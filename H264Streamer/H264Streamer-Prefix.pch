@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'H264Streamer' target in the 'H264Streamer' project
+//
+
+#ifdef __OBJC__
+    #import <Cocoa/Cocoa.h>
+#endif

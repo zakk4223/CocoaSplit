@@ -1,0 +1,457 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		340FE4A215F3417E00E4CE4E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4A115F3417E00E4CE4E /* Cocoa.framework */; };
+		340FE4AC15F3417E00E4CE4E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 340FE4AA15F3417E00E4CE4E /* InfoPlist.strings */; };
+		340FE4AE15F3417E00E4CE4E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FE4AD15F3417E00E4CE4E /* main.m */; };
+		340FE4B215F3417E00E4CE4E /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 340FE4B015F3417E00E4CE4E /* Credits.rtf */; };
+		340FE4B515F3417E00E4CE4E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FE4B415F3417E00E4CE4E /* AppDelegate.m */; };
+		340FE4B815F3417E00E4CE4E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 340FE4B615F3417E00E4CE4E /* MainMenu.xib */; };
+		340FE4C015F3417E00E4CE4E /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4BF15F3417E00E4CE4E /* SenTestingKit.framework */; };
+		340FE4C115F3417E00E4CE4E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4A115F3417E00E4CE4E /* Cocoa.framework */; };
+		340FE4C915F3417E00E4CE4E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 340FE4C715F3417E00E4CE4E /* InfoPlist.strings */; };
+		340FE4CC15F3417E00E4CE4E /* H264StreamerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FE4CB15F3417E00E4CE4E /* H264StreamerTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		340FE4C215F3417E00E4CE4E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 340FE49415F3417E00E4CE4E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 340FE49C15F3417E00E4CE4E;
+			remoteInfo = H264Streamer;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		340FE49D15F3417E00E4CE4E /* H264Streamer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = H264Streamer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		340FE4A115F3417E00E4CE4E /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		340FE4A415F3417E00E4CE4E /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		340FE4A515F3417E00E4CE4E /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		340FE4A615F3417E00E4CE4E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		340FE4A915F3417E00E4CE4E /* H264Streamer-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "H264Streamer-Info.plist"; sourceTree = "<group>"; };
+		340FE4AB15F3417E00E4CE4E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		340FE4AD15F3417E00E4CE4E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		340FE4AF15F3417E00E4CE4E /* H264Streamer-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "H264Streamer-Prefix.pch"; sourceTree = "<group>"; };
+		340FE4B115F3417E00E4CE4E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		340FE4B315F3417E00E4CE4E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		340FE4B415F3417E00E4CE4E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		340FE4B715F3417E00E4CE4E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		340FE4BE15F3417E00E4CE4E /* H264StreamerTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = H264StreamerTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		340FE4BF15F3417E00E4CE4E /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		340FE4C615F3417E00E4CE4E /* H264StreamerTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "H264StreamerTests-Info.plist"; sourceTree = "<group>"; };
+		340FE4C815F3417E00E4CE4E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		340FE4CA15F3417E00E4CE4E /* H264StreamerTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = H264StreamerTests.h; sourceTree = "<group>"; };
+		340FE4CB15F3417E00E4CE4E /* H264StreamerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = H264StreamerTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		340FE49A15F3417E00E4CE4E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				340FE4A215F3417E00E4CE4E /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		340FE4BA15F3417E00E4CE4E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				340FE4C015F3417E00E4CE4E /* SenTestingKit.framework in Frameworks */,
+				340FE4C115F3417E00E4CE4E /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		340FE49215F3417E00E4CE4E = {
+			isa = PBXGroup;
+			children = (
+				340FE4A715F3417E00E4CE4E /* H264Streamer */,
+				340FE4C415F3417E00E4CE4E /* H264StreamerTests */,
+				340FE4A015F3417E00E4CE4E /* Frameworks */,
+				340FE49E15F3417E00E4CE4E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		340FE49E15F3417E00E4CE4E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				340FE49D15F3417E00E4CE4E /* H264Streamer.app */,
+				340FE4BE15F3417E00E4CE4E /* H264StreamerTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		340FE4A015F3417E00E4CE4E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				340FE4A115F3417E00E4CE4E /* Cocoa.framework */,
+				340FE4BF15F3417E00E4CE4E /* SenTestingKit.framework */,
+				340FE4A315F3417E00E4CE4E /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		340FE4A315F3417E00E4CE4E /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				340FE4A415F3417E00E4CE4E /* AppKit.framework */,
+				340FE4A515F3417E00E4CE4E /* CoreData.framework */,
+				340FE4A615F3417E00E4CE4E /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		340FE4A715F3417E00E4CE4E /* H264Streamer */ = {
+			isa = PBXGroup;
+			children = (
+				340FE4B315F3417E00E4CE4E /* AppDelegate.h */,
+				340FE4B415F3417E00E4CE4E /* AppDelegate.m */,
+				340FE4B615F3417E00E4CE4E /* MainMenu.xib */,
+				340FE4A815F3417E00E4CE4E /* Supporting Files */,
+			);
+			path = H264Streamer;
+			sourceTree = "<group>";
+		};
+		340FE4A815F3417E00E4CE4E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				340FE4A915F3417E00E4CE4E /* H264Streamer-Info.plist */,
+				340FE4AA15F3417E00E4CE4E /* InfoPlist.strings */,
+				340FE4AD15F3417E00E4CE4E /* main.m */,
+				340FE4AF15F3417E00E4CE4E /* H264Streamer-Prefix.pch */,
+				340FE4B015F3417E00E4CE4E /* Credits.rtf */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		340FE4C415F3417E00E4CE4E /* H264StreamerTests */ = {
+			isa = PBXGroup;
+			children = (
+				340FE4CA15F3417E00E4CE4E /* H264StreamerTests.h */,
+				340FE4CB15F3417E00E4CE4E /* H264StreamerTests.m */,
+				340FE4C515F3417E00E4CE4E /* Supporting Files */,
+			);
+			path = H264StreamerTests;
+			sourceTree = "<group>";
+		};
+		340FE4C515F3417E00E4CE4E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				340FE4C615F3417E00E4CE4E /* H264StreamerTests-Info.plist */,
+				340FE4C715F3417E00E4CE4E /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		340FE49C15F3417E00E4CE4E /* H264Streamer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 340FE4CF15F3417E00E4CE4E /* Build configuration list for PBXNativeTarget "H264Streamer" */;
+			buildPhases = (
+				340FE49915F3417E00E4CE4E /* Sources */,
+				340FE49A15F3417E00E4CE4E /* Frameworks */,
+				340FE49B15F3417E00E4CE4E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = H264Streamer;
+			productName = H264Streamer;
+			productReference = 340FE49D15F3417E00E4CE4E /* H264Streamer.app */;
+			productType = "com.apple.product-type.application";
+		};
+		340FE4BD15F3417E00E4CE4E /* H264StreamerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 340FE4D215F3417E00E4CE4E /* Build configuration list for PBXNativeTarget "H264StreamerTests" */;
+			buildPhases = (
+				340FE4B915F3417E00E4CE4E /* Sources */,
+				340FE4BA15F3417E00E4CE4E /* Frameworks */,
+				340FE4BB15F3417E00E4CE4E /* Resources */,
+				340FE4BC15F3417E00E4CE4E /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				340FE4C315F3417E00E4CE4E /* PBXTargetDependency */,
+			);
+			name = H264StreamerTests;
+			productName = H264StreamerTests;
+			productReference = 340FE4BE15F3417E00E4CE4E /* H264StreamerTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		340FE49415F3417E00E4CE4E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0440;
+				ORGANIZATIONNAME = Zakk;
+			};
+			buildConfigurationList = 340FE49715F3417E00E4CE4E /* Build configuration list for PBXProject "H264Streamer" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 340FE49215F3417E00E4CE4E;
+			productRefGroup = 340FE49E15F3417E00E4CE4E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				340FE49C15F3417E00E4CE4E /* H264Streamer */,
+				340FE4BD15F3417E00E4CE4E /* H264StreamerTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		340FE49B15F3417E00E4CE4E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				340FE4AC15F3417E00E4CE4E /* InfoPlist.strings in Resources */,
+				340FE4B215F3417E00E4CE4E /* Credits.rtf in Resources */,
+				340FE4B815F3417E00E4CE4E /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		340FE4BB15F3417E00E4CE4E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				340FE4C915F3417E00E4CE4E /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		340FE4BC15F3417E00E4CE4E /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		340FE49915F3417E00E4CE4E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				340FE4AE15F3417E00E4CE4E /* main.m in Sources */,
+				340FE4B515F3417E00E4CE4E /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		340FE4B915F3417E00E4CE4E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				340FE4CC15F3417E00E4CE4E /* H264StreamerTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		340FE4C315F3417E00E4CE4E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 340FE49C15F3417E00E4CE4E /* H264Streamer */;
+			targetProxy = 340FE4C215F3417E00E4CE4E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		340FE4AA15F3417E00E4CE4E /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				340FE4AB15F3417E00E4CE4E /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		340FE4B015F3417E00E4CE4E /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				340FE4B115F3417E00E4CE4E /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		340FE4B615F3417E00E4CE4E /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				340FE4B715F3417E00E4CE4E /* en */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		340FE4C715F3417E00E4CE4E /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				340FE4C815F3417E00E4CE4E /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		340FE4CD15F3417E00E4CE4E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		340FE4CE15F3417E00E4CE4E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		340FE4D015F3417E00E4CE4E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "H264Streamer/H264Streamer-Prefix.pch";
+				INFOPLIST_FILE = "H264Streamer/H264Streamer-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		340FE4D115F3417E00E4CE4E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "H264Streamer/H264Streamer-Prefix.pch";
+				INFOPLIST_FILE = "H264Streamer/H264Streamer-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		340FE4D315F3417E00E4CE4E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/H264Streamer.app/Contents/MacOS/H264Streamer";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "H264Streamer/H264Streamer-Prefix.pch";
+				INFOPLIST_FILE = "H264StreamerTests/H264StreamerTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		340FE4D415F3417E00E4CE4E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/H264Streamer.app/Contents/MacOS/H264Streamer";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "H264Streamer/H264Streamer-Prefix.pch";
+				INFOPLIST_FILE = "H264StreamerTests/H264StreamerTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		340FE49715F3417E00E4CE4E /* Build configuration list for PBXProject "H264Streamer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				340FE4CD15F3417E00E4CE4E /* Debug */,
+				340FE4CE15F3417E00E4CE4E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		340FE4CF15F3417E00E4CE4E /* Build configuration list for PBXNativeTarget "H264Streamer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				340FE4D015F3417E00E4CE4E /* Debug */,
+				340FE4D115F3417E00E4CE4E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		340FE4D215F3417E00E4CE4E /* Build configuration list for PBXNativeTarget "H264StreamerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				340FE4D315F3417E00E4CE4E /* Debug */,
+				340FE4D415F3417E00E4CE4E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 340FE49415F3417E00E4CE4E /* Project object */;
+}
