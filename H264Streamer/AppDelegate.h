@@ -7,9 +7,20 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import <QTKit/QTKit.h>
+#import "CaptureController.h"
+
+
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
+{
+    
+    
+}
+@property (unsafe_unretained) IBOutlet CaptureController *captureController;
 
-@property (assign) IBOutlet NSWindow *window;
+@property (unsafe_unretained) IBOutlet NSWindow *window;
+
+
 
 @end

@@ -1,0 +1,591 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		340FE4A215F3417E00E4CE4E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4A115F3417E00E4CE4E /* Cocoa.framework */; };
+		340FE4AC15F3417E00E4CE4E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 340FE4AA15F3417E00E4CE4E /* InfoPlist.strings */; };
+		340FE4AE15F3417E00E4CE4E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FE4AD15F3417E00E4CE4E /* main.m */; };
+		340FE4B215F3417E00E4CE4E /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 340FE4B015F3417E00E4CE4E /* Credits.rtf */; };
+		340FE4B515F3417E00E4CE4E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FE4B415F3417E00E4CE4E /* AppDelegate.m */; };
+		340FE4B815F3417E00E4CE4E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 340FE4B615F3417E00E4CE4E /* MainMenu.xib */; };
+		340FE4C015F3417E00E4CE4E /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4BF15F3417E00E4CE4E /* SenTestingKit.framework */; };
+		340FE4C115F3417E00E4CE4E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4A115F3417E00E4CE4E /* Cocoa.framework */; };
+		340FE4C915F3417E00E4CE4E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 340FE4C715F3417E00E4CE4E /* InfoPlist.strings */; };
+		340FE4CC15F3417E00E4CE4E /* H264StreamerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FE4CB15F3417E00E4CE4E /* H264StreamerTests.m */; };
+		340FE4DA15F346D900E4CE4E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4D815F346CC00E4CE4E /* AVFoundation.framework */; };
+		340FE4E115F3581200E4CE4E /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4E015F3581200E4CE4E /* QTKit.framework */; };
+		340FE50815F444AA00E4CE4E /* CaptureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FE50715F444AA00E4CE4E /* CaptureController.m */; };
+		34210B3716041C9900362FC8 /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 34210AE5160415B200362FC8 /* libavcodec.a */; };
+		34210B3816041C9900362FC8 /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 34210AE6160415B200362FC8 /* libavformat.a */; };
+		34210B3916041C9900362FC8 /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 34210AE7160415B200362FC8 /* libavutil.a */; };
+		34210B3E1606001200362FC8 /* OutputDestination.m in Sources */ = {isa = PBXBuildFile; fileRef = 34210B3D1606001100362FC8 /* OutputDestination.m */; };
+		342346AA15F59A8500C8C77E /* AVFCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346A915F59A8500C8C77E /* AVFCapture.m */; };
+		342346AD15F59B0D00C8C77E /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 342346AC15F59B0D00C8C77E /* VideoToolbox.framework */; };
+		342346B915F5FBD200C8C77E /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 342346B815F5FBD200C8C77E /* CoreVideo.framework */; };
+		342346BB15F5FBD700C8C77E /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 342346BA15F5FBD700C8C77E /* CoreMedia.framework */; };
+		342346BE15F6103D00C8C77E /* FFMpegTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346BD15F6103D00C8C77E /* FFMpegTask.m */; };
+		342346CF15F9F07E00C8C77E /* AbstractCaptureDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346CE15F9F07E00C8C77E /* AbstractCaptureDevice.m */; };
+		342346D515FA301600C8C77E /* SyphonCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346D415FA301600C8C77E /* SyphonCapture.m */; };
+		342346D715FA305B00C8C77E /* Syphon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 342346D615FA305B00C8C77E /* Syphon.framework */; };
+		342346DE15FA34CF00C8C77E /* Syphon.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 342346D615FA305B00C8C77E /* Syphon.framework */; };
+		34539ED71606E91700638A29 /* StreamServicePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34539ED61606E91700638A29 /* StreamServicePanel.xib */; };
+		34539ED9160734EA00638A29 /* FilePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34539ED8160734EA00638A29 /* FilePanel.xib */; };
+		34792AF316103FF60065A859 /* DesktopCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34792AF216103FF60065A859 /* DesktopCapture.m */; };
+		34792AF616104AA70065A859 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AF516104AA70065A859 /* IOKit.framework */; };
+		34792AFB1611A6B90065A859 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AFA1611A6B90065A859 /* IOSurface.framework */; };
+		34C6C3BF15FB5B440018A18B /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34C6C3BE15FB5B440018A18B /* OpenGL.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		340FE4C215F3417E00E4CE4E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 340FE49415F3417E00E4CE4E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 340FE49C15F3417E00E4CE4E;
+			remoteInfo = H264Streamer;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		342346DC15FA34B400C8C77E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				342346DE15FA34CF00C8C77E /* Syphon.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		340FE49D15F3417E00E4CE4E /* CocoaSplit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CocoaSplit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		340FE4A115F3417E00E4CE4E /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		340FE4A415F3417E00E4CE4E /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		340FE4A515F3417E00E4CE4E /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		340FE4A615F3417E00E4CE4E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		340FE4A915F3417E00E4CE4E /* CocoaSplit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CocoaSplit-Info.plist"; sourceTree = "<group>"; };
+		340FE4AB15F3417E00E4CE4E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		340FE4AD15F3417E00E4CE4E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		340FE4AF15F3417E00E4CE4E /* CocoaSplit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CocoaSplit-Prefix.pch"; sourceTree = "<group>"; };
+		340FE4B115F3417E00E4CE4E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		340FE4B315F3417E00E4CE4E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		340FE4B415F3417E00E4CE4E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		340FE4B715F3417E00E4CE4E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		340FE4BE15F3417E00E4CE4E /* CocoaSplitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CocoaSplitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		340FE4BF15F3417E00E4CE4E /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		340FE4C615F3417E00E4CE4E /* CocoaSplitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CocoaSplitTests-Info.plist"; sourceTree = "<group>"; };
+		340FE4C815F3417E00E4CE4E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		340FE4CA15F3417E00E4CE4E /* H264StreamerTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = H264StreamerTests.h; sourceTree = "<group>"; };
+		340FE4CB15F3417E00E4CE4E /* H264StreamerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = H264StreamerTests.m; sourceTree = "<group>"; };
+		340FE4D815F346CC00E4CE4E /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		340FE4E015F3581200E4CE4E /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = System/Library/Frameworks/QTKit.framework; sourceTree = SDKROOT; };
+		340FE50615F444AA00E4CE4E /* CaptureController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CaptureController.h; sourceTree = "<group>"; };
+		340FE50715F444AA00E4CE4E /* CaptureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CaptureController.m; sourceTree = "<group>"; };
+		34210AE5160415B200362FC8 /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavcodec.a; path = ../../../../usr/local/lib/libavcodec.a; sourceTree = "<group>"; };
+		34210AE6160415B200362FC8 /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavformat.a; path = ../../../../usr/local/lib/libavformat.a; sourceTree = "<group>"; };
+		34210AE7160415B200362FC8 /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavutil.a; path = ../../../../usr/local/lib/libavutil.a; sourceTree = "<group>"; };
+		34210B3C1606001100362FC8 /* OutputDestination.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OutputDestination.h; sourceTree = "<group>"; };
+		34210B3D1606001100362FC8 /* OutputDestination.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OutputDestination.m; sourceTree = "<group>"; };
+		342346A815F59A8500C8C77E /* AVFCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVFCapture.h; sourceTree = "<group>"; };
+		342346A915F59A8500C8C77E /* AVFCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVFCapture.m; sourceTree = "<group>"; };
+		342346AC15F59B0D00C8C77E /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
+		342346B815F5FBD200C8C77E /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		342346BA15F5FBD700C8C77E /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		342346BC15F6103D00C8C77E /* FFMpegTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFMpegTask.h; sourceTree = "<group>"; };
+		342346BD15F6103D00C8C77E /* FFMpegTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFMpegTask.m; sourceTree = "<group>"; };
+		342346CC15F9D52000C8C77E /* CaptureSessionProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CaptureSessionProtocol.h; sourceTree = "<group>"; };
+		342346CD15F9F07E00C8C77E /* AbstractCaptureDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractCaptureDevice.h; sourceTree = "<group>"; };
+		342346CE15F9F07E00C8C77E /* AbstractCaptureDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbstractCaptureDevice.m; sourceTree = "<group>"; };
+		342346D315FA301600C8C77E /* SyphonCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyphonCapture.h; sourceTree = "<group>"; };
+		342346D415FA301600C8C77E /* SyphonCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyphonCapture.m; sourceTree = "<group>"; };
+		342346D615FA305B00C8C77E /* Syphon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Syphon.framework; sourceTree = "<group>"; };
+		34539ED61606E91700638A29 /* StreamServicePanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = StreamServicePanel.xib; path = ../StreamServicePanel.xib; sourceTree = "<group>"; };
+		34539ED8160734EA00638A29 /* FilePanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FilePanel.xib; sourceTree = "<group>"; };
+		34792AF116103FF60065A859 /* DesktopCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DesktopCapture.h; sourceTree = "<group>"; };
+		34792AF216103FF60065A859 /* DesktopCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DesktopCapture.m; sourceTree = "<group>"; };
+		34792AF516104AA70065A859 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		34792AFA1611A6B90065A859 /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = System/Library/Frameworks/IOSurface.framework; sourceTree = SDKROOT; };
+		34C6C3BE15FB5B440018A18B /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		340FE49A15F3417E00E4CE4E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34792AFB1611A6B90065A859 /* IOSurface.framework in Frameworks */,
+				34792AF616104AA70065A859 /* IOKit.framework in Frameworks */,
+				34210B3716041C9900362FC8 /* libavcodec.a in Frameworks */,
+				34210B3816041C9900362FC8 /* libavformat.a in Frameworks */,
+				34210B3916041C9900362FC8 /* libavutil.a in Frameworks */,
+				34C6C3BF15FB5B440018A18B /* OpenGL.framework in Frameworks */,
+				342346BB15F5FBD700C8C77E /* CoreMedia.framework in Frameworks */,
+				342346B915F5FBD200C8C77E /* CoreVideo.framework in Frameworks */,
+				342346AD15F59B0D00C8C77E /* VideoToolbox.framework in Frameworks */,
+				340FE4E115F3581200E4CE4E /* QTKit.framework in Frameworks */,
+				340FE4DA15F346D900E4CE4E /* AVFoundation.framework in Frameworks */,
+				340FE4A215F3417E00E4CE4E /* Cocoa.framework in Frameworks */,
+				342346D715FA305B00C8C77E /* Syphon.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		340FE4BA15F3417E00E4CE4E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				340FE4C015F3417E00E4CE4E /* SenTestingKit.framework in Frameworks */,
+				340FE4C115F3417E00E4CE4E /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		340FE49215F3417E00E4CE4E = {
+			isa = PBXGroup;
+			children = (
+				34792AFA1611A6B90065A859 /* IOSurface.framework */,
+				34792AF516104AA70065A859 /* IOKit.framework */,
+				34C6C3BE15FB5B440018A18B /* OpenGL.framework */,
+				342346BA15F5FBD700C8C77E /* CoreMedia.framework */,
+				342346B815F5FBD200C8C77E /* CoreVideo.framework */,
+				342346AC15F59B0D00C8C77E /* VideoToolbox.framework */,
+				340FE4E015F3581200E4CE4E /* QTKit.framework */,
+				340FE4A715F3417E00E4CE4E /* H264Streamer */,
+				340FE4C415F3417E00E4CE4E /* H264StreamerTests */,
+				340FE4A015F3417E00E4CE4E /* Frameworks */,
+				340FE49E15F3417E00E4CE4E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		340FE49E15F3417E00E4CE4E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				340FE49D15F3417E00E4CE4E /* CocoaSplit.app */,
+				340FE4BE15F3417E00E4CE4E /* CocoaSplitTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		340FE4A015F3417E00E4CE4E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				34210AE5160415B200362FC8 /* libavcodec.a */,
+				34210AE6160415B200362FC8 /* libavformat.a */,
+				34210AE7160415B200362FC8 /* libavutil.a */,
+				342346D615FA305B00C8C77E /* Syphon.framework */,
+				340FE4D815F346CC00E4CE4E /* AVFoundation.framework */,
+				340FE4A115F3417E00E4CE4E /* Cocoa.framework */,
+				340FE4BF15F3417E00E4CE4E /* SenTestingKit.framework */,
+				340FE4A315F3417E00E4CE4E /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		340FE4A315F3417E00E4CE4E /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				340FE4A415F3417E00E4CE4E /* AppKit.framework */,
+				340FE4A515F3417E00E4CE4E /* CoreData.framework */,
+				340FE4A615F3417E00E4CE4E /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		340FE4A715F3417E00E4CE4E /* H264Streamer */ = {
+			isa = PBXGroup;
+			children = (
+				340FE4B315F3417E00E4CE4E /* AppDelegate.h */,
+				340FE4B415F3417E00E4CE4E /* AppDelegate.m */,
+				342346D315FA301600C8C77E /* SyphonCapture.h */,
+				34792AF116103FF60065A859 /* DesktopCapture.h */,
+				34792AF216103FF60065A859 /* DesktopCapture.m */,
+				34210B3C1606001100362FC8 /* OutputDestination.h */,
+				34210B3D1606001100362FC8 /* OutputDestination.m */,
+				342346D415FA301600C8C77E /* SyphonCapture.m */,
+				342346CD15F9F07E00C8C77E /* AbstractCaptureDevice.h */,
+				342346CE15F9F07E00C8C77E /* AbstractCaptureDevice.m */,
+				342346CC15F9D52000C8C77E /* CaptureSessionProtocol.h */,
+				342346BC15F6103D00C8C77E /* FFMpegTask.h */,
+				342346BD15F6103D00C8C77E /* FFMpegTask.m */,
+				342346A815F59A8500C8C77E /* AVFCapture.h */,
+				342346A915F59A8500C8C77E /* AVFCapture.m */,
+				340FE50615F444AA00E4CE4E /* CaptureController.h */,
+				340FE50715F444AA00E4CE4E /* CaptureController.m */,
+				340FE4B615F3417E00E4CE4E /* MainMenu.xib */,
+				34539ED61606E91700638A29 /* StreamServicePanel.xib */,
+				34539ED8160734EA00638A29 /* FilePanel.xib */,
+				340FE4A815F3417E00E4CE4E /* Supporting Files */,
+			);
+			path = H264Streamer;
+			sourceTree = "<group>";
+		};
+		340FE4A815F3417E00E4CE4E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				340FE4A915F3417E00E4CE4E /* CocoaSplit-Info.plist */,
+				340FE4AA15F3417E00E4CE4E /* InfoPlist.strings */,
+				340FE4AD15F3417E00E4CE4E /* main.m */,
+				340FE4AF15F3417E00E4CE4E /* CocoaSplit-Prefix.pch */,
+				340FE4B015F3417E00E4CE4E /* Credits.rtf */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		340FE4C415F3417E00E4CE4E /* H264StreamerTests */ = {
+			isa = PBXGroup;
+			children = (
+				340FE4CA15F3417E00E4CE4E /* H264StreamerTests.h */,
+				340FE4CB15F3417E00E4CE4E /* H264StreamerTests.m */,
+				340FE4C515F3417E00E4CE4E /* Supporting Files */,
+			);
+			path = H264StreamerTests;
+			sourceTree = "<group>";
+		};
+		340FE4C515F3417E00E4CE4E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				340FE4C615F3417E00E4CE4E /* CocoaSplitTests-Info.plist */,
+				340FE4C715F3417E00E4CE4E /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		340FE49C15F3417E00E4CE4E /* CocoaSplit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 340FE4CF15F3417E00E4CE4E /* Build configuration list for PBXNativeTarget "CocoaSplit" */;
+			buildPhases = (
+				340FE49915F3417E00E4CE4E /* Sources */,
+				340FE49A15F3417E00E4CE4E /* Frameworks */,
+				340FE49B15F3417E00E4CE4E /* Resources */,
+				342346DC15FA34B400C8C77E /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CocoaSplit;
+			productName = H264Streamer;
+			productReference = 340FE49D15F3417E00E4CE4E /* CocoaSplit.app */;
+			productType = "com.apple.product-type.application";
+		};
+		340FE4BD15F3417E00E4CE4E /* CocoaSplitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 340FE4D215F3417E00E4CE4E /* Build configuration list for PBXNativeTarget "CocoaSplitTests" */;
+			buildPhases = (
+				340FE4B915F3417E00E4CE4E /* Sources */,
+				340FE4BA15F3417E00E4CE4E /* Frameworks */,
+				340FE4BB15F3417E00E4CE4E /* Resources */,
+				340FE4BC15F3417E00E4CE4E /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				340FE4C315F3417E00E4CE4E /* PBXTargetDependency */,
+			);
+			name = CocoaSplitTests;
+			productName = H264StreamerTests;
+			productReference = 340FE4BE15F3417E00E4CE4E /* CocoaSplitTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		340FE49415F3417E00E4CE4E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0440;
+				ORGANIZATIONNAME = Zakk;
+			};
+			buildConfigurationList = 340FE49715F3417E00E4CE4E /* Build configuration list for PBXProject "CocoaSplit" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 340FE49215F3417E00E4CE4E;
+			productRefGroup = 340FE49E15F3417E00E4CE4E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				340FE49C15F3417E00E4CE4E /* CocoaSplit */,
+				340FE4BD15F3417E00E4CE4E /* CocoaSplitTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		340FE49B15F3417E00E4CE4E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				340FE4AC15F3417E00E4CE4E /* InfoPlist.strings in Resources */,
+				340FE4B215F3417E00E4CE4E /* Credits.rtf in Resources */,
+				340FE4B815F3417E00E4CE4E /* MainMenu.xib in Resources */,
+				34539ED71606E91700638A29 /* StreamServicePanel.xib in Resources */,
+				34539ED9160734EA00638A29 /* FilePanel.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		340FE4BB15F3417E00E4CE4E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				340FE4C915F3417E00E4CE4E /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		340FE4BC15F3417E00E4CE4E /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		340FE49915F3417E00E4CE4E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				340FE4AE15F3417E00E4CE4E /* main.m in Sources */,
+				340FE4B515F3417E00E4CE4E /* AppDelegate.m in Sources */,
+				340FE50815F444AA00E4CE4E /* CaptureController.m in Sources */,
+				342346AA15F59A8500C8C77E /* AVFCapture.m in Sources */,
+				342346BE15F6103D00C8C77E /* FFMpegTask.m in Sources */,
+				342346CF15F9F07E00C8C77E /* AbstractCaptureDevice.m in Sources */,
+				342346D515FA301600C8C77E /* SyphonCapture.m in Sources */,
+				34210B3E1606001200362FC8 /* OutputDestination.m in Sources */,
+				34792AF316103FF60065A859 /* DesktopCapture.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		340FE4B915F3417E00E4CE4E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				340FE4CC15F3417E00E4CE4E /* H264StreamerTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		340FE4C315F3417E00E4CE4E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 340FE49C15F3417E00E4CE4E /* CocoaSplit */;
+			targetProxy = 340FE4C215F3417E00E4CE4E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		340FE4AA15F3417E00E4CE4E /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				340FE4AB15F3417E00E4CE4E /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		340FE4B015F3417E00E4CE4E /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				340FE4B115F3417E00E4CE4E /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		340FE4B615F3417E00E4CE4E /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				340FE4B715F3417E00E4CE4E /* en */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		340FE4C715F3417E00E4CE4E /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				340FE4C815F3417E00E4CE4E /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		340FE4CD15F3417E00E4CE4E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = "";
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		340FE4CE15F3417E00E4CE4E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = "";
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		340FE4D015F3417E00E4CE4E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "H264Streamer/CocoaSplit-Prefix.pch";
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				INFOPLIST_FILE = "H264Streamer/CocoaSplit-Info.plist";
+				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/lib;
+				PRODUCT_NAME = CocoaSplit;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		340FE4D115F3417E00E4CE4E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "H264Streamer/CocoaSplit-Prefix.pch";
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				INFOPLIST_FILE = "H264Streamer/CocoaSplit-Info.plist";
+				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/lib;
+				PRODUCT_NAME = CocoaSplit;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		340FE4D315F3417E00E4CE4E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/H264Streamer.app/Contents/MacOS/H264Streamer";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "H264Streamer/H264Streamer-Prefix.pch";
+				INFOPLIST_FILE = "H264StreamerTests/CocoaSplitTests-Info.plist";
+				PRODUCT_NAME = CocoaSplitTests;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		340FE4D415F3417E00E4CE4E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/H264Streamer.app/Contents/MacOS/H264Streamer";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "H264Streamer/H264Streamer-Prefix.pch";
+				INFOPLIST_FILE = "H264StreamerTests/CocoaSplitTests-Info.plist";
+				PRODUCT_NAME = CocoaSplitTests;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		340FE49715F3417E00E4CE4E /* Build configuration list for PBXProject "CocoaSplit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				340FE4CD15F3417E00E4CE4E /* Debug */,
+				340FE4CE15F3417E00E4CE4E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		340FE4CF15F3417E00E4CE4E /* Build configuration list for PBXNativeTarget "CocoaSplit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				340FE4D015F3417E00E4CE4E /* Debug */,
+				340FE4D115F3417E00E4CE4E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		340FE4D215F3417E00E4CE4E /* Build configuration list for PBXNativeTarget "CocoaSplitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				340FE4D315F3417E00E4CE4E /* Debug */,
+				340FE4D415F3417E00E4CE4E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 340FE49415F3417E00E4CE4E /* Project object */;
+}
