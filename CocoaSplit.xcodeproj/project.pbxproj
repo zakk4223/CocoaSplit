@@ -158,7 +158,7 @@
 				342346B815F5FBD200C8C77E /* CoreVideo.framework */,
 				342346AC15F59B0D00C8C77E /* VideoToolbox.framework */,
 				340FE4E015F3581200E4CE4E /* QTKit.framework */,
-				340FE4A715F3417E00E4CE4E /* H264Streamer */,
+				340FE4A715F3417E00E4CE4E /* CocoaSplit */,
 				340FE4C415F3417E00E4CE4E /* H264StreamerTests */,
 				340FE4A015F3417E00E4CE4E /* Frameworks */,
 				340FE49E15F3417E00E4CE4E /* Products */,
@@ -199,7 +199,7 @@
 			name = "Other Frameworks";
 			sourceTree = "<group>";
 		};
-		340FE4A715F3417E00E4CE4E /* H264Streamer */ = {
+		340FE4A715F3417E00E4CE4E /* CocoaSplit */ = {
 			isa = PBXGroup;
 			children = (
 				340FE4B315F3417E00E4CE4E /* AppDelegate.h */,
@@ -224,6 +224,7 @@
 				34539ED8160734EA00638A29 /* FilePanel.xib */,
 				340FE4A815F3417E00E4CE4E /* Supporting Files */,
 			);
+			name = CocoaSplit;
 			path = H264Streamer;
 			sourceTree = "<group>";
 		};
