@@ -89,7 +89,7 @@
 		340FE4E015F3581200E4CE4E /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = System/Library/Frameworks/QTKit.framework; sourceTree = SDKROOT; };
 		340FE50615F444AA00E4CE4E /* CaptureController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CaptureController.h; sourceTree = "<group>"; };
 		340FE50715F444AA00E4CE4E /* CaptureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CaptureController.m; sourceTree = "<group>"; };
-		341DF94F1634EB1B00EE585B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		341DF94F1634EB1B00EE585B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = H264Streamer/README.md; sourceTree = "<group>"; };
 		34210AE5160415B200362FC8 /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavcodec.a; path = ../../../../usr/local/lib/libavcodec.a; sourceTree = "<group>"; };
 		34210AE6160415B200362FC8 /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavformat.a; path = ../../../../usr/local/lib/libavformat.a; sourceTree = "<group>"; };
 		34210AE7160415B200362FC8 /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavutil.a; path = ../../../../usr/local/lib/libavutil.a; sourceTree = "<group>"; };
@@ -153,6 +153,7 @@
 		340FE49215F3417E00E4CE4E = {
 			isa = PBXGroup;
 			children = (
+				341DF94F1634EB1B00EE585B /* README.md */,
 				34792AFA1611A6B90065A859 /* IOSurface.framework */,
 				34792AF516104AA70065A859 /* IOKit.framework */,
 				34C6C3BE15FB5B440018A18B /* OpenGL.framework */,
@@ -225,7 +226,6 @@
 				34539ED61606E91700638A29 /* StreamServicePanel.xib */,
 				34539ED8160734EA00638A29 /* FilePanel.xib */,
 				340FE4A815F3417E00E4CE4E /* Supporting Files */,
-				341DF94F1634EB1B00EE585B /* README.md */,
 			);
 			name = CocoaSplit;
 			path = H264Streamer;
