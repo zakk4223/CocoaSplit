@@ -16,11 +16,10 @@
 		340FE4C015F3417E00E4CE4E /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4BF15F3417E00E4CE4E /* SenTestingKit.framework */; };
 		340FE4C115F3417E00E4CE4E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4A115F3417E00E4CE4E /* Cocoa.framework */; };
 		340FE4C915F3417E00E4CE4E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 340FE4C715F3417E00E4CE4E /* InfoPlist.strings */; };
-		340FE4CC15F3417E00E4CE4E /* H264StreamerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FE4CB15F3417E00E4CE4E /* H264StreamerTests.m */; };
+		340FE4CC15F3417E00E4CE4E /* CocoaSplitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FE4CB15F3417E00E4CE4E /* CocoaSplitTests.m */; };
 		340FE4DA15F346D900E4CE4E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4D815F346CC00E4CE4E /* AVFoundation.framework */; };
 		340FE4E115F3581200E4CE4E /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4E015F3581200E4CE4E /* QTKit.framework */; };
 		340FE50815F444AA00E4CE4E /* CaptureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FE50715F444AA00E4CE4E /* CaptureController.m */; };
-		341DF9501634EB1B00EE585B /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 341DF94F1634EB1B00EE585B /* README.md */; };
 		34210B3716041C9900362FC8 /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 34210AE5160415B200362FC8 /* libavcodec.a */; };
 		34210B3816041C9900362FC8 /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 34210AE6160415B200362FC8 /* libavformat.a */; };
 		34210B3916041C9900362FC8 /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 34210AE7160415B200362FC8 /* libavutil.a */; };
@@ -48,7 +47,7 @@
 			containerPortal = 340FE49415F3417E00E4CE4E /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 340FE49C15F3417E00E4CE4E;
-			remoteInfo = H264Streamer;
+			remoteInfo = CocoaSplit;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -83,13 +82,12 @@
 		340FE4BF15F3417E00E4CE4E /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		340FE4C615F3417E00E4CE4E /* CocoaSplitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CocoaSplitTests-Info.plist"; sourceTree = "<group>"; };
 		340FE4C815F3417E00E4CE4E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		340FE4CA15F3417E00E4CE4E /* H264StreamerTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = H264StreamerTests.h; sourceTree = "<group>"; };
-		340FE4CB15F3417E00E4CE4E /* H264StreamerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = H264StreamerTests.m; sourceTree = "<group>"; };
+		340FE4CA15F3417E00E4CE4E /* CocoaSplitTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CocoaSplitTests.h; sourceTree = "<group>"; };
+		340FE4CB15F3417E00E4CE4E /* CocoaSplitTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CocoaSplitTests.m; sourceTree = "<group>"; };
 		340FE4D815F346CC00E4CE4E /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		340FE4E015F3581200E4CE4E /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = System/Library/Frameworks/QTKit.framework; sourceTree = SDKROOT; };
 		340FE50615F444AA00E4CE4E /* CaptureController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CaptureController.h; sourceTree = "<group>"; };
 		340FE50715F444AA00E4CE4E /* CaptureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CaptureController.m; sourceTree = "<group>"; };
-		341DF94F1634EB1B00EE585B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = H264Streamer/README.md; sourceTree = "<group>"; };
 		34210AE5160415B200362FC8 /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavcodec.a; path = ../../../../usr/local/lib/libavcodec.a; sourceTree = "<group>"; };
 		34210AE6160415B200362FC8 /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavformat.a; path = ../../../../usr/local/lib/libavformat.a; sourceTree = "<group>"; };
 		34210AE7160415B200362FC8 /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavutil.a; path = ../../../../usr/local/lib/libavutil.a; sourceTree = "<group>"; };
@@ -153,7 +151,6 @@
 		340FE49215F3417E00E4CE4E = {
 			isa = PBXGroup;
 			children = (
-				341DF94F1634EB1B00EE585B /* README.md */,
 				34792AFA1611A6B90065A859 /* IOSurface.framework */,
 				34792AF516104AA70065A859 /* IOKit.framework */,
 				34C6C3BE15FB5B440018A18B /* OpenGL.framework */,
@@ -227,8 +224,7 @@
 				34539ED8160734EA00638A29 /* FilePanel.xib */,
 				340FE4A815F3417E00E4CE4E /* Supporting Files */,
 			);
-			name = CocoaSplit;
-			path = H264Streamer;
+			path = CocoaSplit;
 			sourceTree = "<group>";
 		};
 		340FE4A815F3417E00E4CE4E /* Supporting Files */ = {
@@ -246,12 +242,11 @@
 		340FE4C415F3417E00E4CE4E /* CocoaSplitTests */ = {
 			isa = PBXGroup;
 			children = (
-				340FE4CA15F3417E00E4CE4E /* H264StreamerTests.h */,
-				340FE4CB15F3417E00E4CE4E /* H264StreamerTests.m */,
+				340FE4CA15F3417E00E4CE4E /* CocoaSplitTests.h */,
+				340FE4CB15F3417E00E4CE4E /* CocoaSplitTests.m */,
 				340FE4C515F3417E00E4CE4E /* Supporting Files */,
 			);
-			name = CocoaSplitTests;
-			path = H264StreamerTests;
+			path = CocoaSplitTests;
 			sourceTree = "<group>";
 		};
 		340FE4C515F3417E00E4CE4E /* Supporting Files */ = {
@@ -280,7 +275,7 @@
 			dependencies = (
 			);
 			name = CocoaSplit;
-			productName = H264Streamer;
+			productName = CocoaSplit;
 			productReference = 340FE49D15F3417E00E4CE4E /* CocoaSplit.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -299,7 +294,7 @@
 				340FE4C315F3417E00E4CE4E /* PBXTargetDependency */,
 			);
 			name = CocoaSplitTests;
-			productName = H264StreamerTests;
+			productName = CocoaSplitTests;
 			productReference = 340FE4BE15F3417E00E4CE4E /* CocoaSplitTests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
@@ -340,7 +335,6 @@
 				340FE4B815F3417E00E4CE4E /* MainMenu.xib in Resources */,
 				34539ED71606E91700638A29 /* StreamServicePanel.xib in Resources */,
 				34539ED9160734EA00638A29 /* FilePanel.xib in Resources */,
-				341DF9501634EB1B00EE585B /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -391,7 +385,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				340FE4CC15F3417E00E4CE4E /* H264StreamerTests.m in Sources */,
+				340FE4CC15F3417E00E4CE4E /* CocoaSplitTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -502,9 +496,9 @@
 					"\"$(SRCROOT)\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "H264Streamer/CocoaSplit-Prefix.pch";
+				GCC_PREFIX_HEADER = "CocoaSplit/CocoaSplit-Prefix.pch";
 				HEADER_SEARCH_PATHS = /usr/local/include;
-				INFOPLIST_FILE = "H264Streamer/CocoaSplit-Info.plist";
+				INFOPLIST_FILE = "CocoaSplit/CocoaSplit-Info.plist";
 				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/lib;
 				PRODUCT_NAME = CocoaSplit;
 				WRAPPER_EXTENSION = app;
@@ -522,9 +516,9 @@
 					"\"$(SRCROOT)\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "H264Streamer/CocoaSplit-Prefix.pch";
+				GCC_PREFIX_HEADER = "CocoaSplit/CocoaSplit-Prefix.pch";
 				HEADER_SEARCH_PATHS = /usr/local/include;
-				INFOPLIST_FILE = "H264Streamer/CocoaSplit-Info.plist";
+				INFOPLIST_FILE = "CocoaSplit/CocoaSplit-Info.plist";
 				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/lib;
 				PRODUCT_NAME = CocoaSplit;
 				WRAPPER_EXTENSION = app;
@@ -534,12 +528,12 @@
 		340FE4D315F3417E00E4CE4E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/H264Streamer.app/Contents/MacOS/H264Streamer";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/CocoaSplit.app/Contents/MacOS/CocoaSplit";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "H264Streamer/H264Streamer-Prefix.pch";
-				INFOPLIST_FILE = "H264StreamerTests/CocoaSplitTests-Info.plist";
+				GCC_PREFIX_HEADER = "CocoaSplit/CocoaSplit-Prefix.pch";
+				INFOPLIST_FILE = "CocoaSplitTests/CocoaSplitTests-Info.plist";
 				PRODUCT_NAME = CocoaSplitTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
@@ -549,12 +543,12 @@
 		340FE4D415F3417E00E4CE4E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/H264Streamer.app/Contents/MacOS/H264Streamer";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/CocoaSplit.app/Contents/MacOS/CocoaSplit";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "H264Streamer/H264Streamer-Prefix.pch";
-				INFOPLIST_FILE = "H264StreamerTests/CocoaSplitTests-Info.plist";
+				GCC_PREFIX_HEADER = "CocoaSplit/CocoaSplit-Prefix.pch";
+				INFOPLIST_FILE = "CocoaSplitTests/CocoaSplitTests-Info.plist";
 				PRODUCT_NAME = CocoaSplitTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
