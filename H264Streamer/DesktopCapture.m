@@ -171,7 +171,6 @@ void DesktopPixelBufferRelease(void *releaseRefCon, const void *baseAddress)
         NSDictionary *localizedNames = [deviceInfo objectForKey:[NSString stringWithUTF8String:kDisplayProductName]];
         if ([localizedNames count] > 0)
         {
-            NSLog(@"localized Names %@", localizedNames);
             
             displayName = [localizedNames objectForKey:[[localizedNames allKeys] objectAtIndex:0]];
             

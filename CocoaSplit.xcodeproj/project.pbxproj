@@ -20,6 +20,7 @@
 		340FE4DA15F346D900E4CE4E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4D815F346CC00E4CE4E /* AVFoundation.framework */; };
 		340FE4E115F3581200E4CE4E /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4E015F3581200E4CE4E /* QTKit.framework */; };
 		340FE50815F444AA00E4CE4E /* CaptureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FE50715F444AA00E4CE4E /* CaptureController.m */; };
+		341DF9501634EB1B00EE585B /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 341DF94F1634EB1B00EE585B /* README.md */; };
 		34210B3716041C9900362FC8 /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 34210AE5160415B200362FC8 /* libavcodec.a */; };
 		34210B3816041C9900362FC8 /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 34210AE6160415B200362FC8 /* libavformat.a */; };
 		34210B3916041C9900362FC8 /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 34210AE7160415B200362FC8 /* libavutil.a */; };
@@ -88,6 +89,7 @@
 		340FE4E015F3581200E4CE4E /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = System/Library/Frameworks/QTKit.framework; sourceTree = SDKROOT; };
 		340FE50615F444AA00E4CE4E /* CaptureController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CaptureController.h; sourceTree = "<group>"; };
 		340FE50715F444AA00E4CE4E /* CaptureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CaptureController.m; sourceTree = "<group>"; };
+		341DF94F1634EB1B00EE585B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		34210AE5160415B200362FC8 /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavcodec.a; path = ../../../../usr/local/lib/libavcodec.a; sourceTree = "<group>"; };
 		34210AE6160415B200362FC8 /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavformat.a; path = ../../../../usr/local/lib/libavformat.a; sourceTree = "<group>"; };
 		34210AE7160415B200362FC8 /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavutil.a; path = ../../../../usr/local/lib/libavutil.a; sourceTree = "<group>"; };
@@ -159,7 +161,7 @@
 				342346AC15F59B0D00C8C77E /* VideoToolbox.framework */,
 				340FE4E015F3581200E4CE4E /* QTKit.framework */,
 				340FE4A715F3417E00E4CE4E /* CocoaSplit */,
-				340FE4C415F3417E00E4CE4E /* H264StreamerTests */,
+				340FE4C415F3417E00E4CE4E /* CocoaSplitTests */,
 				340FE4A015F3417E00E4CE4E /* Frameworks */,
 				340FE49E15F3417E00E4CE4E /* Products */,
 			);
@@ -223,6 +225,7 @@
 				34539ED61606E91700638A29 /* StreamServicePanel.xib */,
 				34539ED8160734EA00638A29 /* FilePanel.xib */,
 				340FE4A815F3417E00E4CE4E /* Supporting Files */,
+				341DF94F1634EB1B00EE585B /* README.md */,
 			);
 			name = CocoaSplit;
 			path = H264Streamer;
@@ -240,13 +243,14 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		340FE4C415F3417E00E4CE4E /* H264StreamerTests */ = {
+		340FE4C415F3417E00E4CE4E /* CocoaSplitTests */ = {
 			isa = PBXGroup;
 			children = (
 				340FE4CA15F3417E00E4CE4E /* H264StreamerTests.h */,
 				340FE4CB15F3417E00E4CE4E /* H264StreamerTests.m */,
 				340FE4C515F3417E00E4CE4E /* Supporting Files */,
 			);
+			name = CocoaSplitTests;
 			path = H264StreamerTests;
 			sourceTree = "<group>";
 		};
@@ -336,6 +340,7 @@
 				340FE4B815F3417E00E4CE4E /* MainMenu.xib in Resources */,
 				34539ED71606E91700638A29 /* StreamServicePanel.xib in Resources */,
 				34539ED9160734EA00638A29 /* FilePanel.xib in Resources */,
+				341DF9501634EB1B00EE585B /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

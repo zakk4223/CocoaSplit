@@ -36,13 +36,12 @@
 @property (strong) AVCaptureDevice *audioInputDevice;
 @property (strong) id audioDelegate;
 @property (strong) id videoDelegate;
-@property (assign) int videoFPS;
+@property (assign) int videoCaptureFPS;
 @property (assign) int audioBitrate;
 @property (assign) int audioSamplerate;
 
 
--(bool) initCaptureSession:(AVCaptureDevice *)withInput fps:(int)fpsvalue error:(NSError **)therror;
--(bool) startCaptureSession:(id)delegate error:(NSError **)error;
+-(bool) startCaptureSession:(NSError **)error;
 -(bool) stopCaptureSession;
 
 
