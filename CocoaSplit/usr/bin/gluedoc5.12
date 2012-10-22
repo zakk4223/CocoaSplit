@@ -1,0 +1,91 @@
+#!/usr/bin/perl5.12
+
+eval 'exec /usr/bin/perl  -S $0 ${1+"$@"}'
+    if 0; # not running under some shell
+use strict;
+use warnings;
+
+BEGIN {
+	($Mac::Glue::Common::PROGVERSION) =
+		' $Revision: 1.4 $ ' =~ /\$Revision:\s+([^\s]+)/;
+	$Mac::Glue::Common::PROGDESC = <<'EOT';
+Usage: $PROGNAME [OPTIONS] GLUE
+
+This is a frontend to perldoc.  It searches for the docs of glues used
+by Mac::Glue, and feeds them directly to perldoc.
+
+	# same thing
+	perldoc Mac::Glue::glues::Finder
+	gluedoc Finder
+
+	# open result in BBEdit
+	gluedoc -t Finder | bbedit
+
+Main options:
+	-h	Help (this message)
+	-v	Version
+	-d	GLUE is a dialect (usually "AppleScript")
+	-a	GLUE is a scripting addition (like "StandardAdditions")
+	-L	List available glues
+
+Options for perldoc (see man perldoc for more information):
+	-t	text output
+	-u	unformatted
+	-m	module
+	-l	file name only
+	-U	run insecurely
+
+EOT
+	$Mac::Glue::Common::PROGOPTS = 'hvadLUtuml';
+}
+
+use File::Basename;
+use File::Spec::Functions;
+use Mac::Glue::Common;
+
+my $opts = opts();
+usage() if !@ARGV && !$opts->{'L'};
+
+my $switches = [ '-F', map { '-' . $_ } grep { $opts->{$_} } qw(U t u m l) ];
+
+my $glue = lc(shift @ARGV) || '';
+(my $glue1 = $glue) =~ tr/ /_/;
+(my $glue2 = $glue) =~ tr/_/ /;
+
+my @dirs;
+push @dirs, '' if ( (!$opts->{'a'} && !$opts->{'d'}) || $opts->{'L'});
+push @dirs, 'additions' if $opts->{'a'} || $opts->{'L'};
+push @dirs, 'dialects'  if $opts->{'d'} || $opts->{'L'};
+
+my %list;
+OUTER: for my $dir (@dirs) {
+	my $d = catfile($MACGLUEDIR, $dir);
+	opendir my $dh, $d or die $!;
+	for my $f (readdir $dh) {
+		if ($opts->{'L'} && $f =~ /\.pod$/) {
+			push @{$list{$dir}}, $f;
+			next;
+		}
+
+		my $file = catfile($d, $f);
+		next unless -f $file;		
+
+		for (lc $f) {
+			if (/^(?:\Q$glue\E|\Q$glue1\E|\Q$glue2\E)\.pod$/) {
+				system('perldoc', @$switches, $file);
+				last OUTER;
+			}
+		}
+	}
+}
+
+if ($opts->{'L'}) {
+	for my $dir (sort keys %list) {
+		printf "%s:\n", (ucfirst($dir) || "Glues");
+		printf "  %s\n", join "\n  ", map { s/\.pod//; $_ } sort @{$list{$dir}};
+		print "\n";
+	}
+}
+
+
+__END__

@@ -1,0 +1,459 @@
+#!/usr/bin/perl5.12
+
+eval 'exec /usr/bin/perl  -S $0 ${1+"$@"}'
+    if 0; # not running under some shell
+#
+# eyapp -- Front end to the Parse::Eyapp module
+#
+#
+
+=head1 NAME
+
+eyapp - A Perl front-end to the Parse::Eyapp module
+
+
+=head1 SYNOPSYS
+
+    eyapp [options] grammar[.eyp]
+    eyapp -V
+    eyapp -h
+
+        grammar     The grammar file. If no suffix is given, and the file
+                    does not exists, .eyp is added
+
+=head1 DESCRIPTION
+
+The eyapp compiler is a front-end to the L<Parse::Eyapp> module, which lets you compile
+Parse::Eyapp grammar input files into Perl LALR(1) Object Oriented parser modules.
+
+
+=head1 OPTIONS IN DETAIL
+
+=over 4
+
+=item I<-v>
+
+Creates a file F<grammar>.output describing your parser. It will
+show you a summary of conflicts, rules, the DFA (Deterministic
+Finite Automaton) states and overall usage of the parser.
+
+Implies option C<-N>. To produce a more detailed description of the states,
+the LALR tables aren't compacted.
+Use the combination C<-vN> to produce an  C<.output> file 
+corresponding to the compacted tables.
+
+
+=item I<-s>
+
+Create a standalone module in which the parsing driver is included.
+The modules including the LALR driver (L<Parse::Eyapp::Driver>),
+those for AST manipulations (L<Parse::Eyapp::Node> and
+L<Parse::Eyapp::YATW>)) and L<Parse::Eyapp::Base> 
+are included - almost verbatim - inside the generated module. 
+
+Note that if you have more than one parser module called from a program, 
+to have it standalone, you need this option only for one of your grammars;
+
+=item I<-n>
+
+Disable source file line numbering embedded in your parser module.
+I don't know why one should need it, but it's there.
+
+=item I<-m module>
+
+Gives your parser module the package name (or name space or module name or
+class name or whatever-you-call-it) of F<module>.  It defaults to F<grammar>
+
+=item I<-o outfile>
+
+The compiled output file will be named F<outfile> for your parser module.
+It defaults to F<grammar>.pm or, if you specified the option
+I<-m A::Module::Name> (see below), to F<Name.pm>.
+
+=item I<-c grammar>[.eyp]
+
+Produces as output (STDOUT) the grammar without the actions. Only the syntactic
+parts are displayed. Comments will be also stripped 
+if the C<-v> option is added.
+
+
+=item I<-t filename>
+
+The I<-t filename> option allows you to specify a file which should be 
+used as template for generating the parser output.  The default is to 
+use the internal template defined in F<Parse::Eyapp::Output.pm>.
+For how to write your own template and which substitutions are available,
+have a look to the module F<Parse::Eyapp::Output.pm> : it should be obvious. 
+
+=item I<-b shebang>
+
+If you work on systems that understand so called I<shebangs>, and your
+generated parser is directly an executable script, you can specify one
+with the I<-b> option, ie:
+
+    eyapp -b '/usr/local/bin/perl -w' -o myscript.pl myscript.yp
+
+This will output a file called F<myscript.pl> whose very first line is:
+
+    #!/usr/local/bin/perl -w
+
+The argument is mandatory, but if you specify an empty string, the value
+of I<$Config{perlpath}> will be used instead.
+
+=item I<-B prompt>   
+
+Adds a modulino call '__PACKAGE->main(<prompt>) unless caller();' 
+as the very last line of the output file. The argument is mandatory.
+
+
+=item  I<-C grammar.eyp>         
+
+An abbreviation for the combined use of I<-b ''> and  I<-B ''>
+
+=item I<-T grammar.eyp>         
+
+Equivalent to C<%tree>.
+
+
+=item I<-N grammar.eyp>         
+
+Equivalent to the directive C<%nocompact>. Do not compact LALR 
+action tables. 
+
+
+=item I<-l>         
+
+Do not provide a default lexical analyzer. By default C<eyapp>
+builds a lexical analyzer from your C<%token = /regexp/> definitions
+
+=item I<grammar>
+
+The input grammar file. If no suffix is given, and the file does not exists,
+an attempt to open the file with a suffix of  F<.eyp> is tried before exiting.
+
+=item I<-V>
+
+Display current version of Parse::Eyapp and gracefully exits.
+
+=item I<-h>
+
+Display the usage screen.
+
+=back
+
+=head1 EXAMPLE
+
+The following C<eyapp> program translates an infix expression
+like C<2+3*4> to postfix: C<2 3 4 * +>
+
+    %token NUM = /([0-9]+(?:\.[0-9]+)?)/
+    %token VAR = /([A-Za-z][A-Za-z0-9_]*)/
+
+    %right  '='
+    %left   '-' '+'
+    %left   '*' '/'
+    %left   NEG
+
+    %defaultaction { "$left $right $op"; }
+
+    %%
+    line: $exp  { print "$exp\n" }
+    ;
+
+    exp:        $NUM  { $NUM }            
+            |   $VAR  { $VAR }            
+            |   VAR.left '='.op exp.right         
+            |   exp.left '+'.op exp.right         
+            |   exp.left '-'.op exp.right        
+            |   exp.left '*'.op exp.right       
+            |   exp.left '/'.op exp.right      
+            |   '-' $exp %prec NEG { "$exp NEG" }
+            |   '(' $exp ')' { $exp }      
+    ;
+
+    %%
+
+Notice that there is no need to write lexer and error report subroutines.
+First, we compile the grammar:
+
+    pl@nereida:~/LEyapp/examples/eyappintro$ eyapp -o postfix.pl -C Postfix.eyp 
+
+If we use the C<-C> option and no C<main()> was written one default C<main> sub is provided.
+We can now execute the resulting program:
+
+    pl@nereida:~/LEyapp/examples/eyappintro$ ./postfix.pl -c 'a = 2*3 +b'
+    a 2 3 * b + =
+
+When a non conformant input is given, it produces an accurate error message:
+
+    pl@nereida:~/LEyapp/examples/eyappintro$ ./postfix.pl -c 'a = 2**3 +b'
+
+    Syntax error near '*'. 
+    Expected one of these terminals: '-' 'NUM' 'VAR' '('
+    There were 1 errors during parsing
+
+
+=head1 AUTHOR
+
+Casiano Rodriguez-Leon 
+
+=head1 COPYRIGHT
+
+(c) Copyright 2006 Casiano Rodriguez-Leon
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.8 or,
+at your option, any later version of Perl 5 you may have available.
+
+=head1 SEE ALSO
+
+=over
+
+=item * L<Parse::Eyapp>,
+
+=item *
+perldoc L<vgg>,
+
+=item * The tutorial I<Parsing Strings and Trees with> C<Parse::Eyapp>
+(An Introduction to Compiler Construction in seven pages)> in
+
+=item * The pdf file in L<http://nereida.deioc.ull.es/~pl/perlexamples/Eyapp.pdf> 
+
+=item * L<http://nereida.deioc.ull.es/~pl/perlexamples/section_eyappts.html> (Spanish),
+
+=item * L<eyapp>,
+
+=item * L<treereg>,
+
+=item * L<Parse::yapp>,
+
+=item * yacc(1),
+
+=item * bison(1),
+
+=item * the classic book "Compilers: Principles, Techniques, and Tools" by Alfred V. Aho, Ravi Sethi and
+
+=item * Jeffrey D. Ullman (Addison-Wesley 1986)
+
+=item * L<Parse::RecDescent>.
+
+=back
+
+
+
+=cut
+
+require 5.004;
+
+use File::Basename;
+use Getopt::Std;
+use Config;
+use Parse::Eyapp::Base qw(compute_lines);
+use Parse::Eyapp;
+
+use strict;
+
+our ( $opt_n, $opt_m, $opt_V, $opt_v, $opt_o, $opt_h, $opt_s, $opt_t, $opt_b, $opt_c, $opt_B, $opt_C, );
+our $opt_S; # Specify start symbol
+our $opt_l = 0;
+our $opt_T; # build AST
+our $opt_N; # Do not compact action tables. No DEFAULT field for "STATES"
+our $opt_P; # Accept if prefix conforms to the language, even if not end of input
+our $opt_w; #  Produce a .dot graph describing the LR non-compacted automaton
+our $opt_W; #  Produce a .dot graph describing the LR non-compacted automaton
+
+sub Usage {
+    my($prog)=(fileparse($0,'\..*'))[0];
+    die <<EOF;
+
+Usage:  $prog [options] grammar[.eyp]
+  or    $prog -V
+  or    $prog -h
+
+    -m module   Give your parser module the name <module>
+                default is <grammar>
+    -v          Create a file <grammar>.output describing your parser
+                The LALR tables aren't compacted
+    -vN         Create a file <grammar>.output describing your parser
+                LALR tables are compacted.
+    -w          Create a file <grammar>.dot graph describing your parser.
+                You can then generate a .png file using dot:
+                            dot -Tpng  grammar.dot -o grammar.png
+    -W          Create a file <grammar>.dot graph describing your parser
+                Nodes are labelled with core LR-items
+    -s          Create a standalone module in which the driver is included
+    -S symbol   Use 'symbol' as start symbol of the grammar
+    -n          Disable source file line numbering embedded in your parser
+    -o outfile  Create the file <outfile> for your parser module
+                Default is <grammar>.pm or, if -m A::Module::Name is
+                specified, Name.pm
+    -t filename Uses the file <filename> as a template for creating the parser
+                module file.  Default is to use internal template defined
+                in Parse::Eyapp::Output
+    -b shebang  Adds '#!<shebang>' as the very first line of the output file
+    -B prompt   Adds a modulino call '__PACKAGE->main(<prompt>) unless caller();' 
+                as the very last line of the output file
+    -C          An abbreviation for the combined use of -b ''  -B ''
+    -T          Equivalent to %tree
+    -N          Equivalent to %nocompact. Do not compact action tables. 
+    -l          Do not generate the lexical analyzer. One must be explictly provided
+    -P          Accept if prefix conforms to the language, even if is not legal up 
+                to the end 
+    -c grammar  Displays the "clean" grammar without actions     
+    -vc grammar Displays the "clean" grammar without actions. Strip comments also
+    -V          Display current version of Parse::Eyapp and gracefully exits
+    -h          Display this help screen
+
+    grammar     The grammar file. If no suffix is given, and the file
+                does not exists, .eyp is added
+
+EOF
+}
+
+my($nbargs)=@ARGV;
+
+    getopts('CTVNhlvsnwWPc:b:B:m:t:o:S:')
+or  Usage;
+
+   (  ($opt_V and $nbargs > 1)
+    or $opt_h)
+and Usage;
+
+    $opt_V
+and do {
+
+    @ARGV == 0 or  Usage;
+
+    print "This is Parse::Eyapp version $Parse::Eyapp::Driver::VERSION.\n";
+    exit(0);
+
+};
+
+($opt_w or $opt_W) and do { 
+  $opt_v = 1;
+};
+
+    $opt_c and do {
+     my $file;
+
+     local $/ = undef;
+     open($file, $opt_c) or die "Cannot open grammar file $opt_c: $!\n";
+     $opt_c = <$file>;
+     close($file);
+
+     require Parse::Eyapp::Cleaner;
+     my @args = $opt_v ? (skipcomments => 1) : ();
+     print Parse::Eyapp::Cleaner::ppcontroller(\$opt_c, @args);
+     exit(0);
+  };
+
+
+
+# -t <filename> ($opt_t) option allows a file to be specified which 
+# contains a 'template' to be used when generating the parser; 
+# if defined, we open and read the file.   
+
+    $opt_t
+and do {
+    local $/ = undef;
+    local *TFILE;
+    open(TFILE, $opt_t)
+    or die "Cannot open template file $opt_t: $!\n";
+    $opt_t = <TFILE>;
+    close(TFILE);
+};
+
+    @ARGV == 1
+or  Usage;
+
+my($filename)=$ARGV[0];
+my($base,$path,$sfx)=fileparse($filename,'\..*');
+
+    -r "$filename"
+or  do {
+        ($sfx eq '.yp' or $sfx eq '.eyp')
+    or (-r "$filename.yp" and $filename.='.yp')
+    or (-r "$filename.eyp" and $filename.='.eyp');
+
+        -r "$filename"
+    or  die "Cannot open $filename for reading.\n";
+};
+
+my @args = (inputfile => $filename, );
+
+push @args, (tree => 1) if $opt_T;
+push @args, (nocompact => 1) if (($opt_N or $opt_v) and not($opt_N and $opt_v));
+push @args, (prefix => 1) if $opt_P;
+push @args, (start => $opt_S) if $opt_S;
+
+my ($parser) = Parse::Eyapp->new(@args);
+
+my($warnings)=$parser->Warnings();
+
+$warnings !~ m{^\s*$} and print STDERR "$warnings\n";
+
+$parser->outputtables($path, $base) if $opt_v;
+
+if ($opt_w or $opt_W) { 
+  $parser->outputDot($path, $base, 0) if $opt_w;
+  $parser->outputDot($path, $base, 1) if $opt_W;
+
+  my ($pngfile)= "$path$base.png";
+  my ($dotfile)= "$path$base.dot";
+  system qq{dot -Tpng $dotfile -o $pngfile};
+}
+
+my($outfile)="$path$base.pm";
+my($package)="$base";
+
+# Use the name of the start symbol for the package, if specified
+$opt_m = $opt_S unless $opt_m;
+
+    $opt_m
+and do {
+    $package=$opt_m;
+    $package=~/^(?:
+                  (?:[^:]|:(?!:))*::)*       # The ID up to the last ::
+                  (.*)                       # No colons here
+               $/x;
+    $outfile="$1.pm";
+};
+
+    $opt_o
+and $outfile=$opt_o;
+
+$opt_s = $opt_s ? 1 : 0;
+
+$opt_n = $opt_n ? 0 : 1;
+
+    open(OUT,">$outfile")
+or  die "Cannot open $outfile for writing.\n";
+
+    defined($opt_C) and do {
+      $opt_b = '' unless defined $opt_b;
+      $opt_B = '' unless defined $opt_B;
+    };
+
+    defined($opt_b)
+and do {
+        $opt_b
+    or  $opt_b = $Config{perlpath};
+    print OUT "#!$opt_b\n";
+};
+
+my $text = $parser->Output(
+                          classname  => $package,
+                          standalone => $opt_s,
+                          linenumbers => $opt_n,
+                          template    => $opt_t,
+                          modulino    => $opt_B,
+                          lexerisdefined => $opt_l,
+                          #prefixname => 'R::',
+                         );
+compute_lines(\$text, $outfile, $Parse::Eyapp::Output::pattern) if $opt_n;
+
+print OUT $text;
+
+close(OUT);
+
+chmod(0755, $outfile) if $opt_b;

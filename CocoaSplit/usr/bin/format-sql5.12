@@ -1,0 +1,16 @@
+#!/usr/bin/env perl5.12
+
+use SQL::Abstract::Tree;
+use Getopt::Long::Descriptive;
+
+my ($opt, $usage) = describe_options(
+  'format-sql %o',
+  [ 'profile|p=s',   "the profile to use", { default => 'console' } ],
+  [ 'help',       "print usage message and exit" ],
+);
+
+  print($usage->text), exit if $opt->help;
+
+my $sqlat = SQL::Abstract::Tree->new({ profile => $opt->profile });
+
+print $sqlat->format($_) . "\n" while <>;

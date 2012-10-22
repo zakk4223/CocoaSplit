@@ -1,0 +1,11 @@
+#! /bin/sh
+
+if [[ $1 = '-64' ]] ; then
+	shift
+	arch -x86_64 /usr/bin/auvaltool "$@"
+elif [[ $1 = '-ppc' ]] ; then
+	shift
+	arch -ppc /usr/bin/auvaltool "$@"
+else
+	arch -i386 /usr/bin/auvaltool "$@"
+fi

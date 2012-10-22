@@ -1,0 +1,146 @@
+#!/usr/bin/perl5.12 -w
+
+eval 'exec /usr/bin/perl -w -S $0 ${1+"$@"}'
+    if 0; # not running under some shell
+
+# Copyright (c) 2000                            RIPE NCC
+#
+# All Rights Reserved
+#
+# Permission to use, copy, modify, and distribute this software and its
+# documentation for any purpose and without fee is hereby granted,
+# provided that the above copyright notice appear in all copies and that
+# both that copyright notice and this permission notice appear in
+# supporting documentation, and that the name of the author not be
+# used in advertising or publicity pertaining to distribution of the
+# software without specific, written prior permission.
+#
+# THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING
+# ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS; IN NO EVENT SHALL
+# AUTHOR BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY
+# DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN
+# AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+#------------------------------------------------------------------------------
+# Module Header
+# Filename          : ipcount.pl
+# Purpose           : IP addresses calculator
+# Author            : Manuel Valente <manuel.valente@gmail.com>
+# Date              : 20000329
+# Description       : 
+# Language Version  : Perl 5
+# OSs Tested        : BSDI 3.1
+# Command Line      :
+# Input Files       :
+# Output Files      :
+# External Programs : Net::IP.pm
+# Problems          :
+# To Do             :
+# Comments          : 
+# $Id: ipcount,v 1.3 2002/10/15 09:18:14 manuel Exp $
+#------------------------------------------------------------------------------
+
+use strict;
+use Math::BigInt;
+use Net::IP qw(:PROC);
+use Getopt::Std;
+
+
+my %opts;
+
+getopts ('rd:',\%opts);
+
+scalar (@ARGV) < 1 and usage();
+my $arg = join '',@ARGV;
+$arg =~ s/\s+//g;
+
+my $ip = new Net::IP($arg) or die ("Cannot create IP object $arg: ".Error());
+
+my @list = $ip->find_prefixes() or die ($ip->error());
+
+# Cut down the supplied range in smaller prefixes
+if ($opts{d})
+{
+	if (scalar(@list) > 1)
+	{
+		$ip->set ($list[0]) or die (Error());
+		warn ("\nWarning: The supplied Range does not fit in one single prefix.\n");
+		warn ("I will use the first prefix only (".$ip->print.")\n\n");
+	}		
+		
+	my $size = new Math::BigInt (2);
+	$size = $size->bpow (ip_iplengths($ip->version) - $opts{d}) - 1;
+	
+	my $current = new Net::IP($ip->ip);
+	my $last    = new Net::IP($ip->last_ip);
+	
+	my $new_ip  = new Net::IP(0);
+	my $count;
+	
+	while ($current->bincomp ('lt', $last))
+	{
+		$new_ip->set($current->last_ip.'+'.$size) or die (Error());
+		print $new_ip->print,"\n";
+		
+		if ($opts{r})
+		{
+			print $new_ip->reverse_ip,"\n";
+		}
+		
+		$current->set($new_ip->last_ip .'+ 1') or die (Error());
+		
+		$count++;
+	}
+
+	printf ("\nFound %s /%ss in %s\n\n",$count, $opts{d}, $ip->print);
+
+	exit;
+}
+
+
+my ($addr,@pr,$tot);
+
+foreach (@list) 
+{
+	$addr = new Net::IP ($_) or die ("Cannot create IP object $_: ".Error());
+		
+	printf ("%18s    %15s - %-15s [%s]\n",$addr->print(),$addr->ip(),$addr->last_ip(), $addr->size());
+
+	if ($opts{r})
+	{
+		print $addr->reverse_ip,"\n";
+	}
+	
+	$tot += $addr->size();
+	push (@pr,'/'.$addr->prefixlen());	
+};
+
+if (scalar(@list) > 1) 
+{
+ 	print "\n";
+ 	printf ("%18s    %15s - %-15s [%s]\n",$ip->ip().(join ',',@pr),$ip->ip(),$ip->last_ip(),$tot);
+};
+
+
+# Print usage and die
+sub usage
+{
+	print "
+Usage: 
+	ipcount [-r] [-d <prefix>] address
+
+	-r: Print Reverse Ranges
+	-d <prefix>: Cut down the original prefix in several prefixes
+
+The address range can be one of:	
+	
+ipcount IP + size
+ipcount IP1 - IP2
+ipcount IP/len
+
+";
+	
+	exit (1);
+};
+

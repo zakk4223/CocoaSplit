@@ -1,0 +1,348 @@
+#!/usr/bin/env perl5.12
+
+use strict;
+use warnings;
+
+BEGIN {
+  use DBIx::Class;
+  die (  'The following modules are required for the dbicadmin utility: '
+       . DBIx::Class::Optional::Dependencies->req_missing_for ('admin_script')
+       . "\n"
+  ) unless DBIx::Class::Optional::Dependencies->req_ok_for ('admin_script');
+}
+
+use DBIx::Class::Admin::Descriptive;
+#use Getopt::Long::Descriptive;
+use DBIx::Class::Admin;
+
+my $short_description = "utility for administrating DBIx::Class schemata";
+my $synopsis_text =q|
+  deploy a schema to a database
+  %c --schema=MyApp::Schema \
+    --connect='["dbi:SQLite:my.db", "", ""]' \
+    --deploy
+
+  update an existing record
+  %c --schema=MyApp::Schema --class=Employee \
+    --connect='["dbi:SQLite:my.db", "", ""]' \
+    --op=update --set='{ "name": "New_Employee" }'
+|;
+
+my ($opts, $usage) = describe_options(
+    "%c: %o",
+  (
+    ['Actions'],
+    ["action" => hidden => { one_of => [
+      ['create' => 'Create version diffs needs preversion',],
+      ['upgrade' => 'Upgrade the database to the current schema '],
+      ['install' => 'Install the schema version tables to an existing database',],
+      ['deploy' => 'Deploy the schema to the database',],
+      ['select'   => 'Select data from the schema', ],
+      ['insert'   => 'Insert data into the schema', ],
+      ['update'   => 'Update data in the schema', ],
+      ['delete'   => 'Delete data from the schema',],
+      ['op:s' => 'compatiblity option all of the above can be suppied as --op=<action>'],
+      ['help' => 'display this help', { implies => { schema_class => '__dummy__' } } ],
+      ['selfinject-pod' => 'hidden', { implies => { schema_class => '__dummy__' } } ],
+    ], required=> 1 }],
+    ['Arguments'],
+    ['schema-class:s' => 'The class of the schema to load', { required => 1 } ],
+    ['resultset|resultset-class|class:s' => 'The resultset to operate on for data manipulation' ],
+    ['config-stanza:s' => 'Where in the config to find the connection_info, supply in form MyApp::Model::DB',],
+    ['config:s' => 'Supply the config file for parsing by Config::Any', { depends => 'config_stanza'} ],
+    ['connect-info:s%' => 'Supply the connect info as additional options ie -I dsn=<dsn> user=<user> password=<pass> '],
+    ['connect:s' => 'Supply the connect info as a json string' ],
+    ['sql-dir:s' => 'The directory where sql diffs will be created'],
+    ['sql-type:s' => 'The RDBMs flavour you wish to use'],
+    ['version:i' => 'Supply a version install'],
+    ['preversion:s' => 'The previous version to diff against',],
+    ['set:s' => 'JSON data used to perform data operations' ],
+    ['attrs:s' => 'JSON string to be used for the second argument for search'],
+    ['where:s' => 'JSON string to be used for the where clause of search'],
+    ['force' => 'Be forceful with some operations'],
+    ['trace' => 'Turn on DBIx::Class trace output'],
+    ['quiet' => 'Be less verbose'],
+    ['I:s@' => 'Same as perl\'s -I, prepended to current @INC'],
+  )
+);
+
+die "please only use one of --config or --connect-info\n" if ($opts->{config} and $opts->{connect_info});
+
+if($opts->{selfinject_pod}) {
+
+    die "This is an internal method, do not call!!!\n"
+      unless $ENV{MAKELEVEL};
+
+    $usage->synopsis($synopsis_text);
+    $usage->short_description($short_description);
+    exec (
+      $^X,
+      qw/-p -0777 -i -e/,
+      (
+        's/^# auto_pod_begin.*^# auto_pod_end/'
+      . quotemeta($usage->pod)
+      . '/ms'
+      ),
+      __FILE__
+    );
+}
+
+# FIXME - lowercasing will eventually go away when Getopt::Long::Descriptive is fixed
+if($opts->{i}) {
+  require lib;
+  lib->import( @{delete $opts->{i}} );
+}
+
+if($opts->{help}) {
+  $usage->die();
+}
+
+# option compatability mangle
+if($opts->{connect}) {
+  $opts->{connect_info} = delete $opts->{connect};
+}
+my $admin = DBIx::Class::Admin->new( %$opts );
+
+my $action = $opts->{action};
+
+$action = $opts->{op} if ($action eq 'op');
+
+print "Performing action $action...\n";
+
+my $res = $admin->$action();
+if ($action eq 'select') {
+
+  my $format = $opts->{format} || 'tsv';
+  die('Invalid format') if ($format!~/^tsv|csv$/s);
+
+  require Text::CSV;
+
+  my $csv = Text::CSV->new({
+    sep_char => ( $format eq 'tsv' ? "\t" : ',' ),
+  });
+
+  foreach my $row (@$res) {
+    $csv->combine( @$row );
+    print $csv->string()."\n";
+  }
+}
+
+
+__END__
+
+=head1 NAME
+
+dbicadmin - utility for administrating DBIx::Class schemata
+
+=head1 SYNOPSIS
+
+dbicadmin: [-I] [long options...]
+
+  deploy a schema to a database
+  dbicadmin --schema=MyApp::Schema \
+    --connect='["dbi:SQLite:my.db", "", ""]' \
+    --deploy
+
+  update an existing record
+  dbicadmin --schema=MyApp::Schema --class=Employee \
+    --connect='["dbi:SQLite:my.db", "", ""]' \
+    --op=update --set='{ "name": "New_Employee" }'
+
+
+
+=head1 OPTIONS
+
+=over
+
+=back
+
+=head2 Actions
+
+=cut
+
+=over
+
+=item B<--create>
+
+Create version diffs needs preversion
+
+=cut
+
+=item B<--upgrade>
+
+Upgrade the database to the current schema 
+
+=cut
+
+=item B<--install>
+
+Install the schema version tables to an existing database
+
+=cut
+
+=item B<--deploy>
+
+Deploy the schema to the database
+
+=cut
+
+=item B<--select>
+
+Select data from the schema
+
+=cut
+
+=item B<--insert>
+
+Insert data into the schema
+
+=cut
+
+=item B<--update>
+
+Update data in the schema
+
+=cut
+
+=item B<--delete>
+
+Delete data from the schema
+
+=cut
+
+=item B<--op>
+
+compatiblity option all of the above can be suppied as --op=<action>
+
+=cut
+
+=item B<--help>
+
+display this help
+
+=cut
+
+=back
+
+=head2 Arguments
+
+=cut
+
+=over
+
+=item B<--schema-class>
+
+The class of the schema to load
+
+=cut
+
+=item B<--resultset> or B<--resultset-class> or B<--class>
+
+The resultset to operate on for data manipulation
+
+=cut
+
+=item B<--config-stanza>
+
+Where in the config to find the connection_info, supply in form MyApp::Model::DB
+
+=cut
+
+=item B<--config>
+
+Supply the config file for parsing by Config::Any
+
+=cut
+
+=item B<--connect-info>
+
+Supply the connect info as additional options ie -I dsn=<dsn> user=<user> password=<pass> 
+
+=cut
+
+=item B<--connect>
+
+Supply the connect info as a json string
+
+=cut
+
+=item B<--sql-dir>
+
+The directory where sql diffs will be created
+
+=cut
+
+=item B<--sql-type>
+
+The RDBMs flavour you wish to use
+
+=cut
+
+=item B<--version>
+
+Supply a version install
+
+=cut
+
+=item B<--preversion>
+
+The previous version to diff against
+
+=cut
+
+=item B<--set>
+
+JSON data used to perform data operations
+
+=cut
+
+=item B<--attrs>
+
+JSON string to be used for the second argument for search
+
+=cut
+
+=item B<--where>
+
+JSON string to be used for the where clause of search
+
+=cut
+
+=item B<--force>
+
+Be forceful with some operations
+
+=cut
+
+=item B<--trace>
+
+Turn on DBIx::Class trace output
+
+=cut
+
+=item B<--quiet>
+
+Be less verbose
+
+=cut
+
+=item B<-I>
+
+Same as perl's -I, prepended to current @INC
+
+=cut
+
+=back
+
+
+=head1 AUTHORS
+
+See L<DBIx::Class/CONTRIBUTORS>
+
+=head1 LICENSE
+
+You may distribute this code under the same terms as Perl itself
+
+=cut
+
+# vim: et ft=perl
