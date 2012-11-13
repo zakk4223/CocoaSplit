@@ -10,6 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <VideoToolbox/VideoToolbox.h>
 #import "AVFCapture.h"
+#import "QTCapture.h"
 #import <CoreMedia/CoreMedia.h>
 #import "FFMpegTask.h"
 #import "CaptureSessionProtocol.h"

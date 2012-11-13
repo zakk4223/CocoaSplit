@@ -150,8 +150,12 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     AVOutputFormat *av_out_fmt;
     
     
+    if (_stream_format) {
+        avformat_alloc_output_context2(&_av_fmt_ctx, NULL, [_stream_format UTF8String], [_stream_output UTF8String]);
+    } else {
+        avformat_alloc_output_context2(&_av_fmt_ctx, NULL, NULL, [_stream_output UTF8String]);
+    }
     
-    avformat_alloc_output_context2(&_av_fmt_ctx, NULL, [_stream_format UTF8String], [_stream_output UTF8String]);
     if (!_av_fmt_ctx)
     {
         NSLog(@"No av_fmt_ctx");
@@ -170,7 +174,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
     
     AVCodecContext *c_ctx = _av_video_stream->codec;
-    
     
     c_ctx->codec_type = AVMEDIA_TYPE_VIDEO;
     c_ctx->codec_id = AV_CODEC_ID_H264;
@@ -198,6 +201,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     a_ctx->channels = 2;
     a_ctx->extradata = (unsigned char *)_audio_extradata;
     a_ctx->extradata_size = (int)_audio_extradata_size;
+    a_ctx->frame_size = (_samplerate * 2 * 2) / _framerate;
     
     
     CMFormatDescriptionRef fmt;

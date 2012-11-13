@@ -38,6 +38,15 @@
 		34792AF316103FF60065A859 /* DesktopCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34792AF216103FF60065A859 /* DesktopCapture.m */; };
 		34792AF616104AA70065A859 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AF516104AA70065A859 /* IOKit.framework */; };
 		34792AFB1611A6B90065A859 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AFA1611A6B90065A859 /* IOSurface.framework */; };
+		34AE3C30164E3E020052C95E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AE3C2F164E3E020052C95E /* Foundation.framework */; };
+		34AE3C36164E3E020052C95E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 34AE3C34164E3E020052C95E /* InfoPlist.strings */; };
+		34AE3C39164E3E020052C95E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AE3C38164E3E020052C95E /* main.m */; };
+		34AE3C3F164E3F230052C95E /* zakk.lol.QTCaptureHelper.xpc in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34AE3C2E164E3E020052C95E /* zakk.lol.QTCaptureHelper.xpc */; };
+		34AE3C44164E410D0052C95E /* XPCListenerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AE3C43164E410D0052C95E /* XPCListenerDelegate.m */; };
+		34AE3C4B164E68820052C95E /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4E015F3581200E4CE4E /* QTKit.framework */; };
+		34AE3C6B164F04B30052C95E /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AE3C6A164F04B30052C95E /* IOSurface.framework */; };
+		34AE3C6D164F04C90052C95E /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AE3C6C164F04C90052C95E /* CoreVideo.framework */; };
+		34B74BC91648D23B00818DE2 /* QTCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B74BC81648D23B00818DE2 /* QTCapture.m */; };
 		34C6C3BF15FB5B440018A18B /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34C6C3BE15FB5B440018A18B /* OpenGL.framework */; };
 /* End PBXBuildFile section */
 
@@ -49,6 +58,13 @@
 			remoteGlobalIDString = 340FE49C15F3417E00E4CE4E;
 			remoteInfo = CocoaSplit;
 		};
+		34AE3C40164E3FAD0052C95E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 340FE49415F3417E00E4CE4E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 34AE3C2D164E3E020052C95E;
+			remoteInfo = QTCaptureHelper;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -59,6 +75,16 @@
 			dstSubfolderSpec = 10;
 			files = (
 				342346DE15FA34CF00C8C77E /* Syphon.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		34AE3C3E164E3EAE0052C95E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Contents/XPCServices;
+			dstSubfolderSpec = 1;
+			files = (
+				34AE3C3F164E3F230052C95E /* zakk.lol.QTCaptureHelper.xpc in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +138,20 @@
 		34792AF216103FF60065A859 /* DesktopCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DesktopCapture.m; sourceTree = "<group>"; };
 		34792AF516104AA70065A859 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		34792AFA1611A6B90065A859 /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = System/Library/Frameworks/IOSurface.framework; sourceTree = SDKROOT; };
+		34AE3C2E164E3E020052C95E /* zakk.lol.QTCaptureHelper.xpc */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = zakk.lol.QTCaptureHelper.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
+		34AE3C2F164E3E020052C95E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		34AE3C33164E3E020052C95E /* QTCaptureHelper-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "QTCaptureHelper-Info.plist"; sourceTree = "<group>"; };
+		34AE3C35164E3E020052C95E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		34AE3C37164E3E020052C95E /* QTCaptureHelper-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "QTCaptureHelper-Prefix.pch"; sourceTree = "<group>"; };
+		34AE3C38164E3E020052C95E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		34AE3C42164E410D0052C95E /* XPCListenerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XPCListenerDelegate.h; sourceTree = "<group>"; };
+		34AE3C43164E410D0052C95E /* XPCListenerDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XPCListenerDelegate.m; sourceTree = "<group>"; };
+		34AE3C46164E560C0052C95E /* QTHelperProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QTHelperProtocol.h; sourceTree = "<group>"; };
+		34AE3C69164F01800052C95E /* CapturedFrameProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CapturedFrameProtocol.h; sourceTree = "<group>"; };
+		34AE3C6A164F04B30052C95E /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = ../../../../System/Library/Frameworks/IOSurface.framework; sourceTree = "<group>"; };
+		34AE3C6C164F04C90052C95E /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = ../../../../System/Library/Frameworks/CoreVideo.framework; sourceTree = "<group>"; };
+		34B74BC71648D23B00818DE2 /* QTCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QTCapture.h; sourceTree = "<group>"; };
+		34B74BC81648D23B00818DE2 /* QTCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QTCapture.m; sourceTree = "<group>"; };
 		34C6C3BE15FB5B440018A18B /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -145,12 +185,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		34AE3C2B164E3E020052C95E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34AE3C6D164F04C90052C95E /* CoreVideo.framework in Frameworks */,
+				34AE3C6B164F04B30052C95E /* IOSurface.framework in Frameworks */,
+				34AE3C4B164E68820052C95E /* QTKit.framework in Frameworks */,
+				34AE3C30164E3E020052C95E /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		340FE49215F3417E00E4CE4E = {
 			isa = PBXGroup;
 			children = (
+				34AE3C6C164F04C90052C95E /* CoreVideo.framework */,
+				34AE3C6A164F04B30052C95E /* IOSurface.framework */,
+				34AE3C45164E53D00052C95E /* XPCShared */,
 				34792AFA1611A6B90065A859 /* IOSurface.framework */,
 				34792AF516104AA70065A859 /* IOKit.framework */,
 				34C6C3BE15FB5B440018A18B /* OpenGL.framework */,
@@ -160,6 +214,7 @@
 				340FE4E015F3581200E4CE4E /* QTKit.framework */,
 				340FE4A715F3417E00E4CE4E /* CocoaSplit */,
 				340FE4C415F3417E00E4CE4E /* CocoaSplitTests */,
+				34AE3C31164E3E020052C95E /* QTCaptureHelper */,
 				340FE4A015F3417E00E4CE4E /* Frameworks */,
 				340FE49E15F3417E00E4CE4E /* Products */,
 			);
@@ -170,6 +225,7 @@
 			children = (
 				340FE49D15F3417E00E4CE4E /* CocoaSplit.app */,
 				340FE4BE15F3417E00E4CE4E /* CocoaSplitTests.octest */,
+				34AE3C2E164E3E020052C95E /* zakk.lol.QTCaptureHelper.xpc */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -184,6 +240,7 @@
 				340FE4D815F346CC00E4CE4E /* AVFoundation.framework */,
 				340FE4A115F3417E00E4CE4E /* Cocoa.framework */,
 				340FE4BF15F3417E00E4CE4E /* SenTestingKit.framework */,
+				34AE3C2F164E3E020052C95E /* Foundation.framework */,
 				340FE4A315F3417E00E4CE4E /* Other Frameworks */,
 			);
 			name = Frameworks;
@@ -212,6 +269,8 @@
 				342346D415FA301600C8C77E /* SyphonCapture.m */,
 				342346CD15F9F07E00C8C77E /* AbstractCaptureDevice.h */,
 				342346CE15F9F07E00C8C77E /* AbstractCaptureDevice.m */,
+				34B74BC71648D23B00818DE2 /* QTCapture.h */,
+				34B74BC81648D23B00818DE2 /* QTCapture.m */,
 				342346CC15F9D52000C8C77E /* CaptureSessionProtocol.h */,
 				342346BC15F6103D00C8C77E /* FFMpegTask.h */,
 				342346BD15F6103D00C8C77E /* FFMpegTask.m */,
@@ -258,6 +317,36 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		34AE3C31164E3E020052C95E /* QTCaptureHelper */ = {
+			isa = PBXGroup;
+			children = (
+				34AE3C38164E3E020052C95E /* main.m */,
+				34AE3C42164E410D0052C95E /* XPCListenerDelegate.h */,
+				34AE3C43164E410D0052C95E /* XPCListenerDelegate.m */,
+				34AE3C32164E3E020052C95E /* Supporting Files */,
+			);
+			path = QTCaptureHelper;
+			sourceTree = "<group>";
+		};
+		34AE3C32164E3E020052C95E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				34AE3C33164E3E020052C95E /* QTCaptureHelper-Info.plist */,
+				34AE3C34164E3E020052C95E /* InfoPlist.strings */,
+				34AE3C37164E3E020052C95E /* QTCaptureHelper-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		34AE3C45164E53D00052C95E /* XPCShared */ = {
+			isa = PBXGroup;
+			children = (
+				34AE3C46164E560C0052C95E /* QTHelperProtocol.h */,
+				34AE3C69164F01800052C95E /* CapturedFrameProtocol.h */,
+			);
+			name = XPCShared;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -269,10 +358,12 @@
 				340FE49A15F3417E00E4CE4E /* Frameworks */,
 				340FE49B15F3417E00E4CE4E /* Resources */,
 				342346DC15FA34B400C8C77E /* CopyFiles */,
+				34AE3C3E164E3EAE0052C95E /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				34AE3C41164E3FAD0052C95E /* PBXTargetDependency */,
 			);
 			name = CocoaSplit;
 			productName = CocoaSplit;
@@ -298,6 +389,23 @@
 			productReference = 340FE4BE15F3417E00E4CE4E /* CocoaSplitTests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
+		34AE3C2D164E3E020052C95E /* QTCaptureHelper */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 34AE3C3C164E3E020052C95E /* Build configuration list for PBXNativeTarget "QTCaptureHelper" */;
+			buildPhases = (
+				34AE3C2A164E3E020052C95E /* Sources */,
+				34AE3C2B164E3E020052C95E /* Frameworks */,
+				34AE3C2C164E3E020052C95E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = QTCaptureHelper;
+			productName = QTCaptureHelper;
+			productReference = 34AE3C2E164E3E020052C95E /* zakk.lol.QTCaptureHelper.xpc */;
+			productType = "com.apple.product-type.bundle";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -321,6 +429,7 @@
 			targets = (
 				340FE49C15F3417E00E4CE4E /* CocoaSplit */,
 				340FE4BD15F3417E00E4CE4E /* CocoaSplitTests */,
+				34AE3C2D164E3E020052C95E /* QTCaptureHelper */,
 			);
 		};
 /* End PBXProject section */
@@ -343,6 +452,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				340FE4C915F3417E00E4CE4E /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		34AE3C2C164E3E020052C95E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34AE3C36164E3E020052C95E /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -378,6 +495,7 @@
 				342346D515FA301600C8C77E /* SyphonCapture.m in Sources */,
 				34210B3E1606001200362FC8 /* OutputDestination.m in Sources */,
 				34792AF316103FF60065A859 /* DesktopCapture.m in Sources */,
+				34B74BC91648D23B00818DE2 /* QTCapture.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -389,6 +507,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		34AE3C2A164E3E020052C95E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34AE3C39164E3E020052C95E /* main.m in Sources */,
+				34AE3C44164E410D0052C95E /* XPCListenerDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -396,6 +523,11 @@
 			isa = PBXTargetDependency;
 			target = 340FE49C15F3417E00E4CE4E /* CocoaSplit */;
 			targetProxy = 340FE4C215F3417E00E4CE4E /* PBXContainerItemProxy */;
+		};
+		34AE3C41164E3FAD0052C95E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 34AE3C2D164E3E020052C95E /* QTCaptureHelper */;
+			targetProxy = 34AE3C40164E3FAD0052C95E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -428,6 +560,14 @@
 			isa = PBXVariantGroup;
 			children = (
 				340FE4C815F3417E00E4CE4E /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		34AE3C34164E3E020052C95E /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				34AE3C35164E3E020052C95E /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -555,6 +695,49 @@
 			};
 			name = Release;
 		};
+		34AE3C3A164E3E020052C95E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "QTCaptureHelper/QTCaptureHelper-Prefix.pch";
+				INFOPLIST_FILE = "QTCaptureHelper/QTCaptureHelper-Info.plist";
+				MACH_O_TYPE = mh_execute;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "zakk.lol.$(TARGET_NAME:rfc1034identifier)";
+				SDKROOT = "";
+				VALID_ARCHS = "i386 x86_64";
+				WRAPPER_EXTENSION = xpc;
+			};
+			name = Debug;
+		};
+		34AE3C3B164E3E020052C95E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "QTCaptureHelper/QTCaptureHelper-Prefix.pch";
+				INFOPLIST_FILE = "QTCaptureHelper/QTCaptureHelper-Info.plist";
+				MACH_O_TYPE = mh_execute;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				PRODUCT_NAME = "zakk.lol.$(TARGET_NAME:rfc1034identifier)";
+				SDKROOT = "";
+				VALID_ARCHS = "i386 x86_64";
+				WRAPPER_EXTENSION = xpc;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -581,6 +764,15 @@
 			buildConfigurations = (
 				340FE4D315F3417E00E4CE4E /* Debug */,
 				340FE4D415F3417E00E4CE4E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		34AE3C3C164E3E020052C95E /* Build configuration list for PBXNativeTarget "QTCaptureHelper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34AE3C3A164E3E020052C95E /* Debug */,
+				34AE3C3B164E3E020052C95E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

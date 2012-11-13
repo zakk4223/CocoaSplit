@@ -30,12 +30,12 @@
         self.streamingDestination = nil;
         
         
-        if ([self.selectedDestinationType isEqualToString:@"file"])
-        {
+        //if ([self.selectedDestinationType isEqualToString:@"file"])
+        //{
             panelName = @"FilePanel";
-        } else {
-            panelName = @"StreamServicePanel";
-        }
+        //} else {
+          //  panelName = @"StreamServicePanel";
+        //}
         
         [NSBundle loadNibNamed:panelName owner:self];
     }
@@ -106,6 +106,8 @@
         _video_capture_session = [[DesktopCapture alloc ] init];
     } else if ([selectedVideoType isEqualToString:@"AVFoundation"]) {
         _video_capture_session = [[AVFCapture alloc] init];
+    } else if ([selectedVideoType isEqualToString:@"QTCapture"]) {
+        _video_capture_session = [[QTCapture alloc] init];
     } else {
         _video_capture_session = nil;
     }
@@ -150,8 +152,9 @@
        @"rtmp" : @"RTMP Stream"};
        
        
-       self.videoTypes = @[@"Desktop", @"AVFoundation"];
+       self.videoTypes = @[@"Desktop", @"AVFoundation", @"QTCapture"];
        self.selectedVideoType = [self.videoTypes objectAtIndex:0];
+       
    }
     
     return self;

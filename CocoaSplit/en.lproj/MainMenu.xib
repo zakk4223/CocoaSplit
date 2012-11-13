@@ -1321,7 +1321,7 @@
 				<nil key="NSViewClass"/>
 				<nil key="NSUserInterfaceItemIdentifier"/>
 				<object class="NSView" key="NSWindowView" id="439893737">
-					<nil key="NSNextResponder"/>
+					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<array class="NSMutableArray" key="NSSubviews">
 						<object class="NSButton" id="389308716">
@@ -1329,6 +1329,7 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{250, 25}, {82, 32}}</string>
 							<reference key="NSSuperview" ref="439893737"/>
+							<reference key="NSNextKeyView"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="454886443">
@@ -1357,12 +1358,13 @@
 							<int key="NSvFlags">12</int>
 							<string key="NSFrame">{{-1, 53}, {584, 329}}</string>
 							<reference key="NSSuperview" ref="439893737"/>
+							<reference key="NSNextKeyView" ref="107286857"/>
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<array class="NSMutableArray" key="NSTabViewItems">
 								<object class="NSTabViewItem" id="302448651">
 									<string key="NSIdentifier">1</string>
 									<object class="NSView" key="NSView" id="460084472">
-										<reference key="NSNextResponder" ref="569688021"/>
+										<nil key="NSNextResponder"/>
 										<int key="NSvFlags">256</int>
 										<array class="NSMutableArray" key="NSSubviews">
 											<object class="NSPopUpButton" id="889564284">
@@ -1911,7 +1913,6 @@
 											</object>
 										</array>
 										<string key="NSFrame">{{10, 33}, {564, 283}}</string>
-										<reference key="NSSuperview" ref="569688021"/>
 										<reference key="NSNextKeyView" ref="321001671"/>
 										<string key="NSReuseIdentifierKey">_NS:11</string>
 									</object>
@@ -2177,7 +2178,7 @@
 								<object class="NSTabViewItem" id="155388920">
 									<string key="NSIdentifier">2</string>
 									<object class="NSView" key="NSView" id="107286857">
-										<nil key="NSNextResponder"/>
+										<reference key="NSNextResponder" ref="569688021"/>
 										<int key="NSvFlags">256</int>
 										<array class="NSMutableArray" key="NSSubviews">
 											<object class="NSScrollView" id="710299427">
@@ -2194,7 +2195,7 @@
 																<array class="NSMutableArray" key="NSSubviews"/>
 																<string key="NSFrameSize">{478, 190}</string>
 																<reference key="NSSuperview" ref="842508660"/>
-																<reference key="NSNextKeyView" ref="598397452"/>
+																<reference key="NSNextKeyView" ref="548143049"/>
 																<string key="NSReuseIdentifierKey">_NS:13</string>
 																<bool key="NSEnabled">YES</bool>
 																<bool key="NSAllowsLogicalLayoutDirection">NO</bool>
@@ -2208,11 +2209,10 @@
 																	<string key="NSReuseIdentifierKey">_NS:16</string>
 																	<reference key="NSTableView" ref="953940268"/>
 																</object>
-																<object class="_NSCornerView" key="NSCornerView" id="1050868349">
-																	<reference key="NSNextResponder" ref="710299427"/>
+																<object class="_NSCornerView" key="NSCornerView">
+																	<nil key="NSNextResponder"/>
 																	<int key="NSvFlags">-2147483392</int>
 																	<string key="NSFrame">{{224, 0}, {16, 17}}</string>
-																	<reference key="NSSuperview" ref="710299427"/>
 																	<string key="NSReuseIdentifierKey">_NS:19</string>
 																</object>
 																<array class="NSMutableArray" key="NSTableColumns">
@@ -2388,11 +2388,10 @@
 														<reference key="NSBGColor" ref="574509101"/>
 														<int key="NScvFlags">4</int>
 													</object>
-													<reference ref="1050868349"/>
 												</array>
 												<string key="NSFrame">{{42, 31}, {480, 208}}</string>
 												<reference key="NSSuperview" ref="107286857"/>
-												<reference key="NSNextKeyView" ref="842508660"/>
+												<reference key="NSNextKeyView" ref="598397452"/>
 												<string key="NSReuseIdentifierKey">_NS:9</string>
 												<string key="NSAntiCompressionPriority">{750, 750}</string>
 												<int key="NSsFlags">133682</int>
@@ -2524,6 +2523,7 @@
 											</object>
 										</array>
 										<string key="NSFrame">{{10, 33}, {564, 283}}</string>
+										<reference key="NSSuperview" ref="569688021"/>
 										<reference key="NSNextKeyView" ref="449329695"/>
 										<string key="NSReuseIdentifierKey">_NS:28</string>
 									</object>
@@ -2532,20 +2532,21 @@
 									<reference key="NSTabView" ref="569688021"/>
 								</object>
 							</array>
-							<reference key="NSSelectedTabViewItem" ref="302448651"/>
+							<reference key="NSSelectedTabViewItem" ref="155388920"/>
 							<reference key="NSFont" ref="582680700"/>
 							<int key="NSTvFlags">0</int>
 							<bool key="NSAllowTruncatedLabels">YES</bool>
 							<bool key="NSDrawsBackground">YES</bool>
 							<array class="NSMutableArray" key="NSSubviews">
-								<reference ref="460084472"/>
+								<reference ref="107286857"/>
 							</array>
 						</object>
 					</array>
 					<string key="NSFrameSize">{582, 388}</string>
+					<reference key="NSSuperview"/>
 					<reference key="NSNextKeyView" ref="569688021"/>
 				</object>
-				<string key="NSScreenRect">{{0, 0}, {1920, 1058}}</string>
+				<string key="NSScreenRect">{{0, 0}, {1680, 1028}}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
 				<bool key="NSWindowIsRestorable">YES</bool>
 			</object>
@@ -7335,93 +7336,7 @@
 			<nil key="sourceID"/>
 			<int key="maxID">1844</int>
 		</object>
-		<object class="IBClassDescriber" key="IBDocument.Classes">
-			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
-				<object class="IBPartialClassDescription">
-					<string key="className">AppDelegate</string>
-					<string key="superclassName">NSObject</string>
-					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="captureController">CaptureController</string>
-						<string key="window">NSWindow</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<object class="IBToOneOutletInfo" key="captureController">
-							<string key="name">captureController</string>
-							<string key="candidateClassName">CaptureController</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="window">
-							<string key="name">window</string>
-							<string key="candidateClassName">NSWindow</string>
-						</object>
-					</dictionary>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/AppDelegate.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">CaptureController</string>
-					<string key="superclassName">NSObject</string>
-					<dictionary class="NSMutableDictionary" key="actions">
-						<string key="addStreamingService:">id</string>
-						<string key="closeCreateSheet:">id</string>
-						<string key="openCreateSheet:">id</string>
-						<string key="removeDestination:">id</string>
-						<string key="streamButtonPushed:">id</string>
-						<string key="videoRefresh:">id</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="actionInfosByName">
-						<object class="IBActionInfo" key="addStreamingService:">
-							<string key="name">addStreamingService:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="closeCreateSheet:">
-							<string key="name">closeCreateSheet:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="openCreateSheet:">
-							<string key="name">openCreateSheet:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="removeDestination:">
-							<string key="name">removeDestination:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="streamButtonPushed:">
-							<string key="name">streamButtonPushed:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="videoRefresh:">
-							<string key="name">videoRefresh:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</dictionary>
-					<object class="NSMutableDictionary" key="outlets">
-						<string key="NS.key.0">createSheet</string>
-						<string key="NS.object.0">NSWindow</string>
-					</object>
-					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<string key="NS.key.0">createSheet</string>
-						<object class="IBToOneOutletInfo" key="NS.object.0">
-							<string key="name">createSheet</string>
-							<string key="candidateClassName">NSWindow</string>
-						</object>
-					</object>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/CaptureController.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">NSLayoutConstraint</string>
-					<string key="superclassName">NSObject</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/NSLayoutConstraint.h</string>
-					</object>
-				</object>
-			</array>
-		</object>
+		<object class="IBClassDescriber" key="IBDocument.Classes"/>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaFramework</string>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>

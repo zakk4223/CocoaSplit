@@ -51,6 +51,7 @@
     if (_destination)
         return _destination;
     
+    
     if ([_type_name isEqualToString:@"rtmp"])
     {
         _destination = [NSString stringWithFormat:@"%@/%@", self.server_name, self.stream_key];
@@ -66,6 +67,10 @@
 {
     
     NSLog(@"Destination set to %@", destination);
+    if ([destination hasPrefix:@"rtmp://"])
+    {
+        self.output_format = @"FLV";
+    }
      _destination = destination;
     
 }
@@ -74,13 +79,8 @@
 {
     if (self = [super init])
     {
-        self.output_format = @"FLV";
+        //self.output_format = @"FLV";
         self.type_name = type;
-        if ([type isEqualToString:@"twitchtv"])
-        {
-            self.output_format = @"FLV";
-            self.name = @"Twitch.TV";
-        }
 
     }
     return self;

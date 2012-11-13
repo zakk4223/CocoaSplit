@@ -1,16 +1,43 @@
 //
-//  AVFCapture.m
-//  H264Streamer
+//  QTCapture.m
+//  CocoaSplit
 //
-//  Created by Zakk on 9/3/12.
+//  Created by Zakk on 11/6/12.
 //  Copyright (c) 2012 Zakk. All rights reserved.
 //
 
-#import "AVFCapture.h"
+#import "QTCapture.h"
 #import "AbstractCaptureDevice.h"
+#import "QTHelperProtocol.h"
+#import "CapturedFrameProtocol.h"
 
-@implementation AVFCapture         
+@implementation QTCapture
 
+
+-(id) init
+{
+    self = [super init];
+    if (self)
+    {
+        NSXPCInterface *xpcInterface = [NSXPCInterface interfaceWithProtocol:@protocol(QTHelperProtocol)];
+        NSXPCInterface *xpcCallbackInterface = [NSXPCInterface interfaceWithProtocol:@protocol(CapturedFrameProtocol)];
+        
+        _xpcConnection = [[NSXPCConnection alloc] initWithServiceName:@"zakk.lol.QTCaptureHelper"];
+        
+        [_xpcConnection setRemoteObjectInterface:xpcInterface];
+        [_xpcConnection setExportedInterface:xpcCallbackInterface];
+        [_xpcConnection setExportedObject:self];
+        
+        NSLog(@"SETUP CONNECTION TO LISTENER");
+        [_xpcConnection resume];
+        _xpcProxy = [_xpcConnection remoteObjectProxy];
+        NSLog(@"GOT PROXY OBJECT");
+        
+        
+    }
+    return self;
+    
+}
 
 
 -(void) setVideoDimensions:(int)width height:(int)height
@@ -26,23 +53,17 @@
 
 -(bool) providesAudio
 {
-    return YES;
+    return NO;
 }
 
 
 
--(bool) setActiveAudioDevice:(id)audioDevice
-{
-    
-    _audioInputDevice = audioDevice;
-    return YES;
-    
-}
 
 
 -(bool) setActiveVideoDevice:(AbstractCaptureDevice *)newDev
 {
-    _videoInputDevice = [newDev captureDevice];
+    NSLog(@"SET VIDEO DEVICE TO %@", [newDev uniqueID]);
+    _videoInputDevice = [newDev uniqueID];
     return YES;
     
 }
@@ -51,124 +72,99 @@
 -(NSArray *) availableVideoDevices
 {
     
-    NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
-    NSMutableArray *retArray = [[NSMutableArray alloc] init];
+    dispatch_semaphore_t reply_s = dispatch_semaphore_create(0);
     
+    NSMutableArray *__block retArray;
+    NSLog(@"PROXY %@", _xpcProxy);
+    NSLog(@"CONNECTION %@", _xpcConnection);
+    [_xpcProxy testMethod];
+    NSLog(@"CALLED TEST METHOD FROM SPLIT");
     
-    AVCaptureDevice *devinstance;
-
-    for(devinstance in devices)
-    {
-        NSLog(@"Inputs %@", devinstance.linkedDevices);
-        [retArray addObject:[[AbstractCaptureDevice alloc] initWithName:[devinstance localizedName] device:devinstance uniqueID:devinstance.uniqueID]];
-    }
-    
+    [_xpcProxy listCaptureDevices:^(NSArray *r_devices) {
+        NSLog(@"REMOTE DEVICES %@", r_devices);
+        retArray = [[NSMutableArray alloc] init];
+        NSDictionary *devinstance;
+        for (devinstance in r_devices)
+        {
+           [retArray addObject:[[AbstractCaptureDevice alloc]  initWithName:[devinstance valueForKey:@"name"] device:[devinstance valueForKey:@"id"] uniqueID:[devinstance valueForKey:@"id"]]];
+        }
+        dispatch_semaphore_signal(reply_s);
+    }];
+    NSLog(@"SEMAPHORE WAIT");
+    dispatch_semaphore_wait(reply_s, DISPATCH_TIME_FOREVER);
+    reply_s = nil;
     return (NSArray *)retArray;
     
 }
+
+-(void) newCapturedFrame:(IOSurfaceID)ioxpc reply:(void (^)())reply
+{
+    
+    IOSurfaceRef  frameIOref = IOSurfaceLookup(ioxpc);
+    if (frameIOref)
+    {
+        
+        @synchronized(self) {
+            if (_currentFrame)
+            {
+                IOSurfaceDecrementUseCount(_currentFrame);
+                //CFRelease(_currentFrame);
+            }
+            
+            _currentFrame = frameIOref;
+            IOSurfaceIncrementUseCount(_currentFrame);
+            //CFRetain(_currentFrame);
+        }
+    
+        
+    }
+
+    // ALWAYS reply
+    reply();
+}
+
 
 
 
 -(bool) stopCaptureSession
 {
-    if (_capture_session)
-    {
-        [_capture_session stopRunning]; 
-        _capture_session = nil;
-        _video_capture_queue = nil;
-        _videoInputDevice = nil;
-        _video_capture_output = nil;
-        _audio_capture_output = nil;
-        _audioInputDevice = nil;
-        _audio_capture_queue = nil;
-        
-    }
+    [_xpcProxy stopXPCCaptureSession];
     return YES;
 }
 
-/*
--(void)grabPhoto
-{
-    
-    if (!_staticImage)
-    {
-    AVCaptureConnection *av_conn;
-    av_conn = [_capture_output connectionWithMediaType:AVMediaTypeVideo];
-
-    [_capture_output captureStillImageAsynchronouslyFromConnection:av_conn completionHandler:^(CMSampleBufferRef sampleBuffer, NSError *error) {
-        
-        CVImageBufferRef videoFrame = CMSampleBufferGetImageBuffer(sampleBuffer);
-        
-        
-        
-        //Should I copy the Image Buffer? instead of just retaining it?
-        
-        CVPixelBufferRetain(videoFrame);
-        
-        [_videoDelegate captureOutputVideo:self didOutputSampleBuffer:sampleBuffer didOutputImage:videoFrame];
-        _staticImage = videoFrame;
-        
-        //CVPixelBufferRelease(videoFrame);
-
-    }];
-    } else {
-        [_videoDelegate captureOutputVideo:self didOutputSampleBuffer:nil didOutputImage:_staticImage];
-
-    }
-    
-    
-    
-}
-
-   
- */
 
 -(bool) startCaptureSession:(NSError **)error
 {
     
-    if (_capture_session.isRunning)
-        return YES;
-    
-    if (!_capture_session)
-    {
-        if (error)
-        {
-            *error = [NSError errorWithDomain:@"videoCapture" code:110 userInfo:@{NSLocalizedDescriptionKey : @"No active capture session"}];
-        }
-        
-        return NO;
-        
-    }
-    _video_capture_queue = dispatch_queue_create("VideoQueue", NULL);
-    
-    [_video_capture_output setSampleBufferDelegate:self queue:_video_capture_queue];
-    
-    _audio_capture_queue = dispatch_queue_create("AudioQueue", NULL);
-    [_audio_capture_output setSampleBufferDelegate:self queue:_audio_capture_queue];
-    
-
-    [_capture_session startRunning];
+    NSLog(@"CALLING STARTXPC WITH %@", _videoInputDevice);
+    [_xpcProxy startXPCCaptureSession:_videoInputDevice];
     
     return YES;
 }
 
 
-
+-(bool) setupCaptureSession:(NSError *__autoreleasing *)therror
+{
+    
+    return YES;
+    
+}
+/*
 -(bool) setupCaptureSession:(NSError **)therror
 {
     
-
+    
     AVCaptureDeviceInput *video_capture_input;
     AVCaptureDeviceInput *audio_capture_input;
     
     if (_capture_session)
         return YES;
-        
+    
     
     NSLog(@"Starting setup capture");
     if (_videoDelegate || _audioDelegate)
     {
-         _capture_session = [[AVCaptureSession alloc] init];
+        _capture_session = [[AVCaptureSession alloc] init];
     }
     
     if (_videoDelegate)
@@ -179,31 +175,31 @@
             *therror = [NSError errorWithDomain:@"videoCapture" code:100 userInfo:@{NSLocalizedDescriptionKey : @"Must select video capture device first"}];
             return NO;
         }
-  
+        
         _capture_session = [[AVCaptureSession alloc] init];
-    
-    
+        
+        
         video_capture_input = [AVCaptureDeviceInput deviceInputWithDevice:_videoInputDevice error:therror];
-    
+        
         if (!video_capture_input)
         {
             NSLog(@"No video capture input?");
             return NO;
         }
-                     
+        
         if ([_capture_session canAddInput:video_capture_input])
         {
             [_capture_session addInput:video_capture_input];
-        
+            
         } else {
             NSLog(@"Can't add video_capture_input");
             *therror = [NSError errorWithDomain:@"videoCapture" code:120 userInfo:@{NSLocalizedDescriptionKey : @"Could not add video input to capture session"}];
             return NO;
         }
-  
+        
         _video_capture_output = [[AVCaptureVideoDataOutput alloc] init];
-    
-    
+        
+        
         if ([_capture_session canAddOutput:_video_capture_output])
         {
             [_capture_session addOutput:_video_capture_output];
@@ -220,26 +216,26 @@
         if (_audioInputDevice)
         {
             audio_capture_input = [AVCaptureDeviceInput deviceInputWithDevice:_audioInputDevice error:therror];
-    
+            
             if (!audio_capture_input)
             {
                 NSLog(@"No audio capture input?");
                 return NO;
             }
-    
+            
             if ([_capture_session canAddInput:audio_capture_input])
             {
                 [_capture_session addInput:audio_capture_input];
-        
+                
             } else {
                 NSLog(@"Can't add audio input?");
                 *therror = [NSError errorWithDomain:@"audioCapture" code:220 userInfo:@{NSLocalizedDescriptionKey : @"Could not add audio input to capture session"}];
                 return NO;
             }
-    
+            
             _audio_capture_output = [[AVCaptureAudioDataOutput alloc] init];
-    
-    
+            
+            
             
             _audio_capture_output.audioSettings = @{AVFormatIDKey: [NSNumber numberWithInt:kAudioFormatMPEG4AAC],
         AVSampleRateKey: [NSNumber numberWithFloat: 44100.0],
@@ -247,7 +243,7 @@
         AVNumberOfChannelsKey: @2
             
             };
-
+            
             
             if ([_capture_session canAddOutput:_audio_capture_output])
             {
@@ -267,8 +263,8 @@
     
 }
 
-
-void PixelBufferRelease(void *releaseRefCon, const void *baseAddress)
+*/
+void QTPixelBufferRelease(void *releaseRefCon, const void *baseAddress)
 {
     
     if (baseAddress)
@@ -279,60 +275,46 @@ void PixelBufferRelease(void *releaseRefCon, const void *baseAddress)
 
 - (CVImageBufferRef) getCurrentFrame
 {
-    //copy the current frame to a new pixel buffer
-    //If I don't copy the pixel buffers, sometimes they just generate exceptions, even if I retain them and lock them. Assuming
-    //the IOSurface is being reclaimed or something
-    //There may be a better way to do this?
-    
+
     CVImageBufferRef newbuf = NULL;
-    void *bufbytes;
-    void *current_base;
-    size_t width;
-    size_t height;
-    size_t bytesPerRow;
     
     @synchronized(self)
     {
         if (_currentFrame)
         {
-            CVPixelBufferLockBaseAddress(_currentFrame, 1);
-            width = CVPixelBufferGetWidth(_currentFrame);
-            height = CVPixelBufferGetHeight(_currentFrame);
-            bytesPerRow = CVPixelBufferGetBytesPerRow(_currentFrame);
-            bufbytes = malloc(height*bytesPerRow);
-            current_base = CVPixelBufferGetBaseAddress(_currentFrame);
-            memcpy(bufbytes, current_base, height*bytesPerRow);
-        
-            CVPixelBufferCreateWithBytes(NULL, width, height, CVPixelBufferGetPixelFormatType(_currentFrame), bufbytes, bytesPerRow, PixelBufferRelease, NULL, NULL, &newbuf);
-            CVBufferPropagateAttachments(_currentFrame, newbuf);
+            CVPixelBufferCreateWithIOSurface(NULL, _currentFrame, NULL, &newbuf);
+            return newbuf;
             
-            CVPixelBufferUnlockBaseAddress(_currentFrame, 1);
+            
         }
         
     }
     
     return newbuf;
     
+    
 
+    
+    
 }
 
-
+/*
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
 {
     
     if (connection.output == _video_capture_output)
     {
         CVImageBufferRef videoFrame = CMSampleBufferGetImageBuffer(sampleBuffer);
-    
-    
-    
+        
+        
+        
         @synchronized(self)
         {
             if (_currentFrame)
             {
                 CVPixelBufferRelease(_currentFrame);
             }
-    
+            
             CVPixelBufferRetain(videoFrame);
             _currentFrame = videoFrame;
         }
@@ -343,5 +325,6 @@ void PixelBufferRelease(void *releaseRefCon, const void *baseAddress)
     }
     
 }
+ */
 
 @end
