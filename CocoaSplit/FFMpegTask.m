@@ -119,7 +119,11 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
             
             pkt.pts = CMTimeGetSeconds(pts)*1000;
          
-            av_interleaved_write_frame(_av_fmt_ctx, &pkt);
+            if (av_interleaved_write_frame(_av_fmt_ctx, &pkt) < 0)
+            {
+                NSLog(@"AV WRITE AUDIO failed");
+                [self stopProcess];
+            }
             //CMSampleBufferInvalidate(theBuffer);
             CFRelease(theBuffer);
         });
@@ -234,10 +238,18 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     if (!(av_out_fmt->flags & AVFMT_NOFILE))
     {
         NSLog(@"Doing AVIO_OPEN");
-        avio_open(&_av_fmt_ctx->pb, [_stream_output UTF8String], AVIO_FLAG_WRITE);
+        if (avio_open(&_av_fmt_ctx->pb, [_stream_output UTF8String], AVIO_FLAG_WRITE) < 0)
+        {
+            NSLog(@"AVIO_OPEN failed");
+            [self stopProcess];
+        }
     }
     
-    avformat_write_header(_av_fmt_ctx, NULL);
+    if (avformat_write_header(_av_fmt_ctx, NULL) < 0)
+    {
+        NSLog(@"AVFORMAT_WRITE_HEADER failed");
+        [self stopProcess];
+    }
     return YES;
 }
 
@@ -292,7 +304,11 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
     
         
-    av_interleaved_write_frame(_av_fmt_ctx, &pkt);
+    if (av_interleaved_write_frame(_av_fmt_ctx, &pkt) < 0)
+    {
+        NSLog(@"VIDEO WRITE FRAME failed");
+        [self stopProcess];
+    }
     
     //CMSampleBufferInvalidate(theBuffer);
     CFRelease(theBuffer);
@@ -345,10 +361,17 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 }
 
 -(bool)stopProcess
-{
-    
+{    
     av_write_trailer(_av_fmt_ctx);
     avio_close(_av_fmt_ctx->pb);
+    
+    av_free(_av_fmt_ctx);
+    av_free(_av_video_stream);
+    av_free(_av_audio_stream);
+
+    _av_fmt_ctx = NULL;
+    _av_video_stream = NULL;
+    _av_audio_stream = NULL;
     
     self.is_stopped = YES;
     _stream_dispatch = nil;
