@@ -11,6 +11,7 @@ Audio codec is limited to AAC; this is done through AVFoundation's AVCaptureOutp
 Video input support:
 Webcam (Uses AVFoundation)
 Desktop (Uses CGDisplayStream)
+32-bit QuickTime Inputs (QTCapture) - Camtwist and various webcam/capture cards should show up here.
 
 Audio input support:
 AVFoundation audio (things like SoundFlower or Jack should work fine)
@@ -35,11 +36,6 @@ Some sort of status output while streaming is active.
 Use twitch and own3d API to get user's streamkey.
 Syphon input.
 Allow the option of using libavcodec's x264 encoder for those that don't have a hardware encoder.
-
-What about CamTwist?
-Unfortunately CamTwist is 32bit only and CocoaSplit is 64bit. On top of that, CamTwist only shows up at a QTCaptureDevice and not an AVFoundation Device.
-My experiments with a 32bit version of CocoaSplit that uses QTCapture ended with what I consider excessive CPU usage. So there is unlikely to be native CamTwist support. The upcoming Syphon support should allow getting frames out of CamTwist, it'll just be a bit more complicated than normal.
-
 
 Supported Platforms
 
