@@ -1,6 +1,9 @@
 CocoaSplit
 
 
+BINARIES HERE: http://krylon.rsdio.com/zakk/cocoasplit/
+
+
 CocoaSplit uses libavformat and the OSX VideoToolbox hardware h264 encoder to stream to anything libavformat can handle.
 
 Multiple outputs are supported, so you can save to a local file while streaming to something like twitch.tv or own3d.tv
