@@ -17,6 +17,7 @@
     id _delegate;
     SyphonClient *_syphon_client;
     NSOpenGLContext *_cgl_ctx;
+    IOSurfaceRef _currentFrame;
     
 }
 

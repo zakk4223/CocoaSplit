@@ -27,6 +27,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     
     id _video_capture_session;
     id _audio_capture_session;
+    id _active_video_capture_session;
     
     VTCompressionSessionRef _compression_session;
     NSTimer *_captureTimer;

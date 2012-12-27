@@ -94,10 +94,13 @@
     }
 }
 
+
+
 -(NSString *) selectedVideoType
 {
     return _selectedVideoType;
 }
+
 
 
 -(void) setSelectedVideoType:(NSString *)selectedVideoType
@@ -109,6 +112,8 @@
         _video_capture_session = [[AVFCapture alloc] init];
     } else if ([selectedVideoType isEqualToString:@"QTCapture"]) {
         _video_capture_session = [[QTCapture alloc] init];
+    } else if ([selectedVideoType isEqualToString:@"Syphon"]) {
+        _video_capture_session = [[SyphonCapture alloc] init];
     } else {
         _video_capture_session = nil;
     }
@@ -292,6 +297,39 @@
     output.ffmpeg_out = newout;
 }
 
+
+
+-(BOOL)startVideoCaptureSession
+{
+    NSError *error;
+    bool success;
+
+    [_video_capture_session setActiveVideoDevice:_selectedVideoCapture];
+    [_video_capture_session setVideoCaptureFPS:_captureFPS];
+    [_video_capture_session setVideoDelegate:self];
+    [_video_capture_session setVideoDimensions:_captureWidth height:_captureHeight];
+    success = [_video_capture_session setupCaptureSession:&error];
+    if (!success)
+    {
+        [NSApp presentError:error];
+        return NO;
+    }
+
+    success = [_video_capture_session startCaptureSession:&error];
+
+    
+    if (!success)
+    {
+        NSLog(@"Failed start capture");
+        [NSApp presentError:error];
+        return NO;
+    }
+    
+    return YES;
+}
+
+
+
 - (IBAction)streamButtonPushed:(id)sender {
     
     NSButton *button = (NSButton *)sender;
@@ -307,18 +345,24 @@
         NSError *error;
         bool success;
         
+        if (![self startVideoCaptureSession])
+        {
+            [sender setNextState];
+            return;
+        }
+        
         
         [_audio_capture_session setActiveAudioDevice:_selectedAudioCapture];
-        [_video_capture_session setActiveVideoDevice:_selectedVideoCapture];
-        [_video_capture_session setVideoCaptureFPS:_captureFPS];
-        [_video_capture_session setVideoDelegate:self];
-        [_video_capture_session setVideoDimensions:_captureWidth height:_captureHeight];
+        //[_video_capture_session setActiveVideoDevice:_selectedVideoCapture];
+        //[_video_capture_session setVideoCaptureFPS:_captureFPS];
+        //[_video_capture_session setVideoDelegate:self];
+        //[_video_capture_session setVideoDimensions:_captureWidth height:_captureHeight];
         [_audio_capture_session setAudioDelegate:self];
         [_audio_capture_session setAudioBitrate:_audioBitrate];
         [_audio_capture_session setAudioSamplerate:_audioSamplerate];
         
         
-        
+        /*
         success = [_video_capture_session setupCaptureSession:&error];
         if (!success)
         {
@@ -326,7 +370,7 @@
             [sender setNextState];
             return;
         }
-    
+    */
         success = [_audio_capture_session setupCaptureSession:&error];
         if (!success)
         {
@@ -355,7 +399,7 @@
         }
         
         
-        success = [_video_capture_session startCaptureSession:&error];
+        //success = [_video_capture_session startCaptureSession:&error];
         
         _frameCount = 0;
         _compressedFrameCount = 0;
@@ -364,7 +408,7 @@
         _captureTimer = [NSTimer timerWithTimeInterval:1.0/_captureFPS target:self selector:@selector(newFrame) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:_captureTimer forMode:NSRunLoopCommonModes];
 
-    
+    /*
         if (!success)
         {
             NSLog(@"Failed start capture");
@@ -372,7 +416,7 @@
             [sender setNextState];
             return;
         }
-        
+      */  
         success = [_audio_capture_session startCaptureSession:&error];
         
         
@@ -604,7 +648,7 @@ void VideoCompressorReceiveFrame(void *VTref, void *VTFrameRef, OSStatus status,
 {
     
     NSUInteger key_idx = [@[@"captureWidth", @"captureHeight", @"captureFPS",
-    @"captureVideoAverageBitrate", @"audioBitrate", @"audioSamplerate"] indexOfObject:key];
+    @"captureVideoAverageBitrate", @"audioBitrate", @"audioSamplerate", @"captureVideoMaxBitrate", @"captureVideoMaxKeyframeInterval"] indexOfObject:key];
     
     if (key_idx != NSNotFound)
     {

@@ -11,6 +11,45 @@
 
 @implementation SyphonCapture
 
+
+
+
+-(void)setVideoDimensions:(int)width height:(int)height
+{
+    return;
+}
+
+
+-(bool)stopCaptureSession
+{
+    [_syphon_client stop];
+    
+    return YES;
+}
+
+- (CVImageBufferRef) getCurrentFrame
+{
+    
+    CVImageBufferRef newbuf = NULL;
+    
+    @synchronized(self)
+    {
+        if (_currentFrame)
+        {
+            IOSurfaceSetValue(_currentFrame, kCVPixelBufferPixelFormatTypeKey, (__bridge CFTypeRef)(@(kCVPixelFormatType_32BGRA)));
+            CVPixelBufferCreateWithIOSurface(NULL, _currentFrame, (__bridge CFDictionaryRef)(@{(NSString *)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_422YpCbCr10)}), &newbuf);
+            
+            
+        }
+        
+    }
+    
+    return newbuf;
+    
+    
+}
+
+
 -(void) setVideoCaptureFPS:(int)fps
 {
     _captureFPS = fps;
@@ -32,16 +71,13 @@
 -(bool) setupCaptureSession:(NSError *__autoreleasing *)therror
 {
     
-    const NSOpenGLPixelFormatAttribute attr[] = {NSOpenGLPFANoRecovery, NSOpenGLPFAAccelerated, NSOpenGLPFADoubleBuffer, 0};
-    
-    NSOpenGLPixelFormat* fmt = [[NSOpenGLPixelFormat alloc] initWithAttributes:attr];
-    _cgl_ctx = [[NSOpenGLContext alloc] initWithFormat:fmt shareContext:nil];
-    
-
     return YES;
     
     
 }
+
+
+
 
 -(bool) startCaptureSession:(NSError *__autoreleasing *)error
 {
@@ -50,32 +86,26 @@
     
     
     _syphon_client = [[SyphonClient alloc] initWithServerDescription:_syphonServer options:nil newFrameHandler:^(SyphonClient *client) {
-        [_cgl_ctx makeCurrentContext];
-        CGLContextObj cgl_ctx = [_cgl_ctx CGLContextObj];
+        IOSurfaceRef frameSurface = [client currentSurfaceRef];
+        NSLog(@"IOSURFACE BLAH %d", IOSurfaceGetHeight(frameSurface));
+        if (frameSurface)
+        {
+            CFRetain(frameSurface);
+            IOSurfaceIncrementUseCount(frameSurface);
+            @synchronized(self) {
+                if (_currentFrame)
+                {
+                    IOSurfaceDecrementUseCount(_currentFrame);
+                    CFRelease(_currentFrame);
+                }
+                
+                _currentFrame = frameSurface;
+            }
 
-        SyphonImage *myFrame = [client newFrameImageForContext:cgl_ctx];
-        CVPixelBufferRef pbuff;
-        int buf_size;
+        }
         
-        buf_size = myFrame.textureSize.height * myFrame.textureSize.width;
-        
-        glBindTexture(GL_TEXTURE_RECTANGLE_ARB, myFrame.textureName);
-        
-
-        
-        GLuint *buffer = malloc(buf_size*4);
-
-        
-        glGetTexImage(GL_TEXTURE_RECTANGLE_ARB, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, buffer);
-         
-        CVPixelBufferCreateWithBytes(NULL, myFrame.textureSize.width, myFrame.textureSize.height, kCVPixelFormatType_32BGRA, buffer, myFrame.textureSize.width*4, NULL, 0, NULL, &pbuff);
-        
-        [_delegate captureOutputVideo:self didOutputSampleBuffer:nil didOutputImage:pbuff frameTime:0];
-        //CVPixelBufferRelease(pbuff);
-        
-      
+    }];
     
-    } ];
        return YES;
     
 }
@@ -102,7 +132,8 @@
     NSLog(@"SERVERS %@", servers);
     for(sserv in servers)
     {
-        //[retArr addObject:[[AbstractCaptureDevice alloc] initWithName:[sserv objectForKey:SyphonServerDescriptionAppNameKey] device:sserv]];
+        
+        [retArr addObject:[[AbstractCaptureDevice alloc] initWithName:[sserv objectForKey:SyphonServerDescriptionAppNameKey] device:sserv uniqueID:[sserv objectForKey:SyphonServerDescriptionUUIDKey ]]];
         
     }
     return (NSArray *)retArr;
