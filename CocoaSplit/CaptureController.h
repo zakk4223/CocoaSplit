@@ -15,6 +15,8 @@
 #import "FFMpegTask.h"
 #import "CaptureSessionProtocol.h"
 #import "AbstractCaptureDevice.h"
+#import "PreviewView.h"
+
 
 
 void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , CMSampleBufferRef );
@@ -30,11 +32,17 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     NSTimer *_captureTimer;
     long long _frameCount;
     CFAbsoluteTime _firstFrameTime;
-    AVAssetWriter *_asset_writer;
     NSString *_selectedVideoType;
     
 }
 
+@property (assign) double min_delay;
+@property (assign) double max_delay;
+@property (assign) double avg_delay;
+@property (assign) long long compressedFrameCount;
+
+
+@property (unsafe_unretained) IBOutlet PreviewView *previewCtx;
 - (IBAction)addStreamingService:(id)sender;
 
 - (IBAction)streamButtonPushed:(id)sender;
@@ -59,6 +67,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 @property (weak) NSString *selectedDestinationType;
 
+@property (strong) NSString *statusString;
+@property (strong) NSString *compressionStatusString;
 
 @property (strong) IBOutlet NSWindow *createSheet;
 
@@ -70,6 +80,9 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 @property (assign) int captureVideoAverageBitrate;
+@property (assign) int captureVideoMaxBitrate;
+@property (assign) int captureVideoMaxKeyframeInterval;
+
 
 @property (assign) int captureHeight;
 @property (assign) int captureWidth;

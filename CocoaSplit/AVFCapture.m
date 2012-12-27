@@ -15,6 +15,9 @@
 
 -(void) setVideoDimensions:(int)width height:(int)height
 {
+    self.videoHeight = height;
+    self.videoWidth = width;
+    
     return;
 }
 
@@ -182,7 +185,7 @@
   
         _capture_session = [[AVCaptureSession alloc] init];
     
-    
+        
         video_capture_input = [AVCaptureDeviceInput deviceInputWithDevice:_videoInputDevice error:therror];
     
         if (!video_capture_input)
@@ -201,17 +204,35 @@
             return NO;
         }
   
+        NSMutableDictionary *videoSettings = [[NSMutableDictionary alloc] init];
+        
+        [videoSettings setValue:@[@(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange), @(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange), @(kCVPixelFormatType_422YpCbCr8)] forKey:(NSString *)kCVPixelBufferPixelFormatTypeKey];
+        
+        NSDictionary *ioAttrs = [NSDictionary dictionaryWithObject: [NSNumber numberWithBool: YES]
+                                                            forKey: (NSString *)kIOSurfaceIsGlobal];
+        
+        [videoSettings setValue:ioAttrs forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
+        if (self.videoHeight && self.videoWidth)
+        {
+            [videoSettings setValue:@(self.videoHeight) forKey:(NSString *)kCVPixelBufferHeightKey];
+            [videoSettings setValue:@(self.videoWidth) forKey:(NSString *)kCVPixelBufferWidthKey];
+        }
+        
+        NSLog(@"SETTINGS DICT %@", videoSettings);
         _video_capture_output = [[AVCaptureVideoDataOutput alloc] init];
-    
     
         if ([_capture_session canAddOutput:_video_capture_output])
         {
             [_capture_session addOutput:_video_capture_output];
+            _video_capture_output.videoSettings = videoSettings;
+            NSLog(@"QUERIED VIDEO SETTINGS %@", _video_capture_output.videoSettings);
+
         } else {
             NSLog(@"Can't add video capture output");
             *therror = [NSError errorWithDomain:@"videoCapture" code:130 userInfo:@{NSLocalizedDescriptionKey : @"Could not add video output to capture session"}];
             return NO;
         }
+        
     }
     
     if (_audioDelegate)
@@ -295,6 +316,9 @@ void PixelBufferRelease(void *releaseRefCon, const void *baseAddress)
     {
         if (_currentFrame)
         {
+            CVPixelBufferRetain(_currentFrame);
+            return _currentFrame;
+            /*
             CVPixelBufferLockBaseAddress(_currentFrame, 1);
             width = CVPixelBufferGetWidth(_currentFrame);
             height = CVPixelBufferGetHeight(_currentFrame);
@@ -307,6 +331,7 @@ void PixelBufferRelease(void *releaseRefCon, const void *baseAddress)
             CVBufferPropagateAttachments(_currentFrame, newbuf);
             
             CVPixelBufferUnlockBaseAddress(_currentFrame, 1);
+             */
         }
         
     }
@@ -325,7 +350,7 @@ void PixelBufferRelease(void *releaseRefCon, const void *baseAddress)
         CVImageBufferRef videoFrame = CMSampleBufferGetImageBuffer(sampleBuffer);
     
     
-    
+        CVPixelBufferRetain(videoFrame);
         @synchronized(self)
         {
             if (_currentFrame)
@@ -333,7 +358,6 @@ void PixelBufferRelease(void *releaseRefCon, const void *baseAddress)
                 CVPixelBufferRelease(_currentFrame);
             }
     
-            CVPixelBufferRetain(videoFrame);
             _currentFrame = videoFrame;
         }
     } else if (connection.output == _audio_capture_output) {

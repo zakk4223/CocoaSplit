@@ -260,6 +260,12 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
     CFRetain(theBuffer);
     
+    if (!_stream_dispatch)
+    {
+       _stream_dispatch = dispatch_queue_create("FFMpeg Stream Dispatch", NULL);
+    }
+    
+    
     dispatch_async(_stream_dispatch, ^{
         
     if (!_av_video_stream)
@@ -351,7 +357,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     av_register_all();
     avformat_network_init();
     
-    self.is_stopped = YES;
     
     _stream_dispatch = dispatch_queue_create("FFMpeg Stream Dispatch", NULL);
     
@@ -360,30 +365,27 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
 }
 
+
 -(bool)stopProcess
-{    
-    av_write_trailer(_av_fmt_ctx);
-    avio_close(_av_fmt_ctx->pb);
+{
+    if (_av_fmt_ctx)
+    {
+        av_write_trailer(_av_fmt_ctx);
+        avio_close(_av_fmt_ctx->pb);
+        av_free(_av_fmt_ctx);
+    }
     
-    av_free(_av_fmt_ctx);
-    av_free(_av_video_stream);
-    av_free(_av_audio_stream);
+    if (_av_video_stream)
+        av_free(_av_video_stream);
+    if (_av_audio_stream)
+        av_free(_av_audio_stream);
 
     _av_fmt_ctx = NULL;
     _av_video_stream = NULL;
     _av_audio_stream = NULL;
     
-    self.is_stopped = YES;
+    
     _stream_dispatch = nil;
-    
-    if (_stream_dispatch)
-    {
-        NSLog(@"SUSPEND VIDEO DISPATCH");
-        dispatch_suspend(_stream_dispatch);
-        _stream_dispatch = nil;
-        
-    }
-    
     return YES;
 }
 @end

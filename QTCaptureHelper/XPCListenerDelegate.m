@@ -140,8 +140,7 @@
     NSMutableDictionary *pbAttrs = [NSMutableDictionary dictionaryWithObject:ioAttrs
                                                                       forKey: (NSString*)kCVPixelBufferIOSurfacePropertiesKey];
     
-    [pbAttrs setObject:
-    [NSNumber numberWithInt:kCVPixelFormatType_422YpCbCr8]
+    [pbAttrs setObject: @[@(kCVPixelFormatType_422YpCbCr8), @(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange), @(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)]
                 forKey:(NSString *)kCVPixelBufferPixelFormatTypeKey];
     
     [self.captureOutput setPixelBufferAttributes:pbAttrs];

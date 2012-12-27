@@ -39,6 +39,9 @@
 @property (assign) int videoCaptureFPS;
 @property (assign) int audioBitrate;
 @property (assign) int audioSamplerate;
+@property (assign) int videoHeight;
+@property (assign) int videoWidth;
+
 
 
 -(bool) startCaptureSession:(NSError **)error;

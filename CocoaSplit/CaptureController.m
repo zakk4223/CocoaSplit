@@ -12,6 +12,7 @@
 #import "SyphonCapture.h"
 #import "OutputDestination.h"
 #import "DesktopCapture.h"
+#import "PreviewView.h"
 #import <IOSurface/IOSurface.h>
 
 
@@ -155,6 +156,7 @@
        self.videoTypes = @[@"Desktop", @"AVFoundation", @"QTCapture"];
        self.selectedVideoType = [self.videoTypes objectAtIndex:0];
        
+       
    }
     
     return self;
@@ -264,20 +266,30 @@
     OutputDestination *newDest;
     
     newDest = [[OutputDestination alloc] initWithType:_selectedDestinationType];
-    
     newDest.server_name = _streamingServiceServer;
-    
     newDest.stream_key = _streamingServiceKey;
-    
     newDest.destination = _streamingDestination;
     
     
-    
-    
     [[self mutableArrayValueForKey:@"captureDestinations"] addObject:newDest];
-
+    [self attachCaptureDestination:newDest];
     [self closeCreateSheet:nil];
     
+}
+
+-(void)attachCaptureDestination:(OutputDestination *)output
+{
+    FFMpegTask *newout;
+    
+    
+    newout = [[FFMpegTask alloc] init];
+    newout.height = _captureHeight;
+    newout.width = _captureWidth;
+    newout.framerate = _captureFPS;
+    newout.stream_output = output.destination;
+    newout.stream_format = output.output_format;
+    newout.samplerate = _audioSamplerate;
+    output.ffmpeg_out = newout;
 }
 
 - (IBAction)streamButtonPushed:(id)sender {
@@ -294,7 +306,6 @@
     
         NSError *error;
         bool success;
-               
         
         
         [_audio_capture_session setActiveAudioDevice:_selectedAudioCapture];
@@ -335,27 +346,21 @@
             return;
         }
     
-        _ffmpeg_objects = [[NSMutableArray alloc] init];
         OutputDestination *output;
         
         
         for (output in _captureDestinations)
         {
-            FFMpegTask *newout;
-            
-            newout = [[FFMpegTask alloc] init];
-            newout.height = _captureHeight;
-            newout.width = _captureWidth;
-            newout.framerate = _captureFPS;
-            newout.stream_output = output.destination;
-            newout.stream_format = output.output_format;
-            newout.samplerate = _audioSamplerate;
-            [_ffmpeg_objects addObject:newout];
-            
+            [self attachCaptureDestination:output];
         }
+        
+        
         success = [_video_capture_session startCaptureSession:&error];
         
         _frameCount = 0;
+        _compressedFrameCount = 0;
+        _min_delay = _max_delay = _avg_delay = 0;
+        
         _captureTimer = [NSTimer timerWithTimeInterval:1.0/_captureFPS target:self selector:@selector(newFrame) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:_captureTimer forMode:NSRunLoopCommonModes];
 
@@ -370,7 +375,6 @@
         
         success = [_audio_capture_session startCaptureSession:&error];
         
-        _frameCount = 0;
         
         
         if (!success)
@@ -383,7 +387,6 @@
 
     } else {
         
-        [_asset_writer finishWriting];
 
         if (_captureTimer)
         {
@@ -410,8 +413,11 @@
 
         
         
-        [_ffmpeg_objects makeObjectsPerformSelector:@selector(stopProcess)];
-        
+        for (OutputDestination *out in _captureDestinations)
+        {
+            [out stopOutput];
+        }
+    
     }
     
 }
@@ -429,7 +435,6 @@
         
     }
     
-    
     status = VTCompressionSessionCreate(NULL, _captureWidth, _captureHeight, 'avc1', (__bridge CFDictionaryRef)encoder_spec, NULL, NULL, VideoCompressorReceiveFrame,  (__bridge void *)self, &_compression_session);
 
     //If priority isn't set to -20 the framerate in the SPS/VUI section locks to 25. With -20 it takes on the value of
@@ -440,10 +445,19 @@
     //VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_MaxKeyFrameInterval, (__bridge CFTypeRef)(@30));
     
     
+    if (self.captureVideoMaxKeyframeInterval && self.captureVideoMaxKeyframeInterval)
+    {
+        VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_MaxKeyFrameInterval, (__bridge CFTypeRef)(@(self.captureVideoMaxKeyframeInterval)));
+    }
     
+    if (self.captureVideoMaxBitrate && self.captureVideoMaxBitrate > 0)
+    {
+        
+        int real_bitrate = self.captureVideoMaxBitrate*128; // In bytes (1024/8)
+        VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_DataRateLimits, (__bridge CFTypeRef)(@[@(real_bitrate), @1]));
+        
+    }
     
-    
-       
     
     if (_captureVideoAverageBitrate > 0)
     {
@@ -462,19 +476,36 @@
         
     }
     
-    
     return YES;
     
 }
 
 
-
-
 -  (void)newFrame
 {
     
+    CVImageBufferRef cFrame;
+    cFrame = [_video_capture_session getCurrentFrame];
     
-    [self captureOutputVideo:_video_capture_session didOutputSampleBuffer:nil didOutputImage:[_video_capture_session getCurrentFrame] frameTime:0 ];
+    CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
+    
+    if (_frameCount == 0)
+    {
+        _firstFrameTime = currentTime;
+    }
+    
+    _frameCount++;
+    if ((_frameCount % 15) == 0)
+    {
+        [self updateStatusString];
+    }
+
+    
+    
+    [self.previewCtx drawFrame:cFrame];
+    
+    
+    [self captureOutputVideo:_video_capture_session didOutputSampleBuffer:nil didOutputImage:cFrame frameTime:0 ];
     
 }
 
@@ -489,14 +520,25 @@
     CMSampleBufferSetOutputPresentationTimeStamp(sampleBuffer, pts);
     
     
-    for (id ffmpeg in _ffmpeg_objects)
+    for (OutputDestination *outdest in _captureDestinations)
     {
-        [ffmpeg writeAudioSampleBuffer:sampleBuffer presentationTimeStamp:pts];
+        if (outdest.active)
+        {
+            id ffmpeg = outdest.ffmpeg_out;
+            [ffmpeg writeAudioSampleBuffer:sampleBuffer presentationTimeStamp:pts];
+        }
     }
     
 }
 
 
+
+-(void)updateStatusString
+{
+    CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
+    self.statusString = [NSString stringWithFormat:@"%lld frames %3.2f frames/sec", _frameCount, _frameCount/(currentTime-_firstFrameTime)];
+    self.compressionStatusString = [NSString stringWithFormat:@"Delay min/max/avg 0/%2.3f/%2.3f", self.max_delay, self.avg_delay];
+}
 
 
 - (void)captureOutputVideo:(AbstractCaptureDevice *)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer didOutputImage:(CVImageBufferRef)imageBuffer frameTime:(uint64_t)frameTime
@@ -505,25 +547,11 @@
     CMTime pts;
     CMTime duration;
     
-    /*
-    if (sampleBuffer)
-    {
-        pts = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
-        duration = CMSampleBufferGetDuration(sampleBuffer);
-        
-    } else {
-     */
-        CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
-        pts = CMTimeMake(currentTime*1000, 1000);
-    
-    //CMTimeShow(pts);
-    
-        duration = CMTimeMake(1, _captureFPS);
-        _frameCount++;
+    CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
+    pts = CMTimeMake(currentTime*1000, 1000);
     
     
-    //}
-    
+    duration = CMTimeMake(1, _captureFPS);
     
     if(!imageBuffer)
         return;
@@ -535,25 +563,37 @@
 void VideoCompressorReceiveFrame(void *VTref, void *VTFrameRef, OSStatus status, VTEncodeInfoFlags infoFlags, CMSampleBufferRef sampleBuffer)
 {
     
-    
-    
     @autoreleasepool {
-        
-    
-            
-        
         if(!sampleBuffer)
             return;
+ 
+        CaptureController *selfobj = (__bridge CaptureController *)VTref;
+
+        double frame_delay = 0;
         
-    CaptureController *selfobj = (__bridge CaptureController *)VTref;
-    
+        CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
+        CFAbsoluteTime sample_time = CMTimeGetSeconds(CMSampleBufferGetPresentationTimeStamp(sampleBuffer));
         
+        frame_delay = currentTime - sample_time;
+        
+        selfobj.avg_delay = ((selfobj.avg_delay * selfobj.compressedFrameCount)+frame_delay)/++selfobj.compressedFrameCount;
+        if (frame_delay > selfobj.max_delay)
+        {
+            selfobj.max_delay = frame_delay;
+        }
+        
+        //selfobj.compressedFrameCount++;
+
         
     CFRetain(sampleBuffer);
         
-    for (id ff in selfobj.ffmpeg_objects)
+    for (id od in selfobj.captureDestinations)
     {
-        [ff writeVideoSampleBuffer:sampleBuffer];
+        if ([od active])
+        {
+            
+            [[od ffmpeg_out] writeVideoSampleBuffer:sampleBuffer];
+        }
     }
     CFRelease(sampleBuffer);
     }
@@ -578,7 +618,10 @@ void VideoCompressorReceiveFrame(void *VTref, void *VTFrameRef, OSStatus status,
 - (IBAction)removeDestination:(id)sender
 {
     [self.selectedCaptureDestinations enumerateIndexesWithOptions:0 usingBlock:^(NSUInteger idx, BOOL *stop) {
+        OutputDestination *to_delete = [[self mutableArrayValueForKey:@"captureDestinations"] objectAtIndex:idx];
+        to_delete.active = NO;
         [[self mutableArrayValueForKey:@"captureDestinations"] removeObjectAtIndex:idx];
+        
     }];
     
     NSLog(@"OUTPUT DESTINATIONS %@", self.captureDestinations);

@@ -35,8 +35,8 @@
 
 
 -(bool) stopProcess;
+-(bool) restartProcess;
 
-@property (assign) bool is_stopped;
 @property (strong) NSString *stream_output;
 @property (strong) NSString *stream_format;
 @property (assign) int framerate;

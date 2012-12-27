@@ -20,6 +20,7 @@
     [aCoder encodeObject:self.name forKey:@"name"];
     [aCoder encodeObject:self.type_name forKey:@"type_name"];
     [aCoder encodeObject:self.output_format forKey:@"output_format"];
+    [aCoder encodeBool:self.active forKey:@"active"];
 }
 
 -(id) initWithCoder:(NSCoder *)aDecoder
@@ -30,6 +31,7 @@
         self.name = [aDecoder decodeObjectForKey:@"name"];
         self.type_name = [aDecoder decodeObjectForKey:@"type_name"];
         self.output_format = [aDecoder decodeObjectForKey:@"output_format"];
+        self.active = [aDecoder decodeBoolForKey:@"active"];
     }
     
     return self;
@@ -62,6 +64,38 @@
     
 }
 
+-(NSString *)name
+{
+    return _name;
+}
+
+
+-(void) setName:(NSString *)name
+{
+    _name = name;
+}
+
+
+-(void) setActive:(BOOL)is_active
+{
+    
+    if (is_active != _active)
+    {
+        if (!is_active && self.ffmpeg_out)
+        {
+            [self.ffmpeg_out stopProcess];
+        }
+    }
+    _active = is_active;
+}
+
+
+-(BOOL) active
+{
+    return _active;
+}
+
+
 
 -(void)setDestination:(NSString *)destination
 {
@@ -74,6 +108,15 @@
      _destination = destination;
     
 }
+
+-(void) stopOutput
+{
+    if (self.ffmpeg_out && self.active)
+    {
+        [self.ffmpeg_out stopProcess];
+    }
+}
+
 
 -(id) initWithType:(NSString *)type
 {

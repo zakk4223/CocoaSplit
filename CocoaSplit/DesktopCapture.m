@@ -16,7 +16,6 @@
 
 
 
-
 -(bool) setActiveVideoDevice:(AbstractCaptureDevice *)newDev
 {
     _activeVideoDevice = [[newDev captureDevice] unsignedIntValue];
@@ -57,13 +56,14 @@
     
     NSNumber *minframetime = [NSNumber numberWithFloat:1/self.videoCaptureFPS];
     
-    _displayStreamRef = CGDisplayStreamCreateWithDispatchQueue(_activeVideoDevice, _width, _height, '420v', (__bridge CFDictionaryRef)(@{(NSString *)kCGDisplayStreamQueueDepth : @20, (NSString *)kCGDisplayStreamMinimumFrameTime : minframetime, (NSString *)kCGDisplayStreamPreserveAspectRatio: @NO}), _capture_queue, ^(CGDisplayStreamFrameStatus status, uint64_t displayTime, IOSurfaceRef frameSurface, CGDisplayStreamUpdateRef updateRef) {
+    _displayStreamRef = CGDisplayStreamCreateWithDispatchQueue(_activeVideoDevice, _width, _height,  kCVPixelFormatType_420YpCbCr8BiPlanarFullRange, (__bridge CFDictionaryRef)(@{(NSString *)kCGDisplayStreamQueueDepth : @20, (NSString *)kCGDisplayStreamMinimumFrameTime : minframetime, (NSString *)kCGDisplayStreamPreserveAspectRatio: @NO}), _capture_queue, ^(CGDisplayStreamFrameStatus status, uint64_t displayTime, IOSurfaceRef frameSurface, CGDisplayStreamUpdateRef updateRef) {
         
         if (frameSurface)
         {
-            
+            CFRetain(frameSurface);
+            IOSurfaceIncrementUseCount(frameSurface);            
+
             @synchronized(self) {
-                //NSLog(@"Got surface from CGDISplayStream");
                 if (_currentFrame)
                 {
                     IOSurfaceDecrementUseCount(_currentFrame);
@@ -72,8 +72,8 @@
             
                 _currentFrame = frameSurface;
                 _currentFrameTime = displayTime;
-                IOSurfaceIncrementUseCount(_currentFrame);
-                CFRetain(_currentFrame);
+                //IOSurfaceIncrementUseCount(_currentFrame);
+                //CFRetain(_currentFrame);
             }
 
         }
@@ -119,10 +119,9 @@ void DesktopPixelBufferRelease(void *releaseRefCon, const void *baseAddress)
     {
         if (_currentFrame)
         {
-            //CFRetain(_currentFrame);
             CVPixelBufferRef tmpbuf;
+
             CVPixelBufferCreateWithIOSurface(NULL, _currentFrame, NULL, &tmpbuf);
-            //CFRelease(_currentFrame);
             return tmpbuf;
             
             
