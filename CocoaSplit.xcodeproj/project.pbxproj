@@ -20,9 +20,6 @@
 		340FE4DA15F346D900E4CE4E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4D815F346CC00E4CE4E /* AVFoundation.framework */; };
 		340FE4E115F3581200E4CE4E /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4E015F3581200E4CE4E /* QTKit.framework */; };
 		340FE50815F444AA00E4CE4E /* CaptureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FE50715F444AA00E4CE4E /* CaptureController.m */; };
-		34210B3716041C9900362FC8 /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 34210AE5160415B200362FC8 /* libavcodec.a */; };
-		34210B3816041C9900362FC8 /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 34210AE6160415B200362FC8 /* libavformat.a */; };
-		34210B3916041C9900362FC8 /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 34210AE7160415B200362FC8 /* libavutil.a */; };
 		34210B3E1606001200362FC8 /* OutputDestination.m in Sources */ = {isa = PBXBuildFile; fileRef = 34210B3D1606001100362FC8 /* OutputDestination.m */; };
 		342346AA15F59A8500C8C77E /* AVFCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346A915F59A8500C8C77E /* AVFCapture.m */; };
 		342346AD15F59B0D00C8C77E /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 342346AC15F59B0D00C8C77E /* VideoToolbox.framework */; };
@@ -36,6 +33,9 @@
 		34792AF316103FF60065A859 /* DesktopCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34792AF216103FF60065A859 /* DesktopCapture.m */; };
 		34792AF616104AA70065A859 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AF516104AA70065A859 /* IOKit.framework */; };
 		34792AFB1611A6B90065A859 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AFA1611A6B90065A859 /* IOSurface.framework */; };
+		347B7FC616907A1700B5F4B3 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 347B7FC516907A1700B5F4B3 /* libbz2.dylib */; };
+		347B7FC816907AE700B5F4B3 /* VideoDecodeAcceleration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 347B7FC716907AE700B5F4B3 /* VideoDecodeAcceleration.framework */; };
+		347B7FCA16907AFA00B5F4B3 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 347B7FC916907AFA00B5F4B3 /* libz.dylib */; };
 		34A64A2F165EFE4C00A68428 /* PreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A64A2E165EFE4B00A68428 /* PreviewView.m */; };
 		34A64A35165F047900A68428 /* CapturePreview.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34A64A34165F047900A68428 /* CapturePreview.xib */; };
 		34A64A37165F208800A68428 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A64A36165F208800A68428 /* QuartzCore.framework */; };
@@ -117,9 +117,6 @@
 		340FE4E015F3581200E4CE4E /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = System/Library/Frameworks/QTKit.framework; sourceTree = SDKROOT; };
 		340FE50615F444AA00E4CE4E /* CaptureController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CaptureController.h; sourceTree = "<group>"; };
 		340FE50715F444AA00E4CE4E /* CaptureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CaptureController.m; sourceTree = "<group>"; };
-		34210AE5160415B200362FC8 /* libavcodec.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavcodec.a; path = ../../../../usr/local/lib/libavcodec.a; sourceTree = "<group>"; };
-		34210AE6160415B200362FC8 /* libavformat.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavformat.a; path = ../../../../usr/local/lib/libavformat.a; sourceTree = "<group>"; };
-		34210AE7160415B200362FC8 /* libavutil.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavutil.a; path = ../../../../usr/local/lib/libavutil.a; sourceTree = "<group>"; };
 		34210B3C1606001100362FC8 /* OutputDestination.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OutputDestination.h; sourceTree = "<group>"; };
 		34210B3D1606001100362FC8 /* OutputDestination.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OutputDestination.m; sourceTree = "<group>"; };
 		342346A815F59A8500C8C77E /* AVFCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVFCapture.h; sourceTree = "<group>"; };
@@ -140,6 +137,9 @@
 		34792AF216103FF60065A859 /* DesktopCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DesktopCapture.m; sourceTree = "<group>"; };
 		34792AF516104AA70065A859 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		34792AFA1611A6B90065A859 /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = System/Library/Frameworks/IOSurface.framework; sourceTree = SDKROOT; };
+		347B7FC516907A1700B5F4B3 /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = usr/lib/libbz2.dylib; sourceTree = SDKROOT; };
+		347B7FC716907AE700B5F4B3 /* VideoDecodeAcceleration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoDecodeAcceleration.framework; path = System/Library/Frameworks/VideoDecodeAcceleration.framework; sourceTree = SDKROOT; };
+		347B7FC916907AFA00B5F4B3 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		34A64A2D165EFE4B00A68428 /* PreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreviewView.h; sourceTree = "<group>"; };
 		34A64A2E165EFE4B00A68428 /* PreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreviewView.m; sourceTree = "<group>"; };
 		34A64A34165F047900A68428 /* CapturePreview.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CapturePreview.xib; sourceTree = "<group>"; };
@@ -167,12 +167,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				347B7FCA16907AFA00B5F4B3 /* libz.dylib in Frameworks */,
+				347B7FC816907AE700B5F4B3 /* VideoDecodeAcceleration.framework in Frameworks */,
+				347B7FC616907A1700B5F4B3 /* libbz2.dylib in Frameworks */,
 				34A64A37165F208800A68428 /* QuartzCore.framework in Frameworks */,
 				34792AFB1611A6B90065A859 /* IOSurface.framework in Frameworks */,
 				34792AF616104AA70065A859 /* IOKit.framework in Frameworks */,
-				34210B3716041C9900362FC8 /* libavcodec.a in Frameworks */,
-				34210B3816041C9900362FC8 /* libavformat.a in Frameworks */,
-				34210B3916041C9900362FC8 /* libavutil.a in Frameworks */,
 				34C6C3BF15FB5B440018A18B /* OpenGL.framework in Frameworks */,
 				342346BB15F5FBD700C8C77E /* CoreMedia.framework in Frameworks */,
 				342346B915F5FBD200C8C77E /* CoreVideo.framework in Frameworks */,
@@ -210,6 +210,9 @@
 		340FE49215F3417E00E4CE4E = {
 			isa = PBXGroup;
 			children = (
+				347B7FC916907AFA00B5F4B3 /* libz.dylib */,
+				347B7FC716907AE700B5F4B3 /* VideoDecodeAcceleration.framework */,
+				347B7FC516907A1700B5F4B3 /* libbz2.dylib */,
 				34A64A36165F208800A68428 /* QuartzCore.framework */,
 				34AE3C6C164F04C90052C95E /* CoreVideo.framework */,
 				34AE3C6A164F04B30052C95E /* IOSurface.framework */,
@@ -243,9 +246,6 @@
 			isa = PBXGroup;
 			children = (
 				34EB1953168C849400D13936 /* Syphon.framework */,
-				34210AE5160415B200362FC8 /* libavcodec.a */,
-				34210AE6160415B200362FC8 /* libavformat.a */,
-				34210AE7160415B200362FC8 /* libavutil.a */,
 				340FE4D815F346CC00E4CE4E /* AVFoundation.framework */,
 				340FE4A115F3417E00E4CE4E /* Cocoa.framework */,
 				340FE4BF15F3417E00E4CE4E /* SenTestingKit.framework */,
@@ -654,6 +654,12 @@
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				INFOPLIST_FILE = "CocoaSplit/CocoaSplit-Info.plist";
 				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/lib;
+				"OTHER_LDFLAGS[arch=*]" = (
+					/usr/local/lib/libavutil.a,
+					/usr/local/lib/libavformat.a,
+					/usr/local/lib/libavcodec.a,
+					/usr/local/lib/libmp3lame.a,
+				);
 				PRODUCT_NAME = CocoaSplit;
 				WRAPPER_EXTENSION = app;
 			};
@@ -674,6 +680,12 @@
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				INFOPLIST_FILE = "CocoaSplit/CocoaSplit-Info.plist";
 				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/lib;
+				"OTHER_LDFLAGS[arch=*]" = (
+					/usr/local/lib/libavformat.a,
+					/usr/local/lib/libavutil.a,
+					/usr/local/lib/libavcodec.a,
+					/usr/local/lib/libmp3lame.a,
+				);
 				PRODUCT_NAME = CocoaSplit;
 				WRAPPER_EXTENSION = app;
 			};
