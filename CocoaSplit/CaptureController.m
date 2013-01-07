@@ -204,9 +204,13 @@
     [saveRoot setValue: [NSNumber numberWithInt:self.captureVideoAverageBitrate] forKey:@"captureVideoAverageBitrate"];
     [saveRoot setValue: [NSNumber numberWithInt:self.audioBitrate] forKey:@"audioBitrate"];
     [saveRoot setValue: [NSNumber numberWithInt:self.audioSamplerate] forKey:@"audioSamplerate"];
+    [saveRoot setValue: self.selectedVideoType forKey:@"selectedVideoType"];
     [saveRoot setValue: self.selectedVideoCapture.uniqueID forKey:@"videoCaptureID"];
     [saveRoot setValue: self.selectedAudioCapture.uniqueID forKey:@"audioCaptureID"];
     [saveRoot setValue: self.captureDestinations forKey:@"captureDestinations"];
+    [saveRoot setValue: [NSNumber numberWithInt:self.captureVideoMaxBitrate] forKey:@"captureVideoMaxBitrate"];
+    [saveRoot setValue: [NSNumber numberWithInt:self.captureVideoMaxKeyframeInterval] forKey:@"captureVideoMaxKeyframeInterval"];
+    
     
     [NSKeyedArchiver archiveRootObject:saveRoot toFile:path];
     
@@ -224,6 +228,8 @@
     self.captureHeight = [[saveRoot valueForKey:@"captureHeight"] intValue];
     self.captureFPS = [[saveRoot valueForKey:@"captureFPS"] intValue];
     self.captureVideoAverageBitrate = [[saveRoot valueForKey:@"captureVideoAverageBitrate"] intValue];
+    self.captureVideoMaxBitrate = [[saveRoot valueForKey:@"captureVideoMaxBitrate"] intValue];
+    self.captureVideoMaxKeyframeInterval = [[saveRoot valueForKey:@"captureVideoMaxKeyframeInterval"] intValue];
     self.audioBitrate = [[saveRoot valueForKey:@"audioBitrate"] intValue];
     self.audioSamplerate = [[saveRoot valueForKey:@"audioSamplerate"] intValue];
     self.captureDestinations = [saveRoot valueForKey:@"captureDestinations"];
@@ -234,7 +240,8 @@
     }
     
     
-        
+    
+    self.selectedVideoType = [saveRoot valueForKey:@"selectedVideoType"];
     NSString *videoID = [saveRoot valueForKey:@"videoCaptureID"];
     
     [self selectedVideoCaptureFromID:videoID];

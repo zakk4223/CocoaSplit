@@ -67,6 +67,7 @@
 - (void) listCaptureDevices:(void (^)(NSArray *r_devices))reply
 {
     NSArray *devices = [QTCaptureDevice inputDevicesWithMediaType:QTMediaTypeVideo];
+    NSLog(@"DEVICES IN HELPER %@", devices);
     
     NSMutableArray *retArray = [[NSMutableArray alloc] init];
     QTCaptureDevice *devinstance;
