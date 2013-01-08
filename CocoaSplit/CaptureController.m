@@ -20,6 +20,57 @@
 
 
 
+-(void)loadTwitchIngest
+{
+    
+    NSString *apiString = @"https://api.twitch.tv/kraken/ingests";
+    
+    NSURL *apiURL = [NSURL URLWithString:apiString];
+    
+    NSMutableURLRequest *apiRequest = [NSMutableURLRequest requestWithURL:apiURL];
+    
+    NSLog(@"SENDING ASYNC URL CONNECTION");
+    [NSURLConnection sendAsynchronousRequest:apiRequest queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *err) {
+        
+        NSError *jsonError;
+        NSLog(@"GOT RESPONSE FOR INGESTS");
+        NSDictionary *ingest_response = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonError];
+        //Handle error
+        
+        NSArray *ingest_list = [ingest_response objectForKey:@"ingests"];
+        
+        NSMutableArray *cooked_ingests = [[NSMutableArray alloc] init];
+        
+        for (NSDictionary *tw_ingest in ingest_list)
+        {
+        
+            NSMutableDictionary *ingest_map = [[NSMutableDictionary alloc] init];
+            
+            NSString *url_temp = [tw_ingest objectForKey:@"url_template"];
+            NSString *name = [tw_ingest objectForKey:@"name"];
+            
+            
+            
+            if (!url_temp || !name)
+            {
+                continue;
+            }
+            
+            [ingest_map setValue: url_temp forKey:@"destination"];
+            [ingest_map setValue:name forKey:@"name"];
+            [cooked_ingests addObject:ingest_map];
+            
+        }
+
+        dispatch_async(dispatch_get_main_queue(), ^{self.streamPanelDestinations = cooked_ingests; });
+
+        
+        
+        return;
+    }];
+}
+
+
 
 -(IBAction)openCreateSheet:(id)sender
 {
@@ -31,12 +82,15 @@
         self.streamingDestination = nil;
         
         
-        //if ([self.selectedDestinationType isEqualToString:@"file"])
-        //{
+        if ([self.selectedDestinationType isEqualToString:@"file"])
+        {
             panelName = @"FilePanel";
-        //} else {
-          //  panelName = @"StreamServicePanel";
-        //}
+        } else if ([self.selectedDestinationType isEqualToString:@"twitch"]) {
+            [self loadTwitchIngest];
+            panelName = @"StreamServicePanel";
+        } else {
+            panelName = @"FilePanel";
+        }
         
         [NSBundle loadNibNamed:panelName owner:self];
     }
@@ -154,8 +208,8 @@
        dispatch_source_set_event_handler(sigsrc, ^{ return;});
        dispatch_resume(sigsrc);
        
-       self.destinationTypes = @{@"file" : @"Local File",
-       @"rtmp" : @"RTMP Stream"};
+       self.destinationTypes = @{@"file" : @"File/Raw",
+       @"twitch" : @"Twitch TV"};
        
        
        self.videoTypes = @[@"Desktop", @"AVFoundation", @"QTCapture"];
@@ -280,8 +334,7 @@
     newDest = [[OutputDestination alloc] initWithType:_selectedDestinationType];
     newDest.server_name = _streamingServiceServer;
     newDest.stream_key = _streamingServiceKey;
-    newDest.destination = _streamingDestination;
-    
+    newDest.destination = [_streamingDestination stringByReplacingOccurrencesOfString:@"{stream_key}" withString:_streamingServiceKey];
     
     [[self mutableArrayValueForKey:@"captureDestinations"] addObject:newDest];
     [self attachCaptureDestination:newDest];

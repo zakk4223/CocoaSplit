@@ -41,6 +41,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (assign) double max_delay;
 @property (assign) double avg_delay;
 @property (assign) long long compressedFrameCount;
+@property (assign) NSMutableArray *streamPanelDestinations;
+
 
 
 @property (unsafe_unretained) IBOutlet PreviewView *previewCtx;
