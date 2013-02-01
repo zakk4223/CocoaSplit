@@ -23,24 +23,31 @@
     AVCaptureVideoDataOutput *_video_capture_output;
     AVCaptureAudioDataOutput *_audio_capture_output;
     CVImageBufferRef _currentFrame;
-    
-    
-    
+    AVCaptureDevice *_selectedVideoCaptureDevice;
     
     
     
 }
- 
 
-@property (strong) AVCaptureDevice *videoInputDevice;
-@property (strong) AVCaptureDevice *audioInputDevice;
+
+@property (readonly) NSArray *availableVideoDevices;
+@property int videoCaptureFPS;
+@property int width;
+@property int height;
+@property id videoDelegate;
 @property (strong) id audioDelegate;
-@property (strong) id videoDelegate;
-@property (assign) int videoCaptureFPS;
 @property (assign) int audioBitrate;
 @property (assign) int audioSamplerate;
 @property (assign) int videoHeight;
 @property (assign) int videoWidth;
+@property NSArray *videoFormats;
+@property NSArray *videoFramerates;
+@property id activeAudioDevice;
+@property AVCaptureDeviceFormat *activeVideoFormat;
+@property AVFrameRateRange *activeVideoFramerate;
+@property AbstractCaptureDevice *activeVideoDevice;
+
+
 
 
 

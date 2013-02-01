@@ -14,32 +14,46 @@
 
 @implementation DesktopCapture
 
+@synthesize activeVideoDevice = _activeVideoDevice;
 
 
--(bool) setActiveVideoDevice:(AbstractCaptureDevice *)newDev
+
+-(BOOL) needsAdvancedVideo
 {
-    _activeVideoDevice = [[newDev captureDevice] unsignedIntValue];
-    return YES;
+    return NO;
+}
+
+
+-(AbstractCaptureDevice *)activeVideoDevice
+{
+    return _activeVideoDevice;
+}
+
+
+-(void) setActiveVideoDevice:(AbstractCaptureDevice *)newDev
+{
+    _activeVideoDevice = newDev;
+    _currentDisplay = [[newDev captureDevice] unsignedIntValue];
     
 }
 
 -(void) setVideoDimensions:(int)width height:(int)height
 {
-    _width = width;
-    _height = height;
+    self.width = width;
+    self.height = height;
     
 }
 
 -(bool)setupCaptureSession:(NSError *__autoreleasing *)therror
 {
 
-    if (!_activeVideoDevice)
+    if (!self.activeVideoDevice)
     {
         *therror = [NSError errorWithDomain:@"videoCapture" code:100 userInfo:@{NSLocalizedDescriptionKey : @"Must select video capture device first"}];
         return NO;
     }
     
-    if (!(_width > 0) || !(_height > 0))
+    if (!(self.width > 0) || !(self.height > 0))
     {
         *therror = [NSError errorWithDomain:@"videoCapture" code:150 userInfo:@{NSLocalizedDescriptionKey : @"Width and height must be set to greater than zero"}];
         return NO;
@@ -54,28 +68,28 @@
     }
     _currentFrameTime = 0;
     
-    NSNumber *minframetime = [NSNumber numberWithFloat:1/self.videoCaptureFPS];
+    if (!self.videoCaptureFPS || self.videoCaptureFPS == 0)
+    {
+        self.videoCaptureFPS = 60;
+    }
     
-    _displayStreamRef = CGDisplayStreamCreateWithDispatchQueue(_activeVideoDevice, _width, _height,  kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange, (__bridge CFDictionaryRef)(@{(NSString *)kCGDisplayStreamQueueDepth : @20, (NSString *)kCGDisplayStreamMinimumFrameTime : minframetime, (NSString *)kCGDisplayStreamPreserveAspectRatio: @NO}), _capture_queue, ^(CGDisplayStreamFrameStatus status, uint64_t displayTime, IOSurfaceRef frameSurface, CGDisplayStreamUpdateRef updateRef) {
+    NSNumber *minframetime = [NSNumber numberWithFloat:1.0/self.videoCaptureFPS];
+    
+    _displayStreamRef = CGDisplayStreamCreateWithDispatchQueue(_currentDisplay, self.width, self.height,  kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange, (__bridge CFDictionaryRef)(@{(NSString *)kCGDisplayStreamQueueDepth : @20, (NSString *)kCGDisplayStreamMinimumFrameTime : minframetime, (NSString *)kCGDisplayStreamPreserveAspectRatio: @NO}), _capture_queue, ^(CGDisplayStreamFrameStatus status, uint64_t displayTime, IOSurfaceRef frameSurface, CGDisplayStreamUpdateRef updateRef) {
         
         if (frameSurface)
         {
-            CFRetain(frameSurface);
-            IOSurfaceIncrementUseCount(frameSurface);            
-
-            @synchronized(self) {
-                if (_currentFrame)
-                {
-                    IOSurfaceDecrementUseCount(_currentFrame);
-                    CFRelease(_currentFrame);
-                }
+            CVPixelBufferRef tmpbuf;
             
-                _currentFrame = frameSurface;
-                _currentFrameTime = displayTime;
-                //IOSurfaceIncrementUseCount(_currentFrame);
-                //CFRetain(_currentFrame);
+            if (self.videoDelegate)
+            {
+                CVPixelBufferCreateWithIOSurface(NULL, frameSurface, NULL, &tmpbuf);
+                if (tmpbuf)
+                {
+                    [self.videoDelegate captureOutputVideo:nil didOutputSampleBuffer:nil didOutputImage:tmpbuf frameTime:0 ];
+                    CVPixelBufferRelease(tmpbuf);
+                }
             }
-
         }
     });
     
@@ -97,45 +111,6 @@
     _capture_queue = NULL;
     return YES;
 }
-
-
-void DesktopPixelBufferRelease(void *releaseRefCon, const void *baseAddress)
-{
-    
-    if (baseAddress)
-        free((void *)baseAddress);
-    
-    
-}
-
-
-
-- (CVImageBufferRef) getCurrentFrame
-{
-    
-    CVImageBufferRef newbuf = NULL;
-    
-    @synchronized(self)
-    {
-        if (_currentFrame)
-        {
-            CVPixelBufferRef tmpbuf;
-
-            CVPixelBufferCreateWithIOSurface(NULL, _currentFrame, NULL, &tmpbuf);
-            return tmpbuf;
-            
-            
-        }
-        
-    }
-    
-    return newbuf;
-    
-    
-}
-
-
-
 
 -(bool)providesAudio
 {

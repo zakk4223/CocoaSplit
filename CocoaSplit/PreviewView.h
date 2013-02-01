@@ -12,10 +12,11 @@
 @interface PreviewView : NSOpenGLView
 {
 
-    IOSurfaceRef _boundIOSurface;
+    IOSurfaceID _boundIOSurfaceID;
     GLuint      _previewTexture;
     GLsizei     _surfaceWidth;
     GLsizei     _surfaceHeight;
+    int         _hackcnt;
     
 }
 

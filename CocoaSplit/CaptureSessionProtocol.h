@@ -15,15 +15,22 @@
 @protocol CaptureSessionProtocol <NSObject>
 
 @required
--(NSArray *) availableVideoDevices;  
+
+@property int videoCaptureFPS;
+@property int width;
+@property int height;
+@property AbstractCaptureDevice *activeVideoDevice;
+@property id videoDelegate;
+@property (readonly) NSArray *availableVideoDevices;
+@property (readonly) BOOL needsAdvancedVideo;
+
+
+
 -(bool) stopCaptureSession;
 -(bool) startCaptureSession:(NSError **)error;
--(bool) setActiveVideoDevice:(id)videoDevice;
 -(bool) providesVideo;
 -(bool) providesAudio;
--(void) setVideoDelegate:(id)delegate;
 -(bool) setupCaptureSession:(NSError **)therror;
--(void) setVideoCaptureFPS:(int)fps;
 -(void) setVideoDimensions:(int)width height:(int)height;
 
 
@@ -38,9 +45,14 @@
 
 
 @optional
+@property id activeAudioDevice;
 -(void) setAudioDelegate:(id)delegate;
--(bool) setActiveAudioDevice:(id)audioDevice;
 -(NSArray *) availableAudioDevices;
+@property NSArray *videoFormats;
+@property NSArray *videoFramerates;
+@property id activeVideoFormat;
+@property id activeVideoFramerate;
+
 
 
 @end

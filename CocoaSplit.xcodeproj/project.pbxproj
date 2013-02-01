@@ -36,6 +36,8 @@
 		347B7FC616907A1700B5F4B3 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 347B7FC516907A1700B5F4B3 /* libbz2.dylib */; };
 		347B7FC816907AE700B5F4B3 /* VideoDecodeAcceleration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 347B7FC716907AE700B5F4B3 /* VideoDecodeAcceleration.framework */; };
 		347B7FCA16907AFA00B5F4B3 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 347B7FC916907AFA00B5F4B3 /* libz.dylib */; };
+		3498C78B16AB6688003D8065 /* AVCaptureDeviceFormat+CocoaSplitAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3498C78A16AB6688003D8065 /* AVCaptureDeviceFormat+CocoaSplitAdditions.m */; };
+		3498C78F16AB6853003D8065 /* AVFrameRateRange+CocoaSplitAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3498C78E16AB6853003D8065 /* AVFrameRateRange+CocoaSplitAdditions.m */; };
 		34A64A2F165EFE4C00A68428 /* PreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A64A2E165EFE4B00A68428 /* PreviewView.m */; };
 		34A64A35165F047900A68428 /* CapturePreview.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34A64A34165F047900A68428 /* CapturePreview.xib */; };
 		34A64A37165F208800A68428 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A64A36165F208800A68428 /* QuartzCore.framework */; };
@@ -140,6 +142,10 @@
 		347B7FC516907A1700B5F4B3 /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = usr/lib/libbz2.dylib; sourceTree = SDKROOT; };
 		347B7FC716907AE700B5F4B3 /* VideoDecodeAcceleration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoDecodeAcceleration.framework; path = System/Library/Frameworks/VideoDecodeAcceleration.framework; sourceTree = SDKROOT; };
 		347B7FC916907AFA00B5F4B3 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		3498C78916AB6688003D8065 /* AVCaptureDeviceFormat+CocoaSplitAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "AVCaptureDeviceFormat+CocoaSplitAdditions.h"; path = "../AVCaptureDeviceFormat+CocoaSplitAdditions.h"; sourceTree = "<group>"; };
+		3498C78A16AB6688003D8065 /* AVCaptureDeviceFormat+CocoaSplitAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "AVCaptureDeviceFormat+CocoaSplitAdditions.m"; path = "../AVCaptureDeviceFormat+CocoaSplitAdditions.m"; sourceTree = "<group>"; };
+		3498C78D16AB6853003D8065 /* AVFrameRateRange+CocoaSplitAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AVFrameRateRange+CocoaSplitAdditions.h"; sourceTree = "<group>"; };
+		3498C78E16AB6853003D8065 /* AVFrameRateRange+CocoaSplitAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AVFrameRateRange+CocoaSplitAdditions.m"; sourceTree = "<group>"; };
 		34A64A2D165EFE4B00A68428 /* PreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreviewView.h; sourceTree = "<group>"; };
 		34A64A2E165EFE4B00A68428 /* PreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreviewView.m; sourceTree = "<group>"; };
 		34A64A34165F047900A68428 /* CapturePreview.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CapturePreview.xib; sourceTree = "<group>"; };
@@ -268,6 +274,8 @@
 		340FE4A715F3417E00E4CE4E /* CocoaSplit */ = {
 			isa = PBXGroup;
 			children = (
+				3498C78916AB6688003D8065 /* AVCaptureDeviceFormat+CocoaSplitAdditions.h */,
+				3498C78A16AB6688003D8065 /* AVCaptureDeviceFormat+CocoaSplitAdditions.m */,
 				340FE4B315F3417E00E4CE4E /* AppDelegate.h */,
 				340FE4B415F3417E00E4CE4E /* AppDelegate.m */,
 				342346D315FA301600C8C77E /* SyphonCapture.h */,
@@ -290,6 +298,8 @@
 				340FE50615F444AA00E4CE4E /* CaptureController.h */,
 				340FE50715F444AA00E4CE4E /* CaptureController.m */,
 				340FE4B615F3417E00E4CE4E /* MainMenu.xib */,
+				3498C78D16AB6853003D8065 /* AVFrameRateRange+CocoaSplitAdditions.h */,
+				3498C78E16AB6853003D8065 /* AVFrameRateRange+CocoaSplitAdditions.m */,
 				34A64A34165F047900A68428 /* CapturePreview.xib */,
 				34539ED61606E91700638A29 /* StreamServicePanel.xib */,
 				34539ED8160734EA00638A29 /* FilePanel.xib */,
@@ -510,6 +520,8 @@
 				34792AF316103FF60065A859 /* DesktopCapture.m in Sources */,
 				34B74BC91648D23B00818DE2 /* QTCapture.m in Sources */,
 				34A64A2F165EFE4C00A68428 /* PreviewView.m in Sources */,
+				3498C78B16AB6688003D8065 /* AVCaptureDeviceFormat+CocoaSplitAdditions.m in Sources */,
+				3498C78F16AB6853003D8065 /* AVFrameRateRange+CocoaSplitAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,6 +12,10 @@
 @implementation AVFCapture         
 
 
+@synthesize activeVideoFormat = _activeVideoFormat;
+@synthesize activeVideoDevice = _activeVideoDevice;
+@synthesize activeVideoFramerate = _activeVideoFramerate;
+
 
 -(void) setVideoDimensions:(int)width height:(int)height
 {
@@ -33,22 +37,61 @@
 }
 
 
-
--(bool) setActiveAudioDevice:(id)audioDevice
+-(AVFrameRateRange *)activeVideoFramerate
 {
-    
-    _audioInputDevice = audioDevice;
-    return YES;
+    return _activeVideoFramerate;
+}
+
+
+
+-(void) setActiveVideoFramerate:(AVFrameRateRange *)activeVideoFramerate
+{
+    _activeVideoFramerate = activeVideoFramerate;
+  
+    //TODO: ERROR HANDLING
+/*    [self.activeVideoDevice lockForConfiguration:nil];
+    self.activeVideoDevice.activeVideoMinFrameDuration = _activeVideoFramerate.minFrameDuration;
+    [self.activeVideoDevice unlockForConfiguration];
+  */  
+    self.videoCaptureFPS = _activeVideoFramerate.minFrameRate;
     
 }
 
 
--(bool) setActiveVideoDevice:(AbstractCaptureDevice *)newDev
+-(AVCaptureDeviceFormat *) activeVideoFormat
 {
-    _videoInputDevice = [newDev captureDevice];
-    return YES;
+    return _activeVideoFormat;
+}
+
+
+-(void) setActiveVideoFormat:(id)activeVideoFormat
+{
+    _activeVideoFormat = activeVideoFormat;
+    //TODO: Error handling here
+/*    [self.activeVideoDevice lockForConfiguration:nil];
+    self.activeVideoDevice.activeFormat = _activeVideoFormat;
+    [self.activeVideoDevice unlockForConfiguration];
+*/    
+    self.videoFramerates = self.activeVideoFormat.videoSupportedFrameRateRanges;
+}
+
+
+-(id) activeVideoDevice
+{
+    return _activeVideoDevice;
+}
+
+
+-(void) setActiveVideoDevice:(AbstractCaptureDevice *)newDev
+{
+    _activeVideoDevice = newDev;
+    _selectedVideoCaptureDevice = [newDev captureDevice];
+    self.videoFormats = _selectedVideoCaptureDevice.formats;
+    self.videoFramerates = _selectedVideoCaptureDevice.activeFormat.videoSupportedFrameRateRanges;
     
 }
+
+
 
 
 -(NSArray *) availableVideoDevices
@@ -76,55 +119,20 @@
 {
     if (_capture_session)
     {
-        [_capture_session stopRunning]; 
+        [_capture_session stopRunning];
+        /*
         _capture_session = nil;
         _video_capture_queue = nil;
-        _videoInputDevice = nil;
+        self.activeVideoDevice = nil;
         _video_capture_output = nil;
         _audio_capture_output = nil;
-        _audioInputDevice = nil;
+        self.activeAudioDevice = nil;
         _audio_capture_queue = nil;
-        
+        */
     }
     return YES;
 }
 
-/*
--(void)grabPhoto
-{
-    
-    if (!_staticImage)
-    {
-    AVCaptureConnection *av_conn;
-    av_conn = [_capture_output connectionWithMediaType:AVMediaTypeVideo];
-
-    [_capture_output captureStillImageAsynchronouslyFromConnection:av_conn completionHandler:^(CMSampleBufferRef sampleBuffer, NSError *error) {
-        
-        CVImageBufferRef videoFrame = CMSampleBufferGetImageBuffer(sampleBuffer);
-        
-        
-        
-        //Should I copy the Image Buffer? instead of just retaining it?
-        
-        CVPixelBufferRetain(videoFrame);
-        
-        [_videoDelegate captureOutputVideo:self didOutputSampleBuffer:sampleBuffer didOutputImage:videoFrame];
-        _staticImage = videoFrame;
-        
-        //CVPixelBufferRelease(videoFrame);
-
-    }];
-    } else {
-        [_videoDelegate captureOutputVideo:self didOutputSampleBuffer:nil didOutputImage:_staticImage];
-
-    }
-    
-    
-    
-}
-
-   
- */
 
 -(bool) startCaptureSession:(NSError **)error
 {
@@ -152,6 +160,20 @@
 
     [_capture_session startRunning];
     
+    [_selectedVideoCaptureDevice lockForConfiguration:nil];
+    if (self.activeVideoFormat)
+    {
+        _selectedVideoCaptureDevice.activeFormat = self.activeVideoFormat;
+    }
+    if (self.activeVideoFramerate)
+    {
+        _selectedVideoCaptureDevice.activeVideoMinFrameDuration = self.activeVideoFramerate.minFrameDuration;
+    }
+    
+    [_selectedVideoCaptureDevice unlockForConfiguration];
+    
+
+    
     return YES;
 }
 
@@ -163,6 +185,7 @@
 
     AVCaptureDeviceInput *video_capture_input;
     AVCaptureDeviceInput *audio_capture_input;
+    
     
     if (_capture_session)
         return YES;
@@ -176,7 +199,7 @@
     
     if (_videoDelegate)
     {
-        if (!_videoInputDevice)
+        if (!self.activeVideoDevice)
         {
             NSLog(@"No video input device");
             *therror = [NSError errorWithDomain:@"videoCapture" code:100 userInfo:@{NSLocalizedDescriptionKey : @"Must select video capture device first"}];
@@ -186,7 +209,7 @@
         _capture_session = [[AVCaptureSession alloc] init];
     
         
-        video_capture_input = [AVCaptureDeviceInput deviceInputWithDevice:_videoInputDevice error:therror];
+        video_capture_input = [AVCaptureDeviceInput deviceInputWithDevice:_selectedVideoCaptureDevice error:therror];
     
         if (!video_capture_input)
         {
@@ -205,18 +228,16 @@
         }
   
         NSMutableDictionary *videoSettings = [[NSMutableDictionary alloc] init];
-        
         [videoSettings setValue:@[@(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange), @(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange), @(kCVPixelFormatType_422YpCbCr8)] forKey:(NSString *)kCVPixelBufferPixelFormatTypeKey];
-        
         NSDictionary *ioAttrs = [NSDictionary dictionaryWithObject: [NSNumber numberWithBool: YES]
                                                             forKey: (NSString *)kIOSurfaceIsGlobal];
         
         [videoSettings setValue:ioAttrs forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
-        if (self.videoHeight && self.videoWidth)
+/*        if (self.videoHeight && self.videoWidth)
         {
             [videoSettings setValue:@(self.videoHeight) forKey:(NSString *)kCVPixelBufferHeightKey];
             [videoSettings setValue:@(self.videoWidth) forKey:(NSString *)kCVPixelBufferWidthKey];
-        }
+        } */
         
         NSLog(@"SETTINGS DICT %@", videoSettings);
         _video_capture_output = [[AVCaptureVideoDataOutput alloc] init];
@@ -233,14 +254,20 @@
             return NO;
         }
         
+        AVCaptureConnection *outconn = [_video_capture_output connectionWithMediaType:AVMediaTypeVideo];
+        if (outconn && self.videoCaptureFPS && self.videoCaptureFPS > 0)
+        {
+            outconn.videoMinFrameDuration = CMTimeMake(1, self.videoCaptureFPS);
+        }
+        
     }
     
     if (_audioDelegate)
     {
         
-        if (_audioInputDevice)
+        if (self.activeAudioDevice)
         {
-            audio_capture_input = [AVCaptureDeviceInput deviceInputWithDevice:_audioInputDevice error:therror];
+            audio_capture_input = [AVCaptureDeviceInput deviceInputWithDevice:self.activeAudioDevice error:therror];
     
             if (!audio_capture_input)
             {
@@ -289,28 +316,11 @@
 }
 
 
-void PixelBufferRelease(void *releaseRefCon, const void *baseAddress)
-{
-    
-    if (baseAddress)
-        free((void *)baseAddress);
-    
-    
-}
 
 - (CVImageBufferRef) getCurrentFrame
 {
-    //copy the current frame to a new pixel buffer
-    //If I don't copy the pixel buffers, sometimes they just generate exceptions, even if I retain them and lock them. Assuming
-    //the IOSurface is being reclaimed or something
-    //There may be a better way to do this?
     
     CVImageBufferRef newbuf = NULL;
-    void *bufbytes;
-    void *current_base;
-    size_t width;
-    size_t height;
-    size_t bytesPerRow;
     
     @synchronized(self)
     {
@@ -318,6 +328,7 @@ void PixelBufferRelease(void *releaseRefCon, const void *baseAddress)
         {
             CVPixelBufferRetain(_currentFrame);
             return _currentFrame;
+            
             /*
             CVPixelBufferLockBaseAddress(_currentFrame, 1);
             width = CVPixelBufferGetWidth(_currentFrame);
@@ -342,6 +353,11 @@ void PixelBufferRelease(void *releaseRefCon, const void *baseAddress)
 }
 
 
+- (BOOL)needsAdvancedVideo
+{
+    return YES;
+}
+
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
 {
     
@@ -349,17 +365,20 @@ void PixelBufferRelease(void *releaseRefCon, const void *baseAddress)
     {
         CVImageBufferRef videoFrame = CMSampleBufferGetImageBuffer(sampleBuffer);
     
-    
-        CVPixelBufferRetain(videoFrame);
-        @synchronized(self)
+
+        if (videoFrame)
         {
-            if (_currentFrame)
-            {
-                CVPixelBufferRelease(_currentFrame);
-            }
-    
-            _currentFrame = videoFrame;
+            CVPixelBufferRetain(videoFrame);
+
+            [self.videoDelegate captureOutputVideo:nil didOutputSampleBuffer:nil didOutputImage:videoFrame frameTime:0 ];
+            /*
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [self.videoDelegate captureOutputVideo:nil didOutputSampleBuffer:nil didOutputImage:newbuf frameTime:0 ];});
+             */
+            CVPixelBufferRelease(videoFrame);
         }
+        
+        
     } else if (connection.output == _audio_capture_output) {
         
         

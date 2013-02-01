@@ -25,18 +25,19 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 @interface CaptureController : NSObject <CaptureDataReceiverDelegateProtocol> {
     
-    id _video_capture_session;
     id _audio_capture_session;
-    id _active_video_capture_session;
     
     VTCompressionSessionRef _compression_session;
     NSTimer *_captureTimer;
     long long _frameCount;
     CFAbsoluteTime _firstFrameTime;
     NSString *_selectedVideoType;
+    dispatch_queue_t _main_capture_queue;
+    
     
 }
 
+@property (retain) id<CaptureSessionProtocol> videoCaptureSession;
 @property (assign) double min_delay;
 @property (assign) double max_delay;
 @property (assign) double avg_delay;
@@ -97,7 +98,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 - (IBAction)removeDestination:(id)sender;
 
-@property (weak) NSArray *videoCaptureDevices;
 @property (weak) NSArray *audioCaptureDevices;
 
 @property (strong) FFMpegTask *ffmpeg_obj;

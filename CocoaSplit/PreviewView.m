@@ -34,6 +34,7 @@
         glEnable(GL_TEXTURE_RECTANGLE_ARB);
         glGenTextures(1, &_previewTexture);
         glDisable(GL_TEXTURE_RECTANGLE_ARB);
+        NSLog(@"SETUP PREVIEW TEXTURE");
     }
     
     return self;
@@ -45,22 +46,32 @@
 - (void) drawFrame:(CVImageBufferRef)cImageBuf
 {
  
-    IOSurfaceRef cFrame = CVPixelBufferGetIOSurface(cImageBuf);
-    if (cFrame && (_boundIOSurface != cFrame))
+    if (!cImageBuf)
     {
-        _boundIOSurface = cFrame;
+        return;
+    }
+    CVPixelBufferRetain(cImageBuf);
+    IOSurfaceRef cFrame = CVPixelBufferGetIOSurface(cImageBuf);
+    IOSurfaceID cFrameID;
+    if (cFrame)
+    {
+        cFrameID = IOSurfaceGetID(cFrame);
+    }
+    if (cFrame && (_boundIOSurfaceID != cFrameID))
+    {
+        _boundIOSurfaceID = cFrameID;
         CGLContextObj cgl_ctx = [[self openGLContext] CGLContextObj];
         
-        _surfaceHeight  = (GLsizei)IOSurfaceGetHeight(_boundIOSurface);
-        _surfaceWidth   = (GLsizei)IOSurfaceGetWidth(_boundIOSurface);
+        _surfaceHeight  = (GLsizei)IOSurfaceGetHeight(cFrame);
+        _surfaceWidth   = (GLsizei)IOSurfaceGetWidth(cFrame);
         
         /* the only formats we specify in any of the capture modules are: 420v, 420f and 2vuy. We can't handle 420* without some fragment shader /multi texture trickery, so just grab the first luminance plane and display that for now */
         
         GLenum gl_internal_format;
         GLenum gl_format;
         GLenum gl_type;
-        
         OSType frame_pixel_format = IOSurfaceGetPixelFormat(cFrame);
+        
         if (frame_pixel_format == kCVPixelFormatType_422YpCbCr8)
         {
             gl_format = GL_YCBCR_422_APPLE;
@@ -74,12 +85,13 @@
     
         glEnable(GL_TEXTURE_RECTANGLE_ARB);
         glBindTexture(GL_TEXTURE_RECTANGLE_ARB, _previewTexture);
-        CGLTexImageIOSurface2D(cgl_ctx, GL_TEXTURE_RECTANGLE_ARB, gl_internal_format, _surfaceWidth, _surfaceHeight, gl_format, gl_type, _boundIOSurface, 0);
+        CGLTexImageIOSurface2D(cgl_ctx, GL_TEXTURE_RECTANGLE_ARB, gl_internal_format, _surfaceWidth, _surfaceHeight, gl_format, gl_type, cFrame, 0);
         glBindTexture(GL_TEXTURE_RECTANGLE_ARB, 0);
         glDisable(GL_TEXTURE_RECTANGLE_ARB);
         [self drawRect:CGRectZero];
     }
-        
+
+    CVPixelBufferRelease(cImageBuf);
 }
 
 
@@ -101,8 +113,8 @@
     glPushMatrix();
     glLoadIdentity();
     
-    if (_boundIOSurface)
-    {
+    //if (_boundIOSurface)
+    //{
         glEnable(GL_TEXTURE_RECTANGLE_ARB);
         glBindTexture(GL_TEXTURE_RECTANGLE_ARB, _previewTexture);
         glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -160,7 +172,7 @@
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         glDisableClientState(GL_VERTEX_ARRAY);
         glBindTexture(GL_TEXTURE_RECTANGLE_ARB, 0);
-    }
+    //}
 /*    if (_boundIOSurface)
     {
         GLfloat texMatrix[16] = {0};

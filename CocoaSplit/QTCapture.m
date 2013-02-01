@@ -13,6 +13,9 @@
 
 @implementation QTCapture
 
+@synthesize activeVideoDevice = _activeVideoDevice;
+@synthesize availableVideoDevices = _availableVideoDevices;
+
 
 -(id) init
 {
@@ -32,6 +35,7 @@
         [_xpcConnection resume];
         _xpcProxy = [_xpcConnection remoteObjectProxy];
         NSLog(@"GOT PROXY OBJECT");
+        [self updateAvailableVideoDevices];
         
         
     }
@@ -59,20 +63,23 @@
 
 
 
-
--(bool) setActiveVideoDevice:(AbstractCaptureDevice *)newDev
+-(NSString *) activeVideoDevice
 {
-    NSLog(@"SET VIDEO DEVICE TO %@", [newDev uniqueID]);
-    _videoInputDevice = [newDev uniqueID];
-    return YES;
-    
+    return _activeVideoDevice;
 }
 
 
--(NSArray *) availableVideoDevices
+
+-(void) setActiveVideoDevice:(AbstractCaptureDevice *)newDev
+{
+    _activeVideoDevice = [newDev uniqueID];
+}
+
+
+-(void) updateAvailableVideoDevices
 {
     
-    dispatch_semaphore_t reply_s = dispatch_semaphore_create(0);
+    
     
     NSMutableArray *__block retArray;
     NSLog(@"PROXY %@", _xpcProxy);
@@ -88,38 +95,39 @@
         {
            [retArray addObject:[[AbstractCaptureDevice alloc]  initWithName:[devinstance valueForKey:@"name"] device:[devinstance valueForKey:@"id"] uniqueID:[devinstance valueForKey:@"id"]]];
         }
-        dispatch_semaphore_signal(reply_s);
+        [self willChangeValueForKey:@"availableVideoDevices"];
+        _availableVideoDevices = (NSArray *)retArray;
+        [self didChangeValueForKey:@"availableVideoDevices"];
+        //dispatch_semaphore_signal(reply_s);
     }];
+    /*
     NSLog(@"SEMAPHORE WAIT");
     dispatch_semaphore_wait(reply_s, DISPATCH_TIME_FOREVER);
+    NSLog(@"NO LONGER WAITING ON SEMAPHORE");
     reply_s = nil;
     return (NSArray *)retArray;
-    
+ */   
 }
 
 -(void) newCapturedFrame:(IOSurfaceID)ioxpc reply:(void (^)())reply
 {
     
     IOSurfaceRef  frameIOref = IOSurfaceLookup(ioxpc);
-    if (frameIOref)
-    {
-        
-        @synchronized(self) {
-            if (_currentFrame)
-            {
-                IOSurfaceDecrementUseCount(_currentFrame);
-                //CFRelease(_currentFrame);
-            }
-            
-            _currentFrame = frameIOref;
-            IOSurfaceIncrementUseCount(_currentFrame);
-            //CFRetain(_currentFrame);
-        }
-    
-        
-    }
 
-    // ALWAYS reply
+    
+    CVPixelBufferRef tmpbuf;
+
+    if (self.videoDelegate && frameIOref)
+    {
+        CVPixelBufferCreateWithIOSurface(NULL, frameIOref, NULL, &tmpbuf);
+        if (tmpbuf)
+        {
+            [self.videoDelegate captureOutputVideo:nil didOutputSampleBuffer:nil didOutputImage:tmpbuf frameTime:0 ];
+            CVPixelBufferRelease(tmpbuf);
+        }
+
+    }
+    //ALWAYS REPLY
     reply();
 }
 
@@ -136,8 +144,8 @@
 -(bool) startCaptureSession:(NSError **)error
 {
     
-    NSLog(@"CALLING STARTXPC WITH %@", _videoInputDevice);
-    [_xpcProxy startXPCCaptureSession:_videoInputDevice];
+    NSLog(@"CALLING STARTXPC WITH %@", self.activeVideoDevice);
+    [_xpcProxy startXPCCaptureSession:self.activeVideoDevice];
     
     return YES;
 }

@@ -22,13 +22,21 @@
 }
 
 
-@property (strong) id videoInputDevice;
-@property (strong) id videoDelegate;
-@property (assign) int videoCaptureFPS;
+
+@property int videoCaptureFPS;
+@property int width;
+@property int height;
+@property NSString *activeVideoDevice;
+@property id videoDelegate;
+@property (readonly) NSArray *availableVideoDevices;
+@property (readonly) BOOL needsAdvancedVideo;
+
 
 
 -(bool) startCaptureSession:(NSError **)error;
 -(bool) stopCaptureSession;
+-(void) setVideoDimensions:(int)width height:(int)height;
+-(bool) setupCaptureSession:(NSError **)therror;
 
 
 

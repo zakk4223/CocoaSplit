@@ -13,18 +13,15 @@
 @interface DesktopCapture : NSObject <CaptureSessionProtocol>
 {
     
-    int _width;
-    int _height;
     dispatch_queue_t _capture_queue;
     CGDisplayStreamRef _displayStreamRef;
     IOSurfaceRef _currentFrame;
     uint64_t _currentFrameTime;
-    
-    CGDirectDisplayID _activeVideoDevice;
-    
+    CGDirectDisplayID _currentDisplay;
     
 
 }
+
 
 
 -(bool)providesAudio;
@@ -32,8 +29,14 @@
 -(NSArray *)availableVideoDevices;
 -(void) setVideoDimensions:(int)width height:(int)height;
 
-@property (strong) id videoDelegate;
-@property (assign) int videoCaptureFPS;
+
+@property int videoCaptureFPS;
+@property int width;
+@property int height;
+@property AbstractCaptureDevice *activeVideoDevice;
+@property id videoDelegate;
+@property (readonly) NSArray *availableVideoDevices;
+@property (readonly) BOOL needsAdvancedVideo;
 
 
 

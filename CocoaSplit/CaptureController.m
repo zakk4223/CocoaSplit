@@ -14,7 +14,7 @@
 #import "DesktopCapture.h"
 #import "PreviewView.h"
 #import <IOSurface/IOSurface.h>
-
+#import "CaptureSessionProtocol.h"
 
 @implementation CaptureController
 
@@ -29,11 +29,9 @@
     
     NSMutableURLRequest *apiRequest = [NSMutableURLRequest requestWithURL:apiURL];
     
-    NSLog(@"SENDING ASYNC URL CONNECTION");
     [NSURLConnection sendAsynchronousRequest:apiRequest queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *err) {
         
         NSError *jsonError;
-        NSLog(@"GOT RESPONSE FOR INGESTS");
         NSDictionary *ingest_response = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonError];
         //Handle error
         
@@ -121,29 +119,34 @@
     
     dummydev.uniqueID = uniqueID;
     
+    NSArray *currentAvailableDevices;
+    
+    currentAvailableDevices = self.videoCaptureSession.availableVideoDevices;
+    
     NSUInteger sidx;
-    sidx = [self.videoCaptureDevices indexOfObject:dummydev];
+    sidx = [currentAvailableDevices indexOfObject:dummydev];
     if (sidx == NSNotFound)
     {
-        self.selectedVideoCapture = nil;
+        self.videoCaptureSession.activeVideoDevice = nil;
     } else {
-        self.selectedVideoCapture = [self.videoCaptureDevices objectAtIndex:sidx];
+        self.videoCaptureSession.activeVideoDevice = [currentAvailableDevices objectAtIndex:sidx];
     }
 }
 
 -(IBAction) videoRefresh:(id)sender
 {
     
-    self.videoCaptureDevices = [_video_capture_session availableVideoDevices];
+    NSArray *currentAvailableDevices = self.videoCaptureSession.availableVideoDevices;
+    
     if (self.selectedVideoCapture)
     {
         NSUInteger sidx;
-        sidx = [self.videoCaptureDevices indexOfObject:self.selectedVideoCapture];
+        sidx = [currentAvailableDevices indexOfObject:self.selectedVideoCapture];
         if (sidx == NSNotFound)
         {
             self.selectedVideoCapture = nil;
         } else {
-            self.selectedVideoCapture = [self.videoCaptureDevices objectAtIndex:sidx];
+            self.selectedVideoCapture = [currentAvailableDevices objectAtIndex:sidx];
         }
     }
 }
@@ -159,33 +162,34 @@
 
 -(void) setSelectedVideoType:(NSString *)selectedVideoType
 {
+    
+    NSLog(@"SETTING SELECTED VIDEO TYPE");
     if ([selectedVideoType isEqualToString:@"Desktop"])
     {
-        _video_capture_session = [[DesktopCapture alloc ] init];
+        self.videoCaptureSession = [[DesktopCapture alloc ] init];
     } else if ([selectedVideoType isEqualToString:@"AVFoundation"]) {
-        _video_capture_session = [[AVFCapture alloc] init];
+        self.videoCaptureSession = [[AVFCapture alloc] init];
     } else if ([selectedVideoType isEqualToString:@"QTCapture"]) {
-        _video_capture_session = [[QTCapture alloc] init];
+        self.videoCaptureSession = [[QTCapture alloc] init];
     } else if ([selectedVideoType isEqualToString:@"Syphon"]) {
-        _video_capture_session = [[SyphonCapture alloc] init];
+        self.videoCaptureSession = [[SyphonCapture alloc] init];
     } else {
-        _video_capture_session = nil;
+        self.videoCaptureSession = [[AVFCapture alloc] init];
     }
     
-    if (!_video_capture_session)
+    if (!self.videoCaptureSession)
     {
         _audio_capture_session  = nil;
         _selectedVideoType = nil;
     }
     
-    if ([_video_capture_session providesAudio])
+    if ([self.videoCaptureSession providesAudio])
     {
-        _audio_capture_session = _video_capture_session;
+        _audio_capture_session = self.videoCaptureSession;
     } else {
         _audio_capture_session = [[AVFCapture alloc] init];
     }
     
-    self.videoCaptureDevices = [_video_capture_session availableVideoDevices];
     self.audioCaptureDevices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio];
     self.selectedVideoCapture = nil;
     
@@ -208,6 +212,7 @@
        dispatch_source_set_event_handler(sigsrc, ^{ return;});
        dispatch_resume(sigsrc);
        
+       _main_capture_queue = dispatch_queue_create("CocoaSplit.main.queue", NULL);
        self.destinationTypes = @{@"file" : @"File/Raw",
        @"twitch" : @"Twitch TV"};
        
@@ -228,7 +233,7 @@
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
-    NSString *saveFolder = @"~/Library/Application Support/H264Streamer";
+    NSString *saveFolder = @"~/Library/Application Support/CocoaSplit";
     
     saveFolder = [saveFolder stringByExpandingTildeInPath];
     
@@ -237,7 +242,7 @@
         [fileManager createDirectoryAtPath:saveFolder withIntermediateDirectories:NO attributes:nil error:nil];
     }
     
-    NSString *saveFile = @"H264Streamer.settings";
+    NSString *saveFile = @"CocoaSplit.settings";
     
     return [saveFolder stringByAppendingPathComponent:saveFile];
 }
@@ -254,12 +259,12 @@
     
     [saveRoot setValue: [NSNumber numberWithInt:self.captureWidth] forKey:@"captureWidth"];
     [saveRoot setValue: [NSNumber numberWithInt:self.captureHeight] forKey:@"captureHeight"];
-    [saveRoot setValue: [NSNumber numberWithInt:self.captureFPS] forKey:@"captureFPS"];
+    [saveRoot setValue: [NSNumber numberWithInt:self.videoCaptureSession.videoCaptureFPS] forKey:@"captureFPS"];
     [saveRoot setValue: [NSNumber numberWithInt:self.captureVideoAverageBitrate] forKey:@"captureVideoAverageBitrate"];
     [saveRoot setValue: [NSNumber numberWithInt:self.audioBitrate] forKey:@"audioBitrate"];
     [saveRoot setValue: [NSNumber numberWithInt:self.audioSamplerate] forKey:@"audioSamplerate"];
     [saveRoot setValue: self.selectedVideoType forKey:@"selectedVideoType"];
-    [saveRoot setValue: self.selectedVideoCapture.uniqueID forKey:@"videoCaptureID"];
+    [saveRoot setValue: self.videoCaptureSession.activeVideoDevice.uniqueID forKey:@"videoCaptureID"];
     [saveRoot setValue: self.selectedAudioCapture.uniqueID forKey:@"audioCaptureID"];
     [saveRoot setValue: self.captureDestinations forKey:@"captureDestinations"];
     [saveRoot setValue: [NSNumber numberWithInt:self.captureVideoMaxBitrate] forKey:@"captureVideoMaxBitrate"];
@@ -280,7 +285,6 @@
     saveRoot = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
     self.captureWidth = [[saveRoot valueForKey:@"captureWidth"] intValue];
     self.captureHeight = [[saveRoot valueForKey:@"captureHeight"] intValue];
-    self.captureFPS = [[saveRoot valueForKey:@"captureFPS"] intValue];
     self.captureVideoAverageBitrate = [[saveRoot valueForKey:@"captureVideoAverageBitrate"] intValue];
     self.captureVideoMaxBitrate = [[saveRoot valueForKey:@"captureVideoMaxBitrate"] intValue];
     self.captureVideoMaxKeyframeInterval = [[saveRoot valueForKey:@"captureVideoMaxKeyframeInterval"] intValue];
@@ -303,6 +307,8 @@
     NSString *audioID = [saveRoot valueForKey:@"audioCaptureID"];
     
     [self selectedAudioCaptureFromID:audioID];
+    self.videoCaptureSession.videoCaptureFPS = [[saveRoot valueForKey:@"captureFPS"] intValue];
+
     
 }
 
@@ -334,7 +340,14 @@
     newDest = [[OutputDestination alloc] initWithType:_selectedDestinationType];
     newDest.server_name = _streamingServiceServer;
     newDest.stream_key = _streamingServiceKey;
-    newDest.destination = [_streamingDestination stringByReplacingOccurrencesOfString:@"{stream_key}" withString:_streamingServiceKey];
+    if (_streamingServiceKey)
+    {
+        
+        newDest.destination = [_streamingDestination stringByReplacingOccurrencesOfString:@"{stream_key}" withString:_streamingServiceKey];
+    } else {
+        newDest.destination = _streamingDestination;
+    }
+    
     
     [[self mutableArrayValueForKey:@"captureDestinations"] addObject:newDest];
     [self attachCaptureDestination:newDest];
@@ -350,7 +363,7 @@
     newout = [[FFMpegTask alloc] init];
     newout.height = _captureHeight;
     newout.width = _captureWidth;
-    newout.framerate = _captureFPS;
+    newout.framerate = self.videoCaptureSession.videoCaptureFPS;
     newout.stream_output = output.destination;
     newout.stream_format = output.output_format;
     newout.samplerate = _audioSamplerate;
@@ -380,16 +393,14 @@
         
         
         [_audio_capture_session setActiveAudioDevice:_selectedAudioCapture];
-        [_video_capture_session setActiveVideoDevice:_selectedVideoCapture];
-        [_video_capture_session setVideoCaptureFPS:_captureFPS];
-        [_video_capture_session setVideoDelegate:self];
-        [_video_capture_session setVideoDimensions:_captureWidth height:_captureHeight];
+        [self.videoCaptureSession setVideoDelegate:self];
+        [self.videoCaptureSession setVideoDimensions:_captureWidth height:_captureHeight];
         [_audio_capture_session setAudioDelegate:self];
         [_audio_capture_session setAudioBitrate:_audioBitrate];
         [_audio_capture_session setAudioSamplerate:_audioSamplerate];
         
         
-        success = [_video_capture_session setupCaptureSession:&error];
+        success = [self.videoCaptureSession setupCaptureSession:&error];
         if (!success)
         {
             [NSApp presentError:error];
@@ -424,14 +435,14 @@
         }
         
         
-        success = [_video_capture_session startCaptureSession:&error];
+        success = [self.videoCaptureSession startCaptureSession:&error];
         
         _frameCount = 0;
         _compressedFrameCount = 0;
         _min_delay = _max_delay = _avg_delay = 0;
         
-        _captureTimer = [NSTimer timerWithTimeInterval:1.0/_captureFPS target:self selector:@selector(newFrame) userInfo:nil repeats:YES];
-        [[NSRunLoop currentRunLoop] addTimer:_captureTimer forMode:NSRunLoopCommonModes];
+       // _captureTimer = [NSTimer timerWithTimeInterval:1.0/_captureFPS target:self selector:@selector(newFrame) userInfo:nil repeats:YES];
+        //[[NSRunLoop currentRunLoop] addTimer:_captureTimer forMode:NSRunLoopCommonModes];
 
         if (!success)
         {
@@ -468,9 +479,9 @@
         }
         
         
-        if (_video_capture_session)
+        if (self.videoCaptureSession)
         {
-            [_video_capture_session stopCaptureSession];
+            [self.videoCaptureSession stopCaptureSession];
         }
         
         if (_audio_capture_session)
@@ -521,7 +532,7 @@
     {
         
         int real_bitrate = self.captureVideoMaxBitrate*128; // In bytes (1024/8)
-        VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_DataRateLimits, (__bridge CFTypeRef)(@[@(real_bitrate), @1]));
+        VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_DataRateLimits, (__bridge CFTypeRef)(@[@(real_bitrate), @1.0]));
         
     }
     
@@ -536,10 +547,10 @@
         
     }
     
-    if (_captureFPS && _captureFPS > 0)
+    if (self.videoCaptureSession.videoCaptureFPS && self.videoCaptureSession.videoCaptureFPS > 0)
     {
         
-        VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_ExpectedFrameRate, CFNumberCreate(NULL, kCFNumberIntType, &_captureFPS));
+        VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_ExpectedFrameRate, (__bridge CFTypeRef)(@(self.videoCaptureSession.videoCaptureFPS)));
         
     }
     
@@ -552,7 +563,7 @@
 {
     
     CVImageBufferRef cFrame;
-    cFrame = [_video_capture_session getCurrentFrame];
+    cFrame = [self.videoCaptureSession getCurrentFrame];
     
     CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
     
@@ -572,7 +583,7 @@
     [self.previewCtx drawFrame:cFrame];
     
     
-    [self captureOutputVideo:_video_capture_session didOutputSampleBuffer:nil didOutputImage:cFrame frameTime:0 ];
+    [self captureOutputVideo:self.videoCaptureSession didOutputSampleBuffer:nil didOutputImage:cFrame frameTime:0 ];
     
 }
 
@@ -610,26 +621,61 @@
 
 - (void)captureOutputVideo:(AbstractCaptureDevice *)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer didOutputImage:(CVImageBufferRef)imageBuffer frameTime:(uint64_t)frameTime
 {
+    
+    if (imageBuffer)
+    {
+        CVPixelBufferRetain(imageBuffer);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self processVideoFrame:imageBuffer];
+        }
+                       );
+        
+    }
+    
+}
 
+-(void)processVideoFrame:(CVImageBufferRef)imageBuffer
+{
+
+    
     CMTime pts;
     CMTime duration;
     
+    if(!imageBuffer)
+        return;
+
     CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
     pts = CMTimeMake(currentTime*1000, 1000);
     
     
-    duration = CMTimeMake(1, _captureFPS);
+    duration = CMTimeMake(1, self.videoCaptureSession.videoCaptureFPS);
     
-    if(!imageBuffer)
-        return;
+    
+    if (_frameCount == 0)
+    {
+        _firstFrameTime = currentTime;
+    }
+    
+    _frameCount++;
+    if ((_frameCount % 15) == 0)
+    {
+        [self updateStatusString];
+    }
+    
+    [self.previewCtx drawFrame:imageBuffer];
+    
     
     VTCompressionSessionEncodeFrame(_compression_session, imageBuffer, pts, duration, NULL, imageBuffer, NULL);
-    CVPixelBufferRelease(imageBuffer); //VTCompression should retain it?
+    //CVPixelBufferRelease(imageBuffer); 
 }
 
 void VideoCompressorReceiveFrame(void *VTref, void *VTFrameRef, OSStatus status, VTEncodeInfoFlags infoFlags, CMSampleBufferRef sampleBuffer)
 {
-    
+    if (VTFrameRef)
+    {
+        CVPixelBufferRelease(VTFrameRef);
+    }
+
     @autoreleasepool {
         if(!sampleBuffer)
             return;
@@ -649,7 +695,7 @@ void VideoCompressorReceiveFrame(void *VTref, void *VTFrameRef, OSStatus status,
             selfobj.max_delay = frame_delay;
         }
         
-        //selfobj.compressedFrameCount++;
+        selfobj.compressedFrameCount++;
 
         
     CFRetain(sampleBuffer);
