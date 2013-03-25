@@ -77,6 +77,7 @@
     
     _displayStreamRef = CGDisplayStreamCreateWithDispatchQueue(_currentDisplay, self.width, self.height,  kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange, (__bridge CFDictionaryRef)(@{(NSString *)kCGDisplayStreamQueueDepth : @20, (NSString *)kCGDisplayStreamMinimumFrameTime : minframetime, (NSString *)kCGDisplayStreamPreserveAspectRatio: @NO}), _capture_queue, ^(CGDisplayStreamFrameStatus status, uint64_t displayTime, IOSurfaceRef frameSurface, CGDisplayStreamUpdateRef updateRef) {
         
+        
         if (frameSurface)
         {
             CVPixelBufferRef tmpbuf;

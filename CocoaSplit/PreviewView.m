@@ -57,7 +57,7 @@
     {
         cFrameID = IOSurfaceGetID(cFrame);
     }
-    if (cFrame && (_boundIOSurfaceID != cFrameID))
+    if (cFrame)
     {
         _boundIOSurfaceID = cFrameID;
         CGLContextObj cgl_ctx = [[self openGLContext] CGLContextObj];

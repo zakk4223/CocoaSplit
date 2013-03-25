@@ -15,6 +15,8 @@
 #import "PreviewView.h"
 #import <IOSurface/IOSurface.h>
 #import "CaptureSessionProtocol.h"
+#import "x264.h"
+
 
 @implementation CaptureController
 
@@ -69,6 +71,56 @@
 }
 
 
+-(IBAction)openCompressPanel:(id)sender
+{
+    if (!self.compressPanel)
+    {
+        
+        NSString *panelName;
+        
+        if ([self.selectedCompressorType isEqualToString:@"x264"])
+        {
+            panelName = @"x264Panel";
+        } else if ([self.selectedDestinationType isEqualToString:@"AppleVTCompressor"]) {
+            panelName = @"AppleVTPanel";
+        } else {
+            panelName = @"AppleVTPanel";
+        }
+
+        [NSBundle loadNibNamed:panelName owner:self];
+        
+        [NSApp beginSheet:self.compressPanel modalForWindow:[[NSApp delegate] window] modalDelegate:self didEndSelector:NULL contextInfo:NULL];
+        
+    }
+    
+}
+
+
+-(IBAction)closeCompressPanel:(id)sender
+{
+    [NSApp endSheet:self.compressPanel];
+    [self.compressPanel close];
+    self.compressPanel = nil;
+}
+
+-(IBAction)openAVFAdvanced:(id)sender
+{
+    if (!_avfPanel)
+    {
+        [NSBundle loadNibNamed:@"AVFAdvancedPanel" owner:self];
+        
+        [NSApp beginSheet:self.avfPanel modalForWindow:[[NSApp delegate] window] modalDelegate:self didEndSelector:NULL contextInfo:NULL];
+    
+    }
+    
+}
+
+-(IBAction)closeAVFAdvanced:(id)sender
+{
+    [NSApp endSheet:self.avfPanel];
+    [self.avfPanel close];
+    self.avfPanel = nil;
+}
 
 -(IBAction)openCreateSheet:(id)sender
 {
@@ -216,8 +268,34 @@
        self.destinationTypes = @{@"file" : @"File/Raw",
        @"twitch" : @"Twitch TV"};
        
-       
+       self.showPreview = YES;
        self.videoTypes = @[@"Desktop", @"AVFoundation", @"QTCapture"];
+       self.compressorTypes = @[@"AppleVTCompressor", @"x264"];
+       
+       self.x264tunes = [[NSMutableArray alloc] init];
+       
+       self.x264presets = [[NSMutableArray alloc] init];
+       
+       self.x264profiles = [[NSMutableArray alloc] init];
+
+       
+       for (int i = 0; x264_profile_names[i]; i++)
+       {
+           [self.x264profiles addObject:[NSString stringWithUTF8String:x264_profile_names[i]]];
+       }
+
+       
+       for (int i = 0; x264_preset_names[i]; i++)
+       {
+           [self.x264presets addObject:[NSString stringWithUTF8String:x264_preset_names[i]]];
+       }
+       
+       for (int i = 0; x264_tune_names[i]; i++)
+       {
+           [self.x264tunes addObject:[NSString stringWithUTF8String:x264_tune_names[i]]];
+       }
+
+       
        self.selectedVideoType = [self.videoTypes objectAtIndex:0];
        
        
@@ -269,6 +347,13 @@
     [saveRoot setValue: self.captureDestinations forKey:@"captureDestinations"];
     [saveRoot setValue: [NSNumber numberWithInt:self.captureVideoMaxBitrate] forKey:@"captureVideoMaxBitrate"];
     [saveRoot setValue: [NSNumber numberWithInt:self.captureVideoMaxKeyframeInterval] forKey:@"captureVideoMaxKeyframeInterval"];
+    [saveRoot setValue: self.selectedCompressorType forKey:@"selectedCompressorType"];
+    [saveRoot setValue: self.x264profile forKey:@"x264profile"];
+    [saveRoot setValue: self.x264preset forKey:@"x264preset"];
+    [saveRoot setValue: self.x264tune forKey:@"x264tune"];
+    [saveRoot setValue: [NSNumber numberWithInt:self.x264crf] forKey:@"x264crf"];
+
+    
     
     
     [NSKeyedArchiver archiveRootObject:saveRoot toFile:path];
@@ -298,8 +383,14 @@
     }
     
     
+    self.x264tune = [saveRoot valueForKey:@"x264tune"];
+    self.x264preset = [saveRoot valueForKey:@"x264preset"];
+    self.x264profile = [saveRoot valueForKey:@"x264profile"];
+    self.x264crf = [[saveRoot valueForKey:@"x264crf"] intValue];
     
     self.selectedVideoType = [saveRoot valueForKey:@"selectedVideoType"];
+    self.selectedCompressorType = [saveRoot valueForKey:@"selectedCompressorType"];
+
     NSString *videoID = [saveRoot valueForKey:@"videoCaptureID"];
     
     [self selectedVideoCaptureFromID:videoID];
@@ -374,6 +465,30 @@
 
 
 
+- (void) outputAVPacket:(AVPacket *)avpkt codec_ctx:(AVCodecContext *)codec_ctx
+{
+    for (OutputDestination *outdest in _captureDestinations)
+    {
+        if (outdest.active)
+        {
+            id ffmpeg = outdest.ffmpeg_out;
+            [ffmpeg writeAVPacket:avpkt codec_ctx:codec_ctx];
+        }
+    }
+}
+
+- (void) outputSampleBuffer:(CMSampleBufferRef)theBuffer
+{
+    for (OutputDestination *outdest in _captureDestinations)
+    {
+        if (outdest.active)
+        {
+            id ffmpeg = outdest.ffmpeg_out;
+            [ffmpeg writeVideoSampleBuffer:theBuffer];
+        }
+    }
+}
+
 
 - (IBAction)streamButtonPushed:(id)sender {
     
@@ -415,8 +530,30 @@
             return;
         }
 
+        if ([self.selectedCompressorType isEqualToString:@"x264"])
+        {
+            self.videoCompressor = [[x264Compressor alloc] init];
+        } else if ([self.selectedCompressorType isEqualToString:@"AppleVTCompressor"]) {
+            self.videoCompressor = [[AppleVTCompressor alloc] init];
+        } else {
+            self.videoCompressor = nil;
+        }
         
-        success = [self setupCompression:&error];
+        if (!self.videoCompressor)
+        {
+            error = [NSError errorWithDomain:@"videoCompressor" code:100 userInfo:@{NSLocalizedDescriptionKey : @"Must select compressor type"}];
+            [NSApp presentError:error];
+            [sender setNextState];
+            return;
+        }
+        
+        self.videoCompressor.settingsController = self;
+        
+        if ([self.videoCompressor setupCompressor] == YES)
+        {
+            self.videoCompressor.outputDelegate = self;
+        }
+
     
         if (!success)
         {
@@ -462,6 +599,8 @@
             [sender setNextState];
             return;
         }
+        
+        self.selectedTabIndex = 1;
 
     } else {
         
@@ -472,12 +611,13 @@
             
             
         }
+        /*
         if (_compression_session)
         {
             VTCompressionSessionInvalidate(_compression_session);
             CFRelease(_compression_session);
         }
-        
+        */
         
         if (self.videoCaptureSession)
         {
@@ -500,96 +640,9 @@
     
 }
 
-- (bool)setupCompression:(NSError **)error
-{
-    OSStatus status;
-    NSDictionary *encoder_spec = @{@"EnableHardwareAcceleratedVideoEncoder": @1};
-       
-    
-    if (!_captureHeight || !_captureHeight)
-    {
-        *error = [NSError errorWithDomain:@"videoCapture" code:120 userInfo:@{NSLocalizedDescriptionKey : @"Width and Height must be non-zero"}];
-        return NO;
-        
-    }
-    
-    status = VTCompressionSessionCreate(NULL, _captureWidth, _captureHeight, 'avc1', (__bridge CFDictionaryRef)encoder_spec, NULL, NULL, VideoCompressorReceiveFrame,  (__bridge void *)self, &_compression_session);
-
-    //If priority isn't set to -20 the framerate in the SPS/VUI section locks to 25. With -20 it takes on the value of
-    //whatever ExpectedFrameRate is. I have no idea what the fuck, but it works.
-    
-    VTSessionSetProperty(_compression_session, (CFStringRef)@"Priority", (__bridge CFTypeRef)(@-20));
-    VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_AllowFrameReordering, kCFBooleanFalse);
-    //VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_MaxKeyFrameInterval, (__bridge CFTypeRef)(@30));
-    
-    
-    if (self.captureVideoMaxKeyframeInterval && self.captureVideoMaxKeyframeInterval)
-    {
-        VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_MaxKeyFrameInterval, (__bridge CFTypeRef)(@(self.captureVideoMaxKeyframeInterval)));
-    }
-    
-    if (self.captureVideoMaxBitrate && self.captureVideoMaxBitrate > 0)
-    {
-        
-        int real_bitrate = self.captureVideoMaxBitrate*128; // In bytes (1024/8)
-        VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_DataRateLimits, (__bridge CFTypeRef)(@[@(real_bitrate), @1.0]));
-        
-    }
-    
-    
-    if (_captureVideoAverageBitrate > 0)
-    {
-        int real_bitrate = _captureVideoAverageBitrate*1024;
-                            
-        NSLog(@"Setting bitrate to %d", real_bitrate);
-        
-        VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_AverageBitRate, CFNumberCreate(NULL, kCFNumberIntType, &real_bitrate));
-        
-    }
-    
-    if (self.videoCaptureSession.videoCaptureFPS && self.videoCaptureSession.videoCaptureFPS > 0)
-    {
-        
-        VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_ExpectedFrameRate, (__bridge CFTypeRef)(@(self.videoCaptureSession.videoCaptureFPS)));
-        
-    }
-    
-    return YES;
-    
-}
-
-
--  (void)newFrame
-{
-    
-    CVImageBufferRef cFrame;
-    cFrame = [self.videoCaptureSession getCurrentFrame];
-    
-    CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
-    
-    if (_frameCount == 0)
-    {
-        _firstFrameTime = currentTime;
-    }
-    
-    _frameCount++;
-    if ((_frameCount % 15) == 0)
-    {
-        [self updateStatusString];
-    }
-
-    
-    
-    [self.previewCtx drawFrame:cFrame];
-    
-    
-    [self captureOutputVideo:self.videoCaptureSession didOutputSampleBuffer:nil didOutputImage:cFrame frameTime:0 ];
-    
-}
 
 - (void)captureOutputAudio:(id)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 {
-    
     
     
     CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
@@ -611,12 +664,6 @@
 
 
 
--(void)updateStatusString
-{
-    CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
-    self.statusString = [NSString stringWithFormat:@"%lld frames %3.2f frames/sec", _frameCount, _frameCount/(currentTime-_firstFrameTime)];
-    self.compressionStatusString = [NSString stringWithFormat:@"Delay min/max/avg 0/%2.3f/%2.3f", self.max_delay, self.avg_delay];
-}
 
 
 - (void)captureOutputVideo:(AbstractCaptureDevice *)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer didOutputImage:(CVImageBufferRef)imageBuffer frameTime:(uint64_t)frameTime
@@ -651,66 +698,14 @@
     duration = CMTimeMake(1, self.videoCaptureSession.videoCaptureFPS);
     
     
-    if (_frameCount == 0)
-    {
-        _firstFrameTime = currentTime;
-    }
-    
-    _frameCount++;
-    if ((_frameCount % 15) == 0)
-    {
-        [self updateStatusString];
-    }
-    
     [self.previewCtx drawFrame:imageBuffer];
     
     
-    VTCompressionSessionEncodeFrame(_compression_session, imageBuffer, pts, duration, NULL, imageBuffer, NULL);
+    [self.videoCompressor compressFrame:imageBuffer pts:pts duration:duration];
+    
     //CVPixelBufferRelease(imageBuffer); 
 }
 
-void VideoCompressorReceiveFrame(void *VTref, void *VTFrameRef, OSStatus status, VTEncodeInfoFlags infoFlags, CMSampleBufferRef sampleBuffer)
-{
-    if (VTFrameRef)
-    {
-        CVPixelBufferRelease(VTFrameRef);
-    }
-
-    @autoreleasepool {
-        if(!sampleBuffer)
-            return;
- 
-        CaptureController *selfobj = (__bridge CaptureController *)VTref;
-
-        double frame_delay = 0;
-        
-        CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
-        CFAbsoluteTime sample_time = CMTimeGetSeconds(CMSampleBufferGetPresentationTimeStamp(sampleBuffer));
-        
-        frame_delay = currentTime - sample_time;
-        
-        selfobj.avg_delay = ((selfobj.avg_delay * selfobj.compressedFrameCount)+frame_delay)/++selfobj.compressedFrameCount;
-        if (frame_delay > selfobj.max_delay)
-        {
-            selfobj.max_delay = frame_delay;
-        }
-        
-        selfobj.compressedFrameCount++;
-
-        
-    CFRetain(sampleBuffer);
-        
-    for (id od in selfobj.captureDestinations)
-    {
-        if ([od active])
-        {
-            
-            [[od ffmpeg_out] writeVideoSampleBuffer:sampleBuffer];
-        }
-    }
-    CFRelease(sampleBuffer);
-    }
-}
 
 
 - (void) setNilValueForKey:(NSString *)key

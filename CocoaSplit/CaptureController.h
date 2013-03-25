@@ -16,6 +16,9 @@
 #import "CaptureSessionProtocol.h"
 #import "AbstractCaptureDevice.h"
 #import "PreviewView.h"
+#import "h264Compressor.h"
+#import "AppleVTCompressor.h"
+#import "x264Compressor.h"
 
 
 
@@ -27,7 +30,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     
     id _audio_capture_session;
     
-    VTCompressionSessionRef _compression_session;
     NSTimer *_captureTimer;
     long long _frameCount;
     CFAbsoluteTime _firstFrameTime;
@@ -36,7 +38,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     
     
 }
-
+@property (strong) id<h264Compressor> videoCompressor;
 @property (retain) id<CaptureSessionProtocol> videoCaptureSession;
 @property (assign) double min_delay;
 @property (assign) double max_delay;
@@ -53,14 +55,23 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 - (IBAction)openCreateSheet:(id)sender;
 - (IBAction)videoRefresh:(id)sender;
+- (IBAction)openAVFAdvanced:(id)sender;
+- (IBAction)closeAVFAdvanced:(id)sender;
+- (IBAction)openCompressPanel:(id)sender;
+- (IBAction)closeCompressPanel:(id)sender;
+
 
 
 - (IBAction)closeCreateSheet:(id)sender;
 
 
 @property (weak) NSString *selectedVideoType;
+@property (strong) NSString *selectedCompressorType;
+
 
 @property (strong) NSArray *videoTypes;
+@property (strong) NSArray *compressorTypes;
+
 
 @property (strong) NSMutableArray *ffmpeg_objects;
 @property (weak) NSString *streamingServiceServer;
@@ -71,21 +82,33 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 @property (weak) NSString *selectedDestinationType;
 
-@property (strong) NSString *statusString;
-@property (strong) NSString *compressionStatusString;
 
 @property (strong) IBOutlet NSWindow *createSheet;
+@property (strong) IBOutlet NSWindow *avfPanel;
+@property (strong) IBOutlet NSWindow *compressPanel;
+
+
 
 @property (strong) NSDictionary *destinationTypes;
 
 @property (strong) NSMutableArray *captureDestinations;
 @property (weak) NSIndexSet *selectedCaptureDestinations;
+@property (assign) int selectedTabIndex;
 
 
+@property (assign) BOOL showPreview;
 
 @property (assign) int captureVideoAverageBitrate;
 @property (assign) int captureVideoMaxBitrate;
 @property (assign) int captureVideoMaxKeyframeInterval;
+@property (strong) NSString *x264tune;
+@property (strong) NSString *x264preset;
+@property (strong) NSString *x264profile;
+@property (assign) int x264crf;
+@property (strong) NSMutableArray *x264tunes;
+@property (strong) NSMutableArray *x264presets;
+@property (strong) NSMutableArray *x264profiles;
+
 
 
 @property (assign) int captureHeight;
@@ -115,6 +138,9 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 
+
+- (void) outputSampleBuffer:(CMSampleBufferRef)theBuffer;
+- (void) outputAVPacket:(AVPacket *)avpkt codec_ctx:(AVCodecContext *)codec_ctx;
 - (void)saveSettings;
 - (void)loadSettings;
 

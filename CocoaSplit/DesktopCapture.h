@@ -37,6 +37,8 @@
 @property id videoDelegate;
 @property (readonly) NSArray *availableVideoDevices;
 @property (readonly) BOOL needsAdvancedVideo;
+@property NSArray *videoFormats;
+@property NSArray *videoFramerates;
 
 
 

@@ -66,7 +66,14 @@
 
 -(NSString *)name
 {
-    return _name;
+    if (_name)
+    {
+        return _name;
+    }
+    
+    return _destination;
+    
+    
 }
 
 

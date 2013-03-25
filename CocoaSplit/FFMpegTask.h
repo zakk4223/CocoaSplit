@@ -27,22 +27,37 @@
     char *_audio_extradata;
     size_t _audio_extradata_size;
     
+    CFAbsoluteTime _input_frame_timestamp;
+    CFAbsoluteTime _output_frame_timestamp;
+    int _input_framecnt;
+    int _output_framecnt;
+    int _output_bytes;
+    int _pending_frame_count;
+    int _pending_frame_size;
+    
 }
 
 
 -(void) writeVideoSampleBuffer:(CMSampleBufferRef)theBuffer;
 -(void) writeAudioSampleBuffer:(CMSampleBufferRef)theBuffer presentationTimeStamp:(CMTime)pts;
+-(void) writeAVPacket:(AVPacket *)pkt codec_ctx:(AVCodecContext *)codec_ctx;
 
 
 -(bool) stopProcess;
 -(bool) restartProcess;
 
+@property (assign) BOOL init_done;
 @property (strong) NSString *stream_output;
 @property (strong) NSString *stream_format;
 @property (assign) int framerate;
 @property (assign) int width;
 @property (assign) int height;
 @property (assign) int samplerate;
+@property (assign) int buffered_frame_count;
+@property (assign) int buffered_frame_size;
+@property (assign) double output_framerate;
+@property (assign) double input_framerate;
+@property (assign) double output_bitrate;
 
 
 
