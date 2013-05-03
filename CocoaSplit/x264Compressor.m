@@ -31,22 +31,25 @@
         void *frame_data_ptr;
         uint8_t *frame_data;
         enum PixelFormat frame_fmt;
+        //NSLog(@"WIDTH INPUT %zd HEIGHT %zd",  CVPixelBufferGetWidth(imageBuffer), CVPixelBufferGetHeight(imageBuffer));
         
         if (CVPixelBufferGetPixelFormatType(imageBuffer) == kCVPixelFormatType_422YpCbCr8)
         {
             frame_fmt = PIX_FMT_UYVY422;
+        } else if (CVPixelBufferGetPixelFormatType(imageBuffer) == kCVPixelFormatType_32BGRA) {
+            frame_fmt = PIX_FMT_BGRA;
         } else {
             frame_fmt = PIX_FMT_NV12;
         }
 
         if (!_sws_ctx)
         {
-            _sws_ctx = sws_getContext(_av_codec_ctx->width, _av_codec_ctx->height, frame_fmt,
+            _sws_ctx = sws_getContext((int)CVPixelBufferGetWidth(imageBuffer), (int)CVPixelBufferGetHeight(imageBuffer), frame_fmt,
                                       _av_codec_ctx->width, _av_codec_ctx->height, _av_codec_ctx->pix_fmt,
                                       SWS_BICUBIC, NULL, NULL, NULL);
 
         }
-        size_t frame_size = CVPixelBufferGetBytesPerRow(imageBuffer)*CVPixelBufferGetHeight(imageBuffer);
+        size_t frame_size = CVPixelBufferGetDataSize(imageBuffer); //CVPixelBufferGetBytesPerRow(imageBuffer)*CVPixelBufferGetHeight(imageBuffer);
         frame_data = av_malloc(frame_size);
         CVPixelBufferLockBaseAddress(imageBuffer, kCVPixelBufferLock_ReadOnly);
         frame_data_ptr = CVPixelBufferGetBaseAddress(imageBuffer);

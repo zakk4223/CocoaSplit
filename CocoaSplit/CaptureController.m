@@ -249,6 +249,8 @@
 }
 
 
+
+
 -(id) init
 {
    if (self = [super init])
@@ -269,7 +271,7 @@
        @"twitch" : @"Twitch TV"};
        
        self.showPreview = YES;
-       self.videoTypes = @[@"Desktop", @"AVFoundation", @"QTCapture"];
+       self.videoTypes = @[@"Desktop", @"AVFoundation", @"QTCapture", @"Syphon"];
        self.compressorTypes = @[@"AppleVTCompressor", @"x264"];
        
        self.x264tunes = [[NSMutableArray alloc] init];
@@ -490,6 +492,234 @@
 }
 
 
+-(bool) startStream
+{
+    // We should already have a capture session from init since we need it to figure out device lists.
+    
+    
+    NSError *error;
+    bool success;
+    
+    
+    
+    [_audio_capture_session setActiveAudioDevice:_selectedAudioCapture];
+    [self.videoCaptureSession setVideoDelegate:self];
+    [self.videoCaptureSession setVideoDimensions:_captureWidth height:_captureHeight];
+    [_audio_capture_session setAudioDelegate:self];
+    [_audio_capture_session setAudioBitrate:_audioBitrate];
+    [_audio_capture_session setAudioSamplerate:_audioSamplerate];
+    
+    
+    success = [self.videoCaptureSession setupCaptureSession:&error];
+    if (!success)
+    {
+        [NSApp presentError:error];
+        return NO;
+    }
+    success = [_audio_capture_session setupCaptureSession:&error];
+    if (!success)
+    {
+        [NSApp presentError:error];
+        return NO;
+    }
+    
+    if ([self.selectedCompressorType isEqualToString:@"x264"])
+    {
+        self.videoCompressor = [[x264Compressor alloc] init];
+    } else if ([self.selectedCompressorType isEqualToString:@"AppleVTCompressor"]) {
+        self.videoCompressor = [[AppleVTCompressor alloc] init];
+    } else {
+        self.videoCompressor = nil;
+    }
+    
+    if (!self.videoCompressor)
+    {
+        error = [NSError errorWithDomain:@"videoCompressor" code:100 userInfo:@{NSLocalizedDescriptionKey : @"Must select compressor type"}];
+        [NSApp presentError:error];
+        return NO;
+    }
+    
+    self.videoCompressor.settingsController = self;
+    
+    if ([self.videoCompressor setupCompressor] == YES)
+    {
+        self.videoCompressor.outputDelegate = self;
+    }
+    
+    
+    if (!success)
+    {
+        NSLog(@"Failed compression setup");
+        [NSApp presentError:error];
+        return NO;
+    }
+    
+    OutputDestination *output;
+    
+    
+    for (output in _captureDestinations)
+    {
+        [self attachCaptureDestination:output];
+    }
+    
+    
+    success = [self.videoCaptureSession startCaptureSession:&error];
+    
+    _frameCount = 0;
+    _compressedFrameCount = 0;
+    _min_delay = _max_delay = _avg_delay = 0;
+    
+    // _captureTimer = [NSTimer timerWithTimeInterval:1.0/_captureFPS target:self selector:@selector(newFrame) userInfo:nil repeats:YES];
+    //[[NSRunLoop currentRunLoop] addTimer:_captureTimer forMode:NSRunLoopCommonModes];
+    
+    if (!success)
+    {
+        NSLog(@"Failed start capture");
+        [NSApp presentError:error];
+        return NO;
+    }
+    success = [_audio_capture_session startCaptureSession:&error];
+    
+    
+    
+    if (!success)
+    {
+        NSLog(@"Failed start capture");
+        [NSApp presentError:error];
+        return NO;
+    }
+    
+
+    return YES;
+    
+}
+
+
+-(void) loadCmdlineSettings
+{
+    
+    NSUserDefaults *cmdargs = [NSUserDefaults standardUserDefaults];
+    
+    if ([cmdargs objectForKey:@"captureWidth"])
+    {
+        self.captureWidth = [cmdargs integerForKey:@"captureWidth"];
+    }
+    
+    if ([cmdargs objectForKey:@"captureHeight"])
+    {
+        self.captureHeight = [cmdargs integerForKey:@"captureHeight"];
+    }
+    
+    if ([cmdargs objectForKey:@"captureVideoAverageBitrate"])
+    {
+        self.captureVideoAverageBitrate = [cmdargs integerForKey:@"captureVideoAverageBitrate"];
+    }
+    
+    if ([cmdargs objectForKey:@"captureVideoMaxBitrate"])
+    {
+        self.captureVideoMaxBitrate = [cmdargs integerForKey:@"captureVideoMaxBitrate"];
+    }
+    
+    if ([cmdargs objectForKey:@"captureVideoMaxKeyframeInterval"])
+    {
+        self.captureVideoMaxKeyframeInterval = [cmdargs integerForKey:@"captureVideoMaxKeyframeInterval"];
+    }
+    
+    if ([cmdargs objectForKey:@"audioBitrate"])
+    {
+        self.audioBitrate = [cmdargs integerForKey:@"audioBitrate"];
+    }
+    
+    if ([cmdargs objectForKey:@"audioSamplerate"])
+    {
+        self.audioSamplerate = [cmdargs integerForKey:@"audioSamplerate"];
+    }
+    
+    if ([cmdargs objectForKey:@"x264tune"])
+    {
+        self.x264tune = [cmdargs stringForKey:@"x264tune"];
+    }
+    
+    if ([cmdargs objectForKey:@"x264preset"])
+    {
+        self.x264preset = [cmdargs stringForKey:@"x264preset"];
+    }
+    
+    if ([cmdargs objectForKey:@"x264profile"])
+    {
+        self.x264profile = [cmdargs stringForKey:@"x264profile"];
+    }
+    
+    if ([cmdargs objectForKey:@"x264crf"])
+    {
+        self.x264crf = [cmdargs integerForKey:@"x264crf"];
+    }
+    
+    if ([cmdargs objectForKey:@"selectedVideoType"])
+    {
+        self.selectedVideoType = [cmdargs stringForKey:@"selectedVideoType"];
+    }
+    
+    if ([cmdargs objectForKey:@"selectedCompressorType"])
+    {
+        self.selectedCompressorType = [cmdargs stringForKey:@"selectedCompressorType"];
+    }
+    
+    
+    if ([cmdargs objectForKey:@"videoCaptureID"])
+    {
+        NSString *videoID = [cmdargs stringForKey:@"videoCaptureID"];
+        [self selectedVideoCaptureFromID:videoID];
+    }
+    
+    
+    if ([cmdargs objectForKey:@"audioCaptureID"])
+    {
+        NSString *audioID = [cmdargs stringForKey:@"audioCaptureID"];
+        [self selectedAudioCaptureFromID:audioID];
+    }
+    
+    if ([cmdargs objectForKey:@"captureFPS"])
+    {
+        self.videoCaptureSession.videoCaptureFPS = [cmdargs integerForKey:@"captureFPS"];
+    }
+}
+
+- (void)stopStream
+{
+    if (_captureTimer)
+    {
+        [_captureTimer invalidate];
+        
+        
+    }
+    /*
+     if (_compression_session)
+     {
+     VTCompressionSessionInvalidate(_compression_session);
+     CFRelease(_compression_session);
+     }
+     */
+    
+    if (self.videoCaptureSession)
+    {
+        [self.videoCaptureSession stopCaptureSession];
+    }
+    
+    if (_audio_capture_session)
+    {
+        [_audio_capture_session stopCaptureSession];
+    }
+    
+    
+    
+    for (OutputDestination *out in _captureDestinations)
+    {
+        [out stopOutput];
+    }
+    
+}
+
 - (IBAction)streamButtonPushed:(id)sender {
     
     NSButton *button = (NSButton *)sender;
@@ -498,144 +728,18 @@
     if ([button state] == NSOnState)
     {
         
-        
-        // We should already have a capture session from init since we need it to figure out device lists.
-        
-    
-        NSError *error;
-        bool success;
-        
-        
-        
-        [_audio_capture_session setActiveAudioDevice:_selectedAudioCapture];
-        [self.videoCaptureSession setVideoDelegate:self];
-        [self.videoCaptureSession setVideoDimensions:_captureWidth height:_captureHeight];
-        [_audio_capture_session setAudioDelegate:self];
-        [_audio_capture_session setAudioBitrate:_audioBitrate];
-        [_audio_capture_session setAudioSamplerate:_audioSamplerate];
-        
-        
-        success = [self.videoCaptureSession setupCaptureSession:&error];
-        if (!success)
+        if ([self startStream] == YES)
         {
-            [NSApp presentError:error];
-            [sender setNextState];
-            return;
-        }
-        success = [_audio_capture_session setupCaptureSession:&error];
-        if (!success)
-        {
-            [NSApp presentError:error];
-            [sender setNextState];
-            return;
-        }
-
-        if ([self.selectedCompressorType isEqualToString:@"x264"])
-        {
-            self.videoCompressor = [[x264Compressor alloc] init];
-        } else if ([self.selectedCompressorType isEqualToString:@"AppleVTCompressor"]) {
-            self.videoCompressor = [[AppleVTCompressor alloc] init];
+            self.selectedTabIndex = 1;
         } else {
-            self.videoCompressor = nil;
-        }
-        
-        if (!self.videoCompressor)
-        {
-            error = [NSError errorWithDomain:@"videoCompressor" code:100 userInfo:@{NSLocalizedDescriptionKey : @"Must select compressor type"}];
-            [NSApp presentError:error];
             [sender setNextState];
-            return;
-        }
-        
-        self.videoCompressor.settingsController = self;
-        
-        if ([self.videoCompressor setupCompressor] == YES)
-        {
-            self.videoCompressor.outputDelegate = self;
-        }
 
-    
-        if (!success)
-        {
-            NSLog(@"Failed compression setup");
-            [NSApp presentError:error];
-            [sender setNextState];
-            return;
         }
-    
-        OutputDestination *output;
-        
-        
-        for (output in _captureDestinations)
-        {
-            [self attachCaptureDestination:output];
-        }
-        
-        
-        success = [self.videoCaptureSession startCaptureSession:&error];
-        
-        _frameCount = 0;
-        _compressedFrameCount = 0;
-        _min_delay = _max_delay = _avg_delay = 0;
-        
-       // _captureTimer = [NSTimer timerWithTimeInterval:1.0/_captureFPS target:self selector:@selector(newFrame) userInfo:nil repeats:YES];
-        //[[NSRunLoop currentRunLoop] addTimer:_captureTimer forMode:NSRunLoopCommonModes];
-
-        if (!success)
-        {
-            NSLog(@"Failed start capture");
-            [NSApp presentError:error];
-            [sender setNextState];
-            return;
-        }
-        success = [_audio_capture_session startCaptureSession:&error];
-        
-        
-        
-        if (!success)
-        {
-            NSLog(@"Failed start capture");
-            [NSApp presentError:error];
-            [sender setNextState];
-            return;
-        }
-        
-        self.selectedTabIndex = 1;
 
     } else {
         
 
-        if (_captureTimer)
-        {
-            [_captureTimer invalidate];
-            
-            
-        }
-        /*
-        if (_compression_session)
-        {
-            VTCompressionSessionInvalidate(_compression_session);
-            CFRelease(_compression_session);
-        }
-        */
-        
-        if (self.videoCaptureSession)
-        {
-            [self.videoCaptureSession stopCaptureSession];
-        }
-        
-        if (_audio_capture_session)
-        {
-            [_audio_capture_session stopCaptureSession];
-        }
-
-        
-        
-        for (OutputDestination *out in _captureDestinations)
-        {
-            [out stopOutput];
-        }
-    
+        [self stopStream];
     }
     
 }

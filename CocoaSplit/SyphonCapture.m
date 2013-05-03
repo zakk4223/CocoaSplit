@@ -8,15 +8,19 @@
 
 #import "SyphonCapture.h"
 #import "AbstractCaptureDevice.h"
+#import <OpenGL/OpenGL.h>
+
 
 @implementation SyphonCapture
 
 
 
 
--(void)setVideoDimensions:(int)width height:(int)height
+-(void) setVideoDimensions:(int)width height:(int)height
 {
-    return;
+    self.width = width;
+    self.height = height;
+    
 }
 
 
@@ -27,88 +31,242 @@
     return YES;
 }
 
-- (CVImageBufferRef) getCurrentFrame
-{
-    
-    CVImageBufferRef newbuf = NULL;
-    
-    @synchronized(self)
-    {
-        if (_currentFrame)
-        {
-            IOSurfaceSetValue(_currentFrame, kCVPixelBufferPixelFormatTypeKey, (__bridge CFTypeRef)(@(kCVPixelFormatType_32BGRA)));
-            CVPixelBufferCreateWithIOSurface(NULL, _currentFrame, (__bridge CFDictionaryRef)(@{(NSString *)kCVPixelBufferPixelFormatTypeKey: @(kCVPixelFormatType_422YpCbCr10)}), &newbuf);
-            
-            
-        }
-        
-    }
-    
-    return newbuf;
-    
-    
-}
 
 
--(void) setVideoCaptureFPS:(int)fps
-{
-    _captureFPS = fps;
-}
-
--(void) setVideoDelegate:(id)delegate
-{
-    _delegate = delegate;
-    
-}
-
--(bool) setActiveVideoDevice:(id)videoDevice
-{
-    
-    _syphonServer = [videoDevice captureDevice];
-    return YES;
-}
 
 -(bool) setupCaptureSession:(NSError *__autoreleasing *)therror
 {
     
+    NSOpenGLPixelFormatAttribute glAttributes[] = {
+        
+        NSOpenGLPFAPixelBuffer,
+        NSOpenGLPFANoRecovery,
+        NSOpenGLPFAAccelerated,
+        NSOpenGLPFADepthSize, 32,
+        (NSOpenGLPixelFormatAttribute) 0
+    
+    };
+    NSOpenGLPixelFormat *pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:glAttributes];
+    
+    if (!pixelFormat)
+    {
+        return NO;
+    }
+    
+    _ogl_ctx = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:nil];
+    
+    if (!_ogl_ctx)
+    {
+        return NO;
+    }
+    
+    CVReturn result;
+    
+    result = CVOpenGLTextureCacheCreate(kCFAllocatorDefault, NULL, [_ogl_ctx CGLContextObj], CGLGetPixelFormat([_ogl_ctx CGLContextObj]), NULL, &_texture_cache);
+    
+    if (result != kCVReturnSuccess)
+    {
+        return NO;
+    }
+    
+    
+    
+    
+    NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
+    //[attributes setValue:[NSNumber numberWithInt:GL_RGBA8] forKey:(NSString *)kCVOpenGLBufferInternalFormat];
+    //[attributes setValue:[NSNumber numberWithInt:kCVPixelFormatType_32RGBA]  forKey:(NSString *)kCVPixelBufferPixelFormatTypeKey];
+    [attributes setValue:[NSNumber numberWithInt:self.width] forKey:(NSString *)kCVPixelBufferWidthKey];
+    [attributes setValue:[NSNumber numberWithInt:self.height] forKey:(NSString *)kCVPixelBufferHeightKey];
+    [attributes setValue:@{(NSString *)kIOSurfaceIsGlobal: @YES} forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
+    [attributes setValue:[NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA] forKey:(NSString *)kCVPixelBufferPixelFormatTypeKey];
+    
+
+
+
+    result = CVPixelBufferPoolCreate(NULL, NULL, (__bridge CFDictionaryRef)(attributes), &_pixel_buffer_pool);
+    
+    if (result != kCVReturnSuccess)
+    {
+        return NO;
+    }
+    
     return YES;
-    
-    
 }
 
 
 
 
+-(void)renderNewFrame:(SyphonClient *)client
+{
+    
+    CGLContextObj cgl_ctx = [_ogl_ctx CGLContextObj];
+    [_ogl_ctx makeCurrentContext];
+    NSSize frameSize;
+    
+    if (cgl_ctx == nil)
+    {
+        return;
+    }
+    
+    GLuint frametexture;
+    
+    CGLLockContext(cgl_ctx);
+    SyphonImage *syphon_frame = [client newFrameImageForContext:cgl_ctx];
+    frametexture = [syphon_frame textureName];
+    frameSize = [syphon_frame textureSize];
+    
+    BOOL changed = NO;
+    
+    if ((_last_frame_size.width != frameSize.width) || (_last_frame_size.height != frameSize.height))
+    {
+        changed = YES;
+        _last_frame_size.width = frameSize.width;
+        _last_frame_size.height = frameSize.height;
+    }
+    
+    if (!_framebuffer)
+    {
+        glGenFramebuffers(1, &_framebuffer);
+        
+    }
+    
+    glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
+    CVOpenGLTextureRef textureOut;
+    CVPixelBufferRef bufferOut;
+    
+    CVPixelBufferPoolCreatePixelBuffer(NULL, _pixel_buffer_pool, &bufferOut);
+    if (!bufferOut)
+    {
+        return;
+    }
+    
+    
+    
+    CVOpenGLTextureCacheCreateTextureFromImage(kCFAllocatorDefault, _texture_cache, bufferOut, NULL, &textureOut);
+    
+
+    glEnable(CVOpenGLTextureGetTarget(textureOut));
+    
+    glActiveTexture(GL_TEXTURE0);
+    
+    
+    glBindTexture(CVOpenGLTextureGetTarget(textureOut), CVOpenGLTextureGetName(textureOut));
+    glTexParameterf(CVOpenGLTextureGetTarget(textureOut), GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameterf(CVOpenGLTextureGetTarget(textureOut), GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glDisable(GL_DEPTH_TEST);
+    glDisable(CVOpenGLTextureGetTarget(textureOut));
+    glDepthMask(GL_FALSE);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, CVOpenGLTextureGetTarget(textureOut), CVOpenGLTextureGetName(textureOut), 0);
+    
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    {
+        NSLog(@"FRAMEBUFFER IS NOT COMPLETE %d", glCheckFramebufferStatus(GL_FRAMEBUFFER));
+        return;
+    }
+    
+    glBindTexture(CVOpenGLTextureGetTarget(textureOut), 0);
+    
+    double angle = 0.15f;
+    
+    
+    glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
+    glClearColor (1.0f, 0.0f, 0.0f, 0.5f);
+    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);            // Clear Screen And Depth Buffer on the fbo to red
+    glLoadIdentity ();                                              // Reset The Modelview Matrix
+    glTranslatef (0.0f, 0.0f, -6.0f);                               // Translate 6 Units Into The Screen and then rotate
+    glRotatef(angle,0.0f,1.0f,0.0f);
+    glRotatef(angle,1.0f,0.0f,0.0f);
+    glRotatef(angle,0.0f,0.0f,1.0f);
+    glColor3f(1,1,0);                                               // set color to yellow
+    
+    
+    
+    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+    glViewport(0, 0, frameSize.width, frameSize.height);
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    glOrtho(0.0, frameSize.width, 0.0, frameSize.height, -1, 1);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+    
+    glEnable(GL_TEXTURE_RECTANGLE_ARB);
+    glBindTexture(GL_TEXTURE_RECTANGLE_ARB, frametexture);
+    glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+    
+    glDisable(GL_BLEND);
+    
+    
+    GLfloat text_coords[] =
+    {
+        0.0, 0.0,
+        frameSize.width, 0.0,
+        frameSize.width, frameSize.height,
+        0.0, frameSize.height
+    };
+    
+    float halfw = frameSize.width * 0.5;
+    float halfh = frameSize.height * 0.5;
+    
+    
+    GLfloat verts[] =
+    {
+        -halfw, halfh,
+        halfw, halfh,
+        halfw, -halfh,
+        -halfw, -halfh
+    };
+    
+    glTranslated(frameSize.width * 0.5, frameSize.height * 0.5, 0.0);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glTexCoordPointer(2, GL_FLOAT, 0, text_coords);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glVertexPointer(2, GL_FLOAT, 0, verts);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glBindTexture(GL_TEXTURE_RECTANGLE_ARB, 0);
+    
+    glEnd();
+    glFlush();
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, CVOpenGLTextureGetTarget(textureOut), 0, 0);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    CVOpenGLTextureRelease(textureOut);
+
+    
+    [NSOpenGLContext clearCurrentContext];
+    CGLUnlockContext(cgl_ctx);
+    
+    [self.videoDelegate captureOutputVideo:nil didOutputSampleBuffer:nil didOutputImage:bufferOut frameTime:0 ];
+    
+    CVPixelBufferRelease(bufferOut);
+    CVOpenGLTextureCacheFlush(_texture_cache, 0);
+    
+}
+
 -(bool) startCaptureSession:(NSError *__autoreleasing *)error
 {
     
-    NSLog(@"SERVER IS %@", _syphonServer);
     
-    
+    _syphonServer = [self.activeVideoDevice captureDevice];
+    NSLog(@"STARTING SYPHON");
     _syphon_client = [[SyphonClient alloc] initWithServerDescription:_syphonServer options:nil newFrameHandler:^(SyphonClient *client) {
-        IOSurfaceRef frameSurface = [client currentSurfaceRef];
-        NSLog(@"IOSURFACE BLAH %d", IOSurfaceGetHeight(frameSurface));
-        if (frameSurface)
-        {
-            CFRetain(frameSurface);
-            IOSurfaceIncrementUseCount(frameSurface);
-            @synchronized(self) {
-                if (_currentFrame)
-                {
-                    IOSurfaceDecrementUseCount(_currentFrame);
-                    CFRelease(_currentFrame);
-                }
-                
-                _currentFrame = frameSurface;
-            }
-
-        }
-        
+        NSLog(@"NEW FRAME");
+        [self renderNewFrame:client];
     }];
     
        return YES;
     
 }
+
+
 
 
 
@@ -129,9 +287,10 @@
     NSMutableArray *retArr = [[NSMutableArray alloc] init];
     id sserv;
     
-    NSLog(@"SERVERS %@", servers);
     for(sserv in servers)
     {
+        
+        NSLog(@"Syphon UUID %@", [sserv objectForKey:SyphonServerDescriptionUUIDKey ]);
         
         [retArr addObject:[[AbstractCaptureDevice alloc] initWithName:[sserv objectForKey:SyphonServerDescriptionAppNameKey] device:sserv uniqueID:[sserv objectForKey:SyphonServerDescriptionUUIDKey ]]];
         

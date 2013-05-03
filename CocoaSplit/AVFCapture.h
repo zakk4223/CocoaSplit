@@ -10,6 +10,7 @@
 #import <VideoToolbox/VideoToolbox.h>
 #import <AVFoundation/AVFoundation.h>
 #import "CaptureSessionProtocol.h"
+#import "ControllerProtocol.h"
 
 
 @interface AVFCapture : NSObject <CaptureSessionProtocol, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate>
@@ -34,8 +35,8 @@
 @property int videoCaptureFPS;
 @property int width;
 @property int height;
-@property id videoDelegate;
-@property (strong) id audioDelegate;
+@property id<ControllerProtocol> videoDelegate;
+@property (strong) id<ControllerProtocol> audioDelegate;
 @property (assign) int audioBitrate;
 @property (assign) int audioSamplerate;
 @property (assign) int videoHeight;

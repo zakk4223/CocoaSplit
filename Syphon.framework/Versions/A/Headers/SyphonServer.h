@@ -36,67 +36,9 @@
 
 /*!
  @relates SyphonServer
- If this key is present and matched with a NSNumber with a BOOL value YES, then the server will be invisible to other Syphon users. You are then responsible for passing the NSDictionary returned by serverDescription to processes which require it to create a SyphonClient. Default is NO.
+ If this key is matched with a NSNumber with a BOOL value YES, then the server will be invisible to other Syphon users. You are then responsible for passing the NSDictionary returned by serverDescription to processes which require it to create a SyphonClient. Default is NO.
  */
 extern NSString * const SyphonServerOptionIsPrivate;
-
-/*!
- @relates SyphonServer
- If this key is present and matched with one of the NSString constants below, it describes the image format of the texture being published. The server may use this information to select its internal representation of your frames. If this key is not present the default is SyphonImageFormatRGBA8.
-
- */
-extern NSString* const SyphonServerOptionImageFormat;
-
-/*! @} */
-/*! @name Image Format Constants */
-
-/*!
- @relates SyphonServer
-  This constant is used with the SyphonServerOptionImageFormat option key to specify an RGB image with alpha with 8 bits per component.
- */
-extern NSString* const SyphonImageFormatRGBA8;
-
-/*!
- @relates SyphonServer
- This constant is used with the SyphonServerOptionImageFormat option key to specify an RGB image with 8 bits per component.
- */
-extern NSString* const SyphonImageFormatRGB8;
-
-/*!
- @relates SyphonServer
- This constant is used with the SyphonServerOptionImageFormat option key to specify an RGB image with alpha with 32 bits per component.
- */
-extern NSString* const SyphonImageFormatRGBA32;
-
-/*!
- @relates SyphonServer
- This constant is used with the SyphonServerOptionImageFormat option key to specify an RGB image with 32 bits per component.
- */
-extern NSString* const SyphonImageFormatRGB32;
-
-/*!
- @relates SyphonServer
- This constant is used with the SyphonServerOptionImageFormat option key to specify a luminance image with 8 bits per component.
- */
-extern NSString* const SyphonImageFormatLuminance8;
-
-/*!
- @relates SyphonServer
- This constant is used with the SyphonServerOptionImageFormat option key to specify an intensity or luminance image with alpha with 8 bits per component.
- */
-extern NSString* const SyphonImageFormatLuminanceAlpha8;
-
-/*!
- @relates SyphonServer
- This constant is used with the SyphonServerOptionImageFormat option key to specify an intensity or luminance image with 32 bits per component.
- */
-extern NSString* const SyphonImageFormatLuminance32;
-
-/*!
- @relates SyphonServer
- This constant is used with the SyphonServerOptionImageFormat option key to specify an intensity or luminance image with alpha with 32 bits per component.
- */
-extern NSString* const SyphonImageFormatLuminanceAlpha32;
 
 /*! @} */
 
@@ -117,10 +59,6 @@ extern NSString* const SyphonImageFormatLuminanceAlpha32;
  NSString *_name;
  NSString *_uuid;
  BOOL _broadcasts;
-
-    GLenum _internalFormat;
-    GLenum _format;
-    GLenum _type;
 
  id _connectionManager;
 
@@ -220,7 +158,7 @@ YES if clients are currently attached, NO otherwise. If you generate frames freq
 - (SyphonImage *)newFrameImage;
 
 /*! 
- Stops the server instance. In garbage-collected applications you must call this method prior to removing strong references to the server. In non-garbage-collected applications, use of this method is optional but encouraged.
+ Stops the server instance. In garbage-collected applications you must call this method prior to removing strong references to the server. In non-garbage-collected applications, use of this method is optional.
 */
 
 - (void)stop;

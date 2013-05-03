@@ -31,10 +31,8 @@
         [_xpcConnection setExportedInterface:xpcCallbackInterface];
         [_xpcConnection setExportedObject:self];
         
-        NSLog(@"SETUP CONNECTION TO LISTENER");
         [_xpcConnection resume];
         _xpcProxy = [_xpcConnection remoteObjectProxy];
-        NSLog(@"GOT PROXY OBJECT");
         [self updateAvailableVideoDevices];
         
         
@@ -62,7 +60,7 @@
 
 
 
-
+/*
 -(NSString *) activeVideoDevice
 {
     return _activeVideoDevice;
@@ -75,6 +73,7 @@
     _activeVideoDevice = [newDev uniqueID];
 }
 
+ */
 
 -(void) updateAvailableVideoDevices
 {
@@ -82,13 +81,9 @@
     
     
     NSMutableArray *__block retArray;
-    NSLog(@"PROXY %@", _xpcProxy);
-    NSLog(@"CONNECTION %@", _xpcConnection);
     [_xpcProxy testMethod];
-    NSLog(@"CALLED TEST METHOD FROM SPLIT");
     
     [_xpcProxy listCaptureDevices:^(NSArray *r_devices) {
-        NSLog(@"REMOTE DEVICES %@", r_devices);
         retArray = [[NSMutableArray alloc] init];
         NSDictionary *devinstance;
         for (devinstance in r_devices)
@@ -144,8 +139,7 @@
 -(bool) startCaptureSession:(NSError **)error
 {
     
-    NSLog(@"CALLING STARTXPC WITH %@", self.activeVideoDevice);
-    [_xpcProxy startXPCCaptureSession:self.activeVideoDevice];
+    [_xpcProxy startXPCCaptureSession:self.activeVideoDevice.uniqueID];
     
     return YES;
 }

@@ -129,7 +129,7 @@
 {
     if (self = [super init])
     {
-        //self.output_format = @"FLV";
+        
         self.type_name = type;
 
     }

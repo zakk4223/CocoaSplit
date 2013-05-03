@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreMedia/CoreMedia.h>
 #import "FFMpegTask.h"
+#import "ControllerProtocol.h"
 
 @class CaptureController;
 
@@ -16,14 +17,13 @@
 
 //compressFrame is expected to be non-blocking. Create a serial dispatch queue if the underlying compressor
 //is blocking
-//frame_data should be free()-able, compressor will free when required
 -(bool)compressFrame:(CVImageBufferRef)imageBuffer pts:(CMTime)pts duration:(CMTime)duration;
 
 -(bool)setupCompressor;
 
 
-@property (strong) CaptureController *settingsController;
-@property (strong) CaptureController *outputDelegate;
+@property (strong) id<ControllerProtocol> settingsController;
+@property (strong) id<ControllerProtocol> outputDelegate;
 
 
 

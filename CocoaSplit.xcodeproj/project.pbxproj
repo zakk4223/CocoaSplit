@@ -29,6 +29,35 @@
 		342346BE15F6103D00C8C77E /* FFMpegTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346BD15F6103D00C8C77E /* FFMpegTask.m */; };
 		342346CF15F9F07E00C8C77E /* AbstractCaptureDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346CE15F9F07E00C8C77E /* AbstractCaptureDevice.m */; };
 		342346D515FA301600C8C77E /* SyphonCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346D415FA301600C8C77E /* SyphonCapture.m */; };
+		3450579E172A4B6B0065A452 /* CocoaSplitCmd in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3451A1C317111BD900DF6A8B /* CocoaSplitCmd */; };
+		3451A1C417111BD900DF6A8B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AE3C2F164E3E020052C95E /* Foundation.framework */; };
+		3451A1C717111BD900DF6A8B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3451A1C617111BD900DF6A8B /* main.m */; };
+		3451A1CB17111BD900DF6A8B /* CocoaSplitCmd.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3451A1CA17111BD900DF6A8B /* CocoaSplitCmd.1 */; };
+		3451A1D1171174C800DF6A8B /* CommandLineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3451A1D0171174C800DF6A8B /* CommandLineController.m */; };
+		3451A1D31712C41000DF6A8B /* CaptureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FE50715F444AA00E4CE4E /* CaptureController.m */; };
+		3451A1D51712C57700DF6A8B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4D815F346CC00E4CE4E /* AVFoundation.framework */; };
+		3451A1D61712C58300DF6A8B /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 342346BA15F5FBD700C8C77E /* CoreMedia.framework */; };
+		3451A1D71712C5B300DF6A8B /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 342346B815F5FBD200C8C77E /* CoreVideo.framework */; };
+		3451A1D81712C5C400DF6A8B /* x264Compressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F5140F16FD6E4F00BA894D /* x264Compressor.m */; };
+		3451A1D91712C5C700DF6A8B /* AppleVTCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F5141116FD6E4F00BA894D /* AppleVTCompressor.m */; };
+		3451A1DA1712C5CA00DF6A8B /* SyphonCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346D415FA301600C8C77E /* SyphonCapture.m */; };
+		3451A1DB1712C5CD00DF6A8B /* DesktopCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34792AF216103FF60065A859 /* DesktopCapture.m */; };
+		3451A1DC1712C5D000DF6A8B /* OutputDestination.m in Sources */ = {isa = PBXBuildFile; fileRef = 34210B3D1606001100362FC8 /* OutputDestination.m */; };
+		3451A1DD1712C5D300DF6A8B /* AbstractCaptureDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346CE15F9F07E00C8C77E /* AbstractCaptureDevice.m */; };
+		3451A1DE1712C5D800DF6A8B /* QTCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B74BC81648D23B00818DE2 /* QTCapture.m */; };
+		3451A1DF1712C5DC00DF6A8B /* FFMpegTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346BD15F6103D00C8C77E /* FFMpegTask.m */; };
+		3451A1E01712C5DF00DF6A8B /* AVFCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346A915F59A8500C8C77E /* AVFCapture.m */; };
+		3451A1E21712C5F700DF6A8B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3451A1E11712C5F700DF6A8B /* CoreGraphics.framework */; };
+		3451A1E31712C60D00DF6A8B /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 342346AC15F59B0D00C8C77E /* VideoToolbox.framework */; };
+		3451A1E41712C66E00DF6A8B /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34C6C3BE15FB5B440018A18B /* OpenGL.framework */; };
+		3451A1E51712C67900DF6A8B /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AFA1611A6B90065A859 /* IOSurface.framework */; };
+		3451A1E61712C6D200DF6A8B /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AF516104AA70065A859 /* IOKit.framework */; };
+		3451A1E71712C7C400DF6A8B /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 347B7FC916907AFA00B5F4B3 /* libz.dylib */; };
+		3451A1E81712C7D000DF6A8B /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 347B7FC516907A1700B5F4B3 /* libbz2.dylib */; };
+		3451A1E91712C7DE00DF6A8B /* VideoDecodeAcceleration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 347B7FC716907AE700B5F4B3 /* VideoDecodeAcceleration.framework */; };
+		3451A1EA1712C80400DF6A8B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4A115F3417E00E4CE4E /* Cocoa.framework */; };
+		3451A1EB1712C86800DF6A8B /* Syphon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A8BAB117085BDD0093EEAF /* Syphon.framework */; };
+		3451A1ED1712C8F300DF6A8B /* Syphon.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34A8BAB117085BDD0093EEAF /* Syphon.framework */; };
 		34539ED71606E91700638A29 /* StreamServicePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34539ED61606E91700638A29 /* StreamServicePanel.xib */; };
 		34539ED9160734EA00638A29 /* FilePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34539ED8160734EA00638A29 /* FilePanel.xib */; };
 		3475E75A16FEC9E30030D7FA /* AppleVTPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3475E75916FEC9E30030D7FA /* AppleVTPanel.xib */; };
@@ -44,6 +73,8 @@
 		34A64A2F165EFE4C00A68428 /* PreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A64A2E165EFE4B00A68428 /* PreviewView.m */; };
 		34A64A35165F047900A68428 /* CapturePreview.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34A64A34165F047900A68428 /* CapturePreview.xib */; };
 		34A64A37165F208800A68428 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A64A36165F208800A68428 /* QuartzCore.framework */; };
+		34A8BAB217085BDD0093EEAF /* Syphon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A8BAB117085BDD0093EEAF /* Syphon.framework */; };
+		34A8BAB317085C2A0093EEAF /* Syphon.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34A8BAB117085BDD0093EEAF /* Syphon.framework */; };
 		34AE3C30164E3E020052C95E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AE3C2F164E3E020052C95E /* Foundation.framework */; };
 		34AE3C36164E3E020052C95E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 34AE3C34164E3E020052C95E /* InfoPlist.strings */; };
 		34AE3C39164E3E020052C95E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AE3C38164E3E020052C95E /* main.m */; };
@@ -52,10 +83,9 @@
 		34AE3C4B164E68820052C95E /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4E015F3581200E4CE4E /* QTKit.framework */; };
 		34AE3C6B164F04B30052C95E /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AE3C6A164F04B30052C95E /* IOSurface.framework */; };
 		34AE3C6D164F04C90052C95E /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AE3C6C164F04C90052C95E /* CoreVideo.framework */; };
+		34B0265A1712D8BA0063BB2D /* CmdLineDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B026591712D8BA0063BB2D /* CmdLineDelegate.m */; };
 		34B74BC91648D23B00818DE2 /* QTCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B74BC81648D23B00818DE2 /* QTCapture.m */; };
 		34C6C3BF15FB5B440018A18B /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34C6C3BE15FB5B440018A18B /* OpenGL.framework */; };
-		34EB1954168C849400D13936 /* Syphon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34EB1953168C849400D13936 /* Syphon.framework */; };
-		34EB1955168C849C00D13936 /* Syphon.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34EB1953168C849400D13936 /* Syphon.framework */; };
 		34F5141216FD6E4F00BA894D /* x264Compressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F5140F16FD6E4F00BA894D /* x264Compressor.m */; };
 		34F5141316FD6E4F00BA894D /* AppleVTCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F5141116FD6E4F00BA894D /* AppleVTCompressor.m */; };
 /* End PBXBuildFile section */
@@ -68,6 +98,13 @@
 			remoteGlobalIDString = 340FE49C15F3417E00E4CE4E;
 			remoteInfo = CocoaSplit;
 		};
+		3450579B172A4ABD0065A452 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 340FE49415F3417E00E4CE4E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3451A1C217111BD900DF6A8B;
+			remoteInfo = CocoaSplitCmd;
+		};
 		34AE3C40164E3FAD0052C95E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 340FE49415F3417E00E4CE4E /* Project object */;
@@ -78,6 +115,36 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		3450579D172A4AE30065A452 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 6;
+			files = (
+				3450579E172A4B6B0065A452 /* CocoaSplitCmd in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3451A1C117111BD900DF6A8B /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				3451A1CB17111BD900DF6A8B /* CocoaSplitCmd.1 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		3451A1EC1712C8CA00DF6A8B /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				3451A1ED1712C8F300DF6A8B /* Syphon.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		34AE3C3E164E3EAE0052C95E /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -94,7 +161,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				34EB1955168C849C00D13936 /* Syphon.framework in CopyFiles */,
+				34A8BAB317085C2A0093EEAF /* Syphon.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,6 +205,14 @@
 		342346CE15F9F07E00C8C77E /* AbstractCaptureDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbstractCaptureDevice.m; sourceTree = "<group>"; };
 		342346D315FA301600C8C77E /* SyphonCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyphonCapture.h; sourceTree = "<group>"; };
 		342346D415FA301600C8C77E /* SyphonCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyphonCapture.m; sourceTree = "<group>"; };
+		3451A1C317111BD900DF6A8B /* CocoaSplitCmd */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CocoaSplitCmd; sourceTree = BUILT_PRODUCTS_DIR; };
+		3451A1C617111BD900DF6A8B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		3451A1C917111BD900DF6A8B /* CocoaSplitCmd-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CocoaSplitCmd-Prefix.pch"; sourceTree = "<group>"; };
+		3451A1CA17111BD900DF6A8B /* CocoaSplitCmd.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = CocoaSplitCmd.1; sourceTree = "<group>"; };
+		3451A1CF171174C800DF6A8B /* CommandLineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommandLineController.h; sourceTree = "<group>"; };
+		3451A1D0171174C800DF6A8B /* CommandLineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommandLineController.m; sourceTree = "<group>"; };
+		3451A1D2171187D400DF6A8B /* ControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControllerProtocol.h; sourceTree = "<group>"; };
+		3451A1E11712C5F700DF6A8B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		34539ED61606E91700638A29 /* StreamServicePanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = StreamServicePanel.xib; path = ../StreamServicePanel.xib; sourceTree = "<group>"; };
 		34539ED8160734EA00638A29 /* FilePanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FilePanel.xib; sourceTree = "<group>"; };
 		3475E75916FEC9E30030D7FA /* AppleVTPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AppleVTPanel.xib; sourceTree = "<group>"; };
@@ -158,6 +233,7 @@
 		34A64A2E165EFE4B00A68428 /* PreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreviewView.m; sourceTree = "<group>"; };
 		34A64A34165F047900A68428 /* CapturePreview.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CapturePreview.xib; sourceTree = "<group>"; };
 		34A64A36165F208800A68428 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		34A8BAB117085BDD0093EEAF /* Syphon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Syphon.framework; sourceTree = "<group>"; };
 		34AE3C2E164E3E020052C95E /* zakk.lol.QTCaptureHelper.xpc */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = zakk.lol.QTCaptureHelper.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
 		34AE3C2F164E3E020052C95E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		34AE3C33164E3E020052C95E /* QTCaptureHelper-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "QTCaptureHelper-Info.plist"; sourceTree = "<group>"; };
@@ -170,10 +246,11 @@
 		34AE3C69164F01800052C95E /* CapturedFrameProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CapturedFrameProtocol.h; sourceTree = "<group>"; };
 		34AE3C6A164F04B30052C95E /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = ../../../../System/Library/Frameworks/IOSurface.framework; sourceTree = "<group>"; };
 		34AE3C6C164F04C90052C95E /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = ../../../../System/Library/Frameworks/CoreVideo.framework; sourceTree = "<group>"; };
+		34B026581712D8BA0063BB2D /* CmdLineDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CmdLineDelegate.h; sourceTree = "<group>"; };
+		34B026591712D8BA0063BB2D /* CmdLineDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CmdLineDelegate.m; sourceTree = "<group>"; };
 		34B74BC71648D23B00818DE2 /* QTCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QTCapture.h; sourceTree = "<group>"; };
 		34B74BC81648D23B00818DE2 /* QTCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QTCapture.m; sourceTree = "<group>"; };
 		34C6C3BE15FB5B440018A18B /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
-		34EB1953168C849400D13936 /* Syphon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Syphon.framework; sourceTree = "<group>"; };
 		34F5140E16FD6E4F00BA894D /* x264Compressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = x264Compressor.h; sourceTree = "<group>"; };
 		34F5140F16FD6E4F00BA894D /* x264Compressor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = x264Compressor.m; sourceTree = "<group>"; };
 		34F5141016FD6E4F00BA894D /* AppleVTCompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleVTCompressor.h; sourceTree = "<group>"; };
@@ -199,7 +276,7 @@
 				340FE4E115F3581200E4CE4E /* QTKit.framework in Frameworks */,
 				340FE4DA15F346D900E4CE4E /* AVFoundation.framework in Frameworks */,
 				340FE4A215F3417E00E4CE4E /* Cocoa.framework in Frameworks */,
-				34EB1954168C849400D13936 /* Syphon.framework in Frameworks */,
+				34A8BAB217085BDD0093EEAF /* Syphon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -209,6 +286,27 @@
 			files = (
 				340FE4C015F3417E00E4CE4E /* SenTestingKit.framework in Frameworks */,
 				340FE4C115F3417E00E4CE4E /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3451A1C017111BD900DF6A8B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3451A1EA1712C80400DF6A8B /* Cocoa.framework in Frameworks */,
+				3451A1E91712C7DE00DF6A8B /* VideoDecodeAcceleration.framework in Frameworks */,
+				3451A1E81712C7D000DF6A8B /* libbz2.dylib in Frameworks */,
+				3451A1E71712C7C400DF6A8B /* libz.dylib in Frameworks */,
+				3451A1E61712C6D200DF6A8B /* IOKit.framework in Frameworks */,
+				3451A1E51712C67900DF6A8B /* IOSurface.framework in Frameworks */,
+				3451A1E41712C66E00DF6A8B /* OpenGL.framework in Frameworks */,
+				3451A1E31712C60D00DF6A8B /* VideoToolbox.framework in Frameworks */,
+				3451A1E21712C5F700DF6A8B /* CoreGraphics.framework in Frameworks */,
+				3451A1EB1712C86800DF6A8B /* Syphon.framework in Frameworks */,
+				3451A1D71712C5B300DF6A8B /* CoreVideo.framework in Frameworks */,
+				3451A1D61712C58300DF6A8B /* CoreMedia.framework in Frameworks */,
+				3451A1D51712C57700DF6A8B /* AVFoundation.framework in Frameworks */,
+				3451A1C417111BD900DF6A8B /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -229,6 +327,7 @@
 		340FE49215F3417E00E4CE4E = {
 			isa = PBXGroup;
 			children = (
+				3451A1E11712C5F700DF6A8B /* CoreGraphics.framework */,
 				347B7FC916907AFA00B5F4B3 /* libz.dylib */,
 				347B7FC716907AE700B5F4B3 /* VideoDecodeAcceleration.framework */,
 				347B7FC516907A1700B5F4B3 /* libbz2.dylib */,
@@ -246,6 +345,7 @@
 				340FE4A715F3417E00E4CE4E /* CocoaSplit */,
 				340FE4C415F3417E00E4CE4E /* CocoaSplitTests */,
 				34AE3C31164E3E020052C95E /* QTCaptureHelper */,
+				3451A1C517111BD900DF6A8B /* CocoaSplitCmd */,
 				340FE4A015F3417E00E4CE4E /* Frameworks */,
 				340FE49E15F3417E00E4CE4E /* Products */,
 			);
@@ -257,6 +357,7 @@
 				340FE49D15F3417E00E4CE4E /* CocoaSplit.app */,
 				340FE4BE15F3417E00E4CE4E /* CocoaSplitTests.octest */,
 				34AE3C2E164E3E020052C95E /* zakk.lol.QTCaptureHelper.xpc */,
+				3451A1C317111BD900DF6A8B /* CocoaSplitCmd */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -264,7 +365,7 @@
 		340FE4A015F3417E00E4CE4E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				34EB1953168C849400D13936 /* Syphon.framework */,
+				34A8BAB117085BDD0093EEAF /* Syphon.framework */,
 				340FE4D815F346CC00E4CE4E /* AVFoundation.framework */,
 				340FE4A115F3417E00E4CE4E /* Cocoa.framework */,
 				340FE4BF15F3417E00E4CE4E /* SenTestingKit.framework */,
@@ -291,19 +392,20 @@
 				3498C78A16AB6688003D8065 /* AVCaptureDeviceFormat+CocoaSplitAdditions.m */,
 				34F5141416FD6E5D00BA894D /* h264Compressor.h */,
 				34F5140E16FD6E4F00BA894D /* x264Compressor.h */,
+				3451A1D2171187D400DF6A8B /* ControllerProtocol.h */,
 				34F5140F16FD6E4F00BA894D /* x264Compressor.m */,
 				34F5141016FD6E4F00BA894D /* AppleVTCompressor.h */,
 				34F5141116FD6E4F00BA894D /* AppleVTCompressor.m */,
 				340FE4B315F3417E00E4CE4E /* AppDelegate.h */,
 				340FE4B415F3417E00E4CE4E /* AppDelegate.m */,
 				342346D315FA301600C8C77E /* SyphonCapture.h */,
+				342346D415FA301600C8C77E /* SyphonCapture.m */,
 				34792AF116103FF60065A859 /* DesktopCapture.h */,
 				34792AF216103FF60065A859 /* DesktopCapture.m */,
 				34210B3C1606001100362FC8 /* OutputDestination.h */,
 				34210B3D1606001100362FC8 /* OutputDestination.m */,
 				34A64A2D165EFE4B00A68428 /* PreviewView.h */,
 				34A64A2E165EFE4B00A68428 /* PreviewView.m */,
-				342346D415FA301600C8C77E /* SyphonCapture.m */,
 				342346CD15F9F07E00C8C77E /* AbstractCaptureDevice.h */,
 				342346CE15F9F07E00C8C77E /* AbstractCaptureDevice.m */,
 				34B74BC71648D23B00818DE2 /* QTCapture.h */,
@@ -360,6 +462,28 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		3451A1C517111BD900DF6A8B /* CocoaSplitCmd */ = {
+			isa = PBXGroup;
+			children = (
+				3451A1C617111BD900DF6A8B /* main.m */,
+				34B026581712D8BA0063BB2D /* CmdLineDelegate.h */,
+				34B026591712D8BA0063BB2D /* CmdLineDelegate.m */,
+				3451A1CF171174C800DF6A8B /* CommandLineController.h */,
+				3451A1D0171174C800DF6A8B /* CommandLineController.m */,
+				3451A1CA17111BD900DF6A8B /* CocoaSplitCmd.1 */,
+				3451A1C817111BD900DF6A8B /* Supporting Files */,
+			);
+			path = CocoaSplitCmd;
+			sourceTree = "<group>";
+		};
+		3451A1C817111BD900DF6A8B /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				3451A1C917111BD900DF6A8B /* CocoaSplitCmd-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		34AE3C31164E3E020052C95E /* QTCaptureHelper */ = {
 			isa = PBXGroup;
 			children = (
@@ -402,10 +526,12 @@
 				340FE49B15F3417E00E4CE4E /* Resources */,
 				34EB1951168C838B00D13936 /* CopyFiles */,
 				34AE3C3E164E3EAE0052C95E /* CopyFiles */,
+				3450579D172A4AE30065A452 /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				3450579C172A4ABD0065A452 /* PBXTargetDependency */,
 				34AE3C41164E3FAD0052C95E /* PBXTargetDependency */,
 			);
 			name = CocoaSplit;
@@ -431,6 +557,24 @@
 			productName = CocoaSplitTests;
 			productReference = 340FE4BE15F3417E00E4CE4E /* CocoaSplitTests.octest */;
 			productType = "com.apple.product-type.bundle";
+		};
+		3451A1C217111BD900DF6A8B /* CocoaSplitCmd */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3451A1CE17111BD900DF6A8B /* Build configuration list for PBXNativeTarget "CocoaSplitCmd" */;
+			buildPhases = (
+				3451A1BF17111BD900DF6A8B /* Sources */,
+				3451A1C017111BD900DF6A8B /* Frameworks */,
+				3451A1C117111BD900DF6A8B /* CopyFiles */,
+				3451A1EC1712C8CA00DF6A8B /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CocoaSplitCmd;
+			productName = CocoaSplitCmd;
+			productReference = 3451A1C317111BD900DF6A8B /* CocoaSplitCmd */;
+			productType = "com.apple.product-type.tool";
 		};
 		34AE3C2D164E3E020052C95E /* QTCaptureHelper */ = {
 			isa = PBXNativeTarget;
@@ -473,6 +617,7 @@
 				340FE49C15F3417E00E4CE4E /* CocoaSplit */,
 				340FE4BD15F3417E00E4CE4E /* CocoaSplitTests */,
 				34AE3C2D164E3E020052C95E /* QTCaptureHelper */,
+				3451A1C217111BD900DF6A8B /* CocoaSplitCmd */,
 			);
 		};
 /* End PBXProject section */
@@ -559,6 +704,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3451A1BF17111BD900DF6A8B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3451A1C717111BD900DF6A8B /* main.m in Sources */,
+				3451A1D1171174C800DF6A8B /* CommandLineController.m in Sources */,
+				3451A1D31712C41000DF6A8B /* CaptureController.m in Sources */,
+				3451A1D81712C5C400DF6A8B /* x264Compressor.m in Sources */,
+				3451A1D91712C5C700DF6A8B /* AppleVTCompressor.m in Sources */,
+				3451A1DA1712C5CA00DF6A8B /* SyphonCapture.m in Sources */,
+				3451A1DB1712C5CD00DF6A8B /* DesktopCapture.m in Sources */,
+				3451A1DC1712C5D000DF6A8B /* OutputDestination.m in Sources */,
+				3451A1DD1712C5D300DF6A8B /* AbstractCaptureDevice.m in Sources */,
+				3451A1DE1712C5D800DF6A8B /* QTCapture.m in Sources */,
+				3451A1DF1712C5DC00DF6A8B /* FFMpegTask.m in Sources */,
+				3451A1E01712C5DF00DF6A8B /* AVFCapture.m in Sources */,
+				34B0265A1712D8BA0063BB2D /* CmdLineDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		34AE3C2A164E3E020052C95E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -575,6 +740,11 @@
 			isa = PBXTargetDependency;
 			target = 340FE49C15F3417E00E4CE4E /* CocoaSplit */;
 			targetProxy = 340FE4C215F3417E00E4CE4E /* PBXContainerItemProxy */;
+		};
+		3450579C172A4ABD0065A452 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3451A1C217111BD900DF6A8B /* CocoaSplitCmd */;
+			targetProxy = 3450579B172A4ABD0065A452 /* PBXContainerItemProxy */;
 		};
 		34AE3C41164E3FAD0052C95E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -649,6 +819,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /usr/local/include;
 				MACOSX_DEPLOYMENT_TARGET = "";
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
@@ -671,6 +842,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /usr/local/include;
 				MACOSX_DEPLOYMENT_TARGET = "";
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
@@ -763,6 +935,61 @@
 			};
 			name = Release;
 		};
+		3451A1CC17111BD900DF6A8B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "CocoaSplitCmd/CocoaSplitCmd-Prefix.pch";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				"OTHER_LDFLAGS[arch=*]" = (
+					/usr/local/lib/libavformat.a,
+					/usr/local/lib/libavutil.a,
+					/usr/local/lib/libavcodec.a,
+					/usr/local/lib/libswscale.a,
+					/usr/local/lib/libmp3lame.a,
+					/usr/local/lib/libx264.a,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		3451A1CD17111BD900DF6A8B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "CocoaSplitCmd/CocoaSplitCmd-Prefix.pch";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				"OTHER_LDFLAGS[arch=*]" = (
+					/usr/local/lib/libavformat.a,
+					/usr/local/lib/libswscale.a,
+					/usr/local/lib/libavcodec.a,
+					/usr/local/lib/libavutil.a,
+					/usr/local/lib/libx264.a,
+					/usr/local/lib/libmp3lame.a,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		34AE3C3A164E3E020052C95E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -832,6 +1059,15 @@
 			buildConfigurations = (
 				340FE4D315F3417E00E4CE4E /* Debug */,
 				340FE4D415F3417E00E4CE4E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3451A1CE17111BD900DF6A8B /* Build configuration list for PBXNativeTarget "CocoaSplitCmd" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3451A1CC17111BD900DF6A8B /* Debug */,
+				3451A1CD17111BD900DF6A8B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "CaptureSessionProtocol.h"
 #import "CaptureController.h"
+#import "ControllerProtocol.h"
 
 @interface DesktopCapture : NSObject <CaptureSessionProtocol>
 {
@@ -34,7 +35,7 @@
 @property int width;
 @property int height;
 @property AbstractCaptureDevice *activeVideoDevice;
-@property id videoDelegate;
+@property id<ControllerProtocol> videoDelegate;
 @property (readonly) NSArray *availableVideoDevices;
 @property (readonly) BOOL needsAdvancedVideo;
 @property NSArray *videoFormats;

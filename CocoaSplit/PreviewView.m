@@ -34,7 +34,6 @@
         glEnable(GL_TEXTURE_RECTANGLE_ARB);
         glGenTextures(1, &_previewTexture);
         glDisable(GL_TEXTURE_RECTANGLE_ARB);
-        NSLog(@"SETUP PREVIEW TEXTURE");
     }
     
     return self;
@@ -42,30 +41,66 @@
 
 
 
-
 - (void) drawFrame:(CVImageBufferRef)cImageBuf
+{
+    
+    CFTypeID bufType = CFGetTypeID(cImageBuf);
+    
+    if (bufType == CVPixelBufferGetTypeID())
+    {
+        CVPixelBufferRetain(cImageBuf);
+        [self drawPixelBuffer:cImageBuf];
+    } else if (bufType == CVOpenGLTextureGetTypeID()) {
+        [self drawGLBuffer:cImageBuf];
+    }
+        
+}
+
+- (void) drawGLBuffer:(CVOpenGLTextureRef)cImageBuf
+{
+    
+    GLuint saveTexture = _previewTexture;
+    
+    _previewTexture = CVOpenGLTextureGetName(cImageBuf);
+    NSSize surfaceSize = CVImageBufferGetDisplaySize(cImageBuf);
+    _surfaceWidth = surfaceSize.width;
+    _surfaceHeight = surfaceSize.height;
+
+    [self drawRect:CGRectZero];
+    
+    
+    _previewTexture = saveTexture;
+    
+    
+}
+
+- (void) drawPixelBuffer:(CVPixelBufferRef)cImageBuf
 {
  
     if (!cImageBuf)
     {
         return;
     }
-    CVPixelBufferRetain(cImageBuf);
+    //CVPixelBufferRetain(cImageBuf);
     IOSurfaceRef cFrame = CVPixelBufferGetIOSurface(cImageBuf);
     IOSurfaceID cFrameID;
+    
+    CGLContextObj cgl_ctx = [[self openGLContext] CGLContextObj];
+    [self.openGLContext makeCurrentContext];
+    
     if (cFrame)
     {
-        cFrameID = IOSurfaceGetID(cFrame);
+        cFrameID = IOSurfaceGetID(cFrame);        
     }
-    if (cFrame)
+    
+    if (cFrame && (_boundIOSurfaceID != cFrameID))
     {
         _boundIOSurfaceID = cFrameID;
-        CGLContextObj cgl_ctx = [[self openGLContext] CGLContextObj];
         
         _surfaceHeight  = (GLsizei)IOSurfaceGetHeight(cFrame);
         _surfaceWidth   = (GLsizei)IOSurfaceGetWidth(cFrame);
         
-        /* the only formats we specify in any of the capture modules are: 420v, 420f and 2vuy. We can't handle 420* without some fragment shader /multi texture trickery, so just grab the first luminance plane and display that for now */
+        /* the only formats we specify in any of the capture modules are: 420v, 420f and 2vuy. We can't handle 420* without some  shader /multi texture trickery, so just grab the first luminance plane and display that for now */
         
         GLenum gl_internal_format;
         GLenum gl_format;
@@ -77,6 +112,10 @@
             gl_format = GL_YCBCR_422_APPLE;
             gl_internal_format = GL_RGB;
             gl_type = GL_UNSIGNED_SHORT_8_8_APPLE;
+        } else if (frame_pixel_format == kCVPixelFormatType_32BGRA) {
+            gl_format = GL_BGRA;
+            gl_internal_format = GL_RGB;
+            gl_type = GL_UNSIGNED_INT_8_8_8_8_REV;
         } else {
             gl_format = GL_LUMINANCE;
             gl_internal_format = GL_LUMINANCE;
@@ -88,9 +127,9 @@
         CGLTexImageIOSurface2D(cgl_ctx, GL_TEXTURE_RECTANGLE_ARB, gl_internal_format, _surfaceWidth, _surfaceHeight, gl_format, gl_type, cFrame, 0);
         glBindTexture(GL_TEXTURE_RECTANGLE_ARB, 0);
         glDisable(GL_TEXTURE_RECTANGLE_ARB);
-        [self drawRect:CGRectZero];
     }
 
+    [self drawRect:CGRectZero];
     CVPixelBufferRelease(cImageBuf);
 }
 

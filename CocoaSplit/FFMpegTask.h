@@ -44,7 +44,6 @@
 
 
 -(bool) stopProcess;
--(bool) restartProcess;
 
 @property (assign) BOOL init_done;
 @property (strong) NSString *stream_output;

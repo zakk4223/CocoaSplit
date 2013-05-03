@@ -9,17 +9,38 @@
 #import <Foundation/Foundation.h>
 #import <Syphon/Syphon.h>
 #import "CaptureSessionProtocol.h"
+#import "ControllerProtocol.h"
 
 @interface SyphonCapture : NSObject < CaptureSessionProtocol>
 {
-    int _captureFPS;
     NSDictionary *_syphonServer;
-    id _delegate;
     SyphonClient *_syphon_client;
-    NSOpenGLContext *_cgl_ctx;
-    IOSurfaceRef _currentFrame;
+    NSOpenGLContext *_ogl_ctx;
+    NSSize _last_frame_size;
+    CVOpenGLTextureCacheRef _texture_cache;
+    CVPixelBufferPoolRef _pixel_buffer_pool;
+    GLuint _framebuffer;
+    
     
 }
 
+
+
+@property int videoCaptureFPS;
+@property int width;
+@property int height;
+@property AbstractCaptureDevice *activeVideoDevice;
+@property id<ControllerProtocol> videoDelegate;
+@property (readonly) NSArray *availableVideoDevices;
+@property (readonly) BOOL needsAdvancedVideo;
+
+
+
+-(bool) stopCaptureSession;
+-(bool) startCaptureSession:(NSError **)error;
+-(bool) providesVideo;
+-(bool) providesAudio;
+-(bool) setupCaptureSession:(NSError **)therror;
+-(void) setVideoDimensions:(int)width height:(int)height;
 
 @end

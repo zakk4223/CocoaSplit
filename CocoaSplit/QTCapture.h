@@ -12,6 +12,7 @@
 #import "CaptureSessionProtocol.h"
 #import "CapturedFrameProtocol.h"
 #import "QTHelperProtocol.h"
+#import "ControllerProtocol.h"
 
 @interface QTCapture : NSObject <CaptureSessionProtocol, CapturedFrameProtocol>
 {
@@ -27,7 +28,7 @@
 @property int width;
 @property int height;
 @property AbstractCaptureDevice *activeVideoDevice;
-@property id videoDelegate;
+@property id<ControllerProtocol> videoDelegate;
 @property (readonly) NSArray *availableVideoDevices;
 @property (readonly) BOOL needsAdvancedVideo;
 @property NSArray *videoFormats;

@@ -25,6 +25,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     
     if (!_compression_session)
     {
+        
         CVPixelBufferRelease(imageBuffer);
         return NO;
     }

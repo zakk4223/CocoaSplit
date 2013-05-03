@@ -19,6 +19,7 @@
 #import "h264Compressor.h"
 #import "AppleVTCompressor.h"
 #import "x264Compressor.h"
+#import "ControllerProtocol.h"
 
 
 
@@ -26,7 +27,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 
-@interface CaptureController : NSObject <CaptureDataReceiverDelegateProtocol> {
+@interface CaptureController : NSObject <CaptureDataReceiverDelegateProtocol, ControllerProtocol> {
     
     id _audio_capture_session;
     
@@ -45,7 +46,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (assign) double avg_delay;
 @property (assign) long long compressedFrameCount;
 @property (assign) NSMutableArray *streamPanelDestinations;
-
+@property (strong) NSUserDefaults *cmdLineArgs;
 
 
 @property (unsafe_unretained) IBOutlet PreviewView *previewCtx;
@@ -143,6 +144,10 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (void) outputAVPacket:(AVPacket *)avpkt codec_ctx:(AVCodecContext *)codec_ctx;
 - (void)saveSettings;
 - (void)loadSettings;
+- (bool) startStream;
+- (void) stopStream;
+- (void) loadCmdlineSettings;
+
 
 
 
