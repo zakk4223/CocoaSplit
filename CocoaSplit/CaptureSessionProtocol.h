@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "AbstractCaptureDevice.h"
 #import <AVFoundation/AVFoundation.h>
+#import <Cocoa/Cocoa.h>
+
 
 
 
@@ -16,7 +18,7 @@
 
 @required
 
-@property int videoCaptureFPS;
+@property double videoCaptureFPS;
 @property int width;
 @property int height;
 @property AbstractCaptureDevice *activeVideoDevice;
@@ -34,12 +36,7 @@
 -(void) setVideoDimensions:(int)width height:(int)height;
 
 
-// For those capture schemes that can (attempt) to capture frames at a specific FPS, we should do so.
-// The main capture controller will call out for a frame at the specified FPS rate.
-// Implementations are free to define exactly what the 'current frame' is.
-// This is done to decouple the output rate from weird/badly behaved capture schemes that can't reliably maintain
-// the given rate. Basically we'll drop/dup frames if we have to to keep the output to ffmpeg at a more or less steady pace.
--(CVImageBufferRef) getCurrentFrame;
+//-(CVImageBufferRef) getCurrentFrame;
 
 
 
@@ -52,6 +49,10 @@
 @property NSArray *videoFramerates;
 @property id activeVideoFormat;
 @property id activeVideoFramerate;
+@property (assign) int audioBitrate;
+@property (assign) int audioSamplerate;
+@property (assign) float previewVolume;
+
 
 
 

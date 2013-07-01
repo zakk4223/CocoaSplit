@@ -137,7 +137,7 @@
     _av_codec_ctx->width = self.settingsController.captureWidth;
     _av_codec_ctx->height = self.settingsController.captureHeight;
     _av_codec_ctx->time_base.num = 1;
-    _av_codec_ctx->time_base.den = self.settingsController.captureFPS;
+    _av_codec_ctx->time_base.den = 1000000;
     _av_codec_ctx->pix_fmt = PIX_FMT_YUV420P;
     _av_codec_ctx->gop_size = self.settingsController.captureVideoMaxKeyframeInterval;
     _av_codec_ctx->rc_buffer_size = self.settingsController.captureVideoMaxBitrate*1000;
@@ -145,18 +145,23 @@
     _av_codec_ctx->flags |= CODEC_FLAG_GLOBAL_HEADER;
     
     AVDictionary *opts = NULL;
+    id x264preset = self.settingsController.x264preset;
     
-    if (self.settingsController.x264preset)
+    if (x264preset != [NSNull null])
     {
-        av_dict_set(&opts, "preset", [self.settingsController.x264preset UTF8String], 0);
+        av_dict_set(&opts, "preset", [x264preset UTF8String], 0);
     }
     
-    if (self.settingsController.x264profile)
+    id x264profile = self.settingsController.x264profile;
+
+    if (x264profile != [NSNull null])
     {
-        av_dict_set(&opts, "profile", [self.settingsController.x264profile UTF8String], 0);
+        av_dict_set(&opts, "profile", [x264profile UTF8String], 0);
     }
     
-    if (self.settingsController.x264tune)
+    id x264tune = self.settingsController.x264tune;
+
+    if (x264tune != [NSNull null])
     {
         av_dict_set(&opts, "tune", [self.settingsController.x264tune UTF8String], 0);
     }

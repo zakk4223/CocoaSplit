@@ -12,6 +12,15 @@
 
 
 
+- (void) dealloc
+{
+    NSLog(@"VTCompressor Dealloc");
+    VTCompressionSessionInvalidate(_compression_session);
+    CFRelease(_compression_session);
+    _compression_session = nil;
+}
+
+
 void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 {
     free((int *)baseAddress);

@@ -20,6 +20,8 @@
 #import "AppleVTCompressor.h"
 #import "x264Compressor.h"
 #import "ControllerProtocol.h"
+#import <IOKit/pwr_mgt/IOPMLib.h>
+
 
 
 
@@ -32,15 +34,28 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     id _audio_capture_session;
     
     NSTimer *_captureTimer;
+    NSTimer *_idleTimer;
+
+    NSScreen *_fullscreenOn;
+    
+    IOPMAssertionID _PMAssertionID;
+    IOReturn _PMAssertionRet;
+    
     long long _frameCount;
     CFAbsoluteTime _firstFrameTime;
+    CFAbsoluteTime _lastFrameTime;
+    CFAbsoluteTime _firstAudioTime;
     NSString *_selectedVideoType;
     dispatch_queue_t _main_capture_queue;
+    dispatch_queue_t _preview_queue;
+    
     
     
 }
 @property (strong) id<h264Compressor> videoCompressor;
 @property (retain) id<CaptureSessionProtocol> videoCaptureSession;
+@property (retain) id<CaptureSessionProtocol> audioCaptureSession;
+
 @property (assign) double min_delay;
 @property (assign) double max_delay;
 @property (assign) double avg_delay;
@@ -60,7 +75,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (IBAction)closeAVFAdvanced:(id)sender;
 - (IBAction)openCompressPanel:(id)sender;
 - (IBAction)closeCompressPanel:(id)sender;
-
 
 
 - (IBAction)closeCreateSheet:(id)sender;
@@ -132,7 +146,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (weak) AbstractCaptureDevice *selectedVideoCapture;
 @property (weak) AVCaptureDevice *selectedAudioCapture;
 
-@property (assign) int captureFPS;
+@property (readonly) double captureFPS;
 
 
 @property (weak)  NSString *ffmpeg_path;

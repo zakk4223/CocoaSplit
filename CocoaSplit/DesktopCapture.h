@@ -31,7 +31,7 @@
 -(void) setVideoDimensions:(int)width height:(int)height;
 
 
-@property int videoCaptureFPS;
+@property double videoCaptureFPS;
 @property int width;
 @property int height;
 @property AbstractCaptureDevice *activeVideoDevice;

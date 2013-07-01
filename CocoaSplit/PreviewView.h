@@ -17,9 +17,19 @@
     GLsizei     _surfaceWidth;
     GLsizei     _surfaceHeight;
     int         _hackcnt;
+    NSTimer *_idleTimer;
+    NSTrackingArea *_trackingArea;
+    NSRecursiveLock *renderLock;
+    
+    
+    NSScreen *_fullscreenOn;
+
     
 }
 
 -(void) drawFrame:(CVImageBufferRef)cFrame;
+- (IBAction)toggleFullscreen:(id)sender;
+
+@property (assign) BOOL vsync;
 
 @end

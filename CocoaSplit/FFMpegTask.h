@@ -46,6 +46,7 @@
 -(bool) stopProcess;
 
 @property (assign) BOOL init_done;
+@property (assign) BOOL active;
 @property (strong) NSString *stream_output;
 @property (strong) NSString *stream_format;
 @property (assign) int framerate;

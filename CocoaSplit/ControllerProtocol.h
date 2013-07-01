@@ -15,7 +15,7 @@
 
 @property int captureWidth;
 @property int captureHeight;
-@property int captureFPS;
+@property (readonly) double captureFPS;
 @property int captureVideoMaxKeyframeInterval;
 @property int captureVideoMaxBitrate;
 @property int captureVideoAverageBitrate;

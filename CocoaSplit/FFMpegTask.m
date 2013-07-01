@@ -92,6 +92,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 {
     CFRetain(theBuffer);
 
+
     
     if (_av_audio_stream && (self.init_done == YES))
     {
@@ -118,7 +119,15 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
             pkt.destruct = NULL;
             
             
-            pkt.pts = pts.value;
+            
+            pkt.pts = av_rescale_q(pts.value, (AVRational) {1.0, pts.timescale}, _av_audio_stream->time_base);
+
+
+            
+            //pkt.dts = pkt.pts;
+            
+            
+//            pkt.pts = pts.value;
             if (av_interleaved_write_frame(_av_fmt_ctx, &pkt) < 0)
             {
                 NSLog(@"AV WRITE AUDIO failed");
@@ -184,7 +193,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     c_ctx->width = _width;
     c_ctx->height = _height;
     c_ctx->time_base.num = 1;
-    c_ctx->time_base.den = _framerate;
+    c_ctx->time_base.den = 1000000;
     
     
     _av_audio_stream = avformat_new_stream(_av_fmt_ctx, 0);
@@ -200,7 +209,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     a_ctx->codec_type = AVMEDIA_TYPE_AUDIO;
     a_ctx->codec_id = AV_CODEC_ID_AAC;
     a_ctx->time_base.num = 1;
-    a_ctx->time_base.den = _framerate;
+    a_ctx->time_base.den = 1000000;
     a_ctx->sample_rate = _samplerate;
     a_ctx->channels = 2;
     a_ctx->extradata = (unsigned char *)_audio_extradata;
@@ -345,21 +354,17 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         }
         
         
-        //  NSLog(@"WRITE PREPTS %lld DTS %lld", pkt->pts, pkt->dts);
-        
-        /*
-         if (pkt->pts != AV_NOPTS_VALUE)
+         if (p->pts != AV_NOPTS_VALUE)
          {
-         pkt->pts = av_rescale_q(pkt->pts, codec_ctx->time_base, _av_video_stream->time_base);
+         p->pts = av_rescale_q(p->pts, codec_ctx->time_base, _av_video_stream->time_base);
          }
          
-         if (pkt->dts != AV_NOPTS_VALUE)
+         if (p->dts != AV_NOPTS_VALUE)
          {
-         pkt->dts = av_rescale_q(pkt->dts, codec_ctx->time_base, _av_video_stream->time_base);
+         p->dts = av_rescale_q(p->dts, codec_ctx->time_base, _av_video_stream->time_base);
          }
-         */
+         
         
-        //NSLog(@"WRITE POSTPTS %lld DTS %lld", pkt->pts, pkt->dts);
         
         
         p->stream_index = _av_video_stream->index;
@@ -460,10 +465,15 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     pkt.data = (uint8_t *)sampledata;
     
     pkt.size = (int)buffer_length;
-    
+  
+        pkt.dts = av_rescale_q(CMSampleBufferGetDecodeTimeStamp(theBuffer).value, (AVRational) {1.0, CMSampleBufferGetDecodeTimeStamp(theBuffer).timescale}, _av_video_stream->time_base);
+
+    pkt.pts = av_rescale_q(CMSampleBufferGetPresentationTimeStamp(theBuffer).value, (AVRational) {1.0, CMSampleBufferGetPresentationTimeStamp(theBuffer).timescale}, _av_video_stream->time_base);
+
+
+        //kt.pts = CMSampleBufferGetPresentationTimeStamp(theBuffer).value;
         
-        pkt.pts = CMSampleBufferGetPresentationTimeStamp(theBuffer).value;
-        
+
         
         
     if ([self isBufferKeyframe:theBuffer])
@@ -529,7 +539,8 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
     self = [super init];
     self.init_done = NO;
-
+    self.active = NO;
+    
     av_register_all();
     avformat_network_init();
     

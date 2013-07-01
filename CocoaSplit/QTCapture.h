@@ -24,7 +24,7 @@
 
 
 
-@property int videoCaptureFPS;
+@property double videoCaptureFPS;
 @property int width;
 @property int height;
 @property AbstractCaptureDevice *activeVideoDevice;

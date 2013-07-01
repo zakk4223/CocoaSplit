@@ -12,25 +12,139 @@
 
 @implementation PreviewView
 
+
+@synthesize vsync = _vsync;
+
+-(void) setIdleTimer
+{
+    if (_idleTimer)
+    {
+        [_idleTimer invalidate];
+        _idleTimer = nil;
+    }
+    
+    _idleTimer = [NSTimer scheduledTimerWithTimeInterval:3.0
+                                                  target:self
+                                                selector:@selector(setMouseIdle)
+                                                userInfo:nil
+                                                 repeats:NO];
+    
+}
+-(void) setMouseIdle
+{
+    
+    [NSCursor setHiddenUntilMouseMoves:YES];
+ 
+}
+
+
+-(void) mouseMoved:(NSEvent *)theEvent
+{
+    [self setIdleTimer];
+    
+}
+
+
+-(void) mouseExited:(NSEvent *)theEvent
+{
+    if (_idleTimer)
+    {
+        [_idleTimer invalidate];
+        _idleTimer = nil;
+    }
+}
+
+
+- (IBAction)toggleFullscreen:(id)sender;
+{
+    if (self.isInFullScreenMode)
+    {
+        [_idleTimer invalidate];
+        _idleTimer = nil;
+        [self removeTrackingArea:_trackingArea];
+        _trackingArea = nil;
+        
+        [self exitFullScreenModeWithOptions:nil];
+        [NSCursor setHiddenUntilMouseMoves:NO];
+        
+    } else {
+        
+        NSNumber *fullscreenOptions = @(NSApplicationPresentationAutoHideMenuBar|NSApplicationPresentationAutoHideDock);
+        
+        
+        _fullscreenOn = [NSScreen mainScreen];
+        
+        if (_fullscreenOn != [[NSScreen screens] objectAtIndex:0])
+        {
+            fullscreenOptions = @(0);
+        }
+        
+        
+        [self enterFullScreenMode:_fullscreenOn withOptions:@{NSFullScreenModeAllScreens: @NO, NSFullScreenModeApplicationPresentationOptions: fullscreenOptions}];
+        
+        int opts = (NSTrackingActiveAlways | NSTrackingInVisibleRect | NSTrackingMouseMoved | NSTrackingMouseEnteredAndExited);
+        _trackingArea = [[NSTrackingArea alloc] initWithRect:[self bounds]
+                                                            options:opts
+                                                              owner:self
+                                                           userInfo:nil];
+
+        [self addTrackingArea:_trackingArea];
+        [self setIdleTimer];
+    }
+    
+}
+
+-(void) updateVsync
+{
+    if (self.openGLContext)
+    {
+        long swapInterval;
+        if (self.vsync == YES)
+        {
+            swapInterval = 1;
+        } else {
+            swapInterval = 0;
+        }
+        [[self openGLContext] setValues:(GLint *)&swapInterval forParameter:NSOpenGLCPSwapInterval];
+    }
+    
+}
+
+
+-(BOOL) vsync
+{
+    return _vsync;
+}
+
+
+
+-(void) setVsync:(BOOL)vsync
+{
+    _vsync = vsync;
+    [self updateVsync];
+}
+
+
 -(id) initWithFrame:(NSRect)frameRect
 {
     
     const NSOpenGLPixelFormatAttribute attr[] = {
         NSOpenGLPFAAccelerated,
         NSOpenGLPFANoRecovery,
-        NSOpenGLPFAColorSize, 32,
         0
     };
     
+    
     NSOpenGLPixelFormat *pf = [[NSOpenGLPixelFormat alloc] initWithAttributes:(void *)&attr];
 
+
+    renderLock = [[NSRecursiveLock alloc] init];
+    
     
     self = [super initWithFrame:frameRect pixelFormat:pf];
     if (self)
     {
-        CGLContextObj cgl_ctx = [[self openGLContext] CGLContextObj];
-        long swapInterval = 1;
-        [[self openGLContext] setValues:(GLint *)&swapInterval forParameter:NSOpenGLCPSwapInterval];
+        [self updateVsync];
         glEnable(GL_TEXTURE_RECTANGLE_ARB);
         glGenTextures(1, &_previewTexture);
         glDisable(GL_TEXTURE_RECTANGLE_ARB);
@@ -81,13 +195,21 @@
     {
         return;
     }
+    
+    
+    CGLContextObj cgl_ctx = [[self openGLContext] CGLContextObj];
+
+    
     //CVPixelBufferRetain(cImageBuf);
     IOSurfaceRef cFrame = CVPixelBufferGetIOSurface(cImageBuf);
     IOSurfaceID cFrameID;
     
-    CGLContextObj cgl_ctx = [[self openGLContext] CGLContextObj];
     [self.openGLContext makeCurrentContext];
-    
+    if ([renderLock tryLock] == NO)
+    {
+        [NSOpenGLContext clearCurrentContext];
+        return;
+    }
     if (cFrame)
     {
         cFrameID = IOSurfaceGetID(cFrame);        
@@ -110,7 +232,7 @@
         if (frame_pixel_format == kCVPixelFormatType_422YpCbCr8)
         {
             gl_format = GL_YCBCR_422_APPLE;
-            gl_internal_format = GL_RGB;
+            gl_internal_format = GL_RGB8;
             gl_type = GL_UNSIGNED_SHORT_8_8_APPLE;
         } else if (frame_pixel_format == kCVPixelFormatType_32BGRA) {
             gl_format = GL_BGRA;
@@ -129,15 +251,61 @@
         glDisable(GL_TEXTURE_RECTANGLE_ARB);
     }
 
-    [self drawRect:CGRectZero];
+    [self drawTexture:CGRectZero];
+    
+    [NSOpenGLContext clearCurrentContext];
+    [renderLock unlock];
+    
     CVPixelBufferRelease(cImageBuf);
 }
+
+- (void) update
+{
+  
+    if ([renderLock tryLock] == YES)
+    {
+        [super update];
+        [renderLock unlock];
+    }
+
+}
+
+
+/*
+- (void) reshape
+{
+    CGLContextObj  cgl_ctx  = [[self openGLContext] CGLContextObj];
+    CGLLockContext(cgl_ctx);
+    [super reshape];
+    CGLUnlockContext(cgl_ctx);
+    
+}
+*/
 
 
 - (void) drawRect:(NSRect)dirtyRect
 {
-    CGLContextObj  cgl_ctx  = [[self openGLContext] CGLContextObj];
+
+    if ([renderLock tryLock] == YES)
+    {
+        [self.openGLContext makeCurrentContext];
+        [self drawTexture:dirtyRect];
+        [NSOpenGLContext clearCurrentContext];
+        [renderLock unlock];
+    }
     
+}
+
+- (void) drawTexture:(NSRect)dirtyRect
+{
+//    CGLContextObj  cgl_ctx  = [[self openGLContext] CGLContextObj];
+ //   CGLLockContext(cgl_ctx);
+//    NSLog(@"CONTEXT %@", self.openGLContext);
+    
+    
+    
+
+
     NSRect frame = self.frame;
     
     glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -266,5 +434,9 @@
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
     glFlush();
+    
+    //CGLUnlockContext(cgl_ctx);
 }
+
+
 @end

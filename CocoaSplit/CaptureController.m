@@ -22,6 +22,10 @@
 
 
 
+
+
+
+
 -(void)loadTwitchIngest
 {
     
@@ -215,7 +219,6 @@
 -(void) setSelectedVideoType:(NSString *)selectedVideoType
 {
     
-    NSLog(@"SETTING SELECTED VIDEO TYPE");
     if ([selectedVideoType isEqualToString:@"Desktop"])
     {
         self.videoCaptureSession = [[DesktopCapture alloc ] init];
@@ -231,15 +234,15 @@
     
     if (!self.videoCaptureSession)
     {
-        _audio_capture_session  = nil;
+        self.audioCaptureSession  = nil;
         _selectedVideoType = nil;
     }
     
     if ([self.videoCaptureSession providesAudio])
     {
-        _audio_capture_session = self.videoCaptureSession;
+        self.audioCaptureSession = self.videoCaptureSession;
     } else {
-        _audio_capture_session = [[AVFCapture alloc] init];
+        self.audioCaptureSession = [[AVFCapture alloc] init];
     }
     
     self.audioCaptureDevices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio];
@@ -255,24 +258,19 @@
 {
    if (self = [super init])
    {
-       /*
-       self.destinationTypes = @{  
-       @"twitchtv" : @"Twitch.tv/Justin.tv",
-       @"own3dtv" : @"Own3d.tv",
-       @"file" : @"Local File" };
-       */
-
        dispatch_source_t sigsrc = dispatch_source_create(DISPATCH_SOURCE_TYPE_SIGNAL, SIGPIPE, 0, dispatch_get_global_queue(0, 0));
        dispatch_source_set_event_handler(sigsrc, ^{ return;});
        dispatch_resume(sigsrc);
        
        _main_capture_queue = dispatch_queue_create("CocoaSplit.main.queue", NULL);
+       _preview_queue = dispatch_queue_create("CocoaSplit.preview.queue", NULL);
+       
        self.destinationTypes = @{@"file" : @"File/Raw",
        @"twitch" : @"Twitch TV"};
        
        self.showPreview = YES;
        self.videoTypes = @[@"Desktop", @"AVFoundation", @"QTCapture", @"Syphon"];
-       self.compressorTypes = @[@"AppleVTCompressor", @"x264"];
+       self.compressorTypes = @[@"None", @"AppleVTCompressor", @"x264"];
        
        self.x264tunes = [[NSMutableArray alloc] init];
        
@@ -280,7 +278,8 @@
        
        self.x264profiles = [[NSMutableArray alloc] init];
 
-       
+       [self.x264tunes addObject:[NSNull null]];
+       [self.x264presets addObject:[NSNull null]];
        for (int i = 0; x264_profile_names[i]; i++)
        {
            [self.x264profiles addObject:[NSString stringWithUTF8String:x264_profile_names[i]]];
@@ -339,7 +338,7 @@
     
     [saveRoot setValue: [NSNumber numberWithInt:self.captureWidth] forKey:@"captureWidth"];
     [saveRoot setValue: [NSNumber numberWithInt:self.captureHeight] forKey:@"captureHeight"];
-    [saveRoot setValue: [NSNumber numberWithInt:self.videoCaptureSession.videoCaptureFPS] forKey:@"captureFPS"];
+    [saveRoot setValue: [NSNumber numberWithDouble:self.videoCaptureSession.videoCaptureFPS] forKey:@"captureFPS"];
     [saveRoot setValue: [NSNumber numberWithInt:self.captureVideoAverageBitrate] forKey:@"captureVideoAverageBitrate"];
     [saveRoot setValue: [NSNumber numberWithInt:self.audioBitrate] forKey:@"audioBitrate"];
     [saveRoot setValue: [NSNumber numberWithInt:self.audioSamplerate] forKey:@"audioSamplerate"];
@@ -354,7 +353,9 @@
     [saveRoot setValue: self.x264preset forKey:@"x264preset"];
     [saveRoot setValue: self.x264tune forKey:@"x264tune"];
     [saveRoot setValue: [NSNumber numberWithInt:self.x264crf] forKey:@"x264crf"];
-
+    [saveRoot setValue:[NSNumber numberWithBool:self.previewCtx.vsync] forKey:@"previewVsync"];
+    [saveRoot setValue:[NSNumber numberWithFloat:self.audioCaptureSession.previewVolume] forKey:@"previewVolume"];
+    
     
     
     
@@ -400,7 +401,12 @@
     NSString *audioID = [saveRoot valueForKey:@"audioCaptureID"];
     
     [self selectedAudioCaptureFromID:audioID];
-    self.videoCaptureSession.videoCaptureFPS = [[saveRoot valueForKey:@"captureFPS"] intValue];
+    self.audioCaptureSession.previewVolume = [[saveRoot valueForKey:@"previewVolume"] floatValue];
+    
+    self.videoCaptureSession.videoCaptureFPS = [[saveRoot valueForKey:@"captureFPS"] doubleValue];
+    self.previewCtx.vsync = [[saveRoot valueForKey:@"previewVsync"] boolValue];
+    
+    
 
     
 }
@@ -502,12 +508,13 @@
     
     
     
-    [_audio_capture_session setActiveAudioDevice:_selectedAudioCapture];
+    [self.audioCaptureSession setActiveAudioDevice:_selectedAudioCapture];
     [self.videoCaptureSession setVideoDelegate:self];
     [self.videoCaptureSession setVideoDimensions:_captureWidth height:_captureHeight];
-    [_audio_capture_session setAudioDelegate:self];
-    [_audio_capture_session setAudioBitrate:_audioBitrate];
-    [_audio_capture_session setAudioSamplerate:_audioSamplerate];
+    [self.audioCaptureSession setAudioDelegate:self];
+    [self.audioCaptureSession setAudioBitrate:_audioBitrate];
+    [self.audioCaptureSession setAudioSamplerate:_audioSamplerate];
+    
     
     
     success = [self.videoCaptureSession setupCaptureSession:&error];
@@ -516,7 +523,7 @@
         [NSApp presentError:error];
         return NO;
     }
-    success = [_audio_capture_session setupCaptureSession:&error];
+    success = [self.audioCaptureSession setupCaptureSession:&error];
     if (!success)
     {
         [NSApp presentError:error];
@@ -532,40 +539,41 @@
         self.videoCompressor = nil;
     }
     
-    if (!self.videoCompressor)
+    
+    if (self.videoCompressor)
     {
-        error = [NSError errorWithDomain:@"videoCompressor" code:100 userInfo:@{NSLocalizedDescriptionKey : @"Must select compressor type"}];
-        [NSApp presentError:error];
-        return NO;
+    
+        self.videoCompressor.settingsController = self;
+    
+        if ([self.videoCompressor setupCompressor] == YES)
+        {
+            self.videoCompressor.outputDelegate = self;
+        }
+    
+    
+        if (!success)
+        {
+            NSLog(@"Failed compression setup");
+            [NSApp presentError:error];
+            return NO;
+        }
+    
+        OutputDestination *output;
+    
+    
+        for (output in _captureDestinations)
+        {
+            [self attachCaptureDestination:output];
+        }
+    
     }
-    
-    self.videoCompressor.settingsController = self;
-    
-    if ([self.videoCompressor setupCompressor] == YES)
-    {
-        self.videoCompressor.outputDelegate = self;
-    }
-    
-    
-    if (!success)
-    {
-        NSLog(@"Failed compression setup");
-        [NSApp presentError:error];
-        return NO;
-    }
-    
-    OutputDestination *output;
-    
-    
-    for (output in _captureDestinations)
-    {
-        [self attachCaptureDestination:output];
-    }
-    
     
     success = [self.videoCaptureSession startCaptureSession:&error];
     
     _frameCount = 0;
+    _firstAudioTime = 0;
+    _firstFrameTime = 0;
+    
     _compressedFrameCount = 0;
     _min_delay = _max_delay = _avg_delay = 0;
     
@@ -578,7 +586,11 @@
         [NSApp presentError:error];
         return NO;
     }
-    success = [_audio_capture_session startCaptureSession:&error];
+    if (self.audioCaptureSession != self.videoCaptureSession)
+    {
+        success = [self.audioCaptureSession startCaptureSession:&error];
+    }
+    
     
     
     
@@ -588,11 +600,15 @@
         [NSApp presentError:error];
         return NO;
     }
-    
 
+    
+    _PMAssertionRet = IOPMAssertionCreateWithName(kIOPMAssertionTypePreventUserIdleDisplaySleep, kIOPMAssertionLevelOn, CFSTR("CocoaSplit is capturing video"), &_PMAssertionID);
+    
     return YES;
     
 }
+
+
 
 
 -(void) loadCmdlineSettings
@@ -681,7 +697,7 @@
     
     if ([cmdargs objectForKey:@"captureFPS"])
     {
-        self.videoCaptureSession.videoCaptureFPS = [cmdargs integerForKey:@"captureFPS"];
+        self.videoCaptureSession.videoCaptureFPS = [cmdargs doubleForKey:@"captureFPS"];
     }
 }
 
@@ -693,6 +709,9 @@
         
         
     }
+    
+    self.videoCompressor = nil;
+    
     /*
      if (_compression_session)
      {
@@ -706,9 +725,9 @@
         [self.videoCaptureSession stopCaptureSession];
     }
     
-    if (_audio_capture_session)
+    if (self.audioCaptureSession)
     {
-        [_audio_capture_session stopCaptureSession];
+        [self.audioCaptureSession stopCaptureSession];
     }
     
     
@@ -718,6 +737,11 @@
         [out stopOutput];
     }
     
+    if (_PMAssertionRet == kIOReturnSuccess)
+    {
+        _PMAssertionRet = kIOReturnInvalid;
+        IOPMAssertionRelease(_PMAssertionID);
+    }
 }
 
 - (IBAction)streamButtonPushed:(id)sender {
@@ -738,7 +762,7 @@
 
     } else {
         
-
+        self.selectedTabIndex = 0;
         [self stopStream];
     }
     
@@ -747,12 +771,25 @@
 
 - (void)captureOutputAudio:(id)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 {
+    CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent()*1000000;
+    if (_firstFrameTime == 0)
+    {
+        //Don't start sending audio to the outputs until a video frame has arrived, with AVFoundation this can take 2+ seconds (!?)
+        //Might need to prime the capture session first...
+        return;
+    }
+    if (_firstAudioTime == 0)
+    {
+        _firstAudioTime = currentTime;
+    }
     
+    CFAbsoluteTime ptsTime = currentTime - _firstAudioTime;
     
-    CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
-    CMTime pts = CMTimeMake(currentTime*1000, 1000);
+    CMTime pts = CMTimeMake(ptsTime, 1000000);
+    //CMTime pts = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
+    
 
-    CMSampleBufferSetOutputPresentationTimeStamp(sampleBuffer, pts);
+    //CMSampleBufferSetOutputPresentationTimeStamp(sampleBuffer, pts);
     
     
     for (OutputDestination *outdest in _captureDestinations)
@@ -772,16 +809,18 @@
 
 - (void)captureOutputVideo:(AbstractCaptureDevice *)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer didOutputImage:(CVImageBufferRef)imageBuffer frameTime:(uint64_t)frameTime
 {
-    
+
     if (imageBuffer)
     {
         CVPixelBufferRetain(imageBuffer);
-        dispatch_async(dispatch_get_main_queue(), ^{
+        [self.previewCtx drawFrame:imageBuffer];
+
+
+        dispatch_async(_main_capture_queue, ^{
             [self processVideoFrame:imageBuffer];
-        }
-                       );
+        });
         
-    }
+       }
     
 }
 
@@ -789,27 +828,63 @@
 {
 
     
+    //[self.previewCtx drawFrame:imageBuffer];
+
     CMTime pts;
     CMTime duration;
     
-    if(!imageBuffer)
-        return;
+    CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent()*1000000;
 
-    CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
-    pts = CMTimeMake(currentTime*1000, 1000);
     
     
-    duration = CMTimeMake(1, self.videoCaptureSession.videoCaptureFPS);
+    if (_firstFrameTime == 0)
+    {
+        _firstFrameTime = currentTime;
+        
+    }
+    
+    CFAbsoluteTime ptsTime = currentTime - _firstFrameTime;
+    /*
+    if (currentTime - _lastFrameTime < 1.0/self.videoCaptureSession.videoCaptureFPS)
+    {
+        //skip frame, it hit too fast (!?, is this only desktop capture?)
+        NSLog(@"Dropped frame!");
+        CVPixelBufferRelease(imageBuffer);
+        return;
+    }
+     */
+    _frameCount++;
+    _lastFrameTime = currentTime;
     
     
-    [self.previewCtx drawFrame:imageBuffer];
+    
+
+    pts = CMTimeMake(ptsTime,1000000);
     
     
-    [self.videoCompressor compressFrame:imageBuffer pts:pts duration:duration];
+    duration = CMTimeMake(1000, self.videoCaptureSession.videoCaptureFPS*1000);
     
-    //CVPixelBufferRelease(imageBuffer); 
+    
+    //[self.previewCtx drawFrame:imageBuffer];
+    
+    //NSLog(@"SENDING PTS %lld %d", pts.value, pts.timescale);
+    
+    if (self.videoCompressor)
+    {
+        [self.videoCompressor compressFrame:imageBuffer pts:pts duration:duration];
+    } else {
+        CVPixelBufferRelease(imageBuffer);
+    }
+        
 }
 
+
+
+- (double) captureFPS
+{
+    
+    return self.videoCaptureSession.videoCaptureFPS;
+}
 
 
 - (void) setNilValueForKey:(NSString *)key
@@ -836,6 +911,5 @@
         
     }];
     
-    NSLog(@"OUTPUT DESTINATIONS %@", self.captureDestinations);
 }
 @end

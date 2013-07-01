@@ -33,7 +33,6 @@
 		3451A1C417111BD900DF6A8B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AE3C2F164E3E020052C95E /* Foundation.framework */; };
 		3451A1C717111BD900DF6A8B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3451A1C617111BD900DF6A8B /* main.m */; };
 		3451A1CB17111BD900DF6A8B /* CocoaSplitCmd.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3451A1CA17111BD900DF6A8B /* CocoaSplitCmd.1 */; };
-		3451A1D1171174C800DF6A8B /* CommandLineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3451A1D0171174C800DF6A8B /* CommandLineController.m */; };
 		3451A1D31712C41000DF6A8B /* CaptureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FE50715F444AA00E4CE4E /* CaptureController.m */; };
 		3451A1D51712C57700DF6A8B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4D815F346CC00E4CE4E /* AVFoundation.framework */; };
 		3451A1D61712C58300DF6A8B /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 342346BA15F5FBD700C8C77E /* CoreMedia.framework */; };
@@ -209,8 +208,6 @@
 		3451A1C617111BD900DF6A8B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		3451A1C917111BD900DF6A8B /* CocoaSplitCmd-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CocoaSplitCmd-Prefix.pch"; sourceTree = "<group>"; };
 		3451A1CA17111BD900DF6A8B /* CocoaSplitCmd.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = CocoaSplitCmd.1; sourceTree = "<group>"; };
-		3451A1CF171174C800DF6A8B /* CommandLineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommandLineController.h; sourceTree = "<group>"; };
-		3451A1D0171174C800DF6A8B /* CommandLineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommandLineController.m; sourceTree = "<group>"; };
 		3451A1D2171187D400DF6A8B /* ControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControllerProtocol.h; sourceTree = "<group>"; };
 		3451A1E11712C5F700DF6A8B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		34539ED61606E91700638A29 /* StreamServicePanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = StreamServicePanel.xib; path = ../StreamServicePanel.xib; sourceTree = "<group>"; };
@@ -468,8 +465,6 @@
 				3451A1C617111BD900DF6A8B /* main.m */,
 				34B026581712D8BA0063BB2D /* CmdLineDelegate.h */,
 				34B026591712D8BA0063BB2D /* CmdLineDelegate.m */,
-				3451A1CF171174C800DF6A8B /* CommandLineController.h */,
-				3451A1D0171174C800DF6A8B /* CommandLineController.m */,
 				3451A1CA17111BD900DF6A8B /* CocoaSplitCmd.1 */,
 				3451A1C817111BD900DF6A8B /* Supporting Files */,
 			);
@@ -709,7 +704,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3451A1C717111BD900DF6A8B /* main.m in Sources */,
-				3451A1D1171174C800DF6A8B /* CommandLineController.m in Sources */,
 				3451A1D31712C41000DF6A8B /* CaptureController.m in Sources */,
 				3451A1D81712C5C400DF6A8B /* x264Compressor.m in Sources */,
 				3451A1D91712C5C700DF6A8B /* AppleVTCompressor.m in Sources */,
@@ -822,7 +816,7 @@
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				MACOSX_DEPLOYMENT_TARGET = "";
 				ONLY_ACTIVE_ARCH = NO;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.8;
 			};
 			name = Debug;
 		};
@@ -845,7 +839,7 @@
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				MACOSX_DEPLOYMENT_TARGET = "";
 				ONLY_ACTIVE_ARCH = NO;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.8;
 			};
 			name = Release;
 		};
@@ -1006,7 +1000,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "zakk.lol.$(TARGET_NAME:rfc1034identifier)";
-				SDKROOT = "";
+				SDKROOT = macosx10.8;
 				VALID_ARCHS = "i386 x86_64";
 				WRAPPER_EXTENSION = xpc;
 			};
@@ -1027,7 +1021,7 @@
 				MACH_O_TYPE = mh_execute;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = "zakk.lol.$(TARGET_NAME:rfc1034identifier)";
-				SDKROOT = "";
+				SDKROOT = macosx10.8;
 				VALID_ARCHS = "i386 x86_64";
 				WRAPPER_EXTENSION = xpc;
 			};

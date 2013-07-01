@@ -25,14 +25,17 @@
     AVCaptureAudioDataOutput *_audio_capture_output;
     CVImageBufferRef _currentFrame;
     AVCaptureDevice *_selectedVideoCaptureDevice;
+    int _preroll_frame_cnt;
+    int _preroll_needed_frames;
     
     
     
 }
 
 
+
 @property (readonly) NSArray *availableVideoDevices;
-@property int videoCaptureFPS;
+@property double videoCaptureFPS;
 @property int width;
 @property int height;
 @property id<ControllerProtocol> videoDelegate;
@@ -47,6 +50,11 @@
 @property AVCaptureDeviceFormat *activeVideoFormat;
 @property AVFrameRateRange *activeVideoFramerate;
 @property AbstractCaptureDevice *activeVideoDevice;
+@property (strong) AVCaptureAudioPreviewOutput *audioPreviewOutput;
+@property (assign) int prerollSeconds;
+@property (assign) BOOL did_preroll;
+@property (assign) float previewVolume;
+
 
 
 
