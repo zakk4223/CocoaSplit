@@ -37,6 +37,8 @@ int main(int argc, const char * argv[])
         [runLoop run];
         */
         
+        
+        
         CmdLineDelegate *delegate = [[CmdLineDelegate alloc] init];
 
 NSApplication *app = [NSApplication sharedApplication];

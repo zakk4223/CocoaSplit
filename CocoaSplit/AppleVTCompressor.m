@@ -86,11 +86,11 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     }
     
     
+    
     if (self.settingsController.captureVideoAverageBitrate > 0)
     {
         int real_bitrate = self.settingsController.captureVideoAverageBitrate*1024;
         
-        NSLog(@"Setting bitrate to %d", real_bitrate);
         
         VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_AverageBitRate, CFNumberCreate(NULL, kCFNumberIntType, &real_bitrate));
         
@@ -103,6 +103,28 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
         
     }
     
+    if (self.settingsController.vtcompressor_profile)
+    {
+        CFStringRef session_profile = nil;
+        
+        
+        
+        if ([self.settingsController.vtcompressor_profile isEqualToString:@"Baseline"])
+        {
+            session_profile = kVTProfileLevel_H264_Baseline_4_1;
+        } else if ([self.settingsController.vtcompressor_profile isEqualToString:@"Main"]) {
+            session_profile = kVTProfileLevel_H264_Main_5_0;
+        } else if ([self.settingsController.vtcompressor_profile isEqualToString:@"High"]) {
+            session_profile = kVTProfileLevel_H264_High_5_0;
+        }
+        
+        if (session_profile)
+        {
+            VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_ProfileLevel, session_profile);
+        }
+            
+            
+    }
     return YES;
     
 }

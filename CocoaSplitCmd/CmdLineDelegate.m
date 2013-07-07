@@ -12,20 +12,42 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-    [self.captureController loadSettings];
-    [self.captureController loadCmdlineSettings];
     
+    NSUserDefaults *cmdargs = [NSUserDefaults standardUserDefaults];
+    BOOL loadSavedSettings = YES;
+    
+    loadSavedSettings = [cmdargs boolForKey:@"loadSettings"];
+    
+    if ([cmdargs objectForKey:@"loadSettings"])
+    {
+        loadSavedSettings = [cmdargs boolForKey:@"loadSettings"];
+    }
+
+    if (loadSavedSettings == YES)
+    {
+        [self.captureController loadSettings];
+    }
+    
+    
+    [self.captureController loadCmdlineSettings:cmdargs];
+    [[NSProcessInfo processInfo] disableSuddenTermination];
+
     
     [self.captureController startStream];
     
-    // Insert code here to initialize your application
     
     
 }
 
 
--(void) applicationWillTerminate: (NSNotification *)notification
+-(NSApplicationTerminateReply) applicationShouldTerminate: (NSNotification *)notification
 {
+    
+    NSLog(@"STOPPING STREAM!");
+    
+    [self.captureController stopStream];
+    
+    return NSTerminateNow;
     
     
     

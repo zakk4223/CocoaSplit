@@ -35,6 +35,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     
     NSTimer *_captureTimer;
     NSTimer *_idleTimer;
+    BOOL _cmdLineInfo;
+    
 
     NSScreen *_fullscreenOn;
     
@@ -123,6 +125,9 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) NSMutableArray *x264tunes;
 @property (strong) NSMutableArray *x264presets;
 @property (strong) NSMutableArray *x264profiles;
+@property (strong) NSArray *vtcompressor_profiles;
+@property (strong) NSString *vtcompressor_profile;
+
 
 
 
@@ -160,7 +165,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (void)loadSettings;
 - (bool) startStream;
 - (void) stopStream;
-- (void) loadCmdlineSettings;
+- (void) loadCmdlineSettings:(NSUserDefaults *)cmdargs;
 
 
 

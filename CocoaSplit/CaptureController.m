@@ -297,6 +297,8 @@
        }
 
        
+       self.vtcompressor_profiles = @[[NSNull null], @"Baseline", @"Main", @"High"];
+       
        self.selectedVideoType = [self.videoTypes objectAtIndex:0];
        
        
@@ -507,6 +509,12 @@
     bool success;
     
     
+    if (_cmdLineInfo)
+    {
+        printf("%s", [[self buildCmdLineInfo] UTF8String]);
+        [NSApp performSelector:@selector(terminate:) withObject:nil afterDelay:0.0];
+        return YES;
+    }
     
     [self.audioCaptureSession setActiveAudioDevice:_selectedAudioCapture];
     [self.videoCaptureSession setVideoDelegate:self];
@@ -611,10 +619,54 @@
 
 
 
--(void) loadCmdlineSettings
+-(NSString *) buildCmdLineInfo
 {
     
-    NSUserDefaults *cmdargs = [NSUserDefaults standardUserDefaults];
+    NSMutableDictionary *infoDict = [[NSMutableDictionary alloc] init];
+    NSMutableArray *audioArray = [[NSMutableArray alloc] init];
+    
+    
+    for (AVCaptureDevice *audioDev in self.audioCaptureDevices)
+    {
+        [audioArray addObject:@{@"name": audioDev.localizedName, @"uniqueID": audioDev.uniqueID}];
+    }
+    
+    
+    
+    [infoDict setValue:audioArray forKey:@"audioDevices"];
+    
+    
+    NSMutableDictionary *x264dict = [[NSMutableDictionary alloc] init];
+    
+    [x264dict setValue:self.x264presets forKey:@"presets"];
+    [x264dict setValue:self.x264tunes forKey:@"tunes"];
+    [x264dict setValue:self.x264profiles forKey:@"profiles"];
+
+
+    
+    [infoDict setValue:x264dict forKey:@"x264"];
+    
+    
+    [infoDict setValue:@{@"profiles": self.vtcompressor_profiles} forKey:@"AppleVTCompressor"];
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:infoDict options:0 error:nil];
+    
+    return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+}
+
+
+
+-(void) loadCmdlineSettings:(NSUserDefaults *)cmdargs
+{
+    
+    
+    if ([cmdargs objectForKey:@"dumpInfo"])
+    {
+        _cmdLineInfo = YES;
+    } else {
+        _cmdLineInfo = NO;
+    }
+    
     
     if ([cmdargs objectForKey:@"captureWidth"])
     {
@@ -698,6 +750,26 @@
     if ([cmdargs objectForKey:@"captureFPS"])
     {
         self.videoCaptureSession.videoCaptureFPS = [cmdargs doubleForKey:@"captureFPS"];
+    }
+    
+    if ([cmdargs objectForKey:@"outputDestinations"])
+    {
+        
+        if (!self.captureDestinations)
+        {
+            self.captureDestinations = [[NSMutableArray alloc] init];
+        }
+
+        NSArray *outputs = [cmdargs arrayForKey:@"outputDestinations"];
+        for (NSString *outstr in outputs)
+        {
+            OutputDestination *newDest = [[OutputDestination alloc] initWithType:@"file"];
+            
+            newDest.active = YES;
+            newDest.destination = outstr;
+            [[self mutableArrayValueForKey:@"captureDestinations"] addObject:newDest];
+        }
+        
     }
 }
 

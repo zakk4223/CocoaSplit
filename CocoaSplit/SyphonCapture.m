@@ -258,7 +258,6 @@
     _syphonServer = [self.activeVideoDevice captureDevice];
     NSLog(@"STARTING SYPHON");
     _syphon_client = [[SyphonClient alloc] initWithServerDescription:_syphonServer options:nil newFrameHandler:^(SyphonClient *client) {
-        NSLog(@"NEW FRAME");
         [self renderNewFrame:client];
     }];
     

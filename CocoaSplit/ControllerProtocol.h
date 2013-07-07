@@ -22,6 +22,7 @@
 @property NSString *x264preset;
 @property NSString *x264profile;
 @property NSString *x264tune;
+@property NSString *vtcompressor_profile;
 @property int x264crf;
 @property int audioBitrate;
 @property int audioSamplerate;
