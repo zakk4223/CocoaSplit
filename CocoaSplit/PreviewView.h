@@ -7,6 +7,8 @@
 //
 #import <Foundation/Foundation.h>
 #import <VideoToolbox/VideoToolbox.h>
+#import <Syphon/Syphon.h>
+
 
 
 @interface PreviewView : NSOpenGLView
@@ -14,13 +16,14 @@
 
     IOSurfaceID _boundIOSurfaceID;
     GLuint      _previewTexture;
+    GLuint      _syphonTexture;
     GLsizei     _surfaceWidth;
     GLsizei     _surfaceHeight;
     int         _hackcnt;
     NSTimer *_idleTimer;
     NSTrackingArea *_trackingArea;
     NSRecursiveLock *renderLock;
-    
+
     
     NSScreen *_fullscreenOn;
 

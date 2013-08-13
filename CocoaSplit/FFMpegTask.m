@@ -356,12 +356,12 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         
          if (p->pts != AV_NOPTS_VALUE)
          {
-         p->pts = av_rescale_q(p->pts, codec_ctx->time_base, _av_video_stream->time_base);
+             p->pts = av_rescale_q(p->pts, (AVRational){1,1000000}, _av_video_stream->time_base);
          }
          
          if (p->dts != AV_NOPTS_VALUE)
          {
-         p->dts = av_rescale_q(p->dts, codec_ctx->time_base, _av_video_stream->time_base);
+             p->dts = av_rescale_q(p->dts, (AVRational){1,1000000}, _av_video_stream->time_base);
          }
          
         

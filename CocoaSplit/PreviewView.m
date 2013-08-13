@@ -55,6 +55,7 @@
 }
 
 
+
 - (IBAction)toggleFullscreen:(id)sender;
 {
     if (self.isInFullScreenMode)
@@ -149,6 +150,14 @@
         glGenTextures(1, &_previewTexture);
         glDisable(GL_TEXTURE_RECTANGLE_ARB);
     }
+    
+    
+    
+    
+    
+    
+    
+    
     
     return self;
 }
@@ -251,11 +260,14 @@
         glDisable(GL_TEXTURE_RECTANGLE_ARB);
     }
 
-    [self drawTexture:CGRectZero];
     
+
+      [self drawTexture:CGRectZero];
+
+
     [NSOpenGLContext clearCurrentContext];
     [renderLock unlock];
-    
+
     CVPixelBufferRelease(cImageBuf);
 }
 

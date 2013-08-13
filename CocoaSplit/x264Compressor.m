@@ -71,7 +71,9 @@
         av_free(inframe);
         av_free(frame_data);
     
-    outframe->pts = pts.value;
+        outframe->pts = av_rescale_q(pts.value, (AVRational){1,1000000}, _av_codec_ctx->time_base);
+        
+    //outframe->pts = pts.value;
     AVPacket *pkt = av_malloc(sizeof (AVPacket));
     av_init_packet(pkt);
                                                                                                     
@@ -86,6 +88,8 @@
     
     ret = avcodec_encode_video2(_av_codec_ctx, pkt, outframe, &got_output);
     
+    
+    
     if (ret < 0)
     {
         NSLog(@"ERROR IN AVCODEC ENCODE");
@@ -93,6 +97,8 @@
     
     if (got_output)
     {
+        pkt->pts = pts.value;
+        pkt->dts = pts.value;
         [self.outputDelegate outputAVPacket:pkt codec_ctx:_av_codec_ctx];
     }
         av_free(outframe);
@@ -136,8 +142,10 @@
     _av_codec_ctx->max_b_frames = 0;
     _av_codec_ctx->width = self.settingsController.captureWidth;
     _av_codec_ctx->height = self.settingsController.captureHeight;
-    _av_codec_ctx->time_base.num = 1;
-    _av_codec_ctx->time_base.den = 1000000;
+    _av_codec_ctx->time_base.den = 1;
+    
+    _av_codec_ctx->time_base.num = self.settingsController.captureFPS;
+    
     _av_codec_ctx->pix_fmt = PIX_FMT_YUV420P;
     _av_codec_ctx->gop_size = self.settingsController.captureVideoMaxKeyframeInterval;
     _av_codec_ctx->rc_buffer_size = self.settingsController.captureVideoMaxBitrate*1000;
