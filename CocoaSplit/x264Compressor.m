@@ -142,9 +142,9 @@
     _av_codec_ctx->max_b_frames = 0;
     _av_codec_ctx->width = self.settingsController.captureWidth;
     _av_codec_ctx->height = self.settingsController.captureHeight;
-    _av_codec_ctx->time_base.den = 1;
+    _av_codec_ctx->time_base.num = 1;
     
-    _av_codec_ctx->time_base.num = self.settingsController.captureFPS;
+    _av_codec_ctx->time_base.den = self.settingsController.captureFPS;
     
     _av_codec_ctx->pix_fmt = PIX_FMT_YUV420P;
     _av_codec_ctx->gop_size = self.settingsController.captureVideoMaxKeyframeInterval;
