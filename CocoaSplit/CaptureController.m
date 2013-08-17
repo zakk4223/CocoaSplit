@@ -357,6 +357,7 @@
     [saveRoot setValue: [NSNumber numberWithInt:self.x264crf] forKey:@"x264crf"];
     [saveRoot setValue:[NSNumber numberWithBool:self.previewCtx.vsync] forKey:@"previewVsync"];
     [saveRoot setValue:[NSNumber numberWithFloat:self.audioCaptureSession.previewVolume] forKey:@"previewVolume"];
+    [saveRoot setValue:[NSNumber numberWithBool:self.videoCBR] forKey:@"videoCBR"];
     
     
     
@@ -407,6 +408,7 @@
     
     self.videoCaptureSession.videoCaptureFPS = [[saveRoot valueForKey:@"captureFPS"] doubleValue];
     self.previewCtx.vsync = [[saveRoot valueForKey:@"previewVsync"] boolValue];
+    self.videoCBR = [[saveRoot valueForKey:@"videoCBR"] boolValue];
     
     
 
@@ -585,7 +587,17 @@
     _compressedFrameCount = 0;
     _min_delay = _max_delay = _avg_delay = 0;
     
-    // _captureTimer = [NSTimer timerWithTimeInterval:1.0/_captureFPS target:self selector:@selector(newFrame) userInfo:nil repeats:YES];
+    
+    uint64_t frame_interval = (1.0/self.captureFPS)*NSEC_PER_SEC;
+    
+    _dispatch_timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, _main_capture_queue);
+    
+    dispatch_source_set_timer(_dispatch_timer, DISPATCH_TIME_NOW, frame_interval, 0);
+    dispatch_source_set_event_handler(_dispatch_timer, ^{ [self newFrame]; });
+    dispatch_resume(_dispatch_timer);
+    
+    
+     //_captureTimer = [NSTimer timerWithTimeInterval:1.0/self.captureFPS target:self selector:@selector(newFrame) userInfo:nil repeats:YES];
     //[[NSRunLoop currentRunLoop] addTimer:_captureTimer forMode:NSRunLoopCommonModes];
     
     if (!success)
@@ -775,6 +787,13 @@
 
 - (void)stopStream
 {
+    
+    if (_dispatch_timer)
+    {
+        dispatch_source_cancel(_dispatch_timer);
+        _dispatch_timer = nil;
+        
+    }
     if (_captureTimer)
     {
         [_captureTimer invalidate];
@@ -878,6 +897,26 @@
 
 
 
+-(void) newFrame
+{
+    
+    
+    CVImageBufferRef newFrame;
+    if (self.videoCaptureSession)
+    {
+        newFrame = [self.videoCaptureSession getCurrentFrame];
+        if (newFrame)
+        {
+            [self.previewCtx drawFrame:newFrame];
+            
+            //dispatch_async(_main_capture_queue, ^{
+                [self processVideoFrame:newFrame];
+            //});
+ 
+        }
+    }
+    
+}
 
 - (void)captureOutputVideo:(AbstractCaptureDevice *)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer didOutputImage:(CVImageBufferRef)imageBuffer frameTime:(uint64_t)frameTime
 {

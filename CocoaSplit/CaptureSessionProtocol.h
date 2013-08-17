@@ -36,7 +36,7 @@
 -(void) setVideoDimensions:(int)width height:(int)height;
 
 
-//-(CVImageBufferRef) getCurrentFrame;
+-(CVImageBufferRef) getCurrentFrame;
 
 
 

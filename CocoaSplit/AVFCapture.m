@@ -443,14 +443,26 @@
 
         if (videoFrame)
         {
+            
+            
             CVPixelBufferRetain(videoFrame);
 
-            [self.videoDelegate captureOutputVideo:nil didOutputSampleBuffer:nil didOutputImage:videoFrame frameTime:0 ];
+            @synchronized(self) {
+                if (_currentFrame)
+                {
+                    CVPixelBufferRelease(_currentFrame);
+                }
+                
+                _currentFrame = videoFrame;
+            
+            }
+            
+            //[self.videoDelegate captureOutputVideo:nil didOutputSampleBuffer:nil didOutputImage:videoFrame frameTime:0 ];
             /*
             dispatch_sync(dispatch_get_main_queue(), ^{
                 [self.videoDelegate captureOutputVideo:nil didOutputSampleBuffer:nil didOutputImage:newbuf frameTime:0 ];});
              */
-            CVPixelBufferRelease(videoFrame);
+            //CVPixelBufferRelease(videoFrame);
         }
         
         

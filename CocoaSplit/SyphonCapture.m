@@ -33,6 +33,37 @@
 
 
 
+-(bool) createPixelBufferPoolForSize:(NSSize) size
+{
+    
+    NSLog(@"SyphonCapture: Creating Pixel Buffer Pool %f x %f", size.width, size.height);
+    
+    NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
+    [attributes setValue:[NSNumber numberWithInt:size.width] forKey:(NSString *)kCVPixelBufferWidthKey];
+    [attributes setValue:[NSNumber numberWithInt:size.height] forKey:(NSString *)kCVPixelBufferHeightKey];
+    [attributes setValue:@{(NSString *)kIOSurfaceIsGlobal: @YES} forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
+    [attributes setValue:[NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA] forKey:(NSString *)kCVPixelBufferPixelFormatTypeKey];
+    
+    
+    
+    if (_pixel_buffer_pool)
+    {
+        CVPixelBufferPoolRelease(_pixel_buffer_pool);
+    }
+    
+    
+    
+    CVReturn result = CVPixelBufferPoolCreate(NULL, NULL, (__bridge CFDictionaryRef)(attributes), &_pixel_buffer_pool);
+    
+    if (result != kCVReturnSuccess)
+    {
+        return NO;
+    }
+    
+    return YES;
+
+    
+}
 
 -(bool) setupCaptureSession:(NSError *__autoreleasing *)therror
 {
@@ -69,34 +100,23 @@
         return NO;
     }
     
-    
-    
-    
-    NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
-    //[attributes setValue:[NSNumber numberWithInt:GL_RGBA8] forKey:(NSString *)kCVOpenGLBufferInternalFormat];
-    //[attributes setValue:[NSNumber numberWithInt:kCVPixelFormatType_32RGBA]  forKey:(NSString *)kCVPixelBufferPixelFormatTypeKey];
-    [attributes setValue:[NSNumber numberWithInt:self.width] forKey:(NSString *)kCVPixelBufferWidthKey];
-    [attributes setValue:[NSNumber numberWithInt:self.height] forKey:(NSString *)kCVPixelBufferHeightKey];
-    [attributes setValue:@{(NSString *)kIOSurfaceIsGlobal: @YES} forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
-    [attributes setValue:[NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA] forKey:(NSString *)kCVPixelBufferPixelFormatTypeKey];
-    
-
-
-
-    result = CVPixelBufferPoolCreate(NULL, NULL, (__bridge CFDictionaryRef)(attributes), &_pixel_buffer_pool);
-    
-    if (result != kCVReturnSuccess)
-    {
-        return NO;
-    }
-    
     return YES;
+    
+    
 }
 
 
 
 
--(void)renderNewFrame:(SyphonClient *)client
+-(CVImageBufferRef)getCurrentFrame
+{
+    
+    return [self renderNewFrame:_syphon_client];
+}
+
+
+
+-(CVPixelBufferRef)renderNewFrame:(SyphonClient *)client
 {
     
     CGLContextObj cgl_ctx = [_ogl_ctx CGLContextObj];
@@ -105,24 +125,47 @@
     
     if (cgl_ctx == nil)
     {
-        return;
+        return NULL;
     }
-    
     GLuint frametexture;
     
     CGLLockContext(cgl_ctx);
     SyphonImage *syphon_frame = [client newFrameImageForContext:cgl_ctx];
     frametexture = [syphon_frame textureName];
     frameSize = [syphon_frame textureSize];
+
+    BOOL returnNow = NO;
     
     BOOL changed = NO;
     
-    if ((_last_frame_size.width != frameSize.width) || (_last_frame_size.height != frameSize.height))
+    if (frameSize.width == 0.0f || frameSize.height == 0.0f)
     {
+        returnNow = YES;
+        
+    } else if  ((_last_frame_size.width != frameSize.width) || (_last_frame_size.height != frameSize.height)) {
+    
+        BOOL pixelBufferPoolOK = [self createPixelBufferPoolForSize:frameSize];
+        
+        if (pixelBufferPoolOK != YES)
+        {
+
+            returnNow = YES;
+        }
+        
         changed = YES;
         _last_frame_size.width = frameSize.width;
         _last_frame_size.height = frameSize.height;
     }
+    
+    
+    if (returnNow)
+    {
+        
+        [NSOpenGLContext clearCurrentContext];
+        CGLUnlockContext(cgl_ctx);
+        return NULL;
+    }
+    
     
     if (!_framebuffer)
     {
@@ -137,7 +180,7 @@
     CVPixelBufferPoolCreatePixelBuffer(NULL, _pixel_buffer_pool, &bufferOut);
     if (!bufferOut)
     {
-        return;
+        return NULL;
     }
     
     
@@ -162,7 +205,7 @@
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
     {
         NSLog(@"FRAMEBUFFER IS NOT COMPLETE %d", glCheckFramebufferStatus(GL_FRAMEBUFFER));
-        return;
+        return NULL;
     }
     
     
@@ -245,10 +288,14 @@
     [NSOpenGLContext clearCurrentContext];
     CGLUnlockContext(cgl_ctx);
     
-    [self.videoDelegate captureOutputVideo:nil didOutputSampleBuffer:nil didOutputImage:bufferOut frameTime:0 ];
+    //[self.videoDelegate captureOutputVideo:nil didOutputSampleBuffer:nil didOutputImage:bufferOut frameTime:0 ];
     
-    CVPixelBufferRelease(bufferOut);
+    //CVPixelBufferRelease(bufferOut);
     CVOpenGLTextureCacheFlush(_texture_cache, 0);
+    syphon_frame = nil;
+    
+    return bufferOut;
+    
     
 }
 
@@ -258,9 +305,13 @@
     
     _syphonServer = [self.activeVideoDevice captureDevice];
     NSLog(@"STARTING SYPHON");
+    _syphon_client = [[SyphonClient alloc] initWithServerDescription:_syphonServer options:nil newFrameHandler:nil];
+    
+    /*
     _syphon_client = [[SyphonClient alloc] initWithServerDescription:_syphonServer options:nil newFrameHandler:^(SyphonClient *client) {
         [self renderNewFrame:client];
     }];
+     */
     
        return YES;
     

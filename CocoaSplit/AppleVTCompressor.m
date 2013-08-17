@@ -77,11 +77,20 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
         VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_MaxKeyFrameInterval, (__bridge CFTypeRef)(@(self.settingsController.captureVideoMaxKeyframeInterval)));
     }
     
-    if (self.settingsController.captureVideoMaxBitrate && self.settingsController.captureVideoMaxBitrate > 0)
+    int real_bitrate_limit = 0;
+    
+    if (self.settingsController.videoCBR && self.settingsController.captureVideoAverageBitrate && self.settingsController.captureVideoAverageBitrate > 0)
     {
         
-        int real_bitrate = self.settingsController.captureVideoMaxBitrate*128; // In bytes (1024/8)
-        VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_DataRateLimits, (__bridge CFTypeRef)(@[@(real_bitrate), @1.0]));
+       real_bitrate_limit = self.settingsController.captureVideoAverageBitrate*128; // In bytes (1024/8)
+    } else if (self.settingsController.captureVideoMaxBitrate && self.settingsController.captureVideoMaxBitrate > 0) {
+        real_bitrate_limit = self.settingsController.captureVideoMaxBitrate*128; // In bytes (1024/8)
+    }
+    
+    if (real_bitrate_limit > 0)
+    {
+        
+        VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_DataRateLimits, (__bridge CFTypeRef)(@[@(real_bitrate_limit), @1.0]));
         
     }
     

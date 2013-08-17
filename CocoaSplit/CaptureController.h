@@ -50,7 +50,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     NSString *_selectedVideoType;
     dispatch_queue_t _main_capture_queue;
     dispatch_queue_t _preview_queue;
-    
+    dispatch_source_t _dispatch_timer;
     
     
 }
@@ -127,6 +127,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) NSMutableArray *x264profiles;
 @property (strong) NSArray *vtcompressor_profiles;
 @property (strong) NSString *vtcompressor_profile;
+@property (assign) BOOL videoCBR;
 
 
 

@@ -110,8 +110,20 @@
     IOSurfaceRef  frameIOref = IOSurfaceLookup(ioxpc);
 
     
-    CVPixelBufferRef tmpbuf;
 
+    if (frameIOref)
+    {
+        @synchronized(self)
+        {
+            if (_currentFrame)
+            {
+                CFRelease(_currentFrame);
+            }
+            
+            _currentFrame = frameIOref;
+        }
+    }
+    /*
     if (self.videoDelegate && frameIOref)
     {
         CVPixelBufferCreateWithIOSurface(NULL, frameIOref, NULL, &tmpbuf);
@@ -122,6 +134,7 @@
         }
 
     }
+     */
     //ALWAYS REPLY
     reply();
 }
@@ -171,9 +184,6 @@ void QTPixelBufferRelease(void *releaseRefCon, const void *baseAddress)
         if (_currentFrame)
         {
             CVPixelBufferCreateWithIOSurface(NULL, _currentFrame, NULL, &newbuf);
-            return newbuf;
-            
-            
         }
         
     }

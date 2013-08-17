@@ -29,6 +29,8 @@
 -(bool)providesVideo;
 -(NSArray *)availableVideoDevices;
 -(void) setVideoDimensions:(int)width height:(int)height;
+-(CVImageBufferRef) getCurrentFrame;
+
 
 
 @property double videoCaptureFPS;

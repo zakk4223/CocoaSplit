@@ -192,8 +192,8 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     c_ctx->codec_id = AV_CODEC_ID_H264;
     c_ctx->width = _width;
     c_ctx->height = _height;
-    c_ctx->time_base.num = 1;
-    c_ctx->time_base.den = 1000000;
+    c_ctx->time_base.num = 1000000;
+    c_ctx->time_base.den = self.framerate*1000000;
     
     
     _av_audio_stream = avformat_new_stream(_av_fmt_ctx, 0);
@@ -208,8 +208,8 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
     a_ctx->codec_type = AVMEDIA_TYPE_AUDIO;
     a_ctx->codec_id = AV_CODEC_ID_AAC;
-    a_ctx->time_base.num = 1;
-    a_ctx->time_base.den = 1000000;
+    a_ctx->time_base.num = 1000000;
+    a_ctx->time_base.den = self.framerate*1000000;
     a_ctx->sample_rate = _samplerate;
     a_ctx->channels = 2;
     a_ctx->extradata = (unsigned char *)_audio_extradata;
@@ -356,12 +356,12 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         
          if (p->pts != AV_NOPTS_VALUE)
          {
-             p->pts = av_rescale_q(p->pts, (AVRational){1,1000000}, _av_video_stream->time_base);
+             p->pts = av_rescale_q(p->pts, codec_ctx->time_base, _av_video_stream->time_base);
          }
          
          if (p->dts != AV_NOPTS_VALUE)
          {
-             p->dts = av_rescale_q(p->dts, (AVRational){1,1000000}, _av_video_stream->time_base);
+             p->dts = av_rescale_q(p->dts, codec_ctx->time_base, _av_video_stream->time_base);
          }
          
         

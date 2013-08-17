@@ -73,12 +73,26 @@
         self.videoCaptureFPS = 60.0;
     }
     
+    
     NSNumber *minframetime = [NSNumber numberWithFloat:(1000.0/(self.videoCaptureFPS*1000))];
 
     _displayStreamRef = CGDisplayStreamCreateWithDispatchQueue(_currentDisplay, self.width, self.height,  kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange, (__bridge CFDictionaryRef)(@{(NSString *)kCGDisplayStreamQueueDepth : @20, (NSString *)kCGDisplayStreamMinimumFrameTime : minframetime, (NSString *)kCGDisplayStreamPreserveAspectRatio: @NO}), _capture_queue, ^(CGDisplayStreamFrameStatus status, uint64_t displayTime, IOSurfaceRef frameSurface, CGDisplayStreamUpdateRef updateRef) {
         
         if (frameSurface)
         {
+            
+            CFRetain(frameSurface);
+            @synchronized(self) {
+                if (_currentFrame)
+                {
+                    CFRelease(_currentFrame);
+                }
+                
+                _currentFrame = frameSurface;
+
+            }
+            
+            /*
             CVPixelBufferRef tmpbuf;
             
             if (self.videoDelegate)
@@ -90,10 +104,30 @@
                     CVPixelBufferRelease(tmpbuf);
                 }
             }
+             */
         }
     });
     
     return YES;
+}
+
+
+
+-(CVImageBufferRef) getCurrentFrame
+{
+    
+    CVImageBufferRef tmpbuf = NULL;
+    
+    @synchronized(self) {
+        if (_currentFrame)
+        {
+            CVPixelBufferCreateWithIOSurface(NULL, _currentFrame, NULL, &tmpbuf);
+            
+        }
+    
+    }
+    return tmpbuf;
+    
 }
 
 

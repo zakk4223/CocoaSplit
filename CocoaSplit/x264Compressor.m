@@ -27,7 +27,8 @@
     AVFrame *inframe = avcodec_alloc_frame();
         inframe->pts = pts.value;
         
-    
+        size_t src_height;
+        size_t src_width;
         void *frame_data_ptr;
         uint8_t *frame_data;
         enum PixelFormat frame_fmt;
@@ -42,9 +43,13 @@
             frame_fmt = PIX_FMT_NV12;
         }
 
+        src_height = CVPixelBufferGetHeight(imageBuffer);
+        src_width = CVPixelBufferGetWidth(imageBuffer);
+        
         if (!_sws_ctx)
         {
-            _sws_ctx = sws_getContext((int)CVPixelBufferGetWidth(imageBuffer), (int)CVPixelBufferGetHeight(imageBuffer), frame_fmt,
+            
+            _sws_ctx = sws_getContext((int)src_width, (int)src_height, frame_fmt,
                                       _av_codec_ctx->width, _av_codec_ctx->height, _av_codec_ctx->pix_fmt,
                                       SWS_BICUBIC, NULL, NULL, NULL);
 
@@ -57,7 +62,7 @@
         CVPixelBufferUnlockBaseAddress(imageBuffer, kCVPixelBufferLock_ReadOnly);
         CVPixelBufferRelease(imageBuffer);
         
-    avpicture_fill((AVPicture *)inframe, (uint8_t *)frame_data, frame_fmt, _av_codec_ctx->width, _av_codec_ctx->height);
+    avpicture_fill((AVPicture *)inframe, (uint8_t *)frame_data, frame_fmt, (int)src_width, (int)src_height);
         inframe->pts = pts.value;
     AVFrame *outframe = avcodec_alloc_frame();
     int out_size = avpicture_get_size(_av_codec_ctx->pix_fmt, _av_codec_ctx->width, _av_codec_ctx->height);
@@ -66,7 +71,7 @@
     
     avpicture_fill((AVPicture *)outframe, outbuf, _av_codec_ctx->pix_fmt, _av_codec_ctx->width, _av_codec_ctx->height);
     
-    sws_scale(_sws_ctx, (const uint8_t * const *)inframe->data, inframe->linesize, 0, _av_codec_ctx->height, outframe->data, outframe->linesize);
+    sws_scale(_sws_ctx, (const uint8_t * const *)inframe->data, inframe->linesize, 0, (int)src_height, outframe->data, outframe->linesize);
     
         av_free(inframe);
         av_free(frame_data);
@@ -97,8 +102,8 @@
     
     if (got_output)
     {
-        pkt->pts = pts.value;
-        pkt->dts = pts.value;
+        //pkt->pts = pts.value;
+        //pkt->dts = pts.value;
         [self.outputDelegate outputAVPacket:pkt codec_ctx:_av_codec_ctx];
     }
         av_free(outframe);
@@ -142,17 +147,31 @@
     _av_codec_ctx->max_b_frames = 0;
     _av_codec_ctx->width = self.settingsController.captureWidth;
     _av_codec_ctx->height = self.settingsController.captureHeight;
-    _av_codec_ctx->time_base.num = 1;
+    _av_codec_ctx->time_base.num = 1000000;
     
-    _av_codec_ctx->time_base.den = self.settingsController.captureFPS;
-    
+    _av_codec_ctx->time_base.den = self.settingsController.captureFPS*1000000;
     _av_codec_ctx->pix_fmt = PIX_FMT_YUV420P;
     _av_codec_ctx->gop_size = self.settingsController.captureVideoMaxKeyframeInterval;
-    _av_codec_ctx->rc_buffer_size = self.settingsController.captureVideoMaxBitrate*1000;
+
+    AVDictionary *opts = NULL;
+
+    
     _av_codec_ctx->rc_max_rate = self.settingsController.captureVideoAverageBitrate*1000;
+
+    if (!self.settingsController.videoCBR)
+    {
+         _av_codec_ctx->rc_buffer_size = self.settingsController.captureVideoMaxBitrate*1000;
+        av_dict_set(&opts, "crf", [[NSString stringWithFormat:@"%d", self.settingsController.x264crf] UTF8String], 0);
+
+    } else {
+        
+         _av_codec_ctx->rc_buffer_size = ((1/self.settingsController.captureFPS)*self.settingsController.captureVideoAverageBitrate)*1000;
+        _av_codec_ctx->bit_rate = self.settingsController.captureVideoAverageBitrate*1000;
+        av_dict_set(&opts, "nal-hrd", "cbr", 0);
+    }
+    
     _av_codec_ctx->flags |= CODEC_FLAG_GLOBAL_HEADER;
     
-    AVDictionary *opts = NULL;
     id x264preset = self.settingsController.x264preset;
     
     if (x264preset != [NSNull null])
@@ -174,7 +193,6 @@
         av_dict_set(&opts, "tune", [self.settingsController.x264tune UTF8String], 0);
     }
     
-    av_dict_set(&opts, "crf", [[NSString stringWithFormat:@"%d", self.settingsController.x264crf] UTF8String], 0);
     
     if (avcodec_open2(_av_codec_ctx, _av_codec, &opts) < 0)
     {

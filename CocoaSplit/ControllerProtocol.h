@@ -26,6 +26,7 @@
 @property int x264crf;
 @property int audioBitrate;
 @property int audioSamplerate;
+@property BOOL videoCBR;
 
 
 
