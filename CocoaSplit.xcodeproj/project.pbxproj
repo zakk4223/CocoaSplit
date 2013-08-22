@@ -74,6 +74,7 @@
 		34A64A37165F208800A68428 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A64A36165F208800A68428 /* QuartzCore.framework */; };
 		34A8BAB217085BDD0093EEAF /* Syphon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A8BAB117085BDD0093EEAF /* Syphon.framework */; };
 		34A8BAB317085C2A0093EEAF /* Syphon.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34A8BAB117085BDD0093EEAF /* Syphon.framework */; };
+		34ABEF3C17C0C2CB00AA5E62 /* advancedPrefPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34ABEF3B17C0C2CB00AA5E62 /* advancedPrefPanel.xib */; };
 		34AE3C30164E3E020052C95E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AE3C2F164E3E020052C95E /* Foundation.framework */; };
 		34AE3C36164E3E020052C95E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 34AE3C34164E3E020052C95E /* InfoPlist.strings */; };
 		34AE3C39164E3E020052C95E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AE3C38164E3E020052C95E /* main.m */; };
@@ -231,6 +232,7 @@
 		34A64A34165F047900A68428 /* CapturePreview.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CapturePreview.xib; sourceTree = "<group>"; };
 		34A64A36165F208800A68428 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		34A8BAB117085BDD0093EEAF /* Syphon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Syphon.framework; sourceTree = "<group>"; };
+		34ABEF3B17C0C2CB00AA5E62 /* advancedPrefPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = advancedPrefPanel.xib; sourceTree = "<group>"; };
 		34AE3C2E164E3E020052C95E /* zakk.lol.QTCaptureHelper.xpc */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = zakk.lol.QTCaptureHelper.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
 		34AE3C2F164E3E020052C95E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		34AE3C33164E3E020052C95E /* QTCaptureHelper-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "QTCaptureHelper-Info.plist"; sourceTree = "<group>"; };
@@ -422,6 +424,7 @@
 				34539ED61606E91700638A29 /* StreamServicePanel.xib */,
 				3475E75916FEC9E30030D7FA /* AppleVTPanel.xib */,
 				3475E75B16FEC9F70030D7FA /* x264Panel.xib */,
+				34ABEF3B17C0C2CB00AA5E62 /* advancedPrefPanel.xib */,
 				34539ED8160734EA00638A29 /* FilePanel.xib */,
 				340FE4A815F3417E00E4CE4E /* Supporting Files */,
 			);
@@ -631,6 +634,7 @@
 				3475E75A16FEC9E30030D7FA /* AppleVTPanel.xib in Resources */,
 				3475E75C16FEC9F70030D7FA /* x264Panel.xib in Resources */,
 				3475E75E16FED3A50030D7FA /* AVFAdvancedPanel.xib in Resources */,
+				34ABEF3C17C0C2CB00AA5E62 /* advancedPrefPanel.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

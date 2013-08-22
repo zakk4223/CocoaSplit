@@ -8,6 +8,10 @@
 
 #import "AppleVTCompressor.h"
 
+OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessionRef, CFDictionaryRef *);
+
+
+
 @implementation AppleVTCompressor
 
 
@@ -49,7 +53,12 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 - (bool)setupCompressor
 {
     OSStatus status;
-    NSDictionary *encoder_spec = @{@"EnableHardwareAcceleratedVideoEncoder": @1};
+    
+    
+    NSDictionary *encoder_spec = @{@"EnableHardwareAcceleratedVideoEncoder": @1,
+                                   @"RequireHardwareAcceleratedVideoEncoder": @1 };
+    
+    
     
     if (!self.settingsController)
     {
@@ -57,13 +66,15 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     }
     
     
+
     if (!self.settingsController.captureHeight || !self.settingsController.captureHeight)
     {
         return NO;
         
     }
     
-    status = VTCompressionSessionCreate(NULL, self.settingsController.captureWidth, self.settingsController.captureHeight, 'avc1', (__bridge CFDictionaryRef)encoder_spec, NULL, NULL, VideoCompressorReceiveFrame,  (__bridge void *)self, &_compression_session);
+    
+    status = VTCompressionSessionCreate(NULL, self.settingsController.captureWidth, self.settingsController.captureHeight, kCMVideoCodecType_H264, (__bridge CFDictionaryRef)(encoder_spec), NULL, NULL, VideoCompressorReceiveFrame,  (__bridge void *)self, &_compression_session);
     
     //If priority isn't set to -20 the framerate in the SPS/VUI section locks to 25. With -20 it takes on the value of
     //whatever ExpectedFrameRate is. I have no idea what the fuck, but it works.
@@ -72,38 +83,46 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_AllowFrameReordering, kCFBooleanFalse);
     
     
+    int real_keyframe_interval = 0;
     if (self.settingsController.captureVideoMaxKeyframeInterval && self.settingsController.captureVideoMaxKeyframeInterval > 0)
     {
-        VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_MaxKeyFrameInterval, (__bridge CFTypeRef)(@(self.settingsController.captureVideoMaxKeyframeInterval)));
+        real_keyframe_interval = self.settingsController.captureFPS*self.settingsController.captureVideoMaxKeyframeInterval;
+    } else {
+        real_keyframe_interval = self.settingsController.captureFPS*2;
     }
     
+    VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_MaxKeyFrameInterval, (__bridge CFTypeRef)(@(real_keyframe_interval)));
+
+    
     int real_bitrate_limit = 0;
+    float limit_seconds = 0.0f;
     
     if (self.settingsController.videoCBR && self.settingsController.captureVideoAverageBitrate && self.settingsController.captureVideoAverageBitrate > 0)
     {
         
-       real_bitrate_limit = self.settingsController.captureVideoAverageBitrate*128; // In bytes (1024/8)
+        limit_seconds = 1.0f;
+        real_bitrate_limit = self.settingsController.captureVideoAverageBitrate*125; // In bytes (1000/8)
+        
     } else if (self.settingsController.captureVideoMaxBitrate && self.settingsController.captureVideoMaxBitrate > 0) {
-        real_bitrate_limit = self.settingsController.captureVideoMaxBitrate*128; // In bytes (1024/8)
+        real_bitrate_limit = self.settingsController.captureVideoMaxBitrate*125; // In bytes (1000/8)
+        limit_seconds = 1.0f;
     }
     
-    if (real_bitrate_limit > 0)
-    {
-        
-        VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_DataRateLimits, (__bridge CFTypeRef)(@[@(real_bitrate_limit), @1.0]));
-        
-    }
     
     
     
     if (self.settingsController.captureVideoAverageBitrate > 0)
     {
-        int real_bitrate = self.settingsController.captureVideoAverageBitrate*1024;
+        int real_bitrate = self.settingsController.captureVideoAverageBitrate*1000;
         
         
         VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_AverageBitRate, CFNumberCreate(NULL, kCFNumberIntType, &real_bitrate));
         
     }
+    
+    
+
+    
     
     if (self.settingsController.captureFPS && self.settingsController.captureFPS > 0)
     {
@@ -112,6 +131,36 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
         
     }
     
+    //This doesn't appear to work at all (2012 rMBP, 10.8.4). Even if you set DataRateLimits, you don't get anything back if you
+    //try to retrieve it.
+    
+    if (real_bitrate_limit > 0)
+    {
+        
+        CFNumberRef bitrate_num = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &real_bitrate_limit);
+        //        float rate_time = 1.0f;
+        CFNumberRef time_num = CFNumberCreate(kCFAllocatorDefault, kCFNumberFloatType, &limit_seconds);
+        
+        CFMutableArrayRef dataRateLimits = CFArrayCreateMutable(kCFAllocatorDefault, 2, &kCFTypeArrayCallBacks);
+        CFArrayAppendValue(dataRateLimits, bitrate_num);
+        CFArrayAppendValue(dataRateLimits, time_num);
+        
+        
+        
+        OSStatus success = VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_DataRateLimits, dataRateLimits);
+        if (success != noErr)
+        {
+            NSLog(@"FAILED TO SET DATALIMITS");
+        }
+        
+        
+        CFRelease(bitrate_num);
+        CFRelease(time_num);
+        CFRelease(dataRateLimits);
+        
+
+    }
+
     if (self.settingsController.vtcompressor_profile)
     {
         CFStringRef session_profile = nil;
@@ -141,6 +190,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 
 void VideoCompressorReceiveFrame(void *VTref, void *VTFrameRef, OSStatus status, VTEncodeInfoFlags infoFlags, CMSampleBufferRef sampleBuffer)
 {
+    
     if (VTFrameRef)
     {
         CVPixelBufferRelease(VTFrameRef);

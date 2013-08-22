@@ -27,6 +27,8 @@
 @property int audioBitrate;
 @property int audioSamplerate;
 @property BOOL videoCBR;
+@property (assign) int maxOutputPending;
+@property (assign) int maxOutputDropped;
 
 
 

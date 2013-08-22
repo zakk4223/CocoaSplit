@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreMedia/CoreMedia.h>
 #import "libavformat/avformat.h"
-
+#import "ControllerProtocol.h"
 
 #define AUDIO_BUFFER_SIZE 1000
 @interface FFMpegTask : NSObject
@@ -34,7 +34,9 @@
     int _output_bytes;
     int _pending_frame_count;
     int _pending_frame_size;
-    
+    int _consecutive_dropped_frames;
+    int _dropped_frames;
+
 }
 
 
@@ -58,6 +60,9 @@
 @property (assign) double output_framerate;
 @property (assign) double input_framerate;
 @property (assign) double output_bitrate;
+@property (assign) int dropped_frame_count;
+
+@property (strong) id<ControllerProtocol> settingsController;
 
 
 

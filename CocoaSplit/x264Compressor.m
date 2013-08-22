@@ -27,6 +27,7 @@
     AVFrame *inframe = avcodec_alloc_frame();
         inframe->pts = pts.value;
         
+        
         size_t src_height;
         size_t src_width;
         void *frame_data_ptr;
@@ -63,7 +64,7 @@
         CVPixelBufferRelease(imageBuffer);
         
     avpicture_fill((AVPicture *)inframe, (uint8_t *)frame_data, frame_fmt, (int)src_width, (int)src_height);
-        inframe->pts = pts.value;
+    inframe->pts = pts.value;
     AVFrame *outframe = avcodec_alloc_frame();
     int out_size = avpicture_get_size(_av_codec_ctx->pix_fmt, _av_codec_ctx->width, _av_codec_ctx->height);
     
@@ -71,12 +72,16 @@
     
     avpicture_fill((AVPicture *)outframe, outbuf, _av_codec_ctx->pix_fmt, _av_codec_ctx->width, _av_codec_ctx->height);
     
-    sws_scale(_sws_ctx, (const uint8_t * const *)inframe->data, inframe->linesize, 0, (int)src_height, outframe->data, outframe->linesize);
     
+    sws_scale(_sws_ctx, (const uint8_t * const *)inframe->data, inframe->linesize, 0, (int)src_height, outframe->data, outframe->linesize);
+        
         av_free(inframe);
         av_free(frame_data);
     
         outframe->pts = av_rescale_q(pts.value, (AVRational){1,1000000}, _av_codec_ctx->time_base);
+        
+        //NSLog(@"H264 OUT PTS %lld", outframe->pts);
+        
         
     //outframe->pts = pts.value;
     AVPacket *pkt = av_malloc(sizeof (AVPacket));
@@ -90,9 +95,9 @@
     pkt->data = NULL;
     pkt->size = 0;
     
-    
     ret = avcodec_encode_video2(_av_codec_ctx, pkt, outframe, &got_output);
-    
+        
+
     
     
     if (ret < 0)
@@ -144,14 +149,25 @@
     _av_codec_ctx = avcodec_alloc_context3(_av_codec);
     avcodec_get_context_defaults3(_av_codec_ctx, _av_codec);
     
-    _av_codec_ctx->max_b_frames = 0;
+    //_av_codec_ctx->max_b_frames = 0;
     _av_codec_ctx->width = self.settingsController.captureWidth;
     _av_codec_ctx->height = self.settingsController.captureHeight;
     _av_codec_ctx->time_base.num = 1000000;
     
     _av_codec_ctx->time_base.den = self.settingsController.captureFPS*1000000;
     _av_codec_ctx->pix_fmt = PIX_FMT_YUV420P;
-    _av_codec_ctx->gop_size = self.settingsController.captureVideoMaxKeyframeInterval;
+    
+    
+    int real_keyframe_interval = 0;
+    if (!self.settingsController.captureVideoMaxKeyframeInterval)
+    {
+        real_keyframe_interval = self.settingsController.captureFPS*2;
+    } else {
+        real_keyframe_interval  = self.settingsController.captureFPS*self.settingsController.captureVideoMaxKeyframeInterval;
+    }
+    
+    
+    _av_codec_ctx->gop_size = real_keyframe_interval;
 
     AVDictionary *opts = NULL;
 
@@ -165,7 +181,10 @@
 
     } else {
         
-         _av_codec_ctx->rc_buffer_size = ((1/self.settingsController.captureFPS)*self.settingsController.captureVideoAverageBitrate)*1000;
+        //what did we learn today? Don't believe shit you read in forums posts...
+         //_av_codec_ctx->rc_buffer_size = ((1/self.settingsController.captureFPS)*self.settingsController.captureVideoAverageBitrate)*1000;
+        _av_codec_ctx->rc_buffer_size = self.settingsController.captureVideoAverageBitrate*1000;
+        
         _av_codec_ctx->bit_rate = self.settingsController.captureVideoAverageBitrate*1000;
         av_dict_set(&opts, "nal-hrd", "cbr", 0);
     }

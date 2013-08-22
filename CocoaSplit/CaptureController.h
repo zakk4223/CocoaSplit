@@ -71,6 +71,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 - (IBAction)streamButtonPushed:(id)sender;
 
+- (IBAction)closeAdvancedPrefPanel:(id)sender;
+- (IBAction)openAdvancedPrefPanel:(id)sender;
 - (IBAction)openCreateSheet:(id)sender;
 - (IBAction)videoRefresh:(id)sender;
 - (IBAction)openAVFAdvanced:(id)sender;
@@ -103,6 +105,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) IBOutlet NSWindow *createSheet;
 @property (strong) IBOutlet NSWindow *avfPanel;
 @property (strong) IBOutlet NSWindow *compressPanel;
+@property (strong) IBOutlet NSWindow *advancedPrefPanel;
 
 
 
@@ -128,6 +131,12 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) NSArray *vtcompressor_profiles;
 @property (strong) NSString *vtcompressor_profile;
 @property (assign) BOOL videoCBR;
+
+@property (assign) int maxOutputPending;
+@property (assign) int maxOutputDropped;
+
+@property (assign) BOOL captureRunning;
+
 
 
 

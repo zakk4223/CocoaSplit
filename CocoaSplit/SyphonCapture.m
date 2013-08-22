@@ -152,7 +152,6 @@
             returnNow = YES;
         }
         
-        changed = YES;
         _last_frame_size.width = frameSize.width;
         _last_frame_size.height = frameSize.height;
     }
@@ -293,7 +292,6 @@
     //CVPixelBufferRelease(bufferOut);
     CVOpenGLTextureCacheFlush(_texture_cache, 0);
     syphon_frame = nil;
-    
     return bufferOut;
     
     

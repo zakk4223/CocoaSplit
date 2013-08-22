@@ -109,14 +109,16 @@
     
     IOSurfaceRef  frameIOref = IOSurfaceLookup(ioxpc);
 
+    IOSurfaceIncrementUseCount(frameIOref);
     
-
     if (frameIOref)
     {
         @synchronized(self)
         {
             if (_currentFrame)
             {
+                IOSurfaceDecrementUseCount(_currentFrame);
+
                 CFRelease(_currentFrame);
             }
             

@@ -16,6 +16,8 @@
 #import <IOSurface/IOSurface.h>
 #import "CaptureSessionProtocol.h"
 #import "x264.h"
+#import <mach/mach.h>
+#import <mach/mach_time.h>
 
 
 @implementation CaptureController
@@ -72,6 +74,30 @@
         
         return;
     }];
+}
+
+
+
+-(IBAction)openAdvancedPrefPanel:(id)sender
+{
+    if (!self.advancedPrefPanel)
+    {
+        
+        
+        [NSBundle loadNibNamed:@"advancedPrefPanel" owner:self];
+        
+        [NSApp beginSheet:self.advancedPrefPanel modalForWindow:[[NSApp delegate] window] modalDelegate:self didEndSelector:NULL contextInfo:NULL];
+        
+    }
+    
+}
+
+
+-(IBAction)closeAdvancedPrefPanel:(id)sender
+{
+    [NSApp endSheet:self.advancedPrefPanel];
+    [self.advancedPrefPanel close];
+    self.advancedPrefPanel = nil;
 }
 
 
@@ -358,7 +384,9 @@
     [saveRoot setValue:[NSNumber numberWithBool:self.previewCtx.vsync] forKey:@"previewVsync"];
     [saveRoot setValue:[NSNumber numberWithFloat:self.audioCaptureSession.previewVolume] forKey:@"previewVolume"];
     [saveRoot setValue:[NSNumber numberWithBool:self.videoCBR] forKey:@"videoCBR"];
-    
+    [saveRoot setValue:[NSNumber numberWithInt:self.maxOutputDropped] forKey:@"maxOutputDropped"];
+    [saveRoot setValue:[NSNumber numberWithInt:self.maxOutputPending] forKey:@"maxOutputPending"];
+
     
     
     
@@ -409,8 +437,9 @@
     self.videoCaptureSession.videoCaptureFPS = [[saveRoot valueForKey:@"captureFPS"] doubleValue];
     self.previewCtx.vsync = [[saveRoot valueForKey:@"previewVsync"] boolValue];
     self.videoCBR = [[saveRoot valueForKey:@"videoCBR"] boolValue];
-    
-    
+    self.maxOutputDropped = [[saveRoot valueForKey:@"maxOutputDropped"] intValue];
+    self.maxOutputPending = [[saveRoot valueForKey:@"maxOutputPending"] intValue];
+
 
     
 }
@@ -470,6 +499,7 @@
     newout.stream_output = output.destination;
     newout.stream_format = output.output_format;
     newout.samplerate = _audioSamplerate;
+    newout.settingsController = self;
     output.ffmpeg_out = newout;
 }
 
@@ -588,6 +618,7 @@
     _min_delay = _max_delay = _avg_delay = 0;
     
     
+    self.captureRunning = YES;
     uint64_t frame_interval = (1.0/self.captureFPS)*NSEC_PER_SEC;
     
     _dispatch_timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, _main_capture_queue);
@@ -595,6 +626,8 @@
     dispatch_source_set_timer(_dispatch_timer, DISPATCH_TIME_NOW, frame_interval, 0);
     dispatch_source_set_event_handler(_dispatch_timer, ^{ [self newFrame]; });
     dispatch_resume(_dispatch_timer);
+    //dispatch_async(_main_capture_queue, ^{[self newFrame];});
+    
     
     
      //_captureTimer = [NSTimer timerWithTimeInterval:1.0/self.captureFPS target:self selector:@selector(newFrame) userInfo:nil repeats:YES];
@@ -602,6 +635,7 @@
     
     if (!success)
     {
+        self.captureRunning = NO;
         NSLog(@"Failed start capture");
         [NSApp presentError:error];
         return NO;
@@ -617,6 +651,7 @@
     if (!success)
     {
         NSLog(@"Failed start capture");
+        self.captureRunning = NO;
         [NSApp presentError:error];
         return NO;
     }
@@ -833,6 +868,8 @@
         _PMAssertionRet = kIOReturnInvalid;
         IOPMAssertionRelease(_PMAssertionID);
     }
+    self.captureRunning = NO;
+    
 }
 
 - (IBAction)streamButtonPushed:(id)sender {
@@ -876,7 +913,7 @@
     
     CFAbsoluteTime ptsTime = currentTime - _firstAudioTime;
     
-    CMTime pts = CMTimeMake(ptsTime, 1000000);
+    CMTime pts = CMTimeMake(_frameCount*(1.0f/self.captureFPS)*1000000, 1000000);
     //CMTime pts = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
     
 
@@ -895,28 +932,34 @@
 }
 
 
+//This function is the main capture loop. Naive sleep implementation for now.
+//Maybe look into mach_wait_until?
+
 
 
 -(void) newFrame
 {
-    
-    
     CVImageBufferRef newFrame;
+
+    
     if (self.videoCaptureSession)
     {
         newFrame = [self.videoCaptureSession getCurrentFrame];
         if (newFrame)
         {
-            [self.previewCtx drawFrame:newFrame];
+            //dispatch_async(_preview_queue, ^{
+                [self.previewCtx drawFrame:newFrame];
+            //});
             
             //dispatch_async(_main_capture_queue, ^{
-                [self processVideoFrame:newFrame];
+            [self processVideoFrame:newFrame];
             //});
- 
+            
         }
     }
-    
+
 }
+
 
 - (void)captureOutputVideo:(AbstractCaptureDevice *)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer didOutputImage:(CVImageBufferRef)imageBuffer frameTime:(uint64_t)frameTime
 {
@@ -955,34 +998,27 @@
     }
     
     CFAbsoluteTime ptsTime = currentTime - _firstFrameTime;
-    /*
-    if (currentTime - _lastFrameTime < 1.0/self.videoCaptureSession.videoCaptureFPS)
-    {
-        //skip frame, it hit too fast (!?, is this only desktop capture?)
-        NSLog(@"Dropped frame!");
-        CVPixelBufferRelease(imageBuffer);
-        return;
-    }
-     */
+    
     _frameCount++;
     _lastFrameTime = currentTime;
     
     
     
 
-    pts = CMTimeMake(ptsTime,1000000);
+    pts = CMTimeMake(_frameCount*(1.0f/self.captureFPS)*1000000,1000000);
     
+    //NSLog(@"PTS IS %@", CMTimeCopyDescription(kCFAllocatorDefault, pts));
     
     duration = CMTimeMake(1000, self.videoCaptureSession.videoCaptureFPS*1000);
     
     
-    //[self.previewCtx drawFrame:imageBuffer];
-    
-    //NSLog(@"SENDING PTS %lld %d", pts.value, pts.timescale);
     
     if (self.videoCompressor)
     {
+        
         [self.videoCompressor compressFrame:imageBuffer pts:pts duration:duration];
+        
+        
     } else {
         CVPixelBufferRelease(imageBuffer);
     }

@@ -167,6 +167,8 @@
            dispatch_semaphore_signal(reply_s);
        }];
        dispatch_semaphore_wait(reply_s, DISPATCH_TIME_FOREVER);
+       
+       
        CVPixelBufferRelease(newFrame);
        dispatch_release(reply_s);
    }

@@ -85,15 +85,50 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 }
 
 
+-(BOOL) resetOutputIfNeeded
+{
+    //Should probably only do this if we're a network based output
+    if (self.settingsController.maxOutputDropped)
+    {
+        if (_consecutive_dropped_frames >= self.settingsController.maxOutputDropped)
+        {
+            NSLog(@"STOPPING PROCESS!!");
+            [self stopProcess];
+            return YES;
+        }
+    }
+    return NO;
+}
 
+
+
+-(BOOL) shouldDropFrame
+{
+
+    if (self.settingsController.maxOutputPending)
+    {
+        if (_pending_frame_count >= self.settingsController.maxOutputPending)
+        {
+            return YES;
+        }
+    }
+    
+    return NO;
+}
 
 
 -(void) writeAudioSampleBuffer:(CMSampleBufferRef)theBuffer presentationTimeStamp:(CMTime)pts;
 {
+    
+    
+    if ([self shouldDropFrame])
+    {
+        return;
+    }
+
     CFRetain(theBuffer);
 
 
-    
     if (_av_audio_stream && (self.init_done == YES))
     {
         dispatch_async(_stream_dispatch, ^{
@@ -102,7 +137,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
             size_t buffer_length;
             size_t offset_length;
             char *sampledata;
-        
         
             AVPacket pkt;
         
@@ -281,6 +315,8 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     _input_frame_timestamp = time_now;
     self.buffered_frame_count = _pending_frame_count;
     self.buffered_frame_size = _pending_frame_size;
+    self.dropped_frame_count = _dropped_frames;
+    
 }
 
 -(void) updateOutputStats
@@ -309,17 +345,46 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 -(void) writeAVPacket:(AVPacket *)pkt codec_ctx:(AVCodecContext *)codec_ctx
 {
     
+    
+    if (!_stream_dispatch)
+    {
+        _stream_dispatch = dispatch_queue_create("FFMpeg Stream Dispatch", NULL);
+        _pending_frame_count = 0;
+    }
+
+    
+    _input_framecnt++;
+    
+    
     @synchronized(self)
     {
         _pending_frame_count++;
         _pending_frame_size += pkt->size;
     }
 
-    if (!_stream_dispatch)
+    
+    if ((_input_framecnt % self.framerate) == 0)
     {
-        _stream_dispatch = dispatch_queue_create("FFMpeg Stream Dispatch", NULL);
-        _pending_frame_count = 0;
+        [self updateInputStats];
     }
+
+    
+    if ([self shouldDropFrame])
+    {
+        _dropped_frames++;
+        _consecutive_dropped_frames++;
+        return;
+    } else {
+        _consecutive_dropped_frames = 0;
+    }
+
+    if ([self resetOutputIfNeeded])
+    {
+        return;
+    }
+    
+    
+
     
     
     
@@ -329,12 +394,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     p->destruct = NULL;
     av_dup_packet(p);
 
-    _input_framecnt++;
-    
-    if ((_input_framecnt % self.framerate) == 0)
-    {
-        [self updateInputStats];
-    }
     
     dispatch_async(_stream_dispatch, ^{
         if (!_av_video_stream)
@@ -406,31 +465,51 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         return;
     }
     
-    CFRetain(theBuffer);
-    
     if (!_stream_dispatch)
     {
-       _stream_dispatch = dispatch_queue_create("FFMpeg Stream Dispatch", NULL);
+        _stream_dispatch = dispatch_queue_create("FFMpeg Stream Dispatch", NULL);
         _pending_frame_count = 0;
     }
     
-    CMBlockBufferRef tmp_sample_data = CMSampleBufferGetDataBuffer(theBuffer);
-    
-    
-    size_t data_length = CMBlockBufferGetDataLength(tmp_sample_data);
-    
-          @synchronized(self)
-        {
-            _pending_frame_count++;
-            _pending_frame_size += data_length;
-        }
+
     
     _input_framecnt++;
     if ((_input_framecnt % self.framerate) == 0)
     {
         [self updateInputStats];
     }
+
     
+    if ([self shouldDropFrame])
+    {
+        _dropped_frames++;
+        _consecutive_dropped_frames++;
+        return;
+    } else {
+        _consecutive_dropped_frames = 0;
+    }
+
+    if ([self resetOutputIfNeeded])
+    {
+        return;
+    }
+    
+    
+    CFRetain(theBuffer);
+    
+    
+    CMBlockBufferRef tmp_sample_data = CMSampleBufferGetDataBuffer(theBuffer);
+    
+    
+    size_t data_length = CMBlockBufferGetDataLength(tmp_sample_data);
+    
+    
+    @synchronized(self)
+    {
+        _pending_frame_count++;
+        _pending_frame_size += data_length;
+    }
+
     dispatch_async(_stream_dispatch, ^{
         
     if (!_av_video_stream)
