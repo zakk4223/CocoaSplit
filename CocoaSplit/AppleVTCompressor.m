@@ -36,10 +36,15 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 {
     
     
+    
     if (!_compression_session)
     {
         
-        CVPixelBufferRelease(imageBuffer);
+        if (![self setupCompressor])
+        {
+            CVPixelBufferRelease(imageBuffer);
+            return NO;
+        }
         return NO;
     }
     
@@ -73,6 +78,13 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
         
     }
     
+    
+    
+    CFArrayRef encoderList;
+    
+    VTCopyVideoEncoderList(NULL, &encoderList);
+    
+    NSLog(@"ENCODERS %@", encoderList);
     
     status = VTCompressionSessionCreate(NULL, self.settingsController.captureWidth, self.settingsController.captureHeight, kCMVideoCodecType_H264, (__bridge CFDictionaryRef)(encoder_spec), NULL, NULL, VideoCompressorReceiveFrame,  (__bridge void *)self, &_compression_session);
     

@@ -132,7 +132,11 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     if (_av_audio_stream && (self.init_done == YES))
     {
         dispatch_async(_stream_dispatch, ^{
-            
+            if (!self.active)
+            {
+                return;
+            }
+        
             CMBlockBufferRef blockBufferRef = CMSampleBufferGetDataBuffer(theBuffer);
             size_t buffer_length;
             size_t offset_length;
@@ -290,7 +294,9 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         if (avio_open(&_av_fmt_ctx->pb, [_stream_output UTF8String], AVIO_FLAG_WRITE) < 0)
         {
             NSLog(@"AVIO_OPEN failed");
+            _av_fmt_ctx->pb = NULL;
             [self stopProcess];
+            return NO;
         }
     }
     
@@ -396,11 +402,23 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 
     
     dispatch_async(_stream_dispatch, ^{
+        
+        if (!self.active)
+        {
+            return;
+        }
+        
         if (!_av_video_stream)
         {
             if (_audio_extradata)
             {
-                [self createAVFormatOut:nil codec_ctx:codec_ctx];
+                if (![self createAVFormatOut:nil codec_ctx:codec_ctx])
+                {
+                    
+                    av_free_packet(p);
+                    av_free(p);
+                    return;
+                }
                 [self initStatsValues];
             } else {
                 @synchronized(self)
@@ -512,11 +530,20 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 
     dispatch_async(_stream_dispatch, ^{
         
+    if (!self.active)
+    {
+        return;
+    }
+        
+        
     if (!_av_video_stream)
     {
         if (_audio_extradata)
         {
-            [self createAVFormatOut:theBuffer codec_ctx:nil];
+            if (![self createAVFormatOut:theBuffer codec_ctx:nil])
+            {
+                return;
+            }
             [self initStatsValues];
 
         } else {
@@ -634,9 +661,28 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 
 -(bool)stopProcess
 {
+    
+    self.active = NO;
+    
+    dispatch_async(_stream_dispatch, ^{
+        [self _internal_stopProcess];
+    });
+    
+    return YES;
+}
+
+
+
+-(bool)_internal_stopProcess
+{
+    
     if (_av_fmt_ctx)
     {
-        av_write_trailer(_av_fmt_ctx);
+        if (_av_fmt_ctx->pb)
+        {
+            av_write_trailer(_av_fmt_ctx);
+        }
+        
         avio_close(_av_fmt_ctx->pb);
         av_free(_av_fmt_ctx);
     }
@@ -652,6 +698,8 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
     
     _stream_dispatch = nil;
+        
     return YES;
+        
 }
 @end

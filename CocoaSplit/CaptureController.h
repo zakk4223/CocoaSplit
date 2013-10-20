@@ -136,7 +136,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (assign) int maxOutputDropped;
 
 @property (assign) BOOL captureRunning;
-
+@property (strong) NSArray *arOptions;
+@property (strong) NSString *resolutionOption;
 
 
 

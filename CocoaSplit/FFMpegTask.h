@@ -62,6 +62,7 @@
 @property (assign) double output_bitrate;
 @property (assign) int dropped_frame_count;
 
+
 @property (strong) id<ControllerProtocol> settingsController;
 
 

@@ -12,7 +12,7 @@
 #import "ControllerProtocol.h"
 
 #import <VideoToolbox/VideoToolbox.h>
-
+#import <VideoToolbox/VTVideoEncoderList.h>
 
 @interface AppleVTCompressor : NSObject <h264Compressor>
 {

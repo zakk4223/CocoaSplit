@@ -16,11 +16,25 @@
 {
     
     
-    if (!self.settingsController || !self.outputDelegate || !_av_codec)
+    if (!self.settingsController || !self.outputDelegate)
     {
         CVPixelBufferRelease(imageBuffer);
         return NO;
     }
+    
+    
+    if (!_av_codec)
+    {
+        BOOL setupOK;
+
+        setupOK = [self setupCompressor];
+        
+        if (!setupOK)
+        {
+            return NO;
+        }
+    }
+    
     
     
     dispatch_async(_compressor_queue, ^{
@@ -181,7 +195,7 @@
 
     } else {
         
-        //what did we learn today? Don't believe shit you read in forums posts...
+        //what did we learn today? Don't believe shit you read in forum posts...
          //_av_codec_ctx->rc_buffer_size = ((1/self.settingsController.captureFPS)*self.settingsController.captureVideoAverageBitrate)*1000;
         _av_codec_ctx->rc_buffer_size = self.settingsController.captureVideoAverageBitrate*1000;
         

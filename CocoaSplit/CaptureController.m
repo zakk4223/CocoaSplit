@@ -297,6 +297,7 @@
        self.showPreview = YES;
        self.videoTypes = @[@"Desktop", @"AVFoundation", @"QTCapture", @"Syphon"];
        self.compressorTypes = @[@"None", @"AppleVTCompressor", @"x264"];
+       self.arOptions = @[@"None", @"Use Source", @"Preserve AR"];
        
        self.x264tunes = [[NSMutableArray alloc] init];
        
@@ -386,7 +387,8 @@
     [saveRoot setValue:[NSNumber numberWithBool:self.videoCBR] forKey:@"videoCBR"];
     [saveRoot setValue:[NSNumber numberWithInt:self.maxOutputDropped] forKey:@"maxOutputDropped"];
     [saveRoot setValue:[NSNumber numberWithInt:self.maxOutputPending] forKey:@"maxOutputPending"];
-
+    [saveRoot setValue:self.resolutionOption forKey:@"resolutionOption"];
+    
     
     
     
@@ -440,7 +442,13 @@
     self.maxOutputDropped = [[saveRoot valueForKey:@"maxOutputDropped"] intValue];
     self.maxOutputPending = [[saveRoot valueForKey:@"maxOutputPending"] intValue];
 
+    self.resolutionOption = [saveRoot valueForKey:@"resolutionOption"];
+    if (!self.resolutionOption)
+    {
+        self.resolutionOption = @"None";
+    }
 
+    
     
 }
 
@@ -500,6 +508,7 @@
     newout.stream_format = output.output_format;
     newout.samplerate = _audioSamplerate;
     newout.settingsController = self;
+    newout.active = YES;
     output.ffmpeg_out = newout;
 }
 
@@ -585,26 +594,19 @@
     
         self.videoCompressor.settingsController = self;
     
-        if ([self.videoCompressor setupCompressor] == YES)
-        {
+        //if ([self.videoCompressor setupCompressor] == YES)
+        //{
             self.videoCompressor.outputDelegate = self;
-        }
+        //}
     
     
-        if (!success)
-        {
-            NSLog(@"Failed compression setup");
-            [NSApp presentError:error];
-            return NO;
-        }
+        //if (!success)
+        //{
+        //    NSLog(@"Failed compression setup");
+        //    [NSApp presentError:error];
+        //    return NO;
+       // }
     
-        OutputDestination *output;
-    
-    
-        for (output in _captureDestinations)
-        {
-            [self attachCaptureDestination:output];
-        }
     
     }
     
@@ -932,9 +934,60 @@
 }
 
 
-//This function is the main capture loop. Naive sleep implementation for now.
-//Maybe look into mach_wait_until?
 
+-(BOOL) setupResolution:(CVImageBufferRef)withFrame error:(NSError **)therror
+{
+    
+    if ([self.resolutionOption isEqualToString:@"None"])
+    {
+        if (!(self.captureHeight > 0) || !(self.captureWidth > 0))
+        {
+            if (therror)
+            {
+                *therror = [NSError errorWithDomain:@"videoCapture" code:150 userInfo:@{NSLocalizedDescriptionKey : @"Both width and height are required"}];
+            }
+
+            return NO;
+        }
+        
+        return YES;
+    }
+    
+    self.arOptions = @[@"None", @"Use Source", @"Preserve AR"];
+
+    if ([self.resolutionOption isEqualToString:@"Use Source"])
+    {
+        self.captureHeight = CVPixelBufferGetHeight(withFrame);
+        self.captureWidth = CVPixelBufferGetWidth(withFrame);
+    } else if ([self.resolutionOption isEqualToString:@"Preserve AR"]) {
+        float inputAR = (float)CVPixelBufferGetWidth(withFrame) / (float)CVPixelBufferGetHeight(withFrame);
+        int newWidth;
+        int newHeight;
+        
+        if (self.captureHeight > 0)
+        {
+            newHeight = self.captureHeight;
+            newWidth = (int)(round(self.captureHeight * inputAR));
+        } else if (self.captureWidth > 0) {
+            newWidth = self.captureWidth;
+            newHeight = (int)(round(self.captureWidth / inputAR));
+        } else {
+            
+            if (therror)
+            {
+                *therror = [NSError errorWithDomain:@"videoCapture" code:160 userInfo:@{NSLocalizedDescriptionKey : @"Either width or height are required"}];
+            }
+            
+            return NO;
+
+        }
+        
+        self.captureHeight = (newHeight +1)/2*2;
+        self.captureWidth = (newWidth+1)/2*2;
+    }
+    
+    return YES;
+}
 
 
 -(void) newFrame
@@ -947,6 +1000,31 @@
         newFrame = [self.videoCaptureSession getCurrentFrame];
         if (newFrame)
         {
+            if (_firstFrameTime == 0)
+            {
+                NSError *error;
+                BOOL success;
+                
+                success = [self setupResolution:newFrame error:&error];
+                if (!success)
+                {
+                    [self stopStream];
+                    [NSApp presentError:error];
+                } else {
+                
+                    OutputDestination *output;
+                
+                
+                    for (output in _captureDestinations)
+                    {
+                        [self attachCaptureDestination:output];
+                    }
+                }
+
+
+            }
+
+            
             //dispatch_async(_preview_queue, ^{
                 [self.previewCtx drawFrame:newFrame];
             //});

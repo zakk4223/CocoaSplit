@@ -91,7 +91,10 @@
         if (!is_active && self.ffmpeg_out)
         {
             [self.ffmpeg_out stopProcess];
+        } else if (is_active && self.ffmpeg_out) {
+            self.ffmpeg_out.active = YES;
         }
+        
     }
     _active = is_active;
 }

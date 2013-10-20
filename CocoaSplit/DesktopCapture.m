@@ -34,13 +34,18 @@
 {
     _activeVideoDevice = newDev;
     _currentDisplay = [[newDev captureDevice] unsignedIntValue];
+    CGRect displaySize = CGDisplayBounds(_currentDisplay);
+    
+    self.width = displaySize.size.width;
+    self.height = displaySize.size.height;
     
 }
 
 -(void) setVideoDimensions:(int)width height:(int)height
 {
-    self.width = width;
-    self.height = height;
+    return;
+    //self.width = width;
+    //self.height = height;
     
 }
 
