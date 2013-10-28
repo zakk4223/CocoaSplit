@@ -42,6 +42,21 @@
 }
 
 
+-(AbstractCaptureDevice *)activeVideoDevice
+{
+    return _activeVideoDevice;
+}
+
+-(void)setActiveVideoDevice:(AbstractCaptureDevice *)activeVideoDevice
+{
+    _activeVideoDevice = activeVideoDevice;
+    [self stopCaptureSession];
+    [self startCaptureSession];
+    
+}
+
+
+
 -(void) setVideoDimensions:(int)width height:(int)height
 {
     return;
@@ -81,7 +96,7 @@
     
     
     NSMutableArray *__block retArray;
-    [_xpcProxy testMethod];
+    //[_xpcProxy testMethod];
     
     [_xpcProxy listCaptureDevices:^(NSArray *r_devices) {
         retArray = [[NSMutableArray alloc] init];
@@ -90,6 +105,7 @@
         {
            [retArray addObject:[[AbstractCaptureDevice alloc]  initWithName:[devinstance valueForKey:@"name"] device:[devinstance valueForKey:@"id"] uniqueID:[devinstance valueForKey:@"id"]]];
         }
+        
         [self willChangeValueForKey:@"availableVideoDevices"];
         _availableVideoDevices = (NSArray *)retArray;
         [self didChangeValueForKey:@"availableVideoDevices"];
@@ -111,6 +127,7 @@
 
     IOSurfaceIncrementUseCount(frameIOref);
     
+
     if (frameIOref)
     {
         @synchronized(self)
@@ -137,8 +154,10 @@
 
     }
      */
-    //ALWAYS REPLY
+    
     reply();
+
+    //ALWAYS REPLY
 }
 
 
@@ -151,21 +170,15 @@
 }
 
 
--(bool) startCaptureSession:(NSError **)error
+-(bool) startCaptureSession
 {
+    NSLog(@"STARTING CAPTURE SESSION?");
     
     [_xpcProxy startXPCCaptureSession:self.activeVideoDevice.uniqueID];
     
     return YES;
 }
 
-
--(bool) setupCaptureSession:(NSError *__autoreleasing *)therror
-{
-    
-    return YES;
-    
-}
 
 void QTPixelBufferRelease(void *releaseRefCon, const void *baseAddress)
 {

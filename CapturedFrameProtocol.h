@@ -12,5 +12,4 @@
 
 -(void) newCapturedFrame:(IOSurfaceID)ioxpc reply:(void (^)())reply;
 
-
 @end

@@ -15,12 +15,32 @@
 @implementation DesktopCapture
 
 @synthesize activeVideoDevice = _activeVideoDevice;
+@synthesize videoCaptureFPS = _videoCaptureFPS;
+
+
+
 
 
 
 -(BOOL) needsAdvancedVideo
 {
     return NO;
+}
+
+
+
+-(id) init
+{
+    if (self = [super init])
+    {
+        _capture_queue = dispatch_queue_create("Desktop Capture Queue", DISPATCH_QUEUE_SERIAL);
+
+        self.videoCaptureFPS = 60;
+        
+    }
+
+    return self;
+    
 }
 
 
@@ -38,7 +58,8 @@
     
     self.width = displaySize.size.width;
     self.height = displaySize.size.height;
-    
+
+    [self setupDisplayStream];
 }
 
 -(void) setVideoDimensions:(int)width height:(int)height
@@ -49,40 +70,50 @@
     
 }
 
--(bool)setupCaptureSession:(NSError *__autoreleasing *)therror
+-(double)videoCaptureFPS
+{
+    return _videoCaptureFPS;
+}
+
+
+-(void) setVideoCaptureFPS:(double)videoCaptureFPS
+{
+     _videoCaptureFPS = videoCaptureFPS;
+    
+    [self setupDisplayStream];
+}
+
+
+
+-(bool)setupDisplayStream
 {
 
-    if (!self.activeVideoDevice)
+    
+    if (_displayStreamRef)
     {
-        *therror = [NSError errorWithDomain:@"videoCapture" code:100 userInfo:@{NSLocalizedDescriptionKey : @"Must select video capture device first"}];
+        [self stopDisplayStream];
+    }
+    
+    
+    
+    if (!_currentDisplay)
+    {
         return NO;
     }
     
-    if (!(self.width > 0) || !(self.height > 0))
-    {
-        *therror = [NSError errorWithDomain:@"videoCapture" code:150 userInfo:@{NSLocalizedDescriptionKey : @"Width and height must be set to greater than zero"}];
-        return NO;
-    }
-    
-    
-    _capture_queue = dispatch_queue_create("Desktop Capture Queue", DISPATCH_QUEUE_SERIAL);
-    if (!_capture_queue)
-    {
-        *therror = [NSError errorWithDomain:@"videoCapture" code:160 userInfo:@{NSLocalizedDescriptionKey : @"Could not create desktop capture dispatch queue"}];
-        return NO;
-    }
-    _currentFrameTime = 0;
-    
-    if (!self.videoCaptureFPS || self.videoCaptureFPS == 0)
-    {
-        self.videoCaptureFPS = 60.0;
-    }
     
     
     NSNumber *minframetime = [NSNumber numberWithFloat:(1000.0/(self.videoCaptureFPS*1000))];
 
+    
+    
     _displayStreamRef = CGDisplayStreamCreateWithDispatchQueue(_currentDisplay, self.width, self.height,  kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange, (__bridge CFDictionaryRef)(@{(NSString *)kCGDisplayStreamQueueDepth : @20, (NSString *)kCGDisplayStreamMinimumFrameTime : minframetime, (NSString *)kCGDisplayStreamPreserveAspectRatio: @NO}), _capture_queue, ^(CGDisplayStreamFrameStatus status, uint64_t displayTime, IOSurfaceRef frameSurface, CGDisplayStreamUpdateRef updateRef) {
         
+        if (status == kCGDisplayStreamFrameStatusStopped)
+        {
+            return;
+            
+        }
         if (frameSurface)
         {
             
@@ -97,22 +128,10 @@
 
             }
             
-            /*
-            CVPixelBufferRef tmpbuf;
-            
-            if (self.videoDelegate)
-            {
-                CVPixelBufferCreateWithIOSurface(NULL, frameSurface, NULL, &tmpbuf);
-                if (tmpbuf)
-                {
-                    [self.videoDelegate captureOutputVideo:nil didOutputSampleBuffer:nil didOutputImage:tmpbuf frameTime:0 ];
-                    CVPixelBufferRelease(tmpbuf);
-                }
-            }
-             */
         }
     });
     
+    CGDisplayStreamStart(_displayStreamRef);
     return YES;
 }
 
@@ -136,18 +155,18 @@
 }
 
 
--(bool)startCaptureSession:(NSError *__autoreleasing *)error
-{
-    CGDisplayStreamStart(_displayStreamRef);
-    return YES;
-}
 
 
--(bool)stopCaptureSession
+-(bool)stopDisplayStream
 {
-    CGDisplayStreamStop(_displayStreamRef);
+    
+    if (_displayStreamRef)
+    {
+        CGDisplayStreamStop(_displayStreamRef);
+    }
+    
+    
     _currentFrame = NULL;
-    _capture_queue = NULL;
     return YES;
 }
 

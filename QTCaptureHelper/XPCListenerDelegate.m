@@ -31,6 +31,7 @@
 - (void) dealloc
 {
  
+    NSLog(@"HOLY SHIT DEALLOC");
     if (self.xpcProxy)
     {
         [self.xpcProxy release];
@@ -45,6 +46,7 @@
 - (BOOL) listener:(NSXPCListener *)listener shouldAcceptNewConnection:(NSXPCConnection *)newConnection
 {
     
+    NSLog(@"SHOULD ACCEPT NEW CONNECTION\n");
     NSXPCInterface *helperInterface = [[NSXPCInterface interfaceWithProtocol:@protocol(QTHelperProtocol)] retain];
     NSXPCInterface *masterInterface = [[NSXPCInterface interfaceWithProtocol:@protocol(CapturedFrameProtocol)] retain];
     
@@ -66,6 +68,7 @@
 
 - (void) listCaptureDevices:(void (^)(NSArray *r_devices))reply
 {
+    
     NSArray *devices = [QTCaptureDevice inputDevicesWithMediaType:QTMediaTypeVideo];
     NSLog(@"DEVICES IN HELPER %@", devices);
     
@@ -79,7 +82,7 @@
         
     }
     
-    [devices release];
+
     reply((NSArray *)retArray);
     [retArray release];
 }
@@ -141,7 +144,7 @@
     NSMutableDictionary *pbAttrs = [NSMutableDictionary dictionaryWithObject:ioAttrs
                                                                       forKey: (NSString*)kCVPixelBufferIOSurfacePropertiesKey];
     
-    [pbAttrs setObject: @[@(kCVPixelFormatType_422YpCbCr8), @(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange), @(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)]
+   [pbAttrs setObject: @[@(kCVPixelFormatType_422YpCbCr8), @(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange), @(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange)]
                 forKey:(NSString *)kCVPixelBufferPixelFormatTypeKey];
     
     [self.captureOutput setPixelBufferAttributes:pbAttrs];
@@ -177,7 +180,10 @@
 - (void)captureOutput:(QTCaptureOutput *)captureOutput didOutputVideoFrame:(CVImageBufferRef)videoFrame withSampleBuffer:(QTSampleBuffer *)sampleBuffer fromConnection:(QTCaptureConnection *)connection
 {
 
+    
     CVPixelBufferRetain(videoFrame);
+    
+    
     dispatch_async(frameQueue, ^{
         [self sendFrame:videoFrame];
     });

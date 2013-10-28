@@ -16,6 +16,24 @@
 
 
 
+@synthesize activeVideoDevice = _activeVideoDevice;
+
+
+
+
+-(AbstractCaptureDevice *)activeVideoDevice
+{
+    return _activeVideoDevice;
+}
+
+-(void)setActiveVideoDevice:(AbstractCaptureDevice *)activeVideoDevice
+{
+    _activeVideoDevice = activeVideoDevice;
+    [self startSyphon];
+}
+
+
+
 -(void) setVideoDimensions:(int)width height:(int)height
 {
     self.width = width;
@@ -65,44 +83,45 @@
     
 }
 
--(bool) setupCaptureSession:(NSError *__autoreleasing *)therror
+-(id) init
 {
     
-    NSOpenGLPixelFormatAttribute glAttributes[] = {
+    if (self = [super init])
+    {
+        NSOpenGLPixelFormatAttribute glAttributes[] = {
+            
+            NSOpenGLPFAPixelBuffer,
+            NSOpenGLPFANoRecovery,
+            NSOpenGLPFAAccelerated,
+            NSOpenGLPFADepthSize, 32,
+            (NSOpenGLPixelFormatAttribute) 0
+            
+        };
+        NSOpenGLPixelFormat *pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:glAttributes];
         
-        NSOpenGLPFAPixelBuffer,
-        NSOpenGLPFANoRecovery,
-        NSOpenGLPFAAccelerated,
-        NSOpenGLPFADepthSize, 32,
-        (NSOpenGLPixelFormatAttribute) 0
-    
-    };
-    NSOpenGLPixelFormat *pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:glAttributes];
-    
-    if (!pixelFormat)
-    {
-        return NO;
+        if (!pixelFormat)
+        {
+            return NO;
+        }
+        
+        _ogl_ctx = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:nil];
+        
+        if (!_ogl_ctx)
+        {
+            return NO;
+        }
+        
+        CVReturn result;
+        
+        result = CVOpenGLTextureCacheCreate(kCFAllocatorDefault, NULL, [_ogl_ctx CGLContextObj], CGLGetPixelFormat([_ogl_ctx CGLContextObj]), NULL, &_texture_cache);
+        
+        if (result != kCVReturnSuccess)
+        {
+            return NO;
+        }
+        
     }
-    
-    _ogl_ctx = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:nil];
-    
-    if (!_ogl_ctx)
-    {
-        return NO;
-    }
-    
-    CVReturn result;
-    
-    result = CVOpenGLTextureCacheCreate(kCFAllocatorDefault, NULL, [_ogl_ctx CGLContextObj], CGLGetPixelFormat([_ogl_ctx CGLContextObj]), NULL, &_texture_cache);
-    
-    if (result != kCVReturnSuccess)
-    {
-        return NO;
-    }
-    
-    return YES;
-    
-    
+    return self;
 }
 
 
@@ -136,7 +155,6 @@
 
     BOOL returnNow = NO;
     
-    BOOL changed = NO;
     
     if (frameSize.width == 0.0f || frameSize.height == 0.0f)
     {
@@ -297,22 +315,32 @@
     
 }
 
--(bool) startCaptureSession:(NSError *__autoreleasing *)error
+-(void) startSyphon
 {
     
     
+    
+    if (_syphon_client)
+    {
+        [_syphon_client stop];
+        _syphon_client = nil;
+    }
+    
+    
     _syphonServer = [self.activeVideoDevice captureDevice];
-    NSLog(@"STARTING SYPHON");
-    _syphon_client = [[SyphonClient alloc] initWithServerDescription:_syphonServer options:nil newFrameHandler:nil];
+    
+    if (_syphonServer)
+    {
+        NSLog(@"STARTING SYPHON");
+        _syphon_client = [[SyphonClient alloc] initWithServerDescription:_syphonServer options:nil newFrameHandler:nil];
+    }
+    
     
     /*
     _syphon_client = [[SyphonClient alloc] initWithServerDescription:_syphonServer options:nil newFrameHandler:^(SyphonClient *client) {
         [self renderNewFrame:client];
     }];
      */
-    
-       return YES;
-    
 }
 
 

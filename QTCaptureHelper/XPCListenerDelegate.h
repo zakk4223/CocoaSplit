@@ -19,6 +19,8 @@
     QTCaptureDecompressedVideoOutput *captureOutput;
     id <CapturedFrameProtocol> xpcProxy;
     dispatch_queue_t frameQueue;
+    CVImageBufferRef _currentFrame;
+    
     
     
 }
