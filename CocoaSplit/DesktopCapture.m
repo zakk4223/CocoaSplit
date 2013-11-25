@@ -35,7 +35,7 @@
     {
         _capture_queue = dispatch_queue_create("Desktop Capture Queue", DISPATCH_QUEUE_SERIAL);
 
-        self.videoCaptureFPS = 60;
+        self.videoCaptureFPS = 60.0f;
         
     }
 
@@ -52,6 +52,8 @@
 
 -(void) setActiveVideoDevice:(AbstractCaptureDevice *)newDev
 {
+    
+    NSLog(@"SETTING ACTIVE VIDEO DEVICE");
     _activeVideoDevice = newDev;
     _currentDisplay = [[newDev captureDevice] unsignedIntValue];
     CGRect displaySize = CGDisplayBounds(_currentDisplay);
@@ -78,6 +80,7 @@
 
 -(void) setVideoCaptureFPS:(double)videoCaptureFPS
 {
+    
      _videoCaptureFPS = videoCaptureFPS;
     
     [self setupDisplayStream];
@@ -98,6 +101,7 @@
     
     if (!_currentDisplay)
     {
+        NSLog(@"NO DISPLAY");
         return NO;
     }
     
@@ -165,8 +169,16 @@
         CGDisplayStreamStop(_displayStreamRef);
     }
     
-    
-    _currentFrame = NULL;
+  
+    @synchronized(self) {
+        if (_currentFrame)
+        {
+            CFRelease(_currentFrame);
+            _currentFrame = NULL;
+        }
+    }
+
+  
     return YES;
 }
 
@@ -223,6 +235,11 @@
 
 
 
+
+-(void)dealloc
+{
+    [self stopDisplayStream];
+}
 
 
 @end

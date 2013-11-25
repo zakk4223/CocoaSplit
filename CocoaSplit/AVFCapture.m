@@ -61,20 +61,11 @@
 }
 
 
--(bool) providesVideo
-{
-    return YES;
-}
-
--(bool) providesAudio
-{
-    return YES;
-}
-
 
 -(AVFrameRateRange *)activeVideoFramerate
 {
     return _activeVideoFramerate;
+    
 }
 
 
@@ -357,17 +348,20 @@
   
         NSMutableDictionary *videoSettings = [[NSMutableDictionary alloc] init];
 
+        
         [videoSettings setValue:@[@(kCVPixelFormatType_422YpCbCr8FullRange), @(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange), @(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange), @(kCVPixelFormatType_422YpCbCr8)] forKey:(NSString *)kCVPixelBufferPixelFormatTypeKey];
         NSDictionary *ioAttrs = [NSDictionary dictionaryWithObject: [NSNumber numberWithBool: YES]
                                                             forKey: (NSString *)kIOSurfaceIsGlobal];
         
         [videoSettings setValue:ioAttrs forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
-/*        if (self.videoHeight && self.videoWidth)
+        /*
+        if (self.videoHeight && self.videoWidth)
         {
-            [videoSettings setValue:@(self.videoHeight) forKey:(NSString *)kCVPixelBufferHeightKey];
-            [videoSettings setValue:@(self.videoWidth) forKey:(NSString *)kCVPixelBufferWidthKey];
-        } */
+            [videoSettings setValue:@(1280) forKey:(NSString *)kCVPixelBufferHeightKey];
+            [videoSettings setValue:@(720) forKey:(NSString *)kCVPixelBufferWidthKey];
+        }
         
+         */
         NSLog(@"SETTINGS DICT %@", videoSettings);
         _video_capture_output = [[AVCaptureVideoDataOutput alloc] init];
     
@@ -383,12 +377,12 @@
         }
                 
         AVCaptureConnection *outconn = [_video_capture_output connectionWithMediaType:AVMediaTypeVideo];
-        if (outconn && self.videoCaptureFPS && self.videoCaptureFPS > 0)
-        {
-            NSLog(@"SETTING VIDEO CAPTURE FPS %f", self.videoCaptureFPS);
-            outconn.videoMinFrameDuration = CMTimeMake(1000, self.videoCaptureFPS*1000);
+        //if (outconn && self.videoCaptureFPS && self.videoCaptureFPS > 0)
+        //{
+         //   NSLog(@"SETTING VIDEO CAPTURE FPS %f", self.videoCaptureFPS);
+         //   outconn.videoMinFrameDuration = CMTimeMake(1000, self.videoCaptureFPS*1000);
             
-        }
+        //}
         
     }
     
@@ -464,6 +458,22 @@
 }
 
 
+-(void) stopAudioCompression
+{
+    if (!_capture_session)
+    {
+        return;
+    }
+    
+    if (_audio_capture_output)
+    {
+        [_capture_session beginConfiguration];
+        [_capture_session removeOutput:_audio_capture_output];
+        [_capture_session commitConfiguration];
+    }
+}
+
+
 -(void) setupAudioCompression
 {
     
@@ -472,30 +482,33 @@
         return;
     }
     
-    if (_audio_capture_output)
+    if (!_audio_capture_output)
     {
-        return;
+        
+        
+        
+        _audio_capture_output = [[AVCaptureAudioDataOutput alloc] init];
+        
+        
+        
+        _audio_capture_output.audioSettings = @{AVFormatIDKey: [NSNumber numberWithInt:kAudioFormatMPEG4AAC],
+                                                AVSampleRateKey: [NSNumber numberWithFloat: 44100.0],
+                                                AVEncoderBitRateKey: [NSNumber numberWithInt:_audioBitrate*1000 ],
+                                                AVNumberOfChannelsKey: @2
+                                                
+                                                };
+        
+        [_audio_capture_output setSampleBufferDelegate:self queue:_audio_capture_queue];
     }
     
     
-    _audio_capture_output = [[AVCaptureAudioDataOutput alloc] init];
-    
-    
-    
-    _audio_capture_output.audioSettings = @{AVFormatIDKey: [NSNumber numberWithInt:kAudioFormatMPEG4AAC],
-                                            AVSampleRateKey: [NSNumber numberWithFloat: 44100.0],
-                                            AVEncoderBitRateKey: [NSNumber numberWithInt:_audioBitrate*1000 ],
-                                            AVNumberOfChannelsKey: @2
-                                            
-                                            };
-    
-    [_audio_capture_output setSampleBufferDelegate:self queue:_audio_capture_queue];
-
     [_capture_session beginConfiguration];
     
     if ([_capture_session canAddOutput:_audio_capture_output])
     {
         [_capture_session addOutput:_audio_capture_output];
+    } else {
+        NSLog(@"COULDN'T ADD AUDIO OUTPUT");
     }
     
     [_capture_session commitConfiguration];
@@ -606,6 +619,7 @@
 {
     if (connection.output == _video_capture_output)
     {
+        
         /*
         if (!self.did_preroll)
         {

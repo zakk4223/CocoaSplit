@@ -533,8 +533,13 @@
 {
     FFMpegTask *newout;
     
+    if (!output.ffmpeg_out)
+    {
+        newout = [[FFMpegTask alloc] init];
+    } else {
+        newout = output.ffmpeg_out;
+    }
     
-    newout = [[FFMpegTask alloc] init];
     newout.height = _captureHeight;
     newout.width = _captureWidth;
     newout.framerate = self.videoCaptureSession.videoCaptureFPS;
@@ -665,7 +670,7 @@
         
     }
 
-    _dispatch_timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, _main_capture_queue);
+    _dispatch_timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, DISPATCH_TIMER_STRICT, _main_capture_queue);
     
     dispatch_source_set_timer(_dispatch_timer, DISPATCH_TIME_NOW, frame_interval, 0);
     dispatch_source_set_event_handler(_dispatch_timer, ^{ [self newFrame]; });
@@ -831,19 +836,6 @@
 - (void)stopStream
 {
     
-    if (_dispatch_timer)
-    {
-        dispatch_source_cancel(_dispatch_timer);
-        _dispatch_timer = nil;
-        
-    }
-    if (_captureTimer)
-    {
-        [_captureTimer invalidate];
-        
-        
-    }
-    
     self.videoCompressor = nil;
     
     /*
@@ -878,6 +870,7 @@
         _PMAssertionRet = kIOReturnInvalid;
         IOPMAssertionRelease(_PMAssertionID);
     }
+    [self.audioCaptureSession stopAudioCompression];
     self.captureRunning = NO;
     
 }
@@ -912,7 +905,6 @@
     
     
     CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent()*1000000;
-    
     
     if (_firstFrameTime == 0)
     {
@@ -1027,7 +1019,7 @@
                 
                     OutputDestination *output;
                 
-                
+                    NSLog(@"Attaching destinations");
                     for (output in _captureDestinations)
                     {
                         [self attachCaptureDestination:output];
@@ -1047,6 +1039,8 @@
             if (self.videoCompressor)
             {
                 [self processVideoFrame:newFrame];
+            } else {
+                CVPixelBufferRelease(newFrame);
             }
             
             //});
@@ -1107,7 +1101,6 @@
     
     
 
-    NSLog(@"FRAME COUNT %lld", _frameCount);
     
     pts = CMTimeMake(_frameCount*(1.0f/self.captureFPS)*1000000,1000000);
     

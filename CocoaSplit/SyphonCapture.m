@@ -347,15 +347,6 @@
 
 
 
--(bool)providesAudio
-{
-    return NO;
-}
-
--(bool)providesVideo
-{
-    return YES;
-}
 
 -(NSArray *)availableVideoDevices
 {

@@ -33,6 +33,10 @@
 @property (readonly) BOOL needsAdvancedVideo;
 @property NSArray *videoFormats;
 @property NSArray *videoFramerates;
+@property xpc_connection_t xpc_conn;
+@property dispatch_queue_t xpc_queue;
+
+
 
 
 

@@ -47,12 +47,16 @@
         void *frame_data_ptr;
         uint8_t *frame_data;
         enum PixelFormat frame_fmt;
+        OSType cv_pixel_format = CVPixelBufferGetPixelFormatType(imageBuffer);
+        
         //NSLog(@"WIDTH INPUT %zd HEIGHT %zd",  CVPixelBufferGetWidth(imageBuffer), CVPixelBufferGetHeight(imageBuffer));
         
-        if (CVPixelBufferGetPixelFormatType(imageBuffer) == kCVPixelFormatType_422YpCbCr8)
+        if (cv_pixel_format == kCVPixelFormatType_422YpCbCr8)
         {
             frame_fmt = PIX_FMT_UYVY422;
-        } else if (CVPixelBufferGetPixelFormatType(imageBuffer) == kCVPixelFormatType_32BGRA) {
+        } else if (cv_pixel_format == kCVPixelFormatType_422YpCbCr8FullRange) {
+            frame_fmt = PIX_FMT_YUYV422;
+        } else if (cv_pixel_format == kCVPixelFormatType_32BGRA) {
             frame_fmt = PIX_FMT_BGRA;
         } else {
             frame_fmt = PIX_FMT_NV12;

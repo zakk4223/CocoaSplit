@@ -15,6 +15,12 @@
 #import <QuickTime/QuickTime.h>
 
 
+#import <xpc/xpc.h>
+
+
+XPCListenerDelegate *captureDelegate;
+
+
 
 
 
@@ -26,6 +32,12 @@
 @synthesize captureInput;
 @synthesize captureOutput;
 @synthesize xpcProxy;
+@synthesize xpc_connection;
+
+
+
+
+
 
 
 - (void) dealloc
@@ -42,10 +54,10 @@
 }
 
 
-
 - (BOOL) listener:(NSXPCListener *)listener shouldAcceptNewConnection:(NSXPCConnection *)newConnection
 {
     
+
     NSLog(@"SHOULD ACCEPT NEW CONNECTION\n");
     NSXPCInterface *helperInterface = [[NSXPCInterface interfaceWithProtocol:@protocol(QTHelperProtocol)] retain];
     NSXPCInterface *masterInterface = [[NSXPCInterface interfaceWithProtocol:@protocol(CapturedFrameProtocol)] retain];
@@ -161,19 +173,24 @@
 - (void) sendFrame:(CVImageBufferRef)newFrame
 {
    
+    
+    
    if (newFrame)
    {
-       dispatch_semaphore_t reply_s = dispatch_semaphore_create(0);
        IOSurfaceRef frameIOSurface = CVPixelBufferGetIOSurface(newFrame);
-       IOSurfaceID frameID = IOSurfaceGetID(frameIOSurface);
-       [self.xpcProxy newCapturedFrame:frameID reply:^{
-           dispatch_semaphore_signal(reply_s);
-       }];
-       dispatch_semaphore_wait(reply_s, DISPATCH_TIME_FOREVER);
+       xpc_object_t frameID = IOSurfaceCreateXPCObject(frameIOSurface);
+ 
        
+       xpc_object_t xpc_frame_message = xpc_dictionary_create(NULL, NULL, 0);
+       
+       xpc_dictionary_set_value(xpc_frame_message, "capturedFrame", frameID);
+       
+       xpc_connection_send_message(self.xpc_connection, xpc_frame_message);
+       
+       xpc_release(frameID);
+       xpc_release(xpc_frame_message);
        
        CVPixelBufferRelease(newFrame);
-       dispatch_release(reply_s);
    }
     
 }
@@ -188,19 +205,109 @@
         [self sendFrame:videoFrame];
     });
     
-    //IOSurfaceIncrementUseCount(frameIORef);
-    
-    //[self.xpcProxy newCapturedFrame:IOSurfaceCreateXPCObject(frameIORef)];
-    //mach_port_deallocate(mach_task_self(), framePort);
-    //CVPixelBufferRelease(videoFrame);
     
 }
 
-
-- (void) testMethod
-{
-    NSLog(@"CALLED TEST METHOD");
-    return;
-}
 
 @end
+
+
+void qt_xpc_list_devices(xpc_connection_t conn, xpc_object_t event)
+{
+    
+    NSArray *devices = [QTCaptureDevice inputDevicesWithMediaType:QTMediaTypeVideo];
+    NSLog(@"DEVICES IN HELPER %@", devices);
+    
+    QTCaptureDevice *devinstance;
+    
+    xpc_object_t reply = xpc_dictionary_create_reply(event);
+    
+    xpc_object_t dev_array = xpc_array_create(NULL, 0);
+    
+    
+    for(devinstance in devices)
+    {
+        xpc_object_t dev_xpc = xpc_dictionary_create(NULL, NULL, 0);
+        
+        xpc_dictionary_set_string(dev_xpc, "name", [[devinstance localizedDisplayName] UTF8String]);
+        
+        xpc_dictionary_set_string(dev_xpc, "id", [devinstance.uniqueID UTF8String]);
+        
+        xpc_array_append_value(dev_array, dev_xpc);
+        
+    }
+    
+    
+    xpc_dictionary_set_value(reply, "capture_devices", dev_array);
+    
+    xpc_connection_send_message(conn, reply);
+    
+    xpc_release(dev_array);
+    xpc_release(reply);
+    
+    
+    
+}
+
+
+void qt_xpc_start_capture(xpc_connection_t conn, xpc_object_t event)
+{
+
+    const char *capture_id = xpc_dictionary_get_string(event, "capture_id");
+    captureDelegate = [[XPCListenerDelegate alloc] init];
+    captureDelegate.xpc_connection = conn;
+    [captureDelegate startXPCCaptureSession:[[NSString alloc] initWithUTF8String:capture_id]];
+}
+
+void qt_xpc_stop_capture(xpc_connection_t conn, xpc_object_t event)
+{
+    
+    if (captureDelegate)
+    {
+        [captureDelegate stopXPCCaptureSession];
+    }
+}
+
+
+void qt_xpc_peer_event_handler(xpc_connection_t conn, xpc_object_t event)
+{
+    
+    xpc_type_t event_type = xpc_get_type(event);
+    
+    if (event_type == XPC_TYPE_ERROR)
+    {
+        
+    } else {
+        const char *message = xpc_dictionary_get_string(event, "message");
+        NSLog(@"RECEIVED XPC MESSAGE %s", message);
+        
+        if (!strcmp(message, "list_devices"))
+        {
+            
+            qt_xpc_list_devices(conn, event);
+            
+        } else if (!strcmp(message, "start_capture")) {
+            
+            qt_xpc_start_capture(conn, event);
+            
+        } else if (!strcmp(message, "stop_capture")) {
+            qt_xpc_stop_capture(conn, event);
+            
+        } else {
+            NSLog(@"Unknown XPC message type!");
+        }
+        
+    }
+}
+void qt_xpc_handle_connection(xpc_connection_t conn)
+{
+    
+    
+    xpc_connection_set_event_handler(conn, ^(xpc_object_t event) {
+        qt_xpc_peer_event_handler(conn, event);
+        
+    });
+    
+    xpc_connection_resume(conn);
+    
+}

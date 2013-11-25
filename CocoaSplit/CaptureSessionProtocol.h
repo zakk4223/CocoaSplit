@@ -28,8 +28,6 @@
 
 
 
--(bool) providesVideo;
--(bool) providesAudio;
 -(void) setVideoDimensions:(int)width height:(int)height;
 
 
@@ -51,6 +49,7 @@
 @property (assign) float previewVolume;
 
 -(void)setupAudioCompression;
+-(void)stopAudioCompression;
 
 
 
