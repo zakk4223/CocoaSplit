@@ -17,29 +17,78 @@
 @synthesize availableVideoDevices = _availableVideoDevices;
 
 
+void qtc_xpc_event_handler(xpc_connection_t conn, xpc_object_t event)
+{
+    
+    xpc_type_t event_type = xpc_get_type(event);
+    
+    if (event_type == XPC_TYPE_ERROR)
+    {
+        
+    } else {
+        
+        NSLog(@"Got a reply message!?");
+        
+    }
+}
+
 -(id) init
 {
     self = [super init];
     if (self)
     {
-        NSXPCInterface *xpcInterface = [NSXPCInterface interfaceWithProtocol:@protocol(QTHelperProtocol)];
-        NSXPCInterface *xpcCallbackInterface = [NSXPCInterface interfaceWithProtocol:@protocol(CapturedFrameProtocol)];
         
-        _xpcConnection = [[NSXPCConnection alloc] initWithServiceName:@"zakk.lol.QTCaptureHelper"];
+        self.xpc_conn = xpc_connection_create("zakk.lol.QTCaptureHelper", NULL);
+        self.xpc_queue = dispatch_queue_create("qtc_capture_queue", NULL);
         
-        [_xpcConnection setRemoteObjectInterface:xpcInterface];
-        [_xpcConnection setExportedInterface:xpcCallbackInterface];
-        [_xpcConnection setExportedObject:self];
+        xpc_connection_set_event_handler(self.xpc_conn,  ^(xpc_object_t event) {
+            xpc_type_t event_type = xpc_get_type(event);
+            
+            if (event_type == XPC_TYPE_ERROR)
+            {
+                
+                
+            } else {
+                xpc_object_t xpc_frame = xpc_dictionary_get_value(event, "capturedFrame");
+                
+                if (xpc_frame)
+                {
+                    IOSurfaceRef newFrame = IOSurfaceLookupFromXPCObject(xpc_frame);
+                    [self newCapturedFrame:newFrame];
+                    xpc_frame = nil;
+                }
+            }
+        });
         
-        [_xpcConnection resume];
-        _xpcProxy = [_xpcConnection remoteObjectProxy];
+        
+        xpc_connection_resume(self.xpc_conn);
+        
+        
+        
         [self updateAvailableVideoDevices];
         
-        
+    
     }
     return self;
     
 }
+
+
+
+
+-(AbstractCaptureDevice *)activeVideoDevice
+{
+    return _activeVideoDevice;
+}
+
+-(void)setActiveVideoDevice:(AbstractCaptureDevice *)activeVideoDevice
+{
+    _activeVideoDevice = activeVideoDevice;
+    [self stopCaptureSession];
+    [self startCaptureSession];
+    
+}
+
 
 
 -(void) setVideoDimensions:(int)width height:(int)height
@@ -60,57 +109,55 @@
 
 
 
-/*
--(NSString *) activeVideoDevice
-{
-    return _activeVideoDevice;
-}
-
-
-
--(void) setActiveVideoDevice:(AbstractCaptureDevice *)newDev
-{
-    _activeVideoDevice = [newDev uniqueID];
-}
-
- */
-
 -(void) updateAvailableVideoDevices
 {
     
     
     
     NSMutableArray *__block retArray;
-    [_xpcProxy testMethod];
     
-    [_xpcProxy listCaptureDevices:^(NSArray *r_devices) {
-        retArray = [[NSMutableArray alloc] init];
-        NSDictionary *devinstance;
-        for (devinstance in r_devices)
-        {
-           [retArray addObject:[[AbstractCaptureDevice alloc]  initWithName:[devinstance valueForKey:@"name"] device:[devinstance valueForKey:@"id"] uniqueID:[devinstance valueForKey:@"id"]]];
-        }
+    xpc_object_t listMessage = xpc_dictionary_create(NULL, NULL, 0);
+    
+    xpc_dictionary_set_string(listMessage, "message", "list_devices");
+    
+    xpc_connection_send_message_with_reply(self.xpc_conn, listMessage, self.xpc_queue, ^(xpc_object_t reply) {
+        
+        retArray =  [[ NSMutableArray alloc] init];
+        xpc_object_t capture_devs = xpc_dictionary_get_value(reply, "capture_devices");
+
+        xpc_array_apply(capture_devs, ^bool(size_t index, xpc_object_t capture_dev_dict) {
+            
+            const char *cap_name = xpc_dictionary_get_string(capture_dev_dict, "name");
+            const char *cap_id = xpc_dictionary_get_string(capture_dev_dict, "id");
+            NSString *ns_name = [[NSString alloc] initWithUTF8String:cap_name];
+            NSString *ns_id = [[NSString alloc] initWithUTF8String:cap_id];
+            
+            [retArray addObject:[[AbstractCaptureDevice alloc]  initWithName:ns_name device:ns_id uniqueID:ns_id]];
+            return true;
+            
+        });
+        
         [self willChangeValueForKey:@"availableVideoDevices"];
         _availableVideoDevices = (NSArray *)retArray;
         [self didChangeValueForKey:@"availableVideoDevices"];
-        //dispatch_semaphore_signal(reply_s);
-    }];
-    /*
-    NSLog(@"SEMAPHORE WAIT");
-    dispatch_semaphore_wait(reply_s, DISPATCH_TIME_FOREVER);
-    NSLog(@"NO LONGER WAITING ON SEMAPHORE");
-    reply_s = nil;
-    return (NSArray *)retArray;
- */   
+        
+    });
+    
 }
 
--(void) newCapturedFrame:(IOSurfaceID)ioxpc reply:(void (^)())reply
+-(void) newCapturedFrame:(IOSurfaceRef)frameIOref
 {
+    if (!frameIOref)
+    {
+        
+        NSLog(@"NO FRAME REF");
+        return;
+    }
     
-    IOSurfaceRef  frameIOref = IOSurfaceLookup(ioxpc);
-
+    
     IOSurfaceIncrementUseCount(frameIOref);
     
+
     if (frameIOref)
     {
         @synchronized(self)
@@ -125,20 +172,6 @@
             _currentFrame = frameIOref;
         }
     }
-    /*
-    if (self.videoDelegate && frameIOref)
-    {
-        CVPixelBufferCreateWithIOSurface(NULL, frameIOref, NULL, &tmpbuf);
-        if (tmpbuf)
-        {
-            [self.videoDelegate captureOutputVideo:nil didOutputSampleBuffer:nil didOutputImage:tmpbuf frameTime:0 ];
-            CVPixelBufferRelease(tmpbuf);
-        }
-
-    }
-     */
-    //ALWAYS REPLY
-    reply();
 }
 
 
@@ -151,21 +184,28 @@
 }
 
 
--(bool) startCaptureSession:(NSError **)error
+-(bool) startCaptureSession
 {
+    NSLog(@"STARTING CAPTURE SESSION?");
     
-    [_xpcProxy startXPCCaptureSession:self.activeVideoDevice.uniqueID];
+    
+    if (!self.activeVideoDevice)
+    {
+        return NO;
+    }
+    
+    
+    xpc_object_t start_msg = xpc_dictionary_create(NULL, NULL, 0);
+    
+    xpc_dictionary_set_string(start_msg, "message", "start_capture");
+    xpc_dictionary_set_string(start_msg, "capture_id", [self.activeVideoDevice.uniqueID UTF8String]);
+    
+    
+    xpc_connection_send_message(self.xpc_conn, start_msg);
     
     return YES;
 }
 
-
--(bool) setupCaptureSession:(NSError *__autoreleasing *)therror
-{
-    
-    return YES;
-    
-}
 
 void QTPixelBufferRelease(void *releaseRefCon, const void *baseAddress)
 {
@@ -198,33 +238,5 @@ void QTPixelBufferRelease(void *releaseRefCon, const void *baseAddress)
     
 }
 
-/*
-- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
-{
-    
-    if (connection.output == _video_capture_output)
-    {
-        CVImageBufferRef videoFrame = CMSampleBufferGetImageBuffer(sampleBuffer);
-        
-        
-        
-        @synchronized(self)
-        {
-            if (_currentFrame)
-            {
-                CVPixelBufferRelease(_currentFrame);
-            }
-            
-            CVPixelBufferRetain(videoFrame);
-            _currentFrame = videoFrame;
-        }
-    } else if (connection.output == _audio_capture_output) {
-        
-        
-        [_audioDelegate captureOutputAudio:self didOutputSampleBuffer:sampleBuffer];
-    }
-    
-}
- */
 
 @end

@@ -26,6 +26,8 @@
 	<true/>
 	<key>XPCService</key>
 	<dict>
+		<key>ProcessType</key>
+		<string>Adaptive</string>
 		<key>RunLoopType</key>
 		<string>NSRunLoop</string>
 		<key>ServiceType</key>

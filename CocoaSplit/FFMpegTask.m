@@ -379,6 +379,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     {
         _dropped_frames++;
         _consecutive_dropped_frames++;
+        NSLog(@"SHOULD DROP FRAME");
         return;
     } else {
         _consecutive_dropped_frames = 0;
@@ -386,6 +387,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 
     if ([self resetOutputIfNeeded])
     {
+        NSLog(@"OUTPUT RESET");
         return;
     }
     
@@ -405,6 +407,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         
         if (!self.active)
         {
+            NSLog(@"NOT ACTIVE");
             return;
         }
         
@@ -417,6 +420,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
                     
                     av_free_packet(p);
                     av_free(p);
+                    NSLog(@"NO AVFORMAT OUT");
                     return;
                 }
                 [self initStatsValues];
@@ -426,6 +430,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
                     _pending_frame_count--;
                     _pending_frame_size -= p->size;
                 }
+                NSLog(@"NO AUDIO EXTRA");
                 return;
             }
         }
@@ -698,7 +703,8 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
     
     _stream_dispatch = nil;
-        
+    
+    NSLog(@"Stopped FFMPEG");
     return YES;
         
 }

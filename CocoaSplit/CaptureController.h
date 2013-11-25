@@ -160,7 +160,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 @property (weak) AbstractCaptureDevice *selectedVideoCapture;
-@property (weak) AVCaptureDevice *selectedAudioCapture;
+@property (readonly) AVCaptureDevice *selectedAudioCapture;
 
 @property (readonly) double captureFPS;
 

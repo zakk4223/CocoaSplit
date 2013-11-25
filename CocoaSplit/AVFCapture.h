@@ -23,6 +23,9 @@
     
     AVCaptureVideoDataOutput *_video_capture_output;
     AVCaptureAudioDataOutput *_audio_capture_output;
+    AVCaptureDeviceInput *_audio_capture_input;
+    AVCaptureDeviceInput *_video_capture_input;
+
     CVImageBufferRef _currentFrame;
     AVCaptureDevice *_selectedVideoCaptureDevice;
     int _preroll_frame_cnt;
@@ -62,7 +65,9 @@
 
 -(bool) startCaptureSession:(NSError **)error;
 -(bool) stopCaptureSession;
-
+-(void) setupAudioPreview;
+-(id) initForAudio;
+-(void) setupAudioCompression;
 
 
 @end

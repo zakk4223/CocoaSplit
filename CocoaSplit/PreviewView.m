@@ -238,16 +238,23 @@
         GLenum gl_type;
         OSType frame_pixel_format = IOSurfaceGetPixelFormat(cFrame);
         
+
         if (frame_pixel_format == kCVPixelFormatType_422YpCbCr8)
         {
             gl_format = GL_YCBCR_422_APPLE;
             gl_internal_format = GL_RGB8;
             gl_type = GL_UNSIGNED_SHORT_8_8_APPLE;
+        } else if (frame_pixel_format == kCVPixelFormatType_422YpCbCr8FullRange) {
+            gl_format = GL_YCBCR_422_APPLE;
+            gl_internal_format = GL_RGB;
+            gl_type = GL_UNSIGNED_SHORT_8_8_REV_APPLE;
         } else if (frame_pixel_format == kCVPixelFormatType_32BGRA) {
             gl_format = GL_BGRA;
             gl_internal_format = GL_RGB;
             gl_type = GL_UNSIGNED_INT_8_8_8_8_REV;
         } else {
+            NSLog(@"FALLTHROUGH FORMAT TYPE %d", frame_pixel_format);
+            
             gl_format = GL_LUMINANCE;
             gl_internal_format = GL_LUMINANCE;
             gl_type = GL_UNSIGNED_BYTE;

@@ -10,7 +10,6 @@
 
 @protocol CapturedFrameProtocol
 
--(void) newCapturedFrame:(IOSurfaceID)ioxpc reply:(void (^)())reply;
-
+-(void) newCapturedFrame:(IOSurfaceRef)ioxpc;
 
 @end

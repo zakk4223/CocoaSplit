@@ -28,11 +28,6 @@
 
 
 
--(bool) stopCaptureSession;
--(bool) startCaptureSession:(NSError **)error;
--(bool) providesVideo;
--(bool) providesAudio;
--(bool) setupCaptureSession:(NSError **)therror;
 -(void) setVideoDimensions:(int)width height:(int)height;
 
 
@@ -52,6 +47,9 @@
 @property (assign) int audioBitrate;
 @property (assign) int audioSamplerate;
 @property (assign) float previewVolume;
+
+-(void)setupAudioCompression;
+-(void)stopAudioCompression;
 
 
 

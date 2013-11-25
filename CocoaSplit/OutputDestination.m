@@ -124,6 +124,7 @@
     if (self.ffmpeg_out && self.active)
     {
         [self.ffmpeg_out stopProcess];
+        self.ffmpeg_out = nil;
     }
 }
 

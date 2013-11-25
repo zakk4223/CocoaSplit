@@ -11,6 +11,12 @@
 int main(int argc, const char *argv[])
 {
 
+
+    
+    xpc_main(qt_xpc_handle_connection);
+    
+    
+    /*
     XPCListenerDelegate *listenDelegate = [[XPCListenerDelegate new] retain];
     NSLog(@"LISTEN DELEGATE %@", listenDelegate);
     
@@ -25,4 +31,6 @@ int main(int argc, const char *argv[])
     [listener resume];
     NSLog(@"SETUP XPC LISTENER");
     exit(EXIT_FAILURE);
+     */
+    
 }
