@@ -647,7 +647,13 @@
      //_captureTimer = [NSTimer timerWithTimeInterval:1.0/self.captureFPS target:self selector:@selector(newFrame) userInfo:nil repeats:YES];
     //[[NSRunLoop currentRunLoop] addTimer:_captureTimer forMode:NSRunLoopCommonModes];
     
-    _PMAssertionRet = IOPMAssertionCreateWithName(kIOPMAssertionTypePreventUserIdleDisplaySleep, kIOPMAssertionLevelOn, CFSTR("CocoaSplit is capturing video"), &_PMAssertionID);
+    if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_8)
+    {
+        _PMAssertionRet = IOPMAssertionCreateWithName(kIOPMAssertionTypePreventUserIdleDisplaySleep, kIOPMAssertionLevelOn, CFSTR("CocoaSplit is capturing video"), &_PMAssertionID);
+    } else {
+        _activity_token = [[NSProcessInfo processInfo] beginActivityWithOptions:NSActivityUserInitiated reason:@"CocoaSplit is capturing video"];
+        
+    }
 
     self.videoCompressor = newCompressor;
     return YES;
@@ -669,8 +675,16 @@
         _dispatch_timer = nil;
         
     }
-
-    _dispatch_timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, DISPATCH_TIMER_STRICT, _main_capture_queue);
+    
+    int dispatch_strict_flag = 1;
+    
+    if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_8)
+    {
+        dispatch_strict_flag = 0;
+    }
+    
+    
+    _dispatch_timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, dispatch_strict_flag, _main_capture_queue);
     
     dispatch_source_set_timer(_dispatch_timer, DISPATCH_TIME_NOW, frame_interval, 0);
     dispatch_source_set_event_handler(_dispatch_timer, ^{ [self newFrame]; });
@@ -865,11 +879,19 @@
         [out stopOutput];
     }
     
-    if (_PMAssertionRet == kIOReturnSuccess)
+    if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_8)
     {
-        _PMAssertionRet = kIOReturnInvalid;
-        IOPMAssertionRelease(_PMAssertionID);
+
+        if (_PMAssertionRet == kIOReturnSuccess)
+        {
+            _PMAssertionRet = kIOReturnInvalid;
+            IOPMAssertionRelease(_PMAssertionID);
+        }
+    } else {
+        [[NSProcessInfo processInfo] endActivity:_activity_token];
     }
+    
+    
     [self.audioCaptureSession stopAudioCompression];
     self.captureRunning = NO;
     

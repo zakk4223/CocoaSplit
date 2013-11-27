@@ -43,6 +43,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     IOPMAssertionID _PMAssertionID;
     IOReturn _PMAssertionRet;
     
+    id _activity_token;
+    
     long long _frameCount;
     CFAbsoluteTime _firstFrameTime;
     CFAbsoluteTime _lastFrameTime;

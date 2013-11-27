@@ -20,6 +20,8 @@
     GLsizei     _surfaceWidth;
     GLsizei     _surfaceHeight;
     int         _hackcnt;
+    id _fs_activity_token;
+    
     NSTimer *_idleTimer;
     NSTrackingArea *_trackingArea;
     NSRecursiveLock *renderLock;
