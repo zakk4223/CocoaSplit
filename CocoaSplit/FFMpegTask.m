@@ -48,6 +48,8 @@ int readAudioTag(char **buffer, int *tag)
 
 void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 {
+    
+    
     char *esds = cookie;
     
     int tag, length;
@@ -117,6 +119,84 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 }
 
 
+-(void) extractAudioCookie:(CMSampleBufferRef)theBuffer
+{
+    CMAudioFormatDescriptionRef audio_fmt;
+    
+    audio_fmt = CMSampleBufferGetFormatDescription(theBuffer);
+    if (!audio_fmt)
+    {
+        return;
+    }
+    
+    void *audio_tmp;
+    audio_tmp = (char *)CMAudioFormatDescriptionGetMagicCookie(audio_fmt, &_audio_extradata_size);
+    if (audio_tmp)
+    {
+        getAudioExtradata(audio_tmp, &_audio_extradata, &_audio_extradata_size);
+    }
+
+}
+
+
+-(void) writeEncodedData:(CapturedFrameData *)frameData
+{
+    if (!_audio_extradata && [frameData.audioSamples count] > 0)
+    {
+    
+        NSValue *audioVal = frameData.audioSamples.firstObject;
+        CMSampleBufferRef audioSample = [audioVal pointerValue];
+        [self extractAudioCookie:audioSample];
+    }
+    
+    if (!_av_video_stream && _audio_extradata)
+    {
+        if ([self createAVFormatOut:frameData.encodedSampleBuffer codec_ctx:frameData.avcodec_ctx])
+        {
+            [self initStatsValues];
+
+        } else {
+            return;
+        }
+    }
+    
+    if (!_av_video_stream || !_av_audio_stream)
+    {
+        //!?
+        return;
+    }
+    
+    
+    //If we made it here, we have all the metadata and av* stuff created, so start sending data.
+    
+    if (!_stream_dispatch)
+    {
+        _stream_dispatch = dispatch_queue_create("FFMpeg Stream Dispatch", NULL);
+        _pending_frame_count = 0;
+    }
+
+    for (NSValue *audioVal in frameData.audioSamples)
+    {
+        CMSampleBufferRef audioSample = (CMSampleBufferRef)[audioVal pointerValue];
+        
+        if (CMSampleBufferGetNumSamples(audioSample) > 1)
+        {
+            NSLog(@"NUMBER OF SAMPLES IN FRAME %ld", CMSampleBufferGetNumSamples(audioSample));
+
+        }
+        [self writeAudioSampleBuffer:audioSample presentationTimeStamp:CMSampleBufferGetOutputPresentationTimeStamp(audioSample)];
+        CFRelease(audioSample);
+    }
+
+    if (frameData.encodedSampleBuffer)
+    {
+        
+        [self writeVideoSampleBuffer:frameData.encodedSampleBuffer];
+    } else if (frameData.avcodec_pkt) {
+        [self writeAVPacket:frameData.avcodec_pkt codec_ctx:frameData.avcodec_ctx];
+    }
+}
+
 -(void) writeAudioSampleBuffer:(CMSampleBufferRef)theBuffer presentationTimeStamp:(CMTime)pts;
 {
     
@@ -161,11 +241,12 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
             pkt.pts = av_rescale_q(pts.value, (AVRational) {1.0, pts.timescale}, _av_audio_stream->time_base);
 
 
-            
+            //pkt.pts = pts.value;
             //pkt.dts = pkt.pts;
             
             
 //            pkt.pts = pts.value;
+            
             if (av_interleaved_write_frame(_av_fmt_ctx, &pkt) < 0)
             {
                 NSLog(@"AV WRITE AUDIO failed");
@@ -174,22 +255,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
             //CMSampleBufferInvalidate(theBuffer);
             CFRelease(theBuffer);
         });
-    } else if (!_audio_extradata) {
-        
-        CMAudioFormatDescriptionRef audio_fmt;
-        audio_fmt = CMSampleBufferGetFormatDescription(theBuffer);
-        void *audio_tmp;
-        if (!audio_fmt)
-            return;
-        
-        
-        
-        audio_tmp = (char *)CMAudioFormatDescriptionGetMagicCookie(audio_fmt, &_audio_extradata_size);
-        
-        if (audio_tmp)
-        {
-            getAudioExtradata(audio_tmp, &_audio_extradata, &_audio_extradata_size);
-        }
     }
 }
 
@@ -232,6 +297,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     c_ctx->height = _height;
     c_ctx->time_base.num = 1000000;
     c_ctx->time_base.den = self.framerate*1000000;
+
     
     
     _av_audio_stream = avformat_new_stream(_av_fmt_ctx, 0);
@@ -248,11 +314,11 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     a_ctx->codec_id = AV_CODEC_ID_AAC;
     a_ctx->time_base.num = 1000000;
     a_ctx->time_base.den = self.framerate*1000000;
-    a_ctx->sample_rate = _samplerate;
+    a_ctx->sample_rate = 44100;
     a_ctx->channels = 2;
     a_ctx->extradata = (unsigned char *)_audio_extradata;
     a_ctx->extradata_size = (int)_audio_extradata_size;
-    a_ctx->frame_size = (_samplerate * 2 * 2) / _framerate;
+    //a_ctx->frame_size = (_samplerate * 2 * 2) / _framerate;
     
     if (theBuffer)
     {
@@ -352,13 +418,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 {
     
     
-    if (!_stream_dispatch)
-    {
-        _stream_dispatch = dispatch_queue_create("FFMpeg Stream Dispatch", NULL);
-        _pending_frame_count = 0;
-    }
 
-    
     _input_framecnt++;
     
     
@@ -391,11 +451,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         return;
     }
     
-    
 
-    
-    
-    
     AVPacket *p = av_malloc(sizeof (AVPacket));
     
     memcpy(p, pkt, sizeof(AVPacket));
@@ -409,30 +465,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         {
             NSLog(@"NOT ACTIVE");
             return;
-        }
-        
-        if (!_av_video_stream)
-        {
-            if (_audio_extradata)
-            {
-                if (![self createAVFormatOut:nil codec_ctx:codec_ctx])
-                {
-                    
-                    av_free_packet(p);
-                    av_free(p);
-                    NSLog(@"NO AVFORMAT OUT");
-                    return;
-                }
-                [self initStatsValues];
-            } else {
-                @synchronized(self)
-                {
-                    _pending_frame_count--;
-                    _pending_frame_size -= p->size;
-                }
-                NSLog(@"NO AUDIO EXTRA");
-                return;
-            }
         }
         
         
@@ -488,14 +520,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         return;
     }
     
-    if (!_stream_dispatch)
-    {
-        _stream_dispatch = dispatch_queue_create("FFMpeg Stream Dispatch", NULL);
-        _pending_frame_count = 0;
-    }
-    
 
-    
     _input_framecnt++;
     if ((_input_framecnt % self.framerate) == 0)
     {
@@ -541,21 +566,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     }
         
         
-    if (!_av_video_stream)
-    {
-        if (_audio_extradata)
-        {
-            if (![self createAVFormatOut:theBuffer codec_ctx:nil])
-            {
-                return;
-            }
-            [self initStatsValues];
-
-        } else {
-            @synchronized(self) { _pending_frame_count--; _pending_frame_size -= data_length;}
-            return;
-        }
-    }
     CMBlockBufferRef my_buffer;
     char *sampledata;
     size_t offset_length;

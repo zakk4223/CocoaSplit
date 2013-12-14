@@ -40,10 +40,8 @@
 
 
 
--(bool) startCaptureSession:(NSError **)error;
 -(bool) stopCaptureSession;
 -(void) setVideoDimensions:(int)width height:(int)height;
--(bool) setupCaptureSession:(NSError **)therror;
 
 
 

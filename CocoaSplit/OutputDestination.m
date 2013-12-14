@@ -113,7 +113,7 @@
     NSLog(@"Destination set to %@", destination);
     if ([destination hasPrefix:@"rtmp://"])
     {
-        self.output_format = @"FLV";
+        self.output_format = @"F4V";
     }
      _destination = destination;
     

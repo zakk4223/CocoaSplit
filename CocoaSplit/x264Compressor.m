@@ -11,14 +11,13 @@
 @implementation x264Compressor
 
 
-
-- (bool)compressFrame:(CVImageBufferRef)imageBuffer pts:(CMTime)pts duration:(CMTime)duration
+-(bool)compressFrame:(CapturedFrameData *)frameData
+//- (bool)compressFrame:(CVImageBufferRef)imageBuffer pts:(CMTime)pts duration:(CMTime)duration
 {
     
     
     if (!self.settingsController || !self.outputDelegate)
     {
-        CVPixelBufferRelease(imageBuffer);
         return NO;
     }
     
@@ -38,6 +37,8 @@
     
     
     dispatch_async(_compressor_queue, ^{
+        CMTime pts = frameData.videoPTS;
+        CVImageBufferRef imageBuffer = frameData.videoFrame;
     AVFrame *inframe = avcodec_alloc_frame();
         inframe->pts = pts.value;
         
@@ -79,7 +80,8 @@
         frame_data_ptr = CVPixelBufferGetBaseAddress(imageBuffer);
         memcpy(frame_data, frame_data_ptr, frame_size);
         CVPixelBufferUnlockBaseAddress(imageBuffer, kCVPixelBufferLock_ReadOnly);
-        CVPixelBufferRelease(imageBuffer);
+        imageBuffer = nil;
+        frameData.videoFrame = nil;
         
     avpicture_fill((AVPicture *)inframe, (uint8_t *)frame_data, frame_fmt, (int)src_width, (int)src_height);
     inframe->pts = pts.value;
@@ -127,7 +129,10 @@
     {
         //pkt->pts = pts.value;
         //pkt->dts = pts.value;
-        [self.outputDelegate outputAVPacket:pkt codec_ctx:_av_codec_ctx];
+        frameData.avcodec_ctx = _av_codec_ctx;
+        frameData.avcodec_pkt = pkt;
+        [self.outputDelegate outputEncodedData:frameData];
+        
     }
         av_free(outframe);
         av_free_packet(pkt);
@@ -165,6 +170,8 @@
     }
     
     _av_codec_ctx = avcodec_alloc_context3(_av_codec);
+    
+
     avcodec_get_context_defaults3(_av_codec_ctx, _av_codec);
     
     //_av_codec_ctx->max_b_frames = 0;
@@ -173,6 +180,12 @@
     _av_codec_ctx->time_base.num = 1000000;
     
     _av_codec_ctx->time_base.den = self.settingsController.captureFPS*1000000;
+    
+    
+
+    
+    
+    
     _av_codec_ctx->pix_fmt = PIX_FMT_YUV420P;
     
     

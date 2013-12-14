@@ -312,6 +312,7 @@
    {
        dispatch_source_t sigsrc = dispatch_source_create(DISPATCH_SOURCE_TYPE_SIGNAL, SIGPIPE, 0, dispatch_get_global_queue(0, 0));
        dispatch_source_set_event_handler(sigsrc, ^{ return;});
+       
        dispatch_resume(sigsrc);
        
        _main_capture_queue = dispatch_queue_create("CocoaSplit.main.queue", NULL);
@@ -320,6 +321,7 @@
        self.destinationTypes = @{@"file" : @"File/Raw",
        @"twitch" : @"Twitch TV"};
        
+       self.captureSink = [[CapturedFrameData alloc] init];
        self.showPreview = YES;
        self.videoTypes = @[@"Desktop", @"AVFoundation", @"QTCapture", @"Syphon"];
        self.compressorTypes = @[@"None", @"AppleVTCompressor", @"x264"];
@@ -357,17 +359,12 @@
        self.audioCaptureSession = [[AVFCapture alloc] initForAudio];
        [self.audioCaptureSession setAudioDelegate:self];
        
-       
-       
-       
-       self.audioCaptureDevices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio];
-
-       
    }
     
     return self;
     
 }
+
 
 
 - (NSString *) saveFilePath
@@ -567,6 +564,25 @@
     }
 }
 
+
+- (void) outputEncodedData:(CapturedFrameData *)frameData
+{
+    
+    
+    for (OutputDestination *outdest in _captureDestinations)
+    {
+        if (outdest.active)
+        {
+            
+            id ffmpeg = outdest.ffmpeg_out;
+            [ffmpeg writeEncodedData:frameData];
+
+        }
+    }
+}
+
+
+
 - (void) outputSampleBuffer:(CMSampleBufferRef)theBuffer
 {
     for (OutputDestination *outdest in _captureDestinations)
@@ -585,8 +601,6 @@
     // We should already have a capture session from init since we need it to figure out device lists.
     
     
-    NSError *error;
-    bool success;
     id<h264Compressor> newCompressor;
     
     
@@ -934,20 +948,38 @@
         //Might need to prime the capture session first...
         return;
     }
+    
+    CMTime orig_pts = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
+    
     if (_firstAudioTime == 0)
     {
-        _firstAudioTime = currentTime;
+        _firstAudioTime = orig_pts.value;
     }
     
-    CFAbsoluteTime ptsTime = currentTime - _firstAudioTime;
     
-    CMTime pts = CMTimeMake(_frameCount*(1.0f/self.captureFPS)*1000000, 1000000);
+    CMTime pts = CMTimeMake(orig_pts.value-_firstAudioTime, orig_pts.timescale);
+    
+    //CMTime pts = CMTimeMake(((orig_pts.value-_firstAudioTime)/orig_pts.timescale)*1000000, 1000000);
+    
+    //NSLog(@"ORIGINAL PTS %lld", orig_pts.value);
+    //CMTimeShow(orig_pts);
+    //CMTime pts = CMTimeConvertScale(orig_pts, 1000000, kCMTimeRoundingMethod_Default);
+    //NSLog(@"CONVERTED PTS %lld", pts.value);
+    CMSampleBufferSetOutputPresentationTimeStamp(sampleBuffer, pts);
+    
+    if (self.captureSink)
+    {
+        CFRetain(sampleBuffer);
+        [self.captureSink.audioSamples addObject:[NSValue valueWithPointer:sampleBuffer]];
+        
+        
+    }
     //CMTime pts = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
     
 
     //CMSampleBufferSetOutputPresentationTimeStamp(sampleBuffer, pts);
     
-    
+    /*
     for (OutputDestination *outdest in _captureDestinations)
     {
         if (outdest.active)
@@ -956,6 +988,8 @@
             [ffmpeg writeAudioSampleBuffer:sampleBuffer presentationTimeStamp:pts];
         }
     }
+     
+     */
     
 }
 
@@ -1016,6 +1050,24 @@
 }
 
 
+
+-(CapturedFrameData *)swapCaptureSink
+{
+    
+    CapturedFrameData *newSink;
+    
+    CapturedFrameData *retSink;
+    
+    newSink = [[CapturedFrameData alloc] init];
+    
+    retSink = self.captureSink;
+    self.captureSink = newSink;
+    
+    
+    return retSink;
+}
+
+
 -(void) newFrame
 {
     CVImageBufferRef newFrame;
@@ -1060,10 +1112,16 @@
             
             if (self.videoCompressor)
             {
-                [self processVideoFrame:newFrame];
-            } else {
-                CVPixelBufferRelease(newFrame);
+                CapturedFrameData *capturedData = [self swapCaptureSink];
+                
+                //CapturedFrameData retains video Frame
+                capturedData.videoFrame = newFrame;
+                
+                [self processVideoFrame:capturedData];
             }
+            
+            CVPixelBufferRelease(newFrame);
+            
             
             //});
             
@@ -1073,33 +1131,18 @@
 }
 
 
-- (void)captureOutputVideo:(AbstractCaptureDevice *)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer didOutputImage:(CVImageBufferRef)imageBuffer frameTime:(uint64_t)frameTime
+
+-(void)processVideoFrame:(CapturedFrameData *)frameData
 {
 
-    if (imageBuffer)
-    {
-        CVPixelBufferRetain(imageBuffer);
-        [self.previewCtx drawFrame:imageBuffer];
-
-
-        dispatch_async(_main_capture_queue, ^{
-            [self processVideoFrame:imageBuffer];
-        });
-        
-       }
     
-}
-
--(void)processVideoFrame:(CVImageBufferRef)imageBuffer
-{
-
+    
+    CVImageBufferRef imageBuffer = frameData.videoFrame;
     
     //[self.previewCtx drawFrame:imageBuffer];
 
     if (!self.videoCompressor)
     {
-        CVPixelBufferRelease(imageBuffer);
-
         return;
     }
     CMTime pts;
@@ -1115,7 +1158,6 @@
         
     }
     
-    CFAbsoluteTime ptsTime = currentTime - _firstFrameTime;
     
     _frameCount++;
     _lastFrameTime = currentTime;
@@ -1123,6 +1165,7 @@
     
     
 
+    //pts = CMTimeMake(_lastFrameTime-_firstFrameTime, self.captureFPS*1000000);
     
     pts = CMTimeMake(_frameCount*(1.0f/self.captureFPS)*1000000,1000000);
     
@@ -1131,15 +1174,18 @@
     duration = CMTimeMake(1000, self.videoCaptureSession.videoCaptureFPS*1000);
     
     
+    frameData.videoPTS = pts;
+    frameData.videoDuration = duration;
+    frameData.frameNumber = _frameCount;
     
+    
+
     if (self.videoCompressor)
     {
         
-        [self.videoCompressor compressFrame:imageBuffer pts:pts duration:duration];
+        [self.videoCompressor compressFrame:frameData];
         
         
-    } else {
-        CVPixelBufferRelease(imageBuffer);
     }
         
 }

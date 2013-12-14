@@ -1118,7 +1118,7 @@
         </customObject>
         <arrayController id="896" userLabel="AudioDeviceArrayController">
             <connections>
-                <binding destination="816" name="contentArray" keyPath="self.audioCaptureDevices" id="898"/>
+                <binding destination="816" name="contentArray" keyPath="self.audioCaptureSession.availableAudioDevices" id="yQ9-ZU-3Bf"/>
             </connections>
         </arrayController>
         <drawer trailingOffset="15" id="1235">

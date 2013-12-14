@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "libavformat/avformat.h"
 #import "AbstractCaptureDevice.h"
+#import "CapturedFrameData.h"
+
 
 @protocol ControllerProtocol <NSObject>
 
@@ -36,6 +38,8 @@
 - (void)captureOutputVideo:(AbstractCaptureDevice *)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer didOutputImage:(CVImageBufferRef)imageBuffer frameTime:(uint64_t)frameTime;
 - (void)captureOutputAudio:(id)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer;
 - (void) outputSampleBuffer:(CMSampleBufferRef)theBuffer;
+
+- (void) outputEncodedData:(CapturedFrameData *)frameData;
 
 
 

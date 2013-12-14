@@ -13,6 +13,7 @@
 #import <CoreVideo/CoreVideo.h>
 #import "h264Compressor.h"
 #import "CaptureController.h"
+#import "CapturedFrameData.h"
 
 
 
@@ -33,7 +34,7 @@
 @property (strong) id<ControllerProtocol> settingsController;
 @property (strong) id <ControllerProtocol> outputDelegate;
 
--(bool)compressFrame:(CVImageBufferRef)imageBuffer pts:(CMTime)pts duration:(CMTime)duration;
+-(bool)compressFrame:(CapturedFrameData *)frameData;
 -(bool)setupCompressor;
 
 

@@ -21,7 +21,7 @@
 #import "x264Compressor.h"
 #import "ControllerProtocol.h"
 #import <IOKit/pwr_mgt/IOPMLib.h>
-
+#import "CapturedFrameData.h"
 
 
 
@@ -56,6 +56,9 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     
     
 }
+
+@property (retain) CapturedFrameData *captureSink;
+
 @property (strong) id<h264Compressor> videoCompressor;
 @property (retain) id<CaptureSessionProtocol> videoCaptureSession;
 @property (retain) id<CaptureSessionProtocol> audioCaptureSession;

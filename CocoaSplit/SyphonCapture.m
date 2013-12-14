@@ -20,6 +20,12 @@
 
 
 
+-(void)dealloc
+{
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 
 -(AbstractCaptureDevice *)activeVideoDevice
 {
@@ -88,6 +94,8 @@
     
     if (self = [super init])
     {
+        
+        [self changeAvailableVideoDevices];
         NSOpenGLPixelFormatAttribute glAttributes[] = {
             
             NSOpenGLPFAPixelBuffer,
@@ -319,13 +327,15 @@
 {
     
     
-    
     if (_syphon_client)
     {
         [_syphon_client stop];
         _syphon_client = nil;
     }
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleSyphonServerRetire:) name:SyphonServerRetireNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleSyphonServerAnnounce:) name:SyphonServerAnnounceNotification object:nil];
+
     
     _syphonServer = [self.activeVideoDevice captureDevice];
     
@@ -333,6 +343,8 @@
     {
         NSLog(@"STARTING SYPHON");
         _syphon_client = [[SyphonClient alloc] initWithServerDescription:_syphonServer options:nil newFrameHandler:nil];
+        _syphon_uuid = [[_syphon_client serverDescription] objectForKey:SyphonServerDescriptionUUIDKey];
+        _resume_name = self.activeVideoDevice.captureName;
     }
     
     
@@ -348,7 +360,7 @@
 
 
 
--(NSArray *)availableVideoDevices
+-(void)changeAvailableVideoDevices
 {
      
     NSArray *servers = [[SyphonServerDirectory sharedDirectory] servers];
@@ -359,11 +371,47 @@
     {
         
         NSLog(@"Syphon UUID %@", [sserv objectForKey:SyphonServerDescriptionUUIDKey ]);
+        NSString *sy_name = [NSString stringWithFormat:@"%@ - %@", [sserv objectForKey:SyphonServerDescriptionAppNameKey], [sserv objectForKey:SyphonServerDescriptionNameKey]];
         
-        [retArr addObject:[[AbstractCaptureDevice alloc] initWithName:[sserv objectForKey:SyphonServerDescriptionAppNameKey] device:sserv uniqueID:[sserv objectForKey:SyphonServerDescriptionUUIDKey ]]];
+        AbstractCaptureDevice *newDev;
+        
+        newDev = [[AbstractCaptureDevice alloc] initWithName:sy_name device:sserv uniqueID:[sserv objectForKey:SyphonServerDescriptionUUIDKey ]];
+        
+        [retArr addObject:newDev];
+        if (!self.activeVideoDevice && [sy_name isEqualToString:_resume_name])
+        {
+            self.activeVideoDevice = newDev;
+        }
+
         
     }
-    return (NSArray *)retArr;
+    self.availableVideoDevices = (NSArray *)retArr;
+    
+    
+    
+}
+
+-(void) handleSyphonServerAnnounce:(NSNotification *)notification
+{
+    
+    NSString *announceID = [[notification object] objectForKey:SyphonServerDescriptionUUIDKey];
+    [self changeAvailableVideoDevices];
+    
+
+}
+-(void) handleSyphonServerRetire:(NSNotification *)notification
+{
+    NSString *retireID = [[notification object] objectForKey:SyphonServerDescriptionUUIDKey];
+    
+    if ([retireID isEqualToString:_syphon_uuid])
+    {
+        [_syphon_client stop];
+        self.activeVideoDevice = nil;
+    }
+    
+    [self changeAvailableVideoDevices];
+    
+
     
 }
 @end

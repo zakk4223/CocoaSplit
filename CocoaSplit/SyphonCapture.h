@@ -15,12 +15,16 @@
 {
     NSDictionary *_syphonServer;
     SyphonClient *_syphon_client;
+    NSString *_syphon_uuid;
+    NSString *_resume_name;
+    
     NSOpenGLContext *_ogl_ctx;
     NSSize _last_frame_size;
     CVOpenGLTextureCacheRef _texture_cache;
     CVPixelBufferPoolRef _pixel_buffer_pool;
     GLuint _framebuffer;
-    
+    id _retire_observer;
+    id _announce_observer;
     
 }
 
@@ -31,14 +35,12 @@
 @property int height;
 @property AbstractCaptureDevice *activeVideoDevice;
 @property id<ControllerProtocol> videoDelegate;
-@property (readonly) NSArray *availableVideoDevices;
+@property (strong) NSArray *availableVideoDevices;
 @property (readonly) BOOL needsAdvancedVideo;
 
 
 
 -(bool) stopCaptureSession;
--(bool) startCaptureSession:(NSError **)error;
--(bool) setupCaptureSession:(NSError **)therror;
 -(void) setVideoDimensions:(int)width height:(int)height;
 
 @end

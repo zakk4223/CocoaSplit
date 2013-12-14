@@ -37,7 +37,8 @@
 
 
 
-@property (readonly) NSArray *availableVideoDevices;
+@property (strong) NSArray *availableVideoDevices;
+@property (strong) NSArray *availableAudioDevices;
 @property double videoCaptureFPS;
 @property int width;
 @property int height;
@@ -49,7 +50,7 @@
 @property (assign) int videoWidth;
 @property NSArray *videoFormats;
 @property NSArray *videoFramerates;
-@property id activeAudioDevice;
+@property AVCaptureDevice * activeAudioDevice;
 @property AVCaptureDeviceFormat *activeVideoFormat;
 @property AVFrameRateRange *activeVideoFramerate;
 @property AbstractCaptureDevice *activeVideoDevice;
