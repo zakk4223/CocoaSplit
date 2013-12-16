@@ -11,13 +11,14 @@
 @implementation x264Compressor
 
 
--(bool)compressFrame:(CapturedFrameData *)frameData
-//- (bool)compressFrame:(CVImageBufferRef)imageBuffer pts:(CMTime)pts duration:(CMTime)duration
+
+- (bool)compressFrame:(CVImageBufferRef)imageBuffer pts:(CMTime)pts duration:(CMTime)duration
 {
     
     
     if (!self.settingsController || !self.outputDelegate)
     {
+        CVPixelBufferRelease(imageBuffer);
         return NO;
     }
     
@@ -37,16 +38,10 @@
     
     
     dispatch_async(_compressor_queue, ^{
-        CMTime pts = frameData.videoPTS;
-        CVImageBufferRef imageBuffer = frameData.videoFrame;
-    AVFrame *inframe = avcodec_alloc_frame();
-        inframe->pts = pts.value;
         
         
         size_t src_height;
         size_t src_width;
-        void *frame_data_ptr;
-        uint8_t *frame_data;
         enum PixelFormat frame_fmt;
         OSType cv_pixel_format = CVPixelBufferGetPixelFormatType(imageBuffer);
         
@@ -65,45 +60,43 @@
 
         src_height = CVPixelBufferGetHeight(imageBuffer);
         src_width = CVPixelBufferGetWidth(imageBuffer);
+    
+    
+    if (!_vtpt_ref)
+    {
+        VTPixelTransferSessionCreate(kCFAllocatorDefault, &_vtpt_ref);
+    }
+    CVPixelBufferRef converted_frame;
+    
+    CVPixelBufferCreate(kCFAllocatorDefault, _av_codec_ctx->width, _av_codec_ctx->height, kCVPixelFormatType_420YpCbCr8Planar, 0, &converted_frame);
+    
+    VTPixelTransferSessionTransferImage(_vtpt_ref, imageBuffer, converted_frame);
         
-        if (!_sws_ctx)
-        {
-            
-            _sws_ctx = sws_getContext((int)src_width, (int)src_height, frame_fmt,
-                                      _av_codec_ctx->width, _av_codec_ctx->height, _av_codec_ctx->pix_fmt,
-                                      SWS_BICUBIC, NULL, NULL, NULL);
+    
 
-        }
-        size_t frame_size = CVPixelBufferGetDataSize(imageBuffer); //CVPixelBufferGetBytesPerRow(imageBuffer)*CVPixelBufferGetHeight(imageBuffer);
-        frame_data = av_malloc(frame_size);
-        CVPixelBufferLockBaseAddress(imageBuffer, kCVPixelBufferLock_ReadOnly);
-        frame_data_ptr = CVPixelBufferGetBaseAddress(imageBuffer);
-        memcpy(frame_data, frame_data_ptr, frame_size);
-        CVPixelBufferUnlockBaseAddress(imageBuffer, kCVPixelBufferLock_ReadOnly);
-        imageBuffer = nil;
-        frameData.videoFrame = nil;
-        
-    avpicture_fill((AVPicture *)inframe, (uint8_t *)frame_data, frame_fmt, (int)src_width, (int)src_height);
-    inframe->pts = pts.value;
+    CVPixelBufferRelease(imageBuffer);
     AVFrame *outframe = avcodec_alloc_frame();
-    int out_size = avpicture_get_size(_av_codec_ctx->pix_fmt, _av_codec_ctx->width, _av_codec_ctx->height);
+    outframe->format = PIX_FMT_YUV420P;
+    outframe->width = (int)src_width;
+    outframe->height = (int)src_height;
     
-    uint8_t *outbuf = av_malloc(out_size);
-    
-    avpicture_fill((AVPicture *)outframe, outbuf, _av_codec_ctx->pix_fmt, _av_codec_ctx->width, _av_codec_ctx->height);
-    
-    
-    sws_scale(_sws_ctx, (const uint8_t * const *)inframe->data, inframe->linesize, 0, (int)src_height, outframe->data, outframe->linesize);
+    CVPixelBufferLockBaseAddress(converted_frame, kCVPixelBufferLock_ReadOnly);
+    size_t plane_count = CVPixelBufferGetPlaneCount(converted_frame);
+    int i;
+    for (i=0; i < plane_count; i++)
+    {
+        outframe->linesize[i] = (int)CVPixelBufferGetBytesPerRowOfPlane(converted_frame, i);
+        outframe->data[i] = CVPixelBufferGetBaseAddressOfPlane(converted_frame, i);
         
-        av_free(inframe);
-        av_free(frame_data);
+    }
     
-        outframe->pts = av_rescale_q(pts.value, (AVRational){1,1000000}, _av_codec_ctx->time_base);
+    
+    
+    
+    outframe->pts = av_rescale_q(pts.value, (AVRational){1,1000000}, _av_codec_ctx->time_base);
         
-        //NSLog(@"H264 OUT PTS %lld", outframe->pts);
         
         
-    //outframe->pts = pts.value;
     AVPacket *pkt = av_malloc(sizeof (AVPacket));
     av_init_packet(pkt);
                                                                                                     
@@ -115,8 +108,14 @@
     pkt->data = NULL;
     pkt->size = 0;
     
+
     ret = avcodec_encode_video2(_av_codec_ctx, pkt, outframe, &got_output);
-        
+
+    CVPixelBufferUnlockBaseAddress(converted_frame, kCVPixelBufferLock_ReadOnly);
+    
+
+
+    
 
     
     
@@ -127,17 +126,13 @@
     
     if (got_output)
     {
-        //pkt->pts = pts.value;
-        //pkt->dts = pts.value;
-        frameData.avcodec_ctx = _av_codec_ctx;
-        frameData.avcodec_pkt = pkt;
-        [self.outputDelegate outputEncodedData:frameData];
         
+        [self.outputDelegate outputAVPacket:pkt codec_ctx:_av_codec_ctx];
     }
         av_free(outframe);
+    CVPixelBufferRelease(converted_frame);
         av_free_packet(pkt);
          av_free(pkt);
-        av_free(outbuf);
         
     });
     
@@ -170,8 +165,6 @@
     }
     
     _av_codec_ctx = avcodec_alloc_context3(_av_codec);
-    
-
     avcodec_get_context_defaults3(_av_codec_ctx, _av_codec);
     
     //_av_codec_ctx->max_b_frames = 0;
@@ -180,12 +173,6 @@
     _av_codec_ctx->time_base.num = 1000000;
     
     _av_codec_ctx->time_base.den = self.settingsController.captureFPS*1000000;
-    
-    
-
-    
-    
-    
     _av_codec_ctx->pix_fmt = PIX_FMT_YUV420P;
     
     

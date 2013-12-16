@@ -43,8 +43,6 @@
 -(void) writeVideoSampleBuffer:(CMSampleBufferRef)theBuffer;
 -(void) writeAudioSampleBuffer:(CMSampleBufferRef)theBuffer presentationTimeStamp:(CMTime)pts;
 -(void) writeAVPacket:(AVPacket *)pkt codec_ctx:(AVCodecContext *)codec_ctx;
--(void) writeEncodedData:(CapturedFrameData *)frameData;
-
 
 
 -(bool) stopProcess;

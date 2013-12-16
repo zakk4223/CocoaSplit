@@ -24,46 +24,14 @@
 {
     if (self = [super init])
     {
-        
         _capture_session = [[AVCaptureSession alloc] init];
         [self setupVideoOutput];
-        [self refreshAvailableVideoDevices];
-        [self refreshAvailableAudioDevices];
-
+        
         
 
         [_capture_session startRunning];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(captureDeviceConnected:) name:AVCaptureDeviceWasConnectedNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(captureDeviceDisconnected:) name:AVCaptureDeviceWasDisconnectedNotification object:nil];
     }
     return self;
-}
-
--(void) captureDeviceConnected:(NSNotification *)notification
-{
-    
-    NSLog(@"DEVICE CONNECTED %@", [notification object]);
-    [self refreshAvailableVideoDevices];
-    [self refreshAvailableAudioDevices];
-
-}
-
-
--(void) captureDeviceDisconnected:(NSNotification *)notification
-{
-    AVCaptureDevice *notify_obj = [notification object];
-    
-    if ([notify_obj.uniqueID isEqualToString:_selectedVideoCaptureDevice.uniqueID])
-    {
-        self.activeVideoDevice = nil;
-    }
-    
-    if ([notify_obj.uniqueID isEqualToString:self.activeAudioDevice.uniqueID])
-    {
-        self.activeAudioDevice = nil;
-    }
-
-    [self refreshAvailableVideoDevices];
 }
 
 
@@ -77,8 +45,6 @@
         _audio_capture_queue = dispatch_queue_create("AudioQueue", NULL);
 
         [_capture_session startRunning];
-        [self refreshAvailableAudioDevices];
-
 
     }
     
@@ -234,26 +200,16 @@
     }
     
     [_capture_session commitConfiguration];
-    if (_selectedVideoCaptureDevice)
-    {
-        self.videoFormats = _selectedVideoCaptureDevice.formats;
-        self.videoFramerates = _selectedVideoCaptureDevice.activeFormat.videoSupportedFrameRateRanges;
-    }
     
+    self.videoFormats = _selectedVideoCaptureDevice.formats;
+    self.videoFramerates = _selectedVideoCaptureDevice.activeFormat.videoSupportedFrameRateRanges;
     
 }
 
 
 
--(void) refreshAvailableAudioDevices
-{
-    self.availableAudioDevices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio];
-    NSLog(@"REFRESH AUDIO");
-    NSLog(@"AUDIO DEVICES %@", self.availableAudioDevices);
-}
 
-
--(void) refreshAvailableVideoDevices
+-(NSArray *) availableVideoDevices
 {
     
     NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
@@ -264,10 +220,11 @@
 
     for(devinstance in devices)
     {
+        NSLog(@"Inputs %@", devinstance.linkedDevices);
         [retArray addObject:[[AbstractCaptureDevice alloc] initWithName:[devinstance localizedName] device:devinstance uniqueID:devinstance.uniqueID]];
     }
     
-    self.availableVideoDevices = (NSArray *)retArray;
+    return (NSArray *)retArray;
     
 }
 
@@ -419,7 +376,7 @@
             return NO;
         }
                 
-        //AVCaptureConnection *outconn = [_video_capture_output connectionWithMediaType:AVMediaTypeVideo];
+        AVCaptureConnection *outconn = [_video_capture_output connectionWithMediaType:AVMediaTypeVideo];
         //if (outconn && self.videoCaptureFPS && self.videoCaptureFPS > 0)
         //{
          //   NSLog(@"SETTING VIDEO CAPTURE FPS %f", self.videoCaptureFPS);
@@ -714,7 +671,6 @@
         
         if (_audioDelegate)
         {
-            
             [_audioDelegate captureOutputAudio:self didOutputSampleBuffer:sampleBuffer];
         }
     }

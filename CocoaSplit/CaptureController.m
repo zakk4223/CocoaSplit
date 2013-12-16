@@ -312,7 +312,6 @@
    {
        dispatch_source_t sigsrc = dispatch_source_create(DISPATCH_SOURCE_TYPE_SIGNAL, SIGPIPE, 0, dispatch_get_global_queue(0, 0));
        dispatch_source_set_event_handler(sigsrc, ^{ return;});
-       
        dispatch_resume(sigsrc);
        
        _main_capture_queue = dispatch_queue_create("CocoaSplit.main.queue", NULL);
@@ -321,7 +320,6 @@
        self.destinationTypes = @{@"file" : @"File/Raw",
        @"twitch" : @"Twitch TV"};
        
-       self.captureSink = [[CapturedFrameData alloc] init];
        self.showPreview = YES;
        self.videoTypes = @[@"Desktop", @"AVFoundation", @"QTCapture", @"Syphon"];
        self.compressorTypes = @[@"None", @"AppleVTCompressor", @"x264"];
@@ -359,12 +357,22 @@
        self.audioCaptureSession = [[AVFCapture alloc] initForAudio];
        [self.audioCaptureSession setAudioDelegate:self];
        
+       
+       
+       
+       self.audioCaptureDevices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio];
+       mach_timebase_info(&_mach_timebase);
+       
+       dispatch_async(_main_capture_queue, ^{[self newFrame];});
+       
+           
+
+       
    }
     
     return self;
     
 }
-
 
 
 - (NSString *) saveFilePath
@@ -564,25 +572,6 @@
     }
 }
 
-
-- (void) outputEncodedData:(CapturedFrameData *)frameData
-{
-    
-    
-    for (OutputDestination *outdest in _captureDestinations)
-    {
-        if (outdest.active)
-        {
-            
-            id ffmpeg = outdest.ffmpeg_out;
-            [ffmpeg writeEncodedData:frameData];
-
-        }
-    }
-}
-
-
-
 - (void) outputSampleBuffer:(CMSampleBufferRef)theBuffer
 {
     for (OutputDestination *outdest in _captureDestinations)
@@ -601,6 +590,8 @@
     // We should already have a capture session from init since we need it to figure out device lists.
     
     
+    NSError *error;
+    bool success;
     id<h264Compressor> newCompressor;
     
     
@@ -654,12 +645,6 @@
     
     
     self.captureRunning = YES;
-    //dispatch_async(_main_capture_queue, ^{[self newFrame];});
-    
-    
-    
-     //_captureTimer = [NSTimer timerWithTimeInterval:1.0/self.captureFPS target:self selector:@selector(newFrame) userInfo:nil repeats:YES];
-    //[[NSRunLoop currentRunLoop] addTimer:_captureTimer forMode:NSRunLoopCommonModes];
     
     if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_8)
     {
@@ -679,30 +664,8 @@
 -(void) setupFrameTimer
 {
     
-    uint64_t frame_interval = (1.0/self.captureFPS)*NSEC_PER_SEC;
+    _frame_interval = (1.0/self.captureFPS);
     
-
-    NSLog(@"Setting up new frame timer %f", self.captureFPS);
-    if (_dispatch_timer)
-    {
-        dispatch_source_cancel(_dispatch_timer);
-        _dispatch_timer = nil;
-        
-    }
-    
-    int dispatch_strict_flag = 1;
-    
-    if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_8)
-    {
-        dispatch_strict_flag = 0;
-    }
-    
-    
-    _dispatch_timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, dispatch_strict_flag, _main_capture_queue);
-    
-    dispatch_source_set_timer(_dispatch_timer, DISPATCH_TIME_NOW, frame_interval, 0);
-    dispatch_source_set_event_handler(_dispatch_timer, ^{ [self newFrame]; });
-    dispatch_resume(_dispatch_timer);
 }
 
 
@@ -866,27 +829,6 @@
     
     self.videoCompressor = nil;
     
-    /*
-     if (_compression_session)
-     {
-     VTCompressionSessionInvalidate(_compression_session);
-     CFRelease(_compression_session);
-     }
-     */
-    
-    /*
-    if (self.videoCaptureSession)
-    {
-        [self.videoCaptureSession stopCaptureSession];
-    }
-    
-    if (self.audioCaptureSession)
-    {
-        [self.audioCaptureSession stopCaptureSession];
-    }
-     */
-    
-    
     
     for (OutputDestination *out in _captureDestinations)
     {
@@ -950,36 +892,13 @@
     }
     
     CMTime orig_pts = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
-    
+
     if (_firstAudioTime == 0)
     {
         _firstAudioTime = orig_pts.value;
     }
     
-    
     CMTime pts = CMTimeMake(orig_pts.value-_firstAudioTime, orig_pts.timescale);
-    
-    //CMTime pts = CMTimeMake(((orig_pts.value-_firstAudioTime)/orig_pts.timescale)*1000000, 1000000);
-    
-    //NSLog(@"ORIGINAL PTS %lld", orig_pts.value);
-    //CMTimeShow(orig_pts);
-    //CMTime pts = CMTimeConvertScale(orig_pts, 1000000, kCMTimeRoundingMethod_Default);
-    //NSLog(@"CONVERTED PTS %lld", pts.value);
-    CMSampleBufferSetOutputPresentationTimeStamp(sampleBuffer, pts);
-    
-    if (self.captureSink)
-    {
-        CFRetain(sampleBuffer);
-        [self.captureSink.audioSamples addObject:[NSValue valueWithPointer:sampleBuffer]];
-        
-        
-    }
-    //CMTime pts = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
-    
-
-    //CMSampleBufferSetOutputPresentationTimeStamp(sampleBuffer, pts);
-    
-    /*
     for (OutputDestination *outdest in _captureDestinations)
     {
         if (outdest.active)
@@ -988,8 +907,6 @@
             [ffmpeg writeAudioSampleBuffer:sampleBuffer presentationTimeStamp:pts];
         }
     }
-     
-     */
     
 }
 
@@ -1049,143 +966,164 @@
     return YES;
 }
 
+-(double)mach_time_seconds
+{
+    uint64_t mach_now = mach_absolute_time();
+    return (double)((mach_now * _mach_timebase.numer / _mach_timebase.denom))/NSEC_PER_SEC;
+}
 
 
--(CapturedFrameData *)swapCaptureSink
+-(bool) sleepUntil:(double)target_time
 {
     
-    CapturedFrameData *newSink;
+    if (target_time < [self mach_time_seconds])
+    {
+        return NO;
+    }
     
-    CapturedFrameData *retSink;
-    
-    newSink = [[CapturedFrameData alloc] init];
-    
-    retSink = self.captureSink;
-    self.captureSink = newSink;
-    
-    
-    return retSink;
+    while ([self mach_time_seconds] < target_time)
+    {
+        int64_t usecs_to_sleep = (target_time - [self mach_time_seconds]) * 0.25e6;
+        if (usecs_to_sleep > 0)
+        {
+            usleep((useconds_t)usecs_to_sleep);
+        }
+    }
+    return YES;
 }
+
 
 
 -(void) newFrame
 {
     CVImageBufferRef newFrame;
-
+    double startTime;
     
-    if (self.videoCaptureSession)
+    startTime = [self mach_time_seconds];
+    
+    while (1)
     {
+    
         
-        newFrame = [self.videoCaptureSession getCurrentFrame];
-        if (newFrame)
+        _frame_time = startTime;
+        if (![self sleepUntil:startTime += _frame_interval/2])
         {
-            if (_firstFrameTime == 0 && self.videoCompressor)
+            continue;
+        }
+        
+        if (![self sleepUntil:startTime += _frame_interval/2])
+        {
+            continue;
+        }
+        
+
+        
+        if (self.videoCaptureSession)
+        {
+            
+            newFrame = [self.videoCaptureSession getCurrentFrame];
+            if (newFrame)
             {
-                NSError *error;
-                BOOL success;
-                NSLog(@"SETTING UP RESOLUTION");
-                success = [self setupResolution:newFrame error:&error];
-                if (!success)
+                if (_firstFrameTime == 0 && self.videoCompressor)
                 {
-                    [self stopStream];
-                    [NSApp presentError:error];
-                } else {
-                
-                    OutputDestination *output;
-                
-                    NSLog(@"Attaching destinations");
-                    for (output in _captureDestinations)
+                    NSError *error;
+                    BOOL success;
+                    NSLog(@"SETTING UP RESOLUTION");
+                    success = [self setupResolution:newFrame error:&error];
+                    if (!success)
                     {
-                        [self attachCaptureDestination:output];
+                        [self stopStream];
+                        [NSApp presentError:error];
+                    } else {
+                        
+                        OutputDestination *output;
+                        
+                        NSLog(@"Attaching destinations");
+                        for (output in _captureDestinations)
+                        {
+                            [self attachCaptureDestination:output];
+                        }
                     }
+                    
+                    
                 }
-
-
-            }
-
-            
-            //dispatch_async(_preview_queue, ^{
+                
+                
                 [self.previewCtx drawFrame:newFrame];
-            //});
-            
-            //dispatch_async(_main_capture_queue, ^{
-            
-            if (self.videoCompressor)
-            {
-                CapturedFrameData *capturedData = [self swapCaptureSink];
                 
-                //CapturedFrameData retains video Frame
-                capturedData.videoFrame = newFrame;
                 
-                [self processVideoFrame:capturedData];
+                if (self.videoCompressor)
+                {
+                    [self processVideoFrame:newFrame];
+                } else {
+                    CVPixelBufferRelease(newFrame);
+                }
+                
+                
             }
-            
-            CVPixelBufferRelease(newFrame);
-            
-            
-            //});
             
         }
     }
-
 }
 
 
+- (void)captureOutputVideo:(AbstractCaptureDevice *)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer didOutputImage:(CVImageBufferRef)imageBuffer frameTime:(uint64_t)frameTime
+{
 
--(void)processVideoFrame:(CapturedFrameData *)frameData
+    if (imageBuffer)
+    {
+        CVPixelBufferRetain(imageBuffer);
+        [self.previewCtx drawFrame:imageBuffer];
+
+
+        dispatch_async(_main_capture_queue, ^{
+            [self processVideoFrame:imageBuffer];
+        });
+        
+       }
+    
+}
+
+-(void)processVideoFrame:(CVImageBufferRef)imageBuffer
 {
 
     
-    
-    CVImageBufferRef imageBuffer = frameData.videoFrame;
-    
-    //[self.previewCtx drawFrame:imageBuffer];
-
     if (!self.videoCompressor)
     {
+        CVPixelBufferRelease(imageBuffer);
+
         return;
     }
     CMTime pts;
     CMTime duration;
     
-    CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent()*1000000;
-
-    
     
     if (_firstFrameTime == 0)
     {
-        _firstFrameTime = currentTime;
+        _firstFrameTime = _frame_time;
         
     }
     
+    CFAbsoluteTime ptsTime = _frame_time - _firstFrameTime;
     
     _frameCount++;
-    _lastFrameTime = currentTime;
-    
+    _lastFrameTime = _frame_time;
     
     
 
-    //pts = CMTimeMake(_lastFrameTime-_firstFrameTime, self.captureFPS*1000000);
-    
-    pts = CMTimeMake(_frameCount*(1.0f/self.captureFPS)*1000000,1000000);
-    
-    //NSLog(@"PTS IS %@", CMTimeCopyDescription(kCFAllocatorDefault, pts));
+    pts = CMTimeMake(ptsTime*1000000, self.captureFPS*1000000);
     
     duration = CMTimeMake(1000, self.videoCaptureSession.videoCaptureFPS*1000);
     
     
-    frameData.videoPTS = pts;
-    frameData.videoDuration = duration;
-    frameData.frameNumber = _frameCount;
-    
-    
-
     if (self.videoCompressor)
     {
         
-        [self.videoCompressor compressFrame:frameData];
+        [self.videoCompressor compressFrame:imageBuffer pts:pts duration:duration];
         
         
+    } else {
+        CVPixelBufferRelease(imageBuffer);
     }
         
 }

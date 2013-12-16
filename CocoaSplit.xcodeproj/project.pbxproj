@@ -86,8 +86,6 @@
 		34B0265A1712D8BA0063BB2D /* CmdLineDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B026591712D8BA0063BB2D /* CmdLineDelegate.m */; };
 		34B74BC91648D23B00818DE2 /* QTCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B74BC81648D23B00818DE2 /* QTCapture.m */; };
 		34C6C3BF15FB5B440018A18B /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34C6C3BE15FB5B440018A18B /* OpenGL.framework */; };
-		34D6935A184EDAC70007911A /* CapturedFrameData.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D69359184EDAC70007911A /* CapturedFrameData.m */; };
-		34D6935B184EDAC70007911A /* CapturedFrameData.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D69359184EDAC70007911A /* CapturedFrameData.m */; };
 		34F5141216FD6E4F00BA894D /* x264Compressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F5140F16FD6E4F00BA894D /* x264Compressor.m */; };
 		34F5141316FD6E4F00BA894D /* AppleVTCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F5141116FD6E4F00BA894D /* AppleVTCompressor.m */; };
 /* End PBXBuildFile section */
@@ -252,8 +250,6 @@
 		34B74BC71648D23B00818DE2 /* QTCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QTCapture.h; sourceTree = "<group>"; };
 		34B74BC81648D23B00818DE2 /* QTCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QTCapture.m; sourceTree = "<group>"; };
 		34C6C3BE15FB5B440018A18B /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
-		34D69358184EDAC70007911A /* CapturedFrameData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CapturedFrameData.h; sourceTree = "<group>"; };
-		34D69359184EDAC70007911A /* CapturedFrameData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CapturedFrameData.m; sourceTree = "<group>"; };
 		34F5140E16FD6E4F00BA894D /* x264Compressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = x264Compressor.h; sourceTree = "<group>"; };
 		34F5140F16FD6E4F00BA894D /* x264Compressor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = x264Compressor.m; sourceTree = "<group>"; };
 		34F5141016FD6E4F00BA894D /* AppleVTCompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleVTCompressor.h; sourceTree = "<group>"; };
@@ -401,8 +397,6 @@
 				34F5141116FD6E4F00BA894D /* AppleVTCompressor.m */,
 				340FE4B315F3417E00E4CE4E /* AppDelegate.h */,
 				340FE4B415F3417E00E4CE4E /* AppDelegate.m */,
-				34D69358184EDAC70007911A /* CapturedFrameData.h */,
-				34D69359184EDAC70007911A /* CapturedFrameData.m */,
 				342346D315FA301600C8C77E /* SyphonCapture.h */,
 				342346D415FA301600C8C77E /* SyphonCapture.m */,
 				34792AF116103FF60065A859 /* DesktopCapture.h */,
@@ -531,7 +525,6 @@
 				34EB1951168C838B00D13936 /* CopyFiles */,
 				34AE3C3E164E3EAE0052C95E /* CopyFiles */,
 				3450579D172A4AE30065A452 /* CopyFiles */,
-				34C63E7C18539B9E008FBCC9 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -677,19 +670,6 @@
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
 		};
-		34C63E7C18539B9E008FBCC9 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /usr/bin/perl;
-			shellScript = "use strict;\n\n\n#if ($ENV{CONFIGURATION} ne \"Release\")\n#{\n#   exit;\n#}\n\n\n# Get the current git commit hash and use it to set the CFBundleVersion value\n\nchdir($ENV{PROJECT_DIR});\n\nmy $REV = `/usr/bin/git rev-parse --short HEAD`;\nmy $INFO = \"$ENV{BUILT_PRODUCTS_DIR}/$ENV{WRAPPER_NAME}/Contents/Info.plist\";\n\nmy $version = $REV;\ndie \"$0: No Git revision found\" unless $version;\n\nopen(FH, \"$INFO\") or die \"$0: $INFO: $!\";\nmy $info = join(\"\", <FH>);\nclose(FH);\n\n$info =~ s/([\\t ]+<key>CFBundleVersion<\\/key>\\n[\\t ]+<string>).*?(<\\/string>)/$1$version$2/;\n\nopen(FH, \">$INFO\") or die \"$0: $INFO: $!\";\nprint FH $info;\nclose(FH);";
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -708,7 +688,6 @@
 				34792AF316103FF60065A859 /* DesktopCapture.m in Sources */,
 				34B74BC91648D23B00818DE2 /* QTCapture.m in Sources */,
 				34A64A2F165EFE4C00A68428 /* PreviewView.m in Sources */,
-				34D6935A184EDAC70007911A /* CapturedFrameData.m in Sources */,
 				3498C78B16AB6688003D8065 /* AVCaptureDeviceFormat+CocoaSplitAdditions.m in Sources */,
 				3498C78F16AB6853003D8065 /* AVFrameRateRange+CocoaSplitAdditions.m in Sources */,
 				34F5141216FD6E4F00BA894D /* x264Compressor.m in Sources */,
@@ -740,7 +719,6 @@
 				3451A1DF1712C5DC00DF6A8B /* FFMpegTask.m in Sources */,
 				3451A1E01712C5DF00DF6A8B /* AVFCapture.m in Sources */,
 				34B0265A1712D8BA0063BB2D /* CmdLineDelegate.m in Sources */,
-				34D6935B184EDAC70007911A /* CapturedFrameData.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

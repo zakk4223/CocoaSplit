@@ -85,7 +85,7 @@
     }
     
     return YES;
-
+    
     
 }
 
@@ -160,7 +160,7 @@
     SyphonImage *syphon_frame = [client newFrameImageForContext:cgl_ctx];
     frametexture = [syphon_frame textureName];
     frameSize = [syphon_frame textureSize];
-
+    
     BOOL returnNow = NO;
     
     
@@ -169,12 +169,12 @@
         returnNow = YES;
         
     } else if  ((_last_frame_size.width != frameSize.width) || (_last_frame_size.height != frameSize.height)) {
-    
+        
         BOOL pixelBufferPoolOK = [self createPixelBufferPoolForSize:frameSize];
         
         if (pixelBufferPoolOK != YES)
         {
-
+            
             returnNow = YES;
         }
         
@@ -212,7 +212,7 @@
     
     CVOpenGLTextureCacheCreateTextureFromImage(kCFAllocatorDefault, _texture_cache, bufferOut, NULL, &textureOut);
     
-
+    
     glEnable(CVOpenGLTextureGetTarget(textureOut));
     
     glActiveTexture(GL_TEXTURE0);
@@ -224,7 +224,7 @@
     glDisable(GL_DEPTH_TEST);
     glDisable(CVOpenGLTextureGetTarget(textureOut));
     glDepthMask(GL_FALSE);
-
+    
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, CVOpenGLTextureGetTarget(textureOut), CVOpenGLTextureGetName(textureOut), 0);
     
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -304,11 +304,11 @@
     
     glEnd();
     glFlush();
-
+    
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, CVOpenGLTextureGetTarget(textureOut), 0, 0);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     CVOpenGLTextureRelease(textureOut);
-
+    
     
     [NSOpenGLContext clearCurrentContext];
     CGLUnlockContext(cgl_ctx);
@@ -335,7 +335,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleSyphonServerRetire:) name:SyphonServerRetireNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleSyphonServerAnnounce:) name:SyphonServerAnnounceNotification object:nil];
-
+    
     
     _syphonServer = [self.activeVideoDevice captureDevice];
     
@@ -349,9 +349,9 @@
     
     
     /*
-    _syphon_client = [[SyphonClient alloc] initWithServerDescription:_syphonServer options:nil newFrameHandler:^(SyphonClient *client) {
-        [self renderNewFrame:client];
-    }];
+     _syphon_client = [[SyphonClient alloc] initWithServerDescription:_syphonServer options:nil newFrameHandler:^(SyphonClient *client) {
+     [self renderNewFrame:client];
+     }];
      */
 }
 
@@ -362,7 +362,7 @@
 
 -(void)changeAvailableVideoDevices
 {
-     
+    
     NSArray *servers = [[SyphonServerDirectory sharedDirectory] servers];
     NSMutableArray *retArr = [[NSMutableArray alloc] init];
     id sserv;
@@ -382,7 +382,7 @@
         {
             self.activeVideoDevice = newDev;
         }
-
+        
         
     }
     self.availableVideoDevices = (NSArray *)retArr;
@@ -397,7 +397,7 @@
     NSString *announceID = [[notification object] objectForKey:SyphonServerDescriptionUUIDKey];
     [self changeAvailableVideoDevices];
     
-
+    
 }
 -(void) handleSyphonServerRetire:(NSNotification *)notification
 {
@@ -411,7 +411,7 @@
     
     [self changeAvailableVideoDevices];
     
-
+    
     
 }
 @end

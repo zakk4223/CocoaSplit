@@ -13,7 +13,8 @@
 #import <CoreVideo/CoreVideo.h>
 #import "h264Compressor.h"
 #import "CaptureController.h"
-#import "CapturedFrameData.h"
+#import <VideoToolbox/VideoToolbox.h>
+
 
 
 
@@ -26,6 +27,7 @@
     AVCodecContext *_av_codec_ctx;
     struct SwsContext *_sws_ctx;
     dispatch_queue_t _compressor_queue;
+    VTPixelTransferSessionRef _vtpt_ref;
     
     
 }
@@ -34,7 +36,7 @@
 @property (strong) id<ControllerProtocol> settingsController;
 @property (strong) id <ControllerProtocol> outputDelegate;
 
--(bool)compressFrame:(CapturedFrameData *)frameData;
+-(bool)compressFrame:(CVImageBufferRef)imageBuffer pts:(CMTime)pts duration:(CMTime)duration;
 -(bool)setupCompressor;
 
 

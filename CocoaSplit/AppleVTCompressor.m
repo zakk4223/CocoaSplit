@@ -32,7 +32,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 
 
 
-- (bool)compressFrame:(CapturedFrameData *)frameData
+- (bool)compressFrame:(CVImageBufferRef)imageBuffer pts:(CMTime)pts duration:(CMTime)duration
 {
     
     
@@ -42,12 +42,13 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
         
         if (![self setupCompressor])
         {
+            CVPixelBufferRelease(imageBuffer);
             return NO;
         }
         return NO;
     }
     
-    VTCompressionSessionEncodeFrame(_compression_session, frameData.videoFrame, frameData.videoPTS, frameData.videoDuration, NULL, (__bridge_retained void *)(frameData), NULL);
+    VTCompressionSessionEncodeFrame(_compression_session, imageBuffer, pts, duration, NULL, imageBuffer, NULL);
     return YES;
 }
 
@@ -202,29 +203,12 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 void VideoCompressorReceiveFrame(void *VTref, void *VTFrameRef, OSStatus status, VTEncodeInfoFlags infoFlags, CMSampleBufferRef sampleBuffer)
 {
     
-    
-    if (!sampleBuffer)
+    if (VTFrameRef)
     {
-        return;
-    }
-    CFRetain(sampleBuffer);
-    CapturedFrameData *frameData;
-    
-    frameData = (__bridge_transfer CapturedFrameData *)(VTFrameRef);
-    
-    
-    if (!frameData)
-    {
-        //What?
-        return;
+        CVPixelBufferRelease(VTFrameRef);
     }
     
-
-    /* We don't need the original video frame anymore, set the property to nil, which will release the CVImageBufferRef */
-    
-    frameData.videoFrame = nil;
-    
-    //@autoreleasepool {
+    @autoreleasepool {
         
         
         
@@ -233,19 +217,15 @@ void VideoCompressorReceiveFrame(void *VTref, void *VTFrameRef, OSStatus status,
         
         
         
-        frameData.encodedSampleBuffer = sampleBuffer;
-        
+        CFRetain(sampleBuffer);
         
         AppleVTCompressor *selfobj = (__bridge AppleVTCompressor *)VTref;
         
         
-        [selfobj.outputDelegate outputEncodedData:frameData];
-        
+        [selfobj.outputDelegate outputSampleBuffer:sampleBuffer];
         
         CFRelease(sampleBuffer);
-        
-        
-    //}
+    }
 }
 
 

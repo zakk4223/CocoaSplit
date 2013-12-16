@@ -21,7 +21,9 @@
 #import "x264Compressor.h"
 #import "ControllerProtocol.h"
 #import <IOKit/pwr_mgt/IOPMLib.h>
-#import "CapturedFrameData.h"
+#import <mach/mach_time.h>
+
+
 
 
 
@@ -53,12 +55,13 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     dispatch_queue_t _main_capture_queue;
     dispatch_queue_t _preview_queue;
     dispatch_source_t _dispatch_timer;
+    CFAbsoluteTime _frame_interval;
+    mach_timebase_info_data_t _mach_timebase;
+    double _frame_time;
+    
     
     
 }
-
-@property (retain) CapturedFrameData *captureSink;
-
 @property (strong) id<h264Compressor> videoCompressor;
 @property (retain) id<CaptureSessionProtocol> videoCaptureSession;
 @property (retain) id<CaptureSessionProtocol> audioCaptureSession;
