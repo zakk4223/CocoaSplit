@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>captureFPS</key>
+	<integer>30</integer>
+	<key>captureWidth</key>
+	<integer>1280</integer>
+	<key>captureHeight</key>
+	<integer>720</integer>
+	<key>captureVideoAverageBitrate</key>
+	<integer>1000</integer>
+	<key>captureVideoMaxBitrate</key>
+	<integer>1000</integer>
+	<key>captureVideoMaxKeyframeInterval</key>
+	<integer>2</integer>
+	<key>audioBitrate</key>
+	<integer>128</integer>
+	<key>audioSamplerate</key>
+	<integer>44100</integer>
+	<key>videoCBR</key>
+	<true/>
+</dict>
+</plist>

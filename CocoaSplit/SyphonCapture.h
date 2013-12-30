@@ -25,6 +25,7 @@
     GLuint _framebuffer;
     id _retire_observer;
     id _announce_observer;
+    CVPixelBufferRef _currentFrame;
     
 }
 
@@ -34,9 +35,10 @@
 @property int width;
 @property int height;
 @property AbstractCaptureDevice *activeVideoDevice;
-@property id<ControllerProtocol> videoDelegate;
+@property (weak) id<ControllerProtocol> videoDelegate;
 @property (strong) NSArray *availableVideoDevices;
 @property (readonly) BOOL needsAdvancedVideo;
+@property (weak) id<ControllerProtocol> settingsController;
 
 
 

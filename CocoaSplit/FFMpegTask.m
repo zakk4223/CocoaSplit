@@ -265,6 +265,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         fmt = CMSampleBufferGetFormatDescription(theBuffer);
         atoms = CMFormatDescriptionGetExtension(fmt, kCMFormatDescriptionExtension_SampleDescriptionExtensionAtoms);
         avccKey = CFStringCreateWithCString(NULL, "avcC", kCFStringEncodingUTF8);
+        NSLog(@"ATOMS %@", atoms);
         avcc_data = CFDictionaryGetValue(atoms, avccKey);
         avcc_size = CFDataGetLength(avcc_data);
         c_ctx->extradata = malloc(avcc_size);
@@ -313,6 +314,9 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 
 -(void) updateInputStats
 {
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
     CFAbsoluteTime time_now = CFAbsoluteTimeGetCurrent();
     
     
@@ -322,11 +326,15 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     self.buffered_frame_count = _pending_frame_count;
     self.buffered_frame_size = _pending_frame_size;
     self.dropped_frame_count = _dropped_frames;
+    });
+    
     
 }
 
 -(void) updateOutputStats
 {
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
     CFAbsoluteTime time_now = CFAbsoluteTimeGetCurrent();
     
     
@@ -335,6 +343,8 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     _output_framecnt = 0;
     _output_bytes = 0;
     _output_frame_timestamp = time_now;
+    });
+    
 }
 
 
@@ -577,10 +587,15 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
     pkt.size = (int)buffer_length;
   
-        pkt.dts = av_rescale_q(CMSampleBufferGetDecodeTimeStamp(theBuffer).value, (AVRational) {1.0, CMSampleBufferGetDecodeTimeStamp(theBuffer).timescale}, _av_video_stream->time_base);
-
+        
+        pkt.dts = av_rescale_q(CMSampleBufferGetDecodeTimeStamp(theBuffer).value, (AVRational) {1.0, CMSampleBufferGetDecodeTimeStamp(theBuffer).timescale}, _av_video_stream->time_base);        
+        
     pkt.pts = av_rescale_q(CMSampleBufferGetPresentationTimeStamp(theBuffer).value, (AVRational) {1.0, CMSampleBufferGetPresentationTimeStamp(theBuffer).timescale}, _av_video_stream->time_base);
 
+        
+        
+        
+        
 
         //kt.pts = CMSampleBufferGetPresentationTimeStamp(theBuffer).value;
         
@@ -597,7 +612,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     if (av_interleaved_write_frame(_av_fmt_ctx, &pkt) < 0)
     {
         NSLog(@"VIDEO WRITE FRAME failed");
-        [self stopProcess];
+        //[self stopProcess];
     }
     
         _output_framecnt++;

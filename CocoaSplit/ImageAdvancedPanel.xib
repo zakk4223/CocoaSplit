@@ -6,7 +6,8 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CaptureController">
             <connections>
-                <outlet property="advancedPrefPanel" destination="1" id="7"/>
+                <outlet property="advancedVideoPanel" destination="1" id="zQf-Dl-oiS"/>
+                <outlet property="imagePanelChooseDirectory" destination="SqZ-RO-eEa" id="656-sg-3gr"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
@@ -20,10 +21,10 @@
                 <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3">
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="paQ-j2-YFB">
                         <rect key="frame" x="14" y="13" width="59" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="4">
+                        <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="3DK-XJ-mhc">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                             <string key="keyEquivalent" base64-UTF8="YES">
@@ -31,48 +32,47 @@ DQ
 </string>
                         </buttonCell>
                         <connections>
-                            <action selector="closeAdvancedPrefPanel:" target="-2" id="9"/>
+                            <action selector="closeVideoAdvanced:" target="-2" id="VJB-kO-NgC"/>
                         </connections>
                     </button>
-                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="14">
-                        <rect key="frame" x="222" y="232" width="37" height="22"/>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="v6L-jL-DeJ">
+                        <rect key="frame" x="88" y="230" width="234" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="37" id="19"/>
-                        </constraints>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="15">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="VJr-nJ-a87">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            <connections>
+                                <binding destination="-2" name="value" keyPath="self.videoCaptureSession.imageDirectory" id="Ejn-iK-XUz"/>
+                            </connections>
                         </textFieldCell>
                         <connections>
-                            <binding destination="-2" name="value" keyPath="self.maxOutputPending" id="94">
-                                <dictionary key="options">
-                                    <bool key="NSContinuouslyUpdatesValue" value="YES"/>
-                                </dictionary>
-                            </binding>
+                            <binding destination="-2" name="value" keyPath="self.videoCaptureSession.imageDirectory" id="gIg-b8-jNt"/>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="60">
-                        <rect key="frame" x="21" y="235" width="179" height="17"/>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PEq-U3-BOt">
+                        <rect key="frame" x="18" y="233" width="62" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Max pending output frames" id="61">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Directory" id="bBZ-ib-C7M">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SqZ-RO-eEa">
+                        <rect key="frame" x="384" y="224" width="74" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="push" title="Open" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="DWS-8f-0qW">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="imagePanelChooseDirectory:" target="-2" id="nlx-hR-zoS"/>
+                        </connections>
+                    </button>
                 </subviews>
-                <constraints>
-                    <constraint firstAttribute="bottom" secondItem="3" secondAttribute="bottom" constant="20" symbolic="YES" id="5"/>
-                    <constraint firstItem="3" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="20" symbolic="YES" id="6"/>
-                    <constraint firstItem="14" firstAttribute="top" secondItem="2" secondAttribute="top" constant="16" id="72"/>
-                    <constraint firstItem="14" firstAttribute="centerY" secondItem="60" secondAttribute="centerY" id="74"/>
-                    <constraint firstItem="60" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="23" id="96"/>
-                    <constraint firstItem="14" firstAttribute="centerX" secondItem="2" secondAttribute="centerX" id="98"/>
-                </constraints>
             </view>
         </window>
-        <userDefaultsController representsSharedInstance="YES" id="87"/>
+        <userDefaultsController representsSharedInstance="YES" id="orW-Ps-7Gu"/>
     </objects>
 </document>

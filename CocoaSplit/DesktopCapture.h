@@ -37,11 +37,12 @@
 @property int width;
 @property int height;
 @property AbstractCaptureDevice *activeVideoDevice;
-@property id<ControllerProtocol> videoDelegate;
+@property (weak) id<ControllerProtocol> videoDelegate;
 @property (readonly) NSArray *availableVideoDevices;
 @property (readonly) BOOL needsAdvancedVideo;
 @property NSArray *videoFormats;
 @property NSArray *videoFramerates;
+@property (weak) id<ControllerProtocol> settingsController;
 
 
 

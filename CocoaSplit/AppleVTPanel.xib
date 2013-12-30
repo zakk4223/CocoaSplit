@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="4514"/>
     </dependencies>
@@ -7,11 +7,12 @@
         <customObject id="-2" userLabel="File's Owner" customClass="CaptureController">
             <connections>
                 <outlet property="compressPanel" destination="1" id="106"/>
+                <outlet property="compressSettingsController" destination="2sx-0x-ZEs" id="rgt-tN-OZ6"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application"/>
-        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" wantsToBeColor="NO" visibleAtLaunch="NO" animationBehavior="default" id="1">
+        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" wantsToBeColor="NO" visibleAtLaunch="NO" animationBehavior="default" id="1">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="480" height="270"/>
@@ -38,7 +39,7 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
-                            <binding destination="-2" name="value" keyPath="self.captureVideoAverageBitrate" id="46"/>
+                            <binding destination="2sx-0x-ZEs" name="value" keyPath="selection.captureVideoAverageBitrate" id="T47-7J-yJq"/>
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4">
@@ -74,7 +75,7 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
-                            <binding destination="-2" name="value" keyPath="self.captureVideoMaxBitrate" id="44"/>
+                            <binding destination="2sx-0x-ZEs" name="value" keyPath="selection.captureVideoMaxBitrate" id="Cjt-c8-abf"/>
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7">
@@ -92,7 +93,7 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
-                            <binding destination="-2" name="value" keyPath="self.captureVideoMaxKeyframeInterval" id="40"/>
+                            <binding destination="2sx-0x-ZEs" name="value" keyPath="selection.captureVideoMaxKeyframeInterval" id="9GH-K4-rIy"/>
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8">
@@ -132,7 +133,7 @@
                         </constraints>
                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="134" id="132">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
+                            <font key="font" metaFont="menu"/>
                             <menu key="menu" title="OtherViews" id="133">
                                 <items>
                                     <menuItem title="Item 1" state="on" id="134"/>
@@ -143,7 +144,7 @@
                         </popUpButtonCell>
                         <connections>
                             <binding destination="126" name="content" keyPath="arrangedObjects" id="142"/>
-                            <binding destination="-2" name="selectedObject" keyPath="self.vtcompressor_profile" previousBinding="142" id="146"/>
+                            <binding destination="2sx-0x-ZEs" name="selectedObject" keyPath="selection.vtcompressor_profile" previousBinding="142" id="ZU7-zN-s6C"/>
                         </connections>
                     </popUpButton>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="150">
@@ -154,7 +155,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <binding destination="-2" name="value" keyPath="self.videoCBR" id="160"/>
+                            <binding destination="2sx-0x-ZEs" name="value" keyPath="selection.videoCBR" id="Ywt-fm-Pqh"/>
                         </connections>
                     </button>
                     <button toolTip="Bitrate is set to 'Avg Bitrate'. 'Max Bitrate' is ignored." horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="154">
@@ -210,6 +211,11 @@
                 <binding destination="-2" name="contentArray" keyPath="self.vtcompressor_profiles" id="149"/>
             </connections>
         </arrayController>
+        <objectController id="2sx-0x-ZEs" userLabel="CompressSettingsController">
+            <connections>
+                <binding destination="-2" name="contentObject" keyPath="self" id="QtI-og-0Qd"/>
+            </connections>
+        </objectController>
         <userDefaultsController representsSharedInstance="YES" id="41"/>
     </objects>
 </document>

@@ -28,22 +28,21 @@
 @property int width;
 @property int height;
 @property AbstractCaptureDevice *activeVideoDevice;
-@property id<ControllerProtocol> videoDelegate;
+@property (weak) id<ControllerProtocol> videoDelegate;
 @property (readonly) NSArray *availableVideoDevices;
 @property (readonly) BOOL needsAdvancedVideo;
 @property NSArray *videoFormats;
 @property NSArray *videoFramerates;
 @property xpc_connection_t xpc_conn;
 @property dispatch_queue_t xpc_queue;
+@property (weak) id<ControllerProtocol> settingsController;
 
 
 
 
 
--(bool) startCaptureSession:(NSError **)error;
 -(bool) stopCaptureSession;
 -(void) setVideoDimensions:(int)width height:(int)height;
--(bool) setupCaptureSession:(NSError **)therror;
 
 
 

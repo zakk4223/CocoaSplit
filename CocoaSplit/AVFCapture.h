@@ -41,7 +41,7 @@
 @property double videoCaptureFPS;
 @property int width;
 @property int height;
-@property id<ControllerProtocol> videoDelegate;
+@property (weak) id<ControllerProtocol> videoDelegate;
 @property (strong) id<ControllerProtocol> audioDelegate;
 @property (assign) int audioBitrate;
 @property (assign) int audioSamplerate;
@@ -58,6 +58,7 @@
 @property (assign) BOOL did_preroll;
 @property (assign) float previewVolume;
 
+@property (weak) id<ControllerProtocol> settingsController;
 
 
 

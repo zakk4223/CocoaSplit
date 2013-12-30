@@ -166,7 +166,7 @@
 
 - (void) drawFrame:(CVImageBufferRef)cImageBuf
 {
-    
+        
     CFTypeID bufType = CFGetTypeID(cImageBuf);
     
     if (bufType == CVPixelBufferGetTypeID())
@@ -252,6 +252,10 @@
             gl_format = GL_BGRA;
             gl_internal_format = GL_RGB;
             gl_type = GL_UNSIGNED_INT_8_8_8_8_REV;
+        } else if (frame_pixel_format == kCVPixelFormatType_32ARGB) {
+            gl_format = GL_RGB;
+            gl_internal_format = GL_RGB;
+            gl_type = GL_UNSIGNED_INT_8_8_8_8;
         } else {
             NSLog(@"FALLTHROUGH FORMAT TYPE %d", frame_pixel_format);
             

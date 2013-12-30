@@ -22,7 +22,6 @@
 
 -(void)dealloc
 {
-    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -95,6 +94,7 @@
     if (self = [super init])
     {
         
+        self.videoCaptureFPS = 60.0f;
         [self changeAvailableVideoDevices];
         NSOpenGLPixelFormatAttribute glAttributes[] = {
             
@@ -134,12 +134,37 @@
 
 
 
-
+/*
 -(CVImageBufferRef)getCurrentFrame
 {
     
     return [self renderNewFrame:_syphon_client];
 }
+ */
+
+
+- (CVImageBufferRef) getCurrentFrame
+{
+    
+    CVImageBufferRef newbuf = NULL;
+    
+    @synchronized(self)
+    {
+        if (_currentFrame)
+        {
+            CVPixelBufferRetain(_currentFrame);
+            return _currentFrame;
+            
+        }
+        
+    }
+    
+    return newbuf;
+    
+    
+}
+
+
 
 
 
@@ -342,17 +367,35 @@
     if (_syphonServer)
     {
         NSLog(@"STARTING SYPHON");
-        _syphon_client = [[SyphonClient alloc] initWithServerDescription:_syphonServer options:nil newFrameHandler:nil];
+        //_syphon_client = [[SyphonClient alloc] initWithServerDescription:_syphonServer options:nil newFrameHandler:nil];
+    
+    
+    
+     _syphon_client = [[SyphonClient alloc] initWithServerDescription:_syphonServer options:nil newFrameHandler:^(SyphonClient *client) {
+     
+     CVPixelBufferRef videoFrame = [self renderNewFrame:client];
+
+     //CVPixelBufferRetain(videoFrame);
+     
+     @synchronized(self) {
+     if (_currentFrame)
+     {
+         
+         CVPixelBufferRelease(_currentFrame);
+     }
+     
+     _currentFrame = videoFrame;
+     
+     }
+
+     }];
+        
         _syphon_uuid = [[_syphon_client serverDescription] objectForKey:SyphonServerDescriptionUUIDKey];
         _resume_name = self.activeVideoDevice.captureName;
+
     }
     
-    
-    /*
-     _syphon_client = [[SyphonClient alloc] initWithServerDescription:_syphonServer options:nil newFrameHandler:^(SyphonClient *client) {
-     [self renderNewFrame:client];
-     }];
-     */
+
 }
 
 
@@ -394,7 +437,6 @@
 -(void) handleSyphonServerAnnounce:(NSNotification *)notification
 {
     
-    NSString *announceID = [[notification object] objectForKey:SyphonServerDescriptionUUIDKey];
     [self changeAvailableVideoDevices];
     
     

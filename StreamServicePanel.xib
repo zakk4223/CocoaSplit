@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="4514"/>
     </dependencies>
@@ -7,11 +7,12 @@
         <customObject id="-2" userLabel="File's Owner" customClass="CaptureController">
             <connections>
                 <outlet property="createSheet" destination="1" id="13"/>
+                <outlet property="outputPanelController" destination="tvi-C9-v26" id="ekg-2r-bfE"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application"/>
-        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" wantsToBeColor="NO" visibleAtLaunch="NO" animationBehavior="default" id="1">
+        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" wantsToBeColor="NO" visibleAtLaunch="NO" animationBehavior="default" id="1">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="333" height="186"/>
@@ -75,11 +76,7 @@ Gw
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
-                            <binding destination="-2" name="value" keyPath="streamingServiceKey" id="48">
-                                <dictionary key="options">
-                                    <bool key="NSContinuouslyUpdatesValue" value="YES"/>
-                                </dictionary>
-                            </binding>
+                            <binding destination="tvi-C9-v26" name="value" keyPath="selection.streamingServiceKey" id="Xd2-w9-H5k"/>
                         </connections>
                     </textField>
                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="71">
@@ -87,7 +84,7 @@ Gw
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="74" id="72">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
+                            <font key="font" metaFont="menu"/>
                             <menu key="menu" title="OtherViews" id="73">
                                 <items>
                                     <menuItem title="Item 1" state="on" id="74"/>
@@ -100,7 +97,7 @@ Gw
                             <binding destination="83" name="content" keyPath="arrangedObjects" id="88"/>
                             <binding destination="83" name="contentObjects" keyPath="arrangedObjects.destination" previousBinding="88" id="110"/>
                             <binding destination="83" name="contentValues" keyPath="arrangedObjects.name" previousBinding="110" id="111"/>
-                            <binding destination="-2" name="selectedObject" keyPath="self.streamingDestination" previousBinding="111" id="112"/>
+                            <binding destination="tvi-C9-v26" name="selectedObject" keyPath="selection.streamingDestination" previousBinding="111" id="0tZ-h4-nIP"/>
                         </connections>
                     </popUpButton>
                 </subviews>
@@ -126,7 +123,7 @@ Gw
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="67" id="65">
                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                <font key="font" metaFont="system"/>
+                <font key="font" metaFont="menu"/>
                 <menu key="menu" title="OtherViews" id="66">
                     <items>
                         <menuItem title="Item 1" state="on" id="67"/>
@@ -141,6 +138,11 @@ Gw
                 <binding destination="-2" name="contentArray" keyPath="self.streamPanelDestinations" id="87"/>
             </connections>
         </arrayController>
+        <objectController id="tvi-C9-v26" userLabel="outputPanelController">
+            <connections>
+                <binding destination="-2" name="contentObject" keyPath="self" id="R4s-J1-dp2"/>
+            </connections>
+        </objectController>
         <userDefaultsController representsSharedInstance="YES" id="84"/>
     </objects>
 </document>

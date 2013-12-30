@@ -10,6 +10,7 @@
 #import "AbstractCaptureDevice.h"
 #import <AVFoundation/AVFoundation.h>
 #import <Cocoa/Cocoa.h>
+#import "ControllerProtocol.h"
 
 
 
@@ -22,9 +23,11 @@
 @property int width;
 @property int height;
 @property AbstractCaptureDevice *activeVideoDevice;
-@property id videoDelegate;
+@property (weak) id videoDelegate;
 @property (readonly) NSArray *availableVideoDevices;
 @property (readonly) BOOL needsAdvancedVideo;
+@property (weak) id<ControllerProtocol> settingsController;
+
 
 
 
@@ -50,6 +53,7 @@
 
 -(void)setupAudioCompression;
 -(void)stopAudioCompression;
+-(void)chooseDirectory:(id)sender;
 
 
 

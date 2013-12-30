@@ -11,7 +11,7 @@
 #import "CapturedFrameProtocol.h"
 #import <QTKit/QTKit.h>
 
-@interface XPCListenerDelegate : NSObject <NSXPCListenerDelegate, QTHelperProtocol>
+@interface XPCListenerDelegate : NSObject
 {
     QTCaptureDevice *captureDevice;
     QTCaptureSession *captureSession;

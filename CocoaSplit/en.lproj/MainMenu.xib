@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="4514"/>
     </dependencies>
@@ -288,7 +288,7 @@
                                                             <connections>
                                                                 <binding destination="548" name="content" keyPath="arrangedObjects" id="1027"/>
                                                                 <binding destination="548" name="contentValues" keyPath="arrangedObjects.captureName" previousBinding="1027" id="1053"/>
-                                                                <binding destination="816" name="selectedObject" keyPath="self.videoCaptureSession.activeVideoDevice" previousBinding="1053" id="2108"/>
+                                                                <binding destination="816" name="selectedObject" keyPath="self.videoCaptureSession.activeVideoDevice" previousBinding="1053" id="ENC-yL-Gua"/>
                                                             </connections>
                                                         </popUpButton>
                                                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="613">
@@ -343,9 +343,14 @@
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
-                                                                <binding destination="816" name="value" keyPath="captureWidth" id="1737">
+                                                                <binding destination="nWB-G2-33f" name="value" keyPath="selection.captureWidth" id="3N2-Fs-TH6">
                                                                     <dictionary key="options">
                                                                         <bool key="NSContinuouslyUpdatesValue" value="YES"/>
+                                                                    </dictionary>
+                                                                </binding>
+                                                                <binding destination="816" name="enabled" keyPath="self.captureRunning" id="C9F-C0-8gB">
+                                                                    <dictionary key="options">
+                                                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                                     </dictionary>
                                                                 </binding>
                                                             </connections>
@@ -368,7 +373,12 @@
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
-                                                                <binding destination="816" name="value" keyPath="captureHeight" id="1723"/>
+                                                                <binding destination="nWB-G2-33f" name="value" keyPath="selection.captureHeight" id="juV-Na-R1m"/>
+                                                                <binding destination="816" name="enabled" keyPath="self.captureRunning" id="Ao1-5J-rkt">
+                                                                    <dictionary key="options">
+                                                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                    </dictionary>
+                                                                </binding>
                                                             </connections>
                                                         </textField>
                                                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="639">
@@ -417,7 +427,7 @@
                                                                 <font key="font" metaFont="system"/>
                                                             </buttonCell>
                                                             <connections>
-                                                                <action selector="openAVFAdvanced:" target="816" id="3639"/>
+                                                                <action selector="openVideoAdvanced:" target="816" id="wY0-Nh-O7I"/>
                                                                 <binding destination="816" name="hidden" keyPath="self.videoCaptureSession.needsAdvancedVideo" id="3642">
                                                                     <dictionary key="options">
                                                                         <string key="NSValueTransformerName">NSNegateBoolean</string>
@@ -443,8 +453,8 @@
                                                                 </menu>
                                                             </popUpButtonCell>
                                                             <connections>
-                                                                <binding destination="816" name="selectedObject" keyPath="self.selectedVideoType" previousBinding="1789" id="1791"/>
-                                                                <binding destination="816" name="content" keyPath="self.videoTypes" id="1789"/>
+                                                                <binding destination="nWB-G2-33f" name="content" keyPath="selection.videoTypes" id="rld-cD-DmR"/>
+                                                                <binding destination="816" name="selectedObject" keyPath="self.selectedVideoType" previousBinding="rld-cD-DmR" id="U7d-P0-nPu"/>
                                                             </connections>
                                                         </popUpButton>
                                                         <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3559">
@@ -462,8 +472,13 @@
                                                                 </menu>
                                                             </popUpButtonCell>
                                                             <connections>
-                                                                <binding destination="816" name="content" keyPath="self.compressorTypes" id="3644"/>
-                                                                <binding destination="816" name="selectedObject" keyPath="self.selectedCompressorType" previousBinding="3644" id="3646"/>
+                                                                <binding destination="nWB-G2-33f" name="content" keyPath="selection.compressorTypes" id="Vyp-eZ-waq"/>
+                                                                <binding destination="nWB-G2-33f" name="selectedObject" keyPath="selection.selectedCompressorType" previousBinding="Vyp-eZ-waq" id="cGb-RY-KcI"/>
+                                                                <binding destination="816" name="enabled" keyPath="self.captureRunning" id="TFb-NE-zCz">
+                                                                    <dictionary key="options">
+                                                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                    </dictionary>
+                                                                </binding>
                                                             </connections>
                                                         </popUpButton>
                                                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1784">
@@ -502,9 +517,8 @@
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
-                                                                <binding destination="816" name="value" keyPath="self.videoCaptureSession.videoCaptureFPS" id="NHv-uk-isX">
+                                                                <binding destination="nWB-G2-33f" name="value" keyPath="selection.captureFPS" id="EqK-7l-7X2">
                                                                     <dictionary key="options">
-                                                                        <bool key="NSContinuouslyUpdatesValue" value="YES"/>
                                                                         <bool key="NSValidatesImmediately" value="YES"/>
                                                                     </dictionary>
                                                                 </binding>
@@ -530,7 +544,7 @@
                                                             <connections>
                                                                 <binding destination="896" name="content" keyPath="arrangedObjects" id="929"/>
                                                                 <binding destination="896" name="contentValues" keyPath="arrangedObjects.localizedName" previousBinding="929" id="934"/>
-                                                                <binding destination="816" name="selectedObject" keyPath="self.audioCaptureSession.activeAudioDevice" previousBinding="934" id="xG7-aK-0MP"/>
+                                                                <binding destination="nWB-G2-33f" name="selectedObject" keyPath="selection.audioCaptureSession.activeAudioDevice" previousBinding="934" id="aZ6-eb-NrY"/>
                                                             </connections>
                                                         </popUpButton>
                                                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="919">
@@ -560,7 +574,7 @@
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
-                                                                <binding destination="816" name="value" keyPath="self.audioBitrate" id="1729"/>
+                                                                <binding destination="nWB-G2-33f" name="value" keyPath="selection.audioCaptureSession.audioBitrate" id="bcm-FE-E7D"/>
                                                             </connections>
                                                         </textField>
                                                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1104">
@@ -583,24 +597,6 @@
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
-                                                        </textField>
-                                                        <textField verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1112">
-                                                            <rect key="frame" x="99" y="64" width="96" height="22"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="1113">
-                                                                <numberFormatter key="formatter" formatterBehavior="default10_4" positiveFormat="#,##0.###" negativeFormat="#,##0.###" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="309" minimumFractionDigits="0" maximumFractionDigits="3" id="1114">
-                                                                    <real key="roundingIncrement" value="0.0"/>
-                                                                    <metadata>
-                                                                        <bool key="localizesFormat" value="YES"/>
-                                                                    </metadata>
-                                                                </numberFormatter>
-                                                                <font key="font" metaFont="system"/>
-                                                                <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                            </textFieldCell>
-                                                            <connections>
-                                                                <binding destination="816" name="value" keyPath="self.audioSamplerate" id="1731"/>
-                                                            </connections>
                                                         </textField>
                                                         <scrollView autohidesScrollers="YES" horizontalLineScroll="36" horizontalPageScroll="10" verticalLineScroll="36" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1239">
                                                             <rect key="frame" x="373" y="134" width="414" height="134"/>
@@ -797,10 +793,107 @@
                                                                 </menu>
                                                             </popUpButtonCell>
                                                             <connections>
-                                                                <binding destination="816" name="content" keyPath="self.arOptions" id="3917"/>
-                                                                <binding destination="816" name="selectedObject" keyPath="self.resolutionOption" previousBinding="3917" id="3918"/>
+                                                                <binding destination="nWB-G2-33f" name="content" keyPath="selection.arOptions" id="KW1-EH-Ck6"/>
+                                                                <binding destination="nWB-G2-33f" name="selectedObject" keyPath="selection.resolutionOption" previousBinding="KW1-EH-Ck6" id="ATG-nv-muM"/>
+                                                                <binding destination="816" name="enabled" keyPath="self.captureRunning" id="xzR-6a-swD">
+                                                                    <dictionary key="options">
+                                                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                    </dictionary>
+                                                                </binding>
                                                             </connections>
                                                         </popUpButton>
+                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xmm-O5-Srz">
+                                                            <rect key="frame" x="15" y="40" width="74" height="17"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Audio Shift" id="ZJx-NF-NxW">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="w0g-dB-teB">
+                                                            <rect key="frame" x="99" y="37" width="96" height="22"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="JlD-bx-XpD">
+                                                                <numberFormatter key="formatter" formatterBehavior="custom10_4" positiveFormat="#,##0.###" negativeFormat="#,##0.###" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="309" minimumFractionDigits="0" maximumFractionDigits="3" id="GgZ-bT-lUY">
+                                                                    <real key="roundingIncrement" value="0.0"/>
+                                                                    <metadata>
+                                                                        <bool key="localizesFormat" value="YES"/>
+                                                                        <real key="inspectorSampleValue" value="1"/>
+                                                                    </metadata>
+                                                                </numberFormatter>
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                            <connections>
+                                                                <binding destination="nWB-G2-33f" name="value" keyPath="selection.audio_adjust" id="TKx-zT-v4x">
+                                                                    <dictionary key="options">
+                                                                        <bool key="NSContinuouslyUpdatesValue" value="YES"/>
+                                                                        <bool key="NSConditionallySetsEnabled" value="YES"/>
+                                                                    </dictionary>
+                                                                </binding>
+                                                                <binding destination="816" name="enabled" keyPath="self.captureRunning" id="G2A-QB-TKd">
+                                                                    <dictionary key="options">
+                                                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                    </dictionary>
+                                                                </binding>
+                                                            </connections>
+                                                        </textField>
+                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7aV-3Y-hjS">
+                                                            <rect key="frame" x="201" y="40" width="55" height="17"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="seconds" id="MTJ-t8-vrz">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                        <button horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yJi-U9-92m">
+                                                            <rect key="frame" x="255" y="35" width="25" height="25"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <string key="toolTip">Shift audio by manipulating the audio presentation time stamp. The value here is added to every audio packet's PTS field. Positive values delay the audio, negative values will shift the audio 'behind' the video.</string>
+                                                            <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" enabled="NO" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="nsC-Vs-ToD">
+                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                <font key="font" metaFont="system"/>
+                                                            </buttonCell>
+                                                        </button>
+                                                        <popUpButton verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TZ7-bf-4zZ">
+                                                            <rect key="frame" x="98" y="64" width="100" height="26"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="95" id="Rz3-uG-nbR"/>
+                                                            </constraints>
+                                                            <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="6Zz-L2-pS9" id="F7X-wk-o1V">
+                                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                                <font key="font" metaFont="menu"/>
+                                                                <menu key="menu" title="OtherViews" id="HzL-nS-eYJ">
+                                                                    <items>
+                                                                        <menuItem title="Item 1" state="on" id="6Zz-L2-pS9"/>
+                                                                        <menuItem title="Item 2" id="SOa-Wi-wiX"/>
+                                                                        <menuItem title="Item 3" id="j0k-fw-mDr"/>
+                                                                    </items>
+                                                                </menu>
+                                                            </popUpButtonCell>
+                                                            <connections>
+                                                                <binding destination="nWB-G2-33f" name="selectedObject" keyPath="selection.audioCaptureSession.audioSamplerate" previousBinding="m7q-kG-Njm" id="Mvp-JV-j1i"/>
+                                                                <binding destination="nWB-G2-33f" name="content" keyPath="selection.validSamplerates" id="m7q-kG-Njm"/>
+                                                                <binding destination="816" name="enabled" keyPath="self.captureRunning" id="D4q-km-cvj">
+                                                                    <dictionary key="options">
+                                                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                    </dictionary>
+                                                                </binding>
+                                                            </connections>
+                                                        </popUpButton>
+                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vIa-8W-NuJ">
+                                                            <rect key="frame" x="201" y="95" width="62" height="17"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="kbits/sec" id="YTZ-hR-a0P">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
                                                     </subviews>
                                                     <constraints>
                                                         <constraint firstItem="1784" firstAttribute="leading" secondItem="3290" secondAttribute="leading" constant="17" id="3315"/>
@@ -829,7 +922,6 @@
                                                         <constraint firstItem="1108" firstAttribute="leading" secondItem="3290" secondAttribute="leading" constant="17" id="3677"/>
                                                         <constraint firstItem="1104" firstAttribute="top" secondItem="919" secondAttribute="bottom" constant="8" symbolic="YES" id="3692"/>
                                                         <constraint firstItem="1108" firstAttribute="top" secondItem="1104" secondAttribute="bottom" constant="8" symbolic="YES" id="3700"/>
-                                                        <constraint firstItem="1112" firstAttribute="centerY" secondItem="1108" secondAttribute="centerY" id="3702"/>
                                                         <constraint firstItem="1471" firstAttribute="leading" secondItem="3290" secondAttribute="leading" constant="373" id="3707"/>
                                                         <constraint firstAttribute="trailing" secondItem="1239" secondAttribute="trailing" constant="17" id="3711"/>
                                                         <constraint firstItem="1471" firstAttribute="top" secondItem="3613" secondAttribute="top" id="3714"/>
@@ -848,8 +940,6 @@
                                                         <constraint firstItem="2597" firstAttribute="top" secondItem="3290" secondAttribute="top" constant="158" id="3761"/>
                                                         <constraint firstItem="620" firstAttribute="top" secondItem="3290" secondAttribute="top" constant="105" id="3762"/>
                                                         <constraint firstItem="1098" firstAttribute="bottom" secondItem="1104" secondAttribute="bottom" id="3765"/>
-                                                        <constraint firstItem="1098" firstAttribute="trailing" secondItem="1112" secondAttribute="trailing" id="3767"/>
-                                                        <constraint firstItem="1098" firstAttribute="leading" secondItem="1112" secondAttribute="leading" id="3768"/>
                                                         <constraint firstItem="899" firstAttribute="leading" secondItem="1098" secondAttribute="leading" id="3769"/>
                                                         <constraint firstItem="951" firstAttribute="top" secondItem="639" secondAttribute="bottom" constant="8" symbolic="YES" id="3770"/>
                                                         <constraint firstItem="951" firstAttribute="leading" secondItem="899" secondAttribute="leading" id="3771"/>
@@ -1111,8 +1201,17 @@
                 <binding destination="816" name="contentArray" keyPath="self.videoCaptureSession.availableVideoDevices" id="2047"/>
             </connections>
         </arrayController>
+        <objectController id="nWB-G2-33f">
+            <declaredKeys>
+                <string>captureFPS</string>
+            </declaredKeys>
+            <connections>
+                <binding destination="816" name="contentObject" keyPath="self" id="zQo-gw-l6W"/>
+            </connections>
+        </objectController>
         <customObject id="816" customClass="CaptureController">
             <connections>
+                <outlet property="objectController" destination="nWB-G2-33f" id="AQr-hL-LzT"/>
                 <outlet property="previewCtx" destination="2416" id="3493"/>
             </connections>
         </customObject>

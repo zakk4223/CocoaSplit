@@ -58,13 +58,14 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     CFAbsoluteTime _frame_interval;
     mach_timebase_info_data_t _mach_timebase;
     double _frame_time;
+    double _next_keyframe_time;
     
     
     
 }
 @property (strong) id<h264Compressor> videoCompressor;
-@property (retain) id<CaptureSessionProtocol> videoCaptureSession;
-@property (retain) id<CaptureSessionProtocol> audioCaptureSession;
+@property (nonatomic, strong) id<CaptureSessionProtocol> videoCaptureSession;
+@property (strong) id<CaptureSessionProtocol> audioCaptureSession;
 
 @property (assign) double min_delay;
 @property (assign) double max_delay;
@@ -72,9 +73,17 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (assign) long long compressedFrameCount;
 @property (assign) NSMutableArray *streamPanelDestinations;
 @property (strong) NSUserDefaults *cmdLineArgs;
+@property (assign) double audio_adjust;
+
+@property (assign) CFAbsoluteTime last_dl_time;
 
 
 @property (unsafe_unretained) IBOutlet PreviewView *previewCtx;
+@property (unsafe_unretained) IBOutlet NSObjectController *objectController;
+@property (strong) IBOutlet NSObjectController *compressSettingsController;
+@property (strong) IBOutlet NSObjectController *outputPanelController;
+- (IBAction)imagePanelChooseDirectory:(id)sender;
+
 - (IBAction)addStreamingService:(id)sender;
 
 - (IBAction)streamButtonPushed:(id)sender;
@@ -83,8 +92,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (IBAction)openAdvancedPrefPanel:(id)sender;
 - (IBAction)openCreateSheet:(id)sender;
 - (IBAction)videoRefresh:(id)sender;
-- (IBAction)openAVFAdvanced:(id)sender;
-- (IBAction)closeAVFAdvanced:(id)sender;
+- (IBAction)openVideoAdvanced:(id)sender;
+- (IBAction)closeVideoAdvanced:(id)sender;
 - (IBAction)openCompressPanel:(id)sender;
 - (IBAction)closeCompressPanel:(id)sender;
 
@@ -111,7 +120,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 @property (strong) IBOutlet NSWindow *createSheet;
-@property (strong) IBOutlet NSWindow *avfPanel;
+@property (strong) IBOutlet NSWindow *advancedVideoPanel;
 @property (strong) IBOutlet NSWindow *compressPanel;
 @property (strong) IBOutlet NSWindow *advancedPrefPanel;
 
@@ -150,10 +159,13 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 
+
 @property (assign) int captureHeight;
 @property (assign) int captureWidth;
 
 @property (assign) int audioBitrate;
+
+@property (strong) NSArray *validSamplerates;
 
 @property (assign) int audioSamplerate;
 
@@ -170,10 +182,15 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (weak) AbstractCaptureDevice *selectedVideoCapture;
 @property (readonly) AVCaptureDevice *selectedAudioCapture;
 
-@property (readonly) double captureFPS;
+@property (assign) double captureFPS;
 
 
 @property (weak)  NSString *ffmpeg_path;
+
+@property NSString *imageDirectory;
+
+@property (strong) NSDictionary *extraSaveData;
+
 
 
 
@@ -185,6 +202,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (bool) startStream;
 - (void) stopStream;
 - (void) loadCmdlineSettings:(NSUserDefaults *)cmdargs;
+-(void)setExtraData:(id)saveData forKey:(NSString *)forKey;
+-(id)getExtraData:(NSString *)forkey;
 
 
 

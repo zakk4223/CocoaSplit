@@ -24,11 +24,13 @@
 {
     if (self = [super init])
     {
+        NSLog(@"AVF CAPTURE INIT");
+        self.videoCaptureFPS = 60.0f;
         _capture_session = [[AVCaptureSession alloc] init];
         [self setupVideoOutput];
         
         
-
+        NSLog(@"AVF CAPTURE PRE START");
         [_capture_session startRunning];
     }
     return self;
@@ -51,6 +53,14 @@
     return self;
 }
 
+
+-(void)dealloc
+{
+    if (_capture_session)
+    {
+        [_capture_session stopRunning];
+    }
+}
 
 -(void) setVideoDimensions:(int)width height:(int)height
 {
@@ -220,7 +230,6 @@
 
     for(devinstance in devices)
     {
-        NSLog(@"Inputs %@", devinstance.linkedDevices);
         [retArray addObject:[[AbstractCaptureDevice alloc] initWithName:[devinstance localizedName] device:devinstance uniqueID:devinstance.uniqueID]];
     }
     
@@ -252,6 +261,7 @@
 -(bool) startCaptureSession:(NSError **)error
 {
     
+
     _preroll_frame_cnt = 0;
     self.did_preroll = false;
     
@@ -376,7 +386,7 @@
             return NO;
         }
                 
-        AVCaptureConnection *outconn = [_video_capture_output connectionWithMediaType:AVMediaTypeVideo];
+        //AVCaptureConnection *outconn = [_video_capture_output connectionWithMediaType:AVMediaTypeVideo];
         //if (outconn && self.videoCaptureFPS && self.videoCaptureFPS > 0)
         //{
          //   NSLog(@"SETTING VIDEO CAPTURE FPS %f", self.videoCaptureFPS);
@@ -413,13 +423,13 @@
     
     
             
+            
             _audio_capture_output.audioSettings = @{AVFormatIDKey: [NSNumber numberWithInt:kAudioFormatMPEG4AAC],
         AVSampleRateKey: [NSNumber numberWithFloat: 44100.0],
         AVEncoderBitRateKey: [NSNumber numberWithInt:_audioBitrate*1000 ],
         AVNumberOfChannelsKey: @2
             
             };
-
             
             if ([_capture_session canAddOutput:_audio_capture_output])
             {
@@ -492,8 +502,8 @@
         
         
         _audio_capture_output.audioSettings = @{AVFormatIDKey: [NSNumber numberWithInt:kAudioFormatMPEG4AAC],
-                                                AVSampleRateKey: [NSNumber numberWithFloat: 44100.0],
-                                                AVEncoderBitRateKey: [NSNumber numberWithInt:_audioBitrate*1000 ],
+                                                AVSampleRateKey: [NSNumber numberWithInteger: self.audioSamplerate],
+                                                AVEncoderBitRateKey: [NSNumber numberWithInt:self.audioBitrate*1000 ],
                                                 AVNumberOfChannelsKey: @2
                                                 
                                                 };
@@ -553,6 +563,7 @@
         if ([_capture_session canAddOutput:_video_capture_output])
         {
             [_capture_session addOutput:_video_capture_output];
+            NSLog(@"ADDED OUTPUT");
             _video_capture_output.videoSettings = videoSettings;
             
             _video_capture_queue = dispatch_queue_create("VideoQueue", NULL);

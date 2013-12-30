@@ -12,7 +12,7 @@
 
 
 
-- (bool)compressFrame:(CVImageBufferRef)imageBuffer pts:(CMTime)pts duration:(CMTime)duration
+- (bool)compressFrame:(CVImageBufferRef)imageBuffer pts:(CMTime)pts duration:(CMTime)duration isKeyFrame:(BOOL)isKeyFrame
 {
     
     
@@ -65,6 +65,7 @@
     if (!_vtpt_ref)
     {
         VTPixelTransferSessionCreate(kCFAllocatorDefault, &_vtpt_ref);
+        VTSessionSetProperty(_vtpt_ref, kVTPixelTransferPropertyKey_ScalingMode, kVTScalingMode_Letterbox);
     }
     CVPixelBufferRef converted_frame;
     
@@ -97,6 +98,7 @@
         
         
         
+        
     AVPacket *pkt = av_malloc(sizeof (AVPacket));
     av_init_packet(pkt);
                                                                                                     
@@ -109,6 +111,11 @@
     pkt->size = 0;
     
 
+    if (isKeyFrame)
+    {
+        outframe->pict_type = AV_PICTURE_TYPE_I;
+    }
+        
     ret = avcodec_encode_video2(_av_codec_ctx, pkt, outframe, &got_output);
 
     CVPixelBufferUnlockBaseAddress(converted_frame, kCVPixelBufferLock_ReadOnly);

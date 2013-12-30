@@ -29,6 +29,7 @@
 @property BOOL videoCBR;
 @property (assign) int maxOutputPending;
 @property (assign) int maxOutputDropped;
+@property NSString *imageDirectory;
 
 
 
@@ -36,6 +37,10 @@
 - (void)captureOutputVideo:(AbstractCaptureDevice *)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer didOutputImage:(CVImageBufferRef)imageBuffer frameTime:(uint64_t)frameTime;
 - (void)captureOutputAudio:(id)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer;
 - (void) outputSampleBuffer:(CMSampleBufferRef)theBuffer;
+-(void)newFrame;
+-(void)setExtraData:(id)saveData forKey:(NSString *)forKey;
+-(id)getExtraData:(NSString *)forkey;
+
 
 
 

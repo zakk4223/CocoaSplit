@@ -38,6 +38,7 @@ void qtc_xpc_event_handler(xpc_connection_t conn, xpc_object_t event)
     if (self)
     {
         
+        self.videoCaptureFPS = 60.0f;
         self.xpc_conn = xpc_connection_create("zakk.lol.QTCaptureHelper", NULL);
         self.xpc_queue = dispatch_queue_create("qtc_capture_queue", NULL);
         
