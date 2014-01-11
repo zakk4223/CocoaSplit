@@ -256,9 +256,7 @@
             gl_format = GL_RGB;
             gl_internal_format = GL_RGB;
             gl_type = GL_UNSIGNED_INT_8_8_8_8;
-        } else {
-            NSLog(@"FALLTHROUGH FORMAT TYPE %d", frame_pixel_format);
-            
+        } else {            
             gl_format = GL_LUMINANCE;
             gl_internal_format = GL_LUMINANCE;
             gl_type = GL_UNSIGNED_BYTE;

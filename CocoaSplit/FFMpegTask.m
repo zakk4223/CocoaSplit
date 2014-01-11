@@ -314,15 +314,16 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 
 -(void) updateInputStats
 {
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
     CFAbsoluteTime time_now = CFAbsoluteTimeGetCurrent();
-    
-    
-    self.input_framerate = _input_framecnt / (time_now - _input_frame_timestamp);
+    double calculated_input_framerate = _input_framecnt / (time_now - _input_frame_timestamp);
     _input_framecnt = 0;
     _input_frame_timestamp = time_now;
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+    
+    
+        self.input_framerate = calculated_input_framerate;
     self.buffered_frame_count = _pending_frame_count;
     self.buffered_frame_size = _pending_frame_size;
     self.dropped_frame_count = _dropped_frames;
@@ -334,15 +335,19 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 -(void) updateOutputStats
 {
     
-    dispatch_async(dispatch_get_main_queue(), ^{
     CFAbsoluteTime time_now = CFAbsoluteTimeGetCurrent();
-    
-    
-    self.output_framerate = _output_framecnt / (time_now - _output_frame_timestamp);
-    self.output_bitrate = (_output_bytes / (time_now - _output_frame_timestamp))*8;
+    double calculated_output_framerate = _output_framecnt / (time_now - _output_frame_timestamp);
+    double calculated_output_bitrate = (_output_bytes / (time_now - _output_frame_timestamp))*8;
     _output_framecnt = 0;
     _output_bytes = 0;
     _output_frame_timestamp = time_now;
+
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+    
+    
+        self.output_framerate = calculated_output_framerate;
+        self.output_bitrate = calculated_output_bitrate;
     });
     
 }

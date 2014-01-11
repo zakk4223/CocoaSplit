@@ -116,8 +116,11 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     
     status = VTCompressionSessionCreate(NULL, self.settingsController.captureWidth, self.settingsController.captureHeight, kCMVideoCodecType_H264, encoderSpec, NULL, NULL, VideoCompressorReceiveFrame,  (__bridge void *)self, &_compression_session);
     
+    CFDictionaryRef props;
     
+    VTCompressionSessionCopySupportedPropertyDictionary(_compression_session, &props);
     
+    NSLog(@"SUPPORTED PROPERTIES %@", props);
     if (status != noErr || !_compression_session)
     {
         return NO;
@@ -137,7 +140,9 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     
     
     VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_AllowFrameReordering, kCFBooleanFalse);
-    VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_RealTime, kCFBooleanTrue);
+    VTSessionSetProperty(_compression_session, (__bridge CFStringRef)@"RealTime", kCFBooleanTrue);
+    
+    
     
     
     
@@ -228,20 +233,33 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 
     }
 
+    
     if (self.settingsController.vtcompressor_profile)
     {
         CFStringRef session_profile = nil;
         
         
-        
-        if ([self.settingsController.vtcompressor_profile isEqualToString:@"Baseline"])
+        if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_8)
         {
-            session_profile = kVTProfileLevel_H264_Baseline_AutoLevel;
-        } else if ([self.settingsController.vtcompressor_profile isEqualToString:@"Main"]) {
-            session_profile = kVTProfileLevel_H264_Main_AutoLevel;
-        } else if ([self.settingsController.vtcompressor_profile isEqualToString:@"High"]) {
-            session_profile = kVTProfileLevel_H264_High_AutoLevel;
+            if ([self.settingsController.vtcompressor_profile isEqualToString:@"Baseline"])
+            {
+                session_profile = kVTProfileLevel_H264_Baseline_4_1;
+            } else if ([self.settingsController.vtcompressor_profile isEqualToString:@"Main"]) {
+                session_profile = kVTProfileLevel_H264_Main_5_0;
+            } else if ([self.settingsController.vtcompressor_profile isEqualToString:@"High"]) {
+                session_profile = kVTProfileLevel_H264_High_5_0;
+            }            
+        } else {
+            if ([self.settingsController.vtcompressor_profile isEqualToString:@"Baseline"])
+            {
+                session_profile = (__bridge CFStringRef)@"H264_Baseline_AutoLevel";
+            } else if ([self.settingsController.vtcompressor_profile isEqualToString:@"Main"]) {
+                session_profile = (__bridge CFStringRef)@"H264_Main_AutoLevel";
+            } else if ([self.settingsController.vtcompressor_profile isEqualToString:@"High"]) {
+                session_profile = (__bridge CFStringRef)@"H264_High_AutoLevel";
+            }
         }
+        
         
         if (session_profile)
         {

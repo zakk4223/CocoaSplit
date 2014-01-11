@@ -482,8 +482,9 @@
     [saveRoot setValue:[NSNumber numberWithInt:self.maxOutputDropped] forKey:@"maxOutputDropped"];
     [saveRoot setValue:[NSNumber numberWithInt:self.maxOutputPending] forKey:@"maxOutputPending"];
     [saveRoot setValue:self.resolutionOption forKey:@"resolutionOption"];
+    [saveRoot setValue:[NSNumber numberWithDouble:self.audio_adjust] forKey:@"audioAdjust"];
     
-    NSLog(@"SAVEROOT EXTRA %@", self.extraSaveData);
+    
     
     [saveRoot setValue:self.extraSaveData forKey:@"extraSaveData"];
     
@@ -557,6 +558,8 @@
     self.maxOutputDropped = [[saveRoot valueForKey:@"maxOutputDropped"] intValue];
     self.maxOutputPending = [[saveRoot valueForKey:@"maxOutputPending"] intValue];
 
+    self.audio_adjust = [[saveRoot valueForKey:@"audioAdjust"] doubleValue];
+    
     self.resolutionOption = [saveRoot valueForKey:@"resolutionOption"];
     if (!self.resolutionOption)
     {

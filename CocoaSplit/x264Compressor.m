@@ -80,7 +80,6 @@
     outframe->format = PIX_FMT_YUV420P;
     outframe->width = (int)src_width;
     outframe->height = (int)src_height;
-    
     CVPixelBufferLockBaseAddress(converted_frame, kCVPixelBufferLock_ReadOnly);
     size_t plane_count = CVPixelBufferGetPlaneCount(converted_frame);
     int i;
@@ -147,6 +146,9 @@
     
     
 }
+
+
+
 - (bool)setupCompressor
 {
  

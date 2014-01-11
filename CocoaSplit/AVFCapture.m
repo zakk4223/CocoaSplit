@@ -24,13 +24,11 @@
 {
     if (self = [super init])
     {
-        NSLog(@"AVF CAPTURE INIT");
         self.videoCaptureFPS = 60.0f;
         _capture_session = [[AVCaptureSession alloc] init];
         [self setupVideoOutput];
         
         
-        NSLog(@"AVF CAPTURE PRE START");
         [_capture_session startRunning];
     }
     return self;
@@ -267,7 +265,6 @@
     
     if (_capture_session.isRunning)
     {
-        NSLog(@"CAPTURE SESSION IS ALREADY RUNNING");
         return YES;
     }
 
@@ -372,7 +369,6 @@
         }
         
          */
-        NSLog(@"SETTINGS DICT %@", videoSettings);
         _video_capture_output = [[AVCaptureVideoDataOutput alloc] init];
     
         if ([_capture_session canAddOutput:_video_capture_output])
@@ -557,13 +553,11 @@
          [videoSettings setValue:@(self.videoWidth) forKey:(NSString *)kCVPixelBufferWidthKey];
          } */
         
-        NSLog(@"SETTINGS DICT %@", videoSettings);
         _video_capture_output = [[AVCaptureVideoDataOutput alloc] init];
         
         if ([_capture_session canAddOutput:_video_capture_output])
         {
             [_capture_session addOutput:_video_capture_output];
-            NSLog(@"ADDED OUTPUT");
             _video_capture_output.videoSettings = videoSettings;
             
             _video_capture_queue = dispatch_queue_create("VideoQueue", NULL);
