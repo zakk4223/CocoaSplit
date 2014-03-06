@@ -602,6 +602,7 @@
 				34AE3C3E164E3EAE0052C95E /* CopyFiles */,
 				3450579D172A4AE30065A452 /* CopyFiles */,
 				3435E39C188BD80A0015CC01 /* CopyFiles */,
+				34BC570418C8667700869744 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -751,6 +752,19 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+		34BC570418C8667700869744 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "GIT_HASH=`git rev-parse --short HEAD`\n\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $GIT_HASH\" $BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
