@@ -12,13 +12,13 @@
 
 
 
-- (bool)compressFrame:(CVImageBufferRef)imageBuffer pts:(CMTime)pts duration:(CMTime)duration isKeyFrame:(BOOL)isKeyFrame
+- (bool)compressFrame:(CapturedFrameData *)frameData isKeyFrame:(BOOL)isKeyFrame
 {
     
     
     if (!self.settingsController || !self.outputDelegate)
     {
-        CVPixelBufferRelease(imageBuffer);
+        //CVPixelBufferRelease(imageBuffer);
         return NO;
     }
     
@@ -39,10 +39,13 @@
     
     dispatch_async(_compressor_queue, ^{
         
+        CMTime pts = frameData.videoPTS;
         
         size_t src_height;
         size_t src_width;
         enum PixelFormat frame_fmt;
+        CVImageBufferRef imageBuffer = frameData.videoFrame;
+        
         OSType cv_pixel_format = CVPixelBufferGetPixelFormatType(imageBuffer);
         
         //NSLog(@"WIDTH INPUT %zd HEIGHT %zd",  CVPixelBufferGetWidth(imageBuffer), CVPixelBufferGetHeight(imageBuffer));
@@ -74,8 +77,10 @@
     VTPixelTransferSessionTransferImage(_vtpt_ref, imageBuffer, converted_frame);
         
     
-
-    CVPixelBufferRelease(imageBuffer);
+        imageBuffer = nil;
+        frameData.videoFrame = nil;
+        
+    //CVPixelBufferRelease(imageBuffer);
     AVFrame *outframe = avcodec_alloc_frame();
     outframe->format = PIX_FMT_YUV420P;
     outframe->width = (int)src_width;
@@ -133,12 +138,18 @@
     if (got_output)
     {
         
-        [self.outputDelegate outputAVPacket:pkt codec_ctx:_av_codec_ctx];
+        frameData.avcodec_ctx = _av_codec_ctx;
+        frameData.avcodec_pkt = pkt;
+        
+        [self.outputDelegate outputEncodedData:frameData];
+        
+        //[self.outputDelegate outputAVPacket:pkt codec_ctx:_av_codec_ctx];
     }
         av_free(outframe);
     CVPixelBufferRelease(converted_frame);
-        av_free_packet(pkt);
-         av_free(pkt);
+        //av_free_packet(pkt);
+         //av_free(pkt);
+        
         
     });
     

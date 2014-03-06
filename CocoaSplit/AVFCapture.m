@@ -301,152 +301,6 @@
 
 
 
--(bool) setupCaptureSession:(NSError **)therror
-{
-    
-
-    AVCaptureDeviceInput *video_capture_input;
-    AVCaptureDeviceInput *audio_capture_input;
-    
-    self.prerollSeconds = 2;
-    _preroll_frame_cnt = 0;
-    _preroll_needed_frames = self.prerollSeconds * self.videoCaptureFPS;
-    
-    
-    if (_capture_session)
-        return YES;
-        
-    
-    NSLog(@"Starting setup capture");
-    if (_videoDelegate || _audioDelegate)
-    {
-         _capture_session = [[AVCaptureSession alloc] init];
-    }
-    
-    if (_videoDelegate)
-    {
-        if (!self.activeVideoDevice)
-        {
-            NSLog(@"No video input device");
-            *therror = [NSError errorWithDomain:@"videoCapture" code:100 userInfo:@{NSLocalizedDescriptionKey : @"Must select video capture device first"}];
-            return NO;
-        }
-  
-        _capture_session = [[AVCaptureSession alloc] init];
-    
-        
-        video_capture_input = [AVCaptureDeviceInput deviceInputWithDevice:_selectedVideoCaptureDevice error:therror];
-    
-        if (!video_capture_input)
-        {
-            NSLog(@"No video capture input?");
-            return NO;
-        }
-                     
-        if ([_capture_session canAddInput:video_capture_input])
-        {
-            [_capture_session addInput:video_capture_input];
-        
-        } else {
-            NSLog(@"Can't add video_capture_input");
-            *therror = [NSError errorWithDomain:@"videoCapture" code:120 userInfo:@{NSLocalizedDescriptionKey : @"Could not add video input to capture session"}];
-            return NO;
-        }
-  
-        NSMutableDictionary *videoSettings = [[NSMutableDictionary alloc] init];
-
-        
-        [videoSettings setValue:@[@(kCVPixelFormatType_422YpCbCr8FullRange), @(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange), @(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange), @(kCVPixelFormatType_422YpCbCr8)] forKey:(NSString *)kCVPixelBufferPixelFormatTypeKey];
-        NSDictionary *ioAttrs = [NSDictionary dictionaryWithObject: [NSNumber numberWithBool: YES]
-                                                            forKey: (NSString *)kIOSurfaceIsGlobal];
-        
-        [videoSettings setValue:ioAttrs forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
-        /*
-        if (self.videoHeight && self.videoWidth)
-        {
-            [videoSettings setValue:@(1280) forKey:(NSString *)kCVPixelBufferHeightKey];
-            [videoSettings setValue:@(720) forKey:(NSString *)kCVPixelBufferWidthKey];
-        }
-        
-         */
-        _video_capture_output = [[AVCaptureVideoDataOutput alloc] init];
-    
-        if ([_capture_session canAddOutput:_video_capture_output])
-        {
-            [_capture_session addOutput:_video_capture_output];
-            _video_capture_output.videoSettings = videoSettings;
-
-        } else {
-            NSLog(@"Can't add video capture output");
-            *therror = [NSError errorWithDomain:@"videoCapture" code:130 userInfo:@{NSLocalizedDescriptionKey : @"Could not add video output to capture session"}];
-            return NO;
-        }
-                
-        //AVCaptureConnection *outconn = [_video_capture_output connectionWithMediaType:AVMediaTypeVideo];
-        //if (outconn && self.videoCaptureFPS && self.videoCaptureFPS > 0)
-        //{
-         //   NSLog(@"SETTING VIDEO CAPTURE FPS %f", self.videoCaptureFPS);
-         //   outconn.videoMinFrameDuration = CMTimeMake(1000, self.videoCaptureFPS*1000);
-            
-        //}
-        
-    }
-    
-    if (_audioDelegate)
-    {
-        
-        if (self.activeAudioDevice)
-        {
-            audio_capture_input = [AVCaptureDeviceInput deviceInputWithDevice:self.activeAudioDevice error:therror];
-    
-            if (!audio_capture_input)
-            {
-                NSLog(@"No audio capture input?");
-                return NO;
-            }
-    
-            if ([_capture_session canAddInput:audio_capture_input])
-            {
-                [_capture_session addInput:audio_capture_input];
-        
-            } else {
-                NSLog(@"Can't add audio input?");
-                *therror = [NSError errorWithDomain:@"audioCapture" code:220 userInfo:@{NSLocalizedDescriptionKey : @"Could not add audio input to capture session"}];
-                return NO;
-            }
-    
-            _audio_capture_output = [[AVCaptureAudioDataOutput alloc] init];
-    
-    
-            
-            
-            _audio_capture_output.audioSettings = @{AVFormatIDKey: [NSNumber numberWithInt:kAudioFormatMPEG4AAC],
-        AVSampleRateKey: [NSNumber numberWithFloat: 44100.0],
-        AVEncoderBitRateKey: [NSNumber numberWithInt:_audioBitrate*1000 ],
-        AVNumberOfChannelsKey: @2
-            
-            };
-            
-            if ([_capture_session canAddOutput:_audio_capture_output])
-            {
-                [_capture_session addOutput:_audio_capture_output];
-            } else {
-                NSLog(@"Can't add audio capture output");
-                *therror = [NSError errorWithDomain:@"audioCapture" code:230 userInfo:@{NSLocalizedDescriptionKey : @"Could not add audio output to capture session"}];
-                return NO;
-            }
-
-        } else {
-            NSLog(@"No audio device?");
-            *therror = [NSError errorWithDomain:@"audioCapture" code:240 userInfo:@{NSLocalizedDescriptionKey : @"Must select audio capture device first"}];
-            return NO;
-        }
-    }
-    return YES;
-    
-}
-
-
 -(void) setPreviewVolume:(float)previewVolume
 {
     
@@ -496,6 +350,8 @@
         _audio_capture_output = [[AVCaptureAudioDataOutput alloc] init];
         
         
+        NSLog(@"AUDIO SAMPLERATE %d BITRATE %d", self.audioSamplerate, self.audioBitrate);
+        
         
         _audio_capture_output.audioSettings = @{AVFormatIDKey: [NSNumber numberWithInt:kAudioFormatMPEG4AAC],
                                                 AVSampleRateKey: [NSNumber numberWithInteger: self.audioSamplerate],
@@ -542,9 +398,17 @@
     {
         NSMutableDictionary *videoSettings = [[NSMutableDictionary alloc] init];
         
-        [videoSettings setValue:@[@(kCVPixelFormatType_422YpCbCr8FullRange), @(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange), @(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange), @(kCVPixelFormatType_422YpCbCr8)] forKey:(NSString *)kCVPixelBufferPixelFormatTypeKey];
+        //[videoSettings setValue:@(kCVPixelFormatType_422YpCbCr8) forKey:(__bridge NSString *)kCVPixelBufferPixelFormatTypeKey];
+         
+        
+        
+        //[videoSettings setValue:@(kCVPixelFormatType_32BGRA) forKey:(__bridge NSString *)kCVPixelBufferPixelFormatTypeKey];
+        
+        //[videoSettings setValue:@[@(kCVPixelFormatType_422YpCbCr8), @(kCVPixelFormatType_422YpCbCr8FullRange), @(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange), @(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange), ] forKey:(NSString *)kCVPixelBufferPixelFormatTypeKey];
         NSDictionary *ioAttrs = [NSDictionary dictionaryWithObject: [NSNumber numberWithBool: YES]
                                                             forKey: (NSString *)kIOSurfaceIsGlobal];
+        
+        
         
         [videoSettings setValue:ioAttrs forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
         /*        if (self.videoHeight && self.videoWidth)

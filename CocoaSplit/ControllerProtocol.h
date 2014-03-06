@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "libavformat/avformat.h"
 #import "AbstractCaptureDevice.h"
+#import "CapturedFrameData.h"
 
 @protocol ControllerProtocol <NSObject>
 
@@ -41,6 +42,7 @@
 -(void)setExtraData:(id)saveData forKey:(NSString *)forKey;
 -(id)getExtraData:(NSString *)forkey;
 
+- (void) outputEncodedData:(CapturedFrameData *)frameData;
 
 
 

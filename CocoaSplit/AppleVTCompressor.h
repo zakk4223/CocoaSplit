@@ -23,7 +23,7 @@
 @property (strong) id<ControllerProtocol> settingsController;
 @property (strong) id<ControllerProtocol> outputDelegate;
 
--(bool)compressFrame:(CVImageBufferRef)imageBuffer pts:(CMTime)pts duration:(CMTime)duration isKeyFrame:(BOOL)isKeyFrame;
+-(bool)compressFrame:(CapturedFrameData *)frameData isKeyFrame:(BOOL)isKeyFrame;
 -(bool)setupCompressor;
 
 

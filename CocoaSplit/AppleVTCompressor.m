@@ -36,7 +36,8 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 
 
 
-- (bool)compressFrame:(CVImageBufferRef)imageBuffer pts:(CMTime)pts duration:(CMTime)duration isKeyFrame:(BOOL)isKeyFrame
+//- (bool)compressFrame:(CVImageBufferRef)imageBuffer pts:(CMTime)pts duration:(CMTime)duration isKeyFrame:(BOOL)isKeyFrame
+-(bool)compressFrame:(CapturedFrameData *)frameData isKeyFrame:(BOOL)isKeyFrame
 {
     
     
@@ -46,7 +47,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
         
         if (![self setupCompressor])
         {
-            CVPixelBufferRelease(imageBuffer);
+            //CVPixelBufferRelease(imageBuffer);
             return NO;
         }
         return NO;
@@ -65,7 +66,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     }
     
     
-    VTCompressionSessionEncodeFrame(_compression_session, imageBuffer, pts, duration, frameProperties, imageBuffer, NULL);
+    VTCompressionSessionEncodeFrame(_compression_session, frameData.videoFrame, frameData.videoPTS, frameData.videoDuration, frameProperties, (__bridge_retained void *)(frameData), NULL);
     
     if (frameProperties)
     {
@@ -276,10 +277,13 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 void VideoCompressorReceiveFrame(void *VTref, void *VTFrameRef, OSStatus status, VTEncodeInfoFlags infoFlags, CMSampleBufferRef sampleBuffer)
 {
     
+    /*
     if (VTFrameRef)
     {
         CVPixelBufferRelease(VTFrameRef);
     }
+     */
+    
     
     @autoreleasepool {
         
@@ -292,10 +296,30 @@ void VideoCompressorReceiveFrame(void *VTref, void *VTFrameRef, OSStatus status,
         
         CFRetain(sampleBuffer);
         
+        CapturedFrameData *frameData;
+        
+        frameData = (__bridge_transfer CapturedFrameData *)(VTFrameRef);
+        
+        
+        if (!frameData)
+        {
+            //What?
+            return;
+        }
+        
+        
+        /* We don't need the original video frame anymore, set the property to nil, which will release the CVImageBufferRef */
+        
+        frameData.videoFrame = nil;
+        frameData.encodedSampleBuffer = sampleBuffer;
+        
+        
         AppleVTCompressor *selfobj = (__bridge AppleVTCompressor *)VTref;
         
         
-        [selfobj.outputDelegate outputSampleBuffer:sampleBuffer];
+        [selfobj.outputDelegate outputEncodedData:frameData];
+        
+        //[selfobj.outputDelegate outputSampleBuffer:sampleBuffer];
         
         CFRelease(sampleBuffer);
     }

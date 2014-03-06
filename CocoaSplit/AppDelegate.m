@@ -15,6 +15,15 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
+    
+    [[NSBundle mainBundle] loadNibNamed:@"LogWindow" owner:self.captureController topLevelObjects:nil];
+    
+    /*
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.captureController setupLogging];
+    });*/
+
+    
     [self.captureController loadSettings];
     
     // Insert code here to initialize your application

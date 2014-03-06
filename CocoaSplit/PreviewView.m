@@ -10,10 +10,183 @@
 #import "PreviewView.h"
 
 
+
+@implementation OpenGLProgram
+
+
+-(id) init
+{
+    if (self = [super init])
+    {
+        _sampler_uniform_locations[0] = -1;
+        _sampler_uniform_locations[1] = -1;
+        _sampler_uniform_locations[2] = -1;
+        
+    }
+    
+    return self;
+}
+
+
+-(void)setUniformLocation:(int)index location:(GLint)location
+{
+    if (index < sizeof(_sampler_uniform_locations))
+    {
+        _sampler_uniform_locations[index] = location;
+    }
+}
+
+
+-(GLint)getUniformLocation:(int)index
+{
+    if (index >= sizeof(_sampler_uniform_locations))
+    {
+        return -1;
+    } else {
+        return _sampler_uniform_locations[index];
+    }
+    
+}
+
+@end
+
 @implementation PreviewView
 
 
 @synthesize vsync = _vsync;
+
+
+
+
+-(void) logGLShader:(GLuint)logTarget
+{
+	int infologLength = 0;
+	int maxLength;
+    
+	if(glIsShader(logTarget))
+		glGetShaderiv(logTarget,GL_INFO_LOG_LENGTH,&maxLength);
+	else
+		glGetProgramiv(logTarget,GL_INFO_LOG_LENGTH,&maxLength);
+    
+	char infoLog[maxLength];
+    
+	if (glIsShader(logTarget))
+		glGetShaderInfoLog(logTarget, maxLength, &infologLength, infoLog);
+	else
+		glGetProgramInfoLog(logTarget, maxLength, &infologLength, infoLog);
+    
+	if (infologLength > 0)
+		NSLog(@"SHADER LOG %s\n",infoLog);
+}
+
+
+-(GLuint) loadShader:(NSString *)name  shaderType:(GLenum)shaderType
+{
+    
+    
+    NSBundle *appBundle = [NSBundle mainBundle];
+    
+    NSString *extension;
+    if (shaderType == GL_FRAGMENT_SHADER)
+    {
+        extension = @"fgsh";
+    } else if (shaderType == GL_VERTEX_SHADER) {
+        extension = @"vtsh";
+    }
+    
+    NSString *shaderPath = [appBundle pathForResource:name ofType:extension inDirectory:@"Shaders"];
+    
+    NSString *shaderSource = [NSString stringWithContentsOfFile:shaderPath encoding:NSUTF8StringEncoding error:NULL];
+    
+    GLuint shaderName;
+    
+    shaderName = glCreateShader(shaderType);
+    
+    const char *sc_src = [shaderSource cStringUsingEncoding:NSASCIIStringEncoding];
+    
+    glShaderSource(shaderName, 1, &sc_src, NULL);
+    glCompileShader(shaderName);
+    NSLog(@"LOGGING FOR SHADER %@", shaderPath);
+    [self logGLShader:shaderName];
+    return shaderName;
+}
+
+-(GLuint) createProgram:(NSString *)vertexName fragmentName:(NSString *)fragmentName
+{
+    GLuint progVertex = [self loadShader:vertexName shaderType:GL_VERTEX_SHADER];
+    GLuint progFragment = [self loadShader:fragmentName shaderType:GL_FRAGMENT_SHADER];
+    
+    GLuint newProgram = glCreateProgram();
+    glAttachShader(newProgram, progVertex);
+    glAttachShader(newProgram, progFragment);
+    glLinkProgram(newProgram);
+    
+
+    [self logGLShader:newProgram];
+
+    
+    
+    return newProgram;
+}
+
+
+-(void) setProgramUniforms:(OpenGLProgram *)program
+{
+    GLint text_loc;
+    
+    text_loc = glGetUniformLocation(program.gl_programName, "my_texture1");
+    [program setUniformLocation:0 location:text_loc];
+    
+    text_loc = glGetUniformLocation(program.gl_programName, "my_texture2");
+    [program setUniformLocation:1 location:text_loc];
+    
+    
+    text_loc = glGetUniformLocation(program.gl_programName, "my_texture3");
+    [program setUniformLocation:2 location:text_loc];
+}
+
+
+-(void) createShaders
+{
+    
+    OpenGLProgram *progObj;
+    _shaderPrograms = [[NSMutableDictionary alloc] init];
+    
+    
+    GLuint newProgram = [self createProgram:@"passthrough" fragmentName:@"passthrough"];
+    
+    progObj = [[OpenGLProgram alloc] init];
+    progObj.label = @"passthrough";
+    progObj.gl_programName = newProgram;
+
+    [self setProgramUniforms:progObj];
+    
+    [_shaderPrograms setObject: progObj forKey:@"passthrough"];
+    
+    newProgram = [self createProgram:@"passthrough" fragmentName:@"420v"];
+    
+    progObj = [[OpenGLProgram alloc] init];
+    progObj.label = @"420v";
+    progObj.gl_programName = newProgram;
+    
+    [self setProgramUniforms:progObj];
+
+    [_shaderPrograms setObject:progObj forKey:@"420v"];
+    
+}
+
+
+-(void)bindProgramTextures:(OpenGLProgram *)program
+{
+    
+    
+    for(int i = 0; i < 3; i++)
+    {
+        glUniform1i([program getUniformLocation:i], i);
+    }
+    
+}
+
 
 -(void) setIdleTimer
 {
@@ -132,6 +305,8 @@
     const NSOpenGLPixelFormatAttribute attr[] = {
         NSOpenGLPFAAccelerated,
         NSOpenGLPFANoRecovery,
+//        NSOpenGLPFAOpenGLProfile,
+//        NSOpenGLProfileVersion3_2Core,
         0
     };
     
@@ -146,17 +321,11 @@
     if (self)
     {
         [self updateVsync];
-        glEnable(GL_TEXTURE_RECTANGLE_ARB);
-        glGenTextures(1, &_previewTexture);
-        glDisable(GL_TEXTURE_RECTANGLE_ARB);
+        glGenTextures(3, _previewTextures);
     }
     
     
-    
-    
-    
-    
-    
+    [self createShaders];
     
     
     return self;
@@ -173,12 +342,13 @@
     {
         CVPixelBufferRetain(cImageBuf);
         [self drawPixelBuffer:cImageBuf];
-    } else if (bufType == CVOpenGLTextureGetTypeID()) {
-        [self drawGLBuffer:cImageBuf];
+//    } else if (bufType == CVOpenGLTextureGetTypeID()) {
+  //      [self drawGLBuffer:cImageBuf];
     }
         
 }
 
+/*
 - (void) drawGLBuffer:(CVOpenGLTextureRef)cImageBuf
 {
     
@@ -197,6 +367,7 @@
     
 }
 
+ */
 - (void) drawPixelBuffer:(CVPixelBufferRef)cImageBuf
 {
  
@@ -231,42 +402,84 @@
         _surfaceHeight  = (GLsizei)IOSurfaceGetHeight(cFrame);
         _surfaceWidth   = (GLsizei)IOSurfaceGetWidth(cFrame);
         
-        /* the only formats we specify in any of the capture modules are: 420v, 420f and 2vuy. We can't handle 420* without some  shader /multi texture trickery, so just grab the first luminance plane and display that for now */
-        
         GLenum gl_internal_format;
         GLenum gl_format;
         GLenum gl_type;
         OSType frame_pixel_format = IOSurfaceGetPixelFormat(cFrame);
-        
 
-        if (frame_pixel_format == kCVPixelFormatType_422YpCbCr8)
-        {
-            gl_format = GL_YCBCR_422_APPLE;
-            gl_internal_format = GL_RGB8;
-            gl_type = GL_UNSIGNED_SHORT_8_8_APPLE;
-        } else if (frame_pixel_format == kCVPixelFormatType_422YpCbCr8FullRange) {
-            gl_format = GL_YCBCR_422_APPLE;
-            gl_internal_format = GL_RGB;
-            gl_type = GL_UNSIGNED_SHORT_8_8_REV_APPLE;
-        } else if (frame_pixel_format == kCVPixelFormatType_32BGRA) {
-            gl_format = GL_BGRA;
-            gl_internal_format = GL_RGB;
-            gl_type = GL_UNSIGNED_INT_8_8_8_8_REV;
-        } else if (frame_pixel_format == kCVPixelFormatType_32ARGB) {
-            gl_format = GL_RGB;
-            gl_internal_format = GL_RGB;
-            gl_type = GL_UNSIGNED_INT_8_8_8_8;
-        } else {            
-            gl_format = GL_LUMINANCE;
-            gl_internal_format = GL_LUMINANCE;
-            gl_type = GL_UNSIGNED_BYTE;
+        NSString *programName;
+        programName = @"passthrough"; //default
+
+        //format, internal_format, gl_type
+        GLenum plane_enums[3][3];
+        
+        switch (frame_pixel_format) {
+            case kCVPixelFormatType_422YpCbCr8:
+                plane_enums[0][0] = GL_YCBCR_422_APPLE;
+                plane_enums[0][1] = GL_RGB8;
+                plane_enums[0][2] = GL_UNSIGNED_SHORT_8_8_APPLE;
+                _num_planes = 1;
+                break;
+            case kCVPixelFormatType_422YpCbCr8FullRange:
+            case kCVPixelFormatType_422YpCbCr8_yuvs:
+                plane_enums[0][0] = GL_YCBCR_422_APPLE;
+                plane_enums[0][1] = GL_RGB;
+                plane_enums[0][2] = GL_UNSIGNED_SHORT_8_8_REV_APPLE;
+                _num_planes = 1;
+                break;
+            case kCVPixelFormatType_32BGRA:
+                plane_enums[0][0] = GL_BGRA;
+                plane_enums[0][1] = GL_RGB;
+                plane_enums[0][2] = GL_UNSIGNED_INT_8_8_8_8_REV;
+                _num_planes = 1;
+                break;
+            case kCVPixelFormatType_32ARGB:
+                plane_enums[0][0] = GL_RGB;
+                plane_enums[0][1] = GL_RGB;
+                plane_enums[0][2] = GL_UNSIGNED_INT_8_8_8_8;
+                _num_planes = 1;
+                break;
+            case kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange:
+                plane_enums[0][0] = GL_RED;
+                plane_enums[0][1] = GL_RED;
+                plane_enums[0][2] = GL_UNSIGNED_BYTE;
+                plane_enums[1][0] = GL_RG;
+                plane_enums[1][1] = GL_RG;
+                plane_enums[1][2] = GL_UNSIGNED_BYTE;
+                _num_planes = 2;
+                programName = @"420v";
+                break;
+            default:
+                gl_format = GL_LUMINANCE;
+                gl_internal_format = GL_LUMINANCE;
+                gl_type = GL_UNSIGNED_BYTE;
+                _num_planes = 1;
+                break;
         }
     
-        glEnable(GL_TEXTURE_RECTANGLE_ARB);
-        glBindTexture(GL_TEXTURE_RECTANGLE_ARB, _previewTexture);
-        CGLTexImageIOSurface2D(cgl_ctx, GL_TEXTURE_RECTANGLE_ARB, gl_internal_format, _surfaceWidth, _surfaceHeight, gl_format, gl_type, cFrame, 0);
-        glBindTexture(GL_TEXTURE_RECTANGLE_ARB, 0);
-        glDisable(GL_TEXTURE_RECTANGLE_ARB);
+        for(int t_idx = 0; t_idx < _num_planes; t_idx++)
+        {
+            
+            glActiveTexture(GL_TEXTURE0+t_idx);
+            glEnable(GL_TEXTURE_RECTANGLE_ARB);
+            glBindTexture(GL_TEXTURE_RECTANGLE_ARB, _previewTextures[t_idx]);
+            
+            glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            
+            CGLTexImageIOSurface2D(cgl_ctx, GL_TEXTURE_RECTANGLE_ARB, plane_enums[t_idx][1], (GLsizei)IOSurfaceGetWidthOfPlane(cFrame, t_idx), (GLsizei)IOSurfaceGetHeightOfPlane(cFrame, t_idx), plane_enums[t_idx][0], plane_enums[t_idx][2], cFrame, t_idx);
+        }
+        
+        
+        OpenGLProgram *shProgram = [_shaderPrograms objectForKey:programName];
+        
+        GLuint progID = shProgram.gl_programName;
+        
+        glUseProgram(progID);
+        [self bindProgramTextures:shProgram];
+        
+        
+        
+
     }
 
     
@@ -317,6 +530,7 @@
     
 }
 
+
 - (void) drawTexture:(NSRect)dirtyRect
 {
 //    CGLContextObj  cgl_ctx  = [[self openGLContext] CGLContextObj];
@@ -328,6 +542,7 @@
 
 
     NSRect frame = self.frame;
+    
     
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -341,16 +556,15 @@
     glPushMatrix();
     glLoadIdentity();
     
-    //if (_boundIOSurface)
-    //{
-        glEnable(GL_TEXTURE_RECTANGLE_ARB);
-        glBindTexture(GL_TEXTURE_RECTANGLE_ARB, _previewTexture);
-        glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-        
-        glDisable(GL_BLEND);
-        
+    
+    
+    for(int i = 0; i < _num_planes; i++)
+    {
+
+        glActiveTexture(GL_TEXTURE0 + i);
+        glBindTexture(GL_TEXTURE_RECTANGLE_ARB, _previewTextures[i]);
+    }
+    
         NSSize scaled;
         
         float wr = _surfaceWidth / frame.size.width;
@@ -374,15 +588,7 @@
         float halfw = scaled.width * 0.5;
         float halfh = scaled.height * 0.5;
         
-       /* GLfloat verts[] =
-        {
-            halfw, halfh,
-            -halfw, halfh,
-            -halfw, -halfh,
-            halfw, -halfh
-            
-        };*/
-        
+    
         GLfloat verts[] =
         {
           -halfw, halfh,
@@ -390,73 +596,22 @@
             halfw, -halfh,
             -halfw, -halfh
         };
-        
+    
         glTranslated(frame.size.width * 0.5, frame.size.height * 0.5, 0.0);
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         glTexCoordPointer(2, GL_FLOAT, 0, text_coords);
         glEnableClientState(GL_VERTEX_ARRAY);
         glVertexPointer(2, GL_FLOAT, 0, verts);
+
         glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         glDisableClientState(GL_VERTEX_ARRAY);
-        glBindTexture(GL_TEXTURE_RECTANGLE_ARB, 0);
-    //}
-/*    if (_boundIOSurface)
-    {
-        GLfloat texMatrix[16] = {0};
-        GLint   saveMatrixMode;
-        
-        texMatrix[0]    = (GLfloat)_surfaceWidth;
-        texMatrix[5]    = -(GLfloat)_surfaceHeight;
-        texMatrix[10]   = 1.0;
-        texMatrix[13]   = (GLfloat)_surfaceHeight;
-        texMatrix[15]   = 1.0;
-        
-        glGetIntegerv(GL_MATRIX_MODE, &saveMatrixMode);
-        glMatrixMode(GL_TEXTURE);
-        glPushMatrix();
-        glLoadMatrixf(texMatrix);
-        glMatrixMode(saveMatrixMode);
-        
-        glEnable(GL_TEXTURE_RECTANGLE_ARB);
-        glBindTexture(GL_TEXTURE_RECTANGLE_ARB, _previewTexture);
-        glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-    } else {
-        glColor4f(0.0, 0.0, 0.0, 0.0);
-    }
-    
-    glBegin(GL_QUADS);
-    glTexCoord2f(0.0, 0.0);
-    glVertex3f(-1.0, -1.0, 0.0);
-    glTexCoord2f(1.0, 0.0);
-    glVertex3f(1.0, -1.0, 0.0);
-    glTexCoord2f(1.0, 1.0);
-    glVertex3f(1.0, 1.0, 0.0);
-    glTexCoord2f(0.0, 1.0);
-    glVertex3f(-1.0, 1.0, 0.0);
-    glEnd();
-    
-    if (_boundIOSurface)
-    {
-        GLint           saveMatrixMode;
-        
-        glDisable(GL_TEXTURE_RECTANGLE_ARB);
-        glGetIntegerv(GL_MATRIX_MODE, &saveMatrixMode);
-        glMatrixMode(GL_TEXTURE);
-        glPopMatrix();
-        glMatrixMode(saveMatrixMode);
-    }
-    
-    glFlush();
- */
-    
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
     glFlush();
     
-    //CGLUnlockContext(cgl_ctx);
 }
 
 

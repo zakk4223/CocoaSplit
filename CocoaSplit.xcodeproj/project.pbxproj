@@ -29,6 +29,12 @@
 		342346BE15F6103D00C8C77E /* FFMpegTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346BD15F6103D00C8C77E /* FFMpegTask.m */; };
 		342346CF15F9F07E00C8C77E /* AbstractCaptureDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346CE15F9F07E00C8C77E /* AbstractCaptureDevice.m */; };
 		342346D515FA301600C8C77E /* SyphonCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346D415FA301600C8C77E /* SyphonCapture.m */; };
+		3435E396188B902C0015CC01 /* 420v.fgsh in Resources */ = {isa = PBXBuildFile; fileRef = 3435E395188B902C0015CC01 /* 420v.fgsh */; };
+		3435E39B188B93150015CC01 /* passthrough.vtsh in Resources */ = {isa = PBXBuildFile; fileRef = 3435E39A188B93150015CC01 /* passthrough.vtsh */; };
+		3435E39D188BD8250015CC01 /* passthrough.fgsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3435E399188B90900015CC01 /* passthrough.fgsh */; };
+		3435E39E188BD82F0015CC01 /* passthrough.vtsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3435E39A188B93150015CC01 /* passthrough.vtsh */; };
+		3435E39F188CD8EE0015CC01 /* 420v.fgsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3435E395188B902C0015CC01 /* 420v.fgsh */; };
+		344988131893CF0500044259 /* LogWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 344988121893CF0500044259 /* LogWindow.xib */; };
 		3450579E172A4B6B0065A452 /* CocoaSplitCmd in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3451A1C317111BD900DF6A8B /* CocoaSplitCmd */; };
 		3451A1C417111BD900DF6A8B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AE3C2F164E3E020052C95E /* Foundation.framework */; };
 		3451A1C717111BD900DF6A8B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3451A1C617111BD900DF6A8B /* main.m */; };
@@ -85,6 +91,8 @@
 		34AE3C6D164F04C90052C95E /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AE3C6C164F04C90052C95E /* CoreVideo.framework */; };
 		34B0265A1712D8BA0063BB2D /* CmdLineDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B026591712D8BA0063BB2D /* CmdLineDelegate.m */; };
 		34B74BC91648D23B00818DE2 /* QTCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B74BC81648D23B00818DE2 /* QTCapture.m */; };
+		34C19053189EE60400AB2430 /* CapturedFrameData.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C19052189EE60400AB2430 /* CapturedFrameData.m */; };
+		34C19054189EE60400AB2430 /* CapturedFrameData.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C19052189EE60400AB2430 /* CapturedFrameData.m */; };
 		34C6C3BF15FB5B440018A18B /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34C6C3BE15FB5B440018A18B /* OpenGL.framework */; };
 		34D696F3186E823100B50EB6 /* ImageCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D696F2186E823100B50EB6 /* ImageCapture.m */; };
 		34D696F4186E823100B50EB6 /* ImageCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D696F2186E823100B50EB6 /* ImageCapture.m */; };
@@ -119,6 +127,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		3435E39C188BD80A0015CC01 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Shaders;
+			dstSubfolderSpec = 7;
+			files = (
+				3435E39D188BD8250015CC01 /* passthrough.fgsh in CopyFiles */,
+				3435E39E188BD82F0015CC01 /* passthrough.vtsh in CopyFiles */,
+				3435E39F188CD8EE0015CC01 /* 420v.fgsh in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3450579D172A4AE30065A452 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -209,6 +229,10 @@
 		342346CE15F9F07E00C8C77E /* AbstractCaptureDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbstractCaptureDevice.m; sourceTree = "<group>"; };
 		342346D315FA301600C8C77E /* SyphonCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyphonCapture.h; sourceTree = "<group>"; };
 		342346D415FA301600C8C77E /* SyphonCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyphonCapture.m; sourceTree = "<group>"; };
+		3435E395188B902C0015CC01 /* 420v.fgsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 420v.fgsh; sourceTree = "<group>"; };
+		3435E399188B90900015CC01 /* passthrough.fgsh */ = {isa = PBXFileReference; lastKnownFileType = text; path = passthrough.fgsh; sourceTree = "<group>"; };
+		3435E39A188B93150015CC01 /* passthrough.vtsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = passthrough.vtsh; sourceTree = "<group>"; };
+		344988121893CF0500044259 /* LogWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LogWindow.xib; sourceTree = "<group>"; };
 		3451A1C317111BD900DF6A8B /* CocoaSplitCmd */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CocoaSplitCmd; sourceTree = BUILT_PRODUCTS_DIR; };
 		3451A1C617111BD900DF6A8B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		3451A1C917111BD900DF6A8B /* CocoaSplitCmd-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CocoaSplitCmd-Prefix.pch"; sourceTree = "<group>"; };
@@ -253,6 +277,8 @@
 		34B026591712D8BA0063BB2D /* CmdLineDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CmdLineDelegate.m; sourceTree = "<group>"; };
 		34B74BC71648D23B00818DE2 /* QTCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QTCapture.h; sourceTree = "<group>"; };
 		34B74BC81648D23B00818DE2 /* QTCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QTCapture.m; sourceTree = "<group>"; };
+		34C19051189EE60400AB2430 /* CapturedFrameData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CapturedFrameData.h; sourceTree = "<group>"; };
+		34C19052189EE60400AB2430 /* CapturedFrameData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CapturedFrameData.m; sourceTree = "<group>"; };
 		34C6C3BE15FB5B440018A18B /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		34D696F1186E823100B50EB6 /* ImageCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCapture.h; sourceTree = "<group>"; };
 		34D696F2186E823100B50EB6 /* ImageCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCapture.m; sourceTree = "<group>"; };
@@ -395,6 +421,7 @@
 		340FE4A715F3417E00E4CE4E /* CocoaSplit */ = {
 			isa = PBXGroup;
 			children = (
+				3435E398188B90610015CC01 /* Shaders */,
 				3441338E18667FE40059B686 /* Interface */,
 				3441338D18667F5B0059B686 /* Capture */,
 				3441338C18667F280059B686 /* Compressor */,
@@ -406,6 +433,8 @@
 				34210B3C1606001100362FC8 /* OutputDestination.h */,
 				34210B3D1606001100362FC8 /* OutputDestination.m */,
 				34A64A2D165EFE4B00A68428 /* PreviewView.h */,
+				34C19051189EE60400AB2430 /* CapturedFrameData.h */,
+				34C19052189EE60400AB2430 /* CapturedFrameData.m */,
 				34A64A2E165EFE4B00A68428 /* PreviewView.m */,
 				342346CD15F9F07E00C8C77E /* AbstractCaptureDevice.h */,
 				342346CE15F9F07E00C8C77E /* AbstractCaptureDevice.m */,
@@ -453,6 +482,16 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		3435E398188B90610015CC01 /* Shaders */ = {
+			isa = PBXGroup;
+			children = (
+				3435E395188B902C0015CC01 /* 420v.fgsh */,
+				3435E399188B90900015CC01 /* passthrough.fgsh */,
+				3435E39A188B93150015CC01 /* passthrough.vtsh */,
+			);
+			name = Shaders;
+			sourceTree = "<group>";
+		};
 		3441338C18667F280059B686 /* Compressor */ = {
 			isa = PBXGroup;
 			children = (
@@ -487,6 +526,7 @@
 			children = (
 				3475E75D16FED3A50030D7FA /* AVFoundationAdvancedPanel.xib */,
 				340FE4B615F3417E00E4CE4E /* MainMenu.xib */,
+				344988121893CF0500044259 /* LogWindow.xib */,
 				34A64A34165F047900A68428 /* CapturePreview.xib */,
 				34539ED61606E91700638A29 /* StreamServicePanel.xib */,
 				3475E75916FEC9E30030D7FA /* AppleVTPanel.xib */,
@@ -561,6 +601,7 @@
 				34EB1951168C838B00D13936 /* CopyFiles */,
 				34AE3C3E164E3EAE0052C95E /* CopyFiles */,
 				3450579D172A4AE30065A452 /* CopyFiles */,
+				3435E39C188BD80A0015CC01 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -664,15 +705,18 @@
 				340FE4AC15F3417E00E4CE4E /* InfoPlist.strings in Resources */,
 				340FE4B215F3417E00E4CE4E /* Credits.rtf in Resources */,
 				340FE4B815F3417E00E4CE4E /* MainMenu.xib in Resources */,
+				3435E39B188B93150015CC01 /* passthrough.vtsh in Resources */,
 				34539ED71606E91700638A29 /* StreamServicePanel.xib in Resources */,
 				34539ED9160734EA00638A29 /* FilePanel.xib in Resources */,
 				34D696FA186E8FEB00B50EB6 /* ImageAdvancedPanel.xib in Resources */,
+				344988131893CF0500044259 /* LogWindow.xib in Resources */,
 				34A64A35165F047900A68428 /* CapturePreview.xib in Resources */,
 				3475E75A16FEC9E30030D7FA /* AppleVTPanel.xib in Resources */,
 				34D696FC1871B8F700B50EB6 /* Defaults.plist in Resources */,
 				3475E75C16FEC9F70030D7FA /* x264Panel.xib in Resources */,
 				3475E75E16FED3A50030D7FA /* AVFoundationAdvancedPanel.xib in Resources */,
 				34ABEF3C17C0C2CB00AA5E62 /* advancedPrefPanel.xib in Resources */,
+				3435E396188B902C0015CC01 /* 420v.fgsh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -717,6 +761,7 @@
 			files = (
 				34D696F3186E823100B50EB6 /* ImageCapture.m in Sources */,
 				340FE4AE15F3417E00E4CE4E /* main.m in Sources */,
+				34C19053189EE60400AB2430 /* CapturedFrameData.m in Sources */,
 				340FE4B515F3417E00E4CE4E /* AppDelegate.m in Sources */,
 				340FE50815F444AA00E4CE4E /* CaptureController.m in Sources */,
 				342346AA15F59A8500C8C77E /* AVFCapture.m in Sources */,
@@ -747,6 +792,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3451A1C717111BD900DF6A8B /* main.m in Sources */,
+				34C19054189EE60400AB2430 /* CapturedFrameData.m in Sources */,
 				3451A1D31712C41000DF6A8B /* CaptureController.m in Sources */,
 				3451A1D81712C5C400DF6A8B /* x264Compressor.m in Sources */,
 				3451A1D91712C5C700DF6A8B /* AppleVTCompressor.m in Sources */,

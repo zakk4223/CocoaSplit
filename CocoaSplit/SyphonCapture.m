@@ -374,7 +374,9 @@
      _syphon_client = [[SyphonClient alloc] initWithServerDescription:_syphonServer options:nil newFrameHandler:^(SyphonClient *client) {
      
      CVPixelBufferRef videoFrame = [self renderNewFrame:client];
-
+         //NSLog(@"GET SYPHON FRAME %f", CFAbsoluteTimeGetCurrent());
+         
+         
      //CVPixelBufferRetain(videoFrame);
      
      @synchronized(self) {

@@ -11,15 +11,35 @@
 
 
 
+@interface OpenGLProgram : NSObject
+{
+    
+    GLint _sampler_uniform_locations[3];
+}
+
+@property (strong) NSString *label;
+@property (assign) GLuint gl_programName;
+-(void) setUniformLocation:(int)index location:(GLint)location;
+-(GLint) getUniformLocation:(int)index;
+
+@end
+
+
+
+
 @interface PreviewView : NSOpenGLView
 {
 
     IOSurfaceID _boundIOSurfaceID;
-    GLuint      _previewTexture;
+    NSMutableDictionary      *_shaderPrograms;
+    GLuint      _previewTextures[3]; //Is there something with more than 3 planes? Guess we'll find out;
     GLuint      _syphonTexture;
     GLsizei     _surfaceWidth;
     GLsizei     _surfaceHeight;
     int         _hackcnt;
+    GLuint      _vertexPosBuffer;
+    int _num_planes;
+    
     id _fs_activity_token;
     
     NSTimer *_idleTimer;

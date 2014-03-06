@@ -121,6 +121,12 @@
                 <menuItem title="View" id="295">
                     <menu key="submenu" title="View" id="296">
                         <items>
+                            <menuItem title="Logs" id="Sjr-tp-jiP">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="openLogWindow:" target="816" id="jz5-Wx-wWz"/>
+                                </connections>
+                            </menuItem>
                             <menuItem title="Full Screen" keyEquivalent="f" id="3819">
                                 <connections>
                                     <action selector="toggleFullscreen:" target="2416" id="3821"/>

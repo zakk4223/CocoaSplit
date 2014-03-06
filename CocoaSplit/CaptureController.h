@@ -50,7 +50,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     long long _frameCount;
     CFAbsoluteTime _firstFrameTime;
     CFAbsoluteTime _lastFrameTime;
-    CFAbsoluteTime _firstAudioTime;
+    CMTime _firstAudioTime;
     NSString *_selectedVideoType;
     dispatch_queue_t _main_capture_queue;
     dispatch_queue_t _preview_queue;
@@ -59,10 +59,20 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     mach_timebase_info_data_t _mach_timebase;
     double _frame_time;
     double _next_keyframe_time;
+    CMSampleBufferRef audioRingBuffer[512];
+    size_t audioWritePosition;
+    size_t audioLastReadPosition;
+    NSMutableArray *audioBuffer;
+    NSMutableArray *videoBuffer;
+    
+    
+    
     
     
     
 }
+
+
 @property (strong) id<h264Compressor> videoCompressor;
 @property (nonatomic, strong) id<CaptureSessionProtocol> videoCaptureSession;
 @property (strong) id<CaptureSessionProtocol> audioCaptureSession;
@@ -123,6 +133,9 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) IBOutlet NSWindow *advancedVideoPanel;
 @property (strong) IBOutlet NSWindow *compressPanel;
 @property (strong) IBOutlet NSWindow *advancedPrefPanel;
+@property (strong) IBOutlet NSWindow *logWindow;
+
+- (IBAction)openLogWindow:(id)sender;
 
 
 
@@ -191,6 +204,10 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 @property (strong) NSDictionary *extraSaveData;
 
+@property (strong) NSPipe *loggingPipe;
+@property (strong) NSFileHandle *logReadHandle;
+
+@property (unsafe_unretained) IBOutlet NSTextView *logTextView;
 
 
 
@@ -204,6 +221,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (void) loadCmdlineSettings:(NSUserDefaults *)cmdargs;
 -(void)setExtraData:(id)saveData forKey:(NSString *)forKey;
 -(id)getExtraData:(NSString *)forkey;
+-(void)setupLogging;
+
 
 
 

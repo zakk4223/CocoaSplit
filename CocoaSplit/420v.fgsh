@@ -1,0 +1,26 @@
+varying vec2 tex_coord;
+uniform sampler2DRect my_texture1;
+uniform sampler2DRect my_texture2;
+
+
+void main()
+{
+     vec3 yuv;
+     vec3 rgb;
+
+    yuv.x = texture2DRect(my_texture1, tex_coord).r;
+    yuv.yz = texture2DRect(my_texture2, tex_coord/vec2(2.0, 2.0)).rg - vec2(0.5, 0.5);
+     // BT.601, which is the standard for SDTV is provided as a reference
+     /*
+       rgb = mat3(      1,       1,       1,
+       0, -.39465, 2.03211,
+      1.13983, -.58060,       0) * yuv;
+      */
+      // Using BT.709 which is the standard for HDTV
+     rgb = mat3(      1,       1,       1,
+                0, -.18732, 1.8556,
+                 1.57481, -.46813,      0) * yuv;
+                 
+     gl_FragColor = vec4(rgb, 1);
+
+}

@@ -111,7 +111,7 @@
 {
     
     NSLog(@"Destination set to %@", destination);
-    if ([destination hasPrefix:@"rtmp://"])
+    if ([destination hasPrefix:@"rtmp://"] || [destination hasPrefix:@"udp:"])
     {
         self.output_format = @"FLV";
     }
