@@ -350,7 +350,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
         fmt = CMSampleBufferGetFormatDescription(theBuffer);
         atoms = CMFormatDescriptionGetExtension(fmt, kCMFormatDescriptionExtension_SampleDescriptionExtensionAtoms);
-        avccKey = CFStringCreateWithCString(NULL, "avcC", kCFStringEncodingUTF8);
+        avccKey = CFSTR("avcC");
         NSLog(@"ATOMS %@", atoms);
         avcc_data = CFDictionaryGetValue(atoms, avccKey);
         avcc_size = CFDataGetLength(avcc_data);
