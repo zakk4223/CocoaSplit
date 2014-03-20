@@ -144,8 +144,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     if (!_audio_extradata && [frameData.audioSamples count] > 0)
     {
         
-        NSValue *audioVal = frameData.audioSamples.firstObject;
-        CMSampleBufferRef audioSample = [audioVal pointerValue];
+        CMSampleBufferRef audioSample = (__bridge CMSampleBufferRef)frameData.audioSamples.firstObject;
         [self extractAudioCookie:audioSample];
     }
     
@@ -175,9 +174,9 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         _pending_frame_count = 0;
     }
     
-    for (NSValue *audioVal in frameData.audioSamples)
+    for (id object in frameData.audioSamples)
     {
-        CMSampleBufferRef audioSample = (CMSampleBufferRef)[audioVal pointerValue];
+        CMSampleBufferRef audioSample = (__bridge CMSampleBufferRef)object;
         
         if (CMSampleBufferGetNumSamples(audioSample) > 1)
         {

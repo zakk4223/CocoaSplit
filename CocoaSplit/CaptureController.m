@@ -759,9 +759,7 @@
         
         for (int i = 0; i < audioBufferSize; i++)
         {
-            NSValue *audioPtr = [audioBuffer objectAtIndex:i];
-            
-            CMSampleBufferRef audioData = (CMSampleBufferRef)[audioPtr pointerValue];
+            CMSampleBufferRef audioData = (__bridge CMSampleBufferRef)[audioBuffer objectAtIndex:i];
             
             CMTime audioTime = CMSampleBufferGetOutputPresentationTimeStamp(audioData);
 
@@ -773,7 +771,7 @@
                 
                 audioConsumed++;
                 
-                [frameData.audioSamples addObject:[NSValue valueWithPointer:audioData]];
+                [frameData.audioSamples addObject:(__bridge id)audioData];
                 
             } else {
                 break;
@@ -1173,10 +1171,9 @@
     
     if (audioBuffer)
     {
-        CFRetain(sampleBuffer);
         @synchronized(self)
         {
-            [audioBuffer addObject:[NSValue valueWithPointer:sampleBuffer]];
+            [audioBuffer addObject:(__bridge id)sampleBuffer];
         }
     }
     /*
