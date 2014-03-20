@@ -387,7 +387,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         }
     }
     
-    if (avformat_write_header(_av_fmt_ctx, NULL) < 0)
+    if (_av_fmt_ctx == NULL || avformat_write_header(_av_fmt_ctx, NULL) < 0)
     {
         NSLog(@"AVFORMAT_WRITE_HEADER failed");
         [self stopProcess];
