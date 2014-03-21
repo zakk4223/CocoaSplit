@@ -132,12 +132,11 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     
     //VTSessionSetProperty(_compression_session, (CFStringRef)@"Priority", (__bridge CFTypeRef)(@-20));
     
-    CFMutableDictionaryRef transferSpec = CFDictionaryCreateMutable(NULL, 0, &kCFCopyStringDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
     
-    
-    CFDictionaryAddValue(transferSpec, kVTPixelTransferPropertyKey_ScalingMode, kVTScalingMode_Letterbox);
-    
-    VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_PixelTransferProperties, transferSpec);
+	NSDictionary *transferSpec = @{
+		(__bridge NSString *)kVTPixelTransferPropertyKey_ScalingMode: (__bridge NSString *)kVTScalingMode_Letterbox,
+	};
+    VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_PixelTransferProperties, (__bridge CFTypeRef)(transferSpec));
     
     
     VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_AllowFrameReordering, kCFBooleanFalse);
