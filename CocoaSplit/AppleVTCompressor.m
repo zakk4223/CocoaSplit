@@ -102,7 +102,6 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     status = VTCompressionSessionCreate(NULL, self.settingsController.captureWidth, self.settingsController.captureHeight, kCMVideoCodecType_H264, (__bridge CFDictionaryRef)encoderSpec, NULL, NULL, VideoCompressorReceiveFrame,  (__bridge void *)self, &_compression_session);
     
     CFDictionaryRef props;
-    
     VTCompressionSessionCopySupportedPropertyDictionary(_compression_session, &props);
     
     NSLog(@"SUPPORTED PROPERTIES %@", props);
@@ -110,6 +109,8 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     {
         return NO;
     }
+	
+	CFRelease(props);
     
     //If priority isn't set to -20 the framerate in the SPS/VUI section locks to 25. With -20 it takes on the value of
     //whatever ExpectedFrameRate is. I have no idea what the fuck, but it works.
