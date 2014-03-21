@@ -84,19 +84,10 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 {
     OSStatus status;
     
-    CFMutableDictionaryRef encoderSpec = CFDictionaryCreateMutable(NULL, 0, &kCFCopyStringDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-    
-    CFDictionaryAddValue(encoderSpec, kVTVideoEncoderSpecification_RequireHardwareAcceleratedVideoEncoder, kCFBooleanTrue);
-    
-    
-    
-    
     if (!self.settingsController)
     {
         return NO;
     }
-    
-    
 
     if (!self.settingsController.captureHeight || !self.settingsController.captureHeight)
     {
@@ -104,18 +95,17 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
         
     }
     
-    
-    
     CFArrayRef encoderList;
     
     VTCopyVideoEncoderList(NULL, &encoderList);
     
-    
-    
+
+	NSDictionary *encoderSpec = @{
+		(__bridge NSString *)kVTVideoEncoderSpecification_RequireHardwareAcceleratedVideoEncoder: @YES,
+	};
+	
     _compression_session = NULL;
-    
-    
-    status = VTCompressionSessionCreate(NULL, self.settingsController.captureWidth, self.settingsController.captureHeight, kCMVideoCodecType_H264, encoderSpec, NULL, NULL, VideoCompressorReceiveFrame,  (__bridge void *)self, &_compression_session);
+    status = VTCompressionSessionCreate(NULL, self.settingsController.captureWidth, self.settingsController.captureHeight, kCMVideoCodecType_H264, (__bridge CFDictionaryRef)encoderSpec, NULL, NULL, VideoCompressorReceiveFrame,  (__bridge void *)self, &_compression_session);
     
     CFDictionaryRef props;
     
