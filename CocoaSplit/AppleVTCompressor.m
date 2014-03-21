@@ -152,7 +152,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
         real_keyframe_interval = self.settingsController.captureVideoMaxKeyframeInterval;
     }
     
-    VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_MaxKeyFrameIntervalDuration, CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &real_keyframe_interval));
+    VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_MaxKeyFrameIntervalDuration, (__bridge CFTypeRef)@(real_keyframe_interval));
     
     
     
