@@ -92,14 +92,8 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     if (!self.settingsController.captureHeight || !self.settingsController.captureHeight)
     {
         return NO;
-        
     }
     
-    CFArrayRef encoderList;
-    
-    VTCopyVideoEncoderList(NULL, &encoderList);
-    
-
 	NSDictionary *encoderSpec = @{
 		(__bridge NSString *)kVTVideoEncoderSpecification_RequireHardwareAcceleratedVideoEncoder: @YES,
 	};
