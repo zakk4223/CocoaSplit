@@ -206,31 +206,18 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     
     if (real_bitrate_limit > 0)
     {
-        
         NSLog(@"SETTING DAT RATE LIMIT");
         
-        CFNumberRef bitrate_num = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &real_bitrate_limit);
-        //        float rate_time = 1.0f;
-        CFNumberRef time_num = CFNumberCreate(kCFAllocatorDefault, kCFNumberFloatType, &limit_seconds);
+		NSArray *dataRateLimits = @[
+			@(real_bitrate_limit),
+			@(limit_seconds),
+		];
         
-        CFMutableArrayRef dataRateLimits = CFArrayCreateMutable(kCFAllocatorDefault, 2, &kCFTypeArrayCallBacks);
-        CFArrayAppendValue(dataRateLimits, bitrate_num);
-        CFArrayAppendValue(dataRateLimits, time_num);
-        
-        
-        
-        OSStatus success = VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_DataRateLimits, dataRateLimits);
+        OSStatus success = VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_DataRateLimits, (__bridge CFTypeRef)dataRateLimits);
         if (success != noErr)
         {
             NSLog(@"FAILED TO SET DATALIMITS");
         }
-        
-        
-        CFRelease(bitrate_num);
-        CFRelease(time_num);
-        CFRelease(dataRateLimits);
-        
-
     }
 
     
