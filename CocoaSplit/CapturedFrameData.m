@@ -48,15 +48,8 @@
         av_free(_avcodec_pkt);
 
     }
-    
-    NSUInteger audioBufferSize = [self.audioSamples count];
-    
-    for (int i = 0; i < audioBufferSize; i++)
-    {
-        NSValue *audioPtr = [self.audioSamples objectAtIndex:i];
-        CMSampleBufferRef audioData = (CMSampleBufferRef)[audioPtr pointerValue];
-        CFRelease(audioData);
-    }
+	
+	self.audioSamples = nil;
 }
 
 

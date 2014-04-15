@@ -84,41 +84,24 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 {
     OSStatus status;
     
-    CFMutableDictionaryRef encoderSpec = CFDictionaryCreateMutable(NULL, 0, &kCFCopyStringDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-    
-    CFDictionaryAddValue(encoderSpec, kVTVideoEncoderSpecification_RequireHardwareAcceleratedVideoEncoder, kCFBooleanTrue);
-    
-    
-    
-    
     if (!self.settingsController)
     {
         return NO;
     }
-    
-    
 
     if (!self.settingsController.captureHeight || !self.settingsController.captureHeight)
     {
         return NO;
-        
     }
     
-    
-    
-    CFArrayRef encoderList;
-    
-    VTCopyVideoEncoderList(NULL, &encoderList);
-    
-    
-    
+	NSDictionary *encoderSpec = @{
+		(__bridge NSString *)kVTVideoEncoderSpecification_RequireHardwareAcceleratedVideoEncoder: @YES,
+	};
+	
     _compression_session = NULL;
-    
-    
-    status = VTCompressionSessionCreate(NULL, self.settingsController.captureWidth, self.settingsController.captureHeight, kCMVideoCodecType_H264, encoderSpec, NULL, NULL, VideoCompressorReceiveFrame,  (__bridge void *)self, &_compression_session);
+    status = VTCompressionSessionCreate(NULL, self.settingsController.captureWidth, self.settingsController.captureHeight, kCMVideoCodecType_H264, (__bridge CFDictionaryRef)encoderSpec, NULL, NULL, VideoCompressorReceiveFrame,  (__bridge void *)self, &_compression_session);
     
     CFDictionaryRef props;
-    
     VTCompressionSessionCopySupportedPropertyDictionary(_compression_session, &props);
     
     NSLog(@"SUPPORTED PROPERTIES %@", props);
@@ -126,18 +109,19 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     {
         return NO;
     }
+	
+	CFRelease(props);
     
     //If priority isn't set to -20 the framerate in the SPS/VUI section locks to 25. With -20 it takes on the value of
     //whatever ExpectedFrameRate is. I have no idea what the fuck, but it works.
     
     //VTSessionSetProperty(_compression_session, (CFStringRef)@"Priority", (__bridge CFTypeRef)(@-20));
     
-    CFMutableDictionaryRef transferSpec = CFDictionaryCreateMutable(NULL, 0, &kCFCopyStringDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
     
-    
-    CFDictionaryAddValue(transferSpec, kVTPixelTransferPropertyKey_ScalingMode, kVTScalingMode_Letterbox);
-    
-    VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_PixelTransferProperties, transferSpec);
+	NSDictionary *transferSpec = @{
+		(__bridge NSString *)kVTPixelTransferPropertyKey_ScalingMode: (__bridge NSString *)kVTScalingMode_Letterbox,
+	};
+    VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_PixelTransferProperties, (__bridge CFTypeRef)(transferSpec));
     
     
     VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_AllowFrameReordering, kCFBooleanFalse);
@@ -153,7 +137,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
         real_keyframe_interval = self.settingsController.captureVideoMaxKeyframeInterval;
     }
     
-    VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_MaxKeyFrameIntervalDuration, CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &real_keyframe_interval));
+    VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_MaxKeyFrameIntervalDuration, (__bridge CFTypeRef)@(real_keyframe_interval));
     
     
     
@@ -207,31 +191,18 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     
     if (real_bitrate_limit > 0)
     {
-        
         NSLog(@"SETTING DAT RATE LIMIT");
         
-        CFNumberRef bitrate_num = CFNumberCreate(kCFAllocatorDefault, kCFNumberIntType, &real_bitrate_limit);
-        //        float rate_time = 1.0f;
-        CFNumberRef time_num = CFNumberCreate(kCFAllocatorDefault, kCFNumberFloatType, &limit_seconds);
+		NSArray *dataRateLimits = @[
+			@(real_bitrate_limit),
+			@(limit_seconds),
+		];
         
-        CFMutableArrayRef dataRateLimits = CFArrayCreateMutable(kCFAllocatorDefault, 2, &kCFTypeArrayCallBacks);
-        CFArrayAppendValue(dataRateLimits, bitrate_num);
-        CFArrayAppendValue(dataRateLimits, time_num);
-        
-        
-        
-        OSStatus success = VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_DataRateLimits, dataRateLimits);
+        OSStatus success = VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_DataRateLimits, (__bridge CFTypeRef)dataRateLimits);
         if (success != noErr)
         {
             NSLog(@"FAILED TO SET DATALIMITS");
         }
-        
-        
-        CFRelease(bitrate_num);
-        CFRelease(time_num);
-        CFRelease(dataRateLimits);
-        
-
     }
 
     
