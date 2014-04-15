@@ -11,6 +11,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "CaptureSessionProtocol.h"
 #import "ControllerProtocol.h"
+#import "AVFChannelManager.h"
 
 
 @interface AVFCapture : NSObject <CaptureSessionProtocol, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate>
@@ -36,7 +37,7 @@
 }
 
 
-
+@property (strong) AVFChannelManager *audioChannelManager;
 @property (readonly) NSArray *availableVideoDevices;
 @property double videoCaptureFPS;
 @property int width;

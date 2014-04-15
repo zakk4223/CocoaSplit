@@ -144,11 +144,15 @@
     }
     
     [_capture_session beginConfiguration];
+    
     if (_audio_capture_input)
     {
         [_capture_session removeInput:_audio_capture_input];
         _audio_capture_input = nil;
     }
+    
+    
+
     
     
     _audio_capture_input = [AVCaptureDeviceInput deviceInputWithDevice:self.activeAudioDevice error:nil];
@@ -168,6 +172,9 @@
         }
     }
     [_capture_session commitConfiguration];
+    
+    self.audioChannelManager = [[AVFChannelManager alloc] initWithPreviewOutput:self.audioPreviewOutput];
+
 }
 
 
@@ -352,13 +359,15 @@
         
         NSLog(@"AUDIO SAMPLERATE %d BITRATE %d", self.audioSamplerate, self.audioBitrate);
         
-        
+        _audio_capture_output.audioSettings = nil;
         _audio_capture_output.audioSettings = @{AVFormatIDKey: [NSNumber numberWithInt:kAudioFormatMPEG4AAC],
                                                 AVSampleRateKey: [NSNumber numberWithInteger: self.audioSamplerate],
                                                 AVEncoderBitRateKey: [NSNumber numberWithInt:self.audioBitrate*1000 ],
                                                 AVNumberOfChannelsKey: @2
                                                 
                                                 };
+
+        
         
         [_audio_capture_output setSampleBufferDelegate:self queue:_audio_capture_queue];
     }
@@ -368,12 +377,14 @@
     
     if ([_capture_session canAddOutput:_audio_capture_output])
     {
-        [_capture_session addOutput:_audio_capture_output];
+                [_capture_session addOutput:_audio_capture_output];
+
     } else {
         NSLog(@"COULDN'T ADD AUDIO OUTPUT");
     }
     
     [_capture_session commitConfiguration];
+    self.audioChannelManager.dataOutput = _audio_capture_output;
     
 }
 

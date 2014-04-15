@@ -157,6 +157,25 @@
     self.compressPanel = nil;
 }
 
+- (IBAction)openAudioMixerPanel:(id)sender {
+    
+    if (!self.audioMixerPanel)
+    {
+        [[NSBundle mainBundle] loadNibNamed:@"AudioMixer" owner:self topLevelObjects:nil];
+        [NSApp beginSheet:self.audioMixerPanel modalForWindow:[[NSApp delegate] window] modalDelegate:self didEndSelector:NULL contextInfo:NULL];
+    }
+}
+
+
+- (IBAction)closeAudioMixerPanel:(id)sender {
+    
+    [NSApp endSheet:self.audioMixerPanel];
+    [self.audioMixerPanel close];
+    self.audioMixerPanel = nil;
+}
+
+
+
 -(IBAction)openVideoAdvanced:(id)sender
 {
     

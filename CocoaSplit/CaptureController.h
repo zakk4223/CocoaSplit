@@ -107,6 +107,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (IBAction)openCompressPanel:(id)sender;
 - (IBAction)closeCompressPanel:(id)sender;
 
+- (IBAction)openAudioMixerPanel:(id)sender;
+- (IBAction)closeAudioMixerPanel:(id)sender;
 
 - (IBAction)closeCreateSheet:(id)sender;
 
@@ -134,6 +136,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) IBOutlet NSWindow *compressPanel;
 @property (strong) IBOutlet NSWindow *advancedPrefPanel;
 @property (strong) IBOutlet NSWindow *logWindow;
+@property (strong) IBOutlet NSWindow *audioMixerPanel;
 
 - (IBAction)openLogWindow:(id)sender;
 
