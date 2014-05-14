@@ -8,7 +8,12 @@
 #import <Foundation/Foundation.h>
 #import <VideoToolbox/VideoToolbox.h>
 #import <Syphon/Syphon.h>
+#import "ControllerProtocol.h"
 
+
+
+static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStamp* now, const CVTimeStamp* outputTime,
+                                    CVOptionFlags flagsIn, CVOptionFlags* flagsOut, void* displayLinkContext);
 
 
 @interface OpenGLProgram : NSObject
@@ -19,11 +24,14 @@
 
 @property (strong) NSString *label;
 @property (assign) GLuint gl_programName;
+
+
+
+
 -(void) setUniformLocation:(int)index location:(GLint)location;
 -(GLint) getUniformLocation:(int)index;
 
 @end
-
 
 
 
@@ -38,6 +46,8 @@
     GLsizei     _surfaceHeight;
     int         _hackcnt;
     GLuint      _vertexPosBuffer;
+    CVDisplayLinkRef displayLink;
+    
     int _num_planes;
     
     id _fs_activity_token;
@@ -49,12 +59,20 @@
     
     NSScreen *_fullscreenOn;
 
-    
+
 }
+
 
 -(void) drawFrame:(CVImageBufferRef)cFrame;
 - (IBAction)toggleFullscreen:(id)sender;
 
+
+
+
+@property (unsafe_unretained) IBOutlet id<ControllerProtocol> controller;
+
 @property (assign) BOOL vsync;
 
 @end
+
+

@@ -327,8 +327,43 @@
     
     [self createShaders];
     
+    CVDisplayLinkCreateWithActiveCGDisplays(&displayLink);
+    CVDisplayLinkSetOutputCallback(displayLink, &displayLinkRender, (__bridge void *)self);
+    
+    CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink, [[self openGLContext] CGLContextObj], [[self pixelFormat] CGLPixelFormatObj]);
+    CVDisplayLinkStart(displayLink);
+    
+    
+    
     
     return self;
+}
+
+
+static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStamp* now, const CVTimeStamp* outputTime,
+                                  CVOptionFlags flagsIn, CVOptionFlags* flagsOut, void* displayLinkContext)
+{
+    
+    PreviewView *myself;
+    
+    myself = (__bridge PreviewView *)displayLinkContext;
+    
+    CVImageBufferRef displayFrame = NULL;
+    displayFrame = [myself.controller currentFrame];
+    
+    
+    if (displayFrame)
+    {
+
+    
+        [myself drawFrame:displayFrame];
+    
+        CVPixelBufferRelease(displayFrame);
+    }
+    
+    
+    
+    return kCVReturnSuccess;
 }
 
 
@@ -340,7 +375,6 @@
     
     if (bufType == CVPixelBufferGetTypeID())
     {
-        CVPixelBufferRetain(cImageBuf);
         [self drawPixelBuffer:cImageBuf];
 //    } else if (bufType == CVOpenGLTextureGetTypeID()) {
   //      [self drawGLBuffer:cImageBuf];
@@ -348,26 +382,6 @@
         
 }
 
-/*
-- (void) drawGLBuffer:(CVOpenGLTextureRef)cImageBuf
-{
-    
-    GLuint saveTexture = _previewTexture;
-    
-    _previewTexture = CVOpenGLTextureGetName(cImageBuf);
-    NSSize surfaceSize = CVImageBufferGetDisplaySize(cImageBuf);
-    _surfaceWidth = surfaceSize.width;
-    _surfaceHeight = surfaceSize.height;
-
-    [self drawRect:CGRectZero];
-    
-    
-    _previewTexture = saveTexture;
-    
-    
-}
-
- */
 - (void) drawPixelBuffer:(CVPixelBufferRef)cImageBuf
 {
  
@@ -380,16 +394,11 @@
     CGLContextObj cgl_ctx = [[self openGLContext] CGLContextObj];
 
     
-    //CVPixelBufferRetain(cImageBuf);
     IOSurfaceRef cFrame = CVPixelBufferGetIOSurface(cImageBuf);
     IOSurfaceID cFrameID;
     
     [self.openGLContext makeCurrentContext];
-    if ([renderLock tryLock] == NO)
-    {
-        [NSOpenGLContext clearCurrentContext];
-        return;
-    }
+    
     if (cFrame)
     {
         cFrameID = IOSurfaceGetID(cFrame);        
@@ -467,6 +476,8 @@
             glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             
             CGLTexImageIOSurface2D(cgl_ctx, GL_TEXTURE_RECTANGLE_ARB, plane_enums[t_idx][1], (GLsizei)IOSurfaceGetWidthOfPlane(cFrame, t_idx), (GLsizei)IOSurfaceGetHeightOfPlane(cFrame, t_idx), plane_enums[t_idx][0], plane_enums[t_idx][2], cFrame, t_idx);
+            
+
         }
         
         
@@ -483,59 +494,30 @@
     }
 
     
-
       [self drawTexture:CGRectZero];
 
 
     [NSOpenGLContext clearCurrentContext];
-    [renderLock unlock];
-
-    CVPixelBufferRelease(cImageBuf);
-}
-
-- (void) update
-{
-  
-    if ([renderLock tryLock] == YES)
-    {
-        [super update];
-        [renderLock unlock];
-    }
 
 }
 
 
-/*
-- (void) reshape
-{
-    CGLContextObj  cgl_ctx  = [[self openGLContext] CGLContextObj];
-    CGLLockContext(cgl_ctx);
-    [super reshape];
-    CGLUnlockContext(cgl_ctx);
-    
-}
-*/
 
 
 - (void) drawRect:(NSRect)dirtyRect
 {
 
-    if ([renderLock tryLock] == YES)
-    {
-        [self.openGLContext makeCurrentContext];
-        [self drawTexture:dirtyRect];
-        [NSOpenGLContext clearCurrentContext];
-        [renderLock unlock];
-    }
+    [self.openGLContext makeCurrentContext];
+    [self drawTexture:dirtyRect];
+    [NSOpenGLContext clearCurrentContext];
     
 }
 
 
 - (void) drawTexture:(NSRect)dirtyRect
 {
-//    CGLContextObj  cgl_ctx  = [[self openGLContext] CGLContextObj];
- //   CGLLockContext(cgl_ctx);
-//    NSLog(@"CONTEXT %@", self.openGLContext);
+
+
     
     
     
@@ -611,6 +593,8 @@
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
     glFlush();
+    
+
     
 }
 

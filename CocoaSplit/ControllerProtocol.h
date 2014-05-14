@@ -11,6 +11,7 @@
 #import "AbstractCaptureDevice.h"
 #import "CapturedFrameData.h"
 
+
 @protocol ControllerProtocol <NSObject>
 
 
@@ -33,7 +34,6 @@
 @property NSString *imageDirectory;
 
 
-
 - (void) outputAVPacket:(AVPacket *)avpkt codec_ctx:(AVCodecContext *)codec_ctx;
 - (void)captureOutputVideo:(AbstractCaptureDevice *)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer didOutputImage:(CVImageBufferRef)imageBuffer frameTime:(uint64_t)frameTime;
 - (void)captureOutputAudio:(id)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer;
@@ -41,6 +41,8 @@
 -(void)newFrame;
 -(void)setExtraData:(id)saveData forKey:(NSString *)forKey;
 -(id)getExtraData:(NSString *)forkey;
+-(CVPixelBufferRef)currentFrame;
+
 
 - (void) outputEncodedData:(CapturedFrameData *)frameData;
 

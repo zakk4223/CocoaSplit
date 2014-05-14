@@ -224,6 +224,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (void) loadCmdlineSettings:(NSUserDefaults *)cmdargs;
 -(void)setExtraData:(id)saveData forKey:(NSString *)forKey;
 -(id)getExtraData:(NSString *)forkey;
+-(CVPixelBufferRef)currentFrame;
+
 -(void)setupLogging;
 
 

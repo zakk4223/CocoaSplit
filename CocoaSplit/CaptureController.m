@@ -1405,7 +1405,19 @@
 
 }
 
+
+-(CVPixelBufferRef)currentFrame
+{
     
+    if (self.videoCaptureSession)
+    {
+        return [self.videoCaptureSession getCurrentFrame];
+    }
+    
+    return NULL;
+}
+
+
 -(void) newFrame
 {
 
@@ -1416,7 +1428,6 @@
             newFrame = [self.videoCaptureSession getCurrentFrame];
             if (newFrame)
             {
-                
                 if (self.captureRunning && !self.videoCompressor)
                 {
                     [self setupCompressors];
@@ -1453,7 +1464,6 @@
 
                 }
                 
-                [self.previewCtx drawFrame:newFrame];
                 
                 
                 if (self.captureRunning && self.videoCompressor)
@@ -1462,10 +1472,11 @@
                     
                     capturedData.videoFrame = newFrame;
                     
-                    //NSLog(@"PROCESSING VIDEO FRAME");
                     [self processVideoFrame:capturedData];
                 //} else {
                 }
+                
+                
                     CVPixelBufferRelease(newFrame);
               
                 
@@ -1475,27 +1486,7 @@
 }
 
 
-/*
-- (void)captureOutputVideo:(AbstractCaptureDevice *)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer didOutputImage:(CVImageBufferRef)imageBuffer frameTime:(uint64_t)frameTime
-{
 
-    if (imageBuffer)
-    {
-        CVPixelBufferRetain(imageBuffer);
-        [self.previewCtx drawFrame:imageBuffer];
-
-
-        //dispatch_async(_main_capture_queue, ^{
-            [self processVideoFrame:imageBuffer];
-        //});
-        
-       }
-    
-}
-
-*/
-
-//-(void)processVideoFrame:(CVImageBufferRef)imageBuffer
 -(void)processVideoFrame:(CapturedFrameData *)frameData
 {
 
@@ -1551,14 +1542,8 @@
     if (self.videoCompressor)
     {
         
-        //NSLog(@"COMPRESSOR FRAME TIME %f", ptsTime);
         [self.videoCompressor compressFrame:frameData isKeyFrame:doKeyFrame];
-        
-        //[self.videoCompressor compressFrame:imageBuffer pts:pts duration:duration isKeyFrame:doKeyFrame];
-        
-        
-    //} else {
-     //   CVPixelBufferRelease(imageBuffer);
+
     }
         
 }
