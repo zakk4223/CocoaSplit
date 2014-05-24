@@ -53,7 +53,6 @@
 @implementation PreviewView
 
 
-@synthesize vsync = _vsync;
 
 
 
@@ -268,35 +267,6 @@
     
 }
 
--(void) updateVsync
-{
-    if (self.openGLContext)
-    {
-        long swapInterval;
-        if (self.vsync == YES)
-        {
-            swapInterval = 1;
-        } else {
-            swapInterval = 0;
-        }
-        [[self openGLContext] setValues:(GLint *)&swapInterval forParameter:NSOpenGLCPSwapInterval];
-    }
-    
-}
-
-
--(BOOL) vsync
-{
-    return _vsync;
-}
-
-
-
--(void) setVsync:(BOOL)vsync
-{
-    _vsync = vsync;
-    [self updateVsync];
-}
 
 
 -(id) initWithFrame:(NSRect)frameRect
@@ -320,7 +290,10 @@
     self = [super initWithFrame:frameRect pixelFormat:pf];
     if (self)
     {
-        [self updateVsync];
+        long swapInterval = 1;
+        
+        [[self openGLContext] setValues:(GLint *)&swapInterval forParameter:NSOpenGLCPSwapInterval];
+
         glGenTextures(3, _previewTextures);
     }
     
@@ -393,10 +366,12 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
     CGLContextObj cgl_ctx = [[self openGLContext] CGLContextObj];
 
-    
+
     IOSurfaceRef cFrame = CVPixelBufferGetIOSurface(cImageBuf);
     IOSurfaceID cFrameID;
     
+    CGLLockContext(cgl_ctx);
+
     [self.openGLContext makeCurrentContext];
     
     if (cFrame)
@@ -496,11 +471,11 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
       [self drawTexture:CGRectZero];
 
+    CGLUnlockContext(cgl_ctx);
 
     [NSOpenGLContext clearCurrentContext];
 
 }
-
 
 
 
@@ -508,11 +483,17 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 {
 
     [self.openGLContext makeCurrentContext];
+    CGLLockContext([self.openGLContext CGLContextObj]);
+    
+
     [self drawTexture:dirtyRect];
+    
+    CGLUnlockContext([self.openGLContext CGLContextObj]);
+
+
     [NSOpenGLContext clearCurrentContext];
     
 }
-
 
 - (void) drawTexture:(NSRect)dirtyRect
 {

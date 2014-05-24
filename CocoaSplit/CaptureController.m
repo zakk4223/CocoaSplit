@@ -574,7 +574,6 @@
     [saveRoot setValue: self.x264preset forKey:@"x264preset"];
     [saveRoot setValue: self.x264tune forKey:@"x264tune"];
     [saveRoot setValue: [NSNumber numberWithInt:self.x264crf] forKey:@"x264crf"];
-    [saveRoot setValue:[NSNumber numberWithBool:self.previewCtx.vsync] forKey:@"previewVsync"];
     [saveRoot setValue:[NSNumber numberWithFloat:self.audioCaptureSession.previewVolume] forKey:@"previewVolume"];
     [saveRoot setValue:[NSNumber numberWithBool:self.videoCBR] forKey:@"videoCBR"];
     [saveRoot setValue:[NSNumber numberWithInt:self.maxOutputDropped] forKey:@"maxOutputDropped"];
@@ -651,7 +650,6 @@
     self.audioCaptureSession.previewVolume = [[saveRoot valueForKey:@"previewVolume"] floatValue];
     
     self.captureFPS = [[saveRoot valueForKey:@"captureFPS"] doubleValue];
-    self.previewCtx.vsync = [[saveRoot valueForKey:@"previewVsync"] boolValue];
     self.videoCBR = [[saveRoot valueForKey:@"videoCBR"] boolValue];
     self.maxOutputDropped = [[saveRoot valueForKey:@"maxOutputDropped"] intValue];
     self.maxOutputPending = [[saveRoot valueForKey:@"maxOutputPending"] intValue];

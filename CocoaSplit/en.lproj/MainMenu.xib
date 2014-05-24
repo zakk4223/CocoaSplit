@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
     </dependencies>
@@ -218,27 +218,16 @@
                                                 </connections>
                                             </button>
                                             <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3861">
-                                                <rect key="frame" x="275" y="164" width="96" height="21"/>
+                                                <rect key="frame" x="153" y="164" width="96" height="21"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="92" id="3865"/>
+                                                    <constraint firstAttribute="width" constant="92" id="skf-3b-DAF"/>
                                                 </constraints>
                                                 <sliderCell key="cell" continuous="YES" alignment="left" maxValue="1" doubleValue="0.21369791666666665" tickMarkPosition="above" sliderType="linear" id="3862"/>
                                                 <connections>
                                                     <binding destination="816" name="value" keyPath="self.audioCaptureSession.previewVolume" id="3891"/>
                                                 </connections>
                                             </slider>
-                                            <button translatesAutoresizingMaskIntoConstraints="NO" id="3874">
-                                                <rect key="frame" x="153" y="165" width="110" height="18"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                <buttonCell key="cell" type="check" title="Preview Vsync" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="3875">
-                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                    <font key="font" metaFont="system"/>
-                                                </buttonCell>
-                                                <connections>
-                                                    <binding destination="816" name="value" keyPath="self.previewCtx.vsync" id="3879"/>
-                                                </connections>
-                                            </button>
                                         </subviews>
                                         <constraints>
                                             <constraint firstItem="2416" firstAttribute="leading" secondItem="2411" secondAttribute="leading" constant="31" id="2448"/>
@@ -246,11 +235,9 @@
                                             <constraint firstItem="2416" firstAttribute="top" secondItem="2411" secondAttribute="top" constant="200" id="2451"/>
                                             <constraint firstItem="3495" firstAttribute="leading" secondItem="2411" secondAttribute="leading" constant="43" id="3499"/>
                                             <constraint firstItem="3495" firstAttribute="top" secondItem="2416" secondAttribute="bottom" constant="8" symbolic="YES" id="3500"/>
-                                            <constraint firstItem="3874" firstAttribute="baseline" secondItem="3495" secondAttribute="baseline" id="3876"/>
-                                            <constraint firstItem="3874" firstAttribute="leading" secondItem="3495" secondAttribute="trailing" constant="8" symbolic="YES" id="3877"/>
-                                            <constraint firstItem="3861" firstAttribute="baseline" secondItem="3874" secondAttribute="baseline" id="3888"/>
-                                            <constraint firstAttribute="bottom" secondItem="3861" secondAttribute="bottom" constant="166" id="3889"/>
-                                            <constraint firstItem="3861" firstAttribute="leading" secondItem="2411" secondAttribute="leading" constant="277" id="3890"/>
+                                            <constraint firstItem="3861" firstAttribute="leading" secondItem="3495" secondAttribute="trailing" constant="8" symbolic="YES" id="70c-pM-bCE"/>
+                                            <constraint firstItem="3861" firstAttribute="baseline" secondItem="3495" secondAttribute="baseline" id="87R-pT-Akj"/>
+                                            <constraint firstAttribute="bottom" secondItem="3861" secondAttribute="bottom" constant="166" id="yC3-fs-bUa"/>
                                         </constraints>
                                     </view>
                                 </subviews>

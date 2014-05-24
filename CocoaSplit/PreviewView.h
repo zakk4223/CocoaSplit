@@ -71,7 +71,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
 @property (unsafe_unretained) IBOutlet id<ControllerProtocol> controller;
 
-@property (assign) BOOL vsync;
 
 @end
 
