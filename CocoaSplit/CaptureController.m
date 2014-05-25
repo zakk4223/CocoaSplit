@@ -743,7 +743,7 @@
     newout.height = _captureHeight;
     newout.width = _captureWidth;
     newout.framerate = self.captureFPS;
-    newout.stream_output = output.destination;
+    newout.stream_output = [output.destination stringByStandardizingPath];
     newout.stream_format = output.output_format;
     newout.samplerate = self.audioCaptureSession.audioSamplerate;
     newout.audio_bitrate = self.audioCaptureSession.audioBitrate*1000;
