@@ -1011,12 +1011,12 @@
     
     if ([cmdargs objectForKey:@"audioBitrate"])
     {
-        self.audioBitrate = [cmdargs integerForKey:@"audioBitrate"];
+        self.audioCaptureSession.audioBitrate = [cmdargs integerForKey:@"audioBitrate"];
     }
     
     if ([cmdargs objectForKey:@"audioSamplerate"])
     {
-        self.audioSamplerate = [cmdargs integerForKey:@"audioSamplerate"];
+        self.audioCaptureSession.audioSamplerate = [cmdargs integerForKey:@"audioSamplerate"];
     }
     
     if ([cmdargs objectForKey:@"x264tune"])

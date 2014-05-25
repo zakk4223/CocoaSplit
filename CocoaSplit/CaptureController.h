@@ -179,11 +179,9 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (assign) int captureHeight;
 @property (assign) int captureWidth;
 
-@property (assign) int audioBitrate;
 
 @property (strong) NSArray *validSamplerates;
 
-@property (assign) int audioSamplerate;
 
 
 - (IBAction)removeDestination:(id)sender;
