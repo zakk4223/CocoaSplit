@@ -92,11 +92,6 @@ void qtc_xpc_event_handler(xpc_connection_t conn, xpc_object_t event)
 
 
 
--(void) setVideoDimensions:(int)width height:(int)height
-{
-    return;
-}
-
 
 -(bool) providesVideo
 {

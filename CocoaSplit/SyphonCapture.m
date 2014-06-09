@@ -39,13 +39,6 @@
 
 
 
--(void) setVideoDimensions:(int)width height:(int)height
-{
-    self.width = width;
-    self.height = height;
-    
-}
-
 
 -(bool)stopCaptureSession
 {
@@ -94,7 +87,6 @@
     if (self = [super init])
     {
         
-        self.videoCaptureFPS = 60.0f;
         [self changeAvailableVideoDevices];
         NSOpenGLPixelFormatAttribute glAttributes[] = {
             

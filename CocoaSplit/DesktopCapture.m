@@ -35,7 +35,7 @@
     {
         _capture_queue = dispatch_queue_create("Desktop Capture Queue", DISPATCH_QUEUE_SERIAL);
 
-        self.videoCaptureFPS = 60.0f;
+        self.videoCaptureFPS = 30.0f;
         
     }
 
@@ -62,14 +62,6 @@
     self.height = displaySize.size.height;
 
     [self setupDisplayStream];
-}
-
--(void) setVideoDimensions:(int)width height:(int)height
-{
-    return;
-    //self.width = width;
-    //self.height = height;
-    
 }
 
 -(double)videoCaptureFPS
@@ -106,6 +98,8 @@
     }
     
     
+    NSLog(@"SETUP DISPLAY STREAM %f", self.videoCaptureFPS);
+    
     
     NSNumber *minframetime = [NSNumber numberWithFloat:(1000.0/(self.videoCaptureFPS*1000))];
 
@@ -121,7 +115,6 @@
         
         if (frameSurface)
         {
-            
             CFRetain(frameSurface);
             @synchronized(self) {
                 if (_currentFrame)

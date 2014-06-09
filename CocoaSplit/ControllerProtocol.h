@@ -26,8 +26,6 @@
 @property NSString *x264tune;
 @property NSString *vtcompressor_profile;
 @property int x264crf;
-@property int audioBitrate;
-@property int audioSamplerate;
 @property BOOL videoCBR;
 @property (assign) int maxOutputPending;
 @property (assign) int maxOutputDropped;

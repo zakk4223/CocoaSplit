@@ -33,7 +33,6 @@
 @property (weak) id<ControllerProtocol> settingsController;
 
 
--(void) setVideoDimensions:(int)width height:(int)height;
 
 
 -(CVImageBufferRef) getCurrentFrame;

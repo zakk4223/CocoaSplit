@@ -310,6 +310,8 @@
 {
     if ([keyPath isEqualToString:@"videoCaptureFPS"])
     {
+        self.captureFPS = [[change objectForKey:NSKeyValueChangeNewKey] doubleValue];
+        
         [self setupFrameTimer];
     }
 }
@@ -908,7 +910,7 @@
     {
         _PMAssertionRet = IOPMAssertionCreateWithName(kIOPMAssertionTypePreventUserIdleDisplaySleep, kIOPMAssertionLevelOn, CFSTR("CocoaSplit is capturing video"), &_PMAssertionID);
     } else {
-        _activity_token = [[NSProcessInfo processInfo] beginActivityWithOptions:NSActivityUserInitiated reason:@"CocoaSplit is capturing video"];
+        _activity_token = [[NSProcessInfo processInfo] beginActivityWithOptions:NSActivityUserInitiated|NSActivityIdleDisplaySleepDisabled reason:@"CocoaSplit is capturing video"];
         
     }
 
@@ -986,37 +988,37 @@
     
     if ([cmdargs objectForKey:@"captureWidth"])
     {
-        self.captureWidth = [cmdargs integerForKey:@"captureWidth"];
+        self.captureWidth = (int)[cmdargs integerForKey:@"captureWidth"];
     }
     
     if ([cmdargs objectForKey:@"captureHeight"])
     {
-        self.captureHeight = [cmdargs integerForKey:@"captureHeight"];
+        self.captureHeight = (int)[cmdargs integerForKey:@"captureHeight"];
     }
     
     if ([cmdargs objectForKey:@"captureVideoAverageBitrate"])
     {
-        self.captureVideoAverageBitrate = [cmdargs integerForKey:@"captureVideoAverageBitrate"];
+        self.captureVideoAverageBitrate = (int)[cmdargs integerForKey:@"captureVideoAverageBitrate"];
     }
     
     if ([cmdargs objectForKey:@"captureVideoMaxBitrate"])
     {
-        self.captureVideoMaxBitrate = [cmdargs integerForKey:@"captureVideoMaxBitrate"];
+        self.captureVideoMaxBitrate = (int)[cmdargs integerForKey:@"captureVideoMaxBitrate"];
     }
     
     if ([cmdargs objectForKey:@"captureVideoMaxKeyframeInterval"])
     {
-        self.captureVideoMaxKeyframeInterval = [cmdargs integerForKey:@"captureVideoMaxKeyframeInterval"];
+        self.captureVideoMaxKeyframeInterval = (int)[cmdargs integerForKey:@"captureVideoMaxKeyframeInterval"];
     }
     
     if ([cmdargs objectForKey:@"audioBitrate"])
     {
-        self.audioCaptureSession.audioBitrate = [cmdargs integerForKey:@"audioBitrate"];
+        self.audioCaptureSession.audioBitrate = (int)[cmdargs integerForKey:@"audioBitrate"];
     }
     
     if ([cmdargs objectForKey:@"audioSamplerate"])
     {
-        self.audioCaptureSession.audioSamplerate = [cmdargs integerForKey:@"audioSamplerate"];
+        self.audioCaptureSession.audioSamplerate = (int)[cmdargs integerForKey:@"audioSamplerate"];
     }
     
     if ([cmdargs objectForKey:@"x264tune"])
@@ -1036,7 +1038,7 @@
     
     if ([cmdargs objectForKey:@"x264crf"])
     {
-        self.x264crf = [cmdargs integerForKey:@"x264crf"];
+        self.x264crf = (int)[cmdargs integerForKey:@"x264crf"];
     }
     
     if ([cmdargs objectForKey:@"selectedVideoType"])
@@ -1230,8 +1232,8 @@
 
     if ([self.resolutionOption isEqualToString:@"Use Source"])
     {
-        self.captureHeight = CVPixelBufferGetHeight(withFrame);
-        self.captureWidth = CVPixelBufferGetWidth(withFrame);
+        self.captureHeight = (int)CVPixelBufferGetHeight(withFrame);
+        self.captureWidth = (int)CVPixelBufferGetWidth(withFrame);
     } else if ([self.resolutionOption isEqualToString:@"Preserve AR"]) {
         float inputAR = (float)CVPixelBufferGetWidth(withFrame) / (float)CVPixelBufferGetHeight(withFrame);
         int newWidth;
@@ -1489,7 +1491,7 @@
 {
 
     
-    CVImageBufferRef imageBuffer = frameData.videoFrame;
+    //CVImageBufferRef imageBuffer = frameData.videoFrame;
     
     if (!self.captureRunning || !self.videoCompressor)
     {
@@ -1549,9 +1551,11 @@
 
 -(void)setCaptureFPS:(double)captureFPS
 {
+    
     _captureFPS = captureFPS;
     [self setupFrameTimer];
 }
+
 - (double) captureFPS
 {
     

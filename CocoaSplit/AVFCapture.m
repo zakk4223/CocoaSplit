@@ -24,7 +24,10 @@
 {
     if (self = [super init])
     {
-        self.videoCaptureFPS = 60.0f;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDeviceChange:) name:AVCaptureDeviceWasConnectedNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDeviceChange:) name:AVCaptureDeviceWasDisconnectedNotification object:nil];
+
+        [self changeAvailableVideoDevices];
         _capture_session = [[AVCaptureSession alloc] init];
         [self setupVideoOutput];
         
@@ -33,6 +36,16 @@
     }
     return self;
 }
+
+
+-(void) handleDeviceChange:(NSNotification *)notification
+{
+    
+    [self changeAvailableVideoDevices];
+    
+    
+}
+
 
 
 -(id) initForAudio
@@ -54,19 +67,13 @@
 
 -(void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     if (_capture_session)
     {
         [_capture_session stopRunning];
     }
 }
 
--(void) setVideoDimensions:(int)width height:(int)height
-{
-    self.videoHeight = height;
-    self.videoWidth = width;
-    
-    return;
-}
 
 
 
@@ -224,10 +231,12 @@
 
 
 
--(NSArray *) availableVideoDevices
+-(void) changeAvailableVideoDevices
 {
     
     NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+    NSLog(@"AVFOUNDATION VIDEO LIST %@", devices);
+    
     NSMutableArray *retArray = [[NSMutableArray alloc] init];
     
     
@@ -238,7 +247,7 @@
         [retArray addObject:[[AbstractCaptureDevice alloc] initWithName:[devinstance localizedName] device:devinstance uniqueID:devinstance.uniqueID]];
     }
     
-    return (NSArray *)retArray;
+    self.availableVideoDevices = retArray;
     
 }
 

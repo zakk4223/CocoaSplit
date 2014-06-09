@@ -42,7 +42,6 @@
 
 
 -(bool) stopCaptureSession;
--(void) setVideoDimensions:(int)width height:(int)height;
 
 
 
