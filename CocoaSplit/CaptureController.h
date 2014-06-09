@@ -196,8 +196,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (weak) AbstractCaptureDevice *selectedVideoCapture;
 @property (readonly) AVCaptureDevice *selectedAudioCapture;
 
-@property (assign) double captureFPS;
-
 
 @property (weak)  NSString *ffmpeg_path;
 

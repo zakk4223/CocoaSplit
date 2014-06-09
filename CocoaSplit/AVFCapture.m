@@ -235,7 +235,6 @@
 {
     
     NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
-    NSLog(@"AVFOUNDATION VIDEO LIST %@", devices);
     
     NSMutableArray *retArray = [[NSMutableArray alloc] init];
     

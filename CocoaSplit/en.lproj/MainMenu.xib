@@ -507,7 +507,7 @@
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
-                                                                <binding destination="nWB-G2-33f" name="value" keyPath="selection.captureFPS" id="EqK-7l-7X2">
+                                                                <binding destination="nWB-G2-33f" name="value" keyPath="selection.videoCaptureSession.videoCaptureFPS" id="okf-U6-hLn">
                                                                     <dictionary key="options">
                                                                         <bool key="NSValidatesImmediately" value="YES"/>
                                                                     </dictionary>

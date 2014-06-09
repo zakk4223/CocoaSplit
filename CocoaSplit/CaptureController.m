@@ -24,13 +24,6 @@
 @implementation CaptureController
 
 
-@synthesize captureFPS = _captureFPS;
-
-
-
-
-
-
 -(void)loadTwitchIngest
 {
     
@@ -310,7 +303,7 @@
 {
     if ([keyPath isEqualToString:@"videoCaptureFPS"])
     {
-        self.captureFPS = [[change objectForKey:NSKeyValueChangeNewKey] doubleValue];
+        //self.captureFPS = [[change objectForKey:NSKeyValueChangeNewKey] doubleValue];
         
         [self setupFrameTimer];
     }
@@ -561,7 +554,7 @@
     
     [saveRoot setValue: [NSNumber numberWithInt:self.captureWidth] forKey:@"captureWidth"];
     [saveRoot setValue: [NSNumber numberWithInt:self.captureHeight] forKey:@"captureHeight"];
-    [saveRoot setValue: [NSNumber numberWithDouble:self.captureFPS] forKey:@"captureFPS"];
+    [saveRoot setValue: [NSNumber numberWithDouble:self.videoCaptureSession.videoCaptureFPS] forKey:@"captureFPS"];
     [saveRoot setValue: [NSNumber numberWithInt:self.captureVideoAverageBitrate] forKey:@"captureVideoAverageBitrate"];
     [saveRoot setValue: [NSNumber numberWithInt:self.audioCaptureSession.audioBitrate] forKey:@"audioBitrate"];
     [saveRoot setValue: [NSNumber numberWithInt:self.audioCaptureSession.audioSamplerate] forKey:@"audioSamplerate"];
@@ -651,7 +644,7 @@
     [self selectedAudioCaptureFromID:audioID];
     self.audioCaptureSession.previewVolume = [[saveRoot valueForKey:@"previewVolume"] floatValue];
     
-    self.captureFPS = [[saveRoot valueForKey:@"captureFPS"] doubleValue];
+    self.videoCaptureSession.videoCaptureFPS = [[saveRoot valueForKey:@"captureFPS"] doubleValue];
     self.videoCBR = [[saveRoot valueForKey:@"videoCBR"] boolValue];
     self.maxOutputDropped = [[saveRoot valueForKey:@"maxOutputDropped"] intValue];
     self.maxOutputPending = [[saveRoot valueForKey:@"maxOutputPending"] intValue];
@@ -744,7 +737,7 @@
     
     newout.height = _captureHeight;
     newout.width = _captureWidth;
-    newout.framerate = self.captureFPS;
+    newout.framerate = self.videoCaptureSession.videoCaptureFPS;
     newout.stream_output = [output.destination stringByStandardizingPath];
     newout.stream_format = output.output_format;
     newout.samplerate = self.audioCaptureSession.audioSamplerate;
@@ -924,11 +917,11 @@
 
 -(void) setupFrameTimer
 {
-    NSLog(@"SETTING UP FRAME TIMER %f", self.captureFPS);
+    NSLog(@"SETTING UP FRAME TIMER %f", self.videoCaptureSession.videoCaptureFPS);
     
-    if (self.captureFPS && self.captureFPS > 0)
+    if (self.videoCaptureSession.videoCaptureFPS && self.videoCaptureSession.videoCaptureFPS > 0)
     {
-        _frame_interval = (1.0/self.captureFPS);
+        _frame_interval = (1.0/self.videoCaptureSession.videoCaptureFPS);
     } else {
         _frame_interval = 1.0/60.0;
     }
@@ -1067,7 +1060,7 @@
     
     if ([cmdargs objectForKey:@"captureFPS"])
     {
-        self.captureFPS = [cmdargs doubleForKey:@"captureFPS"];
+        self.videoCaptureSession.videoCaptureFPS = [cmdargs doubleForKey:@"captureFPS"];
     }
     
     if ([cmdargs objectForKey:@"outputDestinations"])
@@ -1525,7 +1518,7 @@
     
     pts = CMTimeMake(ptsTime*1000000, 1000000);
     
-    duration = CMTimeMake(1000, self.captureFPS*1000);
+    duration = CMTimeMake(1000, self.videoCaptureSession.videoCaptureFPS*1000);
     
     BOOL doKeyFrame = NO;
     
@@ -1546,20 +1539,6 @@
 
     }
         
-}
-
-
--(void)setCaptureFPS:(double)captureFPS
-{
-    
-    _captureFPS = captureFPS;
-    [self setupFrameTimer];
-}
-
-- (double) captureFPS
-{
-    
-    return _captureFPS;
 }
 
 
