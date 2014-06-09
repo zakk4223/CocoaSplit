@@ -878,6 +878,13 @@
 
     
 }
+
+-(double) captureFPS
+{
+    return self.videoCaptureSession.videoCaptureFPS;
+}
+
+
 -(bool) startStream
 {
     // We should already have a capture session from init since we need it to figure out device lists.
