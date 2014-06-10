@@ -95,7 +95,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     }
     
 	NSDictionary *encoderSpec = @{
-		(__bridge NSString *)kVTVideoEncoderSpecification_RequireHardwareAcceleratedVideoEncoder: @YES,
+		@"RequireHardwareAcceleratedVideoEncoder": @YES,
 	};
 	
     _compression_session = NULL;

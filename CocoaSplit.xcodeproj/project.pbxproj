@@ -939,7 +939,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /usr/local/include;
-				MACOSX_DEPLOYMENT_TARGET = "";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
 			};
@@ -962,7 +962,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /usr/local/include;
-				MACOSX_DEPLOYMENT_TARGET = "";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
 			};
@@ -992,7 +992,7 @@
 					/usr/local/lib/libx264.a,
 				);
 				PRODUCT_NAME = CocoaSplit;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.9;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1021,7 +1021,7 @@
 					/usr/local/lib/libx264.a,
 				);
 				PRODUCT_NAME = CocoaSplit;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.9;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -1036,6 +1036,7 @@
 				GCC_PREFIX_HEADER = "CocoaSplit/CocoaSplit-Prefix.pch";
 				INFOPLIST_FILE = "CocoaSplitTests/CocoaSplitTests-Info.plist";
 				PRODUCT_NAME = CocoaSplitTests;
+				SDKROOT = macosx10.9;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
 			};
@@ -1051,6 +1052,7 @@
 				GCC_PREFIX_HEADER = "CocoaSplit/CocoaSplit-Prefix.pch";
 				INFOPLIST_FILE = "CocoaSplitTests/CocoaSplitTests-Info.plist";
 				PRODUCT_NAME = CocoaSplitTests;
+				SDKROOT = macosx10.9;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
 			};
@@ -1081,7 +1083,7 @@
 					/usr/local/lib/libx264.a,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
+				SDKROOT = macosx10.9;
 			};
 			name = Debug;
 		};
@@ -1109,7 +1111,7 @@
 					/usr/local/lib/libmp3lame.a,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
+				SDKROOT = macosx10.9;
 			};
 			name = Release;
 		};
@@ -1129,7 +1131,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "zakk.lol.$(TARGET_NAME:rfc1034identifier)";
-				SDKROOT = macosx;
+				SDKROOT = macosx10.9;
 				VALID_ARCHS = "i386 x86_64";
 				WRAPPER_EXTENSION = xpc;
 			};
@@ -1150,7 +1152,7 @@
 				MACH_O_TYPE = mh_execute;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = "zakk.lol.$(TARGET_NAME:rfc1034identifier)";
-				SDKROOT = macosx;
+				SDKROOT = macosx10.9;
 				VALID_ARCHS = "i386 x86_64";
 				WRAPPER_EXTENSION = xpc;
 			};

@@ -299,13 +299,11 @@
     
     
     [self createShaders];
-    
     CVDisplayLinkCreateWithActiveCGDisplays(&displayLink);
     CVDisplayLinkSetOutputCallback(displayLink, &displayLinkRender, (__bridge void *)self);
     
     CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink, [[self openGLContext] CGLContextObj], [[self pixelFormat] CGLPixelFormatObj]);
     CVDisplayLinkStart(displayLink);
-    
     
     
     
