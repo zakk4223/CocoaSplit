@@ -26,6 +26,8 @@
 @property (strong) NSString *output_format;
 @property (strong) NSString *stream_key;
 @property (strong) FFMpegTask *ffmpeg_out;
+@property (strong) id<ControllerProtocol> settingsController;
+
 @property  BOOL active;
 
 
@@ -33,6 +35,7 @@
 
 -(id)initWithType:(NSString *)type;
 -(void)stopOutput;
+-(void) attachOutput:(id<ControllerProtocol>) settingsController;
 
 
 

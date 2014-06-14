@@ -383,7 +383,8 @@
    {
        
        
-       
+       [self setupLogging];
+
        audioLastReadPosition = 0;
        audioWritePosition = 0;
        
@@ -401,6 +402,7 @@
        
        self.destinationTypes = @{@"file" : @"File/Raw",
        @"twitch" : @"Twitch TV"};
+       
        
        
        self.showPreview = YES;
@@ -504,7 +506,16 @@
 -(void) appendToLogView:(NSString *)logLine
 {
     
+    
+    NSAttributedString *appendStr = [[NSAttributedString alloc] initWithString:logLine];
     [[self.logTextView textStorage] beginEditing];
+
+    [self.logTextView.textStorage appendAttributedString:appendStr];
+    
+    [[self.logTextView textStorage] endEditing];
+
+/*
+ 
     [[[self.logTextView textStorage] mutableString] appendString:logLine];
     [[[self.logTextView textStorage] mutableString] appendString:@"\n"];
 
@@ -514,7 +525,9 @@
     range = NSMakeRange([[self.logTextView string] length], 0);
     
     [self.logTextView scrollRangeToVisible:range];
-
+*/
+    
+    
 }
 
 
@@ -539,10 +552,38 @@
     
     self.logReadHandle = [self.loggingPipe fileHandleForReading];
     dup2([[self.loggingPipe fileHandleForWriting] fileDescriptor], fileno(stderr));
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loggingNotification) name:NSFileHandleReadCompletionNotification object:self.logReadHandle];
-    [self.logReadHandle readInBackgroundAndNotify];
     
+    _log_source = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ, [self.logReadHandle fileDescriptor], 0, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
+    dispatch_source_set_event_handler(_log_source, ^{
+       
+        void *data = malloc(512);
+        ssize_t read_size = 0;
+        do
+        {
+            errno = 0;
+            read_size = read([self.logReadHandle fileDescriptor], data, 512);
+        } while (read_size == -1 && errno == EINTR);
+        
+        if (read_size > 0)
+        {
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSString *logStr = [[NSString alloc] initWithBytesNoCopy:data length:read_size encoding:NSUTF8StringEncoding freeWhenDone:YES];
+                [self appendToLogView:logStr];
+                
+            });
+        } else {
+            free(data);
+        }
+        
+        
+        
+    });
+    
+    dispatch_resume(_log_source);
 }
+
+
 -(void) saveSettings
 {
     
@@ -719,34 +760,11 @@
     
     
     [[self mutableArrayValueForKey:@"captureDestinations"] addObject:newDest];
-    [self attachCaptureDestination:newDest];
+    [newDest attachOutput:self];
     [self closeCreateSheet:nil];
     
 }
 
--(void)attachCaptureDestination:(OutputDestination *)output
-{
-    FFMpegTask *newout;
-    
-    if (!output.ffmpeg_out)
-    {
-        newout = [[FFMpegTask alloc] init];
-    } else {
-        newout = output.ffmpeg_out;
-    }
-    
-    newout.height = _captureHeight;
-    newout.width = _captureWidth;
-    newout.framerate = self.videoCaptureSession.videoCaptureFPS;
-    newout.stream_output = [output.destination stringByStandardizingPath];
-    newout.stream_format = output.output_format;
-    newout.samplerate = self.audioCaptureSession.audioSamplerate;
-    newout.audio_bitrate = self.audioCaptureSession.audioBitrate*1000;
-    
-    newout.settingsController = self;
-    newout.active = YES;
-    output.ffmpeg_out = newout;
-}
 
 
 
@@ -877,6 +895,17 @@
     return YES;
 
     
+}
+
+-(int)audioBitrate
+{
+    return self.audioCaptureSession.audioBitrate;
+    
+}
+
+-(int)audioSamplerate
+{
+    return self.audioCaptureSession.audioSamplerate;
 }
 
 -(double) captureFPS
@@ -1458,7 +1487,7 @@
                         NSLog(@"Attaching destinations");
                         for (output in _captureDestinations)
                         {
-                            [self attachCaptureDestination:output];
+                            [output attachOutput:self];
                         }
                     }
 

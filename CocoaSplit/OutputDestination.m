@@ -88,15 +88,15 @@
     
     if (is_active != _active)
     {
+        _active = is_active;
         if (!is_active && self.ffmpeg_out)
         {
             [self.ffmpeg_out stopProcess];
         } else if (is_active && self.ffmpeg_out) {
-            self.ffmpeg_out.active = YES;
+            [self attachOutput:self.settingsController];
         }
         
     }
-    _active = is_active;
 }
 
 
@@ -140,6 +140,30 @@
     return self;
     
     
+}
+
+
+-(void) attachOutput:(id<ControllerProtocol>) settingsController
+{
+    FFMpegTask *newout;
+    if (!self.ffmpeg_out)
+    {
+        newout = [[FFMpegTask alloc] init];
+    } else {
+        newout = self.ffmpeg_out;
+    }
+    
+    self.settingsController = settingsController;
+    
+    newout.framerate = settingsController.captureFPS;
+    newout.stream_output = [self.destination stringByStandardizingPath];
+    newout.stream_format = self.output_format;
+    newout.settingsController = settingsController;
+    newout.active = self.active;
+    newout.samplerate = settingsController.audioSamplerate;
+    newout.audio_bitrate = settingsController.audioBitrate;
+    
+    self.ffmpeg_out = newout;
 }
 
 

@@ -21,10 +21,10 @@
                 <rect key="frame" x="0.0" y="0.0" width="562" height="341"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Re-18-1Xg">
+                    <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Re-18-1Xg">
                         <rect key="frame" x="20" y="75" width="522" height="246"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <clipView key="contentView" ambiguous="YES" misplaced="YES" id="M7R-Kt-NcY">
+                        <clipView key="contentView" id="M7R-Kt-NcY">
                             <rect key="frame" x="1" y="17" width="520" height="228"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
@@ -87,7 +87,7 @@
                             <autoresizingMask key="autoresizingMask"/>
                         </tableHeaderView>
                     </scrollView>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cJk-8t-nSw">
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cJk-8t-nSw">
                         <rect key="frame" x="14" y="27" width="58" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Ok" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="JE4-oO-A9Z">
@@ -99,6 +99,14 @@
                         </connections>
                     </button>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="0Re-18-1Xg" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="20" symbolic="YES" id="0AC-mE-RJU"/>
+                    <constraint firstAttribute="bottom" secondItem="cJk-8t-nSw" secondAttribute="bottom" constant="34" id="3R1-Ha-bEt"/>
+                    <constraint firstAttribute="trailing" secondItem="0Re-18-1Xg" secondAttribute="trailing" constant="20" symbolic="YES" id="ROo-eg-xgE"/>
+                    <constraint firstItem="0Re-18-1Xg" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="Yie-e6-B7c"/>
+                    <constraint firstItem="cJk-8t-nSw" firstAttribute="top" secondItem="0Re-18-1Xg" secondAttribute="bottom" constant="20" symbolic="YES" id="cCD-C2-RvL"/>
+                    <constraint firstItem="cJk-8t-nSw" firstAttribute="leading" secondItem="0Re-18-1Xg" secondAttribute="leading" id="vaX-Jx-D2I"/>
+                </constraints>
             </view>
         </window>
         <arrayController id="Stw-Um-02D" userLabel="AudioChannelController">

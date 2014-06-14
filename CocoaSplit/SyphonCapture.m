@@ -257,6 +257,7 @@
     
     
     glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);
+    /*
     glClearColor (1.0f, 0.0f, 0.0f, 0.5f);
     glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);            // Clear Screen And Depth Buffer on the fbo to red
     glLoadIdentity ();                                              // Reset The Modelview Matrix
@@ -265,13 +266,16 @@
     glRotatef(angle,1.0f,0.0f,0.0f);
     glRotatef(angle,0.0f,0.0f,1.0f);
     glColor3f(1,1,0);                                               // set color to yellow
-    
+    */
     
     
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glClear(GL_COLOR_BUFFER_BIT);
     
     glViewport(0, 0, frameSize.width, frameSize.height);
+    glMatrixMode(GL_TEXTURE);
+    glPushMatrix();
+    glLoadIdentity();
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
@@ -309,7 +313,10 @@
         -halfw, -halfh
     };
     
+
     glTranslated(frameSize.width * 0.5, frameSize.height * 0.5, 0.0);
+    //glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
+
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glTexCoordPointer(2, GL_FLOAT, 0, text_coords);
     glEnableClientState(GL_VERTEX_ARRAY);

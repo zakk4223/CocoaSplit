@@ -57,25 +57,31 @@
 
 
 
--(void) logGLShader:(GLuint)logTarget
+-(void) logGLShader:(GLuint)logTarget shaderPath:(NSString *)shaderPath
 {
 	int infologLength = 0;
 	int maxLength;
     
 	if(glIsShader(logTarget))
+    {
 		glGetShaderiv(logTarget,GL_INFO_LOG_LENGTH,&maxLength);
-	else
+	} else {
 		glGetProgramiv(logTarget,GL_INFO_LOG_LENGTH,&maxLength);
-    
+    }
 	char infoLog[maxLength];
     
 	if (glIsShader(logTarget))
+    {
 		glGetShaderInfoLog(logTarget, maxLength, &infologLength, infoLog);
-	else
+	} else {
 		glGetProgramInfoLog(logTarget, maxLength, &infologLength, infoLog);
+    }
     
 	if (infologLength > 0)
-		NSLog(@"SHADER LOG %s\n",infoLog);
+    {
+		NSLog(@"LOG FOR SHADER %@:  %s\n",shaderPath, infoLog);
+    }
+    
 }
 
 
@@ -105,8 +111,7 @@
     
     glShaderSource(shaderName, 1, &sc_src, NULL);
     glCompileShader(shaderName);
-    NSLog(@"LOGGING FOR SHADER %@", shaderPath);
-    [self logGLShader:shaderName];
+    [self logGLShader:shaderName shaderPath:shaderPath];
     return shaderName;
 }
 
@@ -121,7 +126,7 @@
     glLinkProgram(newProgram);
     
 
-    [self logGLShader:newProgram];
+    [self logGLShader:newProgram shaderPath:nil];
 
     
     

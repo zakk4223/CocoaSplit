@@ -64,6 +64,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     size_t audioLastReadPosition;
     NSMutableArray *audioBuffer;
     NSMutableArray *videoBuffer;
+    dispatch_source_t _log_source;
+
     
     
     

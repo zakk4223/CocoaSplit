@@ -45,7 +45,13 @@
 -(void) writeAVPacket:(AVPacket *)pkt codec_ctx:(AVCodecContext *)codec_ctx;
 -(void) writeEncodedData:(CapturedFrameData *)frameData;
 
+
+
 -(bool) stopProcess;
+-(NSString *) av_error_nsstring:(int)av_err_num;
+
+
+
 
 @property (assign) BOOL init_done;
 @property (assign) BOOL active;

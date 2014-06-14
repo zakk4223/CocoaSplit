@@ -140,6 +140,11 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 -(void) writeEncodedData:(CapturedFrameData *)frameData
 {
     
+    if (!self.active)
+    {
+        return;
+    }
+    
     
     if (!_audio_extradata && [frameData.audioSamples count] > 0)
     {
@@ -149,6 +154,12 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         [self extractAudioCookie:audioSample];
     }
     
+    if (!_stream_dispatch)
+    {
+        _stream_dispatch = dispatch_queue_create("FFMpeg Stream Dispatch", NULL);
+        _pending_frame_count = 0;
+    }
+
     if (!_av_video_stream && _audio_extradata)
     {
         if ([self createAVFormatOut:frameData.encodedSampleBuffer codec_ctx:frameData.avcodec_ctx])
@@ -169,11 +180,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
     //If we made it here, we have all the metadata and av* stuff created, so start sending data.
     
-    if (!_stream_dispatch)
-    {
-        _stream_dispatch = dispatch_queue_create("FFMpeg Stream Dispatch", NULL);
-        _pending_frame_count = 0;
-    }
     
     for (id object in frameData.audioSamples)
     {
@@ -313,8 +319,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
     c_ctx->codec_type = AVMEDIA_TYPE_VIDEO;
     c_ctx->codec_id = AV_CODEC_ID_H264;
-    c_ctx->width = _width;
-    c_ctx->height = _height;
     c_ctx->time_base.num = 1000000;
     c_ctx->time_base.den = self.framerate*1000000;
     
@@ -348,8 +352,14 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         CFStringRef avccKey;
         CFDataRef avcc_data;
         CFIndex avcc_size;
-    
+        
+        CMVideoDimensions avc_dimensions;
+        
         fmt = CMSampleBufferGetFormatDescription(theBuffer);
+        avc_dimensions = CMVideoFormatDescriptionGetDimensions(fmt);
+        self.width = avc_dimensions.width;
+        self.height = avc_dimensions.height;
+        
         atoms = CMFormatDescriptionGetExtension(fmt, kCMFormatDescriptionExtension_SampleDescriptionExtensionAtoms);
         avccKey = CFSTR("avcC");
         NSLog(@"ATOMS %@", atoms);
@@ -361,6 +371,9 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
         c_ctx->extradata_size = (int)avcc_size;
     } else if (codec_ctx) {
+        self.width = codec_ctx->width;
+        self.height = codec_ctx->height;
+        
         c_ctx->extradata_size = codec_ctx->extradata_size;
         c_ctx->extradata = malloc(c_ctx->extradata_size);
         memcpy(c_ctx->extradata, codec_ctx->extradata, c_ctx->extradata_size);
@@ -373,15 +386,22 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         a_ctx->flags |= CODEC_FLAG_GLOBAL_HEADER;
 
 
+    c_ctx->width = self.width;
+    c_ctx->height = self.height;
+
     
     av_dump_format(_av_fmt_ctx, 0, [_stream_output UTF8String], 1);
     
     if (!(av_out_fmt->flags & AVFMT_NOFILE))
     {
+        int av_err;
         NSLog(@"Doing AVIO_OPEN");
-        if (avio_open(&_av_fmt_ctx->pb, [_stream_output UTF8String], AVIO_FLAG_WRITE) < 0)
+        if ((av_err = avio_open(&_av_fmt_ctx->pb, [_stream_output UTF8String], AVIO_FLAG_WRITE)) < 0)
         {
-            NSLog(@"AVIO_OPEN failed");
+            NSString *open_err = [self av_error_nsstring:av_err ];
+
+            
+            NSLog(@"AVIO_OPEN failed REASON %@", open_err);
             _av_fmt_ctx->pb = NULL;
             [self stopProcess];
             return NO;
@@ -780,6 +800,12 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 -(bool)stopProcess
 {
     
+    if (!self.active)
+    {
+        return NO;
+    }
+    
+    
     self.active = NO;
     
     dispatch_async(_stream_dispatch, ^{
@@ -827,4 +853,26 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     return YES;
         
 }
+
+-(NSString *) av_error_nsstring:(int)av_err_num
+{
+    NSString *errstr = nil;
+    
+    
+    char *av_err_str;
+    
+    av_err_str = malloc(AV_ERROR_MAX_STRING_SIZE);
+    
+    if (av_strerror(av_err_num, av_err_str, AV_ERROR_MAX_STRING_SIZE) < 0)
+    {
+        free(av_err_str);
+        errstr = nil;
+    } else {
+        errstr = [[NSString alloc] initWithBytesNoCopy:av_err_str length:AV_ERROR_MAX_STRING_SIZE encoding:NSASCIIStringEncoding freeWhenDone:YES];
+    }
+    
+    return errstr;
+}
+
+
 @end
