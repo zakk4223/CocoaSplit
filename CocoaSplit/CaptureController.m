@@ -514,19 +514,11 @@
     
     [[self.logTextView textStorage] endEditing];
 
-/*
- 
-    [[[self.logTextView textStorage] mutableString] appendString:logLine];
-    [[[self.logTextView textStorage] mutableString] appendString:@"\n"];
-
-    [[self.logTextView textStorage] endEditing];
     NSRange range;
     
     range = NSMakeRange([[self.logTextView string] length], 0);
     
     [self.logTextView scrollRangeToVisible:range];
-*/
-    
     
 }
 
