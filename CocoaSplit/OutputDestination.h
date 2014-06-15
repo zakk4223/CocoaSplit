@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "FFMpegTask.h"
+#import <AppKit/AppKit.h>
 
 
 @interface OutputDestination : NSObject <NSCoding>
@@ -27,6 +28,8 @@
 @property (strong) NSString *stream_key;
 @property (strong) FFMpegTask *ffmpeg_out;
 @property (strong) id<ControllerProtocol> settingsController;
+@property (strong) NSColor *textColor;
+
 
 @property  BOOL active;
 

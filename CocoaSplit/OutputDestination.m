@@ -8,6 +8,7 @@
 
 #import "OutputDestination.h"
 
+
 @implementation OutputDestination
 
 
@@ -136,6 +137,7 @@
         
         self.type_name = type;
 
+        self.textColor = [NSColor blackColor];
     }
     return self;
     
@@ -164,8 +166,31 @@
     newout.audio_bitrate = settingsController.audioBitrate;
     
     self.ffmpeg_out = newout;
+    
+    [self.ffmpeg_out addObserver:self forKeyPath:@"errored" options:NSKeyValueObservingOptionNew context:NULL];
+
 }
 
+
+- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:@"errored"])
+    {
+        
+        BOOL errVal = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
+        
+        if (errVal == YES)
+        {
+            //bounce through main thread because it triggers a notification to the UI and sometimes it won't properly update due to threads HURRRRRRR???
+            //this can't be right, it's too...stupid
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.textColor = [NSColor redColor];
+            });
+        }
+        
+    }
+}
 
 -(NSString *)description
 {
@@ -173,6 +198,17 @@
     return [NSString stringWithFormat:@"Name: %@ Type Name: %@ Destination %@ Key %@", self.name, self.type_name, self.destination, self.stream_key];
     
 }
+
+-(void)dealloc
+{
+    if (self.ffmpeg_out)
+    {
+        [self.ffmpeg_out removeObserver:self forKeyPath:@"errored" context:NULL];
+    }
+
+}
+
+
 @end
 
 

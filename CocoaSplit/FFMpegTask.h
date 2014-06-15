@@ -68,6 +68,7 @@
 @property (assign) double input_framerate;
 @property (assign) double output_bitrate;
 @property (assign) int dropped_frame_count;
+@property (assign) BOOL errored;
 
 
 @property (strong) id<ControllerProtocol> settingsController;

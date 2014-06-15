@@ -92,7 +92,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     {
         if (_consecutive_dropped_frames >= self.settingsController.maxOutputDropped)
         {
-            NSLog(@"STOPPING PROCESS!!");
+            self.errored = YES;
             [self stopProcess];
             return YES;
         }
@@ -403,6 +403,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
             
             NSLog(@"AVIO_OPEN failed REASON %@", open_err);
             _av_fmt_ctx->pb = NULL;
+            self.errored = YES;
             [self stopProcess];
             return NO;
         }
@@ -411,6 +412,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     if (_av_fmt_ctx == NULL || avformat_write_header(_av_fmt_ctx, NULL) < 0)
     {
         NSLog(@"AVFORMAT_WRITE_HEADER failed");
+        self.errored = YES;
         [self stopProcess];
     }
     
@@ -784,6 +786,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     self = [super init];
     self.init_done = NO;
     self.active = NO;
+    self.errored = NO;
     
     av_register_all();
     avformat_network_init();

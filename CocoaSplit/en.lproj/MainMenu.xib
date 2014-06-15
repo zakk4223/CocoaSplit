@@ -968,15 +968,15 @@
                                             </tabViewItem>
                                             <tabViewItem label="Status" identifier="2" id="3288">
                                                 <view key="view" id="3289">
-                                                    <rect key="frame" x="10" y="33" width="804" height="317"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <rect key="frame" x="10" y="33" width="807" height="317"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2212">
                                                             <rect key="frame" x="17" y="16" width="970" height="303"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <clipView key="contentView" id="aIS-jP-sHZ">
                                                                 <rect key="frame" x="1" y="17" width="968" height="285"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <subviews>
                                                                     <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="none" columnReordering="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" typeSelect="NO" headerView="2261" id="2213">
                                                                         <rect key="frame" x="0.0" y="0.0" width="968" height="285"/>
@@ -999,6 +999,7 @@
                                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                 <connections>
                                                                                     <binding destination="1431" name="value" keyPath="arrangedObjects.name" id="2264"/>
+                                                                                    <binding destination="1431" name="textColor" keyPath="arrangedObjects.textColor" id="Afm-R8-1Cm"/>
                                                                                 </connections>
                                                                             </tableColumn>
                                                                             <tableColumn width="60.984375" minWidth="40" maxWidth="1000" id="2218">
@@ -1016,6 +1017,7 @@
                                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                 <connections>
                                                                                     <binding destination="1431" name="value" keyPath="arrangedObjects.ffmpeg_out.input_framerate" id="2270"/>
+                                                                                    <binding destination="1431" name="textColor" keyPath="arrangedObjects.textColor" id="Bmg-dy-t6M"/>
                                                                                 </connections>
                                                                             </tableColumn>
                                                                             <tableColumn width="77.69140625" minWidth="10" maxWidth="3.4028234663852886e+38" id="2255">
@@ -1033,6 +1035,7 @@
                                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                 <connections>
                                                                                     <binding destination="1431" name="value" keyPath="arrangedObjects.ffmpeg_out.output_framerate" id="2272"/>
+                                                                                    <binding destination="1431" name="textColor" keyPath="arrangedObjects.textColor" id="tDn-Zo-4BE"/>
                                                                                 </connections>
                                                                             </tableColumn>
                                                                             <tableColumn width="105.2578125" minWidth="10" maxWidth="3.4028234663852886e+38" id="2257">
@@ -1049,6 +1052,7 @@
                                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                 <connections>
                                                                                     <binding destination="1431" name="value" keyPath="arrangedObjects.ffmpeg_out.buffered_frame_count" id="2273"/>
+                                                                                    <binding destination="1431" name="textColor" keyPath="arrangedObjects.textColor" id="eLl-0v-E2G"/>
                                                                                 </connections>
                                                                             </tableColumn>
                                                                             <tableColumn width="92" minWidth="10" maxWidth="3.4028234663852886e+38" id="2259">
@@ -1065,6 +1069,7 @@
                                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                 <connections>
                                                                                     <binding destination="1431" name="value" keyPath="arrangedObjects.ffmpeg_out.buffered_frame_size" id="2274"/>
+                                                                                    <binding destination="1431" name="textColor" keyPath="arrangedObjects.textColor" id="cGX-bG-T9j"/>
                                                                                 </connections>
                                                                             </tableColumn>
                                                                             <tableColumn width="64" minWidth="10" maxWidth="3.4028234663852886e+38" id="3893">
@@ -1081,6 +1086,7 @@
                                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                 <connections>
                                                                                     <binding destination="1431" name="value" keyPath="arrangedObjects.ffmpeg_out.dropped_frame_count" id="3896"/>
+                                                                                    <binding destination="1431" name="textColor" keyPath="arrangedObjects.textColor" id="LfW-gC-sex"/>
                                                                                 </connections>
                                                                             </tableColumn>
                                                                             <tableColumn width="84" minWidth="10" maxWidth="3.4028234663852886e+38" id="2275">
@@ -1098,6 +1104,7 @@
                                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                 <connections>
                                                                                     <binding destination="1431" name="value" keyPath="arrangedObjects.ffmpeg_out.output_bitrate" id="2278"/>
+                                                                                    <binding destination="1431" name="textColor" keyPath="arrangedObjects.textColor" id="b9l-l3-vUl"/>
                                                                                 </connections>
                                                                             </tableColumn>
                                                                         </tableColumns>
