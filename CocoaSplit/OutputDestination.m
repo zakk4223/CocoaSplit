@@ -22,17 +22,21 @@
     [aCoder encodeObject:self.type_name forKey:@"type_name"];
     [aCoder encodeObject:self.output_format forKey:@"output_format"];
     [aCoder encodeBool:self.active forKey:@"active"];
+    [aCoder encodeInteger:self.stream_delay forKey:@"stream_delay"];
+    
 }
 
 -(id) initWithCoder:(NSCoder *)aDecoder
 {
-    if (self = [super init])
+    if (self = [self init])
     {
         self.destination = [aDecoder decodeObjectForKey:@"destination"];
         self.name = [aDecoder decodeObjectForKey:@"name"];
         self.type_name = [aDecoder decodeObjectForKey:@"type_name"];
         self.output_format = [aDecoder decodeObjectForKey:@"output_format"];
         self.active = [aDecoder decodeBoolForKey:@"active"];
+        self.stream_delay = (int)[aDecoder decodeIntegerForKey:@"stream_delay"];
+        
     }
     
     return self;
@@ -90,11 +94,9 @@
     if (is_active != _active)
     {
         _active = is_active;
-        if (!is_active && self.ffmpeg_out)
-        {
-            [self.ffmpeg_out stopProcess];
-        } else if (is_active && self.ffmpeg_out) {
-            [self attachOutput:self.settingsController];
+        if (!is_active)        {
+            
+            [self reset];
         }
         
     }
@@ -120,12 +122,40 @@
     
 }
 
--(void) stopOutput
+
+-(void) reset
 {
-    if (self.ffmpeg_out && self.active)
+    self.buffer_draining = NO;
+    [_delayBuffer removeAllObjects];
+    
+    if (self.ffmpeg_out)
     {
         [self.ffmpeg_out stopProcess];
         self.ffmpeg_out = nil;
+    }
+    
+    _output_start_time = 0.0f;
+    
+    
+}
+
+
+-(void) stopOutput
+{
+
+    if (self.stream_delay > 0 && [_delayBuffer count] > 0 && self.ffmpeg_out)
+    {
+        self.buffer_draining = YES;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.textColor = [NSColor orangeColor];
+        });
+        return;
+    }
+    
+    
+    if (self.active)
+    {
+        [self reset];
     }
 }
 
@@ -135,9 +165,13 @@
     if (self = [super init])
     {
         
+        
         self.type_name = type;
-
         self.textColor = [NSColor blackColor];
+        _output_start_time = 0.0f;
+        _delayBuffer = [[NSMutableArray alloc] init];
+        self.delay_buffer_frames = 0;
+        
     }
     return self;
     
@@ -145,9 +179,15 @@
 }
 
 
--(void) attachOutput:(id<ControllerProtocol>) settingsController
+-(void) attachOutput
 {
     FFMpegTask *newout;
+    if (!self.active)
+    {
+        return;
+    }
+    
+    NSLog(@"ATTACHING OUTPUT");
     if (!self.ffmpeg_out)
     {
         newout = [[FFMpegTask alloc] init];
@@ -155,42 +195,145 @@
         newout = self.ffmpeg_out;
     }
     
-    self.settingsController = settingsController;
     
-    newout.framerate = settingsController.captureFPS;
+    /*
+    if (self.stream_delay > 0)
+    {
+        _output_start_time = [self.settingsController mach_time_seconds] + self.stream_delay;
+    }
+    */
+    
+
+    newout.framerate = self.settingsController.captureFPS;
     newout.stream_output = [self.destination stringByStandardizingPath];
     newout.stream_format = self.output_format;
-    newout.settingsController = settingsController;
-    newout.active = self.active;
-    newout.samplerate = settingsController.audioSamplerate;
-    newout.audio_bitrate = settingsController.audioBitrate;
+    newout.settingsController = self.settingsController;
+    newout.samplerate = self.settingsController.audioSamplerate;
+    newout.audio_bitrate = self.settingsController.audioBitrate;
     
     self.ffmpeg_out = newout;
     
     [self.ffmpeg_out addObserver:self forKeyPath:@"errored" options:NSKeyValueObservingOptionNew context:NULL];
+    [self.ffmpeg_out addObserver:self forKeyPath:@"active" options:NSKeyValueObservingOptionNew context:NULL];
+
+    self.ffmpeg_out.active = self.active;
+    
 
 }
 
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if ([keyPath isEqualToString:@"errored"])
+    
+    NSColor *newColor = nil;
+    
+    if ([keyPath isEqualToString:@"active"])
     {
+        BOOL activeVal = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
+        if (activeVal == YES)
+        {
+            newColor = [NSColor greenColor];
+        } else {
+            newColor = [NSColor blackColor];
+        }
+        
+    } else if ([keyPath isEqualToString:@"errored"]) {
         
         BOOL errVal = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
         
         if (errVal == YES)
         {
-            //bounce through main thread because it triggers a notification to the UI and sometimes it won't properly update due to threads HURRRRRRR???
-            //this can't be right, it's too...stupid
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.textColor = [NSColor redColor];
-            });
+            newColor = [NSColor redColor];
         }
         
     }
+    
+    
+    if (newColor)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            self.textColor = newColor;
+        });
+    }
+    
 }
+
+-(void) writeEncodedData:(CapturedFrameData *)frameData
+{
+    
+    CapturedFrameData *sendData = nil;
+    double current_time = [self.settingsController mach_time_seconds];
+    
+    if (self.active)
+    {
+        
+
+        if (self.stream_delay > 0 && _output_start_time == 0.0f && frameData)
+        {
+            _output_start_time = current_time + (double)self.stream_delay;
+        }
+        
+        
+        if (frameData)
+        {
+            [_delayBuffer addObject:frameData];
+        }
+        
+        
+        
+        
+        if ((current_time >= _output_start_time) && ([_delayBuffer count] > 0))
+        {
+            
+            
+            if (!self.ffmpeg_out)
+            {
+                [self attachOutput];
+            }
+            
+            sendData = [_delayBuffer objectAtIndex:0];
+            [_delayBuffer removeObjectAtIndex:0];
+        }
+        
+        
+        if (sendData)
+        {
+            [self.ffmpeg_out writeEncodedData:sendData];
+        }
+        
+        if (self.buffer_draining)
+        {
+            if ([_delayBuffer count] <= 0)
+            {
+                [self stopOutput];
+            }
+        }
+    }
+
+}
+
+
+-(void) updateStatistics
+{
+    
+    if (self.ffmpeg_out)
+    {
+        [self.ffmpeg_out updateInputStats];
+        [self.ffmpeg_out updateOutputStats];
+        self.output_framerate = self.ffmpeg_out.output_framerate;
+        self.output_bitrate = self.ffmpeg_out.output_bitrate;
+        self.input_framerate = self.ffmpeg_out.input_framerate;
+        self.dropped_frame_count = self.ffmpeg_out.dropped_frame_count;
+        self.buffered_frame_count = self.ffmpeg_out.buffered_frame_count;
+        self.buffered_frame_size = self.ffmpeg_out.buffered_frame_size;
+    }
+    
+    self.delay_buffer_frames = [_delayBuffer count];
+
+}
+
+
 
 -(NSString *)description
 {
@@ -198,6 +341,7 @@
     return [NSString stringWithFormat:@"Name: %@ Type Name: %@ Destination %@ Key %@", self.name, self.type_name, self.destination, self.stream_key];
     
 }
+
 
 -(void)dealloc
 {

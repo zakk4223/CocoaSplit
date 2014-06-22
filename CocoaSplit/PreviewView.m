@@ -295,7 +295,7 @@
     self = [super initWithFrame:frameRect pixelFormat:pf];
     if (self)
     {
-        long swapInterval = 1;
+        long swapInterval = 0;
         
         [[self openGLContext] setValues:(GLint *)&swapInterval forParameter:NSOpenGLCPSwapInterval];
 
@@ -327,11 +327,18 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     CVImageBufferRef displayFrame = NULL;
     displayFrame = [myself.controller currentFrame];
     
+    myself.statusColor = [myself.controller statusColor];
+    
+    if (myself.statusColor)
+    {
+        myself.statusColor = [myself.statusColor colorUsingColorSpaceName:NSDeviceRGBColorSpace];
+    }
     
     if (displayFrame)
     {
 
     
+        
         [myself drawFrame:displayFrame];
     
         CVPixelBufferRelease(displayFrame);
@@ -510,7 +517,20 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     NSRect frame = self.frame;
     
     
-    glClearColor(0.0, 0.0, 0.0, 0.0);
+    GLclampf rval = 0.0;
+    GLclampf gval = 0.0;
+    GLclampf bval = 0.0;
+    GLclampf aval = 0.0;
+    
+    if (self.statusColor)
+    {
+        rval = [self.statusColor redComponent];
+        gval = [self.statusColor greenComponent];
+        bval = [self.statusColor blueComponent];
+        aval = [self.statusColor alphaComponent];
+    }
+    
+    glClearColor(rval, gval, bval, aval);
     glClear(GL_COLOR_BUFFER_BIT);
     
     glViewport(0, 0, frame.size.width, frame.size.height);

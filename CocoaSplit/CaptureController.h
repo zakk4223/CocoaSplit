@@ -55,6 +55,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     dispatch_queue_t _main_capture_queue;
     dispatch_queue_t _preview_queue;
     dispatch_source_t _dispatch_timer;
+    dispatch_source_t _statistics_timer;
+    
     CFAbsoluteTime _frame_interval;
     mach_timebase_info_data_t _mach_timebase;
     double _frame_time;
@@ -65,7 +67,9 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     NSMutableArray *audioBuffer;
     NSMutableArray *videoBuffer;
     dispatch_source_t _log_source;
-
+    int _saved_stderr;
+    
+    
     
     
     
@@ -208,7 +212,10 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) NSPipe *loggingPipe;
 @property (strong) NSFileHandle *logReadHandle;
 
+@property (assign) bool useStatusColors;
+
 @property (unsafe_unretained) IBOutlet NSTextView *logTextView;
+
 
 
 
@@ -223,6 +230,13 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(void)setExtraData:(id)saveData forKey:(NSString *)forKey;
 -(id)getExtraData:(NSString *)forkey;
 -(CVPixelBufferRef)currentFrame;
+-(double)mach_time_seconds;
+-(bool)pendingStreamConfirmation:(NSString *)queryString;
+-(int)streamsPendingCount;
+-(int)streamsActiveCount;
+-(NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender;
+-(NSColor *)statusColor;
+
 
 -(void)setupLogging;
 

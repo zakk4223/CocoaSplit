@@ -32,6 +32,17 @@
 }
 
 
+-(NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
+{
+    if (self.captureController)
+    {
+        return [self.captureController applicationShouldTerminate:sender];
+    }
+    
+    return NSTerminateNow;
+}
+
+
 -(void) applicationWillTerminate: (NSNotification *)notification
 {
     

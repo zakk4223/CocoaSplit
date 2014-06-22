@@ -60,7 +60,8 @@
     
     self.width = displaySize.size.width;
     self.height = displaySize.size.height;
-
+    
+    
     [self setupDisplayStream];
 }
 

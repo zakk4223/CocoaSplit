@@ -10,6 +10,7 @@
 #import "libavformat/avformat.h"
 #import "AbstractCaptureDevice.h"
 #import "CapturedFrameData.h"
+#import <AppKit/AppKit.h>
 
 
 @protocol ControllerProtocol <NSObject>
@@ -43,6 +44,10 @@
 -(void)setExtraData:(id)saveData forKey:(NSString *)forKey;
 -(id)getExtraData:(NSString *)forkey;
 -(CVPixelBufferRef)currentFrame;
+-(double)mach_time_seconds;
+-(NSColor *)statusColor;
+
+
 
 
 - (void) outputEncodedData:(CapturedFrameData *)frameData;

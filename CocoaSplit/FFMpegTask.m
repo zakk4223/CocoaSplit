@@ -428,18 +428,13 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     _input_framecnt = 0;
     _input_frame_timestamp = time_now;
 
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-    
-    
-        self.input_framerate = calculated_input_framerate;
+    self.input_framerate = calculated_input_framerate;
     self.buffered_frame_count = _pending_frame_count;
     self.buffered_frame_size = _pending_frame_size;
     self.dropped_frame_count = _dropped_frames;
-    });
-    
     
 }
+
 
 -(void) updateOutputStats
 {
@@ -452,12 +447,8 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     _output_frame_timestamp = time_now;
 
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-    
-    
-        self.output_framerate = calculated_output_framerate;
-        self.output_bitrate = calculated_output_bitrate;
-    });
+    self.output_framerate = calculated_output_framerate;
+    self.output_bitrate = calculated_output_bitrate;
     
 }
 
@@ -492,18 +483,10 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         _pending_frame_size += pkt->size;
     }
 
-    
-    if ((_input_framecnt % self.framerate) == 0)
-    {
-        [self updateInputStats];
-    }
-
-    
     if ([self shouldDropFrame])
     {
         _dropped_frames++;
         _consecutive_dropped_frames++;
-        NSLog(@"SHOULD DROP FRAME");
         return;
     } else {
         _consecutive_dropped_frames = 0;
@@ -535,32 +518,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
             return;
         }
         
-        /*
-        if (!_av_video_stream)
-        {
-            if (_audio_extradata)
-            {
-                if (![self createAVFormatOut:nil codec_ctx:codec_ctx])
-                {
-                    
-                    av_free_packet(p);
-                    av_free(p);
-                    NSLog(@"NO AVFORMAT OUT");
-                    return;
-                }
-                [self initStatsValues];
-            } else {
-                @synchronized(self)
-                {
-                    _pending_frame_count--;
-                    _pending_frame_size -= p->size;
-                }
-                NSLog(@"NO AUDIO EXTRA");
-                return;
-            }
-        }
-        
-        */
          if (p->pts != AV_NOPTS_VALUE)
          {
              p->pts = av_rescale_q(p->pts, codec_ctx->time_base, _av_video_stream->time_base);
@@ -588,11 +545,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         av_free(p);
         _output_framecnt++;
         _output_bytes += packet_size;
-        if ((_output_framecnt % self.framerate) == 0)
-        {
-            [self updateOutputStats];
-        }
-        
         @synchronized(self)
         {
             _pending_frame_count--;
@@ -625,11 +577,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 
     
     _input_framecnt++;
-    if ((_input_framecnt % self.framerate) == 0)
-    {
-        [self updateInputStats];
-    }
-
     
     if ([self shouldDropFrame])
     {
@@ -737,11 +684,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
         _output_framecnt++;
         _output_bytes += pkt.size;
-        if ((_output_framecnt % self.framerate) == 0)
-        {
-            [self updateOutputStats];
-        }
-        
     //CMSampleBufferInvalidate(theBuffer);
     CFRelease(theBuffer);
         

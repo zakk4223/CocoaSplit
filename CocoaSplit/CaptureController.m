@@ -383,7 +383,11 @@
    {
        
        
+#ifndef DEBUG
        [self setupLogging];
+#endif
+       
+       
 
        audioLastReadPosition = 0;
        audioWritePosition = 0;
@@ -391,6 +395,8 @@
        audioBuffer = [[NSMutableArray alloc] init];
        videoBuffer = [[NSMutableArray alloc] init];
        
+       
+       self.useStatusColors = YES;
        
        
        dispatch_source_t sigsrc = dispatch_source_create(DISPATCH_SOURCE_TYPE_SIGNAL, SIGPIPE, 0, dispatch_get_global_queue(0, 0));
@@ -470,6 +476,22 @@
        dispatch_resume(_dispatch_timer);
        
        */
+       
+       _statistics_timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
+       
+       dispatch_source_set_timer(_statistics_timer, DISPATCH_TIME_NOW, 1*NSEC_PER_SEC, 0);
+       dispatch_source_set_event_handler(_statistics_timer, ^{
+           
+           for (OutputDestination *outdest in _captureDestinations)
+           {
+               [outdest updateStatistics];
+           }
+
+       });
+       
+       dispatch_resume(_statistics_timer);
+       
+       
        self.extraSaveData = [[NSMutableDictionary alloc] init];
        
        
@@ -480,6 +502,22 @@
     
     return self;
     
+}
+
+
+-(NSColor *)statusColor
+{
+    if (self.captureRunning && [self streamsActiveCount] > 0)
+    {
+        return [NSColor redColor];
+    }
+    
+    if ([self streamsPendingCount] > 0)
+    {
+        return [NSColor orangeColor];
+    }
+    
+    return [NSColor blackColor];
 }
 
 
@@ -543,6 +581,7 @@
     self.loggingPipe = [NSPipe pipe];
     
     self.logReadHandle = [self.loggingPipe fileHandleForReading];
+    
     dup2([[self.loggingPipe fileHandleForWriting] fileDescriptor], fileno(stderr));
     
     _log_source = dispatch_source_create(DISPATCH_SOURCE_TYPE_READ, [self.logReadHandle fileDescriptor], 0, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
@@ -559,6 +598,7 @@
         if (read_size > 0)
         {
             
+
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSString *logStr = [[NSString alloc] initWithBytesNoCopy:data length:read_size encoding:NSUTF8StringEncoding freeWhenDone:YES];
                 [self appendToLogView:logStr];
@@ -608,6 +648,7 @@
     [saveRoot setValue:[NSNumber numberWithInt:self.maxOutputPending] forKey:@"maxOutputPending"];
     [saveRoot setValue:self.resolutionOption forKey:@"resolutionOption"];
     [saveRoot setValue:[NSNumber numberWithDouble:self.audio_adjust] forKey:@"audioAdjust"];
+    [saveRoot setValue: [NSNumber numberWithBool:self.useStatusColors] forKey:@"useStatusColors"];
     
     
     
@@ -650,6 +691,14 @@
         self.captureDestinations = [[NSMutableArray alloc] init];
     }
     
+    
+    for (OutputDestination *outdest in _captureDestinations)
+    {
+        outdest.settingsController = self;
+    }
+
+    
+    self.useStatusColors = [[saveRoot valueForKeyPath:@"useStatusColors"] boolValue];
     
     self.x264tune = [saveRoot valueForKey:@"x264tune"];
     self.x264preset = [saveRoot valueForKey:@"x264preset"];
@@ -752,7 +801,7 @@
     
     
     [[self mutableArrayValueForKey:@"captureDestinations"] addObject:newDest];
-    [newDest attachOutput:self];
+    newDest.settingsController = self;
     [self closeCreateSheet:nil];
     
 }
@@ -809,13 +858,8 @@
     
     for (OutputDestination *outdest in _captureDestinations)
     {
-        if (outdest.active)
-        {
-            
-            id ffmpeg = outdest.ffmpeg_out;
-            [ffmpeg writeEncodedData:frameData];
-            
-        }
+        [outdest writeEncodedData:frameData];
+        
     }
     
 }
@@ -935,6 +979,12 @@
         
     }
 
+    for (OutputDestination *outdest in _captureDestinations)
+    {
+        [outdest reset];
+    }
+    
+    
     self.captureRunning = YES;
 
     return YES;
@@ -1106,6 +1156,7 @@
             
             newDest.active = YES;
             newDest.destination = outstr;
+            newDest.settingsController = self;
             [[self mutableArrayValueForKey:@"captureDestinations"] addObject:newDest];
         }
         
@@ -1154,6 +1205,13 @@
     
     if ([button state] == NSOnState)
     {
+        if ([self pendingStreamConfirmation:@"Start streaming?"] == NO)
+        {
+            [sender setNextState];
+            return;
+        }
+        
+        
         
         if ([self startStream] == YES)
         {
@@ -1287,8 +1345,11 @@
 
 -(double)mach_time_seconds
 {
+    double retval;
+    
     uint64_t mach_now = mach_absolute_time();
-    return (double)((mach_now * _mach_timebase.numer / _mach_timebase.denom))/NSEC_PER_SEC;
+    retval = (double)((mach_now * _mach_timebase.numer / _mach_timebase.denom))/NSEC_PER_SEC;
+    return retval;
 }
 
 
@@ -1472,16 +1533,15 @@
                     {
                         [self stopStream];
                         [NSApp presentError:error];
-                    } else {
+                    /*} else {
                         
                         OutputDestination *output;
                         
-                        NSLog(@"Attaching destinations");
                         for (output in _captureDestinations)
                         {
-                            [output attachOutput:self];
+                            output.settingsController = self;
                         }
-                    }
+                    */}
 
                 }
                 
@@ -1494,8 +1554,15 @@
                     capturedData.videoFrame = newFrame;
                     
                     [self processVideoFrame:capturedData];
-                //} else {
+                } else {
+                    for (OutputDestination *outdest in _captureDestinations)
+                    {
+                        [outdest writeEncodedData:nil];
+                    }
+
                 }
+                
+                
                 
                 
                     CVPixelBufferRelease(newFrame);
@@ -1569,6 +1636,78 @@
         
 }
 
+-(int)streamsActiveCount
+{
+    int ret = 0;
+    for (OutputDestination *outdest in _captureDestinations)
+    {
+        if (outdest.active)
+        {
+            ret++;
+        }
+    }
+
+    return ret;
+}
+
+
+-(int)streamsPendingCount
+{
+    int ret = 0;
+    
+    for (OutputDestination *outdest in _captureDestinations)
+    {
+        if (outdest.buffer_draining)
+        {
+            ret++;
+        }
+    }
+
+    return ret;
+}
+
+
+-(bool)actionConfirmation:(NSString *)queryString infoString:(NSString *)infoString
+{
+    
+    bool retval;
+    
+    NSAlert *confirmationAlert = [[NSAlert alloc] init];
+    [confirmationAlert addButtonWithTitle:@"Yes"];
+    [confirmationAlert addButtonWithTitle:@"No"];
+    [confirmationAlert setMessageText:queryString];
+    if (infoString)
+    {
+        [confirmationAlert setInformativeText:infoString];
+    }
+    
+    [confirmationAlert setAlertStyle:NSWarningAlertStyle];
+    
+    if ([confirmationAlert runModal] == NSAlertFirstButtonReturn)
+    {
+        retval = YES;
+    } else {
+        retval = NO;
+    }
+
+    return retval;
+}
+
+
+-(bool)pendingStreamConfirmation:(NSString *)queryString
+{
+    int pending_count = [self streamsPendingCount];
+    bool retval;
+    
+    if (pending_count > 0)
+    {
+        retval = [self actionConfirmation:queryString infoString:[NSString stringWithFormat:@"There are %d streams pending output", pending_count]];
+    } else {
+        retval = YES;
+    }
+    
+    return retval;
+}
 
 - (void) setNilValueForKey:(NSString *)key
 {
@@ -1593,6 +1732,31 @@
         [[self mutableArrayValueForKey:@"captureDestinations"] removeObjectAtIndex:idx];
         
     }];
+    
+}
+
+-(NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
+{
+    
+    
+    if (self.captureRunning && [self streamsActiveCount] > 0)
+
+    {
+        if ([self actionConfirmation:@"Really quit?" infoString:@"There are still active outputs"])
+        {
+            return NSTerminateNow;
+        } else {
+            return NSTerminateCancel;
+        }
+    }
+    
+    if ([self pendingStreamConfirmation:@"Quit now?"])
+    {
+        return NSTerminateNow;
+    } else {
+        return NSTerminateCancel;
+    }
+    return NSTerminateNow;
     
 }
 @end

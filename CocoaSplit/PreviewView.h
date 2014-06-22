@@ -59,6 +59,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
     NSScreen *_fullscreenOn;
 
+    
 
 }
 
@@ -68,6 +69,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
 
 
+@property (strong) NSColor *statusColor;
 
 @property (unsafe_unretained) IBOutlet id<ControllerProtocol> controller;
 
