@@ -253,7 +253,6 @@
     
     glBindTexture(CVOpenGLTextureGetTarget(textureOut), 0);
     
-    double angle = 0.15f;
     
     
     glBindFramebuffer(GL_FRAMEBUFFER, _framebuffer);

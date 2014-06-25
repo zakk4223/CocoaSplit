@@ -12,6 +12,108 @@
 
 
 
+- (id)copyWithZone:(NSZone *)zone
+{
+    x264Compressor *copy = [[[self class] allocWithZone:zone] init];
+    
+    copy.x264tunes = self.x264tunes;
+    copy.x264presets = self.x264presets;
+    copy.x264profiles = self.x264profiles;
+    
+    copy.settingsController = self.settingsController;
+    copy.outputDelegate = self.outputDelegate;
+    
+    copy.isNew = self.isNew;
+    copy.name = self.name;
+    copy.compressorType = self.compressorType;
+    
+    copy.preset = self.preset;
+    copy.tune = self.tune;
+    copy.profile = self.profile;
+    copy.vbv_maxrate = self.vbv_maxrate;
+    copy.vbv_buffer = self.vbv_buffer;
+    copy.keyframe_interval = self.keyframe_interval;
+    copy.crf = self.crf;
+    copy.use_cbr = self.use_cbr;
+    
+    return copy;
+}
+
+
+-(void) encodeWithCoder:(NSCoder *)aCoder
+{
+    
+    [aCoder encodeObject:self.preset forKey:@"preset"];
+    [aCoder encodeObject:self.tune forKey:@"tune"];
+    [aCoder encodeObject:self.profile forKey:@"profile"];
+    [aCoder encodeObject:self.name forKey:@"name"];
+    [aCoder encodeInteger:self.vbv_maxrate forKey:@"vbv_maxrate"];
+    [aCoder encodeInteger:self.vbv_buffer forKey:@"vbv_buffer"];
+    [aCoder encodeInteger:self.keyframe_interval forKey:@"keyframe_interval"];
+    [aCoder encodeInteger:self.crf forKey:@"crf"];
+    [aCoder encodeBool:self.use_cbr forKey:@"use_cbr"];
+}
+
+-(id) initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [self init])
+    {
+        self.preset = [aDecoder decodeObjectForKey:@"preset"];
+        self.tune = [aDecoder decodeObjectForKey:@"tune"];
+        self.profile = [aDecoder decodeObjectForKey:@"profile"];
+        self.name = [aDecoder decodeObjectForKey:@"name"];
+        self.vbv_maxrate = (int)[aDecoder decodeIntegerForKey:@"vbv_maxrate"];
+        self.vbv_buffer = (int)[aDecoder decodeIntegerForKey:@"vbv_buffer"];
+        self.crf = (int)[aDecoder decodeIntegerForKey:@"crf"];
+        self.use_cbr = [aDecoder decodeBoolForKey:@"use_cbr"];
+        self.keyframe_interval = (int)[aDecoder decodeIntegerForKey:@"keyframe_interval"];
+        
+    }
+    
+    return self;
+}
+
+
+
+-(id)init
+{
+    if (self = [super init])
+    {
+        self.compressorType = @"x264";
+        self.name = [@"" mutableCopy];
+        
+        //this all seems like I should be doing it one time, in some sort of thing you might call a class variable...
+        
+        
+        self.x264tunes = [[NSMutableArray alloc] init];
+        
+        self.x264presets = [[NSMutableArray alloc] init];
+        
+        self.x264profiles = [[NSMutableArray alloc] init];
+        
+        [self.x264tunes addObject:[NSNull null]];
+        [self.x264presets addObject:[NSNull null]];
+        for (int i = 0; x264_profile_names[i]; i++)
+        {
+            [self.x264profiles addObject:[NSString stringWithUTF8String:x264_profile_names[i]]];
+        }
+        
+        
+        for (int i = 0; x264_preset_names[i]; i++)
+        {
+            [self.x264presets addObject:[NSString stringWithUTF8String:x264_preset_names[i]]];
+        }
+        
+        for (int i = 0; x264_tune_names[i]; i++)
+        {
+            [self.x264tunes addObject:[NSString stringWithUTF8String:x264_tune_names[i]]];
+        }
+
+    }
+    return self;
+}
+
+
 - (bool)compressFrame:(CapturedFrameData *)frameData isKeyFrame:(BOOL)isKeyFrame
 {
     
@@ -262,6 +364,22 @@
     
     return YES;
 }
+
+- (void) setNilValueForKey:(NSString *)key
+{
+    
+    NSUInteger key_idx = [@[@"vbv_buffer", @"vbv_maxrate", @"crf"] indexOfObject:key];
+    
+    if (key_idx != NSNotFound)
+    {
+        return [self setValue:[NSNumber numberWithInt:0] forKey:key];
+    }
+    
+    [super setNilValueForKey:key];
+}
+
+
+
 @end
 
 

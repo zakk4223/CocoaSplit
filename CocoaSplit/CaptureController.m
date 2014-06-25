@@ -5,7 +5,6 @@
 //
 //  Created by Zakk on 9/2/12.
 //  Copyright (c) 2012 Zakk. All rights reserved.
-//
 
 #import "CaptureController.h"
 #import "FFMpegTask.h"
@@ -23,6 +22,7 @@
 
 @implementation CaptureController
 
+@synthesize selectedCompressorType = _selectedCompressorType;
 
 -(void)loadTwitchIngest
 {
@@ -110,21 +110,93 @@
 }
 
 
--(IBAction)openCompressPanel:(id)sender
+-(NSString *)selectedCompressorType
 {
+ 
+    return _selectedCompressorType;
+}
+
+-(void)setSelectedCompressorType:(NSString *)selectedCompressorType
+{
+    _selectedCompressorType = selectedCompressorType;
+    if (self.compressPanel)
+    {
+        self.compressTabLabel = selectedCompressorType;
+        if (!self.editingCompressor)
+        {
+            if ([selectedCompressorType isEqualToString:@"x264"])
+            {
+                self.editingCompressor = [[x264Compressor alloc] init];
+            } else if ([selectedCompressorType isEqualToString:@"AppleVTCompressor"]) {
+                self.editingCompressor = [[AppleVTCompressor alloc] init];
+            } else {
+                self.editingCompressor = nil;
+            }
+        }
+        if (self.editingCompressor)
+        {
+            self.editingCompressor.isNew = YES;
+        }
+    }
+}
+
+
+
+
+-(IBAction)newCompressPanel
+{
+    [self openCompressPanel:NO];
+}
+
+-(IBAction)editCompressPanel
+{
+    [self openCompressPanel:YES];
+}
+
+
+-(IBAction)deleteCompressorPanel
+{
+    
+    if (self.editingCompressor)
+    {
+        NSString *deleteKey = self.editingCompressor.name;
+        
+        if (deleteKey)
+        {
+            self.selectedCompressor = nil;
+            self.editingCompressor = nil;
+            
+            [self willChangeValueForKey:@"compressors"];
+            [self.compressors removeObjectForKey:deleteKey];
+            [self didChangeValueForKey:@"compressors"];
+        }
+    }
+    
+    [self closeCompressPanel];
+}
+
+
+
+-(IBAction)openCompressPanel:(bool)doEdit
+{
+    
+    
+    self.editingCompressor = self.selectedCompressor;
+    if (doEdit)
+    {
+        if (self.editingCompressor)
+        {
+            self.compressTabLabel = self.editingCompressor.compressorType;
+        }
+    }
+    
+    
     if (!self.compressPanel)
     {
         
         NSString *panelName;
         
-        if ([self.selectedCompressorType isEqualToString:@"x264"])
-        {
-            panelName = @"x264Panel";
-        } else if ([self.selectedDestinationType isEqualToString:@"AppleVTCompressor"]) {
-            panelName = @"AppleVTPanel";
-        } else {
-            panelName = @"AppleVTPanel";
-        }
+        panelName = @"CompressionSettingsPanel";
         
         [[NSBundle mainBundle] loadNibNamed:panelName owner:self topLevelObjects:nil];
         
@@ -137,14 +209,47 @@
 }
 
 
--(IBAction)closeCompressPanel:(id)sender
+-(IBAction)saveCompressPanel
 {
-        
+
     if (![self.compressSettingsController commitEditing])
     {
-        NSLog(@"FAILED TO COMMIT EDITING");
+        NSLog(@"FAILED TO COMMIT EDITING FOR COMPRESS EDIT");
     }
     
+    self.editingCompressor = self.selectedCompressor;
+    
+    
+    
+    if (self.editingCompressor && self.editingCompressor.isNew)
+    {
+        NSMutableString *baseName = self.editingCompressor.name;
+        
+        NSMutableString *newName = baseName;
+        int name_try = 1;
+        
+        while (self.compressors[newName]) {
+            newName = [NSMutableString stringWithFormat:@"%@#%d", baseName, name_try];
+            name_try++;
+        }
+        
+        self.editingCompressor.name = newName;
+        [self willChangeValueForKey:@"compressors"];
+        [self.compressors setObject:self.editingCompressor forKey:newName];
+        [self didChangeValueForKey:@"compressors"];
+        self.editingCompressor = self.compressors[newName];
+        
+    }
+    
+    
+    [self closeCompressPanel];
+    
+}
+
+
+-(IBAction)closeCompressPanel
+{
+        
     [NSApp endSheet:self.compressPanel];
     [self.compressPanel close];
     self.compressPanel = nil;
@@ -413,9 +518,12 @@
        
        self.showPreview = YES;
        self.videoTypes = @[@"Desktop", @"AVFoundation", @"QTCapture", @"Syphon", @"Image"];
-       self.compressorTypes = @[@"None", @"AppleVTCompressor", @"x264"];
+       self.compressorTypes = @[@"x264", @"AppleVTCompressor", @"None"];
        self.arOptions = @[@"None", @"Use Source", @"Preserve AR"];
        self.validSamplerates = @[@44100, @48000];
+       
+       
+       
        
        
        self.x264tunes = [[NSMutableArray alloc] init];
@@ -649,6 +757,7 @@
     [saveRoot setValue:self.resolutionOption forKey:@"resolutionOption"];
     [saveRoot setValue:[NSNumber numberWithDouble:self.audio_adjust] forKey:@"audioAdjust"];
     [saveRoot setValue: [NSNumber numberWithBool:self.useStatusColors] forKey:@"useStatusColors"];
+    [saveRoot setValue:self.compressors forKey:@"compressors"];
     
     
     
@@ -697,6 +806,17 @@
         outdest.settingsController = self;
     }
 
+
+    
+    self.compressors = [[saveRoot valueForKey:@"compressors"] mutableCopy];
+    
+    
+    if (!self.compressors)
+    {
+        self.compressors = [[NSMutableDictionary alloc] init];
+        
+    }
+    
     
     self.useStatusColors = [[saveRoot valueForKeyPath:@"useStatusColors"] boolValue];
     

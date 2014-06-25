@@ -18,7 +18,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="579" height="336"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1058"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1178"/>
             <view key="contentView" id="2">
                 <rect key="frame" x="0.0" y="0.0" width="579" height="336"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -303,7 +303,7 @@
         </arrayController>
         <objectController id="Sul-eM-tuD" userLabel="CompressSettingsController">
             <connections>
-                <binding destination="-2" name="contentObject" keyPath="self" id="YvH-bZ-Lmw"/>
+                <binding destination="-2" name="contentObject" keyPath="self" id="N6O-i0-fDv"/>
             </connections>
         </objectController>
     </objects>

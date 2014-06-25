@@ -15,11 +15,10 @@
 
 @class CaptureController;
 
-@protocol h264Compressor <NSObject>
+@protocol h264Compressor <NSObject,NSCoding>
 
 //compressFrame is expected to be non-blocking. Create a serial dispatch queue if the underlying compressor
 //is blocking
-//-(bool)compressFrame:(CVImageBufferRef)imageBuffer pts:(CMTime)pts duration:(CMTime)duration isKeyFrame:(BOOL)isKeyFrame;
 
 -(bool)compressFrame:(CapturedFrameData *)imageBuffer isKeyFrame:(BOOL)isKeyFrame;
 
@@ -29,6 +28,9 @@
 
 @property (strong) id<ControllerProtocol> settingsController;
 @property (strong) id<ControllerProtocol> outputDelegate;
+@property (assign) bool isNew;
+@property (strong) NSMutableString *name;
+@property (strong) NSString *compressorType;
 
 
 

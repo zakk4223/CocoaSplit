@@ -31,7 +31,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 
-@interface CaptureController : NSObject <CaptureDataReceiverDelegateProtocol, ControllerProtocol> {
+@interface CaptureController : NSObject <ControllerProtocol> {
     
     id _audio_capture_session;
     
@@ -110,13 +110,26 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (IBAction)videoRefresh:(id)sender;
 - (IBAction)openVideoAdvanced:(id)sender;
 - (IBAction)closeVideoAdvanced:(id)sender;
-- (IBAction)openCompressPanel:(id)sender;
-- (IBAction)closeCompressPanel:(id)sender;
+- (void)openCompressPanel:(bool)doEdit;
+- (IBAction)newCompressPanel;
+- (IBAction)editCompressPanel;
+-(IBAction)deleteCompressorPanel;
+
+- (IBAction)closeCompressPanel;
+
 
 - (IBAction)openAudioMixerPanel:(id)sender;
 - (IBAction)closeAudioMixerPanel:(id)sender;
 
 - (IBAction)closeCreateSheet:(id)sender;
+
+
+@property (strong) NSString *compressTabLabel;
+
+
+@property (strong) id<h264Compressor> editingCompressor;
+@property (strong) NSMutableDictionary *compressors;
+@property (strong) id<h264Compressor> selectedCompressor;
 
 
 @property (weak) NSString *selectedVideoType;
@@ -136,7 +149,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 @property (weak) NSString *selectedDestinationType;
 
-
+@property (weak) IBOutlet NSTabView *compressTabs;
 @property (strong) IBOutlet NSWindow *createSheet;
 @property (strong) IBOutlet NSWindow *advancedVideoPanel;
 @property (strong) IBOutlet NSWindow *compressPanel;

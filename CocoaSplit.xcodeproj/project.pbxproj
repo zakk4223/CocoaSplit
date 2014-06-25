@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3400777016E6FE5D00097E8F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 347B7FC916907AFA00B5F4B3 /* libz.dylib */; };
+		340D8C971959C7C100BE5144 /* CompressionSettingsPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 340D8C961959C7C100BE5144 /* CompressionSettingsPanel.xib */; };
 		340FE4A215F3417E00E4CE4E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4A115F3417E00E4CE4E /* Cocoa.framework */; };
 		340FE4AC15F3417E00E4CE4E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 340FE4AA15F3417E00E4CE4E /* InfoPlist.strings */; };
 		340FE4AE15F3417E00E4CE4E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FE4AD15F3417E00E4CE4E /* main.m */; };
@@ -197,6 +198,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		340D8C961959C7C100BE5144 /* CompressionSettingsPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CompressionSettingsPanel.xib; sourceTree = "<group>"; };
 		340FE49D15F3417E00E4CE4E /* CocoaSplit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CocoaSplit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		340FE4A115F3417E00E4CE4E /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		340FE4A415F3417E00E4CE4E /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -545,6 +547,7 @@
 				34A64A34165F047900A68428 /* CapturePreview.xib */,
 				34539ED61606E91700638A29 /* StreamServicePanel.xib */,
 				3475E75916FEC9E30030D7FA /* AppleVTPanel.xib */,
+				340D8C961959C7C100BE5144 /* CompressionSettingsPanel.xib */,
 				3475E75B16FEC9F70030D7FA /* x264Panel.xib */,
 				34ABEF3B17C0C2CB00AA5E62 /* advancedPrefPanel.xib */,
 				34539ED8160734EA00638A29 /* FilePanel.xib */,
@@ -724,6 +727,7 @@
 				340FE4B815F3417E00E4CE4E /* MainMenu.xib in Resources */,
 				3435E39B188B93150015CC01 /* passthrough.vtsh in Resources */,
 				34539ED71606E91700638A29 /* StreamServicePanel.xib in Resources */,
+				340D8C971959C7C100BE5144 /* CompressionSettingsPanel.xib in Resources */,
 				34539ED9160734EA00638A29 /* FilePanel.xib in Resources */,
 				34CFE49D18F1459600092C6A /* AudioMixer.xib in Resources */,
 				34D696FA186E8FEB00B50EB6 /* ImageAdvancedPanel.xib in Resources */,

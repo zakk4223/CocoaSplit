@@ -54,19 +54,4 @@
 -(void)stopAudioCompression;
 -(void)chooseDirectory:(id)sender;
 
-
-
-
-@end
-
-
-@protocol CaptureDataReceiverDelegateProtocol <NSObject>
-
-@required
-//if CMSampleBufferRef may or may not be nil? If it is nil the receiver must
-//create PresentationTimeStamps if they are required...
--(void)captureOutputVideo:(id) fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer didOutputImage:(CVImageBufferRef)imageBuffer frameTime:(uint64_t) frameTime;
--(void)captureOutputAudio:(id) fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer;
-
-
 @end

@@ -391,7 +391,11 @@
                                                                 <font key="font" metaFont="system"/>
                                                             </buttonCell>
                                                             <connections>
-                                                                <action selector="openCompressPanel:" target="816" id="3643"/>
+                                                                <binding destination="816" name="target" keyPath="self" id="Iiv-Ub-4kb">
+                                                                    <dictionary key="options">
+                                                                        <string key="NSSelectorName">editCompressPanel</string>
+                                                                    </dictionary>
+                                                                </binding>
                                                             </connections>
                                                         </button>
                                                         <button misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CVj-Kx-dmi">
@@ -464,8 +468,10 @@
                                                                 </menu>
                                                             </popUpButtonCell>
                                                             <connections>
-                                                                <binding destination="nWB-G2-33f" name="content" keyPath="selection.compressorTypes" id="Vyp-eZ-waq"/>
-                                                                <binding destination="nWB-G2-33f" name="selectedObject" keyPath="selection.selectedCompressorType" previousBinding="Vyp-eZ-waq" id="cGb-RY-KcI"/>
+                                                                <binding destination="gSI-N4-DsK" name="content" keyPath="arrangedObjects" id="IOC-y6-UGQ"/>
+                                                                <binding destination="gSI-N4-DsK" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="IOC-y6-UGQ" id="RTO-Y1-SNp"/>
+                                                                <binding destination="gSI-N4-DsK" name="contentValues" keyPath="arrangedObjects.key" previousBinding="RTO-Y1-SNp" id="Ftc-NH-ogE"/>
+                                                                <binding destination="nWB-G2-33f" name="selectedObject" keyPath="selection.selectedCompressor" previousBinding="Ftc-NH-ogE" id="IYe-Um-ruB"/>
                                                                 <binding destination="816" name="enabled" keyPath="self.captureRunning" id="TFb-NE-zCz">
                                                                     <dictionary key="options">
                                                                         <string key="NSValueTransformerName">NSNegateBoolean</string>
@@ -886,6 +892,21 @@
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                         </textField>
+                                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RnV-13-oUe">
+                                                            <rect key="frame" x="213" y="220" width="26" height="17"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <buttonCell key="cell" type="squareTextured" alternateTitle="Refresh" bezelStyle="texturedSquare" image="NSAddTemplate" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" inset="2" id="0EP-7j-T9Q">
+                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                <font key="font" metaFont="system"/>
+                                                            </buttonCell>
+                                                            <connections>
+                                                                <binding destination="816" name="target" keyPath="self" id="9l0-lw-ziq">
+                                                                    <dictionary key="options">
+                                                                        <string key="NSSelectorName">newCompressPanel</string>
+                                                                    </dictionary>
+                                                                </binding>
+                                                            </connections>
+                                                        </button>
                                                     </subviews>
                                                     <constraints>
                                                         <constraint firstItem="vIa-8W-NuJ" firstAttribute="leading" secondItem="1098" secondAttribute="trailing" constant="8" symbolic="YES" id="0Qn-jA-b4a"/>
@@ -1220,6 +1241,11 @@
                 </constraints>
             </view>
         </window>
+        <dictionaryController objectClassName="_NSControllerKeyValuePair" id="gSI-N4-DsK" userLabel="CompressorDictionaryController">
+            <connections>
+                <binding destination="816" name="contentDictionary" keyPath="self.compressors" id="PMh-aB-trv"/>
+            </connections>
+        </dictionaryController>
         <customObject id="494" customClass="AppDelegate">
             <connections>
                 <outlet property="captureController" destination="816" id="1732"/>
@@ -1297,6 +1323,7 @@
         </arrayController>
     </objects>
     <resources>
+        <image name="NSAddTemplate" width="8" height="8"/>
         <image name="NSAdvanced" width="32" height="32"/>
         <image name="NSRefreshTemplate" width="10" height="12"/>
     </resources>
