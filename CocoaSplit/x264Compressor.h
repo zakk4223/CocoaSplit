@@ -30,6 +30,7 @@
     struct SwsContext *_sws_ctx;
     dispatch_queue_t _compressor_queue;
     VTPixelTransferSessionRef _vtpt_ref;
+    double _next_keyframe_time;
     
     
 }
@@ -56,7 +57,7 @@
 @property (assign) bool use_cbr;
 
 
--(bool)compressFrame:(CapturedFrameData *)frameData isKeyFrame:(BOOL)isKeyFrame;
+-(bool)compressFrame:(CapturedFrameData *)frameData;
 -(bool)setupCompressor;
 
 

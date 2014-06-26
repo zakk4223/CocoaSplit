@@ -63,7 +63,7 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="x264" identifier="1" id="I6I-nX-nIi">
-                                <view key="view" ambiguous="YES" id="AiJ-YZ-cX2">
+                                <view key="view" id="AiJ-YZ-cX2">
                                     <rect key="frame" x="10" y="33" width="534" height="236"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -140,7 +140,11 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                             <connections>
-                                                <binding destination="TZe-4D-nmN" name="value" keyPath="selection.keyframe_interval" id="PYp-Rc-0Dy"/>
+                                                <binding destination="TZe-4D-nmN" name="value" keyPath="selection.keyframe_interval" id="xWa-nf-itU">
+                                                    <dictionary key="options">
+                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                    </dictionary>
+                                                </binding>
                                             </connections>
                                         </textField>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mrd-j9-Vau">
@@ -153,9 +157,10 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                             <connections>
-                                                <binding destination="TZe-4D-nmN" name="value" keyPath="selection.crf" id="Cya-1o-HGm">
+                                                <binding destination="TZe-4D-nmN" name="value" keyPath="selection.crf" id="xEV-u0-L4J">
                                                     <dictionary key="options">
                                                         <integer key="NSNullPlaceholder" value="0"/>
+                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
                                                     </dictionary>
                                                 </binding>
                                             </connections>
@@ -170,7 +175,11 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                             <connections>
-                                                <binding destination="TZe-4D-nmN" name="value" keyPath="selection.vbv_buffer" id="g7f-hi-D66"/>
+                                                <binding destination="TZe-4D-nmN" name="value" keyPath="selection.vbv_buffer" id="oVO-iP-11f">
+                                                    <dictionary key="options">
+                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                    </dictionary>
+                                                </binding>
                                             </connections>
                                         </textField>
                                         <textField verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bVx-zD-QAw">
@@ -186,7 +195,11 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                             <connections>
-                                                <binding destination="TZe-4D-nmN" name="value" keyPath="selection.vbv_maxrate" id="tR2-5t-HvJ"/>
+                                                <binding destination="TZe-4D-nmN" name="value" keyPath="selection.vbv_maxrate" id="pIp-DY-RbN">
+                                                    <dictionary key="options">
+                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                    </dictionary>
+                                                </binding>
                                             </connections>
                                         </textField>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9TP-kQ-Qdg">
@@ -205,7 +218,11 @@
                                             </popUpButtonCell>
                                             <connections>
                                                 <binding destination="8jM-xj-6eG" name="content" keyPath="arrangedObjects" id="pHT-lW-Kwo"/>
-                                                <binding destination="TZe-4D-nmN" name="selectedObject" keyPath="selection.profile" previousBinding="pHT-lW-Kwo" id="TAi-xR-10y"/>
+                                                <binding destination="TZe-4D-nmN" name="selectedObject" keyPath="selection.profile" previousBinding="pHT-lW-Kwo" id="Uqz-5Y-CvX">
+                                                    <dictionary key="options">
+                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                    </dictionary>
+                                                </binding>
                                             </connections>
                                         </popUpButton>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LdZ-gp-IPX">
@@ -224,7 +241,11 @@
                                             </popUpButtonCell>
                                             <connections>
                                                 <binding destination="qsl-yE-r3J" name="content" keyPath="arrangedObjects" id="NJC-N2-QTp"/>
-                                                <binding destination="TZe-4D-nmN" name="selectedObject" keyPath="selection.tune" previousBinding="NJC-N2-QTp" id="0xX-Ao-E2m"/>
+                                                <binding destination="TZe-4D-nmN" name="selectedObject" keyPath="selection.tune" previousBinding="NJC-N2-QTp" id="6NL-ti-YlZ">
+                                                    <dictionary key="options">
+                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                    </dictionary>
+                                                </binding>
                                             </connections>
                                         </popUpButton>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HRX-AI-IV1">
@@ -243,7 +264,11 @@
                                             </popUpButtonCell>
                                             <connections>
                                                 <binding destination="R45-ki-5Yf" name="content" keyPath="arrangedObjects" id="DD7-rh-hVB"/>
-                                                <binding destination="TZe-4D-nmN" name="selectedObject" keyPath="selection.preset" previousBinding="DD7-rh-hVB" id="bDZ-wP-Wuo"/>
+                                                <binding destination="TZe-4D-nmN" name="selectedObject" keyPath="selection.preset" previousBinding="DD7-rh-hVB" id="TyP-qI-Qbi">
+                                                    <dictionary key="options">
+                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                    </dictionary>
+                                                </binding>
                                             </connections>
                                         </popUpButton>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zcL-cj-J2t">
@@ -263,7 +288,11 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <binding destination="TZe-4D-nmN" name="value" keyPath="selection.use_cbr" id="shB-ox-8IO"/>
+                                                <binding destination="TZe-4D-nmN" name="value" keyPath="selection.use_cbr" id="vy7-fH-obh">
+                                                    <dictionary key="options">
+                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                    </dictionary>
+                                                </binding>
                                             </connections>
                                         </button>
                                         <button toolTip="Bitrate is set to value of 'VBV Maxrate'. 'VBV Buffer' is ignored and calculated based on fps and Maxrate. CRF is ignored." horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7JK-UJ-uXM">
@@ -292,14 +321,18 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                             <connections>
-                                                <binding destination="TZe-4D-nmN" name="value" keyPath="selection.name" id="Rz0-OS-OYZ"/>
+                                                <binding destination="TZe-4D-nmN" name="value" keyPath="selection.name" id="gZ5-Cw-Fuh">
+                                                    <dictionary key="options">
+                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                    </dictionary>
+                                                </binding>
                                             </connections>
                                         </textField>
                                     </subviews>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="AppleVTCompressor" identifier="2" id="dyD-Zy-azw">
-                                <view key="view" id="XTV-kv-85u">
+                                <view key="view" ambiguous="YES" id="XTV-kv-85u">
                                     <rect key="frame" x="10" y="33" width="534" height="236"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -348,6 +381,13 @@
                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
+                                            <connections>
+                                                <binding destination="TZe-4D-nmN" name="value" keyPath="selection.keyframe_interval" id="e1j-VP-q6W">
+                                                    <dictionary key="options">
+                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                    </dictionary>
+                                                </binding>
+                                            </connections>
                                         </textField>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nRC-Eo-rgj">
                                             <rect key="frame" x="122" y="120" width="46" height="22"/>
@@ -358,6 +398,13 @@
                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
+                                            <connections>
+                                                <binding destination="TZe-4D-nmN" name="value" keyPath="selection.max_bitrate" id="Tdz-EZ-iRa">
+                                                    <dictionary key="options">
+                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                    </dictionary>
+                                                </binding>
+                                            </connections>
                                         </textField>
                                         <textField verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HSo-TK-ey0">
                                             <rect key="frame" x="122" y="145" width="46" height="22"/>
@@ -371,6 +418,13 @@
                                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
+                                            <connections>
+                                                <binding destination="TZe-4D-nmN" name="value" keyPath="selection.average_bitrate" id="5hC-XX-4ol">
+                                                    <dictionary key="options">
+                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                    </dictionary>
+                                                </binding>
+                                            </connections>
                                         </textField>
                                         <popUpButton verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nAv-AT-Pjr">
                                             <rect key="frame" x="120" y="68" width="100" height="26"/>
@@ -389,6 +443,14 @@
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
+                                            <connections>
+                                                <binding destination="Fq1-6t-ESc" name="content" keyPath="arrangedObjects" id="3xC-wD-R6H"/>
+                                                <binding destination="TZe-4D-nmN" name="selectedObject" keyPath="selection.profile" previousBinding="3xC-wD-R6H" id="6a2-d2-Thf">
+                                                    <dictionary key="options">
+                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                    </dictionary>
+                                                </binding>
+                                            </connections>
                                         </popUpButton>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="72H-Xv-84L">
                                             <rect key="frame" x="169" y="98" width="55" height="17"/>
@@ -406,6 +468,13 @@
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <binding destination="TZe-4D-nmN" name="value" keyPath="selection.use_cbr" id="nEe-20-Ok6">
+                                                    <dictionary key="options">
+                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                    </dictionary>
+                                                </binding>
+                                            </connections>
                                         </button>
                                         <button toolTip="Bitrate is set to 'Avg Bitrate'. 'Max Bitrate' is ignored." horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ze1-e4-lAf">
                                             <rect key="frame" x="133" y="45" width="25" height="25"/>
@@ -433,7 +502,11 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                             <connections>
-                                                <binding destination="TZe-4D-nmN" name="value" keyPath="selection.name" id="5HS-7o-6pT"/>
+                                                <binding destination="TZe-4D-nmN" name="value" keyPath="selection.name" id="gLq-F6-G8b">
+                                                    <dictionary key="options">
+                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                    </dictionary>
+                                                </binding>
                                             </connections>
                                         </textField>
                                     </subviews>
@@ -502,17 +575,38 @@ Gw
         </objectController>
         <arrayController id="R45-ki-5Yf" userLabel="x264PresetsController">
             <connections>
-                <binding destination="TZe-4D-nmN" name="contentArray" keyPath="selection.x264presets" id="3PG-5S-VuD"/>
+                <binding destination="TZe-4D-nmN" name="contentArray" keyPath="selection.x264presets" id="1f6-Ia-26f">
+                    <dictionary key="options">
+                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                    </dictionary>
+                </binding>
             </connections>
         </arrayController>
         <arrayController id="qsl-yE-r3J" userLabel="x264TunesController">
             <connections>
-                <binding destination="TZe-4D-nmN" name="contentArray" keyPath="selection.x264tunes" id="PwJ-hc-nff"/>
+                <binding destination="TZe-4D-nmN" name="contentArray" keyPath="selection.x264tunes" id="LgQ-cj-kZF">
+                    <dictionary key="options">
+                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                    </dictionary>
+                </binding>
             </connections>
         </arrayController>
         <arrayController id="8jM-xj-6eG" userLabel="x264ProfilesController">
             <connections>
-                <binding destination="TZe-4D-nmN" name="contentArray" keyPath="selection.x264profiles" id="eoc-C5-rly"/>
+                <binding destination="TZe-4D-nmN" name="contentArray" keyPath="selection.x264profiles" id="r9S-JJ-pAI">
+                    <dictionary key="options">
+                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                    </dictionary>
+                </binding>
+            </connections>
+        </arrayController>
+        <arrayController id="Fq1-6t-ESc" userLabel="VTProfilesController">
+            <connections>
+                <binding destination="TZe-4D-nmN" name="contentArray" keyPath="selection.profiles" id="HQv-TY-aAf">
+                    <dictionary key="options">
+                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                    </dictionary>
+                </binding>
             </connections>
         </arrayController>
         <userDefaultsController representsSharedInstance="YES" id="XCx-Za-l54"/>

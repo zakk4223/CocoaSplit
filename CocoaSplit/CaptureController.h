@@ -60,7 +60,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     CFAbsoluteTime _frame_interval;
     mach_timebase_info_data_t _mach_timebase;
     double _frame_time;
-    double _next_keyframe_time;
     CMSampleBufferRef audioRingBuffer[512];
     size_t audioWritePosition;
     size_t audioLastReadPosition;

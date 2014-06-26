@@ -15,6 +15,71 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
 @implementation AppleVTCompressor
 
 
+- (id)copyWithZone:(NSZone *)zone
+{
+    AppleVTCompressor *copy = [[[self class] allocWithZone:zone] init];
+    
+    copy.settingsController = self.settingsController;
+    copy.outputDelegate = self.outputDelegate;
+    
+    copy.isNew = self.isNew;
+    
+    copy.name = self.name;
+    copy.average_bitrate = self.average_bitrate;
+    copy.max_bitrate = self.max_bitrate;
+    
+    copy.compressorType = self.compressorType;
+    
+    copy.profile = self.profile;
+    copy.keyframe_interval = self.keyframe_interval;
+    copy.use_cbr = self.use_cbr;
+    
+    return copy;
+}
+
+
+-(void) encodeWithCoder:(NSCoder *)aCoder
+{
+    
+    
+    [aCoder encodeObject:self.name forKey:@"name"];
+    [aCoder encodeInteger:self.average_bitrate forKey:@"average_bitrate"];
+    [aCoder encodeInteger:self.max_bitrate forKey:@"max_bitrate"];
+    [aCoder encodeInteger:self.keyframe_interval forKey:@"keyframe_interval"];
+    [aCoder encodeObject:self.profile forKey:@"profile"];
+    [aCoder encodeBool:self.use_cbr forKey:@"use_cbr"];
+}
+
+-(id) initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [self init])
+    {
+        self.name = [aDecoder decodeObjectForKey:@"name"];
+        self.average_bitrate = (int)[aDecoder decodeIntegerForKey:@"average_bitrate"];
+        self.max_bitrate = (int)[aDecoder decodeIntegerForKey:@"max_bitrate"];
+        self.keyframe_interval = (int)[aDecoder decodeIntegerForKey:@"keyframe_interval"];
+        self.profile = [aDecoder decodeObjectForKey:@"profile"];
+        self.use_cbr = [aDecoder decodeBoolForKey:@"use_cbr"];
+        
+    }
+    
+    return self;
+}
+
+
+-(id)init
+{
+    if (self = [super init])
+    {
+        self.compressorType = @"AppleVTCompressor";
+        self.name = [@"" mutableCopy];
+
+        self.profiles = @[[NSNull null], @"Baseline", @"Main", @"High"];
+    }
+    
+    return self;
+}
+
 
 - (void) dealloc
 {
@@ -37,7 +102,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 
 
 //- (bool)compressFrame:(CVImageBufferRef)imageBuffer pts:(CMTime)pts duration:(CMTime)duration isKeyFrame:(BOOL)isKeyFrame
--(bool)compressFrame:(CapturedFrameData *)frameData isKeyFrame:(BOOL)isKeyFrame
+-(bool)compressFrame:(CapturedFrameData *)frameData
 {
     
     
@@ -56,14 +121,16 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     
     CFMutableDictionaryRef frameProperties;
     
+    /*
     if (isKeyFrame)
     {
     
         frameProperties = CFDictionaryCreateMutable(NULL, 0, &kCFCopyStringDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
         CFDictionaryAddValue(frameProperties, kVTEncodeFrameOptionKey_ForceKeyFrame, kCFBooleanTrue);
     } else {
+     */
         frameProperties = NULL;
-    }
+    //}
     
     
     VTCompressionSessionEncodeFrame(_compression_session, frameData.videoFrame, frameData.videoPTS, frameData.videoDuration, frameProperties, (__bridge_retained void *)(frameData), NULL);
@@ -132,9 +199,9 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     
     
     int real_keyframe_interval = 2;
-    if (self.settingsController.captureVideoMaxKeyframeInterval && self.settingsController.captureVideoMaxKeyframeInterval > 0)
+    if (self.keyframe_interval && self.keyframe_interval > 0)
     {
-        real_keyframe_interval = self.settingsController.captureVideoMaxKeyframeInterval;
+        real_keyframe_interval = self.keyframe_interval;
     }
     
     VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_MaxKeyFrameIntervalDuration, (__bridge CFTypeRef)@(real_keyframe_interval));
@@ -147,23 +214,23 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     int real_bitrate_limit = 0;
     float limit_seconds = 0.0f;
     
-    if (self.settingsController.videoCBR && self.settingsController.captureVideoAverageBitrate && self.settingsController.captureVideoAverageBitrate > 0)
+    if (self.use_cbr && self.average_bitrate && self.average_bitrate > 0)
     {
         
         limit_seconds = 1.0f;
-        real_bitrate_limit = (self.settingsController.captureVideoAverageBitrate/2)*125; // In bytes (1000/8)
+        real_bitrate_limit = (self.average_bitrate/2)*125; // In bytes (1000/8)
         
-    } else if (self.settingsController.captureVideoMaxBitrate && self.settingsController.captureVideoMaxBitrate > 0) {
-        real_bitrate_limit = self.settingsController.captureVideoMaxBitrate*125; // In bytes (1000/8)
+    } else if (self.max_bitrate && self.max_bitrate > 0) {
+        real_bitrate_limit = self.max_bitrate*125; // In bytes (1000/8)
         limit_seconds = 1.0f;
     }
     
     
     
     
-    if (self.settingsController.captureVideoAverageBitrate > 0)
+    if (self.average_bitrate > 0)
     {
-        int real_bitrate = self.settingsController.captureVideoAverageBitrate*1000;
+        int real_bitrate = self.average_bitrate*1000;
         
         
         VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_AverageBitRate, CFNumberCreate(NULL, kCFNumberIntType, &real_bitrate));
@@ -206,28 +273,28 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     }
 
     
-    if (self.settingsController.vtcompressor_profile)
+    if (self.profile)
     {
         CFStringRef session_profile = nil;
         
         
         if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_8)
         {
-            if ([self.settingsController.vtcompressor_profile isEqualToString:@"Baseline"])
+            if ([self.profile isEqualToString:@"Baseline"])
             {
                 session_profile = kVTProfileLevel_H264_Baseline_4_1;
-            } else if ([self.settingsController.vtcompressor_profile isEqualToString:@"Main"]) {
+            } else if ([self.profile isEqualToString:@"Main"]) {
                 session_profile = kVTProfileLevel_H264_Main_5_0;
-            } else if ([self.settingsController.vtcompressor_profile isEqualToString:@"High"]) {
+            } else if ([self.profile isEqualToString:@"High"]) {
                 session_profile = kVTProfileLevel_H264_High_5_0;
             }            
         } else {
-            if ([self.settingsController.vtcompressor_profile isEqualToString:@"Baseline"])
+            if ([self.profile isEqualToString:@"Baseline"])
             {
                 session_profile = (__bridge CFStringRef)@"H264_Baseline_AutoLevel";
-            } else if ([self.settingsController.vtcompressor_profile isEqualToString:@"Main"]) {
+            } else if ([self.profile isEqualToString:@"Main"]) {
                 session_profile = (__bridge CFStringRef)@"H264_Main_AutoLevel";
-            } else if ([self.settingsController.vtcompressor_profile isEqualToString:@"High"]) {
+            } else if ([self.profile isEqualToString:@"High"]) {
                 session_profile = (__bridge CFStringRef)@"H264_High_AutoLevel";
             }
         }

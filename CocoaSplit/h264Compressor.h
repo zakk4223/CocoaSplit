@@ -20,7 +20,7 @@
 //compressFrame is expected to be non-blocking. Create a serial dispatch queue if the underlying compressor
 //is blocking
 
--(bool)compressFrame:(CapturedFrameData *)imageBuffer isKeyFrame:(BOOL)isKeyFrame;
+-(bool)compressFrame:(CapturedFrameData *)imageBuffer;
 
 
 -(bool)setupCompressor;

@@ -116,6 +116,7 @@
     return _selectedCompressorType;
 }
 
+
 -(void)setSelectedCompressorType:(NSString *)selectedCompressorType
 {
     _selectedCompressorType = selectedCompressorType;
@@ -133,6 +134,8 @@
                 self.editingCompressor = nil;
             }
         }
+        
+        
         if (self.editingCompressor)
         {
             self.editingCompressor.isNew = YES;
@@ -217,7 +220,6 @@
         NSLog(@"FAILED TO COMMIT EDITING FOR COMPRESS EDIT");
     }
     
-    self.editingCompressor = self.selectedCompressor;
     
     
     
@@ -1012,25 +1014,13 @@
 
 -(bool) setupCompressors
 {
-    id<h264Compressor> newCompressor;
     
     
-    if ([self.selectedCompressorType isEqualToString:@"x264"])
-    {
-        newCompressor = [[x264Compressor alloc] init];
-    } else if ([self.selectedCompressorType isEqualToString:@"AppleVTCompressor"]) {
-        newCompressor = [[AppleVTCompressor alloc] init];
-    } else {
-        newCompressor = nil;
-    }
-    
-    
-    if (newCompressor)
+
+    if (self.selectedCompressor)
     {
         
-        newCompressor.settingsController = self;
-        
-        
+        self.selectedCompressor.settingsController = self;
     }
     
     
@@ -1046,7 +1036,7 @@
     _compressedFrameCount = 0;
     _min_delay = _max_delay = _avg_delay = 0;
 
-    self.videoCompressor = newCompressor;
+    self.videoCompressor = self.selectedCompressor;
     
     return YES;
 
@@ -1718,7 +1708,6 @@
         
         
         _firstFrameTime = _frame_time;
-        _next_keyframe_time = _frame_time;
         
     }
     
@@ -1735,22 +1724,16 @@
     
     duration = CMTimeMake(1000, self.videoCaptureSession.videoCaptureFPS*1000);
     
-    BOOL doKeyFrame = NO;
-    
-    if (_frame_time >= _next_keyframe_time)
-    {
-        doKeyFrame = YES;
-        _next_keyframe_time += self.captureVideoMaxKeyframeInterval;
-    }
-    
     frameData.videoPTS = pts;
     frameData.videoDuration = duration;
     frameData.frameNumber = _frameCount;
+    frameData.frameTime = _frame_time;
+    
     
     if (self.videoCompressor)
     {
         
-        [self.videoCompressor compressFrame:frameData isKeyFrame:doKeyFrame];
+        [self.videoCompressor compressFrame:frameData];
 
     }
         

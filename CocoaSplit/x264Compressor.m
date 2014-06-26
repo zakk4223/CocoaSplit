@@ -114,7 +114,7 @@
 }
 
 
-- (bool)compressFrame:(CapturedFrameData *)frameData isKeyFrame:(BOOL)isKeyFrame
+- (bool)compressFrame:(CapturedFrameData *)frameData
 {
     
     
@@ -140,6 +140,21 @@
     
     
     dispatch_async(_compressor_queue, ^{
+        
+        
+        if (frameData.frameNumber == 1)
+        {
+            _next_keyframe_time = frameData.frameTime;
+        }
+        
+        BOOL isKeyFrame = NO;
+        
+        if (frameData.frameTime >= _next_keyframe_time)
+        {
+            isKeyFrame = YES;
+            _next_keyframe_time += self.keyframe_interval;
+        }
+        
         
         CMTime pts = frameData.videoPTS;
         
@@ -286,6 +301,8 @@
         return NO;
     }
     
+    _next_keyframe_time = 0.0f;
+    
     _av_codec_ctx = avcodec_alloc_context3(_av_codec);
     avcodec_get_context_defaults3(_av_codec_ctx, _av_codec);
     
@@ -299,11 +316,11 @@
     
     
     int real_keyframe_interval = 0;
-    if (!self.settingsController.captureVideoMaxKeyframeInterval)
+    if (!self.keyframe_interval)
     {
         real_keyframe_interval = self.settingsController.captureFPS*2;
     } else {
-        real_keyframe_interval  = self.settingsController.captureFPS*self.settingsController.captureVideoMaxKeyframeInterval;
+        real_keyframe_interval  = self.settingsController.captureFPS*self.keyframe_interval;
     }
     
     
@@ -312,44 +329,44 @@
     AVDictionary *opts = NULL;
 
     
-    _av_codec_ctx->rc_max_rate = self.settingsController.captureVideoAverageBitrate*1000;
+    _av_codec_ctx->rc_max_rate = self.vbv_maxrate*1000;
 
-    if (!self.settingsController.videoCBR)
+    if (!self.use_cbr)
     {
-         _av_codec_ctx->rc_buffer_size = self.settingsController.captureVideoMaxBitrate*1000;
-        av_dict_set(&opts, "crf", [[NSString stringWithFormat:@"%d", self.settingsController.x264crf] UTF8String], 0);
+         _av_codec_ctx->rc_buffer_size = self.vbv_buffer*1000;
+        av_dict_set(&opts, "crf", [[NSString stringWithFormat:@"%d", self.crf] UTF8String], 0);
 
     } else {
         
         //what did we learn today? Don't believe shit you read in forum posts...
          //_av_codec_ctx->rc_buffer_size = ((1/self.settingsController.captureFPS)*self.settingsController.captureVideoAverageBitrate)*1000;
-        _av_codec_ctx->rc_buffer_size = self.settingsController.captureVideoAverageBitrate*1000;
+        _av_codec_ctx->rc_buffer_size = self.vbv_maxrate*1000;
         
-        _av_codec_ctx->bit_rate = self.settingsController.captureVideoAverageBitrate*1000;
+        _av_codec_ctx->bit_rate = self.vbv_maxrate*1000;
         av_dict_set(&opts, "nal-hrd", "cbr", 0);
     }
     
     _av_codec_ctx->flags |= CODEC_FLAG_GLOBAL_HEADER;
     
-    id x264preset = self.settingsController.x264preset;
+    id x264preset = self.preset;
     
     if (x264preset != [NSNull null])
     {
         av_dict_set(&opts, "preset", [x264preset UTF8String], 0);
     }
     
-    id x264profile = self.settingsController.x264profile;
+    id x264profile = self.profile;
 
     if (x264profile != [NSNull null])
     {
         av_dict_set(&opts, "profile", [x264profile UTF8String], 0);
     }
     
-    id x264tune = self.settingsController.x264tune;
+    id x264tune = self.tune;
 
     if (x264tune != [NSNull null])
     {
-        av_dict_set(&opts, "tune", [self.settingsController.x264tune UTF8String], 0);
+        av_dict_set(&opts, "tune", [x264tune UTF8String], 0);
     }
     
     

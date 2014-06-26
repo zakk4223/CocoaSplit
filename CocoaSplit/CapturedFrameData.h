@@ -15,7 +15,9 @@
 @interface CapturedFrameData : NSObject
 
 
+
 @property long long frameNumber;
+@property (assign) double frameTime;
 
 @property CVImageBufferRef videoFrame;
 
