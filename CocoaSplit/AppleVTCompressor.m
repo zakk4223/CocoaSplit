@@ -83,7 +83,6 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
 
 - (void) dealloc
 {
-    NSLog(@"VTCompressor Dealloc");
     VTCompressionSessionInvalidate(_compression_session);
     if (_compression_session)
     {
@@ -101,7 +100,6 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 
 
 
-//- (bool)compressFrame:(CVImageBufferRef)imageBuffer pts:(CMTime)pts duration:(CMTime)duration isKeyFrame:(BOOL)isKeyFrame
 -(bool)compressFrame:(CapturedFrameData *)frameData
 {
     
@@ -169,15 +167,14 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     status = VTCompressionSessionCreate(NULL, self.settingsController.captureWidth, self.settingsController.captureHeight, kCMVideoCodecType_H264, (__bridge CFDictionaryRef)encoderSpec, NULL, NULL, VideoCompressorReceiveFrame,  (__bridge void *)self, &_compression_session);
     
     CFDictionaryRef props;
-    VTCompressionSessionCopySupportedPropertyDictionary(_compression_session, &props);
+    //VTCompressionSessionCopySupportedPropertyDictionary(_compression_session, &props);
     
-    NSLog(@"SUPPORTED PROPERTIES %@", props);
     if (status != noErr || !_compression_session)
     {
         return NO;
     }
 	
-	CFRelease(props);
+	//CFRelease(props);
     
     //If priority isn't set to -20 the framerate in the SPS/VUI section locks to 25. With -20 it takes on the value of
     //whatever ExpectedFrameRate is. I have no idea what the fuck, but it works.
@@ -258,7 +255,6 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     
     if (real_bitrate_limit > 0)
     {
-        NSLog(@"SETTING DAT RATE LIMIT");
         
 		NSArray *dataRateLimits = @[
 			@(real_bitrate_limit),

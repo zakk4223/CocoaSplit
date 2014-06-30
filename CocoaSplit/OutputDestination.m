@@ -131,6 +131,10 @@
     if (self.ffmpeg_out)
     {
         [self.ffmpeg_out stopProcess];
+        [self.ffmpeg_out removeObserver:self forKeyPath:@"errored"];
+        [self.ffmpeg_out removeObserver:self forKeyPath:@"active"];
+
+        
         self.ffmpeg_out = nil;
     }
     
@@ -348,6 +352,8 @@
     if (self.ffmpeg_out)
     {
         [self.ffmpeg_out removeObserver:self forKeyPath:@"errored" context:NULL];
+        [self.ffmpeg_out removeObserver:self forKeyPath:@"active" context:NULL];
+
     }
 
 }

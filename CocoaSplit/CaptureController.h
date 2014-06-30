@@ -125,8 +125,11 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 @property (strong) NSString *compressTabLabel;
 
+@property (weak) IBOutlet NSDictionaryController *compressController;
+
 
 @property (strong) id<h264Compressor> editingCompressor;
+@property (strong) NSString *editingCompressorKey;
 @property (strong) NSMutableDictionary *compressors;
 @property (strong) id<h264Compressor> selectedCompressor;
 

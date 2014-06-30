@@ -469,9 +469,9 @@
                                                             </popUpButtonCell>
                                                             <connections>
                                                                 <binding destination="gSI-N4-DsK" name="content" keyPath="arrangedObjects" id="IOC-y6-UGQ"/>
-                                                                <binding destination="gSI-N4-DsK" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="IOC-y6-UGQ" id="RTO-Y1-SNp"/>
                                                                 <binding destination="gSI-N4-DsK" name="contentValues" keyPath="arrangedObjects.key" previousBinding="RTO-Y1-SNp" id="Ftc-NH-ogE"/>
-                                                                <binding destination="nWB-G2-33f" name="selectedObject" keyPath="selection.selectedCompressor" previousBinding="Ftc-NH-ogE" id="IYe-Um-ruB"/>
+                                                                <binding destination="gSI-N4-DsK" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="IOC-y6-UGQ" id="RTO-Y1-SNp"/>
+                                                                <binding destination="gSI-N4-DsK" name="selectedIndex" keyPath="selectionIndex" previousBinding="Ftc-NH-ogE" id="0G7-uW-cOg"/>
                                                                 <binding destination="816" name="enabled" keyPath="self.captureRunning" id="TFb-NE-zCz">
                                                                     <dictionary key="options">
                                                                         <string key="NSValueTransformerName">NSNegateBoolean</string>
@@ -1268,6 +1268,7 @@
         </objectController>
         <customObject id="816" customClass="CaptureController">
             <connections>
+                <outlet property="compressController" destination="gSI-N4-DsK" id="aUZ-rh-IfA"/>
                 <outlet property="objectController" destination="nWB-G2-33f" id="AQr-hL-LzT"/>
                 <outlet property="previewCtx" destination="2416" id="3493"/>
             </connections>

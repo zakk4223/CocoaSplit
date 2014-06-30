@@ -90,11 +90,7 @@
     if (!self.advancedPrefPanel)
     {
         
-        
-        
         [[NSBundle mainBundle] loadNibNamed:@"advancedPrefPanel" owner:self topLevelObjects:nil];
-        
-        
         [NSApp beginSheet:self.advancedPrefPanel modalForWindow:[[NSApp delegate] window] modalDelegate:self didEndSelector:NULL contextInfo:NULL];
         
     }
@@ -120,10 +116,12 @@
 -(void)setSelectedCompressorType:(NSString *)selectedCompressorType
 {
     _selectedCompressorType = selectedCompressorType;
+    self.compressTabLabel = selectedCompressorType;
+
     if (self.compressPanel)
     {
-        self.compressTabLabel = selectedCompressorType;
-        if (!self.editingCompressor)
+        
+        if (!self.editingCompressor || self.editingCompressor.isNew)
         {
             if ([selectedCompressorType isEqualToString:@"x264"])
             {
@@ -184,14 +182,21 @@
 {
     
     
-    self.editingCompressor = self.selectedCompressor;
+    self.selectedCompressor = [[self.compressController.selectedObjects objectAtIndex:0] valueForKey:@"value"];
+
     if (doEdit)
     {
+        self.editingCompressor = self.selectedCompressor;
+        self.editingCompressorKey = self.selectedCompressor.name;
         if (self.editingCompressor)
         {
+            self.selectedCompressorType = self.editingCompressor.compressorType;
             self.compressTabLabel = self.editingCompressor.compressorType;
         }
+    } else {
+        self.editingCompressor = nil;
     }
+    
     
     
     if (!self.compressPanel)
@@ -212,6 +217,43 @@
 }
 
 
+-(NSString *)addCompressor:(id <h264Compressor>)newCompressor
+{
+    NSMutableString *baseName = newCompressor.name;
+    
+    NSMutableString *newName = baseName;
+    int name_try = 1;
+    
+    while (self.compressors[newName]) {
+        newName = [NSMutableString stringWithFormat:@"%@#%d", baseName, name_try];
+        name_try++;
+    }
+    
+    newCompressor.name = newName;
+    [self willChangeValueForKey:@"compressors"];
+    [self.compressors setObject:newCompressor forKey:newName];
+    [self didChangeValueForKey:@"compressors"];
+
+    return newName;
+    
+}
+
+
+-(void) setCompressSelection:(NSString *)forName
+{
+    
+    for (id tmpval in self.compressController.arrangedObjects)
+    {
+        if ([[tmpval valueForKey:@"key"] isEqualToString:forName] )
+        {
+            [self.compressController setSelectedObjects:@[tmpval]];
+            break;
+        }
+    }
+}
+
+
+
 -(IBAction)saveCompressPanel
 {
 
@@ -222,27 +264,34 @@
     
     
     
-    
-    if (self.editingCompressor && self.editingCompressor.isNew)
+    if (self.editingCompressor)
     {
-        NSMutableString *baseName = self.editingCompressor.name;
-        
-        NSMutableString *newName = baseName;
-        int name_try = 1;
-        
-        while (self.compressors[newName]) {
-            newName = [NSMutableString stringWithFormat:@"%@#%d", baseName, name_try];
-            name_try++;
+        if (self.editingCompressor.isNew)
+        {
+            NSString *newName = [self addCompressor:self.editingCompressor];
+            
+            [self setCompressSelection:newName];
+            //[self.compressorPopupButton selectItemWithTitle:newName];
+
+            //self.selectedCompressor = self.compressors[newName];
+            
+        } else if (![self.editingCompressorKey isEqualToString:self.editingCompressor.name]) {
+            //the name was changed in the edit dialog, so create a new key entry and delete the old one
+            NSString *newName = [self addCompressor:self.editingCompressor];
+            
+            
+
+            //self.selectedCompressor = self.compressors[newName];
+
+            [self willChangeValueForKey:@"compressors"];
+            [self.compressors removeObjectForKey:self.editingCompressorKey];
+            [self didChangeValueForKey:@"compressors"];
+            [self setCompressSelection:newName];
+
+            
+            
         }
-        
-        self.editingCompressor.name = newName;
-        [self willChangeValueForKey:@"compressors"];
-        [self.compressors setObject:self.editingCompressor forKey:newName];
-        [self didChangeValueForKey:@"compressors"];
-        self.editingCompressor = self.compressors[newName];
-        
     }
-    
     
     [self closeCompressPanel];
     
@@ -255,7 +304,11 @@
     [NSApp endSheet:self.compressPanel];
     [self.compressPanel close];
     self.compressPanel = nil;
+    self.editingCompressor = nil;
+    self.editingCompressorKey = nil;
 }
+
+
 
 - (IBAction)openAudioMixerPanel:(id)sender {
     
@@ -410,7 +463,6 @@
 {
     if ([keyPath isEqualToString:@"videoCaptureFPS"])
     {
-        //self.captureFPS = [[change objectForKey:NSKeyValueChangeNewKey] doubleValue];
         
         [self setupFrameTimer];
     }
@@ -524,38 +576,6 @@
        self.arOptions = @[@"None", @"Use Source", @"Preserve AR"];
        self.validSamplerates = @[@44100, @48000];
        
-       
-       
-       
-       
-       self.x264tunes = [[NSMutableArray alloc] init];
-       
-       self.x264presets = [[NSMutableArray alloc] init];
-       
-       self.x264profiles = [[NSMutableArray alloc] init];
-
-       [self.x264tunes addObject:[NSNull null]];
-       [self.x264presets addObject:[NSNull null]];
-       for (int i = 0; x264_profile_names[i]; i++)
-       {
-           [self.x264profiles addObject:[NSString stringWithUTF8String:x264_profile_names[i]]];
-       }
-
-       
-       for (int i = 0; x264_preset_names[i]; i++)
-       {
-           [self.x264presets addObject:[NSString stringWithUTF8String:x264_preset_names[i]]];
-       }
-       
-       for (int i = 0; x264_tune_names[i]; i++)
-       {
-           [self.x264tunes addObject:[NSString stringWithUTF8String:x264_tune_names[i]]];
-       }
-
-       
-       self.vtcompressor_profiles = @[[NSNull null], @"Baseline", @"Main", @"High"];
-       
-       self.selectedVideoType = [self.videoTypes objectAtIndex:0];
        
        self.audioCaptureSession = [[AVFCapture alloc] initForAudio];
        [self.audioCaptureSession setAudioDelegate:self];
@@ -725,6 +745,53 @@
     dispatch_resume(_log_source);
 }
 
+-(void) migrateDefaultCompressor:(NSMutableDictionary *)saveRoot
+{
+    
+    if (self.compressors[@"default"])
+    {
+        //We already migrated, or the user did it for us?
+        return;
+    }
+    
+
+    
+    id <h264Compressor> newCompressor;
+    if ([self.selectedCompressorType isEqualToString:@"x264"])
+    {
+        x264Compressor *tmpCompressor;
+        
+        tmpCompressor = [[x264Compressor alloc] init];
+        tmpCompressor.tune = [saveRoot valueForKey:@"x264tune"];
+        tmpCompressor.profile = [saveRoot valueForKey:@"x264profile"];
+        tmpCompressor.preset = [saveRoot valueForKey:@"x264preset"];
+        tmpCompressor.use_cbr = [[saveRoot valueForKey:@"videoCBR"] boolValue];
+        tmpCompressor.crf = [[saveRoot valueForKey:@"x264crf"] intValue];
+        tmpCompressor.vbv_maxrate = [[saveRoot valueForKey:@"captureVideoAverageBitrate"] intValue];
+        tmpCompressor.vbv_buffer = [[saveRoot valueForKey:@"captureVideoMaxBitrate"] intValue];
+        tmpCompressor.keyframe_interval = [[saveRoot valueForKey:@"captureVideoMaxKeyframeInterval"] intValue];
+        newCompressor = tmpCompressor;
+    } else if ([self.selectedCompressorType isEqualToString:@"AppleVTCompressor"]) {
+        AppleVTCompressor *tmpCompressor;
+        tmpCompressor = [[AppleVTCompressor alloc] init];
+        tmpCompressor.average_bitrate = [[saveRoot valueForKey:@"captureVideoAverageBitrate"] intValue];
+        tmpCompressor.max_bitrate = [[saveRoot valueForKey:@"captureVideoMaxBitrate"] intValue];
+        tmpCompressor.keyframe_interval = [[saveRoot valueForKey:@"captureVideoMaxKeyframeInterval"] intValue];
+        newCompressor = tmpCompressor;
+    } else {
+        newCompressor = nil;
+    }
+
+    if (newCompressor)
+    {
+        newCompressor.name = [@"default" mutableCopy];
+        [self willChangeValueForKey:@"compressors"];
+        [self.compressors setObject:newCompressor forKey:newCompressor.name];
+        [self didChangeValueForKey:@"compressors"];
+    }
+    
+}
+
 
 -(void) saveSettings
 {
@@ -738,32 +805,30 @@
     [saveRoot setValue: [NSNumber numberWithInt:self.captureWidth] forKey:@"captureWidth"];
     [saveRoot setValue: [NSNumber numberWithInt:self.captureHeight] forKey:@"captureHeight"];
     [saveRoot setValue: [NSNumber numberWithDouble:self.videoCaptureSession.videoCaptureFPS] forKey:@"captureFPS"];
-    [saveRoot setValue: [NSNumber numberWithInt:self.captureVideoAverageBitrate] forKey:@"captureVideoAverageBitrate"];
     [saveRoot setValue: [NSNumber numberWithInt:self.audioCaptureSession.audioBitrate] forKey:@"audioBitrate"];
     [saveRoot setValue: [NSNumber numberWithInt:self.audioCaptureSession.audioSamplerate] forKey:@"audioSamplerate"];
     [saveRoot setValue: self.selectedVideoType forKey:@"selectedVideoType"];
     [saveRoot setValue: self.videoCaptureSession.activeVideoDevice.uniqueID forKey:@"videoCaptureID"];
     [saveRoot setValue: self.selectedAudioCapture.uniqueID forKey:@"audioCaptureID"];
     [saveRoot setValue: self.captureDestinations forKey:@"captureDestinations"];
-    [saveRoot setValue: [NSNumber numberWithInt:self.captureVideoMaxBitrate] forKey:@"captureVideoMaxBitrate"];
-    [saveRoot setValue: [NSNumber numberWithInt:self.captureVideoMaxKeyframeInterval] forKey:@"captureVideoMaxKeyframeInterval"];
     [saveRoot setValue: self.selectedCompressorType forKey:@"selectedCompressorType"];
-    [saveRoot setValue: self.x264profile forKey:@"x264profile"];
-    [saveRoot setValue: self.x264preset forKey:@"x264preset"];
-    [saveRoot setValue: self.x264tune forKey:@"x264tune"];
-    [saveRoot setValue: [NSNumber numberWithInt:self.x264crf] forKey:@"x264crf"];
     [saveRoot setValue:[NSNumber numberWithFloat:self.audioCaptureSession.previewVolume] forKey:@"previewVolume"];
-    [saveRoot setValue:[NSNumber numberWithBool:self.videoCBR] forKey:@"videoCBR"];
     [saveRoot setValue:[NSNumber numberWithInt:self.maxOutputDropped] forKey:@"maxOutputDropped"];
     [saveRoot setValue:[NSNumber numberWithInt:self.maxOutputPending] forKey:@"maxOutputPending"];
     [saveRoot setValue:self.resolutionOption forKey:@"resolutionOption"];
     [saveRoot setValue:[NSNumber numberWithDouble:self.audio_adjust] forKey:@"audioAdjust"];
     [saveRoot setValue: [NSNumber numberWithBool:self.useStatusColors] forKey:@"useStatusColors"];
     [saveRoot setValue:self.compressors forKey:@"compressors"];
-    
-    
-    
     [saveRoot setValue:self.extraSaveData forKey:@"extraSaveData"];
+
+    NSUInteger compressoridx =    [self.compressController selectionIndex];
+
+    
+    [saveRoot setValue:[NSNumber numberWithUnsignedInteger:compressoridx] forKey:@"selectedCompressor"];
+    
+    
+    
+    
     
     
     
@@ -788,11 +853,10 @@
     [saveRoot addEntriesFromDictionary:defaultValues];
     [saveRoot addEntriesFromDictionary:savedValues];
     
+
+    
     self.captureWidth = [[saveRoot valueForKey:@"captureWidth"] intValue];
     self.captureHeight = [[saveRoot valueForKey:@"captureHeight"] intValue];
-    self.captureVideoAverageBitrate = [[saveRoot valueForKey:@"captureVideoAverageBitrate"] intValue];
-    self.captureVideoMaxBitrate = [[saveRoot valueForKey:@"captureVideoMaxBitrate"] intValue];
-    self.captureVideoMaxKeyframeInterval = [[saveRoot valueForKey:@"captureVideoMaxKeyframeInterval"] intValue];
     self.audioCaptureSession.audioBitrate = [[saveRoot valueForKey:@"audioBitrate"] intValue];
     self.audioCaptureSession.audioSamplerate = [[saveRoot valueForKey:@"audioSamplerate"] intValue];
     self.captureDestinations = [saveRoot valueForKey:@"captureDestinations"];
@@ -819,13 +883,11 @@
         
     }
     
+    NSUInteger selectedCompressoridx = [[saveRoot valueForKey:@"selectedCompressor"] unsignedIntegerValue];
     
+    [self.compressController setSelectionIndex:selectedCompressoridx];
+
     self.useStatusColors = [[saveRoot valueForKeyPath:@"useStatusColors"] boolValue];
-    
-    self.x264tune = [saveRoot valueForKey:@"x264tune"];
-    self.x264preset = [saveRoot valueForKey:@"x264preset"];
-    self.x264profile = [saveRoot valueForKey:@"x264profile"];
-    self.x264crf = [[saveRoot valueForKey:@"x264crf"] intValue];
     
     id tmp_savedata = [saveRoot valueForKey:@"extraSaveData"];
     
@@ -849,7 +911,6 @@
     self.audioCaptureSession.previewVolume = [[saveRoot valueForKey:@"previewVolume"] floatValue];
     
     self.videoCaptureSession.videoCaptureFPS = [[saveRoot valueForKey:@"captureFPS"] doubleValue];
-    self.videoCBR = [[saveRoot valueForKey:@"videoCBR"] boolValue];
     self.maxOutputDropped = [[saveRoot valueForKey:@"maxOutputDropped"] intValue];
     self.maxOutputPending = [[saveRoot valueForKey:@"maxOutputPending"] intValue];
 
@@ -861,9 +922,7 @@
         self.resolutionOption = @"None";
     }
 
-    
-    
-    
+    [self migrateDefaultCompressor:saveRoot];
 }
 
 

@@ -66,8 +66,6 @@
 		3451A1ED1712C8F300DF6A8B /* Syphon.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34A8BAB117085BDD0093EEAF /* Syphon.framework */; };
 		34539ED71606E91700638A29 /* StreamServicePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34539ED61606E91700638A29 /* StreamServicePanel.xib */; };
 		34539ED9160734EA00638A29 /* FilePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34539ED8160734EA00638A29 /* FilePanel.xib */; };
-		3475E75A16FEC9E30030D7FA /* AppleVTPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3475E75916FEC9E30030D7FA /* AppleVTPanel.xib */; };
-		3475E75C16FEC9F70030D7FA /* x264Panel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3475E75B16FEC9F70030D7FA /* x264Panel.xib */; };
 		3475E75E16FED3A50030D7FA /* AVFoundationAdvancedPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3475E75D16FED3A50030D7FA /* AVFoundationAdvancedPanel.xib */; };
 		34792AF316103FF60065A859 /* DesktopCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34792AF216103FF60065A859 /* DesktopCapture.m */; };
 		34792AF616104AA70065A859 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AF516104AA70065A859 /* IOKit.framework */; };
@@ -248,8 +246,6 @@
 		3451A1E11712C5F700DF6A8B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		34539ED61606E91700638A29 /* StreamServicePanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = StreamServicePanel.xib; path = ../StreamServicePanel.xib; sourceTree = "<group>"; };
 		34539ED8160734EA00638A29 /* FilePanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FilePanel.xib; sourceTree = "<group>"; };
-		3475E75916FEC9E30030D7FA /* AppleVTPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AppleVTPanel.xib; sourceTree = "<group>"; };
-		3475E75B16FEC9F70030D7FA /* x264Panel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = x264Panel.xib; sourceTree = "<group>"; };
 		3475E75D16FED3A50030D7FA /* AVFoundationAdvancedPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AVFoundationAdvancedPanel.xib; sourceTree = "<group>"; };
 		34792AF116103FF60065A859 /* DesktopCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DesktopCapture.h; sourceTree = "<group>"; };
 		34792AF216103FF60065A859 /* DesktopCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DesktopCapture.m; sourceTree = "<group>"; };
@@ -546,9 +542,7 @@
 				344988121893CF0500044259 /* LogWindow.xib */,
 				34A64A34165F047900A68428 /* CapturePreview.xib */,
 				34539ED61606E91700638A29 /* StreamServicePanel.xib */,
-				3475E75916FEC9E30030D7FA /* AppleVTPanel.xib */,
 				340D8C961959C7C100BE5144 /* CompressionSettingsPanel.xib */,
-				3475E75B16FEC9F70030D7FA /* x264Panel.xib */,
 				34ABEF3B17C0C2CB00AA5E62 /* advancedPrefPanel.xib */,
 				34539ED8160734EA00638A29 /* FilePanel.xib */,
 				34D696F9186E8FEB00B50EB6 /* ImageAdvancedPanel.xib */,
@@ -733,9 +727,7 @@
 				34D696FA186E8FEB00B50EB6 /* ImageAdvancedPanel.xib in Resources */,
 				344988131893CF0500044259 /* LogWindow.xib in Resources */,
 				34A64A35165F047900A68428 /* CapturePreview.xib in Resources */,
-				3475E75A16FEC9E30030D7FA /* AppleVTPanel.xib in Resources */,
 				34D696FC1871B8F700B50EB6 /* Defaults.plist in Resources */,
-				3475E75C16FEC9F70030D7FA /* x264Panel.xib in Resources */,
 				3475E75E16FED3A50030D7FA /* AVFoundationAdvancedPanel.xib in Resources */,
 				34ABEF3C17C0C2CB00AA5E62 /* advancedPrefPanel.xib in Resources */,
 				3435E396188B902C0015CC01 /* 420v.fgsh in Resources */,
