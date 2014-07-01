@@ -118,27 +118,24 @@
     _selectedCompressorType = selectedCompressorType;
     self.compressTabLabel = selectedCompressorType;
 
-    if (self.compressPanel)
+    if (!self.editingCompressor || self.editingCompressor.isNew)
     {
-        
-        if (!self.editingCompressor || self.editingCompressor.isNew)
+        if ([selectedCompressorType isEqualToString:@"x264"])
         {
-            if ([selectedCompressorType isEqualToString:@"x264"])
-            {
-                self.editingCompressor = [[x264Compressor alloc] init];
-            } else if ([selectedCompressorType isEqualToString:@"AppleVTCompressor"]) {
-                self.editingCompressor = [[AppleVTCompressor alloc] init];
-            } else {
-                self.editingCompressor = nil;
-            }
+            self.editingCompressor = [[x264Compressor alloc] init];
+        } else if ([selectedCompressorType isEqualToString:@"AppleVTCompressor"]) {
+            self.editingCompressor = [[AppleVTCompressor alloc] init];
+        } else {
+            self.editingCompressor = nil;
         }
-        
-        
         if (self.editingCompressor)
         {
             self.editingCompressor.isNew = YES;
         }
+
     }
+    
+    
 }
 
 
@@ -180,28 +177,34 @@
 
 -(IBAction)openCompressPanel:(bool)doEdit
 {
+    self.selectedCompressor = nil;
+    
+    if (self.compressController.selectedObjects.count > 0)
+    {
+        self.selectedCompressor = [[self.compressController.selectedObjects objectAtIndex:0] valueForKey:@"value"];
+    }
     
     
-    self.selectedCompressor = [[self.compressController.selectedObjects objectAtIndex:0] valueForKey:@"value"];
 
     if (doEdit)
     {
         self.editingCompressor = self.selectedCompressor;
         self.editingCompressorKey = self.selectedCompressor.name;
+        
+        
         if (self.editingCompressor)
         {
             self.selectedCompressorType = self.editingCompressor.compressorType;
             self.compressTabLabel = self.editingCompressor.compressorType;
         }
     } else {
-        self.editingCompressor = nil;
+        self.selectedCompressorType = self.selectedCompressorType;
     }
     
     
     
     if (!self.compressPanel)
     {
-        
         NSString *panelName;
         
         panelName = @"CompressionSettingsPanel";
@@ -266,14 +269,17 @@
     
     if (self.editingCompressor)
     {
+        
         if (self.editingCompressor.isNew)
         {
+            
+            self.editingCompressor.isNew = NO;
+
             NSString *newName = [self addCompressor:self.editingCompressor];
             
             [self setCompressSelection:newName];
-            //[self.compressorPopupButton selectItemWithTitle:newName];
 
-            //self.selectedCompressor = self.compressors[newName];
+            
             
         } else if (![self.editingCompressorKey isEqualToString:self.editingCompressor.name]) {
             //the name was changed in the edit dialog, so create a new key entry and delete the old one
@@ -281,7 +287,6 @@
             
             
 
-            //self.selectedCompressor = self.compressors[newName];
 
             [self willChangeValueForKey:@"compressors"];
             [self.compressors removeObjectForKey:self.editingCompressorKey];
@@ -290,6 +295,8 @@
 
             
             
+        } else {
+            [self.compressors setObject:self.editingCompressor forKey:self.editingCompressor.name];
         }
     }
     
@@ -413,7 +420,11 @@
 
 -(void) selectedAudioCaptureFromID:(NSString *)uniqueID
 {
-    self.audioCaptureSession.activeAudioDevice = [AVCaptureDevice deviceWithUniqueID:uniqueID];
+    if (uniqueID)
+    {
+        self.audioCaptureSession.activeAudioDevice = [AVCaptureDevice deviceWithUniqueID:uniqueID];
+    }
+    
 }
 
 
@@ -759,6 +770,7 @@
     id <h264Compressor> newCompressor;
     if ([self.selectedCompressorType isEqualToString:@"x264"])
     {
+        
         x264Compressor *tmpCompressor;
         
         tmpCompressor = [[x264Compressor alloc] init];
@@ -784,10 +796,9 @@
 
     if (newCompressor)
     {
+        
         newCompressor.name = [@"default" mutableCopy];
-        [self willChangeValueForKey:@"compressors"];
-        [self.compressors setObject:newCompressor forKey:newCompressor.name];
-        [self didChangeValueForKey:@"compressors"];
+        [self addCompressor:newCompressor];
     }
     
 }
@@ -885,7 +896,12 @@
     
     NSUInteger selectedCompressoridx = [[saveRoot valueForKey:@"selectedCompressor"] unsignedIntegerValue];
     
-    [self.compressController setSelectionIndex:selectedCompressoridx];
+    
+    if (self.compressors.count > 0)
+    {
+        [self.compressController setSelectionIndex:selectedCompressoridx];
+    }
+    
 
     self.useStatusColors = [[saveRoot valueForKeyPath:@"useStatusColors"] boolValue];
     
@@ -1075,7 +1091,16 @@
 {
     
     
+    if (!self.selectedCompressor)
+    {
+    
+        if (self.compressController.selectedObjects.count > 0)
+        {
+            self.selectedCompressor = [[self.compressController.selectedObjects objectAtIndex:0] valueForKey:@"value"];
+        }
+    }
 
+    
     if (self.selectedCompressor)
     {
         
@@ -1204,15 +1229,47 @@
     
     [infoDict setValue:x264dict forKey:@"x264"];
     
-    
-    [infoDict setValue:@{@"profiles": self.vtcompressor_profiles} forKey:@"AppleVTCompressor"];
-    
+
+
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:infoDict options:0 error:nil];
     
     return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
 }
 
 
+-(id <h264Compressor>) buildCmdlineCompressor:(NSUserDefaults *)cmdargs
+{
+    
+    id <h264Compressor> newCompressor;
+    if ([self.selectedCompressorType isEqualToString:@"x264"])
+    {
+        
+        x264Compressor *tmpCompressor;
+        
+        tmpCompressor = [[x264Compressor alloc] init];
+        tmpCompressor.tune = [cmdargs stringForKey:@"x264tune"];
+        tmpCompressor.profile = [cmdargs stringForKey:@"x264profile"];
+        tmpCompressor.preset = [cmdargs stringForKey:@"x264preset"];
+        tmpCompressor.use_cbr = [cmdargs boolForKey:@"videoCBR"];
+        tmpCompressor.crf = (int)[cmdargs integerForKey:@"x264crf"];
+        tmpCompressor.vbv_maxrate = (int)[cmdargs integerForKey:@"captureVideoAverageBitrate"];
+        tmpCompressor.vbv_buffer = (int)[cmdargs integerForKey:@"captureVideoMaxBitrate"];
+        tmpCompressor.keyframe_interval = (int)[cmdargs integerForKey:@"captureVideoMaxKeyframeInterval"];
+        newCompressor = tmpCompressor;
+    } else if ([self.selectedCompressorType isEqualToString:@"AppleVTCompressor"]) {
+        AppleVTCompressor *tmpCompressor;
+        tmpCompressor = [[AppleVTCompressor alloc] init];
+        tmpCompressor.average_bitrate = (int)[cmdargs integerForKey:@"captureVideoAverageBitrate"];
+        tmpCompressor.max_bitrate = (int)[cmdargs integerForKey:@"captureVideoMaxBitrate"];
+        tmpCompressor.keyframe_interval = (int)[cmdargs integerForKey:@"captureVideoMaxKeyframeInterval"];
+        newCompressor = tmpCompressor;
+    } else {
+        newCompressor = nil;
+    }
+
+    return newCompressor;
+}
 
 -(void) loadCmdlineSettings:(NSUserDefaults *)cmdargs
 {
@@ -1236,21 +1293,6 @@
         self.captureHeight = (int)[cmdargs integerForKey:@"captureHeight"];
     }
     
-    if ([cmdargs objectForKey:@"captureVideoAverageBitrate"])
-    {
-        self.captureVideoAverageBitrate = (int)[cmdargs integerForKey:@"captureVideoAverageBitrate"];
-    }
-    
-    if ([cmdargs objectForKey:@"captureVideoMaxBitrate"])
-    {
-        self.captureVideoMaxBitrate = (int)[cmdargs integerForKey:@"captureVideoMaxBitrate"];
-    }
-    
-    if ([cmdargs objectForKey:@"captureVideoMaxKeyframeInterval"])
-    {
-        self.captureVideoMaxKeyframeInterval = (int)[cmdargs integerForKey:@"captureVideoMaxKeyframeInterval"];
-    }
-    
     if ([cmdargs objectForKey:@"audioBitrate"])
     {
         self.audioCaptureSession.audioBitrate = (int)[cmdargs integerForKey:@"audioBitrate"];
@@ -1259,26 +1301,6 @@
     if ([cmdargs objectForKey:@"audioSamplerate"])
     {
         self.audioCaptureSession.audioSamplerate = (int)[cmdargs integerForKey:@"audioSamplerate"];
-    }
-    
-    if ([cmdargs objectForKey:@"x264tune"])
-    {
-        self.x264tune = [cmdargs stringForKey:@"x264tune"];
-    }
-    
-    if ([cmdargs objectForKey:@"x264preset"])
-    {
-        self.x264preset = [cmdargs stringForKey:@"x264preset"];
-    }
-    
-    if ([cmdargs objectForKey:@"x264profile"])
-    {
-        self.x264profile = [cmdargs stringForKey:@"x264profile"];
-    }
-    
-    if ([cmdargs objectForKey:@"x264crf"])
-    {
-        self.x264crf = (int)[cmdargs integerForKey:@"x264crf"];
     }
     
     if ([cmdargs objectForKey:@"selectedVideoType"])
@@ -1330,12 +1352,31 @@
         }
         
     }
+    
+    if ([cmdargs objectForKey:@"compressor"])
+    {
+        NSString *forName = [cmdargs stringForKey:@"compressor"];
+        
+        for (id tmpval in self.compressController.arrangedObjects)
+        {
+            if ([[tmpval valueForKey:@"key"] isEqualToString:forName] )
+            {
+                self.selectedCompressor = tmpval;
+                break;
+            }
+        }
+
+    } else {
+        self.selectedCompressor = [self buildCmdlineCompressor:cmdargs];
+    }
 }
+
 
 - (void)stopStream
 {
     
     self.videoCompressor = nil;
+    self.selectedCompressor = nil;
     self.captureRunning = NO;
 
     

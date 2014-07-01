@@ -56,13 +56,14 @@
                             <binding destination="-2" name="selectedObject" keyPath="self.selectedCompressorType" previousBinding="uZ2-bY-Uyz" id="Pk7-DT-C9s"/>
                         </connections>
                     </popUpButton>
-                    <tabView fixedFrame="YES" drawsBackground="NO" type="noTabsNoBorder" initialItem="gyg-eG-YlU" translatesAutoresizingMaskIntoConstraints="NO" id="EJA-Rc-sIZ">
-                        <rect key="frame" x="20" y="73" width="540" height="266"/>
+                    <tabView fixedFrame="YES" drawsBackground="NO" initialItem="gyg-eG-YlU" translatesAutoresizingMaskIntoConstraints="NO" id="EJA-Rc-sIZ">
+                        <rect key="frame" x="13" y="63" width="554" height="282"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <font key="font" metaFont="system"/>
                         <tabViewItems>
                             <tabViewItem label="None" identifier="" id="gyg-eG-YlU">
                                 <view key="view" ambiguous="YES" id="lRi-Ns-JYI">
+                                    <rect key="frame" x="10" y="33" width="534" height="236"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
@@ -574,7 +575,7 @@ Gw
         </window>
         <objectController id="TZe-4D-nmN">
             <connections>
-                <binding destination="-2" name="contentObject" keyPath="self.editingCompressor" id="NFE-TB-aVB"/>
+                <binding destination="-2" name="contentObject" keyPath="self.editingCompressor" id="hX1-vD-umo"/>
             </connections>
         </objectController>
         <arrayController id="R45-ki-5Yf" userLabel="x264PresetsController">

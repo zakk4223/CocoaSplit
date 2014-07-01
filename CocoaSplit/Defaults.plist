@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>selectedCompressorType</key>
+	<string>x264</string>
+	<key>x264profile</key>
+	<string>main</string>
+	<key>x264preset</key>
+	<string>superfast</string>
 	<key>captureFPS</key>
 	<integer>30</integer>
 	<key>captureWidth</key>

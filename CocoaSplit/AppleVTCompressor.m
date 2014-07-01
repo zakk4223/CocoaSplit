@@ -93,6 +93,13 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
 }
 
 
+-(NSString *)description
+{
+    return [NSString stringWithFormat:@"%@: Type: %@, Average Bitrate %d, Max Bitrate %d, CBR: %d, Profile %@", self.name, self.compressorType, self.average_bitrate, self.max_bitrate, self.use_cbr, self.profile];
+    
+}
+
+
 void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 {
     free((int *)baseAddress);
@@ -166,7 +173,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     _compression_session = NULL;
     status = VTCompressionSessionCreate(NULL, self.settingsController.captureWidth, self.settingsController.captureHeight, kCMVideoCodecType_H264, (__bridge CFDictionaryRef)encoderSpec, NULL, NULL, VideoCompressorReceiveFrame,  (__bridge void *)self, &_compression_session);
     
-    CFDictionaryRef props;
+    //CFDictionaryRef props;
     //VTCompressionSessionCopySupportedPropertyDictionary(_compression_session, &props);
     
     if (status != noErr || !_compression_session)

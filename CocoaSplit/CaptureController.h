@@ -182,7 +182,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) NSMutableArray *x264tunes;
 @property (strong) NSMutableArray *x264presets;
 @property (strong) NSMutableArray *x264profiles;
-@property (strong) NSArray *vtcompressor_profiles;
 @property (strong) NSString *vtcompressor_profile;
 @property (assign) BOOL videoCBR;
 

@@ -32,7 +32,6 @@
     [self.captureController loadCmdlineSettings:cmdargs];
     [[NSProcessInfo processInfo] disableSuddenTermination];
 
-    
     [self.captureController startStream];
     
     

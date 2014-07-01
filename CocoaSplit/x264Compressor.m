@@ -114,6 +114,13 @@
 }
 
 
+-(NSString *)description
+{
+    return [NSString stringWithFormat:@"%@: Type: %@, VBV-Maxrate %d, VBV-Buffer %d, CRF %d, CBR: %d, Profile %@, Tune %@, Preset %@", self.name, self.compressorType, self.vbv_maxrate, self.vbv_buffer, self.crf, self.use_cbr, self.profile, self.tune, self.preset];
+    
+}
+
+
 - (bool)compressFrame:(CapturedFrameData *)frameData
 {
     
