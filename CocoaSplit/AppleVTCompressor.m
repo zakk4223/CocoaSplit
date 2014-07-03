@@ -7,6 +7,7 @@
 //
 
 #import "AppleVTCompressor.h"
+#import "OutputDestination.h"
 
 OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessionRef, CFDictionaryRef *);
 
@@ -71,6 +72,8 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
 {
     if (self = [super init])
     {
+        self.outputs = [[NSMutableDictionary alloc] init];
+        
         self.compressorType = @"AppleVTCompressor";
         self.name = [@"" mutableCopy];
 
@@ -92,8 +95,26 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
     _compression_session = nil;
 }
 
+-(void) addOutput:(OutputDestination *)destination
+{
+    NSLog(@"ADDING OUTPUT IN AVT %@", self);
+    [self.outputs setObject:destination forKey:destination.name];
+    
+}
 
--(NSString *)description
+-(void) removeOutput:(OutputDestination *)destination
+{
+    [self.outputs removeObjectForKey:destination.name];
+}
+
+
+-(bool) hasOutputs
+{
+    return [self.outputs count] > 0;
+}
+
+
+-(NSString *)descriptionmmmm
 {
     return [NSString stringWithFormat:@"%@: Type: %@, Average Bitrate %d, Max Bitrate %d, CBR: %d, Profile %@", self.name, self.compressorType, self.average_bitrate, self.max_bitrate, self.use_cbr, self.profile];
     
@@ -111,7 +132,11 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 {
     
     
-    
+    if (![self hasOutputs])
+    {
+        return NO;
+    }
+
     if (!_compression_session)
     {
         
@@ -122,6 +147,8 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
         }
         return NO;
     }
+    
+    
     
     
     CFMutableDictionaryRef frameProperties;
@@ -358,7 +385,17 @@ void VideoCompressorReceiveFrame(void *VTref, void *VTFrameRef, OSStatus status,
         AppleVTCompressor *selfobj = (__bridge AppleVTCompressor *)VTref;
         
         
-        [selfobj.outputDelegate outputEncodedData:frameData];
+        for (id dKey in selfobj.outputs)
+        {
+            
+            OutputDestination *dest = selfobj.outputs[dKey];
+            [dest writeEncodedData:frameData];
+            
+
+        }
+        
+        //[selfobj.outputDelegate outputEncodedData:frameData];
+        
         
         //[selfobj.outputDelegate outputSampleBuffer:sampleBuffer];
         

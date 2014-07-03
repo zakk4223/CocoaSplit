@@ -67,6 +67,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     NSMutableArray *videoBuffer;
     dispatch_source_t _log_source;
     int _saved_stderr;
+    bool _last_running_value;
     
     
     

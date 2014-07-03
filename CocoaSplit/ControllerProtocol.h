@@ -11,6 +11,7 @@
 #import "AbstractCaptureDevice.h"
 #import "CapturedFrameData.h"
 #import <AppKit/AppKit.h>
+#import "h264Compressor.h"
 
 
 @protocol ControllerProtocol <NSObject>
@@ -34,6 +35,8 @@
 @property (assign) int maxOutputPending;
 @property (assign) int maxOutputDropped;
 @property NSString *imageDirectory;
+@property (strong) id <h264Compressor> selectedCompressor;
+@property (strong) NSMutableDictionary *compressors;
 
 
 - (void) outputAVPacket:(AVPacket *)avpkt codec_ctx:(AVCodecContext *)codec_ctx;

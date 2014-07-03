@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment defaultVersion="1080" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
@@ -591,7 +591,7 @@
                                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                         <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                                         <tableColumns>
-                                                                            <tableColumn width="40" minWidth="40" maxWidth="1000" id="1244">
+                                                                            <tableColumn width="41" minWidth="40" maxWidth="1000" id="1244">
                                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Active">
                                                                                     <font key="font" metaFont="smallSystem"/>
                                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -606,7 +606,7 @@
                                                                                     <binding destination="1431" name="value" keyPath="arrangedObjects.active" id="1926"/>
                                                                                 </connections>
                                                                             </tableColumn>
-                                                                            <tableColumn width="35" minWidth="10" maxWidth="3.4028234663852886e+38" id="mfG-QW-Q8v">
+                                                                            <tableColumn width="38" minWidth="10" maxWidth="3.4028234663852886e+38" id="mfG-QW-Q8v">
                                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Delay">
                                                                                     <font key="font" metaFont="smallSystem"/>
                                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -627,7 +627,7 @@
                                                                                     <binding destination="1431" name="value" keyPath="arrangedObjects.stream_delay" id="NmI-df-5gR"/>
                                                                                 </connections>
                                                                             </tableColumn>
-                                                                            <tableColumn width="104" minWidth="40" maxWidth="1000" id="1245">
+                                                                            <tableColumn width="40" minWidth="40" maxWidth="1000" id="1245">
                                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Name">
                                                                                     <font key="font" metaFont="smallSystem"/>
                                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -643,7 +643,7 @@
                                                                                     <binding destination="1431" name="value" keyPath="arrangedObjects.name" id="1917"/>
                                                                                 </connections>
                                                                             </tableColumn>
-                                                                            <tableColumn width="69" minWidth="10" maxWidth="3.4028234663852886e+38" id="1290">
+                                                                            <tableColumn width="34" minWidth="10" maxWidth="3.4028234663852886e+38" id="1290">
                                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Type">
                                                                                     <font key="font" metaFont="smallSystem"/>
                                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -659,7 +659,7 @@
                                                                                     <binding destination="1431" name="value" keyPath="arrangedObjects.type_name" id="1921"/>
                                                                                 </connections>
                                                                             </tableColumn>
-                                                                            <tableColumn width="55" minWidth="10" maxWidth="3.4028234663852886e+38" id="1910">
+                                                                            <tableColumn width="69" minWidth="10" maxWidth="3.4028234663852886e+38" id="1910">
                                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Destination">
                                                                                     <font key="font" metaFont="smallSystem"/>
                                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -673,6 +673,27 @@
                                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                 <connections>
                                                                                     <binding destination="1431" name="value" keyPath="arrangedObjects.destination" id="1920"/>
+                                                                                </connections>
+                                                                            </tableColumn>
+                                                                            <tableColumn width="64" minWidth="10" maxWidth="3.4028234663852886e+38" id="WgH-Iw-Sie">
+                                                                                <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
+                                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                                    <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                                                    <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                                                                </tableHeaderCell>
+                                                                                <popUpButtonCell key="dataCell" type="push" bezelStyle="rounded" alignment="center" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="cCq-8a-q5W">
+                                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                                    <font key="font" metaFont="menu"/>
+                                                                                    <menu key="menu" title="OtherViews" id="9OB-zC-QvY">
+                                                                                        <items>
+                                                                                            <menuItem title="Pop Up" id="wbh-Vu-gqY"/>
+                                                                                        </items>
+                                                                                    </menu>
+                                                                                </popUpButtonCell>
+                                                                                <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                                                                <connections>
+                                                                                    <binding destination="gSI-N4-DsK" name="contentValues" keyPath="arrangedObjects.key" id="XVZ-9o-elf"/>
+                                                                                    <binding destination="1431" name="selectedValue" keyPath="arrangedObjects.compressor_name" previousBinding="XVZ-9o-elf" id="vgh-1P-hUx"/>
                                                                                 </connections>
                                                                             </tableColumn>
                                                                         </tableColumns>

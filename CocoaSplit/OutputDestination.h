@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "FFMpegTask.h"
 #import <AppKit/AppKit.h>
+#import "h264Compressor.h"
 
 
 @interface OutputDestination : NSObject <NSCoding>
@@ -35,6 +36,7 @@
 @property (strong) NSColor *textColor;
 @property (assign) NSUInteger delay_buffer_frames;
 @property (assign) BOOL buffer_draining;
+@property (strong) NSString *name;
 
 //stats, mostly we just interrogate the ffmpeg_out object for these, but bouncing
 //through this class allows us to be a bit smarter about the UI status updates
@@ -45,7 +47,8 @@
 @property (assign) int dropped_frame_count;
 @property (assign) double output_framerate;
 @property (assign) double output_bitrate;
-
+@property (strong) id <h264Compressor> compressor;
+@property (strong) NSString *compressor_name;
 
 
 @property (assign) BOOL active;
@@ -58,6 +61,7 @@
 -(void) writeEncodedData:(CapturedFrameData *)frameData;
 -(void) updateStatistics;
 -(void) reset;
+-(void) setupCompressor;
 
 
 

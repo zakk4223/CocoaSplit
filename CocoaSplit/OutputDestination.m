@@ -12,6 +12,7 @@
 @implementation OutputDestination
 
 
+@synthesize name = _name;
 
 
 -(void) encodeWithCoder:(NSCoder *)aCoder
@@ -23,6 +24,10 @@
     [aCoder encodeObject:self.output_format forKey:@"output_format"];
     [aCoder encodeBool:self.active forKey:@"active"];
     [aCoder encodeInteger:self.stream_delay forKey:@"stream_delay"];
+    if (self.compressor)
+    {
+        [aCoder encodeObject:self.compressor.name forKey:@"compressor_name"];
+    }
     
 }
 
@@ -30,12 +35,14 @@
 {
     if (self = [self init])
     {
+        
         self.destination = [aDecoder decodeObjectForKey:@"destination"];
         self.name = [aDecoder decodeObjectForKey:@"name"];
         self.type_name = [aDecoder decodeObjectForKey:@"type_name"];
         self.output_format = [aDecoder decodeObjectForKey:@"output_format"];
         self.active = [aDecoder decodeBoolForKey:@"active"];
         self.stream_delay = (int)[aDecoder decodeIntegerForKey:@"stream_delay"];
+        
         
     }
     
@@ -50,6 +57,15 @@
     return [self initWithType:nil];
     
 }
+
+-(void)stopCompressor
+{
+    if (self.compressor)
+    {
+        [self.compressor removeOutput:self];
+    }
+}
+
 
 
 -(NSString *)destination
@@ -94,9 +110,12 @@
     if (is_active != _active)
     {
         _active = is_active;
-        if (!is_active)        {
-            
+        if (!is_active)
+        {
+            [self stopCompressor];
             [self reset];
+        } else {
+            [self setupCompressor];
         }
         
     }
@@ -225,6 +244,36 @@
 
 }
 
+-(void) setupCompressor
+{
+    if (!self.active)
+    {
+        return;
+    }
+    NSLog(@"IN SETUP COMPRESSOR FOR OUTPUT");
+    
+    NSLog(@"COMPRESSOR NAME %@", self.compressor_name);
+    if (self.compressor_name)
+    {
+        self.compressor = self.settingsController.compressors[self.compressor_name];
+    }
+    
+    
+    if (!self.compressor)
+    {
+        NSLog(@"NO COMPRESSOR, SETTING TO %@", self.settingsController.selectedCompressor);
+        
+        self.compressor = self.settingsController.selectedCompressor;
+        
+    }
+    
+    
+    
+    if (self.compressor)
+    {
+        [self.compressor addOutput:self];
+    }
+}
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
@@ -349,6 +398,8 @@
 
 -(void)dealloc
 {
+    [self stopCompressor];
+    
     if (self.ffmpeg_out)
     {
         [self.ffmpeg_out removeObserver:self forKeyPath:@"errored" context:NULL];

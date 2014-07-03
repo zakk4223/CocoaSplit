@@ -870,21 +870,7 @@
     self.captureHeight = [[saveRoot valueForKey:@"captureHeight"] intValue];
     self.audioCaptureSession.audioBitrate = [[saveRoot valueForKey:@"audioBitrate"] intValue];
     self.audioCaptureSession.audioSamplerate = [[saveRoot valueForKey:@"audioSamplerate"] intValue];
-    self.captureDestinations = [saveRoot valueForKey:@"captureDestinations"];
-    
-    if (!self.captureDestinations)
-    {
-        self.captureDestinations = [[NSMutableArray alloc] init];
-    }
-    
-    
-    for (OutputDestination *outdest in _captureDestinations)
-    {
-        outdest.settingsController = self;
-    }
-
-
-    
+   
     self.compressors = [[saveRoot valueForKey:@"compressors"] mutableCopy];
     
     
@@ -901,8 +887,23 @@
     {
         [self.compressController setSelectionIndex:selectedCompressoridx];
     }
-    
 
+    
+    self.captureDestinations = [saveRoot valueForKey:@"captureDestinations"];
+    
+    if (!self.captureDestinations)
+    {
+        self.captureDestinations = [[NSMutableArray alloc] init];
+    }
+    
+    
+    for (OutputDestination *outdest in _captureDestinations)
+    {
+        outdest.settingsController = self;
+    }
+
+
+    
     self.useStatusColors = [[saveRoot valueForKeyPath:@"useStatusColors"] boolValue];
     
     id tmp_savedata = [saveRoot valueForKey:@"extraSaveData"];
@@ -1007,7 +1008,7 @@
 
 
 
-- (void) outputEncodedData:(CapturedFrameData *)newFrameData
+- (void) outputEncodedData:(CapturedFrameData *)newFrameData 
 {
 
     [videoBuffer addObject:newFrameData];
@@ -1018,40 +1019,7 @@
     [videoBuffer removeObjectAtIndex:0];
     
     
-    CMTime videoTime = frameData.videoPTS;
-    NSUInteger audioConsumed = 0;
     
-    @synchronized(self)
-    {
-        NSUInteger audioBufferSize = [audioBuffer count];
-        
-        for (int i = 0; i < audioBufferSize; i++)
-        {
-            CMSampleBufferRef audioData = (__bridge CMSampleBufferRef)[audioBuffer objectAtIndex:i];
-            
-            CMTime audioTime = CMSampleBufferGetOutputPresentationTimeStamp(audioData);
-
-            
-            
-
-            if (CMTIME_COMPARE_INLINE(audioTime, <=, videoTime))
-            {
-                
-                audioConsumed++;
-                
-                [frameData.audioSamples addObject:(__bridge id)audioData];
-                
-            } else {
-                break;
-            }
-        }
-        
-        if (audioConsumed > 0)
-        {
-            [audioBuffer removeObjectsInRange:NSMakeRange(0, audioConsumed)];
-        }
-        
-    }
     
     for (OutputDestination *outdest in _captureDestinations)
     {
@@ -1091,12 +1059,26 @@
 {
     
     
+    id <h264Compressor> tmpCompressor;
+    
+    for (id cKey in self.compressors)
+    {
+        id <h264Compressor> tmpcomp = self.compressors[cKey];
+        tmpcomp.settingsController = self;
+    }
+    
+    
     if (!self.selectedCompressor)
     {
     
         if (self.compressController.selectedObjects.count > 0)
         {
-            self.selectedCompressor = [[self.compressController.selectedObjects objectAtIndex:0] valueForKey:@"value"];
+            tmpCompressor = [[self.compressController.selectedObjects objectAtIndex:0] valueForKey:@"value"];
+            if (tmpCompressor)
+            {
+                self.selectedCompressor = self.compressors[tmpCompressor.name];
+            }
+            
         }
     }
 
@@ -1107,7 +1089,11 @@
         self.selectedCompressor.settingsController = self;
     }
     
-    
+    for (OutputDestination *outdest in _captureDestinations)
+    {
+        //make the outputs pick up the default selected compressor
+        [outdest setupCompressor];
+    }
     
     
     
@@ -1120,7 +1106,7 @@
     _compressedFrameCount = 0;
     _min_delay = _max_delay = _avg_delay = 0;
 
-    self.videoCompressor = self.selectedCompressor;
+    //self.videoCompressor = self.selectedCompressor;
     
     return YES;
 
@@ -1713,71 +1699,49 @@
 -(void) newFrame
 {
 
-    CVPixelBufferRef newFrame;
+        CVPixelBufferRef newFrame;
     
         if (self.videoCaptureSession)
         {
             newFrame = [self.videoCaptureSession getCurrentFrame];
             if (newFrame)
             {
-                if (self.captureRunning && !self.videoCompressor)
+                
+                if (self.captureRunning)
                 {
-                    [self setupCompressors];
-                    NSError *error;
-                    BOOL success;
-                    NSLog(@"SETTING UP RESOLUTION");
-                    success = [self setupResolution:newFrame error:&error];
-                    if (success)
+                    if (self.captureRunning != _last_running_value)
                     {
-                        if ([self.videoCompressor setupCompressor] == YES)
+                        [self setupCompressors];
+                        NSError *error;
+                        BOOL success;
+                        NSLog(@"SETTING UP RESOLUTION");
+                        success = [self setupResolution:newFrame error:&error];
+                        if (!success)
                         {
-                            self.videoCompressor.outputDelegate = self;
-                        } else {
-                            NSLog(@"Compressor failed to setup properly");
-                            success = NO;
-                            error = [NSError errorWithDomain:@"videoCompressor" code:110 userInfo:@{NSLocalizedDescriptionKey : @"Could not create compression session!"}];
+                            [self stopStream];
+                            [NSApp presentError:error];
                         }
+
                     }
-
-                    if (!success)
-                    {
-                        [self stopStream];
-                        [NSApp presentError:error];
-                    /*} else {
-                        
-                        OutputDestination *output;
-                        
-                        for (output in _captureDestinations)
-                        {
-                            output.settingsController = self;
-                        }
-                    */}
-
-                }
-                
-                
-                
-                if (self.captureRunning && self.videoCompressor)
-                {
+                    
                     CapturedFrameData *capturedData = [[CapturedFrameData alloc] init];
                     
                     capturedData.videoFrame = newFrame;
                     
                     [self processVideoFrame:capturedData];
+
+                    
                 } else {
+                    
                     for (OutputDestination *outdest in _captureDestinations)
                     {
                         [outdest writeEncodedData:nil];
                     }
 
                 }
+                _last_running_value = self.captureRunning;
                 
-                
-                
-                
-                    CVPixelBufferRelease(newFrame);
-              
-                
+                CVPixelBufferRelease(newFrame);
             }
             
         }
@@ -1791,7 +1755,7 @@
     
     //CVImageBufferRef imageBuffer = frameData.videoFrame;
     
-    if (!self.captureRunning || !self.videoCompressor)
+    if (!self.captureRunning)
     {
         //CVPixelBufferRelease(imageBuffer);
 
@@ -1829,11 +1793,47 @@
     frameData.frameNumber = _frameCount;
     frameData.frameTime = _frame_time;
     
-    
-    if (self.videoCompressor)
+    CMTime videoTime = frameData.videoPTS;
+    NSUInteger audioConsumed = 0;
+
+    @synchronized(self)
+    {
+        NSUInteger audioBufferSize = [audioBuffer count];
+        
+        for (int i = 0; i < audioBufferSize; i++)
+        {
+            CMSampleBufferRef audioData = (__bridge CMSampleBufferRef)[audioBuffer objectAtIndex:i];
+            
+            CMTime audioTime = CMSampleBufferGetOutputPresentationTimeStamp(audioData);
+            
+            
+            
+            
+            if (CMTIME_COMPARE_INLINE(audioTime, <=, videoTime))
+            {
+                
+                audioConsumed++;
+                
+                [frameData.audioSamples addObject:(__bridge id)audioData];
+                
+            } else {
+                break;
+            }
+        }
+        
+        if (audioConsumed > 0)
+        {
+            [audioBuffer removeObjectsInRange:NSMakeRange(0, audioConsumed)];
+        }
+        
+    }
+
+    for(id cKey in self.compressors)
     {
         
-        [self.videoCompressor compressFrame:frameData];
+        id <h264Compressor> compressor;
+        compressor = self.compressors[cKey];
+        [compressor compressFrame:frameData];
 
     }
         

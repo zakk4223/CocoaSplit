@@ -7,6 +7,8 @@
 //
 
 #import "x264Compressor.h"
+#import "OutputDestination.h"
+
 
 @implementation x264Compressor
 
@@ -14,6 +16,7 @@
 
 - (id)copyWithZone:(NSZone *)zone
 {
+    
     x264Compressor *copy = [[[self class] allocWithZone:zone] init];
     
     copy.x264tunes = self.x264tunes;
@@ -35,6 +38,7 @@
     copy.keyframe_interval = self.keyframe_interval;
     copy.crf = self.crf;
     copy.use_cbr = self.use_cbr;
+    
     
     return copy;
 }
@@ -79,6 +83,9 @@
 {
     if (self = [super init])
     {
+        NSLog(@"INIT OUTPUTS");
+        _outputs = [[NSMutableDictionary alloc] init];
+        
         self.compressorType = @"x264";
         self.name = [@"" mutableCopy];
         
@@ -114,7 +121,28 @@
 }
 
 
--(NSString *)description
+-(void) addOutput:(OutputDestination *)destination
+{
+    
+    [_outputs setObject:destination forKey:destination.name];
+    NSLog(@"OUTPUTS IN ADD OUTPUT %@", self);
+    
+}
+
+-(void) removeOutput:(OutputDestination *)destination
+{
+    NSLog(@"IN REMOVE OUTPUT %@", destination);
+    
+    [_outputs removeObjectForKey:destination.name];
+}
+
+-(bool) hasOutputs
+{
+    return [_outputs count] > 0;
+}
+
+
+-(NSString *)descriptionmm
 {
     return [NSString stringWithFormat:@"%@: Type: %@, VBV-Maxrate %d, VBV-Buffer %d, CRF %d, CBR: %d, Profile %@, Tune %@, Preset %@", self.name, self.compressorType, self.vbv_maxrate, self.vbv_buffer, self.crf, self.use_cbr, self.profile, self.tune, self.preset];
     
@@ -125,7 +153,13 @@
 {
     
     
-    if (!self.settingsController || !self.outputDelegate)
+    if (![self hasOutputs])
+    {
+        
+        return NO;
+    }
+    
+    if (!self.settingsController)
     {
         //CVPixelBufferRelease(imageBuffer);
         return NO;
@@ -265,7 +299,14 @@
         frameData.avcodec_ctx = _av_codec_ctx;
         frameData.avcodec_pkt = pkt;
         
-        [self.outputDelegate outputEncodedData:frameData];
+        for (id dKey in _outputs)
+        {
+            OutputDestination *dest = _outputs[dKey];
+            [dest writeEncodedData:frameData];
+            
+        }
+        //[self.outputDelegate outputEncodedData:frameData];
+        
         
         //[self.outputDelegate outputAVPacket:pkt codec_ctx:_av_codec_ctx];
     }

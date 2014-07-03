@@ -31,6 +31,7 @@
     dispatch_queue_t _compressor_queue;
     VTPixelTransferSessionRef _vtpt_ref;
     double _next_keyframe_time;
+    NSMutableDictionary *_outputs;
     
     
 }

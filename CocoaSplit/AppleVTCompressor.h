@@ -18,6 +18,7 @@
 {
     
     VTCompressionSessionRef _compression_session;
+
     
 }
 @property (strong) id<ControllerProtocol> settingsController;
@@ -32,6 +33,7 @@
 @property (strong) NSArray *profiles;
 @property (assign) bool isNew;
 @property (strong) NSString *compressorType;
+@property (strong) NSMutableDictionary *outputs;
 
 
 

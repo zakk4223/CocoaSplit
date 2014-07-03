@@ -8,12 +8,15 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreMedia/CoreMedia.h>
-#import "FFMpegTask.h"
-#import "ControllerProtocol.h"
 #import "CapturedFrameData.h"
+
+//#import "OutputDestination.h"
 
 
 @class CaptureController;
+@class OutputDestination;
+@protocol ControllerProtocol;
+
 
 @protocol h264Compressor <NSObject,NSCoding>
 
@@ -31,6 +34,12 @@
 @property (assign) bool isNew;
 @property (strong) NSMutableString *name;
 @property (strong) NSString *compressorType;
+
+
+-(void) addOutput:(id)destination;
+-(void) removeOutput:(id)destination;
+-(bool) hasOutputs;
+
 
 
 
