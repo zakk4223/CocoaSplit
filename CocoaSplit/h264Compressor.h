@@ -26,7 +26,9 @@
 -(bool)compressFrame:(CapturedFrameData *)imageBuffer;
 
 
--(bool)setupCompressor;
+-(bool)setupCompressor:(CVPixelBufferRef)videoFrame;
+
+
 
 
 @property (strong) id<ControllerProtocol> settingsController;
@@ -34,11 +36,15 @@
 @property (assign) bool isNew;
 @property (strong) NSMutableString *name;
 @property (strong) NSString *compressorType;
+@property (assign) int width;
+@property (assign) int height;
+@property (strong) NSString *resolutionOption;
 
 
 -(void) addOutput:(id)destination;
 -(void) removeOutput:(id)destination;
 -(bool) hasOutputs;
+-(void) reset;
 
 
 

@@ -83,11 +83,9 @@
 {
     if (self = [super init])
     {
-        NSLog(@"INIT OUTPUTS");
-        _outputs = [[NSMutableDictionary alloc] init];
         
+
         self.compressorType = @"x264";
-        self.name = [@"" mutableCopy];
         
         //this all seems like I should be doing it one time, in some sort of thing you might call a class variable...
         
@@ -121,25 +119,13 @@
 }
 
 
--(void) addOutput:(OutputDestination *)destination
+-(void) reset
 {
-    
-    [_outputs setObject:destination forKey:destination.name];
-    NSLog(@"OUTPUTS IN ADD OUTPUT %@", self);
-    
+    NSLog(@"RESETTING COMPRESSOR %@", self);
+    _av_codec = NULL;
 }
 
--(void) removeOutput:(OutputDestination *)destination
-{
-    NSLog(@"IN REMOVE OUTPUT %@", destination);
-    
-    [_outputs removeObjectForKey:destination.name];
-}
 
--(bool) hasOutputs
-{
-    return [_outputs count] > 0;
-}
 
 
 -(NSString *)descriptionmm
@@ -161,7 +147,6 @@
     
     if (!self.settingsController)
     {
-        //CVPixelBufferRelease(imageBuffer);
         return NO;
     }
     
@@ -170,7 +155,7 @@
     {
         BOOL setupOK;
 
-        setupOK = [self setupCompressor];
+        setupOK = [self setupCompressor:frameData.videoFrame];
         
         if (!setupOK)
         {
@@ -299,9 +284,9 @@
         frameData.avcodec_ctx = _av_codec_ctx;
         frameData.avcodec_pkt = pkt;
         
-        for (id dKey in _outputs)
+        for (id dKey in self.outputs)
         {
-            OutputDestination *dest = _outputs[dKey];
+            OutputDestination *dest = self.outputs[dKey];
             [dest writeEncodedData:frameData];
             
         }
@@ -325,7 +310,7 @@
 
 
 
-- (bool)setupCompressor
+-(bool)setupCompressor:(CVPixelBufferRef)videoFrame
 {
  
     avcodec_register_all();
@@ -338,6 +323,8 @@
     }
     
 
+    [self setupResolution:videoFrame error:nil];
+    
     _compressor_queue = dispatch_queue_create("x264 encoder queue", NULL);
 
     
@@ -355,8 +342,8 @@
     avcodec_get_context_defaults3(_av_codec_ctx, _av_codec);
     
     //_av_codec_ctx->max_b_frames = 0;
-    _av_codec_ctx->width = self.settingsController.captureWidth;
-    _av_codec_ctx->height = self.settingsController.captureHeight;
+    _av_codec_ctx->width = self.width;
+    _av_codec_ctx->height = self.height;
     _av_codec_ctx->time_base.num = 1000000;
     
     _av_codec_ctx->time_base.den = self.settingsController.captureFPS*1000000;

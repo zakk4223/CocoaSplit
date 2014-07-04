@@ -73,6 +73,34 @@
 }
 
 
+- (IBAction)openOutputEdit:(id)sender
+{
+    long clickedRow = [sender clickedRow];
+    
+    self.editDestination = [self.captureDestinations objectAtIndex:clickedRow];
+    
+    if (!self.outputEditPanel)
+    {
+        
+        [[NSBundle mainBundle] loadNibNamed:@"OutputPanel" owner:self topLevelObjects:nil];
+        [NSApp beginSheet:self.outputEditPanel modalForWindow:[[NSApp delegate] window] modalDelegate:self didEndSelector:NULL contextInfo:NULL];
+        
+    }
+
+}
+
+- (IBAction)closeOutputPanel:(id)sender
+{
+
+    [NSApp endSheet:self.outputEditPanel];
+    [self.outputEditPanel close];
+    self.outputEditPanel = nil;
+
+
+}
+
+
+
 
 -(IBAction)openLogWindow:(id)sender
 {
@@ -83,6 +111,7 @@
         
     }
 }
+
 
 
 -(IBAction)openAdvancedPrefPanel:(id)sender
@@ -981,6 +1010,7 @@
 }
 
 
+
 - (IBAction)addStreamingService:(id)sender {
     
     
@@ -1371,6 +1401,16 @@
         [out stopOutput];
     }
     
+    for (id cKey in self.compressors)
+    {
+        id <h264Compressor> ctmp = self.compressors[cKey];
+        if (ctmp)
+        {
+            [ctmp reset];
+        }
+    }
+    
+    
     if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_8)
     {
 
@@ -1712,16 +1752,6 @@
                     if (self.captureRunning != _last_running_value)
                     {
                         [self setupCompressors];
-                        NSError *error;
-                        BOOL success;
-                        NSLog(@"SETTING UP RESOLUTION");
-                        success = [self setupResolution:newFrame error:&error];
-                        if (!success)
-                        {
-                            [self stopStream];
-                            [NSApp presentError:error];
-                        }
-
                     }
                     
                     CapturedFrameData *capturedData = [[CapturedFrameData alloc] init];

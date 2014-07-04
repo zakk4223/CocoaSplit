@@ -15,13 +15,14 @@
 #import "CaptureController.h"
 #import <VideoToolbox/VideoToolbox.h>
 #import "CapturedFrameData.h"
+#import "CompressorBase.h"
 #import "x264.h"
 
 
 
 
 
-@interface x264Compressor : NSObject <h264Compressor, NSCoding>
+@interface x264Compressor : CompressorBase
 {
     
     
@@ -31,7 +32,6 @@
     dispatch_queue_t _compressor_queue;
     VTPixelTransferSessionRef _vtpt_ref;
     double _next_keyframe_time;
-    NSMutableDictionary *_outputs;
     
     
 }
@@ -43,9 +43,6 @@
 
 @property (strong) id<ControllerProtocol> settingsController;
 @property (strong) id <ControllerProtocol> outputDelegate;
-@property (assign) bool isNew;
-@property (strong) NSMutableString *name;
-@property (strong) NSString *compressorType;
 
 
 @property (strong) NSString *preset;
@@ -58,8 +55,11 @@
 @property (assign) bool use_cbr;
 
 
+
+
+
 -(bool)compressFrame:(CapturedFrameData *)frameData;
--(bool)setupCompressor;
+-(bool)setupCompressor:(CVPixelBufferRef)videoFrame;
 
 
 @end

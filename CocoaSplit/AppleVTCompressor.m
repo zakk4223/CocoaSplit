@@ -72,10 +72,10 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
 {
     if (self = [super init])
     {
-        self.outputs = [[NSMutableDictionary alloc] init];
+        
+
         
         self.compressorType = @"AppleVTCompressor";
-        self.name = [@"" mutableCopy];
 
         self.profiles = @[[NSNull null], @"Baseline", @"Main", @"High"];
     }
@@ -84,8 +84,9 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
 }
 
 
-- (void) dealloc
+-(void) reset
 {
+
     VTCompressionSessionInvalidate(_compression_session);
     if (_compression_session)
     {
@@ -93,28 +94,16 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
     }
     
     _compression_session = nil;
-}
 
--(void) addOutput:(OutputDestination *)destination
+}
+- (void) dealloc
 {
-    NSLog(@"ADDING OUTPUT IN AVT %@", self);
-    [self.outputs setObject:destination forKey:destination.name];
-    
-}
-
--(void) removeOutput:(OutputDestination *)destination
-{
-    [self.outputs removeObjectForKey:destination.name];
+    [self reset];
 }
 
 
--(bool) hasOutputs
-{
-    return [self.outputs count] > 0;
-}
 
-
--(NSString *)descriptionmmmm
+-(NSString *)description
 {
     return [NSString stringWithFormat:@"%@: Type: %@, Average Bitrate %d, Max Bitrate %d, CBR: %d, Profile %@", self.name, self.compressorType, self.average_bitrate, self.max_bitrate, self.use_cbr, self.profile];
     
@@ -140,7 +129,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     if (!_compression_session)
     {
         
-        if (![self setupCompressor])
+        if (![self setupCompressor:frameData.videoFrame])
         {
             //CVPixelBufferRelease(imageBuffer);
             return NO;
@@ -179,7 +168,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 
 
 
-- (bool)setupCompressor
+- (bool)setupCompressor:(CVPixelBufferRef)videoFrame
 {
     OSStatus status;
     
@@ -188,7 +177,9 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
         return NO;
     }
 
-    if (!self.settingsController.captureHeight || !self.settingsController.captureHeight)
+    [self setupResolution:videoFrame error:nil];
+    
+    if (!self.height || !self.width)
     {
         return NO;
     }
@@ -198,7 +189,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 	};
 	
     _compression_session = NULL;
-    status = VTCompressionSessionCreate(NULL, self.settingsController.captureWidth, self.settingsController.captureHeight, kCMVideoCodecType_H264, (__bridge CFDictionaryRef)encoderSpec, NULL, NULL, VideoCompressorReceiveFrame,  (__bridge void *)self, &_compression_session);
+    status = VTCompressionSessionCreate(NULL, self.width, self.height, kCMVideoCodecType_H264, (__bridge CFDictionaryRef)encoderSpec, NULL, NULL, VideoCompressorReceiveFrame,  (__bridge void *)self, &_compression_session);
     
     //CFDictionaryRef props;
     //VTCompressionSessionCopySupportedPropertyDictionary(_compression_session, &props);

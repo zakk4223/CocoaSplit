@@ -10,37 +10,31 @@
 #import "h264Compressor.h"
 #import "CaptureController.h"
 #import "ControllerProtocol.h"
+#import "CompressorBase.h"
 
 #import <VideoToolbox/VideoToolbox.h>
 #import <VideoToolbox/VTVideoEncoderList.h>
 
-@interface AppleVTCompressor : NSObject <h264Compressor>
+@interface AppleVTCompressor : CompressorBase <h264Compressor, NSCoding>
 {
     
     VTCompressionSessionRef _compression_session;
-
-    
 }
+
+
 @property (strong) id<ControllerProtocol> settingsController;
 @property (strong) id<ControllerProtocol> outputDelegate;
 
-@property (strong) NSMutableString *name;
 @property (assign) int average_bitrate;
 @property (assign) int max_bitrate;
 @property (assign) int keyframe_interval;
 @property (strong) NSString *profile;
 @property (assign) BOOL use_cbr;
 @property (strong) NSArray *profiles;
-@property (assign) bool isNew;
-@property (strong) NSString *compressorType;
-@property (strong) NSMutableDictionary *outputs;
-
-
-
 
 
 -(bool)compressFrame:(CapturedFrameData *)frameData;
--(bool)setupCompressor;
+-(BOOL) setupResolution:(CVImageBufferRef)withFrame error:(NSError **)therror;
 
 
 @end

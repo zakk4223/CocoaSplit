@@ -99,6 +99,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) IBOutlet NSObjectController *compressSettingsController;
 @property (strong) IBOutlet NSObjectController *outputPanelController;
 - (IBAction)imagePanelChooseDirectory:(id)sender;
+- (IBAction)closeOutputPanel:(id)sender;
 
 - (IBAction)addStreamingService:(id)sender;
 
@@ -159,9 +160,12 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) IBOutlet NSWindow *advancedPrefPanel;
 @property (strong) IBOutlet NSWindow *logWindow;
 @property (strong) IBOutlet NSWindow *audioMixerPanel;
+@property (strong) IBOutlet NSWindow *outputEditPanel;
+
 
 - (IBAction)openLogWindow:(id)sender;
 
+- (IBAction)openOutputEdit:(id)sender;
 
 
 @property (strong) NSDictionary *destinationTypes;
@@ -192,6 +196,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (assign) BOOL captureRunning;
 @property (strong) NSArray *arOptions;
 @property (strong) NSString *resolutionOption;
+
+@property (strong) OutputDestination *editDestination;
 
 
 
