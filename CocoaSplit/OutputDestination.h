@@ -47,7 +47,7 @@
 @property (assign) int dropped_frame_count;
 @property (assign) double output_framerate;
 @property (assign) double output_bitrate;
-@property (strong) id <h264Compressor> compressor;
+@property (strong) NSObject <h264Compressor> *compressor;
 @property (strong) NSString *compressor_name;
 
 

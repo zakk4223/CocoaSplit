@@ -17,6 +17,8 @@
     if (self = [super init])
     {
         
+        self.errored = NO;
+        
         self.name = [@"" mutableCopy];
 
         self.arOptions = @[@"Use Source", @"Preserve AR"];
@@ -28,6 +30,37 @@
     
     return self;
 }
+
+
+-(bool) validate:(NSError **)therror
+{
+    
+    if (!self.resolutionOption || [self.resolutionOption isEqualToString:@"None"])
+    {
+        if (!(self.height > 0) || !(self.width > 0))
+        {
+            if (therror)
+            {
+                *therror = [NSError errorWithDomain:@"videoCapture" code:150 userInfo:@{NSLocalizedDescriptionKey : @"Both width and height are required"}];
+            }
+            
+            return NO;
+        }
+    } else if ([self.resolutionOption isEqualToString:@"Preserve AR"])  {
+        if (self.height == 0 && self.width == 0)
+        {
+            if (therror)
+            {
+                *therror = [NSError errorWithDomain:@"videoCapture" code:160 userInfo:@{NSLocalizedDescriptionKey : @"Either width or height are required"}];
+            }
+            return NO;
+        }
+    }
+    
+    return YES;
+}
+
+
 
 -(void) reset
 {
@@ -79,18 +112,13 @@
     return [self.outputs count] > 0;
 }
 
--(BOOL) setupResolution:(CVImageBufferRef)withFrame error:(NSError **)therror
+-(BOOL) setupResolution:(CVImageBufferRef)withFrame
 {
     
     if (!self.resolutionOption || [self.resolutionOption isEqualToString:@"None"])
     {
         if (!(self.height > 0) || !(self.width > 0))
         {
-            if (therror)
-            {
-                *therror = [NSError errorWithDomain:@"videoCapture" code:150 userInfo:@{NSLocalizedDescriptionKey : @"Both width and height are required"}];
-            }
-            
             return NO;
         }
         
@@ -116,13 +144,7 @@
             newHeight = (int)(round(self.width / inputAR));
         } else {
             
-            if (therror)
-            {
-                *therror = [NSError errorWithDomain:@"videoCapture" code:160 userInfo:@{NSLocalizedDescriptionKey : @"Either width or height are required"}];
-            }
-            
             return NO;
-            
         }
         
         self.height = (newHeight +1)/2*2;

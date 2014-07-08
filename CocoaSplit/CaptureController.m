@@ -289,6 +289,9 @@
 -(IBAction)saveCompressPanel
 {
 
+    NSError *compressError;
+    
+    
     if (![self.compressSettingsController commitEditing])
     {
         NSLog(@"FAILED TO COMMIT EDITING FOR COMPRESS EDIT");
@@ -298,6 +301,17 @@
     
     if (self.editingCompressor)
     {
+        
+        if (![self.editingCompressor validate:&compressError])
+        {
+            if (compressError)
+            {
+                [NSApp presentError:compressError];
+            }
+            return;
+        }
+        
+        
         
         if (self.editingCompressor.isNew)
         {
@@ -1510,74 +1524,10 @@
             [audioBuffer addObject:(__bridge id)sampleBuffer];
         }
     }
-    /*
-    for (OutputDestination *outdest in _captureDestinations)
-    {
-        if (outdest.active)
-        {
-            id ffmpeg = outdest.ffmpeg_out;
-            [ffmpeg writeAudioSampleBuffer:sampleBuffer presentationTimeStamp:pts];
-        }
-    }
-     */
-    
 }
 
 
 
--(BOOL) setupResolution:(CVImageBufferRef)withFrame error:(NSError **)therror
-{
-    
-    if ([self.resolutionOption isEqualToString:@"None"])
-    {
-        if (!(self.captureHeight > 0) || !(self.captureWidth > 0))
-        {
-            if (therror)
-            {
-                *therror = [NSError errorWithDomain:@"videoCapture" code:150 userInfo:@{NSLocalizedDescriptionKey : @"Both width and height are required"}];
-            }
-
-            return NO;
-        }
-        
-        return YES;
-    }
-    
-    self.arOptions = @[@"None", @"Use Source", @"Preserve AR"];
-
-    if ([self.resolutionOption isEqualToString:@"Use Source"])
-    {
-        self.captureHeight = (int)CVPixelBufferGetHeight(withFrame);
-        self.captureWidth = (int)CVPixelBufferGetWidth(withFrame);
-    } else if ([self.resolutionOption isEqualToString:@"Preserve AR"]) {
-        float inputAR = (float)CVPixelBufferGetWidth(withFrame) / (float)CVPixelBufferGetHeight(withFrame);
-        int newWidth;
-        int newHeight;
-        
-        if (self.captureHeight > 0)
-        {
-            newHeight = self.captureHeight;
-            newWidth = (int)(round(self.captureHeight * inputAR));
-        } else if (self.captureWidth > 0) {
-            newWidth = self.captureWidth;
-            newHeight = (int)(round(self.captureWidth / inputAR));
-        } else {
-            
-            if (therror)
-            {
-                *therror = [NSError errorWithDomain:@"videoCapture" code:160 userInfo:@{NSLocalizedDescriptionKey : @"Either width or height are required"}];
-            }
-            
-            return NO;
-
-        }
-        
-        self.captureHeight = (newHeight +1)/2*2;
-        self.captureWidth = (newWidth+1)/2*2;
-    }
-    
-    return YES;
-}
 
 -(double)mach_time_seconds
 {

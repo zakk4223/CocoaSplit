@@ -39,12 +39,15 @@
 @property (assign) int width;
 @property (assign) int height;
 @property (strong) NSString *resolutionOption;
+@property (assign) bool errored;
 
 
 -(void) addOutput:(id)destination;
 -(void) removeOutput:(id)destination;
 -(bool) hasOutputs;
 -(void) reset;
+-(bool) validate:(NSError **)therror;
+
 
 
 

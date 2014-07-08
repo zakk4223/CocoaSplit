@@ -96,8 +96,6 @@
         
         self.x264profiles = [[NSMutableArray alloc] init];
         
-        [self.x264tunes addObject:[NSNull null]];
-        [self.x264presets addObject:[NSNull null]];
         for (int i = 0; x264_profile_names[i]; i++)
         {
             [self.x264profiles addObject:[NSString stringWithUTF8String:x264_profile_names[i]]];
@@ -121,7 +119,7 @@
 
 -(void) reset
 {
-    NSLog(@"RESETTING COMPRESSOR %@", self);
+    self.errored = NO;
     _av_codec = NULL;
 }
 
@@ -159,6 +157,7 @@
         
         if (!setupOK)
         {
+            self.errored = YES;
             return NO;
         }
     }
@@ -323,7 +322,7 @@
     }
     
 
-    [self setupResolution:videoFrame error:nil];
+    [self setupResolution:videoFrame];
     
     _compressor_queue = dispatch_queue_create("x264 encoder queue", NULL);
 

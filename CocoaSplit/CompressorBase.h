@@ -29,11 +29,13 @@
 @property (assign) bool isNew;
 @property (strong) NSString *compressorType;
 @property (strong) NSMutableString *name;
+@property (assign) bool errored;
+
 
 
 
 -(void) reset;
--(BOOL) setupResolution:(CVImageBufferRef)withFrame error:(NSError **)therror;
+-(BOOL) setupResolution:(CVImageBufferRef)withFrame;
 
 
 

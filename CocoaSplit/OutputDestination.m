@@ -24,10 +24,7 @@
     [aCoder encodeObject:self.output_format forKey:@"output_format"];
     [aCoder encodeBool:self.active forKey:@"active"];
     [aCoder encodeInteger:self.stream_delay forKey:@"stream_delay"];
-    if (self.compressor)
-    {
-        [aCoder encodeObject:self.compressor.name forKey:@"compressor_name"];
-    }
+    [aCoder encodeObject:self.compressor_name forKey:@"compressor_name"];
     
 }
 
@@ -42,9 +39,10 @@
         self.output_format = [aDecoder decodeObjectForKey:@"output_format"];
         self.active = [aDecoder decodeBoolForKey:@"active"];
         self.stream_delay = (int)[aDecoder decodeIntegerForKey:@"stream_delay"];
-        
-        
+        self.compressor_name = [aDecoder decodeObjectForKey:@"compressor_name"];
     }
+    
+    
     
     return self;
 }
@@ -250,9 +248,7 @@
     {
         return;
     }
-    NSLog(@"IN SETUP COMPRESSOR FOR OUTPUT");
     
-    NSLog(@"COMPRESSOR NAME %@", self.compressor_name);
     if (self.compressor_name)
     {
         self.compressor = self.settingsController.compressors[self.compressor_name];
@@ -272,6 +268,7 @@
     if (self.compressor)
     {
         [self.compressor addOutput:self];
+        [self.compressor addObserver:self forKeyPath:@"errored" options:NSKeyValueObservingOptionNew context:NULL];
     }
 }
 
@@ -404,6 +401,8 @@
     {
         [self.ffmpeg_out removeObserver:self forKeyPath:@"errored" context:NULL];
         [self.ffmpeg_out removeObserver:self forKeyPath:@"active" context:NULL];
+        [self.compressor removeObserver:self forKeyPath:@"errored" context:NULL];
+
 
     }
 

@@ -87,6 +87,7 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
 -(void) reset
 {
 
+    self.errored = NO;
     VTCompressionSessionInvalidate(_compression_session);
     if (_compression_session)
     {
@@ -177,10 +178,11 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
         return NO;
     }
 
-    [self setupResolution:videoFrame error:nil];
+    [self setupResolution:videoFrame];
     
     if (!self.height || !self.width)
     {
+        self.errored = YES;
         return NO;
     }
     
@@ -196,6 +198,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     
     if (status != noErr || !_compression_session)
     {
+        self.errored = YES;
         return NO;
     }
 	
