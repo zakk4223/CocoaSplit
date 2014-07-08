@@ -840,6 +840,14 @@
     if (newCompressor)
     {
         
+        newCompressor.width = [[saveRoot valueForKey:@"captureWidth"] intValue];
+        newCompressor.height = [[saveRoot valueForKey:@"captureHeight"] intValue];
+        if ([saveRoot valueForKey:@"resolutionOption"])
+        {
+            newCompressor.resolutionOption = [saveRoot valueForKey:@"resolutionOption"];
+        }
+        
+        
         newCompressor.name = [@"default" mutableCopy];
         [self addCompressor:newCompressor];
     }
