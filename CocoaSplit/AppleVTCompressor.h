@@ -34,7 +34,7 @@
 
 
 -(bool)compressFrame:(CapturedFrameData *)frameData;
--(BOOL) setupResolution:(CVImageBufferRef)withFrame error:(NSError **)therror;
+-(BOOL) setupResolution:(CVImageBufferRef)withFrame;
 
 
 @end
