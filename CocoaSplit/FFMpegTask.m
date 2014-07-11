@@ -137,8 +137,11 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 }
 
 
--(void) writeEncodedData:(CapturedFrameData *)frameData
+-(void) writeEncodedData:(CapturedFrameData *)frameDataIn
 {
+    
+    CapturedFrameData *frameData = frameDataIn;
+    
     
     if (!self.active)
     {
@@ -162,6 +165,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 
     if (!_av_video_stream && _audio_extradata)
     {
+        
         if ([self createAVFormatOut:frameData.encodedSampleBuffer codec_ctx:frameData.avcodec_ctx])
         {
             [self initStatsValues];
@@ -199,14 +203,14 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     if (frameData.encodedSampleBuffer)
     {
         
-        [self writeVideoSampleBuffer:frameData.encodedSampleBuffer];
+        [self writeVideoSampleBuffer:frameData];
     } else if (frameData.avcodec_pkt) {
-        [self writeAVPacket:frameData.avcodec_pkt codec_ctx:frameData.avcodec_ctx];
+        [self writeAVPacket:frameData];
     }
     
 }
 
--(void) writeAudioSampleBuffer:(CMSampleBufferRef)theBuffer presentationTimeStamp:(CMTime)pts;
+-(void) writeAudioSampleBuffer:(CMSampleBufferRef)theBuffer presentationTimeStamp:(CMTime)pts
 {
     
     
@@ -258,7 +262,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 //            pkt.pts = pts.value;
             if (av_interleaved_write_frame(_av_fmt_ctx, &pkt) < 0)
             {
-                NSLog(@"AV WRITE AUDIO failed");
+                NSLog(@"AV WRITE AUDIO failed for %@", self.stream_output);
                 [self stopProcess];
             }
             //CMSampleBufferInvalidate(theBuffer);
@@ -463,9 +467,12 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     _output_frame_timestamp = time_now;
 }
 
--(void) writeAVPacket:(AVPacket *)pkt codec_ctx:(AVCodecContext *)codec_ctx
+//(AVPacket *)pkt codec_ctx:(AVCodecContext *)codec_ctx
+-(void) writeAVPacket:(CapturedFrameData *)frameData
 {
     
+    
+    AVPacket *pkt = frameData.avcodec_pkt;
     
     if (!_stream_dispatch)
     {
@@ -520,12 +527,12 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         
          if (p->pts != AV_NOPTS_VALUE)
          {
-             p->pts = av_rescale_q(p->pts, codec_ctx->time_base, _av_video_stream->time_base);
+             p->pts = av_rescale_q(p->pts, frameData.avcodec_ctx->time_base, _av_video_stream->time_base);
          }
          
          if (p->dts != AV_NOPTS_VALUE)
          {
-             p->dts = av_rescale_q(p->dts, codec_ctx->time_base, _av_video_stream->time_base);
+             p->dts = av_rescale_q(p->dts, frameData.avcodec_ctx->time_base, _av_video_stream->time_base);
          }
          
         
@@ -537,7 +544,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         /* Write the compressed frame to the media file. */
         if (av_interleaved_write_frame(_av_fmt_ctx, p) < 0)
         {
-            NSLog(@"INTERLEAVED WRITE FRAME FAILED");
+            NSLog(@"INTERLEAVED WRITE FRAME FAILED FOR %@ frame number %lld", self.stream_output, frameData.frameNumber);
         }
         
         
@@ -556,11 +563,11 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
 }
 
--(void) writeVideoSampleBuffer:(CMSampleBufferRef)theBuffer
+-(void) writeVideoSampleBuffer:(CapturedFrameData *)frameData
 {
     
     
-    if (!theBuffer)
+    if (!frameData || !frameData.encodedSampleBuffer)
     {
         return;
     }
@@ -593,10 +600,10 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     }
     
     
-    CFRetain(theBuffer);
+    CFRetain(frameData.encodedSampleBuffer);
     
     
-    CMBlockBufferRef tmp_sample_data = CMSampleBufferGetDataBuffer(theBuffer);
+    CMBlockBufferRef tmp_sample_data = CMSampleBufferGetDataBuffer(frameData.encodedSampleBuffer);
     
     
     size_t data_length = CMBlockBufferGetDataLength(tmp_sample_data);
@@ -610,6 +617,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 
     dispatch_async(_stream_dispatch, ^{
         
+    CMSampleBufferRef theBuffer = frameData.encodedSampleBuffer;
     if (!self.active)
     {
         return;
@@ -678,7 +686,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         
     if (av_interleaved_write_frame(_av_fmt_ctx, &pkt) < 0)
     {
-        NSLog(@"VIDEO WRITE FRAME failed");
+        NSLog(@"VIDEO WRITE FRAME failed for %@", self.stream_output);
         //[self stopProcess];
     }
     
@@ -773,21 +781,23 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         }
         
         avio_close(_av_fmt_ctx->pb);
-        av_free(_av_fmt_ctx);
+        avformat_free_context(_av_fmt_ctx);
+        
     }
     
+    /*
     if (_av_video_stream)
         av_free(_av_video_stream);
     if (_av_audio_stream)
         av_free(_av_audio_stream);
-
+*/
     _av_fmt_ctx = NULL;
     _av_video_stream = NULL;
     _av_audio_stream = NULL;
     
     if (_audio_extradata)
     {
-        free(_audio_extradata);
+        //free(_audio_extradata);
         _audio_extradata = NULL;
     }
     

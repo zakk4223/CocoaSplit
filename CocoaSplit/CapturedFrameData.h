@@ -20,6 +20,8 @@
 @property (assign) double frameTime;
 
 @property CVImageBufferRef videoFrame;
+@property (assign) void *encoderData;
+
 
 //Array of CMSampleBuffers from audio capture.
 @property (retain) NSMutableArray *audioSamples;

@@ -32,8 +32,11 @@
 
 -(void)dealloc
 {
+    
+    
     if (_videoFrame)
     {
+        
         CVPixelBufferRelease(_videoFrame);
     }
     
@@ -49,6 +52,13 @@
 
     }
 	
+    for (id object in self.audioSamples)
+    {
+        CMSampleBufferRef audioSample = (__bridge CMSampleBufferRef)object;
+        CFRelease(audioSample);
+    }
+    
+
 	self.audioSamples = nil;
 }
 
@@ -81,12 +91,16 @@
 -(void)setVideoFrame:(CVImageBufferRef)videoFrame
 {
     
+    
     if (_videoFrame)
     {
         CVPixelBufferRelease(_videoFrame);
     }
+    if (videoFrame)
+    {
+        CVPixelBufferRetain(videoFrame);
+    }
     
-    CVPixelBufferRetain(videoFrame);
     _videoFrame = videoFrame;
     
 }

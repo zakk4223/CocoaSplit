@@ -19,6 +19,8 @@
 {
     
     VTCompressionSessionRef _compression_session;
+    VTPixelTransferSessionRef _vtpt_ref;
+
 }
 
 
@@ -34,7 +36,6 @@
 
 
 -(bool)compressFrame:(CapturedFrameData *)frameData;
--(BOOL) setupResolution:(CVImageBufferRef)withFrame;
 
 
 @end

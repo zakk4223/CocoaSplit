@@ -22,6 +22,7 @@
 @property (readonly) double captureFPS;
 @property (readonly) int audioBitrate;
 @property (readonly) int audioSamplerate;
+@property (assign) BOOL captureRunning;
 
 @property int captureVideoMaxKeyframeInterval;
 @property int captureVideoMaxBitrate;
@@ -39,9 +40,7 @@
 @property (strong) NSMutableDictionary *compressors;
 
 
-- (void) outputAVPacket:(AVPacket *)avpkt codec_ctx:(AVCodecContext *)codec_ctx;
-- (void)captureOutputAudio:(id)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer;
-- (void) outputSampleBuffer:(CMSampleBufferRef)theBuffer;
+-(void)captureOutputAudio:(id)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer;
 -(void)newFrame;
 -(void)setExtraData:(id)saveData forKey:(NSString *)forKey;
 -(id)getExtraData:(NSString *)forkey;

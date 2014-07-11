@@ -47,6 +47,7 @@
 -(bool) hasOutputs;
 -(void) reset;
 -(bool) validate:(NSError **)therror;
+-(void) addAudioData:(CMSampleBufferRef)audioData;
 
 
 

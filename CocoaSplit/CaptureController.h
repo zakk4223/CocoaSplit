@@ -241,8 +241,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 
-- (void) outputSampleBuffer:(CMSampleBufferRef)theBuffer;
-- (void) outputAVPacket:(AVPacket *)avpkt codec_ctx:(AVCodecContext *)codec_ctx;
 - (void)saveSettings;
 - (void)loadSettings;
 - (bool) startStream;

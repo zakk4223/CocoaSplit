@@ -192,6 +192,7 @@
         _output_start_time = 0.0f;
         _delayBuffer = [[NSMutableArray alloc] init];
         self.delay_buffer_frames = 0;
+        _stopped = YES;
         
     }
     return self;
@@ -249,6 +250,8 @@
         return;
     }
     
+    NSObject <h264Compressor> *old_compressor = self.compressor;
+
     if (self.compressor_name)
     {
         self.compressor = self.settingsController.compressors[self.compressor_name];
@@ -269,6 +272,12 @@
     {
         [self.compressor addOutput:self];
         [self.compressor addObserver:self forKeyPath:@"errored" options:NSKeyValueObservingOptionNew context:NULL];
+    }
+    
+    if (old_compressor && (self.compressor != old_compressor))
+    {
+        [old_compressor removeOutput:self];
+        [old_compressor removeObserver:self forKeyPath:@"errored"];
     }
 }
 
@@ -337,17 +346,18 @@
         {
             
             
-            if (!self.ffmpeg_out)
+            if (self.settingsController.captureRunning && !self.ffmpeg_out)
             {
                 [self attachOutput];
             }
+            
             
             sendData = [_delayBuffer objectAtIndex:0];
             [_delayBuffer removeObjectAtIndex:0];
         }
         
         
-        if (sendData)
+        if (sendData && self.ffmpeg_out)
         {
             [self.ffmpeg_out writeEncodedData:sendData];
         }

@@ -11,6 +11,9 @@
 #import "h264Compressor.h"
 
 @interface CompressorBase : NSObject <h264Compressor, NSCoding>
+{
+    NSMutableArray *_audioBuffer;
+}
 
 
 
@@ -36,6 +39,9 @@
 
 -(void) reset;
 -(BOOL) setupResolution:(CVImageBufferRef)withFrame;
+-(void) addAudioData:(CMSampleBufferRef)audioData;
+-(void) setAudioData:(CapturedFrameData *)forFrame syncObj:(id)syncObj;
+
 
 
 

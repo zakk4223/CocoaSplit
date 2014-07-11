@@ -40,9 +40,9 @@
 }
 
 
--(void) writeVideoSampleBuffer:(CMSampleBufferRef)theBuffer;
+-(void) writeVideoSampleBuffer:(CapturedFrameData *)frameData;
 -(void) writeAudioSampleBuffer:(CMSampleBufferRef)theBuffer presentationTimeStamp:(CMTime)pts;
--(void) writeAVPacket:(AVPacket *)pkt codec_ctx:(AVCodecContext *)codec_ctx;
+-(void) writeAVPacket:(CapturedFrameData *)frameData;
 -(void) writeEncodedData:(CapturedFrameData *)frameData;
 -(void) updateOutputStats;
 -(void) updateInputStats;

@@ -20,6 +20,8 @@
     BOOL _active;
     double _output_start_time;
     NSMutableArray *_delayBuffer;
+    BOOL _stopped;
+    
     
     
 }

@@ -87,6 +87,7 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
 -(void) reset
 {
 
+    
     self.errored = NO;
     VTCompressionSessionInvalidate(_compression_session);
     if (_compression_session)
@@ -97,6 +98,8 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
     _compression_session = nil;
 
 }
+
+
 - (void) dealloc
 {
     [self reset];
@@ -132,12 +135,10 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
         
         if (![self setupCompressor:frameData.videoFrame])
         {
-            //CVPixelBufferRelease(imageBuffer);
             return NO;
         }
         return NO;
     }
-    
     
     
     
@@ -154,8 +155,31 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
         frameProperties = NULL;
     //}
     
+    if (!_vtpt_ref)
+    {
+        VTPixelTransferSessionCreate(kCFAllocatorDefault, &_vtpt_ref);
+        VTSessionSetProperty(_vtpt_ref, kVTPixelTransferPropertyKey_ScalingMode, kVTScalingMode_Letterbox);
+    }
+    CVPixelBufferRef converted_frame;
     
-    VTCompressionSessionEncodeFrame(_compression_session, frameData.videoFrame, frameData.videoPTS, frameData.videoDuration, frameProperties, (__bridge_retained void *)(frameData), NULL);
+    CVImageBufferRef imageBuffer = frameData.videoFrame;
+    CVPixelBufferRetain(imageBuffer);
+
+    CVPixelBufferCreate(kCFAllocatorDefault, self.width, self.height, kCVPixelFormatType_420YpCbCr8Planar, 0, &converted_frame);
+    
+    VTPixelTransferSessionTransferImage(_vtpt_ref, imageBuffer, converted_frame);
+
+    //set it to nil since this is our private copy and this will force the frameData instance to release the video data
+    
+    frameData.videoFrame = nil;
+    frameData.encoderData = converted_frame;
+    
+    
+    CVPixelBufferRelease(imageBuffer);
+    
+    [self setAudioData:frameData syncObj:self];
+
+    VTCompressionSessionEncodeFrame(_compression_session, converted_frame, frameData.videoPTS, frameData.videoDuration, frameProperties, (__bridge_retained void *)(frameData), NULL);
     
     if (frameProperties)
     {
@@ -198,6 +222,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     
     if (status != noErr || !_compression_session)
     {
+        NSLog(@"COMPRESSOR SETUP ERROR");
         self.errored = YES;
         return NO;
     }
@@ -209,12 +234,12 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     
     //VTSessionSetProperty(_compression_session, (CFStringRef)@"Priority", (__bridge CFTypeRef)(@-20));
     
-    
+    /*
 	NSDictionary *transferSpec = @{
 		(__bridge NSString *)kVTPixelTransferPropertyKey_ScalingMode: (__bridge NSString *)kVTScalingMode_Letterbox,
 	};
     VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_PixelTransferProperties, (__bridge CFTypeRef)(transferSpec));
-    
+    */
     
     VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_AllowFrameReordering, kCFBooleanFalse);
     VTSessionSetProperty(_compression_session, (__bridge CFStringRef)@"RealTime", kCFBooleanTrue);
@@ -331,6 +356,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
             
             
     }
+    _audioBuffer = [[NSMutableArray alloc] init];
     return YES;
     
 }
@@ -347,7 +373,7 @@ void VideoCompressorReceiveFrame(void *VTref, void *VTFrameRef, OSStatus status,
      */
     
     
-    @autoreleasepool {
+    //@autoreleasepool {
         
         
         
@@ -360,6 +386,7 @@ void VideoCompressorReceiveFrame(void *VTref, void *VTFrameRef, OSStatus status,
         
         CapturedFrameData *frameData;
         
+        
         frameData = (__bridge_transfer CapturedFrameData *)(VTFrameRef);
         
         
@@ -370,31 +397,31 @@ void VideoCompressorReceiveFrame(void *VTref, void *VTFrameRef, OSStatus status,
         }
         
         
-        /* We don't need the original video frame anymore, set the property to nil, which will release the CVImageBufferRef */
+        CVPixelBufferRelease(frameData.encoderData);
         
-        frameData.videoFrame = nil;
+
+        //frameData.videoFrame = nil;
         frameData.encodedSampleBuffer = sampleBuffer;
         
         
         AppleVTCompressor *selfobj = (__bridge AppleVTCompressor *)VTref;
-        
-        
+    
+    
+    
+    
         for (id dKey in selfobj.outputs)
         {
             
             OutputDestination *dest = selfobj.outputs[dKey];
+            
             [dest writeEncodedData:frameData];
             
 
         }
         
-        //[selfobj.outputDelegate outputEncodedData:frameData];
-        
-        
-        //[selfobj.outputDelegate outputSampleBuffer:sampleBuffer];
         
         CFRelease(sampleBuffer);
-    }
+    //}
 }
 
 

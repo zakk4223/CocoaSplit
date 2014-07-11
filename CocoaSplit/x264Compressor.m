@@ -39,6 +39,10 @@
     copy.crf = self.crf;
     copy.use_cbr = self.use_cbr;
     
+    copy.width = self.width;
+    copy.height = self.height;
+    copy.resolutionOption = self.resolutionOption;
+    
     
     return copy;
 }
@@ -56,6 +60,10 @@
     [aCoder encodeInteger:self.keyframe_interval forKey:@"keyframe_interval"];
     [aCoder encodeInteger:self.crf forKey:@"crf"];
     [aCoder encodeBool:self.use_cbr forKey:@"use_cbr"];
+    [aCoder encodeInteger:self.width forKey:@"videoWidth"];
+    [aCoder encodeInteger:self.height forKey:@"videoHeight"];
+    [aCoder encodeObject:self.resolutionOption forKey:@"resolutionOption"];
+    
 }
 
 -(id) initWithCoder:(NSCoder *)aDecoder
@@ -71,6 +79,14 @@
         self.crf = (int)[aDecoder decodeIntegerForKey:@"crf"];
         self.use_cbr = [aDecoder decodeBoolForKey:@"use_cbr"];
         self.keyframe_interval = (int)[aDecoder decodeIntegerForKey:@"keyframe_interval"];
+        self.width = (int)[aDecoder decodeIntegerForKey:@"videoWidth"];
+        self.height = (int)[aDecoder decodeIntegerForKey:@"videoHeight"];
+        if ([aDecoder decodeObjectForKey:@"resolutionOption"])
+        {
+            self.resolutionOption = [aDecoder decodeObjectForKey:@"resolutionOption"];
+        }
+        
+        
         
     }
     
@@ -119,6 +135,9 @@
 
 -(void) reset
 {
+    
+    _compressor_queue = nil;
+    
     self.errored = NO;
     _av_codec = NULL;
 }
@@ -163,6 +182,11 @@
     }
     
     
+    if (frameData.videoFrame)
+    {
+        CVPixelBufferRetain(frameData.videoFrame);
+    }
+    
     
     dispatch_async(_compressor_queue, ^{
         
@@ -183,26 +207,14 @@
         
         CMTime pts = frameData.videoPTS;
         
+        
         size_t src_height;
         size_t src_width;
-        enum PixelFormat frame_fmt;
         CVImageBufferRef imageBuffer = frameData.videoFrame;
         
-        OSType cv_pixel_format = CVPixelBufferGetPixelFormatType(imageBuffer);
         
         //NSLog(@"WIDTH INPUT %zd HEIGHT %zd",  CVPixelBufferGetWidth(imageBuffer), CVPixelBufferGetHeight(imageBuffer));
         
-        if (cv_pixel_format == kCVPixelFormatType_422YpCbCr8)
-        {
-            frame_fmt = PIX_FMT_UYVY422;
-        } else if (cv_pixel_format == kCVPixelFormatType_422YpCbCr8FullRange) {
-            frame_fmt = PIX_FMT_YUYV422;
-        } else if (cv_pixel_format == kCVPixelFormatType_32BGRA) {
-            frame_fmt = PIX_FMT_BGRA;
-        } else {
-            frame_fmt = PIX_FMT_NV12;
-        }
-
         src_height = CVPixelBufferGetHeight(imageBuffer);
         src_width = CVPixelBufferGetWidth(imageBuffer);
     
@@ -219,10 +231,12 @@
     VTPixelTransferSessionTransferImage(_vtpt_ref, imageBuffer, converted_frame);
         
     
+        CVPixelBufferRelease(imageBuffer);
         imageBuffer = nil;
+        
+        //poke the frameData so it releases the video buffer
         frameData.videoFrame = nil;
         
-    //CVPixelBufferRelease(imageBuffer);
     AVFrame *outframe = avcodec_alloc_frame();
     outframe->format = PIX_FMT_YUV420P;
     outframe->width = (int)src_width;
@@ -283,9 +297,12 @@
         frameData.avcodec_ctx = _av_codec_ctx;
         frameData.avcodec_pkt = pkt;
         
+        [self setAudioData:frameData syncObj:self];
+        
         for (id dKey in self.outputs)
         {
             OutputDestination *dest = self.outputs[dKey];
+
             [dest writeEncodedData:frameData];
             
         }
@@ -384,22 +401,25 @@
     
     id x264preset = self.preset;
     
-    if (x264preset != [NSNull null])
+    if (x264preset != nil)
     {
+        NSLog(@"SETTING PRESET %@", x264preset);
         av_dict_set(&opts, "preset", [x264preset UTF8String], 0);
     }
     
     id x264profile = self.profile;
 
-    if (x264profile != [NSNull null])
+    if (x264profile != nil)
     {
+        NSLog(@"SETTING PROFILE %@", x264profile);
         av_dict_set(&opts, "profile", [x264profile UTF8String], 0);
     }
     
     id x264tune = self.tune;
 
-    if (x264tune != [NSNull null])
+    if (x264tune != nil)
     {
+        NSLog(@"SETTING TUNE %@", x264tune);
         av_dict_set(&opts, "tune", [x264tune UTF8String], 0);
     }
     
@@ -412,6 +432,8 @@
     
     _sws_ctx = NULL;
     
+    _audioBuffer = [[NSMutableArray alloc] init];
+
     
     return YES;
 }

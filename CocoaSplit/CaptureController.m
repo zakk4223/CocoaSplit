@@ -1082,29 +1082,6 @@
 }
 
 
-- (void) outputAVPacket:(AVPacket *)avpkt codec_ctx:(AVCodecContext *)codec_ctx
-{
-    for (OutputDestination *outdest in _captureDestinations)
-    {
-        if (outdest.active)
-        {
-            id ffmpeg = outdest.ffmpeg_out;
-            [ffmpeg writeAVPacket:avpkt codec_ctx:codec_ctx];
-        }
-    }
-}
-
-- (void) outputSampleBuffer:(CMSampleBufferRef)theBuffer
-{
-    for (OutputDestination *outdest in _captureDestinations)
-    {
-        if (outdest.active)
-        {
-            id ffmpeg = outdest.ffmpeg_out;
-            [ffmpeg writeVideoSampleBuffer:theBuffer];
-        }
-    }
-}
 
 
 -(bool) setupCompressors
@@ -1211,6 +1188,7 @@
         
     }
 
+    
     for (OutputDestination *outdest in _captureDestinations)
     {
         [outdest reset];
@@ -1418,11 +1396,6 @@
     self.captureRunning = NO;
 
     
-    for (OutputDestination *out in _captureDestinations)
-    {
-        [out stopOutput];
-    }
-    
     for (id cKey in self.compressors)
     {
         id <h264Compressor> ctmp = self.compressors[cKey];
@@ -1431,6 +1404,12 @@
             [ctmp reset];
         }
     }
+
+    for (OutputDestination *out in _captureDestinations)
+    {
+        [out stopOutput];
+    }
+    
     
     
     if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_8)
@@ -1445,13 +1424,7 @@
         [[NSProcessInfo processInfo] endActivity:_activity_token];
     }
     
-    
     [self.audioCaptureSession stopAudioCompression];
-    @synchronized(self)
-    {
-        audioBuffer = [[NSMutableArray alloc] init];
-        
-    }
 }
 
 - (IBAction)streamButtonPushed:(id)sender {
@@ -1512,7 +1485,7 @@
     
     if (CMTIME_COMPARE_INLINE(_firstAudioTime, ==, kCMTimeZero))
     {
-        NSLog(@"SETTING FIRST AUDIO TIME");
+        
         _firstAudioTime = orig_pts;
         return;
     }
@@ -1522,16 +1495,21 @@
     CMTime pts = CMTimeAdd(real_pts, adjust_pts);
     
 
+    //NSLog(@"AUDIO PTS %@", CMTimeCopyDescription(kCFAllocatorDefault, pts));
+    
     CMSampleBufferSetOutputPresentationTimeStamp(sampleBuffer, pts);
     
-    
-    if (audioBuffer)
+    for(id cKey in self.compressors)
     {
-        @synchronized(self)
-        {
-            [audioBuffer addObject:(__bridge id)sampleBuffer];
-        }
+        
+        id <h264Compressor> compressor;
+        compressor = self.compressors[cKey];
+        [compressor addAudioData:sampleBuffer];
+        
     }
+    
+    CFRelease(sampleBuffer);
+
 }
 
 
@@ -1621,21 +1599,6 @@
 }
 
 
--(NSMutableArray *)swapAudioBuffer
-{
- 
-    NSMutableArray *newBuf;
-    newBuf = [[NSMutableArray alloc] init];
-    
-    NSMutableArray *retBuf;
-    
-    retBuf = audioBuffer;
-    audioBuffer = newBuf;
-    
-    return retBuf;
-}
-
-
 
 
 -(void) newFrameDispatched
@@ -1712,11 +1675,8 @@
                         [self setupCompressors];
                     }
                     
-                    CapturedFrameData *capturedData = [[CapturedFrameData alloc] init];
                     
-                    capturedData.videoFrame = newFrame;
-                    
-                    [self processVideoFrame:capturedData];
+                    [self processVideoFrame:newFrame];
 
                     
                 } else {
@@ -1737,7 +1697,7 @@
 
 
 
--(void)processVideoFrame:(CapturedFrameData *)frameData
+-(void)processVideoFrame:(CVPixelBufferRef)videoFrame
 {
 
     
@@ -1753,12 +1713,9 @@
     CMTime duration;
     
     
-    //compressor should have a ready? method
     
     if (_firstFrameTime == 0)
     {
-        
-        
         _firstFrameTime = _frame_time;
         
     }
@@ -1773,55 +1730,23 @@
     
     
     pts = CMTimeMake(ptsTime*1000000, 1000000);
-    
+    //NSLog(@"PTS TIME IS %@", CMTimeCopyDescription(kCFAllocatorDefault, pts));
+
     duration = CMTimeMake(1000, self.videoCaptureSession.videoCaptureFPS*1000);
     
-    frameData.videoPTS = pts;
-    frameData.videoDuration = duration;
-    frameData.frameNumber = _frameCount;
-    frameData.frameTime = _frame_time;
-    
-    CMTime videoTime = frameData.videoPTS;
-    NSUInteger audioConsumed = 0;
-
-    @synchronized(self)
-    {
-        NSUInteger audioBufferSize = [audioBuffer count];
-        
-        for (int i = 0; i < audioBufferSize; i++)
-        {
-            CMSampleBufferRef audioData = (__bridge CMSampleBufferRef)[audioBuffer objectAtIndex:i];
-            
-            CMTime audioTime = CMSampleBufferGetOutputPresentationTimeStamp(audioData);
-            
-            
-            
-            
-            if (CMTIME_COMPARE_INLINE(audioTime, <=, videoTime))
-            {
-                
-                audioConsumed++;
-                
-                [frameData.audioSamples addObject:(__bridge id)audioData];
-                
-            } else {
-                break;
-            }
-        }
-        
-        if (audioConsumed > 0)
-        {
-            [audioBuffer removeObjectsInRange:NSMakeRange(0, audioConsumed)];
-        }
-        
-    }
-
     for(id cKey in self.compressors)
     {
+        CapturedFrameData *newFrameData = [[CapturedFrameData alloc] init];
+        
+        newFrameData.videoPTS = pts;
+        newFrameData.videoDuration = duration;
+        newFrameData.frameNumber = _frameCount;
+        newFrameData.frameTime = _frame_time;
+        newFrameData.videoFrame = videoFrame;
         
         id <h264Compressor> compressor;
         compressor = self.compressors[cKey];
-        [compressor compressFrame:frameData];
+        [compressor compressFrame:newFrameData];
 
     }
         
