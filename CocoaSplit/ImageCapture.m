@@ -21,7 +21,8 @@
     if (self = [super init])
     {
         
-        
+        _animationQueue = dispatch_queue_create("imageCaptureQueue", NULL);
+
 
     }
     
@@ -110,56 +111,203 @@
     return _activeVideoDevice;
 }
 
--(void)setActiveVideoDevice:(AbstractCaptureDevice *)activeVideoDevice
+
+-(void) advanceGifFrame
 {
-    _activeVideoDevice = activeVideoDevice;
     
-    //.device is the directory, uniqueID is the filename
+    //wait the current duration, THEN increment the frame and rerender
     
-    NSImage *newImage = [[NSImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", activeVideoDevice.captureDevice, activeVideoDevice.uniqueID]];
-    
-    if (newImage)
+    if (_totalFrames > 1)
     {
+        
+        int next_frame = _frameNumber + 1;
+    
+        
+        if (next_frame >= _totalFrames)
+        {
+            next_frame = 0;
+        }
+    
+        double frame_duration =  [[_delayList objectAtIndex:_frameNumber] floatValue];
+
+        
+        dispatch_time_t frame_time = dispatch_time(DISPATCH_TIME_NOW, frame_duration * NSEC_PER_SEC);
+    
+        _frameNumber = next_frame;
+        __weak ImageCapture *mySelf = self;
+        
+        dispatch_after(frame_time, _animationQueue, ^(void){
+
+            [mySelf renderImage:next_frame];
+        
+        });
+
+    }
+    
+}
+
+-(void) resetImageData
+{
+    _totalFrames = 0;
+    _frameNumber = 0;
+    if (_imageSource)
+    {
+        CFRelease(_imageSource);
+        _imageSource = nil;
+
+    }
+    
+    if (_imageCache)
+    {
+        for(id img in _imageCache)
+        {
+            CGImageRef cgimg = (__bridge CGImageRef)img;
+            CGImageRelease(cgimg);
+        }
+        _imageCache = nil;
+
+    }
+    _delayList = nil;
+}
+
+
+
+
+-(void) dealloc
+{
+
+    [self resetImageData];
+}
+
+
+-(void) renderImage:(int)forIdx
+{
+    CGImageRef theImage = NULL;
+
+
+    if (_imageCache.count > forIdx)
+    {
+        theImage = (__bridge CGImageRef)[_imageCache objectAtIndex:forIdx ];
+    }
+    
+    if (!theImage && _imageSource)
+    {
+        theImage = CGImageSourceCreateImageAtIndex(_imageSource, forIdx, NULL);
+        [_imageCache insertObject:(__bridge id)(theImage) atIndex:forIdx];
+    }
+    
+    if (theImage)
+    {
+        
+        /*
+        NSBitmapImageRep *imgRep = [[newImage representations] objectAtIndex:0];
+        
+        NSLog(@"IMAGE HAS %@ frames", [imgRep valueForProperty:NSImageCurrentFrameDuration]);
+        */
+        
+        
         CVPixelBufferRef newFrame = NULL;
         
-        size_t width = [newImage size].width;
-        size_t height = [newImage size].height;
-        CGColorSpaceRef cs = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
+        
+        size_t width = CGImageGetWidth(theImage);
+        size_t height = CGImageGetHeight(theImage);
+        CGColorSpaceRef cs = CGColorSpaceCreateDeviceRGB();
+        
         NSDictionary *ioAttrs = [NSDictionary dictionaryWithObject: [NSNumber numberWithBool: NO] forKey: (NSString *)kIOSurfaceIsGlobal];
-
+        
         NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], kCVPixelBufferCGImageCompatibilityKey, [NSNumber numberWithBool:YES], kCVPixelBufferCGBitmapContextCompatibilityKey, ioAttrs, kCVPixelBufferIOSurfacePropertiesKey, nil];
         
         CVPixelBufferCreate(kCFAllocatorDefault, width, height, k32BGRAPixelFormat, (__bridge CFDictionaryRef)dict, &newFrame);
         CVPixelBufferLockBaseAddress(newFrame, 0);
         void *rasterData = CVPixelBufferGetBaseAddress(newFrame);
         size_t bytesPerRow = CVPixelBufferGetBytesPerRow(newFrame);
-    
-        CGContextRef ctxt = CGBitmapContextCreate(rasterData, width, height, 8, bytesPerRow, cs, kCGBitmapByteOrder32Little|kCGImageAlphaNoneSkipFirst);
         
-        NSGraphicsContext *nsctxt = [NSGraphicsContext graphicsContextWithGraphicsPort:ctxt flipped:NO];
-        [NSGraphicsContext saveGraphicsState];
-        [NSGraphicsContext setCurrentContext:nsctxt];
-        [newImage compositeToPoint:NSMakePoint(0.0, 0.0) operation:NSCompositeCopy];
-        [NSGraphicsContext restoreGraphicsState];
+        CGContextRef ctxt = CGBitmapContextCreate(rasterData, width, height, 8, bytesPerRow, cs, kCGBitmapByteOrder32Little|kCGImageAlphaNoneSkipFirst);
+
+        CGRect rect = {{0,0}, {width, height}};
+        CGContextDrawImage(ctxt, rect, theImage);
+        
+        
+
+        CGContextRelease(ctxt);
         
         CVPixelBufferUnlockBaseAddress(newFrame, 0);
-        CFRelease(ctxt);
         
-        if (self.currentFrame)
-        {
-            CVPixelBufferRelease(self.currentFrame);
+        @synchronized(self) {
+            if (self.currentFrame)
+            {
+                CVPixelBufferRelease(self.currentFrame);
+            }
+            self.currentFrame = newFrame;
         }
-
-        self.currentFrame = newFrame;
+        [self advanceGifFrame];
     }
+
+}
+-(void)setActiveVideoDevice:(AbstractCaptureDevice *)activeVideoDevice
+{
+    
+    [self resetImageData];
+    
+    
+    NSData *imgData = [NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", activeVideoDevice.captureDevice, activeVideoDevice.uniqueID]];
+    
+    NSDictionary *dict = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:(id)kCGImageSourceShouldCacheImmediately];
+
+    CGImageSourceRef imgSrc = CGImageSourceCreateWithData((__bridge CFDataRef)imgData, (__bridge CFDictionaryRef)dict);
+    
+    if (_imageSource)
+    {
+        CFRelease(_imageSource);
+    }
+    
+    _imageSource = imgSrc;
+    _imageCache = [[NSMutableArray alloc] init];
+    
+    
+    
+    
+    _totalFrames = CGImageSourceGetCount(imgSrc);
+    
+    if (_totalFrames > 1)
+    {
+        _delayList = [[NSMutableArray alloc] init];
+        
+        for (int i=0; i < _totalFrames; i++)
+        {
+            CFDictionaryRef frameprop = CGImageSourceCopyPropertiesAtIndex(imgSrc, i, NULL);
+            CFDictionaryRef gProp = CFDictionaryGetValue(frameprop, kCGImagePropertyGIFDictionary);
+        
+            CFNumberRef udelay = CFDictionaryGetValue(gProp, kCGImagePropertyGIFUnclampedDelayTime);
+            CFNumberRef gdelay = CFDictionaryGetValue(gProp, kCGImagePropertyGIFDelayTime);
+            if ([(__bridge NSNumber *)udelay isEqualToNumber:@(0)])
+            {
+                [_delayList insertObject:(__bridge NSNumber *)gdelay atIndex:i];
+            } else {
+                [_delayList insertObject:(__bridge NSNumber *)udelay atIndex:i];
+            }
+        }
+    }
+    
+    
+    _activeVideoDevice = activeVideoDevice;
+    
+    //.device is the directory, uniqueID is the filename
+    
+    _frameNumber = 0;
+    [self renderImage:0];
     
 }
 
 -(CVImageBufferRef) getCurrentFrame
 {
-    if (self.currentFrame)
-    {
-        CVPixelBufferRetain(self.currentFrame);
+    @synchronized(self) {
+
+        if (self.currentFrame)
+        {
+            CVPixelBufferRetain(self.currentFrame);
+            
+        }
     }
     
     

@@ -14,6 +14,13 @@
 {
     
     NSArray *_sourceList;
+    NSMutableArray *_delayList;
+    CGImageSourceRef _imageSource;
+    size_t _totalFrames;
+    int _frameNumber;
+    dispatch_queue_t _animationQueue;
+    NSMutableArray *_imageCache;
+    
 }
 
 
@@ -28,9 +35,12 @@
 @property NSString *imageDirectory;
 
 
+@property NSImage *currentImage;
+
 @property CVPixelBufferRef currentFrame;
 
 @property (weak) id<ControllerProtocol> settingsController;
+
 
 
 
