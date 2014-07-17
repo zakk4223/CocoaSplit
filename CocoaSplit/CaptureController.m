@@ -590,6 +590,76 @@
 
 
 
+-(void) createCGLContext
+{
+    NSOpenGLPixelFormatAttribute glAttributes[] = {
+        
+        NSOpenGLPFAPixelBuffer,
+        NSOpenGLPFANoRecovery,
+        NSOpenGLPFAAccelerated,
+        NSOpenGLPFADepthSize, 32,
+        (NSOpenGLPixelFormatAttribute) 0
+        
+    };
+    NSOpenGLPixelFormat *pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:glAttributes];
+    
+    if (!pixelFormat)
+    {
+        return;
+    }
+    
+    _ogl_ctx = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:nil];
+    
+    if (!_ogl_ctx)
+    {
+        return;
+    }
+
+    _cgl_ctx = [_ogl_ctx CGLContextObj];
+    /*
+    _cictx = [CIContext contextWithCGLContext:_cgl_ctx pixelFormat:CGLGetPixelFormat(_cgl_ctx) colorSpace:CGColorSpaceCreateDeviceRGB() options:nil];
+    
+    _cifilter = [CIFilter filterWithName:@"CISepiaTone"];
+    [_cifilter setDefaults];
+*/
+    
+    
+}
+
+
+-(bool) createPixelBufferPoolForSize:(NSSize) size
+{
+    
+    NSLog(@"Controller: Creating Pixel Buffer Pool %f x %f", size.width, size.height);
+    
+    NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
+    [attributes setValue:[NSNumber numberWithInt:size.width] forKey:(NSString *)kCVPixelBufferWidthKey];
+    [attributes setValue:[NSNumber numberWithInt:size.height] forKey:(NSString *)kCVPixelBufferHeightKey];
+    [attributes setValue:@{(NSString *)kIOSurfaceIsGlobal: @NO} forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
+    [attributes setValue:[NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA] forKey:(NSString *)kCVPixelBufferPixelFormatTypeKey];
+    
+    
+    
+    if (_cvpool)
+    {
+        CVPixelBufferPoolRelease(_cvpool);
+    }
+    
+    
+    
+    CVReturn result = CVPixelBufferPoolCreate(NULL, NULL, (__bridge CFDictionaryRef)(attributes), &_cvpool);
+    
+    if (result != kCVReturnSuccess)
+    {
+        return NO;
+    }
+    
+    return YES;
+    
+    
+}
+
+
 -(id) init
 {
    if (self = [super init])
@@ -607,6 +677,7 @@
        
        audioBuffer = [[NSMutableArray alloc] init];
        videoBuffer = [[NSMutableArray alloc] init];
+       
        
        
        self.useStatusColors = YES;
@@ -677,6 +748,7 @@
        
        
        self.extraSaveData = [[NSMutableDictionary alloc] init];
+       [self createCGLContext];
        
        
            
@@ -1645,15 +1717,86 @@
 }
 
 
--(CVPixelBufferRef)currentFrame
+-(CIImage *)currentImg
 {
     
-    if (self.videoCaptureSession)
-    {
-        return [self.videoCaptureSession getCurrentFrame];
-    }
+    @autoreleasepool {
+        
+        CVPixelBufferRef newFrame = [self currentFrame];
+        CVPixelBufferRef destFrame = NULL;
+        
+        if (self.videoCaptureSession)
+        {
+            newFrame = [self.videoCaptureSession getCurrentFrame];
+        }
+
+        
+        
+        if (!newFrame)
+        {
+            return nil;
+        }
+        
+        
+         if (!_cvpool)
+         {
+         [self createPixelBufferPoolForSize:NSMakeSize(CVPixelBufferGetWidth(newFrame), CVPixelBufferGetHeight(newFrame))];
+         }
+        
+        if (!_cictx)
+        {
+            
+            _cictx = [CIContext contextWithCGLContext:_cgl_ctx pixelFormat:CGLGetPixelFormat(_cgl_ctx) colorSpace:CGColorSpaceCreateDeviceRGB() options:nil];
+            
+
+        }
+        
+        if (!_cifilter)
+        {
+            _cifilter = [CIFilter filterWithName:@"CISepiaTone"];
+            [_cifilter setDefaults];
+
+        }
+
+        CIImage *tmpimg = [CIImage imageWithIOSurface:CVPixelBufferGetIOSurface(newFrame)];
+        
+        CVPixelBufferRelease(newFrame);
+        
+        
+        CIImage *outimg;
+        
+        [_cifilter setValue:tmpimg forKey:kCIInputImageKey];
+        
+        
+        outimg = [_cifilter valueForKey:kCIOutputImageKey];
+        
+        CVPixelBufferPoolCreatePixelBuffer(kCVReturnSuccess, _cvpool, &destFrame);
+        
+        [_cictx render:tmpimg toIOSurface:CVPixelBufferGetIOSurface(destFrame) bounds:outimg.extent colorSpace:CGColorSpaceCreateDeviceRGB()];
+        
     
-    return NULL;
+    
+        @synchronized(self)
+        {
+            if (_currentPB)
+            {
+                CVPixelBufferRelease(_currentPB);
+            }
+            
+            _currentPB = destFrame;
+        }
+        return nil;
+    }
+}
+
+-(CVPixelBufferRef)currentFrame
+{
+
+    
+    @synchronized(self)
+    {
+        return _currentPB;
+    }
 }
 
 
@@ -1664,7 +1807,10 @@
     
         if (self.videoCaptureSession)
         {
+            [self currentImg];
+            
             newFrame = [self.videoCaptureSession getCurrentFrame];
+            
             if (newFrame)
             {
                 
@@ -1690,8 +1836,9 @@
                 _last_running_value = self.captureRunning;
                 
                 CVPixelBufferRelease(newFrame);
+
+                
             }
-            
         }
 }
 

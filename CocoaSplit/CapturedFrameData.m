@@ -102,7 +102,6 @@
     }
     
     _videoFrame = videoFrame;
-    
 }
 
 @end

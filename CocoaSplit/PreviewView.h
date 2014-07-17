@@ -56,7 +56,8 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     NSTrackingArea *_trackingArea;
     NSRecursiveLock *renderLock;
 
-    
+    CVPixelBufferPoolRef  _renderPool;
+
     NSScreen *_fullscreenOn;
 
     
@@ -68,6 +69,9 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 - (IBAction)toggleFullscreen:(id)sender;
 
 
+
+
+@property (strong) CIContext *cictx;
 
 @property (strong) NSColor *statusColor;
 

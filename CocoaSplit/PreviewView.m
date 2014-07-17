@@ -7,6 +7,8 @@
 //
 #import <QuartzCore/QuartzCore.h>
 #import <OpenGL/OpenGL.h>
+#import <OpenGL/glu.h>
+
 #import "PreviewView.h"
 
 
@@ -215,6 +217,41 @@
 }
 
 
+- (void)mouseDown:(NSEvent *)theEvent
+{
+    NSPoint tmp;
+    
+    tmp = [self convertPoint:theEvent.locationInWindow fromView:nil];
+    
+	NSLog(@"MOUSE POINT %f, %f", tmp.x, tmp.y);
+
+    GLint viewport[4];
+    GLdouble modelview[16];
+    GLdouble projection[16];
+    GLdouble winx, winy, winz;
+    GLdouble worldx, worldy, worldz;
+    
+    
+    [self.openGLContext makeCurrentContext];
+
+    glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
+    glGetDoublev(GL_PROJECTION_MATRIX, projection);
+    glGetIntegerv(GL_VIEWPORT, viewport);
+    winx = tmp.x;
+    winy = tmp.y;
+    winz = 0.0f;
+    
+    gluUnProject(winx, winy, winz, modelview, projection, viewport, &worldx, &worldy, &worldz);
+    
+	NSLog(@"MOUSE POINT %f, %f", winx, winy);
+    NSLog(@"WORLD X %f Y %f", worldx, worldy);
+    NSLog(@"PROJECTION %f %f", projection[4], projection[7]);
+    
+    
+    
+   // NSPointToCGPoint([self convertPoint:theEvent.locationInWindow fromView:nil]);
+}
+
 -(void) mouseMoved:(NSEvent *)theEvent
 {
     [self setIdleTimer];
@@ -304,6 +341,7 @@
     
     
     [self createShaders];
+    
     CVDisplayLinkCreateWithActiveCGDisplays(&displayLink);
     CVDisplayLinkSetOutputCallback(displayLink, &displayLinkRender, (__bridge void *)self);
     
@@ -316,6 +354,92 @@
 }
 
 
+-(bool) createPixelBufferPoolForSize:(NSSize) size
+{
+    
+    NSLog(@"Preview: Creating Pixel Buffer Pool %f x %f", size.width, size.height);
+    
+    NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
+    [attributes setValue:[NSNumber numberWithInt:size.width] forKey:(NSString *)kCVPixelBufferWidthKey];
+    [attributes setValue:[NSNumber numberWithInt:size.height] forKey:(NSString *)kCVPixelBufferHeightKey];
+    [attributes setValue:@{(NSString *)kIOSurfaceIsGlobal: @NO} forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
+    [attributes setValue:[NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA] forKey:(NSString *)kCVPixelBufferPixelFormatTypeKey];
+    
+    
+    
+    if (_renderPool)
+    {
+        CVPixelBufferPoolRelease(_renderPool);
+    }
+    
+    
+    
+    CVReturn result = CVPixelBufferPoolCreate(NULL, NULL, (__bridge CFDictionaryRef)(attributes), &_renderPool);
+    
+    if (result != kCVReturnSuccess)
+    {
+        return NO;
+    }
+    
+    return YES;
+    
+    
+}
+
+-(void) cvrender
+{
+    
+    @autoreleasepool {
+    CVImageBufferRef displayFrame = NULL;
+    CIImage *currentImg;
+    
+    /*
+    CGLContextObj cgl_ctx = [[self openGLContext] CGLContextObj];
+    
+    if (!self.cictx)
+    {
+        self.cictx = [CIContext contextWithCGLContext:cgl_ctx pixelFormat:CGLGetPixelFormat(cgl_ctx) colorSpace:CGColorSpaceCreateDeviceRGB() options:nil];
+    }
+     */
+    
+//    currentImg = [self.controller currentImg];
+        
+        displayFrame = [self.controller currentFrame];
+    
+        CVPixelBufferRetain(displayFrame);
+        /*
+    if (!currentImg)
+    {
+        return;
+    }
+
+
+    if (!_renderPool)
+    {
+        [self createPixelBufferPoolForSize:currentImg.extent.size];
+        
+        
+    }
+    
+    CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, _renderPool, &displayFrame);
+    
+        CGColorSpaceRef cs = CGColorSpaceCreateDeviceRGB();
+        
+        
+    [self.cictx render:currentImg toIOSurface:CVPixelBufferGetIOSurface(displayFrame) bounds:currentImg.extent colorSpace:cs];
+        CGColorSpaceRelease(cs);
+        
+        
+    currentImg = nil;
+    */
+    [self drawPixelBuffer:displayFrame];
+        CVPixelBufferRelease(displayFrame);
+        
+    }
+}
+
+
+
 static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStamp* now, const CVTimeStamp* outputTime,
                                   CVOptionFlags flagsIn, CVOptionFlags* flagsOut, void* displayLinkContext)
 {
@@ -324,28 +448,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
     myself = (__bridge PreviewView *)displayLinkContext;
     
-    CVImageBufferRef displayFrame = NULL;
-    displayFrame = [myself.controller currentFrame];
-    
-    myself.statusColor = [myself.controller statusColor];
-    
-    if (myself.statusColor)
-    {
-        myself.statusColor = [myself.statusColor colorUsingColorSpaceName:NSDeviceRGBColorSpace];
-    }
-    
-    if (displayFrame)
-    {
-
-    
-        
-        [myself drawFrame:displayFrame];
-    
-        CVPixelBufferRelease(displayFrame);
-    }
-    
-    
-    
+    [myself cvrender];
     return kCVReturnSuccess;
 }
 
@@ -353,21 +456,21 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
 - (void) drawFrame:(CVImageBufferRef)cImageBuf
 {
-        
     CFTypeID bufType = CFGetTypeID(cImageBuf);
     
     if (bufType == CVPixelBufferGetTypeID())
     {
-        [self drawPixelBuffer:cImageBuf];
+        //[self drawPixelBuffer:cImageBuf];
 //    } else if (bufType == CVOpenGLTextureGetTypeID()) {
   //      [self drawGLBuffer:cImageBuf];
     }
         
 }
 
-- (void) drawPixelBuffer:(CVPixelBufferRef)cImageBuf
+- (void) drawPixelBuffer:(CVImageBufferRef)cImageBuf
 {
  
+    
     if (!cImageBuf)
     {
         return;
@@ -492,6 +595,8 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 - (void) drawRect:(NSRect)dirtyRect
 {
 
+    
+    
     [self.openGLContext makeCurrentContext];
     CGLLockContext([self.openGLContext CGLContextObj]);
     
@@ -530,10 +635,23 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         aval = [self.statusColor alphaComponent];
     }
     
+    NSSize scaled;
+    
+    float wr = frame.size.width / _surfaceWidth ;
+    float hr = frame.size.height / _surfaceHeight;
+    
+    float ratio;
+    
+    ratio = (hr < wr ? hr : wr);
+    
+    scaled = NSMakeSize((_surfaceWidth * ratio), (_surfaceHeight * ratio));
+
+    
     glClearColor(rval, gval, bval, aval);
     glClear(GL_COLOR_BUFFER_BIT);
     
     glViewport(0, 0, frame.size.width, frame.size.height);
+    
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
@@ -551,17 +669,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         glBindTexture(GL_TEXTURE_RECTANGLE_ARB, _previewTextures[i]);
     }
     
-        NSSize scaled;
-        
-        float wr = _surfaceWidth / frame.size.width;
-        float hr = _surfaceHeight / frame.size.height;
-        
-        float ratio;
-        
-        ratio = (hr < wr ? wr : hr);
-        
-        scaled = NSMakeSize((_surfaceWidth / ratio), (_surfaceHeight / ratio));
-        
+    
         
         GLfloat text_coords[] =
         {
@@ -571,10 +679,12 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
             0.0, _surfaceHeight
         };
         
-        float halfw = scaled.width * 0.5;
-        float halfh = scaled.height * 0.5;
+    float halfw = (frame.size.width - scaled.width) / 2;
+        float halfh = (frame.size.height - scaled.height) / 2;
         
     
+    /*
+   
         GLfloat verts[] =
         {
           -halfw, halfh,
@@ -582,8 +692,23 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
             halfw, -halfh,
             -halfw, -halfh
         };
+   */
     
-        glTranslated(frame.size.width * 0.5, frame.size.height * 0.5, 0.0);
+    
+    GLfloat verts[] =
+    {
+        0, _surfaceHeight,
+        _surfaceWidth, _surfaceHeight,
+        _surfaceWidth, 0,
+        0,0
+    };
+    
+    //glOrtho(0, scaled.width, 0, scaled.height, 1, -1);
+    glTranslated(halfw, halfh, 0.0);
+    glScalef(ratio, ratio, 1.0f);
+    
+
+        //glTranslated(frame.size.width * 0.5, frame.size.height * 0.5, 0.0);
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         glTexCoordPointer(2, GL_FLOAT, 0, text_coords);
         glEnableClientState(GL_VERTEX_ARRAY);
@@ -592,10 +717,10 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         glDisableClientState(GL_VERTEX_ARRAY);
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
+    //glMatrixMode(GL_MODELVIEW);
+    //glPopMatrix();
+    //glMatrixMode(GL_PROJECTION);
+    //glPopMatrix();
     glFlush();
     
 

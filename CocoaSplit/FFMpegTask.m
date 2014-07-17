@@ -169,7 +169,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         if ([self createAVFormatOut:frameData.encodedSampleBuffer codec_ctx:frameData.avcodec_ctx])
         {
             [self initStatsValues];
-            
         } else {
             return;
         }
@@ -189,14 +188,16 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     {
         CMSampleBufferRef audioSample = (__bridge CMSampleBufferRef)object;
         
+        /*
         if (CMSampleBufferGetNumSamples(audioSample) > 1)
         {
             NSLog(@"NUMBER OF SAMPLES IN FRAME %ld", CMSampleBufferGetNumSamples(audioSample));
             
         }
-        
+         */
         
         [self writeAudioSampleBuffer:audioSample presentationTimeStamp:CMSampleBufferGetOutputPresentationTimeStamp(audioSample)];
+        
         //CFRelease(audioSample);
     }
     
@@ -347,7 +348,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     a_ctx->channels = 2;
     a_ctx->extradata = (unsigned char *)_audio_extradata;
     a_ctx->extradata_size = (int)_audio_extradata_size;
-    //a_ctx->frame_size = (_samplerate * 2 * 2) / _framerate;
+    a_ctx->frame_size = (_samplerate * 2 * 2) / _framerate;
     
     if (theBuffer)
     {

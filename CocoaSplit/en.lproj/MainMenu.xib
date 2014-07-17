@@ -616,7 +616,7 @@
                                                                                 </tableHeaderCell>
                                                                                 <popUpButtonCell key="dataCell" type="push" title="Pop Up" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="HpT-sY-IK6" id="9zx-Dv-NIl">
                                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                                    <font key="font" metaFont="system"/>
+                                                                                    <font key="font" metaFont="menu"/>
                                                                                     <menu key="menu" title="OtherViews" id="gHk-ba-GfP">
                                                                                         <items>
                                                                                             <menuItem title="Pop Up" state="on" id="HpT-sY-IK6"/>
@@ -625,17 +625,17 @@
                                                                                 </popUpButtonCell>
                                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                 <connections>
-                                                                                    <binding destination="gSI-N4-DsK" name="contentValues" keyPath="arrangedObjects.key" id="eF7-wz-g3v">
-                                                                                        <dictionary key="options">
-                                                                                            <bool key="NSInsertsNullPlaceholder" value="YES"/>
-                                                                                        </dictionary>
-                                                                                    </binding>
+                                                                                    <binding destination="1431" name="selectedValue" keyPath="arrangedObjects.compressor_name" previousBinding="eF7-wz-g3v" id="rXY-uI-BBK"/>
                                                                                     <binding destination="1431" name="enabled" keyPath="arrangedObjects.ffmpeg_out" id="pDt-Rl-6JE">
                                                                                         <dictionary key="options">
                                                                                             <string key="NSValueTransformerName">NSIsNil</string>
                                                                                         </dictionary>
                                                                                     </binding>
-                                                                                    <binding destination="1431" name="selectedValue" keyPath="arrangedObjects.compressor_name" previousBinding="eF7-wz-g3v" id="rXY-uI-BBK"/>
+                                                                                    <binding destination="gSI-N4-DsK" name="contentValues" keyPath="arrangedObjects.key" id="eF7-wz-g3v">
+                                                                                        <dictionary key="options">
+                                                                                            <bool key="NSInsertsNullPlaceholder" value="YES"/>
+                                                                                        </dictionary>
+                                                                                    </binding>
                                                                                 </connections>
                                                                             </tableColumn>
                                                                         </tableColumns>

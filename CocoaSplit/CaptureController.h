@@ -22,6 +22,7 @@
 #import "ControllerProtocol.h"
 #import <IOKit/pwr_mgt/IOPMLib.h>
 #import <mach/mach_time.h>
+#import <QuartzCore/CoreImage.h>
 
 
 
@@ -70,6 +71,17 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     bool _last_running_value;
     
     
+    CVPixelBufferPoolRef _cvpool;
+    CIContext *_cictx;
+    CIFilter *_cifilter;
+    NSOpenGLContext *_ogl_ctx;
+    CGLContextObj _cgl_ctx;
+    
+    
+    CVPixelBufferRef _currentPB;
+    
+    
+    
     
     
     
@@ -77,7 +89,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     
     
 }
-
 
 @property (strong) id<h264Compressor> videoCompressor;
 @property (nonatomic, strong) id<CaptureSessionProtocol> videoCaptureSession;

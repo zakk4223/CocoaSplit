@@ -219,6 +219,7 @@
     CVOpenGLTextureRef textureOut;
     CVPixelBufferRef bufferOut;
     
+    
     CVPixelBufferPoolCreatePixelBuffer(NULL, _pixel_buffer_pool, &bufferOut);
     if (!bufferOut)
     {
