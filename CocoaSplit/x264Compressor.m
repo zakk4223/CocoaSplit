@@ -187,7 +187,8 @@
         CVPixelBufferRetain(frameData.videoFrame);
     }
     
-    
+    [self setAudioData:frameData syncObj:self];
+
     dispatch_async(_compressor_queue, ^{
         
         
@@ -297,7 +298,6 @@
         frameData.avcodec_ctx = _av_codec_ctx;
         frameData.avcodec_pkt = pkt;
         
-        [self setAudioData:frameData syncObj:self];
         
         for (id dKey in self.outputs)
         {
