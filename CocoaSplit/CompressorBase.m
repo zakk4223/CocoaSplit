@@ -81,8 +81,8 @@
 {
     
     NSUInteger audioConsumed = 0;
-    //@synchronized(syncObj)
-    //{
+    @synchronized(syncObj)
+    {
         NSUInteger audioBufferSize = [_audioBuffer count];
         
         for (int i = 0; i < audioBufferSize; i++)
@@ -111,7 +111,7 @@
             [_audioBuffer removeObjectsInRange:NSMakeRange(0, audioConsumed)];
         }
         
-    //}
+    }
  
 }
 
