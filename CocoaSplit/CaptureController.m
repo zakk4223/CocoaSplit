@@ -1579,9 +1579,6 @@
         [compressor addAudioData:sampleBuffer];
         
     }
-    
-    CFRelease(sampleBuffer);
-
 }
 
 

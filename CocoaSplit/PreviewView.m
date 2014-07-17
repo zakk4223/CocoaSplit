@@ -356,6 +356,7 @@
 
 -(bool) createPixelBufferPoolForSize:(NSSize) size
 {
+    //Without the autorelease NSColor leaks objects
     
     NSLog(@"Preview: Creating Pixel Buffer Pool %f x %f", size.width, size.height);
     
