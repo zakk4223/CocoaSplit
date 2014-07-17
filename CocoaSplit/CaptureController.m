@@ -1714,7 +1714,7 @@
 }
 
 
--(CIImage *)currentImg
+-(CVPixelBufferRef)currentImg
 {
     
     @autoreleasepool {
@@ -1734,11 +1734,20 @@
             return nil;
         }
         
+        CGFloat frameWidth, frameHeight;
         
-         if (!_cvpool)
+        frameWidth = CVPixelBufferGetWidth(newFrame);
+        frameHeight = CVPixelBufferGetHeight(newFrame);
+        
+        NSSize frameSize = NSMakeSize(frameHeight, frameWidth);
+        
+        if (!CGSizeEqualToSize(frameSize, _cvpool_size))
          {
-         [self createPixelBufferPoolForSize:NSMakeSize(CVPixelBufferGetWidth(newFrame), CVPixelBufferGetHeight(newFrame))];
+             [self createPixelBufferPoolForSize:NSMakeSize(CVPixelBufferGetWidth(newFrame), CVPixelBufferGetHeight(newFrame))];
+             _cvpool_size = frameSize;
+         
          }
+        
         
         if (!_cictx)
         {
@@ -1769,7 +1778,7 @@
         
         CVPixelBufferPoolCreatePixelBuffer(kCVReturnSuccess, _cvpool, &destFrame);
         
-        [_cictx render:tmpimg toIOSurface:CVPixelBufferGetIOSurface(destFrame) bounds:outimg.extent colorSpace:CGColorSpaceCreateDeviceRGB()];
+        [_cictx render:outimg toIOSurface:CVPixelBufferGetIOSurface(destFrame) bounds:outimg.extent colorSpace:CGColorSpaceCreateDeviceRGB()];
         
     
     
@@ -1782,8 +1791,9 @@
             
             _currentPB = destFrame;
         }
-        return nil;
+        
     }
+    return _currentPB;
 }
 
 -(CVPixelBufferRef)currentFrame
@@ -1804,13 +1814,12 @@
     
         if (self.videoCaptureSession)
         {
-            [self currentImg];
+            newFrame = [self currentImg];
             
-            newFrame = [self.videoCaptureSession getCurrentFrame];
             
             if (newFrame)
             {
-                
+                CVPixelBufferRetain(newFrame);
                 if (self.captureRunning)
                 {
                     if (self.captureRunning != _last_running_value)

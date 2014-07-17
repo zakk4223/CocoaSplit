@@ -52,12 +52,9 @@
 
 @end
 
+
+
 @implementation PreviewView
-
-
-
-
-
 
 -(void) logGLShader:(GLuint)logTarget shaderPath:(NSString *)shaderPath
 {
@@ -390,53 +387,14 @@
 -(void) cvrender
 {
     
-    @autoreleasepool {
     CVImageBufferRef displayFrame = NULL;
-    CIImage *currentImg;
     
-    /*
-    CGLContextObj cgl_ctx = [[self openGLContext] CGLContextObj];
+    displayFrame = [self.controller currentFrame];
     
-    if (!self.cictx)
-    {
-        self.cictx = [CIContext contextWithCGLContext:cgl_ctx pixelFormat:CGLGetPixelFormat(cgl_ctx) colorSpace:CGColorSpaceCreateDeviceRGB() options:nil];
-    }
-     */
-    
-//    currentImg = [self.controller currentImg];
-        
-        displayFrame = [self.controller currentFrame];
-    
-        CVPixelBufferRetain(displayFrame);
-        /*
-    if (!currentImg)
-    {
-        return;
-    }
-
-
-    if (!_renderPool)
-    {
-        [self createPixelBufferPoolForSize:currentImg.extent.size];
-        
-        
-    }
-    
-    CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, _renderPool, &displayFrame);
-    
-        CGColorSpaceRef cs = CGColorSpaceCreateDeviceRGB();
-        
-        
-    [self.cictx render:currentImg toIOSurface:CVPixelBufferGetIOSurface(displayFrame) bounds:currentImg.extent colorSpace:cs];
-        CGColorSpaceRelease(cs);
-        
-        
-    currentImg = nil;
-    */
+    CVPixelBufferRetain(displayFrame);
     [self drawPixelBuffer:displayFrame];
-        CVPixelBufferRelease(displayFrame);
-        
-    }
+    CVPixelBufferRelease(displayFrame);
+    
 }
 
 
@@ -454,19 +412,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 }
 
 
-
-- (void) drawFrame:(CVImageBufferRef)cImageBuf
-{
-    CFTypeID bufType = CFGetTypeID(cImageBuf);
-    
-    if (bufType == CVPixelBufferGetTypeID())
-    {
-        //[self drawPixelBuffer:cImageBuf];
-//    } else if (bufType == CVOpenGLTextureGetTypeID()) {
-  //      [self drawGLBuffer:cImageBuf];
-    }
-        
-}
 
 - (void) drawPixelBuffer:(CVImageBufferRef)cImageBuf
 {
@@ -613,13 +558,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
 - (void) drawTexture:(NSRect)dirtyRect
 {
-
-
     
-    
-    
-
-
     NSRect frame = self.frame;
     
     
@@ -646,7 +585,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     ratio = (hr < wr ? hr : wr);
     
     scaled = NSMakeSize((_surfaceWidth * ratio), (_surfaceHeight * ratio));
-
+    
     
     glClearColor(rval, gval, bval, aval);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -665,35 +604,23 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
     for(int i = 0; i < _num_planes; i++)
     {
-
+        
         glActiveTexture(GL_TEXTURE0 + i);
         glBindTexture(GL_TEXTURE_RECTANGLE_ARB, _previewTextures[i]);
     }
     
     
-        
-        GLfloat text_coords[] =
-        {
-            0.0, 0.0,
-            _surfaceWidth, 0.0,
-            _surfaceWidth, _surfaceHeight,
-            0.0, _surfaceHeight
-        };
-        
-    float halfw = (frame.size.width - scaled.width) / 2;
-        float halfh = (frame.size.height - scaled.height) / 2;
-        
     
-    /*
-   
-        GLfloat verts[] =
-        {
-          -halfw, halfh,
-            halfw, halfh,
-            halfw, -halfh,
-            -halfw, -halfh
-        };
-   */
+    GLfloat text_coords[] =
+    {
+        0.0, 0.0,
+        _surfaceWidth, 0.0,
+        _surfaceWidth, _surfaceHeight,
+        0.0, _surfaceHeight
+    };
+    
+    float halfw = (frame.size.width - scaled.width) / 2;
+    float halfh = (frame.size.height - scaled.height) / 2;
     
     
     GLfloat verts[] =
@@ -704,24 +631,18 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         0,0
     };
     
-    //glOrtho(0, scaled.width, 0, scaled.height, 1, -1);
     glTranslated(halfw, halfh, 0.0);
     glScalef(ratio, ratio, 1.0f);
     
-
-        //glTranslated(frame.size.width * 0.5, frame.size.height * 0.5, 0.0);
-        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-        glTexCoordPointer(2, GL_FLOAT, 0, text_coords);
-        glEnableClientState(GL_VERTEX_ARRAY);
-        glVertexPointer(2, GL_FLOAT, 0, verts);
-
-        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-        glDisableClientState(GL_VERTEX_ARRAY);
-    //glMatrixMode(GL_MODELVIEW);
-    //glPopMatrix();
-    //glMatrixMode(GL_PROJECTION);
-    //glPopMatrix();
+    
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glTexCoordPointer(2, GL_FLOAT, 0, text_coords);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glVertexPointer(2, GL_FLOAT, 0, verts);
+    
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisableClientState(GL_VERTEX_ARRAY);
     glFlush();
     
 

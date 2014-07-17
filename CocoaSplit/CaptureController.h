@@ -79,15 +79,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     
     
     CVPixelBufferRef _currentPB;
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    NSSize _cvpool_size;
 }
 
 @property (strong) id<h264Compressor> videoCompressor;

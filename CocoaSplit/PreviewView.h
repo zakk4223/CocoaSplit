@@ -65,7 +65,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 }
 
 
--(void) drawFrame:(CVImageBufferRef)cFrame;
 - (IBAction)toggleFullscreen:(id)sender;
 
 

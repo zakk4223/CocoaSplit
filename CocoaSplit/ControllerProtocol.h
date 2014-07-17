@@ -47,7 +47,6 @@
 -(CVPixelBufferRef)currentFrame;
 -(double)mach_time_seconds;
 -(NSColor *)statusColor;
--(CIImage *)currentImg;
 
 
 
