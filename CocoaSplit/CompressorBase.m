@@ -68,7 +68,6 @@
 {
    if ([self hasOutputs] && audioData && _audioBuffer)
    {
-       CFRetain(audioData);
        @synchronized(self)
        {
            [_audioBuffer addObject:(__bridge id)audioData];
@@ -98,9 +97,7 @@
             {
                 
                 audioConsumed++;
-                
                 [forFrame.audioSamples addObject:(__bridge id)audioData];
-                
             } else {
                 break;
             }

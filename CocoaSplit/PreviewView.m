@@ -319,34 +319,39 @@
 static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStamp* now, const CVTimeStamp* outputTime,
                                   CVOptionFlags flagsIn, CVOptionFlags* flagsOut, void* displayLinkContext)
 {
+    //Without the autorelease NSColor leaks objects
     
-    PreviewView *myself;
-    
-    myself = (__bridge PreviewView *)displayLinkContext;
-    
-    CVImageBufferRef displayFrame = NULL;
-    displayFrame = [myself.controller currentFrame];
-    
-    myself.statusColor = [myself.controller statusColor];
-    
-    if (myself.statusColor)
-    {
-        myself.statusColor = [myself.statusColor colorUsingColorSpaceName:NSDeviceRGBColorSpace];
-    }
-    
-    if (displayFrame)
-    {
-
-    
+    @autoreleasepool {
         
-        [myself drawFrame:displayFrame];
-    
-        CVPixelBufferRelease(displayFrame);
+        PreviewView *myself;
+        
+        myself = (__bridge PreviewView *)displayLinkContext;
+        
+        CVImageBufferRef displayFrame = NULL;
+        displayFrame = [myself.controller currentFrame];
+        
+        NSColor *newColor = [myself.controller statusColor];
+        
+        
+        if (newColor)
+        {
+            myself.statusColor = [newColor colorUsingColorSpaceName:NSDeviceRGBColorSpace];
+        }
+        
+        newColor = nil;
+        
+        if (displayFrame)
+        {
+            
+            [myself drawFrame:displayFrame];
+            
+            CVPixelBufferRelease(displayFrame);
+        }
+        
+        
+        
+        return kCVReturnSuccess;
     }
-    
-    
-    
-    return kCVReturnSuccess;
 }
 
 

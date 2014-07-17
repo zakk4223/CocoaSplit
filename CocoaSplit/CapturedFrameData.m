@@ -52,13 +52,6 @@
 
     }
 	
-    for (id object in self.audioSamples)
-    {
-        CMSampleBufferRef audioSample = (__bridge CMSampleBufferRef)object;
-        CFRelease(audioSample);
-    }
-    
-
 	self.audioSamples = nil;
 }
 
