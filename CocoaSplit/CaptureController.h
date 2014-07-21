@@ -12,18 +12,18 @@
 #import "AVFCapture.h"
 #import "QTCapture.h"
 #import <CoreMedia/CoreMedia.h>
-#import "FFMpegTask.h"
 #import "CaptureSessionProtocol.h"
 #import "AbstractCaptureDevice.h"
-#import "PreviewView.h"
-#import "h264Compressor.h"
 #import "AppleVTCompressor.h"
-#import "x264Compressor.h"
-#import "ControllerProtocol.h"
 #import <IOKit/pwr_mgt/IOPMLib.h>
 #import <mach/mach_time.h>
 #import <QuartzCore/CoreImage.h>
 
+
+@class FFMpegTask;
+@protocol h264Compressor;
+@class OutputDestination;
+@class InputSource;
 
 
 
@@ -31,8 +31,17 @@
 void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , CMSampleBufferRef );
 
 
+@class PreviewView;
 
-@interface CaptureController : NSObject <ControllerProtocol> {
+@interface CaptureController : NSObject {
+    
+    
+    
+    CIFilter *_compositeFilter;
+    CIImage *_backgroundImage;
+    
+    NSSortDescriptor *_sourceDepthSorter;
+    NSSortDescriptor *_sourceUUIDSorter;
     
     id _audio_capture_session;
     
@@ -52,7 +61,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     CFAbsoluteTime _firstFrameTime;
     CFAbsoluteTime _lastFrameTime;
     CMTime _firstAudioTime;
-    NSString *_selectedVideoType;
     dispatch_queue_t _main_capture_queue;
     dispatch_queue_t _preview_queue;
     dispatch_source_t _dispatch_timer;
@@ -80,11 +88,20 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     
     CVPixelBufferRef _currentPB;
     NSSize _cvpool_size;
+    CIFilter *_backgroundFilter;
+    
 }
 
+@property (strong) NSMutableArray *sourceList;
+
 @property (strong) id<h264Compressor> videoCompressor;
-@property (nonatomic, strong) id<CaptureSessionProtocol> videoCaptureSession;
 @property (strong) id<CaptureSessionProtocol> audioCaptureSession;
+
+
+@property (assign) double captureFPS;
+@property (readonly) int audioBitrate;
+@property (readonly) int audioSamplerate;
+
 
 @property (assign) double min_delay;
 @property (assign) double max_delay;
@@ -96,12 +113,12 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 @property (assign) CFAbsoluteTime last_dl_time;
 
+@property (weak) IBOutlet NSPopover *editorPopover;
 
 @property (unsafe_unretained) IBOutlet PreviewView *previewCtx;
 @property (unsafe_unretained) IBOutlet NSObjectController *objectController;
 @property (strong) IBOutlet NSObjectController *compressSettingsController;
 @property (strong) IBOutlet NSObjectController *outputPanelController;
-- (IBAction)imagePanelChooseDirectory:(id)sender;
 - (IBAction)closeOutputPanel:(id)sender;
 
 - (IBAction)addStreamingService:(id)sender;
@@ -111,7 +128,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (IBAction)closeAdvancedPrefPanel:(id)sender;
 - (IBAction)openAdvancedPrefPanel:(id)sender;
 - (IBAction)openCreateSheet:(id)sender;
-- (IBAction)videoRefresh:(id)sender;
 - (IBAction)openVideoAdvanced:(id)sender;
 - (IBAction)closeVideoAdvanced:(id)sender;
 - (void)openCompressPanel:(bool)doEdit;
@@ -121,6 +137,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 - (IBAction)closeCompressPanel;
 
+- (IBAction)addInputSource:(id)sender;
 
 - (IBAction)openAudioMixerPanel:(id)sender;
 - (IBAction)closeAudioMixerPanel:(id)sender;
@@ -258,7 +275,9 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(int)streamsActiveCount;
 -(NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender;
 -(NSColor *)statusColor;
-
+-(void)captureOutputAudio:(id)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer;
+-(void)deleteSource:(InputSource *)delSource;
+-(InputSource *)findSource:(NSPoint)forPoint;
 
 -(void)setupLogging;
 

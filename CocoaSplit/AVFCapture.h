@@ -9,12 +9,13 @@
 #import <Foundation/Foundation.h>
 #import <VideoToolbox/VideoToolbox.h>
 #import <AVFoundation/AVFoundation.h>
-#import "CaptureSessionProtocol.h"
-#import "ControllerProtocol.h"
+#import "CaptureBase.h"
 #import "AVFChannelManager.h"
 
 
-@interface AVFCapture : NSObject <CaptureSessionProtocol, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate>
+@class CaptureController;
+
+@interface AVFCapture : CaptureBase <CaptureSessionProtocol, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate>
 {
 
     AVCaptureSession *_capture_session;
@@ -38,12 +39,10 @@
 
 
 @property (strong) AVFChannelManager *audioChannelManager;
-@property (strong) NSArray *availableVideoDevices;
 @property double videoCaptureFPS;
 @property int width;
 @property int height;
-@property (weak) id<ControllerProtocol> videoDelegate;
-@property (strong) id<ControllerProtocol> audioDelegate;
+@property (strong) CaptureController *audioDelegate;
 @property (assign) int audioBitrate;
 @property (assign) int audioSamplerate;
 @property (assign) int videoHeight;
@@ -53,13 +52,10 @@
 @property id activeAudioDevice;
 @property AVCaptureDeviceFormat *activeVideoFormat;
 @property AVFrameRateRange *activeVideoFramerate;
-@property AbstractCaptureDevice *activeVideoDevice;
 @property (strong) AVCaptureAudioPreviewOutput *audioPreviewOutput;
 @property (assign) int prerollSeconds;
 @property (assign) BOOL did_preroll;
 @property (assign) float previewVolume;
-
-@property (weak) id<ControllerProtocol> settingsController;
 
 
 

@@ -18,11 +18,14 @@
 #import <mach/mach.h>
 #import <mach/mach_time.h>
 #import "ImageCapture.h"
+#import "x264Compressor.h"
+#import "InputSource.h"
 
 
 @implementation CaptureController
 
 @synthesize selectedCompressorType = _selectedCompressorType;
+@synthesize captureFPS = _captureFPS;
 
 -(void)loadTwitchIngest
 {
@@ -213,7 +216,6 @@
         self.selectedCompressor = [[self.compressController.selectedObjects objectAtIndex:0] valueForKey:@"value"];
     }
     
-    
 
     if (doEdit)
     {
@@ -358,6 +360,14 @@
     self.editingCompressorKey = nil;
 }
 
+- (IBAction)addInputSource:(id)sender
+{
+    InputSource *newSource = [[InputSource alloc] init];
+    newSource.depth = (int)self.sourceList.count;
+    [self.sourceList addObject:newSource];
+    
+}
+
 
 
 - (IBAction)openAudioMixerPanel:(id)sender {
@@ -471,7 +481,7 @@
 }
 
 
-
+/*
 -(void) selectedVideoCaptureFromID:(NSString *)uniqueID
 {
     
@@ -493,101 +503,20 @@
     }
 }
 
--(IBAction) videoRefresh:(id)sender
+ */
+
+
+-(void)setCaptureFPS:(double)captureFPS
 {
-    
-    NSArray *currentAvailableDevices = self.videoCaptureSession.availableVideoDevices;
-    
-    if (self.selectedVideoCapture)
-    {
-        NSUInteger sidx;
-        sidx = [currentAvailableDevices indexOfObject:self.selectedVideoCapture];
-        if (sidx == NSNotFound)
-        {
-            self.selectedVideoCapture = nil;
-        } else {
-            self.selectedVideoCapture = [currentAvailableDevices objectAtIndex:sidx];
-        }
-    }
+    _captureFPS = captureFPS;
+    [self setupFrameTimer];
 }
 
 
-
-- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+-(double)captureFPS
 {
-    if ([keyPath isEqualToString:@"videoCaptureFPS"])
-    {
-        
-        [self setupFrameTimer];
-    }
+    return _captureFPS;
 }
-
-
-
--(NSString *) selectedVideoType
-{
-    return _selectedVideoType;
-}
-
-
-
--(void) setSelectedVideoType:(NSString *)selectedVideoType
-{
-    
-    
-    NSLog(@"SETTING SELECTED VIDEO TYPE %@", selectedVideoType);
-    
-    if (self.videoCaptureSession)
-    {
-        
-        [(NSObject *)self.videoCaptureSession removeObserver:self forKeyPath:@"videoCaptureFPS" context:NULL];
-    }
-    
-    self.videoCaptureSession = nil;
-    
-    id newCaptureSession;
-    
-    if ([selectedVideoType isEqualToString:@"Desktop"])
-    {
-        newCaptureSession = [[DesktopCapture alloc ] init];
-    } else if ([selectedVideoType isEqualToString:@"AVFoundation"]) {
-        newCaptureSession = [[AVFCapture alloc] init];
-    } else if ([selectedVideoType isEqualToString:@"QTCapture"]) {
-        newCaptureSession = [[QTCapture alloc] init];
-    } else if ([selectedVideoType isEqualToString:@"Syphon"]) {
-        newCaptureSession = [[SyphonCapture alloc] init];
-    } else if ([selectedVideoType isEqualToString:@"Image"]) {
-        
-        newCaptureSession = [[ImageCapture alloc] init];
-    } else {
-        newCaptureSession = [[AVFCapture alloc] init];
-    }
-    
-    
-    self.videoCaptureSession = newCaptureSession;
-    newCaptureSession = nil;
-    
-    
-    if (!self.videoCaptureSession)
-    {
-        self.audioCaptureSession  = nil;
-        _selectedVideoType = nil;
-        
-    } else {
-        self.videoCaptureSession.videoDelegate = self;
-        self.videoCaptureSession.settingsController = self;
-        
-    }
-    
-    [(NSObject *)self.videoCaptureSession addObserver:self forKeyPath:@"videoCaptureFPS" options:NSKeyValueObservingOptionNew context:NULL];
-    
-    
-    self.selectedVideoCapture = nil;
-    
-    _selectedVideoType = selectedVideoType;
-}
-
-
 
 
 -(void) createCGLContext
@@ -616,6 +545,11 @@
     }
 
     _cgl_ctx = [_ogl_ctx CGLContextObj];
+    
+    _backgroundFilter = [CIFilter filterWithName:@"CIConstantColorGenerator"];
+    [_backgroundFilter setDefaults];
+    [_backgroundFilter setValue:[CIColor colorWithRed:0.0f green:0.0f blue:0.0f] forKey:kCIInputColorKey];
+
     /*
     _cictx = [CIContext contextWithCGLContext:_cgl_ctx pixelFormat:CGLGetPixelFormat(_cgl_ctx) colorSpace:CGColorSpaceCreateDeviceRGB() options:nil];
     
@@ -748,6 +682,9 @@
        
        
        self.extraSaveData = [[NSMutableDictionary alloc] init];
+       _sourceDepthSorter = [[NSSortDescriptor alloc] initWithKey:@"depth" ascending:YES];
+       _sourceUUIDSorter = [[NSSortDescriptor alloc] initWithKey:@"uuid" ascending:YES];
+       
        [self createCGLContext];
        
        
@@ -938,11 +875,10 @@
     
     [saveRoot setValue: [NSNumber numberWithInt:self.captureWidth] forKey:@"captureWidth"];
     [saveRoot setValue: [NSNumber numberWithInt:self.captureHeight] forKey:@"captureHeight"];
-    [saveRoot setValue: [NSNumber numberWithDouble:self.videoCaptureSession.videoCaptureFPS] forKey:@"captureFPS"];
+    [saveRoot setValue: [NSNumber numberWithDouble:self.captureFPS] forKey:@"captureFPS"];
     [saveRoot setValue: [NSNumber numberWithInt:self.audioCaptureSession.audioBitrate] forKey:@"audioBitrate"];
     [saveRoot setValue: [NSNumber numberWithInt:self.audioCaptureSession.audioSamplerate] forKey:@"audioSamplerate"];
     [saveRoot setValue: self.selectedVideoType forKey:@"selectedVideoType"];
-    [saveRoot setValue: self.videoCaptureSession.activeVideoDevice.uniqueID forKey:@"videoCaptureID"];
     [saveRoot setValue: self.selectedAudioCapture.uniqueID forKey:@"audioCaptureID"];
     [saveRoot setValue: self.captureDestinations forKey:@"captureDestinations"];
     [saveRoot setValue: self.selectedCompressorType forKey:@"selectedCompressorType"];
@@ -959,6 +895,7 @@
 
     
     [saveRoot setValue:[NSNumber numberWithUnsignedInteger:compressoridx] forKey:@"selectedCompressor"];
+    [saveRoot setValue:self.sourceList forKeyPath:@"sourceList"];
     
     
     
@@ -1041,16 +978,14 @@
     self.selectedVideoType = [saveRoot valueForKey:@"selectedVideoType"];
     self.selectedCompressorType = [saveRoot valueForKey:@"selectedCompressorType"];
 
-    NSString *videoID = [saveRoot valueForKey:@"videoCaptureID"];
     
-    [self selectedVideoCaptureFromID:videoID];
     
     NSString *audioID = [saveRoot valueForKey:@"audioCaptureID"];
     
     [self selectedAudioCaptureFromID:audioID];
     self.audioCaptureSession.previewVolume = [[saveRoot valueForKey:@"previewVolume"] floatValue];
     
-    self.videoCaptureSession.videoCaptureFPS = [[saveRoot valueForKey:@"captureFPS"] doubleValue];
+    self.captureFPS = [[saveRoot valueForKey:@"captureFPS"] doubleValue];
     self.maxOutputDropped = [[saveRoot valueForKey:@"maxOutputDropped"] intValue];
     self.maxOutputPending = [[saveRoot valueForKey:@"maxOutputPending"] intValue];
 
@@ -1062,6 +997,13 @@
         self.resolutionOption = @"None";
     }
 
+    self.sourceList = [saveRoot valueForKey:@"sourceList"];
+    if (!self.sourceList)
+    {
+        self.sourceList = [[NSMutableArray alloc] init];
+    }
+    
+    
     [self migrateDefaultCompressor:saveRoot];
 }
 
@@ -1096,13 +1038,6 @@
         
     }
 }
-
-
-
-- (IBAction)imagePanelChooseDirectory:(id)sender {
-    [self.videoCaptureSession chooseDirectory:sender];
-}
-
 
 
 - (IBAction)addStreamingService:(id)sender {
@@ -1225,10 +1160,6 @@
     return self.audioCaptureSession.audioSamplerate;
 }
 
--(double) captureFPS
-{
-    return self.videoCaptureSession.videoCaptureFPS;
-}
 
 
 -(bool) startStream
@@ -1277,11 +1208,11 @@
 
 -(void) setupFrameTimer
 {
-    NSLog(@"SETTING UP FRAME TIMER %f", self.videoCaptureSession.videoCaptureFPS);
+    NSLog(@"SETTING UP FRAME TIMER %f", self.captureFPS);
     
-    if (self.videoCaptureSession.videoCaptureFPS && self.videoCaptureSession.videoCaptureFPS > 0)
+    if (self.captureFPS && self.captureFPS > 0)
     {
-        _frame_interval = (1.0/self.videoCaptureSession.videoCaptureFPS);
+        _frame_interval = (1.0/self.captureFPS);
     } else {
         _frame_interval = 1.0/60.0;
     }
@@ -1402,12 +1333,14 @@
     }
     
     
+    /*
     if ([cmdargs objectForKey:@"videoCaptureID"])
     {
         NSString *videoID = [cmdargs stringForKey:@"videoCaptureID"];
         [self selectedVideoCaptureFromID:videoID];
     }
     
+     */
     
     if ([cmdargs objectForKey:@"audioCaptureID"])
     {
@@ -1417,7 +1350,7 @@
     
     if ([cmdargs objectForKey:@"captureFPS"])
     {
-        self.videoCaptureSession.videoCaptureFPS = [cmdargs doubleForKey:@"captureFPS"];
+        self.captureFPS = [cmdargs doubleForKey:@"captureFPS"];
     }
     
     if ([cmdargs objectForKey:@"outputDestinations"])
@@ -1713,37 +1646,77 @@
 
 }
 
+-(void)deleteSource:(InputSource *)delSource
+{
+    
+    [self.sourceList removeObject:delSource];
+}
+
+
+
+-(InputSource *)findSource:(NSPoint)forPoint
+{
+    
+    NSArray *listCopy = [self.sourceList sortedArrayUsingDescriptors:@[_sourceDepthSorter.reversedSortDescriptor, _sourceUUIDSorter.reversedSortDescriptor]];
+    
+    for (InputSource *isrc in listCopy)
+    {
+        
+        if (NSPointInRect(forPoint, isrc.layoutPosition))
+        {
+            return isrc;
+        }
+    }
+    
+    return nil;
+}
+
+
 
 -(CVPixelBufferRef)currentImg
 {
     
     @autoreleasepool {
         
-        CVPixelBufferRef newFrame = [self currentFrame];
+        //CVPixelBufferRef newFrame = [self currentFrame];
         CVPixelBufferRef destFrame = NULL;
         
-        if (self.videoCaptureSession)
+        /*
+        if (!_backgroundImage)
         {
-            newFrame = [self.videoCaptureSession getCurrentFrame];
+            _backgroundImage = [CIImage imageWithColor:[CIColor colorWithRed:0.0f green:0.0f blue:0.0f]];
         }
-
+         */
+        
+        CIImage *newImage = [_backgroundFilter valueForKey:kCIOutputImageKey];
         
         
-        if (!newFrame)
+        NSArray *listCopy = [self.sourceList sortedArrayUsingDescriptors:@[_sourceDepthSorter, _sourceUUIDSorter]];
+        
+        for (InputSource *isource in listCopy)
+        {
+            newImage = [isource currentImage:newImage];
+        }
+        
+        
+        if (!newImage)
         {
             return nil;
         }
         
         CGFloat frameWidth, frameHeight;
-        
+        /*
         frameWidth = CVPixelBufferGetWidth(newFrame);
         frameHeight = CVPixelBufferGetHeight(newFrame);
+        */
+        frameWidth = self.captureWidth;
+        frameHeight = self.captureHeight;
         
-        NSSize frameSize = NSMakeSize(frameHeight, frameWidth);
+        NSSize frameSize = NSMakeSize(frameWidth, frameHeight);
         
         if (!CGSizeEqualToSize(frameSize, _cvpool_size))
          {
-             [self createPixelBufferPoolForSize:NSMakeSize(CVPixelBufferGetWidth(newFrame), CVPixelBufferGetHeight(newFrame))];
+             [self createPixelBufferPoolForSize:frameSize];
              _cvpool_size = frameSize;
          
          }
@@ -1757,13 +1730,8 @@
 
         }
         
-        if (!_cifilter)
-        {
-            _cifilter = [CIFilter filterWithName:@"CISepiaTone"];
-            [_cifilter setDefaults];
 
-        }
-
+        /*
         CIImage *tmpimg = [CIImage imageWithIOSurface:CVPixelBufferGetIOSurface(newFrame)];
         
         CVPixelBufferRelease(newFrame);
@@ -1775,10 +1743,11 @@
         
         
         outimg = [_cifilter valueForKey:kCIOutputImageKey];
+        */
         
         CVPixelBufferPoolCreatePixelBuffer(kCVReturnSuccess, _cvpool, &destFrame);
         
-        [_cictx render:outimg toIOSurface:CVPixelBufferGetIOSurface(destFrame) bounds:outimg.extent colorSpace:CGColorSpaceCreateDeviceRGB()];
+        [_cictx render:newImage toIOSurface:CVPixelBufferGetIOSurface(destFrame) bounds:NSMakeRect(0, 0, frameWidth, frameHeight) colorSpace:CGColorSpaceCreateDeviceRGB()];
         
     
     
@@ -1792,14 +1761,19 @@
             _currentPB = destFrame;
         }
         
+        for (InputSource *isource in listCopy)
+        {
+            [isource frameRendered];
+        }
+
+        
     }
     return _currentPB;
 }
 
+
 -(CVPixelBufferRef)currentFrame
 {
-
-    
     @synchronized(self)
     {
         return _currentPB;
@@ -1812,7 +1786,7 @@
 
         CVPixelBufferRef newFrame;
     
-        if (self.videoCaptureSession)
+        //if (self.videoCaptureSession)
         {
             newFrame = [self currentImg];
             
@@ -1885,7 +1859,7 @@
     pts = CMTimeMake(ptsTime*1000000, 1000000);
     //NSLog(@"PTS TIME IS %@", CMTimeCopyDescription(kCFAllocatorDefault, pts));
 
-    duration = CMTimeMake(1000, self.videoCaptureSession.videoCaptureFPS*1000);
+    duration = CMTimeMake(1000, self.captureFPS*1000);
     
     for(id cKey in self.compressors)
     {

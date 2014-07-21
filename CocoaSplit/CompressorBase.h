@@ -7,8 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "OutputDestination.h"
 #import "h264Compressor.h"
+
+
+@class captureController;
 
 @interface CompressorBase : NSObject <h264Compressor, NSCoding>
 {
@@ -17,8 +19,7 @@
 
 
 
-@property (strong) id<ControllerProtocol> settingsController;
-@property (strong) id<ControllerProtocol> outputDelegate;
+@property (strong) CaptureController *settingsController;
 
 
 @property (strong) NSMutableDictionary *outputs;

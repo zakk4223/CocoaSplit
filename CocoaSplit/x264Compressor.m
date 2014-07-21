@@ -24,7 +24,6 @@
     copy.x264profiles = self.x264profiles;
     
     copy.settingsController = self.settingsController;
-    copy.outputDelegate = self.outputDelegate;
     
     copy.isNew = self.isNew;
     copy.name = self.name;

@@ -8,9 +8,10 @@
 #import <Foundation/Foundation.h>
 #import <VideoToolbox/VideoToolbox.h>
 #import <Syphon/Syphon.h>
-#import "ControllerProtocol.h"
+#import "CaptureController.h"
 
 
+@class InputSource;
 
 static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStamp* now, const CVTimeStamp* outputTime,
                                     CVOptionFlags flagsIn, CVOptionFlags* flagsOut, void* displayLinkContext);
@@ -67,6 +68,11 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
 - (IBAction)toggleFullscreen:(id)sender;
 
+- (IBAction)moveInputUp:(id)sender;
+- (IBAction)moveInputDown:(id)sender;
+- (IBAction)deleteInput:(id)sender;
+- (IBAction)showInputSettings:(id)sender;
+- (IBAction)imagePanelChooseDirectory:(id)sender;
 
 
 
@@ -74,7 +80,11 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
 @property (strong) NSColor *statusColor;
 
-@property (unsafe_unretained) IBOutlet id<ControllerProtocol> controller;
+@property (unsafe_unretained) IBOutlet CaptureController *controller;
+
+@property (strong) InputSource *selectedSource;
+@property (assign) NSPoint selectedOriginDistance;
+
 
 
 @end

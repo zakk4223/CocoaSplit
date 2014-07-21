@@ -31,8 +31,7 @@
 
 
 
-@property (strong) id<ControllerProtocol> settingsController;
-@property (strong) id<ControllerProtocol> outputDelegate;
+@property (strong) CaptureController *settingsController;
 @property (assign) bool isNew;
 @property (strong) NSMutableString *name;
 @property (strong) NSString *compressorType;

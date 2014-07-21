@@ -7,9 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "h264Compressor.h"
 #import "CaptureController.h"
-#import "ControllerProtocol.h"
 #import "CompressorBase.h"
 
 #import <VideoToolbox/VideoToolbox.h>
@@ -24,8 +22,8 @@
 }
 
 
-@property (strong) id<ControllerProtocol> settingsController;
-@property (strong) id<ControllerProtocol> outputDelegate;
+//@property (strong) id<ControllerProtocol> settingsController;
+//@property (strong) id<ControllerProtocol> outputDelegate;
 
 @property (assign) int average_bitrate;
 @property (assign) int max_bitrate;

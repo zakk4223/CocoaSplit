@@ -41,8 +41,8 @@
 @property (strong) NSMutableArray *x264presets;
 @property (strong) NSMutableArray *x264profiles;
 
-@property (strong) id<ControllerProtocol> settingsController;
-@property (strong) id <ControllerProtocol> outputDelegate;
+
+@property (strong) CaptureController *settingsController;
 
 
 @property (strong) NSString *preset;

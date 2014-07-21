@@ -16,6 +16,30 @@
 @synthesize imageDirectory = _imageDirectory;
 @synthesize settingsController = _settingsController;
 
+
+
+
+-(void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:self.activeVideoDevice.uniqueID forKey:@"active_uniqueID"];
+    [aCoder encodeObject:self.imageDirectory forKey:@"imageDirectory"];
+}
+
+
+-(id) initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [self init])
+    {
+        
+        self.imageDirectory = [aDecoder decodeObjectForKey:@"imageDirectory"];
+        NSString *uniqueID = [aDecoder decodeObjectForKey:@"active_uniqueID"];
+        [self setDeviceForUniqueID:uniqueID];
+    }
+    
+    return self;
+}
+
+
 -(id)init
 {
     if (self = [super init])
@@ -31,13 +55,13 @@
 }
 
 
--(id<ControllerProtocol>)settingsController
+-(CaptureController *)settingsController
 {
     return _settingsController;
 }
 
 
--(void)setSettingsController:(id<ControllerProtocol>)settingsController
+-(void)setSettingsController:(CaptureController *)settingsController
 {
     _settingsController = settingsController;
     self.imageDirectory = [self.settingsController getExtraData:@"ImageCapture:Directory"];

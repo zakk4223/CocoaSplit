@@ -7,10 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "FFMpegTask.h"
 #import <AppKit/AppKit.h>
 #import "h264Compressor.h"
+#import "CaptureController.h"
 
+
+
+@class FFMpegTask;
 
 @interface OutputDestination : NSObject <NSCoding>
 
@@ -34,7 +37,7 @@
 @property (strong) NSString *stream_key;
 @property (assign) int stream_delay;
 @property (strong) FFMpegTask *ffmpeg_out;
-@property (strong) id<ControllerProtocol> settingsController;
+@property (strong) CaptureController *settingsController;
 @property (strong) NSColor *textColor;
 @property (assign) NSUInteger delay_buffer_frames;
 @property (assign) BOOL buffer_draining;

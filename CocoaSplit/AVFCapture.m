@@ -8,6 +8,8 @@
 
 #import "AVFCapture.h"
 #import "AbstractCaptureDevice.h"
+#import "CaptureController.h"
+
 
 @implementation AVFCapture         
 

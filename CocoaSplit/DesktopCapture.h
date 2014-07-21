@@ -7,11 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CaptureSessionProtocol.h"
-#import "CaptureController.h"
-#import "ControllerProtocol.h"
+#import "CaptureBase.h"
 
-@interface DesktopCapture : NSObject <CaptureSessionProtocol>
+@interface DesktopCapture : CaptureBase <CaptureSessionProtocol>
 {
     
     dispatch_queue_t _capture_queue;
@@ -35,13 +33,9 @@
 @property double videoCaptureFPS;
 @property int width;
 @property int height;
-@property AbstractCaptureDevice *activeVideoDevice;
-@property (weak) id<ControllerProtocol> videoDelegate;
-@property (readonly) NSArray *availableVideoDevices;
 @property (readonly) BOOL needsAdvancedVideo;
 @property NSArray *videoFormats;
 @property NSArray *videoFramerates;
-@property (weak) id<ControllerProtocol> settingsController;
 
 
 

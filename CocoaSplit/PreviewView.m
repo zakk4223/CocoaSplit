@@ -10,6 +10,7 @@
 #import <OpenGL/glu.h>
 
 #import "PreviewView.h"
+#import "InputSource.h"
 
 
 
@@ -214,14 +215,10 @@
 }
 
 
-- (void)mouseDown:(NSEvent *)theEvent
+-(NSPoint)realPointforWindowPoint:(NSPoint)winPoint
 {
-    NSPoint tmp;
     
-    tmp = [self convertPoint:theEvent.locationInWindow fromView:nil];
     
-	NSLog(@"MOUSE POINT %f, %f", tmp.x, tmp.y);
-
     GLint viewport[4];
     GLdouble modelview[16];
     GLdouble projection[16];
@@ -230,24 +227,81 @@
     
     
     [self.openGLContext makeCurrentContext];
-
+    
     glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
     glGetDoublev(GL_PROJECTION_MATRIX, projection);
     glGetIntegerv(GL_VIEWPORT, viewport);
-    winx = tmp.x;
-    winy = tmp.y;
+    winx = winPoint.x;
+    winy = winPoint.y;
     winz = 0.0f;
     
     gluUnProject(winx, winy, winz, modelview, projection, viewport, &worldx, &worldy, &worldz);
-    
-	NSLog(@"MOUSE POINT %f, %f", winx, winy);
-    NSLog(@"WORLD X %f Y %f", worldx, worldy);
-    NSLog(@"PROJECTION %f %f", projection[4], projection[7]);
-    
-    
-    
-   // NSPointToCGPoint([self convertPoint:theEvent.locationInWindow fromView:nil]);
+
+    return NSMakePoint(worldx, worldy);
 }
+
+-(void)rightMouseDown:(NSEvent *)theEvent
+{
+    NSPoint tmp;
+    
+    tmp = [self convertPoint:theEvent.locationInWindow fromView:nil];
+    NSPoint worldPoint = [self realPointforWindowPoint:tmp];
+    self.selectedSource = [self.controller findSource:worldPoint];
+    [self.menu popUpMenuPositioningItem:self.menu.itemArray.firstObject atLocation:tmp inView:self];
+}
+
+
+- (void)mouseDown:(NSEvent *)theEvent
+{
+    NSPoint tmp;
+    
+    tmp = [self convertPoint:theEvent.locationInWindow fromView:nil];
+    
+    NSPoint worldPoint = [self realPointforWindowPoint:tmp];
+    NSPoint diffPoint;
+    
+    self.selectedSource = [self.controller findSource:worldPoint];
+    self.selectedSource.is_selected = YES;
+    diffPoint.x = worldPoint.x - self.selectedSource.layoutPosition.origin.x;
+    diffPoint.y = worldPoint.y - self.selectedSource.layoutPosition.origin.y;
+    self.selectedOriginDistance = diffPoint;
+    
+
+    
+}
+
+
+- (void)mouseDragged:(NSEvent *)theEvent
+{
+    
+    NSPoint tmp;
+    
+    
+    NSPoint worldPoint;
+    if (self.selectedSource)
+    {
+        tmp = [self convertPoint:theEvent.locationInWindow fromView:nil];
+        worldPoint = [self realPointforWindowPoint:tmp];
+        CGFloat dx, dy;
+        dx = worldPoint.x - self.selectedOriginDistance.x;
+        dy = worldPoint.y - self.selectedOriginDistance.y;
+        [self.selectedSource updateOrigin:dx y:dy];
+    }
+    
+}
+
+
+-(void) mouseUp:(NSEvent *)theEvent
+{
+    if (self.selectedSource)
+    {
+        self.selectedSource.is_selected = NO;
+    }
+    
+    
+    self.selectedSource = nil;
+}
+
 
 -(void) mouseMoved:(NSEvent *)theEvent
 {
@@ -262,6 +316,54 @@
     {
         [_idleTimer invalidate];
         _idleTimer = nil;
+    }
+}
+
+
+
+
+- (IBAction)moveInputUp:(id)sender
+{
+    if (self.selectedSource)
+    {
+        self.selectedSource.depth += 1;
+        
+    }
+}
+
+
+- (IBAction)moveInputDown:(id)sender
+{
+    if (self.selectedSource)
+    {
+        self.selectedSource.depth -= 1;
+    }
+}
+
+
+- (IBAction)deleteInput:(id)sender
+{
+    
+    if (self.selectedSource)
+    {
+        [self.controller deleteSource:self.selectedSource];
+        self.selectedSource = nil;
+    }
+}
+
+
+- (IBAction)showInputSettings:(id)sender
+{
+    NSPoint tmp = [self convertPoint:[self.window mouseLocationOutsideOfEventStream] fromView:nil];
+
+    [self.controller.editorPopover showRelativeToRect:NSMakeRect(tmp.x, tmp.y, 1.0f, 1.0f) ofView:self preferredEdge:NSMaxXEdge];
+}
+
+-(IBAction)imagePanelChooseDirectory:(id)sender
+{
+    if (self.selectedSource && self.selectedSource.videoInput)
+    {
+        [self.selectedSource.videoInput chooseDirectory:sender];
     }
 }
 
@@ -562,9 +664,9 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     NSRect frame = self.frame;
     
     
-    GLclampf rval = 0.0;
-    GLclampf gval = 0.0;
-    GLclampf bval = 0.0;
+    GLclampf rval = 0.184314f;
+    GLclampf gval = 0.309804f;
+    GLclampf bval = 0.309804f;
     GLclampf aval = 0.0;
     
     if (self.statusColor)
@@ -586,6 +688,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
     scaled = NSMakeSize((_surfaceWidth * ratio), (_surfaceHeight * ratio));
     
+    glDisable(GL_DEPTH_TEST);
     
     glClearColor(rval, gval, bval, aval);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -595,7 +698,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
-    glOrtho(0.0, frame.size.width, 0.0, frame.size.height, -1, 1);
+    glOrtho(0.0, frame.size.width, 0.0, frame.size.height, 0, 1);
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();

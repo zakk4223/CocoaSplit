@@ -9,7 +9,10 @@
 #import <Foundation/Foundation.h>
 #import <CoreMedia/CoreMedia.h>
 #import "libavformat/avformat.h"
-#import "ControllerProtocol.h"
+#import "CapturedFrameData.h"
+#import "CaptureController.h"
+
+
 
 #define AUDIO_BUFFER_SIZE 1000
 @interface FFMpegTask : NSObject
@@ -74,7 +77,7 @@
 @property (assign) BOOL errored;
 
 
-@property (strong) id<ControllerProtocol> settingsController;
+@property (strong) CaptureController *settingsController;
 
 
 

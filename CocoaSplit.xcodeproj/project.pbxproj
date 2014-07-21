@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		3400777016E6FE5D00097E8F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 347B7FC916907AFA00B5F4B3 /* libz.dylib */; };
 		340D8C971959C7C100BE5144 /* CompressionSettingsPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 340D8C961959C7C100BE5144 /* CompressionSettingsPanel.xib */; };
+		340DC734197CF6E9003A0BB3 /* CaptureBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 340DC733197CF6E9003A0BB3 /* CaptureBase.m */; };
+		340DC735197CF6E9003A0BB3 /* CaptureBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 340DC733197CF6E9003A0BB3 /* CaptureBase.m */; };
 		340FE4A215F3417E00E4CE4E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4A115F3417E00E4CE4E /* Cocoa.framework */; };
 		340FE4AC15F3417E00E4CE4E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 340FE4AA15F3417E00E4CE4E /* InfoPlist.strings */; };
 		340FE4AE15F3417E00E4CE4E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FE4AD15F3417E00E4CE4E /* main.m */; };
@@ -33,6 +35,8 @@
 		342346BE15F6103D00C8C77E /* FFMpegTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346BD15F6103D00C8C77E /* FFMpegTask.m */; };
 		342346CF15F9F07E00C8C77E /* AbstractCaptureDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346CE15F9F07E00C8C77E /* AbstractCaptureDevice.m */; };
 		342346D515FA301600C8C77E /* SyphonCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346D415FA301600C8C77E /* SyphonCapture.m */; };
+		3431FFE119786502000965FE /* InputSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 3431FFE019786502000965FE /* InputSource.m */; };
+		3431FFE219786502000965FE /* InputSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 3431FFE019786502000965FE /* InputSource.m */; };
 		3435E396188B902C0015CC01 /* 420v.fgsh in Resources */ = {isa = PBXBuildFile; fileRef = 3435E395188B902C0015CC01 /* 420v.fgsh */; };
 		3435E39B188B93150015CC01 /* passthrough.vtsh in Resources */ = {isa = PBXBuildFile; fileRef = 3435E39A188B93150015CC01 /* passthrough.vtsh */; };
 		3435E39D188BD8250015CC01 /* passthrough.fgsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3435E399188B90900015CC01 /* passthrough.fgsh */; };
@@ -70,7 +74,6 @@
 		34539ED71606E91700638A29 /* StreamServicePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34539ED61606E91700638A29 /* StreamServicePanel.xib */; };
 		34539ED9160734EA00638A29 /* FilePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34539ED8160734EA00638A29 /* FilePanel.xib */; };
 		345F89861976113C00BD4062 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A64A36165F208800A68428 /* QuartzCore.framework */; };
-		3475E75E16FED3A50030D7FA /* AVFoundationAdvancedPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3475E75D16FED3A50030D7FA /* AVFoundationAdvancedPanel.xib */; };
 		34792AF316103FF60065A859 /* DesktopCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34792AF216103FF60065A859 /* DesktopCapture.m */; };
 		34792AF616104AA70065A859 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AF516104AA70065A859 /* IOKit.framework */; };
 		34792AFB1611A6B90065A859 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AFA1611A6B90065A859 /* IOSurface.framework */; };
@@ -104,7 +107,6 @@
 		34CFE4A518F1992A00092C6A /* AVFAudioChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 34CFE4A318F1992A00092C6A /* AVFAudioChannel.m */; };
 		34D696F3186E823100B50EB6 /* ImageCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D696F2186E823100B50EB6 /* ImageCapture.m */; };
 		34D696F4186E823100B50EB6 /* ImageCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D696F2186E823100B50EB6 /* ImageCapture.m */; };
-		34D696FA186E8FEB00B50EB6 /* ImageAdvancedPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34D696F9186E8FEB00B50EB6 /* ImageAdvancedPanel.xib */; };
 		34D696FC1871B8F700B50EB6 /* Defaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 34D696FB1871B8F700B50EB6 /* Defaults.plist */; };
 		34F5141216FD6E4F00BA894D /* x264Compressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F5140F16FD6E4F00BA894D /* x264Compressor.m */; };
 		34F5141316FD6E4F00BA894D /* AppleVTCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F5141116FD6E4F00BA894D /* AppleVTCompressor.m */; };
@@ -201,6 +203,8 @@
 
 /* Begin PBXFileReference section */
 		340D8C961959C7C100BE5144 /* CompressionSettingsPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CompressionSettingsPanel.xib; sourceTree = "<group>"; };
+		340DC732197CF6E9003A0BB3 /* CaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CaptureBase.h; sourceTree = "<group>"; };
+		340DC733197CF6E9003A0BB3 /* CaptureBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CaptureBase.m; sourceTree = "<group>"; };
 		340FE49D15F3417E00E4CE4E /* CocoaSplit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CocoaSplit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		340FE4A115F3417E00E4CE4E /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		340FE4A415F3417E00E4CE4E /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -241,6 +245,8 @@
 		342346CE15F9F07E00C8C77E /* AbstractCaptureDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbstractCaptureDevice.m; sourceTree = "<group>"; };
 		342346D315FA301600C8C77E /* SyphonCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyphonCapture.h; sourceTree = "<group>"; };
 		342346D415FA301600C8C77E /* SyphonCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyphonCapture.m; sourceTree = "<group>"; };
+		3431FFDF19786502000965FE /* InputSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputSource.h; sourceTree = "<group>"; };
+		3431FFE019786502000965FE /* InputSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InputSource.m; sourceTree = "<group>"; };
 		3435E395188B902C0015CC01 /* 420v.fgsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 420v.fgsh; sourceTree = "<group>"; };
 		3435E399188B90900015CC01 /* passthrough.fgsh */ = {isa = PBXFileReference; lastKnownFileType = text; path = passthrough.fgsh; sourceTree = "<group>"; };
 		3435E39A188B93150015CC01 /* passthrough.vtsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = passthrough.vtsh; sourceTree = "<group>"; };
@@ -253,7 +259,7 @@
 		3451A1E11712C5F700DF6A8B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		34539ED61606E91700638A29 /* StreamServicePanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = StreamServicePanel.xib; path = ../StreamServicePanel.xib; sourceTree = "<group>"; };
 		34539ED8160734EA00638A29 /* FilePanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FilePanel.xib; sourceTree = "<group>"; };
-		3475E75D16FED3A50030D7FA /* AVFoundationAdvancedPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AVFoundationAdvancedPanel.xib; sourceTree = "<group>"; };
+		346EAAF6197A7B28000892CF /* Capture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Capture.h; sourceTree = "<group>"; };
 		34792AF116103FF60065A859 /* DesktopCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DesktopCapture.h; sourceTree = "<group>"; };
 		34792AF216103FF60065A859 /* DesktopCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DesktopCapture.m; sourceTree = "<group>"; };
 		34792AF516104AA70065A859 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
@@ -297,7 +303,6 @@
 		34CFE4A318F1992A00092C6A /* AVFAudioChannel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVFAudioChannel.m; sourceTree = "<group>"; };
 		34D696F1186E823100B50EB6 /* ImageCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCapture.h; sourceTree = "<group>"; };
 		34D696F2186E823100B50EB6 /* ImageCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCapture.m; sourceTree = "<group>"; };
-		34D696F9186E8FEB00B50EB6 /* ImageAdvancedPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageAdvancedPanel.xib; sourceTree = "<group>"; };
 		34D696FB1871B8F700B50EB6 /* Defaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Defaults.plist; sourceTree = "<group>"; };
 		34F5140E16FD6E4F00BA894D /* x264Compressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = x264Compressor.h; sourceTree = "<group>"; };
 		34F5140F16FD6E4F00BA894D /* x264Compressor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = x264Compressor.m; sourceTree = "<group>"; };
@@ -448,9 +453,9 @@
 				340FE4B415F3417E00E4CE4E /* AppDelegate.m */,
 				34210B3C1606001100362FC8 /* OutputDestination.h */,
 				34210B3D1606001100362FC8 /* OutputDestination.m */,
-				34A64A2D165EFE4B00A68428 /* PreviewView.h */,
 				34C19051189EE60400AB2430 /* CapturedFrameData.h */,
 				34C19052189EE60400AB2430 /* CapturedFrameData.m */,
+				34A64A2D165EFE4B00A68428 /* PreviewView.h */,
 				34A64A2E165EFE4B00A68428 /* PreviewView.m */,
 				342346CD15F9F07E00C8C77E /* AbstractCaptureDevice.h */,
 				342346CE15F9F07E00C8C77E /* AbstractCaptureDevice.m */,
@@ -459,6 +464,8 @@
 				342346BD15F6103D00C8C77E /* FFMpegTask.m */,
 				340FE50615F444AA00E4CE4E /* CaptureController.h */,
 				340FE50715F444AA00E4CE4E /* CaptureController.m */,
+				3431FFDF19786502000965FE /* InputSource.h */,
+				3431FFE019786502000965FE /* InputSource.m */,
 				3498C78D16AB6853003D8065 /* AVFrameRateRange+CocoaSplitAdditions.h */,
 				3498C78E16AB6853003D8065 /* AVFrameRateRange+CocoaSplitAdditions.m */,
 				340FE4A815F3417E00E4CE4E /* Supporting Files */,
@@ -527,6 +534,8 @@
 			children = (
 				342346D315FA301600C8C77E /* SyphonCapture.h */,
 				342346D415FA301600C8C77E /* SyphonCapture.m */,
+				340DC732197CF6E9003A0BB3 /* CaptureBase.h */,
+				340DC733197CF6E9003A0BB3 /* CaptureBase.m */,
 				34792AF116103FF60065A859 /* DesktopCapture.h */,
 				34792AF216103FF60065A859 /* DesktopCapture.m */,
 				34B74BC71648D23B00818DE2 /* QTCapture.h */,
@@ -539,6 +548,7 @@
 				342346A915F59A8500C8C77E /* AVFCapture.m */,
 				34D696F1186E823100B50EB6 /* ImageCapture.h */,
 				34D696F2186E823100B50EB6 /* ImageCapture.m */,
+				346EAAF6197A7B28000892CF /* Capture.h */,
 			);
 			name = Capture;
 			sourceTree = "<group>";
@@ -546,7 +556,6 @@
 		3441338E18667FE40059B686 /* Interface */ = {
 			isa = PBXGroup;
 			children = (
-				3475E75D16FED3A50030D7FA /* AVFoundationAdvancedPanel.xib */,
 				34CFE49C18F1459600092C6A /* AudioMixer.xib */,
 				340FE4B615F3417E00E4CE4E /* MainMenu.xib */,
 				34213E161966264F0054E238 /* OutputPanel.xib */,
@@ -556,7 +565,6 @@
 				340D8C961959C7C100BE5144 /* CompressionSettingsPanel.xib */,
 				34ABEF3B17C0C2CB00AA5E62 /* advancedPrefPanel.xib */,
 				34539ED8160734EA00638A29 /* FilePanel.xib */,
-				34D696F9186E8FEB00B50EB6 /* ImageAdvancedPanel.xib */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -736,11 +744,9 @@
 				340D8C971959C7C100BE5144 /* CompressionSettingsPanel.xib in Resources */,
 				34539ED9160734EA00638A29 /* FilePanel.xib in Resources */,
 				34CFE49D18F1459600092C6A /* AudioMixer.xib in Resources */,
-				34D696FA186E8FEB00B50EB6 /* ImageAdvancedPanel.xib in Resources */,
 				344988131893CF0500044259 /* LogWindow.xib in Resources */,
 				34A64A35165F047900A68428 /* CapturePreview.xib in Resources */,
 				34D696FC1871B8F700B50EB6 /* Defaults.plist in Resources */,
-				3475E75E16FED3A50030D7FA /* AVFoundationAdvancedPanel.xib in Resources */,
 				34ABEF3C17C0C2CB00AA5E62 /* advancedPrefPanel.xib in Resources */,
 				3435E396188B902C0015CC01 /* 420v.fgsh in Resources */,
 			);
@@ -811,8 +817,10 @@
 				34210B3E1606001200362FC8 /* OutputDestination.m in Sources */,
 				34792AF316103FF60065A859 /* DesktopCapture.m in Sources */,
 				34B74BC91648D23B00818DE2 /* QTCapture.m in Sources */,
+				340DC734197CF6E9003A0BB3 /* CaptureBase.m in Sources */,
 				34A64A2F165EFE4C00A68428 /* PreviewView.m in Sources */,
 				3498C78B16AB6688003D8065 /* AVCaptureDeviceFormat+CocoaSplitAdditions.m in Sources */,
+				3431FFE119786502000965FE /* InputSource.m in Sources */,
 				3498C78F16AB6853003D8065 /* AVFrameRateRange+CocoaSplitAdditions.m in Sources */,
 				34F5141216FD6E4F00BA894D /* x264Compressor.m in Sources */,
 				34F5141316FD6E4F00BA894D /* AppleVTCompressor.m in Sources */,
@@ -834,8 +842,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				3451A1C717111BD900DF6A8B /* main.m in Sources */,
+				340DC735197CF6E9003A0BB3 /* CaptureBase.m in Sources */,
 				34C19054189EE60400AB2430 /* CapturedFrameData.m in Sources */,
 				3451A1D31712C41000DF6A8B /* CaptureController.m in Sources */,
+				3431FFE219786502000965FE /* InputSource.m in Sources */,
 				3451A1D81712C5C400DF6A8B /* x264Compressor.m in Sources */,
 				34CFE4A518F1992A00092C6A /* AVFAudioChannel.m in Sources */,
 				3451A1D91712C5C700DF6A8B /* AppleVTCompressor.m in Sources */,

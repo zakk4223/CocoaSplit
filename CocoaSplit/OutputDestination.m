@@ -7,6 +7,7 @@
 //
 
 #import "OutputDestination.h"
+#import "FFMpegTask.h"
 
 
 @implementation OutputDestination

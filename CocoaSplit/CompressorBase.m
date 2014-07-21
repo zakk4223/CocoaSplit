@@ -7,6 +7,7 @@
 //
 
 #import "CompressorBase.h"
+#import "OutputDestination.h"
 
 @implementation CompressorBase
 

@@ -8,10 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import <Syphon/Syphon.h>
-#import "CaptureSessionProtocol.h"
-#import "ControllerProtocol.h"
+#import "CaptureBase.h"
+#import "AbstractCaptureDevice.h"
 
-@interface SyphonCapture : NSObject < CaptureSessionProtocol>
+
+@interface SyphonCapture : CaptureBase <CaptureSessionProtocol>
 {
     NSDictionary *_syphonServer;
     SyphonClient *_syphon_client;
@@ -34,11 +35,7 @@
 @property double videoCaptureFPS;
 @property int width;
 @property int height;
-@property AbstractCaptureDevice *activeVideoDevice;
-@property (weak) id<ControllerProtocol> videoDelegate;
-@property (strong) NSArray *availableVideoDevices;
 @property (readonly) BOOL needsAdvancedVideo;
-@property (weak) id<ControllerProtocol> settingsController;
 
 
 

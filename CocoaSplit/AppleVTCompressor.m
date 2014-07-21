@@ -21,7 +21,6 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
     AppleVTCompressor *copy = [[[self class] allocWithZone:zone] init];
     
     copy.settingsController = self.settingsController;
-    copy.outputDelegate = self.outputDelegate;
     
     copy.isNew = self.isNew;
     

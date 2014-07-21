@@ -7,10 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CaptureSessionProtocol.h"
+#import "CaptureBase.h"
+#import "CaptureController.h"
 
 
-@interface ImageCapture : NSObject <CaptureSessionProtocol>
+@interface ImageCapture : CaptureBase <CaptureSessionProtocol>
 {
     
     NSArray *_sourceList;
@@ -27,10 +28,7 @@
 @property double videoCaptureFPS;
 @property int width;
 @property int height;
-@property AbstractCaptureDevice *activeVideoDevice;
 @property (weak) id videoDelegate;
-@property (readonly) NSArray *availableVideoDevices;
-@property (readonly) BOOL needsAdvancedVideo;
 
 @property NSString *imageDirectory;
 
@@ -39,7 +37,7 @@
 
 @property CVPixelBufferRef currentFrame;
 
-@property (weak) id<ControllerProtocol> settingsController;
+@property (weak) CaptureController *settingsController;
 
 
 

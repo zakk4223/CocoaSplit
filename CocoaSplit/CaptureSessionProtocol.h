@@ -10,7 +10,7 @@
 #import "AbstractCaptureDevice.h"
 #import <AVFoundation/AVFoundation.h>
 #import <Cocoa/Cocoa.h>
-#import "ControllerProtocol.h"
+
 
 
 
@@ -19,14 +19,8 @@
 
 @required
 
-@property double videoCaptureFPS;
-@property int width;
-@property int height;
 @property AbstractCaptureDevice *activeVideoDevice;
-@property (weak) id videoDelegate;
-@property (readonly) NSArray *availableVideoDevices;
-@property (readonly) BOOL needsAdvancedVideo;
-@property (weak) id<ControllerProtocol> settingsController;
+@property (strong) NSArray *availableVideoDevices;
 
 
 

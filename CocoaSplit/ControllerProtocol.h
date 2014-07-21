@@ -8,10 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import "libavformat/avformat.h"
-#import "AbstractCaptureDevice.h"
 #import "CapturedFrameData.h"
 #import <AppKit/AppKit.h>
 #import "h264Compressor.h"
+#import "InputSource.h"
 
 
 @protocol ControllerProtocol <NSObject>
