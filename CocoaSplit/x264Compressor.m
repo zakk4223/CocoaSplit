@@ -180,7 +180,6 @@
     
     if (![self hasOutputs])
     {
-        NSLog(@"NO OUTPUTS");
         return NO;
     }
     
