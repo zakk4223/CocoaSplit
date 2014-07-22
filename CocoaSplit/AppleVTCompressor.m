@@ -34,6 +34,13 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
     copy.keyframe_interval = self.keyframe_interval;
     copy.use_cbr = self.use_cbr;
     
+    copy.width = self.width;
+    copy.height = self.height;
+    copy.working_width = self.width;
+    copy.working_height = self.height;
+    
+    copy.resolutionOption = self.resolutionOption;
+
     return copy;
 }
 
@@ -48,6 +55,12 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
     [aCoder encodeInteger:self.keyframe_interval forKey:@"keyframe_interval"];
     [aCoder encodeObject:self.profile forKey:@"profile"];
     [aCoder encodeBool:self.use_cbr forKey:@"use_cbr"];
+    
+    [aCoder encodeInteger:self.width forKey:@"videoWidth"];
+    [aCoder encodeInteger:self.height forKey:@"videoHeight"];
+
+    [aCoder encodeObject:self.resolutionOption forKey:@"resolutionOption"];
+
 }
 
 -(id) initWithCoder:(NSCoder *)aDecoder
@@ -60,6 +73,13 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
         self.keyframe_interval = (int)[aDecoder decodeIntegerForKey:@"keyframe_interval"];
         self.profile = [aDecoder decodeObjectForKey:@"profile"];
         self.use_cbr = [aDecoder decodeBoolForKey:@"use_cbr"];
+        self.width = (int)[aDecoder decodeIntegerForKey:@"videoWidth"];
+        self.height = (int)[aDecoder decodeIntegerForKey:@"videoHeight"];
+        if ([aDecoder decodeObjectForKey:@"resolutionOption"])
+        {
+            self.resolutionOption = [aDecoder decodeObjectForKey:@"resolutionOption"];
+        }
+
         
     }
     
@@ -164,7 +184,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     CVImageBufferRef imageBuffer = frameData.videoFrame;
     CVPixelBufferRetain(imageBuffer);
 
-    CVPixelBufferCreate(kCFAllocatorDefault, self.width, self.height, kCVPixelFormatType_420YpCbCr8Planar, 0, &converted_frame);
+    CVPixelBufferCreate(kCFAllocatorDefault, self.working_width, self.working_height, kCVPixelFormatType_420YpCbCr8Planar, 0, &converted_frame);
     
     VTPixelTransferSessionTransferImage(_vtpt_ref, imageBuffer, converted_frame);
 
@@ -203,7 +223,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 
     [self setupResolution:videoFrame];
     
-    if (!self.height || !self.width)
+    if (!self.working_height || !self.working_width)
     {
         self.errored = YES;
         return NO;
@@ -214,7 +234,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 	};
 	
     _compression_session = NULL;
-    status = VTCompressionSessionCreate(NULL, self.width, self.height, kCMVideoCodecType_H264, (__bridge CFDictionaryRef)encoderSpec, NULL, NULL, VideoCompressorReceiveFrame,  (__bridge void *)self, &_compression_session);
+    status = VTCompressionSessionCreate(NULL, self.working_width, self.working_height, kCMVideoCodecType_H264, (__bridge CFDictionaryRef)encoderSpec, NULL, NULL, VideoCompressorReceiveFrame,  (__bridge void *)self, &_compression_session);
     
     //CFDictionaryRef props;
     //VTCompressionSessionCopySupportedPropertyDictionary(_compression_session, &props);

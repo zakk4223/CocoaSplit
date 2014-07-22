@@ -152,6 +152,7 @@
 
 -(void) removeOutput:(OutputDestination *)destination
 {
+
     [self.outputs removeObjectForKey:destination.name];
     if (self.outputs.count == 0)
     {
@@ -168,9 +169,12 @@
 -(BOOL) setupResolution:(CVImageBufferRef)withFrame
 {
     
+    self.working_height = self.height;
+    self.working_width = self.width;
+    
     if (!self.resolutionOption || [self.resolutionOption isEqualToString:@"None"])
     {
-        if (!(self.height > 0) || !(self.width > 0))
+        if (!(self.working_height > 0) || !(self.working_width > 0))
         {
             return NO;
         }
@@ -181,27 +185,27 @@
     
     if ([self.resolutionOption isEqualToString:@"Use Source"])
     {
-        self.height = (int)CVPixelBufferGetHeight(withFrame);
-        self.width = (int)CVPixelBufferGetWidth(withFrame);
+        self.working_height = (int)CVPixelBufferGetHeight(withFrame);
+        self.working_width = (int)CVPixelBufferGetWidth(withFrame);
     } else if ([self.resolutionOption isEqualToString:@"Preserve AR"]) {
         float inputAR = (float)CVPixelBufferGetWidth(withFrame) / (float)CVPixelBufferGetHeight(withFrame);
         int newWidth;
         int newHeight;
         
-        if (self.height > 0)
+        if (self.working_height > 0)
         {
-            newHeight = self.height;
-            newWidth = (int)(round(self.height * inputAR));
-        } else if (self.width > 0) {
-            newWidth = self.width;
-            newHeight = (int)(round(self.width / inputAR));
+            newHeight = self.working_height;
+            newWidth = (int)(round(self.working_height * inputAR));
+        } else if (self.working_width > 0) {
+            newWidth = self.working_width;
+            newHeight = (int)(round(self.working_width / inputAR));
         } else {
             
             return NO;
         }
         
-        self.height = (newHeight +1)/2*2;
-        self.width = (newWidth+1)/2*2;
+        self.working_height = (newHeight +1)/2*2;
+        self.working_width = (newWidth+1)/2*2;
     }
     
     return YES;

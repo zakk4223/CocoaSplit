@@ -26,6 +26,9 @@
 
 @property (assign) int width;
 @property (assign) int height;
+@property (assign) int working_width;
+@property (assign) int working_height;
+
 @property (strong) NSString *resolutionOption;
 
 @property (strong) NSArray *arOptions;
