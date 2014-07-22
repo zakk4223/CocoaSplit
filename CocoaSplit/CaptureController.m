@@ -210,7 +210,11 @@
     
     if (self.compressController.selectedObjects.count > 0)
     {
-        self.selectedCompressor = [[self.compressController.selectedObjects objectAtIndex:0] valueForKey:@"value"];
+        id <h264Compressor> tmpCompressor;
+        tmpCompressor = [[self.compressController.selectedObjects objectAtIndex:0] valueForKey:@"value"];
+        
+        
+        self.selectedCompressor = self.compressors[tmpCompressor.name];
     }
     
     

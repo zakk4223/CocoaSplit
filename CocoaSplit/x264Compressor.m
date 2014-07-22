@@ -41,8 +41,10 @@
     
     copy.width = self.width;
     copy.height = self.height;
+    copy.working_width = self.working_width;
+    copy.working_height = self.working_height;
+
     copy.resolutionOption = self.resolutionOption;
-    
     
     return copy;
 }
@@ -62,6 +64,7 @@
     [aCoder encodeBool:self.use_cbr forKey:@"use_cbr"];
     [aCoder encodeInteger:self.width forKey:@"videoWidth"];
     [aCoder encodeInteger:self.height forKey:@"videoHeight"];
+    
     [aCoder encodeObject:self.resolutionOption forKey:@"resolutionOption"];
     
 }
@@ -86,7 +89,27 @@
             self.resolutionOption = [aDecoder decodeObjectForKey:@"resolutionOption"];
         }
         
+        if ([[NSNull null] isEqual:self.preset])
+        {
+            self.preset = nil;
+        }
         
+        if ([[NSNull null] isEqual:self.tune])
+        {
+            self.tune = nil;
+        }
+
+        
+        if ([[NSNull null] isEqual:self.profile])
+        {
+            self.profile = nil;
+        }
+
+        if ([[NSNull null] isEqual:self.resolutionOption])
+        {
+            self.resolutionOption = nil;
+        }
+
         
     }
     
@@ -155,10 +178,9 @@
 - (bool)compressFrame:(CapturedFrameData *)frameData
 {
     
-    
     if (![self hasOutputs])
     {
-        
+        NSLog(@"NO OUTPUTS");
         return NO;
     }
     
@@ -333,6 +355,7 @@
     
     
 
+    NSLog(@"IN COMPRESSOR SETUP");
     if (!self.settingsController)
     {
         return NO;
@@ -358,8 +381,8 @@
     avcodec_get_context_defaults3(_av_codec_ctx, _av_codec);
     
     //_av_codec_ctx->max_b_frames = 0;
-    _av_codec_ctx->width = self.width;
-    _av_codec_ctx->height = self.height;
+    _av_codec_ctx->width = self.working_width;
+    _av_codec_ctx->height = self.working_height;
     _av_codec_ctx->time_base.num = 1000000;
     
     _av_codec_ctx->time_base.den = self.settingsController.captureFPS*1000000;
@@ -401,25 +424,22 @@
     
     id x264preset = self.preset;
     
-    if (x264preset != nil)
+    if (x264preset)
     {
-        NSLog(@"SETTING PRESET %@", x264preset);
         av_dict_set(&opts, "preset", [x264preset UTF8String], 0);
     }
     
     id x264profile = self.profile;
 
-    if (x264profile != nil)
+    if (x264profile)
     {
-        NSLog(@"SETTING PROFILE %@", x264profile);
         av_dict_set(&opts, "profile", [x264profile UTF8String], 0);
     }
     
     id x264tune = self.tune;
 
-    if (x264tune != nil)
+    if (x264tune)
     {
-        NSLog(@"SETTING TUNE %@", x264tune);
         av_dict_set(&opts, "tune", [x264tune UTF8String], 0);
     }
     
