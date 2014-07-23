@@ -1094,7 +1094,11 @@
         <customObject id="420" customClass="NSFontManager"/>
         <arrayController id="548" userLabel="VideoDeviceArrayController">
             <connections>
-                <binding destination="hsc-go-2rK" name="contentArray" keyPath="selection.videoInput.availableVideoDevices" id="31v-HE-yqW"/>
+                <binding destination="hsc-go-2rK" name="contentArray" keyPath="selection.videoInput.availableVideoDevices" id="cYF-PA-9Ls">
+                    <dictionary key="options">
+                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                    </dictionary>
+                </binding>
             </connections>
         </arrayController>
         <objectController id="nWB-G2-33f">
@@ -1160,7 +1164,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <tabViewItems>
                         <tabViewItem label="Settings" identifier="1" id="pYy-tS-9Dh">
-                            <view key="view" ambiguous="YES" id="NSA-nW-cHK">
+                            <view key="view" id="NSA-nW-cHK">
                                 <rect key="frame" x="10" y="25" width="483" height="207"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
@@ -1236,7 +1240,7 @@
                                         </connections>
                                     </slider>
                                     <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uNo-hI-xwz">
-                                        <rect key="frame" x="115" y="136" width="351" height="17"/>
+                                        <rect key="frame" x="115" y="136" width="228" height="17"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="2" doubleValue="2" tickMarkPosition="above" sliderType="linear" id="Ue2-vn-EOV"/>
                                         <connections>
@@ -1402,11 +1406,22 @@
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
+                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AEC-QW-UcQ">
+                                        <rect key="frame" x="346" y="128" width="80" height="28"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <buttonCell key="cell" type="push" title="Auto Fit" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mKn-XJ-xQI">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="fitScale:" target="2416" id="i22-Ac-gtT"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                             </view>
                         </tabViewItem>
                         <tabViewItem label="Source" identifier="2" id="85E-km-mi4">
-                            <view key="view" id="65C-7X-XdV">
+                            <view key="view" ambiguous="YES" id="65C-7X-XdV">
                                 <rect key="frame" x="10" y="25" width="483" height="207"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
@@ -1433,7 +1448,7 @@
                                             <binding destination="hsc-go-2rK" name="selectedObject" keyPath="selection.videoInput.activeVideoDevice" previousBinding="zS9-vO-o7S" id="X5q-2b-MPQ"/>
                                         </connections>
                                     </popUpButton>
-                                    <textField verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nJo-WM-ZH4">
+                                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nJo-WM-ZH4">
                                         <rect key="frame" x="41" y="154" width="53" height="22"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Source" id="qGe-hI-CwQ">
@@ -1464,7 +1479,7 @@
                                             <binding destination="nWB-G2-33f" name="content" keyPath="selection.videoTypes" id="8bJ-ov-VMz"/>
                                         </connections>
                                     </popUpButton>
-                                    <textField verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FAh-1N-wAL">
+                                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FAh-1N-wAL">
                                         <rect key="frame" x="41" y="183" width="34" height="18"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Type" id="fGU-R7-qWh">
@@ -1473,23 +1488,23 @@
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <tabView fixedFrame="YES" controlSize="small" translatesAutoresizingMaskIntoConstraints="NO" id="fBG-vX-gXz">
-                                        <rect key="frame" x="-10" y="-13" width="505" height="141"/>
+                                    <tabView fixedFrame="YES" controlSize="small" type="noTabsNoBorder" translatesAutoresizingMaskIntoConstraints="NO" id="fBG-vX-gXz">
+                                        <rect key="frame" x="-3" y="-3" width="491" height="128"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <tabViewItems>
-                                            <tabViewItem label="Desktop" identifier="1" id="SfF-8g-ibM">
+                                            <tabViewItem label="DesktopCapture" identifier="1" id="SfF-8g-ibM">
                                                 <view key="view" id="fUI-oL-QSN">
-                                                    <rect key="frame" x="10" y="25" width="344" height="0.0"/>
+                                                    <rect key="frame" x="10" y="25" width="485" height="103"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 </view>
                                             </tabViewItem>
-                                            <tabViewItem label="AVFoundation" identifier="2" id="pzT-h1-Gd5">
+                                            <tabViewItem label="AVFCapture" identifier="2" id="pzT-h1-Gd5">
                                                 <view key="view" id="JXb-j6-zK0">
-                                                    <rect key="frame" x="10" y="25" width="344" height="0.0"/>
+                                                    <rect key="frame" x="10" y="25" width="485" height="103"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <popUpButton verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="27r-9p-nJR">
-                                                            <rect key="frame" x="67" y="-27" width="100" height="22"/>
+                                                            <rect key="frame" x="67" y="76" width="100" height="22"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="94" id="1lw-kF-GRk"/>
@@ -1516,7 +1531,7 @@
                                                             </connections>
                                                         </popUpButton>
                                                         <popUpButton verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="s26-Du-V1a">
-                                                            <rect key="frame" x="67" y="-56" width="100" height="22"/>
+                                                            <rect key="frame" x="67" y="47" width="100" height="22"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="nOT-Xw-YFu" id="4Em-uB-kYU">
                                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -1540,7 +1555,7 @@
                                                             </connections>
                                                         </popUpButton>
                                                         <textField verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hx1-Kf-FlT">
-                                                            <rect key="frame" x="15" y="-23" width="49" height="14"/>
+                                                            <rect key="frame" x="15" y="80" width="49" height="14"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Format" id="KAW-69-PEd">
                                                                 <font key="font" metaFont="smallSystem"/>
@@ -1549,7 +1564,7 @@
                                                             </textFieldCell>
                                                         </textField>
                                                         <textField verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LzQ-FU-66y">
-                                                            <rect key="frame" x="15" y="-51" width="26" height="14"/>
+                                                            <rect key="frame" x="15" y="52" width="26" height="14"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="FPS" id="QmS-yq-dfe">
                                                                 <font key="font" metaFont="smallSystem"/>
@@ -1569,23 +1584,23 @@
                                             </tabViewItem>
                                             <tabViewItem label="QTCapture" identifier="" id="Qzz-Kj-JEQ">
                                                 <view key="view" id="WUA-4h-363">
-                                                    <rect key="frame" x="10" y="25" width="485" height="103"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="491" height="128"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 </view>
                                             </tabViewItem>
-                                            <tabViewItem label="Syphon" identifier="" id="Q6a-sx-wqo">
+                                            <tabViewItem label="SyphonCapture" identifier="" id="Q6a-sx-wqo">
                                                 <view key="view" id="Fa3-dc-TB0">
-                                                    <rect key="frame" x="10" y="25" width="485" height="103"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="491" height="128"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 </view>
                                             </tabViewItem>
-                                            <tabViewItem label="Image" identifier="" id="7oa-tO-pf4">
-                                                <view key="view" ambiguous="YES" id="IGV-7N-Nb7">
-                                                    <rect key="frame" x="10" y="25" width="344" height="0.0"/>
+                                            <tabViewItem label="ImageCapture" identifier="" id="7oa-tO-pf4">
+                                                <view key="view" id="IGV-7N-Nb7">
+                                                    <rect key="frame" x="10" y="25" width="485" height="103"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fwZ-MZ-Rhb">
-                                                            <rect key="frame" x="15" y="-20" width="62" height="14"/>
+                                                            <rect key="frame" x="15" y="83" width="62" height="14"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Directory" id="Kec-ov-HgY">
                                                                 <font key="font" metaFont="smallSystem"/>
@@ -1594,7 +1609,7 @@
                                                             </textFieldCell>
                                                         </textField>
                                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0ET-WT-znN">
-                                                            <rect key="frame" x="83" y="-25" width="234" height="19"/>
+                                                            <rect key="frame" x="83" y="78" width="234" height="19"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="arB-gv-9Kj">
                                                                 <font key="font" metaFont="smallSystem"/>
@@ -1610,7 +1625,7 @@
                                                             </connections>
                                                         </textField>
                                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KA8-1k-Hfm">
-                                                            <rect key="frame" x="320" y="-30" width="72" height="28"/>
+                                                            <rect key="frame" x="320" y="73" width="72" height="28"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <buttonCell key="cell" type="push" title="Open" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="uY5-Cf-ArM">
                                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1625,13 +1640,153 @@
                                             </tabViewItem>
                                             <tabViewItem label="Blank" identifier="" id="a8f-Ea-i6B">
                                                 <view key="view" id="dpy-B7-su4">
-                                                    <rect key="frame" x="10" y="33" width="485" height="98"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="491" height="128"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                </view>
+                                            </tabViewItem>
+                                            <tabViewItem label="TextCapture" identifier="" id="PTU-yv-3u0">
+                                                <view key="view" ambiguous="YES" id="4AL-Zb-lhs">
+                                                    <rect key="frame" x="0.0" y="0.0" width="491" height="128"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <subviews>
+                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rxg-77-Frj">
+                                                            <rect key="frame" x="15" y="105" width="31" height="17"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Text" id="8pq-r0-IpT">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sGR-zI-Qea">
+                                                            <rect key="frame" x="52" y="75" width="394" height="49"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="r29-qw-xua">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                            <connections>
+                                                                <binding destination="hsc-go-2rK" name="value" keyPath="selection.videoInput.text" id="Tl0-yG-ZbP">
+                                                                    <dictionary key="options">
+                                                                        <bool key="NSContinuouslyUpdatesValue" value="YES"/>
+                                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                                    </dictionary>
+                                                                </binding>
+                                                            </connections>
+                                                        </textField>
+                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iaq-BP-Iza">
+                                                            <rect key="frame" x="15" y="56" width="30" height="17"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Size" id="kPk-CN-FkY">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M7g-P3-Xwb">
+                                                            <rect key="frame" x="52" y="51" width="96" height="22"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="nDn-Pw-09y">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                            <connections>
+                                                                <binding destination="hsc-go-2rK" name="value" keyPath="selection.videoInput.fontSize" id="Hye-52-TbF">
+                                                                    <dictionary key="options">
+                                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                                    </dictionary>
+                                                                </binding>
+                                                            </connections>
+                                                        </textField>
+                                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UiB-Kf-Lhm">
+                                                            <rect key="frame" x="74" y="27" width="50" height="18"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <buttonCell key="cell" type="check" title="Bold" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="hHh-V5-ZzZ">
+                                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                <font key="font" metaFont="system"/>
+                                                            </buttonCell>
+                                                            <connections>
+                                                                <binding destination="hsc-go-2rK" name="value" keyPath="selection.videoInput.isBold" id="3pp-Jj-lAE">
+                                                                    <dictionary key="options">
+                                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                                    </dictionary>
+                                                                </binding>
+                                                            </connections>
+                                                        </button>
+                                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jwb-QN-E2w">
+                                                            <rect key="frame" x="18" y="27" width="52" height="18"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <buttonCell key="cell" type="check" title="Italic" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="GOF-vC-VVl">
+                                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                <font key="font" metaFont="system"/>
+                                                            </buttonCell>
+                                                            <connections>
+                                                                <binding destination="hsc-go-2rK" name="value" keyPath="selection.videoInput.isItalic" id="0Cn-eG-HKv">
+                                                                    <dictionary key="options">
+                                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                                    </dictionary>
+                                                                </binding>
+                                                            </connections>
+                                                        </button>
+                                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q6l-GM-fZq">
+                                                            <rect key="frame" x="128" y="27" width="83" height="18"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <buttonCell key="cell" type="check" title="Underline" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="SKg-UQ-TSc">
+                                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                <font key="font" metaFont="system"/>
+                                                            </buttonCell>
+                                                            <connections>
+                                                                <binding destination="hsc-go-2rK" name="value" keyPath="selection.videoInput.isUnderline" id="h95-6V-rzX">
+                                                                    <dictionary key="options">
+                                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                                    </dictionary>
+                                                                </binding>
+                                                            </connections>
+                                                        </button>
+                                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Skb-Js-oow">
+                                                            <rect key="frame" x="215" y="27" width="109" height="18"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <buttonCell key="cell" type="check" title="Strikethrough" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="3Kw-Ib-yo5">
+                                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                <font key="font" metaFont="system"/>
+                                                            </buttonCell>
+                                                            <connections>
+                                                                <binding destination="hsc-go-2rK" name="value" keyPath="selection.videoInput.isStrikethrough" id="2cW-F9-2Ua">
+                                                                    <dictionary key="options">
+                                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                                    </dictionary>
+                                                                </binding>
+                                                            </connections>
+                                                        </button>
+                                                        <colorWell fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yAS-fN-nIE">
+                                                            <rect key="frame" x="259" y="51" width="43" height="20"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <connections>
+                                                                <binding destination="hsc-go-2rK" name="value" keyPath="selection.videoInput.foregroundColor" id="EhI-un-yJF">
+                                                                    <dictionary key="options">
+                                                                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                                    </dictionary>
+                                                                </binding>
+                                                            </connections>
+                                                        </colorWell>
+                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HGs-es-ofj">
+                                                            <rect key="frame" x="215" y="54" width="39" height="17"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Color" id="GqJ-i3-INB">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                    </subviews>
                                                 </view>
                                             </tabViewItem>
                                         </tabViewItems>
                                         <connections>
-                                            <binding destination="816" name="selectedLabel" keyPath="self.previewCtx.selectedSource.selectedVideoType" id="nch-LT-jk5">
+                                            <binding destination="hsc-go-2rK" name="selectedLabel" keyPath="selection.videoInput.className" id="SuX-Ed-cNU">
                                                 <dictionary key="options">
                                                     <string key="NSNullPlaceholder">Blank</string>
                                                 </dictionary>
@@ -1640,15 +1795,19 @@
                                     </tabView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="nJo-WM-ZH4" firstAttribute="leading" secondItem="FAh-1N-wAL" secondAttribute="leading" id="2E8-gc-Lqf"/>
                                     <constraint firstItem="4yM-8S-p3U" firstAttribute="top" secondItem="mER-wp-MkT" secondAttribute="bottom" constant="5" id="38d-KL-Tpj"/>
-                                    <constraint firstItem="4yM-8S-p3U" firstAttribute="leading" secondItem="nJo-WM-ZH4" secondAttribute="trailing" constant="33" id="MtV-Fx-G9e"/>
                                     <constraint firstItem="4yM-8S-p3U" firstAttribute="leading" secondItem="mER-wp-MkT" secondAttribute="leading" id="iXd-dG-xwY"/>
-                                    <constraint firstItem="nJo-WM-ZH4" firstAttribute="top" secondItem="FAh-1N-wAL" secondAttribute="bottom" constant="5" id="vor-pH-xeQ"/>
                                 </constraints>
                             </view>
                         </tabViewItem>
                     </tabViewItems>
+                    <connections>
+                        <binding destination="hsc-go-2rK" name="selectedLabel" keyPath="selection.settingsTab" id="ZMx-Ei-0xd">
+                            <dictionary key="options">
+                                <string key="NSNullPlaceholder">Source</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
                 </tabView>
             </subviews>
         </customView>

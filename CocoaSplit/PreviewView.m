@@ -368,6 +368,14 @@
 }
 
 
+-(IBAction)fitScale:(id)sender;
+{
+    if (self.selectedSource)
+    {
+        [self.selectedSource scaleTo:self.controller.captureWidth height:self.controller.captureHeight];
+    }
+}
+
 
 - (IBAction)toggleFullscreen:(id)sender;
 {

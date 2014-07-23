@@ -14,6 +14,9 @@
 
 @property AbstractCaptureDevice *activeVideoDevice;
 @property (strong) NSArray *availableVideoDevices;
+@property (strong) CIContext *imageContext;
+@property (assign) int render_width;
+@property (assign) int render_height;
 
 
 -(void)setDeviceForUniqueID:(NSString *)uniqueID;

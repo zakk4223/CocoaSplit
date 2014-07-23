@@ -20,4 +20,5 @@
 	return [NSString stringWithFormat:formatString, [self minFrameRate]];
 }
 
+
 @end

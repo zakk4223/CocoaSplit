@@ -368,7 +368,13 @@
 {
     InputSource *newSource = [[InputSource alloc] init];
     newSource.depth = (int)self.sourceList.count;
+    newSource.imageContext  = _cictx;
+    
     [self.sourceList addObject:newSource];
+    if (newSource.depth == 0)
+    {
+        [newSource scaleTo:self.captureWidth height:self.captureHeight];
+    }
     
 }
 
@@ -634,7 +640,7 @@
        
        
        self.showPreview = YES;
-       self.videoTypes = @[@"Desktop", @"AVFoundation", @"QTCapture", @"Syphon", @"Image"];
+       self.videoTypes = @[@"Desktop", @"AVFoundation", @"QTCapture", @"Syphon", @"Image", @"Text"];
        self.compressorTypes = @[@"x264", @"AppleVTCompressor", @"None"];
        self.arOptions = @[@"None", @"Use Source", @"Preserve AR"];
        self.validSamplerates = @[@44100, @48000];
@@ -690,6 +696,8 @@
        _sourceUUIDSorter = [[NSSortDescriptor alloc] initWithKey:@"uuid" ascending:YES];
        
        [self createCGLContext];
+       _cictx = [CIContext contextWithCGLContext:_cgl_ctx pixelFormat:CGLGetPixelFormat(_cgl_ctx) colorSpace:CGColorSpaceCreateDeviceRGB() options:nil];
+
        
        
            
@@ -1002,9 +1010,15 @@
     }
 
     self.sourceList = [saveRoot valueForKey:@"sourceList"];
+    
     if (!self.sourceList)
     {
         self.sourceList = [[NSMutableArray alloc] init];
+    }
+    
+    for (InputSource *src in self.sourceList)
+    {
+        src.imageContext = _cictx;
     }
     
     
@@ -1726,16 +1740,7 @@
          }
         
         
-        if (!_cictx)
-        {
-            
-            _cictx = [CIContext contextWithCGLContext:_cgl_ctx pixelFormat:CGLGetPixelFormat(_cgl_ctx) colorSpace:CGColorSpaceCreateDeviceRGB() options:nil];
-            
-
-        }
-        
-
-        /*
+                      /*
         CIImage *tmpimg = [CIImage imageWithIOSurface:CVPixelBufferGetIOSurface(newFrame)];
         
         CVPixelBufferRelease(newFrame);

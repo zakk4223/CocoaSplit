@@ -16,7 +16,7 @@
 
 @synthesize selectedVideoType = _selectedVideoType;
 @synthesize name = _name;
-
+@synthesize imageContext = _imageContext;
 
 
 -(void) encodeWithCoder:(NSCoder *)aCoder
@@ -33,7 +33,7 @@
     [aCoder encodeInteger:self.crop_bottom forKey:@"crop_bottom"];
     [aCoder encodeInteger:self.crop_left forKey:@"crop_left"];
     [aCoder encodeInteger:self.crop_right forKey:@"crop_right"];
-
+    [aCoder encodeObject:self.selectedVideoType forKey:@"selectedVideoType"];
 
     if (self.videoInput)
     {
@@ -54,6 +54,7 @@
         self.name = [aDecoder decodeObjectForKey:@"name"];
         self.depth = (int)[aDecoder decodeIntegerForKey:@"depth"];
         self.videoInput = [aDecoder decodeObjectForKey:@"videoInput"];
+        _selectedVideoType = [aDecoder decodeObjectForKey:@"selectedVideoType"];
         self.crop_top = (int)[aDecoder decodeIntegerForKey:@"crop_top"];
         self.crop_bottom = (int)[aDecoder decodeIntegerForKey:@"crop_bottom"];
         self.crop_left = (int)[aDecoder decodeIntegerForKey:@"crop_left"];
@@ -81,7 +82,7 @@
         self.crop_top = 0;
         self.crop_left = 0;
         self.crop_right = 0;
-        
+        _last_width = _last_height = 0;
         CFUUIDRef tmpUUID = CFUUIDCreate(NULL);
         self.uuid = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, tmpUUID);
         CFRelease(tmpUUID);
@@ -97,11 +98,43 @@
 }
 
 
+-(void)setImageContext:(CIContext *)imageContext
+{
+    _imageContext = imageContext;
+    if (self.videoInput)
+    {
+        self.videoInput.imageContext = imageContext;
+    }
+}
+
+-(CIContext *)imageContext
+{
+    return _imageContext;
+}
+
+
 -(void)dealloc
 {
     [self removeObserver:self forKeyPath:@"propertiesChanged"];
 
 }
+
+-(void)setSettingsTab:(NSString *)settingsTab
+{
+    return;
+}
+
+
+-(NSString *)settingsTab
+{
+    if (self.videoInput)
+    {
+        return @"Settings";
+    }
+    
+    return @"Source";
+}
+
 
 -(NSString *)description
 {
@@ -124,6 +157,8 @@
     
     return _name;
 }
+
+
 -(void)rebuildFilters
 {
     
@@ -133,16 +168,21 @@
         [self.selectedFilter setDefaults];
     }
     
-    if(!self.scaleFilter)
+    if(!self.transformFilter)
     {
-        self.scaleFilter = [CIFilter filterWithName:@"CIAffineTransform"];
-        [self.scaleFilter setDefaults];
+        self.transformFilter = [CIFilter filterWithName:@"CIAffineTransform"];
+        [self.transformFilter setDefaults];
     }
     
+    if(!self.scaleFilter)
+    {
+        self.scaleFilter = [CIFilter filterWithName:@"CILanczosScaleTransform"];
+        [self.scaleFilter setDefaults];
+    }
+
     //crop here
     
     NSAffineTransform *identityTransform = [NSAffineTransform transform];
-    
     
     if (self.rotationAngle > 0.0f)
     {
@@ -156,14 +196,15 @@
         NSAffineTransform *scaleTransform = [NSAffineTransform transform];
         [scaleTransform scaleBy:self.scaleFactor];
         [identityTransform appendTransform:scaleTransform];
+        
+        
     }
-
-    
     NSAffineTransform *moveTransform = [NSAffineTransform transform];
     [moveTransform translateXBy:self.x_pos yBy:self.y_pos];
     [identityTransform appendTransform:moveTransform];
     
-    [self.scaleFilter setValue:identityTransform forKeyPath:kCIInputTransformKey];
+    
+    [self.transformFilter setValue:identityTransform forKeyPath:kCIInputTransformKey];
     
     CIVector *alphaVector = [CIVector vectorWithX:0.0f Y:0.0f Z:0.0f W:self.opacity];
     [self.selectedFilter setDefaults];
@@ -181,23 +222,40 @@
     return NSMakeRect(self.crop_left, self.crop_bottom, width-self.crop_right-self.crop_left, height-self.crop_top-self.crop_bottom);
 }
 
+
+
+
 -(CIImage *)currentImage:(CIImage *)backgroundImage
 {
     CIImage *outimg = nil;
     CVPixelBufferRef newFrame = NULL;
     if (self.videoInput)
     {
+        if ([self.videoInput respondsToSelector:@selector(currentImage)])
+        {
+            self.inputImage = [self.videoInput currentImage];
+        }
+        
+        
         newFrame = [self.videoInput getCurrentFrame];
         if (newFrame)
         {
             self.inputImage = [CIImage imageWithIOSurface:CVPixelBufferGetIOSurface(newFrame) options:@{kCIImageColorSpace: (__bridge id)CGColorSpaceCreateDeviceRGB()}];
                                                                                                         
-                                                                                                        
+            
             _tmpCVBuf = newFrame;
 
         }
     }
-    
+    if (newFrame)
+    {
+        _last_width = CVPixelBufferGetWidth(newFrame);
+        _last_height = CVPixelBufferGetHeight(newFrame);
+    } else {
+        _last_height = 0;
+        _last_width = 0;
+    }
+
     if (!self.cropFilter)
     {
         self.cropFilter = [CIFilter filterWithName:@"CICrop"];
@@ -214,10 +272,6 @@
             [self.solidFilter setValue:[CIColor colorWithRed:0.0f green:0.0f blue:0.85f] forKey:kCIInputColorKey];
         }
         
-        //[self.cropFilter setValue:[CIVector vectorWithX:0.0f Y:0.0f Z:100.0f W:100.0f] forKey:@"inputRectangle" ];
-        
-        //[self.cropFilter setValue:[self.solidFilter valueForKey:kCIOutputImageKey] forKey:kCIInputImageKey];
-        //self.inputImage = [self.cropFilter valueForKey:kCIOutputImageKey];
         self.inputImage = [[self.solidFilter valueForKey:kCIOutputImageKey] imageByCroppingToRect:CGRectMake(0.0f, 0.0f, 200.0f, 200.0f)];
         
         
@@ -234,9 +288,9 @@
     [self.cropFilter setValue:outimg forKeyPath:kCIInputImageKey];
     outimg = [self.cropFilter valueForKey:kCIOutputImageKey];
     
-    [self.scaleFilter setValue:outimg forKeyPath:kCIInputImageKey];
     
-    outimg = [self.scaleFilter valueForKey:kCIOutputImageKey];
+    [self.transformFilter setValue:outimg forKeyPath:kCIInputImageKey];
+    outimg = [self.transformFilter valueForKey:kCIOutputImageKey];
     
     
     
@@ -273,6 +327,35 @@
 }
 
 
+-(void) scaleTo:(CGFloat)width height:(CGFloat)height
+{
+
+    if (_last_width == 0 && _last_height == 0)
+    {
+        return;
+    }
+    
+    float wr = width / _last_width;
+    float hr = height / _last_height;
+    
+    float ratio;
+    float new_w, new_h;
+    float new_x, new_y;
+    
+    ratio = (hr < wr ? hr : wr);
+    
+    new_w = _last_width * ratio;
+    new_h = _last_height * ratio;
+    
+    new_x = (width - new_w)/2;
+    new_y = (height - new_h)/2;
+    _x_pos = new_x;
+    _y_pos = new_y;
+    _scaleFactor = ratio;
+
+    [self rebuildFilters];
+}
+
 
 -(void) updateOrigin:(CGFloat)x y:(CGFloat)y
 {
@@ -297,7 +380,7 @@
     
     self.videoInput = nil;
     
-    id newCaptureSession;
+    id <CaptureSessionProtocol> newCaptureSession;
     
     if ([selectedVideoType isEqualToString:@"Desktop"])
     {
@@ -311,12 +394,17 @@
     } else if ([selectedVideoType isEqualToString:@"Image"]) {
         
         newCaptureSession = [[ImageCapture alloc] init];
+    } else if ([selectedVideoType isEqualToString:@"Text"]) {
+        newCaptureSession = [[TextCapture alloc] init];
     } else {
         newCaptureSession = [[AVFCapture alloc] init];
     }
     
-    
+    newCaptureSession.imageContext = self.imageContext;
+
     self.videoInput = newCaptureSession;
+    
+    
     newCaptureSession = nil;
     
     _selectedVideoType = selectedVideoType;

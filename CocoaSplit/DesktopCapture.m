@@ -35,7 +35,7 @@
     {
         _capture_queue = dispatch_queue_create("Desktop Capture Queue", DISPATCH_QUEUE_SERIAL);
 
-        self.videoCaptureFPS = 30.0f;
+        self.videoCaptureFPS = 60.0f;
         
     }
 

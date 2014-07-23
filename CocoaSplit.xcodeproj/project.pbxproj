@@ -35,6 +35,8 @@
 		342346BE15F6103D00C8C77E /* FFMpegTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346BD15F6103D00C8C77E /* FFMpegTask.m */; };
 		342346CF15F9F07E00C8C77E /* AbstractCaptureDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346CE15F9F07E00C8C77E /* AbstractCaptureDevice.m */; };
 		342346D515FA301600C8C77E /* SyphonCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346D415FA301600C8C77E /* SyphonCapture.m */; };
+		342B33AE197F847B00492CB7 /* TextCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 342B33AD197F847B00492CB7 /* TextCapture.m */; };
+		342B33AF197F847B00492CB7 /* TextCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 342B33AD197F847B00492CB7 /* TextCapture.m */; };
 		3431FFE119786502000965FE /* InputSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 3431FFE019786502000965FE /* InputSource.m */; };
 		3431FFE219786502000965FE /* InputSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 3431FFE019786502000965FE /* InputSource.m */; };
 		3435E396188B902C0015CC01 /* 420v.fgsh in Resources */ = {isa = PBXBuildFile; fileRef = 3435E395188B902C0015CC01 /* 420v.fgsh */; };
@@ -245,6 +247,8 @@
 		342346CE15F9F07E00C8C77E /* AbstractCaptureDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbstractCaptureDevice.m; sourceTree = "<group>"; };
 		342346D315FA301600C8C77E /* SyphonCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyphonCapture.h; sourceTree = "<group>"; };
 		342346D415FA301600C8C77E /* SyphonCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyphonCapture.m; sourceTree = "<group>"; };
+		342B33AC197F847B00492CB7 /* TextCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextCapture.h; sourceTree = "<group>"; };
+		342B33AD197F847B00492CB7 /* TextCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextCapture.m; sourceTree = "<group>"; };
 		3431FFDF19786502000965FE /* InputSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputSource.h; sourceTree = "<group>"; };
 		3431FFE019786502000965FE /* InputSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InputSource.m; sourceTree = "<group>"; };
 		3435E395188B902C0015CC01 /* 420v.fgsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 420v.fgsh; sourceTree = "<group>"; };
@@ -549,6 +553,8 @@
 				34D696F1186E823100B50EB6 /* ImageCapture.h */,
 				34D696F2186E823100B50EB6 /* ImageCapture.m */,
 				346EAAF6197A7B28000892CF /* Capture.h */,
+				342B33AC197F847B00492CB7 /* TextCapture.h */,
+				342B33AD197F847B00492CB7 /* TextCapture.m */,
 			);
 			name = Capture;
 			sourceTree = "<group>";
@@ -812,6 +818,7 @@
 				340FE50815F444AA00E4CE4E /* CaptureController.m in Sources */,
 				342346AA15F59A8500C8C77E /* AVFCapture.m in Sources */,
 				342346BE15F6103D00C8C77E /* FFMpegTask.m in Sources */,
+				342B33AE197F847B00492CB7 /* TextCapture.m in Sources */,
 				342346CF15F9F07E00C8C77E /* AbstractCaptureDevice.m in Sources */,
 				342346D515FA301600C8C77E /* SyphonCapture.m in Sources */,
 				34210B3E1606001200362FC8 /* OutputDestination.m in Sources */,
@@ -846,6 +853,7 @@
 				34C19054189EE60400AB2430 /* CapturedFrameData.m in Sources */,
 				3451A1D31712C41000DF6A8B /* CaptureController.m in Sources */,
 				3431FFE219786502000965FE /* InputSource.m in Sources */,
+				342B33AF197F847B00492CB7 /* TextCapture.m in Sources */,
 				3451A1D81712C5C400DF6A8B /* x264Compressor.m in Sources */,
 				34CFE4A518F1992A00092C6A /* AVFAudioChannel.m in Sources */,
 				3451A1D91712C5C700DF6A8B /* AppleVTCompressor.m in Sources */,

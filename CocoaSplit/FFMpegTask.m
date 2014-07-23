@@ -349,7 +349,9 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     a_ctx->channels = 2;
     a_ctx->extradata = (unsigned char *)_audio_extradata;
     a_ctx->extradata_size = (int)_audio_extradata_size;
-    a_ctx->frame_size = (_samplerate * 2 * 2) / _framerate;
+    a_ctx->frame_size = 1024;
+    
+    //a_ctx->frame_size = (_samplerate * 2 * 2) / _framerate;
     
     if (theBuffer)
     {

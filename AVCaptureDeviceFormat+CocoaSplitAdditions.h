@@ -11,5 +11,10 @@
 @interface AVCaptureDeviceFormat (CocoaSplitAdditions)
 
 @property (readonly) NSString *localizedName;
+@property (readonly) NSDictionary *saveDictionary;
+
+
+-(bool) compareToDictionary:(NSDictionary *)dict;
+
 
 @end

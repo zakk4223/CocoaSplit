@@ -9,6 +9,8 @@
 #import "AVFCapture.h"
 #import "AbstractCaptureDevice.h"
 #import "CaptureController.h"
+#import "AVCaptureDeviceFormat+CocoaSplitAdditions.h"
+#import "AVFrameRateRange+CocoaSplitAdditions.m"
 
 
 @implementation AVFCapture         
@@ -20,6 +22,61 @@
 @synthesize previewVolume = _previewVolume;
 @synthesize activeAudioDevice = _activeAudioDevice;
 
+
+
+-(void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [super encodeWithCoder:aCoder];
+    
+    if (self.activeVideoDevice)
+    {
+        [aCoder encodeObject:self.activeVideoFormat.saveDictionary forKey:@"activeVideoFormat"];
+    }
+    
+    if (self.activeVideoFramerate)
+    {
+        [aCoder encodeObject:self.activeVideoFramerate.localizedName forKey:@"activeVideoFramerate"];
+    }
+}
+
+
+-(id) initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithCoder:aDecoder])
+    {
+        
+        NSDictionary *formatSaveDict = [aDecoder decodeObjectForKey:@"activeVideoFormat"];
+        if (_selectedVideoCaptureDevice)
+        {
+            for (AVCaptureDeviceFormat *fmt in _selectedVideoCaptureDevice.formats)
+            {
+                if ([fmt compareToDictionary:formatSaveDict])
+                {
+                    self.activeVideoFormat = fmt;
+                    break;
+                }
+                
+            }
+            
+            if (self.activeVideoFormat)
+            {
+                NSString *savedFrr = [aDecoder decodeObjectForKey:@"activeVideoFramerate"];
+                for (AVFrameRateRange *frr in self.activeVideoFormat.videoSupportedFrameRateRanges)
+                {
+                    if ([frr.localizedName isEqualToString:savedFrr])
+                    {
+                        self.activeVideoFramerate = frr;
+                        break;
+                    }
+                }
+            }
+        }
+       
+        
+    }
+    
+    return self;
+}
 
 
 -(id) init

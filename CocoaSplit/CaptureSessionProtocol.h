@@ -44,8 +44,15 @@
 @property (assign) int audioSamplerate;
 @property (assign) float previewVolume;
 
+//This is mostly here so we can render text into a CGLayer/CIImage, but some sources may be smart and resize depending on what these values are.
+//Less pixels == good
+@property (assign) int render_width;
+@property (assign) int render_height;
+@property (strong) CIContext *imageContext;
+
 -(void)setupAudioCompression;
 -(void)stopAudioCompression;
 -(void)chooseDirectory:(id)sender;
+-(CIImage *)currentImage;
 
 @end
