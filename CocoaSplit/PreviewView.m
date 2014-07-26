@@ -177,6 +177,17 @@
 
     [_shaderPrograms setObject:progObj forKey:@"420v"];
     
+    newProgram = [self createProgram:@"line" fragmentName:@"line"];
+    
+    
+    progObj = [[OpenGLProgram alloc] init];
+    progObj.label = @"line";
+    progObj.gl_programName = newProgram;
+    [_shaderPrograms setObject:progObj forKey:@"line"];
+
+
+    
+    
 }
 
 
@@ -212,6 +223,35 @@
     
     [NSCursor setHiddenUntilMouseMoves:YES];
  
+}
+
+-(NSRect)windowRectforWorldRect:(NSRect)worldRect
+{
+    
+    
+    GLint viewport[4];
+    GLdouble modelview[16];
+    GLdouble projection[16];
+    GLdouble winx, winy, winz;
+    NSRect winRect;
+    
+    
+    [self.openGLContext makeCurrentContext];
+    
+    glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
+    glGetDoublev(GL_PROJECTION_MATRIX, projection);
+    glGetIntegerv(GL_VIEWPORT, viewport);
+    
+    //origin
+    gluProject(worldRect.origin.x, worldRect.origin.y, 0.0f, modelview, projection, viewport, &winx, &winy, &winz);
+    winRect.origin.x = winx;
+    winRect.origin.y = winy;
+    //origin+width and origin+height
+    gluProject(worldRect.origin.x+worldRect.size.width, worldRect.origin.y+worldRect.size.height, 0.0f, modelview, projection, viewport, &winx, &winy, &winz);
+
+    winRect.size.width = winx - winRect.origin.x;
+    winRect.size.height = winy - winRect.origin.y;
+    return winRect;
 }
 
 
@@ -261,10 +301,31 @@
     NSPoint diffPoint;
     
     self.selectedSource = [self.controller findSource:worldPoint];
+    if (!self.selectedSource)
+    {
+        return;
+    }
+    
+    
     self.selectedSource.is_selected = YES;
+    NSRect layoutRect = self.selectedSource.layoutPosition;
+    
+    //Make a rectangle that's 40 pixels smaller on all sides than the selected layoutPosition. If we're inside the selected object
+    //but NOT in the smaller rectangle do a resize (we're grabbing the 'edge')
+    NSRect viewRect = [self windowRectforWorldRect:layoutRect];
+    
+    
+    NSRect interiorRect = NSMakeRect(viewRect.origin.x+40.0f, viewRect.origin.y+40.0f, viewRect.size.width-80.0f, viewRect.size.height-80.0f);
+    
+    
+    if (!NSPointInRect(tmp, interiorRect))
+    {
+        self.isResizing = YES;
+    }
+    
     diffPoint.x = worldPoint.x - self.selectedSource.layoutPosition.origin.x;
     diffPoint.y = worldPoint.y - self.selectedSource.layoutPosition.origin.y;
-    self.selectedOriginDistance = diffPoint;
+    self.selectedOriginDistance = worldPoint;
     
 
     
@@ -285,7 +346,36 @@
         CGFloat dx, dy;
         dx = worldPoint.x - self.selectedOriginDistance.x;
         dy = worldPoint.y - self.selectedOriginDistance.y;
-        [self.selectedSource updateOrigin:dx y:dy];
+        self.selectedOriginDistance = worldPoint;
+        if (self.isResizing)
+        {
+            CGFloat orig_width = self.selectedSource.source_width;
+            CGFloat orig_height = self.selectedSource.source_height;
+            
+            
+            CGFloat new_width, new_height;
+            if (worldPoint.x < (self.selectedSource.layoutPosition.origin.x + self.selectedSource.layoutPosition.size.width/2))
+            {
+                new_width = (self.selectedSource.layoutPosition.origin.x + self.selectedSource.layoutPosition.size.width) - worldPoint.x;
+            } else {
+                new_width = worldPoint.x - self.selectedSource.layoutPosition.origin.x;
+            }
+            
+            if (worldPoint.y < (self.selectedSource.layoutPosition.origin.y + self.selectedSource.layoutPosition.size.height/2))
+            {
+                new_height = (self.selectedSource.layoutPosition.origin.y + self.selectedSource.layoutPosition.size.height) - worldPoint.y;
+            } else {
+                new_height = worldPoint.y - self.selectedSource.layoutPosition.origin.y;
+            }
+
+            float width_ratio = new_width/orig_width;
+            float height_ratio = new_height/orig_height;
+            float new_ratio = width_ratio > height_ratio ? width_ratio : height_ratio;
+            
+            self.selectedSource.scaleFactor = new_ratio;
+        } else {
+            [self.selectedSource updateOrigin:dx y:dy];
+        }
     }
     
 }
@@ -298,7 +388,7 @@
         self.selectedSource.is_selected = NO;
     }
     
-    
+    self.isResizing = NO;
     self.selectedSource = nil;
 }
 
@@ -448,6 +538,11 @@
     
     
     [self createShaders];
+
+    OpenGLProgram *lineprg = [_shaderPrograms objectForKey:@"line"];
+
+    _lineProgram = lineprg.gl_programName;
+    
     
     CVDisplayLinkCreateWithActiveCGDisplays(&displayLink);
     CVDisplayLinkSetOutputCallback(displayLink, &displayLinkRender, (__bridge void *)self);
@@ -501,7 +596,7 @@
     
     displayFrame = [self.controller currentFrame];
     
-    CVPixelBufferRetain(displayFrame);
+    //CVPixelBufferRetain(displayFrame);
     [self drawPixelBuffer:displayFrame];
     CVPixelBufferRelease(displayFrame);
     
@@ -627,9 +722,9 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         
         OpenGLProgram *shProgram = [_shaderPrograms objectForKey:programName];
         
-        GLuint progID = shProgram.gl_programName;
+        _programId = shProgram.gl_programName;
         
-        glUseProgram(progID);
+        glUseProgram(_programId);
         [self bindProgramTextures:shProgram];
         
         
@@ -754,6 +849,34 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);
+    
+    
+    GLfloat outline_verts[8];
+    glEnableClientState(GL_VERTEX_ARRAY);
+
+    glUseProgram(_lineProgram);
+    
+    glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+    glLineWidth(2.0f);
+    for(InputSource *src in self.controller.sourceList)
+    {
+        NSRect my_rect = src.layoutPosition;
+        outline_verts[0] = my_rect.origin.x;
+        outline_verts[1] = my_rect.origin.y;
+        outline_verts[2] = my_rect.origin.x+my_rect.size.width;
+        outline_verts[3] = my_rect.origin.y;
+        outline_verts[4] = my_rect.origin.x+my_rect.size.width;
+        outline_verts[5] = my_rect.origin.y+my_rect.size.height;
+        outline_verts[6] = my_rect.origin.x;
+        outline_verts[7] = my_rect.origin.y+my_rect.size.height;
+
+        glVertexPointer(2, GL_FLOAT, 0, outline_verts);
+        glDrawArrays(GL_LINE_LOOP, 0, 4);
+    }
+    glUseProgram(_programId);
+    
+    
+    
     glFlush();
     
 

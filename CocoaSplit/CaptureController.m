@@ -698,6 +698,7 @@
        [self createCGLContext];
        _cictx = [CIContext contextWithCGLContext:_cgl_ctx pixelFormat:CGLGetPixelFormat(_cgl_ctx) colorSpace:CGColorSpaceCreateDeviceRGB() options:nil];
 
+
        
        
            
@@ -1699,7 +1700,7 @@
         //CVPixelBufferRef newFrame = [self currentFrame];
         CVPixelBufferRef destFrame = NULL;
         
-        /*
+                /*
         if (!_backgroundImage)
         {
             _backgroundImage = [CIImage imageWithColor:[CIColor colorWithRed:0.0f green:0.0f blue:0.0f]];
@@ -1756,7 +1757,10 @@
         
         CVPixelBufferPoolCreatePixelBuffer(kCVReturnSuccess, _cvpool, &destFrame);
         
+
+        
         [_cictx render:newImage toIOSurface:CVPixelBufferGetIOSurface(destFrame) bounds:NSMakeRect(0, 0, frameWidth, frameHeight) colorSpace:CGColorSpaceCreateDeviceRGB()];
+        
         
     
     
@@ -1777,6 +1781,7 @@
 
         
     }
+    
     return _currentPB;
 }
 
@@ -1785,6 +1790,7 @@
 {
     @synchronized(self)
     {
+        CVPixelBufferRetain(_currentPB);
         return _currentPB;
     }
 }

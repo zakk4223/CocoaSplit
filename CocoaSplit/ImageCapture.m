@@ -242,6 +242,9 @@
         
         NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], kCVPixelBufferCGImageCompatibilityKey, [NSNumber numberWithBool:YES], kCVPixelBufferCGBitmapContextCompatibilityKey, ioAttrs, kCVPixelBufferIOSurfacePropertiesKey, nil];
         
+        
+        
+        
         CVPixelBufferCreate(kCFAllocatorDefault, width, height, k32BGRAPixelFormat, (__bridge CFDictionaryRef)dict, &newFrame);
         CVPixelBufferLockBaseAddress(newFrame, 0);
         void *rasterData = CVPixelBufferGetBaseAddress(newFrame);

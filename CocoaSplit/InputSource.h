@@ -21,7 +21,6 @@
 {
     CVPixelBufferRef _tmpCVBuf;
     CGColorSpaceRef _colorSpace;
-    size_t _last_width, _last_height;
     
 }
 
@@ -59,6 +58,11 @@
 @property (strong) CIFilter *cropFilter;
 
 @property (strong) CIContext *imageContext;
+@property (assign) size_t source_width;
+@property (assign) size_t source_height;
+@property (strong) NSAffineTransform *currentTransform;
+@property (assign) NSSize oldSize;
+
 
 -(CIImage *) currentImage:(CIImage *)backgroundImage;
 -(void) updateOrigin:(CGFloat)x y:(CGFloat)y;

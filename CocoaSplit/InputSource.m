@@ -82,7 +82,6 @@
         self.crop_top = 0;
         self.crop_left = 0;
         self.crop_right = 0;
-        _last_width = _last_height = 0;
         CFUUIDRef tmpUUID = CFUUIDCreate(NULL);
         self.uuid = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, tmpUUID);
         CFRelease(tmpUUID);
@@ -162,6 +161,7 @@
 -(void)rebuildFilters
 {
     
+    
     if(!self.selectedFilter)
     {
         self.selectedFilter = [CIFilter filterWithName:@"CIColorMatrix"];
@@ -174,37 +174,39 @@
         [self.transformFilter setDefaults];
     }
     
-    if(!self.scaleFilter)
-    {
-        self.scaleFilter = [CIFilter filterWithName:@"CILanczosScaleTransform"];
-        [self.scaleFilter setDefaults];
-    }
 
-    //crop here
+    CGFloat scale_cx = 0.0f;
+    CGFloat scale_cy = 0.0f;
     
-    NSAffineTransform *identityTransform = [NSAffineTransform transform];
-    
-    if (self.rotationAngle > 0.0f)
-    {
-        NSAffineTransform *rotateTransform = [NSAffineTransform transform];
-        [rotateTransform rotateByDegrees:self.rotationAngle];
-        [identityTransform appendTransform:rotateTransform];
-    }
-    
-    if (self.scaleFactor != 0.0f)
-    {
-        NSAffineTransform *scaleTransform = [NSAffineTransform transform];
-        [scaleTransform scaleBy:self.scaleFactor];
-        [identityTransform appendTransform:scaleTransform];
-        
-        
-    }
-    NSAffineTransform *moveTransform = [NSAffineTransform transform];
-    [moveTransform translateXBy:self.x_pos yBy:self.y_pos];
-    [identityTransform appendTransform:moveTransform];
+
+    NSAffineTransform *scaleTransform = [NSAffineTransform transform];
+    CGFloat cent_x, cent_y, x,y;
     
     
-    [self.transformFilter setValue:identityTransform forKeyPath:kCIInputTransformKey];
+    cent_x = (self.inputImage.extent.origin.x) + self.inputImage.extent.size.width/2;
+    cent_y = (self.inputImage.extent.origin.y) + self.inputImage.extent.size.height/2;
+    scale_cx = cent_x*self.scaleFactor;
+    scale_cy = cent_y*self.scaleFactor;
+    x = (scale_cx)-cent_x;
+    y = (scale_cy)-cent_y;
+    
+    [scaleTransform translateXBy:-x yBy:-y];
+    
+    [scaleTransform scaleBy:self.scaleFactor];
+    
+
+    cent_x = scale_cx-x;
+    cent_y = scale_cy-y;
+    [scaleTransform translateXBy:cent_x yBy:cent_y];
+    [scaleTransform rotateByDegrees:self.rotationAngle];
+    [scaleTransform translateXBy:-cent_x yBy:-cent_y];
+    
+    NSAffineTransform *idtrans = [[NSAffineTransform alloc] init];
+    [idtrans translateXBy:self.x_pos yBy:self.y_pos];
+    [scaleTransform appendTransform:idtrans];
+    
+    [self.transformFilter setValue:scaleTransform forKeyPath:kCIInputTransformKey];
+    
     
     CIVector *alphaVector = [CIVector vectorWithX:0.0f Y:0.0f Z:0.0f W:self.opacity];
     [self.selectedFilter setDefaults];
@@ -227,6 +229,9 @@
 
 -(CIImage *)currentImage:(CIImage *)backgroundImage
 {
+    self.source_width = 0;
+    self.source_height = 0;
+    
     CIImage *outimg = nil;
     CVPixelBufferRef newFrame = NULL;
     if (self.videoInput)
@@ -234,12 +239,17 @@
         if ([self.videoInput respondsToSelector:@selector(currentImage)])
         {
             self.inputImage = [self.videoInput currentImage];
+            self.source_width = self.inputImage.extent.size.width;
+            self.source_height = self.inputImage.extent.size.height;
         }
         
         
         newFrame = [self.videoInput getCurrentFrame];
         if (newFrame)
         {
+            self.source_width = CVPixelBufferGetWidth(newFrame);
+            self.source_height = CVPixelBufferGetHeight(newFrame);
+            
             self.inputImage = [CIImage imageWithIOSurface:CVPixelBufferGetIOSurface(newFrame) options:@{kCIImageColorSpace: (__bridge id)CGColorSpaceCreateDeviceRGB()}];
                                                                                                         
             
@@ -247,15 +257,6 @@
 
         }
     }
-    if (newFrame)
-    {
-        _last_width = CVPixelBufferGetWidth(newFrame);
-        _last_height = CVPixelBufferGetHeight(newFrame);
-    } else {
-        _last_height = 0;
-        _last_width = 0;
-    }
-
     if (!self.cropFilter)
     {
         self.cropFilter = [CIFilter filterWithName:@"CICrop"];
@@ -285,23 +286,38 @@
 
     
     [self.cropFilter setValue:[CIVector vectorWithX:cropRect.origin.x Y:cropRect.origin.y Z:cropRect.size.width W:cropRect.size.height] forKeyPath:@"inputRectangle"];
-    [self.cropFilter setValue:outimg forKeyPath:kCIInputImageKey];
-    outimg = [self.cropFilter valueForKey:kCIOutputImageKey];
     
+    
+    [self.cropFilter setValue:outimg forKeyPath:kCIInputImageKey];
+    
+    outimg = [self.cropFilter valueForKey:kCIOutputImageKey];
+
+    
+    self.inputImage = outimg;
+
+    
+    if (!NSEqualSizes(self.oldSize, self.inputImage.extent.size))
+    {
+        [self rebuildFilters];
+    }
+    
+    self.oldSize = self.inputImage.extent.size;
+    
+    
+
     
     [self.transformFilter setValue:outimg forKeyPath:kCIInputImageKey];
+
     outimg = [self.transformFilter valueForKey:kCIOutputImageKey];
     
-    
-    
-    
-    
+
     [self.selectedFilter setValue:outimg forKey:kCIInputImageKey];
     outimg = [self.selectedFilter valueForKey:kCIOutputImageKey];
     
     if (outimg)
     {
         self.layoutPosition = outimg.extent;
+        
     }
 
     if (backgroundImage)
@@ -330,13 +346,19 @@
 -(void) scaleTo:(CGFloat)width height:(CGFloat)height
 {
 
-    if (_last_width == 0 && _last_height == 0)
+    CGFloat source_width, source_height;
+    
+    source_width = self.inputImage.extent.size.width;
+    source_height = self.inputImage.extent.size.height;
+    
+    
+    if (source_width == 0 && source_height == 0)
     {
         return;
     }
     
-    float wr = width / _last_width;
-    float hr = height / _last_height;
+    float wr = width / source_width;
+    float hr = height / source_height;
     
     float ratio;
     float new_w, new_h;
@@ -344,23 +366,35 @@
     
     ratio = (hr < wr ? hr : wr);
     
-    new_w = _last_width * ratio;
-    new_h = _last_height * ratio;
+    new_w = source_width * ratio;
+    new_h = source_height * ratio;
     
     new_x = (width - new_w)/2;
     new_y = (height - new_h)/2;
-    _x_pos = new_x;
-    _y_pos = new_y;
+    float x_adj, y_adj;
+    //compensate for scaling adjustment. This adjustment is only valid when we're force-setting to center.
+    //There's probably a general case method for compensating for the scaling-at-center movement of the origin
+    //but I'm not good with computer
+    
+    
+    x_adj = ((new_w-source_width)/2)-self.inputImage.extent.origin.x;
+    y_adj = ((new_h-source_height)/2)-self.inputImage.extent.origin.y;
+    
+
+ 
+    _x_pos = new_x+x_adj;
+    _y_pos = new_y+y_adj;
     _scaleFactor = ratio;
 
+    
     [self rebuildFilters];
 }
 
 
 -(void) updateOrigin:(CGFloat)x y:(CGFloat)y
 {
-    _x_pos = x;
-    _y_pos = y;
+    _x_pos += x;
+    _y_pos += y;
     [self rebuildFilters];
 }
 

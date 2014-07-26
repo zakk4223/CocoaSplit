@@ -47,6 +47,9 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     GLsizei     _surfaceHeight;
     int         _hackcnt;
     GLuint      _vertexPosBuffer;
+    GLuint      _programId;
+    GLuint      _lineProgram;
+    
     CVDisplayLinkRef displayLink;
     
     int _num_planes;
@@ -86,6 +89,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
 @property (strong) InputSource *selectedSource;
 @property (assign) NSPoint selectedOriginDistance;
+@property (assign) bool isResizing;
 
 
 

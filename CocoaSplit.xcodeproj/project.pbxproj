@@ -37,6 +37,10 @@
 		342346D515FA301600C8C77E /* SyphonCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346D415FA301600C8C77E /* SyphonCapture.m */; };
 		342B33AE197F847B00492CB7 /* TextCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 342B33AD197F847B00492CB7 /* TextCapture.m */; };
 		342B33AF197F847B00492CB7 /* TextCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 342B33AD197F847B00492CB7 /* TextCapture.m */; };
+		342B33B3198073EC00492CB7 /* line.fgsh in Resources */ = {isa = PBXBuildFile; fileRef = 342B33B2198073EC00492CB7 /* line.fgsh */; };
+		342B33B4198075F200492CB7 /* line.fgsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 342B33B2198073EC00492CB7 /* line.fgsh */; };
+		342B33B61980771200492CB7 /* line.vtsh in Resources */ = {isa = PBXBuildFile; fileRef = 342B33B51980771200492CB7 /* line.vtsh */; };
+		342B33B71980774000492CB7 /* line.vtsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 342B33B51980771200492CB7 /* line.vtsh */; };
 		3431FFE119786502000965FE /* InputSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 3431FFE019786502000965FE /* InputSource.m */; };
 		3431FFE219786502000965FE /* InputSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 3431FFE019786502000965FE /* InputSource.m */; };
 		3435E396188B902C0015CC01 /* 420v.fgsh in Resources */ = {isa = PBXBuildFile; fileRef = 3435E395188B902C0015CC01 /* 420v.fgsh */; };
@@ -145,6 +149,8 @@
 			dstPath = Shaders;
 			dstSubfolderSpec = 7;
 			files = (
+				342B33B71980774000492CB7 /* line.vtsh in CopyFiles */,
+				342B33B4198075F200492CB7 /* line.fgsh in CopyFiles */,
 				3435E39D188BD8250015CC01 /* passthrough.fgsh in CopyFiles */,
 				3435E39E188BD82F0015CC01 /* passthrough.vtsh in CopyFiles */,
 				3435E39F188CD8EE0015CC01 /* 420v.fgsh in CopyFiles */,
@@ -249,6 +255,8 @@
 		342346D415FA301600C8C77E /* SyphonCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyphonCapture.m; sourceTree = "<group>"; };
 		342B33AC197F847B00492CB7 /* TextCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextCapture.h; sourceTree = "<group>"; };
 		342B33AD197F847B00492CB7 /* TextCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextCapture.m; sourceTree = "<group>"; };
+		342B33B2198073EC00492CB7 /* line.fgsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = line.fgsh; sourceTree = "<group>"; };
+		342B33B51980771200492CB7 /* line.vtsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = line.vtsh; sourceTree = "<group>"; };
 		3431FFDF19786502000965FE /* InputSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputSource.h; sourceTree = "<group>"; };
 		3431FFE019786502000965FE /* InputSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InputSource.m; sourceTree = "<group>"; };
 		3435E395188B902C0015CC01 /* 420v.fgsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 420v.fgsh; sourceTree = "<group>"; };
@@ -514,7 +522,9 @@
 			children = (
 				3435E395188B902C0015CC01 /* 420v.fgsh */,
 				3435E399188B90900015CC01 /* passthrough.fgsh */,
+				342B33B2198073EC00492CB7 /* line.fgsh */,
 				3435E39A188B93150015CC01 /* passthrough.vtsh */,
+				342B33B51980771200492CB7 /* line.vtsh */,
 			);
 			name = Shaders;
 			sourceTree = "<group>";
@@ -745,6 +755,7 @@
 				34213E171966264F0054E238 /* OutputPanel.xib in Resources */,
 				340FE4B215F3417E00E4CE4E /* Credits.rtf in Resources */,
 				340FE4B815F3417E00E4CE4E /* MainMenu.xib in Resources */,
+				342B33B61980771200492CB7 /* line.vtsh in Resources */,
 				3435E39B188B93150015CC01 /* passthrough.vtsh in Resources */,
 				34539ED71606E91700638A29 /* StreamServicePanel.xib in Resources */,
 				340D8C971959C7C100BE5144 /* CompressionSettingsPanel.xib in Resources */,
@@ -755,6 +766,7 @@
 				34D696FC1871B8F700B50EB6 /* Defaults.plist in Resources */,
 				34ABEF3C17C0C2CB00AA5E62 /* advancedPrefPanel.xib in Resources */,
 				3435E396188B902C0015CC01 /* 420v.fgsh in Resources */,
+				342B33B3198073EC00492CB7 /* line.fgsh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
