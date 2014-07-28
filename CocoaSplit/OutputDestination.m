@@ -285,7 +285,6 @@
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     
-    NSLog(@"OBSERVED %@ VALUE %@", keyPath, [change objectForKey:NSKeyValueChangeNewKey]);
     NSColor *newColor = nil;
     
     if ([keyPath isEqualToString:@"active"])
@@ -304,7 +303,6 @@
         
         if (errVal == YES)
         {
-            NSLog(@"SETTING RED COLOR");
             newColor = [NSColor redColor];
         }
         

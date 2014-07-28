@@ -46,7 +46,7 @@
 -(CVImageBufferRef) getCurrentFrame;
 
 - (BOOL)needsAdvancedVideo;
--(void)chooseDirectory:(id)sender;
+-(void)chooseDirectory;
 
 
 

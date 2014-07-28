@@ -343,7 +343,7 @@
 }
 
 
--(void)chooseDirectory:(id)sender
+-(void)chooseDirectory
 {
     NSOpenPanel *openPanel = [NSOpenPanel openPanel];
     

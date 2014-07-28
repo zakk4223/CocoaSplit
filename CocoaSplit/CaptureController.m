@@ -20,7 +20,7 @@
 #import "ImageCapture.h"
 #import "x264Compressor.h"
 #import "InputSource.h"
-
+#import "InputPopupControllerViewController.h"
 
 @implementation CaptureController
 
@@ -369,6 +369,7 @@
     InputSource *newSource = [[InputSource alloc] init];
     newSource.depth = (int)self.sourceList.count;
     newSource.imageContext  = _cictx;
+    [self bindInputSourceVars:newSource];
     
     [self.sourceList addObject:newSource];
     if (newSource.depth == 0)
@@ -1020,12 +1021,26 @@
     for (InputSource *src in self.sourceList)
     {
         src.imageContext = _cictx;
+        [self bindInputSourceVars:src];
     }
     
     
     [self migrateDefaultCompressor:saveRoot];
 }
 
+
+-(void)unbindInputSourceVars:(InputSource *)inputSource
+{
+    [inputSource unbind:@"canvas_width"];
+    [inputSource unbind:@"canvas_height"];
+}
+
+
+-(void)bindInputSourceVars:(InputSource *)inputSource
+{
+    [inputSource bind:@"canvas_width" toObject:self withKeyPath:@"captureWidth" options:nil];
+    [inputSource bind:@"canvas_height" toObject:self withKeyPath:@"captureHeight" options:nil];
+}
 
 
 -(void)setExtraData:(id)saveData forKey:(NSString *)forKey
@@ -1669,6 +1684,15 @@
 {
     
     [self.sourceList removeObject:delSource];
+    delSource.editorPopover = nil;
+    
+}
+
+
+-(NSArray *)sourceListOrdered
+{
+    NSArray *listCopy = [self.sourceList sortedArrayUsingDescriptors:@[_sourceDepthSorter, _sourceUUIDSorter]];
+    return listCopy;
 }
 
 

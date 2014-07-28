@@ -64,10 +64,20 @@
 @property (assign) NSSize oldSize;
 
 
+//When an instance is created the creator (capture controller) binds these to the size of the canvas in case we are asked to auto-fit
+//at a later time
+
+@property (assign) size_t canvas_width;
+@property (assign) size_t canvas_height;
+
+@property (strong) NSPopover *editorPopover;
+
+
 -(CIImage *) currentImage:(CIImage *)backgroundImage;
 -(void) updateOrigin:(CGFloat)x y:(CGFloat)y;
 -(void) frameRendered;
 -(void) scaleTo:(CGFloat)width height:(CGFloat)height;
+-(void) autoFit;
 
 
 

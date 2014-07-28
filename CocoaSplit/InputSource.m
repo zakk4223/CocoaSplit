@@ -10,6 +10,11 @@
 #import "CaptureSessionProtocol.h"
 
 
+static NSArray *_sourceTypes = nil;
+
+
+
+
 @implementation InputSource
 
 
@@ -43,9 +48,9 @@
 
 -(id) initWithCoder:(NSCoder *)aDecoder
 {
-    if (self = [self init])
+    if (self = [super init])
     {
-        
+        [self commonInit];
         self.x_pos = [aDecoder decodeFloatForKey:@"x_pos"];
         self.y_pos = [aDecoder decodeFloatForKey:@"y_pos"];
         self.rotationAngle = [aDecoder decodeDoubleForKey:@"rotationAngle"];
@@ -71,7 +76,14 @@
 {
     if (self = [super init])
     {
-        
+        [self commonInit];
+    }
+    return self;
+}
+
+
+-(void)commonInit
+{
         self.scaleFactor = 1.0f;
         self.x_pos = 200.0f;
         self.y_pos = 200.0f;
@@ -91,9 +103,17 @@
         
         [self rebuildFilters];
         [self addObserver:self forKeyPath:@"propertiesChanged" options:NSKeyValueObservingOptionNew context:NULL];
-    }
-    
-    return self;
+ }
+
+
+-(NSArray *)sourceTypes
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _sourceTypes  =  @[@"Desktop", @"AVFoundation", @"QTCapture", @"Syphon", @"Image", @"Text"];
+    });
+
+    return _sourceTypes;
 }
 
 
@@ -115,7 +135,6 @@
 -(void)dealloc
 {
     [self removeObserver:self forKeyPath:@"propertiesChanged"];
-
 }
 
 -(void)setSettingsTab:(NSString *)settingsTab
@@ -340,6 +359,11 @@
         CVPixelBufferRelease(_tmpCVBuf);
         _tmpCVBuf = NULL;
     }
+}
+
+-(void)autoFit
+{
+    [self scaleTo:self.canvas_width height:self.canvas_height];
 }
 
 

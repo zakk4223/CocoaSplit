@@ -77,8 +77,10 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 - (IBAction)moveInputDown:(id)sender;
 - (IBAction)deleteInput:(id)sender;
 - (IBAction)showInputSettings:(id)sender;
-- (IBAction)imagePanelChooseDirectory:(id)sender;
 
+
+
+@property (strong) NSMenu *sourceListMenu;
 
 
 @property (strong) CIContext *cictx;

@@ -11,6 +11,8 @@
 
 #import "PreviewView.h"
 #import "InputSource.h"
+#import "InputPopupControllerViewController.h"
+
 
 
 
@@ -280,6 +282,38 @@
     return NSMakePoint(worldx, worldy);
 }
 
+
+-(void) buildSourceMenu
+{
+    NSArray *sourceList = [self.controller sourceListOrdered];
+    
+    self.sourceListMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
+    
+    
+    
+
+    for (InputSource *src in sourceList)
+    {
+        NSMenuItem *srcItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:src.name action:nil keyEquivalent:@""];
+        [srcItem setEnabled:YES];
+        NSMenu *submenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
+        NSMenuItem *setItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Settings" action:@selector(showInputSettings:) keyEquivalent:@""];
+        [setItem setEnabled:YES];
+        [setItem setRepresentedObject:src];
+        [setItem setTarget:self];
+        [submenu addItem:setItem];
+        NSMenuItem *delItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Delete" action:@selector(deleteInput:) keyEquivalent:@""];
+        [delItem setEnabled:YES];
+        [delItem setRepresentedObject:src];
+        [delItem setTarget:self];
+        [submenu addItem:delItem];
+        [srcItem setSubmenu:submenu];
+        
+        [self.sourceListMenu insertItem:srcItem atIndex:[self.sourceListMenu.itemArray count]];
+        
+    }
+}
+
 -(void)rightMouseDown:(NSEvent *)theEvent
 {
     NSPoint tmp;
@@ -287,7 +321,13 @@
     tmp = [self convertPoint:theEvent.locationInWindow fromView:nil];
     NSPoint worldPoint = [self realPointforWindowPoint:tmp];
     self.selectedSource = [self.controller findSource:worldPoint];
-    [self.menu popUpMenuPositioningItem:self.menu.itemArray.firstObject atLocation:tmp inView:self];
+    if (self.selectedSource)
+    {
+        [self.menu popUpMenuPositioningItem:self.menu.itemArray.firstObject atLocation:tmp inView:self];
+    } else {
+        [self buildSourceMenu];
+        [self.sourceListMenu popUpMenuPositioningItem:self.sourceListMenu.itemArray.firstObject atLocation:tmp inView:self];
+    }
 }
 
 
@@ -433,38 +473,67 @@
 
 - (IBAction)deleteInput:(id)sender
 {
+    NSMenuItem *item = (NSMenuItem *)sender;
     
-    if (self.selectedSource)
+    
+    if (item.representedObject)
     {
+        [self.controller deleteSource:item.representedObject];
+    } else if (self.selectedSource) {
         [self.controller deleteSource:self.selectedSource];
         self.selectedSource = nil;
     }
 }
 
 
+
 - (IBAction)showInputSettings:(id)sender
 {
+    
+    
+    InputSource *configSource;
+    
+    NSMenuItem *menuSender = (NSMenuItem *)sender;
+    
+    
+    
+    configSource = self.selectedSource;
+    if (menuSender.representedObject)
+    {
+        configSource = (InputSource *)menuSender.representedObject;
+    }
+    
+    
     NSPoint tmp = [self convertPoint:[self.window mouseLocationOutsideOfEventStream] fromView:nil];
 
-    [self.controller.editorPopover showRelativeToRect:NSMakeRect(tmp.x, tmp.y, 1.0f, 1.0f) ofView:self preferredEdge:NSMaxXEdge];
-}
+    
 
--(IBAction)imagePanelChooseDirectory:(id)sender
-{
-    if (self.selectedSource && self.selectedSource.videoInput)
+    //if (!configSource.editorPopover)
+    //{
+        InputPopupControllerViewController *popupController = [[InputPopupControllerViewController alloc] initWithNibName:@"InputPopupControllerViewController" bundle:nil];
+        NSPopover *popover = [[NSPopover alloc] init];
+        popover.contentViewController = popupController;
+        popover.animates = YES;
+        popover.delegate = popupController;
+        configSource.editorPopover = popover;
+    popover.behavior = NSPopoverBehaviorSemitransient;
+    //}
+    
+    
+    NSRect spawnRect = NSMakeRect(tmp.x, tmp.y, 1.0f, 1.0f);
+    
+    if (!NSPointInRect(NSMakePoint(tmp.x, tmp.y), self.bounds))
     {
-        [self.selectedSource.videoInput chooseDirectory:sender];
+        spawnRect = NSMakeRect(self.bounds.size.width-5, tmp.y, 1.0f, 1.0f);
     }
+    
+    
+    [configSource.editorPopover showRelativeToRect:spawnRect ofView:self preferredEdge:NSMaxXEdge];
+    ((InputPopupControllerViewController *)configSource.editorPopover.contentViewController).InputController.content = configSource;
+    
 }
 
 
--(IBAction)fitScale:(id)sender;
-{
-    if (self.selectedSource)
-    {
-        [self.selectedSource scaleTo:self.controller.captureWidth height:self.controller.captureHeight];
-    }
-}
 
 
 - (IBAction)toggleFullscreen:(id)sender;
