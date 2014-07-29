@@ -153,6 +153,7 @@
     [NSGraphicsContext setCurrentContext:graphicsContext];
     CGContextClearRect(layerCtx, NSMakeRect(0.0f, 0.0f, _attribString.size.width, _attribString.size.height));
     [_attribString drawInRect:NSMakeRect(0.0f, 0.0f, _attribString.size.width, _attribString.size.height)];
+    
     _ciimage = [CIImage imageWithCGLayer:_cgLayer];
     [NSGraphicsContext setCurrentContext:savedContext];
     

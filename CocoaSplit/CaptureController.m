@@ -1668,7 +1668,7 @@
         
         if (![self sleepUntil:(startTime += _frame_interval)])
         {
-            //NSLog(@"SLEEP FAILED");
+            NSLog(@"SLEEP FAILED");
             continue;
         }
 

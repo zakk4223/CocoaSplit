@@ -294,7 +294,14 @@
 
     for (InputSource *src in sourceList)
     {
-        NSMenuItem *srcItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:src.name action:nil keyEquivalent:@""];
+        NSString *srcName = src.name;
+        if (!srcName)
+        {
+            srcName = [NSString stringWithFormat:@"%@-noname", src.selectedVideoType];
+            
+        }
+    
+        NSMenuItem *srcItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:srcName action:nil keyEquivalent:@""];
         [srcItem setEnabled:YES];
         NSMenu *submenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
         NSMenuItem *setItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Settings" action:@selector(showInputSettings:) keyEquivalent:@""];
