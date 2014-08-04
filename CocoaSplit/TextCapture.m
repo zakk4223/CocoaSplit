@@ -18,8 +18,13 @@
     {
         self.fontSize = 14.0f;
         self.foregroundColor = [NSColor whiteColor];
+        _scroll_adjust = 0.0f;
+        self.scrollSpeed = 0.0f;
         
         [self addObserver:self forKeyPath:@"propertiesChanged" options:NSKeyValueObservingOptionNew context:NULL];
+        
+        offsetFilter = [CIFilter filterWithName:@"TextureWrapPluginFilter"];
+        [offsetFilter setDefaults];
 
     }
     
@@ -120,8 +125,24 @@
     {
         [self renderText];
     }
+
+    //return _ciimage;
     
-    return _ciimage;
+    CIImage *retimg = _ciimage;
+    
+    if (self.scrollSpeed)
+    {
+        [offsetFilter setValue:@(_scroll_adjust) forKey:@"inputOffset"];
+        [offsetFilter setValue:_ciimage forKey:kCIInputImageKey];        
+        retimg = [[offsetFilter valueForKey:kCIOutputImageKey] imageByCroppingToRect:NSInsetRect(_ciimage.extent, 0.1f, 0.1f)];
+        _scroll_adjust += self.scrollSpeed;
+        if (fabs(_scroll_adjust) >= _ciimage.extent.size.width)
+        {
+            _scroll_adjust = 0.0f;
+        }
+    }
+    
+    return retimg;
 }
 
 
@@ -155,6 +176,7 @@
     [_attribString drawInRect:NSMakeRect(0.0f, 0.0f, _attribString.size.width, _attribString.size.height)];
     
     _ciimage = [CIImage imageWithCGLayer:_cgLayer];
+    
     [NSGraphicsContext setCurrentContext:savedContext];
     
     

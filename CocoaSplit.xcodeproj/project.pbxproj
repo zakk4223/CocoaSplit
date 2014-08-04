@@ -113,6 +113,8 @@
 		34CFE4A118F154DD00092C6A /* AVFChannelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 34CFE49F18F154DD00092C6A /* AVFChannelManager.m */; };
 		34CFE4A418F1992A00092C6A /* AVFAudioChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 34CFE4A318F1992A00092C6A /* AVFAudioChannel.m */; };
 		34CFE4A518F1992A00092C6A /* AVFAudioChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 34CFE4A318F1992A00092C6A /* AVFAudioChannel.m */; };
+		34D4351B198BE3B700266169 /* NewLayoutPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34D4351A198BE3B700266169 /* NewLayoutPanel.xib */; };
+		34D43557198DD02000266169 /* TextureWrapPlugin.plugin in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34D43555198DCE3900266169 /* TextureWrapPlugin.plugin */; };
 		34D696F3186E823100B50EB6 /* ImageCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D696F2186E823100B50EB6 /* ImageCapture.m */; };
 		34D696F4186E823100B50EB6 /* ImageCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D696F2186E823100B50EB6 /* ImageCapture.m */; };
 		34D696FC1871B8F700B50EB6 /* Defaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 34D696FB1871B8F700B50EB6 /* Defaults.plist */; };
@@ -141,6 +143,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 34AE3C2D164E3E020052C95E;
 			remoteInfo = QTCaptureHelper;
+		};
+		34D43554198DCE3900266169 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 34D43550198DCE3800266169 /* TextureWrapPlugin.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 34D4352A198DCE3800266169;
+			remoteInfo = TextureWrapPlugin;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -196,6 +205,16 @@
 			dstSubfolderSpec = 1;
 			files = (
 				34AE3C3F164E3F230052C95E /* zakk.lol.QTCaptureHelper.xpc in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		34D43556198DD00F00266169 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				34D43557198DD02000266169 /* TextureWrapPlugin.plugin in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -318,6 +337,8 @@
 		34CFE49F18F154DD00092C6A /* AVFChannelManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVFChannelManager.m; sourceTree = "<group>"; };
 		34CFE4A218F1992A00092C6A /* AVFAudioChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVFAudioChannel.h; sourceTree = "<group>"; };
 		34CFE4A318F1992A00092C6A /* AVFAudioChannel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVFAudioChannel.m; sourceTree = "<group>"; };
+		34D4351A198BE3B700266169 /* NewLayoutPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewLayoutPanel.xib; sourceTree = "<group>"; };
+		34D43550198DCE3800266169 /* TextureWrapPlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = TextureWrapPlugin.xcodeproj; path = TextureWrapPlugin/TextureWrapPlugin.xcodeproj; sourceTree = "<group>"; };
 		34D696F1186E823100B50EB6 /* ImageCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCapture.h; sourceTree = "<group>"; };
 		34D696F2186E823100B50EB6 /* ImageCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCapture.m; sourceTree = "<group>"; };
 		34D696FB1871B8F700B50EB6 /* Defaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Defaults.plist; sourceTree = "<group>"; };
@@ -398,6 +419,7 @@
 		340FE49215F3417E00E4CE4E = {
 			isa = PBXGroup;
 			children = (
+				34D43550198DCE3800266169 /* TextureWrapPlugin.xcodeproj */,
 				3451A1E11712C5F700DF6A8B /* CoreGraphics.framework */,
 				347B7FC916907AFA00B5F4B3 /* libz.dylib */,
 				347B7FC716907AE700B5F4B3 /* VideoDecodeAcceleration.framework */,
@@ -586,6 +608,7 @@
 				344988121893CF0500044259 /* LogWindow.xib */,
 				34A64A34165F047900A68428 /* CapturePreview.xib */,
 				34539ED61606E91700638A29 /* StreamServicePanel.xib */,
+				34D4351A198BE3B700266169 /* NewLayoutPanel.xib */,
 				340D8C961959C7C100BE5144 /* CompressionSettingsPanel.xib */,
 				34ABEF3B17C0C2CB00AA5E62 /* advancedPrefPanel.xib */,
 				34539ED8160734EA00638A29 /* FilePanel.xib */,
@@ -643,6 +666,14 @@
 			name = XPCShared;
 			sourceTree = "<group>";
 		};
+		34D43551198DCE3800266169 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				34D43555198DCE3900266169 /* TextureWrapPlugin.plugin */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -658,6 +689,7 @@
 				3450579D172A4AE30065A452 /* CopyFiles */,
 				3435E39C188BD80A0015CC01 /* CopyFiles */,
 				34BC570418C8667700869744 /* ShellScript */,
+				34D43556198DD00F00266169 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -744,6 +776,12 @@
 			mainGroup = 340FE49215F3417E00E4CE4E;
 			productRefGroup = 340FE49E15F3417E00E4CE4E /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 34D43551198DCE3800266169 /* Products */;
+					ProjectRef = 34D43550198DCE3800266169 /* TextureWrapPlugin.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				340FE49C15F3417E00E4CE4E /* CocoaSplit */,
@@ -753,6 +791,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		34D43555198DCE3900266169 /* TextureWrapPlugin.plugin */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = TextureWrapPlugin.plugin;
+			remoteRef = 34D43554198DCE3900266169 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		340FE49B15F3417E00E4CE4E /* Resources */ = {
@@ -764,6 +812,7 @@
 				34213E171966264F0054E238 /* OutputPanel.xib in Resources */,
 				340FE4B215F3417E00E4CE4E /* Credits.rtf in Resources */,
 				340FE4B815F3417E00E4CE4E /* MainMenu.xib in Resources */,
+				34D4351B198BE3B700266169 /* NewLayoutPanel.xib in Resources */,
 				342B33B61980771200492CB7 /* line.vtsh in Resources */,
 				3435E39B188B93150015CC01 /* passthrough.vtsh in Resources */,
 				34539ED71606E91700638A29 /* StreamServicePanel.xib in Resources */,

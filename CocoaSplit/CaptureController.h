@@ -92,6 +92,12 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     
 }
 
+
+@property (strong) NSString *layoutPanelName;
+
+@property (strong) NSMutableDictionary *sourceLayouts;
+@property (strong) NSString *selectedLayout;
+
 @property (strong) NSMutableArray *sourceList;
 
 @property (strong) id<h264Compressor> videoCompressor;
@@ -119,7 +125,13 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (unsafe_unretained) IBOutlet NSObjectController *objectController;
 @property (strong) IBOutlet NSObjectController *compressSettingsController;
 @property (strong) IBOutlet NSObjectController *outputPanelController;
+@property (strong) IBOutlet NSObjectController *layoutPanelController;
+
 - (IBAction)closeOutputPanel:(id)sender;
+- (IBAction)deleteLayout:(id)sender;
+
+- (IBAction)createNewLayout:(id)sender;
+- (IBAction)closeLayoutPanel:(id)sender;
 
 - (IBAction)addStreamingService:(id)sender;
 
@@ -143,6 +155,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (IBAction)closeAudioMixerPanel:(id)sender;
 
 - (IBAction)closeCreateSheet:(id)sender;
+- (IBAction)openLayoutPanel:(id)sender;
 
 
 @property (strong) NSString *compressTabLabel;
@@ -181,6 +194,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) IBOutlet NSWindow *logWindow;
 @property (strong) IBOutlet NSWindow *audioMixerPanel;
 @property (strong) IBOutlet NSWindow *outputEditPanel;
+@property (strong) IBOutlet NSWindow *layoutPanel;
 
 
 - (IBAction)openLogWindow:(id)sender;

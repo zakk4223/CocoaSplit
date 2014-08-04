@@ -1,4 +1,3 @@
-
 //
 //  CaptureController.m
 //  H264Streamer
@@ -26,6 +25,7 @@
 
 @synthesize selectedCompressorType = _selectedCompressorType;
 @synthesize captureFPS = _captureFPS;
+@synthesize selectedLayout = _selectedLayout;
 
 -(void)loadTwitchIngest
 {
@@ -99,6 +99,50 @@
     [self.outputEditPanel close];
     self.outputEditPanel = nil;
 
+
+}
+
+- (IBAction)deleteLayout:(id)sender
+{
+    if (self.selectedLayout)
+    {
+        if ([self actionConfirmation:[NSString stringWithFormat:@"Really delete %@?", self.selectedLayout] infoString:nil])
+        {
+            [self willChangeValueForKey:@"sourceLayouts"];
+            [self.sourceLayouts removeObjectForKey:self.selectedLayout];
+            [self didChangeValueForKey:@"sourceLayouts"];
+            self.selectedLayout = nil;
+        }
+    }
+}
+
+
+
+- (IBAction)createNewLayout:(id)sender
+{
+    
+    [self.layoutPanelController commitEditing];
+    
+    if (self.layoutPanelName)
+    {
+        [self willChangeValueForKey:@"sourceLayouts"];
+        self.sourceLayouts[self.layoutPanelName] = [[NSData alloc] init];
+        [self didChangeValueForKey:@"sourceLayouts"];
+        self.selectedLayout = self.layoutPanelName;
+    }
+    
+    self.layoutPanelName  = nil;
+    
+    [NSApp endSheet:self.layoutPanel];
+    [self.layoutPanel close];
+}
+
+
+
+- (IBAction)closeLayoutPanel:(id)sender
+{
+    [NSApp endSheet:self.layoutPanel];
+    [self.layoutPanel close];
 
 }
 
@@ -372,6 +416,7 @@
     [self bindInputSourceVars:newSource];
     
     [self.sourceList addObject:newSource];
+    
     if (newSource.depth == 0)
     {
         [newSource scaleTo:self.captureWidth height:self.captureHeight];
@@ -466,6 +511,17 @@
     [NSApp endSheet:self.createSheet];
     [self.createSheet close];
     self.createSheet = nil;
+}
+
+- (IBAction)openLayoutPanel:(id)sender
+{
+    if (!self.layoutPanel)
+    {
+        
+        [[NSBundle mainBundle] loadNibNamed:@"NewLayoutPanel" owner:self topLevelObjects:nil];
+        
+    }
+    [NSApp beginSheet:self.layoutPanel modalForWindow:[[NSApp delegate] window] modalDelegate:self didEndSelector:NULL contextInfo:NULL];
 }
 
 
@@ -696,6 +752,19 @@
        _sourceDepthSorter = [[NSSortDescriptor alloc] initWithKey:@"depth" ascending:YES];
        _sourceUUIDSorter = [[NSSortDescriptor alloc] initWithKey:@"uuid" ascending:YES];
        
+       //load all filters, then load our custom filter(s)
+       
+       [CIPlugIn loadAllPlugIns];
+       
+       NSArray *loadedFilters = [CIFilter filterNamesInCategories:nil];
+       
+       if (![loadedFilters containsObject:@"TextureWrapFilter"])
+       {
+           NSString *filterPath = [[[NSBundle mainBundle] builtInPlugInsPath] stringByAppendingPathComponent:@"TextureWrapPlugin.plugin"];
+           NSURL *filterURL = [NSURL fileURLWithPath:filterPath];
+           [CIPlugIn loadPlugIn:filterURL allowExecutableCode:YES];
+       }
+       
        [self createCGLContext];
        _cictx = [CIContext contextWithCGLContext:_cgl_ctx pixelFormat:CGLGetPixelFormat(_cgl_ctx) colorSpace:CGColorSpaceCreateDeviceRGB() options:nil];
 
@@ -908,10 +977,19 @@
     NSUInteger compressoridx =    [self.compressController selectionIndex];
 
     
-    [saveRoot setValue:[NSNumber numberWithUnsignedInteger:compressoridx] forKey:@"selectedCompressor"];
-    [saveRoot setValue:self.sourceList forKeyPath:@"sourceList"];
+    [saveRoot setValue:[NSNumber numberWithUnsignedInteger:compressoridx] forKey:@"selectedCompressor"];\
+    
+    //[saveRoot setValue:self.sourceList forKeyPath:@"sourceList"];
     
     
+    if (self.selectedLayout)
+    {
+        NSData *layoutSave = [NSKeyedArchiver archivedDataWithRootObject:self.sourceList];
+        self.sourceLayouts[self.selectedLayout] = layoutSave;
+        [saveRoot setValue:self.selectedLayout forKey:@"selectedLayout"];
+    }
+    
+    [saveRoot setValue:self.sourceLayouts forKey:@"sourceLayouts"];
     
     
     
@@ -932,6 +1010,8 @@
     NSDictionary *defaultValues = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Defaults" ofType:@"plist"]];
     
     NSDictionary *savedValues = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+    
+    
     NSMutableDictionary *saveRoot = [[NSMutableDictionary alloc] init];
     
 
@@ -1011,19 +1091,25 @@
         self.resolutionOption = @"None";
     }
 
-    self.sourceList = [saveRoot valueForKey:@"sourceList"];
+    self.sourceLayouts = [saveRoot valueForKey:@"sourceLayouts"];
     
-    if (!self.sourceList)
+    if (!self.sourceLayouts)
     {
-        self.sourceList = [[NSMutableArray alloc] init];
+        self.sourceLayouts = [[NSMutableDictionary alloc] init];
+        self.sourceLayouts[@"default"] = [[NSData alloc] init];
     }
     
-    for (InputSource *src in self.sourceList)
+    
+    NSString *savedLayoutName = [saveRoot valueForKey:@"selectedLayout"];
+    
+
+    
+    if (!savedLayoutName)
     {
-        src.imageContext = _cictx;
-        [self bindInputSourceVars:src];
+        savedLayoutName = @"default";
     }
     
+    self.selectedLayout = savedLayoutName;
     
     [self migrateDefaultCompressor:saveRoot];
 }
@@ -1056,6 +1142,46 @@
 }
 
 
+
+-(void)setSelectedLayout:(NSString *)selectedLayout
+{
+    NSString *currentLayout = _selectedLayout;
+    
+    NSMutableArray *oldSourceList = self.sourceList;
+    
+    
+    
+    NSData *newData = self.sourceLayouts[selectedLayout];
+    if (newData && newData.length > 0)
+    {
+        NSArray *newSourceList = [NSKeyedUnarchiver unarchiveObjectWithData:newData];
+        for (InputSource *src in newSourceList)
+        {
+            src.imageContext = _cictx;
+            [self bindInputSourceVars:src];
+        }
+        
+        
+        self.sourceList = newSourceList.mutableCopy;
+    } else {
+        self.sourceList = [[NSMutableArray alloc] init];
+    }
+    
+    
+    if (currentLayout)
+    {
+        NSData *layoutSave = [NSKeyedArchiver archivedDataWithRootObject:oldSourceList];
+        self.sourceLayouts[currentLayout] = layoutSave;
+    }
+
+    oldSourceList = nil;
+    _selectedLayout = selectedLayout;
+}
+
+-(NSString *)selectedLayout
+{
+    return _selectedLayout;
+}
 
 
 - (IBAction)ffmpegPathPushed:(id)sender {
@@ -1724,6 +1850,7 @@
         //CVPixelBufferRef newFrame = [self currentFrame];
         CVPixelBufferRef destFrame = NULL;
         
+
                 /*
         if (!_backgroundImage)
         {
@@ -1731,40 +1858,30 @@
         }
          */
         
+
         CIImage *newImage = [_backgroundFilter valueForKey:kCIOutputImageKey];
         
+        newImage = [newImage imageByCroppingToRect:NSMakeRect(0, 0, self.captureWidth, self.captureHeight)];
+
         
         NSArray *listCopy = [self.sourceList sortedArrayUsingDescriptors:@[_sourceDepthSorter, _sourceUUIDSorter]];
+        
         
         for (InputSource *isource in listCopy)
         {
             newImage = [isource currentImage:newImage];
+            
         }
-        
         
         if (!newImage)
         {
             return nil;
         }
         
-        CGFloat frameWidth, frameHeight;
         /*
         frameWidth = CVPixelBufferGetWidth(newFrame);
         frameHeight = CVPixelBufferGetHeight(newFrame);
         */
-        frameWidth = self.captureWidth;
-        frameHeight = self.captureHeight;
-        
-        NSSize frameSize = NSMakeSize(frameWidth, frameHeight);
-        
-        if (!CGSizeEqualToSize(frameSize, _cvpool_size))
-         {
-             [self createPixelBufferPoolForSize:frameSize];
-             _cvpool_size = frameSize;
-         
-         }
-        
-        
                       /*
         CIImage *tmpimg = [CIImage imageWithIOSurface:CVPixelBufferGetIOSurface(newFrame)];
         
@@ -1779,13 +1896,30 @@
         outimg = [_cifilter valueForKey:kCIOutputImageKey];
         */
         
-        CVPixelBufferPoolCreatePixelBuffer(kCVReturnSuccess, _cvpool, &destFrame);
+        //CVPixelBufferPoolCreatePixelBuffer(kCVReturnSuccess, _cvpool, &destFrame);
         
 
+        //NSLog(@"IMAGE EXTENT %@", NSStringFromRect(newImage.extent));
+        CGFloat frameWidth, frameHeight;
         
-        [_cictx render:newImage toIOSurface:CVPixelBufferGetIOSurface(destFrame) bounds:NSMakeRect(0, 0, frameWidth, frameHeight) colorSpace:CGColorSpaceCreateDeviceRGB()];
+        frameWidth = self.captureWidth;
+        frameHeight = self.captureHeight;
+        
+        NSSize frameSize = NSMakeSize(frameWidth, frameHeight);
+        
+        if (!CGSizeEqualToSize(frameSize, _cvpool_size))
+        {
+            [self createPixelBufferPoolForSize:frameSize];
+            _cvpool_size = frameSize;
+            
+        }
+        
+        CVPixelBufferPoolCreatePixelBuffer(kCVReturnSuccess, _cvpool, &destFrame);
+
         
         
+        [_cictx render:newImage toIOSurface:CVPixelBufferGetIOSurface(destFrame) bounds:NSMakeRect(0,0,frameWidth, frameHeight) colorSpace:CGColorSpaceCreateDeviceRGB()];
+
     
     
         @synchronized(self)

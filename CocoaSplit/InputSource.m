@@ -100,7 +100,8 @@ static NSArray *_sourceTypes = nil;
         
         self.compositeFilter = [CIFilter filterWithName:@"CISourceOverCompositing"];
         [self.compositeFilter setDefaults];
-        
+    
+
         [self rebuildFilters];
         [self addObserver:self forKeyPath:@"propertiesChanged" options:NSKeyValueObservingOptionNew context:NULL];
  }
@@ -269,6 +270,13 @@ static NSArray *_sourceTypes = nil;
             self.source_width = CVPixelBufferGetWidth(newFrame);
             self.source_height = CVPixelBufferGetHeight(newFrame);
             
+            //leaks memory in 10.9, less efficient if the buffer is YUV (probably due to pixel format conversion.
+            //instead all the capture inputs produce RGB buffers, although it is questionable if it is wise to leave
+            //that conversion up to the individual capture sources.
+            
+            //self.inputImage = [CIImage imageWithCVImageBuffer:newFrame];
+            
+            
             self.inputImage = [CIImage imageWithIOSurface:CVPixelBufferGetIOSurface(newFrame) options:@{kCIImageColorSpace: (__bridge id)CGColorSpaceCreateDeviceRGB()}];
             
                                                                                                         
@@ -301,6 +309,7 @@ static NSArray *_sourceTypes = nil;
     
     outimg = self.inputImage;
     
+
     NSRect cropRect = [self calculateCropRect:self.inputImage.extent.size.width height:self.inputImage.extent.size.height];
     
 
@@ -347,7 +356,6 @@ static NSArray *_sourceTypes = nil;
         [self.compositeFilter setValue:backgroundImage forKeyPath:kCIInputBackgroundImageKey];
         outimg = [self.compositeFilter valueForKey:kCIOutputImageKey];
     }
-    
     return outimg;
 }
 

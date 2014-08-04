@@ -21,8 +21,7 @@
 {
     CVPixelBufferRef _tmpCVBuf;
     CGColorSpaceRef _colorSpace;
-    
-}
+ }
 
 @property (strong) NSString *settingsTab;
 

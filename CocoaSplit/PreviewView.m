@@ -362,7 +362,7 @@
     NSRect viewRect = [self windowRectforWorldRect:layoutRect];
     
     
-    NSRect interiorRect = NSMakeRect(viewRect.origin.x+40.0f, viewRect.origin.y+40.0f, viewRect.size.width-80.0f, viewRect.size.height-80.0f);
+    NSRect interiorRect = NSMakeRect(viewRect.origin.x+10.0f, viewRect.origin.y+10.0f, viewRect.size.width-20.0f, viewRect.size.height-20.0f);
     
     
     if (!NSPointInRect(tmp, interiorRect))
