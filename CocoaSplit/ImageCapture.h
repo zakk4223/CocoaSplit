@@ -21,7 +21,7 @@
     int _frameNumber;
     dispatch_queue_t _animationQueue;
     NSMutableArray *_imageCache;
-    
+    CIImage *_ciimage;
 }
 
 
@@ -33,7 +33,6 @@
 @property NSString *imageDirectory;
 
 
-@property NSImage *currentImage;
 
 @property CVPixelBufferRef currentFrame;
 

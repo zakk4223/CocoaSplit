@@ -184,11 +184,6 @@
     
     if (_imageCache)
     {
-        for(id img in _imageCache)
-        {
-            CGImageRef cgimg = (__bridge CGImageRef)img;
-            CGImageRelease(cgimg);
-        }
         _imageCache = nil;
 
     }
@@ -209,69 +204,31 @@
 {
     CGImageRef theImage = NULL;
 
-
+    CIImage *newImg = nil;
+    
     if (_imageCache.count > forIdx)
     {
-        theImage = (__bridge CGImageRef)[_imageCache objectAtIndex:forIdx ];
+        newImg = (CIImage *)[_imageCache objectAtIndex:forIdx ];
     }
     
-    if (!theImage && _imageSource)
+    if (!newImg && _imageSource)
     {
         theImage = CGImageSourceCreateImageAtIndex(_imageSource, forIdx, NULL);
-        [_imageCache insertObject:(__bridge id)(theImage) atIndex:forIdx];
+        
+        
+        newImg = [CIImage imageWithCGImage:theImage];
+        CGImageRelease(theImage);
+        [_imageCache insertObject:newImg atIndex:forIdx];
+        
     }
     
-    if (theImage)
-    {
-        
-        /*
-        NSBitmapImageRep *imgRep = [[newImage representations] objectAtIndex:0];
-        
-        NSLog(@"IMAGE HAS %@ frames", [imgRep valueForProperty:NSImageCurrentFrameDuration]);
-        */
-        
-        
-        CVPixelBufferRef newFrame = NULL;
-        
-        
-        size_t width = CGImageGetWidth(theImage);
-        size_t height = CGImageGetHeight(theImage);
-        CGColorSpaceRef cs = CGColorSpaceCreateDeviceRGB();
-        
-        NSDictionary *ioAttrs = [NSDictionary dictionaryWithObject: [NSNumber numberWithBool: NO] forKey: (NSString *)kIOSurfaceIsGlobal];
-        
-        NSDictionary *dict = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], kCVPixelBufferCGImageCompatibilityKey, [NSNumber numberWithBool:YES], kCVPixelBufferCGBitmapContextCompatibilityKey, ioAttrs, kCVPixelBufferIOSurfacePropertiesKey, nil];
-        
-        
-        
-        
-        CVPixelBufferCreate(kCFAllocatorDefault, width, height, k32BGRAPixelFormat, (__bridge CFDictionaryRef)dict, &newFrame);
-        CVPixelBufferLockBaseAddress(newFrame, 0);
-        void *rasterData = CVPixelBufferGetBaseAddress(newFrame);
-        size_t bytesPerRow = CVPixelBufferGetBytesPerRow(newFrame);
-        
-        CGContextRef ctxt = CGBitmapContextCreate(rasterData, width, height, 8, bytesPerRow, cs, kCGBitmapByteOrder32Little|kCGImageAlphaNoneSkipFirst);
-
-        CGRect rect = {{0,0}, {width, height}};
-        CGContextDrawImage(ctxt, rect, theImage);
-        
-        
-
-        CGContextRelease(ctxt);
-        
-        CVPixelBufferUnlockBaseAddress(newFrame, 0);
-        
-        @synchronized(self) {
-            if (self.currentFrame)
-            {
-                CVPixelBufferRelease(self.currentFrame);
-            }
-            self.currentFrame = newFrame;
-        }
-        [self advanceGifFrame];
-    }
+    _ciimage = newImg;
+    
+    [self advanceGifFrame];
 
 }
+
+
 -(void)setActiveVideoDevice:(AbstractCaptureDevice *)activeVideoDevice
 {
     
@@ -325,6 +282,13 @@
     _frameNumber = 0;
     [self renderImage:0];
     
+}
+
+
+
+-(CIImage *) currentImage
+{
+    return _ciimage;
 }
 
 -(CVImageBufferRef) getCurrentFrame

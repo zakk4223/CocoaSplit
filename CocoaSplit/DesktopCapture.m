@@ -106,7 +106,7 @@
 
     
     
-    _displayStreamRef = CGDisplayStreamCreateWithDispatchQueue(_currentDisplay, self.width, self.height,  kCVPixelFormatType_32BGRA, (__bridge CFDictionaryRef)(@{(NSString *)kCGDisplayStreamQueueDepth : @8, (NSString *)kCGDisplayStreamMinimumFrameTime : minframetime, (NSString *)kCGDisplayStreamPreserveAspectRatio: @NO}), _capture_queue, ^(CGDisplayStreamFrameStatus status, uint64_t displayTime, IOSurfaceRef frameSurface, CGDisplayStreamUpdateRef updateRef) {
+    _displayStreamRef = CGDisplayStreamCreateWithDispatchQueue(_currentDisplay, self.width, self.height,  kCVPixelFormatType_420YpCbCr8BiPlanarFullRange, (__bridge CFDictionaryRef)(@{(NSString *)kCGDisplayStreamQueueDepth : @8, (NSString *)kCGDisplayStreamMinimumFrameTime : minframetime, (NSString *)kCGDisplayStreamPreserveAspectRatio: @NO}), _capture_queue, ^(CGDisplayStreamFrameStatus status, uint64_t displayTime, IOSurfaceRef frameSurface, CGDisplayStreamUpdateRef updateRef) {
         
         if (status == kCGDisplayStreamFrameStatusStopped)
         {
@@ -116,16 +116,11 @@
         
         if (frameSurface)
         {
-            CFRetain(frameSurface);
+            CIImage *newImg = [CIImage imageWithIOSurface:frameSurface];
+
+            
             @synchronized(self) {
-                if (_currentFrame)
-                {
-
-                    CFRelease(_currentFrame);
-                }
-                
-                _currentFrame = frameSurface;
-
+                _currentImg = newImg;
             }
             
         }
@@ -137,24 +132,17 @@
 
 
 
--(CVImageBufferRef) getCurrentFrame
+-(CIImage *)currentImage
 {
     
-    CVImageBufferRef tmpbuf = NULL;
-    
-    @synchronized(self) {
-        if (_currentFrame)
-        {
-            CVPixelBufferCreateWithIOSurface(NULL, _currentFrame, NULL, &tmpbuf);
-            
-        }
-    
+    CIImage *retimg;
+    @synchronized(self)
+    {
+        retimg = _currentImg;
     }
-    return tmpbuf;
     
+    return retimg;
 }
-
-
 
 
 -(bool)stopDisplayStream

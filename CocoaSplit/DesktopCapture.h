@@ -17,7 +17,7 @@
     IOSurfaceRef _currentFrame;
     uint64_t _currentFrameTime;
     CGDirectDisplayID _currentDisplay;
-    
+    CIImage *_currentImg;
 
 }
 
@@ -26,7 +26,6 @@
 -(bool)providesAudio;
 -(bool)providesVideo;
 -(NSArray *)availableVideoDevices;
--(CVImageBufferRef) getCurrentFrame;
 
 
 

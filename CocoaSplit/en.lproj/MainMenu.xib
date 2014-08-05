@@ -818,12 +818,12 @@
                                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JCv-Ug-BEk">
                                                             <rect key="frame" x="73" y="235" width="100" height="22"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                            <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="XFS-rN-O7W">
+                                                            <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="XFS-rN-O7W">
                                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                 <font key="font" metaFont="smallSystem"/>
                                                                 <menu key="menu" title="OtherViews" id="Iyx-yp-VkE">
                                                                     <items>
-                                                                        <menuItem title="Item 1" state="on" id="hBT-n0-ZZ6"/>
+                                                                        <menuItem title="Item 1" id="hBT-n0-ZZ6"/>
                                                                         <menuItem title="Item 2" id="lQU-pC-64i"/>
                                                                         <menuItem title="Item 3" id="XMu-Ga-p1Z"/>
                                                                     </items>
@@ -831,13 +831,8 @@
                                                             </popUpButtonCell>
                                                             <connections>
                                                                 <binding destination="LMS-v7-nvj" name="content" keyPath="arrangedObjects" id="B9y-CY-cOF"/>
-                                                                <binding destination="LMS-v7-nvj" name="contentObjects" keyPath="arrangedObjects.key" previousBinding="B9y-CY-cOF" id="fdq-8m-CFx"/>
                                                                 <binding destination="LMS-v7-nvj" name="contentValues" keyPath="arrangedObjects.key" previousBinding="fdq-8m-CFx" id="3xH-Dm-NGI"/>
-                                                                <binding destination="816" name="enabled" keyPath="self.captureRunning" id="7WB-3M-b0i">
-                                                                    <dictionary key="options">
-                                                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                                                    </dictionary>
-                                                                </binding>
+                                                                <binding destination="LMS-v7-nvj" name="contentObjects" keyPath="arrangedObjects.key" previousBinding="B9y-CY-cOF" id="fdq-8m-CFx"/>
                                                                 <binding destination="816" name="selectedObject" keyPath="self.selectedLayout" previousBinding="3xH-Dm-NGI" id="JJc-q5-KTs"/>
                                                             </connections>
                                                         </popUpButton>

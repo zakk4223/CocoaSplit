@@ -279,7 +279,7 @@ static NSArray *_sourceTypes = nil;
             
             self.inputImage = [CIImage imageWithIOSurface:CVPixelBufferGetIOSurface(newFrame) options:@{kCIImageColorSpace: (__bridge id)CGColorSpaceCreateDeviceRGB()}];
             
-                                                                                                        
+            
             
             _tmpCVBuf = newFrame;
 
