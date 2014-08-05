@@ -29,13 +29,14 @@
 
 
 
-@property double videoCaptureFPS;
-@property int width;
-@property int height;
+@property (assign) double videoCaptureFPS;
+@property (assign) int width;
+@property (assign) int height;
+@property (assign) BOOL showCursor;
 @property (readonly) BOOL needsAdvancedVideo;
 @property NSArray *videoFormats;
 @property NSArray *videoFramerates;
-
+@property (assign) bool propertiesChanged;
 
 
 

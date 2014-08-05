@@ -21,6 +21,32 @@
 
 
 
+-(void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [super encodeWithCoder:aCoder];
+    
+    [aCoder encodeInt:self.width forKey:@"width"];
+    [aCoder encodeInt:self.height forKey:@"height"];
+    [aCoder encodeDouble:self.videoCaptureFPS forKey:@"videoCaptureFPS"];
+    [aCoder encodeBool:self.showCursor forKey:@"showCursor"];
+}
+
+
+-(id) initWithCoder:(NSCoder *)aDecoder
+{
+    
+    if (self = [super initWithCoder:aDecoder])
+    {
+        _width = [aDecoder decodeIntForKey:@"width"];
+        _height = [aDecoder decodeIntForKey:@"height"];
+        _videoCaptureFPS = [aDecoder decodeDoubleForKey:@"videoCaptureFPS"];
+        _showCursor = [aDecoder decodeBoolForKey:@"showCursor"];
+    }
+    
+    return self;
+}
+
+
 
 -(BOOL) needsAdvancedVideo
 {
@@ -36,7 +62,9 @@
         _capture_queue = dispatch_queue_create("Desktop Capture Queue", DISPATCH_QUEUE_SERIAL);
 
         self.videoCaptureFPS = 60.0f;
-        
+        self.showCursor = YES;
+        [self addObserver:self forKeyPath:@"propertiesChanged" options:NSKeyValueObservingOptionNew context:NULL];
+
     }
 
     return self;
@@ -53,37 +81,17 @@
 -(void) setActiveVideoDevice:(AbstractCaptureDevice *)newDev
 {
     
-    NSLog(@"SETTING ACTIVE VIDEO DEVICE");
     _activeVideoDevice = newDev;
     _currentDisplay = [[newDev captureDevice] unsignedIntValue];
-    CGRect displaySize = CGDisplayBounds(_currentDisplay);
-    
-    self.width = displaySize.size.width;
-    self.height = displaySize.size.height;
-    
-    
     [self setupDisplayStream];
 }
-
--(double)videoCaptureFPS
-{
-    return _videoCaptureFPS;
-}
-
-
--(void) setVideoCaptureFPS:(double)videoCaptureFPS
-{
-    
-     _videoCaptureFPS = videoCaptureFPS;
-    
-    [self setupDisplayStream];
-}
-
-
 
 -(bool)setupDisplayStream
 {
 
+    int width;
+    int height;
+    
     
     if (_displayStreamRef)
     {
@@ -104,9 +112,24 @@
     
     NSNumber *minframetime = [NSNumber numberWithFloat:(1000.0/(self.videoCaptureFPS*1000))];
 
+    if (self.width && self.height)
+    {
+        width = self.width;
+        height = self.height;
+    } else {
+        CGRect displaySize = CGDisplayBounds(_currentDisplay);
+        width = displaySize.size.width;
+        height = displaySize.size.height;
+    }
     
     
-    _displayStreamRef = CGDisplayStreamCreateWithDispatchQueue(_currentDisplay, self.width, self.height,  kCVPixelFormatType_420YpCbCr8BiPlanarFullRange, (__bridge CFDictionaryRef)(@{(NSString *)kCGDisplayStreamQueueDepth : @8, (NSString *)kCGDisplayStreamMinimumFrameTime : minframetime, (NSString *)kCGDisplayStreamPreserveAspectRatio: @NO}), _capture_queue, ^(CGDisplayStreamFrameStatus status, uint64_t displayTime, IOSurfaceRef frameSurface, CGDisplayStreamUpdateRef updateRef) {
+    
+    NSDictionary *opts = @{(NSString *)kCGDisplayStreamQueueDepth : @8, (NSString *)kCGDisplayStreamMinimumFrameTime : minframetime, (NSString *)kCGDisplayStreamPreserveAspectRatio: @YES, (NSString *)kCGDisplayStreamShowCursor:@(self.showCursor)};
+    
+    
+    
+    
+    _displayStreamRef = CGDisplayStreamCreateWithDispatchQueue(_currentDisplay, width, height,  kCVPixelFormatType_420YpCbCr8BiPlanarFullRange, (__bridge CFDictionaryRef)(opts), _capture_queue, ^(CGDisplayStreamFrameStatus status, uint64_t displayTime, IOSurfaceRef frameSurface, CGDisplayStreamUpdateRef updateRef) {
         
         if (status == kCGDisplayStreamFrameStatusStopped)
         {
@@ -155,11 +178,8 @@
     
   
     @synchronized(self) {
-        if (_currentFrame)
-        {
-            CFRelease(_currentFrame);
-            _currentFrame = NULL;
-        }
+        _currentImg = nil;
+        
     }
 
   
@@ -218,10 +238,29 @@
 }
 
 
++ (NSSet *)keyPathsForValuesAffectingPropertiesChanged
+{
+    return [NSSet setWithObjects:@"width", @"height", @"videoCaptureFPS", nil];
+}
+
+
+- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    
+    
+    if ([keyPath isEqualToString:@"propertiesChanged"])
+    {
+        [self setupDisplayStream];
+    }
+    
+}
+
 
 
 -(void)dealloc
 {
+    [self removeObserver:self forKeyPath:@"propertiesChanged"];
+
     [self stopDisplayStream];
 }
 

@@ -193,7 +193,12 @@ static NSArray *_sourceTypes = nil;
         self.transformFilter = [CIFilter filterWithName:@"CIAffineTransform"];
         [self.transformFilter setDefaults];
     }
-    
+   
+    if (!self.scaleFilter)
+    {
+        self.scaleFilter = [CIFilter filterWithName:@"CILanczosScaleTransform"];
+        [self.scaleFilter setDefaults];
+    }
 
     CGFloat scale_cx = 0.0f;
     CGFloat scale_cy = 0.0f;
@@ -212,7 +217,9 @@ static NSArray *_sourceTypes = nil;
     
     [scaleTransform translateXBy:-x yBy:-y];
     
-    [scaleTransform scaleBy:self.scaleFactor];
+    [self.scaleFilter setValue:@(self.scaleFactor) forKey:kCIInputScaleKey];
+    
+    //[scaleTransform scaleBy:self.scaleFactor];
     
 
     cent_x = scale_cx-x;
@@ -276,7 +283,6 @@ static NSArray *_sourceTypes = nil;
             
             //self.inputImage = [CIImage imageWithCVImageBuffer:newFrame];
             
-            
             self.inputImage = [CIImage imageWithIOSurface:CVPixelBufferGetIOSurface(newFrame) options:@{kCIImageColorSpace: (__bridge id)CGColorSpaceCreateDeviceRGB()}];
             
             
@@ -334,6 +340,9 @@ static NSArray *_sourceTypes = nil;
     
     
 
+    [self.scaleFilter setValue:outimg forKeyPath:kCIInputImageKey];
+    
+    outimg  = [self.scaleFilter valueForKey:kCIOutputImageKey];
     
     [self.transformFilter setValue:outimg forKeyPath:kCIInputImageKey];
 
