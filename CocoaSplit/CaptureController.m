@@ -416,12 +416,7 @@
     [self bindInputSourceVars:newSource];
     
     [self.sourceList addObject:newSource];
-    
-    if (newSource.depth == 0)
-    {
-        [newSource scaleTo:self.captureWidth height:self.captureHeight];
-    }
-    
+    [self.previewCtx spawnInputSettings:newSource atRect:NSZeroRect];
 }
 
 

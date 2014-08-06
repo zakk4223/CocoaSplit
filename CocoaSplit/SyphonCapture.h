@@ -32,9 +32,10 @@
 
 
 
-@property double videoCaptureFPS;
-@property int width;
-@property int height;
+@property (assign) double videoCaptureFPS;
+@property (assign) int width;
+@property (assign) int height;
+@property (assign) BOOL isFlipped;
 @property (readonly) BOOL needsAdvancedVideo;
 
 

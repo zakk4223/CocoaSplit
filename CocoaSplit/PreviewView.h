@@ -78,6 +78,9 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 - (IBAction)deleteInput:(id)sender;
 - (IBAction)showInputSettings:(id)sender;
 
+-(void)spawnInputSettings:(InputSource *)forInput atRect:(NSRect)atRect;
+
+
 
 
 @property (strong) NSMenu *sourceListMenu;

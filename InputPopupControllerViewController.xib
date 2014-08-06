@@ -88,7 +88,7 @@
                                 </connections>
                             </textField>
                             <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yK1-CG-2Dt">
-                                <rect key="frame" x="115" y="173" width="351" height="19"/>
+                                <rect key="frame" x="115" y="173" width="351" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="360" doubleValue="90" tickMarkPosition="below" numberOfTickMarks="5" sliderType="linear" id="RSQ-Jk-ZUV"/>
                                 <connections>
@@ -344,17 +344,17 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <tabView fixedFrame="YES" controlSize="small" translatesAutoresizingMaskIntoConstraints="NO" id="YQE-gk-wmj">
+                            <tabView fixedFrame="YES" controlSize="small" type="noTabsNoBorder" translatesAutoresizingMaskIntoConstraints="NO" id="YQE-gk-wmj">
                                 <rect key="frame" x="-7" y="-10" width="505" height="141"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <tabViewItems>
                                     <tabViewItem label="DesktopCapture" identifier="1" id="Th5-4d-79k">
-                                        <view key="view" ambiguous="YES" id="7XW-AL-fl6">
-                                            <rect key="frame" x="10" y="25" width="485" height="103"/>
+                                        <view key="view" id="7XW-AL-fl6">
+                                            <rect key="frame" x="10" y="25" width="403" height="0.0"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4fg-Hq-3Nd">
-                                                    <rect key="frame" x="15" y="80" width="70" height="14"/>
+                                                    <rect key="frame" x="15" y="-23" width="70" height="14"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Resolution" id="fN4-ax-00j">
                                                         <font key="font" metaFont="smallSystem"/>
@@ -363,7 +363,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CM3-Cx-Dbb">
-                                                    <rect key="frame" x="81" y="78" width="44" height="19"/>
+                                                    <rect key="frame" x="81" y="-25" width="44" height="19"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="7Jl-Qr-byv">
                                                         <font key="font" metaFont="smallSystem"/>
@@ -379,7 +379,7 @@
                                                     </connections>
                                                 </textField>
                                                 <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="V3p-He-blW">
-                                                    <rect key="frame" x="149" y="78" width="40" height="19"/>
+                                                    <rect key="frame" x="149" y="-25" width="40" height="19"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="2uD-Xh-bsB">
                                                         <font key="font" metaFont="smallSystem"/>
@@ -395,7 +395,7 @@
                                                     </connections>
                                                 </textField>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aGO-VC-ifF">
-                                                    <rect key="frame" x="131" y="80" width="12" height="14"/>
+                                                    <rect key="frame" x="131" y="-23" width="12" height="14"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="x" id="ABg-I1-gE4">
                                                         <font key="font" metaFont="smallSystem"/>
@@ -404,7 +404,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aNu-TG-EJF">
-                                                    <rect key="frame" x="15" y="58" width="29" height="14"/>
+                                                    <rect key="frame" x="15" y="-45" width="29" height="14"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="FPS" id="Euf-tZ-I73">
                                                         <font key="font" metaFont="smallSystem"/>
@@ -413,7 +413,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qJ6-bV-wsH">
-                                                    <rect key="frame" x="81" y="56" width="44" height="19"/>
+                                                    <rect key="frame" x="81" y="-47" width="44" height="19"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="zoQ-uu-Ga2">
                                                         <font key="font" metaFont="smallSystem"/>
@@ -429,7 +429,7 @@
                                                     </connections>
                                                 </textField>
                                                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WSm-uM-QAx">
-                                                    <rect key="frame" x="14" y="33" width="89" height="20"/>
+                                                    <rect key="frame" x="14" y="-70" width="89" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="check" title="Show Cursor" bezelStyle="regularSquare" imagePosition="right" alignment="left" controlSize="small" state="on" inset="2" id="SqZ-RL-8SK">
                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -532,14 +532,31 @@
                                     </tabViewItem>
                                     <tabViewItem label="QTCapture" identifier="" id="KVO-ba-rCx">
                                         <view key="view" id="qUl-Jt-ycg">
-                                            <rect key="frame" x="0.0" y="0.0" width="491" height="128"/>
+                                            <rect key="frame" x="10" y="25" width="485" height="103"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         </view>
                                     </tabViewItem>
                                     <tabViewItem label="SyphonCapture" identifier="" id="KNP-nn-EtF">
-                                        <view key="view" id="pqj-oD-gPx">
-                                            <rect key="frame" x="10" y="25" width="485" height="103"/>
+                                        <view key="view" ambiguous="YES" id="pqj-oD-gPx">
+                                            <rect key="frame" x="0.0" y="0.0" width="491" height="128"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7PJ-4L-fRn">
+                                                    <rect key="frame" x="15" y="106" width="69" height="18"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <buttonCell key="cell" type="check" title="Flipped" bezelStyle="regularSquare" imagePosition="right" state="on" inset="2" id="6GP-eg-tWu">
+                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                        <font key="font" metaFont="system"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.videoInput.isFlipped" id="a8f-ca-LOS">
+                                                            <dictionary key="options">
+                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                            </dictionary>
+                                                        </binding>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
                                         </view>
                                     </tabViewItem>
                                     <tabViewItem label="ImageCapture" identifier="" id="KNU-Jb-6iB">

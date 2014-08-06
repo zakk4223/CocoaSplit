@@ -494,6 +494,31 @@
 
 
 
+-(void)spawnInputSettings:(InputSource *)forInput atRect:(NSRect)atRect
+{
+    
+    NSRect spawnRect;
+    spawnRect = atRect;
+    
+    if (NSEqualRects(spawnRect, NSZeroRect))
+    {
+        NSRect inputRect = [self windowRectforWorldRect:forInput.layoutPosition];
+        spawnRect = NSInsetRect(inputRect, inputRect.size.width/2-2.0f, inputRect.size.height/2-2.0f);
+    }
+    
+    
+    InputPopupControllerViewController *popupController = [[InputPopupControllerViewController alloc] initWithNibName:@"InputPopupControllerViewController" bundle:nil];
+    NSPopover *popover = [[NSPopover alloc] init];
+    popover.contentViewController = popupController;
+    popover.animates = YES;
+    popover.delegate = popupController;
+    forInput.editorPopover = popover;
+    popover.behavior = NSPopoverBehaviorSemitransient;
+    [forInput.editorPopover showRelativeToRect:spawnRect ofView:self preferredEdge:NSMaxXEdge];
+    ((InputPopupControllerViewController *)forInput.editorPopover.contentViewController).InputController.content = forInput;
+}
+
+
 - (IBAction)showInputSettings:(id)sender
 {
     
@@ -513,31 +538,17 @@
     
     NSPoint tmp = [self convertPoint:[self.window mouseLocationOutsideOfEventStream] fromView:nil];
 
-    
-
-    //if (!configSource.editorPopover)
-    //{
-        InputPopupControllerViewController *popupController = [[InputPopupControllerViewController alloc] initWithNibName:@"InputPopupControllerViewController" bundle:nil];
-        NSPopover *popover = [[NSPopover alloc] init];
-        popover.contentViewController = popupController;
-        popover.animates = YES;
-        popover.delegate = popupController;
-        configSource.editorPopover = popover;
-    popover.behavior = NSPopoverBehaviorSemitransient;
-    //}
-    
-    
     NSRect spawnRect = NSMakeRect(tmp.x, tmp.y, 1.0f, 1.0f);
     
-    if (!NSPointInRect(NSMakePoint(tmp.x, tmp.y), self.bounds))
+    if (!NSPointInRect(NSMakePoint(tmp.x, 0), self.bounds))
     {
         spawnRect = NSMakeRect(self.bounds.size.width-5, tmp.y, 1.0f, 1.0f);
+    } else if (!NSPointInRect(NSMakePoint(0, tmp.y), self.bounds)) {
+        spawnRect = NSMakeRect(tmp.x, 5.0f, 1.0f, 1.0f);
     }
     
-    
-    [configSource.editorPopover showRelativeToRect:spawnRect ofView:self preferredEdge:NSMaxXEdge];
-    ((InputPopupControllerViewController *)configSource.editorPopover.contentViewController).InputController.content = configSource;
-    
+    [self spawnInputSettings:configSource atRect:spawnRect];
+
 }
 
 

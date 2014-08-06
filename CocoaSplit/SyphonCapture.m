@@ -20,6 +20,26 @@
 
 
 
+-(void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [super encodeWithCoder:aCoder];
+    
+    [aCoder encodeBool:self.isFlipped forKey:@"isFlipped"];
+}
+
+
+-(id) initWithCoder:(NSCoder *)aDecoder
+{
+    
+    if (self = [super initWithCoder:aDecoder])
+    {
+        self.isFlipped = [aDecoder decodeBoolForKey:@"isFlipped"];
+    }
+    
+    return self;
+}
+
+
 -(void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -57,7 +77,7 @@
     NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
     [attributes setValue:[NSNumber numberWithInt:size.width] forKey:(NSString *)kCVPixelBufferWidthKey];
     [attributes setValue:[NSNumber numberWithInt:size.height] forKey:(NSString *)kCVPixelBufferHeightKey];
-    [attributes setValue:@{(NSString *)kIOSurfaceIsGlobal: @YES} forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
+    [attributes setValue:@{(NSString *)kIOSurfaceIsGlobal: @NO} forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
     [attributes setValue:[NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA] forKey:(NSString *)kCVPixelBufferPixelFormatTypeKey];
     
     
@@ -87,15 +107,16 @@
     if (self = [super init])
     {
         
+        self.isFlipped = NO;
+        
         [self changeAvailableVideoDevices];
         NSOpenGLPixelFormatAttribute glAttributes[] = {
-            
-            NSOpenGLPFAPixelBuffer,
-            NSOpenGLPFANoRecovery,
             NSOpenGLPFAAccelerated,
-            NSOpenGLPFADepthSize, 32,
-            (NSOpenGLPixelFormatAttribute) 0
-            
+            NSOpenGLPFANoRecovery,
+            //        NSOpenGLPFAOpenGLProfile,
+            //        NSOpenGLProfileVersion3_2Core,
+            0
+
         };
         NSOpenGLPixelFormat *pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:glAttributes];
         
@@ -316,7 +337,11 @@
     
 
     glTranslated(frameSize.width * 0.5, frameSize.height * 0.5, 0.0);
-    //glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
+    if (self.isFlipped)
+    {
+        glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
+    }
+    
 
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glTexCoordPointer(2, GL_FLOAT, 0, text_coords);

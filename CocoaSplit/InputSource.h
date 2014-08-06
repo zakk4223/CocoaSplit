@@ -40,8 +40,8 @@
 
 @property (assign) bool is_selected;
 @property (assign) NSRect layoutPosition;
-
 @property (strong) CIFilter *scaleFilter;
+@property (strong) CIFilter *scaleMoveFilter;
 @property (strong) CIFilter *selectedFilter;
 @property (strong) CIFilter *transformFilter;
 

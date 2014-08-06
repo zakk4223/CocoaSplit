@@ -33,13 +33,16 @@ static NSArray *_sourceTypes = nil;
     [aCoder encodeFloat:self.scaleFactor forKey:@"scaleFactor"];
     [aCoder encodeFloat:self.opacity forKey:@"opacity"];
     [aCoder encodeObject:self.name forKey:@"name"];
-    [aCoder encodeInteger:self.depth forKey:@"depth"];
-    [aCoder encodeInteger:self.crop_top forKey:@"crop_top"];
-    [aCoder encodeInteger:self.crop_bottom forKey:@"crop_bottom"];
-    [aCoder encodeInteger:self.crop_left forKey:@"crop_left"];
-    [aCoder encodeInteger:self.crop_right forKey:@"crop_right"];
+    [aCoder encodeInt:self.depth forKey:@"depth"];
+    [aCoder encodeInt:self.crop_top forKey:@"crop_top"];
+    [aCoder encodeInt:self.crop_bottom forKey:@"crop_bottom"];
+    [aCoder encodeInt:self.crop_left forKey:@"crop_left"];
+    [aCoder encodeInt:self.crop_right forKey:@"crop_right"];
     [aCoder encodeObject:self.selectedVideoType forKey:@"selectedVideoType"];
 
+    [aCoder encodeObject:self.uuid forKey:@"uuid"];
+    
+    
     if (self.videoInput)
     {
         [aCoder encodeObject:self.videoInput forKey:@"videoInput"];
@@ -57,14 +60,15 @@ static NSArray *_sourceTypes = nil;
         self.scaleFactor = [aDecoder decodeFloatForKey:@"scaleFactor"];
         self.opacity = [aDecoder decodeFloatForKey:@"opacity"];
         self.name = [aDecoder decodeObjectForKey:@"name"];
-        self.depth = (int)[aDecoder decodeIntegerForKey:@"depth"];
+        self.depth = [aDecoder decodeIntForKey:@"depth"];
         self.videoInput = [aDecoder decodeObjectForKey:@"videoInput"];
         _selectedVideoType = [aDecoder decodeObjectForKey:@"selectedVideoType"];
-        self.crop_top = (int)[aDecoder decodeIntegerForKey:@"crop_top"];
-        self.crop_bottom = (int)[aDecoder decodeIntegerForKey:@"crop_bottom"];
-        self.crop_left = (int)[aDecoder decodeIntegerForKey:@"crop_left"];
-        self.crop_right = (int)[aDecoder decodeIntegerForKey:@"crop_right"];
+        self.crop_top = [aDecoder decodeIntForKey:@"crop_top"];
+        self.crop_bottom = [aDecoder decodeIntForKey:@"crop_bottom"];
+        self.crop_left = [aDecoder decodeIntForKey:@"crop_left"];
+        self.crop_right = [aDecoder decodeIntForKey:@"crop_right"];
 
+        self.uuid = [aDecoder decodeObjectForKey:@"uuid"];
         
     }
     return self;
@@ -101,6 +105,7 @@ static NSArray *_sourceTypes = nil;
         self.compositeFilter = [CIFilter filterWithName:@"CISourceOverCompositing"];
         [self.compositeFilter setDefaults];
     
+        self.layoutPosition = NSMakeRect(200.0f, 200.0f, 200.0f, 200.0f);
 
         [self rebuildFilters];
         [self addObserver:self forKeyPath:@"propertiesChanged" options:NSKeyValueObservingOptionNew context:NULL];
@@ -215,6 +220,8 @@ static NSArray *_sourceTypes = nil;
     x = (scale_cx)-cent_x;
     y = (scale_cy)-cent_y;
     
+    
+
     [scaleTransform translateXBy:-x yBy:-y];
     
     [self.scaleFilter setValue:@(self.scaleFactor) forKey:kCIInputScaleKey];
@@ -222,8 +229,8 @@ static NSArray *_sourceTypes = nil;
     //[scaleTransform scaleBy:self.scaleFactor];
     
 
-    cent_x = scale_cx-x;
-    cent_y = scale_cy-y;
+    cent_x = scale_cx;
+    cent_y = scale_cy;
     [scaleTransform translateXBy:cent_x yBy:cent_y];
     [scaleTransform rotateByDegrees:self.rotationAngle];
     [scaleTransform translateXBy:-cent_x yBy:-cent_y];
@@ -283,7 +290,8 @@ static NSArray *_sourceTypes = nil;
             
             //self.inputImage = [CIImage imageWithCVImageBuffer:newFrame];
             
-            self.inputImage = [CIImage imageWithIOSurface:CVPixelBufferGetIOSurface(newFrame) options:@{kCIImageColorSpace: (__bridge id)CGColorSpaceCreateDeviceRGB()}];
+            self.inputImage = [CIImage imageWithIOSurface:CVPixelBufferGetIOSurface(newFrame)];
+            
             
             
             
