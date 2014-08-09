@@ -25,12 +25,12 @@
 }
 
 
-@property double videoCaptureFPS;
-@property int width;
-@property int height;
+@property (assign) double videoCaptureFPS;
+@property (assign) int width;
+@property (assign) int height;
 @property (weak) id videoDelegate;
 
-@property NSString *imageDirectory;
+@property NSString *imagePath;
 
 
 

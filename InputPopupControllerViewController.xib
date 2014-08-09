@@ -345,7 +345,7 @@
                                 </textFieldCell>
                             </textField>
                             <tabView fixedFrame="YES" controlSize="small" type="noTabsNoBorder" translatesAutoresizingMaskIntoConstraints="NO" id="YQE-gk-wmj">
-                                <rect key="frame" x="-7" y="-10" width="505" height="141"/>
+                                <rect key="frame" x="0.0" y="0.0" width="491" height="128"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <tabViewItems>
                                     <tabViewItem label="DesktopCapture" identifier="1" id="Th5-4d-79k">
@@ -537,7 +537,7 @@
                                         </view>
                                     </tabViewItem>
                                     <tabViewItem label="SyphonCapture" identifier="" id="KNP-nn-EtF">
-                                        <view key="view" ambiguous="YES" id="pqj-oD-gPx">
+                                        <view key="view" id="pqj-oD-gPx">
                                             <rect key="frame" x="0.0" y="0.0" width="491" height="128"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
@@ -560,21 +560,21 @@
                                         </view>
                                     </tabViewItem>
                                     <tabViewItem label="ImageCapture" identifier="" id="KNU-Jb-6iB">
-                                        <view key="view" id="OyV-4y-wk3">
+                                        <view key="view" ambiguous="YES" id="OyV-4y-wk3">
                                             <rect key="frame" x="0.0" y="0.0" width="491" height="128"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gvx-SC-Tp2">
-                                                    <rect key="frame" x="15" y="108" width="62" height="14"/>
+                                                    <rect key="frame" x="15" y="108" width="28" height="14"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Directory" id="Owa-7c-rOu">
+                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="File" id="Owa-7c-rOu">
                                                         <font key="font" metaFont="smallSystem"/>
                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jOD-hR-1LR">
-                                                    <rect key="frame" x="83" y="103" width="234" height="19"/>
+                                                    <rect key="frame" x="49" y="106" width="234" height="19"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="yrH-3U-VZh">
                                                         <font key="font" metaFont="smallSystem"/>
@@ -582,7 +582,7 @@
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                     <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.videoInput.imageDirectory" id="GNr-hl-HTd">
+                                                        <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.videoInput.imagePath" id="CKq-bE-N7a">
                                                             <dictionary key="options">
                                                                 <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
                                                             </dictionary>
@@ -590,7 +590,7 @@
                                                     </connections>
                                                 </textField>
                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="30c-M2-ICA">
-                                                    <rect key="frame" x="320" y="98" width="72" height="28"/>
+                                                    <rect key="frame" x="286" y="100" width="72" height="28"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                     <buttonCell key="cell" type="push" title="Open" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ENJ-IB-BkI">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>

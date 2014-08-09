@@ -13,16 +13,15 @@
 
 
 @synthesize activeVideoDevice = _activeVideoDevice;
-@synthesize imageDirectory = _imageDirectory;
-@synthesize settingsController = _settingsController;
+@synthesize imagePath = _imagePath;
+
 
 
 
 
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
-    [aCoder encodeObject:self.activeVideoDevice.uniqueID forKey:@"active_uniqueID"];
-    [aCoder encodeObject:self.imageDirectory forKey:@"imageDirectory"];
+    [aCoder encodeObject:self.imagePath forKey:@"imagePath"];
 }
 
 
@@ -31,10 +30,7 @@
 {
     if (self = [self init])
     {
-        
-        self.imageDirectory = [aDecoder decodeObjectForKey:@"imageDirectory"];
-        NSString *uniqueID = [aDecoder decodeObjectForKey:@"active_uniqueID"];
-        [self setDeviceForUniqueID:uniqueID];
+        self.imagePath = [aDecoder decodeObjectForKey:@"imagePath"];
     }
     
     return self;
@@ -56,84 +52,23 @@
 }
 
 
--(CaptureController *)settingsController
-{
-    return _settingsController;
-}
-
-
--(void)setSettingsController:(CaptureController *)settingsController
-{
-    _settingsController = settingsController;
-    self.imageDirectory = [self.settingsController getExtraData:@"ImageCapture:Directory"];
-}
-
-
 - (BOOL)needsAdvancedVideo
 {
     return YES;
 }
 
 
--(void) setImageDirectory:(NSString *)imageDirectory
-{
-    
-    _imageDirectory = imageDirectory;
-    [self refreshDirectory];
-    [self.settingsController setExtraData:imageDirectory forKey:@"ImageCapture:Directory"];
-    
-}
 
-
-
--(NSString *)imageDirectory
-{
-    return _imageDirectory;
-}
-
-
-
--(void)refreshDirectory
-{
- 
-    if (!self.imageDirectory)
-    {
-        return;
-    }
-    
-    
-    NSArray *filetypes = [NSImage imageFileTypes];
-    
-    NSArray *allFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.imageDirectory error:nil];
-    
-    NSArray *imageFiles = [allFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"pathExtension IN %@", filetypes]];
-    
-    NSString *fileName;
-    
-    
-    NSMutableArray *retArray = [[NSMutableArray alloc] init];
-
-    for(fileName in imageFiles)
-    {
-        
-        [retArray addObject:[[AbstractCaptureDevice alloc] initWithName:fileName device:self.imageDirectory uniqueID:fileName]];
-    }
-
-    [self willChangeValueForKey:@"availableVideoDevices"];
-    _sourceList = retArray;
-    [self didChangeValueForKey:@"availableVideoDevices"];
-    
-}
 
 -(NSArray *) availableVideoDevices
 {
     
-    return _sourceList;
+    return @[];
 }
 
 -(AbstractCaptureDevice *)activeVideoDevice
 {
-    return _activeVideoDevice;
+    return nil;
 }
 
 
@@ -231,11 +166,31 @@
 
 -(void)setActiveVideoDevice:(AbstractCaptureDevice *)activeVideoDevice
 {
+    return;
+}
+
+
+-(NSString *)imagePath
+{
+    return _imagePath;
+}
+
+
+-(void)setImagePath:(NSString *)imagePath
+{
+
+    if(!imagePath)
+    {
+        return;
+    }
+    
+    
+    _imagePath = imagePath;
+    
     
     [self resetImageData];
     
-    
-    NSData *imgData = [NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", activeVideoDevice.captureDevice, activeVideoDevice.uniqueID]];
+    NSData *imgData = [NSData dataWithContentsOfFile:self.imagePath];
     
     NSDictionary *dict = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:(id)kCGImageSourceShouldCacheImmediately];
 
@@ -275,7 +230,6 @@
     }
     
     
-    _activeVideoDevice = activeVideoDevice;
     
     //.device is the directory, uniqueID is the filename
     
@@ -311,17 +265,17 @@
 {
     NSOpenPanel *openPanel = [NSOpenPanel openPanel];
     
-    [openPanel setCanChooseDirectories:YES];
+    [openPanel setCanChooseDirectories:NO];
     [openPanel setCanChooseFiles:YES];
     [openPanel setAllowsMultipleSelection:NO];
     
     if ([openPanel runModal] == NSOKButton)
     {
-        NSArray *directories = [openPanel URLs];
-        NSURL *dirUrl = [directories objectAtIndex:0];
-        if (dirUrl)
+        NSArray *files = [openPanel URLs];
+        NSURL *fileUrl = [files objectAtIndex:0];
+        if (fileUrl)
         {
-            self.imageDirectory = [dirUrl path];
+            self.imagePath = [fileUrl path];
         }
     }
 }
