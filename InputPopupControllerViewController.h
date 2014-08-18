@@ -12,5 +12,12 @@
 @property (strong) IBOutlet NSObjectController *InputController;
 @property (strong) NSWindow *popoverWindow;
 @property (strong) NSPopover *myPopover;
+@property (strong) NSWindow *transitionFilterWindow;
+
+- (IBAction)deleteMultiSource:(id)sender;
+-(void)openTransitionFilterPanel:(CIFilter *)forFilter;
+
+
+@property (weak) IBOutlet NSArrayController *multiSourceController;
 
 @end

@@ -37,15 +37,15 @@
 }
 
 
+
 -(id)init
 {
     if (self = [super init])
     {
         
+        
         _animationQueue = dispatch_queue_create("imageCaptureQueue", NULL);
-
-
-    }
+     }
     
     return self;
     
@@ -56,7 +56,6 @@
 {
     return YES;
 }
-
 
 
 
@@ -110,6 +109,7 @@
 {
     _totalFrames = 0;
     _frameNumber = 0;
+    
     if (_imageSource)
     {
         CFRelease(_imageSource);
@@ -172,6 +172,7 @@
 
 -(NSString *)imagePath
 {
+    
     return _imagePath;
 }
 
@@ -189,6 +190,9 @@
     
     
     [self resetImageData];
+    
+    
+    self.captureName = [_imagePath lastPathComponent];
     
     NSData *imgData = [NSData dataWithContentsOfFile:self.imagePath];
     
@@ -230,8 +234,6 @@
     }
     
     
-    
-    //.device is the directory, uniqueID is the filename
     
     _frameNumber = 0;
     [self renderImage:0];

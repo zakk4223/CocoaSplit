@@ -83,6 +83,8 @@
     
     _activeVideoDevice = newDev;
     _currentDisplay = [[newDev captureDevice] unsignedIntValue];
+    self.captureName = newDev.captureName;
+    
     [self setupDisplayStream];
 }
 

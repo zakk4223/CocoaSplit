@@ -357,7 +357,7 @@
     self.selectedSource.is_selected = YES;
     NSRect layoutRect = self.selectedSource.layoutPosition;
     
-    //Make a rectangle that's 40 pixels smaller on all sides than the selected layoutPosition. If we're inside the selected object
+    //Make a rectangle that's 10 pixels smaller on all sides than the selected layoutPosition. If we're inside the selected object
     //but NOT in the smaller rectangle do a resize (we're grabbing the 'edge')
     NSRect viewRect = [self windowRectforWorldRect:layoutRect];
     
@@ -396,8 +396,6 @@
         self.selectedOriginDistance = worldPoint;
         if (self.isResizing)
         {
-            CGFloat orig_width = self.selectedSource.source_width;
-            CGFloat orig_height = self.selectedSource.source_height;
             
             
             CGFloat new_width, new_height;
@@ -415,11 +413,9 @@
                 new_height = worldPoint.y - self.selectedSource.layoutPosition.origin.y;
             }
 
-            float width_ratio = new_width/orig_width;
-            float height_ratio = new_height/orig_height;
-            float new_ratio = width_ratio > height_ratio ? width_ratio : height_ratio;
+            [self.selectedSource updateSize:new_width height:new_height];
             
-            self.selectedSource.scaleFactor = new_ratio;
+            
         } else {
             [self.selectedSource updateOrigin:dx y:dy];
         }
@@ -508,6 +504,7 @@
     
     
     InputPopupControllerViewController *popupController = [[InputPopupControllerViewController alloc] initWithNibName:@"InputPopupControllerViewController" bundle:nil];
+    
     NSPopover *popover = [[NSPopover alloc] init];
     popover.contentViewController = popupController;
     popover.animates = YES;

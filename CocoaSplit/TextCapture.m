@@ -114,6 +114,7 @@
 -(void)setText:(NSString *)text
 {
     _text = text;
+    self.captureName = text;
     
     [self renderText];
 }

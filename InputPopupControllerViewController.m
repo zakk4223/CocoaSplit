@@ -7,6 +7,7 @@
 //
 
 #import "InputPopupControllerViewController.h"
+#import "InputSource.h"
 
 @interface InputPopupControllerViewController ()
 
@@ -30,13 +31,13 @@
 
 -(NSWindow *)detachableWindowForPopover:(NSPopover *)popover
 {
+    //InputPopupControllerViewController *newViewController = [[InputPopupControllerViewController alloc] initWithNibName:@"InputPopupControllerViewController" bundle:nil];
     
+    //NSLog(@"IN DETACHED CREATE %p", newViewController);
     
     self.popoverWindow = [[NSWindow alloc] init];
-    
-    InputPopupControllerViewController *newViewController = [[InputPopupControllerViewController alloc] initWithNibName:@"InputPopupControllerViewController" bundle:nil];
-    
-    //InputPopupControllerViewController *newViewController = self;
+
+    InputPopupControllerViewController *newViewController = self;
     
     NSRect newFrame = [self.popoverWindow frameRectForContentRect:NSMakeRect(0.0f, 0.0f, newViewController.view.frame.size.width, newViewController.view.frame.size.height)];
     //newViewController.myPopover = popover;
@@ -48,8 +49,11 @@
     self.popoverWindow.contentView = newViewController.view;
     self.popoverWindow.delegate = self;
     
+    newViewController.transitionFilterWindow = self.transitionFilterWindow;
     newViewController.InputController.content = self.InputController.content;
-
+    newViewController.multiSourceController.content = self.multiSourceController.content;
+    
+    
     
     self.popoverWindow.title = [NSString stringWithFormat:@"CocoaSplit Input (%@)", [self.InputController.selection valueForKeyPath:@"name"]];
     
@@ -57,4 +61,54 @@
     return self.popoverWindow;
     
 }
+
+
+-(void)openTransitionFilterPanel:(CIFilter *)forFilter
+{
+    if (!forFilter)
+    {
+        return;
+    }
+    
+    IKFilterUIView *filterView = [forFilter viewForUIConfiguration:@{IKUISizeFlavor:IKUISizeMini} excludedKeys:@[kCIInputImageKey, kCIInputTargetImageKey, kCIInputTimeKey]];
+    
+    
+    self.transitionFilterWindow = [[NSWindow alloc] init];
+    self.transitionFilterWindow.delegate = self;
+    [self.transitionFilterWindow setContentSize:filterView.bounds.size];
+    [self.transitionFilterWindow setContentView:filterView];
+    self.transitionFilterWindow.styleMask =  NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask;
+    [self.transitionFilterWindow setReleasedWhenClosed:NO];
+    
+    [self.transitionFilterWindow makeKeyAndOrderFront:self.transitionFilterWindow];
+    
+}
+
+/*
+-(BOOL)windowShouldClose:(id)sender
+{
+    NSWindow *toClose = (NSWindow *)sender;
+    
+    if (toClose == self.transitionFilterWindow)
+    {
+        self.transitionFilterWindow = nil;
+    }
+    
+    return YES;
+}
+ */
+
+
+
+- (IBAction)deleteMultiSource:(id)sender
+{
+
+    NSTableView *bTable = (NSTableView *)sender;
+    NSInteger deleteRow = [bTable clickedRow];
+    
+    [self.multiSourceController removeObjectAtArrangedObjectIndex:deleteRow];
+}
+
+
+
 @end

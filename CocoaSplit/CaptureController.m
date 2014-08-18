@@ -753,6 +753,7 @@
        
        NSArray *loadedFilters = [CIFilter filterNamesInCategories:nil];
        
+       
        if (![loadedFilters containsObject:@"TextureWrapFilter"])
        {
            NSString *filterPath = [[[NSBundle mainBundle] builtInPlugInsPath] stringByAppendingPathComponent:@"TextureWrapPlugin.plugin"];
@@ -1864,7 +1865,10 @@
         
         for (InputSource *isource in listCopy)
         {
-            newImage = [isource currentImage:newImage];
+            if (isource.active)
+            {
+                newImage = [isource currentImage:newImage];
+            }
             
         }
         

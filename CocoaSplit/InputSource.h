@@ -9,10 +9,17 @@
 #import <Foundation/Foundation.h>
 #import <QuartzCore/CoreImage.h>
 #import "Capture.h"
+#import "InputPopupControllerViewController.h"
 
 
 
-
+typedef enum input_rotate_style_t {
+    
+    kRotateNormal = 0,
+    kRotateRandom = 1,
+    kRotateReverse = 2
+    
+} input_rotate_style;
 
 
 @protocol CaptureSessionProtocol;
@@ -21,14 +28,29 @@
 {
     CVPixelBufferRef _tmpCVBuf;
     CGColorSpaceRef _colorSpace;
- }
+    float _scale_x_pos, _scale_y_pos;
+    float _internalScaleFactor;
+    int _currentSourceIdx;
+    CIImage *_oldImage;
+    CIImage *_preBgImage;
+    
+    CVPixelBufferRef _oldCVBuf;
+    
+    double _transitionTime;
+    bool _inTransition;
+    double _nextImageTime;
+    id<CaptureSessionProtocol>_useInput;
+    
+
+}
+
 
 @property (strong) NSString *settingsTab;
 
 @property (strong) id<CaptureSessionProtocol> videoInput;
 @property (assign) float x_pos;
 @property (assign) float y_pos;
-@property (assign) double rotationAngle;
+@property (assign) float rotationAngle;
 @property (assign) int crop_left;
 @property (assign) int crop_right;
 @property (assign) int crop_top;
@@ -41,7 +63,6 @@
 @property (assign) bool is_selected;
 @property (assign) NSRect layoutPosition;
 @property (strong) CIFilter *scaleFilter;
-@property (strong) CIFilter *scaleMoveFilter;
 @property (strong) CIFilter *selectedFilter;
 @property (strong) CIFilter *transformFilter;
 
@@ -57,17 +78,35 @@
 @property (strong) CIFilter *cropFilter;
 
 @property (strong) CIContext *imageContext;
-@property (assign) size_t source_width;
-@property (assign) size_t source_height;
-@property (strong) NSAffineTransform *currentTransform;
 @property (assign) NSSize oldSize;
+@property (assign) bool active;
 
+@property (assign) size_t display_width;
+@property (assign) size_t display_height;
+
+@property (assign) bool lockSize;
 
 //When an instance is created the creator (capture controller) binds these to the size of the canvas in case we are asked to auto-fit
 //at a later time
 
 @property (assign) size_t canvas_width;
 @property (assign) size_t canvas_height;
+
+@property (strong) NSMutableArray *videoSources;
+
+@property (assign) float changeInterval;
+
+@property (strong) NSString *transitionFilterName;
+@property (strong) NSArray *transitionNames;
+
+@property (strong) InputPopupControllerViewController *windowViewController;
+
+@property (assign) input_rotate_style rotateStyle;
+
+@property (strong) CIFilter *transitionFilter;
+
+
+
 
 @property (strong) NSPopover *editorPopover;
 
@@ -76,7 +115,11 @@
 -(void) updateOrigin:(CGFloat)x y:(CGFloat)y;
 -(void) frameRendered;
 -(void) scaleTo:(CGFloat)width height:(CGFloat)height;
+-(void) updateSize:(CGFloat)width height:(CGFloat)height;
+
+-(void) addMulti;
 -(void) autoFit;
+
 
 
 

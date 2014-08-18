@@ -48,6 +48,7 @@
 		3435E39D188BD8250015CC01 /* passthrough.fgsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3435E399188B90900015CC01 /* passthrough.fgsh */; };
 		3435E39E188BD82F0015CC01 /* passthrough.vtsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3435E39A188B93150015CC01 /* passthrough.vtsh */; };
 		3435E39F188CD8EE0015CC01 /* 420v.fgsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3435E395188B902C0015CC01 /* 420v.fgsh */; };
+		3444D8E819A0CDE8000DC46B /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3444D8E719A0CDE8000DC46B /* Quartz.framework */; };
 		344988131893CF0500044259 /* LogWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 344988121893CF0500044259 /* LogWindow.xib */; };
 		3450579E172A4B6B0065A452 /* CocoaSplitCmd in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3451A1C317111BD900DF6A8B /* CocoaSplitCmd */; };
 		3451A1C417111BD900DF6A8B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AE3C2F164E3E020052C95E /* Foundation.framework */; };
@@ -283,6 +284,7 @@
 		3435E395188B902C0015CC01 /* 420v.fgsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 420v.fgsh; sourceTree = "<group>"; };
 		3435E399188B90900015CC01 /* passthrough.fgsh */ = {isa = PBXFileReference; lastKnownFileType = text; path = passthrough.fgsh; sourceTree = "<group>"; };
 		3435E39A188B93150015CC01 /* passthrough.vtsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = passthrough.vtsh; sourceTree = "<group>"; };
+		3444D8E719A0CDE8000DC46B /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		344988121893CF0500044259 /* LogWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LogWindow.xib; sourceTree = "<group>"; };
 		3451A1C317111BD900DF6A8B /* CocoaSplitCmd */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CocoaSplitCmd; sourceTree = BUILT_PRODUCTS_DIR; };
 		3451A1C617111BD900DF6A8B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -354,6 +356,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3444D8E819A0CDE8000DC46B /* Quartz.framework in Frameworks */,
 				3400777016E6FE5D00097E8F /* libz.dylib in Frameworks */,
 				347B7FC816907AE700B5F4B3 /* VideoDecodeAcceleration.framework in Frameworks */,
 				347B7FC616907A1700B5F4B3 /* libbz2.dylib in Frameworks */,
@@ -458,6 +461,7 @@
 		340FE4A015F3417E00E4CE4E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3444D8E719A0CDE8000DC46B /* Quartz.framework */,
 				34A8BAB117085BDD0093EEAF /* Syphon.framework */,
 				340FE4D815F346CC00E4CE4E /* AVFoundation.framework */,
 				340FE4A115F3417E00E4CE4E /* Cocoa.framework */,

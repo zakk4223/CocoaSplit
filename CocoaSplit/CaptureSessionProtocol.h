@@ -43,6 +43,7 @@
 @property (assign) int audioBitrate;
 @property (assign) int audioSamplerate;
 @property (assign) float previewVolume;
+@property (strong) NSString *captureName;
 
 //This is mostly here so we can render text into a CGLayer/CIImage, but some sources may be smart and resize depending on what these values are.
 //Less pixels == good

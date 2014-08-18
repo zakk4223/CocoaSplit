@@ -54,6 +54,7 @@
 -(void)setActiveVideoDevice:(AbstractCaptureDevice *)activeVideoDevice
 {
     _activeVideoDevice = activeVideoDevice;
+    self.captureName = activeVideoDevice.captureName;
     [self startSyphon];
 }
 
@@ -145,15 +146,6 @@
     return self;
 }
 
-
-
-/*
--(CVImageBufferRef)getCurrentFrame
-{
-    
-    return [self renderNewFrame:_syphon_client];
-}
- */
 
 
 - (CVImageBufferRef) getCurrentFrame

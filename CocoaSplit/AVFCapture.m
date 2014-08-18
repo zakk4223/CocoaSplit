@@ -282,6 +282,8 @@
     
     [_capture_session commitConfiguration];
     
+    self.captureName = newDev.captureName;
+    
     self.videoFormats = _selectedVideoCaptureDevice.formats;
     self.videoFramerates = _selectedVideoCaptureDevice.activeFormat.videoSupportedFrameRateRanges;
     

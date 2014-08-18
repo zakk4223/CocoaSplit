@@ -25,6 +25,8 @@
 }
 
 
+
+
 @property (assign) double videoCaptureFPS;
 @property (assign) int width;
 @property (assign) int height;
@@ -37,6 +39,7 @@
 @property CVPixelBufferRef currentFrame;
 
 @property (weak) CaptureController *settingsController;
+
 
 
 

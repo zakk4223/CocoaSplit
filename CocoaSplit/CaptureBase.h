@@ -17,6 +17,7 @@
 @property (strong) CIContext *imageContext;
 @property (assign) int render_width;
 @property (assign) int render_height;
+@property (strong) NSString *captureName;
 
 
 -(void)setDeviceForUniqueID:(NSString *)uniqueID;

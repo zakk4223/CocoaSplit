@@ -68,9 +68,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
 }
 
--(IBAction)fitScale:(id)sender;
-
-
 - (IBAction)toggleFullscreen:(id)sender;
 
 - (IBAction)moveInputUp:(id)sender;
