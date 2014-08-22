@@ -345,7 +345,6 @@
     tmp = [self convertPoint:theEvent.locationInWindow fromView:nil];
     
     NSPoint worldPoint = [self realPointforWindowPoint:tmp];
-    NSPoint diffPoint;
     
     self.selectedSource = [self.controller findSource:worldPoint];
     if (!self.selectedSource)
@@ -365,13 +364,38 @@
     NSRect interiorRect = NSMakeRect(viewRect.origin.x+10.0f, viewRect.origin.y+10.0f, viewRect.size.width-20.0f, viewRect.size.height-20.0f);
     
     
-    if (!NSPointInRect(tmp, interiorRect))
+    NSRect topRect = NSMakeRect(viewRect.origin.x, viewRect.origin.y+viewRect.size.height-10.0f, viewRect.size.width, 10.0f);
+    NSRect bottomRect = NSMakeRect(viewRect.origin.x, viewRect.origin.y, viewRect.size.width, 10.0f);
+    NSRect leftRect = NSMakeRect(viewRect.origin.x, viewRect.origin.y, 10.0f, viewRect.size.height);
+    NSRect rightRect = NSMakeRect(viewRect.origin.x+viewRect.size.width-10.0f, viewRect.origin.y, 10.0f, viewRect.size.height);
+    
+    self.resizeType = kResizeNone;
+    
+    if (NSPointInRect(tmp, leftRect))
     {
-        self.isResizing = YES;
+        self.resizeType |= kResizeLeft;
     }
     
-    diffPoint.x = worldPoint.x - self.selectedSource.layoutPosition.origin.x;
-    diffPoint.y = worldPoint.y - self.selectedSource.layoutPosition.origin.y;
+    if (NSPointInRect(tmp, topRect))
+    {
+        self.resizeType |= kResizeTop;
+    }
+    
+    if (NSPointInRect(tmp, rightRect))
+    {
+        self.resizeType |= kResizeRight;
+    }
+    
+    if (NSPointInRect(tmp, bottomRect))
+    {
+        self.resizeType |= kResizeBottom;
+    }
+    
+    self.resizeAnchor = NSMakePoint(self.selectedSource.layoutPosition.origin.x + self.selectedSource.layoutPosition.size.width, self.selectedSource.layoutPosition.origin.y+self.selectedSource.layoutPosition.size.height);
+    
+    self.isResizing = self.resizeType != kResizeNone;
+    
+    
     self.selectedOriginDistance = worldPoint;
     
 
@@ -396,24 +420,44 @@
         self.selectedOriginDistance = worldPoint;
         if (self.isResizing)
         {
-            
-            
             CGFloat new_width, new_height;
-            if (worldPoint.x < (self.selectedSource.layoutPosition.origin.x + self.selectedSource.layoutPosition.size.width/2))
+            CGFloat adjust_x, adjust_y;
+            adjust_x = 0.0f;
+            adjust_y = 0.0f;
+            
+            new_width = self.selectedSource.display_width;//self.selectedSource.layoutPosition.size.width;
+            new_height = self.selectedSource.display_height;//self.selectedSource.layoutPosition.size.height;
+            
+            if (self.resizeType & kResizeRight)
             {
-                new_width = (self.selectedSource.layoutPosition.origin.x + self.selectedSource.layoutPosition.size.width) - worldPoint.x;
-            } else {
-                new_width = worldPoint.x - self.selectedSource.layoutPosition.origin.x;
+                new_width = worldPoint.x - self.selectedSource.x_pos;
             }
             
-            if (worldPoint.y < (self.selectedSource.layoutPosition.origin.y + self.selectedSource.layoutPosition.size.height/2))
+            if (self.resizeType & kResizeLeft)
             {
-                new_height = (self.selectedSource.layoutPosition.origin.y + self.selectedSource.layoutPosition.size.height) - worldPoint.y;
-            } else {
-                new_height = worldPoint.y - self.selectedSource.layoutPosition.origin.y;
+                new_width = (self.selectedSource.x_pos + self.selectedSource.display_width) - worldPoint.x;
+                adjust_x = self.resizeAnchor.x - (self.selectedSource.x_pos + new_width);
+            }
+            
+            
+            if (self.resizeType & kResizeTop)
+            {
+                new_height = worldPoint.y - self.selectedSource.y_pos;
+            }
+            
+            if (self.resizeType & kResizeBottom)
+            {
+                new_height = (self.selectedSource.y_pos + self.selectedSource.display_height) - worldPoint.y;
+                adjust_y = self.resizeAnchor.y - (self.selectedSource.y_pos + new_height);
+            }
+            
+            
+            [self.selectedSource updateSize:new_width height:new_height];
+            if (adjust_x || adjust_y)
+            {
+                [self.selectedSource updateOrigin:adjust_x y:adjust_y];
             }
 
-            [self.selectedSource updateSize:new_width height:new_height];
             
             
         } else {

@@ -17,6 +17,17 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
                                     CVOptionFlags flagsIn, CVOptionFlags* flagsOut, void* displayLinkContext);
 
 
+typedef enum resize_style_t {
+ 
+    kResizeNone = 0,
+    kResizeTop = 1 << 0,
+    kResizeRight = 1<<1,
+    kResizeBottom = 1<<2,
+    kResizeLeft = 1<<3
+    
+} resize_style;
+
+
 @interface OpenGLProgram : NSObject
 {
     
@@ -92,6 +103,10 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 @property (strong) InputSource *selectedSource;
 @property (assign) NSPoint selectedOriginDistance;
 @property (assign) bool isResizing;
+@property (assign) resize_style resizeType;
+@property (assign) NSPoint resizeAnchor;
+
+
 
 
 
