@@ -10,7 +10,8 @@
 
 @interface TextureWrapPluginFilter : CIFilter {
     CIImage      *inputImage;
-    NSNumber     *inputOffset;
+    NSNumber     *inputXOffset;
+    NSNumber     *inputYOffset;
 }
 
 @end

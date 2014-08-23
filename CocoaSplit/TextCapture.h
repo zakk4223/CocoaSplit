@@ -16,7 +16,8 @@
     CGLayerRef  _cgLayer;
     CIImage *_ciimage;
     NSAttributedString *_attribString;
-    float _scroll_adjust;
+    float _scroll_Xadjust;
+    float _scroll_Yadjust;
     CIFilter *offsetFilter;
     
 
@@ -30,7 +31,8 @@
 @property (assign) bool isUnderline;
 @property (assign) bool isStrikethrough;
 @property (strong) NSColor *foregroundColor;
-@property (assign) float scrollSpeed;
+@property (assign) float scrollXSpeed;
+@property (assign) float scrollYSpeed;
 @property (assign) bool propertiesChanged;
 
 @end

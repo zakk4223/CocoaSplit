@@ -38,10 +38,16 @@ static CIKernel *_TextureWrapPluginFilterKernel = nil;
 - (NSDictionary *)customAttributes
 {
     return @{
-        @"inputOffset":@{
+        @"inputXOffset":@{
             kCIAttributeDefault:@0.00,
             kCIAttributeType:kCIAttributeTypeScalar,
         },
+        
+        @"inputYOffset":@{
+                kCIAttributeDefault:@0.00,
+                kCIAttributeType:kCIAttributeTypeScalar,
+        },
+        
     };
 }
 
@@ -54,7 +60,7 @@ static CIKernel *_TextureWrapPluginFilterKernel = nil;
     src = [CISampler samplerWithImage:inputImage keysAndValues:kCISamplerWrapMode, kCISamplerWrapBlack, nil];
     
     return [self apply:_TextureWrapPluginFilterKernel, src,
-            inputOffset,kCIApplyOptionDefinition, [src definition], nil];
+            inputXOffset,inputYOffset,kCIApplyOptionDefinition, [src definition], nil];
 }
 
 @end

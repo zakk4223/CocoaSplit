@@ -18,8 +18,10 @@
     {
         self.fontSize = 14.0f;
         self.foregroundColor = [NSColor whiteColor];
-        _scroll_adjust = 0.0f;
-        self.scrollSpeed = 0.0f;
+        _scroll_Xadjust = 0.0f;
+        _scroll_Yadjust = 0.0f;
+        self.scrollXSpeed = 0.0f;
+        self.scrollYSpeed = 0.0f;
         
         [self addObserver:self forKeyPath:@"propertiesChanged" options:NSKeyValueObservingOptionNew context:NULL];
         
@@ -131,15 +133,22 @@
     
     CIImage *retimg = _ciimage;
     
-    if (self.scrollSpeed)
+    if (self.scrollXSpeed || self.scrollYSpeed)
     {
-        [offsetFilter setValue:@(_scroll_adjust) forKey:@"inputOffset"];
+        [offsetFilter setValue:@(_scroll_Xadjust) forKey:@"inputXOffset"];
+        [offsetFilter setValue:@(_scroll_Yadjust) forKeyPath:@"inputYOffset"];
         [offsetFilter setValue:_ciimage forKey:kCIInputImageKey];        
         retimg = [[offsetFilter valueForKey:kCIOutputImageKey] imageByCroppingToRect:NSInsetRect(_ciimage.extent, 0.1f, 0.1f)];
-        _scroll_adjust += self.scrollSpeed;
-        if (fabs(_scroll_adjust) >= _ciimage.extent.size.width)
+        _scroll_Xadjust += self.scrollXSpeed;
+        _scroll_Yadjust += self.scrollYSpeed;
+        if (fabs(_scroll_Xadjust) >= _ciimage.extent.size.width)
         {
-            _scroll_adjust = 0.0f;
+            _scroll_Xadjust = 0.0f;
+        }
+        
+        if (fabs(_scroll_Yadjust) >= _ciimage.extent.size.height)
+        {
+            _scroll_Yadjust = 0.0f;
         }
     }
     

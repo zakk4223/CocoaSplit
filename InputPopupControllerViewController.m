@@ -84,19 +84,6 @@
     
 }
 
-/*
--(BOOL)windowShouldClose:(id)sender
-{
-    NSWindow *toClose = (NSWindow *)sender;
-    
-    if (toClose == self.transitionFilterWindow)
-    {
-        self.transitionFilterWindow = nil;
-    }
-    
-    return YES;
-}
- */
 
 
 
