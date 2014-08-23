@@ -675,6 +675,10 @@
        videoBuffer = [[NSMutableArray alloc] init];
        
        
+       _max_render_time = 0.0f;
+       _min_render_time = 0.0f;
+       _avg_render_time = 0.0f;
+       _render_time_total = 0.0f;
        
        self.useStatusColors = YES;
        
@@ -737,6 +741,11 @@
            {
                [outdest updateStatistics];
            }
+           
+           self.renderStatsString = [NSString stringWithFormat:@"Render min/max/avg: %f/%f/%f", _min_render_time, _max_render_time, _render_time_total / _renderedFrames];
+           _renderedFrames = 0;
+           _render_time_total = 0.0f;
+           
 
        });
        
@@ -1796,11 +1805,7 @@
 
         
         _frame_time = startTime;
-        //double nfstart = [self mach_time_seconds];
         [self newFrame];
-        //double nfdone = [self mach_time_seconds];
-        //NSLog(@"FRAME TIME %f", nfdone - nfstart);
-        
     }
     
 
@@ -1964,7 +1969,26 @@
     
         //if (self.videoCaptureSession)
         {
+            
+            double nfstart = [self mach_time_seconds];
+            
             newFrame = [self currentImg];
+            
+            double nfdone = [self mach_time_seconds];
+            double nftime = nfdone - nfstart;
+            _renderedFrames++;
+            
+            _render_time_total += nftime;
+            if (nftime < _min_render_time || _min_render_time == 0.0f)
+            {
+                _min_render_time = nftime;
+            }
+            
+            if (nftime > _max_render_time)
+            {
+                _max_render_time = nftime;
+            }
+
             
             
             if (newFrame)

@@ -89,8 +89,16 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     CVPixelBufferRef _currentPB;
     NSSize _cvpool_size;
     CIFilter *_backgroundFilter;
+    float _min_render_time;
+    float _max_render_time;
+    float _avg_render_time;
+    float _render_time_total;
+    int _renderedFrames;
     
 }
+
+
+@property (strong) NSString *renderStatsString;
 
 
 @property (strong) NSString *layoutPanelName;
