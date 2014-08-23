@@ -1796,7 +1796,11 @@
 
         
         _frame_time = startTime;
+        //double nfstart = [self mach_time_seconds];
         [self newFrame];
+        //double nfdone = [self mach_time_seconds];
+        //NSLog(@"FRAME TIME %f", nfdone - nfstart);
+        
     }
     
 

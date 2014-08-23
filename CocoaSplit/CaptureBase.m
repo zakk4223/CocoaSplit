@@ -21,8 +21,8 @@
     if (self = [self init])
     {
      
-        NSString *uniqueID = [aDecoder decodeObjectForKey:@"active_uniqueID"];
-        [self setDeviceForUniqueID:uniqueID];
+        self.savedUniqueID = [aDecoder decodeObjectForKey:@"active_uniqueID"];
+        [self setDeviceForUniqueID:self.savedUniqueID];
     }
     
     return self;
@@ -39,12 +39,15 @@
     
     currentAvailableDevices = self.availableVideoDevices;
     
+    
     NSUInteger sidx;
     sidx = [currentAvailableDevices indexOfObject:dummydev];
+    
     if (sidx == NSNotFound)
     {
         self.activeVideoDevice = nil;
     } else {
+        
         self.activeVideoDevice = [currentAvailableDevices objectAtIndex:sidx];
     }
 }

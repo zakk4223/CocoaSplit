@@ -18,6 +18,8 @@
 @property (assign) int render_width;
 @property (assign) int render_height;
 @property (strong) NSString *captureName;
+//Blackmagic hack
+@property (strong) NSString *savedUniqueID;
 
 
 -(void)setDeviceForUniqueID:(NSString *)uniqueID;

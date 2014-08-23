@@ -45,40 +45,45 @@
     if (self = [super initWithCoder:aDecoder])
     {
         
-        NSDictionary *formatSaveDict = [aDecoder decodeObjectForKey:@"activeVideoFormat"];
-        if (_selectedVideoCaptureDevice)
-        {
-            for (AVCaptureDeviceFormat *fmt in _selectedVideoCaptureDevice.formats)
-            {
-                if ([fmt compareToDictionary:formatSaveDict])
-                {
-                    self.activeVideoFormat = fmt;
-                    break;
-                }
-                
-            }
-            
-            if (self.activeVideoFormat)
-            {
-                NSString *savedFrr = [aDecoder decodeObjectForKey:@"activeVideoFramerate"];
-                for (AVFrameRateRange *frr in self.activeVideoFormat.videoSupportedFrameRateRanges)
-                {
-                    if ([frr.localizedName isEqualToString:savedFrr])
-                    {
-                        self.activeVideoFramerate = frr;
-                        break;
-                    }
-                }
-            }
-        }
-       
         
+        _savedFormatData = [aDecoder decodeObjectForKey:@"activeVideoFormat"];
+        _savedFrameRateData = [aDecoder decodeObjectForKey:@"activeVideoFramerate"];
+        [self restoreFormatAndFrameRate];
     }
     
     return self;
 }
 
 
+-(void) restoreFormatAndFrameRate
+{
+    if (_selectedVideoCaptureDevice)
+    {
+        for (AVCaptureDeviceFormat *fmt in _selectedVideoCaptureDevice.formats)
+        {
+            if ([fmt compareToDictionary:_savedFormatData])
+            {
+                self.activeVideoFormat = fmt;
+                break;
+            }
+            
+        }
+        
+        if (self.activeVideoFormat)
+        {
+            for (AVFrameRateRange *frr in self.activeVideoFormat.videoSupportedFrameRateRanges)
+            {
+                if ([frr.localizedName isEqualToString:_savedFrameRateData])
+                {
+                    self.activeVideoFramerate = frr;
+                    break;
+                }
+            }
+        }
+    }
+
+    
+}
 -(id) init
 {
     if (self = [super init])
@@ -308,6 +313,18 @@
     }
     
     self.availableVideoDevices = retArray;
+    /*
+    The blackmagic driver is weird and there's a delay before the device shows up in the available list. So the initial restore of the config
+    can't find the unique ID because it doesn't exist yet. So instead we always save the restored UniqueID to a property and then try to restore
+    it when we get a notification of a device change. Only restore if we don't already have a source set, though.
+     */
+    
+    if (!self.activeVideoDevice && self.savedUniqueID)
+    {
+        [self setDeviceForUniqueID:self.savedUniqueID];
+        [self restoreFormatAndFrameRate];
+        
+    }
     
 }
 
@@ -589,11 +606,11 @@
         }
          */
         CVImageBufferRef videoFrame = CMSampleBufferGetImageBuffer(sampleBuffer);
-    
+        
 
         if (videoFrame)
         {
-            
+        
             
             CVPixelBufferRetain(videoFrame);
 

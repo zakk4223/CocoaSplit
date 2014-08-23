@@ -32,6 +32,8 @@
     AVCaptureDevice *_selectedVideoCaptureDevice;
     int _preroll_frame_cnt;
     int _preroll_needed_frames;
+    NSDictionary *_savedFormatData;
+    NSString *_savedFrameRateData;
     
     
     

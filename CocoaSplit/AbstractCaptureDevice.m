@@ -36,4 +36,9 @@
     return [self.uniqueID isEqualToString:((AbstractCaptureDevice *)object).uniqueID];
 }
 
+-(NSString *) description
+{
+    return [NSString stringWithFormat:@"<AbstractCaptureDevice: %p> [%@] %@:%@", self, self.captureName, self.uniqueID, self.captureDevice];
+}
+
 @end
