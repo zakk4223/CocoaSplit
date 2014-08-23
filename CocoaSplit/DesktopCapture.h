@@ -32,6 +32,10 @@
 @property (assign) double videoCaptureFPS;
 @property (assign) int width;
 @property (assign) int height;
+@property (assign) int x_origin;
+@property (assign) int y_origin;
+@property (assign) int region_width;
+@property (assign) int region_height;
 @property (assign) BOOL showCursor;
 @property (readonly) BOOL needsAdvancedVideo;
 @property NSArray *videoFormats;

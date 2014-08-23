@@ -27,6 +27,10 @@
     
     [aCoder encodeInt:self.width forKey:@"width"];
     [aCoder encodeInt:self.height forKey:@"height"];
+    [aCoder encodeInt:self.region_width forKey:@"region_width"];
+    [aCoder encodeInt:self.region_height forKey:@"region_height"];
+    [aCoder encodeInt:self.x_origin forKey:@"x_origin"];
+    [aCoder encodeInt:self.y_origin forKey:@"y_origin"];
     [aCoder encodeDouble:self.videoCaptureFPS forKey:@"videoCaptureFPS"];
     [aCoder encodeBool:self.showCursor forKey:@"showCursor"];
 }
@@ -41,6 +45,11 @@
         _height = [aDecoder decodeIntForKey:@"height"];
         _videoCaptureFPS = [aDecoder decodeDoubleForKey:@"videoCaptureFPS"];
         _showCursor = [aDecoder decodeBoolForKey:@"showCursor"];
+        _region_width = [aDecoder decodeIntForKey:@"region_width"];
+        _region_height = [aDecoder decodeIntForKey:@"region_height"];
+        _x_origin = [aDecoder decodeIntForKey:@"x_origin"];
+        _y_origin = [aDecoder decodeIntForKey:@"y_origin"];
+        
     }
     
     return self;
@@ -94,7 +103,6 @@
     int width;
     int height;
     
-    
     if (_displayStreamRef)
     {
         [self stopDisplayStream];
@@ -109,24 +117,56 @@
     }
     
     
-    NSLog(@"SETUP DISPLAY STREAM %f", self.videoCaptureFPS);
     
     
     NSNumber *minframetime = [NSNumber numberWithFloat:(1000.0/(self.videoCaptureFPS*1000))];
 
+    CGRect displaySize = CGDisplayBounds(_currentDisplay);
+    
+    width = displaySize.size.width - self.x_origin;
+    height = displaySize.size.height - self.y_origin;
+    
+    if (self.region_width)
+    {
+        width = self.region_width;
+    }
+    
+    if (self.region_height)
+    {
+        height = self.region_height;
+    }
+    
     if (self.width && self.height)
     {
         width = self.width;
         height = self.height;
-    } else {
-        CGRect displaySize = CGDisplayBounds(_currentDisplay);
-        width = displaySize.size.width;
-        height = displaySize.size.height;
     }
     
     
+    CFDictionaryRef rectDict;
+
+    int rect_width;
+    int rect_height;
     
-    NSDictionary *opts = @{(NSString *)kCGDisplayStreamQueueDepth : @8, (NSString *)kCGDisplayStreamMinimumFrameTime : minframetime, (NSString *)kCGDisplayStreamPreserveAspectRatio: @YES, (NSString *)kCGDisplayStreamShowCursor:@(self.showCursor)};
+    if (self.region_width)
+    {
+        rect_width = self.region_width;
+    } else {
+        rect_width = displaySize.size.width - self.x_origin;
+    }
+    
+    if (self.region_height)
+    {
+        rect_height = self.region_height;
+    } else {
+        rect_height = displaySize.size.height - self.y_origin;
+    }
+
+    rectDict = CGRectCreateDictionaryRepresentation(CGRectMake(self.x_origin, self.y_origin, rect_width, rect_height));
+    
+    
+    NSDictionary *opts = @{(NSString *)kCGDisplayStreamQueueDepth : @8, (NSString *)kCGDisplayStreamMinimumFrameTime : minframetime, (NSString *)kCGDisplayStreamPreserveAspectRatio: @YES, (NSString *)kCGDisplayStreamShowCursor:@(self.showCursor), (NSString *)kCGDisplayStreamSourceRect: (__bridge NSDictionary *)rectDict};
+    
     
     
     
@@ -242,7 +282,7 @@
 
 + (NSSet *)keyPathsForValuesAffectingPropertiesChanged
 {
-    return [NSSet setWithObjects:@"width", @"height", @"videoCaptureFPS", nil];
+    return [NSSet setWithObjects:@"width", @"height", @"videoCaptureFPS", @"x_origin", @"y_origin", @"region_width", @"region_height", nil];
 }
 
 
