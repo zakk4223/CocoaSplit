@@ -173,7 +173,7 @@ static NSArray *_sourceTypes = nil;
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _sourceTypes  =  @[@"Desktop", @"AVFoundation", @"QTCapture", @"Syphon", @"Image", @"Text"];
+        _sourceTypes  =  @[@"Desktop", @"AVFoundation", @"QTCapture", @"Syphon", @"Image", @"Text", @"Window"];
     });
 
     return _sourceTypes;
@@ -752,6 +752,8 @@ static NSArray *_sourceTypes = nil;
         newCaptureSession = [[ImageCapture alloc] init];
     } else if ([selectedVideoType isEqualToString:@"Text"]) {
         newCaptureSession = [[TextCapture alloc] init];
+    } else if ([selectedVideoType isEqualToString:@"Window"]) {
+        newCaptureSession = [[WindowCapture alloc] init];
     } else {
         newCaptureSession = [[AVFCapture alloc] init];
     }

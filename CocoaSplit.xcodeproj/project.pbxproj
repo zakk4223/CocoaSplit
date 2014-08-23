@@ -106,6 +106,8 @@
 		34AE3C6D164F04C90052C95E /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AE3C6C164F04C90052C95E /* CoreVideo.framework */; };
 		34B0265A1712D8BA0063BB2D /* CmdLineDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B026591712D8BA0063BB2D /* CmdLineDelegate.m */; };
 		34B74BC91648D23B00818DE2 /* QTCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B74BC81648D23B00818DE2 /* QTCapture.m */; };
+		34BA4EDF19A8BED200956CF8 /* WindowCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34BA4EDE19A8BED200956CF8 /* WindowCapture.m */; };
+		34BA4EE019A8BED200956CF8 /* WindowCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34BA4EDE19A8BED200956CF8 /* WindowCapture.m */; };
 		34C19053189EE60400AB2430 /* CapturedFrameData.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C19052189EE60400AB2430 /* CapturedFrameData.m */; };
 		34C19054189EE60400AB2430 /* CapturedFrameData.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C19052189EE60400AB2430 /* CapturedFrameData.m */; };
 		34C6C3BF15FB5B440018A18B /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34C6C3BE15FB5B440018A18B /* OpenGL.framework */; };
@@ -331,6 +333,8 @@
 		34B026591712D8BA0063BB2D /* CmdLineDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CmdLineDelegate.m; sourceTree = "<group>"; };
 		34B74BC71648D23B00818DE2 /* QTCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QTCapture.h; sourceTree = "<group>"; };
 		34B74BC81648D23B00818DE2 /* QTCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QTCapture.m; sourceTree = "<group>"; };
+		34BA4EDD19A8BED200956CF8 /* WindowCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowCapture.h; sourceTree = "<group>"; };
+		34BA4EDE19A8BED200956CF8 /* WindowCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WindowCapture.m; sourceTree = "<group>"; };
 		34C19051189EE60400AB2430 /* CapturedFrameData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CapturedFrameData.h; sourceTree = "<group>"; };
 		34C19052189EE60400AB2430 /* CapturedFrameData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CapturedFrameData.m; sourceTree = "<group>"; };
 		34C6C3BE15FB5B440018A18B /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
@@ -598,6 +602,8 @@
 				346EAAF6197A7B28000892CF /* Capture.h */,
 				342B33AC197F847B00492CB7 /* TextCapture.h */,
 				342B33AD197F847B00492CB7 /* TextCapture.m */,
+				34BA4EDD19A8BED200956CF8 /* WindowCapture.h */,
+				34BA4EDE19A8BED200956CF8 /* WindowCapture.m */,
 			);
 			name = Capture;
 			sourceTree = "<group>";
@@ -900,6 +906,7 @@
 				34B74BC91648D23B00818DE2 /* QTCapture.m in Sources */,
 				347B14DC198492D900DC7DF0 /* InputPopupControllerViewController.m in Sources */,
 				340DC734197CF6E9003A0BB3 /* CaptureBase.m in Sources */,
+				34BA4EDF19A8BED200956CF8 /* WindowCapture.m in Sources */,
 				34A64A2F165EFE4C00A68428 /* PreviewView.m in Sources */,
 				3498C78B16AB6688003D8065 /* AVCaptureDeviceFormat+CocoaSplitAdditions.m in Sources */,
 				3431FFE119786502000965FE /* InputSource.m in Sources */,
@@ -927,6 +934,7 @@
 				340DC735197CF6E9003A0BB3 /* CaptureBase.m in Sources */,
 				34C19054189EE60400AB2430 /* CapturedFrameData.m in Sources */,
 				3451A1D31712C41000DF6A8B /* CaptureController.m in Sources */,
+				34BA4EE019A8BED200956CF8 /* WindowCapture.m in Sources */,
 				3431FFE219786502000965FE /* InputSource.m in Sources */,
 				342B33AF197F847B00492CB7 /* TextCapture.m in Sources */,
 				3451A1D81712C5C400DF6A8B /* x264Compressor.m in Sources */,

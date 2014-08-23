@@ -16,6 +16,8 @@
 #import "QTCapture.h"
 #import "AVFCapture.h"
 #import "TextCapture.h"
+#import "WindowCapture.h"
+
 
 
 #endif
