@@ -83,7 +83,7 @@
         self.keyframe_interval = (int)[aDecoder decodeIntegerForKey:@"keyframe_interval"];
         self.width = (int)[aDecoder decodeIntegerForKey:@"videoWidth"];
         self.height = (int)[aDecoder decodeIntegerForKey:@"videoHeight"];
-        if ([aDecoder decodeObjectForKey:@"resolutionOption"])
+        if ([aDecoder containsValueForKey:@"resolutionOption"])
         {
             self.resolutionOption = [aDecoder decodeObjectForKey:@"resolutionOption"];
         }
