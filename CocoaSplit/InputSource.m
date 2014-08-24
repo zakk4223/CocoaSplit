@@ -61,7 +61,7 @@ static NSArray *_sourceTypes = nil;
     }
     
     [aCoder encodeObject:self.videoSources forKey:@"videoSources"];
-    
+    [aCoder encodeObject:self.currentEffects forKey:@"currentEffects"];
 }
 
 -(id) initWithCoder:(NSCoder *)aDecoder
@@ -105,8 +105,16 @@ static NSArray *_sourceTypes = nil;
         
         self.rotateStyle = [aDecoder decodeIntForKey:@"rotateStyle"];
         
+        self.currentEffects = [aDecoder decodeObjectForKey:@"currentEffects"];
+        if (!self.currentEffects)
+        {
+            self.currentEffects = [[NSMutableArray alloc] init];
+        }
         
+        [self rebuildUserFilter];
     }
+    
+    
     return self;
 }
 
@@ -148,6 +156,8 @@ static NSArray *_sourceTypes = nil;
     self.videoSources = [[NSMutableArray alloc] init];
     
     self.transitionFilterName = @"CISwipeTransition";
+    self.currentEffects = [[NSMutableArray alloc] init];
+    
     
     
     
@@ -161,12 +171,113 @@ static NSArray *_sourceTypes = nil;
     self.layoutPosition = NSMakeRect(self.x_pos, self.y_pos, self.display_width, self.display_height);
     self.active = YES;
     self.transitionNames = [CIFilter filterNamesInCategory:kCICategoryTransition];
-    
+    self.availableEffectNames = [CIFilter filterNamesInCategories:nil];
     
     
     [self rebuildFilters];
     [self addObserver:self forKeyPath:@"propertiesChanged" options:NSKeyValueObservingOptionNew context:NULL];
  }
+
+
+-(void)rebuildUserFilter
+{
+    _filterGenerator = [[CIFilterGenerator alloc] init];
+    
+    CIFilter *lastFilter = nil;
+    CIFilter *firstFilter = nil;
+    if (self.currentEffects.count == 0)
+    {
+        self.userFilter = nil;
+        return;
+    }
+    
+    
+    if (self.currentEffects.count == 1)
+    {
+        self.userFilter = self.currentEffects.firstObject;
+    } else {
+        for (CIFilter *cur in self.currentEffects)
+        {
+            if (!lastFilter)
+            {
+                lastFilter = cur;
+                firstFilter = cur;
+                continue;
+            }
+            
+            [_filterGenerator connectObject:lastFilter withKey:kCIOutputImageKey toObject:cur withKey:kCIInputImageKey];
+            for (NSString *inputName in lastFilter.inputKeys)
+            {
+                if ([inputName isEqualToString:kCIInputImageKey])
+                {
+                    continue;
+                }
+                NSString *keyPrefix = lastFilter.className;
+                
+                [_filterGenerator exportKey:inputName fromObject:lastFilter withName:[NSString stringWithFormat:@"%@:%@", keyPrefix, inputName]];
+            }
+            
+            
+            lastFilter = cur;
+        }
+        
+        
+        [_filterGenerator exportKey:kCIInputImageKey fromObject:firstFilter withName:kCIInputImageKey];
+        [_filterGenerator exportKey:kCIOutputImageKey fromObject:lastFilter withName:nil];
+        for (NSString *inputName in lastFilter.inputKeys)
+        {
+            if ([inputName isEqualToString:kCIInputImageKey])
+            {
+                continue;
+            }
+
+            NSString *keyPrefix = lastFilter.className;
+
+            [_filterGenerator exportKey:inputName fromObject:lastFilter withName:[NSString stringWithFormat:@"%@:%@", keyPrefix, inputName]];
+        }
+
+        
+        
+        CIFilter *newFilter = [_filterGenerator filter];
+        self.userFilter = newFilter;
+    }
+}
+
+
+
+
+-(void)removeUserEffects:(NSIndexSet *)filterIndexes
+{
+    
+    [self.currentEffects removeObjectsAtIndexes:filterIndexes];
+    [self rebuildUserFilter];
+    
+}
+
+
+
+-(void)addUserEffect:(NSIndexSet *)filterIndexes
+{
+    
+    
+    [filterIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+    
+        NSString *filterName = [self.availableEffectNames objectAtIndex:idx];
+        
+        CIFilter *newFilter = [CIFilter filterWithName:filterName];
+        
+        if (newFilter)
+        {
+            [newFilter setDefaults];
+            [self.currentEffects addObject:newFilter];
+        }
+    }];
+    
+    [self rebuildUserFilter];
+
+}
+
+
 
 
 -(NSArray *)sourceTypes
@@ -491,6 +602,16 @@ static NSArray *_sourceTypes = nil;
         [self rebuildFilters];
     }
     
+    if (self.userFilter)
+    {
+        NSArray *userInputs = self.userFilter.inputKeys;
+        if ([userInputs containsObject:kCIInputImageKey])
+        {
+            [self.userFilter setValue:outimg forKeyPath:kCIInputImageKey];
+        }
+        outimg = [self.userFilter valueForKey:kCIOutputImageKey];
+    }
+
     self.oldSize = self.inputImage.extent.size;
     [self.cropFilter setValue:outimg forKeyPath:kCIInputImageKey];
     
@@ -534,6 +655,8 @@ static NSArray *_sourceTypes = nil;
         CVPixelBufferRelease(_oldCVBuf);
     }
 
+    
+    
     if (backgroundImage)
     {
         //CIFilter *compositeCopy = [self.compositeFilter copy];
@@ -719,6 +842,7 @@ static NSArray *_sourceTypes = nil;
     
     [self rebuildFilters];
 }
+
 
 
 -(NSString *) selectedVideoType

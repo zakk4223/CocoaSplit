@@ -40,8 +40,7 @@ typedef enum input_rotate_style_t {
     bool _inTransition;
     double _nextImageTime;
     id<CaptureSessionProtocol>_useInput;
-    
-
+    CIFilterGenerator *_filterGenerator;
 }
 
 
@@ -105,6 +104,14 @@ typedef enum input_rotate_style_t {
 
 @property (strong) CIFilter *transitionFilter;
 
+@property (strong) NSArray *availableEffectNames;
+
+@property (strong) NSMutableArray *currentEffects;
+
+@property (strong) CIFilter *userFilter;
+
+
+
 
 
 
@@ -119,6 +126,9 @@ typedef enum input_rotate_style_t {
 
 -(void) addMulti;
 -(void) autoFit;
+-(void)addUserEffect:(NSIndexSet *)filterIndexes;
+-(void)removeUserEffects:(NSIndexSet *)filterIndexes;
+
 
 
 

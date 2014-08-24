@@ -16,7 +16,6 @@
 
 -(NSArray *) availableVideoDevices
 {
-    
     NSArray *windows = CFBridgingRelease(CGWindowListCopyWindowInfo(kCGWindowListOptionOnScreenOnly|kCGWindowListExcludeDesktopElements, kCGNullWindowID));
     
     
@@ -55,7 +54,7 @@
         NSNumber *windowID = self.activeVideoDevice.captureDevice;
         
         
-        CGImageRef windowImg = CGWindowListCreateImage(CGRectNull, kCGWindowListOptionIncludingWindow, [windowID unsignedIntValue], kCGWindowImageBoundsIgnoreFraming|kCGWindowImageNominalResolution);
+        CGImageRef windowImg = CGWindowListCreateImage(CGRectNull, kCGWindowListOptionIncludingWindow, [windowID unsignedIntValue], kCGWindowImageBoundsIgnoreFraming|kCGWindowImageBestResolution);
         CIImage *ret = [CIImage imageWithCGImage:windowImg];
         CGImageRelease(windowImg);
         return ret;

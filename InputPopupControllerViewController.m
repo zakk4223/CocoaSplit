@@ -63,6 +63,28 @@
 }
 
 
+-(void)openUserFilterPanel:(CIFilter *)forFilter
+{
+    if (!forFilter)
+    {
+        return;
+    }
+    
+    IKFilterUIView *filterView = [forFilter viewForUIConfiguration:@{IKUISizeFlavor:IKUISizeMini} excludedKeys:@[kCIInputImageKey, kCIInputTargetImageKey, kCIInputTimeKey]];
+    
+    self.userFilterWindow = [[NSWindow alloc] init];
+
+    self.userFilterWindow.delegate = self;
+    [self.userFilterWindow setContentSize:filterView.bounds.size];
+    [self.userFilterWindow.contentView addSubview:filterView];
+    self.userFilterWindow.styleMask =  NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask;
+    [self.userFilterWindow setReleasedWhenClosed:NO];
+    
+    [self.userFilterWindow makeKeyAndOrderFront:self.userFilterWindow];
+    
+}
+
+
 -(void)openTransitionFilterPanel:(CIFilter *)forFilter
 {
     if (!forFilter)
@@ -76,7 +98,8 @@
     self.transitionFilterWindow = [[NSWindow alloc] init];
     self.transitionFilterWindow.delegate = self;
     [self.transitionFilterWindow setContentSize:filterView.bounds.size];
-    [self.transitionFilterWindow setContentView:filterView];
+    [self.transitionFilterWindow.contentView addSubview:filterView];
+    
     self.transitionFilterWindow.styleMask =  NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask;
     [self.transitionFilterWindow setReleasedWhenClosed:NO];
     

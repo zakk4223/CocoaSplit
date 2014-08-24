@@ -13,11 +13,15 @@
 @property (strong) NSWindow *popoverWindow;
 @property (strong) NSPopover *myPopover;
 @property (strong) NSWindow *transitionFilterWindow;
+@property (strong) NSWindow *userFilterWindow;
+
 
 - (IBAction)deleteMultiSource:(id)sender;
 -(void)openTransitionFilterPanel:(CIFilter *)forFilter;
+-(void)openUserFilterPanel:(CIFilter *)forFilter;
 
 
 @property (weak) IBOutlet NSArrayController *multiSourceController;
+@property (weak) IBOutlet NSArrayController *currentEffectsController;
 
 @end
