@@ -533,7 +533,7 @@ static NSArray *_sourceTypes = nil;
                 //instead all the capture inputs produce RGB buffers, although it is questionable if it is wise to leave
                 //that conversion up to the individual capture sources.
                 
-                //self.inputImage = [CIImage imageWithCVImageBuffer:newFrame];
+                //outimg = [CIImage imageWithCVImageBuffer:newFrame];
                 
                 outimg = [CIImage imageWithIOSurface:CVPixelBufferGetIOSurface(newFrame)];
                 
