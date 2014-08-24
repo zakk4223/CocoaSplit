@@ -76,7 +76,7 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
         self.use_cbr = [aDecoder decodeBoolForKey:@"use_cbr"];
         self.width = (int)[aDecoder decodeIntegerForKey:@"videoWidth"];
         self.height = (int)[aDecoder decodeIntegerForKey:@"videoHeight"];
-        if ([aDecoder decodeObjectForKey:@"resolutionOption"])
+        if ([aDecoder containsValueForKey:@"resolutionOption"])
         {
             self.resolutionOption = [aDecoder decodeObjectForKey:@"resolutionOption"];
         }
