@@ -770,6 +770,15 @@
            [CIPlugIn loadPlugIn:filterURL allowExecutableCode:YES];
        }
        
+       
+       if (![loadedFilters containsObject:@"CSChromaKeyFilter"])
+       {
+           NSString *filterPath = [[[NSBundle mainBundle] builtInPlugInsPath] stringByAppendingPathComponent:@"CSChromaKey.plugin"];
+           NSURL *filterURL = [NSURL fileURLWithPath:filterPath];
+           [CIPlugIn loadPlugIn:filterURL allowExecutableCode:YES];
+       }
+
+       
        [self createCGLContext];
        _cictx = [CIContext contextWithCGLContext:_cgl_ctx pixelFormat:CGLGetPixelFormat(_cgl_ctx) colorSpace:CGColorSpaceCreateDeviceRGB() options:nil];
 

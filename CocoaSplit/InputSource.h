@@ -75,6 +75,7 @@ typedef enum input_rotate_style_t {
 @property (assign) int depth;
 @property (strong) CIFilter *solidFilter;
 @property (strong) CIFilter *cropFilter;
+@property (strong) CIFilter *chromaKeyFilter;
 
 @property (strong) CIContext *imageContext;
 @property (assign) NSSize oldSize;
@@ -109,6 +110,12 @@ typedef enum input_rotate_style_t {
 @property (strong) NSMutableArray *currentEffects;
 
 @property (strong) CIFilter *userFilter;
+
+@property (strong) NSColor *chromaKeyColor;
+@property (assign) float chromaKeyThreshold;
+@property (assign) float chromaKeySmoothing;
+@property (assign) bool doChromaKey;
+
 
 
 

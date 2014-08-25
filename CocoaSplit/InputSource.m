@@ -60,6 +60,13 @@ static NSArray *_sourceTypes = nil;
         [aCoder encodeObject:self.videoInput forKey:@"videoInput"];
     }
     
+    [aCoder encodeBool:self.doChromaKey forKey:@"doChromaKey"];
+    [aCoder encodeObject:self.chromaKeyColor forKey:@"chromaKeyColor"];
+    [aCoder encodeFloat:self.chromaKeyThreshold forKey:@"chromaKeyThreshold"];
+    [aCoder encodeFloat:self.chromaKeySmoothing forKey:@"chromaKeySmoothing"];
+
+    
+    
     [aCoder encodeObject:self.videoSources forKey:@"videoSources"];
     [aCoder encodeObject:self.currentEffects forKey:@"currentEffects"];
 }
@@ -110,6 +117,30 @@ static NSArray *_sourceTypes = nil;
         {
             self.currentEffects = [[NSMutableArray alloc] init];
         }
+        
+        if ([aDecoder containsValueForKey:@"doChromaKey"])
+        {
+            self.doChromaKey = [aDecoder decodeBoolForKey:@"doChromaKey"];
+        }
+        
+        if ([aDecoder containsValueForKey:@"chromaKeyColor"])
+        {
+
+            self.chromaKeyColor = [aDecoder decodeObjectForKey:@"chromaKeyColor"];
+        }
+        
+        if ([aDecoder containsValueForKey:@"chromaKeyThreshold"])
+        {
+
+            self.chromaKeyThreshold = [aDecoder decodeFloatForKey:@"chromaKeyThreshold"];
+        }
+        
+        if ([aDecoder containsValueForKey:@"chromaKeySmoothing"])
+        {
+            
+            self.chromaKeySmoothing = [aDecoder decodeFloatForKey:@"chromaKeySmoothing"];
+        }
+
         
         [self rebuildUserFilter];
     }
@@ -172,6 +203,12 @@ static NSArray *_sourceTypes = nil;
     self.active = YES;
     self.transitionNames = [CIFilter filterNamesInCategory:kCICategoryTransition];
     self.availableEffectNames = [CIFilter filterNamesInCategories:nil];
+    self.doChromaKey = NO;
+    self.chromaKeyThreshold = 0.1005f;
+    self.chromaKeySmoothing = 0.1344f;
+    
+    self.chromaKeyColor = [NSColor greenColor];
+    
     
     
     [self rebuildFilters];
@@ -355,6 +392,12 @@ static NSArray *_sourceTypes = nil;
 {
     
     
+    if (!self.chromaKeyFilter)
+    {
+        self.chromaKeyFilter = [CIFilter filterWithName:@"CSChromaKeyFilter"];
+        [self.chromaKeyFilter setDefaults];
+    }
+
     if(!self.selectedFilter)
     {
         self.selectedFilter = [CIFilter filterWithName:@"CIColorMatrix"];
@@ -378,6 +421,8 @@ static NSArray *_sourceTypes = nil;
         self.cropFilter = [CIFilter filterWithName:@"CICrop"];
         [self.cropFilter setDefaults];
     }
+    
+    
     
     
     NSAffineTransform *geometryTransform = [NSAffineTransform transform];
@@ -431,6 +476,16 @@ static NSArray *_sourceTypes = nil;
     
     
     [self.transformFilter setValue:geometryTransform forKeyPath:kCIInputTransformKey];
+    
+    
+    if (self.doChromaKey)
+    {
+        [self.chromaKeyFilter setValue:[[CIColor alloc] initWithColor:self.chromaKeyColor] forKey:kCIInputColorKey];
+        
+        [self.chromaKeyFilter setValue:@(self.chromaKeyThreshold) forKey:@"inputThreshold"];
+        [self.chromaKeyFilter setValue:@(self.chromaKeySmoothing) forKey:@"inputSmoothing"];
+    }
+    
     
     CIVector *alphaVector = [CIVector vectorWithX:0.0f Y:0.0f Z:0.0f W:self.opacity];
     [self.selectedFilter setDefaults];
@@ -630,6 +685,13 @@ static NSArray *_sourceTypes = nil;
     
 
 
+    if (self.doChromaKey && self.chromaKeyFilter)
+    {
+        [self.chromaKeyFilter setValue:outimg forKey:kCIInputImageKey];
+        outimg = [self.chromaKeyFilter valueForKey:kCIOutputImageKey];
+    }
+    
+    
     [self.selectedFilter setValue:outimg forKey:kCIInputImageKey];
     outimg = [self.selectedFilter valueForKey:kCIOutputImageKey];
     
@@ -912,7 +974,7 @@ static NSArray *_sourceTypes = nil;
 
 + (NSSet *)keyPathsForValuesAffectingPropertiesChanged
 {
-    return [NSSet setWithObjects:@"x_pos", @"y_pos", @"rotationAngle", @"is_selected", @"depth", @"opacity", @"crop_left", @"crop_right", @"crop_top", @"crop_bottom", nil];
+    return [NSSet setWithObjects:@"x_pos", @"y_pos", @"rotationAngle", @"is_selected", @"depth", @"opacity", @"crop_left", @"crop_right", @"crop_top", @"crop_bottom", @"doChromaKey", @"chromaKeyColor", @"chromaKeyThreshold", @"chromaKeySmoothing", nil];
 }
 
 

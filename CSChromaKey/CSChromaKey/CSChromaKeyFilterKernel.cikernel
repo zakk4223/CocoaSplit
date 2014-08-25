@@ -1,0 +1,33 @@
+//Stolen from an apple example CIChromaKeyFilter
+
+kernel vec4 cschromakey(sampler inputImage, __color inputColor, float inputThreshold, float inputSmoothing)
+{
+	float	Y, Cb, Cr;
+	float	maskY, maskCb, maskCr;
+	vec4		sourcePixel = sample(inputImage, samplerCoord(inputImage));
+	float	blendValue;
+	
+	maskY = 0.2989 * inputColor.r + 0.5866 * inputColor.g + 0.1145 * inputColor.b;
+	maskCr = 0.7132 * (inputColor.r - maskY);
+	maskCb = 0.5647 * (inputColor.b - maskY);
+
+	Y = 0.2989 * sourcePixel.r + 0.5866 * sourcePixel.g + 0.1145 * sourcePixel.b;
+	Cr = 0.7132 * (sourcePixel.r - Y);
+	Cb = 0.5647 * (sourcePixel.b - Y);
+	
+	blendValue = smoothstep(inputThreshold, inputThreshold + inputSmoothing , abs(Cr - maskCr) + abs(Cb - maskCb));
+	sourcePixel = sourcePixel * blendValue;
+	
+	return sourcePixel;
+}
+
+
+
+
+
+
+
+
+
+
+

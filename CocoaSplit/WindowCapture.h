@@ -9,5 +9,12 @@
 #import "CaptureBase.h"
 
 @interface WindowCapture : CaptureBase
+{
+    CFAbsoluteTime _nextCaptureTime;
+    CIImage *_currentFrame;
+    
+}
+
+@property (assign) float captureFPS;
 
 @end

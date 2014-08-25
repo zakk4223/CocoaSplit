@@ -48,6 +48,7 @@
 		3435E39D188BD8250015CC01 /* passthrough.fgsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3435E399188B90900015CC01 /* passthrough.fgsh */; };
 		3435E39E188BD82F0015CC01 /* passthrough.vtsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3435E39A188B93150015CC01 /* passthrough.vtsh */; };
 		3435E39F188CD8EE0015CC01 /* 420v.fgsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3435E395188B902C0015CC01 /* 420v.fgsh */; };
+		343DD6B119AAD8E70017232A /* CSChromaKey.plugin in CopyFiles */ = {isa = PBXBuildFile; fileRef = 343DD6B019AAD3670017232A /* CSChromaKey.plugin */; };
 		3444D8E819A0CDE8000DC46B /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3444D8E719A0CDE8000DC46B /* Quartz.framework */; };
 		344988131893CF0500044259 /* LogWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 344988121893CF0500044259 /* LogWindow.xib */; };
 		3450579E172A4B6B0065A452 /* CocoaSplitCmd in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3451A1C317111BD900DF6A8B /* CocoaSplitCmd */; };
@@ -133,6 +134,13 @@
 			remoteGlobalIDString = 340FE49C15F3417E00E4CE4E;
 			remoteInfo = CocoaSplit;
 		};
+		343DD6AF19AAD3670017232A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 343DD6AB19AAD3660017232A /* CSChromaKey.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 343DD68519AAD3660017232A;
+			remoteInfo = CSChromaKey;
+		};
 		3450579B172A4ABD0065A452 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 340FE49415F3417E00E4CE4E /* Project object */;
@@ -217,6 +225,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				343DD6B119AAD8E70017232A /* CSChromaKey.plugin in CopyFiles */,
 				34D43557198DD02000266169 /* TextureWrapPlugin.plugin in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -286,6 +295,10 @@
 		3435E395188B902C0015CC01 /* 420v.fgsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 420v.fgsh; sourceTree = "<group>"; };
 		3435E399188B90900015CC01 /* passthrough.fgsh */ = {isa = PBXFileReference; lastKnownFileType = text; path = passthrough.fgsh; sourceTree = "<group>"; };
 		3435E39A188B93150015CC01 /* passthrough.vtsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = passthrough.vtsh; sourceTree = "<group>"; };
+		343DD65919AAD3060017232A /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
+		343DD65C19AAD3060017232A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		343DD65E19AAD3060017232A /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		343DD6AB19AAD3660017232A /* CSChromaKey.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSChromaKey.xcodeproj; path = CSChromaKey/CSChromaKey.xcodeproj; sourceTree = "<group>"; };
 		3444D8E719A0CDE8000DC46B /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		344988121893CF0500044259 /* LogWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LogWindow.xib; sourceTree = "<group>"; };
 		3451A1C317111BD900DF6A8B /* CocoaSplitCmd */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CocoaSplitCmd; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -426,6 +439,7 @@
 		340FE49215F3417E00E4CE4E = {
 			isa = PBXGroup;
 			children = (
+				343DD6AB19AAD3660017232A /* CSChromaKey.xcodeproj */,
 				34D43550198DCE3800266169 /* TextureWrapPlugin.xcodeproj */,
 				3451A1E11712C5F700DF6A8B /* CoreGraphics.framework */,
 				347B7FC916907AFA00B5F4B3 /* libz.dylib */,
@@ -471,6 +485,9 @@
 				340FE4A115F3417E00E4CE4E /* Cocoa.framework */,
 				340FE4BF15F3417E00E4CE4E /* SenTestingKit.framework */,
 				34AE3C2F164E3E020052C95E /* Foundation.framework */,
+				343DD65919AAD3060017232A /* ApplicationServices.framework */,
+				343DD65C19AAD3060017232A /* QuartzCore.framework */,
+				343DD65E19AAD3060017232A /* CoreFoundation.framework */,
 				340FE4A315F3417E00E4CE4E /* Other Frameworks */,
 			);
 			name = Frameworks;
@@ -564,6 +581,14 @@
 				342B33B51980771200492CB7 /* line.vtsh */,
 			);
 			name = Shaders;
+			sourceTree = "<group>";
+		};
+		343DD6AC19AAD3660017232A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				343DD6B019AAD3670017232A /* CSChromaKey.plugin */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		3441338C18667F280059B686 /* Compressor */ = {
@@ -788,6 +813,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = 343DD6AC19AAD3660017232A /* Products */;
+					ProjectRef = 343DD6AB19AAD3660017232A /* CSChromaKey.xcodeproj */;
+				},
+				{
 					ProductGroup = 34D43551198DCE3800266169 /* Products */;
 					ProjectRef = 34D43550198DCE3800266169 /* TextureWrapPlugin.xcodeproj */;
 				},
@@ -803,6 +832,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		343DD6B019AAD3670017232A /* CSChromaKey.plugin */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = CSChromaKey.plugin;
+			remoteRef = 343DD6AF19AAD3670017232A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		34D43555198DCE3900266169 /* TextureWrapPlugin.plugin */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;

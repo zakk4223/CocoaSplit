@@ -290,6 +290,92 @@
                                     </binding>
                                 </connections>
                             </button>
+                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Y6-wx-BBA">
+                                <rect key="frame" x="148" y="142" width="87" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="Chroma Key" bezelStyle="regularSquare" imagePosition="right" controlSize="small" state="on" inset="2" id="Osi-Vj-Lpf">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="smallSystem"/>
+                                </buttonCell>
+                                <connections>
+                                    <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.doChromaKey" id="D12-uR-fMY"/>
+                                </connections>
+                            </button>
+                            <colorWell fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="W3y-sm-iex">
+                                <rect key="frame" x="223" y="121" width="44" height="23"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.chromaKeyColor" id="5fR-Ud-zsR"/>
+                                </connections>
+                            </colorWell>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jGQ-gB-c0t">
+                                <rect key="frame" x="149" y="123" width="52" height="14"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="CK Color" id="8cP-GJ-4iN">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8lm-HT-fAd">
+                                <rect key="frame" x="149" y="101" width="59" height="14"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="CK Thresh" id="wdg-wi-XCn">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wti-PG-6ib">
+                                <rect key="frame" x="223" y="99" width="44" height="19"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="92b-oK-PAY">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                                <connections>
+                                    <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.chromaKeyThreshold" id="DCq-ea-8oF"/>
+                                </connections>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e4n-th-JUZ">
+                                <rect key="frame" x="149" y="78" width="63" height="14"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="CK Smooth" id="ULh-jH-ZgA">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="32H-zh-MYL">
+                                <rect key="frame" x="223" y="76" width="44" height="19"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="6JY-d1-U5t">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                                <connections>
+                                    <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.chromaKeySmoothing" id="wA1-Uq-tSt"/>
+                                </connections>
+                            </textField>
+                            <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="82Y-aM-yeP">
+                                <rect key="frame" x="275" y="98" width="92" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="0.5" doubleValue="0.5" tickMarkPosition="above" sliderType="linear" id="tyg-En-6dG"/>
+                                <connections>
+                                    <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.chromaKeyThreshold" id="aYM-ti-5mG"/>
+                                </connections>
+                            </slider>
+                            <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9os-uf-pl6">
+                                <rect key="frame" x="275" y="75" width="92" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="0.5" doubleValue="0.1333" tickMarkPosition="above" sliderType="linear" id="Rdy-kZ-dqP"/>
+                                <connections>
+                                    <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.chromaKeySmoothing" id="Nke-jz-7P9"/>
+                                </connections>
+                            </slider>
                         </subviews>
                     </view>
                 </tabViewItem>
@@ -722,7 +808,7 @@
                                         </view>
                                     </tabViewItem>
                                     <tabViewItem label="TextCapture" identifier="" id="ICq-6E-dsE">
-                                        <view key="view" id="Ss8-xW-0nP">
+                                        <view key="view" ambiguous="YES" id="Ss8-xW-0nP">
                                             <rect key="frame" x="10" y="25" width="510" height="157"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
@@ -936,19 +1022,44 @@
                                         </view>
                                     </tabViewItem>
                                     <tabViewItem label="WindowCapture" identifier="" id="K2T-hV-aLN">
-                                        <view key="view" ambiguous="YES" id="VCH-UP-eJ0">
+                                        <view key="view" id="VCH-UP-eJ0">
                                             <rect key="frame" x="10" y="25" width="510" height="157"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YSs-4p-g8o">
-                                                    <rect key="frame" x="15" y="100" width="480" height="51"/>
+                                                    <rect key="frame" x="15" y="83" width="480" height="68"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" id="JFv-Is-Gas">
-                                                        <font key="font" metaFont="system"/>
-                                                        <string key="title">This capture method sucks. The API for grabbing window images really isn't made for video framerates and depending on what window you are capturing it can't keep up. Expect to drop frames if you use this.</string>
+                                                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" id="JFv-Is-Gas">
+                                                        <font key="font" metaFont="smallSystem"/>
+                                                        <string key="title">This capture method sucks. The API for grabbing window images really isn't made for video framerates and depending on what window you are capturing it can't keep up. Set the framerate for the source low if you can get away with it. Otherwise expect to drop lots of frames.</string>
                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
+                                                </textField>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4HS-NA-Lyo">
+                                                    <rect key="frame" x="15" y="63" width="38" height="14"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="FPS" id="Sq9-Bg-kah">
+                                                        <font key="font" metaFont="smallSystem"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f85-Bv-G8k">
+                                                    <rect key="frame" x="59" y="61" width="43" height="19"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="pwr-Ic-quf">
+                                                        <font key="font" metaFont="smallSystem"/>
+                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                    <connections>
+                                                        <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.videoInput.captureFPS" id="85P-Oc-UmJ">
+                                                            <dictionary key="options">
+                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                            </dictionary>
+                                                        </binding>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                         </view>
@@ -1284,12 +1395,12 @@
                                     <font key="font" metaFont="smallSystem"/>
                                 </buttonCell>
                                 <connections>
-                                    <binding destination="dYd-S3-qDP" name="argument" keyPath="selectionIndexes" id="jLH-cc-WtP">
+                                    <binding destination="Gdf-y2-DdF" name="target" keyPath="selection" previousBinding="jLH-cc-WtP" id="yK1-72-qAq">
                                         <dictionary key="options">
                                             <string key="NSSelectorName">addUserEffect:</string>
                                         </dictionary>
                                     </binding>
-                                    <binding destination="Gdf-y2-DdF" name="target" keyPath="selection" previousBinding="jLH-cc-WtP" id="yK1-72-qAq">
+                                    <binding destination="dYd-S3-qDP" name="argument" keyPath="selectionIndexes" id="jLH-cc-WtP">
                                         <dictionary key="options">
                                             <string key="NSSelectorName">addUserEffect:</string>
                                         </dictionary>
@@ -1324,12 +1435,12 @@
                                     <font key="font" metaFont="smallSystem"/>
                                 </buttonCell>
                                 <connections>
-                                    <binding destination="0iu-Bs-KXZ" name="argument" keyPath="selectionIndexes" id="g51-7c-kG7">
+                                    <binding destination="Gdf-y2-DdF" name="target" keyPath="selection" previousBinding="g51-7c-kG7" id="EbL-Aw-KIm">
                                         <dictionary key="options">
                                             <string key="NSSelectorName">removeUserEffects:</string>
                                         </dictionary>
                                     </binding>
-                                    <binding destination="Gdf-y2-DdF" name="target" keyPath="selection" previousBinding="g51-7c-kG7" id="EbL-Aw-KIm">
+                                    <binding destination="0iu-Bs-KXZ" name="argument" keyPath="selectionIndexes" id="g51-7c-kG7">
                                         <dictionary key="options">
                                             <string key="NSSelectorName">removeUserEffects:</string>
                                         </dictionary>

@@ -13,6 +13,16 @@
 /* CGWindowListCreateImage sucks. It's really slow. This probably isn't a useful capture type, but whatever */
 
 
+-(instancetype)init
+{
+    if (self = [super init])
+    {
+        _nextCaptureTime = 0.0f;
+        self.captureFPS = 30.0f;
+    }
+    return self;
+}
+
 
 -(NSArray *) availableVideoDevices
 {
@@ -49,16 +59,19 @@
 
 -(CIImage *)currentImage
 {
-    if (self.activeVideoDevice)
+    
+    CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
+    
+    if (self.activeVideoDevice && currentTime >= _nextCaptureTime)
     {
         NSNumber *windowID = self.activeVideoDevice.captureDevice;
         
         
         CGImageRef windowImg = CGWindowListCreateImage(CGRectNull, kCGWindowListOptionIncludingWindow, [windowID unsignedIntValue], kCGWindowImageBoundsIgnoreFraming|kCGWindowImageBestResolution);
-        CIImage *ret = [CIImage imageWithCGImage:windowImg];
+        _currentFrame = [CIImage imageWithCGImage:windowImg];
         CGImageRelease(windowImg);
-        return ret;
+        _nextCaptureTime = currentTime + (1/self.captureFPS);
     }
-    return nil;
+    return _currentFrame;
 }
 @end
