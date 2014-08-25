@@ -420,42 +420,67 @@
         self.selectedOriginDistance = worldPoint;
         if (self.isResizing)
         {
-            CGFloat new_width, new_height;
-            CGFloat adjust_x, adjust_y;
-            adjust_x = 0.0f;
-            adjust_y = 0.0f;
-            
-            new_width = self.selectedSource.display_width;//self.selectedSource.layoutPosition.size.width;
-            new_height = self.selectedSource.display_height;//self.selectedSource.layoutPosition.size.height;
-            
-            if (self.resizeType & kResizeRight)
+            if (theEvent.modifierFlags & NSShiftKeyMask)
             {
-                new_width = worldPoint.x - self.selectedSource.x_pos;
-            }
-            
-            if (self.resizeType & kResizeLeft)
-            {
-                new_width = (self.selectedSource.x_pos + self.selectedSource.display_width) - worldPoint.x;
-                adjust_x = self.resizeAnchor.x - (self.selectedSource.x_pos + new_width);
-            }
-            
-            
-            if (self.resizeType & kResizeTop)
-            {
-                new_height = worldPoint.y - self.selectedSource.y_pos;
-            }
-            
-            if (self.resizeType & kResizeBottom)
-            {
-                new_height = (self.selectedSource.y_pos + self.selectedSource.display_height) - worldPoint.y;
-                adjust_y = self.resizeAnchor.y - (self.selectedSource.y_pos + new_height);
-            }
-            
-            
-            [self.selectedSource updateSize:new_width height:new_height];
-            if (adjust_x || adjust_y)
-            {
-                [self.selectedSource updateOrigin:adjust_x y:adjust_y];
+                if (self.resizeType & kResizeRight)
+                {
+                    self.selectedSource.crop_right -= dx;
+                }
+                
+                if (self.resizeType & kResizeLeft)
+                {
+                    self.selectedSource.crop_left += dx;
+                }
+                
+                if (self.resizeType & kResizeTop)
+                {
+                    self.selectedSource.crop_top -= dy;
+                }
+                
+                if (self.resizeType & kResizeBottom)
+                {
+                    self.selectedSource.crop_bottom += dy;
+                }
+                
+            } else {
+                
+                CGFloat new_width, new_height;
+                CGFloat adjust_x, adjust_y;
+                adjust_x = 0.0f;
+                adjust_y = 0.0f;
+                
+                new_width = self.selectedSource.display_width;//self.selectedSource.layoutPosition.size.width;
+                new_height = self.selectedSource.display_height;//self.selectedSource.layoutPosition.size.height;
+                
+                if (self.resizeType & kResizeRight)
+                {
+                    new_width = worldPoint.x - self.selectedSource.x_pos;
+                }
+                
+                if (self.resizeType & kResizeLeft)
+                {
+                    new_width = (self.selectedSource.x_pos + self.selectedSource.display_width) - worldPoint.x;
+                    adjust_x = self.resizeAnchor.x - (self.selectedSource.x_pos + new_width);
+                }
+                
+                
+                if (self.resizeType & kResizeTop)
+                {
+                    new_height = worldPoint.y - self.selectedSource.y_pos;
+                }
+                
+                if (self.resizeType & kResizeBottom)
+                {
+                    new_height = (self.selectedSource.y_pos + self.selectedSource.display_height) - worldPoint.y;
+                    adjust_y = self.resizeAnchor.y - (self.selectedSource.y_pos + new_height);
+                }
+                
+                
+                [self.selectedSource updateSize:new_width height:new_height];
+                if (adjust_x || adjust_y)
+                {
+                    [self.selectedSource updateOrigin:adjust_x y:adjust_y];
+                }
             }
 
             
