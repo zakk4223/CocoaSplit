@@ -590,6 +590,7 @@ static NSArray *_sourceTypes = nil;
                 
                 //outimg = [CIImage imageWithCVImageBuffer:newFrame];
                 
+                
                 outimg = [CIImage imageWithIOSurface:CVPixelBufferGetIOSurface(newFrame)];
                 
                 

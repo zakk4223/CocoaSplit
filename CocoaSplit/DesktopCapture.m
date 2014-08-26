@@ -52,6 +52,7 @@
         
     }
     
+    [self setupDisplayStream];
     return self;
 }
 
@@ -91,7 +92,7 @@
 {
     
     _activeVideoDevice = newDev;
-    _currentDisplay = [[newDev captureDevice] unsignedIntValue];
+    self.currentDisplay = [[newDev captureDevice] unsignedIntValue];
     self.captureName = newDev.captureName;
     
     [self setupDisplayStream];
@@ -110,7 +111,7 @@
     
     
     
-    if (!_currentDisplay)
+    if (!self.currentDisplay)
     {
         NSLog(@"NO DISPLAY");
         return NO;
@@ -119,9 +120,10 @@
     
     
     
+    
     NSNumber *minframetime = [NSNumber numberWithFloat:(1000.0/(self.videoCaptureFPS*1000))];
 
-    CGRect displaySize = CGDisplayBounds(_currentDisplay);
+    CGRect displaySize = CGDisplayBounds(self.currentDisplay);
     
     width = displaySize.size.width - self.x_origin;
     height = displaySize.size.height - self.y_origin;
@@ -171,7 +173,7 @@
     
     
     
-    _displayStreamRef = CGDisplayStreamCreateWithDispatchQueue(_currentDisplay, width, height,  kCVPixelFormatType_420YpCbCr8BiPlanarFullRange, (__bridge CFDictionaryRef)(opts), _capture_queue, ^(CGDisplayStreamFrameStatus status, uint64_t displayTime, IOSurfaceRef frameSurface, CGDisplayStreamUpdateRef updateRef) {
+    _displayStreamRef = CGDisplayStreamCreateWithDispatchQueue(self.currentDisplay, width, height,  kCVPixelFormatType_420YpCbCr8BiPlanarFullRange, (__bridge CFDictionaryRef)(opts), _capture_queue, ^(CGDisplayStreamFrameStatus status, uint64_t displayTime, IOSurfaceRef frameSurface, CGDisplayStreamUpdateRef updateRef) {
         
         if (status == kCGDisplayStreamFrameStatusStopped)
         {

@@ -41,6 +41,8 @@
 @property NSArray *videoFormats;
 @property NSArray *videoFramerates;
 @property (assign) bool propertiesChanged;
+@property (assign) CGDirectDisplayID currentDisplay;
+
 
 
 

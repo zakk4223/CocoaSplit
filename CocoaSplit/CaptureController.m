@@ -1861,16 +1861,9 @@
     
     @autoreleasepool {
         
-        //CVPixelBufferRef newFrame = [self currentFrame];
         CVPixelBufferRef destFrame = NULL;
         
 
-                /*
-        if (!_backgroundImage)
-        {
-            _backgroundImage = [CIImage imageWithColor:[CIColor colorWithRed:0.0f green:0.0f blue:0.0f]];
-        }
-         */
         
 
         CIImage *newImage = [_backgroundFilter valueForKey:kCIOutputImageKey];
@@ -1895,28 +1888,6 @@
             return nil;
         }
         
-        /*
-        frameWidth = CVPixelBufferGetWidth(newFrame);
-        frameHeight = CVPixelBufferGetHeight(newFrame);
-        */
-                      /*
-        CIImage *tmpimg = [CIImage imageWithIOSurface:CVPixelBufferGetIOSurface(newFrame)];
-        
-        CVPixelBufferRelease(newFrame);
-        
-        
-        CIImage *outimg;
-        
-        [_cifilter setValue:tmpimg forKey:kCIInputImageKey];
-        
-        
-        outimg = [_cifilter valueForKey:kCIOutputImageKey];
-        */
-        
-        //CVPixelBufferPoolCreatePixelBuffer(kCVReturnSuccess, _cvpool, &destFrame);
-        
-
-        //NSLog(@"IMAGE EXTENT %@", NSStringFromRect(newImage.extent));
         CGFloat frameWidth, frameHeight;
         
         frameWidth = self.captureWidth;

@@ -107,6 +107,8 @@
 		34AE3C6D164F04C90052C95E /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AE3C6C164F04C90052C95E /* CoreVideo.framework */; };
 		34B0265A1712D8BA0063BB2D /* CmdLineDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B026591712D8BA0063BB2D /* CmdLineDelegate.m */; };
 		34B74BC91648D23B00818DE2 /* QTCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B74BC81648D23B00818DE2 /* QTCapture.m */; };
+		34B7D9EE19AB5DE400D6B9E2 /* CSOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B7D9ED19AB5DE400D6B9E2 /* CSOverlayView.m */; };
+		34B7D9F119AC5E7100D6B9E2 /* CSOverlayWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B7D9F019AC5E7100D6B9E2 /* CSOverlayWindow.m */; };
 		34BA4EDF19A8BED200956CF8 /* WindowCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34BA4EDE19A8BED200956CF8 /* WindowCapture.m */; };
 		34BA4EE019A8BED200956CF8 /* WindowCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34BA4EDE19A8BED200956CF8 /* WindowCapture.m */; };
 		34C19053189EE60400AB2430 /* CapturedFrameData.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C19052189EE60400AB2430 /* CapturedFrameData.m */; };
@@ -346,6 +348,10 @@
 		34B026591712D8BA0063BB2D /* CmdLineDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CmdLineDelegate.m; sourceTree = "<group>"; };
 		34B74BC71648D23B00818DE2 /* QTCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QTCapture.h; sourceTree = "<group>"; };
 		34B74BC81648D23B00818DE2 /* QTCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QTCapture.m; sourceTree = "<group>"; };
+		34B7D9EC19AB5DE400D6B9E2 /* CSOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSOverlayView.h; sourceTree = "<group>"; };
+		34B7D9ED19AB5DE400D6B9E2 /* CSOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSOverlayView.m; sourceTree = "<group>"; };
+		34B7D9EF19AC5E7100D6B9E2 /* CSOverlayWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSOverlayWindow.h; sourceTree = "<group>"; };
+		34B7D9F019AC5E7100D6B9E2 /* CSOverlayWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSOverlayWindow.m; sourceTree = "<group>"; };
 		34BA4EDD19A8BED200956CF8 /* WindowCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowCapture.h; sourceTree = "<group>"; };
 		34BA4EDE19A8BED200956CF8 /* WindowCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WindowCapture.m; sourceTree = "<group>"; };
 		34C19051189EE60400AB2430 /* CapturedFrameData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CapturedFrameData.h; sourceTree = "<group>"; };
@@ -512,6 +518,10 @@
 				3441338C18667F280059B686 /* Compressor */,
 				3498C78916AB6688003D8065 /* AVCaptureDeviceFormat+CocoaSplitAdditions.h */,
 				3498C78A16AB6688003D8065 /* AVCaptureDeviceFormat+CocoaSplitAdditions.m */,
+				34B7D9EF19AC5E7100D6B9E2 /* CSOverlayWindow.h */,
+				34B7D9F019AC5E7100D6B9E2 /* CSOverlayWindow.m */,
+				34B7D9EC19AB5DE400D6B9E2 /* CSOverlayView.h */,
+				34B7D9ED19AB5DE400D6B9E2 /* CSOverlayView.m */,
 				3451A1D2171187D400DF6A8B /* ControllerProtocol.h */,
 				347B14DA198492D900DC7DF0 /* InputPopupControllerViewController.m */,
 				347B14D9198492D900DC7DF0 /* InputPopupControllerViewController.h */,
@@ -943,7 +953,9 @@
 				347B14DC198492D900DC7DF0 /* InputPopupControllerViewController.m in Sources */,
 				340DC734197CF6E9003A0BB3 /* CaptureBase.m in Sources */,
 				34BA4EDF19A8BED200956CF8 /* WindowCapture.m in Sources */,
+				34B7D9EE19AB5DE400D6B9E2 /* CSOverlayView.m in Sources */,
 				34A64A2F165EFE4C00A68428 /* PreviewView.m in Sources */,
+				34B7D9F119AC5E7100D6B9E2 /* CSOverlayWindow.m in Sources */,
 				3498C78B16AB6688003D8065 /* AVCaptureDeviceFormat+CocoaSplitAdditions.m in Sources */,
 				3431FFE119786502000965FE /* InputSource.m in Sources */,
 				3498C78F16AB6853003D8065 /* AVFrameRateRange+CocoaSplitAdditions.m in Sources */,
