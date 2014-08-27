@@ -94,7 +94,7 @@
 	return [NSSet setWithObjects:@"avPlayer.currentItem", @"avPlayer.currentItem.status", nil];
 }
 
-+ (NSSet *)keyPathsForValuesAffectingMovieDurationstring
++ (NSSet *)keyPathsForValuesAffectingMovieDurationString
 {
 	return [NSSet setWithObjects:@"avPlayer.currentItem", @"avPlayer.currentItem.status", nil];
 }
@@ -180,6 +180,11 @@
     if ([self.avPlayer canInsertItem:item afterItem:nil])
     {
         [self.avPlayer insertItem:item afterItem:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(itemDidFinishPlaying:)
+                                                     name:AVPlayerItemDidPlayToEndTimeNotification
+                                                   object:item];
+
     }
     
     if (self.avPlayer.items.count == 1)
@@ -189,6 +194,15 @@
     }
 }
 
+-(void) itemDidFinishPlaying:(NSNotification *)notification
+{
+    AVPlayerItem *item = notification.object;
+    
+    [self willChangeValueForKey:@"movieQueue"];
+    //NO I'LL REMOVE IT FIRST LEAVE ME ALONE
+    [self.avPlayer removeItem:item];
+    [self didChangeValueForKey:@"movieQueue"];
+}
 
 -(NSURL *) currentMedia
 {
@@ -229,20 +243,30 @@
 {
     
     NSArray *deleteItems = [self.avPlayer.items objectsAtIndexes:movieIndexes];
+    [self willChangeValueForKey:@"movieQueue"];
     for(AVPlayerItem *toDelete in deleteItems)
     {
         [self.avPlayer removeItem:toDelete];
     }
-    
+    [self didChangeValueForKey:@"movieQueue"];
 }
-
-
 
 -(void) nextMovie
 {
-    
+    [self willChangeValueForKey:@"movieQueue"];
     [self.avPlayer advanceToNextItem];
+    [self didChangeValueForKey:@"movieQueue"];
+
 }
+
+
+
+-(NSArray *) movieQueue
+{
+    return self.avPlayer.items;
+}
+
+
 
 
 -(void)playOrPause
@@ -270,6 +294,15 @@
         }
     }
 }
+
+-(void) dealloc
+{
+    [self.avPlayer removeObserver:self forKeyPath:@"rate"];
+    self.avOutput = nil;
+    self.avPlayer = nil;
+}
+
+
 
 
 @end

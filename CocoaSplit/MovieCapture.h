@@ -23,6 +23,8 @@
 @property (readonly) NSString *currentMovieTimeString;
 @property (readonly) NSString *movieDurationString;
 @property (readonly) double movieDuration;
+@property (readonly) NSArray *movieQueue;
+
 
 @property (strong) id timeToken;
 
