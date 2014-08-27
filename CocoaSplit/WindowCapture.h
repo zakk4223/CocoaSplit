@@ -8,7 +8,7 @@
 
 #import "CaptureBase.h"
 
-@interface WindowCapture : CaptureBase
+@interface WindowCapture : CaptureBase <CaptureSessionProtocol>
 {
     CFAbsoluteTime _nextCaptureTime;
     CIImage *_currentFrame;

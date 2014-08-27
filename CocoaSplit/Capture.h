@@ -17,6 +17,7 @@
 #import "AVFCapture.h"
 #import "TextCapture.h"
 #import "WindowCapture.h"
+#import "MovieCapture.h"
 
 
 

@@ -499,7 +499,7 @@
          
         
         
-        [videoSettings setValue:@(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange) forKey:(__bridge NSString *)kCVPixelBufferPixelFormatTypeKey];
+        [videoSettings setValue:@(kCVPixelFormatType_32BGRA) forKey:(__bridge NSString *)kCVPixelBufferPixelFormatTypeKey];
         
         //[videoSettings setValue:@[@(kCVPixelFormatType_422YpCbCr8), @(kCVPixelFormatType_422YpCbCr8FullRange), @(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange), @(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange), ] forKey:(NSString *)kCVPixelBufferPixelFormatTypeKey];
         NSDictionary *ioAttrs = [NSDictionary dictionaryWithObject: [NSNumber numberWithBool: NO]
@@ -542,20 +542,6 @@
             CVPixelBufferRetain(_currentFrame);
             return _currentFrame;
             
-            /*
-            CVPixelBufferLockBaseAddress(_currentFrame, 1);
-            width = CVPixelBufferGetWidth(_currentFrame);
-            height = CVPixelBufferGetHeight(_currentFrame);
-            bytesPerRow = CVPixelBufferGetBytesPerRow(_currentFrame);
-            bufbytes = malloc(height*bytesPerRow);
-            current_base = CVPixelBufferGetBaseAddress(_currentFrame);
-            memcpy(bufbytes, current_base, height*bytesPerRow);
-        
-            CVPixelBufferCreateWithBytes(NULL, width, height, CVPixelBufferGetPixelFormatType(_currentFrame), bufbytes, bytesPerRow, PixelBufferRelease, NULL, NULL, &newbuf);
-            CVBufferPropagateAttachments(_currentFrame, newbuf);
-            
-            CVPixelBufferUnlockBaseAddress(_currentFrame, 1);
-             */
         }
         
     }
