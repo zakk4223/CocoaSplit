@@ -12,6 +12,7 @@
 
 @interface CaptureBase : NSObject <NSCoding>
 
+
 @property AbstractCaptureDevice *activeVideoDevice;
 @property (strong) NSArray *availableVideoDevices;
 @property (strong) CIContext *imageContext;
@@ -20,9 +21,12 @@
 @property (strong) NSString *captureName;
 //Blackmagic hack
 @property (strong) NSString *savedUniqueID;
+@property (strong)     NSViewController *configViewController;
 
 
 -(void)setDeviceForUniqueID:(NSString *)uniqueID;
 -(CVImageBufferRef) getCurrentFrame;
+-(NSView *)configurationView;
+
 
 @end

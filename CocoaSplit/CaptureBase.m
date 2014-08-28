@@ -28,6 +28,32 @@
     return self;
 }
 
+-(NSView *)configurationView
+{
+    
+    
+    NSString *controllerName = [NSString stringWithFormat:@"%@ViewController", self.className];
+    
+    NSView *ret = nil;
+    
+    Class viewClass = NSClassFromString(controllerName);
+    
+    if (viewClass)
+    {
+        
+        self.configViewController = [[viewClass alloc] initWithNibName:controllerName bundle:nil];
+        if (self.configViewController)
+        {
+            ret = self.configViewController.view;
+            //Should probably make a base class for view controllers and put captureObj there
+            //but for now be gross.
+            [self.configViewController setValue:self forKey:@"captureObj"];
+        }
+    }
+    return ret;
+    
+}
+
 
 -(void)setDeviceForUniqueID:(NSString *)uniqueID
 {

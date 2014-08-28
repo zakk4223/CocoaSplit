@@ -580,8 +580,12 @@
     popover.delegate = popupController;
     forInput.editorPopover = popover;
     popover.behavior = NSPopoverBehaviorSemitransient;
-    [forInput.editorPopover showRelativeToRect:spawnRect ofView:self preferredEdge:NSMaxXEdge];
+    [popover showRelativeToRect:spawnRect ofView:self preferredEdge:NSMaxXEdge];
     ((InputPopupControllerViewController *)forInput.editorPopover.contentViewController).InputController.content = forInput;
+    forInput.editorPopover = popover;
+
+    
+    
 }
 
 

@@ -25,5 +25,6 @@
 @property (weak) IBOutlet NSArrayController *multiSourceController;
 @property (weak) IBOutlet NSArrayController *currentEffectsController;
 @property (weak) IBOutlet NSWindow *cropSelectionWindow;
+@property (weak) IBOutlet NSView *sourceConfigView;
 
 @end

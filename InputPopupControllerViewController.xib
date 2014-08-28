@@ -8,25 +8,25 @@
         <customObject id="-2" userLabel="File's Owner" customClass="InputPopupControllerViewController">
             <connections>
                 <outlet property="InputController" destination="Gdf-y2-DdF" id="HRa-B3-t4b"/>
-                <outlet property="cropSelectionWindow" destination="5Ex-vJ-60p" id="lgh-v5-FnW"/>
                 <outlet property="currentEffectsController" destination="0iu-Bs-KXZ" id="Lnj-mi-xjC"/>
                 <outlet property="multiSourceController" destination="4mF-fx-iLB" id="U30-Tg-7IY"/>
+                <outlet property="sourceConfigView" destination="SXE-81-50C" id="H3V-Fe-FOV"/>
                 <outlet property="view" destination="E8C-YL-16h" id="aVS-B5-cxz"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application"/>
         <tabView controlSize="small" id="E8C-YL-16h">
-            <rect key="frame" x="0.0" y="0.0" width="566" height="364"/>
+            <rect key="frame" x="0.0" y="0.0" width="615" height="460"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <tabViewItems>
                 <tabViewItem label="Settings" identifier="1" id="59S-Rf-qNa">
                     <view key="view" id="HLt-kx-4Fu">
-                        <rect key="frame" x="10" y="29" width="546" height="322"/>
+                        <rect key="frame" x="10" y="29" width="581" height="604"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fnh-Ue-Jjw">
-                                <rect key="frame" x="15" y="302" width="41" height="14"/>
+                                <rect key="frame" x="15" y="584" width="41" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Name" id="Sib-WT-lwv">
                                     <font key="font" metaFont="smallSystem"/>
@@ -35,7 +35,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ler-8m-NNp">
-                                <rect key="frame" x="15" y="277" width="45" height="14"/>
+                                <rect key="frame" x="15" y="559" width="45" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Rotate" id="64K-cX-dI5">
                                     <font key="font" metaFont="smallSystem"/>
@@ -44,7 +44,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8hr-h8-2k4">
-                                <rect key="frame" x="15" y="252" width="36" height="14"/>
+                                <rect key="frame" x="15" y="534" width="36" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Scale" id="w73-Nv-Vla">
                                     <font key="font" metaFont="smallSystem"/>
@@ -53,7 +53,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wbv-Sv-COL">
-                                <rect key="frame" x="73" y="299" width="237" height="19"/>
+                                <rect key="frame" x="73" y="581" width="237" height="19"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="s5l-my-bLy">
                                     <font key="font" metaFont="smallSystem"/>
@@ -65,7 +65,7 @@
                                 </connections>
                             </textField>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="S24-W7-Jn6">
-                                <rect key="frame" x="73" y="274" width="34" height="19"/>
+                                <rect key="frame" x="73" y="556" width="34" height="19"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="yHj-Au-QRh">
                                     <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="309" maximumFractionDigits="3" id="Mg2-0O-G2Q"/>
@@ -78,7 +78,7 @@
                                 </connections>
                             </textField>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="w2q-gw-rHh">
-                                <rect key="frame" x="73" y="249" width="34" height="19"/>
+                                <rect key="frame" x="73" y="531" width="34" height="19"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="nMj-wn-due">
                                     <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="309" maximumFractionDigits="3" id="rh5-kg-kQT"/>
@@ -91,7 +91,7 @@
                                 </connections>
                             </textField>
                             <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yK1-CG-2Dt">
-                                <rect key="frame" x="115" y="277" width="351" height="20"/>
+                                <rect key="frame" x="115" y="559" width="351" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="360" doubleValue="90" tickMarkPosition="below" numberOfTickMarks="5" sliderType="linear" id="RSQ-Jk-ZUV"/>
                                 <connections>
@@ -99,7 +99,7 @@
                                 </connections>
                             </slider>
                             <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tGb-I1-gEh">
-                                <rect key="frame" x="115" y="251" width="228" height="17"/>
+                                <rect key="frame" x="115" y="533" width="228" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="2" doubleValue="2" tickMarkPosition="above" sliderType="linear" id="O78-iD-eN8"/>
                                 <connections>
@@ -107,7 +107,7 @@
                                 </connections>
                             </slider>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J3M-ME-Bmd">
-                                <rect key="frame" x="15" y="227" width="52" height="14"/>
+                                <rect key="frame" x="15" y="509" width="52" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Opacity" id="QX9-KE-FXz">
                                     <font key="font" metaFont="smallSystem"/>
@@ -116,7 +116,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sJp-3Q-uzS">
-                                <rect key="frame" x="73" y="225" width="34" height="19"/>
+                                <rect key="frame" x="73" y="507" width="34" height="19"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="nsA-PD-ceA">
                                     <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="309" maximumFractionDigits="3" id="ZrG-pe-Q1H"/>
@@ -129,7 +129,7 @@
                                 </connections>
                             </textField>
                             <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2QP-bB-2EU">
-                                <rect key="frame" x="115" y="226" width="351" height="17"/>
+                                <rect key="frame" x="115" y="508" width="351" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="1" doubleValue="1" tickMarkPosition="above" sliderType="linear" id="rWU-wZ-Yqz"/>
                                 <connections>
@@ -137,7 +137,7 @@
                                 </connections>
                             </slider>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f17-Io-cFl">
-                                <rect key="frame" x="56" y="205" width="38" height="14"/>
+                                <rect key="frame" x="56" y="487" width="38" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Crop" id="DB8-Ej-SPY">
                                     <font key="font" metaFont="smallSystem"/>
@@ -146,7 +146,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9EB-QV-tYI">
-                                <rect key="frame" x="58" y="184" width="39" height="19"/>
+                                <rect key="frame" x="58" y="466" width="39" height="19"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="wte-La-6GI">
                                     <font key="font" metaFont="smallSystem"/>
@@ -158,7 +158,7 @@
                                 </connections>
                             </textField>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Fc-qt-NGi">
-                                <rect key="frame" x="58" y="162" width="39" height="19"/>
+                                <rect key="frame" x="58" y="444" width="39" height="19"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="OUd-Yt-9W5">
                                     <font key="font" metaFont="smallSystem"/>
@@ -170,7 +170,7 @@
                                 </connections>
                             </textField>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WnZ-SD-WPy">
-                                <rect key="frame" x="58" y="140" width="39" height="19"/>
+                                <rect key="frame" x="58" y="422" width="39" height="19"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="WPu-NM-37q">
                                     <font key="font" metaFont="smallSystem"/>
@@ -182,7 +182,7 @@
                                 </connections>
                             </textField>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kqx-LU-mw9">
-                                <rect key="frame" x="58" y="118" width="39" height="19"/>
+                                <rect key="frame" x="58" y="400" width="39" height="19"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="bhZ-J4-bug">
                                     <font key="font" metaFont="smallSystem"/>
@@ -194,7 +194,7 @@
                                 </connections>
                             </textField>
                             <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iUw-qk-NqP">
-                                <rect key="frame" x="103" y="160" width="15" height="22"/>
+                                <rect key="frame" x="103" y="442" width="15" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" maxValue="9999" id="Sen-Fw-9AC"/>
                                 <connections>
@@ -202,7 +202,7 @@
                                 </connections>
                             </stepper>
                             <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cWr-V6-k1k">
-                                <rect key="frame" x="103" y="138" width="15" height="22"/>
+                                <rect key="frame" x="103" y="420" width="15" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" maxValue="9999" id="iCL-8V-otZ"/>
                                 <connections>
@@ -210,7 +210,7 @@
                                 </connections>
                             </stepper>
                             <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DSG-Lz-WSK">
-                                <rect key="frame" x="103" y="116" width="15" height="22"/>
+                                <rect key="frame" x="103" y="398" width="15" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" maxValue="9999" id="hHk-8w-hZd"/>
                                 <connections>
@@ -218,7 +218,7 @@
                                 </connections>
                             </stepper>
                             <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CPh-D1-Baq">
-                                <rect key="frame" x="103" y="182" width="15" height="22"/>
+                                <rect key="frame" x="103" y="464" width="15" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" maxValue="9999" id="XcM-wj-h3E"/>
                                 <connections>
@@ -226,7 +226,7 @@
                                 </connections>
                             </stepper>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4e7-9J-9Mi">
-                                <rect key="frame" x="15" y="186" width="29" height="14"/>
+                                <rect key="frame" x="15" y="468" width="29" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Left" id="ql9-Gl-4yX">
                                     <font key="font" metaFont="smallSystem"/>
@@ -235,7 +235,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Xf-UW-5k4">
-                                <rect key="frame" x="15" y="120" width="43" height="14"/>
+                                <rect key="frame" x="15" y="402" width="43" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Bottom" id="3GX-rO-CuE">
                                     <font key="font" metaFont="smallSystem"/>
@@ -244,7 +244,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3rw-7t-SRv">
-                                <rect key="frame" x="15" y="164" width="38" height="14"/>
+                                <rect key="frame" x="15" y="446" width="38" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Right" id="g5l-Rk-c8T">
                                     <font key="font" metaFont="smallSystem"/>
@@ -253,7 +253,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Nho-XZ-qQc">
-                                <rect key="frame" x="15" y="142" width="38" height="14"/>
+                                <rect key="frame" x="15" y="424" width="38" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Top" id="X88-Pg-Yff">
                                     <font key="font" metaFont="smallSystem"/>
@@ -262,7 +262,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UDo-Ip-VIU">
-                                <rect key="frame" x="346" y="243" width="80" height="28"/>
+                                <rect key="frame" x="346" y="525" width="80" height="28"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" title="Auto Fit" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xil-dk-rDD">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -277,7 +277,7 @@
                                 </connections>
                             </button>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0jB-6d-bdu">
-                                <rect key="frame" x="396" y="181" width="72" height="20"/>
+                                <rect key="frame" x="396" y="463" width="72" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="Active" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="s9E-Og-YUb">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -292,7 +292,7 @@
                                 </connections>
                             </button>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Y6-wx-BBA">
-                                <rect key="frame" x="148" y="181" width="87" height="20"/>
+                                <rect key="frame" x="148" y="463" width="87" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="Chroma Key" bezelStyle="regularSquare" imagePosition="right" controlSize="small" state="on" inset="2" id="Osi-Vj-Lpf">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -303,7 +303,7 @@
                                 </connections>
                             </button>
                             <colorWell fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="W3y-sm-iex">
-                                <rect key="frame" x="223" y="160" width="44" height="23"/>
+                                <rect key="frame" x="223" y="442" width="44" height="23"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
@@ -311,7 +311,7 @@
                                 </connections>
                             </colorWell>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jGQ-gB-c0t">
-                                <rect key="frame" x="149" y="162" width="52" height="14"/>
+                                <rect key="frame" x="149" y="444" width="52" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="CK Color" id="8cP-GJ-4iN">
                                     <font key="font" metaFont="smallSystem"/>
@@ -320,7 +320,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8lm-HT-fAd">
-                                <rect key="frame" x="149" y="140" width="59" height="14"/>
+                                <rect key="frame" x="149" y="422" width="59" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="CK Thresh" id="wdg-wi-XCn">
                                     <font key="font" metaFont="smallSystem"/>
@@ -329,7 +329,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e4n-th-JUZ">
-                                <rect key="frame" x="149" y="117" width="63" height="14"/>
+                                <rect key="frame" x="149" y="399" width="63" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="CK Smooth" id="ULh-jH-ZgA">
                                     <font key="font" metaFont="smallSystem"/>
@@ -338,7 +338,7 @@
                                 </textFieldCell>
                             </textField>
                             <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="82Y-aM-yeP">
-                                <rect key="frame" x="223" y="139" width="92" height="17"/>
+                                <rect key="frame" x="223" y="421" width="92" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="0.5" doubleValue="0.5" tickMarkPosition="above" sliderType="linear" id="tyg-En-6dG"/>
                                 <connections>
@@ -346,7 +346,7 @@
                                 </connections>
                             </slider>
                             <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9os-uf-pl6">
-                                <rect key="frame" x="223" y="116" width="92" height="17"/>
+                                <rect key="frame" x="223" y="398" width="92" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="0.5" doubleValue="0.1333" tickMarkPosition="above" sliderType="linear" id="Rdy-kZ-dqP"/>
                                 <connections>
@@ -358,925 +358,111 @@
                 </tabViewItem>
                 <tabViewItem label="Source" identifier="2" id="iXD-as-NHa">
                     <view key="view" id="byO-4p-D9j">
-                        <rect key="frame" x="10" y="25" width="546" height="326"/>
+                        <rect key="frame" x="10" y="25" width="595" height="422"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <popUpButton verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SF5-DO-pnK">
-                                <rect key="frame" x="151" y="270" width="146" height="22"/>
+                            <splitView fixedFrame="YES" dividerStyle="paneSplitter" translatesAutoresizingMaskIntoConstraints="NO" id="tSc-Hj-kBh">
+                                <rect key="frame" x="-3" y="-3" width="601" height="419"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="140" id="2Ni-Na-pps"/>
-                                </constraints>
-                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="lMv-AZ-Kbb">
-                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <menu key="menu" title="OtherViews" id="wyp-mb-9pS">
-                                        <items>
-                                            <menuItem title="Item 1" id="tre-gx-h3S"/>
-                                            <menuItem title="Item 2" id="SNo-I2-0YY"/>
-                                            <menuItem title="Item 3" id="wQQ-DQ-W8F"/>
-                                        </items>
-                                    </menu>
-                                </popUpButtonCell>
-                                <connections>
-                                    <binding destination="PzM-SR-D4i" name="content" keyPath="arrangedObjects" id="Yz7-0o-D5G"/>
-                                    <binding destination="PzM-SR-D4i" name="contentValues" keyPath="arrangedObjects.captureName" previousBinding="Yz7-0o-D5G" id="Sdh-jd-W48"/>
-                                    <binding destination="Gdf-y2-DdF" name="selectedObject" keyPath="selection.videoInput.activeVideoDevice" previousBinding="Sdh-jd-W48" id="bCs-3Z-7EU">
-                                        <dictionary key="options">
-                                            <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                        </dictionary>
-                                    </binding>
-                                </connections>
-                            </popUpButton>
-                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xnk-Lv-nsB">
-                                <rect key="frame" x="43" y="267" width="53" height="22"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Source" id="13K-77-8P2">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <popUpButton verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qtS-ay-sMR">
-                                <rect key="frame" x="151" y="294" width="100" height="22"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="94" id="bfa-Po-9aN"/>
-                                </constraints>
-                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="ymg-jM-kY9">
-                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <menu key="menu" title="OtherViews" id="a1d-dm-8lp">
-                                        <items>
-                                            <menuItem title="Item 1" id="hDJ-5y-FW6"/>
-                                            <menuItem title="Item 2" id="zhw-4s-Q8k"/>
-                                            <menuItem title="Item 3" id="iTM-IC-Swi"/>
-                                        </items>
-                                    </menu>
-                                </popUpButtonCell>
-                                <connections>
-                                    <binding destination="Gdf-y2-DdF" name="selectedObject" keyPath="selection.selectedVideoType" previousBinding="KtS-ty-EXh" id="foZ-3j-wpG"/>
-                                    <binding destination="Gdf-y2-DdF" name="content" keyPath="selection.sourceTypes" id="KtS-ty-EXh"/>
-                                </connections>
-                            </popUpButton>
-                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="s53-tg-RDA">
-                                <rect key="frame" x="43" y="297" width="34" height="18"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Type" id="zZJ-ij-UJn">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <tabView fixedFrame="YES" controlSize="small" translatesAutoresizingMaskIntoConstraints="NO" id="YQE-gk-wmj">
-                                <rect key="frame" x="-10" y="-13" width="566" height="238"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <tabViewItems>
-                                    <tabViewItem label="DesktopCapture" identifier="1" id="Th5-4d-79k">
-                                        <view key="view" ambiguous="YES" id="7XW-AL-fl6">
-                                            <rect key="frame" x="10" y="25" width="516" height="0.0"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <subviews>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4fg-Hq-3Nd">
-                                                    <rect key="frame" x="15" y="-23" width="70" height="14"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Resolution" id="fN4-ax-00j">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                </textField>
-                                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CM3-Cx-Dbb">
-                                                    <rect key="frame" x="81" y="-25" width="44" height="19"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="7Jl-Qr-byv">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.videoInput.width" id="vVK-Wt-ArE">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </textField>
-                                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="V3p-He-blW">
-                                                    <rect key="frame" x="149" y="-25" width="40" height="19"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="2uD-Xh-bsB">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.videoInput.height" id="jJv-mK-r9C">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </textField>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aGO-VC-ifF">
-                                                    <rect key="frame" x="131" y="-23" width="12" height="14"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="x" id="ABg-I1-gE4">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                </textField>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aNu-TG-EJF">
-                                                    <rect key="frame" x="15" y="-45" width="29" height="14"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="FPS" id="Euf-tZ-I73">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                </textField>
-                                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qJ6-bV-wsH">
-                                                    <rect key="frame" x="81" y="-47" width="44" height="19"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="zoQ-uu-Ga2">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.videoInput.videoCaptureFPS" id="8cT-cR-inM">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </textField>
-                                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WSm-uM-QAx">
-                                                    <rect key="frame" x="14" y="-70" width="89" height="20"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="check" title="Show Cursor" bezelStyle="regularSquare" imagePosition="right" alignment="left" controlSize="small" state="on" inset="2" id="SqZ-RL-8SK">
-                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.videoInput.showCursor" id="3v6-AG-jKq">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </button>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kQc-Ol-uRS">
-                                                    <rect key="frame" x="236" y="-56" width="38" height="14"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="X" id="9DV-EV-qbE">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                </textField>
-                                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="enD-zn-w4F">
-                                                    <rect key="frame" x="280" y="-58" width="47" height="19"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="MJy-Ry-r6K">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.videoInput.x_origin" id="GOi-DI-XgW">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </textField>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uq3-UX-Kas">
-                                                    <rect key="frame" x="236" y="-78" width="38" height="14"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Y" id="IUL-mP-hB2">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                </textField>
-                                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8Ez-al-oYa">
-                                                    <rect key="frame" x="280" y="-80" width="47" height="19"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="qYe-rW-EWi">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.videoInput.y_origin" id="EgF-IJ-az3">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </textField>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ziP-OG-Q0I">
-                                                    <rect key="frame" x="236" y="-100" width="38" height="14"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Width" id="b7G-8d-W1E">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                </textField>
-                                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FRX-Ml-zch">
-                                                    <rect key="frame" x="280" y="-102" width="47" height="19"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="vA6-N1-x3a">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.videoInput.region_width" id="5D7-aH-JVv">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </textField>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hRc-1S-WMH">
-                                                    <rect key="frame" x="236" y="-123" width="40" height="14"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Height" id="OYw-B7-IsK">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                </textField>
-                                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ert-u7-Ygx">
-                                                    <rect key="frame" x="280" y="-125" width="47" height="19"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="zyR-ik-ynT">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.videoInput.region_height" id="HXF-rN-YDG">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </textField>
-                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Iqc-IQ-eER">
-                                                    <rect key="frame" x="233" y="-33" width="98" height="28"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="push" title="Select Region" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1be-OQ-W1R">
-                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="argument" keyPath="selection.videoInput.activeVideoDevice" id="XKa-zj-BeW">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                                <string key="NSSelectorName">openScreenCropWindow:</string>
-                                                            </dictionary>
-                                                        </binding>
-                                                        <binding destination="-2" name="target" keyPath="self" previousBinding="XKa-zj-BeW" id="gN3-mU-Gi8">
-                                                            <dictionary key="options">
-                                                                <string key="NSSelectorName">openScreenCropWindow:</string>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </button>
-                                            </subviews>
-                                        </view>
-                                    </tabViewItem>
-                                    <tabViewItem label="AVFCapture" identifier="2" id="UzK-VG-B7d">
-                                        <view key="view" id="Sj7-7j-ClV">
-                                            <rect key="frame" x="10" y="25" width="510" height="157"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <subviews>
-                                                <popUpButton verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cme-EZ-adk">
-                                                    <rect key="frame" x="67" y="130" width="100" height="22"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="94" id="pTY-0b-b51"/>
-                                                    </constraints>
-                                                    <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="637-Fq-lc0" id="AYE-yR-pVd">
-                                                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <menu key="menu" title="OtherViews" id="Ddp-2w-8U9">
-                                                            <items>
-                                                                <menuItem title="Item 1" state="on" id="637-Fq-lc0"/>
-                                                                <menuItem title="Item 2" id="O1t-2Q-16f"/>
-                                                                <menuItem title="Item 3" id="UJE-uk-Qmw"/>
-                                                            </items>
-                                                        </menu>
-                                                    </popUpButtonCell>
-                                                    <connections>
-                                                        <binding destination="2nb-9j-p8j" name="content" keyPath="arrangedObjects" id="jr1-6G-TSg"/>
-                                                        <binding destination="2nb-9j-p8j" name="contentValues" keyPath="arrangedObjects.localizedName" previousBinding="jr1-6G-TSg" id="vjf-uB-73V"/>
-                                                        <binding destination="Gdf-y2-DdF" name="selectedObject" keyPath="selection.videoInput.activeVideoFormat" previousBinding="vjf-uB-73V" id="AHX-hI-Uix">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </popUpButton>
-                                                <popUpButton verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Zc-W7-RTX">
-                                                    <rect key="frame" x="67" y="101" width="100" height="22"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="iW0-Rl-RuJ" id="wIW-Ds-ymA">
-                                                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <menu key="menu" title="OtherViews" id="mfR-VU-Xmc">
-                                                            <items>
-                                                                <menuItem title="Item 1" state="on" id="iW0-Rl-RuJ"/>
-                                                                <menuItem title="Item 2" id="Thg-UD-Nav"/>
-                                                                <menuItem title="Item 3" id="FTc-kq-Nls"/>
-                                                            </items>
-                                                        </menu>
-                                                    </popUpButtonCell>
-                                                    <connections>
-                                                        <binding destination="Th4-Ih-tom" name="content" keyPath="arrangedObjects" id="ZE7-oV-LXg"/>
-                                                        <binding destination="Th4-Ih-tom" name="contentValues" keyPath="arrangedObjects.localizedName" previousBinding="ZE7-oV-LXg" id="8Xm-T1-vbM"/>
-                                                        <binding destination="Gdf-y2-DdF" name="selectedObject" keyPath="selection.videoInput.activeVideoFramerate" previousBinding="8Xm-T1-vbM" id="gm1-ir-fkh">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </popUpButton>
-                                                <textField verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8cN-iB-Wxq">
-                                                    <rect key="frame" x="15" y="134" width="49" height="14"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Format" id="OTY-cp-vOl">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                </textField>
-                                                <textField verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XdA-1E-mRy">
-                                                    <rect key="frame" x="15" y="106" width="26" height="14"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="FPS" id="JCS-eE-9Gc">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                </textField>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="cme-EZ-adk" firstAttribute="trailing" secondItem="4Zc-W7-RTX" secondAttribute="trailing" id="LjK-Ur-ne3"/>
-                                                <constraint firstItem="8cN-iB-Wxq" firstAttribute="centerY" secondItem="cme-EZ-adk" secondAttribute="centerY" id="N79-Bl-6Ja"/>
-                                                <constraint firstItem="cme-EZ-adk" firstAttribute="leading" secondItem="8cN-iB-Wxq" secondAttribute="trailing" constant="8" symbolic="YES" id="Z3b-yo-klp"/>
-                                                <constraint firstItem="XdA-1E-mRy" firstAttribute="centerY" secondItem="4Zc-W7-RTX" secondAttribute="centerY" id="heJ-Jg-GB0"/>
-                                                <constraint firstItem="4Zc-W7-RTX" firstAttribute="leading" secondItem="cme-EZ-adk" secondAttribute="leading" id="sax-Hi-7G0"/>
-                                            </constraints>
-                                        </view>
-                                    </tabViewItem>
-                                    <tabViewItem label="QTCapture" identifier="" id="KVO-ba-rCx">
-                                        <view key="view" id="qUl-Jt-ycg">
-                                            <rect key="frame" x="10" y="25" width="510" height="157"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        </view>
-                                    </tabViewItem>
-                                    <tabViewItem label="SyphonCapture" identifier="" id="KNP-nn-EtF">
-                                        <view key="view" id="pqj-oD-gPx">
-                                            <rect key="frame" x="10" y="25" width="510" height="157"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <subviews>
-                                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7PJ-4L-fRn">
-                                                    <rect key="frame" x="15" y="135" width="69" height="18"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="check" title="Flipped" bezelStyle="regularSquare" imagePosition="right" state="on" inset="2" id="6GP-eg-tWu">
-                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                        <font key="font" metaFont="system"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.videoInput.isFlipped" id="a8f-ca-LOS">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </button>
-                                            </subviews>
-                                        </view>
-                                    </tabViewItem>
-                                    <tabViewItem label="ImageCapture" identifier="" id="KNU-Jb-6iB">
-                                        <view key="view" id="OyV-4y-wk3">
-                                            <rect key="frame" x="10" y="25" width="510" height="157"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <subviews>
-                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="30c-M2-ICA">
-                                                    <rect key="frame" x="15" y="120" width="72" height="28"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="push" title="Open" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ENJ-IB-BkI">
-                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="target" keyPath="selection.videoInput" id="PWt-hA-LuY">
-                                                            <dictionary key="options">
-                                                                <string key="NSSelectorName">chooseDirectory</string>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </button>
-                                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UTQ-m0-EfX">
-                                                    <rect key="frame" x="90" y="125" width="283" height="19"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="XhT-o7-NYq">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.videoInput.imagePath" id="ZEn-MK-CYI">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </textField>
-                                            </subviews>
-                                        </view>
-                                    </tabViewItem>
-                                    <tabViewItem label="Blank" identifier="" id="mI0-B8-UNV">
-                                        <view key="view" id="xGY-Eg-W5P">
-                                            <rect key="frame" x="10" y="25" width="510" height="157"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                        </view>
-                                    </tabViewItem>
-                                    <tabViewItem label="TextCapture" identifier="" id="ICq-6E-dsE">
-                                        <view key="view" id="Ss8-xW-0nP">
-                                            <rect key="frame" x="10" y="25" width="546" height="200"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <subviews>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="K9S-zr-xRz">
-                                                    <rect key="frame" x="15" y="177" width="31" height="14"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Text" id="Duu-w1-HDw">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                </textField>
-                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zqx-EV-w7i">
-                                                    <rect key="frame" x="52" y="147" width="394" height="49"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="uQB-ur-Deo">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.videoInput.text" id="Djt-TR-vFv">
-                                                            <dictionary key="options">
-                                                                <bool key="NSContinuouslyUpdatesValue" value="YES"/>
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </textField>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jhu-OR-cOx">
-                                                    <rect key="frame" x="15" y="128" width="30" height="14"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Size" id="GgB-u3-Wsk">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                </textField>
-                                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M0b-8l-uso">
-                                                    <rect key="frame" x="52" y="123" width="96" height="19"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="qn0-Ly-ZoG">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.videoInput.fontSize" id="6p5-EJ-IzR">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </textField>
-                                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="erV-st-is5">
-                                                    <rect key="frame" x="364" y="102" width="51" height="20"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="check" title="Bold" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="JMs-KT-m9a">
-                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.videoInput.isBold" id="Fxq-Di-rYH">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </button>
-                                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qvM-Rw-yv9">
-                                                    <rect key="frame" x="265" y="102" width="53" height="20"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="check" title="Italic" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="Fdc-vf-dNy">
-                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.videoInput.isItalic" id="kmT-tB-7cF">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </button>
-                                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c8e-KO-SSe">
-                                                    <rect key="frame" x="364" y="122" width="84" height="20"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="check" title="Underline" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="AIo-f1-Jg3">
-                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.videoInput.isUnderline" id="SDh-Oj-JpO">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </button>
-                                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j1e-H1-mle">
-                                                    <rect key="frame" x="265" y="122" width="110" height="20"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="check" title="Strikethrough" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="vge-4e-VgJ">
-                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.videoInput.isStrikethrough" id="4b8-wB-dYS">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </button>
-                                                <colorWell fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pyb-I0-PUO">
-                                                    <rect key="frame" x="217" y="122" width="43" height="20"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.videoInput.foregroundColor" id="uOB-e6-F9x">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </colorWell>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wiy-6C-YKm">
-                                                    <rect key="frame" x="172" y="125" width="39" height="14"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Color" id="cUW-ws-QP4">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                </textField>
-                                                <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zzX-vY-pdP">
-                                                    <rect key="frame" x="113" y="89" width="157" height="17"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" minValue="-50" maxValue="50" tickMarkPosition="above" sliderType="linear" id="xdU-0l-PqA"/>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.videoInput.scrollXSpeed" id="1BC-ZZ-2KZ">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </slider>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Lj-ei-T0C">
-                                                    <rect key="frame" x="15" y="90" width="49" height="14"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="H. Scroll" id="AIQ-6v-hUT">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                </textField>
-                                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="INs-dE-M0X">
-                                                    <rect key="frame" x="62" y="88" width="43" height="19"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="VvQ-jh-SQL">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.videoInput.scrollXSpeed" id="Hn2-qc-J6U">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </textField>
-                                                <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="57B-Pu-FaG">
-                                                    <rect key="frame" x="113" y="61" width="157" height="17"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" minValue="-50" maxValue="50" tickMarkPosition="above" sliderType="linear" id="fI0-hS-rBq"/>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.videoInput.scrollYSpeed" id="r8k-RR-f3f">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </slider>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dWz-ea-fR0">
-                                                    <rect key="frame" x="15" y="62" width="47" height="14"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="V. Scroll" id="U8u-zu-Lc5">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                </textField>
-                                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VUc-9W-twq">
-                                                    <rect key="frame" x="62" y="60" width="43" height="19"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="Lkw-hD-Cr1">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.videoInput.scrollYSpeed" id="aeH-1O-f8n">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </textField>
-                                            </subviews>
-                                        </view>
-                                    </tabViewItem>
-                                    <tabViewItem label="WindowCapture" identifier="" id="K2T-hV-aLN">
-                                        <view key="view" id="VCH-UP-eJ0">
-                                            <rect key="frame" x="10" y="25" width="546" height="200"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <subviews>
-                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YSs-4p-g8o">
-                                                    <rect key="frame" x="15" y="126" width="480" height="68"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" id="JFv-Is-Gas">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <string key="title">This capture method sucks. The API for grabbing window images really isn't made for video framerates and depending on what window you are capturing it can't keep up. Set the framerate for the source low if you can get away with it. Otherwise expect to drop lots of frames.</string>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                </textField>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4HS-NA-Lyo">
-                                                    <rect key="frame" x="15" y="106" width="38" height="14"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="FPS" id="Sq9-Bg-kah">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                </textField>
-                                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f85-Bv-G8k">
-                                                    <rect key="frame" x="59" y="104" width="43" height="19"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="pwr-Ic-quf">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.videoInput.captureFPS" id="85P-Oc-UmJ">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </textField>
-                                            </subviews>
-                                        </view>
-                                    </tabViewItem>
-                                    <tabViewItem label="MovieCapture" identifier="" id="2h6-Z3-Bhy">
-                                        <view key="view" id="vz8-Fb-YfH">
-                                            <rect key="frame" x="10" y="25" width="546" height="200"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <subviews>
-                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gEs-Cd-SuP">
-                                                    <rect key="frame" x="70" y="170" width="80" height="28"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="push" title="Open" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="JmX-aM-GcK">
-                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="target" keyPath="selection.videoInput" id="kvY-4Q-L7v">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                                <string key="NSSelectorName">chooseMedia</string>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </button>
-                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ebd-DC-Kdz">
-                                                    <rect key="frame" x="12" y="139" width="60" height="28"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="push" bezelStyle="rounded" imagePosition="overlaps" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7w5-WS-pAp">
-                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="title" keyPath="selection.videoInput.playPauseTitle" id="eCv-4e-570">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                            </dictionary>
-                                                        </binding>
-                                                        <binding destination="Gdf-y2-DdF" name="target" keyPath="selection.videoInput" id="hyA-g0-H0w">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                                <string key="NSSelectorName">playOrPause</string>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </button>
-                                                <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fc8-xh-ZdT">
-                                                    <rect key="frame" x="59" y="9" width="428" height="17"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="above" sliderType="linear" id="owR-L4-W1p"/>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.videoInput.currentMovieTime" previousBinding="3b9-he-jFE" id="8a7-sj-jkf">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                            </dictionary>
-                                                        </binding>
-                                                        <binding destination="Gdf-y2-DdF" name="maxValue" keyPath="selection.videoInput.movieDuration" id="3b9-he-jFE">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </slider>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qnF-xn-tC3">
-                                                    <rect key="frame" x="15" y="11" width="38" height="14"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="wPH-vl-p7D">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.videoInput.currentMovieTimeString" id="Ahj-Nr-N63">
-                                                            <dictionary key="options">
-                                                                <string key="NSNotApplicablePlaceholder">""</string>
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </textField>
-                                                <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FKJ-jj-MHn">
-                                                    <rect key="frame" x="75" y="33" width="454" height="135"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <clipView key="contentView" ambiguous="YES" misplaced="YES" id="ECU-Ty-6Pj">
-                                                        <rect key="frame" x="1" y="1" width="452" height="133"/>
-                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                        <subviews>
-                                                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" autosaveColumns="NO" rowHeight="14" id="OUw-iT-X0Q">
-                                                                <rect key="frame" x="0.0" y="0.0" width="452" height="133"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <size key="intercellSpacing" width="3" height="2"/>
-                                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                                <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
-                                                                <tableColumns>
-                                                                    <tableColumn width="449" minWidth="40" maxWidth="1000" id="0Dm-AE-BNt">
-                                                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                                            <font key="font" metaFont="smallSystem"/>
-                                                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                                                            <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
-                                                                        </tableHeaderCell>
-                                                                        <textFieldCell key="dataCell" controlSize="small" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="vMM-Us-MYg">
-                                                                            <font key="font" metaFont="smallSystem"/>
-                                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                        </textFieldCell>
-                                                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
-                                                                        <connections>
-                                                                            <binding destination="HSK-q7-X9q" name="value" keyPath="arrangedObjects.asset.URL.description" id="fSw-81-Vg9"/>
-                                                                        </connections>
-                                                                    </tableColumn>
-                                                                </tableColumns>
-                                                                <connections>
-                                                                    <binding destination="HSK-q7-X9q" name="content" keyPath="arrangedObjects" id="CyP-jT-4nq"/>
-                                                                    <binding destination="HSK-q7-X9q" name="selectionIndexes" keyPath="selectionIndexes" previousBinding="CyP-jT-4nq" id="hat-pt-e5c"/>
-                                                                </connections>
-                                                            </tableView>
-                                                        </subviews>
-                                                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </clipView>
-                                                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="o2B-2X-an3">
-                                                        <rect key="frame" x="-7" y="-14" width="0.0" height="15"/>
-                                                        <autoresizingMask key="autoresizingMask"/>
-                                                    </scroller>
-                                                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="CxP-Sn-prI">
-                                                        <rect key="frame" x="-14" y="-7" width="15" height="0.0"/>
-                                                        <autoresizingMask key="autoresizingMask"/>
-                                                    </scroller>
-                                                </scrollView>
-                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="w75-DJ-DJD">
-                                                    <rect key="frame" x="12" y="104" width="51" height="28"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="push" title="Next" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bqw-oF-nbB">
-                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="target" keyPath="selection.videoInput" id="Sia-Ie-auf">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                                <string key="NSSelectorName">nextMovie</string>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </button>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xFv-Bc-fEY">
-                                                    <rect key="frame" x="493" y="11" width="38" height="14"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="FkD-fb-HwB">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.videoInput.movieDurationString" id="2Q6-GY-yRY">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </textField>
-                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fm2-hP-0ts">
-                                                    <rect key="frame" x="148" y="170" width="80" height="28"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                    <buttonCell key="cell" type="push" title="Delete" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="HIA-3Y-PgX">
-                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                    </buttonCell>
-                                                    <connections>
-                                                        <binding destination="Gdf-y2-DdF" name="target" keyPath="selection.videoInput" previousBinding="Tf6-xI-UHT" id="3bR-g7-ptU">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                                <string key="NSSelectorName">removeQueueItems:</string>
-                                                            </dictionary>
-                                                        </binding>
-                                                        <binding destination="HSK-q7-X9q" name="argument" keyPath="selectionIndexes" id="Tf6-xI-UHT">
-                                                            <dictionary key="options">
-                                                                <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                                                                <string key="NSSelectorName">removeQueueItems:</string>
-                                                            </dictionary>
-                                                        </binding>
-                                                    </connections>
-                                                </button>
-                                            </subviews>
-                                        </view>
-                                    </tabViewItem>
-                                </tabViewItems>
-                                <connections>
-                                    <binding destination="Gdf-y2-DdF" name="selectedLabel" keyPath="selection.videoInput.className" id="QqI-XG-6wR">
-                                        <dictionary key="options">
-                                            <string key="NSNoSelectionPlaceholder">Blank</string>
-                                            <string key="NSNullPlaceholder">Blank</string>
-                                        </dictionary>
-                                    </binding>
-                                </connections>
-                            </tabView>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="poH-2V-aBt">
-                                <rect key="frame" x="302" y="267" width="80" height="28"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="Add Multi" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="RIz-If-28E">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
-                                </buttonCell>
-                                <connections>
-                                    <binding destination="Gdf-y2-DdF" name="target" keyPath="selection" id="mBc-tk-uux">
-                                        <dictionary key="options">
-                                            <string key="NSSelectorName">addMulti</string>
-                                        </dictionary>
-                                    </binding>
-                                </connections>
-                            </button>
+                                <subviews>
+                                    <customView fixedFrame="YES" id="7Pr-X4-jhx">
+                                        <rect key="frame" x="0.0" y="0.0" width="601" height="419"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <subviews>
+                                            <popUpButton verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SF5-DO-pnK">
+                                                <rect key="frame" x="126" y="354" width="146" height="22"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="140" id="2Ni-Na-pps"/>
+                                                </constraints>
+                                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="lMv-AZ-Kbb">
+                                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="smallSystem"/>
+                                                    <menu key="menu" title="OtherViews" id="wyp-mb-9pS">
+                                                        <items>
+                                                            <menuItem title="Item 1" id="tre-gx-h3S"/>
+                                                            <menuItem title="Item 2" id="SNo-I2-0YY"/>
+                                                            <menuItem title="Item 3" id="wQQ-DQ-W8F"/>
+                                                        </items>
+                                                    </menu>
+                                                </popUpButtonCell>
+                                                <connections>
+                                                    <binding destination="PzM-SR-D4i" name="content" keyPath="arrangedObjects" id="Yz7-0o-D5G"/>
+                                                    <binding destination="PzM-SR-D4i" name="contentValues" keyPath="arrangedObjects.captureName" previousBinding="Yz7-0o-D5G" id="Sdh-jd-W48"/>
+                                                    <binding destination="Gdf-y2-DdF" name="selectedObject" keyPath="selection.videoInput.activeVideoDevice" previousBinding="Sdh-jd-W48" id="bCs-3Z-7EU">
+                                                        <dictionary key="options">
+                                                            <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
+                                                        </dictionary>
+                                                    </binding>
+                                                </connections>
+                                            </popUpButton>
+                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xnk-Lv-nsB">
+                                                <rect key="frame" x="18" y="351" width="53" height="22"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Source" id="13K-77-8P2">
+                                                    <font key="font" metaFont="smallSystem"/>
+                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                            <popUpButton verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qtS-ay-sMR">
+                                                <rect key="frame" x="126" y="378" width="100" height="22"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="94" id="bfa-Po-9aN"/>
+                                                </constraints>
+                                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="ymg-jM-kY9">
+                                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="smallSystem"/>
+                                                    <menu key="menu" title="OtherViews" id="a1d-dm-8lp">
+                                                        <items>
+                                                            <menuItem title="Item 1" id="hDJ-5y-FW6"/>
+                                                            <menuItem title="Item 2" id="zhw-4s-Q8k"/>
+                                                            <menuItem title="Item 3" id="iTM-IC-Swi"/>
+                                                        </items>
+                                                    </menu>
+                                                </popUpButtonCell>
+                                                <connections>
+                                                    <binding destination="Gdf-y2-DdF" name="selectedObject" keyPath="selection.selectedVideoType" previousBinding="KtS-ty-EXh" id="foZ-3j-wpG"/>
+                                                    <binding destination="Gdf-y2-DdF" name="content" keyPath="selection.sourceTypes" id="KtS-ty-EXh"/>
+                                                </connections>
+                                            </popUpButton>
+                                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="s53-tg-RDA">
+                                                <rect key="frame" x="18" y="381" width="34" height="18"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Type" id="zZJ-ij-UJn">
+                                                    <font key="font" metaFont="smallSystem"/>
+                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                </textFieldCell>
+                                            </textField>
+                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="poH-2V-aBt">
+                                                <rect key="frame" x="277" y="351" width="80" height="28"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                <buttonCell key="cell" type="push" title="Add Multi" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="RIz-If-28E">
+                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                    <font key="font" metaFont="smallSystem"/>
+                                                </buttonCell>
+                                                <connections>
+                                                    <binding destination="Gdf-y2-DdF" name="target" keyPath="selection" id="mBc-tk-uux">
+                                                        <dictionary key="options">
+                                                            <string key="NSSelectorName">addMulti</string>
+                                                        </dictionary>
+                                                    </binding>
+                                                </connections>
+                                            </button>
+                                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SXE-81-50C">
+                                                <rect key="frame" x="20" y="0.0" width="581" height="349"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            </customView>
+                                        </subviews>
+                                    </customView>
+                                </subviews>
+                                <holdingPriorities>
+                                    <real value="250"/>
+                                </holdingPriorities>
+                            </splitView>
                         </subviews>
-                        <constraints>
-                            <constraint firstItem="SF5-DO-pnK" firstAttribute="leading" secondItem="qtS-ay-sMR" secondAttribute="leading" id="ARG-FC-xcv"/>
-                            <constraint firstItem="SF5-DO-pnK" firstAttribute="top" secondItem="qtS-ay-sMR" secondAttribute="bottom" constant="5" id="WDX-EL-cVW"/>
-                        </constraints>
                     </view>
                 </tabViewItem>
                 <tabViewItem label="Multi" identifier="" id="ImC-Zh-P0H">
@@ -1648,24 +834,6 @@
                 </binding>
             </connections>
         </arrayController>
-        <arrayController id="2nb-9j-p8j" userLabel="videoFormatsArrayController">
-            <connections>
-                <binding destination="Gdf-y2-DdF" name="contentArray" keyPath="selection.videoInput.videoFormats" id="k3V-Lk-46n">
-                    <dictionary key="options">
-                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                    </dictionary>
-                </binding>
-            </connections>
-        </arrayController>
-        <arrayController id="Th4-Ih-tom" userLabel="videoFrameratesArrayController">
-            <connections>
-                <binding destination="Gdf-y2-DdF" name="contentArray" keyPath="selection.videoInput.videoFramerates" id="0QM-0k-nxw">
-                    <dictionary key="options">
-                        <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
-                    </dictionary>
-                </binding>
-            </connections>
-        </arrayController>
         <arrayController id="4mF-fx-iLB" userLabel="multiSourceArrayController">
             <connections>
                 <binding destination="Gdf-y2-DdF" name="contentArray" keyPath="selection.videoSources" id="QoP-B8-qwB"/>
@@ -1681,36 +849,6 @@
                 <binding destination="Gdf-y2-DdF" name="contentArray" keyPath="selection.currentEffects" id="s2y-EH-7fu"/>
             </connections>
         </arrayController>
-        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hasShadow="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="5Ex-vJ-60p" customClass="CSOverlayWindow">
-            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="207" width="200" height="200"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1058"/>
-            <view key="contentView" id="LsS-0o-Kvj" customClass="CSOverlayView">
-                <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
-                <autoresizingMask key="autoresizingMask"/>
-                <subviews>
-                    <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I8d-y0-O6w">
-                        <rect key="frame" x="182" y="50" width="117" height="28"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="push" title="Click to select capture area" bezelStyle="rounded" alignment="center" controlSize="small" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Qfn-u6-ofq">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="smallSystem"/>
-                            <connections>
-                                <binding destination="-2" name="target" keyPath="self" id="JdS-CT-tZS">
-                                    <dictionary key="options">
-                                        <string key="NSSelectorName">cropRegionSelected</string>
-                                    </dictionary>
-                                </binding>
-                            </connections>
-                        </buttonCell>
-                    </button>
-                </subviews>
-                <constraints>
-                    <constraint firstAttribute="centerY" secondItem="I8d-y0-O6w" secondAttribute="centerY" id="6pV-Rr-DCf"/>
-                    <constraint firstAttribute="centerX" secondItem="I8d-y0-O6w" secondAttribute="centerX" constant="-0.5" id="ZZ6-3t-kEl"/>
-                </constraints>
-            </view>
-        </window>
         <arrayController id="HSK-q7-X9q" userLabel="movieQueueController">
             <connections>
                 <binding destination="Gdf-y2-DdF" name="contentArray" keyPath="selection.videoInput.movieQueue" id="RJz-BT-03t">

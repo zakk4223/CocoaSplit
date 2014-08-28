@@ -210,6 +210,7 @@ static NSArray *_sourceTypes = nil;
     self.chromaKeyColor = [NSColor greenColor];
     
     
+    [self addObserver:self forKeyPath:@"editorPopover" options:NSKeyValueObservingOptionNew context:NULL];
     
     [self rebuildFilters];
     [self addObserver:self forKeyPath:@"propertiesChanged" options:NSKeyValueObservingOptionNew context:NULL];
@@ -346,6 +347,8 @@ static NSArray *_sourceTypes = nil;
 -(void)dealloc
 {
     [self removeObserver:self forKeyPath:@"propertiesChanged"];
+    [self removeObserver:self forKeyPath:@"editorPopover"];
+    
 }
 
 -(void)setSettingsTab:(NSString *)settingsTab
@@ -511,12 +514,14 @@ static NSArray *_sourceTypes = nil;
     CIImage *outimg = nil;
     CVPixelBufferRef newFrame = NULL;
     
+    id<CaptureSessionProtocol>useInput;
+
     
     CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
     
-    if (!_useInput)
+    if (!useInput)
     {
-        _useInput = self.videoInput;
+        useInput = self.videoInput;
     }
     
     
@@ -549,7 +554,7 @@ static NSArray *_sourceTypes = nil;
 
         
         
-        _useInput = [self.videoSources objectAtIndex:_currentSourceIdx];
+        useInput = [self.videoSources objectAtIndex:_currentSourceIdx];
         
         _oldImage = _preBgImage;
         
@@ -572,14 +577,14 @@ static NSArray *_sourceTypes = nil;
         
     }
     
-    if (_useInput)
+    if (useInput)
     {
-        if ([_useInput respondsToSelector:@selector(currentImage)])
+        if ([useInput respondsToSelector:@selector(currentImage)])
         {
-            outimg = [_useInput currentImage];
+            outimg = [useInput currentImage];
         } else {
             
-            newFrame = [_useInput getCurrentFrame];
+            newFrame = [useInput getCurrentFrame];
             if (newFrame)
             {
                 
@@ -921,6 +926,8 @@ static NSArray *_sourceTypes = nil;
     
     NSLog(@"SETTING SELECTED VIDEO TYPE %@", selectedVideoType);
     
+    self.videoInput.configViewController = nil;
+    
     self.videoInput = nil;
     
     id <CaptureSessionProtocol> newCaptureSession;
@@ -949,12 +956,47 @@ static NSArray *_sourceTypes = nil;
     
     newCaptureSession.imageContext = self.imageContext;
 
-    self.videoInput = newCaptureSession;
     
+    self.videoInput = newCaptureSession;
+    [self sourceConfigurationView];
+
     
     newCaptureSession = nil;
     
     _selectedVideoType = selectedVideoType;
+    
+}
+
+
+-(void)sourceConfigurationView
+{
+    NSView *configView = nil;
+    if ([self.videoInput respondsToSelector:@selector(configurationView)])
+    {
+        configView = [self.videoInput configurationView];
+        
+    }
+    
+    if (self.editorPopover.contentViewController)
+    {
+        
+        InputPopupControllerViewController *pcont = (InputPopupControllerViewController*)self.editorPopover.contentViewController;
+        
+        
+        
+        NSArray *currentSubviews = pcont.sourceConfigView.subviews;
+        NSView *currentSubview = currentSubviews.firstObject;
+        if (!configView)
+        {
+            [currentSubview removeFromSuperview];
+        } else if (currentSubview) {
+            [[pcont.sourceConfigView animator] replaceSubview:currentSubview with:configView ];
+        } else {
+            [[pcont.sourceConfigView animator] addSubview:configView];
+        }
+    }
+
+    
 }
 
 
@@ -989,7 +1031,11 @@ static NSArray *_sourceTypes = nil;
     if ([keyPath isEqualToString:@"propertiesChanged"])
     {
         [self rebuildFilters];
+    } else if ([keyPath isEqualToString:@"editorPopover"]) {
+        NSLog(@"SOURCE CONFIG");
+        [self sourceConfigurationView];
     }
+        
         
 }
 

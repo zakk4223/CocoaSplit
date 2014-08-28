@@ -7,6 +7,7 @@
 //
 
 #import "WindowCapture.h"
+#import "WindowCaptureViewController.h"
 
 @implementation WindowCapture
 
@@ -22,7 +23,6 @@
     }
     return self;
 }
-
 
 -(NSArray *) availableVideoDevices
 {

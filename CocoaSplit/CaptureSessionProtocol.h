@@ -36,10 +36,6 @@
 @property id activeAudioDevice;
 -(void) setAudioDelegate:(id)delegate;
 -(NSArray *) availableAudioDevices;
-@property NSArray *videoFormats;
-@property NSArray *videoFramerates;
-@property id activeVideoFormat;
-@property id activeVideoFramerate;
 @property (assign) int audioBitrate;
 @property (assign) int audioSamplerate;
 @property (assign) float previewVolume;
@@ -51,9 +47,14 @@
 @property (assign) int render_height;
 @property (strong) CIContext *imageContext;
 
+@property (strong)     NSViewController *configViewController;
+
 -(void)setupAudioCompression;
 -(void)stopAudioCompression;
 -(void)chooseDirectory:(id)sender;
 -(CIImage *)currentImage;
+-(NSView *)configurationView;
+
+
 
 @end

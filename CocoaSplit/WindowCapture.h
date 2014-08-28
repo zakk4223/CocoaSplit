@@ -17,4 +17,5 @@
 
 @property (assign) float captureFPS;
 
+
 @end

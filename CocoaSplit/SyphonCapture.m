@@ -42,6 +42,7 @@
 
 -(void)dealloc
 {
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -107,7 +108,6 @@
     
     if (self = [super init])
     {
-        
         self.isFlipped = NO;
         
         [self changeAvailableVideoDevices];
@@ -143,6 +143,7 @@
         }
         
     }
+         
     return self;
 }
 
@@ -388,15 +389,19 @@
     
     
     
-     _syphon_client = [[SyphonClient alloc] initWithServerDescription:_syphonServer options:nil newFrameHandler:^(SyphonClient *client) {
+    
+        __weak SyphonCapture *weakself = self;
+        
+        
+     _syphon_client = [[SyphonClient alloc] initWithServerDescription:_syphonServer.copy options:nil newFrameHandler:^(SyphonClient *client) {
      
-     CVPixelBufferRef videoFrame = [self renderNewFrame:client];
+     CVPixelBufferRef videoFrame = [weakself renderNewFrame:client];
          //NSLog(@"GET SYPHON FRAME %f", CFAbsoluteTimeGetCurrent());
          
          
      //CVPixelBufferRetain(videoFrame);
      
-     @synchronized(self) {
+     @synchronized(weakself) {
      if (_currentFrame)
      {
          
@@ -475,4 +480,5 @@
     
     
 }
+
 @end

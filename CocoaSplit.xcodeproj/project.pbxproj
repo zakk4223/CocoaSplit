@@ -81,6 +81,12 @@
 		3451A1ED1712C8F300DF6A8B /* Syphon.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34A8BAB117085BDD0093EEAF /* Syphon.framework */; };
 		34539ED71606E91700638A29 /* StreamServicePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34539ED61606E91700638A29 /* StreamServicePanel.xib */; };
 		34539ED9160734EA00638A29 /* FilePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34539ED8160734EA00638A29 /* FilePanel.xib */; };
+		34576C6B19AF4EEC007BAD90 /* MovieCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34576C6919AF4EEC007BAD90 /* MovieCaptureViewController.m */; };
+		34576C6C19AF4EEC007BAD90 /* MovieCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34576C6919AF4EEC007BAD90 /* MovieCaptureViewController.m */; };
+		34576C6D19AF4EEC007BAD90 /* MovieCaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34576C6A19AF4EEC007BAD90 /* MovieCaptureViewController.xib */; };
+		34576C7319AF55EB007BAD90 /* DesktopCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34576C7119AF55EB007BAD90 /* DesktopCaptureViewController.m */; };
+		34576C7419AF55EB007BAD90 /* DesktopCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34576C7119AF55EB007BAD90 /* DesktopCaptureViewController.m */; };
+		34576C7519AF55EB007BAD90 /* DesktopCaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34576C7219AF55EB007BAD90 /* DesktopCaptureViewController.xib */; };
 		345F89861976113C00BD4062 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A64A36165F208800A68428 /* QuartzCore.framework */; };
 		34792AF316103FF60065A859 /* DesktopCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34792AF216103FF60065A859 /* DesktopCapture.m */; };
 		34792AF616104AA70065A859 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AF516104AA70065A859 /* IOKit.framework */; };
@@ -126,6 +132,21 @@
 		34D696F3186E823100B50EB6 /* ImageCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D696F2186E823100B50EB6 /* ImageCapture.m */; };
 		34D696F4186E823100B50EB6 /* ImageCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D696F2186E823100B50EB6 /* ImageCapture.m */; };
 		34D696FC1871B8F700B50EB6 /* Defaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 34D696FB1871B8F700B50EB6 /* Defaults.plist */; };
+		34E6977619AF24D100DCABCC /* WindowCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E6977419AF24D100DCABCC /* WindowCaptureViewController.m */; };
+		34E6977719AF24D100DCABCC /* WindowCaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34E6977519AF24D100DCABCC /* WindowCaptureViewController.xib */; };
+		34E6977819AF2A7300DCABCC /* WindowCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E6977419AF24D100DCABCC /* WindowCaptureViewController.m */; };
+		34E6977D19AF2B5500DCABCC /* SyphonCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E6977B19AF2B5500DCABCC /* SyphonCaptureViewController.m */; };
+		34E6977E19AF2B5500DCABCC /* SyphonCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E6977B19AF2B5500DCABCC /* SyphonCaptureViewController.m */; };
+		34E6977F19AF2B5500DCABCC /* SyphonCaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34E6977C19AF2B5500DCABCC /* SyphonCaptureViewController.xib */; };
+		34E6978419AF412900DCABCC /* ImageCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E6978219AF412900DCABCC /* ImageCaptureViewController.m */; };
+		34E6978519AF412900DCABCC /* ImageCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E6978219AF412900DCABCC /* ImageCaptureViewController.m */; };
+		34E6978619AF412900DCABCC /* ImageCaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34E6978319AF412900DCABCC /* ImageCaptureViewController.xib */; };
+		34E6978B19AF428B00DCABCC /* AVFCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E6978919AF428B00DCABCC /* AVFCaptureViewController.m */; };
+		34E6978C19AF428B00DCABCC /* AVFCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E6978919AF428B00DCABCC /* AVFCaptureViewController.m */; };
+		34E6978D19AF428B00DCABCC /* AVFCaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34E6978A19AF428B00DCABCC /* AVFCaptureViewController.xib */; };
+		34E6979219AF4BC100DCABCC /* TextCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E6979019AF4BC100DCABCC /* TextCaptureViewController.m */; };
+		34E6979319AF4BC100DCABCC /* TextCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E6979019AF4BC100DCABCC /* TextCaptureViewController.m */; };
+		34E6979419AF4BC100DCABCC /* TextCaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34E6979119AF4BC100DCABCC /* TextCaptureViewController.xib */; };
 		34F5141216FD6E4F00BA894D /* x264Compressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F5140F16FD6E4F00BA894D /* x264Compressor.m */; };
 		34F5141316FD6E4F00BA894D /* AppleVTCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F5141116FD6E4F00BA894D /* AppleVTCompressor.m */; };
 /* End PBXBuildFile section */
@@ -313,6 +334,12 @@
 		3451A1E11712C5F700DF6A8B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		34539ED61606E91700638A29 /* StreamServicePanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = StreamServicePanel.xib; path = ../StreamServicePanel.xib; sourceTree = "<group>"; };
 		34539ED8160734EA00638A29 /* FilePanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FilePanel.xib; sourceTree = "<group>"; };
+		34576C6819AF4EEC007BAD90 /* MovieCaptureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieCaptureViewController.h; sourceTree = "<group>"; };
+		34576C6919AF4EEC007BAD90 /* MovieCaptureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieCaptureViewController.m; sourceTree = "<group>"; };
+		34576C6A19AF4EEC007BAD90 /* MovieCaptureViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MovieCaptureViewController.xib; sourceTree = "<group>"; };
+		34576C7019AF55EB007BAD90 /* DesktopCaptureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DesktopCaptureViewController.h; sourceTree = "<group>"; };
+		34576C7119AF55EB007BAD90 /* DesktopCaptureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DesktopCaptureViewController.m; sourceTree = "<group>"; };
+		34576C7219AF55EB007BAD90 /* DesktopCaptureViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DesktopCaptureViewController.xib; sourceTree = "<group>"; };
 		346EAAF6197A7B28000892CF /* Capture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Capture.h; sourceTree = "<group>"; };
 		34792AF116103FF60065A859 /* DesktopCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DesktopCapture.h; sourceTree = "<group>"; };
 		34792AF216103FF60065A859 /* DesktopCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DesktopCapture.m; sourceTree = "<group>"; };
@@ -371,6 +398,21 @@
 		34D696F1186E823100B50EB6 /* ImageCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCapture.h; sourceTree = "<group>"; };
 		34D696F2186E823100B50EB6 /* ImageCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCapture.m; sourceTree = "<group>"; };
 		34D696FB1871B8F700B50EB6 /* Defaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Defaults.plist; sourceTree = "<group>"; };
+		34E6977319AF24D100DCABCC /* WindowCaptureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowCaptureViewController.h; sourceTree = "<group>"; };
+		34E6977419AF24D100DCABCC /* WindowCaptureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WindowCaptureViewController.m; sourceTree = "<group>"; };
+		34E6977519AF24D100DCABCC /* WindowCaptureViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WindowCaptureViewController.xib; sourceTree = "<group>"; };
+		34E6977A19AF2B5500DCABCC /* SyphonCaptureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SyphonCaptureViewController.h; path = ../SyphonCaptureViewController.h; sourceTree = "<group>"; };
+		34E6977B19AF2B5500DCABCC /* SyphonCaptureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SyphonCaptureViewController.m; path = ../SyphonCaptureViewController.m; sourceTree = "<group>"; };
+		34E6977C19AF2B5500DCABCC /* SyphonCaptureViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SyphonCaptureViewController.xib; path = ../SyphonCaptureViewController.xib; sourceTree = "<group>"; };
+		34E6978119AF412900DCABCC /* ImageCaptureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCaptureViewController.h; sourceTree = "<group>"; };
+		34E6978219AF412900DCABCC /* ImageCaptureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCaptureViewController.m; sourceTree = "<group>"; };
+		34E6978319AF412900DCABCC /* ImageCaptureViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageCaptureViewController.xib; sourceTree = "<group>"; };
+		34E6978819AF428B00DCABCC /* AVFCaptureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVFCaptureViewController.h; sourceTree = "<group>"; };
+		34E6978919AF428B00DCABCC /* AVFCaptureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVFCaptureViewController.m; sourceTree = "<group>"; };
+		34E6978A19AF428B00DCABCC /* AVFCaptureViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AVFCaptureViewController.xib; sourceTree = "<group>"; };
+		34E6978F19AF4BC100DCABCC /* TextCaptureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextCaptureViewController.h; sourceTree = "<group>"; };
+		34E6979019AF4BC100DCABCC /* TextCaptureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextCaptureViewController.m; sourceTree = "<group>"; };
+		34E6979119AF4BC100DCABCC /* TextCaptureViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextCaptureViewController.xib; sourceTree = "<group>"; };
 		34F5140E16FD6E4F00BA894D /* x264Compressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = x264Compressor.h; sourceTree = "<group>"; };
 		34F5140F16FD6E4F00BA894D /* x264Compressor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = x264Compressor.m; sourceTree = "<group>"; };
 		34F5141016FD6E4F00BA894D /* AppleVTCompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleVTCompressor.h; sourceTree = "<group>"; };
@@ -522,10 +564,6 @@
 				3441338C18667F280059B686 /* Compressor */,
 				3498C78916AB6688003D8065 /* AVCaptureDeviceFormat+CocoaSplitAdditions.h */,
 				3498C78A16AB6688003D8065 /* AVCaptureDeviceFormat+CocoaSplitAdditions.m */,
-				34B7D9EF19AC5E7100D6B9E2 /* CSOverlayWindow.h */,
-				34B7D9F019AC5E7100D6B9E2 /* CSOverlayWindow.m */,
-				34B7D9EC19AB5DE400D6B9E2 /* CSOverlayView.h */,
-				34B7D9ED19AB5DE400D6B9E2 /* CSOverlayView.m */,
 				3451A1D2171187D400DF6A8B /* ControllerProtocol.h */,
 				347B14DA198492D900DC7DF0 /* InputPopupControllerViewController.m */,
 				347B14D9198492D900DC7DF0 /* InputPopupControllerViewController.h */,
@@ -622,29 +660,17 @@
 		3441338D18667F5B0059B686 /* Capture */ = {
 			isa = PBXGroup;
 			children = (
-				342346D315FA301600C8C77E /* SyphonCapture.h */,
-				342346D415FA301600C8C77E /* SyphonCapture.m */,
+				346EAAF6197A7B28000892CF /* Capture.h */,
 				340DC732197CF6E9003A0BB3 /* CaptureBase.h */,
 				340DC733197CF6E9003A0BB3 /* CaptureBase.m */,
-				34792AF116103FF60065A859 /* DesktopCapture.h */,
-				34792AF216103FF60065A859 /* DesktopCapture.m */,
-				34B74BC71648D23B00818DE2 /* QTCapture.h */,
-				34B74BC81648D23B00818DE2 /* QTCapture.m */,
-				34CFE4A218F1992A00092C6A /* AVFAudioChannel.h */,
-				34CFE4A318F1992A00092C6A /* AVFAudioChannel.m */,
-				34CFE49E18F154DD00092C6A /* AVFChannelManager.h */,
-				34CFE49F18F154DD00092C6A /* AVFChannelManager.m */,
-				342346A815F59A8500C8C77E /* AVFCapture.h */,
-				342346A915F59A8500C8C77E /* AVFCapture.m */,
-				34D696F1186E823100B50EB6 /* ImageCapture.h */,
-				34D696F2186E823100B50EB6 /* ImageCapture.m */,
-				346EAAF6197A7B28000892CF /* Capture.h */,
-				342B33AC197F847B00492CB7 /* TextCapture.h */,
-				342B33AD197F847B00492CB7 /* TextCapture.m */,
-				34BA4EDD19A8BED200956CF8 /* WindowCapture.h */,
-				34BA4EDE19A8BED200956CF8 /* WindowCapture.m */,
-				34B876E119ACA849001682A8 /* MovieCapture.h */,
-				34B876E219ACA849001682A8 /* MovieCapture.m */,
+				34E6978019AF410500DCABCC /* ImageCapture */,
+				34E6978719AF425F00DCABCC /* AVFCapture */,
+				34576C6F19AF55C2007BAD90 /* DesktopCapture */,
+				34576C6E19AF5491007BAD90 /* QTCapture */,
+				34576C6519AF4E69007BAD90 /* MovieCapture */,
+				34E6978E19AF4B9700DCABCC /* TextCapture */,
+				34E6977919AF2B0800DCABCC /* SyphonCapture */,
+				34E6977019AF247E00DCABCC /* WindowCapture */,
 			);
 			name = Capture;
 			sourceTree = "<group>";
@@ -687,6 +713,43 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		34576C6519AF4E69007BAD90 /* MovieCapture */ = {
+			isa = PBXGroup;
+			children = (
+				34B876E119ACA849001682A8 /* MovieCapture.h */,
+				34B876E219ACA849001682A8 /* MovieCapture.m */,
+				34576C6819AF4EEC007BAD90 /* MovieCaptureViewController.h */,
+				34576C6919AF4EEC007BAD90 /* MovieCaptureViewController.m */,
+				34576C6A19AF4EEC007BAD90 /* MovieCaptureViewController.xib */,
+			);
+			name = MovieCapture;
+			sourceTree = "<group>";
+		};
+		34576C6E19AF5491007BAD90 /* QTCapture */ = {
+			isa = PBXGroup;
+			children = (
+				34B74BC71648D23B00818DE2 /* QTCapture.h */,
+				34B74BC81648D23B00818DE2 /* QTCapture.m */,
+			);
+			name = QTCapture;
+			sourceTree = "<group>";
+		};
+		34576C6F19AF55C2007BAD90 /* DesktopCapture */ = {
+			isa = PBXGroup;
+			children = (
+				34B7D9EF19AC5E7100D6B9E2 /* CSOverlayWindow.h */,
+				34B7D9F019AC5E7100D6B9E2 /* CSOverlayWindow.m */,
+				34B7D9EC19AB5DE400D6B9E2 /* CSOverlayView.h */,
+				34B7D9ED19AB5DE400D6B9E2 /* CSOverlayView.m */,
+				34792AF116103FF60065A859 /* DesktopCapture.h */,
+				34792AF216103FF60065A859 /* DesktopCapture.m */,
+				34576C7019AF55EB007BAD90 /* DesktopCaptureViewController.h */,
+				34576C7119AF55EB007BAD90 /* DesktopCaptureViewController.m */,
+				34576C7219AF55EB007BAD90 /* DesktopCaptureViewController.xib */,
+			);
+			name = DesktopCapture;
+			sourceTree = "<group>";
+		};
 		34AE3C31164E3E020052C95E /* QTCaptureHelper */ = {
 			isa = PBXGroup;
 			children = (
@@ -723,6 +786,70 @@
 				34D43555198DCE3900266169 /* TextureWrapPlugin.plugin */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		34E6977019AF247E00DCABCC /* WindowCapture */ = {
+			isa = PBXGroup;
+			children = (
+				34BA4EDD19A8BED200956CF8 /* WindowCapture.h */,
+				34BA4EDE19A8BED200956CF8 /* WindowCapture.m */,
+				34E6977319AF24D100DCABCC /* WindowCaptureViewController.h */,
+				34E6977419AF24D100DCABCC /* WindowCaptureViewController.m */,
+				34E6977519AF24D100DCABCC /* WindowCaptureViewController.xib */,
+			);
+			name = WindowCapture;
+			sourceTree = "<group>";
+		};
+		34E6977919AF2B0800DCABCC /* SyphonCapture */ = {
+			isa = PBXGroup;
+			children = (
+				34E6977A19AF2B5500DCABCC /* SyphonCaptureViewController.h */,
+				34E6977B19AF2B5500DCABCC /* SyphonCaptureViewController.m */,
+				34E6977C19AF2B5500DCABCC /* SyphonCaptureViewController.xib */,
+				342346D315FA301600C8C77E /* SyphonCapture.h */,
+				342346D415FA301600C8C77E /* SyphonCapture.m */,
+			);
+			name = SyphonCapture;
+			sourceTree = "<group>";
+		};
+		34E6978019AF410500DCABCC /* ImageCapture */ = {
+			isa = PBXGroup;
+			children = (
+				34D696F1186E823100B50EB6 /* ImageCapture.h */,
+				34D696F2186E823100B50EB6 /* ImageCapture.m */,
+				34E6978119AF412900DCABCC /* ImageCaptureViewController.h */,
+				34E6978219AF412900DCABCC /* ImageCaptureViewController.m */,
+				34E6978319AF412900DCABCC /* ImageCaptureViewController.xib */,
+			);
+			name = ImageCapture;
+			sourceTree = "<group>";
+		};
+		34E6978719AF425F00DCABCC /* AVFCapture */ = {
+			isa = PBXGroup;
+			children = (
+				34CFE4A218F1992A00092C6A /* AVFAudioChannel.h */,
+				34CFE4A318F1992A00092C6A /* AVFAudioChannel.m */,
+				34CFE49E18F154DD00092C6A /* AVFChannelManager.h */,
+				34CFE49F18F154DD00092C6A /* AVFChannelManager.m */,
+				342346A815F59A8500C8C77E /* AVFCapture.h */,
+				342346A915F59A8500C8C77E /* AVFCapture.m */,
+				34E6978819AF428B00DCABCC /* AVFCaptureViewController.h */,
+				34E6978919AF428B00DCABCC /* AVFCaptureViewController.m */,
+				34E6978A19AF428B00DCABCC /* AVFCaptureViewController.xib */,
+			);
+			name = AVFCapture;
+			sourceTree = "<group>";
+		};
+		34E6978E19AF4B9700DCABCC /* TextCapture */ = {
+			isa = PBXGroup;
+			children = (
+				342B33AC197F847B00492CB7 /* TextCapture.h */,
+				342B33AD197F847B00492CB7 /* TextCapture.m */,
+				34E6978F19AF4BC100DCABCC /* TextCaptureViewController.h */,
+				34E6979019AF4BC100DCABCC /* TextCaptureViewController.m */,
+				34E6979119AF4BC100DCABCC /* TextCaptureViewController.xib */,
+			);
+			name = TextCapture;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -871,18 +998,25 @@
 			files = (
 				347B14DD198492D900DC7DF0 /* InputPopupControllerViewController.xib in Resources */,
 				340FE4AC15F3417E00E4CE4E /* InfoPlist.strings in Resources */,
+				34576C6D19AF4EEC007BAD90 /* MovieCaptureViewController.xib in Resources */,
 				34213E171966264F0054E238 /* OutputPanel.xib in Resources */,
 				340FE4B215F3417E00E4CE4E /* Credits.rtf in Resources */,
 				340FE4B815F3417E00E4CE4E /* MainMenu.xib in Resources */,
 				34D4351B198BE3B700266169 /* NewLayoutPanel.xib in Resources */,
 				342B33B61980771200492CB7 /* line.vtsh in Resources */,
 				3435E39B188B93150015CC01 /* passthrough.vtsh in Resources */,
+				34E6977F19AF2B5500DCABCC /* SyphonCaptureViewController.xib in Resources */,
 				34539ED71606E91700638A29 /* StreamServicePanel.xib in Resources */,
+				34E6979419AF4BC100DCABCC /* TextCaptureViewController.xib in Resources */,
 				340D8C971959C7C100BE5144 /* CompressionSettingsPanel.xib in Resources */,
+				34576C7519AF55EB007BAD90 /* DesktopCaptureViewController.xib in Resources */,
 				34539ED9160734EA00638A29 /* FilePanel.xib in Resources */,
 				34CFE49D18F1459600092C6A /* AudioMixer.xib in Resources */,
 				344988131893CF0500044259 /* LogWindow.xib in Resources */,
 				34A64A35165F047900A68428 /* CapturePreview.xib in Resources */,
+				34E6978619AF412900DCABCC /* ImageCaptureViewController.xib in Resources */,
+				34E6977719AF24D100DCABCC /* WindowCaptureViewController.xib in Resources */,
+				34E6978D19AF428B00DCABCC /* AVFCaptureViewController.xib in Resources */,
 				34D696FC1871B8F700B50EB6 /* Defaults.plist in Resources */,
 				34ABEF3C17C0C2CB00AA5E62 /* advancedPrefPanel.xib in Resources */,
 				3435E396188B902C0015CC01 /* 420v.fgsh in Resources */,
@@ -946,8 +1080,11 @@
 				34CFE4A418F1992A00092C6A /* AVFAudioChannel.m in Sources */,
 				340FE4AE15F3417E00E4CE4E /* main.m in Sources */,
 				34C19053189EE60400AB2430 /* CapturedFrameData.m in Sources */,
+				34576C6B19AF4EEC007BAD90 /* MovieCaptureViewController.m in Sources */,
 				340FE4B515F3417E00E4CE4E /* AppDelegate.m in Sources */,
+				34E6978B19AF428B00DCABCC /* AVFCaptureViewController.m in Sources */,
 				340FE50815F444AA00E4CE4E /* CaptureController.m in Sources */,
+				34E6977619AF24D100DCABCC /* WindowCaptureViewController.m in Sources */,
 				342346AA15F59A8500C8C77E /* AVFCapture.m in Sources */,
 				342346BE15F6103D00C8C77E /* FFMpegTask.m in Sources */,
 				342B33AE197F847B00492CB7 /* TextCapture.m in Sources */,
@@ -958,13 +1095,17 @@
 				34B74BC91648D23B00818DE2 /* QTCapture.m in Sources */,
 				347B14DC198492D900DC7DF0 /* InputPopupControllerViewController.m in Sources */,
 				340DC734197CF6E9003A0BB3 /* CaptureBase.m in Sources */,
+				34E6979219AF4BC100DCABCC /* TextCaptureViewController.m in Sources */,
 				34BA4EDF19A8BED200956CF8 /* WindowCapture.m in Sources */,
 				34B7D9EE19AB5DE400D6B9E2 /* CSOverlayView.m in Sources */,
 				34A64A2F165EFE4C00A68428 /* PreviewView.m in Sources */,
 				34B7D9F119AC5E7100D6B9E2 /* CSOverlayWindow.m in Sources */,
+				34E6978419AF412900DCABCC /* ImageCaptureViewController.m in Sources */,
 				3498C78B16AB6688003D8065 /* AVCaptureDeviceFormat+CocoaSplitAdditions.m in Sources */,
 				3431FFE119786502000965FE /* InputSource.m in Sources */,
 				3498C78F16AB6853003D8065 /* AVFrameRateRange+CocoaSplitAdditions.m in Sources */,
+				34576C7319AF55EB007BAD90 /* DesktopCaptureViewController.m in Sources */,
+				34E6977D19AF2B5500DCABCC /* SyphonCaptureViewController.m in Sources */,
 				34F5141216FD6E4F00BA894D /* x264Compressor.m in Sources */,
 				34F5141316FD6E4F00BA894D /* AppleVTCompressor.m in Sources */,
 				34B876E319ACA849001682A8 /* MovieCapture.m in Sources */,
@@ -987,24 +1128,31 @@
 			files = (
 				3451A1C717111BD900DF6A8B /* main.m in Sources */,
 				340DC735197CF6E9003A0BB3 /* CaptureBase.m in Sources */,
+				34576C6C19AF4EEC007BAD90 /* MovieCaptureViewController.m in Sources */,
 				34C19054189EE60400AB2430 /* CapturedFrameData.m in Sources */,
 				3451A1D31712C41000DF6A8B /* CaptureController.m in Sources */,
 				34BA4EE019A8BED200956CF8 /* WindowCapture.m in Sources */,
+				34E6978519AF412900DCABCC /* ImageCaptureViewController.m in Sources */,
 				3431FFE219786502000965FE /* InputSource.m in Sources */,
 				342B33AF197F847B00492CB7 /* TextCapture.m in Sources */,
 				3451A1D81712C5C400DF6A8B /* x264Compressor.m in Sources */,
+				34E6978C19AF428B00DCABCC /* AVFCaptureViewController.m in Sources */,
 				34CFE4A518F1992A00092C6A /* AVFAudioChannel.m in Sources */,
 				34B876E419ACA849001682A8 /* MovieCapture.m in Sources */,
 				3451A1D91712C5C700DF6A8B /* AppleVTCompressor.m in Sources */,
 				34D696F4186E823100B50EB6 /* ImageCapture.m in Sources */,
+				34E6977E19AF2B5500DCABCC /* SyphonCaptureViewController.m in Sources */,
+				34576C7419AF55EB007BAD90 /* DesktopCaptureViewController.m in Sources */,
 				3451A1DA1712C5CA00DF6A8B /* SyphonCapture.m in Sources */,
 				3451A1DB1712C5CD00DF6A8B /* DesktopCapture.m in Sources */,
 				34CFE4A118F154DD00092C6A /* AVFChannelManager.m in Sources */,
+				34E6977819AF2A7300DCABCC /* WindowCaptureViewController.m in Sources */,
 				3451A1DC1712C5D000DF6A8B /* OutputDestination.m in Sources */,
 				3451A1DD1712C5D300DF6A8B /* AbstractCaptureDevice.m in Sources */,
 				34213E1B196680880054E238 /* CompressorBase.m in Sources */,
 				3451A1DE1712C5D800DF6A8B /* QTCapture.m in Sources */,
 				3451A1DF1712C5DC00DF6A8B /* FFMpegTask.m in Sources */,
+				34E6979319AF4BC100DCABCC /* TextCaptureViewController.m in Sources */,
 				3451A1E01712C5DF00DF6A8B /* AVFCapture.m in Sources */,
 				34B0265A1712D8BA0063BB2D /* CmdLineDelegate.m in Sources */,
 			);
