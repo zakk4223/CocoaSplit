@@ -44,7 +44,6 @@ typedef enum input_rotate_style_t {
 }
 
 
-@property (strong) NSString *settingsTab;
 
 @property (strong) id<CaptureSessionProtocol> videoInput;
 @property (assign) float x_pos;
