@@ -53,6 +53,7 @@
 @property (assign) int keyframe_interval;
 @property (assign) int crf;
 @property (assign) bool use_cbr;
+@property (strong) NSString *advancedSettings;
 
 
 

@@ -442,6 +442,14 @@
     }
     
     
+    id advancedSettings = self.advancedSettings;
+    
+    if (advancedSettings)
+    {
+        av_dict_set(&opts, "x264opts", [advancedSettings UTF8String], 0);
+    }
+    
+    
     if (avcodec_open2(_av_codec_ctx, _av_codec, &opts) < 0)
     {
         return NO;
