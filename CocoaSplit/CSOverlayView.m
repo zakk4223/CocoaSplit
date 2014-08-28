@@ -113,7 +113,6 @@
     CGFloat dashLengths[] = { 5,3 };
     CGContextSetLineDash( currentContext, 0.0f, dashLengths, sizeof( dashLengths ) / sizeof( float ) );
     CGContextSetFillColorWithColor(currentContext, [NSColor colorWithDeviceRed:0.0f green:0.0f blue:1.0f alpha:0.2].CGColor);
-    CGPathCreateWithRect(CGRectMake(2.0, 2.0, 100.0, 100.0), NULL);
     CGContextStrokeRect(currentContext, [self insetSelectionRect]);
     CGContextFillRect(currentContext, [self insetSelectionRect]);
     CGContextSetFillColorWithColor(currentContext, [NSColor blackColor].CGColor);
@@ -140,10 +139,6 @@
 	
     while (YES)
 	{
-		//
-		// Lock focus and take all the dragged and mouse up events until we
-		// receive a mouse up.
-		//
         NSEvent *newEvent = [window
                              nextEventMatchingMask:(NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
 		
@@ -152,9 +147,6 @@
 			break;
 		}
 		
-		//
-		// Work out how much the mouse has moved
-		//
 		NSPoint newMouseLocation = [window convertBaseToScreen:[newEvent locationInWindow]];
 		NSPoint delta = NSMakePoint(
                                     newMouseLocation.x - originalMouseLocation.x,
@@ -227,9 +219,9 @@
             newFrame.origin.x = screenBounds.origin.x + NSWidth(screenBounds) - newFrame.size.width + RESIZE_INSET;
         }
         
-        if ((newFrame.origin.y + newFrame.size.height) > screenBounds.origin.y + NSWidth(screenBounds) + RESIZE_INSET)
+        if ((newFrame.origin.y + newFrame.size.height) > screenBounds.origin.y + NSHeight(screenBounds) + RESIZE_INSET)
         {
-            newFrame.origin.y = screenBounds.origin.y + NSWidth(screenBounds) - newFrame.size.height + RESIZE_INSET;
+            newFrame.origin.y = screenBounds.origin.y + NSHeight(screenBounds) - newFrame.size.height + RESIZE_INSET;
         }
 
         

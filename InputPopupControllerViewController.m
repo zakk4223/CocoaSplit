@@ -173,8 +173,12 @@
     NSRect viewRect = cropView.bounds;
     NSRect screenFrame = onScreen.frame;
     
+    
+    
     NSRect windowRect = [cropView convertRect:viewRect fromView:cropView];
     NSRect viewBounds = [self.cropSelectionWindow convertRectToScreen:windowRect];
+    
+    
     
     
     
@@ -199,20 +203,25 @@
     {
         viewBounds.size.height = (screenFrame.origin.y+NSHeight(screenFrame))-viewBounds.origin.y;
     }
+    
+    
     //adjust origin to screen relative point
     viewBounds.origin.x = fabs(fabs(viewBounds.origin.x) - fabs(screenFrame.origin.x));
     viewBounds.origin.y = fabs(fabs(viewBounds.origin.y) - fabs(screenFrame.origin.y) );
 
+    
+
+    
     //adjust for CGDisplay's origin being top left
     
     
-    viewBounds.origin.y = NSHeight(screenFrame) - NSHeight(viewBounds) - viewBounds.origin.y;
+    viewBounds.origin.y = -(viewBounds.origin.y - NSHeight(screenFrame)) - NSHeight(viewBounds);
+    
     
     
     id vidInput = self.InputController.selection;
     
     
-    //viewBounds =  [onScreen convertRectToBacking:viewBounds];
     
     
     [vidInput setValue:[NSNumber numberWithInt:(int)viewBounds.origin.x] forKeyPath:@"videoInput.x_origin"];
