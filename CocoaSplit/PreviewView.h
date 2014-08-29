@@ -11,10 +11,14 @@
 #import "CaptureController.h"
 
 
+
 @class InputSource;
 
 static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStamp* now, const CVTimeStamp* outputTime,
                                     CVOptionFlags flagsIn, CVOptionFlags* flagsOut, void* displayLinkContext);
+
+
+#define SNAP_THRESHOLD 10.0f
 
 
 typedef enum resize_style_t {

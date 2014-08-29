@@ -523,14 +523,13 @@ static NSArray *_sourceTypes = nil;
     CIImage *outimg = nil;
     CVPixelBufferRef newFrame = NULL;
     
-    NSObject<CSCaptureSourceProtocol> *useInput;
 
     
     CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
     
-    if (!useInput)
+    if (!_useInput)
     {
-        useInput = self.videoInput;
+        _useInput = self.videoInput;
     }
     
     
@@ -561,9 +560,8 @@ static NSArray *_sourceTypes = nil;
         }
         _nextImageTime = currentTime + self.changeInterval;
 
-        
-        
-        useInput = [self.videoSources objectAtIndex:_currentSourceIdx];
+    
+        _useInput = [self.videoSources objectAtIndex:_currentSourceIdx];
         
         _oldImage = _preBgImage;
         
@@ -586,19 +584,26 @@ static NSArray *_sourceTypes = nil;
         
     }
     
-    if (useInput)
+    if (_useInput)
     {
         
-        outimg = [useInput currentImage];
+        outimg = [_useInput currentImage];
         if (!outimg)
         {
-            newFrame = [useInput getCurrentFrame];
+            newFrame = [_useInput getCurrentFrame];
             if (newFrame)
             {
-                //outimg = [CIImage imageWithCVImageBuffer:newFrame];
 
-                outimg = [CIImage imageWithIOSurface:CVPixelBufferGetIOSurface(newFrame)];
-                _tmpCVBuf = newFrame;
+                IOSurfaceRef frameSurface = CVPixelBufferGetIOSurface(newFrame);
+                if (frameSurface)
+                {
+                    outimg = [CIImage imageWithIOSurface:frameSurface];
+                    _tmpCVBuf = newFrame;
+                } else {
+                    //WHYYYYYYYYYYYYYYYYYYYYYY
+                    outimg = [CIImage imageWithCVImageBuffer:newFrame];
+                    _tmpCVBuf = NULL;
+                }
             }
         }        
     }

@@ -25,7 +25,6 @@
 		340FE4E115F3581200E4CE4E /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4E015F3581200E4CE4E /* QTKit.framework */; };
 		340FE50815F444AA00E4CE4E /* CaptureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FE50715F444AA00E4CE4E /* CaptureController.m */; };
 		34210B3E1606001200362FC8 /* OutputDestination.m in Sources */ = {isa = PBXBuildFile; fileRef = 34210B3D1606001100362FC8 /* OutputDestination.m */; };
-		34213E171966264F0054E238 /* OutputPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34213E161966264F0054E238 /* OutputPanel.xib */; };
 		34213E1A196680880054E238 /* CompressorBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34213E19196680880054E238 /* CompressorBase.m */; };
 		34213E1B196680880054E238 /* CompressorBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34213E19196680880054E238 /* CompressorBase.m */; };
 		342346AA15F59A8500C8C77E /* AVFAudioCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346A915F59A8500C8C77E /* AVFAudioCapture.m */; };
@@ -72,8 +71,6 @@
 		3451A1EA1712C80400DF6A8B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4A115F3417E00E4CE4E /* Cocoa.framework */; };
 		3451A1EB1712C86800DF6A8B /* Syphon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A8BAB117085BDD0093EEAF /* Syphon.framework */; };
 		3451A1ED1712C8F300DF6A8B /* Syphon.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34A8BAB117085BDD0093EEAF /* Syphon.framework */; };
-		34539ED71606E91700638A29 /* StreamServicePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34539ED61606E91700638A29 /* StreamServicePanel.xib */; };
-		34539ED9160734EA00638A29 /* FilePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34539ED8160734EA00638A29 /* FilePanel.xib */; };
 		34576C7819AFCA1B007BAD90 /* CSPluginLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 34576C7719AFCA1B007BAD90 /* CSPluginLoader.m */; };
 		34576C7919AFCA1B007BAD90 /* CSPluginLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 34576C7719AFCA1B007BAD90 /* CSPluginLoader.m */; };
 		345F89861976113C00BD4062 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A64A36165F208800A68428 /* QuartzCore.framework */; };
@@ -211,6 +208,20 @@
 			remoteGlobalIDString = 34D4352A198DCE3800266169;
 			remoteInfo = TextureWrapPlugin;
 		};
+		34AFC32A19B0AD360007C07B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 34AFC31319B0A5800007C07B /* CSTwitchStreamServicePlugin.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 34AFC2FE19B0A5800007C07B;
+			remoteInfo = CSTwitchStreamServicePlugin;
+		};
+		34AFC32F19B0AD500007C07B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 34AFC2E019B08C050007C07B /* CSFileStreamServicePlugin.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 34AFC2CB19B08C050007C07B;
+			remoteInfo = CSFileStreamServicePlugin;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -317,7 +328,6 @@
 		340FE50715F444AA00E4CE4E /* CaptureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CaptureController.m; sourceTree = "<group>"; };
 		34210B3C1606001100362FC8 /* OutputDestination.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OutputDestination.h; sourceTree = "<group>"; };
 		34210B3D1606001100362FC8 /* OutputDestination.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OutputDestination.m; sourceTree = "<group>"; };
-		34213E161966264F0054E238 /* OutputPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OutputPanel.xib; path = Interface/OutputPanel.xib; sourceTree = "<group>"; };
 		34213E18196680880054E238 /* CompressorBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CompressorBase.h; path = Compressor/CompressorBase.h; sourceTree = "<group>"; };
 		34213E19196680880054E238 /* CompressorBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CompressorBase.m; path = Compressor/CompressorBase.m; sourceTree = "<group>"; };
 		342346A815F59A8500C8C77E /* AVFAudioCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVFAudioCapture.h; sourceTree = "<group>"; };
@@ -349,8 +359,6 @@
 		3451A1CA17111BD900DF6A8B /* CocoaSplitCmd.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = CocoaSplitCmd.1; sourceTree = "<group>"; };
 		3451A1D2171187D400DF6A8B /* ControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControllerProtocol.h; sourceTree = "<group>"; };
 		3451A1E11712C5F700DF6A8B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		34539ED61606E91700638A29 /* StreamServicePanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = StreamServicePanel.xib; path = Interface/StreamServicePanel.xib; sourceTree = "<group>"; };
-		34539ED8160734EA00638A29 /* FilePanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FilePanel.xib; path = Interface/FilePanel.xib; sourceTree = "<group>"; };
 		34576C7619AFCA1B007BAD90 /* CSPluginLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPluginLoader.h; sourceTree = "<group>"; };
 		34576C7719AFCA1B007BAD90 /* CSPluginLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSPluginLoader.m; sourceTree = "<group>"; };
 		34576C9819AFE6F7007BAD90 /* CSWindowCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSWindowCapturePlugin.xcodeproj; path = CapturePlugins/CSWindowCapturePlugin/CSWindowCapturePlugin.xcodeproj; sourceTree = "<group>"; };
@@ -388,6 +396,9 @@
 		34AFC1E819B04EB90007C07B /* CSSyphonCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSSyphonCapturePlugin.xcodeproj; path = CapturePlugins/CSSyphonCapturePlugin/CSSyphonCapturePlugin.xcodeproj; sourceTree = "<group>"; };
 		34AFC21419B04F700007C07B /* CSAVFCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSAVFCapturePlugin.xcodeproj; path = CapturePlugins/CSAVFCapturePlugin/CSAVFCapturePlugin.xcodeproj; sourceTree = "<group>"; };
 		34AFC24519B05ADA0007C07B /* CSDesktopCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSDesktopCapturePlugin.xcodeproj; path = CapturePlugins/CSDesktopCapturePlugin/CSDesktopCapturePlugin.xcodeproj; sourceTree = "<group>"; };
+		34AFC2C119B08AF30007C07B /* CSStreamServiceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSStreamServiceProtocol.h; path = PluginHeaders/CSStreamServiceProtocol.h; sourceTree = "<group>"; };
+		34AFC2E019B08C050007C07B /* CSFileStreamServicePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSFileStreamServicePlugin.xcodeproj; path = StreamServicePlugins/CSFileStreamServicePlugin/CSFileStreamServicePlugin.xcodeproj; sourceTree = "<group>"; };
+		34AFC31319B0A5800007C07B /* CSTwitchStreamServicePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSTwitchStreamServicePlugin.xcodeproj; path = StreamServicePlugins/CSTwitchStreamServicePlugin/CSTwitchStreamServicePlugin.xcodeproj; sourceTree = "<group>"; };
 		34B026581712D8BA0063BB2D /* CmdLineDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CmdLineDelegate.h; sourceTree = "<group>"; };
 		34B026591712D8BA0063BB2D /* CmdLineDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CmdLineDelegate.m; sourceTree = "<group>"; };
 		34C19051189EE60400AB2430 /* CapturedFrameData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CapturedFrameData.h; sourceTree = "<group>"; };
@@ -478,6 +489,7 @@
 		340FE49215F3417E00E4CE4E = {
 			isa = PBXGroup;
 			children = (
+				34AFC2E619B08C1E0007C07B /* StreamServicePlugins */,
 				34AFC24419B058D80007C07B /* ImageUnitPlugins */,
 				347B7FC916907AFA00B5F4B3 /* libz.dylib */,
 				347B7FC516907A1700B5F4B3 /* libbz2.dylib */,
@@ -649,14 +661,11 @@
 				347B14DB198492D900DC7DF0 /* InputPopupControllerViewController.xib */,
 				34CFE49C18F1459600092C6A /* AudioMixer.xib */,
 				340FE4B615F3417E00E4CE4E /* MainMenu.xib */,
-				34213E161966264F0054E238 /* OutputPanel.xib */,
 				344988121893CF0500044259 /* LogWindow.xib */,
 				34A64A34165F047900A68428 /* CapturePreview.xib */,
-				34539ED61606E91700638A29 /* StreamServicePanel.xib */,
 				34D4351A198BE3B700266169 /* NewLayoutPanel.xib */,
 				340D8C961959C7C100BE5144 /* CompressionSettingsPanel.xib */,
 				34ABEF3B17C0C2CB00AA5E62 /* advancedPrefPanel.xib */,
-				34539ED8160734EA00638A29 /* FilePanel.xib */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -687,6 +696,7 @@
 				342346CD15F9F07E00C8C77E /* CSAbstractCaptureDevice.h */,
 				340DC732197CF6E9003A0BB3 /* CSCaptureBase.h */,
 				342346CC15F9D52000C8C77E /* CSCaptureSourceProtocol.h */,
+				34AFC2C119B08AF30007C07B /* CSStreamServiceProtocol.h */,
 			);
 			name = PluginHeaders;
 			sourceTree = "<group>";
@@ -825,6 +835,31 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		34AFC2E619B08C1E0007C07B /* StreamServicePlugins */ = {
+			isa = PBXGroup;
+			children = (
+				34AFC31319B0A5800007C07B /* CSTwitchStreamServicePlugin.xcodeproj */,
+				34AFC2E019B08C050007C07B /* CSFileStreamServicePlugin.xcodeproj */,
+			);
+			name = StreamServicePlugins;
+			sourceTree = "<group>";
+		};
+		34AFC32719B0AD360007C07B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				34AFC32B19B0AD360007C07B /* CSTwitchStreamServicePlugin.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		34AFC32C19B0AD500007C07B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				34AFC33019B0AD500007C07B /* CSFileStreamServicePlugin.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		34E6978719AF425F00DCABCC /* AVFAudioCapture */ = {
 			isa = PBXGroup;
 			children = (
@@ -953,6 +988,10 @@
 					ProjectRef = 34AFC24519B05ADA0007C07B /* CSDesktopCapturePlugin.xcodeproj */;
 				},
 				{
+					ProductGroup = 34AFC32C19B0AD500007C07B /* Products */;
+					ProjectRef = 34AFC2E019B08C050007C07B /* CSFileStreamServicePlugin.xcodeproj */;
+				},
+				{
 					ProductGroup = 34AFC24B19B05B0A0007C07B /* Products */;
 					ProjectRef = 34576D5219B024EB007BAD90 /* CSImageCapturePlugin.xcodeproj */;
 				},
@@ -971,6 +1010,10 @@
 				{
 					ProductGroup = 34AFC25F19B05B6B0007C07B /* Products */;
 					ProjectRef = 34AFC1B819B04DAE0007C07B /* CSTextCapturePlugin.xcodeproj */;
+				},
+				{
+					ProductGroup = 34AFC32719B0AD360007C07B /* Products */;
+					ProjectRef = 34AFC31319B0A5800007C07B /* CSTwitchStreamServicePlugin.xcodeproj */;
 				},
 				{
 					ProductGroup = 34AFC25519B05B470007C07B /* Products */;
@@ -1062,6 +1105,20 @@
 			remoteRef = 34AFC27619B05BF50007C07B /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		34AFC32B19B0AD360007C07B /* CSTwitchStreamServicePlugin.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = CSTwitchStreamServicePlugin.bundle;
+			remoteRef = 34AFC32A19B0AD360007C07B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		34AFC33019B0AD500007C07B /* CSFileStreamServicePlugin.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = CSFileStreamServicePlugin.bundle;
+			remoteRef = 34AFC32F19B0AD500007C07B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -1071,15 +1128,12 @@
 			files = (
 				347B14DD198492D900DC7DF0 /* InputPopupControllerViewController.xib in Resources */,
 				340FE4AC15F3417E00E4CE4E /* InfoPlist.strings in Resources */,
-				34213E171966264F0054E238 /* OutputPanel.xib in Resources */,
 				340FE4B215F3417E00E4CE4E /* Credits.rtf in Resources */,
 				340FE4B815F3417E00E4CE4E /* MainMenu.xib in Resources */,
 				34D4351B198BE3B700266169 /* NewLayoutPanel.xib in Resources */,
 				342B33B61980771200492CB7 /* line.vtsh in Resources */,
 				3435E39B188B93150015CC01 /* passthrough.vtsh in Resources */,
-				34539ED71606E91700638A29 /* StreamServicePanel.xib in Resources */,
 				340D8C971959C7C100BE5144 /* CompressionSettingsPanel.xib in Resources */,
-				34539ED9160734EA00638A29 /* FilePanel.xib in Resources */,
 				34CFE49D18F1459600092C6A /* AudioMixer.xib in Resources */,
 				344988131893CF0500044259 /* LogWindow.xib in Resources */,
 				34A64A35165F047900A68428 /* CapturePreview.xib in Resources */,

@@ -24,80 +24,8 @@
 @synthesize captureFPS = _captureFPS;
 @synthesize selectedLayout = _selectedLayout;
 
--(void)loadTwitchIngest
-{
-    
-    NSString *apiString = @"https://api.twitch.tv/kraken/ingests";
-    
-    NSURL *apiURL = [NSURL URLWithString:apiString];
-    
-    NSMutableURLRequest *apiRequest = [NSMutableURLRequest requestWithURL:apiURL];
-    
-    [NSURLConnection sendAsynchronousRequest:apiRequest queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *err) {
-        
-        NSError *jsonError;
-        NSDictionary *ingest_response = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonError];
-        //Handle error
-        
-        NSArray *ingest_list = [ingest_response objectForKey:@"ingests"];
-        
-        NSMutableArray *cooked_ingests = [[NSMutableArray alloc] init];
-        
-        for (NSDictionary *tw_ingest in ingest_list)
-        {
-        
-            NSMutableDictionary *ingest_map = [[NSMutableDictionary alloc] init];
-            
-            NSString *url_temp = [tw_ingest objectForKey:@"url_template"];
-            NSString *name = [tw_ingest objectForKey:@"name"];
-            
-            
-            
-            if (!url_temp || !name)
-            {
-                continue;
-            }
-            
-            [ingest_map setValue: url_temp forKey:@"destination"];
-            [ingest_map setValue:name forKey:@"name"];
-            [cooked_ingests addObject:ingest_map];
-            
-        }
-
-        dispatch_async(dispatch_get_main_queue(), ^{self.streamPanelDestinations = cooked_ingests; });
-
-        
-        
-        return;
-    }];
-}
 
 
-- (IBAction)openOutputEdit:(id)sender
-{
-    long clickedRow = [sender clickedRow];
-    
-    self.editDestination = [self.captureDestinations objectAtIndex:clickedRow];
-    
-    if (!self.outputEditPanel)
-    {
-        
-        [[NSBundle mainBundle] loadNibNamed:@"OutputPanel" owner:self topLevelObjects:nil];
-        [NSApp beginSheet:self.outputEditPanel modalForWindow:[[NSApp delegate] window] modalDelegate:self didEndSelector:NULL contextInfo:NULL];
-        
-    }
-
-}
-
-- (IBAction)closeOutputPanel:(id)sender
-{
-
-    [NSApp endSheet:self.outputEditPanel];
-    [self.outputEditPanel close];
-    self.outputEditPanel = nil;
-
-
-}
 
 - (IBAction)deleteLayout:(id)sender
 {
@@ -468,41 +396,50 @@
 -(IBAction)openCreateSheet:(id)sender
 {
     
-    if (!_createSheet)
+    
+    self.streamServiceObject = nil;
+    
+    NSMutableDictionary *servicePlugins = [[CSPluginLoader sharedPluginLoader] streamServicePlugins];
+    
+    
+    Class serviceClass = servicePlugins[self.selectedDestinationType];;
+    
+    
+    if (serviceClass)
     {
-        NSString *panelName;
-        
-        self.streamingDestination = nil;
-        
-        
-        if ([self.selectedDestinationType isEqualToString:@"file"])
-        {
-            panelName = @"FilePanel";
-        } else if ([self.selectedDestinationType isEqualToString:@"twitch"]) {
-            [self loadTwitchIngest];
-            panelName = @"StreamServicePanel";
-        } else {
-            panelName = @"FilePanel";
-        }
-        
-        
-        [[NSBundle mainBundle] loadNibNamed:panelName owner:self topLevelObjects:nil];
-        
-        
+        self.streamServiceObject = [[serviceClass alloc] init];
     }
     
-    [NSApp beginSheet:self.createSheet modalForWindow:[[NSApp delegate] window] modalDelegate:self didEndSelector:NULL contextInfo:NULL];
+    
+    
+    
+    
+    if (self.streamServiceObject)
+    {
+        NSViewController *serviceConfigView = [self.streamServiceObject getConfigurationView];
+        self.streamServiceAddView.frame = serviceConfigView.view.frame;
+        
+        [self.streamServiceAddView addSubview:serviceConfigView.view];
+        self.streamServicePluginViewController  = serviceConfigView;
+        [NSApp beginSheet:self.streamServiceConfWindow modalForWindow:[[NSApp delegate] window] modalDelegate:self didEndSelector:NULL contextInfo:NULL];
+    }
+    
 }
 
 
 -(IBAction)closeCreateSheet:(id)sender
 {
     
-    [self.outputPanelController commitEditing];
     
-    [NSApp endSheet:self.createSheet];
-    [self.createSheet close];
-    self.createSheet = nil;
+    [self.streamServicePluginViewController.view removeFromSuperview];
+    
+    NSLog(@"STREAM SERVICE CONFI WINDOW %@", self.streamServiceConfWindow);
+    
+    [NSApp endSheet:self.streamServiceConfWindow];
+    [self.streamServiceConfWindow close];
+    self.streamServicePluginViewController = nil;
+    self.streamServiceObject = nil;
+    
 }
 
 - (IBAction)openLayoutPanel:(id)sender
@@ -688,9 +625,6 @@
        _main_capture_queue = dispatch_queue_create("CocoaSplit.main.queue", NULL);
        _preview_queue = dispatch_queue_create("CocoaSplit.preview.queue", NULL);
        
-       self.destinationTypes = @{@"file" : @"File/Raw",
-       @"twitch" : @"Twitch TV"};
-       
        
        
        self.showPreview = YES;
@@ -760,28 +694,7 @@
        
        [[CSPluginLoader sharedPluginLoader] loadPrivateAndUserImageUnits];
        
-       
-       
-       //NSArray *loadedFilters = [CIFilter filterNamesInCategories:nil];
-       
-       /*
-       if (![loadedFilters containsObject:@"TextureWrapFilter"])
-       {
-           NSString *filterPath = [[[NSBundle mainBundle] builtInPlugInsPath] stringByAppendingPathComponent:@"TextureWrapPlugin.plugin"];
-           NSURL *filterURL = [NSURL fileURLWithPath:filterPath];
-           [CIPlugIn loadPlugIn:filterURL allowExecutableCode:YES];
-       }
-       
-       
-       if (![loadedFilters containsObject:@"CSChromaKeyFilter"])
-       {
-           NSString *filterPath = [[[NSBundle mainBundle] builtInPlugInsPath] stringByAppendingPathComponent:@"CSChromaKey.plugin"];
-           NSURL *filterURL = [NSURL fileURLWithPath:filterPath];
-           [CIPlugIn loadPlugIn:filterURL allowExecutableCode:YES];
-       }
-
-       */
-       [self createCGLContext];
+        [self createCGLContext];
        _cictx = [CIContext contextWithCGLContext:_cgl_ctx pixelFormat:CGLGetPixelFormat(_cgl_ctx) colorSpace:CGColorSpaceCreateDeviceRGB() options:nil];
 
 
@@ -794,6 +707,15 @@
     
     return self;
     
+}
+
+
+-(NSArray *)destinationTypes
+{
+    
+    NSMutableDictionary *servicePlugins = [[CSPluginLoader sharedPluginLoader] streamServicePlugins];
+
+    return servicePlugins.allKeys;
 }
 
 
@@ -1220,18 +1142,13 @@
     
     
     OutputDestination *newDest;
-    [self.outputPanelController commitEditing];
-    newDest = [[OutputDestination alloc] initWithType:_selectedDestinationType];
-    newDest.server_name = _streamingServiceServer;
-    newDest.stream_key = _streamingServiceKey;
-    if (_streamingServiceKey)
-    {
-        
-        newDest.destination = [_streamingDestination stringByReplacingOccurrencesOfString:@"{stream_key}" withString:_streamingServiceKey];
-    } else {
-        newDest.destination = _streamingDestination;
-    }
     
+    [self.streamServicePluginViewController commitEditing];
+    
+    NSString *destination = [self.streamServiceObject getServiceDestination];
+    
+    newDest = [[OutputDestination alloc] initWithType:[self.streamServiceObject.class label]];
+    newDest.destination = destination;
     
     [[self mutableArrayValueForKey:@"captureDestinations"] addObject:newDest];
     newDest.settingsController = self;

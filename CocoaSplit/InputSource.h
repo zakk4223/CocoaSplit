@@ -43,6 +43,8 @@ typedef enum input_rotate_style_t {
     double _nextImageTime;
     CIFilterGenerator *_filterGenerator;
     NSViewController *_currentInputViewController;
+    NSObject<CSCaptureSourceProtocol> *_useInput;
+
     
 }
 

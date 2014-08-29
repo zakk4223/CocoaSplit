@@ -8,6 +8,7 @@
 
 #import "CSPluginLoader.h"
 #import "CSCaptureSourceProtocol.h"
+#import "CSStreamServiceProtocol.h"
 
 
 @implementation CSPluginLoader
@@ -29,7 +30,8 @@
     if (self = [super init])
     {
         self.sourcePlugins = [[NSMutableDictionary alloc] init];
-        
+        self.streamServicePlugins  = [[NSMutableDictionary alloc] init];
+
     }
     
     return self;
@@ -116,14 +118,18 @@
         currBundle = [NSBundle bundleWithPath:currPath];
         if(currBundle)
         {
+            NSString *classLabel;
             currPrincipalClass = [currBundle principalClass];
             if ([currPrincipalClass conformsToProtocol:@protocol(CSCaptureSourceProtocol)])
             {
                 
-                NSString *classLabel = [currPrincipalClass label];
+                classLabel = [currPrincipalClass label];
                 [self.sourcePlugins setObject:currPrincipalClass forKey:classLabel];
-                
+            } else if ([currPrincipalClass conformsToProtocol:@protocol(CSStreamServiceProtocol)]) {
+                classLabel = [currPrincipalClass label];
+                [self.streamServicePlugins setObject:currPrincipalClass forKey:classLabel];
             }
+                
         }
     }
 }

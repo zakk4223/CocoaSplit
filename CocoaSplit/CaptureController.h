@@ -18,6 +18,7 @@
 #import <mach/mach_time.h>
 #import <QuartzCore/CoreImage.h>
 #import "CSPluginLoader.h"
+#import "CSStreamServiceProtocol.h"
 
 
 @class FFMpegTask;
@@ -204,13 +205,19 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) IBOutlet NSWindow *outputEditPanel;
 @property (strong) IBOutlet NSWindow *layoutPanel;
 
+@property (weak) IBOutlet NSView *streamServiceAddView;
+
+@property (unsafe_unretained) IBOutlet NSWindow *streamServiceConfWindow;
+@property (strong) NSViewController *streamServicePluginViewController;
+@property (strong) NSObject<CSStreamServiceProtocol>*streamServiceObject;
+
 
 - (IBAction)openLogWindow:(id)sender;
 
 - (IBAction)openOutputEdit:(id)sender;
 
 
-@property (strong) NSDictionary *destinationTypes;
+@property (readonly) NSArray *destinationTypes;
 
 @property (strong) NSMutableArray *captureDestinations;
 @property (weak) NSIndexSet *selectedCaptureDestinations;

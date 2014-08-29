@@ -486,6 +486,22 @@
             
             
         } else {
+            
+            
+            //Snap to edges on movement. You're on your own while resizing
+            if (self.selectedSource.x_pos < SNAP_THRESHOLD && dx < 0)
+            {
+                dx = -self.selectedSource.x_pos;
+            } else if ((self.selectedSource.x_pos+self.selectedSource.display_width > self.controller.captureWidth-SNAP_THRESHOLD) && dx > 0) {
+                dx = self.controller.captureWidth - (self.selectedSource.x_pos+ self.selectedSource.display_width);
+            } else if (self.selectedSource.y_pos < SNAP_THRESHOLD && dy < 0) {
+                dy = -self.selectedSource.y_pos;
+            } else if ((self.selectedSource.y_pos+self.selectedSource.display_height > self.controller.captureHeight-SNAP_THRESHOLD) && dy > 0) {
+                dy = self.controller.captureHeight - (self.selectedSource.y_pos+ self.selectedSource.display_height);
+            }
+            
+                
+            
             [self.selectedSource updateOrigin:dx y:dy];
         }
     }

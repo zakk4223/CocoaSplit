@@ -1,0 +1,333 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		34AFC2CF19B08C050007C07B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AFC2CE19B08C050007C07B /* Cocoa.framework */; };
+		34AFC2D919B08C050007C07B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 34AFC2D719B08C050007C07B /* InfoPlist.strings */; };
+		34AFC2E919B08C810007C07B /* FileStreamService.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AFC2E819B08C810007C07B /* FileStreamService.m */; };
+		34AFC2ED19B08CA80007C07B /* FileStreamServiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AFC2EB19B08CA80007C07B /* FileStreamServiceViewController.m */; };
+		34AFC2EE19B08CA80007C07B /* FileStreamServiceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34AFC2EC19B08CA80007C07B /* FileStreamServiceViewController.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		34AFC2CB19B08C050007C07B /* CSFileStreamServicePlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSFileStreamServicePlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		34AFC2CE19B08C050007C07B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		34AFC2D119B08C050007C07B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		34AFC2D219B08C050007C07B /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		34AFC2D319B08C050007C07B /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		34AFC2D619B08C050007C07B /* CSFileStreamServicePlugin-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CSFileStreamServicePlugin-Info.plist"; sourceTree = "<group>"; };
+		34AFC2D819B08C050007C07B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		34AFC2DA19B08C050007C07B /* CSFileStreamServicePlugin-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CSFileStreamServicePlugin-Prefix.pch"; sourceTree = "<group>"; };
+		34AFC2E719B08C810007C07B /* FileStreamService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileStreamService.h; sourceTree = "<group>"; };
+		34AFC2E819B08C810007C07B /* FileStreamService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileStreamService.m; sourceTree = "<group>"; };
+		34AFC2EA19B08CA80007C07B /* FileStreamServiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileStreamServiceViewController.h; sourceTree = "<group>"; };
+		34AFC2EB19B08CA80007C07B /* FileStreamServiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileStreamServiceViewController.m; sourceTree = "<group>"; };
+		34AFC2EC19B08CA80007C07B /* FileStreamServiceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FileStreamServiceViewController.xib; sourceTree = "<group>"; };
+		34AFC2EF19B08F490007C07B /* CSAbstractCaptureDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAbstractCaptureDevice.h; path = PluginHeaders/CSAbstractCaptureDevice.h; sourceTree = "<group>"; };
+		34AFC2F019B08F490007C07B /* CSCaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureBase.h; path = PluginHeaders/CSCaptureBase.h; sourceTree = "<group>"; };
+		34AFC2F119B08F490007C07B /* CSCaptureSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureSourceProtocol.h; path = PluginHeaders/CSCaptureSourceProtocol.h; sourceTree = "<group>"; };
+		34AFC2F219B08F490007C07B /* CSStreamServiceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSStreamServiceProtocol.h; path = PluginHeaders/CSStreamServiceProtocol.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		34AFC2C819B08C050007C07B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34AFC2CF19B08C050007C07B /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		34AFC2C219B08C050007C07B = {
+			isa = PBXGroup;
+			children = (
+				34AFC2D419B08C050007C07B /* CSFileStreamServicePlugin */,
+				34AFC2CD19B08C050007C07B /* Frameworks */,
+				34AFC2CC19B08C050007C07B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		34AFC2CC19B08C050007C07B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				34AFC2CB19B08C050007C07B /* CSFileStreamServicePlugin.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		34AFC2CD19B08C050007C07B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				34AFC2CE19B08C050007C07B /* Cocoa.framework */,
+				34AFC2D019B08C050007C07B /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		34AFC2D019B08C050007C07B /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				34AFC2D119B08C050007C07B /* Foundation.framework */,
+				34AFC2D219B08C050007C07B /* CoreData.framework */,
+				34AFC2D319B08C050007C07B /* AppKit.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		34AFC2D419B08C050007C07B /* CSFileStreamServicePlugin */ = {
+			isa = PBXGroup;
+			children = (
+				34AFC2F319B08F490007C07B /* PluginHeaders */,
+				34AFC2D519B08C050007C07B /* Supporting Files */,
+				34AFC2E719B08C810007C07B /* FileStreamService.h */,
+				34AFC2E819B08C810007C07B /* FileStreamService.m */,
+				34AFC2EA19B08CA80007C07B /* FileStreamServiceViewController.h */,
+				34AFC2EB19B08CA80007C07B /* FileStreamServiceViewController.m */,
+				34AFC2EC19B08CA80007C07B /* FileStreamServiceViewController.xib */,
+			);
+			path = CSFileStreamServicePlugin;
+			sourceTree = "<group>";
+		};
+		34AFC2D519B08C050007C07B /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				34AFC2D619B08C050007C07B /* CSFileStreamServicePlugin-Info.plist */,
+				34AFC2D719B08C050007C07B /* InfoPlist.strings */,
+				34AFC2DA19B08C050007C07B /* CSFileStreamServicePlugin-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		34AFC2F319B08F490007C07B /* PluginHeaders */ = {
+			isa = PBXGroup;
+			children = (
+				34AFC2EF19B08F490007C07B /* CSAbstractCaptureDevice.h */,
+				34AFC2F019B08F490007C07B /* CSCaptureBase.h */,
+				34AFC2F119B08F490007C07B /* CSCaptureSourceProtocol.h */,
+				34AFC2F219B08F490007C07B /* CSStreamServiceProtocol.h */,
+			);
+			name = PluginHeaders;
+			path = ../../CocoaSplit;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		34AFC2CA19B08C050007C07B /* CSFileStreamServicePlugin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 34AFC2DD19B08C050007C07B /* Build configuration list for PBXNativeTarget "CSFileStreamServicePlugin" */;
+			buildPhases = (
+				34AFC2C719B08C050007C07B /* Sources */,
+				34AFC2C819B08C050007C07B /* Frameworks */,
+				34AFC2C919B08C050007C07B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CSFileStreamServicePlugin;
+			productName = CSFileStreamServicePlugin;
+			productReference = 34AFC2CB19B08C050007C07B /* CSFileStreamServicePlugin.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		34AFC2C319B08C050007C07B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = Zakk;
+			};
+			buildConfigurationList = 34AFC2C619B08C050007C07B /* Build configuration list for PBXProject "CSFileStreamServicePlugin" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 34AFC2C219B08C050007C07B;
+			productRefGroup = 34AFC2CC19B08C050007C07B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				34AFC2CA19B08C050007C07B /* CSFileStreamServicePlugin */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		34AFC2C919B08C050007C07B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34AFC2EE19B08CA80007C07B /* FileStreamServiceViewController.xib in Resources */,
+				34AFC2D919B08C050007C07B /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		34AFC2C719B08C050007C07B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34AFC2ED19B08CA80007C07B /* FileStreamServiceViewController.m in Sources */,
+				34AFC2E919B08C810007C07B /* FileStreamService.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		34AFC2D719B08C050007C07B /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				34AFC2D819B08C050007C07B /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		34AFC2DB19B08C050007C07B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		34AFC2DC19B08C050007C07B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		34AFC2DE19B08C050007C07B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "CSFileStreamServicePlugin/CSFileStreamServicePlugin-Prefix.pch";
+				INFOPLIST_FILE = "CSFileStreamServicePlugin/CSFileStreamServicePlugin-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-undefined",
+					suppress,
+					"-flat_namespace",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		34AFC2DF19B08C050007C07B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "CSFileStreamServicePlugin/CSFileStreamServicePlugin-Prefix.pch";
+				INFOPLIST_FILE = "CSFileStreamServicePlugin/CSFileStreamServicePlugin-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-undefined",
+					suppress,
+					"-flat_namespace",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		34AFC2C619B08C050007C07B /* Build configuration list for PBXProject "CSFileStreamServicePlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34AFC2DB19B08C050007C07B /* Debug */,
+				34AFC2DC19B08C050007C07B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		34AFC2DD19B08C050007C07B /* Build configuration list for PBXNativeTarget "CSFileStreamServicePlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34AFC2DE19B08C050007C07B /* Debug */,
+				34AFC2DF19B08C050007C07B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 34AFC2C319B08C050007C07B /* Project object */;
+}
