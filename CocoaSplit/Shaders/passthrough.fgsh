@@ -1,0 +1,7 @@
+varying vec2 tex_coord;
+uniform sampler2DRect my_texture1;
+void main()
+{
+      gl_FragColor = texture2DRect(my_texture1, tex_coord);
+}
+
