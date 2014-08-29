@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CIPlugInFilterList</key>
+	<dict>
+		<key>TextureWrapFilter</key>
+		<dict>
+			<key>CIFilterAttributes</key>
+			<dict>
+				<key>CIAttributeDescription</key>
+				<string>filterDescription</string>
+				<key>CIAttributeFilterCategories</key>
+				<array>
+					<string>CICategoryDistortionEffect</string>
+					<string>CICategoryVideo</string>
+					<string>CICategoryStillImage</string>
+				</array>
+				<key>CIAttributeFilterDisplayName</key>
+				<string>TextureWrapFilter</string>
+				<key>CIAttributeReferenceDocumentation</key>
+				<string>index</string>
+			</dict>
+			<key>CIFilterClass</key>
+			<string>TextureWrapPluginFilter</string>
+			<key>CIHasCustomInterface</key>
+			<false/>
+		</dict>
+	</dict>
+	<key>CIPlugInVersion</key>
+	<integer>1</integer>
+</dict>
+</plist>

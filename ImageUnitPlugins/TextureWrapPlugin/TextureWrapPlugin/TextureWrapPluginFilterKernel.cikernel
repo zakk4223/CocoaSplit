@@ -1,0 +1,14 @@
+
+kernel vec4 wrapTexture(sampler image, float x_offset, float y_offset)
+{
+	float x;
+    float y;
+	vec2 sc;
+	vec2 sz;
+	sz = samplerSize(image);
+	sc = samplerCoord(image);
+    x = mod(sc.x+x_offset, sz.x+1.0);
+    y = mod(sc.y+y_offset, sz.y+1.0);
+    return sample(image, vec2(x,y));
+ }
+
