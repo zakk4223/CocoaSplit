@@ -15,5 +15,7 @@
 
 +(id)sharedPluginLoader;
 -(void)loadAllBundles;
+-(void) loadPrivateAndUserImageUnits;
+
 
 @end

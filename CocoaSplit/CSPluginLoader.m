@@ -37,7 +37,7 @@
 
 
 
-- (NSMutableArray *)bundlePaths
+- (NSMutableArray *)bundlePaths:(NSString *)withExtension
 {
     NSArray *librarySearchPaths;
     NSEnumerator *searchPathEnum;
@@ -68,7 +68,7 @@
         {
             while(currBundlePath = [bundleEnum nextObject])
             {
-                if([[currBundlePath pathExtension] isEqualToString:@"bundle"])
+                if([[currBundlePath pathExtension] isEqualToString:withExtension])
                 {
                     [allBundles addObject:[currPath
                                            stringByAppendingPathComponent:currBundlePath]];
@@ -80,6 +80,19 @@
     return allBundles;
 }
 
+
+-(void) loadPrivateAndUserImageUnits
+{
+    
+    NSArray *IUPluginPaths = [self bundlePaths:@"plugin"];
+    
+    for (NSString *IUPath in IUPluginPaths)
+    {
+        
+        NSURL *filterURL = [NSURL fileURLWithPath:IUPath];
+        [CIPlugIn loadPlugIn:filterURL allowExecutableCode:YES];
+    }
+}
 - (void)loadAllBundles
 {
     NSMutableArray *instances;
@@ -95,7 +108,7 @@
         instances = [[NSMutableArray alloc] init];
     }
     
-    [bundlePaths addObjectsFromArray:[self bundlePaths]];
+    [bundlePaths addObjectsFromArray:[self bundlePaths:@"bundle"]];
     
     pathEnum = [bundlePaths objectEnumerator];
     while(currPath = [pathEnum nextObject])

@@ -758,9 +758,13 @@
        
        [CIPlugIn loadAllPlugIns];
        
-       NSArray *loadedFilters = [CIFilter filterNamesInCategories:nil];
+       [[CSPluginLoader sharedPluginLoader] loadPrivateAndUserImageUnits];
        
        
+       
+       //NSArray *loadedFilters = [CIFilter filterNamesInCategories:nil];
+       
+       /*
        if (![loadedFilters containsObject:@"TextureWrapFilter"])
        {
            NSString *filterPath = [[[NSBundle mainBundle] builtInPlugInsPath] stringByAppendingPathComponent:@"TextureWrapPlugin.plugin"];
@@ -776,7 +780,7 @@
            [CIPlugIn loadPlugIn:filterURL allowExecutableCode:YES];
        }
 
-       
+       */
        [self createCGLContext];
        _cictx = [CIContext contextWithCGLContext:_cgl_ctx pixelFormat:CGLGetPixelFormat(_cgl_ctx) colorSpace:CGColorSpaceCreateDeviceRGB() options:nil];
 
