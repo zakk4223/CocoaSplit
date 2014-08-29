@@ -1,0 +1,331 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		34AFC1A719B04DAE0007C07B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AFC1A619B04DAE0007C07B /* Cocoa.framework */; };
+		34AFC1B119B04DAE0007C07B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 34AFC1AF19B04DAE0007C07B /* InfoPlist.strings */; };
+		34AFC1C719B04E2A0007C07B /* TextCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AFC1C319B04E2A0007C07B /* TextCapture.m */; };
+		34AFC1C819B04E2A0007C07B /* TextCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AFC1C519B04E2A0007C07B /* TextCaptureViewController.m */; };
+		34AFC1C919B04E2A0007C07B /* TextCaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34AFC1C619B04E2A0007C07B /* TextCaptureViewController.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		34AFC1A319B04DAE0007C07B /* CSTextCapturePlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSTextCapturePlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		34AFC1A619B04DAE0007C07B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		34AFC1A919B04DAE0007C07B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		34AFC1AA19B04DAE0007C07B /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		34AFC1AB19B04DAE0007C07B /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		34AFC1AE19B04DAE0007C07B /* CSTextCapturePlugin-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CSTextCapturePlugin-Info.plist"; sourceTree = "<group>"; };
+		34AFC1B019B04DAE0007C07B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		34AFC1B219B04DAE0007C07B /* CSTextCapturePlugin-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CSTextCapturePlugin-Prefix.pch"; sourceTree = "<group>"; };
+		34AFC1C219B04E2A0007C07B /* TextCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextCapture.h; sourceTree = "<group>"; };
+		34AFC1C319B04E2A0007C07B /* TextCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextCapture.m; sourceTree = "<group>"; };
+		34AFC1C419B04E2A0007C07B /* TextCaptureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextCaptureViewController.h; sourceTree = "<group>"; };
+		34AFC1C519B04E2A0007C07B /* TextCaptureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextCaptureViewController.m; sourceTree = "<group>"; };
+		34AFC1C619B04E2A0007C07B /* TextCaptureViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextCaptureViewController.xib; sourceTree = "<group>"; };
+		34AFC2A919B0623E0007C07B /* CSAbstractCaptureDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAbstractCaptureDevice.h; path = PluginHeaders/CSAbstractCaptureDevice.h; sourceTree = "<group>"; };
+		34AFC2AA19B0623E0007C07B /* CSCaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureBase.h; path = PluginHeaders/CSCaptureBase.h; sourceTree = "<group>"; };
+		34AFC2AB19B0623E0007C07B /* CSCaptureSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureSourceProtocol.h; path = PluginHeaders/CSCaptureSourceProtocol.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		34AFC1A019B04DAE0007C07B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34AFC1A719B04DAE0007C07B /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		34AFC19A19B04DAE0007C07B = {
+			isa = PBXGroup;
+			children = (
+				34AFC2AC19B0623E0007C07B /* PluginHeaders */,
+				34AFC1AC19B04DAE0007C07B /* CSTextCapturePlugin */,
+				34AFC1A519B04DAE0007C07B /* Frameworks */,
+				34AFC1A419B04DAE0007C07B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		34AFC1A419B04DAE0007C07B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				34AFC1A319B04DAE0007C07B /* CSTextCapturePlugin.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		34AFC1A519B04DAE0007C07B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				34AFC1A619B04DAE0007C07B /* Cocoa.framework */,
+				34AFC1A819B04DAE0007C07B /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		34AFC1A819B04DAE0007C07B /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				34AFC1A919B04DAE0007C07B /* Foundation.framework */,
+				34AFC1AA19B04DAE0007C07B /* CoreData.framework */,
+				34AFC1AB19B04DAE0007C07B /* AppKit.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		34AFC1AC19B04DAE0007C07B /* CSTextCapturePlugin */ = {
+			isa = PBXGroup;
+			children = (
+				34AFC1C219B04E2A0007C07B /* TextCapture.h */,
+				34AFC1C319B04E2A0007C07B /* TextCapture.m */,
+				34AFC1C419B04E2A0007C07B /* TextCaptureViewController.h */,
+				34AFC1C519B04E2A0007C07B /* TextCaptureViewController.m */,
+				34AFC1C619B04E2A0007C07B /* TextCaptureViewController.xib */,
+				34AFC1AD19B04DAE0007C07B /* Supporting Files */,
+			);
+			path = CSTextCapturePlugin;
+			sourceTree = "<group>";
+		};
+		34AFC1AD19B04DAE0007C07B /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				34AFC1AE19B04DAE0007C07B /* CSTextCapturePlugin-Info.plist */,
+				34AFC1AF19B04DAE0007C07B /* InfoPlist.strings */,
+				34AFC1B219B04DAE0007C07B /* CSTextCapturePlugin-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		34AFC2AC19B0623E0007C07B /* PluginHeaders */ = {
+			isa = PBXGroup;
+			children = (
+				34AFC2A919B0623E0007C07B /* CSAbstractCaptureDevice.h */,
+				34AFC2AA19B0623E0007C07B /* CSCaptureBase.h */,
+				34AFC2AB19B0623E0007C07B /* CSCaptureSourceProtocol.h */,
+			);
+			name = PluginHeaders;
+			path = ../../CocoaSplit;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		34AFC1A219B04DAE0007C07B /* CSTextCapturePlugin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 34AFC1B519B04DAE0007C07B /* Build configuration list for PBXNativeTarget "CSTextCapturePlugin" */;
+			buildPhases = (
+				34AFC19F19B04DAE0007C07B /* Sources */,
+				34AFC1A019B04DAE0007C07B /* Frameworks */,
+				34AFC1A119B04DAE0007C07B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CSTextCapturePlugin;
+			productName = CSTextCapturePlugin;
+			productReference = 34AFC1A319B04DAE0007C07B /* CSTextCapturePlugin.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		34AFC19B19B04DAE0007C07B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = Zakk;
+			};
+			buildConfigurationList = 34AFC19E19B04DAE0007C07B /* Build configuration list for PBXProject "CSTextCapturePlugin" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 34AFC19A19B04DAE0007C07B;
+			productRefGroup = 34AFC1A419B04DAE0007C07B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				34AFC1A219B04DAE0007C07B /* CSTextCapturePlugin */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		34AFC1A119B04DAE0007C07B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34AFC1C919B04E2A0007C07B /* TextCaptureViewController.xib in Resources */,
+				34AFC1B119B04DAE0007C07B /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		34AFC19F19B04DAE0007C07B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34AFC1C819B04E2A0007C07B /* TextCaptureViewController.m in Sources */,
+				34AFC1C719B04E2A0007C07B /* TextCapture.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		34AFC1AF19B04DAE0007C07B /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				34AFC1B019B04DAE0007C07B /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		34AFC1B319B04DAE0007C07B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		34AFC1B419B04DAE0007C07B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		34AFC1B619B04DAE0007C07B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "CSTextCapturePlugin/CSTextCapturePlugin-Prefix.pch";
+				INFOPLIST_FILE = "CSTextCapturePlugin/CSTextCapturePlugin-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-flat_namespace",
+					"-undefined",
+					suppress,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		34AFC1B719B04DAE0007C07B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "CSTextCapturePlugin/CSTextCapturePlugin-Prefix.pch";
+				INFOPLIST_FILE = "CSTextCapturePlugin/CSTextCapturePlugin-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-flat_namespace",
+					"-undefined",
+					suppress,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		34AFC19E19B04DAE0007C07B /* Build configuration list for PBXProject "CSTextCapturePlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34AFC1B319B04DAE0007C07B /* Debug */,
+				34AFC1B419B04DAE0007C07B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		34AFC1B519B04DAE0007C07B /* Build configuration list for PBXNativeTarget "CSTextCapturePlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34AFC1B619B04DAE0007C07B /* Debug */,
+				34AFC1B719B04DAE0007C07B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 34AFC19B19B04DAE0007C07B /* Project object */;
+}

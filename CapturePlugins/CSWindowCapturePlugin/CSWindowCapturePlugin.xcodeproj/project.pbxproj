@@ -1,0 +1,331 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		34576C8719AFE6F7007BAD90 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34576C8619AFE6F7007BAD90 /* Cocoa.framework */; };
+		34576C9119AFE6F7007BAD90 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 34576C8F19AFE6F7007BAD90 /* InfoPlist.strings */; };
+		34576CAC19AFEE29007BAD90 /* WindowCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34576CA819AFEE29007BAD90 /* WindowCapture.m */; };
+		34576CAD19AFEE29007BAD90 /* WindowCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34576CAA19AFEE29007BAD90 /* WindowCaptureViewController.m */; };
+		34576CAE19AFEE29007BAD90 /* WindowCaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34576CAB19AFEE29007BAD90 /* WindowCaptureViewController.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		34576C8319AFE6F7007BAD90 /* CSWindowCapturePlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSWindowCapturePlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		34576C8619AFE6F7007BAD90 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		34576C8919AFE6F7007BAD90 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		34576C8A19AFE6F7007BAD90 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		34576C8B19AFE6F7007BAD90 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		34576C8E19AFE6F7007BAD90 /* CSWindowCapturePlugin-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CSWindowCapturePlugin-Info.plist"; sourceTree = "<group>"; };
+		34576C9019AFE6F7007BAD90 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		34576C9219AFE6F7007BAD90 /* CSWindowCapturePlugin-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CSWindowCapturePlugin-Prefix.pch"; sourceTree = "<group>"; };
+		34576CA719AFEE29007BAD90 /* WindowCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowCapture.h; sourceTree = "<group>"; };
+		34576CA819AFEE29007BAD90 /* WindowCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WindowCapture.m; sourceTree = "<group>"; };
+		34576CA919AFEE29007BAD90 /* WindowCaptureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WindowCaptureViewController.h; sourceTree = "<group>"; };
+		34576CAA19AFEE29007BAD90 /* WindowCaptureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WindowCaptureViewController.m; sourceTree = "<group>"; };
+		34576CAB19AFEE29007BAD90 /* WindowCaptureViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WindowCaptureViewController.xib; sourceTree = "<group>"; };
+		34AFC2B519B0624E0007C07B /* CSAbstractCaptureDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAbstractCaptureDevice.h; path = PluginHeaders/CSAbstractCaptureDevice.h; sourceTree = "<group>"; };
+		34AFC2B619B0624E0007C07B /* CSCaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureBase.h; path = PluginHeaders/CSCaptureBase.h; sourceTree = "<group>"; };
+		34AFC2B719B0624E0007C07B /* CSCaptureSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureSourceProtocol.h; path = PluginHeaders/CSCaptureSourceProtocol.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		34576C8019AFE6F7007BAD90 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34576C8719AFE6F7007BAD90 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		34576C7A19AFE6F7007BAD90 = {
+			isa = PBXGroup;
+			children = (
+				34AFC2B819B0624E0007C07B /* PluginHeaders */,
+				34576C8C19AFE6F7007BAD90 /* CSWindowCapturePlugin */,
+				34576C8519AFE6F7007BAD90 /* Frameworks */,
+				34576C8419AFE6F7007BAD90 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		34576C8419AFE6F7007BAD90 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				34576C8319AFE6F7007BAD90 /* CSWindowCapturePlugin.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		34576C8519AFE6F7007BAD90 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				34576C8619AFE6F7007BAD90 /* Cocoa.framework */,
+				34576C8819AFE6F7007BAD90 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		34576C8819AFE6F7007BAD90 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				34576C8919AFE6F7007BAD90 /* Foundation.framework */,
+				34576C8A19AFE6F7007BAD90 /* CoreData.framework */,
+				34576C8B19AFE6F7007BAD90 /* AppKit.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		34576C8C19AFE6F7007BAD90 /* CSWindowCapturePlugin */ = {
+			isa = PBXGroup;
+			children = (
+				34576CA719AFEE29007BAD90 /* WindowCapture.h */,
+				34576CA819AFEE29007BAD90 /* WindowCapture.m */,
+				34576CA919AFEE29007BAD90 /* WindowCaptureViewController.h */,
+				34576CAA19AFEE29007BAD90 /* WindowCaptureViewController.m */,
+				34576CAB19AFEE29007BAD90 /* WindowCaptureViewController.xib */,
+				34576C8D19AFE6F7007BAD90 /* Supporting Files */,
+			);
+			path = CSWindowCapturePlugin;
+			sourceTree = "<group>";
+		};
+		34576C8D19AFE6F7007BAD90 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				34576C8E19AFE6F7007BAD90 /* CSWindowCapturePlugin-Info.plist */,
+				34576C8F19AFE6F7007BAD90 /* InfoPlist.strings */,
+				34576C9219AFE6F7007BAD90 /* CSWindowCapturePlugin-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		34AFC2B819B0624E0007C07B /* PluginHeaders */ = {
+			isa = PBXGroup;
+			children = (
+				34AFC2B519B0624E0007C07B /* CSAbstractCaptureDevice.h */,
+				34AFC2B619B0624E0007C07B /* CSCaptureBase.h */,
+				34AFC2B719B0624E0007C07B /* CSCaptureSourceProtocol.h */,
+			);
+			name = PluginHeaders;
+			path = ../../CocoaSplit;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		34576C8219AFE6F7007BAD90 /* CSWindowCapturePlugin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 34576C9519AFE6F7007BAD90 /* Build configuration list for PBXNativeTarget "CSWindowCapturePlugin" */;
+			buildPhases = (
+				34576C7F19AFE6F7007BAD90 /* Sources */,
+				34576C8019AFE6F7007BAD90 /* Frameworks */,
+				34576C8119AFE6F7007BAD90 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CSWindowCapturePlugin;
+			productName = CSWindowCapturePlugin;
+			productReference = 34576C8319AFE6F7007BAD90 /* CSWindowCapturePlugin.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		34576C7B19AFE6F7007BAD90 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = Zakk;
+			};
+			buildConfigurationList = 34576C7E19AFE6F7007BAD90 /* Build configuration list for PBXProject "CSWindowCapturePlugin" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 34576C7A19AFE6F7007BAD90;
+			productRefGroup = 34576C8419AFE6F7007BAD90 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				34576C8219AFE6F7007BAD90 /* CSWindowCapturePlugin */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		34576C8119AFE6F7007BAD90 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34576C9119AFE6F7007BAD90 /* InfoPlist.strings in Resources */,
+				34576CAE19AFEE29007BAD90 /* WindowCaptureViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		34576C7F19AFE6F7007BAD90 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34576CAC19AFEE29007BAD90 /* WindowCapture.m in Sources */,
+				34576CAD19AFEE29007BAD90 /* WindowCaptureViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		34576C8F19AFE6F7007BAD90 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				34576C9019AFE6F7007BAD90 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		34576C9319AFE6F7007BAD90 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		34576C9419AFE6F7007BAD90 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		34576C9619AFE6F7007BAD90 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "CSWindowCapturePlugin/CSWindowCapturePlugin-Prefix.pch";
+				INFOPLIST_FILE = "CSWindowCapturePlugin/CSWindowCapturePlugin-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-flat_namespace",
+					"-undefined",
+					suppress,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		34576C9719AFE6F7007BAD90 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "CSWindowCapturePlugin/CSWindowCapturePlugin-Prefix.pch";
+				INFOPLIST_FILE = "CSWindowCapturePlugin/CSWindowCapturePlugin-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-flat_namespace",
+					"-undefined",
+					suppress,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		34576C7E19AFE6F7007BAD90 /* Build configuration list for PBXProject "CSWindowCapturePlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34576C9319AFE6F7007BAD90 /* Debug */,
+				34576C9419AFE6F7007BAD90 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		34576C9519AFE6F7007BAD90 /* Build configuration list for PBXNativeTarget "CSWindowCapturePlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34576C9619AFE6F7007BAD90 /* Debug */,
+				34576C9719AFE6F7007BAD90 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 34576C7B19AFE6F7007BAD90 /* Project object */;
+}

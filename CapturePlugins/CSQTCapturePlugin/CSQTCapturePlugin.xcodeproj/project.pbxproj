@@ -1,0 +1,321 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		34AFC17619B04CC30007C07B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AFC17519B04CC30007C07B /* Cocoa.framework */; };
+		34AFC18019B04CC30007C07B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 34AFC17E19B04CC30007C07B /* InfoPlist.strings */; };
+		34AFC19919B04CE60007C07B /* QTCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AFC19819B04CE60007C07B /* QTCapture.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		34AFC17219B04CC30007C07B /* CSQTCapturePlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSQTCapturePlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		34AFC17519B04CC30007C07B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		34AFC17819B04CC30007C07B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		34AFC17919B04CC30007C07B /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		34AFC17A19B04CC30007C07B /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		34AFC17D19B04CC30007C07B /* CSQTCapturePlugin-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CSQTCapturePlugin-Info.plist"; sourceTree = "<group>"; };
+		34AFC17F19B04CC30007C07B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		34AFC18119B04CC30007C07B /* CSQTCapturePlugin-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CSQTCapturePlugin-Prefix.pch"; sourceTree = "<group>"; };
+		34AFC19719B04CE60007C07B /* QTCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QTCapture.h; sourceTree = "<group>"; };
+		34AFC19819B04CE60007C07B /* QTCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QTCapture.m; sourceTree = "<group>"; };
+		34AFC2AD19B062450007C07B /* CSAbstractCaptureDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAbstractCaptureDevice.h; path = PluginHeaders/CSAbstractCaptureDevice.h; sourceTree = "<group>"; };
+		34AFC2AE19B062450007C07B /* CSCaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureBase.h; path = PluginHeaders/CSCaptureBase.h; sourceTree = "<group>"; };
+		34AFC2AF19B062450007C07B /* CSCaptureSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureSourceProtocol.h; path = PluginHeaders/CSCaptureSourceProtocol.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		34AFC16F19B04CC30007C07B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34AFC17619B04CC30007C07B /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		34AFC16919B04CC30007C07B = {
+			isa = PBXGroup;
+			children = (
+				34AFC2B019B062450007C07B /* PluginHeaders */,
+				34AFC17B19B04CC30007C07B /* CSQTCapturePlugin */,
+				34AFC17419B04CC30007C07B /* Frameworks */,
+				34AFC17319B04CC30007C07B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		34AFC17319B04CC30007C07B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				34AFC17219B04CC30007C07B /* CSQTCapturePlugin.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		34AFC17419B04CC30007C07B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				34AFC17519B04CC30007C07B /* Cocoa.framework */,
+				34AFC17719B04CC30007C07B /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		34AFC17719B04CC30007C07B /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				34AFC17819B04CC30007C07B /* Foundation.framework */,
+				34AFC17919B04CC30007C07B /* CoreData.framework */,
+				34AFC17A19B04CC30007C07B /* AppKit.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		34AFC17B19B04CC30007C07B /* CSQTCapturePlugin */ = {
+			isa = PBXGroup;
+			children = (
+				34AFC19719B04CE60007C07B /* QTCapture.h */,
+				34AFC19819B04CE60007C07B /* QTCapture.m */,
+				34AFC17C19B04CC30007C07B /* Supporting Files */,
+			);
+			path = CSQTCapturePlugin;
+			sourceTree = "<group>";
+		};
+		34AFC17C19B04CC30007C07B /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				34AFC17D19B04CC30007C07B /* CSQTCapturePlugin-Info.plist */,
+				34AFC17E19B04CC30007C07B /* InfoPlist.strings */,
+				34AFC18119B04CC30007C07B /* CSQTCapturePlugin-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		34AFC2B019B062450007C07B /* PluginHeaders */ = {
+			isa = PBXGroup;
+			children = (
+				34AFC2AD19B062450007C07B /* CSAbstractCaptureDevice.h */,
+				34AFC2AE19B062450007C07B /* CSCaptureBase.h */,
+				34AFC2AF19B062450007C07B /* CSCaptureSourceProtocol.h */,
+			);
+			name = PluginHeaders;
+			path = ../../CocoaSplit;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		34AFC17119B04CC30007C07B /* CSQTCapturePlugin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 34AFC18419B04CC30007C07B /* Build configuration list for PBXNativeTarget "CSQTCapturePlugin" */;
+			buildPhases = (
+				34AFC16E19B04CC30007C07B /* Sources */,
+				34AFC16F19B04CC30007C07B /* Frameworks */,
+				34AFC17019B04CC30007C07B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CSQTCapturePlugin;
+			productName = CSQTCapturePlugin;
+			productReference = 34AFC17219B04CC30007C07B /* CSQTCapturePlugin.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		34AFC16A19B04CC30007C07B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = Zakk;
+			};
+			buildConfigurationList = 34AFC16D19B04CC30007C07B /* Build configuration list for PBXProject "CSQTCapturePlugin" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 34AFC16919B04CC30007C07B;
+			productRefGroup = 34AFC17319B04CC30007C07B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				34AFC17119B04CC30007C07B /* CSQTCapturePlugin */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		34AFC17019B04CC30007C07B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34AFC18019B04CC30007C07B /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		34AFC16E19B04CC30007C07B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34AFC19919B04CE60007C07B /* QTCapture.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		34AFC17E19B04CC30007C07B /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				34AFC17F19B04CC30007C07B /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		34AFC18219B04CC30007C07B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		34AFC18319B04CC30007C07B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		34AFC18519B04CC30007C07B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "CSQTCapturePlugin/CSQTCapturePlugin-Prefix.pch";
+				INFOPLIST_FILE = "CSQTCapturePlugin/CSQTCapturePlugin-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-undefined",
+					suppress,
+					"-flat_namespace",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		34AFC18619B04CC30007C07B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "CSQTCapturePlugin/CSQTCapturePlugin-Prefix.pch";
+				INFOPLIST_FILE = "CSQTCapturePlugin/CSQTCapturePlugin-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-undefined",
+					suppress,
+					"-flat_namespace",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		34AFC16D19B04CC30007C07B /* Build configuration list for PBXProject "CSQTCapturePlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34AFC18219B04CC30007C07B /* Debug */,
+				34AFC18319B04CC30007C07B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		34AFC18419B04CC30007C07B /* Build configuration list for PBXNativeTarget "CSQTCapturePlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34AFC18519B04CC30007C07B /* Debug */,
+				34AFC18619B04CC30007C07B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 34AFC16A19B04CC30007C07B /* Project object */;
+}
