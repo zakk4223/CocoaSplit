@@ -10,6 +10,8 @@
 #import <QuartzCore/CoreImage.h>
 #import "Capture.h"
 #import "InputPopupControllerViewController.h"
+#import "CSCaptureSourceProtocol.h"
+#import "CSPluginLoader.h"
 
 
 
@@ -22,7 +24,7 @@ typedef enum input_rotate_style_t {
 } input_rotate_style;
 
 
-@protocol CaptureSessionProtocol;
+//@protocol CSCaptureSessionProtocol;
 
 @interface InputSource : NSObject <NSCoding>
 {
@@ -39,13 +41,14 @@ typedef enum input_rotate_style_t {
     double _transitionTime;
     bool _inTransition;
     double _nextImageTime;
-    id<CaptureSessionProtocol>_useInput;
     CIFilterGenerator *_filterGenerator;
+    NSViewController *_currentInputViewController;
+    
 }
 
 
 
-@property (strong) id<CaptureSessionProtocol> videoInput;
+@property (strong) NSObject<CSCaptureSourceProtocol> *videoInput;
 @property (assign) float x_pos;
 @property (assign) float y_pos;
 @property (assign) float rotationAngle;

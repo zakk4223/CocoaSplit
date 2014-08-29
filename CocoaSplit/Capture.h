@@ -10,14 +10,7 @@
 #define CocoaSplit_Capture_h
 
 
-#import "ImageCapture.h"
-#import "SyphonCapture.h"
-#import "DesktopCapture.h"
-#import "QTCapture.h"
-#import "AVFCapture.h"
-#import "TextCapture.h"
-#import "WindowCapture.h"
-#import "MovieCapture.h"
+#import "AVFAudioCapture.h"
 
 
 

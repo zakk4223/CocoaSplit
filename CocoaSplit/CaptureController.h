@@ -9,15 +9,15 @@
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
 #import <VideoToolbox/VideoToolbox.h>
-#import "AVFCapture.h"
-#import "QTCapture.h"
+#import "AVFAudioCapture.h"
 #import <CoreMedia/CoreMedia.h>
-#import "CaptureSessionProtocol.h"
-#import "AbstractCaptureDevice.h"
+#import "CSCaptureSourceProtocol.h"
+#import "CSAbstractCaptureDevice.h"
 #import "AppleVTCompressor.h"
 #import <IOKit/pwr_mgt/IOPMLib.h>
 #import <mach/mach_time.h>
 #import <QuartzCore/CoreImage.h>
+#import "CSPluginLoader.h"
 
 
 @class FFMpegTask;
@@ -109,7 +109,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) NSMutableArray *sourceList;
 
 @property (strong) id<h264Compressor> videoCompressor;
-@property (strong) id<CaptureSessionProtocol> audioCaptureSession;
+@property (strong) AVFAudioCapture *audioCaptureSession;
 
 
 @property (assign) double captureFPS;
@@ -262,7 +262,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) AVAssetWriterInput *audio_writer;
 
 
-@property (weak) AbstractCaptureDevice *selectedVideoCapture;
+@property (weak) CSAbstractCaptureDevice *selectedVideoCapture;
 @property (readonly) AVCaptureDevice *selectedAudioCapture;
 
 

@@ -7,16 +7,13 @@
 
 #import "CaptureController.h"
 #import "FFMpegTask.h"
-#import "SyphonCapture.h"
 #import "OutputDestination.h"
-#import "DesktopCapture.h"
 #import "PreviewView.h"
 #import <IOSurface/IOSurface.h>
-#import "CaptureSessionProtocol.h"
+#import "CSCaptureSourceProtocol.h"
 #import "x264.h"
 #import <mach/mach.h>
 #import <mach/mach_time.h>
-#import "ImageCapture.h"
 #import "x264Compressor.h"
 #import "InputSource.h"
 #import "InputPopupControllerViewController.h"
@@ -661,6 +658,7 @@
    if (self = [super init])
    {
        
+       [[CSPluginLoader sharedPluginLoader] loadAllBundles];
        
 #ifndef DEBUG
        [self setupLogging];
@@ -702,7 +700,7 @@
        self.validSamplerates = @[@44100, @48000];
        
        
-       self.audioCaptureSession = [[AVFCapture alloc] initForAudio];
+       self.audioCaptureSession = [[AVFAudioCapture alloc] init];
        [self.audioCaptureSession setAudioDelegate:self];
        
        

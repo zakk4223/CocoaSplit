@@ -8,7 +8,6 @@
 
 #import "InputPopupControllerViewController.h"
 #import "InputSource.h"
-#import "CSOverlayView.h"
 
 @interface InputPopupControllerViewController ()
 

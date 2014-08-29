@@ -1,0 +1,343 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		34576D7319B02597007BAD90 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34576D7219B02597007BAD90 /* Cocoa.framework */; };
+		34576D7D19B02597007BAD90 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 34576D7B19B02597007BAD90 /* InfoPlist.strings */; };
+		34576D9919B025DE007BAD90 /* CSOverlayWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 34576D9119B025DE007BAD90 /* CSOverlayWindow.m */; };
+		34576D9A19B025DE007BAD90 /* CSOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34576D9319B025DE007BAD90 /* CSOverlayView.m */; };
+		34576D9B19B025DE007BAD90 /* DesktopCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34576D9519B025DE007BAD90 /* DesktopCapture.m */; };
+		34576D9C19B025DE007BAD90 /* DesktopCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34576D9719B025DE007BAD90 /* DesktopCaptureViewController.m */; };
+		34576D9D19B025DE007BAD90 /* DesktopCaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34576D9819B025DE007BAD90 /* DesktopCaptureViewController.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		34576D6F19B02597007BAD90 /* CSDesktopCapturePlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSDesktopCapturePlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		34576D7219B02597007BAD90 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		34576D7519B02597007BAD90 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		34576D7619B02597007BAD90 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		34576D7719B02597007BAD90 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		34576D7A19B02597007BAD90 /* CSDesktopCapturePlugin-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CSDesktopCapturePlugin-Info.plist"; sourceTree = "<group>"; };
+		34576D7C19B02597007BAD90 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		34576D7E19B02597007BAD90 /* CSDesktopCapturePlugin-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CSDesktopCapturePlugin-Prefix.pch"; sourceTree = "<group>"; };
+		34576D9019B025DE007BAD90 /* CSOverlayWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSOverlayWindow.h; sourceTree = "<group>"; };
+		34576D9119B025DE007BAD90 /* CSOverlayWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSOverlayWindow.m; sourceTree = "<group>"; };
+		34576D9219B025DE007BAD90 /* CSOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSOverlayView.h; sourceTree = "<group>"; };
+		34576D9319B025DE007BAD90 /* CSOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSOverlayView.m; sourceTree = "<group>"; };
+		34576D9419B025DE007BAD90 /* DesktopCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DesktopCapture.h; sourceTree = "<group>"; };
+		34576D9519B025DE007BAD90 /* DesktopCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DesktopCapture.m; sourceTree = "<group>"; };
+		34576D9619B025DE007BAD90 /* DesktopCaptureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DesktopCaptureViewController.h; sourceTree = "<group>"; };
+		34576D9719B025DE007BAD90 /* DesktopCaptureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DesktopCaptureViewController.m; sourceTree = "<group>"; };
+		34576D9819B025DE007BAD90 /* DesktopCaptureViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DesktopCaptureViewController.xib; sourceTree = "<group>"; };
+		34AFC2BD19B0625F0007C07B /* CSAbstractCaptureDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAbstractCaptureDevice.h; path = PluginHeaders/CSAbstractCaptureDevice.h; sourceTree = "<group>"; };
+		34AFC2BE19B0625F0007C07B /* CSCaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureBase.h; path = PluginHeaders/CSCaptureBase.h; sourceTree = "<group>"; };
+		34AFC2BF19B0625F0007C07B /* CSCaptureSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureSourceProtocol.h; path = PluginHeaders/CSCaptureSourceProtocol.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		34576D6C19B02597007BAD90 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34576D7319B02597007BAD90 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		34576D6619B02597007BAD90 = {
+			isa = PBXGroup;
+			children = (
+				34AFC2C019B0625F0007C07B /* PluginHeaders */,
+				34576D7819B02597007BAD90 /* CSDesktopCapturePlugin */,
+				34576D7119B02597007BAD90 /* Frameworks */,
+				34576D7019B02597007BAD90 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		34576D7019B02597007BAD90 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				34576D6F19B02597007BAD90 /* CSDesktopCapturePlugin.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		34576D7119B02597007BAD90 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				34576D7219B02597007BAD90 /* Cocoa.framework */,
+				34576D7419B02597007BAD90 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		34576D7419B02597007BAD90 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				34576D7519B02597007BAD90 /* Foundation.framework */,
+				34576D7619B02597007BAD90 /* CoreData.framework */,
+				34576D7719B02597007BAD90 /* AppKit.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		34576D7819B02597007BAD90 /* CSDesktopCapturePlugin */ = {
+			isa = PBXGroup;
+			children = (
+				34576D9019B025DE007BAD90 /* CSOverlayWindow.h */,
+				34576D9119B025DE007BAD90 /* CSOverlayWindow.m */,
+				34576D9219B025DE007BAD90 /* CSOverlayView.h */,
+				34576D9319B025DE007BAD90 /* CSOverlayView.m */,
+				34576D9419B025DE007BAD90 /* DesktopCapture.h */,
+				34576D9519B025DE007BAD90 /* DesktopCapture.m */,
+				34576D9619B025DE007BAD90 /* DesktopCaptureViewController.h */,
+				34576D9719B025DE007BAD90 /* DesktopCaptureViewController.m */,
+				34576D9819B025DE007BAD90 /* DesktopCaptureViewController.xib */,
+				34576D7919B02597007BAD90 /* Supporting Files */,
+			);
+			path = CSDesktopCapturePlugin;
+			sourceTree = "<group>";
+		};
+		34576D7919B02597007BAD90 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				34576D7A19B02597007BAD90 /* CSDesktopCapturePlugin-Info.plist */,
+				34576D7B19B02597007BAD90 /* InfoPlist.strings */,
+				34576D7E19B02597007BAD90 /* CSDesktopCapturePlugin-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		34AFC2C019B0625F0007C07B /* PluginHeaders */ = {
+			isa = PBXGroup;
+			children = (
+				34AFC2BD19B0625F0007C07B /* CSAbstractCaptureDevice.h */,
+				34AFC2BE19B0625F0007C07B /* CSCaptureBase.h */,
+				34AFC2BF19B0625F0007C07B /* CSCaptureSourceProtocol.h */,
+			);
+			name = PluginHeaders;
+			path = ../../CocoaSplit;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		34576D6E19B02597007BAD90 /* CSDesktopCapturePlugin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 34576D8119B02597007BAD90 /* Build configuration list for PBXNativeTarget "CSDesktopCapturePlugin" */;
+			buildPhases = (
+				34576D6B19B02597007BAD90 /* Sources */,
+				34576D6C19B02597007BAD90 /* Frameworks */,
+				34576D6D19B02597007BAD90 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CSDesktopCapturePlugin;
+			productName = CSDesktopCapturePlugin;
+			productReference = 34576D6F19B02597007BAD90 /* CSDesktopCapturePlugin.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		34576D6719B02597007BAD90 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = Zakk;
+			};
+			buildConfigurationList = 34576D6A19B02597007BAD90 /* Build configuration list for PBXProject "CSDesktopCapturePlugin" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 34576D6619B02597007BAD90;
+			productRefGroup = 34576D7019B02597007BAD90 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				34576D6E19B02597007BAD90 /* CSDesktopCapturePlugin */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		34576D6D19B02597007BAD90 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34576D9D19B025DE007BAD90 /* DesktopCaptureViewController.xib in Resources */,
+				34576D7D19B02597007BAD90 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		34576D6B19B02597007BAD90 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34576D9A19B025DE007BAD90 /* CSOverlayView.m in Sources */,
+				34576D9B19B025DE007BAD90 /* DesktopCapture.m in Sources */,
+				34576D9919B025DE007BAD90 /* CSOverlayWindow.m in Sources */,
+				34576D9C19B025DE007BAD90 /* DesktopCaptureViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		34576D7B19B02597007BAD90 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				34576D7C19B02597007BAD90 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		34576D7F19B02597007BAD90 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		34576D8019B02597007BAD90 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		34576D8219B02597007BAD90 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "CSDesktopCapturePlugin/CSDesktopCapturePlugin-Prefix.pch";
+				INFOPLIST_FILE = "CSDesktopCapturePlugin/CSDesktopCapturePlugin-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-undefined",
+					suppress,
+					"-flat_namespace",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		34576D8319B02597007BAD90 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "CSDesktopCapturePlugin/CSDesktopCapturePlugin-Prefix.pch";
+				INFOPLIST_FILE = "CSDesktopCapturePlugin/CSDesktopCapturePlugin-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-undefined",
+					suppress,
+					"-flat_namespace",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		34576D6A19B02597007BAD90 /* Build configuration list for PBXProject "CSDesktopCapturePlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34576D7F19B02597007BAD90 /* Debug */,
+				34576D8019B02597007BAD90 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		34576D8119B02597007BAD90 /* Build configuration list for PBXNativeTarget "CSDesktopCapturePlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34576D8219B02597007BAD90 /* Debug */,
+				34576D8319B02597007BAD90 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 34576D6719B02597007BAD90 /* Project object */;
+}

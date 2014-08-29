@@ -7,7 +7,7 @@
 //
 
 #import "InputSource.h"
-#import "CaptureSessionProtocol.h"
+#import "CSCaptureSourceProtocol.h"
 
 
 static NSArray *_sourceTypes = nil;
@@ -317,7 +317,16 @@ static NSArray *_sourceTypes = nil;
 
 
 
+-(NSArray *)sourceTypes
+{
+    
+    NSMutableDictionary *pluginMap = [[CSPluginLoader sharedPluginLoader] sourcePlugins];
+    
+    return pluginMap.allKeys;
+}
 
+
+/*
 -(NSArray *)sourceTypes
 {
     static dispatch_once_t onceToken;
@@ -327,6 +336,7 @@ static NSArray *_sourceTypes = nil;
 
     return _sourceTypes;
 }
+ */
 
 
 -(void)setImageContext:(CIContext *)imageContext
@@ -466,7 +476,6 @@ static NSArray *_sourceTypes = nil;
     
     NSAffineTransform *scaleTransform = [[NSAffineTransform alloc] init];
     [scaleTransform translateXBy:-x yBy:-y];
-    //[scaleTransform scaleBy:self.scaleFactor];
     [self.scaleFilter setValue:@(_internalScaleFactor) forKey:kCIInputScaleKey];
 
     [geometryTransform appendTransform:scaleTransform];
@@ -514,7 +523,7 @@ static NSArray *_sourceTypes = nil;
     CIImage *outimg = nil;
     CVPixelBufferRef newFrame = NULL;
     
-    id<CaptureSessionProtocol>useInput;
+    NSObject<CSCaptureSourceProtocol> *useInput;
 
     
     CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
@@ -579,33 +588,19 @@ static NSArray *_sourceTypes = nil;
     
     if (useInput)
     {
-        if ([useInput respondsToSelector:@selector(currentImage)])
+        
+        outimg = [useInput currentImage];
+        if (!outimg)
         {
-            outimg = [useInput currentImage];
-        } else {
-            
             newFrame = [useInput getCurrentFrame];
             if (newFrame)
             {
-                
-                
-                //leaks memory in 10.9, less efficient if the buffer is YUV (probably due to pixel format conversion.
-                //instead all the capture inputs produce RGB buffers, although it is questionable if it is wise to leave
-                //that conversion up to the individual capture sources.
-                
                 //outimg = [CIImage imageWithCVImageBuffer:newFrame];
-                
-                
+
                 outimg = [CIImage imageWithIOSurface:CVPixelBufferGetIOSurface(newFrame)];
-                
-                
-                
-                
                 _tmpCVBuf = newFrame;
-                
             }
-        }
-        
+        }        
     }
     
     return outimg;
@@ -926,12 +921,24 @@ static NSArray *_sourceTypes = nil;
     
     NSLog(@"SETTING SELECTED VIDEO TYPE %@", selectedVideoType);
     
-    self.videoInput.configViewController = nil;
+    
+    
+    NSMutableDictionary *pluginMap = [[CSPluginLoader sharedPluginLoader] sourcePlugins];
+    
+    _currentInputViewController = nil;
+    
+    [self teardownInputBindings];
     
     self.videoInput = nil;
     
-    id <CaptureSessionProtocol> newCaptureSession;
+    NSObject <CSCaptureSourceProtocol> *newCaptureSession;
     
+    Class captureClass = [pluginMap objectForKey:selectedVideoType];
+    
+    newCaptureSession = [[captureClass alloc] init];
+    
+    
+    /*
     if ([selectedVideoType isEqualToString:@"Desktop"])
     {
         newCaptureSession = [[DesktopCapture alloc ] init];
@@ -953,14 +960,21 @@ static NSArray *_sourceTypes = nil;
     } else {
         newCaptureSession = [[AVFCapture alloc] init];
     }
+     */
+    
+    
+    NSLog(@"CAPTURE SESSION %@", newCaptureSession);
     
     newCaptureSession.imageContext = self.imageContext;
 
     
     self.videoInput = newCaptureSession;
+    [self setupInputBindings];
     [self sourceConfigurationView];
 
-    
+    //[self.videoInput bind:@"render_width" toObject:self withKeyPath:@"display_width" options:nil];
+    //[inputSource bind:@"canvas_height" toObject:self withKeyPath:@"captureHeight" options:nil];
+
     newCaptureSession = nil;
     
     _selectedVideoType = selectedVideoType;
@@ -968,12 +982,28 @@ static NSArray *_sourceTypes = nil;
 }
 
 
+-(void)setupInputBindings
+{
+    
+
+    [self.videoInput bind:@"render_width" toObject:self withKeyPath:@"display_width" options:nil];
+    [self.videoInput bind:@"render_height" toObject:self withKeyPath:@"display_height" options:nil];
+
+    
+}
+
+-(void)teardownInputBindings
+{
+    [self.videoInput unbind:@"render_width"];
+    [self.videoInput unbind:@"render_height"];
+}
 -(void)sourceConfigurationView
 {
     NSView *configView = nil;
     if ([self.videoInput respondsToSelector:@selector(configurationView)])
     {
-        configView = [self.videoInput configurationView];
+        _currentInputViewController = [self.videoInput configurationView];
+        configView = _currentInputViewController.view;
         
     }
     
@@ -1032,7 +1062,6 @@ static NSArray *_sourceTypes = nil;
     {
         [self rebuildFilters];
     } else if ([keyPath isEqualToString:@"editorPopover"]) {
-        NSLog(@"SOURCE CONFIG");
         [self sourceConfigurationView];
     }
         

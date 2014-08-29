@@ -7,6 +7,8 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import <Quartz/Quartz.h>
+
 
 @interface InputPopupControllerViewController : NSViewController <NSPopoverDelegate, NSWindowDelegate>
 @property (strong) IBOutlet NSObjectController *InputController;
