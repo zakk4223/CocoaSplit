@@ -23,7 +23,7 @@
         _currentFrame = NULL;
         _currentMovieTime = 0.0f;
         
-        
+        self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
         self.playPauseTitle = @"Play";
         
         [self setupPlayer];
@@ -34,6 +34,22 @@
     return self;
 }
 
+
+-(void) generateUniqueID
+{
+    NSMutableString *uID = [NSMutableString string];
+    
+    
+    for(AVPlayerItem *qItem in self.avPlayer.items)
+    {
+        AVURLAsset *urlAsset = (AVURLAsset *)qItem.asset;
+        
+        NSString *itemStr = urlAsset.URL.description;
+        [uID appendString:itemStr];
+    }
+    
+    self.activeVideoDevice.uniqueID = uID;
+}
 
 
 - (void) setupPlayer
@@ -187,6 +203,8 @@
 
     }
     
+    [self generateUniqueID];
+    
     if (self.avPlayer.items.count == 1)
     {
         [self setupTimeObserver];
@@ -202,6 +220,7 @@
     //NO I'LL REMOVE IT FIRST LEAVE ME ALONE
     [self.avPlayer removeItem:item];
     [self didChangeValueForKey:@"movieQueue"];
+    [self generateUniqueID];
 }
 
 -(NSURL *) currentMedia
@@ -248,6 +267,7 @@
     {
         [self.avPlayer removeItem:toDelete];
     }
+    [self generateUniqueID];
     [self didChangeValueForKey:@"movieQueue"];
 }
 
@@ -256,6 +276,7 @@
     [self willChangeValueForKey:@"movieQueue"];
     [self.avPlayer advanceToNextItem];
     [self didChangeValueForKey:@"movieQueue"];
+    [self generateUniqueID];
 
 }
 

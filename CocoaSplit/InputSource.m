@@ -382,7 +382,7 @@ static NSArray *_sourceTypes = nil;
     {
         [self deregisterVideoInput:vInput];
     }
-    
+    [self removeObserver:self forKeyPath:@"usePrivateSource"];
     [self removeObserver:self forKeyPath:@"propertiesChanged"];
     [self removeObserver:self forKeyPath:@"editorPopover"];
     
@@ -1040,6 +1040,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void) deduplicateVideoSource:(NSObject<CSCaptureSourceProtocol> *)source
 {
+    
     
     if (self.usePrivateSource)
     {

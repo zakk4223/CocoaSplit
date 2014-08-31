@@ -7,6 +7,7 @@
 //
 
 #import "TextCapture.h"
+#import "CSAbstractCaptureDevice.h"
 
 @implementation TextCapture
 
@@ -22,6 +23,9 @@
         _scroll_Yadjust = 0.0f;
         self.scrollXSpeed = 0.0f;
         self.scrollYSpeed = 0.0f;
+        
+        self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
+        
         
         [self addObserver:self forKeyPath:@"propertiesChanged" options:NSKeyValueObservingOptionNew context:NULL];
         
@@ -76,6 +80,7 @@
 {
     if (self.text)
     {
+        self.activeVideoDevice.uniqueID = self.text;
         NSFont *myfont = [NSFont fontWithName:@"Helvetica" size:self.fontSize];
         if (self.isItalic)
         {

@@ -45,6 +45,7 @@
         
         self.needsSourceSelection = NO;
         _animationQueue = dispatch_queue_create("imageCaptureQueue", NULL);
+        self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
      }
     
     return self;
@@ -191,6 +192,7 @@
     
     [self resetImageData];
     
+    self.activeVideoDevice.uniqueID = imagePath;
     
     self.captureName = [_imagePath lastPathComponent];
     
