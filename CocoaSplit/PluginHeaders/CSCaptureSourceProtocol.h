@@ -20,13 +20,35 @@
 
 @required
 
+//HEY YOU, DEVELOPER
+//THIS IS ABSOLUTELY REQUIRED!!!! IF YOU DO CUSTOM UI FOR SETTING SOURCES
+//YOU MUST CREATE AS DUMMY CSAbstractCaptureDevice AND MAKE SURE uniqueID IS SET TO SOMETHING
+
+//activeVideoDevice.uniqueID is observed for changes and source deduplication happens this way
+//if you aren't using availablevideo devices/active video device just create a dummy instance
+//and set uniqueID to something uniquely generated for your source. That or just don't support
+//deduplication. Be that way.
 @property CSAbstractCaptureDevice *activeVideoDevice;
+
 @property (strong) NSArray *availableVideoDevices;
-@property (assign) int render_width;
-@property (assign) int render_height;
+
+@property (readonly) int render_width;
+
+@property (readonly) int render_height;
+
 @property (strong) NSString *captureName;
+
 @property (strong) CIContext *imageContext;
+
 @property (assign) bool needsSourceSelection;
+
+@property (weak) id inputSource;
+
+
+
+//Set this to true if you don't want source sharing/deduplication. You should really have a good reason
+//for this.
+@property (assign) bool allowDedup;
 
 -(CIImage *)currentImage;
 -(NSViewController *)configurationView;

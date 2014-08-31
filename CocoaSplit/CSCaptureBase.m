@@ -7,8 +7,12 @@
 //
 
 #import "CSCaptureBase.h"
+#import "SourceCache.h"
+#import <objc/runtime.h>
 
 @implementation CSCaptureBase
+
+@synthesize activeVideoDevice = _activeVideoDevice;
 
 +(NSString *) label
 {
@@ -21,6 +25,7 @@
     if (self = [super init])
     {
         self.needsSourceSelection = YES;
+        self.allowDedup = YES;
     }
     
     return self;
@@ -30,6 +35,7 @@
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:self.activeVideoDevice.uniqueID forKey:@"active_uniqueID"];
+    [aCoder encodeBool:self.allowDedup forKey:@"allowDedup"];
 }
 
 
@@ -38,7 +44,7 @@
     if (self = [self init])
     {
      
-        
+        self.allowDedup = [aDecoder decodeBoolForKey:@"allowDedup"];
         self.savedUniqueID = [aDecoder decodeObjectForKey:@"active_uniqueID"];
         [self setDeviceForUniqueID:self.savedUniqueID];
     }
@@ -108,6 +114,61 @@
     return NULL;
 }
 
+
+
+
+-(int)render_height
+{
+    NSNumber *ret = [self.inputSource valueForKeyPath:@"display_height"];
+    return [ret intValue];
+}
+
+-(int)render_width
+{
+    
+    NSNumber *ret = [self.inputSource valueForKeyPath:@"display_width"];
+    return [ret intValue];
+}
+
+-(id) awakeAfterUsingCoder:(NSCoder *)aDecoder
+{
+    SourceCache *sharedCache = [SourceCache sharedCache];
+    
+    return [sharedCache cacheSource:self uniqueID:self.activeVideoDevice.uniqueID];
+}
+
+-(id) copyWithZone:(NSZone *)zone
+{
+  
+    
+    id newCopy = [[self.class alloc] init];
+    
+    
+    
+    //This is gross I'm sorry
+    
+    unsigned int propCount;
+    objc_property_t *myProperties = class_copyPropertyList(self.class, &propCount);
+    for (unsigned int i = 0; i < propCount; i++)
+    {
+        objc_property_t prop = myProperties[i];
+        const char *propName = property_getName(prop);
+        
+        NSString *pName = [[NSString alloc] initWithBytes:propName length:strlen(propName) encoding:NSUTF8StringEncoding];
+        id propertyValue = [self valueForKey:pName];
+        [newCopy setValue:propertyValue forKey:pName];
+    }
+    
+    
+    return newCopy;
+    
+}
+
+-(void) setValue:(id)value forUndefinedKey:(NSString *)key
+{
+    //hack so we don't throw exceptions during the above function
+    return;
+}
 
 
 @end

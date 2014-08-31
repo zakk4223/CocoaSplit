@@ -55,13 +55,15 @@
         }
         
         NSNumber *windowID = devinstance[(NSString *)kCGWindowNumber];
+        NSString *wUniqueID = [NSString stringWithFormat:@"%@d", windowID];
         
         
-        [retArray addObject:[[CSAbstractCaptureDevice alloc] initWithName:windowName device:windowID uniqueID:windowName]];
+        [retArray addObject:[[CSAbstractCaptureDevice alloc] initWithName:windowName device:windowID uniqueID:wUniqueID]];
     }
     
     return retArray;
 }
+
 
 -(CIImage *)currentImage
 {

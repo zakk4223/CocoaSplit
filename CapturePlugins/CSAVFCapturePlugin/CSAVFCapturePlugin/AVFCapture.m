@@ -373,6 +373,7 @@
     
     CVImageBufferRef newbuf = NULL;
     
+    
     @synchronized(self)
     {
         if (_currentFrame)

@@ -1744,6 +1744,7 @@
     
     [self.sourceList removeObject:delSource];
     delSource.editorPopover = nil;
+    //delSource.videoInput = nil;
     
 }
 

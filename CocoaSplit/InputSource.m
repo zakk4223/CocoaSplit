@@ -43,7 +43,7 @@ static NSArray *_sourceTypes = nil;
     [aCoder encodeInt:self.crop_left forKey:@"crop_left"];
     [aCoder encodeInt:self.crop_right forKey:@"crop_right"];
     [aCoder encodeObject:self.selectedVideoType forKey:@"selectedVideoType"];
-
+    [aCoder encodeBool:self.usePrivateSource forKey:@"usePrivateSource"];
     [aCoder encodeObject:self.uuid forKey:@"uuid"];
     
     [aCoder encodeInt:self.rotateStyle forKey:@"rotateStyle"];
@@ -102,6 +102,7 @@ static NSArray *_sourceTypes = nil;
             self.videoSources = [[NSMutableArray alloc] init];
         }
         
+        
         self.transitionFilter = [aDecoder decodeObjectForKey:@"transitionFilter"];
         
         if (self.transitionFilter)
@@ -141,13 +142,44 @@ static NSArray *_sourceTypes = nil;
             self.chromaKeySmoothing = [aDecoder decodeFloatForKey:@"chromaKeySmoothing"];
         }
 
+        if (self.videoInput)
+        {
+            [self registerVideoInput:self.videoInput];
+        }
         
+        for(id vInput in self.videoSources)
+        {
+            [self registerVideoInput:vInput];
+        }
+        
+        self.usePrivateSource = [aDecoder decodeBoolForKey:@"usePrivateSource"];
+
         [self rebuildUserFilter];
     }
     
     
     return self;
 }
+
+
+
+-(void) registerVideoInput:(NSObject<CSCaptureSourceProtocol> *)forInput
+{
+    forInput.inputSource = self;
+    [forInput addObserver:self forKeyPath:@"activeVideoDevice.uniqueID" options:NSKeyValueObservingOptionNew context:nil];
+}
+
+-(void)deregisterVideoInput:(NSObject<CSCaptureSourceProtocol> *)forInput
+{
+    if (!forInput)
+    {
+        return;
+    }
+    
+    
+    [forInput removeObserver:self forKeyPath:@"activeVideoDevice.uniqueID"];
+}
+
 
 
 
@@ -188,7 +220,7 @@ static NSArray *_sourceTypes = nil;
     
     self.transitionFilterName = @"CISwipeTransition";
     self.currentEffects = [[NSMutableArray alloc] init];
-    
+    self.usePrivateSource = NO;
     
     
     
@@ -209,7 +241,7 @@ static NSArray *_sourceTypes = nil;
     
     self.chromaKeyColor = [NSColor greenColor];
     
-    
+    [self addObserver:self forKeyPath:@"usePrivateSource" options:NSKeyValueObservingOptionNew context:NULL];
     [self addObserver:self forKeyPath:@"editorPopover" options:NSKeyValueObservingOptionNew context:NULL];
     
     [self rebuildFilters];
@@ -326,18 +358,6 @@ static NSArray *_sourceTypes = nil;
 }
 
 
-/*
--(NSArray *)sourceTypes
-{
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _sourceTypes  =  @[@"Desktop", @"AVFoundation", @"QTCapture", @"Syphon", @"Image", @"Text", @"Window", @"Movie"];
-    });
-
-    return _sourceTypes;
-}
- */
-
 
 -(void)setImageContext:(CIContext *)imageContext
 {
@@ -356,6 +376,13 @@ static NSArray *_sourceTypes = nil;
 
 -(void)dealloc
 {
+    NSLog(@"DEALLOC INPUT");
+    [self deregisterVideoInput:self.videoInput];
+    for(id vInput in self.videoSources)
+    {
+        [self deregisterVideoInput:vInput];
+    }
+    
     [self removeObserver:self forKeyPath:@"propertiesChanged"];
     [self removeObserver:self forKeyPath:@"editorPopover"];
     
@@ -524,6 +551,7 @@ static NSArray *_sourceTypes = nil;
     CVPixelBufferRef newFrame = NULL;
     
 
+    NSObject<CSCaptureSourceProtocol> *_useInput;
     
     CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
     
@@ -913,12 +941,13 @@ static NSArray *_sourceTypes = nil;
 
 
 
+
+
+
 -(NSString *) selectedVideoType
 {
     return _selectedVideoType;
 }
-
-
 
 -(void) setSelectedVideoType:(NSString *)selectedVideoType
 {
@@ -932,8 +961,7 @@ static NSArray *_sourceTypes = nil;
     
     _currentInputViewController = nil;
     
-    [self teardownInputBindings];
-    
+    [self deregisterVideoInput:self.videoInput];
     self.videoInput = nil;
     
     NSObject <CSCaptureSourceProtocol> *newCaptureSession;
@@ -943,42 +971,16 @@ static NSArray *_sourceTypes = nil;
     newCaptureSession = [[captureClass alloc] init];
     
     
-    /*
-    if ([selectedVideoType isEqualToString:@"Desktop"])
-    {
-        newCaptureSession = [[DesktopCapture alloc ] init];
-    } else if ([selectedVideoType isEqualToString:@"AVFoundation"]) {
-        newCaptureSession = [[AVFCapture alloc] init];
-    } else if ([selectedVideoType isEqualToString:@"QTCapture"]) {
-        newCaptureSession = [[QTCapture alloc] init];
-    } else if ([selectedVideoType isEqualToString:@"Syphon"]) {
-        newCaptureSession = [[SyphonCapture alloc] init];
-    } else if ([selectedVideoType isEqualToString:@"Image"]) {
-        
-        newCaptureSession = [[ImageCapture alloc] init];
-    } else if ([selectedVideoType isEqualToString:@"Text"]) {
-        newCaptureSession = [[TextCapture alloc] init];
-    } else if ([selectedVideoType isEqualToString:@"Window"]) {
-        newCaptureSession = [[WindowCapture alloc] init];
-    } else if ([selectedVideoType isEqualToString:@"Movie"]) {
-        newCaptureSession = [[MovieCapture alloc] init];
-    } else {
-        newCaptureSession = [[AVFCapture alloc] init];
-    }
-     */
-    
-    
     NSLog(@"CAPTURE SESSION %@", newCaptureSession);
     
     newCaptureSession.imageContext = self.imageContext;
 
     
     self.videoInput = newCaptureSession;
-    [self setupInputBindings];
+    [self registerVideoInput:self.videoInput];
+    
+    
     [self sourceConfigurationView];
-
-    //[self.videoInput bind:@"render_width" toObject:self withKeyPath:@"display_width" options:nil];
-    //[inputSource bind:@"canvas_height" toObject:self withKeyPath:@"captureHeight" options:nil];
 
     newCaptureSession = nil;
     
@@ -987,21 +989,6 @@ static NSArray *_sourceTypes = nil;
 }
 
 
--(void)setupInputBindings
-{
-    
-
-    [self.videoInput bind:@"render_width" toObject:self withKeyPath:@"display_width" options:nil];
-    [self.videoInput bind:@"render_height" toObject:self withKeyPath:@"display_height" options:nil];
-
-    
-}
-
--(void)teardownInputBindings
-{
-    [self.videoInput unbind:@"render_width"];
-    [self.videoInput unbind:@"render_height"];
-}
 -(void)sourceConfigurationView
 {
     NSView *configView = nil;
@@ -1051,6 +1038,51 @@ static NSArray *_sourceTypes = nil;
     [self rebuildFilters];
 }
 
+-(void) deduplicateVideoSource:(NSObject<CSCaptureSourceProtocol> *)source
+{
+    
+    if (self.usePrivateSource)
+    {
+        return;
+    }
+    
+    if (source != self.videoInput)
+    {
+        return;
+    }
+    
+    
+    SourceCache *scache = [SourceCache sharedCache];
+    id newInput = [scache cacheSource:source uniqueID:source.activeVideoDevice.uniqueID];
+    if (newInput == source)
+    {
+        return;
+    }
+    
+    
+    [self deregisterVideoInput:self.videoInput];
+    self.videoInput = newInput;
+    [self registerVideoInput:self.videoInput];
+    
+}
+
+
+-(void) makeSourcePrivate
+{
+    [self deregisterVideoInput:self.videoInput];
+    self.videoInput = self.videoInput.copy;
+    [self registerVideoInput:self.videoInput];
+    
+}
+
+
+-(void) removeObjectFromVideoSourcesAtIndex:(NSUInteger)index
+{
+    id removedSource = [self.videoSources objectAtIndex:index];
+    [self deregisterVideoInput:removedSource];
+    [self.videoSources removeObjectAtIndex:index];
+}
+
 
 + (NSSet *)keyPathsForValuesAffectingPropertiesChanged
 {
@@ -1058,16 +1090,21 @@ static NSArray *_sourceTypes = nil;
 }
 
 
+//I should probably use contexts...
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    
-    
-    
     if ([keyPath isEqualToString:@"propertiesChanged"])
     {
         [self rebuildFilters];
     } else if ([keyPath isEqualToString:@"editorPopover"]) {
         [self sourceConfigurationView];
+    } else if ([keyPath isEqualToString:@"activeVideoDevice.uniqueID"]) {
+        [self deduplicateVideoSource:object];
+    } else if ([keyPath isEqualToString:@"usePrivateSource"]) {
+        if (self.usePrivateSource)
+        {
+            [self makeSourcePrivate];
+        }
     }
         
         

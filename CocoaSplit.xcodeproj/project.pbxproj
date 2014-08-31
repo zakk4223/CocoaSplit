@@ -101,6 +101,8 @@
 		34AFC27E19B05C4E0007C07B /* CSTextCapturePlugin.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34AFC26319B05B6B0007C07B /* CSTextCapturePlugin.bundle */; };
 		34AFC27F19B05C4E0007C07B /* CSSyphonCapturePlugin.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34AFC26819B05B7C0007C07B /* CSSyphonCapturePlugin.bundle */; };
 		34AFC28019B05C4E0007C07B /* CSAVFCapturePlugin.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34AFC26D19B05B930007C07B /* CSAVFCapturePlugin.bundle */; };
+		34AFC33319B19CD00007C07B /* SourceCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AFC33219B19CD00007C07B /* SourceCache.m */; };
+		34AFC33419B19CD00007C07B /* SourceCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AFC33219B19CD00007C07B /* SourceCache.m */; };
 		34B0265A1712D8BA0063BB2D /* CmdLineDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B026591712D8BA0063BB2D /* CmdLineDelegate.m */; };
 		34C19053189EE60400AB2430 /* CapturedFrameData.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C19052189EE60400AB2430 /* CapturedFrameData.m */; };
 		34C19054189EE60400AB2430 /* CapturedFrameData.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C19052189EE60400AB2430 /* CapturedFrameData.m */; };
@@ -399,6 +401,8 @@
 		34AFC2C119B08AF30007C07B /* CSStreamServiceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSStreamServiceProtocol.h; path = PluginHeaders/CSStreamServiceProtocol.h; sourceTree = "<group>"; };
 		34AFC2E019B08C050007C07B /* CSFileStreamServicePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSFileStreamServicePlugin.xcodeproj; path = StreamServicePlugins/CSFileStreamServicePlugin/CSFileStreamServicePlugin.xcodeproj; sourceTree = "<group>"; };
 		34AFC31319B0A5800007C07B /* CSTwitchStreamServicePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSTwitchStreamServicePlugin.xcodeproj; path = StreamServicePlugins/CSTwitchStreamServicePlugin/CSTwitchStreamServicePlugin.xcodeproj; sourceTree = "<group>"; };
+		34AFC33119B19CD00007C07B /* SourceCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SourceCache.h; sourceTree = "<group>"; };
+		34AFC33219B19CD00007C07B /* SourceCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SourceCache.m; sourceTree = "<group>"; };
 		34B026581712D8BA0063BB2D /* CmdLineDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CmdLineDelegate.h; sourceTree = "<group>"; };
 		34B026591712D8BA0063BB2D /* CmdLineDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CmdLineDelegate.m; sourceTree = "<group>"; };
 		34C19051189EE60400AB2430 /* CapturedFrameData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CapturedFrameData.h; sourceTree = "<group>"; };
@@ -584,6 +588,8 @@
 				340FE4A815F3417E00E4CE4E /* Supporting Files */,
 				34576C7619AFCA1B007BAD90 /* CSPluginLoader.h */,
 				34576C7719AFCA1B007BAD90 /* CSPluginLoader.m */,
+				34AFC33119B19CD00007C07B /* SourceCache.h */,
+				34AFC33219B19CD00007C07B /* SourceCache.m */,
 			);
 			path = CocoaSplit;
 			sourceTree = "<group>";
@@ -1200,6 +1206,7 @@
 				340FE4AE15F3417E00E4CE4E /* main.m in Sources */,
 				34C19053189EE60400AB2430 /* CapturedFrameData.m in Sources */,
 				340FE4B515F3417E00E4CE4E /* AppDelegate.m in Sources */,
+				34AFC33319B19CD00007C07B /* SourceCache.m in Sources */,
 				340FE50815F444AA00E4CE4E /* CaptureController.m in Sources */,
 				342346AA15F59A8500C8C77E /* AVFAudioCapture.m in Sources */,
 				342346BE15F6103D00C8C77E /* FFMpegTask.m in Sources */,
@@ -1232,6 +1239,7 @@
 				3451A1C717111BD900DF6A8B /* main.m in Sources */,
 				340DC735197CF6E9003A0BB3 /* CSCaptureBase.m in Sources */,
 				34C19054189EE60400AB2430 /* CapturedFrameData.m in Sources */,
+				34AFC33419B19CD00007C07B /* SourceCache.m in Sources */,
 				3451A1D31712C41000DF6A8B /* CaptureController.m in Sources */,
 				3431FFE219786502000965FE /* InputSource.m in Sources */,
 				3451A1D81712C5C400DF6A8B /* x264Compressor.m in Sources */,

@@ -58,13 +58,6 @@
 
 
 
--(BOOL) needsAdvancedVideo
-{
-    return NO;
-}
-
-
-
 -(id) init
 {
     if (self = [super init])
@@ -103,6 +96,7 @@
 
     int width;
     int height;
+    
     
     if (_displayStreamRef)
     {
@@ -185,7 +179,6 @@
         {
             CIImage *newImg = [CIImage imageWithIOSurface:frameSurface];
 
-            
             @synchronized(self) {
                 _currentImg = newImg;
             }

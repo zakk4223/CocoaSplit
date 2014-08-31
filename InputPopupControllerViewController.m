@@ -27,8 +27,6 @@
 }
 
 
-
-
 -(NSWindow *)detachableWindowForPopover:(NSPopover *)popover
 {
     //InputPopupControllerViewController *newViewController = [[InputPopupControllerViewController alloc] initWithNibName:@"InputPopupControllerViewController" bundle:nil];

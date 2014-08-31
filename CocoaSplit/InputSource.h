@@ -12,7 +12,7 @@
 #import "InputPopupControllerViewController.h"
 #import "CSCaptureSourceProtocol.h"
 #import "CSPluginLoader.h"
-
+#import "SourceCache.h"
 
 
 typedef enum input_rotate_style_t {
@@ -43,10 +43,11 @@ typedef enum input_rotate_style_t {
     double _nextImageTime;
     CIFilterGenerator *_filterGenerator;
     NSViewController *_currentInputViewController;
-    NSObject<CSCaptureSourceProtocol> *_useInput;
+    //NSObject<CSCaptureSourceProtocol> *_useInput;
 
     
 }
+
 
 
 
@@ -119,6 +120,7 @@ typedef enum input_rotate_style_t {
 @property (assign) float chromaKeyThreshold;
 @property (assign) float chromaKeySmoothing;
 @property (assign) bool doChromaKey;
+@property (assign) bool usePrivateSource;
 
 
 

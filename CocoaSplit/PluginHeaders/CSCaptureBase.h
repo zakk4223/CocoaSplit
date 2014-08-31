@@ -9,19 +9,22 @@
 #import <Foundation/Foundation.h>
 #import "CSCaptureSourceProtocol.h"
 
-@interface CSCaptureBase : NSObject <NSCoding>
+@interface CSCaptureBase : NSObject <NSCoding, NSCopying>
 
 
 @property CSAbstractCaptureDevice *activeVideoDevice;
 @property (strong) NSArray *availableVideoDevices;
 @property (strong) CIContext *imageContext;
-@property (assign) int render_width;
-@property (assign) int render_height;
+@property (readonly) int render_width;
+@property (readonly) int render_height;
 @property (strong) NSString *captureName;
-//Blackmagic hack
 @property (strong) NSString *savedUniqueID;
 @property (assign) bool needsSourceSelection;
+//If you are accessing this in a plugin I will be very unhappy on the internet
+@property (weak) id inputSource;
 
+
+@property (assign) bool allowDedup;
 
 
 -(void)setDeviceForUniqueID:(NSString *)uniqueID;
