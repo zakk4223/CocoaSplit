@@ -9,6 +9,9 @@
 #import "CSPluginLoader.h"
 #import "CSCaptureSourceProtocol.h"
 #import "CSStreamServiceProtocol.h"
+#import "CSPluginFactoryProtocol.h"
+
+
 
 
 @implementation CSPluginLoader
@@ -95,6 +98,38 @@
         [CIPlugIn loadPlugIn:filterURL allowExecutableCode:YES];
     }
 }
+
+
+-(bool)validateAndRegisterPluginClass:(Class)toLoad
+{
+    if (!toLoad)
+    {
+        return NO;
+    }
+    
+    
+    bool didLoad = NO;
+    
+    NSString *classLabel = [toLoad label];
+    NSMutableDictionary *registerMap = nil;
+    
+    if ([toLoad conformsToProtocol:@protocol(CSCaptureSourceProtocol)])
+    {
+        registerMap = self.sourcePlugins;
+    } else if ([toLoad conformsToProtocol:@protocol(CSStreamServiceProtocol)]) {
+        registerMap = self.streamServicePlugins;
+    }
+    
+    if (registerMap)
+    {
+        [registerMap setObject:toLoad forKey:classLabel];
+        didLoad = YES;
+    }
+    
+    return didLoad;
+}
+
+
 - (void)loadAllBundles
 {
     NSMutableArray *instances;
@@ -120,6 +155,22 @@
         {
             NSString *classLabel;
             currPrincipalClass = [currBundle principalClass];
+
+            if ([currPrincipalClass conformsToProtocol:@protocol(CSPluginFactoryProtocol)])
+            {
+                Class<CSPluginFactoryProtocol> factoryClass = currPrincipalClass;
+                Class tryClass = nil;
+                
+                tryClass = [factoryClass captureSourceClass];
+                [self validateAndRegisterPluginClass:tryClass];
+                tryClass = [factoryClass streamServiceClass];
+                [self validateAndRegisterPluginClass:tryClass];
+                
+            } else {
+                [self validateAndRegisterPluginClass:currPrincipalClass];
+            }
+            
+            
             if ([currPrincipalClass conformsToProtocol:@protocol(CSCaptureSourceProtocol)])
             {
                 

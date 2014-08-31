@@ -376,7 +376,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)dealloc
 {
-    NSLog(@"DEALLOC INPUT");
     [self deregisterVideoInput:self.videoInput];
     for(id vInput in self.videoSources)
     {
