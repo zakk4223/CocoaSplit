@@ -9,11 +9,14 @@
 #import <Foundation/Foundation.h>
 #import <QuartzCore/CoreImage.h>
 #import "Capture.h"
-#import "InputPopupControllerViewController.h"
 #import "CSCaptureSourceProtocol.h"
 #import "CSPluginLoader.h"
 #import "SourceCache.h"
+#import "InputPopupControllerViewController.h"
 
+
+
+@class SourceLayout;
 
 typedef enum input_rotate_style_t {
     
@@ -26,7 +29,7 @@ typedef enum input_rotate_style_t {
 
 //@protocol CSCaptureSessionProtocol;
 
-@interface InputSource : NSObject <NSCoding>
+@interface InputSource : NSObject <NSCoding, NSWindowDelegate>
 {
     CVPixelBufferRef _tmpCVBuf;
     CGColorSpaceRef _colorSpace;
@@ -50,6 +53,7 @@ typedef enum input_rotate_style_t {
 
 
 
+@property (weak) SourceLayout *layout;
 
 @property (strong) NSObject<CSCaptureSourceProtocol> *videoInput;
 @property (assign) float x_pos;
@@ -82,7 +86,7 @@ typedef enum input_rotate_style_t {
 @property (strong) CIFilter *cropFilter;
 @property (strong) CIFilter *chromaKeyFilter;
 
-@property (strong) CIContext *imageContext;
+@property (weak) CIContext *imageContext;
 @property (assign) NSSize oldSize;
 @property (assign) bool active;
 
@@ -94,8 +98,8 @@ typedef enum input_rotate_style_t {
 //When an instance is created the creator (capture controller) binds these to the size of the canvas in case we are asked to auto-fit
 //at a later time
 
-@property (assign) size_t canvas_width;
-@property (assign) size_t canvas_height;
+@property (readonly) size_t canvas_width;
+@property (readonly) size_t canvas_height;
 
 @property (strong) NSMutableArray *videoSources;
 
@@ -104,7 +108,7 @@ typedef enum input_rotate_style_t {
 @property (strong) NSString *transitionFilterName;
 @property (strong) NSArray *transitionNames;
 
-@property (strong) InputPopupControllerViewController *windowViewController;
+@property (strong) id windowViewController;
 
 @property (assign) input_rotate_style rotateStyle;
 
@@ -128,7 +132,8 @@ typedef enum input_rotate_style_t {
 
 
 
-@property (strong) NSPopover *editorPopover;
+@property (strong) InputPopupControllerViewController *editorController;
+@property (strong) NSWindow *editorWindow;
 
 
 -(CIImage *) currentImage:(CIImage *)backgroundImage;
@@ -141,7 +146,7 @@ typedef enum input_rotate_style_t {
 -(void) autoFit;
 -(void)addUserEffect:(NSIndexSet *)filterIndexes;
 -(void)removeUserEffects:(NSIndexSet *)filterIndexes;
--(void)sourceConfigurationView;
+-(void)sourceConfigurationView:(NSView *)theView;
 
 
 

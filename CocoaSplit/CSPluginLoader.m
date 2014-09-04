@@ -113,6 +113,7 @@
     NSString *classLabel = [toLoad label];
     NSMutableDictionary *registerMap = nil;
     
+    
     if ([toLoad conformsToProtocol:@protocol(CSCaptureSourceProtocol)])
     {
         registerMap = self.sourcePlugins;
@@ -171,16 +172,6 @@
             }
             
             
-            if ([currPrincipalClass conformsToProtocol:@protocol(CSCaptureSourceProtocol)])
-            {
-                
-                classLabel = [currPrincipalClass label];
-                [self.sourcePlugins setObject:currPrincipalClass forKey:classLabel];
-            } else if ([currPrincipalClass conformsToProtocol:@protocol(CSStreamServiceProtocol)]) {
-                classLabel = [currPrincipalClass label];
-                [self.streamServicePlugins setObject:currPrincipalClass forKey:classLabel];
-            }
-                
         }
     }
 }

@@ -25,7 +25,8 @@
 @protocol h264Compressor;
 @class OutputDestination;
 @class InputSource;
-
+@class SourceLayout;
+@class LayoutPreviewWindowController;
 
 
 
@@ -41,8 +42,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     CIFilter *_compositeFilter;
     CIImage *_backgroundImage;
     
-    NSSortDescriptor *_sourceDepthSorter;
-    NSSortDescriptor *_sourceUUIDSorter;
+
     
     id _audio_capture_session;
     
@@ -80,16 +80,12 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     bool _last_running_value;
     
     
-    CVPixelBufferPoolRef _cvpool;
     CIContext *_cictx;
     CIFilter *_cifilter;
     NSOpenGLContext *_ogl_ctx;
     CGLContextObj _cgl_ctx;
     
     
-    CVPixelBufferRef _currentPB;
-    NSSize _cvpool_size;
-    CIFilter *_backgroundFilter;
     float _min_render_time;
     float _max_render_time;
     float _avg_render_time;
@@ -99,15 +95,17 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 }
 
 
+
+@property (strong) LayoutPreviewWindowController *layoutPreviewController;
+
 @property (strong) NSString *renderStatsString;
 
 
 @property (strong) NSString *layoutPanelName;
 
-@property (strong) NSMutableDictionary *sourceLayouts;
-@property (strong) NSString *selectedLayout;
+@property (strong) NSMutableArray *sourceLayouts;
+@property (strong) SourceLayout *selectedLayout;
 
-@property (strong) NSMutableArray *sourceList;
 
 @property (strong) id<h264Compressor> videoCompressor;
 @property (strong) AVFAudioCapture *audioCaptureSession;
@@ -136,7 +134,10 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) IBOutlet NSObjectController *outputPanelController;
 @property (strong) IBOutlet NSObjectController *layoutPanelController;
 
-- (IBAction)closeOutputPanel:(id)sender;
+
+
+- (IBAction)openLayoutPreview:(id)sender;
+
 - (IBAction)deleteLayout:(id)sender;
 
 - (IBAction)createNewLayout:(id)sender;
@@ -308,6 +309,9 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(void)deleteSource:(InputSource *)delSource;
 -(InputSource *)findSource:(NSPoint)forPoint;
 -(NSArray *)sourceListOrdered;
+-(CVPixelBufferRef)currentImg;
+
+
 
 -(void)setupLogging;
 

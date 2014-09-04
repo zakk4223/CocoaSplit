@@ -130,12 +130,14 @@
     return [ret intValue];
 }
 
+/*
 -(id) awakeAfterUsingCoder:(NSCoder *)aDecoder
 {
     SourceCache *sharedCache = [SourceCache sharedCache];
     
     return [sharedCache cacheSource:self uniqueID:self.activeVideoDevice.uniqueID];
 }
+*/
 
 -(id) copyWithZone:(NSZone *)zone
 {

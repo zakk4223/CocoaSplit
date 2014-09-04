@@ -23,15 +23,16 @@
 		34AFC30919B0A5800007C07B /* CSTwitchStreamServicePlugin-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CSTwitchStreamServicePlugin-Info.plist"; sourceTree = "<group>"; };
 		34AFC30B19B0A5800007C07B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		34AFC30D19B0A5800007C07B /* CSTwitchStreamServicePlugin-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CSTwitchStreamServicePlugin-Prefix.pch"; sourceTree = "<group>"; };
-		34AFC31919B0A58E0007C07B /* CSAbstractCaptureDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAbstractCaptureDevice.h; path = PluginHeaders/CSAbstractCaptureDevice.h; sourceTree = "<group>"; };
-		34AFC31A19B0A58E0007C07B /* CSCaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureBase.h; path = PluginHeaders/CSCaptureBase.h; sourceTree = "<group>"; };
-		34AFC31B19B0A58E0007C07B /* CSCaptureSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureSourceProtocol.h; path = PluginHeaders/CSCaptureSourceProtocol.h; sourceTree = "<group>"; };
-		34AFC31C19B0A58E0007C07B /* CSStreamServiceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSStreamServiceProtocol.h; path = PluginHeaders/CSStreamServiceProtocol.h; sourceTree = "<group>"; };
 		34AFC31E19B0A5DC0007C07B /* TwitchStreamService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwitchStreamService.h; sourceTree = "<group>"; };
 		34AFC31F19B0A5DC0007C07B /* TwitchStreamService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwitchStreamService.m; sourceTree = "<group>"; };
 		34AFC32119B0A5FD0007C07B /* TwitchStreamServiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwitchStreamServiceViewController.h; sourceTree = "<group>"; };
 		34AFC32219B0A5FD0007C07B /* TwitchStreamServiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwitchStreamServiceViewController.m; sourceTree = "<group>"; };
 		34AFC32319B0A5FD0007C07B /* TwitchStreamServiceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TwitchStreamServiceViewController.xib; sourceTree = "<group>"; };
+		34D6580419B343210012E32B /* CSAbstractCaptureDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAbstractCaptureDevice.h; path = PluginHeaders/CSAbstractCaptureDevice.h; sourceTree = "<group>"; };
+		34D6580519B343210012E32B /* CSCaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureBase.h; path = PluginHeaders/CSCaptureBase.h; sourceTree = "<group>"; };
+		34D6580619B343210012E32B /* CSCaptureSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureSourceProtocol.h; path = PluginHeaders/CSCaptureSourceProtocol.h; sourceTree = "<group>"; };
+		34D6580719B343210012E32B /* CSStreamServiceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSStreamServiceProtocol.h; path = PluginHeaders/CSStreamServiceProtocol.h; sourceTree = "<group>"; };
+		34D6580819B343210012E32B /* CSPluginFactoryProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPluginFactoryProtocol.h; path = PluginHeaders/CSPluginFactoryProtocol.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,12 +50,12 @@
 		34AFC2F519B0A5800007C07B = {
 			isa = PBXGroup;
 			children = (
+				34D6580919B343210012E32B /* PluginHeaders */,
 				34AFC32119B0A5FD0007C07B /* TwitchStreamServiceViewController.h */,
 				34AFC32219B0A5FD0007C07B /* TwitchStreamServiceViewController.m */,
 				34AFC32319B0A5FD0007C07B /* TwitchStreamServiceViewController.xib */,
 				34AFC31E19B0A5DC0007C07B /* TwitchStreamService.h */,
 				34AFC31F19B0A5DC0007C07B /* TwitchStreamService.m */,
-				34AFC31D19B0A58E0007C07B /* PluginHeaders */,
 				34AFC30719B0A5800007C07B /* CSTwitchStreamServicePlugin */,
 				34AFC30019B0A5800007C07B /* Frameworks */,
 				34AFC2FF19B0A5800007C07B /* Products */,
@@ -106,16 +107,17 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		34AFC31D19B0A58E0007C07B /* PluginHeaders */ = {
+		34D6580919B343210012E32B /* PluginHeaders */ = {
 			isa = PBXGroup;
 			children = (
-				34AFC31919B0A58E0007C07B /* CSAbstractCaptureDevice.h */,
-				34AFC31A19B0A58E0007C07B /* CSCaptureBase.h */,
-				34AFC31B19B0A58E0007C07B /* CSCaptureSourceProtocol.h */,
-				34AFC31C19B0A58E0007C07B /* CSStreamServiceProtocol.h */,
+				34D6580419B343210012E32B /* CSAbstractCaptureDevice.h */,
+				34D6580519B343210012E32B /* CSCaptureBase.h */,
+				34D6580619B343210012E32B /* CSCaptureSourceProtocol.h */,
+				34D6580719B343210012E32B /* CSStreamServiceProtocol.h */,
+				34D6580819B343210012E32B /* CSPluginFactoryProtocol.h */,
 			);
 			name = PluginHeaders;
-			path = ../..;
+			path = ../../CocoaSplit;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -315,6 +317,7 @@
 				34AFC31219B0A5800007C07B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

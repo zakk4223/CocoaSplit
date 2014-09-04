@@ -8,11 +8,15 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
             <connections>
-                <outlet property="delegate" destination="494" id="495"/>
+                <outlet property="delegate" destination="494" id="zxf-RS-nDe"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
-        <customObject id="-3" userLabel="Application"/>
+        <customObject id="-3" userLabel="Application">
+            <connections>
+                <outlet property="delegate" destination="816" id="AR5-LF-C8u"/>
+            </connections>
+        </customObject>
         <userDefaultsController representsSharedInstance="YES" id="555"/>
         <customObject id="816" customClass="CaptureController">
             <connections>
@@ -139,6 +143,12 @@
                                     <action selector="openLogWindow:" target="816" id="jz5-Wx-wWz"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Layout Preview" id="pVt-Sk-CN0">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="openLayoutPreview:" target="816" id="7gW-tX-G9w"/>
+                                </connections>
+                            </menuItem>
                             <menuItem title="Full Screen" keyEquivalent="f" id="3819">
                                 <connections>
                                     <action selector="toggleFullscreen:" target="2416" id="3821"/>
@@ -189,7 +199,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="683" y="323" width="812" height="689"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1178"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1058"/>
             <view key="contentView" id="372">
                 <rect key="frame" x="0.0" y="0.0" width="812" height="689"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -231,7 +241,7 @@
                                                 </connections>
                                             </button>
                                             <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3861">
-                                                <rect key="frame" x="153" y="164" width="96" height="20"/>
+                                                <rect key="frame" x="153" y="164" width="96" height="21"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="92" id="hiD-XP-6bO"/>
@@ -560,11 +570,11 @@
                                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </clipView>
                                                             <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="1241">
-                                                                <rect key="frame" x="1" y="1" width="0.0" height="16"/>
+                                                                <rect key="frame" x="-7" y="2" width="0.0" height="15"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                             </scroller>
                                                             <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="1243">
-                                                                <rect key="frame" x="-15" y="17" width="16" height="0.0"/>
+                                                                <rect key="frame" x="-14" y="9" width="15" height="0.0"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                             </scroller>
                                                             <tableHeaderView key="headerView" id="1242">
@@ -830,10 +840,10 @@
                                                                 </menu>
                                                             </popUpButtonCell>
                                                             <connections>
-                                                                <binding destination="LMS-v7-nvj" name="content" keyPath="arrangedObjects" id="B9y-CY-cOF"/>
-                                                                <binding destination="LMS-v7-nvj" name="contentValues" keyPath="arrangedObjects.key" previousBinding="fdq-8m-CFx" id="3xH-Dm-NGI"/>
-                                                                <binding destination="LMS-v7-nvj" name="contentObjects" keyPath="arrangedObjects.key" previousBinding="B9y-CY-cOF" id="fdq-8m-CFx"/>
-                                                                <binding destination="816" name="selectedObject" keyPath="self.selectedLayout" previousBinding="3xH-Dm-NGI" id="JJc-q5-KTs"/>
+                                                                <binding destination="TZL-zr-Ssj" name="contentObjects" keyPath="arrangedObjects" previousBinding="FBw-h7-aZa" id="Buy-yZ-wI7"/>
+                                                                <binding destination="TZL-zr-Ssj" name="content" keyPath="arrangedObjects" id="FBw-h7-aZa"/>
+                                                                <binding destination="TZL-zr-Ssj" name="contentValues" keyPath="arrangedObjects.name" previousBinding="Buy-yZ-wI7" id="5Pv-Y8-MIo"/>
+                                                                <binding destination="816" name="selectedObject" keyPath="self.selectedLayout" previousBinding="5Pv-Y8-MIo" id="ct1-l9-nqZ"/>
                                                             </connections>
                                                         </popUpButton>
                                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gWX-z7-q20">
@@ -1051,7 +1061,7 @@
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                             </scroller>
                                                             <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="2216">
-                                                                <rect key="frame" x="749" y="17" width="16" height="0.0"/>
+                                                                <rect key="frame" x="750" y="17" width="15" height="0.0"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                             </scroller>
                                                             <tableHeaderView key="headerView" id="2261">
@@ -1194,11 +1204,6 @@
             <size key="contentSize" width="100" height="100"/>
             <size key="maxContentSize" width="10000" height="10000"/>
         </drawer>
-        <dictionaryController objectClassName="_NSControllerKeyValuePair" id="LMS-v7-nvj" userLabel="LayoutDictionaryController">
-            <connections>
-                <binding destination="816" name="contentDictionary" keyPath="self.sourceLayouts" id="9bz-tO-7x2"/>
-            </connections>
-        </dictionaryController>
         <arrayController objectClassName="OutputDestination" id="1431" userLabel="OutputDestinationArrayController">
             <declaredKeys>
                 <string>name</string>
@@ -1214,6 +1219,11 @@
         <arrayController id="Ps1-eW-a2A" userLabel="destinationTypesController">
             <connections>
                 <binding destination="816" name="contentArray" keyPath="self.destinationTypes" id="zTx-hV-zxu"/>
+            </connections>
+        </arrayController>
+        <arrayController id="TZL-zr-Ssj" userLabel="SourceLayoutsArrayController">
+            <connections>
+                <binding destination="816" name="contentArray" keyPath="self.sourceLayouts" id="hfK-ig-qmY"/>
             </connections>
         </arrayController>
         <objectController id="hsc-go-2rK" userLabel="InputSourceController">
@@ -1259,7 +1269,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="599" height="303"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1178"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1058"/>
             <view key="contentView" id="spk-HP-gZw">
                 <rect key="frame" x="0.0" y="0.0" width="599" height="303"/>
                 <autoresizingMask key="autoresizingMask"/>

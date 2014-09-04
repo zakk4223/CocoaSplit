@@ -9,14 +9,17 @@
 #import <Cocoa/Cocoa.h>
 #import <Quartz/Quartz.h>
 
+@class InputSource;
 
 @interface InputPopupControllerViewController : NSViewController <NSPopoverDelegate, NSWindowDelegate>
-@property (strong) IBOutlet NSObjectController *InputController;
-@property (strong) NSWindow *popoverWindow;
+
+@property (strong) IBOutlet NSWindow *popupWIndow;
+
 @property (strong) NSPopover *myPopover;
 @property (strong) NSWindow *transitionFilterWindow;
 @property (strong) NSWindow *userFilterWindow;
 @property (strong) NSWindow *screenCropWindow;
+@property (weak) InputSource *inputSource;
 
 
 - (IBAction)deleteMultiSource:(id)sender;

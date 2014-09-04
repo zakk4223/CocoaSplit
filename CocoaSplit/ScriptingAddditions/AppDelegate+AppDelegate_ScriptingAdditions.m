@@ -1,0 +1,69 @@
+//
+//  AppDelegate+AppDelegate_ScriptingAdditions.m
+//  CocoaSplit
+//
+//  Created by Zakk on 8/31/14.
+//  Copyright (c) 2014 Zakk. All rights reserved.
+//
+
+#import "AppDelegate+AppDelegate_ScriptingAdditions.h"
+
+@implementation AppDelegate (AppDelegate_ScriptingAdditions)
+
+-(NSArray *)layouts
+{
+    NSLog(@"SOURCE LAYOUTS");
+    return self.captureController.sourceLayouts;
+}
+
+
+- (unsigned int)countOfLayoutsArray {
+    NSLog(@"COUNT OF LAYOUTS");
+    return self.captureController.sourceLayouts.count;
+}
+
+
+-(void)setActivelayout:(SourceLayout *)layout
+{
+    self.captureController.selectedLayout = layout;
+}
+
+
+-(int)width
+{
+    return self.captureController.captureWidth;
+}
+
+-(int)height
+{
+    return self.captureController.captureHeight;
+}
+
+-(float)fps
+{
+    return self.captureController.captureFPS;
+}
+
+-(void)setFps:(double)fps
+{
+    self.captureController.captureFPS = fps;
+}
+
+-(SourceLayout *)activelayout
+{
+    return self.captureController.selectedLayout;
+}
+
+
+-(BOOL)application:(NSApplication *)sender delegateHandlesKey:(NSString *)key
+{
+    
+    NSLog(@"HANDLES KEY? %@", key);
+    
+    NSArray *keys = @[@"layouts", @"width", @"height", @"fps", @"activelayout"];
+    
+    return [keys containsObject:key];
+}
+
+
+@end

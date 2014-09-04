@@ -44,6 +44,12 @@
         return toCache;
     }
     
+    if (!uniqueID)
+    {
+        //don't cache things with null uniqueIDs, that just means they don't have an active source yet
+        return toCache;
+    }
+    
     
     NSString *ofType = NSStringFromClass([toCache class]);
     

@@ -17,6 +17,9 @@
 #import "x264Compressor.h"
 #import "InputSource.h"
 #import "InputPopupControllerViewController.h"
+#import "SourceLayout.h"
+#import "LayoutPreviewWindowController.h"
+
 
 @implementation CaptureController
 
@@ -31,10 +34,12 @@
 {
     if (self.selectedLayout)
     {
-        if ([self actionConfirmation:[NSString stringWithFormat:@"Really delete %@?", self.selectedLayout] infoString:nil])
+        if ([self actionConfirmation:[NSString stringWithFormat:@"Really delete %@?", self.selectedLayout.name] infoString:nil])
         {
             [self willChangeValueForKey:@"sourceLayouts"];
-            [self.sourceLayouts removeObjectForKey:self.selectedLayout];
+            self.selectedLayout.isActive = NO;
+            [self.sourceLayouts removeObject:self.selectedLayout];
+            
             [self didChangeValueForKey:@"sourceLayouts"];
             self.selectedLayout = nil;
         }
@@ -43,17 +48,48 @@
 
 
 
+-(SourceLayout *)findLayoutWithName:(NSString *)name
+{
+    for(SourceLayout *layout in self.sourceLayouts)
+    {
+        if([layout.name isEqualToString:name])
+        {
+            return layout;
+        }
+    }
+    
+    return nil;
+}
+
 - (IBAction)createNewLayout:(id)sender
 {
+    
+    SourceLayout *oldLayout = self.selectedLayout;
     
     [self.layoutPanelController commitEditing];
     
     if (self.layoutPanelName)
     {
+        
+        NSMutableString *baseName = self.layoutPanelName.mutableCopy;
+        
+        NSMutableString *newName = baseName;
+        int name_try = 1;
+        
+        while ([self findLayoutWithName:newName]) {
+            newName = [NSMutableString stringWithFormat:@"%@#%d", baseName, name_try];
+            name_try++;
+        }
+
+        
+        SourceLayout *newLayout = [[SourceLayout alloc] init];
+        newLayout.name = newName;
+        
         [self willChangeValueForKey:@"sourceLayouts"];
-        self.sourceLayouts[self.layoutPanelName] = [[NSData alloc] init];
+        
+        [self.sourceLayouts addObject:newLayout];
         [self didChangeValueForKey:@"sourceLayouts"];
-        self.selectedLayout = self.layoutPanelName;
+        oldLayout.isActive = NO;
     }
     
     self.layoutPanelName  = nil;
@@ -335,13 +371,14 @@
 
 - (IBAction)addInputSource:(id)sender
 {
-    InputSource *newSource = [[InputSource alloc] init];
-    newSource.depth = (int)self.sourceList.count;
-    newSource.imageContext  = _cictx;
-    [self bindInputSourceVars:newSource];
+    if (self.selectedLayout)
+    {
+        
     
-    [self.sourceList addObject:newSource];
-    [self.previewCtx spawnInputSettings:newSource atRect:NSZeroRect];
+        InputSource *newSource = [[InputSource alloc] init];
+        [self.selectedLayout addSource:newSource];
+        [self.previewCtx spawnInputSettings:newSource atRect:NSZeroRect];
+    }
 }
 
 
@@ -450,7 +487,7 @@
         [[NSBundle mainBundle] loadNibNamed:@"NewLayoutPanel" owner:self topLevelObjects:nil];
         
     }
-    [NSApp beginSheet:self.layoutPanel modalForWindow:[[NSApp delegate] window] modalDelegate:self didEndSelector:NULL contextInfo:NULL];
+    [NSApp beginSheet:self.layoutPanel modalForWindow:[NSApp mainWindow] modalDelegate:self didEndSelector:NULL contextInfo:NULL];
 }
 
 
@@ -475,31 +512,6 @@
     }
     
 }
-
-
-/*
--(void) selectedVideoCaptureFromID:(NSString *)uniqueID
-{
-    
-    AbstractCaptureDevice *dummydev = [[AbstractCaptureDevice alloc] init];
-    
-    dummydev.uniqueID = uniqueID;
-    
-    NSArray *currentAvailableDevices;
-    
-    currentAvailableDevices = self.videoCaptureSession.availableVideoDevices;
-    
-    NSUInteger sidx;
-    sidx = [currentAvailableDevices indexOfObject:dummydev];
-    if (sidx == NSNotFound)
-    {
-        self.videoCaptureSession.activeVideoDevice = nil;
-    } else {
-        self.videoCaptureSession.activeVideoDevice = [currentAvailableDevices objectAtIndex:sidx];
-    }
-}
-
- */
 
 
 -(void)setCaptureFPS:(double)captureFPS
@@ -542,10 +554,6 @@
 
     _cgl_ctx = [_ogl_ctx CGLContextObj];
     
-    _backgroundFilter = [CIFilter filterWithName:@"CIConstantColorGenerator"];
-    [_backgroundFilter setDefaults];
-    [_backgroundFilter setValue:[CIColor colorWithRed:0.0f green:0.0f blue:0.0f] forKey:kCIInputColorKey];
-
     /*
     _cictx = [CIContext contextWithCGLContext:_cgl_ctx pixelFormat:CGLGetPixelFormat(_cgl_ctx) colorSpace:CGColorSpaceCreateDeviceRGB() options:nil];
     
@@ -553,41 +561,9 @@
     [_cifilter setDefaults];
 */
     
-    
 }
 
 
--(bool) createPixelBufferPoolForSize:(NSSize) size
-{
-    
-    NSLog(@"Controller: Creating Pixel Buffer Pool %f x %f", size.width, size.height);
-    
-    NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
-    [attributes setValue:[NSNumber numberWithInt:size.width] forKey:(NSString *)kCVPixelBufferWidthKey];
-    [attributes setValue:[NSNumber numberWithInt:size.height] forKey:(NSString *)kCVPixelBufferHeightKey];
-    [attributes setValue:@{(NSString *)kIOSurfaceIsGlobal: @NO} forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
-    [attributes setValue:[NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA] forKey:(NSString *)kCVPixelBufferPixelFormatTypeKey];
-    
-    
-    
-    if (_cvpool)
-    {
-        CVPixelBufferPoolRelease(_cvpool);
-    }
-    
-    
-    
-    CVReturn result = CVPixelBufferPoolCreate(NULL, NULL, (__bridge CFDictionaryRef)(attributes), &_cvpool);
-    
-    if (result != kCVReturnSuccess)
-    {
-        return NO;
-    }
-    
-    return YES;
-    
-    
-}
 
 
 -(id) init
@@ -685,8 +661,6 @@
        
        
        self.extraSaveData = [[NSMutableDictionary alloc] init];
-       _sourceDepthSorter = [[NSSortDescriptor alloc] initWithKey:@"depth" ascending:YES];
-       _sourceUUIDSorter = [[NSSortDescriptor alloc] initWithKey:@"uuid" ascending:YES];
        
        //load all filters, then load our custom filter(s)
        
@@ -919,23 +893,9 @@
     
     //[saveRoot setValue:self.sourceList forKeyPath:@"sourceList"];
     
-    
-    if (self.selectedLayout)
-    {
-        NSData *layoutSave = [NSKeyedArchiver archivedDataWithRootObject:self.sourceList];
-        self.sourceLayouts[self.selectedLayout] = layoutSave;
-        [saveRoot setValue:self.selectedLayout forKey:@"selectedLayout"];
-    }
+    [saveRoot setValue:self.selectedLayout forKey:@"selectedLayout"];
     
     [saveRoot setValue:self.sourceLayouts forKey:@"sourceLayouts"];
-    
-    
-    
-    
-    
-    
-    
-    
     [NSKeyedArchiver archiveRootObject:saveRoot toFile:path];
     
 }
@@ -1033,43 +993,28 @@
     
     if (!self.sourceLayouts)
     {
-        self.sourceLayouts = [[NSMutableDictionary alloc] init];
-        self.sourceLayouts[@"default"] = [[NSData alloc] init];
+        self.sourceLayouts = [[NSMutableArray alloc] init];
+        SourceLayout *newLayout = [[SourceLayout alloc] init];
+        newLayout.name = @"default";
+        [[self mutableArrayValueForKey:@"sourceLayouts" ] addObject:newLayout];
+        self.selectedLayout = newLayout;
+        newLayout.isActive = YES;
+        
+    } else {
+    
+        self.selectedLayout = [saveRoot valueForKey:@"selectedLayout"];
+        
     }
-    
-    
-    NSString *savedLayoutName = [saveRoot valueForKey:@"selectedLayout"];
     
 
-    
-    if (!savedLayoutName)
-    {
-        savedLayoutName = @"default";
-    }
-    
-    self.selectedLayout = savedLayoutName;
-    
     [self migrateDefaultCompressor:saveRoot];
 }
 
 
--(void)unbindInputSourceVars:(InputSource *)inputSource
-{
-    [inputSource unbind:@"canvas_width"];
-    [inputSource unbind:@"canvas_height"];
-}
-
-
--(void)bindInputSourceVars:(InputSource *)inputSource
-{
-    [inputSource bind:@"canvas_width" toObject:self withKeyPath:@"captureWidth" options:nil];
-    [inputSource bind:@"canvas_height" toObject:self withKeyPath:@"captureHeight" options:nil];
-}
 
 
 -(void)setExtraData:(id)saveData forKey:(NSString *)forKey
 {
-    
     
     [self.extraSaveData setValue:saveData forKey:forKey];
 }
@@ -1081,42 +1026,20 @@
 
 
 
--(void)setSelectedLayout:(NSString *)selectedLayout
+-(void)setSelectedLayout:(SourceLayout *)selectedLayout
 {
-    NSString *currentLayout = _selectedLayout;
+    SourceLayout *currentLayout = _selectedLayout;
     
-    NSMutableArray *oldSourceList = self.sourceList;
-    
-    
-    
-    NSData *newData = self.sourceLayouts[selectedLayout];
-    if (newData && newData.length > 0)
-    {
-        NSArray *newSourceList = [NSKeyedUnarchiver unarchiveObjectWithData:newData];
-        for (InputSource *src in newSourceList)
-        {
-            src.imageContext = _cictx;
-            [self bindInputSourceVars:src];
-        }
-        
-        
-        self.sourceList = newSourceList.mutableCopy;
-    } else {
-        self.sourceList = [[NSMutableArray alloc] init];
-    }
-    
-    
-    if (currentLayout)
-    {
-        NSData *layoutSave = [NSKeyedArchiver archivedDataWithRootObject:oldSourceList];
-        self.sourceLayouts[currentLayout] = layoutSave;
-    }
-
-    oldSourceList = nil;
     _selectedLayout = selectedLayout;
+    selectedLayout.isActive = YES;
+    selectedLayout.controller = self;
+    selectedLayout.ciCtx = _cictx;
+    self.previewCtx.sourceLayout = selectedLayout;
+    currentLayout.isActive = NO;
+    
 }
 
--(NSString *)selectedLayout
+-(SourceLayout *)selectedLayout
 {
     return _selectedLayout;
 }
@@ -1742,123 +1665,34 @@
 -(void)deleteSource:(InputSource *)delSource
 {
     
-    [self.sourceList removeObject:delSource];
-    delSource.editorPopover = nil;
-    //delSource.videoInput = nil;
+    if (self.selectedLayout)
+    {
+        [self.selectedLayout deleteSource:delSource];
+    }
+    delSource.editorController = nil;
     
 }
 
-
+/*
 -(NSArray *)sourceListOrdered
 {
-    NSArray *listCopy = [self.sourceList sortedArrayUsingDescriptors:@[_sourceDepthSorter, _sourceUUIDSorter]];
+    NSArray *listCopy = [self.selectedLayout.sourceList sortedArrayUsingDescriptors:@[_sourceDepthSorter, _sourceUUIDSorter]];
     return listCopy;
 }
+ */
 
 
 
 -(InputSource *)findSource:(NSPoint)forPoint
 {
-    
-    NSArray *listCopy = [self.sourceList sortedArrayUsingDescriptors:@[_sourceDepthSorter.reversedSortDescriptor, _sourceUUIDSorter.reversedSortDescriptor]];
-    
-    for (InputSource *isrc in listCopy)
-    {
-        
-        if (NSPointInRect(forPoint, isrc.layoutPosition))
-        {
-            return isrc;
-        }
-    }
-    
-    return nil;
+    return [self.selectedLayout findSource:forPoint];
 }
 
 
 
--(CVPixelBufferRef)currentImg
+-(CVPixelBufferRef) currentFrame
 {
-    
-    @autoreleasepool {
-        
-        CVPixelBufferRef destFrame = NULL;
-        
-
-        
-
-        CIImage *newImage = [_backgroundFilter valueForKey:kCIOutputImageKey];
-        
-        newImage = [newImage imageByCroppingToRect:NSMakeRect(0, 0, self.captureWidth, self.captureHeight)];
-
-        
-        NSArray *listCopy = [self.sourceList sortedArrayUsingDescriptors:@[_sourceDepthSorter, _sourceUUIDSorter]];
-        
-        
-        for (InputSource *isource in listCopy)
-        {
-            if (isource.active)
-            {
-                newImage = [isource currentImage:newImage];
-            }
-            
-        }
-        
-        if (!newImage)
-        {
-            return nil;
-        }
-        
-        CGFloat frameWidth, frameHeight;
-        
-        frameWidth = self.captureWidth;
-        frameHeight = self.captureHeight;
-        
-        NSSize frameSize = NSMakeSize(frameWidth, frameHeight);
-        
-        if (!CGSizeEqualToSize(frameSize, _cvpool_size))
-        {
-            [self createPixelBufferPoolForSize:frameSize];
-            _cvpool_size = frameSize;
-            
-        }
-        
-        CVPixelBufferPoolCreatePixelBuffer(kCVReturnSuccess, _cvpool, &destFrame);
-
-        
-        
-        [_cictx render:newImage toIOSurface:CVPixelBufferGetIOSurface(destFrame) bounds:NSMakeRect(0,0,frameWidth, frameHeight) colorSpace:CGColorSpaceCreateDeviceRGB()];
-
-    
-    
-        @synchronized(self)
-        {
-            if (_currentPB)
-            {
-                CVPixelBufferRelease(_currentPB);
-            }
-            
-            _currentPB = destFrame;
-        }
-        
-        for (InputSource *isource in listCopy)
-        {
-            [isource frameRendered];
-        }
-
-        
-    }
-    
-    return _currentPB;
-}
-
-
--(CVPixelBufferRef)currentFrame
-{
-    @synchronized(self)
-    {
-        CVPixelBufferRetain(_currentPB);
-        return _currentPB;
-    }
+    return [self.selectedLayout currentFrame];
 }
 
 
@@ -1872,7 +1706,9 @@
             
             double nfstart = [self mach_time_seconds];
             
-            newFrame = [self currentImg];
+            newFrame = [self.selectedLayout currentImg];
+            //newFrame = [self currentFrame];
+            
             
             double nfdone = [self mach_time_seconds];
             double nftime = nfdone - nfstart;
@@ -2052,6 +1888,7 @@
     return retval;
 }
 
+
 - (void) setNilValueForKey:(NSString *)key
 {
     
@@ -2100,6 +1937,19 @@
         return NSTerminateCancel;
     }
     return NSTerminateNow;
+ 
+    
+}
+
+- (IBAction)openLayoutPreview:(id)sender
+{
+    self.layoutPreviewController = [[LayoutPreviewWindowController alloc] initWithWindowNibName:@"LayoutPreviewWindowController"];
+    [self.layoutPreviewController showWindow:nil];
+    self.layoutPreviewController.captureController = self;
+    //Preview gets a copy of everything so it doesn't mess up live source
+    //self.layoutPreviewController.sourceLayouts = [[NSMutableArray alloc] initWithArray:self.sourceLayouts copyItems:YES];
+    //Or maybe not...
+    self.layoutPreviewController.sourceLayouts = self.sourceLayouts;
     
 }
 @end

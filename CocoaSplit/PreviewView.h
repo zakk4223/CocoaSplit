@@ -12,6 +12,7 @@
 
 
 
+@class SourceLayout;
 @class InputSource;
 
 static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStamp* now, const CVTimeStamp* outputTime,
@@ -51,7 +52,8 @@ typedef enum resize_style_t {
 
 
 
-@interface PreviewView : NSOpenGLView
+@interface PreviewView : NSOpenGLView <NSPopoverDelegate, NSWindowDelegate>
+
 {
 
     IOSurfaceID _boundIOSurfaceID;
@@ -76,6 +78,8 @@ typedef enum resize_style_t {
     NSRecursiveLock *renderLock;
 
     CVPixelBufferPoolRef  _renderPool;
+    CIContext *_ciCtx;
+    
 
     NSScreen *_fullscreenOn;
 
@@ -94,6 +98,7 @@ typedef enum resize_style_t {
 
 
 
+@property (strong) NSMenu *sourceSettingsMenu;
 
 @property (strong) NSMenu *sourceListMenu;
 
@@ -109,7 +114,10 @@ typedef enum resize_style_t {
 @property (assign) bool isResizing;
 @property (assign) resize_style resizeType;
 @property (assign) NSPoint resizeAnchor;
-
+@property (strong) SourceLayout *sourceLayout;
+//If a preview view is set to an active source we copy it so changes don't mess with the live feed
+//When we save or set to live we use this variable to grab the original version and modify it in place
+@property (strong) SourceLayout *originalActiveLayout;
 
 
 

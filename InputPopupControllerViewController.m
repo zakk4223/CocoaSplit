@@ -16,6 +16,17 @@
 @implementation InputPopupControllerViewController
 
 
+-(instancetype) init
+{
+    if (self = [super init])
+    {
+        self = [super initWithNibName:@"InputPopupControllerViewController" bundle:nil];
+    }
+    
+    return self;
+}
+
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     
@@ -27,36 +38,22 @@
 }
 
 
--(NSWindow *)detachableWindowForPopover:(NSPopover *)popover
+
+
+- (void)popoverDidClose:(NSNotification *)notification
 {
-    //InputPopupControllerViewController *newViewController = [[InputPopupControllerViewController alloc] initWithNibName:@"InputPopupControllerViewController" bundle:nil];
-    
-    //NSLog(@"IN DETACHED CREATE %p", newViewController);
-    
-    self.popoverWindow = [[NSWindow alloc] init];
-
-    InputPopupControllerViewController *newViewController = self;
-    
-    NSRect newFrame = [self.popoverWindow frameRectForContentRect:NSMakeRect(0.0f, 0.0f, newViewController.view.frame.size.width, newViewController.view.frame.size.height)];
-    //newViewController.myPopover = popover;
-    
-    [self.popoverWindow setFrame:newFrame display:NO];
-
-    [self.popoverWindow setReleasedWhenClosed:NO];
-    
-    self.popoverWindow.contentView = newViewController.view;
-    self.popoverWindow.delegate = self;
-    
-    newViewController.transitionFilterWindow = self.transitionFilterWindow;
-    newViewController.InputController.content = self.InputController.content;
-    newViewController.multiSourceController.content = self.multiSourceController.content;
-    
-    
-    
-    self.popoverWindow.title = [NSString stringWithFormat:@"CocoaSplit Input (%@)", [self.InputController.selection valueForKeyPath:@"name"]];
-    
-    self.popoverWindow.styleMask =  NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask;
-    return self.popoverWindow;
+    NSString *closeReason = [[notification userInfo] valueForKey:NSPopoverCloseReasonKey];
+            
+    if (closeReason && closeReason == NSPopoverCloseReasonStandard)
+    {
+        // closeReason can be:
+        //      NSPopoverCloseReasonStandard
+        //      NSPopoverCloseReasonDetachToWindow
+        //
+        // add new code here if you want to respond "after" the popover closes
+        //
+        self.inputSource.editorController = nil;
+    }
     
 }
 

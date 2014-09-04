@@ -12,6 +12,7 @@
 #import "PreviewView.h"
 #import "InputSource.h"
 #import "InputPopupControllerViewController.h"
+#import "SourceLayout.h"
 
 
 
@@ -58,6 +59,10 @@
 
 
 @implementation PreviewView
+
+@synthesize sourceLayout = _sourceLayout;
+
+
 
 -(void) logGLShader:(GLuint)logTarget shaderPath:(NSString *)shaderPath
 {
@@ -192,6 +197,83 @@
     
 }
 
+-(void)goLive
+{
+    if (self.originalActiveLayout)
+    {
+        [self saveLayout];
+    } else {
+        self.controller.selectedLayout = self.sourceLayout;
+    }
+}
+
+
+-(void)saveLayout
+{
+    
+    if (self.originalActiveLayout)
+    {
+        //If it's live we have to just push it to the original copy
+        [self.sourceLayout saveSourceList];
+        self.originalActiveLayout.savedSourceListData = self.sourceLayout.savedSourceListData;
+        [self.originalActiveLayout restoreSourceList];
+        
+    } else {
+        [self.sourceLayout saveSourceList];
+    }
+    
+}
+-(SourceLayout *)sourceLayout
+{
+    return _sourceLayout;
+}
+
+-(void) setSourceLayout:(SourceLayout *)sourceLayout
+{
+    
+    SourceLayout *oldLayout = _sourceLayout;
+    
+    if (!sourceLayout.isActive)
+    {
+        CGLContextObj cgl_ctx = [[self openGLContext] CGLContextObj];
+        
+        sourceLayout.ciCtx =  [CIContext contextWithCGLContext:cgl_ctx pixelFormat:CGLGetPixelFormat(cgl_ctx) colorSpace:CGColorSpaceCreateDeviceRGB() options:nil];
+        sourceLayout.canvas_height = 720;
+        sourceLayout.canvas_width = 1280;
+        [sourceLayout restoreSourceList];
+        
+    }
+    
+    
+    
+    _sourceLayout = sourceLayout;
+    
+    if (oldLayout && !oldLayout.isActive)
+    {
+        [oldLayout saveSourceList];
+    }
+}
+
+
+-(SourceLayout *)sourceLayoutPreview
+{
+    return self.sourceLayout;
+}
+
+
+-(void) setSourceLayoutPreview:(SourceLayout *)sourcelayout
+{
+    
+    if (sourcelayout.isActive)
+    {
+        self.sourceLayout = sourcelayout.copy;
+        self.originalActiveLayout = sourcelayout;
+        
+    } else {
+        self.sourceLayout = sourcelayout;
+        self.originalActiveLayout = nil;
+    }
+}
 
 -(void)bindProgramTextures:(OpenGLProgram *)program
 {
@@ -283,9 +365,32 @@
 }
 
 
+-(void) buildSettingsMenu
+{
+    if (self.sourceSettingsMenu)
+    {
+        return;
+    }
+    
+    NSMenuItem *tmp;
+    self.sourceSettingsMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
+    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Move Up" action:@selector(moveInputUp:) keyEquivalent:@"" atIndex:0];
+    tmp.target = self;
+    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Move Down" action:@selector(moveInputDown:) keyEquivalent:@"" atIndex:1];
+    tmp.target = self;
+    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Settings" action:@selector(showInputSettings:) keyEquivalent:@"" atIndex:2];
+    tmp.target = self;
+    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Delete" action:@selector(deleteInput:) keyEquivalent:@"" atIndex:3];
+    tmp.target = self;
+    
+
+    
+    
+    
+}
 -(void) buildSourceMenu
 {
-    NSArray *sourceList = [self.controller sourceListOrdered];
+    NSArray *sourceList = [self.sourceLayout sourceListOrdered];
     
     self.sourceListMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
     
@@ -327,10 +432,11 @@
     
     tmp = [self convertPoint:theEvent.locationInWindow fromView:nil];
     NSPoint worldPoint = [self realPointforWindowPoint:tmp];
-    self.selectedSource = [self.controller findSource:worldPoint];
+    self.selectedSource = [self.sourceLayout findSource:worldPoint];
     if (self.selectedSource)
     {
-        [self.menu popUpMenuPositioningItem:self.menu.itemArray.firstObject atLocation:tmp inView:self];
+        [self buildSettingsMenu];
+        [self.sourceSettingsMenu popUpMenuPositioningItem:self.sourceSettingsMenu.itemArray.firstObject atLocation:tmp inView:self];
     } else {
         [self buildSourceMenu];
         [self.sourceListMenu popUpMenuPositioningItem:self.sourceListMenu.itemArray.firstObject atLocation:tmp inView:self];
@@ -346,7 +452,7 @@
     
     NSPoint worldPoint = [self realPointforWindowPoint:tmp];
     
-    self.selectedSource = [self.controller findSource:worldPoint];
+    self.selectedSource = [self.sourceLayout findSource:worldPoint];
     if (!self.selectedSource)
     {
         return;
@@ -492,12 +598,12 @@
             if (self.selectedSource.x_pos < SNAP_THRESHOLD && dx < 0)
             {
                 dx = -self.selectedSource.x_pos;
-            } else if ((self.selectedSource.x_pos+self.selectedSource.display_width > self.controller.captureWidth-SNAP_THRESHOLD) && dx > 0) {
-                dx = self.controller.captureWidth - (self.selectedSource.x_pos+ self.selectedSource.display_width);
+            } else if ((self.selectedSource.x_pos+self.selectedSource.display_width > self.sourceLayout.canvas_width-SNAP_THRESHOLD) && dx > 0) {
+                dx = self.sourceLayout.canvas_width - (self.selectedSource.x_pos+ self.selectedSource.display_width);
             } else if (self.selectedSource.y_pos < SNAP_THRESHOLD && dy < 0) {
                 dy = -self.selectedSource.y_pos;
-            } else if ((self.selectedSource.y_pos+self.selectedSource.display_height > self.controller.captureHeight-SNAP_THRESHOLD) && dy > 0) {
-                dy = self.controller.captureHeight - (self.selectedSource.y_pos+ self.selectedSource.display_height);
+            } else if ((self.selectedSource.y_pos+self.selectedSource.display_height > self.sourceLayout.canvas_height-SNAP_THRESHOLD) && dy > 0) {
+                dy = self.sourceLayout.canvas_height - (self.selectedSource.y_pos+ self.selectedSource.display_height);
             }
             
                 
@@ -566,9 +672,9 @@
     
     if (item.representedObject)
     {
-        [self.controller deleteSource:item.representedObject];
+        [self.sourceLayout deleteSource:item.representedObject];
     } else if (self.selectedSource) {
-        [self.controller deleteSource:self.selectedSource];
+        [self.sourceLayout deleteSource:self.selectedSource];
         self.selectedSource = nil;
     }
 }
@@ -588,17 +694,23 @@
     }
     
     
-    InputPopupControllerViewController *popupController = [[InputPopupControllerViewController alloc] initWithNibName:@"InputPopupControllerViewController" bundle:nil];
+    InputPopupControllerViewController *popupController = [[InputPopupControllerViewController alloc] init];
     
     NSPopover *popover = [[NSPopover alloc] init];
     popover.contentViewController = popupController;
     popover.animates = YES;
-    popover.delegate = popupController;
-    forInput.editorPopover = popover;
+    popover.delegate = self;
     popover.behavior = NSPopoverBehaviorSemitransient;
     [popover showRelativeToRect:spawnRect ofView:self preferredEdge:NSMaxXEdge];
-    ((InputPopupControllerViewController *)forInput.editorPopover.contentViewController).InputController.content = forInput;
-    forInput.editorPopover = popover;
+    
+    popupController.inputSource = forInput;
+    forInput.editorController = popupController;
+    if (forInput.editorWindow)
+    {
+        forInput.editorWindow = nil;
+    }
+
+    
 
     
     
@@ -717,6 +829,7 @@
     _lineProgram = lineprg.gl_programName;
     
     
+    _cictx = [CIContext contextWithCGLContext:[self.openGLContext CGLContextObj] pixelFormat:CGLGetPixelFormat([self.openGLContext CGLContextObj]) colorSpace:CGColorSpaceCreateDeviceRGB() options:nil];
     CVDisplayLinkCreateWithActiveCGDisplays(&displayLink);
     CVDisplayLinkSetOutputCallback(displayLink, &displayLinkRender, (__bridge void *)self);
     
@@ -767,12 +880,11 @@
     
     CVImageBufferRef displayFrame = NULL;
     
-    displayFrame = [self.controller currentFrame];
+    displayFrame = [self.sourceLayout currentFrame];
     
     //CVPixelBufferRetain(displayFrame);
     [self drawPixelBuffer:displayFrame];
     CVPixelBufferRelease(displayFrame);
-    
 }
 
 
@@ -906,7 +1018,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     }
 
     
-      [self drawTexture:CGRectZero];
+    [self drawTexture:CGRectZero];
 
     CGLUnlockContext(cgl_ctx);
 
@@ -934,9 +1046,10 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
 }
 
-- (void) drawTexture:(NSRect)dirtyRect
-{
+- (void) drawTexture:(NSRect)dirtyRect{
     
+
+
     NSRect frame = self.frame;
     
     
@@ -978,7 +1091,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
-    
     
     
     for(int i = 0; i < _num_planes; i++)
@@ -1031,7 +1143,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
     glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
     glLineWidth(2.0f);
-    for(InputSource *src in self.controller.sourceList)
+    for(InputSource *src in self.sourceLayout.sourceList)
     {
         NSRect my_rect = src.layoutPosition;
         outline_verts[0] = my_rect.origin.x;
@@ -1049,10 +1161,54 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     glUseProgram(_programId);
     
     
-    
     glFlush();
+
     
 
+    
+}
+
+-(NSWindow *)detachableWindowForPopover:(NSPopover *)popover
+{
+    InputPopupControllerViewController *newViewController = [[InputPopupControllerViewController alloc] init];
+    InputPopupControllerViewController *oldViewController = (InputPopupControllerViewController *)popover.contentViewController;
+    
+    
+     newViewController.inputSource = oldViewController.inputSource;
+    NSWindow *popoverWindow;
+    popoverWindow = [[NSWindow alloc] init];
+    
+    
+    
+    NSRect newFrame = [popoverWindow frameRectForContentRect:NSMakeRect(0.0f, 0.0f, newViewController.view.frame.size.width, newViewController.view.frame.size.height)];
+    
+    [popoverWindow setFrame:newFrame display:NO];
+    
+    [popoverWindow setReleasedWhenClosed:NO];
+    
+    
+    [popoverWindow.contentView addSubview:newViewController.view];
+    popoverWindow.title = [NSString stringWithFormat:@"CocoaSplit Input (%@)", newViewController.inputSource.name];
+    popoverWindow.delegate = newViewController.inputSource;
+    
+    popoverWindow.styleMask =  NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask;
+    
+    newViewController.inputSource.editorWindow = popoverWindow;
+    newViewController.inputSource.editorController = newViewController;
+    return popoverWindow;
+    
+}
+
+- (void)popoverDidClose:(NSNotification *)notification
+{
+    NSString *closeReason = [[notification userInfo] valueForKey:NSPopoverCloseReasonKey];
+    NSPopover *popover = notification.object;
+    if (closeReason && closeReason == NSPopoverCloseReasonStandard)
+    {
+        InputPopupControllerViewController *vcont = (InputPopupControllerViewController *)popover.contentViewController;
+        
+        vcont.inputSource.editorController = nil;
+    }
     
 }
 

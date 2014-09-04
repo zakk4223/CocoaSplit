@@ -8,7 +8,8 @@
 
 #import "InputSource.h"
 #import "CSCaptureSourceProtocol.h"
-
+#import "SourceLayout.h"
+#import "InputPopupControllerViewController.h"
 
 static NSArray *_sourceTypes = nil;
 
@@ -242,7 +243,7 @@ static NSArray *_sourceTypes = nil;
     self.chromaKeyColor = [NSColor greenColor];
     
     [self addObserver:self forKeyPath:@"usePrivateSource" options:NSKeyValueObservingOptionNew context:NULL];
-    [self addObserver:self forKeyPath:@"editorPopover" options:NSKeyValueObservingOptionNew context:NULL];
+    [self addObserver:self forKeyPath:@"editorController" options:NSKeyValueObservingOptionNew context:NULL];
     
     [self rebuildFilters];
     [self addObserver:self forKeyPath:@"propertiesChanged" options:NSKeyValueObservingOptionNew context:NULL];
@@ -376,6 +377,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void)dealloc
 {
+    NSLog(@"DEALLOC SOURCE INPUT");
     [self deregisterVideoInput:self.videoInput];
     for(id vInput in self.videoSources)
     {
@@ -383,7 +385,7 @@ static NSArray *_sourceTypes = nil;
     }
     [self removeObserver:self forKeyPath:@"usePrivateSource"];
     [self removeObserver:self forKeyPath:@"propertiesChanged"];
-    [self removeObserver:self forKeyPath:@"editorPopover"];
+    [self removeObserver:self forKeyPath:@"editorController"];
     
 }
 
@@ -624,8 +626,9 @@ static NSArray *_sourceTypes = nil;
                 IOSurfaceRef frameSurface = CVPixelBufferGetIOSurface(newFrame);
                 if (frameSurface)
                 {
+                    
                     outimg = [CIImage imageWithIOSurface:frameSurface];
-                    _tmpCVBuf = newFrame;
+                    //_tmpCVBuf = newFrame;
                 } else {
                     //WHYYYYYYYYYYYYYYYYYYYYYY
                     outimg = [CIImage imageWithCVImageBuffer:newFrame];
@@ -993,20 +996,24 @@ static NSArray *_sourceTypes = nil;
     NSView *configView = nil;
     if ([self.videoInput respondsToSelector:@selector(configurationView)])
     {
+        
         _currentInputViewController = [self.videoInput configurationView];
         configView = _currentInputViewController.view;
         
     }
     
-    if (self.editorPopover.contentViewController)
+    if (self.editorController)
     {
         
-        InputPopupControllerViewController *pcont = (InputPopupControllerViewController*)self.editorPopover.contentViewController;
+        
+        InputPopupControllerViewController *pcont = self.editorController;
         
         
         
         NSArray *currentSubviews = pcont.sourceConfigView.subviews;
         NSView *currentSubview = currentSubviews.firstObject;
+        
+        
         if (!configView)
         {
             [currentSubview removeFromSuperview];
@@ -1052,12 +1059,14 @@ static NSArray *_sourceTypes = nil;
     }
     
     
-    SourceCache *scache = [SourceCache sharedCache];
+    SourceCache *scache = self.layout.sourceCache;
+    
     id newInput = [scache cacheSource:source uniqueID:source.activeVideoDevice.uniqueID];
     if (newInput == source)
     {
         return;
     }
+    
     
     
     [self deregisterVideoInput:self.videoInput];
@@ -1074,6 +1083,18 @@ static NSArray *_sourceTypes = nil;
     [self registerVideoInput:self.videoInput];
     
 }
+
+
+-(size_t)canvas_width
+{
+    return self.layout.canvas_width;
+}
+
+-(size_t)canvas_height
+{
+    return self.layout.canvas_height;
+}
+
 
 
 -(void) removeObjectFromVideoSourcesAtIndex:(NSUInteger)index
@@ -1096,7 +1117,7 @@ static NSArray *_sourceTypes = nil;
     if ([keyPath isEqualToString:@"propertiesChanged"])
     {
         [self rebuildFilters];
-    } else if ([keyPath isEqualToString:@"editorPopover"]) {
+    } else if ([keyPath isEqualToString:@"editorController"]) {
         [self sourceConfigurationView];
     } else if ([keyPath isEqualToString:@"activeVideoDevice.uniqueID"]) {
         [self deduplicateVideoSource:object];
@@ -1111,6 +1132,14 @@ static NSArray *_sourceTypes = nil;
 }
 
 
+
+-(void) windowWillClose:(NSNotification *)notification
+{
+    NSWindow *toClose = notification.object;
+    self.editorController = nil;
+    self.editorWindow = nil;
+    NSLog(@"WINDOW WILL CLOSE");
+}
 
 
 @end

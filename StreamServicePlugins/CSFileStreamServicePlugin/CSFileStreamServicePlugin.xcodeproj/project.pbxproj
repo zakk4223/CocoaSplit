@@ -32,6 +32,11 @@
 		34AFC2F019B08F490007C07B /* CSCaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureBase.h; path = PluginHeaders/CSCaptureBase.h; sourceTree = "<group>"; };
 		34AFC2F119B08F490007C07B /* CSCaptureSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureSourceProtocol.h; path = PluginHeaders/CSCaptureSourceProtocol.h; sourceTree = "<group>"; };
 		34AFC2F219B08F490007C07B /* CSStreamServiceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSStreamServiceProtocol.h; path = PluginHeaders/CSStreamServiceProtocol.h; sourceTree = "<group>"; };
+		34D6580A19B343290012E32B /* CSAbstractCaptureDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAbstractCaptureDevice.h; path = PluginHeaders/CSAbstractCaptureDevice.h; sourceTree = "<group>"; };
+		34D6580B19B343290012E32B /* CSCaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureBase.h; path = PluginHeaders/CSCaptureBase.h; sourceTree = "<group>"; };
+		34D6580C19B343290012E32B /* CSCaptureSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureSourceProtocol.h; path = PluginHeaders/CSCaptureSourceProtocol.h; sourceTree = "<group>"; };
+		34D6580D19B343290012E32B /* CSStreamServiceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSStreamServiceProtocol.h; path = PluginHeaders/CSStreamServiceProtocol.h; sourceTree = "<group>"; };
+		34D6580E19B343290012E32B /* CSPluginFactoryProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPluginFactoryProtocol.h; path = PluginHeaders/CSPluginFactoryProtocol.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +54,7 @@
 		34AFC2C219B08C050007C07B = {
 			isa = PBXGroup;
 			children = (
+				34D6580F19B343290012E32B /* PluginHeaders */,
 				34AFC2D419B08C050007C07B /* CSFileStreamServicePlugin */,
 				34AFC2CD19B08C050007C07B /* Frameworks */,
 				34AFC2CC19B08C050007C07B /* Products */,
@@ -113,6 +119,19 @@
 				34AFC2F019B08F490007C07B /* CSCaptureBase.h */,
 				34AFC2F119B08F490007C07B /* CSCaptureSourceProtocol.h */,
 				34AFC2F219B08F490007C07B /* CSStreamServiceProtocol.h */,
+			);
+			name = PluginHeaders;
+			path = ../../CocoaSplit;
+			sourceTree = "<group>";
+		};
+		34D6580F19B343290012E32B /* PluginHeaders */ = {
+			isa = PBXGroup;
+			children = (
+				34D6580A19B343290012E32B /* CSAbstractCaptureDevice.h */,
+				34D6580B19B343290012E32B /* CSCaptureBase.h */,
+				34D6580C19B343290012E32B /* CSCaptureSourceProtocol.h */,
+				34D6580D19B343290012E32B /* CSStreamServiceProtocol.h */,
+				34D6580E19B343290012E32B /* CSPluginFactoryProtocol.h */,
 			);
 			name = PluginHeaders;
 			path = ../../CocoaSplit;
