@@ -467,7 +467,6 @@
     NSRect viewRect = [self windowRectforWorldRect:layoutRect];
     
     
-    NSRect interiorRect = NSMakeRect(viewRect.origin.x+10.0f, viewRect.origin.y+10.0f, viewRect.size.width-20.0f, viewRect.size.height-20.0f);
     
     
     NSRect topRect = NSMakeRect(viewRect.origin.x, viewRect.origin.y+viewRect.size.height-10.0f, viewRect.size.width, 10.0f);

@@ -89,6 +89,7 @@
 		34A64A2F165EFE4C00A68428 /* PreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A64A2E165EFE4B00A68428 /* PreviewView.m */; };
 		34A64A35165F047900A68428 /* CapturePreview.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34A64A34165F047900A68428 /* CapturePreview.xib */; };
 		34A64A37165F208800A68428 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A64A36165F208800A68428 /* QuartzCore.framework */; };
+		34A7C1AD19B9A57600BC6882 /* CSLayoutSwitcherExtraPlugin.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34A7C1A119B9A41A00BC6882 /* CSLayoutSwitcherExtraPlugin.bundle */; };
 		34ABEF3C17C0C2CB00AA5E62 /* advancedPrefPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34ABEF3B17C0C2CB00AA5E62 /* advancedPrefPanel.xib */; };
 		34AE3C30164E3E020052C95E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AE3C2F164E3E020052C95E /* Foundation.framework */; };
 		34AE3C36164E3E020052C95E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 34AE3C34164E3E020052C95E /* InfoPlist.strings */; };
@@ -142,6 +143,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 3451A1C217111BD900DF6A8B;
 			remoteInfo = CocoaSplitCmd;
+		};
+		34A7C1A019B9A41A00BC6882 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 34A7C19C19B9A41900BC6882 /* CSLayoutSwitcherExtraPlugin.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 34A7C18719B9A41900BC6882;
+			remoteInfo = CSLayoutSwitcherExtraPlugin;
 		};
 		34AE3C40164E3FAD0052C95E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -297,6 +305,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				34A7C1AD19B9A57600BC6882 /* CSLayoutSwitcherExtraPlugin.bundle in CopyFiles */,
 				34D6580319B342E70012E32B /* CSFileStreamServicePlugin.bundle in CopyFiles */,
 				34D6580219B342E00012E32B /* CSTwitchStreamServicePlugin.bundle in CopyFiles */,
 				34AFC27819B05C4E0007C07B /* CSChromaKey.plugin in CopyFiles */,
@@ -398,6 +407,8 @@
 		34A64A2E165EFE4B00A68428 /* PreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreviewView.m; sourceTree = "<group>"; };
 		34A64A34165F047900A68428 /* CapturePreview.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CapturePreview.xib; path = Interface/CapturePreview.xib; sourceTree = "<group>"; };
 		34A64A36165F208800A68428 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		34A7C17A19B98EA200BC6882 /* CSExtraPluginProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSExtraPluginProtocol.h; path = PluginHeaders/CSExtraPluginProtocol.h; sourceTree = "<group>"; };
+		34A7C19C19B9A41900BC6882 /* CSLayoutSwitcherExtraPlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSLayoutSwitcherExtraPlugin.xcodeproj; path = ExtraPlugins/CSLayoutSwitcherExtraPlugin/CSLayoutSwitcherExtraPlugin.xcodeproj; sourceTree = "<group>"; };
 		34A8BAB117085BDD0093EEAF /* Syphon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Syphon.framework; sourceTree = "<group>"; };
 		34ABEF3B17C0C2CB00AA5E62 /* advancedPrefPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = advancedPrefPanel.xib; path = Interface/advancedPrefPanel.xib; sourceTree = "<group>"; };
 		34AE3C2E164E3E020052C95E /* zakk.lol.QTCaptureHelper.xpc */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = zakk.lol.QTCaptureHelper.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -516,6 +527,7 @@
 		340FE49215F3417E00E4CE4E = {
 			isa = PBXGroup;
 			children = (
+				34A7C1A219B9A42000BC6882 /* ExtraPlugins */,
 				34D6581019B35E3B0012E32B /* CocoaSplit.sdef */,
 				34AFC2E619B08C1E0007C07B /* StreamServicePlugins */,
 				34AFC24419B058D80007C07B /* ImageUnitPlugins */,
@@ -734,8 +746,25 @@
 				342346CC15F9D52000C8C77E /* CSCaptureSourceProtocol.h */,
 				34AFC2C119B08AF30007C07B /* CSStreamServiceProtocol.h */,
 				34D657F519B33DCF0012E32B /* CSPluginFactoryProtocol.h */,
+				34A7C17A19B98EA200BC6882 /* CSExtraPluginProtocol.h */,
 			);
 			name = PluginHeaders;
+			sourceTree = "<group>";
+		};
+		34A7C19D19B9A41900BC6882 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				34A7C1A119B9A41A00BC6882 /* CSLayoutSwitcherExtraPlugin.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		34A7C1A219B9A42000BC6882 /* ExtraPlugins */ = {
+			isa = PBXGroup;
+			children = (
+				34A7C19C19B9A41900BC6882 /* CSLayoutSwitcherExtraPlugin.xcodeproj */,
+			);
+			name = ExtraPlugins;
 			sourceTree = "<group>";
 		};
 		34AE3C31164E3E020052C95E /* QTCaptureHelper */ = {
@@ -1044,6 +1073,10 @@
 					ProjectRef = 34576D5219B024EB007BAD90 /* CSImageCapturePlugin.xcodeproj */;
 				},
 				{
+					ProductGroup = 34A7C19D19B9A41900BC6882 /* Products */;
+					ProjectRef = 34A7C19C19B9A41900BC6882 /* CSLayoutSwitcherExtraPlugin.xcodeproj */;
+				},
+				{
 					ProductGroup = 34AFC25019B05B380007C07B /* Products */;
 					ProjectRef = 34576D2019B023E2007BAD90 /* CSMovieCapturePlugin.xcodeproj */;
 				},
@@ -1083,6 +1116,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		34A7C1A119B9A41A00BC6882 /* CSLayoutSwitcherExtraPlugin.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = CSLayoutSwitcherExtraPlugin.bundle;
+			remoteRef = 34A7C1A019B9A41A00BC6882 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		34AFC24A19B05ADA0007C07B /* CSDesktopCapturePlugin.bundle */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;

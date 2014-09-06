@@ -597,12 +597,12 @@
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PDP-sr-E5P">
                                 <rect key="frame" x="151" y="394" width="76" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <popUpButtonCell key="cell" type="push" title="Normal" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="gFp-Kx-ann" id="ZBi-eQ-6CQ">
+                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="ZBi-eQ-6CQ">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="smallSystem"/>
                                     <menu key="menu" title="OtherViews" id="fbq-vk-Sxt">
                                         <items>
-                                            <menuItem title="Normal" state="on" id="gFp-Kx-ann"/>
+                                            <menuItem title="Normal" id="gFp-Kx-ann"/>
                                             <menuItem title="Random" tag="1" id="ZJw-ko-4wc"/>
                                             <menuItem title="Reverse" tag="2" id="kc8-04-u4S"/>
                                         </items>

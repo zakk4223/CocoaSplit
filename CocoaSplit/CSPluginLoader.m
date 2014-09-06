@@ -10,6 +10,7 @@
 #import "CSCaptureSourceProtocol.h"
 #import "CSStreamServiceProtocol.h"
 #import "CSPluginFactoryProtocol.h"
+#import "CSExtraPluginProtocol.h"
 
 
 
@@ -34,6 +35,8 @@
     {
         self.sourcePlugins = [[NSMutableDictionary alloc] init];
         self.streamServicePlugins  = [[NSMutableDictionary alloc] init];
+        self.extraPlugins  = [[NSMutableDictionary alloc] init];
+
 
     }
     
@@ -114,11 +117,14 @@
     NSMutableDictionary *registerMap = nil;
     
     
+    
     if ([toLoad conformsToProtocol:@protocol(CSCaptureSourceProtocol)])
     {
         registerMap = self.sourcePlugins;
     } else if ([toLoad conformsToProtocol:@protocol(CSStreamServiceProtocol)]) {
         registerMap = self.streamServicePlugins;
+    } else if ([toLoad conformsToProtocol:@protocol(CSExtraPluginProtocol)]) {
+        registerMap = self.extraPlugins;
     }
     
     if (registerMap)
@@ -154,7 +160,6 @@
         currBundle = [NSBundle bundleWithPath:currPath];
         if(currBundle)
         {
-            NSString *classLabel;
             currPrincipalClass = [currBundle principalClass];
 
             if ([currPrincipalClass conformsToProtocol:@protocol(CSPluginFactoryProtocol)])

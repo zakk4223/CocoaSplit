@@ -12,7 +12,6 @@
 
 -(NSArray *)layouts
 {
-    NSLog(@"SOURCE LAYOUTS");
     return self.captureController.sourceLayouts;
 }
 
@@ -20,6 +19,29 @@
 - (unsigned int)countOfLayoutsArray {
     NSLog(@"COUNT OF LAYOUTS");
     return self.captureController.sourceLayouts.count;
+}
+
+
+-(void)setActivelayoutByString:(NSString *)byString
+{
+    NSUInteger selectedIdx = [self.captureController.sourceLayouts indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        return [((SourceLayout *)obj).name isEqualToString:byString];
+
+    }];
+    
+    
+    SourceLayout *selectedLayout = nil;
+    
+    if (selectedIdx != NSNotFound)
+    {
+        selectedLayout = [self.captureController.sourceLayouts objectAtIndex:selectedIdx];
+    }
+    
+    
+    if (selectedLayout)
+    {
+        [self setActivelayout:selectedLayout];
+    }
 }
 
 

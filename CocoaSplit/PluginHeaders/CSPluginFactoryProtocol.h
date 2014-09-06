@@ -15,6 +15,7 @@
 
 +(Class)captureSourceClass;
 +(Class)streamServiceClass;
++(Class)extraPluginClass;
 
 
 @end

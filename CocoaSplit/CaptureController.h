@@ -215,8 +215,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 - (IBAction)openLogWindow:(id)sender;
 
-- (IBAction)openOutputEdit:(id)sender;
-
 
 @property (readonly) NSArray *destinationTypes;
 
@@ -287,7 +285,11 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 @property (unsafe_unretained) IBOutlet NSTextView *logTextView;
 
+@property (weak) IBOutlet NSMenu *extrasMenu;
 
+@property (strong) NSMutableDictionary *extraPlugins;
+
+@property (strong) NSMutableDictionary *extraPluginsSaveData;
 
 
 
@@ -308,8 +310,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(void)captureOutputAudio:(id)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer;
 -(void)deleteSource:(InputSource *)delSource;
 -(InputSource *)findSource:(NSPoint)forPoint;
--(NSArray *)sourceListOrdered;
--(CVPixelBufferRef)currentImg;
 
 
 

@@ -1135,10 +1135,8 @@ static NSArray *_sourceTypes = nil;
 
 -(void) windowWillClose:(NSNotification *)notification
 {
-    NSWindow *toClose = notification.object;
     self.editorController = nil;
     self.editorWindow = nil;
-    NSLog(@"WINDOW WILL CLOSE");
 }
 
 

@@ -1,0 +1,343 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		34651AEF19B9B216004BB135 /* CSLayoutSwitcherWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34651AED19B9B216004BB135 /* CSLayoutSwitcherWindowController.m */; };
+		34651AF019B9B216004BB135 /* CSLayoutSwitcherWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34651AEE19B9B216004BB135 /* CSLayoutSwitcherWindowController.xib */; };
+		34651AF619BAF851004BB135 /* CSLayoutSwitchAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 34651AF519BAF851004BB135 /* CSLayoutSwitchAction.m */; };
+		34A7C18B19B9A41900BC6882 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A7C18A19B9A41900BC6882 /* Cocoa.framework */; };
+		34A7C19519B9A41900BC6882 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 34A7C19319B9A41900BC6882 /* InfoPlist.strings */; };
+		34A7C1AC19B9A48700BC6882 /* CSLayoutSwitcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A7C1AB19B9A48700BC6882 /* CSLayoutSwitcher.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		34651AEC19B9B216004BB135 /* CSLayoutSwitcherWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLayoutSwitcherWindowController.h; sourceTree = "<group>"; };
+		34651AED19B9B216004BB135 /* CSLayoutSwitcherWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSLayoutSwitcherWindowController.m; sourceTree = "<group>"; };
+		34651AEE19B9B216004BB135 /* CSLayoutSwitcherWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSLayoutSwitcherWindowController.xib; sourceTree = "<group>"; };
+		34651AF419BAF851004BB135 /* CSLayoutSwitchAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLayoutSwitchAction.h; sourceTree = "<group>"; };
+		34651AF519BAF851004BB135 /* CSLayoutSwitchAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSLayoutSwitchAction.m; sourceTree = "<group>"; };
+		34A7C18719B9A41900BC6882 /* CSLayoutSwitcherExtraPlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSLayoutSwitcherExtraPlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		34A7C18A19B9A41900BC6882 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		34A7C18D19B9A41900BC6882 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		34A7C18E19B9A41900BC6882 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		34A7C18F19B9A41900BC6882 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		34A7C19219B9A41900BC6882 /* CSLayoutSwitcherExtraPlugin-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CSLayoutSwitcherExtraPlugin-Info.plist"; sourceTree = "<group>"; };
+		34A7C19419B9A41900BC6882 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		34A7C19619B9A41900BC6882 /* CSLayoutSwitcherExtraPlugin-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CSLayoutSwitcherExtraPlugin-Prefix.pch"; sourceTree = "<group>"; };
+		34A7C1A319B9A43400BC6882 /* CSAbstractCaptureDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAbstractCaptureDevice.h; path = PluginHeaders/CSAbstractCaptureDevice.h; sourceTree = "<group>"; };
+		34A7C1A419B9A43400BC6882 /* CSCaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureBase.h; path = PluginHeaders/CSCaptureBase.h; sourceTree = "<group>"; };
+		34A7C1A519B9A43400BC6882 /* CSCaptureSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureSourceProtocol.h; path = PluginHeaders/CSCaptureSourceProtocol.h; sourceTree = "<group>"; };
+		34A7C1A619B9A43400BC6882 /* CSStreamServiceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSStreamServiceProtocol.h; path = PluginHeaders/CSStreamServiceProtocol.h; sourceTree = "<group>"; };
+		34A7C1A719B9A43400BC6882 /* CSPluginFactoryProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPluginFactoryProtocol.h; path = PluginHeaders/CSPluginFactoryProtocol.h; sourceTree = "<group>"; };
+		34A7C1A819B9A43400BC6882 /* CSExtraPluginProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSExtraPluginProtocol.h; path = PluginHeaders/CSExtraPluginProtocol.h; sourceTree = "<group>"; };
+		34A7C1AA19B9A48700BC6882 /* CSLayoutSwitcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLayoutSwitcher.h; sourceTree = "<group>"; };
+		34A7C1AB19B9A48700BC6882 /* CSLayoutSwitcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSLayoutSwitcher.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		34A7C18419B9A41900BC6882 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34A7C18B19B9A41900BC6882 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		34A7C17E19B9A41900BC6882 = {
+			isa = PBXGroup;
+			children = (
+				34A7C19019B9A41900BC6882 /* CSLayoutSwitcherExtraPlugin */,
+				34A7C18919B9A41900BC6882 /* Frameworks */,
+				34A7C18819B9A41900BC6882 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		34A7C18819B9A41900BC6882 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				34A7C18719B9A41900BC6882 /* CSLayoutSwitcherExtraPlugin.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		34A7C18919B9A41900BC6882 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				34A7C18A19B9A41900BC6882 /* Cocoa.framework */,
+				34A7C18C19B9A41900BC6882 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		34A7C18C19B9A41900BC6882 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				34A7C18D19B9A41900BC6882 /* Foundation.framework */,
+				34A7C18E19B9A41900BC6882 /* CoreData.framework */,
+				34A7C18F19B9A41900BC6882 /* AppKit.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		34A7C19019B9A41900BC6882 /* CSLayoutSwitcherExtraPlugin */ = {
+			isa = PBXGroup;
+			children = (
+				34A7C1A919B9A43400BC6882 /* PluginHeaders */,
+				34A7C19119B9A41900BC6882 /* Supporting Files */,
+				34A7C1AA19B9A48700BC6882 /* CSLayoutSwitcher.h */,
+				34A7C1AB19B9A48700BC6882 /* CSLayoutSwitcher.m */,
+				34651AEC19B9B216004BB135 /* CSLayoutSwitcherWindowController.h */,
+				34651AED19B9B216004BB135 /* CSLayoutSwitcherWindowController.m */,
+				34651AEE19B9B216004BB135 /* CSLayoutSwitcherWindowController.xib */,
+				34651AF419BAF851004BB135 /* CSLayoutSwitchAction.h */,
+				34651AF519BAF851004BB135 /* CSLayoutSwitchAction.m */,
+			);
+			path = CSLayoutSwitcherExtraPlugin;
+			sourceTree = "<group>";
+		};
+		34A7C19119B9A41900BC6882 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				34A7C19219B9A41900BC6882 /* CSLayoutSwitcherExtraPlugin-Info.plist */,
+				34A7C19319B9A41900BC6882 /* InfoPlist.strings */,
+				34A7C19619B9A41900BC6882 /* CSLayoutSwitcherExtraPlugin-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		34A7C1A919B9A43400BC6882 /* PluginHeaders */ = {
+			isa = PBXGroup;
+			children = (
+				34A7C1A319B9A43400BC6882 /* CSAbstractCaptureDevice.h */,
+				34A7C1A419B9A43400BC6882 /* CSCaptureBase.h */,
+				34A7C1A519B9A43400BC6882 /* CSCaptureSourceProtocol.h */,
+				34A7C1A619B9A43400BC6882 /* CSStreamServiceProtocol.h */,
+				34A7C1A719B9A43400BC6882 /* CSPluginFactoryProtocol.h */,
+				34A7C1A819B9A43400BC6882 /* CSExtraPluginProtocol.h */,
+			);
+			name = PluginHeaders;
+			path = ../../../CocoaSplit;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		34A7C18619B9A41900BC6882 /* CSLayoutSwitcherExtraPlugin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 34A7C19919B9A41900BC6882 /* Build configuration list for PBXNativeTarget "CSLayoutSwitcherExtraPlugin" */;
+			buildPhases = (
+				34A7C18319B9A41900BC6882 /* Sources */,
+				34A7C18419B9A41900BC6882 /* Frameworks */,
+				34A7C18519B9A41900BC6882 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CSLayoutSwitcherExtraPlugin;
+			productName = CSLayoutSwitcherExtraPlugin;
+			productReference = 34A7C18719B9A41900BC6882 /* CSLayoutSwitcherExtraPlugin.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		34A7C17F19B9A41900BC6882 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = Zakk;
+			};
+			buildConfigurationList = 34A7C18219B9A41900BC6882 /* Build configuration list for PBXProject "CSLayoutSwitcherExtraPlugin" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 34A7C17E19B9A41900BC6882;
+			productRefGroup = 34A7C18819B9A41900BC6882 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				34A7C18619B9A41900BC6882 /* CSLayoutSwitcherExtraPlugin */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		34A7C18519B9A41900BC6882 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34651AF019B9B216004BB135 /* CSLayoutSwitcherWindowController.xib in Resources */,
+				34A7C19519B9A41900BC6882 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		34A7C18319B9A41900BC6882 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34651AF619BAF851004BB135 /* CSLayoutSwitchAction.m in Sources */,
+				34651AEF19B9B216004BB135 /* CSLayoutSwitcherWindowController.m in Sources */,
+				34A7C1AC19B9A48700BC6882 /* CSLayoutSwitcher.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		34A7C19319B9A41900BC6882 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				34A7C19419B9A41900BC6882 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		34A7C19719B9A41900BC6882 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		34A7C19819B9A41900BC6882 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		34A7C19A19B9A41900BC6882 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "CSLayoutSwitcherExtraPlugin/CSLayoutSwitcherExtraPlugin-Prefix.pch";
+				INFOPLIST_FILE = "CSLayoutSwitcherExtraPlugin/CSLayoutSwitcherExtraPlugin-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-flat_namespace",
+					"-undefined",
+					suppress,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		34A7C19B19B9A41900BC6882 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "CSLayoutSwitcherExtraPlugin/CSLayoutSwitcherExtraPlugin-Prefix.pch";
+				INFOPLIST_FILE = "CSLayoutSwitcherExtraPlugin/CSLayoutSwitcherExtraPlugin-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-flat_namespace",
+					"-undefined",
+					suppress,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		34A7C18219B9A41900BC6882 /* Build configuration list for PBXProject "CSLayoutSwitcherExtraPlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34A7C19719B9A41900BC6882 /* Debug */,
+				34A7C19819B9A41900BC6882 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		34A7C19919B9A41900BC6882 /* Build configuration list for PBXNativeTarget "CSLayoutSwitcherExtraPlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34A7C19A19B9A41900BC6882 /* Debug */,
+				34A7C19B19B9A41900BC6882 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 34A7C17F19B9A41900BC6882 /* Project object */;
+}

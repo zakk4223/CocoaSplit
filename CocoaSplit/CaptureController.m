@@ -19,6 +19,7 @@
 #import "InputPopupControllerViewController.h"
 #import "SourceLayout.h"
 #import "LayoutPreviewWindowController.h"
+#import "CSExtraPluginProtocol.h"
 
 
 @implementation CaptureController
@@ -64,7 +65,6 @@
 - (IBAction)createNewLayout:(id)sender
 {
     
-    SourceLayout *oldLayout = self.selectedLayout;
     
     [self.layoutPanelController commitEditing];
     
@@ -89,7 +89,8 @@
         
         [self.sourceLayouts addObject:newLayout];
         [self didChangeValueForKey:@"sourceLayouts"];
-        oldLayout.isActive = NO;
+        self.selectedLayout = newLayout;
+        
     }
     
     self.layoutPanelName  = nil;
@@ -668,6 +669,8 @@
        
        [[CSPluginLoader sharedPluginLoader] loadPrivateAndUserImageUnits];
        
+       self.extraPlugins = [NSMutableDictionary dictionary];
+       
         [self createCGLContext];
        _cictx = [CIContext contextWithCGLContext:_cgl_ctx pixelFormat:CGLGetPixelFormat(_cgl_ctx) colorSpace:CGColorSpaceCreateDeviceRGB() options:nil];
 
@@ -680,6 +683,43 @@
    }
     
     return self;
+    
+}
+
+
+-(void) buildExtrasMenu
+{
+    
+    CSPluginLoader *sharedLoader = [CSPluginLoader sharedPluginLoader];
+    [self.extrasMenu removeAllItems];
+    
+    for(NSString *pKey in sharedLoader.extraPlugins)
+    {
+        NSLog(@"PKEY %@, %@", pKey, self.extrasMenu);
+        Class extraClass = (Class)sharedLoader.extraPlugins[pKey];
+        NSObject<CSExtraPluginProtocol>*pInstance;
+        if (self.extraPluginsSaveData[pKey])
+        {
+            pInstance = [NSKeyedUnarchiver unarchiveObjectWithData:self.extraPluginsSaveData[pKey]];
+        } else {
+            pInstance = [[extraClass alloc] init];
+        }
+        
+        
+        self.extraPlugins[pKey] = pInstance;
+        NSMenuItem *pItem = [[NSMenuItem alloc] init];
+        pItem.title = pKey;
+        pItem.representedObject = pInstance;
+        if ([pInstance respondsToSelector:@selector(extraPluginMenu)])
+        {
+            NSMenu *subMenu = [pInstance extraPluginMenu];
+            [pItem setSubmenu:subMenu];
+        } else {
+            pItem.target = pInstance;
+            pItem.action = @selector(extraTopLevelMenuClicked);
+        }
+        [self.extrasMenu addItem:pItem];
+    }
     
 }
 
@@ -896,6 +936,18 @@
     [saveRoot setValue:self.selectedLayout forKey:@"selectedLayout"];
     
     [saveRoot setValue:self.sourceLayouts forKey:@"sourceLayouts"];
+    
+
+    self.extraPluginsSaveData = [NSMutableDictionary dictionary];
+    
+    for(NSString *pkey in self.extraPlugins)
+    {
+        id ePlugin = self.extraPlugins[pkey];
+        self.extraPluginsSaveData[pkey] = [NSKeyedArchiver archivedDataWithRootObject:ePlugin];
+    }
+    
+    [saveRoot setValue:self.extraPluginsSaveData forKeyPath:@"extraPluginsSaveData"];
+    
     [NSKeyedArchiver archiveRootObject:saveRoot toFile:path];
     
 }
@@ -1007,7 +1059,10 @@
     }
     
 
+    self.extraPluginsSaveData = [saveRoot valueForKey:@"extraPluginsSaveData"];
     [self migrateDefaultCompressor:saveRoot];
+    [self buildExtrasMenu];
+    self.extraPluginsSaveData = nil;
 }
 
 
