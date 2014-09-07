@@ -628,7 +628,7 @@ static NSArray *_sourceTypes = nil;
                 {
                     
                     outimg = [CIImage imageWithIOSurface:frameSurface];
-                    //_tmpCVBuf = newFrame;
+                    _tmpCVBuf = newFrame;
                 } else {
                     //WHYYYYYYYYYYYYYYYYYYYYYY
                     outimg = [CIImage imageWithCVImageBuffer:newFrame];
