@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		3400777016E6FE5D00097E8F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 347B7FC916907AFA00B5F4B3 /* libz.dylib */; };
+		3408235519BC677A00CD1F5F /* CSNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 3408235419BC530300CD1F5F /* CSNotifications.m */; };
+		3408235619BC677C00CD1F5F /* CSNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 3408235419BC530300CD1F5F /* CSNotifications.m */; };
 		340D8C971959C7C100BE5144 /* CompressionSettingsPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 340D8C961959C7C100BE5144 /* CompressionSettingsPanel.xib */; };
 		340DC734197CF6E9003A0BB3 /* CSCaptureBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 340DC733197CF6E9003A0BB3 /* CSCaptureBase.m */; };
 		340DC735197CF6E9003A0BB3 /* CSCaptureBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 340DC733197CF6E9003A0BB3 /* CSCaptureBase.m */; };
@@ -323,6 +325,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3408234619BC50AD00CD1F5F /* CSNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSNotifications.h; path = PluginHeaders/CSNotifications.h; sourceTree = "<group>"; };
+		3408235419BC530300CD1F5F /* CSNotifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSNotifications.m; path = ../CSNotifications.m; sourceTree = "<group>"; };
 		340D8C961959C7C100BE5144 /* CompressionSettingsPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CompressionSettingsPanel.xib; path = Interface/CompressionSettingsPanel.xib; sourceTree = "<group>"; };
 		340DC732197CF6E9003A0BB3 /* CSCaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureBase.h; path = PluginHeaders/CSCaptureBase.h; sourceTree = "<group>"; };
 		340DC733197CF6E9003A0BB3 /* CSCaptureBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSCaptureBase.m; sourceTree = "<group>"; };
@@ -604,6 +608,7 @@
 				3441338D18667F5B0059B686 /* Capture */,
 				3441338C18667F280059B686 /* Compressor */,
 				3451A1D2171187D400DF6A8B /* ControllerProtocol.h */,
+				3408235419BC530300CD1F5F /* CSNotifications.m */,
 				340DC733197CF6E9003A0BB3 /* CSCaptureBase.m */,
 				347B14DA198492D900DC7DF0 /* InputPopupControllerViewController.m */,
 				347B14D9198492D900DC7DF0 /* InputPopupControllerViewController.h */,
@@ -747,6 +752,7 @@
 				34AFC2C119B08AF30007C07B /* CSStreamServiceProtocol.h */,
 				34D657F519B33DCF0012E32B /* CSPluginFactoryProtocol.h */,
 				34A7C17A19B98EA200BC6882 /* CSExtraPluginProtocol.h */,
+				3408234619BC50AD00CD1F5F /* CSNotifications.h */,
 			);
 			name = PluginHeaders;
 			sourceTree = "<group>";
@@ -1298,6 +1304,7 @@
 				3481F30619B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m in Sources */,
 				342346CF15F9F07E00C8C77E /* CSAbstractCaptureDevice.m in Sources */,
 				34210B3E1606001200362FC8 /* OutputDestination.m in Sources */,
+				3408235519BC677A00CD1F5F /* CSNotifications.m in Sources */,
 				347B14DC198492D900DC7DF0 /* InputPopupControllerViewController.m in Sources */,
 				34D6581819B387DE0012E32B /* AppDelegate+AppDelegate_ScriptingAdditions.m in Sources */,
 				340DC734197CF6E9003A0BB3 /* CSCaptureBase.m in Sources */,
@@ -1340,6 +1347,7 @@
 				3451A1DC1712C5D000DF6A8B /* OutputDestination.m in Sources */,
 				3451A1DD1712C5D300DF6A8B /* CSAbstractCaptureDevice.m in Sources */,
 				34213E1B196680880054E238 /* CompressorBase.m in Sources */,
+				3408235619BC677C00CD1F5F /* CSNotifications.m in Sources */,
 				3451A1DF1712C5DC00DF6A8B /* FFMpegTask.m in Sources */,
 				3451A1E01712C5DF00DF6A8B /* AVFAudioCapture.m in Sources */,
 				34B0265A1712D8BA0063BB2D /* CmdLineDelegate.m in Sources */,

@@ -50,6 +50,20 @@
 //for this.
 @property (assign) bool allowDedup;
 
+
+//These are set as state changes/events happen. You can check their values in your code at anytime
+//or observe them or override the setter/getter to do whatever you'd like.
+
+//Are we selected in the UI?
+@property (assign) bool isSelected;
+
+//If the source is part of a multi-source input this flag is set when it isn't the source being displayed
+@property (assign) bool isVisible;
+
+//Your active status (active checkbox in config UI). If an input isn't active currentImage/getCurrentFrame aren't
+//called. You can use this to pause timers or deallocate resources if you want.
+@property (assign) bool isActive;
+
 -(CIImage *)currentImage;
 -(NSViewController *)configurationView;
 -(CVImageBufferRef) getCurrentFrame;

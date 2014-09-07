@@ -19,6 +19,7 @@
 #import <QuartzCore/CoreImage.h>
 #import "CSPluginLoader.h"
 #import "CSStreamServiceProtocol.h"
+#import "CSNotifications.h"
 
 
 @class FFMpegTask;

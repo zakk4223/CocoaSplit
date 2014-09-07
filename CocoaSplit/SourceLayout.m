@@ -146,6 +146,8 @@
 -(void)deleteSource:(InputSource *)delSource
 {
     [self.sourceList removeObject:delSource];
+    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputDeleted  object:delSource userInfo:nil];
+
 }
 
 
@@ -157,6 +159,7 @@
     newSource.imageContext  = self.ciCtx;
     newSource.layout = self;
     [self.sourceList addObject:newSource];
+    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputAdded object:newSource userInfo:nil];
 
 }
 

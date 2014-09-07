@@ -26,6 +26,8 @@
     {
         self.needsSourceSelection = YES;
         self.allowDedup = YES;
+        self.isVisible = YES;
+        
     }
     
     return self;

@@ -25,6 +25,8 @@ static NSArray *_sourceTypes = nil;
 @synthesize imageContext = _imageContext;
 @synthesize scaleFactor = _scaleFactor;
 @synthesize transitionFilterName = _transitionFilterName;
+@synthesize is_selected = _is_selected;
+@synthesize active = _active;
 
 
 -(void) encodeWithCoder:(NSCoder *)aCoder
@@ -590,7 +592,9 @@ static NSArray *_sourceTypes = nil;
         _nextImageTime = currentTime + self.changeInterval;
 
     
+        _useInput.isVisible = NO;
         _useInput = [self.videoSources objectAtIndex:_currentSourceIdx];
+        _useInput.isVisible = YES;
         
         _oldImage = _preBgImage;
         
@@ -1095,6 +1099,37 @@ static NSArray *_sourceTypes = nil;
     return self.layout.canvas_height;
 }
 
+
+-(void) setActive:(bool)active
+{
+    _active = active;
+    if (self.videoInput)
+    {
+        self.videoInput.isActive = active;
+    }
+}
+
+
+-(bool)active
+{
+    return _active;
+}
+
+
+-(void) setIs_selected:(bool)is_selected
+{
+    _is_selected = is_selected;
+    if (self.videoInput)
+    {
+        self.videoInput.isSelected = is_selected;
+    }
+}
+
+
+-(bool)is_selected
+{
+    return _is_selected;
+}
 
 
 -(void) removeObjectFromVideoSourcesAtIndex:(NSUInteger)index

@@ -37,11 +37,13 @@
     {
         if ([self actionConfirmation:[NSString stringWithFormat:@"Really delete %@?", self.selectedLayout.name] infoString:nil])
         {
-            [self willChangeValueForKey:@"sourceLayouts"];
-            self.selectedLayout.isActive = NO;
-            [self.sourceLayouts removeObject:self.selectedLayout];
             
-            [self didChangeValueForKey:@"sourceLayouts"];
+            
+            NSUInteger idx = [self.sourceLayouts indexOfObject:self.selectedLayout];
+            
+            self.selectedLayout.isActive = NO;
+            
+            [self removeObjectFromSourceLayoutsAtIndex:idx];
             self.selectedLayout = nil;
         }
     }
@@ -62,6 +64,31 @@
     return nil;
 }
 
+
+-(SourceLayout *)addLayoutForName:(NSString *)name
+{
+    
+    NSMutableString *baseName = name.mutableCopy;
+    
+    NSMutableString *newName = baseName;
+    int name_try = 1;
+    
+    while ([self findLayoutWithName:newName]) {
+        newName = [NSMutableString stringWithFormat:@"%@#%d", baseName, name_try];
+        name_try++;
+    }
+    
+    
+    SourceLayout *newLayout = [[SourceLayout alloc] init];
+    newLayout.name = newName;
+    
+    [self insertObject:newLayout inSourceLayoutsAtIndex:self.sourceLayouts.count];
+    
+    
+    return newLayout;
+}
+
+
 - (IBAction)createNewLayout:(id)sender
 {
     
@@ -71,24 +98,7 @@
     if (self.layoutPanelName)
     {
         
-        NSMutableString *baseName = self.layoutPanelName.mutableCopy;
-        
-        NSMutableString *newName = baseName;
-        int name_try = 1;
-        
-        while ([self findLayoutWithName:newName]) {
-            newName = [NSMutableString stringWithFormat:@"%@#%d", baseName, name_try];
-            name_try++;
-        }
-
-        
-        SourceLayout *newLayout = [[SourceLayout alloc] init];
-        newLayout.name = newName;
-        
-        [self willChangeValueForKey:@"sourceLayouts"];
-        
-        [self.sourceLayouts addObject:newLayout];
-        [self didChangeValueForKey:@"sourceLayouts"];
+        SourceLayout *newLayout = [self addLayoutForName:self.layoutPanelName];
         self.selectedLayout = newLayout;
         
     }
@@ -202,15 +212,23 @@
             self.selectedCompressor = nil;
             self.editingCompressor = nil;
             
-            [self willChangeValueForKey:@"compressors"];
-            [self.compressors removeObjectForKey:deleteKey];
-            [self didChangeValueForKey:@"compressors"];
+            [self deleteCompressorForName:deleteKey];
         }
     }
     
     [self closeCompressPanel];
 }
 
+
+-(void)deleteCompressorForName:(NSString *)name
+{
+    id to_delete = self.compressors[name];
+    
+    [self willChangeValueForKey:@"compressors"];
+    [self.compressors removeObjectForKey:name];
+    [self didChangeValueForKey:@"compressors"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorDeleted object:to_delete userInfo:nil];
+}
 
 
 -(IBAction)openCompressPanel:(bool)doEdit
@@ -278,9 +296,12 @@
     [self.compressors setObject:newCompressor forKey:newName];
     [self didChangeValueForKey:@"compressors"];
 
+    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:newCompressor userInfo:nil];
+    
     return newName;
     
 }
+
 
 
 -(void) setCompressSelection:(NSString *)forName
@@ -1127,10 +1148,11 @@
     
     newDest = [[OutputDestination alloc] initWithType:[self.streamServiceObject.class label]];
     newDest.destination = destination;
-    
-    [[self mutableArrayValueForKey:@"captureDestinations"] addObject:newDest];
     newDest.settingsController = self;
+
+    [self insertObject:newDest inCaptureDestinationsAtIndex:self.captureDestinations.count-1];
     [self closeCreateSheet:nil];
+
     
 }
 
@@ -1271,6 +1293,8 @@
     
     self.captureRunning = YES;
 
+    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationStreamStarted object:self userInfo:nil];
+    
     return YES;
     
 }
@@ -1501,6 +1525,8 @@
     }
     
     [self.audioCaptureSession stopAudioCompression];
+    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationStreamStopped object:self userInfo:nil];
+
 }
 
 - (IBAction)streamButtonPushed:(id)sender {
@@ -1705,7 +1731,7 @@
         
         if (![self sleepUntil:(startTime += _frame_interval)])
         {
-            NSLog(@"SLEEP FAILED");
+            //NSLog(@"SLEEP FAILED");
             continue;
         }
 
@@ -1962,13 +1988,42 @@
 - (IBAction)removeDestination:(id)sender
 {
     [self.selectedCaptureDestinations enumerateIndexesWithOptions:0 usingBlock:^(NSUInteger idx, BOOL *stop) {
-        OutputDestination *to_delete = [[self mutableArrayValueForKey:@"captureDestinations"] objectAtIndex:idx];
-        to_delete.active = NO;
-        [[self mutableArrayValueForKey:@"captureDestinations"] removeObjectAtIndex:idx];
-        
+                [self removeObjectFromCaptureDestinationsAtIndex:idx];
     }];
     
 }
+
+
+-(void) removeObjectFromCaptureDestinationsAtIndex:(NSUInteger)index
+{
+    OutputDestination *to_delete = [self.captureDestinations objectAtIndex:index];
+    to_delete.active = NO;
+    [self.captureDestinations removeObjectAtIndex:index];
+    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputDeleted object:to_delete userInfo:nil];
+}
+
+-(void)insertObject:(OutputDestination *)object inCaptureDestinationsAtIndex:(NSUInteger)index
+{
+    [self.captureDestinations insertObject:object atIndex:index];
+    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputAdded object:object userInfo:nil];
+}
+
+
+-(void) insertObject:(SourceLayout *)object inSourceLayoutsAtIndex:(NSUInteger)index
+{
+    [self.sourceLayouts insertObject:object atIndex:index];
+    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputAdded object:object userInfo:nil];
+}
+
+
+-(void) removeObjectFromSourceLayoutsAtIndex:(NSUInteger)index
+{
+    id to_delete = [self.sourceLayouts objectAtIndex:index];
+    
+    [self.sourceLayouts removeObjectAtIndex:index];
+    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutDeleted object:to_delete userInfo:nil];
+}
+
 
 -(NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
 {
