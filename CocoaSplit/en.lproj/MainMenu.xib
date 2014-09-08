@@ -666,7 +666,7 @@
                                                             <font key="titleFont" metaFont="system"/>
                                                         </box>
                                                         <box autoresizesSubviews="NO" verticalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="3736">
-                                                            <rect key="frame" x="17" y="120" width="248" height="4"/>
+                                                            <rect key="frame" x="17" y="120" width="248" height="5"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                                                             <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -775,15 +775,15 @@
                                                             </connections>
                                                         </button>
                                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CRm-nK-baf">
-                                                            <rect key="frame" x="12" y="257" width="95" height="28"/>
+                                                            <rect key="frame" x="12" y="258" width="95" height="28"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <buttonCell key="cell" type="push" title="Add New" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="NS1-x6-L1C">
                                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                 <font key="font" metaFont="smallSystem"/>
+                                                                <connections>
+                                                                    <action selector="addInputSource:" target="2416" id="iI7-LX-k6L"/>
+                                                                </connections>
                                                             </buttonCell>
-                                                            <connections>
-                                                                <action selector="addInputSource:" target="816" id="39r-2o-JbL"/>
-                                                            </connections>
                                                         </button>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YgM-fI-r8f">
                                                             <rect key="frame" x="15" y="173" width="70" height="14"/>

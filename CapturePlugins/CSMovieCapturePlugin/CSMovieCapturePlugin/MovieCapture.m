@@ -15,6 +15,40 @@
 @synthesize currentMovieTime = _currentMovieTime;
 
 
+-(void) encodeWithCoder:(NSCoder *)aCoder
+{
+    NSMutableArray *currentQueueURLS = [NSMutableArray array];
+    for(AVPlayerItem *item in self.avPlayer.items)
+    {
+        AVURLAsset *itemAsset = (AVURLAsset *)item.asset;
+        if (itemAsset)
+        {
+            NSURL *url = itemAsset.URL;
+            if (url)
+            {
+                [currentQueueURLS addObject:url];
+            }
+        }
+    }
+    
+    [aCoder encodeObject:currentQueueURLS forKey:@"currentQueueURLS"];
+}
+
+
+-(id)initWithCoder:(NSCoder *)aDecoder
+{
+
+    if (self = [self init])
+    {
+        NSMutableArray *urls = [aDecoder decodeObjectForKey:@"currentQueueURLS"];
+        for (NSURL *url in urls)
+        {
+            [self enqueueMedia:url];
+        }
+    }
+    return self;
+}
+
 
 -(id) init
 {

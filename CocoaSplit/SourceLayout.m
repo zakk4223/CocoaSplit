@@ -235,20 +235,23 @@
 
 -(CVPixelBufferRef)currentImg
 {
+    CVPixelBufferRef destFrame = NULL;
+    CIImage *newImage;
+    CGFloat frameWidth, frameHeight;
+    NSArray *listCopy;
     
     @autoreleasepool {
         
-        CVPixelBufferRef destFrame = NULL;
         
         
         
         
-        CIImage *newImage = [_backgroundFilter valueForKey:kCIOutputImageKey];
+        newImage = [_backgroundFilter valueForKey:kCIOutputImageKey];
         
         newImage = [newImage imageByCroppingToRect:NSMakeRect(0, 0, self.canvas_width, self.canvas_height)];
         
         
-        NSArray *listCopy = [self sourceListOrdered];
+        listCopy = [self sourceListOrdered];
         
         
         for (InputSource *isource in listCopy)
@@ -266,7 +269,7 @@
             return nil;
         }
         
-        CGFloat frameWidth, frameHeight;
+        
         
         frameWidth = self.canvas_width;
         frameHeight = self.canvas_height;
@@ -279,14 +282,15 @@
             _cvpool_size = frameSize;
             
         }
+    }
+    
+    CVPixelBufferPoolCreatePixelBuffer(kCVReturnSuccess, _cvpool, &destFrame);
         
-        CVPixelBufferPoolCreatePixelBuffer(kCVReturnSuccess, _cvpool, &destFrame);
-        
-        
-        
+    @autoreleasepool {
+     
         [self.ciCtx render:newImage toIOSurface:CVPixelBufferGetIOSurface(destFrame) bounds:NSMakeRect(0,0,frameWidth, frameHeight) colorSpace:CGColorSpaceCreateDeviceRGB()];
         
-        
+    }
         @synchronized(self)
         {
             if (_currentPB)
@@ -302,7 +306,7 @@
             [isource frameRendered];
         }
         
-    }
+    
     
     return _currentPB;
 }

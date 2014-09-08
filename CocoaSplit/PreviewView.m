@@ -664,6 +664,21 @@
 }
 
 
+- (IBAction)addInputSource:(id)sender
+{
+    
+    if (self.sourceLayout)
+    {
+        
+        
+        InputSource *newSource = [[InputSource alloc] init];
+        [self.sourceLayout addSource:newSource];
+        [self spawnInputSettings:newSource atRect:NSZeroRect];
+    }
+}
+
+
+
 - (IBAction)deleteInput:(id)sender
 {
     NSMenuItem *item = (NSMenuItem *)sender;
@@ -708,11 +723,6 @@
     {
         forInput.editorWindow = nil;
     }
-
-    
-
-    
-    
 }
 
 

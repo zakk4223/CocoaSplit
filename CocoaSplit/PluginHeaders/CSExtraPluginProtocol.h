@@ -13,10 +13,12 @@
 @protocol CSExtraPluginProtocol <NSObject, NSCoding>
 
 
--(void)extraTopLevelMenuClicked;
-
--(NSMenu *)extraPluginMenu;
 
 +(NSString *) label;
+
+@optional
+-(void)extraTopLevelMenuClicked;
+-(NSMenu *)extraPluginMenu;
+
 
 @end

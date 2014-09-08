@@ -7,6 +7,7 @@
 //
 
 #import "LayoutPreviewWindowController.h"
+#import "SourceLayout.h"
 
 @interface LayoutPreviewWindowController ()
 
@@ -30,4 +31,10 @@
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
 }
 
+
+-(void)windowWillClose:(NSNotification *)notification
+{
+    [self.openGLView.sourceLayout.sourceList removeAllObjects];
+    
+}
 @end

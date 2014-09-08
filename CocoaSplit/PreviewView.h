@@ -92,6 +92,7 @@ typedef enum resize_style_t {
 - (IBAction)moveInputUp:(id)sender;
 - (IBAction)moveInputDown:(id)sender;
 - (IBAction)deleteInput:(id)sender;
+- (IBAction)addInputSource:(id)sender;
 - (IBAction)showInputSettings:(id)sender;
 
 -(void)spawnInputSettings:(InputSource *)forInput atRect:(NSRect)atRect;

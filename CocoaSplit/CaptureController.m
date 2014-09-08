@@ -716,7 +716,6 @@
     
     for(NSString *pKey in sharedLoader.extraPlugins)
     {
-        NSLog(@"PKEY %@, %@", pKey, self.extrasMenu);
         Class extraClass = (Class)sharedLoader.extraPlugins[pKey];
         NSObject<CSExtraPluginProtocol>*pInstance;
         if (self.extraPluginsSaveData[pKey])
@@ -735,9 +734,11 @@
         {
             NSMenu *subMenu = [pInstance extraPluginMenu];
             [pItem setSubmenu:subMenu];
-        } else {
+        } else if ([pInstance respondsToSelector:@selector(extraTopLevelMenuClicked)]) {
             pItem.target = pInstance;
             pItem.action = @selector(extraTopLevelMenuClicked);
+        } else {
+            [pItem setEnabled:NO];
         }
         [self.extrasMenu addItem:pItem];
     }
@@ -1830,6 +1831,7 @@
                     }
 
                 }
+                
                 _last_running_value = self.captureRunning;
                 
                 CVPixelBufferRelease(newFrame);
