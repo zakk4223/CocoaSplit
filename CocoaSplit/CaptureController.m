@@ -593,6 +593,9 @@
    if (self = [super init])
    {
        
+       self.sharedPluginLoader = [CSPluginLoader sharedPluginLoader];
+       
+       
        [[CSPluginLoader sharedPluginLoader] loadAllBundles];
        
 #ifndef DEBUG
@@ -2064,4 +2067,13 @@
     self.layoutPreviewController.sourceLayouts = self.sourceLayouts;
     
 }
+
+- (IBAction)openPluginManager:(id)sender
+{
+    self.pluginManagerController = [[PluginManagerWindowController alloc] initWithWindowNibName:@"PluginManagerWindowController"];
+    self.pluginManagerController.sharedPluginLoader = self.sharedPluginLoader;
+    [self.pluginManagerController showWindow:nil];
+}
+
+
 @end

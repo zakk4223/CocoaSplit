@@ -36,6 +36,8 @@
         self.sourcePlugins = [[NSMutableDictionary alloc] init];
         self.streamServicePlugins  = [[NSMutableDictionary alloc] init];
         self.extraPlugins  = [[NSMutableDictionary alloc] init];
+        self.allPlugins = [NSMutableArray array];
+        
 
 
     }
@@ -130,6 +132,8 @@
     if (registerMap)
     {
         [registerMap setObject:toLoad forKey:classLabel];
+        [self.allPlugins addObject:toLoad];
+        
         didLoad = YES;
     }
     

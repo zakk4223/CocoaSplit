@@ -20,6 +20,7 @@
 #import "CSPluginLoader.h"
 #import "CSStreamServiceProtocol.h"
 #import "CSNotifications.h"
+#import "PluginManagerWindowController.h"
 
 
 @class FFMpegTask;
@@ -98,6 +99,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 @property (strong) LayoutPreviewWindowController *layoutPreviewController;
+@property (strong) PluginManagerWindowController *pluginManagerController;
+
 
 @property (strong) NSString *renderStatsString;
 
@@ -138,6 +141,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 - (IBAction)openLayoutPreview:(id)sender;
+- (IBAction)openPluginManager:(id)sender;
 
 - (IBAction)deleteLayout:(id)sender;
 
@@ -291,6 +295,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) NSMutableDictionary *extraPlugins;
 
 @property (strong) NSMutableDictionary *extraPluginsSaveData;
+@property (strong) CSPluginLoader *sharedPluginLoader;
 
 
 

@@ -14,6 +14,7 @@
 @property (strong) NSMutableDictionary *sourcePlugins;
 @property (strong) NSMutableDictionary *streamServicePlugins;
 @property (strong) NSMutableDictionary *extraPlugins;
+@property (strong) NSMutableArray *allPlugins;
 
 
 +(id)sharedPluginLoader;
