@@ -301,8 +301,10 @@
         
         
         
-        
+    
+    //CGColorSpaceRef cs = CGColorSpaceCreateDeviceRGB();
         [self.ciCtx render:newImage toIOSurface:CVPixelBufferGetIOSurface(destFrame) bounds:NSMakeRect(0,0,frameWidth, frameHeight) colorSpace:nil];
+    
         
         
         
