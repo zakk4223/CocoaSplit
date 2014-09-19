@@ -13,7 +13,7 @@
 #import "InputSource.h"
 #import "InputPopupControllerViewController.h"
 #import "SourceLayout.h"
-
+#import "CreateLayoutViewController.h"
 
 
 
@@ -251,6 +251,49 @@
     if (oldLayout && !oldLayout.isActive)
     {
         [oldLayout saveSourceList];
+    }
+}
+
+
+
+- (IBAction)openLayoutPopover:(NSButton *)sender
+{
+    
+    
+    if (!_layoutpopOver)
+    {
+        CreateLayoutViewController *vc = [[CreateLayoutViewController alloc] init];
+        
+        vc.textFieldDelegate = self;
+        _layoutpopOver = [[NSPopover alloc] init];
+        
+        _layoutpopOver.contentViewController = vc;
+        _layoutpopOver.animates = YES;
+        _layoutpopOver.delegate = vc;
+        _layoutpopOver.behavior = NSPopoverBehaviorTransient;
+        
+    }
+    
+    [_layoutpopOver showRelativeToRect:sender.bounds ofView:sender preferredEdge:NSMinYEdge];
+
+    
+
+}
+
+-(void) setLayoutTextValue:(NSString *)textValue
+{
+    
+    SourceLayout *newLayout = [self.controller addLayoutForName:textValue];
+    if (_layoutpopOver)
+    {
+        [_layoutpopOver close];
+    }
+    
+    if (self.controller.previewCtx == self)
+    {
+        self.controller.selectedLayout = newLayout;
+    } else {
+        self.sourceLayoutPreview = newLayout;
     }
 }
 
@@ -805,12 +848,14 @@
 -(id) initWithFrame:(NSRect)frameRect
 {
     
-    const NSOpenGLPixelFormatAttribute attr[] = {
-        NSOpenGLPFAAccelerated,
-        NSOpenGLPFANoRecovery,
-//        NSOpenGLPFAOpenGLProfile,
-//        NSOpenGLProfileVersion3_2Core,
-        0
+     NSOpenGLPixelFormatAttribute attr[] = {
+         NSOpenGLPFAPixelBuffer,
+         NSOpenGLPFANoRecovery,
+         NSOpenGLPFAAccelerated,
+         //NSOpenGLPFAAllowOfflineRenderers,
+         NSOpenGLPFADepthSize, 32,
+         (NSOpenGLPixelFormatAttribute) 0,0,
+         (NSOpenGLPixelFormatAttribute) 0
     };
     
     
@@ -971,13 +1016,13 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
                 break;
             case kCVPixelFormatType_32BGRA:
                 plane_enums[0][0] = GL_BGRA;
-                plane_enums[0][1] = GL_RGB;
+                plane_enums[0][1] = GL_RGBA;
                 plane_enums[0][2] = GL_UNSIGNED_INT_8_8_8_8_REV;
                 _num_planes = 1;
                 break;
-            case kCVPixelFormatType_32ARGB:
-                plane_enums[0][0] = GL_RGB;
-                plane_enums[0][1] = GL_RGB;
+            case kCVPixelFormatType_32RGBA:
+                plane_enums[0][0] = GL_RGBA;
+                plane_enums[0][1] = GL_RGBA;
                 plane_enums[0][2] = GL_UNSIGNED_INT_8_8_8_8;
                 _num_planes = 1;
                 break;

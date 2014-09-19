@@ -20,6 +20,9 @@
 #import "SourceLayout.h"
 #import "LayoutPreviewWindowController.h"
 #import "CSExtraPluginProtocol.h"
+#import <OpenCL/opencl.h>
+#import <OpenCl/cl_gl_ext.h>
+
 
 
 @implementation CaptureController
@@ -31,20 +34,23 @@
 
 
 
-- (IBAction)deleteLayout:(id)sender
+- (void)deleteLayout:(SourceLayout *)toDelete;
 {
-    if (self.selectedLayout)
+    if (toDelete)
     {
-        if ([self actionConfirmation:[NSString stringWithFormat:@"Really delete %@?", self.selectedLayout.name] infoString:nil])
+        if ([self actionConfirmation:[NSString stringWithFormat:@"Really delete %@?", toDelete.name] infoString:nil])
         {
             
             
-            NSUInteger idx = [self.sourceLayouts indexOfObject:self.selectedLayout];
+            NSUInteger idx = [self.sourceLayouts indexOfObject:toDelete];
             
-            self.selectedLayout.isActive = NO;
+            toDelete.isActive = NO;
             
             [self removeObjectFromSourceLayoutsAtIndex:idx];
-            self.selectedLayout = nil;
+            if (self.selectedLayout == toDelete)
+            {
+                self.selectedLayout = nil;
+            }
         }
     }
 }
@@ -556,10 +562,21 @@
         NSOpenGLPFAPixelBuffer,
         NSOpenGLPFANoRecovery,
         NSOpenGLPFAAccelerated,
+        //NSOpenGLPFAAllowOfflineRenderers,
         NSOpenGLPFADepthSize, 32,
+        (NSOpenGLPixelFormatAttribute) 0,0,
         (NSOpenGLPixelFormatAttribute) 0
         
     };
+    if (self.renderOnIntegratedGPU)
+    {
+        NSLog(@"RENDERING ON INTELHD!");
+        
+        glAttributes[5] = NSOpenGLPFARendererID;
+        glAttributes[6] = kCGLRendererIntelHDID;
+    }
+    
+    
     NSOpenGLPixelFormat *pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:glAttributes];
     
     if (!pixelFormat)
@@ -645,7 +662,7 @@
        
        mach_timebase_info(&_mach_timebase);
        
-       dispatch_async(_main_capture_queue, ^{[self newFrameTimed];});
+
        
        /*
        int dispatch_strict_flag = 1;
@@ -695,13 +712,6 @@
        
        self.extraPlugins = [NSMutableDictionary dictionary];
        
-        [self createCGLContext];
-       _cictx = [CIContext contextWithCGLContext:_cgl_ctx pixelFormat:CGLGetPixelFormat(_cgl_ctx) colorSpace:CGColorSpaceCreateDeviceRGB() options:nil];
-
-
-       
-       
-           
 
        
    }
@@ -951,6 +961,9 @@
     [saveRoot setValue:self.compressors forKey:@"compressors"];
     [saveRoot setValue:self.extraSaveData forKey:@"extraSaveData"];
 
+    [saveRoot setValue:[NSNumber numberWithBool:self.renderOnIntegratedGPU] forKey:@"renderOnIntegratedGPU"];
+    
+    
     NSUInteger compressoridx =    [self.compressController selectionIndex];
 
     
@@ -1066,6 +1079,15 @@
         self.resolutionOption = @"None";
     }
 
+    
+    self.renderOnIntegratedGPU = [[saveRoot valueForKey:@"renderOnIntegratedGPU"] boolValue];
+
+    [self createCGLContext];
+    _cictx = [CIContext contextWithCGLContext:_cgl_ctx pixelFormat:CGLGetPixelFormat(_cgl_ctx) colorSpace:CGColorSpaceCreateDeviceRGB() options:nil];
+    
+    dispatch_async(_main_capture_queue, ^{[self newFrameTimed];});
+
+    
     self.sourceLayouts = [saveRoot valueForKey:@"sourceLayouts"];
     
     if (!self.sourceLayouts)
@@ -1084,9 +1106,13 @@
     }
     
 
+
+    
     self.extraPluginsSaveData = [saveRoot valueForKey:@"extraPluginsSaveData"];
     [self migrateDefaultCompressor:saveRoot];
     [self buildExtrasMenu];
+    
+
     self.extraPluginsSaveData = nil;
 }
 
@@ -1114,6 +1140,7 @@
     selectedLayout.isActive = YES;
     selectedLayout.controller = self;
     selectedLayout.ciCtx = _cictx;
+    
     self.previewCtx.sourceLayout = selectedLayout;
     currentLayout.isActive = NO;
     
@@ -1154,7 +1181,7 @@
     newDest.destination = destination;
     newDest.settingsController = self;
 
-    [self insertObject:newDest inCaptureDestinationsAtIndex:self.captureDestinations.count-1];
+    [self insertObject:newDest inCaptureDestinationsAtIndex:self.captureDestinations.count];
     [self closeCreateSheet:nil];
 
     
@@ -1774,7 +1801,27 @@
 }
 
 
+/*
+-(NSString *)getCurrentRendererName
+{
+    cl_int error;
+    
+    CGLShareGroupObj share_group = CGLGetShareGroup(_cgl_ctx);
+    
+    cl_context_properties properties[] = {CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE, (intptr_t)share_group, 0};
+    
+    cl_context context = clCreateContext(properties, 0, NULL, 0, 0, &error);
+    cl_device_id renderer;
+    clGetGLContextInfoAPPLE(context, _cgl_ctx, CL_CGL_DEVICE_FOR_CURRENT_VIRTUAL_SCREEN_APPLE, sizeof(renderer), &renderer, NULL);
+    
+    char buf[128];
+    
+    clGetDeviceInfo(renderer, CL_DEVICE_NAME, 128, buf, NULL);
+    
+    return [NSString stringWithUTF8String:buf];
+}
 
+*/
 -(CVPixelBufferRef) currentFrame
 {
     return [self.selectedLayout currentFrame];
@@ -1790,6 +1837,8 @@
         {
             
             double nfstart = [self mach_time_seconds];
+            
+            
             
             newFrame = [self.selectedLayout currentImg];
             //newFrame = [self currentFrame];
@@ -2061,6 +2110,7 @@
     self.layoutPreviewController = [[LayoutPreviewWindowController alloc] initWithWindowNibName:@"LayoutPreviewWindowController"];
     [self.layoutPreviewController showWindow:nil];
     self.layoutPreviewController.captureController = self;
+    self.layoutPreviewController.openGLView.controller = self;
     //Preview gets a copy of everything so it doesn't mess up live source
     //self.layoutPreviewController.sourceLayouts = [[NSMutableArray alloc] initWithArray:self.sourceLayouts copyItems:YES];
     //Or maybe not...

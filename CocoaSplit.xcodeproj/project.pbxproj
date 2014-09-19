@@ -79,6 +79,8 @@
 		34576C7819AFCA1B007BAD90 /* CSPluginLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 34576C7719AFCA1B007BAD90 /* CSPluginLoader.m */; };
 		34576C7919AFCA1B007BAD90 /* CSPluginLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 34576C7719AFCA1B007BAD90 /* CSPluginLoader.m */; };
 		345F89861976113C00BD4062 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A64A36165F208800A68428 /* QuartzCore.framework */; };
+		3470F41419C84989000A81C4 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3470F41319C84989000A81C4 /* Sparkle.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		3470F41619C849E7000A81C4 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3470F41319C84989000A81C4 /* Sparkle.framework */; };
 		34792AF616104AA70065A859 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AF516104AA70065A859 /* IOKit.framework */; };
 		34792AFB1611A6B90065A859 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AFA1611A6B90065A859 /* IOSurface.framework */; };
 		347B14DC198492D900DC7DF0 /* InputPopupControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 347B14DA198492D900DC7DF0 /* InputPopupControllerViewController.m */; };
@@ -116,6 +118,9 @@
 		34AFC33319B19CD00007C07B /* SourceCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AFC33219B19CD00007C07B /* SourceCache.m */; };
 		34AFC33419B19CD00007C07B /* SourceCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AFC33219B19CD00007C07B /* SourceCache.m */; };
 		34B0265A1712D8BA0063BB2D /* CmdLineDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B026591712D8BA0063BB2D /* CmdLineDelegate.m */; };
+		34B5FCDF19BF1C3F00F67D19 /* CreateLayoutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FCDD19BF1C3F00F67D19 /* CreateLayoutViewController.m */; };
+		34B5FCE019BF1C3F00F67D19 /* CreateLayoutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FCDD19BF1C3F00F67D19 /* CreateLayoutViewController.m */; };
+		34B5FCE119BF1C3F00F67D19 /* CreateLayoutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34B5FCDE19BF1C3F00F67D19 /* CreateLayoutViewController.xib */; };
 		34C19053189EE60400AB2430 /* CapturedFrameData.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C19052189EE60400AB2430 /* CapturedFrameData.m */; };
 		34C19054189EE60400AB2430 /* CapturedFrameData.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C19052189EE60400AB2430 /* CapturedFrameData.m */; };
 		34C6C3BF15FB5B440018A18B /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34C6C3BE15FB5B440018A18B /* OpenGL.framework */; };
@@ -294,6 +299,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3470F41519C849D9000A81C4 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				3470F41619C849E7000A81C4 /* Sparkle.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		34AE3C3E164E3EAE0052C95E /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -398,6 +413,7 @@
 		34576D2019B023E2007BAD90 /* CSMovieCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSMovieCapturePlugin.xcodeproj; path = CapturePlugins/CSMovieCapturePlugin/CSMovieCapturePlugin.xcodeproj; sourceTree = "<group>"; };
 		34576D5219B024EB007BAD90 /* CSImageCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSImageCapturePlugin.xcodeproj; path = CapturePlugins/CSImageCapturePlugin/CSImageCapturePlugin.xcodeproj; sourceTree = "<group>"; };
 		346EAAF6197A7B28000892CF /* Capture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Capture.h; sourceTree = "<group>"; };
+		3470F41319C84989000A81C4 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		34792AF516104AA70065A859 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		34792AFA1611A6B90065A859 /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = System/Library/Frameworks/IOSurface.framework; sourceTree = SDKROOT; };
 		347B14D9198492D900DC7DF0 /* InputPopupControllerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InputPopupControllerViewController.h; path = ../InputPopupControllerViewController.h; sourceTree = "<group>"; };
@@ -445,6 +461,9 @@
 		34AFC33219B19CD00007C07B /* SourceCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SourceCache.m; sourceTree = "<group>"; };
 		34B026581712D8BA0063BB2D /* CmdLineDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CmdLineDelegate.h; sourceTree = "<group>"; };
 		34B026591712D8BA0063BB2D /* CmdLineDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CmdLineDelegate.m; sourceTree = "<group>"; };
+		34B5FCDC19BF1C3F00F67D19 /* CreateLayoutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateLayoutViewController.h; sourceTree = "<group>"; };
+		34B5FCDD19BF1C3F00F67D19 /* CreateLayoutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateLayoutViewController.m; sourceTree = "<group>"; };
+		34B5FCDE19BF1C3F00F67D19 /* CreateLayoutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CreateLayoutViewController.xib; sourceTree = "<group>"; };
 		34C19051189EE60400AB2430 /* CapturedFrameData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CapturedFrameData.h; sourceTree = "<group>"; };
 		34C19052189EE60400AB2430 /* CapturedFrameData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CapturedFrameData.m; sourceTree = "<group>"; };
 		34C6C3BE15FB5B440018A18B /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
@@ -479,6 +498,7 @@
 				34A64A37165F208800A68428 /* QuartzCore.framework in Frameworks */,
 				34792AFB1611A6B90065A859 /* IOSurface.framework in Frameworks */,
 				34792AF616104AA70065A859 /* IOKit.framework in Frameworks */,
+				3470F41419C84989000A81C4 /* Sparkle.framework in Frameworks */,
 				34C6C3BF15FB5B440018A18B /* OpenGL.framework in Frameworks */,
 				342346BB15F5FBD700C8C77E /* CoreMedia.framework in Frameworks */,
 				342346B915F5FBD200C8C77E /* CoreVideo.framework in Frameworks */,
@@ -568,6 +588,7 @@
 		340FE4A015F3417E00E4CE4E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3470F41319C84989000A81C4 /* Sparkle.framework */,
 				34A64A36165F208800A68428 /* QuartzCore.framework */,
 				34AE3C6C164F04C90052C95E /* CoreVideo.framework */,
 				34AE3C6A164F04B30052C95E /* IOSurface.framework */,
@@ -633,6 +654,9 @@
 				342346BD15F6103D00C8C77E /* FFMpegTask.m */,
 				340FE50615F444AA00E4CE4E /* CaptureController.h */,
 				340FE50715F444AA00E4CE4E /* CaptureController.m */,
+				34B5FCDC19BF1C3F00F67D19 /* CreateLayoutViewController.h */,
+				34B5FCDD19BF1C3F00F67D19 /* CreateLayoutViewController.m */,
+				34B5FCDE19BF1C3F00F67D19 /* CreateLayoutViewController.xib */,
 				3431FFDF19786502000965FE /* InputSource.h */,
 				3431FFE019786502000965FE /* InputSource.m */,
 				340FE4A815F3417E00E4CE4E /* Supporting Files */,
@@ -978,8 +1002,9 @@
 				34AE3C3E164E3EAE0052C95E /* CopyFiles */,
 				3450579D172A4AE30065A452 /* CopyFiles */,
 				3435E39C188BD80A0015CC01 /* CopyFiles */,
-				34BC570418C8667700869744 /* ShellScript */,
 				34D43556198DD00F00266169 /* CopyFiles */,
+				3470F41519C849D9000A81C4 /* CopyFiles */,
+				3470F41719C8534B000A81C4 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1055,6 +1080,11 @@
 				LastTestingUpgradeCheck = 0510;
 				LastUpgradeCheck = 0440;
 				ORGANIZATIONNAME = Zakk;
+				TargetAttributes = {
+					340FE49C15F3417E00E4CE4E = {
+						DevelopmentTeam = L3JLUY4S5E;
+					};
+				};
 			};
 			buildConfigurationList = 340FE49715F3417E00E4CE4E /* Build configuration list for PBXProject "CocoaSplit" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1238,6 +1268,7 @@
 				34D4351B198BE3B700266169 /* NewLayoutPanel.xib in Resources */,
 				342B33B61980771200492CB7 /* line.vtsh in Resources */,
 				3435E39B188B93150015CC01 /* passthrough.vtsh in Resources */,
+				34B5FCE119BF1C3F00F67D19 /* CreateLayoutViewController.xib in Resources */,
 				340D8C971959C7C100BE5144 /* CompressionSettingsPanel.xib in Resources */,
 				34CFE49D18F1459600092C6A /* AudioMixer.xib in Resources */,
 				344988131893CF0500044259 /* LogWindow.xib in Resources */,
@@ -1282,7 +1313,7 @@
 			shellPath = /bin/sh;
 			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
 		};
-		34BC570418C8667700869744 /* ShellScript */ = {
+		3470F41719C8534B000A81C4 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1293,7 +1324,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "GIT_HASH=`git rev-parse --short HEAD`\n\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $GIT_HASH\" $BUILT_PRODUCTS_DIR/$INFOPLIST_PATH\n";
+			shellScript = "LOCATION=\"${BUILT_PRODUCTS_DIR}\"/\"${CONTENTS_FOLDER_PATH}\"\nIDENTITY=\"Mac Developer: Zachary Girouard\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/Frameworks/Sparkle.framework\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/MacOS/CocoaSplitCmd\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSAVFCapturePlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSLayoutSwitcherExtraPlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSFileStreamServicePlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSTwitchStreamServicePlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSChromaKey.plugin\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/TextureWrapPlugin.plugin\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSDesktopCapturePlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSMovieCapturePlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSWindowCapturePlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSImageCapturePlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSTextCapturePlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSSyphonCapturePlugin.bundle/Contents/Frameworks/Syphon.framework\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSSyphonCapturePlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/XPCServices/zakk.lol.QTCaptureHelper.xpc\"\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1312,6 +1343,7 @@
 				342346AA15F59A8500C8C77E /* AVFAudioCapture.m in Sources */,
 				342346BE15F6103D00C8C77E /* FFMpegTask.m in Sources */,
 				3481F30619B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m in Sources */,
+				34B5FCDF19BF1C3F00F67D19 /* CreateLayoutViewController.m in Sources */,
 				342346CF15F9F07E00C8C77E /* CSAbstractCaptureDevice.m in Sources */,
 				34210B3E1606001200362FC8 /* OutputDestination.m in Sources */,
 				3408235519BC677A00CD1F5F /* CSNotifications.m in Sources */,
@@ -1348,6 +1380,7 @@
 				34348C3919BDC0D800A122C2 /* PluginManagerWindowController.m in Sources */,
 				34C19054189EE60400AB2430 /* CapturedFrameData.m in Sources */,
 				34AFC33419B19CD00007C07B /* SourceCache.m in Sources */,
+				34B5FCE019BF1C3F00F67D19 /* CreateLayoutViewController.m in Sources */,
 				3451A1D31712C41000DF6A8B /* CaptureController.m in Sources */,
 				3431FFE219786502000965FE /* InputSource.m in Sources */,
 				348AC06C19B406910064F02D /* SourceLayout.m in Sources */,
@@ -1496,10 +1529,12 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)\"",
+					"$(SRCROOT)",
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CocoaSplit/CocoaSplit-Prefix.pch";
@@ -1516,6 +1551,7 @@
 				);
 				PRODUCT_NAME = CocoaSplit;
 				SDKROOT = macosx10.9;
+				STRIP_STYLE = debugging;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1525,13 +1561,17 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)\"",
+					"$(SRCROOT)",
+					"$(PROJECT_DIR)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CocoaSplit/CocoaSplit-Prefix.pch";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				INFOPLIST_FILE = "CocoaSplit/CocoaSplit-Info.plist";
 				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/lib;
@@ -1542,9 +1582,12 @@
 					/usr/local/lib/libmp3lame.a,
 					/usr/local/lib/libswscale.a,
 					/usr/local/lib/libx264.a,
+					"-flat_namespace",
+					"-export_dynamic",
 				);
 				PRODUCT_NAME = CocoaSplit;
 				SDKROOT = macosx10.9;
+				STRIP_STYLE = debugging;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

@@ -27,11 +27,11 @@
         [_backgroundFilter setDefaults];
         [_backgroundFilter setValue:[CIColor colorWithRed:0.0f green:0.0f blue:0.0f] forKey:kCIInputColorKey];
         self.sourceCache = [[SourceCache alloc] init];
-
     }
     
     return self;
 }
+
 
 
 -(id)copyWithZone:(NSZone *)zone
@@ -246,13 +246,13 @@
         
         
         
-        newImage = [_backgroundFilter valueForKey:kCIOutputImageKey];
+        //newImage = [_backgroundFilter valueForKey:kCIOutputImageKey];
+        newImage = [CIImage imageWithColor:[CIColor colorWithRed:0.0f green:0.0f blue:0.0f]];
         
         newImage = [newImage imageByCroppingToRect:NSMakeRect(0, 0, self.canvas_width, self.canvas_height)];
         
         
         listCopy = [self sourceListOrdered];
-        
         
         for (InputSource *isource in listCopy)
         {
@@ -286,11 +286,27 @@
     
     CVPixelBufferPoolCreatePixelBuffer(kCVReturnSuccess, _cvpool, &destFrame);
         
-    @autoreleasepool {
+    //@autoreleasepool {
      
-        [self.ciCtx render:newImage toIOSurface:CVPixelBufferGetIOSurface(destFrame) bounds:NSMakeRect(0,0,frameWidth, frameHeight) colorSpace:CGColorSpaceCreateDeviceRGB()];
         
-    }
+        /*
+        IOSurfaceRef surface = CVPixelBufferGetIOSurface(destFrame);
+        void *surfacePtr = IOSurfaceGetBaseAddress(surface);
+        size_t bpr = IOSurfaceGetBytesPerRow(surface);
+        
+        IOSurfaceLock(surface, 0, NULL);
+        [self.ciCtx render:newImage toBitmap:surfacePtr rowBytes:bpr bounds:NSMakeRect(0,0,frameWidth, frameHeight) format:kCIFormatARGB8 colorSpace:CGColorSpaceCreateDeviceRGB()];
+        IOSurfaceUnlock(surface, 0, NULL);
+         */
+        
+        
+        
+        
+        [self.ciCtx render:newImage toIOSurface:CVPixelBufferGetIOSurface(destFrame) bounds:NSMakeRect(0,0,frameWidth, frameHeight) colorSpace:nil];
+        
+        
+        
+    //}
         @synchronized(self)
         {
             if (_currentPB)

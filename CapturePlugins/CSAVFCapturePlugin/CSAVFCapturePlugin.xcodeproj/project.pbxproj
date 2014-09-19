@@ -298,8 +298,9 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				OTHER_LDFLAGS = (
 					"-undefined",
-					suppress,
+					dynamic_lookup,
 					"-flat_namespace",
+					"-bind_at_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = bundle;
@@ -316,8 +317,9 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				OTHER_LDFLAGS = (
 					"-undefined",
-					suppress,
+					dynamic_lookup,
 					"-flat_namespace",
+					"-bind_at_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = bundle;

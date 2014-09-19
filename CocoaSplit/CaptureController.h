@@ -93,9 +93,16 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     float _avg_render_time;
     float _render_time_total;
     int _renderedFrames;
+    NSTask *_renderTask;
+    
+    NSConnection *_remoteConn;
+    id _renderServer;
     
 }
 
+
+
+@property (assign) bool renderOnIntegratedGPU;
 
 
 @property (strong) LayoutPreviewWindowController *layoutPreviewController;
@@ -143,7 +150,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (IBAction)openLayoutPreview:(id)sender;
 - (IBAction)openPluginManager:(id)sender;
 
-- (IBAction)deleteLayout:(id)sender;
+- (void)deleteLayout:(SourceLayout *)toDelete;
 
 - (IBAction)createNewLayout:(id)sender;
 - (IBAction)closeLayoutPanel:(id)sender;
@@ -316,6 +323,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(void)captureOutputAudio:(id)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer;
 -(void)deleteSource:(InputSource *)delSource;
 -(InputSource *)findSource:(NSPoint)forPoint;
+-(SourceLayout *)addLayoutForName:(NSString *)name;
 
 
 

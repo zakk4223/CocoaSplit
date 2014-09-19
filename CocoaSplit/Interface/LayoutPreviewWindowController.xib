@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment defaultVersion="1080" identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
@@ -57,7 +57,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </customView>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bO5-YG-999">
-                        <rect key="frame" x="143" y="109" width="67" height="28"/>
+                        <rect key="frame" x="98" y="83" width="67" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Save" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="3PV-uV-hRW">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -97,6 +97,37 @@
                             </connections>
                         </buttonCell>
                     </button>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="E8U-BW-e0u">
+                        <rect key="frame" x="148" y="115" width="28" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="squareTextured" alternateTitle="Refresh" bezelStyle="texturedSquare" image="NSAddTemplate" imagePosition="overlaps" alignment="center" controlSize="small" imageScaling="proportionallyDown" inset="2" id="vLc-YT-0vt">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="openLayoutPopover:" target="qFS-DV-lDP" id="lry-JN-6ZC"/>
+                        </connections>
+                    </button>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UHo-dX-zHT">
+                        <rect key="frame" x="172" y="115" width="23" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="squareTextured" bezelStyle="texturedSquare" image="NSRemoveTemplate" imagePosition="overlaps" alignment="center" controlSize="small" imageScaling="proportionallyDown" inset="2" id="hne-pn-aG4">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <binding destination="-2" name="argument" keyPath="self.openGLView.sourceLayoutPreview" id="Tyw-M1-Rn2">
+                                <dictionary key="options">
+                                    <string key="NSSelectorName">deleteLayout:</string>
+                                </dictionary>
+                            </binding>
+                            <binding destination="-2" name="target" keyPath="self.captureController" previousBinding="Tyw-M1-Rn2" id="ICq-3W-fk3">
+                                <dictionary key="options">
+                                    <string key="NSSelectorName">deleteLayout:</string>
+                                </dictionary>
+                            </binding>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="qFS-DV-lDP" secondAttribute="trailing" constant="20" id="BWB-g5-sTZ"/>
@@ -109,8 +140,12 @@
         </window>
         <arrayController id="zoh-Yd-HrW">
             <connections>
-                <binding destination="-2" name="contentArray" keyPath="self.sourceLayouts" id="tYB-vL-o9c"/>
+                <binding destination="-2" name="contentArray" keyPath="self.captureController.sourceLayouts" id="G5V-da-F5i"/>
             </connections>
         </arrayController>
     </objects>
+    <resources>
+        <image name="NSAddTemplate" width="8" height="8"/>
+        <image name="NSRemoveTemplate" width="8" height="8"/>
+    </resources>
 </document>

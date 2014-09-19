@@ -82,6 +82,8 @@ typedef enum resize_style_t {
     
 
     NSScreen *_fullscreenOn;
+    NSPopover *_layoutpopOver;
+    
 
     
 
@@ -94,6 +96,8 @@ typedef enum resize_style_t {
 - (IBAction)deleteInput:(id)sender;
 - (IBAction)addInputSource:(id)sender;
 - (IBAction)showInputSettings:(id)sender;
+- (IBAction)openLayoutPopover:(NSButton *)sender;
+
 
 -(void)spawnInputSettings:(InputSource *)forInput atRect:(NSRect)atRect;
 

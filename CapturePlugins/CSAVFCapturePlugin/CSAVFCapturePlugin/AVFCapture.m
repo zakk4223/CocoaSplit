@@ -329,6 +329,8 @@
 
 -(void)setupVideoOutput
 {
+    
+    
     if (_capture_session)
     {
         NSMutableDictionary *videoSettings = [[NSMutableDictionary alloc] init];

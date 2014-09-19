@@ -202,6 +202,16 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="Help" systemMenu="help" id="491">
                         <items>
+                            <menuItem title="Check for Updates" id="ATy-He-XWC">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <binding destination="WST-Gt-Zlw" name="target" keyPath="self" id="cBm-wN-DqC">
+                                        <dictionary key="options">
+                                            <string key="NSSelectorName">checkForUpdates:</string>
+                                        </dictionary>
+                                    </binding>
+                                </connections>
+                            </menuItem>
                             <menuItem title="CocoaSplit Help" keyEquivalent="?" id="492">
                                 <connections>
                                     <action selector="showHelp:" target="-1" id="493"/>
@@ -869,10 +879,10 @@
                                                             <buttonCell key="cell" type="squareTextured" alternateTitle="Refresh" bezelStyle="texturedSquare" image="NSAddTemplate" imagePosition="overlaps" alignment="center" controlSize="small" imageScaling="proportionallyDown" inset="2" id="xjx-dj-wWF">
                                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                 <font key="font" metaFont="smallSystem"/>
+                                                                <connections>
+                                                                    <action selector="openLayoutPopover:" target="2416" id="oOD-i3-wMJ"/>
+                                                                </connections>
                                                             </buttonCell>
-                                                            <connections>
-                                                                <action selector="openLayoutPanel:" target="816" id="I61-Nh-z2C"/>
-                                                            </connections>
                                                         </button>
                                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I8N-SS-PMC">
                                                             <rect key="frame" x="190" y="238" width="23" height="18"/>
@@ -882,7 +892,16 @@
                                                                 <font key="font" metaFont="smallSystem"/>
                                                             </buttonCell>
                                                             <connections>
-                                                                <action selector="deleteLayout:" target="816" id="Z7L-1w-ndq"/>
+                                                                <binding destination="nWB-G2-33f" name="target" keyPath="selection" previousBinding="Yx8-6o-qEZ" id="8rK-bD-6WF">
+                                                                    <dictionary key="options">
+                                                                        <string key="NSSelectorName">deleteLayout:</string>
+                                                                    </dictionary>
+                                                                </binding>
+                                                                <binding destination="nWB-G2-33f" name="argument" keyPath="selection.selectedLayout" id="Yx8-6o-qEZ">
+                                                                    <dictionary key="options">
+                                                                        <string key="NSSelectorName">deleteLayout:</string>
+                                                                    </dictionary>
+                                                                </binding>
                                                             </connections>
                                                         </button>
                                                     </subviews>
@@ -1197,6 +1216,7 @@
                 </binding>
             </connections>
         </arrayController>
+        <customObject id="WST-Gt-Zlw" userLabel="SUUpdater" customClass="SUUpdater"/>
         <objectController id="nWB-G2-33f">
             <declaredKeys>
                 <string>captureFPS</string>

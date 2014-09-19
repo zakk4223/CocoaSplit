@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "CaptureController.h"
 #import "InputSource.h"
+#import <malloc/malloc.h>
 
 
 @interface SourceLayout : NSObject <NSCoding, NSKeyedUnarchiverDelegate, NSCopying>
@@ -20,9 +21,6 @@
     CVPixelBufferRef _currentPB;
     CIFilter *_backgroundFilter;
     NSSize _cvpool_size;
-
-
-    
 }
 
 
@@ -36,6 +34,7 @@
 
 @property (assign) int canvas_width;
 @property (assign) int canvas_height;
+
 
 @property (strong) CIContext *ciCtx;
 @property (strong) NSString *name;
