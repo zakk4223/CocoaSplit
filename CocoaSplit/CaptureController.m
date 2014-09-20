@@ -798,7 +798,7 @@
         [fileManager createDirectoryAtPath:saveFolder withIntermediateDirectories:NO attributes:nil error:nil];
     }
     
-    NSString *saveFile = @"CocoaSplit.settings";
+    NSString *saveFile = @"CocoaSplit-CI.settings";
     
     return [saveFolder stringByAppendingPathComponent:saveFile];
 }
