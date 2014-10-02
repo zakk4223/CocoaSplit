@@ -238,8 +238,7 @@
         CGLContextObj cgl_ctx = [[self openGLContext] CGLContextObj];
         
         sourceLayout.ciCtx =  [CIContext contextWithCGLContext:cgl_ctx pixelFormat:CGLGetPixelFormat(cgl_ctx) colorSpace:CGColorSpaceCreateDeviceRGB() options:nil];
-        sourceLayout.canvas_height = 720;
-        sourceLayout.canvas_width = 1280;
+        sourceLayout.controller = self.controller;
         [sourceLayout restoreSourceList];
         
     }
