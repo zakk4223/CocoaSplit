@@ -1,0 +1,58 @@
+//
+//  CSSyphonInject.m
+//  CSSyphonInjectExtraPlugin
+//
+//  Created by Zakk on 10/1/14.
+//  Copyright (c) 2014 Zakk. All rights reserved.
+//
+
+#import "CSSyphonInject.h"
+#import <ScriptingBridge/ScriptingBridge.h>
+
+
+@implementation CSSyphonInject
+
+
+
++(NSString *)label
+{
+    return @"SyphonInject";
+}
+
+
+-(void)extraTopLevelMenuClicked
+{
+    
+    self.sharedWorkspace = [NSWorkspace sharedWorkspace];
+    
+    
+    _windowController = [[CSSyphonInjectWindowController alloc] initWithWindowNibName:@"CSSyphonInjectWindowController"];
+    [_windowController showWindow:nil];
+    _windowController.injector = self;
+}
+
+- (void)doInject:(NSRunningApplication *)toInject
+{
+    
+        NSLog(@"WILL INJECT INTO APPLICATION %s", [toInject.localizedName UTF8String]);
+        
+        pid_t pid = toInject.processIdentifier;
+        
+        SBApplication *sbapp = [SBApplication applicationWithProcessIdentifier:pid];
+        
+        [sbapp setDelegate:self];
+        
+        
+        
+        
+        [sbapp setTimeout:10*60];
+        
+        [sbapp setSendMode:kAEWaitReply];
+        [sbapp sendEvent:'ascr' id:'gdut' parameters:0];
+        [sbapp setSendMode:kAENoReply];
+        [sbapp sendEvent:'SASI' id:'injc' parameters:0];
+    
+}
+
+
+@end

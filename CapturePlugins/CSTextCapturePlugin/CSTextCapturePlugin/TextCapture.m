@@ -168,7 +168,6 @@
     
     if (!self.imageContext || !self.text)
     {
-        NSLog(@"RETURNING IN RENDER TEXT %@ %@", self.imageContext, self.text);
         return;
     }
     

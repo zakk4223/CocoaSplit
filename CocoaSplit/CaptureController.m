@@ -981,7 +981,11 @@
     for(NSString *pkey in self.extraPlugins)
     {
         id ePlugin = self.extraPlugins[pkey];
-        self.extraPluginsSaveData[pkey] = [NSKeyedArchiver archivedDataWithRootObject:ePlugin];
+        if ([ePlugin respondsToSelector:@selector(encodeWithCoder:)])
+        {
+            self.extraPluginsSaveData[pkey] = [NSKeyedArchiver archivedDataWithRootObject:ePlugin];
+        }
+        
     }
     
     [saveRoot setValue:self.extraPluginsSaveData forKeyPath:@"extraPluginsSaveData"];

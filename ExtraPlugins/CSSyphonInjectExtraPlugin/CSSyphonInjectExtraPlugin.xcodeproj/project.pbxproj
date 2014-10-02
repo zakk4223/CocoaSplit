@@ -1,0 +1,328 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		34C6806D19DD01C300413468 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34C6806C19DD01C300413468 /* Cocoa.framework */; };
+		34C6807719DD01C300413468 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 34C6807519DD01C300413468 /* InfoPlist.strings */; };
+		34C6809319DD02B300413468 /* CSSyphonInject.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C6809219DD02B300413468 /* CSSyphonInject.m */; };
+		34C6809F19DD045B00413468 /* CSSyphonInjectWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C6809D19DD045B00413468 /* CSSyphonInjectWindowController.m */; };
+		34C680A019DD045B00413468 /* CSSyphonInjectWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34C6809E19DD045B00413468 /* CSSyphonInjectWindowController.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		34C6806919DD01C300413468 /* CSSyphonInjectExtraPlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSSyphonInjectExtraPlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		34C6806C19DD01C300413468 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		34C6806F19DD01C300413468 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		34C6807019DD01C300413468 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		34C6807119DD01C300413468 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		34C6807419DD01C300413468 /* CSSyphonInjectExtraPlugin-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CSSyphonInjectExtraPlugin-Info.plist"; sourceTree = "<group>"; };
+		34C6807619DD01C300413468 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		34C6807819DD01C300413468 /* CSSyphonInjectExtraPlugin-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CSSyphonInjectExtraPlugin-Prefix.pch"; sourceTree = "<group>"; };
+		34C6809119DD02B300413468 /* CSSyphonInject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSyphonInject.h; sourceTree = "<group>"; };
+		34C6809219DD02B300413468 /* CSSyphonInject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSyphonInject.m; sourceTree = "<group>"; };
+		34C6809419DD036000413468 /* CSAbstractCaptureDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAbstractCaptureDevice.h; path = PluginHeaders/CSAbstractCaptureDevice.h; sourceTree = "<group>"; };
+		34C6809519DD036000413468 /* CSCaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureBase.h; path = PluginHeaders/CSCaptureBase.h; sourceTree = "<group>"; };
+		34C6809619DD036000413468 /* CSCaptureSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureSourceProtocol.h; path = PluginHeaders/CSCaptureSourceProtocol.h; sourceTree = "<group>"; };
+		34C6809719DD036000413468 /* CSStreamServiceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSStreamServiceProtocol.h; path = PluginHeaders/CSStreamServiceProtocol.h; sourceTree = "<group>"; };
+		34C6809819DD036000413468 /* CSPluginFactoryProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPluginFactoryProtocol.h; path = PluginHeaders/CSPluginFactoryProtocol.h; sourceTree = "<group>"; };
+		34C6809919DD036000413468 /* CSExtraPluginProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSExtraPluginProtocol.h; path = PluginHeaders/CSExtraPluginProtocol.h; sourceTree = "<group>"; };
+		34C6809A19DD036000413468 /* CSNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSNotifications.h; path = PluginHeaders/CSNotifications.h; sourceTree = "<group>"; };
+		34C6809C19DD045B00413468 /* CSSyphonInjectWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSyphonInjectWindowController.h; sourceTree = "<group>"; };
+		34C6809D19DD045B00413468 /* CSSyphonInjectWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSyphonInjectWindowController.m; sourceTree = "<group>"; };
+		34C6809E19DD045B00413468 /* CSSyphonInjectWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSSyphonInjectWindowController.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		34C6806619DD01C300413468 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34C6806D19DD01C300413468 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		34C6806019DD01C300413468 = {
+			isa = PBXGroup;
+			children = (
+				34C6807219DD01C300413468 /* CSSyphonInjectExtraPlugin */,
+				34C6806B19DD01C300413468 /* Frameworks */,
+				34C6806A19DD01C300413468 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		34C6806A19DD01C300413468 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				34C6806919DD01C300413468 /* CSSyphonInjectExtraPlugin.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		34C6806B19DD01C300413468 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				34C6806C19DD01C300413468 /* Cocoa.framework */,
+				34C6806E19DD01C300413468 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		34C6806E19DD01C300413468 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				34C6806F19DD01C300413468 /* Foundation.framework */,
+				34C6807019DD01C300413468 /* CoreData.framework */,
+				34C6807119DD01C300413468 /* AppKit.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		34C6807219DD01C300413468 /* CSSyphonInjectExtraPlugin */ = {
+			isa = PBXGroup;
+			children = (
+				34C6809B19DD036000413468 /* PluginHeaders */,
+				34C6807319DD01C300413468 /* Supporting Files */,
+				34C6809119DD02B300413468 /* CSSyphonInject.h */,
+				34C6809219DD02B300413468 /* CSSyphonInject.m */,
+				34C6809C19DD045B00413468 /* CSSyphonInjectWindowController.h */,
+				34C6809D19DD045B00413468 /* CSSyphonInjectWindowController.m */,
+				34C6809E19DD045B00413468 /* CSSyphonInjectWindowController.xib */,
+			);
+			path = CSSyphonInjectExtraPlugin;
+			sourceTree = "<group>";
+		};
+		34C6807319DD01C300413468 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				34C6807419DD01C300413468 /* CSSyphonInjectExtraPlugin-Info.plist */,
+				34C6807519DD01C300413468 /* InfoPlist.strings */,
+				34C6807819DD01C300413468 /* CSSyphonInjectExtraPlugin-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		34C6809B19DD036000413468 /* PluginHeaders */ = {
+			isa = PBXGroup;
+			children = (
+				34C6809419DD036000413468 /* CSAbstractCaptureDevice.h */,
+				34C6809519DD036000413468 /* CSCaptureBase.h */,
+				34C6809619DD036000413468 /* CSCaptureSourceProtocol.h */,
+				34C6809719DD036000413468 /* CSStreamServiceProtocol.h */,
+				34C6809819DD036000413468 /* CSPluginFactoryProtocol.h */,
+				34C6809919DD036000413468 /* CSExtraPluginProtocol.h */,
+				34C6809A19DD036000413468 /* CSNotifications.h */,
+			);
+			name = PluginHeaders;
+			path = ../../../CocoaSplit;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		34C6806819DD01C300413468 /* CSSyphonInjectExtraPlugin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 34C6807B19DD01C300413468 /* Build configuration list for PBXNativeTarget "CSSyphonInjectExtraPlugin" */;
+			buildPhases = (
+				34C6806519DD01C300413468 /* Sources */,
+				34C6806619DD01C300413468 /* Frameworks */,
+				34C6806719DD01C300413468 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CSSyphonInjectExtraPlugin;
+			productName = CSSyphonInjectExtraPlugin;
+			productReference = 34C6806919DD01C300413468 /* CSSyphonInjectExtraPlugin.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		34C6806119DD01C300413468 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = Zakk;
+			};
+			buildConfigurationList = 34C6806419DD01C300413468 /* Build configuration list for PBXProject "CSSyphonInjectExtraPlugin" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 34C6806019DD01C300413468;
+			productRefGroup = 34C6806A19DD01C300413468 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				34C6806819DD01C300413468 /* CSSyphonInjectExtraPlugin */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		34C6806719DD01C300413468 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34C6807719DD01C300413468 /* InfoPlist.strings in Resources */,
+				34C680A019DD045B00413468 /* CSSyphonInjectWindowController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		34C6806519DD01C300413468 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34C6809F19DD045B00413468 /* CSSyphonInjectWindowController.m in Sources */,
+				34C6809319DD02B300413468 /* CSSyphonInject.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		34C6807519DD01C300413468 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				34C6807619DD01C300413468 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		34C6807919DD01C300413468 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		34C6807A19DD01C300413468 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		34C6807C19DD01C300413468 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "CSSyphonInjectExtraPlugin/CSSyphonInjectExtraPlugin-Prefix.pch";
+				INFOPLIST_FILE = "CSSyphonInjectExtraPlugin/CSSyphonInjectExtraPlugin-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		34C6807D19DD01C300413468 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "CSSyphonInjectExtraPlugin/CSSyphonInjectExtraPlugin-Prefix.pch";
+				INFOPLIST_FILE = "CSSyphonInjectExtraPlugin/CSSyphonInjectExtraPlugin-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		34C6806419DD01C300413468 /* Build configuration list for PBXProject "CSSyphonInjectExtraPlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34C6807919DD01C300413468 /* Debug */,
+				34C6807A19DD01C300413468 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		34C6807B19DD01C300413468 /* Build configuration list for PBXNativeTarget "CSSyphonInjectExtraPlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34C6807C19DD01C300413468 /* Debug */,
+				34C6807D19DD01C300413468 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 34C6806119DD01C300413468 /* Project object */;
+}
