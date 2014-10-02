@@ -248,6 +248,8 @@ static NSArray *_sourceTypes = nil;
     [self addObserver:self forKeyPath:@"editorController" options:NSKeyValueObservingOptionNew context:NULL];
     
     [self rebuildFilters];
+    self.needRebuildFilter = NO;
+    
     [self addObserver:self forKeyPath:@"propertiesChanged" options:NSKeyValueObservingOptionNew context:NULL];
  }
 
@@ -376,6 +378,14 @@ static NSArray *_sourceTypes = nil;
     return _imageContext;
 }
 
+
+-(void)invalidateFilters
+{
+    @synchronized(self)
+    {
+        self.needRebuildFilter = YES;
+    }
+}
 
 -(void)dealloc
 {
@@ -627,7 +637,9 @@ static NSArray *_sourceTypes = nil;
             if (newFrame)
             {
 
+                
                 IOSurfaceRef frameSurface = CVPixelBufferGetIOSurface(newFrame);
+
                 if (frameSurface)
                 {
                     
@@ -694,8 +706,18 @@ static NSArray *_sourceTypes = nil;
 
     if (!NSEqualSizes(self.oldSize, self.inputImage.extent.size))
     {
-        [self rebuildFilters];
+        [self invalidateFilters];
     }
+    
+    @synchronized(self)
+    {
+        if (self.needRebuildFilter)
+        {
+            [self rebuildFilters];
+            self.needRebuildFilter = NO;
+        }
+    }
+    
     
     if (self.userFilter)
     {
@@ -800,7 +822,7 @@ static NSArray *_sourceTypes = nil;
     
     //[self scaleToRect:NSMakeRect(0.0f, 0.0f, self.canvas_width, self.canvas_height)];
     
-    [self rebuildFilters];
+    [self invalidateFilters];
 }
 
 
@@ -922,7 +944,7 @@ static NSArray *_sourceTypes = nil;
     _internalScaleFactor = ratio;
 
     
-    [self rebuildFilters];
+    [self invalidateFilters];
 }
 
 
@@ -931,18 +953,20 @@ static NSArray *_sourceTypes = nil;
     
     self.display_width = width;
     self.display_height = height;
-    [self rebuildFilters];
+    [self invalidateFilters];
 }
 
 
 -(void) updateOrigin:(CGFloat)x y:(CGFloat)y
 {
+    //NSLog(@"UPDATE ORIGIN x:%f y%f _x_pos:%f _y_pos:%f scale_x:%f scale_y:%f", x, y, _x_pos, _y_pos, _scale_x_pos, _scale_y_pos);
+    
     _x_pos += x;
     _y_pos += y;
     _scale_x_pos += x;
     _scale_y_pos += y;
     
-    [self rebuildFilters];
+    [self invalidateFilters];
 }
 
 
@@ -1045,7 +1069,7 @@ static NSArray *_sourceTypes = nil;
     
     _display_width = self.inputImage.extent.size.width*scaleFactor;
     _display_height = self.inputImage.extent.size.height*scaleFactor;
-    [self rebuildFilters];
+    [self invalidateFilters];
 }
 
 -(void) deduplicateVideoSource:(NSObject<CSCaptureSourceProtocol> *)source
@@ -1151,7 +1175,7 @@ static NSArray *_sourceTypes = nil;
 {
     if ([keyPath isEqualToString:@"propertiesChanged"])
     {
-        [self rebuildFilters];
+        [self invalidateFilters];
     } else if ([keyPath isEqualToString:@"editorController"]) {
         [self sourceConfigurationView];
     } else if ([keyPath isEqualToString:@"activeVideoDevice.uniqueID"]) {

@@ -95,6 +95,8 @@ typedef enum input_rotate_style_t {
 
 @property (assign) bool lockSize;
 
+@property (assign) bool needRebuildFilter;
+
 //When an instance is created the creator (capture controller) binds these to the size of the canvas in case we are asked to auto-fit
 //at a later time
 

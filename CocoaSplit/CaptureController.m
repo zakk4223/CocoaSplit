@@ -1137,9 +1137,10 @@
     SourceLayout *currentLayout = _selectedLayout;
     
     _selectedLayout = selectedLayout;
-    selectedLayout.isActive = YES;
     selectedLayout.controller = self;
     selectedLayout.ciCtx = _cictx;
+    selectedLayout.isActive = YES;
+
     
     self.previewCtx.sourceLayout = selectedLayout;
     currentLayout.isActive = NO;
