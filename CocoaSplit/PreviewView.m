@@ -237,7 +237,7 @@
     {
         CGLContextObj cgl_ctx = [[self openGLContext] CGLContextObj];
         
-        sourceLayout.ciCtx =  [CIContext contextWithCGLContext:cgl_ctx pixelFormat:CGLGetPixelFormat(cgl_ctx) colorSpace:CGColorSpaceCreateDeviceRGB() options:nil];
+        sourceLayout.ciCtx =  [CIContext contextWithCGLContext:cgl_ctx pixelFormat:CGLGetPixelFormat(cgl_ctx) colorSpace:nil options:@{kCIContextWorkingColorSpace: [NSNull null]}];
         sourceLayout.controller = self.controller;
         [sourceLayout restoreSourceList];
         
