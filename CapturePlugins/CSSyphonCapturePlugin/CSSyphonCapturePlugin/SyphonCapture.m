@@ -33,6 +33,7 @@
     
     if (self = [super initWithCoder:aDecoder])
     {
+        [self commonInit];
         self.isFlipped = [aDecoder decodeBoolForKey:@"isFlipped"];
     }
     
@@ -54,8 +55,13 @@
 -(void)setActiveVideoDevice:(CSAbstractCaptureDevice *)activeVideoDevice
 {
     _activeVideoDevice = activeVideoDevice;
-    self.captureName = activeVideoDevice.captureName;
-    [self startSyphon];
+    if (_activeVideoDevice)
+    {
+        self.captureName = activeVideoDevice.captureName;
+        [self startSyphon];
+    } else {
+        self.captureName = nil;
+    }
 }
 
 
@@ -102,48 +108,59 @@
     
 }
 
--(id) init
+-(instancetype) init
 {
-    
     if (self = [super init])
     {
-        self.isFlipped = NO;
-        
-        [self changeAvailableVideoDevices];
-        NSOpenGLPixelFormatAttribute glAttributes[] = {
-            NSOpenGLPFAAccelerated,
-            NSOpenGLPFANoRecovery,
-            //        NSOpenGLPFAOpenGLProfile,
-            //        NSOpenGLProfileVersion3_2Core,
-            0
-
-        };
-        NSOpenGLPixelFormat *pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:glAttributes];
-        
-        if (!pixelFormat)
-        {
-            return NO;
-        }
-        
-        _ogl_ctx = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:nil];
-        
-        if (!_ogl_ctx)
-        {
-            return NO;
-        }
-        
-        CVReturn result;
-        
-        result = CVOpenGLTextureCacheCreate(kCFAllocatorDefault, NULL, [_ogl_ctx CGLContextObj], CGLGetPixelFormat([_ogl_ctx CGLContextObj]), NULL, &_texture_cache);
-        
-        if (result != kCVReturnSuccess)
-        {
-            return NO;
-        }
-        
+        [self commonInit];
     }
-         
+    
     return self;
+}
+
+
+-(void) commonInit
+{
+    
+    self.isFlipped = NO;
+    
+    [self changeAvailableVideoDevices];
+    NSOpenGLPixelFormatAttribute glAttributes[] = {
+        NSOpenGLPFAAccelerated,
+        NSOpenGLPFANoRecovery,
+        //        NSOpenGLPFAOpenGLProfile,
+        //        NSOpenGLProfileVersion3_2Core,
+        0
+        
+    };
+    NSOpenGLPixelFormat *pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:glAttributes];
+    
+    if (!pixelFormat)
+    {
+        return;
+    }
+    
+    _ogl_ctx = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:nil];
+    
+    if (!_ogl_ctx)
+    {
+        return;
+    }
+    
+    CVReturn result;
+    
+    result = CVOpenGLTextureCacheCreate(kCFAllocatorDefault, NULL, [_ogl_ctx CGLContextObj], CGLGetPixelFormat([_ogl_ctx CGLContextObj]), NULL, &_texture_cache);
+    
+    if (result != kCVReturnSuccess)
+    {
+        return;
+    }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleSyphonServerRetire:) name:SyphonServerRetireNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleSyphonServerAnnounce:) name:SyphonServerAnnounceNotification object:nil];
+
+    
+    
 }
 
 
@@ -375,8 +392,6 @@
         _syphon_client = nil;
     }
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleSyphonServerRetire:) name:SyphonServerRetireNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleSyphonServerAnnounce:) name:SyphonServerAnnounceNotification object:nil];
     
     
     _syphonServer = [self.activeVideoDevice captureDevice];
@@ -387,7 +402,7 @@
         //_syphon_client = [[SyphonClient alloc] initWithServerDescription:_syphonServer options:nil newFrameHandler:nil];
     
     
-    
+        
     
         __weak SyphonCapture *weakself = self;
         
@@ -414,7 +429,6 @@
      }];
         
         _syphon_uuid = [[_syphon_client serverDescription] objectForKey:SyphonServerDescriptionUUIDKey];
-        _resume_name = self.activeVideoDevice.captureName;
 
     }
     
@@ -444,7 +458,7 @@
         newDev = [[CSAbstractCaptureDevice alloc] initWithName:sy_name device:sserv uniqueID:[sserv objectForKey:SyphonServerDescriptionUUIDKey ]];
         
         [retArr addObject:newDev];
-        if (!self.activeVideoDevice && [sy_name isEqualToString:_resume_name])
+        if (!self.activeVideoDevice && [newDev.uniqueID isEqualToString:self.savedUniqueID])
         {
             self.activeVideoDevice = newDev;
         }
