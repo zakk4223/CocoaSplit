@@ -37,6 +37,7 @@
 -(id)copyWithZone:(NSZone *)zone
 {
     SourceLayout *newLayout = [[SourceLayout allocWithZone:zone] init];
+    [self saveSourceList];
     
     newLayout.savedSourceListData = self.savedSourceListData;
     newLayout.name = self.name;

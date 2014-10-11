@@ -44,8 +44,9 @@
 
 -(void)windowWillClose:(NSNotification *)notification
 {
-    [self.openGLView.sourceLayout.sourceList removeAllObjects];
     [self.openGLView stopDisplayLink];
+
+    [self.openGLView.sourceLayout.sourceList removeAllObjects];
     
     
 }
