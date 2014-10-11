@@ -922,12 +922,40 @@
     
 }
 
+-(void)stopDisplayLink
+{
+    if (displayLink && CVDisplayLinkIsRunning(displayLink))
+    {
+        CVDisplayLinkStop(displayLink);
+    }
+}
+
+-(void)restartDisplayLink
+{
+    if (displayLink && !CVDisplayLinkIsRunning(displayLink))
+    {
+        CVDisplayLinkStart(displayLink);
+    }
+}
+
+
+
 -(void) cvrender
 {
     
     CVImageBufferRef displayFrame = NULL;
     
+    if (!self.sourceLayout)
+    {
+        return;
+    }
     displayFrame = [self.sourceLayout currentFrame];
+    
+    if (!displayFrame)
+    {
+        return;
+    }
+    
     
     //CVPixelBufferRetain(displayFrame);
     [self drawPixelBuffer:displayFrame];
@@ -939,6 +967,8 @@
 static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStamp* now, const CVTimeStamp* outputTime,
                                   CVOptionFlags flagsIn, CVOptionFlags* flagsOut, void* displayLinkContext)
 {
+    
+    
     
     PreviewView *myself;
     

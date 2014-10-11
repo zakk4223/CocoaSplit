@@ -2112,7 +2112,12 @@
 
 - (IBAction)openLayoutPreview:(id)sender
 {
-    self.layoutPreviewController = [[LayoutPreviewWindowController alloc] initWithWindowNibName:@"LayoutPreviewWindowController"];
+    
+    if (!self.layoutPreviewController)
+    {
+        self.layoutPreviewController = [[LayoutPreviewWindowController alloc] initWithWindowNibName:@"LayoutPreviewWindowController"];
+    }
+    
     [self.layoutPreviewController showWindow:nil];
     self.layoutPreviewController.captureController = self;
     self.layoutPreviewController.openGLView.controller = self;

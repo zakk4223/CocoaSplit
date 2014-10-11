@@ -105,6 +105,8 @@ typedef enum resize_style_t {
 
 
 -(void)spawnInputSettings:(InputSource *)forInput atRect:(NSRect)atRect;
+-(void)stopDisplayLink;
+-(void)restartDisplayLink;
 
 
 

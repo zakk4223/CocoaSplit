@@ -32,9 +32,21 @@
 }
 
 
+-(void)showWindow:(id)sender
+{
+    if (self.openGLView)
+    {
+        [self.openGLView restartDisplayLink];
+    }
+    [super showWindow:sender];
+}
+
+
 -(void)windowWillClose:(NSNotification *)notification
 {
     [self.openGLView.sourceLayout.sourceList removeAllObjects];
+    [self.openGLView stopDisplayLink];
+    
     
 }
 @end
