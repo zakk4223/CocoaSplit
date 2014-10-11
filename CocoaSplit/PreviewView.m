@@ -355,25 +355,18 @@
 {
     
     
-    GLint viewport[4];
-    GLdouble modelview[16];
-    GLdouble projection[16];
     GLdouble winx, winy, winz;
     NSRect winRect;
     
     
-    [self.openGLContext makeCurrentContext];
     
-    glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
-    glGetDoublev(GL_PROJECTION_MATRIX, projection);
-    glGetIntegerv(GL_VIEWPORT, viewport);
     
     //origin
-    gluProject(worldRect.origin.x, worldRect.origin.y, 0.0f, modelview, projection, viewport, &winx, &winy, &winz);
+    gluProject(worldRect.origin.x, worldRect.origin.y, 0.0f, _modelview, _projection, _viewport, &winx, &winy, &winz);
     winRect.origin.x = winx;
     winRect.origin.y = winy;
     //origin+width and origin+height
-    gluProject(worldRect.origin.x+worldRect.size.width, worldRect.origin.y+worldRect.size.height, 0.0f, modelview, projection, viewport, &winx, &winy, &winz);
+    gluProject(worldRect.origin.x+worldRect.size.width, worldRect.origin.y+worldRect.size.height, 0.0f, _modelview, _projection, _viewport, &winx, &winy, &winz);
 
     winRect.size.width = winx - winRect.origin.x;
     winRect.size.height = winy - winRect.origin.y;
@@ -385,25 +378,24 @@
 {
     
     
-    GLint viewport[4];
-    GLdouble modelview[16];
-    GLdouble projection[16];
     GLdouble winx, winy, winz;
     GLdouble worldx, worldy, worldz;
     
     
-    [self.openGLContext makeCurrentContext];
     
-    glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
-    glGetDoublev(GL_PROJECTION_MATRIX, projection);
-    glGetIntegerv(GL_VIEWPORT, viewport);
     winx = winPoint.x;
     winy = winPoint.y;
     winz = 0.0f;
     
-    gluUnProject(winx, winy, winz, modelview, projection, viewport, &worldx, &worldy, &worldz);
+    gluUnProject(winx, winy, winz, _modelview, _projection, _viewport, &worldx, &worldy, &worldz);
 
     return NSMakePoint(worldx, worldy);
+}
+
+
+-(void) reshape
+{
+    _resizeDirty = YES;
 }
 
 
@@ -560,6 +552,7 @@
     if (self.selectedSource)
     {
         tmp = [self convertPoint:theEvent.locationInWindow fromView:nil];
+        
         worldPoint = [self realPointforWindowPoint:tmp];
         CGFloat dx, dy;
         dx = worldPoint.x - self.selectedOriginDistance.x;
@@ -874,6 +867,7 @@
         glGenTextures(3, _previewTextures);
     }
     
+    _resizeDirty = YES;
     
     [self createShaders];
 
@@ -1135,6 +1129,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     glClearColor(rval, gval, bval, aval);
     glClear(GL_COLOR_BUFFER_BIT);
     
+    
     glViewport(0, 0, frame.size.width, frame.size.height);
     
     glMatrixMode(GL_PROJECTION);
@@ -1144,7 +1139,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
-    
+
     
     for(int i = 0; i < _num_planes; i++)
     {
@@ -1213,6 +1208,16 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     }
     glUseProgram(_programId);
     
+    if (_resizeDirty && _surfaceWidth > 0 && _surfaceHeight > 0)
+    {
+        NSLog(@"RESIZE DIRTY %d %d", _surfaceWidth, _surfaceHeight);
+        glGetDoublev(GL_MODELVIEW_MATRIX, _modelview);
+        glGetDoublev(GL_PROJECTION_MATRIX, _projection);
+        glGetIntegerv(GL_VIEWPORT, _viewport);
+        _resizeDirty = NO;
+        
+    }
+
     
     glFlush();
 

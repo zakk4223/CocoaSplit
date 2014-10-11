@@ -231,9 +231,7 @@ static NSArray *_sourceTypes = nil;
     self.uuid = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, tmpUUID);
     CFRelease(tmpUUID);
     
-    self.compositeFilter = [CIFilter filterWithName:@"CISourceOverCompositing"];
-    [self.compositeFilter setDefaults];
-    
+   
     self.layoutPosition = NSMakeRect(self.x_pos, self.y_pos, self.display_width, self.display_height);
     self.active = YES;
     self.transitionNames = [CIFilter filterNamesInCategory:kCICategoryTransition];
@@ -443,6 +441,13 @@ static NSArray *_sourceTypes = nil;
 
 -(void)rebuildFilters
 {
+    
+ 
+    if (!self.compositeFilter)
+    {
+        self.compositeFilter = [CIFilter filterWithName:@"CISourceOverCompositing"];
+        [self.compositeFilter setDefaults];
+    }
     
     
     if (!self.chromaKeyFilter)
@@ -959,6 +964,11 @@ static NSArray *_sourceTypes = nil;
 
 -(void) updateOrigin:(CGFloat)x y:(CGFloat)y
 {
+    if (isnan(x))
+    {
+        NSLog(@"HOLY CRAP NaN");
+    }
+    
     //NSLog(@"UPDATE ORIGIN x:%f y%f _x_pos:%f _y_pos:%f scale_x:%f scale_y:%f", x, y, _x_pos, _y_pos, _scale_x_pos, _scale_y_pos);
     
     _x_pos += x;

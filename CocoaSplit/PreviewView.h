@@ -66,6 +66,11 @@ typedef enum resize_style_t {
     GLuint      _vertexPosBuffer;
     GLuint      _programId;
     GLuint      _lineProgram;
+    bool        _resizeDirty;
+    GLint       _viewport[4];
+    GLdouble    _modelview[16];
+    GLdouble    _projection[16];
+
     
     CVDisplayLinkRef displayLink;
     
