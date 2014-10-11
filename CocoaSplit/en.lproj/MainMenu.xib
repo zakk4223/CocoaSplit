@@ -226,7 +226,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="683" y="323" width="812" height="689"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1058"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1178"/>
             <view key="contentView" id="372">
                 <rect key="frame" x="0.0" y="0.0" width="812" height="689"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -268,7 +268,7 @@
                                                 </connections>
                                             </button>
                                             <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3861">
-                                                <rect key="frame" x="153" y="164" width="96" height="21"/>
+                                                <rect key="frame" x="153" y="164" width="96" height="20"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="92" id="hiD-XP-6bO"/>
@@ -597,11 +597,11 @@
                                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </clipView>
                                                             <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="1241">
-                                                                <rect key="frame" x="-7" y="2" width="0.0" height="15"/>
+                                                                <rect key="frame" x="1" y="1" width="0.0" height="16"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                             </scroller>
                                                             <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="1243">
-                                                                <rect key="frame" x="-14" y="9" width="15" height="0.0"/>
+                                                                <rect key="frame" x="-15" y="17" width="16" height="0.0"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                             </scroller>
                                                             <tableHeaderView key="headerView" id="1242">
@@ -688,7 +688,7 @@
                                                             <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <font key="titleFont" metaFont="system"/>
                                                         </box>
-                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xmm-O5-Srz">
+                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xmm-O5-Srz">
                                                             <rect key="frame" x="15" y="14" width="74" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Audio Shift" id="ZJx-NF-NxW">
@@ -697,7 +697,7 @@
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                         </textField>
-                                                        <textField verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="w0g-dB-teB">
+                                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="w0g-dB-teB">
                                                             <rect key="frame" x="99" y="11" width="71" height="22"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="JlD-bx-XpD">
@@ -724,7 +724,7 @@
                                                                 </binding>
                                                             </connections>
                                                         </textField>
-                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7aV-3Y-hjS">
+                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7aV-3Y-hjS">
                                                             <rect key="frame" x="176" y="16" width="55" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="seconds" id="MTJ-t8-vrz">
@@ -733,7 +733,7 @@
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                         </textField>
-                                                        <button horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yJi-U9-92m">
+                                                        <button horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yJi-U9-92m">
                                                             <rect key="frame" x="230" y="9" width="25" height="25"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <string key="toolTip">Shift audio by manipulating the audio presentation time stamp. The value here is added to every audio packet's PTS field. Positive values delay the audio, negative values will shift the audio 'behind' the video.</string>
@@ -766,7 +766,7 @@
                                                                 </binding>
                                                             </connections>
                                                         </popUpButton>
-                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vIa-8W-NuJ">
+                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vIa-8W-NuJ">
                                                             <rect key="frame" x="176" y="64" width="62" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="kbits/sec" id="YTZ-hR-a0P">
@@ -907,21 +907,13 @@
                                                     </subviews>
                                                     <constraints>
                                                         <constraint firstItem="1471" firstAttribute="leading" secondItem="1239" secondAttribute="leading" id="3st-QL-dkj"/>
-                                                        <constraint firstItem="yJi-U9-92m" firstAttribute="leading" secondItem="7aV-3Y-hjS" secondAttribute="trailing" constant="3" id="5cr-O1-cJK"/>
-                                                        <constraint firstAttribute="bottom" secondItem="w0g-dB-teB" secondAttribute="bottom" constant="37" id="8gK-RC-cbG"/>
                                                         <constraint firstItem="3730" firstAttribute="leading" secondItem="2587" secondAttribute="leading" id="ASq-FW-ogv"/>
-                                                        <constraint firstItem="yJi-U9-92m" firstAttribute="top" secondItem="w0g-dB-teB" secondAttribute="top" id="Eoz-Gq-dQd"/>
                                                         <constraint firstItem="1108" firstAttribute="top" secondItem="1104" secondAttribute="bottom" constant="8" symbolic="YES" id="EqA-pU-6wH"/>
                                                         <constraint firstItem="2587" firstAttribute="leading" secondItem="3290" secondAttribute="leading" constant="17" id="Kkj-ip-MmB"/>
-                                                        <constraint firstItem="vIa-8W-NuJ" firstAttribute="leading" secondItem="7aV-3Y-hjS" secondAttribute="leading" id="Ktf-e8-3hP"/>
                                                         <constraint firstItem="1744" firstAttribute="baseline" secondItem="1499" secondAttribute="baseline" id="QSC-ZT-rY0"/>
-                                                        <constraint firstItem="7aV-3Y-hjS" firstAttribute="centerY" secondItem="yJi-U9-92m" secondAttribute="centerY" id="RR4-ED-iqd"/>
                                                         <constraint firstAttribute="trailing" secondItem="1239" secondAttribute="trailing" constant="-4" id="amf-sg-o3G"/>
-                                                        <constraint firstItem="7aV-3Y-hjS" firstAttribute="leading" secondItem="w0g-dB-teB" secondAttribute="trailing" constant="8" symbolic="YES" id="bQk-du-xsf"/>
                                                         <constraint firstItem="1744" firstAttribute="leading" secondItem="1499" secondAttribute="trailing" constant="12" symbolic="YES" id="f4R-US-MsS"/>
                                                         <constraint firstItem="2587" firstAttribute="top" secondItem="3290" secondAttribute="top" constant="3" id="gUC-Ul-IEN"/>
-                                                        <constraint firstItem="xmm-O5-Srz" firstAttribute="leading" secondItem="1108" secondAttribute="leading" id="sbI-kO-1pe"/>
-                                                        <constraint firstItem="7aV-3Y-hjS" firstAttribute="baseline" secondItem="xmm-O5-Srz" secondAttribute="baseline" id="sfP-ce-U9s"/>
                                                         <constraint firstItem="1108" firstAttribute="leading" secondItem="1104" secondAttribute="leading" id="wLx-vD-dRr"/>
                                                     </constraints>
                                                 </view>
@@ -1097,7 +1089,7 @@
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                             </scroller>
                                                             <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="2216">
-                                                                <rect key="frame" x="750" y="17" width="15" height="0.0"/>
+                                                                <rect key="frame" x="749" y="17" width="16" height="0.0"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                             </scroller>
                                                             <tableHeaderView key="headerView" id="2261">
@@ -1306,7 +1298,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="599" height="303"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1058"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1178"/>
             <view key="contentView" id="spk-HP-gZw">
                 <rect key="frame" x="0.0" y="0.0" width="599" height="303"/>
                 <autoresizingMask key="autoresizingMask"/>
