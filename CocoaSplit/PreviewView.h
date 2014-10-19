@@ -127,9 +127,6 @@ typedef enum resize_style_t {
 @property (assign) resize_style resizeType;
 @property (assign) NSPoint resizeAnchor;
 @property (strong) SourceLayout *sourceLayout;
-//If a preview view is set to an active source we copy it so changes don't mess with the live feed
-//When we save or set to live we use this variable to grab the original version and modify it in place
-@property (strong) SourceLayout *originalActiveLayout;
 
 
 

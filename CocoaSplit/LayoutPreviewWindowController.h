@@ -17,6 +17,10 @@
 @property (weak) IBOutlet PreviewView *openGLView;
 @property (weak) CaptureController *captureController;
 @property (strong) NSMutableArray *sourceLayouts;
+@property (strong) NSString *selectedLayoutName;
+
+-(void)goLive;
+-(void)saveLayout;
 
 
 @end

@@ -23,7 +23,6 @@
     NSSize _cvpool_size;
 }
 
-
 @property (strong) NSMutableArray *sourceList;
 @property (strong) NSData *savedSourceListData;
 @property (assign) bool isActive;

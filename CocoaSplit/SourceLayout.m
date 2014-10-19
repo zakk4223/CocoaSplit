@@ -74,6 +74,7 @@
     return self;
 }
 
+
 -(NSArray *)sourceListOrdered
 {
     NSArray *listCopy = [self.sourceList sortedArrayUsingDescriptors:@[_sourceDepthSorter, _sourceUUIDSorter]];

@@ -145,7 +145,8 @@
     {
         
         [[NSBundle mainBundle] loadNibNamed:@"advancedPrefPanel" owner:self topLevelObjects:nil];
-        [NSApp beginSheet:self.advancedPrefPanel modalForWindow:[[NSApp delegate] window] modalDelegate:self didEndSelector:NULL contextInfo:NULL];
+        
+        [NSApp beginSheet:self.advancedPrefPanel modalForWindow:[NSApplication sharedApplication].mainWindow modalDelegate:self didEndSelector:NULL contextInfo:NULL];
         
     }
     
@@ -278,7 +279,7 @@
         
 
         
-        [NSApp beginSheet:self.compressPanel modalForWindow:[[NSApp delegate] window] modalDelegate:self didEndSelector:NULL contextInfo:NULL];
+        [NSApp beginSheet:self.compressPanel modalForWindow:[NSApplication sharedApplication].mainWindow modalDelegate:self didEndSelector:NULL contextInfo:NULL];
         
     }
     
@@ -416,7 +417,7 @@
     if (!self.audioMixerPanel)
     {
         [[NSBundle mainBundle] loadNibNamed:@"AudioMixer" owner:self topLevelObjects:nil];
-        [NSApp beginSheet:self.audioMixerPanel modalForWindow:[[NSApp delegate] window] modalDelegate:self didEndSelector:NULL contextInfo:NULL];
+        [NSApp beginSheet:self.audioMixerPanel modalForWindow:[NSApplication sharedApplication].mainWindow modalDelegate:self didEndSelector:NULL contextInfo:NULL];
     }
 }
 
@@ -445,7 +446,7 @@
         
         [[NSBundle mainBundle] loadNibNamed:panelName owner:self topLevelObjects:nil];
         
-        [NSApp beginSheet:self.advancedVideoPanel modalForWindow:[[NSApp delegate] window] modalDelegate:self didEndSelector:NULL contextInfo:NULL];
+        [NSApp beginSheet:self.advancedVideoPanel modalForWindow:[NSApplication sharedApplication].mainWindow modalDelegate:self didEndSelector:NULL contextInfo:NULL];
     
     }
     
@@ -486,7 +487,7 @@
         
         [self.streamServiceAddView addSubview:serviceConfigView.view];
         self.streamServicePluginViewController  = serviceConfigView;
-        [NSApp beginSheet:self.streamServiceConfWindow modalForWindow:[[NSApp delegate] window] modalDelegate:self didEndSelector:NULL contextInfo:NULL];
+        [NSApp beginSheet:self.streamServiceConfWindow modalForWindow:[NSApplication sharedApplication].mainWindow modalDelegate:self didEndSelector:NULL contextInfo:NULL];
     }
     
 }
@@ -2109,6 +2110,27 @@
  
     
 }
+
+-(SourceLayout *)getLayoutForName:(NSString *)name
+{
+    NSUInteger selectedIdx = [self.sourceLayouts indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        return [((SourceLayout *)obj).name isEqualToString:name];
+        
+    }];
+    
+    
+    SourceLayout *selectedLayout = nil;
+    
+    if (selectedIdx != NSNotFound)
+    {
+        selectedLayout = [self.sourceLayouts objectAtIndex:selectedIdx];
+    }
+    
+    return selectedLayout;
+
+}
+
+
 
 - (IBAction)openLayoutPreview:(id)sender
 {

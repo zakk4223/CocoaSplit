@@ -197,32 +197,9 @@
     
 }
 
--(void)goLive
-{
-    if (self.originalActiveLayout)
-    {
-        [self saveLayout];
-    } else {
-        self.controller.selectedLayout = self.sourceLayout;
-    }
-}
 
 
--(void)saveLayout
-{
-    
-    if (self.originalActiveLayout)
-    {
-        //If it's live we have to just push it to the original copy
-        [self.sourceLayout saveSourceList];
-        self.originalActiveLayout.savedSourceListData = self.sourceLayout.savedSourceListData;
-        [self.originalActiveLayout restoreSourceList];
-        
-    } else {
-        [self.sourceLayout saveSourceList];
-    }
-    
-}
+
 -(SourceLayout *)sourceLayout
 {
     return _sourceLayout;
@@ -291,8 +268,6 @@
     if (self.controller.previewCtx == self)
     {
         self.controller.selectedLayout = newLayout;
-    } else {
-        self.sourceLayoutPreview = newLayout;
     }
 }
 
@@ -303,19 +278,6 @@
 }
 
 
--(void) setSourceLayoutPreview:(SourceLayout *)sourcelayout
-{
-    
-    if (sourcelayout.isActive)
-    {
-        self.sourceLayout = sourcelayout.copy;
-        self.originalActiveLayout = sourcelayout;
-        
-    } else {
-        self.sourceLayout = sourcelayout;
-        self.originalActiveLayout = nil;
-    }
-}
 
 -(void)bindProgramTextures:(OpenGLProgram *)program
 {

@@ -324,6 +324,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(void)deleteSource:(InputSource *)delSource;
 -(InputSource *)findSource:(NSPoint)forPoint;
 -(SourceLayout *)addLayoutForName:(NSString *)name;
+-(SourceLayout *)getLayoutForName:(NSString *)name;
 
 
 

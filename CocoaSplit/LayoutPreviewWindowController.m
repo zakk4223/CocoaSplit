@@ -13,7 +13,10 @@
 
 @end
 
+
 @implementation LayoutPreviewWindowController
+
+@synthesize selectedLayoutName = _selectedLayoutName;
 
 - (id)initWithWindow:(NSWindow *)window
 {
@@ -50,4 +53,45 @@
     
     
 }
+
+-(NSString *)selectedLayoutName
+{
+    return _selectedLayoutName;
+}
+
+-(void) setSelectedLayoutName:(NSString *)selectedLayoutName
+{
+    _selectedLayoutName = selectedLayoutName;
+    SourceLayout *useLayout = [self.captureController getLayoutForName:selectedLayoutName];
+    SourceLayout *newLayout = [useLayout copy];
+    [newLayout restoreSourceList];
+    self.openGLView.sourceLayout =  newLayout;
+}
+
+-(void) saveLayout
+{
+    
+    SourceLayout *realLayout = [self.captureController getLayoutForName:self.openGLView.sourceLayout.name];
+
+    if (self.openGLView.sourceLayout && realLayout)
+    {
+        [self.openGLView.sourceLayout saveSourceList];
+        realLayout.savedSourceListData = self.openGLView.sourceLayout.savedSourceListData;
+    }
+}
+
+
+-(void) goLive
+{
+    
+    SourceLayout *realLayout = [self.captureController getLayoutForName:self.openGLView.sourceLayout.name];
+    
+    if (self.openGLView.sourceLayout && realLayout)
+    {
+        [self.openGLView.sourceLayout saveSourceList];
+        realLayout.savedSourceListData = self.openGLView.sourceLayout.savedSourceListData;
+        [realLayout restoreSourceList];
+    }
+}
+
 @end
