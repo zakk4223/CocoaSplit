@@ -14,7 +14,6 @@
 
 
 @synthesize isActive = _isActive;
-@synthesize controller = _controller;
 
 
 -(instancetype) init
@@ -37,11 +36,12 @@
 -(id)copyWithZone:(NSZone *)zone
 {
     SourceLayout *newLayout = [[SourceLayout allocWithZone:zone] init];
-    [self saveSourceList];
     
     newLayout.savedSourceListData = self.savedSourceListData;
     newLayout.name = self.name;
-    newLayout.controller = self.controller;
+    newLayout.canvas_height = self.canvas_height;
+    newLayout.canvas_width = self.canvas_width;
+    newLayout.frameRate = self.frameRate;
     return newLayout;
 }
 
@@ -59,6 +59,11 @@
     
     
     [aCoder encodeObject:self.savedSourceListData forKey:@"savedSourceData"];
+    [aCoder encodeInt:self.canvas_width forKey:@"canvas_width"];
+    [aCoder encodeInt:self.canvas_height forKey:@"canvas_height"];
+    [aCoder encodeFloat:self.frameRate forKey:@"frameRate"];
+    
+    
 }
 
 
@@ -69,6 +74,9 @@
     {
         self.name = [aDecoder decodeObjectForKey:@"name"];
         self.savedSourceListData = [aDecoder decodeObjectForKey:@"savedSourceData"];
+        self.canvas_height = [aDecoder decodeIntForKey:@"canvas_height"];
+        self.canvas_width = [aDecoder decodeIntForKey:@"canvas_width"];
+        self.frameRate = [aDecoder decodeFloatForKey:@"frameRate"];
     }
     
     return self;
@@ -108,6 +116,7 @@
 
 -(void)restoreSourceList
 {
+    
     if (self.savedSourceListData)
     {
         
@@ -207,33 +216,7 @@
 }
 
 
--(NSObject *)controller
-{
-    return _controller;
-}
 
-
--(void) setController:(NSObject *)controller
-{
-    _controller = controller;
-    self.canvas_height = [[controller valueForKey:@"captureHeight"] intValue];
-    self.canvas_width = [[controller valueForKey:@"captureWidth"] intValue];
-    [controller addObserver:self forKeyPath:@"captureWidth" options:NSKeyValueObservingOptionNew context:nil];
-    [controller addObserver:self forKeyPath:@"captureHeight" options:NSKeyValueObservingOptionNew context:nil];
-}
-
-
--(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    if ([keyPath isEqualToString:@"captureWidth"])
-    {
-        int new_width = [change[NSKeyValueChangeNewKey] intValue];
-        self.canvas_width = new_width;
-    } else if ([keyPath isEqualToString:@"captureHeight"]) {
-        int new_height = [change[NSKeyValueChangeNewKey] intValue];
-        self.canvas_height = new_height;
-    }
-}
 
 -(CVPixelBufferRef)currentImg
 {
@@ -384,14 +367,6 @@
 }
 
 
--(void)dealloc
-{
-    if (self.controller)
-    {
-        [self.controller removeObserver:self forKeyPath:@"captureWidth"];
-        [self.controller removeObserver:self forKeyPath:@"captureHeight"];
-    }
-}
 
 
 

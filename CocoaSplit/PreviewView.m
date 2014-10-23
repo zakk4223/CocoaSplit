@@ -215,8 +215,6 @@
         CGLContextObj cgl_ctx = [[self openGLContext] CGLContextObj];
         
         sourceLayout.ciCtx =  [CIContext contextWithCGLContext:cgl_ctx pixelFormat:CGLGetPixelFormat(cgl_ctx) colorSpace:nil options:@{kCIContextWorkingColorSpace: [NSNull null]}];
-        sourceLayout.controller = self.controller;
-        [sourceLayout restoreSourceList];
         
     }
     
@@ -224,52 +222,8 @@
     
     _sourceLayout = sourceLayout;
     
-    if (oldLayout && !oldLayout.isActive)
-    {
-        [oldLayout saveSourceList];
-    }
 }
 
-
-
-- (IBAction)openLayoutPopover:(NSButton *)sender
-{
-    
-    
-    if (!_layoutpopOver)
-    {
-        CreateLayoutViewController *vc = [[CreateLayoutViewController alloc] init];
-        
-        vc.textFieldDelegate = self;
-        _layoutpopOver = [[NSPopover alloc] init];
-        
-        _layoutpopOver.contentViewController = vc;
-        _layoutpopOver.animates = YES;
-        _layoutpopOver.delegate = vc;
-        _layoutpopOver.behavior = NSPopoverBehaviorTransient;
-        
-    }
-    
-    [_layoutpopOver showRelativeToRect:sender.bounds ofView:sender preferredEdge:NSMinYEdge];
-
-    
-
-}
-
--(void) setLayoutTextValue:(NSString *)textValue
-{
-    
-    SourceLayout *newLayout = [self.controller addLayoutForName:textValue];
-    if (_layoutpopOver)
-    {
-        [_layoutpopOver close];
-    }
-    
-    if (self.controller.previewCtx == self)
-    {
-        self.controller.selectedLayout = newLayout;
-    }
-}
 
 
 -(SourceLayout *)sourceLayoutPreview
@@ -803,7 +757,6 @@
 {
     
      NSOpenGLPixelFormatAttribute attr[] = {
-         NSOpenGLPFAPixelBuffer,
          NSOpenGLPFANoRecovery,
          NSOpenGLPFAAccelerated,
          //NSOpenGLPFAAllowOfflineRenderers,

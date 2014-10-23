@@ -21,6 +21,7 @@
 #import "CSStreamServiceProtocol.h"
 #import "CSNotifications.h"
 #import "PluginManagerWindowController.h"
+#import "CreateLayoutViewController.h"
 
 
 @class FFMpegTask;
@@ -97,6 +98,9 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     
     NSConnection *_remoteConn;
     id _renderServer;
+    NSPopover *_layoutpopOver;
+
+    
     
 }
 
@@ -116,6 +120,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 @property (strong) NSMutableArray *sourceLayouts;
 @property (strong) SourceLayout *selectedLayout;
+@property (strong) SourceLayout *stagingLayout;
+
 
 
 @property (strong) id<h264Compressor> videoCompressor;
@@ -140,17 +146,23 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (weak) IBOutlet NSPopover *editorPopover;
 
 @property (unsafe_unretained) IBOutlet PreviewView *previewCtx;
+@property (weak) IBOutlet PreviewView *stagingCtx;
+
 @property (unsafe_unretained) IBOutlet NSObjectController *objectController;
 @property (strong) IBOutlet NSObjectController *compressSettingsController;
 @property (strong) IBOutlet NSObjectController *outputPanelController;
 @property (strong) IBOutlet NSObjectController *layoutPanelController;
+
+@property (readonly) NSArray *layoutSortDescriptors;
+
 
 
 
 - (IBAction)openLayoutPreview:(id)sender;
 - (IBAction)openPluginManager:(id)sender;
 
-- (void)deleteLayout:(SourceLayout *)toDelete;
+- (IBAction)stagingGoLive:(id)sender;
+- (void)deleteLayout:(NSInteger)deleteIdx;
 
 - (IBAction)createNewLayout:(id)sender;
 - (IBAction)closeLayoutPanel:(id)sender;
@@ -323,10 +335,18 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(void)captureOutputAudio:(id)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer;
 -(void)deleteSource:(InputSource *)delSource;
 -(InputSource *)findSource:(NSPoint)forPoint;
--(SourceLayout *)addLayoutForName:(NSString *)name;
+-(SourceLayout *)addLayoutFromBase:(SourceLayout *)baseLayout;
 -(SourceLayout *)getLayoutForName:(NSString *)name;
 
+- (IBAction)layoutTableSelected:(NSTableView *)sender;
+- (IBAction)openLayoutPopover:(NSButton *)sender;
+- (IBAction)mainDeleteLayoutClicked:(id)sender;
+- (IBAction)mainCopyLayoutClicked:(id)sender;
 
+
+@property (weak) IBOutlet NSArrayController *sourceLayoutsArrayController;
+@property (weak) IBOutlet NSTableView *mainSourceLayoutTableView;
+@property (weak) IBOutlet NSTableView *stagingSourceLayoutTableView;
 
 -(void)setupLogging;
 

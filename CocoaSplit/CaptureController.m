@@ -30,23 +30,83 @@
 @synthesize selectedCompressorType = _selectedCompressorType;
 @synthesize captureFPS = _captureFPS;
 @synthesize selectedLayout = _selectedLayout;
+@synthesize stagingLayout = _stagingLayout;
 
-
-
-
-- (void)deleteLayout:(SourceLayout *)toDelete;
+-(IBAction)mainDeleteLayoutClicked:(id)sender
 {
+
+    NSInteger selectedIdx = self.mainSourceLayoutTableView.selectedRow;
+    if (selectedIdx != -1)
+    {
+        [self deleteLayout:selectedIdx];
+        [self layoutTableSelected:self.mainSourceLayoutTableView];
+    }
+}
+
+-(IBAction)mainCopyLayoutClicked:(id)sender
+{
+    [self cloneSelectedSourceLayout:self.mainSourceLayoutTableView];
+}
+
+
+-(void) cloneSelectedSourceLayout:(NSTableView *)fromTable
+{
+    NSInteger selectedIdx = fromTable.selectedRow;
+    
+    if (selectedIdx != -1)
+    {
+        SourceLayout *toClone = [self.sourceLayoutsArrayController.arrangedObjects objectAtIndex:selectedIdx];
+        [toClone savedSourceListData];
+        [self addLayoutFromBase:toClone];
+    }
+}
+
+
+- (IBAction)openLayoutPopover:(NSButton *)sender
+{
+    
+    CreateLayoutViewController *vc;
+    if (!_layoutpopOver)
+    {
+        _layoutpopOver = [[NSPopover alloc] init];
+        
+        _layoutpopOver.animates = YES;
+        _layoutpopOver.behavior = NSPopoverBehaviorTransient;
+    }
+    
+    if (!_layoutpopOver.contentViewController)
+    {
+        vc = [[CreateLayoutViewController alloc] init];
+        
+        vc.controller = self;
+        
+        _layoutpopOver.contentViewController = vc;
+        _layoutpopOver.delegate = vc;
+        vc.popover = _layoutpopOver;
+        
+    }
+    
+    vc.sourceLayout = [[SourceLayout alloc] init];
+
+    [_layoutpopOver showRelativeToRect:sender.bounds ofView:sender preferredEdge:NSMinYEdge];
+    
+}
+
+
+- (void)deleteLayout:(NSInteger)deleteIdx
+{
+    SourceLayout *toDelete = [self.sourceLayoutsArrayController.arrangedObjects objectAtIndex:deleteIdx];
+    
     if (toDelete)
     {
         if ([self actionConfirmation:[NSString stringWithFormat:@"Really delete %@?", toDelete.name] infoString:nil])
         {
             
             
-            NSUInteger idx = [self.sourceLayouts indexOfObject:toDelete];
-            
             toDelete.isActive = NO;
+         
+            [self.sourceLayoutsArrayController removeObjectAtArrangedObjectIndex:deleteIdx];
             
-            [self removeObjectFromSourceLayoutsAtIndex:idx];
             if (self.selectedLayout == toDelete)
             {
                 self.selectedLayout = nil;
@@ -71,10 +131,13 @@
 }
 
 
--(SourceLayout *)addLayoutForName:(NSString *)name
+-(SourceLayout *)addLayoutFromBase:(SourceLayout *)baseLayout
 {
     
-    NSMutableString *baseName = name.mutableCopy;
+    
+    SourceLayout *newLayout = baseLayout.copy;
+
+    NSMutableString *baseName = newLayout.name.mutableCopy;
     
     NSMutableString *newName = baseName;
     int name_try = 1;
@@ -85,46 +148,14 @@
     }
     
     
-    SourceLayout *newLayout = [[SourceLayout alloc] init];
     newLayout.name = newName;
+    
     
     [self insertObject:newLayout inSourceLayoutsAtIndex:self.sourceLayouts.count];
     
     
     return newLayout;
 }
-
-
-- (IBAction)createNewLayout:(id)sender
-{
-    
-    
-    [self.layoutPanelController commitEditing];
-    
-    if (self.layoutPanelName)
-    {
-        
-        SourceLayout *newLayout = [self addLayoutForName:self.layoutPanelName];
-        self.selectedLayout = newLayout;
-        
-    }
-    
-    self.layoutPanelName  = nil;
-    
-    [NSApp endSheet:self.layoutPanel];
-    [self.layoutPanel close];
-}
-
-
-
-- (IBAction)closeLayoutPanel:(id)sender
-{
-    [NSApp endSheet:self.layoutPanel];
-    [self.layoutPanel close];
-
-}
-
-
 
 
 -(IBAction)openLogWindow:(id)sender
@@ -560,7 +591,6 @@
 {
     NSOpenGLPixelFormatAttribute glAttributes[] = {
         
-        NSOpenGLPFAPixelBuffer,
         NSOpenGLPFANoRecovery,
         NSOpenGLPFAAccelerated,
         //NSOpenGLPFAAllowOfflineRenderers,
@@ -974,7 +1004,10 @@
     
     [saveRoot setValue:self.selectedLayout forKey:@"selectedLayout"];
     
+    [saveRoot setValue:self.stagingLayout forKey:@"stagingLayout"];
+    
     [saveRoot setValue:self.sourceLayouts forKey:@"sourceLayouts"];
+    
     
 
     self.extraPluginsSaveData = [NSMutableDictionary dictionary];
@@ -1107,7 +1140,7 @@
     } else {
     
         self.selectedLayout = [saveRoot valueForKey:@"selectedLayout"];
-        
+        self.stagingLayout  = [saveRoot valueForKey:@"stagingLayout"];
     }
     
 
@@ -1136,19 +1169,67 @@
 }
 
 
+-(void)setStagingLayout:(SourceLayout *)stagingLayout
+{
+    _stagingLayout = stagingLayout;
+    
+    
+    if (stagingLayout.isActive)
+    {
+        [stagingLayout saveSourceList];
+    }
+    
+    
+    SourceLayout *previewCopy = stagingLayout.copy;
+    
+    self.stagingCtx.sourceLayout = previewCopy;
+    [previewCopy restoreSourceList];
+    if (self.sourceLayoutsArrayController)
+    {
+        NSUInteger sidx = [self.sourceLayoutsArrayController.arrangedObjects indexOfObject:stagingLayout];
+        if ((sidx != NSNotFound) && self.stagingSourceLayoutTableView)
+        {
+            [self.stagingSourceLayoutTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:sidx] byExtendingSelection:NO];
+            
+        }
+    }
+
+
+}
+
+
+-(SourceLayout *)stagingLayout
+{
+    return _stagingLayout;
+}
+
 
 -(void)setSelectedLayout:(SourceLayout *)selectedLayout
 {
+    
     SourceLayout *currentLayout = _selectedLayout;
     
+    if (selectedLayout == _selectedLayout)
+    {
+        return;
+    }
+    
     _selectedLayout = selectedLayout;
-    selectedLayout.controller = self;
     selectedLayout.ciCtx = _cictx;
     selectedLayout.isActive = YES;
 
     
     self.previewCtx.sourceLayout = selectedLayout;
     currentLayout.isActive = NO;
+    if (self.sourceLayoutsArrayController)
+    {
+        NSUInteger sidx = [self.sourceLayoutsArrayController.arrangedObjects indexOfObject:selectedLayout];
+        if ((sidx != NSNotFound) && self.mainSourceLayoutTableView)
+        {
+            [self.mainSourceLayoutTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:sidx] byExtendingSelection:NO];
+            
+        }
+    }
     
 }
 
@@ -1158,7 +1239,14 @@
 }
 
 
+-(NSArray *)layoutSortDescriptors
+{
+    return @[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES] ];
+}
+
+
 - (IBAction)ffmpegPathPushed:(id)sender {
+    
     
     NSOpenPanel *filepanel = [NSOpenPanel openPanel];
     
@@ -2130,6 +2218,30 @@
 
 }
 
+- (IBAction)layoutTableSelected:(NSTableView *)sender
+{
+    
+    NSInteger selectedRow = [sender selectedRow];
+    
+    if (selectedRow != -1)
+    {
+        SourceLayout *selected = [self.sourceLayoutsArrayController.arrangedObjects objectAtIndex:selectedRow];
+        if (selected)
+        {
+            if (sender == self.mainSourceLayoutTableView)
+            {
+                self.selectedLayout = selected;
+            } else {
+                self.stagingLayout = selected;
+            }
+        }
+    }
+    
+}
+
+
+
+
 
 
 - (IBAction)openLayoutPreview:(id)sender
@@ -2155,6 +2267,24 @@
     self.pluginManagerController = [[PluginManagerWindowController alloc] initWithWindowNibName:@"PluginManagerWindowController"];
     self.pluginManagerController.sharedPluginLoader = self.sharedPluginLoader;
     [self.pluginManagerController showWindow:nil];
+}
+
+- (IBAction)stagingGoLive:(id)sender
+{
+    if (self.stagingLayout && self.stagingCtx.sourceLayout)
+    {
+        [self.stagingCtx.sourceLayout saveSourceList];
+        self.stagingLayout.savedSourceListData = self.stagingCtx.sourceLayout.savedSourceListData;
+        self.stagingLayout.frameRate = self.stagingCtx.sourceLayout.frameRate;
+        self.stagingLayout.canvas_width = self.stagingCtx.sourceLayout.canvas_width;
+        self.stagingLayout.canvas_height = self.stagingCtx.sourceLayout.canvas_height;
+        if (self.selectedLayout != self.stagingLayout)
+        {
+            self.selectedLayout = self.stagingLayout;
+        } else {
+            [self.stagingLayout restoreSourceList];
+        }
+    }
 }
 
 

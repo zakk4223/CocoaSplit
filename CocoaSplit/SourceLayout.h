@@ -7,8 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CaptureController.h"
 #import "InputSource.h"
+#import "CSNotifications.h"
 #import <malloc/malloc.h>
 
 
@@ -28,11 +28,10 @@
 @property (assign) bool isActive;
 
 
-//we observe this for canvas size changes. It's a CaptureController for now, but will likely be a preview view later.
-@property (weak) NSObject *controller;
-
 @property (assign) int canvas_width;
 @property (assign) int canvas_height;
+
+@property (assign) float frameRate;
 
 
 @property (strong) CIContext *ciCtx;

@@ -7,10 +7,16 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "SourceLayout.h"
+#import "CaptureController.h"
 
-@interface CreateLayoutViewController : NSViewController
+@interface CreateLayoutViewController : NSViewController <NSPopoverDelegate>
 
-@property (weak) id textFieldDelegate;
+@property (weak) CaptureController *controller;
+@property (weak) NSPopover *popover;
 
-- (IBAction)layoutNameEntered:(NSTextField *)sender;
+@property (strong) SourceLayout *sourceLayout;
+
+- (IBAction)createButtonClicked:(id)sender;
+
 @end

@@ -30,12 +30,26 @@
     return self;
 }
 
-- (IBAction)layoutNameEntered:(NSTextField *)sender
+- (IBAction)createButtonClicked:(id)sender
 {
     
-    if (self.textFieldDelegate)
+    
+    [self commitEditing];
+    
+    if (self.sourceLayout)
     {
-        [self.textFieldDelegate setValue:sender.stringValue forKey:@"layoutTextValue"];
+        [self.controller addLayoutFromBase:self.sourceLayout];
     }
+    [self.popover close];
+    
+    
 }
+
+-(void)popoverDidClose:(NSNotification *)notification
+{
+    self.popover.contentViewController = nil;
+}
+
+
+
 @end
