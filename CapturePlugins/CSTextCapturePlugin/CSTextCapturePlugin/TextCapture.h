@@ -23,6 +23,8 @@
 
 }
 
+@property (strong) NSFont *font;
+
 @property (strong) NSString *text;
 @property (strong) NSArray *fontNames;
 @property (assign) double fontSize;
@@ -34,5 +36,6 @@
 @property (assign) float scrollXSpeed;
 @property (assign) float scrollYSpeed;
 @property (assign) bool propertiesChanged;
+@property (strong) NSDictionary *fontAttributes;
 
 @end

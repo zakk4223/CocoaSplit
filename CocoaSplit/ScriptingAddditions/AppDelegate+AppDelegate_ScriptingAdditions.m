@@ -17,8 +17,7 @@
 
 
 - (unsigned int)countOfLayoutsArray {
-    NSLog(@"COUNT OF LAYOUTS");
-    return self.captureController.sourceLayouts.count;
+    return (unsigned int)self.captureController.sourceLayouts.count;
 }
 
 
@@ -40,12 +39,12 @@
     
     if (selectedLayout)
     {
-        [self setActivelayout:selectedLayout];
+        [self setActiveLayout:selectedLayout];
     }
 }
 
 
--(void)setActivelayout:(SourceLayout *)layout
+-(void)setActiveLayout:(SourceLayout *)layout
 {
     self.captureController.selectedLayout = layout;
 }

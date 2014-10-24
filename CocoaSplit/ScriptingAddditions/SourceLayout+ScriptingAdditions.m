@@ -29,7 +29,7 @@
 -(void)scriptActivate:(NSScriptCommand *)command
 {
     
-    AppDelegate *delegate = [NSApp delegate];
+    AppDelegate *delegate = [NSApplication sharedApplication].delegate;
     [delegate setActiveLayout:self];
     
 }

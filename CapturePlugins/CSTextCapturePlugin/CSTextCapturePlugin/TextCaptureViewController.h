@@ -12,5 +12,6 @@
 
 @interface TextCaptureViewController : NSViewController
 @property (weak) TextCapture *captureObj;
+- (IBAction)openFontPanel:(id)sender;
 
 @end

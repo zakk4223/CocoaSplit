@@ -20,6 +20,20 @@
 }
 
 
+-(void)encodeWithCoder:(NSCoder *)aCoder
+{
+    
+    return;
+}
+
+-(instancetype) initWithCoder:(NSCoder *)aDecoder
+{
+    self = [self init];
+    
+    return self;
+    
+    
+}
 -(void)extraTopLevelMenuClicked
 {
     
@@ -40,7 +54,7 @@
         
         SBApplication *sbapp = [SBApplication applicationWithProcessIdentifier:pid];
         
-        [sbapp setDelegate:self];
+        //[sbapp setDelegate:self];
         
         
         

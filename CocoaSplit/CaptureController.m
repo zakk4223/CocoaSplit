@@ -1247,22 +1247,6 @@
 }
 
 
-- (IBAction)ffmpegPathPushed:(id)sender {
-    
-    
-    NSOpenPanel *filepanel = [NSOpenPanel openPanel];
-    
-    [filepanel setCanChooseFiles:YES];
-    [filepanel setAllowsMultipleSelection:FALSE];
-    
-    if ([filepanel runModal] == NSOKButton)
-    {
-        NSURL *fpath = [filepanel URL];
-        [[[NSUserDefaultsController sharedUserDefaultsController] values] setValue:[fpath path] forKey:@"ffmpeg_path"];
-        
-    }
-}
-
 
 - (IBAction)addStreamingService:(id)sender {
     

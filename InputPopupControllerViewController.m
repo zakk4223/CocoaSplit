@@ -55,6 +55,11 @@
         self.inputSource.editorController = nil;
     }
     
+    [self.inputSource editorPopoverDidClose];
+    
+    
+    
+    
 }
 
 

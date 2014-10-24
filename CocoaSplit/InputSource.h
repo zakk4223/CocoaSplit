@@ -149,6 +149,7 @@ typedef enum input_rotate_style_t {
 -(void)addUserEffect:(NSIndexSet *)filterIndexes;
 -(void)removeUserEffects:(NSIndexSet *)filterIndexes;
 -(void)sourceConfigurationView:(NSView *)theView;
+-(void)editorPopoverDidClose;
 
 
 

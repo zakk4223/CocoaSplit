@@ -23,4 +23,36 @@
     return self;
 }
 
+- (IBAction)openFontPanel:(id)sender
+{
+    [[NSFontPanel sharedFontPanel] makeKeyAndOrderFront:self];
+    [[NSFontPanel sharedFontPanel] setPanelFont:self.captureObj.font isMultiple:NO];
+    [[NSFontPanel sharedFontPanel] setDelegate:self];
+    [[NSFontManager sharedFontManager] setAction:@selector(fontChanged:)];
+}
+
+- (void)fontChanged:(id)sender
+{
+    NSFont *currentFont = self.captureObj.font;
+    NSFont *newFont = [sender convertFont:currentFont];
+    NSLog(@"FONT %@", newFont);
+    
+    self.captureObj.font = newFont;
+}
+
+-(void)changeAttributes:(id)sender
+{
+    self.captureObj.fontAttributes = [sender convertAttributes:self.captureObj.fontAttributes];
+}
+
+-(void)dealloc
+{
+    
+    [[NSFontPanel sharedFontPanel] setDelegate:nil];
+    if ([[NSFontPanel sharedFontPanel] isVisible])
+    {
+        [[NSFontPanel sharedFontPanel] orderOut:self];
+    }
+}
+
 @end

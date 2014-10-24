@@ -167,8 +167,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 - (void)deleteLayout:(NSInteger)deleteIdx;
 
-- (IBAction)createNewLayout:(id)sender;
-- (IBAction)closeLayoutPanel:(id)sender;
 
 - (IBAction)addStreamingService:(id)sender;
 

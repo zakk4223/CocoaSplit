@@ -31,6 +31,9 @@
         
         offsetFilter = [CIFilter filterWithName:@"TextureWrapPluginFilter"];
         [offsetFilter setDefaults];
+        _font = [NSFont fontWithName:@"Helvetica" size:11];
+        _fontAttributes = [NSDictionary dictionary];
+        
 
     }
     
@@ -40,12 +43,11 @@
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:self.text forKey:@"text"];
-    [aCoder encodeDouble:self.fontSize forKey:@"fontSize"];
-    [aCoder encodeBool:self.isItalic forKey:@"isItalic"];
-    [aCoder encodeBool:self.isBold forKey:@"isBold"];
-    [aCoder encodeBool:self.isUnderline forKey:@"isUnderline"];
-    [aCoder encodeBool:self.isStrikethrough forKey:@"isStrikethrough"];
-    [aCoder encodeObject:self.foregroundColor forKey:@"foregroundColor"];
+    [aCoder encodeObject:self.font forKey:@"font"];
+    [aCoder encodeObject:self.fontAttributes forKey:@"fontAttributes"];
+    [aCoder encodeFloat:self.scrollXSpeed forKey:@"scrollXSpeed"];
+    [aCoder encodeFloat:self.scrollYSpeed forKey:@"scrollYSpeed"];
+    
 }
 
 
@@ -53,17 +55,21 @@
 {
     if (self = [self init])
     {
-        self.text = [aDecoder decodeObjectForKey:@"text"];
-        self.fontSize = [aDecoder decodeDoubleForKey:@"fontSize"];
-        self.isItalic = [aDecoder decodeBoolForKey:@"isItalic"];
-        self.isBold = [aDecoder decodeBoolForKey:@"isBold"];
-        self.isUnderline = [aDecoder decodeBoolForKey:@"isUnderline"];
-        self.isStrikethrough = [aDecoder decodeBoolForKey:@"isStrikethrough"];
-        if ([aDecoder containsValueForKey:@"foregroundColor"])
+        _text = [aDecoder decodeObjectForKey:@"text"];
+        NSFont *savedFont = [aDecoder decodeObjectForKey:@"font"];
+        if (savedFont)
         {
-            self.foregroundColor = [aDecoder decodeObjectForKey:@"foregroundColor"];
+            _font = savedFont;
         }
         
+        
+        NSDictionary *savedfontAttributes = [aDecoder decodeObjectForKey:@"fontAttributes"];
+        if (savedfontAttributes)
+        {
+            _fontAttributes = savedfontAttributes;
+        }
+        self.scrollXSpeed = [aDecoder decodeFloatForKey:@"scrollXSpeed"];
+        self.scrollYSpeed = [aDecoder decodeFloatForKey:@"scrollYSpeed"];
     }
     return self;
 }
@@ -81,30 +87,9 @@
     if (self.text)
     {
         self.activeVideoDevice.uniqueID = self.text;
-        NSFont *myfont = [NSFont fontWithName:@"Helvetica" size:self.fontSize];
-        if (self.isItalic)
-        {
-            myfont = [[NSFontManager sharedFontManager] convertFont:myfont toHaveTrait:NSFontItalicTrait];
-        }
         
-        if (self.isBold)
-        {
-            myfont = [[NSFontManager sharedFontManager] convertFont:myfont toHaveTrait:NSFontBoldTrait];
-        }
-        
-        NSMutableDictionary *strAttrs = [[NSMutableDictionary alloc] init];
-        
-        strAttrs[NSForegroundColorAttributeName] = self.foregroundColor;
-        strAttrs[NSFontAttributeName] = myfont;
-        if (self.isUnderline)
-        {
-            strAttrs[NSUnderlineStyleAttributeName] = @(NSUnderlineStyleSingle);
-        }
-        
-        if (self.isStrikethrough)
-        {
-            strAttrs[NSStrikethroughStyleAttributeName] = @(NSUnderlineStyleSingle);
-        }
+        NSMutableDictionary *strAttrs = [NSMutableDictionary dictionaryWithDictionary:self.fontAttributes];
+        strAttrs[NSFontAttributeName] = self.font;
         
         _attribString = [[NSAttributedString alloc] initWithString:self.text attributes:strAttrs];
         
@@ -200,15 +185,13 @@
 
 + (NSSet *)keyPathsForValuesAffectingPropertiesChanged
 {
-    return [NSSet setWithObjects:@"text", @"fontSize", @"isItalic", @"isBold", @"isUnderline", @"isStrikethrough", @"foregroundColor", nil];
+    return [NSSet setWithObjects:@"text", @"font", @"fontAttributes", nil];
 }
 
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    
-    
-    
+
     if ([keyPath isEqualToString:@"propertiesChanged"])
     {
         [self renderText];

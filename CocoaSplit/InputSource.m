@@ -1065,6 +1065,11 @@ static NSArray *_sourceTypes = nil;
     
 }
 
+-(void) editorPopoverDidClose
+{
+    return;
+}
+
 
 -(float) scaleFactor
 {
