@@ -162,6 +162,9 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (IBAction)openPluginManager:(id)sender;
 
 - (IBAction)stagingGoLive:(id)sender;
+- (IBAction)stagingSave:(id)sender;
+
+
 - (void)deleteLayout:(NSInteger)deleteIdx;
 
 - (IBAction)createNewLayout:(id)sender;

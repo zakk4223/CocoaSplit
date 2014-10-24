@@ -391,7 +391,7 @@
                                                             </textFieldCell>
                                                         </textField>
                                                         <textField verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="951">
-                                                            <rect key="frame" x="657" y="55" width="46" height="19"/>
+                                                            <rect key="frame" x="657" y="55" width="39" height="19"/>
                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="952">
                                                                 <numberFormatter key="formatter" formatterBehavior="default10_4" positiveFormat="#,##0.###" negativeFormat="#,##0.###" numberStyle="decimal" paddingCharacter="*" minimumIntegerDigits="1" maximumIntegerDigits="309" maximumFractionDigits="3" decimalSeparator="." groupingSeparator="," currencyDecimalSeparator="." plusSign="+" minusSign="-" notANumberSymbol="NaN" perMillSymbol="‰" percentSymbol="%" exponentSymbol="E" positivePrefix="" positiveSuffix="" negativePrefix="-" negativeSuffix="" id="953"/>
                                                                 <font key="font" metaFont="smallSystem"/>
@@ -399,7 +399,7 @@
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
-                                                                <binding destination="nWB-G2-33f" name="value" keyPath="selection.captureFPS" id="qdZ-1l-OPj">
+                                                                <binding destination="nWB-G2-33f" name="value" keyPath="selection.selectedLayout.frameRate" id="vHW-ly-Std">
                                                                     <dictionary key="options">
                                                                         <bool key="NSValidatesImmediately" value="YES"/>
                                                                     </dictionary>
@@ -562,7 +562,7 @@
                                                             </textFieldCell>
                                                         </textField>
                                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QDG-rb-jHr">
-                                                            <rect key="frame" x="84" y="55" width="46" height="19"/>
+                                                            <rect key="frame" x="84" y="55" width="39" height="19"/>
                                                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="Uxe-AQ-ivu">
                                                                 <numberFormatter key="formatter" formatterBehavior="default10_4" positiveFormat="#,##0.###" negativeFormat="#,##0.###" numberStyle="decimal" paddingCharacter="*" minimumIntegerDigits="1" maximumIntegerDigits="309" maximumFractionDigits="3" decimalSeparator="." groupingSeparator="," currencyDecimalSeparator="." plusSign="+" minusSign="-" notANumberSymbol="NaN" perMillSymbol="‰" percentSymbol="%" exponentSymbol="E" positivePrefix="" positiveSuffix="" negativePrefix="-" negativeSuffix="" id="wzU-kB-TyJ"/>
                                                                 <font key="font" metaFont="smallSystem"/>
@@ -570,7 +570,7 @@
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
-                                                                <binding destination="nWB-G2-33f" name="value" keyPath="selection.captureFPS" id="QmD-on-VNO">
+                                                                <binding destination="nWB-G2-33f" name="value" keyPath="selection.stagingCtx.sourceLayout.frameRate" id="Bb6-oo-AQX">
                                                                     <dictionary key="options">
                                                                         <bool key="NSValidatesImmediately" value="YES"/>
                                                                     </dictionary>
@@ -585,7 +585,7 @@
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
-                                                                <binding destination="nWB-G2-33f" name="value" keyPath="selection.selectedLayout.canvas_width" id="ZrO-Yx-sXh"/>
+                                                                <binding destination="nWB-G2-33f" name="value" keyPath="selection.stagingCtx.sourceLayout.canvas_width" id="Qin-Sq-A0Y"/>
                                                             </connections>
                                                         </textField>
                                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mmz-0q-83I">
@@ -596,7 +596,7 @@
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
-                                                                <binding destination="nWB-G2-33f" name="value" keyPath="selection.selectedLayout.canvas_height" id="ui5-vV-DAK"/>
+                                                                <binding destination="nWB-G2-33f" name="value" keyPath="selection.stagingCtx.sourceLayout.canvas_height" id="xQ6-vI-byH"/>
                                                             </connections>
                                                         </textField>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5fK-aV-m0w">
@@ -759,6 +759,9 @@
                                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                 <font key="font" metaFont="smallSystem"/>
                                                             </buttonCell>
+                                                            <connections>
+                                                                <action selector="stagingSave:" target="816" id="SML-aj-Fb0"/>
+                                                            </connections>
                                                         </button>
                                                     </subviews>
                                                     <constraints>
@@ -781,7 +784,7 @@
                                             </tabViewItem>
                                             <tabViewItem label="Audio" identifier="" id="0Ka-N4-s59">
                                                 <view key="view" id="2SM-Mt-G7T">
-                                                    <rect key="frame" x="10" y="33" width="766" height="314"/>
+                                                    <rect key="frame" x="10" y="33" width="840" height="314"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="899">
@@ -949,7 +952,7 @@
                                             </tabViewItem>
                                             <tabViewItem label="Outputs" identifier="" id="KWj-Tz-2lj">
                                                 <view key="view" id="2ht-De-cOW">
-                                                    <rect key="frame" x="10" y="33" width="766" height="314"/>
+                                                    <rect key="frame" x="10" y="33" width="840" height="314"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1471">
@@ -1151,7 +1154,7 @@
                                             </tabViewItem>
                                             <tabViewItem label="Status" identifier="2" id="3288">
                                                 <view key="view" id="3289">
-                                                    <rect key="frame" x="10" y="33" width="766" height="314"/>
+                                                    <rect key="frame" x="10" y="33" width="840" height="314"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <scrollView ambiguous="YES" misplaced="YES" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2212">

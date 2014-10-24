@@ -28,7 +28,6 @@
 @implementation CaptureController
 
 @synthesize selectedCompressorType = _selectedCompressorType;
-@synthesize captureFPS = _captureFPS;
 @synthesize selectedLayout = _selectedLayout;
 @synthesize stagingLayout = _stagingLayout;
 
@@ -150,6 +149,15 @@
     
     newLayout.name = newName;
     
+    if (newLayout.canvas_width == 0)
+    {
+        newLayout.canvas_width = self.captureWidth;
+    }
+    
+    if (newLayout.canvas_height == 0)
+    {
+        newLayout.canvas_height = self.captureHeight;
+    }
     
     [self insertObject:newLayout inSourceLayoutsAtIndex:self.sourceLayouts.count];
     
@@ -571,19 +579,6 @@
         self.audioCaptureSession.activeAudioDevice = [AVCaptureDevice deviceWithUniqueID:uniqueID];
     }
     
-}
-
-
--(void)setCaptureFPS:(double)captureFPS
-{
-    _captureFPS = captureFPS;
-    [self setupFrameTimer];
-}
-
-
--(double)captureFPS
-{
-    return _captureFPS;
 }
 
 
@@ -1157,6 +1152,11 @@
 
 
 
+-(void)controlTextDidEndEditing:(NSNotification *)obj
+{
+    
+}
+
 -(void)setExtraData:(id)saveData forKey:(NSString *)forKey
 {
     
@@ -1218,6 +1218,8 @@
     selectedLayout.ciCtx = _cictx;
     selectedLayout.isActive = YES;
 
+    [self setupFrameTimer:selectedLayout.frameRate];
+    
     
     self.previewCtx.sourceLayout = selectedLayout;
     currentLayout.isActive = NO;
@@ -1426,13 +1428,13 @@
 
 
 
--(void) setupFrameTimer
+-(void) setupFrameTimer:(double)framerate
 {
-    NSLog(@"SETTING UP FRAME TIMER %f", self.captureFPS);
+    NSLog(@"SETTING UP FRAME TIMER %f", framerate);
     
-    if (self.captureFPS && self.captureFPS > 0)
+    if (framerate && framerate > 0)
     {
-        _frame_interval = (1.0/self.captureFPS);
+        _frame_interval = (1.0/framerate);
     } else {
         _frame_interval = 1.0/60.0;
     }
@@ -2273,17 +2275,26 @@
 {
     if (self.stagingLayout && self.stagingCtx.sourceLayout)
     {
-        [self.stagingCtx.sourceLayout saveSourceList];
-        self.stagingLayout.savedSourceListData = self.stagingCtx.sourceLayout.savedSourceListData;
-        self.stagingLayout.frameRate = self.stagingCtx.sourceLayout.frameRate;
-        self.stagingLayout.canvas_width = self.stagingCtx.sourceLayout.canvas_width;
-        self.stagingLayout.canvas_height = self.stagingCtx.sourceLayout.canvas_height;
+        [self stagingSave:sender];
+        
         if (self.selectedLayout != self.stagingLayout)
         {
             self.selectedLayout = self.stagingLayout;
         } else {
             [self.stagingLayout restoreSourceList];
         }
+    }
+}
+
+-(IBAction)stagingSave:(id)sender
+{
+    if (self.stagingLayout && self.stagingCtx.sourceLayout)
+    {
+        [self.stagingCtx.sourceLayout saveSourceList];
+        self.stagingLayout.savedSourceListData = self.stagingCtx.sourceLayout.savedSourceListData;
+        self.stagingLayout.frameRate = self.stagingCtx.sourceLayout.frameRate;
+        self.stagingLayout.canvas_width = self.stagingCtx.sourceLayout.canvas_width;
+        self.stagingLayout.canvas_height = self.stagingCtx.sourceLayout.canvas_height;
     }
 }
 
