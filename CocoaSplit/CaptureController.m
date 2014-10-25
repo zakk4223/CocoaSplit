@@ -18,7 +18,6 @@
 #import "InputSource.h"
 #import "InputPopupControllerViewController.h"
 #import "SourceLayout.h"
-#import "LayoutPreviewWindowController.h"
 #import "CSExtraPluginProtocol.h"
 #import <OpenCL/opencl.h>
 #import <OpenCl/cl_gl_ext.h>
@@ -2242,23 +2241,6 @@
 
 
 
-- (IBAction)openLayoutPreview:(id)sender
-{
-    
-    if (!self.layoutPreviewController)
-    {
-        self.layoutPreviewController = [[LayoutPreviewWindowController alloc] initWithWindowNibName:@"LayoutPreviewWindowController"];
-    }
-    
-    [self.layoutPreviewController showWindow:nil];
-    self.layoutPreviewController.captureController = self;
-    self.layoutPreviewController.openGLView.controller = self;
-    //Preview gets a copy of everything so it doesn't mess up live source
-    //self.layoutPreviewController.sourceLayouts = [[NSMutableArray alloc] initWithArray:self.sourceLayouts copyItems:YES];
-    //Or maybe not...
-    self.layoutPreviewController.sourceLayouts = self.sourceLayouts;
-    
-}
 
 - (IBAction)openPluginManager:(id)sender
 {

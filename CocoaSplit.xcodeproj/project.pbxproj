@@ -82,9 +82,6 @@
 		347B7FC616907A1700B5F4B3 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 347B7FC516907A1700B5F4B3 /* libbz2.dylib */; };
 		347B7FC816907AE700B5F4B3 /* VideoDecodeAcceleration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 347B7FC716907AE700B5F4B3 /* VideoDecodeAcceleration.framework */; };
 		3481F30619B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3481F30519B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m */; };
-		3481F31619B5A41A00CC76D8 /* LayoutPreviewWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3481F31419B5A41A00CC76D8 /* LayoutPreviewWindowController.m */; };
-		3481F31719B5A41A00CC76D8 /* LayoutPreviewWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3481F31519B5A41A00CC76D8 /* LayoutPreviewWindowController.xib */; };
-		3481F31819B5A7B900CC76D8 /* LayoutPreviewWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3481F31419B5A41A00CC76D8 /* LayoutPreviewWindowController.m */; };
 		348AC06B19B406910064F02D /* SourceLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 348AC06A19B406910064F02D /* SourceLayout.m */; };
 		348AC06C19B406910064F02D /* SourceLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 348AC06A19B406910064F02D /* SourceLayout.m */; };
 		34A64A2F165EFE4C00A68428 /* PreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A64A2E165EFE4B00A68428 /* PreviewView.m */; };
@@ -409,9 +406,6 @@
 		347B7FC916907AFA00B5F4B3 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		3481F30419B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SourceLayout+ScriptingAdditions.h"; path = "ScriptingAddditions/SourceLayout+ScriptingAdditions.h"; sourceTree = "<group>"; };
 		3481F30519B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "SourceLayout+ScriptingAdditions.m"; path = "ScriptingAddditions/SourceLayout+ScriptingAdditions.m"; sourceTree = "<group>"; };
-		3481F31319B5A41A00CC76D8 /* LayoutPreviewWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutPreviewWindowController.h; sourceTree = "<group>"; };
-		3481F31419B5A41A00CC76D8 /* LayoutPreviewWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayoutPreviewWindowController.m; sourceTree = "<group>"; };
-		3481F31519B5A41A00CC76D8 /* LayoutPreviewWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LayoutPreviewWindowController.xib; path = Interface/LayoutPreviewWindowController.xib; sourceTree = "<group>"; };
 		348AC06919B406910064F02D /* SourceLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SourceLayout.h; sourceTree = "<group>"; };
 		348AC06A19B406910064F02D /* SourceLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SourceLayout.m; sourceTree = "<group>"; };
 		34A64A2D165EFE4B00A68428 /* PreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreviewView.h; sourceTree = "<group>"; };
@@ -641,8 +635,6 @@
 				34AFC33219B19CD00007C07B /* SourceCache.m */,
 				348AC06919B406910064F02D /* SourceLayout.h */,
 				348AC06A19B406910064F02D /* SourceLayout.m */,
-				3481F31319B5A41A00CC76D8 /* LayoutPreviewWindowController.h */,
-				3481F31419B5A41A00CC76D8 /* LayoutPreviewWindowController.m */,
 			);
 			path = CocoaSplit;
 			sourceTree = "<group>";
@@ -717,7 +709,6 @@
 		3441338E18667FE40059B686 /* Interface */ = {
 			isa = PBXGroup;
 			children = (
-				3481F31519B5A41A00CC76D8 /* LayoutPreviewWindowController.xib */,
 				34348C2919BDBDC000A122C2 /* PluginManagerWindowController.xib */,
 				347B14DB198492D900DC7DF0 /* InputPopupControllerViewController.xib */,
 				34CFE49C18F1459600092C6A /* AudioMixer.xib */,
@@ -1236,7 +1227,6 @@
 				34D6581119B35E3B0012E32B /* CocoaSplit.sdef in Resources */,
 				347B14DD198492D900DC7DF0 /* InputPopupControllerViewController.xib in Resources */,
 				340FE4AC15F3417E00E4CE4E /* InfoPlist.strings in Resources */,
-				3481F31719B5A41A00CC76D8 /* LayoutPreviewWindowController.xib in Resources */,
 				340FE4B215F3417E00E4CE4E /* Credits.rtf in Resources */,
 				340FE4B815F3417E00E4CE4E /* MainMenu.xib in Resources */,
 				34D4351B198BE3B700266169 /* NewLayoutPanel.xib in Resources */,
@@ -1287,7 +1277,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				34CFE4A418F1992A00092C6A /* AVFAudioChannel.m in Sources */,
-				3481F31619B5A41A00CC76D8 /* LayoutPreviewWindowController.m in Sources */,
 				340FE4AE15F3417E00E4CE4E /* main.m in Sources */,
 				34C19053189EE60400AB2430 /* CapturedFrameData.m in Sources */,
 				340FE4B515F3417E00E4CE4E /* AppDelegate.m in Sources */,
@@ -1319,7 +1308,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3481F31819B5A7B900CC76D8 /* LayoutPreviewWindowController.m in Sources */,
 				3451A1C717111BD900DF6A8B /* main.m in Sources */,
 				340DC735197CF6E9003A0BB3 /* CSCaptureBase.m in Sources */,
 				34348C3919BDC0D800A122C2 /* PluginManagerWindowController.m in Sources */,
