@@ -122,7 +122,10 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) SourceLayout *selectedLayout;
 @property (strong) SourceLayout *stagingLayout;
 
+@property (weak) IBOutlet NSView *stagingControls;
 
+@property (weak) IBOutlet NSView *goLiveControls;
+@property (weak) IBOutlet NSSplitView *canvasSplitView;
 
 @property (strong) id<h264Compressor> videoCompressor;
 @property (strong) AVFAudioCapture *audioCaptureSession;
@@ -157,6 +160,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 
+
+- (IBAction)stagingViewToggle:(id)sender;
 
 - (IBAction)openLayoutPreview:(id)sender;
 - (IBAction)openPluginManager:(id)sender;

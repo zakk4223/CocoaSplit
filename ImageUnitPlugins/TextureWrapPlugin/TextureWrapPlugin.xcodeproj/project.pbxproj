@@ -303,6 +303,7 @@
 				INSTALL_PATH = "$(HOME)/Library/Graphics/Image Units";
 				LIBRARY_STYLE = BUNDLE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = plugin;
 			};
 			name = Debug;
@@ -317,6 +318,7 @@
 				INSTALL_PATH = "$(HOME)/Library/Graphics/Image Units";
 				LIBRARY_STYLE = BUNDLE;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = plugin;
 			};
 			name = Release;
@@ -340,6 +342,7 @@
 				34D4354F198DCE3800266169 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

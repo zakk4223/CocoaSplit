@@ -1019,6 +1019,11 @@
     
     [saveRoot setValue:self.extraPluginsSaveData forKeyPath:@"extraPluginsSaveData"];
     
+    BOOL stagingHidden = [self.canvasSplitView isSubviewCollapsed:self.canvasSplitView.subviews[0]];
+    [saveRoot setValue:[NSNumber numberWithBool:stagingHidden] forKey:@"stagingHidden"];
+    
+    
+    
     [NSKeyedArchiver archiveRootObject:saveRoot toFile:path];
     
 }
@@ -1145,6 +1150,13 @@
     [self migrateDefaultCompressor:saveRoot];
     [self buildExtrasMenu];
     
+    BOOL stagingHidden = [[saveRoot valueForKeyPath:@"stagingHidden"] boolValue];
+    
+    if (stagingHidden)
+    {
+        [self hideStagingView];
+    }
+
 
     self.extraPluginsSaveData = nil;
 }
@@ -2279,6 +2291,50 @@
         self.stagingLayout.frameRate = self.stagingCtx.sourceLayout.frameRate;
         self.stagingLayout.canvas_width = self.stagingCtx.sourceLayout.canvas_width;
         self.stagingLayout.canvas_height = self.stagingCtx.sourceLayout.canvas_height;
+    }
+}
+
+-(void) hideStagingView
+{
+    NSView *stagingView = self.canvasSplitView.subviews[0];
+    NSView *liveView = self.canvasSplitView.subviews[1];
+    stagingView.hidden = YES;
+    [liveView setFrameSize:NSMakeSize(self.canvasSplitView.frame.size.width, liveView.frame.size.height)];
+    [self.canvasSplitView display];
+    self.stagingControls.hidden = YES;
+    self.goLiveControls.hidden = YES;
+    
+}
+
+-(void) showStagingView
+{
+    NSView *stagingView = self.canvasSplitView.subviews[0];
+    NSView *liveView = self.canvasSplitView.subviews[1];
+    stagingView.hidden = NO;
+    
+    CGFloat dividerWidth = self.canvasSplitView.dividerThickness;
+    NSRect stagingFrame = stagingView.frame;
+    NSRect liveFrame = liveView.frame;
+    liveFrame.size.width = liveFrame.size.width - stagingFrame.size.width-dividerWidth;
+    liveFrame.origin.x = stagingFrame.size.width + dividerWidth;
+    [stagingView setFrameSize:stagingFrame.size];
+    [liveView setFrame:liveFrame];
+    [self.canvasSplitView display];
+    self.stagingControls.hidden = NO;
+    self.goLiveControls.hidden = NO;
+
+}
+
+
+- (IBAction)stagingViewToggle:(id)sender
+{
+    BOOL stagingCollapsed = [self.canvasSplitView isSubviewCollapsed:self.canvasSplitView.subviews[0]];
+    
+    if (stagingCollapsed)
+    {
+        [self showStagingView];
+    } else {
+        [self hideStagingView];
     }
 }
 

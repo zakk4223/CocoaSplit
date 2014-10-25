@@ -19,10 +19,6 @@
 		340FE4B215F3417E00E4CE4E /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 340FE4B015F3417E00E4CE4E /* Credits.rtf */; };
 		340FE4B515F3417E00E4CE4E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FE4B415F3417E00E4CE4E /* AppDelegate.m */; };
 		340FE4B815F3417E00E4CE4E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 340FE4B615F3417E00E4CE4E /* MainMenu.xib */; };
-		340FE4C015F3417E00E4CE4E /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4BF15F3417E00E4CE4E /* SenTestingKit.framework */; };
-		340FE4C115F3417E00E4CE4E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4A115F3417E00E4CE4E /* Cocoa.framework */; };
-		340FE4C915F3417E00E4CE4E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 340FE4C715F3417E00E4CE4E /* InfoPlist.strings */; };
-		340FE4CC15F3417E00E4CE4E /* CocoaSplitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FE4CB15F3417E00E4CE4E /* CocoaSplitTests.m */; };
 		340FE4DA15F346D900E4CE4E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4D815F346CC00E4CE4E /* AVFoundation.framework */; };
 		340FE4E115F3581200E4CE4E /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4E015F3581200E4CE4E /* QTKit.framework */; };
 		340FE50815F444AA00E4CE4E /* CaptureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FE50715F444AA00E4CE4E /* CaptureController.m */; };
@@ -54,7 +50,6 @@
 		3450579E172A4B6B0065A452 /* CocoaSplitCmd in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3451A1C317111BD900DF6A8B /* CocoaSplitCmd */; };
 		3451A1C417111BD900DF6A8B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AE3C2F164E3E020052C95E /* Foundation.framework */; };
 		3451A1C717111BD900DF6A8B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3451A1C617111BD900DF6A8B /* main.m */; };
-		3451A1CB17111BD900DF6A8B /* CocoaSplitCmd.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3451A1CA17111BD900DF6A8B /* CocoaSplitCmd.1 */; };
 		3451A1D31712C41000DF6A8B /* CaptureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FE50715F444AA00E4CE4E /* CaptureController.m */; };
 		3451A1D51712C57700DF6A8B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4D815F346CC00E4CE4E /* AVFoundation.framework */; };
 		3451A1D61712C58300DF6A8B /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 342346BA15F5FBD700C8C77E /* CoreMedia.framework */; };
@@ -74,7 +69,6 @@
 		3451A1E81712C7D000DF6A8B /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 347B7FC516907A1700B5F4B3 /* libbz2.dylib */; };
 		3451A1E91712C7DE00DF6A8B /* VideoDecodeAcceleration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 347B7FC716907AE700B5F4B3 /* VideoDecodeAcceleration.framework */; };
 		3451A1EA1712C80400DF6A8B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4A115F3417E00E4CE4E /* Cocoa.framework */; };
-		3451A1EB1712C86800DF6A8B /* Syphon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A8BAB117085BDD0093EEAF /* Syphon.framework */; };
 		3451A1ED1712C8F300DF6A8B /* Syphon.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34A8BAB117085BDD0093EEAF /* Syphon.framework */; };
 		34576C7819AFCA1B007BAD90 /* CSPluginLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 34576C7719AFCA1B007BAD90 /* CSPluginLoader.m */; };
 		34576C7919AFCA1B007BAD90 /* CSPluginLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 34576C7719AFCA1B007BAD90 /* CSPluginLoader.m */; };
@@ -141,13 +135,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		340FE4C215F3417E00E4CE4E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 340FE49415F3417E00E4CE4E /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 340FE49C15F3417E00E4CE4E;
-			remoteInfo = CocoaSplit;
-		};
 		3450579B172A4ABD0065A452 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 340FE49415F3417E00E4CE4E /* Project object */;
@@ -287,16 +274,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3451A1C117111BD900DF6A8B /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
-			files = (
-				3451A1CB17111BD900DF6A8B /* CocoaSplitCmd.1 in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-		};
 		3451A1EC1712C8CA00DF6A8B /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -370,7 +347,6 @@
 		340FE4B315F3417E00E4CE4E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		340FE4B415F3417E00E4CE4E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		340FE4B715F3417E00E4CE4E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		340FE4BE15F3417E00E4CE4E /* CocoaSplitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CocoaSplitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		340FE4BF15F3417E00E4CE4E /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		340FE4C615F3417E00E4CE4E /* CocoaSplitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CocoaSplitTests-Info.plist"; sourceTree = "<group>"; };
 		340FE4C815F3417E00E4CE4E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -519,15 +495,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		340FE4BA15F3417E00E4CE4E /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				340FE4C015F3417E00E4CE4E /* SenTestingKit.framework in Frameworks */,
-				340FE4C115F3417E00E4CE4E /* Cocoa.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		3451A1C017111BD900DF6A8B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -542,7 +509,6 @@
 				3451A1E41712C66E00DF6A8B /* OpenGL.framework in Frameworks */,
 				3451A1E31712C60D00DF6A8B /* VideoToolbox.framework in Frameworks */,
 				3451A1E21712C5F700DF6A8B /* CoreGraphics.framework in Frameworks */,
-				3451A1EB1712C86800DF6A8B /* Syphon.framework in Frameworks */,
 				3451A1D71712C5B300DF6A8B /* CoreVideo.framework in Frameworks */,
 				3451A1D61712C58300DF6A8B /* CoreMedia.framework in Frameworks */,
 				3451A1D51712C57700DF6A8B /* AVFoundation.framework in Frameworks */,
@@ -588,7 +554,6 @@
 			isa = PBXGroup;
 			children = (
 				340FE49D15F3417E00E4CE4E /* CocoaSplit.app */,
-				340FE4BE15F3417E00E4CE4E /* CocoaSplitTests.octest */,
 				34AE3C2E164E3E020052C95E /* zakk.lol.QTCaptureHelper.xpc */,
 				3451A1C317111BD900DF6A8B /* CocoaSplitCmd */,
 			);
@@ -1036,32 +1001,12 @@
 			productReference = 340FE49D15F3417E00E4CE4E /* CocoaSplit.app */;
 			productType = "com.apple.product-type.application";
 		};
-		340FE4BD15F3417E00E4CE4E /* CocoaSplitTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 340FE4D215F3417E00E4CE4E /* Build configuration list for PBXNativeTarget "CocoaSplitTests" */;
-			buildPhases = (
-				340FE4B915F3417E00E4CE4E /* Sources */,
-				340FE4BA15F3417E00E4CE4E /* Frameworks */,
-				340FE4BB15F3417E00E4CE4E /* Resources */,
-				340FE4BC15F3417E00E4CE4E /* ShellScript */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				340FE4C315F3417E00E4CE4E /* PBXTargetDependency */,
-			);
-			name = CocoaSplitTests;
-			productName = CocoaSplitTests;
-			productReference = 340FE4BE15F3417E00E4CE4E /* CocoaSplitTests.octest */;
-			productType = "com.apple.product-type.bundle.ocunit-test";
-		};
 		3451A1C217111BD900DF6A8B /* CocoaSplitCmd */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3451A1CE17111BD900DF6A8B /* Build configuration list for PBXNativeTarget "CocoaSplitCmd" */;
 			buildPhases = (
 				3451A1BF17111BD900DF6A8B /* Sources */,
 				3451A1C017111BD900DF6A8B /* Frameworks */,
-				3451A1C117111BD900DF6A8B /* CopyFiles */,
 				3451A1EC1712C8CA00DF6A8B /* CopyFiles */,
 			);
 			buildRules = (
@@ -1176,7 +1121,6 @@
 			projectRoot = "";
 			targets = (
 				340FE49C15F3417E00E4CE4E /* CocoaSplit */,
-				340FE4BD15F3417E00E4CE4E /* CocoaSplitTests */,
 				34AE3C2D164E3E020052C95E /* QTCaptureHelper */,
 				3451A1C217111BD900DF6A8B /* CocoaSplitCmd */,
 			);
@@ -1311,14 +1255,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		340FE4BB15F3417E00E4CE4E /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				340FE4C915F3417E00E4CE4E /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		34AE3C2C164E3E020052C95E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1330,19 +1266,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		340FE4BC15F3417E00E4CE4E /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
-		};
 		3470F41719C8534B000A81C4 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1392,14 +1315,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		340FE4B915F3417E00E4CE4E /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				340FE4CC15F3417E00E4CE4E /* CocoaSplitTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		3451A1BF17111BD900DF6A8B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1441,11 +1356,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		340FE4C315F3417E00E4CE4E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 340FE49C15F3417E00E4CE4E /* CocoaSplit */;
-			targetProxy = 340FE4C215F3417E00E4CE4E /* PBXContainerItemProxy */;
-		};
 		3450579C172A4ABD0065A452 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 3451A1C217111BD900DF6A8B /* CocoaSplitCmd */;
@@ -1510,6 +1420,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1525,7 +1436,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /usr/local/include;
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
 			};
@@ -1539,6 +1450,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1548,7 +1460,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /usr/local/include;
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
 			};
@@ -1559,8 +1471,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1572,6 +1484,7 @@
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				INFOPLIST_FILE = "CocoaSplit/CocoaSplit-Info.plist";
 				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				"OTHER_LDFLAGS[arch=*]" = (
 					/usr/local/lib/libavutil.a,
 					/usr/local/lib/libavformat.a,
@@ -1593,8 +1506,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1608,6 +1521,7 @@
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				INFOPLIST_FILE = "CocoaSplit/CocoaSplit-Info.plist";
 				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				"OTHER_LDFLAGS[arch=*]" = (
 					/usr/local/lib/libavformat.a,
 					/usr/local/lib/libavutil.a,
@@ -1616,45 +1530,12 @@
 					/usr/local/lib/libswscale.a,
 					/usr/local/lib/libx264.a,
 					"-flat_namespace",
-					"-export_dynamic",
 				);
 				PRODUCT_NAME = CocoaSplit;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 				STRIP_STYLE = debugging;
 				WRAPPER_EXTENSION = app;
-			};
-			name = Release;
-		};
-		340FE4D315F3417E00E4CE4E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/CocoaSplit.app/Contents/MacOS/CocoaSplit";
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "CocoaSplit/CocoaSplit-Prefix.pch";
-				INFOPLIST_FILE = "CocoaSplitTests/CocoaSplitTests-Info.plist";
-				PRODUCT_NAME = CocoaSplitTests;
-				SDKROOT = macosx;
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
-			};
-			name = Debug;
-		};
-		340FE4D415F3417E00E4CE4E /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/CocoaSplit.app/Contents/MacOS/CocoaSplit";
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = "\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"";
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "CocoaSplit/CocoaSplit-Prefix.pch";
-				INFOPLIST_FILE = "CocoaSplitTests/CocoaSplitTests-Info.plist";
-				PRODUCT_NAME = CocoaSplitTests;
-				SDKROOT = macosx;
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
 			};
 			name = Release;
 		};
@@ -1684,6 +1565,7 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
 			};
 			name = Debug;
 		};
@@ -1712,6 +1594,7 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};
@@ -1775,15 +1658,6 @@
 			buildConfigurations = (
 				340FE4D015F3417E00E4CE4E /* Debug */,
 				340FE4D115F3417E00E4CE4E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		340FE4D215F3417E00E4CE4E /* Build configuration list for PBXNativeTarget "CocoaSplitTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				340FE4D315F3417E00E4CE4E /* Debug */,
-				340FE4D415F3417E00E4CE4E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
