@@ -25,17 +25,23 @@
 
 - (IBAction)openFontPanel:(id)sender
 {
-    [[NSFontPanel sharedFontPanel] makeKeyAndOrderFront:self];
-    [[NSFontPanel sharedFontPanel] setPanelFont:self.captureObj.font isMultiple:NO];
-    [[NSFontPanel sharedFontPanel] setDelegate:self];
-    [[NSFontManager sharedFontManager] setAction:@selector(fontChanged:)];
+    NSFontManager *fontManager = [NSFontManager sharedFontManager];
+    fontManager.delegate = self;
+    
+    NSFontPanel *fontPanel = [fontManager fontPanel:YES];
+    fontPanel.delegate = self;
+    
+    [fontPanel makeKeyAndOrderFront:self];
+    [fontManager setSelectedFont:self.captureObj.font isMultiple:NO];
+    [fontManager setAction:@selector(fontChanged:)];
+    [fontManager setSelectedAttributes:self.captureObj.fontAttributes isMultiple:NO];
+    
 }
 
 - (void)fontChanged:(id)sender
 {
     NSFont *currentFont = self.captureObj.font;
     NSFont *newFont = [sender convertFont:currentFont];
-    NSLog(@"FONT %@", newFont);
     
     self.captureObj.font = newFont;
 }

@@ -544,20 +544,57 @@
         } else {
             
             
-            //Snap to edges on movement. You're on your own while resizing
-            if (self.selectedSource.x_pos < SNAP_THRESHOLD && dx < 0)
+            float x_pos = self.selectedSource.x_pos;
+            float y_pos = self.selectedSource.y_pos;
+            size_t s_width = self.selectedSource.display_width;
+            size_t s_height = self.selectedSource.display_height;
+            
+            float top_pos = y_pos+s_height;
+            float right_pos = x_pos+s_width;
+            
+            
+            //Snap to edges on movement. You're on your own while resizing.
+            
+            //Snapping is only valid if we're still fully inside the canvas, if we push beyond that we let the user paint outside the box a bit.
+            
+            if (x_pos > 0 && right_pos < self.sourceLayout.canvas_width)
             {
-                dx = -self.selectedSource.x_pos;
-            } else if ((self.selectedSource.x_pos+self.selectedSource.display_width > self.sourceLayout.canvas_width-SNAP_THRESHOLD) && dx > 0) {
-                dx = self.sourceLayout.canvas_width - (self.selectedSource.x_pos+ self.selectedSource.display_width);
-            } else if (self.selectedSource.y_pos < SNAP_THRESHOLD && dy < 0) {
-                dy = -self.selectedSource.y_pos;
-            } else if ((self.selectedSource.y_pos+self.selectedSource.display_height > self.sourceLayout.canvas_height-SNAP_THRESHOLD) && dy > 0) {
-                dy = self.sourceLayout.canvas_height - (self.selectedSource.y_pos+ self.selectedSource.display_height);
+                if (x_pos < SNAP_THRESHOLD && dx < 0)
+                {
+                    dx = -x_pos;
+                } else if ((right_pos > self.sourceLayout.canvas_width-SNAP_THRESHOLD) && dx > 0) {
+                    dx = self.sourceLayout.canvas_width - right_pos;
+                }
             }
             
-                
+            if (y_pos > 0 && top_pos < self.sourceLayout.canvas_height)
+            {
+                if (y_pos < SNAP_THRESHOLD && dy < 0)
+                {
+                    dy = -y_pos;
+                } else if ((top_pos > self.sourceLayout.canvas_height-SNAP_THRESHOLD) && dy > 0) {
+                    dy = self.sourceLayout.canvas_height - top_pos;
+                }
+            }
             
+            float half_x = x_pos + s_width/2;
+            float half_y = y_pos + s_height/2;
+            
+            //if the middle of our bounding box is outside the canvas, don't let it move any more.
+            
+            if (half_x <= 0.0f && dx < 0)
+            {
+                dx = 0.0f;
+            } else if ((half_x >= self.sourceLayout.canvas_width) && dx > 0) {
+                dx = 0.0f;
+            }
+            
+            if (half_y <= 0.0f && dy < 0)
+            {
+                dy = 0.0f;
+            } else if ((half_y >= self.sourceLayout.canvas_height) && dy > 0) {
+                dy = 0.0f;
+            }
             [self.selectedSource updateOrigin:dx y:dy];
         }
     }

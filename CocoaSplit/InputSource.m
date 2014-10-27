@@ -967,6 +967,7 @@ static NSArray *_sourceTypes = nil;
     if (isnan(x))
     {
         NSLog(@"HOLY CRAP NaN");
+        return;
     }
     
     //NSLog(@"UPDATE ORIGIN x:%f y%f _x_pos:%f _y_pos:%f scale_x:%f scale_y:%f", x, y, _x_pos, _y_pos, _scale_x_pos, _scale_y_pos);
@@ -993,7 +994,6 @@ static NSArray *_sourceTypes = nil;
 {
     
     
-    NSLog(@"SETTING SELECTED VIDEO TYPE %@", selectedVideoType);
     
     
     
@@ -1011,7 +1011,6 @@ static NSArray *_sourceTypes = nil;
     newCaptureSession = [[captureClass alloc] init];
     
     
-    NSLog(@"CAPTURE SESSION %@", newCaptureSession);
     
     newCaptureSession.imageContext = self.imageContext;
 
