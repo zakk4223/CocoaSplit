@@ -1426,7 +1426,7 @@
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = NO;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.10;
 			};
 			name = Debug;
 		};
@@ -1450,7 +1450,7 @@
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = NO;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.10;
 			};
 			name = Release;
 		};

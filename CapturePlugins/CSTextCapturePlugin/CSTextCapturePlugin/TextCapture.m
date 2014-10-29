@@ -19,6 +19,7 @@
     {
         self.fontSize = 14.0f;
         self.foregroundColor = [NSColor whiteColor];
+        self.allowScaling = NO;
         _scroll_Xadjust = 0.0f;
         _scroll_Yadjust = 0.0f;
         self.scrollXSpeed = 0.0f;
@@ -60,7 +61,9 @@
         if (savedFont)
         {
             _font = savedFont;
+            
         }
+        
         
         
         NSDictionary *savedfontAttributes = [aDecoder decodeObjectForKey:@"fontAttributes"];
@@ -90,7 +93,6 @@
         
         NSMutableDictionary *strAttrs = [NSMutableDictionary dictionaryWithDictionary:self.fontAttributes];
         strAttrs[NSFontAttributeName] = self.font;
-        
         _attribString = [[NSAttributedString alloc] initWithString:self.text attributes:strAttrs];
         
     }

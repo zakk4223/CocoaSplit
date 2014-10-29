@@ -51,6 +51,11 @@
 @property (assign) bool allowDedup;
 
 
+//Set this to false if you don't want to be scaled. Instead of this source being forced to scale to the size of the input box
+//it'll be cropped to it instead. This is here mostly for text capture sources, but maybe you can do something weird with it.
+
+@property (assign) bool allowScaling;
+
 //These are set as state changes/events happen. You can check their values in your code at anytime
 //or observe them or override the setter/getter to do whatever you'd like.
 
@@ -63,6 +68,7 @@
 //Your active status (active checkbox in config UI). If an input isn't active currentImage/getCurrentFrame aren't
 //called. You can use this to pause timers or deallocate resources if you want.
 @property (assign) bool isActive;
+
 
 -(CIImage *)currentImage;
 -(NSViewController *)configurationView;

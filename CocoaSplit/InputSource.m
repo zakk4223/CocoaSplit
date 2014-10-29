@@ -480,14 +480,22 @@ static NSArray *_sourceTypes = nil;
         [self.cropFilter setDefaults];
     }
     
-    
-    
-    
     NSAffineTransform *geometryTransform = [NSAffineTransform transform];
     
     //Calculate crop rectangle, then adjust for shifted origin of the crop.
 
-    NSRect cropRect = [self calculateCropRect:self.inputImage.extent.size.width height:self.inputImage.extent.size.height];
+    
+    NSRect cropRect;
+    
+    if (!self.videoInput.allowScaling)
+    {
+        cropRect = [self calculateCropRect:self.display_width height:self.display_height];
+
+        
+    } else {
+        cropRect = [self calculateCropRect:self.inputImage.extent.size.width height:self.inputImage.extent.size.height];
+    }
+    
     
 
     
@@ -557,6 +565,8 @@ static NSArray *_sourceTypes = nil;
 
 -(NSRect)calculateCropRect:(int)width height:(int)height
 {
+    
+    
     return NSMakeRect(self.crop_left, self.crop_bottom, width-self.crop_right-self.crop_left, height-self.crop_top-self.crop_bottom);
 }
 
@@ -865,7 +875,7 @@ static NSArray *_sourceTypes = nil;
     source_width = extent.size.width;
     source_height = extent.size.height;
     
-    if (NSEqualSizes(extent.size, rect.size))
+    if (NSEqualSizes(extent.size, rect.size) || !self.videoInput.allowScaling)
     {
         _scale_x_pos = self.x_pos;
         _scale_y_pos = self.y_pos;
