@@ -836,7 +836,6 @@
     CVDisplayLinkStart(displayLink);
     
     
-    
     return self;
 }
 

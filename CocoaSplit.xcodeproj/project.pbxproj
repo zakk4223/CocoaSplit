@@ -1426,7 +1426,7 @@
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = NO;
-				SDKROOT = macosx10.10;
+				SDKROOT = macosx10.9;
 			};
 			name = Debug;
 		};
@@ -1450,7 +1450,7 @@
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = NO;
-				SDKROOT = macosx10.10;
+				SDKROOT = macosx10.9;
 			};
 			name = Release;
 		};
@@ -1483,7 +1483,7 @@
 				);
 				PRODUCT_NAME = CocoaSplit;
 				PROVISIONING_PROFILE = "";
-				SDKROOT = macosx;
+				SDKROOT = macosx10.9;
 				STRIP_STYLE = debugging;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1521,7 +1521,7 @@
 				);
 				PRODUCT_NAME = CocoaSplit;
 				PROVISIONING_PROFILE = "";
-				SDKROOT = macosx;
+				SDKROOT = macosx10.9;
 				STRIP_STYLE = debugging;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1552,7 +1552,7 @@
 					/usr/local/lib/libx264.a,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
+				SDKROOT = macosx10.9;
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -1581,7 +1581,7 @@
 					/usr/local/lib/libmp3lame.a,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
+				SDKROOT = macosx10.9;
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
