@@ -22,6 +22,7 @@
 #import "CSNotifications.h"
 #import "PluginManagerWindowController.h"
 #import "CreateLayoutViewController.h"
+#import "CAMultiAudioEngine.h"
 
 
 @class FFMpegTask;
@@ -39,7 +40,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @class PreviewView;
 
 @interface CaptureController : NSObject {
-    
     
     
     CIFilter *_compositeFilter;
@@ -106,6 +106,12 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 
+
+@property (weak) IBOutlet NSArrayController *AudioDeviceArrayController;
+
+@property (strong) CAMultiAudioEngine *multiAudioEngine;
+
+
 @property (assign) bool renderOnIntegratedGPU;
 
 
@@ -132,8 +138,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 @property (assign) double captureFPS;
-@property (readonly) int audioBitrate;
-@property (readonly) int audioSamplerate;
+@property (assign) int audioBitrate;
+@property (assign) int audioSamplerate;
 
 
 @property (assign) double min_delay;
@@ -160,6 +166,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 
+- (IBAction)multiAudioAddDevice:(id)sender;
 
 - (IBAction)stagingViewToggle:(id)sender;
 

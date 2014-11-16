@@ -7,6 +7,7 @@
 //
 
 #import "AVFAudioCapture.h"
+#import "CAMultiAudioPCMPlayer.h"
 #import "CaptureController.h"
 
 
@@ -18,18 +19,37 @@
 
 
 
+-(void) commoninit
+{
+    self.useAudioEngine = NO;
+    _capture_session = [[AVCaptureSession alloc] init];
+    _audio_capture_queue = dispatch_queue_create("AudioQueue", NULL);
+    [_capture_session startRunning];
+}
 
+
+-(instancetype) initForAudioEngine:(AVCaptureDevice *)device sampleRate:(int)sampleRate
+{
+    
+    if (self = [super init])
+    {
+        [self commoninit];
+        self.useAudioEngine = YES;
+        self.audioSamplerate = sampleRate;
+        
+        [self setupAudioCompression];
+        self.activeAudioDevice = device;
+    }
+    
+    return self;
+}
 -(id) init
 {
     
     if (self = [super init])
     {
-        _capture_session = [[AVCaptureSession alloc] init];
+        [self commoninit];
         [self setupAudioPreview];
-        _audio_capture_queue = dispatch_queue_create("AudioQueue", NULL);
-
-        [_capture_session startRunning];
-
     }
     
     return self;
@@ -49,7 +69,8 @@
     return _activeAudioDevice;
 }
 
--(void) setActiveAudioDevice:(id)activeAudioDevice
+
+-(void) setActiveAudioDevice:(AVCaptureDevice *)activeAudioDevice
 {
     _activeAudioDevice = activeAudioDevice;
  
@@ -60,12 +81,13 @@
     
     [_capture_session beginConfiguration];
     
+    /*
     if (_audio_capture_input)
     {
         [_capture_session removeInput:_audio_capture_input];
         _audio_capture_input = nil;
     }
-    
+    */
     
 
     
@@ -78,6 +100,8 @@
     } else {
         
         
+        
+        
         if ([_capture_session canAddInput:_audio_capture_input])
         {
             [_capture_session addInput:_audio_capture_input];
@@ -86,9 +110,13 @@
             NSLog(@"Can't add audio input?");
         }
     }
+    
     [_capture_session commitConfiguration];
     
-    self.audioChannelManager = [[AVFChannelManager alloc] initWithPreviewOutput:self.audioPreviewOutput];
+    if (!self.useAudioEngine)
+    {
+        self.audioChannelManager = [[AVFChannelManager alloc] initWithPreviewOutput:self.audioPreviewOutput];
+    }
 
 }
 
@@ -183,16 +211,28 @@
         
         NSLog(@"AUDIO SAMPLERATE %d BITRATE %d", self.audioSamplerate, self.audioBitrate);
         
-        _audio_capture_output.audioSettings = nil;
-        _audio_capture_output.audioSettings = @{AVFormatIDKey: [NSNumber numberWithInt:kAudioFormatMPEG4AAC],
-                                                AVSampleRateKey: [NSNumber numberWithInteger: self.audioSamplerate],
-                                                AVEncoderBitRateKey: [NSNumber numberWithInt:self.audioBitrate*1000 ],
+        if (self.useAudioEngine)
+        {
+            _audio_capture_output.audioSettings = @{
+                                                    AVFormatIDKey: [NSNumber numberWithInt:kAudioFormatLinearPCM],
+                                                    AVLinearPCMBitDepthKey: @32,
+                                                    AVLinearPCMIsFloatKey: @YES,
+                                                    AVLinearPCMIsNonInterleaved: @YES,
+                                                    //AVNumberOfChannelsKey: @2,
+                                            
+                                                    
+                                                    AVSampleRateKey: @(self.audioSamplerate),
+                                                    };
+            
+
+        } else {
+            _audio_capture_output.audioSettings = @{AVFormatIDKey: [NSNumber numberWithInt:kAudioFormatMPEG4AAC],
+                                                AVSampleRateKey: [NSNumber numberWithInteger: 44100],
+                                                AVEncoderBitRateKey: [NSNumber numberWithInt:128000 ],
                                                 AVNumberOfChannelsKey: @2
                                                 
                                                 };
-
-        
-        
+        }
         [_audio_capture_output setSampleBufferDelegate:self queue:_audio_capture_queue];
     }
     
@@ -208,7 +248,8 @@
     }
     
     [_capture_session commitConfiguration];
-    self.audioChannelManager.dataOutput = _audio_capture_output;
+    
+    //self.audioChannelManager.dataOutput = _audio_capture_output;
     
 }
 
@@ -227,16 +268,34 @@
 }
 
 
+-(NSString *)name
+{
+    return self.activeAudioDevice.localizedName;
+}
+
+
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
 {
+    
+    
+    
     if (connection.output == _audio_capture_output) {
         
-        if (_audioDelegate)
+        if (!self.useAudioEngine && self.audioDelegate)
         {
             [_audioDelegate captureOutputAudio:self didOutputSampleBuffer:sampleBuffer];
+        } else {
+            
+            if (self.multiInput)
+            {
+                [self.multiInput scheduleBuffer:sampleBuffer];
+
+            }
+
+            
+            
         }
     }
-    
 }
 
 @end

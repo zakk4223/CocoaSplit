@@ -12,6 +12,8 @@
 #import "AVFChannelManager.h"
 
 
+@class CAMultiAudioPCMPlayer;
+
 @class CaptureController;
 
 @interface AVFAudioCapture : CSCaptureBase <CSCaptureSourceProtocol, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate>
@@ -30,13 +32,19 @@
 @property (strong) CaptureController *audioDelegate;
 @property (assign) int audioBitrate;
 @property (assign) int audioSamplerate;
-@property id activeAudioDevice;
+@property (strong) AVCaptureDevice *activeAudioDevice;
 @property (strong) AVCaptureAudioPreviewOutput *audioPreviewOutput;
 @property (assign) float previewVolume;
+@property (assign) bool useAudioEngine;
+@property (readonly) NSString *name;
+@property (weak) CAMultiAudioPCMPlayer *multiInput;
 
 
 
 
+
+
+-(instancetype) initForAudioEngine:(AVCaptureDevice *)device sampleRate:(int)sampleRate;
 
 -(bool) startCaptureSession:(NSError **)error;
 -(bool) stopCaptureSession;

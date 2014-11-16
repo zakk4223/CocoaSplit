@@ -677,13 +677,13 @@
        self.validSamplerates = @[@44100, @48000];
        
        
-       self.audioCaptureSession = [[AVFAudioCapture alloc] init];
-       [self.audioCaptureSession setAudioDelegate:self];
-       
+       //self.audioCaptureSession = [[AVFAudioCapture alloc] init];
+       //[self.audioCaptureSession setAudioDelegate:self];
        
        
        
        self.audioCaptureDevices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio];
+       
        
        mach_timebase_info(&_mach_timebase);
        
@@ -971,8 +971,8 @@
     [saveRoot setValue: [NSNumber numberWithInt:self.captureWidth] forKey:@"captureWidth"];
     [saveRoot setValue: [NSNumber numberWithInt:self.captureHeight] forKey:@"captureHeight"];
     [saveRoot setValue: [NSNumber numberWithDouble:self.captureFPS] forKey:@"captureFPS"];
-    [saveRoot setValue: [NSNumber numberWithInt:self.audioCaptureSession.audioBitrate] forKey:@"audioBitrate"];
-    [saveRoot setValue: [NSNumber numberWithInt:self.audioCaptureSession.audioSamplerate] forKey:@"audioSamplerate"];
+    [saveRoot setValue: [NSNumber numberWithInt:self.audioBitrate] forKey:@"audioBitrate"];
+    [saveRoot setValue: [NSNumber numberWithInt:self.audioSamplerate] forKey:@"audioSamplerate"];
     [saveRoot setValue: self.selectedVideoType forKey:@"selectedVideoType"];
     [saveRoot setValue: self.selectedAudioCapture.uniqueID forKey:@"audioCaptureID"];
     [saveRoot setValue: self.captureDestinations forKey:@"captureDestinations"];
@@ -1031,6 +1031,18 @@
 -(void) loadSettings
 {
     
+    
+    
+    
+    
+    
+    
+    //self.multiAudioEngine = [[CSMultiAudio alloc] init];
+        //[audioEnc startEncoder];
+    
+    
+    
+    
     NSString *path = [self saveFilePath];
     NSDictionary *defaultValues = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Defaults" ofType:@"plist"]];
     
@@ -1047,8 +1059,8 @@
     
     self.captureWidth = [[saveRoot valueForKey:@"captureWidth"] intValue];
     self.captureHeight = [[saveRoot valueForKey:@"captureHeight"] intValue];
-    self.audioCaptureSession.audioBitrate = [[saveRoot valueForKey:@"audioBitrate"] intValue];
-    self.audioCaptureSession.audioSamplerate = [[saveRoot valueForKey:@"audioSamplerate"] intValue];
+    self.audioBitrate = [[saveRoot valueForKey:@"audioBitrate"] intValue];
+    self.audioSamplerate = [[saveRoot valueForKey:@"audioSamplerate"] intValue];
    
     self.compressors = [[saveRoot valueForKey:@"compressors"] mutableCopy];
     
@@ -1156,9 +1168,11 @@
         [self hideStagingView];
     }
 
+    self.multiAudioEngine = [[CAMultiAudioEngine alloc] initWithSamplerate:self.audioSamplerate];
+
 
     self.extraPluginsSaveData = nil;
-}
+    }
 
 
 
@@ -1255,6 +1269,16 @@
 -(NSArray *)layoutSortDescriptors
 {
     return @[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES] ];
+}
+
+- (IBAction)multiAudioAddDevice:(id)sender
+{
+    AVCaptureDevice *selectedDevice = [self.AudioDeviceArrayController.arrangedObjects objectAtIndex:self.AudioDeviceArrayController.selectionIndex];
+    
+    CAMultiAudioAVCapturePlayer *multiIn = [[CAMultiAudioAVCapturePlayer alloc] initWithDevice:selectedDevice sampleRate:self.audioSamplerate];
+
+    [self.multiAudioEngine attachInput:multiIn];
+    [multiIn play];
 }
 
 
@@ -1364,18 +1388,6 @@
     
 }
 
--(int)audioBitrate
-{
-    return self.audioCaptureSession.audioBitrate;
-    
-}
-
--(int)audioSamplerate
-{
-    return self.audioCaptureSession.audioSamplerate;
-}
-
-
 
 -(bool) startStream
 {
@@ -1412,7 +1424,16 @@
         [outdest reset];
     }
     
+    /*
+    CSAacEncoder *audioEnc = [[CSAacEncoder alloc] init];
+    audioEnc.encodedReceiver = self;
+    audioEnc.sampleRate = self.audioSamplerate;
+    audioEnc.bitRate = self.audioBitrate;
     
+    self.multiAudioEngine.encoder = audioEnc;
+
+    
+     */
     self.captureRunning = YES;
 
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationStreamStarted object:self userInfo:nil];
@@ -1433,6 +1454,8 @@
     } else {
         _frame_interval = 1.0/60.0;
     }
+    
+    self.captureFPS = framerate;
     
 }
 
@@ -1531,12 +1554,12 @@
     
     if ([cmdargs objectForKey:@"audioBitrate"])
     {
-        self.audioCaptureSession.audioBitrate = (int)[cmdargs integerForKey:@"audioBitrate"];
+        self.audioBitrate = (int)[cmdargs integerForKey:@"audioBitrate"];
     }
     
     if ([cmdargs objectForKey:@"audioSamplerate"])
     {
-        self.audioCaptureSession.audioSamplerate = (int)[cmdargs integerForKey:@"audioSamplerate"];
+        self.audioSamplerate = (int)[cmdargs integerForKey:@"audioSamplerate"];
     }
     
     if ([cmdargs objectForKey:@"selectedVideoType"])
@@ -1647,6 +1670,8 @@
     }
     
     [self.audioCaptureSession stopAudioCompression];
+    //self.multiAudioEngine.encoder = nil;
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationStreamStopped object:self userInfo:nil];
 
 }
@@ -1687,25 +1712,29 @@
 - (void)captureOutputAudio:(id)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 {
     
+    
+    //NSLog(@"AUDIO BUFFER %@", sampleBuffer);
     if (!self.captureRunning)
     {
         return;
     }
     
-    
+    /*
     if (_firstFrameTime == 0)
     {
         //Don't start sending audio to the outputs until a video frame has arrived, with AVFoundation this can take 2+ seconds (!?)
         //Might need to prime the capture session first...
         return;
     }
+    */
+   // NSLog(@"AUDIO SAMPLE BUFFER %@", sampleBuffer);
     
     
     CMTime orig_pts = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
     
     
 
-    
+    //NSLog(@"AUDIO PTS %@", CMTimeCopyDescription(kCFAllocatorDefault, orig_pts));
     
     if (CMTIME_COMPARE_INLINE(_firstAudioTime, ==, kCMTimeZero))
     {
@@ -2260,6 +2289,8 @@
             self.selectedLayout = self.stagingLayout;
         } else {
             [self.stagingLayout restoreSourceList];
+            [self setupFrameTimer:self.selectedLayout.frameRate];
+
         }
     }
 }

@@ -328,6 +328,8 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     c_ctx->time_base.den = self.framerate*1000000;
     
     
+    NSLog(@"FRAMERATE FFMP %d SAMPLE %d BITRATE %d", self.framerate, _samplerate, _audio_bitrate);
+    
     _av_audio_stream = avformat_new_stream(_av_fmt_ctx, 0);
     
     if (!_av_audio_stream)
@@ -416,8 +418,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
             return NO;
         }
     }
-    
-    if (_av_fmt_ctx == NULL || avformat_write_header(_av_fmt_ctx, NULL) < 0)
+        if (_av_fmt_ctx == NULL || avformat_write_header(_av_fmt_ctx, NULL) < 0)
     {
         NSLog(@"AVFORMAT_WRITE_HEADER failed");
         self.errored = YES;

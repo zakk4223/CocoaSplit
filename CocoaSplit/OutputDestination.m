@@ -234,6 +234,9 @@
     newout.samplerate = self.settingsController.audioSamplerate;
     newout.audio_bitrate = self.settingsController.audioBitrate;
     
+    NSLog(@"SETTINGS %@, FPS %f", self.settingsController, self.settingsController.captureFPS);
+    
+    
     self.ffmpeg_out = newout;
     
     [self.ffmpeg_out addObserver:self forKeyPath:@"errored" options:NSKeyValueObservingOptionNew context:NULL];

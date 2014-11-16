@@ -22,12 +22,13 @@
 
 //HEY YOU, DEVELOPER
 //THIS IS ABSOLUTELY REQUIRED!!!! IF YOU DO CUSTOM UI FOR SETTING SOURCES
-//YOU MUST CREATE AS DUMMY CSAbstractCaptureDevice AND MAKE SURE uniqueID IS SET TO SOMETHING
+//YOU MUST CREATE A DUMMY CSAbstractCaptureDevice AND MAKE SURE uniqueID IS SET TO SOMETHING
 
 //activeVideoDevice.uniqueID is observed for changes and source deduplication happens this way
 //if you aren't using availablevideo devices/active video device just create a dummy instance
 //and set uniqueID to something uniquely generated for your source. That or just don't support
 //deduplication. Be that way.
+
 @property CSAbstractCaptureDevice *activeVideoDevice;
 
 @property (strong) NSArray *availableVideoDevices;
