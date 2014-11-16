@@ -1424,16 +1424,15 @@
         [outdest reset];
     }
     
-    /*
+    
     CSAacEncoder *audioEnc = [[CSAacEncoder alloc] init];
     audioEnc.encodedReceiver = self;
     audioEnc.sampleRate = self.audioSamplerate;
-    audioEnc.bitRate = self.audioBitrate;
+    audioEnc.bitRate = self.audioBitrate*1000;
     
     self.multiAudioEngine.encoder = audioEnc;
 
     
-     */
     self.captureRunning = YES;
 
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationStreamStarted object:self userInfo:nil];

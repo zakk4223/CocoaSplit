@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CAMultiAudio.h"
+#import "CSAacEncoder.h"
 
 
 /* our default graph setup looks like this:
@@ -25,7 +26,7 @@
 @property (strong) CAMultiAudioDefaultOutput *defaultOutputNode;
 @property (strong) NSMutableArray *audioInputs;
 @property (strong) CAMultiAudioMixer *encodeMixer;
-//@property (strong) CSAacEncoder *encoder;
+@property (strong) CSAacEncoder *encoder;
 @property (assign) UInt32 sampleRate;
 
 

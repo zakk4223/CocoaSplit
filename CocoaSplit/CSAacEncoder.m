@@ -19,72 +19,87 @@
     if (self = [super init])
     {
         encoderQueue = dispatch_queue_create("CSAACEncoderQueue", NULL);
-        
+        _pcmData = NULL;
     }
     
     return self;
 }
 
-
--(void) enqueuePCM:(AVAudioPCMBuffer *)pcmBuffer atTime:(AVAudioTime *)atTime
+-(void)preallocateBufferList:(AudioBufferList *)bufferList
+{
+    //To avoid doing mallocs every cycle, the AU callback asks us to preallocate memory based on the size of the buffers it receives
+    //If the size changes, we only re-allocate if it is bigger than our preallocated size. If it's smaller we
+    //just "waste" the memory and leave it be.
+    
+    int bufferSize = bufferList->mBuffers[0].mDataByteSize;
+    
+    if (bufferSize > self.preallocatedBuffersize)
+    {
+        NSLog(@"ALLOCATING FOR %d", bufferSize);
+        _pcmData = malloc(bufferSize*2); //Assuming deinterleaved 2-ch, so allocate enough space for both channels
+        self.preallocatedBuffersize = bufferSize;
+    }
+    
+}
+-(void) enqueuePCM:(AudioBufferList *)pcmBuffer atTime:(const AudioTimeStamp *)atTime
 {
     
-    dispatch_async(encoderQueue, ^{
     
-        if (!self.encoderStarted)
-        {
-            [self setupEncoder];
-            self.encoderStarted = YES;
-        }
-        
-        
-        //for now assume Float32, 2 channel, non-interleaved. We have to interleave it outselves here.
-        
-        NSLog(@"PCM BUFFER %@ FRAMES %d", pcmBuffer.format, pcmBuffer.frameLength);
-        
-        OSStatus err;
-        size_t channel_size = pcmBuffer.frameLength;
-        UInt32 bufsize = (UInt32)channel_size*pcmBuffer.format.channelCount*4;
-        bufsize += leftover_size;
-        UInt32 orig_size = bufsize;
-        UInt32 wrote_bytes = 0;
-        
-        
-        //NSLog(@"ENCODE BUFFER SIZE %u", (unsigned int)bufsize);
-        Float32 *tmpbuf = malloc(bufsize);
-        Float32 *readbuf = tmpbuf;
-        
-        
-        const AudioBufferList *bufList = pcmBuffer.audioBufferList;
-        AudioBuffer buffer0 = bufList->mBuffers[0];
-        AudioBuffer buffer1 = bufList->mBuffers[1];
-        Float32 *data0 = buffer0.mData;
-        Float32 *data1 = buffer1.mData;
-        
-        
-        if (leftover_size > 0)
-        {
-            memcpy(tmpbuf, PCMleftover, leftover_size);
-        }
-        
-        Float32 *writebuf = tmpbuf + leftover_size;
-        leftover_size = 0;
-        
-        for(int i=0; i < channel_size; i++)
-        {
-            writebuf[i] = data0[i];
-            writebuf[i+1] = data1[i];
-        }
-        
-        
-        UInt32 buffer_size = maxOutputSize;
+    
+    [self preallocateBufferList:pcmBuffer];
+    
+    if (!self.encoderStarted)
+    {
+        [self setupEncoder];
+        self.encoderStarted = YES;
+    }
+    
+    
+    //for now assume Float32, 2 channel, non-interleaved. We have to interleave it outselves here.
+    
+    
+    __block UInt32 bufsize = self.preallocatedBuffersize*2; //This should be equal to 2x pcmBuffer->mBuffers[0].mDataByteSize
+    
+    UInt32 orig_size = bufsize;
+    __block UInt32 wrote_bytes = 0;
+    
+    
+    //NSLog(@"ENCODE BUFFER SIZE %u", (unsigned int)bufsize);
+    
+    
+    AudioBuffer buffer0 = pcmBuffer->mBuffers[0];
+    AudioBuffer buffer1 = pcmBuffer->mBuffers[1];
+    Float32 *data0 = buffer0.mData;
+    Float32 *data1 = buffer1.mData;
+    
+    Float32 *writebuf = _pcmData;
+    int channel_size = buffer0.mDataByteSize/sizeof(Float32);
+    int i, u;
+    for(i=u=0; i < channel_size; i++,u+=2)
+    {
+        writebuf[u] = data0[i];
+        writebuf[u+1] = data1[i];
+    }
+    
+    __block Float32 *readbuf = _pcmData;
+    
+    
+    //Do the actual compression on another thread so as not to block AudioUnit callbacks
+    
+    dispatch_async(encoderQueue, ^{
         UInt32 num_packets = 1;
+
         UInt32 outstatus = 0;
+
+        UInt32 buffer_size = maxOutputSize;
         
         while (true)
         {
+            
             void *aacBuffer = malloc(maxOutputSize);
 
+            OSStatus err;
+            
             err = AudioCodecAppendInputData(aacCodec, readbuf, &bufsize, NULL, NULL);
             
             
@@ -106,55 +121,58 @@
                 
             }
             
-            if (outstatus == kAudioCodecProduceOutputPacketNeedsMoreInputData || wrote_bytes >= orig_size)
+            
+            if (outstatus == kAudioCodecProduceOutputPacketNeedsMoreInputData)
             {
                 break;
             }
 
-            
-            if (self.encodedReceiver)
+
+            if (self.encodedReceiver && buffer_size)
             {
                 CMTime ptsTime = CMTimeMake(outputSampleCount, self.sampleRate);
+                CMTime duration = CMTimeMake(1024, self.sampleRate);
+                
+                CMSampleTimingInfo timeInfo;
+                
+                timeInfo.duration = duration;
+                timeInfo.presentationTimeStamp = ptsTime;
+                timeInfo.decodeTimeStamp = kCMTimeInvalid;
                 
                 CMSampleBufferRef newSampleBuf;
+                CMSampleBufferRef timingSampleBuf;
                 CMBlockBufferRef bufferRef;
+                
                 
                 CMBlockBufferCreateWithMemoryBlock(NULL, aacBuffer, buffer_size, NULL, NULL, 0, buffer_size, 0, &bufferRef);
                 
                 
                 CMAudioSampleBufferCreateReadyWithPacketDescriptions(kCFAllocatorDefault, bufferRef, cmFormat, 1, ptsTime, &packetDesc, &newSampleBuf);
                 
-                [self.encodedReceiver captureOutputAudio:nil didOutputSampleBuffer:newSampleBuf];
+                CMSampleBufferCreateCopyWithNewTiming(kCFAllocatorDefault, newSampleBuf, 1, &timeInfo, &timingSampleBuf);
+                CFRelease(newSampleBuf);
+                
+                
+                [self.encodedReceiver captureOutputAudio:nil didOutputSampleBuffer:timingSampleBuf];
                 
             }
             
-            
-            
+
             
             buffer_size = maxOutputSize;
             num_packets = 1;
 
             outputSampleCount += 1024;
+            if (wrote_bytes >= orig_size)
+            {
+                break;
+            }
             
             
         }
         
         //NSLog(@"WROTE BYTES %d ORIG_SIZE %d", wrote_bytes, orig_size);
         
-        if (wrote_bytes < orig_size)
-        {
-            leftover_size = orig_size-bufsize;
-            //NSLog(@"LEFTOVER BYTES %zu", leftover_size);
-            memcpy(PCMleftover, readbuf, leftover_size);
-            
-        }
-        
-        
-        
-        
-        
-        free(tmpbuf);
-
     });
     
     
@@ -165,15 +183,26 @@
 {
     //create the input format.
     
-    AVAudioFormat *inputFormat = [[AVAudioFormat alloc] initWithCommonFormat:AVAudioPCMFormatFloat32 sampleRate:self.sampleRate channels:2 interleaved:YES];
+     AudioStreamBasicDescription inputFormat = {0};
     
-    outputFormat = [[AVAudioFormat alloc] initWithSettings:@{AVFormatIDKey: [NSNumber numberWithInt:kAudioFormatMPEG4AAC],
-                                                                            AVSampleRateKey: @(self.sampleRate),
-                                                                            AVNumberOfChannelsKey: @2
-                                                                            
-                                                                        }];
+    inputFormat.mSampleRate = self.sampleRate;
+    inputFormat.mFormatID = kAudioFormatLinearPCM;
+    inputFormat.mFormatFlags = kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked | kAudioFormatFlagIsFloat;
+    inputFormat.mChannelsPerFrame = 2;
+    inputFormat.mBitsPerChannel = 32;
+    inputFormat.mBytesPerFrame = 8;
+    inputFormat.mBytesPerPacket = 8;
+    inputFormat.mFramesPerPacket = 1;
     
+    AudioStreamBasicDescription outputFormat = {0};
     
+    outputFormat.mSampleRate = self.sampleRate;
+    outputFormat.mFormatID = kAudioFormatMPEG4AAC;
+    outputFormat.mChannelsPerFrame = 2;
+    outputFormat.mBytesPerPacket = 0;
+    outputFormat.mBytesPerFrame = 0;
+    outputFormat.mFramesPerPacket = 1024;
+    outputFormat.mBitsPerChannel = 0;
     
     
     OSStatus err;
@@ -186,61 +215,60 @@
     
     AudioComponent aComp = NULL;
     
-    /*
-    while ((aComp = (AudioComponentFindNext(aComp, &acDesc))))
-    {
-        CFStringRef aName;
-        AudioComponentCopyName(aComp, &aName);
-        NSLog(@"COMPONENT NAME %@", aName);
-        
-    }
-    
-     */
-    
     aComp = AudioComponentFindNext(aComp, &acDesc);
     AudioComponentInstanceNew(aComp, &aacCodec);
     
-    err = AudioCodecInitialize(aacCodec, inputFormat.streamDescription, outputFormat.streamDescription, NULL, 0);
     
     
-    UInt32 control_mode = kAudioCodecBitRateControlMode_VariableConstrained;
+    UInt32 control_mode = kAudioCodecBitRateControlMode_LongTermAverage;
     
     
     UInt32 getoutputsize = sizeof(UInt32);
     Boolean writeable;
     UInt32 cookiestructsize;
+    AudioStreamBasicDescription outasbd;
+    UInt32 outasbd_size = sizeof(outasbd);
     
-    AudioCodecGetPropertyInfo(aacCodec, kAudioCodecPropertyMagicCookie, &cookiestructsize, &writeable);
     
+    err = AudioCodecSetProperty(aacCodec, kAudioCodecPropertyBitRateControlMode, sizeof(control_mode), &control_mode);
+    if (err)
+    {
+        NSLog(@"SET TARGET BITRATE CONTROL %d", err);
+    }
+    
+    err = AudioCodecSetProperty(aacCodec, kAudioCodecPropertyCurrentTargetBitRate, sizeof(_bitRate), &_bitRate);
+    if (err)
+    {
+        NSLog(@"SET TARGET BITRATE %d", err);
+    }
+
+
+    err = AudioCodecInitialize(aacCodec, &inputFormat, &outputFormat, NULL, 0);
+    if (err)
+    {
+        NSLog(@"CODEC INITIALIZE %@", [[NSError errorWithDomain:NSOSStatusErrorDomain code:err userInfo:nil] description]);
+    }
+
+
+    err = AudioCodecGetProperty(aacCodec, kAudioCodecPropertyCurrentOutputFormat, &outasbd_size, &outasbd);
+    
+    
+    err = AudioCodecGetPropertyInfo(aacCodec, kAudioCodecPropertyMagicCookie, &cookiestructsize, &writeable);
+
+    err = AudioCodecGetProperty(aacCodec, kAudioCodecPropertyMaximumPacketByteSize, &getoutputsize, &maxOutputSize);
     magicCookie = malloc(cookiestructsize);
-    
-    
-    
-    
-    AudioCodecSetProperty(aacCodec, kAudioCodecPropertyCurrentTargetBitRate, sizeof(_bitRate), &_bitRate);
-    AudioCodecSetProperty(aacCodec, kAudioCodecPropertyBitRateControlMode, sizeof(control_mode), &control_mode);
-    
-    
-    AVAudioChannelLayout *stereoLayout = [AVAudioChannelLayout layoutWithLayoutTag:kAudioChannelLayoutTag_Stereo];
-    
-    UInt32 layout_size = sizeof(AudioChannelLayout);
-    
-    AudioCodecSetProperty(aacCodec, kAudioCodecPropertyCurrentInputChannelLayout, layout_size, stereoLayout.layout);
-    AudioCodecSetProperty(aacCodec, kAudioCodecPropertyCurrentOutputChannelLayout, layout_size, stereoLayout.layout);
 
     
-    AudioCodecGetProperty(aacCodec, kAudioCodecPropertyMaximumPacketByteSize, &getoutputsize, &maxOutputSize);
     err = AudioCodecGetProperty(aacCodec, kAudioCodecPropertyMagicCookie, &cookiestructsize, magicCookie);
-    
+
+
     
     
    // NSLog(@"CODEC INIT %d COOKIE SIZE %u MAX %u", err, magicCookie->mMagicCookieSize, cookiestructsize);
-    PCMleftover = malloc(8192);
-    leftover_size = 0;
     outputSampleCount = 0;
     
     
-    CMAudioFormatDescriptionCreate(kCFAllocatorDefault, outputFormat.streamDescription, 0, NULL, cookiestructsize ,magicCookie, NULL, &cmFormat);
+    CMAudioFormatDescriptionCreate(kCFAllocatorDefault, &outasbd, 0, NULL, cookiestructsize ,magicCookie, NULL, &cmFormat);
     
     
     CFDictionaryRef encoderState;
@@ -248,7 +276,7 @@
     cookiestructsize = sizeof(CFDictionaryRef);
     
     AudioCodecGetProperty(aacCodec, kAudioCodecPropertySettings, &cookiestructsize, &encoderState);
-    NSLog(@"ENCODER STATE %@", encoderState);
+    //NSLog(@"ENCODER STATE %@", encoderState);
     
     
     
@@ -262,7 +290,6 @@
     {
         self.encoderStarted = NO;
         AudioCodecUninitialize(aacCodec);
-        free(PCMleftover);
         free(magicCookie);
     }
     

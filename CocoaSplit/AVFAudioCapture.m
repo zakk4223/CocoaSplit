@@ -210,9 +210,9 @@
         
         
         NSLog(@"AUDIO SAMPLERATE %d BITRATE %d", self.audioSamplerate, self.audioBitrate);
-        
         if (self.useAudioEngine)
         {
+           
             _audio_capture_output.audioSettings = @{
                                                     AVFormatIDKey: [NSNumber numberWithInt:kAudioFormatLinearPCM],
                                                     AVLinearPCMBitDepthKey: @32,
@@ -276,7 +276,6 @@
 
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
 {
-    
     
     
     if (connection.output == _audio_capture_output) {

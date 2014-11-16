@@ -8,6 +8,9 @@
 
 #import "CAMultiAudioEngine.h"
 
+OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList *ioData );
+
+
 @implementation CAMultiAudioEngine
 
 -(instancetype)initWithSamplerate:(UInt32)sampleRate
@@ -35,6 +38,9 @@
         [self.graph connectNode:self.encodeMixer toNode:self.previewMixer];
         [self.graph connectNode:self.silentNode toNode:self.encodeMixer];
         [self.graph startGraph];
+        
+        AudioUnitAddRenderNotify(self.encodeMixer.audioUnit, encoderRenderCallback, (__bridge void *)(self));
+        CAShow(self.graph.graphInst);
         
     }
     
@@ -79,3 +85,21 @@
 }
 
 @end
+
+OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList *ioData )
+{
+    if ((*ioActionFlags) & kAudioUnitRenderAction_PostRender)
+    {
+         
+        CAMultiAudioEngine *selfPtr = (__bridge CAMultiAudioEngine *)inRefCon;
+        if (selfPtr.encoder)
+        {
+            [selfPtr.encoder enqueuePCM:ioData atTime:inTimeStamp];
+        }
+        
+
+    }
+    return noErr;
+    
+}
+

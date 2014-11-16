@@ -17,23 +17,22 @@
 {
     dispatch_queue_t encoderQueue;
     AudioCodec aacCodec;
-    Float32 *PCMleftover;
-    size_t leftover_size;
     UInt32 maxOutputSize;
     char *magicCookie;
     int *magicCookieSize;
     
-    AVAudioFormat *outputFormat;
     long outputSampleCount;
-    CMAudioFormatDescriptionRef cmFormat;    
+    CMAudioFormatDescriptionRef cmFormat;
+    void *_pcmData;
 }
 
 @property (assign) bool encoderStarted;
 @property (weak) CaptureController *encodedReceiver;
 @property (assign) int sampleRate;
 @property (assign) int bitRate;
+@property (assign) int preallocatedBuffersize;
 
--(void) enqueuePCM:(AVAudioPCMBuffer *)pcmBuffer atTime:(AVAudioTime *)atTime;
+-(void) enqueuePCM:(AudioBufferList *)pcmBuffer atTime:(const AudioTimeStamp *)atTime;
 -(void) startEncoder;
 -(void) stopEncoder;
 
