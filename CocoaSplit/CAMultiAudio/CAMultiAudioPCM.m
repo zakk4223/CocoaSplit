@@ -18,10 +18,9 @@
         
         _audioSlice = calloc(1, sizeof(ScheduledAudioSlice));
         
-        
         _audioSlice->mBufferList = bufferList;
         _audioSlice->mNumberFrames = bufferList->mBuffers[0].mDataByteSize / streamFormat->mBytesPerFrame;
-        
+        self.bufferCount = streamFormat->mChannelsPerFrame;
         
     }
     
@@ -31,9 +30,12 @@
 
 -(void)dealloc
 {
-    NSLog(@"FREEING PCM BUFFER!");
-    
     //You better not have freed this before
+    for (int i=0; i < self.bufferCount; i++)
+    {
+        free(_audioSlice->mBufferList->mBuffers[i].mData);
+    }
+    
     free(_audioSlice->mBufferList);
     free(_audioSlice);
 }

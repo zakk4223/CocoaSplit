@@ -88,6 +88,8 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     
     CMSampleBufferCopyPCMDataIntoAudioBufferList(sampleBuffer, 0, (int32_t)numSamples, sampleABL);
     CAMultiAudioPCM *pcmBuffer = [[CAMultiAudioPCM alloc] initWithAudioBufferList:sampleABL streamFormat:asbd];
+    pcmBuffer.player = self;
+    
     
     [self playPcmBuffer:pcmBuffer];
 }
@@ -117,7 +119,7 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     //NSLog(@"PLAYER INPUT rate %f, %d channels, %d bits per channel", asbd.mSampleRate, asbd.mChannelsPerFrame, asbd.mBitsPerChannel);
     
     
-    NSLog(@"SCHEDULE START %d", err);
+    //NSLog(@"SCHEDULE START %d", err);
     
     
 }
@@ -130,7 +132,6 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList)
     
     
     CAMultiAudioPCM *pcmObj = (__bridge CAMultiAudioPCM *)(userData);
-    
     //maybe put this on a dedicated queue?
     //why a queue? don't want to do any sort of memory/managed object operations in an audio callback.
     dispatch_async(dispatch_get_main_queue(), ^{

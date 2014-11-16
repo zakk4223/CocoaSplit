@@ -16,6 +16,8 @@
 
 @interface CAMultiAudioPCM : NSObject
 @property (assign) ScheduledAudioSlice *audioSlice;
+@property (assign) int bufferCount;
+
 @property (weak) id player;
 
 

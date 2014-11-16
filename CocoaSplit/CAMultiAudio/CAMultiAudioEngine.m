@@ -20,7 +20,6 @@
         
         self.graph = [[CAMultiAudioGraph alloc] init];
         self.graph.sampleRate = sampleRate;
-        NSLog(@"INIT WITH SAMPLERATE %d", sampleRate);
         
         self.silentNode = [[CAMultiAudioPCMPlayer alloc] init];
         self.defaultOutputNode = [[CAMultiAudioDefaultOutput alloc] init];
