@@ -14,7 +14,7 @@
 
 @synthesize volume = _volume;
 @synthesize muted = _muted;
-
+@synthesize enabled = _enabled;
 
 
 -(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType
@@ -29,11 +29,37 @@
         //Default to two channels, subclasses can override this
         self.channelCount = 2;
         _volume = 1.0;
+        self.nameColor = [NSColor blackColor];
     }
     
     return self;
 }
 
+
+-(bool)enabled
+{
+    return _enabled;
+}
+
+
+-(void)setEnabled:(bool)enabled
+{
+    NSColor *newColor;
+    _enabled = enabled;
+    if (enabled)
+    {
+        newColor = [NSColor redColor];
+    } else {
+        newColor = [NSColor blackColor];
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.nameColor = newColor;
+    });
+
+    
+    
+}
 -(UInt32)inputElement
 {
     return 0;
@@ -42,6 +68,7 @@
 
 -(bool)createNode:(AUGraph)forGraph
 {
+    NSLog(@"CREATING NODE %@", self);
     if (!forGraph)
     {
         return NO;
@@ -51,6 +78,7 @@
     if (err)
     {
         NSLog(@"AUGraphAddNode failed for %@, err: %d", self, err);
+        CAShow(forGraph);
         return NO;
     }
     err = AUGraphNodeInfo(forGraph, _node, NULL, &_audioUnit);
@@ -62,6 +90,17 @@
     
     return YES;
 }
+
+-(void)updatePowerlevel
+{
+    
+    if ([self.connectedTo.class conformsToProtocol:@protocol(CAMultiAudioMixingProtocol)])
+    {
+        id<CAMultiAudioMixingProtocol>mixerNode = (id<CAMultiAudioMixingProtocol>)self.connectedTo;
+        self.powerLevel = [mixerNode powerForInputBus:self.connectedToBus];
+    }
+}
+
 
 -(void)setVolumeOnConnectedNode
 {
@@ -76,9 +115,8 @@
         id<CAMultiAudioMixingProtocol>mixerNode = (id<CAMultiAudioMixingProtocol>)self.connectedTo;
         [mixerNode setVolumeOnInputBus:self.connectedToBus volume:self.volume];
     }
-
-    
 }
+
 
 -(void)nodeConnected:(CAMultiAudioNode *)toNode onBus:(UInt32)onBus
 {
@@ -107,6 +145,13 @@
     }
     _muted = muted;
 }
+
+-(void)resetSamplerate:(UInt32)sampleRate
+{
+    //only certain node types need to react to this
+    return;
+}
+
 
 -(bool)muted
 {

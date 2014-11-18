@@ -28,12 +28,17 @@
 @property (strong) CAMultiAudioMixer *encodeMixer;
 @property (strong) CSAacEncoder *encoder;
 @property (assign) UInt32 sampleRate;
+@property (strong) NSArray *audioOutputs;
+@property (strong) CAMultiAudioDevice *outputNode;
+@property (strong) CAMultiAudioDevice *graphOutputNode;
+
 
 
 
 
 -(void)attachInput:(CAMultiAudioNode *)input;
 -(instancetype)initWithSamplerate:(UInt32)sampleRate;
+-(void)updateStatistics;
 
 
 @end

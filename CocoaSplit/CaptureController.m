@@ -29,6 +29,7 @@
 @synthesize selectedCompressorType = _selectedCompressorType;
 @synthesize selectedLayout = _selectedLayout;
 @synthesize stagingLayout = _stagingLayout;
+@synthesize audioSamplerate  = _audioSamplerate;
 
 -(IBAction)mainDeleteLayoutClicked:(id)sender
 {
@@ -707,6 +708,17 @@
        
        */
        
+       _audio_statistics_timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
+       
+       dispatch_source_set_timer(_audio_statistics_timer, DISPATCH_TIME_NOW, 0.10*NSEC_PER_SEC, 0);
+
+       dispatch_source_set_event_handler(_audio_statistics_timer, ^{
+           [self.multiAudioEngine updateStatistics];
+       });
+       dispatch_resume(_audio_statistics_timer);
+
+       
+
        _statistics_timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
        
        dispatch_source_set_timer(_statistics_timer, DISPATCH_TIME_NOW, 1*NSEC_PER_SEC, 0);
@@ -716,6 +728,8 @@
            {
                [outdest updateStatistics];
            }
+           
+           
            
            self.renderStatsString = [NSString stringWithFormat:@"Render min/max/avg: %f/%f/%f", _min_render_time, _max_render_time, _render_time_total / _renderedFrames];
            _renderedFrames = 0;
@@ -790,6 +804,22 @@
     NSMutableDictionary *servicePlugins = [[CSPluginLoader sharedPluginLoader] streamServicePlugins];
 
     return servicePlugins.allKeys;
+}
+
+
+-(void)setAudioSamplerate:(int)audioSamplerate
+{
+    if (self.multiAudioEngine)
+    {
+        self.multiAudioEngine.sampleRate = audioSamplerate;
+    }
+    
+    _audioSamplerate = audioSamplerate;
+}
+
+-(int)audioSamplerate
+{
+    return _audioSamplerate;
 }
 
 
@@ -1668,8 +1698,8 @@
         [[NSProcessInfo processInfo] endActivity:_activity_token];
     }
     
-    [self.audioCaptureSession stopAudioCompression];
-    //self.multiAudioEngine.encoder = nil;
+    //[self.audioCaptureSession stopAudioCompression];
+    self.multiAudioEngine.encoder = nil;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationStreamStopped object:self userInfo:nil];
 

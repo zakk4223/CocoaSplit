@@ -101,6 +101,14 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
 }
 
 
+-(bool)createNode:(AUGraph)forGraph
+{
+    bool ret = [super createNode:forGraph];
+    [self play];
+    return ret;
+}
+
+
 -(void)play
 {
     AudioTimeStamp ts = {0};

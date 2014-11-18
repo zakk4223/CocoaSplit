@@ -12,8 +12,10 @@
 @interface CAMultiAudioAVCapturePlayer : CAMultiAudioPCMPlayer
 
 
+@property (strong) AVCaptureDevice *captureDevice;
 
 @property (strong) AVFAudioCapture *avfCapture;
+@property (assign) int sampleRate;
 
 -(instancetype)initWithDevice:(AVCaptureDevice *)avDevice sampleRate:(int)sampleRate;
 

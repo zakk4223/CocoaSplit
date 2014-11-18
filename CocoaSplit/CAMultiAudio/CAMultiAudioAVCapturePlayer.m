@@ -16,15 +16,53 @@
     if (self = [super init])
     {
         
-        
-        AVFAudioCapture *newAC = [[AVFAudioCapture alloc] initForAudioEngine:avDevice sampleRate:sampleRate];
-         self.avfCapture = newAC;
-         newAC.multiInput = self;
-        self.name = newAC.name;
-        
+        self.captureDevice = avDevice;
+        self.sampleRate = sampleRate;
+        self.name = avDevice.localizedName;
     }
     return self;
 }
+
+-(void)setEnabled:(bool)enabled
+{
+    super.enabled = enabled;
+    if (enabled)
+    {
+        [self attachCaptureSession];
+    } else {
+        [self detachCaptureSession];
+    }
+}
+
+
+-(void)detachCaptureSession
+{
+    if (self.avfCapture)
+    {
+        [self.avfCapture stopCaptureSession];
+        self.avfCapture = nil;
+    }
+}
+
+-(void)attachCaptureSession
+{
+    AVFAudioCapture *newAC = [[AVFAudioCapture alloc] initForAudioEngine:self.captureDevice sampleRate:self.sampleRate];
+    self.avfCapture = newAC;
+    newAC.multiInput = self;
+}
+
+
+-(void)resetSamplerate:(UInt32)sampleRate
+{
+    if (self.avfCapture)
+    {
+        self.avfCapture.audioSamplerate = sampleRate;
+    
+        [self.avfCapture stopAudioCompression];
+        [self.avfCapture setupAudioCompression];
+    }
+}
+
 
 -(void)setChannelCount:(int)channelCount
 {
@@ -33,14 +71,17 @@
 
 -(int)channelCount
 {
-    if (self.avfCapture)
+    if (self.captureDevice)
     {
-        CMFormatDescriptionRef sDescr = self.avfCapture.activeAudioDevice.activeFormat.formatDescription;
+        CMFormatDescriptionRef sDescr = self.captureDevice.activeFormat.formatDescription;
         
         
         const AudioStreamBasicDescription *asbd =  CMAudioFormatDescriptionGetStreamBasicDescription(sDescr);
 
-        return asbd->mChannelsPerFrame;
+        if (asbd)
+        {
+            return asbd->mChannelsPerFrame;
+        }
     }
     
     return super.channelCount;

@@ -19,6 +19,8 @@
 -(void)setVolumeOnInputBus:(UInt32)bus volume:(float)volume;
 -(void)setVolumeOnOutputBus:(UInt32)bus volume:(float)volume;
 -(void)setVolumeOnOutput:(float)volume;
+-(void)enableMeteringOnInputBus:(UInt32)bus;
+-(Float32)powerForInputBus:(UInt32)bus;
 
 @end
 

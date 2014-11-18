@@ -189,6 +189,8 @@
         [_capture_session beginConfiguration];
         [_capture_session removeOutput:_audio_capture_output];
         [_capture_session commitConfiguration];
+        _audio_capture_output = nil;
+        
     }
 }
 
@@ -278,6 +280,7 @@
 {
     
     
+    
     if (connection.output == _audio_capture_output) {
         
         if (!self.useAudioEngine && self.audioDelegate)
@@ -287,6 +290,7 @@
             
             if (self.multiInput)
             {
+
                 [self.multiInput scheduleBuffer:sampleBuffer];
 
             }

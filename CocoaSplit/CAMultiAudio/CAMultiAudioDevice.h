@@ -6,17 +6,25 @@
 //  Copyright (c) 2014 Zakk. All rights reserved.
 //
 
-#import "CAMultiAudioUnit.h"
+#import "CAMultiAudioNode.h"
 
-@interface CAMultiAudioDevice : CAMultiAudioUnit
+@interface CAMultiAudioDevice : CAMultiAudioNode
 
 
 @property (strong) NSString *deviceUID;
 @property (assign) AudioDeviceID deviceID;
+@property (assign) bool hasInput;
+@property (assign) bool hasOutput;
 
--(instancetype)initWithDeviceID:(NSString *)uid;
+
+
+-(instancetype)initWithDeviceUID:(NSString *)uid;
+-(instancetype)initWithDeviceID:(AudioDeviceID)devid;
+
 -(void)setInputForDevice;
 -(void)setOutputForDevice;
++(NSMutableArray *)allDevices;
++(AudioDeviceID)defaultOutputDeviceID;
 
 
 @end

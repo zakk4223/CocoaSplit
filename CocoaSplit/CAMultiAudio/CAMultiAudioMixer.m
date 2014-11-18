@@ -32,6 +32,10 @@
     NSLog(@"SET ELEMENTS %d", err);
 
     err = AudioUnitSetParameter(self.audioUnit, kMultiChannelMixerParam_Volume, kAudioUnitScope_Output, 0, self.volume, 0);
+    UInt32 enableVal = 1;
+    
+    
+    AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_MeteringMode, kAudioUnitScope_Global, 0, &enableVal, sizeof(enableVal));
     
     return YES;
     
@@ -51,6 +55,39 @@
     [self setOutputVolume];
     
 }
+
+-(void)enableMeteringOnInputBus:(UInt32)bus
+{
+    if (self.audioUnit)
+    {
+        UInt32 enableVal = 1;
+        OSStatus err;
+        err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_MeteringMode, kAudioUnitScope_Input, bus, &enableVal, sizeof(enableVal));
+        
+        if (err)
+        {
+            NSLog(@"SET METERING MODE FAILED FOR BUS %d ERR %d", bus, err);
+        }
+    }
+}
+
+
+-(Float32)powerForInputBus:(UInt32)bus
+{
+    Float32 result = 0;
+    OSStatus err;
+    
+    err = AudioUnitGetParameter(self.audioUnit, kStereoMixerParam_PostAveragePower, kAudioUnitScope_Input, bus, &result);
+    
+
+    if (err)
+    {
+        NSLog(@"GET POWER ERROR %d", err);
+    }
+        
+    return result;
+}
+
 
 
 -(UInt32)inputElement

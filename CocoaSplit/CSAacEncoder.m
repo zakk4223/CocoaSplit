@@ -171,7 +171,6 @@
             
         }
         
-        //NSLog(@"WROTE BYTES %d ORIG_SIZE %d", wrote_bytes, orig_size);
         
     });
     

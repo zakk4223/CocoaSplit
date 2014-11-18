@@ -161,6 +161,7 @@
 		34D6581119B35E3B0012E32B /* CocoaSplit.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 34D6581019B35E3B0012E32B /* CocoaSplit.sdef */; };
 		34D6581819B387DE0012E32B /* AppDelegate+AppDelegate_ScriptingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D6581719B387DE0012E32B /* AppDelegate+AppDelegate_ScriptingAdditions.m */; };
 		34D696FC1871B8F700B50EB6 /* Defaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 34D696FB1871B8F700B50EB6 /* Defaults.plist */; };
+		34EAFB6F1A1A137600E12FBD /* CSMeterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 34EAFB6E1A1A137600E12FBD /* CSMeterCell.m */; };
 		34F5141216FD6E4F00BA894D /* x264Compressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F5140F16FD6E4F00BA894D /* x264Compressor.m */; };
 		34F5141316FD6E4F00BA894D /* AppleVTCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F5141116FD6E4F00BA894D /* AppleVTCompressor.m */; };
 /* End PBXBuildFile section */
@@ -526,6 +527,8 @@
 		34D6581619B387DE0012E32B /* AppDelegate+AppDelegate_ScriptingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "AppDelegate+AppDelegate_ScriptingAdditions.h"; path = "ScriptingAddditions/AppDelegate+AppDelegate_ScriptingAdditions.h"; sourceTree = "<group>"; };
 		34D6581719B387DE0012E32B /* AppDelegate+AppDelegate_ScriptingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "AppDelegate+AppDelegate_ScriptingAdditions.m"; path = "ScriptingAddditions/AppDelegate+AppDelegate_ScriptingAdditions.m"; sourceTree = "<group>"; };
 		34D696FB1871B8F700B50EB6 /* Defaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Defaults.plist; sourceTree = "<group>"; };
+		34EAFB6D1A1A137600E12FBD /* CSMeterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSMeterCell.h; path = Interface/CSMeterCell.h; sourceTree = "<group>"; };
+		34EAFB6E1A1A137600E12FBD /* CSMeterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSMeterCell.m; path = Interface/CSMeterCell.m; sourceTree = "<group>"; };
 		34F5140E16FD6E4F00BA894D /* x264Compressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = x264Compressor.h; path = Compressor/x264Compressor.h; sourceTree = "<group>"; };
 		34F5140F16FD6E4F00BA894D /* x264Compressor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = x264Compressor.m; path = Compressor/x264Compressor.m; sourceTree = "<group>"; };
 		34F5141016FD6E4F00BA894D /* AppleVTCompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleVTCompressor.h; path = Compressor/AppleVTCompressor.h; sourceTree = "<group>"; };
@@ -792,6 +795,8 @@
 				347B14DB198492D900DC7DF0 /* InputPopupControllerViewController.xib */,
 				34CFE49C18F1459600092C6A /* AudioMixer.xib */,
 				340FE4B615F3417E00E4CE4E /* MainMenu.xib */,
+				34EAFB6D1A1A137600E12FBD /* CSMeterCell.h */,
+				34EAFB6E1A1A137600E12FBD /* CSMeterCell.m */,
 				344988121893CF0500044259 /* LogWindow.xib */,
 				34A64A34165F047900A68428 /* CapturePreview.xib */,
 				34D4351A198BE3B700266169 /* NewLayoutPanel.xib */,
@@ -1409,6 +1414,7 @@
 				345F8B3D1A15F3BD009A81E3 /* CAMultiAudioPCM.m in Sources */,
 				345F8B611A161552009A81E3 /* CAMultiAudioAVCapturePlayer.m in Sources */,
 				3481F30619B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m in Sources */,
+				34EAFB6F1A1A137600E12FBD /* CSMeterCell.m in Sources */,
 				34B5FCDF19BF1C3F00F67D19 /* CreateLayoutViewController.m in Sources */,
 				342346CF15F9F07E00C8C77E /* CSAbstractCaptureDevice.m in Sources */,
 				34210B3E1606001200362FC8 /* OutputDestination.m in Sources */,

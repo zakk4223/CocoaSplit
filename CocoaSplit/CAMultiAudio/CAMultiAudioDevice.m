@@ -12,7 +12,20 @@
 @implementation CAMultiAudioDevice
 
 
--(instancetype)initWithDeviceID:(NSString *)uid
+
+-(instancetype)initWithDeviceID:(AudioDeviceID)devid
+{
+    if (self = [super initWithSubType:kAudioUnitSubType_HALOutput unitType:kAudioUnitType_Output])
+    {
+        self.deviceID = devid;
+    }
+    
+    return self;
+
+}
+
+
+-(instancetype)initWithDeviceUID:(NSString *)uid
 {
     if (self = [super initWithSubType:kAudioUnitSubType_HALOutput unitType:kAudioUnitType_Output])
     {
@@ -81,13 +94,149 @@
     translation.mOutputDataSize = propSize;
     UInt32 tSize = sizeof(translation);
     
-    NSLog(@"GET AUDIO OBJECT DATA");
     AudioObjectGetPropertyData(kAudioObjectSystemObject, &deviceProperty, 0, NULL, &tSize, &translation);
-    NSLog(@"DEVICE ID %d FOR UID %@", deviceID, uid);
     CFRelease(cfUID);
     return deviceID;
 }
 
 
++(AudioDeviceID)defaultOutputDeviceID
+{
+    UInt32 datasize = 0;
+    AudioDeviceID defaultDevice;
+    
+    AudioObjectPropertyAddress propAddress;
+    propAddress.mSelector = kAudioHardwarePropertyDefaultOutputDevice;
+    propAddress.mScope = kAudioObjectPropertyScopeGlobal;
+    propAddress.mElement = kAudioObjectPropertyElementMaster;
+    
+    datasize = sizeof(AudioDeviceID);
+    OSStatus err;
+    err = AudioObjectGetPropertyData(kAudioObjectSystemObject, &propAddress, 0, NULL, &datasize, &defaultDevice);
+    
+    return defaultDevice;
+}
+
+
+
++(NSMutableArray *)allDevices
+{
+    UInt32 datasize = 0;
+    OSStatus err;
+    NSMutableArray *deviceList = [NSMutableArray array];
+    CAMultiAudioDevice *newDevice;
+    
+    AudioObjectPropertyAddress propAddress;
+    propAddress.mSelector = kAudioHardwarePropertyDevices;
+    propAddress.mScope = kAudioObjectPropertyScopeGlobal;
+    propAddress.mElement = kAudioObjectPropertyElementMaster;
+    
+    err = AudioObjectGetPropertyDataSize(kAudioObjectSystemObject, &propAddress, 0, NULL, &datasize);
+    if (kAudioHardwareNoError != err)
+    {
+        NSLog(@"Couldn't get size of AudioDeviceID list, err: %d", err);
+        return nil;
+    }
+    
+    UInt32 numDevices = (datasize/sizeof(AudioDeviceID));
+    AudioDeviceID *deviceIDs = malloc(datasize);
+    
+    err = AudioObjectGetPropertyData(kAudioObjectSystemObject, &propAddress, 0, NULL, &datasize, deviceIDs);
+    if (kAudioHardwareNoError != err)
+    {
+        NSLog(@"Couldn't get list of AudioDeviceIDs, err: %d", err);
+        free(deviceIDs);
+        return nil;
+    }
+    
+    for (int i = 0; i < numDevices; i++)
+    {
+        CFStringRef deviceUID = NULL;
+        CFStringRef deviceName = NULL;
+        
+        propAddress.mScope = kAudioDevicePropertyScopeInput;
+        
+        datasize = sizeof(deviceUID);
+        
+        propAddress.mSelector = kAudioDevicePropertyDeviceUID;
+        err = AudioObjectGetPropertyData(deviceIDs[i], &propAddress, 0, NULL, &datasize, &deviceUID);
+        if (kAudioHardwareNoError != err)
+        {
+            NSLog(@"Couldn't get device UID for device ID %d, err: %d", deviceIDs[i], err);
+            continue;
+        }
+        
+        datasize = sizeof(deviceName);
+        
+        propAddress.mSelector = kAudioObjectPropertyName;
+        err = AudioObjectGetPropertyData(deviceIDs[i], &propAddress, 0, NULL, &datasize, &deviceName);
+        if (kAudioHardwareNoError != err)
+        {
+            NSLog(@"Couldn't get device Name for device ID %d, err: %d", deviceIDs[i], err);
+            continue;
+        }
+        
+        newDevice = [[CAMultiAudioDevice alloc] initWithDeviceID:deviceIDs[i]];
+        newDevice.deviceUID = CFBridgingRelease(deviceUID);
+        newDevice.name = CFBridgingRelease(deviceName);
+
+        
+        datasize = 0;
+        
+        propAddress.mSelector = kAudioDevicePropertyStreamConfiguration;
+        
+        err = AudioObjectGetPropertyDataSize(deviceIDs[i], &propAddress, 0, NULL, &datasize);
+        if (kAudioHardwareNoError != err)
+        {
+            NSLog(@"Couldn't get StreamConfiguration size for Device ID %d, err: %d", deviceIDs[i], err);
+            continue;
+        }
+        
+        
+        
+        //This is the input buffer list
+        AudioBufferList *bufferList = malloc(datasize);
+        
+        err = AudioObjectGetPropertyData(deviceIDs[i], &propAddress, 0, NULL, &datasize, bufferList);
+        if (kAudioHardwareNoError != err)
+        {
+            NSLog(@"Error getting input audio buffer list for device ID %d, err: %d", deviceIDs[i], err);
+        } else if (bufferList->mNumberBuffers > 0) {
+            newDevice.hasInput = YES;
+        }
+        
+        free(bufferList);
+        
+        datasize = 0;
+        
+        propAddress.mScope = kAudioDevicePropertyScopeOutput;
+        
+        err = AudioObjectGetPropertyDataSize(deviceIDs[i], &propAddress, 0, NULL, &datasize);
+        if (kAudioHardwareNoError != err)
+        {
+            NSLog(@"Couldn't get StreamConfiguration size for Device ID %d, err: %d", deviceIDs[i], err);
+            continue;
+        }
+        
+        
+        
+        //This is the output buffer list
+        bufferList = malloc(datasize);
+        
+        err = AudioObjectGetPropertyData(deviceIDs[i], &propAddress, 0, NULL, &datasize, bufferList);
+        if (kAudioHardwareNoError != err)
+        {
+            NSLog(@"Error getting input audio buffer list for device ID %d, err: %d", deviceIDs[i], err);
+        } else if (bufferList->mNumberBuffers > 0) {
+            newDevice.hasOutput = YES;
+        }
+        
+        free(bufferList);
+        
+        [deviceList addObject:newDevice];
+    }
+    
+    return deviceList;
+}
 
 @end
