@@ -907,6 +907,7 @@
                                                                 </menu>
                                                             </popUpButtonCell>
                                                             <connections>
+                                                                <binding destination="nWB-G2-33f" name="content" keyPath="selection.multiAudioEngine.validSamplerates" id="frr-ZT-6H8"/>
                                                                 <binding destination="nWB-G2-33f" name="enabled" keyPath="selection.captureRunning" id="VsW-ZD-R9j">
                                                                     <dictionary key="options">
                                                                         <integer key="NSMultipleValuesPlaceholder" value="1"/>
@@ -915,8 +916,7 @@
                                                                         <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                                     </dictionary>
                                                                 </binding>
-                                                                <binding destination="nWB-G2-33f" name="selectedObject" keyPath="selection.audioSamplerate" previousBinding="kmF-gG-inB" id="hhW-it-EHM"/>
-                                                                <binding destination="nWB-G2-33f" name="content" keyPath="selection.validSamplerates" id="kmF-gG-inB"/>
+                                                                <binding destination="nWB-G2-33f" name="selectedObject" keyPath="selection.multiAudioEngine.sampleRate" previousBinding="frr-ZT-6H8" id="hwR-DT-C3X"/>
                                                             </connections>
                                                         </popUpButton>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="clM-yO-jZl">

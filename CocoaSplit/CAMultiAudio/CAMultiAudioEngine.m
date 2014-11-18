@@ -16,31 +16,99 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 @synthesize sampleRate = _sampleRate;
 @synthesize outputNode = _outputNode;
 
--(instancetype)initWithSamplerate:(UInt32)sampleRate
+
+-(void)commonInit
+{
+    
+    self.audioInputs = [NSMutableArray array];
+    self.validSamplerates = @[@44100, @48000];
+    self.sampleRate = 44100;
+    self.audioOutputs = [[CAMultiAudioDevice allDevices] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"hasOutput == YES"]];
+
+    _outputId = [CAMultiAudioDevice defaultOutputDeviceID];
+    
+    
+    
+
+    
+}
+-(instancetype)init
 {
     if (self = [super init])
     {
-        self.sampleRate = sampleRate;
-
-        self.audioInputs = [NSMutableArray array];
-        self.audioOutputs = [[CAMultiAudioDevice allDevices] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"hasOutput == YES"]];
-        AudioDeviceID defaultID = [CAMultiAudioDevice defaultOutputDeviceID];
-        NSUInteger defaultIdx = [self.audioOutputs indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-            return ((CAMultiAudioDevice *)obj).deviceID == defaultID;
-        }];
+        [self commonInit];
         
-        _outputNode = [self.audioOutputs objectAtIndex:defaultIdx];
+        [self buildGraph];
+        [self inputsForSystemAudio];
+        self.encodeMixer.volume = 1.0;
+        self.encodeMixer.muted = NO;
+        self.previewMixer.volume = 1.0;
+        self.previewMixer.muted  = NO;
+}
+    
+    return self;
+}
+
+-(instancetype) initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super init])
+    {
+        [self commonInit];
+        
+        if ([aDecoder containsValueForKey:@"sampleRate"])
+        {
+            self.sampleRate = [aDecoder decodeInt32ForKey:@"sampleRate"];
+        }
+        
+        if ([aDecoder containsValueForKey:@"selectedAudioId"])
+        {
+            _outputId = [aDecoder decodeInt32ForKey:@"selectedAudioId"];
+            
+        }
+        
+        
         
         
         [self buildGraph];
         [self inputsForSystemAudio];
-
-
+        if ([aDecoder containsValueForKey:@"streamVolume"])
+        {
+            self.encodeMixer.volume = [aDecoder decodeFloatForKey:@"streamVolume"];
+        }
+        
+        if ([aDecoder containsValueForKey:@"streamMuted"])
+        {
+            self.encodeMixer.muted = [aDecoder decodeBoolForKey:@"streamMuted"];
+        }
+        
+        if ([aDecoder containsValueForKey:@"previewVolume"])
+        {
+            self.previewMixer.volume = [aDecoder decodeFloatForKey:@"previewVolume"];
+        }
+        
+        if ([aDecoder containsValueForKey:@"previewMuted"])
+        {
+            self.previewMixer.muted = [aDecoder decodeBoolForKey:@"previewMuted"];
+        }
+        
     }
     
     return self;
 }
 
+
+-(void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeInt32:self.sampleRate forKey:@"sampleRate"];
+    [aCoder encodeInt32:self.outputNode.deviceID forKey:@"selectedAudioId"];
+    [aCoder encodeFloat:self.encodeMixer.volume forKey:@"streamVolume"];
+    [aCoder encodeBool:self.encodeMixer.muted forKey:@"streamMuted"];
+    [aCoder encodeFloat:self.previewMixer.volume forKey:@"previewVolume"];
+    [aCoder encodeBool:self.previewMixer.muted forKey:@"previewMuted"];
+    
+    
+    
+}
 
 -(void)updateStatistics
 {
@@ -55,6 +123,17 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 {
     self.graph = [[CAMultiAudioGraph alloc] init];
     self.graph.sampleRate = self.sampleRate;
+    
+    NSUInteger selectedIdx = [self.audioOutputs indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        return ((CAMultiAudioDevice *)obj).deviceID == _outputId;
+    }];
+
+    if (selectedIdx != NSNotFound)
+    {
+        _outputNode = [self.audioOutputs objectAtIndex:selectedIdx];
+    }
+    
+    
     if (!self.graphOutputNode)
     {
         self.graphOutputNode = self.outputNode;
@@ -116,7 +195,9 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     if (self.graphOutputNode)
     {
         self.graphOutputNode.deviceID = outputNode.deviceID;
+        [self.graph stopGraph];
         [self.graphOutputNode setOutputForDevice];
+        [self.graph startGraph];
     }
 }
 

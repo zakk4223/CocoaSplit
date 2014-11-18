@@ -675,7 +675,6 @@
        self.videoTypes = @[@"Desktop", @"AVFoundation", @"QTCapture", @"Syphon", @"Image", @"Text"];
        self.compressorTypes = @[@"x264", @"AppleVTCompressor", @"None"];
        self.arOptions = @[@"None", @"Use Source", @"Preserve AR"];
-       self.validSamplerates = @[@44100, @48000];
        
        
        //self.audioCaptureSession = [[AVFAudioCapture alloc] init];
@@ -813,13 +812,11 @@
     {
         self.multiAudioEngine.sampleRate = audioSamplerate;
     }
-    
-    _audioSamplerate = audioSamplerate;
 }
 
 -(int)audioSamplerate
 {
-    return _audioSamplerate;
+    return self.multiAudioEngine.sampleRate;
 }
 
 
@@ -1051,6 +1048,7 @@
     BOOL stagingHidden = [self.canvasSplitView isSubviewCollapsed:self.canvasSplitView.subviews[0]];
     [saveRoot setValue:[NSNumber numberWithBool:stagingHidden] forKey:@"stagingHidden"];
     
+    [saveRoot setValue:self.multiAudioEngine forKey:@"multiAudioEngine"];
     
     
     [NSKeyedArchiver archiveRootObject:saveRoot toFile:path];
@@ -1060,19 +1058,6 @@
 
 -(void) loadSettings
 {
-    
-    
-    
-    
-    
-    
-    
-    //self.multiAudioEngine = [[CSMultiAudio alloc] init];
-        //[audioEnc startEncoder];
-    
-    
-    
-    
     NSString *path = [self saveFilePath];
     NSDictionary *defaultValues = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Defaults" ofType:@"plist"]];
     
@@ -1198,7 +1183,11 @@
         [self hideStagingView];
     }
 
-    self.multiAudioEngine = [[CAMultiAudioEngine alloc] initWithSamplerate:self.audioSamplerate];
+    self.multiAudioEngine = [saveRoot valueForKey:@"multiAudioEngine"];
+    if (!self.multiAudioEngine)
+    {
+        self.multiAudioEngine = [[CAMultiAudioEngine alloc] init];
+    }
 
 
     self.extraPluginsSaveData = nil;
@@ -1299,16 +1288,6 @@
 -(NSArray *)layoutSortDescriptors
 {
     return @[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES] ];
-}
-
-- (IBAction)multiAudioAddDevice:(id)sender
-{
-    AVCaptureDevice *selectedDevice = [self.AudioDeviceArrayController.arrangedObjects objectAtIndex:self.AudioDeviceArrayController.selectionIndex];
-    
-    CAMultiAudioAVCapturePlayer *multiIn = [[CAMultiAudioAVCapturePlayer alloc] initWithDevice:selectedDevice sampleRate:self.audioSamplerate];
-
-    [self.multiAudioEngine attachInput:multiIn];
-    [multiIn play];
 }
 
 

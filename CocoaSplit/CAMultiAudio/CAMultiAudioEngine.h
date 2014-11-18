@@ -18,7 +18,12 @@
  silentNode -> encodeMixer -> previewMixer -> defaultOutputNode
  The outout of encodeMixer is tapped to provide the audio for the outgoing stream
 */
-@interface CAMultiAudioEngine : NSObject
+@interface CAMultiAudioEngine : NSObject <NSCoding>
+{
+    AudioDeviceID   _outputId;
+}
+
+
 
 @property (strong) CAMultiAudioGraph *graph;
 @property (strong) CAMultiAudioMixer *previewMixer;
@@ -31,6 +36,7 @@
 @property (strong) NSArray *audioOutputs;
 @property (strong) CAMultiAudioDevice *outputNode;
 @property (strong) CAMultiAudioDevice *graphOutputNode;
+@property (strong) NSArray *validSamplerates;
 
 
 
