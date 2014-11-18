@@ -21,6 +21,7 @@
 @interface CAMultiAudioEngine : NSObject <NSCoding>
 {
     AudioDeviceID   _outputId;
+    NSMutableDictionary *_inputSettings;
 }
 
 

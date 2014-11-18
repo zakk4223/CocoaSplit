@@ -30,6 +30,8 @@
 @property (weak) CAMultiAudioNode *connectedTo;
 @property (assign) UInt32 connectedToBus;
 @property (strong) NSString *name;
+@property (strong) NSString *nodeUID;
+
 //There really has to be a better way to do something like this
 @property (strong) NSColor *nameColor;
 

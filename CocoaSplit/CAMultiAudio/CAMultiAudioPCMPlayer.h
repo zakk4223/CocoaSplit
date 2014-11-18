@@ -17,6 +17,8 @@
     
 }
 
+@property (strong) NSString *inputUID;
+
 
 -(bool)playAudioBufferListASAP:(AudioBufferList *)audioBufferList;
 -(void)releasePCM:(CAMultiAudioPCM *)buffer;

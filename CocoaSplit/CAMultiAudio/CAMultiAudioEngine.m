@@ -19,7 +19,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 -(void)commonInit
 {
-    
+    _inputSettings = [NSMutableDictionary dictionary];
+
     self.audioInputs = [NSMutableArray array];
     self.validSamplerates = @[@44100, @48000];
     self.sampleRate = 44100;
@@ -68,6 +69,12 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         
         
         
+        if ([aDecoder containsValueForKey:@"inputSettings"])
+        {
+            _inputSettings = [aDecoder decodeObjectForKey:@"inputSettings"];
+        }
+        
+        
         
         [self buildGraph];
         [self inputsForSystemAudio];
@@ -105,6 +112,24 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     [aCoder encodeBool:self.encodeMixer.muted forKey:@"streamMuted"];
     [aCoder encodeFloat:self.previewMixer.volume forKey:@"previewVolume"];
     [aCoder encodeBool:self.previewMixer.muted forKey:@"previewMuted"];
+    
+    for (CAMultiAudioNode *node in self.audioInputs)
+    {
+        NSString *deviceUID = node.nodeUID;
+        NSMutableDictionary *inputopts = [_inputSettings valueForKey:deviceUID];
+        
+        
+        if (!inputopts)
+        {
+            inputopts = [NSMutableDictionary dictionary];
+            [_inputSettings setValue:inputopts forKey:deviceUID];
+            
+        }
+        [inputopts setValue:@(node.volume) forKey:@"volume"];
+        [inputopts setValue:@(node.enabled) forKey:@"enabled"];
+    }
+    
+    [aCoder encodeObject:_inputSettings forKey:@"inputSettings"];
     
     
     
@@ -177,6 +202,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     for(AVCaptureDevice *dev in sysDevices)
     {
         CAMultiAudioAVCapturePlayer *avplayer = [[CAMultiAudioAVCapturePlayer alloc] initWithDevice:dev sampleRate:self.sampleRate];
+        avplayer.nodeUID = dev.uniqueID;
+        
         [self attachInput:avplayer];
     }
 }
@@ -190,7 +217,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 -(void)setOutputNode:(CAMultiAudioDevice *)outputNode
 {
-    NSLog(@"SET OUTPUT NODE %@", outputNode.name);
     _outputNode = outputNode;
     if (self.graphOutputNode)
     {
@@ -247,7 +273,18 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 -(void)attachInput:(CAMultiAudioNode *)input
 {
+    
     [self.graph addNode:input];
+    if (input.nodeUID)
+    {
+        NSDictionary *settings = [_inputSettings valueForKey:input.nodeUID];
+        if (settings)
+        {
+            input.volume = [(NSNumber *)[settings valueForKey:@"volume"] floatValue];
+            input.enabled = [(NSNumber *)[settings valueForKey:@"enabled"] boolValue];
+        }
+    }
+    
     [self.graph connectNode:input toNode:self.encodeMixer];
     [self addAudioInputsObject:input];
     

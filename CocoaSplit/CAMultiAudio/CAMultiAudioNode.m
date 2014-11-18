@@ -163,7 +163,6 @@
 -(void)setVolume:(float)volume
 {
     _volume = volume;
-
     [self setVolumeOnConnectedNode];
     
 }
