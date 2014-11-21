@@ -85,6 +85,9 @@
 {
     if (self = [super init])
     {
+        _lastFrameTime = 0;
+        _sampleQueue = [NSMutableArray array];
+        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDeviceChange:) name:AVCaptureDeviceWasConnectedNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDeviceChange:) name:AVCaptureDeviceWasDisconnectedNotification object:nil];
 
@@ -173,6 +176,7 @@
     
     if ([_selectedVideoCaptureDevice lockForConfiguration:nil])
     {
+        
         [_selectedVideoCaptureDevice setActiveFormat:_activeVideoFormat];
         [_selectedVideoCaptureDevice unlockForConfiguration];
     }
@@ -214,6 +218,7 @@
         
         if (_video_capture_input)
         {
+            
             [_capture_session addInput:_video_capture_input];
         }
     }
@@ -233,7 +238,7 @@
 -(void) changeAvailableVideoDevices
 {
     
-    NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+    NSArray *devices = [[AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo] arrayByAddingObjectsFromArray:[AVCaptureDevice devicesWithMediaType:AVMediaTypeMuxed]];
     
     NSMutableArray *retArray = [[NSMutableArray alloc] init];
     
@@ -326,7 +331,6 @@
 }
 
 
-
 -(void)setupVideoOutput
 {
     
@@ -335,11 +339,13 @@
     {
         NSMutableDictionary *videoSettings = [[NSMutableDictionary alloc] init];
         
-        //[videoSettings setValue:@(kCVPixelFormatType_422YpCbCr8) forKey:(__bridge NSString *)kCVPixelBufferPixelFormatTypeKey];
+        //I know CIImage can handle this input type. Maybe make this some sort of advanced config if some devices can't handle it?
+        
+        [videoSettings setValue:@(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange) forKey:(__bridge NSString *)kCVPixelBufferPixelFormatTypeKey];
          
         
         
-        [videoSettings setValue:@(kCVPixelFormatType_32BGRA) forKey:(__bridge NSString *)kCVPixelBufferPixelFormatTypeKey];
+       // [videoSettings setValue:@(kCVPixelFormatType_32BGRA) forKey:(__bridge NSString *)kCVPixelBufferPixelFormatTypeKey];
         
         //[videoSettings setValue:@[@(kCVPixelFormatType_422YpCbCr8), @(kCVPixelFormatType_422YpCbCr8FullRange), @(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange), @(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange), ] forKey:(NSString *)kCVPixelBufferPixelFormatTypeKey];
         NSDictionary *ioAttrs = [NSDictionary dictionaryWithObject: [NSNumber numberWithBool: NO]
@@ -348,18 +354,14 @@
         
         
         [videoSettings setValue:ioAttrs forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
-        /*        if (self.videoHeight && self.videoWidth)
-         {
-         [videoSettings setValue:@(self.videoHeight) forKey:(NSString *)kCVPixelBufferHeightKey];
-         [videoSettings setValue:@(self.videoWidth) forKey:(NSString *)kCVPixelBufferWidthKey];
-         } */
-        
+ 
         _video_capture_output = [[AVCaptureVideoDataOutput alloc] init];
         
         if ([_capture_session canAddOutput:_video_capture_output])
         {
             [_capture_session addOutput:_video_capture_output];
             _video_capture_output.videoSettings = videoSettings;
+            
             
             _video_capture_queue = dispatch_queue_create("VideoQueue", NULL);
             
@@ -368,6 +370,7 @@
         }
     }
 }
+
 
 
 - (CVImageBufferRef) getCurrentFrame
@@ -393,6 +396,7 @@
 }
 
 
+
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didDropSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
 {
     if (connection.output == _video_capture_output)
@@ -404,35 +408,19 @@
 
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
 {
+    
+    
     if (connection.output == _video_capture_output)
     {
         
-        /*
-        if (!self.did_preroll)
-        {
-            if (_preroll_frame_cnt < _preroll_needed_frames)
-            {
-                _preroll_frame_cnt++;
-                return;
-            } else if (_preroll_frame_cnt >= _preroll_needed_frames) {
-                self.did_preroll = true;
-                //dispatch_async(dispatch_get_main_queue(), ^{
-                
-                    [_capture_session stopRunning];
-                    [_capture_session startRunning];
-
-                //});
-                return;
-            }
-        }
-         */
+              
         CVImageBufferRef videoFrame = CMSampleBufferGetImageBuffer(sampleBuffer);
         
 
         if (videoFrame)
         {
         
-            
+        
             CVPixelBufferRetain(videoFrame);
 
             @synchronized(self) {
@@ -444,14 +432,8 @@
                 _currentFrame = videoFrame;
             
             }
-            
-            //[self.videoDelegate captureOutputVideo:nil didOutputSampleBuffer:nil didOutputImage:videoFrame frameTime:0 ];
-            /*
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                [self.videoDelegate captureOutputVideo:nil didOutputSampleBuffer:nil didOutputImage:newbuf frameTime:0 ];});
-             */
-            //CVPixelBufferRelease(videoFrame);
         }
+        
         
         
     }

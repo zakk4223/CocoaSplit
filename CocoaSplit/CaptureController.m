@@ -21,6 +21,10 @@
 #import "CSExtraPluginProtocol.h"
 #import <OpenCL/opencl.h>
 #import <OpenCl/cl_gl_ext.h>
+#import <CoreMediaIO/CMIOHardware.h>
+
+
+
 
 
 
@@ -750,7 +754,12 @@
        
        self.extraPlugins = [NSMutableDictionary dictionary];
        
-
+/*
+       
+       CMIOObjectPropertyAddress prop = { kCMIOHardwarePropertyAllowScreenCaptureDevices, kCMIOObjectPropertyScopeGlobal, kCMIOObjectPropertyElementMaster };
+       UInt32 allow = 1;
+       CMIOObjectSetPropertyData( kCMIOObjectSystemObject, &prop, 0, NULL, sizeof(allow), &allow );
+ */
        
    }
     
@@ -1794,7 +1803,17 @@
         return NO;
     }
     
+    while ([self mach_time_seconds] < target_time)
+    {
+        int32_t useconds = (target_time - [self mach_time_seconds]) * 0.25e6;
+        if (useconds > 0)
+        {
+            usleep(useconds);
+        }
+    }
     
+    
+    /*
     double mach_duration = target_time - mach_now;
     double mach_wait_time = mach_now + mach_duration/2.0;
     
@@ -1807,7 +1826,9 @@
         
             //wheeeeeeeeeeeee
     }
+     */
     return YES;
+    
 }
 
 

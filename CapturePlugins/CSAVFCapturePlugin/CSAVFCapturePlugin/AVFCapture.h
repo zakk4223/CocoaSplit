@@ -29,6 +29,9 @@
     int _preroll_needed_frames;
     NSDictionary *_savedFormatData;
     NSString *_savedFrameRateData;
+    CFAbsoluteTime _lastFrameTime;
+    NSMutableArray *_sampleQueue;
+    
     
     
     

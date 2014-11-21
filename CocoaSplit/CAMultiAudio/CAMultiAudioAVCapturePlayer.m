@@ -19,6 +19,8 @@
         self.captureDevice = avDevice;
         self.sampleRate = sampleRate;
         self.name = avDevice.localizedName;
+        self.nodeUID = avDevice.uniqueID;
+        
     }
     return self;
 }

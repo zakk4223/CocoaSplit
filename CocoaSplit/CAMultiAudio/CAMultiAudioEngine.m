@@ -202,9 +202,59 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     for(AVCaptureDevice *dev in sysDevices)
     {
         CAMultiAudioAVCapturePlayer *avplayer = [[CAMultiAudioAVCapturePlayer alloc] initWithDevice:dev sampleRate:self.sampleRate];
-        avplayer.nodeUID = dev.uniqueID;
         
         [self attachInput:avplayer];
+    }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDeviceConnect:) name:AVCaptureDeviceWasConnectedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDeviceDisconnect:) name:AVCaptureDeviceWasDisconnectedNotification object:nil];
+
+}
+
+-(void)handleDeviceDisconnect:(NSNotification *)notification
+{
+    AVCaptureDevice *removedDev = notification.object;
+    
+    if ([removedDev hasMediaType:AVMediaTypeAudio])
+    {
+        NSUInteger selectedIdx = [self.audioInputs indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+            if ([obj isKindOfClass:[CAMultiAudioAVCapturePlayer class]])
+            {
+                CAMultiAudioAVCapturePlayer *testObj = obj;
+                return testObj.captureDevice.uniqueID == removedDev.uniqueID;
+            }
+            return NO;
+        }];
+        
+        if (selectedIdx != NSNotFound)
+        {
+            [self removeObjectFromAudioInputsAtIndex:selectedIdx];
+
+        }
+    }
+
+    
+}
+-(void)handleDeviceConnect:(NSNotification *)notification
+{
+    AVCaptureDevice *newDev = notification.object;
+    
+    if ([newDev hasMediaType:AVMediaTypeAudio])
+    {
+        NSUInteger selectedIdx = [self.audioInputs indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+            if ([obj isKindOfClass:[CAMultiAudioAVCapturePlayer class]])
+            {
+                CAMultiAudioAVCapturePlayer *testObj = obj;
+                return testObj.captureDevice.uniqueID == newDev.uniqueID;
+            }
+            return NO;
+        }];
+        
+        if (selectedIdx == NSNotFound)
+        {
+            CAMultiAudioAVCapturePlayer *avplayer = [[CAMultiAudioAVCapturePlayer alloc] initWithDevice:newDev sampleRate:self.sampleRate];
+            [self attachInput:avplayer];
+        }
     }
 }
 
