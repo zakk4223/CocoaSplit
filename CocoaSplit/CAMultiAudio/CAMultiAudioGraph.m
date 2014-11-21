@@ -197,9 +197,11 @@
     
     if (!node || !toNode)
     {
-        NSLog(@"ConnectNode: Source or destination node is nil");
+        NSLog(@"ConnectNode: Source or destination node is nil %@ -> %@", node, toNode);
         return NO;
     }
+    
+    NSLog(@"CONNECTING NODE %@ to %@", node.name, toNode.name);
     
     AUNode inNode;
     AUNode connectTo;
@@ -256,9 +258,9 @@
         return NO;
     }
     
-    node.connectedTo = toNode;
-    node.connectedToBus = bus;
 
+    [node nodeConnected:toNode onBus:bus];
+    
     CAShow(_graphInst);
     
     return YES;

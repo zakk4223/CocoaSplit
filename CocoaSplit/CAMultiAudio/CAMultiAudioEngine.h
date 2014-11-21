@@ -20,7 +20,7 @@
 */
 @interface CAMultiAudioEngine : NSObject <NSCoding>
 {
-    AudioDeviceID   _outputId;
+    NSString            *_outputId;
     NSMutableDictionary *_inputSettings;
 }
 

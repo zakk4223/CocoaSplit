@@ -26,7 +26,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     self.sampleRate = 44100;
     self.audioOutputs = [[CAMultiAudioDevice allDevices] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"hasOutput == YES"]];
 
-    _outputId = [CAMultiAudioDevice defaultOutputDeviceID];
+    _outputId = [CAMultiAudioDevice defaultOutputDeviceUID];
     
     
     
@@ -55,6 +55,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     if (self = [super init])
     {
         [self commonInit];
+        NSLog(@"AFTER COMMON INIT %@", _outputId);
         
         if ([aDecoder containsValueForKey:@"sampleRate"])
         {
@@ -63,9 +64,17 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         
         if ([aDecoder containsValueForKey:@"selectedAudioId"])
         {
-            _outputId = [aDecoder decodeInt32ForKey:@"selectedAudioId"];
+            
+            NSString *savedUID = [aDecoder decodeObjectForKey:@"selectedAudioId"];
+            if (savedUID)
+            {
+                _outputId = savedUID;
+            }
             
         }
+        
+        NSLog(@"AFTER SELECTED AUDIO ID %@", _outputId);
+
         
         
         
@@ -107,7 +116,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeInt32:self.sampleRate forKey:@"sampleRate"];
-    [aCoder encodeInt32:self.outputNode.deviceID forKey:@"selectedAudioId"];
+    [aCoder encodeObject:self.outputNode.deviceUID forKey:@"selectedAudioId"];
     [aCoder encodeFloat:self.encodeMixer.volume forKey:@"streamVolume"];
     [aCoder encodeBool:self.encodeMixer.muted forKey:@"streamMuted"];
     [aCoder encodeFloat:self.previewMixer.volume forKey:@"previewVolume"];
@@ -149,10 +158,15 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     self.graph = [[CAMultiAudioGraph alloc] init];
     self.graph.sampleRate = self.sampleRate;
     
+    NSLog(@"SELECTED INDEX ID %@", _outputId);
+    
     NSUInteger selectedIdx = [self.audioOutputs indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-        return ((CAMultiAudioDevice *)obj).deviceID == _outputId;
+        return [((CAMultiAudioDevice *)obj).deviceUID isEqualToString:_outputId];
     }];
 
+    NSLog(@"SELECTED INDEX %lu", (unsigned long)selectedIdx);
+    
+    
     if (selectedIdx != NSNotFound)
     {
         _outputNode = [self.audioOutputs objectAtIndex:selectedIdx];
@@ -183,8 +197,11 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     [self.graph addNode:self.encodeMixer];
     [self.graph addNode:self.previewMixer];
     
+    NSLog(@"CONNECT PREVIEW OUTPUT");
     [self.graph connectNode:self.previewMixer toNode:self.graphOutputNode];
+    NSLog(@"CONNECT ENCODE PREVIEW");
     [self.graph connectNode:self.encodeMixer toNode:self.previewMixer];
+    NSLog(@"CONNECT SILENT ENCODE");
     [self.graph connectNode:self.silentNode toNode:self.encodeMixer];
     [self.graph startGraph];
     

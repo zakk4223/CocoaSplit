@@ -100,10 +100,38 @@
 }
 
 
++(NSString *)defaultOutputDeviceUID
+{
+    AudioDeviceID defaultID = [self defaultOutputDeviceID];
+    
+    
+    CFStringRef deviceUID = NULL;
+    
+    AudioObjectPropertyAddress propAddress;
+    propAddress.mSelector = kAudioDevicePropertyDeviceUID;
+    propAddress.mElement = kAudioObjectPropertyElementMaster;
+    propAddress.mScope = kAudioDevicePropertyScopeInput;
+
+    
+    UInt32 datasize = sizeof(deviceUID);
+    
+    OSStatus err;
+    
+    err = AudioObjectGetPropertyData(defaultID, &propAddress, 0, NULL, &datasize, &deviceUID);
+    if (kAudioHardwareNoError != err)
+    {
+        NSLog(@"Couldn't get device UID for device ID %d, err: %d", defaultID, err);
+    }
+
+    NSString *retval = CFBridgingRelease(deviceUID);
+    return retval;
+}
+
 +(AudioDeviceID)defaultOutputDeviceID
 {
     UInt32 datasize = 0;
     AudioDeviceID defaultDevice;
+    
     
     AudioObjectPropertyAddress propAddress;
     propAddress.mSelector = kAudioHardwarePropertyDefaultOutputDevice;
@@ -113,6 +141,8 @@
     datasize = sizeof(AudioDeviceID);
     OSStatus err;
     err = AudioObjectGetPropertyData(kAudioObjectSystemObject, &propAddress, 0, NULL, &datasize, &defaultDevice);
+    
+    
     
     return defaultDevice;
 }

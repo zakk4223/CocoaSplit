@@ -25,6 +25,8 @@
 -(void)setOutputForDevice;
 +(NSMutableArray *)allDevices;
 +(AudioDeviceID)defaultOutputDeviceID;
++(NSString *)defaultOutputDeviceUID;
+
 
 
 @end
