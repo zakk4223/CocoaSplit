@@ -15,5 +15,6 @@
 
 +(id)sharedPluginServices;
 -(CAMultiAudioPCMPlayer *)createPCMInput:(NSString *)forUID withFormat:(const AudioStreamBasicDescription *)withFormat;
+-(void)removePCMInput:(CAMultiAudioPCMPlayer *)toRemove;
 
 @end

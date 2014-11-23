@@ -332,6 +332,12 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 }
 
 
+-(void)removePCMInput:(CAMultiAudioPCMPlayer *)toRemove
+{
+    CAMultiAudioConverter *converter = toRemove.converterNode;
+    [self removeInput:converter];
+}
+
 
 -(CAMultiAudioPCMPlayer *)createPCMInput:(NSString *)uniqueID withFormat:(AudioStreamBasicDescription *)withFormat
 {
@@ -342,6 +348,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     newConverter.nodeUID = uniqueID; //Not so unique, lol
     
     newConverter.sourceNode = newInput;
+    newInput.converterNode = newConverter;
+    
     [self.graph addNode:newInput];
     [self attachInput:newConverter];
     [self.graph connectNode:newInput toNode:newConverter sampleRate:withFormat->mSampleRate];

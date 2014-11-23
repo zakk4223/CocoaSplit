@@ -754,12 +754,6 @@
        
        self.extraPlugins = [NSMutableDictionary dictionary];
        
-/*
-       
-       CMIOObjectPropertyAddress prop = { kCMIOHardwarePropertyAllowScreenCaptureDevices, kCMIOObjectPropertyScopeGlobal, kCMIOObjectPropertyElementMaster };
-       UInt32 allow = 1;
-       CMIOObjectSetPropertyData( kCMIOObjectSystemObject, &prop, 0, NULL, sizeof(allow), &allow );
- */
        
    }
     

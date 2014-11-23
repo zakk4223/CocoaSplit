@@ -10,10 +10,13 @@
 #import <VideoToolbox/VideoToolbox.h>
 #import <AVFoundation/AVFoundation.h>
 #import "CSCaptureBase.h"
+#import "CAMultiAudioPCMPlayer.h"
+#import "CSPluginServices.h"
 
 
 
-@interface AVFCapture : CSCaptureBase <CSCaptureSourceProtocol, AVCaptureVideoDataOutputSampleBufferDelegate>
+
+@interface AVFCapture : CSCaptureBase <CSCaptureSourceProtocol, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate>
 {
 
     AVCaptureSession *_capture_session;
@@ -31,6 +34,12 @@
     NSString *_savedFrameRateData;
     CFAbsoluteTime _lastFrameTime;
     NSMutableArray *_sampleQueue;
+    
+    dispatch_queue_t _audio_capture_queue;
+    
+    AVCaptureAudioDataOutput *_audio_capture_output;
+
+    CAMultiAudioPCMPlayer *_pcmPlayer;
     
     
     

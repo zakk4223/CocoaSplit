@@ -10,7 +10,7 @@
 #import "CSAbstractCaptureDevice.h"
 #import "AVCaptureDeviceFormat+CocoaSplitAdditions.h"
 #import "AVFrameRateRange+CocoaSplitAdditions.m"
-
+#import <CoreMediaIO/CMIOHardware.h>
 
 @implementation AVFCapture         
 
@@ -87,6 +87,14 @@
     {
         _lastFrameTime = 0;
         _sampleQueue = [NSMutableArray array];
+        
+        /*
+         CMIOObjectPropertyAddress prop = { kCMIOHardwarePropertyAllowScreenCaptureDevices, kCMIOObjectPropertyScopeGlobal, kCMIOObjectPropertyElementMaster };
+         UInt32 allow = 1;
+         CMIOObjectSetPropertyData( kCMIOObjectSystemObject, &prop, 0, NULL, sizeof(allow), &allow );
+
+         */
+        
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDeviceChange:) name:AVCaptureDeviceWasConnectedNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDeviceChange:) name:AVCaptureDeviceWasDisconnectedNotification object:nil];
@@ -229,7 +237,13 @@
     
     self.videoFormats = _selectedVideoCaptureDevice.formats;
     self.videoFramerates = _selectedVideoCaptureDevice.activeFormat.videoSupportedFrameRateRanges;
-    
+    if ([_selectedVideoCaptureDevice hasMediaType:AVMediaTypeMuxed])
+    {
+        [self setupAudioOutput];
+        
+    } else {
+        [self removeAudioOutput];
+    }
 }
 
 
@@ -328,6 +342,77 @@
 
     
     return YES;
+}
+
+
+-(void) removeAudioOutput
+{
+    
+    if (!_capture_session || !_audio_capture_output)
+    {
+        return;
+    }
+    
+    
+    [_capture_session beginConfiguration];
+    
+    [_capture_session removeOutput:_audio_capture_output];
+    [_capture_session commitConfiguration];
+
+    _audio_capture_output = nil;
+    _audio_capture_queue = nil;
+    
+    
+    
+    if (_pcmPlayer)
+    {
+        [[CSPluginServices sharedPluginServices] removePCMInput:_pcmPlayer];
+    }
+}
+
+
+-(void) setupAudioOutput
+{
+    
+    if (!_capture_session)
+    {
+        return;
+    }
+    
+    if (!_audio_capture_output)
+    {
+        
+        
+        
+            _audio_capture_output = [[AVCaptureAudioDataOutput alloc] init];
+        
+        
+            _audio_capture_output.audioSettings = @{
+                                                    AVFormatIDKey: [NSNumber numberWithInt:kAudioFormatLinearPCM],
+                                                    AVLinearPCMBitDepthKey: @32,
+                                                    AVLinearPCMIsFloatKey: @YES,
+                                                    AVLinearPCMIsNonInterleaved: @YES,
+                                                    //AVNumberOfChannelsKey: @2,
+                                                    };
+            
+    
+        _audio_capture_queue = dispatch_queue_create("AVFCaptureMuxedAudio", NULL);
+        [_audio_capture_output setSampleBufferDelegate:self queue:_audio_capture_queue];
+    }
+    
+    
+    [_capture_session beginConfiguration];
+    
+    if ([_capture_session canAddOutput:_audio_capture_output])
+    {
+        [_capture_session addOutput:_audio_capture_output];
+        
+    } else {
+        NSLog(@"COULDN'T ADD AUDIO OUTPUT");
+    }
+    
+    
+    [_capture_session commitConfiguration];
 }
 
 
@@ -433,11 +518,17 @@
             
             }
         }
+    } else if (connection.output == _audio_capture_output) {
+        if (!_pcmPlayer)
+        {
+            CMFormatDescriptionRef sDescr = CMSampleBufferGetFormatDescription(sampleBuffer);
+            const AudioStreamBasicDescription *asbd =  CMAudioFormatDescriptionGetStreamBasicDescription(sDescr);
+            _pcmPlayer = [[CSPluginServices sharedPluginServices] createPCMInput:self.activeVideoDevice.uniqueID withFormat:asbd];
+        }
         
-        
-        
+        [_pcmPlayer scheduleBuffer:sampleBuffer];
     }
-    
 }
+
 
 @end

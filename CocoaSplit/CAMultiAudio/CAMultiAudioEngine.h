@@ -45,7 +45,7 @@
 -(CAMultiAudioPCMPlayer *)createPCMInput:(NSString *)uniqueID withFormat:(AudioStreamBasicDescription *)withFormat;
 
 
-
+-(void)removePCMInput:(CAMultiAudioPCMPlayer *)toRemove;
 -(void)attachInput:(CAMultiAudioNode *)input;
 -(instancetype)initWithSamplerate:(UInt32)sampleRate;
 -(void)updateStatistics;

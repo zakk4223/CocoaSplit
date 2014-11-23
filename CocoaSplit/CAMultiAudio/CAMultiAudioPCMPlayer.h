@@ -18,6 +18,7 @@
 }
 
 @property (strong) NSString *inputUID;
+@property (weak) id converterNode;
 
 -(void)releasePCM:(CAMultiAudioPCM *)buffer;
 -(void)scheduleBuffer:(CMSampleBufferRef)sampleBuffer;

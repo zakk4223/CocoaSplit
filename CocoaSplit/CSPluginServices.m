@@ -26,6 +26,18 @@
 }
 
 
+-(void)removePCMInput:(CAMultiAudioPCMPlayer *)toRemove
+{
+    
+    AppDelegate *myAppDelegate = [[NSApplication sharedApplication] delegate];
+    if (myAppDelegate.captureController && myAppDelegate.captureController.multiAudioEngine)
+    {
+        
+        [myAppDelegate.captureController.multiAudioEngine removePCMInput:toRemove];
+    }
+}
+
+
 -(CAMultiAudioPCMPlayer *)createPCMInput:(NSString *)forUID withFormat:(const AudioStreamBasicDescription *)withFormat
 {
     AppDelegate *myAppDelegate = [[NSApplication sharedApplication] delegate];
