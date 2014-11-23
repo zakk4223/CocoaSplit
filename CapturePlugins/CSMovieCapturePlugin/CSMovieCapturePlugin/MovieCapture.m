@@ -9,6 +9,35 @@
 #import "MovieCapture.h"
 
 
+void tapInit(MTAudioProcessingTapRef tap, void *clientInfo, void **tapStorageOut) {
+    *tapStorageOut = clientInfo;
+}
+
+void tapPrepare(MTAudioProcessingTapRef tap, CMItemCount maxFrames, const AudioStreamBasicDescription *processingFormat)
+{
+
+    
+    MovieCapture *captureObj = (__bridge MovieCapture *)(MTAudioProcessingTapGetStorage(tap));
+    [captureObj preallocateAudioBuffers:maxFrames audioFormat:processingFormat];
+}
+
+
+void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioProcessingTapFlags flags, AudioBufferList *bufferListInOut, CMItemCount *numberFramesOut,MTAudioProcessingTapFlags *flagsOut)
+{
+    MovieCapture *captureObj = (__bridge MovieCapture *)MTAudioProcessingTapGetStorage(tap);
+    
+    if (captureObj && captureObj.pcmPlayer)
+    {
+        MTAudioProcessingTapGetSourceAudio(tap, numberFrames, bufferListInOut, flagsOut, NULL, numberFramesOut);
+        [captureObj playAudioBuffer:bufferListInOut];
+    }
+}
+
+
+
+
+
+
 @implementation MovieCapture
 
 @synthesize currentMedia = _currentMedia;
@@ -59,6 +88,7 @@
         
         self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
         self.playPauseTitle = @"Play";
+        _audioQueue = dispatch_queue_create("MoviePlayerAudioQueue", NULL);
         
         [self setupPlayer];
         
@@ -66,6 +96,37 @@
         
     }
     return self;
+}
+
+
+-(void)copyAudioBufferList:(AudioBufferList *)bufferList
+{
+    [_bufferPCM copyFromAudioBufferList:bufferList];
+}
+
+-(void) playAudioBuffer:(AudioBufferList *)buffer
+{
+    
+    [self copyAudioBufferList:buffer];
+    
+    dispatch_async(_audioQueue, ^{
+        CAMultiAudioPCM *newBuffer = [_bufferPCM copy];
+        
+        [self.pcmPlayer playPcmBuffer:newBuffer];
+    });
+}
+
+
+-(void)preallocateAudioBuffers:(CMItemCount)frameCount audioFormat:(const AudioStreamBasicDescription *)audioFormat
+{
+    
+    self.pcmPlayer = [[CSPluginServices sharedPluginServices] createPCMInput:self.activeVideoDevice.uniqueID withFormat:audioFormat];
+    AVURLAsset *urlAsset = (AVURLAsset *)self.avPlayer.currentItem.asset;
+    self.pcmPlayer.name = urlAsset.URL.lastPathComponent;
+    
+    _bufferPCM = [[CAMultiAudioPCM alloc] initWithDescription:audioFormat forFrameCount:(int)frameCount];
+    
+    
 }
 
 
@@ -81,6 +142,11 @@
         NSString *itemStr = urlAsset.URL.description;
         [uID appendString:itemStr];
     }
+    if (_pcmPlayer)
+    {
+        _pcmPlayer.nodeUID = uID;
+    }
+    
     
     self.activeVideoDevice.uniqueID = uID;
 }
@@ -104,6 +170,9 @@
     self.avOutput = [[AVPlayerItemVideoOutput alloc] initWithPixelBufferAttributes:videoSettings];
 
     [self.avPlayer addObserver:self forKeyPath:@"rate" options:NSKeyValueObservingOptionNew context:NULL];
+    self.avPlayer.volume = 0.0;
+    
+    
     
 }
 
@@ -229,7 +298,10 @@
     [item addOutput:self.avOutput];
     if ([self.avPlayer canInsertItem:item afterItem:nil])
     {
+        [item addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
+        
         [self.avPlayer insertItem:item afterItem:nil];
+        
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(itemDidFinishPlaying:)
                                                      name:AVPlayerItemDidPlayToEndTimeNotification
@@ -334,7 +406,38 @@
     }
 }
 
-
+-(void)setupAudioTapOnItem:(AVPlayerItem *)item
+{
+    AVAssetTrack *audioTrack;
+    MTAudioProcessingTapRef tap;
+    MTAudioProcessingTapCallbacks callbacks;
+    
+    audioTrack = [item.asset tracksWithMediaType:AVMediaTypeAudio].firstObject;
+    
+    if (!audioTrack)
+    {
+        return;
+    }
+    
+    
+    callbacks.version = kMTAudioProcessingTapCallbacksVersion_0;
+    callbacks.clientInfo = (__bridge void *)(self);
+    callbacks.init = tapInit;
+    callbacks.prepare = tapPrepare;
+    callbacks.process = tapProcess;
+    callbacks.unprepare = NULL;
+    callbacks.finalize = NULL;
+    
+    MTAudioProcessingTapCreate(kCFAllocatorDefault, &callbacks, kMTAudioProcessingTapCreationFlag_PostEffects, &tap);
+    
+    AVMutableAudioMix *audioMix = [AVMutableAudioMix audioMix];
+    AVMutableAudioMixInputParameters *inputParams = [AVMutableAudioMixInputParameters audioMixInputParametersWithTrack:audioTrack];
+    
+    inputParams.audioTapProcessor = tap;
+    audioMix.inputParameters = @[inputParams];
+    self.avPlayer.currentItem.audioMix = audioMix;
+    
+}
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if ([keyPath isEqualToString:@"rate"])
@@ -347,6 +450,24 @@
         } else {
             self.playPauseTitle = @"Pause";
         }
+    } else if ([keyPath isEqualToString:@"status"]) {
+        
+    
+        NSInteger oldVal, newVal;
+        
+        oldVal = [change[NSKeyValueChangeOldKey] intValue];
+        newVal = [change[NSKeyValueChangeNewKey] intValue];
+        if (oldVal == newVal)
+        {
+            return;
+        }
+        
+        AVPlayerItem *item = (AVPlayerItem *)object;
+        if (item.status != AVPlayerItemStatusReadyToPlay)
+        {
+            return;
+        }
+        [self setupAudioTapOnItem:item];
     }
 }
 

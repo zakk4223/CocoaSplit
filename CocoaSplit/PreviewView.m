@@ -1191,7 +1191,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
     if (_resizeDirty && _surfaceWidth > 0 && _surfaceHeight > 0)
     {
-        NSLog(@"RESIZE DIRTY %d %d", _surfaceWidth, _surfaceHeight);
         glGetDoublev(GL_MODELVIEW_MATRIX, _modelview);
         glGetDoublev(GL_PROJECTION_MATRIX, _projection);
         glGetIntegerv(GL_VIEWPORT, _viewport);

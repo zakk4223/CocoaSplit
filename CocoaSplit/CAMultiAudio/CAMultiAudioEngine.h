@@ -15,7 +15,7 @@
  
  
  
- silentNode -> encodeMixer -> previewMixer -> defaultOutputNode
+ silentNode -> encodeMixer -> previewMixer -> AUHAL
  The outout of encodeMixer is tapped to provide the audio for the outgoing stream
 */
 @interface CAMultiAudioEngine : NSObject <NSCoding>
@@ -40,6 +40,9 @@
 @property (strong) NSArray *validSamplerates;
 
 
+
+
+-(CAMultiAudioPCMPlayer *)createPCMInput:(NSString *)uniqueID withFormat:(AudioStreamBasicDescription *)withFormat;
 
 
 

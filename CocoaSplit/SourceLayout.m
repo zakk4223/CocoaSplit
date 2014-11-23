@@ -26,6 +26,9 @@
         [_backgroundFilter setDefaults];
         [_backgroundFilter setValue:[CIColor colorWithRed:0.0f green:0.0f blue:0.0f] forKey:kCIInputColorKey];
         self.sourceCache = [[SourceCache alloc] init];
+        _frameRate = 30;
+        _canvas_height = 720;
+        _canvas_width = 1280;
     }
     
     return self;
@@ -74,9 +77,21 @@
     {
         self.name = [aDecoder decodeObjectForKey:@"name"];
         self.savedSourceListData = [aDecoder decodeObjectForKey:@"savedSourceData"];
-        self.canvas_height = [aDecoder decodeIntForKey:@"canvas_height"];
-        self.canvas_width = [aDecoder decodeIntForKey:@"canvas_width"];
-        self.frameRate = [aDecoder decodeFloatForKey:@"frameRate"];
+        if ([aDecoder containsValueForKey:@"canvas_height"])
+        {
+            self.canvas_height = [aDecoder decodeIntForKey:@"canvas_height"];
+        }
+        
+        if ([aDecoder containsValueForKey:@"canvas_width"])
+        {
+            self.canvas_width = [aDecoder decodeIntForKey:@"canvas_width"];
+        }
+        
+        if ([aDecoder containsValueForKey:@"frameRate"])
+        {
+            self.frameRate = [aDecoder decodeFloatForKey:@"frameRate"];
+        }
+        
     }
     
     return self;

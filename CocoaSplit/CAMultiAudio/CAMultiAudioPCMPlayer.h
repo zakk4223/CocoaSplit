@@ -19,10 +19,12 @@
 
 @property (strong) NSString *inputUID;
 
-
--(bool)playAudioBufferListASAP:(AudioBufferList *)audioBufferList;
 -(void)releasePCM:(CAMultiAudioPCM *)buffer;
 -(void)scheduleBuffer:(CMSampleBufferRef)sampleBuffer;
+-(void)scheduleAudioBuffer:(AudioBufferList *)bufferList bufferFormat:(AudioStreamBasicDescription)bufferFormat;
+-(bool)playPcmBuffer:(CAMultiAudioPCM *)pcmBuffer;
+
+
 -(void)play;
 
 

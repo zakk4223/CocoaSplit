@@ -1170,6 +1170,7 @@
         newLayout.name = @"default";
         [[self mutableArrayValueForKey:@"sourceLayouts" ] addObject:newLayout];
         self.selectedLayout = newLayout;
+        self.stagingLayout = newLayout;
         newLayout.isActive = YES;
         
     } else {

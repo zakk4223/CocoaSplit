@@ -201,7 +201,6 @@
         return NO;
     }
     
-    NSLog(@"CONNECTING NODE %@ to %@", node.name, toNode.name);
     
     AUNode inNode;
     AUNode connectTo;
@@ -228,7 +227,6 @@
     if (sampleRate > 0)
     {
         asbd.mSampleRate = sampleRate;
-        NSLog(@"SET SAMPLE RATE %d", sampleRate);
         
     }
     asbd.mChannelsPerFrame = node.channelCount;
@@ -260,9 +258,7 @@
     
 
     [node nodeConnected:toNode onBus:bus];
-    
-    CAShow(_graphInst);
-    
+
     return YES;
 }
 

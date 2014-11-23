@@ -10,7 +10,6 @@
 
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
-#import "CAMultiAudioMixingProtocol.h"
 
 @class CAMultiAudioGraph;
 
@@ -47,6 +46,7 @@
 -(void)nodeConnected:(CAMultiAudioNode *)toNode onBus:(UInt32)onBus;
 -(void)resetSamplerate:(UInt32)sampleRate;
 -(void)updatePowerlevel;
+-(void)setVolumeOnConnectedNode;
 
 
 @end

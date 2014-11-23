@@ -28,6 +28,16 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     return self;
 }
 
+-(void)scheduleAudioBuffer:(AudioBufferList *)bufferList bufferFormat:(AudioStreamBasicDescription)bufferFormat
+{
+    //Assuming 32 bit non-interleaved float.
+    
+    CAMultiAudioPCM *pcmBuffer = [[CAMultiAudioPCM alloc] initWithAudioBufferList:bufferList streamFormat:&bufferFormat];
+    
+    [self playPcmBuffer:pcmBuffer];
+}
+
+
 -(bool)playPcmBuffer:(CAMultiAudioPCM *)pcmBuffer
 {
     
@@ -36,9 +46,17 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     OSStatus err;
     //Under 10.10 this means PLAY NEXT. Need to figure out everything that's not 10.10 :(
     
+    
     pcmBuffer.audioSlice->mFlags = 0;
     pcmBuffer.audioSlice->mCompletionProcUserData = (__bridge void *)(pcmBuffer);
     pcmBuffer.audioSlice->mCompletionProc = BufferCompletedPlaying;
+    pcmBuffer.player = self;
+    
+    if (!self.enabled)
+    {
+        return YES;
+    }
+    
     
     [_pendingBuffers addObject:pcmBuffer];
     err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ScheduleAudioSlice, kAudioUnitScope_Global, 0, pcmBuffer.audioSlice, sizeof(ScheduledAudioSlice));
@@ -88,7 +106,7 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     
     CMSampleBufferCopyPCMDataIntoAudioBufferList(sampleBuffer, 0, (int32_t)numSamples, sampleABL);
     CAMultiAudioPCM *pcmBuffer = [[CAMultiAudioPCM alloc] initWithAudioBufferList:sampleABL streamFormat:asbd];
-    pcmBuffer.player = self;
+
     
     
     [self playPcmBuffer:pcmBuffer];

@@ -8,6 +8,7 @@
 
 #import "CAMultiAudioNode.h"
 #import "CAMultiAudioGraph.h"
+#import "CAMultiAudioMixingProtocol.h"
 
 
 @implementation CAMultiAudioNode
@@ -68,7 +69,6 @@
 
 -(bool)createNode:(AUGraph)forGraph
 {
-    NSLog(@"CREATING NODE %@", self);
     if (!forGraph)
     {
         return NO;
@@ -124,6 +124,8 @@
     self.connectedToBus = onBus;
     [self setVolumeOnConnectedNode];
 }
+
+
 
 -(void)setMuted:(bool)muted
 {

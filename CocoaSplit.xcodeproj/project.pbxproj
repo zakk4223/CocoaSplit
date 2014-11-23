@@ -166,6 +166,8 @@
 		34EAFB811A1BA87000E12FBD /* CoreMediaIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34EAFB7F1A1BA86800E12FBD /* CoreMediaIO.framework */; };
 		34F5141216FD6E4F00BA894D /* x264Compressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F5140F16FD6E4F00BA894D /* x264Compressor.m */; };
 		34F5141316FD6E4F00BA894D /* AppleVTCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F5141116FD6E4F00BA894D /* AppleVTCompressor.m */; };
+		34FDD6F21A215268009A7413 /* CSPluginServices.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FDD6F11A215268009A7413 /* CSPluginServices.m */; };
+		34FDD6F31A215268009A7413 /* CSPluginServices.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FDD6F11A215268009A7413 /* CSPluginServices.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -461,7 +463,6 @@
 		345F8B701A177C1F009A81E3 /* CAMultiAudioConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioConverter.m; path = CAMultiAudio/CAMultiAudioConverter.m; sourceTree = "<group>"; };
 		345F8B731A17A785009A81E3 /* CAMultiAudioMixer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioMixer.h; path = CAMultiAudio/CAMultiAudioMixer.h; sourceTree = "<group>"; };
 		345F8B741A17A785009A81E3 /* CAMultiAudioMixer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioMixer.m; path = CAMultiAudio/CAMultiAudioMixer.m; sourceTree = "<group>"; };
-		345F8B771A183D1D009A81E3 /* CAMultiAudioEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioEngine.h; path = CAMultiAudio/CAMultiAudioEngine.h; sourceTree = "<group>"; };
 		345F8B781A183D1D009A81E3 /* CAMultiAudioEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioEngine.m; path = CAMultiAudio/CAMultiAudioEngine.m; sourceTree = "<group>"; };
 		345F8B7B1A184FBC009A81E3 /* CAMultiAudioMixingProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAMultiAudioMixingProtocol.h; sourceTree = "<group>"; };
 		346EAAF6197A7B28000892CF /* Capture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Capture.h; sourceTree = "<group>"; };
@@ -537,6 +538,9 @@
 		34F5141016FD6E4F00BA894D /* AppleVTCompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleVTCompressor.h; path = Compressor/AppleVTCompressor.h; sourceTree = "<group>"; };
 		34F5141116FD6E4F00BA894D /* AppleVTCompressor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppleVTCompressor.m; path = Compressor/AppleVTCompressor.m; sourceTree = "<group>"; };
 		34F5141416FD6E5D00BA894D /* h264Compressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = h264Compressor.h; path = Compressor/h264Compressor.h; sourceTree = "<group>"; };
+		34FDD6DC1A204CE4009A7413 /* CAMultiAudioEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioEngine.h; path = CAMultiAudio/CAMultiAudioEngine.h; sourceTree = "<group>"; };
+		34FDD6F01A215268009A7413 /* CSPluginServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPluginServices.h; sourceTree = "<group>"; };
+		34FDD6F11A215268009A7413 /* CSPluginServices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSPluginServices.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -698,6 +702,7 @@
 				345F8B031A1060D6009A81E3 /* CSAacEncoder.h */,
 				345F8B041A1060D6009A81E3 /* CSAacEncoder.m */,
 				347B14D9198492D900DC7DF0 /* InputPopupControllerViewController.h */,
+				34FDD6F11A215268009A7413 /* CSPluginServices.m */,
 				340FE4B315F3417E00E4CE4E /* AppDelegate.h */,
 				340FE4B415F3417E00E4CE4E /* AppDelegate.m */,
 				34210B3C1606001100362FC8 /* OutputDestination.h */,
@@ -835,6 +840,9 @@
 		34576CFB19B020BF007BAD90 /* PluginHeaders */ = {
 			isa = PBXGroup;
 			children = (
+				34FDD6F01A215268009A7413 /* CSPluginServices.h */,
+				345F8B4D1A15F7DA009A81E3 /* CAMultiAudioPCMPlayer.h */,
+				345F8B3B1A15F3BD009A81E3 /* CAMultiAudioPCM.h */,
 				342346CD15F9F07E00C8C77E /* CSAbstractCaptureDevice.h */,
 				340DC732197CF6E9003A0BB3 /* CSCaptureBase.h */,
 				342346CC15F9D52000C8C77E /* CSCaptureSourceProtocol.h */,
@@ -860,7 +868,7 @@
 				345F8B1F1A14DAB3009A81E3 /* CAMultiAudio.h */,
 				345F8B671A16C348009A81E3 /* CAMultiAudioGraph.h */,
 				345F8B681A16C348009A81E3 /* CAMultiAudioGraph.m */,
-				345F8B771A183D1D009A81E3 /* CAMultiAudioEngine.h */,
+				34FDD6DC1A204CE4009A7413 /* CAMultiAudioEngine.h */,
 				345F8B781A183D1D009A81E3 /* CAMultiAudioEngine.m */,
 				345F8B731A17A785009A81E3 /* CAMultiAudioMixer.h */,
 				345F8B741A17A785009A81E3 /* CAMultiAudioMixer.m */,
@@ -868,11 +876,9 @@
 				345F8B281A14EEE2009A81E3 /* CAMultiAudioDeviceInput.m */,
 				345F8B2F1A15716A009A81E3 /* CAMultiAudioDeviceOutput.h */,
 				345F8B301A15716A009A81E3 /* CAMultiAudioDeviceOutput.m */,
-				345F8B3B1A15F3BD009A81E3 /* CAMultiAudioPCM.h */,
 				345F8B3C1A15F3BD009A81E3 /* CAMultiAudioPCM.m */,
 				345F8B5F1A161552009A81E3 /* CAMultiAudioAVCapturePlayer.h */,
 				345F8B601A161552009A81E3 /* CAMultiAudioAVCapturePlayer.m */,
-				345F8B4D1A15F7DA009A81E3 /* CAMultiAudioPCMPlayer.h */,
 				345F8B4E1A15F7DA009A81E3 /* CAMultiAudioPCMPlayer.m */,
 				345F8B6F1A177C1F009A81E3 /* CAMultiAudioConverter.h */,
 				345F8B701A177C1F009A81E3 /* CAMultiAudioConverter.m */,
@@ -1435,6 +1441,7 @@
 				3431FFE119786502000965FE /* InputSource.m in Sources */,
 				34F5141216FD6E4F00BA894D /* x264Compressor.m in Sources */,
 				34576C7819AFCA1B007BAD90 /* CSPluginLoader.m in Sources */,
+				34FDD6F21A215268009A7413 /* CSPluginServices.m in Sources */,
 				34F5141316FD6E4F00BA894D /* AppleVTCompressor.m in Sources */,
 				348AC06B19B406910064F02D /* SourceLayout.m in Sources */,
 				345F8B751A17A785009A81E3 /* CAMultiAudioMixer.m in Sources */,
@@ -1462,6 +1469,7 @@
 				345F8B7A1A183D1D009A81E3 /* CAMultiAudioEngine.m in Sources */,
 				345F8B2A1A14EEE2009A81E3 /* CAMultiAudioDeviceInput.m in Sources */,
 				3451A1D31712C41000DF6A8B /* CaptureController.m in Sources */,
+				34FDD6F31A215268009A7413 /* CSPluginServices.m in Sources */,
 				3431FFE219786502000965FE /* InputSource.m in Sources */,
 				348AC06C19B406910064F02D /* SourceLayout.m in Sources */,
 				3451A1D81712C5C400DF6A8B /* x264Compressor.m in Sources */,

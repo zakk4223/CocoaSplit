@@ -735,7 +735,7 @@
                                                                 <constraint firstItem="QDG-rb-jHr" firstAttribute="leading" secondItem="KDH-Gg-3ob" secondAttribute="leading" id="zuk-nQ-Wob"/>
                                                             </constraints>
                                                         </customView>
-                                                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="MvM-Ze-Mhu">
+                                                        <customView misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MvM-Ze-Mhu">
                                                             <rect key="frame" x="359" y="155" width="119" height="34"/>
                                                             <subviews>
                                                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3nh-Gb-0rO">
@@ -883,6 +883,7 @@
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
+                                                                <binding destination="nWB-G2-33f" name="value" keyPath="selection.audioBitrate" id="8Fg-uo-zEt"/>
                                                                 <binding destination="nWB-G2-33f" name="enabled" keyPath="selection.captureRunning" id="RID-8m-Oka">
                                                                     <dictionary key="options">
                                                                         <integer key="NSNoSelectionPlaceholder" value="1"/>
@@ -890,7 +891,6 @@
                                                                         <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                                     </dictionary>
                                                                 </binding>
-                                                                <binding destination="nWB-G2-33f" name="value" keyPath="selection.audioBitrate" id="8Fg-uo-zEt"/>
                                                             </connections>
                                                         </textField>
                                                         <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1qG-l7-UUY">
@@ -907,7 +907,6 @@
                                                                 </menu>
                                                             </popUpButtonCell>
                                                             <connections>
-                                                                <binding destination="nWB-G2-33f" name="content" keyPath="selection.multiAudioEngine.validSamplerates" id="frr-ZT-6H8"/>
                                                                 <binding destination="nWB-G2-33f" name="enabled" keyPath="selection.captureRunning" id="VsW-ZD-R9j">
                                                                     <dictionary key="options">
                                                                         <integer key="NSMultipleValuesPlaceholder" value="1"/>
@@ -917,6 +916,7 @@
                                                                     </dictionary>
                                                                 </binding>
                                                                 <binding destination="nWB-G2-33f" name="selectedObject" keyPath="selection.multiAudioEngine.sampleRate" previousBinding="frr-ZT-6H8" id="hwR-DT-C3X"/>
+                                                                <binding destination="nWB-G2-33f" name="content" keyPath="selection.multiAudioEngine.validSamplerates" id="frr-ZT-6H8"/>
                                                             </connections>
                                                         </popUpButton>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="clM-yO-jZl">
@@ -1775,8 +1775,8 @@ Gw
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
-                        <binding destination="93b-Or-H22" name="textColor" keyPath="representedObject.nameColor" id="c6B-Iu-Gnu"/>
                         <binding destination="93b-Or-H22" name="value" keyPath="representedObject.name" id="sQP-FN-yPJ"/>
+                        <binding destination="93b-Or-H22" name="textColor" keyPath="representedObject.nameColor" id="c6B-Iu-Gnu"/>
                     </connections>
                 </textField>
                 <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uW4-9L-JyQ">

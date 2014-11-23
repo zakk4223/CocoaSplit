@@ -7,7 +7,7 @@
 //
 
 #import "CAMultiAudioEngine.h"
-
+#import "CAMultiAudioConverter.h"
 OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList *ioData );
 
 
@@ -55,7 +55,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     if (self = [super init])
     {
         [self commonInit];
-        NSLog(@"AFTER COMMON INIT %@", _outputId);
         
         if ([aDecoder containsValueForKey:@"sampleRate"])
         {
@@ -73,7 +72,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
             
         }
         
-        NSLog(@"AFTER SELECTED AUDIO ID %@", _outputId);
 
         
         
@@ -158,13 +156,11 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     self.graph = [[CAMultiAudioGraph alloc] init];
     self.graph.sampleRate = self.sampleRate;
     
-    NSLog(@"SELECTED INDEX ID %@", _outputId);
     
     NSUInteger selectedIdx = [self.audioOutputs indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
         return [((CAMultiAudioDevice *)obj).deviceUID isEqualToString:_outputId];
     }];
 
-    NSLog(@"SELECTED INDEX %lu", (unsigned long)selectedIdx);
     
     
     if (selectedIdx != NSNotFound)
@@ -197,16 +193,12 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     [self.graph addNode:self.encodeMixer];
     [self.graph addNode:self.previewMixer];
     
-    NSLog(@"CONNECT PREVIEW OUTPUT");
     [self.graph connectNode:self.previewMixer toNode:self.graphOutputNode];
-    NSLog(@"CONNECT ENCODE PREVIEW");
     [self.graph connectNode:self.encodeMixer toNode:self.previewMixer];
-    NSLog(@"CONNECT SILENT ENCODE");
     [self.graph connectNode:self.silentNode toNode:self.encodeMixer];
     [self.graph startGraph];
     
     AudioUnitAddRenderNotify(self.encodeMixer.audioUnit, encoderRenderCallback, (__bridge void *)(self));
-    CAShow(self.graph.graphInst);
 
     return YES;
 }
@@ -225,6 +217,9 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDeviceConnect:) name:AVCaptureDeviceWasConnectedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDeviceDisconnect:) name:AVCaptureDeviceWasDisconnectedNotification object:nil];
+    
+    CAShow(self.graph.graphInst);
+
 
 }
 
@@ -338,6 +333,24 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 
 
+-(CAMultiAudioPCMPlayer *)createPCMInput:(NSString *)uniqueID withFormat:(AudioStreamBasicDescription *)withFormat
+{
+    CAMultiAudioPCMPlayer *newInput = [[CAMultiAudioPCMPlayer alloc] init];
+    newInput.nodeUID = uniqueID;
+    
+    CAMultiAudioConverter *newConverter = [[CAMultiAudioConverter alloc] initWithInputFormat:withFormat];
+    newConverter.nodeUID = uniqueID; //Not so unique, lol
+    
+    newConverter.sourceNode = newInput;
+    [self.graph addNode:newInput];
+    [self attachInput:newConverter];
+    [self.graph connectNode:newInput toNode:newConverter sampleRate:withFormat->mSampleRate];
+    
+    [newInput play];
+    
+    return newInput;
+    
+}
 -(void)attachInput:(CAMultiAudioNode *)input
 {
     

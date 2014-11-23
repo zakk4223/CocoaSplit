@@ -14,17 +14,23 @@
 
 //This class is used by the CAMultiAudioPCMPlayer class to store some submitted buffers for later free-ing.
 
-@interface CAMultiAudioPCM : NSObject
+@interface CAMultiAudioPCM : NSObject <NSCopying>
 {
-    //This class does double duty managing buffers for submission to the AAC encoder. Since that data comes from a AudioUnit callback there's a setup 
-    AudioBufferList _encoderABL;
+    size_t _audioBufferListSize;
+    size_t _audioBufferDataSize;
+    AudioBufferList *_pcmData;
+    
 }
 @property (assign) ScheduledAudioSlice *audioSlice;
 @property (assign) int bufferCount;
+@property (assign) int frameCount;
 @property (weak) id player;
-
+@property (assign) AudioStreamBasicDescription pcmFormat;
 
 -(instancetype)initWithAudioBufferList:(AudioBufferList *)bufferList streamFormat:(AudioStreamBasicDescription *)streamFormat;
+-(instancetype)initWithDescription:(const AudioStreamBasicDescription *)streamFormat forFrameCount:(int)forFrameCount;
+-(void)copyFromAudioBufferList:(AudioBufferList *)copyFrom;
+
 
 
 
