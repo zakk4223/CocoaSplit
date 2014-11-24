@@ -88,12 +88,10 @@
         _lastFrameTime = 0;
         _sampleQueue = [NSMutableArray array];
         
-        /*
          CMIOObjectPropertyAddress prop = { kCMIOHardwarePropertyAllowScreenCaptureDevices, kCMIOObjectPropertyScopeGlobal, kCMIOObjectPropertyElementMaster };
          UInt32 allow = 1;
          CMIOObjectSetPropertyData( kCMIOObjectSystemObject, &prop, 0, NULL, sizeof(allow), &allow );
 
-         */
         
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDeviceChange:) name:AVCaptureDeviceWasConnectedNotification object:nil];
@@ -247,6 +245,19 @@
 }
 
 
+-(void)setIsLive:(bool)isLive
+{
+    super.isLive = isLive;
+    
+    if (!isLive)
+    {
+        if (_pcmPlayer)
+        {
+            [[CSPluginServices sharedPluginServices] removePCMInput:_pcmPlayer];
+            _pcmPlayer = nil;
+        }
+    }
+}
 
 
 -(void) changeAvailableVideoDevices
@@ -519,14 +530,18 @@
             }
         }
     } else if (connection.output == _audio_capture_output) {
-        if (!_pcmPlayer)
+        if (self.isLive && !_pcmPlayer)
         {
             CMFormatDescriptionRef sDescr = CMSampleBufferGetFormatDescription(sampleBuffer);
             const AudioStreamBasicDescription *asbd =  CMAudioFormatDescriptionGetStreamBasicDescription(sDescr);
             _pcmPlayer = [[CSPluginServices sharedPluginServices] createPCMInput:self.activeVideoDevice.uniqueID withFormat:asbd];
+            _pcmPlayer.name = _selectedVideoCaptureDevice.localizedName;
         }
         
-        [_pcmPlayer scheduleBuffer:sampleBuffer];
+        if (_pcmPlayer)
+        {
+            [_pcmPlayer scheduleBuffer:sampleBuffer];
+        }
     }
 }
 
