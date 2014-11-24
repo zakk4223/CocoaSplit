@@ -374,7 +374,9 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     }
     
     [self.graph connectNode:input toNode:self.encodeMixer];
-    [self addAudioInputsObject:input];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self addAudioInputsObject:input];
+    });
     
 
     
@@ -385,7 +387,14 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 -(void)removeInput:(CAMultiAudioNode *)toRemove
 {
     NSUInteger index = [self.audioInputs indexOfObject:toRemove];
-    [self removeObjectFromAudioInputsAtIndex:index];
+    if (index != NSNotFound)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self removeObjectFromAudioInputsAtIndex:index];
+
+        });
+    }
+    
     
 }
 
@@ -397,6 +406,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 -(void)insertObject:(CAMultiAudioNode *)object inAudioInputsAtIndex:(NSUInteger)index
 {
     [self.audioInputs insertObject:object atIndex:index];
+
 }
 
 
@@ -406,6 +416,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     [self.graph removeNode:toRemove];
     [self.audioInputs removeObjectAtIndex:index];
 }
+
 
 @end
 

@@ -25,10 +25,10 @@ void tapPrepare(MTAudioProcessingTapRef tap, CMItemCount maxFrames, const AudioS
 void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioProcessingTapFlags flags, AudioBufferList *bufferListInOut, CMItemCount *numberFramesOut,MTAudioProcessingTapFlags *flagsOut)
 {
     MovieCapture *captureObj = (__bridge MovieCapture *)MTAudioProcessingTapGetStorage(tap);
-    
+    MTAudioProcessingTapGetSourceAudio(tap, numberFrames, bufferListInOut, flagsOut, NULL, numberFramesOut);
+
     if (captureObj && captureObj.pcmPlayer)
     {
-        MTAudioProcessingTapGetSourceAudio(tap, numberFrames, bufferListInOut, flagsOut, NULL, numberFramesOut);
         [captureObj playAudioBuffer:bufferListInOut];
     }
 }
@@ -116,17 +116,61 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     });
 }
 
-
--(void)preallocateAudioBuffers:(CMItemCount)frameCount audioFormat:(const AudioStreamBasicDescription *)audioFormat
+-(void)setIsLive:(bool)isLive
 {
+    
+    
+    bool oldLive = super.isLive;
+    super.isLive = isLive;
+    if (isLive == oldLive)
+    {
+        return;
+    }
+    
+    if (isLive && _bufferPCM)
+    {
+        AudioStreamBasicDescription asbd = _bufferPCM.pcmFormat;
+
+        [self registerPCMOutput:_bufferPCM.frameCount audioFormat:&asbd];
+    } else {
+        [self deregisterPCMOutput];
+    }
+}
+
+
+-(void)registerPCMOutput:(CMItemCount)frameCount audioFormat:(const AudioStreamBasicDescription *)audioFormat
+{
+    if (self.pcmPlayer)
+    {
+        //looks like we already have one?
+        return;
+    }
+    
     
     self.pcmPlayer = [[CSPluginServices sharedPluginServices] createPCMInput:self.activeVideoDevice.uniqueID withFormat:audioFormat];
     AVURLAsset *urlAsset = (AVURLAsset *)self.avPlayer.currentItem.asset;
     self.pcmPlayer.name = urlAsset.URL.lastPathComponent;
+}
+
+-(void)deregisterPCMOutput
+{
+    if (self.pcmPlayer)
+    {
+        [[CSPluginServices sharedPluginServices] removePCMInput:self.pcmPlayer];
+    }
     
+    self.pcmPlayer = nil;
+}
+
+
+-(void)preallocateAudioBuffers:(CMItemCount)frameCount audioFormat:(const AudioStreamBasicDescription *)audioFormat
+{
+ 
+    if (self.isLive)
+    {
+        [self registerPCMOutput:frameCount audioFormat:audioFormat];
+    }
     _bufferPCM = [[CAMultiAudioPCM alloc] initWithDescription:audioFormat forFrameCount:(int)frameCount];
-    
-    
 }
 
 

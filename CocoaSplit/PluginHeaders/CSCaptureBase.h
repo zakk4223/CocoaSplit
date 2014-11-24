@@ -46,6 +46,11 @@
 //called. You can use this to pause timers or deallocate resources if you want.
 @property (assign) bool isActive;
 
+//TRUE if the source is in the LIVE canvas, FALSE otherwise.
+//If you're handling audio via a CAMultiAudioPCMPlayer you shouldn't register a player unless you are isLive == YES
+//You should also deregister it if you transition to isLive == NO. In summary: only create an audio out if you are live.
+@property (assign) bool isLive;
+
 
 
 -(void)setDeviceForUniqueID:(NSString *)uniqueID;

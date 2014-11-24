@@ -68,6 +68,7 @@ typedef enum input_rotate_style_t {
 @property (strong) CIImage *outputImage;
 @property (assign) float opacity;
 
+@property (assign) bool is_live;
 @property (assign) bool is_selected;
 @property (assign) NSRect layoutPosition;
 @property (strong) CIFilter *scaleFilter;

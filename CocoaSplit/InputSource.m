@@ -27,6 +27,7 @@ static NSArray *_sourceTypes = nil;
 @synthesize transitionFilterName = _transitionFilterName;
 @synthesize is_selected = _is_selected;
 @synthesize active = _active;
+@synthesize is_live = _is_live;
 
 
 -(void) encodeWithCoder:(NSCoder *)aCoder
@@ -169,6 +170,7 @@ static NSArray *_sourceTypes = nil;
 -(void) registerVideoInput:(NSObject<CSCaptureSourceProtocol> *)forInput
 {
     forInput.inputSource = self;
+    forInput.isLive = self.is_live;
     [forInput addObserver:self forKeyPath:@"activeVideoDevice.uniqueID" options:NSKeyValueObservingOptionNew context:nil];
 }
 
@@ -179,6 +181,7 @@ static NSArray *_sourceTypes = nil;
         return;
     }
     
+    forInput.isLive = NO;
     
     [forInput removeObserver:self forKeyPath:@"activeVideoDevice.uniqueID"];
 }
@@ -1161,6 +1164,21 @@ static NSArray *_sourceTypes = nil;
 -(bool)active
 {
     return _active;
+}
+
+
+-(void) setIs_live:(bool)is_live
+{
+    _is_live = is_live;
+    if (self.videoInput)
+    {
+        self.videoInput.isLive = is_live;
+    }
+}
+
+-(bool)is_live
+{
+    return _is_live;
 }
 
 

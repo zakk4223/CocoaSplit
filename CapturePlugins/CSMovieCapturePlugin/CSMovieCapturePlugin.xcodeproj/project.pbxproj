@@ -58,6 +58,7 @@
 		34576D0219B023E2007BAD90 = {
 			isa = PBXGroup;
 			children = (
+				34FDD6FE1A2152F1009A7413 /* PluginHeaders */,
 				34576D1419B023E2007BAD90 /* CSMovieCapturePlugin */,
 				34576D0D19B023E2007BAD90 /* Frameworks */,
 				34576D0C19B023E2007BAD90 /* Products */,
@@ -95,7 +96,6 @@
 		34576D1419B023E2007BAD90 /* CSMovieCapturePlugin */ = {
 			isa = PBXGroup;
 			children = (
-				34FDD6FE1A2152F1009A7413 /* PluginHeaders */,
 				34576D2C19B02453007BAD90 /* MovieCapture.h */,
 				34576D2D19B02453007BAD90 /* MovieCapture.m */,
 				34576D2E19B02453007BAD90 /* MovieCaptureViewController.h */,
@@ -131,7 +131,7 @@
 				34FDD6FD1A2152F1009A7413 /* CSNotifications.h */,
 			);
 			name = PluginHeaders;
-			path = ../../../CocoaSplit;
+			path = ../../CocoaSplit;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

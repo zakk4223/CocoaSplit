@@ -45,6 +45,8 @@
     newLayout.canvas_height = self.canvas_height;
     newLayout.canvas_width = self.canvas_width;
     newLayout.frameRate = self.frameRate;
+    newLayout.isActive = NO;
+    
     return newLayout;
 }
 
@@ -149,11 +151,12 @@
         self.sourceList = [NSMutableArray array];
     }
     
-    
+    NSLog(@"RESTORING SOURCE LIST FOR %@", self);
     for(InputSource *src in self.sourceList)
     {
         src.layout = self;
         src.imageContext = self.ciCtx;
+        src.is_live = self.isActive;
     }
 }
 
@@ -184,6 +187,8 @@
     newSource.depth = (int)self.sourceList.count;
     newSource.imageContext  = self.ciCtx;
     newSource.layout = self;
+    newSource.is_live = self.isActive;
+    
     [self.sourceList addObject:newSource];
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputAdded object:newSource userInfo:nil];
 
