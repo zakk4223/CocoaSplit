@@ -10,7 +10,7 @@
 #import <VideoToolbox/VideoToolbox.h>
 #import <AVFoundation/AVFoundation.h>
 #import "CSCaptureBase.h"
-#import "CAMultiAudioPCMPlayer.h"
+#import "CSPcmPlayer.h"
 #import "CSPluginServices.h"
 
 
@@ -39,7 +39,7 @@
     
     AVCaptureAudioDataOutput *_audio_capture_output;
 
-    CAMultiAudioPCMPlayer *_pcmPlayer;
+    CSPcmPlayer *_pcmPlayer;
     
     
     

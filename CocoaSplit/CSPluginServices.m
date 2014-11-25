@@ -8,6 +8,7 @@
 
 #import "CSPluginServices.h"
 #import "CAMultiAudioPCMPlayer.h"
+#import "CSPcmPlayer.h"
 #import "AppDelegate.h"
 
 
@@ -26,19 +27,22 @@
 }
 
 
--(void)removePCMInput:(CAMultiAudioPCMPlayer *)toRemove
+-(void)removePCMInput:(CSPcmPlayer *)toRemove
 {
+    
+    CAMultiAudioPCMPlayer *realRemove = (CAMultiAudioPCMPlayer *)toRemove;
+    
     
     AppDelegate *myAppDelegate = [[NSApplication sharedApplication] delegate];
     if (myAppDelegate.captureController && myAppDelegate.captureController.multiAudioEngine)
     {
         
-        [myAppDelegate.captureController.multiAudioEngine removePCMInput:toRemove];
+        [myAppDelegate.captureController.multiAudioEngine removePCMInput:realRemove];
     }
 }
 
 
--(CAMultiAudioPCMPlayer *)createPCMInput:(NSString *)forUID withFormat:(const AudioStreamBasicDescription *)withFormat
+-(CSPcmPlayer *)createPCMInput:(NSString *)forUID withFormat:(const AudioStreamBasicDescription *)withFormat
 {
     AppDelegate *myAppDelegate = [[NSApplication sharedApplication] delegate];
     
@@ -48,7 +52,10 @@
     if (myAppDelegate.captureController && myAppDelegate.captureController.multiAudioEngine)
     {
         
-        return [myAppDelegate.captureController.multiAudioEngine createPCMInput:forUID withFormat:withFormat];
+        CAMultiAudioPCMPlayer *player;
+        
+        player = [myAppDelegate.captureController.multiAudioEngine createPCMInput:forUID withFormat:withFormat];
+        return (CSPcmPlayer *)player;
     }
     
     return nil;

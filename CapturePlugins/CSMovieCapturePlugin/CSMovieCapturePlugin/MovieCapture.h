@@ -7,7 +7,7 @@
 //
 
 #import "CSCaptureBase.h"
-#import "CAMultiAudioPCMPlayer.h"
+#import "CSPcmPlayer.h"
 #import "CAMultiAudioPCM.h"
 #import "CSPluginServices.h"
 
@@ -24,7 +24,7 @@
 
 
 
-@property (strong) CAMultiAudioPCMPlayer *pcmPlayer;
+@property (strong) CSPcmPlayer *pcmPlayer;
 @property (assign) AudioStreamBasicDescription audioFormat;
 @property (strong) AVQueuePlayer *avPlayer;
 @property (strong) AVPlayerItemVideoOutput *avOutput;

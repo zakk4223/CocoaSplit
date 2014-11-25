@@ -408,6 +408,7 @@
 		342346CE15F9F07E00C8C77E /* CSAbstractCaptureDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAbstractCaptureDevice.m; sourceTree = "<group>"; };
 		342B33B2198073EC00492CB7 /* line.fgsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = line.fgsh; path = Shaders/line.fgsh; sourceTree = "<group>"; };
 		342B33B51980771200492CB7 /* line.vtsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = line.vtsh; path = Shaders/line.vtsh; sourceTree = "<group>"; };
+		342F73F41A245316007AA99F /* CSPcmPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPcmPlayer.h; sourceTree = "<group>"; };
 		3431FFDF19786502000965FE /* InputSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputSource.h; sourceTree = "<group>"; };
 		3431FFE019786502000965FE /* InputSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InputSource.m; sourceTree = "<group>"; };
 		34348C2719BDBDC000A122C2 /* PluginManagerWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PluginManagerWindowController.h; sourceTree = "<group>"; };
@@ -841,7 +842,7 @@
 			isa = PBXGroup;
 			children = (
 				34FDD6F01A215268009A7413 /* CSPluginServices.h */,
-				345F8B4D1A15F7DA009A81E3 /* CAMultiAudioPCMPlayer.h */,
+				342F73F41A245316007AA99F /* CSPcmPlayer.h */,
 				345F8B3B1A15F3BD009A81E3 /* CAMultiAudioPCM.h */,
 				342346CD15F9F07E00C8C77E /* CSAbstractCaptureDevice.h */,
 				340DC732197CF6E9003A0BB3 /* CSCaptureBase.h */,
@@ -879,6 +880,7 @@
 				345F8B3C1A15F3BD009A81E3 /* CAMultiAudioPCM.m */,
 				345F8B5F1A161552009A81E3 /* CAMultiAudioAVCapturePlayer.h */,
 				345F8B601A161552009A81E3 /* CAMultiAudioAVCapturePlayer.m */,
+				345F8B4D1A15F7DA009A81E3 /* CAMultiAudioPCMPlayer.h */,
 				345F8B4E1A15F7DA009A81E3 /* CAMultiAudioPCMPlayer.m */,
 				345F8B6F1A177C1F009A81E3 /* CAMultiAudioConverter.h */,
 				345F8B701A177C1F009A81E3 /* CAMultiAudioConverter.m */,
