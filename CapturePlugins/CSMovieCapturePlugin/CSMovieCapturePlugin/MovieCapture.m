@@ -60,7 +60,9 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
         }
     }
     
+    [aCoder encodeDouble:self.currentMovieTime forKey:@"currentMovieTime"];
     [aCoder encodeObject:currentQueueURLS forKey:@"currentQueueURLS"];
+    [aCoder encodeFloat:self.avPlayer.rate forKey:@"playerRate"];
 }
 
 
@@ -74,7 +76,10 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
         {
             [self enqueueMedia:url];
         }
+        self.currentMovieTime = [aDecoder decodeDoubleForKey:@"currentMovieTime"];
+        self.avPlayer.rate = [aDecoder decodeFloatForKey:@"playerRate"];
     }
+    
     return self;
 }
 
@@ -214,6 +219,7 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     self.avOutput = [[AVPlayerItemVideoOutput alloc] initWithPixelBufferAttributes:videoSettings];
 
     [self.avPlayer addObserver:self forKeyPath:@"rate" options:NSKeyValueObservingOptionNew context:NULL];
+    [self.avPlayer addObserver:self forKeyPath:@"currentItem" options:0 context:NULL];
     self.avPlayer.volume = 0.0;
     
     
@@ -229,7 +235,7 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     CMTime outputItemTime = [self.avOutput itemTimeForHostTime:currentTime];
     if ([self.avOutput hasNewPixelBufferForItemTime:outputItemTime])
     {
-        
+     
         newFrame = [self.avOutput copyPixelBufferForItemTime:outputItemTime itemTimeForDisplay:nil];
         if (newFrame)
         {
@@ -339,10 +345,8 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     
     AVPlayerItem *item = [AVPlayerItem playerItemWithURL:mediaURL];
 
-    [item addOutput:self.avOutput];
     if ([self.avPlayer canInsertItem:item afterItem:nil])
     {
-        [item addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
         
         [self.avPlayer insertItem:item afterItem:nil];
         
@@ -360,6 +364,7 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
         [self setupTimeObserver];
         [self.avPlayer play];
     }
+    
 }
 
 -(void) itemDidFinishPlaying:(NSNotification *)notification
@@ -484,6 +489,7 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 }
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
+    
     if ([keyPath isEqualToString:@"rate"])
     {
         float playerRate = [[change objectForKey:NSKeyValueChangeNewKey] floatValue];
@@ -512,12 +518,25 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
             return;
         }
         [self setupAudioTapOnItem:item];
+    } else if ([keyPath isEqualToString:@"currentItem"]) {
+        [self.avPlayer.currentItem addOutput:self.avOutput];
+
+        [self setupAudioTapOnItem:self.avPlayer.currentItem];
     }
+    
 }
 
 -(void) dealloc
 {
+    //stop any inflight whatever
+    [self.avPlayer pause];
+    
+    if (self.timeToken)
+    {
+        [self.avPlayer removeTimeObserver:self.timeToken];
+    }
     [self.avPlayer removeObserver:self forKeyPath:@"rate"];
+    [self.avPlayer removeObserver:self forKeyPath:@"currentItem"];
     self.avOutput = nil;
     self.avPlayer = nil;
 }
