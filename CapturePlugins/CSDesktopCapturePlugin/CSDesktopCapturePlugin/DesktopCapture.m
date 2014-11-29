@@ -103,7 +103,7 @@
         [self stopDisplayStream];
     }
     
-    
+
     
     if (!self.currentDisplay)
     {
@@ -138,7 +138,7 @@
         height = self.height;
     }
     
-    
+
     CFDictionaryRef rectDict;
 
     int rect_width;
@@ -166,8 +166,18 @@
     
     
     
+
+    __weak __typeof__(self) weakSelf = self;
     
     _displayStreamRef = CGDisplayStreamCreateWithDispatchQueue(self.currentDisplay, width, height,  kCVPixelFormatType_420YpCbCr8BiPlanarFullRange, (__bridge CFDictionaryRef)(opts), _capture_queue, ^(CGDisplayStreamFrameStatus status, uint64_t displayTime, IOSurfaceRef frameSurface, CGDisplayStreamUpdateRef updateRef) {
+        
+        if (!weakSelf)
+        {
+            return;
+        }
+        
+        __typeof__(self) strongSelf = weakSelf;
+        
         
         if (status == kCGDisplayStreamFrameStatusStopped)
         {
@@ -179,13 +189,13 @@
         {
             CIImage *newImg = [CIImage imageWithIOSurface:frameSurface];
 
-            @synchronized(self) {
-                _currentImg = newImg;
+            @synchronized(strongSelf) {
+                strongSelf->_currentImg = newImg;
             }
             
         }
     });
-    
+
     CGDisplayStreamStart(_displayStreamRef);
     return YES;
 }
@@ -296,6 +306,8 @@
 
 -(void)dealloc
 {
+    
+    
     [self removeObserver:self forKeyPath:@"propertiesChanged"];
 
     [self stopDisplayStream];

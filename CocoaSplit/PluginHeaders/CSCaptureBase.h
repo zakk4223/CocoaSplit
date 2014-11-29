@@ -14,7 +14,7 @@
 
 @property CSAbstractCaptureDevice *activeVideoDevice;
 @property (strong) NSArray *availableVideoDevices;
-@property (strong) CIContext *imageContext;
+@property (weak) CIContext *imageContext;
 @property (readonly) int render_width;
 @property (readonly) int render_height;
 @property (strong) NSString *captureName;

@@ -73,6 +73,7 @@ static NSArray *_sourceTypes = nil;
     
     [aCoder encodeObject:self.videoSources forKey:@"videoSources"];
     [aCoder encodeObject:self.currentEffects forKey:@"currentEffects"];
+    [aCoder encodeFloat:self.changeInterval forKey:@"changeInterval"];
 }
 
 -(id) initWithCoder:(NSCoder *)aDecoder
@@ -155,6 +156,12 @@ static NSArray *_sourceTypes = nil;
         {
             [self registerVideoInput:vInput];
         }
+        
+        if ([aDecoder containsValueForKey:@"changeInterval"])
+        {
+            self.changeInterval = [aDecoder decodeFloatForKey:@"changeInterval"];
+        }
+        
         
         self.usePrivateSource = [aDecoder decodeBoolForKey:@"usePrivateSource"];
 
@@ -390,12 +397,14 @@ static NSArray *_sourceTypes = nil;
 
 -(void)dealloc
 {
+    
     NSLog(@"DEALLOC SOURCE INPUT");
     [self deregisterVideoInput:self.videoInput];
     for(id vInput in self.videoSources)
     {
         [self deregisterVideoInput:vInput];
     }
+    
     [self removeObserver:self forKeyPath:@"usePrivateSource"];
     [self removeObserver:self forKeyPath:@"propertiesChanged"];
     [self removeObserver:self forKeyPath:@"editorController"];
@@ -582,18 +591,24 @@ static NSArray *_sourceTypes = nil;
     CVPixelBufferRef newFrame = NULL;
     
 
-    NSObject<CSCaptureSourceProtocol> *_useInput;
+    NSObject<CSCaptureSourceProtocol> *_useInput = nil;
     
     CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
     
-    if (!_useInput)
+    if (self.videoSources.count > 0)
     {
+        _useInput = [self.videoSources objectAtIndex:_currentSourceIdx];
+
+    } else {
         _useInput = self.videoInput;
     }
     
     
+    
     if (self.videoSources.count > 0 && (currentTime >= _nextImageTime) && (self.changeInterval > 0))
     {
+        
+        
         
         switch (self.rotateStyle)
         {
@@ -617,6 +632,8 @@ static NSArray *_sourceTypes = nil;
             default:
                 break;
         }
+        
+        
         _nextImageTime = currentTime + self.changeInterval;
 
     
@@ -720,7 +737,7 @@ static NSArray *_sourceTypes = nil;
     }
     
     outimg = self.inputImage;
-    
+
 
     if (!NSEqualSizes(self.oldSize, self.inputImage.extent.size))
     {
@@ -736,7 +753,8 @@ static NSArray *_sourceTypes = nil;
         }
     }
     
-    
+
+
     if (self.userFilter)
     {
         NSArray *userInputs = self.userFilter.inputKeys;
@@ -752,17 +770,23 @@ static NSArray *_sourceTypes = nil;
     
     outimg = [self.cropFilter valueForKey:kCIOutputImageKey];
 
-    
+
     
     //self.inputImage = outimg;
+    
+
+
+    
     [self.scaleFilter setValue:outimg forKeyPath:kCIInputImageKey];
     
     outimg  = [self.scaleFilter valueForKey:kCIOutputImageKey];
+
+
     
     [self.transformFilter setValue:outimg forKeyPath:kCIInputImageKey];
 
     outimg = [self.transformFilter valueForKey:kCIOutputImageKey];
-    
+
 
 
     if (self.doChromaKey && self.chromaKeyFilter)
@@ -777,8 +801,6 @@ static NSArray *_sourceTypes = nil;
     
     self.layoutPosition = NSMakeRect(self.x_pos, self.y_pos, self.display_width, self.display_height);
 
-    _preBgImage = outimg;
-    
     if (_inTransition)
     {
         CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
@@ -796,8 +818,13 @@ static NSArray *_sourceTypes = nil;
         _oldImage = nil;
         CVPixelBufferRelease(_oldCVBuf);
     }
+    
+
+
 
     
+    _preBgImage = outimg;
+
     
     if (backgroundImage)
     {
@@ -806,6 +833,8 @@ static NSArray *_sourceTypes = nil;
         [self.compositeFilter setValue:backgroundImage forKeyPath:kCIInputBackgroundImageKey];
         outimg = [self.compositeFilter valueForKey:kCIOutputImageKey];
     }
+
+
     return outimg;
 }
 
@@ -825,7 +854,13 @@ static NSArray *_sourceTypes = nil;
 {
     if (self.videoInput)
     {
-        [self.videoSources addObject:self.videoInput];
+        NSObject<CSCaptureSourceProtocol> *inputCopy;
+        
+        inputCopy = self.videoInput.copy;
+        
+        [self registerVideoInput:inputCopy];
+
+        [self.videoSources addObject:inputCopy];
     }
     
 }
@@ -1014,8 +1049,11 @@ static NSArray *_sourceTypes = nil;
     
     _currentInputViewController = nil;
     
-    [self deregisterVideoInput:self.videoInput];
-    self.videoInput = nil;
+    if (self.videoInput)
+    {
+        [self deregisterVideoInput:self.videoInput];
+        self.videoInput = nil;
+    }
     
     NSObject <CSCaptureSourceProtocol> *newCaptureSession;
     

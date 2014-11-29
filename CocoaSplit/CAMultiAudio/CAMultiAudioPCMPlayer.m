@@ -93,6 +93,7 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
         //In 10.10 mFlags = 0 says 'play as soon as you can, but don't interrupt anything currently playing'
         pcmBuffer.audioSlice->mTimeStamp.mSampleTime = 0;
         pcmBuffer.audioSlice->mTimeStamp.mFlags = 0;
+
     }
     
 
@@ -172,7 +173,14 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
 -(bool)createNode:(AUGraph)forGraph
 {
     bool ret = [super createNode:forGraph];
-    //[self play];
+    if (floor(NSAppKitVersionNumber > NSAppKitVersionNumber10_9))
+    {
+        
+        //We can start whenever on 10.10. Anything not 10.10 we have to start/restart at specific times in the schedule function.
+        [self play];
+
+    }
+
     return ret;
 }
 

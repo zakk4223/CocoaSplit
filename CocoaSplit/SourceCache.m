@@ -39,6 +39,7 @@
 -(id) cacheSource:(NSObject <CSCaptureSourceProtocol>*)toCache uniqueID:(NSString *)uniqueID
 {
     
+
     if (!toCache.allowDedup)
     {
         return toCache;

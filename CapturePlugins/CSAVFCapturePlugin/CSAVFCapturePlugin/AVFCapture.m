@@ -121,6 +121,8 @@
 -(void)dealloc
 {
     
+    NSLog(@"DEALLOC AVF");
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     if (_capture_session)
     {
