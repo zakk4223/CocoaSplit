@@ -14,11 +14,13 @@
 @interface CAMultiAudioPCMPlayer : CAMultiAudioNode
 {
     NSMutableArray *_pendingBuffers;
+    dispatch_queue_t _pendingQueue;
     
 }
 
 @property (strong) NSString *inputUID;
 @property (weak) id converterNode;
+@property (assign) Float64 latestScheduledTime;
 
 -(void)releasePCM:(CAMultiAudioPCM *)buffer;
 -(void)scheduleBuffer:(CMSampleBufferRef)sampleBuffer;

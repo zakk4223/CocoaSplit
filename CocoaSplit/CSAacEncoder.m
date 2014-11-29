@@ -41,12 +41,17 @@
     }
     
 }
+
+
+
 -(void) enqueuePCM:(AudioBufferList *)pcmBuffer atTime:(const AudioTimeStamp *)atTime
 {
     
     
     
     [self preallocateBufferList:pcmBuffer];
+    
+
     
     if (!self.encoderStarted)
     {
@@ -55,13 +60,10 @@
     }
     
     
+
     //for now assume Float32, 2 channel, non-interleaved. We have to interleave it outselves here.
     
     
-    __block UInt32 bufsize = self.preallocatedBuffersize*2; //This should be equal to 2x pcmBuffer->mBuffers[0].mDataByteSize
-    
-    UInt32 orig_size = bufsize;
-    __block UInt32 wrote_bytes = 0;
     
     
     //NSLog(@"ENCODE BUFFER SIZE %u", (unsigned int)bufsize);
@@ -81,15 +83,38 @@
         writebuf[u+1] = data1[i];
     }
     
-    __block Float32 *readbuf = _pcmData;
     
     
     //Do the actual compression on another thread so as not to block AudioUnit callbacks
     
-    dispatch_async(encoderQueue, ^{
-        UInt32 num_packets = 1;
+    
+    
 
+    
+    
+    
+    
+    dispatch_async(encoderQueue, ^{
+        
+            
+            
+        
+        UInt32 wrote_bytes = 0;
+        UInt32 num_packets = 1;
         UInt32 outstatus = 0;
+        Float32 *readbuf = _pcmData;
+
+
+        
+        
+       
+
+        UInt32 bufsize = self.preallocatedBuffersize*2; //This should be equal to 2x pcmBuffer->mBuffers[0].mDataByteSize
+        
+        
+        UInt32 orig_size = bufsize;
+
+
 
         UInt32 buffer_size = maxOutputSize;
         
@@ -124,6 +149,7 @@
             
             if (outstatus == kAudioCodecProduceOutputPacketNeedsMoreInputData)
             {
+                free(aacBuffer);
                 break;
             }
 
@@ -144,17 +170,23 @@
                 CMBlockBufferRef bufferRef;
                 
                 
-                CMBlockBufferCreateWithMemoryBlock(NULL, aacBuffer, buffer_size, NULL, NULL, 0, buffer_size, 0, &bufferRef);
+                CMBlockBufferCreateWithMemoryBlock(NULL, aacBuffer, buffer_size, kCFAllocatorMalloc, NULL, 0, buffer_size, 0, &bufferRef);
                 
                 
                 CMAudioSampleBufferCreateReadyWithPacketDescriptions(kCFAllocatorDefault, bufferRef, cmFormat, 1, ptsTime, &packetDesc, &newSampleBuf);
                 
                 CMSampleBufferCreateCopyWithNewTiming(kCFAllocatorDefault, newSampleBuf, 1, &timeInfo, &timingSampleBuf);
                 CFRelease(newSampleBuf);
+                //The sample buffer retains the block buffer when it is handed over to it, we can release ours.
+                CFRelease(bufferRef);
                 
                 
                 [self.encodedReceiver captureOutputAudio:nil didOutputSampleBuffer:timingSampleBuf];
+                //Individual video compressors retain the buffer until they push it to their output, we can release it now.
+                CFRelease(timingSampleBuf);
                 
+            } else {
+                free(aacBuffer);
             }
             
 
@@ -173,7 +205,6 @@
         
         
     });
-    
     
 }
 

@@ -176,7 +176,6 @@
 
 - (bool)compressFrame:(CapturedFrameData *)frameData
 {
-    
     if (![self hasOutputs])
     {
         return NO;

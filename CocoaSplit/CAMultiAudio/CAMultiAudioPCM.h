@@ -27,7 +27,7 @@
 @property (weak) id player;
 @property (assign) AudioStreamBasicDescription pcmFormat;
 
--(instancetype)initWithAudioBufferList:(AudioBufferList *)bufferList streamFormat:(AudioStreamBasicDescription *)streamFormat;
+-(instancetype)initWithAudioBufferList:(AudioBufferList *)bufferList streamFormat:(const AudioStreamBasicDescription *)streamFormat;
 -(instancetype)initWithDescription:(const AudioStreamBasicDescription *)streamFormat forFrameCount:(int)forFrameCount;
 -(void)copyFromAudioBufferList:(AudioBufferList *)copyFrom;
 

@@ -50,6 +50,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     
     id _audio_capture_session;
     
+    NSThread *mainThread;
+    
     NSTimer *_captureTimer;
     NSTimer *_idleTimer;
     BOOL _cmdLineInfo;
@@ -169,11 +171,9 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 
-- (IBAction)multiAudioAddDevice:(id)sender;
 
 - (IBAction)stagingViewToggle:(id)sender;
 
-- (IBAction)openLayoutPreview:(id)sender;
 - (IBAction)openPluginManager:(id)sender;
 
 - (IBAction)stagingGoLive:(id)sender;

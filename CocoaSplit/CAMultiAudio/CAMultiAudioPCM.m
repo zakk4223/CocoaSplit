@@ -23,7 +23,7 @@
 }
 
 
--(instancetype)initWithAudioBufferList:(AudioBufferList *)bufferList streamFormat:(AudioStreamBasicDescription *)streamFormat
+-(instancetype)initWithAudioBufferList:(AudioBufferList *)bufferList streamFormat:(const AudioStreamBasicDescription *)streamFormat
 {
     if (self = [super init])
     {
@@ -32,6 +32,8 @@
         
         _audioSlice->mBufferList = bufferList;
         _audioSlice->mNumberFrames = bufferList->mBuffers[0].mDataByteSize / streamFormat->mBytesPerFrame;
+        self.frameCount = _audioSlice->mNumberFrames;
+        
         self.bufferCount = streamFormat->mChannelsPerFrame;
         
     }

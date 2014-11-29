@@ -208,7 +208,6 @@
 -(void) setSourceLayout:(SourceLayout *)sourceLayout
 {
     
-    SourceLayout *oldLayout = _sourceLayout;
     
     if (!sourceLayout.isActive)
     {
@@ -217,11 +216,7 @@
         sourceLayout.ciCtx =  [CIContext contextWithCGLContext:cgl_ctx pixelFormat:CGLGetPixelFormat(cgl_ctx) colorSpace:nil options:@{kCIContextWorkingColorSpace: [NSNull null]}];
         
     }
-    
-    
-    
     _sourceLayout = sourceLayout;
-    
 }
 
 
@@ -894,6 +889,9 @@
 -(void) cvrender
 {
     
+    @autoreleasepool {
+        
+    
     CVImageBufferRef displayFrame = NULL;
     
     if (!self.sourceLayout)
@@ -911,6 +909,7 @@
     //CVPixelBufferRetain(displayFrame);
     [self drawPixelBuffer:displayFrame];
     CVPixelBufferRelease(displayFrame);
+    }
 }
 
 

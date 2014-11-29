@@ -16,20 +16,30 @@ void tapInit(MTAudioProcessingTapRef tap, void *clientInfo, void **tapStorageOut
 void tapPrepare(MTAudioProcessingTapRef tap, CMItemCount maxFrames, const AudioStreamBasicDescription *processingFormat)
 {
 
+    void *tapStorage = MTAudioProcessingTapGetStorage(tap);
     
-    MovieCapture *captureObj = (__bridge MovieCapture *)(MTAudioProcessingTapGetStorage(tap));
-    [captureObj preallocateAudioBuffers:maxFrames audioFormat:processingFormat];
+    if (tapStorage)
+    {
+        MovieCapture *captureObj = (__bridge MovieCapture *)tapStorage;
+        [captureObj preallocateAudioBuffers:maxFrames audioFormat:processingFormat];
+    }
 }
 
 
 void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioProcessingTapFlags flags, AudioBufferList *bufferListInOut, CMItemCount *numberFramesOut,MTAudioProcessingTapFlags *flagsOut)
 {
-    MovieCapture *captureObj = (__bridge MovieCapture *)MTAudioProcessingTapGetStorage(tap);
-    MTAudioProcessingTapGetSourceAudio(tap, numberFrames, bufferListInOut, flagsOut, NULL, numberFramesOut);
-
-    if (captureObj && captureObj.pcmPlayer)
+    
+    void *tapStorage = MTAudioProcessingTapGetStorage(tap);
+    
+    if (tapStorage)
     {
-        [captureObj playAudioBuffer:bufferListInOut];
+        MovieCapture *captureObj = (__bridge MovieCapture *)tapStorage;
+        MTAudioProcessingTapGetSourceAudio(tap, numberFrames, bufferListInOut, flagsOut, NULL, numberFramesOut);
+
+        if (captureObj && captureObj.pcmPlayer)
+        {
+            [captureObj playAudioBuffer:bufferListInOut];
+        }
     }
 }
 
@@ -111,13 +121,18 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 
 -(void) playAudioBuffer:(AudioBufferList *)buffer
 {
-    
     [self copyAudioBufferList:buffer];
     
+    
+    
+    
+    
     dispatch_async(_audioQueue, ^{
-        CAMultiAudioPCM *newBuffer = [_bufferPCM copy];
         
-        [self.pcmPlayer playPcmBuffer:newBuffer];
+        
+            CAMultiAudioPCM *newBuffer = [_bufferPCM copy];
+        
+            [self.pcmPlayer playPcmBuffer:newBuffer];
     });
 }
 
@@ -529,6 +544,12 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 -(void) dealloc
 {
     //stop any inflight whatever
+    if (self.avPlayer && self.avPlayer.currentItem)
+    {
+        AVMutableAudioMixInputParameters *inputParams = self.avPlayer.currentItem.audioMix.inputParameters.firstObject;
+        inputParams.audioTapProcessor = nil;
+        self.avPlayer.currentItem.audioMix = nil;
+    }
     [self.avPlayer pause];
     
     if (self.timeToken)

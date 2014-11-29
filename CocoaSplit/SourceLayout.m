@@ -151,7 +151,6 @@
         self.sourceList = [NSMutableArray array];
     }
     
-    NSLog(@"RESTORING SOURCE LIST FOR %@", self);
     for(InputSource *src in self.sourceList)
     {
         src.layout = self;
@@ -245,15 +244,15 @@
     CGFloat frameWidth, frameHeight;
     NSArray *listCopy;
     
-    @autoreleasepool {
+    
         
         
         
         
-        
-        //newImage = [_backgroundFilter valueForKey:kCIOutputImageKey];
-        newImage = [CIImage imageWithColor:[CIColor colorWithRed:0.0f green:0.0f blue:0.0f]];
-        
+        newImage = [_backgroundFilter valueForKey:kCIOutputImageKey];
+        //newImage = [CIImage imageWithColor:[CIColor colorWithRed:0.0f green:0.0f blue:0.0f]];
+        //newImage = [CIImage emptyImage];
+    
         newImage = [newImage imageByCroppingToRect:NSMakeRect(0, 0, self.canvas_width, self.canvas_height)];
         
         
@@ -287,7 +286,7 @@
             _cvpool_size = frameSize;
             
         }
-    }
+    //}
     
     CVPixelBufferPoolCreatePixelBuffer(kCVReturnSuccess, _cvpool, &destFrame);
         
@@ -312,8 +311,6 @@
     
         
         
-        
-    //}
         @synchronized(self)
         {
             if (_currentPB)

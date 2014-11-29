@@ -339,7 +339,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 }
 
 
--(CAMultiAudioPCMPlayer *)createPCMInput:(NSString *)uniqueID withFormat:(AudioStreamBasicDescription *)withFormat
+-(CAMultiAudioPCMPlayer *)createPCMInput:(NSString *)uniqueID withFormat:(const AudioStreamBasicDescription *)withFormat
 {
     CAMultiAudioPCMPlayer *newInput = [[CAMultiAudioPCMPlayer alloc] init];
     newInput.nodeUID = uniqueID;
@@ -354,7 +354,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     [self attachInput:newConverter];
     [self.graph connectNode:newInput toNode:newConverter sampleRate:withFormat->mSampleRate];
     
-    [newInput play];
+    //[newInput play];
     
     return newInput;
     
@@ -424,7 +424,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 {
     if ((*ioActionFlags) & kAudioUnitRenderAction_PostRender)
     {
-         
+        
+        
         CAMultiAudioEngine *selfPtr = (__bridge CAMultiAudioEngine *)inRefCon;
         
         if (selfPtr.encoder)

@@ -21,7 +21,7 @@
     return self;
 }
 
--(instancetype)initWithInputFormat:(AudioStreamBasicDescription *)format
+-(instancetype)initWithInputFormat:(const AudioStreamBasicDescription *)format
 {
     if (self = [self init])
     {

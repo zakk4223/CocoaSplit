@@ -33,7 +33,6 @@
 @property (assign) int preallocatedBuffersize;
 
 -(void) enqueuePCM:(AudioBufferList *)pcmBuffer atTime:(const AudioTimeStamp *)atTime;
--(void) startEncoder;
 -(void) stopEncoder;
 
 

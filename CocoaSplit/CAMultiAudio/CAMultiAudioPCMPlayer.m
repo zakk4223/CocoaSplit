@@ -22,7 +22,9 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     if (self = [super initWithSubType:kAudioUnitSubType_ScheduledSoundPlayer unitType:kAudioUnitType_Generator])
     {
         _pendingBuffers = [NSMutableArray array];
+        _pendingQueue = dispatch_queue_create("PCM Player pending queue", NULL);
         
+        self.latestScheduledTime = 0;
     }
     
     return self;
@@ -47,6 +49,11 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     //Under 10.10 this means PLAY NEXT. Need to figure out everything that's not 10.10 :(
     
     
+    AudioTimeStamp currentTimeStamp = {0};
+    UInt32 ctsSize = sizeof(currentTimeStamp);
+    
+    Float64 playAtTime = 0;
+    
     pcmBuffer.audioSlice->mFlags = 0;
     pcmBuffer.audioSlice->mCompletionProcUserData = (__bridge void *)(pcmBuffer);
     pcmBuffer.audioSlice->mCompletionProc = BufferCompletedPlaying;
@@ -57,9 +64,50 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
         return YES;
     }
     
+    if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_9)
+    {
+        //Before 10.10 this was a bit more involved...
+        AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_CurrentPlayTime, kAudioUnitScope_Global, 0, &currentTimeStamp, &ctsSize);
+        
+        if (self.latestScheduledTime == 0)
+        {
+            playAtTime = 0;
+        } else {
+            playAtTime = self.latestScheduledTime;
+        }
+        
+        if (currentTimeStamp.mSampleTime > self.latestScheduledTime)
+        {
+            
+            self.latestScheduledTime = playAtTime = 0;
+        }
+        pcmBuffer.audioSlice->mTimeStamp.mSampleTime = playAtTime;
+        pcmBuffer.audioSlice->mTimeStamp.mFlags = kAudioTimeStampSampleTimeValid;
+        
+        if (playAtTime == 0)
+        {
+            [self play];
+        }
+        self.latestScheduledTime += pcmBuffer.frameCount;
+    } else {
+        //In 10.10 mFlags = 0 says 'play as soon as you can, but don't interrupt anything currently playing'
+        pcmBuffer.audioSlice->mTimeStamp.mSampleTime = 0;
+        pcmBuffer.audioSlice->mTimeStamp.mFlags = 0;
+    }
     
-    [_pendingBuffers addObject:pcmBuffer];
+
     err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ScheduleAudioSlice, kAudioUnitScope_Global, 0, pcmBuffer.audioSlice, sizeof(ScheduledAudioSlice));
+    
+
+    
+    dispatch_async(_pendingQueue, ^{
+        
+        [_pendingBuffers addObject:pcmBuffer];
+    });
+    
+
+    
+    
     
     //NSLog(@"SCHED SLICE %d", err);
     
@@ -114,15 +162,17 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
 
 -(void)releasePCM:(CAMultiAudioPCM *)buffer
 {
-    [_pendingBuffers removeObject:buffer];
-    
+    dispatch_async(_pendingQueue, ^{
+        [_pendingBuffers removeObject:buffer];
+    });
 }
+
 
 
 -(bool)createNode:(AUGraph)forGraph
 {
     bool ret = [super createNode:forGraph];
-    [self play];
+    //[self play];
     return ret;
 }
 
@@ -135,7 +185,7 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     
 
     
-    ts.mFlags = kAudioTimeStampHostTimeValid;
+    ts.mFlags = kAudioTimeStampSampleTimeValid;
     ts.mSampleTime = -1;
     err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ScheduleStartTimeStamp, kAudioUnitScope_Global, 0, &ts, sizeof(ts));
     
@@ -162,6 +212,7 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList)
     //why a queue? don't want to do any sort of memory/managed object operations in an audio callback.
     dispatch_async(dispatch_get_main_queue(), ^{
         CAMultiAudioPCMPlayer *pplayer = pcmObj.player;
+        //pplayer.latestScheduledTime = pcmObj.audioSlice->mTimeStamp.mSampleTime + pcmObj.audioSlice->mNumberFrames;
         [pplayer releasePCM:pcmObj];
     });
     

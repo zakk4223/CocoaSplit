@@ -693,7 +693,6 @@
        
 
        
-       /*
        int dispatch_strict_flag = 1;
        
        if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_8)
@@ -701,6 +700,7 @@
            dispatch_strict_flag = 0;
        }
        
+       /*
        _dispatch_timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, dispatch_strict_flag, _main_capture_queue);
        
        dispatch_source_set_timer(_dispatch_timer, DISPATCH_TIME_NOW, _frame_interval, 0);
@@ -708,7 +708,6 @@
        dispatch_source_set_event_handler(_dispatch_timer, ^{[self newFrameDispatched];});
        
        dispatch_resume(_dispatch_timer);
-       
        */
        
        _audio_statistics_timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
@@ -1152,9 +1151,13 @@
     [self createCGLContext];
     _cictx = [CIContext contextWithCGLContext:_cgl_ctx pixelFormat:CGLGetPixelFormat(_cgl_ctx) colorSpace:nil options:@{kCIContextWorkingColorSpace: [NSNull null]}];
     
-    dispatch_async(_main_capture_queue, ^{[self newFrameTimed];});
-
+    mainThread = [[NSThread alloc] initWithTarget:self selector:@selector(newFrameTimed) object:nil];
+    [mainThread start];
     
+    
+    
+    //dispatch_async(_main_capture_queue, ^{[self newFrameTimed];});
+
     self.sourceLayouts = [saveRoot valueForKey:@"sourceLayouts"];
     
     if (!self.sourceLayouts)
@@ -1195,7 +1198,7 @@
 
 
     self.extraPluginsSaveData = nil;
-    }
+}
 
 
 
@@ -1797,7 +1800,6 @@
     {
         return NO;
     }
-    
     while ([self mach_time_seconds] < target_time)
     {
         int32_t useconds = (target_time - [self mach_time_seconds]) * 0.25e6;
@@ -1806,7 +1808,6 @@
             usleep(useconds);
         }
     }
-    
     
     /*
     double mach_duration = target_time - mach_now;
@@ -1821,6 +1822,7 @@
         
             //wheeeeeeeeeeeee
     }
+     
      */
     return YES;
     
@@ -1885,6 +1887,9 @@
 
 -(void) newFrameTimed
 {
+    
+    
+    
     double startTime;
     
     startTime = [self mach_time_seconds];
@@ -1896,6 +1901,9 @@
     //[self setFrameThreadPriority];
     while (1)
     {
+        
+        @autoreleasepool {
+            
         
         
         
@@ -1913,9 +1921,9 @@
         
         _frame_time = startTime;
         [self newFrame];
+        }
+        
     }
-    
-
 }
 
 -(void)deleteSource:(InputSource *)delSource

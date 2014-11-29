@@ -492,7 +492,7 @@ static NSArray *_sourceTypes = nil;
     
     if (!self.videoInput.allowScaling)
     {
-        cropRect = [self calculateCropRect:self.display_width height:self.display_height];
+        cropRect = [self calculateCropRect:(int)self.display_width height:(int)self.display_height];
 
         
     } else {

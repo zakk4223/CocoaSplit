@@ -21,7 +21,6 @@
 
 @property (unsafe_unretained) IBOutlet NSWindow *window;
 
--(CAMultiAudioPCMPlayer *)createPCMInput:(NSString *)forUID withFormat:(AudioStreamBasicDescription *)withFormat;
 
 
 @end

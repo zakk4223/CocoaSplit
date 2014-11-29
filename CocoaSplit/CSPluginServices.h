@@ -7,14 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CAMultiAudioPCMPlayer.h"
+#import "CSPcmPlayer.h"
 
 @interface CSPluginServices : NSObject
 
 
 
 +(id)sharedPluginServices;
--(CAMultiAudioPCMPlayer *)createPCMInput:(NSString *)forUID withFormat:(const AudioStreamBasicDescription *)withFormat;
--(void)removePCMInput:(CAMultiAudioPCMPlayer *)toRemove;
+-(CSPcmPlayer *)createPCMInput:(NSString *)forUID withFormat:(const AudioStreamBasicDescription *)withFormat;
+-(void)removePCMInput:(CSPcmPlayer *)toRemove;
 
 @end

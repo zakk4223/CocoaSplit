@@ -20,6 +20,6 @@
 @property (weak) CAMultiAudioNode *sourceNode;
 
 
--(instancetype)initWithInputFormat:(AudioStreamBasicDescription *)format;
+-(instancetype)initWithInputFormat:(const AudioStreamBasicDescription *)format;
 
 @end
