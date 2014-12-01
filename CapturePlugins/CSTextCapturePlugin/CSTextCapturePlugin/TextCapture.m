@@ -32,8 +32,9 @@
         
         offsetFilter = [CIFilter filterWithName:@"TextureWrapPluginFilter"];
         [offsetFilter setDefaults];
-        _font = [NSFont fontWithName:@"Helvetica" size:11];
-        _fontAttributes = [NSDictionary dictionary];
+        _font = [NSFont fontWithName:@"Helvetica" size:50];
+        _fontAttributes = [NSDictionary dictionaryWithObject:[NSColor whiteColor] forKey:NSForegroundColorAttributeName];
+        
         
 
     }

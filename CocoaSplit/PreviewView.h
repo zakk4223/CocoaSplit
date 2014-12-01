@@ -7,7 +7,6 @@
 //
 #import <Foundation/Foundation.h>
 #import <VideoToolbox/VideoToolbox.h>
-#import <Syphon/Syphon.h>
 #import "CaptureController.h"
 
 
@@ -59,7 +58,6 @@ typedef enum resize_style_t {
     IOSurfaceID _boundIOSurfaceID;
     NSMutableDictionary      *_shaderPrograms;
     GLuint      _previewTextures[3]; //Is there something with more than 3 planes? Guess we'll find out;
-    GLuint      _syphonTexture;
     GLsizei     _surfaceWidth;
     GLsizei     _surfaceHeight;
     int         _hackcnt;

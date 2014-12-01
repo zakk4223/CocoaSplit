@@ -7,9 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <Syphon/Syphon.h>
 #import "CSCaptureBase.h"
 #import "CSAbstractCaptureDevice.h"
+#import "SyphonBuildMacros.h"
+#import "Syphon.h"
+
+
 
 
 @interface SyphonCapture : CSCaptureBase <CSCaptureSourceProtocol>
@@ -27,7 +30,10 @@
     id _retire_observer;
     id _announce_observer;
     CVPixelBufferRef _currentFrame;
+    IOSurfaceRef _serverSurface;
+    uint32_t _surfaceSeed;
     
+    CIFilter *_flipTransform;
 }
 
 

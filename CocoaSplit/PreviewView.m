@@ -798,6 +798,8 @@
     };
     
     
+    NSLog(@"CALLED INIT WITH FRAME");
+    
     NSOpenGLPixelFormat *pf = [[NSOpenGLPixelFormat alloc] initWithAttributes:(void *)&attr];
 
 
@@ -825,11 +827,10 @@
     
     _cictx = [CIContext contextWithCGLContext:[self.openGLContext CGLContextObj] pixelFormat:CGLGetPixelFormat([self.openGLContext CGLContextObj]) colorSpace:CGColorSpaceCreateDeviceRGB() options:nil];
     CVDisplayLinkCreateWithActiveCGDisplays(&displayLink);
-    CVDisplayLinkSetOutputCallback(displayLink, &displayLinkRender, (__bridge void *)self);
+   CVDisplayLinkSetOutputCallback(displayLink, &displayLinkRender, (__bridge void *)self);
     
     CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink, [[self openGLContext] CGLContextObj], [[self pixelFormat] CGLPixelFormatObj]);
     CVDisplayLinkStart(displayLink);
-    
     
     return self;
 }

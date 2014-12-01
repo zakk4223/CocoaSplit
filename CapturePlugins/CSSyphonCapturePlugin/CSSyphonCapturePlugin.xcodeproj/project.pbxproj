@@ -12,9 +12,26 @@
 		34AFC1F319B04F0B0007C07B /* SyphonCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AFC1EF19B04F0B0007C07B /* SyphonCaptureViewController.m */; };
 		34AFC1F419B04F0B0007C07B /* SyphonCaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34AFC1F019B04F0B0007C07B /* SyphonCaptureViewController.xib */; };
 		34AFC1F519B04F0B0007C07B /* SyphonCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AFC1F219B04F0B0007C07B /* SyphonCapture.m */; };
-		34AFC23519B0559E0007C07B /* Syphon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AFC23419B0559E0007C07B /* Syphon.framework */; };
-		34AFC23719B055F40007C07B /* Syphon.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34AFC23419B0559E0007C07B /* Syphon.framework */; };
+		34C67B4E1A2A4ECB0012DC1B /* Syphon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34C67B4A1A2A4D870012DC1B /* Syphon.framework */; };
+		34C67B4F1A2A56A20012DC1B /* Syphon.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34C67B4A1A2A4D870012DC1B /* Syphon.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		34C67B491A2A4D870012DC1B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 34C67B441A2A4D870012DC1B /* Syphon.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8DC2EF5B0486A6940098B216;
+			remoteInfo = Syphon;
+		};
+		34C67B4B1A2A4E130012DC1B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 34C67B441A2A4D870012DC1B /* Syphon.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
+			remoteInfo = Syphon;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		34AFC23619B055E80007C07B /* CopyFiles */ = {
@@ -23,7 +40,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				34AFC23719B055F40007C07B /* Syphon.framework in CopyFiles */,
+				34C67B4F1A2A56A20012DC1B /* Syphon.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,10 +60,10 @@
 		34AFC1F019B04F0B0007C07B /* SyphonCaptureViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SyphonCaptureViewController.xib; sourceTree = "<group>"; };
 		34AFC1F119B04F0B0007C07B /* SyphonCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyphonCapture.h; sourceTree = "<group>"; };
 		34AFC1F219B04F0B0007C07B /* SyphonCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyphonCapture.m; sourceTree = "<group>"; };
-		34AFC23419B0559E0007C07B /* Syphon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Syphon.framework; sourceTree = "<group>"; };
 		34AFC2A519B062390007C07B /* CSAbstractCaptureDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAbstractCaptureDevice.h; path = PluginHeaders/CSAbstractCaptureDevice.h; sourceTree = "<group>"; };
 		34AFC2A619B062390007C07B /* CSCaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureBase.h; path = PluginHeaders/CSCaptureBase.h; sourceTree = "<group>"; };
 		34AFC2A719B062390007C07B /* CSCaptureSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureSourceProtocol.h; path = PluginHeaders/CSCaptureSourceProtocol.h; sourceTree = "<group>"; };
+		34C67B441A2A4D870012DC1B /* Syphon.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Syphon.xcodeproj; path = "Syphon-Framework/Syphon.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,7 +72,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				34AFC1D719B04EB90007C07B /* Cocoa.framework in Frameworks */,
-				34AFC23519B0559E0007C07B /* Syphon.framework in Frameworks */,
+				34C67B4E1A2A4ECB0012DC1B /* Syphon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +82,7 @@
 		34AFC1CA19B04EB90007C07B = {
 			isa = PBXGroup;
 			children = (
+				34C67B441A2A4D870012DC1B /* Syphon.xcodeproj */,
 				34AFC2A819B062390007C07B /* PluginHeaders */,
 				34AFC1DC19B04EB90007C07B /* CSSyphonCapturePlugin */,
 				34AFC1D519B04EB90007C07B /* Frameworks */,
@@ -83,7 +101,6 @@
 		34AFC1D519B04EB90007C07B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				34AFC23419B0559E0007C07B /* Syphon.framework */,
 				34AFC1D619B04EB90007C07B /* Cocoa.framework */,
 				34AFC1D819B04EB90007C07B /* Other Frameworks */,
 			);
@@ -134,6 +151,14 @@
 			path = ../../CocoaSplit;
 			sourceTree = "<group>";
 		};
+		34C67B451A2A4D870012DC1B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				34C67B4A1A2A4D870012DC1B /* Syphon.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -149,6 +174,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				34C67B4C1A2A4E130012DC1B /* PBXTargetDependency */,
 			);
 			name = CSSyphonCapturePlugin;
 			productName = CSSyphonCapturePlugin;
@@ -174,12 +200,28 @@
 			mainGroup = 34AFC1CA19B04EB90007C07B;
 			productRefGroup = 34AFC1D419B04EB90007C07B /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 34C67B451A2A4D870012DC1B /* Products */;
+					ProjectRef = 34C67B441A2A4D870012DC1B /* Syphon.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				34AFC1D219B04EB90007C07B /* CSSyphonCapturePlugin */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		34C67B4A1A2A4D870012DC1B /* Syphon.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Syphon.framework;
+			remoteRef = 34C67B491A2A4D870012DC1B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		34AFC1D119B04EB90007C07B /* Resources */ = {
@@ -204,6 +246,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		34C67B4C1A2A4E130012DC1B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Syphon;
+			targetProxy = 34C67B4B1A2A4E130012DC1B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		34AFC1DF19B04EB90007C07B /* InfoPlist.strings */ = {
@@ -290,6 +340,7 @@
 		34AFC1E619B04EB90007C07B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -297,6 +348,10 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CSSyphonCapturePlugin/CSSyphonCapturePlugin-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
 				INFOPLIST_FILE = "CSSyphonCapturePlugin/CSSyphonCapturePlugin-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				OTHER_LDFLAGS = (
@@ -306,6 +361,7 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/Syphon-Framework/**";
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Debug;
@@ -313,6 +369,7 @@
 		34AFC1E719B04EB90007C07B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -329,6 +386,7 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/Syphon-Framework/**";
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Release;

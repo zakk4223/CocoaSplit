@@ -507,7 +507,10 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     
     if ([keyPath isEqualToString:@"rate"])
     {
+        
         float playerRate = [[change objectForKey:NSKeyValueChangeNewKey] floatValue];
+        
+
         
         if (playerRate != 1.0f)
         {
@@ -544,6 +547,16 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 -(void) dealloc
 {
     //stop any inflight whatever
+    
+    if (self.timeToken)
+    {
+        [self.avPlayer removeTimeObserver:self.timeToken];
+    }
+
+    
+    [self.avPlayer removeObserver:self forKeyPath:@"rate"];
+    [self.avPlayer removeObserver:self forKeyPath:@"currentItem"];
+
     if (self.avPlayer && self.avPlayer.currentItem)
     {
         AVMutableAudioMixInputParameters *inputParams = self.avPlayer.currentItem.audioMix.inputParameters.firstObject;
@@ -552,12 +565,6 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     }
     [self.avPlayer pause];
     
-    if (self.timeToken)
-    {
-        [self.avPlayer removeTimeObserver:self.timeToken];
-    }
-    [self.avPlayer removeObserver:self forKeyPath:@"rate"];
-    [self.avPlayer removeObserver:self forKeyPath:@"currentItem"];
     self.avOutput = nil;
     self.avPlayer = nil;
 }

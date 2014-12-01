@@ -1710,7 +1710,7 @@
         
         if ([self startStream] == YES)
         {
-            self.selectedTabIndex = 1;
+            self.selectedTabIndex = 3;
         } else {
             [sender setNextState];
 
