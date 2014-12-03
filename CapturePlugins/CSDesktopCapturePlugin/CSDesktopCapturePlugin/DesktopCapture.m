@@ -170,7 +170,6 @@
     __weak __typeof__(self) weakSelf = self;
     
     _displayStreamRef = CGDisplayStreamCreateWithDispatchQueue(self.currentDisplay, width, height,  kCVPixelFormatType_420YpCbCr8BiPlanarFullRange, (__bridge CFDictionaryRef)(opts), _capture_queue, ^(CGDisplayStreamFrameStatus status, uint64_t displayTime, IOSurfaceRef frameSurface, CGDisplayStreamUpdateRef updateRef) {
-        
         if (!weakSelf)
         {
             return;
@@ -306,7 +305,6 @@
 
 -(void)dealloc
 {
-    
     
     [self removeObserver:self forKeyPath:@"propertiesChanged"];
 

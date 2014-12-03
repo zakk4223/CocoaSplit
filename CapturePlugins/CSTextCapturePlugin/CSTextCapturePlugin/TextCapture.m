@@ -162,6 +162,7 @@
     [self buildString];
     
     
+    
     if (!_cgLayer || !NSEqualSizes(CGLayerGetSize(_cgLayer), _attribString.size))
     {
         CGLayerRelease(_cgLayer);

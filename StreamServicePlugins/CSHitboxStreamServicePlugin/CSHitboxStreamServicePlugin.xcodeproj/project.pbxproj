@@ -1,0 +1,302 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		34C67B861A2D7C490012DC1B /* HitboxStreamService.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C67B851A2D7C490012DC1B /* HitboxStreamService.m */; };
+		34C67B881A2D7DDB0012DC1B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34C67B871A2D7DDB0012DC1B /* Cocoa.framework */; };
+		34C67B8C1A2D82250012DC1B /* HitboxStreamServiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C67B8A1A2D82250012DC1B /* HitboxStreamServiceViewController.m */; };
+		34C67B8D1A2D82250012DC1B /* HitboxStreamServiceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34C67B8B1A2D82250012DC1B /* HitboxStreamServiceViewController.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		34C67B691A2D7B690012DC1B /* CSHitboxStreamServicePlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSHitboxStreamServicePlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		34C67B6D1A2D7B690012DC1B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		34C67B791A2D7B760012DC1B /* CSPluginServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPluginServices.h; sourceTree = "<group>"; };
+		34C67B7A1A2D7B760012DC1B /* CSPcmPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPcmPlayer.h; sourceTree = "<group>"; };
+		34C67B7B1A2D7B760012DC1B /* CAMultiAudioPCM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioPCM.h; path = CAMultiAudio/CAMultiAudioPCM.h; sourceTree = "<group>"; };
+		34C67B7C1A2D7B760012DC1B /* CSAbstractCaptureDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAbstractCaptureDevice.h; path = PluginHeaders/CSAbstractCaptureDevice.h; sourceTree = "<group>"; };
+		34C67B7D1A2D7B760012DC1B /* CSCaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureBase.h; path = PluginHeaders/CSCaptureBase.h; sourceTree = "<group>"; };
+		34C67B7E1A2D7B760012DC1B /* CSCaptureSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureSourceProtocol.h; path = PluginHeaders/CSCaptureSourceProtocol.h; sourceTree = "<group>"; };
+		34C67B7F1A2D7B760012DC1B /* CSStreamServiceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSStreamServiceProtocol.h; path = PluginHeaders/CSStreamServiceProtocol.h; sourceTree = "<group>"; };
+		34C67B801A2D7B760012DC1B /* CSPluginFactoryProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPluginFactoryProtocol.h; path = PluginHeaders/CSPluginFactoryProtocol.h; sourceTree = "<group>"; };
+		34C67B811A2D7B760012DC1B /* CSExtraPluginProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSExtraPluginProtocol.h; path = PluginHeaders/CSExtraPluginProtocol.h; sourceTree = "<group>"; };
+		34C67B821A2D7B760012DC1B /* CSNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSNotifications.h; path = PluginHeaders/CSNotifications.h; sourceTree = "<group>"; };
+		34C67B841A2D7C490012DC1B /* HitboxStreamService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HitboxStreamService.h; sourceTree = "<group>"; };
+		34C67B851A2D7C490012DC1B /* HitboxStreamService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HitboxStreamService.m; sourceTree = "<group>"; };
+		34C67B871A2D7DDB0012DC1B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		34C67B891A2D82250012DC1B /* HitboxStreamServiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HitboxStreamServiceViewController.h; sourceTree = "<group>"; };
+		34C67B8A1A2D82250012DC1B /* HitboxStreamServiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HitboxStreamServiceViewController.m; sourceTree = "<group>"; };
+		34C67B8B1A2D82250012DC1B /* HitboxStreamServiceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HitboxStreamServiceViewController.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		34C67B661A2D7B690012DC1B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34C67B881A2D7DDB0012DC1B /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		34C67B601A2D7B690012DC1B = {
+			isa = PBXGroup;
+			children = (
+				34C67B871A2D7DDB0012DC1B /* Cocoa.framework */,
+				34C67B831A2D7B760012DC1B /* PluginHeaders */,
+				34C67B6B1A2D7B690012DC1B /* CSHitboxStreamServicePlugin */,
+				34C67B6A1A2D7B690012DC1B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		34C67B6A1A2D7B690012DC1B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				34C67B691A2D7B690012DC1B /* CSHitboxStreamServicePlugin.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		34C67B6B1A2D7B690012DC1B /* CSHitboxStreamServicePlugin */ = {
+			isa = PBXGroup;
+			children = (
+				34C67B841A2D7C490012DC1B /* HitboxStreamService.h */,
+				34C67B851A2D7C490012DC1B /* HitboxStreamService.m */,
+				34C67B891A2D82250012DC1B /* HitboxStreamServiceViewController.h */,
+				34C67B8A1A2D82250012DC1B /* HitboxStreamServiceViewController.m */,
+				34C67B8B1A2D82250012DC1B /* HitboxStreamServiceViewController.xib */,
+				34C67B6C1A2D7B690012DC1B /* Supporting Files */,
+			);
+			path = CSHitboxStreamServicePlugin;
+			sourceTree = "<group>";
+		};
+		34C67B6C1A2D7B690012DC1B /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				34C67B6D1A2D7B690012DC1B /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		34C67B831A2D7B760012DC1B /* PluginHeaders */ = {
+			isa = PBXGroup;
+			children = (
+				34C67B791A2D7B760012DC1B /* CSPluginServices.h */,
+				34C67B7A1A2D7B760012DC1B /* CSPcmPlayer.h */,
+				34C67B7B1A2D7B760012DC1B /* CAMultiAudioPCM.h */,
+				34C67B7C1A2D7B760012DC1B /* CSAbstractCaptureDevice.h */,
+				34C67B7D1A2D7B760012DC1B /* CSCaptureBase.h */,
+				34C67B7E1A2D7B760012DC1B /* CSCaptureSourceProtocol.h */,
+				34C67B7F1A2D7B760012DC1B /* CSStreamServiceProtocol.h */,
+				34C67B801A2D7B760012DC1B /* CSPluginFactoryProtocol.h */,
+				34C67B811A2D7B760012DC1B /* CSExtraPluginProtocol.h */,
+				34C67B821A2D7B760012DC1B /* CSNotifications.h */,
+			);
+			name = PluginHeaders;
+			path = ../../CocoaSplit;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		34C67B681A2D7B690012DC1B /* CSHitboxStreamServicePlugin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 34C67B701A2D7B690012DC1B /* Build configuration list for PBXNativeTarget "CSHitboxStreamServicePlugin" */;
+			buildPhases = (
+				34C67B651A2D7B690012DC1B /* Sources */,
+				34C67B661A2D7B690012DC1B /* Frameworks */,
+				34C67B671A2D7B690012DC1B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CSHitboxStreamServicePlugin;
+			productName = CSHitboxStreamServicePlugin;
+			productReference = 34C67B691A2D7B690012DC1B /* CSHitboxStreamServicePlugin.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		34C67B611A2D7B690012DC1B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = Zakk;
+				TargetAttributes = {
+					34C67B681A2D7B690012DC1B = {
+						CreatedOnToolsVersion = 6.1;
+					};
+				};
+			};
+			buildConfigurationList = 34C67B641A2D7B690012DC1B /* Build configuration list for PBXProject "CSHitboxStreamServicePlugin" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 34C67B601A2D7B690012DC1B;
+			productRefGroup = 34C67B6A1A2D7B690012DC1B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				34C67B681A2D7B690012DC1B /* CSHitboxStreamServicePlugin */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		34C67B671A2D7B690012DC1B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34C67B8D1A2D82250012DC1B /* HitboxStreamServiceViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		34C67B651A2D7B690012DC1B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34C67B8C1A2D82250012DC1B /* HitboxStreamServiceViewController.m in Sources */,
+				34C67B861A2D7C490012DC1B /* HitboxStreamService.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		34C67B6E1A2D7B690012DC1B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		34C67B6F1A2D7B690012DC1B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		34C67B711A2D7B690012DC1B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = CSHitboxStreamServicePlugin/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		34C67B721A2D7B690012DC1B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = CSHitboxStreamServicePlugin/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		34C67B641A2D7B690012DC1B /* Build configuration list for PBXProject "CSHitboxStreamServicePlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34C67B6E1A2D7B690012DC1B /* Debug */,
+				34C67B6F1A2D7B690012DC1B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		34C67B701A2D7B690012DC1B /* Build configuration list for PBXNativeTarget "CSHitboxStreamServicePlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34C67B711A2D7B690012DC1B /* Debug */,
+				34C67B721A2D7B690012DC1B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 34C67B611A2D7B690012DC1B /* Project object */;
+}
