@@ -1206,8 +1206,15 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
 }
 
+- (BOOL)popoverShouldDetach:(NSPopover *)popover
+{
+    return YES;
+}
+
+
 -(NSWindow *)detachableWindowForPopover:(NSPopover *)popover
 {
+    NSLog(@"DETACHABLE WINDOW FOR POPOVER");
     InputPopupControllerViewController *newViewController = [[InputPopupControllerViewController alloc] init];
     InputPopupControllerViewController *oldViewController = (InputPopupControllerViewController *)popover.contentViewController;
     

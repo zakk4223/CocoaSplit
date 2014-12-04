@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14B25" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
+        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6250"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="InputPopupControllerViewController">
             <connections>
-                <outlet property="InputController" destination="Gdf-y2-DdF" id="HRa-B3-t4b"/>
                 <outlet property="currentEffectsController" destination="0iu-Bs-KXZ" id="Lnj-mi-xjC"/>
                 <outlet property="multiSourceController" destination="4mF-fx-iLB" id="U30-Tg-7IY"/>
                 <outlet property="sourceConfigView" destination="SXE-81-50C" id="H3V-Fe-FOV"/>
@@ -84,7 +84,7 @@
                                 </connections>
                             </textField>
                             <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yK1-CG-2Dt">
-                                <rect key="frame" x="115" y="377" width="351" height="19"/>
+                                <rect key="frame" x="115" y="373" width="351" height="20"/>
                                 <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="360" doubleValue="90" tickMarkPosition="below" numberOfTickMarks="5" sliderType="linear" id="RSQ-Jk-ZUV"/>
                                 <connections>
                                     <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.rotationAngle" id="ZrZ-RS-T2W"/>
