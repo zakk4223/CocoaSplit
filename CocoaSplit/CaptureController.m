@@ -1054,7 +1054,6 @@
     
     
     [NSKeyedArchiver archiveRootObject:saveRoot toFile:path];
-    
 }
 
 
@@ -1199,6 +1198,8 @@
 
     self.extraPluginsSaveData = nil;
 }
+
+
 
 
 

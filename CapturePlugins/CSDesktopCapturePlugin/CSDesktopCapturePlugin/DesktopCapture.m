@@ -67,12 +67,21 @@
         self.videoCaptureFPS = 60.0f;
         self.showCursor = YES;
         [self addObserver:self forKeyPath:@"propertiesChanged" options:NSKeyValueObservingOptionNew context:NULL];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationTerminating:) name:NSApplicationWillTerminateNotification object:nil];
+        
 
     }
 
     return self;
     
 }
+
+
+-(void)applicationTerminating:(NSApplication *)sender
+{
+    [self stopDisplayStream];
+}
+
 
 
 -(CSAbstractCaptureDevice *)activeVideoDevice
@@ -180,7 +189,11 @@
         
         if (status == kCGDisplayStreamFrameStatusStopped)
         {
-            return;
+            if (strongSelf->_displayStreamRef)
+            {
+                CFRelease(strongSelf->_displayStreamRef);
+            }
+            
             
         }
         
@@ -307,7 +320,7 @@
 {
     
     [self removeObserver:self forKeyPath:@"propertiesChanged"];
-
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self stopDisplayStream];
 }
 
