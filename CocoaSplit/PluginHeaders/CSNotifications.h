@@ -29,6 +29,8 @@ extern NSString *const CSNotificationCompressorDeleted;
 extern NSString *const CSNotificationInputAdded;
 extern NSString *const CSNotificationInputDeleted;
 
+extern NSString *const CSNotificationInputSelected;
+
 
 
 

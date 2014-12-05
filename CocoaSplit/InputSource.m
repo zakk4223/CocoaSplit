@@ -1227,6 +1227,13 @@ static NSArray *_sourceTypes = nil;
     {
         self.videoInput.isSelected = is_selected;
     }
+    
+    if (is_selected)
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputSelected object:self userInfo:nil];
+
+    }
+    
 }
 
 

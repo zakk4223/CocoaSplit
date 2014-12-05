@@ -28,4 +28,7 @@ NSString *const CSNotificationCompressorAdded = @"CSNotificationCompressorAdded"
 NSString *const CSNotificationInputAdded = @"CSNotificationInputAdded";
 NSString *const CSNotificationInputDeleted = @"CSNotificationInputDeleted";
 
+NSString *const CSNotificationInputSelected = @"CSNotificationInputSelected";
+
+
 
