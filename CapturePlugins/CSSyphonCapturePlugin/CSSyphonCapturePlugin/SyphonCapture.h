@@ -47,5 +47,9 @@
 
 
 -(bool) stopCaptureSession;
+-(void) startSyphon;
+-(void) commonInit;
+
+
 
 @end

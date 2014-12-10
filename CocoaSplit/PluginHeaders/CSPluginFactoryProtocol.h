@@ -13,9 +13,9 @@
 //This protocol just contains class methods used to load various plugin classes.
 //Useful for plugins that want to implement multiple plugin types in one bundle.
 
-+(Class)captureSourceClass;
-+(Class)streamServiceClass;
-+(Class)extraPluginClass;
++(NSArray *)captureSourceClasses;
++(NSArray *)streamServiceClasses;
++(NSArray *)extraPluginClasses;
 
 
 @end

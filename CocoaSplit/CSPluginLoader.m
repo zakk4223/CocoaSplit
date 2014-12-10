@@ -169,12 +169,39 @@
             if ([currPrincipalClass conformsToProtocol:@protocol(CSPluginFactoryProtocol)])
             {
                 Class<CSPluginFactoryProtocol> factoryClass = currPrincipalClass;
-                Class tryClass = nil;
+                NSArray *tryClasses;
                 
-                tryClass = [factoryClass captureSourceClass];
-                [self validateAndRegisterPluginClass:tryClass];
-                tryClass = [factoryClass streamServiceClass];
-                [self validateAndRegisterPluginClass:tryClass];
+                tryClasses = [factoryClass captureSourceClasses];
+                if (tryClasses)
+                {
+                    for(Class tryClass in tryClasses)
+                    {
+                        [self validateAndRegisterPluginClass:tryClass];
+                    }
+
+                }
+                
+                tryClasses = [factoryClass streamServiceClasses];
+                if (tryClasses)
+                {
+                    for(Class tryClass in tryClasses)
+                    {
+                        [self validateAndRegisterPluginClass:tryClass];
+                    }
+                    
+                }
+                
+                tryClasses = [factoryClass extraPluginClasses];
+                if (tryClasses)
+                {
+                    for(Class tryClass in tryClasses)
+                    {
+                        [self validateAndRegisterPluginClass:tryClass];
+                    }
+                    
+                }
+
+
                 
             } else {
                 [self validateAndRegisterPluginClass:currPrincipalClass];
