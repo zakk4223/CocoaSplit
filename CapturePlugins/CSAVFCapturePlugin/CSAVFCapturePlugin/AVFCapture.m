@@ -51,6 +51,11 @@
     return self;
 }
 
++(NSString *)label
+{
+    return @"Webcam Capture";
+}
+
 
 -(void) restoreFormatAndFrameRate
 {

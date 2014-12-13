@@ -17,7 +17,6 @@
 -(instancetype)init
 {
     
-    NSLog(@"INIT WINCAP");
     
     if (self = [super init])
     {
@@ -82,4 +81,11 @@
     }
     return _currentFrame;
 }
+
++(NSString *)label
+{
+    return @"Window Capture";
+}
+
+
 @end

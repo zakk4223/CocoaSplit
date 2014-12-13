@@ -323,9 +323,11 @@
     tmp.target = self;
     tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Move Down" action:@selector(moveInputDown:) keyEquivalent:@"" atIndex:1];
     tmp.target = self;
-    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Settings" action:@selector(showInputSettings:) keyEquivalent:@"" atIndex:2];
+    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Auto Fit" action:@selector(autoFitInput:) keyEquivalent:@"" atIndex:2];
     tmp.target = self;
-    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Delete" action:@selector(deleteInput:) keyEquivalent:@"" atIndex:3];
+    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Settings" action:@selector(showInputSettings:) keyEquivalent:@"" atIndex:3];
+    tmp.target = self;
+    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Delete" action:@selector(deleteInput:) keyEquivalent:@"" atIndex:4];
     tmp.target = self;
     
 
@@ -706,6 +708,22 @@
     {
         forInput.editorWindow = nil;
     }
+}
+
+
+
+-(IBAction) autoFitInput:(id)sender
+{
+    InputSource *autoFitSource;
+    NSMenuItem *menuSender = (NSMenuItem *)sender;
+    
+    autoFitSource = self.selectedSource;
+    if (menuSender.representedObject)
+    {
+        autoFitSource = (InputSource *)menuSender.representedObject;
+    }
+    
+    [autoFitSource autoFit];
 }
 
 
@@ -1214,7 +1232,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
 -(NSWindow *)detachableWindowForPopover:(NSPopover *)popover
 {
-    NSLog(@"DETACHABLE WINDOW FOR POPOVER");
     InputPopupControllerViewController *newViewController = [[InputPopupControllerViewController alloc] init];
     InputPopupControllerViewController *oldViewController = (InputPopupControllerViewController *)popover.contentViewController;
     

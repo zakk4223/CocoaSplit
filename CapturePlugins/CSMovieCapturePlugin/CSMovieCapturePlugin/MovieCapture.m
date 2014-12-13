@@ -544,6 +544,12 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     
 }
 
++(NSString *)label
+{
+    return @"Movie";
+}
+
+
 -(void) dealloc
 {
     //stop any inflight whatever

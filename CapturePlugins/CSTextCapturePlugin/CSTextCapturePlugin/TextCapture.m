@@ -187,6 +187,12 @@
 }
 
 
++(NSString *)label
+{
+    return @"Text";
+}
+
+
 + (NSSet *)keyPathsForValuesAffectingPropertiesChanged
 {
     return [NSSet setWithObjects:@"text", @"font", @"fontAttributes", nil];

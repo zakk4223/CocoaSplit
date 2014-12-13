@@ -297,6 +297,12 @@
 }
 
 
++ (NSString *)label
+{
+    return @"Desktop Capture";
+}
+
+
 + (NSSet *)keyPathsForValuesAffectingPropertiesChanged
 {
     return [NSSet setWithObjects:@"width", @"height", @"videoCaptureFPS", @"x_origin", @"y_origin", @"region_width", @"region_height", nil];

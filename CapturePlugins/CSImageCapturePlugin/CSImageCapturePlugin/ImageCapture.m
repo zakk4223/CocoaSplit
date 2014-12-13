@@ -135,6 +135,11 @@
     [self resetImageData];
 }
 
++(NSString *)label
+{
+    return @"Image";
+}
+
 
 -(void) renderImage:(int)forIdx
 {

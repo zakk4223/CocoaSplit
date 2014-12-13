@@ -192,23 +192,6 @@
              CFRelease(newSurface);
          }
          
-         /*
-     CVPixelBufferRef videoFrame = [weakself renderNewFrame:client];
-         //NSLog(@"GET SYPHON FRAME %f", CFAbsoluteTimeGetCurrent());
-         
-         
-     CVPixelBufferRetain(videoFrame);
-     
-     @synchronized(weakself) {
-     if (_currentFrame)
-     {
-         
-         CVPixelBufferRelease(_currentFrame);
-     }
-     
-     _currentFrame = videoFrame;
-     
-     }*/
      }];
         
         @synchronized(self)
@@ -281,6 +264,11 @@
     
     
     
+}
+
++(NSString *)label
+{
+    return @"Syphon Capture";
 }
 
 @end
