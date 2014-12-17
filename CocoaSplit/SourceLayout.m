@@ -290,23 +290,6 @@
     
     CVPixelBufferPoolCreatePixelBuffer(kCVReturnSuccess, _cvpool, &destFrame);
         
-    //@autoreleasepool {
-     
-        
-        /*
-        IOSurfaceRef surface = CVPixelBufferGetIOSurface(destFrame);
-        void *surfacePtr = IOSurfaceGetBaseAddress(surface);
-        size_t bpr = IOSurfaceGetBytesPerRow(surface);
-        
-        IOSurfaceLock(surface, 0, NULL);
-        [self.ciCtx render:newImage toBitmap:surfacePtr rowBytes:bpr bounds:NSMakeRect(0,0,frameWidth, frameHeight) format:kCIFormatARGB8 colorSpace:CGColorSpaceCreateDeviceRGB()];
-        IOSurfaceUnlock(surface, 0, NULL);
-         */
-        
-        
-        
-    
-    //CGColorSpaceRef cs = CGColorSpaceCreateDeviceRGB();
         [self.ciCtx render:newImage toIOSurface:CVPixelBufferGetIOSurface(destFrame) bounds:NSMakeRect(0,0,frameWidth, frameHeight) colorSpace:nil];
     
         

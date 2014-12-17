@@ -54,12 +54,26 @@
     return self;
 }
 
+-(NSString *) configurationViewClassName
+{
+    return [NSString stringWithFormat:@"%@ViewController", self.className];
+}
+
+
+-(NSString *) configurationViewName
+{
+    return [NSString stringWithFormat:@"%@ViewController", self.className];
+}
+
+
 -(NSViewController *)configurationView
 {
     
     NSViewController *configViewController;
     
-    NSString *controllerName = [NSString stringWithFormat:@"%@ViewController", self.className];
+    NSString *controllerName = self.configurationViewClassName;
+    
+    
     
     
     Class viewClass = NSClassFromString(controllerName);
@@ -67,7 +81,8 @@
     if (viewClass)
     {
         
-        configViewController = [[viewClass alloc] initWithNibName:controllerName bundle:[NSBundle bundleForClass:self.class]];
+        
+        configViewController = [[viewClass alloc] initWithNibName:self.configurationViewName bundle:[NSBundle bundleForClass:self.class]];
         
         if (configViewController)
         {

@@ -19,6 +19,9 @@
 @property (assign) int width;
 @property (assign) int height;
 
+@property (readonly) NSAttributedString *notInstalledText;
+
+@property (weak) IBOutlet NSTextField *notInstalledTextField;
 
 - (IBAction)changeBuffer:(id)sender;
 - (IBAction)toggleFast:(id)sender;

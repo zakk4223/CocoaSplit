@@ -16,8 +16,45 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+
+    if (self.notInstalledTextField)
+    {
+        self.notInstalledTextField.allowsEditingTextAttributes = YES;
+        self.notInstalledTextField.selectable = YES;
+    
+        self.notInstalledTextField.attributedStringValue = self.notInstalledText;
+    }
+    
     // Do view setup here.
 }
+
+
+
+-(NSAttributedString *)notInstalledText
+{
+    NSMutableAttributedString *retStr = [[NSMutableAttributedString alloc] initWithString:@"A compatible version of SyphonInject is not installed. Download and install the latest version from "];
+    
+    NSMutableAttributedString *urlStr = [[NSMutableAttributedString alloc] initWithString:@"here"];
+    
+    
+    NSRange range = NSMakeRange(0, urlStr.length);
+    
+    [urlStr beginEditing];
+    
+    NSURL *URL = [NSURL URLWithString:@"http://www.cocoasplit.com/releases/SyphonInject/SyphonInject.zip"];
+    
+    [urlStr addAttribute:NSLinkAttributeName value:URL range:range];
+    
+    [urlStr addAttribute:NSForegroundColorAttributeName value:[NSColor blueColor] range:range];
+    [urlStr addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInt:NSUnderlineStyleSingle] range:range];
+    [urlStr endEditing];
+    
+    [retStr appendAttributedString:urlStr];
+    
+    return retStr;
+}
+
 
 - (IBAction)changeBuffer:(id)sender
 {

@@ -20,7 +20,51 @@
 
 
 
-//Superclass calls this when a syphon notification arrives
+
+-(bool) isSyphonInjectInstalled
+{
+    
+    NSEnumerator *searchPathEnum;
+    
+    NSArray *scriptDirs = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSLocalDomainMask, YES);
+    
+    searchPathEnum = [scriptDirs objectEnumerator];
+    NSString *currPath;
+    while(currPath = [searchPathEnum nextObject])
+    {
+        
+        NSString *bundlePath = [currPath stringByAppendingPathComponent:@"ScriptingAdditions/SASyphonInjector.osax"];
+
+        NSBundle *injectBundle = [NSBundle bundleWithPath:bundlePath];
+        
+        
+        if (injectBundle)
+        {
+            NSString *bundleVersion = [[injectBundle infoDictionary] valueForKey:@"CFBundleVersion"];
+            NSComparisonResult comp = [@"1.2" compare:bundleVersion options:NSNumericSearch];
+            if (comp == NSOrderedSame || comp == NSOrderedAscending)
+            {
+                return YES;
+            }
+            
+        }
+    }
+    
+    return NO;
+
+}
+
+
+-(NSString *)configurationViewName
+{
+    if (![self isSyphonInjectInstalled])
+    {
+        return @"CSSyphonInjectCaptureViewNotInstalled";
+    }
+    
+    return [super configurationViewName];
+}
+
 
 -(void)commonInit
 {
@@ -28,6 +72,10 @@
     [self changeApplicationList];
     
 }
+
+
+//Superclass calls this when a syphon notification arrives
+
 -(void)setActiveVideoDevice:(CSAbstractCaptureDevice *)activeVideoDevice
 {
     

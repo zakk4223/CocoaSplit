@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3429A0491A41063900EE702C /* CSSyphonInjectCaptureViewNotInstalled.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3429A0481A41063900EE702C /* CSSyphonInjectCaptureViewNotInstalled.xib */; };
 		34AFC1D719B04EB90007C07B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AFC1D619B04EB90007C07B /* Cocoa.framework */; };
 		34AFC1E119B04EB90007C07B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 34AFC1DF19B04EB90007C07B /* InfoPlist.strings */; };
 		34AFC1F319B04F0B0007C07B /* SyphonCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AFC1EF19B04F0B0007C07B /* SyphonCaptureViewController.m */; };
@@ -52,6 +53,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3429A0481A41063900EE702C /* CSSyphonInjectCaptureViewNotInstalled.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSSyphonInjectCaptureViewNotInstalled.xib; sourceTree = "<group>"; };
 		34AFC1D319B04EB90007C07B /* CSSyphonCapturePlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSSyphonCapturePlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		34AFC1D619B04EB90007C07B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		34AFC1D919B04EB90007C07B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -181,6 +183,7 @@
 				34C7B8D81A3465010033AC71 /* CSSyphonInjectCaptureViewController.h */,
 				34C7B8D91A3465010033AC71 /* CSSyphonInjectCaptureViewController.m */,
 				34C7B8DA1A3465010033AC71 /* CSSyphonInjectCaptureViewController.xib */,
+				3429A0481A41063900EE702C /* CSSyphonInjectCaptureViewNotInstalled.xib */,
 			);
 			name = CSSyphonInjectCapturePlugin;
 			sourceTree = "<group>";
@@ -274,6 +277,7 @@
 			files = (
 				34AFC1F419B04F0B0007C07B /* SyphonCaptureViewController.xib in Resources */,
 				34AFC1E119B04EB90007C07B /* InfoPlist.strings in Resources */,
+				3429A0491A41063900EE702C /* CSSyphonInjectCaptureViewNotInstalled.xib in Resources */,
 				34C7B8DC1A3465010033AC71 /* CSSyphonInjectCaptureViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

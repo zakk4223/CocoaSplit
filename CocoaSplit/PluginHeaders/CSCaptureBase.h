@@ -53,6 +53,15 @@
 
 
 
+//TODO: just load the class via a 'loadCSViewClass' type method and let the plugin twiddle its NIB however it wants.
+
+
+//Set this to the name of the configuration NIB file. This is the UI that appears in the lower half of the 'Source' tab that lets the user configure input specific settings. By default this is going to be {self.className}ViewController. Override if you want to do something fancy
+@property (readonly) NSString *configurationViewName;
+
+//This is the class name of the configuration view CONTROLLER. With the combo above you can have different view controller classes and/or different NIBs depending on various conditions.
+@property (readonly) NSString *configurationViewClassName;
+
 -(void)setDeviceForUniqueID:(NSString *)uniqueID;
 -(CVImageBufferRef) getCurrentFrame;
 -(CIImage *) currentImage;
