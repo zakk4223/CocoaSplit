@@ -35,6 +35,8 @@ typedef enum input_rotate_style_t {
     CGColorSpaceRef _colorSpace;
     float _scale_x_pos, _scale_y_pos;
     float _internalScaleFactor;
+    int _scale_width, _scale_height;
+    
     int _currentSourceIdx;
     CIImage *_oldImage;
     CIImage *_preBgImage;

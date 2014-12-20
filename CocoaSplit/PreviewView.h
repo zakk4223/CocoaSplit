@@ -70,6 +70,11 @@ typedef enum resize_style_t {
     GLdouble    _projection[16];
 
     
+    float _snap_x_accum, _snap_y_accum;
+    float _snap_x, _snap_y;
+    bool _in_resize_rect;
+    
+    
     CVDisplayLinkRef displayLink;
     
     int _num_planes;
@@ -119,6 +124,8 @@ typedef enum resize_style_t {
 @property (unsafe_unretained) IBOutlet CaptureController *controller;
 
 @property (strong) InputSource *selectedSource;
+@property (strong) InputSource *mousedSource;
+
 @property (assign) NSPoint selectedOriginDistance;
 @property (assign) bool isResizing;
 @property (assign) resize_style resizeType;

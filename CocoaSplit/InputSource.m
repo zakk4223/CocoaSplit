@@ -568,10 +568,12 @@ static NSArray *_sourceTypes = nil;
     [self.selectedFilter setDefaults];
     
     [self.selectedFilter setValue:alphaVector forKey:@"inputAVector"];
+    /*
     if (self.is_selected)
     {
         [self.selectedFilter setValue:[CIVector vectorWithX:1.0f Y:0.0f Z:0.0f W:0.0f] forKey:@"inputBiasVector"];
     }
+     */
     
 }
 
@@ -799,8 +801,15 @@ static NSArray *_sourceTypes = nil;
     [self.selectedFilter setValue:outimg forKey:kCIInputImageKey];
     outimg = [self.selectedFilter valueForKey:kCIOutputImageKey];
     
-    self.layoutPosition = NSMakeRect(self.x_pos, self.y_pos, self.display_width, self.display_height);
+    //self.layoutPosition = NSMakeRect(self.x_pos, self.y_pos, self.display_width, self.display_height);
 
+    self.layoutPosition = outimg.extent;
+    
+    
+    
+    
+    
+    
     if (_inTransition)
     {
         CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
@@ -919,6 +928,9 @@ static NSArray *_sourceTypes = nil;
         _scale_y_pos = self.y_pos;
         _internalScaleFactor = 1.0f;
         
+        _scale_height = source_height;
+        _scale_width = source_width;
+        
         return;
     }
     
@@ -947,6 +959,8 @@ static NSArray *_sourceTypes = nil;
     
     _scale_x_pos = new_x+x_adj+_x_pos;
     _scale_y_pos = new_y+y_adj+_y_pos;
+    _scale_height = new_h;
+    _scale_width = new_w;
     
     
     _internalScaleFactor = ratio;

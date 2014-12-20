@@ -15,6 +15,16 @@
 #import "SourceLayout.h"
 #import "CreateLayoutViewController.h"
 
+//wtf apple
+
+@interface NSCursor (CSApplePrivate)
++ (instancetype)_bottomLeftResizeCursor;
++ (instancetype)_topLeftResizeCursor;
++ (instancetype)_bottomRightResizeCursor;
++ (instancetype)_topRightResizeCursor;
++ (instancetype)_windowResizeNorthEastSouthWestCursor;
++ (instancetype)_windowResizeNorthWestSouthEastCursor;
+@end
 
 
 @implementation OpenGLProgram
@@ -344,6 +354,7 @@
     
     
 
+    
     for (InputSource *src in sourceList)
     {
         NSString *srcName = src.name;
@@ -373,6 +384,79 @@
     }
 }
 
+-(void)trackMousedSource
+{
+    
+    if (self.selectedSource)
+    {
+        self.mousedSource = self.selectedSource;
+        return;
+    }
+    
+    
+    NSPoint mouseLoc = [NSEvent mouseLocation];
+    
+    NSRect rect = NSRectFromCGRect((CGRect){mouseLoc, CGSizeZero});
+    
+    mouseLoc = [self.window convertRectFromScreen:rect].origin;
+    mouseLoc = [self convertPoint:mouseLoc fromView:nil];
+    
+    if (![self mouse:mouseLoc inRect:self.bounds])
+    {
+        return;
+    }
+    
+    
+    NSPoint worldPoint = [self realPointforWindowPoint:mouseLoc];
+    
+    InputSource *newSrc = [self.sourceLayout findSource:worldPoint withExtra:2];
+    
+
+    if (!newSrc)
+    {
+        [NSCursor pop];
+    }
+    
+    NSArray *resizeRects = [self resizeRectsForSource:newSrc withExtra:2];
+
+    NSCursor *newCursor = [NSCursor openHandCursor];
+    
+    bool hitResize = NO;
+    
+    //bottom left, top left, top right, bottom right
+    for(int i=0; i < resizeRects.count; i++)
+    {
+        NSValue *rVal = [resizeRects objectAtIndex:i];
+        
+        NSRect reRect = [rVal rectValue];
+        if (NSPointInRect(mouseLoc, reRect))
+        {
+            if (i == 0 || i == 2)
+            {
+                newCursor = [NSCursor _windowResizeNorthEastSouthWestCursor];
+            } else {
+                newCursor = [NSCursor _windowResizeNorthWestSouthEastCursor];
+            }
+            hitResize = YES;
+            break;
+        }
+        
+        
+    }
+    
+    if ((newSrc != self.mousedSource) || (hitResize != _in_resize_rect))
+    {
+        [NSCursor pop];
+        [newCursor push];
+    }
+ 
+    self.mousedSource = newSrc;
+    _in_resize_rect = hitResize;
+    
+}
+
+
+
 -(void)rightMouseDown:(NSEvent *)theEvent
 {
     NSPoint tmp;
@@ -391,6 +475,32 @@
 }
 
 
+//bottom left, top left, top right, bottom right
+
+-(NSArray *)resizeRectsForSource:(InputSource *)inputSource withExtra:(float)withExtra
+{
+    
+    NSRect layoutRect = inputSource.layoutPosition;
+    
+    NSRect extraRect = NSInsetRect(layoutRect, -withExtra, -withExtra);
+    
+    NSRect viewRect = [self windowRectforWorldRect:extraRect];
+    
+    
+    NSRect bottomLeftRect = NSMakeRect(viewRect.origin.x, viewRect.origin.y, 10.0f, 10.0f);
+    NSRect bottomRightRect = NSMakeRect(viewRect.origin.x+viewRect.size.width-10.0f, viewRect.origin.y, 10.0f, 10.0f);
+    
+    NSRect topLeftRect = NSMakeRect(viewRect.origin.x, viewRect.origin.y+viewRect.size.height-10.0f, 10.0f, 10.0f);
+    
+    NSRect topRightRect = NSMakeRect(viewRect.origin.x+viewRect.size.width-10.0f, viewRect.origin.y+viewRect.size.height-10.0f, 10.0f, 10.0f);
+    
+    
+    return @[[NSValue valueWithRect:bottomLeftRect], [NSValue valueWithRect:topLeftRect], [NSValue valueWithRect:topRightRect],[NSValue valueWithRect:bottomRightRect]];
+    
+}
+
+
+
 - (void)mouseDown:(NSEvent *)theEvent
 {
     NSPoint tmp;
@@ -399,6 +509,7 @@
     
     NSPoint worldPoint = [self realPointforWindowPoint:tmp];
     
+    InputSource *oldSource = self.selectedSource;
     self.selectedSource = [self.sourceLayout findSource:worldPoint];
     if (!self.selectedSource)
     {
@@ -407,26 +518,47 @@
     
     
     self.selectedSource.is_selected = YES;
-    NSRect layoutRect = self.selectedSource.layoutPosition;
-    
-    //Make a rectangle that's 10 pixels smaller on all sides than the selected layoutPosition. If we're inside the selected object
-    //but NOT in the smaller rectangle do a resize (we're grabbing the 'edge')
-    NSRect viewRect = [self windowRectforWorldRect:layoutRect];
-    
+    if (oldSource)
+    {
+        oldSource.is_selected = NO;
+    }
     
     
     
-    NSRect topRect = NSMakeRect(viewRect.origin.x, viewRect.origin.y+viewRect.size.height-10.0f, viewRect.size.width, 10.0f);
-    NSRect bottomRect = NSMakeRect(viewRect.origin.x, viewRect.origin.y, viewRect.size.width, 10.0f);
-    NSRect leftRect = NSMakeRect(viewRect.origin.x, viewRect.origin.y, 10.0f, viewRect.size.height);
-    NSRect rightRect = NSMakeRect(viewRect.origin.x+viewRect.size.width-10.0f, viewRect.origin.y, 10.0f, viewRect.size.height);
+    NSArray *resizeRects = [self resizeRectsForSource:self.selectedSource withExtra:2];
+    
+    //bottom left, top left, top right, bottom right
+
+    
+    NSRect bottomLeftRect = [[resizeRects objectAtIndex:0] rectValue];
+    NSRect topLeftRect = [[resizeRects objectAtIndex:1] rectValue];
+    NSRect topRightRect = [[resizeRects objectAtIndex:2] rectValue];
+    NSRect bottomRightRect = [[resizeRects objectAtIndex:3] rectValue];
+    
+    
+    
+    
     
     self.resizeType = kResizeNone;
     
+    if (NSPointInRect(tmp, topLeftRect))
+    {
+        self.resizeType = kResizeLeft | kResizeTop;
+    } else if (NSPointInRect(tmp, bottomLeftRect)) {
+        self.resizeType = kResizeLeft | kResizeBottom;
+    } else if (NSPointInRect(tmp, topRightRect)) {
+        self.resizeType = kResizeRight | kResizeTop;
+    } else if (NSPointInRect(tmp, bottomRightRect)) {
+        self.resizeType = kResizeRight | kResizeBottom;
+    }
+    
+     
+/*
     if (NSPointInRect(tmp, leftRect))
     {
         self.resizeType |= kResizeLeft;
     }
+    
     
     if (NSPointInRect(tmp, topRect))
     {
@@ -443,10 +575,11 @@
         self.resizeType |= kResizeBottom;
     }
     
+    */
+    
     self.resizeAnchor = NSMakePoint(self.selectedSource.layoutPosition.origin.x + self.selectedSource.layoutPosition.size.width, self.selectedSource.layoutPosition.origin.y+self.selectedSource.layoutPosition.size.height);
     
     self.isResizing = self.resizeType != kResizeNone;
-    
     
     self.selectedOriginDistance = worldPoint;
     
@@ -467,6 +600,10 @@
         tmp = [self convertPoint:theEvent.locationInWindow fromView:nil];
         
         worldPoint = [self realPointforWindowPoint:tmp];
+        
+        
+        
+        
         CGFloat dx, dy;
         dx = worldPoint.x - self.selectedOriginDistance.x;
         dy = worldPoint.y - self.selectedOriginDistance.y;
@@ -549,49 +686,8 @@
             float top_pos = y_pos+s_height;
             float right_pos = x_pos+s_width;
             
+            [self adjustDeltas:&dx dy:&dy];
             
-            //Snap to edges on movement. You're on your own while resizing.
-            
-            //Snapping is only valid if we're still fully inside the canvas, if we push beyond that we let the user paint outside the box a bit.
-            
-            if (x_pos > 0 && right_pos < self.sourceLayout.canvas_width)
-            {
-                if (x_pos < SNAP_THRESHOLD && dx < 0)
-                {
-                    dx = -x_pos;
-                } else if ((right_pos > self.sourceLayout.canvas_width-SNAP_THRESHOLD) && dx > 0) {
-                    dx = self.sourceLayout.canvas_width - right_pos;
-                }
-            }
-            
-            if (y_pos > 0 && top_pos < self.sourceLayout.canvas_height)
-            {
-                if (y_pos < SNAP_THRESHOLD && dy < 0)
-                {
-                    dy = -y_pos;
-                } else if ((top_pos > self.sourceLayout.canvas_height-SNAP_THRESHOLD) && dy > 0) {
-                    dy = self.sourceLayout.canvas_height - top_pos;
-                }
-            }
-            
-            float half_x = x_pos + s_width/2;
-            float half_y = y_pos + s_height/2;
-            
-            //if the middle of our bounding box is outside the canvas, don't let it move any more.
-            
-            if (half_x <= 0.0f && dx < 0)
-            {
-                dx = 0.0f;
-            } else if ((half_x >= self.sourceLayout.canvas_width) && dx > 0) {
-                dx = 0.0f;
-            }
-            
-            if (half_y <= 0.0f && dy < 0)
-            {
-                dy = 0.0f;
-            } else if ((half_y >= self.sourceLayout.canvas_height) && dy > 0) {
-                dy = 0.0f;
-            }
             [self.selectedSource updateOrigin:dx y:dy];
         }
     }
@@ -599,12 +695,115 @@
 }
 
 
+-(void)adjustDeltas:(CGFloat *)dx dy:(CGFloat *)dy
+{
+    NSPoint no_snap_found = NSMakePoint(-555, -555);
+    
+    //define snap points. basically edges and the center of the canvas
+    NSPoint c_lb_snap = NSMakePoint(0, 0);
+    NSPoint c_rt_snap = NSMakePoint(self.sourceLayout.canvas_width, self.sourceLayout.canvas_height);
+    NSPoint c_center_snap = NSMakePoint(self.sourceLayout.canvas_width/2, self.sourceLayout.canvas_height/2);
+
+    
+    //selected source snap points. edges, and center
+    
+    if (!self.selectedSource)
+    {
+        return;
+    }
+    
+    NSRect src_rect = self.selectedSource.layoutPosition;
+    
+    NSPoint s_lb_snap = src_rect.origin;
+    NSPoint s_rt_snap = NSMakePoint(src_rect.origin.x+src_rect.size.width, src_rect.origin.y+src_rect.size.height);
+    NSPoint s_center_snap = NSMakePoint(src_rect.origin.x+roundf(src_rect.size.width/2), src_rect.origin.y+roundf(src_rect.size.height/2));
+    
+    
+    NSPoint dist;
+    float old_dx = *dx;
+    float old_dy = *dy;
+    
+    NSPoint s_snaps[3] = {s_lb_snap, s_rt_snap, s_center_snap};
+    NSPoint c_snaps[3] = {c_lb_snap, c_rt_snap, c_center_snap};
+    
+    //NSPoint s_snaps[1] = {s_lb_snap};
+    //NSPoint c_snaps[1] = {c_center_snap};
+    
+    
+    
+    for(int i=0; i < sizeof(s_snaps)/sizeof(NSPoint); i++)
+    {
+        NSPoint s_snap = s_snaps[i];
+        for(int j=0; j < sizeof(c_snaps)/sizeof(NSPoint); j++)
+        {
+            
+            NSPoint c_snap = c_snaps[j];
+            dist = [self pointDistance:s_snap b:c_snap];
+            if (abs(dist.x) < SNAP_THRESHOLD)
+            {
+                if (s_snap.x != c_snap.x)
+                {
+                    *dx = -dist.x;
+                    _snap_x = c_snap.x;
+                    _snap_x_accum = 0;
+                } else {
+                    _snap_x_accum += *dx;
+                    if (abs(_snap_x_accum) > SNAP_THRESHOLD*5)
+                    {
+                        _snap_x = -1;
+                        *dx = *dx > 0 ? SNAP_THRESHOLD : -SNAP_THRESHOLD;
+                    } else {
+                        *dx = 0;
+                    }
+                    
+                }
+            }
+            
+            if (abs(dist.y) < SNAP_THRESHOLD)
+            {
+                if (s_snap.y != c_snap.y)
+                {
+                    *dy = -dist.y;
+                    _snap_y = c_snap.y;
+                    _snap_y_accum = 0;
+                } else {
+                    _snap_y_accum += *dy;
+                    if (abs(_snap_y_accum) > SNAP_THRESHOLD*5)
+                    {
+                        _snap_y = -1;
+                        *dy = *dy > 0 ? SNAP_THRESHOLD : -SNAP_THRESHOLD;
+                    } else {
+                        *dy = 0;
+                    }
+                    
+                }
+            }
+        }
+    }
+    
+}
+
+
+-(NSPoint)pointDistance:(NSPoint )a b:(NSPoint )b
+{
+    NSPoint ret;
+    
+    ret.x = a.x - b.x;
+    ret.y = a.y - b.y;
+    return ret;
+}
+
+
 -(void) mouseUp:(NSEvent *)theEvent
 {
+    /*
     if (self.selectedSource)
     {
         self.selectedSource.is_selected = NO;
     }
+    */
+    _snap_x_accum = 0;
+    _snap_y_accum  = 0;
     
     self.isResizing = NO;
     self.selectedSource = nil;
@@ -613,6 +812,7 @@
 
 -(void) mouseMoved:(NSEvent *)theEvent
 {
+    
     [self setIdleTimer];
     
 }
@@ -816,7 +1016,6 @@
     };
     
     
-    NSLog(@"CALLED INIT WITH FRAME");
     
     NSOpenGLPixelFormat *pf = [[NSOpenGLPixelFormat alloc] initWithAttributes:(void *)&attr];
 
@@ -835,9 +1034,13 @@
     }
     
     _resizeDirty = YES;
+    _snap_x = _snap_y = -1;
+    
+    
     
     [self createShaders];
 
+    
     OpenGLProgram *lineprg = [_shaderPrograms objectForKey:@"line"];
 
     _lineProgram = lineprg.gl_programName;
@@ -924,7 +1127,7 @@
         return;
     }
     
-    
+        [self trackMousedSource];
     //CVPixelBufferRetain(displayFrame);
     [self drawPixelBuffer:displayFrame];
     CVPixelBufferRelease(displayFrame);
@@ -1184,15 +1387,18 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
     
     GLfloat outline_verts[8];
+    GLfloat snapx_verts[4];
+    GLfloat snapy_verts[4];
+    
     glEnableClientState(GL_VERTEX_ARRAY);
 
     glUseProgram(_lineProgram);
     
-    glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
     glLineWidth(2.0f);
-    for(InputSource *src in self.sourceLayout.sourceList)
+    //for(InputSource *src in self.sourceLayout.sourceList)
+    if (self.mousedSource || self.isResizing)
     {
-        NSRect my_rect = src.layoutPosition;
+        NSRect my_rect = self.mousedSource.layoutPosition;
         outline_verts[0] = my_rect.origin.x;
         outline_verts[1] = my_rect.origin.y;
         outline_verts[2] = my_rect.origin.x+my_rect.size.width;
@@ -1204,6 +1410,34 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
         glVertexPointer(2, GL_FLOAT, 0, outline_verts);
         glDrawArrays(GL_LINE_LOOP, 0, 4);
+    }
+    
+    if (self.selectedSource)
+    {
+    
+        glLineStipple(2, 0xAAAA);
+        glEnable(GL_LINE_STIPPLE);
+        if (_snap_x > -1)
+        {
+            snapx_verts[0] = _snap_x;
+            snapx_verts[1] = 0;
+            snapx_verts[2] = _snap_x;
+            snapx_verts[3] = self.sourceLayout.canvas_height;
+            glVertexPointer(2, GL_FLOAT, 0, snapx_verts);
+            glDrawArrays(GL_LINES, 0, 2);
+        }
+        
+        if (_snap_y > -1)
+        {
+            snapy_verts[0] = 0;
+            snapy_verts[1] = _snap_y;
+            snapy_verts[2] = self.sourceLayout.canvas_width;
+            snapy_verts[3] = _snap_y;
+            glVertexPointer(2, GL_FLOAT, 0, snapy_verts);
+            glDrawArrays(GL_LINES, 0, 2);
+        }
+        glDisable(GL_LINE_STIPPLE);
+
     }
     glUseProgram(_programId);
     

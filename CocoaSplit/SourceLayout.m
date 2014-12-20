@@ -107,21 +107,28 @@
 }
 
 
--(InputSource *)findSource:(NSPoint)forPoint
+-(InputSource *)findSource:(NSPoint)forPoint withExtra:(float)withExtra
 {
-    
     NSArray *listCopy = [self.sourceList sortedArrayUsingDescriptors:@[_sourceDepthSorter.reversedSortDescriptor, _sourceUUIDSorter.reversedSortDescriptor]];
     
     for (InputSource *isrc in listCopy)
     {
         
-        if (NSPointInRect(forPoint, isrc.layoutPosition))
+        NSRect testRect = NSInsetRect(isrc.layoutPosition, -withExtra, -withExtra);
+        
+        if (NSPointInRect(forPoint, testRect))
         {
             return isrc;
         }
     }
     
     return nil;
+
+}
+-(InputSource *)findSource:(NSPoint)forPoint
+{
+    
+    return [self findSource:forPoint withExtra:0];
 }
 
 
