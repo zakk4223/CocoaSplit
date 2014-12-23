@@ -8,11 +8,12 @@
 #import <Foundation/Foundation.h>
 #import <VideoToolbox/VideoToolbox.h>
 #import "CaptureController.h"
+#import "InputSource.h"
 
 
 
 @class SourceLayout;
-@class InputSource;
+//@class InputSource;
 
 static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStamp* now, const CVTimeStamp* outputTime,
                                     CVOptionFlags flagsIn, CVOptionFlags* flagsOut, void* displayLinkContext);
@@ -21,15 +22,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 #define SNAP_THRESHOLD 10.0f
 
 
-typedef enum resize_style_t {
- 
-    kResizeNone = 0,
-    kResizeTop = 1 << 0,
-    kResizeRight = 1<<1,
-    kResizeBottom = 1<<2,
-    kResizeLeft = 1<<3
-    
-} resize_style;
 
 
 @interface OpenGLProgram : NSObject
@@ -129,7 +121,6 @@ typedef enum resize_style_t {
 @property (assign) NSPoint selectedOriginDistance;
 @property (assign) bool isResizing;
 @property (assign) resize_style resizeType;
-@property (assign) NSPoint resizeAnchor;
 @property (strong) SourceLayout *sourceLayout;
 
 

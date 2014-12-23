@@ -10,7 +10,6 @@
 #import <OpenGL/glu.h>
 
 #import "PreviewView.h"
-#import "InputSource.h"
 #import "InputPopupControllerViewController.h"
 #import "SourceLayout.h"
 #import "CreateLayoutViewController.h"
@@ -546,13 +545,18 @@
         self.resizeType = kResizeLeft | kResizeTop;
     } else if (NSPointInRect(tmp, bottomLeftRect)) {
         self.resizeType = kResizeLeft | kResizeBottom;
+
     } else if (NSPointInRect(tmp, topRightRect)) {
         self.resizeType = kResizeRight | kResizeTop;
     } else if (NSPointInRect(tmp, bottomRightRect)) {
         self.resizeType = kResizeRight | kResizeBottom;
     }
     
-     
+    
+    
+    
+    
+    
 /*
     if (NSPointInRect(tmp, leftRect))
     {
@@ -577,13 +581,35 @@
     
     */
     
-    self.resizeAnchor = NSMakePoint(self.selectedSource.layoutPosition.origin.x + self.selectedSource.layoutPosition.size.width, self.selectedSource.layoutPosition.origin.y+self.selectedSource.layoutPosition.size.height);
+    float anchor_y;
+    float anchor_x;
+    
+    if (self.resizeType & kResizeBottom)
+    {
+        anchor_y = NSMaxY(self.selectedSource.layoutPosition);
+    } else {
+        anchor_y = NSMinY(self.selectedSource.layoutPosition);
+    }
+    
+    if (self.resizeType & kResizeRight)
+    {
+        anchor_x = NSMaxX(self.selectedSource.layoutPosition);
+    } else {
+        anchor_x = NSMinX(self.selectedSource.layoutPosition);
+    }
+
+    
+    
+    
     
     self.isResizing = self.resizeType != kResizeNone;
     
     self.selectedOriginDistance = worldPoint;
     
-
+    if (self.isResizing)
+    {
+        self.selectedSource.resizeType = self.resizeType;
+    }
     
 }
 
@@ -635,45 +661,39 @@
             } else {
                 
                 CGFloat new_width, new_height;
-                CGFloat adjust_x, adjust_y;
-                adjust_x = 0.0f;
-                adjust_y = 0.0f;
                 
-                new_width = self.selectedSource.display_width;//self.selectedSource.layoutPosition.size.width;
-                new_height = self.selectedSource.display_height;//self.selectedSource.layoutPosition.size.height;
+                NSRect sPosition = self.selectedSource.layoutPosition;
+                
+                new_width = sPosition.size.width;
+                new_height = sPosition.size.height;
                 
                 if (self.resizeType & kResizeRight)
                 {
-                    new_width = worldPoint.x - self.selectedSource.x_pos;
+                    new_width += dx;
+                    
                 }
                 
                 if (self.resizeType & kResizeLeft)
                 {
-                    new_width = (self.selectedSource.x_pos + self.selectedSource.display_width) - worldPoint.x;
-                    adjust_x = self.resizeAnchor.x - (self.selectedSource.x_pos + new_width);
+                    new_width -= dx;
+                    
                 }
                 
                 
                 if (self.resizeType & kResizeTop)
                 {
-                    new_height = worldPoint.y - self.selectedSource.y_pos;
+                    new_height += dy;
                 }
                 
                 if (self.resizeType & kResizeBottom)
                 {
-                    new_height = (self.selectedSource.y_pos + self.selectedSource.display_height) - worldPoint.y;
-                    adjust_y = self.resizeAnchor.y - (self.selectedSource.y_pos + new_height);
+                    new_height -= dy;
                 }
                 
                 
                 [self.selectedSource updateSize:new_width height:new_height];
-                if (adjust_x || adjust_y)
-                {
-                    [self.selectedSource updateOrigin:adjust_x y:adjust_y];
-                }
-            }
 
-            
+            }
             
         } else {
             
@@ -806,6 +826,8 @@
     _snap_y_accum  = 0;
     
     self.isResizing = NO;
+    //self.selectedSource.resizeType = kResizeNone;
+    
     self.selectedSource = nil;
 }
 
@@ -1258,8 +1280,8 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         
         _programId = shProgram.gl_programName;
         
-        glUseProgram(_programId);
-        [self bindProgramTextures:shProgram];
+        //glUseProgram(_programId);
+        //[self bindProgramTextures:shProgram];
         
         
         
@@ -1330,6 +1352,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
     glClearColor(rval, gval, bval, aval);
     glClear(GL_COLOR_BUFFER_BIT);
+    glEnable(GL_TEXTURE_RECTANGLE_ARB);
     
     
     glViewport(0, 0, frame.size.width, frame.size.height);
@@ -1385,19 +1408,28 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);
     
+
     
     GLfloat outline_verts[8];
     GLfloat snapx_verts[4];
     GLfloat snapy_verts[4];
     
+
     glEnableClientState(GL_VERTEX_ARRAY);
 
-    glUseProgram(_lineProgram);
+    //glUseProgram(_lineProgram);
     
     glLineWidth(2.0f);
+
+    glDisable(GL_TEXTURE_RECTANGLE_ARB);
+    
     //for(InputSource *src in self.sourceLayout.sourceList)
     if (self.mousedSource || self.isResizing)
     {
+        
+    
+
+        glColor3f(0.0f, 0.0f, 1.0f);
         NSRect my_rect = self.mousedSource.layoutPosition;
         outline_verts[0] = my_rect.origin.x;
         outline_verts[1] = my_rect.origin.y;
@@ -1415,8 +1447,11 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     if (self.selectedSource)
     {
     
+        glLineWidth(1.0f);
+
+        glColor3f(1.0f, 1.0f, 0.0f);
         glLineStipple(2, 0xAAAA);
-        glEnable(GL_LINE_STIPPLE);
+        //glEnable(GL_LINE_STIPPLE);
         if (_snap_x > -1)
         {
             snapx_verts[0] = _snap_x;
@@ -1436,10 +1471,12 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
             glVertexPointer(2, GL_FLOAT, 0, snapy_verts);
             glDrawArrays(GL_LINES, 0, 2);
         }
-        glDisable(GL_LINE_STIPPLE);
+        //glDisable(GL_LINE_STIPPLE);
 
     }
-    glUseProgram(_programId);
+    glColor3f(1.0f, 1.0f, 1.0f);
+
+    //glUseProgram(_programId);
     
     if (_resizeDirty && _surfaceWidth > 0 && _surfaceHeight > 0)
     {

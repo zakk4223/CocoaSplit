@@ -26,6 +26,17 @@ typedef enum input_rotate_style_t {
     
 } input_rotate_style;
 
+typedef enum resize_style_t {
+    
+    kResizeNone = 0,
+    kResizeTop = 1 << 0,
+    kResizeRight = 1<<1,
+    kResizeBottom = 1<<2,
+    kResizeLeft = 1<<3
+    
+} resize_style;
+
+
 
 //@protocol CSCaptureSessionProtocol;
 
@@ -48,6 +59,11 @@ typedef enum input_rotate_style_t {
     double _nextImageTime;
     CIFilterGenerator *_filterGenerator;
     NSViewController *_currentInputViewController;
+    float _locked_ar;
+    resize_style _last_resize;
+    int _adjusted_x_pos;
+    int _adjusted_y_pos;
+    
     //NSObject<CSCaptureSourceProtocol> *_useInput;
 
     
@@ -58,8 +74,8 @@ typedef enum input_rotate_style_t {
 @property (weak) SourceLayout *layout;
 
 @property (strong) NSObject<CSCaptureSourceProtocol> *videoInput;
-@property (assign) float x_pos;
-@property (assign) float y_pos;
+@property (assign) int x_pos;
+@property (assign) int y_pos;
 @property (assign) float rotationAngle;
 @property (assign) int crop_left;
 @property (assign) int crop_right;
@@ -74,8 +90,14 @@ typedef enum input_rotate_style_t {
 @property (assign) bool is_selected;
 @property (assign) NSRect layoutPosition;
 @property (strong) CIFilter *scaleFilter;
+@property (strong) CIFilter *prescaleTransformFilter;
+@property (strong) CIFilter *postscaleTransformFilter;
+
+
 @property (strong) CIFilter *selectedFilter;
 @property (strong) CIFilter *transformFilter;
+@property (strong) CIFilter *rotateFilter;
+
 
 
 @property (assign) bool propertiesChanged;
@@ -99,6 +121,11 @@ typedef enum input_rotate_style_t {
 @property (assign) bool lockSize;
 
 @property (assign) bool needRebuildFilter;
+
+@property (assign) bool unlock_aspect;
+
+@property (assign) resize_style resizeType;
+
 
 //When an instance is created the creator (capture controller) binds these to the size of the canvas in case we are asked to auto-fit
 //at a later time
@@ -146,6 +173,7 @@ typedef enum input_rotate_style_t {
 -(void) frameRendered;
 -(void) scaleTo:(CGFloat)width height:(CGFloat)height;
 -(void) updateSize:(CGFloat)width height:(CGFloat)height;
+-(NSRect) scaleToRect:(CGRect)rect extent:(CGRect)extent;
 
 -(void) addMulti;
 -(void) autoFit;

@@ -38,6 +38,7 @@
 @property (strong) NSString *name;
 
 @property (strong) SourceCache *sourceCache;
+@property (strong) CIFilter *compositeFilter;
 
 
 -(void)deleteSource:(InputSource *)delSource;

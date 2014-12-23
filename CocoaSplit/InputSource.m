@@ -33,6 +33,9 @@ static NSArray *_sourceTypes = nil;
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
     
+    _x_pos = self.layoutPosition.origin.x;
+    _y_pos = self.layoutPosition.origin.y;
+    
     [aCoder encodeFloat:self.x_pos forKey:@"x_pos"];
     [aCoder encodeFloat:self.y_pos forKey:@"y_pos"];
     [aCoder encodeInt64:self.display_width forKey:@"display_width"];
@@ -98,6 +101,8 @@ static NSArray *_sourceTypes = nil;
         self.crop_left = [aDecoder decodeIntForKey:@"crop_left"];
         self.crop_right = [aDecoder decodeIntForKey:@"crop_right"];
 
+        _last_resize = kResizeNone;
+        
         
         self.uuid = [aDecoder decodeObjectForKey:@"uuid"];
         
@@ -235,6 +240,10 @@ static NSArray *_sourceTypes = nil;
     self.currentEffects = [[NSMutableArray alloc] init];
     self.usePrivateSource = NO;
     
+    self.unlock_aspect = NO;
+    self.resizeType = kResizeNone;
+    
+    _locked_ar = 1.0;
     
     
     CFUUIDRef tmpUUID = CFUUIDCreate(NULL);
@@ -474,6 +483,12 @@ static NSArray *_sourceTypes = nil;
         [self.selectedFilter setDefaults];
     }
     
+    if (!self.rotateFilter)
+    {
+        self.rotateFilter = [CIFilter filterWithName:@"CIAffineTransform"];
+        [self.rotateFilter setDefaults];
+
+    }
     if(!self.transformFilter)
     {
         self.transformFilter = [CIFilter filterWithName:@"CIAffineTransform"];
@@ -485,6 +500,24 @@ static NSArray *_sourceTypes = nil;
         self.scaleFilter = [CIFilter filterWithName:@"CILanczosScaleTransform"];
         [self.scaleFilter setDefaults];
     }
+    
+    if (!self.prescaleTransformFilter)
+    {
+        
+        self.prescaleTransformFilter = [CIFilter filterWithName:@"CIAffineTransform"];
+        [self.prescaleTransformFilter setDefaults];
+
+        
+    }
+    
+    if (!self.postscaleTransformFilter)
+    {
+        
+        self.postscaleTransformFilter = [CIFilter filterWithName:@"CIAffineTransform"];
+        [self.postscaleTransformFilter setDefaults];
+        
+    }
+
 
     if (!self.cropFilter)
     {
@@ -492,7 +525,6 @@ static NSArray *_sourceTypes = nil;
         [self.cropFilter setDefaults];
     }
     
-    NSAffineTransform *geometryTransform = [NSAffineTransform transform];
     
     //Calculate crop rectangle, then adjust for shifted origin of the crop.
 
@@ -511,49 +543,110 @@ static NSArray *_sourceTypes = nil;
     
 
     
+    
+    
     [self.cropFilter setValue:[CIVector vectorWithX:cropRect.origin.x Y:cropRect.origin.y Z:cropRect.size.width W:cropRect.size.height] forKeyPath:@"inputRectangle"];
     
-    NSAffineTransform *rotateTransform = [NSAffineTransform transform];
+
+    
+    NSAffineTransform *geometryTransform = [[NSAffineTransform alloc] init];
+    
+    CGFloat scaleX = self.display_width/cropRect.size.width;
+    CGFloat scaleY = self.display_height/cropRect.size.height;
+    if (self.unlock_aspect)
+    {
+        _locked_ar = scaleX/scaleY;
+    }
+    
+    
+    
+    float scale_x_adjust, scale_y_adjust;
+    
+    //default is origin/corner
+    
+    scale_x_adjust = NSMinX(cropRect);
+    scale_y_adjust = NSMinY(cropRect);
+    
+    if (self.resizeType & kResizeLeft)
+    {
+        scale_x_adjust = NSMaxX(cropRect);
+    }
+    
+    if (self.resizeType & kResizeBottom)
+    {
+        scale_y_adjust = NSMaxY(cropRect);
+    }
+    
+    NSAffineTransform *scaleSim = [[NSAffineTransform alloc] init];
+    
+    
+    [scaleSim translateXBy:-scale_x_adjust yBy:-scale_y_adjust];
+    CGFloat useScale = fminf(scaleX, scaleY);
+    
+    [scaleSim scaleBy:useScale];
+    [scaleSim translateXBy:scale_x_adjust yBy:scale_y_adjust];
+    
+    NSSize adjustedSize = [scaleSim transformSize:cropRect.size];
+    
+    
+    int width_change = cropRect.size.width - adjustedSize.width;
+    int height_change = cropRect.size.height - adjustedSize.height;
+    
+    int adjust_x = 0;
+    int adjust_y = 0;
+    
+    if ((self.resizeType != kResizeNone) && (self.resizeType != _last_resize))
+    {
+        if (self.resizeType & kResizeBottom)
+        {
+            adjust_y = -height_change;
+        }
+    
+        if (self.resizeType & kResizeLeft)
+        {
+            adjust_x = -width_change;
+        }
+        
+        _x_pos = self.layoutPosition.origin.x;
+        _y_pos = self.layoutPosition.origin.y;
+        
+        _adjusted_x_pos = adjust_x;
+        _adjusted_y_pos = adjust_y;
+        _last_resize = self.resizeType;
+
+    }
+    
+    NSAffineTransform *scaleCalc = [[NSAffineTransform alloc] init];
+    [scaleCalc translateXBy:-scale_x_adjust yBy:-scale_y_adjust];
+    [self.prescaleTransformFilter setValue:scaleCalc forKey:kCIInputTransformKey];
+
+    NSAffineTransform *postCalc = [[NSAffineTransform alloc] init];
+    [postCalc translateXBy:scale_x_adjust yBy:scale_y_adjust];
+    [self.postscaleTransformFilter setValue:postCalc forKey:kCIInputTransformKey];
+    
+
+    NSAffineTransform *rotateTransform = [[NSAffineTransform alloc] init];
+    
+    [rotateTransform translateXBy:NSMidX(cropRect) yBy:NSMidY(cropRect)];
+    
+    
     [rotateTransform rotateByDegrees:self.rotationAngle];
     
-    NSPoint rotateOrigin = [rotateTransform transformPoint:cropRect.origin];
-    NSSize rotateSize = [rotateTransform transformSize:cropRect.size];
-    
-    
-    NSRect rotateRect = NSMakeRect(rotateOrigin.x, rotateOrigin.y, rotateSize.width, rotateSize.height);
-    
-    
-    
-    
-    
-    CGFloat scale_cx, scale_cy, cent_x, cent_y, x,y;
-    
-    [self scaleToRect:NSMakeRect(self.x_pos, self.y_pos, self.display_width, self.display_height) extent:NSMakeRect(rotateRect.origin.x, rotateRect.origin.y, rotateRect.size.width, rotateRect.size.height)];
-    
-    
-    
-    cent_x = (rotateRect.origin.x) + rotateRect.size.width/2;
-    cent_y = (rotateRect.origin.y) + rotateRect.size.height/2;
-    scale_cx = cent_x*_internalScaleFactor;
-    scale_cy = cent_y*_internalScaleFactor;
-    x = (scale_cx)-cent_x;
-    y = (scale_cy)-cent_y;
-    
-    NSAffineTransform *scaleTransform = [[NSAffineTransform alloc] init];
-    [scaleTransform translateXBy:-x yBy:-y];
-    [self.scaleFilter setValue:@(_internalScaleFactor) forKey:kCIInputScaleKey];
+    [rotateTransform translateXBy:-NSMidX(cropRect) yBy:-NSMidY(cropRect)];
 
-    [geometryTransform appendTransform:scaleTransform];
-    NSAffineTransform *positionTrans = [[NSAffineTransform alloc] init];
+    [self.rotateFilter setValue:rotateTransform forKeyPath:kCIInputTransformKey];
     
-    [positionTrans translateXBy:_scale_x_pos yBy:_scale_y_pos];
-    [geometryTransform appendTransform:positionTrans];
+
+    [geometryTransform translateXBy:_x_pos+_adjusted_x_pos yBy:_y_pos+_adjusted_y_pos];
+
+    [self.scaleFilter setValue:@(fminf(scaleY,scaleX)) forKey:kCIInputScaleKey];
+    [self.scaleFilter setValue:@(_locked_ar) forKey:kCIInputAspectRatioKey];
     
-    [geometryTransform rotateByDegrees:self.rotationAngle];
+
+
     
     
     [self.transformFilter setValue:geometryTransform forKeyPath:kCIInputTransformKey];
-    
     
     if (self.doChromaKey)
     {
@@ -568,6 +661,7 @@ static NSArray *_sourceTypes = nil;
     [self.selectedFilter setDefaults];
     
     [self.selectedFilter setValue:alphaVector forKey:@"inputAVector"];
+    
     /*
     if (self.is_selected)
     {
@@ -778,16 +872,34 @@ static NSArray *_sourceTypes = nil;
     
 
 
+
+
     
+    [self.rotateFilter setValue:outimg forKeyPath:kCIInputImageKey];
+    
+    outimg = [self.rotateFilter valueForKey:kCIOutputImageKey];
+
+
+    
+    [self.prescaleTransformFilter setValue:outimg forKeyPath:kCIInputImageKey];
+    
+    outimg  = [self.prescaleTransformFilter valueForKey:kCIOutputImageKey];
+
     [self.scaleFilter setValue:outimg forKeyPath:kCIInputImageKey];
     
     outimg  = [self.scaleFilter valueForKey:kCIOutputImageKey];
+    
+    [self.postscaleTransformFilter setValue:outimg forKeyPath:kCIInputImageKey];
+    
+    outimg  = [self.postscaleTransformFilter valueForKey:kCIOutputImageKey];
+
+
+    [self.transformFilter setValue:outimg forKeyPath:kCIInputImageKey];
+    
+    outimg = [self.transformFilter valueForKey:kCIOutputImageKey];
 
 
     
-    [self.transformFilter setValue:outimg forKeyPath:kCIInputImageKey];
-
-    outimg = [self.transformFilter valueForKey:kCIOutputImageKey];
 
 
 
@@ -833,14 +945,19 @@ static NSArray *_sourceTypes = nil;
 
     
     _preBgImage = outimg;
-
+   
+    
+    
     
     if (backgroundImage)
     {
         //CIFilter *compositeCopy = [self.compositeFilter copy];
-        [self.compositeFilter setValue:outimg forKeyPath:kCIInputImageKey];
-        [self.compositeFilter setValue:backgroundImage forKeyPath:kCIInputBackgroundImageKey];
-        outimg = [self.compositeFilter valueForKey:kCIOutputImageKey];
+        //[self.compositeFilter setValue:outimg forKeyPath:kCIInputImageKey];
+        //[self.compositeFilter setValue:backgroundImage forKeyPath:kCIInputBackgroundImageKey];
+        //outimg = [self.compositeFilter valueForKey:kCIOutputImageKey];
+        CGAffineTransform posTrans = CGAffineTransformMakeTranslation(_x_pos, _y_pos);
+        //outimg = [outimg imageByApplyingTransform:posTrans];
+        outimg = [outimg imageByCompositingOverImage:backgroundImage];
     }
 
 
@@ -879,10 +996,19 @@ static NSArray *_sourceTypes = nil;
 {
     _x_pos = 0.0f;
     _y_pos = 0.0f;
+    _adjusted_y_pos = _adjusted_x_pos = 0;
+    self.resizeType = kResizeNone;
+    
     self.display_width = self.canvas_width;
     self.display_height = self.canvas_height;
     
-    //[self scaleToRect:NSMakeRect(0.0f, 0.0f, self.canvas_width, self.canvas_height)];
+    NSRect scaleRect = [self scaleToRect:NSMakeRect(0.0f, 0.0f, self.canvas_width, self.canvas_height) extent:self.inputImage.extent];
+    
+    _x_pos = scaleRect.origin.x;
+    _y_pos = scaleRect.origin.y;
+
+    self.unlock_aspect = NO;
+    _locked_ar = 1.0;
     
     [self invalidateFilters];
 }
@@ -899,11 +1025,6 @@ static NSArray *_sourceTypes = nil;
     source_width = fabs(sourceSize.width);
     source_height = fabs(sourceSize.height);
     
-    if (source_width == 0 && source_height == 0)
-    {
-        return _internalScaleFactor;
-    }
-    
     float wr = forSize.width / source_width;
     float hr = forSize.height / source_height;
     
@@ -914,7 +1035,7 @@ static NSArray *_sourceTypes = nil;
 
 
 
--(void) scaleToRect:(CGRect)rect extent:(CGRect)extent
+-(NSRect) scaleToRect:(CGRect)rect extent:(CGRect)extent
 {
     
     CGFloat source_width, source_height;
@@ -924,20 +1045,15 @@ static NSArray *_sourceTypes = nil;
     
     if (NSEqualSizes(extent.size, rect.size) || !self.videoInput.allowScaling)
     {
-        _scale_x_pos = self.x_pos;
-        _scale_y_pos = self.y_pos;
-        _internalScaleFactor = 1.0f;
         
-        _scale_height = source_height;
-        _scale_width = source_width;
         
-        return;
+        return extent;
     }
     
     
     if (source_width == 0 && source_height == 0)
     {
-        return;
+        return extent;
     }
     
     float ratio = [self calculateScale:rect.size sourceSize:extent.size];
@@ -951,20 +1067,8 @@ static NSArray *_sourceTypes = nil;
     new_x = (rect.size.width - new_w)/2;
     new_y = (rect.size.height - new_h)/2;
     
-    float x_adj, y_adj;
-    x_adj = ((new_w-source_width)/2)-extent.origin.x;
-    y_adj = ((new_h-source_height)/2)-extent.origin.y;
-    
-    
-    
-    _scale_x_pos = new_x+x_adj+_x_pos;
-    _scale_y_pos = new_y+y_adj+_y_pos;
-    _scale_height = new_h;
-    _scale_width = new_w;
-    
-    
-    _internalScaleFactor = ratio;
 
+    return NSMakeRect(new_x, new_y, new_w, new_h);
     
 }
 
@@ -1018,8 +1122,10 @@ static NSArray *_sourceTypes = nil;
 -(void) updateSize:(CGFloat)width height:(CGFloat)height
 {
     
+    
     self.display_width = width;
     self.display_height = height;
+    
     [self invalidateFilters];
 }
 
