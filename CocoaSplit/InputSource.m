@@ -530,6 +530,7 @@ static NSArray *_sourceTypes = nil;
 
     
     NSRect cropRect;
+    NSRect fullRect = self.inputImage.extent;
     
     if (!self.videoInput.allowScaling)
     {
@@ -584,6 +585,8 @@ static NSArray *_sourceTypes = nil;
     CGFloat useScale = fminf(scaleX, scaleY);
     
     [scaleSim scaleBy:useScale];
+    [scaleSim rotateByDegrees:self.rotationAngle];
+
     [scaleSim translateXBy:scale_x_adjust yBy:scale_y_adjust];
     
     NSSize adjustedSize = [scaleSim transformSize:cropRect.size];

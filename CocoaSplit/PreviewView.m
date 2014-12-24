@@ -557,50 +557,8 @@
     
     
     
-/*
-    if (NSPointInRect(tmp, leftRect))
-    {
-        self.resizeType |= kResizeLeft;
-    }
-    
-    
-    if (NSPointInRect(tmp, topRect))
-    {
-        self.resizeType |= kResizeTop;
-    }
-    
-    if (NSPointInRect(tmp, rightRect))
-    {
-        self.resizeType |= kResizeRight;
-    }
-    
-    if (NSPointInRect(tmp, bottomRect))
-    {
-        self.resizeType |= kResizeBottom;
-    }
-    
-    */
-    
     float anchor_y;
     float anchor_x;
-    
-    if (self.resizeType & kResizeBottom)
-    {
-        anchor_y = NSMaxY(self.selectedSource.layoutPosition);
-    } else {
-        anchor_y = NSMinY(self.selectedSource.layoutPosition);
-    }
-    
-    if (self.resizeType & kResizeRight)
-    {
-        anchor_x = NSMaxX(self.selectedSource.layoutPosition);
-    } else {
-        anchor_x = NSMinX(self.selectedSource.layoutPosition);
-    }
-
-    
-    
-    
     
     self.isResizing = self.resizeType != kResizeNone;
     
@@ -633,6 +591,8 @@
         CGFloat dx, dy;
         dx = worldPoint.x - self.selectedOriginDistance.x;
         dy = worldPoint.y - self.selectedOriginDistance.y;
+        [self adjustDeltas:&dx dy:&dy];
+
         self.selectedOriginDistance = worldPoint;
         if (self.isResizing)
         {
@@ -706,7 +666,6 @@
             float top_pos = y_pos+s_height;
             float right_pos = x_pos+s_width;
             
-            [self adjustDeltas:&dx dy:&dy];
             
             [self.selectedSource updateOrigin:dx y:dy];
         }
@@ -746,10 +705,8 @@
     NSPoint s_snaps[3] = {s_lb_snap, s_rt_snap, s_center_snap};
     NSPoint c_snaps[3] = {c_lb_snap, c_rt_snap, c_center_snap};
     
-    //NSPoint s_snaps[1] = {s_lb_snap};
-    //NSPoint c_snaps[1] = {c_center_snap};
-    
-    
+    bool did_snap_x = NO;
+    bool did_snap_y = NO;
     
     for(int i=0; i < sizeof(s_snaps)/sizeof(NSPoint); i++)
     {
@@ -759,15 +716,16 @@
             
             NSPoint c_snap = c_snaps[j];
             dist = [self pointDistance:s_snap b:c_snap];
-            if (abs(dist.x) < SNAP_THRESHOLD)
+            if ((abs(dist.x) < SNAP_THRESHOLD) && !did_snap_x)
             {
-                if (s_snap.x != c_snap.x)
+                if ((s_snap.x != c_snap.x) && (_snap_x == -1))
                 {
                     *dx = -dist.x;
                     _snap_x = c_snap.x;
                     _snap_x_accum = 0;
                 } else {
                     _snap_x_accum += *dx;
+
                     if (abs(_snap_x_accum) > SNAP_THRESHOLD*5)
                     {
                         _snap_x = -1;
@@ -777,17 +735,19 @@
                     }
                     
                 }
+                did_snap_x = YES;
             }
             
-            if (abs(dist.y) < SNAP_THRESHOLD)
+            if ((abs(dist.y) < SNAP_THRESHOLD) && !did_snap_y)
             {
-                if (s_snap.y != c_snap.y)
+                if ((s_snap.y != c_snap.y) && (_snap_y == -1))
                 {
                     *dy = -dist.y;
                     _snap_y = c_snap.y;
                     _snap_y_accum = 0;
                 } else {
                     _snap_y_accum += *dy;
+
                     if (abs(_snap_y_accum) > SNAP_THRESHOLD*5)
                     {
                         _snap_y = -1;
@@ -795,8 +755,8 @@
                     } else {
                         *dy = 0;
                     }
-                    
                 }
+                did_snap_y = YES;
             }
         }
     }
@@ -822,6 +782,8 @@
         self.selectedSource.is_selected = NO;
     }
     */
+    _snap_x = -1;
+    _snap_y = -1;
     _snap_x_accum = 0;
     _snap_y_accum  = 0;
     
