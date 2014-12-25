@@ -676,7 +676,6 @@
 
 -(void)adjustDeltas:(CGFloat *)dx dy:(CGFloat *)dy
 {
-    NSPoint no_snap_found = NSMakePoint(-555, -555);
     
     //define snap points. basically edges and the center of the canvas
     NSPoint c_lb_snap = NSMakePoint(0, 0);
@@ -692,15 +691,13 @@
     }
     
     NSRect src_rect = self.selectedSource.layoutPosition;
-    
+
     NSPoint s_lb_snap = src_rect.origin;
     NSPoint s_rt_snap = NSMakePoint(src_rect.origin.x+src_rect.size.width, src_rect.origin.y+src_rect.size.height);
     NSPoint s_center_snap = NSMakePoint(src_rect.origin.x+roundf(src_rect.size.width/2), src_rect.origin.y+roundf(src_rect.size.height/2));
     
     
     NSPoint dist;
-    float old_dx = *dx;
-    float old_dy = *dy;
     
     NSPoint s_snaps[3] = {s_lb_snap, s_rt_snap, s_center_snap};
     NSPoint c_snaps[3] = {c_lb_snap, c_rt_snap, c_center_snap};
@@ -708,6 +705,38 @@
     bool did_snap_x = NO;
     bool did_snap_y = NO;
     
+    //Check if we're already snapped. If we are, check if it's time to break the magnetism.
+    if (_snap_x != -1)
+    {
+        _snap_x_accum += *dx;
+        if (fabs(_snap_x_accum) > SNAP_THRESHOLD*2)
+        {
+            _snap_x = -1;
+            *dx = _snap_x_accum;
+            _snap_x_accum = 0;
+        } else {
+            *dx = 0;
+        }
+        
+        did_snap_x = YES;
+    }
+    
+    if (_snap_y != -1)
+    {
+        _snap_y_accum += *dy;
+        if (fabs(_snap_y_accum) > SNAP_THRESHOLD*2)
+        {
+            _snap_y = -1;
+            *dy = _snap_y_accum;
+            _snap_y_accum = 0;
+        } else {
+            *dy = 0;
+        }
+        
+        did_snap_y = YES;
+    }
+
+
     for(int i=0; i < sizeof(s_snaps)/sizeof(NSPoint); i++)
     {
         NSPoint s_snap = s_snaps[i];
@@ -716,47 +745,28 @@
             
             NSPoint c_snap = c_snaps[j];
             dist = [self pointDistance:s_snap b:c_snap];
-            if ((abs(dist.x) < SNAP_THRESHOLD) && !did_snap_x)
+            if (!did_snap_x && (copysignf(dist.x, *dx) != dist.x) && (fabs(dist.x) < SNAP_THRESHOLD))
             {
                 if ((s_snap.x != c_snap.x) && (_snap_x == -1))
                 {
                     *dx = -dist.x;
                     _snap_x = c_snap.x;
                     _snap_x_accum = 0;
-                } else {
-                    _snap_x_accum += *dx;
-
-                    if (abs(_snap_x_accum) > SNAP_THRESHOLD*5)
-                    {
-                        _snap_x = -1;
-                        *dx = *dx > 0 ? SNAP_THRESHOLD : -SNAP_THRESHOLD;
-                    } else {
-                        *dx = 0;
-                    }
-                    
+                    did_snap_x = YES;
                 }
-                did_snap_x = YES;
             }
             
-            if ((abs(dist.y) < SNAP_THRESHOLD) && !did_snap_y)
+            if ((*dy != 0) && !did_snap_y && (copysignf(dist.y, *dy) != dist.y) && (fabs(dist.y) < SNAP_THRESHOLD))
             {
+
                 if ((s_snap.y != c_snap.y) && (_snap_y == -1))
                 {
                     *dy = -dist.y;
                     _snap_y = c_snap.y;
                     _snap_y_accum = 0;
-                } else {
-                    _snap_y_accum += *dy;
+                    did_snap_y = YES;
 
-                    if (abs(_snap_y_accum) > SNAP_THRESHOLD*5)
-                    {
-                        _snap_y = -1;
-                        *dy = *dy > 0 ? SNAP_THRESHOLD : -SNAP_THRESHOLD;
-                    } else {
-                        *dy = 0;
-                    }
                 }
-                did_snap_y = YES;
             }
         }
     }

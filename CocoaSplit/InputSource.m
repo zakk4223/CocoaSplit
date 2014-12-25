@@ -28,6 +28,11 @@ static NSArray *_sourceTypes = nil;
 @synthesize is_selected = _is_selected;
 @synthesize active = _active;
 @synthesize is_live = _is_live;
+@synthesize crop_left = _crop_left;
+@synthesize crop_right = _crop_right;
+@synthesize crop_top = _crop_top;
+@synthesize crop_bottom = _crop_bottom;
+
 
 
 -(void) encodeWithCoder:(NSCoder *)aCoder
@@ -525,6 +530,9 @@ static NSArray *_sourceTypes = nil;
         [self.cropFilter setDefaults];
     }
     
+    //Reset any negative crop values to zero.
+    
+    
     
     //Calculate crop rectangle, then adjust for shifted origin of the crop.
 
@@ -676,6 +684,7 @@ static NSArray *_sourceTypes = nil;
 
 -(NSRect)calculateCropRect:(int)width height:(int)height
 {
+    
     
     
     return NSMakeRect(self.crop_left, self.crop_bottom, width-self.crop_right-self.crop_left, height-self.crop_top-self.crop_bottom);
@@ -1364,6 +1373,71 @@ static NSArray *_sourceTypes = nil;
 {
     return _is_selected;
 }
+
+-(int) crop_left
+{
+    return _crop_left;
+}
+
+
+-(void) setCrop_left:(int)crop_left
+{
+    if (crop_left < 0)
+    {
+        _crop_left = 0;
+    } else {
+        _crop_left = crop_left;
+    }
+}
+
+-(int) crop_right
+{
+    return _crop_right;
+}
+
+
+-(void) setCrop_right:(int)crop_right
+{
+    if (crop_right < 0)
+    {
+        _crop_right = 0;
+    } else {
+        _crop_right = crop_right;
+    }
+}
+
+-(int) crop_top
+{
+    return _crop_top;
+}
+
+
+-(void) setCrop_top:(int)crop_top
+{
+    if (crop_top < 0)
+    {
+        _crop_top = 0;
+    } else {
+        _crop_top = crop_top;
+    }
+}
+
+-(int) crop_bottom
+{
+    return _crop_bottom;
+}
+
+
+-(void) setCrop_bottom:(int)crop_bottom
+{
+    if (crop_bottom < 0)
+    {
+        _crop_bottom = 0;
+    } else {
+        _crop_bottom = crop_bottom;
+    }
+}
+
 
 
 -(void) removeObjectFromVideoSourcesAtIndex:(NSUInteger)index
