@@ -586,6 +586,12 @@ static NSArray *_sourceTypes = nil;
         scale_y_adjust = NSMaxY(cropRect);
     }
     
+    if (self.resizeType & kResizeCenter)
+    {
+        scale_y_adjust = NSMidY(cropRect);
+        scale_x_adjust = NSMidX(cropRect);
+    }
+    
     NSAffineTransform *scaleSim = [[NSAffineTransform alloc] init];
     
     
@@ -618,8 +624,16 @@ static NSArray *_sourceTypes = nil;
             adjust_x = -width_change;
         }
         
+        if (self.resizeType & kResizeCenter)
+        {
+            adjust_x = -width_change/2;
+            adjust_y = -height_change/2;
+        }
+        
+        
         _x_pos = self.layoutPosition.origin.x;
         _y_pos = self.layoutPosition.origin.y;
+        
         
         _adjusted_x_pos = adjust_x;
         _adjusted_y_pos = adjust_y;

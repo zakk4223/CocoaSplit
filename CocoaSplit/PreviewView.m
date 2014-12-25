@@ -566,6 +566,11 @@
     
     if (self.isResizing)
     {
+        if (theEvent.modifierFlags & NSAlternateKeyMask)
+        {
+            self.resizeType |= kResizeCenter;
+        }
+        
         self.selectedSource.resizeType = self.resizeType;
     }
     
@@ -620,6 +625,13 @@
                 
             } else {
                 
+                if (theEvent.modifierFlags & NSAlternateKeyMask)
+                {
+                    self.resizeType |= kResizeCenter;
+                } else {
+                    self.resizeType &= ~kResizeCenter;
+                }
+                self.selectedSource.resizeType = self.resizeType;
                 CGFloat new_width, new_height;
                 
                 NSRect sPosition = self.selectedSource.layoutPosition;

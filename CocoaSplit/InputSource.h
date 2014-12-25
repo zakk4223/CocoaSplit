@@ -32,8 +32,8 @@ typedef enum resize_style_t {
     kResizeTop = 1 << 0,
     kResizeRight = 1<<1,
     kResizeBottom = 1<<2,
-    kResizeLeft = 1<<3
-    
+    kResizeLeft = 1<<3,
+    kResizeCenter = 1<<4
 } resize_style;
 
 
