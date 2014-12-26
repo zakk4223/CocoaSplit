@@ -221,6 +221,8 @@ static NSArray *_sourceTypes = nil;
     _internalScaleFactor = 1.0f;
     _nextImageTime = 0.0f;
     _currentSourceIdx = 0;
+    _rotateTransform = CGAffineTransformIdentity;
+    
     self.changeInterval = 20.0f;
     
     
@@ -532,13 +534,45 @@ static NSArray *_sourceTypes = nil;
     
     //Reset any negative crop values to zero.
     
-    
-    
     //Calculate crop rectangle, then adjust for shifted origin of the crop.
 
     
     NSRect cropRect;
     NSRect fullRect = self.inputImage.extent;
+    float rotateRad = (self.rotationAngle/180.0)*M_PI;
+    
+    float r_x_adjust = fullRect.size.height * fabsf(sinf(rotateRad));
+    float r_y_adjust = fullRect.size.height * fabsf(cosf(rotateRad));
+    
+    float rotatedWidth = r_x_adjust + (fullRect.size.width * fabsf(cosf(rotateRad)));
+    float rotatedHeight = r_y_adjust + (fullRect.size.width * fabsf(sinf(rotateRad)));
+
+    
+
+    
+
+    
+    
+    
+    
+    NSAffineTransform *rotateTransform = [[NSAffineTransform alloc] init];
+
+    [rotateTransform rotateByDegrees:self.rotationAngle];
+
+
+    NSBezierPath *rectPath = [NSBezierPath bezierPathWithRect:fullRect];
+    [rectPath transformUsingAffineTransform:rotateTransform];
+    
+    
+    r_x_adjust = -rectPath.bounds.origin.x;
+    r_y_adjust = -rectPath.bounds.origin.y;
+    NSAffineTransform *r = [NSAffineTransform transform];
+    [r translateXBy:r_x_adjust yBy:r_y_adjust];
+    [rotateTransform appendTransform:r];
+    
+    [self.rotateFilter setValue:rotateTransform forKeyPath:kCIInputTransformKey];
+
+    
     
     if (!self.videoInput.allowScaling)
     {
@@ -546,12 +580,14 @@ static NSArray *_sourceTypes = nil;
 
         
     } else {
-        cropRect = [self calculateCropRect:self.inputImage.extent.size.width height:self.inputImage.extent.size.height];
+        cropRect = [self calculateCropRect:rotatedWidth height:rotatedHeight];
     }
-    
     
 
     
+    
+    
+
     
     
     [self.cropFilter setValue:[CIVector vectorWithX:cropRect.origin.x Y:cropRect.origin.y Z:cropRect.size.width W:cropRect.size.height] forKeyPath:@"inputRectangle"];
@@ -559,6 +595,7 @@ static NSArray *_sourceTypes = nil;
 
     
     NSAffineTransform *geometryTransform = [[NSAffineTransform alloc] init];
+    
     
     CGFloat scaleX = self.display_width/cropRect.size.width;
     CGFloat scaleY = self.display_height/cropRect.size.height;
@@ -594,20 +631,20 @@ static NSArray *_sourceTypes = nil;
     
     NSAffineTransform *scaleSim = [[NSAffineTransform alloc] init];
     
-    
+
     [scaleSim translateXBy:-scale_x_adjust yBy:-scale_y_adjust];
     CGFloat useScale = fminf(scaleX, scaleY);
     
+
     [scaleSim scaleBy:useScale];
-    [scaleSim rotateByDegrees:self.rotationAngle];
 
     [scaleSim translateXBy:scale_x_adjust yBy:scale_y_adjust];
     
     NSSize adjustedSize = [scaleSim transformSize:cropRect.size];
     
     
-    int width_change = cropRect.size.width - adjustedSize.width;
-    int height_change = cropRect.size.height - adjustedSize.height;
+    int width_change = cropRect.size.width - fabs(adjustedSize.width);
+    int height_change = cropRect.size.height - fabs(adjustedSize.height);
     
     int adjust_x = 0;
     int adjust_y = 0;
@@ -650,16 +687,6 @@ static NSArray *_sourceTypes = nil;
     [self.postscaleTransformFilter setValue:postCalc forKey:kCIInputTransformKey];
     
 
-    NSAffineTransform *rotateTransform = [[NSAffineTransform alloc] init];
-    
-    [rotateTransform translateXBy:NSMidX(cropRect) yBy:NSMidY(cropRect)];
-    
-    
-    [rotateTransform rotateByDegrees:self.rotationAngle];
-    
-    [rotateTransform translateXBy:-NSMidX(cropRect) yBy:-NSMidY(cropRect)];
-
-    [self.rotateFilter setValue:rotateTransform forKeyPath:kCIInputTransformKey];
     
 
     [geometryTransform translateXBy:_x_pos+_adjusted_x_pos yBy:_y_pos+_adjusted_y_pos];
@@ -788,6 +815,7 @@ static NSArray *_sourceTypes = nil;
     {
         
         outimg = [_useInput currentImage];
+        
         if (!outimg)
         {
             newFrame = [_useInput getCurrentFrame];
@@ -846,6 +874,8 @@ static NSArray *_sourceTypes = nil;
     CIImage *outimg = nil;
     self.inputImage = [self getCurrentImage];
     
+    
+    
     if (!self.inputImage)
     {
         if (!self.solidFilter)
@@ -858,6 +888,8 @@ static NSArray *_sourceTypes = nil;
         self.inputImage = [[self.solidFilter valueForKey:kCIOutputImageKey] imageByCroppingToRect:CGRectMake(0.0f, 0.0f, 200.0f, 200.0f)];
     }
     
+    
+
     outimg = self.inputImage;
 
 
@@ -888,6 +920,11 @@ static NSArray *_sourceTypes = nil;
     }
 
     self.oldSize = self.inputImage.extent.size;
+    
+    [self.rotateFilter setValue:outimg forKey:kCIInputImageKey];
+    outimg = [self.rotateFilter valueForKey:kCIOutputImageKey];
+    
+    
     [self.cropFilter setValue:outimg forKeyPath:kCIInputImageKey];
     
     outimg = [self.cropFilter valueForKey:kCIOutputImageKey];
@@ -901,9 +938,6 @@ static NSArray *_sourceTypes = nil;
 
 
     
-    [self.rotateFilter setValue:outimg forKeyPath:kCIInputImageKey];
-    
-    outimg = [self.rotateFilter valueForKey:kCIOutputImageKey];
 
 
     

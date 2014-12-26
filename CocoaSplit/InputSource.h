@@ -63,6 +63,7 @@ typedef enum resize_style_t {
     resize_style _last_resize;
     int _adjusted_x_pos;
     int _adjusted_y_pos;
+    CGAffineTransform _rotateTransform;
     
     //NSObject<CSCaptureSourceProtocol> *_useInput;
 
@@ -82,6 +83,7 @@ typedef enum resize_style_t {
 @property (assign) int crop_top;
 @property (assign) int crop_bottom;
 @property (assign) float scaleFactor;
+
 @property (strong) CIImage *inputImage;
 @property (strong) CIImage *outputImage;
 @property (assign) float opacity;
