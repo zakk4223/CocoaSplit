@@ -47,13 +47,13 @@
 
 +(NSString *)label
 {
-    return @"File";
+    return @"File/RTMP";
 }
 
 
 +(NSString *)serviceDescription
 {
-    return @"File";
+    return @"File/RTMP";
 }
 
 @end
