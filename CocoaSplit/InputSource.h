@@ -44,9 +44,6 @@ typedef enum resize_style_t {
 {
     CVPixelBufferRef _tmpCVBuf;
     CGColorSpaceRef _colorSpace;
-    float _scale_x_pos, _scale_y_pos;
-    float _internalScaleFactor;
-    int _scale_width, _scale_height;
     
     int _currentSourceIdx;
     CIImage *_oldImage;
@@ -61,9 +58,11 @@ typedef enum resize_style_t {
     NSViewController *_currentInputViewController;
     float _locked_ar;
     resize_style _last_resize;
-    int _adjusted_x_pos;
-    int _adjusted_y_pos;
-    CGAffineTransform _rotateTransform;
+    NSBezierPath *_lastScalePath;
+    
+    float _last_x_adjust;
+    float _last_y_adjust;
+    NSRect _inputExtent;
     
     //NSObject<CSCaptureSourceProtocol> *_useInput;
 
@@ -93,7 +92,6 @@ typedef enum resize_style_t {
 @property (assign) NSRect layoutPosition;
 @property (strong) CIFilter *scaleFilter;
 @property (strong) CIFilter *prescaleTransformFilter;
-@property (strong) CIFilter *postscaleTransformFilter;
 
 
 @property (strong) CIFilter *selectedFilter;

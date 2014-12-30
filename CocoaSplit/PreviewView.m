@@ -522,8 +522,6 @@
         oldSource.is_selected = NO;
     }
     
-    NSLog(@"SELECTED SOURCE RECTANGLE %@", NSStringFromRect(self.selectedSource.layoutPosition));
-    
     
     NSArray *resizeRects = [self resizeRectsForSource:self.selectedSource withExtra:2];
     
@@ -534,10 +532,6 @@
     NSRect topLeftRect = [[resizeRects objectAtIndex:1] rectValue];
     NSRect topRightRect = [[resizeRects objectAtIndex:2] rectValue];
     NSRect bottomRightRect = [[resizeRects objectAtIndex:3] rectValue];
-    
-    
-    
-    
     
     self.resizeType = kResizeNone;
     
@@ -564,8 +558,8 @@
         {
             self.resizeType |= kResizeCenter;
         }
-        
         self.selectedSource.resizeType = self.resizeType;
+
     }
     
 }
