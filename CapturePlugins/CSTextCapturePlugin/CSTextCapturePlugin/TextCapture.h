@@ -8,29 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import <QuartzCore/CoreImage.h>
-#import "CSCaptureBase.h"
+#import "CSTextCaptureBase.h"
 
-@interface TextCapture : CSCaptureBase <CSCaptureSourceProtocol>
-
-{
-    CGLayerRef  _cgLayer;
-    CIImage *_ciimage;
-    NSAttributedString *_attribString;
-    
-
-}
-
-@property (strong) NSFont *font;
-
-@property (strong) NSString *text;
-@property (strong) NSArray *fontNames;
-@property (assign) double fontSize;
-@property (assign) bool isItalic;
-@property (assign) bool isBold;
-@property (assign) bool isUnderline;
-@property (assign) bool isStrikethrough;
-@property (strong) NSColor *foregroundColor;
-@property (assign) bool propertiesChanged;
-@property (strong) NSDictionary *fontAttributes;
+@interface TextCapture : CSTextCaptureBase
 
 @end

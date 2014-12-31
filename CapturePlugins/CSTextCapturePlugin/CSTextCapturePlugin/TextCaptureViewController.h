@@ -7,11 +7,8 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "TextCapture.h"
+#import "CSTextCaptureViewControllerBase.h"
 
 
-@interface TextCaptureViewController : NSViewController
-@property (weak) TextCapture *captureObj;
-- (IBAction)openFontPanel:(id)sender;
-
+@interface TextCaptureViewController : CSTextCaptureViewControllerBase
 @end

@@ -155,6 +155,10 @@
 		34CFE4A118F154DD00092C6A /* AVFChannelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 34CFE49F18F154DD00092C6A /* AVFChannelManager.m */; };
 		34CFE4A418F1992A00092C6A /* AVFAudioChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 34CFE4A318F1992A00092C6A /* AVFAudioChannel.m */; };
 		34CFE4A518F1992A00092C6A /* AVFAudioChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 34CFE4A318F1992A00092C6A /* AVFAudioChannel.m */; };
+		34D2D5731A547628001004E5 /* CSTextCaptureBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2D5721A547628001004E5 /* CSTextCaptureBase.m */; };
+		34D2D5741A547628001004E5 /* CSTextCaptureBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2D5721A547628001004E5 /* CSTextCaptureBase.m */; };
+		34D2D5771A547C35001004E5 /* CSTextCaptureViewControllerBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2D5761A547C35001004E5 /* CSTextCaptureViewControllerBase.m */; };
+		34D2D5781A547C35001004E5 /* CSTextCaptureViewControllerBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2D5761A547C35001004E5 /* CSTextCaptureViewControllerBase.m */; };
 		34D4351B198BE3B700266169 /* NewLayoutPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34D4351A198BE3B700266169 /* NewLayoutPanel.xib */; };
 		34D6580219B342E00012E32B /* CSTwitchStreamServicePlugin.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34AFC32B19B0AD360007C07B /* CSTwitchStreamServicePlugin.bundle */; };
 		34D6580319B342E70012E32B /* CSFileStreamServicePlugin.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34AFC33019B0AD500007C07B /* CSFileStreamServicePlugin.bundle */; };
@@ -531,6 +535,10 @@
 		34CFE49F18F154DD00092C6A /* AVFChannelManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVFChannelManager.m; sourceTree = "<group>"; };
 		34CFE4A218F1992A00092C6A /* AVFAudioChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVFAudioChannel.h; sourceTree = "<group>"; };
 		34CFE4A318F1992A00092C6A /* AVFAudioChannel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVFAudioChannel.m; sourceTree = "<group>"; };
+		34D2D5711A547628001004E5 /* CSTextCaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSTextCaptureBase.h; sourceTree = "<group>"; };
+		34D2D5721A547628001004E5 /* CSTextCaptureBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSTextCaptureBase.m; sourceTree = "<group>"; };
+		34D2D5751A547C35001004E5 /* CSTextCaptureViewControllerBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSTextCaptureViewControllerBase.h; sourceTree = "<group>"; };
+		34D2D5761A547C35001004E5 /* CSTextCaptureViewControllerBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSTextCaptureViewControllerBase.m; sourceTree = "<group>"; };
 		34D4351A198BE3B700266169 /* NewLayoutPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NewLayoutPanel.xib; path = Interface/NewLayoutPanel.xib; sourceTree = "<group>"; };
 		34D43550198DCE3800266169 /* TextureWrapPlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = TextureWrapPlugin.xcodeproj; path = ImageUnitPlugins/TextureWrapPlugin/TextureWrapPlugin.xcodeproj; sourceTree = "<group>"; };
 		34D657F519B33DCF0012E32B /* CSPluginFactoryProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPluginFactoryProtocol.h; path = PluginHeaders/CSPluginFactoryProtocol.h; sourceTree = "<group>"; };
@@ -702,7 +710,9 @@
 				3451A1D2171187D400DF6A8B /* ControllerProtocol.h */,
 				3408235419BC530300CD1F5F /* CSNotifications.m */,
 				340DC733197CF6E9003A0BB3 /* CSCaptureBase.m */,
+				34D2D5761A547C35001004E5 /* CSTextCaptureViewControllerBase.m */,
 				34348C2719BDBDC000A122C2 /* PluginManagerWindowController.h */,
+				34D2D5721A547628001004E5 /* CSTextCaptureBase.m */,
 				34348C2819BDBDC000A122C2 /* PluginManagerWindowController.m */,
 				347B14D9198492D900DC7DF0 /* InputPopupControllerViewController.h */,
 				347B14DA198492D900DC7DF0 /* InputPopupControllerViewController.m */,
@@ -851,6 +861,8 @@
 				342F73F41A245316007AA99F /* CSPcmPlayer.h */,
 				345F8B3B1A15F3BD009A81E3 /* CAMultiAudioPCM.h */,
 				342346CD15F9F07E00C8C77E /* CSAbstractCaptureDevice.h */,
+				34D2D5711A547628001004E5 /* CSTextCaptureBase.h */,
+				34D2D5751A547C35001004E5 /* CSTextCaptureViewControllerBase.h */,
 				340DC732197CF6E9003A0BB3 /* CSCaptureBase.h */,
 				342346CC15F9D52000C8C77E /* CSCaptureSourceProtocol.h */,
 				34AFC2C119B08AF30007C07B /* CSStreamServiceProtocol.h */,
@@ -1443,6 +1455,7 @@
 				34C19053189EE60400AB2430 /* CapturedFrameData.m in Sources */,
 				345F8B311A15716A009A81E3 /* CAMultiAudioDeviceOutput.m in Sources */,
 				345F8B6D1A176A5D009A81E3 /* CAMultiAudioUnit.m in Sources */,
+				34D2D5731A547628001004E5 /* CSTextCaptureBase.m in Sources */,
 				340FE4B515F3417E00E4CE4E /* AppDelegate.m in Sources */,
 				345F8B4F1A15F7DA009A81E3 /* CAMultiAudioPCMPlayer.m in Sources */,
 				34AFC33319B19CD00007C07B /* SourceCache.m in Sources */,
@@ -1455,6 +1468,7 @@
 				345F8B611A161552009A81E3 /* CAMultiAudioAVCapturePlayer.m in Sources */,
 				3481F30619B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m in Sources */,
 				34EAFB6F1A1A137600E12FBD /* CSMeterCell.m in Sources */,
+				34D2D5771A547C35001004E5 /* CSTextCaptureViewControllerBase.m in Sources */,
 				34B5FCDF19BF1C3F00F67D19 /* CreateLayoutViewController.m in Sources */,
 				342346CF15F9F07E00C8C77E /* CSAbstractCaptureDevice.m in Sources */,
 				34210B3E1606001200362FC8 /* OutputDestination.m in Sources */,
@@ -1492,6 +1506,7 @@
 				345F8B2E1A156E15009A81E3 /* CAMultiAudioDevice.m in Sources */,
 				345F8B261A14E6A0009A81E3 /* CAMultiAudioNode.m in Sources */,
 				345F8B761A17A785009A81E3 /* CAMultiAudioMixer.m in Sources */,
+				34D2D5781A547C35001004E5 /* CSTextCaptureViewControllerBase.m in Sources */,
 				34AFC33419B19CD00007C07B /* SourceCache.m in Sources */,
 				34B5FCE019BF1C3F00F67D19 /* CreateLayoutViewController.m in Sources */,
 				345F8B7A1A183D1D009A81E3 /* CAMultiAudioEngine.m in Sources */,
@@ -1512,6 +1527,7 @@
 				34CFE4A118F154DD00092C6A /* AVFChannelManager.m in Sources */,
 				3451A1DC1712C5D000DF6A8B /* OutputDestination.m in Sources */,
 				3451A1DD1712C5D300DF6A8B /* CSAbstractCaptureDevice.m in Sources */,
+				34D2D5741A547628001004E5 /* CSTextCaptureBase.m in Sources */,
 				34213E1B196680880054E238 /* CompressorBase.m in Sources */,
 				345F8B6A1A16C348009A81E3 /* CAMultiAudioGraph.m in Sources */,
 				3408235619BC677C00CD1F5F /* CSNotifications.m in Sources */,
