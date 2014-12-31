@@ -64,6 +64,11 @@ typedef enum resize_style_t {
     float _last_y_adjust;
     NSRect _inputExtent;
     
+    CIFilter *_offsetFilter;
+    float _scroll_Xadjust;
+    float _scroll_Yadjust;
+    
+    
     //NSObject<CSCaptureSourceProtocol> *_useInput;
 
     
@@ -72,6 +77,10 @@ typedef enum resize_style_t {
 
 
 @property (weak) SourceLayout *layout;
+
+
+@property (assign) float scrollXSpeed;
+@property (assign) float scrollYSpeed;
 
 @property (strong) NSObject<CSCaptureSourceProtocol> *videoInput;
 @property (assign) int x_pos;

@@ -319,6 +319,58 @@
                                     <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.chromaKeySmoothing" id="Nke-jz-7P9"/>
                                 </connections>
                             </slider>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zl4-78-RXC">
+                                <rect key="frame" x="15" y="179" width="50" height="14"/>
+                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="H. Scroll" id="Mkp-FP-6Tb">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wg3-Zd-Fen">
+                                <rect key="frame" x="15" y="157" width="47" height="14"/>
+                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="V. Scroll" id="7js-VG-33a">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Ax-5h-pnJ">
+                                <rect key="frame" x="73" y="177" width="34" height="19"/>
+                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="vGB-5s-kUs">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                                <connections>
+                                    <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.scrollXSpeed" id="yAh-j8-OvW"/>
+                                </connections>
+                            </textField>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ljY-wM-Sbo">
+                                <rect key="frame" x="73" y="155" width="34" height="19"/>
+                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="wRh-DY-FQv">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                                <connections>
+                                    <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.scrollYSpeed" id="3mn-Ut-Ibv"/>
+                                </connections>
+                            </textField>
+                            <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KXx-R7-LEl">
+                                <rect key="frame" x="118" y="178" width="130" height="17"/>
+                                <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" minValue="-50" maxValue="50" tickMarkPosition="above" sliderType="linear" id="2rQ-4q-6NR"/>
+                                <connections>
+                                    <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.scrollXSpeed" id="EAG-ZZ-Ehp"/>
+                                </connections>
+                            </slider>
+                            <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wI7-EO-7XH">
+                                <rect key="frame" x="118" y="156" width="130" height="17"/>
+                                <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" minValue="-50" maxValue="50" tickMarkPosition="above" sliderType="linear" id="83E-le-lkE"/>
+                                <connections>
+                                    <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.scrollYSpeed" id="z5L-vn-7hZ"/>
+                                </connections>
+                            </slider>
                         </subviews>
                     </view>
                 </tabViewItem>
@@ -786,6 +838,7 @@
             <connections>
                 <binding destination="Gdf-y2-DdF" name="selectedLabel" keyPath="selection.settingsTab" id="hiM-bU-1lm"/>
             </connections>
+            <point key="canvasLocation" x="429.5" y="232.5"/>
         </tabView>
         <objectController id="Gdf-y2-DdF" userLabel="InputSourceController">
             <connections>

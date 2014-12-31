@@ -227,6 +227,11 @@ static NSArray *_sourceTypes = nil;
     self.changeInterval = 20.0f;
     
     
+    self.scrollXSpeed = 0.0f;
+    self.scrollYSpeed = 0.0f;
+    _scroll_Xadjust = 0.0f;
+    _scroll_Yadjust = 0.0f;
+    
     self.scaleFactor = 1.0f;
     _x_pos = 0;
     _y_pos = 0;
@@ -525,6 +530,11 @@ static NSArray *_sourceTypes = nil;
         [self.cropFilter setDefaults];
     }
     
+    if (!_offsetFilter)
+    {
+        _offsetFilter = [CIFilter filterWithName:@"TextureWrapPluginFilter"];
+        [_offsetFilter setDefaults];
+    }
     
     //Calculate crop rectangle, then adjust for shifted origin of the crop.
 
@@ -810,7 +820,6 @@ static NSArray *_sourceTypes = nil;
                 
                 [self.transitionFilter setValue:[CIVector vectorWithCGRect:self.layoutPosition] forKey:kCIInputExtentKey];
                 
-                //[self.transitionFilter setValue:[CIVector vectorWithX:self.x_pos Y:self.y_pos Z:self.display_width W:self.display_height] forKey:kCIInputExtentKey];
             }
 
             [self.transitionFilter setValue:_oldImage forKey:kCIInputImageKey];
@@ -988,6 +997,30 @@ static NSArray *_sourceTypes = nil;
     
 
 
+
+    
+    
+    if (self.scrollXSpeed || self.scrollYSpeed)
+    {
+        [_offsetFilter setValue:@(_scroll_Xadjust) forKey:@"inputXOffset"];
+        [_offsetFilter setValue:@(_scroll_Yadjust) forKeyPath:@"inputYOffset"];
+        [_offsetFilter setValue:outimg forKey:kCIInputImageKey];
+        outimg = [_offsetFilter valueForKey:kCIOutputImageKey];
+        outimg = [outimg imageByCroppingToRect:NSInsetRect(outimg.extent, 0.1f, 0.1f)];
+        _scroll_Xadjust += self.scrollXSpeed;
+        _scroll_Yadjust += self.scrollYSpeed;
+        if (fabs(_scroll_Xadjust) >= outimg.extent.size.width)
+        {
+            _scroll_Xadjust = 0.0f;
+        }
+        
+        if (fabs(_scroll_Yadjust) >= outimg.extent.size.height)
+        {
+            _scroll_Yadjust = 0.0f;
+        }
+    } else {
+        _scroll_Xadjust = _scroll_Yadjust = 0.0f;
+    }
 
     
     _preBgImage = outimg;
