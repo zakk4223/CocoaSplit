@@ -1,0 +1,312 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		34D2D5AE1A54883F001004E5 /* CSNowPlaying.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2D5AD1A54883F001004E5 /* CSNowPlaying.m */; };
+		34D2D5B21A548A2F001004E5 /* CSNowPlayingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2D5B01A548A2F001004E5 /* CSNowPlayingViewController.m */; };
+		34D2D5B31A548A2F001004E5 /* CSNowPlayingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34D2D5B11A548A2F001004E5 /* CSNowPlayingViewController.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		34D2D58F1A54857C001004E5 /* CSNowPlayingPlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSNowPlayingPlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		34D2D5931A54857C001004E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		34D2D59F1A54858F001004E5 /* CSPluginServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPluginServices.h; sourceTree = "<group>"; };
+		34D2D5A01A54858F001004E5 /* CSPcmPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPcmPlayer.h; sourceTree = "<group>"; };
+		34D2D5A11A54858F001004E5 /* CAMultiAudioPCM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioPCM.h; path = CAMultiAudio/CAMultiAudioPCM.h; sourceTree = "<group>"; };
+		34D2D5A21A54858F001004E5 /* CSAbstractCaptureDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAbstractCaptureDevice.h; path = PluginHeaders/CSAbstractCaptureDevice.h; sourceTree = "<group>"; };
+		34D2D5A31A54858F001004E5 /* CSTextCaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSTextCaptureBase.h; sourceTree = "<group>"; };
+		34D2D5A41A54858F001004E5 /* CSTextCaptureViewControllerBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSTextCaptureViewControllerBase.h; sourceTree = "<group>"; };
+		34D2D5A51A54858F001004E5 /* CSCaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureBase.h; path = PluginHeaders/CSCaptureBase.h; sourceTree = "<group>"; };
+		34D2D5A61A54858F001004E5 /* CSCaptureSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureSourceProtocol.h; path = PluginHeaders/CSCaptureSourceProtocol.h; sourceTree = "<group>"; };
+		34D2D5A71A54858F001004E5 /* CSStreamServiceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSStreamServiceProtocol.h; path = PluginHeaders/CSStreamServiceProtocol.h; sourceTree = "<group>"; };
+		34D2D5A81A54858F001004E5 /* CSPluginFactoryProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPluginFactoryProtocol.h; path = PluginHeaders/CSPluginFactoryProtocol.h; sourceTree = "<group>"; };
+		34D2D5A91A54858F001004E5 /* CSExtraPluginProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSExtraPluginProtocol.h; path = PluginHeaders/CSExtraPluginProtocol.h; sourceTree = "<group>"; };
+		34D2D5AA1A54858F001004E5 /* CSNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSNotifications.h; path = PluginHeaders/CSNotifications.h; sourceTree = "<group>"; };
+		34D2D5AC1A54883F001004E5 /* CSNowPlaying.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSNowPlaying.h; sourceTree = "<group>"; };
+		34D2D5AD1A54883F001004E5 /* CSNowPlaying.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSNowPlaying.m; sourceTree = "<group>"; };
+		34D2D5AF1A548A2F001004E5 /* CSNowPlayingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSNowPlayingViewController.h; sourceTree = "<group>"; };
+		34D2D5B01A548A2F001004E5 /* CSNowPlayingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSNowPlayingViewController.m; sourceTree = "<group>"; };
+		34D2D5B11A548A2F001004E5 /* CSNowPlayingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSNowPlayingViewController.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		34D2D58C1A54857C001004E5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		34D2D5861A54857C001004E5 = {
+			isa = PBXGroup;
+			children = (
+				34D2D5AB1A54858F001004E5 /* PluginHeaders */,
+				34D2D5911A54857C001004E5 /* CSNowPlayingPlugin */,
+				34D2D5901A54857C001004E5 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		34D2D5901A54857C001004E5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				34D2D58F1A54857C001004E5 /* CSNowPlayingPlugin.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		34D2D5911A54857C001004E5 /* CSNowPlayingPlugin */ = {
+			isa = PBXGroup;
+			children = (
+				34D2D5921A54857C001004E5 /* Supporting Files */,
+				34D2D5AC1A54883F001004E5 /* CSNowPlaying.h */,
+				34D2D5AD1A54883F001004E5 /* CSNowPlaying.m */,
+				34D2D5AF1A548A2F001004E5 /* CSNowPlayingViewController.h */,
+				34D2D5B01A548A2F001004E5 /* CSNowPlayingViewController.m */,
+				34D2D5B11A548A2F001004E5 /* CSNowPlayingViewController.xib */,
+			);
+			path = CSNowPlayingPlugin;
+			sourceTree = "<group>";
+		};
+		34D2D5921A54857C001004E5 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				34D2D5931A54857C001004E5 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		34D2D5AB1A54858F001004E5 /* PluginHeaders */ = {
+			isa = PBXGroup;
+			children = (
+				34D2D59F1A54858F001004E5 /* CSPluginServices.h */,
+				34D2D5A01A54858F001004E5 /* CSPcmPlayer.h */,
+				34D2D5A11A54858F001004E5 /* CAMultiAudioPCM.h */,
+				34D2D5A21A54858F001004E5 /* CSAbstractCaptureDevice.h */,
+				34D2D5A31A54858F001004E5 /* CSTextCaptureBase.h */,
+				34D2D5A41A54858F001004E5 /* CSTextCaptureViewControllerBase.h */,
+				34D2D5A51A54858F001004E5 /* CSCaptureBase.h */,
+				34D2D5A61A54858F001004E5 /* CSCaptureSourceProtocol.h */,
+				34D2D5A71A54858F001004E5 /* CSStreamServiceProtocol.h */,
+				34D2D5A81A54858F001004E5 /* CSPluginFactoryProtocol.h */,
+				34D2D5A91A54858F001004E5 /* CSExtraPluginProtocol.h */,
+				34D2D5AA1A54858F001004E5 /* CSNotifications.h */,
+			);
+			name = PluginHeaders;
+			path = ../../CocoaSplit;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		34D2D58E1A54857C001004E5 /* CSNowPlayingPlugin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 34D2D5961A54857C001004E5 /* Build configuration list for PBXNativeTarget "CSNowPlayingPlugin" */;
+			buildPhases = (
+				34D2D58B1A54857C001004E5 /* Sources */,
+				34D2D58C1A54857C001004E5 /* Frameworks */,
+				34D2D58D1A54857C001004E5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CSNowPlayingPlugin;
+			productName = CSNowPlayingPlugin;
+			productReference = 34D2D58F1A54857C001004E5 /* CSNowPlayingPlugin.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		34D2D5871A54857C001004E5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = Zakk;
+				TargetAttributes = {
+					34D2D58E1A54857C001004E5 = {
+						CreatedOnToolsVersion = 6.1;
+					};
+				};
+			};
+			buildConfigurationList = 34D2D58A1A54857C001004E5 /* Build configuration list for PBXProject "CSNowPlayingPlugin" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 34D2D5861A54857C001004E5;
+			productRefGroup = 34D2D5901A54857C001004E5 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				34D2D58E1A54857C001004E5 /* CSNowPlayingPlugin */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		34D2D58D1A54857C001004E5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34D2D5B31A548A2F001004E5 /* CSNowPlayingViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		34D2D58B1A54857C001004E5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34D2D5B21A548A2F001004E5 /* CSNowPlayingViewController.m in Sources */,
+				34D2D5AE1A54883F001004E5 /* CSNowPlaying.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		34D2D5941A54857C001004E5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		34D2D5951A54857C001004E5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		34D2D5971A54857C001004E5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = CSNowPlayingPlugin/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-undefined",
+					suppress,
+					"-flat_namespace",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		34D2D5981A54857C001004E5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = CSNowPlayingPlugin/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-undefined",
+					suppress,
+					"-flat_namespace",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		34D2D58A1A54857C001004E5 /* Build configuration list for PBXProject "CSNowPlayingPlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34D2D5941A54857C001004E5 /* Debug */,
+				34D2D5951A54857C001004E5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		34D2D5961A54857C001004E5 /* Build configuration list for PBXNativeTarget "CSNowPlayingPlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34D2D5971A54857C001004E5 /* Debug */,
+				34D2D5981A54857C001004E5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 34D2D5871A54857C001004E5 /* Project object */;
+}

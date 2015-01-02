@@ -159,6 +159,7 @@
 		34D2D5741A547628001004E5 /* CSTextCaptureBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2D5721A547628001004E5 /* CSTextCaptureBase.m */; };
 		34D2D5771A547C35001004E5 /* CSTextCaptureViewControllerBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2D5761A547C35001004E5 /* CSTextCaptureViewControllerBase.m */; };
 		34D2D5781A547C35001004E5 /* CSTextCaptureViewControllerBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2D5761A547C35001004E5 /* CSTextCaptureViewControllerBase.m */; };
+		34D2D5B41A548B68001004E5 /* CSNowPlayingPlugin.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34D2D59E1A54857D001004E5 /* CSNowPlayingPlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		34D4351B198BE3B700266169 /* NewLayoutPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34D4351A198BE3B700266169 /* NewLayoutPanel.xib */; };
 		34D6580219B342E00012E32B /* CSTwitchStreamServicePlugin.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34AFC32B19B0AD360007C07B /* CSTwitchStreamServicePlugin.bundle */; };
 		34D6580319B342E70012E32B /* CSFileStreamServicePlugin.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34AFC33019B0AD500007C07B /* CSFileStreamServicePlugin.bundle */; };
@@ -294,6 +295,13 @@
 			remoteGlobalIDString = 34C6806919DD01C300413468;
 			remoteInfo = CSSyphonInjectExtraPlugin;
 		};
+		34D2D59D1A54857D001004E5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 34D2D5991A54857C001004E5 /* CSNowPlayingPlugin.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 34D2D58F1A54857C001004E5;
+			remoteInfo = CSNowPlayingPlugin;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -356,6 +364,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				34D2D5B41A548B68001004E5 /* CSNowPlayingPlugin.bundle in CopyFiles */,
 				34C67B8E1A2E69F60012DC1B /* CSHitboxStreamServicePlugin.bundle in CopyFiles */,
 				34C680A119DD06E800413468 /* CSSyphonInjectExtraPlugin.bundle in CopyFiles */,
 				34A7C1AD19B9A57600BC6882 /* CSLayoutSwitcherExtraPlugin.bundle in CopyFiles */,
@@ -539,6 +548,7 @@
 		34D2D5721A547628001004E5 /* CSTextCaptureBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSTextCaptureBase.m; sourceTree = "<group>"; };
 		34D2D5751A547C35001004E5 /* CSTextCaptureViewControllerBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSTextCaptureViewControllerBase.h; sourceTree = "<group>"; };
 		34D2D5761A547C35001004E5 /* CSTextCaptureViewControllerBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSTextCaptureViewControllerBase.m; sourceTree = "<group>"; };
+		34D2D5991A54857C001004E5 /* CSNowPlayingPlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSNowPlayingPlugin.xcodeproj; path = CapturePlugins/CSNowPlayingPlugin/CSNowPlayingPlugin.xcodeproj; sourceTree = "<group>"; };
 		34D4351A198BE3B700266169 /* NewLayoutPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NewLayoutPanel.xib; path = Interface/NewLayoutPanel.xib; sourceTree = "<group>"; };
 		34D43550198DCE3800266169 /* TextureWrapPlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = TextureWrapPlugin.xcodeproj; path = ImageUnitPlugins/TextureWrapPlugin/TextureWrapPlugin.xcodeproj; sourceTree = "<group>"; };
 		34D657F519B33DCF0012E32B /* CSPluginFactoryProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPluginFactoryProtocol.h; path = PluginHeaders/CSPluginFactoryProtocol.h; sourceTree = "<group>"; };
@@ -957,6 +967,7 @@
 		34AFC24319B058800007C07B /* CapturePlugins */ = {
 			isa = PBXGroup;
 			children = (
+				34D2D5991A54857C001004E5 /* CSNowPlayingPlugin.xcodeproj */,
 				34AFC24519B05ADA0007C07B /* CSDesktopCapturePlugin.xcodeproj */,
 				34576D2019B023E2007BAD90 /* CSMovieCapturePlugin.xcodeproj */,
 				34576C9819AFE6F7007BAD90 /* CSWindowCapturePlugin.xcodeproj */,
@@ -1096,6 +1107,14 @@
 			isa = PBXGroup;
 			children = (
 				34C6808C19DD01C400413468 /* CSSyphonInjectExtraPlugin.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		34D2D59A1A54857C001004E5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				34D2D59E1A54857D001004E5 /* CSNowPlayingPlugin.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1245,6 +1264,10 @@
 					ProjectRef = 34576D2019B023E2007BAD90 /* CSMovieCapturePlugin.xcodeproj */;
 				},
 				{
+					ProductGroup = 34D2D59A1A54857C001004E5 /* Products */;
+					ProjectRef = 34D2D5991A54857C001004E5 /* CSNowPlayingPlugin.xcodeproj */;
+				},
+				{
 					ProductGroup = 34AFC25A19B05B5D0007C07B /* Products */;
 					ProjectRef = 34AFC18719B04CC30007C07B /* CSQTCapturePlugin.xcodeproj */;
 				},
@@ -1386,6 +1409,13 @@
 			fileType = wrapper.cfbundle;
 			path = CSSyphonInjectExtraPlugin.bundle;
 			remoteRef = 34C6808B19DD01C400413468 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		34D2D59E1A54857D001004E5 /* CSNowPlayingPlugin.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = CSNowPlayingPlugin.bundle;
+			remoteRef = 34D2D59D1A54857D001004E5 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

@@ -12,6 +12,10 @@
 		34AFC1C719B04E2A0007C07B /* TextCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AFC1C319B04E2A0007C07B /* TextCapture.m */; };
 		34AFC1C819B04E2A0007C07B /* TextCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AFC1C519B04E2A0007C07B /* TextCaptureViewController.m */; };
 		34AFC1C919B04E2A0007C07B /* TextCaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34AFC1C619B04E2A0007C07B /* TextCaptureViewController.xib */; };
+		34D2D5B71A550037001004E5 /* FileTextCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2D5B61A550037001004E5 /* FileTextCapture.m */; };
+		34D2D5BB1A550348001004E5 /* FileTextCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2D5B91A550348001004E5 /* FileTextCaptureViewController.m */; };
+		34D2D5BC1A550348001004E5 /* FileTextCaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34D2D5BA1A550348001004E5 /* FileTextCaptureViewController.xib */; };
+		34D2D5BF1A55062C001004E5 /* CSTextCaptureFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2D5BE1A55062C001004E5 /* CSTextCaptureFactory.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +44,13 @@
 		34D2D5821A547E51001004E5 /* CSPluginFactoryProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPluginFactoryProtocol.h; path = PluginHeaders/CSPluginFactoryProtocol.h; sourceTree = "<group>"; };
 		34D2D5831A547E51001004E5 /* CSExtraPluginProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSExtraPluginProtocol.h; path = PluginHeaders/CSExtraPluginProtocol.h; sourceTree = "<group>"; };
 		34D2D5841A547E51001004E5 /* CSNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSNotifications.h; path = PluginHeaders/CSNotifications.h; sourceTree = "<group>"; };
+		34D2D5B51A550037001004E5 /* FileTextCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileTextCapture.h; sourceTree = "<group>"; };
+		34D2D5B61A550037001004E5 /* FileTextCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileTextCapture.m; sourceTree = "<group>"; };
+		34D2D5B81A550348001004E5 /* FileTextCaptureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileTextCaptureViewController.h; sourceTree = "<group>"; };
+		34D2D5B91A550348001004E5 /* FileTextCaptureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileTextCaptureViewController.m; sourceTree = "<group>"; };
+		34D2D5BA1A550348001004E5 /* FileTextCaptureViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FileTextCaptureViewController.xib; sourceTree = "<group>"; };
+		34D2D5BD1A55062C001004E5 /* CSTextCaptureFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSTextCaptureFactory.h; sourceTree = "<group>"; };
+		34D2D5BE1A55062C001004E5 /* CSTextCaptureFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSTextCaptureFactory.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +111,13 @@
 				34AFC1C519B04E2A0007C07B /* TextCaptureViewController.m */,
 				34AFC1C619B04E2A0007C07B /* TextCaptureViewController.xib */,
 				34AFC1AD19B04DAE0007C07B /* Supporting Files */,
+				34D2D5B51A550037001004E5 /* FileTextCapture.h */,
+				34D2D5B61A550037001004E5 /* FileTextCapture.m */,
+				34D2D5B81A550348001004E5 /* FileTextCaptureViewController.h */,
+				34D2D5B91A550348001004E5 /* FileTextCaptureViewController.m */,
+				34D2D5BA1A550348001004E5 /* FileTextCaptureViewController.xib */,
+				34D2D5BD1A55062C001004E5 /* CSTextCaptureFactory.h */,
+				34D2D5BE1A55062C001004E5 /* CSTextCaptureFactory.m */,
 			);
 			path = CSTextCapturePlugin;
 			sourceTree = "<group>";
@@ -186,6 +204,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				34AFC1C919B04E2A0007C07B /* TextCaptureViewController.xib in Resources */,
+				34D2D5BC1A550348001004E5 /* FileTextCaptureViewController.xib in Resources */,
 				34AFC1B119B04DAE0007C07B /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -197,7 +216,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34D2D5B71A550037001004E5 /* FileTextCapture.m in Sources */,
 				34AFC1C819B04E2A0007C07B /* TextCaptureViewController.m in Sources */,
+				34D2D5BB1A550348001004E5 /* FileTextCaptureViewController.m in Sources */,
+				34D2D5BF1A55062C001004E5 /* CSTextCaptureFactory.m in Sources */,
 				34AFC1C719B04E2A0007C07B /* TextCapture.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
