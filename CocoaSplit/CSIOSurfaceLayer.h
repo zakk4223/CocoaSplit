@@ -15,5 +15,6 @@
 
 @property (assign) IOSurfaceRef ioSurface;
 @property (strong) CIImage *ioImage;
+@property (assign) BOOL flipImage;
 
 @end

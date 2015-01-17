@@ -191,12 +191,11 @@
 {
     toLayer.anchorPoint = _sourceLayer.anchorPoint;//CGPointMake(0.0, 0.0);
     toLayer.filters = _sourceLayer.filters;
-    toLayer.contentsGravity = kCAGravityResizeAspect;
+    toLayer.contentsGravity = _sourceLayer.contentsGravity;
     toLayer.contentsRect = _sourceLayer.contentsRect;
     toLayer.autoresizingMask = _sourceLayer.autoresizingMask;
     if (self.allowResize)
     {
-        //toLayer.constraints = _sourceLayer.constraints;
         toLayer.frame = CGRectMake(0.0, 0.0, self.frame.size.width, self.frame.size.height);
     }
 

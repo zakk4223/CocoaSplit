@@ -23,6 +23,7 @@
     {
         self.asynchronous = YES;
         self.needsDisplayOnBoundsChange = YES;
+        self.flipImage = NO;
     }
     
     return self;
@@ -62,7 +63,12 @@
     
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(0, self.bounds.size.width, 0,self.bounds.size.height,  -1, 1);
+    if (self.flipImage)
+    {
+        glOrtho(0, self.bounds.size.width,self.bounds.size.height,0,  -1, 1);
+    } else {
+        glOrtho(0, self.bounds.size.width,0, self.bounds.size.height,  -1, 1);
+    }
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     

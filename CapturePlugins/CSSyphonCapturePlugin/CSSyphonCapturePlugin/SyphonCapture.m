@@ -19,7 +19,6 @@
 @synthesize activeVideoDevice = _activeVideoDevice;
 
 
-
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
     [super encodeWithCoder:aCoder];
@@ -91,20 +90,12 @@
 -(void) commonInit
 {
     
-    self.isFlipped = NO;
     self.outputLayer = [CSIOSurfaceLayer layer];
-    
+    self.isFlipped = NO;
+
     [self changeAvailableVideoDevices];
    
-    if(!_flipTransform)
-    {
-        NSAffineTransform *nsflip = [[NSAffineTransform alloc] init];
-
-        
-        _flipTransform = [CIFilter filterWithName:@"CIAffineTransform"];
-        [_flipTransform setDefaults];
-        [_flipTransform setValue:nsflip forKeyPath:kCIInputTransformKey];
-    }
+    _flipTransform = CATransform3DMakeScale(1, -1, 1);
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleSyphonServerRetire:) name:SyphonServerRetireNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleSyphonServerAnnounce:) name:SyphonServerAnnounceNotification object:nil];
@@ -114,8 +105,20 @@
 }
 
 
+-(void)setIsFlipped:(BOOL)isFlipped
+{
+    
+    
+    ((CSIOSurfaceLayer *)self.outputLayer).flipImage = isFlipped;
+
+}
 
 
+
+-(BOOL)isFlipped
+{
+    return  ((CSIOSurfaceLayer *)self.outputLayer).flipImage;
+}
 
 -(void) startSyphon
 {
@@ -144,12 +147,7 @@
          {
              CIImage *newImage = [[CIImage alloc] initWithIOSurface:newSurface plane:0 format:kCIFormatARGB8 options:nil];
              _surfaceSeed = newSeed;
-             //CFRelease(newSurface);
-             _lastImage = newImage;
-             
-             //dispatch_async(dispatch_get_main_queue(), ^{
                  ((CSIOSurfaceLayer *)self.outputLayer).ioImage = newImage;
-             //});
           } else {
              CFRelease(newSurface);
          }
