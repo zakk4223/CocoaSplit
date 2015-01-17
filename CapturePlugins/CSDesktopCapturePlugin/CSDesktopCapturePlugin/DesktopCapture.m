@@ -9,6 +9,8 @@
 #import "DesktopCapture.h"
 #import <IOKit/graphics/IOGraphicsLib.h>
 #import <IOSurface/IOSurface.h>
+#import "CSIOSurfaceLayer.h"
+
 
 
 
@@ -66,6 +68,7 @@
 
         self.videoCaptureFPS = 60.0f;
         self.showCursor = YES;
+        self.outputLayer = [CSIOSurfaceLayer layer];
         [self addObserver:self forKeyPath:@"propertiesChanged" options:NSKeyValueObservingOptionNew context:NULL];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationTerminating:) name:NSApplicationWillTerminateNotification object:nil];
         
@@ -199,11 +202,7 @@
         
         if (frameSurface)
         {
-            CIImage *newImg = [CIImage imageWithIOSurface:frameSurface];
-
-            @synchronized(strongSelf) {
-                strongSelf->_currentImg = newImg;
-            }
+            ((CSIOSurfaceLayer *)strongSelf.outputLayer).ioSurface = frameSurface;
             
         }
     });
@@ -214,17 +213,6 @@
 
 
 
--(CIImage *)currentImage
-{
-    
-    CIImage *retimg;
-    @synchronized(self)
-    {
-        retimg = _currentImg;
-    }
-    
-    return retimg;
-}
 
 
 -(bool)stopDisplayStream
@@ -232,6 +220,7 @@
     
     if (_displayStreamRef)
     {
+        NSLog(@"STOP DISPLAY STREAM");
         CGDisplayStreamStop(_displayStreamRef);
     }
     
@@ -321,13 +310,17 @@
 }
 
 
+-(void)willDelete
+{
+    [self stopDisplayStream];
+
+}
 
 -(void)dealloc
 {
-    
+    NSLog(@"DEALLOC DISPLAY STREAM");
     [self removeObserver:self forKeyPath:@"propertiesChanged"];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self stopDisplayStream];
 }
 
 

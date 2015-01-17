@@ -47,6 +47,15 @@ static CIKernel *_TextureWrapPluginFilterKernel = nil;
                 kCIAttributeDefault:@0.00,
                 kCIAttributeType:kCIAttributeTypeScalar,
         },
+        @"inputMaxX":@{
+                kCIAttributeDefault:@0.00,
+                kCIAttributeType:kCIAttributeTypeScalar,
+                },
+        @"inputMaxY":@{
+                kCIAttributeDefault:@0.00,
+                kCIAttributeType:kCIAttributeTypeScalar,
+                },
+
         
     };
 }
@@ -56,11 +65,12 @@ static CIKernel *_TextureWrapPluginFilterKernel = nil;
 {
     CISampler *src;
     
+    src = [CISampler samplerWithImage:inputImage];
+    //src = [CISampler samplerWithImage:inputImage keysAndValues:kCISamplerWrapMode, kCISamplerWrapClamp, nil];
     
-    src = [CISampler samplerWithImage:inputImage keysAndValues:kCISamplerWrapMode, kCISamplerWrapBlack, nil];
     
-    return [self apply:_TextureWrapPluginFilterKernel, src,
-            inputXOffset,inputYOffset,kCIApplyOptionDefinition, [src definition], nil];
+    return [self apply:_TextureWrapPluginFilterKernel, src, src,
+            inputXOffset,inputYOffset,inputMaxX, inputMaxY, kCIApplyOptionDefinition, [src definition], nil];
 }
 
 @end

@@ -106,8 +106,12 @@
 		345F8B761A17A785009A81E3 /* CAMultiAudioMixer.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B741A17A785009A81E3 /* CAMultiAudioMixer.m */; };
 		345F8B791A183D1D009A81E3 /* CAMultiAudioEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B781A183D1D009A81E3 /* CAMultiAudioEngine.m */; };
 		345F8B7A1A183D1D009A81E3 /* CAMultiAudioEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B781A183D1D009A81E3 /* CAMultiAudioEngine.m */; };
+		346CF44C1A5C10C2008E5BFF /* CSInputLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 346CF44B1A5C10C2008E5BFF /* CSInputLayer.m */; };
+		346CF44D1A5C10C2008E5BFF /* CSInputLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 346CF44B1A5C10C2008E5BFF /* CSInputLayer.m */; };
 		3470F41419C84989000A81C4 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3470F41319C84989000A81C4 /* Sparkle.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		3470F41619C849E7000A81C4 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3470F41319C84989000A81C4 /* Sparkle.framework */; };
+		347277FD1A5A2758008801A9 /* CSIOSurfaceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 347277FC1A5A2758008801A9 /* CSIOSurfaceLayer.m */; };
+		347277FE1A5A2758008801A9 /* CSIOSurfaceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 347277FC1A5A2758008801A9 /* CSIOSurfaceLayer.m */; };
 		34792AF616104AA70065A859 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AF516104AA70065A859 /* IOKit.framework */; };
 		34792AFB1611A6B90065A859 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AFA1611A6B90065A859 /* IOSurface.framework */; };
 		347B14DC198492D900DC7DF0 /* InputPopupControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 347B14DA198492D900DC7DF0 /* InputPopupControllerViewController.m */; };
@@ -281,6 +285,13 @@
 			remoteGlobalIDString = 34AFC2CB19B08C050007C07B;
 			remoteInfo = CSFileStreamServicePlugin;
 		};
+		34B08FE81A58219600A409FB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 34D2D5D31A563980001004E5 /* CSBrowserCapturePlugin.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 34D2D5F71A5776B3001004E5;
+			remoteInfo = browser_process;
+		};
 		34C67B771A2D7B6A0012DC1B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 34C67B731A2D7B690012DC1B /* CSHitboxStreamServicePlugin.xcodeproj */;
@@ -301,6 +312,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 34D2D58F1A54857C001004E5;
 			remoteInfo = CSNowPlayingPlugin;
+		};
+		34D2D5D71A563981001004E5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 34D2D5D31A563980001004E5 /* CSBrowserCapturePlugin.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 34D2D5C91A563980001004E5;
+			remoteInfo = CSBrowserCapturePlugin;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -486,8 +504,12 @@
 		345F8B741A17A785009A81E3 /* CAMultiAudioMixer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioMixer.m; path = CAMultiAudio/CAMultiAudioMixer.m; sourceTree = "<group>"; };
 		345F8B781A183D1D009A81E3 /* CAMultiAudioEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioEngine.m; path = CAMultiAudio/CAMultiAudioEngine.m; sourceTree = "<group>"; };
 		345F8B7B1A184FBC009A81E3 /* CAMultiAudioMixingProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAMultiAudioMixingProtocol.h; sourceTree = "<group>"; };
+		346CF44A1A5C10C2008E5BFF /* CSInputLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSInputLayer.h; sourceTree = "<group>"; };
+		346CF44B1A5C10C2008E5BFF /* CSInputLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSInputLayer.m; sourceTree = "<group>"; };
 		346EAAF6197A7B28000892CF /* Capture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Capture.h; sourceTree = "<group>"; };
 		3470F41319C84989000A81C4 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
+		347277FB1A5A2758008801A9 /* CSIOSurfaceLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSIOSurfaceLayer.h; sourceTree = "<group>"; };
+		347277FC1A5A2758008801A9 /* CSIOSurfaceLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSIOSurfaceLayer.m; sourceTree = "<group>"; };
 		34792AF516104AA70065A859 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		34792AFA1611A6B90065A859 /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = System/Library/Frameworks/IOSurface.framework; sourceTree = SDKROOT; };
 		347B14D9198492D900DC7DF0 /* InputPopupControllerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InputPopupControllerViewController.h; path = ../InputPopupControllerViewController.h; sourceTree = "<group>"; };
@@ -549,6 +571,7 @@
 		34D2D5751A547C35001004E5 /* CSTextCaptureViewControllerBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSTextCaptureViewControllerBase.h; sourceTree = "<group>"; };
 		34D2D5761A547C35001004E5 /* CSTextCaptureViewControllerBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSTextCaptureViewControllerBase.m; sourceTree = "<group>"; };
 		34D2D5991A54857C001004E5 /* CSNowPlayingPlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSNowPlayingPlugin.xcodeproj; path = CapturePlugins/CSNowPlayingPlugin/CSNowPlayingPlugin.xcodeproj; sourceTree = "<group>"; };
+		34D2D5D31A563980001004E5 /* CSBrowserCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSBrowserCapturePlugin.xcodeproj; path = CapturePlugins/CSBrowserCapturePlugin/CSBrowserCapturePlugin.xcodeproj; sourceTree = "<group>"; };
 		34D4351A198BE3B700266169 /* NewLayoutPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NewLayoutPanel.xib; path = Interface/NewLayoutPanel.xib; sourceTree = "<group>"; };
 		34D43550198DCE3800266169 /* TextureWrapPlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = TextureWrapPlugin.xcodeproj; path = ImageUnitPlugins/TextureWrapPlugin/TextureWrapPlugin.xcodeproj; sourceTree = "<group>"; };
 		34D657F519B33DCF0012E32B /* CSPluginFactoryProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPluginFactoryProtocol.h; path = PluginHeaders/CSPluginFactoryProtocol.h; sourceTree = "<group>"; };
@@ -748,6 +771,8 @@
 				34B5FCDE19BF1C3F00F67D19 /* CreateLayoutViewController.xib */,
 				3431FFDF19786502000965FE /* InputSource.h */,
 				3431FFE019786502000965FE /* InputSource.m */,
+				346CF44A1A5C10C2008E5BFF /* CSInputLayer.h */,
+				346CF44B1A5C10C2008E5BFF /* CSInputLayer.m */,
 				340FE4A815F3417E00E4CE4E /* Supporting Files */,
 				34576C7619AFCA1B007BAD90 /* CSPluginLoader.h */,
 				34576C7719AFCA1B007BAD90 /* CSPluginLoader.m */,
@@ -755,6 +780,7 @@
 				34AFC33219B19CD00007C07B /* SourceCache.m */,
 				348AC06919B406910064F02D /* SourceLayout.h */,
 				348AC06A19B406910064F02D /* SourceLayout.m */,
+				347277FC1A5A2758008801A9 /* CSIOSurfaceLayer.m */,
 			);
 			path = CocoaSplit;
 			sourceTree = "<group>";
@@ -868,6 +894,7 @@
 			isa = PBXGroup;
 			children = (
 				34FDD6F01A215268009A7413 /* CSPluginServices.h */,
+				347277FB1A5A2758008801A9 /* CSIOSurfaceLayer.h */,
 				342F73F41A245316007AA99F /* CSPcmPlayer.h */,
 				345F8B3B1A15F3BD009A81E3 /* CAMultiAudioPCM.h */,
 				342346CD15F9F07E00C8C77E /* CSAbstractCaptureDevice.h */,
@@ -967,6 +994,7 @@
 		34AFC24319B058800007C07B /* CapturePlugins */ = {
 			isa = PBXGroup;
 			children = (
+				34D2D5D31A563980001004E5 /* CSBrowserCapturePlugin.xcodeproj */,
 				34D2D5991A54857C001004E5 /* CSNowPlayingPlugin.xcodeproj */,
 				34AFC24519B05ADA0007C07B /* CSDesktopCapturePlugin.xcodeproj */,
 				34576D2019B023E2007BAD90 /* CSMovieCapturePlugin.xcodeproj */,
@@ -1119,6 +1147,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		34D2D5D41A563980001004E5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				34D2D5D81A563981001004E5 /* CSBrowserCapturePlugin.bundle */,
+				34B08FE91A58219600A409FB /* browser_process */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		34D6581519B3876D0012E32B /* ScriptingAdditions */ = {
 			isa = PBXGroup;
 			children = (
@@ -1234,6 +1271,10 @@
 				{
 					ProductGroup = 34AFC26919B05B930007C07B /* Products */;
 					ProjectRef = 34AFC21419B04F700007C07B /* CSAVFCapturePlugin.xcodeproj */;
+				},
+				{
+					ProductGroup = 34D2D5D41A563980001004E5 /* Products */;
+					ProjectRef = 34D2D5D31A563980001004E5 /* CSBrowserCapturePlugin.xcodeproj */;
 				},
 				{
 					ProductGroup = 34AFC26E19B05BE90007C07B /* Products */;
@@ -1397,6 +1438,13 @@
 			remoteRef = 34AFC32F19B0AD500007C07B /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		34B08FE91A58219600A409FB /* browser_process */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = browser_process;
+			remoteRef = 34B08FE81A58219600A409FB /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		34C67B781A2D7B6A0012DC1B /* CSHitboxStreamServicePlugin.bundle */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
@@ -1416,6 +1464,13 @@
 			fileType = wrapper.cfbundle;
 			path = CSNowPlayingPlugin.bundle;
 			remoteRef = 34D2D59D1A54857D001004E5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		34D2D5D81A563981001004E5 /* CSBrowserCapturePlugin.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = CSBrowserCapturePlugin.bundle;
+			remoteRef = 34D2D5D71A563981001004E5 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -1481,6 +1536,7 @@
 				34CFE4A418F1992A00092C6A /* AVFAudioChannel.m in Sources */,
 				345F8B791A183D1D009A81E3 /* CAMultiAudioEngine.m in Sources */,
 				340FE4AE15F3417E00E4CE4E /* main.m in Sources */,
+				346CF44C1A5C10C2008E5BFF /* CSInputLayer.m in Sources */,
 				345F8B711A177C1F009A81E3 /* CAMultiAudioConverter.m in Sources */,
 				34C19053189EE60400AB2430 /* CapturedFrameData.m in Sources */,
 				345F8B311A15716A009A81E3 /* CAMultiAudioDeviceOutput.m in Sources */,
@@ -1490,6 +1546,7 @@
 				345F8B4F1A15F7DA009A81E3 /* CAMultiAudioPCMPlayer.m in Sources */,
 				34AFC33319B19CD00007C07B /* SourceCache.m in Sources */,
 				340FE50815F444AA00E4CE4E /* CaptureController.m in Sources */,
+				347277FD1A5A2758008801A9 /* CSIOSurfaceLayer.m in Sources */,
 				345F8B251A14E6A0009A81E3 /* CAMultiAudioNode.m in Sources */,
 				342346AA15F59A8500C8C77E /* AVFAudioCapture.m in Sources */,
 				345F8B051A1060D6009A81E3 /* CSAacEncoder.m in Sources */,
@@ -1531,9 +1588,11 @@
 				345F8B5E1A161012009A81E3 /* CAMultiAudioPCMPlayer.m in Sources */,
 				3451A1C717111BD900DF6A8B /* main.m in Sources */,
 				340DC735197CF6E9003A0BB3 /* CSCaptureBase.m in Sources */,
+				346CF44D1A5C10C2008E5BFF /* CSInputLayer.m in Sources */,
 				34348C3919BDC0D800A122C2 /* PluginManagerWindowController.m in Sources */,
 				34C19054189EE60400AB2430 /* CapturedFrameData.m in Sources */,
 				345F8B2E1A156E15009A81E3 /* CAMultiAudioDevice.m in Sources */,
+				347277FE1A5A2758008801A9 /* CSIOSurfaceLayer.m in Sources */,
 				345F8B261A14E6A0009A81E3 /* CAMultiAudioNode.m in Sources */,
 				345F8B761A17A785009A81E3 /* CAMultiAudioMixer.m in Sources */,
 				34D2D5781A547C35001004E5 /* CSTextCaptureViewControllerBase.m in Sources */,

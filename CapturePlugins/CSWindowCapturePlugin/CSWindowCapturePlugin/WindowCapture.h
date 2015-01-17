@@ -11,8 +11,6 @@
 @interface WindowCapture : CSCaptureBase <CSCaptureSourceProtocol>
 {
     CFAbsoluteTime _nextCaptureTime;
-    CIImage *_currentFrame;
-    
 }
 
 @property (assign) float captureFPS;

@@ -34,17 +34,6 @@
 @property NSString *imagePath;
 
 
-
-@property CVPixelBufferRef currentFrame;
-
-
-
-
-
-
-
--(CVImageBufferRef) getCurrentFrame;
-
 - (BOOL)needsAdvancedVideo;
 -(void)chooseDirectory;
 

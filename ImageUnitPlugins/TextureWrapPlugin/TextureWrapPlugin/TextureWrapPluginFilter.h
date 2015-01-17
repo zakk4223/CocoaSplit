@@ -12,6 +12,9 @@
     CIImage      *inputImage;
     NSNumber     *inputXOffset;
     NSNumber     *inputYOffset;
+    NSNumber     *inputMaxX;
+    NSNumber     *inputMaxY;
+
 }
 
 @end

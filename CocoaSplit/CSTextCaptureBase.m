@@ -23,7 +23,7 @@
         self.allowScaling = NO;
         
         self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
-        
+        self.outputLayer = [CATextLayer layer];
         
         [self addObserver:self forKeyPath:@"propertiesChanged" options:NSKeyValueObservingOptionNew context:NULL];
         
@@ -36,15 +36,16 @@
 
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
+    [super encodeWithCoder:aCoder];
     [aCoder encodeObject:self.text forKey:@"text"];
     [aCoder encodeObject:self.font forKey:@"font"];
     [aCoder encodeObject:self.fontAttributes forKey:@"fontAttributes"];
 }
 
 
--(id)initWithCoder:(NSCoder *)aDecoder
+-(instancetype)initWithCoder:(NSCoder *)aDecoder
 {
-    if (self = [self init])
+    if (self = [super initWithCoder:aDecoder])
     {
         _text = [aDecoder decodeObjectForKey:@"text"];
         NSFont *savedFont = [aDecoder decodeObjectForKey:@"font"];
@@ -62,6 +63,7 @@
             _fontAttributes = savedfontAttributes;
         }
     }
+    [self buildString];
     return self;
 }
 
@@ -82,7 +84,16 @@
         NSMutableDictionary *strAttrs = [NSMutableDictionary dictionaryWithDictionary:self.fontAttributes];
         strAttrs[NSFontAttributeName] = self.font;
         _attribString = [[NSAttributedString alloc] initWithString:self.text attributes:strAttrs];
+        if (!self.outputLayer)
+        {
+            self.outputLayer = [CATextLayer layer];
+        }
         
+        self.outputLayer.bounds = CGRectMake(0.0, 0.0, _attribString.size.width, _attribString.size.height);
+        
+        
+        ((CATextLayer *)self.outputLayer).string = _attribString;
+
     }
     
     
@@ -98,60 +109,7 @@
     _text = text;
     self.captureName = text;
     
-    [self renderText];
-}
-
-
--(CIImage *)currentImage
-{
-    if (!_ciimage)
-    {
-        [self renderText];
-    }
-    
-    //return _ciimage;
-    
-    CIImage *retimg = _ciimage;
-    
-    return retimg;
-}
-
-
--(void)renderText
-{
-    
-    
-    
-    if (!self.imageContext || !self.text)
-    {
-        return;
-    }
-    
     [self buildString];
-    
-    
-    
-    if (!_cgLayer || !NSEqualSizes(CGLayerGetSize(_cgLayer), _attribString.size))
-    {
-        CGLayerRelease(_cgLayer);
-        
-        _cgLayer = [self.imageContext createCGLayerWithSize:_attribString.size info:NULL];
-        
-    }
-    
-    CGContextRef layerCtx = CGLayerGetContext(_cgLayer);
-    
-    NSGraphicsContext *savedContext = [NSGraphicsContext currentContext];
-    NSGraphicsContext *graphicsContext = [NSGraphicsContext graphicsContextWithGraphicsPort:layerCtx flipped:NO];
-    [NSGraphicsContext setCurrentContext:graphicsContext];
-    CGContextClearRect(layerCtx, NSMakeRect(0.0f, 0.0f, _attribString.size.width, _attribString.size.height));
-    [_attribString drawInRect:NSMakeRect(0.0f, 0.0f, _attribString.size.width, _attribString.size.height)];
-    
-    _ciimage = [CIImage imageWithCGLayer:_cgLayer];
-    
-    [NSGraphicsContext setCurrentContext:savedContext];
-    
-    
 }
 
 
@@ -172,7 +130,7 @@
     
     if ([keyPath isEqualToString:@"propertiesChanged"])
     {
-        [self renderText];
+        [self buildString];
     }
     
 }

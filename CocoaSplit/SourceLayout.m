@@ -29,6 +29,9 @@
         _frameRate = 30;
         _canvas_height = 720;
         _canvas_width = 1280;
+        _fboTexture = 0;
+        _rFbo = 0;
+        self.rootLayer = [CALayer layer];
     }
     
     return self;
@@ -109,18 +112,16 @@
 
 -(InputSource *)findSource:(NSPoint)forPoint withExtra:(float)withExtra
 {
-    NSArray *listCopy = [self.sourceList sortedArrayUsingDescriptors:@[_sourceDepthSorter.reversedSortDescriptor, _sourceUUIDSorter.reversedSortDescriptor]];
+    /* invert the point due to layer rendering inversion/weirdness */
     
-    for (InputSource *isrc in listCopy)
+    CGPoint newPoint = CGPointMake(forPoint.x, self.canvas_height-forPoint.y);
+    CALayer *foundLayer = [self.rootLayer hitTest:newPoint];
+    
+    if (foundLayer)
     {
-        
-        NSRect testRect = NSInsetRect(isrc.layoutPosition, -withExtra, -withExtra);
-        
-        if (NSPointInRect(forPoint, testRect))
-        {
-            return isrc;
-        }
+        return foundLayer.delegate;
     }
+    
     
     return nil;
 
@@ -143,10 +144,17 @@
     
     if (self.savedSourceListData)
     {
+
+        self.rootLayer.sublayers = [NSArray array];
         
         NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:self.savedSourceListData];
         
         [unarchiver setDelegate:self];
+        
+        for(InputSource *src in self.sourceList)
+        {
+            [src willDelete];
+        }
         
         self.sourceList = [unarchiver decodeObjectForKey:@"root"];
         [unarchiver finishDecoding];
@@ -161,11 +169,14 @@
     for(InputSource *src in self.sourceList)
     {
         src.layout = self;
-        src.imageContext = self.ciCtx;
         src.is_live = self.isActive;
+        
+        [self.rootLayer addSublayer:src.layer];
     }
+
 }
 
+/* We can't support shared sources right now due to CALayer limitations
 -(id)unarchiver:(NSKeyedUnarchiver *)unarchiver didDecodeObject:(id)object
 {
     
@@ -175,12 +186,16 @@
     } else {
         return object;
     }
-}
-
+}*/
 
 -(void)deleteSource:(InputSource *)delSource
 {
+    
+    [delSource willDelete];
+    
     [self.sourceList removeObject:delSource];
+    [delSource.layer removeFromSuperlayer];
+
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputDeleted  object:delSource userInfo:nil];
 
 }
@@ -189,15 +204,13 @@
 
 -(void) addSource:(InputSource *)newSource
 {
-    
-    newSource.depth = (int)self.sourceList.count;
-    newSource.imageContext  = self.ciCtx;
     newSource.layout = self;
     newSource.is_live = self.isActive;
     
     [self.sourceList addObject:newSource];
+    [self.rootLayer addSublayer:newSource.layer];
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputAdded object:newSource userInfo:nil];
-
 }
 
 
@@ -221,6 +234,7 @@
         for(InputSource *src in self.sourceList)
         {
             src.layout = self;
+            
         }
         
     } else {
@@ -228,8 +242,10 @@
         for(InputSource *src in self.sourceList)
         {
             src.editorController = nil;
+            
         }
         
+        self.rootLayer.sublayers = [NSArray array];
         [self.sourceList removeAllObjects];
         
         //self.sourceList = [NSMutableArray array];
@@ -242,80 +258,196 @@
 }
 
 
+-(void) createCGLContext
+{
+    CGLPixelFormatAttribute glAttributes[] = {
+        
+        kCGLPFAAccelerated,
+        kCGLPFADepthSize, (CGLPixelFormatAttribute)32,
+        kCGLPFAAllowOfflineRenderers,
+        (CGLPixelFormatAttribute)0
+    };
+    
+    GLint screens;
+    CGLPixelFormatObj pixelFormat;
+    CGLChoosePixelFormat(glAttributes, &pixelFormat, &screens);
+    
+    
+    if (!pixelFormat)
+    {
+        return;
+    }
+
+    CGLCreateContext(pixelFormat, NULL, &_cglCtx);
+    
+}
+
+-(void)setupCArenderer
+{
+    if (!self.cglCtx)
+    {
+        [self createCGLContext];
+    }
+    
+    
+    CGLSetCurrentContext(self.cglCtx);
+    
+    if (!self.renderer)
+    {
+        self.renderer = [CARenderer rendererWithCGLContext:self.cglCtx options:nil];
+    }
+
+    
+    [CATransaction begin];
+    if (!self.rootLayer)
+    {
+        self.rootLayer = [CALayer layer];
+    }
+    CALayer *newRoot = self.rootLayer;
+    newRoot.bounds = CGRectMake(0, 0, 1280, 720);
+    newRoot.backgroundColor = CGColorCreateGenericRGB(0, 0, 0, 1);
+    newRoot.position = CGPointMake(0.0, 0.0);
+    newRoot.anchorPoint = CGPointMake(0.0, 0.0);
+    newRoot.masksToBounds = YES;
+    //newRoot.geometryFlipped = YES;
+    newRoot.sublayerTransform = CATransform3DIdentity;
+    newRoot.sublayerTransform = CATransform3DTranslate(newRoot.sublayerTransform, 0, self.canvas_height, 0);
+    newRoot.sublayerTransform = CATransform3DScale(newRoot.sublayerTransform, 1.0, -1.0, 1.0);
+    self.renderer.bounds = NSMakeRect(0.0, 0.0, self.canvas_width, self.canvas_height);
+    self.renderer.layer = newRoot;
+    [CATransaction commit];
+    
+}
+
+
+-(void)renderToSurface:(IOSurfaceRef)ioSurface
+{
+    if (!self.renderer)
+    {
+        return;
+    }
+    CGLSetCurrentContext(self.cglCtx);
+
+    if (!_rFbo)
+    {
+        glGenFramebuffers(1, &_rFbo);
+    }
+    
+    if (!_fboTexture)
+    {
+        glGenTextures(1, &_fboTexture);
+    }
+    
+
+    glEnable(GL_TEXTURE_RECTANGLE_ARB);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_RECTANGLE_ARB, _fboTexture);
+    glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_TEXTURE_RECTANGLE_ARB);
+    glDepthMask(GL_FALSE);
+    
+    
+    
+    
+    CGLTexImageIOSurface2D(self.cglCtx, GL_TEXTURE_RECTANGLE_ARB, GL_RGBA, self.canvas_width, self.canvas_height, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, ioSurface, 0);
+    
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_RECTANGLE_ARB, _fboTexture, 0);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, _rFbo);
+    
+    GLenum fboStatus;
+
+    fboStatus  = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if (fboStatus != GL_FRAMEBUFFER_COMPLETE)
+    {
+    } else {
+    }
+
+    glBindTexture(GL_TEXTURE_RECTANGLE_ARB, 0);
+    glViewport(0, 0, self.canvas_width, self.canvas_height);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0, self.canvas_width, 0,self.canvas_height, -1, 1);
+    //glTranslatef(0.0f, self.canvas_height, 0.0);
+    //glScalef(1.0, -1.0, 1.0);
+    
+
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    
+    glClearColor(0, 0, 0, 0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+
+
+    
+    
+    [self.renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];
+    [self.renderer addUpdateRect:self.renderer.bounds];
+    [self.renderer render];
+    [self.renderer endFrame];
+    
+    glFlush();
+}
 
 
 -(CVPixelBufferRef)currentImg
 {
     CVPixelBufferRef destFrame = NULL;
-    CIImage *newImage;
     CGFloat frameWidth, frameHeight;
     NSArray *listCopy;
     
     
-        
-        
-        
-        
-        newImage = [_backgroundFilter valueForKey:kCIOutputImageKey];
-        //newImage = [CIImage imageWithColor:[CIColor colorWithRed:0.0f green:0.0f blue:0.0f]];
-        //newImage = [CIImage emptyImage];
+    listCopy = [self sourceListOrdered];
     
-        newImage = [newImage imageByCroppingToRect:NSMakeRect(0, 0, self.canvas_width, self.canvas_height)];
-        
-        
-        listCopy = [self sourceListOrdered];
-        
-        for (InputSource *isource in listCopy)
+    
+    for (InputSource *isource in listCopy)
+    {
+        if (isource.active)
         {
-            if (isource.active)
-            {
-                newImage = [isource currentImage:newImage];
-            }
-            
+            [isource frameTick];
         }
         
-        if (!newImage)
-        {
-            NSLog(@"NO IMAGE");
-            return nil;
-        }
+    }
+    
+    frameWidth = self.canvas_width;
+    frameHeight = self.canvas_height;
+    
+    NSSize frameSize = NSMakeSize(frameWidth, frameHeight);
+    
+    if (CGSizeEqualToSize(frameSize, CGSizeZero))
+    {
+        return nil;
+    }
+    
+    if (!CGSizeEqualToSize(frameSize, _cvpool_size))
+    {
+        [self createPixelBufferPoolForSize:frameSize];
+        _cvpool_size = frameSize;
+        [self setupCArenderer];
         
-        
-        
-        frameWidth = self.canvas_width;
-        frameHeight = self.canvas_height;
-        
-        NSSize frameSize = NSMakeSize(frameWidth, frameHeight);
-        
-        if (!CGSizeEqualToSize(frameSize, _cvpool_size))
-        {
-            [self createPixelBufferPoolForSize:frameSize];
-            _cvpool_size = frameSize;
-            
-        }
-    //}
+    }
     
     CVPixelBufferPoolCreatePixelBuffer(kCVReturnSuccess, _cvpool, &destFrame);
-        
-        [self.ciCtx render:newImage toIOSurface:CVPixelBufferGetIOSurface(destFrame) bounds:NSMakeRect(0,0,frameWidth, frameHeight) colorSpace:nil];
     
-        
-        
-        @synchronized(self)
+    
+    
+    [self renderToSurface:CVPixelBufferGetIOSurface(destFrame)];
+    
+    
+    @synchronized(self)
+    {
+        if (_currentPB)
         {
-            if (_currentPB)
-            {
-                CVPixelBufferRelease(_currentPB);
-            }
-            
-            _currentPB = destFrame;
+            CVPixelBufferRelease(_currentPB);
         }
         
-        for (InputSource *isource in listCopy)
-        {
-            [isource frameRendered];
-        }
-        
+        _currentPB = destFrame;
+    }
     
     
     return _currentPB;

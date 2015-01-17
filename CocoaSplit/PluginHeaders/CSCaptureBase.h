@@ -15,8 +15,8 @@
 @property CSAbstractCaptureDevice *activeVideoDevice;
 @property (strong) NSArray *availableVideoDevices;
 @property (weak) CIContext *imageContext;
-@property (readonly) int render_width;
-@property (readonly) int render_height;
+@property (readonly) float render_width;
+@property (readonly) float render_height;
 @property (strong) NSString *captureName;
 @property (strong) NSString *savedUniqueID;
 @property (assign) bool needsSourceSelection;
@@ -62,11 +62,24 @@
 //This is the class name of the configuration view CONTROLLER. With the combo above you can have different view controller classes and/or different NIBs depending on various conditions.
 @property (readonly) NSString *configurationViewClassName;
 
+
+//This is the layer that is inserted into the canvas. The inputsource container will take care of positioning and sizing. A CALayer with position set to 0,0 and the source native size is all that is required here. You can reassign this whenever you want and the layer will get replaced on the next frame render
+@property (strong) CALayer *outputLayer;
+
+//frameTick is called every render loop. You are not required to do anything here, but it may be useful for some timing/lazy rendering
+-(void)frameTick;
+
+
+//called before the input is removed. Allows you to clean up anything that isn't appropriate in -(void)dealloc
+-(void)willDelete;
+
+
 -(void)setDeviceForUniqueID:(NSString *)uniqueID;
--(CVImageBufferRef) getCurrentFrame;
--(CIImage *) currentImage;
 -(NSView *)configurationView;
 +(NSString *) label;
+//Class method to run code that messes with the CALayer(s). It has to be on the main thread even if it isn't in a view :(
+//All this method does is dispatch_sync to the main thread OR run the block immediately if we're already on the main thread
++(void) layoutModification:(void (^)())modBlock;
 
 
 @end

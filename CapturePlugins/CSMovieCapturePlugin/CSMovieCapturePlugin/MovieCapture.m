@@ -98,7 +98,6 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 {
     if (self = [super init])
     {
-        _currentFrame = NULL;
         _currentMovieTime = 0.0f;
         
         self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
@@ -123,10 +122,6 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 {
     [self copyAudioBufferList:buffer];
     
-    
-    
-    
-    
     dispatch_async(_audioQueue, ^{
         
         
@@ -138,7 +133,6 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 
 -(void)setIsLive:(bool)isLive
 {
-    
     
     bool oldLive = super.isLive;
     super.isLive = isLive;
@@ -236,35 +230,15 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     [self.avPlayer addObserver:self forKeyPath:@"rate" options:NSKeyValueObservingOptionNew context:NULL];
     [self.avPlayer addObserver:self forKeyPath:@"currentItem" options:0 context:NULL];
     self.avPlayer.volume = 0.0;
+    self.outputLayer = [AVPlayerLayer playerLayerWithPlayer:self.avPlayer];
     
     
     
-}
-
-
-
-- (CVImageBufferRef) getCurrentFrame
-{
-    CFTimeInterval currentTime = CACurrentMediaTime();
-    CVPixelBufferRef newFrame = NULL;
-    CMTime outputItemTime = [self.avOutput itemTimeForHostTime:currentTime];
-    if ([self.avOutput hasNewPixelBufferForItemTime:outputItemTime])
-    {
-     
-        newFrame = [self.avOutput copyPixelBufferForItemTime:outputItemTime itemTimeForDisplay:nil];
-        if (newFrame)
-        {
-            CVPixelBufferRelease(_currentFrame);
-            _currentFrame = newFrame;
-        }
-    }
-    
-    
-    CVPixelBufferRetain(_currentFrame);
-    
-    return _currentFrame;
     
 }
+
+
+
 
 
 + (NSSet *)keyPathsForValuesAffectingCurrentMovieTimeString
@@ -550,19 +524,14 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 }
 
 
--(void) dealloc
+-(void)willDelete
 {
-    //stop any inflight whatever
     
     if (self.timeToken)
     {
         [self.avPlayer removeTimeObserver:self.timeToken];
     }
-
     
-    [self.avPlayer removeObserver:self forKeyPath:@"rate"];
-    [self.avPlayer removeObserver:self forKeyPath:@"currentItem"];
-
     if (self.avPlayer && self.avPlayer.currentItem)
     {
         AVMutableAudioMixInputParameters *inputParams = self.avPlayer.currentItem.audioMix.inputParameters.firstObject;
@@ -571,8 +540,19 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     }
     [self.avPlayer pause];
     
+    [self.avPlayer removeObserver:self forKeyPath:@"rate"];
+    [self.avPlayer removeObserver:self forKeyPath:@"currentItem"];
+
     self.avOutput = nil;
     self.avPlayer = nil;
+
+
+    
+}
+-(void) dealloc
+{
+    [self willDelete];
+
 }
 
 

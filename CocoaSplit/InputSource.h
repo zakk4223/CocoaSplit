@@ -13,6 +13,7 @@
 #import "CSPluginLoader.h"
 #import "SourceCache.h"
 #import "InputPopupControllerViewController.h"
+#import "CSInputLayer.h"
 
 
 
@@ -33,7 +34,8 @@ typedef enum resize_style_t {
     kResizeRight = 1<<1,
     kResizeBottom = 1<<2,
     kResizeLeft = 1<<3,
-    kResizeCenter = 1<<4
+    kResizeCenter = 1<<4,
+    kResizeFree = 1<<5
 } resize_style;
 
 
@@ -42,40 +44,23 @@ typedef enum resize_style_t {
 
 @interface InputSource : NSObject <NSCoding, NSWindowDelegate>
 {
-    CVPixelBufferRef _tmpCVBuf;
-    CGColorSpaceRef _colorSpace;
     
     int _currentSourceIdx;
-    CIImage *_oldImage;
-    CIImage *_preBgImage;
     
-    CVPixelBufferRef _oldCVBuf;
+    CATransition *_multiTransition;
     
     double _transitionTime;
-    bool _inTransition;
     double _nextImageTime;
     CIFilterGenerator *_filterGenerator;
     NSViewController *_currentInputViewController;
-    float _locked_ar;
-    resize_style _last_resize;
-    NSBezierPath *_lastScalePath;
-    
-    float _last_x_adjust;
-    float _last_y_adjust;
-    NSRect _inputExtent;
-    
-    CIFilter *_offsetFilter;
-    float _scroll_Xadjust;
-    float _scroll_Yadjust;
-    
-    
-    //NSObject<CSCaptureSourceProtocol> *_useInput;
+    CIFilter *_chromaFilter;
+    NSObject<CSCaptureSourceProtocol> *_nextInput;
 
     
 }
 
 
-
+@property (strong) CSInputLayer *layer;
 @property (weak) SourceLayout *layout;
 
 
@@ -83,57 +68,40 @@ typedef enum resize_style_t {
 @property (assign) float scrollYSpeed;
 
 @property (strong) NSObject<CSCaptureSourceProtocol> *videoInput;
-@property (assign) int x_pos;
-@property (assign) int y_pos;
 @property (assign) float rotationAngle;
-@property (assign) int crop_left;
-@property (assign) int crop_right;
-@property (assign) int crop_top;
-@property (assign) int crop_bottom;
-@property (assign) float scaleFactor;
+@property (assign) float crop_left;
+@property (assign) float crop_right;
+@property (assign) float crop_top;
+@property (assign) float crop_bottom;
 
-@property (strong) CIImage *inputImage;
-@property (strong) CIImage *outputImage;
 @property (assign) float opacity;
 
 @property (assign) bool is_live;
 @property (assign) bool is_selected;
 @property (assign) NSRect layoutPosition;
-@property (strong) CIFilter *scaleFilter;
-@property (strong) CIFilter *prescaleTransformFilter;
-
-
-@property (strong) CIFilter *selectedFilter;
-@property (strong) CIFilter *transformFilter;
-@property (strong) CIFilter *rotateFilter;
-
-
 
 @property (assign) bool propertiesChanged;
-@property (strong) CIFilter *compositeFilter;
 @property (strong) NSString *selectedVideoType;
 @property (strong) NSString *name;
 @property (strong) NSString *uuid;
 
-@property (assign) int depth;
-@property (strong) CIFilter *solidFilter;
-@property (strong) CIFilter *cropFilter;
-@property (strong) CIFilter *chromaKeyFilter;
+@property (assign) float depth;
 
-@property (weak) CIContext *imageContext;
 @property (assign) NSSize oldSize;
 @property (assign) bool active;
 
-@property (assign) size_t display_width;
-@property (assign) size_t display_height;
 
 @property (assign) bool lockSize;
 
-@property (assign) bool needRebuildFilter;
 
 @property (assign) bool unlock_aspect;
 
 @property (assign) resize_style resizeType;
+
+@property (readonly) NSPoint origin;
+@property (readonly) NSSize size;
+@property (readonly) float display_width;
+@property (readonly) float display_height;
 
 
 //When an instance is created the creator (capture controller) binds these to the size of the canvas in case we are asked to auto-fit
@@ -148,12 +116,13 @@ typedef enum resize_style_t {
 
 @property (strong) NSString *transitionFilterName;
 @property (strong) NSArray *transitionNames;
+@property (strong) NSArray *transitionDirections;
+@property (strong) NSString *transitionDirection;
+@property (assign) float transitionDuration;
 
 @property (strong) id windowViewController;
 
 @property (assign) input_rotate_style rotateStyle;
-
-@property (strong) CIFilter *transitionFilter;
 
 @property (strong) NSArray *availableEffectNames;
 
@@ -167,28 +136,20 @@ typedef enum resize_style_t {
 @property (assign) bool doChromaKey;
 @property (assign) bool usePrivateSource;
 
-
-
-
-
-
-
 @property (strong) InputPopupControllerViewController *editorController;
 @property (strong) NSWindow *editorWindow;
 
 
--(CIImage *) currentImage:(CIImage *)backgroundImage;
 -(void) updateOrigin:(CGFloat)x y:(CGFloat)y;
--(void) frameRendered;
--(void) scaleTo:(CGFloat)width height:(CGFloat)height;
 -(void) updateSize:(CGFloat)width height:(CGFloat)height;
--(NSRect) scaleToRect:(CGRect)rect extent:(CGRect)extent;
 
 -(void) addMulti;
 -(void) autoFit;
 -(void)addUserEffect:(NSIndexSet *)filterIndexes;
 -(void)removeUserEffects:(NSIndexSet *)filterIndexes;
 -(void)editorPopoverDidClose;
+-(void)frameTick;
+-(void)willDelete;
 
 
 

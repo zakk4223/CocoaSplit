@@ -222,6 +222,7 @@
     {
         CGLContextObj cgl_ctx = [[self openGLContext] CGLContextObj];
         
+        
         sourceLayout.ciCtx =  [CIContext contextWithCGLContext:cgl_ctx pixelFormat:CGLGetPixelFormat(cgl_ctx) colorSpace:nil options:@{kCIContextWorkingColorSpace: [NSNull null]}];
         
     }
@@ -558,9 +559,16 @@
         {
             self.resizeType |= kResizeCenter;
         }
-        self.selectedSource.resizeType = self.resizeType;
+        
+        if (theEvent.modifierFlags & NSControlKeyMask)
+        {
+            self.resizeType |= kResizeFree;
+        }
+
 
     }
+    self.selectedSource.resizeType = self.resizeType;
+
     
 }
 
@@ -591,24 +599,31 @@
         {
             if (theEvent.modifierFlags & NSShiftKeyMask)
             {
+                //Crop is expressed as a floating point number between 0.0 and 1.0, basically a percentage of that dimension.
+                //Convert appropriately.
+                
+                float x_crop = dx/self.selectedSource.layoutPosition.size.width;
+                float y_crop = dy/self.selectedSource.layoutPosition.size.height;
+                
+                
                 if (self.resizeType & kResizeRight)
                 {
-                    self.selectedSource.crop_right -= dx;
+                    self.selectedSource.crop_right -= x_crop;
                 }
                 
                 if (self.resizeType & kResizeLeft)
                 {
-                    self.selectedSource.crop_left += dx;
+                    self.selectedSource.crop_left += x_crop;
                 }
                 
                 if (self.resizeType & kResizeTop)
                 {
-                    self.selectedSource.crop_top -= dy;
+                    self.selectedSource.crop_top -= y_crop;
                 }
                 
                 if (self.resizeType & kResizeBottom)
                 {
-                    self.selectedSource.crop_bottom += dy;
+                    self.selectedSource.crop_bottom += y_crop;
                 }
                 
             } else {
@@ -619,7 +634,6 @@
                 } else {
                     self.resizeType &= ~kResizeCenter;
                 }
-                self.selectedSource.resizeType = self.resizeType;
                 CGFloat new_width, new_height;
                 
                 NSRect sPosition = self.selectedSource.layoutPosition;
@@ -656,16 +670,6 @@
             }
             
         } else {
-            
-            
-            float x_pos = self.selectedSource.x_pos;
-            float y_pos = self.selectedSource.y_pos;
-            size_t s_width = self.selectedSource.display_width;
-            size_t s_height = self.selectedSource.display_height;
-            
-            float top_pos = y_pos+s_height;
-            float right_pos = x_pos+s_width;
-            
             
             [self.selectedSource updateOrigin:dx y:dy];
         }
@@ -798,14 +802,15 @@
     _snap_y_accum  = 0;
     
     self.isResizing = NO;
-    //self.selectedSource.resizeType = kResizeNone;
-    
+    self.selectedSource.resizeType = kResizeNone;
     self.selectedSource = nil;
 }
 
 
 -(void) mouseMoved:(NSEvent *)theEvent
 {
+    
+    [self trackMousedSource];
     
     [self setIdleTimer];
     
@@ -1047,6 +1052,14 @@
     CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink, [[self openGLContext] CGLContextObj], [[self pixelFormat] CGLPixelFormatObj]);
     CVDisplayLinkStart(displayLink);
     
+    int opts = (NSTrackingActiveAlways | NSTrackingInVisibleRect | NSTrackingMouseMoved | NSTrackingMouseEnteredAndExited);
+    _trackingArea = [[NSTrackingArea alloc] initWithRect:[self bounds]
+                                                 options:opts
+                                                   owner:self
+                                                userInfo:nil];
+    
+    [self addTrackingArea:_trackingArea];
+
     return self;
 }
 
@@ -1121,7 +1134,7 @@
         return;
     }
     
-        [self trackMousedSource];
+        //[self trackMousedSource];
     //CVPixelBufferRetain(displayFrame);
     [self drawPixelBuffer:displayFrame];
     CVPixelBufferRelease(displayFrame);
@@ -1158,13 +1171,13 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
     CGLContextObj cgl_ctx = [[self openGLContext] CGLContextObj];
 
+    CGLLockContext(cgl_ctx);
+    
+    [self.openGLContext makeCurrentContext];
 
     IOSurfaceRef cFrame = CVPixelBufferGetIOSurface(cImageBuf);
     IOSurfaceID cFrameID;
     
-    CGLLockContext(cgl_ctx);
-
-    [self.openGLContext makeCurrentContext];
     
     if (cFrame)
     {

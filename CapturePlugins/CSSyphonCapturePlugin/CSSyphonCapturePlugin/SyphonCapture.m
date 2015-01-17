@@ -92,6 +92,7 @@
 {
     
     self.isFlipped = NO;
+    self.outputLayer = [CSIOSurfaceLayer layer];
     
     [self changeAvailableVideoDevices];
    
@@ -113,29 +114,6 @@
 }
 
 
--(CIImage *)currentImage
-{
-    
-    
-    CIImage *retImage = nil;
-    
-    @synchronized(self)
-    {
-        if (_serverSurface)
-        {
-            CIImage *newImage = [[CIImage alloc] initWithIOSurface:_serverSurface plane:0 format:kCIFormatARGB8 options:nil];
-            if (self.isFlipped)
-            {
-                [_flipTransform setValue:newImage forKey:kCIInputImageKey];
-                retImage = [_flipTransform valueForKey:kCIOutputImageKey];
-            } else {
-                retImage = newImage;
-            }
-        }
-    }
-    
-    return retImage;
-}
 
 
 
@@ -155,14 +133,6 @@
     
     if (_syphonServer)
     {
-        NSLog(@"STARTING SYPHON");
-        //_syphon_client = [[SyphonClient alloc] initWithServerDescription:_syphonServer options:nil newFrameHandler:nil];
-    
-    
-        
-    
-        
-        
      _syphon_client = [[SyphonClient alloc] initWithServerDescription:_syphonServer.copy options:nil newFrameHandler:^(SyphonClient *client) {
      
          //this call retains the surface, so be sure to release it if we don't care about it anymore
@@ -172,23 +142,15 @@
          
          if (newSeed != _surfaceSeed)
          {
+             CIImage *newImage = [[CIImage alloc] initWithIOSurface:newSurface plane:0 format:kCIFormatARGB8 options:nil];
              _surfaceSeed = newSeed;
-             IOSurfaceRef oldSurface = _serverSurface;
-
-             @synchronized(self)
-             {
-                 _serverSurface = newSurface;
-                 NSAffineTransform *nsflip = [NSAffineTransform transform];
-                 [nsflip translateXBy:0 yBy:IOSurfaceGetHeight(_serverSurface)];
-                 
-                 [nsflip scaleXBy:1 yBy:-1];
-                 [_flipTransform setValue:nsflip forKeyPath:kCIInputTransformKey];
-             }
-             if (oldSurface)
-             {
-                 CFRelease(oldSurface);
-             }
-         } else {
+             //CFRelease(newSurface);
+             _lastImage = newImage;
+             
+             //dispatch_async(dispatch_get_main_queue(), ^{
+                 ((CSIOSurfaceLayer *)self.outputLayer).ioImage = newImage;
+             //});
+          } else {
              CFRelease(newSurface);
          }
          

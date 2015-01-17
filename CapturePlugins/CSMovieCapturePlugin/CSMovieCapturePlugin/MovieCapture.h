@@ -16,7 +16,6 @@
 
 @interface MovieCapture : CSCaptureBase <CSCaptureSourceProtocol>
 {
-    CVPixelBufferRef _currentFrame;
     CAMultiAudioPCM *_bufferPCM;
     dispatch_queue_t _audioQueue;
     

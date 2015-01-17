@@ -460,6 +460,9 @@
  
         _video_capture_output = [[AVCaptureVideoDataOutput alloc] init];
         
+        AVCaptureVideoPreviewLayer *avlayer = [AVCaptureVideoPreviewLayer layerWithSession:_capture_session];
+        
+        self.outputLayer = avlayer;
         if ([_capture_session canAddOutput:_video_capture_output])
         {
             [_capture_session addOutput:_video_capture_output];

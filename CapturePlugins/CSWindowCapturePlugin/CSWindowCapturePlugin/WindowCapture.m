@@ -64,7 +64,8 @@
 }
 
 
--(CIImage *)currentImage
+
+-(void)frameTick
 {
     
     CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
@@ -75,11 +76,14 @@
         
         
         CGImageRef windowImg = CGWindowListCreateImage(CGRectNull, kCGWindowListOptionIncludingWindow, [windowID unsignedIntValue], kCGWindowImageBoundsIgnoreFraming|kCGWindowImageBestResolution);
-        _currentFrame = [CIImage imageWithCGImage:windowImg];
-        CGImageRelease(windowImg);
+        [CSCaptureBase layoutModification:^{
+            self.outputLayer.contents = (__bridge id)(windowImg);
+
+        }];
+            CGImageRelease(windowImg);
+        
         _nextCaptureTime = currentTime + (1/self.captureFPS);
     }
-    return _currentFrame;
 }
 
 +(NSString *)label

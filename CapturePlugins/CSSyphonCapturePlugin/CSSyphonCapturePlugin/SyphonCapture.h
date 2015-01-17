@@ -11,6 +11,7 @@
 #import "CSAbstractCaptureDevice.h"
 #import "SyphonBuildMacros.h"
 #import "Syphon.h"
+#import "CSIOSurfaceLayer.h"
 
 
 
@@ -33,9 +34,9 @@
     IOSurfaceRef _serverSurface;
     uint32_t _surfaceSeed;
     
+    CIImage *_lastImage;
     CIFilter *_flipTransform;
 }
-
 
 
 @property (assign) double videoCaptureFPS;

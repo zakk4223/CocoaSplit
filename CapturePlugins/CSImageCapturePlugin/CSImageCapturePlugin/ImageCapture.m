@@ -201,11 +201,13 @@
     
     self.captureName = [_imagePath lastPathComponent];
     
-    NSData *imgData = [NSData dataWithContentsOfFile:self.imagePath];
     
     NSDictionary *dict = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:(id)kCGImageSourceShouldCacheImmediately];
 
-    CGImageSourceRef imgSrc = CGImageSourceCreateWithData((__bridge CFDataRef)imgData, (__bridge CFDictionaryRef)dict);
+    NSURL *fileURL = [NSURL fileURLWithPath:imagePath];
+    
+    CGImageSourceRef imgSrc = CGImageSourceCreateWithURL((__bridge CFURLRef)fileURL, (__bridge CFDictionaryRef)dict);
+    
     
     if (_imageSource)
     {
@@ -219,9 +221,12 @@
     
     
     _totalFrames = CGImageSourceGetCount(imgSrc);
+    float totalTime = 0;
     
     if (_totalFrames > 1)
     {
+        NSMutableArray *frameArray = [NSMutableArray array];
+        
         _delayList = [[NSMutableArray alloc] init];
         
         for (int i=0; i < _totalFrames; i++)
@@ -229,15 +234,49 @@
             CFDictionaryRef frameprop = CGImageSourceCopyPropertiesAtIndex(imgSrc, i, NULL);
             CFDictionaryRef gProp = CFDictionaryGetValue(frameprop, kCGImagePropertyGIFDictionary);
         
-            CFNumberRef udelay = CFDictionaryGetValue(gProp, kCGImagePropertyGIFUnclampedDelayTime);
-            CFNumberRef gdelay = CFDictionaryGetValue(gProp, kCGImagePropertyGIFDelayTime);
-            if ([(__bridge NSNumber *)udelay isEqualToNumber:@(0)])
+            NSNumber *udelay = CFDictionaryGetValue(gProp, kCGImagePropertyGIFUnclampedDelayTime);
+            NSNumber *gdelay = CFDictionaryGetValue(gProp, kCGImagePropertyGIFDelayTime);
+            if ([udelay isEqualToNumber:@(0)])
             {
-                [_delayList insertObject:(__bridge NSNumber *)gdelay atIndex:i];
+                [_delayList insertObject:gdelay atIndex:i];
+                totalTime += gdelay.floatValue;
             } else {
-                [_delayList insertObject:(__bridge NSNumber *)udelay atIndex:i];
+                [_delayList insertObject:udelay atIndex:i];
+                totalTime += udelay.floatValue;
             }
+            CGImageRef frame = CGImageSourceCreateImageAtIndex(_imageSource, i, NULL);
+            [frameArray addObject:(__bridge id)frame];
+            
         }
+        
+        NSMutableArray *timesArray = [NSMutableArray array];
+        float base = 0;
+        for (NSNumber *duration in _delayList)
+        {
+            base = base + (duration.floatValue/totalTime);
+            [timesArray addObject:[NSNumber numberWithFloat:base]];
+        }
+        
+        CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"contents"];
+        animation.duration = totalTime;
+        animation.repeatCount = HUGE_VALF;
+        animation.removedOnCompletion = NO;
+        animation.fillMode = kCAFillModeForwards;
+        animation.values = frameArray;
+        animation.keyTimes = timesArray;
+        animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+        animation.calculationMode = kCAAnimationDiscrete;
+        dispatch_async(dispatch_get_main_queue(), ^{
+
+            [self.outputLayer addAnimation:animation forKey:@"contents"];
+        });
+
+        
+        
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.outputLayer.contents = (__bridge id)CGImageSourceCreateImageAtIndex(_imageSource, 0, NULL);
+        });
     }
     
     
@@ -248,26 +287,6 @@
 }
 
 
-
--(CIImage *) currentImage
-{
-    return _ciimage;
-}
-
--(CVImageBufferRef) getCurrentFrame
-{
-    @synchronized(self) {
-
-        if (self.currentFrame)
-        {
-            CVPixelBufferRetain(self.currentFrame);
-            
-        }
-    }
-    
-    
-    return self.currentFrame;
-}
 
 
 -(void)chooseDirectory

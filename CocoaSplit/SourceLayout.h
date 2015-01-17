@@ -21,6 +21,8 @@
     CVPixelBufferRef _currentPB;
     CIFilter *_backgroundFilter;
     NSSize _cvpool_size;
+    GLuint _fboTexture;
+    GLuint _rFbo;
 }
 
 @property (strong) NSMutableArray *sourceList;
@@ -33,9 +35,14 @@
 
 @property (assign) float frameRate;
 
+@property (assign) CGLContextObj cglCtx;
 
 @property (strong) CIContext *ciCtx;
 @property (strong) NSString *name;
+
+@property (strong) CARenderer *renderer;
+@property (strong) CALayer *rootLayer;
+
 
 @property (strong) SourceCache *sourceCache;
 @property (strong) CIFilter *compositeFilter;
@@ -50,4 +57,5 @@
 -(CVPixelBufferRef)currentFrame;
 -(void) saveSourceList;
 -(void) restoreSourceList;
+
 @end

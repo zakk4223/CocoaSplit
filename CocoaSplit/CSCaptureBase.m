@@ -28,6 +28,7 @@
         self.allowDedup = YES;
         self.isVisible = YES;
         self.allowScaling = YES;
+        self.outputLayer = [CALayer layer];
     }
     
     return self;
@@ -120,27 +121,25 @@
     }
 }
 
--(CIImage *) currentImage
+-(void)frameTick
 {
-    return nil;
+    return;
 }
 
 
--(CVImageBufferRef) getCurrentFrame
+-(void)willDelete
 {
-    return NULL;
+    return;
 }
 
 
-
-
--(int)render_height
+-(float)render_height
 {
     NSNumber *ret = [self.inputSource valueForKeyPath:@"display_height"];
     return [ret intValue];
 }
 
--(int)render_width
+-(float)render_width
 {
     
     NSNumber *ret = [self.inputSource valueForKeyPath:@"display_width"];
@@ -181,5 +180,18 @@
     return;
 }
 
++(void) layoutModification:(void (^)())modBlock
+{
+    //On main thread already, just execute the block, otherwise execute on main and wait
+    if ([NSThread isMainThread])
+    {
+        modBlock();
+    } else {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            modBlock();
+        });
+    }
+    
+}
 
 @end
