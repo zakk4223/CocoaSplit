@@ -320,10 +320,21 @@
 
 }
 
+-(BOOL)containsPoint:(CGPoint)p
+{
+    if (self.hidden)
+    {
+        return NO;
+    } else {
+        return [super containsPoint:p];
+    }
+}
+
+
 - (CALayer *)hitTest:(CGPoint)hitPoint
 {
     
-    
+        
     hitPoint = [self convertPoint:hitPoint fromLayer:self.superlayer];
     return [self containsPoint:hitPoint] ? self : nil;
 }

@@ -1032,11 +1032,13 @@ static NSArray *_sourceTypes = nil;
     {
         self.videoInput.isActive = active;
     }
+    self.layer.hidden = !active;
 }
 
 
 -(bool)active
 {
+    
     return _active;
 }
 
