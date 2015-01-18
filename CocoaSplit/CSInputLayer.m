@@ -24,6 +24,8 @@
     if (self = [super init])
     {
         
+        self.minificationFilter = kCAFilterTrilinear;
+        self.magnificationFilter = kCAFilterTrilinear;
         _xLayer = [CAReplicatorLayer layer];
         _yLayer = [CAReplicatorLayer layer];
         _xLayer.instanceCount = 1;
@@ -33,6 +35,7 @@
         _sourceLayer = [CALayer layer];
         _sourceLayer.anchorPoint = CGPointMake(0.0, 0.0);
         //_sourceLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
+        _sourceLayer.contentsGravity = kCAGravityResizeAspect;
         _sourceLayer.frame = CGRectMake(0, 0, 1, 1);
         _scrollAnimation = [CABasicAnimation animation];
         _scrollAnimation.repeatCount = HUGE_VALF;

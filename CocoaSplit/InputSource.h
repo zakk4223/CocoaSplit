@@ -139,6 +139,9 @@ typedef enum resize_style_t {
 @property (strong) InputPopupControllerViewController *editorController;
 @property (strong) NSWindow *editorWindow;
 
+@property (strong) NSColor *borderColor;
+@property (assign) CGFloat borderWidth;
+
 
 -(void) updateOrigin:(CGFloat)x y:(CGFloat)y;
 -(void) updateSize:(CGFloat)width height:(CGFloat)height;

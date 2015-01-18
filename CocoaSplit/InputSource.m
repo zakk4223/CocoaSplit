@@ -80,7 +80,8 @@ static NSArray *_sourceTypes = nil;
     [aCoder encodeFloat:self.layer.position.y forKey:@"frame_origin_y"];
     [aCoder encodeFloat:self.layer.bounds.size.width forKey:@"frame_width"];
     [aCoder encodeFloat:self.layer.bounds.size.height forKey:@"frame_height"];
-    
+    [aCoder encodeFloat:self.borderWidth forKey:@"borderWidth"];
+    [aCoder encodeObject:self.borderColor forKey:@"borderColor"];
 }
 
 -(id) initWithCoder:(NSCoder *)aDecoder
@@ -203,6 +204,8 @@ static NSArray *_sourceTypes = nil;
         
         self.usePrivateSource = [aDecoder decodeBoolForKey:@"usePrivateSource"];
 
+        self.borderWidth = [aDecoder decodeFloatForKey:@"borderWidth"];
+        self.borderColor = [aDecoder decodeObjectForKey:@"borderColor"];
         self.layoutPosition = self.layer.frame;
 
         
@@ -357,6 +360,27 @@ static NSArray *_sourceTypes = nil;
 -(void)setDepth:(float)depth
 {
     self.layer.zPosition = depth;
+}
+
+-(void)setBorderColor:(NSColor *)borderColor
+{
+    self.layer.borderColor = [borderColor CGColor];
+}
+
+-(NSColor *)borderColor
+{
+    return [NSColor colorWithCGColor:self.layer.borderColor];
+}
+
+
+-(void)setBorderWidth:(CGFloat)borderWidth
+{
+    self.layer.borderWidth = borderWidth;
+}
+
+-(CGFloat)borderWidth
+{
+    return self.layer.borderWidth;
 }
 
 
