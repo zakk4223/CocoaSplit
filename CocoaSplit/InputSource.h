@@ -56,6 +56,9 @@ typedef enum resize_style_t {
     CIFilter *_chromaFilter;
     NSObject<CSCaptureSourceProtocol> *_nextInput;
 
+    bool _userBackground;
+    
+    
     
 }
 
@@ -142,6 +145,7 @@ typedef enum resize_style_t {
 @property (strong) NSColor *borderColor;
 @property (assign) CGFloat borderWidth;
 @property (assign) CGFloat cornerRadius;
+@property (strong) NSColor *backgroundColor;
 
 
 -(void) updateOrigin:(CGFloat)x y:(CGFloat)y;
@@ -154,6 +158,7 @@ typedef enum resize_style_t {
 -(void)editorPopoverDidClose;
 -(void)frameTick;
 -(void)willDelete;
+-(void)clearBackground;
 
 
 

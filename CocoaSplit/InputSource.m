@@ -83,6 +83,12 @@ static NSArray *_sourceTypes = nil;
     [aCoder encodeFloat:self.borderWidth forKey:@"borderWidth"];
     [aCoder encodeObject:self.borderColor forKey:@"borderColor"];
     [aCoder encodeFloat:self.cornerRadius forKey:@"cornerRadius"];
+    [aCoder encodeBool:_userBackground forKey:@"userBackground"];
+    if (_userBackground)
+    {
+        [aCoder encodeObject:self.backgroundColor forKey:@"backgroundColor"];
+    }
+    
 }
 
 -(id) initWithCoder:(NSCoder *)aDecoder
@@ -92,10 +98,24 @@ static NSArray *_sourceTypes = nil;
         [self commonInit];
         
         
+        _userBackground = [aDecoder decodeBoolForKey:@"userBackground"];
+        if (_userBackground)
+        {
+            self.backgroundColor = [aDecoder decodeObjectForKey:@"backgroundColor"];
+        }
+
         self.videoInput = [aDecoder decodeObjectForKey:@"videoInput"];
 
         self.layer.allowResize = self.videoInput.allowScaling;
-        self.layer.sourceLayer = self.videoInput.outputLayer;
+        if (self.videoInput)
+        {
+            self.layer.sourceLayer = self.videoInput.outputLayer;
+            if (!_userBackground)
+            {
+                self.backgroundColor = nil;
+            }
+        }
+        
         
 
 
@@ -210,8 +230,6 @@ static NSArray *_sourceTypes = nil;
         self.cornerRadius = [aDecoder decodeFloatForKey:@"cornerRadius"];
         self.layoutPosition = self.layer.frame;
 
-        
-        
     }
     
     
@@ -333,6 +351,9 @@ static NSArray *_sourceTypes = nil;
     self.chromaKeySmoothing = 0.1344f;
     
     self.chromaKeyColor = [NSColor greenColor];
+    _userBackground = NO;
+    self.layer.backgroundColor = CGColorCreateGenericRGB(0, 0, 1, 1);
+
     
     
     [self addObserver:self forKeyPath:@"usePrivateSource" options:NSKeyValueObservingOptionNew context:NULL];
@@ -363,6 +384,35 @@ static NSArray *_sourceTypes = nil;
 {
     self.layer.zPosition = depth;
 }
+
+-(void)clearBackground
+{
+    self.backgroundColor = nil;
+}
+
+
+-(void)setBackgroundColor:(NSColor *)backgroundColor
+{
+    if (backgroundColor)
+    {
+        _userBackground = YES;
+        self.layer.backgroundColor = [backgroundColor CGColor];
+    } else {
+        _userBackground = NO;
+        self.layer.backgroundColor = NULL;
+    }
+}
+
+-(NSColor *)backgroundColor
+{
+    if (self.layer.backgroundColor)
+    {
+        return [NSColor colorWithCGColor:self.layer.backgroundColor];
+    } else {
+        return nil;
+    }
+}
+
 
 -(void)setBorderColor:(NSColor *)borderColor
 {
@@ -701,6 +751,11 @@ static NSArray *_sourceTypes = nil;
     
         //dispatch_async(dispatch_get_main_queue(), ^{
         [CSCaptureBase layoutModification:^{
+            if (!_userBackground)
+            {
+                self.backgroundColor = nil;
+                _userBackground = NO;
+            }
             self.layer.allowResize = self.videoInput.allowScaling;
 
             self.layer.sourceLayer = self.videoInput.outputLayer;

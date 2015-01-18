@@ -39,7 +39,6 @@
         _sourceLayer.frame = CGRectMake(0, 0, 1, 1);
         _scrollAnimation = [CABasicAnimation animation];
         _scrollAnimation.repeatCount = HUGE_VALF;
-        self.backgroundColor = CGColorCreateGenericRGB(0, 0, 1, 1);
         self.zPosition = 0;
         
         [CSCaptureBase layoutModification:^{
@@ -246,7 +245,6 @@
 -(void)setSourceLayer:(CALayer *)sourceLayer
 {
     
-    self.backgroundColor = NULL;
 
     [self copySourceSettings:sourceLayer];
     

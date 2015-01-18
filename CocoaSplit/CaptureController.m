@@ -1059,6 +1059,11 @@
 
 -(void) loadSettings
 {
+    
+    //all color panels allow opacity
+    [NSColorPanel sharedColorPanel].showsAlpha = YES;
+    [NSColor setIgnoresAlpha:NO];
+    
     NSString *path = [self saveFilePath];
     NSDictionary *defaultValues = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Defaults" ofType:@"plist"]];
     
