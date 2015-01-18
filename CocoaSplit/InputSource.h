@@ -141,6 +141,7 @@ typedef enum resize_style_t {
 
 @property (strong) NSColor *borderColor;
 @property (assign) CGFloat borderWidth;
+@property (assign) CGFloat cornerRadius;
 
 
 -(void) updateOrigin:(CGFloat)x y:(CGFloat)y;

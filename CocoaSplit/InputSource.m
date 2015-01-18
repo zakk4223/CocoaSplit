@@ -82,6 +82,7 @@ static NSArray *_sourceTypes = nil;
     [aCoder encodeFloat:self.layer.bounds.size.height forKey:@"frame_height"];
     [aCoder encodeFloat:self.borderWidth forKey:@"borderWidth"];
     [aCoder encodeObject:self.borderColor forKey:@"borderColor"];
+    [aCoder encodeFloat:self.cornerRadius forKey:@"cornerRadius"];
 }
 
 -(id) initWithCoder:(NSCoder *)aDecoder
@@ -206,6 +207,7 @@ static NSArray *_sourceTypes = nil;
 
         self.borderWidth = [aDecoder decodeFloatForKey:@"borderWidth"];
         self.borderColor = [aDecoder decodeObjectForKey:@"borderColor"];
+        self.cornerRadius = [aDecoder decodeFloatForKey:@"cornerRadius"];
         self.layoutPosition = self.layer.frame;
 
         
@@ -370,6 +372,16 @@ static NSArray *_sourceTypes = nil;
 -(NSColor *)borderColor
 {
     return [NSColor colorWithCGColor:self.layer.borderColor];
+}
+
+-(void)setCornerRadius:(CGFloat)cornerRadius
+{
+    self.layer.cornerRadius = cornerRadius;
+}
+
+-(CGFloat)cornerRadius
+{
+    return self.layer.cornerRadius;
 }
 
 
