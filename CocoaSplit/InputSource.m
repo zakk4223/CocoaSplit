@@ -320,8 +320,12 @@ static NSArray *_sourceTypes = nil;
     cFilter.name = @"Chromakey";
     cFilter.enabled = NO;
     
+    CIFilter *cropFilter = [CIFilter filterWithName:@"CICrop"];
+    [cropFilter setDefaults];
+    cropFilter.name = @"CropFilter";
+    cropFilter.enabled = NO;
     
-    self.layer.sourceLayer.filters = @[cFilter];
+    self.layer.sourceLayer.filters = @[cropFilter, cFilter];
     
     
     _multiTransition = [[CATransition alloc] init];
@@ -625,13 +629,19 @@ static NSArray *_sourceTypes = nil;
     _rotationAngle = rotationAngle;
     
     CATransform3D transform = CATransform3DMakeRotation(self.rotationAngle * M_PI / 180.0, 0.0, 0.0, 1);
+    /*
     [CSCaptureBase layoutModification:^{
         [CATransaction begin];
         [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
         self.layer.transform = transform;
         [CATransaction commit];
         
-    }];
+    }];*/
+    
+    self.layer.disableAnimation = YES;
+    self.layer.transform = transform;
+    self.layer.disableAnimation = NO;
+    
 }
 
 -(float)rotationAngle
@@ -650,11 +660,10 @@ static NSArray *_sourceTypes = nil;
     
     [CSCaptureBase layoutModification:^{
         [CATransaction begin];
-        self.layer.sourceLayer.contentsRect = contentsRect;
+        self.layer.cropRect = contentsRect;
         [CATransaction commit];
         
     }];
-    
 }
 
 
@@ -837,7 +846,6 @@ static NSArray *_sourceTypes = nil;
     
     if (self.layer)
     {
-        
         if (self.resizeType & kResizeFree)
         {
             self.layer.sourceLayer.contentsGravity = kCAGravityResize;

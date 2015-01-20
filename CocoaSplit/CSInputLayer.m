@@ -16,7 +16,7 @@
 @synthesize allowResize = _allowResize;
 @synthesize scrollXSpeed = _scrollXSpeed;
 @synthesize scrollYSpeed = _scrollYSpeed;
-
+@synthesize cropRect = _cropRect;
 
 
 -(instancetype)init
@@ -26,14 +26,16 @@
         
         self.minificationFilter = kCAFilterTrilinear;
         self.magnificationFilter = kCAFilterTrilinear;
+        self.disableAnimation = NO;
         _xLayer = [CAReplicatorLayer layer];
         _yLayer = [CAReplicatorLayer layer];
         _xLayer.instanceCount = 1;
         _yLayer.instanceCount = 1;
+        _cropRect = CGRectZero;
         
         _allowResize = YES;
         _sourceLayer = [CALayer layer];
-        _sourceLayer.anchorPoint = CGPointMake(0.0, 0.0);
+        //_sourceLayer.anchorPoint = CGPointMake(0.0, 0.0);
         //_sourceLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
         _sourceLayer.contentsGravity = kCAGravityResizeAspect;
         _sourceLayer.frame = CGRectMake(0, 0, 1, 1);
@@ -196,6 +198,7 @@
     toLayer.contentsGravity = _sourceLayer.contentsGravity;
     toLayer.contentsRect = _sourceLayer.contentsRect;
     toLayer.autoresizingMask = _sourceLayer.autoresizingMask;
+    toLayer.masksToBounds = YES;
     if (self.allowResize)
     {
         toLayer.frame = CGRectMake(0.0, 0.0, self.frame.size.width, self.frame.size.height);
@@ -256,6 +259,57 @@
     [self setupYAnimation:_scrollYSpeed];
 }
 
+-(void)calculateCropTransform
+{
+    
+    if (CGRectIsEmpty(_cropRect))
+    {
+        self.transform = CATransform3DIdentity;
+        return;
+    }
+    //cropRect is like contentsRect, i.e 0.0 -> 1.0
+
+    CGRect currentBounds = self.bounds;
+    CGRect newBounds;
+    CATransform3D newTransform = CATransform3DIdentity;
+    
+    newBounds.origin.x = currentBounds.size.width * _cropRect.origin.x;
+    newBounds.origin.y = currentBounds.size.height * _cropRect.origin.y;
+    newBounds.size.width = currentBounds.size.width * _cropRect.size.width;
+    newBounds.size.height = currentBounds.size.height * _cropRect.size.height;
+    CGFloat nmidX, nmidY, omidX, omidY;
+    
+    omidX = CGRectGetMidX(currentBounds);
+    omidY = CGRectGetMidY(currentBounds);
+    nmidX = CGRectGetMidX(newBounds);
+    nmidY = CGRectGetMidY(newBounds);
+    
+    CGFloat scaleX, scaleY;
+    scaleX = currentBounds.size.width / newBounds.size.width;
+    scaleY = currentBounds.size.height / newBounds.size.height;
+    
+    CGFloat useScale = scaleX > scaleY ? scaleX : scaleY;
+    
+    newTransform = CATransform3DTranslate(newTransform, ((omidX-nmidX)*scaleX), ((omidY-nmidY)*scaleY), 0);
+
+    newTransform = CATransform3DScale(newTransform, useScale, useScale, 1);
+
+    self.sourceLayer.transform = newTransform;
+}
+
+
+-(void)setCropRect:(CGRect)cropRect
+{
+    _cropRect = cropRect;
+    [self calculateCropTransform];
+}
+
+-(CGRect)cropRect
+{
+    return _cropRect;
+}
+
+
 -(void)setFrame:(CGRect)frame
 {
     
@@ -270,8 +324,6 @@
 
 -(void)resizeSourceLayer:(CGRect)newFrame oldFrame:(CGRect)oldFrame
 {
-    
-
     
     if (self.allowResize)
     {
@@ -293,6 +345,8 @@
         
     }
 
+    [self calculateCropTransform];
+    
     if (_scrollXSpeed)
     {
         float baseval = newFrame.size.width > self.sourceLayer.bounds.size.width ? newFrame.size.width : self.sourceLayer.bounds.size.width;
@@ -320,6 +374,18 @@
     }
 
 }
+
+
+- (id<CAAction>)actionForKey:(NSString *)key
+{
+    if (self.disableAnimation)
+    {
+        return nil;
+    }
+    
+    return [super actionForKey:key];
+}
+
 
 -(BOOL)containsPoint:(CGPoint)p
 {

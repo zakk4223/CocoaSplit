@@ -23,6 +23,8 @@
 @property (assign) float scrollXSpeed;
 @property (assign) float scrollYSpeed;
 @property (strong) CAReplicatorLayer *xLayer;
+@property (assign) bool disableAnimation;
+@property (assign) CGRect cropRect;
 
 
 -(void)setSourceLayer:(CALayer *)sourceLayer withTransition:(CATransition *)transition;
