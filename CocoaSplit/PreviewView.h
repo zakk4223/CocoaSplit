@@ -7,6 +7,7 @@
 //
 #import <Foundation/Foundation.h>
 #import <VideoToolbox/VideoToolbox.h>
+
 #import "CaptureController.h"
 #import "InputSource.h"
 
@@ -67,6 +68,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     bool _in_resize_rect;
     
     
+    
     CVDisplayLinkRef displayLink;
     
     int _num_planes;
@@ -101,6 +103,8 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 -(void)spawnInputSettings:(InputSource *)forInput atRect:(NSRect)atRect;
 -(void)stopDisplayLink;
 -(void)restartDisplayLink;
+-(void) cvrender;
+
 
 
 

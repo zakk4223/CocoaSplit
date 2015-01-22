@@ -634,6 +634,32 @@
 
 
 
+static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStamp* now, const CVTimeStamp* outputTime,
+                                  CVOptionFlags flagsIn, CVOptionFlags* flagsOut, void* displayLinkContext)
+{
+    
+    
+    
+    CaptureController *myself;
+    
+    myself = (__bridge CaptureController *)displayLinkContext;
+    
+   
+    if (!myself.stagingPreviewView.hiddenOrHasHiddenAncestor)
+    {
+        [myself.stagingPreviewView cvrender];
+    }
+    
+    if (!myself.livePreviewView.hiddenOrHasHiddenAncestor)
+    {
+        [myself.livePreviewView cvrender];
+    }
+    
+    
+    
+    return kCVReturnSuccess;
+}
+
 
 -(id) init
 {
@@ -753,12 +779,20 @@
        
        self.extraPlugins = [NSMutableDictionary dictionary];
        
+       CVDisplayLinkCreateWithActiveCGDisplays(&_displayLink);
+       CVDisplayLinkSetOutputCallback(_displayLink, &displayLinkRender, (__bridge void *)self);
+       
+       CVDisplayLinkStart(_displayLink);
+
+       
        
    }
     
     return self;
     
 }
+
+
 
 
 -(void) buildExtrasMenu

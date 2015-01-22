@@ -1054,12 +1054,6 @@
     
     
     _cictx = [CIContext contextWithCGLContext:[self.openGLContext CGLContextObj] pixelFormat:CGLGetPixelFormat([self.openGLContext CGLContextObj]) colorSpace:CGColorSpaceCreateDeviceRGB() options:nil];
-    CVDisplayLinkCreateWithActiveCGDisplays(&displayLink);
-   CVDisplayLinkSetOutputCallback(displayLink, &displayLinkRender, (__bridge void *)self);
-    
-    CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(displayLink, [[self openGLContext] CGLContextObj], [[self pixelFormat] CGLPixelFormatObj]);
-    CVDisplayLinkStart(displayLink);
-    
     int opts = (NSTrackingActiveAlways | NSTrackingInVisibleRect | NSTrackingMouseMoved | NSTrackingMouseEnteredAndExited);
     _trackingArea = [[NSTrackingArea alloc] initWithRect:[self bounds]
                                                  options:opts

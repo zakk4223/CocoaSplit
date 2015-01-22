@@ -46,6 +46,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     CIFilter *_compositeFilter;
     CIImage *_backgroundImage;
     
+    CVDisplayLinkRef _displayLink;
+    
 
     
     id _audio_capture_session;
@@ -169,7 +171,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 @property (readonly) NSArray *layoutSortDescriptors;
 
-
+@property (weak) IBOutlet PreviewView *stagingPreviewView;
+@property (weak) IBOutlet PreviewView *livePreviewView;
 
 
 - (IBAction)stagingViewToggle:(id)sender;
