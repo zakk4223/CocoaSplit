@@ -19,10 +19,24 @@
 @synthesize cropRect = _cropRect;
 
 
+-(void)layoutyySublayers
+{
+    if (self.allowResize)
+    {
+        [CATransaction begin];
+        [CATransaction setDisableActions:YES];
+        _sourceLayer.bounds = self.bounds;
+        [CATransaction commit];
+    }
+}
+
+
 -(instancetype)init
 {
     if (self = [super init])
     {
+        
+        self.needsDisplayOnBoundsChange = YES;
         
         self.minificationFilter = kCAFilterTrilinear;
         self.magnificationFilter = kCAFilterTrilinear;
@@ -35,8 +49,11 @@
         
         _allowResize = YES;
         _sourceLayer = [CALayer layer];
-        //_sourceLayer.anchorPoint = CGPointMake(0.0, 0.0);
+        _sourceLayer.anchorPoint = CGPointMake(0.0, 0.0);
         //_sourceLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
+        //_xLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
+        //_yLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
+
         _sourceLayer.contentsGravity = kCAGravityResizeAspect;
         _sourceLayer.frame = CGRectMake(0, 0, 1, 1);
         _scrollAnimation = [CABasicAnimation animation];
@@ -186,6 +203,8 @@
 }
 
 
+
+
 -(CALayer *)sourceLayer
 {
     return _sourceLayer;
@@ -193,12 +212,12 @@
 
 -(void)copySourceSettings:(CALayer *)toLayer
 {
-    toLayer.anchorPoint = _sourceLayer.anchorPoint;//CGPointMake(0.0, 0.0);
+    toLayer.anchorPoint = _sourceLayer.anchorPoint;
     toLayer.filters = _sourceLayer.filters;
     toLayer.contentsGravity = _sourceLayer.contentsGravity;
     toLayer.contentsRect = _sourceLayer.contentsRect;
     toLayer.autoresizingMask = _sourceLayer.autoresizingMask;
-    toLayer.masksToBounds = YES;
+    toLayer.bounds = _sourceLayer.bounds;
     if (self.allowResize)
     {
         toLayer.frame = CGRectMake(0.0, 0.0, self.frame.size.width, self.frame.size.height);
@@ -262,14 +281,17 @@
 -(void)calculateCropTransform
 {
     
+    
     if (CGRectIsEmpty(_cropRect))
     {
-        self.transform = CATransform3DIdentity;
+        self.sourceLayer.transform = CATransform3DIdentity;
         return;
     }
+    
     //cropRect is like contentsRect, i.e 0.0 -> 1.0
 
-    CGRect currentBounds = self.bounds;
+    
+    CGRect currentBounds = self.sourceLayer.bounds;
     CGRect newBounds;
     CATransform3D newTransform = CATransform3DIdentity;
     
@@ -279,10 +301,10 @@
     newBounds.size.height = currentBounds.size.height * _cropRect.size.height;
     CGFloat nmidX, nmidY, omidX, omidY;
     
-    omidX = CGRectGetMidX(currentBounds);
-    omidY = CGRectGetMidY(currentBounds);
-    nmidX = CGRectGetMidX(newBounds);
-    nmidY = CGRectGetMidY(newBounds);
+    omidX = CGRectGetMinX(currentBounds);
+    omidY = CGRectGetMinY(currentBounds);
+    nmidX = CGRectGetMinX(newBounds);
+    nmidY = CGRectGetMinY(newBounds);
     
     CGFloat scaleX, scaleY;
     scaleX = currentBounds.size.width / newBounds.size.width;
@@ -290,7 +312,9 @@
     
     CGFloat useScale = scaleX > scaleY ? scaleX : scaleY;
     
-    newTransform = CATransform3DTranslate(newTransform, ((omidX-nmidX)*scaleX), ((omidY-nmidY)*scaleY), 0);
+    NSLog(@"X ADJUST %f", (omidX-nmidX)*scaleX);
+    
+    newTransform = CATransform3DTranslate(newTransform, (omidX-nmidX)*scaleX, ((omidY-nmidY)*scaleY), 0);
 
     newTransform = CATransform3DScale(newTransform, useScale, useScale, 1);
 
@@ -300,13 +324,17 @@
 
 -(void)setCropRect:(CGRect)cropRect
 {
+    /*
     _cropRect = cropRect;
     [self calculateCropTransform];
+     */
+    self.sourceLayer.contentsRect = cropRect;
 }
+
 
 -(CGRect)cropRect
 {
-    return _cropRect;
+    return self.sourceLayer.contentsRect;
 }
 
 
@@ -314,9 +342,8 @@
 {
     
     CGRect oldFrame = self.frame;
-    
-    [self resizeSourceLayer:frame oldFrame:oldFrame];
     [super setFrame:frame];
+    [self resizeSourceLayer:frame oldFrame:oldFrame];
     
 }
 
@@ -324,14 +351,16 @@
 
 -(void)resizeSourceLayer:(CGRect)newFrame oldFrame:(CGRect)oldFrame
 {
-    
     if (self.allowResize)
     {
+        _sourceLayer.bounds = self.bounds;
+        
+        /*
         if (CGSizeEqualToSize(_sourceLayer.frame.size, CGSizeZero) || CGSizeEqualToSize(oldFrame.size, CGSizeZero))
         {
-            _sourceLayer.frame = newFrame;
+            _sourceLayer.bounds = self.bounds;
         } else if (!CGSizeEqualToSize(oldFrame.size, newFrame.size)) {
-            CGRect oldSourceFrame = _sourceLayer.frame;
+            CGRect oldSourceFrame = _sourceLayer.bounds;
             CGFloat scaleFactorX = oldSourceFrame.size.width / oldFrame.size.width;
             CGFloat scaleFactorY = oldSourceFrame.size.height / oldFrame.size.height;
             
@@ -340,9 +369,9 @@
             newSourceFrame.size.height = newFrame.size.height * scaleFactorY;
             newSourceFrame.origin.x = (oldSourceFrame.origin.x / oldSourceFrame.size.width) * newSourceFrame.size.width;
             newSourceFrame.origin.y = (oldSourceFrame.origin.y / oldSourceFrame.size.height) * newSourceFrame.size.height;            
-            _sourceLayer.frame = newSourceFrame;
+            _sourceLayer.bounds = newSourceFrame;
         }
-        
+         */
     }
 
     [self calculateCropTransform];

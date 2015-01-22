@@ -11,11 +11,90 @@
 #import <OpenGL/OpenGL.h>
 #import <OpenGL/glu.h>
 
+@interface CIImageWrapper : NSObject
+{
+    IOSurfaceRef _csIOSurfacePriv;
+    CVImageBufferRef _csPixelBufferPriv;
+}
+
+@property (strong) CIImage *ciImage;
+
+@end
+
+@implementation CIImageWrapper
+
+
+
+-(instancetype)init
+{
+    self = [super init];
+    return self;
+}
+
+
+-(instancetype)initWithCVImageBuffer:(CVImageBufferRef)imageBuffer
+{
+    
+    /*
+     This method in CIImage fails for non RGB image buffers, even if they are IOSurface backed with surfaces that work fine with initWithIOSurface.
+     So let's just retain the image buffer, use initWithIOSurface ourselves. Release the image buffer in dealloc.
+     */
+    
+    if (self = [super init])
+    {
+        IOSurfaceRef imageSurface = CVPixelBufferGetIOSurface(imageBuffer);
+        if (imageSurface)
+        {
+            CVPixelBufferRetain(imageBuffer);
+            _csPixelBufferPriv = imageBuffer;
+            _ciImage = [CIImage imageWithIOSurface:imageSurface];
+        } else {
+            _csPixelBufferPriv = NULL;
+            _ciImage = nil;
+        }
+    }
+    
+    return self;
+}
+-(instancetype)initWithIOSurface:(IOSurfaceRef)surface
+{
+    //CIImage retains the iosurface, we're just here to mess with the use count.
+    if (self = [super init])
+    {
+        IOSurfaceIncrementUseCount(surface);
+        _csIOSurfacePriv = surface;
+        _ciImage = [CIImage imageWithIOSurface:surface];
+    }
+    return self;
+}
+
+-(void)dealloc
+{
+    if (_csIOSurfacePriv)
+    {
+        IOSurfaceDecrementUseCount(_csIOSurfacePriv);
+    }
+    
+    if (_csPixelBufferPriv)
+    {
+        CVPixelBufferRelease(_csPixelBufferPriv);
+    }
+}
+
+@end
+
+
+@interface CSIOSurfaceLayer()
+
+@property (strong) CIImageWrapper *imageWrapper;
+@end
+
+
 @implementation CSIOSurfaceLayer
 
 @synthesize ioSurface = _ioSurface;
 @synthesize ioImage = _ioImage;
-
+@synthesize imageBuffer = _imageBuffer;
 
 -(instancetype)init
 {
@@ -24,21 +103,83 @@
         self.asynchronous = YES;
         self.needsDisplayOnBoundsChange = YES;
         self.flipImage = NO;
+        _lastSurfaceSize = NSMakeRect(0, 0, 0, 0);
+        _privateCropRect = CGRectMake(0.0, 0.0, 1.0, 1.0);
+        
     }
     
     return self;
 }
 
+-(void)setImageBuffer:(CVImageBufferRef)imageBuffer
+{
+    @synchronized(self)
+    {
+        self.imageWrapper = [[CIImageWrapper alloc] initWithCVImageBuffer:imageBuffer];
+    }
+ 
+    //imageWrapper retains imageBuffer
+    _imageBuffer = imageBuffer;
+}
+
+-(CVImageBufferRef)imageBuffer
+{
+    return _imageBuffer;
+}
+
+
+-(void)calculateCrop:(NSRect)extent;
+{
+    CGRect newCrop;
+    
+    newCrop.origin.x = extent.size.width * _privateCropRect.origin.x;
+    newCrop.origin.y = extent.size.height * _privateCropRect.origin.y;
+    newCrop.size.width = extent.size.width * _privateCropRect.size.width;
+    newCrop.size.height = extent.size.height * _privateCropRect.size.height;
+    _lastSurfaceSize = extent;
+    _calculatedCrop = newCrop;
+}
+
+
+//We handle this by cropping the source image, and never pass it on to the parent
+-(void)setContentsRect:(CGRect)contentsRect
+{
+    _privateCropRect = contentsRect;
+    if (self.imageWrapper && self.imageWrapper.ciImage)
+    {
+        [self calculateCrop:self.imageWrapper.ciImage.extent];
+    }
+}
+
+-(CGRect)contentsRect
+{
+    return _privateCropRect;
+}
+
+
 
 -(void)setIoSurface:(IOSurfaceRef)ioSurface
 {
 
-    _ioSurface = ioSurface;
+    
+    //IOSurfaceIncrementUseCount(ioSurface);
     @synchronized(self)
     {
-        _ioImage = [CIImage imageWithIOSurface:ioSurface];
+        self.imageWrapper = [[CIImageWrapper alloc] initWithIOSurface:ioSurface];
     }
+    
+
+    /*
+    if (_ioSurface)
+    {
+        IOSurfaceDecrementUseCount(_ioSurface);
+    }
+     */
+    _ioSurface = ioSurface;
+
+    
 }
+
 
 -(IOSurfaceRef)ioSurface
 {
@@ -49,25 +190,48 @@
 -(void) drawInCGLContext:(CGLContextObj)ctx pixelFormat:(CGLPixelFormatObj)pf forLayerTime:(CFTimeInterval)t displayTime:(const CVTimeStamp *)ts
 {
     
+    CIImageWrapper *wrappedImage = self.imageWrapper;
+    
+    CIImage *useImage;
+    @synchronized(self)
+    {
+
+
+        useImage = wrappedImage.ciImage;
+        //IOSurfaceIncrementUseCount(cImg);
+        
+
+    }
+    
+    if (!_ciCtx || !useImage)
+    {
+        return;
+    }
+
+    CGRect useBounds = self.bounds;
     CGLSetCurrentContext(ctx);
     glClearColor(0,0,0,0);
     glClear(GL_COLOR_BUFFER_BIT);
 
-
-    if (!_ciCtx || !_ioImage)
-    {
-        return;
-    }
+    CIImage *croppedImage;
     
+    
+    if (!NSEqualRects(useImage.extent, _lastSurfaceSize))
+    {
+        [self calculateCrop:useImage.extent];
+    }
+
+    
+    croppedImage = [useImage imageByCroppingToRect:_calculatedCrop];
 
     
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     if (self.flipImage)
     {
-        glOrtho(0, self.bounds.size.width,self.bounds.size.height,0,  -1, 1);
+        glOrtho(0, useBounds.size.width,useBounds.size.height,0,  -1, 1);
     } else {
-        glOrtho(0, self.bounds.size.width,0, self.bounds.size.height,  -1, 1);
+        glOrtho(0, useBounds.size.width,0, useBounds.size.height,  -1, 1);
     }
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -77,31 +241,33 @@
     //so all I'm doing here is Resize and ResizeAspect.
     
     //This covers kCAGravityResize
-    NSRect inRect = self.bounds;
+    NSRect inRect = useBounds;
     
     
     if ([self.contentsGravity isEqualToString:kCAGravityResizeAspect])
     {
         
-        float wr = self.bounds.size.width / _ioImage.extent.size.width;
-        float hr = self.bounds.size.height / _ioImage.extent.size.height;
+        float wr = useBounds.size.width / croppedImage.extent.size.width;
+        float hr = useBounds.size.height / croppedImage.extent.size.height;
         
         float ratio = (hr < wr ? hr : wr);
         
-        NSSize scaledSize = NSMakeSize(_ioImage.extent.size.width * ratio, _ioImage.extent.size.height * ratio);
+        NSSize scaledSize = NSMakeSize(croppedImage.extent.size.width * ratio, croppedImage.extent.size.height * ratio);
         
-        CGFloat originX = self.bounds.size.width/2 - scaledSize.width/2;
-        CGFloat originY = self.bounds.size.height/2 - scaledSize.height/2;
+        CGFloat originX = useBounds.size.width/2 - scaledSize.width/2;
+        CGFloat originY = useBounds.size.height/2 - scaledSize.height/2;
         
         inRect = NSMakeRect(originX, originY, scaledSize.width, scaledSize.height);
     }
     
-    @synchronized(self)
-    {
-        [_ciCtx drawImage:_ioImage inRect:inRect fromRect:_ioImage.extent];
-    }
+    [_ciCtx drawImage:croppedImage inRect:inRect fromRect:croppedImage.extent];
+
+
     
     [super drawInCGLContext:ctx pixelFormat:pf forLayerTime:t displayTime:ts];
+    //IOSurfaceDecrementUseCount(cImg);
+    
+
     
 }
 
@@ -115,7 +281,6 @@
     _ciCtx = [CIContext contextWithCGLContext:contextObj pixelFormat:pf colorSpace:nil options:@{kCIContextWorkingColorSpace: [NSNull null]}];
     return contextObj;
 }
-
 
 
 @end

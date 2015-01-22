@@ -148,6 +148,7 @@
              CIImage *newImage = [[CIImage alloc] initWithIOSurface:newSurface plane:0 format:kCIFormatARGB8 options:nil];
              _surfaceSeed = newSeed;
                  ((CSIOSurfaceLayer *)self.outputLayer).ioImage = newImage;
+             CFRelease(newSurface);
           } else {
              CFRelease(newSurface);
          }

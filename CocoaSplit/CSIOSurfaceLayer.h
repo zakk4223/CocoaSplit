@@ -11,10 +11,15 @@
 @interface CSIOSurfaceLayer : CAOpenGLLayer
 {
     CIContext *_ciCtx;
+    CGRect _privateCropRect;
+    CGRect _calculatedCrop;
+    NSRect _lastSurfaceSize;
 }
 
 @property (assign) IOSurfaceRef ioSurface;
-@property (strong) CIImage *ioImage;
+@property (atomic, strong) CIImage *ioImage;
+@property (assign) CVImageBufferRef imageBuffer;
 @property (assign) BOOL flipImage;
-
+@property (weak) id frameSourceDelegate;
 @end
+

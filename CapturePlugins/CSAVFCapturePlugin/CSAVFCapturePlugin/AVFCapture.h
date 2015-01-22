@@ -12,7 +12,7 @@
 #import "CSCaptureBase.h"
 #import "CSPcmPlayer.h"
 #import "CSPluginServices.h"
-
+#import "CSIOSurfaceLayer.h"
 
 
 

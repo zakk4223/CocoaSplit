@@ -242,7 +242,7 @@ static NSArray *_sourceTypes = nil;
 {
     forInput.inputSource = self;
     forInput.isLive = self.is_live;
-    //[forInput addObserver:self forKeyPath:@"activeVideoDevice.uniqueID" options:NSKeyValueObservingOptionNew context:nil];
+    [forInput addObserver:self forKeyPath:@"activeVideoDevice.uniqueID" options:NSKeyValueObservingOptionNew context:nil];
 }
 
 -(void)deregisterVideoInput:(NSObject<CSCaptureSourceProtocol> *)forInput
@@ -254,7 +254,7 @@ static NSArray *_sourceTypes = nil;
     
     forInput.isLive = NO;
     
-    //[forInput removeObserver:self forKeyPath:@"activeVideoDevice.uniqueID"];
+    [forInput removeObserver:self forKeyPath:@"activeVideoDevice.uniqueID"];
 }
 
 
@@ -294,7 +294,7 @@ static NSArray *_sourceTypes = nil;
     
     self.transitionFilterName = @"fade";
     self.currentEffects = [[NSMutableArray alloc] init];
-    self.usePrivateSource = YES;
+    self.usePrivateSource = NO;
     
     self.unlock_aspect = NO;
     self.resizeType = kResizeNone;
@@ -324,6 +324,7 @@ static NSArray *_sourceTypes = nil;
     [cropFilter setDefaults];
     cropFilter.name = @"CropFilter";
     cropFilter.enabled = NO;
+    
     
     self.layer.sourceLayer.filters = @[cropFilter, cFilter];
     
@@ -767,7 +768,14 @@ static NSArray *_sourceTypes = nil;
             }
             self.layer.allowResize = self.videoInput.allowScaling;
 
-            self.layer.sourceLayer = self.videoInput.outputLayer;
+            if (self.videoInput.outputLayer.superlayer)
+            {
+                CALayer *newLayer = [CALayer layer];
+                newLayer.contents = self.videoInput.outputLayer.contents;
+                self.layer.sourceLayer = newLayer;
+            } else {
+                self.layer.sourceLayer = self.videoInput.outputLayer;
+            }
             
 
         }];
@@ -843,7 +851,8 @@ static NSArray *_sourceTypes = nil;
     delta_w = width - oldLayout.size.width;
     delta_h = height - oldLayout.size.height;
     
-    
+    bool oldResize = self.layer.allowResize;
+    bool tmpResize = oldResize;
     if (self.layer)
     {
         if (self.resizeType & kResizeFree)
@@ -851,6 +860,11 @@ static NSArray *_sourceTypes = nil;
             self.layer.sourceLayer.contentsGravity = kCAGravityResize;
         } else {
             self.layer.sourceLayer.contentsGravity = kCAGravityResizeAspect;
+        }
+        
+        if (self.resizeType & kResizeCrop)
+        {
+            tmpResize = NO;
         }
         
         if (self.resizeType & kResizeCenter)
@@ -876,11 +890,14 @@ static NSArray *_sourceTypes = nil;
         [CSCaptureBase layoutModification:^{
             [CATransaction begin];
             [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
-            
+            self.layer.allowResize = tmpResize;
             self.layer.frame = newLayout;
+            self.layer.allowResize = oldResize;
+            
             [CATransaction commit];
 
         }];
+        
 
     }
 }
@@ -1047,7 +1064,8 @@ static NSArray *_sourceTypes = nil;
 {
     
     
-    /*
+    return;
+    
     if (self.usePrivateSource)
     {
         return;
@@ -1070,20 +1088,18 @@ static NSArray *_sourceTypes = nil;
     
     
     [self deregisterVideoInput:self.videoInput];
+    
     self.videoInput = newInput;
     [self registerVideoInput:self.videoInput];
-    */
     
 }
 
 
 -(void) makeSourcePrivate
 {
-    /*
     [self deregisterVideoInput:self.videoInput];
     self.videoInput = self.videoInput.copy;
     [self registerVideoInput:self.videoInput];
-     */
     
 }
 

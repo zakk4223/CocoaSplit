@@ -448,7 +448,7 @@
          
         
         
-       // [videoSettings setValue:@(kCVPixelFormatType_32BGRA) forKey:(__bridge NSString *)kCVPixelBufferPixelFormatTypeKey];
+        //[videoSettings setValue:@(kCVPixelFormatType_32BGRA) forKey:(__bridge NSString *)kCVPixelBufferPixelFormatTypeKey];
         
         //[videoSettings setValue:@[@(kCVPixelFormatType_422YpCbCr8), @(kCVPixelFormatType_422YpCbCr8FullRange), @(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange), @(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange), ] forKey:(NSString *)kCVPixelBufferPixelFormatTypeKey];
         NSDictionary *ioAttrs = [NSDictionary dictionaryWithObject: [NSNumber numberWithBool: NO]
@@ -460,7 +460,8 @@
  
         _video_capture_output = [[AVCaptureVideoDataOutput alloc] init];
         
-        AVCaptureVideoPreviewLayer *avlayer = [AVCaptureVideoPreviewLayer layerWithSession:_capture_session];
+        //AVCaptureVideoPreviewLayer *avlayer = [AVCaptureVideoPreviewLayer layerWithSession:_capture_session];
+        CSIOSurfaceLayer *avlayer = [CSIOSurfaceLayer layer];
         
         self.outputLayer = avlayer;
         if ([_capture_session canAddOutput:_video_capture_output])
@@ -479,27 +480,6 @@
 
 
 
-- (CVImageBufferRef) getCurrentFrame
-{
-    
-    CVImageBufferRef newbuf = NULL;
-    
-    
-    @synchronized(self)
-    {
-        if (_currentFrame)
-        {
-            CVPixelBufferRetain(_currentFrame);
-            return _currentFrame;
-            
-        }
-        
-    }
-    
-    return newbuf;
-    
-
-}
 
 
 
@@ -519,16 +499,20 @@
     if (connection.output == _video_capture_output)
     {
         
-              
         CVImageBufferRef videoFrame = CMSampleBufferGetImageBuffer(sampleBuffer);
         
 
         if (videoFrame)
         {
         
-        
-            CVPixelBufferRetain(videoFrame);
 
+            
+            ((CSIOSurfaceLayer *)self.outputLayer).imageBuffer = videoFrame;
+
+
+            
+
+            /*
             @synchronized(self) {
                 if (_currentFrame)
                 {
@@ -538,6 +522,8 @@
                 _currentFrame = videoFrame;
             
             }
+             */
+            
         }
     } else if (connection.output == _audio_capture_output) {
         if (self.isLive && !_pcmPlayer)

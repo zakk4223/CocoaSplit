@@ -113,6 +113,30 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 }
 
 
+-(void)frameTick
+{
+    CFTimeInterval currentTime = CACurrentMediaTime();
+    CVPixelBufferRef newFrame = NULL;
+    CMTime outputItemTime = [self.avOutput itemTimeForHostTime:currentTime];
+    if ([self.avOutput hasNewPixelBufferForItemTime:outputItemTime])
+    {
+        
+        newFrame = [self.avOutput copyPixelBufferForItemTime:outputItemTime itemTimeForDisplay:nil];
+        if (newFrame)
+        {
+            
+            
+            //outputlayer retains the pixel buffer until no longer needed
+            ((CSIOSurfaceLayer *)self.outputLayer).imageBuffer = newFrame;
+            CVPixelBufferRelease(newFrame);
+        }
+    }
+    
+    
+}
+
+
+
 -(void)copyAudioBufferList:(AudioBufferList *)bufferList
 {
     [_bufferPCM copyFromAudioBufferList:bufferList];
@@ -216,7 +240,7 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     [self.avPlayer pause];
     NSMutableDictionary *videoSettings = [[NSMutableDictionary alloc] init];
     
-    [videoSettings setValue:@(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange) forKey:(id)kCVPixelBufferPixelFormatTypeKey];
+    [videoSettings setValue:@(kCVPixelFormatType_32BGRA) forKey:(id)kCVPixelBufferPixelFormatTypeKey];
     
     NSDictionary *ioAttrs = [NSDictionary dictionaryWithObject: [NSNumber numberWithBool: NO]
                                                         forKey: (NSString *)kIOSurfaceIsGlobal];
@@ -230,7 +254,7 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     [self.avPlayer addObserver:self forKeyPath:@"rate" options:NSKeyValueObservingOptionNew context:NULL];
     [self.avPlayer addObserver:self forKeyPath:@"currentItem" options:0 context:NULL];
     self.avPlayer.volume = 0.0;
-    self.outputLayer = [AVPlayerLayer playerLayerWithPlayer:self.avPlayer];
+    self.outputLayer =  [CSIOSurfaceLayer layer];
     
     
     

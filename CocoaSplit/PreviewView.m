@@ -207,8 +207,6 @@
 }
 
 
-
-
 -(SourceLayout *)sourceLayout
 {
     return _sourceLayout;
@@ -216,7 +214,6 @@
 
 -(void) setSourceLayout:(SourceLayout *)sourceLayout
 {
-    
     
     if (!sourceLayout.isActive)
     {
@@ -226,6 +223,7 @@
         sourceLayout.ciCtx =  [CIContext contextWithCGLContext:cgl_ctx pixelFormat:CGLGetPixelFormat(cgl_ctx) colorSpace:nil options:@{kCIContextWorkingColorSpace: [NSNull null]}];
         
     }
+    
     _sourceLayout = sourceLayout;
 }
 
@@ -564,6 +562,11 @@
         {
             self.resizeType |= kResizeFree;
         }
+        
+        if (theEvent.modifierFlags & NSShiftKeyMask)
+        {
+            self.resizeType |= kResizeCrop;
+        }
 
 
     }
@@ -597,7 +600,7 @@
         self.selectedOriginDistance = worldPoint;
         if (self.isResizing)
         {
-            if (theEvent.modifierFlags & NSShiftKeyMask)
+            if (theEvent.modifierFlags & NSShiftKeyMask && 0)
             {
                 //Crop is expressed as a floating point number between 0.0 and 1.0, basically a percentage of that dimension.
                 //Convert appropriately.
@@ -634,6 +637,12 @@
                 } else {
                     self.resizeType &= ~kResizeCenter;
                 }
+                
+                if (theEvent.modifierFlags & NSShiftKeyMask)
+                {
+                    self.resizeType |= kResizeCrop;
+                }
+
                 CGFloat new_width, new_height;
                 
                 NSRect sPosition = self.selectedSource.layoutPosition;
@@ -1001,7 +1010,6 @@
 }
 
 
-
 -(id) initWithFrame:(NSRect)frameRect
 {
     
@@ -1063,7 +1071,6 @@
     return self;
 }
 
-
 -(bool) createPixelBufferPoolForSize:(NSSize) size
 {
     //Without the autorelease NSColor leaks objects
@@ -1114,7 +1121,6 @@
 }
 
 
-
 -(void) cvrender
 {
     
@@ -1141,8 +1147,6 @@
     }
 }
 
-
-
 static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStamp* now, const CVTimeStamp* outputTime,
                                   CVOptionFlags flagsIn, CVOptionFlags* flagsOut, void* displayLinkContext)
 {
@@ -1156,8 +1160,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     [myself cvrender];
     return kCVReturnSuccess;
 }
-
-
 
 - (void) drawPixelBuffer:(CVImageBufferRef)cImageBuf
 {

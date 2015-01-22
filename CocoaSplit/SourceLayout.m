@@ -186,8 +186,9 @@
     } else {
         return object;
     }
-}*/
+}
 
+ */
 -(void)deleteSource:(InputSource *)delSource
 {
     

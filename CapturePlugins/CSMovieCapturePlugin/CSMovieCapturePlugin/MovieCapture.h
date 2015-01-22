@@ -10,6 +10,7 @@
 #import "CSPcmPlayer.h"
 #import "CAMultiAudioPCM.h"
 #import "CSPluginServices.h"
+#import "CSIOSurfaceLayer.h"
 
 #import <AVFoundation/AVFoundation.h>
 
