@@ -1062,9 +1062,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void) deduplicateVideoSource:(NSObject<CSCaptureSourceProtocol> *)source
 {
-    
-    
-    
     if (self.usePrivateSource)
     {
         return;
@@ -1074,9 +1071,6 @@ static NSArray *_sourceTypes = nil;
     {
         return;
     }
-    
-    
-    
     SourceCache *scache = self.layout.sourceCache;
     
     
@@ -1101,7 +1095,7 @@ static NSArray *_sourceTypes = nil;
     [self deregisterVideoInput:self.videoInput];
     self.videoInput = self.videoInput.copy;
     [self registerVideoInput:self.videoInput];
-    
+    _currentLayer = [self.videoInput layerForInput:self];
 }
 
 

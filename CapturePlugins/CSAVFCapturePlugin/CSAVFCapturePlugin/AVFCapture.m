@@ -518,21 +518,6 @@
                 ((CSIOSurfaceLayer *)layer).imageBuffer = videoFrame;
 
             }];
-
-
-            
-
-            /*
-            @synchronized(self) {
-                if (_currentFrame)
-                {
-                    CVPixelBufferRelease(_currentFrame);
-                }
-                
-                _currentFrame = videoFrame;
-            
-            }
-             */
             
         }
     } else if (connection.output == _audio_capture_output) {
