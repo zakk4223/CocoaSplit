@@ -872,6 +872,32 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 }
 
 
+-(NSString *) restoreFilePath
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    NSString *saveFolder = @"~/Library/Application Support/CocoaSplit";
+    
+    saveFolder = [saveFolder stringByExpandingTildeInPath];
+    
+    if ([fileManager fileExistsAtPath:saveFolder] == NO)
+    {
+        [fileManager createDirectoryAtPath:saveFolder withIntermediateDirectories:NO attributes:nil error:nil];
+    }
+    
+    NSString *saveFile = [saveFolder stringByAppendingPathComponent:@"CocoaSplit-CA.settings"];
+    
+    if ([fileManager fileExistsAtPath:saveFile])
+    {
+        return saveFile;
+    }
+    
+    saveFile = [saveFolder stringByAppendingPathComponent:@"CocoaSplit-CI.settings"];
+    
+    return saveFile;
+}
+
+
 - (NSString *) saveFilePath
 {
     
@@ -886,7 +912,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         [fileManager createDirectoryAtPath:saveFolder withIntermediateDirectories:NO attributes:nil error:nil];
     }
     
-    NSString *saveFile = @"CocoaSplit-CI.settings";
+    NSString *saveFile = @"CocoaSplit-CA.settings";
     
     return [saveFolder stringByAppendingPathComponent:saveFile];
 }
@@ -1098,7 +1124,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     [NSColorPanel sharedColorPanel].showsAlpha = YES;
     [NSColor setIgnoresAlpha:NO];
     
-    NSString *path = [self saveFilePath];
+    NSString *path = [self restoreFilePath];
     NSDictionary *defaultValues = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Defaults" ofType:@"plist"]];
     
     NSDictionary *savedValues = [NSKeyedUnarchiver unarchiveObjectWithFile:path];

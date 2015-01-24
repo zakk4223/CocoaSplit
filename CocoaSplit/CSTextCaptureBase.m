@@ -36,7 +36,11 @@
 
 -(CALayer *)createNewLayer
 {
-    return [CATextLayer layer];
+    CATextLayer *newLayer = [CATextLayer layer];
+    newLayer.string = _attribString;
+    newLayer.bounds = CGRectMake(0.0, 0.0, _attribString.size.width, _attribString.size.height);
+
+    return newLayer;
 }
 
 
@@ -69,6 +73,7 @@
             _fontAttributes = savedfontAttributes;
         }
     }
+    
     [self buildString];
     return self;
 }

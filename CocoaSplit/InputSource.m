@@ -48,11 +48,11 @@ static NSArray *_sourceTypes = nil;
     [aCoder encodeFloat:self.rotationAngle forKey:@"rotationAngle"];
     [aCoder encodeFloat:self.opacity forKey:@"opacity"];
     [aCoder encodeObject:self.name forKey:@"name"];
-    [aCoder encodeFloat:self.depth forKey:@"depth"];
-    [aCoder encodeFloat:self.crop_top forKey:@"crop_top"];
-    [aCoder encodeFloat:self.crop_bottom forKey:@"crop_bottom"];
-    [aCoder encodeFloat:self.crop_left forKey:@"crop_left"];
-    [aCoder encodeFloat:self.crop_right forKey:@"crop_right"];
+    [aCoder encodeFloat:self.depth forKey:@"CAdepth"];
+    [aCoder encodeFloat:self.crop_top forKey:@"CAcrop_top"];
+    [aCoder encodeFloat:self.crop_bottom forKey:@"CAcrop_bottom"];
+    [aCoder encodeFloat:self.crop_left forKey:@"CAcrop_left"];
+    [aCoder encodeFloat:self.crop_right forKey:@"CAcrop_right"];
     [aCoder encodeObject:self.selectedVideoType forKey:@"selectedVideoType"];
     [aCoder encodeBool:self.usePrivateSource forKey:@"usePrivateSource"];
     [aCoder encodeObject:self.uuid forKey:@"uuid"];
@@ -76,10 +76,10 @@ static NSArray *_sourceTypes = nil;
     [aCoder encodeFloat:self.changeInterval forKey:@"changeInterval"];
     
 
-    [aCoder encodeFloat:self.layer.position.x forKey:@"frame_origin_x"];
-    [aCoder encodeFloat:self.layer.position.y forKey:@"frame_origin_y"];
-    [aCoder encodeFloat:self.layer.bounds.size.width forKey:@"frame_width"];
-    [aCoder encodeFloat:self.layer.bounds.size.height forKey:@"frame_height"];
+    [aCoder encodeFloat:self.layer.position.x forKey:@"CAx_pos"];
+    [aCoder encodeFloat:self.layer.position.y forKey:@"CAy_pos"];
+    [aCoder encodeFloat:self.layer.bounds.size.width forKey:@"CAdisplay_width"];
+    [aCoder encodeFloat:self.layer.bounds.size.height forKey:@"CAdisplay_height"];
     [aCoder encodeFloat:self.borderWidth forKey:@"borderWidth"];
     [aCoder encodeObject:self.borderColor forKey:@"borderColor"];
     [aCoder encodeFloat:self.cornerRadius forKey:@"cornerRadius"];
@@ -93,6 +93,10 @@ static NSArray *_sourceTypes = nil;
 
 -(id) initWithCoder:(NSCoder *)aDecoder
 {
+    /*
+    There's some 'legacy' stuff in here to support loading older CocoaSplit save formats. Mostly related to the change from CoreImage to CoreAnimation. some types changed, some stuff like x/y position changed names. It's probably a bit slower when you're saving->going live but meh. Problematic variables are encoded with a prefix of 'CA' to avoid excessive use of try/catch
+     */
+    
     if (self = [super init])
     {
         [self commonInit];
@@ -125,10 +129,35 @@ static NSArray *_sourceTypes = nil;
 
         float x_pos,y_pos,width,height;
         
-        x_pos = [aDecoder decodeFloatForKey:@"frame_origin_x"];
-        y_pos = [aDecoder decodeFloatForKey:@"frame_origin_y"];
-        width = [aDecoder decodeFloatForKey:@"frame_width"];
-        height = [aDecoder decodeFloatForKey:@"frame_height"];
+        if ([aDecoder containsValueForKey:@"CAx_pos"])
+        {
+            x_pos = [aDecoder decodeFloatForKey:@"CAx_pos"];
+            y_pos = [aDecoder decodeFloatForKey:@"CAy_pos"];
+
+        } else {
+        //at one point [xy]_pos was an integer, so if the float fails try integer. otherwise die.
+            @try {
+                x_pos = [aDecoder decodeFloatForKey:@"x_pos"];
+                y_pos = [aDecoder decodeFloatForKey:@"y_pos"];
+            } @catch (NSException *e) {
+                x_pos = [aDecoder decodeIntForKey:@"x_pos"];
+                y_pos = [aDecoder decodeIntForKey:@"y_pos"];
+                
+            }
+        }
+        
+        if ([aDecoder containsValueForKey:@"CAdisplay_width"])
+        {
+            width = [aDecoder decodeFloatForKey:@"CAdisplay_width"];
+            height = [aDecoder decodeFloatForKey:@"CAdisplay_height"];
+
+            
+        } else {
+            width = [aDecoder decodeIntForKey:@"display_width"];
+            height = [aDecoder decodeIntForKey:@"display_height"];
+            
+        }
+
 
         
         CGRect oldFrame = self.layer.frame;
@@ -157,11 +186,27 @@ static NSArray *_sourceTypes = nil;
 
         self.opacity = [aDecoder decodeFloatForKey:@"opacity"];
         self.name = [aDecoder decodeObjectForKey:@"name"];
-        self.depth = [aDecoder decodeFloatForKey:@"depth"];
-        self.crop_top = [aDecoder decodeFloatForKey:@"crop_top"];
-        self.crop_bottom = [aDecoder decodeFloatForKey:@"crop_bottom"];
-        self.crop_left = [aDecoder decodeFloatForKey:@"crop_left"];
-        self.crop_right = [aDecoder decodeFloatForKey:@"crop_right"];
+        //Old Cocoasplit encoded this as an integer. CoreAnimation wants a float.
+        if ([aDecoder containsValueForKey:@"CAdepth"])
+        {
+            self.depth = [aDecoder decodeFloatForKey:@"depth"];
+
+        } else {
+            self.depth = [aDecoder decodeIntForKey:@"depth"];
+        }
+        
+        if ([aDecoder containsValueForKey:@"CAcrop_top"])
+        {
+            self.crop_top = [aDecoder decodeFloatForKey:@"CAcrop_top"];
+            self.crop_bottom = [aDecoder decodeFloatForKey:@"CAcrop_bottom"];
+            self.crop_left = [aDecoder decodeFloatForKey:@"CAcrop_left"];
+            self.crop_right = [aDecoder decodeFloatForKey:@"CAcrop_right"];
+        } else {
+            self.crop_top = [aDecoder decodeIntForKey:@"crop_top"];
+            self.crop_bottom = [aDecoder decodeIntForKey:@"crop_bottom"];
+            self.crop_left = [aDecoder decodeIntForKey:@"crop_left"];
+            self.crop_right = [aDecoder decodeIntForKey:@"crop_right"];
+        }
 
         
         
@@ -427,7 +472,12 @@ static NSArray *_sourceTypes = nil;
 
 -(NSColor *)borderColor
 {
-    return [NSColor colorWithCGColor:self.layer.borderColor];
+    if (self.layer.borderColor)
+    {
+        return [NSColor colorWithCGColor:self.layer.borderColor];
+    } else {
+        return nil;
+    }
 }
 
 -(void)setCornerRadius:(CGFloat)cornerRadius
