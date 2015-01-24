@@ -67,6 +67,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     float _snap_x, _snap_y;
     bool _in_resize_rect;
     
+    CIImage *_currentImage;
     
     
     CVDisplayLinkRef displayLink;

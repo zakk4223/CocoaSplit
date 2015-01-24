@@ -23,16 +23,22 @@
         self.allowScaling = NO;
         
         self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
-        self.outputLayer = [CATextLayer layer];
         
         [self addObserver:self forKeyPath:@"propertiesChanged" options:NSKeyValueObservingOptionNew context:NULL];
         
         _font = [NSFont fontWithName:@"Helvetica" size:50];
         _fontAttributes = [NSDictionary dictionaryWithObject:[NSColor whiteColor] forKey:NSForegroundColorAttributeName];
+        self.allowDedup = NO;
     }
     
     return self;
 }
+
+-(CALayer *)createNewLayer
+{
+    return [CATextLayer layer];
+}
+
 
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
@@ -84,15 +90,14 @@
         NSMutableDictionary *strAttrs = [NSMutableDictionary dictionaryWithDictionary:self.fontAttributes];
         strAttrs[NSFontAttributeName] = self.font;
         _attribString = [[NSAttributedString alloc] initWithString:self.text attributes:strAttrs];
-        if (!self.outputLayer)
-        {
-            self.outputLayer = [CATextLayer layer];
-        }
         
-        self.outputLayer.bounds = CGRectMake(0.0, 0.0, _attribString.size.width, _attribString.size.height);
+        [self updateLayersWithBlock:^(CALayer *layer) {
+            layer.bounds = CGRectMake(0.0, 0.0, _attribString.size.width, _attribString.size.height);
+            ((CATextLayer *)layer).string = _attribString;
+ 
+        }];
         
         
-        ((CATextLayer *)self.outputLayer).string = _attribString;
 
     }
     

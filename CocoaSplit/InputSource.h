@@ -57,10 +57,12 @@ typedef enum resize_style_t {
     CIFilter *_chromaFilter;
     NSObject<CSCaptureSourceProtocol> *_nextInput;
 
+    
+    CALayer *_nextLayer;
+    
+    CALayer *_currentLayer;
+    
     bool _userBackground;
-    
-    
-    
 }
 
 

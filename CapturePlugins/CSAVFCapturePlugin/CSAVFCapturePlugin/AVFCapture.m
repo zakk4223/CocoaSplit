@@ -434,6 +434,14 @@
 }
 
 
+
+
+-(CALayer *)createNewLayer
+{
+    return [CSIOSurfaceLayer layer];
+}
+
+
 -(void)setupVideoOutput
 {
     
@@ -462,8 +470,7 @@
         
         //AVCaptureVideoPreviewLayer *avlayer = [AVCaptureVideoPreviewLayer layerWithSession:_capture_session];
         CSIOSurfaceLayer *avlayer = [CSIOSurfaceLayer layer];
-        
-        self.outputLayer = avlayer;
+        avlayer.delegate = self;
         if ([_capture_session canAddOutput:_video_capture_output])
         {
             [_capture_session addOutput:_video_capture_output];
@@ -507,7 +514,10 @@
         
 
             
-            ((CSIOSurfaceLayer *)self.outputLayer).imageBuffer = videoFrame;
+            [self updateLayersWithBlock:^(CALayer *layer) {
+                ((CSIOSurfaceLayer *)layer).imageBuffer = videoFrame;
+
+            }];
 
 
             

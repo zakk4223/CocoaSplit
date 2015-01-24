@@ -81,16 +81,33 @@
 //This is the class name of the configuration view CONTROLLER. With the combo above you can have different view controller classes and/or different NIBs depending on various conditions.
 @property (readonly) NSString *configurationViewClassName;
 
-//This is the layer that is inserted into the canvas. The inputsource container will take care of positioning and sizing. A CALayer with position set to 0,0 and the source native size is all that is required here. You can reassign this whenever you want and the layer will get replaced on the next frame render
-@property (strong) CALayer *outputLayer;
-
-
 //frameTick is called every render loop. You are not required to do anything here, but it may be useful for some timing/lazy rendering
 -(void)frameTick;
 
 //called before the input is removed. Allows you to clean up anything that isn't appropriate in -(void)dealloc
 
 -(void)willDelete;
+
+/*
+Called to create a new layer. You should create and return a layer of the appropriate type for your source. Default implementation is just a plain CALayer.
+If your source is 'shared' between inputSources each new one will call this function to create a new layer. You are responsible for updating ALL layers when updating content.
+ (See below)
+*/
+-(CALayer *)createNewLayer;
+
+
+/* Update ALL the current layers for this Source. The provided block is run once for every layer. You should use this when you are updating content. 
+ */
+
+-(void)updateLayersWithBlock:(void(^)(CALayer *))updateBlock;
+
+/* Called when the input source goes away and the layer is no longer required. You probably don't need to override this. Default implementation just removes it from the underlying array */
+
+-(void)removeLayerForInput:(id)inputsrc;
+
+//Don't ever call this, it's not for you.
+-(CALayer *)createNewLayerForInput:(id)inputsrc;
+-(CALayer *)layerForInput:(id)inputsrc;
 
 
 -(NSViewController *)configurationView;

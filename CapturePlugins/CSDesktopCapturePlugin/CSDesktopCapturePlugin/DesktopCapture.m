@@ -68,7 +68,6 @@
 
         self.videoCaptureFPS = 60.0f;
         self.showCursor = YES;
-        self.outputLayer = [CSIOSurfaceLayer layer];
         [self addObserver:self forKeyPath:@"propertiesChanged" options:NSKeyValueObservingOptionNew context:NULL];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationTerminating:) name:NSApplicationWillTerminateNotification object:nil];
         
@@ -77,6 +76,12 @@
 
     return self;
     
+}
+
+
+-(CALayer *)createNewLayer
+{
+    return [CSIOSurfaceLayer layer];
 }
 
 
@@ -202,7 +207,10 @@
         
         if (frameSurface)
         {
-            ((CSIOSurfaceLayer *)strongSelf.outputLayer).ioSurface = frameSurface;
+            [strongSelf updateLayersWithBlock:^(CALayer *layer) {
+                ((CSIOSurfaceLayer *)layer).ioSurface = frameSurface;
+            }];
+            
             
         }
     });

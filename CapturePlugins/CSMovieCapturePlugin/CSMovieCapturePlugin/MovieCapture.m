@@ -113,6 +113,12 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 }
 
 
+-(CALayer *)createNewLayer
+{
+    return [CSIOSurfaceLayer layer];
+}
+
+
 -(void)frameTick
 {
     CFTimeInterval currentTime = CACurrentMediaTime();
@@ -126,8 +132,10 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
         {
             
             
+            [self updateLayersWithBlock:^(CALayer *layer) {
+                ((CSIOSurfaceLayer *)layer).imageBuffer = newFrame;
+            }];
             //outputlayer retains the pixel buffer until no longer needed
-            ((CSIOSurfaceLayer *)self.outputLayer).imageBuffer = newFrame;
             CVPixelBufferRelease(newFrame);
         }
     }
@@ -254,11 +262,6 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     [self.avPlayer addObserver:self forKeyPath:@"rate" options:NSKeyValueObservingOptionNew context:NULL];
     [self.avPlayer addObserver:self forKeyPath:@"currentItem" options:0 context:NULL];
     self.avPlayer.volume = 0.0;
-    self.outputLayer =  [CSIOSurfaceLayer layer];
-    
-    
-    
-    
 }
 
 

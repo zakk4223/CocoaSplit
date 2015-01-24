@@ -1164,7 +1164,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         return;
     }
     
-    
     CGLContextObj cgl_ctx = [[self openGLContext] CGLContextObj];
 
     CGLLockContext(cgl_ctx);
@@ -1172,6 +1171,8 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     [self.openGLContext makeCurrentContext];
 
     IOSurfaceRef cFrame = CVPixelBufferGetIOSurface(cImageBuf);
+    
+    
     IOSurfaceID cFrameID;
     
     
@@ -1346,7 +1347,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     glPushMatrix();
     glLoadIdentity();
 
-    
     for(int i = 0; i < _num_planes; i++)
     {
         
@@ -1389,7 +1389,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);
     
-
+    
     
     GLfloat outline_verts[8];
     GLfloat snapx_verts[4];
@@ -1464,7 +1464,9 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         glGetDoublev(GL_MODELVIEW_MATRIX, _modelview);
         glGetDoublev(GL_PROJECTION_MATRIX, _projection);
         glGetIntegerv(GL_VIEWPORT, _viewport);
-        _resizeDirty = NO;
+        glDisable(GL_DEPTH_TEST);
+        
+         _resizeDirty = NO;
         
     }
 

@@ -57,9 +57,12 @@
     
     NSString *sourceKey = [NSString stringWithFormat:@"%@:%@", ofType, uniqueID];
 
+    NSLog(@"SOURCE KEY IS %@", sourceKey);
     
     
     id cachedSource = [self.cacheMap objectForKey:sourceKey];
+    
+    NSLog(@"CACHED SOURCE %@", cachedSource);
     
     if (!cachedSource)
     {

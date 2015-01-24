@@ -10,6 +10,12 @@
 #import "SourceCache.h"
 #import <objc/runtime.h>
 
+@interface CSCaptureBase()
+{
+    NSMapTable *_allLayers;
+}
+
+@end
 @implementation CSCaptureBase
 
 @synthesize activeVideoDevice = _activeVideoDevice;
@@ -28,7 +34,8 @@
         self.allowDedup = YES;
         self.isVisible = YES;
         self.allowScaling = YES;
-        self.outputLayer = [CALayer layer];
+        _allLayers = [NSMapTable weakToStrongObjectsMapTable];
+        
     }
     
     return self;
@@ -180,6 +187,40 @@
     //hack so we don't throw exceptions during the above function
     return;
 }
+
+
+-(CALayer *)createNewLayer
+{
+    return [CALayer layer];
+}
+
+
+-(CALayer *)createNewLayerForInput:(id)inputsrc
+{
+    CALayer *newLayer = [self createNewLayer];
+    [_allLayers setObject:newLayer forKey:inputsrc];
+    return newLayer;
+}
+
+-(void)removeLayerForInput:(id)inputsrc
+{
+    [_allLayers removeObjectForKey:inputsrc];
+}
+
+-(void)updateLayersWithBlock:(void (^)(CALayer *))updateBlock
+{
+    for (id key in _allLayers)
+    {
+        CALayer *clayer = [_allLayers objectForKey:key];
+        updateBlock(clayer);
+    }
+}
+
+-(CALayer *)layerForInput:(id)inputsrc
+{
+    return [_allLayers objectForKey:inputsrc];
+}
+
 
 +(void) layoutModification:(void (^)())modBlock
 {

@@ -109,7 +109,11 @@ static NSArray *_sourceTypes = nil;
         self.layer.allowResize = self.videoInput.allowScaling;
         if (self.videoInput)
         {
-            self.layer.sourceLayer = self.videoInput.outputLayer;
+            
+            [self registerVideoInput:self.videoInput];
+
+            _currentLayer = [self.videoInput layerForInput:self];
+            self.layer.sourceLayer = _currentLayer;
             if (!_userBackground)
             {
                 self.backgroundColor = nil;
@@ -204,11 +208,6 @@ static NSArray *_sourceTypes = nil;
         }
 
         
-        if (self.videoInput)
-        {
-            [self registerVideoInput:self.videoInput];
-        }
-        
         for(id vInput in self.videoSources)
         {
             [self registerVideoInput:vInput];
@@ -242,6 +241,7 @@ static NSArray *_sourceTypes = nil;
 {
     forInput.inputSource = self;
     forInput.isLive = self.is_live;
+    [forInput createNewLayerForInput:self];
     [forInput addObserver:self forKeyPath:@"activeVideoDevice.uniqueID" options:NSKeyValueObservingOptionNew context:nil];
 }
 
@@ -253,6 +253,7 @@ static NSArray *_sourceTypes = nil;
     }
     
     forInput.isLive = NO;
+    [forInput removeLayerForInput:self];
     
     [forInput removeObserver:self forKeyPath:@"activeVideoDevice.uniqueID"];
 }
@@ -743,6 +744,8 @@ static NSArray *_sourceTypes = nil;
     
     [self.videoInput frameTick];
     
+    __block CALayer *tLayer;
+    
     if (self.videoSources.count > 1 && (self.videoInput != _nextInput))
     {
         _multiTransition = [[CATransition alloc] init];
@@ -752,12 +755,14 @@ static NSArray *_sourceTypes = nil;
         _multiTransition.removedOnCompletion = YES;
 
         [CSCaptureBase layoutModification:^{
-            [self.layer setSourceLayer:_nextInput.outputLayer withTransition:_multiTransition];
+            tLayer = [_nextInput layerForInput:self];
+            [self.layer setSourceLayer:tLayer withTransition:_multiTransition];
 
         }];
         
         self.videoInput = _nextInput;
-    } else if (self.videoInput.outputLayer && (self.layer.sourceLayer != self.videoInput.outputLayer)) {
+        _currentLayer = tLayer;
+    } else if ((self.layer.sourceLayer != _currentLayer)) {
     
         //dispatch_async(dispatch_get_main_queue(), ^{
         [CSCaptureBase layoutModification:^{
@@ -768,14 +773,7 @@ static NSArray *_sourceTypes = nil;
             }
             self.layer.allowResize = self.videoInput.allowScaling;
 
-            if (self.videoInput.outputLayer.superlayer)
-            {
-                CALayer *newLayer = [CALayer layer];
-                newLayer.contents = self.videoInput.outputLayer.contents;
-                self.layer.sourceLayer = newLayer;
-            } else {
-                self.layer.sourceLayer = self.videoInput.outputLayer;
-            }
+            self.layer.sourceLayer = _currentLayer;
             
 
         }];
@@ -994,6 +992,7 @@ static NSArray *_sourceTypes = nil;
     {
         [self deregisterVideoInput:self.videoInput];
         self.videoInput = nil;
+        _currentLayer = nil;
     }
     
     NSObject <CSCaptureSourceProtocol> *newCaptureSession;
@@ -1005,6 +1004,7 @@ static NSArray *_sourceTypes = nil;
     
     self.videoInput = newCaptureSession;
     [self registerVideoInput:self.videoInput];
+    _currentLayer = [self.videoInput layerForInput:self];
     
     
     [self sourceConfigurationView];
@@ -1064,7 +1064,6 @@ static NSArray *_sourceTypes = nil;
 {
     
     
-    return;
     
     if (self.usePrivateSource)
     {
@@ -1077,7 +1076,9 @@ static NSArray *_sourceTypes = nil;
     }
     
     
+    
     SourceCache *scache = self.layout.sourceCache;
+    
     
     id newInput = [scache cacheSource:source uniqueID:source.activeVideoDevice.uniqueID];
     if (newInput == source)
@@ -1086,11 +1087,11 @@ static NSArray *_sourceTypes = nil;
     }
     
     
-    
     [self deregisterVideoInput:self.videoInput];
     
     self.videoInput = newInput;
     [self registerVideoInput:self.videoInput];
+    _currentLayer = [self.videoInput layerForInput:self];
     
 }
 

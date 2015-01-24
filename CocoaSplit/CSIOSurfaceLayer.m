@@ -208,6 +208,7 @@
         return;
     }
 
+    
     CGRect useBounds = self.bounds;
     CGLSetCurrentContext(ctx);
     glClearColor(0,0,0,0);

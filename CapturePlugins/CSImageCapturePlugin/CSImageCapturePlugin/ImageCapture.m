@@ -66,74 +66,10 @@
     return @[];
 }
 
--(CSAbstractCaptureDevice *)activeVideoDevice
-{
-    return nil;
-}
-
-
--(void) advanceGifFrame
-{
-    
-    //wait the current duration, THEN increment the frame and rerender
-    
-    if (_totalFrames > 1)
-    {
-        
-        int next_frame = _frameNumber + 1;
-    
-        
-        if (next_frame >= _totalFrames)
-        {
-            next_frame = 0;
-        }
-    
-        double frame_duration =  [[_delayList objectAtIndex:_frameNumber] floatValue];
-
-        
-        dispatch_time_t frame_time = dispatch_time(DISPATCH_TIME_NOW, frame_duration * NSEC_PER_SEC);
-    
-        _frameNumber = next_frame;
-        __weak ImageCapture *mySelf = self;
-        
-        dispatch_after(frame_time, _animationQueue, ^(void){
-
-            [mySelf renderImage:next_frame];
-        
-        });
-
-    }
-    
-}
-
--(void) resetImageData
-{
-    _totalFrames = 0;
-    _frameNumber = 0;
-    
-    if (_imageSource)
-    {
-        CFRelease(_imageSource);
-        _imageSource = nil;
-
-    }
-    
-    if (_imageCache)
-    {
-        _imageCache = nil;
-
-    }
-    _delayList = nil;
-}
 
 
 
 
--(void) dealloc
-{
-
-    [self resetImageData];
-}
 
 +(NSString *)label
 {
@@ -141,39 +77,18 @@
 }
 
 
--(void) renderImage:(int)forIdx
+-(CALayer *)createNewLayer
 {
-    CGImageRef theImage = NULL;
-
-    CIImage *newImg = nil;
-    
-    if (_imageCache.count > forIdx)
+    CALayer *newLayer = [CALayer layer];
+    if (_singleImage)
     {
-        newImg = (CIImage *)[_imageCache objectAtIndex:forIdx ];
+        newLayer.contents = (__bridge id)(_singleImage);
+    } else if (_animation) {
+        [newLayer addAnimation:_animation forKey:@"contents"];
     }
-    
-    if (!newImg && _imageSource)
-    {
-        theImage = CGImageSourceCreateImageAtIndex(_imageSource, forIdx, NULL);
-        
-        
-        newImg = [CIImage imageWithCGImage:theImage];
-        CGImageRelease(theImage);
-        [_imageCache insertObject:newImg atIndex:forIdx];
-        
-    }
-    
-    _ciimage = newImg;
-    
-    [self advanceGifFrame];
-
+    return newLayer;
 }
 
-
--(void)setActiveVideoDevice:(CSAbstractCaptureDevice *)activeVideoDevice
-{
-    return;
-}
 
 
 -(NSString *)imagePath
@@ -192,15 +107,13 @@
     }
     
     
+
     _imagePath = imagePath;
     
-    
-    [self resetImageData];
     
     self.activeVideoDevice.uniqueID = imagePath;
     
     self.captureName = [_imagePath lastPathComponent];
-    
     
     NSDictionary *dict = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:(id)kCGImageSourceShouldCacheImmediately];
 
@@ -257,32 +170,40 @@
             [timesArray addObject:[NSNumber numberWithFloat:base]];
         }
         
-        CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"contents"];
-        animation.duration = totalTime;
-        animation.repeatCount = HUGE_VALF;
-        animation.removedOnCompletion = NO;
-        animation.fillMode = kCAFillModeForwards;
-        animation.values = frameArray;
-        animation.keyTimes = timesArray;
-        animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-        animation.calculationMode = kCAAnimationDiscrete;
+        _animation = [CAKeyframeAnimation animationWithKeyPath:@"contents"];
+        _animation.duration = totalTime;
+        _animation.repeatCount = HUGE_VALF;
+        _animation.removedOnCompletion = NO;
+        //animation.fillMode = kCAFillModeForwards;
+        _animation.values = frameArray;
+        _animation.keyTimes = timesArray;
+        _animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+        _animation.calculationMode = kCAAnimationDiscrete;
         dispatch_async(dispatch_get_main_queue(), ^{
 
-            [self.outputLayer addAnimation:animation forKey:@"contents"];
+            [self updateLayersWithBlock:^(CALayer *layer) {
+                [layer addAnimation:_animation forKey:@"contents"];
+
+            }];
         });
 
         
         
     } else {
+        _animation = nil;
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.outputLayer.contents = (__bridge id)CGImageSourceCreateImageAtIndex(_imageSource, 0, NULL);
-        });
+            _singleImage = CGImageSourceCreateImageAtIndex(_imageSource, 0, NULL);
+
+            [self updateLayersWithBlock:^(CALayer *layer) {
+                layer.contents = (__bridge id)(_singleImage);
+                [layer removeAnimationForKey:@"contents"];
+            }];
+                    });
     }
     
     
     
     _frameNumber = 0;
-    [self renderImage:0];
     
 }
 

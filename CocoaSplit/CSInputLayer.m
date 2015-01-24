@@ -217,7 +217,7 @@
     toLayer.contentsGravity = _sourceLayer.contentsGravity;
     toLayer.contentsRect = _sourceLayer.contentsRect;
     toLayer.autoresizingMask = _sourceLayer.autoresizingMask;
-    toLayer.bounds = _sourceLayer.bounds;
+    
     if (self.allowResize)
     {
         toLayer.frame = CGRectMake(0.0, 0.0, self.frame.size.width, self.frame.size.height);

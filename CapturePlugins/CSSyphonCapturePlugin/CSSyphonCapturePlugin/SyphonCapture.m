@@ -18,6 +18,8 @@
 
 @synthesize activeVideoDevice = _activeVideoDevice;
 
+@synthesize isFlipped = _isFlipped;
+
 
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
@@ -90,7 +92,6 @@
 -(void) commonInit
 {
     
-    self.outputLayer = [CSIOSurfaceLayer layer];
     self.isFlipped = NO;
 
     [self changeAvailableVideoDevices];
@@ -104,12 +105,20 @@
     
 }
 
+-(CALayer *)createNewLayer
+{
+    return [CSIOSurfaceLayer layer];
+}
+
 
 -(void)setIsFlipped:(BOOL)isFlipped
 {
     
+    _isFlipped = isFlipped;
     
-    ((CSIOSurfaceLayer *)self.outputLayer).flipImage = isFlipped;
+    [self updateLayersWithBlock:^(CALayer *layer) {
+        ((CSIOSurfaceLayer *)layer).flipImage = isFlipped;
+    }];
 
 }
 
@@ -117,7 +126,7 @@
 
 -(BOOL)isFlipped
 {
-    return  ((CSIOSurfaceLayer *)self.outputLayer).flipImage;
+    return _isFlipped;
 }
 
 -(void) startSyphon
@@ -147,7 +156,9 @@
          {
              CIImage *newImage = [[CIImage alloc] initWithIOSurface:newSurface plane:0 format:kCIFormatARGB8 options:nil];
              _surfaceSeed = newSeed;
-                 ((CSIOSurfaceLayer *)self.outputLayer).ioImage = newImage;
+             [self updateLayersWithBlock:^(CALayer *layer) {
+                 ((CSIOSurfaceLayer *)layer).ioImage = newImage;
+             }];
              CFRelease(newSurface);
           } else {
              CFRelease(newSurface);

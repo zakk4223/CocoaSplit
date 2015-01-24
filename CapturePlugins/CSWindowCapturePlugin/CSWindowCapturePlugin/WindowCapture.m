@@ -77,8 +77,10 @@
         
         CGImageRef windowImg = CGWindowListCreateImage(CGRectNull, kCGWindowListOptionIncludingWindow, [windowID unsignedIntValue], kCGWindowImageBoundsIgnoreFraming|kCGWindowImageBestResolution);
         [CSCaptureBase layoutModification:^{
-            self.outputLayer.contents = (__bridge id)(windowImg);
-
+            [self updateLayersWithBlock:^(CALayer *layer) {
+                
+               layer.contents = (__bridge id)(windowImg);
+            }];
         }];
             CGImageRelease(windowImg);
         
