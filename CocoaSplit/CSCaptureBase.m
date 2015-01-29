@@ -205,7 +205,12 @@
 -(void)removeLayerForInput:(id)inputsrc
 {
     [_allLayers removeObjectForKey:inputsrc];
+    if (_allLayers.count == 0)
+    {
+        [self willDelete];
+    }
 }
+
 
 -(void)updateLayersWithBlock:(void (^)(CALayer *))updateBlock
 {

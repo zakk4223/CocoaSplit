@@ -1142,10 +1142,14 @@ static NSArray *_sourceTypes = nil;
 
 -(void) makeSourcePrivate
 {
-    [self deregisterVideoInput:self.videoInput];
-    self.videoInput = self.videoInput.copy;
+    
+    NSObject<CSCaptureSourceProtocol> *inputCopy = self.videoInput.copy;
+    NSObject<CSCaptureSourceProtocol> *oldInput = self.videoInput;
+    self.videoInput = inputCopy;
     [self registerVideoInput:self.videoInput];
     _currentLayer = [self.videoInput layerForInput:self];
+
+    [self deregisterVideoInput:inputCopy];
 }
 
 
@@ -1383,13 +1387,14 @@ static NSArray *_sourceTypes = nil;
 
 
 
-
 -(void)willDelete
 {
+    /*
     if (self.videoInput)
     {
         [self.videoInput willDelete];
     }
+     */
 }
 
 
