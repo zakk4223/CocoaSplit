@@ -105,6 +105,7 @@
         self.flipImage = NO;
         _lastSurfaceSize = NSMakeRect(0, 0, 0, 0);
         _privateCropRect = CGRectMake(0.0, 0.0, 1.0, 1.0);
+        self.imageWrapper = nil;
         
     }
     
@@ -192,6 +193,16 @@
     
     CIImageWrapper *wrappedImage = self.imageWrapper;
     
+    CGLSetCurrentContext(ctx);
+    glClearColor(0,0,0,0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    
+    if (!wrappedImage)
+    {
+        return;
+    }
+    
     CIImage *useImage;
     @synchronized(self)
     {
@@ -210,9 +221,6 @@
 
     
     CGRect useBounds = self.bounds;
-    CGLSetCurrentContext(ctx);
-    glClearColor(0,0,0,0);
-    glClear(GL_COLOR_BUFFER_BIT);
 
     CIImage *croppedImage;
     

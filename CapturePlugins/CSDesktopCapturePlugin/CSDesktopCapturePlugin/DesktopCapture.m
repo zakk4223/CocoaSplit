@@ -13,7 +13,6 @@
 
 
 
-
 @implementation DesktopCapture
 
 @synthesize activeVideoDevice = _activeVideoDevice;
