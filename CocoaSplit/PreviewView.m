@@ -270,6 +270,30 @@
  
 }
 
+-(BOOL)acceptsFirstResponder
+{
+    return YES;
+}
+
+-(void)cancelOperation:(id)sender
+{
+    if (self.isInFullScreenMode)
+    {
+        [self toggleFullscreen:self];
+    }
+}
+
+-(void)keyDown:(NSEvent *)theEvent
+{
+    if ([theEvent.charactersIgnoringModifiers isEqualToString:@"f"] && (theEvent.modifierFlags & NSCommandKeyMask))
+    {
+        [self toggleFullscreen:self];
+    }
+
+}
+
+
+
 -(NSRect)windowRectforWorldRect:(NSRect)worldRect
 {
     
@@ -974,15 +998,19 @@
 {
     if (self.isInFullScreenMode)
     {
-        [_idleTimer invalidate];
-        _idleTimer = nil;
-        [self removeTrackingArea:_trackingArea];
-        _trackingArea = nil;
+        NSLog(@"LEAVE FULLSCREEN %@", self);
+        //[_idleTimer invalidate];
+        //_idleTimer = nil;
+        //[self removeTrackingArea:_trackingArea];
+        //_trackingArea = nil;
         
         [self exitFullScreenModeWithOptions:nil];
-        [NSCursor setHiddenUntilMouseMoves:NO];
+        
+        [self.controller layoutLeftFullscreen];
         
     } else {
+        
+        NSLog(@"ENTER FULLSCREEN %@", self);
         
         NSNumber *fullscreenOptions = @(NSApplicationPresentationAutoHideMenuBar|NSApplicationPresentationAutoHideDock);
         
@@ -995,16 +1023,18 @@
         }
         
         
+        [self.controller layoutWentFullscreen];
+        
         [self enterFullScreenMode:_fullscreenOn withOptions:@{NSFullScreenModeAllScreens: @NO, NSFullScreenModeApplicationPresentationOptions: fullscreenOptions}];
         
-        int opts = (NSTrackingActiveAlways | NSTrackingInVisibleRect | NSTrackingMouseMoved | NSTrackingMouseEnteredAndExited);
-        _trackingArea = [[NSTrackingArea alloc] initWithRect:[self bounds]
-                                                            options:opts
-                                                              owner:self
-                                                           userInfo:nil];
+        //int opts = (NSTrackingActiveAlways | NSTrackingInVisibleRect | NSTrackingMouseMoved | NSTrackingMouseEnteredAndExited);
+        //_trackingArea = [[NSTrackingArea alloc] initWithRect:[self bounds]
+                                                           // options:opts
+                                                           //   owner:self
+                                                          // userInfo:nil];
 
-        [self addTrackingArea:_trackingArea];
-        [self setIdleTimer];
+        //[self addTrackingArea:_trackingArea];
+        //[self setIdleTimer];
     }
     
 }

@@ -49,23 +49,13 @@
 -(void)openScreenCropWindow:(CSAbstractCaptureDevice *)captureDevice
 {
     
-    NSLog(@"OPEN SCREEN CROP WINDOW");
     
     NSScreen *cropScreen = [self findScreeenForDisplayID:captureDevice.captureDevice];
-    
-    NSLog(@"CROP SCREEN %@", cropScreen);
-    
-    
-    //self.screenCropWindow = [[NSWindow alloc] initWithContentRect:NSMakeRect(100.0f, 100.0f, 400, 400) styleMask:NSBorderlessWindowMask backing:NSBackingStoreRetained defer:NO];
-    
-    
-    //[self.screenCropWindow setContentView:oview];
     
     
     
     [self.cropSelectionWindow setOpaque:NO];
     [self.cropSelectionWindow setLevel:CGShieldingWindowLevel()];
-    //self.cropSelectionWindow.styleMask = NSBorderlessWindowMask;
     
     [self.cropSelectionWindow setIgnoresMouseEvents:NO];
     

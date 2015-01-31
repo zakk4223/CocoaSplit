@@ -49,6 +49,9 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     CVDisplayLinkRef _displayLink;
     
 
+    NSRect _stagingFrame;
+    NSRect _liveFrame;
+    
     
     id _audio_capture_session;
     
@@ -176,6 +179,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 - (IBAction)stagingViewToggle:(id)sender;
+-(void)showStagingView;
 
 - (IBAction)openPluginManager:(id)sender;
 
@@ -369,6 +373,9 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 -(void)setupLogging;
 
+
+-(void)layoutWentFullscreen;
+-(void)layoutLeftFullscreen;
 
 
 

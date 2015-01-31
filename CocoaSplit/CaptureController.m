@@ -684,6 +684,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
        videoBuffer = [[NSMutableArray alloc] init];
        
        
+       
        _max_render_time = 0.0f;
        _min_render_time = 0.0f;
        _avg_render_time = 0.0f;
@@ -1262,6 +1263,9 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
 
     self.extraPluginsSaveData = nil;
+    self.stagingPreviewView.controller = self;
+    self.livePreviewView.controller = self;
+
 }
 
 
@@ -2436,7 +2440,18 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
 }
 
+-(void)layoutWentFullscreen
+{
+    _stagingFrame = self.stagingPreviewView.frame;
+    _liveFrame = self.livePreviewView.frame;
+}
 
+-(void)layoutLeftFullscreen
+{
+    self.stagingPreviewView.frame = _stagingFrame;
+    self.livePreviewView.frame = _liveFrame;
+    
+}
 - (IBAction)stagingViewToggle:(id)sender
 {
     BOOL stagingCollapsed = [self.canvasSplitView isSubviewCollapsed:self.canvasSplitView.subviews[0]];

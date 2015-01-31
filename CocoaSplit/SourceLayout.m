@@ -386,7 +386,6 @@
 
 
     
-    
     [self.renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];
     [self.renderer addUpdateRect:self.renderer.bounds];
     [self.renderer render];

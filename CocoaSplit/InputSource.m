@@ -681,15 +681,6 @@ static NSArray *_sourceTypes = nil;
     _rotationAngle = rotationAngle;
     
     CATransform3D transform = CATransform3DMakeRotation(self.rotationAngle * M_PI / 180.0, 0.0, 0.0, 1);
-    /*
-    [CSCaptureBase layoutModification:^{
-        [CATransaction begin];
-        [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
-        self.layer.transform = transform;
-        [CATransaction commit];
-        
-    }];*/
-    
     self.layer.disableAnimation = YES;
     self.layer.transform = transform;
     self.layer.disableAnimation = NO;
@@ -710,12 +701,8 @@ static NSArray *_sourceTypes = nil;
     contentsRect.size.width = 1.0 - self.crop_right - self.crop_left;
     contentsRect.size.height = 1.0 - self.crop_top - self.crop_bottom;
     
-    [CSCaptureBase layoutModification:^{
-        [CATransaction begin];
         self.layer.cropRect = contentsRect;
-        [CATransaction commit];
-        
-    }];
+    
 }
 
 
@@ -814,8 +801,6 @@ static NSArray *_sourceTypes = nil;
         _currentLayer = tLayer;
     } else if ((self.layer.sourceLayer != _currentLayer)) {
     
-        //dispatch_async(dispatch_get_main_queue(), ^{
-        [CSCaptureBase layoutModification:^{
             if (!_userBackground)
             {
                 self.backgroundColor = nil;
@@ -824,11 +809,10 @@ static NSArray *_sourceTypes = nil;
             self.layer.allowResize = self.videoInput.allowScaling;
 
             self.layer.sourceLayer = _currentLayer;
-            
-
-        }];
+            [CATransaction commit];
         
-        //});
+
+        
     }
     
     
@@ -935,16 +919,13 @@ static NSArray *_sourceTypes = nil;
         newLayout.size.width = width;
         newLayout.size.height = height;
         
-        [CSCaptureBase layoutModification:^{
             [CATransaction begin];
             [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
             self.layer.allowResize = tmpResize;
             self.layer.frame = newLayout;
             self.layer.allowResize = oldResize;
-            
-            [CATransaction commit];
-
-        }];
+        
+           [CATransaction commit];
         
 
     }
@@ -987,15 +968,14 @@ static NSArray *_sourceTypes = nil;
         newOrigin.y += y;
         
         
-        [CSCaptureBase layoutModification:^{
-            [CATransaction begin];
-            [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
-            
+            //[CATransaction begin];
+            //[CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
+        self.layer.disableAnimation = YES;
             self.layer.position = newOrigin;
+        self.layer.disableAnimation = NO;
             
-            [CATransaction commit];
+            //[CATransaction commit];
 
-        }];
     }
     
 }

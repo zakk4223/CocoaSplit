@@ -63,6 +63,8 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     GLdouble    _projection[16];
 
     
+    NSRect _oldFrame;
+    
     float _snap_x_accum, _snap_y_accum;
     float _snap_x, _snap_y;
     bool _in_resize_rect;

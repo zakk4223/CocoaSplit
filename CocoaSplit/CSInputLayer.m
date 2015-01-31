@@ -60,12 +60,10 @@
         _scrollAnimation.repeatCount = HUGE_VALF;
         self.zPosition = 0;
         
-        [CSCaptureBase layoutModification:^{
-            [_xLayer addSublayer:_sourceLayer];
-            [_yLayer addSublayer:_xLayer];
-            [self addSublayer:_yLayer];
+        [_xLayer addSublayer:_sourceLayer];
+        [_yLayer addSublayer:_xLayer];
+        [self addSublayer:_yLayer];
 
-        }];
 
     }
     

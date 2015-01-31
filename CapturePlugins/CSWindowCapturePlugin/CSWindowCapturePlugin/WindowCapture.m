@@ -76,12 +76,12 @@
         
         
         CGImageRef windowImg = CGWindowListCreateImage(CGRectNull, kCGWindowListOptionIncludingWindow, [windowID unsignedIntValue], kCGWindowImageBoundsIgnoreFraming|kCGWindowImageBestResolution);
-        [CSCaptureBase layoutModification:^{
+        //[CATransaction begin];
             [self updateLayersWithBlock:^(CALayer *layer) {
                 
                layer.contents = (__bridge id)(windowImg);
             }];
-        }];
+        [CATransaction commit];
             CGImageRelease(windowImg);
         
         _nextCaptureTime = currentTime + (1/self.captureFPS);
