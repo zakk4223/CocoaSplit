@@ -624,7 +624,7 @@
         self.selectedOriginDistance = worldPoint;
         if (self.isResizing)
         {
-            if (theEvent.modifierFlags & NSShiftKeyMask && 0)
+            if (theEvent.modifierFlags & NSShiftKeyMask)
             {
                 //Crop is expressed as a floating point number between 0.0 and 1.0, basically a percentage of that dimension.
                 //Convert appropriately.
@@ -998,19 +998,11 @@
 {
     if (self.isInFullScreenMode)
     {
-        NSLog(@"LEAVE FULLSCREEN %@", self);
-        //[_idleTimer invalidate];
-        //_idleTimer = nil;
-        //[self removeTrackingArea:_trackingArea];
-        //_trackingArea = nil;
-        
         [self exitFullScreenModeWithOptions:nil];
         
         [self.controller layoutLeftFullscreen];
         
     } else {
-        
-        NSLog(@"ENTER FULLSCREEN %@", self);
         
         NSNumber *fullscreenOptions = @(NSApplicationPresentationAutoHideMenuBar|NSApplicationPresentationAutoHideDock);
         
@@ -1027,14 +1019,6 @@
         
         [self enterFullScreenMode:_fullscreenOn withOptions:@{NSFullScreenModeAllScreens: @NO, NSFullScreenModeApplicationPresentationOptions: fullscreenOptions}];
         
-        //int opts = (NSTrackingActiveAlways | NSTrackingInVisibleRect | NSTrackingMouseMoved | NSTrackingMouseEnteredAndExited);
-        //_trackingArea = [[NSTrackingArea alloc] initWithRect:[self bounds]
-                                                           // options:opts
-                                                           //   owner:self
-                                                          // userInfo:nil];
-
-        //[self addTrackingArea:_trackingArea];
-        //[self setIdleTimer];
     }
     
 }

@@ -85,7 +85,9 @@
 
 
 @interface CSIOSurfaceLayer()
-
+{
+    CIFilter *_resizeFilter;
+}
 @property (strong) CIImageWrapper *imageWrapper;
 @end
 
@@ -105,6 +107,8 @@
         self.flipImage = NO;
         _lastSurfaceSize = NSMakeRect(0, 0, 0, 0);
         _privateCropRect = CGRectMake(0.0, 0.0, 1.0, 1.0);
+        _resizeFilter = [CIFilter filterWithName:@"CILanczosScaleTransform"];
+        [_resizeFilter setDefaults];
         self.imageWrapper = nil;
         
     }
@@ -267,6 +271,9 @@
         CGFloat originY = useBounds.size.height/2 - scaledSize.height/2;
         
         inRect = NSMakeRect(originX, originY, scaledSize.width, scaledSize.height);
+        //[_resizeFilter setValue:croppedImage forKey:kCIInputImageKey];
+        //[_resizeFilter setValue:@(ratio) forKey:kCIInputScaleKey];
+        //croppedImage = [_resizeFilter valueForKey:kCIOutputImageKey];
     }
     
     [_ciCtx drawImage:croppedImage inRect:inRect fromRect:croppedImage.extent];
