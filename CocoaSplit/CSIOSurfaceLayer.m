@@ -194,7 +194,6 @@
 
 -(void) drawInCGLContext:(CGLContextObj)ctx pixelFormat:(CGLPixelFormatObj)pf forLayerTime:(CFTimeInterval)t displayTime:(const CVTimeStamp *)ts
 {
-    
     CIImageWrapper *wrappedImage = self.imageWrapper;
     
     CGLSetCurrentContext(ctx);

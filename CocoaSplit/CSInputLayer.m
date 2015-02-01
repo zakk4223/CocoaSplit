@@ -208,6 +208,7 @@
     return _sourceLayer;
 }
 
+
 -(void)copySourceSettings:(CALayer *)toLayer
 {
     toLayer.anchorPoint = _sourceLayer.anchorPoint;
@@ -259,6 +260,8 @@
     
     [self setupXAnimation:_scrollXSpeed];
     [self setupYAnimation:_scrollYSpeed];
+    [CATransaction commit];
+    
 }
 
 
@@ -274,6 +277,8 @@
 
     [self setupXAnimation:_scrollXSpeed];
     [self setupYAnimation:_scrollYSpeed];
+    [CATransaction commit];
+    
 }
 
 -(void)calculateCropTransform

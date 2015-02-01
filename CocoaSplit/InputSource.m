@@ -791,11 +791,10 @@ static NSArray *_sourceTypes = nil;
         _multiTransition.duration = self.transitionDuration;
         _multiTransition.removedOnCompletion = YES;
 
-        [CSCaptureBase layoutModification:^{
-            tLayer = [_nextInput layerForInput:self];
-            [self.layer setSourceLayer:tLayer withTransition:_multiTransition];
+        tLayer = [_nextInput layerForInput:self];
+        
+        [self.layer setSourceLayer:tLayer withTransition:_multiTransition];
 
-        }];
         
         self.videoInput = _nextInput;
         _currentLayer = tLayer;
@@ -809,7 +808,6 @@ static NSArray *_sourceTypes = nil;
             self.layer.allowResize = self.videoInput.allowScaling;
 
             self.layer.sourceLayer = _currentLayer;
-            [CATransaction commit];
         
 
         
@@ -832,11 +830,11 @@ static NSArray *_sourceTypes = nil;
     {
         NSObject<CSCaptureSourceProtocol> *inputCopy;
         
-        //inputCopy = self.videoInput.copy;
+        inputCopy = self.videoInput.copy;
         
-        //[self registerVideoInput:inputCopy];
+        [self registerVideoInput:inputCopy];
 
-        [self.videoSources addObject:self.videoInput];
+        [self.videoSources addObject:inputCopy];
     }
     
 }
@@ -1092,6 +1090,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void) deduplicateVideoSource:(NSObject<CSCaptureSourceProtocol> *)source
 {
+    NSLog(@"IN DEDUP");
     if (self.usePrivateSource)
     {
         return;
@@ -1111,6 +1110,7 @@ static NSArray *_sourceTypes = nil;
     }
     
     
+    NSLog(@"DEREGISTER?REGISTER");
     [self deregisterVideoInput:self.videoInput];
     
     self.videoInput = newInput;
