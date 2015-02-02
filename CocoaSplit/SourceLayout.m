@@ -168,7 +168,7 @@
     
     for(InputSource *src in self.sourceList)
     {
-        src.layout = self;
+        src.sourceLayout = self;
         src.is_live = self.isActive;
         
         [self.rootLayer addSublayer:src.layer];
@@ -176,19 +176,6 @@
 
 }
 
-/* We can't support shared sources right now due to CALayer limitations
--(id)unarchiver:(NSKeyedUnarchiver *)unarchiver didDecodeObject:(id)object
-{
-    
-    if ([object isKindOfClass:[CSCaptureBase class]])
-    {
-        return [self.sourceCache cacheSource:object uniqueID:((CSCaptureBase *)object).activeVideoDevice.uniqueID];
-    } else {
-        return object;
-    }
-}
-
- */
 -(void)deleteSource:(InputSource *)delSource
 {
     
@@ -205,7 +192,7 @@
 
 -(void) addSource:(InputSource *)newSource
 {
-    newSource.layout = self;
+    newSource.sourceLayout = self;
     newSource.is_live = self.isActive;
     
     [self.sourceList addObject:newSource];
@@ -234,7 +221,7 @@
         [self restoreSourceList];
         for(InputSource *src in self.sourceList)
         {
-            src.layout = self;
+            src.sourceLayout = self;
             
         }
         
@@ -475,7 +462,6 @@
 
 -(bool) createPixelBufferPoolForSize:(NSSize) size
 {
-    
     NSLog(@"Controller: Creating Pixel Buffer Pool %f x %f", size.width, size.height);
     
     NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
@@ -506,6 +492,24 @@
 }
 
 
+-(InputSource *)inputForUUID:(NSString *)uuid
+{
+
+    NSArray *sources = [self sourceListOrdered];
+    
+    NSUInteger idx = [sources indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        return [((InputSource *)obj).uuid isEqualToString:uuid];
+        
+        
+    }];
+    
+    
+    if (idx != NSNotFound)
+    {
+        return [sources objectAtIndex:idx];
+    }
+    return nil;
+}
 
 
 

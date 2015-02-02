@@ -361,6 +361,10 @@
     tmp.target = self;
     tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Delete" action:@selector(deleteInput:) keyEquivalent:@"" atIndex:4];
     tmp.target = self;
+    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Clone" action:@selector(cloneInputSource:) keyEquivalent:@"" atIndex:5];
+
+    
+    tmp.target = self;
     
 
     
@@ -399,6 +403,12 @@
         [delItem setRepresentedObject:src];
         [delItem setTarget:self];
         [submenu addItem:delItem];
+        NSMenuItem *cloneItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Clone" action:@selector(cloneInputSource:) keyEquivalent:@""];
+        [cloneItem setEnabled:YES];
+        [cloneItem setRepresentedObject:src];
+        [cloneItem setTarget:self];
+        [submenu addItem:cloneItem];
+        
         [srcItem setSubmenu:submenu];
         
         [self.sourceListMenu insertItem:srcItem atIndex:[self.sourceListMenu.itemArray count]];
@@ -877,6 +887,29 @@
     if (self.selectedSource)
     {
         self.selectedSource.depth -= 1;
+    }
+}
+
+
+- (IBAction)cloneInputSource:(id)sender
+{
+    
+    NSMenuItem *item = (NSMenuItem *)sender;
+    InputSource *toClone;
+    
+    if (item.representedObject)
+    {
+        toClone = (InputSource *)item.representedObject;
+    } else {
+        toClone = self.selectedSource;
+    }
+
+    
+    
+    if (toClone)
+    {
+        InputSource *newSource = toClone.copy;
+        [self.sourceLayout addSource:newSource];
     }
 }
 

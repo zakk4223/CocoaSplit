@@ -43,7 +43,7 @@ typedef enum resize_style_t {
 
 //@protocol CSCaptureSessionProtocol;
 
-@interface InputSource : NSObject <NSCoding, NSWindowDelegate>
+@interface InputSource : NSObject <NSCoding, NSWindowDelegate, NSCopying>
 {
     
     int _currentSourceIdx;
@@ -67,7 +67,7 @@ typedef enum resize_style_t {
 
 
 @property (strong) CSInputLayer *layer;
-@property (weak) SourceLayout *layout;
+@property (weak) SourceLayout *sourceLayout;
 
 
 @property (assign) float scrollXSpeed;
@@ -108,7 +108,7 @@ typedef enum resize_style_t {
 @property (readonly) NSSize size;
 @property (readonly) float display_width;
 @property (readonly) float display_height;
-
+@property (weak)     InputSource *clonedFromInput;
 
 //When an instance is created the creator (capture controller) binds these to the size of the canvas in case we are asked to auto-fit
 //at a later time
@@ -140,7 +140,6 @@ typedef enum resize_style_t {
 @property (assign) float chromaKeyThreshold;
 @property (assign) float chromaKeySmoothing;
 @property (assign) bool doChromaKey;
-@property (assign) bool usePrivateSource;
 
 @property (strong) InputPopupControllerViewController *editorController;
 @property (strong) NSWindow *editorWindow;

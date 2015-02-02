@@ -39,6 +39,56 @@ static NSArray *_sourceTypes = nil;
 @synthesize chromaKeyColor = _chromaKeyColor;
 @synthesize chromaKeySmoothing = _chromaKeySmoothing;
 @synthesize chromaKeyThreshold = _chromaKeyThreshold;
+@synthesize clonedFromInput = _clonedFromInput;
+
+
+-(instancetype)copyWithZone:(NSZone *)zone
+{
+    InputSource *newSource = [[InputSource allocWithZone:zone] init];
+    
+    newSource.videoInput = self.videoInput;
+    [newSource registerVideoInput:self.videoInput];
+    newSource->_currentLayer = [self.videoInput layerForInput:newSource];
+    newSource.layer.sourceLayer = newSource->_currentLayer;
+    
+    newSource.rotationAngle = self.rotationAngle;
+    newSource.opacity =  self.opacity;
+    newSource.name = self.name;
+    newSource.depth = self.depth;
+    newSource.crop_top = self.crop_top;
+    newSource.crop_bottom = self.crop_bottom;
+    newSource.crop_left = self.crop_left;
+    newSource.crop_right = self.crop_right;
+    newSource.scrollXSpeed = self.scrollXSpeed;
+    newSource.scrollYSpeed = self.scrollYSpeed;
+    newSource.rotateStyle = self.rotateStyle;
+    newSource.doChromaKey = self.doChromaKey;
+    
+    newSource.chromaKeyColor = self.chromaKeyColor;
+    newSource.chromaKeyThreshold = self.chromaKeyThreshold;
+    newSource.chromaKeySmoothing = self.chromaKeySmoothing;
+    newSource.videoSources = self.videoSources;
+    for(NSObject <CSCaptureSourceProtocol> *vsrc in newSource.videoSources)
+    {
+        [vsrc layerForInput:newSource];
+    }
+    
+    CGRect oldFrame = newSource.layer.frame;
+
+    
+    newSource.changeInterval = self.changeInterval;
+    newSource.layer.position = self.layer.position;
+    newSource.layer.bounds = self.layer.bounds;
+    newSource.borderWidth = self.borderWidth;
+    newSource.borderColor = self.borderColor;
+    newSource.cornerRadius  = self.cornerRadius;
+    newSource.backgroundColor = self.backgroundColor;
+    
+    
+    [newSource.layer resizeSourceLayer:newSource.layer.frame oldFrame:oldFrame];
+
+    return newSource;
+}
 
 
 
@@ -54,7 +104,6 @@ static NSArray *_sourceTypes = nil;
     [aCoder encodeFloat:self.crop_left forKey:@"CAcrop_left"];
     [aCoder encodeFloat:self.crop_right forKey:@"CAcrop_right"];
     [aCoder encodeObject:self.selectedVideoType forKey:@"selectedVideoType"];
-    [aCoder encodeBool:self.usePrivateSource forKey:@"usePrivateSource"];
     [aCoder encodeObject:self.uuid forKey:@"uuid"];
 
     [aCoder encodeFloat:self.scrollXSpeed forKey:@"scrollXSpeed"];
@@ -88,7 +137,6 @@ static NSArray *_sourceTypes = nil;
     {
         [aCoder encodeObject:self.backgroundColor forKey:@"backgroundColor"];
     }
-    
 }
 
 -(id) initWithCoder:(NSCoder *)aDecoder
@@ -108,6 +156,7 @@ static NSArray *_sourceTypes = nil;
             self.backgroundColor = [aDecoder decodeObjectForKey:@"backgroundColor"];
         }
 
+        
         self.videoInput = [aDecoder decodeObjectForKey:@"videoInput"];
 
         self.layer.allowResize = self.videoInput.allowScaling;
@@ -267,7 +316,6 @@ static NSArray *_sourceTypes = nil;
         self.scrollXSpeed = [aDecoder decodeFloatForKey:@"scrollXSpeed"];
         self.scrollYSpeed = [aDecoder decodeFloatForKey:@"scrollYSpeed"];
         
-        self.usePrivateSource = [aDecoder decodeBoolForKey:@"usePrivateSource"];
 
         self.borderWidth = [aDecoder decodeFloatForKey:@"borderWidth"];
         self.borderColor = [aDecoder decodeObjectForKey:@"borderColor"];
@@ -340,7 +388,6 @@ static NSArray *_sourceTypes = nil;
     
     self.transitionFilterName = @"fade";
     self.currentEffects = [[NSMutableArray alloc] init];
-    self.usePrivateSource = NO;
     
     self.unlock_aspect = NO;
     self.resizeType = kResizeNone;
@@ -407,7 +454,6 @@ static NSArray *_sourceTypes = nil;
 
     
     
-    [self addObserver:self forKeyPath:@"usePrivateSource" options:NSKeyValueObservingOptionNew context:NULL];
     [self addObserver:self forKeyPath:@"editorController" options:NSKeyValueObservingOptionNew context:NULL];
     
  }
@@ -631,7 +677,6 @@ static NSArray *_sourceTypes = nil;
         [self deregisterVideoInput:vInput];
     }
     
-    [self removeObserver:self forKeyPath:@"usePrivateSource"];
     [self removeObserver:self forKeyPath:@"editorController"];
     
 }
@@ -808,20 +853,8 @@ static NSArray *_sourceTypes = nil;
             self.layer.allowResize = self.videoInput.allowScaling;
 
             self.layer.sourceLayer = _currentLayer;
-        
-
-        
     }
-    
-    
-    
-    
 }
-
-
-
-
-
 
 
 -(void)addMulti
@@ -1088,51 +1121,6 @@ static NSArray *_sourceTypes = nil;
 
 
 
--(void) deduplicateVideoSource:(NSObject<CSCaptureSourceProtocol> *)source
-{
-    NSLog(@"IN DEDUP");
-    if (self.usePrivateSource)
-    {
-        return;
-    }
-    
-    if (source != self.videoInput)
-    {
-        return;
-    }
-    SourceCache *scache = self.layout.sourceCache;
-    
-    
-    id newInput = [scache cacheSource:source uniqueID:source.activeVideoDevice.uniqueID];
-    if (newInput == source)
-    {
-        return;
-    }
-    
-    
-    NSLog(@"DEREGISTER?REGISTER");
-    [self deregisterVideoInput:self.videoInput];
-    
-    self.videoInput = newInput;
-    [self registerVideoInput:self.videoInput];
-    _currentLayer = [self.videoInput layerForInput:self];
-    
-}
-
-
--(void) makeSourcePrivate
-{
-    
-    NSObject<CSCaptureSourceProtocol> *inputCopy = self.videoInput.copy;
-    NSObject<CSCaptureSourceProtocol> *oldInput = self.videoInput;
-    self.videoInput = inputCopy;
-    [self registerVideoInput:self.videoInput];
-    _currentLayer = [self.videoInput layerForInput:self];
-
-    [self deregisterVideoInput:inputCopy];
-}
-
-
 -(void)setScrollXSpeed:(float)scrollXSpeed
 {
     self.layer.scrollXSpeed = scrollXSpeed;
@@ -1160,12 +1148,12 @@ static NSArray *_sourceTypes = nil;
 
 -(size_t)canvas_width
 {
-    return self.layout.canvas_width;
+    return self.sourceLayout.canvas_width;
 }
 
 -(size_t)canvas_height
 {
-    return self.layout.canvas_height;
+    return self.sourceLayout.canvas_height;
 }
 
 
@@ -1383,18 +1371,39 @@ static NSArray *_sourceTypes = nil;
 {
     if ([keyPath isEqualToString:@"editorController"]) {
         [self sourceConfigurationView];
-    } else if ([keyPath isEqualToString:@"activeVideoDevice.uniqueID"]) {
-        [self deduplicateVideoSource:object];
-    } else if ([keyPath isEqualToString:@"usePrivateSource"]) {
-        if (self.usePrivateSource)
-        {
-            [self makeSourcePrivate];
-        }
     }
         
         
 }
 
+
+-(void)setClonedFromInput:(InputSource *)clonedFromInput
+{
+    NSObject <CSCaptureSourceProtocol>*fromInput = clonedFromInput.videoInput;
+    
+    if (self.videoInput)
+    {
+        [self deregisterVideoInput:fromInput];
+        _currentLayer = nil;
+    }
+    
+    
+    if (fromInput)
+    {
+        self.videoInput = fromInput;
+        [self registerVideoInput:fromInput];
+        _currentLayer = [fromInput layerForInput:self];
+    }
+    
+    
+    _clonedFromInput = clonedFromInput;
+}
+
+
+-(InputSource *)clonedFromInput
+{
+    return _clonedFromInput;
+}
 
 
 -(void) windowWillClose:(NSNotification *)notification

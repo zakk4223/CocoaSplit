@@ -57,5 +57,7 @@
 -(CVPixelBufferRef)currentFrame;
 -(void) saveSourceList;
 -(void) restoreSourceList;
+-(InputSource *)inputForUUID:(NSString *)uuid;
+
 
 @end

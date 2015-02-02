@@ -604,16 +604,6 @@
                                             <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SXE-81-50C">
                                                 <rect key="frame" x="20" y="0.0" width="581" height="349"/>
                                             </customView>
-                                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gMQ-KI-FXv">
-                                                <rect key="frame" x="486" y="354" width="97" height="20"/>
-                                                <buttonCell key="cell" type="check" title="Private Source" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="eK0-X4-OwX">
-                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                    <font key="font" metaFont="smallSystem"/>
-                                                </buttonCell>
-                                                <connections>
-                                                    <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.usePrivateSource" id="xlL-hr-i8U"/>
-                                                </connections>
-                                            </button>
                                         </subviews>
                                     </customView>
                                 </subviews>
