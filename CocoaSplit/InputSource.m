@@ -70,8 +70,12 @@ static NSArray *_sourceTypes = nil;
     newSource.videoSources = self.videoSources;
     for(NSObject <CSCaptureSourceProtocol> *vsrc in newSource.videoSources)
     {
-        [vsrc layerForInput:newSource];
+        [newSource registerVideoInput:vsrc];
     }
+    
+    newSource.transitionDuration = self.transitionDuration;
+    newSource.transitionFilterName = self.transitionFilterName;
+    newSource.transitionDirection = self.transitionDirection;
     
     CGRect oldFrame = newSource.layer.frame;
 
@@ -133,6 +137,10 @@ static NSArray *_sourceTypes = nil;
     [aCoder encodeObject:self.borderColor forKey:@"borderColor"];
     [aCoder encodeFloat:self.cornerRadius forKey:@"cornerRadius"];
     [aCoder encodeBool:_userBackground forKey:@"userBackground"];
+    [aCoder encodeObject:self.transitionFilterName forKey:@"transitionFilterName"];
+    [aCoder encodeObject:self.transitionDirection forKey:@"transitionDirection"];
+    [aCoder encodeFloat:self.transitionDuration forKey:@"transitionDuration"];
+    
     if (_userBackground)
     {
         [aCoder encodeObject:self.backgroundColor forKey:@"backgroundColor"];
@@ -302,6 +310,10 @@ static NSArray *_sourceTypes = nil;
         }
 
         
+        self.transitionDirection = [aDecoder decodeObjectForKey:@"transitionDirection"];
+        self.transitionFilterName = [aDecoder decodeObjectForKey:@"transitionFilterName"];
+        self.transitionDuration = [aDecoder decodeFloatForKey:@"transitionDuration"];
+        
         for(id vInput in self.videoSources)
         {
             [self registerVideoInput:vInput];
@@ -335,7 +347,6 @@ static NSArray *_sourceTypes = nil;
     forInput.inputSource = self;
     forInput.isLive = self.is_live;
     [forInput createNewLayerForInput:self];
-    [forInput addObserver:self forKeyPath:@"activeVideoDevice.uniqueID" options:NSKeyValueObservingOptionNew context:nil];
 }
 
 -(void)deregisterVideoInput:(NSObject<CSCaptureSourceProtocol> *)forInput
@@ -348,7 +359,6 @@ static NSArray *_sourceTypes = nil;
     forInput.isLive = NO;
     [forInput removeLayerForInput:self];
     
-    [forInput removeObserver:self forKeyPath:@"activeVideoDevice.uniqueID"];
 }
 
 
@@ -812,7 +822,6 @@ static NSArray *_sourceTypes = nil;
 -(void)frameTick
 {
     
-
     self.layoutPosition = self.layer.frame;
     
     [self multiChange];
