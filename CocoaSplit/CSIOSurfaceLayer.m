@@ -56,6 +56,18 @@
     
     return self;
 }
+
+-(instancetype)initWithCIImage:(CIImage *)img
+{
+    if (self = [super init])
+    {
+        _ciImage = img;
+    }
+    
+    return self;
+}
+
+
 -(instancetype)initWithIOSurface:(IOSurfaceRef)surface
 {
     //CIImage retains the iosurface, we're just here to mess with the use count.
@@ -131,6 +143,22 @@
 {
     return _imageBuffer;
 }
+
+-(void)setIoImage:(CIImage *)ioImage
+{
+    @synchronized(self)
+    {
+        self.imageWrapper = [[CIImageWrapper alloc] initWithCIImage:ioImage];
+    }
+    _ioImage = ioImage;
+}
+
+
+-(CIImage *)ioImage
+{
+    return _ioImage;
+}
+
 
 
 -(void)calculateCrop:(NSRect)extent;
