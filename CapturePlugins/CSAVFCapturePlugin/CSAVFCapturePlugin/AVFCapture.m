@@ -86,12 +86,12 @@
 
     
 }
+
 -(id) init
 {
     if (self = [super init])
     {
         _lastFrameTime = 0;
-        _sampleQueue = [NSMutableArray array];
         
          CMIOObjectPropertyAddress prop = { kCMIOHardwarePropertyAllowScreenCaptureDevices, kCMIOObjectPropertyScopeGlobal, kCMIOObjectPropertyElementMaster };
          UInt32 allow = 1;
@@ -103,11 +103,6 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDeviceChange:) name:AVCaptureDeviceWasDisconnectedNotification object:nil];
 
         [self changeAvailableVideoDevices];
-        _capture_session = [[AVCaptureSession alloc] init];
-        [self setupVideoOutput];
-        
-        
-        [_capture_session startRunning];
     }
     return self;
 }
@@ -126,12 +121,10 @@
 -(void)dealloc
 {
     
-    NSLog(@"DEALLOC AVF");
-    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     if (_capture_session)
     {
-        [_capture_session stopRunning];
+        [_capture_session removeOutput:self];
     }
 }
 
@@ -208,47 +201,29 @@
 
 -(void) setActiveVideoDevice:(CSAbstractCaptureDevice *)newDev
 {
+    
+    NSLog(@"IN SET ACTIVE VIDEO DEVICE AVF %@", self);
     _activeVideoDevice = newDev;
     _selectedVideoCaptureDevice = [newDev captureDevice];
+    
+    if (_capture_session)
+    {
+        [_capture_session removeOutput:self];
+    }
+    
+    _capture_session = [[AVFSession alloc] initWithDevice:_selectedVideoCaptureDevice];
     
     if (!_capture_session)
     {
         return;
     }
     
-    [_capture_session beginConfiguration];
-    
-    if (_video_capture_input)
-    {
-        [_capture_session removeInput:_video_capture_input];
-        _video_capture_input = nil;
-    }
-    
-    
-    if (_selectedVideoCaptureDevice)
-    {
-        _video_capture_input = [AVCaptureDeviceInput deviceInputWithDevice:_selectedVideoCaptureDevice error:nil];
-        
-        if (_video_capture_input)
-        {
-            
-            [_capture_session addInput:_video_capture_input];
-        }
-    }
-    
-    [_capture_session commitConfiguration];
+    [_capture_session registerOutput:self];
     
     self.captureName = newDev.captureName;
     
     self.videoFormats = _selectedVideoCaptureDevice.formats;
     self.videoFramerates = _selectedVideoCaptureDevice.activeFormat.videoSupportedFrameRateRanges;
-    if ([_selectedVideoCaptureDevice hasMediaType:AVMediaTypeMuxed])
-    {
-        [self setupAudioOutput];
-        
-    } else {
-        [self removeAudioOutput];
-    }
 }
 
 
@@ -300,87 +275,10 @@
 
 
 
--(bool) stopCaptureSession
-{
-    if (_capture_session)
-    {
-        [_capture_session stopRunning];
-        /*
-        _capture_session = nil;
-        _video_capture_queue = nil;
-        self.activeVideoDevice = nil;
-        _video_capture_output = nil;
-        _audio_capture_output = nil;
-        self.activeAudioDevice = nil;
-        _audio_capture_queue = nil;
-        */
-    }
-    return YES;
-}
-
-
--(bool) startCaptureSession:(NSError **)error
-{
-    
-
-    _preroll_frame_cnt = 0;
-    self.did_preroll = false;
-    
-    if (_capture_session.isRunning)
-    {
-        return YES;
-    }
-
-    
-    if (!_capture_session)
-    {
-        if (error)
-        {
-            *error = [NSError errorWithDomain:@"videoCapture" code:110 userInfo:@{NSLocalizedDescriptionKey : @"No active capture session"}];
-        }
-        
-        return NO;
-        
-    }
-    
-    
-    [_selectedVideoCaptureDevice lockForConfiguration:nil];
-    if (self.activeVideoFormat)
-    {
-        _selectedVideoCaptureDevice.activeFormat = self.activeVideoFormat;
-    }
-    if (self.activeVideoFramerate)
-    {
-                
-        _selectedVideoCaptureDevice.activeVideoMinFrameDuration = self.activeVideoFramerate.minFrameDuration;
-    }
-    
-    [_selectedVideoCaptureDevice unlockForConfiguration];
-    
-
-    
-    return YES;
-}
 
 
 -(void) removeAudioOutput
 {
-    
-    if (!_capture_session || !_audio_capture_output)
-    {
-        return;
-    }
-    
-    
-    [_capture_session beginConfiguration];
-    
-    [_capture_session removeOutput:_audio_capture_output];
-    [_capture_session commitConfiguration];
-
-    _audio_capture_output = nil;
-    _audio_capture_queue = nil;
-    
-    
     
     if (_pcmPlayer)
     {
@@ -389,6 +287,7 @@
 }
 
 
+/*
 -(void) setupAudioOutput
 {
     
@@ -433,6 +332,7 @@
     [_capture_session commitConfiguration];
 }
 
+*/
 
 
 
@@ -442,85 +342,23 @@
 }
 
 
--(void)setupVideoOutput
+-(void)captureVideoOutput:(CMSampleBufferRef)sampleBuffer
 {
-    
-    
-    if (_capture_session)
-    {
-        NSMutableDictionary *videoSettings = [[NSMutableDictionary alloc] init];
-        
-        //I know CIImage can handle this input type. Maybe make this some sort of advanced config if some devices can't handle it?
-        
-        [videoSettings setValue:@(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange) forKey:(__bridge NSString *)kCVPixelBufferPixelFormatTypeKey];
-         
-        
-        
-        //[videoSettings setValue:@(kCVPixelFormatType_32BGRA) forKey:(__bridge NSString *)kCVPixelBufferPixelFormatTypeKey];
-        
-        //[videoSettings setValue:@[@(kCVPixelFormatType_422YpCbCr8), @(kCVPixelFormatType_422YpCbCr8FullRange), @(kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange), @(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange), ] forKey:(NSString *)kCVPixelBufferPixelFormatTypeKey];
-        NSDictionary *ioAttrs = [NSDictionary dictionaryWithObject: [NSNumber numberWithBool: NO]
-                                                            forKey: (NSString *)kIOSurfaceIsGlobal];
-        
-        
-        
-        [videoSettings setValue:ioAttrs forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
- 
-        _video_capture_output = [[AVCaptureVideoDataOutput alloc] init];
-        
-        //AVCaptureVideoPreviewLayer *avlayer = [AVCaptureVideoPreviewLayer layerWithSession:_capture_session];
-        CSIOSurfaceLayer *avlayer = [CSIOSurfaceLayer layer];
-        avlayer.delegate = self;
-        if ([_capture_session canAddOutput:_video_capture_output])
-        {
-            [_capture_session addOutput:_video_capture_output];
-            _video_capture_output.videoSettings = videoSettings;
-            
-            
-            _video_capture_queue = dispatch_queue_create("VideoQueue", NULL);
-            
-            [_video_capture_output setSampleBufferDelegate:self queue:_video_capture_queue];
-
-        }
-    }
-}
-
-
-
-
-
-
-- (void)captureOutput:(AVCaptureOutput *)captureOutput didDropSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
-{
-    if (connection.output == _video_capture_output)
-    {
-        NSLog(@"DROPPED FRAME!!!");
-    }
-    
-}
-
-- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
-{
-    
-    
-    if (connection.output == _video_capture_output)
-    {
-        
         CVImageBufferRef videoFrame = CMSampleBufferGetImageBuffer(sampleBuffer);
         
 
         if (videoFrame)
         {
-        
-
-            
             [self updateLayersWithBlock:^(CALayer *layer) {
                 ((CSIOSurfaceLayer *)layer).imageBuffer = videoFrame;
 
             }];
-            
         }
-    } else if (connection.output == _audio_capture_output) {
+}
+
+-(void)captureAudioOutput:(CMSampleBufferRef)sampleBuffer
+{
+    
         if (self.isLive && !_pcmPlayer)
         {
             CMFormatDescriptionRef sDescr = CMSampleBufferGetFormatDescription(sampleBuffer);
@@ -533,7 +371,6 @@
         {
             [_pcmPlayer scheduleBuffer:sampleBuffer];
         }
-    }
 }
 
 

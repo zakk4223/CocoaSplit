@@ -161,6 +161,7 @@
 
 
 
+
 -(void)calculateCrop:(NSRect)extent;
 {
     CGRect newCrop;

@@ -198,25 +198,37 @@
 -(CALayer *)createNewLayerForInput:(id)inputsrc
 {
     CALayer *newLayer = [self createNewLayer];
-    [_allLayers setObject:newLayer forKey:inputsrc];
+    @synchronized(self)
+    {
+        [_allLayers setObject:newLayer forKey:inputsrc];
+    }
     return newLayer;
 }
 
 -(void)removeLayerForInput:(id)inputsrc
 {
-    [_allLayers removeObjectForKey:inputsrc];
-    if (_allLayers.count == 0)
+    @synchronized(self)
     {
-        [self willDelete];
+        [_allLayers removeObjectForKey:inputsrc];
+        if (_allLayers.count == 0)
+        {
+            [self willDelete];
+        }
     }
 }
 
 
 -(void)updateLayersWithBlock:(void (^)(CALayer *))updateBlock
 {
-    for (id key in _allLayers)
+    NSMapTable *layersCopy = nil;
+    @synchronized(self)
     {
-        CALayer *clayer = [_allLayers objectForKey:key];
+        layersCopy = _allLayers.copy;
+    }
+    
+    for (id key in layersCopy)
+    {
+        CALayer *clayer = [layersCopy objectForKey:key];
         updateBlock(clayer);
     }
 }

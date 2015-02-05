@@ -347,6 +347,8 @@ static NSArray *_sourceTypes = nil;
     forInput.inputSource = self;
     forInput.isLive = self.is_live;
     [forInput createNewLayerForInput:self];
+    [forInput addObserver:self forKeyPath:@"activeVideoDevice.uniqueID" options:NSKeyValueObservingOptionNew context:NULL];
+
 }
 
 -(void)deregisterVideoInput:(NSObject<CSCaptureSourceProtocol> *)forInput
@@ -356,6 +358,7 @@ static NSArray *_sourceTypes = nil;
         return;
     }
     
+    [forInput removeObserver:self forKeyPath:@"activeVideoDevice.uniqueID"];
     forInput.isLive = NO;
     [forInput removeLayerForInput:self];
     
@@ -735,7 +738,7 @@ static NSArray *_sourceTypes = nil;
 {
     _rotationAngle = rotationAngle;
     
-    CATransform3D transform = CATransform3DMakeRotation(self.rotationAngle * M_PI / 180.0, 0.0, 0.0, 1);
+    CATransform3D transform = CATransform3DMakeRotation(self.rotationAngle * M_PI / 180.0, 0.0, 0.0, 1.0);
     self.layer.disableAnimation = YES;
     self.layer.transform = transform;
     self.layer.disableAnimation = NO;
@@ -1380,7 +1383,10 @@ static NSArray *_sourceTypes = nil;
 {
     if ([keyPath isEqualToString:@"editorController"]) {
         [self sourceConfigurationView];
+    } else if ([keyPath isEqualToString:@"activeVideoDevice.uniqueID"]) {
+        NSLog(@"UNIQUE ID CHANGED");
     }
+    
         
         
 }

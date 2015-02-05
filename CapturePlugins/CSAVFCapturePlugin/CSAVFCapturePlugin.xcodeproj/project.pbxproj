@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		34A054DE1A82998300583002 /* AVFSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A054DD1A82998300583002 /* AVFSession.m */; };
 		34AFC20319B04F700007C07B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AFC20219B04F700007C07B /* Cocoa.framework */; };
 		34AFC20D19B04F700007C07B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 34AFC20B19B04F700007C07B /* InfoPlist.strings */; };
 		34AFC21F19B04F890007C07B /* AVFCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AFC21B19B04F890007C07B /* AVFCapture.m */; };
@@ -32,6 +33,8 @@
 		344E1E8E1A7947EF0081E5E7 /* CSPluginFactoryProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPluginFactoryProtocol.h; path = PluginHeaders/CSPluginFactoryProtocol.h; sourceTree = "<group>"; };
 		344E1E8F1A7947EF0081E5E7 /* CSExtraPluginProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSExtraPluginProtocol.h; path = PluginHeaders/CSExtraPluginProtocol.h; sourceTree = "<group>"; };
 		344E1E901A7947EF0081E5E7 /* CSNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSNotifications.h; path = PluginHeaders/CSNotifications.h; sourceTree = "<group>"; };
+		34A054DC1A82998300583002 /* AVFSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVFSession.h; sourceTree = "<group>"; };
+		34A054DD1A82998300583002 /* AVFSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVFSession.m; sourceTree = "<group>"; };
 		34AFC1FF19B04F700007C07B /* CSAVFCapturePlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSAVFCapturePlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		34AFC20219B04F700007C07B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		34AFC20519B04F700007C07B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -139,6 +142,8 @@
 				34AFC21C19B04F890007C07B /* AVFCaptureViewController.h */,
 				34AFC21D19B04F890007C07B /* AVFCaptureViewController.m */,
 				34AFC21E19B04F890007C07B /* AVFCaptureViewController.xib */,
+				34A054DC1A82998300583002 /* AVFSession.h */,
+				34A054DD1A82998300583002 /* AVFSession.m */,
 				34AFC20919B04F700007C07B /* Supporting Files */,
 			);
 			path = CSAVFCapturePlugin;
@@ -220,6 +225,7 @@
 				34AFC21F19B04F890007C07B /* AVFCapture.m in Sources */,
 				34AFC22019B04F890007C07B /* AVFCaptureViewController.m in Sources */,
 				34AFC23E19B056FB0007C07B /* AVCaptureDeviceFormat+CocoaSplitAdditions.m in Sources */,
+				34A054DE1A82998300583002 /* AVFSession.m in Sources */,
 				34AFC24119B0570E0007C07B /* AVFrameRateRange+CocoaSplitAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
