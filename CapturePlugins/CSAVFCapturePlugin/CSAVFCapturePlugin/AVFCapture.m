@@ -202,7 +202,6 @@
 -(void) setActiveVideoDevice:(CSAbstractCaptureDevice *)newDev
 {
     
-    NSLog(@"IN SET ACTIVE VIDEO DEVICE AVF %@", self);
     _activeVideoDevice = newDev;
     _selectedVideoCaptureDevice = [newDev captureDevice];
     

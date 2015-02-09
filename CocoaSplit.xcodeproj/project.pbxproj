@@ -175,6 +175,7 @@
 		34EAFB811A1BA87000E12FBD /* CoreMediaIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34EAFB7F1A1BA86800E12FBD /* CoreMediaIO.framework */; };
 		34F5141216FD6E4F00BA894D /* x264Compressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F5140F16FD6E4F00BA894D /* x264Compressor.m */; };
 		34F5141316FD6E4F00BA894D /* AppleVTCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F5141116FD6E4F00BA894D /* AppleVTCompressor.m */; };
+		34FDA83E1A84C46500E7F65E /* CSTimeCapturePlugin.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34FDA8191A84BF9400E7F65E /* CSTimeCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		34FDD6F21A215268009A7413 /* CSPluginServices.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FDD6F11A215268009A7413 /* CSPluginServices.m */; };
 		34FDD6F31A215268009A7413 /* CSPluginServices.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FDD6F11A215268009A7413 /* CSPluginServices.m */; };
 /* End PBXBuildFile section */
@@ -306,6 +307,13 @@
 			remoteGlobalIDString = 34D2D58F1A54857C001004E5;
 			remoteInfo = CSNowPlayingPlugin;
 		};
+		34FDA8181A84BF9400E7F65E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 34FDA8071A84BF9300E7F65E /* CSTimeCapturePlugin.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 34FDA7FD1A84BF9300E7F65E;
+			remoteInfo = CSTimeCapturePlugin;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -368,6 +376,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				34FDA83E1A84C46500E7F65E /* CSTimeCapturePlugin.bundle in CopyFiles */,
 				34D2D5B41A548B68001004E5 /* CSNowPlayingPlugin.bundle in CopyFiles */,
 				34C67B8E1A2E69F60012DC1B /* CSHitboxStreamServicePlugin.bundle in CopyFiles */,
 				34C680A119DD06E800413468 /* CSSyphonInjectExtraPlugin.bundle in CopyFiles */,
@@ -572,6 +581,7 @@
 		34F5141016FD6E4F00BA894D /* AppleVTCompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleVTCompressor.h; path = Compressor/AppleVTCompressor.h; sourceTree = "<group>"; };
 		34F5141116FD6E4F00BA894D /* AppleVTCompressor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppleVTCompressor.m; path = Compressor/AppleVTCompressor.m; sourceTree = "<group>"; };
 		34F5141416FD6E5D00BA894D /* h264Compressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = h264Compressor.h; path = Compressor/h264Compressor.h; sourceTree = "<group>"; };
+		34FDA8071A84BF9300E7F65E /* CSTimeCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSTimeCapturePlugin.xcodeproj; path = CapturePlugins/CSTimeCapturePlugin/CSTimeCapturePlugin.xcodeproj; sourceTree = "<group>"; };
 		34FDD6DC1A204CE4009A7413 /* CAMultiAudioEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioEngine.h; path = CAMultiAudio/CAMultiAudioEngine.h; sourceTree = "<group>"; };
 		34FDD6F01A215268009A7413 /* CSPluginServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPluginServices.h; path = PluginHeaders/CSPluginServices.h; sourceTree = "<group>"; };
 		34FDD6F11A215268009A7413 /* CSPluginServices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSPluginServices.m; sourceTree = "<group>"; };
@@ -979,6 +989,7 @@
 		34AFC24319B058800007C07B /* CapturePlugins */ = {
 			isa = PBXGroup;
 			children = (
+				34FDA8071A84BF9300E7F65E /* CSTimeCapturePlugin.xcodeproj */,
 				34D2D5991A54857C001004E5 /* CSNowPlayingPlugin.xcodeproj */,
 				34AFC24519B05ADA0007C07B /* CSDesktopCapturePlugin.xcodeproj */,
 				34576D2019B023E2007BAD90 /* CSMovieCapturePlugin.xcodeproj */,
@@ -1155,6 +1166,14 @@
 			name = AVFAudioCapture;
 			sourceTree = "<group>";
 		};
+		34FDA8081A84BF9300E7F65E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				34FDA8191A84BF9400E7F65E /* CSTimeCapturePlugin.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1296,6 +1315,10 @@
 					ProjectRef = 34AFC1B819B04DAE0007C07B /* CSTextCapturePlugin.xcodeproj */;
 				},
 				{
+					ProductGroup = 34FDA8081A84BF9300E7F65E /* Products */;
+					ProjectRef = 34FDA8071A84BF9300E7F65E /* CSTimeCapturePlugin.xcodeproj */;
+				},
+				{
 					ProductGroup = 34AFC32719B0AD360007C07B /* Products */;
 					ProjectRef = 34AFC31319B0A5800007C07B /* CSTwitchStreamServicePlugin.xcodeproj */;
 				},
@@ -1428,6 +1451,13 @@
 			fileType = wrapper.cfbundle;
 			path = CSNowPlayingPlugin.bundle;
 			remoteRef = 34D2D59D1A54857D001004E5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		34FDA8191A84BF9400E7F65E /* CSTimeCapturePlugin.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = CSTimeCapturePlugin.bundle;
+			remoteRef = 34FDA8181A84BF9400E7F65E /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

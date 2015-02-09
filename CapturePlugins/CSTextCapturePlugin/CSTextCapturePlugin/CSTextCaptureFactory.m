@@ -11,6 +11,7 @@
 #import "TextCapture.h"
 #import "FileTextCapture.h"
 
+
 @implementation CSTextCaptureFactory
 
 

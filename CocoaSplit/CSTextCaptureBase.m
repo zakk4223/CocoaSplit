@@ -99,6 +99,7 @@
         [self updateLayersWithBlock:^(CALayer *layer) {
             layer.bounds = CGRectMake(0.0, 0.0, _attribString.size.width, _attribString.size.height);
             ((CATextLayer *)layer).string = _attribString;
+            [CATransaction commit];
  
         }];
         

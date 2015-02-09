@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14C109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6250"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="CSElapsedTimeCaptureViewController">
+            <connections>
+                <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="Hz6-mo-xeY">
+            <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lqi-1m-gF5">
+                    <rect key="frame" x="15" y="145" width="80" height="28"/>
+                    <buttonCell key="cell" type="push" title="Font" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Xvf-CA-VB5">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="openFontPanel:" target="-2" id="n38-VJ-WZ9"/>
+                    </connections>
+                </button>
+                <datePicker verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TPj-6z-FbI">
+                    <rect key="frame" x="85" y="235" width="174" height="22"/>
+                    <datePickerCell key="cell" controlSize="small" borderStyle="bezel" alignment="left" id="Ere-4M-0ee">
+                        <font key="font" metaFont="smallSystem"/>
+                        <calendarDate key="date" timeIntervalSinceReferenceDate="-595929600" calendarFormat="%Y-%m-%d %H:%M:%S %z">
+                            <!--1982-02-12 16:00:00 +0000-->
+                            <timeZone key="timeZone" name="US/Pacific"/>
+                        </calendarDate>
+                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <datePickerElements key="datePickerElements" year="YES" month="YES" day="YES" hour="YES" minute="YES" second="YES"/>
+                    </datePickerCell>
+                    <connections>
+                        <binding destination="2L5-3h-3sg" name="value" keyPath="selection.startDate" id="IGg-x8-Phw"/>
+                    </connections>
+                </datePicker>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GMq-ek-bfR">
+                    <rect key="frame" x="18" y="238" width="61" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Start From" id="sfd-yy-9tE">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1oh-z2-cag">
+                    <rect key="frame" x="17" y="203" width="130" height="20"/>
+                    <buttonCell key="cell" type="check" title="Reset time at go live" bezelStyle="regularSquare" imagePosition="right" controlSize="small" state="on" inset="2" id="lUb-D4-Us9">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="2L5-3h-3sg" name="value" keyPath="selection.restartWhenLive" id="NPO-4b-17A"/>
+                    </connections>
+                </button>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qs8-pn-0vv">
+                    <rect key="frame" x="260" y="230" width="86" height="28"/>
+                    <buttonCell key="cell" type="push" title="Reset Time" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ocA-jK-9ll">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="resetTime:" target="-2" id="CZK-hZ-tSF"/>
+                    </connections>
+                </button>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ddb-qn-S6e">
+                    <rect key="frame" x="18" y="184" width="42" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Format" id="lVw-JU-IHT">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x3b-Bq-Yz5">
+                    <rect key="frame" x="66" y="182" width="120" height="19"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="NuI-K3-2wO">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="2L5-3h-3sg" name="value" keyPath="selection.format" id="L0Q-hE-Pwz"/>
+                    </connections>
+                </textField>
+            </subviews>
+        </customView>
+        <objectController id="2L5-3h-3sg">
+            <connections>
+                <binding destination="-2" name="contentObject" keyPath="self.captureObj" id="Dej-uW-cGf"/>
+            </connections>
+        </objectController>
+    </objects>
+</document>

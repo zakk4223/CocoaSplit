@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14C109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6250"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="CSCountdownTimeCaptureViewController">
+            <connections>
+                <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="Hz6-mo-xeY">
+            <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <datePicker verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fC1-ya-wVY">
+                    <rect key="frame" x="111" y="233" width="173" height="22"/>
+                    <datePickerCell key="cell" controlSize="small" borderStyle="bezel" alignment="left" id="cgk-H8-VAx">
+                        <font key="font" metaFont="smallSystem"/>
+                        <calendarDate key="date" timeIntervalSinceReferenceDate="-595929600" calendarFormat="%Y-%m-%d %H:%M:%S %z">
+                            <!--1982-02-12 16:00:00 +0000-->
+                            <timeZone key="timeZone" name="US/Pacific"/>
+                        </calendarDate>
+                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <datePickerElements key="datePickerElements" year="YES" month="YES" day="YES" hour="YES" minute="YES" second="YES"/>
+                    </datePickerCell>
+                    <connections>
+                        <binding destination="dGP-MJ-0RA" name="value" keyPath="selection.endDate" id="2y0-QM-bna"/>
+                    </connections>
+                </datePicker>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UGZ-eA-6aK">
+                    <rect key="frame" x="18" y="236" width="44" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="End at" id="iLQ-qd-IAJ">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c9f-uZ-56V">
+                    <rect key="frame" x="18" y="188" width="92" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Total Seconds" id="QGk-a5-8yd">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zrJ-WN-XOs">
+                    <rect key="frame" x="116" y="184" width="44" height="22"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="6JB-S6-089">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="dGP-MJ-0RA" name="value" keyPath="selection.countdownSeconds" id="fle-Rn-H4t"/>
+                    </connections>
+                </textField>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sUI-lW-qoZ">
+                    <rect key="frame" x="15" y="133" width="80" height="28"/>
+                    <buttonCell key="cell" type="push" title="Font" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ihX-bA-Rhw">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="openFontPanel:" target="-2" id="qcY-j0-7oL"/>
+                    </connections>
+                </button>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uoo-P2-tHy">
+                    <rect key="frame" x="91" y="210" width="19" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Or" id="JCY-mH-Cpd">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kXU-g2-aJ9">
+                    <rect key="frame" x="165" y="185" width="160" height="20"/>
+                    <buttonCell key="cell" type="check" title="Restart time when live" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="umo-3o-MQq">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="dGP-MJ-0RA" name="value" keyPath="selection.restartWhenLive" id="MVV-bC-bA7"/>
+                    </connections>
+                </button>
+            </subviews>
+        </customView>
+        <objectController id="dGP-MJ-0RA">
+            <connections>
+                <binding destination="-2" name="contentObject" keyPath="self.captureObj" id="pyI-qB-wko"/>
+            </connections>
+        </objectController>
+        <userDefaultsController representsSharedInstance="YES" id="t3A-3M-hDK"/>
+    </objects>
+</document>

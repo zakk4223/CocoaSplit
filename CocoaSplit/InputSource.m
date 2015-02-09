@@ -1384,7 +1384,6 @@ static NSArray *_sourceTypes = nil;
     if ([keyPath isEqualToString:@"editorController"]) {
         [self sourceConfigurationView];
     } else if ([keyPath isEqualToString:@"activeVideoDevice.uniqueID"]) {
-        NSLog(@"UNIQUE ID CHANGED");
     }
     
         
