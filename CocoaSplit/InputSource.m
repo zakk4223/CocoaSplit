@@ -675,7 +675,7 @@ static NSArray *_sourceTypes = nil;
     
     NSMutableDictionary *pluginMap = [[CSPluginLoader sharedPluginLoader] sourcePlugins];
     
-    return pluginMap.allKeys;
+    return [pluginMap.allKeys sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
 }
 
 
