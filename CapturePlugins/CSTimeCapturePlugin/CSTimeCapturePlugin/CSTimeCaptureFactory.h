@@ -11,6 +11,7 @@
 #import "CSCurrentTimeCapture.h"
 #import "CSElapsedTimeCapture.h"
 #import "CSCountdownTimeCapture.h"
+#import "CSTimeIntervalCapture.h"
 
 
 @interface CSTimeCaptureFactory : NSObject <CSPluginFactoryProtocol>

@@ -20,6 +20,9 @@
 		34FDA8521A88360400E7F65E /* CSCountdownTimeCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FDA8511A88360400E7F65E /* CSCountdownTimeCapture.m */; };
 		34FDA8561A883E1700E7F65E /* CSCountdownTimeCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FDA8541A883E1700E7F65E /* CSCountdownTimeCaptureViewController.m */; };
 		34FDA8571A883E1700E7F65E /* CSCountdownTimeCaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34FDA8551A883E1700E7F65E /* CSCountdownTimeCaptureViewController.xib */; };
+		34FDA85E1A8C930E00E7F65E /* CSTimeIntervalCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FDA85D1A8C930E00E7F65E /* CSTimeIntervalCapture.m */; };
+		34FDA8621A8C94A400E7F65E /* CSTimeIntervalCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FDA8601A8C94A400E7F65E /* CSTimeIntervalCaptureViewController.m */; };
+		34FDA8631A8C94A400E7F65E /* CSTimeIntervalCaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34FDA8611A8C94A400E7F65E /* CSTimeIntervalCaptureViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,6 +64,11 @@
 		34FDA8531A883E1700E7F65E /* CSCountdownTimeCaptureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSCountdownTimeCaptureViewController.h; sourceTree = "<group>"; };
 		34FDA8541A883E1700E7F65E /* CSCountdownTimeCaptureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSCountdownTimeCaptureViewController.m; sourceTree = "<group>"; };
 		34FDA8551A883E1700E7F65E /* CSCountdownTimeCaptureViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSCountdownTimeCaptureViewController.xib; sourceTree = "<group>"; };
+		34FDA85C1A8C930E00E7F65E /* CSTimeIntervalCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSTimeIntervalCapture.h; sourceTree = "<group>"; };
+		34FDA85D1A8C930E00E7F65E /* CSTimeIntervalCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSTimeIntervalCapture.m; sourceTree = "<group>"; };
+		34FDA85F1A8C94A400E7F65E /* CSTimeIntervalCaptureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSTimeIntervalCaptureViewController.h; sourceTree = "<group>"; };
+		34FDA8601A8C94A400E7F65E /* CSTimeIntervalCaptureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSTimeIntervalCaptureViewController.m; sourceTree = "<group>"; };
+		34FDA8611A8C94A400E7F65E /* CSTimeIntervalCaptureViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSTimeIntervalCaptureViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,30 +102,19 @@
 		34FDA7FF1A84BF9300E7F65E /* CSTimeCapturePlugin */ = {
 			isa = PBXGroup;
 			children = (
+				34FDA85B1A8C92E300E7F65E /* CSTimeIntervalCapture */,
+				34FDA85A1A8C910E00E7F65E /* CSCurrentTimeCapture */,
+				34FDA8591A8C90F300E7F65E /* CSCountdownTimeCapture */,
+				34FDA8581A8C90E100E7F65E /* CSElapsedTimeCapture */,
 				34FDA8421A860D5500E7F65E /* NSTimeIntervalFormatter.h */,
 				34FDA8431A860D5500E7F65E /* NSTimeIntervalFormatter.m */,
-				34FDA84B1A86679900E7F65E /* CSElapsedTimeCaptureViewController.h */,
-				34FDA84C1A86679900E7F65E /* CSElapsedTimeCaptureViewController.m */,
-				34FDA84D1A86679900E7F65E /* CSElapsedTimeCaptureViewController.xib */,
-				34FDA83F1A84C7F000E7F65E /* CSElapsedTimeCapture.h */,
-				34FDA8401A84C7F000E7F65E /* CSElapsedTimeCapture.m */,
 				34FDA8451A865F9000E7F65E /* CSTimeIntervalBase.h */,
 				34FDA8461A865F9000E7F65E /* CSTimeIntervalBase.m */,
-				34FDA8391A84C34A00E7F65E /* CSCurrentTimeCaptureViewController.h */,
-				34FDA83A1A84C34A00E7F65E /* CSCurrentTimeCaptureViewController.m */,
-				34FDA83B1A84C34A00E7F65E /* CSCurrentTimeCaptureViewController.xib */,
-				34FDA8311A84C15800E7F65E /* CSCurrentTimeCapture.h */,
-				34FDA8321A84C15800E7F65E /* CSCurrentTimeCapture.m */,
 				34FDA82B1A84BFF400E7F65E /* CSTimeCaptureFactory.h */,
 				34FDA82C1A84BFF400E7F65E /* CSTimeCaptureFactory.m */,
 				34FDA8001A84BF9300E7F65E /* Supporting Files */,
 				34FDA82E1A84C08A00E7F65E /* CSTimeCaptureBase.h */,
 				34FDA82F1A84C08A00E7F65E /* CSTimeCaptureBase.m */,
-				34FDA8501A88360400E7F65E /* CSCountdownTimeCapture.h */,
-				34FDA8511A88360400E7F65E /* CSCountdownTimeCapture.m */,
-				34FDA8531A883E1700E7F65E /* CSCountdownTimeCaptureViewController.h */,
-				34FDA8541A883E1700E7F65E /* CSCountdownTimeCaptureViewController.m */,
-				34FDA8551A883E1700E7F65E /* CSCountdownTimeCaptureViewController.xib */,
 			);
 			path = CSTimeCapturePlugin;
 			sourceTree = "<group>";
@@ -149,6 +146,54 @@
 			);
 			name = PluginHeaders;
 			path = ../../CocoaSplit;
+			sourceTree = "<group>";
+		};
+		34FDA8581A8C90E100E7F65E /* CSElapsedTimeCapture */ = {
+			isa = PBXGroup;
+			children = (
+				34FDA84B1A86679900E7F65E /* CSElapsedTimeCaptureViewController.h */,
+				34FDA84C1A86679900E7F65E /* CSElapsedTimeCaptureViewController.m */,
+				34FDA84D1A86679900E7F65E /* CSElapsedTimeCaptureViewController.xib */,
+				34FDA83F1A84C7F000E7F65E /* CSElapsedTimeCapture.h */,
+				34FDA8401A84C7F000E7F65E /* CSElapsedTimeCapture.m */,
+			);
+			name = CSElapsedTimeCapture;
+			sourceTree = "<group>";
+		};
+		34FDA8591A8C90F300E7F65E /* CSCountdownTimeCapture */ = {
+			isa = PBXGroup;
+			children = (
+				34FDA8501A88360400E7F65E /* CSCountdownTimeCapture.h */,
+				34FDA8511A88360400E7F65E /* CSCountdownTimeCapture.m */,
+				34FDA8531A883E1700E7F65E /* CSCountdownTimeCaptureViewController.h */,
+				34FDA8541A883E1700E7F65E /* CSCountdownTimeCaptureViewController.m */,
+				34FDA8551A883E1700E7F65E /* CSCountdownTimeCaptureViewController.xib */,
+			);
+			name = CSCountdownTimeCapture;
+			sourceTree = "<group>";
+		};
+		34FDA85A1A8C910E00E7F65E /* CSCurrentTimeCapture */ = {
+			isa = PBXGroup;
+			children = (
+				34FDA8391A84C34A00E7F65E /* CSCurrentTimeCaptureViewController.h */,
+				34FDA83A1A84C34A00E7F65E /* CSCurrentTimeCaptureViewController.m */,
+				34FDA83B1A84C34A00E7F65E /* CSCurrentTimeCaptureViewController.xib */,
+				34FDA8311A84C15800E7F65E /* CSCurrentTimeCapture.h */,
+				34FDA8321A84C15800E7F65E /* CSCurrentTimeCapture.m */,
+			);
+			name = CSCurrentTimeCapture;
+			sourceTree = "<group>";
+		};
+		34FDA85B1A8C92E300E7F65E /* CSTimeIntervalCapture */ = {
+			isa = PBXGroup;
+			children = (
+				34FDA85C1A8C930E00E7F65E /* CSTimeIntervalCapture.h */,
+				34FDA85D1A8C930E00E7F65E /* CSTimeIntervalCapture.m */,
+				34FDA85F1A8C94A400E7F65E /* CSTimeIntervalCaptureViewController.h */,
+				34FDA8601A8C94A400E7F65E /* CSTimeIntervalCaptureViewController.m */,
+				34FDA8611A8C94A400E7F65E /* CSTimeIntervalCaptureViewController.xib */,
+			);
+			name = CSTimeIntervalCapture;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -208,6 +253,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				34FDA83D1A84C34A00E7F65E /* CSCurrentTimeCaptureViewController.xib in Resources */,
+				34FDA8631A8C94A400E7F65E /* CSTimeIntervalCaptureViewController.xib in Resources */,
 				34FDA8571A883E1700E7F65E /* CSCountdownTimeCaptureViewController.xib in Resources */,
 				34FDA84F1A86679900E7F65E /* CSElapsedTimeCaptureViewController.xib in Resources */,
 			);
@@ -225,6 +271,8 @@
 				34FDA82D1A84BFF400E7F65E /* CSTimeCaptureFactory.m in Sources */,
 				34FDA83C1A84C34A00E7F65E /* CSCurrentTimeCaptureViewController.m in Sources */,
 				34FDA8441A860D5500E7F65E /* NSTimeIntervalFormatter.m in Sources */,
+				34FDA8621A8C94A400E7F65E /* CSTimeIntervalCaptureViewController.m in Sources */,
+				34FDA85E1A8C930E00E7F65E /* CSTimeIntervalCapture.m in Sources */,
 				34FDA8411A84C7F000E7F65E /* CSElapsedTimeCapture.m in Sources */,
 				34FDA84E1A86679900E7F65E /* CSElapsedTimeCaptureViewController.m in Sources */,
 				34FDA8331A84C15800E7F65E /* CSCurrentTimeCapture.m in Sources */,

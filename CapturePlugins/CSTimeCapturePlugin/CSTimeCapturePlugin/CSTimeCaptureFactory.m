@@ -15,7 +15,7 @@
 
 +(NSArray *)captureSourceClasses
 {
-    return @[[CSCurrentTimeCapture class], [CSElapsedTimeCapture class], [CSCountdownTimeCapture class]];
+    return @[[CSCurrentTimeCapture class], [CSElapsedTimeCapture class], [CSCountdownTimeCapture class], [CSTimeIntervalCapture class]];
 }
 
 

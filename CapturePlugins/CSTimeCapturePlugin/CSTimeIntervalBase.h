@@ -16,5 +16,6 @@
 @property (strong) NSDate *endDate;
 @property (strong) NSString *format;
 @property (strong) NSDictionary *styleTypeMap;
+@property (assign) bool paused;
 
 @end

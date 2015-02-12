@@ -10,6 +10,8 @@
 
 @implementation CSTimeIntervalBase
 @synthesize format = _format;
+@synthesize paused = _paused;
+
 
 -(instancetype)init
 {
@@ -38,6 +40,7 @@
         self.endDate = [aDecoder decodeObjectForKey:@"endDate"];
         self.startDate = [aDecoder decodeObjectForKey:@"startDate"];
         self.format = [aDecoder decodeObjectForKey:@"format"];
+        self.paused = [aDecoder decodeBoolForKey:@"paused"];
     }
     
     return self;
@@ -49,6 +52,9 @@
     [aCoder encodeObject:self.endDate forKey:@"endDate"];
     [aCoder encodeObject:self.startDate forKey:@"startDate"];
     [aCoder encodeObject:self.format forKey:@"format"];
+    [aCoder encodeBool:self.paused forKey:@"paused"];
+
+    
 }
 
 
@@ -70,19 +76,21 @@
 }
 
 
+
 -(void)frameTick
 {
     NSTimeInterval interval;
-    
-    if (self.startDate)
+    if (self.paused)
     {
-        
+        return;
+    }
+    
+    if (self.startDate) {
         interval = -[self.startDate timeIntervalSinceNow];
     } else if (self.endDate) {
-        
         interval = [self.endDate timeIntervalSinceNow];
-        
     }
+    
     if (interval < 0)
     {
         interval = 0;

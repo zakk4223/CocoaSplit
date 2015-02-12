@@ -21,7 +21,7 @@
     if (self = [super init])
     {
         self.startDate = [NSDate date];
-        self.restartWhenLive = YES;
+        self.restartWhenLive = NO;
     }
     return self;
 }

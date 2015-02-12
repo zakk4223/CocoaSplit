@@ -10,7 +10,4 @@
 
 @interface CSCountdownTimeCapture : CSTimeIntervalBase
 
-@property (assign) float countdownSeconds;
-@property (assign) bool restartWhenLive;
-
 @end
