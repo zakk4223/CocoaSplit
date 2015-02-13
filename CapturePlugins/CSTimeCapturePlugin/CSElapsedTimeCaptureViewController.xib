@@ -16,7 +16,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lqi-1m-gF5">
-                    <rect key="frame" x="15" y="145" width="80" height="28"/>
+                    <rect key="frame" x="260" y="207" width="80" height="28"/>
                     <buttonCell key="cell" type="push" title="Font" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Xvf-CA-VB5">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -49,19 +49,9 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1oh-z2-cag">
-                    <rect key="frame" x="17" y="203" width="130" height="20"/>
-                    <buttonCell key="cell" type="check" title="Reset time at go live" bezelStyle="regularSquare" imagePosition="right" controlSize="small" state="on" inset="2" id="lUb-D4-Us9">
-                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                    </buttonCell>
-                    <connections>
-                        <binding destination="2L5-3h-3sg" name="value" keyPath="selection.restartWhenLive" id="NPO-4b-17A"/>
-                    </connections>
-                </button>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qs8-pn-0vv">
-                    <rect key="frame" x="260" y="230" width="86" height="28"/>
-                    <buttonCell key="cell" type="push" title="Reset Time" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ocA-jK-9ll">
+                    <rect key="frame" x="260" y="230" width="85" height="28"/>
+                    <buttonCell key="cell" type="push" title="Set to Now" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ocA-jK-9ll">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
@@ -70,7 +60,7 @@
                     </connections>
                 </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ddb-qn-S6e">
-                    <rect key="frame" x="18" y="184" width="42" height="14"/>
+                    <rect key="frame" x="18" y="213" width="42" height="14"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Format" id="lVw-JU-IHT">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -78,7 +68,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x3b-Bq-Yz5">
-                    <rect key="frame" x="66" y="182" width="120" height="19"/>
+                    <rect key="frame" x="85" y="213" width="172" height="19"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="NuI-K3-2wO">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -88,6 +78,26 @@
                         <binding destination="2L5-3h-3sg" name="value" keyPath="selection.format" id="L0Q-hE-Pwz"/>
                     </connections>
                 </textField>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PKu-wE-q8G">
+                    <rect key="frame" x="348" y="230" width="80" height="28"/>
+                    <buttonCell key="cell" type="push" title="Pause" alternateTitle="Go!" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="4fI-fF-Sz0">
+                        <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="2L5-3h-3sg" name="value" keyPath="selection.paused" id="cWk-CW-3eo"/>
+                    </connections>
+                </button>
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1oh-z2-cag">
+                    <rect key="frame" x="17" y="188" width="130" height="20"/>
+                    <buttonCell key="cell" type="check" title="Reset time at go live" bezelStyle="regularSquare" imagePosition="right" controlSize="small" state="on" inset="2" id="lUb-D4-Us9">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="2L5-3h-3sg" name="value" keyPath="selection.restartWhenLive" id="NPO-4b-17A"/>
+                    </connections>
+                </button>
             </subviews>
         </customView>
         <objectController id="2L5-3h-3sg">

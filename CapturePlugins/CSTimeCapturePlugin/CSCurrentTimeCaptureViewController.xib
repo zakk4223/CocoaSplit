@@ -16,7 +16,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qhv-2g-h22">
-                    <rect key="frame" x="15" y="228" width="80" height="28"/>
+                    <rect key="frame" x="15" y="150" width="80" height="28"/>
                     <buttonCell key="cell" type="push" title="Font" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qUM-7Z-R73">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -25,7 +25,93 @@
                         <action selector="openFontPanel:" target="-2" id="vBw-Ye-ZPT"/>
                     </connections>
                 </button>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mJ6-t6-1hJ">
+                    <rect key="frame" x="20" y="184" width="42" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Format" id="LHn-zZ-ypp">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R2e-W0-PwU">
+                    <rect key="frame" x="68" y="182" width="296" height="19"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="nWW-gr-8DI">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="vFt-xN-8xE" name="value" keyPath="selection.format" id="S4R-3A-KmB"/>
+                    </connections>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PJ7-82-aHc">
+                    <rect key="frame" x="18" y="238" width="59" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Date Style" id="ydm-xQ-MW0">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wdz-3w-ELu">
+                    <rect key="frame" x="17" y="216" width="60" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Time Style" id="5qb-So-nbx">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZbE-Nr-duJ">
+                    <rect key="frame" x="80" y="233" width="101" height="22"/>
+                    <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="TkZ-tm-iTW" id="Ppf-ra-J8r">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" id="1xa-jR-wOb">
+                            <items>
+                                <menuItem title="Item 1" state="on" id="TkZ-tm-iTW"/>
+                                <menuItem title="Item 2" id="xPG-ah-sxb"/>
+                                <menuItem title="Item 3" id="bOK-IY-rBB"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="jIp-YP-Lxx" name="content" keyPath="arrangedObjects" id="6o5-ze-trd"/>
+                        <binding destination="jIp-YP-Lxx" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="6o5-ze-trd" id="2wO-EZ-bXt"/>
+                        <binding destination="jIp-YP-Lxx" name="contentValues" keyPath="arrangedObjects.key" previousBinding="2wO-EZ-bXt" id="eMl-Bp-zdP"/>
+                        <binding destination="vFt-xN-8xE" name="selectedObject" keyPath="selection.formatter.dateStyle" previousBinding="eMl-Bp-zdP" id="qWq-zk-ps4"/>
+                    </connections>
+                </popUpButton>
+                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="v2k-lG-GDh">
+                    <rect key="frame" x="80" y="211" width="101" height="22"/>
+                    <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="WNe-S1-zuh" id="q51-hd-DoW">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" id="IUC-Dd-ugF">
+                            <items>
+                                <menuItem title="Item 1" state="on" id="WNe-S1-zuh"/>
+                                <menuItem title="Item 2" id="iae-Ph-G2V"/>
+                                <menuItem title="Item 3" id="vrF-gw-AOU"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="jIp-YP-Lxx" name="content" keyPath="arrangedObjects" id="tKH-Us-9zh"/>
+                        <binding destination="jIp-YP-Lxx" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="tKH-Us-9zh" id="ybF-S7-MIz"/>
+                        <binding destination="jIp-YP-Lxx" name="contentValues" keyPath="arrangedObjects.key" previousBinding="ybF-S7-MIz" id="VE0-RS-hJq"/>
+                        <binding destination="vFt-xN-8xE" name="selectedObject" keyPath="selection.formatter.timeStyle" previousBinding="VE0-RS-hJq" id="nWL-yK-uU8"/>
+                    </connections>
+                </popUpButton>
             </subviews>
         </customView>
+        <objectController id="vFt-xN-8xE">
+            <connections>
+                <binding destination="-2" name="contentObject" keyPath="self.captureObj" id="HTa-KU-OgX"/>
+            </connections>
+        </objectController>
+        <dictionaryController objectClassName="_NSControllerKeyValuePair" id="jIp-YP-Lxx" userLabel="StyleTypeMapController">
+            <connections>
+                <binding destination="vFt-xN-8xE" name="contentDictionary" keyPath="selection.styleTypeMap" id="d7m-zb-S0s"/>
+                <binding destination="-2" name="sortDescriptors" keyPath="self.styleSortDescriptors" id="cRJ-Jj-dxS"/>
+            </connections>
+        </dictionaryController>
     </objects>
 </document>

@@ -9,8 +9,7 @@
 #import "CSCurrentTimeCapture.h"
 
 @implementation CSCurrentTimeCapture
-
-
+@synthesize format = _format;
 
 -(instancetype)init
 {
@@ -32,10 +31,56 @@
 }
 
 
+-(instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithCoder:aDecoder])
+    {
+        self.formatter.dateStyle = [aDecoder decodeIntegerForKey:@"dateStyle"];
+        self.formatter.timeStyle = [aDecoder decodeIntegerForKey:@"timeStyle"];
+
+        if ([aDecoder containsValueForKey:@"format"])
+        {
+            self.format = [aDecoder decodeObjectForKey:@"format"];
+        }
+    }
+    
+    return self;
+}
+
+
+-(void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [super encodeWithCoder:aCoder];
+
+    [aCoder encodeInteger:self.formatter.dateStyle forKey:@"dateStyle"];
+    [aCoder encodeInteger:self.formatter.timeStyle forKey:@"timeStyle"];
+    
+    if (_format)
+    {
+        [aCoder encodeObject:_format forKey:@"format"];
+    }
+}
+
+
 +(NSString *)label
 {
     return @"Current Date/Time";
 }
+
+
+-(void)setFormat:(NSString *)format
+{
+    _format = format;
+    self.formatter.dateStyle = NSDateFormatterNoStyle;
+    self.formatter.timeStyle = NSDateFormatterNoStyle;
+    self.formatter.dateFormat = format;
+}
+
+-(NSString *)format
+{
+    return self.formatter.dateFormat;
+}
+
 
 -(NSArray *)styleTypes
 {
@@ -46,6 +91,13 @@
 -(void)frameTick
 {
     self.text = [_formatter stringFromDate:[NSDate date]];
+}
+
+
++ (NSSet *)keyPathsForValuesAffectingFormat
+{
+    return [NSSet setWithObjects:@"formatter.dateStyle", @"formatter.timeStyle", nil];
+
 }
 
 
