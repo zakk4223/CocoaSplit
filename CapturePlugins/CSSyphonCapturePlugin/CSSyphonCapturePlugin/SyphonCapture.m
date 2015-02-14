@@ -107,7 +107,10 @@
 
 -(CALayer *)createNewLayer
 {
-    return [CSIOSurfaceLayer layer];
+    CSIOSurfaceLayer *newLayer = [CSIOSurfaceLayer layer];
+    
+    newLayer.flipImage = self.isFlipped;
+    return newLayer;
 }
 
 
