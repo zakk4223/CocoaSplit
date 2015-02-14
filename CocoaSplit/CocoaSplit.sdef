@@ -1,0 +1,34 @@
+<dictionary xmlns:xi="http://www.w3.org/2003/XInclude">
+    <!--<xi:include href="file:///System/Library/ScriptingDefinitions/CocoaStandard.sdef" xpointer="xpointer(/dictionary/suite)"/>-->
+    
+    <suite name="CocoaSplit Scripting Suite" code="CSss">
+        <class name="application" code="capp">
+            <cocoa class="NSApplication"/>
+            <element type="layout">
+                <cocoa key="layouts"/>
+            </element>
+            <property name="width" code="CSwd" type="integer"/>
+            <property name="height" code="CSht" type="integer"/>
+            <property name="fps" code="CSfp" type="real"/>
+            <property name="activelayout" code="CSal" type="layout"/>
+            
+            
+        </class>
+        
+        <class name="layout" code="CSly">
+            <cocoa class="SourceLayout"/>
+            <property name="name" code="pnam" type="text">
+                <cocoa key="name"/>
+            </property>
+            <responds-to name="activate">
+                <cocoa method="scriptActivate:"/>
+            </responds-to>
+        </class>
+        
+        <command name="activate" code="CSlyACtv">
+            <direct-parameter type="layout"/>
+        </command>
+    </suite>
+    
+    
+</dictionary>
