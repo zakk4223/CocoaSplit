@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		34FDA82D1A84BFF400E7F65E /* CSTimeCaptureFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FDA82C1A84BFF400E7F65E /* CSTimeCaptureFactory.m */; };
-		34FDA8301A84C08A00E7F65E /* CSTimeCaptureBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FDA82F1A84C08A00E7F65E /* CSTimeCaptureBase.m */; };
 		34FDA8331A84C15800E7F65E /* CSCurrentTimeCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FDA8321A84C15800E7F65E /* CSCurrentTimeCapture.m */; };
 		34FDA83C1A84C34A00E7F65E /* CSCurrentTimeCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FDA83A1A84C34A00E7F65E /* CSCurrentTimeCaptureViewController.m */; };
 		34FDA83D1A84C34A00E7F65E /* CSCurrentTimeCaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34FDA83B1A84C34A00E7F65E /* CSCurrentTimeCaptureViewController.xib */; };
@@ -43,8 +42,6 @@
 		34FDA8291A84BFA800E7F65E /* CSNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSNotifications.h; path = PluginHeaders/CSNotifications.h; sourceTree = "<group>"; };
 		34FDA82B1A84BFF400E7F65E /* CSTimeCaptureFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSTimeCaptureFactory.h; sourceTree = "<group>"; };
 		34FDA82C1A84BFF400E7F65E /* CSTimeCaptureFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSTimeCaptureFactory.m; sourceTree = "<group>"; };
-		34FDA82E1A84C08A00E7F65E /* CSTimeCaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSTimeCaptureBase.h; sourceTree = "<group>"; };
-		34FDA82F1A84C08A00E7F65E /* CSTimeCaptureBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSTimeCaptureBase.m; sourceTree = "<group>"; };
 		34FDA8311A84C15800E7F65E /* CSCurrentTimeCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCurrentTimeCapture.h; path = ../CSCurrentTimeCapture.h; sourceTree = "<group>"; };
 		34FDA8321A84C15800E7F65E /* CSCurrentTimeCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSCurrentTimeCapture.m; path = ../CSCurrentTimeCapture.m; sourceTree = "<group>"; };
 		34FDA8391A84C34A00E7F65E /* CSCurrentTimeCaptureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCurrentTimeCaptureViewController.h; path = ../CSCurrentTimeCaptureViewController.h; sourceTree = "<group>"; };
@@ -113,8 +110,6 @@
 				34FDA82B1A84BFF400E7F65E /* CSTimeCaptureFactory.h */,
 				34FDA82C1A84BFF400E7F65E /* CSTimeCaptureFactory.m */,
 				34FDA8001A84BF9300E7F65E /* Supporting Files */,
-				34FDA82E1A84C08A00E7F65E /* CSTimeCaptureBase.h */,
-				34FDA82F1A84C08A00E7F65E /* CSTimeCaptureBase.m */,
 			);
 			path = CSTimeCapturePlugin;
 			sourceTree = "<group>";
@@ -266,7 +261,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				34FDA8301A84C08A00E7F65E /* CSTimeCaptureBase.m in Sources */,
 				34FDA8521A88360400E7F65E /* CSCountdownTimeCapture.m in Sources */,
 				34FDA82D1A84BFF400E7F65E /* CSTimeCaptureFactory.m in Sources */,
 				34FDA83C1A84C34A00E7F65E /* CSCurrentTimeCaptureViewController.m in Sources */,
@@ -411,6 +405,7 @@
 				34FDA8061A84BF9300E7F65E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

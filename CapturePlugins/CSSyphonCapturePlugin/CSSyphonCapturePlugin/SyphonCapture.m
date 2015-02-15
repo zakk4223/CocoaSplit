@@ -132,6 +132,23 @@
     return _isFlipped;
 }
 
+
+-(void)publishSurface:(IOSurfaceRef)surface
+{
+    
+    uint32_t newSeed = IOSurfaceGetSeed(surface);
+    
+    if (newSeed != _surfaceSeed)
+    {
+        CIImage *newImage = [[CIImage alloc] initWithIOSurface:surface plane:0 format:kCIFormatARGB8 options:nil];
+        _surfaceSeed = newSeed;
+        [self updateLayersWithBlock:^(CALayer *layer) {
+            ((CSIOSurfaceLayer *)layer).ioImage = newImage;
+        }];
+    }
+}
+
+    
 -(void) startSyphon
 {
     
@@ -148,30 +165,22 @@
     
     if (_syphonServer)
     {
-     _syphon_client = [[SyphonClient alloc] initWithServerDescription:_syphonServer.copy options:nil newFrameHandler:^(SyphonClient *client) {
-     
-         //this call retains the surface, so be sure to release it if we don't care about it anymore
-         IOSurfaceRef newSurface = [client IOSurface];
-         
-         uint32_t newSeed = IOSurfaceGetSeed(newSurface);
-         
-         if (newSeed != _surfaceSeed)
-         {
-             CIImage *newImage = [[CIImage alloc] initWithIOSurface:newSurface plane:0 format:kCIFormatARGB8 options:nil];
-             _surfaceSeed = newSeed;
-             [self updateLayersWithBlock:^(CALayer *layer) {
-                 ((CSIOSurfaceLayer *)layer).ioImage = newImage;
-             }];
-             CFRelease(newSurface);
-          } else {
-             CFRelease(newSurface);
-         }
-         
-     }];
+        _syphon_client = [[SyphonClient alloc] initWithServerDescription:_syphonServer.copy options:nil newFrameHandler:^(SyphonClient *client) {
+            
+            //this call retains the surface, so be sure to release it if we don't care about it anymore
+            IOSurfaceRef newSurface = [client IOSurface];
+            
+            [self publishSurface:newSurface];
+            
+            CFRelease(newSurface);
+        }];
         
-        @synchronized(self)
+        
+        IOSurfaceRef newSurface = [_syphon_client IOSurface];
+        if (newSurface)
         {
-            _serverSurface = [_syphon_client IOSurface];
+            [self publishSurface:newSurface];
+            CFRelease(newSurface);
         }
         
         

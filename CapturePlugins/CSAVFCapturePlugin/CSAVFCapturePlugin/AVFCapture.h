@@ -50,9 +50,6 @@
 
 
 
--(bool) startCaptureSession:(NSError **)error;
--(bool) stopCaptureSession;
--(id) initForProxy;
 -(void)captureVideoOutput:(CMSampleBufferRef)sampleBuffer;
 -(void)captureAudioOutput:(CMSampleBufferRef)sampleBuffer;
 

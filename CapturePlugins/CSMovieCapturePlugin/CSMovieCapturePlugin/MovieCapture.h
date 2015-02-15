@@ -44,7 +44,6 @@
 
 -(void)copyAudioBufferList:(AudioBufferList *)bufferList;
 
--(void) copyIntoFormat:(const AudioStreamBasicDescription *)newFormat;
 -(void) nextMovie;
 -(void)removeQueueItems:(NSIndexSet *)movieIndexes;
 -(void)preallocateAudioBuffers:(CMItemCount)frameCount audioFormat:(const AudioStreamBasicDescription *)audioFormat;

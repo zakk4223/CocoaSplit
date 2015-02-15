@@ -59,11 +59,9 @@ static const uint HOURS_PER_DAY = 24;
 - (NSString*) stringFromInterval:(NSTimeInterval) interval
 {
     uint wholeSeconds = (uint) interval;
-    uint milliseconds = (uint) (fmod(interval, 1.0) * 1000);
     
-    char msg[512] = {0};
     
-    NSString *message = timeFormat.mutableCopy;
+    NSMutableString *message = timeFormat.mutableCopy;
     /*
      timeFormat = [dayRegex
      stringByReplacingMatchesInString:timeFormat
@@ -129,12 +127,12 @@ static const uint HOURS_PER_DAY = 24;
 {
     NSTextCheckingResult *res;
     
-    while (res = [milliSecondRegex firstMatchInString:message options:0 range:workingRange])
+    while ((res = [milliSecondRegex firstMatchInString:message options:0 range:workingRange]))
     {
-        uint length = res.range.length;
+        unsigned long length = res.range.length;
         uint milliseconds = (uint) (fmod(interval, 1.0) * pow(10, length));
         
-        [message replaceCharactersInRange:res.range withString:[NSString stringWithFormat:@"%0*d", length, milliseconds]];
+        [message replaceCharactersInRange:res.range withString:[NSString stringWithFormat:@"%0*d", (int)length, milliseconds]];
         workingRange = NSMakeRange(0, message.length);
     }
 }
@@ -144,10 +142,10 @@ static const uint HOURS_PER_DAY = 24;
 {
     NSTextCheckingResult *res;
     
-    while (res = [regex firstMatchInString:message options:0 range:workingRange])
+    while ((res = [regex firstMatchInString:message options:0 range:workingRange]))
     {
-        uint length = res.range.length;
-        [message replaceCharactersInRange:res.range withString:[NSString stringWithFormat:@"%0*d", length, value]];
+        unsigned long length = res.range.length;
+        [message replaceCharactersInRange:res.range withString:[NSString stringWithFormat:@"%0*d", (int)length, value]];
         workingRange = NSMakeRange(0, message.length);
     }
 }

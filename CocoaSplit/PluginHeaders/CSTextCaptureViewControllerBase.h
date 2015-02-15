@@ -10,7 +10,8 @@
 #import "CSTextCaptureBase.h"
 
 
-@interface CSTextCaptureViewControllerBase : NSViewController
+@interface CSTextCaptureViewControllerBase : NSViewController <NSWindowDelegate>
+
 @property (weak) CSTextCaptureBase *captureObj;
 - (IBAction)openFontPanel:(id)sender;
 

@@ -8,12 +8,12 @@
 
 #import "CAMultiAudioGraph.h"
 #import "CAMultiAudioNode.h"
-#import "CAMultiAudioDeviceInput.h"
-#import "CAMultiAudioDeviceOutput.h"
 #import "CAMultiAudioDefaultOutput.h"
 #import "CAMultiAudioPCMPlayer.h"
 #import "CAMultiAudioAVCapturePlayer.h"
 #import "CAMultiAudioMixer.h"
+#import "CAMultiAudioDevice.h"
+
 
 
 
