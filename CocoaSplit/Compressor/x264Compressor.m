@@ -187,7 +187,7 @@
     }
     
     
-    if (!_av_codec)
+    if (!_av_codec && !self.errored)
     {
         BOOL setupOK;
 
@@ -198,6 +198,8 @@
             self.errored = YES;
             return NO;
         }
+    } else if (!_av_codec) {
+        return NO;
     }
     
     
@@ -426,8 +428,17 @@
         av_dict_set(&opts, "preset", [x264preset UTF8String], 0);
     }
     
-    id x264profile = self.profile;
+    id x264profile = nil;
+    
+    if (self.use_cbr)
+    {
+        x264profile = self.profile;
+    } else if (self.crf > 0) {
+        x264profile = self.profile;
+    }
+    
 
+    
     if (x264profile)
     {
         av_dict_set(&opts, "profile", [x264profile UTF8String], 0);
@@ -451,6 +462,9 @@
     
     if (avcodec_open2(_av_codec_ctx, _av_codec, &opts) < 0)
     {
+        _av_codec_ctx = NULL;
+        _av_codec = NULL;
+        NSLog(@"CODEC SETUP FAILED!");
         return NO;
     }
     
