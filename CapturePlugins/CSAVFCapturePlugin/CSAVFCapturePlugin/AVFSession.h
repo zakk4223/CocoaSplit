@@ -29,5 +29,4 @@
 -(void)removeOutput:(AVFCapture *)output;
 -(instancetype)initWithDevice:(AVCaptureDevice *)device;
 
-
 @end

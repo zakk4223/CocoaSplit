@@ -43,7 +43,6 @@
         [self setupVideoOutput];
         [self setupCaptureInput];
 
-        NSLog(@"STARTING CAPTURE SESSION");
         [_capture_session startRunning];
         
         [cachemap setObject:self forKey:device.uniqueID];
@@ -165,6 +164,10 @@
     @synchronized(self)
     {
         [_outputs addObject:output];
+        if (_outputs.count == 1)
+        {
+            [_capture_session startRunning];
+        }
     }
 }
 

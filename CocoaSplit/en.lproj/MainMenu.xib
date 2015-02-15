@@ -740,7 +740,7 @@
                                                         <customView misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MvM-Ze-Mhu">
                                                             <rect key="frame" x="359" y="155" width="119" height="34"/>
                                                             <subviews>
-                                                                <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3nh-Gb-0rO">
+                                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3nh-Gb-0rO">
                                                                     <rect key="frame" x="-2" y="2" width="126" height="28"/>
                                                                     <buttonCell key="cell" type="push" title="&gt;&gt; Go Live &gt;&gt;" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tpA-PI-4UQ">
                                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
