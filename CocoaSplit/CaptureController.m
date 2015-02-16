@@ -35,9 +35,10 @@
 @synthesize stagingLayout = _stagingLayout;
 @synthesize audioSamplerate  = _audioSamplerate;
 
+
 -(IBAction)mainDeleteLayoutClicked:(id)sender
 {
-
+    
     NSInteger selectedIdx = self.mainSourceLayoutTableView.selectedRow;
     if (selectedIdx != -1)
     {
@@ -45,6 +46,23 @@
         [self layoutTableSelected:self.mainSourceLayoutTableView];
     }
 }
+
+-(IBAction)stagingDeleteLayoutClicked:(id)sender
+{
+
+    NSInteger selectedIdx = self.stagingSourceLayoutTableView.selectedRow;
+    if (selectedIdx != -1)
+    {
+        [self deleteLayout:selectedIdx];
+        [self layoutTableSelected:self.stagingSourceLayoutTableView];
+    }
+}
+
+-(IBAction)stagingCopyLayoutClicked:(id)sender
+{
+    [self cloneSelectedSourceLayout:self.stagingSourceLayoutTableView];
+}
+
 
 -(IBAction)mainCopyLayoutClicked:(id)sender
 {

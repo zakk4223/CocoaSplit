@@ -365,6 +365,9 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (IBAction)openLayoutPopover:(NSButton *)sender;
 - (IBAction)mainDeleteLayoutClicked:(id)sender;
 - (IBAction)mainCopyLayoutClicked:(id)sender;
+-(IBAction)stagingDeleteLayoutClicked:(id)sender;
+-(IBAction)stagingCopyLayoutClicked:(id)sender;
+
 
 
 @property (weak) IBOutlet NSArrayController *sourceLayoutsArrayController;

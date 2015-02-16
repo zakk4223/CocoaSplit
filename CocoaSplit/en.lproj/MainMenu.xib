@@ -662,7 +662,7 @@
                                                                         <font key="font" metaFont="smallSystem"/>
                                                                     </buttonCell>
                                                                     <connections>
-                                                                        <action selector="mainDeleteLayoutClicked:" target="816" id="5S1-Ty-6FF"/>
+                                                                        <action selector="stagingDeleteLayoutClicked:" target="816" id="tlc-E3-A3n"/>
                                                                     </connections>
                                                                 </button>
                                                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ICV-KI-bst">
@@ -675,7 +675,7 @@
                                                                         <font key="font" metaFont="smallSystem"/>
                                                                     </buttonCell>
                                                                     <connections>
-                                                                        <action selector="mainCopyLayoutClicked:" target="816" id="KnJ-2z-Ee6"/>
+                                                                        <action selector="stagingCopyLayoutClicked:" target="816" id="1ZL-hz-cgT"/>
                                                                     </connections>
                                                                 </button>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="u64-4q-EIL">
