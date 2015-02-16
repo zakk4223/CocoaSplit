@@ -12,6 +12,7 @@
 #import "SyphonBuildMacros.h"
 #import "Syphon.h"
 #import "CSIOSurfaceLayer.h"
+#import "CSSyphonCaptureLayer.h"
 
 
 

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3429A0491A41063900EE702C /* CSSyphonInjectCaptureViewNotInstalled.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3429A0481A41063900EE702C /* CSSyphonInjectCaptureViewNotInstalled.xib */; };
+		3479A99A1A91C5A500A524F0 /* CSSyphonCaptureLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3479A9991A91C5A500A524F0 /* CSSyphonCaptureLayer.m */; };
 		34AFC1D719B04EB90007C07B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AFC1D619B04EB90007C07B /* Cocoa.framework */; };
 		34AFC1E119B04EB90007C07B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 34AFC1DF19B04EB90007C07B /* InfoPlist.strings */; };
 		34AFC1F319B04F0B0007C07B /* SyphonCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AFC1EF19B04F0B0007C07B /* SyphonCaptureViewController.m */; };
@@ -67,6 +68,8 @@
 		344E1EAB1A79481C0081E5E7 /* CSPluginFactoryProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPluginFactoryProtocol.h; path = PluginHeaders/CSPluginFactoryProtocol.h; sourceTree = "<group>"; };
 		344E1EAC1A79481C0081E5E7 /* CSExtraPluginProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSExtraPluginProtocol.h; path = PluginHeaders/CSExtraPluginProtocol.h; sourceTree = "<group>"; };
 		344E1EAD1A79481C0081E5E7 /* CSNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSNotifications.h; path = PluginHeaders/CSNotifications.h; sourceTree = "<group>"; };
+		3479A9981A91C5A500A524F0 /* CSSyphonCaptureLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSyphonCaptureLayer.h; sourceTree = "<group>"; };
+		3479A9991A91C5A500A524F0 /* CSSyphonCaptureLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSyphonCaptureLayer.m; sourceTree = "<group>"; };
 		34AFC1D319B04EB90007C07B /* CSSyphonCapturePlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSSyphonCapturePlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		34AFC1D619B04EB90007C07B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		34AFC1D919B04EB90007C07B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -177,6 +180,8 @@
 				34C7B8CA1A34621C0033AC71 /* CSSyphonCaptureFactory.h */,
 				34C7B8CB1A34621C0033AC71 /* CSSyphonCaptureFactory.m */,
 				34AFC1DD19B04EB90007C07B /* Supporting Files */,
+				3479A9981A91C5A500A524F0 /* CSSyphonCaptureLayer.h */,
+				3479A9991A91C5A500A524F0 /* CSSyphonCaptureLayer.m */,
 			);
 			path = CSSyphonCapturePlugin;
 			sourceTree = "<group>";
@@ -300,6 +305,7 @@
 				34C7B8CC1A34621C0033AC71 /* CSSyphonCaptureFactory.m in Sources */,
 				34C7B8DB1A3465010033AC71 /* CSSyphonInjectCaptureViewController.m in Sources */,
 				34AFC1F519B04F0B0007C07B /* SyphonCapture.m in Sources */,
+				3479A99A1A91C5A500A524F0 /* CSSyphonCaptureLayer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

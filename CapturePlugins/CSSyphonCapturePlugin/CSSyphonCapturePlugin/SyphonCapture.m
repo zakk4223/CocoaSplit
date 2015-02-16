@@ -107,7 +107,13 @@
 
 -(CALayer *)createNewLayer
 {
-    CSIOSurfaceLayer *newLayer = [CSIOSurfaceLayer layer];
+    CSSyphonCaptureLayer  *newLayer = [CSSyphonCaptureLayer layer];
+    
+    if (_syphon_client)
+    {
+        newLayer.syphonClient = _syphon_client;
+    }
+    
     
     newLayer.flipImage = self.isFlipped;
     return newLayer;
@@ -133,6 +139,10 @@
 }
 
 
+
+
+
+/*
 -(void)publishSurface:(IOSurfaceRef)surface
 {
     
@@ -140,14 +150,18 @@
     
     if (newSeed != _surfaceSeed)
     {
-        CIImage *newImage = [[CIImage alloc] initWithIOSurface:surface plane:0 format:kCIFormatARGB8 options:nil];
+        CIImage *newImage = [[CIImage alloc] initWithIOSurface:surface plane:0 format:kCIFormatARGB8 options:@{kCIImageColorSpace:[NSNull null]}];
+        
+        
+        
         _surfaceSeed = newSeed;
         [self updateLayersWithBlock:^(CALayer *layer) {
             ((CSIOSurfaceLayer *)layer).ioImage = newImage;
         }];
+
     }
 }
-
+*/
     
 -(void) startSyphon
 {
@@ -166,22 +180,32 @@
     if (_syphonServer)
     {
         _syphon_client = [[SyphonClient alloc] initWithServerDescription:_syphonServer.copy options:nil newFrameHandler:^(SyphonClient *client) {
-            
+   
+            //[self publishFrame:client];
+/*
             //this call retains the surface, so be sure to release it if we don't care about it anymore
             IOSurfaceRef newSurface = [client IOSurface];
             
             [self publishSurface:newSurface];
             
             CFRelease(newSurface);
+ */
         }];
         
-        
+ 
+        [self updateLayersWithBlock:^(CALayer *layer) {
+            ((CSSyphonCaptureLayer *)layer).syphonClient = _syphon_client;
+        }];
+
+        /*
         IOSurfaceRef newSurface = [_syphon_client IOSurface];
         if (newSurface)
         {
             [self publishSurface:newSurface];
             CFRelease(newSurface);
         }
+         */
+        
         
         
         _syphon_uuid = [[_syphon_client serverDescription] objectForKey:SyphonServerDescriptionUUIDKey];

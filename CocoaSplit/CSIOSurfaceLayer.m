@@ -99,6 +99,8 @@
 @interface CSIOSurfaceLayer()
 {
     CIFilter *_resizeFilter;
+    CIFilter *_matrixFilter;
+    
 }
 @property (strong) CIImageWrapper *imageWrapper;
 @end
@@ -226,7 +228,7 @@
     CIImageWrapper *wrappedImage = self.imageWrapper;
     
     CGLSetCurrentContext(ctx);
-    glClearColor(0,0,0,0);
+    glClearColor(1,0,0,0);
     glClear(GL_COLOR_BUFFER_BIT);
 
     
@@ -266,6 +268,8 @@
     croppedImage = [useImage imageByCroppingToRect:_calculatedCrop];
 
     
+    
+    
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     if (self.flipImage)
@@ -303,6 +307,8 @@
         //[_resizeFilter setValue:@(ratio) forKey:kCIInputScaleKey];
         //croppedImage = [_resizeFilter valueForKey:kCIOutputImageKey];
     }
+    
+    
     
     [_ciCtx drawImage:croppedImage inRect:inRect fromRect:croppedImage.extent];
 
