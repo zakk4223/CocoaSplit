@@ -19,6 +19,7 @@
 @optional
 -(void)extraTopLevelMenuClicked;
 -(NSMenu *)extraPluginMenu;
+-(void)pluginWasLoaded;
 
 
 @end

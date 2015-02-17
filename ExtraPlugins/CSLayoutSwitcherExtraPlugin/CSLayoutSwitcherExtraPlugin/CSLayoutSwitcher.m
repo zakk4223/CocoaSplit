@@ -36,14 +36,18 @@
     return @"LayoutSwitcher";
 }
 
+-(void)pluginWasLoaded
+{
+    [[NSWorkspace sharedWorkspace].notificationCenter addObserver:self selector:@selector(applicationActivated:) name:NSWorkspaceDidActivateApplicationNotification  object:[NSWorkspace sharedWorkspace]];
+    
+    
+    [[NSWorkspace sharedWorkspace].notificationCenter addObserver:self selector:@selector(applicationDeactivated:) name:NSWorkspaceDidDeactivateApplicationNotification  object:[NSWorkspace sharedWorkspace]];
+    
+
+}
 -(void)extraTopLevelMenuClicked
 {
     
-    [[NSWorkspace sharedWorkspace].notificationCenter addObserver:self selector:@selector(applicationActivated:) name:NSWorkspaceDidActivateApplicationNotification  object:[NSWorkspace sharedWorkspace]];
-    
-
-    [[NSWorkspace sharedWorkspace].notificationCenter addObserver:self selector:@selector(applicationDeactivated:) name:NSWorkspaceDidDeactivateApplicationNotification  object:[NSWorkspace sharedWorkspace]];
- 
     
     if (!self.switchActions)
     {

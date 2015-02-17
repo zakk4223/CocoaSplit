@@ -832,6 +832,12 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         }
         
         
+        if ([pInstance respondsToSelector:@selector(pluginWasLoaded)])
+        {
+            [pInstance pluginWasLoaded];
+        }
+        
+        
         self.extraPlugins[pKey] = pInstance;
         NSMenuItem *pItem = [[NSMenuItem alloc] init];
         pItem.title = pKey;

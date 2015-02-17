@@ -24,6 +24,7 @@
     
 }
 -(void)extraTopLevelMenuClicked;
+-(void)pluginWasLoaded;
 
 
 +(NSString *) label;
