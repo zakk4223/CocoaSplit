@@ -292,7 +292,7 @@
         self.rootLayer = [CALayer layer];
     }
     CALayer *newRoot = self.rootLayer;
-    newRoot.bounds = CGRectMake(0, 0, 1280, 720);
+    newRoot.bounds = CGRectMake(0, 0, self.canvas_width, self.canvas_height);
     newRoot.backgroundColor = CGColorCreateGenericRGB(0, 0, 0, 1);
     newRoot.position = CGPointMake(0.0, 0.0);
     newRoot.anchorPoint = CGPointMake(0.0, 0.0);

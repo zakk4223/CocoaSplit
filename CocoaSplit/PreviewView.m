@@ -1232,8 +1232,18 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     {
         _boundIOSurfaceID = cFrameID;
         
-        _surfaceHeight  = (GLsizei)IOSurfaceGetHeight(cFrame);
-        _surfaceWidth   = (GLsizei)IOSurfaceGetWidth(cFrame);
+
+        GLsizei newHeight = (GLsizei)IOSurfaceGetHeight(cFrame);
+        GLsizei newWidth = (GLsizei)IOSurfaceGetWidth(cFrame);
+        
+        if (newHeight != _surfaceHeight || newWidth != _surfaceWidth)
+        {
+            _resizeDirty = YES;
+        }
+        
+        _surfaceHeight  = newHeight;
+        _surfaceWidth   = newWidth;
+        
         
         GLenum gl_internal_format;
         GLenum gl_format;
