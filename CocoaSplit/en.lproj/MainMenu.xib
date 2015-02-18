@@ -737,7 +737,7 @@
                                                                 <constraint firstItem="KDH-Gg-3ob" firstAttribute="baseline" secondItem="mmz-0q-83I" secondAttribute="baseline" id="yw0-0m-ikL"/>
                                                             </constraints>
                                                         </customView>
-                                                        <customView misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MvM-Ze-Mhu">
+                                                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="MvM-Ze-Mhu">
                                                             <rect key="frame" x="359" y="155" width="119" height="34"/>
                                                             <subviews>
                                                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3nh-Gb-0rO">
@@ -1594,7 +1594,7 @@
                     <constraint firstAttribute="bottom" secondItem="2368" secondAttribute="bottom" constant="29" id="hMA-Uw-5PO"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="290.5" y="212"/>
+            <point key="canvasLocation" x="358.5" y="220"/>
         </window>
         <dictionaryController objectClassName="_NSControllerKeyValuePair" id="gSI-N4-DsK" userLabel="CompressorDictionaryController">
             <connections>
@@ -1745,7 +1745,7 @@ Gw
             </connections>
         </collectionViewItem>
         <view id="ZmA-40-k3N">
-            <rect key="frame" x="0.0" y="0.0" width="63" height="299"/>
+            <rect key="frame" x="0.0" y="0.0" width="63" height="307"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QXC-Xu-cG7">
@@ -1767,18 +1767,38 @@ Gw
                         <binding destination="93b-Or-H22" name="value" keyPath="representedObject.volume" id="aQo-34-mNT"/>
                     </connections>
                 </slider>
-                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YUv-y3-Hba">
-                    <rect key="frame" x="10" y="7" width="34" height="17"/>
-                    <buttonCell key="cell" type="roundRect" title="On" alternateTitle="Off" bezelStyle="roundedRect" alignment="center" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tgQ-KW-dJd">
-                        <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
+                <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XXK-WA-B7U" customClass="CSAudioSwitchControl">
+                    <rect key="frame" x="6" y="5" width="43" height="19"/>
+                    <animations>
+                        <caTransition key="subviews">
+                            <mutableData key="keyedArchiveRepresentation">
+YnBsaXN0MDDUAQIDBAUGJCVYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKkHCBES
+EwsKGR9VJG51bGzUCQoLDA0ODxBWJGNsYXNzVHR5cGVXc3VidHlwZV8QEl9fQ0FDb2RpbmdDb250ZW50
+c4AIgAOAAoAEWWZyb21SaWdodFRwdXNo0hQJFRhaTlMub2JqZWN0c6IWF4AFgAaAB9IaGxwdWiRjbGFz
+c25hbWVYJGNsYXNzZXNXTlNBcnJheaIcHlhOU09iamVjdNIaGyAhXENBVHJhbnNpdGlvbqMiIx5cQ0FU
+cmFuc2l0aW9uW0NBQW5pbWF0aW9uXxAPTlNLZXllZEFyY2hpdmVy0SYnVHJvb3SAAQAIABEAGgAjAC0A
+MgA3AEEARwBQAFcAXABkAHkAewB9AH8AgQCLAJAAlQCgAKMApQCnAKkArgC5AMIAygDNANYA2wDoAOwA
++QEFARcBGgEfAAAAAAAAAgEAAAAAAAAAKAAAAAAAAAAAAAAAAAAAASE
+</mutableData>
+                        </caTransition>
+                    </animations>
+                    <segmentedCell key="cell" controlSize="mini" continuous="YES" borderStyle="border" alignment="left" style="smallSquare" trackingMode="selectOne" id="z74-vM-Tm5" customClass="CSAudioSwitchCell">
                         <font key="font" metaFont="miniSystem"/>
-                    </buttonCell>
+                        <segments>
+                            <segment label="On" width="20" tag="1"/>
+                            <segment label="Off" width="20"/>
+                        </segments>
+                    </segmentedCell>
                     <connections>
-                        <binding destination="93b-Or-H22" name="value" keyPath="representedObject.enabled" id="KFf-cx-Odc"/>
+                        <binding destination="93b-Or-H22" name="selectedTag" keyPath="representedObject.enabled" id="DXk-50-uzh">
+                            <dictionary key="options">
+                                <bool key="NSValidatesImmediately" value="YES"/>
+                            </dictionary>
+                        </binding>
                     </connections>
-                </button>
+                </segmentedControl>
             </subviews>
-            <point key="canvasLocation" x="847.5" y="189.5"/>
+            <point key="canvasLocation" x="885.5" y="194.5"/>
         </view>
         <view id="bRh-Lo-mbG">
             <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>

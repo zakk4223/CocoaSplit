@@ -49,7 +49,7 @@
     _enabled = enabled;
     if (enabled)
     {
-        newColor = [NSColor redColor];
+        newColor = [NSColor greenColor];
     } else {
         newColor = [NSColor blackColor];
     }
