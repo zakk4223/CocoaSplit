@@ -246,7 +246,7 @@ static NSArray *_sourceTypes = nil;
         //Old Cocoasplit encoded this as an integer. CoreAnimation wants a float.
         if ([aDecoder containsValueForKey:@"CAdepth"])
         {
-            self.depth = [aDecoder decodeFloatForKey:@"depth"];
+            self.depth = [aDecoder decodeFloatForKey:@"CAdepth"];
 
         } else {
             self.depth = [aDecoder decodeIntForKey:@"depth"];
