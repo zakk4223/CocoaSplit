@@ -57,7 +57,7 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
     NSMutableArray *currentQueueURLS = [NSMutableArray array];
-    for(AVPlayerItem *item in self.avPlayer.items)
+    for(AVPlayerItem *item in _avPlayer.items)
     {
         AVURLAsset *itemAsset = (AVURLAsset *)item.asset;
         if (itemAsset)
@@ -72,7 +72,7 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     
     [aCoder encodeDouble:self.currentMovieTime forKey:@"currentMovieTime"];
     [aCoder encodeObject:currentQueueURLS forKey:@"currentQueueURLS"];
-    [aCoder encodeFloat:self.avPlayer.rate forKey:@"playerRate"];
+    [aCoder encodeFloat:_avPlayer.rate forKey:@"playerRate"];
 }
 
 
@@ -87,7 +87,7 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
             [self enqueueMedia:url];
         }
         self.currentMovieTime = [aDecoder decodeDoubleForKey:@"currentMovieTime"];
-        self.avPlayer.rate = [aDecoder decodeFloatForKey:@"playerRate"];
+        _avPlayer.rate = [aDecoder decodeFloatForKey:@"playerRate"];
     }
     
     return self;
@@ -194,7 +194,7 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     
     
     self.pcmPlayer = [[CSPluginServices sharedPluginServices] createPCMInput:self.activeVideoDevice.uniqueID withFormat:audioFormat];
-    AVURLAsset *urlAsset = (AVURLAsset *)self.avPlayer.currentItem.asset;
+    AVURLAsset *urlAsset = (AVURLAsset *)_avPlayer.currentItem.asset;
     self.pcmPlayer.name = urlAsset.URL.lastPathComponent;
 }
 
@@ -225,7 +225,7 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     NSMutableString *uID = [NSMutableString string];
     
     
-    for(AVPlayerItem *qItem in self.avPlayer.items)
+    for(AVPlayerItem *qItem in _avPlayer.items)
     {
         AVURLAsset *urlAsset = (AVURLAsset *)qItem.asset;
         
@@ -244,8 +244,8 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 
 - (void) setupPlayer
 {
-    self.avPlayer = [[AVQueuePlayer alloc] init];
-    [self.avPlayer pause];
+    _avPlayer = [[AVQueuePlayer alloc] init];
+    [_avPlayer pause];
     NSMutableDictionary *videoSettings = [[NSMutableDictionary alloc] init];
     
     [videoSettings setValue:@(kCVPixelFormatType_32BGRA) forKey:(id)kCVPixelBufferPixelFormatTypeKey];
@@ -259,9 +259,9 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     
     self.avOutput = [[AVPlayerItemVideoOutput alloc] initWithPixelBufferAttributes:videoSettings];
 
-    [self.avPlayer addObserver:self forKeyPath:@"rate" options:NSKeyValueObservingOptionNew context:NULL];
-    [self.avPlayer addObserver:self forKeyPath:@"currentItem" options:0 context:NULL];
-    self.avPlayer.volume = 0.0;
+    [_avPlayer addObserver:self forKeyPath:@"rate" options:NSKeyValueObservingOptionNew context:NULL];
+    [_avPlayer addObserver:self forKeyPath:@"currentItem" options:0 context:NULL];
+    _avPlayer.volume = 0.0;
 }
 
 
@@ -297,7 +297,7 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 
 -(double) movieDuration
 {
-    AVPlayerItem *nowPlaying = self.avPlayer.currentItem;
+    AVPlayerItem *nowPlaying = _avPlayer.currentItem;
     if (nowPlaying.status == AVPlayerItemStatusReadyToPlay)
     {
         return CMTimeGetSeconds(nowPlaying.asset.duration);
@@ -325,7 +325,7 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 
 -(void) setCurrentMovieTime:(double)time
 {
-    [self.avPlayer seekToTime:CMTimeMakeWithSeconds(time, 1)];
+    [_avPlayer seekToTime:CMTimeMakeWithSeconds(time, 1)];
 }
 
 
@@ -337,11 +337,11 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     
     if (self.timeToken)
     {
-        [self.avPlayer removeTimeObserver:self.timeToken];
+        [_avPlayer removeTimeObserver:self.timeToken];
     }
     
     
-    self.timeToken = [self.avPlayer addPeriodicTimeObserverForInterval:CMTimeMake(1,10) queue:dispatch_get_main_queue() usingBlock:^(CMTime time) {
+    self.timeToken = [_avPlayer addPeriodicTimeObserverForInterval:CMTimeMake(1,10) queue:dispatch_get_main_queue() usingBlock:^(CMTime time) {
        
         MovieCapture *strongself = weakself;
         
@@ -361,10 +361,10 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     
     AVPlayerItem *item = [AVPlayerItem playerItemWithURL:mediaURL];
 
-    if ([self.avPlayer canInsertItem:item afterItem:nil])
+    if ([_avPlayer canInsertItem:item afterItem:nil])
     {
         
-        [self.avPlayer insertItem:item afterItem:nil];
+        [_avPlayer insertItem:item afterItem:nil];
         
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(itemDidFinishPlaying:)
@@ -375,10 +375,10 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     
     [self generateUniqueID];
     
-    if (self.avPlayer.items.count == 1)
+    if (_avPlayer.items.count == 1)
     {
         [self setupTimeObserver];
-        [self.avPlayer play];
+        [_avPlayer play];
     }
     
 }
@@ -389,7 +389,7 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     
     [self willChangeValueForKey:@"movieQueue"];
     //NO I'LL REMOVE IT FIRST LEAVE ME ALONE
-    [self.avPlayer removeItem:item];
+    [_avPlayer removeItem:item];
     [self didChangeValueForKey:@"movieQueue"];
     [self generateUniqueID];
 }
@@ -432,11 +432,11 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 -(void)removeQueueItems:(NSIndexSet *)movieIndexes
 {
     
-    NSArray *deleteItems = [self.avPlayer.items objectsAtIndexes:movieIndexes];
+    NSArray *deleteItems = [_avPlayer.items objectsAtIndexes:movieIndexes];
     [self willChangeValueForKey:@"movieQueue"];
     for(AVPlayerItem *toDelete in deleteItems)
     {
-        [self.avPlayer removeItem:toDelete];
+        [_avPlayer removeItem:toDelete];
     }
     [self generateUniqueID];
     [self didChangeValueForKey:@"movieQueue"];
@@ -445,7 +445,7 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 -(void) nextMovie
 {
     [self willChangeValueForKey:@"movieQueue"];
-    [self.avPlayer advanceToNextItem];
+    [_avPlayer advanceToNextItem];
     [self didChangeValueForKey:@"movieQueue"];
     [self generateUniqueID];
 
@@ -455,7 +455,7 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 
 -(NSArray *) movieQueue
 {
-    return self.avPlayer.items;
+    return _avPlayer.items;
 }
 
 
@@ -463,11 +463,11 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 
 -(void)playOrPause
 {
-    if (self.avPlayer.rate != 1.0f)
+    if (_avPlayer.rate != 1.0f)
     {
-        [self.avPlayer play];
+        [_avPlayer play];
     } else {
-        [self.avPlayer pause];
+        [_avPlayer pause];
     }
 }
 
@@ -500,7 +500,7 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     
     inputParams.audioTapProcessor = tap;
     audioMix.inputParameters = @[inputParams];
-    self.avPlayer.currentItem.audioMix = audioMix;
+    _avPlayer.currentItem.audioMix = audioMix;
     
 }
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -538,9 +538,9 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
         }
         [self setupAudioTapOnItem:item];
     } else if ([keyPath isEqualToString:@"currentItem"]) {
-        [self.avPlayer.currentItem addOutput:self.avOutput];
+        [_avPlayer.currentItem addOutput:self.avOutput];
 
-        [self setupAudioTapOnItem:self.avPlayer.currentItem];
+        [self setupAudioTapOnItem:_avPlayer.currentItem];
     }
     
 }
@@ -556,22 +556,22 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     
     if (self.timeToken)
     {
-        [self.avPlayer removeTimeObserver:self.timeToken];
+        [_avPlayer removeTimeObserver:self.timeToken];
     }
     
-    if (self.avPlayer && self.avPlayer.currentItem)
+    if (_avPlayer && _avPlayer.currentItem)
     {
-        AVMutableAudioMixInputParameters *inputParams = self.avPlayer.currentItem.audioMix.inputParameters.firstObject;
+        AVMutableAudioMixInputParameters *inputParams = _avPlayer.currentItem.audioMix.inputParameters.firstObject;
         inputParams.audioTapProcessor = nil;
-        self.avPlayer.currentItem.audioMix = nil;
+        _avPlayer.currentItem.audioMix = nil;
     }
-    [self.avPlayer pause];
+    [_avPlayer pause];
     
-    [self.avPlayer removeObserver:self forKeyPath:@"rate"];
-    [self.avPlayer removeObserver:self forKeyPath:@"currentItem"];
+    [_avPlayer removeObserver:self forKeyPath:@"rate"];
+    [_avPlayer removeObserver:self forKeyPath:@"currentItem"];
 
     self.avOutput = nil;
-    self.avPlayer = nil;
+    _avPlayer = nil;
 
 
     

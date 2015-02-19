@@ -347,7 +347,6 @@ static NSArray *_sourceTypes = nil;
     forInput.inputSource = self;
     forInput.isLive = self.is_live;
     [forInput createNewLayerForInput:self];
-    [forInput addObserver:self forKeyPath:@"activeVideoDevice.uniqueID" options:NSKeyValueObservingOptionNew context:NULL];
 
 }
 
@@ -358,7 +357,6 @@ static NSArray *_sourceTypes = nil;
         return;
     }
     
-    [forInput removeObserver:self forKeyPath:@"activeVideoDevice.uniqueID"];
     forInput.isLive = NO;
     [forInput removeLayerForInput:self];
     
@@ -876,9 +874,9 @@ static NSArray *_sourceTypes = nil;
         NSObject<CSCaptureSourceProtocol> *inputCopy;
         
         inputCopy = self.videoInput.copy;
-        
         [self registerVideoInput:inputCopy];
 
+        
         [self.videoSources addObject:inputCopy];
     }
     

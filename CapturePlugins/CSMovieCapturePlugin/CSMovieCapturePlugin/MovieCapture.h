@@ -19,6 +19,7 @@
 {
     CAMultiAudioPCM *_bufferPCM;
     dispatch_queue_t _audioQueue;
+    AVQueuePlayer *_avPlayer;
     
 }
 
@@ -26,7 +27,7 @@
 
 @property (strong) CSPcmPlayer *pcmPlayer;
 @property (assign) AudioStreamBasicDescription audioFormat;
-@property (strong) AVQueuePlayer *avPlayer;
+//@property (strong) AVQueuePlayer *avPlayer;
 @property (strong) AVPlayerItemVideoOutput *avOutput;
 @property (strong) NSURL *currentMedia;
 @property (strong) NSString *playPauseTitle;
