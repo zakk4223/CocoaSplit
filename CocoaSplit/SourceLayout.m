@@ -305,6 +305,21 @@
     self.renderer.layer = newRoot;
     [CATransaction commit];
     
+    glViewport(0, 0, self.canvas_width, self.canvas_height);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0, self.canvas_width, 0,self.canvas_height, -1, 1);
+    
+    
+    
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    
+    
+    glClearColor(0, 0, 0, 0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    
 }
 
 
@@ -354,31 +369,14 @@
     }
 
     glBindTexture(GL_TEXTURE_RECTANGLE_ARB, 0);
-    glViewport(0, 0, self.canvas_width, self.canvas_height);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(0, self.canvas_width, 0,self.canvas_height, -1, 1);
-    //glTranslatef(0.0f, self.canvas_height, 0.0);
-    //glScalef(1.0, -1.0, 1.0);
     
 
 
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-    
-    glClearColor(0, 0, 0, 0);
-    glClear(GL_COLOR_BUFFER_BIT);
-    
-
-
-    
     [self.renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];
     [self.renderer addUpdateRect:self.renderer.bounds];
     [self.renderer render];
     [self.renderer endFrame];
-    
-    glFlush();
+    //glFlush();
 }
 
 

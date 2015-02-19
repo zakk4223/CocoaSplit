@@ -1063,7 +1063,8 @@
      NSOpenGLPixelFormatAttribute attr[] = {
          NSOpenGLPFANoRecovery,
          NSOpenGLPFAAccelerated,
-         //NSOpenGLPFAAllowOfflineRenderers,
+         NSOpenGLPFAAllowOfflineRenderers,
+         NSOpenGLPFADoubleBuffer,
          NSOpenGLPFADepthSize, 32,
          (NSOpenGLPixelFormatAttribute) 0,0,
          (NSOpenGLPixelFormatAttribute) 0
@@ -1080,7 +1081,7 @@
     self = [super initWithFrame:frameRect pixelFormat:pf];
     if (self)
     {
-        long swapInterval = 0;
+        long swapInterval = 1;
         
         [[self openGLContext] setValues:(GLint *)&swapInterval forParameter:NSOpenGLCPSwapInterval];
 
@@ -1174,6 +1175,7 @@
     {
         return;
     }
+        
     displayFrame = [self.sourceLayout currentFrame];
     
     if (!displayFrame)
@@ -1393,16 +1395,36 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     glClear(GL_COLOR_BUFFER_BIT);
     glEnable(GL_TEXTURE_RECTANGLE_ARB);
     
+    float halfw = (frame.size.width - scaled.width) / 2;
+    float halfh = (frame.size.height - scaled.height) / 2;
     
-    glViewport(0, 0, frame.size.width, frame.size.height);
+
     
-    glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
-    glLoadIdentity();
-    glOrtho(0.0, frame.size.width, 0.0, frame.size.height, 0, 1);
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-    glLoadIdentity();
+    if (_resizeDirty && _surfaceWidth > 0 && _surfaceHeight > 0)
+    {
+        glViewport(0, 0, frame.size.width, frame.size.height);
+        
+        glMatrixMode(GL_PROJECTION);
+        glPushMatrix();
+        glLoadIdentity();
+        glOrtho(0.0, frame.size.width, 0.0, frame.size.height, 0, 1);
+        glMatrixMode(GL_MODELVIEW);
+        glPushMatrix();
+        glLoadIdentity();
+
+        glTranslated(halfw, halfh, 0.0);
+        glScalef(ratio, ratio, 1.0f);
+
+        glGetDoublev(GL_MODELVIEW_MATRIX, _modelview);
+        glGetDoublev(GL_PROJECTION_MATRIX, _projection);
+        glGetIntegerv(GL_VIEWPORT, _viewport);
+        glDisable(GL_DEPTH_TEST);
+        
+        _resizeDirty = NO;
+        
+    }
+    
+
 
     for(int i = 0; i < _num_planes; i++)
     {
@@ -1421,9 +1443,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         0.0, _surfaceHeight
     };
     
-    float halfw = (frame.size.width - scaled.width) / 2;
-    float halfh = (frame.size.height - scaled.height) / 2;
-    
     
     GLfloat verts[] =
     {
@@ -1433,8 +1452,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         0,0
     };
     
-    glTranslated(halfw, halfh, 0.0);
-    glScalef(ratio, ratio, 1.0f);
     
     
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -1516,19 +1533,9 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
     //glUseProgram(_programId);
     
-    if (_resizeDirty && _surfaceWidth > 0 && _surfaceHeight > 0)
-    {
-        glGetDoublev(GL_MODELVIEW_MATRIX, _modelview);
-        glGetDoublev(GL_PROJECTION_MATRIX, _projection);
-        glGetIntegerv(GL_VIEWPORT, _viewport);
-        glDisable(GL_DEPTH_TEST);
-        
-         _resizeDirty = NO;
-        
-    }
-
+    [self.openGLContext flushBuffer];
     
-    glFlush();
+    //glFlush();
 
     
 
