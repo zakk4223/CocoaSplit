@@ -19,6 +19,7 @@
 @synthesize activeVideoDevice = _activeVideoDevice;
 
 @synthesize isFlipped = _isFlipped;
+@synthesize renderType = _renderType;
 
 
 -(void)encodeWithCoder:(NSCoder *)aCoder
@@ -26,6 +27,7 @@
     [super encodeWithCoder:aCoder];
     
     [aCoder encodeBool:self.isFlipped forKey:@"isFlipped"];
+    [aCoder encodeInt:self.renderType forKey:@"renderType"];
 }
 
 
@@ -36,6 +38,7 @@
     {
         [self commonInit];
         self.isFlipped = [aDecoder decodeBoolForKey:@"isFlipped"];
+        self.renderType = [aDecoder decodeIntForKey:@"renderType"];
     }
     
     return self;
@@ -92,6 +95,8 @@
 -(void) commonInit
 {
     
+    _renderType = kCSRenderFrameArrived;
+    
     self.isFlipped = NO;
 
     [self changeAvailableVideoDevices];
@@ -105,6 +110,7 @@
     
 }
 
+
 -(CALayer *)createNewLayer
 {
     CSSyphonCaptureLayer  *newLayer = [CSSyphonCaptureLayer layer];
@@ -112,6 +118,13 @@
     if (_syphon_client)
     {
         newLayer.syphonClient = _syphon_client;
+    }
+    
+    if (self.renderType == kCSRenderAsync)
+    {
+        newLayer.asynchronous = YES;
+    } else {
+        newLayer.asynchronous = NO;
     }
     
     
@@ -141,28 +154,40 @@
 
 
 
-
-/*
--(void)publishSurface:(IOSurfaceRef)surface
+-(void)setRenderType:(frame_render_behavior)renderType
 {
-    
-    uint32_t newSeed = IOSurfaceGetSeed(surface);
-    
-    if (newSeed != _surfaceSeed)
+    bool asyncValue = NO;
+    if (renderType == kCSRenderAsync)
     {
-        CIImage *newImage = [[CIImage alloc] initWithIOSurface:surface plane:0 format:kCIFormatARGB8 options:@{kCIImageColorSpace:[NSNull null]}];
-        
-        
-        
-        _surfaceSeed = newSeed;
-        [self updateLayersWithBlock:^(CALayer *layer) {
-            ((CSIOSurfaceLayer *)layer).ioImage = newImage;
-        }];
+        asyncValue = YES;
+    }
+    
+    
+    [self updateLayersWithBlock:^(CALayer *layer) {
+        ((CSSyphonCaptureLayer *)layer).asynchronous = asyncValue;
+    }];
 
+    _renderType = renderType;
+}
+
+
+-(frame_render_behavior)renderType
+{
+    return _renderType;
+}
+
+
+-(void)frameTick
+{
+    if (self.renderType == kCSRenderOnFrameTick)
+    {
+        [self updateLayersWithBlock:^(CALayer *layer) {
+            [((CSSyphonCaptureLayer *)layer) setNeedsDisplay];
+        }];
     }
 }
-*/
-    
+
+
 -(void) startSyphon
 {
     
@@ -181,6 +206,15 @@
     {
         _syphon_client = [[SyphonClient alloc] initWithServerDescription:_syphonServer.copy options:nil newFrameHandler:^(SyphonClient *client) {
    
+            if (self.renderType == kCSRenderFrameArrived)
+            {
+                [self updateLayersWithBlock:^(CALayer *layer) {
+                    [((CSSyphonCaptureLayer *)layer) setNeedsDisplay];
+                }];
+            }
+            
+
+            
             //[self publishFrame:client];
 /*
             //this call retains the surface, so be sure to release it if we don't care about it anymore

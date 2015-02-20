@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14B25" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14C109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6250"/>
@@ -132,6 +132,34 @@
                         <binding destination="1SZ-yt-eHb" name="value" keyPath="selection.isFlipped" id="Y3n-Qj-Rhz"/>
                     </connections>
                 </button>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="krh-oh-0Lc">
+                    <rect key="frame" x="20" y="140" width="124" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Frame Update Method" id="vcz-6x-zXW">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vMV-Gs-FOh">
+                    <rect key="frame" x="150" y="135" width="123" height="22"/>
+                    <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="QHc-Qf-fWc" id="fCa-Hn-Zkc">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" id="I8S-eq-QzN">
+                            <items>
+                                <menuItem title="Item 1" state="on" id="QHc-Qf-fWc"/>
+                                <menuItem title="Item 2" id="oCw-f0-7N4"/>
+                                <menuItem title="Item 3" id="eBy-m7-2R4"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="501-J8-LhQ" name="content" keyPath="arrangedObjects" id="cP0-vB-3dI"/>
+                        <binding destination="501-J8-LhQ" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="cP0-vB-3dI" id="ifO-NC-Wf1"/>
+                        <binding destination="501-J8-LhQ" name="contentValues" keyPath="arrangedObjects.key" previousBinding="ifO-NC-Wf1" id="J58-ll-2G0"/>
+                        <binding destination="1SZ-yt-eHb" name="selectedObject" keyPath="selection.renderType" previousBinding="J58-ll-2G0" id="Tv5-8c-Def"/>
+                    </connections>
+                </popUpButton>
             </subviews>
             <point key="canvasLocation" x="482" y="305"/>
         </customView>
@@ -140,6 +168,12 @@
                 <binding destination="-2" name="contentObject" keyPath="self.captureObj" id="r6P-U4-AuF"/>
             </connections>
         </objectController>
+        <dictionaryController objectClassName="_NSControllerKeyValuePair" id="501-J8-LhQ" userLabel="RenderStyleController">
+            <connections>
+                <binding destination="-2" name="contentDictionary" keyPath="self.renderStyleMap" id="l8q-tp-dLe"/>
+                <binding destination="-2" name="sortDescriptors" keyPath="self.styleSortDescriptors" id="KFn-QP-BmL"/>
+            </connections>
+        </dictionaryController>
         <userDefaultsController representsSharedInstance="YES" id="vwt-lV-Z8Y"/>
     </objects>
 </document>

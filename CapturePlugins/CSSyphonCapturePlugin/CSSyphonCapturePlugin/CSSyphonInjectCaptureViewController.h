@@ -20,6 +20,9 @@
 @property (assign) int height;
 
 @property (readonly) NSAttributedString *notInstalledText;
+@property (strong) NSDictionary *renderStyleMap;
+@property (strong) NSArray *styleSortDescriptors;
+
 
 @property (weak) IBOutlet NSTextField *notInstalledTextField;
 

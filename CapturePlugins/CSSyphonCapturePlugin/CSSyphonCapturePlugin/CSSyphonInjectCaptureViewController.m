@@ -26,6 +26,13 @@
         self.notInstalledTextField.attributedStringValue = self.notInstalledText;
     }
     
+    self.renderStyleMap = @{@"On Frame Arrival": @(kCSRenderFrameArrived),
+                            @"On Internal Frame Tick": @(kCSRenderOnFrameTick),
+                            @"Asynchronous": @(kCSRenderAsync)
+                            };
+    
+    self.styleSortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"value" ascending:YES]];
+
     // Do view setup here.
 }
 

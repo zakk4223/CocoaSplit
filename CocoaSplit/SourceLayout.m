@@ -251,6 +251,7 @@
     CGLPixelFormatAttribute glAttributes[] = {
         
         kCGLPFAAccelerated,
+        kCGLPFANoRecovery,
         kCGLPFADepthSize, (CGLPixelFormatAttribute)32,
         kCGLPFAAllowOfflineRenderers,
         (CGLPixelFormatAttribute)0
@@ -317,7 +318,6 @@
     
     
     glClearColor(0, 0, 0, 0);
-    glClear(GL_COLOR_BUFFER_BIT);
 
     
 }
@@ -325,57 +325,61 @@
 
 -(void)renderToSurface:(IOSurfaceRef)ioSurface
 {
-    if (!self.renderer)
-    {
-        return;
-    }
     CGLSetCurrentContext(self.cglCtx);
 
     if (!_rFbo)
     {
         glGenFramebuffers(1, &_rFbo);
+        NSLog(@"GENERATED FBO %d", _rFbo);
+
     }
     
     if (!_fboTexture)
     {
         glGenTextures(1, &_fboTexture);
+        NSLog(@"GENERATED TEXTURE %d", _fboTexture);
+
     }
     
 
     glEnable(GL_TEXTURE_RECTANGLE_ARB);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_RECTANGLE_ARB, _fboTexture);
+    
     //glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     //glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glDisable(GL_DEPTH_TEST);
-    glDisable(GL_TEXTURE_RECTANGLE_ARB);
     glDepthMask(GL_FALSE);
     
     
-    
-    
     CGLTexImageIOSurface2D(self.cglCtx, GL_TEXTURE_RECTANGLE_ARB, GL_RGBA, self.canvas_width, self.canvas_height, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, ioSurface, 0);
-    
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_RECTANGLE_ARB, _fboTexture, 0);
 
-    glBindFramebuffer(GL_FRAMEBUFFER, _rFbo);
+            GLenum fboStatus;
     
-    GLenum fboStatus;
 
-    fboStatus  = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-    if (fboStatus != GL_FRAMEBUFFER_COMPLETE)
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_RECTANGLE_ARB, _fboTexture, 0);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, _rFbo);
+        fboStatus  = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+
+    
+    
+
+    
+
+
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+    if (fboStatus == GL_FRAMEBUFFER_COMPLETE && self.renderer && self.renderer.layer)
     {
-    } else {
-    }
-
+        [self.renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];
+        [self.renderer addUpdateRect:self.renderer.bounds];
+        [self.renderer render];
+        [self.renderer endFrame];
+     }
     glBindTexture(GL_TEXTURE_RECTANGLE_ARB, 0);
-    
+    glDisable(GL_TEXTURE_RECTANGLE_ARB);
 
-
-    [self.renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];
-    [self.renderer addUpdateRect:self.renderer.bounds];
-    [self.renderer render];
-    [self.renderer endFrame];
     //glFlush();
 }
 

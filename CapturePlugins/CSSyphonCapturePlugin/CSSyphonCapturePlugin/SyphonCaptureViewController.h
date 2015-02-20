@@ -13,5 +13,7 @@
 @interface SyphonCaptureViewController : NSViewController
 
 @property (weak) SyphonCapture *captureObj;
+@property (strong) NSDictionary *renderStyleMap;
+@property (strong) NSArray *styleSortDescriptors;
 
 @end

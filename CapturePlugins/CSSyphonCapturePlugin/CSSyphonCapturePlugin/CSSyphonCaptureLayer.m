@@ -16,7 +16,7 @@
 {
     if (self = [super init])
     {
-        self.asynchronous = YES;
+        self.asynchronous = NO;
         self.needsDisplayOnBoundsChange = YES;
         self.flipImage = NO;
     }
@@ -72,8 +72,11 @@
 }
 
 
+/*
 -(BOOL)canDrawInCGLContext:(CGLContextObj)ctx pixelFormat:(CGLPixelFormatObj)pf forLayerTime:(CFTimeInterval)t displayTime:(const CVTimeStamp *)ts
 {
+    
+
     bool boundsChanged = !CGRectEqualToRect(self.bounds, _lastBounds);
     
     if (boundsChanged || self.syphonClient.hasNewFrame || _needsRedraw)
@@ -83,6 +86,8 @@
 
     return NO;
 }
+ */
+
 
 
 

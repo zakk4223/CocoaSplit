@@ -663,6 +663,10 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     myself = (__bridge CaptureController *)displayLinkContext;
     
    
+    
+    
+    
+    
     if (!myself.stagingPreviewView.hiddenOrHasHiddenAncestor)
     {
         [myself.stagingPreviewView cvrender];

@@ -7,6 +7,8 @@
 //
 
 #import "SyphonCaptureViewController.h"
+#import "SyphonCapture.h"
+
 
 @interface SyphonCaptureViewController ()
 
@@ -18,6 +20,12 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        self.renderStyleMap = @{@"On Frame Arrival": @(kCSRenderFrameArrived),
+                              @"On Internal Frame Tick": @(kCSRenderOnFrameTick),
+                              @"Asynchronous": @(kCSRenderAsync)
+                              };
+
+        self.styleSortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"value" ascending:YES]];
         // Initialization code here.
     }
     return self;

@@ -12,5 +12,4 @@
 @interface CSCurrentTimeCaptureViewController : CSTextCaptureViewControllerBase
 
 @property (strong) NSArray *styleSortDescriptors;
-
 @end

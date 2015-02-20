@@ -55,6 +55,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     
     id _audio_capture_session;
     
+    CFAbsoluteTime _lastcvtime;
+    
     NSThread *mainThread;
     
     NSTimer *_captureTimer;

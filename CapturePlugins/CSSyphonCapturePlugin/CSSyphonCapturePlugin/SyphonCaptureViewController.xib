@@ -17,15 +17,43 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gdc-iP-UTJ">
-                    <rect key="frame" x="18" y="236" width="69" height="18"/>
-                    <buttonCell key="cell" type="check" title="Flipped" bezelStyle="regularSquare" imagePosition="right" state="on" inset="2" id="vd4-c4-MTM">
+                    <rect key="frame" x="17" y="235" width="70" height="20"/>
+                    <buttonCell key="cell" type="check" title="Flipped" bezelStyle="regularSquare" imagePosition="right" controlSize="small" state="on" inset="2" id="vd4-c4-MTM">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="system"/>
+                        <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
                     <connections>
                         <binding destination="uDg-ze-iV3" name="value" keyPath="selection.isFlipped" id="dFd-3C-rbP"/>
                     </connections>
                 </button>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nFS-4x-7UP">
+                    <rect key="frame" x="18" y="213" width="124" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Frame Update Method" id="yNd-BU-1Ot">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="y3V-D2-KWn">
+                    <rect key="frame" x="145" y="208" width="122" height="22"/>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="MXT-Ux-hve">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" title="On Frame Arrival" id="49f-2W-QdJ">
+                            <items>
+                                <menuItem title="On Frame Arrival" id="ctY-NS-1gI"/>
+                                <menuItem title="On Frame Tick" id="DKx-S7-XDu"/>
+                                <menuItem title="Asynchronous" id="2lv-lz-Ra2"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="RtK-Zg-8Rl" name="content" keyPath="arrangedObjects" id="KaP-Cj-Gga"/>
+                        <binding destination="RtK-Zg-8Rl" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="KaP-Cj-Gga" id="d6o-EE-PB7"/>
+                        <binding destination="RtK-Zg-8Rl" name="contentValues" keyPath="arrangedObjects.key" previousBinding="d6o-EE-PB7" id="gDM-cl-TWF"/>
+                        <binding destination="uDg-ze-iV3" name="selectedObject" keyPath="selection.self.renderType" previousBinding="gDM-cl-TWF" id="5tF-6n-xo9"/>
+                    </connections>
+                </popUpButton>
             </subviews>
         </customView>
         <objectController id="uDg-ze-iV3" userLabel="SyphonCaptureObjectController">
@@ -33,6 +61,12 @@
                 <binding destination="-2" name="contentObject" keyPath="self.captureObj" id="C29-ZC-tEK"/>
             </connections>
         </objectController>
+        <dictionaryController objectClassName="_NSControllerKeyValuePair" id="RtK-Zg-8Rl" userLabel="RenderStyleController">
+            <connections>
+                <binding destination="-2" name="contentDictionary" keyPath="self.renderStyleMap" id="Ulj-c7-hof"/>
+                <binding destination="-2" name="sortDescriptors" keyPath="self.styleSortDescriptors" id="i4j-JR-vUI"/>
+            </connections>
+        </dictionaryController>
         <userDefaultsController representsSharedInstance="YES" id="wx8-ah-t2a"/>
     </objects>
 </document>

@@ -61,6 +61,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     GLint       _viewport[4];
     GLdouble    _modelview[16];
     GLdouble    _projection[16];
+    SourceLayout *_renderingLayout;
 
     
     NSRect _oldFrame;
@@ -128,7 +129,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 @property (assign) NSPoint selectedOriginDistance;
 @property (assign) bool isResizing;
 @property (assign) resize_style resizeType;
-@property (strong) SourceLayout *sourceLayout;
+@property (strong, atomic) SourceLayout *sourceLayout;
 
 
 

@@ -85,11 +85,13 @@
         return;
     }
     
+    //NSDate *newNow = [NSDate date];
     if (self.startDate) {
         interval = -[self.startDate timeIntervalSinceNow];
     } else if (self.endDate) {
         interval = [self.endDate timeIntervalSinceNow];
     }
+    //self.startDate = newNow;
     
     if (interval < 0)
     {

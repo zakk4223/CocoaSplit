@@ -75,8 +75,8 @@
                     </popUpButtonCell>
                     <connections>
                         <binding destination="jIp-YP-Lxx" name="content" keyPath="arrangedObjects" id="6o5-ze-trd"/>
-                        <binding destination="jIp-YP-Lxx" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="6o5-ze-trd" id="2wO-EZ-bXt"/>
                         <binding destination="jIp-YP-Lxx" name="contentValues" keyPath="arrangedObjects.key" previousBinding="2wO-EZ-bXt" id="eMl-Bp-zdP"/>
+                        <binding destination="jIp-YP-Lxx" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="6o5-ze-trd" id="2wO-EZ-bXt"/>
                         <binding destination="vFt-xN-8xE" name="selectedObject" keyPath="selection.formatter.dateStyle" previousBinding="eMl-Bp-zdP" id="qWq-zk-ps4"/>
                     </connections>
                 </popUpButton>
@@ -95,8 +95,8 @@
                     </popUpButtonCell>
                     <connections>
                         <binding destination="jIp-YP-Lxx" name="content" keyPath="arrangedObjects" id="tKH-Us-9zh"/>
-                        <binding destination="jIp-YP-Lxx" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="tKH-Us-9zh" id="ybF-S7-MIz"/>
                         <binding destination="jIp-YP-Lxx" name="contentValues" keyPath="arrangedObjects.key" previousBinding="ybF-S7-MIz" id="VE0-RS-hJq"/>
+                        <binding destination="jIp-YP-Lxx" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="tKH-Us-9zh" id="ybF-S7-MIz"/>
                         <binding destination="vFt-xN-8xE" name="selectedObject" keyPath="selection.formatter.timeStyle" previousBinding="VE0-RS-hJq" id="nWL-yK-uU8"/>
                     </connections>
                 </popUpButton>
