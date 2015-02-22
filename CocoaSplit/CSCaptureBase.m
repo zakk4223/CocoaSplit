@@ -166,18 +166,31 @@
     //This is gross I'm sorry
     
     unsigned int propCount;
-    objc_property_t *myProperties = class_copyPropertyList(self.class, &propCount);
-    for (unsigned int i = 0; i < propCount; i++)
+    Class currentClass = self.class;
+    
+    
+    while (currentClass && [currentClass superclass])
     {
-        objc_property_t prop = myProperties[i];
-        const char *propName = property_getName(prop);
         
-        NSString *pName = [[NSString alloc] initWithBytes:propName length:strlen(propName) encoding:NSUTF8StringEncoding];
-        id propertyValue = [self valueForKey:pName];
-        [newCopy setValue:propertyValue forKey:pName];
+        
+    
+        objc_property_t *myProperties = class_copyPropertyList(currentClass, &propCount);
+        for (unsigned int i = 0; i < propCount; i++)
+        {
+            objc_property_t prop = myProperties[i];
+            const char *propName = property_getName(prop);
+            
+            NSString *pName = [[NSString alloc] initWithBytes:propName length:strlen(propName) encoding:NSUTF8StringEncoding];
+            id propertyValue = [self valueForKey:pName];
+            NSLog(@"SETTING %@ TO %@",pName, propertyValue);
+            
+            [newCopy setValue:propertyValue forKey:pName];
+        }
+        
+        currentClass = [currentClass superclass];
+        
+        
     }
-    
-    
     return newCopy;
     
 }

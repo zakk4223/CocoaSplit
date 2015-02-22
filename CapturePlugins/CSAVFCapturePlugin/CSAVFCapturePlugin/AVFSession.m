@@ -78,7 +78,6 @@
             [_capture_session addOutput:_video_capture_output];
             _video_capture_output.videoSettings = videoSettings;
             
-            
             _capture_queue = dispatch_queue_create("VideoQueue", NULL);
             
             [_video_capture_output setSampleBufferDelegate:self queue:_capture_queue];

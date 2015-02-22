@@ -20,6 +20,8 @@
     uint64_t _currentFrameTime;
     CGDirectDisplayID _currentDisplay;
     CIImage *_currentImg;
+    CFAbsoluteTime _lastFrame;
+    
 
 }
 

@@ -660,6 +660,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
     CaptureController *myself;
     
+    
     myself = (__bridge CaptureController *)displayLinkContext;
     
    
@@ -1505,7 +1506,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
 -(bool) startStream
 {
-    // We should already have a capture session from init since we need it to figure out device lists.
     
     
     if (_cmdLineInfo)
@@ -1559,6 +1559,12 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
 -(void) setupFrameTimer:(double)framerate
 {
+    if (self.captureRunning)
+    {
+        //Don't change FPS mid-stream
+        return;
+    }
+    
     NSLog(@"SETTING UP FRAME TIMER %f", framerate);
     
     if (framerate && framerate > 0)
@@ -1769,7 +1775,8 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     }
     
     
-    
+    [self setupFrameTimer:self.selectedLayout.frameRate];
+
     if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_8)
     {
 
@@ -2431,6 +2438,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     {
         [self.stagingCtx.sourceLayout saveSourceList];
         self.stagingLayout.savedSourceListData = self.stagingCtx.sourceLayout.savedSourceListData;
+        
         self.stagingLayout.frameRate = self.stagingCtx.sourceLayout.frameRate;
         self.stagingLayout.canvas_width = self.stagingCtx.sourceLayout.canvas_width;
         self.stagingLayout.canvas_height = self.stagingCtx.sourceLayout.canvas_height;

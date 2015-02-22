@@ -186,6 +186,15 @@
     __weak __typeof__(self) weakSelf = self;
     
     _displayStreamRef = CGDisplayStreamCreateWithDispatchQueue(self.currentDisplay, width, height,  kCVPixelFormatType_420YpCbCr8BiPlanarFullRange, (__bridge CFDictionaryRef)(opts), _capture_queue, ^(CGDisplayStreamFrameStatus status, uint64_t displayTime, IOSurfaceRef frameSurface, CGDisplayStreamUpdateRef updateRef) {
+        
+
+        CFAbsoluteTime nowTime = CFAbsoluteTimeGetCurrent();
+        CFAbsoluteTime elapsed = nowTime - _lastFrame;
+        _lastFrame = nowTime;
+        
+        _lastFrame = nowTime;
+        
+        
         if (!weakSelf)
         {
             return;

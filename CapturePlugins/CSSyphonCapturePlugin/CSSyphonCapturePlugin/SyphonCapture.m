@@ -58,6 +58,9 @@
 
 -(void)setActiveVideoDevice:(CSAbstractCaptureDevice *)activeVideoDevice
 {
+    
+    NSLog(@"ACTIVE VIDEO DEVICE SET %@", activeVideoDevice);
+    
     _activeVideoDevice = activeVideoDevice;
     if (_activeVideoDevice)
     {
@@ -191,6 +194,10 @@
 -(void) startSyphon
 {
     
+    NSLog(@"SYPHON CLIENT %@ AVD %@ CAPTURE %@", _syphon_client, self.activeVideoDevice, self.activeVideoDevice.captureDevice);
+    
+          
+          
     
     if (_syphon_client)
     {
