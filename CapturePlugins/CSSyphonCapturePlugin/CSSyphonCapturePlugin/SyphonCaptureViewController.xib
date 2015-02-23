@@ -49,8 +49,8 @@
                     </popUpButtonCell>
                     <connections>
                         <binding destination="RtK-Zg-8Rl" name="content" keyPath="arrangedObjects" id="KaP-Cj-Gga"/>
-                        <binding destination="RtK-Zg-8Rl" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="KaP-Cj-Gga" id="d6o-EE-PB7"/>
                         <binding destination="RtK-Zg-8Rl" name="contentValues" keyPath="arrangedObjects.key" previousBinding="d6o-EE-PB7" id="gDM-cl-TWF"/>
+                        <binding destination="RtK-Zg-8Rl" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="KaP-Cj-Gga" id="d6o-EE-PB7"/>
                         <binding destination="uDg-ze-iV3" name="selectedObject" keyPath="selection.self.renderType" previousBinding="gDM-cl-TWF" id="5tF-6n-xo9"/>
                     </connections>
                 </popUpButton>

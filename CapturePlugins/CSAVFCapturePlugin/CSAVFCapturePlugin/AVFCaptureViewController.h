@@ -12,5 +12,7 @@
 
 @interface AVFCaptureViewController : NSViewController
 @property (weak) AVFCapture *captureObj;
+@property (strong) NSDictionary *renderStyleMap;
+@property (strong) NSArray *styleSortDescriptors;
 
 @end

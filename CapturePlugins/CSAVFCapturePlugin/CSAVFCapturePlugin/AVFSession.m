@@ -105,11 +105,7 @@
         
         if (_video_capture_input)
         {
-            _video_capture_input.removesDuplicateFrames = NO;
-            
             [_capture_session addInput:_video_capture_input];
-            AVCaptureConnection *conn = (AVCaptureConnection *)_video_capture_output.connections.firstObject;
-            conn.videoMaxFrameDuration = CMTimeMake(1, 60);
             
         }
     }

@@ -9,6 +9,12 @@
 #import <Foundation/Foundation.h>
 #import "CSCaptureSourceProtocol.h"
 
+typedef enum frame_render_behavior_t {
+    kCSRenderFrameArrived = 0,
+    kCSRenderOnFrameTick = 1,
+    kCSRenderAsync = 2
+} frame_render_behavior;
+
 @interface CSCaptureBase : NSObject <NSCoding, NSCopying>
 
 

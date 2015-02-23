@@ -82,6 +82,34 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="C0B-X8-VJI">
+                    <rect key="frame" x="20" y="133" width="124" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Frame Update Method" id="cfh-od-pLb">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dnN-lc-DLe">
+                    <rect key="frame" x="150" y="128" width="138" height="22"/>
+                    <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="oEv-3X-L9g" id="nKW-a6-1dm">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" id="kvP-w0-Mtf">
+                            <items>
+                                <menuItem title="Item 1" state="on" id="oEv-3X-L9g"/>
+                                <menuItem title="Item 2" id="dJf-uT-gMk"/>
+                                <menuItem title="Item 3" id="Qj6-va-TPK"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="P5V-2Z-CDX" name="content" keyPath="arrangedObjects" id="wGj-TV-x7U"/>
+                        <binding destination="P5V-2Z-CDX" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="wGj-TV-x7U" id="xdb-gy-GLN"/>
+                        <binding destination="P5V-2Z-CDX" name="contentValues" keyPath="arrangedObjects.key" previousBinding="xdb-gy-GLN" id="HrV-UA-BoT"/>
+                        <binding destination="XW7-Yv-ARE" name="selectedObject" keyPath="selection.self.renderType" previousBinding="HrV-UA-BoT" id="dOj-VQ-exZ"/>
+                    </connections>
+                </popUpButton>
             </subviews>
             <constraints>
                 <constraint firstItem="bkc-bT-MdR" firstAttribute="centerY" secondItem="bO3-jY-iyA" secondAttribute="centerY" id="KAJ-0m-Ph0"/>
@@ -106,5 +134,11 @@
                 <binding destination="XW7-Yv-ARE" name="contentArray" keyPath="selection.videoFramerates" id="E1H-vD-9YW"/>
             </connections>
         </arrayController>
+        <dictionaryController objectClassName="_NSControllerKeyValuePair" id="P5V-2Z-CDX" userLabel="renderStyleController">
+            <connections>
+                <binding destination="-2" name="contentDictionary" keyPath="self.renderStyleMap" id="uF9-5k-GM1"/>
+                <binding destination="-2" name="sortDescriptors" keyPath="self.styleSortDescriptors" id="pvr-Ck-cd5"/>
+            </connections>
+        </dictionaryController>
     </objects>
 </document>
