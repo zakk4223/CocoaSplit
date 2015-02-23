@@ -231,7 +231,7 @@
 }
 
 
--(void)updateLayersWithBlock:(void (^)(CALayer *))updateBlock
+-(void)updateLayersWithBlock:(void (^)(CALayer *layer))updateBlock
 {
     NSMapTable *layersCopy = nil;
     @synchronized(self)
@@ -239,11 +239,14 @@
         layersCopy = _allLayers.copy;
     }
     
+    [CATransaction begin];
     for (id key in layersCopy)
     {
         CALayer *clayer = [layersCopy objectForKey:key];
         updateBlock(clayer);
     }
+    [CATransaction commit];
+    
 }
 
 -(CALayer *)layerForInput:(id)inputsrc

@@ -61,7 +61,10 @@
         
         //I know CIImage can handle this input type. Maybe make this some sort of advanced config if some devices can't handle it?
         
-        [videoSettings setValue:@(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange) forKey:(__bridge NSString *)kCVPixelBufferPixelFormatTypeKey];
+        [videoSettings setValue:@(kCVPixelFormatType_32BGRA) forKey:(__bridge NSString *)kCVPixelBufferPixelFormatTypeKey];
+
+        
+        //[videoSettings setValue:@(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange) forKey:(__bridge NSString *)kCVPixelBufferPixelFormatTypeKey];
         
         
         NSDictionary *ioAttrs = [NSDictionary dictionaryWithObject: [NSNumber numberWithBool: NO]
@@ -97,11 +100,17 @@
     
     if (_capture_device)
     {
+        
         _video_capture_input = [AVCaptureDeviceInput deviceInputWithDevice:_capture_device error:nil];
         
         if (_video_capture_input)
         {
+            _video_capture_input.removesDuplicateFrames = NO;
+            
             [_capture_session addInput:_video_capture_input];
+            AVCaptureConnection *conn = (AVCaptureConnection *)_video_capture_output.connections.firstObject;
+            conn.videoMaxFrameDuration = CMTimeMake(1, 60);
+            
         }
     }
     [_capture_session commitConfiguration];
@@ -197,6 +206,7 @@
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
 {
 
+    //NSLog(@"GOT DESKTOP FRAME %@", CMTimeCopyDescription(NULL, connection.videoMaxFrameDuration));
     NSHashTable *outcopy;
     @synchronized(self)
     {

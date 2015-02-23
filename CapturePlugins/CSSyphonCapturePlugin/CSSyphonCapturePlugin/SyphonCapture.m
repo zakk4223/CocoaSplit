@@ -186,7 +186,9 @@
     {
         [self updateLayersWithBlock:^(CALayer *layer) {
             [((CSSyphonCaptureLayer *)layer) setNeedsDisplay];
+            
         }];
+
     }
 }
 
@@ -194,10 +196,6 @@
 -(void) startSyphon
 {
     
-    NSLog(@"SYPHON CLIENT %@ AVD %@ CAPTURE %@", _syphon_client, self.activeVideoDevice, self.activeVideoDevice.captureDevice);
-    
-          
-          
     
     if (_syphon_client)
     {
