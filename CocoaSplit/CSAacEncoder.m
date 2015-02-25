@@ -173,7 +173,10 @@
                 CMBlockBufferCreateWithMemoryBlock(NULL, aacBuffer, buffer_size, kCFAllocatorMalloc, NULL, 0, buffer_size, 0, &bufferRef);
                 
                 
-                CMAudioSampleBufferCreateReadyWithPacketDescriptions(kCFAllocatorDefault, bufferRef, cmFormat, 1, ptsTime, &packetDesc, &newSampleBuf);
+                CMAudioSampleBufferCreateWithPacketDescriptions(kCFAllocatorDefault, bufferRef, YES, NULL, NULL, cmFormat, 1, ptsTime, &packetDesc, &newSampleBuf);
+                
+                
+                //CMAudioSampleBufferCreateReadyWithPacketDescriptions(kCFAllocatorDefault, bufferRef, cmFormat, 1, ptsTime, &packetDesc, &newSampleBuf);
                 
                 CMSampleBufferCreateCopyWithNewTiming(kCFAllocatorDefault, newSampleBuf, 1, &timeInfo, &timingSampleBuf);
                 CFRelease(newSampleBuf);

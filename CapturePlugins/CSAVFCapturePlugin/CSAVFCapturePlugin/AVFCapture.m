@@ -274,7 +274,6 @@
     {
         [self setDeviceForUniqueID:self.savedUniqueID];
         [self restoreFormatAndFrameRate];
-        
     }
     
 }
@@ -293,52 +292,6 @@
 }
 
 
-/*
--(void) setupAudioOutput
-{
-    
-    if (!_capture_session)
-    {
-        return;
-    }
-    
-    if (!_audio_capture_output)
-    {
-        
-        
-        
-            _audio_capture_output = [[AVCaptureAudioDataOutput alloc] init];
-        
-        
-            _audio_capture_output.audioSettings = @{
-                                                    AVFormatIDKey: [NSNumber numberWithInt:kAudioFormatLinearPCM],
-                                                    AVLinearPCMBitDepthKey: @32,
-                                                    AVLinearPCMIsFloatKey: @YES,
-                                                    AVLinearPCMIsNonInterleaved: @YES,
-                                                    //AVNumberOfChannelsKey: @2,
-                                                    };
-            
-    
-        _audio_capture_queue = dispatch_queue_create("AVFCaptureMuxedAudio", NULL);
-        [_audio_capture_output setSampleBufferDelegate:self queue:_audio_capture_queue];
-    }
-    
-    
-    [_capture_session beginConfiguration];
-    
-    if ([_capture_session canAddOutput:_audio_capture_output])
-    {
-        [_capture_session addOutput:_audio_capture_output];
-        
-    } else {
-        NSLog(@"COULDN'T ADD AUDIO OUTPUT");
-    }
-    
-    
-    [_capture_session commitConfiguration];
-}
-
-*/
 
 
 

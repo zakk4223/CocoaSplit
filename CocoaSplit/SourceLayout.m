@@ -330,14 +330,12 @@
     if (!_rFbo)
     {
         glGenFramebuffers(1, &_rFbo);
-        NSLog(@"GENERATED FBO %d", _rFbo);
 
     }
     
     if (!_fboTexture)
     {
         glGenTextures(1, &_fboTexture);
-        NSLog(@"GENERATED TEXTURE %d", _fboTexture);
 
     }
     
