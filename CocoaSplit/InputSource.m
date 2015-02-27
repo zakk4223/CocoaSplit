@@ -33,6 +33,9 @@ static NSArray *_sourceTypes = nil;
 @synthesize crop_bottom = _crop_bottom;
 @synthesize opacity = _opacity;
 @synthesize rotationAngle = _rotationAngle;
+@synthesize rotationAngleX = _rotationAngleX;
+@synthesize rotationAngleY = _rotationAngleY;
+
 @synthesize scrollXSpeed = _scrollXSpeed;
 @synthesize scrollYSpeed = _scrollYSpeed;
 @synthesize doChromaKey = _doChromaKey;
@@ -52,6 +55,8 @@ static NSArray *_sourceTypes = nil;
     newSource.layer.sourceLayer = newSource->_currentLayer;
     
     newSource.rotationAngle = self.rotationAngle;
+    newSource.rotationAngleY = self.rotationAngleY;
+    newSource.rotationAngleX = self.rotationAngleX;
     newSource.opacity =  self.opacity;
     newSource.name = self.name;
     newSource.depth = self.depth;
@@ -100,6 +105,9 @@ static NSArray *_sourceTypes = nil;
 {
     
     [aCoder encodeFloat:self.rotationAngle forKey:@"rotationAngle"];
+    [aCoder encodeFloat:self.rotationAngleX forKey:@"rotationAngleX"];
+    [aCoder encodeFloat:self.rotationAngleY forKey:@"rotationAngleY"];
+
     [aCoder encodeFloat:self.opacity forKey:@"opacity"];
     [aCoder encodeObject:self.name forKey:@"name"];
     [aCoder encodeFloat:self.depth forKey:@"CAdepth"];
@@ -222,7 +230,11 @@ static NSArray *_sourceTypes = nil;
         self.layer.bounds = CGRectMake(0, 0, width, height);
        
         [self.layer resizeSourceLayer:self.layer.frame oldFrame:oldFrame];
-        self.rotationAngle = [aDecoder decodeFloatForKey:@"rotationAngle"];
+        _rotationAngle = [aDecoder decodeFloatForKey:@"rotationAngle"];
+        _rotationAngleX = [aDecoder decodeFloatForKey:@"rotationAngleX"];
+        _rotationAngleY = [aDecoder decodeFloatForKey:@"rotationAngleY"];
+        [self updateRotationTransform];
+
 
         //[self positionOrigin:x_pos y:y_pos];
 
@@ -732,20 +744,54 @@ static NSArray *_sourceTypes = nil;
 }
 
 
+-(void)updateRotationTransform
+{
+    CATransform3D transform = CATransform3DMakeRotation(self.rotationAngle * M_PI / 180.0, 0.0, 0.0, 1.0);
+    transform = CATransform3DRotate(transform, self.rotationAngleX * M_PI / 180.0, 1.0, 0.0, 0.0);
+    transform = CATransform3DRotate(transform, self.rotationAngleY * M_PI / 180.0, 0.0, 1.0, 0.0);
+    self.layer.disableAnimation = YES;
+    self.layer.transform = transform;
+    self.layer.disableAnimation  = NO;
+}
+
+
 -(void)setRotationAngle:(float)rotationAngle
 {
     _rotationAngle = rotationAngle;
     
-    CATransform3D transform = CATransform3DMakeRotation(self.rotationAngle * M_PI / 180.0, 0.0, 0.0, 1.0);
-    self.layer.disableAnimation = YES;
-    self.layer.transform = transform;
-    self.layer.disableAnimation = NO;
-    
+    [self updateRotationTransform];
 }
+
 
 -(float)rotationAngle
 {
     return _rotationAngle;
+}
+
+-(void)setRotationAngleX:(float)rotationAngleX
+{
+    _rotationAngleX = rotationAngleX;
+    
+    [self updateRotationTransform];
+}
+
+
+-(float)rotationAngleX
+{
+    return _rotationAngleX;
+}
+
+-(void)setRotationAngleY:(float)rotationAngleY
+{
+    _rotationAngleY = rotationAngleY;
+    
+    [self updateRotationTransform];
+}
+
+
+-(float)rotationAngleY
+{
+    return _rotationAngleY;
 }
 
 

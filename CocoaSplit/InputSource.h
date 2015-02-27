@@ -75,6 +75,8 @@ typedef enum resize_style_t {
 
 @property (strong) NSObject<CSCaptureSourceProtocol> *videoInput;
 @property (assign) float rotationAngle;
+@property (assign) float rotationAngleY;
+@property (assign) float rotationAngleX;
 @property (assign) float crop_left;
 @property (assign) float crop_right;
 @property (assign) float crop_top;
