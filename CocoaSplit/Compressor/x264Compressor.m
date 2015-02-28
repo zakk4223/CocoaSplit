@@ -8,6 +8,8 @@
 
 #import "x264Compressor.h"
 #import "OutputDestination.h"
+#import <libavutil/opt.h>
+
 
 
 @implementation x264Compressor
@@ -203,6 +205,9 @@
     }
     
     
+
+    [self reconfigureCompressor];
+    
     if (frameData.videoFrame)
     {
         CVPixelBufferRetain(frameData.videoFrame);
@@ -347,10 +352,35 @@
 
 
 
+-(void)reconfigureCompressor
+{
+
+    if (!_av_codec_ctx)
+    {
+        return;
+    }
+    
+    _av_codec_ctx->rc_max_rate = self.vbv_maxrate*1000;
+    
+    if (!self.use_cbr)
+    {
+        _av_codec_ctx->rc_buffer_size = self.vbv_buffer*1000;
+        
+        av_opt_set(_av_codec_ctx->priv_data, "crf", [[NSString stringWithFormat:@"%d", self.crf] UTF8String], 0);
+        
+    } else {
+        _av_codec_ctx->rc_buffer_size = self.vbv_buffer*1000;
+        
+        _av_codec_ctx->bit_rate = self.vbv_maxrate*1000;
+    }
+
+}
+
 -(bool)setupCompressor:(CVPixelBufferRef)videoFrame
 {
  
     avcodec_register_all();
+    
     
     
 
@@ -361,6 +391,9 @@
     }
     
 
+    NSString *useAdvancedSettings = self.advancedSettings.copy;
+    
+    
     [self setupResolution:videoFrame];
     
     _compressor_queue = dispatch_queue_create("x264 encoder queue", NULL);
@@ -413,10 +446,17 @@
         
         //what did we learn today? Don't believe shit you read in forum posts...
          //_av_codec_ctx->rc_buffer_size = ((1/self.settingsController.captureFPS)*self.settingsController.captureVideoAverageBitrate)*1000;
-        _av_codec_ctx->rc_buffer_size = self.vbv_maxrate*1000;
+        _av_codec_ctx->rc_buffer_size = self.vbv_buffer*1000;
         
         _av_codec_ctx->bit_rate = self.vbv_maxrate*1000;
-        av_dict_set(&opts, "nal-hrd", "cbr", 0);
+        
+        if (!useAdvancedSettings)
+        {
+            useAdvancedSettings = [NSString stringWithFormat:@"filler=1"];
+        } else {
+            useAdvancedSettings = [useAdvancedSettings stringByAppendingString:@":filler=1"];
+        }
+        //av_dict_set(&opts, "nal-hrd", "cbr", 0);
     }
     
     _av_codec_ctx->flags |= CODEC_FLAG_GLOBAL_HEADER;
@@ -452,11 +492,10 @@
     }
     
     
-    id advancedSettings = self.advancedSettings;
     
-    if (advancedSettings)
+    if (useAdvancedSettings)
     {
-        av_dict_set(&opts, "x264opts", [advancedSettings UTF8String], 0);
+        av_dict_set(&opts, "x264opts", [useAdvancedSettings UTF8String], 0);
     }
     
     

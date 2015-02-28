@@ -1158,11 +1158,6 @@
                                                                 <binding destination="gSI-N4-DsK" name="contentValues" keyPath="arrangedObjects.key" previousBinding="RTO-Y1-SNp" id="Ftc-NH-ogE"/>
                                                                 <binding destination="gSI-N4-DsK" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="IOC-y6-UGQ" id="RTO-Y1-SNp"/>
                                                                 <binding destination="gSI-N4-DsK" name="selectedIndex" keyPath="selectionIndex" previousBinding="Ftc-NH-ogE" id="0G7-uW-cOg"/>
-                                                                <binding destination="816" name="enabled" keyPath="self.captureRunning" id="TFb-NE-zCz">
-                                                                    <dictionary key="options">
-                                                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                                                    </dictionary>
-                                                                </binding>
                                                             </connections>
                                                         </popUpButton>
                                                         <button translatesAutoresizingMaskIntoConstraints="NO" id="3602">

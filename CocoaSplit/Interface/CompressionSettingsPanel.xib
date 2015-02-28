@@ -161,15 +161,16 @@ Gw
                         </connections>
                     </popUpButton>
                     <tabView fixedFrame="YES" drawsBackground="NO" controlSize="small" type="noTabsNoBorder" initialItem="gyg-eG-YlU" translatesAutoresizingMaskIntoConstraints="NO" id="EJA-Rc-sIZ">
-                        <rect key="frame" x="13" y="41" width="554" height="279"/>
+                        <rect key="frame" x="6" y="31" width="568" height="292"/>
                         <tabViewItems>
                             <tabViewItem label="None" identifier="" id="gyg-eG-YlU">
-                                <view key="view" ambiguous="YES" id="lRi-Ns-JYI">
+                                <view key="view" id="lRi-Ns-JYI">
+                                    <rect key="frame" x="10" y="25" width="548" height="254"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="x264" identifier="1" id="I6I-nX-nIi">
-                                <view key="view" id="AiJ-YZ-cX2">
+                                <view key="view" ambiguous="YES" id="AiJ-YZ-cX2">
                                     <rect key="frame" x="0.0" y="0.0" width="554" height="279"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -254,6 +255,11 @@ Gw
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                             <connections>
+                                                <binding destination="TZe-4D-nmN" name="enabled" keyPath="selection.use_cbr" id="z4t-yD-nTr">
+                                                    <dictionary key="options">
+                                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                    </dictionary>
+                                                </binding>
                                                 <binding destination="TZe-4D-nmN" name="value" keyPath="selection.crf" id="xEV-u0-L4J">
                                                     <dictionary key="options">
                                                         <integer key="NSNullPlaceholder" value="0"/>
@@ -392,6 +398,11 @@ Gw
                                                 <font key="font" metaFont="smallSystem"/>
                                             </buttonCell>
                                             <connections>
+                                                <binding destination="-2" name="enabled" keyPath="self.captureRunning" id="1JB-Uf-a7i">
+                                                    <dictionary key="options">
+                                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                    </dictionary>
+                                                </binding>
                                                 <binding destination="TZe-4D-nmN" name="value" keyPath="selection.use_cbr" id="vy7-fH-obh">
                                                     <dictionary key="options">
                                                         <bool key="NSRaisesForNotApplicableKeys" value="NO"/>

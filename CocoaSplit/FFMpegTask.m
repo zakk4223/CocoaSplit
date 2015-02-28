@@ -320,7 +320,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     _av_video_stream->time_base.den = self.framerate*1000000;
     
     
-    NSLog(@"FRAMERATE FFMP %d SAMPLE %d BITRATE %d", self.framerate, _samplerate, _audio_bitrate);
     
     _av_audio_stream = avformat_new_stream(_av_fmt_ctx, 0);
     
