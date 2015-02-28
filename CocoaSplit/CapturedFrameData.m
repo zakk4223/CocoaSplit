@@ -15,6 +15,7 @@
 
 @synthesize videoFrame = _videoFrame;
 @synthesize encodedSampleBuffer = _encodedSampleBuffer;
+@synthesize avcodec_pkt = _avcodec_pkt;
 
 
 -(id)init

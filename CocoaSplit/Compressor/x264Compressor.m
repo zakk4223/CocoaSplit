@@ -259,7 +259,7 @@
         //poke the frameData so it releases the video buffer
         frameData.videoFrame = nil;
         
-    AVFrame *outframe = avcodec_alloc_frame();
+    AVFrame *outframe = av_frame_alloc();
     outframe->format = PIX_FMT_YUV420P;
     outframe->width = (int)src_width;
     outframe->height = (int)src_height;

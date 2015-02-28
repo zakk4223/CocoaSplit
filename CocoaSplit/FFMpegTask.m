@@ -188,14 +188,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     {
         CMSampleBufferRef audioSample = (__bridge CMSampleBufferRef)object;
         
-        /*
-        if (CMSampleBufferGetNumSamples(audioSample) > 1)
-        {
-            NSLog(@"NUMBER OF SAMPLES IN FRAME %ld", CMSampleBufferGetNumSamples(audioSample));
-            
-        }
-         */
-        
         [self writeAudioSampleBuffer:audioSample presentationTimeStamp:CMSampleBufferGetOutputPresentationTimeStamp(audioSample)];
         
         //CFRelease(audioSample);
@@ -324,8 +316,8 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
     c_ctx->codec_type = AVMEDIA_TYPE_VIDEO;
     c_ctx->codec_id = AV_CODEC_ID_H264;
-    c_ctx->time_base.num = 1000000;
-    c_ctx->time_base.den = self.framerate*1000000;
+    _av_video_stream->time_base.num = 1000000;
+    _av_video_stream->time_base.den = self.framerate*1000000;
     
     
     NSLog(@"FRAMERATE FFMP %d SAMPLE %d BITRATE %d", self.framerate, _samplerate, _audio_bitrate);
@@ -344,8 +336,8 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     a_ctx->codec_type = AVMEDIA_TYPE_AUDIO;
     a_ctx->codec_id = AV_CODEC_ID_AAC;
     
-    a_ctx->time_base.num = 1000000;
-    a_ctx->time_base.den = self.framerate*1000000;
+    _av_audio_stream->time_base.num = 1000000;
+    _av_audio_stream->time_base.den = self.framerate*1000000;
     a_ctx->sample_rate = _samplerate;
     a_ctx->bit_rate = _audio_bitrate;
     a_ctx->channels = 2;
@@ -516,11 +508,10 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
     
     AVPacket *p = av_malloc(sizeof (AVPacket));
-    
-    memcpy(p, pkt, sizeof(AVPacket));
-    p->destruct = NULL;
-    av_dup_packet(p);
 
+    av_init_packet(p);
+    
+    av_packet_ref(p, pkt);
     
     dispatch_async(_stream_dispatch, ^{
         
@@ -553,8 +544,8 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         }
         
         
-        av_free_packet(p);
-        av_free(p);
+        //av_free_packet(p);
+        //av_free(p);
         _output_framecnt++;
         _output_bytes += packet_size;
         @synchronized(self)

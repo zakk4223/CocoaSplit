@@ -31,7 +31,7 @@
 @property CMTime videoDuration;
 @property CMSampleBufferRef encodedSampleBuffer;
 
-@property AVPacket *avcodec_pkt;
+@property (assign) AVPacket *avcodec_pkt;
 @property AVCodecContext *avcodec_ctx;
 
 @end
