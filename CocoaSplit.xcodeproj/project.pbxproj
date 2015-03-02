@@ -168,6 +168,8 @@
 		34D6580319B342E70012E32B /* CSFileStreamServicePlugin.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34AFC33019B0AD500007C07B /* CSFileStreamServicePlugin.bundle */; };
 		34D6581819B387DE0012E32B /* AppDelegate+AppDelegate_ScriptingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D6581719B387DE0012E32B /* AppDelegate+AppDelegate_ScriptingAdditions.m */; };
 		34D696FC1871B8F700B50EB6 /* Defaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 34D696FB1871B8F700B50EB6 /* Defaults.plist */; };
+		34DF75581AA272F100DA9FDE /* LayoutRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34DF75571AA272F100DA9FDE /* LayoutRenderer.m */; };
+		34DF75591AA272F100DA9FDE /* LayoutRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34DF75571AA272F100DA9FDE /* LayoutRenderer.m */; };
 		34EAFB6F1A1A137600E12FBD /* CSMeterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 34EAFB6E1A1A137600E12FBD /* CSMeterCell.m */; };
 		34EAFB801A1BA86800E12FBD /* CoreMediaIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34EAFB7F1A1BA86800E12FBD /* CoreMediaIO.framework */; };
 		34EAFB811A1BA87000E12FBD /* CoreMediaIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34EAFB7F1A1BA86800E12FBD /* CoreMediaIO.framework */; };
@@ -571,6 +573,8 @@
 		34D6581619B387DE0012E32B /* AppDelegate+AppDelegate_ScriptingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "AppDelegate+AppDelegate_ScriptingAdditions.h"; path = "ScriptingAddditions/AppDelegate+AppDelegate_ScriptingAdditions.h"; sourceTree = "<group>"; };
 		34D6581719B387DE0012E32B /* AppDelegate+AppDelegate_ScriptingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "AppDelegate+AppDelegate_ScriptingAdditions.m"; path = "ScriptingAddditions/AppDelegate+AppDelegate_ScriptingAdditions.m"; sourceTree = "<group>"; };
 		34D696FB1871B8F700B50EB6 /* Defaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Defaults.plist; sourceTree = "<group>"; };
+		34DF75561AA272F100DA9FDE /* LayoutRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutRenderer.h; sourceTree = "<group>"; };
+		34DF75571AA272F100DA9FDE /* LayoutRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayoutRenderer.m; sourceTree = "<group>"; };
 		34EAFB6D1A1A137600E12FBD /* CSMeterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSMeterCell.h; path = Interface/CSMeterCell.h; sourceTree = "<group>"; };
 		34EAFB6E1A1A137600E12FBD /* CSMeterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSMeterCell.m; path = Interface/CSMeterCell.m; sourceTree = "<group>"; };
 		34EAFB7F1A1BA86800E12FBD /* CoreMediaIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMediaIO.framework; path = System/Library/Frameworks/CoreMediaIO.framework; sourceTree = SDKROOT; };
@@ -773,6 +777,8 @@
 				348AC06919B406910064F02D /* SourceLayout.h */,
 				348AC06A19B406910064F02D /* SourceLayout.m */,
 				347277FC1A5A2758008801A9 /* CSIOSurfaceLayer.m */,
+				34DF75561AA272F100DA9FDE /* LayoutRenderer.h */,
+				34DF75571AA272F100DA9FDE /* LayoutRenderer.m */,
 			);
 			path = CocoaSplit;
 			sourceTree = "<group>";
@@ -1565,6 +1571,7 @@
 				34576C7819AFCA1B007BAD90 /* CSPluginLoader.m in Sources */,
 				34FDD6F21A215268009A7413 /* CSPluginServices.m in Sources */,
 				34F5141316FD6E4F00BA894D /* AppleVTCompressor.m in Sources */,
+				34DF75581AA272F100DA9FDE /* LayoutRenderer.m in Sources */,
 				348AC06B19B406910064F02D /* SourceLayout.m in Sources */,
 				345F8B751A17A785009A81E3 /* CAMultiAudioMixer.m in Sources */,
 				34348C2A19BDBDC000A122C2 /* PluginManagerWindowController.m in Sources */,
@@ -1605,6 +1612,7 @@
 				345F8B621A161552009A81E3 /* CAMultiAudioAVCapturePlayer.m in Sources */,
 				345F8B721A177C1F009A81E3 /* CAMultiAudioConverter.m in Sources */,
 				34CFE4A118F154DD00092C6A /* AVFChannelManager.m in Sources */,
+				34DF75591AA272F100DA9FDE /* LayoutRenderer.m in Sources */,
 				3451A1DC1712C5D000DF6A8B /* OutputDestination.m in Sources */,
 				3451A1DD1712C5D300DF6A8B /* CSAbstractCaptureDevice.m in Sources */,
 				34D2D5741A547628001004E5 /* CSTextCaptureBase.m in Sources */,

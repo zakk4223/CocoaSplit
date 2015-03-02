@@ -225,6 +225,12 @@
     }
     
     _sourceLayout = sourceLayout;
+    
+    if (self.layoutRenderer)
+    {
+        self.layoutRenderer.layout = _sourceLayout;
+    }
+
 }
 
 
@@ -1081,7 +1087,7 @@
     self = [super initWithFrame:frameRect pixelFormat:pf];
     if (self)
     {
-        long swapInterval = 1;
+        long swapInterval = 0;
         
         [[self openGLContext] setValues:(GLint *)&swapInterval forParameter:NSOpenGLCPSwapInterval];
 
@@ -1171,12 +1177,12 @@
     
     CVImageBufferRef displayFrame = NULL;
     
-    if (!self.sourceLayout)
+    if (!self.sourceLayout || !self.layoutRenderer)
     {
         return;
     }
         
-    displayFrame = [self.sourceLayout currentFrame];
+    displayFrame = [self.layoutRenderer currentFrame];
     
     if (!displayFrame)
     {

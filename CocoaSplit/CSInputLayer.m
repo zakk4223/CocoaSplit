@@ -242,17 +242,16 @@
     [CATransaction setCompletionBlock:^{
         [CATransaction begin];
         [saveLayer removeFromSuperlayer];
-        [saveLayer removeAnimationForKey:kCATransition];
-        [_sourceLayer removeAnimationForKey:kCATransition];
         [CATransaction commit];
     }];
-    _sourceLayer.hidden = YES;
+
     [_sourceLayer.superlayer addSublayer:sourceLayer];
-    sourceLayer.hidden = NO;
+    
     
 
-    [sourceLayer addAnimation:transition forKey:kCATransition];
+   [sourceLayer addAnimation:transition forKey:kCATransition];
     [_sourceLayer addAnimation:transition forKey:kCATransition];
+    
     
 
     [CATransaction commit];

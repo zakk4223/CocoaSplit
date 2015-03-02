@@ -22,9 +22,6 @@
     {
         _sourceDepthSorter = [[NSSortDescriptor alloc] initWithKey:@"depth" ascending:YES];
         _sourceUUIDSorter = [[NSSortDescriptor alloc] initWithKey:@"uuid" ascending:YES];
-        _backgroundFilter = [CIFilter filterWithName:@"CIConstantColorGenerator"];
-        [_backgroundFilter setDefaults];
-        [_backgroundFilter setValue:[CIColor colorWithRed:0.0f green:0.0f blue:0.0f] forKey:kCIInputColorKey];
         self.sourceCache = [[SourceCache alloc] init];
         _frameRate = 30;
         _canvas_height = 720;
@@ -32,6 +29,15 @@
         _fboTexture = 0;
         _rFbo = 0;
         self.rootLayer = [CALayer layer];
+        self.rootLayer.bounds = CGRectMake(0, 0, _canvas_width, _canvas_height);
+        self.rootLayer.anchorPoint = CGPointMake(0.0, 0.0);
+        self.rootLayer.position = CGPointMake(0.0, 0.0);
+        self.rootLayer.masksToBounds = YES;
+        self.rootLayer.backgroundColor = CGColorCreateGenericRGB(0, 0, 0, 1);
+        //self.rootLayer.geometryFlipped = YES;
+
+        _rootSize = NSMakeSize(_canvas_width, _canvas_height);
+        
     }
     
     return self;
@@ -174,6 +180,8 @@
         [self.rootLayer addSublayer:src.layer];
     }
 
+    [CATransaction commit];
+    
 }
 
 -(void)deleteSource:(InputSource *)delSource
@@ -184,6 +192,8 @@
     [self.sourceList removeObject:delSource];
     [delSource.layer removeFromSuperlayer];
 
+    [CATransaction commit];
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputDeleted  object:delSource userInfo:nil];
 
 }
@@ -197,7 +207,7 @@
     
     [self.sourceList addObject:newSource];
     [self.rootLayer addSublayer:newSource.layer];
-    
+    [CATransaction commit];
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputAdded object:newSource userInfo:nil];
 }
 
@@ -246,250 +256,43 @@
 }
 
 
--(void) createCGLContext
+
+
+
+
+
+-(void)frameTick
 {
-    CGLPixelFormatAttribute glAttributes[] = {
+    
+    
+    NSSize curSize = NSMakeSize(self.canvas_width, self.canvas_height);
+    
+    if (!NSEqualSizes(curSize, _rootSize))
+    {
+        NSLog(@"CHANGING SIZE!!!!");
+        [CATransaction begin];
+        [CATransaction setDisableActions:YES];
         
-        kCGLPFAAccelerated,
-        kCGLPFANoRecovery,
-        kCGLPFADepthSize, (CGLPixelFormatAttribute)32,
-        kCGLPFAAllowOfflineRenderers,
-        (CGLPixelFormatAttribute)0
-    };
-    
-    GLint screens;
-    CGLPixelFormatObj pixelFormat;
-    CGLChoosePixelFormat(glAttributes, &pixelFormat, &screens);
-    
-    
-    if (!pixelFormat)
-    {
-        return;
-    }
-
-    CGLCreateContext(pixelFormat, NULL, &_cglCtx);
-    
-}
-
--(void)setupCArenderer
-{
-    if (!self.cglCtx)
-    {
-        [self createCGLContext];
+        self.rootLayer.bounds = CGRectMake(0, 0, self.canvas_width, self.canvas_height);
+        [CATransaction commit];
+        
+        _rootSize = curSize;
     }
     
-    
-    CGLSetCurrentContext(self.cglCtx);
-    
-    if (!self.renderer)
-    {
-        self.renderer = [CARenderer rendererWithCGLContext:self.cglCtx options:nil];
-    }
-
-    
-    [CATransaction begin];
-    if (!self.rootLayer)
-    {
-        self.rootLayer = [CALayer layer];
-    }
-    CALayer *newRoot = self.rootLayer;
-    newRoot.bounds = CGRectMake(0, 0, self.canvas_width, self.canvas_height);
-    newRoot.backgroundColor = CGColorCreateGenericRGB(0, 0, 0, 1);
-    newRoot.position = CGPointMake(0.0, 0.0);
-    newRoot.anchorPoint = CGPointMake(0.0, 0.0);
-    newRoot.masksToBounds = YES;
-    //newRoot.geometryFlipped = YES;
-    newRoot.sublayerTransform = CATransform3DIdentity;
-    newRoot.sublayerTransform = CATransform3DTranslate(newRoot.sublayerTransform, 0, self.canvas_height, 0);
-    newRoot.sublayerTransform = CATransform3DScale(newRoot.sublayerTransform, 1.0, -1.0, 1.0);
-    self.renderer.bounds = NSMakeRect(0.0, 0.0, self.canvas_width, self.canvas_height);
-    self.renderer.layer = newRoot;
-    [CATransaction commit];
-    
-    glViewport(0, 0, self.canvas_width, self.canvas_height);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(0, self.canvas_width, 0,self.canvas_height, -1, 1);
-    
-    
-    
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    
-    
-    glClearColor(0, 0, 0, 0);
-
-    
-}
-
-
--(void)renderToSurface:(IOSurfaceRef)ioSurface
-{
-    CGLSetCurrentContext(self.cglCtx);
-
-    if (!_rFbo)
-    {
-        glGenFramebuffers(1, &_rFbo);
-
-    }
-    
-    if (!_fboTexture)
-    {
-        glGenTextures(1, &_fboTexture);
-
-    }
-    
-
-    glEnable(GL_TEXTURE_RECTANGLE_ARB);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_RECTANGLE_ARB, _fboTexture);
-    
-    //glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    //glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glDisable(GL_DEPTH_TEST);
-    glDepthMask(GL_FALSE);
-    
-    
-    CGLTexImageIOSurface2D(self.cglCtx, GL_TEXTURE_RECTANGLE_ARB, GL_RGBA, self.canvas_width, self.canvas_height, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, ioSurface, 0);
-
-            GLenum fboStatus;
-    
-
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_RECTANGLE_ARB, _fboTexture, 0);
-
-        glBindFramebuffer(GL_FRAMEBUFFER, _rFbo);
-        fboStatus  = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-
-    
-    
-
-    
-
-
-    glClear(GL_COLOR_BUFFER_BIT);
-    
-    if (fboStatus == GL_FRAMEBUFFER_COMPLETE && self.renderer && self.renderer.layer)
-    {
-        [self.renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];
-        [self.renderer addUpdateRect:self.renderer.bounds];
-        [self.renderer render];
-        [self.renderer endFrame];
-     }
-    glBindTexture(GL_TEXTURE_RECTANGLE_ARB, 0);
-    glDisable(GL_TEXTURE_RECTANGLE_ARB);
-
-    //glFlush();
-}
-
-
--(CVPixelBufferRef)currentImg
-{
-    CVPixelBufferRef destFrame = NULL;
-    CGFloat frameWidth, frameHeight;
-    NSArray *listCopy;
-    
-    
-    listCopy = [self sourceListOrdered];
+    NSArray *listCopy = [self sourceListOrdered];
     
     
     for (InputSource *isource in listCopy)
     {
+        
         if (isource.active)
         {
             [isource frameTick];
         }
         
     }
-    
-    frameWidth = self.canvas_width;
-    frameHeight = self.canvas_height;
-    
-    NSSize frameSize = NSMakeSize(frameWidth, frameHeight);
-    
-    if (CGSizeEqualToSize(frameSize, CGSizeZero))
-    {
-        return nil;
-    }
-    
-    if (!CGSizeEqualToSize(frameSize, _cvpool_size))
-    {
-        [self createPixelBufferPoolForSize:frameSize];
-        _cvpool_size = frameSize;
-        [self setupCArenderer];
-        
-    }
-    
-    CVPixelBufferPoolCreatePixelBuffer(kCVReturnSuccess, _cvpool, &destFrame);
-    
-    
-    
-    [self renderToSurface:CVPixelBufferGetIOSurface(destFrame)];
-    
-    
-    @synchronized(self)
-    {
-        if (_currentPB)
-        {
-            CVPixelBufferRelease(_currentPB);
-        }
-        
-        _currentPB = destFrame;
-    }
-    
-    
-    return _currentPB;
 }
 
-
--(CVPixelBufferRef)currentFrame
-{
-    
-    
-    if (!self.isActive)
-    {
-        [self currentImg];
-    }
-    
-    
-    @synchronized(self)
-    {
-        CVPixelBufferRetain(_currentPB);
-        return _currentPB;
-    }
-}
-
-
-
--(bool) createPixelBufferPoolForSize:(NSSize) size
-{
-    NSLog(@"Controller: Creating Pixel Buffer Pool %f x %f", size.width, size.height);
-    
-    NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
-    [attributes setValue:[NSNumber numberWithInt:size.width] forKey:(NSString *)kCVPixelBufferWidthKey];
-    [attributes setValue:[NSNumber numberWithInt:size.height] forKey:(NSString *)kCVPixelBufferHeightKey];
-    [attributes setValue:@{(NSString *)kIOSurfaceIsGlobal: @NO} forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
-    [attributes setValue:[NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA] forKey:(NSString *)kCVPixelBufferPixelFormatTypeKey];
-    
-    
-    
-    if (_cvpool)
-    {
-        CVPixelBufferPoolRelease(_cvpool);
-    }
-    
-    
-    
-    CVReturn result = CVPixelBufferPoolCreate(NULL, NULL, (__bridge CFDictionaryRef)(attributes), &_cvpool);
-    
-    if (result != kCVReturnSuccess)
-    {
-        return NO;
-    }
-    
-    return YES;
-    
-    
-}
 
 
 -(InputSource *)inputForUUID:(NSString *)uuid

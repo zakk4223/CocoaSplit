@@ -179,6 +179,12 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (weak) IBOutlet PreviewView *stagingPreviewView;
 @property (weak) IBOutlet PreviewView *livePreviewView;
 
+@property (strong) NSArray *transitionNames;
+@property (strong) NSArray *transitionDirections;
+@property (assign) float transitionDuration;
+@property (strong) NSString *transitionName;
+@property (strong) NSString *transitionDirection;
+
 
 - (IBAction)stagingViewToggle:(id)sender;
 -(void)showStagingView;

@@ -10,6 +10,7 @@
 
 #import "CaptureController.h"
 #import "InputSource.h"
+#import "LayoutRenderer.h"
 
 
 
@@ -111,6 +112,8 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
 
 
+
+@property (strong) LayoutRenderer *layoutRenderer;
 
 @property (strong) NSMenu *sourceSettingsMenu;
 

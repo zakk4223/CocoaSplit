@@ -557,6 +557,7 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     if (self.timeToken)
     {
         [_avPlayer removeTimeObserver:self.timeToken];
+        self.timeToken = nil;
     }
     
     if (_avPlayer && _avPlayer.currentItem)
@@ -567,11 +568,9 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     }
     [_avPlayer pause];
     
-    [_avPlayer removeObserver:self forKeyPath:@"rate"];
-    [_avPlayer removeObserver:self forKeyPath:@"currentItem"];
 
-    self.avOutput = nil;
-    _avPlayer = nil;
+    //self.avOutput = nil;
+    //_avPlayer = nil;
 
 
     
@@ -579,6 +578,8 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 -(void) dealloc
 {
     [self willDelete];
+    [_avPlayer removeObserver:self forKeyPath:@"rate"];
+    [_avPlayer removeObserver:self forKeyPath:@"currentItem"];
 
 }
 

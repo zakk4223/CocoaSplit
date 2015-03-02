@@ -689,6 +689,10 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
    if (self = [super init])
    {
        
+       self.transitionNames = @[kCATransitionFade, kCATransitionPush, kCATransitionMoveIn, kCATransitionReveal, @"cube", @"alignedCube", @"flip", @"alignedFlip"];
+       self.transitionDirections = @[kCATransitionFromTop, kCATransitionFromRight, kCATransitionFromBottom, kCATransitionFromLeft];
+
+       
        self.sharedPluginLoader = [CSPluginLoader sharedPluginLoader];
        
        
@@ -1252,6 +1256,17 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
     //dispatch_async(_main_capture_queue, ^{[self newFrameTimed];});
 
+    self.stagingPreviewView.controller = self;
+    self.livePreviewView.controller = self;
+    LayoutRenderer *stagingRender = [[LayoutRenderer alloc] init];
+    stagingRender.isLiveRenderer = NO;
+    self.stagingPreviewView.layoutRenderer = stagingRender;
+    
+    LayoutRenderer *liveRender = [[LayoutRenderer alloc] init];
+    liveRender.isLiveRenderer = YES;
+    self.livePreviewView.layoutRenderer = liveRender;
+
+    
     self.sourceLayouts = [saveRoot valueForKey:@"sourceLayouts"];
     
     if (!self.sourceLayouts)
@@ -1292,8 +1307,8 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
 
     self.extraPluginsSaveData = nil;
-    self.stagingPreviewView.controller = self;
-    self.livePreviewView.controller = self;
+    
+    
 
 }
 
@@ -1321,6 +1336,12 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
 -(void)setStagingLayout:(SourceLayout *)stagingLayout
 {
+    
+    self.stagingCtx.layoutRenderer.transitionName = self.transitionName;
+    self.stagingCtx.layoutRenderer.transitionDirection = self.transitionDirection;
+    self.stagingCtx.layoutRenderer.transitionDuration = self.transitionDuration;
+    
+    
     _stagingLayout = stagingLayout;
     
     
@@ -1331,9 +1352,9 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
     
     SourceLayout *previewCopy = stagingLayout.copy;
-    
-    self.stagingCtx.sourceLayout = previewCopy;
     [previewCopy restoreSourceList];
+
+    self.stagingCtx.sourceLayout = previewCopy;
     if (self.sourceLayoutsArrayController)
     {
         NSUInteger sidx = [self.sourceLayoutsArrayController.arrangedObjects indexOfObject:stagingLayout];
@@ -1357,8 +1378,12 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 -(void)setSelectedLayout:(SourceLayout *)selectedLayout
 {
     
-    SourceLayout *currentLayout = _selectedLayout;
     
+    
+    self.previewCtx.layoutRenderer.transitionName = self.transitionName;
+    self.previewCtx.layoutRenderer.transitionDirection = self.transitionDirection;
+    self.previewCtx.layoutRenderer.transitionDuration = self.transitionDuration;
+
     if (selectedLayout == _selectedLayout)
     {
         return;
@@ -1372,7 +1397,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
     
     self.previewCtx.sourceLayout = selectedLayout;
-    currentLayout.isActive = NO;
+    //currentLayout.isActive = NO;
     if (self.sourceLayoutsArrayController)
     {
         NSUInteger sidx = [self.sourceLayoutsArrayController.arrangedObjects indexOfObject:selectedLayout];
@@ -2081,7 +2106,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 */
 -(CVPixelBufferRef) currentFrame
 {
-    return [self.selectedLayout currentFrame];
+    return [self.previewCtx.layoutRenderer currentFrame];
 }
 
 
@@ -2097,7 +2122,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
             
             
             
-            newFrame = [self.selectedLayout currentImg];
+            newFrame = [self.previewCtx.layoutRenderer currentImg];
             //newFrame = [self currentFrame];
             
             

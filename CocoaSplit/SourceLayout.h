@@ -19,8 +19,7 @@
     NSSortDescriptor *_sourceUUIDSorter;
     CVPixelBufferPoolRef _cvpool;
     CVPixelBufferRef _currentPB;
-    CIFilter *_backgroundFilter;
-    NSSize _cvpool_size;
+    NSSize _rootSize;
     GLuint _fboTexture;
     GLuint _rFbo;
 }
@@ -53,11 +52,10 @@
 -(InputSource *)findSource:(NSPoint)forPoint;
 -(InputSource *)findSource:(NSPoint)forPoint withExtra:(float)withExtra;
 -(NSArray *)sourceListOrdered;
--(CVPixelBufferRef)currentImg;
--(CVPixelBufferRef)currentFrame;
 -(void) saveSourceList;
 -(void) restoreSourceList;
 -(InputSource *)inputForUUID:(NSString *)uuid;
+-(void)frameTick;
 
 
 @end

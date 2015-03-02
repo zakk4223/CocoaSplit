@@ -445,7 +445,7 @@ static NSArray *_sourceTypes = nil;
     self.layer.sourceLayer.filters = @[cropFilter, cFilter];
     
     
-    _multiTransition = [[CATransition alloc] init];
+    _multiTransition = [CATransition animation];
     _multiTransition.type = kCATransitionPush;
     _multiTransition.subtype = kCATransitionFromRight;
     _multiTransition.duration = 2.0;
@@ -886,7 +886,7 @@ static NSArray *_sourceTypes = nil;
     
     if (self.videoSources.count > 1 && (self.videoInput != _nextInput))
     {
-        _multiTransition = [[CATransition alloc] init];
+        _multiTransition = [CATransition animation];
         _multiTransition.type = self.transitionFilterName;
         _multiTransition.subtype = self.transitionDirection;
         _multiTransition.duration = self.transitionDuration;
