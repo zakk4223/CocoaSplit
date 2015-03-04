@@ -1342,6 +1342,9 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     self.stagingCtx.layoutRenderer.transitionDuration = self.transitionDuration;
     
     
+
+    [self stagingSave:self];
+    
     _stagingLayout = stagingLayout;
     
     
