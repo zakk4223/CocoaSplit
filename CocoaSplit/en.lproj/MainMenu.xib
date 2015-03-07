@@ -343,6 +343,11 @@
                                                             </buttonCell>
                                                             <connections>
                                                                 <action selector="addInputSource:" target="79f-hz-x80" id="X2W-yg-aRR"/>
+                                                                <binding destination="816" name="enabled" keyPath="self.livePreviewView.viewOnly" id="2bY-iv-O9D">
+                                                                    <dictionary key="options">
+                                                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                    </dictionary>
+                                                                </binding>
                                                             </connections>
                                                         </button>
                                                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GUC-RL-iVH">
@@ -698,12 +703,12 @@
                                                                 </textField>
                                                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IdG-La-Ugm">
                                                                     <rect key="frame" x="173" y="76" width="69" height="28"/>
-                                                                    <buttonCell key="cell" type="push" title="Save" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="dWy-pY-eA4">
+                                                                    <buttonCell key="cell" type="push" title=" Revert" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="dWy-pY-eA4">
                                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                         <font key="font" metaFont="smallSystem"/>
                                                                     </buttonCell>
                                                                     <connections>
-                                                                        <action selector="stagingSave:" target="816" id="SML-aj-Fb0"/>
+                                                                        <action selector="stagingRevert:" target="816" id="6wF-5s-Ngx"/>
                                                                     </connections>
                                                                 </button>
                                                             </subviews>
@@ -843,12 +848,6 @@
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                         </textField>
-                                                        <box verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="4ja-Ia-fqA">
-                                                            <rect key="frame" x="345" y="108" width="151" height="5"/>
-                                                            <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                                                            <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                            <font key="titleFont" metaFont="system"/>
-                                                        </box>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wwd-Bm-G7P">
                                                             <rect key="frame" x="343" y="119" width="64" height="17"/>
                                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Transition" id="EEs-Ap-dp5">
@@ -857,6 +856,27 @@
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                         </textField>
+                                                        <box verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="4ja-Ia-fqA">
+                                                            <rect key="frame" x="345" y="108" width="151" height="5"/>
+                                                            <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                                                            <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                            <font key="titleFont" metaFont="system"/>
+                                                        </box>
+                                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Hgs-3y-c5x">
+                                                            <rect key="frame" x="748" y="73" width="69" height="28"/>
+                                                            <buttonCell key="cell" type="push" title=" Revert" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="iNL-35-Zmo">
+                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                <font key="font" metaFont="smallSystem"/>
+                                                            </buttonCell>
+                                                            <connections>
+                                                                <action selector="mainRevert:" target="816" id="TgL-eI-6ow"/>
+                                                                <binding destination="816" name="enabled" keyPath="self.livePreviewView.viewOnly" id="y5c-R8-MiT">
+                                                                    <dictionary key="options">
+                                                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                    </dictionary>
+                                                                </binding>
+                                                            </connections>
+                                                        </button>
                                                     </subviews>
                                                     <constraints>
                                                         <constraint firstItem="GUC-RL-iVH" firstAttribute="leading" secondItem="CRm-nK-baf" secondAttribute="leading" id="0qq-TN-7IN"/>
@@ -873,11 +893,13 @@
                                                         <constraint firstItem="Kzs-N1-BTm" firstAttribute="leading" secondItem="mq9-iE-APb" secondAttribute="trailing" constant="8" symbolic="YES" id="EdH-hK-Btl"/>
                                                         <constraint firstItem="YgM-fI-r8f" firstAttribute="top" secondItem="1987" secondAttribute="bottom" constant="8" symbolic="YES" id="EtH-Om-9hd"/>
                                                         <constraint firstItem="PVr-rT-h0X" firstAttribute="baseline" secondItem="TAH-nl-dMp" secondAttribute="baseline" id="FGr-9L-ODx"/>
+                                                        <constraint firstItem="Hgs-3y-c5x" firstAttribute="leading" secondItem="Kzs-N1-BTm" secondAttribute="trailing" constant="8" symbolic="YES" id="IvI-Ur-DmF"/>
                                                         <constraint firstItem="mq9-iE-APb" firstAttribute="leading" secondItem="gWX-z7-q20" secondAttribute="trailing" constant="8" symbolic="YES" id="J4C-uj-cxh"/>
                                                         <constraint firstItem="bqv-QJ-rqH" firstAttribute="top" secondItem="Kzs-N1-BTm" secondAttribute="bottom" constant="29" id="K1F-R2-ZK1"/>
                                                         <constraint firstItem="GUC-RL-iVH" firstAttribute="top" secondItem="CRm-nK-baf" secondAttribute="bottom" constant="8" symbolic="YES" id="K2r-ve-cj0"/>
                                                         <constraint firstItem="gWX-z7-q20" firstAttribute="top" secondItem="M3T-k2-chY" secondAttribute="bottom" constant="8" symbolic="YES" id="KDy-lo-OUt"/>
                                                         <constraint firstAttribute="trailing" secondItem="MvM-Ze-Mhu" secondAttribute="trailing" constant="362" id="KWv-lO-WbS"/>
+                                                        <constraint firstItem="Hgs-3y-c5x" firstAttribute="baseline" secondItem="Kzs-N1-BTm" secondAttribute="baseline" id="Ma5-kT-WPY"/>
                                                         <constraint firstItem="GUC-RL-iVH" firstAttribute="leading" secondItem="M3T-k2-chY" secondAttribute="leading" id="W1X-PX-gLd"/>
                                                         <constraint firstItem="Tku-6P-Ve9" firstAttribute="top" secondItem="2587" secondAttribute="top" id="Wfu-M3-UXv"/>
                                                         <constraint firstItem="YgM-fI-r8f" firstAttribute="baseline" secondItem="TAH-nl-dMp" secondAttribute="baseline" id="ZCt-ES-wnv"/>
@@ -895,6 +917,7 @@
                                                         <constraint firstAttribute="trailing" secondItem="Kzs-N1-BTm" secondAttribute="trailing" constant="95" id="sMs-TM-ouj"/>
                                                         <constraint firstItem="M3T-k2-chY" firstAttribute="centerY" secondItem="MvM-Ze-Mhu" secondAttribute="centerY" id="saD-Lf-Ubq"/>
                                                         <constraint firstItem="3730" firstAttribute="bottom" secondItem="2587" secondAttribute="bottom" id="sqZ-m0-Qhz"/>
+                                                        <constraint firstAttribute="trailing" secondItem="Hgs-3y-c5x" secondAttribute="trailing" constant="28" id="tu7-Mz-TOn"/>
                                                         <constraint firstAttribute="bottom" secondItem="Tku-6P-Ve9" secondAttribute="bottom" constant="-3" id="xV3-lz-iu5"/>
                                                         <constraint firstItem="951" firstAttribute="leading" secondItem="1987" secondAttribute="trailing" constant="40" id="yih-4z-TsX"/>
                                                         <constraint firstItem="Tku-6P-Ve9" firstAttribute="leading" secondItem="3290" secondAttribute="leading" constant="-3" id="yzM-sh-G7P"/>

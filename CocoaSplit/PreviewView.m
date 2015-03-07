@@ -497,6 +497,12 @@
 
 -(void)rightMouseDown:(NSEvent *)theEvent
 {
+    
+    if (self.viewOnly)
+    {
+        return;
+    }
+    
     NSPoint tmp;
     
     tmp = [self convertPoint:theEvent.locationInWindow fromView:nil];
@@ -541,6 +547,13 @@
 
 - (void)mouseDown:(NSEvent *)theEvent
 {
+    
+    if (self.viewOnly)
+    {
+        return;
+    }
+    
+    
     NSPoint tmp;
     
     tmp = [self convertPoint:theEvent.locationInWindow fromView:nil];
@@ -859,7 +872,11 @@
 -(void) mouseMoved:(NSEvent *)theEvent
 {
     
-    [self trackMousedSource];
+    if (!self.viewOnly)
+    {
+        [self trackMousedSource];
+    }
+    
     
     [self setIdleTimer];
     
@@ -1189,7 +1206,6 @@
         return;
     }
     
-        //[self trackMousedSource];
     //CVPixelBufferRetain(displayFrame);
     [self drawPixelBuffer:displayFrame];
     CVPixelBufferRelease(displayFrame);

@@ -193,6 +193,9 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 - (IBAction)stagingGoLive:(id)sender;
 - (IBAction)stagingSave:(id)sender;
+- (IBAction)stagingRevert:(id)sender;
+- (IBAction)mainRevert:(id)sender;
+
 
 
 - (void)deleteLayout:(NSInteger)deleteIdx;

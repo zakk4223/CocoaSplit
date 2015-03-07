@@ -113,6 +113,8 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
 
 
+@property (assign) bool viewOnly;
+
 @property (strong) LayoutRenderer *layoutRenderer;
 
 @property (strong) NSMenu *sourceSettingsMenu;

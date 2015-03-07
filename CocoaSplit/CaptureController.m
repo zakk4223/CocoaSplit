@@ -1266,6 +1266,8 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     liveRender.isLiveRenderer = YES;
     self.livePreviewView.layoutRenderer = liveRender;
 
+    self.livePreviewView.viewOnly = YES;
+    
     
     self.sourceLayouts = [saveRoot valueForKey:@"sourceLayouts"];
     
@@ -2473,6 +2475,23 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     }
 }
 
+-(IBAction)stagingRevert:(id)sender
+{
+    if (self.stagingPreviewView.sourceLayout)
+    {
+        [self.stagingPreviewView.sourceLayout restoreSourceList];
+    }
+}
+
+-(IBAction)mainRevert:(id)sender
+{
+    if (self.livePreviewView.sourceLayout)
+    {
+        [self.livePreviewView.sourceLayout restoreSourceList];
+    }
+}
+
+
 -(void) hideStagingView
 {
     NSView *stagingView = self.canvasSplitView.subviews[0];
@@ -2482,6 +2501,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     [self.canvasSplitView display];
     self.stagingControls.hidden = YES;
     self.goLiveControls.hidden = YES;
+    self.livePreviewView.viewOnly = NO;
     
 }
 
@@ -2498,9 +2518,22 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     liveFrame.origin.x = stagingFrame.size.width + dividerWidth;
     [stagingView setFrameSize:stagingFrame.size];
     [liveView setFrame:liveFrame];
+    
+    if (self.livePreviewView.sourceLayout)
+    {
+        [self.livePreviewView.sourceLayout saveSourceList];
+        if (self.selectedLayout == self.stagingLayout)
+        {
+            self.stagingPreviewView.sourceLayout.savedSourceListData = self.livePreviewView.sourceLayout.savedSourceListData;
+            [self.stagingPreviewView.sourceLayout restoreSourceList];
+        }
+    }
+
+    
     [self.canvasSplitView display];
     self.stagingControls.hidden = NO;
     self.goLiveControls.hidden = NO;
+    self.livePreviewView.viewOnly = YES;
 
 }
 
