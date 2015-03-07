@@ -1349,11 +1349,13 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
     _stagingLayout = stagingLayout;
     
-    
+    /*
     if (stagingLayout.isActive)
     {
         [stagingLayout saveSourceList];
     }
+     
+     */
     
     
     SourceLayout *previewCopy = stagingLayout.copy;
@@ -2529,7 +2531,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         }
     }
 
-    
     [self.canvasSplitView display];
     self.stagingControls.hidden = NO;
     self.goLiveControls.hidden = NO;
