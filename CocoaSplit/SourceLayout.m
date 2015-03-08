@@ -145,6 +145,44 @@
     self.savedSourceListData = [NSKeyedArchiver archivedDataWithRootObject:self.sourceList];
 }
 
+
+-(void)restoreSourceListForSelfGoLive
+{
+    
+    if (self.savedSourceListData)
+    {
+        
+        self.transitionLayer = [CALayer layer];
+        
+        NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:self.savedSourceListData];
+        
+        [unarchiver setDelegate:self];
+        
+        self.transitionSourceList = [unarchiver decodeObjectForKey:@"root"];
+        [unarchiver finishDecoding];
+        
+    }
+    
+    if (!self.transitionSourceList)
+    {
+        self.transitionSourceList = [NSMutableArray array];
+    }
+    
+    for(InputSource *src in self.transitionSourceList)
+    {
+        src.sourceLayout = self;
+        src.is_live = self.isActive;
+        
+        [self.transitionLayer addSublayer:src.layer];
+    }
+    
+
+    self.transitionNeeded = YES;
+    
+    [CATransaction commit];
+}
+
+
 -(void)restoreSourceList
 {
     
@@ -160,6 +198,7 @@
         for(InputSource *src in self.sourceList)
         {
             [src willDelete];
+            [src.layer removeFromSuperlayer];
         }
         
         self.sourceList = [unarchiver decodeObjectForKey:@"root"];

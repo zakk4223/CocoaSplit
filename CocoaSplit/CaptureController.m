@@ -2449,6 +2449,11 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
 - (IBAction)stagingGoLive:(id)sender
 {
+    
+    self.previewCtx.layoutRenderer.transitionName = self.transitionName;
+    self.previewCtx.layoutRenderer.transitionDirection = self.transitionDirection;
+    self.previewCtx.layoutRenderer.transitionDuration = self.transitionDuration;
+
     if (self.stagingLayout && self.stagingCtx.sourceLayout)
     {
         [self stagingSave:sender];
@@ -2457,7 +2462,10 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         {
             self.selectedLayout = self.stagingLayout;
         } else {
-            [self.stagingLayout restoreSourceList];
+            
+            [self.stagingLayout restoreSourceListForSelfGoLive];
+            [CATransaction commit];
+            
             [self setupFrameTimer:self.selectedLayout.frameRate];
 
         }

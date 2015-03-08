@@ -42,6 +42,10 @@
 @property (strong) CARenderer *renderer;
 @property (strong) CALayer *rootLayer;
 
+//For self-transitions
+@property (strong) CALayer *transitionLayer;
+@property (strong) NSMutableArray *transitionSourceList;
+@property (assign) bool transitionNeeded;
 
 @property (strong) SourceCache *sourceCache;
 @property (strong) CIFilter *compositeFilter;
@@ -56,6 +60,8 @@
 -(void) restoreSourceList;
 -(InputSource *)inputForUUID:(NSString *)uuid;
 -(void)frameTick;
+-(void)restoreSourceListForSelfGoLive;
+
 
 
 @end
