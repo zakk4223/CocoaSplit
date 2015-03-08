@@ -1091,6 +1091,10 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
     saveRoot = [NSMutableDictionary dictionary];
     
+    [saveRoot setValue:self.transitionName forKey:@"transitionName"];
+    [saveRoot setValue:self.transitionDirection forKey:@"transitionDirection"];
+    [saveRoot setValue:[NSNumber numberWithFloat:self.transitionDuration] forKey:@"transitionDuration"];
+    
     [saveRoot setValue: [NSNumber numberWithInt:self.captureWidth] forKey:@"captureWidth"];
     [saveRoot setValue: [NSNumber numberWithInt:self.captureHeight] forKey:@"captureHeight"];
     [saveRoot setValue: [NSNumber numberWithDouble:self.captureFPS] forKey:@"captureFPS"];
@@ -1171,6 +1175,10 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     [saveRoot addEntriesFromDictionary:savedValues];
     
 
+    
+    self.transitionName = [saveRoot valueForKey:@"transitionName"];
+    self.transitionDirection = [saveRoot valueForKey:@"transitionDirection"];
+    self.transitionDuration = [[saveRoot valueForKey:@"transitionDuration"] floatValue];
     
     self.captureWidth = [[saveRoot valueForKey:@"captureWidth"] intValue];
     self.captureHeight = [[saveRoot valueForKey:@"captureHeight"] intValue];
