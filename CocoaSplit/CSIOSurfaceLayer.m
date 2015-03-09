@@ -14,6 +14,8 @@
 @interface CIImageWrapper : NSObject
 {
     IOSurfaceRef _csIOSurfacePriv;
+    uint32_t _csIOSurfaceSeed;
+    
     CVImageBufferRef _csPixelBufferPriv;
 }
 
@@ -22,6 +24,8 @@
 @end
 
 @implementation CIImageWrapper
+
+@synthesize ciImage = _ciImage;
 
 
 
@@ -57,6 +61,32 @@
     return self;
 }
 
+
+-(CIImage *)ciImage
+{
+    
+    
+    if (!_csIOSurfacePriv)
+    {
+        return _ciImage;
+    }
+    
+    uint32_t currseed = IOSurfaceGetSeed(_csIOSurfacePriv);
+    if (currseed != _csIOSurfaceSeed)
+    {
+        _ciImage = [CIImage imageWithIOSurface:_csIOSurfacePriv];
+        _csIOSurfaceSeed = currseed;
+    }
+    
+    return _ciImage;
+}
+
+-(void)setCiImage:(CIImage *)ciImage
+{
+    _ciImage = ciImage;
+}
+
+
 -(instancetype)initWithCIImage:(CIImage *)img
 {
     if (self = [super init])
@@ -75,6 +105,8 @@
     {
         IOSurfaceIncrementUseCount(surface);
         _csIOSurfacePriv = surface;
+        _csIOSurfaceSeed = IOSurfaceGetSeed(surface);
+        
         _ciImage = [CIImage imageWithIOSurface:surface];
     }
     return self;
@@ -98,7 +130,6 @@
 
 @interface CSIOSurfaceLayer()
 {
-    CIFilter *_resizeFilter;
     CIFilter *_matrixFilter;
     
 }
@@ -121,8 +152,6 @@
         self.flipImage = NO;
         _lastSurfaceSize = NSMakeRect(0, 0, 0, 0);
         _privateCropRect = CGRectMake(0.0, 0.0, 1.0, 1.0);
-        _resizeFilter = [CIFilter filterWithName:@"CILanczosScaleTransform"];
-        [_resizeFilter setDefaults];
         self.imageWrapper = nil;
         
     }
@@ -302,11 +331,13 @@
         CGFloat originX = useBounds.size.width/2 - scaledSize.width/2;
         CGFloat originY = useBounds.size.height/2 - scaledSize.height/2;
         
+        
+        
         inRect = NSMakeRect(originX, originY, scaledSize.width, scaledSize.height);
-        //[_resizeFilter setValue:croppedImage forKey:kCIInputImageKey];
-        //[_resizeFilter setValue:@(ratio) forKey:kCIInputScaleKey];
-        //croppedImage = [_resizeFilter valueForKey:kCIOutputImageKey];
+        inRect = NSIntegralRect(inRect);
     }
+    
+    
     
     
     
