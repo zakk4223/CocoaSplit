@@ -119,7 +119,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
 @property (strong) NSMenu *sourceSettingsMenu;
 
-@property (strong) NSMenu *sourceListMenu;
 
 
 @property (strong) CIContext *cictx;

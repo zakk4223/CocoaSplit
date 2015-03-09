@@ -118,6 +118,7 @@
 		3481F30619B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3481F30519B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m */; };
 		348AC06B19B406910064F02D /* SourceLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 348AC06A19B406910064F02D /* SourceLayout.m */; };
 		348AC06C19B406910064F02D /* SourceLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 348AC06A19B406910064F02D /* SourceLayout.m */; };
+		349461451AAD73BC00F28883 /* TestView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 349461441AAD73BC00F28883 /* TestView.xib */; };
 		3498D94A1A94685000906532 /* CSAudioSwitchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3498D9491A94685000906532 /* CSAudioSwitchCell.m */; };
 		3498D94F1A9472BD00906532 /* CSAudioSwitchControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 3498D94E1A9472BD00906532 /* CSAudioSwitchControl.m */; };
 		34A64A2F165EFE4C00A68428 /* PreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A64A2E165EFE4B00A68428 /* PreviewView.m */; };
@@ -514,6 +515,7 @@
 		3481F30519B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "SourceLayout+ScriptingAdditions.m"; path = "ScriptingAddditions/SourceLayout+ScriptingAdditions.m"; sourceTree = "<group>"; };
 		348AC06919B406910064F02D /* SourceLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SourceLayout.h; sourceTree = "<group>"; };
 		348AC06A19B406910064F02D /* SourceLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SourceLayout.m; sourceTree = "<group>"; };
+		349461441AAD73BC00F28883 /* TestView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TestView.xib; sourceTree = "<group>"; };
 		3498D9481A94685000906532 /* CSAudioSwitchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSAudioSwitchCell.h; sourceTree = "<group>"; };
 		3498D9491A94685000906532 /* CSAudioSwitchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAudioSwitchCell.m; sourceTree = "<group>"; };
 		3498D94D1A9472BD00906532 /* CSAudioSwitchControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAudioSwitchControl.h; path = Interface/CSAudioSwitchControl.h; sourceTree = "<group>"; };
@@ -869,6 +871,7 @@
 				3498D9491A94685000906532 /* CSAudioSwitchCell.m */,
 				3498D94D1A9472BD00906532 /* CSAudioSwitchControl.h */,
 				3498D94E1A9472BD00906532 /* CSAudioSwitchControl.m */,
+				349461441AAD73BC00F28883 /* TestView.xib */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -1497,6 +1500,7 @@
 				34ABEF3C17C0C2CB00AA5E62 /* advancedPrefPanel.xib in Resources */,
 				3435E396188B902C0015CC01 /* 420v.fgsh in Resources */,
 				342B33B3198073EC00492CB7 /* line.fgsh in Resources */,
+				349461451AAD73BC00F28883 /* TestView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

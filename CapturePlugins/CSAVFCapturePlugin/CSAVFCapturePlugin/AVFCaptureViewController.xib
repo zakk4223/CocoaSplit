@@ -105,8 +105,8 @@
                     </popUpButtonCell>
                     <connections>
                         <binding destination="P5V-2Z-CDX" name="content" keyPath="arrangedObjects" id="wGj-TV-x7U"/>
-                        <binding destination="P5V-2Z-CDX" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="wGj-TV-x7U" id="xdb-gy-GLN"/>
                         <binding destination="P5V-2Z-CDX" name="contentValues" keyPath="arrangedObjects.key" previousBinding="xdb-gy-GLN" id="HrV-UA-BoT"/>
+                        <binding destination="P5V-2Z-CDX" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="wGj-TV-x7U" id="xdb-gy-GLN"/>
                         <binding destination="XW7-Yv-ARE" name="selectedObject" keyPath="selection.self.renderType" previousBinding="HrV-UA-BoT" id="dOj-VQ-exZ"/>
                     </connections>
                 </popUpButton>

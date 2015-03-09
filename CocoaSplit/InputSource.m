@@ -1135,18 +1135,24 @@ static NSArray *_sourceTypes = nil;
 
 -(void)sourceConfigurationView
 {
-    NSView *configView = nil;
-    if ([self.videoInput respondsToSelector:@selector(configurationView)])
-    {
-        
-        _currentInputViewController = [self.videoInput configurationView];
-        configView = _currentInputViewController.view;
-        
-    }
     
     if (self.editorController)
     {
-        
+
+    
+        NSView *configView = nil;
+        if (!_currentInputViewController)
+        {
+            if ([self.videoInput respondsToSelector:@selector(configurationView)])
+            {
+                
+                _currentInputViewController = [self.videoInput configurationView];
+                configView = _currentInputViewController.view;
+                
+            }
+        }
+    
+    
         
         InputPopupControllerViewController *pcont = self.editorController;
         
@@ -1164,6 +1170,12 @@ static NSArray *_sourceTypes = nil;
         } else {
             [[pcont.sourceConfigView animator] addSubview:configView];
         }
+    } else {
+        if (_currentInputViewController)
+        {
+            [_currentInputViewController setValue:nil forKey:@"captureObj"];
+        }
+
     }
 
     
@@ -1413,12 +1425,19 @@ static NSArray *_sourceTypes = nil;
 
 -(void)willDelete
 {
-    /*
-    if (self.videoInput)
+    
+    if (self.editorController)
     {
-        [self.videoInput willDelete];
+        self.editorController.inputSource = nil;
     }
-     */
+    
+    if (_currentInputViewController)
+    {
+        [_currentInputViewController setValue:nil forKey:@"captureObj"];
+
+    }
+    
+    
 }
 
 
@@ -1466,6 +1485,20 @@ static NSArray *_sourceTypes = nil;
 
 -(void) windowWillClose:(NSNotification *)notification
 {
+    
+    NSLog(@"WINDOW WILL CLOSE!!!");
+    
+    
+    if (self.editorController)
+    {
+        self.editorController.inputSource = nil;
+    }
+    
+    if (_currentInputViewController)
+    {
+        [_currentInputViewController setValue:nil forKey:@"captureObj"];
+
+    }
     self.editorController = nil;
     self.editorWindow = nil;
 }

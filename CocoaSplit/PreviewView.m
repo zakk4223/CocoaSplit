@@ -377,11 +377,11 @@
     
     
 }
--(void) buildSourceMenu
+-(NSMenu *) buildSourceMenu
 {
     NSArray *sourceList = [self.sourceLayout sourceListOrdered];
     
-    self.sourceListMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
+    NSMenu *sourceListMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
     
     
     
@@ -417,9 +417,11 @@
         
         [srcItem setSubmenu:submenu];
         
-        [self.sourceListMenu insertItem:srcItem atIndex:[self.sourceListMenu.itemArray count]];
+        [sourceListMenu insertItem:srcItem atIndex:[sourceListMenu.itemArray count]];
         
     }
+    
+    return sourceListMenu;
 }
 
 -(void)trackMousedSource
@@ -513,8 +515,10 @@
         [self buildSettingsMenu];
         [self.sourceSettingsMenu popUpMenuPositioningItem:self.sourceSettingsMenu.itemArray.firstObject atLocation:tmp inView:self];
     } else {
-        [self buildSourceMenu];
-        [self.sourceListMenu popUpMenuPositioningItem:self.sourceListMenu.itemArray.firstObject atLocation:tmp inView:self];
+        
+        NSMenu *srcListMenu = [self buildSourceMenu];
+        
+        [srcListMenu popUpMenuPositioningItem:srcListMenu.itemArray.firstObject atLocation:tmp inView:self];
     }
 }
 
@@ -952,6 +956,7 @@
 
 
 
+
 - (IBAction)deleteInput:(id)sender
 {
     NSMenuItem *item = (NSMenuItem *)sender;
@@ -963,6 +968,7 @@
     } else if (self.selectedSource) {
         [self.sourceLayout deleteSource:self.selectedSource];
         self.selectedSource = nil;
+        self.mousedSource = nil;
     }
 }
 
@@ -1597,6 +1603,8 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
     newViewController.inputSource.editorWindow = popoverWindow;
     newViewController.inputSource.editorController = newViewController;
+    
+    oldViewController.inputSource = nil;
     return popoverWindow;
     
 }
@@ -1610,6 +1618,8 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         InputPopupControllerViewController *vcont = (InputPopupControllerViewController *)popover.contentViewController;
         
         vcont.inputSource.editorController = nil;
+        vcont.inputSource = nil;
+        
     }
     
 }

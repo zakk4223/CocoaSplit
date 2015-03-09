@@ -8,6 +8,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="InputPopupControllerViewController">
             <connections>
                 <outlet property="currentEffectsController" destination="0iu-Bs-KXZ" id="Lnj-mi-xjC"/>
+                <outlet property="inputobjctrl" destination="Gdf-y2-DdF" id="FT4-F8-KVU"/>
                 <outlet property="multiSourceController" destination="4mF-fx-iLB" id="U30-Tg-7IY"/>
                 <outlet property="sourceConfigView" destination="SXE-81-50C" id="H3V-Fe-FOV"/>
                 <outlet property="view" destination="E8C-YL-16h" id="aVS-B5-cxz"/>
@@ -478,7 +479,7 @@
                                 <font key="titleFont" metaFont="system"/>
                             </box>
                             <box horizontalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="UcS-yc-7Kj">
-                                <rect key="frame" x="122" y="173" width="5" height="97"/>
+                                <rect key="frame" x="122" y="169" width="4" height="97"/>
                                 <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                                 <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <font key="titleFont" metaFont="system"/>
@@ -504,7 +505,7 @@
                                 </textFieldCell>
                             </textField>
                             <box verticalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="QBW-Q6-I7d">
-                                <rect key="frame" x="303" y="275" width="136" height="5"/>
+                                <rect key="frame" x="303" y="271" width="136" height="4"/>
                                 <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                                 <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <font key="titleFont" metaFont="system"/>

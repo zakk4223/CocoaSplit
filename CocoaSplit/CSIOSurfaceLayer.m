@@ -227,19 +227,10 @@
 {
 
     
-    //IOSurfaceIncrementUseCount(ioSurface);
     @synchronized(self)
     {
         self.imageWrapper = [[CIImageWrapper alloc] initWithIOSurface:ioSurface];
     }
-    
-
-    /*
-    if (_ioSurface)
-    {
-        IOSurfaceDecrementUseCount(_ioSurface);
-    }
-     */
     _ioSurface = ioSurface;
 
     
@@ -269,12 +260,7 @@
     CIImage *useImage;
     @synchronized(self)
     {
-
-
         useImage = wrappedImage.ciImage;
-        //IOSurfaceIncrementUseCount(cImg);
-        
-
     }
     
     if (!_ciCtx || !useImage)
@@ -346,7 +332,6 @@
 
     
     [super drawInCGLContext:ctx pixelFormat:pf forLayerTime:t displayTime:ts];
-    //IOSurfaceDecrementUseCount(cImg);
     
 
     

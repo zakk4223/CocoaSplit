@@ -21,6 +21,8 @@
     if (self = [super init])
     {
         self = [super initWithNibName:@"InputPopupControllerViewController" bundle:nil];
+        //self = [super initWithNibName:@"TestView" bundle:nil];
+
     }
     
     return self;
