@@ -183,43 +183,62 @@
 }
 
 
+
+-(void)mergeSourceListData:(NSData *)mergeData
+{
+    
+    if (!self.sourceList)
+    {
+        self.sourceList = [NSMutableArray array];
+    }
+
+    if (!mergeData)
+    {
+        return;
+    }
+    
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:mergeData];
+    
+    [unarchiver setDelegate:self];
+    
+    NSArray *mergeList = [unarchiver decodeObjectForKey:@"root"];
+    [unarchiver finishDecoding];
+    
+    for(InputSource *src in mergeList)
+    {
+        src.sourceLayout = self;
+        src.is_live = self.isActive;
+        
+        [self.rootLayer addSublayer:src.layer];
+        [self.sourceList addObject:src];
+    }
+
+    [CATransaction commit];
+    
+    
+    
+    
+}
 -(void)restoreSourceList
 {
     
     if (self.savedSourceListData)
     {
 
+        
         self.rootLayer.sublayers = [NSArray array];
-        
-        NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:self.savedSourceListData];
-        
-        [unarchiver setDelegate:self];
         
         for(InputSource *src in self.sourceList)
         {
             [src willDelete];
             [src.layer removeFromSuperlayer];
         }
-        
-        self.sourceList = [unarchiver decodeObjectForKey:@"root"];
-        [unarchiver finishDecoding];
-        
-    }
-    
-    if (!self.sourceList)
-    {
-        self.sourceList = [NSMutableArray array];
-    }
-    
-    for(InputSource *src in self.sourceList)
-    {
-        src.sourceLayout = self;
-        src.is_live = self.isActive;
-        
-        [self.rootLayer addSublayer:src.layer];
-    }
 
-    [CATransaction commit];
+        
+        [self mergeSourceListData:self.savedSourceListData];
+        
+        
+    }
     
 }
 

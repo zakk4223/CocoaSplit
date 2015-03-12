@@ -436,13 +436,7 @@ static NSArray *_sourceTypes = nil;
     cFilter.name = @"Chromakey";
     cFilter.enabled = NO;
     
-    CIFilter *cropFilter = [CIFilter filterWithName:@"CICrop"];
-    [cropFilter setDefaults];
-    cropFilter.name = @"CropFilter";
-    cropFilter.enabled = NO;
-    
-    
-    self.layer.sourceLayer.filters = @[cropFilter, cFilter];
+    self.layer.sourceLayer.filters = @[cFilter];
     
     
     _multiTransition = [CATransition animation];
@@ -1397,6 +1391,7 @@ static NSArray *_sourceTypes = nil;
     [self.layer.sourceLayer setValue:[NSNumber numberWithBool:doChromaKey] forKeyPath:@"filters.Chromakey.enabled" ];
     if (doChromaKey)
     {
+                
         [self.layer.sourceLayer setValue:[[CIColor alloc] initWithColor:self.chromaKeyColor] forKeyPath:@"filters.Chromakey.inputColor"];
 
         [self.layer.sourceLayer setValue:@(self.chromaKeySmoothing) forKeyPath:@"filters.Chromakey.inputSmoothing"];
