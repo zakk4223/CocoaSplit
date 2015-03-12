@@ -2426,6 +2426,8 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
     NSInteger selectedRow = [sender selectedRow];
     
+    NSInteger selectedCount = sender.numberOfSelectedRows;
+    
     if (selectedRow != -1)
     {
         SourceLayout *selected = [self.sourceLayoutsArrayController.arrangedObjects objectAtIndex:selectedRow];
@@ -2433,9 +2435,26 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         {
             if (sender == self.mainSourceLayoutTableView)
             {
-                self.selectedLayout = selected;
+                if (selectedCount > 1)
+                {
+                    if (!self.livePreviewView.viewOnly)
+                    {
+                        [self.selectedLayout mergeSourceListData:selected.savedSourceListData];
+                    }
+                } else {
+                    self.selectedLayout = selected;
+                }
             } else {
-                self.stagingLayout = selected;
+                if (selectedCount > 1)
+                {
+                    [self.stagingPreviewView.sourceLayout mergeSourceListData:selected.savedSourceListData];
+                } else {
+                    self.stagingLayout = selected;
+                }
+            }
+            if (selectedCount > 1)
+            {
+                [sender deselectRow:selectedRow];
             }
         }
     }

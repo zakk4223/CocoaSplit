@@ -61,6 +61,7 @@
 -(InputSource *)inputForUUID:(NSString *)uuid;
 -(void)frameTick;
 -(void)restoreSourceListForSelfGoLive;
+-(void)mergeSourceListData:(NSData *)mergeData;
 
 
 
