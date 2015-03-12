@@ -1144,9 +1144,13 @@ static NSArray *_sourceTypes = nil;
                 configView = _currentInputViewController.view;
                 
             }
+        } else {
+            configView = _currentInputViewController.view;
+            [_currentInputViewController setValue:self.videoInput forKey:@"captureObj"];
         }
     
-    
+        
+        
         
         InputPopupControllerViewController *pcont = self.editorController;
         
