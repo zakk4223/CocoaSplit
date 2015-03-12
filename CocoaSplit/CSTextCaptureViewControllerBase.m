@@ -50,10 +50,19 @@
 -(void)dealloc
 {
     
-    [[NSFontPanel sharedFontPanel] setDelegate:nil];
-    if ([[NSFontPanel sharedFontPanel] isVisible])
+    NSFontManager *fontManager = [NSFontManager sharedFontManager];
+    
+    NSFontPanel *fontPanel = [fontManager fontPanel:NO];
+
+    if (!fontPanel)
     {
-        [[NSFontPanel sharedFontPanel] orderOut:self];
+        return;
+    }
+    fontPanel.delegate = nil;
+    
+    if (fontPanel.visible)
+    {
+        [fontPanel orderOut:self];
     }
 }
 
