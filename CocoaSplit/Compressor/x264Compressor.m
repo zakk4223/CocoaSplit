@@ -361,15 +361,19 @@
     }
     
     _av_codec_ctx->rc_max_rate = self.vbv_maxrate*1000;
+    if (self.vbv_buffer > 0)
+    {
+        _av_codec_ctx->rc_buffer_size = self.vbv_buffer*1000;
+    } else {
+        _av_codec_ctx->rc_buffer_size = self.vbv_maxrate*1000;
+    }
     
     if (!self.use_cbr)
     {
-        _av_codec_ctx->rc_buffer_size = self.vbv_buffer*1000;
         
         av_opt_set(_av_codec_ctx->priv_data, "crf", [[NSString stringWithFormat:@"%d", self.crf] UTF8String], 0);
         
     } else {
-        _av_codec_ctx->rc_buffer_size = self.vbv_buffer*1000;
         
         _av_codec_ctx->bit_rate = self.vbv_maxrate*1000;
     }
@@ -437,16 +441,21 @@
     
     _av_codec_ctx->rc_max_rate = self.vbv_maxrate*1000;
 
+    if (self.vbv_buffer > 0)
+    {
+        _av_codec_ctx->rc_buffer_size = self.vbv_buffer*1000;
+    } else {
+        _av_codec_ctx->rc_buffer_size = self.vbv_maxrate*1000;
+    }
+
     if (!self.use_cbr)
     {
-         _av_codec_ctx->rc_buffer_size = self.vbv_buffer*1000;
         av_dict_set(&opts, "crf", [[NSString stringWithFormat:@"%d", self.crf] UTF8String], 0);
 
     } else {
         
         //what did we learn today? Don't believe shit you read in forum posts...
          //_av_codec_ctx->rc_buffer_size = ((1/self.settingsController.captureFPS)*self.settingsController.captureVideoAverageBitrate)*1000;
-        _av_codec_ctx->rc_buffer_size = self.vbv_buffer*1000;
         
         _av_codec_ctx->bit_rate = self.vbv_maxrate*1000;
         
