@@ -202,7 +202,6 @@
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
 {
 
-    //NSLog(@"GOT DESKTOP FRAME %@", CMTimeCopyDescription(NULL, connection.videoMaxFrameDuration));
     NSHashTable *outcopy;
     @synchronized(self)
     {

@@ -17,6 +17,8 @@
 
 @synthesize activeVideoDevice = _activeVideoDevice;
 @synthesize videoCaptureFPS = _videoCaptureFPS;
+@synthesize renderType = _renderType;
+
 
 
 
@@ -26,14 +28,14 @@
 {
     [super encodeWithCoder:aCoder];
     
-    [aCoder encodeInt:self.width forKey:@"width"];
-    [aCoder encodeInt:self.height forKey:@"height"];
     [aCoder encodeInt:self.region_width forKey:@"region_width"];
     [aCoder encodeInt:self.region_height forKey:@"region_height"];
     [aCoder encodeInt:self.x_origin forKey:@"x_origin"];
     [aCoder encodeInt:self.y_origin forKey:@"y_origin"];
     [aCoder encodeDouble:self.videoCaptureFPS forKey:@"videoCaptureFPS"];
     [aCoder encodeBool:self.showCursor forKey:@"showCursor"];
+    [aCoder encodeBool:self.showClicks forKey:@"showClicks"];
+    
 }
 
 
@@ -42,10 +44,9 @@
     
     if (self = [super initWithCoder:aDecoder])
     {
-        _width = [aDecoder decodeIntForKey:@"width"];
-        _height = [aDecoder decodeIntForKey:@"height"];
         _videoCaptureFPS = [aDecoder decodeDoubleForKey:@"videoCaptureFPS"];
         _showCursor = [aDecoder decodeBoolForKey:@"showCursor"];
+        _showClicks = [aDecoder decodeBoolForKey:@"showClicks"];
         _region_width = [aDecoder decodeIntForKey:@"region_width"];
         _region_height = [aDecoder decodeIntForKey:@"region_height"];
         _x_origin = [aDecoder decodeIntForKey:@"x_origin"];
@@ -67,8 +68,9 @@
 
         self.videoCaptureFPS = 60.0f;
         self.showCursor = YES;
+        self.showClicks = NO;
+        self.scaleFactor = 1.0f;
         [self addObserver:self forKeyPath:@"propertiesChanged" options:NSKeyValueObservingOptionNew context:NULL];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationTerminating:) name:NSApplicationWillTerminateNotification object:nil];
         
 
     }
@@ -77,18 +79,44 @@
     
 }
 
+-(void)setRenderType:(frame_render_behavior)renderType
+{
+    bool asyncValue = NO;
+    if (renderType == kCSRenderAsync)
+    {
+        asyncValue = YES;
+    }
+    
+    
+    [self updateLayersWithBlock:^(CALayer *layer) {
+        ((CSIOSurfaceLayer *)layer).asynchronous = asyncValue;
+    }];
+    
+    _renderType = renderType;
+}
+
+
+-(frame_render_behavior)renderType
+{
+    return _renderType;
+}
+
 
 -(CALayer *)createNewLayer
 {
-    return [CSIOSurfaceLayer layer];
+    
+    CSIOSurfaceLayer *newLayer = [CSIOSurfaceLayer layer];
+    
+    if (self.renderType == kCSRenderAsync)
+    {
+        newLayer.asynchronous = YES;
+    } else {
+        newLayer.asynchronous = NO;
+    }
+    
+    return newLayer;
+
 }
-
-
--(void)applicationTerminating:(NSApplication *)sender
-{
-    [self stopDisplayStream];
-}
-
 
 
 -(CSAbstractCaptureDevice *)activeVideoDevice
@@ -107,148 +135,59 @@
     [self setupDisplayStream];
 }
 
+
+
 -(bool)setupDisplayStream
 {
-
-    int width;
-    int height;
-    
-    
-    if (_displayStreamRef)
+    if (!_capture_session)
     {
-        [self stopDisplayStream];
+        _capture_session = [[AVCaptureSession alloc] init];
+        [_capture_session startRunning];
     }
     
-
-    
-    if (!self.currentDisplay)
+    if (!_capture_output)
     {
-        NSLog(@"NO DISPLAY");
-        return NO;
-    }
-    
-    
-    
-    
-    
-    NSNumber *minframetime = [NSNumber numberWithFloat:(1000.0/(self.videoCaptureFPS*1000))];
-
-    CGRect displaySize = CGDisplayBounds(self.currentDisplay);
-    
-    width = displaySize.size.width - self.x_origin;
-    height = displaySize.size.height - self.y_origin;
-    
-    if (self.region_width)
-    {
-        width = self.region_width;
-    }
-    
-    if (self.region_height)
-    {
-        height = self.region_height;
-    }
-    
-    if (self.width && self.height)
-    {
-        width = self.width;
-        height = self.height;
-    }
-    
-
-    CFDictionaryRef rectDict;
-
-    int rect_width;
-    int rect_height;
-    
-    if (self.region_width)
-    {
-        rect_width = self.region_width;
-    } else {
-        rect_width = displaySize.size.width - self.x_origin;
-    }
-    
-    if (self.region_height)
-    {
-        rect_height = self.region_height;
-    } else {
-        rect_height = displaySize.size.height - self.y_origin;
-    }
-
-    rectDict = CGRectCreateDictionaryRepresentation(CGRectMake(self.x_origin, self.y_origin, rect_width, rect_height));
-    
-    
-    NSDictionary *opts = @{(NSString *)kCGDisplayStreamQueueDepth : @8, (NSString *)kCGDisplayStreamMinimumFrameTime : minframetime, (NSString *)kCGDisplayStreamPreserveAspectRatio: @YES, (NSString *)kCGDisplayStreamShowCursor:@(self.showCursor), (NSString *)kCGDisplayStreamSourceRect: (__bridge NSDictionary *)rectDict};
-    
-    
-    
-    
-
-    __weak __typeof__(self) weakSelf = self;
-    
-    _displayStreamRef = CGDisplayStreamCreateWithDispatchQueue(self.currentDisplay, width, height,  kCVPixelFormatType_420YpCbCr8BiPlanarFullRange, (__bridge CFDictionaryRef)(opts), _capture_queue, ^(CGDisplayStreamFrameStatus status, uint64_t displayTime, IOSurfaceRef frameSurface, CGDisplayStreamUpdateRef updateRef) {
         
-
-        CFAbsoluteTime nowTime = CFAbsoluteTimeGetCurrent();
-        CFAbsoluteTime elapsed = nowTime - _lastFrame;
-        _lastFrame = nowTime;
+        NSMutableDictionary *videoSettings = [NSMutableDictionary dictionary];
         
-        _lastFrame = nowTime;
+        [videoSettings setValue:@(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange) forKey:(__bridge NSString *)kCVPixelBufferPixelFormatTypeKey];
+        
+        NSDictionary *ioAttrs = [NSDictionary dictionaryWithObject: [NSNumber numberWithBool: NO]
+                                                            forKey: (NSString *)kIOSurfaceIsGlobal];
         
         
-        if (!weakSelf)
+        
+        [videoSettings setValue:ioAttrs forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
+
+        
+
+        _capture_output = [[AVCaptureVideoDataOutput alloc] init];
+        if ([_capture_session canAddOutput:_capture_output])
         {
-            return;
+            [_capture_session addOutput:_capture_output];
+            _capture_output.videoSettings = videoSettings;
+            _capture_queue = dispatch_queue_create("Desktop Capture Queue", NULL);
+            [_capture_output setSampleBufferDelegate:self queue:_capture_queue];
         }
-        
-        __typeof__(self) strongSelf = weakSelf;
-        
-        
-        if (status == kCGDisplayStreamFrameStatusStopped)
-        {
-            if (strongSelf->_displayStreamRef)
-            {
-                CFRelease(strongSelf->_displayStreamRef);
-            }
-            
-            
-        }
-        
-        if (frameSurface)
-        {
-            [strongSelf updateLayersWithBlock:^(CALayer *layer) {
-                ((CSIOSurfaceLayer *)layer).ioSurface = frameSurface;
-            }];
-            
-            
-        }
-    });
-
-    CGDisplayStreamStart(_displayStreamRef);
+    }
+    
+    [_capture_session beginConfiguration];
+    
+    if (_screen_input)
+    {
+        [_capture_session removeInput:_screen_input];
+    }
+    
+    _screen_input = [[AVCaptureScreenInput alloc] initWithDisplayID:self.currentDisplay];
+    [self configureScreenInput];
+    
+    [_capture_session addInput:_screen_input];
+    [_capture_session commitConfiguration];
+    
     return YES;
 }
 
 
-
-
-
--(bool)stopDisplayStream
-{
-    
-    if (_displayStreamRef)
-    {
-        NSLog(@"STOP DISPLAY STREAM");
-        CGDisplayStreamStop(_displayStreamRef);
-    }
-    
-  
-    @synchronized(self) {
-        _currentImg = nil;
-        
-    }
-
-  
-    return YES;
-}
 
 -(bool)providesAudio
 {
@@ -302,6 +241,46 @@
 }
 
 
+-(void)configureScreenInput
+{
+    if (!_screen_input)
+    {
+        return;
+    }
+    
+    _screen_input.minFrameDuration = CMTimeMake(1,self.videoCaptureFPS);
+    if (self.scaleFactor != 0)
+    {
+        _screen_input.scaleFactor = self.scaleFactor;
+    } else {
+        _screen_input.scaleFactor = 1.0f;
+    }
+    
+    
+    
+
+    CGRect displaySize = CGDisplayBounds(self.currentDisplay);
+    
+    int use_width = displaySize.size.width - self.x_origin;
+    int use_height = displaySize.size.height - self.y_origin;
+
+    if (self.region_width)
+    {
+        use_width = self.region_width;
+    }
+    
+    if (self.region_height)
+    {
+        use_height = self.region_height;
+    }
+    
+    
+    _screen_input.cropRect = CGRectMake(self.x_origin, self.y_origin, use_width, use_height);
+    _screen_input.capturesCursor = self.showCursor;
+    _screen_input.capturesMouseClicks = self.showClicks;
+}
+
+
 + (NSString *)label
 {
     return @"Desktop Capture";
@@ -310,7 +289,7 @@
 
 + (NSSet *)keyPathsForValuesAffectingPropertiesChanged
 {
-    return [NSSet setWithObjects:@"width", @"height", @"videoCaptureFPS", @"x_origin", @"y_origin", @"region_width", @"region_height", nil];
+    return [NSSet setWithObjects:@"scaleFactor", @"videoCaptureFPS", @"x_origin", @"y_origin", @"region_width", @"region_height", @"showCursor",@"showClicks", nil];
 }
 
 
@@ -320,23 +299,37 @@
     
     if ([keyPath isEqualToString:@"propertiesChanged"])
     {
-        [self setupDisplayStream];
+        [self configureScreenInput];
     }
     
 }
 
 
--(void)willDelete
+- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
 {
-    [self stopDisplayStream];
 
+    CVImageBufferRef videoFrame = CMSampleBufferGetImageBuffer(sampleBuffer);
+    
+    
+    if (videoFrame)
+    {
+        [self updateLayersWithBlock:^(CALayer *layer) {
+            ((CSIOSurfaceLayer *)layer).imageBuffer = videoFrame;
+            if (self.renderType == kCSRenderFrameArrived)
+            {
+                [((CSIOSurfaceLayer *)layer) setNeedsDisplay];
+            }
+            
+        }];
+    }
+
+    
 }
 
 -(void)dealloc
 {
     NSLog(@"DEALLOC DISPLAY STREAM");
     [self removeObserver:self forKeyPath:@"propertiesChanged"];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 
