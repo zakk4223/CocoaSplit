@@ -12,5 +12,7 @@
 @interface DesktopCaptureViewController : NSViewController
 @property (weak) DesktopCapture *captureObj;
 @property (weak) IBOutlet NSWindow *cropSelectionWindow;
+@property (strong) NSDictionary *renderStyleMap;
+@property (strong) NSArray *styleSortDescriptors;
 
 @end

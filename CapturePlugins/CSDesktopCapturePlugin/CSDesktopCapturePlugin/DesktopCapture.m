@@ -35,7 +35,7 @@
     [aCoder encodeDouble:self.videoCaptureFPS forKey:@"videoCaptureFPS"];
     [aCoder encodeBool:self.showCursor forKey:@"showCursor"];
     [aCoder encodeBool:self.showClicks forKey:@"showClicks"];
-    
+    [aCoder encodeInt:self.renderType forKey:@"renderType"];
 }
 
 
@@ -51,6 +51,8 @@
         _region_height = [aDecoder decodeIntForKey:@"region_height"];
         _x_origin = [aDecoder decodeIntForKey:@"x_origin"];
         _y_origin = [aDecoder decodeIntForKey:@"y_origin"];
+        self.renderType = [aDecoder decodeIntForKey:@"renderType"];
+
         
     }
     

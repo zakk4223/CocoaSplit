@@ -59,7 +59,6 @@
 -(void)setActiveVideoDevice:(CSAbstractCaptureDevice *)activeVideoDevice
 {
     
-    NSLog(@"ACTIVE VIDEO DEVICE SET %@", activeVideoDevice);
     
     _activeVideoDevice = activeVideoDevice;
     if (_activeVideoDevice)
