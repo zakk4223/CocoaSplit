@@ -27,8 +27,6 @@
                                 };
         
         self.styleSortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"value" ascending:YES]];
-        
-
     }
     return self;
 }

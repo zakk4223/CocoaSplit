@@ -18,23 +18,12 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u9Z-Pg-s0r">
-                    <rect key="frame" x="18" y="235" width="70" height="14"/>
-                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Scale" id="XPT-7I-1qm">
+                    <rect key="frame" x="18" y="235" width="61" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Resolution" id="XPT-7I-1qm">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
-                </textField>
-                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="L46-Ys-2g8">
-                    <rect key="frame" x="84" y="233" width="44" height="19"/>
-                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="Fvf-tn-k2P">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="YxM-Vh-gvX" name="value" keyPath="selection.scaleFactor" id="aos-nB-wV2"/>
-                    </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iwZ-dN-QyQ">
                     <rect key="frame" x="84" y="211" width="44" height="19"/>
@@ -133,25 +122,6 @@
                         <binding destination="YxM-Vh-gvX" name="value" keyPath="selection.region_height" id="E57-Rg-HgQ"/>
                     </connections>
                 </textField>
-                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BZN-NR-e3t">
-                    <rect key="frame" x="236" y="225" width="98" height="28"/>
-                    <buttonCell key="cell" type="push" title="Select Region" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tf2-h3-yJI">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                    </buttonCell>
-                    <connections>
-                        <binding destination="YxM-Vh-gvX" name="argument" keyPath="selection.activeVideoDevice" id="M4Z-Y0-N9f">
-                            <dictionary key="options">
-                                <string key="NSSelectorName">openScreenCropWindow:</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="target" keyPath="self" previousBinding="M4Z-Y0-N9f" id="e7s-bZ-4Lk">
-                            <dictionary key="options">
-                                <string key="NSSelectorName">openScreenCropWindow:</string>
-                            </dictionary>
-                        </binding>
-                    </connections>
-                </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="II4-dC-DDc">
                     <rect key="frame" x="18" y="213" width="29" height="14"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="FPS" id="g2S-3G-xQL">
@@ -160,16 +130,6 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Oj-0y-sXC">
-                    <rect key="frame" x="17" y="168" width="97" height="20"/>
-                    <buttonCell key="cell" type="check" title="Show Clicks" bezelStyle="regularSquare" imagePosition="right" controlSize="small" state="on" inset="2" id="dLo-ok-xgD">
-                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                    </buttonCell>
-                    <connections>
-                        <binding destination="YxM-Vh-gvX" name="value" keyPath="selection.showClicks" id="pa6-us-tSn"/>
-                    </connections>
-                </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gNk-Kw-Fkm">
                     <rect key="frame" x="18" y="98" width="124" height="14"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Frame Update Method" id="wyI-fm-YYL">
@@ -198,6 +158,55 @@
                         <binding destination="YxM-Vh-gvX" name="selectedObject" keyPath="selection.self.renderType" previousBinding="H05-IL-2Rq" id="0s9-gw-Vmu"/>
                     </connections>
                 </popUpButton>
+                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LCx-mf-zKr">
+                    <rect key="frame" x="84" y="233" width="44" height="19"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="6Dk-7W-GaH">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="YxM-Vh-gvX" name="value" keyPath="selection.width" id="qdU-zR-B2A"/>
+                    </connections>
+                </textField>
+                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yqx-Fn-lSJ">
+                    <rect key="frame" x="151" y="233" width="44" height="19"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="L6L-UP-xGg">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="YxM-Vh-gvX" name="value" keyPath="selection.height" id="Hhn-zk-ZZR"/>
+                    </connections>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="B5P-ip-38J">
+                    <rect key="frame" x="134" y="235" width="11" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="x" id="Njl-BU-uVc">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BZN-NR-e3t">
+                    <rect key="frame" x="236" y="228" width="98" height="28"/>
+                    <buttonCell key="cell" type="push" title="Select Region" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tf2-h3-yJI">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="YxM-Vh-gvX" name="argument" keyPath="selection.activeVideoDevice" id="M4Z-Y0-N9f">
+                            <dictionary key="options">
+                                <string key="NSSelectorName">openScreenCropWindow:</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="target" keyPath="self" previousBinding="M4Z-Y0-N9f" id="e7s-bZ-4Lk">
+                            <dictionary key="options">
+                                <string key="NSSelectorName">openScreenCropWindow:</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </button>
             </subviews>
         </customView>
         <objectController id="YxM-Vh-gvX" userLabel="DesktopCaptureController">

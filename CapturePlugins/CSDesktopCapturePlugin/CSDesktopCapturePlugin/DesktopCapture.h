@@ -15,12 +15,12 @@
 {
     
     dispatch_queue_t _capture_queue;
+    CGDisplayStreamRef _displayStreamRef;
+    IOSurfaceRef _currentFrame;
+    uint64_t _currentFrameTime;
     CGDirectDisplayID _currentDisplay;
-    
-    AVCaptureSession *_capture_session;
-    AVCaptureScreenInput *_screen_input;
-    AVCaptureVideoDataOutput *_capture_output;
-    
+    CIImage *_currentImg;
+    CFAbsoluteTime _lastFrame;
     
 
 }
@@ -34,7 +34,8 @@
 
 
 @property (assign) double videoCaptureFPS;
-@property (assign) float scaleFactor;
+@property (assign) int width;
+@property (assign) int height;
 @property (assign) int x_origin;
 @property (assign) int y_origin;
 @property (assign) int region_width;
@@ -46,7 +47,6 @@
 @property (assign) bool propertiesChanged;
 @property (assign) CGDirectDisplayID currentDisplay;
 @property (assign) frame_render_behavior renderType;
-@property (assign) bool showClicks;
 
 
 
