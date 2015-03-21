@@ -10,6 +10,8 @@
 #import "InputSource.h"
 #import "CSNotifications.h"
 #import <malloc/malloc.h>
+#import "CSAnimationItem.h"
+#import "CSAnimationRunnerObj.h"
 
 
 @interface SourceLayout : NSObject <NSCoding, NSKeyedUnarchiverDelegate, NSCopying>
@@ -23,6 +25,12 @@
     GLuint _fboTexture;
     GLuint _rFbo;
 }
+
+
+@property (strong) NSMutableArray *animationList;
+@property (strong) NSIndexSet *animationIndexes;
+
+@property (strong) CSAnimationItem *selectedAnimation;
 
 @property (strong) NSMutableArray *sourceList;
 @property (strong) NSData *savedSourceListData;
@@ -62,6 +70,8 @@
 -(void)frameTick;
 -(void)restoreSourceListForSelfGoLive;
 -(void)mergeSourceListData:(NSData *)mergeData;
+-(IBAction)runAnimations:(id)sender;
+
 
 
 

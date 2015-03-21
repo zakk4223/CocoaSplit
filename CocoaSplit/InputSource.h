@@ -163,7 +163,7 @@ typedef enum resize_style_t {
 -(void)frameTick;
 -(void)willDelete;
 -(void)clearBackground;
-
+-(CALayer *)animationLayer;
 
 
 

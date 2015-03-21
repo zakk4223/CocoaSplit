@@ -14,6 +14,7 @@
 {
     //CAReplicatorLayer *_xLayer;
     CAReplicatorLayer *_yLayer;
+    
     CABasicAnimation *_scrollAnimation;
 }
 
@@ -25,7 +26,7 @@
 @property (strong) CAReplicatorLayer *xLayer;
 @property (assign) bool disableAnimation;
 @property (assign) CGRect cropRect;
-
+@property (assign) CGRect animateDummy;
 
 -(void)setSourceLayer:(CALayer *)sourceLayer withTransition:(CATransition *)transition;
 -(void)resizeSourceLayer:(CGRect)newFrame oldFrame:(CGRect)oldFrame;

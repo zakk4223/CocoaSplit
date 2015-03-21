@@ -11,6 +11,7 @@
 
 @implementation CSInputLayer
 
+@dynamic animateDummy;
 
 @synthesize sourceLayer = _sourceLayer;
 @synthesize allowResize = _allowResize;
@@ -19,15 +20,24 @@
 @synthesize cropRect = _cropRect;
 
 
--(void)layoutyySublayers
+-(void)layoutSublayers
 {
+    
+    [CATransaction begin];
+    [CATransaction setDisableActions:YES];
+
     if (self.allowResize)
     {
-        [CATransaction begin];
-        [CATransaction setDisableActions:YES];
+        _sourceLayer.position = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2);
+
         _sourceLayer.bounds = self.bounds;
-        [CATransaction commit];
     }
+    
+
+    [self resizeSourceLayer:self.frame oldFrame:CGRectZero];
+    [CATransaction commit];
+
+    
 }
 
 
@@ -36,8 +46,7 @@
     if (self = [super init])
     {
         
-        self.needsDisplayOnBoundsChange = YES;
-        
+        //self.needsDisplayOnBoundsChange = YES;
         self.minificationFilter = kCAFilterTrilinear;
         self.magnificationFilter = kCAFilterTrilinear;
         self.disableAnimation = NO;
@@ -47,9 +56,19 @@
         _yLayer.instanceCount = 1;
         _cropRect = CGRectZero;
         
+        
+        //self.layoutManager = [CAConstraintLayoutManager layoutManager];
+        
         _allowResize = YES;
         _sourceLayer = [CALayer layer];
-        _sourceLayer.anchorPoint = CGPointMake(0.0, 0.0);
+        //_sourceLayer.anchorPoint = CGPointMake(0.0, 0.0);
+        /*
+        [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:1.0 offset:0]];
+        [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:1.0 offset:0]];
+         [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX scale:1.0 offset:0]];
+        [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY scale:1.0 offset:0]];
+        */
+        
         //_sourceLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
         //_xLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
         //_yLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
@@ -59,6 +78,7 @@
         _scrollAnimation = [CABasicAnimation animation];
         _scrollAnimation.repeatCount = HUGE_VALF;
         self.zPosition = 0;
+        
         
         [_xLayer addSublayer:_sourceLayer];
         [_yLayer addSublayer:_xLayer];
@@ -101,6 +121,7 @@
     _scrollXSpeed = scrollXSpeed;
     
 }
+
 
 -(float)scrollXSpeed
 {
@@ -218,13 +239,9 @@
     toLayer.contentsGravity = _sourceLayer.contentsGravity;
     toLayer.contentsRect = _sourceLayer.contentsRect;
     toLayer.autoresizingMask = _sourceLayer.autoresizingMask;
-    
-    if (self.allowResize)
-    {
-        toLayer.frame = CGRectMake(0.0, 0.0, self.frame.size.width, self.frame.size.height);
-    }
-
+    toLayer.constraints = _sourceLayer.constraints;
 }
+
 
 -(void)setSourceLayer:(CALayer *)sourceLayer withTransition:(CATransition *)transition
 {
@@ -248,7 +265,12 @@
     }];
 
     [_sourceLayer.superlayer addSublayer:sourceLayer];
-    
+    [self setNeedsLayout];
+    if (!self.allowResize)
+    {
+        sourceLayer.position = CGPointMake(sourceLayer.bounds.size.width/2, sourceLayer.bounds.size.height/2);
+    }
+
     
 
    [sourceLayer addAnimation:transition forKey:kCATransition];
@@ -257,8 +279,7 @@
     
 
     [CATransaction commit];
-    _sourceLayer = sourceLayer;
-    
+
     [self setupXAnimation:_scrollXSpeed];
     [self setupYAnimation:_scrollYSpeed];
     [CATransaction commit];
@@ -276,11 +297,19 @@
     
     _sourceLayer = sourceLayer;
 
+    [self setNeedsLayout];
+    if (!self.allowResize)
+    {
+        sourceLayer.position = CGPointMake(sourceLayer.bounds.size.width/2, sourceLayer.bounds.size.height/2);
+    }
+
     [self setupXAnimation:_scrollXSpeed];
     [self setupYAnimation:_scrollYSpeed];
     [CATransaction commit];
     
 }
+
+
 
 -(void)calculateCropTransform
 {
@@ -342,23 +371,25 @@
 }
 
 
--(void)setFrame:(CGRect)frame
+-(void)setFFrame:(CGRect)frame
 {
     
     CGRect oldFrame = self.frame;
     [super setFrame:frame];
-    [self resizeSourceLayer:frame oldFrame:oldFrame];
+    //[self resizeSourceLayer:frame oldFrame:oldFrame];
+    [self setNeedsDisplay];
     
 }
 
-
-
 -(void)resizeSourceLayer:(CGRect)newFrame oldFrame:(CGRect)oldFrame
 {
+    
+    
     if (self.allowResize)
     {
-        _sourceLayer.bounds = self.bounds;
         
+        
+        //_sourceLayer.bounds = self.bounds;
         /*
         if (CGSizeEqualToSize(_sourceLayer.frame.size, CGSizeZero) || CGSizeEqualToSize(oldFrame.size, CGSizeZero))
         {
@@ -378,7 +409,6 @@
          */
     }
 
-    [self calculateCropTransform];
     
     if (_scrollXSpeed)
     {

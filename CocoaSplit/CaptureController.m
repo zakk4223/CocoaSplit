@@ -63,6 +63,9 @@
     [self cloneSelectedSourceLayout:self.stagingSourceLayoutTableView];
 }
 
+- (IBAction)stagingAnimationSelected:(id)sender {
+}
+
 
 -(IBAction)mainCopyLayoutClicked:(id)sender
 {
@@ -822,6 +825,26 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
 
 
++(CSAnimationRunnerObj *) sharedAnimationObj
+{
+    static CSAnimationRunnerObj *sharedAnimationObj = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        
+        NSString *animationPluginPath = [[NSBundle mainBundle] pathForResource:@"CSAnimationRunner" ofType:@"plugin"];
+        NSLog(@"ANIM PATH %@", animationPluginPath);
+        NSBundle *animationBundle = [NSBundle bundleWithPath:animationPluginPath];
+        NSLog(@"ANIM BUNDLE %@", animationBundle);
+        Class animationClass = [animationBundle classNamed:@"CSAnimationRunnerObj"];
+        NSLog(@"ANIM CLASS %@", animationClass);
+        
+        sharedAnimationObj = [[animationClass alloc] init];
+
+    });
+    
+    return sharedAnimationObj;
+}
+
 
 -(void) buildExtrasMenu
 {
@@ -1316,6 +1339,15 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     }
 
 
+    /*
+    NSString *animationPluginPath = [[NSBundle mainBundle] pathForResource:@"CSAnimationRunner" ofType:@"plugin"];
+    NSLog(@"ANIM PATH %@", animationPluginPath);
+    NSBundle *animationBundle = [NSBundle bundleWithPath:animationPluginPath];
+    NSLog(@"ANIM BUNDLE %@", animationBundle);
+    Class animationClass = [animationBundle classNamed:@"CSAnimationRunnerObj"];
+    NSLog(@"ANIM CLASS %@", animationClass);
+    //self.animationRunner = [[animationClass alloc] init];
+    */
     self.extraPluginsSaveData = nil;
     
     
@@ -2401,6 +2433,8 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
  
     
 }
+
+
 
 -(SourceLayout *)getLayoutForName:(NSString *)name
 {

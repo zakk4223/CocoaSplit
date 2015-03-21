@@ -10,6 +10,7 @@
 #import "CSCaptureSourceProtocol.h"
 #import "SourceLayout.h"
 #import "InputPopupControllerViewController.h"
+#import <objc/runtime.h>
 
 static NSArray *_sourceTypes = nil;
 
@@ -738,6 +739,18 @@ static NSArray *_sourceTypes = nil;
 }
 
 
+//This is a dummy layer the animation scripts use to keep track of geometry changes without messing up the presentation/model layers
+-(CALayer *)animationLayer
+{
+    CALayer *nLayer = [CALayer layer];
+    nLayer.position = self.layer.position;
+    nLayer.bounds = self.layer.bounds;
+    nLayer.transform = self.layer.transform;
+    
+    return nLayer;
+}
+
+
 -(void)updateRotationTransform
 {
     CATransform3D transform = CATransform3DMakeRotation(self.rotationAngle * M_PI / 180.0, 0.0, 0.0, 1.0);
@@ -745,6 +758,8 @@ static NSArray *_sourceTypes = nil;
     transform = CATransform3DRotate(transform, self.rotationAngleY * M_PI / 180.0, 0.0, 1.0, 0.0);
     self.layer.disableAnimation = YES;
     self.layer.transform = transform;
+
+    
     self.layer.disableAnimation  = NO;
 }
 

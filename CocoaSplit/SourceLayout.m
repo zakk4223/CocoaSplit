@@ -8,13 +8,14 @@
 
 #import "SourceLayout.h"
 #import "InputSource.h"
+#import "CaptureController.h"
 
 
 @implementation SourceLayout
 
 
 @synthesize isActive = _isActive;
-
+@synthesize animationIndexes = _animationIndexes;
 
 -(instancetype) init
 {
@@ -35,7 +36,7 @@
         self.rootLayer.masksToBounds = YES;
         self.rootLayer.backgroundColor = CGColorCreateGenericRGB(0, 0, 0, 1);
         //self.rootLayer.geometryFlipped = YES;
-
+        [self loadAnimations];
         _rootSize = NSMakeSize(_canvas_width, _canvas_height);
         
     }
@@ -44,6 +45,50 @@
 }
 
 
+
+-(void)setAnimationIndexes:(NSIndexSet *)animationIndexes
+{
+    _animationIndexes = animationIndexes;
+    NSUInteger firstIndex = animationIndexes.firstIndex;
+    self.selectedAnimation = [self.animationList objectAtIndex:firstIndex];
+}
+
+-(NSIndexSet *)animationIndexes
+{
+    return _animationIndexes;
+}
+
+
+-(IBAction)runAnimations:(id)sender
+{
+    if (self.selectedAnimation)
+    {
+        CSAnimationRunnerObj *runner = [CaptureController sharedAnimationObj];
+        NSMutableDictionary *inputMap = [NSMutableDictionary dictionary];
+        
+        for (NSDictionary *item in self.selectedAnimation.inputs)
+        {
+            inputMap[item[@"label"]] = item[@"input"];
+        }
+        [runner runAnimation:self.selectedAnimation.module_name forInput:inputMap withSuperlayer:self.rootLayer withDuration:10.0f];
+        
+    }
+}
+
+
+
+-(void)loadAnimations
+{
+    CSAnimationRunnerObj *runner = [CaptureController sharedAnimationObj];
+    NSDictionary *animations = [runner allAnimations];
+    self.animationList = [NSMutableArray array];
+    
+    for (NSString *key in animations)
+    {
+        CSAnimationItem *newItem = [[CSAnimationItem alloc] initWithDictionary:animations[key] moduleName:key];
+        [self.animationList addObject:newItem];
+    }
+}
 
 -(id)copyWithZone:(NSZone *)zone
 {
@@ -61,7 +106,7 @@
 
 
 
- 
+
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:self.name forKey:@"name"];

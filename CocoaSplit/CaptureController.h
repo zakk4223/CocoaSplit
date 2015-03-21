@@ -23,6 +23,7 @@
 #import "PluginManagerWindowController.h"
 #import "CreateLayoutViewController.h"
 #import "CAMultiAudioEngine.h"
+#import "CSAnimationRunnerObj.h"
 
 
 
@@ -119,6 +120,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 
+
 @property (weak) IBOutlet NSArrayController *AudioDeviceArrayController;
 
 @property (strong) CAMultiAudioEngine *multiAudioEngine;
@@ -185,6 +187,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) NSString *transitionName;
 @property (strong) NSString *transitionDirection;
 
+
+-(IBAction)testAnimationStuff:(id)sender;
 
 - (IBAction)stagingViewToggle:(id)sender;
 -(void)showStagingView;
@@ -379,6 +383,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(IBAction)stagingDeleteLayoutClicked:(id)sender;
 -(IBAction)stagingCopyLayoutClicked:(id)sender;
 
+- (IBAction)stagingAnimationSelected:(id)sender;
 
 
 @property (weak) IBOutlet NSArrayController *sourceLayoutsArrayController;
@@ -386,6 +391,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (weak) IBOutlet NSTableView *stagingSourceLayoutTableView;
 
 -(void)setupLogging;
++(CSAnimationRunnerObj *) sharedAnimationObj;
 
 
 -(void)layoutWentFullscreen;
