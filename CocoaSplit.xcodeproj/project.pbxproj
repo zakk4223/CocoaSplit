@@ -121,7 +121,6 @@
 		349461451AAD73BC00F28883 /* TestView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 349461441AAD73BC00F28883 /* TestView.xib */; };
 		3494615A1AB4213B00F28883 /* CSAnimationRunner.py in Resources */ = {isa = PBXBuildFile; fileRef = 349461591AB4213B00F28883 /* CSAnimationRunner.py */; };
 		3494615C1AB4279300F28883 /* setup.py in Resources */ = {isa = PBXBuildFile; fileRef = 3494615B1AB4279300F28883 /* setup.py */; };
-		349461651AB65BE800F28883 /* CSAnimationBase.py in Resources */ = {isa = PBXBuildFile; fileRef = 349461641AB65BE800F28883 /* CSAnimationBase.py */; };
 		349461681ABC57C100F28883 /* CSAnimationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 349461671ABC57C100F28883 /* CSAnimationItem.m */; };
 		349461691ABC73CF00F28883 /* CSAnimationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 349461671ABC57C100F28883 /* CSAnimationItem.m */; };
 		3494616B1ABD1B5900F28883 /* CSAnimationBlock.py in Resources */ = {isa = PBXBuildFile; fileRef = 3494616A1ABD1B5900F28883 /* CSAnimationBlock.py */; };
@@ -535,7 +534,6 @@
 		349461571AB41DA000F28883 /* CSAnimationRunnerObj.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSAnimationRunnerObj.h; sourceTree = "<group>"; };
 		349461591AB4213B00F28883 /* CSAnimationRunner.py */ = {isa = PBXFileReference; explicitFileType = text.script.python; fileEncoding = 4; path = CSAnimationRunner.py; sourceTree = "<group>"; };
 		3494615B1AB4279300F28883 /* setup.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = setup.py; sourceTree = "<group>"; };
-		349461641AB65BE800F28883 /* CSAnimationBase.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = CSAnimationBase.py; sourceTree = "<group>"; };
 		349461661ABC57C100F28883 /* CSAnimationItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSAnimationItem.h; sourceTree = "<group>"; };
 		349461671ABC57C100F28883 /* CSAnimationItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAnimationItem.m; sourceTree = "<group>"; };
 		3494616A1ABD1B5900F28883 /* CSAnimationBlock.py */ = {isa = PBXFileReference; explicitFileType = text.script.python; fileEncoding = 4; path = CSAnimationBlock.py; sourceTree = "<group>"; };
@@ -978,7 +976,6 @@
 			isa = PBXGroup;
 			children = (
 				349461591AB4213B00F28883 /* CSAnimationRunner.py */,
-				349461641AB65BE800F28883 /* CSAnimationBase.py */,
 				3494615B1AB4279300F28883 /* setup.py */,
 				3494616A1ABD1B5900F28883 /* CSAnimationBlock.py */,
 				3494616C1ABD399B00F28883 /* CSAnimation.py */,
@@ -1529,7 +1526,6 @@
 				340FE4B815F3417E00E4CE4E /* MainMenu.xib in Resources */,
 				3494615C1AB4279300F28883 /* setup.py in Resources */,
 				34D4351B198BE3B700266169 /* NewLayoutPanel.xib in Resources */,
-				349461651AB65BE800F28883 /* CSAnimationBase.py in Resources */,
 				342B33B61980771200492CB7 /* line.vtsh in Resources */,
 				3435E39B188B93150015CC01 /* passthrough.vtsh in Resources */,
 				34B5FCE119BF1C3F00F67D19 /* CreateLayoutViewController.xib in Resources */,
