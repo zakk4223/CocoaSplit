@@ -56,8 +56,8 @@ class CSAnimationInput:
         c_y = self.animationLayer.frame().origin.y
         return NSPoint(x-c_x, y-c_y)
     
-    def waitAnimation(self):
-        return CSAnimationBlock.current_frame.waitAnimation()
+    def waitAnimation(self, duration=0):
+        return CSAnimationBlock.current_frame.waitAnimation(duration)
     
     def scaleLayer(self, scaleVal, duration, **kwargs):
         return self.simple_animation('transform.scale', scaleVal, duration, **kwargs)
@@ -212,7 +212,10 @@ class CSAnimationRunnerObj(NSObject):
         if isinstance(input_or_dict, NSDictionary) or isinstance(input_or_dict, NSMutableDictionary):
             input_arg = {}
             for k in input_or_dict:
-                input_arg[k] = CSAnimationInput(input_or_dict[k])
+                if input_or_dict[k]:
+                    input_arg[k] = CSAnimationInput(input_or_dict[k])
+                else:
+                    input_arg[k] = None
 
 
 

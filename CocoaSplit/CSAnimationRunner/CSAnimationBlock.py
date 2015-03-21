@@ -25,9 +25,10 @@ class AnimationBlock:
 
 
 
-    def add_waitmarker(self):
+    def add_waitmarker(self, duration=0):
         new_mark = CSAnimation(None, "__CS_WAIT_MARK", None)
         new_mark.isWaitMark = True
+        new_mark.duration = duration
         self.animations.append(new_mark)
         return new_mark
 
@@ -38,8 +39,8 @@ class AnimationBlock:
             animation.apply_immediate()
         return animation
 
-    def waitAnimation(self):
-        return self.add_waitmarker()
+    def waitAnimation(self, duration=0):
+        return self.add_waitmarker(duration)
 
     def commit(self):
         add_time = CACurrentMediaTime()
@@ -50,6 +51,7 @@ class AnimationBlock:
         for anim in self.animations:
             if anim.isWaitMark:
                 c_begin += max_time
+                c_begin += anim.duration
                 max_time = 0.0
 
             if not anim.ignore_wait and anim.animation:

@@ -68,8 +68,14 @@
         
         for (NSDictionary *item in self.selectedAnimation.inputs)
         {
-            inputMap[item[@"label"]] = item[@"input"];
+            if (item[@"input"])
+            {
+                inputMap[item[@"label"]] = item[@"input"];
+            } else {
+                inputMap[item[@"label"]] = [NSNull null];
+            }
         }
+        
         [runner runAnimation:self.selectedAnimation.module_name forInput:inputMap withSuperlayer:self.rootLayer withDuration:10.0f];
         
     }
