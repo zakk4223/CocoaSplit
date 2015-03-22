@@ -45,6 +45,7 @@ class CSAnimationInput:
     
 
     def add_animation(self, animation, target, keyPath):
+        animation.cs_input = self
         CSAnimationBlock.current_frame.add_animation(animation, target, keyPath)
         return self
     
@@ -57,7 +58,10 @@ class CSAnimationInput:
         return NSPoint(x-c_x, y-c_y)
     
     def waitAnimation(self, duration=0):
-        return CSAnimationBlock.current_frame.waitAnimation(duration)
+        return CSAnimationBlock.current_frame.waitAnimation(duration, self)
+    
+    def wait(self, duration=0):
+        return CSAnimationBlock.current_frame.wait(duration, self)
     
     def scaleLayer(self, scaleVal, duration, **kwargs):
         return self.simple_animation('transform.scale', scaleVal, duration, **kwargs)
@@ -182,6 +186,9 @@ class CSAnimationInput:
 
 
 
+def wait(duration=0):
+    CSAnimationBlock.wait(duration, None)
+
 
 class CSAnimationRunnerObj(NSObject):
     
@@ -223,6 +230,8 @@ class CSAnimationRunnerObj(NSObject):
         reload(animation)
         CSAnimationBlock.superLayer = superlayer
         CSAnimationBlock.beginAnimation()
+        animation.wait = CSAnimationBlock.wait
+        animation.waitAnimation = CSAnimationBlock.waitAnimation
         animation.do_animation(input_arg, duration)
         CSAnimationBlock.commitAnimation()
 

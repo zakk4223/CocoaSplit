@@ -9,9 +9,12 @@ class CSAnimation:
         self.keyPath = keyPath
         self.animation = animation
         self.isWaitMark = False
+        self.isWaitOnly = False
         self.ignore_wait = False
         self.extra_model = None
         self.duration = 0.0
+        self.cs_input = None
+        
         if animation:
             animation.setRemovedOnCompletion_(False)
             animation.setFillMode_("forwards")
@@ -33,7 +36,7 @@ class CSAnimation:
 
 
     def apply(self, begin_time):
-        if self.target:
+        if self.target and not self.isWaitMark:
             self.animation.setBeginTime_(begin_time)
             self.uukey = "{0}-{1}".format(self.keyPath, uuid4())
             self.target.addAnimation_forKey_(self.animation, self.uukey)
