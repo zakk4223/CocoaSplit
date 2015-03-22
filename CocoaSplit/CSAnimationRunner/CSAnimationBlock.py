@@ -34,10 +34,10 @@ class AnimationBlock:
         return new_mark
 
     def add_animation(self, animation, target, keyPath):
-        if animation.duration > 0:
-            self.animations.append(animation)
-        else:
-            animation.apply_immediate()
+        #if animation.duration > 0:
+        self.animations.append(animation)
+        #else:
+            #animation.apply_immediate()
         return animation
 
     def wait(self, duration=0, target=None):

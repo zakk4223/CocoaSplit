@@ -35,6 +35,7 @@
         self.rootLayer.position = CGPointMake(0.0, 0.0);
         self.rootLayer.masksToBounds = YES;
         self.rootLayer.backgroundColor = CGColorCreateGenericRGB(0, 0, 0, 1);
+        
         //self.rootLayer.geometryFlipped = YES;
         [self loadAnimations];
         _rootSize = NSMakeSize(_canvas_width, _canvas_height);
@@ -284,7 +285,8 @@
             [src willDelete];
             [src.layer removeFromSuperlayer];
         }
-
+        self.sourceList = [NSMutableArray array];
+        
         
         [self mergeSourceListData:self.savedSourceListData];
         

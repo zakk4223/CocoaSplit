@@ -180,6 +180,7 @@ class CSAnimationInput:
     def hidden(self, yesno, duration, **kwargs):
         return self.simple_animation('hidden', yesno, duration, **kwargs)
 
+    
     def zPosition(self, zpos, duration, **kwargs):
         return self.simple_animation('zPosition', zpos, duration, **kwargs)
 
