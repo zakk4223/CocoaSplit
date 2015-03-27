@@ -242,7 +242,13 @@
         
     }
     
-    vc.sourceLayout = self.stagingPreviewView.sourceLayout;
+    if (sender.tag == 1)
+    {
+        vc.sourceLayout = self.stagingPreviewView.sourceLayout;
+    } else {
+        vc.sourceLayout = self.livePreviewView.sourceLayout;
+    }
+    
     
     [_animatepopOver showRelativeToRect:sender.bounds ofView:sender preferredEdge:NSMinYEdge];
     

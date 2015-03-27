@@ -509,8 +509,8 @@
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                         </textField>
-                                                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="Tku-6P-Ve9">
-                                                            <rect key="frame" x="-3" y="-3" width="268" height="314"/>
+                                                        <customView misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tku-6P-Ve9">
+                                                            <rect key="frame" x="-3" y="0.0" width="268" height="314"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bAa-Hp-YnV">
                                                                     <rect key="frame" x="18" y="297" width="52" height="17"/>
@@ -1498,7 +1498,7 @@
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <subviews>
                                                                     <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="none" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="14" id="H3k-dU-KZ9">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="238" height="134"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="216" height="16"/>
                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                         <size key="intercellSpacing" width="3" height="2"/>
                                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1567,7 +1567,7 @@
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <subviews>
                                                                     <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="none" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="14" id="x1C-dJ-oRx">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="238" height="134"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="216" height="16"/>
                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                         <size key="intercellSpacing" width="3" height="2"/>
                                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1614,7 +1614,7 @@
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <subviews>
                                                                     <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="14" id="dsz-4I-3nW">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="238" height="134"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="238" height="16"/>
                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                         <size key="intercellSpacing" width="3" height="2"/>
                                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1655,9 +1655,9 @@
                                                                                 </popUpButtonCell>
                                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                 <connections>
+                                                                                    <binding destination="9yt-ex-KdZ" name="selectedObject" keyPath="arrangedObjects.input" previousBinding="nfe-hL-9rh" id="E5O-f0-lxQ"/>
                                                                                     <binding destination="816" name="content" keyPath="self.livePreviewView.sourceLayout.sourceList" id="eXq-mr-5uA"/>
                                                                                     <binding destination="816" name="contentValues" keyPath="self.livePreviewView.sourceLayout.sourceList.name" previousBinding="eXq-mr-5uA" id="nfe-hL-9rh"/>
-                                                                                    <binding destination="9yt-ex-KdZ" name="selectedObject" keyPath="arrangedObjects.input" previousBinding="nfe-hL-9rh" id="E5O-f0-lxQ"/>
                                                                                 </connections>
                                                                             </tableColumn>
                                                                         </tableColumns>
@@ -1705,7 +1705,7 @@
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <subviews>
                                                                     <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="14" id="LtW-BG-FXp">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="238" height="134"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="238" height="16"/>
                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                         <size key="intercellSpacing" width="3" height="2"/>
                                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1746,9 +1746,9 @@
                                                                                 </popUpButtonCell>
                                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                 <connections>
+                                                                                    <binding destination="x3d-VU-1FP" name="selectedObject" keyPath="arrangedObjects.input" previousBinding="Dnt-KX-gEk" id="hAK-U9-JXt"/>
                                                                                     <binding destination="816" name="content" keyPath="self.stagingPreviewView.sourceLayout.sourceList" id="bU2-Rm-Eud"/>
                                                                                     <binding destination="816" name="contentValues" keyPath="self.stagingPreviewView.sourceLayout.sourceList.name" previousBinding="bU2-Rm-Eud" id="Dnt-KX-gEk"/>
-                                                                                    <binding destination="x3d-VU-1FP" name="selectedObject" keyPath="arrangedObjects.input" previousBinding="Dnt-KX-gEk" id="hAK-U9-JXt"/>
                                                                                 </connections>
                                                                             </tableColumn>
                                                                         </tableColumns>
@@ -1775,7 +1775,7 @@
                                                                 <action selector="stagingRevert:" target="816" id="S9w-ul-1nk"/>
                                                             </connections>
                                                         </button>
-                                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eYy-bt-k7V">
+                                                        <button verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="eYy-bt-k7V">
                                                             <rect key="frame" x="133" y="261" width="80" height="28"/>
                                                             <buttonCell key="cell" type="push" title="Add" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="3Td-xt-1lJ">
                                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1783,6 +1783,16 @@
                                                             </buttonCell>
                                                             <connections>
                                                                 <action selector="openAnimatePopover:" target="816" id="t6K-1W-rOE"/>
+                                                            </connections>
+                                                        </button>
+                                                        <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="Sml-4Y-OIQ">
+                                                            <rect key="frame" x="637" y="261" width="80" height="28"/>
+                                                            <buttonCell key="cell" type="push" title="Add" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xBw-eU-AVB">
+                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                <font key="font" metaFont="smallSystem"/>
+                                                            </buttonCell>
+                                                            <connections>
+                                                                <action selector="openAnimatePopover:" target="816" id="YAa-H5-APw"/>
                                                             </connections>
                                                         </button>
                                                     </subviews>
@@ -2036,8 +2046,8 @@
         </dictionaryController>
         <arrayController id="BRk-R4-Lci" userLabel="liveAnimationsController">
             <connections>
-                <binding destination="816" name="contentArray" keyPath="self.livePreviewView.sourceLayout.animationList" id="nFx-GB-him"/>
                 <binding destination="816" name="selectionIndexes" keyPath="self.livePreviewView.sourceLayout.animationIndexes" id="fRk-Ai-kXw"/>
+                <binding destination="816" name="contentArray" keyPath="self.livePreviewView.sourceLayout.animationList" id="nFx-GB-him"/>
             </connections>
         </arrayController>
         <customObject id="494" customClass="AppDelegate">
@@ -2055,8 +2065,8 @@
         <customObject id="WST-Gt-Zlw" userLabel="SUUpdater" customClass="SUUpdater"/>
         <arrayController id="oWB-zA-4hG" userLabel="stagingAnimationsController">
             <connections>
-                <binding destination="816" name="contentArray" keyPath="self.stagingPreviewView.sourceLayout.animationList" id="Log-r2-hGr"/>
                 <binding destination="816" name="selectionIndexes" keyPath="self.stagingPreviewView.sourceLayout.animationIndexes" id="xaQ-n5-qXf"/>
+                <binding destination="816" name="contentArray" keyPath="self.stagingPreviewView.sourceLayout.animationList" id="Log-r2-hGr"/>
             </connections>
         </arrayController>
         <objectController id="nWB-G2-33f">
