@@ -20,8 +20,16 @@
 @synthesize cropRect = _cropRect;
 
 
+/*
+-(void)layoutSublayersOfLayer:(CALayer *)layer
+{
+    [self layoutSublayers];
+}
+
+
 -(void)layoutSublayers
 {
+    
     
     [CATransaction begin];
     [CATransaction setDisableActions:YES];
@@ -31,6 +39,8 @@
         _sourceLayer.position = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2);
 
         _sourceLayer.bounds = self.bounds;
+    } else {
+        _sourceLayer.position = CGPointMake(_sourceLayer.bounds.size.width/2, _sourceLayer.bounds.size.height/2);
     }
     
 
@@ -40,7 +50,7 @@
     
 }
 
-
+*/
 -(instancetype)init
 {
     if (self = [super init])
@@ -57,17 +67,11 @@
         _cropRect = CGRectZero;
         
         
-        //self.layoutManager = [CAConstraintLayoutManager layoutManager];
+        //self.layoutManager = [CSInputLayoutManager layoutManager];
         
         _allowResize = YES;
         _sourceLayer = [CALayer layer];
         //_sourceLayer.anchorPoint = CGPointMake(0.0, 0.0);
-        /*
-        [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:1.0 offset:0]];
-        [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:1.0 offset:0]];
-         [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX scale:1.0 offset:0]];
-        [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY scale:1.0 offset:0]];
-        */
         
         //_sourceLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
         //_xLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
@@ -78,15 +82,12 @@
         _scrollAnimation = [CABasicAnimation animation];
         _scrollAnimation.repeatCount = HUGE_VALF;
         self.zPosition = 0;
+        _xLayer.layoutManager = self;
         
         
         [_xLayer addSublayer:_sourceLayer];
         [_yLayer addSublayer:_xLayer];
         [self addSublayer:_yLayer];
-        
-        
-
-
     }
     
     return self;
@@ -239,7 +240,7 @@
     toLayer.contentsGravity = _sourceLayer.contentsGravity;
     toLayer.contentsRect = _sourceLayer.contentsRect;
     toLayer.autoresizingMask = _sourceLayer.autoresizingMask;
-    toLayer.constraints = _sourceLayer.constraints;
+
 }
 
 

@@ -47,7 +47,7 @@ class CSAnimationInput:
     def add_animation(self, animation, target, keyPath):
         animation.cs_input = self
         CSAnimationBlock.current_frame.add_animation(animation, target, keyPath)
-        return self
+        return animation
     
 
     def adjust_coordinates(self, x, y):
@@ -57,8 +57,8 @@ class CSAnimationInput:
         c_y = self.animationLayer.frame().origin.y
         return NSPoint(x-c_x, y-c_y)
     
-    def waitAnimation(self, duration=0):
-        return CSAnimationBlock.current_frame.waitAnimation(duration, self)
+    def waitAnimation(self, duration=0, **kwargs):
+        return CSAnimationBlock.current_frame.waitAnimation(duration, self, **kwargs)
     
     def wait(self, duration=0):
         return CSAnimationBlock.current_frame.wait(duration, self)
@@ -88,7 +88,6 @@ class CSAnimationInput:
         current_bounds.size.width = width
         current_bounds.size.height = height
         rectval = NSValue.valueWithRect_(current_bounds)
-
         kwargs['use_layer'] = self.layer.sourceLayer()
         kwargs['extra_model'] = self.layer
         return self.simple_animation('bounds', rectval, duration, **kwargs)
@@ -153,6 +152,7 @@ class CSAnimationInput:
     def opacity(self, opacity, duration, **kwargs):
         return self.simple_animation('opacity', opacity, duration, **kwargs)
 
+
     def rotateX(self, angle, duration, **kwargs):
         toVal = math.radians(angle)
         fromVal = self.animationLayer.valueForKeyPath_('transform.rotation.x')
@@ -164,12 +164,28 @@ class CSAnimationInput:
         fromVal = self.animationLayer.valueForKeyPath_('transform.rotation.y')
         retval = self.simple_animation('transform.rotation.y', fromVal+toVal, duration, **kwargs)
         return retval
+    
+    def rotateXTo(self, angle, duration, **kwargs):
+        toVal = math.radians(angle)
+        retval = self.simple_animation('transform.rotation.x', toVal, duration, **kwargs)
+        return retval
+    
+    def rotateYTo(self, angle, duration, **kwargs):
+        toVal = math.radians(angle)
+        retval = self.simple_animation('transform.rotation.y', toVal, duration, **kwargs)
+        return retval
+
 
     def rotate(self, angle, duration, **kwargs):
         toVal = math.radians(angle)
         fromVal = self.animationLayer.valueForKeyPath_('transform.rotation.z')
         retval = self.simple_animation('transform.rotation.z', fromVal+toVal, duration, **kwargs)
         return retval
+    
+    def rotateTo(self, angle, duration, **kwargs):
+        toVal = math.radians(angle)
+        return self.simple_animation('transform.rotation.z', toVal, duration, **kwargs)
+
 
     def borderwidth(self, width, duration, **kwargs):
         return self.simple_animation('borderWidth', width, duration, **kwargs)
@@ -177,9 +193,25 @@ class CSAnimationInput:
     def cornerradius(self, radius, duration, **kwargs):
         return self.simple_animation('cornerRadius', radius, duration, **kwargs)
 
+    def __hidden_complete__(self, animation, yesno):
+        animation.set_model_value()
+        self.layer.setHidden_(yesno)
+    
     def hidden(self, yesno, duration, **kwargs):
-        return self.simple_animation('hidden', yesno, duration, **kwargs)
+        ret = self.simple_animation('hidden', yesno, duration, **kwargs)
+        ret.internal_completion_handler = lambda a: self.__hidden_complete__(a, yesno)
+        return ret
 
+    def hide(self, duration, **kwargs):
+        return self.hidden(True, duration, **kwargs)
+    
+    def show(self, duration, **kwargs):
+        return self.hidden(False, duration, **kwargs)
+    
+    def toggle(self, duration, **kwargs):
+        cval = self.animationLayer.hidden()        
+        return self.hidden(not cval, duration, **kwargs)
+    
     
     def zPosition(self, zpos, duration, **kwargs):
         return self.simple_animation('zPosition', zpos, duration, **kwargs)
@@ -210,7 +242,7 @@ class CSAnimationRunnerObj(NSObject):
             if not plugin_name:
                 continue
             plugin_inputs = plugin.animation_inputs
-            ret[m_name] = {'inputs': plugin_inputs, 'name':plugin_name}
+            ret[m_name] = {'inputs': plugin_inputs, 'name':plugin_name, 'module':m_name}
         return ret
 
 

@@ -217,6 +217,38 @@
 }
 
 
+
+- (IBAction)openAnimatePopover:(NSButton *)sender
+{
+    
+    CSAnimationChooserViewController *vc;
+    if (!_animatepopOver)
+    {
+        _animatepopOver = [[NSPopover alloc] init];
+        
+        _animatepopOver.animates = YES;
+        _animatepopOver.behavior = NSPopoverBehaviorTransient;
+    }
+    
+    if (!_animatepopOver.contentViewController)
+    {
+        vc = [[CSAnimationChooserViewController alloc] init];
+        
+        vc.controller = self;
+        
+        _animatepopOver.contentViewController = vc;
+        _animatepopOver.delegate = vc;
+        vc.popover = _animatepopOver;
+        
+    }
+    
+    vc.sourceLayout = self.stagingPreviewView.sourceLayout;
+    
+    [_animatepopOver showRelativeToRect:sender.bounds ofView:sender preferredEdge:NSMinYEdge];
+    
+}
+
+
 -(IBAction)closeAdvancedPrefPanel:(id)sender
 {
     [NSApp endSheet:self.advancedPrefPanel];
@@ -804,10 +836,14 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
        
        //load all filters, then load our custom filter(s)
        
+       
        [CIPlugIn loadAllPlugIns];
+       
+
        
        [[CSPluginLoader sharedPluginLoader] loadPrivateAndUserImageUnits];
        
+
        self.extraPlugins = [NSMutableDictionary dictionary];
        
        CVDisplayLinkCreateWithActiveCGDisplays(&_displayLink);

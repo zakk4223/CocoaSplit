@@ -1775,6 +1775,16 @@
                                                                 <action selector="stagingRevert:" target="816" id="S9w-ul-1nk"/>
                                                             </connections>
                                                         </button>
+                                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eYy-bt-k7V">
+                                                            <rect key="frame" x="133" y="261" width="80" height="28"/>
+                                                            <buttonCell key="cell" type="push" title="Add" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="3Td-xt-1lJ">
+                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                <font key="font" metaFont="smallSystem"/>
+                                                            </buttonCell>
+                                                            <connections>
+                                                                <action selector="openAnimatePopover:" target="816" id="t6K-1W-rOE"/>
+                                                            </connections>
+                                                        </button>
                                                     </subviews>
                                                     <constraints>
                                                         <constraint firstItem="qei-nK-1Al" firstAttribute="top" secondItem="Q57-Lg-UOf" secondAttribute="top" id="1jW-E1-6nc"/>

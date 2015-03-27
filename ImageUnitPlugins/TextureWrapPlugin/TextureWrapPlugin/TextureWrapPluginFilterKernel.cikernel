@@ -1,22 +1,14 @@
 
-kernel vec4 wrapTexture(sampler image, sampler wrapimage, float x_offset, float y_offset, float xmax, float ymax)
+kernel vec4 wrapTexture(sampler image, float x_offset, float y_offset)
 {
-	float x;
+    float x;
     float y;
-	vec2 sc;
-	vec2 sz;
-    sz = vec2(xmax, ymax);
-	sc = samplerCoord(image);
-
-    vec2 pPos = sz*vec2(x_offset, y_offset);
-
-    vec2 samplePos = sc+pPos;
-    vec2 wrappedPos = mod(samplePos, sz);
-
-
-    vec4 useTarget = vec4(float(any(notEqual(samplePos, wrappedPos))));
-
-    return compare(-useTarget, sample(wrapimage, wrappedPos), sample(image, wrappedPos));
-
- }
+    vec2 sc;
+    vec2 sz;
+    sz = samplerSize(image);
+    sc = samplerCoord(image);
+    x = mod(sc.x+x_offset, sz.x+1.0);
+    y = mod(sc.y+y_offset, sz.y+1.0);
+    return sample(image, vec2(x,y));
+}
 

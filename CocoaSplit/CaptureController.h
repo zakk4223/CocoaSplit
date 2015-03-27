@@ -24,6 +24,7 @@
 #import "CreateLayoutViewController.h"
 #import "CAMultiAudioEngine.h"
 #import "CSAnimationRunnerObj.h"
+#import "CSAnimationChooserViewController.h"
 
 
 
@@ -112,6 +113,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     NSConnection *_remoteConn;
     id _renderServer;
     NSPopover *_layoutpopOver;
+    NSPopover *_animatepopOver;
+    
 
     
     
@@ -355,6 +358,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) CSPluginLoader *sharedPluginLoader;
 
 
+
+- (IBAction)openAnimatePopover:(NSButton *)sender;
 
 - (void)saveSettings;
 - (void)loadSettings;

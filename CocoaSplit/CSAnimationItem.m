@@ -11,6 +11,26 @@
 @implementation CSAnimationItem
 
 
+-(void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:self.name forKey:@"name"];
+    [aCoder encodeObject:self.module_name forKey:@"module_name"];
+    [aCoder encodeObject:self.inputs forKey:@"inputs"];
+}
+
+-(instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super init])
+    {
+        self.name = [aDecoder decodeObjectForKey:@"name"];
+        self.module_name = [aDecoder decodeObjectForKey:@"module_name"];
+        self.inputs = [aDecoder decodeObjectForKey:@"inputs"];
+    }
+    
+    return self;
+}
+
+
 -(instancetype)copyWithZone:(NSZone *)zone
 {
     CSAnimationItem *newItem = [[CSAnimationItem allocWithZone:zone] init];

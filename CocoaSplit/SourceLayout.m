@@ -35,9 +35,10 @@
         self.rootLayer.position = CGPointMake(0.0, 0.0);
         self.rootLayer.masksToBounds = YES;
         self.rootLayer.backgroundColor = CGColorCreateGenericRGB(0, 0, 0, 1);
+        self.rootLayer.layoutManager = [CAConstraintLayoutManager layoutManager];
+        self.animationList = [NSMutableArray array];
         
         //self.rootLayer.geometryFlipped = YES;
-        [self loadAnimations];
         _rootSize = NSMakeSize(_canvas_width, _canvas_height);
         
     }
@@ -51,7 +52,10 @@
 {
     _animationIndexes = animationIndexes;
     NSUInteger firstIndex = animationIndexes.firstIndex;
-    self.selectedAnimation = [self.animationList objectAtIndex:firstIndex];
+    if (firstIndex < self.animationList.count)
+    {
+        self.selectedAnimation = [self.animationList objectAtIndex:firstIndex];
+    }
 }
 
 -(NSIndexSet *)animationIndexes
@@ -84,18 +88,17 @@
 
 
 
--(void)loadAnimations
+
+-(void)addAnimation:(NSDictionary *)animation
 {
-    CSAnimationRunnerObj *runner = [CaptureController sharedAnimationObj];
-    NSDictionary *animations = [runner allAnimations];
-    self.animationList = [NSMutableArray array];
+    CSAnimationItem *newItem = [[CSAnimationItem alloc] initWithDictionary:animation moduleName:animation[@"module"]];
+    NSLog(@"ADDING %@", newItem);
+    [[self mutableArrayValueForKey:@"animationList"] addObject:newItem];
     
-    for (NSString *key in animations)
-    {
-        CSAnimationItem *newItem = [[CSAnimationItem alloc] initWithDictionary:animations[key] moduleName:key];
-        [self.animationList addObject:newItem];
-    }
+    
 }
+
+
 
 -(id)copyWithZone:(NSZone *)zone
 {
@@ -194,7 +197,9 @@
 -(void) saveSourceList
 {
     
-    self.savedSourceListData = [NSKeyedArchiver archivedDataWithRootObject:self.sourceList];
+    NSDictionary *saveDict = @{@"sourcelist": self.sourceList, @"animationList": self.animationList};
+    
+    self.savedSourceListData = [NSKeyedArchiver archivedDataWithRootObject:saveDict];
 }
 
 
@@ -209,8 +214,15 @@
         NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:self.savedSourceListData];
         
         [unarchiver setDelegate:self];
+        NSObject *restoredData = [unarchiver decodeObjectForKey:@"root"];
         
-        self.transitionSourceList = [unarchiver decodeObjectForKey:@"root"];
+        if ([restoredData isKindOfClass:[NSDictionary class]])
+        {
+            self.transitionSourceList = [((NSDictionary *)restoredData) objectForKey:@"sourcelist"];
+            self.animationList = [((NSDictionary *)restoredData) objectForKey:@"animationList"];
+        } else {
+            self.transitionSourceList = (NSMutableArray *)restoredData;
+        }
         [unarchiver finishDecoding];
         
     }
@@ -219,6 +231,12 @@
     {
         self.transitionSourceList = [NSMutableArray array];
     }
+    
+    if (!self.animationList)
+    {
+        self.animationList = [NSMutableArray array];
+    }
+    
     
     for(InputSource *src in self.transitionSourceList)
     {
@@ -236,7 +254,7 @@
 
 
 
--(void)mergeSourceListData:(NSData *)mergeData
+-(NSObject *)mergeSourceListData:(NSData *)mergeData
 {
     
     if (!self.sourceList)
@@ -246,15 +264,24 @@
 
     if (!mergeData)
     {
-        return;
+        return nil;
     }
     
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:mergeData];
     
     [unarchiver setDelegate:self];
     
-    NSArray *mergeList = [unarchiver decodeObjectForKey:@"root"];
+    NSObject *mergeObj = [unarchiver decodeObjectForKey:@"root"];
     [unarchiver finishDecoding];
+    
+    NSArray *mergeList;
+    
+    if ([mergeObj isKindOfClass:[NSDictionary class]])
+    {
+        mergeList = [((NSDictionary *)mergeObj) objectForKey:@"sourcelist"];
+    } else {
+        mergeList = (NSArray *)mergeObj;
+    }
     
     for(InputSource *src in mergeList)
     {
@@ -267,17 +294,15 @@
 
     [CATransaction commit];
     
-    
-    
-    
+    return mergeObj;
 }
+
+
 -(void)restoreSourceList
 {
     
     if (self.savedSourceListData)
     {
-
-        
         self.rootLayer.sublayers = [NSArray array];
         
         for(InputSource *src in self.sourceList)
@@ -287,12 +312,16 @@
         }
         self.sourceList = [NSMutableArray array];
         
-        
-        [self mergeSourceListData:self.savedSourceListData];
-        
-        
+        NSObject *restData = [self mergeSourceListData:self.savedSourceListData];
+        if (restData && [restData isKindOfClass:[NSDictionary class]])
+        {
+            self.animationList = [((NSDictionary *)restData) objectForKey:@"animationList"];
+            if (!self.animationList)
+            {
+                self.animationList = [NSMutableArray array];
+            }
+        }
     }
-    
 }
 
 -(void)deleteSource:(InputSource *)delSource

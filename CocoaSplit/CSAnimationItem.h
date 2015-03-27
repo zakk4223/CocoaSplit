@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface CSAnimationItem : NSObject <NSCopying>
+@interface CSAnimationItem : NSObject <NSCopying, NSCoding>
 
 
 

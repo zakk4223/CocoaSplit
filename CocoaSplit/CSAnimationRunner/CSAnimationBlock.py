@@ -12,7 +12,7 @@ class CSAnimationDelegate(NSObject):
     @objc.signature('v@:@c')
     def animationDidStop_finished_(self, animation, finished):
         cs_anim = animation.valueForKeyPath_("__CS_COMPLETION__")
-        cs_anim.set_model_value()
+        cs_anim.completed()
 
 
 class AnimationBlock:
@@ -25,8 +25,8 @@ class AnimationBlock:
 
 
 
-    def add_waitmarker(self, duration=0, target=None):
-        new_mark = CSAnimation(None, "__CS_WAIT_MARK", None)
+    def add_waitmarker(self, duration=0, target=None, **kwargs):
+        new_mark = CSAnimation(None, "__CS_WAIT_MARK", None, **kwargs)
         new_mark.isWaitMark = True
         new_mark.duration = duration
         new_mark.cs_input = target
@@ -40,23 +40,27 @@ class AnimationBlock:
             #animation.apply_immediate()
         return animation
 
-    def wait(self, duration=0, target=None):
-        waitmark = self.add_waitmarker(duration, target)
+    def wait(self, duration=0, target=None, **kwargs):
+        waitmark = self.add_waitmarker(duration, target, **kwargs)
         waitmark.isWaitOnly = True
 
-    def waitAnimation(self, duration=0, target=None):
-        return self.add_waitmarker(duration, target)
+    def waitAnimation(self, duration=0, target=None, **kwargs):
+        return self.add_waitmarker(duration, target, **kwargs)
 
     def commit(self):
         add_time = CACurrentMediaTime()
 
         target_map = {}
+        anim_map = {}
         slayer_time = self.baseLayer.convertTime_fromLayer_(add_time, None)
 
         total_time = 0.0
         c_begin = slayer_time
         latest_end_time = c_begin
         for anim in self.animations:
+            if anim.label and not anim.isWaitMark:
+                anim_map[anim.label] = anim
+
             if anim.cs_input:
                 if not anim.cs_input in target_map:
                     target_map[anim.cs_input] = {'c_begin': c_begin, 'latest_end_time':0}
@@ -67,6 +71,10 @@ class AnimationBlock:
                 if anim.cs_input:
                     tmp_begin = target_map[anim.cs_input]['c_begin']
                     use_end = target_map[anim.cs_input]['latest_end_time']
+                if anim.label and anim.label in anim_map:
+                    label_anim = anim_map[anim.label]
+                    use_end = label_anim.end_time
+
                 if anim.isWaitOnly:
                     tmp_begin += anim.duration
                 else:
@@ -102,9 +110,9 @@ def wait(duration=0):
     global current_frame
     current_frame.wait(duration, None)
 
-def waitAnimation(duration=0):
+def waitAnimation(duration=0, **kwargs):
     global current_frame
-    current_frame.waitAnimation(duration, None)
+    current_frame.waitAnimation(duration, None, **kwargs)
 
 def beginAnimation():
     global current_frame

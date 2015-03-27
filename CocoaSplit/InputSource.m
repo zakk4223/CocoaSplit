@@ -440,6 +440,7 @@ static NSArray *_sourceTypes = nil;
     self.layer.sourceLayer.filters = @[cFilter];
     
     
+    
     _multiTransition = [CATransition animation];
     _multiTransition.type = kCATransitionPush;
     _multiTransition.subtype = kCATransitionFromRight;
@@ -746,7 +747,7 @@ static NSArray *_sourceTypes = nil;
     nLayer.position = self.layer.position;
     nLayer.bounds = self.layer.bounds;
     nLayer.transform = self.layer.transform;
-    
+    nLayer.hidden = self.layer.hidden;
     return nLayer;
 }
 
@@ -1022,8 +1023,6 @@ static NSArray *_sourceTypes = nil;
             self.layer.allowResize = oldResize;
         
            [CATransaction commit];
-        
-
     }
 }
 
@@ -1031,6 +1030,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void) positionOrigin:(CGFloat)x y:(CGFloat)y
 {
+    
     if (self.layer)
     {
         

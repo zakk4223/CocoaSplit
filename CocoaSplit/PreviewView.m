@@ -695,11 +695,6 @@
                     self.resizeType &= ~kResizeCenter;
                 }
                 
-                if (theEvent.modifierFlags & NSShiftKeyMask)
-                {
-                    self.resizeType |= kResizeCrop;
-                }
-
                 CGFloat new_width, new_height;
                 
                 NSRect sPosition = self.selectedSource.layoutPosition;

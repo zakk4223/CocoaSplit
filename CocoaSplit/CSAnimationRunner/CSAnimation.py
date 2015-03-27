@@ -1,5 +1,6 @@
 from uuid import uuid4
 from Quartz import CATransaction
+from Foundation import NSLog
 
 
 
@@ -14,6 +15,10 @@ class CSAnimation:
         self.extra_model = None
         self.duration = 0.0
         self.cs_input = None
+        self.label = None
+        self.end_time = 0
+        self.completion_handler = None
+        self.internal_completion_handler = None
         
         if animation:
             animation.setRemovedOnCompletion_(False)
@@ -33,13 +38,29 @@ class CSAnimation:
         if 'extra_model' in kwargs:
             self.extra_model = kwargs['extra_model']
 
+        if 'on_complete' in kwargs:
+            self.completion_handler = kwargs['on_complete']
+        
+        if 'label' in kwargs:
+            self.label = kwargs['label']
+                
+        self.internal_completion_handler = self.set_model_value
+        
 
+
+    def completed(self):
+        if self.internal_completion_handler:
+            self.internal_completion_handler(self)
+        if self.completion_handler:
+            self.completion_handler(self)
 
     def apply(self, begin_time):
         if self.target and not self.isWaitMark:
             self.animation.setBeginTime_(begin_time)
             self.uukey = "{0}-{1}".format(self.keyPath, uuid4())
             self.target.addAnimation_forKey_(self.animation, self.uukey)
+        if not self.ignore_wait:
+            self.end_time = begin_time + self.duration
         return self.duration
 
     def apply_immediate(self):
@@ -53,7 +74,7 @@ class CSAnimation:
             CATransaction.commit()
 
 
-    def set_model_value(self):
+    def set_model_value(self, realme=None):
         if self.target:
             p_layer = self.target.presentationLayer()
             p_value = p_layer.valueForKeyPath_(self.animation.keyPath())

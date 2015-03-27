@@ -125,6 +125,9 @@
 		349461691ABC73CF00F28883 /* CSAnimationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 349461671ABC57C100F28883 /* CSAnimationItem.m */; };
 		3494616B1ABD1B5900F28883 /* CSAnimationBlock.py in Resources */ = {isa = PBXBuildFile; fileRef = 3494616A1ABD1B5900F28883 /* CSAnimationBlock.py */; };
 		3494616D1ABD399B00F28883 /* CSAnimation.py in Resources */ = {isa = PBXBuildFile; fileRef = 3494616C1ABD399B00F28883 /* CSAnimation.py */; };
+		349461751AC49BB300F28883 /* CSAnimationChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 349461731AC49BB300F28883 /* CSAnimationChooserViewController.m */; };
+		349461761AC49BB300F28883 /* CSAnimationChooserViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 349461741AC49BB300F28883 /* CSAnimationChooserViewController.xib */; };
+		349461771AC4CCD000F28883 /* CSAnimationChooserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 349461731AC49BB300F28883 /* CSAnimationChooserViewController.m */; };
 		3498D94A1A94685000906532 /* CSAudioSwitchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3498D9491A94685000906532 /* CSAudioSwitchCell.m */; };
 		3498D94F1A9472BD00906532 /* CSAudioSwitchControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 3498D94E1A9472BD00906532 /* CSAudioSwitchControl.m */; };
 		34A64A2F165EFE4C00A68428 /* PreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A64A2E165EFE4B00A68428 /* PreviewView.m */; };
@@ -538,6 +541,9 @@
 		349461671ABC57C100F28883 /* CSAnimationItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAnimationItem.m; sourceTree = "<group>"; };
 		3494616A1ABD1B5900F28883 /* CSAnimationBlock.py */ = {isa = PBXFileReference; explicitFileType = text.script.python; fileEncoding = 4; path = CSAnimationBlock.py; sourceTree = "<group>"; };
 		3494616C1ABD399B00F28883 /* CSAnimation.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = CSAnimation.py; sourceTree = "<group>"; };
+		349461721AC49BB300F28883 /* CSAnimationChooserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSAnimationChooserViewController.h; sourceTree = "<group>"; };
+		349461731AC49BB300F28883 /* CSAnimationChooserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAnimationChooserViewController.m; sourceTree = "<group>"; };
+		349461741AC49BB300F28883 /* CSAnimationChooserViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSAnimationChooserViewController.xib; sourceTree = "<group>"; };
 		3498D9481A94685000906532 /* CSAudioSwitchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSAudioSwitchCell.h; sourceTree = "<group>"; };
 		3498D9491A94685000906532 /* CSAudioSwitchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAudioSwitchCell.m; sourceTree = "<group>"; };
 		3498D94D1A9472BD00906532 /* CSAudioSwitchControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAudioSwitchControl.h; path = Interface/CSAudioSwitchControl.h; sourceTree = "<group>"; };
@@ -898,6 +904,9 @@
 				3498D94D1A9472BD00906532 /* CSAudioSwitchControl.h */,
 				3498D94E1A9472BD00906532 /* CSAudioSwitchControl.m */,
 				349461441AAD73BC00F28883 /* TestView.xib */,
+				349461721AC49BB300F28883 /* CSAnimationChooserViewController.h */,
+				349461731AC49BB300F28883 /* CSAnimationChooserViewController.m */,
+				349461741AC49BB300F28883 /* CSAnimationChooserViewController.xib */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -1541,6 +1550,7 @@
 				34ABEF3C17C0C2CB00AA5E62 /* advancedPrefPanel.xib in Resources */,
 				3435E396188B902C0015CC01 /* 420v.fgsh in Resources */,
 				342B33B3198073EC00492CB7 /* line.fgsh in Resources */,
+				349461761AC49BB300F28883 /* CSAnimationChooserViewController.xib in Resources */,
 				349461451AAD73BC00F28883 /* TestView.xib in Resources */,
 				3494616B1ABD1B5900F28883 /* CSAnimationBlock.py in Resources */,
 			);
@@ -1602,6 +1612,7 @@
 				34EAFB6F1A1A137600E12FBD /* CSMeterCell.m in Sources */,
 				34D2D5771A547C35001004E5 /* CSTextCaptureViewControllerBase.m in Sources */,
 				34B5FCDF19BF1C3F00F67D19 /* CreateLayoutViewController.m in Sources */,
+				349461751AC49BB300F28883 /* CSAnimationChooserViewController.m in Sources */,
 				342346CF15F9F07E00C8C77E /* CSAbstractCaptureDevice.m in Sources */,
 				34210B3E1606001200362FC8 /* OutputDestination.m in Sources */,
 				345F8B391A15D850009A81E3 /* CAMultiAudioDefaultOutput.m in Sources */,
@@ -1657,6 +1668,7 @@
 				345F8B061A1060D6009A81E3 /* CSAacEncoder.m in Sources */,
 				34576C7919AFCA1B007BAD90 /* CSPluginLoader.m in Sources */,
 				345F8B621A161552009A81E3 /* CAMultiAudioAVCapturePlayer.m in Sources */,
+				349461771AC4CCD000F28883 /* CSAnimationChooserViewController.m in Sources */,
 				345F8B721A177C1F009A81E3 /* CAMultiAudioConverter.m in Sources */,
 				34CFE4A118F154DD00092C6A /* AVFChannelManager.m in Sources */,
 				34DF75591AA272F100DA9FDE /* LayoutRenderer.m in Sources */,
