@@ -20,7 +20,6 @@
 @synthesize cropRect = _cropRect;
 
 
-/*
 -(void)layoutSublayersOfLayer:(CALayer *)layer
 {
     [self layoutSublayers];
@@ -50,7 +49,6 @@
     
 }
 
-*/
 -(instancetype)init
 {
     if (self = [super init])
@@ -60,10 +58,13 @@
         self.minificationFilter = kCAFilterTrilinear;
         self.magnificationFilter = kCAFilterTrilinear;
         self.disableAnimation = NO;
+        
+        
         _xLayer = [CAReplicatorLayer layer];
         _yLayer = [CAReplicatorLayer layer];
         _xLayer.instanceCount = 1;
         _yLayer.instanceCount = 1;
+        
         _cropRect = CGRectZero;
         
         
@@ -385,31 +386,6 @@
 -(void)resizeSourceLayer:(CGRect)newFrame oldFrame:(CGRect)oldFrame
 {
     
-    
-    if (self.allowResize)
-    {
-        
-        
-        //_sourceLayer.bounds = self.bounds;
-        /*
-        if (CGSizeEqualToSize(_sourceLayer.frame.size, CGSizeZero) || CGSizeEqualToSize(oldFrame.size, CGSizeZero))
-        {
-            _sourceLayer.bounds = self.bounds;
-        } else if (!CGSizeEqualToSize(oldFrame.size, newFrame.size)) {
-            CGRect oldSourceFrame = _sourceLayer.bounds;
-            CGFloat scaleFactorX = oldSourceFrame.size.width / oldFrame.size.width;
-            CGFloat scaleFactorY = oldSourceFrame.size.height / oldFrame.size.height;
-            
-            CGRect newSourceFrame;
-            newSourceFrame.size.width = newFrame.size.width * scaleFactorX;
-            newSourceFrame.size.height = newFrame.size.height * scaleFactorY;
-            newSourceFrame.origin.x = (oldSourceFrame.origin.x / oldSourceFrame.size.width) * newSourceFrame.size.width;
-            newSourceFrame.origin.y = (oldSourceFrame.origin.y / oldSourceFrame.size.height) * newSourceFrame.size.height;            
-            _sourceLayer.bounds = newSourceFrame;
-        }
-         */
-    }
-
     
     if (_scrollXSpeed)
     {

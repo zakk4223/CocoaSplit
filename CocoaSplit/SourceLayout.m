@@ -71,18 +71,22 @@
         CSAnimationRunnerObj *runner = [CaptureController sharedAnimationObj];
         NSMutableDictionary *inputMap = [NSMutableDictionary dictionary];
         
-        for (NSDictionary *item in self.selectedAnimation.inputs)
+        NSArray *animations = [self.animationList objectsAtIndexes:self.animationIndexes];
+        
+        for (CSAnimationItem *anim in animations)
         {
-            if (item[@"input"])
+            for (NSDictionary *item in anim.inputs)
             {
-                inputMap[item[@"label"]] = item[@"input"];
-            } else {
-                inputMap[item[@"label"]] = [NSNull null];
+                if (item[@"input"])
+                {
+                    inputMap[item[@"label"]] = item[@"input"];
+                } else {
+                    inputMap[item[@"label"]] = [NSNull null];
+                }
             }
+            
+            [runner runAnimation:anim.module_name forInput:inputMap withSuperlayer:self.rootLayer withDuration:10.0f];
         }
-        
-        [runner runAnimation:self.selectedAnimation.module_name forInput:inputMap withSuperlayer:self.rootLayer withDuration:10.0f];
-        
     }
 }
 
