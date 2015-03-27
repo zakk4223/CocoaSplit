@@ -23,6 +23,25 @@ class CSAnimationInput:
         self.current_frame = None
     
 
+    def minY(self):
+        return NSMinY(self.animationLayer.frame())
+    
+    def maxY(self):
+        return NSMaxY(self.animationLayer.frame())
+
+    def minX(self):
+        return NSMinX(self.animationLayer.frame())
+
+    def maxX(self):
+        return NSMaxX(self.animationLayer.frame())
+
+    def midY(self):
+        return NSMidY(self.animationLayer.frame())
+
+    def midX(self):
+        return NSMidX(self.animationLayer.frame())
+
+
     def basic_animation(self, forKey, withDuration):
         cab = CABasicAnimation.animationWithKeyPath_(forKey)
         cab.setDuration_(withDuration)
@@ -215,6 +234,35 @@ class CSAnimationInput:
     
     def zPosition(self, zpos, duration, **kwargs):
         return self.simple_animation('zPosition', zpos, duration, **kwargs)
+
+    def moveRelativeTo(self, toInput, duration, **kwargs):
+        new_coords = self.animationLayer.frame().origin
+        my_size = self.animationLayer.bounds().size
+        if 'left' in kwargs:
+            l_space = kwargs['left']
+            new_coords.x = toInput.minX()-my_size.width-l_space
+        elif 'right' in kwargs:
+            r_space = kwargs['right']
+            new_coords.x = toInput.maxX()+r_space
+
+        if 'top' in kwargs:
+            t_space = kwargs['top']
+            new_coords.y = toInput.maxY()+t_space
+            new_coords.x = toInput.minX()
+        elif 'bottom' in kwargs:
+            b_space = kwargs['bottom']
+            new_coords.y = toInput.minY()-my_size.height-b_space
+        
+        if 'offsetX' in kwargs:
+            ex_space = kwargs['offsetX']
+            new_coords.x = toInput.minX()-ex_space
+        
+        if 'offsetY' in kwargs:
+            ex_space = kwargs['offsetY']
+            new_coords.y = toInput.minY()-ex_space
+    
+        return self.moveTo(new_coords.x, new_coords.y, duration, **kwargs)
+
 
 
 
