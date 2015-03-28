@@ -17,7 +17,7 @@
 
 -(NSDictionary *)allAnimations;
 
--(void)runAnimation:(NSString *)name forInput:(id)forInput withSuperlayer:(CALayer *)superLayer withDuration:(float)duration;
+-(void)runAnimation:(NSString *)name forInput:(id)forInput withSuperlayer:(CALayer *)superLayer;
 
 @end
 

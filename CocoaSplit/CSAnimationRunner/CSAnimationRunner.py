@@ -327,6 +327,8 @@ class CSAnimationRunnerObj(NSObject):
             except AttributeError:
                 plugin_parameters = []
             
+            plugin_parameters.append('duration')
+            
             try:
                 plugin_description = plugin.animation_description
             except AttributeError:
@@ -336,9 +338,11 @@ class CSAnimationRunnerObj(NSObject):
         return ret
 
 
-    @objc.signature('v@:@@@f')
-    def runAnimation_forInput_withSuperlayer_withDuration_(self, pluginName,input_or_dict,superlayer, duration):
+    @objc.signature('v@:@@@')
+    def runAnimation_forInput_withSuperlayer_(self, pluginName,input_or_dict,superlayer):
         input_arg = input_or_dict
+        duration = None
+        
         if isinstance(input_or_dict, NSDictionary) or isinstance(input_or_dict, NSMutableDictionary):
             input_arg = {}
             for k in input_or_dict:
@@ -347,6 +351,8 @@ class CSAnimationRunnerObj(NSObject):
                     if hasattr(arg, 'layer'):
                         input_arg[k] = CSAnimationInput(arg)
                     else:
+                        if k == 'duration':
+                            duration = float(arg)
                         input_arg[k] = arg
                 else:
                     input_arg[k] = None

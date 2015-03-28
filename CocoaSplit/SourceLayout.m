@@ -85,7 +85,7 @@
                 }
             }
             
-            [runner runAnimation:anim.module_name forInput:inputMap withSuperlayer:self.rootLayer withDuration:10.0f];
+            [runner runAnimation:anim.module_name forInput:inputMap withSuperlayer:self.rootLayer];
         }
     }
 }
