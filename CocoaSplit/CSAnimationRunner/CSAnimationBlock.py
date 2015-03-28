@@ -22,6 +22,8 @@ class AnimationBlock:
         self.duration = duration
         self.max_animation_time = 0.0
         self.beginTime =  0.0
+        if not self.duration:
+            self.duration = 0.25
 
 
 
@@ -36,8 +38,8 @@ class AnimationBlock:
     def add_animation(self, animation, target, keyPath):
         if animation.duration == 0:
             #hax
-            animation.duration = 0.00001
-            animation.animation.setDuration_(0.00001)
+            animation.duration = 0.001
+            animation.animation.setDuration_(0.001)
         self.animations.append(animation)
 
         return animation
@@ -116,12 +118,16 @@ def waitAnimation(duration=0, **kwargs):
     global current_frame
     current_frame.waitAnimation(duration, None, **kwargs)
 
-def beginAnimation():
+def animationDuration():
+    global current_frame
+    return current_frame.duration
+
+def beginAnimation(duration=0.25):
     global current_frame
     global frames
     global superLayer
 
-    new_frame = AnimationBlock()
+    new_frame = AnimationBlock(duration)
     new_frame.baseLayer = superLayer
     if current_frame:
         frames.append(current_frame)

@@ -44,11 +44,14 @@ class CSAnimationInput:
 
     def basic_animation(self, forKey, withDuration):
         cab = CABasicAnimation.animationWithKeyPath_(forKey)
-        cab.setDuration_(withDuration)
+        if withDuration != None:
+            cab.setDuration_(withDuration)
+        else:
+            cab.setDuration_(CSAnimationBlock.current_frame.duration)
         return cab
     
 
-    def simple_animation(self, forKey, toValue, withDuration, **kwargs):
+    def simple_animation(self, forKey, toValue, withDuration=None, **kwargs):
         banim = self.basic_animation(forKey, withDuration)
         for_layer = self.layer
         if 'use_layer' in kwargs:
@@ -82,26 +85,26 @@ class CSAnimationInput:
     def wait(self, duration=0):
         return CSAnimationBlock.current_frame.wait(duration, self)
     
-    def scaleLayer(self, scaleVal, duration, **kwargs):
+    def scaleLayer(self, scaleVal, duration=None, **kwargs):
         return self.simple_animation('transform.scale', scaleVal, duration, **kwargs)
     
 
-    def scaleSize(self, scaleVal, duration):
+    def scaleSize(self, scaleVal, duration=None, **kwargs):
         curr_width = self.animationLayer.bounds().size.width
         curr_height = self.animationLayer.bounds().size.height
-        return self.size(curr_width * scaleVal, curr_height*scaleVal, duration)
+        return self.size(curr_width * scaleVal, curr_height*scaleVal, duration, **kwargs)
     
-    def width(self, width, duration, **kwargs):
+    def width(self, width, duration=None, **kwargs):
         kwargs['use_layer'] = self.layer.sourceLayer()
         kwargs['extra_model'] = self.layer
         return self.simple_animation('bounds.size.width', width, duration, **kwargs)
     
-    def height(self, height, duration, **kwargs):
+    def height(self, height, duration=None, **kwargs):
         kwargs['use_layer'] = self.layer.sourceLayer()
         kwargs['extra_model'] = self.layer
         return self.simple_animation('bounds.size.height', height, duration, **kwargs)
 
-    def size(self, width, height, duration, **kwargs):
+    def size(self, width, height, duration=None, **kwargs):
         current_bounds = self.animationLayer.bounds()
         oldwidth = current_bounds.size.width
         current_bounds.size.width = width
@@ -111,34 +114,52 @@ class CSAnimationInput:
         kwargs['extra_model'] = self.layer
         return self.simple_animation('bounds', rectval, duration, **kwargs)
     
-    def translateY(self, y, duration, **kwargs):
+    
+    def translateYTo(self, y, duration=None, **kwargs):
+        new_coord = self.adjust_coordinates(0,y)
+        cval = self.animationLayer.valueForKeyPath_('transform.translation.y')
+        return self.simple_animation('transform.translation.y', new_coord.y+cval, duration, **kwargs)
+    
+    def translateXTo(self, x, duration=None, **kwargs):
+        new_coord = self.adjust_coordinates(x,0)
+        cval = self.animationLayer.valueForKeyPath_('transform.translation.x')
+        return self.simple_animation('transform.translation.x', new_coord.x+cval, duration, **kwargs)
+
+    def translateTo(self, x,y,duration=None, **kwargs):
+        new_coord = self.adjust_coordinates(x,y)
+        cpos = self.animationLayer.valueForKeyPath_('transform.translation')
+        csize = cpos.sizeValue()
+        nsize = NSSize(csize.width+new_coord.x, csize.height+new_coord.y)
+        return self.simple_animation('transform.translation', NSValue.valueWithSize_(nsize), duration, **kwargs)
+
+    def translateY(self, y, duration=None, **kwargs):
         cval = self.animationLayer.valueForKeyPath_('transform.translation.y')
         return self.simple_animation('transform.translation.y', y+cval, duration, **kwargs)
  
-    def translateX(self, x, duration, **kwargs):
+    def translateX(self, x, duration=None, **kwargs):
         cval = self.animationLayer.valueForKeyPath_('transform.translation.x')
         return self.simple_animation('transform.translation.x', x+cval, duration, **kwargs)
     
-    def translate(self, x,y,duration, **kwargs):
+    def translate(self, x,y,duration=None, **kwargs):
         cpos = self.animationLayer.valueForKeyPath_('transform.translation')
         csize = cpos.sizeValue()
         nsize = NSSize(csize.width+x, csize.height+y)
         return self.simple_animation('transform.translation', NSValue.valueWithSize_(nsize), duration, **kwargs)
     
     
-    def moveX(self, move_x, duration, **kwargs):
+    def moveX(self, move_x, duration=None, **kwargs):
         return self.simple_animation('position.x', self.animationLayer.position().x+move_x, duration, **kwargs)
     
-    def moveY(self, move_y, duration):
+    def moveY(self, move_y, duration=None):
         return self.simple_animation('position.y', self.animationLayer.position().y+move_y, duration, **kwargs)
 
 
-    def move(self, move_x, move_y, duration, **kwargs):
+    def move(self, move_x, move_y, duration=None, **kwargs):
         curr_x = self.animationLayer.position().x
         curr_y = self.animationLayer.position().y
         return self.moveTo(curr_x+move_x, curr_y+move_y, duration, **kwargs)
     
-    def moveCenter(self, duration, **kwargs):
+    def moveCenter(self, duration=None, **kwargs):
         rootLayer = self.layer.superlayer()
         rootWidth = rootLayer.bounds().size.width
         rootHeight = rootLayer.bounds().size.height
@@ -148,94 +169,94 @@ class CSAnimationInput:
         return self.moveTo(new_x, new_y, duration, **kwargs)
     
     
-    def moveYTo(self, move_y, duration, **kwargs):
+    def moveYTo(self, move_y, duration=None, **kwargs):
         new_coord = self.adjust_coordinates(0,move_y)
         c_pos = self.animationLayer.position()
         c_pos.y += new_coord.y
 
         return self.simple_animation('position.y', c_pos.y, duration, **kwargs)
     
-    def moveXTo(self, move_x, duration, **kwargs):
+    def moveXTo(self, move_x, duration=None, **kwargs):
         new_coord = self.adjust_coordinates(move_x, 0)
         c_pos = self.animationLayer.position()
         c_pos.x += new_coord.x
         return self.simple_animation('position.x', c_pos.x, duration, **kwargs)
 
-    def moveTo(self, move_x, move_y, duration, **kwargs):
+    def moveTo(self, move_x, move_y, duration=None, **kwargs):
         new_coords = self.adjust_coordinates(move_x, move_y)
         c_pos = self.animationLayer.position()
         c_pos.x += new_coords.x
         c_pos.y += new_coords.y
         return self.simple_animation('position', NSValue.valueWithPoint_(c_pos), duration, **kwargs)
     
-    def opacity(self, opacity, duration, **kwargs):
+    def opacity(self, opacity, duration=None, **kwargs):
         return self.simple_animation('opacity', opacity, duration, **kwargs)
 
 
-    def rotateX(self, angle, duration, **kwargs):
+    def rotateX(self, angle, duration=None, **kwargs):
         toVal = math.radians(angle)
         fromVal = self.animationLayer.valueForKeyPath_('transform.rotation.x')
         retval = self.simple_animation('transform.rotation.x', fromVal+toVal, duration, **kwargs)
         return retval
 
-    def rotateY(self, angle, duration, **kwargs):
+    def rotateY(self, angle, duration=None, **kwargs):
         toVal = math.radians(angle)
         fromVal = self.animationLayer.valueForKeyPath_('transform.rotation.y')
         retval = self.simple_animation('transform.rotation.y', fromVal+toVal, duration, **kwargs)
         return retval
     
-    def rotateXTo(self, angle, duration, **kwargs):
+    def rotateXTo(self, angle, duration=None, **kwargs):
         toVal = math.radians(angle)
         retval = self.simple_animation('transform.rotation.x', toVal, duration, **kwargs)
         return retval
     
-    def rotateYTo(self, angle, duration, **kwargs):
+    def rotateYTo(self, angle, duration=None, **kwargs):
         toVal = math.radians(angle)
         retval = self.simple_animation('transform.rotation.y', toVal, duration, **kwargs)
         return retval
 
 
-    def rotate(self, angle, duration, **kwargs):
+    def rotate(self, angle, duration=None, **kwargs):
         toVal = math.radians(angle)
         fromVal = self.animationLayer.valueForKeyPath_('transform.rotation.z')
         retval = self.simple_animation('transform.rotation.z', fromVal+toVal, duration, **kwargs)
         return retval
     
-    def rotateTo(self, angle, duration, **kwargs):
+    def rotateTo(self, angle, duration=None, **kwargs):
         toVal = math.radians(angle)
         return self.simple_animation('transform.rotation.z', toVal, duration, **kwargs)
 
 
-    def borderwidth(self, width, duration, **kwargs):
+    def borderwidth(self, width, duration=None, **kwargs):
         return self.simple_animation('borderWidth', width, duration, **kwargs)
 
-    def cornerradius(self, radius, duration, **kwargs):
+    def cornerradius(self, radius, duration=None, **kwargs):
         return self.simple_animation('cornerRadius', radius, duration, **kwargs)
 
     def __hidden_complete__(self, animation, yesno):
         animation.set_model_value()
         self.layer.setHidden_(yesno)
     
-    def hidden(self, yesno, duration, **kwargs):
+    def hidden(self, yesno, duration=None, **kwargs):
         ret = self.simple_animation('hidden', yesno, duration, **kwargs)
         ret.internal_completion_handler = lambda a: self.__hidden_complete__(a, yesno)
         return ret
 
-    def hide(self, duration, **kwargs):
+    def hide(self, duration=None, **kwargs):
         return self.hidden(True, duration, **kwargs)
     
-    def show(self, duration, **kwargs):
+    def show(self, duration=None, **kwargs):
         return self.hidden(False, duration, **kwargs)
     
-    def toggle(self, duration, **kwargs):
+    def toggle(self, duration=None, **kwargs):
         cval = self.animationLayer.hidden()        
         return self.hidden(not cval, duration, **kwargs)
     
     
-    def zPosition(self, zpos, duration, **kwargs):
+    def zPosition(self, zpos, duration=None, **kwargs):
         return self.simple_animation('zPosition', zpos, duration, **kwargs)
 
-    def moveRelativeTo(self, toInput, duration, **kwargs):
+    def moveRelativeTo(self, toInput, duration=None, **kwargs):
         new_coords = self.animationLayer.frame().origin
         my_size = self.animationLayer.bounds().size
         if 'left' in kwargs:
@@ -310,9 +331,10 @@ class CSAnimationRunnerObj(NSObject):
         animation = plugin_source.load_plugin(pluginName)
         reload(animation)
         CSAnimationBlock.superLayer = superlayer
-        CSAnimationBlock.beginAnimation()
+        CSAnimationBlock.beginAnimation(duration)
         animation.wait = CSAnimationBlock.wait
         animation.waitAnimation = CSAnimationBlock.waitAnimation
+        animation.animationDuration = CSAnimationBlock.animationDuration
         animation.do_animation(input_arg, duration)
         CSAnimationBlock.commitAnimation()
 
