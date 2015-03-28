@@ -13,6 +13,8 @@
 @end
 
 @implementation CSAnimationChooserViewController
+@synthesize selectedAnimations = _selectedAnimations;
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -22,26 +24,36 @@
 }
 
 
+-(void)setSelectedAnimations:(NSIndexSet *)selectedAnimations
+{
+    _selectedAnimations = selectedAnimations;
+    
+    self.selectedAnimation = [self.animationList objectAtIndex:[selectedAnimations firstIndex]];
+}
+
+-(NSIndexSet *)selectedAnimations
+{
+    return _selectedAnimations;
+}
+
+
 - (IBAction)addButtonClicked:(id)sender
 {
     
     
     [self commitEditing];
     
-    NSLog(@"SELECTED %@", self.selectedAnimations);
     
     if (self.sourceLayout)
     {
         
         NSArray *animations = [self.animationList objectsAtIndexes:self.selectedAnimations];
-        NSLog(@"ANIMATIONS %@", animations);
         
         for (id anim in animations)
         {
             [self.sourceLayout addAnimation:anim];
         }
     }
-    NSLog(@"CLOSING POPOVER!");
     
     [self.popover close];
     
@@ -59,6 +71,7 @@
 {
     self.popover.contentViewController = nil;
 }
+
 
 -(void)loadAnimations
 {

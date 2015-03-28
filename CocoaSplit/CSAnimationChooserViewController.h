@@ -19,6 +19,7 @@
 @property (strong) SourceLayout *sourceLayout;
 @property (strong) NSMutableArray *animationList;
 @property (strong) NSIndexSet *selectedAnimations;
+@property (strong) NSDictionary *selectedAnimation;
 
 - (IBAction)addButtonClicked:(id)sender;
 

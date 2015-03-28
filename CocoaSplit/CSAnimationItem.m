@@ -47,19 +47,34 @@
     {
         
         self.module_name = moduleName;
+    
+        NSLog(@"INIT DICT %@", dict);
         
         self.name = [dict objectForKey:@"name"];
         NSArray *inputNames = [dict objectForKey:@"inputs"];
-        
+        NSArray *paramNames = [dict objectForKey:@"params"];
+    
         self.inputs = [NSMutableArray array];
         
         for (NSString *iname in inputNames)
         {
             NSMutableDictionary *inputDict = [NSMutableDictionary dictionary];
+            inputDict[@"type"] = @"input";
             inputDict[@"label"] = iname;
-            inputDict[@"inputsource"] = [NSNull null];
+            inputDict[@"value"] = [NSNull null];
             [self.inputs addObject:inputDict];
         }
+        
+        for (NSString *iname in paramNames)
+        {
+            NSMutableDictionary *inputDict = [NSMutableDictionary dictionary];
+            inputDict[@"type"] = @"param";
+            inputDict[@"label"] = iname;
+            inputDict[@"value"] = [NSNull null];
+            [self.inputs addObject:inputDict];
+        }
+
+        
     }
     
     return self;

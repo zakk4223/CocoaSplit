@@ -217,6 +217,46 @@
 }
 
 
+- (id)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
+{
+    
+    NSView *retView = nil;
+    
+    SourceLayout *layout;
+    
+    if (tableView.tag == 0)
+    {
+        layout = self.stagingPreviewView.sourceLayout;
+    } else {
+        layout = self.livePreviewView.sourceLayout;
+    }
+    CSAnimationItem *animation = layout.selectedAnimation;
+    
+    NSArray *inputs = animation.inputs;
+    
+    NSDictionary *inputmap = nil;
+    
+    if (row > -1 && row < inputs.count)
+    {
+        inputmap = [inputs objectAtIndex:row];
+    }
+    
+    if ([tableColumn.identifier isEqualToString:@"label"])
+    {
+        
+        retView = [tableView makeViewWithIdentifier:@"LabelCellView" owner:self];
+    } else if ([tableColumn.identifier isEqualToString:@"value"]) {
+        if ([inputmap[@"type"] isEqualToString:@"param"])
+        {
+            retView = [tableView makeViewWithIdentifier:@"InputParamView" owner:self];
+        } else {
+            retView = [tableView makeViewWithIdentifier:@"InputSourceView" owner:self];
+        }
+    }
+    
+    return retView;
+}
+
 
 - (IBAction)openAnimatePopover:(NSButton *)sender
 {

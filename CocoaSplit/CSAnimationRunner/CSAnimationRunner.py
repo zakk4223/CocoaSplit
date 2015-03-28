@@ -14,7 +14,7 @@ plugin_dirs = map(lambda x: x + "/Application Support/CocoaSplit/Plugins/Animati
 plugin_source = plugin_base.make_plugin_source(searchpath=plugin_dirs)
 
 
-class CSAnimationInput:
+class CSAnimationInput(object):
     def __init__(self, cs_input):
         self.input = cs_input
         self.layer = cs_input.layer()
@@ -22,22 +22,27 @@ class CSAnimationInput:
         self.frames = []
         self.current_frame = None
     
-
+    @property
     def minY(self):
         return NSMinY(self.animationLayer.frame())
     
+    @property
     def maxY(self):
         return NSMaxY(self.animationLayer.frame())
 
+    @property
     def minX(self):
         return NSMinX(self.animationLayer.frame())
-
+    
+    @property
     def maxX(self):
         return NSMaxX(self.animationLayer.frame())
 
+    @property
     def midY(self):
         return NSMidY(self.animationLayer.frame())
 
+    @property
     def midX(self):
         return NSMidX(self.animationLayer.frame())
 
@@ -261,26 +266,25 @@ class CSAnimationInput:
         my_size = self.animationLayer.bounds().size
         if 'left' in kwargs:
             l_space = kwargs['left']
-            new_coords.x = toInput.minX()-my_size.width-l_space
+            new_coords.x = toInput.minX-my_size.width-l_space
         elif 'right' in kwargs:
             r_space = kwargs['right']
-            new_coords.x = toInput.maxX()+r_space
+            new_coords.x = toInput.maxX+r_space
 
         if 'top' in kwargs:
             t_space = kwargs['top']
-            new_coords.y = toInput.maxY()+t_space
-            new_coords.x = toInput.minX()
+            new_coords.y = toInput.maxY+t_space
         elif 'bottom' in kwargs:
             b_space = kwargs['bottom']
-            new_coords.y = toInput.minY()-my_size.height-b_space
+            new_coords.y = toInput.minY-my_size.height-b_space
         
         if 'offsetX' in kwargs:
             ex_space = kwargs['offsetX']
-            new_coords.x = toInput.minX()-ex_space
+            new_coords.x = toInput.minX-ex_space
         
         if 'offsetY' in kwargs:
             ex_space = kwargs['offsetY']
-            new_coords.y = toInput.minY()-ex_space
+            new_coords.y = toInput.minY-ex_space
     
         return self.moveTo(new_coords.x, new_coords.y, duration, **kwargs)
 
@@ -307,11 +311,28 @@ class CSAnimationRunnerObj(NSObject):
             plugin = plugin_source.load_plugin(m_name)
             reload(plugin)
 
-            plugin_name = plugin.animation_name
-            if not plugin_name:
+
+            try:
+                plugin_name = plugin.animation_name
+            except AttributeError:
                 continue
-            plugin_inputs = plugin.animation_inputs
-            ret[m_name] = {'inputs': plugin_inputs, 'name':plugin_name, 'module':m_name}
+            
+            try:
+                plugin_inputs = plugin.animation_inputs
+            except AttributeError:
+                plugin_inputs = []
+            
+            try:
+                plugin_parameters = plugin.animation_params
+            except AttributeError:
+                plugin_parameters = []
+            
+            try:
+                plugin_description = plugin.animation_description
+            except AttributeError:
+                plugin_description = "No description provided"
+            
+            ret[m_name] = {'params': plugin_parameters, 'inputs': plugin_inputs, 'name':plugin_name, 'module':m_name, 'description':plugin_description}
         return ret
 
 
@@ -322,7 +343,11 @@ class CSAnimationRunnerObj(NSObject):
             input_arg = {}
             for k in input_or_dict:
                 if input_or_dict[k]:
-                    input_arg[k] = CSAnimationInput(input_or_dict[k])
+                    arg = input_or_dict[k]
+                    if hasattr(arg, 'layer'):
+                        input_arg[k] = CSAnimationInput(arg)
+                    else:
+                        input_arg[k] = arg
                 else:
                     input_arg[k] = None
 

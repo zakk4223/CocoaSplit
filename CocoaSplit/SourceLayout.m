@@ -77,9 +77,9 @@
         {
             for (NSDictionary *item in anim.inputs)
             {
-                if (item[@"input"])
+                if (item[@"value"])
                 {
-                    inputMap[item[@"label"]] = item[@"input"];
+                    inputMap[item[@"label"]] = item[@"value"];
                 } else {
                     inputMap[item[@"label"]] = [NSNull null];
                 }
@@ -91,6 +91,12 @@
 }
 
 
+
+
+-(void)deleteAnimations:(id)sender
+{
+    [[self mutableArrayValueForKey:@"animationList"] removeObjectsAtIndexes:self.animationIndexes];
+}
 
 
 -(void)addAnimation:(NSDictionary *)animation
