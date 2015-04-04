@@ -1,3 +1,6 @@
+"""
+Animation runner base
+"""
 import objc
 from Foundation import *
 from CoreGraphics import *
@@ -11,39 +14,95 @@ plugin_base = PluginBase(package='animationplugins')
 
 library_dirs = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSAllDomainsMask - NSSystemDomainMask, YES)
 plugin_dirs = map(lambda x: x + "/Application Support/CocoaSplit/Plugins/Animations", library_dirs)
+plugin_dirs.append(NSBundle.mainBundle().builtInPlugInsPath() + "/Animations")
 plugin_source = plugin_base.make_plugin_source(searchpath=plugin_dirs)
 
 
 class CSAnimationInput(object):
     def __init__(self, cs_input):
-        self.input = cs_input
-        self.layer = cs_input.layer()
-        self.animationLayer = cs_input.animationLayer()
+        self.__input__ = cs_input
+        self.__layer__ = cs_input.layer()
+        self.__animationLayer__ = cs_input.animationLayer()
         self.frames = []
         self.current_frame = None
     
     @property
+    def input(self):
+        """
+        The source being animated. This is set via the UI and animation_input keys to the input dict.
+        """
+        return self.__input__
+    
+    @property
+    def layer(self):
+        """
+        The InputSource's CALayer.
+        """
+        return self.__layer__
+    
+    @property
+    def animationLayer(self):
+        """
+        A "shadow" copy of the layer being animated. This layer is updated as animations are applied to the layer.
+        """
+        return self.__animationLayer__
+    
+    
+    @property
+    def width(self):
+        """
+        Current width of the input
+        """
+        return self.animationLayer.bounds().size.width
+    
+    @property
+    def height(self):
+        """
+        Current height of the input
+        """
+        return self.animationLayer.bounds().size.height
+    
+    
+    @property
     def minY(self):
+        """
+        Minimum Y value, otherwise known as the Y coordinate of the input's origin
+        """
         return NSMinY(self.animationLayer.frame())
     
     @property
     def maxY(self):
+        """
+        Maximum Y value of the input's frame. origin.y+height
+        """
         return NSMaxY(self.animationLayer.frame())
 
     @property
     def minX(self):
+        """
+        Minimum X value, otherwise known as the X coordinate of the input's origin
+        """
         return NSMinX(self.animationLayer.frame())
     
     @property
     def maxX(self):
+        """
+        Maximum X value of the input's frame. origin.x+width
+        """
         return NSMaxX(self.animationLayer.frame())
 
     @property
     def midY(self):
+        """
+        Midpoint of the input's frame on the Y axis. origin.y+(height/2)
+        """
         return NSMidY(self.animationLayer.frame())
 
     @property
     def midX(self):
+        """
+        Midpoint of the input's frame on the X axis. origin.x+(width/2)
+        """
         return NSMidX(self.animationLayer.frame())
 
 
@@ -85,31 +144,69 @@ class CSAnimationInput(object):
         return NSPoint(x-c_x, y-c_y)
     
     def waitAnimation(self, duration=0, **kwargs):
+        """
+        Wait for all in-progress animations on this input to complete before adding any more. 
+        This ONLY changes the timing for the input this wait is applied to. Example:
+        input1.moveTo(0,0,2.5)
+        input2.moveTo(100,100.5.5)
+        input1.waitAnimation()
+        input2.rotate(360, 5.5)
+        input1.moveCenter(3.5)
+        
+        input1 will start to move towards the bottom left corner and simultaneously input2 will begin its rotation AND begin moving to 100,100.
+        After input1 finishes moving to the corner it will then start moving towards the center.
+        Notice that the timing of input2's animations are not modified by the waitAnimation() on input1.
+        
+        Like the global waitAnimation() you can specify a keyword argument of 'label' to wait on a specific animation.
+        """
         return CSAnimationBlock.current_frame.waitAnimation(duration, self, **kwargs)
     
     def wait(self, duration=0):
+        """
+        Wait duration seconds before starting any new animations on this input. As described previously in waitAnimation() this 
+        only modifies the timing of animations on THIS input.
+        """
         return CSAnimationBlock.current_frame.wait(duration, self)
     
     def scaleLayer(self, scaleVal, duration=None, **kwargs):
+        """
+        Apply a uniform scale transform to the layer. Grows or shrinks the input by the given scale. 
+        
+        Two important points about scale animations:
+        1) They ARE NOT PERMANENT. If you use an animation to apply a 0.5 scale to an input, then go live or save the layout, the scale does not carry over. If you want to make the change permanent use scaleSize()
+        2) The scale is relative to the original size of the input. So applying one 2x scale and then another 2x scale only results in the scale changing once.
+        """
         return self.simple_animation('transform.scale', scaleVal, duration, **kwargs)
     
 
     def scaleSize(self, scaleVal, duration=None, **kwargs):
+        """
+        Changes the input bounds by scaleVal. This change IS permanent; if you save and restore the layout after performing a scaleSize() the input will retain the size it was set to by the animation. Note that the scaleVal is relative to the CURRENT size of the input, so applying a 2x scaleSize followed by another 2x scaleSize will result in something 4x as big as the original bounds.
+        """
         curr_width = self.animationLayer.bounds().size.width
         curr_height = self.animationLayer.bounds().size.height
         return self.size(curr_width * scaleVal, curr_height*scaleVal, duration, **kwargs)
     
-    def width(self, width, duration=None, **kwargs):
+    def sizeWidth(self, width, duration=None, **kwargs):
+        """
+        Set the width of the input. This change saves/is permanent. It is applied to the underlying layer's bounds.
+        """
         kwargs['use_layer'] = self.layer.sourceLayer()
         kwargs['extra_model'] = self.layer
         return self.simple_animation('bounds.size.width', width, duration, **kwargs)
     
-    def height(self, height, duration=None, **kwargs):
+    def sizeHeight(self, height, duration=None, **kwargs):
+        """
+        Set the height of the input. This change saves/is permanent. It is applied to the underlying layer's bounds.
+        """
         kwargs['use_layer'] = self.layer.sourceLayer()
         kwargs['extra_model'] = self.layer
         return self.simple_animation('bounds.size.height', height, duration, **kwargs)
 
     def size(self, width, height, duration=None, **kwargs):
+        """
+        Set the width and height of the input. This change saves/is permanent. It is applied to the underlying layer's bounds.
+        """
         current_bounds = self.animationLayer.bounds()
         oldwidth = current_bounds.size.width
         current_bounds.size.width = width
@@ -121,16 +218,26 @@ class CSAnimationInput(object):
     
     
     def translateYTo(self, y, duration=None, **kwargs):
+        """
+        Translate/move the input on the y-axis to the new value y. The final result of this translation is not permanent/saved. If you translate an input and then manually move it via the UI or via the move* functions, it may not restore/go live in the exact position it appears in the layout. Use caution.
+        """
         new_coord = self.adjust_coordinates(0,y)
         cval = self.animationLayer.valueForKeyPath_('transform.translation.y')
         return self.simple_animation('transform.translation.y', new_coord.y+cval, duration, **kwargs)
     
     def translateXTo(self, x, duration=None, **kwargs):
+        """
+        Translate/move the input on the x-axis to the new value x. The final result of this translation is not permanent/saved. If you translate an input and then manually move it via the UI or via the move* functions, it may not restore/go live in the exact position it appears in the layout. Use caution.
+        """
+
         new_coord = self.adjust_coordinates(x,0)
         cval = self.animationLayer.valueForKeyPath_('transform.translation.x')
         return self.simple_animation('transform.translation.x', new_coord.x+cval, duration, **kwargs)
 
     def translateTo(self, x,y,duration=None, **kwargs):
+        """
+        Translate/move the input's origin to the coordinate (x,y) The final result of this translation is not permanent/saved. If you translate an input and then manually move it via the UI or via the move* functions, it may not restore/go live in the exact position it appears in the layout. Use caution.
+        """
         new_coord = self.adjust_coordinates(x,y)
         cpos = self.animationLayer.valueForKeyPath_('transform.translation')
         csize = cpos.sizeValue()
@@ -153,18 +260,31 @@ class CSAnimationInput(object):
     
     
     def moveX(self, move_x, duration=None, **kwargs):
+        """
+        Move the input's X coordinate by move_x units. This change is permanent/saved. If you want non-saved move use the translate* animations
+        """
         return self.simple_animation('position.x', self.animationLayer.position().x+move_x, duration, **kwargs)
     
-    def moveY(self, move_y, duration=None):
+    def moveY(self, move_y, duration=None, **kwargs):
+        """
+        Move the input's Y coordinate by move_y units. This change is permanent/saved. If you want non-saved move use the translate* animations
+        """
         return self.simple_animation('position.y', self.animationLayer.position().y+move_y, duration, **kwargs)
 
 
     def move(self, move_x, move_y, duration=None, **kwargs):
+        """
+        Move the input's position by move_x and move_y units This change is permanent/saved. If you want non-saved move use the translate* animations
+        """
+
         curr_x = self.animationLayer.position().x
         curr_y = self.animationLayer.position().y
         return self.moveTo(curr_x+move_x, curr_y+move_y, duration, **kwargs)
     
     def moveCenter(self, duration=None, **kwargs):
+        """
+        Move to the center of the layout. This move is slight different from the other move animations; it moves the input's CENTER to the center of the layout.
+        """
         rootLayer = self.layer.superlayer()
         rootWidth = rootLayer.bounds().size.width
         rootHeight = rootLayer.bounds().size.height
@@ -175,6 +295,9 @@ class CSAnimationInput(object):
     
     
     def moveYTo(self, move_y, duration=None, **kwargs):
+        """
+        Move the y component of the input's origin to the move_y point. The origin of an input is the input's bottom left corner. This is an absolute positioning, not a delta from the current position. This move is permanent/saved. If you want a non-saved move use the translate* animations.
+        """
         new_coord = self.adjust_coordinates(0,move_y)
         c_pos = self.animationLayer.position()
         c_pos.y += new_coord.y
@@ -182,12 +305,18 @@ class CSAnimationInput(object):
         return self.simple_animation('position.y', c_pos.y, duration, **kwargs)
     
     def moveXTo(self, move_x, duration=None, **kwargs):
+        """
+        Move the x component of the input's origin to the move_x point. The origin of an input is the input's bottom left corner. This is an absolute positioning, not a delta from the current position. This move is permanent/saved. If you want a non-saved move use the translate* animations.
+        """
         new_coord = self.adjust_coordinates(move_x, 0)
         c_pos = self.animationLayer.position()
         c_pos.x += new_coord.x
         return self.simple_animation('position.x', c_pos.x, duration, **kwargs)
 
     def moveTo(self, move_x, move_y, duration=None, **kwargs):
+        """
+        Move the y component of the input's origin to (move_x, move_y) The origin of an input is the input's bottom left corner. This is an absolute positioning, not a delta from the current position. This move is permanent/saved. If you want a non-saved move use the translate* animations.
+        """
         new_coords = self.adjust_coordinates(move_x, move_y)
         c_pos = self.animationLayer.position()
         c_pos.x += new_coords.x
@@ -195,16 +324,25 @@ class CSAnimationInput(object):
         return self.simple_animation('position', NSValue.valueWithPoint_(c_pos), duration, **kwargs)
     
     def opacity(self, opacity, duration=None, **kwargs):
+        """
+        Change the opacity/transparency of the input.
+        """
         return self.simple_animation('opacity', opacity, duration, **kwargs)
 
 
     def rotateX(self, angle, duration=None, **kwargs):
+        """
+        Rotate the input around the x-axis by angle degrees. This rotation is additive: a rotate of 45 degrees followed by another rotate of 45 degrees results in a total rotation of 90 degrees. This rotation is not permanent, it will not persist across save/restore or go live.
+        """
         toVal = math.radians(angle)
         fromVal = self.animationLayer.valueForKeyPath_('transform.rotation.x')
         retval = self.simple_animation('transform.rotation.x', fromVal+toVal, duration, **kwargs)
         return retval
 
     def rotateY(self, angle, duration=None, **kwargs):
+        """
+        Rotate the input around the y-axis by angle degrees. This rotation is additive: a rotate of 45 degrees followed by another rotate of 45 degrees results in a total rotation of 90 degrees. This rotation is not permanent, it will not persist across save/restore or go live.
+        """
         toVal = math.radians(angle)
         fromVal = self.animationLayer.valueForKeyPath_('transform.rotation.y')
         retval = self.simple_animation('transform.rotation.y', fromVal+toVal, duration, **kwargs)
@@ -222,12 +360,18 @@ class CSAnimationInput(object):
 
 
     def rotate(self, angle, duration=None, **kwargs):
+        """
+        Rotate the input by angle degrees. Positive angles are anti-clockwise, negative angles are clockwise. This rotation is additive: a rotate of 45 degrees followed by another rotate of 45 degrees results in a total rotation of 90 degrees. This rotation is not permanent, it will not persist across save/restore or go live.
+        """
         toVal = math.radians(angle)
         fromVal = self.animationLayer.valueForKeyPath_('transform.rotation.z')
         retval = self.simple_animation('transform.rotation.z', fromVal+toVal, duration, **kwargs)
         return retval
     
     def rotateTo(self, angle, duration=None, **kwargs):
+        """
+        Rotate the input to the specified angle. 
+        """
         toVal = math.radians(angle)
         return self.simple_animation('transform.rotation.z', toVal, duration, **kwargs)
 
@@ -248,17 +392,30 @@ class CSAnimationInput(object):
         return ret
 
     def hide(self, duration=None, **kwargs):
+        """
+        Hide the input, making it not visible. If it is already hidden this does nothing, but the duration will count towards any waitAnimation() calls
+        """
+
         return self.hidden(True, duration, **kwargs)
     
     def show(self, duration=None, **kwargs):
+        """
+        Make the input visible. If it is already visible this does nothing, but the duration will count towards any waitAnimation() calls
+        """
         return self.hidden(False, duration, **kwargs)
     
     def toggle(self, duration=None, **kwargs):
+        """
+        Toggle the visibility of the input. If it's hidden, show it, if it's visible hide etc. There is no fadein/fadeout animation for this change. The duration basically acts as a delay, if you hide an input with a duration of 2, it waits 2 seconds before hiding.
+        """
         cval = self.animationLayer.hidden()        
         return self.hidden(not cval, duration, **kwargs)
     
     
     def zPosition(self, zpos, duration=None, **kwargs):
+        """
+        Change the depth of the input to zpos.
+        """
         return self.simple_animation('zPosition', zpos, duration, **kwargs)
 
     def moveRelativeTo(self, toInput, duration=None, **kwargs):

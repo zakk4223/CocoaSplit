@@ -102,6 +102,8 @@
 		345F8B761A17A785009A81E3 /* CAMultiAudioMixer.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B741A17A785009A81E3 /* CAMultiAudioMixer.m */; };
 		345F8B791A183D1D009A81E3 /* CAMultiAudioEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B781A183D1D009A81E3 /* CAMultiAudioEngine.m */; };
 		345F8B7A1A183D1D009A81E3 /* CAMultiAudioEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B781A183D1D009A81E3 /* CAMultiAudioEngine.m */; };
+		3460E5881AC764500080358E /* rotate.py in Resources */ = {isa = PBXBuildFile; fileRef = 3460E5871AC764500080358E /* rotate.py */; };
+		3460E58A1AC766260080358E /* rotate.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3460E5871AC764500080358E /* rotate.py */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		346CF44C1A5C10C2008E5BFF /* CSInputLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 346CF44B1A5C10C2008E5BFF /* CSInputLayer.m */; };
 		346CF44D1A5C10C2008E5BFF /* CSInputLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 346CF44B1A5C10C2008E5BFF /* CSInputLayer.m */; };
 		3470F41419C84989000A81C4 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3470F41319C84989000A81C4 /* Sparkle.framework */; settings = {ATTRIBUTES = (Required, ); }; };
@@ -360,6 +362,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3460E5891AC766120080358E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Animations;
+			dstSubfolderSpec = 13;
+			files = (
+				3460E58A1AC766260080358E /* rotate.py in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3470F41519C849D9000A81C4 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -514,6 +526,7 @@
 		345F8B741A17A785009A81E3 /* CAMultiAudioMixer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioMixer.m; path = CAMultiAudio/CAMultiAudioMixer.m; sourceTree = "<group>"; };
 		345F8B781A183D1D009A81E3 /* CAMultiAudioEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioEngine.m; path = CAMultiAudio/CAMultiAudioEngine.m; sourceTree = "<group>"; };
 		345F8B7B1A184FBC009A81E3 /* CAMultiAudioMixingProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAMultiAudioMixingProtocol.h; sourceTree = "<group>"; };
+		3460E5871AC764500080358E /* rotate.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = rotate.py; sourceTree = "<group>"; };
 		346CF44A1A5C10C2008E5BFF /* CSInputLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSInputLayer.h; sourceTree = "<group>"; };
 		346CF44B1A5C10C2008E5BFF /* CSInputLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSInputLayer.m; sourceTree = "<group>"; };
 		346EAAF6197A7B28000892CF /* Capture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Capture.h; sourceTree = "<group>"; };
@@ -760,6 +773,7 @@
 		340FE4A715F3417E00E4CE4E /* CocoaSplit */ = {
 			isa = PBXGroup;
 			children = (
+				3460E5861AC764360080358E /* AnimationSamples */,
 				349461581AB420E600F28883 /* CSAnimationRunner */,
 				34D6581519B3876D0012E32B /* ScriptingAdditions */,
 				34576CFB19B020BF007BAD90 /* PluginHeaders */,
@@ -979,6 +993,14 @@
 				345F8B7B1A184FBC009A81E3 /* CAMultiAudioMixingProtocol.h */,
 			);
 			name = CAMultiAudio;
+			sourceTree = "<group>";
+		};
+		3460E5861AC764360080358E /* AnimationSamples */ = {
+			isa = PBXGroup;
+			children = (
+				3460E5871AC764500080358E /* rotate.py */,
+			);
+			path = AnimationSamples;
 			sourceTree = "<group>";
 		};
 		349461581AB420E600F28883 /* CSAnimationRunner */ = {
@@ -1244,6 +1266,8 @@
 				3470F41519C849D9000A81C4 /* CopyFiles */,
 				3470F41719C8534B000A81C4 /* ShellScript */,
 				349461611AB42FF000F28883 /* CopyFiles */,
+				3460E5891AC766120080358E /* CopyFiles */,
+				3460E58B1AC768840080358E /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1548,6 +1572,7 @@
 				34348C2B19BDBDC000A122C2 /* PluginManagerWindowController.xib in Resources */,
 				3494615A1AB4213B00F28883 /* CSAnimationRunner.py in Resources */,
 				34ABEF3C17C0C2CB00AA5E62 /* advancedPrefPanel.xib in Resources */,
+				3460E5881AC764500080358E /* rotate.py in Resources */,
 				3435E396188B902C0015CC01 /* 420v.fgsh in Resources */,
 				342B33B3198073EC00492CB7 /* line.fgsh in Resources */,
 				349461761AC49BB300F28883 /* CSAnimationChooserViewController.xib in Resources */,
@@ -1567,6 +1592,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		3460E58B1AC768840080358E /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#rm \"${BUILT_PRODUCTS_DIR}\"/\"${CONTENTS_FOLDER_PATH}\"/PlugIns/Animations/*.pyc";
+		};
 		3470F41719C8534B000A81C4 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
