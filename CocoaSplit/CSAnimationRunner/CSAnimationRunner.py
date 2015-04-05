@@ -9,6 +9,9 @@ from pluginbase import PluginBase
 import math
 import CSAnimationBlock
 from CSAnimation import *
+import sys
+sys.dont_write_bytecode = True
+
 
 plugin_base = PluginBase(package='animationplugins')
 
@@ -118,6 +121,9 @@ class CSAnimationInput(object):
     def simple_animation(self, forKey, toValue, withDuration=None, **kwargs):
         banim = self.basic_animation(forKey, withDuration)
         for_layer = self.layer
+        
+        if 'source_only' in kwargs and kwargs['source_only']:
+            for_layer = self.layer.sourceLayer()
         if 'use_layer' in kwargs:
             for_layer = kwargs['use_layer']
         csanim = CSAnimation(for_layer, forKey, banim, **kwargs)
@@ -191,8 +197,9 @@ class CSAnimationInput(object):
         """
         Set the width of the input. This change saves/is permanent. It is applied to the underlying layer's bounds.
         """
-        kwargs['use_layer'] = self.layer.sourceLayer()
-        kwargs['extra_model'] = self.layer
+        if self.layer.sourceLayer() and self.layer.allowResize():
+            kwargs['use_layer'] = self.layer.sourceLayer()
+            kwargs['extra_model'] = self.layer
         return self.simple_animation('bounds.size.width', width, duration, **kwargs)
     
     def sizeHeight(self, height, duration=None, **kwargs):
@@ -258,7 +265,18 @@ class CSAnimationInput(object):
         nsize = NSSize(csize.width+x, csize.height+y)
         return self.simple_animation('transform.translation', NSValue.valueWithSize_(nsize), duration, **kwargs)
     
-    
+    def translateCenter(self, duration=None, **kwargs):
+        """
+            Translate to the center of the layout. This translate is slight different from the other translate animations; it moves the input's CENTER to the center of the layout. The final result of this translation is not permanent/saved. If you translate an input and then manually move it via the UI or via the move* functions, it may not restore/go live in the exact position it appears in the layout. Use caution.
+            """
+        rootLayer = self.layer.superlayer()
+        rootWidth = rootLayer.bounds().size.width
+        rootHeight = rootLayer.bounds().size.height
+        #we want to move our center to root center. do anchor point correction..
+        new_x = rootWidth * 0.5 - self.animationLayer.frame().size.width * 0.5
+        new_y = rootHeight * 0.5 - self.animationLayer.frame().size.height * 0.5
+        return self.translateTo(new_x, new_y, duration, **kwargs)
+
     def moveX(self, move_x, duration=None, **kwargs):
         """
         Move the input's X coordinate by move_x units. This change is permanent/saved. If you want non-saved move use the translate* animations
@@ -390,7 +408,7 @@ class CSAnimationInput(object):
 
     def __hidden_complete__(self, animation, yesno):
         animation.set_model_value()
-        self.layer.setHidden_(yesno)
+        animation.target.setHidden_(yesno)
     
     def hidden(self, yesno, duration=None, **kwargs):
         ret = self.simple_animation('hidden', yesno, duration, **kwargs)
@@ -424,6 +442,64 @@ class CSAnimationInput(object):
         """
         return self.simple_animation('zPosition', zpos, duration, **kwargs)
 
+    def __calculateRelativeMove(self, toInput, **kwargs):
+        new_coords = self.animationLayer.frame().origin
+        my_size = self.animationLayer.bounds().size
+        if 'left' in kwargs:
+            l_space = kwargs['left']
+            new_coords.x = toInput.minX-my_size.width-l_space
+        elif 'right' in kwargs:
+            r_space = kwargs['right']
+            new_coords.x = toInput.maxX+r_space
+        
+        if 'top' in kwargs:
+            t_space = kwargs['top']
+            new_coords.y = toInput.maxY+t_space
+        elif 'bottom' in kwargs:
+            b_space = kwargs['bottom']
+            new_coords.y = toInput.minY-my_size.height-b_space
+        
+        if 'offsetX' in kwargs:
+            ex_space = kwargs['offsetX']
+            new_coords.x = toInput.minX+ex_space
+
+        if 'offsetY' in kwargs:
+            ex_space = kwargs['offsetY']
+            new_coords.y = toInput.minY+ex_space
+        return new_coords
+            
+
+
+    def translateRelativeTo(self, toInput, duration=None, **kwargs):
+        """
+            Translates this input relative to toInput. The following keyword arguments describe positioning options:
+            
+            left=<margin>: The input is positioned so that its maximum X coordinate is equal to the x coordinate of toInput's origin. If <margin> is greater than zero, the input is positioned offset <margin> pixels from toInput.
+            right=<margin>: The input is positioned so that its origin x coordinate is equal to the maximum x coordinate of toInput If <margin> is greater than zero, the input is positioned offset <margin> pixels from toInput.
+            bottom=<margin>: The input is positioned so that its maximum Y coordinate is equal to the y coordinate of toInput's origin. If <margin> is greater than zero, the input is positioned offset <margin> pixels from toInput.
+            top=<margin>: The input is positioned so that its origin y coordinate is equal to the maximum y coordinate of toInput If <margin> is greater than zero, the input is positioned offset <margin> pixels from toInput.
+            
+            offsetX=<value>: The input is positioned so that its origin X coordinate is equal to toInput.minX+<value>
+            
+            offsetY=<value>: The input is positioned so that its origin Y coordinate is equal to toInput.minY+<value>
+            
+            
+            Positioning an input next to some other input typically requires TWO of the above arguments to properly set both the x and y position of the input. Say you have two inputs, input1 and input2. Both are the same size. You wish to move input1 such that it is directly to the left of input2. Your end state looks like the bad ascii diagram below.
+            
+            +=========+=========+
+            |         |         |
+            | input1  |  input2 |
+            |         |         |
+            |         |         |
+            +=========+=========+
+            
+            The animation to do this would be: input1.translateRelativeTo(input2, 1.5, left=0, offsetY=0)
+            """
+
+        new_coords = self.__calculateRelativeMove(toInput, **kwargs)
+        return self.translateTo(new_coords.x, new_coords.y, duration, **kwargs)
+
+
     def moveRelativeTo(self, toInput, duration=None, **kwargs):
         """
         Moves this input relative to toInput. The following keyword arguments describe positioning options:
@@ -449,30 +525,8 @@ class CSAnimationInput(object):
              
              The animation to do this would be: input1.moveRelativeTo(input2, 1.5, left=0, offsetY=0)
         """
-        new_coords = self.animationLayer.frame().origin
-        my_size = self.animationLayer.bounds().size
-        if 'left' in kwargs:
-            l_space = kwargs['left']
-            new_coords.x = toInput.minX-my_size.width-l_space
-        elif 'right' in kwargs:
-            r_space = kwargs['right']
-            new_coords.x = toInput.maxX+r_space
-
-        if 'top' in kwargs:
-            t_space = kwargs['top']
-            new_coords.y = toInput.maxY+t_space
-        elif 'bottom' in kwargs:
-            b_space = kwargs['bottom']
-            new_coords.y = toInput.minY-my_size.height-b_space
+        new_coords = self.__calculateRelativeMove(toInput, **kwargs)
         
-        if 'offsetX' in kwargs:
-            ex_space = kwargs['offsetX']
-            new_coords.x = toInput.minX+ex_space
-        
-        if 'offsetY' in kwargs:
-            ex_space = kwargs['offsetY']
-            new_coords.y = toInput.minY+ex_space
-    
         return self.moveTo(new_coords.x, new_coords.y, duration, **kwargs)
 
 

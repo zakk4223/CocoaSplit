@@ -1,5 +1,5 @@
 from uuid import uuid4
-from Quartz import CATransaction
+from Quartz import CATransaction,CAMediaTimingFunction
 from Foundation import NSLog
 
 

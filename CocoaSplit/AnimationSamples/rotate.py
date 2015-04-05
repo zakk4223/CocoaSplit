@@ -47,3 +47,4 @@ def do_animation(inputs, duration):
         # 3) the negative angle causes the source to rotate in the opposite direction as the previous rotations
         source1.rotate(-360, 2.5, repeatcount=3)
         source2.rotate(-360, 2.5, repeatcount=3)
+

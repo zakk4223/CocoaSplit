@@ -38,10 +38,9 @@
 {
     CATextLayer *newLayer = [CATextLayer layer];
     newLayer.string = _attribString;
-    newLayer.backgroundColor = CGColorCreateGenericRGB(1, 0, 0, 1);
     
     newLayer.bounds = CGRectMake(0.0, 0.0, _attribString.size.width, _attribString.size.height);
-
+    newLayer.alignmentMode = kCAAlignmentRight;
     return newLayer;
 }
 

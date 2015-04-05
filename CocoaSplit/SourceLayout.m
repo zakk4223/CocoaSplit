@@ -348,7 +348,9 @@
     
     [delSource willDelete];
     
-    [self.sourceList removeObject:delSource];
+    [[self mutableArrayValueForKey:@"sourceList" ] removeObject:delSource];
+
+    //[self.sourceList removeObject:delSource];
     [delSource.layer removeFromSuperlayer];
 
     [CATransaction commit];
@@ -364,12 +366,13 @@
     newSource.sourceLayout = self;
     newSource.is_live = self.isActive;
     
-    [self.sourceList addObject:newSource];
+    [[self mutableArrayValueForKey:@"sourceList" ] addObject:newSource];
+
+    
     [self.rootLayer addSublayer:newSource.layer];
     [CATransaction commit];
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputAdded object:newSource userInfo:nil];
 }
-
 
 
 -(void) setIsActive:(bool)isActive

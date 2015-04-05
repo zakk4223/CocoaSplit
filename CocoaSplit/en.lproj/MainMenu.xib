@@ -1527,9 +1527,9 @@
                                                                                                     </menu>
                                                                                                 </popUpButtonCell>
                                                                                                 <connections>
-                                                                                                    <binding destination="M8o-XP-qs3" name="selectedObject" keyPath="objectValue.value" previousBinding="0Ia-hp-6uQ" id="UAv-0Z-6i0"/>
-                                                                                                    <binding destination="816" name="content" keyPath="self.stagingPreviewView.sourceLayout.sourceList" id="4l0-0n-uaC"/>
-                                                                                                    <binding destination="816" name="contentValues" keyPath="self.stagingPreviewView.sourceLayout.sourceList.name" previousBinding="4l0-0n-uaC" id="0Ia-hp-6uQ"/>
+                                                                                                    <binding destination="816" name="content" keyPath="self.stagingPreviewView.sourceLayout.sourceList" id="Buo-tz-Ziz"/>
+                                                                                                    <binding destination="816" name="contentValues" keyPath="self.stagingPreviewView.sourceLayout.sourceList.name" previousBinding="Buo-tz-Ziz" id="0Yr-JI-iLJ"/>
+                                                                                                    <binding destination="M8o-XP-qs3" name="selectedObject" keyPath="objectValue.value" previousBinding="0Yr-JI-iLJ" id="cFk-iE-7bM"/>
                                                                                                 </connections>
                                                                                             </popUpButton>
                                                                                         </subviews>
