@@ -86,13 +86,15 @@
             }
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 @try {
-                    [CATransaction begin];
                     [runner runAnimation:anim.module_name forInput:inputMap withSuperlayer:self.rootLayer];
-                    [CATransaction commit];
                 }
                 @catch (NSException *exception) {
                     NSLog(@"Animation module %@ failed with exception: %@: %@", anim.module_name, [exception name], [exception reason]);
                 }
+                @finally {
+                    [CATransaction commit];
+                }
+                
             });
         }
     }
