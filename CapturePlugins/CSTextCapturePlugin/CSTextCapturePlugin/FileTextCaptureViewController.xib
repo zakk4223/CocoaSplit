@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14C109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14D131" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6250"/>
@@ -17,9 +17,9 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lbh-p4-FGF">
-                    <rect key="frame" x="18" y="235" width="26" height="17"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="File" id="nrh-Mx-3qK">
-                        <font key="font" metaFont="system"/>
+                    <rect key="frame" x="18" y="235" width="26" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="File" id="nrh-Mx-3qK">
+                        <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
@@ -45,8 +45,63 @@
                         <action selector="chooseFile:" target="-2" id="46e-pA-JfF"/>
                     </connections>
                 </button>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WBW-sP-wFK">
+                    <rect key="frame" x="18" y="213" width="85" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Line count limit" id="ZG4-WY-7mm">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cBX-Lj-ak6">
+                    <rect key="frame" x="17" y="188" width="110" height="20"/>
+                    <buttonCell key="cell" type="check" title="Strip newlines" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="2tn-p6-3LN">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="vHC-Iv-oOo" name="value" keyPath="selection.collapseLines" id="vzF-pa-k8i"/>
+                    </connections>
+                </button>
+                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hlq-PY-7Wy">
+                    <rect key="frame" x="109" y="211" width="42" height="19"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="WLV-Vh-kAN">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="vHC-Iv-oOo" name="value" keyPath="selection.lineLimit" id="gGy-yb-GZH"/>
+                    </connections>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nOa-ne-GDf">
+                    <rect key="frame" x="18" y="167" width="57" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Alignment" id="X3j-53-zXO">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mC2-P3-uhz">
+                    <rect key="frame" x="78" y="162" width="101" height="22"/>
+                    <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="jej-IE-EGl" id="cOz-ob-dg4">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" id="y2G-Rx-rJv">
+                            <items>
+                                <menuItem title="Item 1" state="on" id="jej-IE-EGl"/>
+                                <menuItem title="Item 2" id="CTq-on-EtC"/>
+                                <menuItem title="Item 3" id="Vh2-7V-N58"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="IT2-zX-kAI" name="content" keyPath="arrangedObjects" id="mwG-KR-VHa"/>
+                        <binding destination="vHC-Iv-oOo" name="selectedValue" keyPath="selection.alignmentMode" previousBinding="mwG-KR-VHa" id="jLo-zH-hDC"/>
+                    </connections>
+                </popUpButton>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oFW-Nm-pc1">
-                    <rect key="frame" x="15" y="144" width="80" height="28"/>
+                    <rect key="frame" x="15" y="133" width="80" height="28"/>
                     <buttonCell key="cell" type="push" title="Font" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="TNn-V3-TI6">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -59,35 +114,6 @@
                         </connections>
                     </buttonCell>
                 </button>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WBW-sP-wFK">
-                    <rect key="frame" x="18" y="209" width="99" height="17"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Line count limit" id="ZG4-WY-7mm">
-                        <font key="font" metaFont="system"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cBX-Lj-ak6">
-                    <rect key="frame" x="18" y="185" width="109" height="18"/>
-                    <buttonCell key="cell" type="check" title="Strip newlines" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="2tn-p6-3LN">
-                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <binding destination="vHC-Iv-oOo" name="value" keyPath="selection.collapseLines" id="vzF-pa-k8i"/>
-                    </connections>
-                </button>
-                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hlq-PY-7Wy">
-                    <rect key="frame" x="123" y="207" width="42" height="19"/>
-                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="WLV-Vh-kAN">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="vHC-Iv-oOo" name="value" keyPath="selection.lineLimit" id="gGy-yb-GZH"/>
-                    </connections>
-                </textField>
             </subviews>
         </customView>
         <objectController id="vHC-Iv-oOo" userLabel="CaptureObjectController">
@@ -95,6 +121,11 @@
                 <binding destination="-2" name="contentObject" keyPath="self.captureObj" id="uDK-Qr-3L6"/>
             </connections>
         </objectController>
+        <arrayController id="IT2-zX-kAI" userLabel="alignmentModesController">
+            <connections>
+                <binding destination="-2" name="contentArray" keyPath="self.textAlignmentModes" id="iTs-hl-XRS"/>
+            </connections>
+        </arrayController>
         <userDefaultsController representsSharedInstance="YES" id="8PR-z5-eHo"/>
     </objects>
 </document>

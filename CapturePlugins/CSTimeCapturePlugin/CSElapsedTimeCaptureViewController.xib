@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14C109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14D131" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6250"/>
     </dependencies>
@@ -15,16 +15,6 @@
             <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lqi-1m-gF5">
-                    <rect key="frame" x="260" y="207" width="80" height="28"/>
-                    <buttonCell key="cell" type="push" title="Font" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Xvf-CA-VB5">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="openFontPanel:" target="-2" id="n38-VJ-WZ9"/>
-                    </connections>
-                </button>
                 <datePicker verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TPj-6z-FbI">
                     <rect key="frame" x="85" y="235" width="174" height="22"/>
                     <datePickerCell key="cell" controlSize="small" borderStyle="bezel" alignment="left" id="Ere-4M-0ee">
@@ -98,6 +88,42 @@
                         <binding destination="2L5-3h-3sg" name="value" keyPath="selection.restartWhenLive" id="NPO-4b-17A"/>
                     </connections>
                 </button>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="V00-8B-roG">
+                    <rect key="frame" x="18" y="167" width="57" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Alignment" id="F8t-1w-ffk">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5Wp-iA-zor">
+                    <rect key="frame" x="78" y="162" width="101" height="22"/>
+                    <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="MVw-WO-mOh" id="zHB-em-x0A">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" id="FAt-G5-IrR">
+                            <items>
+                                <menuItem title="Item 1" state="on" id="MVw-WO-mOh"/>
+                                <menuItem title="Item 2" id="iMz-YR-CB5"/>
+                                <menuItem title="Item 3" id="Sjv-Yh-0WJ"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="yM3-TW-FMT" name="content" keyPath="arrangedObjects" id="uWC-Xs-d9E"/>
+                        <binding destination="2L5-3h-3sg" name="selectedValue" keyPath="selection.alignmentMode" previousBinding="uWC-Xs-d9E" id="tI4-ni-uR3"/>
+                    </connections>
+                </popUpButton>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lqi-1m-gF5">
+                    <rect key="frame" x="15" y="133" width="80" height="28"/>
+                    <buttonCell key="cell" type="push" title="Font" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Xvf-CA-VB5">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="openFontPanel:" target="-2" id="n38-VJ-WZ9"/>
+                    </connections>
+                </button>
             </subviews>
         </customView>
         <objectController id="2L5-3h-3sg">
@@ -105,5 +131,10 @@
                 <binding destination="-2" name="contentObject" keyPath="self.captureObj" id="Dej-uW-cGf"/>
             </connections>
         </objectController>
+        <arrayController id="yM3-TW-FMT" userLabel="alignmentModesController">
+            <connections>
+                <binding destination="-2" name="contentArray" keyPath="self.textAlignmentModes" id="rbA-l5-NXL"/>
+            </connections>
+        </arrayController>
     </objects>
 </document>

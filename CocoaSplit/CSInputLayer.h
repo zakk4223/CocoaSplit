@@ -16,6 +16,7 @@
     CAReplicatorLayer *_yLayer;
     
     CABasicAnimation *_scrollAnimation;
+    CAConstraintLayoutManager *_realLayoutManager;
 }
 
 
@@ -30,9 +31,5 @@
 
 -(void)setSourceLayer:(CALayer *)sourceLayer withTransition:(CATransition *)transition;
 -(void)resizeSourceLayer:(CGRect)newFrame oldFrame:(CGRect)oldFrame;
-
-
-
-
 
 @end

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14C109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14D131" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6250"/>
     </dependencies>
@@ -39,16 +39,6 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sUI-lW-qoZ">
-                    <rect key="frame" x="285" y="200" width="80" height="28"/>
-                    <buttonCell key="cell" type="push" title="Font" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ihX-bA-Rhw">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="openFontPanel:" target="-2" id="qcY-j0-7oL"/>
-                    </connections>
-                </button>
                 <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gra-w0-u3c">
                     <rect key="frame" x="111" y="206" width="171" height="19"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="WbU-sf-TwA">
@@ -78,6 +68,42 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PQf-AP-ICi">
+                    <rect key="frame" x="18" y="182" width="57" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Alignment" id="0IF-6s-qTl">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6py-t2-oJt">
+                    <rect key="frame" x="78" y="177" width="101" height="22"/>
+                    <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="gaF-wc-8IS" id="KBD-Bu-Rn8">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" id="dMt-ho-gOa">
+                            <items>
+                                <menuItem title="Item 1" state="on" id="gaF-wc-8IS"/>
+                                <menuItem title="Item 2" id="0Dd-3g-e3v"/>
+                                <menuItem title="Item 3" id="DEj-zs-AQu"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="4mR-Ww-jdv" name="content" keyPath="arrangedObjects" id="Sqj-9H-xWr"/>
+                        <binding destination="dGP-MJ-0RA" name="selectedValue" keyPath="selection.alignmentMode" previousBinding="Sqj-9H-xWr" id="Uee-Ju-pW1"/>
+                    </connections>
+                </popUpButton>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sUI-lW-qoZ">
+                    <rect key="frame" x="15" y="148" width="80" height="28"/>
+                    <buttonCell key="cell" type="push" title="Font" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ihX-bA-Rhw">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="openFontPanel:" target="-2" id="qcY-j0-7oL"/>
+                    </connections>
+                </button>
             </subviews>
         </customView>
         <objectController id="dGP-MJ-0RA">
@@ -85,6 +111,11 @@
                 <binding destination="-2" name="contentObject" keyPath="self.captureObj" id="pyI-qB-wko"/>
             </connections>
         </objectController>
+        <arrayController id="4mR-Ww-jdv" userLabel="alignmentModesController">
+            <connections>
+                <binding destination="-2" name="contentArray" keyPath="self.textAlignmentModes" id="G9F-UX-FvT"/>
+            </connections>
+        </arrayController>
         <userDefaultsController representsSharedInstance="YES" id="t3A-3M-hDK"/>
     </objects>
 </document>

@@ -14,7 +14,6 @@
 @dynamic animateDummy;
 
 @synthesize sourceLayer = _sourceLayer;
-@synthesize allowResize = _allowResize;
 @synthesize scrollXSpeed = _scrollXSpeed;
 @synthesize scrollYSpeed = _scrollYSpeed;
 @synthesize cropRect = _cropRect;
@@ -32,29 +31,49 @@
     
     [CATransaction begin];
     [CATransaction setDisableActions:YES];
-
+    
     if (self.allowResize)
     {
-        _sourceLayer.position = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2);
-
         _sourceLayer.bounds = self.bounds;
+        _sourceLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
+
+
     } else {
-        _sourceLayer.position = CGPointMake(_sourceLayer.bounds.size.width/2, _sourceLayer.bounds.size.height/2);
+        
+        //This is mostly for CATextLayer hax, but CALayer allows the setting for arbitrary keyvalues, so....
+        
+        _sourceLayer.autoresizingMask = kCALayerNotSizable;
+        
+        NSString *alignment = [_sourceLayer valueForKey:@"alignmentMode"];
+        
+        if ([alignment isEqualToString:kCAAlignmentRight])
+        {
+            
+            _sourceLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
+
+            float newX = NSMaxX(self.bounds)-_sourceLayer.bounds.size.width;
+            
+            _sourceLayer.position = CGPointMake(newX, 0);
+        } else if ([alignment isEqualToString:kCAAlignmentCenter]) {
+            float newX = NSMidX(self.bounds)-_sourceLayer.bounds.size.width/2;
+            _sourceLayer.position = CGPointMake(newX, 0);
+        } else {
+            _sourceLayer.position = CGPointMake(0.0, 0.0);
+        }
     }
     
-
     [self resizeSourceLayer:self.frame oldFrame:CGRectZero];
     [CATransaction commit];
 
     
 }
 
+
 -(instancetype)init
 {
     if (self = [super init])
     {
         
-        //self.needsDisplayOnBoundsChange = YES;
         self.minificationFilter = kCAFilterTrilinear;
         self.magnificationFilter = kCAFilterTrilinear;
         self.disableAnimation = NO;
@@ -68,23 +87,16 @@
         _cropRect = CGRectZero;
         
         
-        //self.layoutManager = [CSInputLayoutManager layoutManager];
         
         _allowResize = YES;
         _sourceLayer = [CALayer layer];
-        //_sourceLayer.anchorPoint = CGPointMake(0.0, 0.0);
-        
-        //_sourceLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
-        //_xLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
-        //_yLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
-
+        _sourceLayer.anchorPoint = CGPointMake(0.0, 0.0);
         _sourceLayer.contentsGravity = kCAGravityResizeAspect;
         _sourceLayer.frame = CGRectMake(0, 0, 1, 1);
         _scrollAnimation = [CABasicAnimation animation];
         _scrollAnimation.repeatCount = HUGE_VALF;
         self.zPosition = 0;
         _xLayer.layoutManager = self;
-        
         
         [_xLayer addSublayer:_sourceLayer];
         [_yLayer addSublayer:_xLayer];
@@ -100,7 +112,7 @@
     {
         self.sublayers = nil;
         [CSCaptureBase layoutModification:^{
-            [self addSublayer:_yLayer];
+            //[self addSublayer:_yLayer];
         }];
 
     }
@@ -208,25 +220,6 @@
     
 }
 
--(bool)allowResize
-{
-    return _allowResize;
-}
-
--(void)setAllowResize:(bool)allowResize
-{
-    if (allowResize)
-    {
-        self.sourceLayer.autoresizingMask = kCALayerHeightSizable | kCALayerWidthSizable;
-    } else {
-        self.sourceLayer.autoresizingMask = kCALayerNotSizable;
-    }
-    
-    _allowResize = allowResize;
-}
-
-
-
 
 -(CALayer *)sourceLayer
 {
@@ -300,10 +293,15 @@
     _sourceLayer = sourceLayer;
 
     [self setNeedsLayout];
+    /*
     if (!self.allowResize)
     {
         sourceLayer.position = CGPointMake(sourceLayer.bounds.size.width/2, sourceLayer.bounds.size.height/2);
-    }
+    } else {
+        sourceLayer.bounds = self.bounds;
+
+        sourceLayer.position = CGPointMake(sourceLayer.bounds.size.width/2, sourceLayer.bounds.size.height/2);
+    }*/
 
     [self setupXAnimation:_scrollXSpeed];
     [self setupYAnimation:_scrollYSpeed];
@@ -313,56 +311,10 @@
 
 
 
--(void)calculateCropTransform
-{
-    
-    
-    if (CGRectIsEmpty(_cropRect))
-    {
-        self.sourceLayer.transform = CATransform3DIdentity;
-        return;
-    }
-    
-    //cropRect is like contentsRect, i.e 0.0 -> 1.0
-
-    
-    CGRect currentBounds = self.sourceLayer.bounds;
-    CGRect newBounds;
-    CATransform3D newTransform = CATransform3DIdentity;
-    
-    newBounds.origin.x = currentBounds.size.width * _cropRect.origin.x;
-    newBounds.origin.y = currentBounds.size.height * _cropRect.origin.y;
-    newBounds.size.width = currentBounds.size.width * _cropRect.size.width;
-    newBounds.size.height = currentBounds.size.height * _cropRect.size.height;
-    CGFloat nmidX, nmidY, omidX, omidY;
-    
-    omidX = CGRectGetMinX(currentBounds);
-    omidY = CGRectGetMinY(currentBounds);
-    nmidX = CGRectGetMinX(newBounds);
-    nmidY = CGRectGetMinY(newBounds);
-    
-    CGFloat scaleX, scaleY;
-    scaleX = currentBounds.size.width / newBounds.size.width;
-    scaleY = currentBounds.size.height / newBounds.size.height;
-    
-    CGFloat useScale = scaleX > scaleY ? scaleX : scaleY;
-    
-    NSLog(@"X ADJUST %f", (omidX-nmidX)*scaleX);
-    
-    newTransform = CATransform3DTranslate(newTransform, (omidX-nmidX)*scaleX, ((omidY-nmidY)*scaleY), 0);
-
-    newTransform = CATransform3DScale(newTransform, useScale, useScale, 1);
-
-    self.sourceLayer.transform = newTransform;
-}
 
 
 -(void)setCropRect:(CGRect)cropRect
 {
-    /*
-    _cropRect = cropRect;
-    [self calculateCropTransform];
-     */
     self.sourceLayer.contentsRect = cropRect;
 }
 
@@ -372,16 +324,6 @@
     return self.sourceLayer.contentsRect;
 }
 
-
--(void)setFFrame:(CGRect)frame
-{
-    
-    CGRect oldFrame = self.frame;
-    [super setFrame:frame];
-    //[self resizeSourceLayer:frame oldFrame:oldFrame];
-    [self setNeedsDisplay];
-    
-}
 
 -(void)resizeSourceLayer:(CGRect)newFrame oldFrame:(CGRect)oldFrame
 {

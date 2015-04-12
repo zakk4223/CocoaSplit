@@ -27,6 +27,8 @@
 @property (strong) NSColor *foregroundColor;
 @property (assign) bool propertiesChanged;
 @property (strong) NSDictionary *fontAttributes;
+@property (strong) NSString *alignmentMode;
+
 
 @end
 

@@ -19,6 +19,7 @@
 @implementation CSCaptureBase
 
 @synthesize activeVideoDevice = _activeVideoDevice;
+@synthesize allowScaling = _allowScaling;
 
 +(NSString *) label
 {
@@ -211,6 +212,7 @@
 -(CALayer *)createNewLayerForInput:(id)inputsrc
 {
     CALayer *newLayer = [self createNewLayer];
+    [newLayer setValue:@(!self.allowScaling) forKey:@"csnoResize"];
     @synchronized(self)
     {
         [_allLayers setObject:newLayer forKey:inputsrc];
@@ -252,6 +254,19 @@
 -(CALayer *)layerForInput:(id)inputsrc
 {
     return [_allLayers objectForKey:inputsrc];
+}
+
+-(void)setAllowScaling:(bool)allowScaling
+{
+    _allowScaling = allowScaling;
+    [self updateLayersWithBlock:^(CALayer *layer) {
+        [layer setValue:@(!allowScaling) forKey:@"csnoResize"];
+    }];
+}
+
+-(bool)allowScaling
+{
+    return _allowScaling;
 }
 
 

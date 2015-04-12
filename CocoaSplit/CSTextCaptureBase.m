@@ -29,6 +29,7 @@
         _font = [NSFont fontWithName:@"Helvetica" size:50];
         _fontAttributes = [NSDictionary dictionaryWithObject:[NSColor whiteColor] forKey:NSForegroundColorAttributeName];
         self.allowDedup = NO;
+        self.alignmentMode = kCAAlignmentNatural;
     }
     
     return self;
@@ -40,7 +41,7 @@
     newLayer.string = _attribString;
     
     newLayer.bounds = CGRectMake(0.0, 0.0, _attribString.size.width, _attribString.size.height);
-    newLayer.alignmentMode = kCAAlignmentRight;
+    newLayer.alignmentMode = self.alignmentMode;
     return newLayer;
 }
 
@@ -97,9 +98,18 @@
         strAttrs[NSFontAttributeName] = self.font;
         _attribString = [[NSAttributedString alloc] initWithString:self.text attributes:strAttrs];
         
+        if ([self.alignmentMode isEqualToString:kCAAlignmentCenter] || [self.alignmentMode isEqualToString:kCAAlignmentRight])
+        {
+            self.allowScaling = YES;
+        } else {
+            self.allowScaling = NO;
+        }
+
         [self updateLayersWithBlock:^(CALayer *layer) {
             layer.bounds = CGRectMake(0.0, 0.0, _attribString.size.width, _attribString.size.height);
             ((CATextLayer *)layer).string = _attribString;
+            ((CATextLayer *)layer).alignmentMode = self.alignmentMode;
+            
             [CATransaction commit];
  
         }];
@@ -133,7 +143,7 @@
 
 + (NSSet *)keyPathsForValuesAffectingPropertiesChanged
 {
-    return [NSSet setWithObjects:@"text", @"font", @"fontAttributes", nil];
+    return [NSSet setWithObjects:@"text", @"font", @"fontAttributes", @"alignmentMode", nil];
 }
 
 

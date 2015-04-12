@@ -437,7 +437,8 @@ static NSArray *_sourceTypes = nil;
     cFilter.name = @"Chromakey";
     cFilter.enabled = NO;
     
-    self.layer.sourceLayer.filters = @[cFilter];
+    self.layer.filters = @[cFilter];
+                         
     
     
     
@@ -916,10 +917,13 @@ static NSArray *_sourceTypes = nil;
                 self.backgroundColor = nil;
                 _userBackground = NO;
             }
-            self.layer.allowResize = self.videoInput.allowScaling;
+
+        self.layer.allowResize = self.videoInput.allowScaling;
 
             self.layer.sourceLayer = _currentLayer;
     }
+    
+
 }
 
 

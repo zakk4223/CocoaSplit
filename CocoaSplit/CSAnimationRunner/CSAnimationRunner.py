@@ -197,31 +197,39 @@ class CSAnimationInput(object):
         """
         Set the width of the input. This change saves/is permanent. It is applied to the underlying layer's bounds.
         """
+
+        ret = self.simple_animation('bounds.size.width', width, duration, **kwargs)
+
         if self.layer.sourceLayer() and self.layer.allowResize():
             kwargs['use_layer'] = self.layer.sourceLayer()
-            kwargs['extra_model'] = self.layer
-        return self.simple_animation('bounds.size.width', width, duration, **kwargs)
+            self.simple_animation('bounds.size.width', width, duration, **kwargs)
+        return ret
     
     def sizeHeight(self, height, duration=None, **kwargs):
         """
         Set the height of the input. This change saves/is permanent. It is applied to the underlying layer's bounds.
         """
-        kwargs['use_layer'] = self.layer.sourceLayer()
-        kwargs['extra_model'] = self.layer
-        return self.simple_animation('bounds.size.height', height, duration, **kwargs)
+        ret = self.simple_animation('bounds.size.height', width, duration, **kwargs)
+        
+        if self.layer.sourceLayer() and self.layer.allowResize():
+            kwargs['use_layer'] = self.layer.sourceLayer()
+            self.simple_animation('bounds.size.height', width, duration, **kwargs)
+        return ret
+
 
     def size(self, width, height, duration=None, **kwargs):
         """
         Set the width and height of the input. This change saves/is permanent. It is applied to the underlying layer's bounds.
         """
         current_bounds = self.animationLayer.bounds()
-        oldwidth = current_bounds.size.width
         current_bounds.size.width = width
         current_bounds.size.height = height
         rectval = NSValue.valueWithRect_(current_bounds)
-        kwargs['use_layer'] = self.layer.sourceLayer()
-        kwargs['extra_model'] = self.layer
-        return self.simple_animation('bounds', rectval, duration, **kwargs)
+        ret = self.simple_animation('bounds', rectval, duration, **kwargs)
+        if self.layer.sourceLayer() and self.layer.allowResize():
+            kwargs['use_layer'] = self.layer.sourceLayer()
+            self.simple_animation('bounds', rectval, duration, **kwargs)
+        return ret
     
     
     def translateYTo(self, y, duration=None, **kwargs):

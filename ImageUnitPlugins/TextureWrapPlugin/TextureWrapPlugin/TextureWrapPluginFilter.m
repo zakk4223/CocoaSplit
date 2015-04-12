@@ -65,13 +65,12 @@ static CIKernel *_TextureWrapPluginFilterKernel = nil;
 {
     CISampler *src;
     
-    NSLog(@"CI IMAGE BOUNDS %@", NSStringFromRect(inputImage.extent));
     src = [CISampler samplerWithImage:inputImage];
-    //src = [CISampler samplerWithImage:inputImage keysAndValues:kCISamplerWrapMode, kCISamplerWrapClamp, nil];
+    //src = [CISampler samplerWithImage:inputImage keysAndValues:kCISamplerWrapMode, kCISamplerWrapClamp,kCISamplerFilterMode, kCISamplerFilterNearest, nil];
     
     
-    return [self apply:_TextureWrapPluginFilterKernel, src,
-            inputXOffset,inputYOffset,kCIApplyOptionDefinition, [src definition], nil];
+    return [self apply:_TextureWrapPluginFilterKernel, src,src,
+            inputXOffset,inputYOffset,inputMaxX, inputMaxY, kCIApplyOptionDefinition, [src definition], nil];
 }
 
 @end

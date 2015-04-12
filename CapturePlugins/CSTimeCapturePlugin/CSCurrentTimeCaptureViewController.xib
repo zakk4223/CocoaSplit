@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14C109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14D131" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6250"/>
     </dependencies>
@@ -15,18 +15,8 @@
             <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qhv-2g-h22">
-                    <rect key="frame" x="15" y="150" width="80" height="28"/>
-                    <buttonCell key="cell" type="push" title="Font" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qUM-7Z-R73">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="openFontPanel:" target="-2" id="vBw-Ye-ZPT"/>
-                    </connections>
-                </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mJ6-t6-1hJ">
-                    <rect key="frame" x="20" y="184" width="42" height="14"/>
+                    <rect key="frame" x="18" y="184" width="42" height="14"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Format" id="LHn-zZ-ypp">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -100,6 +90,42 @@
                         <binding destination="vFt-xN-8xE" name="selectedObject" keyPath="selection.formatter.timeStyle" previousBinding="VE0-RS-hJq" id="nWL-yK-uU8"/>
                     </connections>
                 </popUpButton>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yaC-Kq-Qfn">
+                    <rect key="frame" x="18" y="158" width="57" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Alignment" id="FFc-yy-W2U">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bWP-4j-MUw">
+                    <rect key="frame" x="78" y="153" width="101" height="22"/>
+                    <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="mMG-57-1nf" id="D9N-Oh-od8">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" id="EfA-RE-w5U">
+                            <items>
+                                <menuItem title="Item 1" state="on" id="mMG-57-1nf"/>
+                                <menuItem title="Item 2" id="Ch0-zY-nbx"/>
+                                <menuItem title="Item 3" id="teU-i8-6nf"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="Iqd-Qr-QgD" name="content" keyPath="arrangedObjects" id="mKj-nO-QT9"/>
+                        <binding destination="vFt-xN-8xE" name="selectedValue" keyPath="selection.alignmentMode" previousBinding="mKj-nO-QT9" id="ncZ-ZR-COc"/>
+                    </connections>
+                </popUpButton>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qhv-2g-h22">
+                    <rect key="frame" x="15" y="124" width="80" height="28"/>
+                    <buttonCell key="cell" type="push" title="Font" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qUM-7Z-R73">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="openFontPanel:" target="-2" id="vBw-Ye-ZPT"/>
+                    </connections>
+                </button>
             </subviews>
         </customView>
         <objectController id="vFt-xN-8xE">
@@ -113,5 +139,10 @@
                 <binding destination="-2" name="sortDescriptors" keyPath="self.styleSortDescriptors" id="cRJ-Jj-dxS"/>
             </connections>
         </dictionaryController>
+        <arrayController id="Iqd-Qr-QgD" userLabel="alignmentModesController">
+            <connections>
+                <binding destination="-2" name="contentArray" keyPath="self.textAlignmentModes" id="qjR-WP-h5M"/>
+            </connections>
+        </arrayController>
     </objects>
 </document>

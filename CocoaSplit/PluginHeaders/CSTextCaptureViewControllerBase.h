@@ -13,6 +13,8 @@
 @interface CSTextCaptureViewControllerBase : NSViewController <NSWindowDelegate>
 
 @property (weak) CSTextCaptureBase *captureObj;
+@property (strong) NSArray *textAlignmentModes;
+
 - (IBAction)openFontPanel:(id)sender;
 
 @end

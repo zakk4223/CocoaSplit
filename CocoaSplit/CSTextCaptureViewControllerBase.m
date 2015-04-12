@@ -14,6 +14,9 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        
+        self.textAlignmentModes = @[kCAAlignmentNatural, kCAAlignmentLeft, kCAAlignmentRight, kCAAlignmentCenter, kCAAlignmentJustified];
+        
         // Initialization code here.
     }
     return self;

@@ -243,8 +243,17 @@
 }
 
 
+
++(BOOL)needsDisplayForKey:(NSString *)key
+{
+    return YES;
+}
+
+
 -(void) drawInCGLContext:(CGLContextObj)ctx pixelFormat:(CGLPixelFormatObj)pf forLayerTime:(CFTimeInterval)t displayTime:(const CVTimeStamp *)ts
 {
+    
+    
     CIImageWrapper *wrappedImage = self.imageWrapper;
     
     CGLSetCurrentContext(ctx);
@@ -269,8 +278,10 @@
     }
 
     
-    CGRect useBounds = self.bounds;
+    
 
+    CGRect useBounds = self.bounds;
+    
     CIImage *croppedImage;
     
     
@@ -307,6 +318,7 @@
     if ([self.contentsGravity isEqualToString:kCAGravityResizeAspect])
     {
         
+
         float wr = useBounds.size.width / croppedImage.extent.size.width;
         float hr = useBounds.size.height / croppedImage.extent.size.height;
         
@@ -327,6 +339,8 @@
     
     
     
+    
+
     [_ciCtx drawImage:croppedImage inRect:inRect fromRect:croppedImage.extent];
 
 
