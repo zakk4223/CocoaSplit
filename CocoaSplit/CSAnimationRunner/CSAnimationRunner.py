@@ -244,7 +244,26 @@ class CSAnimationInput(object):
         current_bounds.size.width = width
         current_bounds.size.height = height
         rectval = NSValue.valueWithRect_(current_bounds)
+        
+        original_y = self.minY
+        original_height = self.height
+        original_x = self.minX
+        original_width = self.width
+
         ret = self.simple_animation('bounds', rectval, duration, **kwargs)
+        
+        
+        if 'anchorLeft' in kwargs and kwargs['anchorLeft']:
+            self.moveXTo(original_x, duration, **kwargs)
+        elif 'anchorRight' in kwargs and kwargs['anchorRight']:
+            self.moveX((original_width-self.width)/2, duration, **kwargs)
+
+        if 'anchorBottom' in kwargs and kwargs['anchorBottom']:
+            self.moveYTo(original_y, duration, **kwargs)
+        elif 'anchorTop' in kwargs and kwargs['anchorTop']:
+            self.moveY((original_height-self.height)/2, duration, **kwargs)
+
+
         if self.layer.sourceLayer() and self.layer.allowResize():
             kwargs['use_layer'] = self.layer.sourceLayer()
             self.simple_animation('bounds', rectval, duration, **kwargs)
