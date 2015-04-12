@@ -148,7 +148,7 @@ class CSAnimationInput(object):
         c_x = self.animationLayer.frame().origin.x
         c_y = self.animationLayer.frame().origin.y
         return NSPoint(x-c_x, y-c_y)
-    
+
     def waitAnimation(self, duration=0, **kwargs):
         """
         Wait for all in-progress animations on this input to complete before adding any more. 
@@ -198,7 +198,18 @@ class CSAnimationInput(object):
         Set the width of the input. This change saves/is permanent. It is applied to the underlying layer's bounds.
         """
 
+        original_x = self.minX
+        original_width = self.width
+        
         ret = self.simple_animation('bounds.size.width', width, duration, **kwargs)
+        
+        
+
+        if 'anchorLeft' in kwargs and kwargs['anchorLeft']:
+            self.moveXTo(original_x, duration, **kwargs)
+        elif 'anchorRight' in kwargs and kwargs['anchorRight']:
+            self.moveX((original_width-self.width)/2, duration, **kwargs)
+
 
         if self.layer.sourceLayer() and self.layer.allowResize():
             kwargs['use_layer'] = self.layer.sourceLayer()
@@ -209,11 +220,19 @@ class CSAnimationInput(object):
         """
         Set the height of the input. This change saves/is permanent. It is applied to the underlying layer's bounds.
         """
-        ret = self.simple_animation('bounds.size.height', width, duration, **kwargs)
+        
+        original_y = self.minY
+        original_height = self.height
+        ret = self.simple_animation('bounds.size.height', height, duration, **kwargs)
+        
+        if 'anchorBottom' in kwargs and kwargs['anchorBottom']:
+            self.moveYTo(original_y, duration, **kwargs)
+        elif 'anchorTop' in kwargs and kwargs['anchorTop']:
+            self.moveY((original_height-self.height)/2, duration, **kwargs)
         
         if self.layer.sourceLayer() and self.layer.allowResize():
             kwargs['use_layer'] = self.layer.sourceLayer()
-            self.simple_animation('bounds.size.height', width, duration, **kwargs)
+            self.simple_animation('bounds.size.height', height, duration, **kwargs)
         return ret
 
 
