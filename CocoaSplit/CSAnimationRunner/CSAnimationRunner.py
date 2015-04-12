@@ -206,9 +206,9 @@ class CSAnimationInput(object):
         
 
         if 'anchorLeft' in kwargs and kwargs['anchorLeft']:
-            self.moveXTo(original_x, duration, **kwargs)
+            self.moveX((width-original_width)/2, duration, **kwargs)
         elif 'anchorRight' in kwargs and kwargs['anchorRight']:
-            self.moveX((original_width-self.width)/2, duration, **kwargs)
+            self.moveX((original_width-width)/2, duration, **kwargs)
 
 
         if self.layer.sourceLayer() and self.layer.allowResize():
@@ -226,9 +226,9 @@ class CSAnimationInput(object):
         ret = self.simple_animation('bounds.size.height', height, duration, **kwargs)
         
         if 'anchorBottom' in kwargs and kwargs['anchorBottom']:
-            self.moveYTo(original_y, duration, **kwargs)
+            self.moveY((height-original_height)/2, duration, **kwargs)
         elif 'anchorTop' in kwargs and kwargs['anchorTop']:
-            self.moveY((original_height-self.height)/2, duration, **kwargs)
+            self.moveY((original_height-height)/2, duration, **kwargs)
         
         if self.layer.sourceLayer() and self.layer.allowResize():
             kwargs['use_layer'] = self.layer.sourceLayer()
@@ -254,14 +254,14 @@ class CSAnimationInput(object):
         
         
         if 'anchorLeft' in kwargs and kwargs['anchorLeft']:
-            self.moveXTo(original_x, duration, **kwargs)
+            self.moveX((width-original_width)/2, duration, **kwargs)
         elif 'anchorRight' in kwargs and kwargs['anchorRight']:
-            self.moveX((original_width-self.width)/2, duration, **kwargs)
+            self.moveX((original_width-width)/2, duration, **kwargs)
 
         if 'anchorBottom' in kwargs and kwargs['anchorBottom']:
-            self.moveYTo(original_y, duration, **kwargs)
+            self.moveY((height-original_height)/2, duration, **kwargs)
         elif 'anchorTop' in kwargs and kwargs['anchorTop']:
-            self.moveY((original_height-self.height)/2, duration, **kwargs)
+            self.moveY((original_height-height)/2, duration, **kwargs)
 
 
         if self.layer.sourceLayer() and self.layer.allowResize():
