@@ -308,7 +308,7 @@
         src.is_live = self.isActive;
         
         [self.rootLayer addSublayer:src.layer];
-        [self.sourceList addObject:src];
+        [[self mutableArrayValueForKey:@"sourceList" ] addObject:src];
     }
 
     [CATransaction commit];
