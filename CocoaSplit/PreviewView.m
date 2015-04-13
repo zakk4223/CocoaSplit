@@ -350,10 +350,12 @@
 
 -(void) buildSettingsMenu
 {
+    /*
     if (self.sourceSettingsMenu)
     {
         return;
     }
+     */
     
     NSMenuItem *tmp;
     self.sourceSettingsMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
@@ -368,15 +370,18 @@
     tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Delete" action:@selector(deleteInput:) keyEquivalent:@"" atIndex:4];
     tmp.target = self;
     tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Clone" action:@selector(cloneInputSource:) keyEquivalent:@"" atIndex:5];
-
-    
     tmp.target = self;
     
-
-    
-    
-    
+    if (self.selectedSource.parentInput)
+    {
+        tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Detach from parent" action:@selector(detachSource:) keyEquivalent:@"" atIndex:6];
+    } else {
+        tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Attach to underlying input" action:@selector(subLayerInputSource:) keyEquivalent:@"" atIndex:6];
+    }
+    tmp.target = self;
 }
+
+
 -(NSMenu *) buildSourceMenu
 {
     NSArray *sourceList = [self.sourceLayout sourceListOrdered];
@@ -528,7 +533,8 @@
 -(NSArray *)resizeRectsForSource:(InputSource *)inputSource withExtra:(float)withExtra
 {
     
-    NSRect layoutRect = inputSource.layoutPosition;
+    NSRect layoutRect = inputSource.globalLayoutPosition;
+    
     
     NSRect extraRect = NSInsetRect(layoutRect, -withExtra, -withExtra);
     
@@ -664,8 +670,8 @@
                 //Crop is expressed as a floating point number between 0.0 and 1.0, basically a percentage of that dimension.
                 //Convert appropriately.
                 
-                float x_crop = dx/self.selectedSource.layoutPosition.size.width;
-                float y_crop = dy/self.selectedSource.layoutPosition.size.height;
+                float x_crop = dx/self.selectedSource.globalLayoutPosition.size.width;
+                float y_crop = dy/self.selectedSource.globalLayoutPosition.size.height;
                 
                 
                 if (self.resizeType & kResizeRight)
@@ -699,7 +705,7 @@
                 
                 CGFloat new_width, new_height;
                 
-                NSRect sPosition = self.selectedSource.layoutPosition;
+                NSRect sPosition = self.selectedSource.globalLayoutPosition;
                 
                 new_width = sPosition.size.width;
                 new_height = sPosition.size.height;
@@ -757,7 +763,7 @@
         return;
     }
     
-    NSRect src_rect = self.selectedSource.layoutPosition;
+    NSRect src_rect = self.selectedSource.globalLayoutPosition;
 
     NSPoint s_lb_snap = src_rect.origin;
     NSPoint s_rt_snap = NSMakePoint(src_rect.origin.x+src_rect.size.width, src_rect.origin.y+src_rect.size.height);
@@ -915,6 +921,50 @@
 }
 
 
+-(void)detachSource:(id)sender
+{
+    NSMenuItem *item = (NSMenuItem *)sender;
+    InputSource *toDetach;
+    
+    if (item.representedObject)
+    {
+        toDetach = (InputSource *)item.representedObject;
+    } else {
+        toDetach = self.selectedSource;
+    }
+    
+    if (toDetach && toDetach.parentInput)
+    {
+        [((InputSource *)toDetach.parentInput) detachInput:toDetach];
+    }
+}
+
+
+-(void)subLayerInputSource:(id)sender
+{
+    NSMenuItem *item = (NSMenuItem *)sender;
+    InputSource *toSub;
+    
+    if (item.representedObject)
+    {
+        toSub = (InputSource *)item.representedObject;
+    } else {
+        toSub = self.selectedSource;
+    }
+
+    if (toSub)
+    {
+        
+        
+        InputSource *underSource = [self.sourceLayout sourceUnder:toSub];
+        if (underSource)
+        {
+            [underSource attachInput:toSub];
+        }
+    }
+}
+
+
 - (IBAction)cloneInputSource:(id)sender
 {
     
@@ -979,7 +1029,7 @@
     
     if (NSEqualRects(spawnRect, NSZeroRect))
     {
-        NSRect inputRect = [self windowRectforWorldRect:forInput.layoutPosition];
+        NSRect inputRect = [self windowRectforWorldRect:forInput.globalLayoutPosition];
         spawnRect = NSInsetRect(inputRect, inputRect.size.width/2-2.0f, inputRect.size.height/2-2.0f);
     }
     
@@ -1510,7 +1560,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
 
         glColor3f(0.0f, 0.0f, 1.0f);
-        NSRect my_rect = self.mousedSource.layoutPosition;
+        NSRect my_rect = self.mousedSource.globalLayoutPosition;
         outline_verts[0] = my_rect.origin.x;
         outline_verts[1] = my_rect.origin.y;
         outline_verts[2] = my_rect.origin.x+my_rect.size.width;

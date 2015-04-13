@@ -150,6 +150,9 @@ typedef enum resize_style_t {
 @property (assign) CGFloat borderWidth;
 @property (assign) CGFloat cornerRadius;
 @property (strong) NSColor *backgroundColor;
+@property (readonly) CGRect globalLayoutPosition;
+@property (strong) NSMutableArray *attachedInputs;
+@property (weak) id parentInput;
 
 
 -(void) updateOrigin:(CGFloat)x y:(CGFloat)y;
@@ -164,6 +167,10 @@ typedef enum resize_style_t {
 -(void)willDelete;
 -(void)clearBackground;
 -(CALayer *)animationLayer;
+-(void)makeSublayerOfLayer:(CALayer *)parentLayer;
+-(void)detachAllInputs;
+-(void)detachInput:(InputSource *)toDetach;
+-(void)attachInput:(InputSource *)toAttach;
 
 
 

@@ -111,7 +111,6 @@
 -(void)addAnimation:(NSDictionary *)animation
 {
     CSAnimationItem *newItem = [[CSAnimationItem alloc] initWithDictionary:animation moduleName:animation[@"module"]];
-    NSLog(@"ADDING %@", newItem);
     [[self mutableArrayValueForKey:@"animationList"] addObject:newItem];
     
     
@@ -262,7 +261,10 @@
         src.sourceLayout = self;
         src.is_live = self.isActive;
         
-        [self.transitionLayer addSublayer:src.layer];
+        if (!src.layer.superlayer)
+        {
+            [self.transitionLayer addSublayer:src.layer];
+        }
     }
     
 
@@ -307,7 +309,11 @@
         src.sourceLayout = self;
         src.is_live = self.isActive;
         
-        [self.rootLayer addSublayer:src.layer];
+        if (!src.layer.superlayer)
+        {
+            [self.rootLayer addSublayer:src.layer];
+        }
+        
         [[self mutableArrayValueForKey:@"sourceList" ] addObject:src];
     }
 
@@ -347,6 +353,7 @@
 {
     
     [delSource willDelete];
+    [delSource detachAllInputs];
     
     [[self mutableArrayValueForKey:@"sourceList" ] removeObject:delSource];
 
@@ -421,6 +428,40 @@
 
 
 
+-(InputSource *)sourceUnder:(InputSource *)source
+{
+    
+    NSRect sourceFrame = source.layer.frame;
+    
+    InputSource *ret = nil;
+    
+    NSArray *listCopy = [self sourceListOrdered];
+
+    for (InputSource *src in listCopy)
+    {
+        if (src == source)
+        {
+            continue;
+        }
+        
+        NSRect tryFrame = src.layer.frame;
+        
+        if (NSIntersectsRect(sourceFrame, tryFrame))
+        {
+            if (source.layer.zPosition >= src.layer.zPosition)
+            {
+                if (!ret || src.layer.zPosition > ret.layer.zPosition)
+                {
+                    ret = src;
+                }
+            }
+        }
+        
+    }
+    
+    return ret;
+}
+
 
 
 -(void)frameTick
@@ -431,7 +472,6 @@
     
     if (!NSEqualSizes(curSize, _rootSize))
     {
-        NSLog(@"CHANGING SIZE!!!!");
         [CATransaction begin];
         [CATransaction setDisableActions:YES];
         

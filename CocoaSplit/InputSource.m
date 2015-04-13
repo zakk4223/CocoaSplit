@@ -140,6 +140,7 @@ static NSArray *_sourceTypes = nil;
 
     [aCoder encodeFloat:self.layer.position.x forKey:@"CAx_pos"];
     [aCoder encodeFloat:self.layer.position.y forKey:@"CAy_pos"];
+    
     [aCoder encodeFloat:self.layer.bounds.size.width forKey:@"CAdisplay_width"];
     [aCoder encodeFloat:self.layer.bounds.size.height forKey:@"CAdisplay_height"];
     [aCoder encodeFloat:self.borderWidth forKey:@"borderWidth"];
@@ -149,6 +150,8 @@ static NSArray *_sourceTypes = nil;
     [aCoder encodeObject:self.transitionFilterName forKey:@"transitionFilterName"];
     [aCoder encodeObject:self.transitionDirection forKey:@"transitionDirection"];
     [aCoder encodeFloat:self.transitionDuration forKey:@"transitionDuration"];
+    
+    [aCoder encodeObject:self.parentInput forKey:@"parentInput"];
     
     if (_userBackground)
     {
@@ -225,12 +228,14 @@ static NSArray *_sourceTypes = nil;
         }
 
 
-        
         CGRect oldFrame = self.layer.frame;
         self.layer.position = CGPointMake(x_pos, y_pos);
         self.layer.bounds = CGRectMake(0, 0, width, height);
        
         [self.layer resizeSourceLayer:self.layer.frame oldFrame:oldFrame];
+        
+
+        
         _rotationAngle = [aDecoder decodeFloatForKey:@"rotationAngle"];
         _rotationAngleX = [aDecoder decodeFloatForKey:@"rotationAngleX"];
         _rotationAngleY = [aDecoder decodeFloatForKey:@"rotationAngleY"];
@@ -346,6 +351,18 @@ static NSArray *_sourceTypes = nil;
         self.borderColor = [aDecoder decodeObjectForKey:@"borderColor"];
         self.cornerRadius = [aDecoder decodeFloatForKey:@"cornerRadius"];
         self.layoutPosition = self.layer.frame;
+        
+        InputSource *parentInput = [aDecoder decodeObjectForKey:@"parentInput"];
+        if (parentInput)
+        {
+            [parentInput.layer addSublayer:self.layer];
+            [parentInput.attachedInputs addObject:self];
+            self.parentInput = parentInput;
+            
+        }
+
+        
+        
 
     }
     
@@ -353,7 +370,10 @@ static NSArray *_sourceTypes = nil;
     return self;
 }
 
-
+-(CGRect)globalLayoutPosition
+{
+    return [self.sourceLayout.rootLayer convertRect:self.layoutPosition fromLayer:self.layer.superlayer];
+}
 
 -(void) registerVideoInput:(NSObject<CSCaptureSourceProtocol> *)forInput
 {
@@ -395,6 +415,8 @@ static NSArray *_sourceTypes = nil;
     
     self.changeInterval = 20.0f;
     
+    
+    self.attachedInputs = [NSMutableArray array];
     
     self.scrollXSpeed = 0.0f;
     self.scrollYSpeed = 0.0f;
@@ -1030,6 +1052,78 @@ static NSArray *_sourceTypes = nil;
     }
 }
 
+
+
+-(void)detachAllInputs
+{
+    NSArray *aCopy = self.attachedInputs.copy;
+    
+    for (InputSource *inp in aCopy)
+    {
+        [self detachInput:inp];
+    }
+}
+
+
+-(void)detachInput:(InputSource *)toDetach
+{
+    if (!toDetach.parentInput)
+    {
+        return;
+    }
+    
+    if (toDetach.parentInput != self)
+    {
+        return;
+    }
+
+    toDetach.parentInput = nil;
+    [CATransaction begin];
+    [CATransaction disableActions];
+    [self.sourceLayout.rootLayer addSublayer:toDetach.layer];
+    //translate the position to the new sublayers coordinates
+    
+    
+    NSPoint newPosition = [self.sourceLayout.rootLayer convertPoint:toDetach.layer.position fromLayer:self.layer];
+    toDetach.layer.position = newPosition;
+    [CATransaction commit];
+
+    
+    [self.attachedInputs removeObject:toDetach];
+}
+
+
+-(void)attachInput:(InputSource *)toAttach
+{
+    if (toAttach.parentInput)
+    {
+        if (toAttach.parentInput == self)
+        {
+            return;
+        }
+        
+        [toAttach.parentInput detachInput:toAttach];
+    }
+    
+    [toAttach makeSublayerOfLayer:self.layer];
+    [self.attachedInputs addObject:toAttach];
+    toAttach.parentInput = self;
+}
+
+
+-(void)makeSublayerOfLayer:(CALayer *)parentLayer
+{
+    
+    [CATransaction begin];
+    [CATransaction disableActions];
+    [parentLayer addSublayer:self.layer];
+    //translate the position to the new sublayers coordinates
+    
+    
+    NSPoint newPosition = [parentLayer convertPoint:self.layer.position fromLayer:parentLayer.superlayer];
+    self.layer.position = newPosition;
+    [CATransaction commit];
+}
 
 
 -(void) positionOrigin:(CGFloat)x y:(CGFloat)y

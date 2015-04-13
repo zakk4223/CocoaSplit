@@ -383,9 +383,19 @@
 - (CALayer *)hitTest:(CGPoint)hitPoint
 {
     
-        
-    hitPoint = [self convertPoint:hitPoint fromLayer:self.superlayer];
-    return [self containsPoint:hitPoint] ? self : nil;
+    CGPoint hitPointConv = [self convertPoint:hitPoint fromLayer:self.superlayer];
+    if ([self containsPoint:hitPointConv])
+    {
+        CALayer *hitLayer =  [super hitTest:hitPoint];
+        if (hitLayer == self || hitLayer == _sourceLayer || hitLayer == _xLayer || hitLayer == _yLayer)
+        {
+            return self;
+        } else {
+            return hitLayer;
+        }
+    } else {
+        return nil;
+    }
 }
 
 @end

@@ -72,6 +72,7 @@
 -(NSObject *)mergeSourceListData:(NSData *)mergeData;
 -(IBAction)runAnimations:(id)sender;
 -(void)addAnimation:(NSDictionary *)animation;
+-(InputSource *)sourceUnder:(InputSource *)source;
 
 
 
