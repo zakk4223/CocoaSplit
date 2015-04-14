@@ -968,7 +968,9 @@ static NSArray *_sourceTypes = nil;
 -(void)autoFit
 {
     
-    self.layer.frame = CGRectMake(0.0f, 0.0f, self.canvas_width, self.canvas_height);
+    self.layer.bounds = self.layer.superlayer.bounds;
+    self.layer.position = CGPointMake(self.layer.bounds.size.width/2, self.layer.bounds.size.height/2);
+
 }
 
 
