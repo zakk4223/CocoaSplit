@@ -243,8 +243,10 @@
     
     for (id key in layersCopy)
     {
+        [CATransaction begin];
         CALayer *clayer = [layersCopy objectForKey:key];
         updateBlock(clayer);
+        [CATransaction commit];
     }
     
 }
