@@ -748,10 +748,15 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
     
     
-    
+
     if (!myself.stagingPreviewView.hiddenOrHasHiddenAncestor)
     {
+        //[CATransaction commit];
+
+        [CATransaction begin];
         [myself.stagingPreviewView cvrender];
+        [CATransaction commit];
+        
     }
     
     if (!myself.livePreviewView.hiddenOrHasHiddenAncestor)
@@ -760,6 +765,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     }
     
     
+    [CATransaction commit];
     
     return kCVReturnSuccess;
 }
@@ -2179,6 +2185,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
         
         _frame_time = startTime;
+
         [self newFrame];
         }
         
@@ -2249,9 +2256,9 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
             
             double nfstart = [self mach_time_seconds];
             
-            
-            
+            [CATransaction begin];
             newFrame = [self.previewCtx.layoutRenderer currentImg];
+            [CATransaction commit];
             //newFrame = [self currentFrame];
             
             
@@ -2607,7 +2614,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         } else {
             
             [self.stagingLayout restoreSourceListForSelfGoLive];
-            [CATransaction commit];
             
             [self setupFrameTimer:self.selectedLayout.frameRate];
 

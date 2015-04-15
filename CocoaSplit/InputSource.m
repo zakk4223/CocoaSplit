@@ -748,6 +748,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setName:(NSString *)name
 {
+    self.layer.name = name;
     _name = name;
 }
 
@@ -766,11 +767,20 @@ static NSArray *_sourceTypes = nil;
 //This is a dummy layer the animation scripts use to keep track of geometry changes without messing up the presentation/model layers
 -(CALayer *)animationLayer
 {
+    
+    [CATransaction begin];
+    [CATransaction setDisableActions:YES];
     CALayer *nLayer = [CALayer layer];
+    
+    
     nLayer.position = self.layer.position;
     nLayer.bounds = self.layer.bounds;
     nLayer.transform = self.layer.transform;
     nLayer.hidden = self.layer.hidden;
+    [nLayer setValue:@(self.layer.bounds.size.width) forKey:@"fakeWidth"];
+    
+    [CATransaction commit];
+
     return nLayer;
 }
 
@@ -945,6 +955,7 @@ static NSArray *_sourceTypes = nil;
             self.layer.sourceLayer = _currentLayer;
     }
     
+    [self.layer frameTick];
 
 }
 
@@ -1044,13 +1055,10 @@ static NSArray *_sourceTypes = nil;
         newLayout.size.width = width;
         newLayout.size.height = height;
         
-            [CATransaction begin];
-            [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
             self.layer.allowResize = tmpResize;
             self.layer.frame = newLayout;
             self.layer.allowResize = oldResize;
         
-           [CATransaction commit];
     }
 }
 
@@ -1080,15 +1088,12 @@ static NSArray *_sourceTypes = nil;
     }
 
     toDetach.parentInput = nil;
-    [CATransaction begin];
-    [CATransaction disableActions];
     [self.sourceLayout.rootLayer addSublayer:toDetach.layer];
     //translate the position to the new sublayers coordinates
     
     
     NSPoint newPosition = [self.sourceLayout.rootLayer convertPoint:toDetach.layer.position fromLayer:self.layer];
     toDetach.layer.position = newPosition;
-    [CATransaction commit];
 
     
     [self.attachedInputs removeObject:toDetach];
@@ -1116,15 +1121,12 @@ static NSArray *_sourceTypes = nil;
 -(void)makeSublayerOfLayer:(CALayer *)parentLayer
 {
     
-    [CATransaction begin];
-    [CATransaction disableActions];
+    
     [parentLayer addSublayer:self.layer];
     //translate the position to the new sublayers coordinates
-    
-    
     NSPoint newPosition = [parentLayer convertPoint:self.layer.position fromLayer:parentLayer.superlayer];
     self.layer.position = newPosition;
-    [CATransaction commit];
+
 }
 
 
@@ -1138,11 +1140,8 @@ static NSArray *_sourceTypes = nil;
         newFrame.origin.x = x;
         newFrame.origin.y = y;
         
-        [CATransaction begin];
-        [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
         
         self.layer.frame = newFrame;
-        [CATransaction commit];
     }
 
 }

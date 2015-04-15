@@ -28,8 +28,13 @@
 @property (assign) bool disableAnimation;
 @property (assign) CGRect cropRect;
 @property (assign) CGRect animateDummy;
+@property (assign) bool is_animation_shadow;
+
+@property (nonatomic, assign) CGFloat fakeWidth;
+@property (nonatomic, assign) CGFloat fakeHeight;
 
 -(void)setSourceLayer:(CALayer *)sourceLayer withTransition:(CATransition *)transition;
 -(void)resizeSourceLayer:(CGRect)newFrame oldFrame:(CGRect)oldFrame;
+-(void)frameTick;
 
 @end

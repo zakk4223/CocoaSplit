@@ -17,55 +17,54 @@
 @synthesize scrollXSpeed = _scrollXSpeed;
 @synthesize scrollYSpeed = _scrollYSpeed;
 @synthesize cropRect = _cropRect;
+@dynamic fakeHeight;
+@dynamic fakeWidth;
 
 
--(void)layoutSublayersOfLayer:(CALayer *)layer
+
+
+
+
+-(instancetype)initWithLayer:(id)layer
 {
-    [self layoutSublayers];
+    if (self = [super initWithLayer:layer])
+    {
+        self.fakeHeight = ((CALayer *)layer).bounds.size.height;
+        self.fakeWidth = ((CALayer *)layer).bounds.size.width;
+
+    }
+    
+    return self;
 }
 
-
--(void)layoutSublayers
++(BOOL)needsDisplayForKey:(NSString *)key
 {
+    if ([@"fakeWidth" isEqualToString:key] || [@"fakeHeight" isEqualToString:key])
+    {
+        return YES;
+    }
     
-    
+    return [super needsDisplayForKey:key];
+}
+
+-(void)display
+{
     [CATransaction begin];
     [CATransaction setDisableActions:YES];
     
-    if (self.allowResize)
-    {
-        _sourceLayer.bounds = self.bounds;
-        _sourceLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
+    [self setValue:@([self.presentationLayer fakeWidth]) forKeyPath:@"bounds.size.width"];
+    [self setValue:@([self.presentationLayer fakeHeight]) forKeyPath:@"bounds.size.height"];
 
-
-    } else {
-        
-        //This is mostly for CATextLayer hax, but CALayer allows the setting for arbitrary keyvalues, so....
-        
-        _sourceLayer.autoresizingMask = kCALayerNotSizable;
-        
-        NSString *alignment = [_sourceLayer valueForKey:@"alignmentMode"];
-        
-        if ([alignment isEqualToString:kCAAlignmentRight])
-        {
-            
-            _sourceLayer.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
-
-            float newX = NSMaxX(self.bounds)-_sourceLayer.bounds.size.width;
-            
-            _sourceLayer.position = CGPointMake(newX, 0);
-        } else if ([alignment isEqualToString:kCAAlignmentCenter]) {
-            float newX = NSMidX(self.bounds)-_sourceLayer.bounds.size.width/2;
-            _sourceLayer.position = CGPointMake(newX, 0);
-        } else {
-            _sourceLayer.position = CGPointMake(0.0, 0.0);
-        }
-    }
-    
-    [self resizeSourceLayer:self.frame oldFrame:CGRectZero];
     [CATransaction commit];
-
     
+    
+}
+
+
+
+-(void)frameTick
+{
+
 }
 
 
@@ -86,6 +85,7 @@
         
         _cropRect = CGRectZero;
         
+        self.layoutManager = [CAConstraintLayoutManager layoutManager];
         
         
         _allowResize = YES;
@@ -96,7 +96,28 @@
         _scrollAnimation = [CABasicAnimation animation];
         _scrollAnimation.repeatCount = HUGE_VALF;
         self.zPosition = 0;
-        _xLayer.layoutManager = self;
+        _xLayer.layoutManager = self.layoutManager;
+        _yLayer.layoutManager = self.layoutManager;
+        
+        [_xLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth]];
+        [_xLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight]];
+        [_xLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX]];
+        [_xLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY]];
+
+
+        [_yLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth]];
+        [_yLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight]];
+        [_yLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX]];
+        [_yLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY]];
+
+        [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth]];
+        [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight]];
+        [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX]];
+        [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY]];
+
+        
+        _xLayer.delegate = self;
+        _yLayer.delegate = self;
         
         [_xLayer addSublayer:_sourceLayer];
         [_yLayer addSublayer:_xLayer];
@@ -105,6 +126,7 @@
     
     return self;
 }
+
 
 -(instancetype)initWithCoder:(NSCoder *)aDecoder
 {
@@ -221,11 +243,6 @@
 }
 
 
--(CALayer *)sourceLayer
-{
-    return _sourceLayer;
-}
-
 
 -(void)copySourceSettings:(CALayer *)toLayer
 {
@@ -234,7 +251,8 @@
     toLayer.contentsGravity = _sourceLayer.contentsGravity;
     toLayer.contentsRect = _sourceLayer.contentsRect;
     toLayer.autoresizingMask = _sourceLayer.autoresizingMask;
-
+    toLayer.constraints = _sourceLayer.constraints;
+    toLayer.delegate = self;
 }
 
 
@@ -279,6 +297,12 @@
     [self setupYAnimation:_scrollYSpeed];
     [CATransaction commit];
     
+}
+
+
+-(CALayer *)sourceLayer
+{
+    return _sourceLayer;
 }
 
 
@@ -358,16 +382,18 @@
 }
 
 
-- (id<CAAction>)actionForKey:(NSString *)key
+
+-(id<CAAction>)actionForLayer:(CALayer *)layer forKey:(NSString *)event
 {
-    if (self.disableAnimation)
-    {
-        return nil;
-    }
-    
-    return [super actionForKey:key];
+    return (id<CAAction>)[NSNull null];
 }
 
+
+- (id<CAAction>)actionForKey:(NSString *)key
+{
+    
+    return nil;
+}
 
 -(BOOL)containsPoint:(CGPoint)p
 {

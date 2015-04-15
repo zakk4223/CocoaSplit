@@ -4,7 +4,7 @@ Animation runner base
 import objc
 from Foundation import *
 from CoreGraphics import *
-from Quartz import CACurrentMediaTime
+from Quartz import CACurrentMediaTime,CATransaction
 from pluginbase import PluginBase
 import math
 import CSAnimationBlock
@@ -130,6 +130,11 @@ class CSAnimationInput(object):
         
         if not 'autoreverse' in kwargs:
             self.animationLayer.setValue_forKeyPath_(toValue, forKey)
+            if 'extra_keypath' in kwargs:
+                self.animationLayer.setValue_forKeyPath_(toValue, kwargs['extra_keypath'])
+        
+        if 'use_fromVal' in kwargs:
+            banim.setFromValue_(kwargs['use_fromVal'])
         
         banim.setToValue_(toValue)
         return self.add_animation(csanim, for_layer, forKey)
@@ -200,20 +205,19 @@ class CSAnimationInput(object):
 
         original_x = self.minX
         original_width = self.width
-        
-        ret = self.simple_animation('bounds.size.width', width, duration, **kwargs)
-        
+        kwargs['use_fromVal'] = self.width
+        kwargs['extra_keypath'] = 'bounds.size.width'
+        ret = self.simple_animation('fakeWidth', width, duration, **kwargs)
+        kwargs.pop('use_fromVal', None)
+        kwargs.pop('extra_keypath', None)
+
+
         
 
         if 'anchorLeft' in kwargs and kwargs['anchorLeft']:
             self.moveX((width-original_width)/2, duration, **kwargs)
         elif 'anchorRight' in kwargs and kwargs['anchorRight']:
             self.moveX((original_width-width)/2, duration, **kwargs)
-
-
-        if self.layer.sourceLayer() and self.layer.allowResize():
-            kwargs['use_layer'] = self.layer.sourceLayer()
-            self.simple_animation('bounds.size.width', width, duration, **kwargs)
         return ret
     
     def sizeHeight(self, height, duration=None, **kwargs):
@@ -223,16 +227,18 @@ class CSAnimationInput(object):
         
         original_y = self.minY
         original_height = self.height
-        ret = self.simple_animation('bounds.size.height', height, duration, **kwargs)
-        
+        kwargs['use_fromVal'] = self.height
+        kwargs['extra_keypath'] = 'bounds.size.height'
+
+        ret = self.simple_animation('fakeHeight', height, duration, **kwargs)
+        kwargs.pop('use_fromVal', None)
+        kwargs.pop('extra_keypath', None)
+
         if 'anchorBottom' in kwargs and kwargs['anchorBottom']:
             self.moveY((height-original_height)/2, duration, **kwargs)
         elif 'anchorTop' in kwargs and kwargs['anchorTop']:
             self.moveY((original_height-height)/2, duration, **kwargs)
         
-        if self.layer.sourceLayer() and self.layer.allowResize():
-            kwargs['use_layer'] = self.layer.sourceLayer()
-            self.simple_animation('bounds.size.height', height, duration, **kwargs)
         return ret
 
 
@@ -240,6 +246,11 @@ class CSAnimationInput(object):
         """
         Set the width and height of the input. This change saves/is permanent. It is applied to the underlying layer's bounds.
         """
+        
+        self.sizeWidth(width, duration, **kwargs)
+        return self.sizeHeight(height, duration, **kwargs)
+        
+        
         current_bounds = self.animationLayer.bounds()
         current_bounds.size.width = width
         current_bounds.size.height = height
@@ -267,6 +278,7 @@ class CSAnimationInput(object):
         if self.layer.sourceLayer() and self.layer.allowResize():
             kwargs['use_layer'] = self.layer.sourceLayer()
             self.simple_animation('bounds', rectval, duration, **kwargs)
+        
         return ret
     
     
@@ -629,14 +641,17 @@ class CSAnimationRunnerObj(NSObject):
     def runAnimation_forInput_withSuperlayer_(self, pluginName,input_or_dict,superlayer):
         input_arg = input_or_dict
         duration = None
-        
+
+
         if isinstance(input_or_dict, NSDictionary) or isinstance(input_or_dict, NSMutableDictionary):
             input_arg = {}
             for k in input_or_dict:
                 if input_or_dict[k]:
                     arg = input_or_dict[k]
                     if hasattr(arg, 'layer'):
+
                         input_arg[k] = CSAnimationInput(arg)
+
                     else:
                         if k == 'duration':
                             duration = float(arg)
@@ -649,11 +664,18 @@ class CSAnimationRunnerObj(NSObject):
         animation = plugin_source.load_plugin(pluginName)
         reload(animation)
         CSAnimationBlock.superLayer = superlayer
+
+
         CSAnimationBlock.beginAnimation(duration)
+#CATransaction.setValue_forKey_("RUNNERT", "__cs_transaction_name")
         animation.wait = CSAnimationBlock.wait
         animation.waitAnimation = CSAnimationBlock.waitAnimation
         animation.animationDuration = CSAnimationBlock.animationDuration
+
+
         animation.do_animation(input_arg, duration)
+
+
         CSAnimationBlock.commitAnimation()
 
 

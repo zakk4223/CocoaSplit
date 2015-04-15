@@ -109,8 +109,6 @@
             layer.bounds = CGRectMake(0.0, 0.0, _attribString.size.width, _attribString.size.height);
             ((CATextLayer *)layer).string = _attribString;
             ((CATextLayer *)layer).alignmentMode = self.alignmentMode;
-            
-            [CATransaction commit];
  
         }];
         

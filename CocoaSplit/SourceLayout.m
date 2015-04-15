@@ -29,7 +29,12 @@
         _canvas_width = 1280;
         _fboTexture = 0;
         _rFbo = 0;
+        
+        _animationQueue = dispatch_queue_create("CSAnimationQueue", NULL);
+        
+        
         self.rootLayer = [CALayer layer];
+        
         self.rootLayer.bounds = CGRectMake(0, 0, _canvas_width, _canvas_height);
         self.rootLayer.anchorPoint = CGPointMake(0.0, 0.0);
         self.rootLayer.position = CGPointMake(0.0, 0.0);
@@ -68,7 +73,6 @@
 {
     if (self.selectedAnimation)
     {
-        CSAnimationRunnerObj *runner = [CaptureController sharedAnimationObj];
         NSMutableDictionary *inputMap = [NSMutableDictionary dictionary];
         
         NSArray *animations = [self.animationList objectsAtIndexes:self.animationIndexes];
@@ -84,22 +88,57 @@
                     inputMap[item[@"label"]] = [NSNull null];
                 }
             }
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                @try {
-                    [runner runAnimation:anim.module_name forInput:inputMap withSuperlayer:self.rootLayer];
-                }
-                @catch (NSException *exception) {
-                    NSLog(@"Animation module %@ failed with exception: %@: %@", anim.module_name, [exception name], [exception reason]);
-                }
-                @finally {
-                    [CATransaction commit];
-                }
-                
-            });
         }
+        
+        NSDictionary *animMap = @{@"moduleName": self.selectedAnimation.module_name, @"inputs": inputMap, @"rootLayer": self.rootLayer};
+        
+        NSThread *runThread = [[NSThread alloc] initWithTarget:self selector:@selector(doAnimation:) object:animMap];
+        [runThread start];
     }
 }
 
+
+-(void)doAnimation:(NSDictionary *)threadDict
+{
+    //[CATransaction flush];
+    
+    CSAnimationRunnerObj *runner = [CaptureController sharedAnimationObj];
+
+    NSString *modName = threadDict[@"moduleName"];
+    NSDictionary *inpMap = threadDict[@"inputs"];
+    CALayer *rootLayer = threadDict[@"rootLayer"];
+    
+    
+    /*
+    InputSource *src = inpMap[@"spinnah"];
+    CALayer *layer = src.layer;
+    
+
+    NSLog(@"LAYER IS %@", layer);
+    
+    [CATransaction begin];
+    [CATransaction setAnimationDuration:3.5];
+    layer.zPosition = -1;
+    [CATransaction begin];
+    [CATransaction setAnimationDuration:5.5];
+    [layer setValue:@500.0f forKeyPath:@"bounds.size.width"];
+    [CATransaction commit];
+    [CATransaction commit];
+    
+    */
+    
+    @try {
+        [runner runAnimation:modName forInput:inpMap withSuperlayer:rootLayer];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Animation module %@ failed with exception: %@: %@", modName, [exception name], [exception reason]);
+
+    }
+    
+    
+    
+    
+}
 
 
 -(void)deleteAnimations:(id)sender
@@ -270,7 +309,6 @@
 
     self.transitionNeeded = YES;
     
-    [CATransaction commit];
 }
 
 
@@ -317,7 +355,6 @@
         [[self mutableArrayValueForKey:@"sourceList" ] addObject:src];
     }
 
-    [CATransaction commit];
     
     return mergeObj;
 }
@@ -360,7 +397,6 @@
     //[self.sourceList removeObject:delSource];
     [delSource.layer removeFromSuperlayer];
 
-    [CATransaction commit];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputDeleted  object:delSource userInfo:nil];
 
@@ -377,7 +413,6 @@
 
     
     [self.rootLayer addSublayer:newSource.layer];
-    [CATransaction commit];
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputAdded object:newSource userInfo:nil];
 }
 
@@ -472,11 +507,8 @@
     
     if (!NSEqualSizes(curSize, _rootSize))
     {
-        [CATransaction begin];
-        [CATransaction setDisableActions:YES];
         
         self.rootLayer.bounds = CGRectMake(0, 0, self.canvas_width, self.canvas_height);
-        [CATransaction commit];
         
         _rootSize = curSize;
     }

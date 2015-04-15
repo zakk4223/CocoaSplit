@@ -241,13 +241,11 @@
         layersCopy = _allLayers.copy;
     }
     
-    [CATransaction begin];
     for (id key in layersCopy)
     {
         CALayer *clayer = [layersCopy objectForKey:key];
         updateBlock(clayer);
     }
-    [CATransaction commit];
     
 }
 

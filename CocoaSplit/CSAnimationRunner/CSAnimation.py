@@ -17,6 +17,7 @@ class CSAnimation:
         self.cs_input = None
         self.label = None
         self.end_time = 0
+        self.begin_time = 0
         self.completion_handler = None
         self.internal_completion_handler = None
         
@@ -24,6 +25,7 @@ class CSAnimation:
             animation.setRemovedOnCompletion_(False)
             animation.setFillMode_("forwards")
             self.duration = animation.duration()
+
 
         if 'repeatcount' in kwargs:
             self.repeatcount(kwargs['repeatcount'])
@@ -55,6 +57,9 @@ class CSAnimation:
             self.completion_handler(self)
 
     def apply(self, begin_time):
+        self.begin_time = begin_time
+        
+        
         if self.target and not self.isWaitMark:
             self.animation.setBeginTime_(begin_time)
             self.uukey = "{0}-{1}".format(self.keyPath, uuid4())
@@ -67,7 +72,7 @@ class CSAnimation:
         if self.target:
             p_value = self.animation.toValue()
             CATransaction.begin()
-            CATransaction.setDisableActions_(True)
+            #CATransaction.setDisableActions_(True)
             self.target.setValue_forKeyPath_(p_value, self.animation.keyPath())
             if self.extra_model:
                 self.extra_model.setValue_forKeyPath_(p_value, self.animation.keyPath())
@@ -75,6 +80,7 @@ class CSAnimation:
 
 
     def set_model_value(self, realme=None):
+
         if self.target:
             p_layer = self.target.presentationLayer()
             p_value = p_layer.valueForKeyPath_(self.animation.keyPath())

@@ -120,10 +120,8 @@
     
     CGLSetCurrentContext(self.cglCtx);
     
-    [CATransaction begin];
-    //[CATransaction setDisableActions:YES];
     
-    
+
     if (!self.rootLayer)
     {
         self.rootLayer = [CALayer layer];
@@ -196,10 +194,10 @@
             _currentLayout.transitionSourceList = nil;
 
         }
+        
         [self.renderer.layer addSublayer:self.layout.rootLayer];
     }
     
-    [CATransaction commit];
 
 
     _currentLayout = self.layout;
@@ -260,6 +258,7 @@
 
 -(CVPixelBufferRef)currentImg
 {
+    
     CVPixelBufferRef destFrame = NULL;
     CGFloat frameWidth, frameHeight;
 
@@ -279,12 +278,10 @@
     {
         [self createPixelBufferPoolForSize:frameSize];
         _cvpool_size = frameSize;
-        [CATransaction begin];
-        [CATransaction setDisableActions:YES];
         [self resizeRenderer];
-        [CATransaction commit];
     }
     
+
     
     if (_layoutChanged || _currentLayout.transitionNeeded)
     {
@@ -297,9 +294,9 @@
     CVPixelBufferPoolCreatePixelBuffer(kCVReturnSuccess, _cvpool, &destFrame);
     
     
-    
+
     [self renderToSurface:CVPixelBufferGetIOSurface(destFrame)];
-    
+
     
     @synchronized(self)
     {
