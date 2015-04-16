@@ -23,7 +23,64 @@
 
 
 
+-(void)invalidateLayoutOfLayer:(CALayer *)layer
+{
+    return [self.layoutManager invalidateLayoutOfLayer:layer];
+}
 
+-(void)layoutSublayersOfLayer:(CALayer *)layer
+{
+
+    [self.layoutManager layoutSublayersOfLayer:layer];
+
+    if (layer == _xLayer)
+    {
+        for (CALayer *sLayer in _xLayer.sublayers)
+        {
+            CGSize newSize = [self preferredSizeOfLayer:sLayer];
+            CGRect bounds = sLayer.bounds;
+            bounds.size = newSize;
+            sLayer.bounds = bounds;
+            
+        }
+        [self setupXAnimation:self.scrollXSpeed];
+        [self setupYAnimation:self.scrollYSpeed];
+    }
+    
+
+}
+
+-(CGSize)preferredSizeOfLayer:(CALayer *)layer
+{
+    
+    CGSize retSize = [self.layoutManager preferredSizeOfLayer:layer];
+    if ([layer isKindOfClass:[CATextLayer class]])
+    {
+        NSAttributedString *lText = ((CATextLayer *)layer).string;
+        if (self.scrollXSpeed != 0)
+        {
+            
+            if (lText.size.width > self.bounds.size.width)
+            {
+                retSize.width = lText.size.width;
+            } else {
+                retSize.width = self.bounds.size.width;
+            }
+        }
+        
+        if (self.scrollYSpeed != 0)
+        {
+            if (lText.size.height > self.bounds.size.height)
+            {
+                retSize.height = lText.size.height;
+            } else {
+                retSize.height = self.bounds.size.height;
+            }
+
+        }
+    }
+    return retSize;
+}
 
 -(instancetype)initWithLayer:(id)layer
 {
@@ -49,14 +106,9 @@
 
 -(void)display
 {
-    [CATransaction begin];
-    [CATransaction setDisableActions:YES];
     
     [self setValue:@([self.presentationLayer fakeWidth]) forKeyPath:@"bounds.size.width"];
     [self setValue:@([self.presentationLayer fakeHeight]) forKeyPath:@"bounds.size.height"];
-
-    [CATransaction commit];
-    
     
 }
 
@@ -96,7 +148,7 @@
         _scrollAnimation = [CABasicAnimation animation];
         _scrollAnimation.repeatCount = HUGE_VALF;
         self.zPosition = 0;
-        _xLayer.layoutManager = self.layoutManager;
+        _xLayer.layoutManager = self;
         _yLayer.layoutManager = self.layoutManager;
         
         [_xLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth]];
@@ -118,6 +170,12 @@
         
         _xLayer.delegate = self;
         _yLayer.delegate = self;
+        
+        _xLayer.masksToBounds = NO;
+        _yLayer.masksToBounds = NO;
+        
+        self.masksToBounds = YES;
+        _yLayer.anchorPoint = CGPointMake(0.0, 0.0);
         
         [_xLayer addSublayer:_sourceLayer];
         [_yLayer addSublayer:_xLayer];
@@ -145,6 +203,9 @@
 
 -(void)setScrollXSpeed:(float)scrollXSpeed
 {
+    _scrollXSpeed = scrollXSpeed;
+    [_xLayer setNeedsLayout];
+    
     if (scrollXSpeed == 0)
     {
         _xLayer.instanceCount = 1;
@@ -154,7 +215,8 @@
         _xLayer.instanceCount = 2;
         [self setupXAnimation:scrollXSpeed];
     }
-    _scrollXSpeed = scrollXSpeed;
+
+    
     
 }
 
@@ -227,7 +289,9 @@
     {
         _scrollAnimation.fromValue = @0.0;
         _scrollAnimation.toValue = [NSNumber numberWithFloat:-self.sourceLayer.bounds.size.width];
+        
         _xLayer.instanceTransform = CATransform3DMakeTranslation(self.sourceLayer.bounds.size.width,0, 0);
+
 
         
     } else {
@@ -317,16 +381,6 @@
     _sourceLayer = sourceLayer;
 
     [self setNeedsLayout];
-    /*
-    if (!self.allowResize)
-    {
-        sourceLayer.position = CGPointMake(sourceLayer.bounds.size.width/2, sourceLayer.bounds.size.height/2);
-    } else {
-        sourceLayer.bounds = self.bounds;
-
-        sourceLayer.position = CGPointMake(sourceLayer.bounds.size.width/2, sourceLayer.bounds.size.height/2);
-    }*/
-
     [self setupXAnimation:_scrollXSpeed];
     [self setupYAnimation:_scrollYSpeed];
     [CATransaction commit];
