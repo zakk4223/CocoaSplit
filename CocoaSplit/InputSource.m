@@ -45,6 +45,10 @@ static NSArray *_sourceTypes = nil;
 @synthesize chromaKeyThreshold = _chromaKeyThreshold;
 @synthesize clonedFromInput = _clonedFromInput;
 @synthesize transitionEnabled = _transitionEnabled;
+@synthesize x_pos = _x_pos;
+@synthesize y_pos = _y_pos;
+@synthesize width = _width;
+@synthesize height = _height;
 
 
 -(instancetype)copyWithZone:(NSZone *)zone
@@ -84,7 +88,6 @@ static NSArray *_sourceTypes = nil;
     newSource.transitionFilterName = self.transitionFilterName;
     newSource.transitionDirection = self.transitionDirection;
     
-    CGRect oldFrame = newSource.layer.frame;
 
     
     newSource.changeInterval = self.changeInterval;
@@ -945,10 +948,64 @@ static NSArray *_sourceTypes = nil;
     }
 }
 
+
+-(void)setWidth:(float)width
+{
+    _width = width;
+    [self updateSize:_width height:_height];
+}
+
+-(float)width
+{
+    return _width;
+}
+
+-(void)setHeight:(float)height
+{
+    _height = height;
+    [self updateSize:_width height:_height];
+}
+
+-(float)height
+{
+    return _height;
+}
+
+
+-(void)setX_pos:(float)x_pos
+{
+    _x_pos = x_pos;
+    
+    [self positionOrigin:_x_pos y:_y_pos];
+}
+
+-(float)x_pos
+{
+    return _x_pos;
+}
+
+-(void)setY_pos:(float)y_pos
+{
+    _y_pos = y_pos;
+    [self positionOrigin:_x_pos y:_y_pos];
+}
+
+
+
+-(float)y_pos
+{
+    return _y_pos;
+}
+
+
 -(void)frameTick
 {
     
     self.layoutPosition = self.layer.frame;
+    _x_pos = self.layer.frame.origin.x;
+    _y_pos = self.layer.frame.origin.y;
+    _width = self.layer.frame.size.width;
+    _height = self.layer.frame.size.height;
     
     [self multiChange];
     

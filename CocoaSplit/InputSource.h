@@ -154,6 +154,11 @@ typedef enum resize_style_t {
 @property (strong) NSMutableArray *attachedInputs;
 @property (weak) id parentInput;
 
+@property (assign) float x_pos;
+@property (assign) float y_pos;
+@property (assign) float width;
+@property (assign) float height;
+
 
 -(void) updateOrigin:(CGFloat)x y:(CGFloat)y;
 -(void) updateSize:(CGFloat)width height:(CGFloat)height;
