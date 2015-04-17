@@ -320,6 +320,35 @@
 }
 
 
+-(void)transitionsDisabled
+{
+    _yLayer.hidden = NO;
+}
+
+
+-(void)transitionToLayer:(CALayer *)toLayer fromLayer:(CALayer *)fromLayer withTransition:(CATransition *)transition
+{
+    CALayer *realTo = toLayer;
+    CALayer *realFrom = fromLayer;
+    
+    if (toLayer == self)
+    {
+        realTo = _yLayer;
+    }
+    
+    if (fromLayer == self)
+    {
+        realFrom = _yLayer;
+    }
+    
+    
+    [realTo addAnimation:transition forKey:nil];
+    [realFrom addAnimation:transition forKey:nil];
+    realFrom.hidden = YES;
+    realTo.hidden = NO;
+}
+
+
 -(void)setSourceLayer:(CALayer *)sourceLayer withTransition:(CATransition *)transition
 {
     
@@ -401,40 +430,6 @@
 {
     return self.sourceLayer.contentsRect;
 }
-
-
--(void)resizeSourceLayer:(CGRect)newFrame oldFrame:(CGRect)oldFrame
-{
-    
-    
-    if (_scrollXSpeed)
-    {
-        float baseval = newFrame.size.width > self.sourceLayer.bounds.size.width ? newFrame.size.width : self.sourceLayer.bounds.size.width;
-        float xval = _scrollXSpeed < 0 ? -baseval : baseval;
-        
-        _xLayer.instanceTransform = CATransform3DMakeTranslation(xval, 0, 0);
-        CABasicAnimation *sAnim = ((CABasicAnimation *)[_yLayer animationForKey:@"position.x"]).copy;
-        
-        sAnim.toValue = [NSNumber numberWithFloat:-xval];
-        [_yLayer addAnimation:sAnim forKey:@"position.x"];
-    }
-    
-    if (_scrollYSpeed)
-    {
-        float baseval = newFrame.size.height > self.sourceLayer.bounds.size.height ? newFrame.size.height : self.sourceLayer.bounds.size.height;
-        float yval = _scrollYSpeed < 0 ? -baseval : baseval;
-
-        
-        _yLayer.instanceTransform = CATransform3DMakeTranslation(0, yval, 0);
-        CABasicAnimation *sAnim = ((CABasicAnimation *)[_yLayer animationForKey:@"position.y"]).copy;
-        
-        sAnim.toValue = [NSNumber numberWithFloat:-yval];
-        [_yLayer addAnimation:sAnim forKey:@"position.y"];
-        
-    }
-
-}
-
 
 
 -(id<CAAction>)actionForLayer:(CALayer *)layer forKey:(NSString *)event

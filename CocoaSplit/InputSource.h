@@ -55,10 +55,9 @@ typedef enum resize_style_t {
     CIFilterGenerator *_filterGenerator;
     NSViewController *_currentInputViewController;
     CIFilter *_chromaFilter;
-    NSObject<CSCaptureSourceProtocol> *_nextInput;
+    InputSource *_currentInput;
 
     
-    CALayer *_nextLayer;
     
     CALayer *_currentLayer;
     
@@ -127,6 +126,7 @@ typedef enum resize_style_t {
 @property (strong) NSArray *transitionDirections;
 @property (strong) NSString *transitionDirection;
 @property (assign) float transitionDuration;
+@property (assign) bool transitionEnabled;
 
 @property (strong) id windowViewController;
 
@@ -158,7 +158,6 @@ typedef enum resize_style_t {
 -(void) updateOrigin:(CGFloat)x y:(CGFloat)y;
 -(void) updateSize:(CGFloat)width height:(CGFloat)height;
 
--(void) addMulti;
 -(void) autoFit;
 -(void)addUserEffect:(NSIndexSet *)filterIndexes;
 -(void)removeUserEffects:(NSIndexSet *)filterIndexes;

@@ -119,8 +119,34 @@
     NSTableView *bTable = (NSTableView *)sender;
     NSInteger deleteRow = [bTable clickedRow];
     
-    [self.multiSourceController removeObjectAtArrangedObjectIndex:deleteRow];
+    InputSource *toConfig = [self.multiSourceController.arrangedObjects objectAtIndex:deleteRow];
+    
+
+    InputPopupControllerViewController *windowController = [[InputPopupControllerViewController alloc] init];
+    
+    windowController.inputSource = toConfig;
+    NSWindow *configWindow = [[NSWindow alloc] init];
+    
+    NSRect newFrame = [configWindow frameRectForContentRect:NSMakeRect(0.0f, 0.0f, windowController.view.frame.size.width, windowController.view.frame.size.height)];
+    
+    [configWindow setFrame:newFrame display:NO];
+    
+    [configWindow setReleasedWhenClosed:NO];
+    
+    
+    [configWindow.contentView addSubview:windowController.view];
+    configWindow.title = [NSString stringWithFormat:@"CocoaSplit Input (%@)", windowController.inputSource.name];
+    configWindow.delegate = windowController.inputSource;
+    
+    configWindow.styleMask =  NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask;
+    
+    windowController.inputSource.editorWindow = configWindow;
+    windowController.inputSource.editorController = windowController;
+    [configWindow makeKeyAndOrderFront:NSApp];
 }
+
+
+
 
 
 @end

@@ -36,5 +36,7 @@
 -(void)setSourceLayer:(CALayer *)sourceLayer withTransition:(CATransition *)transition;
 -(void)resizeSourceLayer:(CGRect)newFrame oldFrame:(CGRect)oldFrame;
 -(void)frameTick;
+-(void)transitionToLayer:(CALayer *)toLayer fromLayer:(CALayer *)fromLayer withTransition:(CATransition *)transition;
+-(void)transitionsDisabled;
 
 @end

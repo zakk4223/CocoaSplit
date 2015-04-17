@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14C109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14D131" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6250"/>
@@ -479,7 +479,7 @@
                                 <font key="titleFont" metaFont="system"/>
                             </box>
                             <box horizontalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="UcS-yc-7Kj">
-                                <rect key="frame" x="122" y="169" width="4" height="97"/>
+                                <rect key="frame" x="122" y="165" width="5" height="97"/>
                                 <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                                 <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <font key="titleFont" metaFont="system"/>
@@ -505,7 +505,7 @@
                                 </textFieldCell>
                             </textField>
                             <box verticalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="QBW-Q6-I7d">
-                                <rect key="frame" x="303" y="271" width="136" height="4"/>
+                                <rect key="frame" x="303" y="267" width="136" height="5"/>
                                 <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                                 <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <font key="titleFont" metaFont="system"/>
@@ -642,20 +642,6 @@
                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
-                                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="poH-2V-aBt">
-                                                <rect key="frame" x="272" y="351" width="80" height="28"/>
-                                                <buttonCell key="cell" type="push" title="Add Multi" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="RIz-If-28E">
-                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                    <font key="font" metaFont="smallSystem"/>
-                                                </buttonCell>
-                                                <connections>
-                                                    <binding destination="Gdf-y2-DdF" name="target" keyPath="selection" id="mBc-tk-uux">
-                                                        <dictionary key="options">
-                                                            <string key="NSSelectorName">addMulti</string>
-                                                        </dictionary>
-                                                    </binding>
-                                                </connections>
-                                            </button>
                                             <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SXE-81-50C">
                                                 <rect key="frame" x="20" y="0.0" width="581" height="349"/>
                                             </customView>
@@ -790,7 +776,7 @@
                                 </connections>
                             </textField>
                             <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="30" horizontalPageScroll="10" verticalLineScroll="30" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SCi-uN-txg">
-                                <rect key="frame" x="17" y="186" width="456" height="167"/>
+                                <rect key="frame" x="17" y="154" width="456" height="167"/>
                                 <clipView key="contentView" ambiguous="YES" misplaced="YES" id="VU8-cU-Tot">
                                     <rect key="frame" x="1" y="17" width="454" height="149"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -815,7 +801,7 @@
                                                     </textFieldCell>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <connections>
-                                                        <binding destination="4mF-fx-iLB" name="value" keyPath="arrangedObjects.captureName" id="cKn-s4-59K">
+                                                        <binding destination="4mF-fx-iLB" name="value" keyPath="arrangedObjects.name" id="4Ih-rR-j9d">
                                                             <dictionary key="options">
                                                                 <bool key="NSRaisesForNotApplicableKeys" value="NO"/>
                                                             </dictionary>
@@ -856,6 +842,16 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableHeaderView>
                             </scrollView>
+                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dy9-I6-WFu">
+                                <rect key="frame" x="14" y="347" width="117" height="20"/>
+                                <buttonCell key="cell" type="check" title="Enable transitions" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="Gye-xd-YyB">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="smallSystem"/>
+                                </buttonCell>
+                                <connections>
+                                    <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.transitionEnabled" id="bs5-TP-msu"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </view>
                 </tabViewItem>
@@ -881,7 +877,7 @@
         </arrayController>
         <arrayController id="4mF-fx-iLB" userLabel="multiSourceArrayController">
             <connections>
-                <binding destination="Gdf-y2-DdF" name="contentArray" keyPath="selection.videoSources" id="QoP-B8-qwB"/>
+                <binding destination="Gdf-y2-DdF" name="contentArray" keyPath="selection.attachedInputs" id="sbD-fu-ivQ"/>
             </connections>
         </arrayController>
         <arrayController id="dYd-S3-qDP" userLabel="availableEffectsController">

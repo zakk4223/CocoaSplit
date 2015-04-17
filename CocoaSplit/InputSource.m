@@ -44,6 +44,7 @@ static NSArray *_sourceTypes = nil;
 @synthesize chromaKeySmoothing = _chromaKeySmoothing;
 @synthesize chromaKeyThreshold = _chromaKeyThreshold;
 @synthesize clonedFromInput = _clonedFromInput;
+@synthesize transitionEnabled = _transitionEnabled;
 
 
 -(instancetype)copyWithZone:(NSZone *)zone
@@ -95,7 +96,6 @@ static NSArray *_sourceTypes = nil;
     newSource.backgroundColor = self.backgroundColor;
     
     
-    [newSource.layer resizeSourceLayer:newSource.layer.frame oldFrame:oldFrame];
 
     return newSource;
 }
@@ -232,7 +232,6 @@ static NSArray *_sourceTypes = nil;
         self.layer.position = CGPointMake(x_pos, y_pos);
         self.layer.bounds = CGRectMake(0, 0, width, height);
        
-        [self.layer resizeSourceLayer:self.layer.frame oldFrame:oldFrame];
         
 
         
@@ -468,7 +467,6 @@ static NSArray *_sourceTypes = nil;
     _multiTransition.subtype = kCATransitionFromRight;
     _multiTransition.duration = 2.0;
     _multiTransition.removedOnCompletion = YES;
-    //_multiTransition.fillMode = kCAFillModeForwards;
     
     
     
@@ -492,7 +490,7 @@ static NSArray *_sourceTypes = nil;
     self.chromaKeyColor = [NSColor greenColor];
     _userBackground = NO;
     self.layer.backgroundColor = CGColorCreateGenericRGB(0, 0, 1, 1);
-
+    _currentInput = self;
     
     
     [self addObserver:self forKeyPath:@"editorController" options:NSKeyValueObservingOptionNew context:NULL];
@@ -851,6 +849,31 @@ static NSArray *_sourceTypes = nil;
 
 
 
+-(void)setTransitionEnabled:(bool)transitionEnabled
+{
+    _transitionEnabled = transitionEnabled;
+    
+    if (transitionEnabled)
+    {
+        for (InputSource *inp in self.attachedInputs)
+        {
+            inp.layer.hidden = YES;
+        }
+    } else {
+        for (InputSource *inp in self.attachedInputs)
+        {
+            inp.layer.hidden = NO;
+        }
+        [self.layer transitionsDisabled];
+    }
+}
+
+
+-(bool)transitionEnabled
+{
+    return _transitionEnabled;
+}
+
 
 -(void) setTransitionFilterName:(NSString *)transitionFilterName
 {
@@ -868,42 +891,56 @@ static NSArray *_sourceTypes = nil;
 
 -(void)multiChange
 {
+    
+    if (!self.transitionEnabled)
+    {
+        return;
+    }
+
+    
     CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
 
-    if (self.videoSources.count > 1 && (currentTime >= _nextImageTime) && (self.changeInterval > 0) )
+    NSMutableArray *chooseInputs = [NSMutableArray arrayWithArray:self.attachedInputs];
+    [chooseInputs addObject:self];
+    
+    InputSource *_nextInput;
+    
+    
+    
+    if (chooseInputs.count > 1 && (currentTime >= _nextImageTime) && (self.changeInterval > 0) )
     {
         switch (self.rotateStyle)
         {
             case kRotateNormal:
                 _currentSourceIdx++;
-                if (_currentSourceIdx == self.videoSources.count)
+                if (_currentSourceIdx == chooseInputs.count)
                 {
                     _currentSourceIdx = 0;
                 }
                 break;
             case kRotateRandom:
-                _currentSourceIdx = (unsigned int)arc4random_uniform((unsigned int)self.videoSources.count);
+                _currentSourceIdx = (unsigned int)arc4random_uniform((unsigned int)chooseInputs.count);
             case kRotateReverse:
                 _currentSourceIdx--;
                 if (_currentSourceIdx < 0)
                 {
-                    _currentSourceIdx = (int)self.videoSources.count-1;
+                    _currentSourceIdx = (int)chooseInputs.count-1;
                 }
                 break;
             default:
                 break;
         }
         _nextImageTime = currentTime + self.changeInterval;
-        //[self.videoInput.outputLayer addAnimation:_multiTransition forKey:@"transition"];
+        _nextInput = [chooseInputs objectAtIndex:_currentSourceIdx];
         
-        //[self.layer.sourceLayer addAnimation:_multiTransition forKey:@"transition"];
-        //[self.videoInput.outputLayer addAnimation:_multiTransition forKey:@"transition"];
-
-        //[self.layer.xLayer addAnimation:_multiTransition forKey:@"sublayers"];
-
+        _multiTransition.type = self.transitionFilterName;
+        _multiTransition.duration = self.transitionDuration;
+        _multiTransition.subtype = self.transitionDirection;
         
-        _nextInput = [self.videoSources objectAtIndex:_currentSourceIdx];
-
+        [self.layer transitionToLayer:_nextInput.layer fromLayer:_currentInput.layer withTransition:_multiTransition];
+        _currentInput = _nextInput;
+        
+        
 
     }
 }
@@ -922,57 +959,25 @@ static NSArray *_sourceTypes = nil;
     
     
     
-    [self.videoInput frameTick];
-    
-    __block CALayer *tLayer;
-    
-    if (self.videoSources.count > 1 && (self.videoInput != _nextInput))
+    if (self.layer.sourceLayer != _currentLayer)
     {
-        _multiTransition = [CATransition animation];
-        _multiTransition.type = self.transitionFilterName;
-        _multiTransition.subtype = self.transitionDirection;
-        _multiTransition.duration = self.transitionDuration;
-        _multiTransition.removedOnCompletion = YES;
-
-        tLayer = [_nextInput layerForInput:self];
+        if (!_userBackground)
+        {
+            self.backgroundColor = nil;
+            _userBackground = NO;
+        }
         
-        [self.layer setSourceLayer:tLayer withTransition:_multiTransition];
-
-        
-        self.videoInput = _nextInput;
-        _currentLayer = tLayer;
-    } else if ((self.layer.sourceLayer != _currentLayer)) {
-    
-            if (!_userBackground)
-            {
-                self.backgroundColor = nil;
-                _userBackground = NO;
-            }
-
         self.layer.allowResize = self.videoInput.allowScaling;
+        
+        self.layer.sourceLayer = _currentLayer;
 
-            self.layer.sourceLayer = _currentLayer;
+        
     }
-    
+    [self.videoInput frameTick];
     [self.layer frameTick];
 
 }
 
-
--(void)addMulti
-{
-    if (self.videoInput)
-    {
-        NSObject<CSCaptureSourceProtocol> *inputCopy;
-        
-        inputCopy = self.videoInput.copy;
-        [self registerVideoInput:inputCopy];
-
-        
-        [self.videoSources addObject:inputCopy];
-    }
-    
-}
 
 
 -(void)autoFit
@@ -1088,6 +1093,8 @@ static NSArray *_sourceTypes = nil;
 
     toDetach.parentInput = nil;
     [self.sourceLayout.rootLayer addSublayer:toDetach.layer];
+    toDetach.layer.hidden = NO;
+    
     //translate the position to the new sublayers coordinates
     
     
