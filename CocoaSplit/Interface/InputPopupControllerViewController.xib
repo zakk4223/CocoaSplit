@@ -814,7 +814,7 @@
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
                                                     </tableHeaderCell>
-                                                    <buttonCell key="dataCell" type="push" title="Delete" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="9hm-rX-Xt7">
+                                                    <buttonCell key="dataCell" type="push" title="Settings" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="9hm-rX-Xt7">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                         <font key="font" metaFont="smallSystem"/>
                                                         <connections>
