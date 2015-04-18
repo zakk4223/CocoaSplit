@@ -750,10 +750,27 @@
 -(void)adjustDeltas:(CGFloat *)dx dy:(CGFloat *)dy
 {
     
+    InputSource *superInput = self.selectedSource.parentInput;
+    
+    NSPoint c_lb_snap;
+    NSPoint c_rt_snap;
+    NSPoint c_center_snap;
+    
+    if (superInput)
+    {
+        NSRect super_rect = superInput.globalLayoutPosition;
+        
+        c_lb_snap = super_rect.origin;
+        c_rt_snap = NSMakePoint(NSMaxX(super_rect), NSMaxY(super_rect));
+        c_center_snap = NSMakePoint(NSMidX(super_rect), NSMidY(super_rect));
+    } else {
     //define snap points. basically edges and the center of the canvas
-    NSPoint c_lb_snap = NSMakePoint(0, 0);
-    NSPoint c_rt_snap = NSMakePoint(self.sourceLayout.canvas_width, self.sourceLayout.canvas_height);
-    NSPoint c_center_snap = NSMakePoint(self.sourceLayout.canvas_width/2, self.sourceLayout.canvas_height/2);
+        c_lb_snap = NSMakePoint(0, 0);
+        c_rt_snap = NSMakePoint(self.sourceLayout.canvas_width, self.sourceLayout.canvas_height);
+        c_center_snap = NSMakePoint(self.sourceLayout.canvas_width/2, self.sourceLayout.canvas_height/2);
+    }
+    
+    
 
     
     //selected source snap points. edges, and center
@@ -1584,19 +1601,39 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         //glEnable(GL_LINE_STIPPLE);
         if (_snap_x > -1)
         {
+            float snap_y_min = 0;
+            float snap_y_max = self.sourceLayout.canvas_height;
+            
+            if (self.selectedSource && self.selectedSource.parentInput)
+            {
+                NSRect parentRect = ((InputSource *)self.selectedSource.parentInput).globalLayoutPosition;
+                snap_y_min = parentRect.origin.y;
+                snap_y_max = NSMaxY(parentRect);
+            }
+            
             snapx_verts[0] = _snap_x;
-            snapx_verts[1] = 0;
+            snapx_verts[1] = snap_y_min;
             snapx_verts[2] = _snap_x;
-            snapx_verts[3] = self.sourceLayout.canvas_height;
+            snapx_verts[3] = snap_y_max;
             glVertexPointer(2, GL_FLOAT, 0, snapx_verts);
             glDrawArrays(GL_LINES, 0, 2);
         }
         
         if (_snap_y > -1)
         {
-            snapy_verts[0] = 0;
+            float snap_x_min = 0;
+            float snap_x_max = self.sourceLayout.canvas_width;
+            
+            if (self.selectedSource && self.selectedSource.parentInput)
+            {
+                NSRect parentRect = ((InputSource *)self.selectedSource.parentInput).globalLayoutPosition;
+                snap_x_min = parentRect.origin.x;
+                snap_x_max = NSMaxX(parentRect);
+            }
+
+            snapy_verts[0] = snap_x_min;
             snapy_verts[1] = _snap_y;
-            snapy_verts[2] = self.sourceLayout.canvas_width;
+            snapy_verts[2] = snap_x_max;
             snapy_verts[3] = _snap_y;
             glVertexPointer(2, GL_FLOAT, 0, snapy_verts);
             glDrawArrays(GL_LINES, 0, 2);
