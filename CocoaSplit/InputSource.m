@@ -1619,22 +1619,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void)willDelete
 {
-    
-    
     _currentInput = nil;
-    
-    if (self.editorController)
-    {
-        self.editorController.inputSource = nil;
-    }
-    
-    if (_currentInputViewController)
-    {
-        [_currentInputViewController setValue:nil forKey:@"captureObj"];
-
-    }
-    
-    
 }
 
 

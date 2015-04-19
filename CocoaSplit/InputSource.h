@@ -55,7 +55,7 @@ typedef enum resize_style_t {
     CIFilterGenerator *_filterGenerator;
     NSViewController *_currentInputViewController;
     CIFilter *_chromaFilter;
-    InputSource *_currentInput;
+    __weak InputSource *_currentInput;
 
     
     
