@@ -376,6 +376,8 @@
         self.sourceList = [NSMutableArray array];
         
         NSObject *restData = [self mergeSourceListData:self.savedSourceListData];
+        
+        
         if (restData && [restData isKindOfClass:[NSDictionary class]])
         {
             self.animationList = [((NSDictionary *)restData) objectForKey:@"animationList"];

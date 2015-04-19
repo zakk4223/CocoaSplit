@@ -194,7 +194,7 @@ static NSArray *_sourceTypes = nil;
             [self registerVideoInput:self.videoInput];
 
             _currentLayer = [self.videoInput layerForInput:self];
-            self.layer.sourceLayer = _currentLayer;
+            //self.layer.sourceLayer = _currentLayer;
             if (!_userBackground)
             {
                 self.backgroundColor = nil;
