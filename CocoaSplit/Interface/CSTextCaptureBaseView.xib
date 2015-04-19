@@ -19,11 +19,11 @@
             <point key="canvasLocation" x="458" y="467.5"/>
         </customView>
         <customView id="6JR-B1-0HO">
-            <rect key="frame" x="0.0" y="0.0" width="158" height="61"/>
+            <rect key="frame" x="0.0" y="0.0" width="242" height="105"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aVb-ZT-tZL">
-                    <rect key="frame" x="-3" y="-5" width="63" height="28"/>
+                    <rect key="frame" x="-3" y="39" width="63" height="28"/>
                     <buttonCell key="cell" type="push" title="Font" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="R00-1U-mYA">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -33,7 +33,7 @@
                     </connections>
                 </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dz1-ZF-ZbP">
-                    <rect key="frame" x="0.0" y="27" width="57" height="14"/>
+                    <rect key="frame" x="0.0" y="71" width="57" height="14"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Alignment" id="rE9-rL-MTP">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -41,7 +41,7 @@
                     </textFieldCell>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oHy-e2-MFH">
-                    <rect key="frame" x="60" y="22" width="101" height="22"/>
+                    <rect key="frame" x="60" y="66" width="101" height="22"/>
                     <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="fSX-Ds-m32" id="nLz-dK-ImT">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -58,8 +58,18 @@
                         <binding destination="V1e-p2-LKl" name="selectedObject" keyPath="selection.alignmentMode" previousBinding="zcw-mT-S36" id="rlc-0r-U94"/>
                     </connections>
                 </popUpButton>
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gup-FE-R1D">
+                    <rect key="frame" x="62" y="43" width="75" height="20"/>
+                    <buttonCell key="cell" type="check" title="Wrap Text" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="NxL-ei-Eeg">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="V1e-p2-LKl" name="value" keyPath="selection.wrapped" id="dWn-cJ-thd"/>
+                    </connections>
+                </button>
             </subviews>
-            <point key="canvasLocation" x="346" y="719.5"/>
+            <point key="canvasLocation" x="388" y="741.5"/>
         </customView>
         <arrayController id="KAf-yK-h1d" userLabel="textAlignmentModesController">
             <connections>

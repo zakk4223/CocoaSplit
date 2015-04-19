@@ -28,6 +28,7 @@
 @property (assign) bool propertiesChanged;
 @property (strong) NSDictionary *fontAttributes;
 @property (strong) NSString *alignmentMode;
+@property (assign) bool wrapped;
 
 
 @end

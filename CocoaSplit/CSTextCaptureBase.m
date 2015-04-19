@@ -49,6 +49,7 @@
     
     newLayer.bounds = CGRectMake(0.0, 0.0, _attribString.size.width, _attribString.size.height);
     newLayer.alignmentMode = self.alignmentMode;
+    newLayer.wrapped = self.wrapped;
     return newLayer;
 }
 
@@ -59,6 +60,8 @@
     [aCoder encodeObject:self.text forKey:@"text"];
     [aCoder encodeObject:self.font forKey:@"font"];
     [aCoder encodeObject:self.fontAttributes forKey:@"fontAttributes"];
+    [aCoder encodeBool:self.wrapped forKey:@"wrapped"];
+    [aCoder encodeObject:self.alignmentMode forKey:@"alignmentMode"];
 }
 
 
@@ -81,6 +84,10 @@
         {
             _fontAttributes = savedfontAttributes;
         }
+        
+        _wrapped = [aDecoder decodeBoolForKey:@"wrapped"];
+        _alignmentMode = [aDecoder decodeObjectForKey:@"alignmentMode"];
+        
     }
     
     [self buildString];
@@ -116,6 +123,8 @@
             layer.bounds = CGRectMake(0.0, 0.0, _attribString.size.width, _attribString.size.height);
             ((CATextLayer *)layer).string = _attribString;
             ((CATextLayer *)layer).alignmentMode = self.alignmentMode;
+            ((CATextLayer *)layer).wrapped = self.wrapped;
+
  
         }];
         
@@ -232,7 +241,7 @@
 
 + (NSSet *)keyPathsForValuesAffectingPropertiesChanged
 {
-    return [NSSet setWithObjects:@"text", @"font", @"fontAttributes", @"alignmentMode", nil];
+    return [NSSet setWithObjects:@"text", @"font", @"fontAttributes", @"alignmentMode", @"wrapped",nil];
 }
 
 
