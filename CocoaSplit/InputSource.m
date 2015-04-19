@@ -1342,8 +1342,12 @@ static NSArray *_sourceTypes = nil;
             [currentSubview removeFromSuperview];
         } else if (currentSubview) {
             [[pcont.sourceConfigView animator] replaceSubview:currentSubview with:configView ];
+            [configView setFrameOrigin:NSMakePoint(configView.frame.origin.x, NSMaxY(pcont.sourceConfigView.frame) - configView.frame.size.height)];
+
+            
         } else {
             [[pcont.sourceConfigView animator] addSubview:configView];
+            [configView setFrameOrigin:NSMakePoint(configView.frame.origin.x, NSMaxY(pcont.sourceConfigView.frame) - configView.frame.size.height)];
         }
     } else {
         if (_currentInputViewController)

@@ -7,9 +7,12 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "CSTextCaptureViewControllerBase.h"
 
-@interface CSCurrentTimeCaptureViewController : CSTextCaptureViewControllerBase
+#import "CSCurrentTimeCapture.h"
+
+@interface CSCurrentTimeCaptureViewController : NSViewController
 
 @property (strong) NSArray *styleSortDescriptors;
+@property (weak) CSCurrentTimeCapture *captureObj;
+
 @end

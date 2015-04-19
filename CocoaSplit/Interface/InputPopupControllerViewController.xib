@@ -17,7 +17,7 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <tabView controlSize="small" id="E8C-YL-16h">
-            <rect key="frame" x="0.0" y="0.0" width="615" height="460"/>
+            <rect key="frame" x="0.0" y="0.0" width="659" height="466"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <tabViewItems>
                 <tabViewItem label="Settings" identifier="1" id="59S-Rf-qNa">
@@ -511,7 +511,7 @@
                                 <font key="titleFont" metaFont="system"/>
                             </box>
                             <box verticalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="rcb-T5-GbU">
-                                <rect key="frame" x="303" y="179" width="136" height="5"/>
+                                <rect key="frame" x="303" y="175" width="136" height="4"/>
                                 <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                                 <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <font key="titleFont" metaFont="system"/>
@@ -556,11 +556,11 @@
                 </tabViewItem>
                 <tabViewItem label="Source" identifier="2" id="iXD-as-NHa">
                     <view key="view" id="byO-4p-D9j">
-                        <rect key="frame" x="10" y="25" width="595" height="422"/>
+                        <rect key="frame" x="10" y="25" width="639" height="428"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <splitView fixedFrame="YES" dividerStyle="paneSplitter" translatesAutoresizingMaskIntoConstraints="NO" id="tSc-Hj-kBh">
-                                <rect key="frame" x="-3" y="-3" width="601" height="419"/>
+                                <rect key="frame" x="4" y="3" width="601" height="419"/>
                                 <subviews>
                                     <customView fixedFrame="YES" id="7Pr-X4-jhx">
                                         <rect key="frame" x="0.0" y="0.0" width="601" height="419"/>
@@ -643,7 +643,7 @@
                                                 </textFieldCell>
                                             </textField>
                                             <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SXE-81-50C">
-                                                <rect key="frame" x="20" y="0.0" width="581" height="349"/>
+                                                <rect key="frame" x="20" y="-6" width="601" height="349"/>
                                             </customView>
                                         </subviews>
                                     </customView>
@@ -987,7 +987,7 @@
             <connections>
                 <binding destination="Gdf-y2-DdF" name="selectedLabel" keyPath="selection.settingsTab" id="hiM-bU-1lm"/>
             </connections>
-            <point key="canvasLocation" x="429.5" y="232.5"/>
+            <point key="canvasLocation" x="600.5" y="241.5"/>
         </tabView>
         <objectController id="Gdf-y2-DdF" userLabel="InputSourceController">
             <connections>

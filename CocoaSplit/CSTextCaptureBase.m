@@ -10,6 +10,13 @@
 
 
 #import "CSAbstractCaptureDevice.h"
+#import "CSTextCaptureViewControllerBase.h"
+
+
+@interface CSTextCaptureBase()
+@property (strong) NSViewController *currentConfigController;
+@end
+
 
 @implementation CSTextCaptureBase
 
@@ -136,6 +143,90 @@
 +(NSString *)label
 {
     return @"Text";
+}
+
+-(NSViewController *)configurationView
+{
+    
+    NSViewController *configViewController;
+    CSTextCaptureViewControllerBase *returnViewController;
+    
+    NSString *controllerName = @"CSTextCaptureViewControllerBase";
+    
+    
+    
+    
+    Class viewClass = NSClassFromString(controllerName);
+    
+    if (viewClass)
+    {
+        
+        
+        returnViewController = [[viewClass alloc] initWithNibName:@"CSTextCaptureBaseView" bundle:[NSBundle mainBundle]];
+        
+        if (returnViewController)
+        {
+            
+            returnViewController.view.hidden = NO;
+            
+            
+            
+            //Should probably make a base class for view controllers and put captureObj there
+            //but for now be gross.
+            [returnViewController setValue:self forKey:@"captureObj"];
+        }
+    }
+    
+    //Now load the plugin's provided controller and view and attach the view to ours
+    
+    controllerName = self.configurationViewClassName;
+    
+    viewClass = NSClassFromString(controllerName);
+    
+    if (viewClass)
+    {
+        
+        configViewController = [[viewClass alloc] initWithNibName:self.configurationViewName bundle:[NSBundle bundleForClass:self.class]];
+        
+        if (configViewController)
+        {
+            configViewController.view.hidden = NO;
+            
+            [configViewController setValue:self forKey:@"captureObj"];
+        }
+
+        self.currentConfigController  = configViewController;
+        
+    }
+    
+    
+    
+    
+    
+    CSTextCaptureViewControllerBase *vcont = (CSTextCaptureViewControllerBase *)returnViewController;
+    
+    
+
+    //[vcont.view setBoundsSize:NSMakeSize(vcont.view.bounds.size.width, configViewController.view.bounds.size.height + vcont.sourceConfigView.bounds.size.height)];
+    
+    [[vcont.view animator] addSubview:configViewController.view];
+    NSRect newFrame = configViewController.view.frame;
+
+   [configViewController.view setFrameOrigin:NSMakePoint(newFrame.origin.x, NSMaxY(vcont.view.frame) - newFrame.size.height)];
+    
+    
+    
+    
+    
+    [[vcont.view animator] addSubview:vcont.sourceConfigView];
+    
+    [vcont.sourceConfigView setFrameOrigin:NSMakePoint(vcont.sourceConfigView.frame.origin.x, configViewController.view.frame.origin.y - vcont.sourceConfigView.bounds.size.height)];
+    
+    
+    
+    
+    return returnViewController;
+    
 }
 
 

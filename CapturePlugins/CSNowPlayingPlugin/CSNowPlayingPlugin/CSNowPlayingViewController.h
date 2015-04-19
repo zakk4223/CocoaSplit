@@ -6,8 +6,10 @@
 //  Copyright (c) 2014 Zakk. All rights reserved.
 //
 
-#import "CSTextCaptureViewControllerBase.h"
+#import "CSNowPlaying.h"
 
-@interface CSNowPlayingViewController : CSTextCaptureViewControllerBase
+@interface CSNowPlayingViewController : NSViewController
+@property (weak) CSNowPlaying *captureObj;
+
 
 @end

@@ -45,6 +45,7 @@
         
         //self.rootLayer.geometryFlipped = YES;
         _rootSize = NSMakeSize(_canvas_width, _canvas_height);
+        self.sourceList = [NSMutableArray array];
         
     }
     

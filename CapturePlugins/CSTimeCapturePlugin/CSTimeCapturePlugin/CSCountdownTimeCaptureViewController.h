@@ -7,7 +7,8 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "CSTextCaptureViewControllerBase.h"
-@interface CSCountdownTimeCaptureViewController : CSTextCaptureViewControllerBase
+#import "CSCountdownTimeCapture.h"
+@interface CSCountdownTimeCaptureViewController : NSViewController
+@property (weak) CSCountdownTimeCapture *captureObj;
 
 @end

@@ -6,9 +6,12 @@
 //  Copyright (c) 2014 Zakk. All rights reserved.
 //
 
-#import "CSTextCaptureViewControllerBase.h"
+#import "FileTextCapture.h"
 
-@interface FileTextCaptureViewController : CSTextCaptureViewControllerBase
+@interface FileTextCaptureViewController : NSViewController
+
+@property (weak) FileTextCapture *captureObj;
+
 - (IBAction)chooseFile:(id)sender;
 
 @end

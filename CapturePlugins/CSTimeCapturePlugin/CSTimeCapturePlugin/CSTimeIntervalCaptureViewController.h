@@ -7,10 +7,12 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "CSTextCaptureViewControllerBase.h"
+#import "CSTimeIntervalCapture.h"
 
 
-@interface CSTimeIntervalCaptureViewController : CSTextCaptureViewControllerBase
+@interface CSTimeIntervalCaptureViewController : NSViewController
+@property (weak) CSTimeIntervalCapture *captureObj;
 - (IBAction)reset:(id)sender;
+
 
 @end

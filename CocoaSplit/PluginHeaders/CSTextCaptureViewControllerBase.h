@@ -15,6 +15,9 @@
 @property (weak) CSTextCaptureBase *captureObj;
 @property (strong) NSArray *textAlignmentModes;
 
+@property (weak) IBOutlet NSView *sourceConfigView;
+
+
 - (IBAction)openFontPanel:(id)sender;
 
 @end

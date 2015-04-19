@@ -7,8 +7,10 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "CSTextCaptureViewControllerBase.h"
-@interface CSElapsedTimeCaptureViewController : CSTextCaptureViewControllerBase
+#import "CSElapsedTimeCapture.h"
+@interface CSElapsedTimeCaptureViewController : NSViewController
+@property (weak) CSElapsedTimeCapture *captureObj;
+
 - (IBAction)resetTime:(id)sender;
 
 @end

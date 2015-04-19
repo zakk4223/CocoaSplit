@@ -10,5 +10,7 @@
 #import "CSTextCaptureViewControllerBase.h"
 
 
-@interface TextCaptureViewController : CSTextCaptureViewControllerBase
+@interface TextCaptureViewController : NSViewController
+@property (weak) CSTextCaptureBase *captureObj;
+
 @end
