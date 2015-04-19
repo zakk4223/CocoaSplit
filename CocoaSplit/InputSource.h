@@ -183,6 +183,7 @@ typedef enum resize_style_t {
 -(void)detachInput:(InputSource *)toDetach;
 -(void)attachInput:(InputSource *)toAttach;
 -(void)resetConstraints;
+-(NSViewController *)sourceConfigurationView;
 
 
 

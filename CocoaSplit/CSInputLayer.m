@@ -191,10 +191,6 @@
     if (self = [super initWithCoder:aDecoder])
     {
         self.sublayers = nil;
-        [CSCaptureBase layoutModification:^{
-            //[self addSublayer:_yLayer];
-        }];
-
     }
     
     return self;

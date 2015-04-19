@@ -23,6 +23,9 @@
 @property (strong) NSDictionary *inputConstraintMap;
 @property (strong) NSArray *constraintSortDescriptors;
 
+@property (assign) NSString *selectedVideoType;
+
+
 - (IBAction)resetConstraints:(id)sender;
 
 - (IBAction)deleteMultiSource:(id)sender;

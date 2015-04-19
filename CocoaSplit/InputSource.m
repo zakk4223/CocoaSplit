@@ -373,7 +373,6 @@ static NSArray *_sourceTypes = nil;
             self.constraintMap = restoredConstraintMap;
             [self buildLayerConstraints];
         }
-        
 
     }
     
@@ -481,7 +480,6 @@ static NSArray *_sourceTypes = nil;
     self.resizeType = kResizeNone;
     
     
-    
     self.layer = [CSInputLayer layer];
     self.layer.contentsGravity = kCAGravityResizeAspect;
     
@@ -502,9 +500,6 @@ static NSArray *_sourceTypes = nil;
     cFilter.enabled = NO;
     
     self.layer.filters = @[cFilter];
-                         
-    
-    
     
     _multiTransition = [CATransition animation];
     _multiTransition.type = kCATransitionPush;
@@ -536,8 +531,7 @@ static NSArray *_sourceTypes = nil;
     self.layer.backgroundColor = CGColorCreateGenericRGB(0, 0, 1, 1);
     _currentInput = self;
     
-    
-    [self addObserver:self forKeyPath:@"editorController" options:NSKeyValueObservingOptionNew context:NULL];
+
     [self observeConstraintKeys];
  }
 
@@ -770,7 +764,6 @@ static NSArray *_sourceTypes = nil;
         [self deregisterVideoInput:vInput];
     }
     
-    [self removeObserver:self forKeyPath:@"editorController"];
     [self stopObservingConstraintKeys];
     
     
@@ -1267,8 +1260,6 @@ static NSArray *_sourceTypes = nil;
         NSRect newFrame = self.layer.frame;
         newFrame.origin.x = x;
         newFrame.origin.y = y;
-        
-        
         self.layer.frame = newFrame;
     }
 
@@ -1359,9 +1350,6 @@ static NSArray *_sourceTypes = nil;
     [self registerVideoInput:self.videoInput];
     _currentLayer = [self.videoInput layerForInput:self];
     
-    
-    [self sourceConfigurationView];
-
     newCaptureSession = nil;
     
     _selectedVideoType = selectedVideoType;
@@ -1369,60 +1357,21 @@ static NSArray *_sourceTypes = nil;
 }
 
 
--(void)sourceConfigurationView
+-(NSViewController *)sourceConfigurationView;
 {
     
-    if (self.editorController)
+    NSViewController *vcont = nil;
+    if (self.videoInput && [self.videoInput respondsToSelector:@selector(configurationView)])
     {
-
-    
-        NSView *configView = nil;
-        if (!_currentInputViewController)
-        {
-            if ([self.videoInput respondsToSelector:@selector(configurationView)])
-            {
-                
-                _currentInputViewController = [self.videoInput configurationView];
-                configView = _currentInputViewController.view;
-                
-            }
-        } else {
-            configView = _currentInputViewController.view;
-            [_currentInputViewController setValue:self.videoInput forKey:@"captureObj"];
-        }
-    
-        
-        
-        
-        InputPopupControllerViewController *pcont = self.editorController;
-        
-        
-        
-        NSArray *currentSubviews = pcont.sourceConfigView.subviews;
-        NSView *currentSubview = currentSubviews.firstObject;
-        
-        
-        if (!configView)
-        {
-            [currentSubview removeFromSuperview];
-        } else if (currentSubview) {
-            [[pcont.sourceConfigView animator] replaceSubview:currentSubview with:configView ];
-            [configView setFrameOrigin:NSMakePoint(configView.frame.origin.x, NSMaxY(pcont.sourceConfigView.frame) - configView.frame.size.height)];
-
-            
-        } else {
-            [[pcont.sourceConfigView animator] addSubview:configView];
-            [configView setFrameOrigin:NSMakePoint(configView.frame.origin.x, NSMaxY(pcont.sourceConfigView.frame) - configView.frame.size.height)];
-        }
-    } else {
-        if (_currentInputViewController)
-        {
-            [_currentInputViewController setValue:nil forKey:@"captureObj"];
-        }
-
+        vcont = [self.videoInput configurationView];
     }
-
     
+    if (vcont)
+    {
+        [vcont setValue:self.videoInput forKey:@"captureObj"];
+    }
+    
+    return vcont;
 }
 
 -(void) editorPopoverDidClose
@@ -1671,6 +1620,9 @@ static NSArray *_sourceTypes = nil;
 -(void)willDelete
 {
     
+    
+    _currentInput = nil;
+    
     if (self.editorController)
     {
         self.editorController.inputSource = nil;
@@ -1737,11 +1689,9 @@ static NSArray *_sourceTypes = nil;
 //I should probably use contexts...
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if ([keyPath isEqualToString:@"editorController"]) {
-        [self sourceConfigurationView];
-    
-    } else if ([keyPath isEqualToString:@"activeVideoDevice.uniqueID"]) {
-    } else if ([keyPath hasPrefix:@"constraintMap"]) {
+
+    if ([keyPath hasPrefix:@"constraintMap"])
+    {
         [self buildLayerConstraints];
     }
 }
@@ -1796,25 +1746,6 @@ static NSArray *_sourceTypes = nil;
 }
 
 
--(void) windowWillClose:(NSNotification *)notification
-{
-    
-    NSLog(@"WINDOW WILL CLOSE!!!");
-    
-    
-    if (self.editorController)
-    {
-        self.editorController.inputSource = nil;
-    }
-    
-    if (_currentInputViewController)
-    {
-        [_currentInputViewController setValue:nil forKey:@"captureObj"];
-
-    }
-    self.editorController = nil;
-    self.editorWindow = nil;
-}
 
 
 @end

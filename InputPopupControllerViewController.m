@@ -14,6 +14,7 @@
 @end
 
 @implementation InputPopupControllerViewController
+@synthesize inputSource = _inputSource;
 
 
 -(instancetype) init
@@ -42,6 +43,69 @@
 }
 
 
++(NSSet *)keyPathsForValuesAffectingSelectedVideoType
+{
+    return [NSSet setWithObjects:@"inputSource", nil];
+}
+
+
+-(void)setInputSource:(InputSource *)inputSource
+{
+    _inputSource = inputSource;
+    
+    [self sourceConfigurationView];
+    
+}
+
+-(InputSource *)inputSource
+{
+    return _inputSource;
+}
+
+
+-(NSString *)selectedVideoType
+{
+    
+    return self.inputSource.selectedVideoType;
+}
+
+
+-(void)setSelectedVideoType:(NSString *)selectedVideoType
+{
+    self.inputSource.selectedVideoType = selectedVideoType;
+    [self sourceConfigurationView];
+}
+
+
+-(void)sourceConfigurationView
+{
+
+    NSViewController *sourceViewController = [self.inputSource sourceConfigurationView];
+    
+    
+    
+    NSView *configView = sourceViewController.view;
+    self.view.hidden = NO;
+    
+    
+    NSArray *currentSubviews = self.sourceConfigView.subviews;
+    NSView *currentSubview = currentSubviews.firstObject;
+    
+    
+    if (!configView)
+    {
+        [currentSubview removeFromSuperview];
+    } else if (currentSubview) {
+        [[self.sourceConfigView animator] replaceSubview:currentSubview with:configView ];
+        [configView setFrameOrigin:NSMakePoint(configView.frame.origin.x, NSMaxY(self.sourceConfigView.frame) - configView.frame.size.height)];
+        
+    } else {
+        [[self.sourceConfigView animator] addSubview:configView];
+        [configView setFrameOrigin:NSMakePoint(configView.frame.origin.x, NSMaxY(self.sourceConfigView.frame) - configView.frame.size.height)];
+    }
+    
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     
@@ -57,6 +121,7 @@
 
 - (void)popoverDidClose:(NSNotification *)notification
 {
+    
     NSString *closeReason = [[notification userInfo] valueForKey:NSPopoverCloseReasonKey];
             
     if (closeReason && closeReason == NSPopoverCloseReasonStandard)
@@ -163,9 +228,6 @@
     windowController.inputSource.editorController = windowController;
     [configWindow makeKeyAndOrderFront:NSApp];
 }
-
-
-
 
 
 @end

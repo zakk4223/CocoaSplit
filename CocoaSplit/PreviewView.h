@@ -134,6 +134,9 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 @property (assign) bool isResizing;
 @property (assign) resize_style resizeType;
 @property (strong, atomic) SourceLayout *sourceLayout;
+@property (strong) NSViewController *activePopupController;
+@property (strong) NSMutableDictionary *activeConfigWindows;
+@property (strong) NSMutableDictionary *activeConfigControllers;
 
 
 

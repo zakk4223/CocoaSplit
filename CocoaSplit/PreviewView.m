@@ -350,13 +350,6 @@
 
 -(void) buildSettingsMenu
 {
-    /*
-    if (self.sourceSettingsMenu)
-    {
-        return;
-    }
-     */
-    
     NSMenuItem *tmp;
     self.sourceSettingsMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
     tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Move Up" action:@selector(moveInputUp:) keyEquivalent:@"" atIndex:0];
@@ -1025,14 +1018,20 @@
 {
     NSMenuItem *item = (NSMenuItem *)sender;
     
+    InputSource *toDelete = nil;
     
     if (item.representedObject)
     {
-        [self.sourceLayout deleteSource:item.representedObject];
+        toDelete = item.representedObject;
     } else if (self.selectedSource) {
-        [self.sourceLayout deleteSource:self.selectedSource];
+        toDelete = self.selectedSource;
         self.selectedSource = nil;
         self.mousedSource = nil;
+    }
+    
+    if (toDelete)
+    {
+        [self.sourceLayout deleteSource:toDelete];
     }
 }
 
@@ -1061,11 +1060,7 @@
     [popover showRelativeToRect:spawnRect ofView:self preferredEdge:NSMaxXEdge];
     
     popupController.inputSource = forInput;
-    forInput.editorController = popupController;
-    if (forInput.editorWindow)
-    {
-        forInput.editorWindow = nil;
-    }
+    self.activePopupController = popupController;
 }
 
 
@@ -1180,6 +1175,13 @@
 
         glGenTextures(3, _previewTextures);
     }
+    
+    self.activeConfigWindows = [NSMutableDictionary dictionary];
+    self.activeConfigControllers = [NSMutableDictionary dictionary];
+
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sourceWasDeleted:) name:CSNotificationInputDeleted object:nil];
+    
     
     _resizeDirty = YES;
     _snap_x = _snap_y = -1;
@@ -1654,6 +1656,35 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
 }
 
+-(void)sourceWasDeleted:(NSNotification *)notification
+{
+    InputSource *toDel = notification.object;
+    [self purgeConfigForInput:toDel];
+}
+
+
+-(void)purgeConfigForInput:(InputSource *)src
+{
+    NSString *uuid = src.uuid;
+    
+    NSWindow *cWindow = [self.activeConfigWindows objectForKey:uuid];
+    InputPopupControllerViewController *cController = [self.activeConfigControllers objectForKey:uuid];
+    
+    
+    if (cController)
+    {
+        cController.inputSource = nil;
+        [self.activeConfigControllers removeObjectForKey:uuid];
+    }
+    
+    if (cWindow)
+    {
+        [cWindow close];
+        [self.activeConfigWindows removeObjectForKey:uuid];
+    }
+}
+
+
 - (BOOL)popoverShouldDetach:(NSPopover *)popover
 {
     return YES;
@@ -1662,11 +1693,18 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
 -(NSWindow *)detachableWindowForPopover:(NSPopover *)popover
 {
+
+    
+    
+    
     InputPopupControllerViewController *newViewController = [[InputPopupControllerViewController alloc] init];
+    
     InputPopupControllerViewController *oldViewController = (InputPopupControllerViewController *)popover.contentViewController;
     
     
-     newViewController.inputSource = oldViewController.inputSource;
+    
+    newViewController.inputSource = oldViewController.inputSource;
+    
     NSWindow *popoverWindow;
     popoverWindow = [[NSWindow alloc] init];
     
@@ -1681,31 +1719,52 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
     [popoverWindow.contentView addSubview:newViewController.view];
     popoverWindow.title = [NSString stringWithFormat:@"CocoaSplit Input (%@)", newViewController.inputSource.name];
-    popoverWindow.delegate = newViewController.inputSource;
+    popoverWindow.delegate = self;
     
     popoverWindow.styleMask =  NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask;
     
-    newViewController.inputSource.editorWindow = popoverWindow;
-    newViewController.inputSource.editorController = newViewController;
+    NSString *uuid = newViewController.inputSource.uuid;
     
-    oldViewController.inputSource = nil;
+    NSWindow *cWindow = [self.activeConfigWindows objectForKey:uuid];
+    InputPopupControllerViewController *cController = [self.activeConfigControllers objectForKey:uuid];
+    
+    if (cController)
+    {
+        cController.inputSource = nil;
+        [self.activeConfigControllers removeObjectForKey:uuid];
+    }
+    
+    if (cWindow)
+    {
+        [self.activeConfigWindows removeObjectForKey:uuid];
+    }
+    
+    
+    [self.activeConfigWindows setObject:popoverWindow forKey:uuid];
+    [self.activeConfigControllers setObject:newViewController forKey:uuid];
+    
     return popoverWindow;
-    
 }
 
 - (void)popoverDidClose:(NSNotification *)notification
 {
+    
+    
     NSString *closeReason = [[notification userInfo] valueForKey:NSPopoverCloseReasonKey];
     NSPopover *popover = notification.object;
     if (closeReason && closeReason == NSPopoverCloseReasonStandard)
     {
         InputPopupControllerViewController *vcont = (InputPopupControllerViewController *)popover.contentViewController;
         
-        vcont.inputSource.editorController = nil;
         vcont.inputSource = nil;
         
     }
     
+    if (popover.contentViewController == self.activePopupController)
+    {
+        self.activePopupController = nil;
+        popover.contentViewController = nil;
+    }
 }
 
 
