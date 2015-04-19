@@ -126,6 +126,12 @@
 
 
 
+- (IBAction)resetConstraints:(id)sender
+{
+    [self.inputSource resetConstraints];
+    
+}
+
 - (IBAction)deleteMultiSource:(id)sender
 {
 

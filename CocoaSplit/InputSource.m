@@ -236,7 +236,6 @@ static NSArray *_sourceTypes = nil;
         }
 
 
-        CGRect oldFrame = self.layer.frame;
         self.layer.position = CGPointMake(x_pos, y_pos);
         self.layer.bounds = CGRectMake(0, 0, width, height);
        
@@ -409,6 +408,10 @@ static NSArray *_sourceTypes = nil;
 
 
 
+-(void)resetConstraints
+{
+    [self initDictionaryForConstraints:self.constraintMap];
+}
 
 -(id)init
 {
@@ -456,15 +459,13 @@ static NSArray *_sourceTypes = nil;
                                 @"Height": @(kCAConstraintHeight),
                                 };
 
+    [self initDictionaryForConstraints:self.constraintMap];
     
-    NSArray *baseKeys = @[@"LeftEdge", @"RightEdge", @"TopEdge", @"BottomEdge", @"HorizontalCenter", @"VerticalCenter", @"Width", @"Height"];
     
     NSMutableArray *tmpArr = [NSMutableArray array];
     
-    for (NSString *base in baseKeys)
+    for (NSString *base in self.constraintMap.allKeys)
     {
-        [self.constraintMap setObject:[NSMutableDictionary dictionaryWithDictionary:@{@"attr": [NSNull null], @"offset": @0}] forKey:base];
-        
         [tmpArr addObject:[NSString stringWithFormat:@"constraintMap.%@.attr", base]];
         [tmpArr addObject:[NSString stringWithFormat:@"constraintMap.%@.offset", base]];
     }
@@ -542,6 +543,16 @@ static NSArray *_sourceTypes = nil;
 
 
 
+-(void)initDictionaryForConstraints:(NSMutableDictionary *)dict
+{
+    NSArray *baseKeys = @[@"LeftEdge", @"RightEdge", @"TopEdge", @"BottomEdge", @"HorizontalCenter", @"VerticalCenter", @"Width", @"Height"];
+    
+    
+    for (NSString *base in baseKeys)
+    {
+        [dict setObject:[NSMutableDictionary dictionaryWithDictionary:@{@"attr": [NSNull null], @"offset": @0}] forKey:base];
+    }
+}
 
 -(float)display_height
 {
@@ -1081,9 +1092,21 @@ static NSArray *_sourceTypes = nil;
 
 -(void)autoFit
 {
+
     
-    self.layer.bounds = self.layer.superlayer.bounds;
-    self.layer.position = CGPointMake(self.layer.bounds.size.width/2, self.layer.bounds.size.height/2);
+    NSMutableDictionary *newConstraints = [NSMutableDictionary dictionary];
+    
+    [self initDictionaryForConstraints:newConstraints];
+    
+    newConstraints[@"HorizontalCenter"][@"attr"] = @(kCAConstraintMidX);
+    newConstraints[@"Width"][@"attr"] = @(kCAConstraintWidth);
+    newConstraints[@"VerticalCenter"][@"attr"] = @(kCAConstraintMidY);
+    newConstraints[@"Height"][@"attr"] = @(kCAConstraintHeight);
+    self.constraintMap = newConstraints;
+    
+    [self buildLayerConstraints];
+    //self.layer.bounds = self.layer.superlayer.bounds;
+    //self.layer.position = CGPointMake(self.layer.bounds.size.width/2, self.layer.bounds.size.height/2);
 
 }
 

@@ -182,6 +182,10 @@ typedef enum resize_style_t {
 -(void)detachAllInputs;
 -(void)detachInput:(InputSource *)toDetach;
 -(void)attachInput:(InputSource *)toAttach;
+-(void)resetConstraints;
+
+
+
 
 
 

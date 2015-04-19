@@ -23,6 +23,7 @@
 @property (strong) NSDictionary *inputConstraintMap;
 @property (strong) NSArray *constraintSortDescriptors;
 
+- (IBAction)resetConstraints:(id)sender;
 
 - (IBAction)deleteMultiSource:(id)sender;
 -(void)openTransitionFilterPanel:(CIFilter *)forFilter;
