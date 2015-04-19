@@ -21,6 +21,19 @@
     if (self = [super init])
     {
         self = [super initWithNibName:@"InputPopupControllerViewController" bundle:nil];
+        self.inputConstraintMap = @{@"Left Edge": @(kCAConstraintMinX),
+                                    @"Right Edge": @(kCAConstraintMaxX),
+                                    @"Top Edge": @(kCAConstraintMaxY),
+                                    @"Bottom Edge": @(kCAConstraintMinY),
+                                    @"Horizontal Center": @(kCAConstraintMidX),
+                                    @"Vertical Center": @(kCAConstraintMidY),
+                                    @"Width": @(kCAConstraintWidth),
+                                    @"Height": @(kCAConstraintHeight),
+                                    };
+
+        self.constraintSortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"value" ascending:YES]];
+
+        
         //self = [super initWithNibName:@"TestView" bundle:nil];
 
     }

@@ -156,10 +156,15 @@ static NSArray *_sourceTypes = nil;
     
     [aCoder encodeObject:self.parentInput forKey:@"parentInput"];
     
+    [aCoder encodeObject:self.constraintMap forKey:@"constraintMap"];
+    
+    
     if (_userBackground)
     {
         [aCoder encodeObject:self.backgroundColor forKey:@"backgroundColor"];
     }
+    
+    
 }
 
 -(id) initWithCoder:(NSCoder *)aDecoder
@@ -363,7 +368,12 @@ static NSArray *_sourceTypes = nil;
             
         }
 
-        
+        id restoredConstraintMap = [aDecoder decodeObjectForKey:@"constraintMap"];
+        if (restoredConstraintMap)
+        {
+            self.constraintMap = restoredConstraintMap;
+            [self buildLayerConstraints];
+        }
         
 
     }
@@ -434,11 +444,41 @@ static NSArray *_sourceTypes = nil;
     self.crop_right = 0;
     self.videoSources = [[NSMutableArray alloc] init];
     
+    self.constraintMap = [NSMutableDictionary dictionary];
+
+    _constraintAttributeMap = @{@"LeftEdge": @(kCAConstraintMinX),
+                                @"RightEdge": @(kCAConstraintMaxX),
+                                @"TopEdge": @(kCAConstraintMaxY),
+                                @"BottomEdge": @(kCAConstraintMinY),
+                                @"HorizontalCenter": @(kCAConstraintMidX),
+                                @"VerticalCenter": @(kCAConstraintMidY),
+                                @"Width": @(kCAConstraintWidth),
+                                @"Height": @(kCAConstraintHeight),
+                                };
+
+    
+    NSArray *baseKeys = @[@"LeftEdge", @"RightEdge", @"TopEdge", @"BottomEdge", @"HorizontalCenter", @"VerticalCenter", @"Width", @"Height"];
+    
+    NSMutableArray *tmpArr = [NSMutableArray array];
+    
+    for (NSString *base in baseKeys)
+    {
+        [self.constraintMap setObject:[NSMutableDictionary dictionaryWithDictionary:@{@"attr": [NSNull null], @"offset": @0}] forKey:base];
+        
+        [tmpArr addObject:[NSString stringWithFormat:@"constraintMap.%@.attr", base]];
+        [tmpArr addObject:[NSString stringWithFormat:@"constraintMap.%@.offset", base]];
+    }
+    
+    
+    _constraintObserveKeys = tmpArr;
+    
+    
     self.transitionFilterName = @"fade";
     self.currentEffects = [[NSMutableArray alloc] init];
     
     self.unlock_aspect = NO;
     self.resizeType = kResizeNone;
+    
     
     
     self.layer = [CSInputLayer layer];
@@ -497,7 +537,7 @@ static NSArray *_sourceTypes = nil;
     
     
     [self addObserver:self forKeyPath:@"editorController" options:NSKeyValueObservingOptionNew context:NULL];
-    
+    [self observeConstraintKeys];
  }
 
 
@@ -720,6 +760,8 @@ static NSArray *_sourceTypes = nil;
     }
     
     [self removeObserver:self forKeyPath:@"editorController"];
+    [self stopObservingConstraintKeys];
+    
     
 }
 
@@ -1621,16 +1663,64 @@ static NSArray *_sourceTypes = nil;
 }
 
 
+-(void) buildLayerConstraints
+{
+    
+    
+    NSMutableArray *constraints = [NSMutableArray array];
+    
+    for (NSString *key in self.constraintMap)
+    {
+        
+        
+        NSNumber *constraintVal;
+        constraintVal = _constraintAttributeMap[key];
+        
+        if (!constraintVal)
+        {
+            continue;
+        }
+        
+        CAConstraintAttribute toConstrain = [constraintVal intValue];
+        NSDictionary *valMap = self.constraintMap[key];
+        if (!valMap)
+        {
+            continue;
+        }
+        NSNumber *parentVal = valMap[@"attr"];
+        NSNumber *offsetVal = valMap[@"offset"];
+        
+        if (!parentVal || (id)parentVal == [NSNull null])
+        {
+            continue;
+        }
+        
+        CGFloat offsetFloat = 0.0;
+        
+        if (offsetVal)
+        {
+            offsetFloat = [offsetVal floatValue];
+        }
+        
+        CAConstraintAttribute parentAttrib = [parentVal intValue];
+        [constraints addObject:[CAConstraint constraintWithAttribute:toConstrain relativeTo:@"superlayer" attribute:parentAttrib scale:1 offset:offsetFloat]];
+        
+    }
+    
+    self.layer.constraints = constraints;
+}
+
+
 //I should probably use contexts...
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if ([keyPath isEqualToString:@"editorController"]) {
         [self sourceConfigurationView];
-    } else if ([keyPath isEqualToString:@"activeVideoDevice.uniqueID"]) {
-    }
     
-        
-        
+    } else if ([keyPath isEqualToString:@"activeVideoDevice.uniqueID"]) {
+    } else if ([keyPath hasPrefix:@"constraintMap"]) {
+        [self buildLayerConstraints];
+    }
 }
 
 
@@ -1660,6 +1750,26 @@ static NSArray *_sourceTypes = nil;
 -(InputSource *)clonedFromInput
 {
     return _clonedFromInput;
+}
+
+
+
+-(void)stopObservingConstraintKeys
+{
+    for (NSString *key in _constraintObserveKeys)
+    {
+        [self removeObserver:self forKeyPath:key];
+    }
+}
+
+
+
+-(void)observeConstraintKeys
+{
+    for (NSString *key in _constraintObserveKeys)
+    {
+        [self addObserver:self forKeyPath:key options:NSKeyValueObservingOptionNew context:NULL];
+    }
 }
 
 

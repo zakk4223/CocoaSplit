@@ -20,6 +20,8 @@
 @property (strong) NSWindow *userFilterWindow;
 @property (strong) NSWindow *screenCropWindow;
 @property (weak) InputSource *inputSource;
+@property (strong) NSDictionary *inputConstraintMap;
+@property (strong) NSArray *constraintSortDescriptors;
 
 
 - (IBAction)deleteMultiSource:(id)sender;

@@ -62,6 +62,10 @@ typedef enum resize_style_t {
     CALayer *_currentLayer;
     
     bool _userBackground;
+    
+    NSDictionary *_constraintAttributeMap;
+    NSArray *_constraintObserveKeys;
+    
 }
 
 
@@ -158,6 +162,9 @@ typedef enum resize_style_t {
 @property (assign) float y_pos;
 @property (assign) float width;
 @property (assign) float height;
+
+@property (strong) NSMutableDictionary *constraintMap;
+
 
 
 -(void) updateOrigin:(CGFloat)x y:(CGFloat)y;
