@@ -158,6 +158,7 @@ static NSArray *_sourceTypes = nil;
     
     [aCoder encodeObject:self.constraintMap forKey:@"constraintMap"];
     
+    [aCoder encodeObject:self.layer.filters forKey:@"layerFilters"];
     
     if (_userBackground)
     {
@@ -373,8 +374,12 @@ static NSArray *_sourceTypes = nil;
             self.constraintMap = restoredConstraintMap;
             [self buildLayerConstraints];
         }
+        
+        self.layer.filters = [aDecoder decodeObjectForKey:@"layerFilters"];
+        
 
     }
+    
     
     
     return self;
@@ -499,7 +504,7 @@ static NSArray *_sourceTypes = nil;
     cFilter.name = @"Chromakey";
     cFilter.enabled = NO;
     
-    self.layer.filters = @[cFilter];
+    self.layer.sourceLayer.filters = @[cFilter];
     
     _multiTransition = [CATransition animation];
     _multiTransition.type = kCATransitionPush;
@@ -632,6 +637,104 @@ static NSArray *_sourceTypes = nil;
 -(CGFloat)borderWidth
 {
     return self.layer.borderWidth;
+}
+
+
+-(NSMutableArray *)newFilterArray:(NSArray *)filters withoutName:(NSString *)withoutName
+{
+    NSMutableArray *ret = [NSMutableArray array];
+    
+    for (CIFilter *filter in filters)
+    {
+        if ([filter.name isEqualToString:withoutName])
+        {
+            continue;
+        }
+        
+        [ret addObject:filter];
+    }
+    
+    return ret;
+}
+-(void)deleteLayerFilter:(NSString *)filteruuid
+{
+    self.layer.filters = [self newFilterArray:self.layer.filters withoutName:filteruuid];
+}
+-(void)deleteSourceFilter:(NSString *)filteruuid
+{
+    self.layer.sourceLayer.filters = [self newFilterArray:self.layer.sourceLayer.filters withoutName:filteruuid];
+}
+
+-(void)deleteBackgroundFilter:(NSString *)filteruuid
+{
+    self.layer.backgroundFilters = [self newFilterArray:self.layer.backgroundFilters withoutName:filteruuid];
+}
+
+
+
+-(void)addLayerFilter:(NSString *)filterName
+{
+
+    CIFilter *newFilter = [CIFilter filterWithName:filterName];
+    if (newFilter)
+    {
+        [newFilter setDefaults];
+        CFUUIDRef tmpUUID = CFUUIDCreate(NULL);
+        NSString *filterID = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, tmpUUID);
+        CFRelease(tmpUUID);
+        newFilter.name = filterID;
+        NSMutableArray *currentFilters = self.layer.filters.mutableCopy;
+        if (!currentFilters)
+        {
+            currentFilters = [NSMutableArray array];
+        }
+
+        [currentFilters addObject:newFilter];
+        self.layer.filters = currentFilters;
+    }
+}
+
+-(void)addSourceFilter:(NSString *)filterName
+{
+    
+    CIFilter *newFilter = [CIFilter filterWithName:filterName];
+    if (newFilter)
+    {
+        [newFilter setDefaults];
+        CFUUIDRef tmpUUID = CFUUIDCreate(NULL);
+        NSString *filterID = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, tmpUUID);
+        CFRelease(tmpUUID);
+        newFilter.name = filterID;
+        NSMutableArray *currentFilters = self.layer.sourceLayer.filters.mutableCopy;
+        if (!currentFilters)
+        {
+            currentFilters = [NSMutableArray array];
+        }
+
+        [currentFilters addObject:newFilter];
+        self.layer.sourceLayer.filters = currentFilters;
+    }
+}
+
+-(void)addBackgroundFilter:(NSString *)filterName
+{
+    
+    CIFilter *newFilter = [CIFilter filterWithName:filterName];
+    if (newFilter)
+    {
+        [newFilter setDefaults];
+        CFUUIDRef tmpUUID = CFUUIDCreate(NULL);
+        NSString *filterID = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, tmpUUID);
+        CFRelease(tmpUUID);
+        newFilter.name = filterID;
+        NSMutableArray *currentFilters = self.layer.backgroundFilters.mutableCopy;
+        if (!currentFilters)
+        {
+            currentFilters = [NSMutableArray array];
+        }
+        [currentFilters addObject:newFilter];
+        self.layer.backgroundFilters = currentFilters;
+    }
 }
 
 

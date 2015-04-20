@@ -238,7 +238,6 @@
         
 
         CFAbsoluteTime nowTime = CFAbsoluteTimeGetCurrent();
-        CFAbsoluteTime elapsed = nowTime - _lastFrame;
         _lastFrame = nowTime;
         
         _lastFrame = nowTime;

@@ -191,7 +191,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) NSString *transitionDirection;
 
 
--(IBAction)testAnimationStuff:(id)sender;
 
 - (IBAction)stagingViewToggle:(id)sender;
 -(void)showStagingView;

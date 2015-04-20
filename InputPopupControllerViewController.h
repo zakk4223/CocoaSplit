@@ -11,7 +11,7 @@
 
 @class InputSource;
 
-@interface InputPopupControllerViewController : NSViewController <NSPopoverDelegate, NSWindowDelegate>
+@interface InputPopupControllerViewController : NSViewController <NSPopoverDelegate, NSWindowDelegate, NSTableViewDelegate>
 
 @property (strong) IBOutlet NSWindow *popupWIndow;
 
@@ -24,14 +24,27 @@
 @property (strong) NSArray *constraintSortDescriptors;
 
 @property (assign) NSString *selectedVideoType;
+@property (weak) IBOutlet NSTableView *sourceFilterTableView;
+@property (weak) IBOutlet NSTableView *backgroundFilterTableView;
+@property (weak) IBOutlet NSTableView *layerFilterTableView;
 
+@property (assign) bool sourceTableHasSelection;
+@property (assign) bool backgroundTableHasSelection;
+@property (assign) bool layerTableHasSelection;
+
+- (IBAction)configureFilter:(NSButton *)sender;
 
 - (IBAction)resetConstraints:(id)sender;
+
+- (IBAction)removeFilter:(NSButton *)sender;
+
+
 
 - (IBAction)deleteMultiSource:(id)sender;
 -(void)openTransitionFilterPanel:(CIFilter *)forFilter;
 -(void)openUserFilterPanel:(CIFilter *)forFilter;
 
+- (IBAction)addFilterAction:(NSButton *)sender;
 
 @property (weak) IBOutlet NSArrayController *multiSourceController;
 @property (weak) IBOutlet NSArrayController *currentEffectsController;

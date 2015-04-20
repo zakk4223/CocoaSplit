@@ -1284,20 +1284,6 @@
     }
 }
 
-static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStamp* now, const CVTimeStamp* outputTime,
-                                  CVOptionFlags flagsIn, CVOptionFlags* flagsOut, void* displayLinkContext)
-{
-    
-    
-    
-    PreviewView *myself;
-    
-    myself = (__bridge PreviewView *)displayLinkContext;
-    
-    [myself cvrender];
-    return kCVReturnSuccess;
-}
-
 - (void) drawPixelBuffer:(CVImageBufferRef)cImageBuf
 {
  

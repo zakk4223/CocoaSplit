@@ -123,6 +123,11 @@
 		3481F30619B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3481F30519B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m */; };
 		348AC06B19B406910064F02D /* SourceLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 348AC06A19B406910064F02D /* SourceLayout.m */; };
 		348AC06C19B406910064F02D /* SourceLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 348AC06A19B406910064F02D /* SourceLayout.m */; };
+		34938EE81AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 34938EE71AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m */; };
+		34938EE91AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 34938EE71AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m */; };
+		34938EED1AE4D24200F3B1CF /* CSFilterChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34938EEB1AE4D24200F3B1CF /* CSFilterChooserWindowController.m */; };
+		34938EEE1AE4D24200F3B1CF /* CSFilterChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34938EEB1AE4D24200F3B1CF /* CSFilterChooserWindowController.m */; };
+		34938EEF1AE4D24200F3B1CF /* CSFilterChooserWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34938EEC1AE4D24200F3B1CF /* CSFilterChooserWindowController.xib */; };
 		349461451AAD73BC00F28883 /* TestView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 349461441AAD73BC00F28883 /* TestView.xib */; };
 		3494615A1AB4213B00F28883 /* CSAnimationRunner.py in Resources */ = {isa = PBXBuildFile; fileRef = 349461591AB4213B00F28883 /* CSAnimationRunner.py */; };
 		3494615C1AB4279300F28883 /* setup.py in Resources */ = {isa = PBXBuildFile; fileRef = 3494615B1AB4279300F28883 /* setup.py */; };
@@ -552,6 +557,11 @@
 		3481F30519B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "SourceLayout+ScriptingAdditions.m"; path = "ScriptingAddditions/SourceLayout+ScriptingAdditions.m"; sourceTree = "<group>"; };
 		348AC06919B406910064F02D /* SourceLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SourceLayout.h; sourceTree = "<group>"; };
 		348AC06A19B406910064F02D /* SourceLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SourceLayout.m; sourceTree = "<group>"; };
+		34938EE61AE4A7E500F3B1CF /* CSCIFilterConfigProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSCIFilterConfigProxy.h; sourceTree = "<group>"; };
+		34938EE71AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSCIFilterConfigProxy.m; sourceTree = "<group>"; };
+		34938EEA1AE4D24200F3B1CF /* CSFilterChooserWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSFilterChooserWindowController.h; path = Interface/CSFilterChooserWindowController.h; sourceTree = "<group>"; };
+		34938EEB1AE4D24200F3B1CF /* CSFilterChooserWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSFilterChooserWindowController.m; path = Interface/CSFilterChooserWindowController.m; sourceTree = "<group>"; };
+		34938EEC1AE4D24200F3B1CF /* CSFilterChooserWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSFilterChooserWindowController.xib; path = Interface/CSFilterChooserWindowController.xib; sourceTree = "<group>"; };
 		349461441AAD73BC00F28883 /* TestView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TestView.xib; sourceTree = "<group>"; };
 		349461571AB41DA000F28883 /* CSAnimationRunnerObj.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSAnimationRunnerObj.h; sourceTree = "<group>"; };
 		349461591AB4213B00F28883 /* CSAnimationRunner.py */ = {isa = PBXFileReference; explicitFileType = text.script.python; fileEncoding = 4; path = CSAnimationRunner.py; sourceTree = "<group>"; };
@@ -833,6 +843,8 @@
 				349461571AB41DA000F28883 /* CSAnimationRunnerObj.h */,
 				349461661ABC57C100F28883 /* CSAnimationItem.h */,
 				349461671ABC57C100F28883 /* CSAnimationItem.m */,
+				34938EE61AE4A7E500F3B1CF /* CSCIFilterConfigProxy.h */,
+				34938EE71AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m */,
 			);
 			path = CocoaSplit;
 			sourceTree = "<group>";
@@ -928,6 +940,9 @@
 				349461731AC49BB300F28883 /* CSAnimationChooserViewController.m */,
 				349461741AC49BB300F28883 /* CSAnimationChooserViewController.xib */,
 				3415CED21AE257DA002F11F5 /* CSTextCaptureBaseView.xib */,
+				34938EEA1AE4D24200F3B1CF /* CSFilterChooserWindowController.h */,
+				34938EEB1AE4D24200F3B1CF /* CSFilterChooserWindowController.m */,
+				34938EEC1AE4D24200F3B1CF /* CSFilterChooserWindowController.xib */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -1275,7 +1290,6 @@
 				3470F41719C8534B000A81C4 /* ShellScript */,
 				349461611AB42FF000F28883 /* CopyFiles */,
 				3460E5891AC766120080358E /* CopyFiles */,
-				3460E58B1AC768840080358E /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1568,6 +1582,7 @@
 				3494615C1AB4279300F28883 /* setup.py in Resources */,
 				34D4351B198BE3B700266169 /* NewLayoutPanel.xib in Resources */,
 				342B33B61980771200492CB7 /* line.vtsh in Resources */,
+				34938EEF1AE4D24200F3B1CF /* CSFilterChooserWindowController.xib in Resources */,
 				3435E39B188B93150015CC01 /* passthrough.vtsh in Resources */,
 				34B5FCE119BF1C3F00F67D19 /* CreateLayoutViewController.xib in Resources */,
 				3463F99E1AD0DC7100F3B5C8 /* movement.py in Resources */,
@@ -1602,19 +1617,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		3460E58B1AC768840080358E /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#rm \"${BUILT_PRODUCTS_DIR}\"/\"${CONTENTS_FOLDER_PATH}\"/PlugIns/Animations/*.pyc";
-		};
 		3470F41719C8534B000A81C4 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1662,6 +1664,7 @@
 				34B5FCDF19BF1C3F00F67D19 /* CreateLayoutViewController.m in Sources */,
 				349461751AC49BB300F28883 /* CSAnimationChooserViewController.m in Sources */,
 				342346CF15F9F07E00C8C77E /* CSAbstractCaptureDevice.m in Sources */,
+				34938EE81AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m in Sources */,
 				34210B3E1606001200362FC8 /* OutputDestination.m in Sources */,
 				345F8B391A15D850009A81E3 /* CAMultiAudioDefaultOutput.m in Sources */,
 				3408235519BC677A00CD1F5F /* CSNotifications.m in Sources */,
@@ -1677,6 +1680,7 @@
 				34576C7819AFCA1B007BAD90 /* CSPluginLoader.m in Sources */,
 				34FDD6F21A215268009A7413 /* CSPluginServices.m in Sources */,
 				34F5141316FD6E4F00BA894D /* AppleVTCompressor.m in Sources */,
+				34938EED1AE4D24200F3B1CF /* CSFilterChooserWindowController.m in Sources */,
 				34DF75581AA272F100DA9FDE /* LayoutRenderer.m in Sources */,
 				348AC06B19B406910064F02D /* SourceLayout.m in Sources */,
 				345F8B751A17A785009A81E3 /* CAMultiAudioMixer.m in Sources */,
@@ -1700,6 +1704,7 @@
 				345F8B2E1A156E15009A81E3 /* CAMultiAudioDevice.m in Sources */,
 				347277FE1A5A2758008801A9 /* CSIOSurfaceLayer.m in Sources */,
 				345F8B261A14E6A0009A81E3 /* CAMultiAudioNode.m in Sources */,
+				34938EEE1AE4D24200F3B1CF /* CSFilterChooserWindowController.m in Sources */,
 				345F8B761A17A785009A81E3 /* CAMultiAudioMixer.m in Sources */,
 				34D2D5781A547C35001004E5 /* CSTextCaptureViewControllerBase.m in Sources */,
 				34AFC33419B19CD00007C07B /* SourceCache.m in Sources */,
@@ -1710,6 +1715,7 @@
 				3431FFE219786502000965FE /* InputSource.m in Sources */,
 				348AC06C19B406910064F02D /* SourceLayout.m in Sources */,
 				3451A1D81712C5C400DF6A8B /* x264Compressor.m in Sources */,
+				34938EE91AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m in Sources */,
 				345F8B3E1A15F3BD009A81E3 /* CAMultiAudioPCM.m in Sources */,
 				34CFE4A518F1992A00092C6A /* AVFAudioChannel.m in Sources */,
 				3451A1D91712C5C700DF6A8B /* AppleVTCompressor.m in Sources */,
@@ -1861,6 +1867,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
@@ -1872,6 +1879,8 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CocoaSplit/CocoaSplit-Prefix.pch";
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_PARAMETER = NO;
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				INFOPLIST_FILE = "CocoaSplit/CocoaSplit-Info.plist";
 				"LIBRARY_SEARCH_PATHS[arch=*]" = "";
@@ -1897,6 +1906,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
@@ -1910,6 +1920,8 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CocoaSplit/CocoaSplit-Prefix.pch";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_PARAMETER = NO;
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				INFOPLIST_FILE = "CocoaSplit/CocoaSplit-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;

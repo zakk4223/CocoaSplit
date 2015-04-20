@@ -184,6 +184,16 @@ typedef enum resize_style_t {
 -(void)attachInput:(InputSource *)toAttach;
 -(void)resetConstraints;
 -(NSViewController *)sourceConfigurationView;
+-(void)addLayerFilter:(NSString *)filterName;
+-(void)addSourceFilter:(NSString *)filterName;
+-(void)addBackgroundFilter:(NSString *)filterName;
+-(void)deleteLayerFilter:(NSString *)filteruuid;
+-(void)deleteSourceFilter:(NSString *)filteruuid;
+-(void)deleteBackgroundFilter:(NSString *)filteruuid;
+
+
+
+
 
 
 
