@@ -165,6 +165,11 @@ typedef enum resize_style_t {
 
 @property (strong) NSMutableDictionary *constraintMap;
 
+@property (strong) CIFilter *advancedTransition;
+@property (strong) NSString *advancedTransitionName;
+
+
+
 
 
 -(void) updateOrigin:(CGFloat)x y:(CGFloat)y;

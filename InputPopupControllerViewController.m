@@ -35,7 +35,15 @@
                                     };
 
         self.constraintSortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"value" ascending:YES]];
+        self.availableTransitions = [NSMutableDictionary dictionary];
 
+        NSArray *ciTransitionNames = [CIFilter filterNamesInCategory:kCICategoryTransition];
+        for (NSString *ciName in ciTransitionNames)
+        {
+            NSString *niceName = [CIFilter localizedNameForFilterName:ciName];
+            [self.availableTransitions setObject:niceName forKey:ciName];
+        }
+        
         
         //self = [super initWithNibName:@"TestView" bundle:nil];
 
@@ -70,6 +78,15 @@
     
     return self.inputSource.selectedVideoType;
 }
+
+-(IBAction) configureInputTransition:(NSButton *)sender
+{
+    if (self.inputSource.advancedTransition)
+    {
+        [self openTransitionFilterPanel:self.inputSource.advancedTransition];
+    }
+}
+
 
 - (IBAction)configureFilter:(NSButton *)sender
 {
@@ -306,7 +323,16 @@
     
     
     
-    [self rebindViewControls:filterView withProxy:filterProxy];
+    if (forLayer)
+    {
+        CSCIFilterConfigProxy *filterProxy = [[CSCIFilterConfigProxy alloc] init];
+        filterProxy.baseLayer = forLayer;
+        filterProxy.layerFilterName = forFilter.name;
+        filterProxy.filterType = withType;
+
+        [self rebindViewControls:filterView withProxy:filterProxy];
+    }
+    
     
     self.userFilterWindow = [[NSWindow alloc] init];
 

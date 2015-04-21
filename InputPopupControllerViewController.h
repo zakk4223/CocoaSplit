@@ -32,6 +32,9 @@
 @property (assign) bool backgroundTableHasSelection;
 @property (assign) bool layerTableHasSelection;
 
+@property (strong) NSMutableDictionary *availableTransitions;
+
+
 - (IBAction)configureFilter:(NSButton *)sender;
 
 - (IBAction)resetConstraints:(id)sender;
@@ -42,7 +45,8 @@
 
 - (IBAction)deleteMultiSource:(id)sender;
 -(void)openTransitionFilterPanel:(CIFilter *)forFilter;
--(void)openUserFilterPanel:(CIFilter *)forFilter;
+-(IBAction) configureInputTransition:(NSButton *)sender;
+
 
 - (IBAction)addFilterAction:(NSButton *)sender;
 

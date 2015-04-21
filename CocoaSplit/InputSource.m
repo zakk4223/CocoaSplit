@@ -526,7 +526,6 @@ static NSArray *_sourceTypes = nil;
     self.transitionDirection = kCATransitionFromRight;
     self.transitionDuration = 2.0f;
     
-    self.availableEffectNames = [CIFilter filterNamesInCategories:nil];
     self.doChromaKey = NO;
     self.chromaKeyThreshold = 0.1005f;
     self.chromaKeySmoothing = 0.1344f;
@@ -656,6 +655,8 @@ static NSArray *_sourceTypes = nil;
     
     return ret;
 }
+
+
 -(void)deleteLayerFilter:(NSString *)filteruuid
 {
     self.layer.filters = [self newFilterArray:self.layer.filters withoutName:filteruuid];
@@ -1027,6 +1028,26 @@ static NSArray *_sourceTypes = nil;
 }
 
 
+-(void) setAdvancedTransitionName:(NSString *)advancedTransitionName
+{
+    CIFilter *newTransition = [CIFilter filterWithName:advancedTransitionName];
+    [newTransition setDefaults];
+    self.advancedTransition = newTransition;
+    
+}
+
+
+-(NSString *)advancedTransitionName
+{
+    if (self.advancedTransition)
+    {
+        return self.advancedTransition.className;
+    }
+    
+    return nil;
+}
+
+
 -(void) setTransitionFilterName:(NSString *)transitionFilterName
 {
     _transitionFilterName = transitionFilterName;
@@ -1038,6 +1059,7 @@ static NSArray *_sourceTypes = nil;
 {
     return _transitionFilterName;
 }
+
 
 
 
@@ -1088,6 +1110,7 @@ static NSArray *_sourceTypes = nil;
         _multiTransition.type = self.transitionFilterName;
         _multiTransition.duration = self.transitionDuration;
         _multiTransition.subtype = self.transitionDirection;
+        _multiTransition.filter = self.advancedTransition.copy;
         
         [self.layer transitionToLayer:_nextInput.layer fromLayer:_currentInput.layer withTransition:_multiTransition];
         _currentInput = _nextInput;

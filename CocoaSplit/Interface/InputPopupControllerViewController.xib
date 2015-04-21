@@ -507,13 +507,7 @@
                                 </textFieldCell>
                             </textField>
                             <box verticalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="QBW-Q6-I7d">
-                                <rect key="frame" x="303" y="273" width="136" height="5"/>
-                                <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                                <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <font key="titleFont" metaFont="system"/>
-                            </box>
-                            <box verticalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="rcb-T5-GbU">
-                                <rect key="frame" x="303" y="181" width="136" height="5"/>
+                                <rect key="frame" x="303" y="281" width="136" height="5"/>
                                 <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                                 <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <font key="titleFont" metaFont="system"/>
@@ -553,6 +547,12 @@
                                     </binding>
                                 </connections>
                             </button>
+                            <box verticalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="rcb-T5-GbU">
+                                <rect key="frame" x="303" y="185" width="136" height="5"/>
+                                <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                                <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <font key="titleFont" metaFont="system"/>
+                            </box>
                         </subviews>
                     </view>
                 </tabViewItem>
@@ -854,6 +854,44 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BHl-nR-0pY">
+                                <rect key="frame" x="147" y="381" width="120" height="14"/>
+                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Core Image Transition" id="NRR-BL-qMt">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G8u-yY-gqV">
+                                <rect key="frame" x="273" y="376" width="101" height="22"/>
+                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="LTL-rb-GGr" id="2MC-FB-E4j">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <menu key="menu" id="StC-6o-96F">
+                                        <items>
+                                            <menuItem title="Item 1" state="on" id="LTL-rb-GGr"/>
+                                            <menuItem title="Item 2" id="q7O-Z1-DG4"/>
+                                            <menuItem title="Item 3" id="wGu-va-9P3"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                                <connections>
+                                    <binding destination="JDZ-il-mOi" name="content" keyPath="arrangedObjects" id="fKT-M5-jM0"/>
+                                    <binding destination="JDZ-il-mOi" name="contentObjects" keyPath="arrangedObjects.key" previousBinding="fKT-M5-jM0" id="j9p-o7-MEL"/>
+                                    <binding destination="JDZ-il-mOi" name="contentValues" keyPath="arrangedObjects.value" previousBinding="j9p-o7-MEL" id="T5F-Qe-qig"/>
+                                    <binding destination="Gdf-y2-DdF" name="selectedObject" keyPath="selection.advancedTransitionName" previousBinding="T5F-Qe-qig" id="i5e-qV-t9o"/>
+                                </connections>
+                            </popUpButton>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KZU-Tb-igF">
+                                <rect key="frame" x="379" y="373" width="80" height="28"/>
+                                <buttonCell key="cell" type="push" title="Configure" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fCl-4N-B5C">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="smallSystem"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="configureInputTransition:" target="-2" id="Kcf-1x-wWZ"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </view>
                 </tabViewItem>
@@ -1823,11 +1861,6 @@
                 <binding destination="Gdf-y2-DdF" name="contentArray" keyPath="selection.attachedInputs" id="sbD-fu-ivQ"/>
             </connections>
         </arrayController>
-        <arrayController id="dYd-S3-qDP" userLabel="availableEffectsController">
-            <connections>
-                <binding destination="Gdf-y2-DdF" name="contentArray" keyPath="selection.availableEffectNames" id="Vyp-C1-1sw"/>
-            </connections>
-        </arrayController>
         <dictionaryController objectClassName="_NSControllerKeyValuePair" id="5ZX-ve-K4l" userLabel="constraintMapController">
             <connections>
                 <binding destination="-2" name="sortDescriptors" keyPath="self.constraintSortDescriptors" id="KZP-ka-QrM"/>
@@ -1844,6 +1877,11 @@
                 <binding destination="Gdf-y2-DdF" name="contentArray" keyPath="selection.layer.filters" id="fOV-is-dce"/>
             </connections>
         </arrayController>
+        <dictionaryController objectClassName="_NSControllerKeyValuePair" id="JDZ-il-mOi" userLabel="availableTransitionsController">
+            <connections>
+                <binding destination="-2" name="contentDictionary" keyPath="self.availableTransitions" id="W91-VB-Kqi"/>
+            </connections>
+        </dictionaryController>
         <arrayController id="Yz8-ps-On7" userLabel="backgroundFiltersController">
             <connections>
                 <binding destination="Gdf-y2-DdF" name="contentArray" keyPath="selection.layer.backgroundFilters" id="BqP-Zc-k7f"/>
