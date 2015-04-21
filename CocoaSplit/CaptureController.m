@@ -1278,6 +1278,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
     [saveRoot setValue:self.multiAudioEngine forKey:@"multiAudioEngine"];
     
+    [saveRoot setValue:self.transitionFilter forKey:@"transitionFilter"];
     
     [NSKeyedArchiver archiveRootObject:saveRoot toFile:path];
 }
@@ -1307,6 +1308,8 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     self.transitionName = [saveRoot valueForKey:@"transitionName"];
     self.transitionDirection = [saveRoot valueForKey:@"transitionDirection"];
     self.transitionDuration = [[saveRoot valueForKey:@"transitionDuration"] floatValue];
+    self.transitionFilter = [saveRoot valueForKey:@"transitionFilter"];
+    
     
     self.captureWidth = [[saveRoot valueForKey:@"captureWidth"] intValue];
     self.captureHeight = [[saveRoot valueForKey:@"captureHeight"] intValue];
@@ -2644,12 +2647,11 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
     
     self.transitionFilterWindow = [[NSWindow alloc] init];
-    self.transitionFilterWindow.delegate = self;
     [self.transitionFilterWindow setContentSize:filterView.bounds.size];
     [self.transitionFilterWindow.contentView addSubview:filterView];
     
     self.transitionFilterWindow.styleMask =  NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask;
-    [self.transitionFilterWindow setReleasedWhenClosed:NO];
+    [self.transitionFilterWindow setReleasedWhenClosed:YES];
     
     [self.transitionFilterWindow makeKeyAndOrderFront:self.transitionFilterWindow];
     

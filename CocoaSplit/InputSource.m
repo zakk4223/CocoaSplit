@@ -87,6 +87,8 @@ static NSArray *_sourceTypes = nil;
     newSource.transitionDuration = self.transitionDuration;
     newSource.transitionFilterName = self.transitionFilterName;
     newSource.transitionDirection = self.transitionDirection;
+    newSource.advancedTransition = self.advancedTransition;
+    
     
 
     
@@ -153,6 +155,8 @@ static NSArray *_sourceTypes = nil;
     [aCoder encodeObject:self.transitionFilterName forKey:@"transitionFilterName"];
     [aCoder encodeObject:self.transitionDirection forKey:@"transitionDirection"];
     [aCoder encodeFloat:self.transitionDuration forKey:@"transitionDuration"];
+    [aCoder encodeObject:self.advancedTransition forKey:@"advancedTransition"];
+    
     
     [aCoder encodeObject:self.parentInput forKey:@"parentInput"];
     
@@ -338,6 +342,8 @@ static NSArray *_sourceTypes = nil;
         self.transitionDirection = [aDecoder decodeObjectForKey:@"transitionDirection"];
         self.transitionFilterName = [aDecoder decodeObjectForKey:@"transitionFilterName"];
         self.transitionDuration = [aDecoder decodeFloatForKey:@"transitionDuration"];
+        self.advancedTransition = [aDecoder decodeObjectForKey:@"advancedTransition"];
+        
         
         for(id vInput in self.videoSources)
         {
