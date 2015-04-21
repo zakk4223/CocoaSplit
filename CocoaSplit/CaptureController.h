@@ -184,13 +184,17 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (weak) IBOutlet PreviewView *stagingPreviewView;
 @property (weak) IBOutlet PreviewView *livePreviewView;
 
-@property (strong) NSArray *transitionNames;
+@property (strong) NSMutableDictionary *transitionNames;
 @property (strong) NSArray *transitionDirections;
 @property (assign) float transitionDuration;
 @property (strong) NSString *transitionName;
 @property (strong) NSString *transitionDirection;
+@property (strong) CIFilter *transitionFilter;
+
+@property (strong) NSWindow *transitionFilterWindow;
 
 
+-(IBAction)openTransitionFilterPanel:(NSButton *)sender;
 
 - (IBAction)stagingViewToggle:(id)sender;
 -(void)showStagingView;

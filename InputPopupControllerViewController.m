@@ -37,7 +37,14 @@
         self.constraintSortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"value" ascending:YES]];
         self.availableTransitions = [NSMutableDictionary dictionary];
 
+        NSArray *caTransitionNames = @[kCATransitionFade, kCATransitionPush, kCATransitionMoveIn, kCATransitionReveal, @"cube", @"alignedCube", @"flip", @"alignedFlip"];
         NSArray *ciTransitionNames = [CIFilter filterNamesInCategory:kCICategoryTransition];
+        
+        for (NSString *caName in caTransitionNames)
+        {
+            [self.availableTransitions setObject:caName forKey:caName];
+        }
+        
         for (NSString *ciName in ciTransitionNames)
         {
             NSString *niceName = [CIFilter localizedNameForFilterName:ciName];

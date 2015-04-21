@@ -714,24 +714,6 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gTd-R7-qyX">
-                                <rect key="frame" x="308" y="400" width="76" height="22"/>
-                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Grt-H9-s7R" id="l2e-Fg-hVe">
-                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <menu key="menu" title="OtherViews" id="kyF-rr-MnR">
-                                        <items>
-                                            <menuItem title="Item 1" state="on" id="Grt-H9-s7R"/>
-                                            <menuItem title="Item 2" id="8VF-rG-ZO0"/>
-                                            <menuItem title="Item 3" id="Xvq-U2-7hQ"/>
-                                        </items>
-                                    </menu>
-                                </popUpButtonCell>
-                                <connections>
-                                    <binding destination="Gdf-y2-DdF" name="selectedObject" keyPath="selection.transitionFilterName" previousBinding="pJ1-54-HN4" id="BhA-Ca-ctR"/>
-                                    <binding destination="Gdf-y2-DdF" name="content" keyPath="selection.transitionNames" id="pJ1-54-HN4"/>
-                                </connections>
-                            </popUpButton>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="t1a-ea-9eE">
                                 <rect key="frame" x="389" y="405" width="52" height="14"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Direction" id="Fbf-FG-srr">
@@ -739,6 +721,13 @@
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
+                                <connections>
+                                    <binding destination="Gdf-y2-DdF" name="hidden" keyPath="selection.advancedTransition" id="cPV-zC-kof">
+                                        <dictionary key="options">
+                                            <string key="NSValueTransformerName">NSIsNotNil</string>
+                                        </dictionary>
+                                    </binding>
+                                </connections>
                             </textField>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hhv-Ub-D72">
                                 <rect key="frame" x="447" y="400" width="89" height="22"/>
@@ -754,6 +743,11 @@
                                     </menu>
                                 </popUpButtonCell>
                                 <connections>
+                                    <binding destination="Gdf-y2-DdF" name="hidden" keyPath="selection.advancedTransition" id="VnP-mr-aoY">
+                                        <dictionary key="options">
+                                            <string key="NSValueTransformerName">NSIsNotNil</string>
+                                        </dictionary>
+                                    </binding>
                                     <binding destination="Gdf-y2-DdF" name="selectedObject" keyPath="selection.transitionDirection" previousBinding="crK-rH-FfP" id="9Vq-W1-W8y"/>
                                     <binding destination="Gdf-y2-DdF" name="content" keyPath="selection.transitionDirections" id="crK-rH-FfP"/>
                                 </connections>
@@ -854,16 +848,23 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BHl-nR-0pY">
-                                <rect key="frame" x="147" y="381" width="120" height="14"/>
-                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Core Image Transition" id="NRR-BL-qMt">
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KZU-Tb-igF">
+                                <rect key="frame" x="384" y="397" width="80" height="28"/>
+                                <buttonCell key="cell" type="push" title="Configure" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fCl-4N-B5C">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="configureInputTransition:" target="-2" id="Kcf-1x-wWZ"/>
+                                    <binding destination="Gdf-y2-DdF" name="hidden" keyPath="selection.advancedTransition" id="sqw-ea-k5p">
+                                        <dictionary key="options">
+                                            <string key="NSValueTransformerName">NSIsNil</string>
+                                        </dictionary>
+                                    </binding>
+                                </connections>
+                            </button>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G8u-yY-gqV">
-                                <rect key="frame" x="273" y="376" width="101" height="22"/>
+                                <rect key="frame" x="299" y="400" width="87" height="22"/>
                                 <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="LTL-rb-GGr" id="2MC-FB-E4j">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="smallSystem"/>
@@ -879,19 +880,9 @@
                                     <binding destination="JDZ-il-mOi" name="content" keyPath="arrangedObjects" id="fKT-M5-jM0"/>
                                     <binding destination="JDZ-il-mOi" name="contentObjects" keyPath="arrangedObjects.key" previousBinding="fKT-M5-jM0" id="j9p-o7-MEL"/>
                                     <binding destination="JDZ-il-mOi" name="contentValues" keyPath="arrangedObjects.value" previousBinding="j9p-o7-MEL" id="T5F-Qe-qig"/>
-                                    <binding destination="Gdf-y2-DdF" name="selectedObject" keyPath="selection.advancedTransitionName" previousBinding="T5F-Qe-qig" id="i5e-qV-t9o"/>
+                                    <binding destination="Gdf-y2-DdF" name="selectedObject" keyPath="selection.transitionFilterName" previousBinding="T5F-Qe-qig" id="4wp-Cd-0vm"/>
                                 </connections>
                             </popUpButton>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KZU-Tb-igF">
-                                <rect key="frame" x="379" y="373" width="80" height="28"/>
-                                <buttonCell key="cell" type="push" title="Configure" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fCl-4N-B5C">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="configureInputTransition:" target="-2" id="Kcf-1x-wWZ"/>
-                                </connections>
-                            </button>
                         </subviews>
                     </view>
                 </tabViewItem>

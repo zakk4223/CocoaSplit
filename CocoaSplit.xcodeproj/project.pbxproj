@@ -128,6 +128,7 @@
 		34938EED1AE4D24200F3B1CF /* CSFilterChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34938EEB1AE4D24200F3B1CF /* CSFilterChooserWindowController.m */; };
 		34938EEE1AE4D24200F3B1CF /* CSFilterChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34938EEB1AE4D24200F3B1CF /* CSFilterChooserWindowController.m */; };
 		34938EEF1AE4D24200F3B1CF /* CSFilterChooserWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34938EEC1AE4D24200F3B1CF /* CSFilterChooserWindowController.xib */; };
+		34938EF01AE68EBD00F3B1CF /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3444D8E719A0CDE8000DC46B /* Quartz.framework */; };
 		349461451AAD73BC00F28883 /* TestView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 349461441AAD73BC00F28883 /* TestView.xib */; };
 		3494615A1AB4213B00F28883 /* CSAnimationRunner.py in Resources */ = {isa = PBXBuildFile; fileRef = 349461591AB4213B00F28883 /* CSAnimationRunner.py */; };
 		3494615C1AB4279300F28883 /* setup.py in Resources */ = {isa = PBXBuildFile; fileRef = 3494615B1AB4279300F28883 /* setup.py */; };
@@ -679,6 +680,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34938EF01AE68EBD00F3B1CF /* Quartz.framework in Frameworks */,
 				34EAFB811A1BA87000E12FBD /* CoreMediaIO.framework in Frameworks */,
 				345F8B361A157444009A81E3 /* CoreAudio.framework in Frameworks */,
 				345F8B1E1A12AC31009A81E3 /* AudioUnit.framework in Frameworks */,

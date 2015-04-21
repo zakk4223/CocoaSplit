@@ -1051,7 +1051,16 @@ static NSArray *_sourceTypes = nil;
 -(void) setTransitionFilterName:(NSString *)transitionFilterName
 {
     _transitionFilterName = transitionFilterName;
+    if ([transitionFilterName hasPrefix:@"CI"])
+    {
+        CIFilter *newFilter = [CIFilter filterWithName:transitionFilterName];
+        [newFilter setDefaults];
+        self.advancedTransition = newFilter;
+    } else {
+        self.advancedTransition = nil;
+    }
 }
+
 
 
 

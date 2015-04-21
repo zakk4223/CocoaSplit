@@ -709,28 +709,43 @@
                                                                 </menu>
                                                             </popUpButtonCell>
                                                             <connections>
-                                                                <binding destination="816" name="selectedObject" keyPath="self.transitionName" previousBinding="gHj-E5-u21" id="7NH-Bz-bII"/>
-                                                                <binding destination="816" name="content" keyPath="self.transitionNames" id="gHj-E5-u21">
+                                                                <binding destination="nSm-CJ-gxC" name="content" keyPath="arrangedObjects" id="yxj-c8-r4W">
                                                                     <dictionary key="options">
                                                                         <bool key="NSInsertsNullPlaceholder" value="YES"/>
                                                                     </dictionary>
                                                                 </binding>
+                                                                <binding destination="nSm-CJ-gxC" name="contentObjects" keyPath="arrangedObjects.key" previousBinding="yxj-c8-r4W" id="dz4-SQ-VCC">
+                                                                    <dictionary key="options">
+                                                                        <bool key="NSInsertsNullPlaceholder" value="YES"/>
+                                                                    </dictionary>
+                                                                </binding>
+                                                                <binding destination="nSm-CJ-gxC" name="contentValues" keyPath="arrangedObjects.value" previousBinding="dz4-SQ-VCC" id="PFd-um-l95">
+                                                                    <dictionary key="options">
+                                                                        <bool key="NSInsertsNullPlaceholder" value="YES"/>
+                                                                    </dictionary>
+                                                                </binding>
+                                                                <binding destination="816" name="selectedObject" keyPath="self.transitionName" previousBinding="PFd-um-l95" id="fF7-Yl-qoL"/>
                                                             </connections>
                                                         </popUpButton>
                                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OgS-Yl-xu8">
                                                             <rect key="frame" x="398" y="52" width="101" height="22"/>
-                                                            <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="uW1-56-9SC" id="U9w-Ld-Wpk">
+                                                            <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="U9w-Ld-Wpk">
                                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                 <font key="font" metaFont="smallSystem"/>
                                                                 <menu key="menu" id="EB5-PZ-Yqs">
                                                                     <items>
-                                                                        <menuItem title="Item 1" state="on" id="uW1-56-9SC"/>
+                                                                        <menuItem title="Item 1" id="uW1-56-9SC"/>
                                                                         <menuItem title="Item 2" id="YOw-VC-MQj"/>
                                                                         <menuItem title="Item 3" id="aDV-ze-kcq"/>
                                                                     </items>
                                                                 </menu>
                                                             </popUpButtonCell>
                                                             <connections>
+                                                                <binding destination="816" name="hidden" keyPath="self.transitionFilter" id="WE9-ru-0Yf">
+                                                                    <dictionary key="options">
+                                                                        <string key="NSValueTransformerName">NSIsNotNil</string>
+                                                                    </dictionary>
+                                                                </binding>
                                                                 <binding destination="816" name="selectedObject" keyPath="self.transitionDirection" previousBinding="ogF-SB-YR2" id="yoE-SW-E9Q"/>
                                                                 <binding destination="816" name="content" keyPath="self.transitionDirections" id="ogF-SB-YR2"/>
                                                             </connections>
@@ -761,6 +776,13 @@
                                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
+                                                            <connections>
+                                                                <binding destination="816" name="hidden" keyPath="self.transitionFilter" id="TX0-hI-W6m">
+                                                                    <dictionary key="options">
+                                                                        <string key="NSValueTransformerName">NSIsNotNil</string>
+                                                                    </dictionary>
+                                                                </binding>
+                                                            </connections>
                                                         </textField>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XKJ-xe-0nr">
                                                             <rect key="frame" x="343" y="86" width="29" height="14"/>
@@ -795,6 +817,21 @@
                                                                 <binding destination="816" name="enabled" keyPath="self.livePreviewView.viewOnly" id="y5c-R8-MiT">
                                                                     <dictionary key="options">
                                                                         <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                    </dictionary>
+                                                                </binding>
+                                                            </connections>
+                                                        </button>
+                                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ty6-U2-o3b">
+                                                            <rect key="frame" x="340" y="49" width="80" height="28"/>
+                                                            <buttonCell key="cell" type="push" title="Configure" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2mF-In-QLx">
+                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                <font key="font" metaFont="smallSystem"/>
+                                                            </buttonCell>
+                                                            <connections>
+                                                                <action selector="openTransitionFilterPanel:" target="816" id="RVR-a0-edT"/>
+                                                                <binding destination="816" name="hidden" keyPath="self.transitionFilter" id="Npl-mz-MQd">
+                                                                    <dictionary key="options">
+                                                                        <string key="NSValueTransformerName">NSIsNil</string>
                                                                     </dictionary>
                                                                 </binding>
                                                             </connections>
@@ -2067,6 +2104,11 @@
                 <binding destination="816" name="contentObject" keyPath="self.previewCtx.selectedSource" id="ddB-Nb-tkf"/>
             </connections>
         </objectController>
+        <dictionaryController objectClassName="_NSControllerKeyValuePair" id="nSm-CJ-gxC" userLabel="transitionsController">
+            <connections>
+                <binding destination="816" name="contentDictionary" keyPath="self.transitionNames" id="eiM-KK-Is2"/>
+            </connections>
+        </dictionaryController>
         <arrayController id="3897" userLabel="AspectOptionsController">
             <connections>
                 <binding destination="816" name="contentArray" keyPath="self.arOptions" id="3900"/>

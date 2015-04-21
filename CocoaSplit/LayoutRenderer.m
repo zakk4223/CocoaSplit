@@ -146,6 +146,7 @@
         _layoutTransition.type = self.transitionName  ;
         _layoutTransition.subtype = self.transitionDirection;
         _layoutTransition.duration = self.transitionDuration;
+        _layoutTransition.filter = self.transitionFilter;
         _layoutTransition.removedOnCompletion = YES;
         [CATransaction setCompletionBlock:^{
             [CATransaction begin];

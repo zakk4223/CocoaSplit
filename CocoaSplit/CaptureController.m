@@ -34,6 +34,8 @@
 @synthesize selectedLayout = _selectedLayout;
 @synthesize stagingLayout = _stagingLayout;
 @synthesize audioSamplerate  = _audioSamplerate;
+@synthesize transitionName = _transitionName;
+
 
 
 -(IBAction)mainDeleteLayoutClicked:(id)sender
@@ -776,10 +778,25 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
    if (self = [super init])
    {
        
-       self.transitionNames = @[kCATransitionFade, kCATransitionPush, kCATransitionMoveIn, kCATransitionReveal, @"cube", @"alignedCube", @"flip", @"alignedFlip"];
        self.transitionDirections = @[kCATransitionFromTop, kCATransitionFromRight, kCATransitionFromBottom, kCATransitionFromLeft];
 
        
+       NSArray *caTransitionNames = @[kCATransitionFade, kCATransitionPush, kCATransitionMoveIn, kCATransitionReveal, @"cube", @"alignedCube", @"flip", @"alignedFlip"];
+       NSArray *ciTransitionNames = [CIFilter filterNamesInCategory:kCICategoryTransition];
+       
+       self.transitionNames = [NSMutableDictionary dictionary];
+       
+       for (NSString *caName in caTransitionNames)
+       {
+           [self.transitionNames setObject:caName forKey:caName];
+       }
+       
+       for (NSString *ciName in ciTransitionNames)
+       {
+           NSString *niceName = [CIFilter localizedNameForFilterName:ciName];
+           [self.transitionNames setObject:niceName forKey:ciName];
+       }
+
        self.sharedPluginLoader = [CSPluginLoader sharedPluginLoader];
        
        
@@ -1470,6 +1487,8 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     self.stagingCtx.layoutRenderer.transitionName = self.transitionName;
     self.stagingCtx.layoutRenderer.transitionDirection = self.transitionDirection;
     self.stagingCtx.layoutRenderer.transitionDuration = self.transitionDuration;
+    self.stagingCtx.layoutRenderer.transitionFilter = self.transitionFilter;
+    
     
     
 
@@ -1518,6 +1537,8 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     self.previewCtx.layoutRenderer.transitionName = self.transitionName;
     self.previewCtx.layoutRenderer.transitionDirection = self.transitionDirection;
     self.previewCtx.layoutRenderer.transitionDuration = self.transitionDuration;
+    self.previewCtx.layoutRenderer.transitionFilter = self.transitionFilter;
+    
 
     if (selectedLayout == _selectedLayout)
     {
@@ -1550,6 +1571,27 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     return _selectedLayout;
 }
 
+
+-(void) setTransitionName:(NSString *)transitionName
+{
+    _transitionName = transitionName;
+    if ([transitionName hasPrefix:@"CI"])
+    {
+        CIFilter *newFilter = [CIFilter filterWithName:transitionName];
+        [newFilter setDefaults];
+        self.transitionFilter = newFilter;
+    } else {
+        self.transitionFilter = nil;
+    }
+}
+
+
+
+
+-(NSString *)transitionName
+{
+    return _transitionName;
+}
 
 -(NSArray *)layoutSortDescriptors
 {
@@ -2589,6 +2631,30 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
 
 
+-(IBAction)openTransitionFilterPanel:(NSButton *)sender
+{
+    
+    
+    if (!self.transitionFilter)
+    {
+        return;
+    }
+    
+    IKFilterUIView *filterView = [self.transitionFilter viewForUIConfiguration:@{IKUISizeFlavor:IKUISizeMini} excludedKeys:@[kCIInputImageKey, kCIInputTargetImageKey, kCIInputTimeKey]];
+    
+    
+    self.transitionFilterWindow = [[NSWindow alloc] init];
+    self.transitionFilterWindow.delegate = self;
+    [self.transitionFilterWindow setContentSize:filterView.bounds.size];
+    [self.transitionFilterWindow.contentView addSubview:filterView];
+    
+    self.transitionFilterWindow.styleMask =  NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask;
+    [self.transitionFilterWindow setReleasedWhenClosed:NO];
+    
+    [self.transitionFilterWindow makeKeyAndOrderFront:self.transitionFilterWindow];
+    
+}
+
 
 - (IBAction)openPluginManager:(id)sender
 {
@@ -2603,6 +2669,8 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     self.previewCtx.layoutRenderer.transitionName = self.transitionName;
     self.previewCtx.layoutRenderer.transitionDirection = self.transitionDirection;
     self.previewCtx.layoutRenderer.transitionDuration = self.transitionDuration;
+    self.previewCtx.layoutRenderer.transitionFilter = self.transitionFilter;
+    
 
     if (self.stagingLayout && self.stagingCtx.sourceLayout)
     {

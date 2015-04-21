@@ -31,6 +31,8 @@
 @property (assign) bool isLiveRenderer;
 @property (strong) NSString *transitionName;
 @property (strong) NSString *transitionDirection;
+@property (strong) CIFilter *transitionFilter;
+
 @property (assign) float transitionDuration;
 
 
