@@ -17,6 +17,9 @@
 @synthesize scrollXSpeed = _scrollXSpeed;
 @synthesize scrollYSpeed = _scrollYSpeed;
 @synthesize cropRect = _cropRect;
+@synthesize startColor = _startColor;
+@synthesize stopColor = _stopColor;
+
 @dynamic fakeHeight;
 @dynamic fakeWidth;
 
@@ -112,6 +115,129 @@
     
 }
 
+
+-(void)clearGradient
+{
+    self.colors = @[];
+    self.startColor = nil;
+    self.stopColor = nil;
+}
+
+
+-(void)setGradientStartX:(CGFloat)gradientStartX
+{
+    CGPoint cBounds = self.startPoint;
+    cBounds.x = gradientStartX;
+    self.startPoint = cBounds;
+}
+
+-(CGFloat)gradientStartX
+{
+    return self.startPoint.x;
+}
+
+
+-(void)setGradientStartY:(CGFloat)gradientStartY
+{
+    CGPoint cBounds = self.startPoint;
+    cBounds.y = gradientStartY;
+    self.startPoint = cBounds;
+}
+
+-(CGFloat)gradientStartY
+{
+    return self.startPoint.y;
+}
+
+-(void)setGradientStopX:(CGFloat)gradientStopX
+{
+    CGPoint cBounds = self.endPoint;
+    cBounds.x = gradientStopX;
+    self.endPoint = cBounds;
+}
+
+-(CGFloat)gradientStopX
+{
+    return self.endPoint.x;
+}
+
+-(void)setGradientStopY:(CGFloat)gradientStopY
+{
+    CGPoint cBounds = self.endPoint;
+    cBounds.y = gradientStopY;
+    self.endPoint = cBounds;
+}
+
+-(CGFloat)gradientStopY
+{
+    return self.endPoint.y;
+}
+
+
+
+-(void)setStartColor:(NSColor *)startColor
+{
+    
+    
+    if (!startColor)
+    {
+        return;
+    }
+    CGColorRef newStart = CGColorRetain(startColor.CGColor);
+    
+    
+    _startColor = startColor;
+    
+    NSMutableArray *newColors = [NSMutableArray array];
+    
+    [newColors addObject:(id)CFBridgingRelease(newStart)];
+    id lastColor = self.colors.lastObject;
+    
+    if (lastColor)
+    {
+        [newColors addObject:lastColor];
+    }
+    
+    
+    self.colors = newColors;
+}
+
+-(NSColor *)startColor
+{
+    return _startColor;
+}
+
+
+-(void)setStopColor:(NSColor *)stopColor
+{
+    
+    if (!stopColor)
+    {
+        return;
+    }
+    
+    
+    CGColorRef newStop = CGColorRetain(stopColor.CGColor);
+    
+    _stopColor = stopColor;
+    
+    NSMutableArray *newColors = [NSMutableArray array];
+    
+    id startColor = self.colors.firstObject;
+    if (startColor)
+    {
+        [newColors addObject:startColor];
+    }
+    
+    
+    [newColors addObject:(id)CFBridgingRelease(newStop)];
+    self.colors = newColors;
+}
+
+-(NSColor *)stopColor
+{
+    return _stopColor;
+}
 
 
 -(void)frameTick

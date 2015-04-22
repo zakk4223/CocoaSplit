@@ -422,6 +422,12 @@
 
 
 
+-(IBAction) clearGradient:(NSButton *)sender
+{
+
+    [self.inputSource.layer clearGradient];
+}
+
 
 
 - (IBAction)resetConstraints:(id)sender

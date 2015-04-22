@@ -2010,7 +2010,7 @@
                     <constraint firstItem="2368" firstAttribute="top" secondItem="372" secondAttribute="top" id="t3R-20-X4J"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="358.5" y="220"/>
+            <point key="canvasLocation" x="339.5" y="110"/>
         </window>
         <dictionaryController objectClassName="_NSControllerKeyValuePair" id="gSI-N4-DsK" userLabel="CompressorDictionaryController">
             <connections>
@@ -2241,7 +2241,7 @@ MgA3AEEARwBQAFcAXABkAHkAewB9AH8AgQCLAJAAlQCgAKMApQCnAKkArgC5AMIAygDNANYA2wDoAOwA
                     </connections>
                 </segmentedControl>
             </subviews>
-            <point key="canvasLocation" x="885.5" y="194.5"/>
+            <point key="canvasLocation" x="872.5" y="291.5"/>
         </view>
         <view id="bRh-Lo-mbG">
             <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>

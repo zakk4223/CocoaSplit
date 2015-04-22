@@ -162,6 +162,16 @@ static NSArray *_sourceTypes = nil;
     
     [aCoder encodeObject:self.constraintMap forKey:@"constraintMap"];
     
+    
+    [aCoder encodeObject:self.layer.startColor forKey:@"gradientStartColor"];
+    [aCoder encodeObject:self.layer.stopColor forKey:@"gradientStopColor"];
+    [aCoder encodeFloat: self.layer.startPoint.x forKey:@"gradientStartPointX"];
+    [aCoder encodeFloat: self.layer.startPoint.y forKey:@"gradientStartPointY"];
+    [aCoder encodeFloat: self.layer.endPoint.x forKey:@"gradientEndPointX"];
+    [aCoder encodeFloat: self.layer.endPoint.y forKey:@"gradientEndPointY"];
+
+
+    
     [aCoder encodeObject:self.layer.filters forKey:@"layerFilters"];
     
     if (_userBackground)
@@ -380,6 +390,20 @@ static NSArray *_sourceTypes = nil;
             self.constraintMap = restoredConstraintMap;
             [self buildLayerConstraints];
         }
+        
+        self.layer.startColor = [aDecoder decodeObjectForKey:@"gradientStartColor"];
+        self.layer.stopColor = [aDecoder decodeObjectForKey:@"gradientStopColor"];
+        
+        
+        self.layer.gradientStartX = [aDecoder decodeFloatForKey:@"gradientStartPointX"];
+        self.layer.gradientStartY = [aDecoder decodeFloatForKey:@"gradientStartPointY"];
+        
+        self.layer.gradientStopX = [aDecoder decodeFloatForKey:@"gradientEndPointX"];
+        self.layer.gradientStopY = [aDecoder decodeFloatForKey:@"gradientEndPointY"];
+        
+        
+
+        
         
         self.layer.filters = [aDecoder decodeObjectForKey:@"layerFilters"];
         

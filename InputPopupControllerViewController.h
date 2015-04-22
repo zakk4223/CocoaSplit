@@ -50,6 +50,8 @@
 
 - (IBAction)addFilterAction:(NSButton *)sender;
 
+-(IBAction) clearGradient:(NSButton *)sender;
+
 @property (weak) IBOutlet NSArrayController *multiSourceController;
 @property (weak) IBOutlet NSArrayController *currentEffectsController;
 @property (weak) IBOutlet NSWindow *cropSelectionWindow;

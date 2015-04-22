@@ -7,10 +7,10 @@
 //
 
 #import <QuartzCore/QuartzCore.h>
-
+#import <AppKit/AppKit.h>
 @class InputSource;
 
-@interface CSInputLayer : CALayer
+@interface CSInputLayer : CAGradientLayer
 {
     //CAReplicatorLayer *_xLayer;
     CAReplicatorLayer *_yLayer;
@@ -33,9 +33,21 @@
 @property (nonatomic, assign) CGFloat fakeWidth;
 @property (nonatomic, assign) CGFloat fakeHeight;
 
+
+@property (strong) NSColor *startColor;
+@property (strong) NSColor *stopColor;
+
+@property (assign) CGFloat gradientStartX;
+@property (assign) CGFloat gradientStartY;
+@property (assign) CGFloat gradientStopX;
+@property (assign) CGFloat gradientStopY;
+
+
 -(void)setSourceLayer:(CALayer *)sourceLayer withTransition:(CATransition *)transition;
 -(void)frameTick;
 -(void)transitionToLayer:(CALayer *)toLayer fromLayer:(CALayer *)fromLayer withTransition:(CATransition *)transition;
 -(void)transitionsDisabled;
+-(void)clearGradient;
+
 
 @end
