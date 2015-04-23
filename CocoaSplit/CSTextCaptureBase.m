@@ -106,6 +106,7 @@
 {
     if (self.text)
     {
+        
         self.activeVideoDevice.uniqueID = self.text;
         
         NSMutableDictionary *strAttrs = [NSMutableDictionary dictionaryWithDictionary:self.fontAttributes];
@@ -119,13 +120,12 @@
             self.allowScaling = NO;
         }
 
+        
         [self updateLayersWithBlock:^(CALayer *layer) {
             layer.bounds = CGRectMake(0.0, 0.0, _attribString.size.width, _attribString.size.height);
             ((CATextLayer *)layer).string = _attribString;
             ((CATextLayer *)layer).alignmentMode = self.alignmentMode;
             ((CATextLayer *)layer).wrapped = self.wrapped;
-
- 
         }];
         
         
@@ -142,6 +142,11 @@
 
 -(void)setText:(NSString *)text
 {
+    
+    if ([_text isEqualToString:text])
+    {
+        return;
+    }
     _text = text;
     self.captureName = text;
     
@@ -241,7 +246,7 @@
 
 + (NSSet *)keyPathsForValuesAffectingPropertiesChanged
 {
-    return [NSSet setWithObjects:@"text", @"font", @"fontAttributes", @"alignmentMode", @"wrapped",nil];
+    return [NSSet setWithObjects:@"font", @"fontAttributes", @"alignmentMode", @"wrapped",nil];
 }
 
 

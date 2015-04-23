@@ -90,7 +90,8 @@
 
 -(void)frameTick
 {
-    self.text = [_formatter stringFromDate:[NSDate date]];
+    NSString *newText = [_formatter stringFromDate:[NSDate date]];
+    self.text = newText;
 }
 
 
