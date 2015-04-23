@@ -606,6 +606,7 @@ static NSArray *_sourceTypes = nil;
 -(void)clearBackground
 {
     self.backgroundColor = nil;
+    _userBackground = YES;
 }
 
 

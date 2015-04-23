@@ -10,7 +10,7 @@
 
 @interface CSChromaKeyFilter : CIFilter {
     CIImage      *inputImage;
-    CIVector     *inputColor;
+    CIColor     *inputColor;
     NSNumber     *inputThreshold;
     NSNumber     *inputSmoothing;
 }

@@ -32,17 +32,21 @@ static CIKernel *_CSChromaKeyFilterKernel = nil;
 {
     return @{
         @"inputColor":@{
-            kCIAttributeDefault:[CIVector vectorWithX:0.0f Y:1.0f Z:0.0f],
+            kCIAttributeDefault:[CIColor colorWithRed:0.0f green:1.0f blue:0.0f],
             kCIAttributeType:kCIAttributeTypeOpaqueColor,
         },
         @"inputThreshold":@{
             kCIAttributeDefault:@0.1005,
             kCIAttributeType:kCIAttributeTypeScalar,
+            kCIAttributeSliderMax:@0.5,
+            kCIAttributeSliderMin:@0,
         },
         
         @"inputSmoothing":@{
             kCIAttributeDefault:@0.1344,
             kCIAttributeType:kCIAttributeTypeScalar,
+            kCIAttributeSliderMax:@0.5,
+            kCIAttributeSliderMin:@0,
         },
     };
 }
