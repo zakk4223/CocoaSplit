@@ -158,10 +158,10 @@
 -(void)sourceConfigurationView
 {
 
-    NSViewController *sourceViewController = [self.inputSource sourceConfigurationView];
+    self.inputConfigViewController  = [self.inputSource sourceConfigurationView];
     
     
-    NSView *configView = sourceViewController.view;
+    NSView *configView = self.inputConfigViewController.view;
     self.view.hidden = NO;
     
     

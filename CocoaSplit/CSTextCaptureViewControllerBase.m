@@ -24,11 +24,13 @@
 
 - (IBAction)openFontPanel:(id)sender
 {
+    
     NSFontManager *fontManager = [NSFontManager sharedFontManager];
     fontManager.delegate = self;
     
     NSFontPanel *fontPanel = [fontManager fontPanel:YES];
     fontPanel.delegate = self;
+    
     
     [fontPanel makeKeyAndOrderFront:self];
     [fontManager setSelectedFont:self.captureObj.font isMultiple:NO];
@@ -52,6 +54,8 @@
 
 -(void)dealloc
 {
+
+    NSLog(@"DEALLOC TEXT CAPTURE BASE!");
     
     NSFontManager *fontManager = [NSFontManager sharedFontManager];
     

@@ -57,5 +57,6 @@
 @property (weak) IBOutlet NSWindow *cropSelectionWindow;
 @property (weak) IBOutlet NSView *sourceConfigView;
 @property (strong) IBOutlet NSObjectController *inputobjctrl;
+@property (strong) NSViewController *inputConfigViewController;
 
 @end

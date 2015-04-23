@@ -1522,7 +1522,7 @@ static NSArray *_sourceTypes = nil;
 }
 
 
--(NSViewController *)sourceConfigurationView;
+-(NSViewController *)sourceConfigurationView
 {
     
     NSViewController *vcont = nil;
