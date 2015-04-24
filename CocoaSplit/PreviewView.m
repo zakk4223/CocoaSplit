@@ -447,7 +447,7 @@
     
     NSPoint worldPoint = [self realPointforWindowPoint:mouseLoc];
     
-    InputSource *newSrc = [self.sourceLayout findSource:worldPoint withExtra:2];
+    InputSource *newSrc = [self.sourceLayout findSource:worldPoint withExtra:2 deepParent:YES];
     
 
     if (!newSrc)
@@ -503,11 +503,18 @@
         return;
     }
     
+    bool doDeep = YES;
+    
+    if (theEvent.modifierFlags & NSControlKeyMask)
+    {
+        doDeep = NO;
+    }
     NSPoint tmp;
     
     tmp = [self convertPoint:theEvent.locationInWindow fromView:nil];
     NSPoint worldPoint = [self realPointforWindowPoint:tmp];
-    self.selectedSource = [self.sourceLayout findSource:worldPoint];
+    self.selectedSource = [self.sourceLayout findSource:worldPoint deepParent:doDeep];
+    
     if (self.selectedSource)
     {
         [self buildSettingsMenu];
@@ -566,7 +573,19 @@
     NSPoint worldPoint = [self realPointforWindowPoint:tmp];
     
     InputSource *oldSource = self.selectedSource;
-    self.selectedSource = [self.sourceLayout findSource:worldPoint];
+    
+    InputSource *topSource = [self.sourceLayout findSource:worldPoint deepParent:NO];
+
+    InputSource *deepSource = [self.sourceLayout findSource:worldPoint deepParent:YES];
+;
+    
+    if (theEvent.modifierFlags & NSControlKeyMask)
+    {
+        self.selectedSource = topSource;
+    } else {
+        self.selectedSource = deepSource;
+    }
+    
     if (!self.selectedSource)
     {
         return;
@@ -606,6 +625,12 @@
     
     
     self.isResizing = self.resizeType != kResizeNone;
+    
+    if (self.isResizing)
+    {
+        self.selectedSource = deepSource;
+    }
+    
     
     self.selectedOriginDistance = worldPoint;
     

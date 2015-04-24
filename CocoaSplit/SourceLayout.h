@@ -63,8 +63,8 @@
 
 -(void)deleteSource:(InputSource *)delSource;
 -(void)addSource:(InputSource *)newSource;
--(InputSource *)findSource:(NSPoint)forPoint;
--(InputSource *)findSource:(NSPoint)forPoint withExtra:(float)withExtra;
+-(InputSource *)findSource:(NSPoint)forPoint deepParent:(bool)deepParent;
+-(InputSource *)findSource:(NSPoint)forPoint withExtra:(float)withExtra deepParent:(bool)deepParent;
 -(NSArray *)sourceListOrdered;
 -(void) saveSourceList;
 -(void) restoreSourceList;

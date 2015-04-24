@@ -229,7 +229,7 @@
 }
 
 
--(InputSource *)findSource:(NSPoint)forPoint withExtra:(float)withExtra
+-(InputSource *)findSource:(NSPoint)forPoint withExtra:(float)withExtra deepParent:(bool)deepParent
 {
     /* invert the point due to layer rendering inversion/weirdness */
     
@@ -243,21 +243,23 @@
         retInput = foundLayer.delegate;
     }
     
-    InputSource *parentInput = retInput.parentInput;
 
-    while (retInput && retInput.parentInput && NSEqualRects(retInput.globalLayoutPosition, ((InputSource *)retInput.parentInput).globalLayoutPosition))
+    if (deepParent)
     {
-        retInput = retInput.parentInput;
+        while (retInput && retInput.parentInput && NSEqualRects(retInput.globalLayoutPosition, ((InputSource *)retInput.parentInput).globalLayoutPosition))
+        {
+            retInput = retInput.parentInput;
+        }
     }
     
     
     return retInput;
 
 }
--(InputSource *)findSource:(NSPoint)forPoint
+-(InputSource *)findSource:(NSPoint)forPoint deepParent:(bool)deepParent
 {
     
-    return [self findSource:forPoint withExtra:0];
+    return [self findSource:forPoint withExtra:0 deepParent:deepParent];
 }
 
 

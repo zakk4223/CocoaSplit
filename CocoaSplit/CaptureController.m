@@ -2260,7 +2260,8 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
 -(InputSource *)findSource:(NSPoint)forPoint
 {
-    return [self.selectedLayout findSource:forPoint];
+    
+    return [self.selectedLayout findSource:forPoint deepParent:YES];
 }
 
 
