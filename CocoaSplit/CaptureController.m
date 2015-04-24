@@ -2651,7 +2651,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     [self.transitionFilterWindow.contentView addSubview:filterView];
     
     self.transitionFilterWindow.styleMask =  NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask;
-    [self.transitionFilterWindow setReleasedWhenClosed:YES];
+    [self.transitionFilterWindow setReleasedWhenClosed:NO];
     
     [self.transitionFilterWindow makeKeyAndOrderFront:self.transitionFilterWindow];
     

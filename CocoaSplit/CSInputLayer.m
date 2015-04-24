@@ -178,6 +178,8 @@
 -(void)setStartColor:(NSColor *)startColor
 {
     
+
+    
     
     if (!startColor)
     {
@@ -210,6 +212,8 @@
 
 -(void)setStopColor:(NSColor *)stopColor
 {
+    
+    _stopColor = stopColor;
     
     if (!stopColor)
     {
