@@ -251,7 +251,6 @@
     
     if (foundLayer && [foundLayer isKindOfClass:[CSInputLayer class]])
     {
-        NSLog(@"FOUND LAYER %@", foundLayer);
         retInput = ((CSInputLayer *)foundLayer).sourceInput;
     }
     

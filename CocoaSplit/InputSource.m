@@ -1374,7 +1374,10 @@ static NSArray *_sourceTypes = nil;
         return;
     }
 
+    [toDetach resetConstraints];
+    
     toDetach.parentInput = nil;
+    
     [self.sourceLayout.rootLayer addSublayer:toDetach.layer];
     toDetach.layer.hidden = NO;
     
