@@ -251,8 +251,10 @@ static NSArray *_sourceTypes = nil;
         }
 
 
-        self.layer.position = CGPointMake(x_pos, y_pos);
-        self.layer.bounds = CGRectMake(0, 0, width, height);
+        NSRect tmpRect = NSIntegralRect(NSMakeRect(x_pos, y_pos, width, height));
+        self.layer.position = CGPointMake(tmpRect.origin.x, tmpRect.origin.y);
+        self.layer.bounds = CGRectMake(0, 0, tmpRect.size.width, tmpRect.size.height);
+        
        
         
 
@@ -1341,7 +1343,7 @@ static NSArray *_sourceTypes = nil;
         newLayout.size.height = height;
         
             self.layer.allowResize = tmpResize;
-            self.layer.frame = newLayout;
+            self.layer.frame = NSIntegralRect(newLayout);
             self.layer.allowResize = oldResize;
         
     }
@@ -1426,7 +1428,8 @@ static NSArray *_sourceTypes = nil;
         NSRect newFrame = self.layer.frame;
         newFrame.origin.x = x;
         newFrame.origin.y = y;
-        self.layer.frame = newFrame;
+        self.layer.frame = NSIntegralRect(newFrame);
+        
     }
 
 }
@@ -1450,8 +1453,11 @@ static NSArray *_sourceTypes = nil;
         
             //[CATransaction begin];
             //[CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
+        NSRect tmpRect = NSIntegralRect(NSMakeRect(newOrigin.x, newOrigin.y, 100, 100));
+        
         self.layer.disableAnimation = YES;
-            self.layer.position = newOrigin;
+            self.layer.position = tmpRect.origin;
+        
         self.layer.disableAnimation = NO;
             
             //[CATransaction commit];

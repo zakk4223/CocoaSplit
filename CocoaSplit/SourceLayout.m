@@ -236,13 +236,22 @@
     CGPoint newPoint = CGPointMake(forPoint.x, self.canvas_height-forPoint.y);
     CALayer *foundLayer = [self.rootLayer hitTest:newPoint];
     
+    InputSource *retInput;
+    
     if (foundLayer)
     {
-        return foundLayer.delegate;
+        retInput = foundLayer.delegate;
+    }
+    
+    InputSource *parentInput = retInput.parentInput;
+
+    while (retInput && retInput.parentInput && NSEqualRects(retInput.globalLayoutPosition, ((InputSource *)retInput.parentInput).globalLayoutPosition))
+    {
+        retInput = retInput.parentInput;
     }
     
     
-    return nil;
+    return retInput;
 
 }
 -(InputSource *)findSource:(NSPoint)forPoint
