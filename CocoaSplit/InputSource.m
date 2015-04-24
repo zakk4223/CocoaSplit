@@ -520,7 +520,7 @@ static NSArray *_sourceTypes = nil;
     self.layer = [CSInputLayer layer];
     self.layer.contentsGravity = kCAGravityResizeAspect;
     
-    self.layer.delegate = self;
+    self.layer.sourceInput = self;
     
     //self.layer.anchorPoint = CGPointMake(0.0, 0.0);
     
@@ -1791,6 +1791,13 @@ static NSArray *_sourceTypes = nil;
 
 -(void)willDelete
 {
+    [self detachAllInputs];
+    if (self.parentInput)
+    {
+        [self.parentInput detachInput:self];
+    }
+    
+    
     _currentInput = nil;
 }
 

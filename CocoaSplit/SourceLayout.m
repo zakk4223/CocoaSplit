@@ -247,11 +247,12 @@
     CGPoint newPoint = CGPointMake(forPoint.x, self.canvas_height-forPoint.y);
     CALayer *foundLayer = [self.rootLayer hitTest:newPoint];
     
-    InputSource *retInput;
+    InputSource *retInput = nil;
     
-    if (foundLayer)
+    if (foundLayer && [foundLayer isKindOfClass:[CSInputLayer class]])
     {
-        retInput = foundLayer.delegate;
+        NSLog(@"FOUND LAYER %@", foundLayer);
+        retInput = ((CSInputLayer *)foundLayer).sourceInput;
     }
     
 
@@ -417,7 +418,6 @@
 {
     
     [delSource willDelete];
-    [delSource detachAllInputs];
     
     [[self mutableArrayValueForKey:@"sourceList" ] removeObject:delSource];
 

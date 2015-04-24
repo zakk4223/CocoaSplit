@@ -182,7 +182,7 @@ typedef enum resize_style_t {
 -(void)frameTick;
 -(void)willDelete;
 -(void)clearBackground;
--(CALayer *)animationLayer;
+-(CSInputLayer *)animationLayer;
 -(void)makeSublayerOfLayer:(CALayer *)parentLayer;
 -(void)detachAllInputs;
 -(void)detachInput:(InputSource *)toDetach;
