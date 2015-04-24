@@ -222,6 +222,17 @@
 }
 
 
+-(NSArray *)transitionListOrdered
+{
+    if (!self.transitionSourceList)
+    {
+        return @[];
+    }
+    
+    
+    NSArray *listCopy = [self.transitionSourceList sortedArrayUsingDescriptors:@[_sourceDepthSorter, _sourceUUIDSorter]];
+    return listCopy;
+}
 -(NSArray *)sourceListOrdered
 {
     NSArray *listCopy = [self.sourceList sortedArrayUsingDescriptors:@[_sourceDepthSorter, _sourceUUIDSorter]];
@@ -279,6 +290,8 @@
     {
         
         self.transitionLayer = [CALayer layer];
+        self.transitionLayer.frame = self.rootLayer.frame;
+        
         
         NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:self.savedSourceListData];
         
@@ -538,6 +551,14 @@
             [isource frameTick];
         }
         
+    }
+    
+    for (InputSource *isource in [self transitionListOrdered])
+    {
+        if (isource.active)
+        {
+            [isource frameTick];
+        }
     }
 }
 
