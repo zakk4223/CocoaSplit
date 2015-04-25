@@ -61,6 +61,13 @@
     
 }
 
+
+-(id<CAAction>)actionForLayer:(CALayer *)layer forKey:(NSString *)event
+{
+    return (id<CAAction>)[NSNull null];
+}
+
+
 -(void)resizeRenderer
 {
     
@@ -98,6 +105,7 @@
     self.rootLayer.sublayerTransform = CATransform3DTranslate(self.rootLayer.sublayerTransform, 0, _cvpool_size.height, 0);
     self.rootLayer.sublayerTransform = CATransform3DScale(self.rootLayer.sublayerTransform, 1.0, -1.0, 1.0);
     self.renderer.bounds = NSMakeRect(0.0, 0.0, _cvpool_size.width, _cvpool_size.height);
+    self.rootLayer.delegate = self;
     
     glViewport(0, 0, _cvpool_size.width, _cvpool_size.height);
     glMatrixMode(GL_PROJECTION);
@@ -125,6 +133,7 @@
     if (!self.rootLayer)
     {
         self.rootLayer = [CALayer layer];
+        self.rootLayer.delegate = self;
     }
     
     SourceLayout *saveLayout;

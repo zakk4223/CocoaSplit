@@ -57,6 +57,9 @@ typedef enum resize_style_t {
     CIFilter *_chromaFilter;
     __weak InputSource *_currentInput;
 
+    int _frameCount;
+    
+    
     
     
     CALayer *_currentLayer;
@@ -65,6 +68,7 @@ typedef enum resize_style_t {
     
     NSDictionary *_constraintAttributeMap;
     NSArray *_constraintObserveKeys;
+    NSMutableDictionary *_restoredConstraintMap;
     
 }
 
@@ -156,7 +160,7 @@ typedef enum resize_style_t {
 @property (strong) NSColor *backgroundColor;
 @property (readonly) CGRect globalLayoutPosition;
 @property (strong) NSMutableArray *attachedInputs;
-@property (weak) id parentInput;
+@property (weak) InputSource* parentInput;
 
 @property (assign) float x_pos;
 @property (assign) float y_pos;
@@ -195,6 +199,10 @@ typedef enum resize_style_t {
 -(void)deleteLayerFilter:(NSString *)filteruuid;
 -(void)deleteSourceFilter:(NSString *)filteruuid;
 -(void)deleteBackgroundFilter:(NSString *)filteruuid;
+-(void)buildLayerConstraints;
+-(void)restoreConstraints;
+
+
 
 
 

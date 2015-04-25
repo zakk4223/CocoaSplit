@@ -41,7 +41,10 @@
         self.rootLayer.masksToBounds = YES;
         self.rootLayer.backgroundColor = CGColorCreateGenericRGB(0, 0, 0, 1);
         self.rootLayer.layoutManager = [CAConstraintLayoutManager layoutManager];
+        self.rootLayer.delegate = self;
+        
         self.animationList = [NSMutableArray array];
+        
         
         //self.rootLayer.geometryFlipped = YES;
         _rootSize = NSMakeSize(_canvas_width, _canvas_height);
@@ -291,7 +294,11 @@
         
         self.transitionLayer = [CALayer layer];
         self.transitionLayer.frame = self.rootLayer.frame;
-        
+        self.transitionLayer.masksToBounds = YES;
+        self.transitionLayer.backgroundColor = CGColorCreateGenericRGB(0, 0, 0, 1);
+        self.transitionLayer.layoutManager = [CAConstraintLayoutManager layoutManager];
+        self.transitionLayer.delegate = self;
+
         
         NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:self.savedSourceListData];
         
@@ -325,10 +332,11 @@
         src.sourceLayout = self;
         src.is_live = self.isActive;
         
-        if (!src.layer.superlayer)
+         if (!src.layer.superlayer)
         {
             [self.transitionLayer addSublayer:src.layer];
         }
+        
     }
     
 
@@ -372,10 +380,14 @@
         src.sourceLayout = self;
         src.is_live = self.isActive;
         
+        
+
         if (!src.layer.superlayer)
         {
             [self.rootLayer addSublayer:src.layer];
         }
+        
+
         
         [[self mutableArrayValueForKey:@"sourceList" ] addObject:src];
     }
@@ -521,6 +533,12 @@
     }
     
     return ret;
+}
+
+
+-(id<CAAction>)actionForLayer:(CALayer *)layer forKey:(NSString *)event
+{
+    return (id<CAAction>)[NSNull null];
 }
 
 

@@ -166,6 +166,8 @@ static NSArray *_sourceTypes = nil;
     
     [aCoder encodeObject:self.parentInput forKey:@"parentInput"];
     
+    
+    
     [aCoder encodeObject:self.constraintMap forKey:@"constraintMap"];
     
     
@@ -225,6 +227,7 @@ static NSArray *_sourceTypes = nil;
         
 
 
+        
         float x_pos,y_pos,width,height;
         
         if ([aDecoder containsValueForKey:@"CAx_pos"])
@@ -260,8 +263,15 @@ static NSArray *_sourceTypes = nil;
         NSRect tmpRect = NSIntegralRect(NSMakeRect(x_pos, y_pos, width, height));
         self.layer.position = CGPointMake(tmpRect.origin.x, tmpRect.origin.y);
         self.layer.bounds = CGRectMake(0, 0, tmpRect.size.width, tmpRect.size.height);
+
+
+
+        _restoredConstraintMap  = [aDecoder decodeObjectForKey:@"constraintMap"];
         
-       
+        
+
+
+        
         
 
         
@@ -386,18 +396,14 @@ static NSArray *_sourceTypes = nil;
         InputSource *parentInput = [aDecoder decodeObjectForKey:@"parentInput"];
         if (parentInput)
         {
+            
             [parentInput.layer addSublayer:self.layer];
             [parentInput.attachedInputs addObject:self];
             self.parentInput = parentInput;
+
             
         }
 
-        id restoredConstraintMap = [aDecoder decodeObjectForKey:@"constraintMap"];
-        if (restoredConstraintMap)
-        {
-            self.constraintMap = restoredConstraintMap;
-            [self buildLayerConstraints];
-        }
         
         self.layer.startColor = [aDecoder decodeObjectForKey:@"gradientStartColor"];
         self.layer.stopColor = [aDecoder decodeObjectForKey:@"gradientStopColor"];
@@ -448,6 +454,13 @@ static NSArray *_sourceTypes = nil;
     
 }
 
+
+
+-(void)restoreConstraints
+{
+    self.constraintMap = _restoredConstraintMap;
+    _restoredConstraintMap = nil;
+}
 
 
 -(void)resetConstraints
@@ -620,12 +633,13 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setBackgroundColor:(NSColor *)backgroundColor
 {
+    
+    _userBackground = YES;
+
     if (backgroundColor)
     {
-        _userBackground = YES;
         self.layer.backgroundColor = [backgroundColor CGColor];
     } else {
-        _userBackground = NO;
         self.layer.backgroundColor = NULL;
     }
 }
@@ -1221,6 +1235,10 @@ static NSArray *_sourceTypes = nil;
 -(void)frameTick
 {
     
+    _frameCount++;
+    
+
+    
     self.layoutPosition = self.layer.frame;
     _x_pos = self.layer.frame.origin.x;
     _y_pos = self.layer.frame.origin.y;
@@ -1228,6 +1246,21 @@ static NSArray *_sourceTypes = nil;
     _height = self.layer.frame.size.height;
     
     [self multiChange];
+
+    //a terrible terrible hack. if constraints are applied immediately some layers get weird small sizes
+    //delaying 2+ frames seems to clear it up. do this until I figure out wtf
+    
+    if (_restoredConstraintMap && _frameCount > 2)
+    {
+        _frameCount++;
+
+        self.constraintMap = _restoredConstraintMap;
+        
+        _restoredConstraintMap = nil;
+        
+    }
+
+    
     
     if (!self.videoInput)
     {
@@ -1250,6 +1283,8 @@ static NSArray *_sourceTypes = nil;
 
         
     }
+    
+    
     [self.videoInput frameTick];
     [self.layer frameTick];
 
@@ -1396,6 +1431,7 @@ static NSArray *_sourceTypes = nil;
     
     [self.attachedInputs removeObject:toDetach];
 }
+
 
 
 -(void)attachInput:(InputSource *)toAttach
@@ -1855,6 +1891,7 @@ static NSArray *_sourceTypes = nil;
         
     }
     
+    
     self.layer.constraints = constraints;
 }
 
@@ -1863,6 +1900,7 @@ static NSArray *_sourceTypes = nil;
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
 
+    
     if ([keyPath hasPrefix:@"constraintMap"])
     {
         [self buildLayerConstraints];
