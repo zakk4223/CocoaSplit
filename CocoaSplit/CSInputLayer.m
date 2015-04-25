@@ -118,7 +118,9 @@
 
 -(void)clearGradient
 {
-    self.colors = @[];
+    _startColor = _stopColor = nil;
+    [self setupColors];
+    
     self.startColor = nil;
     self.stopColor = nil;
 }
@@ -126,6 +128,7 @@
 
 -(void)setGradientStartX:(CGFloat)gradientStartX
 {
+    
     CGPoint cBounds = self.startPoint;
     cBounds.x = gradientStartX;
     self.startPoint = cBounds;
@@ -139,10 +142,13 @@
 
 -(void)setGradientStartY:(CGFloat)gradientStartY
 {
+    
     CGPoint cBounds = self.startPoint;
     cBounds.y = gradientStartY;
     self.startPoint = cBounds;
 }
+
+
 
 -(CGFloat)gradientStartY
 {
@@ -174,35 +180,51 @@
 }
 
 
+-(void)setupColors
+{
+    
+    if (!self.startColor && !self.stopColor)
+    {
+        self.colors = nil;
+        return;
+    }
+    
+    CGColorRef firstColor;
+    CGColorRef lastColor;
+    if (!self.startColor)
+    {
+        firstColor = CGColorCreateGenericRGB(0, 0, 0, 1);
+    } else {
+        firstColor = [self.startColor CGColor];
+    }
+    
+    if (!self.stopColor)
+    {
+        lastColor = CGColorCreateGenericRGB(0, 0, 0, 1);
+    } else {
+        lastColor = [self.stopColor CGColor];
+    }
+
+    
+    CGColorRetain(firstColor);
+    CGColorRetain(lastColor);
+    
+    self.colors = [NSArray arrayWithObjects:CFBridgingRelease(firstColor),CFBridgingRelease(lastColor), nil];
+    
+}
 
 -(void)setStartColor:(NSColor *)startColor
 {
     
 
-    
-    
-    if (!startColor)
-    {
-        return;
-    }
-    CGColorRef newStart = CGColorRetain(startColor.CGColor);
-    
-    
     _startColor = startColor;
     
-    NSMutableArray *newColors = [NSMutableArray array];
     
-    [newColors addObject:(id)CFBridgingRelease(newStart)];
-    id lastColor = self.colors.lastObject;
+    [self setupColors];
     
-    if (lastColor)
-    {
-        [newColors addObject:lastColor];
-    }
-    
-    
-    self.colors = newColors;
 }
+
+
 
 -(NSColor *)startColor
 {
@@ -215,28 +237,10 @@
     
     _stopColor = stopColor;
     
-    if (!stopColor)
-    {
-        return;
-    }
-    
-    
-    CGColorRef newStop = CGColorRetain(stopColor.CGColor);
-    
-    _stopColor = stopColor;
-    
-    NSMutableArray *newColors = [NSMutableArray array];
-    
-    id startColor = self.colors.firstObject;
-    if (startColor)
-    {
-        [newColors addObject:startColor];
-    }
-    
-    
-    [newColors addObject:(id)CFBridgingRelease(newStop)];
-    self.colors = newColors;
+    [self setupColors];
 }
+
+
 
 -(NSColor *)stopColor
 {
@@ -258,6 +262,7 @@
         self.minificationFilter = kCAFilterTrilinear;
         self.magnificationFilter = kCAFilterTrilinear;
         self.disableAnimation = NO;
+        
         
         
         _xLayer = [CAReplicatorLayer layer];

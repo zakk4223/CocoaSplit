@@ -101,6 +101,12 @@ static NSArray *_sourceTypes = nil;
     newSource.backgroundColor = self.backgroundColor;
     
     
+    newSource.layer.startColor = self.layer.startColor;
+    newSource.layer.stopColor = self.layer.stopColor;
+    newSource.layer.gradientStartX = self.layer.gradientStartX;
+    newSource.layer.gradientStartY = self.layer.gradientStartY;
+    newSource.layer.gradientStopX = self.layer.gradientStopX;
+    newSource.layer.gradientStopY = self.layer.gradientStopY;
 
     return newSource;
 }
@@ -165,10 +171,10 @@ static NSArray *_sourceTypes = nil;
     
     [aCoder encodeObject:self.layer.startColor forKey:@"gradientStartColor"];
     [aCoder encodeObject:self.layer.stopColor forKey:@"gradientStopColor"];
-    [aCoder encodeFloat: self.layer.startPoint.x forKey:@"gradientStartPointX"];
-    [aCoder encodeFloat: self.layer.startPoint.y forKey:@"gradientStartPointY"];
-    [aCoder encodeFloat: self.layer.endPoint.x forKey:@"gradientEndPointX"];
-    [aCoder encodeFloat: self.layer.endPoint.y forKey:@"gradientEndPointY"];
+    [aCoder encodeFloat: self.layer.gradientStartX forKey:@"gradientStartPointX"];
+    [aCoder encodeFloat: self.layer.gradientStartY forKey:@"gradientStartPointY"];
+    [aCoder encodeFloat: self.layer.gradientStopX forKey:@"gradientEndPointX"];
+    [aCoder encodeFloat: self.layer.gradientStopY forKey:@"gradientEndPointY"];
 
 
     
