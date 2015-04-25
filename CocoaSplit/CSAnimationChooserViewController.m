@@ -76,6 +76,8 @@
 -(void)loadAnimations
 {
     CSAnimationRunnerObj *runner = [CaptureController sharedAnimationObj];
+    NSString *animationPluginPath = [[NSBundle bundleForClass:self.class] pathForResource:@"CSAnimationRunner" ofType:@"plugin"];
+    
     NSDictionary *animations = [runner allAnimations];
     NSMutableArray *tmpList  = [NSMutableArray array];
     

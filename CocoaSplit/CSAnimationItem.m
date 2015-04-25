@@ -47,8 +47,6 @@
     {
         
         self.module_name = moduleName;
-    
-        NSLog(@"INIT DICT %@", dict);
         
         self.name = [dict objectForKey:@"name"];
         NSArray *inputNames = [dict objectForKey:@"inputs"];

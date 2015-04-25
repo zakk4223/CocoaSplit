@@ -741,13 +741,13 @@
                                                                 </menu>
                                                             </popUpButtonCell>
                                                             <connections>
+                                                                <binding destination="816" name="selectedObject" keyPath="self.transitionDirection" previousBinding="ogF-SB-YR2" id="yoE-SW-E9Q"/>
+                                                                <binding destination="816" name="content" keyPath="self.transitionDirections" id="ogF-SB-YR2"/>
                                                                 <binding destination="816" name="hidden" keyPath="self.transitionFilter" id="WE9-ru-0Yf">
                                                                     <dictionary key="options">
                                                                         <string key="NSValueTransformerName">NSIsNotNil</string>
                                                                     </dictionary>
                                                                 </binding>
-                                                                <binding destination="816" name="selectedObject" keyPath="self.transitionDirection" previousBinding="ogF-SB-YR2" id="yoE-SW-E9Q"/>
-                                                                <binding destination="816" name="content" keyPath="self.transitionDirections" id="ogF-SB-YR2"/>
                                                             </connections>
                                                         </popUpButton>
                                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NfO-T5-aJZ">

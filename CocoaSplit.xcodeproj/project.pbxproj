@@ -145,6 +145,7 @@
 		34A64A35165F047900A68428 /* CapturePreview.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34A64A34165F047900A68428 /* CapturePreview.xib */; };
 		34A64A37165F208800A68428 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A64A36165F208800A68428 /* QuartzCore.framework */; };
 		34A7C1AD19B9A57600BC6882 /* CSLayoutSwitcherExtraPlugin.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34A7C1A119B9A41A00BC6882 /* CSLayoutSwitcherExtraPlugin.bundle */; };
+		34A892CC1AEBA50300A089CF /* CSAnimationRunner.plugin in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34A892CB1AEBA50300A089CF /* CSAnimationRunner.plugin */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		34ABEF3C17C0C2CB00AA5E62 /* advancedPrefPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34ABEF3B17C0C2CB00AA5E62 /* advancedPrefPanel.xib */; };
 		34AE3C30164E3E020052C95E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AE3C2F164E3E020052C95E /* Foundation.framework */; };
 		34AE3C36164E3E020052C95E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 34AE3C34164E3E020052C95E /* InfoPlist.strings */; };
@@ -398,6 +399,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
+				34A892CC1AEBA50300A089CF /* CSAnimationRunner.plugin in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -584,6 +586,7 @@
 		34A64A36165F208800A68428 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		34A7C17A19B98EA200BC6882 /* CSExtraPluginProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSExtraPluginProtocol.h; path = PluginHeaders/CSExtraPluginProtocol.h; sourceTree = "<group>"; };
 		34A7C19C19B9A41900BC6882 /* CSLayoutSwitcherExtraPlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSLayoutSwitcherExtraPlugin.xcodeproj; path = ExtraPlugins/CSLayoutSwitcherExtraPlugin/CSLayoutSwitcherExtraPlugin.xcodeproj; sourceTree = "<group>"; };
+		34A892CB1AEBA50300A089CF /* CSAnimationRunner.plugin */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = CSAnimationRunner.plugin; path = CocoaSplit/CSAnimationRunner/dist/CSAnimationRunner.plugin; sourceTree = "<group>"; };
 		34ABEF3B17C0C2CB00AA5E62 /* advancedPrefPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = advancedPrefPanel.xib; path = Interface/advancedPrefPanel.xib; sourceTree = "<group>"; };
 		34AE3C2E164E3E020052C95E /* zakk.lol.QTCaptureHelper.xpc */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = zakk.lol.QTCaptureHelper.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
 		34AE3C2F164E3E020052C95E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -719,6 +722,7 @@
 		340FE49215F3417E00E4CE4E = {
 			isa = PBXGroup;
 			children = (
+				34A892CB1AEBA50300A089CF /* CSAnimationRunner.plugin */,
 				34A7C1A219B9A42000BC6882 /* ExtraPlugins */,
 				34AFC2E619B08C1E0007C07B /* StreamServicePlugins */,
 				34AFC24419B058D80007C07B /* ImageUnitPlugins */,

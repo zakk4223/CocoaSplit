@@ -244,10 +244,6 @@
 
 
 
-+(BOOL)needsDisplayForKey:(NSString *)key
-{
-    return YES;
-}
 
 
 -(void) drawInCGLContext:(CGLContextObj)ctx pixelFormat:(CGLPixelFormatObj)pf forLayerTime:(CFTimeInterval)t displayTime:(const CVTimeStamp *)ts

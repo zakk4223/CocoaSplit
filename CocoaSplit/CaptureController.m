@@ -935,7 +935,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     static CSAnimationRunnerObj *sharedAnimationObj = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        
         NSString *animationPluginPath = [[NSBundle mainBundle] pathForResource:@"CSAnimationRunner" ofType:@"plugin"];
         NSLog(@"ANIM PATH %@", animationPluginPath);
         NSBundle *animationBundle = [NSBundle bundleWithPath:animationPluginPath];

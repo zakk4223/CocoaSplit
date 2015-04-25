@@ -283,29 +283,30 @@
         _scrollAnimation = [CABasicAnimation animation];
         _scrollAnimation.repeatCount = HUGE_VALF;
         self.zPosition = 0;
+
         _xLayer.layoutManager = self;
         _yLayer.layoutManager = self.layoutManager;
         
-        [_xLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth]];
-        [_xLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight]];
-        [_xLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX]];
-        [_xLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY]];
+        [_xLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinX relativeTo:@"superlayer" attribute:kCAConstraintMinX]];
+        [_xLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY]];
+        [_xLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"superlayer" attribute:kCAConstraintMaxX]];
+        [_xLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY]];
 
 
-        [_yLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth]];
-        [_yLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight]];
-        [_yLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX]];
-        [_yLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY]];
+        [_yLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinX relativeTo:@"superlayer" attribute:kCAConstraintMinX]];
+        [_yLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY]];
+        [_yLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"superlayer" attribute:kCAConstraintMaxX]];
+        [_yLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY]];
 
-        [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth]];
-        [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight]];
-        [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX]];
-        [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMidY relativeTo:@"superlayer" attribute:kCAConstraintMidY]];
-
+        
+        [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinX relativeTo:@"superlayer" attribute:kCAConstraintMinX]];
+        [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY]];
+        [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"superlayer" attribute:kCAConstraintMaxX]];
+        [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY]];
         
         _xLayer.delegate = self;
         _yLayer.delegate = self;
-        
+
         _xLayer.masksToBounds = NO;
         _yLayer.masksToBounds = NO;
         
@@ -315,6 +316,8 @@
         [_xLayer addSublayer:_sourceLayer];
         [_yLayer addSublayer:_xLayer];
         [self addSublayer:_yLayer];
+        
+        
     }
     
     return self;
@@ -480,48 +483,6 @@
 }
 
 
--(void)setSourceLayer:(CALayer *)sourceLayer withTransition:(CATransition *)transition
-{
-    
-    if (sourceLayer == _sourceLayer)
-    {
-        return;
-    }
-    
-    
-    [self copySourceSettings:sourceLayer];
-    
-
-    [CATransaction begin];
-    CALayer *saveLayer = _sourceLayer;
-    
-    [CATransaction setCompletionBlock:^{
-        [CATransaction begin];
-        [saveLayer removeFromSuperlayer];
-        [CATransaction commit];
-    }];
-
-    [_sourceLayer.superlayer addSublayer:sourceLayer];
-    [self setNeedsLayout];
-    if (!self.allowResize)
-    {
-        sourceLayer.position = CGPointMake(sourceLayer.bounds.size.width/2, sourceLayer.bounds.size.height/2);
-    }
-
-    
-
-   [sourceLayer addAnimation:transition forKey:kCATransition];
-    [_sourceLayer addAnimation:transition forKey:kCATransition];
-    
-    
-
-    [CATransaction commit];
-
-    [self setupXAnimation:_scrollXSpeed];
-    [self setupYAnimation:_scrollYSpeed];
-    [CATransaction commit];
-    
-}
 
 
 -(CALayer *)sourceLayer
@@ -541,14 +502,25 @@
     _sourceLayer = sourceLayer;
 
     [self setNeedsLayout];
+    [_sourceLayer layoutIfNeeded];
+    
+    
     [self setupXAnimation:_scrollXSpeed];
     [self setupYAnimation:_scrollYSpeed];
-    [CATransaction commit];
     
 }
 
 
 
+
+//If the layout isn't forced weird stuff happens, I dunno.
+
+-(void)setConstraints:(NSArray *)constraints
+{
+    [super setConstraints:constraints];
+    [self setNeedsLayout];
+    [self layoutIfNeeded];
+}
 
 
 -(void)setCropRect:(CGRect)cropRect

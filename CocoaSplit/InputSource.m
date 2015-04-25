@@ -266,7 +266,11 @@ static NSArray *_sourceTypes = nil;
 
 
 
-        _restoredConstraintMap  = [aDecoder decodeObjectForKey:@"constraintMap"];
+        id constraintData = [aDecoder decodeObjectForKey:@"constraintMap"];
+        if (constraintData)
+        {
+            self.constraintMap = constraintData;
+        }
         
         
 
@@ -1235,7 +1239,6 @@ static NSArray *_sourceTypes = nil;
 -(void)frameTick
 {
     
-    _frameCount++;
     
 
     
@@ -1247,21 +1250,6 @@ static NSArray *_sourceTypes = nil;
     
     [self multiChange];
 
-    //a terrible terrible hack. if constraints are applied immediately some layers get weird small sizes
-    //delaying 2+ frames seems to clear it up. do this until I figure out wtf
-    
-    if (_restoredConstraintMap && _frameCount > 2)
-    {
-        _frameCount++;
-
-        self.constraintMap = _restoredConstraintMap;
-        
-        _restoredConstraintMap = nil;
-        
-    }
-
-    
-    
     if (!self.videoInput)
     {
         return;
@@ -1893,6 +1881,7 @@ static NSArray *_sourceTypes = nil;
     
     
     self.layer.constraints = constraints;
+    
 }
 
 

@@ -359,6 +359,7 @@
                 ((CSIOSurfaceLayer *)layer).imageBuffer = videoFrame;
                 if (self.renderType == kCSRenderFrameArrived)
                 {
+                    
                     [((CSIOSurfaceLayer *)layer) setNeedsDisplay];
                 }
 
