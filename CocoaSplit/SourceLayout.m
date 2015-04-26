@@ -517,13 +517,17 @@
             continue;
         }
         
-        NSRect tryFrame = src.layer.frame;
+        NSRect candidateFrame = src.layer.frame;
         
+        NSRect tryFrame;
+        
+        tryFrame = [self.rootLayer convertRect:candidateFrame fromLayer:src.layer.superlayer];
+
         if (NSIntersectsRect(sourceFrame, tryFrame))
         {
             if (source.layer.zPosition >= src.layer.zPosition)
             {
-                if (!ret || src.layer.zPosition > ret.layer.zPosition)
+                if (!ret || src.layer.zPosition > ret.layer.zPosition || src.layer.superlayer == ret.layer)
                 {
                     ret = src;
                 }

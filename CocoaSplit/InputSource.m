@@ -1250,6 +1250,8 @@ static NSArray *_sourceTypes = nil;
     
     [self multiChange];
 
+    
+    
     if (!self.videoInput)
     {
         return;
@@ -1440,14 +1442,45 @@ static NSArray *_sourceTypes = nil;
 }
 
 
+
+
+-(NSArray *)getLayersToCanvas:(CALayer *)startLayer
+{
+    NSMutableArray *ret = [NSMutableArray array];
+    
+    CALayer *curr = startLayer;
+    while (curr)
+    {
+        [ret addObject:curr];
+        curr = curr.superlayer;
+        if (curr == self.sourceLayout.rootLayer)
+        {
+            break;
+        }
+    }
+    
+    return ret;
+}
 -(void)makeSublayerOfLayer:(CALayer *)parentLayer
 {
     
-    
     [parentLayer addSublayer:self.layer];
     //translate the position to the new sublayers coordinates
-    NSPoint newPosition = [parentLayer convertPoint:self.layer.position fromLayer:parentLayer.superlayer];
-    self.layer.position = newPosition;
+    
+    NSArray *layers = [self getLayersToCanvas:parentLayer];
+    NSPoint newPosition = self.layer.frame.origin;
+    
+    for (CALayer *curr in [layers reverseObjectEnumerator])
+    {
+      //We start at the layer just before the canvas layer and the point we are converting is in canvas coordinate space
+        
+        newPosition = [curr convertPoint:newPosition fromLayer:curr.superlayer];
+    }
+    
+    NSRect oldFrame = self.layer.frame;
+    oldFrame.origin = newPosition;
+    
+    self.layer.frame = oldFrame;
 
 }
 
