@@ -3,7 +3,7 @@ Animation runner base
 """
 import objc
 from Foundation import *
-from CoreGraphics import *
+#from CoreGraphics import *
 from Quartz import CACurrentMediaTime,CATransaction
 from pluginbase import PluginBase
 import math
@@ -19,6 +19,9 @@ library_dirs = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSAllDoma
 plugin_dirs = map(lambda x: x + "/Application Support/CocoaSplit/Plugins/Animations", library_dirs)
 plugin_dirs.append(NSBundle.mainBundle().builtInPlugInsPath() + "/Animations")
 plugin_source = plugin_base.make_plugin_source(searchpath=plugin_dirs)
+
+NSLog("PLUGIN DIRS {0}".format(plugin_dirs))
+
 
 
 class CSAnimationInput(object):

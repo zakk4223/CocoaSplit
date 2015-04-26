@@ -930,6 +930,22 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
 
 
+-(NSData *)archiveLayout:(SourceLayout *)layout
+{
+    
+    [layout saveSourceList];
+    
+    NSMutableData *saveData = [NSMutableData data];
+    
+    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:saveData];
+    archiver.outputFormat = NSPropertyListXMLFormat_v1_0;
+    [archiver encodeObject:layout forKey:@"root"];
+    [archiver finishEncoding];
+    return saveData;
+}
+
+
+
 +(CSAnimationRunnerObj *) sharedAnimationObj
 {
     static CSAnimationRunnerObj *sharedAnimationObj = nil;
@@ -2019,7 +2035,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         
         if ([self startStream] == YES)
         {
-            self.selectedTabIndex = 3;
+            self.selectedTabIndex = 4;
         } else {
             [sender setNextState];
 

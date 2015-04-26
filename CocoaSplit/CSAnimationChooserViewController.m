@@ -16,9 +16,22 @@
 @synthesize selectedAnimations = _selectedAnimations;
 
 
+
+-(instancetype) init
+{
+    return [self initWithNibName:@"CSAnimationChooserViewController" bundle:nil];
+}
+
+
+-(void)loadView
+{
+    [super loadView];
+    [self loadAnimations];
+}
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self loadAnimations];
     
     // Do view setup here.
 }
@@ -76,7 +89,9 @@
 -(void)loadAnimations
 {
     CSAnimationRunnerObj *runner = [CaptureController sharedAnimationObj];
-    NSString *animationPluginPath = [[NSBundle bundleForClass:self.class] pathForResource:@"CSAnimationRunner" ofType:@"plugin"];
+    
+    
+    NSLog(@"LOADING ANIMATIONS %@", runner);
     
     NSDictionary *animations = [runner allAnimations];
     NSMutableArray *tmpList  = [NSMutableArray array];
