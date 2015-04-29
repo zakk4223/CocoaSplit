@@ -26,6 +26,8 @@
 
 -(instancetype)initWithDevice:(AVCaptureDevice *)device
 {
+    
+    
     NSMutableDictionary *cachemap = [AVFSession sessionCache];
     AVFSession *cachedSession = [cachemap objectForKey:device.uniqueID];
     

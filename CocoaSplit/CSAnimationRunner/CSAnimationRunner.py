@@ -20,7 +20,6 @@ plugin_dirs = map(lambda x: x + "/Application Support/CocoaSplit/Plugins/Animati
 plugin_dirs.append(NSBundle.mainBundle().builtInPlugInsPath() + "/Animations")
 plugin_source = plugin_base.make_plugin_source(searchpath=plugin_dirs)
 
-NSLog("PLUGIN DIRS {0}".format(plugin_dirs))
 
 
 

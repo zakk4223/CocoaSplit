@@ -217,6 +217,12 @@
         [_capture_session removeOutput:self];
     }
     
+    if (!_selectedVideoCaptureDevice)
+    {
+        return;
+    }
+    
+    
     _capture_session = [[AVFSession alloc] initWithDevice:_selectedVideoCaptureDevice];
     
     if (!_capture_session)
