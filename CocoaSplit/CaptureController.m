@@ -22,6 +22,7 @@
 #import <OpenCL/opencl.h>
 #import <OpenCl/cl_gl_ext.h>
 #import <CoreMediaIO/CMIOHardware.h>
+#import <IOKit/graphics/IOGraphicsLib.h>
 
 
 
@@ -773,6 +774,99 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 }
 
 
+-(void)buildScreensInfo:(NSNotification *)notification
+{
+    
+    
+    NSArray *screens = [NSScreen screens];
+    
+    _screensCache = [NSMutableArray array];
+    
+    
+    CFMutableDictionaryRef iodisp = IOServiceMatching("IODisplayConnect");
+    
+    io_iterator_t itr;
+    kern_return_t err = IOServiceGetMatchingServices(kIOMasterPortDefault, iodisp, &itr);
+    if (err)
+    {
+        return;
+    }
+    
+    io_service_t serv;
+    while ((serv = IOIteratorNext(itr)) != 0)
+    {
+        NSDictionary *info = (NSDictionary *)CFBridgingRelease(IODisplayCreateInfoDictionary(serv, kIODisplayOnlyPreferredName));
+        
+        NSNumber *vendorIDVal = [info objectForKey:@(kDisplayVendorID)];
+        
+        NSNumber *productIDVal = [info objectForKey:@(kDisplayProductID)];
+        
+        
+        for (NSScreen *screen in screens)
+        {
+            CGDirectDisplayID dispID = [[[screen deviceDescription] valueForKey:@"NSScreenNumber"] unsignedIntValue];
+            uint32_t vid = CGDisplayVendorNumber(dispID);
+            uint32_t pid = CGDisplayModelNumber(dispID);
+            
+            if (vid == vendorIDVal.integerValue && pid == productIDVal.integerValue)
+            {
+                NSDictionary *names = [info objectForKey:@(kDisplayProductName)];
+                if (names)
+                {
+                    NSString *dispName = [names objectForKey:[[names allKeys] firstObject]];
+                    [_screensCache addObject:@{@"name": dispName, @"screen": screen}];
+                }
+                
+            }
+            
+            
+        }
+        
+        
+    }
+    
+    
+}
+
+
+-(void)goFullscreen:(NSMenuItem *)item
+{
+    
+    if (item.menu == self.stagingFullScreenMenu)
+    {
+        
+        [self.stagingPreviewView goFullscreen:item.representedObject];
+    } else {
+        [self.livePreviewView goFullscreen:item.representedObject];
+    }
+}
+
+
+-(NSInteger)numberOfItemsInMenu:(NSMenu *)menu
+{
+    
+    
+    return _screensCache.count;
+}
+
+
+-(BOOL)menu:(NSMenu *)menu updateItem:(NSMenuItem *)item atIndex:(NSInteger)index shouldCancel:(BOOL)shouldCancel
+{
+    
+    
+    NSDictionary *sInfo = [_screensCache objectAtIndex:index];
+    if (sInfo)
+    {
+        item.title = sInfo[@"name"];
+        item.representedObject = sInfo[@"screen"];
+        item.action = @selector(goFullscreen:);
+        item.target = self;
+    } else {
+        item.title = @"Unknown";
+    }
+    return YES;
+}
+
 -(id) init
 {
    if (self = [super init])
@@ -914,6 +1008,12 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
        
 
        self.extraPlugins = [NSMutableDictionary dictionary];
+       
+       [self buildScreensInfo:nil];
+       
+       [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(buildScreensInfo:) name:NSApplicationDidChangeScreenParametersNotification object:nil];
+       
+       
        
        CVDisplayLinkCreateWithActiveCGDisplays(&_displayLink);
        CVDisplayLinkSetOutputCallback(_displayLink, &displayLinkRender, (__bridge void *)self);
@@ -2741,8 +2841,12 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 {
     NSView *stagingView = self.canvasSplitView.subviews[0];
     NSView *liveView = self.canvasSplitView.subviews[1];
+    _liveFrame = liveView.frame;
     stagingView.hidden = YES;
-    [liveView setFrameSize:NSMakeSize(self.canvasSplitView.frame.size.width, liveView.frame.size.height)];
+    //[liveView setFrameSize:NSMakeSize(self.canvasSplitView.frame.size.width, liveView.frame.size.height)];
+    [self.canvasSplitView adjustSubviews];
+    
+    
     [self.canvasSplitView display];
     self.stagingControls.hidden = YES;
     self.goLiveControls.hidden = YES;
@@ -2756,6 +2860,8 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     NSView *liveView = self.canvasSplitView.subviews[1];
     stagingView.hidden = NO;
     
+    
+    /*
     CGFloat dividerWidth = self.canvasSplitView.dividerThickness;
     NSRect stagingFrame = stagingView.frame;
     NSRect liveFrame = liveView.frame;
@@ -2763,7 +2869,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     liveFrame.origin.x = stagingFrame.size.width + dividerWidth;
     [stagingView setFrameSize:stagingFrame.size];
     [liveView setFrame:liveFrame];
-    
+    */
     if (self.livePreviewView.sourceLayout)
     {
         [self.livePreviewView.sourceLayout saveSourceList];
@@ -2774,6 +2880,10 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         }
     }
 
+    [self.canvasSplitView setPosition:_liveFrame.origin.x ofDividerAtIndex:0];
+    
+    [self.canvasSplitView adjustSubviews];
+    
     [self.canvasSplitView display];
     self.stagingControls.hidden = NO;
     self.goLiveControls.hidden = NO;
@@ -2783,14 +2893,32 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
 -(void)layoutWentFullscreen
 {
+    
+    //[self.canvasSplitView adjustSubviews];
+    //[self.canvasSplitView display];
+    /*
     _stagingFrame = self.stagingPreviewView.frame;
     _liveFrame = self.livePreviewView.frame;
+     */
+    if (!self.stagingPreviewView.isInFullScreenMode && !self.stagingPreviewView.isInFullScreenMode)
+    {
+        _liveFrame = self.livePreviewView.frame;
+    }
+
+    
 }
 
 -(void)layoutLeftFullscreen
 {
+    [self.canvasSplitView adjustSubviews];
+    [self.canvasSplitView setPosition:_liveFrame.origin.x ofDividerAtIndex:0];
+    [self.canvasSplitView display];
+    
+    
+    /*
     self.stagingPreviewView.frame = _stagingFrame;
     self.livePreviewView.frame = _liveFrame;
+     */
     
 }
 - (IBAction)stagingViewToggle:(id)sender

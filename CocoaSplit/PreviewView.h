@@ -106,6 +106,10 @@
 -(void)restartDisplayLink;
 -(void) cvrender;
 
+-(void)goFullscreen:(NSScreen *)onScreen;
+
+
+
 
 
 

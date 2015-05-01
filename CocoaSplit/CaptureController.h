@@ -42,7 +42,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 @class PreviewView;
 
-@interface CaptureController : NSObject {
+@interface CaptureController : NSObject <NSMenuDelegate> {
     
     
     CIFilter *_compositeFilter;
@@ -115,11 +115,17 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     NSPopover *_layoutpopOver;
     NSPopover *_animatepopOver;
     
+    NSMutableArray *_screensCache;
+    
 
     
     
 }
 
+
+
+@property (weak) IBOutlet NSMenu *stagingFullScreenMenu;
+@property (weak) IBOutlet NSMenu *liveFullScreenMenu;
 
 
 

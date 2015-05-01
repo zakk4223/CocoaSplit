@@ -1138,13 +1138,15 @@
 }
 
 
-
-
-- (IBAction)toggleFullscreen:(id)sender;
+-(void)goFullscreen:(NSScreen *)onScreen
 {
+    
     if (self.isInFullScreenMode)
     {
+        
+        
         [self exitFullScreenModeWithOptions:nil];
+        
         
         [self.controller layoutLeftFullscreen];
         
@@ -1153,19 +1155,24 @@
         NSNumber *fullscreenOptions = @(NSApplicationPresentationAutoHideMenuBar|NSApplicationPresentationAutoHideDock);
         
         
-        _fullscreenOn = [NSScreen mainScreen];
+        _fullscreenOn = onScreen;
         
-        if (_fullscreenOn != [[NSScreen screens] objectAtIndex:0])
-        {
-            fullscreenOptions = @(0);
-        }
         
         
         [self.controller layoutWentFullscreen];
-        
+
         [self enterFullScreenMode:_fullscreenOn withOptions:@{NSFullScreenModeAllScreens: @NO, NSFullScreenModeApplicationPresentationOptions: fullscreenOptions}];
         
+
     }
+    
+}
+
+
+- (IBAction)toggleFullscreen:(id)sender;
+{
+    [self goFullscreen:[NSScreen mainScreen]];
+    
     
 }
 

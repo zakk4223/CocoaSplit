@@ -25,6 +25,7 @@
                 <outlet property="editorPopover" destination="pVG-uK-v8x" id="Z4y-xI-k5M"/>
                 <outlet property="extrasMenu" destination="wPc-B9-L1T" id="Ysq-1k-pbF"/>
                 <outlet property="goLiveControls" destination="MvM-Ze-Mhu" id="1fm-uC-oEW"/>
+                <outlet property="liveFullScreenMenu" destination="oei-ah-Eqx" id="3Ot-ve-qp2"/>
                 <outlet property="livePreviewView" destination="79f-hz-x80" id="iR0-Am-BlN"/>
                 <outlet property="mainSourceLayoutTableView" destination="32Z-hP-mbT" id="OGH-tA-hzz"/>
                 <outlet property="objectController" destination="nWB-G2-33f" id="AQr-hL-LzT"/>
@@ -32,6 +33,7 @@
                 <outlet property="sourceLayoutsArrayController" destination="TZL-zr-Ssj" id="pem-M0-xL6"/>
                 <outlet property="stagingControls" destination="Tku-6P-Ve9" id="Yls-ps-OhQ"/>
                 <outlet property="stagingCtx" destination="4Vq-5w-Nt7" id="emu-7h-Rym"/>
+                <outlet property="stagingFullScreenMenu" destination="9T8-BJ-6o1" id="dWH-S2-kfO"/>
                 <outlet property="stagingPreviewView" destination="4Vq-5w-Nt7" id="pZ6-mn-4wF"/>
                 <outlet property="stagingSourceLayoutTableView" destination="oSt-2V-lDd" id="FXg-jd-bHc"/>
                 <outlet property="streamServiceAddView" destination="IwK-Ag-CTY" id="kOs-by-Otw"/>
@@ -164,6 +166,39 @@
                                 <connections>
                                     <action selector="stagingViewToggle:" target="816" id="86d-P0-FCH"/>
                                 </connections>
+                            </menuItem>
+                            <menuItem title="FullScreen" id="CsN-yB-eyw">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="FullScreen" id="qiN-Gq-uHu">
+                                    <items>
+                                        <menuItem title="Staging" id="chR-KK-5Md">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="Staging" id="9T8-BJ-6o1">
+                                                <items>
+                                                    <menuItem title="Item" id="nsL-wT-jmo">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    </menuItem>
+                                                </items>
+                                                <connections>
+                                                    <outlet property="delegate" destination="816" id="F8P-fL-T72"/>
+                                                </connections>
+                                            </menu>
+                                        </menuItem>
+                                        <menuItem title="Live" id="Bbb-LC-zE1">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="Live" id="oei-ah-Eqx">
+                                                <items>
+                                                    <menuItem title="Item" id="3t4-Rc-U1k">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    </menuItem>
+                                                </items>
+                                                <connections>
+                                                    <outlet property="delegate" destination="816" id="ID3-pP-Fn6"/>
+                                                </connections>
+                                            </menu>
+                                        </menuItem>
+                                    </items>
+                                </menu>
                             </menuItem>
                         </items>
                     </menu>
