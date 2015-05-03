@@ -48,7 +48,6 @@
 - (void)doInject:(NSRunningApplication *)toInject
 {
     
-        NSLog(@"WILL INJECT INTO APPLICATION %s", [toInject.localizedName UTF8String]);
         
         pid_t pid = toInject.processIdentifier;
         

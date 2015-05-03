@@ -23,9 +23,4 @@
     return self;
 }
 
--(void)dealloc
-{
-    NSLog(@"WINDOW CAPTURE VIEW DEALLOC");
-    
-}
 @end

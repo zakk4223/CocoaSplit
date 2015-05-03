@@ -43,7 +43,6 @@ XPCListenerDelegate *captureDelegate;
 - (void) dealloc
 {
  
-    NSLog(@"HOLY SHIT DEALLOC");
     if (self.xpcProxy)
     {
         [self.xpcProxy release];
@@ -58,7 +57,6 @@ XPCListenerDelegate *captureDelegate;
 {
     
 
-    NSLog(@"SHOULD ACCEPT NEW CONNECTION\n");
     NSXPCInterface *helperInterface = [[NSXPCInterface interfaceWithProtocol:@protocol(QTHelperProtocol)] retain];
     NSXPCInterface *masterInterface = [[NSXPCInterface interfaceWithProtocol:@protocol(CapturedFrameProtocol)] retain];
     
@@ -82,7 +80,6 @@ XPCListenerDelegate *captureDelegate;
 {
     
     NSArray *devices = [QTCaptureDevice inputDevicesWithMediaType:QTMediaTypeVideo];
-    NSLog(@"DEVICES IN HELPER %@", devices);
     
     NSMutableArray *retArray = [[NSMutableArray alloc] init];
     QTCaptureDevice *devinstance;
@@ -279,7 +276,6 @@ void qt_xpc_peer_event_handler(xpc_connection_t conn, xpc_object_t event)
         
     } else {
         const char *message = xpc_dictionary_get_string(event, "message");
-        NSLog(@"RECEIVED XPC MESSAGE %s", message);
         
         if (!strcmp(message, "list_devices"))
         {

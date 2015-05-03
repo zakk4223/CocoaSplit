@@ -21,7 +21,6 @@
     if (self = [super init])
     {
         
-        //NSLog(@"SUPER CLASS IS %@", super);
 
         _nextCaptureTime = 0.0f;
         self.captureFPS = 30.0f;

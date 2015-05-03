@@ -27,8 +27,6 @@
             AudioComponentInstanceNew(comp, &_audioUnit);
             OSStatus err;
             err = AudioUnitInitialize(_audioUnit);
-            NSLog(@"AU INIT %d", err);
-
         }
         
         
@@ -51,10 +49,8 @@
     
     AudioUnitGetProperty(_audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 1, &asbd, &asbdSize);
 
-    NSLog(@"OUTPUT ASBD SAMPLERATE %f", asbd.mSampleRate);
     
     err = AudioUnitSetProperty(toNode, kAudioUnitProperty_MakeConnection, kAudioUnitScope_Input, 1, &conn, sizeof(conn));
-    NSLog(@"UNIT SET CONN %d", err);
     
     err = AudioUnitSetProperty(toNode, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 1, &asbd, asbdSize);
     

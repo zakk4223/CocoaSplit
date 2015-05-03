@@ -55,7 +55,6 @@
 -(void)dealloc
 {
 
-    NSLog(@"DEALLOC TEXT CAPTURE BASE!");
     
     NSFontManager *fontManager = [NSFontManager sharedFontManager];
     

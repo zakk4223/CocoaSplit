@@ -211,7 +211,6 @@
         _audio_capture_output = [[AVCaptureAudioDataOutput alloc] init];
         
         
-        NSLog(@"AUDIO SAMPLERATE %d BITRATE %d", self.audioSamplerate, self.audioBitrate);
         if (self.useAudioEngine)
         {
            

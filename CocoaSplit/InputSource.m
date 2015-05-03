@@ -285,20 +285,9 @@ static NSArray *_sourceTypes = nil;
         [self updateRotationTransform];
 
 
-        //[self positionOrigin:x_pos y:y_pos];
-
-        //self.layoutPosition = self.layer.frame;
-        //if (width && height)
-       // {
-       //     [self updateSize:width height:height];
-       // }
         self.layoutPosition = self.layer.frame;
         
 
-        //self.layoutPosition = self.layer.frame;
-        
-        //NSLog(@"INIT %f %f %f %f", x_pos, y_pos, width, height);
-        
         _selectedVideoType = [aDecoder decodeObjectForKey:@"selectedVideoType"];
 
 
@@ -918,7 +907,6 @@ static NSArray *_sourceTypes = nil;
 -(void)dealloc
 {
     
-    NSLog(@"DEALLOC SOURCE INPUT");
     [self deregisterVideoInput:self.videoInput];
     for(id vInput in self.videoSources)
     {
@@ -1504,7 +1492,6 @@ static NSArray *_sourceTypes = nil;
     
     if (isnan(x))
     {
-        NSLog(@"HOLY CRAP NaN");
         return;
     }
     

@@ -79,7 +79,6 @@
 -(BOOL)application:(NSApplication *)sender delegateHandlesKey:(NSString *)key
 {
     
-    NSLog(@"HANDLES KEY? %@", key);
     
     NSArray *keys = @[@"layouts", @"width", @"height", @"fps", @"activelayout"];
     

@@ -183,7 +183,6 @@
             
             NSString *pName = [[NSString alloc] initWithBytes:propName length:strlen(propName) encoding:NSUTF8StringEncoding];
             id propertyValue = [self valueForKey:pName];
-            NSLog(@"SETTING %@ TO %@",pName, propertyValue);
             
             [newCopy setValue:propertyValue forKey:pName];
         }

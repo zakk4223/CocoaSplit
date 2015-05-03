@@ -40,7 +40,6 @@
 {
     
     
-    NSLog(@"SELECTED SERVER %@ STREAMKEY %@", self.selectedServer, self.streamKey);
     
     if (self.selectedServer)
     {

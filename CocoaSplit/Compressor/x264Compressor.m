@@ -240,7 +240,6 @@
         CVImageBufferRef imageBuffer = frameData.videoFrame;
         
         
-        //NSLog(@"WIDTH INPUT %zd HEIGHT %zd",  CVPixelBufferGetWidth(imageBuffer), CVPixelBufferGetHeight(imageBuffer));
         
         src_height = CVPixelBufferGetHeight(imageBuffer);
         src_width = CVPixelBufferGetWidth(imageBuffer);

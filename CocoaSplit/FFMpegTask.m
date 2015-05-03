@@ -243,16 +243,13 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
             pkt.destruct = NULL;
             
             
-            //NSLog(@"FFMPEG AUDIO PTS %lld/%d", pts.value, pts.timescale);
             
             pkt.pts = av_rescale_q(pts.value, (AVRational) {1.0, pts.timescale}, _av_audio_stream->time_base);
 
 
             
-            //pkt.dts = pkt.pts;
             
             
-//            pkt.pts = pts.value;
             if (av_interleaved_write_frame(_av_fmt_ctx, &pkt) < 0)
             {
                 NSLog(@"AV WRITE AUDIO failed for %@", self.stream_output);
@@ -396,7 +393,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     if (!(av_out_fmt->flags & AVFMT_NOFILE))
     {
         int av_err;
-        NSLog(@"Doing AVIO_OPEN");
         if ((av_err = avio_open(&_av_fmt_ctx->pb, [_stream_output UTF8String], AVIO_FLAG_WRITE)) < 0)
         {
             NSString *open_err = [self av_error_nsstring:av_err ];
@@ -497,7 +493,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 
     if ([self resetOutputIfNeeded])
     {
-        NSLog(@"OUTPUT RESET");
         return;
     }
     
@@ -516,7 +511,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         
         if (!self.active)
         {
-            NSLog(@"NOT ACTIVE");
             return;
         }
         

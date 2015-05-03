@@ -1244,7 +1244,6 @@
 {
     //Without the autorelease NSColor leaks objects
     
-    NSLog(@"Preview: Creating Pixel Buffer Pool %f x %f", size.width, size.height);
     
     NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
     [attributes setValue:[NSNumber numberWithInt:size.width] forKey:(NSString *)kCVPixelBufferWidthKey];

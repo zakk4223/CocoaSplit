@@ -104,7 +104,6 @@
 
 -(void)doAnimation:(NSDictionary *)threadDict
 {
-    //[CATransaction flush];
     
     CSAnimationRunnerObj *runner = [CaptureController sharedAnimationObj];
 
@@ -112,24 +111,6 @@
     NSDictionary *inpMap = threadDict[@"inputs"];
     CALayer *rootLayer = threadDict[@"rootLayer"];
     
-    
-    /*
-    InputSource *src = inpMap[@"spinnah"];
-    CALayer *layer = src.layer;
-    
-
-    NSLog(@"LAYER IS %@", layer);
-    
-    [CATransaction begin];
-    [CATransaction setAnimationDuration:3.5];
-    layer.zPosition = -1;
-    [CATransaction begin];
-    [CATransaction setAnimationDuration:5.5];
-    [layer setValue:@500.0f forKeyPath:@"bounds.size.width"];
-    [CATransaction commit];
-    [CATransaction commit];
-    
-    */
     
     @try {
         [runner runAnimation:modName forInput:inpMap withSuperlayer:rootLayer];

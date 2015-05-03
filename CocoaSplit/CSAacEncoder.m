@@ -35,7 +35,6 @@
     
     if (bufferSize > self.preallocatedBuffersize)
     {
-        NSLog(@"ALLOCATING FOR %d", bufferSize);
         _pcmData = malloc(bufferSize*2); //Assuming deinterleaved 2-ch, so allocate enough space for both channels
         self.preallocatedBuffersize = bufferSize;
     }
@@ -63,12 +62,6 @@
     
 
     //for now assume Float32, 2 channel, non-interleaved. We have to interleave it outselves here.
-    
-    
-    
-    
-    //NSLog(@"ENCODE BUFFER SIZE %u", (unsigned int)bufsize);
-    
     
     AudioBuffer buffer0 = pcmBuffer->mBuffers[0];
     AudioBuffer buffer1 = pcmBuffer->mBuffers[1];
@@ -298,7 +291,6 @@
 
     
     
-   // NSLog(@"CODEC INIT %d COOKIE SIZE %u MAX %u", err, magicCookie->mMagicCookieSize, cookiestructsize);
     outputSampleCount = 0;
     
     
@@ -310,10 +302,6 @@
     cookiestructsize = sizeof(CFDictionaryRef);
     
     AudioCodecGetProperty(aacCodec, kAudioCodecPropertySettings, &cookiestructsize, &encoderState);
-    //NSLog(@"ENCODER STATE %@", encoderState);
-    
-    
-    
     return;
     
 }

@@ -110,7 +110,6 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     
     
     
-    //NSLog(@"SCHED SLICE %d", err);
     
     return YES;
 }
@@ -118,8 +117,6 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
 -(void)scheduleBuffer:(CMSampleBufferRef)sampleBuffer
 {
     
-    
-    //NSLog(@"THE BUFFER %@", sampleBuffer);
     
     //credit to TheAmazingAudioEngine for an illustration of proper audiobufferlist allocation. Google leads to some really really bad allocation code...
 
@@ -139,7 +136,6 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     
     sampleABL->mNumberBuffers = bufferCnt;
     
-    //NSLog(@"BUFFERCNT %d CHANNELCNT %d, SAMPLES %ld, BYTES/FRAME %d", bufferCnt, channelCnt, numSamples, asbd->mBytesPerFrame);
     
     for (int i=0; i<bufferCnt; i++)
     {
@@ -196,25 +192,12 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     ts.mFlags = kAudioTimeStampSampleTimeValid;
     ts.mSampleTime = -1;
     err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ScheduleStartTimeStamp, kAudioUnitScope_Global, 0, &ts, sizeof(ts));
-    
-    
-    
-        
-    //NSLog(@"PLAYER INPUT rate %f, %d channels, %d bits per channel", asbd.mSampleRate, asbd.mChannelsPerFrame, asbd.mBitsPerChannel);
-    
-    
-    //NSLog(@"SCHEDULE START %d", err);
-    
-    
 }
 @end
 
 
 void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList)
 {
-    //NSLog(@"BUFFER COMPLETED PLAYING!!!! COMP %d BEGAN %d LATE %d", bufferList->mFlags & kScheduledAudioSliceFlag_Complete, bufferList->mFlags & kScheduledAudioSliceFlag_BeganToRender, bufferList->mFlags & kScheduledAudioSliceFlag_BeganToRenderLate);
-    
-    
     CAMultiAudioPCM *pcmObj = (__bridge CAMultiAudioPCM *)(userData);
     //maybe put this on a dedicated queue?
     //why a queue? don't want to do any sort of memory/managed object operations in an audio callback.

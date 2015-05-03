@@ -172,7 +172,6 @@
     
     if (!self.currentDisplay)
     {
-        NSLog(@"NO DISPLAY");
         return NO;
     }
     
@@ -289,7 +288,6 @@
     
     if (_displayStreamRef)
     {
-        NSLog(@"STOP DISPLAY STREAM");
         CGDisplayStreamStop(_displayStreamRef);
     }
     
@@ -387,7 +385,6 @@
 
 -(void)dealloc
 {
-    NSLog(@"DEALLOC DISPLAY STREAM");
     [self removeObserver:self forKeyPath:@"propertiesChanged"];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }

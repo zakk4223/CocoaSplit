@@ -477,13 +477,6 @@
     NSError *compressError;
     
     
-    if (![self.compressSettingsController commitEditing])
-    {
-        NSLog(@"FAILED TO COMMIT EDITING FOR COMPRESS EDIT");
-    }
-    
-    
-    
     if (self.editingCompressor)
     {
         
@@ -644,7 +637,6 @@
     
     [self.streamServicePluginViewController.view removeFromSuperview];
     
-    NSLog(@"STREAM SERVICE CONFI WINDOW %@", self.streamServiceConfWindow);
     
     [NSApp endSheet:self.streamServiceConfWindow];
     [self.streamServiceConfWindow close];
@@ -1052,11 +1044,8 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         NSString *animationPluginPath = [[NSBundle mainBundle] pathForResource:@"CSAnimationRunner" ofType:@"plugin"];
-        NSLog(@"ANIM PATH %@", animationPluginPath);
         NSBundle *animationBundle = [NSBundle bundleWithPath:animationPluginPath];
-        NSLog(@"ANIM BUNDLE %@", animationBundle);
         Class animationClass = [animationBundle classNamed:@"CSAnimationRunnerObj"];
-        NSLog(@"ANIM CLASS %@", animationClass);
         
         sharedAnimationObj = [[animationClass alloc] init];
 
@@ -1562,15 +1551,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     }
 
 
-    /*
-    NSString *animationPluginPath = [[NSBundle mainBundle] pathForResource:@"CSAnimationRunner" ofType:@"plugin"];
-    NSLog(@"ANIM PATH %@", animationPluginPath);
-    NSBundle *animationBundle = [NSBundle bundleWithPath:animationPluginPath];
-    NSLog(@"ANIM BUNDLE %@", animationBundle);
-    Class animationClass = [animationBundle classNamed:@"CSAnimationRunnerObj"];
-    NSLog(@"ANIM CLASS %@", animationClass);
-    //self.animationRunner = [[animationClass alloc] init];
-    */
     self.extraPluginsSaveData = nil;
     
     
@@ -2153,28 +2133,15 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 {
     
     
-    //NSLog(@"AUDIO BUFFER %@", sampleBuffer);
     if (!self.captureRunning)
     {
         return;
     }
     
-    /*
-    if (_firstFrameTime == 0)
-    {
-        //Don't start sending audio to the outputs until a video frame has arrived, with AVFoundation this can take 2+ seconds (!?)
-        //Might need to prime the capture session first...
-        return;
-    }
-    */
-   // NSLog(@"AUDIO SAMPLE BUFFER %@", sampleBuffer);
-    
-    
     CMTime orig_pts = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
     
     
 
-    //NSLog(@"AUDIO PTS %@", CMTimeCopyDescription(kCFAllocatorDefault, orig_pts));
     
     if (CMTIME_COMPARE_INLINE(_firstAudioTime, ==, kCMTimeZero))
     {
@@ -2188,7 +2155,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     CMTime pts = CMTimeAdd(real_pts, adjust_pts);
     
 
-    //NSLog(@"AUDIO PTS %@", CMTimeCopyDescription(kCFAllocatorDefault, pts));
     
     CMSampleBufferSetOutputPresentationTimeStamp(sampleBuffer, pts);
     
@@ -2339,7 +2305,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         
         if (![self sleepUntil:(startTime += _frame_interval)])
         {
-            //NSLog(@"SLEEP FAILED");
             continue;
         }
 
@@ -2499,7 +2464,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
     CFAbsoluteTime ptsTime = _frame_time - _firstFrameTime;
     
-    //NSLog(@"PTS TIME IS %f", ptsTime);
     
     
     _frameCount++;
@@ -2507,7 +2471,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
     
     pts = CMTimeMake(ptsTime*1000000, 1000000);
-    //NSLog(@"PTS TIME IS %@", CMTimeCopyDescription(kCFAllocatorDefault, pts));
 
     duration = CMTimeMake(1000, self.captureFPS*1000);
     

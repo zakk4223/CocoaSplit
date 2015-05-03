@@ -131,7 +131,6 @@
 -(void)setDestination:(NSString *)destination
 {
     
-    NSLog(@"Destination set to %@", destination);
     if ([destination hasPrefix:@"rtmp://"] || [destination hasPrefix:@"udp:"])
     {
         self.output_format = @"FLV";
@@ -210,7 +209,6 @@
         return;
     }
     
-    NSLog(@"ATTACHING OUTPUT");
     if (!self.ffmpeg_out)
     {
         newout = [[FFMpegTask alloc] init];
@@ -234,7 +232,6 @@
     newout.samplerate = self.settingsController.audioSamplerate;
     newout.audio_bitrate = self.settingsController.audioBitrate;
     
-    NSLog(@"SETTINGS %@, FPS %f", self.settingsController, self.settingsController.captureFPS);
     
     
     self.ffmpeg_out = newout;

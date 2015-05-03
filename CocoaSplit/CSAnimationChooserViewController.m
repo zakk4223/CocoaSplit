@@ -91,8 +91,6 @@
     CSAnimationRunnerObj *runner = [CaptureController sharedAnimationObj];
     
     
-    NSLog(@"LOADING ANIMATIONS %@", runner);
-    
     NSDictionary *animations = [runner allAnimations];
     NSMutableArray *tmpList  = [NSMutableArray array];
     
