@@ -45,7 +45,6 @@
 @property (assign) CGFloat gradientStopY;
 
 
--(void)setSourceLayer:(CALayer *)sourceLayer withTransition:(CATransition *)transition;
 -(void)frameTick;
 -(void)transitionToLayer:(CALayer *)toLayer fromLayer:(CALayer *)fromLayer withTransition:(CATransition *)transition;
 -(void)transitionsDisabled;
