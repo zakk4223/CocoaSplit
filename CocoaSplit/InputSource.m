@@ -1200,6 +1200,11 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setX_pos:(float)x_pos
 {
+    if (x_pos > 0 && x_pos <= 1.0)
+    {
+        CALayer *sLayer = self.layer.superlayer;
+        x_pos = sLayer.bounds.origin.x + (sLayer.bounds.size.width * x_pos);
+    }
     _x_pos = x_pos;
     
     [self positionOrigin:_x_pos y:_y_pos];
@@ -1212,6 +1217,12 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setY_pos:(float)y_pos
 {
+    if (y_pos > 0 && y_pos <= 1.0)
+    {
+        CALayer *sLayer = self.layer.superlayer;
+        y_pos = sLayer.bounds.origin.y + (sLayer.bounds.size.height * y_pos);
+    }
+
     _y_pos = y_pos;
     [self positionOrigin:_x_pos y:_y_pos];
 }

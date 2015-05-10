@@ -156,6 +156,18 @@ class CSAnimationInput(object):
         c_y = self.animationLayer.frame().origin.y
         return NSPoint(x-c_x, y-c_y)
 
+    def real_coordinate_from_fract(self, x,y):
+        ret_x = x
+        ret_y = y
+        if x > 0.0 and x <= 1.0:
+            slayer = self.layer.superlayer()
+            ret_x = slayer.bounds().origin.x + (slayer.bounds().size.width * x)
+        if y > 0.0 and y <= 1.0:
+            slayer = self.layer.superlayer()
+            ret_y = slayer.bounds().origin.y + (slayer.bounds().size.height * y)
+        return NSPoint(ret_x, ret_y)
+
+
     def waitAnimation(self, duration=0, **kwargs):
         """
         Wait for all in-progress animations on this input to complete before adding any more. 
@@ -288,7 +300,8 @@ class CSAnimationInput(object):
         """
         Translate/move the input on the y-axis to the new value y. The final result of this translation is not permanent/saved. If you translate an input and then manually move it via the UI or via the move* functions, it may not restore/go live in the exact position it appears in the layout. Use caution.
         """
-        new_coord = self.adjust_coordinates(0,y)
+        new_coord = self.real_coordinate_from_fract(0,y)
+        new_coord = self.adjust_coordinates(0,new_coord.y)
         cval = self.animationLayer.valueForKeyPath_('transform.translation.y')
         return self.simple_animation('transform.translation.y', new_coord.y+cval, duration, **kwargs)
     
@@ -296,8 +309,9 @@ class CSAnimationInput(object):
         """
         Translate/move the input on the x-axis to the new value x. The final result of this translation is not permanent/saved. If you translate an input and then manually move it via the UI or via the move* functions, it may not restore/go live in the exact position it appears in the layout. Use caution.
         """
+        new_coord = self.real_coordinate_from_fract(0,x)
 
-        new_coord = self.adjust_coordinates(x,0)
+        new_coord = self.adjust_coordinates(new_coord.x,0)
         cval = self.animationLayer.valueForKeyPath_('transform.translation.x')
         return self.simple_animation('transform.translation.x', new_coord.x+cval, duration, **kwargs)
 
@@ -305,24 +319,31 @@ class CSAnimationInput(object):
         """
         Translate/move the input's origin to the coordinate (x,y) The final result of this translation is not permanent/saved. If you translate an input and then manually move it via the UI or via the move* functions, it may not restore/go live in the exact position it appears in the layout. Use caution.
         """
-        new_coord = self.adjust_coordinates(x,y)
+        new_coord = self.real_coordinate_from_fract(x,y)
+        new_coord = self.adjust_coordinates(new_coord.x,new_coord.y)
         cpos = self.animationLayer.valueForKeyPath_('transform.translation')
         csize = cpos.sizeValue()
         nsize = NSSize(csize.width+new_coord.x, csize.height+new_coord.y)
         return self.simple_animation('transform.translation', NSValue.valueWithSize_(nsize), duration, **kwargs)
 
     def translateY(self, y, duration=None, **kwargs):
+        new_coord = self.real_coordinate_from_fract(0,y)
+
         cval = self.animationLayer.valueForKeyPath_('transform.translation.y')
-        return self.simple_animation('transform.translation.y', y+cval, duration, **kwargs)
+        return self.simple_animation('transform.translation.y', new_coord.y+cval, duration, **kwargs)
  
     def translateX(self, x, duration=None, **kwargs):
+        new_coord = self.real_coordinate_from_fract(x,0)
+
         cval = self.animationLayer.valueForKeyPath_('transform.translation.x')
-        return self.simple_animation('transform.translation.x', x+cval, duration, **kwargs)
+        return self.simple_animation('transform.translation.x', new_coord.x+cval, duration, **kwargs)
     
     def translate(self, x,y,duration=None, **kwargs):
+        new_coord = self.real_coordinate_from_fract(x,y)
+
         cpos = self.animationLayer.valueForKeyPath_('transform.translation')
         csize = cpos.sizeValue()
-        nsize = NSSize(csize.width+x, csize.height+y)
+        nsize = NSSize(csize.width+new_coord.x, csize.height+new_coord.y)
         return self.simple_animation('transform.translation', NSValue.valueWithSize_(nsize), duration, **kwargs)
     
     def translateCenter(self, duration=None, **kwargs):
@@ -341,13 +362,17 @@ class CSAnimationInput(object):
         """
         Move the input's X coordinate by move_x units. This change is permanent/saved. If you want non-saved move use the translate* animations
         """
-        return self.simple_animation('position.x', self.animationLayer.position().x+move_x, duration, **kwargs)
+        new_coord = self.real_coordinate_from_fract(move_x,0)
+
+        return self.simple_animation('position.x', self.animationLayer.position().x+new_coord.x, duration, **kwargs)
     
     def moveY(self, move_y, duration=None, **kwargs):
         """
         Move the input's Y coordinate by move_y units. This change is permanent/saved. If you want non-saved move use the translate* animations
         """
-        return self.simple_animation('position.y', self.animationLayer.position().y+move_y, duration, **kwargs)
+        new_coord = self.real_coordinate_from_fract(0,move_y)
+
+        return self.simple_animation('position.y', self.animationLayer.position().y+new_coord.y, duration, **kwargs)
 
 
     def move(self, move_x, move_y, duration=None, **kwargs):
@@ -355,9 +380,11 @@ class CSAnimationInput(object):
         Move the input's position by move_x and move_y units This change is permanent/saved. If you want non-saved move use the translate* animations
         """
 
+        new_coord = self.real_coordinate_from_fract(move_x,move_y)
+
         curr_x = self.animationLayer.position().x
         curr_y = self.animationLayer.position().y
-        return self.moveTo(curr_x+move_x, curr_y+move_y, duration, **kwargs)
+        return self.moveTo(curr_x+new_coord.x, curr_y+new_coord.y, duration, **kwargs)
     
     def moveCenter(self, duration=None, **kwargs):
         """
@@ -376,7 +403,9 @@ class CSAnimationInput(object):
         """
         Move the y component of the input's origin to the move_y point. The origin of an input is the input's bottom left corner. This is an absolute positioning, not a delta from the current position. This move is permanent/saved. If you want a non-saved move use the translate* animations.
         """
-        new_coord = self.adjust_coordinates(0,move_y)
+        new_coord = self.real_coordinate_from_fract(0,move_y)
+
+        new_coord = self.adjust_coordinates(0,new_coord.y)
         c_pos = self.animationLayer.position()
         c_pos.y += new_coord.y
 
@@ -386,7 +415,9 @@ class CSAnimationInput(object):
         """
         Move the x component of the input's origin to the move_x point. The origin of an input is the input's bottom left corner. This is an absolute positioning, not a delta from the current position. This move is permanent/saved. If you want a non-saved move use the translate* animations.
         """
-        new_coord = self.adjust_coordinates(move_x, 0)
+        new_coord = self.real_coordinate_from_fract(move_x,0)
+
+        new_coord = self.adjust_coordinates(new_coord.x, 0)
         c_pos = self.animationLayer.position()
         c_pos.x += new_coord.x
         return self.simple_animation('position.x', c_pos.x, duration, **kwargs)
@@ -395,7 +426,9 @@ class CSAnimationInput(object):
         """
         Move the y component of the input's origin to (move_x, move_y) The origin of an input is the input's bottom left corner. This is an absolute positioning, not a delta from the current position. This move is permanent/saved. If you want a non-saved move use the translate* animations.
         """
-        new_coords = self.adjust_coordinates(move_x, move_y)
+        new_coord = self.real_coordinate_from_fract(move_x,move_y)
+
+        new_coords = self.adjust_coordinates(new_coord.x, new_coord.y)
         c_pos = self.animationLayer.position()
         c_pos.x += new_coords.x
         c_pos.y += new_coords.y
