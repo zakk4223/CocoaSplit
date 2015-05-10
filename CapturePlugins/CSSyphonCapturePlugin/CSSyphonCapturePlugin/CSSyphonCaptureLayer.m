@@ -8,6 +8,7 @@
 
 #import "CSSyphonCaptureLayer.h"
 
+
 @implementation CSSyphonCaptureLayer
 
 @synthesize flipImage = _flipImage;

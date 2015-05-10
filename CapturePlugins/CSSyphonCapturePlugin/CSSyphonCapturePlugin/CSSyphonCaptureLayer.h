@@ -20,7 +20,6 @@
     CGRect _calculatedCrop;
     bool _needsRedraw;
     CFAbsoluteTime _lastDrawTime;
-    
 }
 
 

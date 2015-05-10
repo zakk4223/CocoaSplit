@@ -22,22 +22,6 @@
 
 
 
-@interface OpenGLProgram : NSObject
-{
-    
-    GLint _sampler_uniform_locations[3];
-}
-
-@property (strong) NSString *label;
-@property (assign) GLuint gl_programName;
-
-
-
-
--(void) setUniformLocation:(int)index location:(GLint)location;
--(GLint) getUniformLocation:(int)index;
-
-@end
 
 
 

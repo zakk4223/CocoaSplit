@@ -26,44 +26,6 @@
 @end
 
 
-@implementation OpenGLProgram
-
-
--(id) init
-{
-    if (self = [super init])
-    {
-        _sampler_uniform_locations[0] = -1;
-        _sampler_uniform_locations[1] = -1;
-        _sampler_uniform_locations[2] = -1;
-        
-    }
-    
-    return self;
-}
-
-
--(void)setUniformLocation:(int)index location:(GLint)location
-{
-    if (index < sizeof(_sampler_uniform_locations))
-    {
-        _sampler_uniform_locations[index] = location;
-    }
-}
-
-
--(GLint)getUniformLocation:(int)index
-{
-    if (index >= sizeof(_sampler_uniform_locations))
-    {
-        return -1;
-    } else {
-        return _sampler_uniform_locations[index];
-    }
-    
-}
-
-@end
 
 
 
@@ -73,138 +35,6 @@
 
 
 
--(void) logGLShader:(GLuint)logTarget shaderPath:(NSString *)shaderPath
-{
-	int infologLength = 0;
-	int maxLength;
-    
-	if(glIsShader(logTarget))
-    {
-		glGetShaderiv(logTarget,GL_INFO_LOG_LENGTH,&maxLength);
-	} else {
-		glGetProgramiv(logTarget,GL_INFO_LOG_LENGTH,&maxLength);
-    }
-	char infoLog[maxLength];
-    
-	if (glIsShader(logTarget))
-    {
-		glGetShaderInfoLog(logTarget, maxLength, &infologLength, infoLog);
-	} else {
-		glGetProgramInfoLog(logTarget, maxLength, &infologLength, infoLog);
-    }
-    
-	if (infologLength > 0)
-    {
-		NSLog(@"LOG FOR SHADER %@:  %s\n",shaderPath, infoLog);
-    }
-    
-}
-
-
--(GLuint) loadShader:(NSString *)name  shaderType:(GLenum)shaderType
-{
-    
-    
-    NSBundle *appBundle = [NSBundle mainBundle];
-    
-    NSString *extension;
-    if (shaderType == GL_FRAGMENT_SHADER)
-    {
-        extension = @"fgsh";
-    } else if (shaderType == GL_VERTEX_SHADER) {
-        extension = @"vtsh";
-    }
-    
-    NSString *shaderPath = [appBundle pathForResource:name ofType:extension inDirectory:@"Shaders"];
-    
-    NSString *shaderSource = [NSString stringWithContentsOfFile:shaderPath encoding:NSUTF8StringEncoding error:NULL];
-    
-    GLuint shaderName;
-    
-    shaderName = glCreateShader(shaderType);
-    
-    const char *sc_src = [shaderSource cStringUsingEncoding:NSASCIIStringEncoding];
-    
-    glShaderSource(shaderName, 1, &sc_src, NULL);
-    glCompileShader(shaderName);
-    [self logGLShader:shaderName shaderPath:shaderPath];
-    return shaderName;
-}
-
--(GLuint) createProgram:(NSString *)vertexName fragmentName:(NSString *)fragmentName
-{
-    GLuint progVertex = [self loadShader:vertexName shaderType:GL_VERTEX_SHADER];
-    GLuint progFragment = [self loadShader:fragmentName shaderType:GL_FRAGMENT_SHADER];
-    
-    GLuint newProgram = glCreateProgram();
-    glAttachShader(newProgram, progVertex);
-    glAttachShader(newProgram, progFragment);
-    glLinkProgram(newProgram);
-    
-
-    [self logGLShader:newProgram shaderPath:nil];
-
-    
-    
-    return newProgram;
-}
-
-
--(void) setProgramUniforms:(OpenGLProgram *)program
-{
-    GLint text_loc;
-    
-    text_loc = glGetUniformLocation(program.gl_programName, "my_texture1");
-    [program setUniformLocation:0 location:text_loc];
-    
-    text_loc = glGetUniformLocation(program.gl_programName, "my_texture2");
-    [program setUniformLocation:1 location:text_loc];
-    
-    
-    text_loc = glGetUniformLocation(program.gl_programName, "my_texture3");
-    [program setUniformLocation:2 location:text_loc];
-}
-
-
--(void) createShaders
-{
-    
-    OpenGLProgram *progObj;
-    _shaderPrograms = [[NSMutableDictionary alloc] init];
-    
-    
-    GLuint newProgram = [self createProgram:@"passthrough" fragmentName:@"passthrough"];
-    
-    progObj = [[OpenGLProgram alloc] init];
-    progObj.label = @"passthrough";
-    progObj.gl_programName = newProgram;
-
-    [self setProgramUniforms:progObj];
-    
-    [_shaderPrograms setObject: progObj forKey:@"passthrough"];
-    
-    newProgram = [self createProgram:@"passthrough" fragmentName:@"420v"];
-    
-    progObj = [[OpenGLProgram alloc] init];
-    progObj.label = @"420v";
-    progObj.gl_programName = newProgram;
-    
-    [self setProgramUniforms:progObj];
-
-    [_shaderPrograms setObject:progObj forKey:@"420v"];
-    
-    newProgram = [self createProgram:@"line" fragmentName:@"line"];
-    
-    
-    progObj = [[OpenGLProgram alloc] init];
-    progObj.label = @"line";
-    progObj.gl_programName = newProgram;
-    [_shaderPrograms setObject:progObj forKey:@"line"];
-
-
-    
-    
-}
 
 
 -(SourceLayout *)sourceLayout
@@ -242,16 +72,6 @@
 
 
 
--(void)bindProgramTextures:(OpenGLProgram *)program
-{
-    
-    
-    for(int i = 0; i < 3; i++)
-    {
-        glUniform1i([program getUniformLocation:i], i);
-    }
-    
-}
 
 
 -(void) setIdleTimer
@@ -1220,12 +1040,12 @@
     
     
     
-    [self createShaders];
+   // [self createShaders];
 
     
-    OpenGLProgram *lineprg = [_shaderPrograms objectForKey:@"line"];
+   // OpenGLProgram *lineprg = [_shaderPrograms objectForKey:@"line"];
 
-    _lineProgram = lineprg.gl_programName;
+    //_lineProgram = lineprg.gl_programName;
     
     
     _cictx = [CIContext contextWithCGLContext:[self.openGLContext CGLContextObj] pixelFormat:CGLGetPixelFormat([self.openGLContext CGLContextObj]) colorSpace:CGColorSpaceCreateDeviceRGB() options:nil];
@@ -1428,9 +1248,9 @@
         }
         
         
-        OpenGLProgram *shProgram = [_shaderPrograms objectForKey:programName];
+        //OpenGLProgram *shProgram = [_shaderPrograms objectForKey:programName];
         
-        _programId = shProgram.gl_programName;
+        //_programId = shProgram.gl_programName;
         
         //glUseProgram(_programId);
         //[self bindProgramTextures:shProgram];
