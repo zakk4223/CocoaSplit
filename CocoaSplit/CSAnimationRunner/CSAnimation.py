@@ -20,11 +20,13 @@ class CSAnimation:
         self.begin_time = 0
         self.completion_handler = None
         self.internal_completion_handler = None
+        self.toValue = None
         
         if animation:
             animation.setRemovedOnCompletion_(False)
             animation.setFillMode_("forwards")
             self.duration = animation.duration()
+     
 
 
         if 'repeatcount' in kwargs:
@@ -70,7 +72,7 @@ class CSAnimation:
 
     def apply_immediate(self):
         if self.target:
-            p_value = self.animation.toValue()
+            p_value = self.toValue
             CATransaction.begin()
             #CATransaction.setDisableActions_(True)
             self.target.setValue_forKeyPath_(p_value, self.animation.keyPath())

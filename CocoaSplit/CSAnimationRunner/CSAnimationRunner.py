@@ -120,8 +120,33 @@ class CSAnimationInput(object):
         return cab
     
 
+    def keyframe_animation(self, forKey, withDuration):
+    
+        kanim = CAKeyframeAnimation.animationWithKeyPath_(forKey)
+        if withDuration != None:
+            kanim.setDuration_(withDuration)
+        else:
+            kanim.setDuration_(CSAnimationBlock.current_frame.duration)
+        kanim.setCalculationMode_('cubicPaced')
+        return kanim
+        
+    
     def simple_animation(self, forKey, toValue, withDuration=None, **kwargs):
-        banim = self.basic_animation(forKey, withDuration)
+        
+        real_end_value = toValue
+        
+        if type(toValue) in (list,tuple):
+            banim = self.keyframe_animation(forKey, withDuration)
+            real_end_value = toValue[-1]
+            banim.setValues_(toValue)
+        else:
+            banim = self.basic_animation(forKey, withDuration)
+            if 'use_fromVal' in kwargs:
+                banim.setFromValue_(kwargs['use_fromVal'])
+            banim.setToValue_(toValue)
+
+        
+        
         for_layer = self.layer
         
         if 'source_only' in kwargs and kwargs['source_only']:
@@ -131,17 +156,36 @@ class CSAnimationInput(object):
         csanim = CSAnimation(for_layer, forKey, banim, **kwargs)
         
         if not 'autoreverse' in kwargs:
-            self.animationLayer.setValue_forKeyPath_(toValue, forKey)
+            self.animationLayer.setValue_forKeyPath_(real_end_value, forKey)
             if 'extra_keypath' in kwargs:
-                self.animationLayer.setValue_forKeyPath_(toValue, kwargs['extra_keypath'])
+                self.animationLayer.setValue_forKeyPath_(real_end_value, kwargs['extra_keypath'])
         
-        if 'use_fromVal' in kwargs:
-            banim.setFromValue_(kwargs['use_fromVal'])
         
-        banim.setToValue_(toValue)
+        csanim.toValue = real_end_value
+
         return self.add_animation(csanim, for_layer, forKey)
     
     
+    def make_animation_values(self,initial_value, anim_value, valueMaker):
+        
+
+        ret_val = None
+        
+        if type(anim_value) in (list,tuple):
+            
+            val_arr = []
+            if initial_value is not None:
+                val_arr.append(initial_value)
+            
+            for val in anim_value:
+                n_val = valueMaker(val)
+                val_arr.append(n_val)
+            ret_val = val_arr
+        else:
+            ret_val = valueMaker(anim_value)
+
+        return ret_val
+
 
     def add_animation(self, animation, target, keyPath):
         animation.cs_input = self
@@ -300,51 +344,85 @@ class CSAnimationInput(object):
         """
         Translate/move the input on the y-axis to the new value y. The final result of this translation is not permanent/saved. If you translate an input and then manually move it via the UI or via the move* functions, it may not restore/go live in the exact position it appears in the layout. Use caution.
         """
-        new_coord = self.real_coordinate_from_fract(0,y)
-        new_coord = self.adjust_coordinates(0,new_coord.y)
         cval = self.animationLayer.valueForKeyPath_('transform.translation.y')
-        return self.simple_animation('transform.translation.y', new_coord.y+cval, duration, **kwargs)
+
+        def vmk(val):
+            new_coord = self.real_coordinate_from_fract(0,val)
+            new_coord = self.adjust_coordinates(0,new_coord.y)
+            return new_coord.y + cval
+
+        anim_vals = self.make_animation_values(0, y, vmk)
+        
+        
+        return self.simple_animation('transform.translation.y', anim_vals, duration, **kwargs)
     
     def translateXTo(self, x, duration=None, **kwargs):
         """
         Translate/move the input on the x-axis to the new value x. The final result of this translation is not permanent/saved. If you translate an input and then manually move it via the UI or via the move* functions, it may not restore/go live in the exact position it appears in the layout. Use caution.
         """
-        new_coord = self.real_coordinate_from_fract(0,x)
-
-        new_coord = self.adjust_coordinates(new_coord.x,0)
         cval = self.animationLayer.valueForKeyPath_('transform.translation.x')
-        return self.simple_animation('transform.translation.x', new_coord.x+cval, duration, **kwargs)
 
-    def translateTo(self, x,y,duration=None, **kwargs):
+        def vmk(val):
+            new_coord = self.real_coordinate_from_fract(0,val)
+            new_coord = self.adjust_coordinates(new_coord.x,0)
+            return new_coord.x + cval
+
+        anim_vals = self.make_animation_values(0,x,vmk)
+        return self.simple_animation('transform.translation.x', anim_vals, duration, **kwargs)
+
+    def translateTo(self, pos_tpl,duration=None, **kwargs):
         """
         Translate/move the input's origin to the coordinate (x,y) The final result of this translation is not permanent/saved. If you translate an input and then manually move it via the UI or via the move* functions, it may not restore/go live in the exact position it appears in the layout. Use caution.
         """
-        new_coord = self.real_coordinate_from_fract(x,y)
-        new_coord = self.adjust_coordinates(new_coord.x,new_coord.y)
         cpos = self.animationLayer.valueForKeyPath_('transform.translation')
         csize = cpos.sizeValue()
-        nsize = NSSize(csize.width+new_coord.x, csize.height+new_coord.y)
-        return self.simple_animation('transform.translation', NSValue.valueWithSize_(nsize), duration, **kwargs)
+        def vmk(val):
+            new_coord = self.real_coordinate_from_fract(val[0], val[1])
+            new_coord = self.adjust_coordinates(new_coord.x,new_coord.y)
+            nsize = NSSize(csize.width+new_coord.x, csize.height+new_coord.y)
+            return NSValue.valueWithSize_(nsize)
+
+        isize = NSSize(0,0)
+
+        anim_vals = self.make_animation_values(NSValue.valueWithSize_(isize), pos_tpl, vmk)
+        return self.simple_animation('transform.translation', anim_vals, duration, **kwargs)
 
     def translateY(self, y, duration=None, **kwargs):
-        new_coord = self.real_coordinate_from_fract(0,y)
-
+        
         cval = self.animationLayer.valueForKeyPath_('transform.translation.y')
-        return self.simple_animation('transform.translation.y', new_coord.y+cval, duration, **kwargs)
+
+        def vmk(val):
+            new_coord = self.real_coordinate_from_fract(0,val)
+            return new_coord.y+cval
+        anim_vals = self.make_animation_values(0, y, vmk)
+        
+        return self.simple_animation('transform.translation.y', anim_vals, duration, **kwargs)
  
     def translateX(self, x, duration=None, **kwargs):
-        new_coord = self.real_coordinate_from_fract(x,0)
-
+        
         cval = self.animationLayer.valueForKeyPath_('transform.translation.x')
-        return self.simple_animation('transform.translation.x', new_coord.x+cval, duration, **kwargs)
-    
-    def translate(self, x,y,duration=None, **kwargs):
-        new_coord = self.real_coordinate_from_fract(x,y)
 
+        def vmk(val):
+            new_coord = self.real_coordinate_from_fract(val,0)
+            return new_coord.x+cval
+
+        anim_vals = self.make_animation_values(0,x,vmk)
+
+        return self.simple_animation('transform.translation.x', anim_vals, duration, **kwargs)
+    
+    def translate(self, pos_tpl,duration=None, **kwargs):
+        
         cpos = self.animationLayer.valueForKeyPath_('transform.translation')
         csize = cpos.sizeValue()
-        nsize = NSSize(csize.width+new_coord.x, csize.height+new_coord.y)
-        return self.simple_animation('transform.translation', NSValue.valueWithSize_(nsize), duration, **kwargs)
+
+        def vmk(val):
+            new_coord = self.real_coordinate_from_fract(val[0],val[1])
+            return NSSize(csize.width+new_coord.x, csize.height+new_coord.y)
+        
+        isize = NSSize(0,0)
+        anim_vals = self.make_animation_values(NSValue.valueWithSize_(isize), pos_tpl, vmk)
+        
+        return self.simple_animation('transform.translation', anim_vals, duration, **kwargs)
     
     def translateCenter(self, duration=None, **kwargs):
         """
@@ -362,29 +440,44 @@ class CSAnimationInput(object):
         """
         Move the input's X coordinate by move_x units. This change is permanent/saved. If you want non-saved move use the translate* animations
         """
-        new_coord = self.real_coordinate_from_fract(move_x,0)
+        
+        cpos = self.animationLayer.position()
+        
+        def vmk(val):
+            new_coord = self.real_coordinate_from_fract(val,0)
+            return cpos.x+new_coord.x
 
-        return self.simple_animation('position.x', self.animationLayer.position().x+new_coord.x, duration, **kwargs)
+        anim_vals = self.make_animation_values(cpos.x, move_x, vmk)
+        return self.simple_animation('position.x', anim_vals, duration, **kwargs)
     
     def moveY(self, move_y, duration=None, **kwargs):
         """
         Move the input's Y coordinate by move_y units. This change is permanent/saved. If you want non-saved move use the translate* animations
         """
-        new_coord = self.real_coordinate_from_fract(0,move_y)
+        cpos = self.animationLayer.position()
+        def vmk(val):
+            new_coord = self.real_coordinate_from_fract(0,val)
+            return cpos.y+new_coord.y
+        
+        anim_vals = self.make_animation_values(0, move_y, vmk)
 
-        return self.simple_animation('position.y', self.animationLayer.position().y+new_coord.y, duration, **kwargs)
+        return self.simple_animation('position.y', anim_vals, duration, **kwargs)
 
 
-    def move(self, move_x, move_y, duration=None, **kwargs):
+    def move(self, pos_tpl, duration=None, **kwargs):
         """
         Move the input's position by move_x and move_y units This change is permanent/saved. If you want non-saved move use the translate* animations
         """
-
-        new_coord = self.real_coordinate_from_fract(move_x,move_y)
-
         curr_x = self.animationLayer.position().x
         curr_y = self.animationLayer.position().y
-        return self.moveTo(curr_x+new_coord.x, curr_y+new_coord.y, duration, **kwargs)
+
+        def vmk(val):
+            new_coord = self.real_coordinate_from_fract(val[0],val[1])
+            return (curr_x+new_coord.x, curr_y+new_coord.y)
+        
+        anim_vals = self.make_animation_values((curr_x, curr_y), pos_tpl, vmk)
+        
+        return self.moveTo(anim_vals, duration, **kwargs)
     
     def moveCenter(self, duration=None, **kwargs):
         """
@@ -403,42 +496,61 @@ class CSAnimationInput(object):
         """
         Move the y component of the input's origin to the move_y point. The origin of an input is the input's bottom left corner. This is an absolute positioning, not a delta from the current position. This move is permanent/saved. If you want a non-saved move use the translate* animations.
         """
-        new_coord = self.real_coordinate_from_fract(0,move_y)
-
-        new_coord = self.adjust_coordinates(0,new_coord.y)
         c_pos = self.animationLayer.position()
-        c_pos.y += new_coord.y
+        
+        def vmk(val):
+            new_coord = self.real_coordinate_from_fract(0,val)
+            new_coord = self.adjust_coordinates(0,new_coord.y)
+            n_val = c_pos.y + new_coord.y
+            return n_val
+        
+        anim_value = self.make_animation_values(c_pos.y, move_y, vmk)
 
-        return self.simple_animation('position.y', c_pos.y, duration, **kwargs)
+        return self.simple_animation('position.y', anim_value, duration, **kwargs)
     
     def moveXTo(self, move_x, duration=None, **kwargs):
         """
         Move the x component of the input's origin to the move_x point. The origin of an input is the input's bottom left corner. This is an absolute positioning, not a delta from the current position. This move is permanent/saved. If you want a non-saved move use the translate* animations.
         """
-        new_coord = self.real_coordinate_from_fract(move_x,0)
-
-        new_coord = self.adjust_coordinates(new_coord.x, 0)
         c_pos = self.animationLayer.position()
-        c_pos.x += new_coord.x
-        return self.simple_animation('position.x', c_pos.x, duration, **kwargs)
+        
+        def vmk(val):
+            new_coord = self.real_coordinate_from_fract(val, 0)
+            new_coord = self.adjust_coordinates(new_coord.x, 0)
+            n_val = c_pos.x + new_coord.x
+            return n_val
+        
+        anim_value = self.make_animation_values(c_pos.x, move_x, vmk)
+        
+        return self.simple_animation('position.x', anim_value, duration, **kwargs)
 
-    def moveTo(self, move_x, move_y, duration=None, **kwargs):
+    def moveTo(self, move_tpl, duration=None, **kwargs):
         """
         Move the y component of the input's origin to (move_x, move_y) The origin of an input is the input's bottom left corner. This is an absolute positioning, not a delta from the current position. This move is permanent/saved. If you want a non-saved move use the translate* animations.
         """
-        new_coord = self.real_coordinate_from_fract(move_x,move_y)
 
-        new_coords = self.adjust_coordinates(new_coord.x, new_coord.y)
         c_pos = self.animationLayer.position()
-        c_pos.x += new_coords.x
-        c_pos.y += new_coords.y
-        return self.simple_animation('position', NSValue.valueWithPoint_(c_pos), duration, **kwargs)
+
+        def vmk(val):
+            new_coord = self.real_coordinate_from_fract(val[0], val[1])
+            new_coords = self.adjust_coordinates(new_coord.x, new_coord.y)
+            n_pos = NSPoint()
+            n_pos.x = c_pos.x + new_coords.x
+            n_pos.y = c_pos.y + new_coord.y
+            return NSValue.valueWithPoint_(n_pos)
+
+        anim_vals = self.make_animation_values(NSValue.valueWithPoint_(c_pos), move_tpl, vmk)
+        
+        return self.simple_animation('position', anim_vals, duration, **kwargs)
     
     def opacity(self, opacity, duration=None, **kwargs):
         """
         Change the opacity/transparency of the input.
         """
-        return self.simple_animation('opacity', opacity, duration, **kwargs)
+        
+        anim_vals = self.make_animation_values(self.animationLayer.opacity(), opacity, lambda x: x)
+        
+        return self.simple_animation('opacity', anim_vals, duration, **kwargs)
 
 
     def rotateX(self, angle, duration=None, **kwargs):
