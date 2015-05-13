@@ -245,7 +245,11 @@ class CSAnimationInput(object):
         1) They ARE NOT PERMANENT. If you use an animation to apply a 0.5 scale to an input, then go live or save the layout, the scale does not carry over. If you want to make the change permanent use scaleSize()
         2) The scale is relative to the original size of the input. So applying one 2x scale and then another 2x scale only results in the scale changing once.
         """
-        return self.simple_animation('transform.scale', scaleVal, duration, **kwargs)
+        
+        cval = self.animationLayer.valueForKeyPath_('transform.scale')
+        
+        anim_vals = self.make_animation_values(cval, scaleVal, lambda x: x)
+        return self.simple_animation('transform.scale', anim_vals, duration, **kwargs)
     
 
     def scaleSize(self, scaleVal, duration=None, **kwargs):
@@ -261,83 +265,71 @@ class CSAnimationInput(object):
         Set the width of the input. This change saves/is permanent. It is applied to the underlying layer's bounds.
         """
 
-        original_x = self.minX
+        move_frames = []
         original_width = self.width
+        
+        def vmk(val):
+            
+            mvval = None
+            if 'anchorLeft' in kwargs and kwargs['anchorLeft']:
+                mvval = (val - original_width)/2
+            elif 'anchorRight' in kwargs and kwargs['anchorRight']:
+                mvval = (original_width - val)/2
+            if mvval is not None:
+                move_frames.append(mvval)
+            return val
+        
+        anim_vals = self.make_animation_values(self.width, width, vmk)
         kwargs['use_fromVal'] = self.width
         kwargs['extra_keypath'] = 'bounds.size.width'
-        ret = self.simple_animation('fakeWidth', width, duration, **kwargs)
+        ret = self.simple_animation('fakeWidth', anim_vals, duration, **kwargs)
         kwargs.pop('use_fromVal', None)
         kwargs.pop('extra_keypath', None)
 
-
-        
-
-        if 'anchorLeft' in kwargs and kwargs['anchorLeft']:
-            self.moveX((width-original_width)/2, duration, **kwargs)
-        elif 'anchorRight' in kwargs and kwargs['anchorRight']:
-            self.moveX((original_width-width)/2, duration, **kwargs)
+        self.moveX(move_frames, duration, **kwargs)
         return ret
     
     def sizeHeight(self, height, duration=None, **kwargs):
         """
         Set the height of the input. This change saves/is permanent. It is applied to the underlying layer's bounds.
         """
-        
-        original_y = self.minY
+        move_frames = []
         original_height = self.height
+        
+        def vmk(val):
+            mvval = None
+            if 'anchorBottom' in kwargs and kwargs['anchorBottom']:
+                mvval = (val - original_height)/2
+            elif 'anchorTop' in kwargs and kwargs['anchorTop']:
+                mvval = (original_height - val)/2
+            if mvval is not None:
+                move_frames.append(mvval)
+            return val
+        
+        anim_vals = self.make_animation_values(self.height, height, vmk)
         kwargs['use_fromVal'] = self.height
         kwargs['extra_keypath'] = 'bounds.size.height'
-
-        ret = self.simple_animation('fakeHeight', height, duration, **kwargs)
+        ret = self.simple_animation('fakeHeight', anim_vals, duration, **kwargs)
         kwargs.pop('use_fromVal', None)
         kwargs.pop('extra_keypath', None)
-
-        if 'anchorBottom' in kwargs and kwargs['anchorBottom']:
-            self.moveY((height-original_height)/2, duration, **kwargs)
-        elif 'anchorTop' in kwargs and kwargs['anchorTop']:
-            self.moveY((original_height-height)/2, duration, **kwargs)
         
+        self.moveY(move_frames, duration, **kwargs)
         return ret
 
-
-    def size(self, width, height, duration=None, **kwargs):
+    def size(self, size_tpl, duration=None, **kwargs):
         """
         Set the width and height of the input. This change saves/is permanent. It is applied to the underlying layer's bounds.
         """
         
-        self.sizeWidth(width, duration, **kwargs)
-        return self.sizeHeight(height, duration, **kwargs)
-        
-        
-        current_bounds = self.animationLayer.bounds()
-        current_bounds.size.width = width
-        current_bounds.size.height = height
-        rectval = NSValue.valueWithRect_(current_bounds)
-        
-        original_y = self.minY
-        original_height = self.height
-        original_x = self.minX
-        original_width = self.width
+        if type(size_tpl[0]) in (list, tuple):
+            width_vals = map(lambda x: x[0], size_tpl)
+            height_vals = map(lambda y: y[1], size_tpl)
+        else:
+            width_vals = size_tpl[0]
+            height_vals = size_tpl[1]
 
-        ret = self.simple_animation('bounds', rectval, duration, **kwargs)
-        
-        
-        if 'anchorLeft' in kwargs and kwargs['anchorLeft']:
-            self.moveX((width-original_width)/2, duration, **kwargs)
-        elif 'anchorRight' in kwargs and kwargs['anchorRight']:
-            self.moveX((original_width-width)/2, duration, **kwargs)
-
-        if 'anchorBottom' in kwargs and kwargs['anchorBottom']:
-            self.moveY((height-original_height)/2, duration, **kwargs)
-        elif 'anchorTop' in kwargs and kwargs['anchorTop']:
-            self.moveY((original_height-height)/2, duration, **kwargs)
-
-
-        if self.layer.sourceLayer() and self.layer.allowResize():
-            kwargs['use_layer'] = self.layer.sourceLayer()
-            self.simple_animation('bounds', rectval, duration, **kwargs)
-        
-        return ret
+        self.sizeWidth(width_vals, duration, **kwargs)
+        return self.sizeHeight(height_vals, duration, **kwargs)
     
     
     def translateYTo(self, y, duration=None, **kwargs):
@@ -459,7 +451,7 @@ class CSAnimationInput(object):
             new_coord = self.real_coordinate_from_fract(0,val)
             return cpos.y+new_coord.y
         
-        anim_vals = self.make_animation_values(0, move_y, vmk)
+        anim_vals = self.make_animation_values(cpos.y, move_y, vmk)
 
         return self.simple_animation('position.y', anim_vals, duration, **kwargs)
 
@@ -557,59 +549,80 @@ class CSAnimationInput(object):
         """
         Rotate the input around the x-axis by angle degrees. This rotation is additive: a rotate of 45 degrees followed by another rotate of 45 degrees results in a total rotation of 90 degrees. This rotation is not permanent, it will not persist across save/restore or go live.
         """
-        toVal = math.radians(angle)
         fromVal = self.animationLayer.valueForKeyPath_('transform.rotation.x')
-        retval = self.simple_animation('transform.rotation.x', fromVal+toVal, duration, **kwargs)
-        return retval
+
+        anim_vals = self.make_animation_values(fromVal, angle, lambda x: fromVal+math.radians(x))
+        
+        return self.simple_animation('transform.rotation.x', anim_vals, duration, **kwargs)
 
     def rotateY(self, angle, duration=None, **kwargs):
         """
         Rotate the input around the y-axis by angle degrees. This rotation is additive: a rotate of 45 degrees followed by another rotate of 45 degrees results in a total rotation of 90 degrees. This rotation is not permanent, it will not persist across save/restore or go live.
         """
-        toVal = math.radians(angle)
         fromVal = self.animationLayer.valueForKeyPath_('transform.rotation.y')
-        retval = self.simple_animation('transform.rotation.y', fromVal+toVal, duration, **kwargs)
-        return retval
+        
+        anim_vals = self.make_animation_values(fromVal, angle, lambda x: fromVal+math.radians(x))
+
+        return self.simple_animation('transform.rotation.y', anim_vals, duration, **kwargs)
     
     def rotateXTo(self, angle, duration=None, **kwargs):
-        toVal = math.radians(angle)
-        retval = self.simple_animation('transform.rotation.x', toVal, duration, **kwargs)
-        return retval
-    
+        
+        initVal = self.animationLayer.valueForKeyPath_('transform.rotation.x')
+
+        anim_vals = self.make_animation_values(initVal, angle, lambda x: math.radians(x))
+        
+        return self.simple_animation('transform.rotation.x', anim_vals, duration, **kwargs)
+
     def rotateYTo(self, angle, duration=None, **kwargs):
-        toVal = math.radians(angle)
-        retval = self.simple_animation('transform.rotation.y', toVal, duration, **kwargs)
-        return retval
+        initVal = self.animationLayer.valueForKeyPath_('transform.rotation.y')
+        
+        anim_vals = self.make_animation_values(initVal, angle, lambda x: math.radians(x))
+        
+        return self.simple_animation('transform.rotation.y', anim_vals, duration, **kwargs)
 
 
     def rotate(self, angle, duration=None, **kwargs):
         """
         Rotate the input by angle degrees. Positive angles are anti-clockwise, negative angles are clockwise. This rotation is additive: a rotate of 45 degrees followed by another rotate of 45 degrees results in a total rotation of 90 degrees. This rotation is not permanent, it will not persist across save/restore or go live.
         """
-        toVal = math.radians(angle)
         fromVal = self.animationLayer.valueForKeyPath_('transform.rotation.z')
-        retval = self.simple_animation('transform.rotation.z', fromVal+toVal, duration, **kwargs)
-        return retval
+        
+        
+        anim_vals = self.make_animation_values(fromVal, angle, lambda x: fromVal+math.radians(x))
+        
+        return self.simple_animation('transform.rotation.z', anim_vals, duration, **kwargs)
     
     def rotateTo(self, angle, duration=None, **kwargs):
         """
         Rotate the input to the specified angle. 
         """
-        toVal = math.radians(angle)
-        return self.simple_animation('transform.rotation.z', toVal, duration, **kwargs)
+        fromVal = self.animationLayer.valueForKeyPath_('transform.rotation.z')
+        
+        
+        anim_vals = self.make_animation_values(fromVal, angle, lambda x: math.radians(x))
+        
+        return self.simple_animation('transform.rotation.z', anim_vals, duration, **kwargs)
 
 
     def borderwidth(self, width, duration=None, **kwargs):
         """
         Change the border width of the input. You probably also want to set a border color.
         """
-        return self.simple_animation('borderWidth', width, duration, **kwargs)
+        fromVal = self.animationLayer.valueForKeyPath_('borderWidth')
+        
+        anim_vals = self.make_animation_values(fromVal, width, lambda x: x)
+
+        return self.simple_animation('borderWidth', anim_vals, duration, **kwargs)
 
     def cornerradius(self, radius, duration=None, **kwargs):
         """
         Change the corner radius of the input. The corner radius is what creates rounded corners.
         """
-        return self.simple_animation('cornerRadius', radius, duration, **kwargs)
+        fromVal = self.animationLayer.valueForKeyPath_('cornerRadius')
+        
+        anim_vals = self.make_animation_values(fromVal, radius, lambda x: x)
+        
+        return self.simple_animation('cornerRadius', anim_vals, duration, **kwargs)
 
     def __hidden_complete__(self, animation, yesno):
         animation.set_model_value()
