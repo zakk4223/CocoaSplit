@@ -12,9 +12,11 @@
 #import <malloc/malloc.h>
 #import "CSAnimationItem.h"
 #import "CSAnimationRunnerObj.h"
+#import "MIKMIDI.h"
 
 
-@interface SourceLayout : NSObject <NSCoding, NSKeyedUnarchiverDelegate, NSCopying>
+
+@interface SourceLayout : NSObject <NSCoding, NSKeyedUnarchiverDelegate, NSCopying, MIKMIDIMappableResponder, MIKMIDIResponder>
 {
     
     NSSortDescriptor *_sourceDepthSorter;
@@ -29,6 +31,7 @@
 }
 
 
+@property (assign) bool inTransition;
 @property (strong) NSMutableArray *animationList;
 @property (strong) NSIndexSet *animationIndexes;
 

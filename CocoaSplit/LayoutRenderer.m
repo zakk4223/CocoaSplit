@@ -173,7 +173,7 @@
                 _currentLayout.transitionLayer = nil;
                 _currentLayout.sourceList = _currentLayout.transitionSourceList;
                 _currentLayout.transitionSourceList = nil;
-                
+                _currentLayout.inTransition = NO;
             }
             [CATransaction commit];
         }];
@@ -182,6 +182,7 @@
         
         if (saveLayer)
         {
+            
             [self.rootLayer replaceSublayer:self.layout.rootLayer with:saveLayer];
             
             

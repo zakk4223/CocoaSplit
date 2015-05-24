@@ -25,6 +25,8 @@
 #import "CAMultiAudioEngine.h"
 #import "CSAnimationRunnerObj.h"
 #import "CSAnimationChooserViewController.h"
+#import "CSMidiManagerWindowController.h"
+#import "MIKMIDI.h"
 
 
 
@@ -42,7 +44,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 @class PreviewView;
 
-@interface CaptureController : NSObject <NSMenuDelegate> {
+
+@interface CaptureController : NSObject <NSMenuDelegate, MIKMIDIMappableResponder, MIKMIDIResponder, MIKMIDIMappingGeneratorDelegate> {
     
     
     CIFilter *_compositeFilter;
@@ -127,6 +130,12 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (weak) IBOutlet NSMenu *stagingFullScreenMenu;
 @property (weak) IBOutlet NSMenu *liveFullScreenMenu;
 
+@property (strong) MIKMIDIDeviceManager *midiManager;
+
+@property (strong) NSMutableDictionary *midiDeviceMappings;
+
+@property (strong) NSArray *midiMapGenerators;
+
 
 
 
@@ -140,6 +149,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 @property (strong) LayoutPreviewWindowController *layoutPreviewController;
 @property (strong) PluginManagerWindowController *pluginManagerController;
+@property (strong) CSMidiManagerWindowController *midiManagerController;
 
 
 @property (strong) NSString *renderStatsString;
@@ -206,6 +216,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(void)showStagingView;
 
 - (IBAction)openPluginManager:(id)sender;
+- (IBAction)openMidiManager:(id)sender;
+
 
 - (IBAction)stagingGoLive:(id)sender;
 - (IBAction)stagingSave:(id)sender;
@@ -406,6 +418,11 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 -(void)setupLogging;
 +(CSAnimationRunnerObj *) sharedAnimationObj;
+- (NSArray *)commandIdentifiers;
+- (MIKMIDIResponderType)MIDIResponderTypeForCommandIdentifier:(NSString *)commandID;
+-(void)learnMidiForCommand:(NSString *)command withRepsonder:(id<MIKMIDIMappableResponder>)responder;
+
+-(void)openMidiLearnerForResponders:(NSArray *)responders;
 
 
 -(void)layoutWentFullscreen;

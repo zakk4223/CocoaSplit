@@ -57,6 +57,79 @@
 
 
 
+-(NSString *)MIDIIdentifier
+{
+    NSString *liveStr = @"Staging";
+    if (self.isActive)
+    {
+        liveStr = @"Live";
+    }
+    
+    return [NSString stringWithFormat:@"%@Layout:%@", liveStr, self.name];
+}
+
+
+-(MIKMIDIResponderType)MIDIResponderTypeForCommandIdentifier:(NSString *)commandID
+{
+    return MIKMIDIResponderTypeButton;
+}
+
+-(BOOL)respondsToMIDICommand:(MIKMIDICommand *)command
+{
+    return YES;
+}
+
+-(void)handleMIDICommand:(MIKMIDICommand *)command forIdentifier:(NSString *)identifier
+{
+    
+    NSLog(@"HANDLING IDENTIFIER %@", identifier);
+    
+    __weak SourceLayout *weakSelf = self;
+    
+    if ([identifier hasPrefix:@"Animation:"])
+    {
+        NSString *animName = [identifier substringFromIndex:10];
+        NSUInteger indexOfAnim = [self.animationList indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+            CSAnimationItem *testAnim = obj;
+            if ([testAnim.name isEqualToString:animName])
+            {
+                *stop = YES;
+                return YES;
+            }
+            return NO;
+        }];
+        
+        if (indexOfAnim != NSNotFound)
+        {
+            CSAnimationItem *anim = [self.animationList objectAtIndex:indexOfAnim];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf runSingleAnimation:anim];
+                
+            });
+            
+        }
+        return;
+    }
+    
+}
+
+
+-(NSArray *)commandIdentifiers
+{
+    
+    NSMutableArray *ret = [NSMutableArray array];
+    
+    for (CSAnimationItem *anim in self.animationList)
+    {
+        NSString *ident = [NSString stringWithFormat:@"Animation:%@", anim.name];
+        [ret addObject:ident];
+    }
+    
+    return ret;
+}
+
+
 -(void)setAnimationIndexes:(NSIndexSet *)animationIndexes
 {
     _animationIndexes = animationIndexes;
@@ -77,30 +150,41 @@
 {
     if (self.selectedAnimation)
     {
-        NSMutableDictionary *inputMap = [NSMutableDictionary dictionary];
         
         NSArray *animations = [self.animationList objectsAtIndexes:self.animationIndexes];
         
         for (CSAnimationItem *anim in animations)
         {
-            for (NSDictionary *item in anim.inputs)
-            {
-                if (item[@"value"])
-                {
-                    inputMap[item[@"label"]] = item[@"value"];
-                } else {
-                    inputMap[item[@"label"]] = [NSNull null];
-                }
-            }
+            [self runSingleAnimation:anim];
+            
         }
-        
-        NSDictionary *animMap = @{@"moduleName": self.selectedAnimation.module_name, @"inputs": inputMap, @"rootLayer": self.rootLayer};
-        
-        NSThread *runThread = [[NSThread alloc] initWithTarget:self selector:@selector(doAnimation:) object:animMap];
-        [runThread start];
     }
 }
 
+-(void)runSingleAnimation:(CSAnimationItem *)animation
+{
+    if (!animation)
+    {
+        return;
+    }
+    NSMutableDictionary *inputMap = [NSMutableDictionary dictionary];
+
+    for (NSDictionary *item in animation.inputs)
+    {
+        if (item[@"value"])
+        {
+            inputMap[item[@"label"]] = item[@"value"];
+        } else {
+            inputMap[item[@"label"]] = [NSNull null];
+        }
+    }
+
+    NSDictionary *animMap = @{@"moduleName": animation.module_name, @"inputs": inputMap, @"rootLayer": self.rootLayer};
+
+    NSThread *runThread = [[NSThread alloc] initWithTarget:self selector:@selector(doAnimation:) object:animMap];
+    [runThread start];
+
+}
 
 -(void)doAnimation:(NSDictionary *)threadDict
 {
@@ -322,7 +406,7 @@
     
 
     self.transitionNeeded = YES;
-    
+    self.inTransition = YES;
 }
 
 
@@ -362,7 +446,8 @@
         src.is_live = self.isActive;
         
         
-
+        [NSApp registerMIDIResponder:src];
+        
         if (!src.layer.superlayer)
         {
             [self.rootLayer addSublayer:src.layer];
@@ -428,10 +513,13 @@
     newSource.sourceLayout = self;
     newSource.is_live = self.isActive;
     
+    
     [[self mutableArrayValueForKey:@"sourceList" ] addObject:newSource];
 
     
     [self.rootLayer addSublayer:newSource.layer];
+    [NSApp registerMIDIResponder:newSource];
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputAdded object:newSource userInfo:nil];
 }
 

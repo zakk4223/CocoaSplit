@@ -54,7 +54,14 @@
         
     }
     
+    if (_sourceLayout)
+    {
+        [NSApp unregisterMIDIResponder:_sourceLayout];
+    }
     _sourceLayout = sourceLayout;
+    
+    
+    [NSApp registerMIDIResponder:sourceLayout];
     
     if (self.layoutRenderer)
     {
@@ -168,6 +175,21 @@
 }
 
 
+-(void)midiMapSource:(id)sender
+{
+    if (self.selectedSource)
+    {
+
+        InputSource *mapCopy = self.selectedSource.copy;
+        mapCopy.uuid = self.selectedSource.uuid;
+        
+        mapCopy.is_live = !self.selectedSource.is_live;
+        
+        [self.controller openMidiLearnerForResponders:@[self.selectedSource, mapCopy]];
+    }
+}
+
+
 -(void) buildSettingsMenu
 {
     NSMenuItem *tmp;
@@ -185,13 +207,34 @@
     tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Clone" action:@selector(cloneInputSource:) keyEquivalent:@"" atIndex:5];
     tmp.target = self;
     
+    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Midi Mapping" action:@selector(midiMapSource:) keyEquivalent:@"" atIndex:6];
+    tmp.target = self;
+    
     if (self.selectedSource.parentInput)
     {
-        tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Detach from parent" action:@selector(detachSource:) keyEquivalent:@"" atIndex:6];
+        tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Detach from parent" action:@selector(detachSource:) keyEquivalent:@"" atIndex:7];
     } else {
-        tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Attach to underlying input" action:@selector(subLayerInputSource:) keyEquivalent:@"" atIndex:6];
+        tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Attach to underlying input" action:@selector(subLayerInputSource:) keyEquivalent:@"" atIndex:7];
     }
     tmp.target = self;
+}
+
+
+-(void)doLayoutMidi:(id)sender
+{
+    if (self.sourceLayout)
+    {
+        //We need to do mappings for both staging and live, so create a dummy copy that isn't in the same state as ours
+        SourceLayout *layoutCopy = [self.sourceLayout copy];
+        
+        //Default on copy is isActive = NO, so only tweak it if we aren't the active version
+        if (!self.sourceLayout.isActive)
+        {
+            layoutCopy.isActive = YES;
+        }
+        [self.controller openMidiLearnerForResponders:@[self.sourceLayout, layoutCopy]];
+        layoutCopy = nil;
+    }
 }
 
 
@@ -204,7 +247,12 @@
     
     
 
+    NSMenuItem *midiItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Midi Mapping" action:@selector(doLayoutMidi:) keyEquivalent:@""];
+    [midiItem setTarget:self];
+    [midiItem setEnabled:YES];
     
+    [sourceListMenu insertItem:midiItem atIndex:[sourceListMenu.itemArray count]];
+
     for (InputSource *src in sourceList)
     {
         NSString *srcName = src.name;

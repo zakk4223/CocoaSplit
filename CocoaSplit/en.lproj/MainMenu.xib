@@ -161,6 +161,12 @@
                                     <action selector="openPluginManager:" target="816" id="0In-ly-YuR"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Midi Manager" id="JEA-On-kXU">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="openMidiManager:" target="816" id="msu-ZX-OjS"/>
+                                </connections>
+                            </menuItem>
                             <menuItem title="Toggle Staging View" id="qBw-3x-gup">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>

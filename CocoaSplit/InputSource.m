@@ -1124,8 +1124,12 @@ static NSArray *_sourceTypes = nil;
     {
         return;
     }
-
+    [self multiChangeForce];
+}
     
+    
+-(void)multiChangeForce
+{
     CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
 
     NSMutableArray *chooseInputs = [NSMutableArray arrayWithArray:self.attachedInputs];
@@ -1204,6 +1208,7 @@ static NSArray *_sourceTypes = nil;
     {
         CALayer *sLayer = self.layer.superlayer;
         x_pos = sLayer.bounds.origin.x + (sLayer.bounds.size.width * x_pos);
+        x_pos = roundf(x_pos);
     }
     _x_pos = x_pos;
     
@@ -1221,6 +1226,7 @@ static NSArray *_sourceTypes = nil;
     {
         CALayer *sLayer = self.layer.superlayer;
         y_pos = sLayer.bounds.origin.y + (sLayer.bounds.size.height * y_pos);
+        y_pos = roundf(y_pos);
     }
 
     _y_pos = y_pos;
@@ -1652,6 +1658,353 @@ static NSArray *_sourceTypes = nil;
 {
     return self.sourceLayout.canvas_height;
 }
+
+-(NSString *)MIDIIdentifier
+{
+    NSString *liveStr;
+    if (self.is_live)
+    {
+        liveStr = @"Live";
+    } else {
+        liveStr = @"Staging";
+    }
+    
+    
+    return [NSString stringWithFormat:@"%@:%@", liveStr, self.uuid];
+}
+
+-(NSArray *)commandIdentifiers
+{
+    return @[@"Opacity", @"Rotate", @"RotateX", @"RotateY", @"Active", @"AutoFit",
+             @"HScroll", @"VScroll", @"CropLeft", @"CropRight", @"CropTop", @"CropBottom",
+             @"CKEnable", @"CKThresh", @"CKSmooth", @"BorderWidth", @"CornerRadius",
+             @"GradientStartX", @"GradientStartY", @"GradientStopX", @"GradientStopY",
+             @"ChangeInterval", @"EffectDuration", @"MultiTransition",
+             @"PositionX", @"PositionY"];
+}
+
+-(MIKMIDIResponderType)MIDIResponderTypeForCommandIdentifier:(NSString *)commandID
+{
+    MIKMIDIResponderType ret = MIKMIDIResponderTypeAbsoluteSliderOrKnob;
+
+    if ([@[@"Opacity",@"Rotate",@"RotateX",@"RotateY"] containsObject:commandID])
+    {
+        ret |= MIKMIDIResponderTypeButton;
+    }
+    
+    if ([@[@"Active", @"AutoFit", @"CKEnable", @"MultiTransition"] containsObject:commandID])
+    {
+        ret = MIKMIDIResponderTypeButton;
+    }
+    
+    
+    return ret;
+}
+
+
+-(BOOL)respondsToMIDICommand:(MIKMIDICommand *)command
+{
+    return YES;
+}
+
+-(float)convertMidiValueForRange:(MIKMIDIChannelVoiceCommand *)command minValue:(float)minvalue maxValue:(float)maxvalue
+{
+    NSUInteger midiValue = command.value;
+    
+    float midifract = midiValue/127.0;
+    
+    float valRange = maxvalue - minvalue;
+    
+    float valFract = valRange * midifract;
+    
+    return minvalue + valFract;
+}
+
+-(void)handleMIDICommandChangeInterval:(MIKMIDICommand *)command
+{
+    float newVal = [self convertMidiValueForRange:(MIKMIDIChannelVoiceCommand *)command minValue:0.0 maxValue:60];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.changeInterval = newVal;
+    });
+    
+}
+
+-(void)handleMIDICommandEffectDuration:(MIKMIDICommand *)command
+{
+    float newVal = [self convertMidiValueForRange:(MIKMIDIChannelVoiceCommand *)command minValue:0.0 maxValue:10];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.transitionDuration = newVal;
+    });
+    
+}
+
+-(void)handleMIDICommandPositionX:(MIKMIDICommand *)command
+{
+    float newVal = [self convertMidiValueForRange:(MIKMIDIChannelVoiceCommand *)command minValue:0.0 maxValue:1.0];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.x_pos = newVal;
+    });
+    
+}
+
+-(void)handleMIDICommandPositionY:(MIKMIDICommand *)command
+{
+    float newVal = [self convertMidiValueForRange:(MIKMIDIChannelVoiceCommand *)command minValue:0.0 maxValue:1.0];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.y_pos = newVal;
+    });
+    
+}
+
+
+
+
+-(void)handleMIDICommandCKThresh:(MIKMIDICommand *)command
+{
+    float newVal = [self convertMidiValueForRange:(MIKMIDIChannelVoiceCommand *)command minValue:0.0 maxValue:0.5];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.chromaKeyThreshold = newVal;
+    });
+    
+}
+
+
+-(void)handleMIDICommandGradientStartX:(MIKMIDICommand *)command
+{
+    float newVal = [self convertMidiValueForRange:(MIKMIDIChannelVoiceCommand *)command minValue:0.0 maxValue:1.0];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.layer.gradientStartX = newVal;
+    });
+
+}
+
+-(void)handleMIDICommandGradientStartY:(MIKMIDICommand *)command
+{
+    float newVal = [self convertMidiValueForRange:(MIKMIDIChannelVoiceCommand *)command minValue:0.0 maxValue:1.0];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.layer.gradientStartY = newVal;
+    });
+    
+}
+
+-(void)handleMIDICommandGradientStopX:(MIKMIDICommand *)command
+{
+    float newVal = [self convertMidiValueForRange:(MIKMIDIChannelVoiceCommand *)command minValue:0.0 maxValue:1.0];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.layer.gradientStopX = newVal;
+    });
+    
+}
+
+-(void)handleMIDICommandGradientStopY:(MIKMIDICommand *)command
+{
+    float newVal = [self convertMidiValueForRange:(MIKMIDIChannelVoiceCommand *)command minValue:0.0 maxValue:1.0];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.layer.gradientStopY = newVal;
+    });
+    
+}
+
+
+
+-(void)handleMIDICommandCKSmooth:(MIKMIDICommand *)command
+{
+    float newVal = [self convertMidiValueForRange:(MIKMIDIChannelVoiceCommand *)command minValue:0.0 maxValue:0.5];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.chromaKeySmoothing = newVal;
+    });
+    
+}
+
+
+-(void)handleMIDICommandMultiTransition:(MIKMIDICommand *)command
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self multiChangeForce];
+    });
+}
+
+
+-(void)handleMIDICommandCKEnable:(MIKMIDICommand *)command
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.doChromaKey = !self.doChromaKey;
+    });
+}
+
+
+
+-(void)handleMIDICommandBorderWidth:(MIKMIDICommand *)command
+{
+    float newVal = ((MIKMIDIChannelVoiceCommand *)command).value;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.borderWidth = newVal;
+    });
+    
+}
+
+-(void)handleMIDICommandCornerRadius:(MIKMIDICommand *)command
+{
+    float newVal = [self convertMidiValueForRange:(MIKMIDIChannelVoiceCommand *)command minValue:0.0 maxValue:360];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.cornerRadius = newVal;
+    });
+    
+}
+
+
+-(void)handleMIDICommandCropLeft:(MIKMIDICommand *)command
+{
+    float newVal = [self convertMidiValueForRange:(MIKMIDIChannelVoiceCommand *)command minValue:0.0 maxValue:1.0];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.crop_left = newVal;
+    });
+}
+
+-(void)handleMIDICommandCropRight:(MIKMIDICommand *)command
+{
+    float newVal = [self convertMidiValueForRange:(MIKMIDIChannelVoiceCommand *)command minValue:0.0 maxValue:1.0];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.crop_right = newVal;
+    });
+    
+}
+
+-(void)handleMIDICommandCropTop:(MIKMIDICommand *)command
+{
+    float newVal = [self convertMidiValueForRange:(MIKMIDIChannelVoiceCommand *)command minValue:0.0 maxValue:1.0];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.crop_top = newVal;
+    });
+    
+}
+
+-(void)handleMIDICommandCropBottom:(MIKMIDICommand *)command
+{
+    float newVal = [self convertMidiValueForRange:(MIKMIDIChannelVoiceCommand *)command minValue:0.0 maxValue:1.0];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.crop_bottom = newVal;
+    });
+    
+}
+
+
+
+
+-(void)handleMIDICommandAutoFit:(MIKMIDICommand *)command
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self autoFit];
+    });
+}
+
+
+-(void)handleMIDICommandHScroll:(MIKMIDICommand *)command
+{
+    float newVal = [self convertMidiValueForRange:(MIKMIDIChannelVoiceCommand *)command minValue:-10.0 maxValue:10.0];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.scrollXSpeed = newVal;
+    });
+}
+
+-(void)handleMIDICommandVScroll:(MIKMIDICommand *)command
+{
+    float newVal = [self convertMidiValueForRange:(MIKMIDIChannelVoiceCommand *)command minValue:-10.0 maxValue:10.0];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.scrollYSpeed = newVal;
+    });
+}
+
+
+-(void)handleMIDICommandOpacity:(MIKMIDICommand *)command
+{
+    float newVal;
+    if (command.commandType == MIKMIDICommandTypeNoteOn)
+    {
+        if (self.opacity != 0)
+        {
+            newVal = 0;
+        } else {
+            newVal = 1;
+        }
+    } else {
+        newVal = [self convertMidiValueForRange:(MIKMIDIChannelVoiceCommand *)command minValue:0 maxValue:1.0];
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.opacity = newVal;
+    });
+}
+
+-(void)handleMIDICommandActive:(MIKMIDICommand *)command
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.active = !self.active;
+    });
+
+}
+
+-(float)handleGenericRotateForMidi:(float)currentValue forCommand:(MIKMIDICommand *)command
+{
+    float retVal;
+    if (command.commandType == MIKMIDICommandTypeNoteOn)
+    {
+        retVal = currentValue + 90;
+        if (retVal >= 360)
+        {
+            retVal = 0;
+        }
+    } else {
+       retVal = [self convertMidiValueForRange:(MIKMIDIChannelVoiceCommand *)command minValue:0 maxValue:360];
+    }
+    
+    return retVal;
+}
+
+
+-(void)handleMIDICommandRotate:(MIKMIDICommand *)command
+{
+    float newVal = [self handleGenericRotateForMidi:self.rotationAngle forCommand:command];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.rotationAngle = newVal;
+    });
+}
+
+-(void)handleMIDICommandRotateX:(MIKMIDICommand *)command
+{
+    float newVal = [self handleGenericRotateForMidi:self.rotationAngleX forCommand:command];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.rotationAngleX = newVal;
+    });
+}
+
+-(void)handleMIDICommandRotateY:(MIKMIDICommand *)command
+{
+    float newVal = [self handleGenericRotateForMidi:self.rotationAngleY forCommand:command];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.rotationAngleY = newVal;
+    });
+}
+
+
 
 
 -(void) setActive:(bool)active

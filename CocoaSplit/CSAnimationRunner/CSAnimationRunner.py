@@ -4,7 +4,7 @@ Animation runner base
 import objc
 from Foundation import *
 #from CoreGraphics import *
-from Quartz import CACurrentMediaTime,CATransaction
+from Quartz import CACurrentMediaTime,CATransaction,CGPathRef,CGPathAddLines,CGPathCloseSubpath,CGPathRelease,CGPathCreateMutable
 from pluginbase import PluginBase
 import math
 import CSAnimationBlock
@@ -127,7 +127,9 @@ class CSAnimationInput(object):
             kanim.setDuration_(withDuration)
         else:
             kanim.setDuration_(CSAnimationBlock.current_frame.duration)
-        kanim.setCalculationMode_('cubicPaced')
+        kanim.setCalculationMode_('paced')
+        kanim.setRotationMode_('autoReverse')
+        
         return kanim
         
     
@@ -135,7 +137,7 @@ class CSAnimationInput(object):
         
         real_end_value = toValue
         
-        if type(toValue) in (list,tuple):
+        if type(toValue) in (list,tuple,CGPathRef):
             banim = self.keyframe_animation(forKey, withDuration)
             real_end_value = toValue[-1]
             banim.setValues_(toValue)
@@ -465,11 +467,20 @@ class CSAnimationInput(object):
 
         def vmk(val):
             new_coord = self.real_coordinate_from_fract(val[0],val[1])
-            return (curr_x+new_coord.x, curr_y+new_coord.y)
+            return NSPoint(curr_x+new_coord.x, curr_y+new_coord.y)
         
-        anim_vals = self.make_animation_values((curr_x, curr_y), pos_tpl, vmk)
+        anim_vals = self.make_animation_values(NSPoint(curr_x, curr_y), pos_tpl, vmk)
         
-        return self.moveTo(anim_vals, duration, **kwargs)
+        path = CGPathCreateMutable()
+        CGPathAddLines(path, None, anim_vals, len(anim_vals))
+        
+        ret = self.moveTo(anim_vals, duration, **kwargs)
+    
+        CGPathCloseSubpath(path)
+        #CGPathRelease(path)
+        return ret
+    
+    
     
     def moveCenter(self, duration=None, **kwargs):
         """
@@ -525,9 +536,9 @@ class CSAnimationInput(object):
 
         def vmk(val):
             new_coord = self.real_coordinate_from_fract(val[0], val[1])
-            new_coords = self.adjust_coordinates(new_coord.x, new_coord.y)
+            new_coord = self.adjust_coordinates(new_coord.x, new_coord.y)
             n_pos = NSPoint()
-            n_pos.x = c_pos.x + new_coords.x
+            n_pos.x = c_pos.x + new_coord.x
             n_pos.y = c_pos.y + new_coord.y
             return NSValue.valueWithPoint_(n_pos)
 

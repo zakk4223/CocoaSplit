@@ -23,6 +23,8 @@
 #import <OpenCl/cl_gl_ext.h>
 #import <CoreMediaIO/CMIOHardware.h>
 #import <IOKit/graphics/IOGraphicsLib.h>
+#import "MIKMIDI.h"
+#import "CSMidiWrapper.h"
 
 
 
@@ -885,6 +887,9 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
        self.sharedPluginLoader = [CSPluginLoader sharedPluginLoader];
        
+
+       [self setupMIDI];
+       
        
        [[CSPluginLoader sharedPluginLoader] loadAllBundles];
        
@@ -1552,6 +1557,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
 
     self.extraPluginsSaveData = nil;
+    
     
     
 
@@ -2709,7 +2715,154 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 }
 
 
+-(void)learnedMidiCommand:(NSString *)command fromWrapper:(CSMidiWrapper *)wrapper
+{
+    for (CSMidiWrapper *cwrap in self.midiMapGenerators)
+    {
+        if (cwrap == wrapper)
+        {
+            continue;
+        }
+        
+        [cwrap cancelLearning];
+    }
+}
 
+-(void)learnMidiForCommand:(NSString *)command withRepsonder:(id<MIKMIDIMappableResponder>)responder
+{
+    for (CSMidiWrapper *wrap in self.midiMapGenerators)
+    {
+        
+        __weak CaptureController *weakSelf = self;
+        [wrap learnCommand:command forResponder:responder completionBlock:^(CSMidiWrapper *wrapper, NSString *command) {
+            [weakSelf learnedMidiCommand:command fromWrapper:wrapper];
+        }];
+    }
+}
+
+
+- (NSArray *)commandIdentifiers
+{
+    NSArray *baseIdentfiers = @[@"GoLive", @"StagingRevert", @"LiveRevert"];
+    NSMutableArray *layoutIdentifiers = [NSMutableArray array];
+    
+    for (SourceLayout *layout in self.sourceLayouts)
+    {
+        [layoutIdentifiers addObject:[NSString stringWithFormat:@"SwitchStaging:%@", layout.name]];
+        [layoutIdentifiers addObject:[NSString stringWithFormat:@"SwitchLive:%@", layout.name]];
+    }
+    
+    return [baseIdentfiers arrayByAddingObjectsFromArray:layoutIdentifiers];
+}
+
+- (MIKMIDIResponderType)MIDIResponderTypeForCommandIdentifier:(NSString *)commandID
+{
+    MIKMIDIResponderType ret = MIKMIDIResponderTypeButton;
+    
+    return ret;
+}
+
+
+
+-(NSString *)MIDIIdentifier
+{
+    return @"Global";
+}
+
+-(BOOL)respondsToMIDICommand:(MIKMIDICommand *)command
+{
+    return YES;
+}
+
+-(void)handleMIDICommand:(MIKMIDICommand *)command
+{
+    return;
+}
+
+-(void)handleMIDICommand:(MIKMIDICommand *)command forIdentifier:(NSString *)identifier
+{
+    
+    __weak CaptureController *weakSelf = self;
+
+    if ([identifier hasPrefix:@"SwitchStaging:"])
+    {
+        NSString *layoutName = [identifier substringFromIndex:14];
+        NSUInteger indexOfLayout = [self.sourceLayouts indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+            SourceLayout *testLayout = obj;
+            if ([testLayout.name isEqualToString:layoutName])
+            {
+                *stop = YES;
+                return YES;
+            }
+            return NO;
+        }];
+        
+        if (indexOfLayout != NSNotFound)
+        {
+            SourceLayout *layout = [self.sourceLayouts objectAtIndex:indexOfLayout];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                weakSelf.stagingLayout = layout;
+            });
+
+        }
+        return;
+    }
+
+    
+    if ([identifier hasPrefix:@"SwitchLive:"])
+    {
+        NSString *layoutName = [identifier substringFromIndex:11];
+        NSUInteger indexOfLayout = [self.sourceLayouts indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+            SourceLayout *testLayout = obj;
+            if ([testLayout.name isEqualToString:layoutName])
+            {
+                *stop = YES;
+                return YES;
+            }
+            return NO;
+        }];
+        
+        if (indexOfLayout != NSNotFound)
+        {
+            SourceLayout *layout = [self.sourceLayouts objectAtIndex:indexOfLayout];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                weakSelf.selectedLayout = layout;
+            });
+            
+        }
+        return;
+    }
+
+    
+    if ([identifier isEqualToString:@"GoLive"])
+    {
+    
+        NSLog(@"GOING LIVE!");
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf stagingGoLive:nil];
+        });
+    } else if ([identifier isEqualToString:@"StagingRevert"]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf stagingRevert:nil];
+        });
+    }
+}
+
+
+-(void)setupMIDI
+{
+    self.midiManager = [MIKMIDIDeviceManager sharedDeviceManager];
+    self.midiMapGenerators = [CSMidiWrapper getAllMidiDevices];
+    self.midiDeviceMappings = [NSMutableDictionary dictionary];
+
+    for (CSMidiWrapper *wrap in self.midiMapGenerators)
+    {
+        self.midiDeviceMappings[wrap.device.name] = wrap;
+        [wrap connect];
+
+    }
+    [NSApp registerMIDIResponder:self];
+}
 
 
 
@@ -2737,6 +2890,20 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 }
 
 
+-(void)openMidiLearnerForResponders:(NSArray *)responders
+{
+    self.midiManagerController = [[CSMidiManagerWindowController alloc] initWithWindowNibName:@"CSMidiManagerWindowController"];
+    self.midiManagerController.captureController = self;
+    self.midiManagerController.responderList = responders;
+    [self.midiManagerController showWindow:nil];
+}
+
+
+-(IBAction)openMidiManager:(id)sender
+{
+    [self openMidiLearnerForResponders:@[self]];
+}
+
 - (IBAction)openPluginManager:(id)sender
 {
     self.pluginManagerController = [[PluginManagerWindowController alloc] initWithWindowNibName:@"PluginManagerWindowController"];
@@ -2761,10 +2928,12 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         {
             self.selectedLayout = self.stagingLayout;
         } else {
+            if (!self.stagingLayout.inTransition)
+            {
+                [self.stagingLayout restoreSourceListForSelfGoLive];
             
-            [self.stagingLayout restoreSourceListForSelfGoLive];
-            
-            [self setupFrameTimer:self.selectedLayout.frameRate];
+                [self setupFrameTimer:self.selectedLayout.frameRate];
+            }
 
         }
     }

@@ -14,7 +14,7 @@
 #import "SourceCache.h"
 #import "InputPopupControllerViewController.h"
 #import "CSInputLayer.h"
-
+#import "MIKMIDI.h"
 
 
 @class SourceLayout;
@@ -43,7 +43,7 @@ typedef enum resize_style_t {
 
 //@protocol CSCaptureSessionProtocol;
 
-@interface InputSource : NSObject <NSCoding, NSWindowDelegate, NSCopying>
+@interface InputSource : NSObject <NSCoding, NSWindowDelegate, NSCopying, MIKMIDIMappableResponder, MIKMIDIResponder>
 {
     
     int _currentSourceIdx;
