@@ -25,10 +25,20 @@
     
     for (id <MIKMIDIMappableResponder> responder in self.responderList)
     {
+        NSString *responderName;
+        
+        if ([responder respondsToSelector:@selector(MIDIShortIdentifier)])
+        {
+            responderName = [responder MIDIShortIdentifier];
+        } else {
+            responderName = [responder MIDIIdentifier];
+        }
+        
+        
         NSArray *idents = [responder commandIdentifiers];
         for (NSString *ident in idents)
         {
-            [identList addObject:@{@"command":ident, @"responder":responder, @"display":[NSString stringWithFormat:@"%@-%@", [responder MIDIIdentifier], ident]}];
+            [identList addObject:@{@"command":ident, @"responder":responder, @"display":[NSString stringWithFormat:@"%@-%@", responderName, ident]}];
         }
     }
     
@@ -76,6 +86,20 @@
 }
 
 
+
+
+-(IBAction)clearPushed:(id)sender
+{
+    NSTableView *bTable = (NSTableView *)sender;
+    NSInteger clickedRow = [bTable clickedRow];
+    
+    
+    NSDictionary *commandMap = [self.commandIdentfiers objectAtIndex:clickedRow];
+    
+    
+    [self.captureController clearLearnedMidiForCommand:commandMap[@"command"] withResponder:commandMap[@"responder"]];
+
+}
 
 
 - (IBAction)learnPushed:(id)sender {

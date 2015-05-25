@@ -27,6 +27,8 @@
 -(void)connect;
 -(void)learnCommand:(NSString *)command forResponder:(id<MIKMIDIMappableResponder>)responder completionBlock:(void (^)(CSMidiWrapper *wrapper, NSString *command))completionBlock;
 -(void)cancelLearning;
+-(void)forgetCommand:(NSString *)command forResponder:(id<MIKMIDIMappableResponder>)responder;
+
 
 
 

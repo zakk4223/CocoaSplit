@@ -179,6 +179,9 @@
                                                                 <buttonCell key="dataCell" type="push" title="Clear" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="Rh4-e0-fyY">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="system"/>
+                                                                    <connections>
+                                                                        <action selector="clearPushed:" target="-2" id="K5C-Tu-s6K"/>
+                                                                    </connections>
                                                                 </buttonCell>
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             </tableColumn>

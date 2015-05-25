@@ -423,6 +423,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(void)learnMidiForCommand:(NSString *)command withRepsonder:(id<MIKMIDIMappableResponder>)responder;
 
 -(void)openMidiLearnerForResponders:(NSArray *)responders;
+-(void)clearLearnedMidiForCommand:(NSString *)command withResponder:(id<MIKMIDIMappableResponder>)responder;
+
 
 
 -(void)layoutWentFullscreen;

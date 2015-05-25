@@ -25,6 +25,9 @@
 
 
 - (IBAction)learnPushed:(id)sender;
+-(IBAction)clearPushed:(id)sender;
+
+
 -(void)learnedDone;
 
 @end

@@ -1659,6 +1659,17 @@ static NSArray *_sourceTypes = nil;
     return self.sourceLayout.canvas_height;
 }
 
+-(NSString *)MIDIShortIdentifier
+{
+    if (self.is_live)
+    {
+        return @"Live";
+    }
+    
+    return @"Staging";
+}
+
+
 -(NSString *)MIDIIdentifier
 {
     NSString *liveStr;

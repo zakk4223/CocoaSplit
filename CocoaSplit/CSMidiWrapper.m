@@ -107,6 +107,16 @@
 }
 
 
+-(void)forgetCommand:(NSString *)command forResponder:(id<MIKMIDIMappableResponder>)responder
+{
+    NSSet *maps = [self.deviceMapping mappingItemsForCommandIdentifier:command responder:responder];
+    if (maps)
+    {
+        [self.deviceMapping removeMappingItems:maps];
+    }
+}
+
+
 -(void)learnCommand:(NSString *)command forResponder:(id<MIKMIDIMappableResponder>)responder completionBlock:(void (^)(CSMidiWrapper *wrapper, NSString *command))methodCompletionBlock
 {
     

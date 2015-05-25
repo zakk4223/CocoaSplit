@@ -2715,6 +2715,15 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 }
 
 
+-(void)clearLearnedMidiForCommand:(NSString *)command withResponder:(id<MIKMIDIMappableResponder>)responder
+{
+    for(CSMidiWrapper *cwrap in self.midiMapGenerators)
+    {
+        [cwrap forgetCommand:command forResponder:responder];
+    }
+}
+
+
 -(void)learnedMidiCommand:(NSString *)command fromWrapper:(CSMidiWrapper *)wrapper
 {
     for (CSMidiWrapper *cwrap in self.midiMapGenerators)

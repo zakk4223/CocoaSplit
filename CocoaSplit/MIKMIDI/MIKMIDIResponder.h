@@ -58,6 +58,8 @@
 
 @optional
 
+- (NSString *)MIDIShortIdentifier;
+
 -(void)handleMIDICommand:(MIKMIDICommand *)command forIdentifier:(NSString *)identifier;
 
 /**
