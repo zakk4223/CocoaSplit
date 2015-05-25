@@ -33,7 +33,49 @@
     }
     
     self.commandIdentfiers = identList;
+    
+    
+    
 }
+
+
+-(void)createModal
+{
+    NSWindow *newWindow = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, self.window.frame.size.width, 300) styleMask:NSTexturedBackgroundWindowMask backing:NSBackingStoreBuffered defer:NO];
+    
+    NSTextField *text = [[NSTextField alloc] initWithFrame:newWindow.frame];
+    text.editable = NO;
+    text.selectable = NO;
+    text.drawsBackground = NO;
+    text.bordered = NO;
+    text.stringValue = @"Activate the MIDI control for this input";
+    [text sizeToFit];
+
+    NSRect wFrame = self.window.frame;
+    NSRect tFrame = text.frame;
+    
+    
+    [text setFrameOrigin:NSMakePoint(wFrame.size.width/2 - tFrame.size.width/2, wFrame.size.height/2 - tFrame.size.height/2)];
+    
+    
+    [newWindow.contentView addSubview:text];
+    
+    self.modalWindow = newWindow;
+    [self.window beginSheet:newWindow completionHandler:nil];
+}
+
+
+-(void)learnedDone
+{
+
+    if (self.modalWindow)
+    {
+        [self.window endSheet:self.modalWindow];
+        self.modalWindow = nil;
+    }
+}
+
+
 
 
 - (IBAction)learnPushed:(id)sender {
@@ -43,8 +85,8 @@
     
     NSDictionary *commandMap = [self.commandIdentfiers objectAtIndex:clickedRow];
     
-    //NSLog(@"WILL LEARN %@", command);
     
+    [self createModal];
     [self.captureController learnMidiForCommand:commandMap[@"command"] withRepsonder:commandMap[@"responder"]];
     
     

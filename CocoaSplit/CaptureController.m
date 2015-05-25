@@ -2726,6 +2726,9 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         
         [cwrap cancelLearning];
     }
+    
+    [self.midiManagerController learnedDone];
+    
 }
 
 -(void)learnMidiForCommand:(NSString *)command withRepsonder:(id<MIKMIDIMappableResponder>)responder

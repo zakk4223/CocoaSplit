@@ -1709,6 +1709,9 @@
 							};
 						};
 					};
+					3451A1C217111BD900DF6A8B = {
+						DevelopmentTeam = L3JLUY4S5E;
+					};
 				};
 			};
 			buildConfigurationList = 340FE49715F3417E00E4CE4E /* Build configuration list for PBXProject "CocoaSplit" */;
@@ -2412,7 +2415,8 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -2430,6 +2434,7 @@
 					/usr/local/lib/libx264.a,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx10.10;
 				SKIP_INSTALL = YES;
 			};
@@ -2443,7 +2448,8 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -2460,6 +2466,7 @@
 					/usr/local/lib/libmp3lame.a,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx10.10;
 				SKIP_INSTALL = YES;
 			};
