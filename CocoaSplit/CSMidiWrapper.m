@@ -19,6 +19,8 @@
     {
         self.device = device;
         self.deviceMapping = [[MIKMIDIMapping alloc] init];
+        self.deviceMapping.controllerName = device.name;
+        
         
     }
     

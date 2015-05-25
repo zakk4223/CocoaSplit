@@ -1390,6 +1390,8 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     [saveRoot setValue:self.transitionFilter forKey:@"transitionFilter"];
     
     [NSKeyedArchiver archiveRootObject:saveRoot toFile:path];
+    [self saveMIDI];
+    
 }
 
 
@@ -2861,6 +2863,34 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 }
 
 
+-(void)saveMIDI
+{
+    MIKMIDIMappingManager *manager = [MIKMIDIMappingManager sharedManager];
+    
+    for (CSMidiWrapper *wrap in self.midiMapGenerators)
+    {
+        [manager addUserMappingsObject:wrap.deviceMapping];
+    }
+    
+    //[manager saveMappingsToDisk];
+}
+
+
+-(void)loadMIDI
+{
+    MIKMIDIMappingManager *manager = [MIKMIDIMappingManager sharedManager];
+    
+    for (CSMidiWrapper *wrap in self.midiMapGenerators)
+    {
+        MIKMIDIMapping *devmap = [[manager mappingsForControllerName:wrap.device.name] anyObject];
+        if (devmap)
+        {
+            wrap.deviceMapping = devmap;
+        }
+    }
+}
+
+
 -(void)setupMIDI
 {
     self.midiManager = [MIKMIDIDeviceManager sharedDeviceManager];
@@ -2873,6 +2903,8 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         [wrap connect];
 
     }
+    
+    [self loadMIDI];
     [NSApp registerMIDIResponder:self];
 }
 

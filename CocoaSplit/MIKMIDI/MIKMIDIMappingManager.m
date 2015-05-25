@@ -221,7 +221,7 @@ static MIKMIDIMappingManager *sharedManager = nil;
 {
 	NSURL *mappingsFolder = [self userMappingsFolder];
 	NSString *filename = [mapping.name stringByAppendingPathExtension:kMIKMIDIMappingFileExtension];
-	
+	    
 	NSURL *result = [mappingsFolder URLByAppendingPathComponent:filename];
 	
 	if (unique) {
