@@ -867,15 +867,22 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
                         NSString *moduleSource = newLayout.animationSaveData[moduleFile];
                         NSString *modulePath = [csAnimationDir stringByAppendingPathComponent:moduleFile];
                         
+                        
                         bool fileExists = [[NSFileManager defaultManager] fileExistsAtPath:modulePath];
                         if (fileExists)
                         {
                             continue;
                         }
                         
-                        [moduleSource writeToFile:moduleSource atomically:YES encoding:NSUTF8StringEncoding error:nil];
+                        NSError *writeError;
+                        
+                        [moduleSource writeToFile:modulePath atomically:YES encoding:NSUTF8StringEncoding error:&writeError];
+                        
                     }
                 }
+                
+                newLayout.animationSaveData = nil;
+                
                 [self insertObject:newLayout inSourceLayoutsAtIndex:self.sourceLayouts.count];
 
 
