@@ -10,6 +10,8 @@ import math
 import CSAnimationBlock
 from CSAnimation import *
 import sys
+import os
+
 sys.dont_write_bytecode = True
 
 
@@ -773,6 +775,14 @@ class CSAnimationRunnerObj(NSObject):
         return self
 
 
+    @objc.signature('@@:@')
+    def animationPath_(self, pluginName):
+        plugin_module = plugin_source.load_plugin(pluginName)
+        plugin_file = plugin_module.__file__
+        real_path = os.path.realpath(plugin_file)
+        return real_path
+    
+    
     @objc.signature('@@:')
     def allAnimations(self):
         plugins = plugin_source.list_plugins()

@@ -849,6 +849,33 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
                 }
                 
                 newLayout.name = newName;
+                
+                NSString *userAppSupp = [NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES) firstObject];
+                
+                NSString *csAnimationDir = [[[userAppSupp stringByAppendingPathComponent:@"CocoaSplit"] stringByAppendingPathComponent:@"Plugins"] stringByAppendingPathComponent:@"Animations"];
+                
+                if (![[NSFileManager defaultManager] fileExistsAtPath:csAnimationDir])
+                {
+                    [[NSFileManager defaultManager] createDirectoryAtPath:csAnimationDir withIntermediateDirectories:YES attributes:nil error:nil];
+                }
+                
+                
+                if (newLayout.animationSaveData)
+                {
+                    for (NSString *moduleFile in newLayout.animationSaveData)
+                    {
+                        NSString *moduleSource = newLayout.animationSaveData[moduleFile];
+                        NSString *modulePath = [csAnimationDir stringByAppendingPathComponent:moduleFile];
+                        
+                        bool fileExists = [[NSFileManager defaultManager] fileExistsAtPath:modulePath];
+                        if (fileExists)
+                        {
+                            continue;
+                        }
+                        
+                        [moduleSource writeToFile:moduleSource atomically:YES encoding:NSUTF8StringEncoding error:nil];
+                    }
+                }
                 [self insertObject:newLayout inSourceLayoutsAtIndex:self.sourceLayouts.count];
 
 
@@ -913,6 +940,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         item.representedObject = layout;
         item.action = @selector(doExportLayout:);
         item.target = self;
+        return YES;
     }
     
     return NO;
@@ -927,23 +955,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
     panel.nameFieldStringValue = defaultSave;
     panel.canCreateDirectories = YES;
-    
-    [panel beginWithCompletionHandler:^(NSInteger result) {
-        if (result == NSFileHandlingPanelOKButton)
-        {
-            NSURL *saveFile = [panel URL];
-            [layout saveSourceList];
-            
-            NSLog(@"SAVING LAYOUT %@ TO %@", layout, saveFile.absoluteString);
-            
-            [NSKeyedArchiver archiveRootObject:layout toFile:saveFile.path];
-        }
-    }];
-}
-
-
--(void)saveLayout:(SourceLayout *)layout toFile:(NSURL *)fileURL
-{
     SourceLayout *useLayout = layout;
     
     if (layout == self.selectedLayout)
@@ -952,9 +963,23 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     } else if (layout == self.stagingLayout) {
         useLayout = self.stagingPreviewView.sourceLayout;
     }
-    
-    
+
+    [panel beginWithCompletionHandler:^(NSInteger result) {
+        if (result == NSFileHandlingPanelOKButton)
+        {
+            NSURL *saveFile = [panel URL];
+            [useLayout saveSourceList];
+            [useLayout saveAnimationSource];
+            
+            NSLog(@"SAVING LAYOUT %@ TO %@", useLayout, saveFile.absoluteString);
+            
+            [NSKeyedArchiver archiveRootObject:useLayout toFile:saveFile.path];
+            
+            useLayout.animationSaveData = nil;
+        }
+    }];
 }
+
 
 -(id) init
 {

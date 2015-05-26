@@ -18,6 +18,7 @@
 -(NSDictionary *)allAnimations;
 
 -(void)runAnimation:(NSString *)name forInput:(id)forInput withSuperlayer:(CALayer *)superLayer;
+-(NSString *)animationPath:(NSString *)name;
 
 @end
 

@@ -37,6 +37,9 @@
 
 @property (strong) CSAnimationItem *selectedAnimation;
 
+@property (strong) NSMutableDictionary *animationSaveData;
+
+
 @property (strong) NSMutableArray *sourceList;
 @property (strong) NSData *savedSourceListData;
 @property (assign) bool isActive;
@@ -71,6 +74,8 @@
 -(NSArray *)sourceListOrdered;
 -(void) saveSourceList;
 -(void) restoreSourceList;
+-(void) saveAnimationSource;
+
 -(InputSource *)inputForUUID:(NSString *)uuid;
 -(void)frameTick;
 -(void)restoreSourceListForSelfGoLive;

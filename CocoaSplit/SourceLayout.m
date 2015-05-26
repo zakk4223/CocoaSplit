@@ -186,6 +186,40 @@
 
 }
 
+
+-(void)saveAnimationSource
+{
+    CSAnimationRunnerObj *runner = [CaptureController sharedAnimationObj];
+    NSBundle *mybundle = [NSBundle mainBundle];
+    NSString *bundlePath = [mybundle.bundleURL path];
+    self.animationSaveData = [NSMutableDictionary dictionary];
+
+
+    
+    for (CSAnimationItem *aitem in self.animationList)
+    {
+        NSString *mName = aitem.module_name;
+        
+        NSString *path = [runner animationPath:mName];
+        
+        //Don't save application bundled animations
+        
+        
+        if ([path hasPrefix:bundlePath])
+        {
+            continue;
+        }
+        
+        NSString *sourceString = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+        NSString *moduleFile = [path lastPathComponent];
+        if (sourceString)
+        {
+            [self.animationSaveData setObject:sourceString forKey:moduleFile];
+        }
+     }
+}
+
+
 -(void)doAnimation:(NSDictionary *)threadDict
 {
     
@@ -257,9 +291,12 @@
     [aCoder encodeInt:self.canvas_width forKey:@"canvas_width"];
     [aCoder encodeInt:self.canvas_height forKey:@"canvas_height"];
     [aCoder encodeFloat:self.frameRate forKey:@"frameRate"];
-    
-    
+    if (self.animationSaveData)
+    {
+        [aCoder encodeObject:self.animationSaveData forKey:@"animationSaveData"];
+    }
 }
+
 
 
 
@@ -282,6 +319,11 @@
         if ([aDecoder containsValueForKey:@"frameRate"])
         {
             self.frameRate = [aDecoder decodeFloatForKey:@"frameRate"];
+        }
+        
+        if ([aDecoder containsValueForKey:@"animationSaveData"])
+        {
+            self.animationSaveData = [aDecoder decodeObjectForKey:@"animationSaveData"];
         }
         
     }
