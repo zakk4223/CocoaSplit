@@ -130,6 +130,9 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (weak) IBOutlet NSMenu *stagingFullScreenMenu;
 @property (weak) IBOutlet NSMenu *liveFullScreenMenu;
 
+@property (weak) IBOutlet NSMenu *exportLayoutMenu;
+
+
 @property (strong) MIKMIDIDeviceManager *midiManager;
 
 @property (strong) NSMutableDictionary *midiDeviceMappings;
@@ -213,6 +216,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(IBAction)openTransitionFilterPanel:(NSButton *)sender;
 
 - (IBAction)stagingViewToggle:(id)sender;
+-(IBAction)doImportLayout:(id)sender;
+
 -(void)showStagingView;
 
 - (IBAction)openPluginManager:(id)sender;

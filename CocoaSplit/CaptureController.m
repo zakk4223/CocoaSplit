@@ -823,6 +823,45 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 }
 
 
+
+-(IBAction)doImportLayout:(id)sender
+{
+    NSOpenPanel *panel = [NSOpenPanel openPanel];
+    
+    [panel beginWithCompletionHandler:^(NSInteger result) {
+        if (result == NSFileHandlingPanelOKButton)
+        {
+            NSURL *fileURL = [panel.URLs objectAtIndex:0];
+            if (fileURL)
+            {
+                SourceLayout *newLayout = [NSKeyedUnarchiver unarchiveObjectWithFile:fileURL.path];
+                if (!newLayout)
+                {
+                    return;
+                }
+                int name_try = 1;
+                
+                NSString *newName = newLayout.name;
+                NSString *baseName = newLayout.name;
+                while ([self findLayoutWithName:newName]) {
+                    newName = [NSMutableString stringWithFormat:@"%@#%d", baseName, name_try];
+                    name_try++;
+                }
+                
+                newLayout.name = newName;
+                [self insertObject:newLayout inSourceLayoutsAtIndex:self.sourceLayouts.count];
+
+
+            }
+        }
+    }];
+}
+-(void)doExportLayout:(NSMenuItem *)item
+{
+    [self exportLayout:item.representedObject];
+}
+
+
 -(void)goFullscreen:(NSMenuItem *)item
 {
     
@@ -839,8 +878,14 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 -(NSInteger)numberOfItemsInMenu:(NSMenu *)menu
 {
     
+    if (menu == self.stagingFullScreenMenu || menu == self.liveFullScreenMenu)
+    {
+        return _screensCache.count;
+    } else if (menu == self.exportLayoutMenu) {
+        return self.sourceLayouts.count;
+    }
     
-    return _screensCache.count;
+    return 0;
 }
 
 
@@ -848,17 +893,67 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 {
     
     
-    NSDictionary *sInfo = [_screensCache objectAtIndex:index];
-    if (sInfo)
+    
+    if (menu == self.stagingFullScreenMenu || menu == self.liveFullScreenMenu)
     {
-        item.title = sInfo[@"name"];
-        item.representedObject = sInfo[@"screen"];
-        item.action = @selector(goFullscreen:);
+        NSDictionary *sInfo = [_screensCache objectAtIndex:index];
+        if (sInfo)
+        {
+            item.title = sInfo[@"name"];
+            item.representedObject = sInfo[@"screen"];
+            item.action = @selector(goFullscreen:);
+            item.target = self;
+        } else {
+            item.title = @"Unknown";
+        }
+        return YES;
+    } else if (menu == self.exportLayoutMenu) {
+        SourceLayout *layout = [self.sourceLayouts objectAtIndex:index];
+        item.title = layout.name;
+        item.representedObject = layout;
+        item.action = @selector(doExportLayout:);
         item.target = self;
-    } else {
-        item.title = @"Unknown";
     }
-    return YES;
+    
+    return NO;
+}
+
+
+-(void)exportLayout:(SourceLayout *)layout
+{
+    NSSavePanel *panel = [NSSavePanel savePanel];
+    
+    NSString *defaultSave = [layout.name stringByAppendingPathExtension:@"plist"];
+    
+    panel.nameFieldStringValue = defaultSave;
+    panel.canCreateDirectories = YES;
+    
+    [panel beginWithCompletionHandler:^(NSInteger result) {
+        if (result == NSFileHandlingPanelOKButton)
+        {
+            NSURL *saveFile = [panel URL];
+            [layout saveSourceList];
+            
+            NSLog(@"SAVING LAYOUT %@ TO %@", layout, saveFile.absoluteString);
+            
+            [NSKeyedArchiver archiveRootObject:layout toFile:saveFile.path];
+        }
+    }];
+}
+
+
+-(void)saveLayout:(SourceLayout *)layout toFile:(NSURL *)fileURL
+{
+    SourceLayout *useLayout = layout;
+    
+    if (layout == self.selectedLayout)
+    {
+        useLayout = self.livePreviewView.sourceLayout;
+    } else if (layout == self.stagingLayout) {
+        useLayout = self.stagingPreviewView.sourceLayout;
+    }
+    
+    
 }
 
 -(id) init
@@ -2851,7 +2946,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     if ([identifier isEqualToString:@"GoLive"])
     {
     
-        NSLog(@"GOING LIVE!");
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf stagingGoLive:nil];
         });

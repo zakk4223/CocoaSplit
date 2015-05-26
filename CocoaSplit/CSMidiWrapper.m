@@ -37,7 +37,6 @@
     
     for (MIKMIDISourceEndpoint *ept in srcs)
     {
-        NSLog(@"VIRTUAL SOURCE %@", ept);
         MIKMIDIDevice *vdev = [MIKMIDIDevice deviceWithVirtualEndpoints:@[ept]];
         CSMidiWrapper *wrap = [[CSMidiWrapper alloc] initWithDevice:vdev];
         if (wrap)
