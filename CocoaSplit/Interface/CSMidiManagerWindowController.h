@@ -17,7 +17,7 @@
 
 
 @property (weak) CaptureController *captureController;
-@property (weak) NSArray *responderList;
+@property (strong) NSArray *responderList;
 @property (strong) NSMutableArray *commandIdentfiers;
 @property (strong) NSWindow *modalWindow;
 

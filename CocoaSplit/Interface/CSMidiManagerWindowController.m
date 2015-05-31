@@ -21,7 +21,15 @@
     
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
     
+    [self buildIdentifiers];
+    
+    
+}
+
+-(void)buildIdentifiers
+{
     NSMutableArray *identList = [NSMutableArray array];
+    
     
     for (id <MIKMIDIMappableResponder> responder in self.responderList)
     {
@@ -38,14 +46,25 @@
         NSArray *idents = [responder commandIdentifiers];
         for (NSString *ident in idents)
         {
-            [identList addObject:@{@"command":ident, @"responder":responder, @"display":[NSString stringWithFormat:@"%@-%@", responderName, ident]}];
+            NSMutableSet *midiMappings = [NSMutableSet set];
+            
+            NSSet *allMaps = [MIKMIDIMappingManager sharedManager].mappings;
+            
+            for (MIKMIDIMapping *cMap in allMaps)
+            {
+                NSSet *commandMaps = [cMap mappingItemsForCommandIdentifier:ident responder:responder];
+                if (commandMaps)
+                {
+                    [midiMappings unionSet:commandMaps];
+                }
+            }
+            [identList addObject:@{@"command":ident, @"responder":responder, @"count":@(midiMappings.count), @"display":[NSString stringWithFormat:@"%@-%@", responderName, ident]}];
         }
     }
     
+    
     self.commandIdentfiers = identList;
-    
-    
-    
+
 }
 
 
@@ -83,6 +102,7 @@
         [self.window endSheet:self.modalWindow];
         self.modalWindow = nil;
     }
+    [self buildIdentifiers];
 }
 
 
@@ -99,6 +119,7 @@
     
     [self.captureController clearLearnedMidiForCommand:commandMap[@"command"] withResponder:commandMap[@"responder"]];
 
+    [self buildIdentifiers];
 }
 
 

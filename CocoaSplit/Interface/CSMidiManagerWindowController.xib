@@ -36,15 +36,16 @@
                                                 <rect key="frame" x="1" y="17" width="238" height="117"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="32" headerView="dXu-hh-E3U" id="wgY-ny-Js3">
+                                                    <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="32" headerView="dXu-hh-E3U" id="wgY-ny-Js3">
                                                         <rect key="frame" x="0.0" y="0.0" width="533" height="34"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <size key="intercellSpacing" width="3" height="2"/>
                                                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        <tableViewGridLines key="gridStyleMask" dashed="YES"/>
                                                         <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                         <tableColumns>
-                                                            <tableColumn width="260" minWidth="40" maxWidth="1000" id="Bag-JM-oez">
-                                                                <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
+                                                            <tableColumn width="243" minWidth="40" maxWidth="1000" id="Bag-JM-oez">
+                                                                <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Command">
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -59,30 +60,46 @@
                                                                     <binding destination="-2" name="value" keyPath="self.commandIdentfiers.display" id="QZb-4f-6jZ"/>
                                                                 </connections>
                                                             </tableColumn>
-                                                            <tableColumn width="111" minWidth="40" maxWidth="1000" id="Cph-6E-fgA">
+                                                            <tableColumn width="48" minWidth="10" maxWidth="3.4028234663852886e+38" id="nmP-8Y-tqN">
+                                                                <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Count">
+                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                    <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                                                </tableHeaderCell>
+                                                                <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="AyF-n6-3zy">
+                                                                    <font key="font" metaFont="system"/>
+                                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                                <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                                                <connections>
+                                                                    <binding destination="-2" name="value" keyPath="self.commandIdentfiers.count" id="GMe-Zs-GUw"/>
+                                                                </connections>
+                                                            </tableColumn>
+                                                            <tableColumn width="94" minWidth="40" maxWidth="1000" id="Cph-6E-fgA">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                                 </tableHeaderCell>
-                                                                <buttonCell key="dataCell" type="push" title="Learn" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="3rt-ol-2lU">
+                                                                <buttonCell key="dataCell" type="push" title="Learn" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="3rt-ol-2lU">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
+                                                                    <font key="font" metaFont="smallSystem"/>
                                                                     <connections>
                                                                         <action selector="learnPushed:" target="-2" id="kaO-Do-gG3"/>
                                                                     </connections>
                                                                 </buttonCell>
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             </tableColumn>
-                                                            <tableColumn width="153" minWidth="10" maxWidth="3.4028234663852886e+38" id="wt2-dg-eaJ">
+                                                            <tableColumn width="136" minWidth="10" maxWidth="3.4028234663852886e+38" id="wt2-dg-eaJ">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                                 </tableHeaderCell>
-                                                                <buttonCell key="dataCell" type="push" title="Forget" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="Rh4-e0-fyY">
+                                                                <buttonCell key="dataCell" type="push" title="Forget" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="Rh4-e0-fyY">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="system"/>
+                                                                    <font key="font" metaFont="smallSystem"/>
                                                                     <connections>
                                                                         <action selector="clearPushed:" target="-2" id="K5C-Tu-s6K"/>
                                                                     </connections>

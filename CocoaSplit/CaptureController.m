@@ -3201,12 +3201,14 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 {
     MIKMIDIMappingManager *manager = [MIKMIDIMappingManager sharedManager];
     
+    /*
     for (CSMidiWrapper *wrap in self.midiMapGenerators)
     {
         [manager addUserMappingsObject:wrap.deviceMapping];
     }
+     */
     
-    //[manager saveMappingsToDisk];
+    [manager saveMappingsToDisk];
 }
 
 
@@ -3220,9 +3222,12 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         if (devmap)
         {
             wrap.deviceMapping = devmap;
+        } else {
+            [manager addUserMappingsObject:wrap.deviceMapping];
         }
     }
 }
+
 
 
 -(void)setupMIDI

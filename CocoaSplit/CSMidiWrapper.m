@@ -132,7 +132,7 @@
 
         if (mappingItem)
         {
-            weakSelf.deviceMapping = _mapGenerator.mapping;
+            [weakSelf.deviceMapping addMappingItemsObject:mappingItem];
             if ([responder respondsToSelector:@selector(additionalChannelForMIDIIdentifier:)])
             {
                 NSInteger extraChannel = [responder additionalChannelForMIDIIdentifier:command];
