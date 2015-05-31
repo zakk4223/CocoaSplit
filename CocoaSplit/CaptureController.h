@@ -47,6 +47,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 @interface CaptureController : NSObject <NSMenuDelegate, MIKMIDIMappableResponder, MIKMIDIResponder, MIKMIDIMappingGeneratorDelegate> {
     
+    NSArray *_inputIdentifiers;
     
     CIFilter *_compositeFilter;
     CIImage *_backgroundImage;
@@ -139,7 +140,13 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 @property (strong) NSArray *midiMapGenerators;
 
+@property (assign) NSInteger currentMidiInputStagingIdx;
+@property (assign) NSInteger currentMidiInputLiveIdx;
 
+@property (assign) bool currentMidiLayoutLive;
+
+@property (assign) bool useMidiLiveChannelMapping;
+@property (assign) NSInteger midiLiveChannel;
 
 
 @property (weak) IBOutlet NSArrayController *AudioDeviceArrayController;

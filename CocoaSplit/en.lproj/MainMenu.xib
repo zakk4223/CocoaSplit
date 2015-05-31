@@ -2254,7 +2254,7 @@
                     <constraint firstAttribute="bottom" secondItem="2368" secondAttribute="bottom" constant="29" id="vbt-Nq-oyK"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="339.5" y="275"/>
+            <point key="canvasLocation" x="14.5" y="270"/>
         </window>
         <dictionaryController objectClassName="_NSControllerKeyValuePair" id="gSI-N4-DsK" userLabel="CompressorDictionaryController">
             <connections>

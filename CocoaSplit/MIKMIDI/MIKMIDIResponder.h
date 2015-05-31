@@ -62,6 +62,8 @@
 
 -(void)handleMIDICommand:(MIKMIDICommand *)command forIdentifier:(NSString *)identifier;
 
+- (NSInteger)additionalChannelForMIDIIdentifier:(NSString *)identifier;
+
 /**
  *  An array of subresponders, which must also conform to MIKMIDIResponder.
  *  Responders returned by this method will be eligible

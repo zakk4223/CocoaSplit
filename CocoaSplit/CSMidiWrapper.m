@@ -64,7 +64,6 @@
 -(void)dispatchMidiCommand:(MIKMIDICommand *)command
 {
     
-    //NSLog(@"MIDI COMMAND IS %@", command);
     if (!self.deviceMapping || _mapGenerator)
     {
         return;
@@ -134,6 +133,16 @@
         if (mappingItem)
         {
             weakSelf.deviceMapping = _mapGenerator.mapping;
+            if ([responder respondsToSelector:@selector(additionalChannelForMIDIIdentifier:)])
+            {
+                NSInteger extraChannel = [responder additionalChannelForMIDIIdentifier:command];
+                if (extraChannel > -1)
+                {
+                    MIKMIDIMappingItem *newMap = mappingItem.copy;
+                    newMap.channel = extraChannel;
+                    [weakSelf.deviceMapping addMappingItemsObject:newMap];
+                }
+            }
             if (methodCompletionBlock)
             {
                 methodCompletionBlock(weakSelf, mappingItem.commandIdentifier);

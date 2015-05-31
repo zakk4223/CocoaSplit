@@ -827,10 +827,20 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 -(IBAction)doImportLayout:(id)sender
 {
     NSOpenPanel *panel = [NSOpenPanel openPanel];
+    NSButton *clobberAnimButton = [[NSButton alloc] init];
+    [clobberAnimButton setButtonType:NSSwitchButton];
+    clobberAnimButton.title = @"Overwrite animation scripts";
+    clobberAnimButton.state = NSOnState;
+    [clobberAnimButton sizeToFit];
+    
+    panel.accessoryView = clobberAnimButton;
     
     [panel beginWithCompletionHandler:^(NSInteger result) {
         if (result == NSFileHandlingPanelOKButton)
         {
+            
+            bool doClobber = clobberAnimButton.state == NSOnState;
+            
             NSURL *fileURL = [panel.URLs objectAtIndex:0];
             if (fileURL)
             {
@@ -869,7 +879,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
                         
                         
                         bool fileExists = [[NSFileManager defaultManager] fileExistsAtPath:modulePath];
-                        if (fileExists)
+                        if (fileExists && !doClobber)
                         {
                             continue;
                         }
@@ -1135,6 +1145,18 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
        
        [self buildScreensInfo:nil];
        
+       self.currentMidiInputLiveIdx = 0;
+       self.currentMidiInputStagingIdx = 0;
+       self.currentMidiLayoutLive = NO;
+       
+       _inputIdentifiers =          @[@"Opacity", @"Rotate",
+                                     @"RotateX", @"RotateY", @"Active", @"AutoFit",
+                                     @"HScroll", @"VScroll", @"CropLeft", @"CropRight", @"CropTop", @"CropBottom",
+                                     @"CKEnable", @"CKThresh", @"CKSmooth", @"BorderWidth", @"CornerRadius",
+                                     @"GradientStartX", @"GradientStartY", @"GradientStopX", @"GradientStopY",
+                                     @"ChangeInterval", @"EffectDuration", @"MultiTransition",
+                                     @"PositionX", @"PositionY"];
+
        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(buildScreensInfo:) name:NSApplicationDidChangeScreenParametersNotification object:nil];
        
        
@@ -1517,6 +1539,9 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     [saveRoot setValue:self.transitionFilter forKey:@"transitionFilter"];
     
     [NSKeyedArchiver archiveRootObject:saveRoot toFile:path];
+    [saveRoot setValue:[NSNumber numberWithBool:self.useMidiLiveChannelMapping] forKey:@"useMidiLiveChannelMapping"];
+    [saveRoot setValue:[NSNumber numberWithInteger:self.midiLiveChannel] forKey:@"midiLiveChannel"];
+    
     [self saveMIDI];
     
 }
@@ -1678,6 +1703,10 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         [self hideStagingView];
     }
 
+    self.useMidiLiveChannelMapping   = [[saveRoot valueForKey:@"useMidiLiveChannelMapping"] boolValue];
+    self.midiLiveChannel = [[saveRoot valueForKey:@"midiLiveChannel"] integerValue];
+    
+    
     self.multiAudioEngine = [saveRoot valueForKey:@"multiAudioEngine"];
     if (!self.multiAudioEngine)
     {
@@ -1751,6 +1780,8 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
             
         }
     }
+    
+    self.currentMidiInputStagingIdx = 0;
 
 
 }
@@ -1797,6 +1828,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         }
     }
     
+    self.currentMidiInputLiveIdx = 0;
 }
 
 -(SourceLayout *)selectedLayout
@@ -2882,10 +2914,24 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 }
 
 
+-(NSInteger)additionalChannelForMIDIIdentifier:(NSString *)identifier
+{
+    NSArray *idents = [_inputIdentifiers arrayByAddingObjectsFromArray:@[@"InputNext", @"InputPrevious"]];
+    
+    if ([idents containsObject:identifier] && self.useMidiLiveChannelMapping && self.midiLiveChannel > -1)
+    {
+        return self.midiLiveChannel;
+    }
+    
+    return -1;
+}
+
+
 - (NSArray *)commandIdentifiers
 {
-    NSArray *baseIdentfiers = @[@"GoLive", @"StagingRevert", @"LiveRevert"];
-    NSMutableArray *layoutIdentifiers = [NSMutableArray array];
+    NSArray *baseIdentifiers = @[@"GoLive", @"StagingRevert", @"LiveRevert", @"InputNext", @"InputPrevious", @"ActivateLive", @"ActivateStaging", @"ActivateToggle"];
+    
+     NSMutableArray *layoutIdentifiers = [NSMutableArray array];
     
     for (SourceLayout *layout in self.sourceLayouts)
     {
@@ -2893,13 +2939,29 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         [layoutIdentifiers addObject:[NSString stringWithFormat:@"SwitchLive:%@", layout.name]];
     }
     
-    return [baseIdentfiers arrayByAddingObjectsFromArray:layoutIdentifiers];
+    baseIdentifiers = [baseIdentifiers arrayByAddingObjectsFromArray:layoutIdentifiers];
+    baseIdentifiers = [baseIdentifiers arrayByAddingObjectsFromArray:_inputIdentifiers];
+    return baseIdentifiers;
 }
+
 
 - (MIKMIDIResponderType)MIDIResponderTypeForCommandIdentifier:(NSString *)commandID
 {
     MIKMIDIResponderType ret = MIKMIDIResponderTypeButton;
+
+    if ([_inputIdentifiers containsObject:commandID])
+    {
+        ret = MIKMIDIResponderTypeAbsoluteSliderOrKnob;
+        if ([@[@"Opacity",@"Rotate",@"RotateX",@"RotateY"] containsObject:commandID])
+        {
+            ret |= MIKMIDIResponderTypeButton;
+        }
     
+        if ([@[@"Active", @"AutoFit", @"CKEnable", @"MultiTransition"] containsObject:commandID])
+        {
+            ret = MIKMIDIResponderTypeButton;
+        }
+    }
     return ret;
 }
 
@@ -2920,11 +2982,157 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     return;
 }
 
+
+-(SourceLayout *)currentMIDILayout
+{
+    if (self.currentMidiLayoutLive)
+    {
+        return self.livePreviewView.sourceLayout;
+    }
+    
+    return self.stagingPreviewView.sourceLayout;
+}
+
+-(InputSource *)currentMIDIInput:(MIKMIDIChannelVoiceCommand *)command
+{
+    SourceLayout *currLayout = [self currentMIDILayout];
+
+    
+    if (self.useMidiLiveChannelMapping && command.channel == self.midiLiveChannel)
+    {
+        currLayout = self.livePreviewView.sourceLayout;
+    }
+    
+    NSArray *inputs = currLayout.sourceListOrdered;
+    
+    if (!inputs || inputs.count == 0)
+    {
+        return nil;
+    }
+    
+    NSInteger inputIdx;
+    if (self.currentMidiLayoutLive || (self.useMidiLiveChannelMapping && command.channel == self.midiLiveChannel))
+    {
+        inputIdx = self.currentMidiInputLiveIdx;
+    } else {
+        inputIdx = self.currentMidiInputStagingIdx;
+    }
+    
+    
+    
+    InputSource *retval = nil;
+    
+    @try {
+        retval = [inputs objectAtIndex:inputIdx];
+    } @catch (NSException *exception) {
+        retval = nil;
+    }
+    
+    return retval;
+}
+
+
+-(void)handleMIDICommandActivateLive:(MIKMIDICommand *)command
+{
+    self.currentMidiLayoutLive = YES;
+}
+
+-(void)handleMIDICommandActivateStaging:(MIKMIDICommand *)command
+{
+    self.currentMidiLayoutLive = NO;
+}
+
+-(void)handleMIDICommandActivateToggle:(MIKMIDICommand *)command
+{
+    self.currentMidiLayoutLive = !self.currentMidiLayoutLive;
+}
+
+-(void)handleMIDICommandInputNext:(MIKMIDIChannelVoiceCommand *)command
+{
+    
+    NSInteger cVal;
+    NSInteger cCount;
+    
+    if (self.currentMidiLayoutLive || (self.useMidiLiveChannelMapping && command.channel == self.midiLiveChannel))
+    {
+        cVal = self.currentMidiInputLiveIdx;
+        cCount = self.livePreviewView.sourceLayout.sourceListOrdered.count;
+    } else {
+        cVal = self.currentMidiInputStagingIdx;
+        cCount = self.stagingPreviewView.sourceLayout.sourceListOrdered.count;
+    }
+    
+    cVal++;
+    
+    
+    if (cVal >= cCount)
+    {
+        cVal = 0;
+    }
+    
+    if (self.currentMidiLayoutLive || (self.useMidiLiveChannelMapping && command.channel == self.midiLiveChannel))
+    {
+        self.currentMidiInputLiveIdx = cVal;
+    } else {
+        self.currentMidiInputStagingIdx = cVal;
+    }
+    
+}
+
+-(void)handleMIDICommandInputPrevious:(MIKMIDIChannelVoiceCommand *)command
+{
+    NSInteger cVal;
+    NSInteger cCount;
+    
+    if (self.currentMidiLayoutLive || (self.useMidiLiveChannelMapping && command.channel == self.midiLiveChannel))
+    {
+        cVal = self.currentMidiInputLiveIdx;
+        cCount = self.livePreviewView.sourceLayout.sourceListOrdered.count;
+    } else {
+        cVal = self.currentMidiInputStagingIdx;
+        cCount = self.stagingPreviewView.sourceLayout.sourceListOrdered.count;
+    }
+    
+    cVal--;
+    
+    if (cVal < 0)
+    {
+        cVal = cCount -1;
+    }
+    
+    if (self.currentMidiLayoutLive)
+    {
+        self.currentMidiInputLiveIdx = cVal;
+    } else {
+        self.currentMidiInputStagingIdx = cVal;
+    }
+}
 -(void)handleMIDICommand:(MIKMIDICommand *)command forIdentifier:(NSString *)identifier
 {
     
     __weak CaptureController *weakSelf = self;
 
+    if ([_inputIdentifiers containsObject:identifier])
+    {
+        InputSource *currInput = [self currentMIDIInput:command];
+        NSString *dynMethod = [NSString stringWithFormat:@"handleMIDICommand%@:", identifier];
+        
+        SEL dynSelector = NSSelectorFromString(dynMethod);
+        
+        if ([currInput respondsToSelector:dynSelector])
+        {
+            NSMethodSignature *dynsig = [[currInput class] instanceMethodSignatureForSelector:dynSelector];
+            NSInvocation *dyninvoke = [NSInvocation invocationWithMethodSignature:dynsig];
+            dyninvoke.target = currInput;
+            dyninvoke.selector = dynSelector;
+            [dyninvoke setArgument:&command atIndex:2];
+            [dyninvoke retainArguments];
+            [dyninvoke invoke];
+        }
+        return;
+    }
+    
+    
     if ([identifier hasPrefix:@"SwitchStaging:"])
     {
         NSString *layoutName = [identifier substringFromIndex:14];
