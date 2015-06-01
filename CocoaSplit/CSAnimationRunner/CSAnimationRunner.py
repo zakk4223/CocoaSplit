@@ -216,6 +216,28 @@ class CSAnimationInput(object):
         return NSPoint(ret_x, ret_y)
 
 
+    def multiTransition(self, duration=None):
+        """
+        Trigger this inputs "multi source" transition
+        If the duration isn't explicitly set the current user-configured value is used.
+        This function doesn't honor auto-reverse or count towards wait animation calculations, it merely calls the transition function on the input with the duration set. Returns the duration of the transition.
+        """
+        
+        if duration:
+            retval = duration
+        else:
+            retval = self.input.transitionDuration()
+
+        if duration:
+            restore_duration = self.input.setTransitionDuration_(duration)
+        else:
+            restore_duration = None
+    
+        self.input.multiChangeForce()
+        if restore_duration:
+            self.input.setTransitionDuration_(restore_duration)
+        return retval
+    
     def waitAnimation(self, duration=0, **kwargs):
         """
         Wait for all in-progress animations on this input to complete before adding any more. 

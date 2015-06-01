@@ -1124,9 +1124,15 @@ static NSArray *_sourceTypes = nil;
     {
         return;
     }
-    [self multiChangeForce];
-}
+    CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
+
+    if ((currentTime >= _nextImageTime) && (self.changeInterval > 0))
+    {
+        [self multiChangeForce];
+    }
     
+}
+
     
 -(void)multiChangeForce
 {
@@ -1139,7 +1145,7 @@ static NSArray *_sourceTypes = nil;
     
     
     
-    if (chooseInputs.count > 1 && (currentTime >= _nextImageTime) && (self.changeInterval > 0) )
+    if (chooseInputs.count > 1)
     {
         switch (self.rotateStyle)
         {
