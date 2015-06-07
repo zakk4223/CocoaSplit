@@ -8,6 +8,8 @@
 
 #import "CAMultiAudioEngine.h"
 #import "CAMultiAudioConverter.h"
+#import "CAMultiAudioDownmixer.h"
+
 OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList *ioData );
 
 
@@ -362,6 +364,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 -(void)attachInput:(CAMultiAudioNode *)input
 {
     
+    
     [self.graph addNode:input];
     if (input.nodeUID)
     {
@@ -373,7 +376,14 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         }
     }
     
-    [self.graph connectNode:input toNode:self.encodeMixer];
+    CAMultiAudioDownmixer *dmix = [[CAMultiAudioDownmixer alloc] initWithInputChannels:input.channelCount];
+    [self.graph addNode:dmix];
+    
+    [self.graph connectNode:dmix toNode:self.encodeMixer];
+
+    [self.graph connectNode:input toNode:dmix];
+    
+    //[self.graph connectNode:input toNode:self.encodeMixer];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self addAudioInputsObject:input];
     });

@@ -21,26 +21,21 @@
     return self;
 }
 
--(bool)createNode:(AUGraph)forGraph
+-(void)willInitializeNode
 {
-    [super createNode:forGraph];
-    
-    UInt32 elementCount = 15;
+    UInt32 elementCount = 32;
     
     OSStatus err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Input, 0,&elementCount, sizeof(UInt32));
     
-
+    
     err = AudioUnitSetParameter(self.audioUnit, kMultiChannelMixerParam_Volume, kAudioUnitScope_Output, 0, self.volume, 0);
     UInt32 enableVal = 1;
     
     
     AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_MeteringMode, kAudioUnitScope_Global, 0, &enableVal, sizeof(enableVal));
     
-    return YES;
-    
+
 }
-
-
 -(void)setOutputVolume
 {
     AudioUnitSetParameter(self.audioUnit, kMultiChannelMixerParam_Volume, kAudioUnitScope_Output, 0, self.volume, 0);
@@ -52,6 +47,9 @@
     
     
     [self setOutputVolume];
+    for (UInt32 i = 0; i < 15; i++) {
+        [self setVolumeOnInputBus:i volume:1.0];
+    }
     
 }
 
@@ -102,7 +100,10 @@
     UInt32 elementCount = 0;
     UInt32 elementSize = 0;
     
-    AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Input, 0, &elementCount, &elementSize);
+    //AudioUnitUninitialize(self.audioUnit);
+    AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Input, 0, &elementCount, elementSize);
+   // AudioUnitInitialize(self.audioUnit);
+    
     
     /*
     UInt32 interactionCnt = elementCount*2;

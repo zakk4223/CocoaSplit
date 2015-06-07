@@ -988,7 +988,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
             [useLayout saveSourceList];
             [useLayout saveAnimationSource];
             
-            NSLog(@"SAVING LAYOUT %@ TO %@", useLayout, saveFile.absoluteString);
             
             [NSKeyedArchiver archiveRootObject:useLayout toFile:saveFile.path];
             
@@ -1537,12 +1536,12 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     [saveRoot setValue:self.multiAudioEngine forKey:@"multiAudioEngine"];
     
     [saveRoot setValue:self.transitionFilter forKey:@"transitionFilter"];
-    
-    [NSKeyedArchiver archiveRootObject:saveRoot toFile:path];
     [saveRoot setValue:[NSNumber numberWithBool:self.useMidiLiveChannelMapping] forKey:@"useMidiLiveChannelMapping"];
     [saveRoot setValue:[NSNumber numberWithInteger:self.midiLiveChannel] forKey:@"midiLiveChannel"];
     
     [self saveMIDI];
+
+    [NSKeyedArchiver archiveRootObject:saveRoot toFile:path];
     
 }
 

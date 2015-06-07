@@ -191,6 +191,8 @@
         }
         
     } else {
+        _currentLayout.inTransition = NO;
+
         if (saveLayout)
         {
             [saveLayout.rootLayer removeFromSuperlayer];

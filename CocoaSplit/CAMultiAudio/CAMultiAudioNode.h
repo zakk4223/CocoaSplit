@@ -44,6 +44,12 @@
 
 -(bool)createNode:(AUGraph)forGraph;
 -(void)nodeConnected:(CAMultiAudioNode *)toNode onBus:(UInt32)onBus;
+-(void)willConnectNode:(CAMultiAudioNode *)node toBus:(UInt32)toBus;
+-(void)willInitializeNode;
+-(void)didInitializeNode;
+-(void)setInputStreamFormat:(AudioStreamBasicDescription *)format;
+-(void)setOutputStreamFormat:(AudioStreamBasicDescription *)format;
+
 -(void)resetSamplerate:(UInt32)sampleRate;
 -(void)updatePowerlevel;
 -(void)setVolumeOnConnectedNode;

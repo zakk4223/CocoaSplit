@@ -180,6 +180,11 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     return ret;
 }
 
+-(void)setInputStreamFormat:(AudioStreamBasicDescription *)format
+{
+    return;
+}
+
 
 -(void)play
 {

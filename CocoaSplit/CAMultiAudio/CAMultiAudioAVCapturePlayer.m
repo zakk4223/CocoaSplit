@@ -37,6 +37,19 @@
 }
 
 
+-(bool)createNode:(AUGraph)forGraph
+{
+    [super createNode:forGraph];
+    AudioStreamBasicDescription asbd;
+    UInt32 asbdSize;
+    
+    AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 0, &asbd, &asbdSize);
+    asbd.mChannelsPerFrame = self.channelCount;
+    AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 0, &asbd, asbdSize);
+    return YES;
+}
+
+
 -(void)detachCaptureSession
 {
     if (self.avfCapture)

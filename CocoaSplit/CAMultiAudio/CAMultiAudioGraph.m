@@ -8,6 +8,7 @@
 
 #import "CAMultiAudioGraph.h"
 
+#import "CAMultiAudioDevice.h"
 
 
 
@@ -21,6 +22,20 @@
         //default to something reasonable
         
         self.sampleRate = 44100;
+        //set to canonical, 2 channel
+        self.graphAsbd = malloc(sizeof(AudioStreamBasicDescription));
+        
+        _graphAsbd->mSampleRate = self.sampleRate;
+        _graphAsbd->mFormatID = kAudioFormatLinearPCM;
+        _graphAsbd->mFormatFlags = kAudioFormatFlagsAudioUnitCanonical;
+        _graphAsbd->mFramesPerPacket = 1;
+        _graphAsbd->mChannelsPerFrame = 2;
+        _graphAsbd->mReserved = 0;
+        _graphAsbd->mBytesPerPacket = 1 * sizeof(Float32);
+        _graphAsbd->mBytesPerFrame = 1 * sizeof(Float32);
+        _graphAsbd->mBitsPerChannel = 8 * sizeof(Float32);
+        
+        
         self.nodeList = [NSMutableArray array];
         OSStatus err;
         err = NewAUGraph(&_graphInst);
@@ -99,11 +114,24 @@
 
 -(bool)addNode:(CAMultiAudioNode *)newNode
 {
-    
     if ([newNode createNode:_graphInst])
     {
+        
         newNode.graph = self;
-    
+        
+
+        [newNode setInputStreamFormat:self.graphAsbd];
+        [newNode setOutputStreamFormat:self.graphAsbd];
+        
+        [newNode willInitializeNode];
+        OSStatus err = AudioUnitInitialize(newNode.audioUnit);
+        if (err)
+        {
+            NSLog(@"AudioUnitInitialize failed for node %@ with status %d", newNode, err);
+        }
+        
+        [newNode didInitializeNode];
+        
         [self.nodeList addObject:newNode];
         return YES;
     }
@@ -212,35 +240,11 @@
     connectTo = toNode.node;
     aUnit = node.audioUnit;
     
-    AudioStreamBasicDescription asbd = {0};
-    UInt32 asbdSize = sizeof(asbd);
-    
-    err = AudioUnitGetProperty(aUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 0, &asbd, &asbdSize);
-    
-    if (err)
-    {
-        NSLog(@"AUGetProperty failed (StreamFormat) on node %@ err: %d", node, err);
-        return NO;
-    }
-    
-    
-    if (sampleRate > 0)
-    {
-        asbd.mSampleRate = sampleRate;
-        
-    }
-    asbd.mChannelsPerFrame = node.channelCount;
-    
-    err = AudioUnitSetProperty(aUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 0, &asbd, asbdSize);
-    
-    if (err)
-    {
-        NSLog(@"AUSetProperty failed (StreamFormat) on node %@ err: %d", node, err);
-        return NO;
-    }
 
 
     UInt32 bus = toNode.inputElement;
+    
+    [toNode willConnectNode:node toBus:bus];
     
     err = AUGraphConnectNodeInput(_graphInst, inNode, 0, connectTo, bus);
     if (err)
@@ -249,15 +253,15 @@
         return NO;
     }
     
-    
+    [node nodeConnected:toNode onBus:bus];
+
     if (![self graphUpdate])
     {
-        NSLog(@"Graph %@ graphUpdate for connection failed", self);
+        NSLog(@"Graph %@ graphUpdate for connection failed %@ -> %@", self, node, toNode);
         return NO;
     }
     
 
-    [node nodeConnected:toNode onBus:bus];
 
     return YES;
 }

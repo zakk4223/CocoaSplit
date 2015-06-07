@@ -77,6 +77,8 @@ typedef enum resize_style_t {
 @property (weak) SourceLayout *sourceLayout;
 
 
+@property (assign) bool skipSave;
+
 @property (assign) float scrollXSpeed;
 @property (assign) float scrollYSpeed;
 

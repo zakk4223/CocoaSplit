@@ -16,7 +16,7 @@
 
 
 
-@interface SourceLayout : NSObject <NSCoding, NSKeyedUnarchiverDelegate, NSCopying, MIKMIDIMappableResponder, MIKMIDIResponder>
+@interface SourceLayout : NSObject <NSCoding, NSKeyedUnarchiverDelegate, NSKeyedArchiverDelegate, NSCopying, MIKMIDIMappableResponder, MIKMIDIResponder>
 {
     
     NSSortDescriptor *_sourceDepthSorter;

@@ -170,6 +170,8 @@
 		34B5FCDF19BF1C3F00F67D19 /* CreateLayoutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FCDD19BF1C3F00F67D19 /* CreateLayoutViewController.m */; };
 		34B5FCE019BF1C3F00F67D19 /* CreateLayoutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FCDD19BF1C3F00F67D19 /* CreateLayoutViewController.m */; };
 		34B5FCE119BF1C3F00F67D19 /* CreateLayoutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34B5FCDE19BF1C3F00F67D19 /* CreateLayoutViewController.xib */; };
+		34BD1E4D1B1F1A2D0015CBEC /* CAMultiAudioDownmixer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34BD1E4C1B1F1A2D0015CBEC /* CAMultiAudioDownmixer.m */; };
+		34BD1E5F1B1F2A100015CBEC /* CAMultiAudioDownmixer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34BD1E4C1B1F1A2D0015CBEC /* CAMultiAudioDownmixer.m */; };
 		34C19053189EE60400AB2430 /* CapturedFrameData.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C19052189EE60400AB2430 /* CapturedFrameData.m */; };
 		34C19054189EE60400AB2430 /* CapturedFrameData.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C19052189EE60400AB2430 /* CapturedFrameData.m */; };
 		34C67B8E1A2E69F60012DC1B /* CSHitboxStreamServicePlugin.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34C67B781A2D7B6A0012DC1B /* CSHitboxStreamServicePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -717,6 +719,8 @@
 		34B5FCDC19BF1C3F00F67D19 /* CreateLayoutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateLayoutViewController.h; sourceTree = "<group>"; };
 		34B5FCDD19BF1C3F00F67D19 /* CreateLayoutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateLayoutViewController.m; sourceTree = "<group>"; };
 		34B5FCDE19BF1C3F00F67D19 /* CreateLayoutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CreateLayoutViewController.xib; sourceTree = "<group>"; };
+		34BD1E4B1B1F1A2D0015CBEC /* CAMultiAudioDownmixer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioDownmixer.h; path = CAMultiAudio/CAMultiAudioDownmixer.h; sourceTree = "<group>"; };
+		34BD1E4C1B1F1A2D0015CBEC /* CAMultiAudioDownmixer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioDownmixer.m; path = CAMultiAudio/CAMultiAudioDownmixer.m; sourceTree = "<group>"; };
 		34C19051189EE60400AB2430 /* CapturedFrameData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CapturedFrameData.h; sourceTree = "<group>"; };
 		34C19052189EE60400AB2430 /* CapturedFrameData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CapturedFrameData.m; sourceTree = "<group>"; };
 		34C67B731A2D7B690012DC1B /* CSHitboxStreamServicePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSHitboxStreamServicePlugin.xcodeproj; path = StreamServicePlugins/CSHitboxStreamServicePlugin/CSHitboxStreamServicePlugin.xcodeproj; sourceTree = "<group>"; };
@@ -1248,6 +1252,8 @@
 				345F8B6F1A177C1F009A81E3 /* CAMultiAudioConverter.h */,
 				345F8B701A177C1F009A81E3 /* CAMultiAudioConverter.m */,
 				345F8B7B1A184FBC009A81E3 /* CAMultiAudioMixingProtocol.h */,
+				34BD1E4B1B1F1A2D0015CBEC /* CAMultiAudioDownmixer.h */,
+				34BD1E4C1B1F1A2D0015CBEC /* CAMultiAudioDownmixer.m */,
 			);
 			name = CAMultiAudio;
 			sourceTree = "<group>";
@@ -2022,6 +2028,7 @@
 				34ED8C9D1B07371C002C0674 /* MIKMIDIProgramChangeCommand.m in Sources */,
 				34ED8C731B07371C002C0674 /* MIKMIDIMappingXMLParser.m in Sources */,
 				347277FD1A5A2758008801A9 /* CSIOSurfaceLayer.m in Sources */,
+				34BD1E4D1B1F1A2D0015CBEC /* CAMultiAudioDownmixer.m in Sources */,
 				345F8B251A14E6A0009A81E3 /* CAMultiAudioNode.m in Sources */,
 				342346AA15F59A8500C8C77E /* AVFAudioCapture.m in Sources */,
 				3498D94A1A94685000906532 /* CSAudioSwitchCell.m in Sources */,
@@ -2133,6 +2140,7 @@
 				34938EEE1AE4D24200F3B1CF /* CSFilterChooserWindowController.m in Sources */,
 				34ED8C501B07371C002C0674 /* MIKMIDIClock.m in Sources */,
 				345F8B761A17A785009A81E3 /* CAMultiAudioMixer.m in Sources */,
+				34BD1E5F1B1F2A100015CBEC /* CAMultiAudioDownmixer.m in Sources */,
 				34ED8C4C1B07371C002C0674 /* MIKMIDIClientDestinationEndpoint.m in Sources */,
 				34D2D5781A547C35001004E5 /* CSTextCaptureViewControllerBase.m in Sources */,
 				34ED8C701B07371C002C0674 /* MIKMIDIMappingGenerator.m in Sources */,

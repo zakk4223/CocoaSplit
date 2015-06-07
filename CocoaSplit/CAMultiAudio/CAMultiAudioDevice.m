@@ -55,6 +55,11 @@
     
 }
 
+-(void)setOutputStreamFormat:(AudioStreamBasicDescription *)format
+{
+    return;
+}
+
 
 -(void)setOutputForDevice
 {

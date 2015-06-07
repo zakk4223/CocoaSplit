@@ -388,14 +388,32 @@
 {
     
     NSDictionary *saveDict = @{@"sourcelist": self.sourceList, @"animationList": self.animationList};
+    NSMutableData *saveData = [NSMutableData data];
+    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:saveData];
+    archiver.delegate = self;
+    [archiver encodeObject:saveDict forKey:@"root"];
+    [archiver finishEncoding];
     
-    self.savedSourceListData = [NSKeyedArchiver archivedDataWithRootObject:saveDict];
+    self.savedSourceListData = saveData;
+}
+
+-(id)archiver:(NSKeyedArchiver *)archiver willEncodeObject:(id)object
+{
+    if ([object isKindOfClass:[InputSource class]])
+    {
+        InputSource *src = (InputSource *)object;
+        if (src.skipSave)
+        {
+            return nil;
+        }
+    }
+    
+    return object;
 }
 
 
 -(void)restoreSourceListForSelfGoLive
 {
-    
     if (self.savedSourceListData)
     {
         

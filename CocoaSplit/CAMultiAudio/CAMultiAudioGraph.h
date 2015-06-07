@@ -23,6 +23,7 @@
 @property (assign) AUGraph graphInst;
 @property (strong) NSMutableArray *nodeList;
 @property (assign) int sampleRate;
+@property (assign) AudioStreamBasicDescription *graphAsbd;
 
 -(bool)addNode:(CAMultiAudioNode *)newNode;
 -(bool)connectNode:(CAMultiAudioNode *)node toNode:(CAMultiAudioNode *)toNode;
