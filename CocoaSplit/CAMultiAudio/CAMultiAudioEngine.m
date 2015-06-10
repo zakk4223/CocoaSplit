@@ -136,6 +136,10 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         }
         [inputopts setValue:@(node.volume) forKey:@"volume"];
         [inputopts setValue:@(node.enabled) forKey:@"enabled"];
+        if (node.downMixer)
+        {
+            [inputopts setValue:[node.downMixer saveData] forKey:@"downMixerData"];
+        }
     }
     
     [aCoder encodeObject:_inputSettings forKey:@"inputSettings"];
@@ -157,6 +161,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 {
     self.graph = [[CAMultiAudioGraph alloc] init];
     self.graph.sampleRate = self.sampleRate;
+    
     
     
     NSUInteger selectedIdx = [self.audioOutputs indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
@@ -366,15 +371,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     
     [self.graph addNode:input];
-    if (input.nodeUID)
-    {
-        NSDictionary *settings = [_inputSettings valueForKey:input.nodeUID];
-        if (settings)
-        {
-            input.volume = [(NSNumber *)[settings valueForKey:@"volume"] floatValue];
-            input.enabled = [(NSNumber *)[settings valueForKey:@"enabled"] boolValue];
-        }
-    }
     
     CAMultiAudioDownmixer *dmix = [[CAMultiAudioDownmixer alloc] initWithInputChannels:input.channelCount];
     [self.graph addNode:dmix];
@@ -382,7 +378,23 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     [self.graph connectNode:dmix toNode:self.encodeMixer];
 
     [self.graph connectNode:input toNode:dmix];
+    input.downMixer = dmix;
     
+    if (input.nodeUID)
+    {
+        NSDictionary *settings = [_inputSettings valueForKey:input.nodeUID];
+        if (settings)
+        {
+            input.volume = [(NSNumber *)[settings valueForKey:@"volume"] floatValue];
+            input.enabled = [(NSNumber *)[settings valueForKey:@"enabled"] boolValue];
+            NSDictionary *mixerData = [settings valueForKey:@"downMixerData"];
+            if (mixerData)
+            {
+                [input.downMixer restoreData:mixerData];
+            }
+        }
+    }
+
     //[self.graph connectNode:input toNode:self.encodeMixer];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self addAudioInputsObject:input];

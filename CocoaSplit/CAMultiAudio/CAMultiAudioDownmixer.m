@@ -27,6 +27,7 @@
     if (self = [self init])
     {
         _inputChannels = channels;
+        self.inputChannelCount = channels;
     }
     return self;
 }
@@ -152,6 +153,12 @@
 }
 
 
+-(void)setOutputStreamFormat:(AudioStreamBasicDescription *)format
+{
+    [super setOutputStreamFormat:format];
+    self.outputChannelCount = format->mChannelsPerFrame;
+    
+}
 -(void)setInputStreamFormat:(AudioStreamBasicDescription *)format
 {
     
@@ -161,6 +168,7 @@
     memcpy(&fCopy, format, sizeof(fCopy));
     
     fCopy.mChannelsPerFrame = _inputChannels;
+    
     
     [super setInputStreamFormat:&fCopy];
 }
@@ -210,19 +218,110 @@
         
         //also set crosspoint volumes.
         UInt32 outChan = chan % self.graph.graphAsbd->mChannelsPerFrame;
-        UInt32 xElem = (chan << 16) | (outChan & 0x0000FFFF);
         
-        err = AudioUnitSetParameter(self.audioUnit, kMatrixMixerParam_Volume, kAudioUnitScope_Global, xElem, 1.0, 0);
-        if (err)
-        {
-            NSLog(@"Failed to set crosspoint volume for channel %d -> %d  on %@ with status %d", chan, outChan, self, err);
-        }
-
+        [self setVolume:1.0 forChannel:chan outChannel:outChan];
+        
     }
 
     
     
 }
+
+-(Float32)getVolumeforChannel:(UInt32)inChannel outChannel:(UInt32)outChannel
+{
+    UInt32 xElem = (inChannel << 16) | (outChannel & 0x0000FFFF);
+    Float32 ret = 0.0f;
+    
+    OSStatus err = AudioUnitGetParameter(self.audioUnit, kMatrixMixerParam_Volume, kAudioUnitScope_Global, xElem, &ret);
+    
+    if (err)
+    {
+        NSLog(@"Failed to set crosspoint volume for channel %d -> %d  on %@ with status %d", inChannel, outChannel, self, err);
+    }
+ 
+    return ret;
+    
+}
+-(void)setVolume:(float)volume forChannel:(UInt32)inChannel outChannel:(UInt32)outChannel
+{
+    UInt32 xElem = (inChannel << 16) | (outChannel & 0x0000FFFF);
+    OSStatus err = AudioUnitSetParameter(self.audioUnit, kMatrixMixerParam_Volume, kAudioUnitScope_Global, xElem, volume,0);
+    if (err)
+    {
+        NSLog(@"Failed to set crosspoint volume for channel %d -> %d  on %@ with status %d", inChannel, outChannel, self, err);
+    }
+}
+
+
+-(void)restoreData:(NSDictionary *)saveData
+{
+    UInt32 inputCount = [[saveData objectForKey:@"inputChannels"] unsignedIntValue];
+    UInt32 outputCount = [[saveData objectForKey:@"outputChannels"] unsignedIntValue];
+    NSData *data = [saveData objectForKey:@"data"];
+
+    NSUInteger dataSize = data.length;
+    
+    if ((dataSize % sizeof(Float32)))
+    {
+        return;
+    }
+    
+    
+    Float32 *levels = malloc(dataSize);
+    
+    [data getBytes:levels length:dataSize];
+    
+    
+    for (int ichan = 0; ichan < inputCount; ichan++)
+    {
+        if (ichan >= self.inputChannelCount)
+        {
+            break;
+        }
+        
+        for (int ochan = 0; ochan < outputCount; ochan++)
+        {
+            if (ochan >= self.outputChannelCount)
+            {
+                break;
+            }
+            
+            Float32 xpoint = levels[(ichan * (outputCount+1)) + ochan];
+            [self setVolume:xpoint forChannel:ichan outChannel:ochan];
+        }
+    }
+}
+
+-(NSDictionary *)saveData
+{
+    NSMutableDictionary *ret = [NSMutableDictionary dictionary];
+    
+    UInt32 levelSize = (self.inputChannelCount+1)*(self.outputChannelCount+1)*sizeof(Float32);
+
+    Float32 *levelData = malloc(levelSize);
+    
+    OSStatus err = AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_MatrixLevels, kAudioUnitScope_Global, 0, levelData, &levelSize);
+    
+     NSData *levels = [NSData dataWithBytes:levelData length:levelSize];
+    
+    [ret setObject:@(self.inputChannelCount) forKey:@"inputChannels"];
+    [ret setObject:@(self.outputChannelCount) forKey:@"outputChannels"];
+    [ret setObject:levels forKey:@"data"];
+    return ret;
+}
+
+
+-(Float32 *)getMixerVolumes
+{
+    
+    Float32 *ret = malloc((self.inputChannelCount+1)*(self.outputChannelCount+1));
+    UInt32 levelSize;
+    
+    AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_MatrixLevels, kAudioUnitScope_Global, 0, ret, &levelSize);
+    
+    return ret;
+}
+
 
 -(void)willConnectNode:(CAMultiAudioNode *)node toBus:(UInt32)toBus
 {

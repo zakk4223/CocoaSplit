@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface CSMeterCell : NSSliderCell
+IB_DESIGNABLE
+@interface CSMeterCell : NSLevelIndicator
 
 @end

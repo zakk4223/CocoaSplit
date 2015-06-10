@@ -10,8 +10,27 @@
 
 @implementation CSMeterCell
 
--(void)drawKnob:(NSRect)knobRect
+
+-(void)awakeFromNib
 {
-    return;
+    [super awakeFromNib];
+    [self setupView];
 }
+
+
+-(void)prepareForInterfaceBuilder
+{
+ 
+    [super prepareForInterfaceBuilder];
+    [self setupView];
+}
+
+
+-(void)setupView
+{
+    
+    [self setFrameCenterRotation:90];
+}
+
+
 @end

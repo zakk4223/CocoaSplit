@@ -2254,7 +2254,7 @@
                     <constraint firstAttribute="bottom" secondItem="2368" secondAttribute="bottom" constant="29" id="vbt-Nq-oyK"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="818.5" y="565"/>
+            <point key="canvasLocation" x="1092.5" y="724"/>
         </window>
         <dictionaryController objectClassName="_NSControllerKeyValuePair" id="gSI-N4-DsK" userLabel="CompressorDictionaryController">
             <connections>
@@ -2484,8 +2484,22 @@ MgA3AEEARwBQAFcAXABkAHkAewB9AH8AgQCLAJAAlQCgAKMApQCnAKkArgC5AMIAygDNANYA2wDoAOwA
                         </binding>
                     </connections>
                 </segmentedControl>
+                <button horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6KB-9R-g3x">
+                    <rect key="frame" x="36" y="31" width="13" height="13"/>
+                    <buttonCell key="cell" type="disclosureTriangle" bezelStyle="disclosure" imagePosition="above" alignment="left" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bUL-4P-VX8">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="miniSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="93b-Or-H22" name="target" keyPath="self.representedObject" id="qp5-2H-0YK">
+                            <dictionary key="options">
+                                <string key="NSSelectorName">openMixerWindow:</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </button>
             </subviews>
-            <point key="canvasLocation" x="345.5" y="333.5"/>
+            <point key="canvasLocation" x="538.5" y="375.5"/>
         </view>
         <view id="bRh-Lo-mbG">
             <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>

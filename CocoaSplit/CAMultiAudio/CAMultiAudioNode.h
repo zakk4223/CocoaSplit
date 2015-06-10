@@ -11,7 +11,10 @@
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
 
+
 @class CAMultiAudioGraph;
+@class CAMultiAudioDownmixer;
+@class CAMultiAudioMatrixMixerWindowController;
 
 
 @interface CAMultiAudioNode : NSObject
@@ -31,6 +34,8 @@
 @property (strong) NSString *name;
 @property (strong) NSString *nodeUID;
 
+@property (strong) CAMultiAudioDownmixer *downMixer;
+
 //There really has to be a better way to do something like this
 @property (strong) NSColor *nameColor;
 
@@ -39,6 +44,8 @@
 
 @property (assign) bool enabled;
 @property (assign) Float32 powerLevel;
+
+@property (strong) CAMultiAudioMatrixMixerWindowController *mixerWindow;
 
 -(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType;
 
@@ -53,6 +60,8 @@
 -(void)resetSamplerate:(UInt32)sampleRate;
 -(void)updatePowerlevel;
 -(void)setVolumeOnConnectedNode;
+
+-(void)openMixerWindow:(id)sender;
 
 
 @end

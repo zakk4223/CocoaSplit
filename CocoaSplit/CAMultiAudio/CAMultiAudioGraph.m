@@ -120,10 +120,11 @@
         newNode.graph = self;
         
 
-        [newNode setInputStreamFormat:self.graphAsbd];
-        [newNode setOutputStreamFormat:self.graphAsbd];
+       [newNode setInputStreamFormat:self.graphAsbd];
+      [newNode setOutputStreamFormat:self.graphAsbd];
         
         [newNode willInitializeNode];
+        
         OSStatus err = AudioUnitInitialize(newNode.audioUnit);
         if (err)
         {

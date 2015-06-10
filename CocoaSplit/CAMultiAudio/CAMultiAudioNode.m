@@ -9,6 +9,7 @@
 #import "CAMultiAudioNode.h"
 #import "CAMultiAudioGraph.h"
 #import "CAMultiAudioMixingProtocol.h"
+#import "CAMultiAudioMatrixMixerWindowController.h"
 
 
 @implementation CAMultiAudioNode
@@ -93,6 +94,7 @@
 
 -(void)setInputStreamFormat:(AudioStreamBasicDescription *)format
 {
+    
     OSStatus err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 0, format, sizeof(AudioStreamBasicDescription));
     if (err)
     {
@@ -156,7 +158,14 @@
     }
 }
 
-
+-(void)openMixerWindow:(id)sender
+{
+    if (self.downMixer)
+    {
+        self.mixerWindow = [[CAMultiAudioMatrixMixerWindowController alloc] initWithAudioMixer:self.downMixer];
+        [self.mixerWindow showWindow:nil];
+    }
+}
 -(void)nodeConnected:(CAMultiAudioNode *)toNode onBus:(UInt32)onBus
 {
     self.connectedTo = toNode;

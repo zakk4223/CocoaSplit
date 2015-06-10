@@ -13,6 +13,19 @@
 {
     int _inputChannels;
 }
+
+@property (assign) UInt32 inputChannelCount;
+@property (assign) UInt32 outputChannelCount;
+
 -(instancetype)initWithInputChannels:(int)channels;
+
+-(void)setVolume:(float)volume forChannel:(UInt32)inChannel outChannel:(UInt32)outChannel;
+-(Float32)getVolumeforChannel:(UInt32)inChannel outChannel:(UInt32)outChannel;
+
+-(Float32 *)getMixerVolumes;
+
+-(NSDictionary *)saveData;
+-(void)restoreData:(NSDictionary *)saveData;
+
 
 @end
