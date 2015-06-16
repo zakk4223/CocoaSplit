@@ -51,7 +51,6 @@
     if (columnIndex == 0)
     {
         NSTableCellView *inputLabel = [self.matrixTable makeViewWithIdentifier:@"MatrixLabelCell" owner:self];
-        NSLog(@"INPUT LABEL %@", inputLabel);
 
         [inputLabel.textField setStringValue:[NSString stringWithFormat:@"Input Channel %ld", (long)row]];
         [inputLabel setNeedsLayout:YES];

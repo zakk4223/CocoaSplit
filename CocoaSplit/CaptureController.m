@@ -254,6 +254,8 @@
         if ([inputmap[@"type"] isEqualToString:@"param"])
         {
             retView = [tableView makeViewWithIdentifier:@"InputParamView" owner:self];
+        } else if ([inputmap[@"type"] isEqualToString:@"bool"]) {
+            retView = [tableView makeViewWithIdentifier:@"InputBoolView" owner:self];
         } else {
             retView = [tableView makeViewWithIdentifier:@"InputSourceView" owner:self];
         }
@@ -1826,6 +1828,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
             
         }
     }
+    
     
     self.currentMidiInputLiveIdx = 0;
 }

@@ -82,7 +82,6 @@
 -(void)handleMIDICommand:(MIKMIDICommand *)command forIdentifier:(NSString *)identifier
 {
     
-    NSLog(@"HANDLING IDENTIFIER %@", identifier);
     
     __weak SourceLayout *weakSelf = self;
     
@@ -237,10 +236,6 @@
         NSLog(@"Animation module %@ failed with exception: %@: %@", modName, [exception name], [exception reason]);
 
     }
-    
-    
-    
-    
 }
 
 
@@ -708,6 +703,18 @@
         if (isource.active)
         {
             [isource frameTick];
+        }
+    }
+}
+
+
+-(void)didBecomeVisible
+{
+    for (CSAnimationItem  *anim in self.animationList)
+    {
+        if (anim.onLive)
+        {
+            [self runSingleAnimation:anim];
         }
     }
 }

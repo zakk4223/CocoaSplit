@@ -215,6 +215,8 @@
 
 
     _currentLayout = self.layout;
+    [_currentLayout didBecomeVisible];
+    
     
 }
 

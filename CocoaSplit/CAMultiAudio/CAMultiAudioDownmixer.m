@@ -178,6 +178,8 @@
     //Enable both input and output busses
     OSStatus err;
     
+  
+    
     err = AudioUnitSetParameter(self.audioUnit, kMatrixMixerParam_Enable, kAudioUnitScope_Input, 0, 1, 0);
     if (err)
     {
@@ -323,14 +325,5 @@
 }
 
 
--(void)willConnectNode:(CAMultiAudioNode *)node toBus:(UInt32)toBus
-{
-    
-
-}
--(void)nodeConnected:(CAMultiAudioNode *)toNode onBus:(UInt32)onBus
-{
-    OSStatus err;
-}
 
 @end

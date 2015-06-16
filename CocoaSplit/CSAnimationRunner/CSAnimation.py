@@ -85,6 +85,8 @@ class CSAnimation:
 
         if self.target:
             p_layer = self.target.presentationLayer()
+            if not p_layer:
+                return
             p_value = p_layer.valueForKeyPath_(self.animation.keyPath())
             CATransaction.begin()
             CATransaction.setDisableActions_(True)

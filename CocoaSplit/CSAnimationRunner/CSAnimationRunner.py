@@ -851,6 +851,7 @@ class CSAnimationRunnerObj(NSObject):
             for k in input_or_dict:
                 if input_or_dict[k]:
                     arg = input_or_dict[k]
+                    
                     if hasattr(arg, 'layer'):
 
                         input_arg[k] = CSAnimationInput(arg)

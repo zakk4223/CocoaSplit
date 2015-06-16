@@ -71,11 +71,34 @@
             inputDict[@"value"] = [NSNull null];
             [self.inputs addObject:inputDict];
         }
-
         
+        NSMutableDictionary *liveDict = [NSMutableDictionary dictionary];
+        liveDict[@"type"] = @"bool";
+        liveDict[@"label"] = @"onLive";
+        liveDict[@"value"] = @NO;
+        
+        [self.inputs addObject:liveDict];
     }
     
     return self;
 }
+
+-(bool)onLive
+{
+    bool ret = NO;
+    for (NSDictionary *input in self.inputs)
+    {
+        if ([input[@"label"] isEqualToString:@"onLive"])
+        {
+            ret = input[@"value"];
+            if (ret)
+            {
+                break;
+            }
+        }
+    }
+    return ret;
+}
+
 
 @end

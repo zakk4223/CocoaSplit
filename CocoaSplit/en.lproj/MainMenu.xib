@@ -1825,6 +1825,22 @@
                                                                                             </textField>
                                                                                         </subviews>
                                                                                     </tableCellView>
+                                                                                    <tableCellView identifier="InputBoolView" id="4b6-Et-Xqe">
+                                                                                        <rect key="frame" x="120" y="52" width="116" height="17"/>
+                                                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                                        <subviews>
+                                                                                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="a5i-Xe-jtT">
+                                                                                                <rect key="frame" x="89" y="-5" width="26" height="28"/>
+                                                                                                <buttonCell key="cell" type="check" title="Check" bezelStyle="regularSquare" imagePosition="only" controlSize="mini" state="on" inset="2" id="xfn-0A-lKJ">
+                                                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                                                    <font key="font" metaFont="miniSystem"/>
+                                                                                                </buttonCell>
+                                                                                                <connections>
+                                                                                                    <binding destination="4b6-Et-Xqe" name="value" keyPath="objectValue.value" id="UU4-uf-s1Z"/>
+                                                                                                </connections>
+                                                                                            </button>
+                                                                                        </subviews>
+                                                                                    </tableCellView>
                                                                                 </prototypeCellViews>
                                                                             </tableColumn>
                                                                         </tableColumns>
@@ -1974,6 +1990,22 @@
                                                                                                     <binding destination="mDX-Ab-PuW" name="value" keyPath="objectValue.value" id="HPN-rZ-V01"/>
                                                                                                 </connections>
                                                                                             </textField>
+                                                                                        </subviews>
+                                                                                    </tableCellView>
+                                                                                    <tableCellView identifier="InputBoolView" id="Rcj-MU-PTS">
+                                                                                        <rect key="frame" x="120" y="52" width="116" height="17"/>
+                                                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                                        <subviews>
+                                                                                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uce-Fh-tS7">
+                                                                                                <rect key="frame" x="89" y="-5" width="26" height="28"/>
+                                                                                                <buttonCell key="cell" type="check" title="Check" bezelStyle="regularSquare" imagePosition="only" controlSize="mini" state="on" inset="2" id="iN4-Nv-Xyo">
+                                                                                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                                                    <font key="font" metaFont="miniSystem"/>
+                                                                                                </buttonCell>
+                                                                                                <connections>
+                                                                                                    <binding destination="Rcj-MU-PTS" name="value" keyPath="objectValue.value" id="BFS-yo-raa"/>
+                                                                                                </connections>
+                                                                                            </button>
                                                                                         </subviews>
                                                                                     </tableCellView>
                                                                                 </prototypeCellViews>

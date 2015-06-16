@@ -14,6 +14,7 @@
 
 @property (strong) NSString *module_name;
 @property (strong) NSString *name;
+@property (readonly) bool onLive;
 
 //label -> 'whatever'
 //input -> InputSource

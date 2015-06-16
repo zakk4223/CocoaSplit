@@ -27,10 +27,6 @@
     NSString *_savedFrameRateData;
     CFAbsoluteTime _lastFrameTime;
     CSPcmPlayer *_pcmPlayer;
-    
-    
-    
-    
 }
 
 

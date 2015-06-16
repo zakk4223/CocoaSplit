@@ -109,6 +109,7 @@
 
 -(void)setDeviceForUniqueID:(NSString *)uniqueID
 {
+    
     CSAbstractCaptureDevice *dummydev = [[CSAbstractCaptureDevice alloc] init];
     
     dummydev.uniqueID = uniqueID;
@@ -116,7 +117,6 @@
     NSArray *currentAvailableDevices;
     
     currentAvailableDevices = self.availableVideoDevices;
-    
     
     NSUInteger sidx;
     sidx = [currentAvailableDevices indexOfObject:dummydev];

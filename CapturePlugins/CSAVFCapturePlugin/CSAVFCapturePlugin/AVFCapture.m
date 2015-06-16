@@ -51,7 +51,7 @@
         _savedFormatData = [aDecoder decodeObjectForKey:@"activeVideoFormat"];
         _savedFrameRateData = [aDecoder decodeObjectForKey:@"activeVideoFramerate"];
         [self restoreFormatAndFrameRate];
-        self.renderType = [aDecoder decodeIntForKey:@"renderType"];
+        self.renderType = (frame_render_behavior)[aDecoder decodeIntForKey:@"renderType"];
         
     }
     
