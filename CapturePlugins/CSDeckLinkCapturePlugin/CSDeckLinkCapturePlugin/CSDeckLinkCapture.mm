@@ -163,7 +163,7 @@
 
 
 
--(void)removeDevice:(CSAbstractCaptureDevice *)device
+-(void)removeDevice:(IDeckLink *)device
 {
     if (!self.availableVideoDevices)
     {
@@ -172,7 +172,21 @@
     
     NSMutableArray *newArray = self.availableVideoDevices.mutableCopy;
     
-    [newArray removeObject:device];
+    
+    NSUInteger idx = [newArray indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        CSAbstractCaptureDevice *dev = (CSAbstractCaptureDevice *)obj;
+        CSDeckLinkWrapper *wrapper = dev.captureDevice;
+        if (wrapper && wrapper.deckLink && wrapper.deckLink == device)
+        {
+            return YES;
+        }
+        return NO;
+    }];
+    
+    if (idx != NSNotFound)
+    {
+        [newArray removeObjectAtIndex:idx];
+    }
     
     self.availableVideoDevices = newArray;
 }

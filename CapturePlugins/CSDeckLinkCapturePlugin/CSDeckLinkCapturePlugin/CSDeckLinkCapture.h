@@ -27,7 +27,7 @@
 -(void)addDevice:(CSAbstractCaptureDevice *)device;
 
 -(void)frameArrived:(IDeckLinkVideoFrame *)frame;
--(void)removeDevice:(CSAbstractCaptureDevice *)device;
+-(void)removeDevice:(IDeckLink *)device;
 
 
 

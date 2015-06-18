@@ -161,32 +161,17 @@ HRESULT     DeckLinkDeviceDiscovery::DeckLinkDeviceArrived (/* in */ IDeckLink* 
     CSAbstractCaptureDevice *newDev = [[CSAbstractCaptureDevice alloc] initWithName:(__bridge NSString *)displayName device:wrapper uniqueID:uuid];
     
     
-    //dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
         [captureDelegate addDevice:newDev];
-    //});
+    });
     
     return S_OK;
 }
 
 HRESULT     DeckLinkDeviceDiscovery::DeckLinkDeviceRemoved (/* in */ IDeckLink* deckLink)
 {
-    IDeckLinkAttributes *deckLinkAttributes = NULL;
-
-    CSDeckLinkWrapper *wrapper = [[CSDeckLinkWrapper alloc] initWithDeckLink:deckLink];
-    
-    
-    CFStringRef displayName;
-    int64_t topID;
-    deckLink->GetDisplayName(&displayName);
-    deckLinkAttributes->GetInt(BMDDeckLinkPersistentID, &topID);
-    
-    NSString *uuid = [NSString stringWithFormat:@"%lld", topID];
-    
-    CSAbstractCaptureDevice *newDev = [[CSAbstractCaptureDevice alloc] initWithName:(__bridge NSString *)displayName device:wrapper uniqueID:uuid];
-    
-    
     dispatch_async(dispatch_get_main_queue(), ^{
-        [captureDelegate removeDevice:newDev];
+        [captureDelegate removeDevice:deckLink];
     });
     return S_OK;
 }
