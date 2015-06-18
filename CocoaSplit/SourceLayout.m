@@ -546,6 +546,23 @@
     }
 }
 
+
+-(bool)containsInput:(InputSource *)cInput
+{
+    NSArray *listCopy = [self sourceListOrdered];
+    
+    for (InputSource *testSrc in listCopy)
+    {
+        if (testSrc == cInput)
+        {
+            return YES;
+        }
+    }
+
+    return NO;
+}
+
+
 -(void)deleteSource:(InputSource *)delSource
 {
     
@@ -555,6 +572,7 @@
 
     //[self.sourceList removeObject:delSource];
     [delSource.layer removeFromSuperlayer];
+    delSource.sourceLayout = nil;
 
     
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputDeleted  object:delSource userInfo:nil];

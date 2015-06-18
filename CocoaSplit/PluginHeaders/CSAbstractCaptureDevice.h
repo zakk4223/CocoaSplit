@@ -10,7 +10,7 @@
 
 @interface CSAbstractCaptureDevice : NSObject
 
-@property (weak) id captureDevice;
+@property (strong) id captureDevice;
 @property (strong) NSString * captureName;
 @property (strong) NSString *uniqueID;
 

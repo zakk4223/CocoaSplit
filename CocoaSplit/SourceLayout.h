@@ -84,6 +84,7 @@
 -(void)addAnimation:(NSDictionary *)animation;
 -(InputSource *)sourceUnder:(InputSource *)source;
 -(void)didBecomeVisible;
+-(bool)containsInput:(InputSource *)cSource;
 
 
 

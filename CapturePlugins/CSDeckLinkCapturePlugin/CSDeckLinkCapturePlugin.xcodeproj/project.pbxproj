@@ -14,6 +14,7 @@
 		34F7C5961B2D577500345230 /* CSDeckLinkDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = 34F7C5951B2D577500345230 /* CSDeckLinkDevice.mm */; };
 		34F7C59D1B2DA13A00345230 /* CSDeckLinkCaptureViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 34F7C59B1B2DA13A00345230 /* CSDeckLinkCaptureViewController.mm */; };
 		34F7C59E1B2DA13A00345230 /* CSDeckLinkCaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34F7C59C1B2DA13A00345230 /* CSDeckLinkCaptureViewController.xib */; };
+		34FB04901B32672E00379548 /* CSDeckLinkWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 34FB048F1B32672E00379548 /* CSDeckLinkWrapper.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,8 @@
 		34F7C59A1B2DA13A00345230 /* CSDeckLinkCaptureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSDeckLinkCaptureViewController.h; sourceTree = "<group>"; };
 		34F7C59B1B2DA13A00345230 /* CSDeckLinkCaptureViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CSDeckLinkCaptureViewController.mm; sourceTree = "<group>"; };
 		34F7C59C1B2DA13A00345230 /* CSDeckLinkCaptureViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSDeckLinkCaptureViewController.xib; sourceTree = "<group>"; };
+		34FB048E1B32672E00379548 /* CSDeckLinkWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSDeckLinkWrapper.h; sourceTree = "<group>"; };
+		34FB048F1B32672E00379548 /* CSDeckLinkWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CSDeckLinkWrapper.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +101,8 @@
 				34F7C59A1B2DA13A00345230 /* CSDeckLinkCaptureViewController.h */,
 				34F7C59B1B2DA13A00345230 /* CSDeckLinkCaptureViewController.mm */,
 				34F7C59C1B2DA13A00345230 /* CSDeckLinkCaptureViewController.xib */,
+				34FB048E1B32672E00379548 /* CSDeckLinkWrapper.h */,
+				34FB048F1B32672E00379548 /* CSDeckLinkWrapper.mm */,
 			);
 			path = CSDeckLinkCapturePlugin;
 			sourceTree = "<group>";
@@ -216,6 +221,7 @@
 			files = (
 				34F7C59D1B2DA13A00345230 /* CSDeckLinkCaptureViewController.mm in Sources */,
 				34F7C5931B2D4EC500345230 /* CSDeckLinkLayer.mm in Sources */,
+				34FB04901B32672E00379548 /* CSDeckLinkWrapper.mm in Sources */,
 				34F7C5811B2C91FA00345230 /* CSDeckLinkCapture.mm in Sources */,
 				34F7C5961B2D577500345230 /* CSDeckLinkDevice.mm in Sources */,
 				34F7C5851B2C96B400345230 /* DeckLinkAPIDispatch.cpp in Sources */,
@@ -358,6 +364,7 @@
 				34F7C5591B2C908700345230 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

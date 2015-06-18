@@ -123,12 +123,14 @@
     
     if (activeVideoDevice)
     {
-        NSValue *devValue = activeVideoDevice.captureDevice;
-        IDeckLink *deckLink = (IDeckLink *)[devValue pointerValue];
+        CSDeckLinkWrapper *devWrapper = activeVideoDevice.captureDevice;
+        IDeckLink *deckLink = devWrapper.deckLink;
+        
     
-        NSLog(@"SET ACTIVE DEVICE %@", activeVideoDevice);
         
         self.currentInput = [[CSDeckLinkDevice alloc] initWithDevice:deckLink];
+        NSLog(@"CURRENT INPUT %@", self.currentInput);
+        
         [self.currentInput registerOutput:self];
     } else {
         self.currentInput = nil;
@@ -160,6 +162,22 @@
 }
 
 
+
+-(void)removeDevice:(CSAbstractCaptureDevice *)device
+{
+    if (!self.availableVideoDevices)
+    {
+        return;
+    }
+    
+    NSMutableArray *newArray = self.availableVideoDevices.mutableCopy;
+    
+    [newArray removeObject:device];
+    
+    self.availableVideoDevices = newArray;
+}
+
+
 -(void)addDevice:(CSAbstractCaptureDevice *)device
 {
 
@@ -169,7 +187,6 @@
     }
     
     
-    NSLog(@"NEW DEVICE ARRIVED %@", device);
     
     NSArray *newArray = [self.availableVideoDevices arrayByAddingObject:device];
     self.availableVideoDevices = newArray;

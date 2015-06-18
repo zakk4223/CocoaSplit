@@ -10,6 +10,7 @@
 #import "DeckLinkBridge.h"
 #import "CSDeckLinkDevice.h"
 #import "CSDeckLinkLayer.h"
+#import "CSDeckLinkWrapper.h"
 
 
 @interface CSDeckLinkCapture : CSCaptureBase <CSCaptureSourceProtocol>
@@ -26,6 +27,8 @@
 -(void)addDevice:(CSAbstractCaptureDevice *)device;
 
 -(void)frameArrived:(IDeckLinkVideoFrame *)frame;
+-(void)removeDevice:(CSAbstractCaptureDevice *)device;
+
 
 
 

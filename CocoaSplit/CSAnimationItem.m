@@ -7,12 +7,15 @@
 //
 
 #import "CSAnimationItem.h"
+#import "SourceLayout.h"
 
 @implementation CSAnimationItem
 
 
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
+    [self removeDetachedInputs];
+    
     [aCoder encodeObject:self.name forKey:@"name"];
     [aCoder encodeObject:self.module_name forKey:@"module_name"];
     [aCoder encodeObject:self.inputs forKey:@"inputs"];
@@ -41,6 +44,45 @@
 }
 
 
+-(void)removeDetachedInputs
+{
+    for (NSMutableDictionary *inp in self.inputs)
+    {
+        NSString *inputType = inp[@"type"];
+        if ([inputType isEqualToString:@"input"])
+        {
+            InputSource *inpsrc = inp[@"value"];
+            if (!inpsrc || [inpsrc isEqual:[NSNull null]])
+            {
+                continue;
+            }
+            
+            if (!inpsrc.sourceLayout || ![inpsrc.sourceLayout containsInput:inpsrc])
+            {                
+                inp[@"value"] = [NSNull null];
+            }
+        }
+    }
+}
+
+
+-(void)purgeInputSource:(InputSource *)src
+{
+    for (NSMutableDictionary *inp in self.inputs)
+    {
+        NSString *inputType = inp[@"type"];
+        if ([inputType isEqualToString:@"input"])
+        {
+            InputSource *inpsrc = inp[@"value"];
+            if (inpsrc == src)
+            {
+                inp[@"value"] = [NSNull null];
+            }
+        }
+    }
+}
+
+
 -(instancetype)initWithDictionary:(NSDictionary *)dict moduleName:(NSString *)moduleName
 {
     if (self = [super init])
@@ -60,6 +102,7 @@
             inputDict[@"type"] = @"input";
             inputDict[@"label"] = iname;
             inputDict[@"value"] = [NSNull null];
+            
             [self.inputs addObject:inputDict];
         }
         

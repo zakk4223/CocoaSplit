@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "InputSource.h"
 
 @interface CSAnimationItem : NSObject <NSCopying, NSCoding>
 
@@ -22,6 +23,7 @@
 
 
 -(instancetype)initWithDictionary:(NSDictionary *)dict moduleName:(NSString *)moduleName;
+-(void)purgeInputSource:(InputSource *)src;
 
 
 @end
