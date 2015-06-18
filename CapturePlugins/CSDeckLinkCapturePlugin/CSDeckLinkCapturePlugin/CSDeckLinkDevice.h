@@ -29,6 +29,8 @@
     IDeckLinkInput *_deviceInput;
     NSHashTable *_outputs;
     uint32_t _pixelFormatValues[9];
+    NSDictionary *_connectionMap;
+    
     DeckLinkInputHandler *_inputCallbackHandler;
 
     
@@ -42,6 +44,8 @@
 @property (strong) CSDeckLinkDisplayMode *selectedDisplayMode;
 @property (strong) NSArray *pixelFormats;
 @property (strong) NSString *selectedPixelFormat;
+@property (strong) NSMutableArray *videoConnections;
+@property (strong) NSString *activeConnection;
 
 
 -(instancetype) initWithDevice:(IDeckLink *)device;

@@ -55,6 +55,7 @@
 
 @synthesize selectedDisplayMode = _selectedDisplayMode;
 @synthesize selectedPixelFormat = _selectedPixelFormat;
+@synthesize activeConnection = _activeConnection;
 
 
 +(id) deviceCache
@@ -112,7 +113,7 @@
         _outputs = [NSHashTable weakObjectsHashTable];
 
         IDeckLinkAttributes *deviceAttributes = NULL;
-        
+        IDeckLinkConfiguration *deviceConfig = NULL;
         if (device)
         {
             _device = device;
@@ -123,6 +124,21 @@
             }
         
         
+            _connectionMap = @{@"SDI": @(bmdVideoConnectionSDI),
+                               @"HDMI": @(bmdVideoConnectionHDMI),
+                               @"Optical SDI": @(bmdVideoConnectionOpticalSDI),
+                               @"Component": @(bmdVideoConnectionComponent),
+                               @"Composite": @(bmdVideoConnectionComposite),
+                               @"S-Video": @(bmdVideoConnectionSVideo),
+                               @(bmdVideoConnectionSDI): @"SDI",
+                               @(bmdVideoConnectionHDMI): @"HDMI",
+                               @(bmdVideoConnectionOpticalSDI): @"Optical SDI",
+                               @(bmdVideoConnectionComponent): @"Component",
+                               @(bmdVideoConnectionComposite): @"Composite",
+                               @(bmdVideoConnectionSVideo): @"S-Video",
+                               };
+            
+            
             if (_device->QueryInterface(IID_IDeckLinkAttributes, (void **)&deviceAttributes) == S_OK)
             {
             
@@ -132,6 +148,11 @@
                 self.uniqueID = [NSString stringWithFormat:@"%lld", topID];
             
             
+                if (_device->QueryInterface(IID_IDeckLinkConfiguration, (void **)&deviceConfig) == S_OK)
+                {
+                    [self setupConnections:deviceAttributes deviceConfig:deviceConfig];
+                    deviceConfig->Release();
+                }
                 deviceAttributes->Release();
             
             }
@@ -143,6 +164,88 @@
     }
     
     return self;
+}
+
+
+
+
+-(void)setupConnections:(IDeckLinkAttributes *)attrs deviceConfig:(IDeckLinkConfiguration *)config
+{
+    self.videoConnections = [NSMutableArray array];
+    
+    int64_t ports = 0;
+    
+    HRESULT err = attrs->GetInt(BMDDeckLinkVideoInputConnections, &ports);
+    
+    if (err == S_OK)
+    {
+        if (ports & bmdVideoConnectionSDI)
+        {
+            [self.videoConnections addObject:_connectionMap[@(bmdVideoConnectionSDI)]];
+        }
+        
+        if (ports & bmdVideoConnectionHDMI)
+        {
+            [self.videoConnections addObject:_connectionMap[@(bmdVideoConnectionHDMI)]];
+        }
+        
+        if (ports & bmdVideoConnectionOpticalSDI)
+        {
+            [self.videoConnections addObject:_connectionMap[@(bmdVideoConnectionOpticalSDI)]];
+        }
+        
+        if (ports & bmdVideoConnectionComponent)
+        {
+            [self.videoConnections addObject:_connectionMap[@(bmdVideoConnectionComponent)]];
+        }
+        
+        if (ports & bmdVideoConnectionComposite)
+        {
+            [self.videoConnections addObject:_connectionMap[@(bmdVideoConnectionComposite)]];
+        }
+        
+        if (ports & bmdVideoConnectionSVideo)
+        {
+            [self.videoConnections addObject:_connectionMap[@(bmdVideoConnectionSVideo)]];
+        }
+    }
+    
+    int64_t inputConnection = 0;
+    err = config->GetInt(bmdDeckLinkConfigVideoInputConnection, &inputConnection);
+    if (err == S_OK)
+    {
+        _activeConnection = _connectionMap[@(inputConnection)];
+    }
+}
+
+
+-(NSString *)activeConnection
+{
+    return _activeConnection;
+}
+
+-(void)setActiveConnection:(NSString *)activeConnection
+{
+    _activeConnection = activeConnection;
+    if (!_device)
+    {
+        return;
+    }
+    int64_t inputPort = 0;
+    
+    NSNumber *inpObj = _connectionMap[activeConnection];
+    if (inpObj)
+    {
+        inputPort = [inpObj longLongValue];
+        IDeckLinkConfiguration *deckConfig = NULL;
+        HRESULT err;
+        err = _device->QueryInterface(IID_IDeckLinkConfiguration, (void **)&deckConfig);
+        if (err == S_OK)
+        {
+            deckConfig->SetInt(bmdDeckLinkConfigVideoInputConnection, inputPort);
+            deckConfig->Release();
+        }
+    }
 }
 
 

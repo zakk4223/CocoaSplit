@@ -129,7 +129,6 @@
     
         
         self.currentInput = [[CSDeckLinkDevice alloc] initWithDevice:deckLink];
-        NSLog(@"CURRENT INPUT %@", self.currentInput);
         
         [self.currentInput registerOutput:self];
     } else {
