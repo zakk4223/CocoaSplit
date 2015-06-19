@@ -46,6 +46,11 @@
         [aCoder encodeObject:self.currentInput.selectedPixelFormat forKey:@"selectedPixelFormat"];
     }
     
+    if (self.currentInput && self.currentInput.activeConnection)
+    {
+        [aCoder encodeObject:self.currentInput.activeConnection forKey:@"activeConnection"];
+    }
+    
     [aCoder encodeInt:self.renderType forKey:@"renderType"];
     
 }
@@ -69,6 +74,10 @@
             _restoredFormat = [aDecoder decodeObjectForKey:@"selectedPixelFormat"];
         }
         
+        if ([aDecoder containsValueForKey:@"activeConnection"])
+        {
+            _restoredInput = [aDecoder decodeObjectForKey:@"activeConnection"];
+        }
         
         
         self.renderType = (frame_render_behavior)[aDecoder decodeIntForKey:@"renderType"];
@@ -86,6 +95,11 @@
     
     if (self.currentInput)
     {
+        if (_restoredInput)
+        {
+            self.currentInput.activeConnection = _restoredInput;
+        }
+        
         if (_restoredMode)
         {
             

@@ -18,6 +18,7 @@
     DeckLinkDeviceDiscovery *_discoveryDev;
     NSString *_restoredMode;
     NSString *_restoredFormat;
+    NSString *_restoredInput;
 }
 
 @property (strong) CSDeckLinkDevice *currentInput;
