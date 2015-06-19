@@ -133,7 +133,8 @@
     {
         if ([input[@"label"] isEqualToString:@"onLive"])
         {
-            ret = input[@"value"];
+            ret = [input[@"value"] boolValue];
+            
             if (ret)
             {
                 break;

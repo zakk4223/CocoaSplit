@@ -92,7 +92,6 @@
 -(void)restoreInputSettings
 {
     
-    
     if (self.currentInput)
     {
         if (_restoredInput)

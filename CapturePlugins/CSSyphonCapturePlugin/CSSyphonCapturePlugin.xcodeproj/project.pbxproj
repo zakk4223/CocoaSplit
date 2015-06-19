@@ -15,7 +15,7 @@
 		34AFC1F419B04F0B0007C07B /* SyphonCaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34AFC1F019B04F0B0007C07B /* SyphonCaptureViewController.xib */; };
 		34AFC1F519B04F0B0007C07B /* SyphonCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AFC1F219B04F0B0007C07B /* SyphonCapture.m */; };
 		34C67B4E1A2A4ECB0012DC1B /* Syphon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34C67B4A1A2A4D870012DC1B /* Syphon.framework */; };
-		34C67B4F1A2A56A20012DC1B /* Syphon.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34C67B4A1A2A4D870012DC1B /* Syphon.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		34C67B4F1A2A56A20012DC1B /* Syphon.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34C67B4A1A2A4D870012DC1B /* Syphon.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		34C7B8C91A344DB20033AC71 /* CSSyphonInjectCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C7B8C81A344DB20033AC71 /* CSSyphonInjectCapture.m */; };
 		34C7B8CC1A34621C0033AC71 /* CSSyphonCaptureFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C7B8CB1A34621C0033AC71 /* CSSyphonCaptureFactory.m */; };
 		34C7B8DB1A3465010033AC71 /* CSSyphonInjectCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C7B8D91A3465010033AC71 /* CSSyphonInjectCaptureViewController.m */; };
