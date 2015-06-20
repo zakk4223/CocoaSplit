@@ -99,7 +99,7 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     if (self = [super init])
     {
         _currentMovieTime = 0.0f;
-        
+        self.needsSourceSelection = NO;
         self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
         self.playPauseTitle = @"Play";
         _audioQueue = dispatch_queue_create("MoviePlayerAudioQueue", NULL);

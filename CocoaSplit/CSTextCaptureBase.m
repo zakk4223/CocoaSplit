@@ -28,7 +28,7 @@
     {
         self.foregroundColor = [NSColor whiteColor];
         self.allowScaling = NO;
-        
+        self.needsSourceSelection = NO;
         self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
         
         [self addObserver:self forKeyPath:@"propertiesChanged" options:NSKeyValueObservingOptionNew context:NULL];
