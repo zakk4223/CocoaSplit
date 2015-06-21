@@ -137,18 +137,11 @@
     }
     
     SourceLayout *saveLayout;
-    CALayer *saveLayer;
     
-    
-    if (_currentLayout && _currentLayout.transitionLayer)
-    {
-        saveLayer = _currentLayout.transitionLayer;
-    } else {
-        saveLayout = _currentLayout;
-    }
 
+    saveLayout = _currentLayout;
     
-    if (self.transitionName && (saveLayout || saveLayer))
+    if (self.transitionName && saveLayout)
     {
         [CATransaction setDisableActions:YES];
         _layoutTransition = [CATransition animation];
@@ -166,29 +159,11 @@
             }
             
             
-            if (saveLayer)
-            {
-        
-                _currentLayout.rootLayer = _currentLayout.transitionLayer;
-                _currentLayout.transitionLayer = nil;
-                _currentLayout.sourceList = _currentLayout.transitionSourceList;
-                _currentLayout.transitionSourceList = nil;
-                _currentLayout.inTransition = NO;
-            }
             [CATransaction commit];
         }];
         [self.rootLayer addAnimation:_layoutTransition forKey:nil];
         
-        
-        if (saveLayer)
-        {
-            
-            [self.rootLayer replaceSublayer:self.layout.rootLayer with:saveLayer];
-            
-            
-        } else {
-            [self.rootLayer addSublayer:self.layout.rootLayer];
-        }
+        [self.rootLayer addSublayer:self.layout.rootLayer];
         
     } else {
         _currentLayout.inTransition = NO;
@@ -197,16 +172,6 @@
         {
             [saveLayout.rootLayer removeFromSuperlayer];
             saveLayout.isActive = NO;
-        }
-        
-        if (saveLayer)
-        {
-            [_currentLayout.rootLayer removeFromSuperlayer];
-            _currentLayout.rootLayer = _currentLayout.transitionLayer;
-            _currentLayout.transitionLayer = nil;
-            _currentLayout.sourceList = _currentLayout.transitionSourceList;
-            _currentLayout.transitionSourceList = nil;
-
         }
         
         [self.renderer.layer addSublayer:self.layout.rootLayer];
@@ -299,11 +264,10 @@
     
 
     
-    if (_layoutChanged || _currentLayout.transitionNeeded)
+    if (_layoutChanged)
     {
         [self setupCArenderer];
         _layoutChanged = NO;
-        _currentLayout.transitionNeeded = NO;
 
     }
     

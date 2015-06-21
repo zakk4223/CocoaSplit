@@ -1811,7 +1811,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     }
     
     _selectedLayout = selectedLayout;
-    selectedLayout.ciCtx = _cictx;
     selectedLayout.isActive = YES;
 
     [self setupFrameTimer:selectedLayout.frameRate];
@@ -3313,13 +3312,15 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         {
             self.selectedLayout = self.stagingLayout;
         } else {
-            if (!self.stagingLayout.inTransition)
-            {
-                [self.stagingLayout restoreSourceListForSelfGoLive];
+            SourceLayout *previewCopy = self.stagingLayout.copy;
+            [previewCopy restoreSourceList];
+            NSUInteger layoutIdx = [self.sourceLayoutsArrayController.arrangedObjects indexOfObject:self.selectedLayout];
+            [self.sourceLayoutsArrayController removeObjectAtArrangedObjectIndex:layoutIdx];
+            [self.sourceLayoutsArrayController insertObject:previewCopy atArrangedObjectIndex:layoutIdx];
             
-                [self setupFrameTimer:self.selectedLayout.frameRate];
-            }
-
+            self.selectedLayout = previewCopy;
+            _stagingLayout = previewCopy;
+            
         }
     }
 }

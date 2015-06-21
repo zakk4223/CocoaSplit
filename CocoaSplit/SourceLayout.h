@@ -52,16 +52,10 @@
 
 @property (assign) CGLContextObj cglCtx;
 
-@property (strong) CIContext *ciCtx;
 @property (strong) NSString *name;
 
 @property (strong) CARenderer *renderer;
 @property (strong) CALayer *rootLayer;
-
-//For self-transitions
-@property (strong) CALayer *transitionLayer;
-@property (strong) NSMutableArray *transitionSourceList;
-@property (assign) bool transitionNeeded;
 
 @property (strong) SourceCache *sourceCache;
 @property (strong) CIFilter *compositeFilter;
@@ -78,7 +72,6 @@
 
 -(InputSource *)inputForUUID:(NSString *)uuid;
 -(void)frameTick;
--(void)restoreSourceListForSelfGoLive;
 -(NSObject *)mergeSourceListData:(NSData *)mergeData;
 -(IBAction)runAnimations:(id)sender;
 -(void)addAnimation:(NSDictionary *)animation;

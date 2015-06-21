@@ -327,17 +327,6 @@
 }
 
 
--(NSArray *)transitionListOrdered
-{
-    if (!self.transitionSourceList)
-    {
-        return @[];
-    }
-    
-    
-    NSArray *listCopy = [self.transitionSourceList sortedArrayUsingDescriptors:@[_sourceDepthSorter, _sourceUUIDSorter]];
-    return listCopy;
-}
 -(NSArray *)sourceListOrdered
 {
     NSArray *listCopy = [self.sourceList sortedArrayUsingDescriptors:@[_sourceDepthSorter, _sourceUUIDSorter]];
@@ -406,63 +395,6 @@
     return object;
 }
 
-
--(void)restoreSourceListForSelfGoLive
-{
-    if (self.savedSourceListData)
-    {
-        
-        self.transitionLayer = [CALayer layer];
-        self.transitionLayer.frame = self.rootLayer.frame;
-        self.transitionLayer.masksToBounds = YES;
-        self.transitionLayer.backgroundColor = CGColorCreateGenericRGB(0, 0, 0, 1);
-        self.transitionLayer.layoutManager = [CAConstraintLayoutManager layoutManager];
-        self.transitionLayer.delegate = self;
-
-        
-        NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:self.savedSourceListData];
-        
-        [unarchiver setDelegate:self];
-        NSObject *restoredData = [unarchiver decodeObjectForKey:@"root"];
-        
-        if ([restoredData isKindOfClass:[NSDictionary class]])
-        {
-            self.transitionSourceList = [((NSDictionary *)restoredData) objectForKey:@"sourcelist"];
-            self.animationList = [((NSDictionary *)restoredData) objectForKey:@"animationList"];
-        } else {
-            self.transitionSourceList = (NSMutableArray *)restoredData;
-        }
-        [unarchiver finishDecoding];
-        
-    }
-    
-    if (!self.transitionSourceList)
-    {
-        self.transitionSourceList = [NSMutableArray array];
-    }
-    
-    if (!self.animationList)
-    {
-        self.animationList = [NSMutableArray array];
-    }
-    
-    
-    for(InputSource *src in self.transitionSourceList)
-    {
-        src.sourceLayout = self;
-        src.is_live = self.isActive;
-        
-         if (!src.layer.superlayer)
-        {
-            [self.transitionLayer addSublayer:src.layer];
-        }
-        
-    }
-    
-
-    self.transitionNeeded = YES;
-    self.inTransition = YES;
-}
 
 
 
@@ -716,13 +648,6 @@
         
     }
     
-    for (InputSource *isource in [self transitionListOrdered])
-    {
-        if (isource.active)
-        {
-            [isource frameTick];
-        }
-    }
 }
 
 
