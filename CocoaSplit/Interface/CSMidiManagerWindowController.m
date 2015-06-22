@@ -79,18 +79,40 @@
     text.bordered = NO;
     text.stringValue = @"Activate the MIDI control for this input";
     [text sizeToFit];
+    
+    NSButton *cancel = [[NSButton alloc] initWithFrame:newWindow.frame];
+    cancel.title = @"Cancel";
+    [cancel setButtonType:NSMomentaryLightButton];
+    [cancel setBezelStyle:NSRoundedBezelStyle];
+    [cancel setAction:@selector(learnCancelled:)];
+    [cancel setTarget:self];
+    
+    
+    [cancel sizeToFit];
 
     NSRect wFrame = self.window.frame;
     NSRect tFrame = text.frame;
-    
+    NSRect cFrame = cancel.frame;
     
     [text setFrameOrigin:NSMakePoint(wFrame.size.width/2 - tFrame.size.width/2, wFrame.size.height/2 - tFrame.size.height/2)];
     
-    
-    [newWindow.contentView addSubview:text];
-    
+    [cancel setFrameOrigin:NSMakePoint(wFrame.size.width/2 - cFrame.size.width/2, wFrame.size.height/2 - cFrame.size.height/2 - tFrame.size.height*2)];
     self.modalWindow = newWindow;
     [self.window beginSheet:newWindow completionHandler:nil];
+
+    [newWindow.contentView addSubview:text];
+    [newWindow.contentView addSubview:cancel];
+
+}
+
+
+-(IBAction)learnCancelled:(id)sender
+{
+    if (self.modalWindow)
+    {
+        [self.window endSheet:self.modalWindow];
+        self.modalWindow = nil;
+    }
 }
 
 

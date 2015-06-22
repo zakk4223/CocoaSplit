@@ -26,6 +26,7 @@
 
 - (IBAction)learnPushed:(id)sender;
 -(IBAction)clearPushed:(id)sender;
+-(IBAction)learnCancelled:(id)sender;
 
 
 -(void)learnedDone;
