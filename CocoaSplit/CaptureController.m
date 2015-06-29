@@ -1747,6 +1747,8 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 -(void)setStagingLayout:(SourceLayout *)stagingLayout
 {
     
+    [self.objectController commitEditing];
+
     self.stagingCtx.layoutRenderer.transitionName = self.transitionName;
     self.stagingCtx.layoutRenderer.transitionDirection = self.transitionDirection;
     self.stagingCtx.layoutRenderer.transitionDuration = self.transitionDuration;
@@ -1798,7 +1800,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 {
     
     
-    
+    [self.objectController commitEditing];
     self.previewCtx.layoutRenderer.transitionName = self.transitionName;
     self.previewCtx.layoutRenderer.transitionDirection = self.transitionDirection;
     self.previewCtx.layoutRenderer.transitionDuration = self.transitionDuration;
@@ -3298,11 +3300,14 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 - (IBAction)stagingGoLive:(id)sender
 {
     
+    [self.objectController commitEditing];
+
     self.previewCtx.layoutRenderer.transitionName = self.transitionName;
     self.previewCtx.layoutRenderer.transitionDirection = self.transitionDirection;
     self.previewCtx.layoutRenderer.transitionDuration = self.transitionDuration;
     self.previewCtx.layoutRenderer.transitionFilter = self.transitionFilter;
     
+
 
     if (self.stagingLayout && self.stagingCtx.sourceLayout)
     {
