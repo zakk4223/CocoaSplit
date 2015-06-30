@@ -179,6 +179,8 @@
 
 -(void)removeOutput:(AVFCapture *)output
 {
+    
+    
     @synchronized(self)
     {
         [_outputs removeObject:output];

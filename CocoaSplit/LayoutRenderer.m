@@ -170,6 +170,7 @@
 
         if (saveLayout)
         {
+            
             [saveLayout.rootLayer removeFromSuperlayer];
             saveLayout.isActive = NO;
         }

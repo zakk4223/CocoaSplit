@@ -1812,7 +1812,10 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         return;
     }
     
+    _selectedLayout.isActive = NO;
+    
     _selectedLayout = selectedLayout;
+
     selectedLayout.isActive = YES;
 
     [self setupFrameTimer:selectedLayout.frameRate];

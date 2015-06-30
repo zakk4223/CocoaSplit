@@ -433,7 +433,7 @@
         src.is_live = self.isActive;
         
         
-        [NSApp registerMIDIResponder:src];
+        //[NSApp registerMIDIResponder:src];
         
         if (!src.layer.superlayer)
         {
@@ -535,6 +535,8 @@
     
     _isActive = isActive;
     
+    
+    
     if (oldActive == isActive)
     {
         //If the value didn't change don't do anything
@@ -557,10 +559,14 @@
         {
             src.editorController = nil;
             
+            
         }
         
         self.rootLayer.sublayers = [NSArray array];
+        
         [self.sourceList removeAllObjects];
+        [self.animationList removeAllObjects];
+        self.selectedAnimation = nil;
         
         //self.sourceList = [NSMutableArray array];
     }
