@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "CAMultiAudio.h"
 #import "CSAacEncoder.h"
+#import "CAMultiAudioConverter.h"
+
 
 
 /* our default graph setup looks like this:

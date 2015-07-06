@@ -95,11 +95,6 @@
 -(instancetype)initWithCVImageBuffer:(CVImageBufferRef)imageBuffer
 {
     
-    /*
-     This method in CIImage fails for non RGB image buffers, even if they are IOSurface backed with surfaces that work fine with initWithIOSurface.
-     So let's just retain the image buffer, use initWithIOSurface ourselves. Release the image buffer in dealloc.
-     */
-    
     if (self = [super init])
     {
         IOSurfaceRef imageSurface = CVPixelBufferGetIOSurface(imageBuffer);
@@ -120,6 +115,7 @@
 
 -(void)assignIOSurface:(IOSurfaceRef)ioSurf
 {
+    
     IOSurfaceIncrementUseCount(ioSurf);
     CFRetain(ioSurf);
     self.ioImage = ioSurf;
@@ -139,6 +135,7 @@
 
 -(void)dealloc
 {
+    
     if (self.ioImage)
     {
         IOSurfaceDecrementUseCount(self.ioImage);
@@ -497,7 +494,14 @@
     glClear(GL_COLOR_BUFFER_BIT);
     
     
-    CIImageWrapper *wrappedImage = self.imageWrapper;
+    CIImageWrapper *wrappedImage;
+    
+    @synchronized(self)
+    {
+        wrappedImage = self.imageWrapper;
+    }
+    
+    
     
     
     
@@ -507,10 +511,8 @@
     }
     
     IOSurfaceRef useImage;
-    @synchronized(self)
-    {
-        useImage = wrappedImage.ioImage;
-    }
+    
+    useImage = wrappedImage.ioImage;
     
     if (!useImage)
     {
@@ -602,7 +604,6 @@
 
     
     [super drawInCGLContext:ctx pixelFormat:pf forLayerTime:t displayTime:ts];
-    
     
     
 }

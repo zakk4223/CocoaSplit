@@ -16,6 +16,7 @@
 
 
 @property (assign) AudioStreamBasicDescription inputFormat;
+@property (assign) AudioStreamBasicDescription *outputFormat;
 
 @property (weak) CAMultiAudioNode *sourceNode;
 

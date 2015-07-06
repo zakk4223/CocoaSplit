@@ -7,7 +7,6 @@
 //
 
 #import "CAMultiAudioEngine.h"
-#import "CAMultiAudioConverter.h"
 #import "CAMultiAudioDownmixer.h"
 
 OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList *ioData );
@@ -196,6 +195,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     }
     
     
+    
+    
     [self.graph addNode:self.silentNode];
     [self.graph addNode:self.encodeMixer];
     [self.graph addNode:self.previewMixer];
@@ -204,6 +205,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     [self.graph connectNode:self.encodeMixer toNode:self.previewMixer];
     [self.graph connectNode:self.silentNode toNode:self.encodeMixer];
     [self.graph startGraph];
+    
+    
     
     AudioUnitAddRenderNotify(self.encodeMixer.audioUnit, encoderRenderCallback, (__bridge void *)(self));
 
@@ -444,6 +447,9 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList *ioData )
 {
+    
+    
+    
     if ((*ioActionFlags) & kAudioUnitRenderAction_PostRender)
     {
         

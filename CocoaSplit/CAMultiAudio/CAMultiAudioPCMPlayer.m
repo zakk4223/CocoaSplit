@@ -23,7 +23,7 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     {
         _pendingBuffers = [NSMutableArray array];
         _pendingQueue = dispatch_queue_create("PCM Player pending queue", NULL);
-        
+        _bufcnt = 0;
         self.latestScheduledTime = 0;
     }
     
@@ -93,7 +93,6 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
         //In 10.10 mFlags = 0 says 'play as soon as you can, but don't interrupt anything currently playing'
         pcmBuffer.audioSlice->mTimeStamp.mSampleTime = 0;
         pcmBuffer.audioSlice->mTimeStamp.mFlags = 0;
-
     }
     
 
@@ -179,6 +178,7 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
 
     return ret;
 }
+
 
 -(void)setInputStreamFormat:(AudioStreamBasicDescription *)format
 {

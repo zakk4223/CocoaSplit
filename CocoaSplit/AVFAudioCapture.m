@@ -35,7 +35,7 @@
     {
         [self commoninit];
         self.useAudioEngine = YES;
-        self.audioSamplerate = sampleRate;
+        self.audioSamplerate = 44100;
         
         [self setupAudioCompression];
         self.activeAudioDevice = device;

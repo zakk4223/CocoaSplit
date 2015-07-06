@@ -23,6 +23,8 @@
 
 -(void)setInputForDevice;
 -(void)setOutputForDevice;
+-(AudioStreamBasicDescription *)getOutputFormat;
+
 +(NSMutableArray *)allDevices;
 +(AudioDeviceID)defaultOutputDeviceID;
 +(NSString *)defaultOutputDeviceUID;

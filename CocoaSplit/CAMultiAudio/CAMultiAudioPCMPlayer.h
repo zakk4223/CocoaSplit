@@ -15,6 +15,8 @@
 {
     NSMutableArray *_pendingBuffers;
     dispatch_queue_t _pendingQueue;
+    bool _playing;
+    int _bufcnt;
     
 }
 

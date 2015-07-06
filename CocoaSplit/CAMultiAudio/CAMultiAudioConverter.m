@@ -32,6 +32,22 @@
     return self;
 }
 
+
+
+-(void)setOutputStreamFormat:(AudioStreamBasicDescription *)format
+{
+    //ignore if we have our own
+    
+    if (self.outputFormat)
+    {
+        
+        [super setOutputStreamFormat:self.outputFormat];
+    } else {
+        [super setOutputStreamFormat:format];
+    }
+}
+
+
 -(float)volume
 {
     if (self.sourceNode)

@@ -52,8 +52,28 @@
     
     AudioUnitSetProperty(self.audioUnit, kAudioOutputUnitProperty_CurrentDevice, kAudioUnitScope_Global, 0, &_deviceID, sizeof(_deviceID));
 
+}
+
+-(AudioStreamBasicDescription *)getOutputFormat
+{
+    AudioStreamBasicDescription *outfmt = malloc(sizeof(AudioStreamBasicDescription));
+    UInt32 outsize = sizeof(AudioStreamBasicDescription);
+    
+    OSStatus err = AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 0, outfmt, &outsize);
+    
+    NSLog(@"MY OUTPUT FORMAT %d %f", err, outfmt->mSampleRate);
+    
+    return outfmt;
+}
+
+
+
+-(void)setInputStreamFormat:(AudioStreamBasicDescription *)format
+{
+    [super setInputStreamFormat:[self getOutputFormat]];
     
 }
+
 
 -(void)setOutputStreamFormat:(AudioStreamBasicDescription *)format
 {

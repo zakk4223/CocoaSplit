@@ -22,6 +22,7 @@ void tapPrepare(MTAudioProcessingTapRef tap, CMItemCount maxFrames, const AudioS
     {
         MovieCapture *captureObj = (__bridge MovieCapture *)tapStorage;
         [captureObj preallocateAudioBuffers:maxFrames audioFormat:processingFormat];
+        
     }
 }
 
@@ -31,11 +32,13 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     
     void *tapStorage = MTAudioProcessingTapGetStorage(tap);
     
+    
     if (tapStorage)
     {
         MovieCapture *captureObj = (__bridge MovieCapture *)tapStorage;
         MTAudioProcessingTapGetSourceAudio(tap, numberFrames, bufferListInOut, flagsOut, NULL, numberFramesOut);
 
+        
         if (captureObj && captureObj.pcmPlayer)
         {
             [captureObj playAudioBuffer:bufferListInOut];
@@ -493,7 +496,7 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     callbacks.unprepare = NULL;
     callbacks.finalize = NULL;
     
-    MTAudioProcessingTapCreate(kCFAllocatorDefault, &callbacks, kMTAudioProcessingTapCreationFlag_PostEffects, &tap);
+    MTAudioProcessingTapCreate(kCFAllocatorDefault, &callbacks, kMTAudioProcessingTapCreationFlag_PreEffects, &tap);
     
     AVMutableAudioMix *audioMix = [AVMutableAudioMix audioMix];
     AVMutableAudioMixInputParameters *inputParams = [AVMutableAudioMixInputParameters audioMixInputParametersWithTrack:audioTrack];
