@@ -13,6 +13,16 @@ void tapInit(MTAudioProcessingTapRef tap, void *clientInfo, void **tapStorageOut
     *tapStorageOut = clientInfo;
 }
 
+void tapFinalize(MTAudioProcessingTapRef tap)
+{
+    void *tapStorage = MTAudioProcessingTapGetStorage(tap);
+    if (tapStorage)
+    {
+        CFBridgingRelease(tapStorage);
+    }
+}
+
+
 void tapPrepare(MTAudioProcessingTapRef tap, CMItemCount maxFrames, const AudioStreamBasicDescription *processingFormat)
 {
 
@@ -489,12 +499,13 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     
     
     callbacks.version = kMTAudioProcessingTapCallbacksVersion_0;
-    callbacks.clientInfo = (__bridge void *)(self);
+    callbacks.clientInfo = (__bridge_retained void *)(self);
     callbacks.init = tapInit;
     callbacks.prepare = tapPrepare;
     callbacks.process = tapProcess;
     callbacks.unprepare = NULL;
-    callbacks.finalize = NULL;
+    callbacks.finalize = tapFinalize;
+    
     
     MTAudioProcessingTapCreate(kCFAllocatorDefault, &callbacks, kMTAudioProcessingTapCreationFlag_PreEffects, &tap);
     
@@ -504,6 +515,8 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     inputParams.audioTapProcessor = tap;
     audioMix.inputParameters = @[inputParams];
     _avPlayer.currentItem.audioMix = audioMix;
+    CFRelease(tap);
+    
     
 }
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -566,10 +579,16 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     if (_avPlayer && _avPlayer.currentItem)
     {
         AVMutableAudioMixInputParameters *inputParams = _avPlayer.currentItem.audioMix.inputParameters.firstObject;
+        [_avPlayer pause];
+        [_avPlayer removeAllItems];
+        
         inputParams.audioTapProcessor = nil;
         _avPlayer.currentItem.audioMix = nil;
+        [_avPlayer removeObserver:self forKeyPath:@"rate"];
+        [_avPlayer removeObserver:self forKeyPath:@"currentItem"];
+
+        _avPlayer = nil;
     }
-    [_avPlayer pause];
     
 
     //self.avOutput = nil;
@@ -581,8 +600,6 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 -(void) dealloc
 {
     [self willDelete];
-    [_avPlayer removeObserver:self forKeyPath:@"rate"];
-    [_avPlayer removeObserver:self forKeyPath:@"currentItem"];
 
 }
 
