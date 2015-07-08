@@ -15,6 +15,13 @@
 #import <AVFoundation/AVFoundation.h>
 
 
+typedef enum movie_repeat_t {
+    kCSMovieRepeatNone = 0,
+    kCSMovieRepeatOne = 1,
+    kCSMovieRepeatAll = 2
+} movie_repeat;
+
+
 @interface MovieCapture : CSCaptureBase <CSCaptureSourceProtocol>
 {
     CAMultiAudioPCM *_bufferPCM;
@@ -36,6 +43,8 @@
 @property (readonly) NSString *movieDurationString;
 @property (readonly) double movieDuration;
 @property (readonly) NSArray *movieQueue;
+@property (assign) movie_repeat repeat;
+
 
 
 @property (strong) id timeToken;

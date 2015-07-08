@@ -11,6 +11,9 @@
 
 @interface MovieCaptureViewController : NSViewController
 
+@property (strong) NSDictionary *repeatTypeMap;
+@property (strong) NSArray *repeatSortDescriptors;
+
 @property (weak) MovieCapture *captureObj;
 
 @end

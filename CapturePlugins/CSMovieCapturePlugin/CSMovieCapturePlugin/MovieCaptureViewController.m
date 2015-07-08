@@ -18,7 +18,12 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Initialization code here.
+        self.repeatTypeMap = @{@"None": @(kCSMovieRepeatNone),
+                                @"One": @(kCSMovieRepeatOne),
+                                @"All": @(kCSMovieRepeatAll)
+                                };
+        
+        self.repeatSortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"value" ascending:YES]];
     }
     return self;
 }

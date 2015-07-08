@@ -86,6 +86,8 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     [aCoder encodeDouble:self.currentMovieTime forKey:@"currentMovieTime"];
     [aCoder encodeObject:currentQueueURLS forKey:@"currentQueueURLS"];
     [aCoder encodeFloat:_avPlayer.rate forKey:@"playerRate"];
+    [aCoder encodeInt32:self.repeat forKey:@"repeat"];
+    
 }
 
 
@@ -101,6 +103,10 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
         }
         self.currentMovieTime = [aDecoder decodeDoubleForKey:@"currentMovieTime"];
         _avPlayer.rate = [aDecoder decodeFloatForKey:@"playerRate"];
+        if ([aDecoder containsValueForKey:@"repeat"])
+        {
+            self.repeat = [aDecoder decodeInt32ForKey:@"repeat"];
+        }
     }
     
     return self;
@@ -111,6 +117,8 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 {
     if (self = [super init])
     {
+        self.repeat = kCSMovieRepeatNone;
+        
         _currentMovieTime = 0.0f;
         self.needsSourceSelection = NO;
         self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
@@ -396,15 +404,33 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     
 }
 
--(void) itemDidFinishPlaying:(NSNotification *)notification
+
+-(void) advanceQueue
 {
-    AVPlayerItem *item = notification.object;
+    AVPlayerItem *currentItem = _avPlayer.currentItem;
+    AVPlayerItem *currentCopy = currentItem.copy;
     
     [self willChangeValueForKey:@"movieQueue"];
-    //NO I'LL REMOVE IT FIRST LEAVE ME ALONE
-    [_avPlayer removeItem:item];
+    if (self.repeat == kCSMovieRepeatOne)
+    {
+        [_avPlayer insertItem:currentCopy afterItem:currentItem];
+    } else if (self.repeat == kCSMovieRepeatAll) {
+        [_avPlayer insertItem:currentCopy afterItem:nil];
+        
+    }
+    
+    [_avPlayer removeItem:currentItem];
+
     [self didChangeValueForKey:@"movieQueue"];
     [self generateUniqueID];
+    
+}
+
+
+-(void) itemDidFinishPlaying:(NSNotification *)notification
+{
+    
+    [self advanceQueue];
 }
 
 -(NSURL *) currentMedia
@@ -457,11 +483,7 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 
 -(void) nextMovie
 {
-    [self willChangeValueForKey:@"movieQueue"];
-    [_avPlayer advanceToNextItem];
-    [self didChangeValueForKey:@"movieQueue"];
-    [self generateUniqueID];
-
+    [self advanceQueue];
 }
 
 

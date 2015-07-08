@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6250"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MovieCaptureViewController">
@@ -17,7 +17,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2cM-Vw-GSB">
-                    <rect key="frame" x="53" y="160" width="80" height="28"/>
+                    <rect key="frame" x="70" y="160" width="80" height="28"/>
                     <buttonCell key="cell" type="push" title="Open" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qLW-cy-dbV">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -70,8 +70,8 @@
                     </connections>
                 </textField>
                 <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tAh-bu-KEx">
-                    <rect key="frame" x="58" y="23" width="454" height="135"/>
-                    <clipView key="contentView" ambiguous="YES" misplaced="YES" id="gdK-lO-BG6">
+                    <rect key="frame" x="75" y="23" width="437" height="135"/>
+                    <clipView key="contentView" misplaced="YES" id="gdK-lO-BG6">
                         <rect key="frame" x="1" y="1" width="452" height="133"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -79,10 +79,10 @@
                                 <rect key="frame" x="0.0" y="0.0" width="452" height="16"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                 <tableColumns>
-                                    <tableColumn width="449" minWidth="40" maxWidth="1000" id="Agq-sB-nfZ">
+                                    <tableColumn width="432" minWidth="40" maxWidth="1000" id="Agq-sB-nfZ">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -139,8 +139,36 @@
                         <binding destination="zML-fQ-s12" name="value" keyPath="selection.movieDurationString" id="Zj7-z3-McY"/>
                     </connections>
                 </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CDJ-QU-7gQ">
+                    <rect key="frame" x="0.0" y="78" width="42" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Repeat" id="tCi-Zp-bVm">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WsF-Rq-WlK">
+                    <rect key="frame" x="1" y="55" width="61" height="15"/>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="iAb-3D-mz3">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="miniSystem"/>
+                        <menu key="menu" id="Yky-eT-d2J">
+                            <items>
+                                <menuItem title="Item 1" id="lv4-Yo-Hm0"/>
+                                <menuItem title="Item 2" id="EVw-4V-vy7"/>
+                                <menuItem title="Item 3" id="9pc-dB-n8J"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="1ve-hK-YuQ" name="content" keyPath="arrangedObjects" id="PCN-JM-6fZ"/>
+                        <binding destination="1ve-hK-YuQ" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="PCN-JM-6fZ" id="04C-pZ-lQ4"/>
+                        <binding destination="1ve-hK-YuQ" name="contentValues" keyPath="arrangedObjects.key" previousBinding="04C-pZ-lQ4" id="c9n-te-ZJW"/>
+                        <binding destination="zML-fQ-s12" name="selectedObject" keyPath="selection.repeat" previousBinding="c9n-te-ZJW" id="pA4-W2-b9T"/>
+                    </connections>
+                </popUpButton>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZgG-iI-wxh">
-                    <rect key="frame" x="131" y="160" width="80" height="28"/>
+                    <rect key="frame" x="148" y="160" width="80" height="28"/>
                     <buttonCell key="cell" type="push" title="Delete" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="laS-si-9Rk">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -171,5 +199,11 @@
                 <binding destination="zML-fQ-s12" name="contentArray" keyPath="selection.movieQueue" id="5Ju-gW-XNj"/>
             </connections>
         </arrayController>
+        <dictionaryController objectClassName="_NSControllerKeyValuePair" id="1ve-hK-YuQ" userLabel="repeatTypeController">
+            <connections>
+                <binding destination="-2" name="contentDictionary" keyPath="self.repeatTypeMap" id="iJm-hw-bLq"/>
+                <binding destination="-2" name="sortDescriptors" keyPath="self.repeatSortDescriptors" id="rep-8X-7z7"/>
+            </connections>
+        </dictionaryController>
     </objects>
 </document>
