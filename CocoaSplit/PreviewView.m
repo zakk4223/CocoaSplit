@@ -183,29 +183,38 @@
 
 -(void) buildSettingsMenu
 {
+    
+    NSInteger idx = 0;
+    
     NSMenuItem *tmp;
     self.sourceSettingsMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
-    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Move Up" action:@selector(moveInputUp:) keyEquivalent:@"" atIndex:0];
+    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Move Up" action:@selector(moveInputUp:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
-    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Move Down" action:@selector(moveInputDown:) keyEquivalent:@"" atIndex:1];
+    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Move Down" action:@selector(moveInputDown:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
-    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Auto Fit" action:@selector(autoFitInput:) keyEquivalent:@"" atIndex:2];
+    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Auto Fit" action:@selector(autoFitInput:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
-    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Settings" action:@selector(showInputSettings:) keyEquivalent:@"" atIndex:3];
+    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Settings" action:@selector(showInputSettings:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
-    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Delete" action:@selector(deleteInput:) keyEquivalent:@"" atIndex:4];
+    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Delete" action:@selector(deleteInput:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
-    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Clone" action:@selector(cloneInputSource:) keyEquivalent:@"" atIndex:5];
+    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Clone" action:@selector(cloneInputSource:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
     
-    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Midi Mapping" action:@selector(midiMapSource:) keyEquivalent:@"" atIndex:6];
+    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Midi Mapping" action:@selector(midiMapSource:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
+    
+    if (self.selectedSource.videoInput && [self.selectedSource.videoInput canProvideTiming])
+    {
+        tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Use as master timing" action:@selector(setSourceAsTimer:) keyEquivalent:@"" atIndex:idx++];
+        tmp.target = self;
+    }
     
     if (self.selectedSource.parentInput)
     {
-        tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Detach from parent" action:@selector(detachSource:) keyEquivalent:@"" atIndex:7];
+        tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Detach from parent" action:@selector(detachSource:) keyEquivalent:@"" atIndex:idx++];
     } else {
-        tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Attach to underlying input" action:@selector(subLayerInputSource:) keyEquivalent:@"" atIndex:7];
+        tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Attach to underlying input" action:@selector(subLayerInputSource:) keyEquivalent:@"" atIndex:idx++];
     }
     tmp.target = self;
 }
@@ -811,6 +820,25 @@
     if (self.selectedSource)
     {
         self.selectedSource.depth -= 1;
+    }
+}
+
+
+-(void)setSourceAsTimer:(id)sender
+{
+    NSMenuItem *item = (NSMenuItem *)sender;
+    InputSource *useSrc;
+    
+    if (item.representedObject)
+    {
+        useSrc = (InputSource *)item.representedObject;
+    } else {
+        useSrc = self.selectedSource;
+    }
+
+    if (useSrc.videoInput && [useSrc.videoInput canProvideTiming])
+    {
+        self.sourceLayout.layoutTimingSource = useSrc;
     }
 }
 

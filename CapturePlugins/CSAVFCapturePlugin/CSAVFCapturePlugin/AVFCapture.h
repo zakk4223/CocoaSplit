@@ -41,7 +41,6 @@
 @property AVFrameRateRange *activeVideoFramerate;
 @property (assign) int prerollSeconds;
 @property (assign) BOOL did_preroll;
-@property (assign) frame_render_behavior renderType;
 
 
 

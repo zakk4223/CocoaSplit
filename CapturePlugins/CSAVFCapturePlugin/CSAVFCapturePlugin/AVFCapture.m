@@ -110,6 +110,7 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDeviceChange:) name:AVCaptureDeviceWasDisconnectedNotification object:nil];
 
         [self changeAvailableVideoDevices];
+        self.canProvideTiming = YES;
     }
     return self;
 }
@@ -362,6 +363,7 @@
         if (videoFrame)
         {
             [self updateLayersWithBlock:^(CALayer *layer) {
+                
                 ((CSIOSurfaceLayer *)layer).imageBuffer = videoFrame;
                 if (self.renderType == kCSRenderFrameArrived)
                 {
@@ -370,6 +372,7 @@
                 }
 
             }];
+            [self frameArrived];
         }
 }
 

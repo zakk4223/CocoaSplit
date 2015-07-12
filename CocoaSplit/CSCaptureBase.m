@@ -7,19 +7,30 @@
 //
 
 #import "CSCaptureBase.h"
+#import "CSTimerSourceProtocol.h"
+
 #import "SourceCache.h"
 #import <objc/runtime.h>
 
 @interface CSCaptureBase()
 {
     NSMapTable *_allLayers;
+    frame_render_behavior _saved_render_behavior;
 }
 
+
+@property (weak) id<CSTimerSourceProtocol> timerDelegate;
+
+
 @end
+
+
 @implementation CSCaptureBase
 
 @synthesize activeVideoDevice = _activeVideoDevice;
 @synthesize allowScaling = _allowScaling;
+@synthesize timerDelegate = _timerDelegate;
+
 
 +(NSString *) label
 {
@@ -31,6 +42,7 @@
 {
     if (self = [super init])
     {
+        self.canProvideTiming = NO;
         self.needsSourceSelection = YES;
         self.allowDedup = YES;
         self.isVisible = YES;
@@ -250,6 +262,35 @@
     
 }
 
+
+-(void)frameArrived
+{
+    if (self.timerDelegate)
+    {
+        [self.timerDelegate frameArrived];
+    }
+}
+
+
+-(void)setTimerDelegate:(id<CSTimerSourceProtocol>)timerDelegate
+{
+    if (timerDelegate)
+    {
+        _saved_render_behavior = self.renderType;
+        self.renderType = kCSRenderFrameArrived;
+    } else {
+        self.renderType = _saved_render_behavior;
+    }
+    
+    _timerDelegate = timerDelegate;
+}
+
+-(id<CSTimerSourceProtocol>)timerDelegate
+{
+    return _timerDelegate;
+}
+
+
 -(CALayer *)layerForInput:(id)inputsrc
 {
     return [_allLayers objectForKey:inputsrc];
@@ -282,5 +323,16 @@
     }
     
 }
+
+-(void)dealloc
+{
+    if (self.timerDelegate)
+    {
+        [self.timerDelegate frameTimerWillStop];
+    }
+    
+    self.timerDelegate = nil;
+}
+
 
 @end

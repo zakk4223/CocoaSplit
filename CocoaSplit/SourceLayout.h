@@ -60,6 +60,8 @@
 @property (strong) SourceCache *sourceCache;
 @property (strong) CIFilter *compositeFilter;
 
+@property (weak) InputSource *layoutTimingSource;
+
 
 -(void)deleteSource:(InputSource *)delSource;
 -(void)addSource:(InputSource *)newSource;

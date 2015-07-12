@@ -25,6 +25,7 @@
 #import <IOKit/graphics/IOGraphicsLib.h>
 #import "MIKMIDI.h"
 #import "CSMidiWrapper.h"
+#import "CSCaptureBase+TimerDelegate.h"
 
 
 
@@ -721,12 +722,6 @@
 
     _cgl_ctx = [_ogl_ctx CGLContextObj];
     
-    /*
-    _cictx = [CIContext contextWithCGLContext:_cgl_ctx pixelFormat:CGLGetPixelFormat(_cgl_ctx) colorSpace:CGColorSpaceCreateDeviceRGB() options:nil];
-    
-    _cifilter = [CIFilter filterWithName:@"CISepiaTone"];
-    [_cifilter setDefaults];
-*/
     
 }
 
@@ -1650,14 +1645,12 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     self.renderOnIntegratedGPU = [[saveRoot valueForKey:@"renderOnIntegratedGPU"] boolValue];
 
     [self createCGLContext];
-    _cictx = [CIContext contextWithCGLContext:_cgl_ctx pixelFormat:CGLGetPixelFormat(_cgl_ctx) colorSpace:nil options:@{kCIContextWorkingColorSpace: [NSNull null]}];
-    
-    mainThread = [[NSThread alloc] initWithTarget:self selector:@selector(newFrameTimed) object:nil];
-    [mainThread start];
+    //mainThread = [[NSThread alloc] initWithTarget:self selector:@selector(newFrameTimed) object:nil];
+    //[mainThread start];
     
     
     
-    //dispatch_async(_main_capture_queue, ^{[self newFrameTimed];});
+    dispatch_async(_main_capture_queue, ^{[self newFrameTimed];});
 
     self.stagingPreviewView.controller = self;
     self.livePreviewView.controller = self;
@@ -2449,9 +2442,31 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 }
 
 
+-(void)frameArrived
+{
+    dispatch_async(_main_capture_queue, ^{
+        [self newFrameEvent];
+    });
+    
+}
+
+-(void)frameTimerWillStop
+{
+    dispatch_async(_main_capture_queue, ^{
+        [self newFrameTimed];
+    });
+}
+
+
+-(void)newFrameEvent
+{
+    _frame_time = [self mach_time_seconds];
+    [self newFrame];
+}
+
+
 -(void) newFrameTimed
 {
-    
     
     
     double startTime;
@@ -2465,6 +2480,14 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     //[self setFrameThreadPriority];
     while (1)
     {
+        
+        
+        if (self.previewCtx.sourceLayout.layoutTimingSource && self.previewCtx.sourceLayout.layoutTimingSource.videoInput && self.previewCtx.sourceLayout.layoutTimingSource.videoInput.canProvideTiming)
+        {
+            CSCaptureBase *newTiming = (CSCaptureBase *)self.previewCtx.sourceLayout.layoutTimingSource.videoInput;
+            newTiming.timerDelegate = self;
+            return;
+        }
         
         @autoreleasepool {
             
@@ -2482,6 +2505,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         }
 
         
+            
         _frame_time = startTime;
 
         [self newFrame];
@@ -3361,6 +3385,24 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         [self.livePreviewView.sourceLayout restoreSourceList];
     }
 }
+
+- (IBAction)unlockStagingFPS:(id)sender
+{
+    if (self.stagingPreviewView && self.stagingPreviewView.sourceLayout)
+    {
+        self.stagingPreviewView.sourceLayout.layoutTimingSource = nil;
+    }
+}
+
+- (IBAction)unlockLiveFPS:(id)sender
+{
+    if (self.livePreviewView && self.livePreviewView.sourceLayout)
+    {
+        self.livePreviewView.sourceLayout.layoutTimingSource = nil;
+    }
+}
+
+
 
 
 -(void) hideStagingView

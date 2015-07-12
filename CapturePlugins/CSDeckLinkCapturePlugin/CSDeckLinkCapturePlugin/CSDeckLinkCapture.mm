@@ -25,6 +25,7 @@
     {
         _discoveryDev = new DeckLinkDeviceDiscovery(self);
         _discoveryDev->Enable();
+        self.canProvideTiming = YES;
     }
     
     return self;
@@ -238,6 +239,7 @@
             }
             
         }];
+        [self frameArrived];
     }
 }
 

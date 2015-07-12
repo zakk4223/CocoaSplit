@@ -371,7 +371,15 @@
 -(void) saveSourceList
 {
     
-    NSDictionary *saveDict = @{@"sourcelist": self.sourceList, @"animationList": self.animationList};
+    
+    
+    NSObject *timerSrc = self.layoutTimingSource;
+    if (!timerSrc)
+    {
+        timerSrc = [NSNull null];
+    }
+    
+    NSDictionary *saveDict = @{@"sourcelist": self.sourceList, @"animationList": self.animationList, @"timingSource": timerSrc};
     NSMutableData *saveData = [NSMutableData data];
     NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:saveData];
     archiver.delegate = self;
@@ -400,6 +408,7 @@
 
 -(NSObject *)mergeSourceListData:(NSData *)mergeData
 {
+    
     
     if (!self.sourceList)
     {
@@ -474,6 +483,15 @@
             {
                 self.animationList = [NSMutableArray array];
             }
+            NSObject *timerSrc = nil;
+            timerSrc = [((NSDictionary *)restData) objectForKey:@"timingSource"];
+            if (timerSrc == [NSNull null])
+            {
+                timerSrc = nil;
+            }
+            
+            
+            self.layoutTimingSource = ((InputSource *)timerSrc);
         }
     }
 }
@@ -503,6 +521,11 @@
     [[self mutableArrayValueForKey:@"sourceList" ] removeObject:delSource];
 
     //[self.sourceList removeObject:delSource];
+    if (delSource == self.layoutTimingSource)
+    {
+        self.layoutTimingSource = nil;
+    }
+    
     [delSource.layer removeFromSuperlayer];
     delSource.sourceLayout = nil;
 

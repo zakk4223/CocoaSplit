@@ -81,6 +81,12 @@
 //This is the class name of the configuration view CONTROLLER. With the combo above you can have different view controller classes and/or different NIBs depending on various conditions.
 @property (readonly) NSString *configurationViewClassName;
 
+
+
+
+@property (assign) bool canProvideTiming;
+
+
 //frameTick is called every render loop. You are not required to do anything here, but it may be useful for some timing/lazy rendering
 -(void)frameTick;
 
@@ -113,6 +119,7 @@ If your source is 'shared' between inputSources each new one will call this func
 -(NSViewController *)configurationView;
 +(NSString *) label;
 
+-(void)frameArrived;
 
 
 

@@ -99,6 +99,8 @@
     
     _renderType = kCSRenderFrameArrived;
     
+    self.canProvideTiming = YES;
+    
     self.isFlipped = NO;
 
     [self changeAvailableVideoDevices];
@@ -215,19 +217,11 @@
                 [self updateLayersWithBlock:^(CALayer *layer) {
                     [((CSSyphonCaptureLayer *)layer) setNeedsDisplay];
                 }];
+                [self frameArrived];
             }
             
 
             
-            //[self publishFrame:client];
-/*
-            //this call retains the surface, so be sure to release it if we don't care about it anymore
-            IOSurfaceRef newSurface = [client IOSurface];
-            
-            [self publishSurface:newSurface];
-            
-            CFRelease(newSurface);
- */
         }];
         
  
@@ -235,17 +229,6 @@
             ((CSSyphonCaptureLayer *)layer).syphonClient = _syphon_client;
         }];
 
-        /*
-        IOSurfaceRef newSurface = [_syphon_client IOSurface];
-        if (newSurface)
-        {
-            [self publishSurface:newSurface];
-            CFRelease(newSurface);
-        }
-         */
-        
-        
-        
         _syphon_uuid = [[_syphon_client serverDescription] objectForKey:SyphonServerDescriptionUUIDKey];
 
     }

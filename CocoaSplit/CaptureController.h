@@ -27,6 +27,7 @@
 #import "CSAnimationChooserViewController.h"
 #import "CSMidiManagerWindowController.h"
 #import "MIKMIDI.h"
+#import "CSTimerSourceProtocol.h"
 
 
 
@@ -45,7 +46,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @class PreviewView;
 
 
-@interface CaptureController : NSObject <NSMenuDelegate, MIKMIDIMappableResponder, MIKMIDIResponder, MIKMIDIMappingGeneratorDelegate> {
+@interface CaptureController : NSObject <NSMenuDelegate, MIKMIDIMappableResponder, MIKMIDIResponder, MIKMIDIMappingGeneratorDelegate, CSTimerSourceProtocol> {
     
     NSArray *_inputIdentifiers;
     
@@ -91,6 +92,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     CFAbsoluteTime _frame_interval;
     mach_timebase_info_data_t _mach_timebase;
     double _frame_time;
+    double _start_time;
+    
     CMSampleBufferRef audioRingBuffer[512];
     size_t audioWritePosition;
     size_t audioLastReadPosition;
@@ -101,7 +104,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     bool _last_running_value;
     
     
-    CIContext *_cictx;
     CIFilter *_cifilter;
     NSOpenGLContext *_ogl_ctx;
     CGLContextObj _cgl_ctx;
@@ -237,6 +239,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (IBAction)mainRevert:(id)sender;
 
 
+- (IBAction)unlockStagingFPS:(id)sender;
+- (IBAction)unlockLiveFPS:(id)sender;
 
 - (void)deleteLayout:(NSInteger)deleteIdx;
 

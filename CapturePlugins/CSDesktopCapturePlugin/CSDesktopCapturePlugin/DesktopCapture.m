@@ -66,6 +66,7 @@
     {
         _capture_queue = dispatch_queue_create("Desktop Capture Queue", DISPATCH_QUEUE_SERIAL);
 
+        self.canProvideTiming = YES;
         self.videoCaptureFPS = 60.0f;
         self.showCursor = YES;
         [self addObserver:self forKeyPath:@"propertiesChanged" options:NSKeyValueObservingOptionNew context:NULL];
@@ -268,6 +269,7 @@
                 {
                     [((CSIOSurfaceLayer *)layer) setNeedsDisplay];
                 }
+                [self frameArrived];
 
             }];
             

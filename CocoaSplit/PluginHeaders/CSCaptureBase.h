@@ -70,6 +70,10 @@ typedef enum frame_render_behavior_t {
 
 
 
+@property (assign) frame_render_behavior renderType;
+
+@property (assign) bool canProvideTiming;
+
 
 //frameTick is called every render loop. You are not required to do anything here, but it may be useful for some timing/lazy rendering
 -(void)frameTick;
@@ -106,5 +110,8 @@ typedef enum frame_render_behavior_t {
 //Don't ever call this, it's not for you.
 -(CALayer *)createNewLayerForInput:(id)inputsrc;
 -(CALayer *)layerForInput:(id)inputsrc;
+
+-(void)frameArrived;
+
 
 @end
