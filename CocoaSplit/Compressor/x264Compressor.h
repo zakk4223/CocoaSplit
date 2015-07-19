@@ -32,6 +32,8 @@
     dispatch_queue_t _compressor_queue;
     VTPixelTransferSessionRef _vtpt_ref;
     double _next_keyframe_time;
+    int64_t _last_pts;
+    
     
     
 }

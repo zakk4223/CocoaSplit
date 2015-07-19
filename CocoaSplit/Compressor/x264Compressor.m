@@ -164,6 +164,8 @@
     
     self.errored = NO;
     _av_codec = NULL;
+    _last_pts = 0;
+    
 }
 
 
@@ -250,6 +252,26 @@
         VTPixelTransferSessionCreate(kCFAllocatorDefault, &_vtpt_ref);
         VTSessionSetProperty(_vtpt_ref, kVTPixelTransferPropertyKey_ScalingMode, kVTScalingMode_Letterbox);
     }
+        
+    int64_t usePts = av_rescale_q(pts.value, (AVRational){1,1000000}, _av_codec_ctx->time_base);
+        
+    if (_last_pts > 0 && usePts <= _last_pts)
+    {
+        //We got the frame too fast, or something else weird happened. Just send the audio along
+        frameData.avcodec_pkt = NULL;
+        frameData.encodedSampleBuffer = NULL;
+        
+        for (id dKey in self.outputs)
+        {
+            OutputDestination *dest = self.outputs[dKey];
+            
+            [dest writeEncodedData:frameData];
+            
+        }
+        return;
+    }
+        
+        _last_pts = usePts;
     CVPixelBufferRef converted_frame;
     
     CVPixelBufferCreate(kCFAllocatorDefault, _av_codec_ctx->width, _av_codec_ctx->height, kCVPixelFormatType_420YpCbCr8Planar, 0, &converted_frame);
@@ -262,6 +284,8 @@
         
         //poke the frameData so it releases the video buffer
         frameData.videoFrame = nil;
+        
+        
         
     AVFrame *outframe = av_frame_alloc();
     outframe->format = PIX_FMT_YUV420P;
@@ -280,8 +304,7 @@
     
     
     
-    outframe->pts = av_rescale_q(pts.value, (AVRational){1,1000000}, _av_codec_ctx->time_base);
-        
+        outframe->pts = usePts;
         
         
         
