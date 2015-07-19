@@ -29,6 +29,7 @@ DeckLinkInputHandler::~DeckLinkInputHandler()
 
 HRESULT     DeckLinkInputHandler::VideoInputFrameArrived(IDeckLinkVideoInputFrame *videoFrame, IDeckLinkAudioInputPacket *audioPacket)
 {
+    
     if (deckLinkDevice)
     {
         [deckLinkDevice frameArrived:videoFrame];

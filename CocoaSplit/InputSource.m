@@ -49,6 +49,7 @@ static NSArray *_sourceTypes = nil;
 @synthesize y_pos = _y_pos;
 @synthesize width = _width;
 @synthesize height = _height;
+@synthesize alwaysDisplay = _alwaysDisplay;
 
 
 -(instancetype)copyWithZone:(NSZone *)zone
@@ -1055,7 +1056,10 @@ static NSArray *_sourceTypes = nil;
     {
         for (InputSource *inp in self.attachedInputs)
         {
-            inp.layer.hidden = YES;
+            if (!inp.alwaysDisplay)
+            {
+                inp.layer.hidden = YES;
+            }
         }
     } else {
         for (InputSource *inp in self.attachedInputs)
@@ -1064,6 +1068,21 @@ static NSArray *_sourceTypes = nil;
         }
         [self.layer transitionsDisabled];
     }
+}
+
+-(bool)alwaysDisplay
+{
+    return _alwaysDisplay;
+}
+
+-(void)setAlwaysDisplay:(bool)alwaysDisplay
+{
+    if (alwaysDisplay)
+    {
+        self.layer.hidden = NO;
+    }
+    
+    _alwaysDisplay = alwaysDisplay;
 }
 
 
@@ -1138,8 +1157,15 @@ static NSArray *_sourceTypes = nil;
 {
     CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
 
+    NSPredicate *inputFilter = [NSPredicate predicateWithFormat:@"alwaysDisplay == NO"];
     NSMutableArray *chooseInputs = [NSMutableArray arrayWithArray:self.attachedInputs];
-    [chooseInputs addObject:self];
+    [chooseInputs filterUsingPredicate:inputFilter];
+    if (!self.alwaysDisplay)
+    {
+        [chooseInputs addObject:self];
+    }
+    
+    
     
     InputSource *_nextInput;
     
@@ -1419,6 +1445,7 @@ static NSArray *_sourceTypes = nil;
     [toDetach resetConstraints];
     
     toDetach.parentInput = nil;
+    toDetach.alwaysDisplay = NO;
     
     [self.sourceLayout.rootLayer addSublayer:toDetach.layer];
     toDetach.layer.hidden = NO;
@@ -1437,6 +1464,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void)attachInput:(InputSource *)toAttach
 {
+    
     if (toAttach.parentInput)
     {
         if (toAttach.parentInput == self)

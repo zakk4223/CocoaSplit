@@ -451,7 +451,6 @@
     NSString *newFormat = @"YUV 10-bit";
     
     CSDeckLinkDisplayMode *newMode = [self displayModeForRaw:mode];
-    NSLog(@"DETECTED DISPLAY CHANGE %@", newMode);
 
     if (flags & bmdDetectedVideoInputRGB444)
     {
@@ -469,6 +468,8 @@
 
 -(void)frameArrived:(IDeckLinkVideoFrame *)frame
 {
+    
+
     NSHashTable *outcopy;
     @synchronized(self)
     {

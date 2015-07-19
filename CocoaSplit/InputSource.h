@@ -119,6 +119,8 @@ typedef enum resize_style_t {
 @property (readonly) NSSize size;
 @property (readonly) float display_width;
 @property (readonly) float display_height;
+@property (assign) bool alwaysDisplay;
+
 @property (weak)     InputSource *clonedFromInput;
 
 //When an instance is created the creator (capture controller) binds these to the size of the canvas in case we are asked to auto-fit

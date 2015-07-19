@@ -2663,6 +2663,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     
     
     
+    
     _frameCount++;
     _lastFrameTime = _frame_time;
     

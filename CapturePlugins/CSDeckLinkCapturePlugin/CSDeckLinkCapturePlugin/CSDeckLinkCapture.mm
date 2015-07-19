@@ -229,6 +229,8 @@
 
 -(void)frameArrived:(IDeckLinkVideoFrame *)frame
 {
+    
+    
     if (frame)
     {
         [self updateLayersWithBlock:^(CALayer *layer) {
