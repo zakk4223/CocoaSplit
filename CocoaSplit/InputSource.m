@@ -1276,9 +1276,6 @@ static NSArray *_sourceTypes = nil;
 -(void)frameTick
 {
     
-    
-
-    
     self.layoutPosition = self.layer.frame;
     _x_pos = self.layer.frame.origin.x;
     _y_pos = self.layer.frame.origin.y;
@@ -1295,7 +1292,6 @@ static NSArray *_sourceTypes = nil;
     }
     
     
-    
     if (self.layer.sourceLayer != _currentLayer)
     {
         if (!_userBackground)
@@ -1307,10 +1303,7 @@ static NSArray *_sourceTypes = nil;
         self.layer.allowResize = self.videoInput.allowScaling;
         
         self.layer.sourceLayer = _currentLayer;
-
-        
     }
-    
     
     [self.videoInput frameTick];
     [self.layer frameTick];
@@ -1322,7 +1315,6 @@ static NSArray *_sourceTypes = nil;
 -(void)autoFit
 {
 
-    
     NSMutableDictionary *newConstraints = [NSMutableDictionary dictionary];
     
     [self initDictionaryForConstraints:newConstraints];
@@ -1607,30 +1599,26 @@ static NSArray *_sourceTypes = nil;
     NSMutableDictionary *pluginMap = [[CSPluginLoader sharedPluginLoader] sourcePlugins];
     
     _currentInputViewController = nil;
-    
     if (self.videoInput)
     {
         [self deregisterVideoInput:self.videoInput];
-        self.videoInput = nil;
-        _currentLayer = nil;
     }
     
     NSObject <CSCaptureSourceProtocol> *newCaptureSession;
     
     Class captureClass = [pluginMap objectForKey:selectedVideoType];
-    
     newCaptureSession = [[captureClass alloc] init];
     
+    [self registerVideoInput:newCaptureSession];
+    CALayer *newLayer = [newCaptureSession layerForInput:self];
+    
+    _currentLayer = newLayer;
     
     self.videoInput = newCaptureSession;
-    [self registerVideoInput:self.videoInput];
-    _currentLayer = [self.videoInput layerForInput:self];
-    
-    newCaptureSession = nil;
-    
+
+ 
     _selectedVideoType = selectedVideoType;
-    
-}
+ }
 
 
 -(NSViewController *)sourceConfigurationView

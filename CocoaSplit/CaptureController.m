@@ -1196,7 +1196,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         NSString *animationPluginPath = [[NSBundle mainBundle] pathForResource:@"CSAnimationRunner" ofType:@"plugin"];
         NSBundle *animationBundle = [NSBundle bundleWithPath:animationPluginPath];
         Class animationClass = [animationBundle classNamed:@"CSAnimationRunnerObj"];
-        
         sharedAnimationObj = [[animationClass alloc] init];
 
     });

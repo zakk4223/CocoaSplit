@@ -57,6 +57,7 @@
 {
     
     CGSize retSize = [self.layoutManager preferredSizeOfLayer:layer];
+    
     if ([layer isKindOfClass:[CATextLayer class]])
     {
         NSAttributedString *lText = ((CATextLayer *)layer).string;
@@ -286,6 +287,7 @@
 
         _xLayer.layoutManager = self;
         _yLayer.layoutManager = self.layoutManager;
+        _sourceLayer.layoutManager = self.layoutManager;
         
         [_xLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinX relativeTo:@"superlayer" attribute:kCAConstraintMinX]];
         [_xLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY]];
@@ -493,8 +495,6 @@
 
 -(void)setSourceLayer:(CALayer *)sourceLayer
 {
-    
-
     [self copySourceSettings:sourceLayer];
     
     [_sourceLayer.superlayer replaceSublayer:_sourceLayer with:sourceLayer];

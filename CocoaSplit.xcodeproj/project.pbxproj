@@ -46,6 +46,7 @@
 		3435E39D188BD8250015CC01 /* passthrough.fgsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3435E399188B90900015CC01 /* passthrough.fgsh */; };
 		3435E39E188BD82F0015CC01 /* passthrough.vtsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3435E39A188B93150015CC01 /* passthrough.vtsh */; };
 		3435E39F188CD8EE0015CC01 /* 420v.fgsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3435E395188B902C0015CC01 /* 420v.fgsh */; };
+		343692501B6243D4007EC2D9 /* CSShapeCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 3436922B1B62364E007EC2D9 /* CSShapeCapturePlugin.bundle */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		3444D8E819A0CDE8000DC46B /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3444D8E719A0CDE8000DC46B /* Quartz.framework */; };
 		344825D21B2536EA00AF9EAC /* CAMultiAudioMatrixView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 344825D11B2536EA00AF9EAC /* CAMultiAudioMatrixView.xib */; };
 		344825E61B253D6900AF9EAC /* CAMultiAudioMatrixCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 344825E51B253D6900AF9EAC /* CAMultiAudioMatrixCell.m */; };
@@ -147,7 +148,7 @@
 		34A64A2F165EFE4C00A68428 /* PreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A64A2E165EFE4B00A68428 /* PreviewView.m */; };
 		34A64A35165F047900A68428 /* CapturePreview.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34A64A34165F047900A68428 /* CapturePreview.xib */; };
 		34A64A37165F208800A68428 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A64A36165F208800A68428 /* QuartzCore.framework */; };
-		34A7C1AD19B9A57600BC6882 /* CSLayoutSwitcherExtraPlugin.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34A7C1A119B9A41A00BC6882 /* CSLayoutSwitcherExtraPlugin.bundle */; };
+		34A7C1AD19B9A57600BC6882 /* CSLayoutSwitcherExtraPlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34A7C1A119B9A41A00BC6882 /* CSLayoutSwitcherExtraPlugin.bundle */; };
 		34A892CE1AECEFF600A089CF /* CSAnimationRunner.plugin in Resources */ = {isa = PBXBuildFile; fileRef = 34A892CD1AECEFF600A089CF /* CSAnimationRunner.plugin */; };
 		34ABEF3C17C0C2CB00AA5E62 /* advancedPrefPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34ABEF3B17C0C2CB00AA5E62 /* advancedPrefPanel.xib */; };
 		34AE3C30164E3E020052C95E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AE3C2F164E3E020052C95E /* Foundation.framework */; };
@@ -158,15 +159,15 @@
 		34AE3C4B164E68820052C95E /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4E015F3581200E4CE4E /* QTKit.framework */; };
 		34AE3C6B164F04B30052C95E /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AE3C6A164F04B30052C95E /* IOSurface.framework */; };
 		34AE3C6D164F04C90052C95E /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AE3C6C164F04C90052C95E /* CoreVideo.framework */; };
-		34AFC27819B05C4E0007C07B /* CSChromaKey.plugin in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34AFC27219B05BE90007C07B /* CSChromaKey.plugin */; };
-		34AFC27919B05C4E0007C07B /* TextureWrapPlugin.plugin in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34AFC27719B05BF50007C07B /* TextureWrapPlugin.plugin */; };
-		34AFC27A19B05C4E0007C07B /* CSDesktopCapturePlugin.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34AFC24A19B05ADA0007C07B /* CSDesktopCapturePlugin.bundle */; };
-		34AFC27B19B05C4E0007C07B /* CSMovieCapturePlugin.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34AFC25419B05B380007C07B /* CSMovieCapturePlugin.bundle */; };
-		34AFC27C19B05C4E0007C07B /* CSWindowCapturePlugin.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34AFC25919B05B470007C07B /* CSWindowCapturePlugin.bundle */; };
-		34AFC27D19B05C4E0007C07B /* CSImageCapturePlugin.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34AFC24F19B05B0A0007C07B /* CSImageCapturePlugin.bundle */; };
-		34AFC27E19B05C4E0007C07B /* CSTextCapturePlugin.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34AFC26319B05B6B0007C07B /* CSTextCapturePlugin.bundle */; };
-		34AFC27F19B05C4E0007C07B /* CSSyphonCapturePlugin.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34AFC26819B05B7C0007C07B /* CSSyphonCapturePlugin.bundle */; };
-		34AFC28019B05C4E0007C07B /* CSAVFCapturePlugin.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34AFC26D19B05B930007C07B /* CSAVFCapturePlugin.bundle */; };
+		34AFC27819B05C4E0007C07B /* CSChromaKey.plugin in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC27219B05BE90007C07B /* CSChromaKey.plugin */; };
+		34AFC27919B05C4E0007C07B /* TextureWrapPlugin.plugin in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC27719B05BF50007C07B /* TextureWrapPlugin.plugin */; };
+		34AFC27A19B05C4E0007C07B /* CSDesktopCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC24A19B05ADA0007C07B /* CSDesktopCapturePlugin.bundle */; };
+		34AFC27B19B05C4E0007C07B /* CSMovieCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC25419B05B380007C07B /* CSMovieCapturePlugin.bundle */; };
+		34AFC27C19B05C4E0007C07B /* CSWindowCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC25919B05B470007C07B /* CSWindowCapturePlugin.bundle */; };
+		34AFC27D19B05C4E0007C07B /* CSImageCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC24F19B05B0A0007C07B /* CSImageCapturePlugin.bundle */; };
+		34AFC27E19B05C4E0007C07B /* CSTextCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC26319B05B6B0007C07B /* CSTextCapturePlugin.bundle */; };
+		34AFC27F19B05C4E0007C07B /* CSSyphonCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC26819B05B7C0007C07B /* CSSyphonCapturePlugin.bundle */; };
+		34AFC28019B05C4E0007C07B /* CSAVFCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC26D19B05B930007C07B /* CSAVFCapturePlugin.bundle */; };
 		34AFC33319B19CD00007C07B /* SourceCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AFC33219B19CD00007C07B /* SourceCache.m */; };
 		34AFC33419B19CD00007C07B /* SourceCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AFC33219B19CD00007C07B /* SourceCache.m */; };
 		34B0265A1712D8BA0063BB2D /* CmdLineDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B026591712D8BA0063BB2D /* CmdLineDelegate.m */; };
@@ -180,8 +181,8 @@
 		34BD1E651B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34BD1E621B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.xib */; };
 		34C19053189EE60400AB2430 /* CapturedFrameData.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C19052189EE60400AB2430 /* CapturedFrameData.m */; };
 		34C19054189EE60400AB2430 /* CapturedFrameData.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C19052189EE60400AB2430 /* CapturedFrameData.m */; };
-		34C67B8E1A2E69F60012DC1B /* CSHitboxStreamServicePlugin.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34C67B781A2D7B6A0012DC1B /* CSHitboxStreamServicePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		34C680A119DD06E800413468 /* CSSyphonInjectExtraPlugin.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34C6808C19DD01C400413468 /* CSSyphonInjectExtraPlugin.bundle */; };
+		34C67B8E1A2E69F60012DC1B /* CSHitboxStreamServicePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34C67B781A2D7B6A0012DC1B /* CSHitboxStreamServicePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		34C680A119DD06E800413468 /* CSSyphonInjectExtraPlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34C6808C19DD01C400413468 /* CSSyphonInjectExtraPlugin.bundle */; };
 		34C6C3BF15FB5B440018A18B /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34C6C3BE15FB5B440018A18B /* OpenGL.framework */; };
 		34CFE49D18F1459600092C6A /* AudioMixer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34CFE49C18F1459600092C6A /* AudioMixer.xib */; };
 		34CFE4A018F154DD00092C6A /* AVFChannelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 34CFE49F18F154DD00092C6A /* AVFChannelManager.m */; };
@@ -192,10 +193,10 @@
 		34D2D5741A547628001004E5 /* CSTextCaptureBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2D5721A547628001004E5 /* CSTextCaptureBase.m */; };
 		34D2D5771A547C35001004E5 /* CSTextCaptureViewControllerBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2D5761A547C35001004E5 /* CSTextCaptureViewControllerBase.m */; };
 		34D2D5781A547C35001004E5 /* CSTextCaptureViewControllerBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2D5761A547C35001004E5 /* CSTextCaptureViewControllerBase.m */; };
-		34D2D5B41A548B68001004E5 /* CSNowPlayingPlugin.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34D2D59E1A54857D001004E5 /* CSNowPlayingPlugin.bundle */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		34D2D5B41A548B68001004E5 /* CSNowPlayingPlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34D2D59E1A54857D001004E5 /* CSNowPlayingPlugin.bundle */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		34D4351B198BE3B700266169 /* NewLayoutPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34D4351A198BE3B700266169 /* NewLayoutPanel.xib */; };
-		34D6580219B342E00012E32B /* CSTwitchStreamServicePlugin.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34AFC32B19B0AD360007C07B /* CSTwitchStreamServicePlugin.bundle */; };
-		34D6580319B342E70012E32B /* CSFileStreamServicePlugin.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34AFC33019B0AD500007C07B /* CSFileStreamServicePlugin.bundle */; };
+		34D6580219B342E00012E32B /* CSTwitchStreamServicePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC32B19B0AD360007C07B /* CSTwitchStreamServicePlugin.bundle */; };
+		34D6580319B342E70012E32B /* CSFileStreamServicePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC33019B0AD500007C07B /* CSFileStreamServicePlugin.bundle */; };
 		34D6581819B387DE0012E32B /* AppDelegate+AppDelegate_ScriptingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D6581719B387DE0012E32B /* AppDelegate+AppDelegate_ScriptingAdditions.m */; };
 		34D696FC1871B8F700B50EB6 /* Defaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 34D696FB1871B8F700B50EB6 /* Defaults.plist */; };
 		34DC2FB01B512362008F12A2 /* CSCaptureBase+TimerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34DC2FAF1B512362008F12A2 /* CSCaptureBase+TimerDelegate.m */; };
@@ -318,13 +319,20 @@
 		34ED8CBD1B07763F002C0674 /* CSMidiWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8CBB1B07763F002C0674 /* CSMidiWrapper.m */; };
 		34F5141216FD6E4F00BA894D /* x264Compressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F5140F16FD6E4F00BA894D /* x264Compressor.m */; };
 		34F5141316FD6E4F00BA894D /* AppleVTCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F5141116FD6E4F00BA894D /* AppleVTCompressor.m */; };
-		34F7C5871B2C9A5300345230 /* CSDeckLinkCapturePlugin.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34F7C5611B2C908700345230 /* CSDeckLinkCapturePlugin.bundle */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		34FDA83E1A84C46500E7F65E /* CSTimeCapturePlugin.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34FDA8191A84BF9400E7F65E /* CSTimeCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		34F7C5871B2C9A5300345230 /* CSDeckLinkCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34F7C5611B2C908700345230 /* CSDeckLinkCapturePlugin.bundle */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		34FDA83E1A84C46500E7F65E /* CSTimeCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34FDA8191A84BF9400E7F65E /* CSTimeCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		34FDD6F21A215268009A7413 /* CSPluginServices.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FDD6F11A215268009A7413 /* CSPluginServices.m */; };
 		34FDD6F31A215268009A7413 /* CSPluginServices.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FDD6F11A215268009A7413 /* CSPluginServices.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		3436922A1B62364E007EC2D9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3436921B1B62364E007EC2D9 /* CSShapeCapturePlugin.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 343692111B62364E007EC2D9;
+			remoteInfo = CSShapeCapturePlugin;
+		};
 		3450579B172A4ABD0065A452 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 340FE49415F3417E00E4CE4E /* Project object */;
@@ -532,30 +540,32 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		34D43556198DD00F00266169 /* CopyFiles */ = {
+		34D43556198DD00F00266169 /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				34F7C5871B2C9A5300345230 /* CSDeckLinkCapturePlugin.bundle in CopyFiles */,
-				34FDA83E1A84C46500E7F65E /* CSTimeCapturePlugin.bundle in CopyFiles */,
-				34D2D5B41A548B68001004E5 /* CSNowPlayingPlugin.bundle in CopyFiles */,
-				34C67B8E1A2E69F60012DC1B /* CSHitboxStreamServicePlugin.bundle in CopyFiles */,
-				34C680A119DD06E800413468 /* CSSyphonInjectExtraPlugin.bundle in CopyFiles */,
-				34A7C1AD19B9A57600BC6882 /* CSLayoutSwitcherExtraPlugin.bundle in CopyFiles */,
-				34D6580319B342E70012E32B /* CSFileStreamServicePlugin.bundle in CopyFiles */,
-				34D6580219B342E00012E32B /* CSTwitchStreamServicePlugin.bundle in CopyFiles */,
-				34AFC27819B05C4E0007C07B /* CSChromaKey.plugin in CopyFiles */,
-				34AFC27919B05C4E0007C07B /* TextureWrapPlugin.plugin in CopyFiles */,
-				34AFC27A19B05C4E0007C07B /* CSDesktopCapturePlugin.bundle in CopyFiles */,
-				34AFC27B19B05C4E0007C07B /* CSMovieCapturePlugin.bundle in CopyFiles */,
-				34AFC27C19B05C4E0007C07B /* CSWindowCapturePlugin.bundle in CopyFiles */,
-				34AFC27D19B05C4E0007C07B /* CSImageCapturePlugin.bundle in CopyFiles */,
-				34AFC27E19B05C4E0007C07B /* CSTextCapturePlugin.bundle in CopyFiles */,
-				34AFC27F19B05C4E0007C07B /* CSSyphonCapturePlugin.bundle in CopyFiles */,
-				34AFC28019B05C4E0007C07B /* CSAVFCapturePlugin.bundle in CopyFiles */,
+				343692501B6243D4007EC2D9 /* CSShapeCapturePlugin.bundle in Copy Files */,
+				34F7C5871B2C9A5300345230 /* CSDeckLinkCapturePlugin.bundle in Copy Files */,
+				34FDA83E1A84C46500E7F65E /* CSTimeCapturePlugin.bundle in Copy Files */,
+				34D2D5B41A548B68001004E5 /* CSNowPlayingPlugin.bundle in Copy Files */,
+				34C67B8E1A2E69F60012DC1B /* CSHitboxStreamServicePlugin.bundle in Copy Files */,
+				34C680A119DD06E800413468 /* CSSyphonInjectExtraPlugin.bundle in Copy Files */,
+				34A7C1AD19B9A57600BC6882 /* CSLayoutSwitcherExtraPlugin.bundle in Copy Files */,
+				34D6580319B342E70012E32B /* CSFileStreamServicePlugin.bundle in Copy Files */,
+				34D6580219B342E00012E32B /* CSTwitchStreamServicePlugin.bundle in Copy Files */,
+				34AFC27819B05C4E0007C07B /* CSChromaKey.plugin in Copy Files */,
+				34AFC27919B05C4E0007C07B /* TextureWrapPlugin.plugin in Copy Files */,
+				34AFC27A19B05C4E0007C07B /* CSDesktopCapturePlugin.bundle in Copy Files */,
+				34AFC27B19B05C4E0007C07B /* CSMovieCapturePlugin.bundle in Copy Files */,
+				34AFC27C19B05C4E0007C07B /* CSWindowCapturePlugin.bundle in Copy Files */,
+				34AFC27D19B05C4E0007C07B /* CSImageCapturePlugin.bundle in Copy Files */,
+				34AFC27E19B05C4E0007C07B /* CSTextCapturePlugin.bundle in Copy Files */,
+				34AFC27F19B05C4E0007C07B /* CSSyphonCapturePlugin.bundle in Copy Files */,
+				34AFC28019B05C4E0007C07B /* CSAVFCapturePlugin.bundle in Copy Files */,
 			);
+			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -614,6 +624,7 @@
 		3435E395188B902C0015CC01 /* 420v.fgsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = 420v.fgsh; path = Shaders/420v.fgsh; sourceTree = "<group>"; };
 		3435E399188B90900015CC01 /* passthrough.fgsh */ = {isa = PBXFileReference; lastKnownFileType = text; name = passthrough.fgsh; path = Shaders/passthrough.fgsh; sourceTree = "<group>"; };
 		3435E39A188B93150015CC01 /* passthrough.vtsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = passthrough.vtsh; path = Shaders/passthrough.vtsh; sourceTree = "<group>"; };
+		3436921B1B62364E007EC2D9 /* CSShapeCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSShapeCapturePlugin.xcodeproj; path = CapturePlugins/CSShapeCapturePlugin/CSShapeCapturePlugin.xcodeproj; sourceTree = "<group>"; };
 		343DD65919AAD3060017232A /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
 		343DD65C19AAD3060017232A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		343DD65E19AAD3060017232A /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
@@ -1160,6 +1171,14 @@
 			name = Shaders;
 			sourceTree = "<group>";
 		};
+		3436921C1B62364E007EC2D9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3436922B1B62364E007EC2D9 /* CSShapeCapturePlugin.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		3441338C18667F280059B686 /* Compressor */ = {
 			isa = PBXGroup;
 			children = (
@@ -1364,6 +1383,7 @@
 		34AFC24319B058800007C07B /* CapturePlugins */ = {
 			isa = PBXGroup;
 			children = (
+				3436921B1B62364E007EC2D9 /* CSShapeCapturePlugin.xcodeproj */,
 				34F7C55A1B2C908700345230 /* CSDeckLinkCapturePlugin.xcodeproj */,
 				34FDA8071A84BF9300E7F65E /* CSTimeCapturePlugin.xcodeproj */,
 				34D2D5991A54857C001004E5 /* CSNowPlayingPlugin.xcodeproj */,
@@ -1689,7 +1709,7 @@
 				34AE3C3E164E3EAE0052C95E /* CopyFiles */,
 				3450579D172A4AE30065A452 /* CopyFiles */,
 				3435E39C188BD80A0015CC01 /* CopyFiles */,
-				34D43556198DD00F00266169 /* CopyFiles */,
+				34D43556198DD00F00266169 /* Copy Files */,
 				3470F41519C849D9000A81C4 /* CopyFiles */,
 				3460E5891AC766120080358E /* CopyFiles */,
 				34FB04A31B349A0B00379548 /* ShellScript */,
@@ -1821,6 +1841,10 @@
 					ProjectRef = 34AFC18719B04CC30007C07B /* CSQTCapturePlugin.xcodeproj */;
 				},
 				{
+					ProductGroup = 3436921C1B62364E007EC2D9 /* Products */;
+					ProjectRef = 3436921B1B62364E007EC2D9 /* CSShapeCapturePlugin.xcodeproj */;
+				},
+				{
 					ProductGroup = 34AFC26419B05B7C0007C07B /* Products */;
 					ProjectRef = 34AFC1E819B04EB90007C07B /* CSSyphonCapturePlugin.xcodeproj */;
 				},
@@ -1859,6 +1883,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		3436922B1B62364E007EC2D9 /* CSShapeCapturePlugin.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = CSShapeCapturePlugin.bundle;
+			remoteRef = 3436922A1B62364E007EC2D9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		34A7C1A119B9A41A00BC6882 /* CSLayoutSwitcherExtraPlugin.bundle */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
@@ -2049,7 +2080,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "LOCATION=\"${BUILT_PRODUCTS_DIR}\"/\"${CONTENTS_FOLDER_PATH}\"\nIDENTITY=\"Mac Developer: Zachary Girouard (5ZF5EX2CV8)\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/Frameworks/Sparkle.framework\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/MacOS/CocoaSplitCmd\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSAVFCapturePlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSLayoutSwitcherExtraPlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSFileStreamServicePlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSTwitchStreamServicePlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSChromaKey.plugin\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/TextureWrapPlugin.plugin\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSDesktopCapturePlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSMovieCapturePlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSWindowCapturePlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSImageCapturePlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSTextCapturePlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSSyphonCapturePlugin.bundle/Contents/Frameworks/Syphon.framework\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSSyphonCapturePlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/XPCServices/zakk.lol.QTCaptureHelper.xpc\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSSyphonInjectExtraPlugin.bundle\"\ncodesign --verbose --deep --force --sign \"$IDENTITY\" \"$LOCATION/Resources/CSAnimationRunner.plugin\"\ncodesign --verbose --deep --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSDeckLinkCapturePlugin.bundle\"\ncodesign --verbose --deep --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSNowPlayingPlugin.bundle\"\n";
+			shellScript = "LOCATION=\"${BUILT_PRODUCTS_DIR}\"/\"${CONTENTS_FOLDER_PATH}\"\nIDENTITY=\"Mac Developer: Zachary Girouard (5ZF5EX2CV8)\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/Frameworks/Sparkle.framework\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/MacOS/CocoaSplitCmd\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSAVFCapturePlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSLayoutSwitcherExtraPlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSFileStreamServicePlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSTwitchStreamServicePlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSChromaKey.plugin\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/TextureWrapPlugin.plugin\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSDesktopCapturePlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSMovieCapturePlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSWindowCapturePlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSImageCapturePlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSTextCapturePlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSSyphonCapturePlugin.bundle/Contents/Frameworks/Syphon.framework\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSSyphonCapturePlugin.bundle\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/XPCServices/zakk.lol.QTCaptureHelper.xpc\"\ncodesign --verbose --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSSyphonInjectExtraPlugin.bundle\"\ncodesign --verbose --deep --force --sign \"$IDENTITY\" \"$LOCATION/Resources/CSAnimationRunner.plugin\"\ncodesign --verbose --deep --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSDeckLinkCapturePlugin.bundle\"\ncodesign --verbose --deep --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSNowPlayingPlugin.bundle\"\ncodesign --verbose --deep --force --sign \"$IDENTITY\" \"$LOCATION/PlugIns/CSShapeCapturePlugin.bundle\"\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

@@ -15,13 +15,13 @@
 
 @implementation CAMultiAudioGraph
 
--(instancetype)init
+-(instancetype)initWithSamplerate:(int)samplerate
 {
-    if (self = [super init])
+    if (self = [self init])
     {
         //default to something reasonable
         
-        self.sampleRate = 44100;
+        _sampleRate = samplerate;
         //set to canonical, 2 channel
         self.graphAsbd = malloc(sizeof(AudioStreamBasicDescription));
         

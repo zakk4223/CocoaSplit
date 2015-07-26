@@ -1,0 +1,388 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		343692431B6236DF007EC2D9 /* CSShapeCaptureFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 343692421B6236DF007EC2D9 /* CSShapeCaptureFactory.m */; };
+		3436924C1B6238C6007EC2D9 /* CSShapeCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 3436924B1B6238C6007EC2D9 /* CSShapeCapture.m */; };
+		3436925C1B637D62007EC2D9 /* setup.py in Resources */ = {isa = PBXBuildFile; fileRef = 3436925B1B637D62007EC2D9 /* setup.py */; };
+		3436925E1B637DD2007EC2D9 /* CSShapePathLoader.py in Resources */ = {isa = PBXBuildFile; fileRef = 3436925D1B637DD2007EC2D9 /* CSShapePathLoader.py */; };
+		343692641B63891C007EC2D9 /* CSShapeLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 343692631B63891C007EC2D9 /* CSShapeLayer.m */; };
+		343692661B638BE5007EC2D9 /* CSShapePathLoader.plugin in Resources */ = {isa = PBXBuildFile; fileRef = 343692651B638BE5007EC2D9 /* CSShapePathLoader.plugin */; };
+		34E3010A1B64A39E000C16DB /* CSShapeCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E301081B64A39E000C16DB /* CSShapeCaptureViewController.m */; };
+		34E3010B1B64A39E000C16DB /* CSShapeCaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34E301091B64A39E000C16DB /* CSShapeCaptureViewController.xib */; };
+		34E301141B6515C9000C16DB /* circle.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34E3010D1B6514F9000C16DB /* circle.py */; };
+		34E301151B6515C9000C16DB /* triangle.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34E3010F1B651515000C16DB /* triangle.py */; };
+		34E301161B6515CB000C16DB /* rtriangle.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34E301111B65153A000C16DB /* rtriangle.py */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		34E301131B6515B9000C16DB /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Paths;
+			dstSubfolderSpec = 13;
+			files = (
+				34E301141B6515C9000C16DB /* circle.py in CopyFiles */,
+				34E301151B6515C9000C16DB /* triangle.py in CopyFiles */,
+				34E301161B6515CB000C16DB /* rtriangle.py in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		343692111B62364E007EC2D9 /* CSShapeCapturePlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSShapeCapturePlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		343692151B62364E007EC2D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		343692331B6236A4007EC2D9 /* CSPluginServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPluginServices.h; path = PluginHeaders/CSPluginServices.h; sourceTree = "<group>"; };
+		343692341B6236A4007EC2D9 /* CSIOSurfaceLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSIOSurfaceLayer.h; path = PluginHeaders/CSIOSurfaceLayer.h; sourceTree = "<group>"; };
+		343692351B6236A4007EC2D9 /* CSPcmPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPcmPlayer.h; path = PluginHeaders/CSPcmPlayer.h; sourceTree = "<group>"; };
+		343692361B6236A4007EC2D9 /* CAMultiAudioPCM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioPCM.h; path = PluginHeaders/CAMultiAudioPCM.h; sourceTree = "<group>"; };
+		343692371B6236A4007EC2D9 /* CSAbstractCaptureDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAbstractCaptureDevice.h; path = PluginHeaders/CSAbstractCaptureDevice.h; sourceTree = "<group>"; };
+		343692381B6236A4007EC2D9 /* CSTextCaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTextCaptureBase.h; path = PluginHeaders/CSTextCaptureBase.h; sourceTree = "<group>"; };
+		343692391B6236A4007EC2D9 /* CSTextCaptureViewControllerBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTextCaptureViewControllerBase.h; path = PluginHeaders/CSTextCaptureViewControllerBase.h; sourceTree = "<group>"; };
+		3436923A1B6236A4007EC2D9 /* CSCaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureBase.h; path = PluginHeaders/CSCaptureBase.h; sourceTree = "<group>"; };
+		3436923B1B6236A4007EC2D9 /* CSCaptureSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureSourceProtocol.h; path = PluginHeaders/CSCaptureSourceProtocol.h; sourceTree = "<group>"; };
+		3436923C1B6236A4007EC2D9 /* CSStreamServiceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSStreamServiceProtocol.h; path = PluginHeaders/CSStreamServiceProtocol.h; sourceTree = "<group>"; };
+		3436923D1B6236A4007EC2D9 /* CSPluginFactoryProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPluginFactoryProtocol.h; path = PluginHeaders/CSPluginFactoryProtocol.h; sourceTree = "<group>"; };
+		3436923E1B6236A4007EC2D9 /* CSExtraPluginProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSExtraPluginProtocol.h; path = PluginHeaders/CSExtraPluginProtocol.h; sourceTree = "<group>"; };
+		3436923F1B6236A4007EC2D9 /* CSNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSNotifications.h; path = PluginHeaders/CSNotifications.h; sourceTree = "<group>"; };
+		343692411B6236DF007EC2D9 /* CSShapeCaptureFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSShapeCaptureFactory.h; sourceTree = "<group>"; };
+		343692421B6236DF007EC2D9 /* CSShapeCaptureFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSShapeCaptureFactory.m; sourceTree = "<group>"; };
+		3436924A1B6238C6007EC2D9 /* CSShapeCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSShapeCapture.h; sourceTree = "<group>"; };
+		3436924B1B6238C6007EC2D9 /* CSShapeCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSShapeCapture.m; sourceTree = "<group>"; };
+		3436925B1B637D62007EC2D9 /* setup.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = setup.py; sourceTree = "<group>"; };
+		3436925D1B637DD2007EC2D9 /* CSShapePathLoader.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = CSShapePathLoader.py; sourceTree = "<group>"; };
+		3436925F1B638382007EC2D9 /* CSShapePathLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSShapePathLoader.h; sourceTree = "<group>"; };
+		343692611B63860E007EC2D9 /* CSShapePathCreatorProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSShapePathCreatorProtocol.h; sourceTree = "<group>"; };
+		343692621B63891C007EC2D9 /* CSShapeLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSShapeLayer.h; sourceTree = "<group>"; };
+		343692631B63891C007EC2D9 /* CSShapeLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSShapeLayer.m; sourceTree = "<group>"; };
+		343692651B638BE5007EC2D9 /* CSShapePathLoader.plugin */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = CSShapePathLoader.plugin; path = CSShapeCapturePlugin/CSShapePathPlugin/dist/CSShapePathLoader.plugin; sourceTree = "<group>"; };
+		34E301071B64A39E000C16DB /* CSShapeCaptureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSShapeCaptureViewController.h; sourceTree = "<group>"; };
+		34E301081B64A39E000C16DB /* CSShapeCaptureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSShapeCaptureViewController.m; sourceTree = "<group>"; };
+		34E301091B64A39E000C16DB /* CSShapeCaptureViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSShapeCaptureViewController.xib; sourceTree = "<group>"; };
+		34E3010D1B6514F9000C16DB /* circle.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = circle.py; sourceTree = "<group>"; };
+		34E3010F1B651515000C16DB /* triangle.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = triangle.py; sourceTree = "<group>"; };
+		34E301111B65153A000C16DB /* rtriangle.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = rtriangle.py; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3436920E1B62364E007EC2D9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		343692081B62364E007EC2D9 = {
+			isa = PBXGroup;
+			children = (
+				34E3010C1B6514DA000C16DB /* ShapePaths */,
+				343692651B638BE5007EC2D9 /* CSShapePathLoader.plugin */,
+				343692401B6236A4007EC2D9 /* PluginHeaders */,
+				343692131B62364E007EC2D9 /* CSShapeCapturePlugin */,
+				343692121B62364E007EC2D9 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		343692121B62364E007EC2D9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				343692111B62364E007EC2D9 /* CSShapeCapturePlugin.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		343692131B62364E007EC2D9 /* CSShapeCapturePlugin */ = {
+			isa = PBXGroup;
+			children = (
+				3436925A1B637D46007EC2D9 /* CSShapePathPlugin */,
+				343692141B62364E007EC2D9 /* Supporting Files */,
+				343692411B6236DF007EC2D9 /* CSShapeCaptureFactory.h */,
+				343692421B6236DF007EC2D9 /* CSShapeCaptureFactory.m */,
+				3436924A1B6238C6007EC2D9 /* CSShapeCapture.h */,
+				3436924B1B6238C6007EC2D9 /* CSShapeCapture.m */,
+				3436925F1B638382007EC2D9 /* CSShapePathLoader.h */,
+				343692611B63860E007EC2D9 /* CSShapePathCreatorProtocol.h */,
+				343692621B63891C007EC2D9 /* CSShapeLayer.h */,
+				343692631B63891C007EC2D9 /* CSShapeLayer.m */,
+				34E301071B64A39E000C16DB /* CSShapeCaptureViewController.h */,
+				34E301081B64A39E000C16DB /* CSShapeCaptureViewController.m */,
+				34E301091B64A39E000C16DB /* CSShapeCaptureViewController.xib */,
+			);
+			path = CSShapeCapturePlugin;
+			sourceTree = "<group>";
+		};
+		343692141B62364E007EC2D9 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				343692151B62364E007EC2D9 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		343692401B6236A4007EC2D9 /* PluginHeaders */ = {
+			isa = PBXGroup;
+			children = (
+				343692331B6236A4007EC2D9 /* CSPluginServices.h */,
+				343692341B6236A4007EC2D9 /* CSIOSurfaceLayer.h */,
+				343692351B6236A4007EC2D9 /* CSPcmPlayer.h */,
+				343692361B6236A4007EC2D9 /* CAMultiAudioPCM.h */,
+				343692371B6236A4007EC2D9 /* CSAbstractCaptureDevice.h */,
+				343692381B6236A4007EC2D9 /* CSTextCaptureBase.h */,
+				343692391B6236A4007EC2D9 /* CSTextCaptureViewControllerBase.h */,
+				3436923A1B6236A4007EC2D9 /* CSCaptureBase.h */,
+				3436923B1B6236A4007EC2D9 /* CSCaptureSourceProtocol.h */,
+				3436923C1B6236A4007EC2D9 /* CSStreamServiceProtocol.h */,
+				3436923D1B6236A4007EC2D9 /* CSPluginFactoryProtocol.h */,
+				3436923E1B6236A4007EC2D9 /* CSExtraPluginProtocol.h */,
+				3436923F1B6236A4007EC2D9 /* CSNotifications.h */,
+			);
+			name = PluginHeaders;
+			path = ../../CocoaSplit;
+			sourceTree = "<group>";
+		};
+		3436925A1B637D46007EC2D9 /* CSShapePathPlugin */ = {
+			isa = PBXGroup;
+			children = (
+				3436925B1B637D62007EC2D9 /* setup.py */,
+				3436925D1B637DD2007EC2D9 /* CSShapePathLoader.py */,
+			);
+			path = CSShapePathPlugin;
+			sourceTree = "<group>";
+		};
+		34E3010C1B6514DA000C16DB /* ShapePaths */ = {
+			isa = PBXGroup;
+			children = (
+				34E3010D1B6514F9000C16DB /* circle.py */,
+				34E3010F1B651515000C16DB /* triangle.py */,
+				34E301111B65153A000C16DB /* rtriangle.py */,
+			);
+			name = ShapePaths;
+			path = CSShapeCapturePlugin/ShapePaths;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		343692101B62364E007EC2D9 /* CSShapeCapturePlugin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 343692181B62364E007EC2D9 /* Build configuration list for PBXNativeTarget "CSShapeCapturePlugin" */;
+			buildPhases = (
+				3436920D1B62364E007EC2D9 /* Sources */,
+				3436920E1B62364E007EC2D9 /* Frameworks */,
+				3436920F1B62364E007EC2D9 /* Resources */,
+				34E301131B6515B9000C16DB /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CSShapeCapturePlugin;
+			productName = CSShapeCapturePlugin;
+			productReference = 343692111B62364E007EC2D9 /* CSShapeCapturePlugin.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		343692091B62364E007EC2D9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0640;
+				ORGANIZATIONNAME = Zakk;
+				TargetAttributes = {
+					343692101B62364E007EC2D9 = {
+						CreatedOnToolsVersion = 6.4;
+					};
+				};
+			};
+			buildConfigurationList = 3436920C1B62364E007EC2D9 /* Build configuration list for PBXProject "CSShapeCapturePlugin" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 343692081B62364E007EC2D9;
+			productRefGroup = 343692121B62364E007EC2D9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				343692101B62364E007EC2D9 /* CSShapeCapturePlugin */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3436920F1B62364E007EC2D9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				343692661B638BE5007EC2D9 /* CSShapePathLoader.plugin in Resources */,
+				3436925E1B637DD2007EC2D9 /* CSShapePathLoader.py in Resources */,
+				34E3010B1B64A39E000C16DB /* CSShapeCaptureViewController.xib in Resources */,
+				3436925C1B637D62007EC2D9 /* setup.py in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3436920D1B62364E007EC2D9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3436924C1B6238C6007EC2D9 /* CSShapeCapture.m in Sources */,
+				343692641B63891C007EC2D9 /* CSShapeLayer.m in Sources */,
+				343692431B6236DF007EC2D9 /* CSShapeCaptureFactory.m in Sources */,
+				34E3010A1B64A39E000C16DB /* CSShapeCaptureViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		343692161B62364E007EC2D9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		343692171B62364E007EC2D9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		343692191B62364E007EC2D9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = CSShapeCapturePlugin/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-flat_namespace",
+					"-undefined",
+					suppress,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		3436921A1B62364E007EC2D9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = CSShapeCapturePlugin/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-flat_namespace",
+					"-undefined",
+					suppress,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3436920C1B62364E007EC2D9 /* Build configuration list for PBXProject "CSShapeCapturePlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				343692161B62364E007EC2D9 /* Debug */,
+				343692171B62364E007EC2D9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		343692181B62364E007EC2D9 /* Build configuration list for PBXNativeTarget "CSShapeCapturePlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				343692191B62364E007EC2D9 /* Debug */,
+				3436921A1B62364E007EC2D9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 343692091B62364E007EC2D9 /* Project object */;
+}

@@ -41,6 +41,7 @@
         self.rootLayer.masksToBounds = YES;
         self.rootLayer.backgroundColor = CGColorCreateGenericRGB(0, 0, 0, 1);
         self.rootLayer.layoutManager = [CAConstraintLayoutManager layoutManager];
+        
         self.rootLayer.delegate = self;
         
         self.animationList = [NSMutableArray array];

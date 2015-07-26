@@ -25,6 +25,8 @@
 @property (assign) int sampleRate;
 @property (assign) AudioStreamBasicDescription *graphAsbd;
 
+-(instancetype)initWithSamplerate:(int)samplerate;
+
 -(bool)addNode:(CAMultiAudioNode *)newNode;
 -(bool)connectNode:(CAMultiAudioNode *)node toNode:(CAMultiAudioNode *)toNode;
 -(bool)connectNode:(CAMultiAudioNode *)node toNode:(CAMultiAudioNode *)toNode sampleRate:(int)sampleRate;

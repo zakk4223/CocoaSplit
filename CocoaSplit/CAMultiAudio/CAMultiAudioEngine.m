@@ -158,8 +158,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 -(bool)buildGraph
 {
-    self.graph = [[CAMultiAudioGraph alloc] init];
-    self.graph.sampleRate = self.sampleRate;
+    self.graph = [[CAMultiAudioGraph alloc] initWithSamplerate:self.sampleRate];
     
     
     
@@ -315,8 +314,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     for (CAMultiAudioNode *node in self.audioInputs)
     {
         [node resetSamplerate:self.sampleRate];
-        [self.graph addNode:node];
-        [self.graph connectNode:node toNode:self.encodeMixer];
+        [self reattachInput:node];
         
     }
     
@@ -369,6 +367,24 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     return newInput;
     
 }
+
+
+-(void)reattachInput:(CAMultiAudioNode *)input
+{
+    
+    
+    [self.graph addNode:input];
+    
+    CAMultiAudioDownmixer *dmix = [[CAMultiAudioDownmixer alloc] initWithInputChannels:input.channelCount];
+    [self.graph addNode:dmix];
+    
+    [self.graph connectNode:dmix toNode:self.encodeMixer];
+    
+    [self.graph connectNode:input toNode:dmix];
+    input.downMixer = dmix;
+
+}
+
 -(void)attachInput:(CAMultiAudioNode *)input
 {
     
