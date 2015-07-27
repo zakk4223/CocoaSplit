@@ -50,6 +50,7 @@ static NSArray *_sourceTypes = nil;
 @synthesize width = _width;
 @synthesize height = _height;
 @synthesize alwaysDisplay = _alwaysDisplay;
+@synthesize compositingFilterName = _compositingFilterName;
 
 
 -(instancetype)copyWithZone:(NSZone *)zone
@@ -188,8 +189,10 @@ static NSArray *_sourceTypes = nil;
         [aCoder encodeObject:self.backgroundColor forKey:@"backgroundColor"];
     }
     
+    [aCoder encodeObject:self.compositingFilterName forKey:@"compositingFilterName"];
     
 }
+
 
 -(id) initWithCoder:(NSCoder *)aDecoder
 {
@@ -414,6 +417,7 @@ static NSArray *_sourceTypes = nil;
         
         
         self.layer.filters = [aDecoder decodeObjectForKey:@"layerFilters"];
+        self.compositingFilterName = [aDecoder decodeObjectForKey:@"compositingFilterName"];
         
 
     }
@@ -683,6 +687,40 @@ static NSArray *_sourceTypes = nil;
 -(CGFloat)borderWidth
 {
     return self.layer.borderWidth;
+}
+
+
+-(NSString *)compositingFilterName
+{
+    return _compositingFilterName;
+}
+
+-(void)setCompositingFilterName:(NSString *)compositingFilterName
+{
+    CIFilter *newFilter = nil;
+    if (compositingFilterName)
+    {
+        newFilter = [CIFilter filterWithName:compositingFilterName];
+    }
+    self.layer.compositingFilter = newFilter;
+    _compositingFilterName = compositingFilterName;
+}
+
+
+-(void)setIsMaskLayer:(bool)isMaskLayer
+{
+    if (isMaskLayer)
+    {
+        self.compositingFilterName = @"CIMinimumCompositing";
+    } else if ([self.compositingFilterName isEqualToString:@"CIMinimumCompositing"]) {
+        self.compositingFilterName = nil;
+    }
+}
+
+
+-(bool)isMaskLayer
+{
+    return [self.compositingFilterName isEqualToString:@"CIMinimumCompositing"];
 }
 
 

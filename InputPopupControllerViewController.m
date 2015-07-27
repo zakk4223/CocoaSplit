@@ -51,6 +51,8 @@
             [self.availableTransitions setObject:niceName forKey:ciName];
         }
         
+        self.compositionFilterNames = [CIFilter filterNamesInCategory:kCICategoryCompositeOperation];
+        
         
         //self = [super initWithNibName:@"TestView" bundle:nil];
 

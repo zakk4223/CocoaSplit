@@ -669,6 +669,16 @@
                                 <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <font key="titleFont" metaFont="system"/>
                             </box>
+                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u4M-zQ-4JM">
+                                <rect key="frame" x="262" y="159" width="90" height="20"/>
+                                <buttonCell key="cell" type="check" title="Use as mask" bezelStyle="regularSquare" imagePosition="right" controlSize="small" state="on" inset="2" id="zTZ-wn-fXS">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="smallSystem"/>
+                                </buttonCell>
+                                <connections>
+                                    <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.isMaskLayer" id="ORP-rS-TVy"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </view>
                 </tabViewItem>
@@ -1965,6 +1975,36 @@
                                     <binding destination="-2" name="enabled" keyPath="self.layerTableHasSelection" id="Ttb-Xe-y4y"/>
                                 </connections>
                             </button>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CJB-gi-9hu">
+                                <rect key="frame" x="240" y="17" width="72" height="14"/>
+                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Composition" placeholderString="" id="0dM-GS-IwH">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rBq-PA-ObB">
+                                <rect key="frame" x="315" y="12" width="101" height="22"/>
+                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="NcG-Gb-mUJ" id="dyA-4y-dNd">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <menu key="menu" id="FOR-fN-GDb">
+                                        <items>
+                                            <menuItem title="Item 1" state="on" id="NcG-Gb-mUJ"/>
+                                            <menuItem title="Item 2" id="Qfj-Wb-Kv3"/>
+                                            <menuItem title="Item 3" id="l6a-1b-KhK"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                                <connections>
+                                    <binding destination="Anc-ZZ-EeJ" name="content" keyPath="arrangedObjects" id="PnG-dl-OW4">
+                                        <dictionary key="options">
+                                            <bool key="NSInsertsNullPlaceholder" value="YES"/>
+                                        </dictionary>
+                                    </binding>
+                                    <binding destination="Gdf-y2-DdF" name="selectedObject" keyPath="selection.compositingFilterName" previousBinding="PnG-dl-OW4" id="BRJ-nl-KZa"/>
+                                </connections>
+                            </popUpButton>
                         </subviews>
                     </view>
                 </tabViewItem>
@@ -1972,7 +2012,7 @@
             <connections>
                 <binding destination="Gdf-y2-DdF" name="selectedLabel" keyPath="selection.settingsTab" id="hiM-bU-1lm"/>
             </connections>
-            <point key="canvasLocation" x="654.5" y="152.5"/>
+            <point key="canvasLocation" x="652.5" y="152.5"/>
         </tabView>
         <objectController id="Gdf-y2-DdF" userLabel="InputSourceController">
             <connections>
@@ -1991,6 +2031,11 @@
         <arrayController id="4mF-fx-iLB" userLabel="multiSourceArrayController">
             <connections>
                 <binding destination="Gdf-y2-DdF" name="contentArray" keyPath="selection.attachedInputs" id="sbD-fu-ivQ"/>
+            </connections>
+        </arrayController>
+        <arrayController id="Anc-ZZ-EeJ" userLabel="compositionNamesArrayController">
+            <connections>
+                <binding destination="-2" name="contentArray" keyPath="self.compositionFilterNames" id="YfV-BO-Ibe"/>
             </connections>
         </arrayController>
         <dictionaryController objectClassName="_NSControllerKeyValuePair" id="5ZX-ve-K4l" userLabel="constraintMapController">

@@ -76,6 +76,10 @@ typedef enum resize_style_t {
 @property (strong) CSInputLayer *layer;
 @property (weak) SourceLayout *sourceLayout;
 
+@property (assign) bool isMaskLayer;
+
+@property (strong) NSString *compositingFilterName;
+
 
 @property (assign) bool skipSave;
 

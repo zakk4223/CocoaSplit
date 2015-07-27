@@ -34,6 +34,8 @@
 
 @property (strong) NSMutableDictionary *availableTransitions;
 
+@property (strong) NSArray *compositionFilterNames;
+
 
 - (IBAction)configureFilter:(NSButton *)sender;
 
