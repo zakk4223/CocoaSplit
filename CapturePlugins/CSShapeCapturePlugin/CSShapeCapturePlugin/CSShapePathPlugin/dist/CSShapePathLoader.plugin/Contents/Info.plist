@@ -52,7 +52,11 @@
 		<false/>
 		<key>site_packages</key>
 		<false/>
+		<key>use_faulthandler</key>
+		<false/>
 		<key>use_pythonpath</key>
+		<false/>
+		<key>verbose</key>
 		<false/>
 	</dict>
 	<key>PyResourcePackages</key>
@@ -81,7 +85,7 @@
 			<key>template</key>
 			<string>bundle</string>
 			<key>version</key>
-			<string>0.7.3</string>
+			<string>0.9</string>
 		</dict>
 	</dict>
 </dict>

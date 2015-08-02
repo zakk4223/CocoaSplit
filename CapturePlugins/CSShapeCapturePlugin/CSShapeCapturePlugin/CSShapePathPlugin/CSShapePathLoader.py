@@ -1,8 +1,9 @@
 import objc
 import sys
 import os
-from Foundation import *
 from pluginbase import PluginBase
+from Foundation import *
+from CSShapePathWrapper import *
 
 sys.dont_write_bytecode = True
 
@@ -15,21 +16,12 @@ plugin_dirs.append(NSBundle.bundleForClass_(objc.lookUpClass("CSShapeCapture").c
 plugin_source = plugin_base.make_plugin_source(searchpath=plugin_dirs)
 
 
+
 class CSShapePathLoader(NSObject):
     
     def init(self):
-        self = super(CSShapePathLoader, self).init()
+        self = objc.super(CSShapePathLoader,self).init()
         return self
-    
-    @objc.signature('v@:@@')
-    def setPathForLayer_withPlugin_(self, layer, m_name):
-        if layer and m_name:
-            path_plugin = plugin_source.load_plugin(m_name)
-            path_ref = path_plugin.create_cgpath(layer.frame())
-            layer.setPath_(path_ref)
-    #CGPathRelease(path_ref)
-            
-    
     
     @objc.signature('@@:@')
     def pathLoaderPath_(self, pluginName):
@@ -52,8 +44,9 @@ class CSShapePathLoader(NSObject):
             except AttributeError:
                 plugin_name = "No Name!"
             
+            new_wrap = CSShapePathWrapper.alloc().initWithPlugin_(plugin)
             
-            ret[m_name] = { 'name':plugin_name, 'module':m_name}
+            ret[m_name] = { 'name':plugin_name, 'module':m_name, 'plugin':new_wrap}
         return ret
 
 

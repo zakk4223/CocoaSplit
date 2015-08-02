@@ -11,13 +11,15 @@
 #import <Foundation/Foundation.h>
 
 
+
+
+
 @interface CSShapePathLoader : NSObject
 
 
 -(NSDictionary *)allPaths;
 -(NSString *)pathLoaderPath:(NSString *)name;
 
--(void)setPathForLayer:(CAShapeLayer *)layer withPlugin:(id)withPlugin;
 
 
 @end

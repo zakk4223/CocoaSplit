@@ -8,6 +8,7 @@
 
 #import "CSShapeCapture.h"
 #import "CSShapeCaptureFactory.h"
+#import <objc/runtime.h>
 
 @implementation CSShapeCapture
 
@@ -16,7 +17,9 @@
 @synthesize fillColor = _fillColor;
 @synthesize lineColor = _lineColor;
 @synthesize backgroundColor = _backgroundColor;
-
+@synthesize flipX = _flipX;
+@synthesize flipY = _flipY;
+@synthesize rotateAngle = _rotateAngle;
 
 
 -(void)encodeWithCoder:(NSCoder *)aCoder
@@ -27,6 +30,9 @@
     [aCoder encodeObject:self.lineColor forKey:@"lineColor"];
     [aCoder encodeObject:self.fillColor forKey:@"fillColor"];
     [aCoder encodeFloat:self.lineWidth forKey:@"lineWidth"];
+    [aCoder encodeFloat:self.rotateAngle forKey:@"rotateAngle"];
+    [aCoder encodeBool:self.flipX forKey:@"flipX"];
+    [aCoder encodeBool:self.flipY forKey:@"flipY"];
 }
 
 -(instancetype) initWithCoder:(NSCoder *)aDecoder
@@ -37,6 +43,9 @@
         self.lineColor = [aDecoder decodeObjectForKey:@"lineColor"];
         self.fillColor = [aDecoder decodeObjectForKey:@"fillColor"];
         self.lineWidth = [aDecoder decodeFloatForKey:@"lineWidth"];
+        self.rotateAngle = [aDecoder decodeFloatForKey:@"rotateAngle"];
+        self.flipX = [aDecoder decodeBoolForKey:@"flipX"];
+        self.flipY = [aDecoder decodeBoolForKey:@"flipY"];
     }
     return self;
 }
@@ -46,6 +55,7 @@
 {
     if (self = [super init])
     {
+        
         _lineColor = [NSColor blackColor];
         _fillColor = [NSColor redColor];
         _lineWidth = 2.0f;
@@ -53,6 +63,53 @@
     }
     
     return self;
+}
+
+
+-(void)setRotateAngle:(CGFloat)rotateAngle
+{
+    _rotateAngle = rotateAngle;
+    [self updateLayersWithBlock:^(CALayer *layer) {
+        ((CSShapeLayer *)layer).rotateAngle = rotateAngle;
+        [(CSShapeLayer *)layer drawPath];
+        
+    }];
+}
+
+-(CGFloat)rotateAngle
+{
+    return _rotateAngle;
+}
+
+
+-(void)setFlipX:(bool)flipX
+{
+    _flipX = flipX;
+    [self updateLayersWithBlock:^(CALayer *layer) {
+        ((CSShapeLayer *)layer).flipX = flipX;
+        [(CSShapeLayer *)layer drawPath];
+
+    }];
+}
+
+-(bool)flipX
+{
+    return _flipX;
+}
+
+-(void)setFlipY:(bool)flipY
+{
+    _flipY = flipY;
+    [self updateLayersWithBlock:^(CALayer *layer) {
+        ((CSShapeLayer *)layer).flipY = flipY;
+        [(CSShapeLayer *)layer drawPath];
+
+    }];
+}
+
+-(bool)flipY
+{
+    return _flipY;
 }
 
 
@@ -145,9 +202,7 @@
 
     CSShapeLayer *newLayer = [CSShapeLayer layer];
     
-    CSShapePathLoader *sharedLoader = [CSShapeCaptureFactory sharedPathLoader];
     
-    newLayer.shapeLoader = sharedLoader;
     
     if (self.fillColor)
     {
@@ -166,9 +221,14 @@
     
     if (self.activeVideoDevice)
     {
-        newLayer.pathModule = self.activeVideoDevice.uniqueID;
+        newLayer.shapeCreator = self.activeVideoDevice.captureDevice;
+        
     }
     newLayer.lineWidth = self.lineWidth;
+    newLayer.flipX = self.flipX;
+    newLayer.flipY = self.flipY;
+    newLayer.rotateAngle = self.rotateAngle;
+    
     
     return newLayer;
 }
@@ -186,7 +246,9 @@
     
     _activeVideoDevice = newDev;
     [self updateLayersWithBlock:^(CALayer *layer) {
-        ((CSShapeLayer *)layer).pathModule = newDev.uniqueID;
+        ((CSShapeLayer *)layer).shapeCreator = newDev.captureDevice;
+
+        
         [(CSShapeLayer *)layer drawPath];
     }];
 }
@@ -204,7 +266,7 @@
     for(NSString *key in allShapes)
     {
         NSDictionary *shapeInfo = allShapes[key];
-        CSAbstractCaptureDevice *shape = [[CSAbstractCaptureDevice alloc] initWithName:shapeInfo[@"name"] device:nil uniqueID:shapeInfo[@"module"]];
+        CSAbstractCaptureDevice *shape = [[CSAbstractCaptureDevice alloc] initWithName:shapeInfo[@"name"] device:shapeInfo[@"plugin"] uniqueID:shapeInfo[@"module"]];
         [ret addObject:shape];
     }
     return ret;

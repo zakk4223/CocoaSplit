@@ -7,13 +7,21 @@
 //
 
 #import <QuartzCore/QuartzCore.h>
-#import "CSShapePathCreatorProtocol.h"
 #import "CSShapePathLoader.h"
 
-@interface CSShapeLayer : CAShapeLayer
 
-@property (strong) NSString *pathModule;
-@property (strong) CSShapePathLoader *shapeLoader;
+@class CSShapeWrapper;
+
+
+@interface CSShapeLayer : CAShapeLayer
+{
+    CGAffineTransform _shapeTransform;
+}
+
+@property (strong)  CSShapeWrapper *shapeCreator;
+@property (assign) bool flipX;
+@property (assign) bool flipY;
+@property (assign) CGFloat rotateAngle;
 
 -(void)drawPath;
 

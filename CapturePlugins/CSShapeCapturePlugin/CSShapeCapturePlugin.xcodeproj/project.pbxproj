@@ -18,6 +18,8 @@
 		34E301141B6515C9000C16DB /* circle.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34E3010D1B6514F9000C16DB /* circle.py */; };
 		34E301151B6515C9000C16DB /* triangle.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34E3010F1B651515000C16DB /* triangle.py */; };
 		34E301161B6515CB000C16DB /* rtriangle.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34E301111B65153A000C16DB /* rtriangle.py */; };
+		34E56B0C1B6DF3D1006A621E /* CSShapeWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E56B0B1B6DF3D1006A621E /* CSShapeWrapper.m */; };
+		34FD2AC01B6D39DA00181409 /* CSShapePathWrapper.py in Resources */ = {isa = PBXBuildFile; fileRef = 34FD2ABF1B6D39DA00181409 /* CSShapePathWrapper.py */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -58,7 +60,6 @@
 		3436925B1B637D62007EC2D9 /* setup.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = setup.py; sourceTree = "<group>"; };
 		3436925D1B637DD2007EC2D9 /* CSShapePathLoader.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = CSShapePathLoader.py; sourceTree = "<group>"; };
 		3436925F1B638382007EC2D9 /* CSShapePathLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSShapePathLoader.h; sourceTree = "<group>"; };
-		343692611B63860E007EC2D9 /* CSShapePathCreatorProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSShapePathCreatorProtocol.h; sourceTree = "<group>"; };
 		343692621B63891C007EC2D9 /* CSShapeLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSShapeLayer.h; sourceTree = "<group>"; };
 		343692631B63891C007EC2D9 /* CSShapeLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSShapeLayer.m; sourceTree = "<group>"; };
 		343692651B638BE5007EC2D9 /* CSShapePathLoader.plugin */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = CSShapePathLoader.plugin; path = CSShapeCapturePlugin/CSShapePathPlugin/dist/CSShapePathLoader.plugin; sourceTree = "<group>"; };
@@ -68,6 +69,9 @@
 		34E3010D1B6514F9000C16DB /* circle.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = circle.py; sourceTree = "<group>"; };
 		34E3010F1B651515000C16DB /* triangle.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = triangle.py; sourceTree = "<group>"; };
 		34E301111B65153A000C16DB /* rtriangle.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = rtriangle.py; sourceTree = "<group>"; };
+		34E56B0A1B6DF3D1006A621E /* CSShapeWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSShapeWrapper.h; sourceTree = "<group>"; };
+		34E56B0B1B6DF3D1006A621E /* CSShapeWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSShapeWrapper.m; sourceTree = "<group>"; };
+		34FD2ABF1B6D39DA00181409 /* CSShapePathWrapper.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = CSShapePathWrapper.py; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,12 +114,13 @@
 				3436924A1B6238C6007EC2D9 /* CSShapeCapture.h */,
 				3436924B1B6238C6007EC2D9 /* CSShapeCapture.m */,
 				3436925F1B638382007EC2D9 /* CSShapePathLoader.h */,
-				343692611B63860E007EC2D9 /* CSShapePathCreatorProtocol.h */,
 				343692621B63891C007EC2D9 /* CSShapeLayer.h */,
 				343692631B63891C007EC2D9 /* CSShapeLayer.m */,
 				34E301071B64A39E000C16DB /* CSShapeCaptureViewController.h */,
 				34E301081B64A39E000C16DB /* CSShapeCaptureViewController.m */,
 				34E301091B64A39E000C16DB /* CSShapeCaptureViewController.xib */,
+				34E56B0A1B6DF3D1006A621E /* CSShapeWrapper.h */,
+				34E56B0B1B6DF3D1006A621E /* CSShapeWrapper.m */,
 			);
 			path = CSShapeCapturePlugin;
 			sourceTree = "<group>";
@@ -154,6 +159,7 @@
 			children = (
 				3436925B1B637D62007EC2D9 /* setup.py */,
 				3436925D1B637DD2007EC2D9 /* CSShapePathLoader.py */,
+				34FD2ABF1B6D39DA00181409 /* CSShapePathWrapper.py */,
 			);
 			path = CSShapePathPlugin;
 			sourceTree = "<group>";
@@ -226,6 +232,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34FD2AC01B6D39DA00181409 /* CSShapePathWrapper.py in Resources */,
 				343692661B638BE5007EC2D9 /* CSShapePathLoader.plugin in Resources */,
 				3436925E1B637DD2007EC2D9 /* CSShapePathLoader.py in Resources */,
 				34E3010B1B64A39E000C16DB /* CSShapeCaptureViewController.xib in Resources */,
@@ -243,6 +250,7 @@
 				3436924C1B6238C6007EC2D9 /* CSShapeCapture.m in Sources */,
 				343692641B63891C007EC2D9 /* CSShapeLayer.m in Sources */,
 				343692431B6236DF007EC2D9 /* CSShapeCaptureFactory.m in Sources */,
+				34E56B0C1B6DF3D1006A621E /* CSShapeWrapper.m in Sources */,
 				34E3010A1B64A39E000C16DB /* CSShapeCaptureViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

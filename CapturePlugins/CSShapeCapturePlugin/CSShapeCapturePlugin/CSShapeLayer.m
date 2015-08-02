@@ -7,26 +7,62 @@
 //
 
 #import "CSShapeLayer.h"
+#import "CSShapeWrapper.h"
 
 @implementation CSShapeLayer
 
 
 
+
+-(void)transformPath
+{
+    
+    CGAffineTransform useTransform = CGAffineTransformIdentity;
+    
+    if (self.flipX)
+    {
+        useTransform = CGAffineTransformTranslate(useTransform, self.frame.size.width, 0);
+        useTransform = CGAffineTransformScale(useTransform, -1.0, 1.0);
+    }
+    
+    if (self.flipY)
+    {
+        useTransform = CGAffineTransformTranslate(useTransform, 0, self.frame.size.height);
+        useTransform = CGAffineTransformScale(useTransform, 1.0, -1.0);
+
+    }
+    
+    if (self.rotateAngle)
+    {
+        useTransform = CGAffineTransformTranslate(useTransform, self.frame.size.width/2, self.frame.size.height/2);
+        useTransform = CGAffineTransformRotate(useTransform, self.rotateAngle * M_PI / 180);
+        useTransform = CGAffineTransformTranslate(useTransform, -self.frame.size.width/2, -self.frame.size.height/2);
+
+        
+    }
+    
+    
+    self.path = CGPathCreateCopyByTransformingPath(self.path, &useTransform);
+
+}
+
 -(void)drawPath
 {
     
-    
-    
-    if (self.pathModule && self.shapeLoader && !CGRectEqualToRect(self.frame, CGRectZero))
+    if (self.shapeCreator)
     {
-        [self.shapeLoader setPathForLayer:self withPlugin:self.pathModule];
+        [self.shapeCreator getcgpath:self.frame forLayer:self];
+        if (self.path)
+        {
+                        
+            [self transformPath];
+        }
     }
+    
+    return;
+    
 }
 
--(void)setBounds:(CGRect)bounds
-{
-    [super setBounds:bounds];
-}
 -(void)setFrame:(CGRect)frame
 {
     [super setFrame:frame];

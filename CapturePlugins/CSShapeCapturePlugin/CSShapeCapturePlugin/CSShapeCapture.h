@@ -9,7 +9,6 @@
 #import "CSCaptureBase.h"
 #import "CSAbstractCaptureDevice.h"
 #import "CSShapePathLoader.h"
-#import "CSShapePathCreatorProtocol.h"
 #import "CSShapeLayer.h"
 
 @interface CSShapeCapture : CSCaptureBase <CSCaptureSourceProtocol>
@@ -20,5 +19,10 @@
 @property (strong) NSColor *lineColor;
 @property (assign) CGFloat lineWidth;
 @property (strong) NSColor *backgroundColor;
+@property (assign) bool flipX;
+@property (assign) bool flipY;
+@property (assign) CGFloat rotateAngle;
+
+
 
 @end
