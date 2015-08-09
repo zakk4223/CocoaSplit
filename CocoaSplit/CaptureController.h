@@ -48,6 +48,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 @interface CaptureController : NSObject <NSMenuDelegate, MIKMIDIMappableResponder, MIKMIDIResponder, MIKMIDIMappingGeneratorDelegate, CSTimerSourceProtocol> {
     
+    bool _stagingHidden;
+    
     NSArray *_inputIdentifiers;
     
     CIFilter *_compositeFilter;
@@ -90,6 +92,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
     
     CFAbsoluteTime _frame_interval;
+    CFAbsoluteTime _staging_frame_interval;
+    
     mach_timebase_info_data_t _mach_timebase;
     double _frame_time;
     double _start_time;

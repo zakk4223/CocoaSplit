@@ -11,6 +11,7 @@
 #import "CaptureController.h"
 #import "InputSource.h"
 #import "LayoutRenderer.h"
+#import "CSPreviewGLLayer.h"
 
 
 
@@ -25,23 +26,13 @@
 
 
 
-@interface PreviewView : NSOpenGLView <NSPopoverDelegate, NSWindowDelegate>
+@interface PreviewView : NSView <NSPopoverDelegate, NSWindowDelegate>
 
 {
 
-    IOSurfaceID _boundIOSurfaceID;
-    NSMutableDictionary      *_shaderPrograms;
-    GLuint      _previewTextures[3]; //Is there something with more than 3 planes? Guess we'll find out;
-    GLsizei     _surfaceWidth;
-    GLsizei     _surfaceHeight;
-    int         _hackcnt;
-    GLuint      _vertexPosBuffer;
-    GLuint      _programId;
-    GLuint      _lineProgram;
-    bool        _resizeDirty;
-    GLint       _viewport[4];
-    GLdouble    _modelview[16];
-    GLdouble    _projection[16];
+    
+    CSPreviewGLLayer *_glLayer;
+    
     SourceLayout *_renderingLayout;
 
     
@@ -51,23 +42,13 @@
     float _snap_x, _snap_y;
     bool _in_resize_rect;
     
-    CIImage *_currentImage;
+    NSTrackingArea *_trackingArea;
+
     
     
-    CVDisplayLinkRef displayLink;
-    
-    int _num_planes;
     
     id _fs_activity_token;
     
-    NSTimer *_idleTimer;
-    NSTrackingArea *_trackingArea;
-    NSRecursiveLock *renderLock;
-
-    CVPixelBufferPoolRef  _renderPool;
-    CIContext *_ciCtx;
-    
-
     NSScreen *_fullscreenOn;
     NSPopover *_layoutpopOver;
     
@@ -86,10 +67,6 @@
 
 
 -(void)spawnInputSettings:(InputSource *)forInput atRect:(NSRect)atRect;
--(void)stopDisplayLink;
--(void)restartDisplayLink;
--(void) cvrender;
-
 -(void)goFullscreen:(NSScreen *)onScreen;
 
 
@@ -105,7 +82,6 @@
 
 
 
-@property (strong) CIContext *cictx;
 
 @property (strong) NSColor *statusColor;
 
@@ -122,6 +98,7 @@
 @property (strong) NSMutableDictionary *activeConfigWindows;
 @property (strong) NSMutableDictionary *activeConfigControllers;
 
+-(void)needsUpdate;
 
 
 

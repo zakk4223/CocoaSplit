@@ -13,8 +13,8 @@
 @protocol CSTimerSourceProtocol
 
 
--(void)frameArrived;
--(void)frameTimerWillStop;
+-(void)frameArrived:(id)ctx;
+-(void)frameTimerWillStop:(id)ctx;
 
 
 @end

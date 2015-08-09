@@ -230,7 +230,6 @@
     
     
     
-    
 
     __weak __typeof__(self) weakSelf = self;
     
@@ -251,6 +250,7 @@
         __typeof__(self) strongSelf = weakSelf;
         
         
+        
         if (status == kCGDisplayStreamFrameStatusStopped)
         {
             if (strongSelf->_displayStreamRef)
@@ -261,7 +261,8 @@
             
         }
         
-        if (frameSurface)
+        
+        if (status == kCGDisplayStreamFrameStatusFrameComplete && frameSurface)
         {
             [strongSelf updateLayersWithBlock:^(CALayer *layer) {
                 ((CSIOSurfaceLayer *)layer).ioSurface = frameSurface;

@@ -20,6 +20,7 @@
 
 
 @property (weak) id<CSTimerSourceProtocol> timerDelegate;
+@property (weak) id timerDelegateCtx;
 
 
 @end
@@ -267,7 +268,7 @@
 {
     if (self.timerDelegate)
     {
-        [self.timerDelegate frameArrived];
+        [self.timerDelegate frameArrived:self.timerDelegateCtx];
     }
 }
 
@@ -328,7 +329,7 @@
 {
     if (self.timerDelegate)
     {
-        [self.timerDelegate frameTimerWillStop];
+        [self.timerDelegate frameTimerWillStop:self.timerDelegateCtx];
     }
     
     self.timerDelegate = nil;

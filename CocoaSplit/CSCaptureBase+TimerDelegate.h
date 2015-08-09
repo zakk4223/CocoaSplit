@@ -12,6 +12,6 @@
 @interface CSCaptureBase (TimerDelegate)
 
 @property (weak) id<CSTimerSourceProtocol> timerDelegate;
-
+@property (weak) id timerDelegateCtx;
 
 @end

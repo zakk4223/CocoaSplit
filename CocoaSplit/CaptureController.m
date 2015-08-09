@@ -727,43 +727,6 @@
 
 
 
-static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStamp* now, const CVTimeStamp* outputTime,
-                                  CVOptionFlags flagsIn, CVOptionFlags* flagsOut, void* displayLinkContext)
-{
-    
-    
-    
-    CaptureController *myself;
-    
-    
-    myself = (__bridge CaptureController *)displayLinkContext;
-    
-   
-    
-    
-    
-
-    if (!myself.stagingPreviewView.hiddenOrHasHiddenAncestor)
-    {
-        //[CATransaction commit];
-
-        [CATransaction begin];
-        [myself.stagingPreviewView cvrender];
-        [CATransaction commit];
-        
-    }
-    
-    if (!myself.livePreviewView.hiddenOrHasHiddenAncestor)
-    {
-        [myself.livePreviewView cvrender];
-    }
-    
-    
-    [CATransaction commit];
-    
-    return kCVReturnSuccess;
-}
-
 
 -(void)buildScreensInfo:(NSNotification *)notification
 {
@@ -1062,15 +1025,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
        self.compressorTypes = @[@"x264", @"AppleVTCompressor", @"None"];
        self.arOptions = @[@"None", @"Use Source", @"Preserve AR"];
        
-       
-       //self.audioCaptureSession = [[AVFAudioCapture alloc] init];
-       //[self.audioCaptureSession setAudioDelegate:self];
-       
-       
-       
-       //self.audioCaptureDevices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio];
-       
-       
        mach_timebase_info(&_mach_timebase);
        
 
@@ -1155,13 +1109,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 
        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(buildScreensInfo:) name:NSApplicationDidChangeScreenParametersNotification object:nil];
        
-       
-       
-       CVDisplayLinkCreateWithActiveCGDisplays(&_displayLink);
-       CVDisplayLinkSetOutputCallback(_displayLink, &displayLinkRender, (__bridge void *)self);
-       
-       CVDisplayLinkStart(_displayLink);
-
        
        
    }
@@ -1647,10 +1594,12 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     //mainThread = [[NSThread alloc] initWithTarget:self selector:@selector(newFrameTimed) object:nil];
     //[mainThread start];
     
-    
-    
     dispatch_async(_main_capture_queue, ^{[self newFrameTimed];});
-
+    
+    dispatch_async(_preview_queue, ^{
+        [self newStagingFrameTimed];
+    });
+    
     self.stagingPreviewView.controller = self;
     self.livePreviewView.controller = self;
     LayoutRenderer *stagingRender = [[LayoutRenderer alloc] init];
@@ -1761,7 +1710,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
      
      */
     
-    
+
     SourceLayout *previewCopy = stagingLayout.copy;
     [previewCopy restoreSourceList];
 
@@ -1775,7 +1724,16 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
             
         }
     }
+
+    float framerate = stagingLayout.frameRate;
     
+    if (framerate && framerate > 0)
+    {
+        _staging_frame_interval = (1.0/framerate);
+    } else {
+        _staging_frame_interval = 1.0/60.0;
+    }
+
     self.currentMidiInputStagingIdx = 0;
 
 
@@ -2441,19 +2399,49 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 }
 
 
--(void)frameArrived
+-(void)frameArrived:(id)ctx
 {
-    dispatch_async(_main_capture_queue, ^{
-        [self newFrameEvent];
-    });
+    if (ctx == self.previewCtx)
+    {
+        dispatch_async(_main_capture_queue, ^{
+            [self newFrameEvent];
+        });
+    } else if (ctx == self.stagingCtx) {
+        dispatch_async(_preview_queue, ^{
+            [self newStagingFrame];
+        });
+    }
     
 }
 
--(void)frameTimerWillStop
+-(void)frameTimerWillStop:(id)ctx
 {
-    dispatch_async(_main_capture_queue, ^{
-        [self newFrameTimed];
-    });
+    if (ctx == self.previewCtx)
+    {
+        dispatch_async(_main_capture_queue, ^{
+            [self newFrameTimed];
+        });
+    } else if (ctx == self.stagingCtx) {
+        dispatch_async(_preview_queue, ^{
+            [self newStagingFrameTimed];
+        });
+    }
+}
+
+
+-(void)newStagingFrame
+{
+    if (_stagingHidden)
+    {
+        return;
+    }
+    
+    [self.stagingCtx.layoutRenderer currentImg];
+    /*
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.stagingCtx setNeedsDisplay:YES];
+    });*/
+
 }
 
 
@@ -2461,6 +2449,41 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 {
     _frame_time = [self mach_time_seconds];
     [self newFrame];
+}
+
+
+-(void)newStagingFrameTimed
+{
+    double startTime;
+    startTime = [self mach_time_seconds];
+    while (1)
+    {
+        
+        if (_stagingHidden)
+        {
+            return;
+        }
+        
+        if (self.stagingCtx.sourceLayout.layoutTimingSource && self.stagingCtx.sourceLayout.layoutTimingSource.videoInput && self.stagingCtx.sourceLayout.layoutTimingSource.videoInput.canProvideTiming)
+        {
+            CSCaptureBase *newTiming = (CSCaptureBase *)self.stagingCtx.sourceLayout.layoutTimingSource.videoInput;
+            newTiming.timerDelegateCtx = self.stagingCtx;
+            newTiming.timerDelegate = self;
+            return;
+        }
+        
+        @autoreleasepool {
+            if (![self sleepUntil:(startTime += _staging_frame_interval)])
+            {
+                continue;
+            }
+            [CATransaction begin];
+            [self.stagingCtx.layoutRenderer currentImg];
+            [CATransaction commit];
+         }
+        
+
+    }
 }
 
 
@@ -2484,6 +2507,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
         if (self.previewCtx.sourceLayout.layoutTimingSource && self.previewCtx.sourceLayout.layoutTimingSource.videoInput && self.previewCtx.sourceLayout.layoutTimingSource.videoInput.canProvideTiming)
         {
             CSCaptureBase *newTiming = (CSCaptureBase *)self.previewCtx.sourceLayout.layoutTimingSource.videoInput;
+            newTiming.timerDelegateCtx = self.previewCtx;
             newTiming.timerDelegate = self;
             return;
         }
@@ -2541,27 +2565,6 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
 }
 
 
-/*
--(NSString *)getCurrentRendererName
-{
-    cl_int error;
-    
-    CGLShareGroupObj share_group = CGLGetShareGroup(_cgl_ctx);
-    
-    cl_context_properties properties[] = {CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE, (intptr_t)share_group, 0};
-    
-    cl_context context = clCreateContext(properties, 0, NULL, 0, 0, &error);
-    cl_device_id renderer;
-    clGetGLContextInfoAPPLE(context, _cgl_ctx, CL_CGL_DEVICE_FOR_CURRENT_VIRTUAL_SCREEN_APPLE, sizeof(renderer), &renderer, NULL);
-    
-    char buf[128];
-    
-    clGetDeviceInfo(renderer, CL_DEVICE_NAME, 128, buf, NULL);
-    
-    return [NSString stringWithUTF8String:buf];
-}
-
-*/
 -(CVPixelBufferRef) currentFrame
 {
     return [self.previewCtx.layoutRenderer currentFrame];
@@ -3419,6 +3422,7 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     self.stagingControls.hidden = YES;
     self.goLiveControls.hidden = YES;
     self.livePreviewView.viewOnly = NO;
+    _stagingHidden = YES;
     
 }
 
@@ -3456,6 +3460,11 @@ static CVReturn displayLinkRender(CVDisplayLinkRef displayLink, const CVTimeStam
     self.stagingControls.hidden = NO;
     self.goLiveControls.hidden = NO;
     self.livePreviewView.viewOnly = YES;
+    _stagingHidden = NO;
+    dispatch_async(_preview_queue, ^{
+        [self newStagingFrameTimed];
+    });
+
 
 }
 

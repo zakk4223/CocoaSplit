@@ -174,6 +174,7 @@
 		34B5FCDF19BF1C3F00F67D19 /* CreateLayoutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FCDD19BF1C3F00F67D19 /* CreateLayoutViewController.m */; };
 		34B5FCE019BF1C3F00F67D19 /* CreateLayoutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FCDD19BF1C3F00F67D19 /* CreateLayoutViewController.m */; };
 		34B5FCE119BF1C3F00F67D19 /* CreateLayoutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34B5FCDE19BF1C3F00F67D19 /* CreateLayoutViewController.xib */; };
+		34BB29811B7652EA00F201C2 /* CSPreviewGLLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34BB29801B7652EA00F201C2 /* CSPreviewGLLayer.m */; };
 		34BD1E4D1B1F1A2D0015CBEC /* CAMultiAudioDownmixer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34BD1E4C1B1F1A2D0015CBEC /* CAMultiAudioDownmixer.m */; };
 		34BD1E5F1B1F2A100015CBEC /* CAMultiAudioDownmixer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34BD1E4C1B1F1A2D0015CBEC /* CAMultiAudioDownmixer.m */; };
 		34BD1E631B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34BD1E611B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.m */; };
@@ -750,6 +751,8 @@
 		34B5FCDC19BF1C3F00F67D19 /* CreateLayoutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateLayoutViewController.h; sourceTree = "<group>"; };
 		34B5FCDD19BF1C3F00F67D19 /* CreateLayoutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateLayoutViewController.m; sourceTree = "<group>"; };
 		34B5FCDE19BF1C3F00F67D19 /* CreateLayoutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CreateLayoutViewController.xib; sourceTree = "<group>"; };
+		34BB297F1B7652EA00F201C2 /* CSPreviewGLLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPreviewGLLayer.h; sourceTree = "<group>"; };
+		34BB29801B7652EA00F201C2 /* CSPreviewGLLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSPreviewGLLayer.m; sourceTree = "<group>"; };
 		34BD1E4B1B1F1A2D0015CBEC /* CAMultiAudioDownmixer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioDownmixer.h; path = CAMultiAudio/CAMultiAudioDownmixer.h; sourceTree = "<group>"; };
 		34BD1E4C1B1F1A2D0015CBEC /* CAMultiAudioDownmixer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioDownmixer.m; path = CAMultiAudio/CAMultiAudioDownmixer.m; sourceTree = "<group>"; };
 		34BD1E601B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioMatrixMixerWindowController.h; path = Interface/CAMultiAudioMatrixMixerWindowController.h; sourceTree = "<group>"; };
@@ -1122,6 +1125,8 @@
 				34DC2F9B1B50FBCD008F12A2 /* CSTimerSourceProtocol.h */,
 				34DC2FAE1B512362008F12A2 /* CSCaptureBase+TimerDelegate.h */,
 				34DC2FAF1B512362008F12A2 /* CSCaptureBase+TimerDelegate.m */,
+				34BB297F1B7652EA00F201C2 /* CSPreviewGLLayer.h */,
+				34BB29801B7652EA00F201C2 /* CSPreviewGLLayer.m */,
 			);
 			path = CocoaSplit;
 			sourceTree = "<group>";
@@ -2154,6 +2159,7 @@
 				34ED8CB71B073C1B002C0674 /* CSMidiManagerWindowController.m in Sources */,
 				3408235519BC677A00CD1F5F /* CSNotifications.m in Sources */,
 				347B14DC198492D900DC7DF0 /* InputPopupControllerViewController.m in Sources */,
+				34BB29811B7652EA00F201C2 /* CSPreviewGLLayer.m in Sources */,
 				34D6581819B387DE0012E32B /* AppDelegate+AppDelegate_ScriptingAdditions.m in Sources */,
 				34ED8C991B07371C002C0674 /* MIKMIDIPort.m in Sources */,
 				340DC734197CF6E9003A0BB3 /* CSCaptureBase.m in Sources */,

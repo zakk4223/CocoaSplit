@@ -297,12 +297,12 @@
 -(CVPixelBufferRef)currentFrame
 {
     
-    
+    /*
     if (!self.isLiveRenderer)
     {
         [self currentImg];
     }
-    
+    */
     
     @synchronized(self)
     {

@@ -793,7 +793,7 @@ def wait(duration=0):
 class CSAnimationRunnerObj(NSObject):
     
     def init(self):
-        self = super(CSAnimationRunnerObj, self).init()
+        self = objc.super(CSAnimationRunnerObj,self).init()
         return self
 
 

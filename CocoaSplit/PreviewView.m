@@ -32,11 +32,68 @@
 @implementation PreviewView
 
 @synthesize sourceLayout = _sourceLayout;
+@synthesize layoutRenderer = _layoutRenderer;
+@synthesize mousedSource = _mousedSource;
+@synthesize selectedSource = _selectedSource;
 
 
 
 
 
+-(void)setSelectedSource:(InputSource *)selectedSource
+{
+    _selectedSource = selectedSource;
+    if (_glLayer)
+    {
+        _glLayer.outlineSource = selectedSource;
+        if (selectedSource)
+        {
+            _glLayer.doSnaplines = YES;
+        } else {
+            _glLayer.doSnaplines = NO;
+        }
+    }
+    
+}
+
+-(InputSource *)selectedSource
+{
+    return _selectedSource;
+}
+
+
+-(void)setMousedSource:(InputSource *)mousedSource
+{
+    _mousedSource = mousedSource;
+    if (_glLayer)
+    {
+        _glLayer.outlineSource = mousedSource;
+    }
+
+}
+
+-(InputSource *)mousedSource
+{
+    return _mousedSource;
+}
+
+
+-(void)setLayoutRenderer:(LayoutRenderer *)layoutRenderer
+{
+    if (_glLayer)
+    {
+        _glLayer.renderer = layoutRenderer;
+    }
+    
+    _layoutRenderer = layoutRenderer;
+}
+
+
+
+-(LayoutRenderer *)layoutRenderer
+{
+    return _layoutRenderer;
+}
 -(SourceLayout *)sourceLayout
 {
     return _sourceLayout;
@@ -72,28 +129,6 @@
 
 
 
--(void) setIdleTimer
-{
-    if (_idleTimer)
-    {
-        [_idleTimer invalidate];
-        _idleTimer = nil;
-    }
-    
-    _idleTimer = [NSTimer scheduledTimerWithTimeInterval:3.0
-                                                  target:self
-                                                selector:@selector(setMouseIdle)
-                                                userInfo:nil
-                                                 repeats:NO];
-    
-}
--(void) setMouseIdle
-{
-    
-    [NSCursor setHiddenUntilMouseMoves:YES];
- 
-}
-
 -(BOOL)acceptsFirstResponder
 {
     return YES;
@@ -121,23 +156,12 @@
 -(NSRect)windowRectforWorldRect:(NSRect)worldRect
 {
     
+    if (_glLayer)
+    {
+        return [_glLayer windowRectforWorldRect:worldRect];
+    }
     
-    GLdouble winx, winy, winz;
-    NSRect winRect;
-    
-    
-    
-    
-    //origin
-    gluProject(worldRect.origin.x, worldRect.origin.y, 0.0f, _modelview, _projection, _viewport, &winx, &winy, &winz);
-    winRect.origin.x = winx;
-    winRect.origin.y = winy;
-    //origin+width and origin+height
-    gluProject(worldRect.origin.x+worldRect.size.width, worldRect.origin.y+worldRect.size.height, 0.0f, _modelview, _projection, _viewport, &winx, &winy, &winz);
-
-    winRect.size.width = winx - winRect.origin.x;
-    winRect.size.height = winy - winRect.origin.y;
-    return winRect;
+    return NSZeroRect;
 }
 
 
@@ -145,24 +169,12 @@
 {
     
     
-    GLdouble winx, winy, winz;
-    GLdouble worldx, worldy, worldz;
+    if (_glLayer)
+    {
+        return [_glLayer realPointforWindowPoint:winPoint];
+    }
     
-    
-    
-    winx = winPoint.x;
-    winy = winPoint.y;
-    winz = 0.0f;
-    
-    gluUnProject(winx, winy, winz, _modelview, _projection, _viewport, &worldx, &worldy, &worldz);
-
-    return NSMakePoint(worldx, worldy);
-}
-
-
--(void) reshape
-{
-    _resizeDirty = YES;
+    return NSZeroPoint;
 }
 
 
@@ -358,8 +370,11 @@
  
     self.mousedSource = newSrc;
     _in_resize_rect = hitResize;
+
     
+
 }
+
 
 
 
@@ -747,6 +762,11 @@
         }
     }
     
+    if (_glLayer)
+    {
+        _glLayer.snap_x = _snap_x;
+        _glLayer.snap_y  = _snap_y;
+    }
 }
 
 
@@ -762,12 +782,6 @@
 
 -(void) mouseUp:(NSEvent *)theEvent
 {
-    /*
-    if (self.selectedSource)
-    {
-        self.selectedSource.is_selected = NO;
-    }
-    */
     _snap_x = -1;
     _snap_y = -1;
     _snap_x_accum = 0;
@@ -788,19 +802,9 @@
     }
     
     
-    [self setIdleTimer];
     
 }
 
-
--(void) mouseExited:(NSEvent *)theEvent
-{
-    if (_idleTimer)
-    {
-        [_idleTimer invalidate];
-        _idleTimer = nil;
-    }
-}
 
 
 
@@ -939,6 +943,7 @@
         toDelete = self.selectedSource;
         self.selectedSource = nil;
         self.mousedSource = nil;
+
     }
     
     if (toDelete)
@@ -947,6 +952,19 @@
     }
 }
 
+
+
+-(void)needsUpdate
+{
+    if (_glLayer)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_glLayer setNeedsDisplay];
+
+            
+        });
+    }
+}
 
 
 -(void)spawnInputSettings:(InputSource *)forInput atRect:(NSRect)atRect
@@ -974,7 +992,6 @@
     popupController.inputSource = forInput;
     self.activePopupController = popupController;
 }
-
 
 
 -(IBAction) autoFitInput:(id)sender
@@ -1064,58 +1081,20 @@
 }
 
 
--(id) initWithFrame:(NSRect)frameRect
+
+
+-(void)awakeFromNib
 {
-    
-     NSOpenGLPixelFormatAttribute attr[] = {
-         NSOpenGLPFANoRecovery,
-         NSOpenGLPFAAccelerated,
-         NSOpenGLPFAAllowOfflineRenderers,
-         NSOpenGLPFADoubleBuffer,
-         NSOpenGLPFADepthSize, 32,
-         (NSOpenGLPixelFormatAttribute) 0,0,
-         (NSOpenGLPixelFormatAttribute) 0
-    };
-    
-    
-    
-    NSOpenGLPixelFormat *pf = [[NSOpenGLPixelFormat alloc] initWithAttributes:(void *)&attr];
-
-
-    renderLock = [[NSRecursiveLock alloc] init];
-    
-    
-    self = [super initWithFrame:frameRect pixelFormat:pf];
-    if (self)
-    {
-        long swapInterval = 0;
-        
-        [[self openGLContext] setValues:(GLint *)&swapInterval forParameter:NSOpenGLCPSwapInterval];
-
-        glGenTextures(3, _previewTextures);
-    }
     
     self.activeConfigWindows = [NSMutableDictionary dictionary];
     self.activeConfigControllers = [NSMutableDictionary dictionary];
-
-
+    
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sourceWasDeleted:) name:CSNotificationInputDeleted object:nil];
     
     
-    _resizeDirty = YES;
     _snap_x = _snap_y = -1;
     
-    
-    
-   // [self createShaders];
-
-    
-   // OpenGLProgram *lineprg = [_shaderPrograms objectForKey:@"line"];
-
-    //_lineProgram = lineprg.gl_programName;
-    
-    
-    _cictx = [CIContext contextWithCGLContext:[self.openGLContext CGLContextObj] pixelFormat:CGLGetPixelFormat([self.openGLContext CGLContextObj]) colorSpace:CGColorSpaceCreateDeviceRGB() options:nil];
     int opts = (NSTrackingActiveAlways | NSTrackingInVisibleRect | NSTrackingMouseMoved | NSTrackingMouseEnteredAndExited);
     _trackingArea = [[NSTrackingArea alloc] initWithRect:[self bounds]
                                                  options:opts
@@ -1124,441 +1103,19 @@
     
     [self addTrackingArea:_trackingArea];
 
-    return self;
+    [self setWantsLayer:YES];
+    self.layer.backgroundColor = CGColorCreateGenericRGB(0, 0, 0, 1);
+    
 }
 
--(bool) createPixelBufferPoolForSize:(NSSize) size
+-(CALayer *)makeBackingLayer
 {
-    //Without the autorelease NSColor leaks objects
-    
-    
-    NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
-    [attributes setValue:[NSNumber numberWithInt:size.width] forKey:(NSString *)kCVPixelBufferWidthKey];
-    [attributes setValue:[NSNumber numberWithInt:size.height] forKey:(NSString *)kCVPixelBufferHeightKey];
-    [attributes setValue:@{(NSString *)kIOSurfaceIsGlobal: @NO} forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
-    [attributes setValue:[NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA] forKey:(NSString *)kCVPixelBufferPixelFormatTypeKey];
-    
-    
-    
-    if (_renderPool)
-    {
-        CVPixelBufferPoolRelease(_renderPool);
-    }
-    
-    
-    
-    CVReturn result = CVPixelBufferPoolCreate(NULL, NULL, (__bridge CFDictionaryRef)(attributes), &_renderPool);
-    
-    if (result != kCVReturnSuccess)
-    {
-        return NO;
-    }
-    
-    return YES;
-    
-    
-}
+    _glLayer = [CSPreviewGLLayer layer];
 
--(void)stopDisplayLink
-{
-    if (displayLink && CVDisplayLinkIsRunning(displayLink))
-    {
-        CVDisplayLinkStop(displayLink);
-    }
-}
-
--(void)restartDisplayLink
-{
-    if (displayLink && !CVDisplayLinkIsRunning(displayLink))
-    {
-        CVDisplayLinkStart(displayLink);
-    }
+    return _glLayer;
 }
 
 
--(void) cvrender
-{
-
-    @autoreleasepool {
-        
-    
-    CVImageBufferRef displayFrame = NULL;
-    
-    if (!self.sourceLayout || !self.layoutRenderer)
-    {
-        return;
-    }
-        
-    displayFrame = [self.layoutRenderer currentFrame];
-    
-    if (!displayFrame)
-    {
-        return;
-    }
-    
-    //CVPixelBufferRetain(displayFrame);
-    [self drawPixelBuffer:displayFrame];
-    CVPixelBufferRelease(displayFrame);
-    }
-}
-
-- (void) drawPixelBuffer:(CVImageBufferRef)cImageBuf
-{
- 
-    
-    if (!cImageBuf)
-    {
-        return;
-    }
-    
-    CGLContextObj cgl_ctx = [[self openGLContext] CGLContextObj];
-
-    CGLLockContext(cgl_ctx);
-    
-    [self.openGLContext makeCurrentContext];
-
-    IOSurfaceRef cFrame = CVPixelBufferGetIOSurface(cImageBuf);
-    
-    
-    IOSurfaceID cFrameID;
-    
-    
-    if (cFrame)
-    {
-        cFrameID = IOSurfaceGetID(cFrame);        
-    }
-    
-    if (cFrame && (_boundIOSurfaceID != cFrameID))
-    {
-        _boundIOSurfaceID = cFrameID;
-        
-
-        GLsizei newHeight = (GLsizei)IOSurfaceGetHeight(cFrame);
-        GLsizei newWidth = (GLsizei)IOSurfaceGetWidth(cFrame);
-        
-        if (newHeight != _surfaceHeight || newWidth != _surfaceWidth)
-        {
-            _resizeDirty = YES;
-        }
-        
-        _surfaceHeight  = newHeight;
-        _surfaceWidth   = newWidth;
-        
-        
-        GLenum gl_internal_format;
-        GLenum gl_format;
-        GLenum gl_type;
-        OSType frame_pixel_format = IOSurfaceGetPixelFormat(cFrame);
-
-        NSString *programName;
-        programName = @"passthrough"; //default
-
-        //format, internal_format, gl_type
-        GLenum plane_enums[3][3];
-        
-        switch (frame_pixel_format) {
-            case kCVPixelFormatType_422YpCbCr8:
-                plane_enums[0][0] = GL_YCBCR_422_APPLE;
-                plane_enums[0][1] = GL_RGB8;
-                plane_enums[0][2] = GL_UNSIGNED_SHORT_8_8_APPLE;
-                _num_planes = 1;
-                break;
-            case kCVPixelFormatType_422YpCbCr8FullRange:
-            case kCVPixelFormatType_422YpCbCr8_yuvs:
-                plane_enums[0][0] = GL_YCBCR_422_APPLE;
-                plane_enums[0][1] = GL_RGB;
-                plane_enums[0][2] = GL_UNSIGNED_SHORT_8_8_REV_APPLE;
-                _num_planes = 1;
-                break;
-            case kCVPixelFormatType_32BGRA:
-                plane_enums[0][0] = GL_BGRA;
-                plane_enums[0][1] = GL_RGBA;
-                plane_enums[0][2] = GL_UNSIGNED_INT_8_8_8_8_REV;
-                _num_planes = 1;
-                break;
-            case kCVPixelFormatType_32RGBA:
-                plane_enums[0][0] = GL_RGBA;
-                plane_enums[0][1] = GL_RGBA;
-                plane_enums[0][2] = GL_UNSIGNED_INT_8_8_8_8;
-                _num_planes = 1;
-                break;
-            case kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange:
-                plane_enums[0][0] = GL_RED;
-                plane_enums[0][1] = GL_RED;
-                plane_enums[0][2] = GL_UNSIGNED_BYTE;
-                plane_enums[1][0] = GL_RG;
-                plane_enums[1][1] = GL_RG;
-                plane_enums[1][2] = GL_UNSIGNED_BYTE;
-                _num_planes = 2;
-                programName = @"420v";
-                break;
-            default:
-                gl_format = GL_LUMINANCE;
-                gl_internal_format = GL_LUMINANCE;
-                gl_type = GL_UNSIGNED_BYTE;
-                _num_planes = 1;
-                break;
-        }
-    
-        for(int t_idx = 0; t_idx < _num_planes; t_idx++)
-        {
-            
-            glActiveTexture(GL_TEXTURE0+t_idx);
-            glEnable(GL_TEXTURE_RECTANGLE_ARB);
-            glBindTexture(GL_TEXTURE_RECTANGLE_ARB, _previewTextures[t_idx]);
-            
-            glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            
-            CGLTexImageIOSurface2D(cgl_ctx, GL_TEXTURE_RECTANGLE_ARB, plane_enums[t_idx][1], (GLsizei)IOSurfaceGetWidthOfPlane(cFrame, t_idx), (GLsizei)IOSurfaceGetHeightOfPlane(cFrame, t_idx), plane_enums[t_idx][0], plane_enums[t_idx][2], cFrame, t_idx);
-            
-
-        }
-        
-        
-        //OpenGLProgram *shProgram = [_shaderPrograms objectForKey:programName];
-        
-        //_programId = shProgram.gl_programName;
-        
-        //glUseProgram(_programId);
-        //[self bindProgramTextures:shProgram];
-        
-        
-        
-
-    }
-
-    
-    [self drawTexture:CGRectZero];
-
-    CGLUnlockContext(cgl_ctx);
-
-    [NSOpenGLContext clearCurrentContext];
-
-}
-
-
-
-- (void) drawRect:(NSRect)dirtyRect
-{
-
-    
-    
-    [self.openGLContext makeCurrentContext];
-    CGLLockContext([self.openGLContext CGLContextObj]);
-    
-
-    [self drawTexture:dirtyRect];
-    
-    CGLUnlockContext([self.openGLContext CGLContextObj]);
-
-
-    [NSOpenGLContext clearCurrentContext];
-    
-}
-
-- (void) drawTexture:(NSRect)dirtyRect{
-    
-
-
-    NSRect frame = self.frame;
-    
-    
-    GLclampf rval = 0.184314f;
-    GLclampf gval = 0.309804f;
-    GLclampf bval = 0.309804f;
-    GLclampf aval = 0.0;
-    
-    if (self.statusColor)
-    {
-        rval = [self.statusColor redComponent];
-        gval = [self.statusColor greenComponent];
-        bval = [self.statusColor blueComponent];
-        aval = [self.statusColor alphaComponent];
-    }
-    
-    NSSize scaled;
-    
-    float wr = frame.size.width / _surfaceWidth ;
-    float hr = frame.size.height / _surfaceHeight;
-    
-    float ratio;
-    
-    ratio = (hr < wr ? hr : wr);
-    
-    scaled = NSMakeSize((_surfaceWidth * ratio), (_surfaceHeight * ratio));
-    
-    glDisable(GL_DEPTH_TEST);
-    
-    glClearColor(rval, gval, bval, aval);
-    glClear(GL_COLOR_BUFFER_BIT);
-    glEnable(GL_TEXTURE_RECTANGLE_ARB);
-    
-    float halfw = (frame.size.width - scaled.width) / 2;
-    float halfh = (frame.size.height - scaled.height) / 2;
-    
-
-    
-    if (_resizeDirty && _surfaceWidth > 0 && _surfaceHeight > 0)
-    {
-        glViewport(0, 0, frame.size.width, frame.size.height);
-        
-        glMatrixMode(GL_PROJECTION);
-        glPushMatrix();
-        glLoadIdentity();
-        glOrtho(0.0, frame.size.width, 0.0, frame.size.height, 0, 1);
-        glMatrixMode(GL_MODELVIEW);
-        glPushMatrix();
-        glLoadIdentity();
-
-        glTranslated(halfw, halfh, 0.0);
-        glScalef(ratio, ratio, 1.0f);
-
-        glGetDoublev(GL_MODELVIEW_MATRIX, _modelview);
-        glGetDoublev(GL_PROJECTION_MATRIX, _projection);
-        glGetIntegerv(GL_VIEWPORT, _viewport);
-        glDisable(GL_DEPTH_TEST);
-        
-        _resizeDirty = NO;
-        
-    }
-    
-
-
-    for(int i = 0; i < _num_planes; i++)
-    {
-        
-        glActiveTexture(GL_TEXTURE0 + i);
-        glBindTexture(GL_TEXTURE_RECTANGLE_ARB, _previewTextures[i]);
-    }
-    
-    
-    
-    GLfloat text_coords[] =
-    {
-        0.0, 0.0,
-        _surfaceWidth, 0.0,
-        _surfaceWidth, _surfaceHeight,
-        0.0, _surfaceHeight
-    };
-    
-    
-    GLfloat verts[] =
-    {
-        0, _surfaceHeight,
-        _surfaceWidth, _surfaceHeight,
-        _surfaceWidth, 0,
-        0,0
-    };
-    
-    
-    
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    glTexCoordPointer(2, GL_FLOAT, 0, text_coords);
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glVertexPointer(2, GL_FLOAT, 0, verts);
-    
-    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glDisableClientState(GL_VERTEX_ARRAY);
-    
-    
-    
-    GLfloat outline_verts[8];
-    GLfloat snapx_verts[4];
-    GLfloat snapy_verts[4];
-    
-
-    glEnableClientState(GL_VERTEX_ARRAY);
-
-    //glUseProgram(_lineProgram);
-    
-    glLineWidth(2.0f);
-
-    glDisable(GL_TEXTURE_RECTANGLE_ARB);
-    
-    //for(InputSource *src in self.sourceLayout.sourceList)
-    if (self.mousedSource || self.isResizing)
-    {
-        
-    
-
-        glColor3f(0.0f, 0.0f, 1.0f);
-        NSRect my_rect = self.mousedSource.globalLayoutPosition;
-        outline_verts[0] = my_rect.origin.x;
-        outline_verts[1] = my_rect.origin.y;
-        outline_verts[2] = my_rect.origin.x+my_rect.size.width;
-        outline_verts[3] = my_rect.origin.y;
-        outline_verts[4] = my_rect.origin.x+my_rect.size.width;
-        outline_verts[5] = my_rect.origin.y+my_rect.size.height;
-        outline_verts[6] = my_rect.origin.x;
-        outline_verts[7] = my_rect.origin.y+my_rect.size.height;
-
-        glVertexPointer(2, GL_FLOAT, 0, outline_verts);
-        glDrawArrays(GL_LINE_LOOP, 0, 4);
-    }
-    
-    if (self.selectedSource)
-    {
-    
-        glLineWidth(1.0f);
-
-        glColor3f(1.0f, 1.0f, 0.0f);
-        glLineStipple(2, 0xAAAA);
-        //glEnable(GL_LINE_STIPPLE);
-        if (_snap_x > -1)
-        {
-            float snap_y_min = 0;
-            float snap_y_max = self.sourceLayout.canvas_height;
-            
-            if (self.selectedSource && self.selectedSource.parentInput)
-            {
-                NSRect parentRect = ((InputSource *)self.selectedSource.parentInput).globalLayoutPosition;
-                snap_y_min = parentRect.origin.y;
-                snap_y_max = NSMaxY(parentRect);
-            }
-            
-            snapx_verts[0] = _snap_x;
-            snapx_verts[1] = snap_y_min;
-            snapx_verts[2] = _snap_x;
-            snapx_verts[3] = snap_y_max;
-            glVertexPointer(2, GL_FLOAT, 0, snapx_verts);
-            glDrawArrays(GL_LINES, 0, 2);
-        }
-        
-        if (_snap_y > -1)
-        {
-            float snap_x_min = 0;
-            float snap_x_max = self.sourceLayout.canvas_width;
-            
-            if (self.selectedSource && self.selectedSource.parentInput)
-            {
-                NSRect parentRect = ((InputSource *)self.selectedSource.parentInput).globalLayoutPosition;
-                snap_x_min = parentRect.origin.x;
-                snap_x_max = NSMaxX(parentRect);
-            }
-
-            snapy_verts[0] = snap_x_min;
-            snapy_verts[1] = _snap_y;
-            snapy_verts[2] = snap_x_max;
-            snapy_verts[3] = _snap_y;
-            glVertexPointer(2, GL_FLOAT, 0, snapy_verts);
-            glDrawArrays(GL_LINES, 0, 2);
-        }
-        //glDisable(GL_LINE_STIPPLE);
-
-    }
-    glColor3f(1.0f, 1.0f, 1.0f);
-
-    //glUseProgram(_programId);
-    
-    [self.openGLContext flushBuffer];
-    
-    //glFlush();
-
-    
-
-    
-}
 
 -(void)sourceWasDeleted:(NSNotification *)notification
 {
