@@ -1,4 +1,4 @@
-from Quartz import CGPathCreateWithEllipseInRect,CGPathCreateMutable,CGPathMoveToPoint, CGPathCloseSubpath, CGPathAddLineToPoint
+from Quartz import CGPathCreateMutable,CGPathMoveToPoint, CGPathCloseSubpath, CGPathAddLineToPoint
 
 name = "Triangle"
 

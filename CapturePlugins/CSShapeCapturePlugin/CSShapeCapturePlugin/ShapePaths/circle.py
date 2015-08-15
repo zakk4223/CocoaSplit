@@ -1,6 +1,8 @@
-from Quartz import CGPathCreateWithEllipseInRect
+from Quartz import CGPathCreateMutable, CGPathAddEllipseInRect
 
 name = "Circle"
 
 def create_cgpath(frame):
-    return CGPathCreateWithEllipseInRect(frame, None)
+    newpath = CGPathCreateMutable()
+    CGPathAddEllipseInRect(newpath, None, frame)
+    return newpath
