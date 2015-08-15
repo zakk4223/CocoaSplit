@@ -57,7 +57,7 @@
     {
         
         _lineColor = [NSColor blackColor];
-        _fillColor = [NSColor redColor];
+        _fillColor = [NSColor whiteColor];
         _lineWidth = 2.0f;
 
     }
