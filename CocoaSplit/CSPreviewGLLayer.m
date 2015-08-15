@@ -38,7 +38,7 @@
     if (!_initDone)
     {
         glGenTextures(1, &_renderTexture);
-        glClearColor(0, 0, 0, 0);
+        glClearColor(0.184314f, 0.309804f, 0.309804f, 0);
 
         _initDone = YES;
     }

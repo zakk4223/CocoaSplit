@@ -7,6 +7,7 @@
 //
 
 #import "CSShapeCaptureFactory.h"
+#import "CSPluginServices.h"
 
 @implementation CSShapeCaptureFactory
 
@@ -41,14 +42,13 @@
     static CSShapePathLoader *sharedPathLoader = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        NSString *pathLoaderPluginPath = [[NSBundle bundleForClass:[CSShapeCaptureFactory class]] pathForResource:@"CSShapePathLoader" ofType:@"plugin"];
+        CSPluginServices *sharedService = [CSPluginServices sharedPluginServices];
         
-        NSBundle *pathLoaderBundle = [NSBundle bundleWithPath:pathLoaderPluginPath];
+        
+        NSString *pathLoaderFilePath = [[NSBundle bundleForClass:[CSShapeCaptureFactory class]] pathForResource:@"CSShapePathLoader" ofType:@"py" inDirectory:@"Python"];
+        
     
-
-        Class loaderClass = [pathLoaderBundle principalClass];
-        
-        
+        Class loaderClass = [sharedService loadPythonClass:@"CSShapePathLoader" fromFile:pathLoaderFilePath];
        sharedPathLoader = [[loaderClass alloc] init];
    });
     return sharedPathLoader;

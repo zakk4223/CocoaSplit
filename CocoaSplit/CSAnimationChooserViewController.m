@@ -88,8 +88,9 @@
 
 -(void)loadAnimations
 {
-    CSAnimationRunnerObj *runner = [CaptureController sharedAnimationObj];
     
+    CSAnimationRunnerObj *runner = [CaptureController sharedAnimationObj];
+
     
     NSDictionary *animations = [runner allAnimations];
     NSMutableArray *tmpList  = [NSMutableArray array];

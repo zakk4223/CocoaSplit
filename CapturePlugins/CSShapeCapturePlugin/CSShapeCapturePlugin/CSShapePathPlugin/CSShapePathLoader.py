@@ -1,6 +1,10 @@
 import objc
 import sys
 import os
+
+my_path = NSBundle.bundleForClass_(objc.lookUpClass("CSShapeCapture").class__()).resourcePath() + "/Python"
+sys.path.append(my_path)
+
 from pluginbase import PluginBase
 from Foundation import *
 from CSShapePathWrapper import *

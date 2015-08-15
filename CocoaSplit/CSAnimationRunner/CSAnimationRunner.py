@@ -793,7 +793,7 @@ def wait(duration=0):
 class CSAnimationRunnerObj(NSObject):
     
     def init(self):
-        self = objc.super(CSAnimationRunnerObj,self).init()
+        self = super(CSAnimationRunnerObj,self).init()
         return self
 
 
@@ -809,6 +809,7 @@ class CSAnimationRunnerObj(NSObject):
     def allAnimations(self):
         plugins = plugin_source.list_plugins()
         ret = {}
+        
         for m_name in plugins:
             plugin = plugin_source.load_plugin(m_name)
             reload(plugin)
@@ -838,6 +839,7 @@ class CSAnimationRunnerObj(NSObject):
             
             ret[m_name] = {'params': plugin_parameters, 'inputs': plugin_inputs, 'name':plugin_name, 'module':m_name, 'description':plugin_description}
         return ret
+
 
 
     @objc.signature('v@:@@@')

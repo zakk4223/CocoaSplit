@@ -16,5 +16,7 @@
 +(id)sharedPluginServices;
 -(CSPcmPlayer *)createPCMInput:(NSString *)forUID withFormat:(const AudioStreamBasicDescription *)withFormat;
 -(void)removePCMInput:(CSPcmPlayer *)toRemove;
+-(Class)loadPythonClass:(NSString *)pyClass fromFile:(NSString *)fromFile;
+
 
 @end

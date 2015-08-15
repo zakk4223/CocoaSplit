@@ -26,6 +26,7 @@
 #import "MIKMIDI.h"
 #import "CSMidiWrapper.h"
 #import "CSCaptureBase+TimerDelegate.h"
+#import <Python/Python.h>
 
 
 
@@ -1134,19 +1135,73 @@
 }
 
 
++(void)initializePython
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        
+        
+        Py_SetProgramName("/usr/bin/python");
+        Py_Initialize();
+        PyEval_InitThreads();
+        
+        NSString *resourcePath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Python"];
+        
+        NSString *sysstr = [NSString stringWithFormat:@"import sys; sys.path.append('%@');", resourcePath];
+        PyGILState_STATE gilState = PyGILState_Ensure();
+        PyRun_SimpleString([sysstr UTF8String]);
+        PyGILState_Release(gilState);
+        
+        if (gilState == PyGILState_LOCKED)
+        {
+            PyThreadState_Swap(NULL);
+
+            PyEval_ReleaseLock();
+        }
+
+    });
+
+}
+
++(Class)loadPythonClass:(NSString *)pyClass fromFile:(NSString *)fromFile
+{
+    [CaptureController initializePython];
+    FILE *runnerFile = fopen([fromFile UTF8String], "r");
+    
+    PyGILState_STATE gilState = PyGILState_Ensure();
+
+    PyRun_SimpleFile(runnerFile, (char *)[[fromFile lastPathComponent] UTF8String]);
+
+    Class retClass = NSClassFromString(pyClass);
+    PyGILState_Release(gilState);
+    
+    if (gilState == PyGILState_LOCKED)
+    {
+        PyThreadState_Swap(NULL);
+
+        PyEval_ReleaseLock();
+    }
+
+    return retClass;
+}
+
 
 +(CSAnimationRunnerObj *) sharedAnimationObj
 {
     static CSAnimationRunnerObj *sharedAnimationObj = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        NSString *animationPluginPath = [[NSBundle mainBundle] pathForResource:@"CSAnimationRunner" ofType:@"plugin"];
-        NSBundle *animationBundle = [NSBundle bundleWithPath:animationPluginPath];
-        Class animationClass = [animationBundle classNamed:@"CSAnimationRunnerObj"];
+        
+        
+        
+        NSString *runnerPath = [[NSBundle mainBundle] pathForResource:@"CSAnimationRunner" ofType:@"py" inDirectory:@"Python"];
+        Class animationClass = [CaptureController loadPythonClass:@"CSAnimationRunnerObj" fromFile:runnerPath];
+        
         sharedAnimationObj = [[animationClass alloc] init];
 
+
     });
-    
+
     return sharedAnimationObj;
 }
 

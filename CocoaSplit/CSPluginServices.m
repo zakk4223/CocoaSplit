@@ -26,6 +26,11 @@
     return sharedCSPluginServices;
 }
 
+-(Class)loadPythonClass:(NSString *)pyClass fromFile:(NSString *)fromFile
+{
+    return [CaptureController loadPythonClass:pyClass fromFile:fromFile];
+}
+
 
 -(void)removePCMInput:(CSPcmPlayer *)toRemove
 {

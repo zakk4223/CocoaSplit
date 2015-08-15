@@ -370,9 +370,6 @@
  
     self.mousedSource = newSrc;
     _in_resize_rect = hitResize;
-
-    
-
 }
 
 
@@ -1104,7 +1101,7 @@
     [self addTrackingArea:_trackingArea];
 
     [self setWantsLayer:YES];
-    self.layer.backgroundColor = CGColorCreateGenericRGB(0, 0, 0, 1);
+    self.layer.backgroundColor = CGColorCreateGenericRGB(0.184314f, 0.309804f, 0.309804f, 1);
     
 }
 
