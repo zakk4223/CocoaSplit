@@ -214,7 +214,7 @@
    
             if (self.renderType == kCSRenderFrameArrived)
             {
-                [self updateLayersWithBlock:^(CALayer *layer) {
+                [self updateLayersWithBlock:^(CALayer *layer) {                    
                     [((CSSyphonCaptureLayer *)layer) setNeedsDisplay];
                 }];
                 [self frameArrived];

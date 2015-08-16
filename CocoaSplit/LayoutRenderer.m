@@ -226,7 +226,6 @@
     
     if (fboStatus == GL_FRAMEBUFFER_COMPLETE && self.renderer && self.renderer.layer)
     {
-        
         [self.renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];
         [self.renderer addUpdateRect:self.renderer.bounds];
         [self.renderer render];
@@ -273,7 +272,6 @@
     }
     
     CVPixelBufferPoolCreatePixelBuffer(kCVReturnSuccess, _cvpool, &destFrame);
-    
     
 
     [self renderToSurface:CVPixelBufferGetIOSurface(destFrame)];

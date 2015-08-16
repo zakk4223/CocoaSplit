@@ -11,6 +11,7 @@
 #import <IOSurface/IOSurface.h>
 #import "CSIOSurfaceLayer.h"
 
+#import <pthread.h>
 
 
 @implementation DesktopCapture
@@ -35,6 +36,7 @@
     [aCoder encodeInt:self.y_origin forKey:@"y_origin"];
     [aCoder encodeDouble:self.videoCaptureFPS forKey:@"videoCaptureFPS"];
     [aCoder encodeBool:self.showCursor forKey:@"showCursor"];
+    [aCoder encodeInt:self.renderType forKey:@"renderType"];
 }
 
 
@@ -51,6 +53,8 @@
         _region_height = [aDecoder decodeIntForKey:@"region_height"];
         _x_origin = [aDecoder decodeIntForKey:@"x_origin"];
         _y_origin = [aDecoder decodeIntForKey:@"y_origin"];
+        _renderType = [aDecoder decodeIntForKey:@"renderType"];
+        
         
     }
     
@@ -99,13 +103,13 @@
     
     CSIOSurfaceLayer *newLayer = [CSIOSurfaceLayer layer];
     
+    
     if (self.renderType == kCSRenderAsync)
     {
         newLayer.asynchronous = YES;
     } else {
         newLayer.asynchronous = NO;
     }
-    
     return newLayer;
 }
 
@@ -233,6 +237,7 @@
 
     __weak __typeof__(self) weakSelf = self;
     
+    
     _displayStreamRef = CGDisplayStreamCreateWithDispatchQueue(self.currentDisplay, width, height,  kCVPixelFormatType_420YpCbCr8BiPlanarFullRange, (__bridge CFDictionaryRef)(opts), _capture_queue, ^(CGDisplayStreamFrameStatus status, uint64_t displayTime, IOSurfaceRef frameSurface, CGDisplayStreamUpdateRef updateRef) {
         
 
@@ -265,20 +270,29 @@
         if (status == kCGDisplayStreamFrameStatusFrameComplete && frameSurface)
         {
             [strongSelf updateLayersWithBlock:^(CALayer *layer) {
+
                 ((CSIOSurfaceLayer *)layer).ioSurface = frameSurface;
                 if (self.renderType == kCSRenderFrameArrived)
                 {
-                    [((CSIOSurfaceLayer *)layer) setNeedsDisplay];
+                    
+                
+                    //dispatch through the main queue because otherwise the display stream events bounce between threads and confuse core animation
+                  dispatch_async(dispatch_get_main_queue(), ^{
+                        [((CSIOSurfaceLayer *)layer) setNeedsDisplay];
+                 });
                 }
-                [self frameArrived];
+
 
             }];
+            [self frameArrived];
+
             
             
         }
     });
 
-    CGDisplayStreamStart(_displayStreamRef);
+    CGError sErr = CGDisplayStreamStart(_displayStreamRef);
+    
     return YES;
 }
 

@@ -483,11 +483,13 @@
     [self bindProgramTextures:shProgram];
 
 }
+
+
 -(void) drawInCGLContext:(CGLContextObj)ctx pixelFormat:(CGLPixelFormatObj)pf forLayerTime:(CFTimeInterval)t displayTime:(const CVTimeStamp *)ts
 {
     
     
-    CGLSetCurrentContext(ctx);
+
 
     
     glClearColor(0,0,0,0);

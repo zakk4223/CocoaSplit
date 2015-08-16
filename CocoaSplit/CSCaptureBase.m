@@ -223,7 +223,11 @@
 
 -(CALayer *)createNewLayerForInput:(id)inputsrc
 {
+    
+    [CATransaction commit];
+    [CATransaction begin];
     CALayer *newLayer = [self createNewLayer];
+    [CATransaction commit];
     [newLayer setValue:@(!self.allowScaling) forKey:@"csnoResize"];
     @synchronized(self)
     {
@@ -252,15 +256,18 @@
     {
         layersCopy = _allLayers.copy;
     }
-    
+    [CATransaction begin];
     for (id key in layersCopy)
     {
-        [CATransaction begin];
         CALayer *clayer = [layersCopy objectForKey:key];
+
         updateBlock(clayer);
-        [CATransaction commit];
+
     }
+    [CATransaction commit];
     
+
+
 }
 
 
