@@ -230,6 +230,7 @@
         [self.renderer addUpdateRect:self.renderer.bounds];
         [self.renderer render];
         [self.renderer endFrame];
+        [CATransaction flush];
     }
     glBindTexture(GL_TEXTURE_RECTANGLE_ARB, 0);
     glDisable(GL_TEXTURE_RECTANGLE_ARB);
