@@ -267,6 +267,7 @@ static NSArray *_sourceTypes = nil;
         NSRect tmpRect = NSIntegralRect(NSMakeRect(x_pos, y_pos, width, height));
         self.layer.position = CGPointMake(tmpRect.origin.x, tmpRect.origin.y);
         self.layer.bounds = CGRectMake(0, 0, tmpRect.size.width, tmpRect.size.height);
+        
 
 
 
@@ -418,11 +419,7 @@ static NSArray *_sourceTypes = nil;
         
         self.layer.filters = [aDecoder decodeObjectForKey:@"layerFilters"];
         self.compositingFilterName = [aDecoder decodeObjectForKey:@"compositingFilterName"];
-        
-
     }
-    
-    
     
     return self;
 }
@@ -1346,6 +1343,7 @@ static NSArray *_sourceTypes = nil;
     [self.videoInput frameTick];
     [self.layer frameTick];
 
+    
 }
 
 
@@ -1651,7 +1649,6 @@ static NSArray *_sourceTypes = nil;
     CALayer *newLayer = [newCaptureSession layerForInput:self];
     
     _currentLayer = newLayer;
-    
     self.videoInput = newCaptureSession;
 
  

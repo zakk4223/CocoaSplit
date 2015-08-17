@@ -159,6 +159,11 @@
     NSMutableDictionary *_shaderPrograms;
     bool _loadedShaders;
     int _num_planes;
+    int _can_count;
+    bool _reassert_async;
+    bool _updateOnDemand;
+    
+    
     CGLContextObj _contextObj;
 }
 
@@ -178,14 +183,29 @@
     if (self = [super init])
     {
         self.asynchronous = YES;
+        
         self.needsDisplayOnBoundsChange = YES;
         self.flipImage = NO;
         _lastSurfaceSize = NSMakeRect(0, 0, 0, 0);
         _privateCropRect = CGRectMake(0.0, 0.0, 1.0, 1.0);
         self.imageWrapper = nil;
+        _reassert_async = YES;
+        _updateOnDemand = NO;
+        _can_count = 0;
+        
     }
     
     return self;
+}
+
+-(void)setAsynchronous:(BOOL)asynchronous
+{
+    _updateOnDemand = asynchronous;
+
+    if (asynchronous)
+    {
+        [super setAsynchronous:asynchronous];
+    }
 }
 
 
@@ -485,15 +505,35 @@
 }
 
 
+
+
+-(BOOL)canDrawInCGLContext:(CGLContextObj)ctx pixelFormat:(CGLPixelFormatObj)pf forLayerTime:(CFTimeInterval)t displayTime:(const CVTimeStamp *)ts
+{
+
+    if (_updateOnDemand != self.isAsynchronous)
+    {
+        if (_can_count > 5)
+        {
+            super.asynchronous = _updateOnDemand;
+            _can_count = 0;
+        } else {
+            _can_count++;
+        }
+    }
+    
+    return YES;
+}
+
+
 -(void) drawInCGLContext:(CGLContextObj)ctx pixelFormat:(CGLPixelFormatObj)pf forLayerTime:(CFTimeInterval)t displayTime:(const CVTimeStamp *)ts
 {
     
     
-
-
+    
     
     glClearColor(0,0,0,0);
     glClear(GL_COLOR_BUFFER_BIT);
+    
     
     
     CIImageWrapper *wrappedImage;
@@ -524,7 +564,6 @@
     [self setupTextures:useImage withContext:ctx];
 
     NSRect imageExtent = NSMakeRect(0, 0, IOSurfaceGetWidth(useImage), IOSurfaceGetHeight(useImage));
-    
     
     
     
@@ -612,7 +651,6 @@
 
 
 
-
 -(CGLContextObj)copyCGLContextForPixelFormat:(CGLPixelFormatObj)pf
 {
     CGLContextObj currCtx = CGLGetCurrentContext();
@@ -621,6 +659,7 @@
     glGenTextures(3, _previewTextures);
     [self createShaders];
 
+    
     CGLSetCurrentContext(currCtx);
     
     

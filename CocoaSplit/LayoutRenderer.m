@@ -313,7 +313,7 @@
 
 -(bool) createPixelBufferPoolForSize:(NSSize) size
 {
-    NSLog(@"Controller: Creating Pixel Buffer Pool %f x %f", size.width, size.height);
+    NSLog(@"Controller: Creating Pixel Buffer Pool %f x %f LAYOUT %@", size.width, size.height, self.layout);
     
     NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
     [attributes setValue:[NSNumber numberWithInt:size.width] forKey:(NSString *)kCVPixelBufferWidthKey];

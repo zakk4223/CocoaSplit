@@ -21,5 +21,6 @@
 @property (assign) CVImageBufferRef imageBuffer;
 @property (assign) BOOL flipImage;
 @property (weak) id frameSourceDelegate;
+
 @end
 

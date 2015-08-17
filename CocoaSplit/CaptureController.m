@@ -1649,11 +1649,6 @@
     //mainThread = [[NSThread alloc] initWithTarget:self selector:@selector(newFrameTimed) object:nil];
     //[mainThread start];
     
-    dispatch_async(_main_capture_queue, ^{[self newFrameTimed];});
-    
-    dispatch_async(_preview_queue, ^{
-        [self newStagingFrameTimed];
-    });
     
     self.stagingPreviewView.controller = self;
     self.livePreviewView.controller = self;
@@ -1712,7 +1707,12 @@
 
 
     self.extraPluginsSaveData = nil;
+    dispatch_async(_main_capture_queue, ^{[self newFrameTimed];});
     
+    dispatch_async(_preview_queue, ^{
+        [self newStagingFrameTimed];
+    });
+
     
     
 
@@ -2532,9 +2532,7 @@
             {
                 continue;
             }
-            [CATransaction begin];
             [self.stagingCtx.layoutRenderer currentImg];
-            [CATransaction commit];
          }
         
 
@@ -2636,9 +2634,9 @@
             
             double nfstart = [self mach_time_seconds];
             
-            [CATransaction begin];
+            //[CATransaction begin];
             newFrame = [self.previewCtx.layoutRenderer currentImg];
-            [CATransaction commit];
+            //[CATransaction commit];
             //newFrame = [self currentFrame];
             
             

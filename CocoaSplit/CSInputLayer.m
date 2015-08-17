@@ -34,6 +34,7 @@
 -(void)layoutSublayersOfLayer:(CALayer *)layer
 {
 
+    
     [self.layoutManager layoutSublayersOfLayer:layer];
 
     if (layer == _xLayer)
@@ -111,8 +112,11 @@
 -(void)display
 {
     
+    
     [self setValue:@([self.presentationLayer fakeWidth]) forKeyPath:@"bounds.size.width"];
     [self setValue:@([self.presentationLayer fakeHeight]) forKeyPath:@"bounds.size.height"];
+    [super display];
+    
     
 }
 
@@ -319,7 +323,6 @@
         [_yLayer addSublayer:_xLayer];
         [self addSublayer:_yLayer];
         
-        
     }
     
     return self;
@@ -411,6 +414,7 @@
 
 }
 
+
 -(void)setupXAnimation:(float)speed
 {
     
@@ -500,6 +504,7 @@
     
     [_sourceLayer.superlayer replaceSublayer:_sourceLayer with:sourceLayer];
     
+    
     _sourceLayer = sourceLayer;
 
     [self setNeedsLayout];
@@ -509,7 +514,6 @@
     [self setupXAnimation:_scrollXSpeed];
     [self setupYAnimation:_scrollYSpeed];
     [CATransaction commit];
-    
 }
 
 
@@ -519,9 +523,12 @@
 
 -(void)setConstraints:(NSArray *)constraints
 {
+    [CATransaction begin];
     [super setConstraints:constraints];
     [self setNeedsLayout];
     [self layoutIfNeeded];
+    [CATransaction commit];
+    
 }
 
 

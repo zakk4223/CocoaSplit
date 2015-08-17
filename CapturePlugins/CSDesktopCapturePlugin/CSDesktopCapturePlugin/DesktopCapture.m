@@ -40,6 +40,7 @@
 }
 
 
+
 -(id) initWithCoder:(NSCoder *)aDecoder
 {
     
@@ -103,13 +104,13 @@
     
     CSIOSurfaceLayer *newLayer = [CSIOSurfaceLayer layer];
     
-    
     if (self.renderType == kCSRenderAsync)
     {
         newLayer.asynchronous = YES;
     } else {
         newLayer.asynchronous = NO;
     }
+    
     return newLayer;
 }
 
@@ -140,7 +141,9 @@
 
 -(void)setRenderType:(frame_render_behavior)renderType
 {
-    bool asyncValue = NO;
+    
+    
+    BOOL asyncValue = NO;
     if (renderType == kCSRenderAsync)
     {
         asyncValue = YES;
@@ -148,6 +151,7 @@
     
     
     [self updateLayersWithBlock:^(CALayer *layer) {
+        
         ((CSIOSurfaceLayer *)layer).asynchronous = asyncValue;
     }];
     
@@ -275,11 +279,11 @@
                 if (self.renderType == kCSRenderFrameArrived)
                 {
                     
-                
+                    
                     //dispatch through the main queue because otherwise the display stream events bounce between threads and confuse core animation
-                  dispatch_async(dispatch_get_main_queue(), ^{
+                  //dispatch_async(dispatch_get_main_queue(), ^{
                         [((CSIOSurfaceLayer *)layer) setNeedsDisplay];
-                 });
+                // });
                 }
 
 

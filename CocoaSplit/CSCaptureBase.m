@@ -224,15 +224,14 @@
 -(CALayer *)createNewLayerForInput:(id)inputsrc
 {
     
-    [CATransaction commit];
     [CATransaction begin];
     CALayer *newLayer = [self createNewLayer];
-    [CATransaction commit];
-    [newLayer setValue:@(!self.allowScaling) forKey:@"csnoResize"];
     @synchronized(self)
     {
         [_allLayers setObject:newLayer forKey:inputsrc];
     }
+    [CATransaction commit];
+
     return newLayer;
 }
 
