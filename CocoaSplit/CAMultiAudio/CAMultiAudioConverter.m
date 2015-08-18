@@ -34,6 +34,17 @@
 
 
 
+-(void)setInputStreamFormat:(AudioStreamBasicDescription *)format
+{
+    if (&_inputFormat)
+    {
+        [super setInputStreamFormat:&_inputFormat];
+    } else {
+        [super setInputStreamFormat:format];
+    }
+}
+
+
 -(void)setOutputStreamFormat:(AudioStreamBasicDescription *)format
 {
     //ignore if we have our own

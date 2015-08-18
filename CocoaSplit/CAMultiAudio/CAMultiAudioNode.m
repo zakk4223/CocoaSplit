@@ -206,6 +206,11 @@
     return;
 }
 
+-(void)resetFormat:(AudioStreamBasicDescription *)format
+{
+    return;
+}
+
 
 -(bool)muted
 {

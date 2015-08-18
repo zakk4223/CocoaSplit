@@ -17,8 +17,9 @@
 @property (strong) AVFAudioCapture *avfCapture;
 @property (assign) int sampleRate;
 
--(instancetype)initWithDevice:(AVCaptureDevice *)avDevice sampleRate:(int)sampleRate;
+-(instancetype)initWithDevice:(AVCaptureDevice *)avDevice withFormat:(AudioStreamBasicDescription *)withFormat;
 
+-(void)resetFormat:(AudioStreamBasicDescription *)format;
 
 
 @end

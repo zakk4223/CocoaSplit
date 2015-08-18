@@ -23,6 +23,7 @@
 @property (strong) NSString *inputUID;
 @property (weak) id converterNode;
 @property (assign) Float64 latestScheduledTime;
+@property (assign) AudioStreamBasicDescription *inputFormat;
 
 -(void)releasePCM:(CAMultiAudioPCM *)buffer;
 -(void)scheduleBuffer:(CMSampleBufferRef)sampleBuffer;

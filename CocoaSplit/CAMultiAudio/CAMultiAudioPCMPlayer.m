@@ -13,6 +13,7 @@
 
 @implementation CAMultiAudioPCMPlayer
 
+@synthesize inputFormat = _inputFormat;
 
 void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
 
@@ -24,6 +25,7 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
         _pendingBuffers = [NSMutableArray array];
         _pendingQueue = dispatch_queue_create("PCM Player pending queue", NULL);
         _bufcnt = 0;
+        _inputFormat = NULL;
         self.latestScheduledTime = 0;
     }
     
@@ -180,9 +182,37 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
 }
 
 
+-(void)setInputFormat:(AudioStreamBasicDescription *)inputFormat
+{
+    if (inputFormat)
+    {
+        if (!_inputFormat)
+        {
+            _inputFormat = malloc(sizeof(AudioStreamBasicDescription));
+        }
+        
+        memcpy(_inputFormat, inputFormat, sizeof(AudioStreamBasicDescription));
+    } else {
+        inputFormat = NULL;
+    }
+}
+
+-(AudioStreamBasicDescription *)inputFormat
+{
+    return _inputFormat;
+}
+
 -(void)setInputStreamFormat:(AudioStreamBasicDescription *)format
 {
     return;
+}
+
+-(void)setOutputStreamFormat:(AudioStreamBasicDescription *)format
+{
+    if (self.inputFormat)
+    {
+        [super setOutputStreamFormat:self.inputFormat];
+    }
 }
 
 
@@ -198,6 +228,16 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     ts.mSampleTime = -1;
     err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ScheduleStartTimeStamp, kAudioUnitScope_Global, 0, &ts, sizeof(ts));
 }
+
+-(void)dealloc
+{
+    if (_inputFormat)
+    {
+        free(_inputFormat);
+    }
+}
+
+
 @end
 
 

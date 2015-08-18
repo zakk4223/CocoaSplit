@@ -11,15 +11,17 @@
 @implementation CAMultiAudioAVCapturePlayer
 
 
--(instancetype)initWithDevice:(AVCaptureDevice *)avDevice sampleRate:(int)sampleRate
+-(instancetype)initWithDevice:(AVCaptureDevice *)avDevice withFormat:(AudioStreamBasicDescription *)withFormat
 {
     if (self = [super init])
     {
         
         self.captureDevice = avDevice;
-        self.sampleRate = sampleRate;
+        self.sampleRate = withFormat->mSampleRate;
         self.name = avDevice.localizedName;
         self.nodeUID = avDevice.uniqueID;
+        self.inputFormat = withFormat;
+        
         
     }
     return self;
@@ -65,6 +67,20 @@
     AVFAudioCapture *newAC = [[AVFAudioCapture alloc] initForAudioEngine:self.captureDevice sampleRate:self.sampleRate];
     self.avfCapture = newAC;
     newAC.multiInput = self;
+}
+
+
+-(void)resetFormat:(AudioStreamBasicDescription *)format
+{
+    self.inputFormat = format;
+    self.sampleRate = format->mSampleRate;
+    if (self.avfCapture)
+    {
+        self.avfCapture.audioSamplerate = self.sampleRate;
+        
+        [self.avfCapture stopAudioCompression];
+        [self.avfCapture setupAudioCompression];
+    }
 }
 
 

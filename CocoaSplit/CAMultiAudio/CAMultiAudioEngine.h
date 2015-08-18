@@ -33,6 +33,8 @@
 @property (strong) CAMultiAudioPCMPlayer *silentNode;
 @property (strong) CAMultiAudioDefaultOutput *defaultOutputNode;
 @property (strong) NSMutableArray *audioInputs;
+@property (strong) NSMutableArray *pcmInputs;
+
 @property (strong) CAMultiAudioMixer *encodeMixer;
 @property (strong) CSAacEncoder *encoder;
 @property (assign) UInt32 sampleRate;

@@ -238,7 +238,7 @@
     
     if (err)
     {
-        NSLog(@"Failed to set crosspoint volume for channel %d -> %d  on %@ with status %d", inChannel, outChannel, self, err);
+        NSLog(@"Failed to get crosspoint volume for channel %d -> %d  on %@ with status %d", inChannel, outChannel, self, err);
     }
  
     return ret;

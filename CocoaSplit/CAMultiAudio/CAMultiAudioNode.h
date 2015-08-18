@@ -58,6 +58,8 @@
 -(void)setOutputStreamFormat:(AudioStreamBasicDescription *)format;
 
 -(void)resetSamplerate:(UInt32)sampleRate;
+-(void)resetFormat:(AudioStreamBasicDescription *)format;
+
 -(void)updatePowerlevel;
 -(void)setVolumeOnConnectedNode;
 
