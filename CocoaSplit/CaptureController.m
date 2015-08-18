@@ -1817,7 +1817,6 @@
         return;
     }
     
-    NSLog(@"SETTING _SELECTED LAYOUT (%@) ISACTIVE NO", _selectedLayout);
     _selectedLayout.isActive = NO;
     
     _selectedLayout = selectedLayout;
@@ -2044,7 +2043,6 @@
         return;
     }
     
-    NSLog(@"SETTING UP FRAME TIMER %f", framerate);
     
     if (framerate && framerate > 0)
     {
