@@ -943,6 +943,8 @@ static NSArray *_sourceTypes = nil;
 -(void)dealloc
 {
     
+    
+    
     [self deregisterVideoInput:self.videoInput];
     for(id vInput in self.videoSources)
     {

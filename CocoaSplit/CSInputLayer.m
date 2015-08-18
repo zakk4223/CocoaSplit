@@ -499,7 +499,6 @@
 
 -(void)setSourceLayer:(CALayer *)sourceLayer
 {
-    [CATransaction begin];
     [self copySourceSettings:sourceLayer];
     
     [_sourceLayer.superlayer replaceSublayer:_sourceLayer with:sourceLayer];
@@ -513,7 +512,6 @@
     
     [self setupXAnimation:_scrollXSpeed];
     [self setupYAnimation:_scrollYSpeed];
-    [CATransaction commit];
 }
 
 
@@ -523,11 +521,9 @@
 
 -(void)setConstraints:(NSArray *)constraints
 {
-    [CATransaction begin];
     [super setConstraints:constraints];
     [self setNeedsLayout];
     [self layoutIfNeeded];
-    [CATransaction commit];
     
 }
 

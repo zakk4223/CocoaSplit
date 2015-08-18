@@ -54,6 +54,9 @@
     
     IOSurfaceRef drawSurface = CVPixelBufferGetIOSurface(toDraw);
     
+    IOSurfaceIncrementUseCount(drawSurface);
+    CFRetain(drawSurface);
+    
     size_t surfaceWidth = IOSurfaceGetWidth(drawSurface);
     size_t surfaceHeight = IOSurfaceGetHeight(drawSurface);
     
@@ -265,6 +268,8 @@
 
 
     
+    IOSurfaceDecrementUseCount(drawSurface);
+    CFRelease(drawSurface);
     CVPixelBufferRelease(toDraw);
     
     

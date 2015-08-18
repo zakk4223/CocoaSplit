@@ -252,6 +252,9 @@
 
 -(NSMenu *) buildSourceMenu
 {
+    
+    return nil;
+    
     NSArray *sourceList = [self.sourceLayout sourceListOrdered];
     
     NSMenu *sourceListMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];

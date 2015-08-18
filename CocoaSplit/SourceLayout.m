@@ -330,7 +330,14 @@
 
 -(NSArray *)sourceListOrdered
 {
-    NSArray *listCopy = [self.sourceList sortedArrayUsingDescriptors:@[_sourceDepthSorter, _sourceUUIDSorter]];
+    NSArray *mylist;
+    
+    @synchronized(self)
+    {
+        mylist = self.sourceList;
+    }
+    
+    NSArray *listCopy = [mylist sortedArrayUsingDescriptors:@[_sourceDepthSorter, _sourceUUIDSorter]];
     return listCopy;
 }
 
@@ -464,6 +471,7 @@
 -(void)restoreSourceList
 {
     
+    
     if (self.savedSourceListData)
     {
         self.rootLayer.sublayers = [NSArray array];
@@ -556,6 +564,8 @@
 
 -(void) setIsActive:(bool)isActive
 {
+    
+    
     bool oldActive = _isActive;
     
     _isActive = isActive;
@@ -588,8 +598,11 @@
         }
         
         self.rootLayer.sublayers = [NSArray array];
-        
-        [self.sourceList removeAllObjects];
+        @synchronized(self)
+        {
+            [self.sourceList removeAllObjects];
+
+        }
         [self.animationList removeAllObjects];
         self.selectedAnimation = nil;
         
@@ -666,7 +679,7 @@
         _rootSize = curSize;
     }
     
-    NSArray *listCopy = [self sourceListOrdered];
+    NSArray *listCopy = self.sourceList; //[self sourceListOrdered];
     
     
     for (InputSource *isource in listCopy)

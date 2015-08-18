@@ -161,7 +161,7 @@
     int _num_planes;
     int _can_count;
     bool _reassert_async;
-    bool _updateOnDemand;
+    BOOL _updateOnDemand;
     
     
     CGLContextObj _contextObj;
@@ -182,6 +182,8 @@
 {
     if (self = [super init])
     {
+        _updateOnDemand = NO;
+
         self.asynchronous = YES;
         
         self.needsDisplayOnBoundsChange = YES;
@@ -190,7 +192,6 @@
         _privateCropRect = CGRectMake(0.0, 0.0, 1.0, 1.0);
         self.imageWrapper = nil;
         _reassert_async = YES;
-        _updateOnDemand = NO;
         _can_count = 0;
         
     }
@@ -509,7 +510,6 @@
 
 -(BOOL)canDrawInCGLContext:(CGLContextObj)ctx pixelFormat:(CGLPixelFormatObj)pf forLayerTime:(CFTimeInterval)t displayTime:(const CVTimeStamp *)ts
 {
-
     if (_updateOnDemand != self.isAsynchronous)
     {
         if (_can_count > 5)
@@ -527,7 +527,6 @@
 
 -(void) drawInCGLContext:(CGLContextObj)ctx pixelFormat:(CGLPixelFormatObj)pf forLayerTime:(CFTimeInterval)t displayTime:(const CVTimeStamp *)ts
 {
-    
     
     
     

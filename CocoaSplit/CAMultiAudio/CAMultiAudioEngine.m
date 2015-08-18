@@ -430,6 +430,17 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     NSUInteger index = [self.audioInputs indexOfObject:toRemove];
     if (index != NSNotFound)
     {
+        NSMutableDictionary *saveSettings = [NSMutableDictionary dictionary];
+        
+        saveSettings[@"volume"] = @(toRemove.volume);
+        saveSettings[@"enabled"] = @(toRemove.enabled);
+        if (toRemove.downMixer)
+        {
+            saveSettings[@"downMixerData"] = [toRemove.downMixer saveData];
+        }
+        
+        _inputSettings[toRemove.nodeUID] = saveSettings;
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             [self removeObjectFromAudioInputsAtIndex:index];
 

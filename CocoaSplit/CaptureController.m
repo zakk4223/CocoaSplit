@@ -1817,6 +1817,7 @@
         return;
     }
     
+    NSLog(@"SETTING _SELECTED LAYOUT (%@) ISACTIVE NO", _selectedLayout);
     _selectedLayout.isActive = NO;
     
     _selectedLayout = selectedLayout;

@@ -142,6 +142,7 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 
 -(void)frameTick
 {
+    
     CFTimeInterval currentTime = CACurrentMediaTime();
     CVPixelBufferRef newFrame = NULL;
     CMTime outputItemTime = [self.avOutput itemTimeForHostTime:currentTime];
@@ -189,6 +190,7 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     
     bool oldLive = super.isLive;
     super.isLive = isLive;
+    
     if (isLive == oldLive)
     {
         return;
@@ -197,7 +199,7 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     if (isLive && _bufferPCM)
     {
         AudioStreamBasicDescription asbd = _bufferPCM.pcmFormat;
-
+        
         [self registerPCMOutput:_bufferPCM.frameCount audioFormat:&asbd];
     } else {
         [self deregisterPCMOutput];
@@ -207,13 +209,15 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 
 -(void)registerPCMOutput:(CMItemCount)frameCount audioFormat:(const AudioStreamBasicDescription *)audioFormat
 {
+    
     if (self.pcmPlayer)
     {
         //looks like we already have one?
         return;
     }
     
-    
+    NSLog(@"REGISTERING PCM OUTPUT %@", self);
+
     self.pcmPlayer = [[CSPluginServices sharedPluginServices] createPCMInput:self.activeVideoDevice.uniqueID withFormat:audioFormat];
     AVURLAsset *urlAsset = (AVURLAsset *)_avPlayer.currentItem.asset;
     self.pcmPlayer.name = urlAsset.URL.lastPathComponent;
@@ -221,8 +225,12 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 
 -(void)deregisterPCMOutput
 {
+    
+    NSLog(@"DEREGISTERING PCM OUTPUT %@", self);
+
     if (self.pcmPlayer)
     {
+
         [[CSPluginServices sharedPluginServices] removePCMInput:self.pcmPlayer];
     }
     
