@@ -145,6 +145,8 @@
         self.currentInput = [[CSDeckLinkDevice alloc] initWithDevice:deckLink];
         
         [self.currentInput registerOutput:self];
+        self.captureName = activeVideoDevice.captureName;
+        
     } else {
         self.currentInput = nil;
     }

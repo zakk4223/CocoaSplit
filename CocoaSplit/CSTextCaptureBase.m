@@ -148,7 +148,14 @@
         return;
     }
     _text = text;
-    self.captureName = text;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        self.captureName = text;
+
+    });
+    
+    
     
     [self buildString];
 }

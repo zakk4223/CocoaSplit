@@ -247,6 +247,8 @@
     
     
     _activeVideoDevice = newDev;
+    self.captureName = newDev.captureName;
+    
     [self updateLayersWithBlock:^(CALayer *layer) {
         ((CSShapeLayer *)layer).shapeCreator = newDev.captureDevice;
 

@@ -64,6 +64,13 @@
 
 
 
+-(void)setActiveVideoDevice:(CSAbstractCaptureDevice *)activeVideoDevice
+{
+    [super setActiveVideoDevice:activeVideoDevice];
+    self.captureName = activeVideoDevice.captureName;
+}
+
+
 -(void)frameTick
 {
     
