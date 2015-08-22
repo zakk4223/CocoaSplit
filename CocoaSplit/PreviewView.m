@@ -253,7 +253,6 @@
 -(NSMenu *) buildSourceMenu
 {
     
-    return nil;
     
     NSArray *sourceList = [self.sourceLayout sourceListOrdered];
     

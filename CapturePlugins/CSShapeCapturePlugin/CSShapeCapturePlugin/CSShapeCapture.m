@@ -37,7 +37,9 @@
 
 -(instancetype) initWithCoder:(NSCoder *)aDecoder
 {
-    
+    //force python loading
+    [CSShapeCaptureFactory sharedPathLoader];
+
     if (self = [super initWithCoder:aDecoder])
     {
         self.lineColor = [aDecoder decodeObjectForKey:@"lineColor"];

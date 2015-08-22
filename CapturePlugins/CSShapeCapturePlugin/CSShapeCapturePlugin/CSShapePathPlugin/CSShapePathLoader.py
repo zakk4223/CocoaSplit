@@ -42,7 +42,7 @@ class CSShapePathLoader(NSObject):
         ret = {}
         for m_name in plugins:
             plugin = plugin_source.load_plugin(m_name)
-            #reload(plugin)
+            reload(plugin)
             try:
                 plugin_name = plugin.name
             except AttributeError:

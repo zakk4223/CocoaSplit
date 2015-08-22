@@ -216,7 +216,6 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
         return;
     }
     
-    NSLog(@"REGISTERING PCM OUTPUT %@", self);
 
     self.pcmPlayer = [[CSPluginServices sharedPluginServices] createPCMInput:self.activeVideoDevice.uniqueID withFormat:audioFormat];
     AVURLAsset *urlAsset = (AVURLAsset *)_avPlayer.currentItem.asset;
@@ -226,7 +225,6 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 -(void)deregisterPCMOutput
 {
     
-    NSLog(@"DEREGISTERING PCM OUTPUT %@", self);
 
     if (self.pcmPlayer)
     {

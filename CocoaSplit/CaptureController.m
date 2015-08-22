@@ -1147,7 +1147,7 @@
         
         NSString *resourcePath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Python"];
         
-        NSString *sysstr = [NSString stringWithFormat:@"import sys; sys.path.append('%@');", resourcePath];
+        NSString *sysstr = [NSString stringWithFormat:@"from Foundation import *; import sys; sys.path.append('%@');", resourcePath];
         PyGILState_STATE gilState = PyGILState_Ensure();
         PyRun_SimpleString([sysstr UTF8String]);
         PyGILState_Release(gilState);
@@ -1170,8 +1170,20 @@
     
     PyGILState_STATE gilState = PyGILState_Ensure();
 
-    PyRun_SimpleFile(runnerFile, (char *)[[fromFile lastPathComponent] UTF8String]);
+    PyObject *main_tl = PyImport_AddModule("__main__");
+    PyObject *main_dict = PyModule_GetDict(main_tl);
+    PyObject *dict_copy = PyDict_Copy(main_dict);
+    
 
+    PyObject *ret = PyRun_File(runnerFile, (char *)[[fromFile lastPathComponent] UTF8String], Py_file_input, dict_copy, dict_copy);
+    if (!ret)
+    {
+        NSLog(@"PYTHON RETURNED NULL!");
+        PyErr_Print();
+        return nil;
+    }
+    
+    
     Class retClass = NSClassFromString(pyClass);
     PyGILState_Release(gilState);
     
@@ -1712,9 +1724,6 @@
     dispatch_async(_preview_queue, ^{
         [self newStagingFrameTimed];
     });
-
-    
-    
 
 }
 

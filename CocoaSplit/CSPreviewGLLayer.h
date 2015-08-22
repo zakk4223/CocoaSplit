@@ -25,7 +25,8 @@
     GLint       _viewport[4];
     GLdouble    _modelview[16];
     GLdouble    _projection[16];
-
+    CVPixelBufferRef _renderBuffer;
+    
     
 }
 

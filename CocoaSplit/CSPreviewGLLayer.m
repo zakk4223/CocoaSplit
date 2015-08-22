@@ -52,10 +52,15 @@
         return;
     }
     
+    if (_renderBuffer)
+    {
+        CVPixelBufferRelease(_renderBuffer);
+    }
+    _renderBuffer = toDraw;
+
+    
     IOSurfaceRef drawSurface = CVPixelBufferGetIOSurface(toDraw);
     
-    IOSurfaceIncrementUseCount(drawSurface);
-    CFRetain(drawSurface);
     
     size_t surfaceWidth = IOSurfaceGetWidth(drawSurface);
     size_t surfaceHeight = IOSurfaceGetHeight(drawSurface);
@@ -264,13 +269,8 @@
 
 
     
-    //[super drawInCGLContext:ctx pixelFormat:pf forLayerTime:t displayTime:ts];
+    [super drawInCGLContext:ctx pixelFormat:pf forLayerTime:t displayTime:ts];
 
-
-    
-    IOSurfaceDecrementUseCount(drawSurface);
-    CFRelease(drawSurface);
-    CVPixelBufferRelease(toDraw);
     
     
 }

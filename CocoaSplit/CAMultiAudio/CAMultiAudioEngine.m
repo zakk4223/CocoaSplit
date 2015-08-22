@@ -370,9 +370,9 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 -(void)removePCMInput:(CAMultiAudioPCMPlayer *)toRemove
 {
     CAMultiAudioConverter *converter = toRemove.converterNode;
+    
     [self removeInput:converter];
 
-    [self.graph removeNode:toRemove];
     
    
     NSUInteger index = [self.pcmInputs indexOfObject:toRemove];
@@ -517,8 +517,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 -(void)removeObjectFromAudioInputsAtIndex:(NSUInteger)index
 {
-    CAMultiAudioNode *toRemove = [self.audioInputs objectAtIndex:index];
-    [self.graph removeNode:toRemove];
     [self.audioInputs removeObjectAtIndex:index];
 }
 
