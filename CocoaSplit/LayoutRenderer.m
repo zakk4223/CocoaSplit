@@ -135,12 +135,11 @@
         self.rootLayer.delegate = self;
     }
     
-    SourceLayout *saveLayout;
     
 
-    saveLayout = _currentLayout;
+    _transitionLayout = _currentLayout;
     
-    if (self.transitionName && saveLayout)
+    if (self.transitionName && _transitionLayout)
     {
         [CATransaction setDisableActions:YES];
         _layoutTransition = [CATransition animation];
@@ -151,10 +150,11 @@
         _layoutTransition.removedOnCompletion = YES;
         [CATransaction setCompletionBlock:^{
             [CATransaction begin];
-            if (saveLayout)
+            if (_transitionLayout)
             {
-                [saveLayout.rootLayer removeFromSuperlayer];
-                saveLayout.isActive = NO;
+                [_transitionLayout.rootLayer removeFromSuperlayer];
+                _transitionLayout.isActive = NO;
+                _transitionLayout = nil;
             }
             
             
@@ -167,11 +167,11 @@
     } else {
         _currentLayout.inTransition = NO;
 
-        if (saveLayout)
+        if (_transitionLayout)
         {
             
-            [saveLayout.rootLayer removeFromSuperlayer];
-            saveLayout.isActive = NO;
+            [_transitionLayout.rootLayer removeFromSuperlayer];
+            _transitionLayout.isActive = NO;
         }
         
         [self.renderer.layer addSublayer:self.layout.rootLayer];
@@ -248,7 +248,10 @@
     CGFloat frameWidth, frameHeight;
 
     [self.layout frameTick];
-    
+    if (_transitionLayout)
+    {
+        [_transitionLayout frameTick];
+    }
     
     frameWidth = self.layout.canvas_width;
     frameHeight = self.layout.canvas_height;

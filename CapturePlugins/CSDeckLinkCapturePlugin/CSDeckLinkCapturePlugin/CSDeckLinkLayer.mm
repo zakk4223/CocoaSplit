@@ -78,7 +78,6 @@
 
 -(void)drawInCGLContext:(CGLContextObj)ctx pixelFormat:(CGLPixelFormatObj)pf forLayerTime:(CFTimeInterval)t displayTime:(const CVTimeStamp *)ts
 {
-    CGLContextObj cgl_ctx = ctx;
     CGLSetCurrentContext(ctx);
     glClearColor(0,0,0,0);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -112,7 +111,7 @@
     
     if (_deckLinkOGL)
     {
-        HRESULT err = _deckLinkOGL->PaintGL();
+        _deckLinkOGL->PaintGL();
     }
 
     /*

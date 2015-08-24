@@ -13,7 +13,6 @@
 
 @interface CSShapeCapture : CSCaptureBase <CSCaptureSourceProtocol>
 
-+(CSShapePathLoader *) sharedPathLoader;
 
 @property (strong) NSColor *fillColor;
 @property (strong) NSColor *lineColor;

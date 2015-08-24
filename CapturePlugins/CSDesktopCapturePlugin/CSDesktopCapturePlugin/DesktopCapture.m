@@ -295,7 +295,7 @@
         }
     });
 
-    CGError sErr = CGDisplayStreamStart(_displayStreamRef);
+    CGDisplayStreamStart(_displayStreamRef);
     
     return YES;
 }

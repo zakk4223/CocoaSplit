@@ -20,6 +20,8 @@
     bool _layoutChanged;
     CATransition *_layoutTransition;
     SourceLayout *_currentLayout;
+    SourceLayout *_transitionLayout;
+    
     
     
 }

@@ -302,9 +302,9 @@
 
     Float32 *levelData = malloc(levelSize);
     
-    OSStatus err = AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_MatrixLevels, kAudioUnitScope_Global, 0, levelData, &levelSize);
+    AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_MatrixLevels, kAudioUnitScope_Global, 0, levelData, &levelSize);
     
-     NSData *levels = [NSData dataWithBytes:levelData length:levelSize];
+    NSData *levels = [NSData dataWithBytes:levelData length:levelSize];
     
     [ret setObject:@(self.inputChannelCount) forKey:@"inputChannels"];
     [ret setObject:@(self.outputChannelCount) forKey:@"outputChannels"];

@@ -1826,7 +1826,7 @@
         return;
     }
     
-    _selectedLayout.isActive = NO;
+    
     
     _selectedLayout = selectedLayout;
 
