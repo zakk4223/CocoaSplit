@@ -18,6 +18,7 @@
 		34E301151B6515C9000C16DB /* triangle.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34E3010F1B651515000C16DB /* triangle.py */; };
 		34E301161B6515CB000C16DB /* rtriangle.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34E301111B65153A000C16DB /* rtriangle.py */; };
 		34E56B0C1B6DF3D1006A621E /* CSShapeWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E56B0B1B6DF3D1006A621E /* CSShapeWrapper.m */; };
+		34F2FF2B1B8AAAC1000B5964 /* arc.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34F2FF291B8AA717000B5964 /* arc.py */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -38,6 +39,7 @@
 			dstPath = Paths;
 			dstSubfolderSpec = 13;
 			files = (
+				34F2FF2B1B8AAAC1000B5964 /* arc.py in CopyFiles */,
 				34E301141B6515C9000C16DB /* circle.py in CopyFiles */,
 				34E301151B6515C9000C16DB /* triangle.py in CopyFiles */,
 				34E301161B6515CB000C16DB /* rtriangle.py in CopyFiles */,
@@ -78,6 +80,7 @@
 		34E301111B65153A000C16DB /* rtriangle.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = rtriangle.py; sourceTree = "<group>"; };
 		34E56B0A1B6DF3D1006A621E /* CSShapeWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSShapeWrapper.h; sourceTree = "<group>"; };
 		34E56B0B1B6DF3D1006A621E /* CSShapeWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSShapeWrapper.m; sourceTree = "<group>"; };
+		34F2FF291B8AA717000B5964 /* arc.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = arc.py; sourceTree = "<group>"; };
 		34FD2ABF1B6D39DA00181409 /* CSShapePathWrapper.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = CSShapePathWrapper.py; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -175,6 +178,7 @@
 				34E3010D1B6514F9000C16DB /* circle.py */,
 				34E3010F1B651515000C16DB /* triangle.py */,
 				34E301111B65153A000C16DB /* rtriangle.py */,
+				34F2FF291B8AA717000B5964 /* arc.py */,
 			);
 			name = ShapePaths;
 			path = CSShapeCapturePlugin/ShapePaths;

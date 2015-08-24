@@ -1232,18 +1232,30 @@ static NSArray *_sourceTypes = nil;
                 break;
         }
         _nextImageTime = currentTime + self.changeInterval;
-        _nextInput = [chooseInputs objectAtIndex:_currentSourceIdx];
         
-        _multiTransition.type = self.transitionFilterName;
-        _multiTransition.duration = self.transitionDuration;
-        _multiTransition.subtype = self.transitionDirection;
-        _multiTransition.filter = self.advancedTransition.copy;
+        @try {
+            _nextInput = [chooseInputs objectAtIndex:_currentSourceIdx];
+        }
+        @catch (NSException *exception) {
+            _nextInput = nil;
+        }
         
-        [self.layer transitionToLayer:_nextInput.layer fromLayer:_currentInput.layer withTransition:_multiTransition];
-        _currentInput = _nextInput;
+        if (_nextInput)
+        {
+            _multiTransition.type = self.transitionFilterName;
+            _multiTransition.duration = self.transitionDuration;
+            _multiTransition.subtype = self.transitionDirection;
+            _multiTransition.filter = self.advancedTransition.copy;
         
+            CALayer *fromLayer = nil;
+            if (!_currentInput.alwaysDisplay)
+            {
+                fromLayer = _currentInput.layer;
+            }
         
-
+            [self.layer transitionToLayer:_nextInput.layer fromLayer:fromLayer withTransition:_multiTransition];
+            _currentInput = _nextInput;
+        }
     }
 }
 
