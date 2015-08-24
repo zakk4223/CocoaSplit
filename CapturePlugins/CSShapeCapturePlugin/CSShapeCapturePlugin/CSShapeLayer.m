@@ -51,7 +51,13 @@
     
     if (self.shapeCreator)
     {
-        [self.shapeCreator getcgpath:self.frame forLayer:self];
+        @try {
+            [self.shapeCreator getcgpath:self.frame forLayer:self];
+        }
+        @catch (NSException *exception) {
+            NSLog(@"Path creation for layer failed with exception %@", exception);
+        }
+        
         if (self.path)
         {
                         

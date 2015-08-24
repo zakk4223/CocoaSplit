@@ -265,7 +265,13 @@
     NSMutableArray *ret = [NSMutableArray array];
     CSShapePathLoader *sharedLoader = [CSShapeCaptureFactory sharedPathLoader];
     
-    NSDictionary *allShapes = [sharedLoader allPaths];
+    NSDictionary *allShapes = [NSDictionary dictionary];
+    @try {
+        allShapes = [sharedLoader allPaths];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Loading available shapes failed with exception %@", exception);
+    }
     
     for(NSString *key in allShapes)
     {
