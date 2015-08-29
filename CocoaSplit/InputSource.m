@@ -1147,12 +1147,7 @@ static NSArray *_sourceTypes = nil;
 }
 
 -(bool)alwaysDisplay
-{
-    return _alwaysDisplay;
-}
-
--(void)setAlwaysDisplay:(bool)alwaysDisplay
-{
+    
     if (alwaysDisplay)
     {
         [CATransaction begin];
