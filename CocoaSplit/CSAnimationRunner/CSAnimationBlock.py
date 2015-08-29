@@ -1,11 +1,13 @@
 import objc
+import PyObjCTools.AppHelper
 from Foundation import NSObject,NSLog
 from Quartz import CACurrentMediaTime,CATransaction
 from CSAnimation import *
+from threading import local
 
-superLayer = None
-current_frame = None
-frames = []
+threadData = local()
+
+
 
 class CSAnimationDelegate(NSObject):
 
@@ -99,6 +101,7 @@ class AnimationBlock:
                     target_map[anim.cs_input]['c_begin'] = real_begin
                 else:
                     real_begin = t_begin
+            
             a_duration = anim.apply(real_begin)
             if not anim.ignore_wait:
                 latest_end_time = max(latest_end_time, real_begin+anim.duration)
@@ -111,36 +114,40 @@ class AnimationBlock:
 
 
 def wait(duration=0):
-    global current_frame
-    current_frame.wait(duration, None)
+    global threadData
+    threadData.current_frame.wait(duration, None)
 
 def waitAnimation(duration=0, **kwargs):
-    global current_frame
-    current_frame.waitAnimation(duration, None, **kwargs)
+    global threadData
+    threadData.current_frame.waitAnimation(duration, None, **kwargs)
 
 def animationDuration():
-    global current_frame
-    return current_frame.duration
+    global threadData
+    return threadData.current_frame.duration
 
 def beginAnimation(duration=0.25):
-    global current_frame
-    global frames
-    global superLayer
+    global threadData
+
+    if not hasattr(threadData, 'superLayer'):
+        threadData.superLayer = None
+    if not hasattr(threadData, 'current_frame'):
+        threadData.current_frame = None
+    if not hasattr(threadData, 'frames'):
+        threadData.frames = []
 
     new_frame = AnimationBlock(duration)
-    new_frame.baseLayer = superLayer
-    if current_frame:
-        frames.append(current_frame)
-    current_frame = new_frame
+    new_frame.baseLayer = threadData.superLayer
+    if threadData.current_frame:
+        frames.append(threadData.current_frame)
+    threadData.current_frame = new_frame
 
 
 def commitAnimation():
-    global current_frame
-    global frames
-    current_frame.commit()
+    global threadData
+    threadData.current_frame.commit()
 
-    if not frames:
-        current_frame = None
+    if not threadData.frames:
+        threadData.current_frame = None
     else:
-        current_frame = frames.pop()
+        threadData.current_frame = threadData.frames.pop()
 

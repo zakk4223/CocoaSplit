@@ -141,6 +141,7 @@
     
     if (self.transitionName && _transitionLayout)
     {
+        [CATransaction begin];
         [CATransaction setDisableActions:YES];
         _layoutTransition = [CATransition animation];
         _layoutTransition.type = self.transitionName  ;
@@ -163,8 +164,10 @@
         [self.rootLayer addAnimation:_layoutTransition forKey:nil];
         
         [self.rootLayer addSublayer:self.layout.rootLayer];
+        [CATransaction commit];
         
     } else {
+        [CATransaction begin];
         _currentLayout.inTransition = NO;
 
         if (_transitionLayout)
@@ -175,6 +178,7 @@
         }
         
         [self.renderer.layer addSublayer:self.layout.rootLayer];
+        [CATransaction commit];
     }
     
 
@@ -187,6 +191,7 @@
 
 -(void)renderToSurface:(IOSurfaceRef)ioSurface
 {
+
     CGLSetCurrentContext(self.cglCtx);
     
     if (!_rFbo)
@@ -225,19 +230,18 @@
     
     if (fboStatus == GL_FRAMEBUFFER_COMPLETE && self.renderer && self.renderer.layer)
     {
-        [CATransaction begin];
         [self.renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];
         [self.renderer addUpdateRect:self.renderer.bounds];
         [self.renderer render];
         [self.renderer endFrame];
-        [CATransaction flush];
+        //[CATransaction flush];
 
-        [CATransaction commit];
     }
     glBindTexture(GL_TEXTURE_RECTANGLE_ARB, 0);
     glDisable(GL_TEXTURE_RECTANGLE_ARB);
     
     glFlush();
+    [CATransaction flush];
 }
 
 -(CVPixelBufferRef)currentImg

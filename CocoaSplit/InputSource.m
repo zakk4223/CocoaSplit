@@ -55,6 +55,7 @@ static NSArray *_sourceTypes = nil;
 
 -(instancetype)copyWithZone:(NSZone *)zone
 {
+    [CATransaction begin];
     InputSource *newSource = [[InputSource allocWithZone:zone] init];
     
     newSource.videoInput = self.videoInput;
@@ -110,6 +111,7 @@ static NSArray *_sourceTypes = nil;
     newSource.layer.gradientStopX = self.layer.gradientStopX;
     newSource.layer.gradientStopY = self.layer.gradientStopY;
 
+    [CATransaction commit];
     return newSource;
 }
 
@@ -202,6 +204,7 @@ static NSArray *_sourceTypes = nil;
     
     if (self = [super init])
     {
+        [CATransaction begin];
         [self commonInit];
         
         
@@ -419,6 +422,7 @@ static NSArray *_sourceTypes = nil;
         
         self.layer.filters = [aDecoder decodeObjectForKey:@"layerFilters"];
         self.compositingFilterName = [aDecoder decodeObjectForKey:@"compositingFilterName"];
+        [CATransaction commit];
     }
     
     return self;
@@ -475,6 +479,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void)commonInit
 {
+    [CATransaction begin];
     _nextImageTime = 0.0f;
     _currentSourceIdx = 0;
     
@@ -583,6 +588,7 @@ static NSArray *_sourceTypes = nil;
     
 
     [self observeConstraintKeys];
+    [CATransaction commit];
  }
 
 
@@ -616,7 +622,9 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setDepth:(float)depth
 {
+    [CATransaction begin];
     self.layer.zPosition = depth;
+    [CATransaction commit];
 }
 
 -(void)clearBackground
@@ -629,6 +637,7 @@ static NSArray *_sourceTypes = nil;
 -(void)setBackgroundColor:(NSColor *)backgroundColor
 {
     
+    [CATransaction begin];
     _userBackground = YES;
 
     if (backgroundColor)
@@ -637,6 +646,7 @@ static NSArray *_sourceTypes = nil;
     } else {
         self.layer.backgroundColor = NULL;
     }
+    [CATransaction commit];
 }
 
 -(NSColor *)backgroundColor
@@ -652,7 +662,9 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setBorderColor:(NSColor *)borderColor
 {
+    [CATransaction begin];
     self.layer.borderColor = [borderColor CGColor];
+    [CATransaction commit];
 }
 
 -(NSColor *)borderColor
@@ -667,7 +679,9 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setCornerRadius:(CGFloat)cornerRadius
 {
+    [CATransaction begin];
     self.layer.cornerRadius = cornerRadius;
+    [CATransaction commit];
 }
 
 -(CGFloat)cornerRadius
@@ -678,7 +692,9 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setBorderWidth:(CGFloat)borderWidth
 {
+    [CATransaction begin];
     self.layer.borderWidth = borderWidth;
+    [CATransaction commit];
 }
 
 -(CGFloat)borderWidth
@@ -699,7 +715,9 @@ static NSArray *_sourceTypes = nil;
     {
         newFilter = [CIFilter filterWithName:compositingFilterName];
     }
+    [CATransaction begin];
     self.layer.compositingFilter = newFilter;
+    [CATransaction commit];
     _compositingFilterName = compositingFilterName;
 }
 
@@ -741,16 +759,23 @@ static NSArray *_sourceTypes = nil;
 
 -(void)deleteLayerFilter:(NSString *)filteruuid
 {
+    [CATransaction begin];
     self.layer.filters = [self newFilterArray:self.layer.filters withoutName:filteruuid];
+    [CATransaction commit];
 }
+
 -(void)deleteSourceFilter:(NSString *)filteruuid
 {
+    [CATransaction begin];
     self.layer.sourceLayer.filters = [self newFilterArray:self.layer.sourceLayer.filters withoutName:filteruuid];
+    [CATransaction commit];
 }
 
 -(void)deleteBackgroundFilter:(NSString *)filteruuid
 {
+    [CATransaction begin];
     self.layer.backgroundFilters = [self newFilterArray:self.layer.backgroundFilters withoutName:filteruuid];
+    [CATransaction commit];
 }
 
 
@@ -773,7 +798,9 @@ static NSArray *_sourceTypes = nil;
         }
 
         [currentFilters addObject:newFilter];
+        [CATransaction begin];
         self.layer.filters = currentFilters;
+        [CATransaction commit];
     }
 }
 
@@ -795,7 +822,9 @@ static NSArray *_sourceTypes = nil;
         }
 
         [currentFilters addObject:newFilter];
+        [CATransaction begin];
         self.layer.sourceLayer.filters = currentFilters;
+        [CATransaction commit];
     }
 }
 
@@ -816,7 +845,9 @@ static NSArray *_sourceTypes = nil;
             currentFilters = [NSMutableArray array];
         }
         [currentFilters addObject:newFilter];
+        [CATransaction begin];
         self.layer.backgroundFilters = currentFilters;
+        [CATransaction commit];
     }
 }
 
@@ -981,7 +1012,9 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setName:(NSString *)name
 {
+    [CATransaction begin];
     self.layer.name = name;
+    [CATransaction commit];
     _name = name;
 }
 
@@ -1023,11 +1056,14 @@ static NSArray *_sourceTypes = nil;
     CATransform3D transform = CATransform3DMakeRotation(self.rotationAngle * M_PI / 180.0, 0.0, 0.0, 1.0);
     transform = CATransform3DRotate(transform, self.rotationAngleX * M_PI / 180.0, 1.0, 0.0, 0.0);
     transform = CATransform3DRotate(transform, self.rotationAngleY * M_PI / 180.0, 0.0, 1.0, 0.0);
+    [CATransaction begin];
     self.layer.disableAnimation = YES;
+    
     self.layer.transform = transform;
 
     
     self.layer.disableAnimation  = NO;
+    [CATransaction commit];
 }
 
 
@@ -1078,8 +1114,9 @@ static NSArray *_sourceTypes = nil;
     contentsRect.origin.y = self.crop_bottom;
     contentsRect.size.width = 1.0 - self.crop_right - self.crop_left;
     contentsRect.size.height = 1.0 - self.crop_top - self.crop_bottom;
-    
-        self.layer.cropRect = contentsRect;
+    [CATransaction begin];
+    self.layer.cropRect = contentsRect;
+    [CATransaction commit];
     
 }
 
@@ -1087,6 +1124,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setTransitionEnabled:(bool)transitionEnabled
 {
+    [CATransaction begin];
     _transitionEnabled = transitionEnabled;
     
     if (transitionEnabled)
@@ -1105,6 +1143,7 @@ static NSArray *_sourceTypes = nil;
         }
         [self.layer transitionsDisabled];
     }
+    [CATransaction commit];
 }
 
 -(bool)alwaysDisplay
@@ -1116,7 +1155,9 @@ static NSArray *_sourceTypes = nil;
 {
     if (alwaysDisplay)
     {
+        [CATransaction begin];
         self.layer.hidden = NO;
+        [CATransaction commit];
     }
     
     _alwaysDisplay = alwaysDisplay;
@@ -1408,7 +1449,7 @@ static NSArray *_sourceTypes = nil;
 -(void) updateSize:(CGFloat)width height:(CGFloat)height
 {
     
-    
+    [CATransaction begin];
     NSRect oldLayout = self.layoutPosition;
     NSRect newLayout = self.layoutPosition;
     
@@ -1452,11 +1493,12 @@ static NSArray *_sourceTypes = nil;
         newLayout.size.width = width;
         newLayout.size.height = height;
         
-            self.layer.allowResize = tmpResize;
-            self.layer.frame = NSIntegralRect(newLayout);
-            self.layer.allowResize = oldResize;
+        self.layer.allowResize = tmpResize;
+        self.layer.frame = NSIntegralRect(newLayout);
+        self.layer.allowResize = oldResize;
         
     }
+    [CATransaction commit];
 }
 
 
@@ -1484,6 +1526,7 @@ static NSArray *_sourceTypes = nil;
         return;
     }
 
+    [CATransaction begin];
     [toDetach resetConstraints];
     
     toDetach.parentInput = nil;
@@ -1497,7 +1540,7 @@ static NSArray *_sourceTypes = nil;
     
     NSPoint newPosition = [self.sourceLayout.rootLayer convertPoint:toDetach.layer.position fromLayer:self.layer];
     toDetach.layer.position = newPosition;
-
+    [CATransaction commit];
     
     [self.attachedInputs removeObject:toDetach];
 }
@@ -1545,6 +1588,7 @@ static NSArray *_sourceTypes = nil;
 -(void)makeSublayerOfLayer:(CALayer *)parentLayer
 {
     
+    [CATransaction begin];
     [parentLayer addSublayer:self.layer];
     //translate the position to the new sublayers coordinates
     
@@ -1562,6 +1606,7 @@ static NSArray *_sourceTypes = nil;
     oldFrame.origin = newPosition;
     
     self.layer.frame = oldFrame;
+    [CATransaction commit];
 
 }
 
@@ -1575,7 +1620,9 @@ static NSArray *_sourceTypes = nil;
         NSRect newFrame = self.layer.frame;
         newFrame.origin.x = x;
         newFrame.origin.y = y;
+        [CATransaction begin];
         self.layer.frame = NSIntegralRect(newFrame);
+        [CATransaction commit];
         
     }
 
@@ -1597,16 +1644,16 @@ static NSArray *_sourceTypes = nil;
         newOrigin.y += y;
         
         
-            //[CATransaction begin];
+        [CATransaction begin];
             //[CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
         NSRect tmpRect = NSIntegralRect(NSMakeRect(newOrigin.x, newOrigin.y, 100, 100));
         
         self.layer.disableAnimation = YES;
-            self.layer.position = tmpRect.origin;
+        self.layer.position = tmpRect.origin;
         
         self.layer.disableAnimation = NO;
             
-            //[CATransaction commit];
+        [CATransaction commit];
 
     }
     
@@ -1633,7 +1680,9 @@ static NSArray *_sourceTypes = nil;
 -(void)setOpacity:(float)opacity
 {
     _opacity = opacity;
+    [CATransaction begin];
     self.layer.opacity = _opacity;
+    [CATransaction commit];
 }
 
 
@@ -1697,7 +1746,9 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setScrollXSpeed:(float)scrollXSpeed
 {
+    [CATransaction begin];
     self.layer.scrollXSpeed = scrollXSpeed;
+    [CATransaction commit];
     
 }
 
@@ -1710,7 +1761,9 @@ static NSArray *_sourceTypes = nil;
 -(void)setScrollYSpeed:(float)scrollYSpeed
 {
 
+    [CATransaction begin];
     self.layer.scrollYSpeed = scrollYSpeed;
+    [CATransaction commit];
 }
 
 
@@ -2096,7 +2149,10 @@ static NSArray *_sourceTypes = nil;
     {
         self.videoInput.isActive = active;
     }
+    [CATransaction begin];
     self.layer.hidden = !active;
+    [CATransaction commit];
+    
 }
 
 
@@ -2222,7 +2278,9 @@ static NSArray *_sourceTypes = nil;
 -(void)setChromaKeyColor:(NSColor *)chromaKeyColor
 {
     _chromaKeyColor = chromaKeyColor;
+    [CATransaction begin];
     [self.layer.sourceLayer setValue:[[CIColor alloc] initWithColor:chromaKeyColor] forKeyPath:@"filters.Chromakey.inputColor"];
+    [CATransaction commit];
 }
 
 -(NSColor *)chromaKeyColor
@@ -2233,7 +2291,9 @@ static NSArray *_sourceTypes = nil;
 -(void)setChromaKeySmoothing:(float)chromaKeySmoothing
 {
     _chromaKeySmoothing = chromaKeySmoothing;
+    [CATransaction begin];
     [self.layer.sourceLayer setValue:@(chromaKeySmoothing) forKeyPath:@"filters.Chromakey.inputSmoothing"];
+    [CATransaction commit];
 }
 
 -(float)chromaKeySmoothing
@@ -2244,7 +2304,9 @@ static NSArray *_sourceTypes = nil;
 -(void)setChromaKeyThreshold:(float)chromaKeyThreshold
 {
     _chromaKeyThreshold = chromaKeyThreshold;
+    [CATransaction begin];
     [self.layer.sourceLayer setValue:@(chromaKeyThreshold) forKeyPath:@"filters.Chromakey.inputThreshold"];
+    [CATransaction commit];
 }
 
 -(float)chromaKeyThreshold
@@ -2258,6 +2320,7 @@ static NSArray *_sourceTypes = nil;
 {
     _doChromaKey = doChromaKey;
 
+    [CATransaction begin];
     [self.layer.sourceLayer setValue:[NSNumber numberWithBool:doChromaKey] forKeyPath:@"filters.Chromakey.enabled" ];
     if (doChromaKey)
     {
@@ -2269,6 +2332,7 @@ static NSArray *_sourceTypes = nil;
         [self.layer.sourceLayer setValue:@(self.chromaKeyThreshold) forKeyPath:@"filters.Chromakey.inputThreshold"];
 
     }
+    [CATransaction commit];
     
 }
 
@@ -2345,8 +2409,10 @@ static NSArray *_sourceTypes = nil;
         
     }
     
-    
+    [CATransaction begin];
     self.layer.constraints = constraints;
+    [CATransaction commit];
+    
     
 }
 

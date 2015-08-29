@@ -468,6 +468,7 @@
 
 -(void)transitionToLayer:(CALayer *)toLayer fromLayer:(CALayer *)fromLayer withTransition:(CATransition *)transition
 {
+    [CATransaction begin];
     CALayer *realTo = toLayer;
     CALayer *realFrom = fromLayer;
     
@@ -486,6 +487,7 @@
     [realFrom addAnimation:transition forKey:nil];
     realFrom.hidden = YES;
     realTo.hidden = NO;
+    [CATransaction commit];
 }
 
 
@@ -499,6 +501,7 @@
 
 -(void)setSourceLayer:(CALayer *)sourceLayer
 {
+    [CATransaction begin];
     [self copySourceSettings:sourceLayer];
     
     [_sourceLayer.superlayer replaceSublayer:_sourceLayer with:sourceLayer];
@@ -512,6 +515,7 @@
     
     [self setupXAnimation:_scrollXSpeed];
     [self setupYAnimation:_scrollYSpeed];
+    [CATransaction commit];
 }
 
 

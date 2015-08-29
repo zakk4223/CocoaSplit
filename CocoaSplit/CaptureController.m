@@ -1675,26 +1675,6 @@
     self.livePreviewView.viewOnly = YES;
     
     
-    self.sourceLayouts = [saveRoot valueForKey:@"sourceLayouts"];
-    
-    if (!self.sourceLayouts)
-    {
-        self.sourceLayouts = [[NSMutableArray alloc] init];
-        SourceLayout *newLayout = [[SourceLayout alloc] init];
-        newLayout.name = @"default";
-        [[self mutableArrayValueForKey:@"sourceLayouts" ] addObject:newLayout];
-        self.selectedLayout = newLayout;
-        self.stagingLayout = newLayout;
-        newLayout.isActive = YES;
-        
-    } else {
-    
-        self.selectedLayout = [saveRoot valueForKey:@"selectedLayout"];
-        self.stagingLayout  = [saveRoot valueForKey:@"stagingLayout"];
-    }
-    
-
-
     
     self.extraPluginsSaveData = [saveRoot valueForKey:@"extraPluginsSaveData"];
     [self migrateDefaultCompressor:saveRoot];
@@ -1719,11 +1699,29 @@
 
 
     self.extraPluginsSaveData = nil;
+    self.sourceLayouts = [saveRoot valueForKey:@"sourceLayouts"];
+    
+
     dispatch_async(_main_capture_queue, ^{[self newFrameTimed];});
     
     dispatch_async(_preview_queue, ^{
         [self newStagingFrameTimed];
     });
+    if (!self.sourceLayouts)
+    {
+        self.sourceLayouts = [[NSMutableArray alloc] init];
+        SourceLayout *newLayout = [[SourceLayout alloc] init];
+        newLayout.name = @"default";
+        [[self mutableArrayValueForKey:@"sourceLayouts" ] addObject:newLayout];
+        self.selectedLayout = newLayout;
+        self.stagingLayout = newLayout;
+        newLayout.isActive = YES;
+        
+    } else {
+        
+        self.selectedLayout = [saveRoot valueForKey:@"selectedLayout"];
+        self.stagingLayout  = [saveRoot valueForKey:@"stagingLayout"];
+    }
 
 }
 
@@ -1754,52 +1752,56 @@
     
     [self.objectController commitEditing];
 
-    self.stagingCtx.layoutRenderer.transitionName = self.transitionName;
-    self.stagingCtx.layoutRenderer.transitionDirection = self.transitionDirection;
-    self.stagingCtx.layoutRenderer.transitionDuration = self.transitionDuration;
-    self.stagingCtx.layoutRenderer.transitionFilter = self.transitionFilter;
-    
-    
-    
 
-    [self stagingSave:self];
+        self.stagingCtx.layoutRenderer.transitionName = self.transitionName;
+        self.stagingCtx.layoutRenderer.transitionDirection = self.transitionDirection;
+        self.stagingCtx.layoutRenderer.transitionDuration = self.transitionDuration;
+        self.stagingCtx.layoutRenderer.transitionFilter = self.transitionFilter;
+        
+        
+        
+        
     
-    _stagingLayout = stagingLayout;
+       
     
-    /*
-    if (stagingLayout.isActive)
-    {
-        [stagingLayout saveSourceList];
-    }
-     
-     */
-    
-
-    SourceLayout *previewCopy = stagingLayout.copy;
-    [previewCopy restoreSourceList];
-
-    self.stagingCtx.sourceLayout = previewCopy;
-    if (self.sourceLayoutsArrayController)
-    {
-        NSUInteger sidx = [self.sourceLayoutsArrayController.arrangedObjects indexOfObject:stagingLayout];
-        if ((sidx != NSNotFound) && self.stagingSourceLayoutTableView)
-        {
-            [self.stagingSourceLayoutTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:sidx] byExtendingSelection:NO];
+            [self stagingSave:self];
             
-        }
-    }
+            
+            SourceLayout *previewCopy = stagingLayout.copy;
 
-    float framerate = stagingLayout.frameRate;
+            [previewCopy restoreSourceList];
     
-    if (framerate && framerate > 0)
-    {
-        _staging_frame_interval = (1.0/framerate);
-    } else {
-        _staging_frame_interval = 1.0/60.0;
-    }
+    self.stagingPreviewView.sourceLayout = previewCopy;
+    
+    
+    
+    
+        if (self.sourceLayoutsArrayController)
+        {
+            NSUInteger sidx = [self.sourceLayoutsArrayController.arrangedObjects indexOfObject:stagingLayout];
+            if ((sidx != NSNotFound) && self.stagingSourceLayoutTableView)
+            {
+                    [self.stagingSourceLayoutTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:sidx] byExtendingSelection:NO];
 
-    self.currentMidiInputStagingIdx = 0;
+                
+            }
+        }
+        
+        float framerate = stagingLayout.frameRate;
+        
+        if (framerate && framerate > 0)
+        {
+            _staging_frame_interval = (1.0/framerate);
+        } else {
+            _staging_frame_interval = 1.0/60.0;
+        }
+        
+        self.currentMidiInputStagingIdx = 0;
 
+           _stagingLayout = stagingLayout;
+    
+       
+    
 
 }
 
@@ -1812,15 +1814,6 @@
 
 -(void)setSelectedLayout:(SourceLayout *)selectedLayout
 {
-    
-    
-    [self.objectController commitEditing];
-    self.previewCtx.layoutRenderer.transitionName = self.transitionName;
-    self.previewCtx.layoutRenderer.transitionDirection = self.transitionDirection;
-    self.previewCtx.layoutRenderer.transitionDuration = self.transitionDuration;
-    self.previewCtx.layoutRenderer.transitionFilter = self.transitionFilter;
-    
-
     if (selectedLayout == _selectedLayout)
     {
         return;
@@ -1828,27 +1821,39 @@
     
     
     
-    _selectedLayout = selectedLayout;
+    [self.objectController commitEditing];
 
-    selectedLayout.isActive = YES;
 
-    [self setupFrameTimer:selectedLayout.frameRate];
+        self.previewCtx.layoutRenderer.transitionName = self.transitionName;
+        self.previewCtx.layoutRenderer.transitionDirection = self.transitionDirection;
+        self.previewCtx.layoutRenderer.transitionDuration = self.transitionDuration;
+        self.previewCtx.layoutRenderer.transitionFilter = self.transitionFilter;
+        
+        
+        
+        selectedLayout.isActive = YES;
+        
+            [self setupFrameTimer:selectedLayout.frameRate];
+            self.previewCtx.sourceLayout = selectedLayout;
+
     
-    
-    self.previewCtx.sourceLayout = selectedLayout;
-    //currentLayout.isActive = NO;
-    if (self.sourceLayoutsArrayController)
-    {
-        NSUInteger sidx = [self.sourceLayoutsArrayController.arrangedObjects indexOfObject:selectedLayout];
-        if ((sidx != NSNotFound) && self.mainSourceLayoutTableView)
+        
+        if (self.sourceLayoutsArrayController)
         {
-            [self.mainSourceLayoutTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:sidx] byExtendingSelection:NO];
-            
+            NSUInteger sidx = [self.sourceLayoutsArrayController.arrangedObjects indexOfObject:selectedLayout];
+            if ((sidx != NSNotFound) && self.mainSourceLayoutTableView)
+            {
+                    [self.mainSourceLayoutTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:sidx] byExtendingSelection:NO];
+
+                
+            }
         }
-    }
+        
+        
+        self.currentMidiInputLiveIdx = 0;
+            _selectedLayout = selectedLayout;
+
     
-    
-    self.currentMidiInputLiveIdx = 0;
 }
 
 -(SourceLayout *)selectedLayout

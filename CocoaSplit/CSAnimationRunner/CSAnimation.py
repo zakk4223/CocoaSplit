@@ -70,6 +70,7 @@ class CSAnimation:
             self.end_time = begin_time + self.duration
         return self.duration
 
+
     def apply_immediate(self):
         if self.target:
             p_value = self.toValue

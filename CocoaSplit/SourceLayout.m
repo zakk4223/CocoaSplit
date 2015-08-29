@@ -33,8 +33,9 @@
         _animationQueue = dispatch_queue_create("CSAnimationQueue", NULL);
         
         
-        self.rootLayer = [CALayer layer];
         
+        self.rootLayer = [CALayer layer];
+        [CATransaction begin];
         self.rootLayer.bounds = CGRectMake(0, 0, _canvas_width, _canvas_height);
         self.rootLayer.anchorPoint = CGPointMake(0.0, 0.0);
         self.rootLayer.position = CGPointMake(0.0, 0.0);
@@ -43,7 +44,7 @@
         self.rootLayer.layoutManager = [CAConstraintLayoutManager layoutManager];
         
         self.rootLayer.delegate = self;
-        
+        [CATransaction commit];
         self.animationList = [NSMutableArray array];
         
         
@@ -148,6 +149,7 @@
 
 -(IBAction)runAnimations:(id)sender
 {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
     if (self.selectedAnimation)
     {
         
@@ -159,6 +161,9 @@
             
         }
     }
+    });
+    
+
 }
 
 -(void)runSingleAnimation:(CSAnimationItem *)animation
@@ -181,6 +186,8 @@
 
     NSDictionary *animMap = @{@"moduleName": animation.module_name, @"inputs": inputMap, @"rootLayer": self.rootLayer};
 
+    //[self doAnimation:animMap];
+    
     NSThread *runThread = [[NSThread alloc] initWithTarget:self selector:@selector(doAnimation:) object:animMap];
     [runThread start];
 
@@ -231,9 +238,16 @@
     
     
     @try {
+        [CATransaction begin];
         [runner runAnimation:modName forInput:inpMap withSuperlayer:rootLayer];
+        [CATransaction commit];
+        [CATransaction flush];
+
     }
     @catch (NSException *exception) {
+        [CATransaction commit];
+        [CATransaction flush];
+
         NSLog(@"Animation module %@ failed with exception: %@: %@", modName, [exception name], [exception reason]);
 
     }
@@ -454,13 +468,15 @@
         
         if (!src.layer.superlayer)
         {
+            [CATransaction begin];
             [self.rootLayer addSublayer:src.layer];
+            [CATransaction commit];
             
         }
         
 
-        
-        [[self mutableArrayValueForKey:@"sourceList" ] addObject:src];
+            [[self mutableArrayValueForKey:@"sourceList" ] addObject:src];
+
     }
 
     
@@ -474,6 +490,7 @@
     
     if (self.savedSourceListData)
     {
+        [CATransaction begin];
         self.rootLayer.sublayers = [NSArray array];
         
         for(InputSource *src in self.sourceList)
@@ -481,6 +498,8 @@
             [src willDelete];
             [src.layer removeFromSuperlayer];
         }
+        [CATransaction commit];
+        
         self.sourceList = [NSMutableArray array];
         
         NSObject *restData = [self mergeSourceListData:self.savedSourceListData];
@@ -488,11 +507,13 @@
         
         if (restData && [restData isKindOfClass:[NSDictionary class]])
         {
-            self.animationList = [((NSDictionary *)restData) objectForKey:@"animationList"];
-            if (!self.animationList)
-            {
-                self.animationList = [NSMutableArray array];
-            }
+                self.animationList = [((NSDictionary *)restData) objectForKey:@"animationList"];
+                if (!self.animationList)
+                {
+                    self.animationList = [NSMutableArray array];
+                }
+
+            
             NSObject *timerSrc = nil;
             timerSrc = [((NSDictionary *)restData) objectForKey:@"timingSource"];
             if (timerSrc == [NSNull null])
@@ -581,12 +602,13 @@
     
     if (isActive)
     {
-        [self restoreSourceList];
-        for(InputSource *src in self.sourceList)
-        {
-            src.sourceLayout = self;
-            
-        }
+            [self restoreSourceList];
+            for(InputSource *src in self.sourceList)
+            {
+                src.sourceLayout = self;
+                
+            }
+
         
     } else {
         [self saveSourceList];

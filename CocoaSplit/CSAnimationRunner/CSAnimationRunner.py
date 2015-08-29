@@ -118,7 +118,7 @@ class CSAnimationInput(object):
         if withDuration != None:
             cab.setDuration_(withDuration)
         else:
-            cab.setDuration_(CSAnimationBlock.current_frame.duration)
+            cab.setDuration_(CSAnimationBlock.threadData.current_frame.duration)
         return cab
     
 
@@ -128,7 +128,7 @@ class CSAnimationInput(object):
         if withDuration != None:
             kanim.setDuration_(withDuration)
         else:
-            kanim.setDuration_(CSAnimationBlock.current_frame.duration)
+            kanim.setDuration_(CSAnimationBlock.threadData.current_frame.duration)
         kanim.setCalculationMode_('paced')
         kanim.setRotationMode_('autoReverse')
         
@@ -193,7 +193,7 @@ class CSAnimationInput(object):
 
     def add_animation(self, animation, target, keyPath):
         animation.cs_input = self
-        CSAnimationBlock.current_frame.add_animation(animation, target, keyPath)
+        CSAnimationBlock.threadData.current_frame.add_animation(animation, target, keyPath)
         return animation
     
 
@@ -254,14 +254,14 @@ class CSAnimationInput(object):
         
         Like the global waitAnimation() you can specify a keyword argument of 'label' to wait on a specific animation.
         """
-        return CSAnimationBlock.current_frame.waitAnimation(duration, self, **kwargs)
+        return CSAnimationBlock.threadData.current_frame.waitAnimation(duration, self, **kwargs)
     
     def wait(self, duration=0):
         """
         Wait duration seconds before starting any new animations on this input. As described previously in waitAnimation() this 
         only modifies the timing of animations on THIS input.
         """
-        return CSAnimationBlock.current_frame.wait(duration, self)
+        return CSAnimationBlock.threadData.current_frame.wait(duration, self)
     
     def scaleLayer(self, scaleVal, duration=None, **kwargs):
         """
@@ -869,7 +869,7 @@ class CSAnimationRunnerObj(NSObject):
 
         animation = plugin_source.load_plugin(pluginName)
         reload(animation)
-        CSAnimationBlock.superLayer = superlayer
+        CSAnimationBlock.threadData.superLayer = superlayer
 
 
         CSAnimationBlock.beginAnimation(duration)
