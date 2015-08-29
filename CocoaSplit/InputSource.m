@@ -193,6 +193,9 @@ static NSArray *_sourceTypes = nil;
     
     [aCoder encodeObject:self.compositingFilterName forKey:@"compositingFilterName"];
     
+    [aCoder encodeBool:self.alwaysDisplay forKey:@"alwaysDisplay"];
+    [aCoder encodeBool:self.transitionEnabled forKey:@"transitionEnabled"];
+    
 }
 
 
@@ -422,6 +425,17 @@ static NSArray *_sourceTypes = nil;
         
         self.layer.filters = [aDecoder decodeObjectForKey:@"layerFilters"];
         self.compositingFilterName = [aDecoder decodeObjectForKey:@"compositingFilterName"];
+        if ([aDecoder containsValueForKey:@"alwaysDisplay"])
+        {
+            self.alwaysDisplay = [aDecoder decodeBoolForKey:@"alwaysDisplay"];
+        }
+
+        if ([aDecoder containsValueForKey:@"transitionEnabled"])
+        {
+            self.transitionEnabled = [aDecoder decodeBoolForKey:@"transitionEnabled"];
+        }
+        
+        
         [CATransaction commit];
     }
     
