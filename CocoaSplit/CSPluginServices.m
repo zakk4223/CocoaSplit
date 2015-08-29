@@ -26,6 +26,12 @@
     return sharedCSPluginServices;
 }
 
+-(void)loadPythonClass:(NSString *)pyClass fromFile:(NSString *)fromFile withBlock:(void (^)(__unsafe_unretained Class))withBlock
+{
+    [CaptureController loadPythonClass:pyClass fromFile:fromFile withBlock:withBlock];
+}
+
+
 -(Class)loadPythonClass:(NSString *)pyClass fromFile:(NSString *)fromFile
 {
     return [CaptureController loadPythonClass:pyClass fromFile:fromFile];

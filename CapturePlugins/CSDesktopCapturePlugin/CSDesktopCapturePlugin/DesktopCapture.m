@@ -117,7 +117,7 @@
 
 -(void)applicationTerminating:(NSApplication *)sender
 {
-    //[self stopDisplayStream];
+    [self stopDisplayStream];
 }
 
 

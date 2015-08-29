@@ -1163,18 +1163,32 @@
 
 }
 
++(void)loadPythonClass:(NSString *)pyClass fromFile:(NSString *)fromFile withBlock:(void(^)(Class))withBlock
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        Class retClass = [self loadPythonClass:pyClass fromFile:fromFile];
+        if (withBlock)
+        {
+            withBlock(retClass);
+        }
+    });
+}
+
+
 +(Class)loadPythonClass:(NSString *)pyClass fromFile:(NSString *)fromFile
 {
+    
+    
     [CaptureController initializePython];
     FILE *runnerFile = fopen([fromFile UTF8String], "r");
     
     PyGILState_STATE gilState = PyGILState_Ensure();
-
+    
     PyObject *main_tl = PyImport_AddModule("__main__");
     PyObject *main_dict = PyModule_GetDict(main_tl);
     PyObject *dict_copy = PyDict_Copy(main_dict);
     
-
+    
     PyObject *ret = PyRun_File(runnerFile, (char *)[[fromFile lastPathComponent] UTF8String], Py_file_input, dict_copy, dict_copy);
     if (!ret)
     {
@@ -1190,10 +1204,10 @@
     if (gilState == PyGILState_LOCKED)
     {
         PyThreadState_Swap(NULL);
-
+        
         PyEval_ReleaseLock();
     }
-
+    
     return retClass;
 }
 

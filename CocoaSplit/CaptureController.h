@@ -449,7 +449,9 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 -(void)layoutWentFullscreen;
 -(void)layoutLeftFullscreen;
++(void)loadPythonClass:(NSString *)pyClass fromFile:(NSString *)fromFile withBlock:(void(^)(Class))withBlock;
 +(Class)loadPythonClass:(NSString *)pyClass fromFile:(NSString *)fromFile;
+
 
 
 
