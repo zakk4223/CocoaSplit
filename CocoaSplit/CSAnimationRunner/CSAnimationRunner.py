@@ -873,16 +873,17 @@ class CSAnimationRunnerObj(NSObject):
 
 
         CSAnimationBlock.beginAnimation(duration)
-#CATransaction.setValue_forKey_("RUNNERT", "__cs_transaction_name")
         animation.wait = CSAnimationBlock.wait
         animation.waitAnimation = CSAnimationBlock.waitAnimation
         animation.animationDuration = CSAnimationBlock.animationDuration
 
-
-        animation.do_animation(input_arg, duration)
-
-
-        CSAnimationBlock.commitAnimation()
+        try:
+            animation.do_animation(input_arg, duration)
+        except:
+            CSAnimationBlock.commitAnimation()
+            raise
+        else:
+            CSAnimationBlock.commitAnimation()
 
 
 

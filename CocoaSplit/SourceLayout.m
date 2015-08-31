@@ -238,18 +238,15 @@
     
     
     @try {
-        [CATransaction begin];
         [runner runAnimation:modName forInput:inpMap withSuperlayer:rootLayer];
-        [CATransaction commit];
-        [CATransaction flush];
 
     }
     @catch (NSException *exception) {
-        [CATransaction commit];
-        [CATransaction flush];
-
         NSLog(@"Animation module %@ failed with exception: %@: %@", modName, [exception name], [exception reason]);
 
+    }
+    @finally {
+        [CATransaction flush];
     }
 }
 
