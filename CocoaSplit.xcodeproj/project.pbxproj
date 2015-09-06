@@ -146,6 +146,7 @@
 		34A64A35165F047900A68428 /* CapturePreview.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34A64A34165F047900A68428 /* CapturePreview.xib */; };
 		34A64A37165F208800A68428 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A64A36165F208800A68428 /* QuartzCore.framework */; };
 		34A7C1AD19B9A57600BC6882 /* CSLayoutSwitcherExtraPlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34A7C1A119B9A41A00BC6882 /* CSLayoutSwitcherExtraPlugin.bundle */; };
+		34AB1C311B944F48003F2C03 /* CSPreviewOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AB1C301B944F48003F2C03 /* CSPreviewOverlayView.m */; };
 		34ABEF3C17C0C2CB00AA5E62 /* advancedPrefPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34ABEF3B17C0C2CB00AA5E62 /* advancedPrefPanel.xib */; };
 		34AE3C30164E3E020052C95E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AE3C2F164E3E020052C95E /* Foundation.framework */; };
 		34AE3C36164E3E020052C95E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 34AE3C34164E3E020052C95E /* InfoPlist.strings */; };
@@ -713,6 +714,8 @@
 		34A64A36165F208800A68428 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		34A7C17A19B98EA200BC6882 /* CSExtraPluginProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSExtraPluginProtocol.h; path = PluginHeaders/CSExtraPluginProtocol.h; sourceTree = "<group>"; };
 		34A7C19C19B9A41900BC6882 /* CSLayoutSwitcherExtraPlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSLayoutSwitcherExtraPlugin.xcodeproj; path = ExtraPlugins/CSLayoutSwitcherExtraPlugin/CSLayoutSwitcherExtraPlugin.xcodeproj; sourceTree = "<group>"; };
+		34AB1C2F1B944F48003F2C03 /* CSPreviewOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPreviewOverlayView.h; sourceTree = "<group>"; };
+		34AB1C301B944F48003F2C03 /* CSPreviewOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSPreviewOverlayView.m; sourceTree = "<group>"; };
 		34ABEF3B17C0C2CB00AA5E62 /* advancedPrefPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = advancedPrefPanel.xib; path = Interface/advancedPrefPanel.xib; sourceTree = "<group>"; };
 		34AE3C2E164E3E020052C95E /* zakk.lol.QTCaptureHelper.xpc */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = zakk.lol.QTCaptureHelper.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
 		34AE3C2F164E3E020052C95E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -1119,6 +1122,8 @@
 				34DC2FAF1B512362008F12A2 /* CSCaptureBase+TimerDelegate.m */,
 				34BB297F1B7652EA00F201C2 /* CSPreviewGLLayer.h */,
 				34BB29801B7652EA00F201C2 /* CSPreviewGLLayer.m */,
+				34AB1C2F1B944F48003F2C03 /* CSPreviewOverlayView.h */,
+				34AB1C301B944F48003F2C03 /* CSPreviewOverlayView.m */,
 			);
 			path = CocoaSplit;
 			sourceTree = "<group>";
@@ -2112,6 +2117,7 @@
 				345F8B251A14E6A0009A81E3 /* CAMultiAudioNode.m in Sources */,
 				342346AA15F59A8500C8C77E /* AVFAudioCapture.m in Sources */,
 				3498D94A1A94685000906532 /* CSAudioSwitchCell.m in Sources */,
+				34AB1C311B944F48003F2C03 /* CSPreviewOverlayView.m in Sources */,
 				345F8B051A1060D6009A81E3 /* CSAacEncoder.m in Sources */,
 				342346BE15F6103D00C8C77E /* FFMpegTask.m in Sources */,
 				345F8B3D1A15F3BD009A81E3 /* CAMultiAudioPCM.m in Sources */,

@@ -12,7 +12,7 @@
 #import "InputSource.h"
 #import "LayoutRenderer.h"
 #import "CSPreviewGLLayer.h"
-
+#import "CSPreviewOverlayView.h"
 
 
 @class SourceLayout;
@@ -51,6 +51,10 @@
     
     NSScreen *_fullscreenOn;
     NSPopover *_layoutpopOver;
+    CSPreviewOverlayView *_overlayView;
+    bool _inDrag;
+    
+    
     
 
     
@@ -99,6 +103,10 @@
 @property (strong) NSMutableDictionary *activeConfigControllers;
 
 -(void)needsUpdate;
+-(NSRect)windowRectforWorldRect:(NSRect)worldRect;
+-(NSArray *)resizeRectsForSource:(InputSource *)inputSource withExtra:(float)withExtra;
+
+
 
 
 

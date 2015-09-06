@@ -39,6 +39,10 @@
 
 
 
+-(void)cursorUpdate:(NSEvent *)event
+{
+    return;
+}
 
 -(void)setSelectedSource:(InputSource *)selectedSource
 {
@@ -437,6 +441,20 @@
 
 
 
+-(void)drawRect:(NSRect)dirtyRect
+{
+    if (self.mousedSource)
+    {
+        NSArray *resizeRects = [self resizeRectsForSource:self.selectedSource withExtra:2];
+        for (NSValue *rVal in resizeRects)
+        {
+            NSRect rect = [rVal rectValue];
+            CGContextRef currentContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
+            CGContextSetFillColorWithColor(currentContext, [NSColor colorWithDeviceRed:1.0f green:0.0f blue:0.0f alpha:0.2].CGColor);
+            CGContextFillRect(currentContext, rect);
+        }
+    }
+}
 
 
 - (void)mouseDown:(NSEvent *)theEvent
@@ -541,6 +559,21 @@
 }
 
 
+
+-(void)doUndoSourceFrame:(NSRect)oldFrame forInput:(NSString *)forInput
+{
+    if (forInput)
+    {
+        InputSource *realInput = [self.sourceLayout inputForUUID:forInput];
+        if (realInput)
+        {
+            [realInput updateSize:oldFrame.size.width height:oldFrame.size.height];
+            [realInput positionOrigin:oldFrame.origin.x y:oldFrame.origin.y];
+        }
+    }
+}
+
+
 - (void)mouseDragged:(NSEvent *)theEvent
 {
     
@@ -550,6 +583,15 @@
     NSPoint worldPoint;
     if (self.selectedSource)
     {
+        
+        if (!_inDrag)
+        {
+            NSRect curFrame = self.selectedSource.layoutPosition;
+            
+            [[self.undoManager prepareWithInvocationTarget:self] doUndoSourceFrame:curFrame forInput:self.selectedSource.uuid];
+        }
+        
+        _inDrag = YES;
         tmp = [self convertPoint:theEvent.locationInWindow fromView:nil];
         
         worldPoint = [self realPointforWindowPoint:tmp];
@@ -641,8 +683,18 @@
         } else {
             
             [self.selectedSource updateOrigin:dx y:dy];
+            if (_overlayView)
+            {
+                NSRect newRect = [self windowRectforWorldRect:self.selectedSource.globalLayoutPosition];
+                _overlayView.frame = newRect;
+            }
         }
     }
+    if (_overlayView)
+    {
+        [_overlayView updatePosition];
+    }
+
     
 }
 
@@ -789,6 +841,7 @@
     self.isResizing = NO;
     self.selectedSource.resizeType = kResizeNone;
     self.selectedSource = nil;
+    _inDrag = NO;
 }
 
 
@@ -798,6 +851,13 @@
     if (!self.viewOnly)
     {
         [self trackMousedSource];
+        if (!_overlayView)
+        {
+            _overlayView = [[CSPreviewOverlayView alloc] init];
+            _overlayView.previewView = self;
+        }
+        
+        _overlayView.parentSource = self.mousedSource;
     }
     
     
@@ -848,69 +908,124 @@
 
 -(void)detachSource:(id)sender
 {
-    NSMenuItem *item = (NSMenuItem *)sender;
-    InputSource *toDetach;
+    InputSource *toDetach = nil;
     
-    if (item.representedObject)
+    if (sender)
     {
-        toDetach = (InputSource *)item.representedObject;
-    } else {
+        if ([sender isKindOfClass:[NSMenuItem class]])
+        {
+            NSMenuItem *item = (NSMenuItem *)sender;
+            toDetach = (InputSource *)item.representedObject;
+        } else if ([sender isKindOfClass:[InputSource class]]) {
+            toDetach = (InputSource *)sender;
+        }
+    }
+    
+    if (!toDetach)
+    {
         toDetach = self.selectedSource;
     }
     
     if (toDetach && toDetach.parentInput)
     {
         [((InputSource *)toDetach.parentInput) detachInput:toDetach];
+        [[self.undoManager prepareWithInvocationTarget:self] subLayerInputSource:toDetach];
     }
 }
 
 
+-(void)attachSource:(InputSource *)src toSource:(InputSource *)toSource
+{
+    if (src && toSource)
+    {
+        [toSource attachInput:src];
+
+    }
+}
 -(void)subLayerInputSource:(id)sender
 {
-    NSMenuItem *item = (NSMenuItem *)sender;
-    InputSource *toSub;
+    InputSource *toSub = nil;
     
-    if (item.representedObject)
+    if (sender)
     {
-        toSub = (InputSource *)item.representedObject;
-    } else {
-        toSub = self.selectedSource;
+        if ([sender isKindOfClass:[NSMenuItem class]])
+        {
+            NSMenuItem *item = (NSMenuItem *)sender;
+            toSub = (InputSource *)item.representedObject;
+        } else if ([sender isKindOfClass:[InputSource class]]) {
+            toSub = (InputSource *)sender;
+        }
     }
 
+    if (!toSub)
+    {
+        toSub = self.selectedSource;
+    }
+    
     if (toSub)
     {
-        
-        
         InputSource *underSource = [self.sourceLayout sourceUnder:toSub];
         if (underSource)
         {
             [underSource attachInput:toSub];
+            [[self.undoManager prepareWithInvocationTarget:self] detachSource:toSub];
         }
     }
 }
 
 
+-(void)undoCloneInput:(NSString *)inputUUID parentUUID:(NSString *)parentUUID
+{
+    
+
+    if (inputUUID)
+    {
+        InputSource *clonedSource = [self.sourceLayout inputForUUID:inputUUID];
+        if (clonedSource)
+        {
+            [self.sourceLayout deleteSource:clonedSource];
+
+        }
+    }
+    if (parentUUID)
+    {
+        InputSource *parentSource = [self.sourceLayout inputForUUID:parentUUID];
+        if (parentSource)
+        {
+            [[self.undoManager prepareWithInvocationTarget:self] cloneInputSource:parentSource];
+        }
+    }
+}
+
 - (IBAction)cloneInputSource:(id)sender
 {
     
-    NSMenuItem *item = (NSMenuItem *)sender;
-    InputSource *toClone;
-    
-    if (item.representedObject)
+    InputSource *toClone = nil;
+
+    if (sender)
     {
-        toClone = (InputSource *)item.representedObject;
-    } else {
+        if ([sender isKindOfClass:[NSMenuItem class]])
+        {
+            NSMenuItem *item = (NSMenuItem *)sender;
+            toClone = (InputSource *)item.representedObject;
+        } else if ([sender isKindOfClass:[InputSource class]]) {
+            toClone = (InputSource *)sender;
+        }
+    }
+    
+    if (!toClone)
+    {
         toClone = self.selectedSource;
     }
 
-    
-    
     if (toClone)
     {
         InputSource *newSource = toClone.copy;
         [self.sourceLayout addSource:newSource];
+        [[self.undoManager prepareWithInvocationTarget:self] undoCloneInput:newSource.uuid parentUUID:toClone.uuid];
     }
 }
+
 
 
 - (IBAction)addInputSource:(id)sender
@@ -918,36 +1033,86 @@
     
     if (self.sourceLayout)
     {
-        
-        
         InputSource *newSource = [[InputSource alloc] init];
+        
         [self.sourceLayout addSource:newSource];
+        [[self.undoManager prepareWithInvocationTarget:self] deleteInput:newSource];
         [self spawnInputSettings:newSource atRect:NSZeroRect];
     }
 }
 
 
 
+-(void)addUndoAction
+{
+    NSData *curData = [self.sourceLayout makeSaveData];
+    [self.undoManager registerUndoWithTarget:self selector:@selector(undoLayoutEdit:) object:curData];
+}
+
+
+-(void)undoLayoutEdit:(NSData *)withData
+{
+    [self.sourceLayout restoreSourceList:withData];
+}
+
+-(void)undoDeleteInput:(NSData *)withData parentUUID:(NSString *)parentUUID
+{
+    InputSource *restoredSource = [NSKeyedUnarchiver unarchiveObjectWithData:withData];
+    
+    [self.sourceLayout addSource:restoredSource];
+    if (parentUUID)
+    {
+        InputSource *parentSource = [self.sourceLayout inputForUUID:parentUUID];
+        if (parentSource)
+        {
+            [self attachSource:restoredSource toSource:parentSource];
+        }
+    }
+    [[self.undoManager prepareWithInvocationTarget:self] deleteInput:restoredSource];
+}
+
+
 
 - (IBAction)deleteInput:(id)sender
 {
-    NSMenuItem *item = (NSMenuItem *)sender;
-    
     InputSource *toDelete = nil;
-    
-    if (item.representedObject)
-    {
-        toDelete = item.representedObject;
-    } else if (self.selectedSource) {
-        toDelete = self.selectedSource;
-        self.selectedSource = nil;
-        self.mousedSource = nil;
 
+    if ([sender isKindOfClass:[NSMenuItem class]])
+    {
+        NSMenuItem *item = (NSMenuItem *)sender;
+        if (item && item.representedObject)
+        {
+            toDelete = item.representedObject;
+        }
+    } else if ([sender isKindOfClass:[InputSource class]]) {
+        toDelete = (InputSource *)sender;
+    }
+
+    if (!toDelete)
+    {
+        toDelete = self.selectedSource ? self.selectedSource : self.mousedSource;
     }
     
     if (toDelete)
     {
+        self.selectedSource = nil;
+        self.mousedSource = nil;
+
+        NSString *pUUID = nil;
+        if (toDelete.parentInput)
+        {
+            pUUID = toDelete.parentInput.uuid;
+            [toDelete.parentInput detachInput:toDelete];
+        }
+
+        NSData *saveData = [NSKeyedArchiver archivedDataWithRootObject:toDelete];
+        
+        [[self.undoManager prepareWithInvocationTarget:self] undoDeleteInput:saveData parentUUID:pUUID];
         [self.sourceLayout deleteSource:toDelete];
+        if (_overlayView)
+        {
+            _overlayView.parentSource = nil;
+        }
     }
 }
 
@@ -993,19 +1158,50 @@
 }
 
 
+-(void)undoAutoFit:(NSString *)inputUUID oldFrame:(NSRect)oldFrame
+{
+    if (inputUUID)
+    {
+        InputSource *unfit = [self.sourceLayout inputForUUID:inputUUID];
+        if (unfit)
+        {
+            [unfit resetConstraints];
+            [unfit updateSize:oldFrame.size.width height:oldFrame.size.height];
+            [unfit positionOrigin:oldFrame.origin.x y:oldFrame.origin.y];
+            [[self.undoManager prepareWithInvocationTarget:self] autoFitInput:unfit];
+        }
+    }
+}
+
+
+
 -(IBAction) autoFitInput:(id)sender
 {
-    InputSource *autoFitSource;
-    NSMenuItem *menuSender = (NSMenuItem *)sender;
+    InputSource *autoFitSource = nil;
     
-    autoFitSource = self.selectedSource;
-    if (menuSender.representedObject)
+    if ([sender isKindOfClass:[NSMenuItem class]])
     {
-        autoFitSource = (InputSource *)menuSender.representedObject;
+        NSMenuItem *item = (NSMenuItem *)sender;
+        if (item && item.representedObject)
+        {
+            autoFitSource = item.representedObject;
+        }
+    } else if ([sender isKindOfClass:[InputSource class]]) {
+        autoFitSource = (InputSource *)sender;
     }
     
-    [autoFitSource autoFit];
+    if (!autoFitSource)
+    {
+        autoFitSource = self.selectedSource;
+    }
+
+    if (autoFitSource)
+    {
+        [autoFitSource autoFit];
+        [[self.undoManager prepareWithInvocationTarget:self] undoAutoFit:autoFitSource.uuid oldFrame:autoFitSource.layoutPosition];
+    }
 }
+
 
 
 - (IBAction)showInputSettings:(id)sender
@@ -1103,6 +1299,7 @@
     [self addTrackingArea:_trackingArea];
 
     [self setWantsLayer:YES];
+    
     self.layer.backgroundColor = CGColorCreateGenericRGB(0.184314f, 0.309804f, 0.309804f, 1);
     
 }

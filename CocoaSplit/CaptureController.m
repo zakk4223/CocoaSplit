@@ -1783,7 +1783,7 @@
             
             SourceLayout *previewCopy = stagingLayout.copy;
 
-            [previewCopy restoreSourceList];
+            [previewCopy restoreSourceList:nil];
     
     self.stagingPreviewView.sourceLayout = previewCopy;
     
@@ -2966,7 +2966,7 @@
                 {
                     if (!self.livePreviewView.viewOnly)
                     {
-                        [self.selectedLayout mergeSourceListData:selected.savedSourceListData];
+                        [self.selectedLayout mergeSourceListData:selected.savedSourceListData withLayer:nil];
                     }
                 } else {
                     self.selectedLayout = selected;
@@ -2974,7 +2974,7 @@
             } else {
                 if (selectedCount > 1)
                 {
-                    [self.stagingPreviewView.sourceLayout mergeSourceListData:selected.savedSourceListData];
+                    [self.stagingPreviewView.sourceLayout mergeSourceListData:selected.savedSourceListData withLayer:nil];
                 } else {
                     self.stagingLayout = selected;
                 }
@@ -3428,7 +3428,7 @@
             self.selectedLayout = self.stagingLayout;
         } else {
             SourceLayout *previewCopy = self.stagingLayout.copy;
-            [previewCopy restoreSourceList];
+            [previewCopy restoreSourceList:nil];
             NSUInteger layoutIdx = [self.sourceLayoutsArrayController.arrangedObjects indexOfObject:self.selectedLayout];
             [self.sourceLayoutsArrayController removeObjectAtArrangedObjectIndex:layoutIdx];
             [self.sourceLayoutsArrayController insertObject:previewCopy atArrangedObjectIndex:layoutIdx];
@@ -3457,7 +3457,7 @@
 {
     if (self.stagingPreviewView.sourceLayout)
     {
-        [self.stagingPreviewView.sourceLayout restoreSourceList];
+        [self.stagingPreviewView.sourceLayout restoreSourceList:nil];
     }
 }
 
@@ -3465,7 +3465,7 @@
 {
     if (self.livePreviewView.sourceLayout)
     {
-        [self.livePreviewView.sourceLayout restoreSourceList];
+        [self.livePreviewView.sourceLayout restoreSourceList:nil];
     }
 }
 
@@ -3528,7 +3528,7 @@
         if (self.selectedLayout == self.stagingLayout)
         {
             self.stagingPreviewView.sourceLayout.savedSourceListData = self.livePreviewView.sourceLayout.savedSourceListData;
-            [self.stagingPreviewView.sourceLayout restoreSourceList];
+            [self.stagingPreviewView.sourceLayout restoreSourceList:nil];
         }
     }
 

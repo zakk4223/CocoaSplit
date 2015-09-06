@@ -185,6 +185,8 @@ typedef enum resize_style_t {
 
 
 -(void) updateOrigin:(CGFloat)x y:(CGFloat)y;
+-(void) positionOrigin:(CGFloat)x y:(CGFloat)y;
+
 -(void) updateSize:(CGFloat)width height:(CGFloat)height;
 
 -(void) autoFit;

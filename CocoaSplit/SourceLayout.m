@@ -33,18 +33,7 @@
         _animationQueue = dispatch_queue_create("CSAnimationQueue", NULL);
         
         
-        
-        self.rootLayer = [CALayer layer];
-        [CATransaction begin];
-        self.rootLayer.bounds = CGRectMake(0, 0, _canvas_width, _canvas_height);
-        self.rootLayer.anchorPoint = CGPointMake(0.0, 0.0);
-        self.rootLayer.position = CGPointMake(0.0, 0.0);
-        self.rootLayer.masksToBounds = YES;
-        self.rootLayer.backgroundColor = CGColorCreateGenericRGB(0, 0, 0, 1);
-        self.rootLayer.layoutManager = [CAConstraintLayoutManager layoutManager];
-        
-        self.rootLayer.delegate = self;
-        [CATransaction commit];
+        self.rootLayer = [self newRootLayer];
         self.animationList = [NSMutableArray array];
         
         
@@ -58,6 +47,23 @@
 }
 
 
+-(CALayer *)newRootLayer
+{
+    CALayer *newRoot = [CALayer layer];
+    [CATransaction begin];
+    newRoot.bounds = CGRectMake(0, 0, _canvas_width, _canvas_height);
+    newRoot.anchorPoint = CGPointMake(0.0, 0.0);
+    newRoot.position = CGPointMake(0.0, 0.0);
+    newRoot.masksToBounds = YES;
+    newRoot.backgroundColor = CGColorCreateGenericRGB(0, 0, 0, 1);
+    newRoot.layoutManager = [CAConstraintLayoutManager layoutManager];
+    
+    newRoot.delegate = self;
+    [CATransaction commit];
+
+    return newRoot;
+    
+}
 
 -(NSString *)MIDIIdentifier
 {
@@ -387,11 +393,8 @@
 }
 
 
--(void) saveSourceList
+-(NSData *)makeSaveData
 {
-    
-    
-    
     NSObject *timerSrc = self.layoutTimingSource;
     if (!timerSrc)
     {
@@ -405,6 +408,14 @@
     [archiver encodeObject:saveDict forKey:@"root"];
     [archiver finishEncoding];
     
+    return saveData;
+}
+
+
+-(void) saveSourceList
+{
+    
+    NSData *saveData = [self makeSaveData];
     self.savedSourceListData = saveData;
 }
 
@@ -425,7 +436,7 @@
 
 
 
--(NSObject *)mergeSourceListData:(NSData *)mergeData
+-(NSObject *)mergeSourceListData:(NSData *)mergeData withLayer:(CALayer *)withLayer
 {
     
     
@@ -437,6 +448,11 @@
     if (!mergeData)
     {
         return nil;
+    }
+    
+    if (!withLayer)
+    {
+        withLayer = self.rootLayer;
     }
     
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:mergeData];
@@ -466,7 +482,7 @@
         if (!src.layer.superlayer)
         {
             [CATransaction begin];
-            [self.rootLayer addSublayer:src.layer];
+            [withLayer addSublayer:src.layer];
             [CATransaction commit];
             
         }
@@ -481,25 +497,27 @@
 }
 
 
--(void)restoreSourceList
+-(void)restoreSourceList:(NSData *)withData
 {
     
     
     if (self.savedSourceListData)
     {
-        [CATransaction begin];
-        self.rootLayer.sublayers = [NSArray array];
+        CALayer *newRoot = [self newRootLayer];
         
-        for(InputSource *src in self.sourceList)
-        {
-            [src willDelete];
-            [src.layer removeFromSuperlayer];
-        }
-        [CATransaction commit];
+        [CATransaction begin];
+        newRoot.sublayers = [NSArray array];
+        
+        NSMutableArray *oldSourceList = self.sourceList;
+        
         
         self.sourceList = [NSMutableArray array];
         
-        NSObject *restData = [self mergeSourceListData:self.savedSourceListData];
+        if (!withData)
+        {
+            withData = self.savedSourceListData;
+        }
+        NSObject *restData = [self mergeSourceListData:withData withLayer:newRoot];
         
         
         if (restData && [restData isKindOfClass:[NSDictionary class]])
@@ -521,6 +539,20 @@
             
             self.layoutTimingSource = ((InputSource *)timerSrc);
         }
+        
+        [self.rootLayer.superlayer replaceSublayer:self.rootLayer with:newRoot];
+        self.rootLayer = newRoot;
+
+        for(InputSource *src in oldSourceList)
+        {
+            [src willDelete];
+            [src.layer removeFromSuperlayer];
+        }
+
+        
+        
+        [CATransaction commit];
+
     }
 }
 
@@ -599,7 +631,7 @@
     
     if (isActive)
     {
-            [self restoreSourceList];
+            [self restoreSourceList:nil];
             for(InputSource *src in self.sourceList)
             {
                 src.sourceLayout = self;
@@ -698,7 +730,7 @@
         _rootSize = curSize;
     }
     
-    NSArray *listCopy = self.sourceList; //[self sourceListOrdered];
+    NSArray *listCopy = [self sourceListOrdered];
     
     
     for (InputSource *isource in listCopy)

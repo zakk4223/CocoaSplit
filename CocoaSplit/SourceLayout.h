@@ -69,12 +69,13 @@
 -(InputSource *)findSource:(NSPoint)forPoint withExtra:(float)withExtra deepParent:(bool)deepParent;
 -(NSArray *)sourceListOrdered;
 -(void) saveSourceList;
--(void) restoreSourceList;
+-(void)restoreSourceList:(NSData *)withData;
 -(void) saveAnimationSource;
+-(NSData *)makeSaveData;
 
 -(InputSource *)inputForUUID:(NSString *)uuid;
 -(void)frameTick;
--(NSObject *)mergeSourceListData:(NSData *)mergeData;
+-(NSObject *)mergeSourceListData:(NSData *)mergeData withLayer:(CALayer *)withLayer;
 -(IBAction)runAnimations:(id)sender;
 -(void)addAnimation:(NSDictionary *)animation;
 -(InputSource *)sourceUnder:(InputSource *)source;

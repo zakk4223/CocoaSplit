@@ -517,7 +517,10 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 -(void)removeObjectFromAudioInputsAtIndex:(NSUInteger)index
 {
-    [self.audioInputs removeObjectAtIndex:index];
+    if (index < self.audioInputs.count)
+    {
+        [self.audioInputs removeObjectAtIndex:index];
+    }
 }
 
 

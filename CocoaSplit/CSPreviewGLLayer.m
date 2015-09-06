@@ -163,25 +163,6 @@
     
     if (self.outlineSource)
     {
-        NSRect outRect = self.outlineSource.globalLayoutPosition;
-    
-        if (!NSEqualRects(NSZeroRect, outRect))
-        {
-            glColor3f(0.0f, 0.0f, 1.0f);
-            outline_verts[0] = outRect.origin.x;
-            outline_verts[1] = outRect.origin.y;
-            outline_verts[2] = outRect.origin.x+outRect.size.width;
-            outline_verts[3] = outRect.origin.y;
-            outline_verts[4] = outRect.origin.x+outRect.size.width;
-            outline_verts[5] = outRect.origin.y+outRect.size.height;
-            outline_verts[6] = outRect.origin.x;
-            outline_verts[7] = outRect.origin.y+outRect.size.height;
-        
-            glVertexPointer(2, GL_FLOAT, 0, outline_verts);
-            glDrawArrays(GL_LINE_LOOP, 0, 4);
-            glColor3f(1.0f, 1.0f, 1.0f);
-
-        }
         
         glLineWidth(1.0f);
         
