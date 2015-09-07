@@ -49,7 +49,6 @@ static NSArray *_sourceTypes = nil;
 @synthesize y_pos = _y_pos;
 @synthesize width = _width;
 @synthesize height = _height;
-@synthesize alwaysDisplay = _alwaysDisplay;
 @synthesize compositingFilterName = _compositingFilterName;
 
 
@@ -104,12 +103,12 @@ static NSArray *_sourceTypes = nil;
     newSource.backgroundColor = self.backgroundColor;
     
     
-    newSource.layer.startColor = self.layer.startColor;
-    newSource.layer.stopColor = self.layer.stopColor;
-    newSource.layer.gradientStartX = self.layer.gradientStartX;
-    newSource.layer.gradientStartY = self.layer.gradientStartY;
-    newSource.layer.gradientStopX = self.layer.gradientStopX;
-    newSource.layer.gradientStopY = self.layer.gradientStopY;
+    newSource.startColor = self.startColor;
+    newSource.stopColor = self.stopColor;
+    newSource.gradientStartX = self.gradientStartX;
+    newSource.gradientStartY = self.gradientStartY;
+    newSource.gradientStopX = self.gradientStopX;
+    newSource.gradientStopY = self.gradientStopY;
 
     [CATransaction commit];
     return newSource;
@@ -175,12 +174,12 @@ static NSArray *_sourceTypes = nil;
     [aCoder encodeObject:self.constraintMap forKey:@"constraintMap"];
     
     
-    [aCoder encodeObject:self.layer.startColor forKey:@"gradientStartColor"];
-    [aCoder encodeObject:self.layer.stopColor forKey:@"gradientStopColor"];
-    [aCoder encodeFloat: self.layer.gradientStartX forKey:@"gradientStartPointX"];
-    [aCoder encodeFloat: self.layer.gradientStartY forKey:@"gradientStartPointY"];
-    [aCoder encodeFloat: self.layer.gradientStopX forKey:@"gradientEndPointX"];
-    [aCoder encodeFloat: self.layer.gradientStopY forKey:@"gradientEndPointY"];
+    [aCoder encodeObject:self.startColor forKey:@"gradientStartColor"];
+    [aCoder encodeObject:self.stopColor forKey:@"gradientStopColor"];
+    [aCoder encodeFloat: self.gradientStartX forKey:@"gradientStartPointX"];
+    [aCoder encodeFloat: self.gradientStartY forKey:@"gradientStartPointY"];
+    [aCoder encodeFloat: self.gradientStopX forKey:@"gradientEndPointX"];
+    [aCoder encodeFloat: self.gradientStopY forKey:@"gradientEndPointY"];
 
 
     
@@ -409,15 +408,15 @@ static NSArray *_sourceTypes = nil;
         }
 
         
-        self.layer.startColor = [aDecoder decodeObjectForKey:@"gradientStartColor"];
-        self.layer.stopColor = [aDecoder decodeObjectForKey:@"gradientStopColor"];
+        self.startColor = [aDecoder decodeObjectForKey:@"gradientStartColor"];
+        self.stopColor = [aDecoder decodeObjectForKey:@"gradientStopColor"];
         
         
-        self.layer.gradientStartX = [aDecoder decodeFloatForKey:@"gradientStartPointX"];
-        self.layer.gradientStartY = [aDecoder decodeFloatForKey:@"gradientStartPointY"];
+        self.gradientStartX = [aDecoder decodeFloatForKey:@"gradientStartPointX"];
+        self.gradientStartY = [aDecoder decodeFloatForKey:@"gradientStartPointY"];
         
-        self.layer.gradientStopX = [aDecoder decodeFloatForKey:@"gradientEndPointX"];
-        self.layer.gradientStopY = [aDecoder decodeFloatForKey:@"gradientEndPointY"];
+        self.gradientStopX = [aDecoder decodeFloatForKey:@"gradientEndPointX"];
+        self.gradientStopY = [aDecoder decodeFloatForKey:@"gradientEndPointY"];
         
         
 
@@ -607,6 +606,31 @@ static NSArray *_sourceTypes = nil;
 
 
 
+-(void)setRotateStyle:(input_rotate_style)rotateStyle
+{
+    [self registerUndoForProperty:@"rotateStyle" withAction:@"Order"];
+    _rotateStyle = rotateStyle;
+}
+
+-(input_rotate_style)rotateStyle
+{
+    return _rotateStyle;
+}
+
+
+-(void)setChangeInterval:(float)changeInterval
+{
+    
+    [self registerUndoForProperty:@"changeInterval" withAction:@"Change Interval"];
+    _changeInterval = changeInterval;
+}
+
+-(float)changeInterval
+{
+    return _changeInterval;
+}
+
+
 -(void)initDictionaryForConstraints:(NSMutableDictionary *)dict
 {
     NSArray *baseKeys = @[@"LeftEdge", @"RightEdge", @"TopEdge", @"BottomEdge", @"HorizontalCenter", @"VerticalCenter", @"Width", @"Height"];
@@ -641,6 +665,80 @@ static NSArray *_sourceTypes = nil;
     [CATransaction commit];
 }
 
+
+
+
+-(void)setGradientStartX:(CGFloat)gradientStartX
+{
+    [self registerUndoForProperty:@"gradientStartX" withAction:@"Gradient Start Color X"];
+    self.layer.gradientStartX = gradientStartX;
+}
+
+-(CGFloat)gradientStartX
+{
+    return self.layer.gradientStartX;
+}
+
+-(void)setGradientStartY:(CGFloat)gradientStartY
+{
+    [self registerUndoForProperty:@"gradientStartY" withAction:@"Gradient Start Color Y"];
+    self.layer.gradientStartY = gradientStartY;
+}
+
+-(CGFloat)gradientStartY
+{
+    return self.layer.gradientStartY;
+}
+
+-(void)setGradientStopX:(CGFloat)gradientStopX
+{
+    [self registerUndoForProperty:@"gradientStopX" withAction:@"Gradient Stop Color X"];
+    self.layer.gradientStopX = gradientStopX;
+}
+
+-(CGFloat)gradientStopX
+{
+    return self.layer.gradientStopX;
+}
+
+-(void)setGradientStopY:(CGFloat)gradientStopY
+{
+    [self registerUndoForProperty:@"gradientStopY" withAction:@"Gradient Stop Color Y"];
+    self.layer.gradientStopY = gradientStopY;
+}
+
+-(CGFloat)gradientStopY
+{
+    return self.layer.gradientStopY;
+}
+
+-(NSColor *)startColor
+{
+    return self.layer.startColor;
+}
+
+
+-(void)setStartColor:(NSColor *)startColor
+{
+    [self registerUndoForProperty:@"startColor" withAction:@"Gradient Start Color"];
+
+    self.layer.startColor = startColor;
+}
+
+-(NSColor *)stopColor
+{
+    return self.layer.stopColor;
+}
+
+
+-(void)setStopColor:(NSColor *)stopColor
+{
+    [self registerUndoForProperty:@"stopColor" withAction:@"Gradient Stop Color"];
+    
+    self.layer.stopColor = stopColor;
+}
+
+
 -(void)clearBackground
 {
     self.backgroundColor = nil;
@@ -651,6 +749,8 @@ static NSArray *_sourceTypes = nil;
 -(void)setBackgroundColor:(NSColor *)backgroundColor
 {
     
+    [self registerUndoForProperty:@"backgroundColor" withAction:@"Background Color"];
+
     [CATransaction begin];
     _userBackground = YES;
 
@@ -676,6 +776,8 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setBorderColor:(NSColor *)borderColor
 {
+    [self registerUndoForProperty:@"borderColor" withAction:@"Border Color"];
+
     [CATransaction begin];
     self.layer.borderColor = [borderColor CGColor];
     [CATransaction commit];
@@ -693,6 +795,8 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setCornerRadius:(CGFloat)cornerRadius
 {
+    [self registerUndoForProperty:@"cornerRadius" withAction:@"Border Corner Radius"];
+
     [CATransaction begin];
     self.layer.cornerRadius = cornerRadius;
     [CATransaction commit];
@@ -706,9 +810,14 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setBorderWidth:(CGFloat)borderWidth
 {
+    
+    [self registerUndoForProperty:@"borderWidth" withAction:@"Border Width"];
+    
+    
     [CATransaction begin];
     self.layer.borderWidth = borderWidth;
     [CATransaction commit];
+    
 }
 
 -(CGFloat)borderWidth
@@ -724,6 +833,8 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setCompositingFilterName:(NSString *)compositingFilterName
 {
+    
+    [self registerUndoForProperty:@"compositingFilterName" withAction:@"Composition Filter"];
     CIFilter *newFilter = nil;
     if (compositingFilterName)
     {
@@ -738,18 +849,44 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setIsMaskLayer:(bool)isMaskLayer
 {
+    
+    [self registerUndoForProperty:@"isMaskLayer" withAction:isMaskLayer ? @"Set As Mask" : @"Unset As Mask"];
+
+    [self.sourceLayout.undoManager disableUndoRegistration];
     if (isMaskLayer)
     {
         self.compositingFilterName = @"CIMinimumCompositing";
     } else if ([self.compositingFilterName isEqualToString:@"CIMinimumCompositing"]) {
         self.compositingFilterName = nil;
     }
+    [self.sourceLayout.undoManager enableUndoRegistration];
+    
 }
 
 
 -(bool)isMaskLayer
 {
     return [self.compositingFilterName isEqualToString:@"CIMinimumCompositing"];
+}
+
+
+
+-(CIFilter *) filter:(NSString *)filterUUID fromArray:(NSArray *)fromArray
+{
+    
+    CIFilter *ret = nil;
+    NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+        CIFilter *obj = (CIFilter *)evaluatedObject;
+        return [obj.name isEqualToString:filterUUID];
+    }];
+    
+    NSArray *results = [fromArray filteredArrayUsingPredicate:predicate];
+    if (results)
+    {
+        ret = results.firstObject;
+    }
+    
+    return ret;
 }
 
 
@@ -773,6 +910,34 @@ static NSArray *_sourceTypes = nil;
 
 -(void)deleteLayerFilter:(NSString *)filteruuid
 {
+    CIFilter *toDelete = [self filter:filteruuid fromArray:self.layer.filters];
+    if (toDelete)
+    {
+        NSData *saveData = [NSKeyedArchiver archivedDataWithRootObject:toDelete];
+        __weak InputSource *weakSelf = self;
+        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(InputSource *input) {
+            CIFilter *newFilter = [NSKeyedUnarchiver unarchiveObjectWithData:saveData];
+            NSMutableArray *cFilters = weakSelf.layer.filters.mutableCopy;
+            if (!cFilters)
+            {
+                cFilters = [NSMutableArray array];
+            }
+            [cFilters addObject:newFilter];
+            [CATransaction begin];
+            weakSelf.layer.filters = cFilters;
+            [CATransaction commit];
+            [[self.sourceLayout.undoManager prepareWithInvocationTarget:weakSelf.sourceLayout] modifyUUID:weakSelf.uuid withBlock:^(InputSource *input) {
+                [input deleteLayerFilter:newFilter.name];
+            }];
+            [self.sourceLayout.undoManager setActionName:@"Add Input Filter"];
+            
+            
+            
+        }];
+        [self.sourceLayout.undoManager setActionName:@"Delete Input Filter"];
+        
+    }
+
     [CATransaction begin];
     self.layer.filters = [self newFilterArray:self.layer.filters withoutName:filteruuid];
     [CATransaction commit];
@@ -780,6 +945,34 @@ static NSArray *_sourceTypes = nil;
 
 -(void)deleteSourceFilter:(NSString *)filteruuid
 {
+    CIFilter *toDelete = [self filter:filteruuid fromArray:self.layer.sourceLayer.filters];
+    if (toDelete)
+    {
+        NSData *saveData = [NSKeyedArchiver archivedDataWithRootObject:toDelete];
+        __weak InputSource *weakSelf = self;
+        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(InputSource *input) {
+            CIFilter *newFilter = [NSKeyedUnarchiver unarchiveObjectWithData:saveData];
+            NSMutableArray *cFilters = weakSelf.layer.sourceLayer.filters.mutableCopy;
+            if (!cFilters)
+            {
+                cFilters = [NSMutableArray array];
+            }
+            [cFilters addObject:newFilter];
+            [CATransaction begin];
+            weakSelf.layer.sourceLayer.filters = cFilters;
+            [CATransaction commit];
+            [[self.sourceLayout.undoManager prepareWithInvocationTarget:weakSelf.sourceLayout] modifyUUID:weakSelf.uuid withBlock:^(InputSource *input) {
+                [input deleteSourceFilter:newFilter.name];
+            }];
+            [self.sourceLayout.undoManager setActionName:@"Add Source Filter"];
+            
+            
+            
+        }];
+        [self.sourceLayout.undoManager setActionName:@"Delete Source Filter"];
+        
+    }
+
     [CATransaction begin];
     self.layer.sourceLayer.filters = [self newFilterArray:self.layer.sourceLayer.filters withoutName:filteruuid];
     [CATransaction commit];
@@ -787,6 +980,34 @@ static NSArray *_sourceTypes = nil;
 
 -(void)deleteBackgroundFilter:(NSString *)filteruuid
 {
+    CIFilter *toDelete = [self filter:filteruuid fromArray:self.layer.backgroundFilters];
+    if (toDelete)
+    {
+        NSData *saveData = [NSKeyedArchiver archivedDataWithRootObject:toDelete];
+        __weak InputSource *weakSelf = self;
+        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(InputSource *input) {
+            CIFilter *newFilter = [NSKeyedUnarchiver unarchiveObjectWithData:saveData];
+            NSMutableArray *cFilters = weakSelf.layer.backgroundFilters.mutableCopy;
+            if (!cFilters)
+            {
+                cFilters = [NSMutableArray array];
+            }
+            [cFilters addObject:newFilter];
+            [CATransaction begin];
+            weakSelf.layer.backgroundFilters = cFilters;
+            [CATransaction commit];
+            [[self.sourceLayout.undoManager prepareWithInvocationTarget:weakSelf.sourceLayout] modifyUUID:weakSelf.uuid withBlock:^(InputSource *input) {
+                [input deleteBackgroundFilter:newFilter.name];
+            }];
+            [self.sourceLayout.undoManager setActionName:@"Add Background Filter"];
+
+
+
+        }];
+        [self.sourceLayout.undoManager setActionName:@"Delete Background Filter"];
+        
+    }
+    
     [CATransaction begin];
     self.layer.backgroundFilters = [self newFilterArray:self.layer.backgroundFilters withoutName:filteruuid];
     [CATransaction commit];
@@ -805,6 +1026,10 @@ static NSArray *_sourceTypes = nil;
         NSString *filterID = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, tmpUUID);
         CFRelease(tmpUUID);
         newFilter.name = filterID;
+        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(InputSource *input) {
+            [input deleteLayerFilter:filterID];
+        }];
+
         NSMutableArray *currentFilters = self.layer.filters.mutableCopy;
         if (!currentFilters)
         {
@@ -829,6 +1054,10 @@ static NSArray *_sourceTypes = nil;
         NSString *filterID = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, tmpUUID);
         CFRelease(tmpUUID);
         newFilter.name = filterID;
+        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(InputSource *input) {
+            [input deleteSourceFilter:filterID];
+        }];
+
         NSMutableArray *currentFilters = self.layer.sourceLayer.filters.mutableCopy;
         if (!currentFilters)
         {
@@ -853,6 +1082,12 @@ static NSArray *_sourceTypes = nil;
         NSString *filterID = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, tmpUUID);
         CFRelease(tmpUUID);
         newFilter.name = filterID;
+        
+        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(InputSource *input) {
+            [input deleteBackgroundFilter:filterID];
+        }];
+        [self.sourceLayout.undoManager setActionName:@"Add Background Filter"];
+
         NSMutableArray *currentFilters = self.layer.backgroundFilters.mutableCopy;
         if (!currentFilters)
         {
@@ -1026,6 +1261,10 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setName:(NSString *)name
 {
+    
+    [self registerUndoForProperty:@"name" withAction:@"Set Name"];
+    
+
     [CATransaction begin];
     self.layer.name = name;
     [CATransaction commit];
@@ -1083,6 +1322,9 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setRotationAngle:(float)rotationAngle
 {
+    [self registerUndoForProperty:@"rotationAngle" withAction:@"Rotation"];
+
+    
     _rotationAngle = rotationAngle;
     
     [self updateRotationTransform];
@@ -1096,6 +1338,8 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setRotationAngleX:(float)rotationAngleX
 {
+    [self registerUndoForProperty:@"rotationAngleX" withAction:@"X Rotation"];
+
     _rotationAngleX = rotationAngleX;
     
     [self updateRotationTransform];
@@ -1109,6 +1353,8 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setRotationAngleY:(float)rotationAngleY
 {
+    [self registerUndoForProperty:@"rotationAngleY" withAction:@"Y Rotation"];
+
     _rotationAngleY = rotationAngleY;
     
     [self updateRotationTransform];
@@ -1128,6 +1374,7 @@ static NSArray *_sourceTypes = nil;
     contentsRect.origin.y = self.crop_bottom;
     contentsRect.size.width = 1.0 - self.crop_right - self.crop_left;
     contentsRect.size.height = 1.0 - self.crop_top - self.crop_bottom;
+
     [CATransaction begin];
     self.layer.cropRect = contentsRect;
     [CATransaction commit];
@@ -1136,8 +1383,32 @@ static NSArray *_sourceTypes = nil;
 
 
 
+
+-(void)setTransitionDuration:(float)transitionDuration
+{
+    [self registerUndoForProperty:@"transitionDuration" withAction:@"Effect Duration"];
+    _transitionDuration = transitionDuration;
+}
+
+
+-(float)transitionDuration
+{
+    return _transitionDuration;
+}
+-(void)setTransitionDirection:(NSString *)transitionDirection
+{
+    [self registerUndoForProperty:@"transitionDirection" withAction:@"Transition Direction"];
+    _transitionDirection = transitionDirection;
+}
+
+-(NSString *)transitionDirection
+{
+    return _transitionDirection;
+}
+
 -(void)setTransitionEnabled:(bool)transitionEnabled
 {
+    [self registerUndoForProperty:@"transitionEnabled" withAction:@"Enable Transitions"];
     [CATransaction begin];
     _transitionEnabled = transitionEnabled;
     
@@ -1169,6 +1440,7 @@ static NSArray *_sourceTypes = nil;
 {
     
     
+    [self registerUndoForProperty:@"alwaysDisplay" withAction:@"Always Show"];
     if (alwaysDisplay)
     {
         [CATransaction begin];
@@ -1208,6 +1480,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void) setTransitionFilterName:(NSString *)transitionFilterName
 {
+    [self registerUndoForProperty:@"transitionFilterName" withAction:@"Transition Effect"];
     _transitionFilterName = transitionFilterName;
     if ([transitionFilterName hasPrefix:@"CI"])
     {
@@ -1319,6 +1592,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setWidth:(float)width
 {
+    [self registerUndoForProperty:@"width" withAction:@"Width"];
     _width = width;
     [self updateSize:_width height:_height];
 }
@@ -1330,6 +1604,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setHeight:(float)height
 {
+    [self registerUndoForProperty:@"height" withAction:@"Height"];
     _height = height;
     [self updateSize:_width height:_height];
 }
@@ -1342,6 +1617,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setX_pos:(float)x_pos
 {
+    [self registerUndoForProperty:@"x_pos" withAction:@"Position X"];
     if (x_pos > 0 && x_pos <= 1.0)
     {
         CALayer *sLayer = self.layer.superlayer;
@@ -1360,6 +1636,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setY_pos:(float)y_pos
 {
+    [self registerUndoForProperty:@"y_pos" withAction:@"Position Y"];
     if (y_pos > 0 && y_pos <= 1.0)
     {
         CALayer *sLayer = self.layer.superlayer;
@@ -1695,6 +1972,8 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setOpacity:(float)opacity
 {
+    [self registerUndoForProperty:@"opacity" withAction:@"Opacity"];
+
     _opacity = opacity;
     [CATransaction begin];
     self.layer.opacity = _opacity;
@@ -1762,6 +2041,8 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setScrollXSpeed:(float)scrollXSpeed
 {
+    [self registerUndoForProperty:@"scrollXSpeed" withAction:@"Horizontal Scroll Speed"];
+
     [CATransaction begin];
     self.layer.scrollXSpeed = scrollXSpeed;
     [CATransaction commit];
@@ -1776,6 +2057,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setScrollYSpeed:(float)scrollYSpeed
 {
+    [self registerUndoForProperty:@"scrollYSpeed" withAction:@"Vertical Scroll Speed"];
 
     [CATransaction begin];
     self.layer.scrollYSpeed = scrollYSpeed;
@@ -2160,6 +2442,8 @@ static NSArray *_sourceTypes = nil;
 
 -(void) setActive:(bool)active
 {
+    
+    [self registerUndoForProperty:@"active" withAction:active ? @"Set Active" : @"Unset Active"];
     _active = active;
     if (self.videoInput)
     {
@@ -2224,6 +2508,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void) setCrop_left:(float)crop_left
 {
+    [self registerUndoForProperty:@"crop_left" withAction:@"Crop Left"];
     if (crop_left < 0)
     {
         _crop_left = 0;
@@ -2244,6 +2529,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void) setCrop_right:(float)crop_right
 {
+    [self registerUndoForProperty:@"crop_right" withAction:@"Crop Right"];
     if (crop_right < 0)
     {
         _crop_right = 0;
@@ -2262,6 +2548,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void) setCrop_top:(float)crop_top
 {
+    [self registerUndoForProperty:@"crop_top" withAction:@"Crop Top"];
     if (crop_top < 0)
     {
         _crop_top = 0;
@@ -2280,6 +2567,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void) setCrop_bottom:(float)crop_bottom
 {
+    [self registerUndoForProperty:@"crop_bottom" withAction:@"Crop Bottom"];
     if (crop_bottom < 0)
     {
         _crop_bottom = 0;
@@ -2291,8 +2579,24 @@ static NSArray *_sourceTypes = nil;
 }
 
 
+-(void)registerUndoForProperty:(NSString *)propName withAction:(NSString *)action
+{
+    id propertyValue = [self valueForKeyPath:propName];
+    
+    [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(InputSource *input) {
+        [input setValue:propertyValue forKeyPath:propName];
+        
+    }];
+    [self.sourceLayout.undoManager setActionName:action];
+}
+
+
+
 -(void)setChromaKeyColor:(NSColor *)chromaKeyColor
 {
+
+    [self registerUndoForProperty:@"chromaKeyColor" withAction:@"Chroma Key Color"];
+
     _chromaKeyColor = chromaKeyColor;
     [CATransaction begin];
     [self.layer.sourceLayer setValue:[[CIColor alloc] initWithColor:chromaKeyColor] forKeyPath:@"filters.Chromakey.inputColor"];
@@ -2306,6 +2610,8 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setChromaKeySmoothing:(float)chromaKeySmoothing
 {
+    [self registerUndoForProperty:@"chromaKeySmoothing" withAction:@"CK Smoothing"];
+
     _chromaKeySmoothing = chromaKeySmoothing;
     [CATransaction begin];
     [self.layer.sourceLayer setValue:@(chromaKeySmoothing) forKeyPath:@"filters.Chromakey.inputSmoothing"];
@@ -2319,6 +2625,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setChromaKeyThreshold:(float)chromaKeyThreshold
 {
+    [self registerUndoForProperty:@"chromaKeyThreshold" withAction:@"CK Threshold"];
     _chromaKeyThreshold = chromaKeyThreshold;
     [CATransaction begin];
     [self.layer.sourceLayer setValue:@(chromaKeyThreshold) forKeyPath:@"filters.Chromakey.inputThreshold"];
@@ -2334,6 +2641,8 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setDoChromaKey:(bool)doChromaKey
 {
+    
+    [self registerUndoForProperty:@"doChromaKey" withAction:doChromaKey ? @"Set Chroma Key" : @"Unset Chroma Key"];
     _doChromaKey = doChromaKey;
 
     [CATransaction begin];
@@ -2440,6 +2749,17 @@ static NSArray *_sourceTypes = nil;
     
     if ([keyPath hasPrefix:@"constraintMap"])
     {
+        id oldValue = change[NSKeyValueChangeOldKey];
+        NSRect oldFrame = self.layoutPosition;
+        
+        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(InputSource *input) {
+            [input setValue:oldValue forKeyPath:keyPath];
+            [input updateSize:oldFrame.size.width height:oldFrame.size.height];
+            [input positionOrigin:oldFrame.origin.x y:oldFrame.origin.y];
+            
+        }];
+        [self.sourceLayout.undoManager setActionName:@"Constraint Change"];
+
         [self buildLayerConstraints];
     }
 }
@@ -2489,7 +2809,7 @@ static NSArray *_sourceTypes = nil;
 {
     for (NSString *key in _constraintObserveKeys)
     {
-        [self addObserver:self forKeyPath:key options:NSKeyValueObservingOptionNew context:NULL];
+        [self addObserver:self forKeyPath:key options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld) context:NULL];
     }
 }
 

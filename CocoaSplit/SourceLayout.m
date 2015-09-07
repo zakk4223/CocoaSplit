@@ -759,6 +759,17 @@
 
 
 
+-(void)modifyUUID:(NSString *)uuid withBlock:(void (^)(InputSource *input))withBlock
+{
+    InputSource *useSource = [self inputForUUID:uuid];
+    if (useSource)
+    {
+        withBlock(useSource);
+    }
+}
+
+
+
 -(InputSource *)inputForUUID:(NSString *)uuid
 {
 

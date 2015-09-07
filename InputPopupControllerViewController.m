@@ -10,6 +10,7 @@
 #import "InputSource.h"
 #import "CSCIFilterConfigProxy.h"
 #import "CSFilterChooserWindowController.h"
+#import "SourceLayout.h"
 
 @interface InputPopupControllerViewController ()
 
@@ -427,13 +428,25 @@
 -(IBAction) clearGradient:(NSButton *)sender
 {
 
-    [self.inputSource.layer clearGradient];
+    [self.undoManager beginUndoGrouping];
+    self.inputSource.startColor = nil;
+    self.inputSource.stopColor = nil;
+    [self.undoManager setActionName:@"Clear Gradient"];
+    [self.undoManager endUndoGrouping];
 }
 
 
 
 - (IBAction)resetConstraints:(id)sender
 {
+    NSDictionary *oldConstraints = self.inputSource.constraintMap;
+    
+    [[self.inputSource.sourceLayout.undoManager prepareWithInvocationTarget:self.inputSource.sourceLayout] modifyUUID:self.inputSource.uuid withBlock:^(InputSource *input) {
+        
+        input.constraintMap = oldConstraints;
+    }];
+    
+    
     [self.inputSource resetConstraints];
     
 }

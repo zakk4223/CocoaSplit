@@ -109,9 +109,11 @@
     if (_sourceLayout)
     {
         [NSApp unregisterMIDIResponder:_sourceLayout];
+        
     }
     _sourceLayout = sourceLayout;
-    
+    [self.undoManager removeAllActions];
+    sourceLayout.undoManager = self.undoManager;
     
     [NSApp registerMIDIResponder:sourceLayout];
     
@@ -560,20 +562,6 @@
 
 
 
--(void)doUndoSourceFrame:(NSRect)oldFrame forInput:(NSString *)forInput
-{
-    if (forInput)
-    {
-        InputSource *realInput = [self.sourceLayout inputForUUID:forInput];
-        if (realInput)
-        {
-            [realInput updateSize:oldFrame.size.width height:oldFrame.size.height];
-            [realInput positionOrigin:oldFrame.origin.x y:oldFrame.origin.y];
-        }
-    }
-}
-
-
 - (void)mouseDragged:(NSEvent *)theEvent
 {
     
@@ -588,7 +576,15 @@
         {
             NSRect curFrame = self.selectedSource.layoutPosition;
             
-            [[self.undoManager prepareWithInvocationTarget:self] doUndoSourceFrame:curFrame forInput:self.selectedSource.uuid];
+            [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.selectedSource.uuid withBlock:^(InputSource *input) {
+                if (input)
+                {
+                    [input updateSize:curFrame.size.width height:curFrame.size.height];
+                    [input positionOrigin:curFrame.origin.x y:curFrame.origin.y];
+                }
+
+                
+            }];
         }
         
         _inDrag = YES;
@@ -870,9 +866,33 @@
 
 - (IBAction)moveInputUp:(id)sender
 {
-    if (self.selectedSource)
+    InputSource *toMove = nil;
+    
+    if (sender)
     {
-        self.selectedSource.depth += 1;
+        if ([sender isKindOfClass:[NSMenuItem class]])
+        {
+            NSMenuItem *item = (NSMenuItem *)sender;
+            toMove = (InputSource *)item.representedObject;
+        } else if ([sender isKindOfClass:[InputSource class]]) {
+            toMove = (InputSource *)sender;
+        } else if ([sender isKindOfClass:[NSString class]]) {
+            toMove = [self.sourceLayout inputForUUID:sender];
+        }
+    }
+    
+    if (!toMove)
+    {
+        toMove = self.selectedSource;
+    }
+
+    if (toMove)
+    {
+
+        toMove.depth += 1;
+        
+
+        [[self.undoManager prepareWithInvocationTarget:self] moveInputDown:toMove.uuid];
         
     }
 }
@@ -880,9 +900,33 @@
 
 - (IBAction)moveInputDown:(id)sender
 {
-    if (self.selectedSource)
+    InputSource *toMove = nil;
+    
+    if (sender)
     {
-        self.selectedSource.depth -= 1;
+        if ([sender isKindOfClass:[NSMenuItem class]])
+        {
+            NSMenuItem *item = (NSMenuItem *)sender;
+            toMove = (InputSource *)item.representedObject;
+        } else if ([sender isKindOfClass:[InputSource class]]) {
+            toMove = (InputSource *)sender;
+        } else if ([sender isKindOfClass:[NSString class]]) {
+            toMove = [self.sourceLayout inputForUUID:sender];
+        }
+    }
+    
+    if (!toMove)
+    {
+        toMove = self.selectedSource;
+    }
+    
+    if (toMove)
+    {
+        toMove.depth -= 1;
+
+        
+        [[self.undoManager prepareWithInvocationTarget:self] moveInputUp:toMove.uuid];
+        
     }
 }
 
@@ -1042,18 +1086,24 @@
 }
 
 
-
--(void)addUndoAction
+-(void)undoEditsource:(NSData *)withData
 {
-    NSData *curData = [self.sourceLayout makeSaveData];
-    [self.undoManager registerUndoWithTarget:self selector:@selector(undoLayoutEdit:) object:curData];
+    
+    
+    InputSource *restoredSource = [NSKeyedUnarchiver unarchiveObjectWithData:withData];
+    InputSource *currentSource = [self.sourceLayout inputForUUID:restoredSource.uuid];
+    if (currentSource)
+    {
+        [self.sourceLayout deleteSource:currentSource];
+        NSData *curData = [NSKeyedArchiver archivedDataWithRootObject:currentSource];
+        [[self.undoManager prepareWithInvocationTarget:self] undoEditsource:curData];
+    }
+    
+    
+    [self.sourceLayout addSource:restoredSource];
+    
 }
 
-
--(void)undoLayoutEdit:(NSData *)withData
-{
-    [self.sourceLayout restoreSourceList:withData];
-}
 
 -(void)undoDeleteInput:(NSData *)withData parentUUID:(NSString *)parentUUID
 {
@@ -1143,7 +1193,7 @@
         spawnRect = NSInsetRect(inputRect, inputRect.size.width/2-2.0f, inputRect.size.height/2-2.0f);
     }
     
-    
+    //[[self.undoManager prepareWithInvocationTarget:self] undoEditsource:[NSKeyedArchiver archivedDataWithRootObject:forInput]];
     InputPopupControllerViewController *popupController = [[InputPopupControllerViewController alloc] init];
     
     NSPopover *popover = [[NSPopover alloc] init];
@@ -1154,24 +1204,11 @@
     [popover showRelativeToRect:spawnRect ofView:self preferredEdge:NSMaxXEdge];
     
     popupController.inputSource = forInput;
+    
     self.activePopupController = popupController;
 }
 
 
--(void)undoAutoFit:(NSString *)inputUUID oldFrame:(NSRect)oldFrame
-{
-    if (inputUUID)
-    {
-        InputSource *unfit = [self.sourceLayout inputForUUID:inputUUID];
-        if (unfit)
-        {
-            [unfit resetConstraints];
-            [unfit updateSize:oldFrame.size.width height:oldFrame.size.height];
-            [unfit positionOrigin:oldFrame.origin.x y:oldFrame.origin.y];
-            [[self.undoManager prepareWithInvocationTarget:self] autoFitInput:unfit];
-        }
-    }
-}
 
 
 
@@ -1198,7 +1235,7 @@
     if (autoFitSource)
     {
         [autoFitSource autoFit];
-        [[self.undoManager prepareWithInvocationTarget:self] undoAutoFit:autoFitSource.uuid oldFrame:autoFitSource.layoutPosition];
+        [self.undoManager setActionName:@"Auto Fit"];
     }
 }
 
@@ -1345,6 +1382,12 @@
 - (BOOL)popoverShouldDetach:(NSPopover *)popover
 {
     return YES;
+}
+
+
+-(NSUndoManager *)windowWillReturnUndoManager:(NSWindow *)window
+{
+    return self.undoManager;
 }
 
 

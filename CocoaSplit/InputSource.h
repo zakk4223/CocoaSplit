@@ -46,6 +46,13 @@ typedef enum resize_style_t {
 @interface InputSource : NSObject <NSCoding, NSWindowDelegate, NSCopying, MIKMIDIMappableResponder, MIKMIDIResponder>
 {
     
+    bool _alwaysDisplay;
+
+    float _transitionDuration;
+    NSString *_transitionDirection;
+    input_rotate_style _rotateStyle;
+    float _changeInterval;
+    
     int _currentSourceIdx;
     
     CATransition *_multiTransition;
@@ -180,8 +187,12 @@ typedef enum resize_style_t {
 @property (strong) CIFilter *advancedTransition;
 @property (strong) NSString *advancedTransitionName;
 
-
-
+@property (strong) NSColor *startColor;
+@property (strong) NSColor *stopColor;
+@property (assign) CGFloat gradientStartX;
+@property (assign) CGFloat gradientStartY;
+@property (assign) CGFloat gradientStopX;
+@property (assign) CGFloat gradientStopY;
 
 
 -(void) updateOrigin:(CGFloat)x y:(CGFloat)y;

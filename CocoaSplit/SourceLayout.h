@@ -61,6 +61,7 @@
 @property (strong) CIFilter *compositeFilter;
 
 @property (weak) InputSource *layoutTimingSource;
+@property (strong) NSUndoManager *undoManager;
 
 
 -(void)deleteSource:(InputSource *)delSource;
@@ -81,6 +82,7 @@
 -(InputSource *)sourceUnder:(InputSource *)source;
 -(void)didBecomeVisible;
 -(bool)containsInput:(InputSource *)cSource;
+-(void)modifyUUID:(NSString *)uuid withBlock:(void (^)(InputSource *input))withBlock;
 
 
 

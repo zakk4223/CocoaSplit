@@ -565,14 +565,14 @@
                                 <rect key="frame" x="132" y="86" width="44" height="23"/>
                                 <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
-                                    <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.layer.startColor" id="PM0-Cc-yOr"/>
+                                    <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.startColor" id="6lO-fK-dza"/>
                                 </connections>
                             </colorWell>
                             <colorWell fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CVI-Ly-scM">
                                 <rect key="frame" x="132" y="59" width="44" height="23"/>
                                 <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
-                                    <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.layer.stopColor" id="Rs8-J6-xhW"/>
+                                    <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.stopColor" id="USH-ox-DTS"/>
                                 </connections>
                             </colorWell>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PbG-mI-o0s">
@@ -615,7 +615,7 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                                 <connections>
-                                    <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.layer.gradientStopX" id="0k6-4t-EdZ"/>
+                                    <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.gradientStopX" id="fWU-dL-o62"/>
                                 </connections>
                             </textField>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wMU-lB-vGu">
@@ -626,7 +626,7 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                                 <connections>
-                                    <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.layer.gradientStartX" id="JqZ-4m-NEe"/>
+                                    <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.gradientStartX" id="sRY-aJ-Pco"/>
                                 </connections>
                             </textField>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7U4-ln-Kcs">
@@ -637,7 +637,7 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                                 <connections>
-                                    <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.layer.gradientStartY" id="wyu-8P-fVi"/>
+                                    <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.gradientStartY" id="dvp-JE-iUT"/>
                                 </connections>
                             </textField>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oFb-MA-BZO">
@@ -658,7 +658,7 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                                 <connections>
-                                    <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.layer.gradientStopY" id="Qft-de-Fiy"/>
+                                    <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.gradientStopY" id="WON-qC-jdp"/>
                                 </connections>
                             </textField>
                             <box horizontalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="UcS-yc-7Kj">
