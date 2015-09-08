@@ -493,7 +493,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)commonInit
 {
-    [NSApp registerMIDIResponder:self];
 
     [CATransaction begin];
     _nextImageTime = 0.0f;

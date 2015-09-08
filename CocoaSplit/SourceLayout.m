@@ -477,7 +477,7 @@
         src.is_live = self.isActive;
         
         
-        //[NSApp registerMIDIResponder:src];
+        [NSApp registerMIDIResponder:src];
         
         if (!src.layer.superlayer)
         {
