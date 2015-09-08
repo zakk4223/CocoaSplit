@@ -73,9 +73,11 @@
     
     for (MIKMIDIMappingItem *item in items)
     {
+        
         id<MIKMIDIResponder> responder = [NSApp MIDIResponderWithIdentifier:item.MIDIResponderIdentifier];
         if ([responder respondsToMIDICommand:command])
         {
+
             NSString *dynMethod = [NSString stringWithFormat:@"handleMIDICommand%@:", item.commandIdentifier];
             
             SEL dynSelector = NSSelectorFromString(dynMethod);

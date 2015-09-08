@@ -206,6 +206,7 @@ static NSArray *_sourceTypes = nil;
     
     if (self = [super init])
     {
+        
         [CATransaction begin];
         [self commonInit];
         
@@ -492,6 +493,8 @@ static NSArray *_sourceTypes = nil;
 
 -(void)commonInit
 {
+    [NSApp registerMIDIResponder:self];
+
     [CATransaction begin];
     _nextImageTime = 0.0f;
     _currentSourceIdx = 0;
