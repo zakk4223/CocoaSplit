@@ -12,6 +12,26 @@
 @implementation CSAnimationItem
 
 
+
+-(instancetype)init
+{
+    if (self = [super init])
+    {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sourceWasDeleted:) name:CSNotificationInputDeleted object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sourceWasAdded:) name:CSNotificationInputAdded object:nil];
+
+    }
+    
+    return self;
+}
+
+
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
     [self removeDetachedInputs];
@@ -23,7 +43,7 @@
 
 -(instancetype)initWithCoder:(NSCoder *)aDecoder
 {
-    if (self = [super init])
+    if (self = [self init])
     {
         self.name = [aDecoder decodeObjectForKey:@"name"];
         self.module_name = [aDecoder decodeObjectForKey:@"module_name"];
@@ -66,6 +86,48 @@
 }
 
 
+-(void)sourceWasDeleted:(NSNotification *)notification
+{
+    InputSource *srcDel = notification.object;
+    
+    
+    for (NSMutableDictionary *inp in self.inputs)
+    {
+        NSString *inputType = inp[@"type"];
+        if ([inputType isEqualToString:@"input"])
+        {
+            InputSource *inpsrc = inp[@"value"];
+            if (inpsrc == srcDel)
+            {
+                inp[@"deletedUUID"] = srcDel.uuid;
+                inp[@"value"] = [NSNull null];
+            }
+        }
+    }
+}
+
+
+-(void)sourceWasAdded:(NSNotification *)notification
+{
+    InputSource *srcAdd = notification.object;
+    
+    for (NSMutableDictionary *inp in self.inputs)
+    {
+        NSString *inputType = inp[@"type"];
+        if ([inputType isEqualToString:@"input"])
+        {
+            NSString *inpuuid = inp[@"deletedUUID"];
+            if (inpuuid && [inpuuid isEqualToString:srcAdd.uuid])
+            {
+                [inp removeObjectForKey:@"deletedUUID"];
+                inp[@"value"] = srcAdd;
+            }
+        }
+    }
+}
+
+
+
 -(void)purgeInputSource:(InputSource *)src
 {
     for (NSMutableDictionary *inp in self.inputs)
@@ -85,7 +147,7 @@
 
 -(instancetype)initWithDictionary:(NSDictionary *)dict moduleName:(NSString *)moduleName
 {
-    if (self = [super init])
+    if (self = [self init])
     {
         
         self.module_name = moduleName;

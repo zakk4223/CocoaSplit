@@ -587,10 +587,11 @@
     }
     
     [delSource.layer removeFromSuperlayer];
+
+    NSLog(@"DELETE SOURCE %@", delSource);
+    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputDeleted  object:delSource userInfo:nil];
     delSource.sourceLayout = nil;
 
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputDeleted  object:delSource userInfo:nil];
 
 }
 
