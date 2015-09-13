@@ -118,6 +118,14 @@
             _closeButton.action = @selector(deleteSource);
         }
         
+        if (!_autoFitButton)
+        {
+            _autoFitButton = [NSWindow standardWindowButton:NSWindowZoomButton forStyleMask:NSClosableWindowMask];
+            [self addSubview:_autoFitButton];
+            _autoFitButton.target = self;
+            _autoFitButton.action  = @selector(autoFitSource);
+        }
+        
         
         NSRect insetFrame = [self insetSelectionRect];
         
@@ -126,6 +134,12 @@
         bFrame.origin.y = insetFrame.size.height - _closeButton.bounds.size.height/2 - 3;
         _closeButton.frame = bFrame;
 
+        
+        NSRect aFrame = _autoFitButton.frame;
+        aFrame.origin.x = NSMaxX(bFrame)+5;
+        aFrame.origin.y = bFrame.origin.y;
+        _autoFitButton.frame = aFrame;
+        
         
         if (insetFrame.size.width <= NSMaxX(_closeButton.frame) || _closeButton.frame.origin.y < RESIZE_HANDLE_SIZE)
         {
@@ -140,6 +154,13 @@
     // Drawing code here.
 }
 
+-(void)autoFitSource
+{
+    if (self.parentSource && self.previewView)
+    {
+        [self.parentSource autoFit];
+    }
+}
 -(void)deleteSource
 {
     if (self.parentSource && self.previewView)

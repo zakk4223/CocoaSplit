@@ -27,6 +27,8 @@
     GLuint _fboTexture;
     GLuint _rFbo;
     dispatch_queue_t _animationQueue;
+    NSMutableDictionary *_uuidMap;
+    
     
 }
 

@@ -14,6 +14,7 @@
 @interface CSPreviewOverlayView : NSView
 {
     NSButton *_closeButton;
+    NSButton *_autoFitButton;
 }
 
 @property (weak) InputSource *parentSource;

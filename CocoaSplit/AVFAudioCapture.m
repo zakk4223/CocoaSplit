@@ -214,7 +214,6 @@
         if (self.useAudioEngine)
         {
            
-            NSLog(@"USING SAMPLE RATE %d", self.audioSamplerate);
             
             _audio_capture_output.audioSettings = @{
                                                     AVFormatIDKey: [NSNumber numberWithInt:kAudioFormatLinearPCM],
@@ -222,7 +221,6 @@
                                                     AVLinearPCMIsFloatKey: @YES,
                                                     AVLinearPCMIsNonInterleaved: @YES,
                                                     //AVNumberOfChannelsKey: @2,
-                                            
                                                     AVSampleRateKey: @(self.audioSamplerate),
                                                     };
             

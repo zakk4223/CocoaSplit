@@ -75,6 +75,7 @@ typedef enum frame_render_behavior_t {
 @property (assign) bool canProvideTiming;
 
 
+
 //frameTick is called every render loop. You are not required to do anything here, but it may be useful for some timing/lazy rendering
 -(void)frameTick;
 

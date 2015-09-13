@@ -399,6 +399,37 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
 }
 
+-(void)attachDeviceInput:(CAMultiAudioAVCapturePlayer *)device
+{
+    if (!device)
+    {
+        return; //what?
+    }
+    
+    CAMultiAudioNode *toAttach = nil;
+    
+    AudioStreamBasicDescription *devFormat = device.inputFormat;
+    
+    if (devFormat)
+    {
+        CAMultiAudioConverter *newConverter = [[CAMultiAudioConverter alloc] initWithInputFormat:devFormat];
+        newConverter.nodeUID = device.nodeUID;
+    
+        newConverter.sourceNode = device;
+        device.converterNode = newConverter;
+        toAttach = newConverter;
+    }
+    
+    [self.graph addNode:device];
+    [self attachInput:toAttach];
+    if (devFormat)
+    {
+        [self.graph connectNode:device toNode:toAttach sampleRate:devFormat->mSampleRate];
+    }
+
+}
+
+
 -(void)attachPCMInput:(CAMultiAudioPCMPlayer *)input
 {
     CAMultiAudioConverter *newConverter = [[CAMultiAudioConverter alloc] initWithInputFormat:input.inputFormat];

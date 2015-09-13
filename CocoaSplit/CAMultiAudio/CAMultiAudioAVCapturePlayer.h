@@ -20,6 +20,7 @@
 -(instancetype)initWithDevice:(AVCaptureDevice *)avDevice withFormat:(AudioStreamBasicDescription *)withFormat;
 
 -(void)resetFormat:(AudioStreamBasicDescription *)format;
+-(const AudioStreamBasicDescription *)deviceAudioDescription;
 
 
 @end

@@ -101,6 +101,30 @@
     super.channelCount = channelCount;
 }
 
+/*
+-(AudioStreamBasicDescription *)inputFormat
+{
+    if (self.captureDevice)
+    {
+        CMFormatDescriptionRef sDescr = self.captureDevice.activeFormat.formatDescription;
+        
+        
+        const AudioStreamBasicDescription *asbd =  CMAudioFormatDescriptionGetStreamBasicDescription(sDescr);
+        return (AudioStreamBasicDescription *)asbd;
+        
+    }
+    
+    return NULL;
+
+}
+
+-(void)setInputFormat:(AudioStreamBasicDescription *)inputFormat
+{
+    return;
+}
+*/
+
+
 -(int)channelCount
 {
     if (self.captureDevice)
@@ -109,6 +133,8 @@
         
         
         const AudioStreamBasicDescription *asbd =  CMAudioFormatDescriptionGetStreamBasicDescription(sDescr);
+        
+        
 
         if (asbd)
         {

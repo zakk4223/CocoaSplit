@@ -212,6 +212,7 @@
     
      AudioStreamBasicDescription inputFormat = {0};
     
+    
     inputFormat.mSampleRate = self.sampleRate;
     inputFormat.mFormatID = kAudioFormatLinearPCM;
     inputFormat.mFormatFlags = kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked | kAudioFormatFlagIsFloat;

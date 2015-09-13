@@ -123,8 +123,10 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
 
     AudioBufferList *sampleABL;
     
+    
     CMFormatDescriptionRef sDescr = CMSampleBufferGetFormatDescription(sampleBuffer);
     const AudioStreamBasicDescription *asbd =  CMAudioFormatDescriptionGetStreamBasicDescription(sDescr);
+    
     
     int bufferCnt = asbd->mFormatFlags & kAudioFormatFlagIsNonInterleaved ? asbd->mChannelsPerFrame : 1;
     int channelCnt = asbd->mFormatFlags & kAudioFormatFlagIsNonInterleaved ? 1 : asbd->mChannelsPerFrame;

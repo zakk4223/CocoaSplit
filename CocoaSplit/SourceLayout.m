@@ -29,6 +29,7 @@
         _canvas_width = 1280;
         _fboTexture = 0;
         _rFbo = 0;
+        _uuidMap = [NSMutableDictionary dictionary];
         
         _animationQueue = dispatch_queue_create("CSAnimationQueue", NULL);
         
@@ -471,6 +472,10 @@
         mergeList = (NSArray *)mergeObj;
     }
     
+    if (self.undoManager)
+    {
+        [self.undoManager beginUndoGrouping];
+    }
     for(InputSource *src in mergeList)
     {
         src.sourceLayout = self;
@@ -488,10 +493,24 @@
         }
         
 
-            [[self mutableArrayValueForKey:@"sourceList" ] addObject:src];
+        [[self mutableArrayValueForKey:@"sourceList" ] addObject:src];
+        [_uuidMap setObject:src forKey:src.uuid];
+        
+        if (self.undoManager)
+        {
+            __weak SourceLayout *weakSelf = self;
+            
+            [[weakSelf.undoManager prepareWithInvocationTarget:weakSelf] modifyUUID:src.uuid withBlock:^(InputSource *input) {
+                [weakSelf deleteSource:input];
+            }];
+        }
+
 
     }
-
+    if (self.undoManager)
+    {
+        [self.undoManager endUndoGrouping];
+    }
     
     return mergeObj;
 }
@@ -512,6 +531,8 @@
         
         
         self.sourceList = [NSMutableArray array];
+        _uuidMap = [NSMutableDictionary dictionary];
+        
         
         if (!withData)
         {
@@ -580,6 +601,8 @@
     
     [[self mutableArrayValueForKey:@"sourceList" ] removeObject:delSource];
 
+    [_uuidMap removeObjectForKey:delSource.uuid];
+    
     //[self.sourceList removeObject:delSource];
     if (delSource == self.layoutTimingSource)
     {
@@ -606,6 +629,8 @@
 
     
     [self.rootLayer addSublayer:newSource.layer];
+    [_uuidMap setObject:newSource forKey:newSource.uuid];
+    
     [NSApp registerMIDIResponder:newSource];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputAdded object:newSource userInfo:nil];
@@ -773,20 +798,7 @@
 -(InputSource *)inputForUUID:(NSString *)uuid
 {
 
-    NSArray *sources = [self sourceListOrdered];
-    
-    NSUInteger idx = [sources indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-        return [((InputSource *)obj).uuid isEqualToString:uuid];
-        
-        
-    }];
-    
-    
-    if (idx != NSNotFound)
-    {
-        return [sources objectAtIndex:idx];
-    }
-    return nil;
+    return [_uuidMap objectForKey:uuid];
 }
 
 
