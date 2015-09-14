@@ -435,8 +435,6 @@
 }
 
 
-
-
 -(NSObject *)mergeSourceListData:(NSData *)mergeData withLayer:(CALayer *)withLayer
 {
     
@@ -445,7 +443,7 @@
     {
         self.sourceList = [NSMutableArray array];
     }
-
+    
     if (!mergeData)
     {
         return nil;
@@ -455,6 +453,8 @@
     {
         withLayer = self.rootLayer;
     }
+    
+    NSMutableArray *undoSources = [NSMutableArray array];
     
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:mergeData];
     
@@ -480,6 +480,45 @@
     {
         src.sourceLayout = self;
         src.is_live = self.isActive;
+        InputSource *eSrc = [self inputForUUID:src.uuid];
+        if (eSrc)
+        {
+            CATransition *rTrans = [CATransition animation];
+            rTrans.type = @"flip";
+            rTrans.duration = 2.5;
+            rTrans.removedOnCompletion = YES;
+            [CATransaction begin];
+            [eSrc.layer.superlayer addSublayer:src.layer];
+            src.layer.hidden = YES;
+            [CATransaction commit];
+            
+            [CATransaction begin];
+            __weak SourceLayout *weakSelf = self;
+            
+            [CATransaction setCompletionBlock:^{
+                [weakSelf deleteSource:eSrc];
+            }];
+            
+            
+            
+            //[eSrc.layer addAnimation:rTrans forKey:nil];
+            // [src.layer addAnimation:rTrans forKey:nil];
+            
+            eSrc.layer.hidden = YES;
+            src.layer.hidden = NO;
+            
+            [CATransaction commit];
+            [undoSources addObject:eSrc];
+        }
+        
+        
+        if (undoSources.count > 0)
+        {
+            NSData *undoData = [NSKeyedArchiver archivedDataWithRootObject:undoSources];
+            [[self.undoManager prepareWithInvocationTarget:self] mergeSourceListData:undoData withLayer:nil];
+        } else {
+            [[self.undoManager prepareWithInvocationTarget:self] removeSourceListData:mergeData withLayer:nil];
+        }
         
         
         [NSApp registerMIDIResponder:src];
@@ -492,20 +531,96 @@
             
         }
         
-
+        
         [[self mutableArrayValueForKey:@"sourceList" ] addObject:src];
         [_uuidMap setObject:src forKey:src.uuid];
         
-        if (self.undoManager)
+    }
+    if (self.undoManager)
+    {
+        [self.undoManager endUndoGrouping];
+    }
+    
+    return mergeObj;
+}
+
+
+-(NSObject *)removeSourceListData:(NSData *)mergeData withLayer:(CALayer *)withLayer
+{
+    
+    
+    if (!self.sourceList)
+    {
+        return nil;
+    }
+
+    if (!mergeData)
+    {
+        return nil;
+    }
+    
+    if (!withLayer)
+    {
+        withLayer = self.rootLayer;
+    }
+    
+    NSMutableArray *undoSources = [NSMutableArray array];
+    
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:mergeData];
+    
+    [unarchiver setDelegate:self];
+    
+    NSObject *mergeObj = [unarchiver decodeObjectForKey:@"root"];
+    [unarchiver finishDecoding];
+    
+    NSArray *mergeList;
+    
+    if ([mergeObj isKindOfClass:[NSDictionary class]])
+    {
+        mergeList = [((NSDictionary *)mergeObj) objectForKey:@"sourcelist"];
+    } else {
+        mergeList = (NSArray *)mergeObj;
+    }
+    
+    if (self.undoManager)
+    {
+        [self.undoManager beginUndoGrouping];
+    }
+    for(InputSource *src in mergeList)
+    {
+        src.sourceLayout = self;
+        InputSource *eSrc = [self inputForUUID:src.uuid];
+        if (eSrc)
         {
+            CATransition *rTrans = [CATransition animation];
+            rTrans.type = @"flip";
+            rTrans.duration = 2.5;
+            rTrans.removedOnCompletion = YES;
+
+            [CATransaction begin];
             __weak SourceLayout *weakSelf = self;
-            
-            [[weakSelf.undoManager prepareWithInvocationTarget:weakSelf] modifyUUID:src.uuid withBlock:^(InputSource *input) {
-                [weakSelf deleteSource:input];
+
+            [CATransaction setCompletionBlock:^{
+                [weakSelf deleteSource:eSrc];
             }];
+
+
+            
+            [eSrc.layer addAnimation:rTrans forKey:nil];
+           // [src.layer addAnimation:rTrans forKey:nil];
+            
+            eSrc.layer.hidden = YES;
+            
+            [CATransaction commit];
+            [undoSources addObject:eSrc];
         }
-
-
+        
+     
+        if (undoSources.count > 0)
+        {
+            NSData *undoData = [NSKeyedArchiver archivedDataWithRootObject:undoSources];
+            [[self.undoManager prepareWithInvocationTarget:self] mergeSourceListData:undoData withLayer:nil];
+        }
     }
     if (self.undoManager)
     {
@@ -601,7 +716,12 @@
     
     [[self mutableArrayValueForKey:@"sourceList" ] removeObject:delSource];
 
-    [_uuidMap removeObjectForKey:delSource.uuid];
+    InputSource *uSrc;
+    uSrc = _uuidMap[delSource.uuid];
+    if ([uSrc isEqual:delSource])
+    {
+        [_uuidMap removeObjectForKey:delSource.uuid];
+    }
     
     //[self.sourceList removeObject:delSource];
     if (delSource == self.layoutTimingSource)

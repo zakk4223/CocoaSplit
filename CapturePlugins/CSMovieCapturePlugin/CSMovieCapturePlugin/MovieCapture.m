@@ -604,17 +604,22 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
         self.timeToken = nil;
     }
     
-    if (_avPlayer && _avPlayer.currentItem)
+    if (_avPlayer)
     {
-        AVMutableAudioMixInputParameters *inputParams = _avPlayer.currentItem.audioMix.inputParameters.firstObject;
         [_avPlayer pause];
         [_avPlayer removeAllItems];
         
-        inputParams.audioTapProcessor = nil;
-        _avPlayer.currentItem.audioMix = nil;
         [_avPlayer removeObserver:self forKeyPath:@"rate"];
         [_avPlayer removeObserver:self forKeyPath:@"currentItem"];
 
+        if (_avPlayer.currentItem)
+        {
+            AVMutableAudioMixInputParameters *inputParams = _avPlayer.currentItem.audioMix.inputParameters.firstObject;
+            inputParams.audioTapProcessor = nil;
+            _avPlayer.currentItem.audioMix = nil;
+
+        }
+        
         _avPlayer = nil;
     }
     

@@ -1771,13 +1771,6 @@
         self.stagingCtx.layoutRenderer.transitionDirection = self.transitionDirection;
         self.stagingCtx.layoutRenderer.transitionDuration = self.transitionDuration;
         self.stagingCtx.layoutRenderer.transitionFilter = self.transitionFilter;
-        
-        
-        
-        
-    
-       
-    
             [self stagingSave:self];
             
             

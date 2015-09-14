@@ -175,6 +175,7 @@
             
             [_transitionLayout.rootLayer removeFromSuperlayer];
             _transitionLayout.isActive = NO;
+            _transitionLayout = nil;
         }
         
         [self.renderer.layer addSublayer:self.layout.rootLayer];
