@@ -21,8 +21,9 @@
     [super setRepresentedObject:representedObject];
     [self.representedObject addObserver:self forKeyPath:@"in_live" options:NSKeyValueObservingOptionNew context:NULL];
     [self.representedObject addObserver:self forKeyPath:@"in_staging" options:NSKeyValueObservingOptionNew context:NULL];
-
 }
+
+
 -(void) awakeFromNib
 {
     [super awakeFromNib];
@@ -46,7 +47,12 @@
 
 - (IBAction)layoutButtonPushed:(id)sender
 {
-    [self.captureController toggleLayout:self.representedObject];
+    if ([NSEvent modifierFlags] & NSCommandKeyMask)
+    {
+        [self.captureController switchToLayout:self.representedObject];
+    } else {
+        [self.captureController toggleLayout:self.representedObject];
+    }
 }
 
 

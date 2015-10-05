@@ -455,6 +455,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 +(Class)loadPythonClass:(NSString *)pyClass fromFile:(NSString *)fromFile;
 -(void)toggleLayout:(SourceLayout *)layout;
 -(void)saveToLayout:(SourceLayout *)layout;
+-(void)switchToLayout:(SourceLayout *)layout;
+
 
 
 

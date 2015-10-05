@@ -2897,6 +2897,12 @@
 
 }
 
+-(void)switchToLayout:(SourceLayout *)layout
+{
+    SourceLayout *activeLayout = self.activePreviewView.sourceLayout;
+    [activeLayout replaceWithSourceLayout:layout];
+}
+
 
 -(void)toggleLayout:(SourceLayout *)layout
 {
