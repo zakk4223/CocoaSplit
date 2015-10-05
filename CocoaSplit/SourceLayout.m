@@ -32,7 +32,7 @@
         _uuidMap = [NSMutableDictionary dictionary];
         
         _animationQueue = dispatch_queue_create("CSAnimationQueue", NULL);
-        
+        _containedLayouts = [NSMutableArray array];
         
         self.rootLayer = [self newRootLayer];
         self.animationList = [NSMutableArray array];
@@ -309,7 +309,13 @@
     {
         [aCoder encodeObject:self.animationSaveData forKey:@"animationSaveData"];
     }
+    
+    if (self.containedLayouts)
+    {
+        [aCoder encodeObject:self.containedLayouts forKey:@"containedLayouts"];
+    }
 }
+
 
 
 
@@ -339,12 +345,28 @@
         {
             self.animationSaveData = [aDecoder decodeObjectForKey:@"animationSaveData"];
         }
-        
+    
+        if ([aDecoder containsValueForKey:@"containedLayouts"])
+        {
+            self.containedLayouts = [aDecoder decodeObjectForKey:@"containedLayouts"];
+            //set live/staging status for each layout
+        }
     }
     
     return self;
 }
 
+
+-(void)applyAddBlock
+{
+    if (self.addLayoutBlock)
+    {
+        for (SourceLayout *layout in self.containedLayouts)
+        {
+            self.addLayoutBlock(layout);
+        }
+    }
+}
 
 -(NSArray *)sourceListOrdered
 {
@@ -433,6 +455,80 @@
     
     return object;
 }
+
+
+-(void)replaceWithSourceLayout:(SourceLayout *)layout
+{
+    for (SourceLayout *cLayout in self.containedLayouts.copy)
+    {
+        if (self.removeLayoutBlock)
+        {
+            self.removeLayoutBlock(cLayout);
+        }
+        
+        [self.containedLayouts removeObject:cLayout];
+    }
+    
+    [self removeSourceInputs:self.sourceList withLayer:nil];
+    
+    for (SourceLayout *cLayout in layout.containedLayouts.copy)
+    {
+        if (self.addLayoutBlock)
+        {
+            self.addLayoutBlock(cLayout);
+        }
+        
+        [self.containedLayouts addObject:cLayout];
+    }
+
+    
+    [self mergeSourceListData:layout.savedSourceListData withLayer:nil];
+}
+
+
+
+-(bool)containsLayout:(SourceLayout *)layout
+{
+    return [self.containedLayouts containsObject:layout];
+}
+
+
+-(void)mergeSourceLayout:(SourceLayout *)toMerge withLayer:(CALayer *)withLayer
+{
+    
+    if ([self.containedLayouts containsObject:toMerge])
+    {
+        return;
+    }
+    
+    [self mergeSourceListData:toMerge.savedSourceListData withLayer:withLayer];
+    
+    [self.containedLayouts addObject:toMerge];
+    if (self.addLayoutBlock)
+    {
+        self.addLayoutBlock(toMerge);
+    }
+}
+
+
+-(void)removeSourceLayout:(SourceLayout *)toRemove withLayer:(CALayer *)withLayer
+{
+    
+    if (![self.containedLayouts containsObject:toRemove])
+    {
+        return;
+    }
+    
+    [self removeSourceListData:toRemove.savedSourceListData withLayer:withLayer];
+    
+    [self.containedLayouts removeObject:toRemove];
+    if (self.removeLayoutBlock)
+    {
+        self.removeLayoutBlock(toRemove);
+    }
+}
+
+
 
 
 -(NSObject *)mergeSourceListData:(NSData *)mergeData withLayer:(CALayer *)withLayer
@@ -545,6 +641,60 @@
 }
 
 
+-(void)removeSourceInputs:(NSArray *)inputs withLayer:(CALayer *)withLayer
+{
+    
+    NSMutableArray *undoSources = [NSMutableArray array];
+
+    if (self.undoManager)
+    {
+        [self.undoManager beginUndoGrouping];
+    }
+    for(InputSource *src in inputs)
+    {
+        src.sourceLayout = self;
+        InputSource *eSrc = [self inputForUUID:src.uuid];
+        if (eSrc)
+        {
+            CATransition *rTrans = [CATransition animation];
+            rTrans.type = @"flip";
+            rTrans.duration = 2.5;
+            rTrans.removedOnCompletion = YES;
+            
+            [CATransaction begin];
+            __weak SourceLayout *weakSelf = self;
+            
+            [CATransaction setCompletionBlock:^{
+                [weakSelf deleteSource:eSrc];
+            }];
+            
+            
+            
+            [eSrc.layer addAnimation:rTrans forKey:nil];
+            // [src.layer addAnimation:rTrans forKey:nil];
+            
+            eSrc.layer.hidden = YES;
+            
+            [CATransaction commit];
+            [undoSources addObject:eSrc];
+        }
+        
+        
+        if (undoSources.count > 0)
+        {
+            NSData *undoData = [NSKeyedArchiver archivedDataWithRootObject:undoSources];
+            [[self.undoManager prepareWithInvocationTarget:self] mergeSourceListData:undoData withLayer:nil];
+        }
+    }
+    if (self.undoManager)
+    {
+        [self.undoManager endUndoGrouping];
+    }
+
+    
+}
+
+
 -(NSObject *)removeSourceListData:(NSData *)mergeData withLayer:(CALayer *)withLayer
 {
     
@@ -564,7 +714,6 @@
         withLayer = self.rootLayer;
     }
     
-    NSMutableArray *undoSources = [NSMutableArray array];
     
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:mergeData];
     
@@ -582,51 +731,8 @@
         mergeList = (NSArray *)mergeObj;
     }
     
-    if (self.undoManager)
-    {
-        [self.undoManager beginUndoGrouping];
-    }
-    for(InputSource *src in mergeList)
-    {
-        src.sourceLayout = self;
-        InputSource *eSrc = [self inputForUUID:src.uuid];
-        if (eSrc)
-        {
-            CATransition *rTrans = [CATransition animation];
-            rTrans.type = @"flip";
-            rTrans.duration = 2.5;
-            rTrans.removedOnCompletion = YES;
 
-            [CATransaction begin];
-            __weak SourceLayout *weakSelf = self;
-
-            [CATransaction setCompletionBlock:^{
-                [weakSelf deleteSource:eSrc];
-            }];
-
-
-            
-            [eSrc.layer addAnimation:rTrans forKey:nil];
-           // [src.layer addAnimation:rTrans forKey:nil];
-            
-            eSrc.layer.hidden = YES;
-            
-            [CATransaction commit];
-            [undoSources addObject:eSrc];
-        }
-        
-     
-        if (undoSources.count > 0)
-        {
-            NSData *undoData = [NSKeyedArchiver archivedDataWithRootObject:undoSources];
-            [[self.undoManager prepareWithInvocationTarget:self] mergeSourceListData:undoData withLayer:nil];
-        }
-    }
-    if (self.undoManager)
-    {
-        [self.undoManager endUndoGrouping];
-    }
-    
+    [self removeSourceInputs:mergeList withLayer:withLayer];
     return mergeObj;
 }
 

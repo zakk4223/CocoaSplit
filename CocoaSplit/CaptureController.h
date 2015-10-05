@@ -398,6 +398,9 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) NSMutableDictionary *extraPluginsSaveData;
 @property (strong) CSPluginLoader *sharedPluginLoader;
 
+@property (strong) PreviewView *activePreviewView;
+
+
 
 
 - (IBAction)openAnimatePopover:(NSButton *)sender;
@@ -451,6 +454,9 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(void)layoutLeftFullscreen;
 +(void)loadPythonClass:(NSString *)pyClass fromFile:(NSString *)fromFile withBlock:(void(^)(Class))withBlock;
 +(Class)loadPythonClass:(NSString *)pyClass fromFile:(NSString *)fromFile;
+-(void)toggleLayout:(SourceLayout *)layout;
+-(void)saveToLayout:(SourceLayout *)layout;
+
 
 
 

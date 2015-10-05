@@ -65,6 +65,16 @@
 @property (weak) InputSource *layoutTimingSource;
 @property (strong) NSUndoManager *undoManager;
 
+@property (strong) NSMutableArray *containedLayouts;
+
+@property (assign) bool in_live;
+@property (assign) bool in_staging;
+
+@property (nonatomic, copy) void (^addLayoutBlock)(SourceLayout *layout);
+@property (nonatomic, copy) void (^removeLayoutBlock)(SourceLayout *layout);
+
+
+
 
 -(void)deleteSource:(InputSource *)delSource;
 -(void)addSource:(InputSource *)newSource;
@@ -86,6 +96,11 @@
 -(bool)containsInput:(InputSource *)cSource;
 -(void)modifyUUID:(NSString *)uuid withBlock:(void (^)(InputSource *input))withBlock;
 
+-(void)mergeSourceLayout:(SourceLayout *)toMerge withLayer:(CALayer *)withLayer;
+-(void)removeSourceLayout:(SourceLayout *)toRemove withLayer:(CALayer *)withLayer;
+-(bool)containsLayout:(SourceLayout *)layout;
+-(void)applyAddBlock;
+-(void)replaceWithSourceLayout:(SourceLayout *)layout;
 
 
 

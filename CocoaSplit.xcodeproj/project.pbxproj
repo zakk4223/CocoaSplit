@@ -115,7 +115,7 @@
 		346CF44C1A5C10C2008E5BFF /* CSInputLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 346CF44B1A5C10C2008E5BFF /* CSInputLayer.m */; };
 		346CF44D1A5C10C2008E5BFF /* CSInputLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 346CF44B1A5C10C2008E5BFF /* CSInputLayer.m */; };
 		3470F41419C84989000A81C4 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3470F41319C84989000A81C4 /* Sparkle.framework */; settings = {ATTRIBUTES = (Required, ); }; };
-		3470F41619C849E7000A81C4 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3470F41319C84989000A81C4 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		3470F41619C849E7000A81C4 /* Sparkle.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 3470F41319C84989000A81C4 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		347277FD1A5A2758008801A9 /* CSIOSurfaceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 347277FC1A5A2758008801A9 /* CSIOSurfaceLayer.m */; };
 		347277FE1A5A2758008801A9 /* CSIOSurfaceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 347277FC1A5A2758008801A9 /* CSIOSurfaceLayer.m */; };
 		34792AF616104AA70065A859 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AF516104AA70065A859 /* IOKit.framework */; };
@@ -151,7 +151,6 @@
 		34AE3C30164E3E020052C95E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AE3C2F164E3E020052C95E /* Foundation.framework */; };
 		34AE3C36164E3E020052C95E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 34AE3C34164E3E020052C95E /* InfoPlist.strings */; };
 		34AE3C39164E3E020052C95E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AE3C38164E3E020052C95E /* main.m */; };
-		34AE3C3F164E3F230052C95E /* zakk.lol.QTCaptureHelper.xpc in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34AE3C2E164E3E020052C95E /* zakk.lol.QTCaptureHelper.xpc */; };
 		34AE3C44164E410D0052C95E /* XPCListenerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AE3C43164E410D0052C95E /* XPCListenerDelegate.m */; };
 		34AE3C4B164E68820052C95E /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4E015F3581200E4CE4E /* QTKit.framework */; };
 		34AE3C6B164F04B30052C95E /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AE3C6A164F04B30052C95E /* IOSurface.framework */; };
@@ -318,6 +317,9 @@
 		34ED8CBD1B07763F002C0674 /* CSMidiWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8CBB1B07763F002C0674 /* CSMidiWrapper.m */; };
 		34F5141216FD6E4F00BA894D /* x264Compressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F5140F16FD6E4F00BA894D /* x264Compressor.m */; };
 		34F5141316FD6E4F00BA894D /* AppleVTCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F5141116FD6E4F00BA894D /* AppleVTCompressor.m */; };
+		34F52A271BC1CE2700662911 /* CSLayoutCollectionItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F52A251BC1CE2700662911 /* CSLayoutCollectionItem.m */; settings = {ASSET_TAGS = (); }; };
+		34F52A281BC1CE2700662911 /* CSLayoutCollectionItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34F52A261BC1CE2700662911 /* CSLayoutCollectionItem.xib */; settings = {ASSET_TAGS = (); }; };
+		34F52A2B1BC1E0F900662911 /* CSLayoutButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F52A2A1BC1E0F800662911 /* CSLayoutButton.m */; settings = {ASSET_TAGS = (); }; };
 		34F7C5871B2C9A5300345230 /* CSDeckLinkCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34F7C5611B2C908700345230 /* CSDeckLinkCapturePlugin.bundle */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		34FDA83E1A84C46500E7F65E /* CSTimeCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34FDA8191A84BF9400E7F65E /* CSTimeCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		34FDD6F21A215268009A7413 /* CSPluginServices.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FDD6F11A215268009A7413 /* CSPluginServices.m */; };
@@ -338,13 +340,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 34A7C18719B9A41900BC6882;
 			remoteInfo = CSLayoutSwitcherExtraPlugin;
-		};
-		34AE3C40164E3FAD0052C95E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 340FE49415F3417E00E4CE4E /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 34AE3C2D164E3E020052C95E;
-			remoteInfo = QTCaptureHelper;
 		};
 		34AFC24919B05ADA0007C07B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -515,24 +510,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3470F41519C849D9000A81C4 /* CopyFiles */ = {
+		3470F41519C849D9000A81C4 /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				3470F41619C849E7000A81C4 /* Sparkle.framework in CopyFiles */,
+				3470F41619C849E7000A81C4 /* Sparkle.framework in Copy Files */,
 			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		34AE3C3E164E3EAE0052C95E /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = Contents/XPCServices;
-			dstSubfolderSpec = 1;
-			files = (
-				34AE3C3F164E3F230052C95E /* zakk.lol.QTCaptureHelper.xpc in CopyFiles */,
-			);
+			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		34D43556198DD00F00266169 /* Copy Files */ = {
@@ -904,6 +890,11 @@
 		34F5141016FD6E4F00BA894D /* AppleVTCompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleVTCompressor.h; path = Compressor/AppleVTCompressor.h; sourceTree = "<group>"; };
 		34F5141116FD6E4F00BA894D /* AppleVTCompressor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppleVTCompressor.m; path = Compressor/AppleVTCompressor.m; sourceTree = "<group>"; };
 		34F5141416FD6E5D00BA894D /* h264Compressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = h264Compressor.h; path = Compressor/h264Compressor.h; sourceTree = "<group>"; };
+		34F52A241BC1CE2700662911 /* CSLayoutCollectionItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSLayoutCollectionItem.h; path = Interface/CSLayoutCollectionItem.h; sourceTree = "<group>"; };
+		34F52A251BC1CE2700662911 /* CSLayoutCollectionItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSLayoutCollectionItem.m; path = Interface/CSLayoutCollectionItem.m; sourceTree = "<group>"; };
+		34F52A261BC1CE2700662911 /* CSLayoutCollectionItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSLayoutCollectionItem.xib; path = Interface/CSLayoutCollectionItem.xib; sourceTree = "<group>"; };
+		34F52A291BC1E0F800662911 /* CSLayoutButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLayoutButton.h; sourceTree = "<group>"; };
+		34F52A2A1BC1E0F800662911 /* CSLayoutButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSLayoutButton.m; sourceTree = "<group>"; };
 		34F7C55A1B2C908700345230 /* CSDeckLinkCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSDeckLinkCapturePlugin.xcodeproj; path = CapturePlugins/CSDeckLinkCapturePlugin/CSDeckLinkCapturePlugin.xcodeproj; sourceTree = "<group>"; };
 		34FDA8071A84BF9300E7F65E /* CSTimeCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSTimeCapturePlugin.xcodeproj; path = CapturePlugins/CSTimeCapturePlugin/CSTimeCapturePlugin.xcodeproj; sourceTree = "<group>"; };
 		34FDD6DC1A204CE4009A7413 /* CAMultiAudioEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioEngine.h; path = CAMultiAudio/CAMultiAudioEngine.h; sourceTree = "<group>"; };
@@ -1239,6 +1230,11 @@
 				34D4351A198BE3B700266169 /* NewLayoutPanel.xib */,
 				34348C2919BDBDC000A122C2 /* PluginManagerWindowController.xib */,
 				349461441AAD73BC00F28883 /* TestView.xib */,
+				34F52A241BC1CE2700662911 /* CSLayoutCollectionItem.h */,
+				34F52A251BC1CE2700662911 /* CSLayoutCollectionItem.m */,
+				34F52A261BC1CE2700662911 /* CSLayoutCollectionItem.xib */,
+				34F52A291BC1E0F800662911 /* CSLayoutButton.h */,
+				34F52A2A1BC1E0F800662911 /* CSLayoutButton.m */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -1708,10 +1704,9 @@
 				340FE49915F3417E00E4CE4E /* Sources */,
 				340FE49A15F3417E00E4CE4E /* Frameworks */,
 				340FE49B15F3417E00E4CE4E /* Resources */,
-				34AE3C3E164E3EAE0052C95E /* CopyFiles */,
 				3435E39C188BD80A0015CC01 /* CopyFiles */,
 				34D43556198DD00F00266169 /* Copy Files */,
-				3470F41519C849D9000A81C4 /* CopyFiles */,
+				3470F41519C849D9000A81C4 /* Copy Files */,
 				3460E5891AC766120080358E /* CopyFiles */,
 				34FB04A31B349A0B00379548 /* ShellScript */,
 				343644051B78EFF90069B8F2 /* CopyFiles */,
@@ -1719,7 +1714,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				34AE3C41164E3FAD0052C95E /* PBXTargetDependency */,
 			);
 			name = CocoaSplit;
 			productName = CocoaSplit;
@@ -2024,6 +2018,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34F52A281BC1CE2700662911 /* CSLayoutCollectionItem.xib in Resources */,
 				347B14DD198492D900DC7DF0 /* InputPopupControllerViewController.xib in Resources */,
 				34ED8CB91B073C1B002C0674 /* CSMidiManagerWindowController.xib in Resources */,
 				340FE4AC15F3417E00E4CE4E /* InfoPlist.strings in Resources */,
@@ -2111,6 +2106,7 @@
 				34ED8C9D1B07371C002C0674 /* MIKMIDIProgramChangeCommand.m in Sources */,
 				34ED8C731B07371C002C0674 /* MIKMIDIMappingXMLParser.m in Sources */,
 				34BD1E631B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.m in Sources */,
+				34F52A271BC1CE2700662911 /* CSLayoutCollectionItem.m in Sources */,
 				347277FD1A5A2758008801A9 /* CSIOSurfaceLayer.m in Sources */,
 				344825E61B253D6900AF9EAC /* CAMultiAudioMatrixCell.m in Sources */,
 				34BD1E4D1B1F1A2D0015CBEC /* CAMultiAudioDownmixer.m in Sources */,
@@ -2173,6 +2169,7 @@
 				34F5141216FD6E4F00BA894D /* x264Compressor.m in Sources */,
 				34DC2FB01B512362008F12A2 /* CSCaptureBase+TimerDelegate.m in Sources */,
 				34ED8C791B07371C002C0674 /* MIKMIDIMetaEvent.m in Sources */,
+				34F52A2B1BC1E0F900662911 /* CSLayoutButton.m in Sources */,
 				34576C7819AFCA1B007BAD90 /* CSPluginLoader.m in Sources */,
 				34FDD6F21A215268009A7413 /* CSPluginServices.m in Sources */,
 				34ED8C8F1B07371C002C0674 /* MIKMIDINoteOffCommand.m in Sources */,
@@ -2315,14 +2312,6 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		34AE3C41164E3FAD0052C95E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 34AE3C2D164E3E020052C95E /* QTCaptureHelper */;
-			targetProxy = 34AE3C40164E3FAD0052C95E /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin PBXVariantGroup section */
 		340FE4AA15F3417E00E4CE4E /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
@@ -2454,7 +2443,7 @@
 				);
 				PRODUCT_NAME = CocoaSplit;
 				PROVISIONING_PROFILE = "";
-				SDKROOT = macosx10.10;
+				SDKROOT = macosx10.11;
 				STRIP_STYLE = debugging;
 				WRAPPER_EXTENSION = app;
 			};
@@ -2495,7 +2484,7 @@
 				);
 				PRODUCT_NAME = CocoaSplit;
 				PROVISIONING_PROFILE = "";
-				SDKROOT = macosx10.10;
+				SDKROOT = macosx10.11;
 				STRIP_STYLE = debugging;
 				WRAPPER_EXTENSION = app;
 			};
