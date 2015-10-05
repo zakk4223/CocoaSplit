@@ -246,8 +246,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (IBAction)unlockStagingFPS:(id)sender;
 - (IBAction)unlockLiveFPS:(id)sender;
 
-- (void)deleteLayout:(NSInteger)deleteIdx;
-
+- (bool)deleteLayout:(SourceLayout *)toDelete;
 
 - (IBAction)addStreamingService:(id)sender;
 

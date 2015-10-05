@@ -7,6 +7,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CSLayoutCollectionItem">
             <connections>
+                <outlet property="layoutButton" destination="oEZ-7b-gAG" id="vTT-n9-tmF"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="Edh-QE-Kq0"/>
             </connections>
         </customObject>

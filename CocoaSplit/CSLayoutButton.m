@@ -7,27 +7,13 @@
 //
 
 #import "CSLayoutButton.h"
+#import "CSLayoutCollectionItem.h"
 
 @implementation CSLayoutButton
 
 
--(void)awakeFromNib
-{
-    [super awakeFromNib];
-    
-
-    if (self.viewController)
-    {
-        [self.viewController addObserver:self forKeyPath:@"representedObject.in_live" options:NSKeyValueObservingOptionNew context:NULL];
-        [self.viewController addObserver:self forKeyPath:@"representedObject.in_staging" options:NSKeyValueObservingOptionNew context:NULL];
-    }
-}
 
 
--(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
-{
-    [self setNeedsDisplay];
-}
 
 
 - (void)drawRect:(NSRect)dirtyRect {
@@ -75,4 +61,11 @@
 }
 
 
+-(void)dealloc
+{
+    [self.viewController removeObserver:self forKeyPath:@"representedObject.in_live"];
+    [self.viewController removeObserver:self forKeyPath:@"representedObject.in_staging"];
+
+    
+}
 @end

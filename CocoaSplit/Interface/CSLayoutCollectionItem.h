@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "CaptureController.h"
+#import "CSLayoutButton.h"
 
 
 @interface CSLayoutCollectionItem : NSCollectionViewItem
@@ -21,5 +22,6 @@
 -(void)buildLayoutMenu;
 -(void)showLayoutMenu:(NSEvent *)clickEvent;
 
+@property (weak) IBOutlet CSLayoutButton *layoutButton;
 
 @end

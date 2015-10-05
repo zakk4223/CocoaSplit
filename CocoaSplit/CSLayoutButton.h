@@ -7,7 +7,10 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "CSLayoutCollectionItem.h"
+
+@class CSLayoutCollectionItem;
+
+
 @interface CSLayoutButton : NSButton
 
 @property (weak) IBOutlet CSLayoutCollectionItem *viewController;

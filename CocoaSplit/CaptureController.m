@@ -43,35 +43,6 @@
 
 
 
--(IBAction)mainDeleteLayoutClicked:(id)sender
-{
-    
-    NSInteger selectedIdx = self.mainSourceLayoutTableView.selectedRow;
-    if (selectedIdx != -1)
-    {
-        [self deleteLayout:selectedIdx];
-        [self layoutTableSelected:self.mainSourceLayoutTableView];
-    }
-}
-
--(IBAction)stagingDeleteLayoutClicked:(id)sender
-{
-
-    NSInteger selectedIdx = self.stagingSourceLayoutTableView.selectedRow;
-    if (selectedIdx != -1)
-    {
-        [self deleteLayout:selectedIdx];
-        [self layoutTableSelected:self.stagingSourceLayoutTableView];
-    }
-}
-
--(IBAction)stagingCopyLayoutClicked:(id)sender
-{
-    [self cloneSelectedSourceLayout:self.stagingSourceLayoutTableView];
-}
-
-- (IBAction)stagingAnimationSelected:(id)sender {
-}
 
 
 -(IBAction)mainCopyLayoutClicked:(id)sender
@@ -124,9 +95,8 @@
 }
 
 
-- (void)deleteLayout:(NSInteger)deleteIdx
+- (bool)deleteLayout:(SourceLayout *)toDelete
 {
-    SourceLayout *toDelete = [self.sourceLayoutsArrayController.arrangedObjects objectAtIndex:deleteIdx];
     
     if (toDelete)
     {
@@ -135,15 +105,11 @@
             
             
             toDelete.isActive = NO;
-         
-            [self.sourceLayoutsArrayController removeObjectAtArrangedObjectIndex:deleteIdx];
-            
-            if (self.selectedLayout == toDelete)
-            {
-                self.selectedLayout = nil;
-            }
+            [self.sourceLayoutsArrayController removeObject:toDelete];
+            return YES;
         }
     }
+    return NO;
 }
 
 
