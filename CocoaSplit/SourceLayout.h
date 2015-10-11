@@ -28,6 +28,8 @@
     GLuint _rFbo;
     dispatch_queue_t _animationQueue;
     NSMutableDictionary *_uuidMap;
+    bool _noSceneTransactions;
+    
     
     
 }
@@ -73,6 +75,14 @@
 @property (nonatomic, copy) void (^addLayoutBlock)(SourceLayout *layout);
 @property (nonatomic, copy) void (^removeLayoutBlock)(SourceLayout *layout);
 
+@property (strong) NSString *transitionName;
+@property (strong) NSString *transitionDirection;
+@property (strong) CIFilter *transitionFilter;
+@property (assign) float transitionDuration;
+@property (assign) bool transitionFullScene;
+
+
+
 
 
 
@@ -88,7 +98,7 @@
 
 -(InputSource *)inputForUUID:(NSString *)uuid;
 -(void)frameTick;
--(NSObject *)mergeSourceListData:(NSData *)mergeData withLayer:(CALayer *)withLayer;
+-(NSObject *)mergeSourceListData:(NSData *)mergeData onlyAdd:(bool)onlyAdd;
 -(IBAction)runAnimations:(id)sender;
 -(void)addAnimation:(NSDictionary *)animation;
 -(InputSource *)sourceUnder:(InputSource *)source;

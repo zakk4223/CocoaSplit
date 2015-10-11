@@ -466,11 +466,11 @@
 }
 
 
-
+/*
 -(void)setHidden:(BOOL)hidden
 {
     _yLayer.hidden = hidden;
-}
+}*/
 
 
 -(void)transitionToLayer:(CALayer *)toLayer fromLayer:(CALayer *)fromLayer withTransition:(CATransition *)transition

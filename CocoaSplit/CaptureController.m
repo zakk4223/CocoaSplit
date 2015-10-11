@@ -1295,7 +1295,15 @@
         [fileManager createDirectoryAtPath:saveFolder withIntermediateDirectories:NO attributes:nil error:nil];
     }
     
-    NSString *saveFile = [saveFolder stringByAppendingPathComponent:@"CocoaSplit-CA.settings"];
+    NSString *saveFile = [saveFolder stringByAppendingPathComponent:@"CocoaSplit-2.settings"];
+    
+    if ([fileManager fileExistsAtPath:saveFile])
+    {
+        return saveFile;
+    }
+
+    
+    saveFile = [saveFolder stringByAppendingPathComponent:@"CocoaSplit-CA.settings"];
     
     if ([fileManager fileExistsAtPath:saveFile])
     {
@@ -1322,7 +1330,7 @@
         [fileManager createDirectoryAtPath:saveFolder withIntermediateDirectories:NO attributes:nil error:nil];
     }
     
-    NSString *saveFile = @"CocoaSplit-CA.settings";
+    NSString *saveFile = @"CocoaSplit-2.settings";
     
     return [saveFolder stringByAppendingPathComponent:saveFile];
 }
@@ -2907,6 +2915,14 @@
 -(void)toggleLayout:(SourceLayout *)layout
 {
     SourceLayout *activeLayout = self.activePreviewView.sourceLayout;
+    [self.objectController commitEditing];
+    
+    activeLayout.transitionName = self.transitionName;
+    activeLayout.transitionDirection = self.transitionDirection;
+    activeLayout.transitionDuration = self.transitionDuration;
+    activeLayout.transitionFilter = self.transitionFilter;
+    activeLayout.transitionFullScene = self.transitionFullScene;
+
     if ([activeLayout containsLayout:layout])
     {
         [activeLayout removeSourceLayout:layout withLayer:nil];
@@ -2918,51 +2934,11 @@
 
 -(void)saveToLayout:(SourceLayout *)layout
 {
-    NSLog(@"SAVING %@ TO %@", self.activePreviewView.sourceLayout, layout);
     [self.activePreviewView.sourceLayout saveSourceList];
     layout.savedSourceListData = self.activePreviewView.sourceLayout.savedSourceListData;
 }
 
 
-- (IBAction)layoutTableSelected:(NSTableView *)sender
-{
-    
-    NSInteger selectedRow = [sender selectedRow];
-    
-    NSInteger selectedCount = sender.numberOfSelectedRows;
-    
-    if (selectedRow != -1)
-    {
-        SourceLayout *selected = [self.sourceLayoutsArrayController.arrangedObjects objectAtIndex:selectedRow];
-        if (selected)
-        {
-            if (sender == self.mainSourceLayoutTableView)
-            {
-                if (selectedCount > 1)
-                {
-                    if (!self.livePreviewView.viewOnly)
-                    {
-                        [self.selectedLayout mergeSourceListData:selected.savedSourceListData withLayer:nil];
-                    }
-                } else {
-                    self.selectedLayout = selected;
-                }
-            } else {
-                if (selectedCount > 1)
-                {
-                    [self.stagingPreviewView.sourceLayout mergeSourceListData:selected.savedSourceListData withLayer:nil];
-                } else {
-                    self.stagingLayout = selected;
-                }
-            }
-            if (selectedCount > 1)
-            {
-                [sender deselectRow:selectedRow];
-            }
-        }
-    }
-    
-}
 
 
 -(void)clearLearnedMidiForCommand:(NSString *)command withResponder:(id<MIKMIDIMappableResponder>)responder
@@ -3388,10 +3364,11 @@
     
     [self.objectController commitEditing];
 
-    self.previewCtx.layoutRenderer.transitionName = self.transitionName;
-    self.previewCtx.layoutRenderer.transitionDirection = self.transitionDirection;
-    self.previewCtx.layoutRenderer.transitionDuration = self.transitionDuration;
-    self.previewCtx.layoutRenderer.transitionFilter = self.transitionFilter;
+    self.livePreviewView.sourceLayout.transitionName = self.transitionName;
+    self.livePreviewView.sourceLayout.transitionDirection = self.transitionDirection;
+    self.livePreviewView.sourceLayout.transitionDuration = self.transitionDuration;
+    self.livePreviewView.sourceLayout.transitionFilter = self.transitionFilter;
+    self.livePreviewView.sourceLayout.transitionFullScene = self.transitionFullScene;
 
     if (self.stagingLayout)
     {

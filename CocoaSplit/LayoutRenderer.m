@@ -128,7 +128,7 @@
     CGLSetCurrentContext(self.cglCtx);
     
     
-
+    
     if (!self.rootLayer)
     {
         self.rootLayer = [CALayer layer];
@@ -136,54 +136,24 @@
     }
     
     
-
-    _transitionLayout = _currentLayout;
     
-    if (self.transitionName && _transitionLayout)
+    
+    [CATransaction begin];
+    _currentLayout.inTransition = NO;
+    
+    if (_transitionLayout)
     {
-        [CATransaction begin];
-        [CATransaction setDisableActions:YES];
-        _layoutTransition = [CATransition animation];
-        _layoutTransition.type = self.transitionName  ;
-        _layoutTransition.subtype = self.transitionDirection;
-        _layoutTransition.duration = self.transitionDuration;
-        _layoutTransition.filter = self.transitionFilter;
-        _layoutTransition.removedOnCompletion = YES;
-        [CATransaction setCompletionBlock:^{
-            [CATransaction begin];
-            if (_transitionLayout)
-            {
-                [_transitionLayout.rootLayer removeFromSuperlayer];
-                _transitionLayout.isActive = NO;
-                _transitionLayout = nil;
-            }
-            
-            
-            [CATransaction commit];
-        }];
-        [self.rootLayer addAnimation:_layoutTransition forKey:nil];
         
-        [self.rootLayer addSublayer:self.layout.rootLayer];
-        [CATransaction commit];
-        
-    } else {
-        [CATransaction begin];
-        _currentLayout.inTransition = NO;
-
-        if (_transitionLayout)
-        {
-            
-            [_transitionLayout.rootLayer removeFromSuperlayer];
-            _transitionLayout.isActive = NO;
-            _transitionLayout = nil;
-        }
-        
-        [self.renderer.layer addSublayer:self.layout.rootLayer];
-        [CATransaction commit];
+        [_transitionLayout.rootLayer removeFromSuperlayer];
+        _transitionLayout.isActive = NO;
+        _transitionLayout = nil;
     }
     
-
-
+    [self.renderer.layer addSublayer:self.layout.rootLayer];
+    [CATransaction commit];
+    
+    
+    
     _currentLayout = self.layout;
     [_currentLayout didBecomeVisible];
     

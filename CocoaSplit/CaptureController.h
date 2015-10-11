@@ -222,6 +222,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) NSString *transitionName;
 @property (strong) NSString *transitionDirection;
 @property (strong) CIFilter *transitionFilter;
+@property (assign) bool transitionFullScene;
+
 
 @property (strong) NSWindow *transitionFilterWindow;
 
