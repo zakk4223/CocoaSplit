@@ -432,6 +432,9 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (IBAction)mainCopyLayoutClicked:(id)sender;
 -(IBAction)stagingDeleteLayoutClicked:(id)sender;
 -(IBAction)stagingCopyLayoutClicked:(id)sender;
+-(void)openLayoutPopover:(NSButton *)sender forLayout:(SourceLayout *)layout;
+-(void)openBuiltinLayoutPopover:(NSView *)sender spawnRect:(NSRect)spawnRect forLayout:(SourceLayout *)layout;
+
 
 - (IBAction)stagingAnimationSelected:(id)sender;
 

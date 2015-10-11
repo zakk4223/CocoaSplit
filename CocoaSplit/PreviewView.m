@@ -266,7 +266,19 @@
     
     
     
-
+    NSString *resTitle = [NSString stringWithFormat:@"%dx%d@%.2f", self.sourceLayout.canvas_width, self.sourceLayout.canvas_height, self.sourceLayout.frameRate];
+    
+    NSMenuItem *resItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:resTitle action:@selector(showLayoutSettings:) keyEquivalent:@""];
+    [resItem setTarget:self];
+    [resItem setEnabled:YES];
+    
+    [sourceListMenu insertItem:resItem atIndex:[sourceListMenu.itemArray count]];
+    
+    if (self.viewOnly)
+    {
+        return sourceListMenu;
+    }
+    
     NSMenuItem *midiItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Midi Mapping" action:@selector(doLayoutMidi:) keyEquivalent:@""];
     [midiItem setTarget:self];
     [midiItem setEnabled:YES];
@@ -386,9 +398,17 @@
 -(void)rightMouseDown:(NSEvent *)theEvent
 {
     
+    NSPoint tmp;
+    
+    tmp = [self convertPoint:theEvent.locationInWindow fromView:nil];
+
+    
     if (self.viewOnly)
     {
-        return;
+        NSMenu *srcListMenu = [self buildSourceMenu];
+        
+        [srcListMenu popUpMenuPositioningItem:srcListMenu.itemArray.firstObject atLocation:tmp inView:self];
+
     }
     
     bool doDeep = YES;
@@ -397,9 +417,6 @@
     {
         doDeep = NO;
     }
-    NSPoint tmp;
-    
-    tmp = [self convertPoint:theEvent.locationInWindow fromView:nil];
     NSPoint worldPoint = [self realPointforWindowPoint:tmp];
     self.selectedSource = [self.sourceLayout findSource:worldPoint deepParent:doDeep];
     
@@ -1239,6 +1256,25 @@
     }
 }
 
+
+- (void)showLayoutSettings:(id)sender
+{
+    
+    
+    
+    NSPoint tmp = [self convertPoint:[self.window mouseLocationOutsideOfEventStream] fromView:nil];
+    
+    NSRect spawnRect = NSMakeRect(tmp.x, tmp.y, 1.0f, 1.0f);
+    
+    if (!NSPointInRect(NSMakePoint(tmp.x, 0), self.bounds))
+    {
+        spawnRect = NSMakeRect(self.bounds.size.width-5, tmp.y, 1.0f, 1.0f);
+    } else if (!NSPointInRect(NSMakePoint(0, tmp.y), self.bounds)) {
+        spawnRect = NSMakeRect(tmp.x, 5.0f, 1.0f, 1.0f);
+    }
+    
+    [self.controller openBuiltinLayoutPopover:self spawnRect:spawnRect forLayout:self.sourceLayout];
+}
 
 
 - (IBAction)showInputSettings:(id)sender

@@ -21,10 +21,18 @@
 }
 
 
+-(instancetype) initForBuiltin
+{
+    return [self initWithNibName:@"EditBuiltinLayoutView" bundle:nil];
+}
+
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        _createDialog = NO;
+        
         // Initialization code here.
     }
     return self;
@@ -36,7 +44,7 @@
     
     [self commitEditing];
     
-    if (self.sourceLayout)
+    if (self.sourceLayout && self.createDialog)
     {
         [self.controller addLayoutFromBase:self.sourceLayout];
     }

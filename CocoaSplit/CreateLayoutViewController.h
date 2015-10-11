@@ -16,7 +16,10 @@
 @property (weak) NSPopover *popover;
 
 @property (strong) SourceLayout *sourceLayout;
+@property (assign) bool createDialog;
 
 - (IBAction)createButtonClicked:(id)sender;
+-(instancetype) initForBuiltin;
+
 
 @end

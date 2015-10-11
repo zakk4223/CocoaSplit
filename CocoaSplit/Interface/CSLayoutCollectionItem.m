@@ -62,6 +62,13 @@
 }
 
 
+-(void)editLayout:(id) sender
+{
+    SourceLayout *toEdit = self.representedObject;
+    [self.captureController openLayoutPopover:self.layoutButton forLayout:toEdit];
+}
+
+
 -(void)deleteLayout:(id) sender
 {
     SourceLayout *toDelete = self.representedObject;
@@ -83,6 +90,9 @@
     self.layoutMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
     tmp = [self.layoutMenu insertItemWithTitle:@"Save To" action:@selector(saveToLayout:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
+    tmp = [self.layoutMenu insertItemWithTitle:@"Edit" action:@selector(editLayout:) keyEquivalent:@"" atIndex:idx++];
+    tmp.target = self;
+
     tmp = [self.layoutMenu insertItemWithTitle:@"Delete" action:@selector(deleteLayout:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
 }

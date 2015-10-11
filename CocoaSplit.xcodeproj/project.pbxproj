@@ -51,6 +51,7 @@
 		343644081B78F01D0069B8F2 /* CSAnimation.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3494616C1ABD399B00F28883 /* CSAnimation.py */; };
 		343644091B78F01D0069B8F2 /* pluginbase.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34E983841B78B19D00F26F1E /* pluginbase.py */; };
 		343692501B6243D4007EC2D9 /* CSShapeCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 3436922B1B62364E007EC2D9 /* CSShapeCapturePlugin.bundle */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		343ED9421BCAC1C80061FC4B /* EditBuiltinLayoutView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 343ED9411BCAC1C80061FC4B /* EditBuiltinLayoutView.xib */; settings = {ASSET_TAGS = (); }; };
 		3444D8E819A0CDE8000DC46B /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3444D8E719A0CDE8000DC46B /* Quartz.framework */; };
 		344825D21B2536EA00AF9EAC /* CAMultiAudioMatrixView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 344825D11B2536EA00AF9EAC /* CAMultiAudioMatrixView.xib */; };
 		344825E61B253D6900AF9EAC /* CAMultiAudioMatrixCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 344825E51B253D6900AF9EAC /* CAMultiAudioMatrixCell.m */; };
@@ -610,6 +611,7 @@
 		343DD65C19AAD3060017232A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		343DD65E19AAD3060017232A /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		343DD6AB19AAD3660017232A /* CSChromaKey.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSChromaKey.xcodeproj; path = ImageUnitPlugins/CSChromaKey/CSChromaKey.xcodeproj; sourceTree = "<group>"; };
+		343ED9411BCAC1C80061FC4B /* EditBuiltinLayoutView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EditBuiltinLayoutView.xib; path = Interface/EditBuiltinLayoutView.xib; sourceTree = "<group>"; };
 		3444D8E719A0CDE8000DC46B /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		344825D11B2536EA00AF9EAC /* CAMultiAudioMatrixView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CAMultiAudioMatrixView.xib; sourceTree = "<group>"; };
 		344825E41B253D6900AF9EAC /* CAMultiAudioMatrixCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioMatrixCell.h; path = Interface/CAMultiAudioMatrixCell.h; sourceTree = "<group>"; };
@@ -1235,6 +1237,7 @@
 				34F52A261BC1CE2700662911 /* CSLayoutCollectionItem.xib */,
 				34F52A291BC1E0F800662911 /* CSLayoutButton.h */,
 				34F52A2A1BC1E0F800662911 /* CSLayoutButton.m */,
+				343ED9411BCAC1C80061FC4B /* EditBuiltinLayoutView.xib */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -2039,6 +2042,7 @@
 				34348C2B19BDBDC000A122C2 /* PluginManagerWindowController.xib in Resources */,
 				34ABEF3C17C0C2CB00AA5E62 /* advancedPrefPanel.xib in Resources */,
 				3435E396188B902C0015CC01 /* 420v.fgsh in Resources */,
+				343ED9421BCAC1C80061FC4B /* EditBuiltinLayoutView.xib in Resources */,
 				3415CED31AE257DA002F11F5 /* CSTextCaptureBaseView.xib in Resources */,
 				342B33B3198073EC00492CB7 /* line.fgsh in Resources */,
 				344825D21B2536EA00AF9EAC /* CAMultiAudioMatrixView.xib in Resources */,

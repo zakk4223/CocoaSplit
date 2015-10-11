@@ -494,6 +494,13 @@
     [self removeSourceInputs:self.sourceList withLayer:nil];
     
     
+    if (self.addLayoutBlock)
+    {
+        self.addLayoutBlock(layout);
+    }
+    
+    [self.containedLayouts addObject:layout];
+
     for (SourceLayout *cLayout in layout.containedLayouts.copy)
     {
         if (self.addLayoutBlock)
@@ -517,6 +524,10 @@
     }
     
     _noSceneTransactions = NO;
+    self.canvas_height = layout.canvas_height;
+    self.canvas_width = layout.canvas_width;
+    self.frameRate = layout.frameRate;
+    
 }
 
 

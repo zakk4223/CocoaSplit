@@ -64,9 +64,44 @@
 }
 
 
-- (IBAction)openLayoutPopover:(NSButton *)sender
+-(void)openBuiltinLayoutPopover:(NSView *)sender spawnRect:(NSRect)spawnRect forLayout:(SourceLayout *)layout
 {
+    CreateLayoutViewController *vc;
+    if (!_layoutpopOver)
+    {
+        _layoutpopOver = [[NSPopover alloc] init];
+        
+        _layoutpopOver.animates = YES;
+        _layoutpopOver.behavior = NSPopoverBehaviorTransient;
+    }
     
+    if (!_layoutpopOver.contentViewController)
+    {
+        vc = [[CreateLayoutViewController alloc] initForBuiltin];
+        
+        vc.controller = self;
+        
+        _layoutpopOver.contentViewController = vc;
+        _layoutpopOver.delegate = vc;
+        vc.popover = _layoutpopOver;
+        
+    }
+    
+    SourceLayout *useLayout = layout;
+    if (!useLayout)
+    {
+        vc.createDialog = YES;
+        useLayout = [[SourceLayout alloc] init];
+    }
+    vc.sourceLayout = useLayout;
+    
+    
+    [_layoutpopOver showRelativeToRect:spawnRect ofView:sender preferredEdge:NSMinYEdge];
+}
+
+
+-(void)openLayoutPopover:(NSButton *)sender forLayout:(SourceLayout *)layout
+{
     CreateLayoutViewController *vc;
     if (!_layoutpopOver)
     {
@@ -88,9 +123,24 @@
         
     }
     
-    vc.sourceLayout = [[SourceLayout alloc] init];
-
+    SourceLayout *useLayout = layout;
+    if (!useLayout)
+    {
+        vc.createDialog = YES;
+        useLayout = [[SourceLayout alloc] init];
+    }
+    vc.sourceLayout = useLayout;
+    
     [_layoutpopOver showRelativeToRect:sender.bounds ofView:sender preferredEdge:NSMinYEdge];
+}
+
+
+
+- (IBAction)openLayoutPopover:(NSButton *)sender
+{
+    
+
+    [self openLayoutPopover:sender forLayout:nil];
     
 }
 
@@ -615,17 +665,6 @@
     self.streamServicePluginViewController = nil;
     self.streamServiceObject = nil;
     
-}
-
-- (IBAction)openLayoutPanel:(id)sender
-{
-    if (!self.layoutPanel)
-    {
-        
-        [[NSBundle mainBundle] loadNibNamed:@"NewLayoutPanel" owner:self topLevelObjects:nil];
-        
-    }
-    [NSApp beginSheet:self.layoutPanel modalForWindow:[NSApp mainWindow] modalDelegate:self didEndSelector:NULL contextInfo:NULL];
 }
 
 
