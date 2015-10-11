@@ -285,6 +285,8 @@
     
     [sourceListMenu insertItem:midiItem atIndex:[sourceListMenu.itemArray count]];
 
+    [sourceListMenu insertItem:[NSMenuItem separatorItem] atIndex:[sourceListMenu.itemArray count]];
+    
     for (InputSource *src in sourceList)
     {
         NSString *srcName = src.name;
