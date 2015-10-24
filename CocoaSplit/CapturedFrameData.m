@@ -68,9 +68,10 @@
     if (_encodedSampleBuffer)
     {
         CFRelease(_encodedSampleBuffer);
+        CFRetain(encodedSampleBuffer);
+
     }
     
-    CFRetain(encodedSampleBuffer);
     _encodedSampleBuffer = encodedSampleBuffer;
     
 }
