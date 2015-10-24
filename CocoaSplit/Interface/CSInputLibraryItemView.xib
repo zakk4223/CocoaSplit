@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8191" systemVersion="15A284" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8191" systemVersion="15B42" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8191"/>
@@ -12,26 +12,33 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <customView misplaced="YES" id="c22-O7-iKe">
-            <rect key="frame" x="0.0" y="0.0" width="240" height="284"/>
+        <customView id="c22-O7-iKe">
+            <rect key="frame" x="0.0" y="0.0" width="266" height="60"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" ambiguous="YES" misplaced="YES" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dKB-El-5wv">
-                    <rect key="frame" x="-2" y="0.0" width="224" height="284"/>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dKB-El-5wv">
+                    <rect key="frame" x="24" y="0.0" width="224" height="60"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="60" id="xg1-aU-ekP"/>
+                    </constraints>
                     <animations/>
                     <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="center" title="Multiline Label" id="CSG-Y9-YdX">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <binding destination="6Ke-IM-eF7" name="value" keyPath="selection.name" id="VZY-M7-yO0"/>
+                    </connections>
                 </textField>
             </subviews>
             <constraints>
-                <constraint firstItem="dKB-El-5wv" firstAttribute="width" secondItem="c22-O7-iKe" secondAttribute="width" id="4pN-3i-QVi"/>
-                <constraint firstItem="dKB-El-5wv" firstAttribute="height" secondItem="c22-O7-iKe" secondAttribute="height" id="ODL-V7-vkX"/>
+                <constraint firstItem="dKB-El-5wv" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" id="UBt-QA-2R6"/>
+                <constraint firstAttribute="trailing" secondItem="dKB-El-5wv" secondAttribute="trailing" constant="20" symbolic="YES" id="XWQ-2F-E4o"/>
+                <constraint firstItem="dKB-El-5wv" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="26" id="fw8-BI-vUK"/>
             </constraints>
             <animations/>
-            <point key="canvasLocation" x="469" y="373"/>
+            <point key="canvasLocation" x="354" y="286"/>
         </customView>
         <objectController id="6Ke-IM-eF7">
             <connections>

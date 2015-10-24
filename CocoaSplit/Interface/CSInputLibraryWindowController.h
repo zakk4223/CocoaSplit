@@ -10,7 +10,7 @@
 
 @class CaptureController;
 
-@interface CSInputLibraryWindowController : NSWindowController <NSTableViewDelegate>
+@interface CSInputLibraryWindowController : NSWindowController <NSTableViewDelegate, NSTableViewDataSource>
 
 @property (strong) CaptureController *controller;
 @property (weak) IBOutlet NSTableView *tableView;

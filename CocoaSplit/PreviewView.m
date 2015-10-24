@@ -1415,8 +1415,47 @@
     [self setWantsLayer:YES];
     
     self.layer.backgroundColor = CGColorCreateGenericRGB(0.184314f, 0.309804f, 0.309804f, 1);
+    [self registerForDraggedTypes:@[@"CSInputPasteBoard"]];
     
 }
+
+-(NSDragOperation)draggingEntered:(id<NSDraggingInfo>)sender
+{
+    NSPasteboard *pboard;
+    pboard = [sender draggingPasteboard];
+    if ([pboard.types containsObject:@"CSInputPasteBoard"])
+    {
+        NSLog(@"INPUT FROM PASTEBOARD!");
+        return NSDragOperationGeneric;
+    }
+    return NSDragOperationNone;
+}
+
+-(BOOL)performDragOperation:(id<NSDraggingInfo>)sender
+{
+    NSPasteboard *pboard;
+    
+    pboard = [sender draggingPasteboard];
+    
+    if ([pboard.types containsObject:@"CSInputPasteBoard"])
+    {
+        NSData *aData = [pboard dataForType:@"CSInputPasteBoard"];
+        NSArray *iArray = [NSUnarchiver unarchiveObjectWithData:aData];
+        for (NSData *iData in iArray)
+        {
+            NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:iData];
+            
+            
+            InputSource *iSrc = [unarchiver decodeObjectForKey:@"root"];
+            [self.sourceLayout addSource:iSrc];
+
+            [unarchiver finishDecoding];
+        }
+        return YES;
+    }
+    return NO;
+}
+
 
 -(CALayer *)makeBackingLayer
 {
