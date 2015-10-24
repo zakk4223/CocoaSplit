@@ -87,6 +87,7 @@
     if (_glLayer)
     {
         _glLayer.renderer = layoutRenderer;
+        _glLayer.doRender = self.isEditWindow;
     }
     
     _layoutRenderer = layoutRenderer;
@@ -98,6 +99,8 @@
 {
     return _layoutRenderer;
 }
+
+
 -(SourceLayout *)sourceLayout
 {
     return _sourceLayout;
@@ -106,7 +109,7 @@
 -(void) setSourceLayout:(SourceLayout *)sourceLayout
 {
     
-    if (_sourceLayout)
+    if (_sourceLayout && !self.isEditWindow)
     {
         [NSApp unregisterMIDIResponder:_sourceLayout];
         
@@ -115,7 +118,10 @@
     [self.undoManager removeAllActions];
     sourceLayout.undoManager = self.undoManager;
     
-    [NSApp registerMIDIResponder:sourceLayout];
+    if (!self.isEditWindow)
+    {
+        [NSApp registerMIDIResponder:sourceLayout];
+    }
     
     if (self.layoutRenderer)
     {
@@ -199,6 +205,33 @@
 }
 
 
+- (IBAction)addInputToLibrary:(id)sender
+{
+    
+    InputSource *toAdd = nil;
+    
+    if (sender)
+    {
+        if ([sender isKindOfClass:[NSMenuItem class]])
+        {
+            NSMenuItem *item = (NSMenuItem *)sender;
+            toAdd = (InputSource *)item.representedObject;
+        } else if ([sender isKindOfClass:[InputSource class]]) {
+            toAdd = (InputSource *)sender;
+        }
+    }
+    
+    if (!toAdd)
+    {
+        toAdd = self.selectedSource;
+    }
+    
+    if (toAdd)
+    {
+        [self.controller addInputToLibrary:toAdd];
+    }
+}
+
 -(void) buildSettingsMenu
 {
     
@@ -210,15 +243,14 @@
     tmp.target = self;
     tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Move Down" action:@selector(moveInputDown:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
-    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Auto Fit" action:@selector(autoFitInput:) keyEquivalent:@"" atIndex:idx++];
-    tmp.target = self;
     tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Settings" action:@selector(showInputSettings:) keyEquivalent:@"" atIndex:idx++];
-    tmp.target = self;
-    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Delete" action:@selector(deleteInput:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
     tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Clone" action:@selector(cloneInputSource:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
     
+    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Add to Library" action:@selector(addInputToLibrary:) keyEquivalent:@"" atIndex:idx++];
+    tmp.target = self;
+
     tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Midi Mapping" action:@selector(midiMapSource:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
     
@@ -309,6 +341,13 @@
         [delItem setRepresentedObject:src];
         [delItem setTarget:self];
         [submenu addItem:delItem];
+        
+        NSMenuItem *libraryItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Add to Library" action:@selector(addInputToLibrary:) keyEquivalent:@""];
+        [libraryItem setEnabled:YES];
+        [libraryItem setRepresentedObject:src];
+        [libraryItem setTarget:self];
+        [submenu addItem:libraryItem];
+
         NSMenuItem *cloneItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Clone" action:@selector(cloneInputSource:) keyEquivalent:@""];
         [cloneItem setEnabled:YES];
         [cloneItem setRepresentedObject:src];
@@ -1382,7 +1421,7 @@
 -(CALayer *)makeBackingLayer
 {
     _glLayer = [CSPreviewGLLayer layer];
-
+    _glLayer.doRender = self.isEditWindow;
     return _glLayer;
 }
 

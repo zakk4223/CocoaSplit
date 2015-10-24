@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8191" systemVersion="15A284" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8191"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="CSLibraryInputItemViewController">
+            <connections>
+                <outlet property="view" destination="c22-O7-iKe" id="NXJ-QS-zDi"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView misplaced="YES" id="c22-O7-iKe">
+            <rect key="frame" x="0.0" y="0.0" width="240" height="284"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" ambiguous="YES" misplaced="YES" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dKB-El-5wv">
+                    <rect key="frame" x="-2" y="0.0" width="224" height="284"/>
+                    <animations/>
+                    <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="center" title="Multiline Label" id="CSG-Y9-YdX">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+            </subviews>
+            <constraints>
+                <constraint firstItem="dKB-El-5wv" firstAttribute="width" secondItem="c22-O7-iKe" secondAttribute="width" id="4pN-3i-QVi"/>
+                <constraint firstItem="dKB-El-5wv" firstAttribute="height" secondItem="c22-O7-iKe" secondAttribute="height" id="ODL-V7-vkX"/>
+            </constraints>
+            <animations/>
+            <point key="canvasLocation" x="469" y="373"/>
+        </customView>
+        <objectController id="6Ke-IM-eF7">
+            <connections>
+                <binding destination="-2" name="contentObject" keyPath="self.item" id="mnw-v1-uCr"/>
+            </connections>
+        </objectController>
+    </objects>
+</document>

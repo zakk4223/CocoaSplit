@@ -112,6 +112,7 @@
     glLoadIdentity();
     glOrtho(0, _cvpool_size.width, 0,_cvpool_size.height, -1, 1);
     
+    NSLog(@"CVPOOL %@", NSStringFromSize(_cvpool_size));
     
     
     glMatrixMode(GL_MODELVIEW);
@@ -156,7 +157,6 @@
     
     _currentLayout = self.layout;
     [_currentLayout didBecomeVisible];
-    
     
 }
 
@@ -218,6 +218,10 @@
 -(CVPixelBufferRef)currentImg
 {
     
+    if (self.cglCtx)
+    {
+        CGLSetCurrentContext(self.cglCtx);
+    }
     
     CVPixelBufferRef destFrame = NULL;
     CGFloat frameWidth, frameHeight;

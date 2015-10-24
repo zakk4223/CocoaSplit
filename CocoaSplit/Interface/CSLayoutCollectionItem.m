@@ -65,7 +65,9 @@
 -(void)editLayout:(id) sender
 {
     SourceLayout *toEdit = self.representedObject;
-    [self.captureController openLayoutPopover:self.layoutButton forLayout:toEdit];
+    [self.captureController openLayoutWindow:toEdit];
+    
+    //[self.captureController openLayoutPopover:self.layoutButton forLayout:toEdit];
 }
 
 

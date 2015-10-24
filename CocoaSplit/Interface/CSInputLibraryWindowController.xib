@@ -5,9 +5,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8191"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="CAMultiAudioMatrixMixerWindowController">
+        <customObject id="-2" userLabel="File's Owner" customClass="CSInputLibraryWindowController">
             <connections>
-                <outlet property="matrixTable" destination="C8k-GN-Boe" id="QZJ-wT-3F1"/>
+                <outlet property="itemArrayController" destination="gZh-Nb-Da9" id="DU0-yj-jZm"/>
+                <outlet property="tableView" destination="LTj-Vc-lD5" id="xnQ-4a-orW"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
@@ -16,69 +17,71 @@
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="F0z-JX-Cv5">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="240" width="684" height="427"/>
+            <rect key="contentRect" x="196" y="240" width="368" height="597"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1057"/>
             <view key="contentView" id="se5-gp-TjO">
-                <rect key="frame" x="0.0" y="1" width="684" height="427"/>
+                <rect key="frame" x="0.0" y="0.0" width="368" height="597"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <scrollView autohidesScrollers="YES" horizontalLineScroll="74" horizontalPageScroll="10" verticalLineScroll="74" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tVp-xm-zat">
-                        <rect key="frame" x="-1" y="8" width="686" height="420"/>
-                        <clipView key="contentView" id="p64-r1-trE">
-                            <rect key="frame" x="1" y="0.0" width="684" height="419"/>
+                    <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3hS-EI-xmd">
+                        <rect key="frame" x="-1" y="1" width="370" height="594"/>
+                        <clipView key="contentView" id="LKO-XE-ZXF">
+                            <rect key="frame" x="1" y="1" width="368" height="592"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="72" headerView="Vgl-NM-EJm" viewBased="YES" id="C8k-GN-Boe">
-                                    <rect key="frame" x="0.0" y="0.0" width="684" height="396"/>
+                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" id="LTj-Vc-lD5">
+                                    <rect key="frame" x="0.0" y="0.0" width="368" height="592"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <animations/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn width="88" minWidth="40" maxWidth="1000" id="FQ8-QY-ESB">
-                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Input Channels">
+                                        <tableColumn width="364" minWidth="40" maxWidth="1000" id="eEU-SC-gEt">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                             </tableHeaderCell>
-                                            <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="fxE-Vr-0sI">
+                                            <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="pda-Av-bSG">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
-                                                <tableCellView id="1TX-h1-G78">
-                                                    <rect key="frame" x="1" y="1" width="88" height="17"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                    <animations/>
-                                                </tableCellView>
-                                                <tableCellView identifier="MatrixLabelCell" id="WRd-kK-mfZ">
-                                                    <rect key="frame" x="1" y="20" width="88" height="33"/>
+                                                <tableCellView id="i2c-B2-cFa">
+                                                    <rect key="frame" x="1" y="1" width="364" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
-                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3fF-18-1Ky">
-                                                            <rect key="frame" x="1" y="8" width="100" height="17"/>
+                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="dP7-Uf-QYC">
+                                                            <rect key="frame" x="0.0" y="0.0" width="100" height="17"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="96" id="JqO-eE-k7x"/>
+                                                            </constraints>
                                                             <animations/>
-                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" identifier="MatrixLabelCell" title="Table View Cell" id="fcm-Ye-Lfm">
+                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="ATk-th-5Pi">
                                                                 <font key="font" metaFont="system"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                         </textField>
                                                     </subviews>
+                                                    <constraints>
+                                                        <constraint firstItem="dP7-Uf-QYC" firstAttribute="centerY" secondItem="i2c-B2-cFa" secondAttribute="centerY" id="TVN-Co-sdK"/>
+                                                        <constraint firstItem="dP7-Uf-QYC" firstAttribute="leading" secondItem="i2c-B2-cFa" secondAttribute="leading" constant="2" id="Ua1-Pb-Zsc"/>
+                                                    </constraints>
                                                     <animations/>
                                                     <connections>
-                                                        <outlet property="textField" destination="3fF-18-1Ky" id="JT6-0e-yyJ"/>
+                                                        <outlet property="textField" destination="dP7-Uf-QYC" id="Mg8-Z8-lnz"/>
                                                     </connections>
                                                 </tableCellView>
                                             </prototypeCellViews>
                                         </tableColumn>
                                     </tableColumns>
                                     <connections>
-                                        <outlet property="dataSource" destination="-2" id="nuz-ng-SbX"/>
-                                        <outlet property="delegate" destination="-2" id="Gjc-f9-sk4"/>
+                                        <binding destination="gZh-Nb-Da9" name="content" keyPath="arrangedObjects" id="B99-Kr-sZk"/>
+                                        <outlet property="delegate" destination="-2" id="OFY-H1-aMj"/>
                                     </connections>
                                 </tableView>
                             </subviews>
@@ -86,35 +89,35 @@
                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </clipView>
                         <animations/>
-                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="ygg-gV-zQ5">
+                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="Vbm-Pp-qDH">
                             <rect key="frame" x="1" y="119" width="223" height="15"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <animations/>
                         </scroller>
-                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="gcj-g7-1Ue">
+                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="TiU-Ke-Q7w">
                             <rect key="frame" x="224" y="17" width="15" height="102"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <animations/>
                         </scroller>
-                        <tableHeaderView key="headerView" id="Vgl-NM-EJm">
-                            <rect key="frame" x="0.0" y="0.0" width="684" height="23"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                            <animations/>
-                        </tableHeaderView>
                     </scrollView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="tVp-xm-zat" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" constant="-1" id="0gP-Mx-3kV"/>
-                    <constraint firstAttribute="bottom" secondItem="tVp-xm-zat" secondAttribute="bottom" constant="8" id="3bC-3z-ieN"/>
-                    <constraint firstAttribute="trailing" secondItem="tVp-xm-zat" secondAttribute="trailing" constant="-1" id="IN8-Kc-8l7"/>
-                    <constraint firstItem="tVp-xm-zat" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" constant="-1" id="xrx-iQ-DYb"/>
+                    <constraint firstItem="3hS-EI-xmd" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" constant="-1" id="Uf3-0p-HzM"/>
+                    <constraint firstItem="3hS-EI-xmd" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" constant="2" id="b6w-k6-BtX"/>
+                    <constraint firstAttribute="trailing" secondItem="3hS-EI-xmd" secondAttribute="trailing" constant="-1" id="kqx-fR-IKu"/>
+                    <constraint firstItem="3hS-EI-xmd" firstAttribute="centerY" secondItem="se5-gp-TjO" secondAttribute="centerY" id="lJD-3C-GRk"/>
                 </constraints>
                 <animations/>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="0bl-1N-AYu"/>
             </connections>
-            <point key="canvasLocation" x="400" y="281.5"/>
+            <point key="canvasLocation" x="306" y="354.5"/>
         </window>
+        <arrayController id="gZh-Nb-Da9">
+            <connections>
+                <binding destination="-2" name="contentArray" keyPath="self.controller.inputLibrary" id="Znp-dv-g5A"/>
+            </connections>
+        </arrayController>
     </objects>
 </document>

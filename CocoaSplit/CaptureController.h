@@ -28,6 +28,8 @@
 #import "CSMidiManagerWindowController.h"
 #import "MIKMIDI.h"
 #import "CSTimerSourceProtocol.h"
+#import "CSInputLibraryWindowController.h"
+#import "CSInputLibraryItem.h"
 
 
 
@@ -37,6 +39,7 @@
 @class InputSource;
 @class SourceLayout;
 @class LayoutPreviewWindowController;
+@class CSLayoutEditWindowController;
 
 
 
@@ -126,6 +129,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     NSPopover *_animatepopOver;
     
     NSMutableArray *_screensCache;
+    NSMutableArray *_layoutWindows;
     
 
     
@@ -133,6 +137,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 }
 
 
+
+@property (strong) NSMutableArray *inputLibrary;
 
 @property (weak) IBOutlet NSMenu *stagingFullScreenMenu;
 @property (weak) IBOutlet NSMenu *liveFullScreenMenu;
@@ -401,6 +407,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 @property (strong) PreviewView *activePreviewView;
 
+@property (strong) CSInputLibraryWindowController *inputLibraryController;
 
 
 
@@ -461,7 +468,11 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(void)toggleLayout:(SourceLayout *)layout;
 -(void)saveToLayout:(SourceLayout *)layout;
 -(void)switchToLayout:(SourceLayout *)layout;
+-(void)openLayoutWindow:(SourceLayout *)layout;
+-(void)layoutWindowWillClose:(CSLayoutEditWindowController *)windowController;
 
+-(void)addInputToLibrary:(InputSource *)source;
+- (IBAction)openLibraryWindow:(id) sender;
 
 
 

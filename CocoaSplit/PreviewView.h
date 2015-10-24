@@ -101,6 +101,7 @@
 @property (strong) NSViewController *activePopupController;
 @property (strong) NSMutableDictionary *activeConfigWindows;
 @property (strong) NSMutableDictionary *activeConfigControllers;
+@property (assign) bool isEditWindow;
 
 -(void)needsUpdate;
 -(NSRect)windowRectforWorldRect:(NSRect)worldRect;

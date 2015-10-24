@@ -36,6 +36,7 @@
 
 @property (assign) float snap_y;
 @property (assign) float snap_x;
+@property (assign) bool doRender;
 
 
 -(NSPoint)realPointforWindowPoint:(NSPoint)winPoint;

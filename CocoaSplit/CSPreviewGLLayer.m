@@ -34,6 +34,7 @@
 {
     
     
+    CGLSetCurrentContext(ctx);
     
     if (!_initDone)
     {
@@ -44,8 +45,25 @@
     }
     glClear(GL_COLOR_BUFFER_BIT);
 
+    if (!self.renderer)
+    {
+        return;
+    }
     
-    CVPixelBufferRef toDraw = [self.renderer currentFrame];
+    
+    CVPixelBufferRef toDraw;
+    if (self.doRender)
+    {
+        toDraw = [self.renderer currentImg];
+        CGLSetCurrentContext(ctx);
+        
+        if (toDraw)
+        {
+            CVPixelBufferRetain(toDraw);
+        }
+    } else {
+        toDraw = [self.renderer currentFrame];
+    }
     
     if (!toDraw)
     {
@@ -103,6 +121,7 @@
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     
+    
     glOrtho(0.0, self.bounds.size.width, 0.0, self.bounds.size.height, 0, 1);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -112,6 +131,7 @@
     
     if (_resizeDirty)
     {
+        NSLog(@"RESIZE DIRTY");
         glGetDoublev(GL_MODELVIEW_MATRIX, _modelview);
         glGetDoublev(GL_PROJECTION_MATRIX, _projection);
         glGetIntegerv(GL_VIEWPORT, _viewport);
@@ -248,8 +268,7 @@
     glBindTexture(GL_TEXTURE_RECTANGLE_ARB, 0);
     glDisable(GL_TEXTURE_RECTANGLE_ARB);
 
-
-    
+ 
     [super drawInCGLContext:ctx pixelFormat:pf forLayerTime:t displayTime:ts];
 
     

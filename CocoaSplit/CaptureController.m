@@ -26,6 +26,8 @@
 #import "MIKMIDI.h"
 #import "CSMidiWrapper.h"
 #import "CSCaptureBase+TimerDelegate.h"
+#import "CSLayoutEditWindowController.h"
+
 #import <Python/Python.h>
 
 
@@ -132,6 +134,67 @@
     vc.sourceLayout = useLayout;
     
     [_layoutpopOver showRelativeToRect:sender.bounds ofView:sender preferredEdge:NSMinYEdge];
+}
+
+
+-(void)layoutWindowWillClose:(CSLayoutEditWindowController *)windowController
+{
+    if ([_layoutWindows containsObject:windowController])
+    {
+        [_layoutWindows removeObject:windowController];
+    }
+}
+
+
+- (IBAction)openLibraryWindow:(id) sender
+{
+    CSInputLibraryWindowController *newController = [[CSInputLibraryWindowController alloc] init];
+    
+    [newController showWindow:nil];
+    
+    newController.controller = self;
+    
+    self.inputLibraryController = newController;
+}
+
+-(void)addInputToLibrary:(InputSource *)source
+{
+    NSMutableData *saveData = [NSMutableData data];
+    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:saveData];
+    [archiver encodeObject:source forKey:@"root"];
+    [archiver finishEncoding];
+    CSInputLibraryItem *newItem = [[CSInputLibraryItem alloc] init];
+    
+    newItem.name = source.name;
+    newItem.inputData = saveData;
+
+    NSUInteger cIdx = self.inputLibrary.count;
+    
+    [self insertObject:newItem inInputLibraryAtIndex:cIdx];
+    
+    NSLog(@"ADDED NEW ITEM %@ %@", newItem, newItem.name);
+}
+
+
+-(void)openLayoutWindow:(SourceLayout *)layout
+{
+    CSLayoutEditWindowController *newController = [[CSLayoutEditWindowController alloc] init];
+
+    [newController showWindow:nil];
+    
+    newController.previewView.isEditWindow = YES;
+    
+    LayoutRenderer *wRenderer = [[LayoutRenderer alloc] init];
+    
+    newController.previewView.layoutRenderer = wRenderer;
+    
+    newController.previewView.controller = self;
+    newController.previewView.sourceLayout = layout;
+    [newController.previewView.sourceLayout restoreSourceList:nil];
+    
+    
+    [_layoutWindows addObject:newController];
+
 }
 
 
@@ -968,6 +1031,8 @@
    if (self = [super init])
    {
        
+       _layoutWindows = [NSMutableArray array];
+       
        self.transitionDirections = @[kCATransitionFromTop, kCATransitionFromRight, kCATransitionFromBottom, kCATransitionFromLeft];
 
        
@@ -1757,6 +1822,8 @@
         self.stagingLayout = tmpLayout;
   //      [self.stagingLayout mergeSourceLayout:tmpLayout withLayer:nil];
     }
+    
+    self.inputLibrary = [NSMutableArray array];
     
 }
 
@@ -2894,6 +2961,17 @@
     
     [self.sourceLayouts removeObjectAtIndex:index];
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutDeleted object:to_delete userInfo:nil];
+}
+
+
+-(void) insertObject:(CSInputLibraryItem *)item inInputLibraryAtIndex:(NSUInteger)index
+{
+    [self.inputLibrary insertObject:item atIndex:index];
+}
+
+-(void)removeObjectFromInputLibraryAtIndex:(NSUInteger)index
+{
+    [self.inputLibrary removeObjectAtIndex:index];
 }
 
 
