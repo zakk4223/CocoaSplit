@@ -29,7 +29,7 @@
     [super windowDidLoad];
     
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
-    [self.tableView registerForDraggedTypes:@[@"CSInputPasteBoard"]];
+    [self.tableView registerForDraggedTypes:@[@"cocoasplit.library.item"]];
 }
 
 
@@ -38,18 +38,11 @@
 
 -(BOOL)tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
 {
-    NSMutableArray *dataArray = [NSMutableArray array];
-    [pboard declareTypes:[NSArray arrayWithObject:@"CSInputPasteBoard"] owner:self];
     NSArray *draggedItems = [self.itemArrayController.arrangedObjects objectsAtIndexes:rowIndexes];
     
-    for (CSInputLibraryItem *item in draggedItems)
-    {
-        [dataArray addObject:item.inputData];
-    }
+    [pboard clearContents];
+    [pboard writeObjects:draggedItems];
     
-    NSData *pbData = [NSArchiver archivedDataWithRootObject:dataArray];
-    
-    [pboard setData:pbData forType: @"CSInputPasteBoard"];
     return YES;
 }
 

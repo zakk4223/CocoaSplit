@@ -222,6 +222,8 @@ typedef enum resize_style_t {
 -(void)deleteBackgroundFilter:(NSString *)filteruuid;
 -(void)buildLayerConstraints;
 -(void)restoreConstraints;
+-(void)createUUID;
+
 
 
 

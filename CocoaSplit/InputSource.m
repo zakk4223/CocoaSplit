@@ -579,10 +579,7 @@ static NSArray *_sourceTypes = nil;
     _multiTransition.removedOnCompletion = YES;
     
     
-    
-    CFUUIDRef tmpUUID = CFUUIDCreate(NULL);
-    self.uuid = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, tmpUUID);
-    CFRelease(tmpUUID);
+    [self createUUID];
     
    
     self.layoutPosition = self.layer.frame;
@@ -607,6 +604,14 @@ static NSArray *_sourceTypes = nil;
  }
 
 
+
+-(void)createUUID
+{
+    CFUUIDRef tmpUUID = CFUUIDCreate(NULL);
+    self.uuid = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, tmpUUID);
+    CFRelease(tmpUUID);
+
+}
 
 -(void)setRotateStyle:(input_rotate_style)rotateStyle
 {

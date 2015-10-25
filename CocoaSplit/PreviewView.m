@@ -1415,7 +1415,7 @@
     [self setWantsLayer:YES];
     
     self.layer.backgroundColor = CGColorCreateGenericRGB(0.184314f, 0.309804f, 0.309804f, 1);
-    [self registerForDraggedTypes:@[@"CSInputPasteBoard"]];
+    [self registerForDraggedTypes:@[@"cocoasplit.library.item"]];
     
 }
 
@@ -1423,9 +1423,8 @@
 {
     NSPasteboard *pboard;
     pboard = [sender draggingPasteboard];
-    if ([pboard.types containsObject:@"CSInputPasteBoard"])
+    if ([pboard.types containsObject:@"cocoasplit.library.item"] && !self.viewOnly)
     {
-        NSLog(@"INPUT FROM PASTEBOARD!");
         return NSDragOperationGeneric;
     }
     return NSDragOperationNone;
@@ -1437,19 +1436,45 @@
     
     pboard = [sender draggingPasteboard];
     
-    if ([pboard.types containsObject:@"CSInputPasteBoard"])
+    
+    if ([pboard canReadItemWithDataConformingToTypes:@[@"cocoasplit.library.item"]])
     {
-        NSData *aData = [pboard dataForType:@"CSInputPasteBoard"];
-        NSArray *iArray = [NSUnarchiver unarchiveObjectWithData:aData];
-        for (NSData *iData in iArray)
+        
+        NSArray *classes = @[[CSInputLibraryItem class]];
+        NSArray *draggedObjects = [pboard readObjectsForClasses:classes options:@{}];
+        
+        for (CSInputLibraryItem *item in draggedObjects)
         {
+            NSData *iData = item.inputData;
+            
             NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:iData];
             
             
             InputSource *iSrc = [unarchiver decodeObjectForKey:@"root"];
+            [unarchiver finishDecoding];
+
+            NSPoint mouseLoc = [NSEvent mouseLocation];
+            
+            NSRect rect = NSRectFromCGRect((CGRect){mouseLoc, CGSizeZero});
+            
+            mouseLoc = [self.window convertRectFromScreen:rect].origin;
+            mouseLoc = [self convertPoint:mouseLoc fromView:nil];
+            
+            if (![self mouse:mouseLoc inRect:self.bounds])
+            {
+                return NO;
+            }
+            
+            
+            NSPoint worldPoint = [self realPointforWindowPoint:mouseLoc];
+
+            iSrc.x_pos = worldPoint.x;
+            iSrc.y_pos = worldPoint.y;
+
+            [iSrc createUUID];
+            
             [self.sourceLayout addSource:iSrc];
 
-            [unarchiver finishDecoding];
         }
         return YES;
     }

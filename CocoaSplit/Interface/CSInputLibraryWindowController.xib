@@ -17,24 +17,25 @@
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="F0z-JX-Cv5">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="240" width="368" height="597"/>
+            <rect key="contentRect" x="196" y="240" width="368" height="571"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1057"/>
             <view key="contentView" id="se5-gp-TjO">
-                <rect key="frame" x="0.0" y="0.0" width="368" height="597"/>
+                <rect key="frame" x="0.0" y="0.0" width="368" height="571"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="52" horizontalPageScroll="10" verticalLineScroll="52" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3hS-EI-xmd">
-                        <rect key="frame" x="-1" y="1" width="370" height="594"/>
-                        <clipView key="contentView" id="LKO-XE-ZXF">
-                            <rect key="frame" x="1" y="1" width="368" height="592"/>
+                        <rect key="frame" x="-1" y="47" width="370" height="522"/>
+                        <clipView key="contentView" drawsBackground="NO" id="LKO-XE-ZXF">
+                            <rect key="frame" x="1" y="1" width="368" height="520"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" alternatingRowBackgroundColors="YES" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="50" viewBased="YES" id="LTj-Vc-lD5">
-                                    <rect key="frame" x="0.0" y="0.0" width="367" height="0.0"/>
+                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="50" viewBased="YES" id="LTj-Vc-lD5">
+                                    <rect key="frame" x="0.0" y="0.0" width="368" height="520"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <animations/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    <tableViewGridLines key="gridStyleMask" horizontal="YES"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
                                         <tableColumn width="364" minWidth="40" maxWidth="1000" id="eEU-SC-gEt">
@@ -87,7 +88,7 @@
                                 </tableView>
                             </subviews>
                             <animations/>
-                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            <nil key="backgroundColor"/>
                         </clipView>
                         <animations/>
                         <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="Vbm-Pp-qDH">
@@ -101,19 +102,32 @@
                             <animations/>
                         </scroller>
                     </scrollView>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="61O-4f-qPL">
+                        <rect key="frame" x="20" y="19" width="23" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="23" id="98l-dZ-LU9"/>
+                        </constraints>
+                        <animations/>
+                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="LjC-Up-Khm">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                    </button>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="3hS-EI-xmd" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" constant="-1" id="Uf3-0p-HzM"/>
-                    <constraint firstItem="3hS-EI-xmd" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" constant="2" id="b6w-k6-BtX"/>
-                    <constraint firstAttribute="trailing" secondItem="3hS-EI-xmd" secondAttribute="trailing" constant="-1" id="kqx-fR-IKu"/>
-                    <constraint firstItem="3hS-EI-xmd" firstAttribute="centerY" secondItem="se5-gp-TjO" secondAttribute="centerY" id="lJD-3C-GRk"/>
+                    <constraint firstItem="61O-4f-qPL" firstAttribute="top" secondItem="3hS-EI-xmd" secondAttribute="bottom" constant="8" id="7yN-9t-JyZ"/>
+                    <constraint firstItem="61O-4f-qPL" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" constant="20" symbolic="YES" id="BlB-gI-fn2"/>
+                    <constraint firstItem="3hS-EI-xmd" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" constant="2" id="OY7-9z-rLP"/>
+                    <constraint firstAttribute="bottom" secondItem="61O-4f-qPL" secondAttribute="bottom" constant="20" id="YMe-pg-2GX"/>
+                    <constraint firstAttribute="trailing" secondItem="3hS-EI-xmd" secondAttribute="trailing" constant="-1" id="egA-0y-EJv"/>
+                    <constraint firstItem="3hS-EI-xmd" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" constant="-1" id="l4W-Ur-Dbr"/>
                 </constraints>
                 <animations/>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="0bl-1N-AYu"/>
             </connections>
-            <point key="canvasLocation" x="306" y="354.5"/>
+            <point key="canvasLocation" x="306" y="341.5"/>
         </window>
         <arrayController id="gZh-Nb-Da9">
             <connections>
@@ -121,4 +135,7 @@
             </connections>
         </arrayController>
     </objects>
+    <resources>
+        <image name="NSRemoveTemplate" width="11" height="11"/>
+    </resources>
 </document>

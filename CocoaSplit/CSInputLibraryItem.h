@@ -8,9 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-@interface CSInputLibraryItem : NSObject
+@interface CSInputLibraryItem : NSObject <NSPasteboardReading, NSPasteboardWriting, NSCoding>
 
 @property (strong) NSString *name;
 @property (strong) NSData *inputData;
+@property (strong) NSImage *inputImage;
 
 @end
