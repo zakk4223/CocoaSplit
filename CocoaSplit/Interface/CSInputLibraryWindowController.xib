@@ -29,7 +29,7 @@
                             <rect key="frame" x="1" y="1" width="368" height="520"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="50" viewBased="YES" id="LTj-Vc-lD5">
+                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnSelection="YES" columnResizing="NO" autosaveColumns="NO" rowHeight="50" viewBased="YES" id="LTj-Vc-lD5">
                                     <rect key="frame" x="0.0" y="0.0" width="368" height="520"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <animations/>
