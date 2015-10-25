@@ -11,6 +11,11 @@
 @class CaptureController;
 
 @interface CSInputLibraryWindowController : NSWindowController <NSTableViewDelegate, NSTableViewDataSource>
+{
+    NSRange _dragRange;
+    NSArray *_draggingObjects;
+}
+
 
 @property (strong) CaptureController *controller;
 @property (weak) IBOutlet NSTableView *tableView;

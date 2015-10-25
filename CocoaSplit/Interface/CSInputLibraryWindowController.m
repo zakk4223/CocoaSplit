@@ -35,6 +35,53 @@
 
 //Table view delegate
 
+-(void)tableView:(NSTableView *)tableView draggingSession:(NSDraggingSession *)session willBeginAtPoint:(NSPoint)screenPoint forRowIndexes:(NSIndexSet *)rowIndexes
+{
+    NSUInteger dlen = (rowIndexes.lastIndex+1) - rowIndexes.firstIndex;
+    _dragRange = NSMakeRange(rowIndexes.firstIndex, dlen);
+    _draggingObjects = [self.itemArrayController.arrangedObjects objectsAtIndexes:rowIndexes];
+}
+
+-(void)tableView:(NSTableView *)tableView draggingSession:(NSDraggingSession *)session endedAtPoint:(NSPoint)screenPoint operation:(NSDragOperation)operation
+{
+    _dragRange = NSMakeRange(0, 0);
+    _draggingObjects = nil;
+}
+
+-(NSDragOperation)tableView:(NSTableView *)tableView validateDrop:(id<NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)dropOperation
+{
+    if (dropOperation == NSTableViewDropAbove && (_dragRange.location > row || _dragRange.location+_dragRange.length < row))
+    {
+        if ([info draggingSource] == self.tableView)
+        {
+            return NSDragOperationMove;
+        }
+    }
+    return NSDragOperationNone;
+}
+
+
+-(BOOL)tableView:(NSTableView *)tableView acceptDrop:(id<NSDraggingInfo>)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)dropOperation
+{
+    [tableView beginUpdates];
+    NSArray *classes = @[[CSInputLibraryItem class]];
+    
+    [info enumerateDraggingItemsWithOptions:0 forView:tableView classes:classes searchOptions:@{} usingBlock:^(NSDraggingItem * _Nonnull draggingItem, NSInteger idx, BOOL * _Nonnull stop) {
+        NSInteger newIdx = row+idx;
+        CSInputLibraryItem *dragItem = _draggingObjects[idx];
+        NSInteger oldIdx = [self.itemArrayController.arrangedObjects indexOfObject:dragItem];
+        if (oldIdx < newIdx)
+        {
+            newIdx -= idx+1;
+        }
+        
+        [self.controller.inputLibrary removeObjectAtIndex:oldIdx];
+        [self.controller.inputLibrary insertObject:dragItem atIndex:newIdx];
+        [self.tableView moveRowAtIndex:oldIdx toIndex:newIdx];
+    }];
+    [tableView endUpdates];
+    return YES;
+}
 
 -(BOOL)tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
 {

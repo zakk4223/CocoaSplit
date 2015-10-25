@@ -1644,6 +1644,7 @@
     
     [self saveMIDI];
 
+    [saveRoot setValue:self.inputLibrary forKey:@"inputLibrary"];
     [NSKeyedArchiver archiveRootObject:saveRoot toFile:path];
     
 }
@@ -1823,7 +1824,11 @@
   //      [self.stagingLayout mergeSourceLayout:tmpLayout withLayer:nil];
     }
     
-    self.inputLibrary = [NSMutableArray array];
+    self.inputLibrary = [saveRoot valueForKey:@"inputLibrary"];
+    if (!self.inputLibrary)
+    {
+        self.inputLibrary = [NSMutableArray array];
+    }
     
 }
 
