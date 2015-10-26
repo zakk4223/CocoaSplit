@@ -120,5 +120,16 @@
     [self.tableView endUpdates];
 }
 
+- (IBAction)doDeleteFromMenu:(id)sender
+{
+    if (self.tableView.selectedRowIndexes.count == 0)
+    {
+        NSIndexSet *toSelect = [NSIndexSet indexSetWithIndex:self.tableView.clickedRow];
+        [self.tableView selectRowIndexes:toSelect byExtendingSelection:NO];
+    }
+    [self deleteItem:sender];
+}
+
+
 
 @end

@@ -23,4 +23,8 @@
 @property (strong) IBOutlet NSArrayController *itemArrayController;
 
 - (IBAction)deleteItem:(id)sender;
+
+
+- (IBAction)doDeleteFromMenu:(id)sender;
+
 @end

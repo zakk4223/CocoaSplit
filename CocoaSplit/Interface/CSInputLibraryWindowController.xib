@@ -84,6 +84,7 @@
                                         <binding destination="gZh-Nb-Da9" name="content" keyPath="arrangedObjects" id="B99-Kr-sZk"/>
                                         <outlet property="dataSource" destination="-2" id="Kwl-1b-48R"/>
                                         <outlet property="delegate" destination="-2" id="OFY-H1-aMj"/>
+                                        <outlet property="menu" destination="KHC-4m-0T4" id="J3h-p4-42j"/>
                                     </connections>
                                 </tableView>
                             </subviews>
@@ -151,5 +152,19 @@
                 <binding destination="-2" name="contentArray" keyPath="self.controller.inputLibrary" id="Znp-dv-g5A"/>
             </connections>
         </arrayController>
+        <menu id="KHC-4m-0T4">
+            <items>
+                <menuItem title="Edit" id="EVC-Nj-OUz">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                </menuItem>
+                <menuItem title="Delete" id="rdI-he-Vbm">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="doDeleteFromMenu:" target="-2" id="sD0-4X-37C"/>
+                    </connections>
+                </menuItem>
+            </items>
+            <point key="canvasLocation" x="582.5" y="497.5"/>
+        </menu>
     </objects>
 </document>
