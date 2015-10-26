@@ -61,6 +61,18 @@
     }
 }
 
+-(NSImage *)libraryImage
+{
+    NSString *calPath = [[NSWorkspace sharedWorkspace] absolutePathForAppBundleWithIdentifier:@"com.apple.iCal"];
+    
+    if (calPath)
+    {
+        return [[NSWorkspace sharedWorkspace] iconForFile:calPath];
+    }
+    return nil;
+}
+
+
 
 +(NSString *)label
 {

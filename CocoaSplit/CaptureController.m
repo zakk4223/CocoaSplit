@@ -159,20 +159,12 @@
 
 -(void)addInputToLibrary:(InputSource *)source
 {
-    NSMutableData *saveData = [NSMutableData data];
-    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:saveData];
-    [archiver encodeObject:source forKey:@"root"];
-    [archiver finishEncoding];
-    CSInputLibraryItem *newItem = [[CSInputLibraryItem alloc] init];
+    CSInputLibraryItem *newItem = [[CSInputLibraryItem alloc] initWithInput:source];
     
-    newItem.name = source.name;
-    newItem.inputData = saveData;
-
     NSUInteger cIdx = self.inputLibrary.count;
     
     [self insertObject:newItem inInputLibraryAtIndex:cIdx];
     
-    NSLog(@"ADDED NEW ITEM %@ %@", newItem, newItem.name);
 }
 
 

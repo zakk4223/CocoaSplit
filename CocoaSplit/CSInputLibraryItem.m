@@ -11,6 +11,48 @@
 @implementation CSInputLibraryItem
 
 
+-(instancetype) initWithInput:(InputSource *)input
+{
+    if (self = [super init])
+    {
+        NSString *inputType = @"None";
+        NSString *inputName = @"No Name";
+        
+        if (input.videoInput)
+        {
+            inputType = [input.videoInput.class label];
+            NSImage *img = [input.videoInput libraryImage];
+            if (img)
+            {
+                NSImage *thumb = [[NSImage alloc] initWithSize:NSMakeSize(32, 32)];
+                NSRect fromRect = NSMakeRect(0, 0, img.size.width, img.size.height);
+                [thumb lockFocus];
+                [img drawInRect:NSMakeRect(0, 0, 32, 32) fromRect:fromRect operation:NSCompositeCopy fraction:1.0f];
+                [thumb unlockFocus];
+                self.inputImage = thumb;
+            }
+        }
+        
+        if (input.name)
+        {
+            inputName = input.name;
+        }
+        
+        self.name = [NSString stringWithFormat:@"%@ %@", inputType, inputName];
+        NSMutableData *saveData = [NSMutableData data];
+        NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:saveData];
+        [archiver encodeObject:input forKey:@"root"];
+        [archiver finishEncoding];
+        self.inputData = saveData;
+        if (!self.inputImage)
+        {
+            self.inputImage = [NSImage imageNamed:NSImageNameUser];
+        }
+    }
+    
+    return self;
+}
+
 
 -(instancetype) init
 {

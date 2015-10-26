@@ -91,6 +91,16 @@
 
 
 
+-(NSImage *)libraryImage
+{
+    if (self.imagePath)
+    {
+        return [[NSImage alloc] initWithContentsOfFile:self.imagePath];
+    }
+    return nil;
+}
+
+
 -(NSString *)imagePath
 {
     

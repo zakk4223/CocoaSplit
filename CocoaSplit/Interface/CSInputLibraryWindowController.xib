@@ -23,7 +23,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="368" height="571"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <scrollView autohidesScrollers="YES" horizontalLineScroll="52" horizontalPageScroll="10" verticalLineScroll="52" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3hS-EI-xmd">
+                    <scrollView autohidesScrollers="YES" horizontalLineScroll="65" horizontalPageScroll="10" verticalLineScroll="65" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3hS-EI-xmd">
                         <rect key="frame" x="-1" y="47" width="370" height="522"/>
                         <clipView key="contentView" drawsBackground="NO" id="LKO-XE-ZXF">
                             <rect key="frame" x="1" y="1" width="368" height="520"/>
@@ -33,7 +33,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="368" height="520"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <animations/>
-                                    <size key="intercellSpacing" width="3" height="2"/>
+                                    <size key="intercellSpacing" width="3" height="15"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <tableViewGridLines key="gridStyleMask" horizontal="YES"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
@@ -52,7 +52,7 @@
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
                                                 <tableCellView id="i2c-B2-cFa">
-                                                    <rect key="frame" x="1" y="1" width="364" height="17"/>
+                                                    <rect key="frame" x="1" y="7" width="364" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="dP7-Uf-QYC">
@@ -102,23 +102,40 @@
                             <animations/>
                         </scroller>
                     </scrollView>
-                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="61O-4f-qPL">
-                        <rect key="frame" x="20" y="19" width="23" height="21"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="23" id="98l-dZ-LU9"/>
-                        </constraints>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aOA-xY-YgO">
+                        <rect key="frame" x="14" y="13" width="80" height="32"/>
                         <animations/>
-                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="LjC-Up-Khm">
+                        <buttonCell key="cell" type="push" title="Delete" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="YYH-zb-jo4">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
+                        <connections>
+                            <action selector="deleteItem:" target="-2" id="poo-Ym-2kM"/>
+                        </connections>
                     </button>
+                    <searchField wantsLayer="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WiU-s7-0sd">
+                        <rect key="frame" x="96" y="19" width="252" height="22"/>
+                        <animations/>
+                        <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="d83-GW-qdA">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </searchFieldCell>
+                        <connections>
+                            <binding destination="gZh-Nb-Da9" name="predicate" keyPath="filterPredicate" id="JJI-Hp-EYy">
+                                <dictionary key="options">
+                                    <string key="NSDisplayName">predicate</string>
+                                    <string key="NSPredicateFormat">self.name CONTAINS[cd] $value</string>
+                                </dictionary>
+                            </binding>
+                        </connections>
+                    </searchField>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="61O-4f-qPL" firstAttribute="top" secondItem="3hS-EI-xmd" secondAttribute="bottom" constant="8" id="7yN-9t-JyZ"/>
-                    <constraint firstItem="61O-4f-qPL" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" constant="20" symbolic="YES" id="BlB-gI-fn2"/>
+                    <constraint firstAttribute="bottom" secondItem="aOA-xY-YgO" secondAttribute="bottom" constant="20" id="EbH-AT-8CU"/>
                     <constraint firstItem="3hS-EI-xmd" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" constant="2" id="OY7-9z-rLP"/>
-                    <constraint firstAttribute="bottom" secondItem="61O-4f-qPL" secondAttribute="bottom" constant="20" id="YMe-pg-2GX"/>
+                    <constraint firstItem="aOA-xY-YgO" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" constant="20" id="Qh6-RX-3XP"/>
+                    <constraint firstItem="aOA-xY-YgO" firstAttribute="top" secondItem="3hS-EI-xmd" secondAttribute="bottom" constant="6" id="cMR-Fv-0GQ"/>
                     <constraint firstAttribute="trailing" secondItem="3hS-EI-xmd" secondAttribute="trailing" constant="-1" id="egA-0y-EJv"/>
                     <constraint firstItem="3hS-EI-xmd" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" constant="-1" id="l4W-Ur-Dbr"/>
                 </constraints>
@@ -135,7 +152,4 @@
             </connections>
         </arrayController>
     </objects>
-    <resources>
-        <image name="NSRemoveTemplate" width="11" height="11"/>
-    </resources>
 </document>

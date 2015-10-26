@@ -115,4 +115,6 @@ typedef enum frame_render_behavior_t {
 -(void)frameArrived;
 
 
+-(NSImage *)libraryImage;
+
 @end

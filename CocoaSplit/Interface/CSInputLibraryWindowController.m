@@ -83,6 +83,7 @@
     return YES;
 }
 
+
 -(BOOL)tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
 {
     NSArray *draggedItems = [self.itemArrayController.arrangedObjects objectsAtIndexes:rowIndexes];
@@ -100,7 +101,7 @@
         self.tableControllers = [NSMutableArray array];
     }
     
-    CSInputLibraryItem *cItem = [self.controller.inputLibrary objectAtIndex:row];
+    CSInputLibraryItem *cItem = [self.itemArrayController.arrangedObjects objectAtIndex:row];
     if (cItem)
     {
         CSLibraryInputItemViewController *vCont = [[CSLibraryInputItemViewController alloc] init];
@@ -110,5 +111,14 @@
     }
     return nil;
 }
+
+- (IBAction)deleteItem:(id)sender
+{
+    [self.tableView beginUpdates];
+    [self.itemArrayController removeObjectsAtArrangedObjectIndexes:self.tableView.selectedRowIndexes];
+//    [self.tableView removeRowsAtIndexes:self.tableView.selectedRowIndexes withAnimation:NSTableViewAnimationEffectFade];
+    [self.tableView endUpdates];
+}
+
 
 @end

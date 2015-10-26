@@ -101,6 +101,12 @@
 }
 
 
+-(NSImage *)libraryImage
+{
+    return [NSImage imageNamed:NSImageNameFontPanel];
+}
+
+
 
 -(void) buildString
 {

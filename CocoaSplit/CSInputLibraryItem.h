@@ -7,11 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "InputSource.h"
+
 
 @interface CSInputLibraryItem : NSObject <NSPasteboardReading, NSPasteboardWriting, NSCoding>
 
 @property (strong) NSString *name;
 @property (strong) NSData *inputData;
 @property (strong) NSImage *inputImage;
+
+-(instancetype) initWithInput:(InputSource *)input;
 
 @end

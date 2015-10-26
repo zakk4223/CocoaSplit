@@ -85,6 +85,12 @@
 }
 
 
+-(NSImage *)libraryImage
+{
+    return [NSImage imageNamed:NSImageNameComputer];
+}
+
+
 -(void)frameTick
 {
     

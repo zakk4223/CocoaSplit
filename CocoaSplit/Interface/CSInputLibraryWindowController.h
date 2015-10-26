@@ -22,4 +22,5 @@
 @property (strong) NSMutableArray *tableControllers;
 @property (strong) IBOutlet NSArrayController *itemArrayController;
 
+- (IBAction)deleteItem:(id)sender;
 @end

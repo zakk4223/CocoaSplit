@@ -76,6 +76,13 @@
     return self;
 }
 
+
+-(NSImage *)libraryImage
+{
+    return nil;
+}
+
+
 -(NSString *) configurationViewClassName
 {
     return [NSString stringWithFormat:@"%@ViewController", self.className];

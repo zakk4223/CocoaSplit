@@ -121,6 +121,8 @@ If your source is 'shared' between inputSources each new one will call this func
 
 -(void)frameArrived;
 
+-(NSImage *)libraryImage;
+
 
 
 
