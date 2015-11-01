@@ -84,6 +84,31 @@
 }
 
 
+-(InputSource *)makeInput
+{
+    if (!self.inputData)
+    {
+        return nil;
+    }
+    
+    NSData *iData = self.inputData;
+    
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:iData];
+    
+    
+    InputSource *iSrc = [unarchiver decodeObjectForKey:@"root"];
+    [unarchiver finishDecoding];
+    return iSrc;
+}
+
+-(void)makeDataFromInput:(InputSource *)input
+{
+    NSMutableData *saveData = [NSMutableData data];
+    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:saveData];
+    [archiver encodeObject:input forKey:@"root"];
+    [archiver finishEncoding];
+    self.inputData = saveData;
+}
 -(id)initWithPasteboardPropertyList:(id)propertyList ofType:(NSString *)type
 {
     return [NSKeyedUnarchiver unarchiveObjectWithData:propertyList];

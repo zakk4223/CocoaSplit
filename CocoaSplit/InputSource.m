@@ -116,6 +116,7 @@ static NSArray *_sourceTypes = nil;
 
 
 
+
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
     
@@ -142,6 +143,16 @@ static NSArray *_sourceTypes = nil;
     {
         [aCoder encodeObject:self.videoInput forKey:@"videoInput"];
     }
+    
+    if (self.sourceLayout)
+    {
+        [aCoder encodeFloat:self.canvas_width forKey:@"topLevelWidth"];
+        [aCoder encodeFloat:self.canvas_height forKey:@"topLevelHeight"];
+    } else {
+        [aCoder encodeFloat:_topLevelWidth forKey:@"topLevelWidth"];
+        [aCoder encodeFloat:_topLevelHeight forKey:@"topLevelHeight"];
+    }
+    
     
     [aCoder encodeBool:self.doChromaKey forKey:@"doChromaKey"];
     [aCoder encodeObject:self.chromaKeyColor forKey:@"chromaKeyColor"];
@@ -283,13 +294,6 @@ static NSArray *_sourceTypes = nil;
             self.constraintMap = constraintData;
         }
         
-        
-
-
-        
-        
-
-        
         _rotationAngle = [aDecoder decodeFloatForKey:@"rotationAngle"];
         _rotationAngleX = [aDecoder decodeFloatForKey:@"rotationAngleX"];
         _rotationAngleY = [aDecoder decodeFloatForKey:@"rotationAngleY"];
@@ -420,7 +424,15 @@ static NSArray *_sourceTypes = nil;
         self.gradientStopY = [aDecoder decodeFloatForKey:@"gradientEndPointY"];
         
         
-
+        if ([aDecoder containsValueForKey:@"topLevelWidth"])
+        {
+            _topLevelWidth = [aDecoder decodeFloatForKey:@"topLevelWidth"];
+        }
+        
+        if ([aDecoder containsValueForKey:@"topLevelHeight"])
+        {
+            _topLevelHeight = [aDecoder decodeFloatForKey:@"topLevelHeight"];
+        }
         
         
         self.layer.filters = [aDecoder decodeObjectForKey:@"layerFilters"];
@@ -441,6 +453,18 @@ static NSArray *_sourceTypes = nil;
     
     return self;
 }
+
+
+-(CGFloat)topLevelHeight
+{
+    return _topLevelHeight;
+}
+
+-(CGFloat)topLevelWidth
+{
+    return _topLevelWidth;
+}
+
 
 -(CGRect)globalLayoutPosition
 {
@@ -1921,7 +1945,7 @@ static NSArray *_sourceTypes = nil;
         newFrame.origin.x = x;
         newFrame.origin.y = y;
         [CATransaction begin];
-        self.layer.frame = NSIntegralRect(newFrame);
+        self.layer.position = newFrame.origin;
         [CATransaction commit];
         
     }

@@ -1468,13 +1468,11 @@
             
             NSPoint worldPoint = [self realPointforWindowPoint:mouseLoc];
 
-            iSrc.x_pos = worldPoint.x;
-            iSrc.y_pos = worldPoint.y;
 
             [iSrc createUUID];
             
             [self.sourceLayout addSource:iSrc];
-
+            [iSrc positionOrigin:worldPoint.x y:worldPoint.y];
         }
         return YES;
     }

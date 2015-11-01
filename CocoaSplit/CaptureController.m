@@ -139,6 +139,8 @@
 
 -(void)layoutWindowWillClose:(CSLayoutEditWindowController *)windowController
 {
+    
+    NSLog(@"LAYOUT WINDOW WILL CLOSE");
     if ([_layoutWindows containsObject:windowController])
     {
         [_layoutWindows removeObject:windowController];
@@ -168,7 +170,7 @@
 }
 
 
--(void)openLayoutWindow:(SourceLayout *)layout
+-(CSLayoutEditWindowController *)openLayoutWindow:(SourceLayout *)layout
 {
     CSLayoutEditWindowController *newController = [[CSLayoutEditWindowController alloc] init];
 
@@ -183,11 +185,14 @@
     newController.previewView.controller = self;
     newController.previewView.sourceLayout = layout;
     [newController.previewView.sourceLayout restoreSourceList:nil];
+    newController.delegate = self;
     
     
     [_layoutWindows addObject:newController];
-
+    return newController;
 }
+
+
 
 
 

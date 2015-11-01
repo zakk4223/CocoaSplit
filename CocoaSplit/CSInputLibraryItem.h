@@ -15,7 +15,10 @@
 @property (strong) NSString *name;
 @property (strong) NSData *inputData;
 @property (strong) NSImage *inputImage;
+@property (strong) InputSource *editInput;
 
 -(instancetype) initWithInput:(InputSource *)input;
+-(void)makeDataFromInput:(InputSource *)input;
+-(InputSource *)makeInput;
 
 @end

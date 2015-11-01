@@ -468,7 +468,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(void)toggleLayout:(SourceLayout *)layout;
 -(void)saveToLayout:(SourceLayout *)layout;
 -(void)switchToLayout:(SourceLayout *)layout;
--(void)openLayoutWindow:(SourceLayout *)layout;
+-(CSLayoutEditWindowController *)openLayoutWindow:(SourceLayout *)layout;
 -(void)layoutWindowWillClose:(CSLayoutEditWindowController *)windowController;
 
 -(void)addInputToLibrary:(InputSource *)source;

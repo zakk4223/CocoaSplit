@@ -9,6 +9,7 @@
 #import "CSInputLibraryWindowController.h"
 #import "CaptureController.h"
 #import "CSLibraryInputItemViewController.h"
+#import "CSLayoutEditWindowController.h"
 
 
 @interface CSInputLibraryWindowController ()
@@ -120,6 +121,37 @@
     [self.tableView endUpdates];
 }
 
+
+-(void)popoverWillClose:(NSNotification *)notification
+{
+    if (self.activePopupController && self.activePopupItem)
+    {
+        InputSource *editInput = self.activePopupController.inputSource;
+        
+        //[editInput frameTick];
+        
+        [self.activePopupItem makeDataFromInput:editInput];
+    }
+    
+    self.activePopupItem = nil;
+}
+
+-(void)popoverDidClose:(NSNotification *)notification
+{
+    self.activePopupItem = nil;
+    self.activePopupController = nil;
+    self.editLayout = nil;
+}
+
+
+-(void)layoutWindowWillClose:(id)controller
+{
+    [self.activePopupItem makeDataFromInput:self.activePopupItem.editInput];
+    self.activePopupItem.editInput = nil;
+    [self.controller layoutWindowWillClose:controller];
+}
+
+
 - (IBAction)doDeleteFromMenu:(id)sender
 {
     if (self.tableView.selectedRowIndexes.count == 0)
@@ -130,6 +162,52 @@
     [self deleteItem:sender];
 }
 
+-(IBAction)doEditFromMenu:(id)sender
+{
+    
+    CSInputLibraryItem *cItem = [self.itemArrayController.arrangedObjects objectAtIndex:self.tableView.clickedRow];
+    
+    
+    
+    
+    
+    InputSource *iSrc = [cItem makeInput];
 
+    cItem.editInput = iSrc;
+    
+    //self.editLayout = [[SourceLayout alloc] init];
+    
+    CGFloat parent_width = iSrc.topLevelWidth;
+    CGFloat parent_height = iSrc.topLevelHeight;
+    
+    //self.editLayout.canvas_width = parent_width;
+    //self.editLayout.canvas_height = parent_height;
+    NSLog(@"PARENT WIDTH %f HEIGHT %f", parent_width, parent_height);
+    
+    
+    //[self.editLayout addSource:iSrc];
+    
+    /*
+    self.editWindowController = [[CSLayoutEditWindowController alloc] init];
+    self.editWindowController.previewView.sourceLayout = self.editLayout;
+    [self.editWindowController showWindow:nil];
+     */
+    //self.editWindowController = [self.controller openLayoutWindow:self.editLayout];
+    //self.editWindowController.delegate = self;
+    
+    InputPopupControllerViewController *popupController = [[InputPopupControllerViewController alloc] init];
+    
+    NSPopover *popover = [[NSPopover alloc] init];
+    popover.contentViewController = popupController;
+    popover.animates = YES;
+    popover.delegate = self;
+    popover.behavior = NSPopoverBehaviorTransient;
+    [popover showRelativeToRect:self.tableView.frame ofView:self.tableView preferredEdge:NSMaxXEdge];
+    
+    //[iSrc frameTick];
+    popupController.inputSource = iSrc;
+    self.activePopupItem = cItem;
+    self.activePopupController = popupController;
+}
 
 @end

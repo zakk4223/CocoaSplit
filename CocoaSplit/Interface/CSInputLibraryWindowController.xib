@@ -30,7 +30,7 @@
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnSelection="YES" columnResizing="NO" autosaveColumns="NO" rowHeight="50" viewBased="YES" id="LTj-Vc-lD5">
-                                    <rect key="frame" x="0.0" y="0.0" width="368" height="520"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="367" height="0.0"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <animations/>
                                     <size key="intercellSpacing" width="3" height="15"/>
@@ -156,6 +156,9 @@
             <items>
                 <menuItem title="Edit" id="EVC-Nj-OUz">
                     <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="doEditFromMenu:" target="-2" id="ZST-TR-SId"/>
+                    </connections>
                 </menuItem>
                 <menuItem title="Delete" id="rdI-he-Vbm">
                     <modifierMask key="keyEquivalentModifierMask"/>
