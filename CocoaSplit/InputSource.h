@@ -76,8 +76,6 @@ typedef enum resize_style_t {
     NSDictionary *_constraintAttributeMap;
     NSArray *_constraintObserveKeys;
     NSMutableDictionary *_restoredConstraintMap;
-    CGFloat _topLevelWidth;
-    CGFloat _topLevelHeight;
     
 }
 
@@ -196,8 +194,8 @@ typedef enum resize_style_t {
 @property (assign) CGFloat gradientStopX;
 @property (assign) CGFloat gradientStopY;
 
-@property (readonly) CGFloat topLevelWidth;
-@property (readonly) CGFloat topLevelHeight;
+@property (assign) CGFloat topLevelWidth;
+@property (assign) CGFloat topLevelHeight;
 
 
 -(void) updateOrigin:(CGFloat)x y:(CGFloat)y;
@@ -229,6 +227,7 @@ typedef enum resize_style_t {
 -(void)restoreConstraints;
 -(void)createUUID;
 -(void)updateRotationTransform;
+-(void) directSize:(CGFloat)width height:(CGFloat)height;
 
 
 

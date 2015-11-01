@@ -455,16 +455,6 @@ static NSArray *_sourceTypes = nil;
 }
 
 
--(CGFloat)topLevelHeight
-{
-    return _topLevelHeight;
-}
-
--(CGFloat)topLevelWidth
-{
-    return _topLevelWidth;
-}
-
 
 -(CGRect)globalLayoutPosition
 {
@@ -521,6 +511,9 @@ static NSArray *_sourceTypes = nil;
     [CATransaction begin];
     _nextImageTime = 0.0f;
     _currentSourceIdx = 0;
+    
+    _topLevelHeight = 0;
+    _topLevelWidth = 0;
     
     self.changeInterval = 20.0f;
     
@@ -1625,7 +1618,7 @@ static NSArray *_sourceTypes = nil;
 {
     [self registerUndoForProperty:@"width" withAction:@"Width"];
     _width = width;
-    [self updateSize:_width height:_height];
+    [self directSize:_width height:_height];
 }
 
 -(float)width
@@ -1637,7 +1630,7 @@ static NSArray *_sourceTypes = nil;
 {
     [self registerUndoForProperty:@"height" withAction:@"Height"];
     _height = height;
-    [self updateSize:_width height:_height];
+    [self directSize:_width height:_height];
 }
 
 -(float)height
@@ -1770,6 +1763,17 @@ static NSArray *_sourceTypes = nil;
 
 
 
+-(void) directSize:(CGFloat)width height:(CGFloat)height
+{
+    NSRect newLayout = self.layoutPosition;
+    
+    newLayout.size.width = width;
+    newLayout.size.height = height;
+    
+    NSRect iRect = NSIntegralRect(newLayout);
+    
+    self.layer.bounds = iRect;
+}
 -(void) updateSize:(CGFloat)width height:(CGFloat)height
 {
     
@@ -1818,7 +1822,15 @@ static NSArray *_sourceTypes = nil;
         newLayout.size.height = height;
         
         self.layer.allowResize = tmpResize;
+        NSRect iRect = NSIntegralRect(newLayout);
+        NSRect cFrame = oldLayout;
+        cFrame.origin = iRect.origin;
+        
+        //self.layer.frame = cFrame;
+        //self.layer.bounds = iRect;
+        
         self.layer.frame = NSIntegralRect(newLayout);
+        
         self.layer.allowResize = oldResize;
         
     }
@@ -1941,12 +1953,15 @@ static NSArray *_sourceTypes = nil;
     if (self.layer)
     {
         
+        /*
         NSRect newFrame = self.layer.frame;
         newFrame.origin.x = x;
         newFrame.origin.y = y;
         [CATransaction begin];
-        self.layer.position = newFrame.origin;
+        self.layer.frame = newFrame;
         [CATransaction commit];
+         */
+        [self updateOrigin:x-self.layer.frame.origin.x y:y-self.layer.frame.origin.y];
         
     }
 

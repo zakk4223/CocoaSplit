@@ -1472,7 +1472,9 @@
             [iSrc createUUID];
             
             [self.sourceLayout addSource:iSrc];
-            [iSrc positionOrigin:worldPoint.x y:worldPoint.y];
+            //[iSrc positionOrigin:worldPoint.x y:worldPoint.y];
+            iSrc.x_pos = worldPoint.x;
+            iSrc.y_pos = worldPoint.y;
         }
         return YES;
     }
