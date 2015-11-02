@@ -288,6 +288,19 @@
 }
 
 
+-(void)menu:(NSMenu *)menu willHighlightItem:(nullable NSMenuItem *)item
+{
+    if (item.representedObject)
+    {
+        InputSource *hInput = (InputSource *)item.representedObject;
+        if (_overlayView)
+        {
+            _overlayView.parentSource = hInput;
+        }
+    }
+}
+
+
 -(NSMenu *) buildSourceMenu
 {
     
@@ -295,7 +308,7 @@
     NSArray *sourceList = [self.sourceLayout sourceListOrdered];
     
     NSMenu *sourceListMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
-    
+    sourceListMenu.delegate = self;
     
     
     NSString *resTitle = [NSString stringWithFormat:@"%dx%d@%.2f", self.sourceLayout.canvas_width, self.sourceLayout.canvas_height, self.sourceLayout.frameRate];
@@ -355,7 +368,8 @@
         [submenu addItem:cloneItem];
         
         [srcItem setSubmenu:submenu];
-        
+        [srcItem setRepresentedObject:src];
+
         [sourceListMenu insertItem:srcItem atIndex:[sourceListMenu.itemArray count]];
         
     }
