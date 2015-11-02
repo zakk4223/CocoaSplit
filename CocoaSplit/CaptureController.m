@@ -140,7 +140,6 @@
 -(void)layoutWindowWillClose:(CSLayoutEditWindowController *)windowController
 {
     
-    NSLog(@"LAYOUT WINDOW WILL CLOSE");
     if ([_layoutWindows containsObject:windowController])
     {
         [_layoutWindows removeObject:windowController];

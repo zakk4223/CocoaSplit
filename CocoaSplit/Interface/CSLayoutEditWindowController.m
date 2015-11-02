@@ -63,5 +63,11 @@
     [self close];
 }
 
+- (IBAction)newSource:(id)sender
+{
+    [self.previewView addInputSource:self];
+}
+
+
 
 @end

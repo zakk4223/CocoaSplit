@@ -131,7 +131,6 @@
     
     if (_resizeDirty)
     {
-        NSLog(@"RESIZE DIRTY");
         glGetDoublev(GL_MODELVIEW_MATRIX, _modelview);
         glGetDoublev(GL_PROJECTION_MATRIX, _projection);
         glGetIntegerv(GL_VIEWPORT, _viewport);

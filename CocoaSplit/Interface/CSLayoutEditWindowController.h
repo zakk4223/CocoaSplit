@@ -24,5 +24,6 @@
 @property (strong) IBOutlet NSObjectController *layoutController;
 - (IBAction)cancelEdit:(id)sender;
 - (IBAction)editOK:(id)sender;
+- (IBAction)newSource:(id)sender;
 
 @end
