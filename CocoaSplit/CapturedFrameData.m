@@ -70,7 +70,11 @@
         CFRelease(_encodedSampleBuffer);
     }
     
-    CFRetain(encodedSampleBuffer);
+    if (encodedSampleBuffer)
+    {
+        CFRetain(encodedSampleBuffer);
+    }
+    
     _encodedSampleBuffer = encodedSampleBuffer;
     
 }
