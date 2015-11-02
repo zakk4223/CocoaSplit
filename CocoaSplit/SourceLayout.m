@@ -296,10 +296,7 @@
 {
     [aCoder encodeObject:self.name forKey:@"name"];
     
-    if (self.isActive)
-    {
-        [self saveSourceList];
-    }
+    [self saveSourceList];
     
     
     [aCoder encodeObject:self.savedSourceListData forKey:@"savedSourceData"];
