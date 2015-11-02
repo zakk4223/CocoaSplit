@@ -1886,6 +1886,7 @@
     self.currentMidiInputStagingIdx = 0;
     
     _stagingLayout = stagingLayout;
+    stagingLayout.doSaveSourceList = YES;
     
     
     
@@ -1922,6 +1923,7 @@
     
     
     selectedLayout.isActive = YES;
+    [selectedLayout restoreSourceList:nil];
     
     [self setupFrameTimer:selectedLayout.frameRate];
     self.livePreviewView.sourceLayout = selectedLayout;
@@ -1930,6 +1932,7 @@
     
     self.currentMidiInputLiveIdx = 0;
     _selectedLayout = selectedLayout;
+    selectedLayout.doSaveSourceList = YES;
     
     
 }

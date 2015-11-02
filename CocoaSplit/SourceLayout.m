@@ -296,7 +296,11 @@
 {
     [aCoder encodeObject:self.name forKey:@"name"];
     
-    [self saveSourceList];
+    if (self.doSaveSourceList)
+    {
+        [self saveSourceList];
+    }
+    
     
     
     [aCoder encodeObject:self.savedSourceListData forKey:@"savedSourceData"];
@@ -1176,6 +1180,20 @@
 }
 
 
+-(void)clearSourceList
+{
+    self.rootLayer.sublayers = [NSArray array];
+    @synchronized(self)
+    {
+        [self.sourceList removeAllObjects];
+        
+    }
+    [self.animationList removeAllObjects];
+    self.selectedAnimation = nil;
+}
+
+
+/*
 -(void) setIsActive:(bool)isActive
 {
     
@@ -1229,6 +1247,8 @@
 {
     return _isActive;
 }
+
+*/
 
 
 

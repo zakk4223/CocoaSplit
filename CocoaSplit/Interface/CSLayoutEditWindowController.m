@@ -59,6 +59,7 @@
     if (self.previewView.sourceLayout)
     {
         [self.previewView.sourceLayout saveSourceList];
+        [self.previewView.sourceLayout clearSourceList];
     }
     [self close];
 }

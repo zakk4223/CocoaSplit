@@ -35,6 +35,8 @@
 }
 
 
+@property (assign) bool doSaveSourceList;
+
 @property (assign) bool inTransition;
 @property (strong) NSMutableArray *animationList;
 @property (strong) NSIndexSet *animationIndexes;
@@ -111,6 +113,7 @@
 -(bool)containsLayout:(SourceLayout *)layout;
 -(void)applyAddBlock;
 -(void)replaceWithSourceLayout:(SourceLayout *)layout;
+-(void)clearSourceList;
 
 
 
