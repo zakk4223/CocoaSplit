@@ -1107,20 +1107,6 @@
 }
 
 
--(void) adjustInputPosition:(InputSource *)src
-{
-    if (src.topLevelHeight > 0 && src.topLevelWidth > 0)
-    {
-        float wRatio = self.canvas_width/src.topLevelWidth;
-        float hRatio = self.canvas_height/src.topLevelHeight;
-        float new_xpos = src.layer.frame.origin.x * wRatio;
-        float new_ypos = src.layer.frame.origin.y * hRatio;
-        NSLog(@"NEW POSITIONS %f %f", new_xpos, new_ypos);
-        src.x_pos = new_xpos;
-        src.y_pos = new_ypos;
-    }
-}
-
 
 -(void) adjustAllInputs
 {
@@ -1129,35 +1115,12 @@
     
     for (InputSource *src in copiedInputs)
     {
-        [self adjustInputSize:src doPosition:YES];
+        src.needsAdjustPosition = YES;
+        src.needsAdjustment = YES;
     }
 }
 
 
--(void) adjustInputSize:(InputSource *)src doPosition:(bool)doPosition
-{
-    
-    [src frameTick];
-    if (src.topLevelHeight > 0 && src.topLevelWidth > 0)
-    {
-        float wRatio = self.canvas_width/src.topLevelWidth;
-        float hRatio = self.canvas_height/src.topLevelHeight;
-        float old_x = src.x_pos;
-        float old_y = src.y_pos;
-        float new_width = src.layer.bounds.size.width * wRatio;
-        float new_height = src.layer.bounds.size.height * hRatio;
-        [src directSize:new_width height:new_height];
-        if (doPosition)
-        {
-            src.x_pos = old_x*wRatio;
-            src.y_pos = old_y*hRatio;
-        }
-    }
-    
-    src.topLevelWidth = self.canvas_width;
-    src.topLevelHeight = self.canvas_height;
-
-}
 
 
 -(void) addSource:(InputSource *)newSource
@@ -1170,7 +1133,10 @@
 
     [self.rootLayer addSublayer:newSource.layer];
 
-    [self adjustInputSize:newSource doPosition:NO];
+
+    newSource.needsAdjustPosition = NO;
+    newSource.needsAdjustment = YES;
+    
     [_uuidMap setObject:newSource forKey:newSource.uuid];
     
     
@@ -1322,7 +1288,8 @@
     {
         if (needsResize)
         {
-            [self adjustInputSize:isource doPosition:YES];
+            isource.needsAdjustPosition = YES;
+            isource.needsAdjustment = YES;
         }
         
         if (isource.active)

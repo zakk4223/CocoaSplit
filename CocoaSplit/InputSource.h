@@ -196,6 +196,8 @@ typedef enum resize_style_t {
 
 @property (assign) CGFloat topLevelWidth;
 @property (assign) CGFloat topLevelHeight;
+@property (assign) bool needsAdjustment;
+@property (assign) bool needsAdjustPosition;
 
 
 -(void) updateOrigin:(CGFloat)x y:(CGFloat)y;

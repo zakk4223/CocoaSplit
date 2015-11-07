@@ -511,7 +511,8 @@ static NSArray *_sourceTypes = nil;
     [CATransaction begin];
     _nextImageTime = 0.0f;
     _currentSourceIdx = 0;
-    
+    _needsAdjustment = NO;
+    _needsAdjustPosition = NO;
     _topLevelHeight = 0;
     _topLevelWidth = 0;
     
@@ -1680,6 +1681,31 @@ static NSArray *_sourceTypes = nil;
 }
 
 
+
+-(void) adjustInputSize: (bool)doPosition
+{
+    
+    if (self.topLevelHeight > 0 && self.topLevelWidth > 0)
+    {
+        float wRatio = self.canvas_width/self.topLevelWidth;
+        float hRatio = self.canvas_height/self.topLevelHeight;
+        float old_x = self.x_pos;
+        float old_y = self.y_pos;
+        float new_width = self.layer.bounds.size.width * wRatio;
+        float new_height = self.layer.bounds.size.height * hRatio;
+        [self directSize:new_width height:new_height];
+        if (doPosition)
+        {
+            self.x_pos = old_x*wRatio;
+            self.y_pos = old_y*hRatio;
+        }
+    }
+    
+    self.topLevelWidth = self.canvas_width;
+    self.topLevelHeight = self.canvas_height;
+    
+}
+
 -(void)frameTick
 {
     
@@ -1714,8 +1740,11 @@ static NSArray *_sourceTypes = nil;
     
     [self.videoInput frameTick];
     [self.layer frameTick];
-
-    
+    if (self.needsAdjustment)
+    {
+        [self adjustInputSize:self.needsAdjustPosition];
+        self.needsAdjustment = NO;
+    }
 }
 
 
