@@ -473,6 +473,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 -(void)addInputToLibrary:(InputSource *)source;
 - (IBAction)openLibraryWindow:(id) sender;
+-(void)updateFrameIntervals;
+
 
 
 

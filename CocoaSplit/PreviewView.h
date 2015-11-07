@@ -23,7 +23,7 @@
 
 
 
-
+#define LAYOUT_RESOLUTIONS @[@"1280x720@60", @"1280x720@30", @"1920x1080@60", @"1920x1080@30", @"Custom"]
 
 
 @interface PreviewView : NSView <NSPopoverDelegate, NSWindowDelegate>

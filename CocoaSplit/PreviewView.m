@@ -301,6 +301,38 @@
 }
 
 
+
+-(void)resolutionMenuAction:(NSMenuItem *)sender
+{
+    NSInteger tag = sender.tag;
+    
+    if (!self.sourceLayout)
+    {
+        return;
+    }
+    
+    if (tag < 2)
+    {
+        self.sourceLayout.canvas_width = 1280;
+        self.sourceLayout.canvas_height = 720;
+    } else if (tag < 4) {
+        self.sourceLayout.canvas_width = 1920;
+        self.sourceLayout.canvas_height = 1080;
+    }
+    
+    if ((tag % 2) == 0)
+    {
+        self.sourceLayout.frameRate = 60.0f;
+    } else {
+        self.sourceLayout.frameRate = 30.0f;
+    }
+    
+    [self.controller updateFrameIntervals];
+    
+}
+
+
+
 -(NSMenu *) buildSourceMenu
 {
     
@@ -313,9 +345,30 @@
     
     NSString *resTitle = [NSString stringWithFormat:@"%dx%d@%.2f", self.sourceLayout.canvas_width, self.sourceLayout.canvas_height, self.sourceLayout.frameRate];
     
-    NSMenuItem *resItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:resTitle action:@selector(showLayoutSettings:) keyEquivalent:@""];
-    [resItem setTarget:self];
-    [resItem setEnabled:YES];
+    NSMenuItem *resItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:resTitle action:nil keyEquivalent:@""];
+    
+    NSMenu *resSubmenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
+    
+    [LAYOUT_RESOLUTIONS enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSString *resOpt = obj;
+        SEL menuAction = @selector(resolutionMenuAction:);
+        
+        if ([resOpt isEqualToString:@"Custom"])
+        {
+            menuAction = @selector(showLayoutSettings:);
+        }
+        
+        
+        NSMenuItem *item = [resSubmenu addItemWithTitle:resOpt action:menuAction keyEquivalent:@""];
+        item.target = self;
+        item.enabled = YES;
+        item.tag = idx;
+        
+    }];
+
+    [resItem setSubmenu:resSubmenu];
+    
+    
     
     [sourceListMenu insertItem:resItem atIndex:[sourceListMenu.itemArray count]];
     
@@ -1316,7 +1369,6 @@
 {
     
     
-    
     NSPoint tmp = [self convertPoint:[self.window mouseLocationOutsideOfEventStream] fromView:nil];
     
     NSRect spawnRect = NSMakeRect(tmp.x, tmp.y, 1.0f, 1.0f);
@@ -1603,8 +1655,6 @@
 
 - (void)popoverDidClose:(NSNotification *)notification
 {
-    
-    
     NSString *closeReason = [[notification userInfo] valueForKey:NSPopoverCloseReasonKey];
     NSPopover *popover = notification.object;
     if (closeReason && closeReason == NSPopoverCloseReasonStandard)

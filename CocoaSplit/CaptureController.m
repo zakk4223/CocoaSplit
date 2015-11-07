@@ -2633,6 +2633,12 @@
     }
 }
 
+-(void)updateFrameIntervals
+{
+    _staging_frame_interval = 1.0/self.stagingPreviewView.sourceLayout.frameRate;
+    _frame_interval = 1.0/self.livePreviewView.sourceLayout.frameRate;
+}
+
 
 -(void) newFrameTimed
 {
@@ -2694,15 +2700,6 @@
     delSource.editorController = nil;
     
 }
-
-/*
--(NSArray *)sourceListOrdered
-{
-    NSArray *listCopy = [self.selectedLayout.sourceList sortedArrayUsingDescriptors:@[_sourceDepthSorter, _sourceUUIDSorter]];
-    return listCopy;
-}
- */
-
 
 
 -(InputSource *)findSource:(NSPoint)forPoint

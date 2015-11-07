@@ -56,6 +56,8 @@
 -(void)popoverDidClose:(NSNotification *)notification
 {
     self.popover.contentViewController = nil;
+    //This is only relevant if we're a custom edit popup for staging/live, but just do it unconditionally because reasons/lazy
+    [self.controller updateFrameIntervals];
 }
 
 
