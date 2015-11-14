@@ -1684,7 +1684,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void) adjustInputSize: (bool)doPosition
 {
-    
+
     if (self.topLevelHeight > 0 && self.topLevelWidth > 0)
     {
         float wRatio = self.canvas_width/self.topLevelWidth;
@@ -1734,7 +1734,6 @@ static NSArray *_sourceTypes = nil;
         }
         
         self.layer.allowResize = self.videoInput.allowScaling;
-        
         self.layer.sourceLayer = _currentLayer;
     }
     

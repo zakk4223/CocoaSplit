@@ -281,7 +281,7 @@
         
         
         _allowResize = YES;
-        _sourceLayer = [CALayer layer];
+        self.sourceLayer = [CALayer layer];
         _sourceLayer.anchorPoint = CGPointMake(0.0, 0.0);
         _sourceLayer.contentsGravity = kCAGravityResizeAspect;
         _sourceLayer.frame = CGRectMake(0, 0, 1, 1);
@@ -509,9 +509,14 @@
 -(void)setSourceLayer:(CALayer *)sourceLayer
 {
     [CATransaction begin];
-    [self copySourceSettings:sourceLayer];
     
-    [_sourceLayer.superlayer replaceSublayer:_sourceLayer with:sourceLayer];
+    if (_sourceLayer)
+    {
+        [self copySourceSettings:sourceLayer];
+    
+        
+        [_sourceLayer.superlayer replaceSublayer:_sourceLayer with:sourceLayer];
+    }
     
     
     _sourceLayer = sourceLayer;

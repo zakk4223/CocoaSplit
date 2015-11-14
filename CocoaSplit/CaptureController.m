@@ -1817,6 +1817,14 @@
     if (tmpLayout)
     {
         self.stagingLayout = tmpLayout;
+        if (tmpLayout == self.selectedLayout)
+        {
+            SourceLayout *tmpCopy = [tmpLayout copy];
+            self.stagingLayout = tmpCopy;
+        } else {
+            self.stagingLayout = tmpLayout;
+        }
+
   //      [self.stagingLayout mergeSourceLayout:tmpLayout withLayer:nil];
     }
     
