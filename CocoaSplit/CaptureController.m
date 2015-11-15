@@ -684,18 +684,11 @@
     [self.mainWindow beginSheet:self.addOutputWindowController.window completionHandler:^(NSModalResponse returnCode) {
         if (returnCode == NSModalResponseOK)
         {
-            NSObject<CSStreamServiceProtocol>*serviceObj = self.addOutputWindowController.streamServiceObject;
-            
-            if (serviceObj)
-            {
-                OutputDestination *newDest;
 
-                NSString *destination = [serviceObj getServiceDestination];
-            
-                newDest = [[OutputDestination alloc] initWithType:[serviceObj.class label]];
-                newDest.destination = destination;
+            OutputDestination *newDest = self.addOutputWindowController.outputDestination;
+            if (newDest)
+            {
                 newDest.settingsController = self;
-            
                 [self insertObject:newDest inCaptureDestinationsAtIndex:self.captureDestinations.count];
             }
         }
@@ -1065,7 +1058,6 @@
        self.showPreview = YES;
        self.videoTypes = @[@"Desktop", @"AVFoundation", @"QTCapture", @"Syphon", @"Image", @"Text"];
        self.compressorTypes = @[@"x264", @"AppleVTCompressor", @"None"];
-       self.arOptions = @[@"None", @"Use Source", @"Preserve AR"];
        
        mach_timebase_info(&_mach_timebase);
        

@@ -23,7 +23,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X1Y-aS-wPk">
-                        <rect key="frame" x="18" y="341" width="80" height="17"/>
+                        <rect key="frame" x="18" y="316" width="80" height="17"/>
                         <animations/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Output Type" id="mtq-3G-zIa">
                             <font key="font" metaFont="system"/>
@@ -31,6 +31,26 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
+                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="49U-P3-kb4">
+                        <rect key="frame" x="102" y="310" width="126" height="26"/>
+                        <animations/>
+                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="o4G-X4-boY">
+                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="menu"/>
+                            <menu key="menu" id="NGi-1y-eZb">
+                                <items>
+                                    <menuItem title="Item 1" id="B7O-av-dcl"/>
+                                    <menuItem title="Item 2" id="bv5-kk-VRi"/>
+                                    <menuItem title="Item 3" id="KGc-dw-yCU"/>
+                                </items>
+                            </menu>
+                        </popUpButtonCell>
+                        <connections>
+                            <binding destination="Qtf-3L-EFL" name="content" keyPath="arrangedObjects" id="LXl-Lr-7tZ"/>
+                            <binding destination="Qtf-3L-EFL" name="contentValues" keyPath="arrangedObjects" previousBinding="LXl-Lr-7tZ" id="hxP-FJ-3K5"/>
+                            <binding destination="-2" name="selectedObject" keyPath="self.selectedOutputType" previousBinding="hxP-FJ-3K5" id="sly-cS-rBK"/>
+                        </connections>
+                    </popUpButton>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sHW-AN-BMN">
                         <rect key="frame" x="14" y="13" width="65" height="32"/>
                         <animations/>
@@ -56,30 +76,76 @@ Gw
                             <action selector="cancelButtonAction:" target="-2" id="CGP-YD-jX6"/>
                         </connections>
                     </button>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mcc-vH-D71">
+                        <rect key="frame" x="18" y="341" width="40" height="17"/>
+                        <animations/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Name" id="rH8-ko-Oa4">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="t5O-yx-msN">
+                        <rect key="frame" x="104" y="338" width="121" height="22"/>
+                        <animations/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="rb0-vM-a1K">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                        <connections>
+                            <binding destination="I41-1j-4DV" name="value" keyPath="selection.name" id="VoH-lZ-kTY"/>
+                        </connections>
+                    </textField>
                     <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qkq-wQ-53P">
-                        <rect key="frame" x="20" y="61" width="559" height="272"/>
+                        <rect key="frame" x="20" y="61" width="559" height="247"/>
                         <animations/>
                     </customView>
-                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="49U-P3-kb4">
-                        <rect key="frame" x="102" y="336" width="126" height="26"/>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cQ4-po-jZY">
+                        <rect key="frame" x="231" y="343" width="38" height="17"/>
                         <animations/>
-                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="o4G-X4-boY">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Delay" id="X2V-vD-yFT">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wSQ-MU-931">
+                        <rect key="frame" x="231" y="315" width="78" height="17"/>
+                        <animations/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Compressor" id="IYE-t9-Wmz">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ATx-Ew-doP">
+                        <rect key="frame" x="313" y="309" width="105" height="26"/>
+                        <animations/>
+                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Vea-CP-5AF" id="FRp-3g-z5P">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="menu"/>
-                            <menu key="menu" id="NGi-1y-eZb">
+                            <menu key="menu" id="PRO-dR-iMs">
                                 <items>
-                                    <menuItem title="Item 1" id="B7O-av-dcl"/>
-                                    <menuItem title="Item 2" id="bv5-kk-VRi"/>
-                                    <menuItem title="Item 3" id="KGc-dw-yCU"/>
+                                    <menuItem title="Item 1" state="on" id="Vea-CP-5AF"/>
+                                    <menuItem title="Item 2" id="qbs-KR-rkK"/>
+                                    <menuItem title="Item 3" id="s9m-wd-14k"/>
                                 </items>
                             </menu>
                         </popUpButtonCell>
-                        <connections>
-                            <binding destination="Qtf-3L-EFL" name="content" keyPath="arrangedObjects" id="LXl-Lr-7tZ"/>
-                            <binding destination="Qtf-3L-EFL" name="contentValues" keyPath="arrangedObjects" previousBinding="LXl-Lr-7tZ" id="hxP-FJ-3K5"/>
-                            <binding destination="-2" name="selectedObject" keyPath="self.selectedOutputType" previousBinding="hxP-FJ-3K5" id="sly-cS-rBK"/>
-                        </connections>
                     </popUpButton>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Ib-9M-LVb">
+                        <rect key="frame" x="315" y="340" width="100" height="22"/>
+                        <animations/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="8PL-wV-7SC">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                        <connections>
+                            <binding destination="I41-1j-4DV" name="value" keyPath="selection.stream_delay" id="uSl-YW-wFY"/>
+                        </connections>
+                    </textField>
                 </subviews>
                 <animations/>
             </view>
@@ -90,7 +156,7 @@ Gw
         </window>
         <objectController id="I41-1j-4DV" userLabel="streamServiceObjectController">
             <connections>
-                <binding destination="-2" name="contentObject" keyPath="self.streamServiceObject" id="5md-ay-IeM"/>
+                <binding destination="-2" name="contentObject" keyPath="self.outputDestination" id="0r0-Af-8tm"/>
             </connections>
         </objectController>
         <arrayController id="Qtf-3L-EFL" userLabel="outputTypesController">

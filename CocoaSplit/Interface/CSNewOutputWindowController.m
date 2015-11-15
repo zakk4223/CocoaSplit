@@ -8,6 +8,7 @@
 
 #import "CSNewOutputWindowController.h"
 #import "CSPluginLoader.h"
+#import "OutputDestination.h"
 
 
 @implementation CSNewOutputWindowController
@@ -22,7 +23,7 @@
         NSMutableDictionary *servicePlugins = [[CSPluginLoader sharedPluginLoader] streamServicePlugins];
         
         self.outputTypes = servicePlugins.allKeys;
-        NSLog(@"OUTPUT TYPES %@", self.outputTypes);
+        self.outputDestination = [[OutputDestination alloc] init];
     }
     
     return self;
@@ -55,9 +56,15 @@
         {
             [self.pluginViewController.view removeFromSuperview];
         }
+        self.pluginViewController = nil;
+        
+        self.outputDestination.type_name = [serviceObj.class label];
         self.streamServiceObject = serviceObj;
         NSViewController *serviceConfigView = [self.streamServiceObject getConfigurationView];
         [self.serviceConfigView addSubview:serviceConfigView.view];
+        
+        
+        [serviceConfigView.view setFrameOrigin:NSMakePoint(0, self.serviceConfigView.frame.size.height - serviceConfigView.view.frame.size.height)];
         self.pluginViewController = serviceConfigView;
     }
 }
@@ -77,6 +84,9 @@
 - (IBAction)addButtonAction:(id)sender
 {
     [self.pluginViewController commitEditing];
+    NSString *destination = [self.streamServiceObject getServiceDestination];
+    
+    self.outputDestination.destination = destination;
     [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseOK];
 }
 

@@ -9,11 +9,15 @@
 #import <Cocoa/Cocoa.h>
 #import "CSStreamServiceProtocol.h"
 
+@class OutputDestination;
 
 @interface CSNewOutputWindowController : NSWindowController
 
 - (IBAction)cancelButtonAction:(id)sender;
 - (IBAction)addButtonAction:(id)sender;
+
+
+@property (strong) OutputDestination *outputDestination;
 
 @property (strong) NSString *selectedOutputType;
 @property (strong) NSObject<CSStreamServiceProtocol>*streamServiceObject;
