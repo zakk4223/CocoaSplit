@@ -678,55 +678,30 @@
     self.advancedVideoPanel = nil;
 }
 
--(IBAction)openCreateSheet:(id)sender
+-(IBAction)openCreateSheet:(id)senderddd
 {
-    
-    
-    self.streamServiceObject = nil;
-    
-    NSMutableDictionary *servicePlugins = [[CSPluginLoader sharedPluginLoader] streamServicePlugins];
-    
-    
-    Class serviceClass = servicePlugins[self.selectedDestinationType];;
-    
-    
-    if (serviceClass)
-    {
-        self.streamServiceObject = [[serviceClass alloc] init];
-    }
-    
-    
-    
-    
-    
-    if (self.streamServiceObject)
-    {
-        NSViewController *serviceConfigView = [self.streamServiceObject getConfigurationView];
-        self.streamServiceAddView.frame = serviceConfigView.view.frame;
-        
-        [self.streamServiceAddView addSubview:serviceConfigView.view];
-        self.streamServicePluginViewController  = serviceConfigView;
-        [NSApp beginSheet:self.streamServiceConfWindow modalForWindow:[NSApplication sharedApplication].mainWindow modalDelegate:self didEndSelector:NULL contextInfo:NULL];
-    }
+    self.addOutputWindowController = [[CSNewOutputWindowController alloc] init];
+    [self.mainWindow beginSheet:self.addOutputWindowController.window completionHandler:^(NSModalResponse returnCode) {
+        if (returnCode == NSModalResponseOK)
+        {
+            NSObject<CSStreamServiceProtocol>*serviceObj = self.addOutputWindowController.streamServiceObject;
+            
+            if (serviceObj)
+            {
+                OutputDestination *newDest;
+
+                NSString *destination = [serviceObj getServiceDestination];
+            
+                newDest = [[OutputDestination alloc] initWithType:[serviceObj.class label]];
+                newDest.destination = destination;
+                newDest.settingsController = self;
+            
+                [self insertObject:newDest inCaptureDestinationsAtIndex:self.captureDestinations.count];
+            }
+        }
+    }];
     
 }
-
-
--(IBAction)closeCreateSheet:(id)sender
-{
-    
-    
-    [self.streamServicePluginViewController.view removeFromSuperview];
-    
-    
-    [NSApp endSheet:self.streamServiceConfWindow];
-    [self.streamServiceConfWindow close];
-    self.streamServicePluginViewController = nil;
-    self.streamServiceObject = nil;
-    
-}
-
-
 
 
 -(AVCaptureDevice *)selectedAudioCapture
@@ -1976,30 +1951,6 @@
 {
     return @[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES] ];
 }
-
-
-
-- (IBAction)addStreamingService:(id)sender {
-    
-    
-    OutputDestination *newDest;
-    
-    [self.streamServicePluginViewController commitEditing];
-    
-    NSString *destination = [self.streamServiceObject getServiceDestination];
-    
-    newDest = [[OutputDestination alloc] initWithType:[self.streamServiceObject.class label]];
-    newDest.destination = destination;
-    newDest.settingsController = self;
-
-    [self insertObject:newDest inCaptureDestinationsAtIndex:self.captureDestinations.count];
-    [self closeCreateSheet:nil];
-
-    
-}
-
-
-
 
 
 - (void) outputEncodedData:(CapturedFrameData *)newFrameData 

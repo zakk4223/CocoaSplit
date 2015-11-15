@@ -30,6 +30,7 @@
 #import "CSTimerSourceProtocol.h"
 #import "CSInputLibraryWindowController.h"
 #import "CSInputLibraryItem.h"
+#import "CSNewOutputWindowController.h"
 
 
 
@@ -319,11 +320,11 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) IBOutlet NSWindow *outputEditPanel;
 @property (strong) IBOutlet NSWindow *layoutPanel;
 
-@property (weak) IBOutlet NSView *streamServiceAddView;
+@property (strong) CSNewOutputWindowController *addOutputWindowController;
 
-@property (unsafe_unretained) IBOutlet NSWindow *streamServiceConfWindow;
-@property (strong) NSViewController *streamServicePluginViewController;
-@property (strong) NSObject<CSStreamServiceProtocol>*streamServiceObject;
+@property (weak) IBOutlet NSWindow *mainWindow;
+
+
 
 
 - (IBAction)openLogWindow:(id)sender;
@@ -433,12 +434,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(SourceLayout *)addLayoutFromBase:(SourceLayout *)baseLayout;
 -(SourceLayout *)getLayoutForName:(NSString *)name;
 
-- (IBAction)layoutTableSelected:(NSTableView *)sender;
 - (IBAction)openLayoutPopover:(NSButton *)sender;
-- (IBAction)mainDeleteLayoutClicked:(id)sender;
-- (IBAction)mainCopyLayoutClicked:(id)sender;
--(IBAction)stagingDeleteLayoutClicked:(id)sender;
--(IBAction)stagingCopyLayoutClicked:(id)sender;
 -(void)openLayoutPopover:(NSButton *)sender forLayout:(SourceLayout *)layout;
 -(void)openBuiltinLayoutPopover:(NSView *)sender spawnRect:(NSRect)spawnRect forLayout:(SourceLayout *)layout;
 

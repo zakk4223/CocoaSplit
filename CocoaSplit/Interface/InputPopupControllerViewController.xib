@@ -508,7 +508,7 @@
                                 </connections>
                             </textField>
                             <box verticalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="qV8-1N-B9r">
-                                <rect key="frame" x="17" y="185" width="108" height="5"/>
+                                <rect key="frame" x="17" y="181" width="108" height="4"/>
                                 <animations/>
                                 <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                                 <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>

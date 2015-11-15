@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8191" systemVersion="15B42" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8191"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="CSNewOutputWindowController">
+            <connections>
+                <outlet property="serviceConfigView" destination="qkq-wQ-53P" id="vFa-7P-gNU"/>
+                <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="F0z-JX-Cv5">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="196" y="240" width="579" height="378"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1057"/>
+            <view key="contentView" id="se5-gp-TjO">
+                <rect key="frame" x="0.0" y="0.0" width="579" height="378"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X1Y-aS-wPk">
+                        <rect key="frame" x="18" y="341" width="80" height="17"/>
+                        <animations/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Output Type" id="mtq-3G-zIa">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sHW-AN-BMN">
+                        <rect key="frame" x="14" y="13" width="65" height="32"/>
+                        <animations/>
+                        <buttonCell key="cell" type="push" title="Add" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="z3X-JA-gdY">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="addButtonAction:" target="-2" id="8yh-RF-fOs"/>
+                        </connections>
+                    </button>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hIE-y0-gxF">
+                        <rect key="frame" x="79" y="13" width="82" height="32"/>
+                        <animations/>
+                        <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xgY-lu-8JD">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="cancelButtonAction:" target="-2" id="CGP-YD-jX6"/>
+                        </connections>
+                    </button>
+                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qkq-wQ-53P">
+                        <rect key="frame" x="20" y="61" width="559" height="272"/>
+                        <animations/>
+                    </customView>
+                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="49U-P3-kb4">
+                        <rect key="frame" x="102" y="336" width="126" height="26"/>
+                        <animations/>
+                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="o4G-X4-boY">
+                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="menu"/>
+                            <menu key="menu" id="NGi-1y-eZb">
+                                <items>
+                                    <menuItem title="Item 1" id="B7O-av-dcl"/>
+                                    <menuItem title="Item 2" id="bv5-kk-VRi"/>
+                                    <menuItem title="Item 3" id="KGc-dw-yCU"/>
+                                </items>
+                            </menu>
+                        </popUpButtonCell>
+                        <connections>
+                            <binding destination="Qtf-3L-EFL" name="content" keyPath="arrangedObjects" id="LXl-Lr-7tZ"/>
+                            <binding destination="Qtf-3L-EFL" name="contentValues" keyPath="arrangedObjects" previousBinding="LXl-Lr-7tZ" id="hxP-FJ-3K5"/>
+                            <binding destination="-2" name="selectedObject" keyPath="self.selectedOutputType" previousBinding="hxP-FJ-3K5" id="sly-cS-rBK"/>
+                        </connections>
+                    </popUpButton>
+                </subviews>
+                <animations/>
+            </view>
+            <connections>
+                <outlet property="delegate" destination="-2" id="0bl-1N-AYu"/>
+            </connections>
+            <point key="canvasLocation" x="428.5" y="280"/>
+        </window>
+        <objectController id="I41-1j-4DV" userLabel="streamServiceObjectController">
+            <connections>
+                <binding destination="-2" name="contentObject" keyPath="self.streamServiceObject" id="5md-ay-IeM"/>
+            </connections>
+        </objectController>
+        <arrayController id="Qtf-3L-EFL" userLabel="outputTypesController">
+            <connections>
+                <binding destination="-2" name="contentArray" keyPath="self.outputTypes" id="jUk-0M-csK"/>
+            </connections>
+        </arrayController>
+    </objects>
+</document>
