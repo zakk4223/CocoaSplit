@@ -22,6 +22,23 @@
 }
 
 
+-(void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:self.selectedServer forKey:@"selectedServer"];
+    [aCoder encodeObject:self.streamKey forKey:@"streamKey"];
+}
+
+-(instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [self init])
+    {
+        self.selectedServer = [aDecoder decodeObjectForKey:@"selectedServer"];
+        self.streamKey = [aDecoder decodeObjectForKey:@"streamKey"];
+    }
+    return self;
+}
+
+
 -(NSViewController *)getConfigurationView
 {
     

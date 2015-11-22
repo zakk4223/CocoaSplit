@@ -32,6 +32,36 @@
     return @"Hitbox";
 }
 
+/*
+@property (strong) NSString *authKey;
+@property (strong) NSArray *ingestServers;
+@property (strong) NSString *authUsername;
+@property (strong) NSString *streamKey;
+@property (strong) NSString *streamPath;
+@property (strong) NSString *selectedServer;
+*/
+
+-(void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:self.authUsername forKey:@"authUsername"];
+    [aCoder encodeObject:self.streamKey forKey:@"streamKey"];
+    [aCoder encodeObject:self.streamPath forKey:@"streamPath"];
+    [aCoder encodeObject:self.selectedServer forKey:@"selectedServer"];
+}
+
+
+-(instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [self init])
+    {
+        self.authUsername = [aDecoder decodeObjectForKey:@"authUsername"];
+        self.streamKey = [aDecoder decodeObjectForKey:@"streamKey"];
+        self.streamPath = [aDecoder decodeObjectForKey:@"streamPath"];
+        self.selectedServer = [aDecoder decodeObjectForKey:@"selectedServer"];
+    }
+    return self;
+}
+
 
 -(NSString *)getServiceDestination
 {

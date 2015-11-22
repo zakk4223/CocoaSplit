@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
 
-@protocol CSStreamServiceProtocol <NSObject>
+@protocol CSStreamServiceProtocol <NSObject, NSCoding>
 
 @property bool isReady;
 

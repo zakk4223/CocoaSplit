@@ -24,6 +24,23 @@
 }
 
 
+-(void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:self.fileName forKey:@"fileName"];
+}
+
+
+-(instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [self init])
+    {
+        self.fileName = [aDecoder decodeObjectForKey:@"fileName"];
+    }
+    
+    return self;
+}
+
+
 -(NSViewController *)getConfigurationView
 {
  

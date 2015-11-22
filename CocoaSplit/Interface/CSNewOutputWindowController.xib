@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8191" systemVersion="15B42" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8191"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9060"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CSNewOutputWindowController">
@@ -119,6 +119,18 @@ Gw
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Ib-9M-LVb">
+                        <rect key="frame" x="315" y="340" width="100" height="22"/>
+                        <animations/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="8PL-wV-7SC">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                        <connections>
+                            <binding destination="I41-1j-4DV" name="value" keyPath="selection.stream_delay" id="uSl-YW-wFY"/>
+                        </connections>
+                    </textField>
                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ATx-Ew-doP">
                         <rect key="frame" x="313" y="309" width="105" height="26"/>
                         <animations/>
@@ -133,19 +145,12 @@ Gw
                                 </items>
                             </menu>
                         </popUpButtonCell>
-                    </popUpButton>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Ib-9M-LVb">
-                        <rect key="frame" x="315" y="340" width="100" height="22"/>
-                        <animations/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="8PL-wV-7SC">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
                         <connections>
-                            <binding destination="I41-1j-4DV" name="value" keyPath="selection.stream_delay" id="uSl-YW-wFY"/>
+                            <binding destination="2GW-PH-Paw" name="content" keyPath="arrangedObjects" id="YsC-dc-GYc"/>
+                            <binding destination="2GW-PH-Paw" name="contentValues" keyPath="arrangedObjects.key" previousBinding="YsC-dc-GYc" id="CJB-1f-Rev"/>
+                            <binding destination="I41-1j-4DV" name="selectedValue" keyPath="selection.compressor_name" previousBinding="CJB-1f-Rev" id="zvW-tC-1aI"/>
                         </connections>
-                    </textField>
+                    </popUpButton>
                 </subviews>
                 <animations/>
             </view>
@@ -164,5 +169,10 @@ Gw
                 <binding destination="-2" name="contentArray" keyPath="self.outputTypes" id="jUk-0M-csK"/>
             </connections>
         </arrayController>
+        <dictionaryController objectClassName="_NSDictionaryControllerKeyValuePair" id="2GW-PH-Paw" userLabel="CompressorController">
+            <connections>
+                <binding destination="-2" name="contentDictionary" keyPath="self.compressors" id="Fkj-30-Y36"/>
+            </connections>
+        </dictionaryController>
     </objects>
 </document>

@@ -16,17 +16,34 @@
 @synthesize name = _name;
 
 
+-(instancetype)copyWithZone:(NSZone *)zone
+{
+    OutputDestination *newCopy = [[OutputDestination alloc] init];
+    newCopy.destination = self.destination;
+    newCopy.name = self.name;
+    newCopy.type_name = self.type_name;
+    newCopy.type_class_name = self.type_class_name;
+    newCopy.output_format = self.output_format;
+    newCopy.active = self.active;
+    newCopy.stream_delay = self.stream_delay;
+    newCopy.compressor_name = self.compressor_name;
+    newCopy.streamServiceObject = self.streamServiceObject;
+    return newCopy;
+}
+
+
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
     
     [aCoder encodeObject:self.destination forKey:@"destination"];
     [aCoder encodeObject:self.name forKey:@"name"];
     [aCoder encodeObject:self.type_name forKey:@"type_name"];
+    [aCoder encodeObject:self.type_class_name forKey:@"type_class_name"];
     [aCoder encodeObject:self.output_format forKey:@"output_format"];
     [aCoder encodeBool:self.active forKey:@"active"];
     [aCoder encodeInteger:self.stream_delay forKey:@"stream_delay"];
     [aCoder encodeObject:self.compressor_name forKey:@"compressor_name"];
-    
+    [aCoder encodeObject:self.streamServiceObject forKey:@"streamServiceObject"];
 }
 
 -(id) initWithCoder:(NSCoder *)aDecoder
@@ -41,12 +58,12 @@
         self.active = [aDecoder decodeBoolForKey:@"active"];
         self.stream_delay = (int)[aDecoder decodeIntegerForKey:@"stream_delay"];
         self.compressor_name = [aDecoder decodeObjectForKey:@"compressor_name"];
+        self.streamServiceObject = [aDecoder decodeObjectForKey:@"streamServiceObject"];
+        self.type_class_name = [aDecoder decodeObjectForKey:@"type_class_name"];
     }
-    
-    
-    
     return self;
 }
+
 
 
 

@@ -440,6 +440,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 - (IBAction)stagingAnimationSelected:(id)sender;
 
+@property (weak) IBOutlet NSTableView *outputTableView;
+- (IBAction)outputEditClicked:(id)sender;
 
 @property (weak) IBOutlet NSArrayController *sourceLayoutsArrayController;
 @property (weak) IBOutlet NSTableView *mainSourceLayoutTableView;

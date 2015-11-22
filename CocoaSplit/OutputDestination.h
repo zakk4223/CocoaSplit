@@ -15,7 +15,7 @@
 
 @class FFMpegTask;
 
-@interface OutputDestination : NSObject <NSCoding>
+@interface OutputDestination : NSObject <NSCoding,NSCopying>
 
 {
     NSString *_destination;
@@ -32,6 +32,7 @@
 
 @property (strong) NSString *server_name;
 @property (strong) NSString *type_name;
+@property (strong) NSString *type_class_name;
 @property (strong) NSString *destination;
 @property (strong) NSString *output_format;
 @property (strong) NSString *stream_key;
@@ -42,6 +43,7 @@
 @property (assign) NSUInteger delay_buffer_frames;
 @property (assign) BOOL buffer_draining;
 @property (strong) NSString *name;
+@property (strong) NSObject<CSStreamServiceProtocol>*streamServiceObject;
 
 //stats, mostly we just interrogate the ffmpeg_out object for these, but bouncing
 //through this class allows us to be a bit smarter about the UI status updates

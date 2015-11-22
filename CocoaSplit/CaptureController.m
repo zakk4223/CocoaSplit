@@ -678,22 +678,39 @@
     self.advancedVideoPanel = nil;
 }
 
--(IBAction)openCreateSheet:(id)senderddd
+
+-(void)openOutputSheet:(OutputDestination *)toEdit
 {
     self.addOutputWindowController = [[CSNewOutputWindowController alloc] init];
+    self.addOutputWindowController.compressors = self.compressors;
+    if (toEdit)
+    {
+        self.addOutputWindowController.outputDestination = toEdit.copy;
+    }
     [self.mainWindow beginSheet:self.addOutputWindowController.window completionHandler:^(NSModalResponse returnCode) {
         if (returnCode == NSModalResponseOK)
         {
-
+            
             OutputDestination *newDest = self.addOutputWindowController.outputDestination;
             if (newDest)
             {
                 newDest.settingsController = self;
-                [self insertObject:newDest inCaptureDestinationsAtIndex:self.captureDestinations.count];
+                if (toEdit)
+                {
+                    NSInteger idx = [self.captureDestinations indexOfObject:toEdit];
+                    [self replaceObjectInCaptureDestinationsAtIndex:idx withObject:newDest];
+                } else {
+                    [self insertObject:newDest inCaptureDestinationsAtIndex:self.captureDestinations.count];
+                }
             }
         }
     }];
+
     
+}
+-(IBAction)openCreateSheet:(id)sender
+{
+    [self openOutputSheet:nil];
 }
 
 
@@ -2893,6 +2910,12 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputDeleted object:to_delete userInfo:nil];
 }
 
+-(void)replaceObjectInCaptureDestinationsAtIndex:(NSUInteger)index withObject:(id)object
+{
+    [self.captureDestinations replaceObjectAtIndex:index withObject:object];
+}
+
+
 -(void)insertObject:(OutputDestination *)object inCaptureDestinationsAtIndex:(NSUInteger)index
 {
     [self.captureDestinations insertObject:object atIndex:index];
@@ -3593,5 +3616,11 @@
     }
 }
 
+
+- (IBAction)outputEditClicked:(id)sender
+{
+    OutputDestination *toEdit = [self.captureDestinations objectAtIndex:self.outputTableView.clickedRow];
+    [self openOutputSheet:toEdit];
+}
 
 @end

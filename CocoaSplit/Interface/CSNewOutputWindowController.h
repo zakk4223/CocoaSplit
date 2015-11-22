@@ -24,4 +24,5 @@
 @property (strong) NSArray *outputTypes;
 @property (weak) IBOutlet NSView *serviceConfigView;
 @property (strong) NSViewController *pluginViewController;
+@property (strong) NSDictionary *compressors;
 @end
