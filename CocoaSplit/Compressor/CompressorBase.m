@@ -34,7 +34,6 @@
     return self;
 }
 
-
 -(bool) validate:(NSError **)therror
 {
     
@@ -148,6 +147,7 @@
 -(void) addOutput:(OutputDestination *)destination
 {
     [self.outputs setObject:destination forKey:destination.name];
+    self.active = YES;
 }
 
 -(void) removeOutput:(OutputDestination *)destination
@@ -157,6 +157,7 @@
     if (self.outputs.count == 0)
     {
         [self reset];
+        self.active = NO;
     }
 }
 

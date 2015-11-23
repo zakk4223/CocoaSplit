@@ -210,11 +210,42 @@
         _delayBuffer = [[NSMutableArray alloc] init];
         self.delay_buffer_frames = 0;
         _stopped = YES;
-        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(compressorDeleted:) name:CSNotificationCompressorDeleted object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(compressorRenamed:) name:CSNotificationCompressorRenamed object:nil];
+
+
     }
     return self;
     
     
+}
+
+
+-(void)compressorDeleted:(NSNotification *)notification
+{
+    id <h264Compressor> compressor = notification.object;
+    
+    if (self.compressor_name && [self.compressor_name isEqualToString:compressor.name])
+    {
+        self.compressor_name = nil;
+        self.compressor = nil;
+    }
+}
+
+
+-(void)compressorRenamed:(NSNotification *)notification
+{
+    
+    NSDictionary *infoDict = notification.object;
+    
+    NSString *oldName = infoDict[@"oldName"];
+    id <h264Compressor> compressor = infoDict[@"compressor"];
+    
+    if (self.compressor_name && [self.compressor_name isEqualToString:oldName])
+    {
+        self.compressor_name = compressor.name;
+        self.compressor = compressor;
+    }
 }
 
 
@@ -278,9 +309,7 @@
     
     if (!self.compressor)
     {
-        NSLog(@"NO COMPRESSOR, SETTING TO %@", self.settingsController.selectedCompressor);
-        
-        self.compressor = self.settingsController.selectedCompressor;
+        NSLog(@"NO COMPRESSOR");
         
     }
     
@@ -429,10 +458,8 @@
         [self.ffmpeg_out removeObserver:self forKeyPath:@"errored" context:NULL];
         [self.ffmpeg_out removeObserver:self forKeyPath:@"active" context:NULL];
         [self.compressor removeObserver:self forKeyPath:@"errored" context:NULL];
-
-
     }
-
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 

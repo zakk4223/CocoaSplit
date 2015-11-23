@@ -31,7 +31,7 @@
 #import "CSInputLibraryWindowController.h"
 #import "CSInputLibraryItem.h"
 #import "CSNewOutputWindowController.h"
-
+#import "CompressionSettingsPanelController.h"
 
 
 @class FFMpegTask;
@@ -321,7 +321,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) IBOutlet NSWindow *layoutPanel;
 
 @property (strong) CSNewOutputWindowController *addOutputWindowController;
-
+@property (strong) CompressionSettingsPanelController *compressionEditPanelController;
 @property (weak) IBOutlet NSWindow *mainWindow;
 
 

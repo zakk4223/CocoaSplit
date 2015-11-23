@@ -18,7 +18,7 @@
 @protocol ControllerProtocol;
 
 
-@protocol h264Compressor <NSObject,NSCoding>
+@protocol h264Compressor <NSObject,NSCoding,NSCopying>
 
 //compressFrame is expected to be non-blocking. Create a serial dispatch queue if the underlying compressor
 //is blocking
@@ -39,7 +39,7 @@
 @property (assign) int height;
 @property (strong) NSString *resolutionOption;
 @property (assign) bool errored;
-
+@property (assign) bool active;
 
 -(void) addOutput:(id)destination;
 -(void) removeOutput:(id)destination;

@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "CSStreamServiceProtocol.h"
+#import "CompressionSettingsPanelController.h"
 
 @class OutputDestination;
 
@@ -15,7 +16,9 @@
 
 - (IBAction)cancelButtonAction:(id)sender;
 - (IBAction)addButtonAction:(id)sender;
+- (IBAction)openCompressorEdit:(id)sender;
 
+@property (strong) IBOutlet NSObjectController *outputObjectController;
 
 @property (strong) OutputDestination *outputDestination;
 
@@ -24,5 +27,6 @@
 @property (strong) NSArray *outputTypes;
 @property (weak) IBOutlet NSView *serviceConfigView;
 @property (strong) NSViewController *pluginViewController;
-@property (strong) NSDictionary *compressors;
+@property (strong) NSMutableDictionary *compressors;
+@property (strong) CompressionSettingsPanelController *compressionPanelController;
 @end

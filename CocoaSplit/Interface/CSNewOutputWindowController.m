@@ -40,7 +40,17 @@
         Class serviceClass = self.streamServiceObject.class;
         self.selectedOutputType = [serviceClass label];
     }
+    
+    if (self.outputDestination.compressor_name)
+    {
+        id<h264Compressor> oCompressor = self.compressors[self.outputDestination.compressor_name];
+        if (!oCompressor)
+        {
+            self.outputDestination.compressor_name = nil;
+        }
+    }
 }
+
 
 -(OutputDestination *)outputDestination
 {
@@ -118,17 +128,95 @@
 
 - (IBAction)cancelButtonAction:(id)sender
 {
+    [self.outputObjectController discardEditing];
+    [self.pluginViewController discardEditing];
+    
     [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseCancel];
 }
 
 - (IBAction)addButtonAction:(id)sender
 {
+    [self.outputObjectController commitEditing];
     [self.pluginViewController commitEditing];
     NSString *destination = [self.streamServiceObject getServiceDestination];
     
     self.outputDestination.destination = destination;
     self.outputDestination.streamServiceObject = self.streamServiceObject;
     [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseOK];
+}
+
+- (IBAction)openCompressorEdit:(id)sender
+{
+
+    NSObject <h264Compressor>*editCompressor;
+    
+    if (!self.outputDestination.compressor_name)
+    {
+        return;
+    }
+    
+    editCompressor = self.compressors[self.outputDestination.compressor_name];
+    
+    if (!editCompressor)
+    {
+        return;
+    }
+    
+    
+    self.compressionPanelController = [[CompressionSettingsPanelController alloc] init];
+    
+    if (editCompressor.active)
+    {
+        self.compressionPanelController.compressor = editCompressor;
+    } else {
+        self.compressionPanelController.compressor = editCompressor.copy;
+    }
+    
+    
+    [self.window beginSheet:self.compressionPanelController.window completionHandler:^(NSModalResponse returnCode) {
+        switch (returnCode) {
+            case NSModalResponseStop:
+                if (self.compressionPanelController.compressor.active)
+                {
+                    return;
+                }
+                [self willChangeValueForKey:@"compressors"];
+                [self.compressors removeObjectForKey:self.compressionPanelController.compressor.name];
+                [self didChangeValueForKey:@"compressors"];
+                [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorDeleted object:self.compressionPanelController.compressor userInfo:nil];
+
+                break;
+            case NSModalResponseOK:
+            {
+                if (self.compressionPanelController.compressor.active)
+                {
+                    //if it was an active compressor the edit was in-place
+                    return;
+                }
+                
+                if (![editCompressor.name isEqualToString:self.compressionPanelController.compressor.name])
+                {
+                    [self.compressors removeObjectForKey:editCompressor.name];
+                }
+                self.compressors[self.compressionPanelController.compressor.name] = self.compressionPanelController.compressor;
+                NSDictionary *notifyMsg = [NSDictionary dictionaryWithObjectsAndKeys:editCompressor.name, @"oldName", self.compressionPanelController.compressor, @"compressor", nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorRenamed object:notifyMsg];
+                break;
+            }
+            case 4242:
+                if (self.compressionPanelController.saveProfileName)
+                {
+                    self.compressionPanelController.compressor.name = self.compressionPanelController.saveProfileName.mutableCopy;
+                    [self willChangeValueForKey:@"compressors"];
+                    self.compressors[self.compressionPanelController.compressor.name] = self.compressionPanelController.compressor;
+                    [self didChangeValueForKey:@"compressors"];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:self.compressionPanelController.compressor userInfo:nil];
+
+                }
+            default:
+                break;
+        }
+    }];
 }
 
 

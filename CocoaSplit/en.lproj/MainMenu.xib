@@ -1016,14 +1016,6 @@
                                                                 <action selector="removeDestination:" target="816" id="rf0-yv-K9p"/>
                                                             </connections>
                                                         </button>
-                                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AK8-M7-LqR">
-                                                            <rect key="frame" x="139" y="287" width="96" height="28"/>
-                                                            <animations/>
-                                                            <buttonCell key="cell" type="push" title="Compressors" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Bh8-As-TTg">
-                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                <font key="font" metaFont="smallSystem"/>
-                                                            </buttonCell>
-                                                        </button>
                                                         <scrollView ambiguous="YES" misplaced="YES" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2212">
                                                             <rect key="frame" x="6" y="8" width="837" height="277"/>
                                                             <clipView key="contentView" ambiguous="YES" id="aIS-jP-sHZ">
