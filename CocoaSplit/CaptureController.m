@@ -1751,7 +1751,6 @@
 {
     
     
-    id <h264Compressor> tmpCompressor;
     
     for (id cKey in self.compressors)
     {
