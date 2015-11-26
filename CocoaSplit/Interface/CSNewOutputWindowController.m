@@ -24,7 +24,8 @@
         NSMutableDictionary *servicePlugins = [[CSPluginLoader sharedPluginLoader] streamServicePlugins];
         
         self.outputTypes = servicePlugins.allKeys;
-        self.outputDestination = [[OutputDestination alloc] init];
+        _outputDestination = [[OutputDestination alloc] init];
+        self.buttonLabel = @"Add";
     }
     
     return self;
@@ -34,6 +35,7 @@
 -(void)setOutputDestination:(OutputDestination *)outputDestination
 {
     _outputDestination = outputDestination;
+    self.buttonLabel = @"Save";
     if (outputDestination.streamServiceObject)
     {
         self.streamServiceObject = outputDestination.streamServiceObject;

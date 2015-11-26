@@ -29,4 +29,6 @@
 @property (strong) NSViewController *pluginViewController;
 @property (strong) NSMutableDictionary *compressors;
 @property (strong) CompressionSettingsPanelController *compressionPanelController;
+@property (strong) NSString *buttonLabel;
+
 @end

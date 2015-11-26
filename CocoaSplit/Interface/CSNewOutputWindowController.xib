@@ -61,6 +61,7 @@
                         </buttonCell>
                         <connections>
                             <action selector="addButtonAction:" target="-2" id="8yh-RF-fOs"/>
+                            <binding destination="-2" name="title" keyPath="self.buttonLabel" id="wbi-vq-yJS"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hIE-y0-gxF">
