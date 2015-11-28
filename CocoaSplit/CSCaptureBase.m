@@ -226,7 +226,9 @@
 
 -(CALayer *)createNewLayer
 {
-    return [CALayer layer];
+    CALayer *newLayer = [CALayer layer];
+    return newLayer;
+
 }
 
 

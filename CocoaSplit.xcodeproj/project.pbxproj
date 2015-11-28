@@ -187,7 +187,6 @@
 		34C67B8E1A2E69F60012DC1B /* CSHitboxStreamServicePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34C67B781A2D7B6A0012DC1B /* CSHitboxStreamServicePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		34C680A119DD06E800413468 /* CSSyphonInjectExtraPlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34C6808C19DD01C400413468 /* CSSyphonInjectExtraPlugin.bundle */; };
 		34C6C3BF15FB5B440018A18B /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34C6C3BE15FB5B440018A18B /* OpenGL.framework */; };
-		34CFE49D18F1459600092C6A /* AudioMixer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34CFE49C18F1459600092C6A /* AudioMixer.xib */; };
 		34CFE4A018F154DD00092C6A /* AVFChannelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 34CFE49F18F154DD00092C6A /* AVFChannelManager.m */; };
 		34CFE4A118F154DD00092C6A /* AVFChannelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 34CFE49F18F154DD00092C6A /* AVFChannelManager.m */; };
 		34CFE4A418F1992A00092C6A /* AVFAudioChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 34CFE4A318F1992A00092C6A /* AVFAudioChannel.m */; };
@@ -197,7 +196,6 @@
 		34D2D5771A547C35001004E5 /* CSTextCaptureViewControllerBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2D5761A547C35001004E5 /* CSTextCaptureViewControllerBase.m */; };
 		34D2D5781A547C35001004E5 /* CSTextCaptureViewControllerBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2D5761A547C35001004E5 /* CSTextCaptureViewControllerBase.m */; };
 		34D2D5B41A548B68001004E5 /* CSNowPlayingPlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34D2D59E1A54857D001004E5 /* CSNowPlayingPlugin.bundle */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		34D4351B198BE3B700266169 /* NewLayoutPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34D4351A198BE3B700266169 /* NewLayoutPanel.xib */; };
 		34D6580219B342E00012E32B /* CSTwitchStreamServicePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC32B19B0AD360007C07B /* CSTwitchStreamServicePlugin.bundle */; };
 		34D6580319B342E70012E32B /* CSFileStreamServicePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC33019B0AD500007C07B /* CSFileStreamServicePlugin.bundle */; };
 		34D6581819B387DE0012E32B /* AppDelegate+AppDelegate_ScriptingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D6581719B387DE0012E32B /* AppDelegate+AppDelegate_ScriptingAdditions.m */; };
@@ -762,7 +760,6 @@
 		34C67B731A2D7B690012DC1B /* CSHitboxStreamServicePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSHitboxStreamServicePlugin.xcodeproj; path = StreamServicePlugins/CSHitboxStreamServicePlugin/CSHitboxStreamServicePlugin.xcodeproj; sourceTree = "<group>"; };
 		34C6807E19DD01C300413468 /* CSSyphonInjectExtraPlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSSyphonInjectExtraPlugin.xcodeproj; path = ExtraPlugins/CSSyphonInjectExtraPlugin/CSSyphonInjectExtraPlugin.xcodeproj; sourceTree = "<group>"; };
 		34C6C3BE15FB5B440018A18B /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
-		34CFE49C18F1459600092C6A /* AudioMixer.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AudioMixer.xib; path = Interface/AudioMixer.xib; sourceTree = "<group>"; };
 		34CFE49E18F154DD00092C6A /* AVFChannelManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVFChannelManager.h; sourceTree = "<group>"; };
 		34CFE49F18F154DD00092C6A /* AVFChannelManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVFChannelManager.m; sourceTree = "<group>"; };
 		34CFE4A218F1992A00092C6A /* AVFAudioChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVFAudioChannel.h; sourceTree = "<group>"; };
@@ -772,7 +769,6 @@
 		34D2D5751A547C35001004E5 /* CSTextCaptureViewControllerBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTextCaptureViewControllerBase.h; path = PluginHeaders/CSTextCaptureViewControllerBase.h; sourceTree = "<group>"; };
 		34D2D5761A547C35001004E5 /* CSTextCaptureViewControllerBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSTextCaptureViewControllerBase.m; sourceTree = "<group>"; };
 		34D2D5991A54857C001004E5 /* CSNowPlayingPlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSNowPlayingPlugin.xcodeproj; path = CapturePlugins/CSNowPlayingPlugin/CSNowPlayingPlugin.xcodeproj; sourceTree = "<group>"; };
-		34D4351A198BE3B700266169 /* NewLayoutPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NewLayoutPanel.xib; path = Interface/NewLayoutPanel.xib; sourceTree = "<group>"; };
 		34D43550198DCE3800266169 /* TextureWrapPlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = TextureWrapPlugin.xcodeproj; path = ImageUnitPlugins/TextureWrapPlugin/TextureWrapPlugin.xcodeproj; sourceTree = "<group>"; };
 		34D657F519B33DCF0012E32B /* CSPluginFactoryProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPluginFactoryProtocol.h; path = PluginHeaders/CSPluginFactoryProtocol.h; sourceTree = "<group>"; };
 		34D6581619B387DE0012E32B /* AppDelegate+AppDelegate_ScriptingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "AppDelegate+AppDelegate_ScriptingAdditions.h"; path = "ScriptingAddditions/AppDelegate+AppDelegate_ScriptingAdditions.h"; sourceTree = "<group>"; };
@@ -1227,7 +1223,6 @@
 			isa = PBXGroup;
 			children = (
 				34ABEF3B17C0C2CB00AA5E62 /* advancedPrefPanel.xib */,
-				34CFE49C18F1459600092C6A /* AudioMixer.xib */,
 				344825E41B253D6900AF9EAC /* CAMultiAudioMatrixCell.h */,
 				344825E51B253D6900AF9EAC /* CAMultiAudioMatrixCell.m */,
 				34BD1E601B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.h */,
@@ -1254,7 +1249,6 @@
 				347B14DB198492D900DC7DF0 /* InputPopupControllerViewController.xib */,
 				344988121893CF0500044259 /* LogWindow.xib */,
 				340FE4B615F3417E00E4CE4E /* MainMenu.xib */,
-				34D4351A198BE3B700266169 /* NewLayoutPanel.xib */,
 				34348C2919BDBDC000A122C2 /* PluginManagerWindowController.xib */,
 				349461441AAD73BC00F28883 /* TestView.xib */,
 				34F52A241BC1CE2700662911 /* CSLayoutCollectionItem.h */,
@@ -2070,7 +2064,6 @@
 				340FE4B215F3417E00E4CE4E /* Credits.rtf in Resources */,
 				340FE4B815F3417E00E4CE4E /* MainMenu.xib in Resources */,
 				34DA1D3F1BF823E700132486 /* CSNewOutputWindowController.xib in Resources */,
-				34D4351B198BE3B700266169 /* NewLayoutPanel.xib in Resources */,
 				34F1EB931BCCA41F00B38E6C /* CSLayoutEditWindowController.xib in Resources */,
 				342B33B61980771200492CB7 /* line.vtsh in Resources */,
 				34938EEF1AE4D24200F3B1CF /* CSFilterChooserWindowController.xib in Resources */,
@@ -2078,7 +2071,6 @@
 				34B5FCE119BF1C3F00F67D19 /* CreateLayoutViewController.xib in Resources */,
 				3479A9971A9007DD00A524F0 /* CocoaSplit.sdef in Resources */,
 				340D8C971959C7C100BE5144 /* CompressionSettingsPanel.xib in Resources */,
-				34CFE49D18F1459600092C6A /* AudioMixer.xib in Resources */,
 				344988131893CF0500044259 /* LogWindow.xib in Resources */,
 				34D696FC1871B8F700B50EB6 /* Defaults.plist in Resources */,
 				34348C2B19BDBDC000A122C2 /* PluginManagerWindowController.xib in Resources */,

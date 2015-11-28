@@ -23,7 +23,6 @@
             <connections>
                 <outlet property="AudioDeviceArrayController" destination="896" id="H2R-qR-lrz"/>
                 <outlet property="canvasSplitView" destination="EvN-9x-8Di" id="Y7U-Zu-lP3"/>
-                <outlet property="compressController" destination="gSI-N4-DsK" id="aUZ-rh-IfA"/>
                 <outlet property="editorPopover" destination="pVG-uK-v8x" id="Z4y-xI-k5M"/>
                 <outlet property="exportLayoutMenu" destination="Aks-2j-maL" id="SL3-RU-b4a"/>
                 <outlet property="extrasMenu" destination="wPc-B9-L1T" id="Ysq-1k-pbF"/>
@@ -1974,11 +1973,6 @@
             <connections>
                 <binding destination="816" name="contentArray" keyPath="captureDestinations" id="1527"/>
                 <binding destination="816" name="selectionIndexes" keyPath="selectedCaptureDestinations" id="1743"/>
-            </connections>
-        </arrayController>
-        <arrayController id="Ps1-eW-a2A" userLabel="destinationTypesController">
-            <connections>
-                <binding destination="816" name="contentArray" keyPath="self.destinationTypes" id="zTx-hV-zxu"/>
             </connections>
         </arrayController>
         <arrayController automaticallyRearrangesObjects="YES" id="TZL-zr-Ssj" userLabel="SourceLayoutsArrayController">

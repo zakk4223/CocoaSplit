@@ -46,11 +46,6 @@
 
 
 
--(IBAction)mainCopyLayoutClicked:(id)sender
-{
-    [self cloneSelectedSourceLayout:self.mainSourceLayoutTableView];
-}
-
 
 -(void) cloneSelectedSourceLayout:(NSTableView *)fromTable
 {
@@ -395,66 +390,7 @@
 
 
 
-- (IBAction)addInputSource:(id)sender
-{
-    if (self.selectedLayout)
-    {
-        
-    
-        InputSource *newSource = [[InputSource alloc] init];
-        [self.selectedLayout addSource:newSource];
-        [self.previewCtx spawnInputSettings:newSource atRect:NSZeroRect];
-    }
-}
 
-
-
-- (IBAction)openAudioMixerPanel:(id)sender {
-    
-    if (!self.audioMixerPanel)
-    {
-        [[NSBundle mainBundle] loadNibNamed:@"AudioMixer" owner:self topLevelObjects:nil];
-        [NSApp beginSheet:self.audioMixerPanel modalForWindow:[NSApplication sharedApplication].mainWindow modalDelegate:self didEndSelector:NULL contextInfo:NULL];
-    }
-}
-
-
-- (IBAction)closeAudioMixerPanel:(id)sender {
-    
-    [NSApp endSheet:self.audioMixerPanel];
-    [self.audioMixerPanel close];
-    self.audioMixerPanel = nil;
-}
-
-
-
--(IBAction)openVideoAdvanced:(id)sender
-{
-    
-    
-    NSString *panelName;
-    
-    if (!self.advancedVideoPanel)
-    {
-        
-    
-        panelName = [NSString stringWithFormat:@"%@AdvancedPanel", self.selectedVideoType];
-        
-        
-        [[NSBundle mainBundle] loadNibNamed:panelName owner:self topLevelObjects:nil];
-        
-        [NSApp beginSheet:self.advancedVideoPanel modalForWindow:[NSApplication sharedApplication].mainWindow modalDelegate:self didEndSelector:NULL contextInfo:NULL];
-    
-    }
-    
-}
-
--(IBAction)closeVideoAdvanced:(id)sender
-{
-    [NSApp endSheet:self.advancedVideoPanel];
-    [self.advancedVideoPanel close];
-    self.advancedVideoPanel = nil;
-}
 
 
 -(void)openOutputSheet:(OutputDestination *)toEdit
@@ -490,70 +426,6 @@
 {
     [self openOutputSheet:nil];
 }
-
-
--(AVCaptureDevice *)selectedAudioCapture
-{
-    if (self.audioCaptureSession)
-    {
-        return self.audioCaptureSession.activeAudioDevice;
-    }
-    
-    return nil;
-}
-
-
--(void) selectedAudioCaptureFromID:(NSString *)uniqueID
-{
-    if (uniqueID)
-    {
-        self.audioCaptureSession.activeAudioDevice = [AVCaptureDevice deviceWithUniqueID:uniqueID];
-    }
-    
-}
-
-
--(void) createCGLContext
-{
-    NSOpenGLPixelFormatAttribute glAttributes[] = {
-        
-        NSOpenGLPFANoRecovery,
-        NSOpenGLPFAAccelerated,
-        //NSOpenGLPFAAllowOfflineRenderers,
-        NSOpenGLPFADepthSize, 32,
-        (NSOpenGLPixelFormatAttribute) 0,0,
-        (NSOpenGLPixelFormatAttribute) 0
-        
-    };
-    if (self.renderOnIntegratedGPU)
-    {
-        NSLog(@"RENDERING ON INTELHD!");
-        
-        glAttributes[5] = NSOpenGLPFARendererID;
-        glAttributes[6] = kCGLRendererIntelHDID;
-    }
-    
-    
-    NSOpenGLPixelFormat *pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:glAttributes];
-    
-    if (!pixelFormat)
-    {
-        return;
-    }
-    
-    _ogl_ctx = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:nil];
-    
-    if (!_ogl_ctx)
-    {
-        return;
-    }
-
-    _cgl_ctx = [_ogl_ctx CGLContextObj];
-    
-    
-}
-
-
 
 
 -(void)buildScreensInfo:(NSNotification *)notification
@@ -825,10 +697,7 @@
        
        
 
-       audioLastReadPosition = 0;
-       audioWritePosition = 0;
        
-       audioBuffer = [[NSMutableArray alloc] init];
        videoBuffer = [[NSMutableArray alloc] init];
        
        
@@ -850,8 +719,6 @@
        
        
        
-       self.showPreview = YES;
-       self.videoTypes = @[@"Desktop", @"AVFoundation", @"QTCapture", @"Syphon", @"Image", @"Text"];
        
        
        mach_timebase_info(&_mach_timebase);
@@ -1105,14 +972,6 @@
 }
 
 
--(NSArray *)destinationTypes
-{
-    
-    NSMutableDictionary *servicePlugins = [[CSPluginLoader sharedPluginLoader] streamServicePlugins];
-
-    return servicePlugins.allKeys;
-}
-
 
 -(void)setAudioSamplerate:(int)audioSamplerate
 {
@@ -1341,18 +1200,14 @@
     [saveRoot setValue: [NSNumber numberWithInt:self.audioBitrate] forKey:@"audioBitrate"];
     [saveRoot setValue: [NSNumber numberWithInt:self.audioSamplerate] forKey:@"audioSamplerate"];
     [saveRoot setValue: self.selectedVideoType forKey:@"selectedVideoType"];
-    [saveRoot setValue: self.selectedAudioCapture.uniqueID forKey:@"audioCaptureID"];
     [saveRoot setValue: self.captureDestinations forKey:@"captureDestinations"];
-    [saveRoot setValue:[NSNumber numberWithFloat:self.audioCaptureSession.previewVolume] forKey:@"previewVolume"];
     [saveRoot setValue:[NSNumber numberWithInt:self.maxOutputDropped] forKey:@"maxOutputDropped"];
     [saveRoot setValue:[NSNumber numberWithInt:self.maxOutputPending] forKey:@"maxOutputPending"];
-    [saveRoot setValue:self.resolutionOption forKey:@"resolutionOption"];
     [saveRoot setValue:[NSNumber numberWithDouble:self.audio_adjust] forKey:@"audioAdjust"];
     [saveRoot setValue: [NSNumber numberWithBool:self.useStatusColors] forKey:@"useStatusColors"];
     [saveRoot setValue:self.compressors forKey:@"compressors"];
     [saveRoot setValue:self.extraSaveData forKey:@"extraSaveData"];
 
-    [saveRoot setValue:[NSNumber numberWithBool:self.renderOnIntegratedGPU] forKey:@"renderOnIntegratedGPU"];
     
     
 
@@ -1476,27 +1331,11 @@
     
     NSString *audioID = [saveRoot valueForKey:@"audioCaptureID"];
     
-    [self selectedAudioCaptureFromID:audioID];
-    self.audioCaptureSession.previewVolume = [[saveRoot valueForKey:@"previewVolume"] floatValue];
-    
     self.captureFPS = [[saveRoot valueForKey:@"captureFPS"] doubleValue];
     self.maxOutputDropped = [[saveRoot valueForKey:@"maxOutputDropped"] intValue];
     self.maxOutputPending = [[saveRoot valueForKey:@"maxOutputPending"] intValue];
 
     self.audio_adjust = [[saveRoot valueForKey:@"audioAdjust"] doubleValue];
-    
-    self.resolutionOption = [saveRoot valueForKey:@"resolutionOption"];
-    if (!self.resolutionOption)
-    {
-        self.resolutionOption = @"None";
-    }
-
-    
-    self.renderOnIntegratedGPU = [[saveRoot valueForKey:@"renderOnIntegratedGPU"] boolValue];
-
-    [self createCGLContext];
-    //mainThread = [[NSThread alloc] initWithTarget:self selector:@selector(newFrameTimed) object:nil];
-    //[mainThread start];
     
 
     self.stagingPreviewView.controller = self;
@@ -1554,15 +1393,20 @@
     SourceLayout *tmpLayout = [saveRoot valueForKey:@"selectedLayout"];
     if (tmpLayout)
     {
-        self.selectedLayout = tmpLayout;
-//        [self.selectedLayout mergeSourceLayout:tmpLayout withLayer:nil];
+        if (tmpLayout == self.stagingLayout || [self.sourceLayouts containsObject:tmpLayout])
+        {
+            SourceLayout *tmpCopy = [tmpLayout copy];
+            self.selectedLayout = tmpCopy;
+        } else {
+            self.selectedLayout = tmpLayout;
+        }
+        //[self.selectedLayout mergeSourceLayout:tmpLayout withLayer:nil];
     }
     
     tmpLayout = [saveRoot valueForKey:@"stagingLayout"];
     if (tmpLayout)
     {
-        self.stagingLayout = tmpLayout;
-        if (tmpLayout == self.selectedLayout)
+        if (tmpLayout == self.selectedLayout || [self.sourceLayouts containsObject:tmpLayout])
         {
             SourceLayout *tmpCopy = [tmpLayout copy];
             self.stagingLayout = tmpCopy;
@@ -1570,7 +1414,7 @@
             self.stagingLayout = tmpLayout;
         }
 
-  //      [self.stagingLayout mergeSourceLayout:tmpLayout withLayer:nil];
+        //[self.stagingLayout mergeSourceLayout:tmpLayout withLayer:nil];
     }
     
     self.inputLibrary = [saveRoot valueForKey:@"inputLibrary"];
@@ -1767,14 +1611,11 @@
     
     
     
-    [self.audioCaptureSession setupAudioCompression];
     
     _frameCount = 0;
     _firstAudioTime = kCMTimeZero;
     _firstFrameTime = 0;
     
-    _compressedFrameCount = 0;
-    _min_delay = _max_delay = _avg_delay = 0;
 
     
     return YES;
@@ -1787,20 +1628,9 @@
 {
     
     
-    if (_cmdLineInfo)
-    {
-        printf("%s", [[self buildCmdLineInfo] UTF8String]);
-        [NSApp performSelector:@selector(terminate:) withObject:nil afterDelay:0.0];
-        return YES;
-    }
-    
     _frameCount = 0;
     _firstAudioTime = kCMTimeZero;
     _firstFrameTime = 0;
-    
-    _compressedFrameCount = 0;
-    _min_delay = _max_delay = _avg_delay = 0;
-    
     
     
     if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_8)
@@ -1858,161 +1688,10 @@
 
 
 
--(NSString *) buildCmdLineInfo
-{
-    
-    NSMutableDictionary *infoDict = [[NSMutableDictionary alloc] init];
-    NSMutableArray *audioArray = [[NSMutableArray alloc] init];
-    
-    
-    for (AVCaptureDevice *audioDev in self.audioCaptureDevices)
-    {
-        [audioArray addObject:@{@"name": audioDev.localizedName, @"uniqueID": audioDev.uniqueID}];
-    }
-    
-    
-    
-    [infoDict setValue:audioArray forKey:@"audioDevices"];
-    
-    
-    NSMutableDictionary *x264dict = [[NSMutableDictionary alloc] init];
-    
-    [x264dict setValue:self.x264presets forKey:@"presets"];
-    [x264dict setValue:self.x264tunes forKey:@"tunes"];
-    [x264dict setValue:self.x264profiles forKey:@"profiles"];
-
-
-    
-    [infoDict setValue:x264dict forKey:@"x264"];
-    
-
-
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:infoDict options:0 error:nil];
-    
-    return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    
-}
-
-
--(id <h264Compressor>) buildCmdlineCompressor:(NSUserDefaults *)cmdargs
-{
-    
-    id <h264Compressor> newCompressor;
-    if ([self.selectedCompressorType isEqualToString:@"x264"])
-    {
-        
-        x264Compressor *tmpCompressor;
-        
-        tmpCompressor = [[x264Compressor alloc] init];
-        tmpCompressor.tune = [cmdargs stringForKey:@"x264tune"];
-        tmpCompressor.profile = [cmdargs stringForKey:@"x264profile"];
-        tmpCompressor.preset = [cmdargs stringForKey:@"x264preset"];
-        tmpCompressor.use_cbr = [cmdargs boolForKey:@"videoCBR"];
-        tmpCompressor.crf = (int)[cmdargs integerForKey:@"x264crf"];
-        tmpCompressor.vbv_maxrate = (int)[cmdargs integerForKey:@"captureVideoAverageBitrate"];
-        tmpCompressor.vbv_buffer = (int)[cmdargs integerForKey:@"captureVideoMaxBitrate"];
-        tmpCompressor.keyframe_interval = (int)[cmdargs integerForKey:@"captureVideoMaxKeyframeInterval"];
-        newCompressor = tmpCompressor;
-    } else if ([self.selectedCompressorType isEqualToString:@"AppleVTCompressor"]) {
-        AppleVTCompressor *tmpCompressor;
-        tmpCompressor = [[AppleVTCompressor alloc] init];
-        tmpCompressor.average_bitrate = (int)[cmdargs integerForKey:@"captureVideoAverageBitrate"];
-        tmpCompressor.max_bitrate = (int)[cmdargs integerForKey:@"captureVideoMaxBitrate"];
-        tmpCompressor.keyframe_interval = (int)[cmdargs integerForKey:@"captureVideoMaxKeyframeInterval"];
-        newCompressor = tmpCompressor;
-    } else {
-        newCompressor = nil;
-    }
-
-    return newCompressor;
-}
-
--(void) loadCmdlineSettings:(NSUserDefaults *)cmdargs
-{
-    
-    
-    if ([cmdargs objectForKey:@"dumpInfo"])
-    {
-        _cmdLineInfo = YES;
-    } else {
-        _cmdLineInfo = NO;
-    }
-    
-    
-    if ([cmdargs objectForKey:@"captureWidth"])
-    {
-        self.captureWidth = (int)[cmdargs integerForKey:@"captureWidth"];
-    }
-    
-    if ([cmdargs objectForKey:@"captureHeight"])
-    {
-        self.captureHeight = (int)[cmdargs integerForKey:@"captureHeight"];
-    }
-    
-    if ([cmdargs objectForKey:@"audioBitrate"])
-    {
-        self.audioBitrate = (int)[cmdargs integerForKey:@"audioBitrate"];
-    }
-    
-    if ([cmdargs objectForKey:@"audioSamplerate"])
-    {
-        self.audioSamplerate = (int)[cmdargs integerForKey:@"audioSamplerate"];
-    }
-    
-    if ([cmdargs objectForKey:@"selectedVideoType"])
-    {
-        self.selectedVideoType = [cmdargs stringForKey:@"selectedVideoType"];
-    }
-    
-    /*
-    if ([cmdargs objectForKey:@"videoCaptureID"])
-    {
-        NSString *videoID = [cmdargs stringForKey:@"videoCaptureID"];
-        [self selectedVideoCaptureFromID:videoID];
-    }
-    
-     */
-    
-    if ([cmdargs objectForKey:@"audioCaptureID"])
-    {
-        NSString *audioID = [cmdargs stringForKey:@"audioCaptureID"];
-        [self selectedAudioCaptureFromID:audioID];
-    }
-    
-    if ([cmdargs objectForKey:@"captureFPS"])
-    {
-        self.captureFPS = [cmdargs doubleForKey:@"captureFPS"];
-    }
-    
-    if ([cmdargs objectForKey:@"outputDestinations"])
-    {
-        
-        if (!self.captureDestinations)
-        {
-            self.captureDestinations = [[NSMutableArray alloc] init];
-        }
-
-        NSArray *outputs = [cmdargs arrayForKey:@"outputDestinations"];
-        for (NSString *outstr in outputs)
-        {
-            OutputDestination *newDest = [[OutputDestination alloc] initWithType:@"file"];
-            
-            newDest.active = YES;
-            newDest.destination = outstr;
-            newDest.settingsController = self;
-            [[self mutableArrayValueForKey:@"captureDestinations"] addObject:newDest];
-        }
-        
-    }
-    
-}
-
 
 - (void)stopStream
 {
     
-    self.videoCompressor = nil;
-    self.selectedCompressor = nil;
     self.captureRunning = NO;
 
     
@@ -2045,7 +1724,6 @@
         [[NSProcessInfo processInfo] endActivity:_activity_token];
     }
     
-    //[self.audioCaptureSession stopAudioCompression];
     self.multiAudioEngine.encoder = nil;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationStreamStopped object:self userInfo:nil];
@@ -2598,7 +2276,7 @@
 {
     
     NSUInteger key_idx = [@[@"captureWidth", @"captureHeight", @"captureFPS",
-    @"captureVideoAverageBitrate", @"audioBitrate", @"audioSamplerate", @"captureVideoMaxBitrate", @"captureVideoMaxKeyframeInterval"] indexOfObject:key];
+    @"audioBitrate", @"audioSamplerate"] indexOfObject:key];
     
     if (key_idx != NSNotFound)
     {
@@ -3238,8 +2916,6 @@
     
     
     [self.canvasSplitView display];
-    self.stagingControls.hidden = YES;
-    self.goLiveControls.hidden = YES;
     self.livePreviewView.viewOnly = NO;
     self.activePreviewView = self.livePreviewView;
     _stagingHidden = YES;
@@ -3277,8 +2953,6 @@
     [self.canvasSplitView adjustSubviews];
     
     [self.canvasSplitView display];
-    self.stagingControls.hidden = NO;
-    self.goLiveControls.hidden = NO;
     self.livePreviewView.viewOnly = YES;
     _stagingHidden = NO;
     self.activePreviewView = self.stagingPreviewView;

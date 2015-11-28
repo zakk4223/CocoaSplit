@@ -479,8 +479,7 @@
 
     } else {
         
-        //what did we learn today? Don't believe shit you read in forum posts...
-         //_av_codec_ctx->rc_buffer_size = ((1/self.settingsController.captureFPS)*self.settingsController.captureVideoAverageBitrate)*1000;
+
         
         _av_codec_ctx->bit_rate = self.vbv_maxrate*1000;
         

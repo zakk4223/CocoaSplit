@@ -34,6 +34,12 @@
     return self;
 }
 
+-(instancetype)copyWithZone:(NSZone *)zone
+{
+    return [[self.class allocWithZone:zone] init];
+}
+
+
 -(bool) validate:(NSError **)therror
 {
     

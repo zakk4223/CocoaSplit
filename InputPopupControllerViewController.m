@@ -216,10 +216,6 @@
     }
     
     [self.inputSource editorPopoverDidClose];
-    
-    
-    
-    
 }
 
 
@@ -439,7 +435,7 @@
 
 - (IBAction)resetConstraints:(id)sender
 {
-    NSDictionary *oldConstraints = self.inputSource.constraintMap;
+    NSMutableDictionary *oldConstraints = self.inputSource.constraintMap;
     
     [[self.inputSource.sourceLayout.undoManager prepareWithInvocationTarget:self.inputSource.sourceLayout] modifyUUID:self.inputSource.uuid withBlock:^(InputSource *input) {
         

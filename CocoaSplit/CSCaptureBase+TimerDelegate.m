@@ -9,5 +9,7 @@
 #import "CSCaptureBase+TimerDelegate.h"
 
 @implementation CSCaptureBase (TimerDelegate)
+@dynamic timerDelegateCtx;
+@dynamic timerDelegate;
 
 @end

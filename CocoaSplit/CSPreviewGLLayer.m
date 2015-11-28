@@ -168,7 +168,6 @@
     
     
     
-    GLfloat outline_verts[8];
     GLfloat snapx_verts[4];
     GLfloat snapy_verts[4];
     
