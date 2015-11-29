@@ -86,6 +86,10 @@
     } else if (_animation) {
         [newLayer addAnimation:_animation forKey:@"contents"];
     }
+    
+    newLayer.minificationFilter = kCAFilterTrilinear;
+    newLayer.magnificationFilter = kCAFilterTrilinear;
+
     return newLayer;
 }
 

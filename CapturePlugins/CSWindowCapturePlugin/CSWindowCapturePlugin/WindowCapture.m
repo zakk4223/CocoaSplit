@@ -28,6 +28,35 @@
     return self;
 }
 
+
+-(void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [super encodeWithCoder:aCoder];
+    [aCoder encodeFloat:self.captureFPS forKey:@"captureFPS"];
+}
+
+
+
+-(id) initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithCoder:aDecoder])
+    {
+        self.captureFPS = [aDecoder decodeFloatForKey:@"captureFPS"];
+    }
+    
+    return self;
+}
+
+
+-(CALayer *)createNewLayer
+{
+    CALayer *newLayer = [super createNewLayer];
+    newLayer.minificationFilter = kCAFilterTrilinear;
+    newLayer.magnificationFilter = kCAFilterTrilinear;
+    return newLayer;
+}
+
+
 -(NSArray *) availableVideoDevices
 {
     NSArray *windows = CFBridgingRelease(CGWindowListCopyWindowInfo(kCGWindowListOptionOnScreenOnly|kCGWindowListExcludeDesktopElements, kCGNullWindowID));
@@ -81,12 +110,15 @@
         NSNumber *windowID = self.activeVideoDevice.captureDevice;
         
         
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
         CGImageRef windowImg = CGWindowListCreateImage(CGRectNull, kCGWindowListOptionIncludingWindow, [windowID unsignedIntValue], kCGWindowImageBoundsIgnoreFraming|kCGWindowImageBestResolution);
             [self updateLayersWithBlock:^(CALayer *layer) {
                 
                layer.contents = (__bridge id)(windowImg);
             }];
             CGImageRelease(windowImg);
+        });
         
         _nextCaptureTime = currentTime + (1/self.captureFPS);
     }
