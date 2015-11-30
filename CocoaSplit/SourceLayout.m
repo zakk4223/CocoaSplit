@@ -492,7 +492,25 @@
         [self.containedLayouts removeObject:cLayout];
     }
     
-    [self removeSourceInputs:self.sourceList withLayer:nil];
+    [self.animationList removeAllObjects];
+    //If an input exists in both lists, only remove it if the new one is different/changed
+    
+    NSMutableArray *rList = [NSMutableArray array];
+    for (InputSource *src in self.sourceList)
+    {
+        InputSource *nSrc = [layout inputForUUID:src.uuid];
+        if (nSrc)
+        {
+            if ([nSrc isDifferentInput:src])
+            {
+                [rList addObject:src];
+            }
+        } else {
+            [rList addObject:src];
+        }
+    }
+    
+    [self removeSourceInputs:rList withLayer:nil];
     
     
     if (self.addLayoutBlock)
@@ -608,7 +626,16 @@
         src.sourceLayout = self;
         src.is_live = self.isActive;
         InputSource *eSrc = [self inputForUUID:src.uuid];
+        bool isDifferent = YES;
         
+        if (eSrc)
+        {
+            isDifferent = [eSrc isDifferentInput:src];
+            if (!isDifferent)
+            {
+                continue;
+            }
+        }
         if (eSrc && !onlyAdd)
         {
             [eSrc.layer.superlayer addSublayer:src.layer];
@@ -675,8 +702,20 @@
         src.is_live = self.isActive;
         InputSource *eSrc = [self inputForUUID:src.uuid];
         
+        bool isDifferent = NO;
+        
+        if (eSrc)
+        {
+            isDifferent = [eSrc isDifferentInput:src];
+        }
+        
         if (eSrc && !onlyAdd)
         {
+            if (!isDifferent)
+            {
+                continue;
+            }
+            
             src.layer.hidden = YES;
             [eSrc.layer.superlayer addSublayer:src.layer];
             
@@ -703,6 +742,10 @@
             [undoSources addObject:eSrc];
         } else {
             
+            if (eSrc && !isDifferent)
+            {
+                continue;
+            }
             src.layer.hidden = YES;
             
             
@@ -761,10 +804,12 @@
     [unarchiver finishDecoding];
     
     NSArray *mergeList;
+    NSArray *mergeAnimationList = nil;
     
     if ([mergeObj isKindOfClass:[NSDictionary class]])
     {
         mergeList = [((NSDictionary *)mergeObj) objectForKey:@"sourcelist"];
+        mergeAnimationList = [((NSDictionary *)mergeObj) objectForKey:@"animationList"];
     } else {
         mergeList = (NSArray *)mergeObj;
     }
@@ -773,6 +818,16 @@
     {
         [self.undoManager beginUndoGrouping];
     }
+   
+    
+    if (mergeAnimationList)
+    {
+        for (CSAnimationItem *aItem in mergeAnimationList)
+        {
+            [[self mutableArrayValueForKey:@"animationList"] addObject:aItem];
+        }
+    }
+    
     
     NSArray *undoSources;
     
@@ -831,7 +886,6 @@
     [CATransaction setCompletionBlock:^{
         for (InputSource *dInput in undoSources)
         {
-            //NSLog(@"DELETING SOURCE %@", dInput);
             [weakSelf deleteSource:dInput];
         }
     }];

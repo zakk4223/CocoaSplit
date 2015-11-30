@@ -230,6 +230,7 @@ typedef enum resize_style_t {
 -(void)createUUID;
 -(void)updateRotationTransform;
 -(void) directSize:(CGFloat)width height:(CGFloat)height;
+-(bool)isDifferentInput:(InputSource *)from;
 
 
 

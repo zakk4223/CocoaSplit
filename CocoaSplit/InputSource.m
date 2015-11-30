@@ -1642,7 +1642,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setX_pos:(float)x_pos
 {
-    [self registerUndoForProperty:@"x_pos" withAction:@"Position X"];
+    //[self registerUndoForProperty:@"x_pos" withAction:@"Position X"];
     if (x_pos > 0 && x_pos <= 1.0)
     {
         CALayer *sLayer = self.layer.superlayer;
@@ -1661,7 +1661,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setY_pos:(float)y_pos
 {
-    [self registerUndoForProperty:@"y_pos" withAction:@"Position Y"];
+    //[self registerUndoForProperty:@"y_pos" withAction:@"Position Y"];
     if (y_pos > 0 && y_pos <= 1.0)
     {
         CALayer *sLayer = self.layer.superlayer;
@@ -2086,6 +2086,33 @@ static NSArray *_sourceTypes = nil;
  
     _selectedVideoType = selectedVideoType;
  }
+
+-(NSData *)saveData
+{
+    NSMutableData *saveData = [NSMutableData data];
+    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:saveData];
+    [archiver encodeObject:self forKey:@"root"];
+    [archiver finishEncoding];
+    return saveData;
+}
+
+-(bool)isDifferentInput:(InputSource *)from
+{
+    if (![from.uuid isEqualToString:self.uuid])
+    {
+        return YES;
+    }
+    
+    NSData *myData = [self saveData];
+    NSData *fromData = [from saveData];
+    
+    if ([myData isEqualToData:fromData])
+    {
+        return NO;
+    }
+    
+    return YES;
+}
 
 
 -(NSViewController *)sourceConfigurationView

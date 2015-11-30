@@ -1749,7 +1749,7 @@
         
         if ([self startStream] == YES)
         {
-            self.selectedTabIndex = 4;
+            self.selectedTabIndex = 2;
         } else {
             [sender setNextState];
 
