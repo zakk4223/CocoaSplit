@@ -70,5 +70,33 @@
 }
 
 
+- (IBAction)openAnimatePopover:(NSButton *)sender
+{
+    
+    CSAnimationChooserViewController *vc;
+    if (!_animatepopOver)
+    {
+        _animatepopOver = [[NSPopover alloc] init];
+        
+        _animatepopOver.animates = YES;
+        _animatepopOver.behavior = NSPopoverBehaviorTransient;
+    }
+    
+    if (!_animatepopOver.contentViewController)
+    {
+        vc = [[CSAnimationChooserViewController alloc] init];
+        
+        
+        _animatepopOver.contentViewController = vc;
+        _animatepopOver.delegate = vc;
+        vc.popover = _animatepopOver;
+        
+    }
+    
+    vc.sourceLayout = self.previewView.sourceLayout;
+    [_animatepopOver showRelativeToRect:sender.bounds ofView:sender preferredEdge:NSMinYEdge];
+    
+}
+
 
 @end

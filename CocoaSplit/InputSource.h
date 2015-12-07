@@ -198,6 +198,7 @@ typedef enum resize_style_t {
 @property (assign) CGFloat topLevelHeight;
 @property (assign) bool needsAdjustment;
 @property (assign) bool needsAdjustPosition;
+@property (assign) NSInteger refCount;
 
 
 -(void) updateOrigin:(CGFloat)x y:(CGFloat)y;

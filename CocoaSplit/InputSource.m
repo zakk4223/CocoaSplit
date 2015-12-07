@@ -534,6 +534,7 @@ static NSArray *_sourceTypes = nil;
     self.crop_left = 0;
     self.crop_right = 0;
     self.videoSources = [[NSMutableArray alloc] init];
+    _refCount = 0;
     
     self.constraintMap = [NSMutableDictionary dictionary];
 

@@ -38,7 +38,6 @@
         self.rootLayer = [self newRootLayer];
         self.animationList = [NSMutableArray array];
         
-        
         //self.rootLayer.geometryFlipped = YES;
         _rootSize = NSMakeSize(_canvas_width, _canvas_height);
         self.sourceList = [NSMutableArray array];
@@ -316,6 +315,7 @@
     {
         [aCoder encodeObject:self.containedLayouts forKey:@"containedLayouts"];
     }
+    
 }
 
 
@@ -353,6 +353,7 @@
             self.containedLayouts = [aDecoder decodeObjectForKey:@"containedLayouts"];
             //set live/staging status for each layout
         }
+        
     }
     
     return self;
@@ -411,6 +412,46 @@
     return retInput;
 
 }
+
+-(NSInteger) incrementAnimationRef:(CSAnimationItem *)anim
+{
+    anim.refCount++;
+    return anim.refCount;
+    
+}
+
+-(NSInteger)decrementAnimationRef:(CSAnimationItem *)anim
+{
+    anim.refCount--;
+    if (anim.refCount < 0)
+    {
+        anim.refCount = 0;
+    }
+    
+    return anim.refCount;
+}
+
+
+-(NSInteger)incrementInputRef:(InputSource *)input
+{
+    
+    input.refCount++;
+    
+    return input.refCount;
+}
+
+-(NSInteger)decrementInputRef:(InputSource *)input
+{
+    input.refCount--;
+    if (input.refCount < 0)
+    {
+        input.refCount = 0;
+    }
+    
+    return input.refCount;
+}
+
+
 -(InputSource *)findSource:(NSPoint)forPoint deepParent:(bool)deepParent
 {
     
@@ -457,6 +498,7 @@
     
     return object;
 }
+
 
 
 -(void)replaceWithSourceLayout:(SourceLayout *)layout
@@ -630,9 +672,12 @@
         
         if (eSrc)
         {
+
             isDifferent = [eSrc isDifferentInput:src];
             if (!isDifferent)
             {
+                [self incrementInputRef:eSrc];
+
                 continue;
             }
         }
@@ -641,10 +686,12 @@
             [eSrc.layer.superlayer addSublayer:src.layer];
             eSrc.layer.hidden = YES;
             [undoSources addObject:eSrc];
+            eSrc.refCount = 0;
         } else {
             [self.rootLayer addSublayer:src.layer];
         }
         [NSApp registerMIDIResponder:src];
+        [self incrementInputRef:src];
         
         
         
@@ -683,6 +730,8 @@
     
     NSMutableArray *undoSources = [NSMutableArray array];
     CATransition *rTrans = nil;
+    NSInteger origRefCnt = 0;
+    
     if (self.transitionName || self.transitionFilter)
     {
         rTrans = [CATransition animation];
@@ -713,6 +762,7 @@
         {
             if (!isDifferent)
             {
+                [self incrementInputRef:eSrc];
                 continue;
             }
             
@@ -736,6 +786,8 @@
                 [src.layer addAnimation:rTrans forKey:nil];
             }
             
+            origRefCnt = eSrc.refCount;
+            eSrc.refCount = 0;
             eSrc.layer.hidden = YES;
             src.layer.hidden = NO;
             [CATransaction commit];
@@ -744,6 +796,8 @@
             
             if (eSrc && !isDifferent)
             {
+                [self incrementInputRef:eSrc];
+
                 continue;
             }
             src.layer.hidden = YES;
@@ -765,6 +819,7 @@
         [NSApp registerMIDIResponder:src];
         
         
+        src.refCount = origRefCnt+1;
         
         [[self mutableArrayValueForKey:@"sourceList" ] addObject:src];
         [_uuidMap setObject:src forKey:src.uuid];
@@ -824,7 +879,14 @@
     {
         for (CSAnimationItem *aItem in mergeAnimationList)
         {
-            [[self mutableArrayValueForKey:@"animationList"] addObject:aItem];
+            CSAnimationItem *eItem = [self animationForUUID:aItem.uuid];
+            if (eItem)
+            {
+                [self incrementAnimationRef:eItem];
+            } else {
+                [[self mutableArrayValueForKey:@"animationList"] addObject:aItem];
+                [self incrementAnimationRef:aItem];
+            }
         }
     }
     
@@ -903,7 +965,13 @@
 
         if (eSrc)
         {
-            
+        
+            NSInteger refCnt = [self decrementInputRef:eSrc];
+            if (refCnt != 0)
+            {
+                continue;
+            }
+
             eSrc.layer.hidden = YES;
             [undoSources addObject:eSrc];
         }
@@ -943,6 +1011,12 @@
         InputSource *eSrc = [self inputForUUID:src.uuid];
         if (eSrc)
         {
+            NSInteger refCnt = [self decrementInputRef:eSrc];
+            if (refCnt != 0)
+            {
+                continue;
+            }
+            
             [CATransaction begin];
             __weak SourceLayout *weakSelf = self;
             
@@ -1031,16 +1105,35 @@
     [unarchiver finishDecoding];
     
     NSArray *mergeList;
+    NSArray *mergeAnim;
     
     if ([mergeObj isKindOfClass:[NSDictionary class]])
     {
         mergeList = [((NSDictionary *)mergeObj) objectForKey:@"sourcelist"];
+        mergeAnim = [((NSDictionary *)mergeObj) objectForKey:@"animationList"];
+
     } else {
         mergeList = (NSArray *)mergeObj;
     }
     
 
     [self removeSourceInputs:mergeList withLayer:withLayer];
+    
+    if (mergeAnim)
+    {
+        for (CSAnimationItem *aItem in mergeAnim)
+        {
+            CSAnimationItem *eItem = [self animationForUUID:aItem.uuid];
+            if (eItem)
+            {
+                NSInteger eCnt = [self decrementAnimationRef:eItem];
+                if (eCnt <= 0)
+                {
+                    [[self mutableArrayValueForKey:@"animationList"] removeObject:eItem];
+                }
+            }
+        }
+    }
     return mergeObj;
 }
 
@@ -1378,6 +1471,18 @@
     }
 }
 
+
+-(CSAnimationItem *)animationForUUID:(NSString *)uuid
+{
+    for (CSAnimationItem *item in self.animationList)
+    {
+        if ([item.uuid isEqualToString:uuid])
+        {
+            return item;
+        }
+    }
+    return nil;
+}
 
 
 -(InputSource *)inputForUUID:(NSString *)uuid

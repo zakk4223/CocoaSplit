@@ -14,6 +14,8 @@
 @interface CSLayoutEditWindowController : NSWindowController <NSWindowDelegate>
 {
     float _frame_interval;
+    NSPopover *_animatepopOver;
+
 }
 
 
@@ -25,5 +27,6 @@
 - (IBAction)cancelEdit:(id)sender;
 - (IBAction)editOK:(id)sender;
 - (IBAction)newSource:(id)sender;
+- (IBAction)openAnimatePopover:(NSButton *)sender;
 
 @end

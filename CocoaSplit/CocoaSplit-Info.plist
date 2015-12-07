@@ -17,11 +17,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.0.2</string>
+	<string>2.0.3</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>2.0.2</string>
+	<string>2.0.3</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.video</string>
 	<key>LSMinimumSystemVersion</key>
@@ -37,6 +37,6 @@
 	<key>OSAScriptingDefinition</key>
 	<string>CocoaSplit.sdef</string>
 	<key>SUFeedURL</key>
-	<string>http://www.cocoasplit.com/cocoasplitcast2.0.xml</string>
+	<string>https://www.cocoasplit.com/cocoasplitcast2.0.xml</string>
 </dict>
 </plist>

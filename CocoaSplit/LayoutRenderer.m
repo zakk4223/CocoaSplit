@@ -291,7 +291,10 @@
     
     @synchronized(self)
     {
-        CVPixelBufferRetain(_currentPB);
+        if (_currentPB)
+        {
+            CVPixelBufferRetain(_currentPB);
+        }
         return _currentPB;
     }
 }
