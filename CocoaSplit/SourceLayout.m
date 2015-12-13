@@ -607,13 +607,36 @@
         return;
     }
     
-    [self mergeSourceListData:toMerge.savedSourceListData];
+    NSArray *mergedAnim = nil;
+    
+    NSObject *dictOrObj = [self mergeSourceListData:toMerge.savedSourceListData];
+    
+    if ([dictOrObj isKindOfClass:[NSDictionary class]])
+    {
+        NSDictionary *dict = (NSDictionary *)dictOrObj;
+        mergedAnim = [dict valueForKey:@"animationList"];
+    }
     
     [self adjustAllInputs];
     [self.containedLayouts addObject:toMerge];
     if (self.addLayoutBlock)
     {
         self.addLayoutBlock(toMerge);
+    }
+    
+    if (mergedAnim)
+    {
+        for (CSAnimationItem *anim in mergedAnim)
+        {
+            if (anim.onLive)
+            {
+                CSAnimationItem *eItem = [self animationForUUID:anim.uuid];
+                if (eItem)
+                {
+                    [self runSingleAnimation:eItem];
+                }
+            }
+        }
     }
 }
 
