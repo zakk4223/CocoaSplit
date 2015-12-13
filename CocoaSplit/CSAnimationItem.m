@@ -114,7 +114,7 @@
         if ([inputType isEqualToString:@"input"])
         {
             InputSource *inpsrc = inp[@"value"];
-            if (inpsrc == srcDel)
+            if (inpsrc == srcDel && inpsrc.sourceLayout == srcDel.sourceLayout)
             {
                 inp[@"deletedUUID"] = srcDel.uuid;
                 inp[@"value"] = [NSNull null];
