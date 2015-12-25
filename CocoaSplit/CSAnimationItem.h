@@ -17,7 +17,7 @@
 @property (strong) NSString *name;
 @property (readonly) bool onLive;
 @property (strong) NSString *uuid;
-@property (assign) NSInteger *refCount;
+@property (assign) NSInteger refCount;
 
 
 

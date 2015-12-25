@@ -524,6 +524,8 @@
         
         [CATransaction begin];
     }
+    
+    
     for (SourceLayout *cLayout in self.containedLayouts.copy)
     {
         if (self.removeLayoutBlock)
@@ -532,6 +534,17 @@
         }
         
         [self.containedLayouts removeObject:cLayout];
+    }
+    //Only run animations that aren't already in the layout
+    
+    NSMutableArray *runAnimations = [NSMutableArray array];
+    
+    for (CSAnimationItem *anim in layout.animationList)
+    {
+        if (![self animationForUUID:anim.uuid] && anim.onLive)
+        {
+            [runAnimations addObject:anim.uuid];
+        }
     }
     
     [self.animationList removeAllObjects];
@@ -584,6 +597,15 @@
         [CATransaction commit];
     }
     
+    for (NSString *anim in runAnimations)
+    {
+        CSAnimationItem *eItem = [self animationForUUID:anim];
+        if (eItem)
+        {
+            [self runSingleAnimation:eItem];
+        }
+    }
+
     _noSceneTransactions = NO;
     self.canvas_height = layout.canvas_height;
     self.canvas_width = layout.canvas_width;
@@ -631,7 +653,7 @@
             if (anim.onLive)
             {
                 CSAnimationItem *eItem = [self animationForUUID:anim.uuid];
-                if (eItem)
+                if (eItem && eItem.refCount == 1)
                 {
                     [self runSingleAnimation:eItem];
                 }
