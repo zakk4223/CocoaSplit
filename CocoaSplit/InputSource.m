@@ -1279,10 +1279,12 @@ static NSArray *_sourceTypes = nil;
 }
 
 
+/*
 -(NSString *)description
 {
     return [NSString stringWithFormat:@"Name: %@ Depth %f", self.name, self.depth];
 }
+ */
 
 
 -(void)setName:(NSString *)name

@@ -183,9 +183,23 @@
 
     for (NSDictionary *item in animation.inputs)
     {
+        
         if (item[@"value"])
         {
-            inputMap[item[@"label"]] = item[@"value"];
+            if ([item[@"type"] isEqualToString:@"input"])
+            {
+                NSString *suuid = item[@"savedUUID"];
+                if (suuid && ![suuid isEqualTo:[NSNull null]])
+                {
+                    InputSource *nSrc = [self inputForUUID:suuid];
+                    if (nSrc)
+                    {
+                        inputMap[item[@"label"]] = nSrc;
+                    }
+                }
+            } else {
+                inputMap[item[@"label"]] = item[@"value"];
+            }
         } else {
             inputMap[item[@"label"]] = [NSNull null];
         }

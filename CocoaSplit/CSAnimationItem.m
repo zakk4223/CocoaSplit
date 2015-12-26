@@ -39,7 +39,20 @@
     
     [aCoder encodeObject:self.name forKey:@"name"];
     [aCoder encodeObject:self.module_name forKey:@"module_name"];
+    for (NSMutableDictionary *item in self.inputs)
+    {
+        if ([item[@"type"] isEqualToString:@"input"])
+        {
+            if (item[@"value"] && ![item[@"value"] isEqualTo:[NSNull null]])
+            {
+                InputSource *inp = item[@"value"];
+                item[@"savedUUID"] = inp.uuid;
+                item[@"value"] = [NSNull null];
+            }
+        }
+    }
     [aCoder encodeObject:self.inputs forKey:@"inputs"];
+
     if (self.uuid)
     {
         [aCoder encodeObject:self.uuid forKey:@"uuid"];
