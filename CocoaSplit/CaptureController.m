@@ -1942,7 +1942,7 @@
 
 -(void)newStagingFrame
 {
-    if (_stagingHidden)
+    if (self.stagingHidden)
     {
         return;
     }
@@ -1970,7 +1970,7 @@
     while (1)
     {
         
-        if (_stagingHidden)
+        if (self.stagingHidden)
         {
             return;
         }
@@ -2918,7 +2918,7 @@
     [self.canvasSplitView display];
     self.livePreviewView.viewOnly = NO;
     self.activePreviewView = self.livePreviewView;
-    _stagingHidden = YES;
+    self.stagingHidden = YES;
     
 }
 
@@ -2954,7 +2954,7 @@
     
     [self.canvasSplitView display];
     self.livePreviewView.viewOnly = YES;
-    _stagingHidden = NO;
+    self.stagingHidden = NO;
     self.activePreviewView = self.stagingPreviewView;
     
     dispatch_async(_preview_queue, ^{

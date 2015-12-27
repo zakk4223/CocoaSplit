@@ -52,7 +52,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 @interface CaptureController : NSObject <NSMenuDelegate, MIKMIDIMappableResponder, MIKMIDIResponder, MIKMIDIMappingGeneratorDelegate, CSTimerSourceProtocol> {
     
-    bool _stagingHidden;
     
     NSArray *_inputIdentifiers;
 
@@ -107,6 +106,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 }
 
 
+
+@property (assign) bool stagingHidden;
 
 @property (strong) NSMutableArray *inputLibrary;
 
