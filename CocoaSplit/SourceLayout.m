@@ -1314,6 +1314,17 @@
 
 
 
+-(void)setupMIDI
+{
+    [NSApp registerMIDIResponder:self];
+    for (InputSource *src in self.sourceList)
+    {
+        [NSApp registerMIDIResponder:src];
+
+    }
+}
+
+
 -(void) adjustAllInputs
 {
     

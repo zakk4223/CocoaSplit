@@ -115,6 +115,8 @@
 -(void)applyAddBlock;
 -(void)replaceWithSourceLayout:(SourceLayout *)layout;
 -(void)clearSourceList;
+-(void)setupMIDI;
+
 
 
 

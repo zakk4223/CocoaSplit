@@ -360,12 +360,7 @@
         
     }
     
-    if (sender.tag == 1)
-    {
-        vc.sourceLayout = self.stagingPreviewView.sourceLayout;
-    } else {
-        vc.sourceLayout = self.livePreviewView.sourceLayout;
-    }
+    vc.sourceLayout = self.activePreviewView.sourceLayout;
     
     
     [_animatepopOver showRelativeToRect:sender.bounds ofView:sender preferredEdge:NSMinYEdge];
@@ -1452,6 +1447,7 @@
     
     
     [stagingLayout restoreSourceList:nil];
+    [stagingLayout setupMIDI];
     
     self.stagingPreviewView.sourceLayout = stagingLayout;
     
@@ -1521,6 +1517,8 @@
     
     selectedLayout.isActive = YES;
     [selectedLayout restoreSourceList:nil];
+    
+    [selectedLayout setupMIDI];
     
     [self setupFrameTimer:selectedLayout.frameRate];
     self.livePreviewView.sourceLayout = selectedLayout;
@@ -2480,14 +2478,13 @@
 
 - (NSArray *)commandIdentifiers
 {
-    NSArray *baseIdentifiers = @[@"GoLive", @"StagingRevert", @"LiveRevert", @"InputNext", @"InputPrevious", @"ActivateLive", @"ActivateStaging", @"ActivateToggle"];
+    NSArray *baseIdentifiers = @[@"GoLive", @"InputNext", @"InputPrevious", @"ActivateLive", @"ActivateStaging", @"ActivateToggle"];
     
      NSMutableArray *layoutIdentifiers = [NSMutableArray array];
     
     for (SourceLayout *layout in self.sourceLayouts)
     {
-        [layoutIdentifiers addObject:[NSString stringWithFormat:@"SwitchStaging:%@", layout.name]];
-        [layoutIdentifiers addObject:[NSString stringWithFormat:@"SwitchLive:%@", layout.name]];
+        [layoutIdentifiers addObject:[NSString stringWithFormat:@"ToggleLayout:%@", layout.name]];
     }
     
     baseIdentifiers = [baseIdentifiers arrayByAddingObjectsFromArray:layoutIdentifiers];
@@ -2663,6 +2660,7 @@
     
     __weak CaptureController *weakSelf = self;
 
+    
     if ([_inputIdentifiers containsObject:identifier])
     {
         InputSource *currInput = [self currentMIDIInput:command];
@@ -2684,9 +2682,11 @@
     }
     
     
-    if ([identifier hasPrefix:@"SwitchStaging:"])
+    if ([identifier hasPrefix:@"ToggleLayout:"])
     {
-        NSString *layoutName = [identifier substringFromIndex:14];
+        
+        
+        NSString *layoutName = [identifier substringFromIndex:13];
         NSUInteger indexOfLayout = [self.sourceLayouts indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
             SourceLayout *testLayout = obj;
             if ([testLayout.name isEqualToString:layoutName])
@@ -2701,32 +2701,7 @@
         {
             SourceLayout *layout = [self.sourceLayouts objectAtIndex:indexOfLayout];
             dispatch_async(dispatch_get_main_queue(), ^{
-                weakSelf.stagingLayout = layout;
-            });
-
-        }
-        return;
-    }
-
-    
-    if ([identifier hasPrefix:@"SwitchLive:"])
-    {
-        NSString *layoutName = [identifier substringFromIndex:11];
-        NSUInteger indexOfLayout = [self.sourceLayouts indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-            SourceLayout *testLayout = obj;
-            if ([testLayout.name isEqualToString:layoutName])
-            {
-                *stop = YES;
-                return YES;
-            }
-            return NO;
-        }];
-        
-        if (indexOfLayout != NSNotFound)
-        {
-            SourceLayout *layout = [self.sourceLayouts objectAtIndex:indexOfLayout];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                weakSelf.selectedLayout = layout;
+                [weakSelf toggleLayout:layout];
             });
             
         }
@@ -2739,10 +2714,6 @@
     
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf stagingGoLive:nil];
-        });
-    } else if ([identifier isEqualToString:@"StagingRevert"]) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf stagingRevert:nil];
         });
     }
 }
