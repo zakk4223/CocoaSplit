@@ -2187,27 +2187,13 @@ static NSArray *_sourceTypes = nil;
 
 -(NSString *)MIDIShortIdentifier
 {
-    if (self.is_live)
-    {
-        return @"Live";
-    }
-    
-    return @"Staging";
+    return nil;
 }
 
 
 -(NSString *)MIDIIdentifier
 {
-    NSString *liveStr;
-    if (self.is_live)
-    {
-        liveStr = @"Live";
-    } else {
-        liveStr = @"Staging";
-    }
-    
-    
-    return [NSString stringWithFormat:@"%@:%@", liveStr, self.uuid];
+    return [NSString stringWithFormat:@"Input:%@", self.uuid];
 }
 
 -(NSArray *)commandIdentifiers

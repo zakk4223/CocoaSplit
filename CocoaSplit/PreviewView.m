@@ -195,12 +195,7 @@
     if (self.selectedSource)
     {
 
-        InputSource *mapCopy = self.selectedSource.copy;
-        mapCopy.uuid = self.selectedSource.uuid;
-        
-        mapCopy.is_live = !self.selectedSource.is_live;
-        
-        [self.controller openMidiLearnerForResponders:@[self.selectedSource, mapCopy]];
+        [self.controller openMidiLearnerForResponders:@[self.selectedSource]];
     }
 }
 

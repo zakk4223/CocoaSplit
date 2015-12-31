@@ -18,6 +18,7 @@
 
 - (void)windowDidLoad {
     [super windowDidLoad];
+    self.window.delegate = self;
     
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
     
@@ -25,6 +26,13 @@
     
     
 }
+
+-(void)windowWillClose:(NSNotification *)notification
+{
+    self.responderList = nil;
+    self.commandIdentfiers = nil;
+}
+
 
 -(void)buildIdentifiers
 {
@@ -58,7 +66,16 @@
                     [midiMappings unionSet:commandMaps];
                 }
             }
-            [identList addObject:@{@"command":ident, @"responder":responder, @"count":@(midiMappings.count), @"display":[NSString stringWithFormat:@"%@-%@", responderName, ident]}];
+            
+            NSString *displayName;
+            
+            if (responderName)
+            {
+                displayName = [NSString stringWithFormat:@"%@-%@", responderName, ident];
+            } else {
+                displayName = [NSString stringWithFormat:@"%@", ident];
+            }
+            [identList addObject:@{@"command":ident, @"responder":responder, @"count":@(midiMappings.count), @"display":displayName}];
         }
     }
     
@@ -158,4 +175,5 @@
     
     
 }
+
 @end

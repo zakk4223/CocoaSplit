@@ -2655,6 +2655,35 @@
         self.currentMidiInputStagingIdx = cVal;
     }
 }
+
+
+-(id<MIKMIDIResponder>)dispatchMIDI:(MIKMIDICommand *)command forItem:(MIKMIDIMappingItem *)item
+{
+    
+    id<MIKMIDIResponder> ret = nil;
+    
+    SourceLayout *currLayout = [self currentMIDILayout];
+    NSString *responderName = item.MIDIResponderIdentifier;
+    
+    if ([responderName hasPrefix:@"Layout:"])
+    {
+        ret = currLayout;
+    } else if ([responderName hasPrefix:@"Input:"]) {
+        NSString *uuid = [responderName substringFromIndex:6];
+        InputSource *input = [currLayout inputForUUID:uuid];
+        if (input)
+        {
+            ret = input;
+        }
+    }
+
+    return ret;
+}
+
+
+
+
+
 -(void)handleMIDICommand:(MIKMIDICommand *)command forIdentifier:(NSString *)identifier
 {
     
@@ -2760,6 +2789,10 @@
 
     for (CSMidiWrapper *wrap in self.midiMapGenerators)
     {
+        wrap.redirectResponderBlock = ^id<MIKMIDIResponder>(MIKMIDICommand *command, MIKMIDIMappingItem *item) {
+            return [self dispatchMIDI:command forItem:item];
+        };
+        
         self.midiDeviceMappings[wrap.device.name] = wrap;
         [wrap connect];
 

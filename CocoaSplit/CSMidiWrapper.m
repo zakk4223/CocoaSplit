@@ -74,25 +74,40 @@
     for (MIKMIDIMappingItem *item in items)
     {
         
-        id<MIKMIDIResponder> responder = [NSApp MIDIResponderWithIdentifier:item.MIDIResponderIdentifier];
-        if ([responder respondsToMIDICommand:command])
+        
+        id<MIKMIDIResponder> responder = nil;
+        
+        if (self.redirectResponderBlock)
         {
+             responder = self.redirectResponderBlock(command, item);
+        }
+        
+        if (!responder)
+        {
+            responder = [NSApp MIDIResponderWithIdentifier:item.MIDIResponderIdentifier];
+        }
 
-            NSString *dynMethod = [NSString stringWithFormat:@"handleMIDICommand%@:", item.commandIdentifier];
-            
-            SEL dynSelector = NSSelectorFromString(dynMethod);
-            
-            if ([responder respondsToSelector:dynSelector])
+        if (responder)
+        {
+            if ([responder respondsToMIDICommand:command])
             {
-                NSMethodSignature *dynsig = [[responder class] instanceMethodSignatureForSelector:dynSelector];
-                NSInvocation *dyninvoke = [NSInvocation invocationWithMethodSignature:dynsig];
-                dyninvoke.target = responder;
-                dyninvoke.selector = dynSelector;
-                [dyninvoke setArgument:&command atIndex:2];
-                [dyninvoke retainArguments];
-                [dyninvoke invoke];
-            } else {
-                [responder handleMIDICommand:command forIdentifier:item.commandIdentifier];
+                
+                NSString *dynMethod = [NSString stringWithFormat:@"handleMIDICommand%@:", item.commandIdentifier];
+                
+                SEL dynSelector = NSSelectorFromString(dynMethod);
+                
+                if ([responder respondsToSelector:dynSelector])
+                {
+                    NSMethodSignature *dynsig = [[responder class] instanceMethodSignatureForSelector:dynSelector];
+                    NSInvocation *dyninvoke = [NSInvocation invocationWithMethodSignature:dynsig];
+                    dyninvoke.target = responder;
+                    dyninvoke.selector = dynSelector;
+                    [dyninvoke setArgument:&command atIndex:2];
+                    [dyninvoke retainArguments];
+                    [dyninvoke invoke];
+                } else {
+                    [responder handleMIDICommand:command forIdentifier:item.commandIdentifier];
+                }
             }
         }
     }

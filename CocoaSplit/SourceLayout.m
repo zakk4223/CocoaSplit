@@ -68,13 +68,7 @@
 
 -(NSString *)MIDIIdentifier
 {
-    NSString *liveStr = @"Staging";
-    if (self.isActive)
-    {
-        liveStr = @"Live";
-    }
-    
-    return [NSString stringWithFormat:@"%@Layout:%@", liveStr, self.name];
+    return [NSString stringWithFormat:@"Layout:%@", self.name];
 }
 
 
@@ -1372,6 +1366,7 @@
         
     }
     [self.animationList removeAllObjects];
+    [_uuidMap removeAllObjects];
     self.selectedAnimation = nil;
 }
 

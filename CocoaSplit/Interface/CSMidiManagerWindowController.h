@@ -13,7 +13,7 @@
 @class CaptureController;
 
 
-@interface CSMidiManagerWindowController : NSWindowController
+@interface CSMidiManagerWindowController : NSWindowController <NSWindowDelegate>
 
 
 @property (weak) CaptureController *captureController;

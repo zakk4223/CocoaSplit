@@ -44,6 +44,12 @@
     {
         [self.layoutController discardEditing];
     }
+    
+    if (self.previewView.sourceLayout)
+    {
+        [self.previewView.sourceLayout clearSourceList];
+    }
+    
     [self close];
 }
 
