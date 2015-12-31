@@ -2533,6 +2533,13 @@
 
 -(SourceLayout *)currentMIDILayout
 {
+    
+    if (self.stagingHidden)
+    {
+        return self.activePreviewView.sourceLayout;
+    }
+    
+    
     if (self.currentMidiLayoutLive)
     {
         return self.livePreviewView.sourceLayout;
@@ -2582,18 +2589,28 @@
 
 -(void)handleMIDICommandActivateLive:(MIKMIDICommand *)command
 {
-    self.currentMidiLayoutLive = YES;
+    if (!self.stagingHidden)
+    {
+        self.currentMidiLayoutLive = YES;
+    }
 }
 
 -(void)handleMIDICommandActivateStaging:(MIKMIDICommand *)command
 {
-    self.currentMidiLayoutLive = NO;
+    if (!self.stagingHidden)
+    {
+        self.currentMidiLayoutLive = NO;
+    }
 }
 
 -(void)handleMIDICommandActivateToggle:(MIKMIDICommand *)command
 {
-    self.currentMidiLayoutLive = !self.currentMidiLayoutLive;
+    if (!self.stagingHidden)
+    {
+        self.currentMidiLayoutLive = !self.currentMidiLayoutLive;
+    }
 }
+
 
 -(void)handleMIDICommandInputNext:(MIKMIDIChannelVoiceCommand *)command
 {
