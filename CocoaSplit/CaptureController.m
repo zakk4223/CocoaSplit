@@ -1450,7 +1450,7 @@
     [stagingLayout setupMIDI];
     
     self.stagingPreviewView.sourceLayout = stagingLayout;
-    
+    self.stagingPreviewView.midiActive = YES;
     
     [stagingLayout setAddLayoutBlock:^(SourceLayout *layout) {
         
@@ -1522,6 +1522,7 @@
     
     [self setupFrameTimer:selectedLayout.frameRate];
     self.livePreviewView.sourceLayout = selectedLayout;
+    self.livePreviewView.midiActive = NO;
     
     
     
@@ -2592,6 +2593,8 @@
     if (!self.stagingHidden)
     {
         self.currentMidiLayoutLive = YES;
+        self.stagingPreviewView.midiActive = NO;
+        self.livePreviewView.midiActive = YES;
     }
 }
 
@@ -2600,6 +2603,8 @@
     if (!self.stagingHidden)
     {
         self.currentMidiLayoutLive = NO;
+        self.livePreviewView.midiActive = NO;
+        self.stagingPreviewView.midiActive = YES;
     }
 }
 
@@ -2608,6 +2613,8 @@
     if (!self.stagingHidden)
     {
         self.currentMidiLayoutLive = !self.currentMidiLayoutLive;
+        self.stagingPreviewView.midiActive = !self.stagingPreviewView.midiActive;
+        self.livePreviewView.midiActive = !self.livePreviewView.midiActive;
     }
 }
 
@@ -2938,6 +2945,7 @@
     
     [self.canvasSplitView display];
     self.livePreviewView.viewOnly = NO;
+    self.livePreviewView.midiActive = NO;
     self.activePreviewView = self.livePreviewView;
     self.stagingHidden = YES;
     
@@ -2977,7 +2985,14 @@
     self.livePreviewView.viewOnly = YES;
     self.stagingHidden = NO;
     self.activePreviewView = self.stagingPreviewView;
-    
+    if (self.currentMidiLayoutLive)
+    {
+        self.livePreviewView.midiActive = YES;
+        self.stagingPreviewView.midiActive = NO;
+    } else {
+        self.livePreviewView.midiActive = YES;
+        self.stagingPreviewView.midiActive = NO;
+    }
     dispatch_async(_preview_queue, ^{
         [self newStagingFrameTimed];
     });

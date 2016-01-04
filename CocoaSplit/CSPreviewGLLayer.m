@@ -9,6 +9,7 @@
 #import "CSPreviewGLLayer.h"
 
 @implementation CSPreviewGLLayer
+@synthesize midiActive = _midiActive;
 
 -(instancetype)init
 {
@@ -30,6 +31,18 @@
 }
 
 
+-(void)setMidiActive:(bool)midiActive
+{
+    _midiActive = midiActive;
+    _resetClearColor = YES;
+}
+
+-(bool)midiActive
+{
+    return _midiActive;
+}
+
+
 -(void)drawInCGLContext:(CGLContextObj)ctx pixelFormat:(CGLPixelFormatObj)pf forLayerTime:(CFTimeInterval)t displayTime:(const CVTimeStamp *)ts
 {
     
@@ -39,10 +52,22 @@
     if (!_initDone)
     {
         glGenTextures(1, &_renderTexture);
-        glClearColor(0.184314f, 0.309804f, 0.309804f, 0);
-
         _initDone = YES;
     }
+    
+    if (_resetClearColor)
+    {
+        if (self.midiActive)
+        {
+            glClearColor(0.309804f, 0.184314f, 0.309804f, 0);
+        } else {
+            glClearColor(0.184314f, 0.309804f, 0.309804f, 0);
+        }
+        
+        _resetClearColor = NO;
+    }
+    
+    
     glClear(GL_COLOR_BUFFER_BIT);
 
     if (!self.renderer)

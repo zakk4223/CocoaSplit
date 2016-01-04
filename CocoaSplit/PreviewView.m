@@ -37,6 +37,17 @@
 @synthesize selectedSource = _selectedSource;
 
 
+-(void)setMidiActive:(bool)midiActive
+{
+    _glLayer.midiActive = midiActive;
+}
+
+
+-(bool)midiActive
+{
+    return _glLayer.midiActive;
+}
+
 
 
 -(void)cursorUpdate:(NSEvent *)event

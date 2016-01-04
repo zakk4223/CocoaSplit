@@ -84,6 +84,8 @@
 
 @property (strong) NSMenu *sourceSettingsMenu;
 
+@property (assign) bool midiActive;
+
 
 
 
