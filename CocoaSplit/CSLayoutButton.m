@@ -18,7 +18,6 @@
 
 - (void)drawRect:(NSRect)dirtyRect {
     [super drawRect:dirtyRect];
-    
     NSColor *redColor = [NSColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.3];
     NSColor *greenColor = [NSColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:0.3];
     
@@ -55,8 +54,33 @@
 }
 
 
+-(void)mouseDown:(NSEvent *)theEvent
+{
+    [self highlight:YES];
+    //[self.nextResponder mouseDown:theEvent];'
+    _savedMouseDown = theEvent;
+
+    return;
+}
+
+-(void)mouseDragged:(NSEvent *)theEvent
+{
+    [self highlight:NO];
+    [self.nextResponder mouseDown:_savedMouseDown];
+    [self.nextResponder mouseDragged:theEvent];
+}
+
+-(void)mouseUp:(NSEvent *)theEvent
+{
+    [self performClick:self];
+    [self.nextResponder mouseUp:theEvent];
+}
+
+
+
 -(void)rightMouseDown:(NSEvent *)theEvent
 {
+    
     [self.viewController showLayoutMenu:theEvent];
 }
 

@@ -12,6 +12,10 @@
 
 
 @interface CSLayoutButton : NSButton
+{
+    NSEvent *_savedMouseDown;
+}
+
 
 @property (weak) IBOutlet CSLayoutCollectionItem *viewController;
 

@@ -260,6 +260,7 @@
         newLayout.canvas_height = self.captureHeight;
     }
     
+    
     [self insertObject:newLayout inSourceLayoutsAtIndex:self.sourceLayouts.count];
     
     
@@ -660,7 +661,7 @@
        _layoutWindows = [NSMutableArray array];
        
        self.transitionDirections = @[kCATransitionFromTop, kCATransitionFromRight, kCATransitionFromBottom, kCATransitionFromLeft];
-
+       
        
        NSArray *caTransitionNames = @[kCATransitionFade, kCATransitionPush, kCATransitionMoveIn, kCATransitionReveal, @"cube", @"alignedCube", @"flip", @"alignedFlip"];
        NSArray *ciTransitionNames = [CIFilter filterNamesInCategory:kCICategoryTransition];
@@ -1253,6 +1254,7 @@
     
     //all color panels allow opacity
     self.activePreviewView = self.stagingPreviewView;
+    [self.layoutCollectionView registerForDraggedTypes:@[@"CS_LAYOUT_DRAG"]];
 
     [NSColorPanel sharedColorPanel].showsAlpha = YES;
     [NSColor setIgnoresAlpha:NO];
@@ -2371,6 +2373,84 @@
 
 
 
+-(NSDragOperation)collectionView:(NSCollectionView *)collectionView validateDrop:(id<NSDraggingInfo>)draggingInfo proposedIndex:(NSInteger *)proposedDropIndex dropOperation:(NSCollectionViewDropOperation *)proposedDropOperation
+{
+    
+    NSPasteboard *pBoard = [draggingInfo draggingPasteboard];
+    NSData *indexSave = [pBoard dataForType:@"CS_LAYOUT_DRAG"];
+    NSIndexSet *indexes = [NSKeyedUnarchiver unarchiveObjectWithData:indexSave];
+    NSInteger draggedItemIdx = [indexes firstIndex];
+    
+    NSInteger useIdx = *proposedDropIndex;
+    
+    if (*proposedDropIndex > draggedItemIdx)
+    {
+        useIdx--;
+    }
+    
+    
+    if (useIdx < 0)
+    {
+        useIdx = 0;
+    }
+
+
+    
+    if (*proposedDropIndex == -1 || labs(draggedItemIdx - useIdx) < 1)
+    {
+        return NSDragOperationNone;
+    }
+    
+    return NSDragOperationMove;
+}
+
+
+-(BOOL)collectionView:(NSCollectionView *)collectionView writeItemsAtIndexes:(NSIndexSet *)indexes toPasteboard:(NSPasteboard *)pasteboard
+{
+    NSData *indexSave = [NSKeyedArchiver archivedDataWithRootObject:indexes];
+    [pasteboard declareTypes:@[@"CS_LAYOUT_DRAG"] owner:nil];
+    [pasteboard setData:indexSave forType:@"CS_LAYOUT_DRAG"];
+    return YES;
+}
+
+
+-(BOOL)collectionView:(NSCollectionView *)collectionView acceptDrop:(id<NSDraggingInfo>)draggingInfo index:(NSInteger)index dropOperation:(NSCollectionViewDropOperation)dropOperation
+{
+    NSPasteboard *pBoard = [draggingInfo draggingPasteboard];
+    NSData *indexSave = [pBoard dataForType:@"CS_LAYOUT_DRAG"];
+    NSIndexSet *indexes = [NSKeyedUnarchiver unarchiveObjectWithData:indexSave];
+    NSInteger draggedItemIdx = [indexes firstIndex];
+
+    
+    [self willChangeValueForKey:@"sourceLayouts"];
+    SourceLayout *draggedItem = [self.sourceLayouts objectAtIndex:draggedItemIdx];
+    NSInteger useIdx = index;
+    
+    if (index > draggedItemIdx)
+    {
+        useIdx--;
+    }
+    
+    
+    if (useIdx < 0)
+    {
+        useIdx = 0;
+    }
+    
+    [self.sourceLayouts removeObjectAtIndex:draggedItemIdx];
+    [self.sourceLayouts insertObject:draggedItem atIndex:useIdx];
+    [self didChangeValueForKey:@"sourceLayouts"];
+    
+    return YES;
+}
+
+
+-(BOOL)collectionView:(NSCollectionView *)collectionView canDragItemsAtIndexes:(NSIndexSet *)indexes withEvent:(NSEvent *)event
+{
+    return YES;
+}
+
+
 -(SourceLayout *)getLayoutForName:(NSString *)name
 {
     NSUInteger selectedIdx = [self.sourceLayouts indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
@@ -2488,6 +2568,11 @@
         [layoutIdentifiers addObject:[NSString stringWithFormat:@"ToggleLayout:%@", layout.name]];
     }
     
+    for (SourceLayout *layout in self.sourceLayouts)
+    {
+        [layoutIdentifiers addObject:[NSString stringWithFormat:@"SwitchToLayout:%@", layout.name]];
+    }
+
     baseIdentifiers = [baseIdentifiers arrayByAddingObjectsFromArray:layoutIdentifiers];
     baseIdentifiers = [baseIdentifiers arrayByAddingObjectsFromArray:_inputIdentifiers];
     return baseIdentifiers;
@@ -2762,6 +2847,32 @@
     }
 
     
+    if ([identifier hasPrefix:@"SwitchToLayout:"])
+    {
+        
+        
+        NSString *layoutName = [identifier substringFromIndex:15];
+        NSUInteger indexOfLayout = [self.sourceLayouts indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+            SourceLayout *testLayout = obj;
+            if ([testLayout.name isEqualToString:layoutName])
+            {
+                *stop = YES;
+                return YES;
+            }
+            return NO;
+        }];
+        
+        if (indexOfLayout != NSNotFound)
+        {
+            SourceLayout *layout = [self.sourceLayouts objectAtIndex:indexOfLayout];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf switchToLayout:layout];
+            });
+            
+        }
+        return;
+    }
+
     if ([identifier isEqualToString:@"GoLive"])
     {
     

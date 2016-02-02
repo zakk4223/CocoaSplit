@@ -42,6 +42,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    //self.view.layer.backgroundColor = [[NSColor blackColor] CGColor];
+
     // Do view setup here.
 }
 
@@ -53,6 +56,11 @@
     } else {
         [self.captureController toggleLayout:self.representedObject];
     }
+}
+
+-(void)mouseDragged:(NSEvent *)theEvent
+{
+    [self.nextResponder mouseDragged:theEvent];
 }
 
 
@@ -86,6 +94,7 @@
 
 -(void)buildLayoutMenu
 {
+
     NSInteger idx = 0;
     
     NSMenuItem *tmp;
