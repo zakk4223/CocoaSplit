@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9060" systemVersion="15C50" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9060" systemVersion="15D21" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9060"/>
@@ -637,12 +637,12 @@
                                                             </buttonCell>
                                                             <connections>
                                                                 <action selector="stagingGoLive:" target="816" id="lU4-Kr-Ds5"/>
+                                                                <binding destination="816" name="hidden" keyPath="self.stagingHidden" previousBinding="rGQ-UV-fZc" id="bDf-fR-qR3"/>
                                                                 <binding destination="816" name="enabled" keyPath="self.stagingHidden" id="rGQ-UV-fZc">
                                                                     <dictionary key="options">
                                                                         <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                                     </dictionary>
                                                                 </binding>
-                                                                <binding destination="816" name="hidden" keyPath="self.stagingHidden" previousBinding="rGQ-UV-fZc" id="bDf-fR-qR3"/>
                                                             </connections>
                                                         </button>
                                                         <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b93-ds-aBr">
@@ -1315,7 +1315,7 @@
                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                         <subviews>
                                                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="22" viewBased="YES" id="4PG-g3-ePP">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="238" height="133"/>
+                                                                                <rect key="frame" x="0.0" y="0.0" width="238" height="0.0"/>
                                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                                 <animations/>
                                                                                 <size key="intercellSpacing" width="3" height="2"/>
@@ -1491,7 +1491,7 @@
                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                         <subviews>
                                                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="none" columnSelection="YES" autosaveColumns="NO" rowHeight="14" id="H3k-dU-KZ9">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="216" height="113"/>
+                                                                                <rect key="frame" x="0.0" y="0.0" width="216" height="16"/>
                                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                                 <animations/>
                                                                                 <size key="intercellSpacing" width="3" height="2"/>
@@ -1836,7 +1836,7 @@
                     </connections>
                 </textField>
                 <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uW4-9L-JyQ">
-                    <rect key="frame" x="20" y="30" width="15" height="238"/>
+                    <rect key="frame" x="20" y="49" width="15" height="219"/>
                     <animations/>
                     <sliderCell key="cell" controlSize="mini" continuous="YES" alignment="left" maxValue="1" doubleValue="1" tickMarkPosition="right" sliderType="linear" id="DtI-hV-J01"/>
                     <connections>
@@ -1873,8 +1873,16 @@ MgA3AEEARwBQAFcAXABkAHkAewB9AH8AgQCLAJAAlQCgAKMApQCnAKkArgC5AMIAygDNANYA2wDoAOwA
                         </binding>
                     </connections>
                 </segmentedControl>
+                <levelIndicator verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bcO-wt-LMF">
+                    <rect key="frame" x="6" y="24" width="43" height="18"/>
+                    <animations/>
+                    <levelIndicatorCell key="cell" controlSize="mini" continuous="YES" alignment="left" doubleValue="-60" maxValue="7" warningValue="4" criticalValue="6" id="pGs-Hw-JOp"/>
+                    <connections>
+                        <binding destination="93b-Or-H22" name="value" keyPath="self.representedObject.powerLevel" id="bbg-mo-Rk2"/>
+                    </connections>
+                </levelIndicator>
                 <button horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6KB-9R-g3x">
-                    <rect key="frame" x="36" y="20" width="13" height="29"/>
+                    <rect key="frame" x="35" y="50" width="14" height="29"/>
                     <animations/>
                     <buttonCell key="cell" type="squareTextured" bezelStyle="texturedSquare" image="NSActionTemplate" imagePosition="above" alignment="left" controlSize="mini" imageScaling="proportionallyDown" inset="2" id="bUL-4P-VX8">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1890,7 +1898,7 @@ MgA3AEEARwBQAFcAXABkAHkAewB9AH8AgQCLAJAAlQCgAKMApQCnAKkArgC5AMIAygDNANYA2wDoAOwA
                 </button>
             </subviews>
             <animations/>
-            <point key="canvasLocation" x="538.5" y="375.5"/>
+            <point key="canvasLocation" x="610.5" y="475.5"/>
         </view>
         <collectionViewItem id="yDQ-rG-Cjn" userLabel="LayoutCollectionViewItem" customClass="CSLayoutCollectionItem"/>
         <menu id="Wwr-bS-1EX">

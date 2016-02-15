@@ -150,11 +150,12 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 -(void)updateStatistics
 {
-    /*
     for(CAMultiAudioNode *node in self.audioInputs)
     {
-        [node updatePowerlevel];
-    }*/
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [node updatePowerlevel];
+        });
+    }
 }
 
 

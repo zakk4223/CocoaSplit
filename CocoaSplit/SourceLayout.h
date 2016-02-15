@@ -21,8 +21,6 @@
     
     NSSortDescriptor *_sourceDepthSorter;
     NSSortDescriptor *_sourceUUIDSorter;
-    CVPixelBufferPoolRef _cvpool;
-    CVPixelBufferRef _currentPB;
     NSSize _rootSize;
     GLuint _fboTexture;
     GLuint _rFbo;
@@ -33,6 +31,7 @@
     
     
 }
+
 
 
 @property (assign) bool doSaveSourceList;

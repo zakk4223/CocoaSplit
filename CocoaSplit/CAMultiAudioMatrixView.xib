@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9060" systemVersion="15D21" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9060"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CAMultiAudioMatrixMixerWindowController"/>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="c22-O7-iKe" customClass="CAMultiAudioMatrixCell">
-            <rect key="frame" x="0.0" y="-1" width="17" height="148"/>
+            <rect key="frame" x="0.0" y="0.0" width="17" height="148"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <slider horizontalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UPM-S6-sSJ">
                     <rect key="frame" x="0.0" y="9" width="17" height="132"/>
+                    <animations/>
                     <sliderCell key="cell" controlSize="mini" continuous="YES" alignment="left" maxValue="1" doubleValue="1" tickMarkPosition="right" numberOfTickMarks="10" sliderType="linear" id="ZaG-mv-3m8"/>
                     <connections>
                         <action selector="matrixVolumeChanged:" target="-2" id="EqR-4t-8Qs"/>
@@ -24,6 +25,7 @@
                 <constraint firstItem="UPM-S6-sSJ" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="7" id="2QV-Vg-JTX"/>
                 <constraint firstAttribute="bottom" secondItem="UPM-S6-sSJ" secondAttribute="bottom" constant="10" id="h4W-yi-qbt"/>
             </constraints>
+            <animations/>
             <connections>
                 <outlet property="volumeSlider" destination="UPM-S6-sSJ" id="JA6-YN-Fxl"/>
             </connections>
