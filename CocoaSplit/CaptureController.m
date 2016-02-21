@@ -2480,13 +2480,7 @@
 -(void)toggleLayout:(SourceLayout *)layout
 {
     SourceLayout *activeLayout = self.activePreviewView.sourceLayout;
-    [self.objectController commitEditing];
-    
-    activeLayout.transitionName = self.transitionName;
-    activeLayout.transitionDirection = self.transitionDirection;
-    activeLayout.transitionDuration = self.transitionDuration;
-    activeLayout.transitionFilter = self.transitionFilter;
-    activeLayout.transitionFullScene = self.transitionFullScene;
+    [self applyTransitionSettings:activeLayout];
 
     if ([activeLayout containsLayout:layout])
     {
@@ -2984,16 +2978,49 @@
     [self.pluginManagerController showWindow:nil];
 }
 
+
+
+-(void)applyTransitionSettings:(SourceLayout *)layout
+{
+    [self.objectController commitEditing];
+    layout.transitionName = self.transitionName;
+    layout.transitionDirection = self.transitionDirection;
+    layout.transitionDuration = self.transitionDuration;
+    layout.transitionFilter = self.transitionFilter;
+    layout.transitionFullScene = self.transitionFullScene;
+}
+
+-(void)clearTransitionSettings:(SourceLayout *)layout
+{
+    layout.transitionName = nil;
+    layout.transitionDirection = nil;
+    layout.transitionDuration = 0;
+    layout.transitionFilter = nil;
+    layout.transitionFullScene = nil;
+
+}
+-(IBAction) swapStagingAndLive:(id)sender
+{
+
+    //Save the current live layout to a temporary layout, do a normal staging->live and then restore old live into current staging
+
+    [self.livePreviewView.sourceLayout saveSourceList];
+    
+    SourceLayout *tmpLive = [self.livePreviewView.sourceLayout copy];
+    
+    [self stagingGoLive:self];
+
+    [self applyTransitionSettings:self.activePreviewView.sourceLayout];
+    [self switchToLayout:tmpLive];
+    [self clearTransitionSettings:self.activePreviewView.sourceLayout];
+}
+
+
+
 - (IBAction)stagingGoLive:(id)sender
 {
     
-    [self.objectController commitEditing];
-
-    self.livePreviewView.sourceLayout.transitionName = self.transitionName;
-    self.livePreviewView.sourceLayout.transitionDirection = self.transitionDirection;
-    self.livePreviewView.sourceLayout.transitionDuration = self.transitionDuration;
-    self.livePreviewView.sourceLayout.transitionFilter = self.transitionFilter;
-    self.livePreviewView.sourceLayout.transitionFullScene = self.transitionFullScene;
+    [self applyTransitionSettings:self.livePreviewView.sourceLayout];
 
     if (self.stagingLayout)
     {

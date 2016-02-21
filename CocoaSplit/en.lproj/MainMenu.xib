@@ -680,6 +680,18 @@
                                                                 <outlet property="menu" destination="Wwr-bS-1EX" id="3mz-6W-mQM"/>
                                                             </connections>
                                                         </scrollView>
+                                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rzE-ZM-Eom">
+                                                            <rect key="frame" x="684" y="233" width="126" height="28"/>
+                                                            <animations/>
+                                                            <buttonCell key="cell" type="push" title="Swap" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="XZO-uo-5LB">
+                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                <font key="font" metaFont="smallSystem"/>
+                                                            </buttonCell>
+                                                            <connections>
+                                                                <action selector="swapStagingAndLive:" target="816" id="bFi-H9-egl"/>
+                                                                <binding destination="816" name="hidden" keyPath="self.stagingHidden" id="ugE-6e-RoW"/>
+                                                            </connections>
+                                                        </button>
                                                     </subviews>
                                                     <constraints>
                                                         <constraint firstItem="CRm-nK-baf" firstAttribute="leading" secondItem="3290" secondAttribute="leading" constant="17" id="Gl1-qV-X93"/>

@@ -292,6 +292,7 @@
     newLayout.canvas_width = self.canvas_width;
     newLayout.frameRate = self.frameRate;
     newLayout.isActive = NO;
+    newLayout.containedLayouts = self.containedLayouts.copy;
     
     return newLayout;
 }
@@ -594,6 +595,7 @@
     }
 
     [self mergeSourceListData:layout.savedSourceListData onlyAdd:YES];
+    
     
     if (self.transitionFullScene)
     {
@@ -913,6 +915,7 @@
     
     NSArray *mergeList;
     NSArray *mergeAnimationList = nil;
+    
     
     if ([mergeObj isKindOfClass:[NSDictionary class]])
     {

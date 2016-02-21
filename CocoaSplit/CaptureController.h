@@ -198,6 +198,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (IBAction)openMidiManager:(id)sender;
 
 
+-(IBAction) swapStagingAndLive:(id)sender;
 - (IBAction)stagingGoLive:(id)sender;
 - (IBAction)stagingSave:(id)sender;
 - (IBAction)stagingRevert:(id)sender;
