@@ -15,6 +15,7 @@
 
 -(NSViewController  *)getConfigurationView;
 -(NSString *)getServiceDestination;
+-(NSString *)getServiceFormat;
 +(NSString *)label;
 +(NSString *)serviceDescription;
 

@@ -140,9 +140,6 @@
 {
     [self.outputObjectController commitEditing];
     [self.pluginViewController commitEditing];
-    NSString *destination = [self.streamServiceObject getServiceDestination];
-    
-    self.outputDestination.destination = destination;
     self.outputDestination.streamServiceObject = self.streamServiceObject;
     [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseOK];
 }

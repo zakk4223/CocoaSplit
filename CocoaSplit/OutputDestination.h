@@ -18,13 +18,12 @@
 @interface OutputDestination : NSObject <NSCoding,NSCopying>
 
 {
-    NSString *_destination;
     NSString *_name;
     BOOL _active;
     double _output_start_time;
     NSMutableArray *_delayBuffer;
     BOOL _stopped;
-    
+    NSString *_destination;
     
     
 }
@@ -33,7 +32,7 @@
 @property (strong) NSString *server_name;
 @property (strong) NSString *type_name;
 @property (strong) NSString *type_class_name;
-@property (strong) NSString *destination;
+@property (readonly) NSString *destination;
 @property (strong) NSString *output_format;
 @property (strong) NSString *stream_key;
 @property (assign) int stream_delay;

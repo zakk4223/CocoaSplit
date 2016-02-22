@@ -14,20 +14,21 @@
 
 
 @synthesize name = _name;
+@synthesize output_format = _output_format;
+
 
 
 -(instancetype)copyWithZone:(NSZone *)zone
 {
     OutputDestination *newCopy = [[OutputDestination alloc] init];
-    newCopy.destination = self.destination;
     newCopy.name = self.name;
     newCopy.type_name = self.type_name;
     newCopy.type_class_name = self.type_class_name;
-    newCopy.output_format = self.output_format;
     newCopy.active = self.active;
     newCopy.stream_delay = self.stream_delay;
     newCopy.compressor_name = self.compressor_name;
     newCopy.streamServiceObject = self.streamServiceObject;
+    newCopy->_destination = _destination;
     return newCopy;
 }
 
@@ -35,26 +36,24 @@
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
     
-    [aCoder encodeObject:self.destination forKey:@"destination"];
     [aCoder encodeObject:self.name forKey:@"name"];
     [aCoder encodeObject:self.type_name forKey:@"type_name"];
     [aCoder encodeObject:self.type_class_name forKey:@"type_class_name"];
-    [aCoder encodeObject:self.output_format forKey:@"output_format"];
     [aCoder encodeBool:self.active forKey:@"active"];
     [aCoder encodeInteger:self.stream_delay forKey:@"stream_delay"];
     [aCoder encodeObject:self.compressor_name forKey:@"compressor_name"];
     [aCoder encodeObject:self.streamServiceObject forKey:@"streamServiceObject"];
+    [aCoder encodeObject:_destination forKey:@"destination"];
 }
+
 
 -(id) initWithCoder:(NSCoder *)aDecoder
 {
     if (self = [self init])
     {
-        
-        self.destination = [aDecoder decodeObjectForKey:@"destination"];
+        _destination = [aDecoder decodeObjectForKey:@"destination"];
         self.name = [aDecoder decodeObjectForKey:@"name"];
         self.type_name = [aDecoder decodeObjectForKey:@"type_name"];
-        self.output_format = [aDecoder decodeObjectForKey:@"output_format"];
         self.active = [aDecoder decodeBoolForKey:@"active"];
         self.stream_delay = (int)[aDecoder decodeIntegerForKey:@"stream_delay"];
         self.compressor_name = [aDecoder decodeObjectForKey:@"compressor_name"];
@@ -88,18 +87,14 @@
 {
     
     if (_destination)
-        return _destination;
-    
-    
-    if ([_type_name isEqualToString:@"rtmp"])
     {
-        _destination = [NSString stringWithFormat:@"%@/%@", self.server_name, self.stream_key];
-                
+        return _destination;
     }
     
-    return _destination;
-    
+    return [self.streamServiceObject getServiceDestination];
 }
+
+
 
 -(NSString *)name
 {
@@ -108,7 +103,7 @@
         return _name;
     }
     
-    return _destination;
+    return self.destination;
     
     
 }
@@ -144,17 +139,6 @@
 }
 
 
-
--(void)setDestination:(NSString *)destination
-{
-    
-    if ([destination hasPrefix:@"rtmp://"] || [destination hasPrefix:@"udp:"])
-    {
-        self.output_format = @"FLV";
-    }
-     _destination = destination;
-    
-}
 
 
 -(void) reset
@@ -218,6 +202,31 @@
     return self;
     
     
+}
+
+-(void)setOutput_format:(NSString *)output_format
+{
+    _output_format = output_format;
+}
+
+
+-(NSString *)output_format
+{
+    if (_output_format)
+    {
+        return _output_format;
+    }
+    
+    
+    if (self.streamServiceObject)
+    {
+        if ([self.streamServiceObject respondsToSelector:@selector(getServiceFormat)])
+        {
+            return [self.streamServiceObject getServiceFormat];
+        }
+    }
+    
+    return nil;
 }
 
 

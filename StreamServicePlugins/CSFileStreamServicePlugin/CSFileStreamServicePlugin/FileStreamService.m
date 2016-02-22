@@ -53,6 +53,12 @@
 
 
 
+-(NSString *)getServiceFormat
+{
+    return nil;
+}
+
+
 
 -(NSString *)getServiceDestination
 {

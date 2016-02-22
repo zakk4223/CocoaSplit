@@ -41,6 +41,13 @@
 @property (strong) NSString *selectedServer;
 */
 
+
+-(NSString *)getServiceFormat
+{
+    return @"FLV";
+}
+
+
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:self.authUsername forKey:@"authUsername"];

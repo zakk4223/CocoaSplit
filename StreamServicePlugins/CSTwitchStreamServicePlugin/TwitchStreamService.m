@@ -52,6 +52,11 @@
 
 
 
+-(NSString *)getServiceFormat
+{
+    return @"FLV";
+}
+
 
 -(NSString *)getServiceDestination
 {
