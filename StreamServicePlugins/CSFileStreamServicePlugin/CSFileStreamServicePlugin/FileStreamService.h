@@ -13,7 +13,7 @@
 
 
 @property bool isReady;
-@property (assign) NSString *fileName;
+@property (strong) NSString *fileName;
 
 
 

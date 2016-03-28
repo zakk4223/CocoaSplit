@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <AppKit/AppKit.h>
-#import "h264Compressor.h"
+#import "VideoCompressor.h"
 #import "CaptureController.h"
 
 
@@ -53,7 +53,7 @@
 @property (assign) int dropped_frame_count;
 @property (assign) double output_framerate;
 @property (assign) double output_bitrate;
-@property (strong) NSObject <h264Compressor> *compressor;
+@property (strong) NSObject <VideoCompressor> *compressor;
 @property (strong) NSString *compressor_name;
 
 

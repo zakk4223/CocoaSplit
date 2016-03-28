@@ -1,5 +1,5 @@
 //
-//  h264Compressor.h
+//  VideoCompressor.h
 //  streamOutput
 //
 //  Created by Zakk on 3/17/13.
@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <CoreMedia/CoreMedia.h>
 #import "CapturedFrameData.h"
+#import "libavformat/avformat.h"
+#import "CSCompressorViewControllerProtocol.h"
 
 //#import "OutputDestination.h"
 
@@ -18,7 +20,7 @@
 @protocol ControllerProtocol;
 
 
-@protocol h264Compressor <NSObject,NSCoding,NSCopying>
+@protocol VideoCompressor <NSObject,NSCoding,NSCopying>
 
 //compressFrame is expected to be non-blocking. Create a serial dispatch queue if the underlying compressor
 //is blocking
@@ -40,6 +42,7 @@
 @property (strong) NSString *resolutionOption;
 @property (assign) bool errored;
 @property (assign) bool active;
+@property (assign) enum AVCodecID codec_id;
 
 -(void) addOutput:(id)destination;
 -(void) removeOutput:(id)destination;
@@ -47,6 +50,7 @@
 -(void) reset;
 -(bool) validate:(NSError **)therror;
 -(void) addAudioData:(CMSampleBufferRef)audioData;
+-(id <CSCompressorViewControllerProtocol>)getConfigurationView;
 
 
 

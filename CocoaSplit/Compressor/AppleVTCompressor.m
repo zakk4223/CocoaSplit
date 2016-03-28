@@ -8,6 +8,7 @@
 
 #import "AppleVTCompressor.h"
 #import "OutputDestination.h"
+#import "CSAppleH264CompressorViewController.h"
 
 OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessionRef, CFDictionaryRef *);
 
@@ -441,6 +442,11 @@ void VideoCompressorReceiveFrame(void *VTref, void *VTFrameRef, OSStatus status,
         
         CFRelease(sampleBuffer);
     //}
+}
+
+-(id <CSCompressorViewControllerProtocol>)getConfigurationView
+{
+    return [[CSAppleH264CompressorViewController alloc] init];
 }
 
 

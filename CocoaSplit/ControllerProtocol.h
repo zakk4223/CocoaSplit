@@ -10,7 +10,7 @@
 #import "libavformat/avformat.h"
 #import "CapturedFrameData.h"
 #import <AppKit/AppKit.h>
-#import "h264Compressor.h"
+#import "VideoCompressor.h"
 #import "InputSource.h"
 
 
@@ -26,7 +26,7 @@
 
 @property (assign) int maxOutputPending;
 @property (assign) int maxOutputDropped;
-@property (strong) id <h264Compressor> selectedCompressor;
+@property (strong) id <VideoCompressor> selectedCompressor;
 @property (strong) NSMutableDictionary *compressors;
 
 

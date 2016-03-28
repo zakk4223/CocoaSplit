@@ -32,7 +32,7 @@
         _uuidMap = [NSMutableDictionary dictionary];
         
         _animationQueue = dispatch_queue_create("CSAnimationQueue", NULL);
-        _containedLayouts = [NSMutableArray array];
+        _containedLayouts = [[NSMutableArray alloc] init];
         _noSceneTransactions = NO;
         
         self.rootLayer = [self newRootLayer];
@@ -359,7 +359,7 @@
     
         if ([aDecoder containsValueForKey:@"containedLayouts"])
         {
-            self.containedLayouts = [aDecoder decodeObjectForKey:@"containedLayouts"];
+            self.containedLayouts = [[aDecoder decodeObjectForKey:@"containedLayouts"] mutableCopy];
             //set live/staging status for each layout
         }
         
@@ -546,20 +546,21 @@
     }
     //Only run animations that aren't already in the layout
     
-    NSMutableArray *runAnimations = [NSMutableArray array];
+    NSMutableArray *runAnimations = [[NSMutableArray alloc] init];
     
     for (CSAnimationItem *anim in layout.animationList)
     {
         if (![self animationForUUID:anim.uuid] && anim.onLive)
         {
             [runAnimations addObject:anim.uuid];
+            
         }
     }
     
     [self.animationList removeAllObjects];
     //If an input exists in both lists, only remove it if the new one is different/changed
     
-    NSMutableArray *rList = [NSMutableArray array];
+    NSMutableArray *rList = [[NSMutableArray alloc] init];
     for (InputSource *src in self.sourceList)
     {
         InputSource *nSrc = [layout inputForUUID:src.uuid];

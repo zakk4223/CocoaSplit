@@ -9,6 +9,7 @@
 #import "x264Compressor.h"
 #import "OutputDestination.h"
 #import <libavutil/opt.h>
+#import "CSx264CompressorViewController.h"
 
 
 
@@ -562,6 +563,10 @@
     [super setNilValueForKey:key];
 }
 
+-(id <CSCompressorViewControllerProtocol>)getConfigurationView
+{
+    return [[CSx264CompressorViewController alloc] init];
+}
 
 
 @end

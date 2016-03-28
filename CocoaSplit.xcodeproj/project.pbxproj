@@ -48,6 +48,13 @@
 		34348C2A19BDBDC000A122C2 /* PluginManagerWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34348C2819BDBDC000A122C2 /* PluginManagerWindowController.m */; };
 		34348C2B19BDBDC000A122C2 /* PluginManagerWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34348C2919BDBDC000A122C2 /* PluginManagerWindowController.xib */; };
 		34348C3919BDC0D800A122C2 /* PluginManagerWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34348C2819BDBDC000A122C2 /* PluginManagerWindowController.m */; };
+		3434CB281CA8615A001B3DF9 /* AppleProResCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3434CB271CA8615A001B3DF9 /* AppleProResCompressor.m */; };
+		3434CB2D1CA90D28001B3DF9 /* CSx264CompressorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3434CB2B1CA90D28001B3DF9 /* CSx264CompressorViewController.m */; };
+		3434CB2E1CA90D28001B3DF9 /* CSx264CompressorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3434CB2C1CA90D28001B3DF9 /* CSx264CompressorViewController.xib */; };
+		3434CB321CA91D99001B3DF9 /* CSAppleH264CompressorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3434CB301CA91D99001B3DF9 /* CSAppleH264CompressorViewController.m */; };
+		3434CB331CA91D99001B3DF9 /* CSAppleH264CompressorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3434CB311CA91D99001B3DF9 /* CSAppleH264CompressorViewController.xib */; };
+		3434CB381CA93BCD001B3DF9 /* CSAppleProResCompressorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3434CB361CA93BCD001B3DF9 /* CSAppleProResCompressorViewController.m */; };
+		3434CB391CA93BCD001B3DF9 /* CSAppleProResCompressorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3434CB371CA93BCD001B3DF9 /* CSAppleProResCompressorViewController.xib */; };
 		3435E396188B902C0015CC01 /* 420v.fgsh in Resources */ = {isa = PBXBuildFile; fileRef = 3435E395188B902C0015CC01 /* 420v.fgsh */; };
 		3435E39B188B93150015CC01 /* passthrough.vtsh in Resources */ = {isa = PBXBuildFile; fileRef = 3435E39A188B93150015CC01 /* passthrough.vtsh */; };
 		3435E39D188BD8250015CC01 /* passthrough.fgsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3435E399188B90900015CC01 /* passthrough.fgsh */; };
@@ -620,6 +627,18 @@
 		34348C2719BDBDC000A122C2 /* PluginManagerWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PluginManagerWindowController.h; sourceTree = "<group>"; };
 		34348C2819BDBDC000A122C2 /* PluginManagerWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PluginManagerWindowController.m; sourceTree = "<group>"; };
 		34348C2919BDBDC000A122C2 /* PluginManagerWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PluginManagerWindowController.xib; path = Interface/PluginManagerWindowController.xib; sourceTree = "<group>"; };
+		3434CB261CA8615A001B3DF9 /* AppleProResCompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleProResCompressor.h; path = Compressor/AppleProResCompressor.h; sourceTree = "<group>"; };
+		3434CB271CA8615A001B3DF9 /* AppleProResCompressor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppleProResCompressor.m; path = Compressor/AppleProResCompressor.m; sourceTree = "<group>"; };
+		3434CB2A1CA90D28001B3DF9 /* CSx264CompressorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSx264CompressorViewController.h; path = Interface/CSx264CompressorViewController.h; sourceTree = "<group>"; };
+		3434CB2B1CA90D28001B3DF9 /* CSx264CompressorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSx264CompressorViewController.m; path = Interface/CSx264CompressorViewController.m; sourceTree = "<group>"; };
+		3434CB2C1CA90D28001B3DF9 /* CSx264CompressorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSx264CompressorViewController.xib; path = Interface/CSx264CompressorViewController.xib; sourceTree = "<group>"; };
+		3434CB2F1CA91D99001B3DF9 /* CSAppleH264CompressorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAppleH264CompressorViewController.h; path = Interface/CSAppleH264CompressorViewController.h; sourceTree = "<group>"; };
+		3434CB301CA91D99001B3DF9 /* CSAppleH264CompressorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSAppleH264CompressorViewController.m; path = Interface/CSAppleH264CompressorViewController.m; sourceTree = "<group>"; };
+		3434CB311CA91D99001B3DF9 /* CSAppleH264CompressorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSAppleH264CompressorViewController.xib; path = Interface/CSAppleH264CompressorViewController.xib; sourceTree = "<group>"; };
+		3434CB341CA933B3001B3DF9 /* CSCompressorViewControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCompressorViewControllerProtocol.h; path = Interface/CSCompressorViewControllerProtocol.h; sourceTree = "<group>"; };
+		3434CB351CA93BCD001B3DF9 /* CSAppleProResCompressorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAppleProResCompressorViewController.h; path = Interface/CSAppleProResCompressorViewController.h; sourceTree = "<group>"; };
+		3434CB361CA93BCD001B3DF9 /* CSAppleProResCompressorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSAppleProResCompressorViewController.m; path = Interface/CSAppleProResCompressorViewController.m; sourceTree = "<group>"; };
+		3434CB371CA93BCD001B3DF9 /* CSAppleProResCompressorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSAppleProResCompressorViewController.xib; path = Interface/CSAppleProResCompressorViewController.xib; sourceTree = "<group>"; };
 		3435E395188B902C0015CC01 /* 420v.fgsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = 420v.fgsh; path = Shaders/420v.fgsh; sourceTree = "<group>"; };
 		3435E399188B90900015CC01 /* passthrough.fgsh */ = {isa = PBXFileReference; lastKnownFileType = text; name = passthrough.fgsh; path = Shaders/passthrough.fgsh; sourceTree = "<group>"; };
 		3435E39A188B93150015CC01 /* passthrough.vtsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = passthrough.vtsh; path = Shaders/passthrough.vtsh; sourceTree = "<group>"; };
@@ -914,7 +933,7 @@
 		34F5140F16FD6E4F00BA894D /* x264Compressor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = x264Compressor.m; path = Compressor/x264Compressor.m; sourceTree = "<group>"; };
 		34F5141016FD6E4F00BA894D /* AppleVTCompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppleVTCompressor.h; path = Compressor/AppleVTCompressor.h; sourceTree = "<group>"; };
 		34F5141116FD6E4F00BA894D /* AppleVTCompressor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppleVTCompressor.m; path = Compressor/AppleVTCompressor.m; sourceTree = "<group>"; };
-		34F5141416FD6E5D00BA894D /* h264Compressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = h264Compressor.h; path = Compressor/h264Compressor.h; sourceTree = "<group>"; };
+		34F5141416FD6E5D00BA894D /* VideoCompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VideoCompressor.h; path = Compressor/VideoCompressor.h; sourceTree = "<group>"; };
 		34F52A241BC1CE2700662911 /* CSLayoutCollectionItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSLayoutCollectionItem.h; path = Interface/CSLayoutCollectionItem.h; sourceTree = "<group>"; };
 		34F52A251BC1CE2700662911 /* CSLayoutCollectionItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSLayoutCollectionItem.m; path = Interface/CSLayoutCollectionItem.m; sourceTree = "<group>"; };
 		34F52A261BC1CE2700662911 /* CSLayoutCollectionItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSLayoutCollectionItem.xib; path = Interface/CSLayoutCollectionItem.xib; sourceTree = "<group>"; };
@@ -1179,6 +1198,23 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		3434CB291CA90C3D001B3DF9 /* Compressor */ = {
+			isa = PBXGroup;
+			children = (
+				3434CB2A1CA90D28001B3DF9 /* CSx264CompressorViewController.h */,
+				3434CB2B1CA90D28001B3DF9 /* CSx264CompressorViewController.m */,
+				3434CB2C1CA90D28001B3DF9 /* CSx264CompressorViewController.xib */,
+				3434CB2F1CA91D99001B3DF9 /* CSAppleH264CompressorViewController.h */,
+				3434CB301CA91D99001B3DF9 /* CSAppleH264CompressorViewController.m */,
+				3434CB311CA91D99001B3DF9 /* CSAppleH264CompressorViewController.xib */,
+				3434CB341CA933B3001B3DF9 /* CSCompressorViewControllerProtocol.h */,
+				3434CB351CA93BCD001B3DF9 /* CSAppleProResCompressorViewController.h */,
+				3434CB361CA93BCD001B3DF9 /* CSAppleProResCompressorViewController.m */,
+				3434CB371CA93BCD001B3DF9 /* CSAppleProResCompressorViewController.xib */,
+			);
+			name = Compressor;
+			sourceTree = "<group>";
+		};
 		3435E398188B90610015CC01 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
@@ -1202,13 +1238,15 @@
 		3441338C18667F280059B686 /* Compressor */ = {
 			isa = PBXGroup;
 			children = (
-				34F5141416FD6E5D00BA894D /* h264Compressor.h */,
+				34F5141416FD6E5D00BA894D /* VideoCompressor.h */,
 				34F5140E16FD6E4F00BA894D /* x264Compressor.h */,
 				34F5140F16FD6E4F00BA894D /* x264Compressor.m */,
 				34213E18196680880054E238 /* CompressorBase.h */,
 				34213E19196680880054E238 /* CompressorBase.m */,
 				34F5141016FD6E4F00BA894D /* AppleVTCompressor.h */,
 				34F5141116FD6E4F00BA894D /* AppleVTCompressor.m */,
+				3434CB261CA8615A001B3DF9 /* AppleProResCompressor.h */,
+				3434CB271CA8615A001B3DF9 /* AppleProResCompressor.m */,
 			);
 			name = Compressor;
 			sourceTree = "<group>";
@@ -1225,6 +1263,7 @@
 		3441338E18667FE40059B686 /* Interface */ = {
 			isa = PBXGroup;
 			children = (
+				3434CB291CA90C3D001B3DF9 /* Compressor */,
 				34ABEF3B17C0C2CB00AA5E62 /* advancedPrefPanel.xib */,
 				344825E41B253D6900AF9EAC /* CAMultiAudioMatrixCell.h */,
 				344825E51B253D6900AF9EAC /* CAMultiAudioMatrixCell.m */,
@@ -2072,14 +2111,17 @@
 				34F1EB931BCCA41F00B38E6C /* CSLayoutEditWindowController.xib in Resources */,
 				342B33B61980771200492CB7 /* line.vtsh in Resources */,
 				34938EEF1AE4D24200F3B1CF /* CSFilterChooserWindowController.xib in Resources */,
+				3434CB2E1CA90D28001B3DF9 /* CSx264CompressorViewController.xib in Resources */,
 				3435E39B188B93150015CC01 /* passthrough.vtsh in Resources */,
 				34B5FCE119BF1C3F00F67D19 /* CreateLayoutViewController.xib in Resources */,
 				3479A9971A9007DD00A524F0 /* CocoaSplit.sdef in Resources */,
 				340D8C971959C7C100BE5144 /* CompressionSettingsPanel.xib in Resources */,
+				3434CB331CA91D99001B3DF9 /* CSAppleH264CompressorViewController.xib in Resources */,
 				344988131893CF0500044259 /* LogWindow.xib in Resources */,
 				34D696FC1871B8F700B50EB6 /* Defaults.plist in Resources */,
 				34348C2B19BDBDC000A122C2 /* PluginManagerWindowController.xib in Resources */,
 				34ABEF3C17C0C2CB00AA5E62 /* advancedPrefPanel.xib in Resources */,
+				3434CB391CA93BCD001B3DF9 /* CSAppleProResCompressorViewController.xib in Resources */,
 				3435E396188B902C0015CC01 /* 420v.fgsh in Resources */,
 				343ED9421BCAC1C80061FC4B /* EditBuiltinLayoutView.xib in Resources */,
 				3415CED31AE257DA002F11F5 /* CSTextCaptureBaseView.xib in Resources */,
@@ -2149,6 +2191,8 @@
 				34ED8C9D1B07371C002C0674 /* MIKMIDIProgramChangeCommand.m in Sources */,
 				34ED8C731B07371C002C0674 /* MIKMIDIMappingXMLParser.m in Sources */,
 				34BD1E631B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.m in Sources */,
+				3434CB381CA93BCD001B3DF9 /* CSAppleProResCompressorViewController.m in Sources */,
+				3434CB321CA91D99001B3DF9 /* CSAppleH264CompressorViewController.m in Sources */,
 				34F52A271BC1CE2700662911 /* CSLayoutCollectionItem.m in Sources */,
 				347277FD1A5A2758008801A9 /* CSIOSurfaceLayer.m in Sources */,
 				344825E61B253D6900AF9EAC /* CAMultiAudioMatrixCell.m in Sources */,
@@ -2165,6 +2209,7 @@
 				34ED8CBC1B07763F002C0674 /* CSMidiWrapper.m in Sources */,
 				34DA1D3E1BF823E700132486 /* CSNewOutputWindowController.m in Sources */,
 				34ED8C691B07371C002C0674 /* MIKMIDIInputPort.m in Sources */,
+				3434CB281CA8615A001B3DF9 /* AppleProResCompressor.m in Sources */,
 				34ED8C531B07371C002C0674 /* MIKMIDICommandThrottler.m in Sources */,
 				345F8B611A161552009A81E3 /* CAMultiAudioAVCapturePlayer.m in Sources */,
 				34ED8CAD1B07371C002C0674 /* MIKMIDIUtilities.m in Sources */,
@@ -2210,6 +2255,7 @@
 				3498D94F1A9472BD00906532 /* CSAudioSwitchControl.m in Sources */,
 				3400A0621BD44DF0003E1828 /* CSInputLibraryItem.m in Sources */,
 				34ED8C831B07371C002C0674 /* MIKMIDIMetaSequenceEvent.m in Sources */,
+				3434CB2D1CA90D28001B3DF9 /* CSx264CompressorViewController.m in Sources */,
 				34ED8C6D1B07371C002C0674 /* MIKMIDIMapping.m in Sources */,
 				34F1EB921BCCA41F00B38E6C /* CSLayoutEditWindowController.m in Sources */,
 				34ED8CA31B07371C002C0674 /* MIKMIDISourceEndpoint.m in Sources */,

@@ -1,9 +1,9 @@
 //
-//  AppleVTCompressor.h
-//  streamOutput
+//  AppleProResCompressor.h
+//  CocoaSplit
 //
-//  Created by Zakk on 3/17/13.
-//  Copyright (c) 2013 Zakk. All rights reserved.
+//  Created by Zakk on 3/27/16.
+//  Copyright © 2016 Zakk. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -13,28 +13,21 @@
 #import <VideoToolbox/VideoToolbox.h>
 #import <VideoToolbox/VTVideoEncoderList.h>
 
-@interface AppleVTCompressor : CompressorBase <VideoCompressor, NSCoding>
+@interface AppleProResCompressor : CompressorBase <VideoCompressor, NSCoding>
 {
     
     VTCompressionSessionRef _compression_session;
     VTPixelTransferSessionRef _vtpt_ref;
-
+    
 }
 
 
 //@property (strong) id<ControllerProtocol> settingsController;
 //@property (strong) id<ControllerProtocol> outputDelegate;
 
-@property (assign) int average_bitrate;
-@property (assign) int max_bitrate;
-@property (assign) int keyframe_interval;
-@property (strong) NSString *profile;
-@property (assign) BOOL use_cbr;
-@property (strong) NSArray *profiles;
+@property (strong) NSNumber *proResType;
 
 
 -(bool)compressFrame:(CapturedFrameData *)frameData;
 
-
 @end
- 

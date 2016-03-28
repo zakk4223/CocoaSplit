@@ -11,7 +11,7 @@
 #import "libavcodec/avcodec.h"
 #import "libswscale/swscale.h"
 #import <CoreVideo/CoreVideo.h>
-#import "h264Compressor.h"
+#import "VideoCompressor.h"
 #import "CaptureController.h"
 #import <VideoToolbox/VideoToolbox.h>
 #import "CapturedFrameData.h"

@@ -45,7 +45,7 @@
     
     if (self.outputDestination.compressor_name)
     {
-        id<h264Compressor> oCompressor = self.compressors[self.outputDestination.compressor_name];
+        id<VideoCompressor> oCompressor = self.compressors[self.outputDestination.compressor_name];
         if (!oCompressor)
         {
             self.outputDestination.compressor_name = nil;
@@ -62,6 +62,13 @@
 
 -(void)setupServiceView
 {
+    
+    if (!self.serviceConfigView)
+    {
+        return;
+    }
+    
+    
     if (!self.streamServiceObject)
     {
         if (self.pluginViewController)
@@ -124,7 +131,11 @@
 
 - (void)windowDidLoad {
     [super windowDidLoad];
-    [self setupServiceView];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setupServiceView];
+
+        
+    });
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
 }
 
@@ -147,7 +158,7 @@
 - (IBAction)openCompressorEdit:(id)sender
 {
 
-    NSObject <h264Compressor>*editCompressor;
+    NSObject <VideoCompressor>*editCompressor;
     
     if (!self.outputDestination.compressor_name)
     {

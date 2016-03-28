@@ -26,6 +26,8 @@
 
         self.resolutionOption = @"Use Source";
         
+        self.codec_id = AV_CODEC_ID_H264;
+        
         self.outputs = [[NSMutableDictionary alloc] init];
         _audioBuffer = [[NSMutableArray alloc] init];
         
@@ -132,8 +134,10 @@
 
 -(id) initWithCoder:(NSCoder *)aDecoder
 {
+    self.codec_id = AV_CODEC_ID_H264;
     return self;
 }
+
 
 
 
@@ -216,6 +220,10 @@
     }
     
     return YES;
+}
+-(id <CSCompressorViewControllerProtocol>)getConfigurationView
+{
+    return nil;
 }
 
 

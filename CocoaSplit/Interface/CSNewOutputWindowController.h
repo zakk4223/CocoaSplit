@@ -25,7 +25,7 @@
 @property (strong) NSString *selectedOutputType;
 @property (strong) NSObject<CSStreamServiceProtocol>*streamServiceObject;
 @property (strong) NSArray *outputTypes;
-@property (weak) IBOutlet NSView *serviceConfigView;
+@property (strong) IBOutlet NSView *serviceConfigView;
 @property (strong) NSViewController *pluginViewController;
 @property (strong) NSMutableDictionary *compressors;
 @property (strong) CompressionSettingsPanelController *compressionPanelController;

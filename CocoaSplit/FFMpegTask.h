@@ -11,6 +11,8 @@
 #import "libavformat/avformat.h"
 #import "CapturedFrameData.h"
 #import "CaptureController.h"
+#import "libavutil/opt.h"
+
 
 
 
@@ -75,6 +77,8 @@
 @property (assign) double output_bitrate;
 @property (assign) int dropped_frame_count;
 @property (assign) BOOL errored;
+@property (assign) enum AVCodecID video_codec_id;
+
 
 
 @property (strong) CaptureController *settingsController;

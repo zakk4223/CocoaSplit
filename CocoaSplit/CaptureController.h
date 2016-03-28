@@ -32,10 +32,11 @@
 #import "CSInputLibraryItem.h"
 #import "CSNewOutputWindowController.h"
 #import "CompressionSettingsPanelController.h"
+#import "AppleProResCompressor.h"
 
 
 @class FFMpegTask;
-@protocol h264Compressor;
+@protocol VideoCompressor;
 @class OutputDestination;
 @class InputSource;
 @class SourceLayout;

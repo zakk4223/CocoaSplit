@@ -232,7 +232,7 @@
 
 -(void)compressorDeleted:(NSNotification *)notification
 {
-    id <h264Compressor> compressor = notification.object;
+    id <VideoCompressor> compressor = notification.object;
     
     if (self.compressor_name && [self.compressor_name isEqualToString:compressor.name])
     {
@@ -248,7 +248,7 @@
     NSDictionary *infoDict = notification.object;
     
     NSString *oldName = infoDict[@"oldName"];
-    id <h264Compressor> compressor = infoDict[@"compressor"];
+    id <VideoCompressor> compressor = infoDict[@"compressor"];
     
     if (self.compressor_name && [self.compressor_name isEqualToString:oldName])
     {
@@ -281,7 +281,7 @@
     }
     */
     
-
+    newout.video_codec_id  = self.compressor.codec_id;
     newout.framerate = self.settingsController.captureFPS;
     newout.stream_output = [self.destination stringByStandardizingPath];
     newout.stream_format = self.output_format;
@@ -308,7 +308,7 @@
         return;
     }
     
-    NSObject <h264Compressor> *old_compressor = self.compressor;
+    NSObject <VideoCompressor> *old_compressor = self.compressor;
 
     if (self.compressor_name)
     {

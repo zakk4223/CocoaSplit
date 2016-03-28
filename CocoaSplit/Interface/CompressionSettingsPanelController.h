@@ -7,13 +7,18 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "h264Compressor.h"
+#import "VideoCompressor.h"
+#import "CSCompressorViewControllerProtocol.h"
+
 
 @interface CompressionSettingsPanelController : NSWindowController
+@property (weak) IBOutlet NSView *compressorSettingsView;
+@property (strong) NSViewController *compressorViewController;
+
 
 @property (strong) IBOutlet NSObjectController *compressorObjectController;
 
-@property (strong) id <h264Compressor> compressor;
+@property (strong) id <VideoCompressor> compressor;
 @property (strong) NSArray *compressorTypes;
 @property (strong) NSString *selectedCompressorType;
 @property (strong) NSString *saveProfileName;

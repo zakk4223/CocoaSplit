@@ -278,6 +278,24 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     }
 }
 
+-(void) setVideoFormatOptions:(AVFormatContext *)ctx
+{
+    
+    AVOutputFormat *ofmt = ctx->oformat;
+    
+    if (!ofmt)
+    {
+        return;
+    }
+    
+    const char *fmt_name = ofmt->name;
+    
+    if (!strcasecmp(fmt_name, "mov"))
+    {
+        av_opt_set_int(ctx->priv_data, "frag_duration", 10000000, 0);
+    }
+}
+
 
 -(bool) createAVFormatOut:(CMSampleBufferRef)theBuffer codec_ctx:(AVCodecContext *)codec_ctx
 {
@@ -299,7 +317,10 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     }
     
     
+    [self setVideoFormatOptions:_av_fmt_ctx];
+    
     av_out_fmt = _av_fmt_ctx->oformat;
+    
     _av_video_stream = avformat_new_stream(_av_fmt_ctx, 0);
     
     if (!_av_video_stream)
@@ -312,7 +333,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     AVCodecContext *c_ctx = _av_video_stream->codec;
     
     c_ctx->codec_type = AVMEDIA_TYPE_VIDEO;
-    c_ctx->codec_id = AV_CODEC_ID_H264;
+    c_ctx->codec_id = self.video_codec_id;
     _av_video_stream->time_base.num = 1000000;
     _av_video_stream->time_base.den = self.framerate*1000000;
     
@@ -332,8 +353,8 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     a_ctx->codec_type = AVMEDIA_TYPE_AUDIO;
     a_ctx->codec_id = AV_CODEC_ID_AAC;
     
-    _av_audio_stream->time_base.num = 1000000;
-    _av_audio_stream->time_base.den = self.framerate*1000000;
+    _av_audio_stream->time_base.num = 100000;
+    _av_audio_stream->time_base.den = self.framerate*100000;
     a_ctx->sample_rate = _samplerate;
     a_ctx->bit_rate = _audio_bitrate;
     a_ctx->channels = 2;
@@ -360,14 +381,16 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         
         atoms = CMFormatDescriptionGetExtension(fmt, kCMFormatDescriptionExtension_SampleDescriptionExtensionAtoms);
         avccKey = CFSTR("avcC");
-        NSLog(@"ATOMS %@", atoms);
-        avcc_data = CFDictionaryGetValue(atoms, avccKey);
-        avcc_size = CFDataGetLength(avcc_data);
-        c_ctx->extradata = malloc(avcc_size);
+        if (atoms)
+        {
+            avcc_data = CFDictionaryGetValue(atoms, avccKey);
+            avcc_size = CFDataGetLength(avcc_data);
+            c_ctx->extradata = malloc(avcc_size);
     
-        CFDataGetBytes(avcc_data, CFRangeMake(0,avcc_size), c_ctx->extradata);
+            CFDataGetBytes(avcc_data, CFRangeMake(0,avcc_size), c_ctx->extradata);
     
-        c_ctx->extradata_size = (int)avcc_size;
+            c_ctx->extradata_size = (int)avcc_size;
+        }
     } else if (codec_ctx) {
         self.width = codec_ctx->width;
         self.height = codec_ctx->height;
@@ -536,7 +559,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
             NSLog(@"INTERLEAVED WRITE FRAME FAILED FOR %@ frame number %lld", self.stream_output, frameData.frameNumber);
         }
         
-        
         //av_free_packet(p);
         //av_free(p);
         _output_framecnt++;
@@ -652,6 +674,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     pkt.size = (int)buffer_length;
   
         
+        
         pkt.dts = av_rescale_q(CMSampleBufferGetDecodeTimeStamp(theBuffer).value, (AVRational) {1.0, CMSampleBufferGetDecodeTimeStamp(theBuffer).timescale}, _av_video_stream->time_base);        
         
     pkt.pts = av_rescale_q(CMSampleBufferGetPresentationTimeStamp(theBuffer).value, (AVRational) {1.0, CMSampleBufferGetPresentationTimeStamp(theBuffer).timescale}, _av_video_stream->time_base);
@@ -672,22 +695,23 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     }
     
     
-        
+
     if (av_interleaved_write_frame(_av_fmt_ctx, &pkt) < 0)
     {
         NSLog(@"VIDEO WRITE FRAME failed for %@", self.stream_output);
         //[self stopProcess];
     }
-    
+
         _output_framecnt++;
-        _output_bytes += pkt.size;
+        _output_bytes += buffer_length;
     //CMSampleBufferInvalidate(theBuffer);
     CFRelease(theBuffer);
         
         @synchronized(self)
         {
             _pending_frame_count--;
-            _pending_frame_size -= pkt.size;
+            _pending_frame_size -= buffer_length;
+            
         }
     });
     

@@ -1130,14 +1130,14 @@
 -(void) migrateDefaultCompressor:(NSMutableDictionary *)saveRoot
 {
     
-    if (self.compressors[@"x264"] && self.compressors[@"AppleVT"])
+    if (self.compressors[@"x264"] && self.compressors[@"AppleVT"] && self.compressors[@"AppleProRes"])
     {
         //We already migrated, or the user did it for us?
         return;
     }
     
 
-    id <h264Compressor> defaultCompressor = self.compressors[@"default"];
+    id <VideoCompressor> defaultCompressor = self.compressors[@"default"];
     if (defaultCompressor)
     {
         [self.compressors removeObjectForKey:@"default"];
@@ -1173,6 +1173,16 @@
         newCompressor.keyframe_interval = 2;
         self.compressors[@"AppleVT"] = newCompressor;
         [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:newCompressor];
+    }
+    
+    if (!self.compressors[@"AppleProRes"])
+    {
+        AppleProResCompressor *newCompressor = [[AppleProResCompressor alloc] init];
+        newCompressor.name = @"AppleProRes".mutableCopy;
+        self.compressors[@"AppleProRes"] = newCompressor;
+        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:newCompressor];
+
+        
     }
 }
 
@@ -1599,7 +1609,7 @@
     
     for (id cKey in self.compressors)
     {
-        id <h264Compressor> tmpcomp = self.compressors[cKey];
+        id <VideoCompressor> tmpcomp = self.compressors[cKey];
         tmpcomp.settingsController = self;
     }
     
@@ -1698,7 +1708,7 @@
     
     for (id cKey in self.compressors)
     {
-        id <h264Compressor> ctmp = self.compressors[cKey];
+        id <VideoCompressor> ctmp = self.compressors[cKey];
         if (ctmp)
         {
             [ctmp reset];
@@ -1796,7 +1806,7 @@
     for(id cKey in self.compressors)
     {
         
-        id <h264Compressor> compressor;
+        id <VideoCompressor> compressor;
         compressor = self.compressors[cKey];
         [compressor addAudioData:sampleBuffer];
         
@@ -2191,7 +2201,7 @@
         newFrameData.frameTime = _frame_time;
         newFrameData.videoFrame = videoFrame;
         
-        id <h264Compressor> compressor;
+        id <VideoCompressor> compressor;
         compressor = self.compressors[cKey];
         [compressor compressFrame:newFrameData];
 
