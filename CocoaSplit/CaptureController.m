@@ -2180,16 +2180,19 @@
     
     CFAbsoluteTime ptsTime = _frame_time - _firstFrameTime;
     
+  
+    pts = CMTimeMake(_frameCount, self.captureFPS);
+    duration = CMTimeMake(1, self.captureFPS);
     
+    /*
+    pts = CMTimeMake(ptsTime*1000000, 1000000);
     
-    
+    duration = CMTimeMake(1000, self.captureFPS*1000);
+*/
     _frameCount++;
     _lastFrameTime = _frame_time;
     
     
-    pts = CMTimeMake(ptsTime*1000000, 1000000);
-
-    duration = CMTimeMake(1000, self.captureFPS*1000);
     
     for(id cKey in self.compressors)
     {

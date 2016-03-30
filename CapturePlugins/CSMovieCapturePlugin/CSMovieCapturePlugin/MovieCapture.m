@@ -352,7 +352,7 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 
 -(void) setCurrentMovieTime:(double)time
 {
-    [_avPlayer seekToTime:CMTimeMakeWithSeconds(time, 1)];
+    [_avPlayer seekToTime:CMTimeMakeWithSeconds(time, 1000)];
 }
 
 

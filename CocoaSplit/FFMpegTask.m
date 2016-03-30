@@ -334,9 +334,14 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
     c_ctx->codec_type = AVMEDIA_TYPE_VIDEO;
     c_ctx->codec_id = self.video_codec_id;
+    /*
     _av_video_stream->time_base.num = 1000000;
     _av_video_stream->time_base.den = self.framerate*1000000;
+    */
     
+    _av_video_stream->time_base.num = 1000;
+    _av_video_stream->time_base.den = self.framerate*1000;
+
     
     
     _av_audio_stream = avformat_new_stream(_av_fmt_ctx, 0);
@@ -353,8 +358,13 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     a_ctx->codec_type = AVMEDIA_TYPE_AUDIO;
     a_ctx->codec_id = AV_CODEC_ID_AAC;
     
-    _av_audio_stream->time_base.num = 100000;
+    /*_av_audio_stream->time_base.num = 100000;
     _av_audio_stream->time_base.den = self.framerate*100000;
+     */
+    
+    _av_audio_stream->time_base.num = 1;
+    _av_audio_stream->time_base.den = _samplerate;
+    
     a_ctx->sample_rate = _samplerate;
     a_ctx->bit_rate = _audio_bitrate;
     a_ctx->channels = 2;

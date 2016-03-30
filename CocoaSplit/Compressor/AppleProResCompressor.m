@@ -224,7 +224,6 @@ void __ProResPixelBufferRelease( void *releaseRefCon, const void *baseAddress )
                                                                     };
     
     _compression_session = NULL;
-    NSLog(@"PRORES TYPE %@", self.proResType);
     
     status = VTCompressionSessionCreate(NULL, self.working_width, self.working_height, self.proResType.intValue, (__bridge CFDictionaryRef)encoderSpec, NULL, NULL, __ProResVideoCompressorReceiveFrame,  (__bridge void *)self, &_compression_session);
     
