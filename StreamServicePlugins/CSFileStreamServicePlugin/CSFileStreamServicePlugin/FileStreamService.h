@@ -15,6 +15,9 @@
 @property bool isReady;
 @property (strong) NSString *fileName;
 
+@property (assign) BOOL useTimestamp;
+@property (assign) BOOL noClobber;
+
 
 
 -(NSViewController  *)getConfigurationView;

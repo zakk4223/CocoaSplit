@@ -36,6 +36,26 @@
                         <binding destination="omD-Gp-f2c" name="value" keyPath="selection.fileName" id="4XU-Lj-WyE"/>
                     </connections>
                 </textField>
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wo3-Xc-esB">
+                    <rect key="frame" x="18" y="211" width="151" height="18"/>
+                    <buttonCell key="cell" type="check" title="Do not overwrite files" bezelStyle="regularSquare" imagePosition="right" state="on" inset="2" id="3hs-bt-D5a">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="omD-Gp-f2c" name="value" keyPath="selection.noClobber" id="Isa-3k-ma1"/>
+                    </connections>
+                </button>
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f23-XA-1ly">
+                    <rect key="frame" x="18" y="191" width="114" height="18"/>
+                    <buttonCell key="cell" type="check" title="Use timestamp" bezelStyle="regularSquare" imagePosition="right" state="on" inset="2" id="D1T-wf-4O7">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="omD-Gp-f2c" name="value" keyPath="selection.useTimestamp" id="Nzd-VL-Sr5"/>
+                    </connections>
+                </button>
             </subviews>
         </customView>
         <objectController id="omD-Gp-f2c" userLabel="FileStreamServiceController">
