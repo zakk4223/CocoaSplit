@@ -55,6 +55,7 @@
 		3434CB331CA91D99001B3DF9 /* CSAppleH264CompressorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3434CB311CA91D99001B3DF9 /* CSAppleH264CompressorViewController.xib */; };
 		3434CB381CA93BCD001B3DF9 /* CSAppleProResCompressorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3434CB361CA93BCD001B3DF9 /* CSAppleProResCompressorViewController.m */; };
 		3434CB391CA93BCD001B3DF9 /* CSAppleProResCompressorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3434CB371CA93BCD001B3DF9 /* CSAppleProResCompressorViewController.xib */; };
+		3434CB3C1CB09BC4001B3DF9 /* CSTimedOutputBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3434CB3B1CB09BC4001B3DF9 /* CSTimedOutputBuffer.m */; };
 		3435E396188B902C0015CC01 /* 420v.fgsh in Resources */ = {isa = PBXBuildFile; fileRef = 3435E395188B902C0015CC01 /* 420v.fgsh */; };
 		3435E39B188B93150015CC01 /* passthrough.vtsh in Resources */ = {isa = PBXBuildFile; fileRef = 3435E39A188B93150015CC01 /* passthrough.vtsh */; };
 		3435E39D188BD8250015CC01 /* passthrough.fgsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3435E399188B90900015CC01 /* passthrough.fgsh */; };
@@ -639,6 +640,8 @@
 		3434CB351CA93BCD001B3DF9 /* CSAppleProResCompressorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAppleProResCompressorViewController.h; path = Interface/CSAppleProResCompressorViewController.h; sourceTree = "<group>"; };
 		3434CB361CA93BCD001B3DF9 /* CSAppleProResCompressorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSAppleProResCompressorViewController.m; path = Interface/CSAppleProResCompressorViewController.m; sourceTree = "<group>"; };
 		3434CB371CA93BCD001B3DF9 /* CSAppleProResCompressorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSAppleProResCompressorViewController.xib; path = Interface/CSAppleProResCompressorViewController.xib; sourceTree = "<group>"; };
+		3434CB3A1CB09BC4001B3DF9 /* CSTimedOutputBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSTimedOutputBuffer.h; sourceTree = "<group>"; };
+		3434CB3B1CB09BC4001B3DF9 /* CSTimedOutputBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSTimedOutputBuffer.m; sourceTree = "<group>"; };
 		3435E395188B902C0015CC01 /* 420v.fgsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = 420v.fgsh; path = Shaders/420v.fgsh; sourceTree = "<group>"; };
 		3435E399188B90900015CC01 /* passthrough.fgsh */ = {isa = PBXFileReference; lastKnownFileType = text; name = passthrough.fgsh; path = Shaders/passthrough.fgsh; sourceTree = "<group>"; };
 		3435E39A188B93150015CC01 /* passthrough.vtsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = passthrough.vtsh; path = Shaders/passthrough.vtsh; sourceTree = "<group>"; };
@@ -1161,6 +1164,8 @@
 				34AB1C301B944F48003F2C03 /* CSPreviewOverlayView.m */,
 				3400A0601BD44DF0003E1828 /* CSInputLibraryItem.h */,
 				3400A0611BD44DF0003E1828 /* CSInputLibraryItem.m */,
+				3434CB3A1CB09BC4001B3DF9 /* CSTimedOutputBuffer.h */,
+				3434CB3B1CB09BC4001B3DF9 /* CSTimedOutputBuffer.m */,
 			);
 			path = CocoaSplit;
 			sourceTree = "<group>";
@@ -2231,6 +2236,7 @@
 				34ED8C5F1B07371C002C0674 /* MIKMIDIEndpointSynthesizer.m in Sources */,
 				34ED8CA11B07371C002C0674 /* MIKMIDISequencer.m in Sources */,
 				34ED8C751B07371C002C0674 /* MIKMIDIMetaCopyrightEvent.m in Sources */,
+				3434CB3C1CB09BC4001B3DF9 /* CSTimedOutputBuffer.m in Sources */,
 				34ED8CB71B073C1B002C0674 /* CSMidiManagerWindowController.m in Sources */,
 				3408235519BC677A00CD1F5F /* CSNotifications.m in Sources */,
 				347B14DC198492D900DC7DF0 /* InputPopupControllerViewController.m in Sources */,

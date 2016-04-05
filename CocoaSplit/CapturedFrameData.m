@@ -56,6 +56,20 @@
 	self.audioSamples = nil;
 }
 
+-(NSInteger) encodedDataLength
+{
+    NSInteger ret = 0;
+    
+    if (self.avcodec_pkt)
+    {
+        ret = self.avcodec_pkt->size;
+    } else if (self.encodedSampleBuffer) {
+        ret = CMSampleBufferGetTotalSampleSize(self.encodedSampleBuffer);
+    }
+    
+    return ret;
+}
+
 
 -(CMSampleBufferRef)encodedSampleBuffer
 {

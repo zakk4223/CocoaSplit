@@ -237,6 +237,9 @@ void __ProResPixelBufferRelease( void *releaseRefCon, const void *baseAddress )
         return NO;
     }
     
+    int real_keyframe_interval = 2;
+    VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_MaxKeyFrameIntervalDuration, (__bridge CFTypeRef)@(real_keyframe_interval));
+
     _audioBuffer = [[NSMutableArray alloc] init];
     return YES;
     
@@ -283,7 +286,7 @@ void __ProResVideoCompressorReceiveFrame(void *VTref, void *VTFrameRef, OSStatus
     
     //frameData.videoFrame = nil;
     frameData.encodedSampleBuffer = sampleBuffer;
-    
+    frameData.isKeyFrame = YES;
     
     AppleVTCompressor *selfobj = (__bridge AppleVTCompressor *)VTref;
     

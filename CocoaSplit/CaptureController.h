@@ -34,7 +34,6 @@
 #import "CompressionSettingsPanelController.h"
 #import "AppleProResCompressor.h"
 
-
 @class FFMpegTask;
 @protocol VideoCompressor;
 @class OutputDestination;
@@ -42,7 +41,7 @@
 @class SourceLayout;
 @class LayoutPreviewWindowController;
 @class CSLayoutEditWindowController;
-
+@class CSTimedOutputBuffer;
 
 
 void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , CMSampleBufferRef );
@@ -68,9 +67,13 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     id _activity_token;
     
     long long _frameCount;
-    CFAbsoluteTime _firstFrameTime;
+    long long _streamFrameStart;
+    
     CFAbsoluteTime _lastFrameTime;
+    CFAbsoluteTime _firstFrameTime;
+    
     CMTime _firstAudioTime;
+    
     dispatch_queue_t _main_capture_queue;
     dispatch_queue_t _preview_queue;
     dispatch_source_t _dispatch_timer;
@@ -105,6 +108,9 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     NSMutableArray *_screensCache;
     NSMutableArray *_layoutWindows;
 }
+
+
+@property (strong) CSTimedOutputBuffer *instantRecorder;
 
 
 @property (weak) IBOutlet NSCollectionView *layoutCollectionView;
@@ -187,6 +193,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 @property (strong) NSWindow *transitionFilterWindow;
 
+- (IBAction)doInstantRecord:(id)sender;
 
 -(IBAction)openTransitionFilterPanel:(NSButton *)sender;
 

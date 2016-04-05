@@ -27,6 +27,7 @@
 #import "CSMidiWrapper.h"
 #import "CSCaptureBase+TimerDelegate.h"
 #import "CSLayoutEditWindowController.h"
+#import "CSTimedOutputBuffer.h"
 
 #import <Python/Python.h>
 
@@ -704,6 +705,8 @@
        _render_time_total = 0.0f;
        
        self.useStatusColors = YES;
+       
+       
        
        
        dispatch_source_t sigsrc = dispatch_source_create(DISPATCH_SOURCE_TYPE_SIGNAL, SIGPIPE, 0, dispatch_get_global_queue(0, 0));
@@ -1387,6 +1390,14 @@
     self.sourceLayouts = [saveRoot valueForKey:@"sourceLayouts"];
     
 
+    self.instantRecorder = [[CSTimedOutputBuffer alloc] init];
+    self.instantRecorder.bufferDuration = 10;
+    
+    NSObject <VideoCompressor> *origCompressor = self.compressors[@"AppleProRes"];
+    self.instantRecorder.compressor = origCompressor.copy;
+    [self.instantRecorder.compressor addOutput:self.instantRecorder];
+    self.instantRecorder.compressor.settingsController = self;
+
     dispatch_async(_main_capture_queue, ^{[self newFrameTimed];});
     
     dispatch_async(_preview_queue, ^{
@@ -1429,6 +1440,17 @@
     {
         self.inputLibrary = [NSMutableArray array];
     }
+    
+    _firstAudioTime = kCMTimeZero;
+
+    
+    CSAacEncoder *audioEnc = [[CSAacEncoder alloc] init];
+    audioEnc.encodedReceiver = self;
+    audioEnc.sampleRate = self.audioSamplerate;
+    audioEnc.bitRate = self.audioBitrate*1000;
+    
+    self.multiAudioEngine.encoder = audioEnc;
+
     
 }
 
@@ -1623,9 +1645,9 @@
     
     
     
-    _frameCount = 0;
-    _firstAudioTime = kCMTimeZero;
-    _firstFrameTime = 0;
+    //_frameCount = 0;
+    //_firstAudioTime = kCMTimeZero;
+   // _firstFrameTime = 0;
     
 
     
@@ -1639,9 +1661,8 @@
 {
     
     
-    _frameCount = 0;
-    _firstAudioTime = kCMTimeZero;
-    _firstFrameTime = 0;
+    //_frameCount = 0;
+    //_firstAudioTime = kCMTimeZero;
     
     
     if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_8)
@@ -1659,12 +1680,6 @@
     }
     
     
-    CSAacEncoder *audioEnc = [[CSAacEncoder alloc] init];
-    audioEnc.encodedReceiver = self;
-    audioEnc.sampleRate = self.audioSamplerate;
-    audioEnc.bitRate = self.audioBitrate*1000;
-    
-    self.multiAudioEngine.encoder = audioEnc;
 
     
     self.captureRunning = YES;
@@ -1735,7 +1750,7 @@
         [[NSProcessInfo processInfo] endActivity:_activity_token];
     }
     
-    self.multiAudioEngine.encoder = nil;
+    //self.multiAudioEngine.encoder = nil;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationStreamStopped object:self userInfo:nil];
 
@@ -1778,10 +1793,6 @@
 {
     
     
-    if (!self.captureRunning)
-    {
-        return;
-    }
     
     CMTime orig_pts = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
     
@@ -1790,26 +1801,34 @@
     
     if (CMTIME_COMPARE_INLINE(_firstAudioTime, ==, kCMTimeZero))
     {
+    
+        NSLog(@"FIRST AUDIO AT %f", CFAbsoluteTimeGetCurrent());
         
         _firstAudioTime = orig_pts;
         return;
     }
-    
     CMTime real_pts = CMTimeSubtract(orig_pts, _firstAudioTime);
     CMTime adjust_pts = CMTimeMakeWithSeconds(self.audio_adjust, orig_pts.timescale);
     CMTime pts = CMTimeAdd(real_pts, adjust_pts);
-    
 
     
     CMSampleBufferSetOutputPresentationTimeStamp(sampleBuffer, pts);
     
-    for(id cKey in self.compressors)
+    
+    if (self.instantRecorder)
     {
-        
-        id <VideoCompressor> compressor;
-        compressor = self.compressors[cKey];
-        [compressor addAudioData:sampleBuffer];
-        
+        [self.instantRecorder.compressor addAudioData:sampleBuffer];
+    }
+    
+    
+    if (self.captureRunning)
+    {
+        for(id cKey in self.compressors)
+        {
+            id <VideoCompressor> compressor;
+            compressor = self.compressors[cKey];
+            [compressor addAudioData:sampleBuffer];
+        }
     }
 }
 
@@ -1819,7 +1838,6 @@
 -(double)mach_time_seconds
 {
     double retval;
-    
     uint64_t mach_now = mach_absolute_time();
     retval = (double)((mach_now * _mach_timebase.numer / _mach_timebase.denom))/NSEC_PER_SEC;
     return retval;
@@ -2023,6 +2041,7 @@
     double lastLoopTime = startTime;
 
     _frame_time = startTime;
+    _firstFrameTime = startTime;
     [self newFrame];
     
     //[self setFrameThreadPriority];
@@ -2050,6 +2069,7 @@
         
         if (![self sleepUntil:(startTime += _frame_interval)])
         {
+            NSLog(@"MISSED FRAME!");
             continue;
         }
 
@@ -2123,7 +2143,9 @@
             
             if (newFrame)
             {
+                _frameCount++;
                 CVPixelBufferRetain(newFrame);
+                [self sendFrameToReplay:newFrame];
                 if (self.captureRunning)
                 {
                     if (self.captureRunning != _last_running_value)
@@ -2154,6 +2176,31 @@
 }
 
 
+-(void)sendFrameToReplay:(CVPixelBufferRef)videoFrame
+{
+    CMTime pts;
+    CMTime duration;
+    
+    pts = CMTimeMake((_frame_time - _firstFrameTime)*1000, 1000);
+    duration = CMTimeMake(1, self.captureFPS);
+    
+    
+    
+    if (self.instantRecorder && self.instantRecorder.compressor)
+    {
+        
+        //NSLog(@"SENDING FRAME %lld TO COMPRESSOR", _frameCount);
+        CapturedFrameData *newFrameData = [[CapturedFrameData alloc] init];
+        
+        newFrameData.videoPTS = pts;
+        newFrameData.videoDuration = duration;
+        newFrameData.frameNumber = _frameCount;
+        newFrameData.frameTime = _frame_time;
+        newFrameData.videoFrame = videoFrame;
+        [self.instantRecorder.compressor compressFrame:newFrameData];
+    }
+}
+
 
 -(void)processVideoFrame:(CVPixelBufferRef)videoFrame
 {
@@ -2172,16 +2219,7 @@
     
     
     
-    if (_firstFrameTime == 0)
-    {
-        _firstFrameTime = _frame_time;
-        
-    }
-    
-    CFAbsoluteTime ptsTime = _frame_time - _firstFrameTime;
-    
-  
-    pts = CMTimeMake(_frameCount, self.captureFPS);
+    pts = CMTimeMake((_frame_time - _firstFrameTime)*1000, 1000);
     duration = CMTimeMake(1, self.captureFPS);
     
     /*
@@ -2189,8 +2227,8 @@
     
     duration = CMTimeMake(1000, self.captureFPS*1000);
 */
-    _frameCount++;
-    _lastFrameTime = _frame_time;
+    //_frameCount++;
+    //_lastFrameTime = _frame_time;
     
     
     
@@ -2942,6 +2980,16 @@
     
     [self loadMIDI];
     [NSApp registerMIDIResponder:self];
+}
+
+
+
+- (IBAction)doInstantRecord:(id)sender
+{
+    if (self.instantRecorder)
+    {
+        [self.instantRecorder writeCurrentBuffer:@"/tmp/instant_record.mov"];
+    }
 }
 
 

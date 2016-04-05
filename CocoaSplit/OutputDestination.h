@@ -24,9 +24,23 @@
     NSMutableArray *_delayBuffer;
     BOOL _stopped;
     NSString *_destination;
+    dispatch_queue_t _output_queue;
+    int _p_buffered_frame_count;
+    int _p_buffered_frame_size;
+    int _p_dropped_frame_count;
+    int _p_input_framecnt;
+    int _p_output_framecnt;
+    int _p_output_bytes;
+    int _pending_frame_count;
+    int _consecutive_dropped_frames;
+    BOOL _errored;
     
     
+    CFAbsoluteTime _input_frame_timestamp;
+    CFAbsoluteTime _output_frame_timestamp;
 }
+
+
 
 
 @property (strong) NSString *server_name;

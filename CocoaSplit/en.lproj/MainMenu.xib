@@ -1595,6 +1595,16 @@
                                             <binding destination="816" name="selectedIndex" keyPath="self.selectedTabIndex" id="3817"/>
                                         </connections>
                                     </tabView>
+                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ggC-Mg-kHj">
+                                        <rect key="frame" x="14" y="3" width="129" height="32"/>
+                                        <buttonCell key="cell" type="push" title="Instant Record" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="gnN-jG-RAU">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="doInstantRecord:" target="816" id="VVT-DK-grI"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="597" firstAttribute="top" secondItem="3286" secondAttribute="bottom" constant="14" id="9Is-fx-VcX"/>

@@ -228,6 +228,7 @@
         
         BOOL isKeyFrame = NO;
         
+        
         if (frameData.frameTime >= _next_keyframe_time)
         {
             isKeyFrame = YES;
@@ -349,7 +350,7 @@
         
         frameData.avcodec_ctx = _av_codec_ctx;
         frameData.avcodec_pkt = pkt;
-        
+        frameData.isKeyFrame = pkt->flags & AV_PKT_FLAG_KEY;
         
         for (id dKey in self.outputs)
         {
@@ -445,12 +446,8 @@
     //_av_codec_ctx->max_b_frames = 0;
     _av_codec_ctx->width = self.working_width;
     _av_codec_ctx->height = self.working_height;
-    /*
-    _av_codec_ctx->time_base.num = 1000000;
-    _av_codec_ctx->time_base.den = self.settingsController.captureFPS*1000000;
-     */
     _av_codec_ctx->time_base.num = 1;
-    _av_codec_ctx->time_base.den = self.settingsController.captureFPS;
+    _av_codec_ctx->time_base.den = 1000;
     
     _av_codec_ctx->pix_fmt = PIX_FMT_YUV420P;
     
@@ -494,7 +491,6 @@
         } else {
             useAdvancedSettings = [useAdvancedSettings stringByAppendingString:@":filler=1"];
         }
-        //av_dict_set(&opts, "nal-hrd", "cbr", 0);
     }
     
     _av_codec_ctx->flags |= CODEC_FLAG_GLOBAL_HEADER;

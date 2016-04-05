@@ -24,6 +24,8 @@
     long outputSampleCount;
     CMAudioFormatDescriptionRef cmFormat;
     void *_pcmData;
+    u_int64_t _last_sample_time;
+    int _last_write_sample_cnt;
 }
 
 @property (assign) bool encoderStarted;

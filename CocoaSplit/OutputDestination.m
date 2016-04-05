@@ -118,6 +118,13 @@
 -(void) setActive:(BOOL)is_active
 {
     
+    if (!_output_queue)
+    {
+        NSString *queue_name = [NSString stringWithFormat:@"Output Queue %@", self.name];
+        _output_queue = dispatch_queue_create(queue_name.UTF8String, NULL);
+    }
+    
+    
     if (is_active != _active)
     {
         _active = is_active;
@@ -126,6 +133,7 @@
             [self stopCompressor];
             [self reset];
         } else {
+            [self initStatsValues];
             [self setupCompressor];
         }
         
@@ -145,15 +153,28 @@
 {
     self.buffer_draining = NO;
     [_delayBuffer removeAllObjects];
-    
+    [self initStatsValues];
     if (self.ffmpeg_out)
     {
-        [self.ffmpeg_out stopProcess];
-        [self.ffmpeg_out removeObserver:self forKeyPath:@"errored"];
-        [self.ffmpeg_out removeObserver:self forKeyPath:@"active"];
+        if (_errored)
+        {
+            //errors jump the queue and just kill the ffmpeg output
+            [self.ffmpeg_out stopProcess];
+            self.ffmpeg_out = nil;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.textColor = [NSColor redColor];
+            });
+        } else {
+            dispatch_async(_output_queue, ^{
+                [self.ffmpeg_out stopProcess];
+                self.ffmpeg_out = nil;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.textColor = [NSColor blackColor];
+                });
+                
+            });
+        }
 
-        
-        self.ffmpeg_out = nil;
     }
     
     _output_start_time = 0.0f;
@@ -293,12 +314,36 @@
     
     self.ffmpeg_out = newout;
     
-    [self.ffmpeg_out addObserver:self forKeyPath:@"errored" options:NSKeyValueObservingOptionNew context:NULL];
-    [self.ffmpeg_out addObserver:self forKeyPath:@"active" options:NSKeyValueObservingOptionNew context:NULL];
 
-    self.ffmpeg_out.active = self.active;
     
 
+}
+
+
+- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    
+    NSColor *newColor = nil;
+    
+    if ([keyPath isEqualToString:@"errored"]) {
+        
+        BOOL errVal = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
+        
+        if (errVal == YES)
+        {
+            newColor = [NSColor redColor];
+        }
+        
+    }
+    
+    
+    if (newColor)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.textColor = newColor;
+        });
+    }
+    
 }
 
 -(void) setupCompressor
@@ -337,41 +382,34 @@
     }
 }
 
-- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+
+
+-(bool) resetOutputIfNeeded
 {
-    
-    NSColor *newColor = nil;
-    
-    if ([keyPath isEqualToString:@"active"])
+    if (self.settingsController.maxOutputDropped)
     {
-        BOOL activeVal = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
-        if (activeVal == YES)
+        if (_consecutive_dropped_frames >= self.settingsController.maxOutputDropped)
         {
-            newColor = [NSColor greenColor];
-        } else {
-            newColor = [NSColor blackColor];
+            return YES;
         }
-        
-    } else if ([keyPath isEqualToString:@"errored"]) {
-        
-        BOOL errVal = [[change objectForKey:NSKeyValueChangeNewKey] boolValue];
-        
-        if (errVal == YES)
-        {
-            newColor = [NSColor redColor];
-        }
-        
     }
-    
-    
-    if (newColor)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.textColor = newColor;
-        });
-    }
-    
+    return NO;
 }
+
+
+-(bool) shouldDropFrame
+{
+    if (self.settingsController.maxOutputPending)
+    {
+        if (_pending_frame_count >= self.settingsController.maxOutputPending)
+        {
+            return YES;
+        }
+    }
+    
+    return NO;
+}
+
 
 -(void) writeEncodedData:(CapturedFrameData *)frameData
 {
@@ -389,32 +427,88 @@
         }
         
         
-        if (frameData)
+        if (frameData && self.stream_delay > 0)
         {
             [_delayBuffer addObject:frameData];
         }
         
         
+        BOOL start_stream = NO;
         
-        
-        if ((current_time >= _output_start_time) && ([_delayBuffer count] > 0))
+        if (self.settingsController.captureRunning && !self.ffmpeg_out)
         {
             
-            
-            if (self.settingsController.captureRunning && !self.ffmpeg_out)
+            if (self.stream_delay == 0)
             {
-                [self attachOutput];
+                start_stream = YES;
             }
             
+            if ((current_time >= _output_start_time) && ([_delayBuffer count] > 0))
+            {
+                
+                start_stream = YES;
+            }
+        }
+        
+        if (start_stream)
+        {
             
-            sendData = [_delayBuffer objectAtIndex:0];
-            [_delayBuffer removeObjectAtIndex:0];
+            [self attachOutput];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.textColor  = [NSColor greenColor];
+            });
+        }
+        
+        if (frameData)
+        {
+            _p_input_framecnt++;
         }
         
         
+        if (self.ffmpeg_out)
+        {
+            if (_delayBuffer.count > 0)
+            {
+                sendData = [_delayBuffer objectAtIndex:0];
+                [_delayBuffer removeObjectAtIndex:0];
+            } else {
+                sendData = frameData;
+            }
+        }
+
         if (sendData && self.ffmpeg_out)
         {
-            [self.ffmpeg_out writeEncodedData:sendData];
+            NSInteger f_size = [sendData encodedDataLength];
+            
+            if ([self resetOutputIfNeeded])
+            {
+                _errored = YES;
+                self.active = NO;
+                return;
+            }
+            if ([self shouldDropFrame])
+            {
+                _dropped_frame_count++;
+                _consecutive_dropped_frames++;
+            } else {
+                _consecutive_dropped_frames = 0;
+                
+                dispatch_async(_output_queue, ^{
+                    _p_buffered_frame_size += f_size;
+                    _p_buffered_frame_count++;
+                    
+                    BOOL write_ret = [self.ffmpeg_out writeEncodedData:sendData];
+                    
+                    if (write_ret)
+                    {
+                        _p_output_framecnt++;
+                        _p_buffered_frame_count--;
+                        _p_buffered_frame_size -= f_size;
+                        _p_output_bytes += f_size;
+                    }
+                    
+                });
+            }
         }
         
         if (self.buffer_draining)
@@ -428,22 +522,43 @@
 
 }
 
+-(void) initStatsValues
+{
+    CFAbsoluteTime time_now = CFAbsoluteTimeGetCurrent();
+    _input_frame_timestamp = time_now;
+    _output_frame_timestamp = time_now;
+    _p_input_framecnt = 0;
+    _p_buffered_frame_count = 0;
+    _p_buffered_frame_size = 0;
+    _p_dropped_frame_count = 0;
+    _p_output_framecnt = 0;
+    _p_output_bytes = 0;
+}
+
 
 -(void) updateStatistics
 {
     
-    if (self.ffmpeg_out)
-    {
-        [self.ffmpeg_out updateInputStats];
-        [self.ffmpeg_out updateOutputStats];
-        self.output_framerate = self.ffmpeg_out.output_framerate;
-        self.output_bitrate = self.ffmpeg_out.output_bitrate;
-        self.input_framerate = self.ffmpeg_out.input_framerate;
-        self.dropped_frame_count = self.ffmpeg_out.dropped_frame_count;
-        self.buffered_frame_count = self.ffmpeg_out.buffered_frame_count;
-        self.buffered_frame_size = self.ffmpeg_out.buffered_frame_size;
-    }
+    CFAbsoluteTime time_now = CFAbsoluteTimeGetCurrent();
     
+    double calculated_input_framerate = _p_input_framecnt / (time_now - _input_frame_timestamp);
+    double calculated_output_framerate = _p_output_framecnt / (time_now - _output_frame_timestamp);
+    double calculated_output_bitrate = (_p_output_bytes / (time_now - _output_frame_timestamp)) * 8;
+    
+    _p_input_framecnt = 0;
+    _p_output_framecnt = 0;
+    _output_frame_timestamp = time_now;
+    _input_frame_timestamp = time_now;
+    _p_output_bytes = 0;
+    
+    
+    self.output_framerate = calculated_output_framerate;
+    self.input_framerate = calculated_input_framerate;
+    self.output_bitrate = calculated_output_bitrate;
+    self.buffered_frame_count = _p_buffered_frame_count;
+    self.buffered_frame_size = _p_buffered_frame_size;
+    //TODO
+    self.dropped_frame_count = 0;
     self.delay_buffer_frames = [_delayBuffer count];
 
 }
@@ -464,8 +579,6 @@
     
     if (self.ffmpeg_out)
     {
-        [self.ffmpeg_out removeObserver:self forKeyPath:@"errored" context:NULL];
-        [self.ffmpeg_out removeObserver:self forKeyPath:@"active" context:NULL];
         [self.compressor removeObserver:self forKeyPath:@"errored" context:NULL];
     }
     [[NSNotificationCenter defaultCenter] removeObserver:self];

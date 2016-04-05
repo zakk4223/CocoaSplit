@@ -21,6 +21,7 @@
 
 @property CVImageBufferRef videoFrame;
 @property (assign) void *encoderData;
+@property (assign) BOOL isKeyFrame;
 
 
 //Array of CMSampleBuffers from audio capture.
@@ -33,5 +34,8 @@
 
 @property (assign) AVPacket *avcodec_pkt;
 @property AVCodecContext *avcodec_ctx;
+
+
+-(NSInteger) encodedDataLength;
 
 @end

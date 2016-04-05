@@ -74,10 +74,12 @@
 
 -(void) addAudioData:(CMSampleBufferRef)audioData
 {
+    
    if ([self hasOutputs] && audioData && _audioBuffer)
    {
        @synchronized(self)
        {
+
            [_audioBuffer addObject:(__bridge id)audioData];
        }
    }
@@ -86,7 +88,7 @@
 
 -(void) setAudioData:(CapturedFrameData *)forFrame syncObj:(id)syncObj
 {
-    
+
     NSUInteger audioConsumed = 0;
     @synchronized(syncObj)
     {

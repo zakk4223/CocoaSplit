@@ -47,7 +47,6 @@
 {
     
     
-    
     [self preallocateBufferList:pcmBuffer];
     
 
@@ -70,6 +69,7 @@
     
     Float32 *writebuf = _pcmData;
     int channel_size = buffer0.mDataByteSize/sizeof(Float32);
+    
     int i, u;
     for(i=u=0; i < channel_size; i++,u+=2)
     {
@@ -150,8 +150,14 @@
 
             if (self.encodedReceiver && buffer_size)
             {
-                CMTime ptsTime = CMTimeMake(outputSampleCount, self.sampleRate);
+                
+                
                 CMTime duration = CMTimeMake(1024, self.sampleRate);
+                uint64_t mach_now = mach_absolute_time();
+                double abs_pts = (double)mach_now/NSEC_PER_SEC;
+                abs_pts -= CMTimeGetSeconds(duration);
+
+                CMTime ptsTime = CMTimeMake(abs_pts*1000, 1000);
                 
                 CMSampleTimingInfo timeInfo;
                 

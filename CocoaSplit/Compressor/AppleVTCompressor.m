@@ -422,8 +422,19 @@ void VideoCompressorReceiveFrame(void *VTref, void *VTFrameRef, OSStatus status,
 
         //frameData.videoFrame = nil;
         frameData.encodedSampleBuffer = sampleBuffer;
+        CFArrayRef sample_attachments;
+        sample_attachments = CMSampleBufferGetSampleAttachmentsArray(sampleBuffer, NO);
+        if (sample_attachments)
+        {
+            CFDictionaryRef attach;
+            CFBooleanRef depends_on_others;
+            
+            attach = CFArrayGetValueAtIndex(sample_attachments, 0);
+            depends_on_others = CFDictionaryGetValue(attach, kCMSampleAttachmentKey_DependsOnOthers);
+            frameData.isKeyFrame = depends_on_others;
+        }
         
-        
+    
         AppleVTCompressor *selfobj = (__bridge AppleVTCompressor *)VTref;
     
     
