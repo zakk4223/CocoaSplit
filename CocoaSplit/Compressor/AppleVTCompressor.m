@@ -230,10 +230,20 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
         return NO;
     }
     
-	NSDictionary *encoderSpec = @{
-		@"RequireHardwareAcceleratedVideoEncoder": @YES,
-	};
-	
+    
+    NSMutableDictionary *encoderSpec = [[NSMutableDictionary alloc] init];
+    
+    bool enableVal = !self.noHardware;
+    
+    encoderSpec[(__bridge NSString *)kVTVideoEncoderSpecification_EnableHardwareAcceleratedVideoEncoder] = @(enableVal);
+    
+    
+    if (self.forceHardware)
+    {
+        encoderSpec[(__bridge NSString *)kVTVideoEncoderSpecification_RequireHardwareAcceleratedVideoEncoder] = @YES;
+    }
+    
+  
     _compression_session = NULL;
     status = VTCompressionSessionCreate(NULL, self.working_width, self.working_height, kCMVideoCodecType_H264, (__bridge CFDictionaryRef)encoderSpec, NULL, NULL, VideoCompressorReceiveFrame,  (__bridge void *)self, &_compression_session);
     

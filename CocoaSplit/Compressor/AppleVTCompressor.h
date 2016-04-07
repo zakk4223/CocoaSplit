@@ -32,6 +32,9 @@
 @property (assign) BOOL use_cbr;
 @property (strong) NSArray *profiles;
 
+@property (assign) bool noHardware;
+@property (assign) bool forceHardware;
+
 
 -(bool)compressFrame:(CapturedFrameData *)frameData;
 

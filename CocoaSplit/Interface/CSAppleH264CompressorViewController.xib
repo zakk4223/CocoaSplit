@@ -125,6 +125,36 @@
                         <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
                 </button>
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kox-qf-hjy">
+                    <rect key="frame" x="-3" y="148" width="162" height="20"/>
+                    <buttonCell key="cell" type="check" title="Require Hardware Encoder" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="8Do-Q3-ZWY">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="-2" name="enabled" keyPath="self.compressorController.selection.noHardware" id="MCd-1n-4yY">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.compressorController.selection.forceHardware" id="fTo-UU-Tf4"/>
+                    </connections>
+                </button>
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JqM-dV-BzJ">
+                    <rect key="frame" x="-2" y="128" width="161" height="20"/>
+                    <buttonCell key="cell" type="check" title="Disable Hardware Encoder" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="JdF-Vu-hBv">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="-2" name="enabled" keyPath="self.compressorController.selection.forceHardware" id="nxF-rb-CfA">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.compressorController.selection.noHardware" id="h3d-KS-BDH"/>
+                    </connections>
+                </button>
             </subviews>
             <point key="canvasLocation" x="398.5" y="367"/>
         </customView>
