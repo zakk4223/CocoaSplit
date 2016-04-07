@@ -44,18 +44,20 @@
         fCopy = _frameBuffer.copy;
     }
     
-    for (CapturedFrameData *cData in fCopy)
-    {
-        [newout writeEncodedData:cData];
-    }
-    [newout stopProcess];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        for (CapturedFrameData *cData in fCopy)
+        {
+            [newout writeEncodedData:cData];
+        }
+        [newout stopProcess];
+    });
+
 }
 
 
 -(void) writeEncodedData:(CapturedFrameData *)frameData
 {
  
-    //NSLog(@"FRAME AUDIO COUNT %lu FRAME NUM %lld", (unsigned long)frameData.audioSamples.count, frameData.frameNumber);
     
     float frameDuration = CMTimeGetSeconds(frameData.videoDuration);
     
@@ -63,8 +65,6 @@
         [_frameBuffer addObject:frameData];
     }
     _currentBufferDuration  += frameDuration;
-    
-    //NSLog(@"CURRENT BUFFER DURATION %f BUFFER SIZE %lu", _currentBufferDuration, (unsigned long)_frameBuffer.count);
     
     //Drain the buffer if we need to
     //Try to always have a keyframe at the head of the buffer, even if it means we have to fudge the duration a bit
