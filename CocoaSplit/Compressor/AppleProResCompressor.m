@@ -16,7 +16,6 @@
 {
     AppleProResCompressor *copy = [[[self class] allocWithZone:zone] init];
     
-    copy.settingsController = self.settingsController;
     
     copy.isNew = self.isNew;
     
@@ -207,10 +206,6 @@ void __ProResPixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 {
     OSStatus status;
     
-    if (!self.settingsController)
-    {
-        return NO;
-    }
     
     [self setupResolution:videoFrame];
     

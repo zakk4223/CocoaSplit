@@ -21,7 +21,6 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
 {
     AppleVTCompressor *copy = [[[self class] allocWithZone:zone] init];
     
-    copy.settingsController = self.settingsController;
     
     copy.isNew = self.isNew;
     
@@ -62,6 +61,9 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
 
     [aCoder encodeObject:self.resolutionOption forKey:@"resolutionOption"];
 
+    [aCoder encodeBool:self.noHardware forKey:@"noHardware"];
+    [aCoder encodeBool:self.forceHardware forKey:@"forceHardware"];
+    
 }
 
 -(id) initWithCoder:(NSCoder *)aDecoder
@@ -76,6 +78,9 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
         self.use_cbr = [aDecoder decodeBoolForKey:@"use_cbr"];
         self.width = (int)[aDecoder decodeIntegerForKey:@"videoWidth"];
         self.height = (int)[aDecoder decodeIntegerForKey:@"videoHeight"];
+        self.noHardware = [aDecoder decodeBoolForKey:@"noHardware"];
+        self.forceHardware = [aDecoder decodeBoolForKey:@"forceHardware"];
+        
         if ([aDecoder containsValueForKey:@"resolutionOption"])
         {
             self.resolutionOption = [aDecoder decodeObjectForKey:@"resolutionOption"];
@@ -217,10 +222,6 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 {
     OSStatus status;
     
-    if (!self.settingsController)
-    {
-        return NO;
-    }
 
     [self setupResolution:videoFrame];
     

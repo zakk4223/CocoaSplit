@@ -14,7 +14,7 @@
 
 @implementation CSPluginServices
 
-+(id) sharedPluginServices
++(CSPluginServices *) sharedPluginServices
 {
     static CSPluginServices *sharedCSPluginServices = nil;
     static dispatch_once_t onceToken;
@@ -25,6 +25,31 @@
     
     return sharedCSPluginServices;
 }
+
+
+
+-(double) currentFPS
+{
+    AppDelegate *myAppDelegate = [[NSApplication sharedApplication] delegate];
+    if (myAppDelegate.captureController)
+    {
+        return myAppDelegate.captureController.captureFPS;
+    }
+    return 0.0;
+}
+
+
+-(int) audioSampleRate
+{
+    AppDelegate *myAppDelegate = [[NSApplication sharedApplication] delegate];
+    if (myAppDelegate.captureController)
+    {
+        return myAppDelegate.captureController.audioSamplerate;
+    }
+    return 0;
+}
+
+
 
 -(void)loadPythonClass:(NSString *)pyClass fromFile:(NSString *)fromFile withBlock:(void (^)(__unsafe_unretained Class))withBlock
 {

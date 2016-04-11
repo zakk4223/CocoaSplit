@@ -23,6 +23,16 @@
     return self;
 }
 
+-(instancetype) initWithCompressor:(id<VideoCompressor>)compressor
+{
+    if (self = [self init])
+    {
+        _compressor = compressor;
+        [_compressor addOutput:self];
+    }
+    
+    return self;
+}
 
 -(void) writeCurrentBuffer:(NSString *)toFile
 {

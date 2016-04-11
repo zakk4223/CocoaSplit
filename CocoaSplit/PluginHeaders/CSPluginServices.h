@@ -13,12 +13,14 @@
 
 
 
-+(id)sharedPluginServices;
++(CSPluginServices *)sharedPluginServices;
 -(CSPcmPlayer *)createPCMInput:(NSString *)forUID withFormat:(const AudioStreamBasicDescription *)withFormat;
 -(void)removePCMInput:(CSPcmPlayer *)toRemove;
 -(void)loadPythonClass:(NSString *)pyClass fromFile:(NSString *)fromFile withBlock:(void(^)(Class))withBlock;
 -(Class)loadPythonClass:(NSString *)pyClass fromFile:(NSString *)fromFile;
 
+@property (readonly) double currentFPS;
+@property (readonly) int audioSampleRate;
 
 
 @end

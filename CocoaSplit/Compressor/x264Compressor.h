@@ -16,6 +16,7 @@
 #import <VideoToolbox/VideoToolbox.h>
 #import "CapturedFrameData.h"
 #import "CompressorBase.h"
+#import "CSPluginServices.h"
 #import "x264.h"
 
 
@@ -44,7 +45,6 @@
 @property (strong) NSMutableArray *x264profiles;
 
 
-@property (strong) CaptureController *settingsController;
 
 
 @property (strong) NSString *preset;

@@ -26,7 +26,6 @@
     copy.x264presets = self.x264presets;
     copy.x264profiles = self.x264profiles;
     
-    copy.settingsController = self.settingsController;
     
     copy.isNew = self.isNew;
     copy.name = self.name;
@@ -182,11 +181,6 @@
 - (bool)compressFrame:(CapturedFrameData *)frameData
 {
     if (![self hasOutputs])
-    {
-        return NO;
-    }
-    
-    if (!self.settingsController)
     {
         return NO;
     }
@@ -416,12 +410,6 @@
     
 
     NSLog(@"IN COMPRESSOR SETUP");
-    if (!self.settingsController)
-    {
-        return NO;
-    }
-    
-
     NSString *useAdvancedSettings = self.advancedSettings.copy;
     
     
@@ -453,11 +441,15 @@
     
     
     int real_keyframe_interval = 0;
+    
+    double captureFPS = [CSPluginServices sharedPluginServices].currentFPS;
+    
+    
     if (!self.keyframe_interval)
     {
-        real_keyframe_interval = self.settingsController.captureFPS*2;
+        real_keyframe_interval = captureFPS*2;
     } else {
-        real_keyframe_interval  = self.settingsController.captureFPS*self.keyframe_interval;
+        real_keyframe_interval  = captureFPS*self.keyframe_interval;
     }
     
     

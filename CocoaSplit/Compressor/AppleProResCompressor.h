@@ -22,7 +22,6 @@
 }
 
 
-//@property (strong) id<ControllerProtocol> settingsController;
 //@property (strong) id<ControllerProtocol> outputDelegate;
 
 @property (strong) NSNumber *proResType;

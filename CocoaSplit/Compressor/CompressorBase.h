@@ -20,7 +20,6 @@
 
 
 
-@property (strong) CaptureController *settingsController;
 
 
 @property (strong) NSMutableDictionary *outputs;

@@ -1133,12 +1133,6 @@
 -(void) migrateDefaultCompressor:(NSMutableDictionary *)saveRoot
 {
     
-    if (self.compressors[@"x264"] && self.compressors[@"AppleVT"] && self.compressors[@"AppleProRes"])
-    {
-        //We already migrated, or the user did it for us?
-        return;
-    }
-    
 
     id <VideoCompressor> defaultCompressor = self.compressors[@"default"];
     if (defaultCompressor)
@@ -1184,9 +1178,16 @@
         newCompressor.name = @"AppleProRes".mutableCopy;
         self.compressors[@"AppleProRes"] = newCompressor;
         [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:newCompressor];
-
-        
     }
+    
+    if (!self.compressors[@"InstantRecorder"])
+    {
+        CSIRCompressor *newCompressor = [[CSIRCompressor alloc] init];
+        newCompressor.name = @"InstantRecorder".mutableCopy;
+        self.compressors[@"InstantRecorder"] = newCompressor;
+        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:newCompressor];
+    }
+    
 }
 
 
@@ -1390,14 +1391,16 @@
     self.sourceLayouts = [saveRoot valueForKey:@"sourceLayouts"];
     
 
-    self.instantRecorder = [[CSTimedOutputBuffer alloc] init];
-    self.instantRecorder.bufferDuration = 10;
+    id<VideoCompressor> irCompressor = self.compressors[@"InstantRecorder"];
     
-    NSObject <VideoCompressor> *origCompressor = self.compressors[@"AppleProRes"];
-    self.instantRecorder.compressor = origCompressor.copy;
-    [self.instantRecorder.compressor addOutput:self.instantRecorder];
-    self.instantRecorder.compressor.settingsController = self;
-
+    if (irCompressor)
+    {
+        self.instantRecorder = [[CSTimedOutputBuffer alloc] initWithCompressor:irCompressor];
+        self.instantRecorder.bufferDuration = 60;
+    }
+    
+    
+    
     dispatch_async(_main_capture_queue, ^{[self newFrameTimed];});
     
     dispatch_async(_preview_queue, ^{
@@ -1629,28 +1632,11 @@
     
     
     
-    for (id cKey in self.compressors)
-    {
-        id <VideoCompressor> tmpcomp = self.compressors[cKey];
-        tmpcomp.settingsController = self;
-    }
-    
-    
     for (OutputDestination *outdest in _captureDestinations)
     {
         //make the outputs pick up the default selected compressor
         [outdest setupCompressor];
     }
-    
-    
-    
-    
-    //_frameCount = 0;
-    //_firstAudioTime = kCMTimeZero;
-   // _firstFrameTime = 0;
-    
-
-    
     return YES;
 
     
@@ -1815,7 +1801,7 @@
     CMSampleBufferSetOutputPresentationTimeStamp(sampleBuffer, pts);
     
     
-    if (self.instantRecorder)
+    if (self.instantRecorder && self.instantRecorder.compressor)
     {
         [self.instantRecorder.compressor addAudioData:sampleBuffer];
     }
@@ -2234,6 +2220,11 @@
     
     for(id cKey in self.compressors)
     {
+        if (self.instantRecorder && [self.instantRecorder.compressor isEqualTo:cKey])
+        {
+            continue;
+        }
+        
         CapturedFrameData *newFrameData = [[CapturedFrameData alloc] init];
         
         newFrameData.videoPTS = pts;

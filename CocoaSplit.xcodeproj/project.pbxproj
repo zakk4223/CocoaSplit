@@ -27,6 +27,7 @@
 		340FE4DA15F346D900E4CE4E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4D815F346CC00E4CE4E /* AVFoundation.framework */; };
 		340FE4E115F3581200E4CE4E /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4E015F3581200E4CE4E /* QTKit.framework */; };
 		340FE50815F444AA00E4CE4E /* CaptureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FE50715F444AA00E4CE4E /* CaptureController.m */; };
+		3414C6AE1CBB9EBF00107C69 /* CSIRCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3414C6AD1CBB9EBF00107C69 /* CSIRCompressor.m */; };
 		3415CED31AE257DA002F11F5 /* CSTextCaptureBaseView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3415CED21AE257DA002F11F5 /* CSTextCaptureBaseView.xib */; };
 		341A2D5C1C7AB04700FF7566 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 341A2D5B1C7AB04700FF7566 /* Sparkle.framework */; };
 		341A2D5D1C7AB0D100FF7566 /* Sparkle.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 341A2D5B1C7AB04700FF7566 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -604,6 +605,8 @@
 		340FE4E015F3581200E4CE4E /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = System/Library/Frameworks/QTKit.framework; sourceTree = SDKROOT; };
 		340FE50615F444AA00E4CE4E /* CaptureController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CaptureController.h; sourceTree = "<group>"; };
 		340FE50715F444AA00E4CE4E /* CaptureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CaptureController.m; sourceTree = "<group>"; };
+		3414C6AC1CBB9EBF00107C69 /* CSIRCompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSIRCompressor.h; path = Compressor/CSIRCompressor.h; sourceTree = "<group>"; };
+		3414C6AD1CBB9EBF00107C69 /* CSIRCompressor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSIRCompressor.m; path = Compressor/CSIRCompressor.m; sourceTree = "<group>"; };
 		3415CED21AE257DA002F11F5 /* CSTextCaptureBaseView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSTextCaptureBaseView.xib; path = Interface/CSTextCaptureBaseView.xib; sourceTree = "<group>"; };
 		341A2D5B1C7AB04700FF7566 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		34210B3C1606001100362FC8 /* OutputDestination.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OutputDestination.h; sourceTree = "<group>"; };
@@ -1252,6 +1255,8 @@
 				34F5141116FD6E4F00BA894D /* AppleVTCompressor.m */,
 				3434CB261CA8615A001B3DF9 /* AppleProResCompressor.h */,
 				3434CB271CA8615A001B3DF9 /* AppleProResCompressor.m */,
+				3414C6AC1CBB9EBF00107C69 /* CSIRCompressor.h */,
+				3414C6AD1CBB9EBF00107C69 /* CSIRCompressor.m */,
 			);
 			name = Compressor;
 			sourceTree = "<group>";
@@ -2257,6 +2262,7 @@
 				3400A0791BD4533A003E1828 /* CSInputLibraryWindowController.m in Sources */,
 				345F8B691A16C348009A81E3 /* CAMultiAudioGraph.m in Sources */,
 				3431FFE119786502000965FE /* InputSource.m in Sources */,
+				3414C6AE1CBB9EBF00107C69 /* CSIRCompressor.m in Sources */,
 				34ED8C911B07371C002C0674 /* MIKMIDINoteOnCommand.m in Sources */,
 				3498D94F1A9472BD00906532 /* CSAudioSwitchControl.m in Sources */,
 				3400A0621BD44DF0003E1828 /* CSInputLibraryItem.m in Sources */,
