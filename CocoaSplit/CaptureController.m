@@ -662,6 +662,8 @@
        _layoutWindows = [NSMutableArray array];
        
        self.transitionDirections = @[kCATransitionFromTop, kCATransitionFromRight, kCATransitionFromBottom, kCATransitionFromLeft];
+       self.useInstantRecord = YES;
+       self.instantRecordBufferDuration = 60;
        
        
        NSArray *caTransitionNames = @[kCATransitionFade, kCATransitionPush, kCATransitionMoveIn, kCATransitionReveal, @"cube", @"alignedCube", @"flip", @"alignedFlip"];
@@ -1217,8 +1219,10 @@
     [saveRoot setValue: [NSNumber numberWithBool:self.useStatusColors] forKey:@"useStatusColors"];
     [saveRoot setValue:self.compressors forKey:@"compressors"];
     [saveRoot setValue:self.extraSaveData forKey:@"extraSaveData"];
-
+    [saveRoot setValue: [NSNumber numberWithBool:self.useInstantRecord] forKey:@"useInstantRecord"];
     
+    [saveRoot setValue:[NSNumber numberWithInt:self.instantRecordBufferDuration] forKey:@"instantRecordBufferDuration"];
+
     
 
     
@@ -1286,6 +1290,17 @@
     [saveRoot addEntriesFromDictionary:savedValues];
     
 
+    if (saveRoot[@"useInstantRecord"])
+    {
+        self.useInstantRecord = [[saveRoot valueForKey:@"useInstantRecord"] boolValue];
+    }
+    
+    if (saveRoot[@"instantRecordBufferDuration"])
+    {
+        self.instantRecordBufferDuration = [[saveRoot valueForKey:@"instantRecordBufferDuration"] intValue];
+    }
+    
+    
     
     self.transitionName = [saveRoot valueForKey:@"transitionName"];
     self.transitionDirection = [saveRoot valueForKey:@"transitionDirection"];
@@ -1390,13 +1405,16 @@
     self.extraPluginsSaveData = nil;
     self.sourceLayouts = [saveRoot valueForKey:@"sourceLayouts"];
     
-
-    id<VideoCompressor> irCompressor = self.compressors[@"InstantRecorder"];
-    
-    if (irCompressor)
+    if (self.useInstantRecord)
     {
-        self.instantRecorder = [[CSTimedOutputBuffer alloc] initWithCompressor:irCompressor];
-        self.instantRecorder.bufferDuration = 60;
+
+        id<VideoCompressor> irCompressor = self.compressors[@"InstantRecorder"];
+    
+        if (irCompressor)
+        {
+            self.instantRecorder = [[CSTimedOutputBuffer alloc] initWithCompressor:irCompressor];
+            self.instantRecorder.bufferDuration = self.instantRecordBufferDuration;
+        }
     }
     
     
