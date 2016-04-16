@@ -42,6 +42,9 @@
 @synthesize stagingLayout = _stagingLayout;
 @synthesize audioSamplerate  = _audioSamplerate;
 @synthesize transitionName = _transitionName;
+@synthesize useInstantRecord = _useInstantRecord;
+@synthesize instantRecordBufferDuration = _instantRecordBufferDuration;
+
 
 
 
@@ -1132,6 +1135,19 @@
     dispatch_resume(_log_source);
 }
 
+
+-(void) setupInstantRecorder
+{
+    id<VideoCompressor> irCompressor = self.compressors[@"InstantRecorder"];
+    
+    if (irCompressor)
+    {
+        self.instantRecorder = [[CSTimedOutputBuffer alloc] initWithCompressor:irCompressor];
+        self.instantRecorder.bufferDuration = self.instantRecordBufferDuration;
+    }
+}
+
+
 -(void) migrateDefaultCompressor:(NSMutableDictionary *)saveRoot
 {
     
@@ -1405,16 +1421,11 @@
     self.extraPluginsSaveData = nil;
     self.sourceLayouts = [saveRoot valueForKey:@"sourceLayouts"];
     
+    
+    
     if (self.useInstantRecord)
     {
-
-        id<VideoCompressor> irCompressor = self.compressors[@"InstantRecorder"];
-    
-        if (irCompressor)
-        {
-            self.instantRecorder = [[CSTimedOutputBuffer alloc] initWithCompressor:irCompressor];
-            self.instantRecorder.bufferDuration = self.instantRecordBufferDuration;
-        }
+        [self setupInstantRecorder];
     }
     
     
@@ -1475,9 +1486,43 @@
     
 }
 
+-(void)setInstantRecordBufferDuration:(int)instantRecordBufferDuration
+{
+    _instantRecordBufferDuration = instantRecordBufferDuration;
+    
+    if (_instantRecordBufferDuration <= 0)
+    {
+        self.instantRecorder = nil;
+    } else {
+        if (self.instantRecorder)
+        {
+            self.instantRecorder.bufferDuration = _instantRecordBufferDuration;
+        }
+    }
+}
+
+-(int)instantRecordBufferDuration
+{
+    return _instantRecordBufferDuration;
+}
 
 
+-(void) setUseInstantRecord:(bool)useInstantRecord
+{
+    _useInstantRecord = useInstantRecord;
+    
+    if (useInstantRecord)
+    {
+        [self setupInstantRecorder];
+    } else {
+        self.instantRecorder = nil;
+    }
+}
 
+-(bool)useInstantRecord
+{
+    return _useInstantRecord;
+}
 
 
 -(void)controlTextDidEndEditing:(NSNotification *)obj
@@ -2997,7 +3042,26 @@
 {
     if (self.instantRecorder)
     {
-        [self.instantRecorder writeCurrentBuffer:@"/tmp/instant_record.mov"];
+        
+        NSString *directory = self.instantRecordDirectory;
+        
+        if (!directory)
+        {
+            NSArray *mPaths = NSSearchPathForDirectoriesInDomains(NSMoviesDirectory, NSUserDomainMask, YES);
+            directory = mPaths.firstObject;
+        }
+        
+        if (directory)
+        {
+            NSDateFormatter *dFormat = [[NSDateFormatter alloc] init];
+            dFormat.dateFormat = @"yyyyMMddHHmmss";
+            NSString *dateStr = [dFormat stringFromDate:[NSDate date]];
+            NSString *useFilename = [NSString stringWithFormat:@"CS_instant_record-%@.mov", dateStr];
+
+            NSString *savePath = [NSString pathWithComponents:@[directory, useFilename]];
+            
+            [self.instantRecorder writeCurrentBuffer:savePath];
+        }
     }
 }
 

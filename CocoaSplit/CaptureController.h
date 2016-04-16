@@ -113,6 +113,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (assign) bool useInstantRecord;
 @property (assign) int instantRecordBufferDuration;
 @property (strong) NSString *instantRecordCompressor;
+@property (strong) NSString *instantRecordDirectory;
+
 
 @property (strong) CSTimedOutputBuffer *instantRecorder;
 
