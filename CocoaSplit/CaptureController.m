@@ -427,6 +427,25 @@
     [self openOutputSheet:nil];
 }
 
+- (IBAction)chooseInstantRecordDirectory:(id)sender
+{
+
+    NSOpenPanel *panel = [NSOpenPanel openPanel];
+    panel.canChooseDirectories = YES;
+    panel.canCreateDirectories = YES;
+    panel.canChooseFiles = NO;
+    panel.allowsMultipleSelection = NO;
+    
+    [panel beginWithCompletionHandler:^(NSInteger result) {
+        if (result == NSFileHandlingPanelOKButton)
+        {
+            self.instantRecordDirectory = panel.URL.path;
+        }
+        
+    }];
+    
+}
+
 
 -(void)buildScreensInfo:(NSNotification *)notification
 {
@@ -622,6 +641,7 @@
     
     return NO;
 }
+
 
 
 -(void)exportLayout:(SourceLayout *)layout
@@ -1238,7 +1258,8 @@
     [saveRoot setValue: [NSNumber numberWithBool:self.useInstantRecord] forKey:@"useInstantRecord"];
     
     [saveRoot setValue:[NSNumber numberWithInt:self.instantRecordBufferDuration] forKey:@"instantRecordBufferDuration"];
-
+    [saveRoot setValue:self.instantRecordDirectory forKey:@"instantRecordDirectory"];
+    
     
 
     
@@ -1315,6 +1336,8 @@
     {
         self.instantRecordBufferDuration = [[saveRoot valueForKey:@"instantRecordBufferDuration"] intValue];
     }
+    
+    self.instantRecordDirectory = [saveRoot valueForKey:@"instantRecordDirectory"];
     
     
     

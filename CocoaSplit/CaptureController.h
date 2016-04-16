@@ -232,6 +232,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (IBAction)openCreateSheet:(id)sender;
 
 
+- (IBAction)chooseInstantRecordDirectory:(id)sender;
 
 
 
