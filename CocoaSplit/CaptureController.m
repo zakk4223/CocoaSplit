@@ -3131,7 +3131,8 @@
         if (directory)
         {
             NSDateFormatter *dFormat = [[NSDateFormatter alloc] init];
-            dFormat.dateFormat = @"yyyyMMddHHmmss";
+            dFormat.dateStyle = NSDateFormatterMediumStyle;
+            dFormat.timeStyle = NSDateFormatterMediumStyle;
             NSString *dateStr = [dFormat stringFromDate:[NSDate date]];
             NSString *useFilename = [NSString stringWithFormat:@"CS_instant_record-%@.mov", dateStr];
 
