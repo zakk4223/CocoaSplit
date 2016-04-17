@@ -12,7 +12,6 @@
 {
     
     id<VideoCompressor> _compressor;
-    AppleVTCompressor *_appleh264;
 
 }
 
@@ -22,6 +21,7 @@
 @property (assign) bool useAppleProRes;
 @property (assign) bool usex264;
 @property (assign) bool useNone;
+@property (assign) int selectedCompressor;
 
 
 

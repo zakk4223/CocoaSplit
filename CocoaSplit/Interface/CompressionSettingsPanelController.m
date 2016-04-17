@@ -53,6 +53,9 @@
         if (compressorConfigView)
         {
             compressorConfigView.compressorController = self.compressorObjectController;
+            compressorConfigView.compressor = self.compressor;
+            
+            
             
             [self.compressorSettingsView addSubview:((NSViewController *)compressorConfigView).view];
         

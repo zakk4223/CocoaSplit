@@ -26,29 +26,18 @@
                         <binding destination="-2" name="value" keyPath="self.compressorController.selection.tryAppleHardware" id="2U1-FD-rby"/>
                     </connections>
                 </button>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wnu-Bv-H39">
+                <button fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="wnu-Bv-H39">
                     <rect key="frame" x="-2" y="189" width="83" height="20"/>
-                    <buttonCell key="cell" type="radio" title="Apple h264" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="ny1-QF-O4a">
+                    <buttonCell key="cell" type="radio" title="Apple h264" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" continuous="YES" inset="2" id="ny1-QF-O4a">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
                     <connections>
                         <action selector="selectCompressorType:" target="-2" id="9Sj-T8-nLC"/>
-                        <binding destination="-2" name="value" keyPath="self.compressorController.selection.useAppleH264" id="yV4-O8-1az"/>
+                        <binding destination="-2" name="value" keyPath="self.compressorController.selection.useAppleH264" id="8mB-I8-tZZ"/>
                     </connections>
                 </button>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="S4I-aO-YUr">
-                    <rect key="frame" x="-2" y="165" width="93" height="20"/>
-                    <buttonCell key="cell" type="radio" title="Apple ProRes" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="Wce-8J-a6o">
-                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="selectCompressorType:" target="-2" id="9ZE-jT-4Vd"/>
-                        <binding destination="-2" name="value" keyPath="self.compressorController.selection.useAppleProRes" id="leI-7G-YaB"/>
-                    </connections>
-                </button>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l6F-el-Ho1">
+                <button fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="l6F-el-Ho1">
                     <rect key="frame" x="-2" y="141" width="57" height="20"/>
                     <buttonCell key="cell" type="radio" title="x264" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="FCo-QM-xmW">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -56,7 +45,7 @@
                     </buttonCell>
                     <connections>
                         <action selector="selectCompressorType:" target="-2" id="i8r-9e-ElQ"/>
-                        <binding destination="-2" name="value" keyPath="self.compressorController.selection.usex264" id="pSB-Lt-STX"/>
+                        <binding destination="-2" name="value" keyPath="self.compressorController.selection.usex264" id="V1m-DH-QDv"/>
                     </connections>
                 </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IDh-wQ-B7u">
@@ -69,12 +58,24 @@
                 </textField>
                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CAz-F7-0F0">
                     <rect key="frame" x="-2" y="117" width="57" height="20"/>
-                    <buttonCell key="cell" type="radio" title="None" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="BAF-Ft-iW5">
+                    <buttonCell key="cell" type="radio" title="None" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" continuous="YES" inset="2" id="BAF-Ft-iW5">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
                     <connections>
-                        <binding destination="-2" name="value" keyPath="self.compressorController.selection.useNone" id="4ax-zL-afM"/>
+                        <action selector="selectCompressorType:" target="-2" id="uOb-xb-Jp4"/>
+                        <binding destination="-2" name="value" keyPath="self.compressorController.selection.useNone" id="9Gj-xs-eRK"/>
+                    </connections>
+                </button>
+                <button fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="S4I-aO-YUr">
+                    <rect key="frame" x="-2" y="165" width="93" height="20"/>
+                    <buttonCell key="cell" type="radio" title="Apple ProRes" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="Wce-8J-a6o">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="selectCompressorType:" target="-2" id="9ZE-jT-4Vd"/>
+                        <binding destination="-2" name="value" keyPath="self.compressorController.selection.useAppleProRes" id="2yk-wk-owp"/>
                     </connections>
                 </button>
             </subviews>

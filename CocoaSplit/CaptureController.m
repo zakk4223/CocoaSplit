@@ -834,12 +834,27 @@
        
        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(layoutCanvasChanged:) name:CSNotificationLayoutFramerateChanged object:nil];
        
+       [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(compressorReconfigured:) name:CSNotificationCompressorReconfigured object:nil];
+
+       
        
        
    }
     
     return self;
     
+}
+
+
+-(void)compressorReconfigured:(NSNotification *)notification
+{
+    
+    
+    id<VideoCompressor> compressor = [notification object];
+    if (self.instantRecorder && [compressor isEqual:self.instantRecorder.compressor])
+    {
+        [self resetInstantRecorder];
+    }
 }
 
 
@@ -1183,7 +1198,6 @@
             _needsIRReset = YES;
         } else {
             [irCompressor reset];
-            [self setupInstantRecorder];
         }
 
     }

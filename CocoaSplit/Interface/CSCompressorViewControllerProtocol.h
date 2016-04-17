@@ -12,6 +12,7 @@
 @protocol CSCompressorViewControllerProtocol <NSObject>
 
 @property (strong) NSObjectController *compressorController;
+@property (strong) id compressor;
 
 
 @end

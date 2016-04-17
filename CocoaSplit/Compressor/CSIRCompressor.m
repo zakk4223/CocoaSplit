@@ -124,7 +124,14 @@
 -(void) reset
 {
     self.errored = NO;
-    [_appleh264 reset];
+    if (_compressor)
+    {
+        [_compressor reset];
+    }
+    
+    _compressor = nil;
+    
+    
     
 }
 
@@ -153,6 +160,8 @@
         bool compressor_status;
 
         compressor_status = [self setupCompressor:frameData.videoFrame];
+        
+        NSLog(@"NEW COMPRESSOR %@", _compressor);
         if (!compressor_status)
         {
             self.errored = YES;
@@ -186,6 +195,8 @@
 - (bool)setupCompressor:(CVPixelBufferRef)videoFrame
 {
 
+    NSLog(@"%@ TRY HARDWARE %d USE NONE %d USE AH264 %d USE APRO %d USE x264 %d SELECTED COMPRESSOR %d", self, self.tryAppleHardware, self.useNone, self.useAppleH264, self.useAppleProRes, self.usex264, self.selectedCompressor);
+    
     if (self.tryAppleHardware && [AppleVTCompressor intelQSVAvailable])
     {
         

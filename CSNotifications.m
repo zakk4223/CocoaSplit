@@ -25,6 +25,7 @@ NSString *const CSNotificationOutputDeleted = @"CSNotificationOutputDeleted";
 NSString *const CSNotificationCompressorAdded = @"CSNotificationCompressorAdded";
 NSString *const CSNotificationCompressorDeleted = @"CSNotificationCompressorDeleted";
 NSString *const CSNotificationCompressorRenamed = @"CSNotificationCompressorRenamed";
+NSString *const CSNotificationCompressorReconfigured = @"CSNotificationCompressorReconfigured";
 
 
 NSString *const CSNotificationInputAdded = @"CSNotificationInputAdded";

@@ -12,6 +12,8 @@
 
 @interface CSAppleProResCompressorViewController : NSViewController <CSCompressorViewControllerProtocol>
 
+@property (strong) AppleProResCompressor *compressor;
+
 @property (strong) NSObjectController *compressorController;
 
 @property (strong) NSDictionary *compressorTypes;

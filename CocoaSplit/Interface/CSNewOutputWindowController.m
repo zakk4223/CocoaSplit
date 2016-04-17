@@ -182,7 +182,7 @@
         self.compressionPanelController.compressor = editCompressor.copy;
     }
     
-    
+
     [self.window beginSheet:self.compressionPanelController.window completionHandler:^(NSModalResponse returnCode) {
         switch (returnCode) {
             case NSModalResponseStop:
@@ -198,19 +198,21 @@
                 break;
             case NSModalResponseOK:
             {
-                if (self.compressionPanelController.compressor.active)
-                {
-                    //if it was an active compressor the edit was in-place
-                    return;
-                }
                 
-                if (![editCompressor.name isEqualToString:self.compressionPanelController.compressor.name])
+                
+                if (!self.compressionPanelController.compressor.active)
                 {
-                    [self.compressors removeObjectForKey:editCompressor.name];
+                    if (![editCompressor.name isEqualToString:self.compressionPanelController.compressor.name])
+                    {
+                        [self.compressors removeObjectForKey:editCompressor.name];
+                        NSDictionary *notifyMsg = [NSDictionary dictionaryWithObjectsAndKeys:editCompressor.name, @"oldName", self.compressionPanelController.compressor, @"compressor", nil];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorRenamed object:notifyMsg];
+                        
+                    }
+                    self.compressors[self.compressionPanelController.compressor.name] = self.compressionPanelController.compressor;
                 }
-                self.compressors[self.compressionPanelController.compressor.name] = self.compressionPanelController.compressor;
-                NSDictionary *notifyMsg = [NSDictionary dictionaryWithObjectsAndKeys:editCompressor.name, @"oldName", self.compressionPanelController.compressor, @"compressor", nil];
-                [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorRenamed object:notifyMsg];
+                [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorReconfigured object:self.compressionPanelController.compressor];
+                
                 break;
             }
             case 4242:

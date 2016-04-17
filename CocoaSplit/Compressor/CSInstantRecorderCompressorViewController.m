@@ -16,9 +16,35 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     // Do view setup here.
 }
 
-- (IBAction)selectCompressorType:(id)sender {
+- (IBAction)selectCompressorType:(NSButton *)sender {
+    
+    CSIRCompressor *tcomp = self.compressor;
+    tcomp.usex264 = NO;
+    tcomp.useAppleH264 = NO;
+    tcomp.useAppleProRes = NO;
+    tcomp.useNone = NO;
+
+    switch (sender.tag)
+    {
+        case 0:
+            //useNone
+            tcomp.useNone = YES;
+            break;
+        case 1:
+            tcomp.useAppleH264 = YES;
+            break;
+        case 2:
+            tcomp.useAppleProRes = YES;
+            break;
+        case 3:
+            tcomp.usex264 = YES;
+            break;
+        default:
+            break;
+    }
 }
 @end

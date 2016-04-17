@@ -27,6 +27,7 @@ extern NSString *const CSNotificationOutputDeleted;
 extern NSString *const CSNotificationCompressorAdded;
 extern NSString *const CSNotificationCompressorDeleted;
 extern NSString *const CSNotificationCompressorRenamed;
+extern NSString *const CSNotificationCompressorReconfigured;
 
 
 
