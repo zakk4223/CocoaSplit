@@ -229,6 +229,16 @@ DQ
                             <action selector="chooseInstantRecordDirectory:" target="-2" id="5B2-Vf-JMr"/>
                         </connections>
                     </button>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zg6-Am-3CZ">
+                        <rect key="frame" x="140" y="192" width="145" height="28"/>
+                        <buttonCell key="cell" type="push" title="Configure Compressor" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ceF-oa-ul7">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="configureIRCompressor:" target="-2" id="QHh-Di-6Bu"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="3" secondAttribute="bottom" constant="20" symbolic="YES" id="5"/>

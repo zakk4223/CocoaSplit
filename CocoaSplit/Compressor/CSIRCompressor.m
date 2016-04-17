@@ -161,12 +161,13 @@
 
         compressor_status = [self setupCompressor:frameData.videoFrame];
         
-        NSLog(@"NEW COMPRESSOR %@", _compressor);
         if (!compressor_status)
         {
             self.errored = YES;
             return NO;
         } else {
+            self.codec_id = _compressor.codec_id;
+            
             [_compressor addOutput:self];
         }
     }

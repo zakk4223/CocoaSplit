@@ -2169,6 +2169,65 @@
     _frame_interval = 1.0/self.livePreviewView.sourceLayout.frameRate;
 }
 
+- (IBAction)configureIRCompressor:(id)sender {
+    
+    
+    CompressionSettingsPanelController *cPanel = [[CompressionSettingsPanelController alloc] init];
+    CSIRCompressor *compressor = self.compressors[@"InstantRecorder"];
+    
+    cPanel.compressor = compressor;
+    
+    
+    [self.advancedPrefPanel beginSheet:cPanel.window completionHandler:^(NSModalResponse returnCode) {
+        switch (returnCode) {
+            case NSModalResponseStop:
+                if (cPanel.compressor.active)
+                {
+                    return;
+                }
+                [self willChangeValueForKey:@"compressors"];
+                [self.compressors removeObjectForKey:cPanel.compressor.name];
+                [self didChangeValueForKey:@"compressors"];
+                [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorDeleted object:cPanel.compressor userInfo:nil];
+                
+                break;
+            case NSModalResponseOK:
+            {
+                
+                
+                if (!cPanel.compressor.active)
+                {
+                    if (![compressor.name isEqualToString:cPanel.compressor.name])
+                    {
+                        [self.compressors removeObjectForKey:compressor.name];
+                        NSDictionary *notifyMsg = [NSDictionary dictionaryWithObjectsAndKeys:compressor.name, @"oldName", cPanel.compressor, @"compressor", nil];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorRenamed object:notifyMsg];
+                        
+                    }
+                    self.compressors[cPanel.compressor.name] = cPanel.compressor;
+                }
+                [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorReconfigured object:cPanel.compressor];
+                
+                break;
+            }
+            case 4242:
+                if (cPanel.saveProfileName)
+                {
+                    cPanel.compressor.name = cPanel.saveProfileName.mutableCopy;
+                    [self willChangeValueForKey:@"compressors"];
+                    self.compressors[cPanel.compressor.name] = cPanel.compressor;
+                    [self didChangeValueForKey:@"compressors"];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:cPanel.compressor userInfo:nil];
+                    
+                }
+            default:
+                break;
+        }
+
+        
+    }];
+}
+
 
 -(void) newFrameTimed
 {

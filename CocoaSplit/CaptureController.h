@@ -377,6 +377,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (IBAction)openLibraryWindow:(id) sender;
 -(void)updateFrameIntervals;
 
+- (IBAction)configureIRCompressor:(id)sender;
 
 
 
