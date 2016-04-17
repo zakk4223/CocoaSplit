@@ -115,6 +115,7 @@
 -(void)replaceWithSourceLayout:(SourceLayout *)layout;
 -(void)clearSourceList;
 -(void)setupMIDI;
+-(void)updateCanvasWidth:(int)width height:(int)height;
 
 
 

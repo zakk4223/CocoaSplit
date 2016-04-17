@@ -18,6 +18,10 @@
 @property (strong) SourceLayout *sourceLayout;
 @property (assign) bool createDialog;
 
+
+@property (assign) int canvas_width;
+@property (assign) int canvas_height;
+
 - (IBAction)createButtonClicked:(id)sender;
 -(instancetype) initForBuiltin;
 

@@ -13,6 +13,7 @@
 @end
 
 @implementation CreateLayoutViewController
+@synthesize sourceLayout = _sourceLayout;
 
 
 -(instancetype) init
@@ -44,6 +45,12 @@
     
     [self commitEditing];
     
+    if (self.sourceLayout)
+    {
+        [self.sourceLayout updateCanvasWidth:self.canvas_width height:self.canvas_height];
+    }
+    
+    
     if (self.sourceLayout && self.createDialog)
     {
         [self.controller addLayoutFromBase:self.sourceLayout];
@@ -60,6 +67,22 @@
     [self.controller updateFrameIntervals];
 }
 
+
+-(SourceLayout *)sourceLayout
+{
+    return _sourceLayout;
+}
+
+
+-(void) setSourceLayout:(SourceLayout *)sourceLayout
+{
+    _sourceLayout = sourceLayout;
+    if (_sourceLayout)
+    {
+        self.canvas_width = sourceLayout.canvas_width;
+        self.canvas_height = sourceLayout.canvas_height;
+    }
+}
 
 
 @end

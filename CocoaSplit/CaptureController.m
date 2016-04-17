@@ -830,6 +830,10 @@
        
        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(buildScreensInfo:) name:NSApplicationDidChangeScreenParametersNotification object:nil];
        
+       [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(layoutCanvasChanged:) name:CSNotificationLayoutCanvasChanged object:nil];
+       
+       [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(layoutCanvasChanged:) name:CSNotificationLayoutFramerateChanged object:nil];
+       
        
        
    }
@@ -838,6 +842,16 @@
     
 }
 
+
+-(void)layoutCanvasChanged:(NSNotification *)notification
+{
+    SourceLayout *layout = [notification object];
+    
+    if ([layout isEqual:self.livePreviewView.sourceLayout])
+    {
+        [self resetInstantRecorder];
+    }
+}
 
 
 -(NSData *)archiveLayout:(SourceLayout *)layout
@@ -2139,13 +2153,11 @@
 {
     _staging_frame_interval = 1.0/self.stagingPreviewView.sourceLayout.frameRate;
     _frame_interval = 1.0/self.livePreviewView.sourceLayout.frameRate;
-    [self resetInstantRecorder];
 }
 
 
 -(void) newFrameTimed
 {
-    
     
     double startTime;
     

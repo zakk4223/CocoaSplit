@@ -9,7 +9,8 @@
 
 NSString *const CSNotificationLayoutAdded = @"CSNotificationLayoutAdded";
 NSString *const CSNotificationLayoutDeleted = @"CSNotificationLayoutDeleted";
-
+NSString *const CSNotificationLayoutCanvasChanged = @"CSNotificationLayoutCanvasChanged";
+NSString *const CSNotificationLayoutFramerateChanged = @"CSNotificationLayoutFramerateChanged";
 
 
 

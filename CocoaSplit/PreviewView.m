@@ -319,11 +319,9 @@
     
     if (tag < 2)
     {
-        self.sourceLayout.canvas_width = 1280;
-        self.sourceLayout.canvas_height = 720;
+        [self.sourceLayout updateCanvasWidth:1280 height:720];
     } else if (tag < 4) {
-        self.sourceLayout.canvas_width = 1920;
-        self.sourceLayout.canvas_height = 1080;
+        [self.sourceLayout updateCanvasWidth:1920 height:1080];
     }
     
     if ((tag % 2) == 0)

@@ -16,6 +16,7 @@
 
 @synthesize isActive = _isActive;
 @synthesize animationIndexes = _animationIndexes;
+@synthesize frameRate = _frameRate;
 
 -(instancetype) init
 {
@@ -369,6 +370,24 @@
 }
 
 
+
+-(float)frameRate
+{
+    return _frameRate;
+}
+
+
+-(void)setFrameRate:(float)frameRate
+{
+    float oldframerate = _frameRate;
+    
+    _frameRate = frameRate;
+    
+    if (_frameRate != oldframerate)
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutFramerateChanged object:self userInfo:nil];
+    }
+}
 -(void)applyAddBlock
 {
     if (self.addLayoutBlock)
@@ -1480,6 +1499,20 @@
     return (id<CAAction>)[NSNull null];
 }
 
+
+-(void)updateCanvasWidth:(int)width height:(int)height
+{
+    int old_height = self.canvas_height;
+    int old_width = self.canvas_width;
+    
+    self.canvas_height = height;
+    self.canvas_width = width;
+    
+    if ((old_height != height) || (old_width != width))
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutCanvasChanged object:self userInfo:nil];
+    }
+}
 
 
 -(void)frameTick
