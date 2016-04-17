@@ -165,7 +165,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
         return NO;
     }
     
-    
+
     
     CFMutableDictionaryRef frameProperties;
     
@@ -230,6 +230,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
         self.errored = YES;
         return NO;
     }
+    
     
     
     NSMutableDictionary *encoderSpec = [[NSMutableDictionary alloc] init];

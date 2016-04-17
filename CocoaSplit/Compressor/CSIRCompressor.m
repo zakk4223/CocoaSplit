@@ -82,6 +82,8 @@
 -(void) reset
 {
     self.errored = NO;
+    [_appleh264 reset];
+    
 }
 
 
@@ -113,11 +115,13 @@
         [_appleh264 addOutput:self];
     }
     
+    
     bool ret = [_appleh264 compressFrame:frameData];
     if (!ret && _appleh264.errored)
     {
         _appleh264.forceHardware = NO;
         _appleh264.noHardware = YES;
+
         ret = [_appleh264 compressFrame:frameData];
     }
     

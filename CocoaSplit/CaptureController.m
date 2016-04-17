@@ -1156,6 +1156,26 @@
 }
 
 
+
+-(void) resetInstantRecorder
+{
+    
+    
+    if (self.instantRecorder && self.instantRecorder.compressor)
+    {
+        id<VideoCompressor> irCompressor = self.instantRecorder.compressor;
+        if ([irCompressor outputCount] > 1 && !_needsIRReset)
+        {
+            _needsIRReset = YES;
+        } else {
+            [irCompressor reset];
+            [self setupInstantRecorder];
+        }
+
+    }
+}
+
+
 -(void) setupInstantRecorder
 {
     id<VideoCompressor> irCompressor = self.compressors[@"InstantRecorder"];
@@ -1445,19 +1465,6 @@
     self.sourceLayouts = [saveRoot valueForKey:@"sourceLayouts"];
     
     
-    
-    if (self.useInstantRecord)
-    {
-        [self setupInstantRecorder];
-    }
-    
-    
-    
-    dispatch_async(_main_capture_queue, ^{[self newFrameTimed];});
-    
-    dispatch_async(_preview_queue, ^{
-        [self newStagingFrameTimed];
-    });
     if (!self.sourceLayouts)
     {
         self.sourceLayouts = [[NSMutableArray alloc] init];
@@ -1486,7 +1493,7 @@
         } else {
             self.stagingLayout = tmpLayout;
         }
-
+        
         //[self.stagingLayout mergeSourceLayout:tmpLayout withLayer:nil];
     }
     
@@ -1499,12 +1506,27 @@
     _firstAudioTime = kCMTimeZero;
 
     
+    
+    
+    dispatch_async(_main_capture_queue, ^{[self newFrameTimed];});
+    
+    dispatch_async(_preview_queue, ^{
+        [self newStagingFrameTimed];
+    });
+
+    
     CSAacEncoder *audioEnc = [[CSAacEncoder alloc] init];
     audioEnc.encodedReceiver = self;
     audioEnc.sampleRate = self.audioSamplerate;
     audioEnc.bitRate = self.audioBitrate*1000;
     
     self.multiAudioEngine.encoder = audioEnc;
+    
+    if (self.useInstantRecord)
+    {
+        [self setupInstantRecorder];
+    }
+
 
     
 }
@@ -1796,6 +1818,11 @@
     for (id cKey in self.compressors)
     {
         id <VideoCompressor> ctmp = self.compressors[cKey];
+        if (ctmp && self.instantRecorder && [self.instantRecorder.compressor isEqual:ctmp])
+        {
+            continue;
+        }
+        
         if (ctmp)
         {
             [ctmp reset];
@@ -1821,6 +1848,13 @@
     } else {
         [[NSProcessInfo processInfo] endActivity:_activity_token];
     }
+    
+    if (_needsIRReset)
+    {
+        [self resetInstantRecorder];
+        _needsIRReset = NO;
+    }
+    
     
     //self.multiAudioEngine.encoder = nil;
     
@@ -1899,6 +1933,11 @@
         {
             id <VideoCompressor> compressor;
             compressor = self.compressors[cKey];
+            if (self.instantRecorder && [self.instantRecorder.compressor isEqual:compressor])
+            {
+                continue;
+            }
+
             [compressor addAudioData:sampleBuffer];
         }
     }
@@ -2100,6 +2139,7 @@
 {
     _staging_frame_interval = 1.0/self.stagingPreviewView.sourceLayout.frameRate;
     _frame_interval = 1.0/self.livePreviewView.sourceLayout.frameRate;
+    [self resetInstantRecorder];
 }
 
 
@@ -2306,7 +2346,11 @@
     
     for(id cKey in self.compressors)
     {
-        if (self.instantRecorder && [self.instantRecorder.compressor isEqualTo:cKey])
+        
+        id <VideoCompressor> compressor;
+        compressor = self.compressors[cKey];
+
+        if (self.instantRecorder && [self.instantRecorder.compressor isEqual:compressor])
         {
             continue;
         }
@@ -2319,8 +2363,6 @@
         newFrameData.frameTime = _frame_time;
         newFrameData.videoFrame = videoFrame;
         
-        id <VideoCompressor> compressor;
-        compressor = self.compressors[cKey];
         [compressor compressFrame:newFrameData];
 
     }

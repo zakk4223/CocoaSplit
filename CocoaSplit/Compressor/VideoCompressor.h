@@ -46,6 +46,7 @@
 -(void) addOutput:(id)destination;
 -(void) removeOutput:(id)destination;
 -(bool) hasOutputs;
+-(NSInteger) outputCount;
 -(void) reset;
 -(bool) validate:(NSError **)therror;
 -(void) addAudioData:(CMSampleBufferRef)audioData;

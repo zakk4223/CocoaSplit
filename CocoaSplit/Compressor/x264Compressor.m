@@ -409,7 +409,6 @@
     
     
 
-    NSLog(@"IN COMPRESSOR SETUP");
     NSString *useAdvancedSettings = self.advancedSettings.copy;
     
     

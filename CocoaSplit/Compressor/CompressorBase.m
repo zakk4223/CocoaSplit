@@ -158,14 +158,22 @@
 
 -(void) addOutput:(OutputDestination *)destination
 {
-    [self.outputs setObject:destination forKey:destination.name];
+    
+    
+    [self.outputs setObject:destination forKey:[NSValue valueWithPointer:(__bridge const void * _Nullable)(destination)]];
     self.active = YES;
 }
+
+-(NSInteger)outputCount
+{
+    return self.outputs.count;
+}
+
 
 -(void) removeOutput:(OutputDestination *)destination
 {
 
-    [self.outputs removeObjectForKey:destination.name];
+    [self.outputs removeObjectForKey:[NSValue valueWithPointer:(__bridge const void * _Nullable)(destination)]];
     if (self.outputs.count == 0)
     {
         [self reset];
@@ -185,6 +193,7 @@
     self.working_height = self.height;
     self.working_width = self.width;
     
+    
     if (!self.resolutionOption || [self.resolutionOption isEqualToString:@"None"])
     {
         if (!(self.working_height > 0) || !(self.working_width > 0))
@@ -200,6 +209,8 @@
     {
         self.working_height = (int)CVPixelBufferGetHeight(withFrame);
         self.working_width = (int)CVPixelBufferGetWidth(withFrame);
+        NSLog(@"WORKING WIDTH %d", self.working_width);
+        
     } else if ([self.resolutionOption isEqualToString:@"Preserve AR"]) {
         float inputAR = (float)CVPixelBufferGetWidth(withFrame) / (float)CVPixelBufferGetHeight(withFrame);
         int newWidth;
