@@ -98,12 +98,12 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
+                        <binding destination="-2" name="value" keyPath="self.compressorController.selection.crf" id="c2k-gh-zpo"/>
                         <binding destination="-2" name="enabled" keyPath="self.compressorController.selection.use_cbr" id="LWl-QU-O3y">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
                             </dictionary>
                         </binding>
-                        <binding destination="-2" name="value" keyPath="self.compressorController.selection.crf" id="c2k-gh-zpo"/>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SkS-1t-Y4E">
@@ -135,12 +135,12 @@
                 </textField>
                 <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vte-yo-2IC">
                     <rect key="frame" x="102" y="257" width="101" height="22"/>
-                    <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="bhV-zT-vph">
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="bhV-zT-vph">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
                         <menu key="menu" title="OtherViews" id="3AX-UY-VJX">
                             <items>
-                                <menuItem title="Item 1" state="on" id="QKn-V5-QfV"/>
+                                <menuItem title="Item 1" id="QKn-V5-QfV"/>
                                 <menuItem title="Item 2" id="roI-oG-QHF"/>
                                 <menuItem title="Item 3" id="vZh-HH-Zvf"/>
                             </items>

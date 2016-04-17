@@ -130,6 +130,8 @@
 		345F8B7A1A183D1D009A81E3 /* CAMultiAudioEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B781A183D1D009A81E3 /* CAMultiAudioEngine.m */; };
 		3460E58A1AC766260080358E /* rotate.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3460E5871AC764500080358E /* rotate.py */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3463F99F1AD1594300F3B5C8 /* movement.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3463F99D1AD0DC7100F3B5C8 /* movement.py */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		346865471CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 346865451CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.m */; };
+		346865481CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 346865461CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.xib */; };
 		346CF44C1A5C10C2008E5BFF /* CSInputLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 346CF44B1A5C10C2008E5BFF /* CSInputLayer.m */; };
 		346CF44D1A5C10C2008E5BFF /* CSInputLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 346CF44B1A5C10C2008E5BFF /* CSInputLayer.m */; };
 		347277FD1A5A2758008801A9 /* CSIOSurfaceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 347277FC1A5A2758008801A9 /* CSIOSurfaceLayer.m */; };
@@ -702,6 +704,9 @@
 		345F8B7B1A184FBC009A81E3 /* CAMultiAudioMixingProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAMultiAudioMixingProtocol.h; sourceTree = "<group>"; };
 		3460E5871AC764500080358E /* rotate.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = rotate.py; sourceTree = "<group>"; };
 		3463F99D1AD0DC7100F3B5C8 /* movement.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = movement.py; sourceTree = "<group>"; };
+		346865441CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSInstantRecorderCompressorViewController.h; path = Compressor/CSInstantRecorderCompressorViewController.h; sourceTree = "<group>"; };
+		346865451CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSInstantRecorderCompressorViewController.m; path = Compressor/CSInstantRecorderCompressorViewController.m; sourceTree = "<group>"; };
+		346865461CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSInstantRecorderCompressorViewController.xib; path = Compressor/CSInstantRecorderCompressorViewController.xib; sourceTree = "<group>"; };
 		346CF44A1A5C10C2008E5BFF /* CSInputLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSInputLayer.h; sourceTree = "<group>"; };
 		346CF44B1A5C10C2008E5BFF /* CSInputLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSInputLayer.m; sourceTree = "<group>"; };
 		346EAAF6197A7B28000892CF /* Capture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Capture.h; sourceTree = "<group>"; };
@@ -1219,6 +1224,9 @@
 				3434CB351CA93BCD001B3DF9 /* CSAppleProResCompressorViewController.h */,
 				3434CB361CA93BCD001B3DF9 /* CSAppleProResCompressorViewController.m */,
 				3434CB371CA93BCD001B3DF9 /* CSAppleProResCompressorViewController.xib */,
+				346865441CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.h */,
+				346865451CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.m */,
+				346865461CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.xib */,
 			);
 			name = Compressor;
 			sourceTree = "<group>";
@@ -2131,6 +2139,7 @@
 				34D696FC1871B8F700B50EB6 /* Defaults.plist in Resources */,
 				34348C2B19BDBDC000A122C2 /* PluginManagerWindowController.xib in Resources */,
 				34ABEF3C17C0C2CB00AA5E62 /* advancedPrefPanel.xib in Resources */,
+				346865481CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.xib in Resources */,
 				3434CB391CA93BCD001B3DF9 /* CSAppleProResCompressorViewController.xib in Resources */,
 				3435E396188B902C0015CC01 /* 420v.fgsh in Resources */,
 				343ED9421BCAC1C80061FC4B /* EditBuiltinLayoutView.xib in Resources */,
@@ -2264,6 +2273,7 @@
 				3431FFE119786502000965FE /* InputSource.m in Sources */,
 				3414C6AE1CBB9EBF00107C69 /* CSIRCompressor.m in Sources */,
 				34ED8C911B07371C002C0674 /* MIKMIDINoteOnCommand.m in Sources */,
+				346865471CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.m in Sources */,
 				3498D94F1A9472BD00906532 /* CSAudioSwitchControl.m in Sources */,
 				3400A0621BD44DF0003E1828 /* CSInputLibraryItem.m in Sources */,
 				34ED8C831B07371C002C0674 /* MIKMIDIMetaSequenceEvent.m in Sources */,

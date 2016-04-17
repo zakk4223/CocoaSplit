@@ -8,6 +8,10 @@
 
 #import "CSIRCompressor.h"
 #import "OutputDestination.h"
+#import "CSInstantRecorderCompressorViewController.h"
+#import "x264Compressor.h"
+
+
 
 @implementation CSIRCompressor
 
@@ -28,6 +32,12 @@
     copy.working_height = self.height;
     
     copy.resolutionOption = self.resolutionOption;
+    copy.tryAppleHardware = self.tryAppleHardware;
+    copy.useAppleH264 = self.useAppleH264;
+    copy.useAppleProRes = self.useAppleProRes;
+    copy.usex264 = self.usex264;
+    copy.useNone = self.useNone;
+    
     
     return copy;
 }
@@ -42,6 +52,11 @@
     [aCoder encodeInteger:self.height forKey:@"videoHeight"];
     
     [aCoder encodeObject:self.resolutionOption forKey:@"resolutionOption"];
+    [aCoder encodeBool:self.tryAppleHardware forKey:@"tryAppleHardware"];
+    [aCoder encodeBool:self.useAppleH264 forKey:@"useAppleH264"];
+    [aCoder encodeBool:self.useAppleProRes forKey:@"useAppleProRes"];
+    [aCoder encodeBool:self.usex264 forKey:@"usex264"];
+    [aCoder encodeBool:self.useNone forKey:@"useNone"];
     
 }
 
@@ -58,6 +73,30 @@
             self.resolutionOption = [aDecoder decodeObjectForKey:@"resolutionOption"];
         }
         
+        if ([aDecoder containsValueForKey:@"tryAppleHardware"])
+        {
+            self.tryAppleHardware = [aDecoder decodeBoolForKey:@"tryAppleHardware"];
+        }
+        
+        if ([aDecoder containsValueForKey:@"useAppleH264"])
+        {
+            self.useAppleH264 = [aDecoder decodeBoolForKey:@"useAppleH264"];
+        }
+
+        if ([aDecoder containsValueForKey:@"useAppleProRes"])
+        {
+            self.useAppleProRes = [aDecoder decodeBoolForKey:@"useAppleProRes"];
+        }
+
+        if ([aDecoder containsValueForKey:@"usex264"])
+        {
+            self.usex264 = [aDecoder decodeBoolForKey:@"usex264"];
+        }
+
+        if ([aDecoder containsValueForKey:@"useNone"])
+        {
+            self.useNone = [aDecoder decodeBoolForKey:@"useNone"];
+        }
     }
     
     return self;
@@ -72,6 +111,9 @@
         
         
         self.compressorType = @"Instant Replay Compressor";
+        self.tryAppleHardware = YES;
+        self.useAppleH264 = YES;
+        
         
     }
     
@@ -105,27 +147,23 @@
     
     [self setAudioData:frameData syncObj:self];
 
-    if (!_appleh264)
+    
+    if (!_compressor)
     {
-        _appleh264 = [[AppleVTCompressor alloc] init];
-        _appleh264.average_bitrate = 9000;
-        _appleh264.max_bitrate = 150000;
-        _appleh264.keyframe_interval = 2;
-        _appleh264.forceHardware = YES;
-        [_appleh264 addOutput:self];
-    }
-    
-    
-    bool ret = [_appleh264 compressFrame:frameData];
-    if (!ret && _appleh264.errored)
-    {
-        _appleh264.forceHardware = NO;
-        _appleh264.noHardware = YES;
+        bool compressor_status;
 
-        ret = [_appleh264 compressFrame:frameData];
+        compressor_status = [self setupCompressor:frameData.videoFrame];
+        if (!compressor_status)
+        {
+            self.errored = YES;
+            return NO;
+        } else {
+            [_compressor addOutput:self];
+        }
     }
-    
 
+    bool ret;
+    ret = [_compressor compressFrame:frameData];
     return ret;
 }
 
@@ -147,27 +185,60 @@
 
 - (bool)setupCompressor:(CVPixelBufferRef)videoFrame
 {
-    OSStatus status;
-    
-    
-    [self setupResolution:videoFrame];
-    
-    if (!self.working_height || !self.working_width)
+
+    if (self.tryAppleHardware && [AppleVTCompressor intelQSVAvailable])
     {
-        self.errored = YES;
+        
+        AppleVTCompressor *acomp = [[AppleVTCompressor alloc] init];
+        acomp.average_bitrate = 9000;
+        acomp.max_bitrate = 15000;
+        acomp.keyframe_interval = 2;
+        acomp.forceHardware = YES;
+        _compressor = acomp;
+        return YES;
+    }
+    
+    if (self.useNone)
+    {
         return NO;
     }
     
+    if (self.useAppleH264)
+    {
+        AppleVTCompressor *acomp = [[AppleVTCompressor alloc] init];
+        acomp.average_bitrate = 9000;
+        acomp.max_bitrate = 15000;
+        acomp.keyframe_interval = 2;
+        acomp.forceHardware = NO;
+        acomp.noHardware = YES;
+        _compressor = acomp;
+        return YES;
+    }
     
-    return YES;
+    if (self.useAppleProRes)
+    {
+        AppleProResCompressor *acomp = [[AppleProResCompressor alloc] init];
+        _compressor = acomp;
+        return YES;
+    }
     
+    if (self.usex264)
+    {
+        x264Compressor *xcomp = [[x264Compressor alloc] init];
+        xcomp.use_cbr = NO;
+        xcomp.crf = 10;
+        _compressor = xcomp;
+        return YES;
+    }
+    
+    return NO; //???
 }
 
 
 
 -(id <CSCompressorViewControllerProtocol>)getConfigurationView
 {
-    return nil;
+    return [[CSInstantRecorderCompressorViewController alloc] init];
 }
 
 @end

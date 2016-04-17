@@ -216,6 +216,32 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 }
 
 
++(bool)intelQSVAvailable
+{
+    NSMutableDictionary *encoderSpec = [[NSMutableDictionary alloc] init];
+    encoderSpec[(__bridge NSString *)kVTVideoEncoderSpecification_RequireHardwareAcceleratedVideoEncoder] = @YES;
+    
+    
+    VTCompressionSessionRef testSession = NULL;
+    OSStatus status;
+    
+    status = VTCompressionSessionCreate(NULL, 1920, 1080, kCMVideoCodecType_H264, (__bridge CFDictionaryRef)encoderSpec, NULL, NULL, NULL,  (__bridge void *)self, &testSession);
+    
+    bool ret;
+    if (status != noErr || !testSession)
+    {
+        ret = NO;
+    } else {
+        VTCompressionSessionInvalidate(testSession);
+        if (testSession)
+        {
+            CFRelease(testSession);
+        }
+        ret = YES;
+    }
+
+    return ret;
+}
 
 
 - (bool)setupCompressor:(CVPixelBufferRef)videoFrame

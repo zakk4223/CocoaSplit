@@ -132,12 +132,12 @@
                         <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
                     <connections>
+                        <binding destination="-2" name="value" keyPath="self.compressorController.selection.forceHardware" id="fTo-UU-Tf4"/>
                         <binding destination="-2" name="enabled" keyPath="self.compressorController.selection.noHardware" id="MCd-1n-4yY">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
                             </dictionary>
                         </binding>
-                        <binding destination="-2" name="value" keyPath="self.compressorController.selection.forceHardware" id="fTo-UU-Tf4"/>
                     </connections>
                 </button>
                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JqM-dV-BzJ">

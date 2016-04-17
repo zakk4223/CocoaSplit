@@ -11,9 +11,18 @@
 @interface CSIRCompressor : CompressorBase <VideoCompressor, NSCoding>
 {
     
+    id<VideoCompressor> _compressor;
     AppleVTCompressor *_appleh264;
 
 }
+
+
+@property (assign) bool tryAppleHardware;
+@property (assign) bool useAppleH264;
+@property (assign) bool useAppleProRes;
+@property (assign) bool usex264;
+@property (assign) bool useNone;
+
 
 
 -(bool)compressFrame:(CapturedFrameData *)frameData;

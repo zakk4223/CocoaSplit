@@ -36,6 +36,7 @@
 
 
 -(bool)compressFrame:(CapturedFrameData *)frameData;
++(bool)intelQSVAvailable;
 
 
 @end
