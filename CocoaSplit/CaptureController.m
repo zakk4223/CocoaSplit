@@ -832,7 +832,7 @@
        
        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(layoutCanvasChanged:) name:CSNotificationLayoutCanvasChanged object:nil];
        
-       [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(layoutCanvasChanged:) name:CSNotificationLayoutFramerateChanged object:nil];
+       [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(layoutFramerateChanged:) name:CSNotificationLayoutFramerateChanged object:nil];
        
        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(compressorReconfigured:) name:CSNotificationCompressorReconfigured object:nil];
 
@@ -858,12 +858,29 @@
 }
 
 
+-(void)layoutFramerateChanged:(NSNotification *)notification
+{
+    SourceLayout *layout = [notification object];
+    if (layout == self.livePreviewView.sourceLayout || layout == self.stagingPreviewView.sourceLayout)
+    {
+        [self updateFrameIntervals];
+    }
+    
+    if (layout == self.livePreviewView.sourceLayout)
+    {
+        [self resetInstantRecorder];
+    }
+}
+
+
 -(void)layoutCanvasChanged:(NSNotification *)notification
 {
     SourceLayout *layout = [notification object];
     
     if ([layout isEqual:self.livePreviewView.sourceLayout])
     {
+        NSLog(@"LAYOUT CHANNGED");
+        
         [self resetInstantRecorder];
     }
 }
@@ -1197,7 +1214,9 @@
         {
             _needsIRReset = YES;
         } else {
+            NSLog(@"RESETTING IR COMPRESSOR");
             [irCompressor reset];
+            NSLog(@"RESET IR COMPRESSOR DONE");
         }
 
     }
@@ -1814,6 +1833,7 @@
 
 
 
+
 -(void) setupFrameTimer:(double)framerate
 {
     if (self.captureRunning)
@@ -2166,7 +2186,7 @@
 -(void)updateFrameIntervals
 {
     _staging_frame_interval = 1.0/self.stagingPreviewView.sourceLayout.frameRate;
-    _frame_interval = 1.0/self.livePreviewView.sourceLayout.frameRate;
+    [self setupFrameTimer:self.livePreviewView.sourceLayout.frameRate];
 }
 
 - (IBAction)configureIRCompressor:(id)sender {

@@ -121,7 +121,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 {
     CMAudioFormatDescriptionRef audio_fmt;
     
-    NSLog(@"AUDIO EXTRACT %@", theBuffer);
     
     audio_fmt = CMSampleBufferGetFormatDescription(theBuffer);
     if (!audio_fmt)

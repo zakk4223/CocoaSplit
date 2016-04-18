@@ -388,6 +388,8 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutFramerateChanged object:self userInfo:nil];
     }
 }
+
+
 -(void)applyAddBlock
 {
     if (self.addLayoutBlock)
@@ -1500,7 +1502,7 @@
 }
 
 
--(void)updateCanvasWidth:(int)width height:(int)height
+-(void)updateCanvasWidth:(int)width height:(int)height 
 {
     int old_height = self.canvas_height;
     int old_width = self.canvas_width;

@@ -330,9 +330,6 @@
     } else {
         self.sourceLayout.frameRate = 30.0f;
     }
-    
-    [self.controller updateFrameIntervals];
-    
 }
 
 

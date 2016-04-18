@@ -209,7 +209,6 @@
     {
         self.working_height = (int)CVPixelBufferGetHeight(withFrame);
         self.working_width = (int)CVPixelBufferGetWidth(withFrame);
-        NSLog(@"WORKING WIDTH %d", self.working_width);
         
     } else if ([self.resolutionOption isEqualToString:@"Preserve AR"]) {
         float inputAR = (float)CVPixelBufferGetWidth(withFrame) / (float)CVPixelBufferGetHeight(withFrame);

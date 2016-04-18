@@ -18,6 +18,8 @@
     
     VTCompressionSessionRef _compression_session;
     VTPixelTransferSessionRef _vtpt_ref;
+    bool _resetPending;
+    
 
 }
 

@@ -9,6 +9,8 @@
 #import "AppleVTCompressor.h"
 #import "OutputDestination.h"
 #import "CSAppleH264CompressorViewController.h"
+#import "CSPluginServices.h"
+
 
 OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessionRef, CFDictionaryRef *);
 
@@ -112,16 +114,17 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
 -(void) reset
 {
 
-    
+    _resetPending = YES;
     self.errored = NO;
+    VTCompressionSessionCompleteFrames(_compression_session, CMTimeMake(0, 0));
     VTCompressionSessionInvalidate(_compression_session);
     if (_compression_session)
     {
         CFRelease(_compression_session);
     }
     
-    _compression_session = nil;
-
+    _compression_session = NULL;
+    _resetPending = NO;
 }
 
 
@@ -148,6 +151,11 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 
 -(bool)compressFrame:(CapturedFrameData *)frameData
 {
+    
+    if (_resetPending)
+    {
+        return NO;
+    }
     
     
     if (![self hasOutputs])
@@ -304,7 +312,13 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     
     
     
+    double captureFPS = [CSPluginServices sharedPluginServices].currentFPS;
     
+    if (captureFPS > 0)
+    {
+        VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_ExpectedFrameRate, (__bridge CFTypeRef)(@(captureFPS)));
+    }
+     
     
     int real_keyframe_interval = 2;
     if (self.keyframe_interval && self.keyframe_interval > 0)
@@ -347,18 +361,6 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     
     
 
-    /*
-    
-    if (self.settingsController.captureFPS && self.settingsController.captureFPS > 0)
-    {
-        
-        
-        
-        VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_ExpectedFrameRate, (__bridge CFTypeRef)(@(self.settingsController.captureFPS)));
-        
-    }
-    
-     */
     
     
     //This doesn't appear to work at all (2012 rMBP, 10.8.4). Even if you set DataRateLimits, you don't get anything back if you
