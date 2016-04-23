@@ -2828,7 +2828,7 @@
 
 - (NSArray *)commandIdentifiers
 {
-    NSArray *baseIdentifiers = @[@"GoLive", @"InputNext", @"InputPrevious", @"ActivateLive", @"ActivateStaging", @"ActivateToggle"];
+    NSArray *baseIdentifiers = @[@"GoLive", @"InputNext", @"InputPrevious", @"ActivateLive", @"ActivateStaging", @"ActivateToggle", @"InstantRecord"];
     
      NSMutableArray *layoutIdentifiers = [NSMutableArray array];
     
@@ -3149,7 +3149,15 @@
             [weakSelf stagingGoLive:nil];
         });
     }
+    
+    if ([identifier isEqualToString:@"InstantRecord"])
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf doInstantRecord:nil];
+        });
+    }
 }
+
 
 
 -(void)saveMIDI

@@ -23,4 +23,24 @@
     return self;
 }
 
+
+- (IBAction)chooseDestination:(id)sender
+{
+    
+    NSOpenPanel *panel = [NSOpenPanel openPanel];
+    panel.canChooseDirectories = YES;
+    panel.canCreateDirectories = YES;
+    panel.canChooseFiles = NO;
+    panel.allowsMultipleSelection = NO;
+    
+    [panel beginWithCompletionHandler:^(NSInteger result) {
+        if (result == NSFileHandlingPanelOKButton)
+        {
+            self.serviceObj.fileName = panel.URL.path;
+        }
+        
+    }];
+    
+}
+
 @end

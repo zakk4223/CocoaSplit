@@ -25,17 +25,6 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qk4-1f-aeS">
-                    <rect key="frame" x="100" y="232" width="360" height="22"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="BlJ-C5-Byy">
-                        <font key="font" metaFont="system"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="omD-Gp-f2c" name="value" keyPath="selection.fileName" id="4XU-Lj-WyE"/>
-                    </connections>
-                </textField>
                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wo3-Xc-esB">
                     <rect key="frame" x="18" y="211" width="151" height="18"/>
                     <buttonCell key="cell" type="check" title="Do not overwrite files" bezelStyle="regularSquare" imagePosition="right" state="on" inset="2" id="3hs-bt-D5a">
@@ -56,6 +45,27 @@
                         <binding destination="omD-Gp-f2c" name="value" keyPath="selection.useTimestamp" id="Nzd-VL-Sr5"/>
                     </connections>
                 </button>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HEb-zu-ZHY">
+                    <rect key="frame" x="353" y="225" width="85" height="32"/>
+                    <buttonCell key="cell" type="push" title="Browse" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="h2r-E3-0dE">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="chooseDestination:" target="-2" id="LCr-2N-ndd"/>
+                    </connections>
+                </button>
+                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qk4-1f-aeS">
+                    <rect key="frame" x="100" y="232" width="253" height="22"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="BlJ-C5-Byy">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="omD-Gp-f2c" name="value" keyPath="selection.fileName" id="4XU-Lj-WyE"/>
+                    </connections>
+                </textField>
             </subviews>
         </customView>
         <objectController id="omD-Gp-f2c" userLabel="FileStreamServiceController">
