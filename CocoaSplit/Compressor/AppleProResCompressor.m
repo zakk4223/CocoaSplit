@@ -186,7 +186,6 @@ void __ProResPixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     
     CVPixelBufferRelease(imageBuffer);
     
-    [self setAudioData:frameData syncObj:self];
     
     VTCompressionSessionEncodeFrame(_compression_session, converted_frame, frameData.videoPTS, frameData.videoDuration, frameProperties, (__bridge_retained void *)(frameData), NULL);
     

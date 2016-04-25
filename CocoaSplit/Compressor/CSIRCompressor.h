@@ -26,6 +26,5 @@
 
 
 -(bool)compressFrame:(CapturedFrameData *)frameData;
--(void) addAudioData:(CMSampleBufferRef)sampleBuffer;
 
 @end

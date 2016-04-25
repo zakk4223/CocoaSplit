@@ -45,8 +45,6 @@
 
 -(void) reset;
 -(BOOL) setupResolution:(CVImageBufferRef)withFrame;
--(void) addAudioData:(CMSampleBufferRef)audioData;
--(void) setAudioData:(CapturedFrameData *)forFrame syncObj:(id)syncObj;
 -(id <CSCompressorViewControllerProtocol>)getConfigurationView;
 
 

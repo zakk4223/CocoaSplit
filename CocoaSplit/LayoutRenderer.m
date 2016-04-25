@@ -259,7 +259,7 @@
 
     }
     
-    CVPixelBufferPoolCreatePixelBuffer(kCVReturnSuccess, _cvpool, &destFrame);
+    CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, _cvpool, &destFrame);
     
 
     [self renderToSurface:CVPixelBufferGetIOSurface(destFrame)];

@@ -292,8 +292,6 @@
                 [self.multiInput scheduleBuffer:sampleBuffer];
 
             }
-
-            
             
         }
     }

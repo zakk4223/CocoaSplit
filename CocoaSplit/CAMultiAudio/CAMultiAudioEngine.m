@@ -571,6 +571,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         
         if (selfPtr.encoder)
         {
+            
+                
             [selfPtr.encoder enqueuePCM:ioData atTime:inTimeStamp];
         }
         

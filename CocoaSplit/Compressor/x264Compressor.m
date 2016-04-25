@@ -210,11 +210,11 @@
         CVPixelBufferRetain(frameData.videoFrame);
     }
     
-    [self setAudioData:frameData syncObj:self];
 
     dispatch_async(_compressor_queue, ^{
         
-        
+        @autoreleasepool {
+            
         if (frameData.frameNumber == 1)
         {
             _next_keyframe_time = frameData.frameTime;
@@ -363,7 +363,7 @@
         //av_free_packet(pkt);
          //av_free(pkt);
         
-        
+        }
     });
     
     return YES;

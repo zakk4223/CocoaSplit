@@ -721,6 +721,8 @@
 
        
        videoBuffer = [[NSMutableArray alloc] init];
+       _audioBuffer = [[NSMutableArray alloc] init];
+       
        
        
        
@@ -738,8 +740,14 @@
        dispatch_source_set_event_handler(sigsrc, ^{ return;});
        dispatch_resume(sigsrc);
        
-       _main_capture_queue = dispatch_queue_create("CocoaSplit.main.queue", NULL);
+       /*
+       dispatch_queue_attr_t attr = dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_DEFAULT, 0);
+       _main_capture_queue = dispatch_queue_create("CocoaSplit.main.queue", attr);
        _preview_queue = dispatch_queue_create("CocoaSplit.preview.queue", NULL);
+        */
+       
+       _main_capture_queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+       _preview_queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
        
        
        
@@ -771,7 +779,10 @@
        dispatch_source_set_timer(_audio_statistics_timer, DISPATCH_TIME_NOW, 0.10*NSEC_PER_SEC, 0);
 
        dispatch_source_set_event_handler(_audio_statistics_timer, ^{
-           [self.multiAudioEngine updateStatistics];
+           if (self.multiAudioEngine)
+           {
+               [self.multiAudioEngine updateStatistics];
+           }
        });
        dispatch_resume(_audio_statistics_timer);
 
@@ -789,7 +800,7 @@
            
            
            
-           self.renderStatsString = [NSString stringWithFormat:@"Render min/max/avg: %f/%f/%f", _min_render_time, _max_render_time, _render_time_total / _renderedFrames];
+           //self.renderStatsString = [NSString stringWithFormat:@"Render min/max/avg: %f/%f/%f", _min_render_time, _max_render_time, _render_time_total / _renderedFrames];
            _renderedFrames = 0;
            _render_time_total = 0.0f;
            
@@ -1461,7 +1472,6 @@
 
     
     
-    NSString *audioID = [saveRoot valueForKey:@"audioCaptureID"];
     
     self.captureFPS = [[saveRoot valueForKey:@"captureFPS"] doubleValue];
     self.maxOutputDropped = [[saveRoot valueForKey:@"maxOutputDropped"] intValue];
@@ -1506,6 +1516,7 @@
     {
         self.multiAudioEngine = [[CAMultiAudioEngine alloc] init];
     }
+     
 
 
     self.extraPluginsSaveData = nil;
@@ -1560,13 +1571,14 @@
     dispatch_async(_preview_queue, ^{
         [self newStagingFrameTimed];
     });
-
     
     CSAacEncoder *audioEnc = [[CSAacEncoder alloc] init];
     audioEnc.encodedReceiver = self;
     audioEnc.sampleRate = self.audioSamplerate;
     audioEnc.bitRate = self.audioBitrate*1000;
     
+    audioEnc.inputASBD = self.multiAudioEngine.graph.graphAsbd;
+    [audioEnc setupEncoderBuffer];
     self.multiAudioEngine.encoder = audioEnc;
     
     if (self.useInstantRecord)
@@ -1804,7 +1816,7 @@
     
     //_frameCount = 0;
     //_firstAudioTime = kCMTimeZero;
-    
+    //_firstFrameTime = [self mach_time_seconds];
     
     if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_8)
     {
@@ -1943,9 +1955,54 @@
     
 }
 
-- (void)captureOutputAudio:(id)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
+-(void) addAudioData:(CMSampleBufferRef)audioData
 {
     
+        @synchronized(self)
+        {
+            
+            [_audioBuffer addObject:(__bridge id)audioData];
+        }
+}
+
+
+-(void) setAudioData:(NSMutableArray *)audioDestination videoPTS:(CMTime)videoPTS
+{
+    
+    NSUInteger audioConsumed = 0;
+    @synchronized(self)
+    {
+        NSUInteger audioBufferSize = [_audioBuffer count];
+        
+        for (int i = 0; i < audioBufferSize; i++)
+        {
+            CMSampleBufferRef audioData = (__bridge CMSampleBufferRef)[_audioBuffer objectAtIndex:i];
+            
+            CMTime audioTime = CMSampleBufferGetOutputPresentationTimeStamp(audioData);
+            
+            
+            
+            
+            if (CMTIME_COMPARE_INLINE(audioTime, <=, videoPTS))
+            {
+                
+                audioConsumed++;
+                [audioDestination addObject:(__bridge id)audioData];
+            } else {
+                break;
+            }
+        }
+        
+        if (audioConsumed > 0)
+        {
+            [_audioBuffer removeObjectsInRange:NSMakeRange(0, audioConsumed)];
+        }
+        
+    }
+}
+
+- (void)captureOutputAudio:(id)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
+{
     
     
     CMTime orig_pts = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
@@ -1961,6 +2018,8 @@
         _firstAudioTime = orig_pts;
         return;
     }
+    
+    
     CMTime real_pts = CMTimeSubtract(orig_pts, _firstAudioTime);
     CMTime adjust_pts = CMTimeMakeWithSeconds(self.audio_adjust, orig_pts.timescale);
     CMTime pts = CMTimeAdd(real_pts, adjust_pts);
@@ -1968,27 +2027,7 @@
     
     CMSampleBufferSetOutputPresentationTimeStamp(sampleBuffer, pts);
     
-    
-    if (self.instantRecorder && self.instantRecorder.compressor)
-    {
-        [self.instantRecorder.compressor addAudioData:sampleBuffer];
-    }
-    
-    
-    if (self.captureRunning)
-    {
-        for(id cKey in self.compressors)
-        {
-            id <VideoCompressor> compressor;
-            compressor = self.compressors[cKey];
-            if (self.instantRecorder && [self.instantRecorder.compressor isEqual:compressor])
-            {
-                continue;
-            }
-
-            [compressor addAudioData:sampleBuffer];
-        }
-    }
+    [self addAudioData:sampleBuffer];
 }
 
 
@@ -2022,21 +2061,6 @@
         }
     }
     
-    /*
-    double mach_duration = target_time - mach_now;
-    double mach_wait_time = mach_now + mach_duration/2.0;
-    
-    mach_wait_until(mach_wait_time*NSEC_PER_SEC);
-    
-    
-    while ([self mach_time_seconds] < target_time)
-    {
-        usleep(500);
-        
-            //wheeeeeeeeeeeee
-    }
-     
-     */
     return YES;
     
 }
@@ -2136,10 +2160,6 @@
     }
     
     [self.stagingCtx.layoutRenderer currentImg];
-    /*
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.stagingCtx setNeedsDisplay:YES];
-    });*/
 
 }
 
@@ -2255,7 +2275,6 @@
     double startTime;
     
     startTime = [self mach_time_seconds];
-    double lastLoopTime = startTime;
 
     _frame_time = startTime;
     _firstFrameTime = startTime;
@@ -2280,9 +2299,7 @@
         
         
         //_frame_time = nowTime;//startTime;
-        double nowTime = [self mach_time_seconds];
         
-        lastLoopTime = nowTime;
         
         if (![self sleepUntil:(startTime += _frame_interval)])
         {
@@ -2327,127 +2344,116 @@
 
 -(void) newFrame
 {
-
-        CVPixelBufferRef newFrame;
     
-        //if (self.videoCaptureSession)
+    CVPixelBufferRef newFrame;
+    
+    
+    double nfstart = [self mach_time_seconds];
+    
+    newFrame = [self.previewCtx.layoutRenderer currentImg];
+    
+    
+    double nfdone = [self mach_time_seconds];
+    double nftime = nfdone - nfstart;
+    _renderedFrames++;
+    
+    _render_time_total += nftime;
+    if (nftime < _min_render_time || _min_render_time == 0.0f)
+    {
+        _min_render_time = nftime;
+    }
+    
+    if (nftime > _max_render_time)
+    {
+        _max_render_time = nftime;
+    }
+    
+    
+    
+    if (newFrame)
+    {
+        _frameCount++;
+        CVPixelBufferRetain(newFrame);
+        NSMutableArray *frameAudio = [[NSMutableArray alloc] init];
+        [self setAudioData:frameAudio videoPTS:CMTimeMake((_frame_time - _firstFrameTime)*1000, 1000)];
+        CapturedFrameData *newData = [self createFrameData];
+        newData.audioSamples = frameAudio;
+        newData.videoFrame = newFrame;
+        
+        [self sendFrameToReplay:newData];
+        if (self.captureRunning)
         {
-            
-            double nfstart = [self mach_time_seconds];
-            
-            //[CATransaction begin];
-            newFrame = [self.previewCtx.layoutRenderer currentImg];
-            //[CATransaction commit];
-            //newFrame = [self currentFrame];
-            
-            
-            double nfdone = [self mach_time_seconds];
-            double nftime = nfdone - nfstart;
-            _renderedFrames++;
-            
-            _render_time_total += nftime;
-            if (nftime < _min_render_time || _min_render_time == 0.0f)
+            if (self.captureRunning != _last_running_value)
             {
-                _min_render_time = nftime;
+                [self setupCompressors];
             }
             
-            if (nftime > _max_render_time)
-            {
-                _max_render_time = nftime;
-            }
-
+            
+            [self processVideoFrame:newData];
             
             
-            if (newFrame)
+        } else {
+            
+            for (OutputDestination *outdest in _captureDestinations)
             {
-                _frameCount++;
-                CVPixelBufferRetain(newFrame);
-                [self sendFrameToReplay:newFrame];
-                if (self.captureRunning)
-                {
-                    if (self.captureRunning != _last_running_value)
-                    {
-                        [self setupCompressors];
-                    }
-                    
-                    
-                    [self processVideoFrame:newFrame];
-
-                    
-                } else {
-                    
-                    for (OutputDestination *outdest in _captureDestinations)
-                    {
-                        [outdest writeEncodedData:nil];
-                    }
-
-                }
-                
-                _last_running_value = self.captureRunning;
-                
-                CVPixelBufferRelease(newFrame);
-
-                
+                [outdest writeEncodedData:nil];
             }
+            
         }
+        
+        _last_running_value = self.captureRunning;
+        
+        CVPixelBufferRelease(newFrame);
+        
+        
+    }
 }
 
 
--(void)sendFrameToReplay:(CVPixelBufferRef)videoFrame
+-(CapturedFrameData *)createFrameData
+{
+    
+    CMTime pts = CMTimeMake((_frame_time - _firstFrameTime)*1000, 1000);
+    CMTime duration = CMTimeMake(1, self.captureFPS);
+
+    CapturedFrameData *newFrameData = [[CapturedFrameData alloc] init];
+    newFrameData.videoPTS = pts;
+    newFrameData.videoDuration = duration;
+    newFrameData.frameNumber = _frameCount;
+    newFrameData.frameTime = _frame_time;
+    return newFrameData;
+}
+
+
+-(void)sendFrameToReplay:(CapturedFrameData *)frameData
 {
     CMTime pts;
     CMTime duration;
     
     pts = CMTimeMake((_frame_time - _firstFrameTime)*1000, 1000);
+    
     duration = CMTimeMake(1, self.captureFPS);
     
     
     
     if (self.instantRecorder && self.instantRecorder.compressor)
     {
-        
-        //NSLog(@"SENDING FRAME %lld TO COMPRESSOR", _frameCount);
-        CapturedFrameData *newFrameData = [[CapturedFrameData alloc] init];
-        
-        newFrameData.videoPTS = pts;
-        newFrameData.videoDuration = duration;
-        newFrameData.frameNumber = _frameCount;
-        newFrameData.frameTime = _frame_time;
-        newFrameData.videoFrame = videoFrame;
+        CapturedFrameData *newFrameData = frameData.copy;
         [self.instantRecorder.compressor compressFrame:newFrameData];
     }
 }
 
 
--(void)processVideoFrame:(CVPixelBufferRef)videoFrame
+-(void)processVideoFrame:(CapturedFrameData *)frameData
 {
 
     
-    //CVImageBufferRef imageBuffer = frameData.videoFrame;
     
     if (!self.captureRunning)
     {
-        //CVPixelBufferRelease(imageBuffer);
 
         return;
     }
-    CMTime pts;
-    CMTime duration;
-    
-    
-    
-    pts = CMTimeMake((_frame_time - _firstFrameTime)*1000, 1000);
-    duration = CMTimeMake(1, self.captureFPS);
-    
-    /*
-    pts = CMTimeMake(ptsTime*1000000, 1000000);
-    
-    duration = CMTimeMake(1000, self.captureFPS*1000);
-*/
-    //_frameCount++;
-    //_lastFrameTime = _frame_time;
-    
-    
     
     for(id cKey in self.compressors)
     {
@@ -2460,13 +2466,7 @@
             continue;
         }
         
-        CapturedFrameData *newFrameData = [[CapturedFrameData alloc] init];
-        
-        newFrameData.videoPTS = pts;
-        newFrameData.videoDuration = duration;
-        newFrameData.frameNumber = _frameCount;
-        newFrameData.frameTime = _frame_time;
-        newFrameData.videoFrame = videoFrame;
+        CapturedFrameData *newFrameData = frameData.copy;
         
         [compressor compressFrame:newFrameData];
 

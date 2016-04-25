@@ -176,6 +176,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     {
         CMSampleBufferRef audioSample = (__bridge CMSampleBufferRef)object;
         
+        
         [self writeAudioSampleBuffer:audioSample presentationTimeStamp:CMSampleBufferGetOutputPresentationTimeStamp(audioSample)];
         
         //CFRelease(audioSample);
@@ -236,7 +237,9 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
                 ret_val = NO;
                 [self stopProcess];
             }
-            CFRelease(theBuffer);
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+                CFRelease(theBuffer);
+            });
     }
     
     return ret_val;

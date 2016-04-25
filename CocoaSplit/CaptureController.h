@@ -108,6 +108,9 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     NSMutableArray *_screensCache;
     NSMutableArray *_layoutWindows;
     bool _needsIRReset;
+    
+    NSMutableArray *_audioBuffer;
+    
 }
 
 

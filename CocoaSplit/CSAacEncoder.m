@@ -19,37 +19,33 @@
     if (self = [super init])
     {
         encoderQueue = dispatch_queue_create("CSAACEncoderQueue", NULL);
-        _pcmData = NULL;
+        _aSemaphore = dispatch_semaphore_create(0);
+        
+        
     }
     
     return self;
 }
 
--(void)preallocateBufferList:(AudioBufferList *)bufferList
+-(void)setupEncoderBuffer
 {
-    //To avoid doing mallocs every cycle, the AU callback asks us to preallocate memory based on the size of the buffers it receives
-    //If the size changes, we only re-allocate if it is bigger than our preallocated size. If it's smaller we
-    //just "waste" the memory and leave it be.
-    
-    int bufferSize = bufferList->mBuffers[0].mDataByteSize;
-    
-    if (bufferSize > self.preallocatedBuffersize)
-    {
-        _pcmData = malloc(bufferSize*2); //Assuming deinterleaved 2-ch, so allocate enough space for both channels
-        self.preallocatedBuffersize = bufferSize;
-    }
-    
-}
+    TPCircularBufferInit(&_inputBuffer, self.inputASBD->mBytesPerFrame * 4096);
+    TPCircularBufferInit(&_scratchBuffer, self.inputASBD->mBytesPerFrame * 4096);
 
+    dispatch_async(encoderQueue, ^{[self encodeAudio];});
+}
 
 
 -(void) enqueuePCM:(AudioBufferList *)pcmBuffer atTime:(const AudioTimeStamp *)atTime
 {
-    
-    
-    [self preallocateBufferList:pcmBuffer];
-    
+    TPCircularBufferCopyAudioBufferList(&_inputBuffer, pcmBuffer, atTime, kTPCircularBufferCopyAll, NULL);
+    dispatch_semaphore_signal(_aSemaphore);
+}
 
+
+-(void)encodeAudio
+{
+    
     
     if (!self.encoderStarted)
     {
@@ -57,160 +53,135 @@
         self.encoderStarted = YES;
     }
     
-    
-    
-
-    //for now assume Float32, 2 channel, non-interleaved. We have to interleave it outselves here.
-    
-    AudioBuffer buffer0 = pcmBuffer->mBuffers[0];
-    AudioBuffer buffer1 = pcmBuffer->mBuffers[1];
-    Float32 *data0 = buffer0.mData;
-    Float32 *data1 = buffer1.mData;
-    
-    Float32 *writebuf = _pcmData;
-    int channel_size = buffer0.mDataByteSize/sizeof(Float32);
-    
-    int i, u;
-    for(i=u=0; i < channel_size; i++,u+=2)
+    while (1)
     {
-        writebuf[u] = data0[i];
-        writebuf[u+1] = data1[i];
-    }
-    
-    
-    
-    //Do the actual compression on another thread so as not to block AudioUnit callbacks
-    
-    
-    
-
-    
-    
-    
-    
-    dispatch_async(encoderQueue, ^{
-        
-            
-            
-        
-        UInt32 wrote_bytes = 0;
-        UInt32 num_packets = 1;
-        UInt32 outstatus = 0;
-        Float32 *readbuf = _pcmData;
-
-
+        dispatch_semaphore_wait(_aSemaphore, DISPATCH_TIME_FOREVER);
         
         
-       
-
-        UInt32 bufsize = self.preallocatedBuffersize*2; //This should be equal to 2x pcmBuffer->mBuffers[0].mDataByteSize
         
-        
-        UInt32 orig_size = bufsize;
-
-
-
-        UInt32 buffer_size = maxOutputSize;
-        
-        while (true)
+        while (TPCircularBufferPeek(&_inputBuffer, NULL, self.inputASBD) >= 1024)
         {
+            AudioBufferList *inBuffer = TPCircularBufferPrepareEmptyAudioBufferListWithAudioFormat(&_scratchBuffer, self.inputASBD, 1024, NULL);
+            UInt32 inFrameCnt = 1024;
+            AudioTimeStamp atTime;
             
-            void *aacBuffer = malloc(maxOutputSize);
-
-            OSStatus err;
+            TPCircularBufferDequeueBufferListFrames(&_inputBuffer, &inFrameCnt, inBuffer, &atTime, self.inputASBD);
             
-            err = AudioCodecAppendInputData(aacCodec, readbuf, &bufsize, NULL, NULL);
-            
-            
-            wrote_bytes += bufsize;
-            
-            readbuf += bufsize/sizeof(Float32);
-            //reset bufsize for next loop
-            bufsize = orig_size - wrote_bytes;
-            
-            AudioStreamPacketDescription packetDesc;
-            
-            
-            
-            err = AudioCodecProduceOutputPackets(aacCodec, aacBuffer, &buffer_size, &num_packets, &packetDesc, &outstatus);
-            
-            if (err != 0)
+            Float32 *writebuf = malloc(inBuffer->mBuffers[0].mDataByteSize*2);
+            AudioBuffer buffer0 = inBuffer->mBuffers[0];
+            AudioBuffer buffer1 = inBuffer->mBuffers[1];
+            Float32 *data0 = buffer0.mData;
+            Float32 *data1 = buffer1.mData;
+            int channel_size = buffer0.mDataByteSize/sizeof(Float32);
+            int i, u;
+            for(i=u=0; i < channel_size; i++,u+=2)
             {
-                NSLog(@"CODEC PRODUCE OUTPUT ERROR IS %@", [[NSError errorWithDomain:NSOSStatusErrorDomain code:err userInfo:nil] description]);
-                
+                writebuf[u] = data0[i];
+                writebuf[u+1] = data1[i];
             }
             
-            
-            if (outstatus == kAudioCodecProduceOutputPacketNeedsMoreInputData)
-            {
-                free(aacBuffer);
-                break;
+            @autoreleasepool {
+                
+                UInt32 num_packets = 1;
+                UInt32 outstatus = 0;
+                
+                
+                
+                
+                
+                
+                UInt32 bufsize =  inBuffer->mBuffers[0].mDataByteSize*2;//This should be equal to 2x pcmBuffer->mBuffers[0].mDataByteSize
+                
+                
+                
+                
+                
+                UInt32 buffer_size = maxOutputSize;
+                
+                void *aacBuffer = malloc(maxOutputSize);
+                
+                
+                OSStatus err;
+                
+                err = AudioCodecAppendInputData(aacCodec, writebuf, &bufsize, NULL, NULL);
+                
+                free(writebuf);
+                AudioStreamPacketDescription packetDesc;
+                
+                
+                
+                err = AudioCodecProduceOutputPackets(aacCodec, aacBuffer, &buffer_size, &num_packets, &packetDesc, &outstatus);
+                
+                if (err != 0)
+                {
+                    NSLog(@"CODEC PRODUCE OUTPUT ERROR IS %@", [[NSError errorWithDomain:NSOSStatusErrorDomain code:err userInfo:nil] description]);
+                    
+                }
+                
+                
+                if (outstatus == kAudioCodecProduceOutputPacketNeedsMoreInputData)
+                {
+                    NSLog(@"NEED MORE INPUT DATA");
+                    free(aacBuffer);
+                    break;
+                }
+                
+                
+                if (self.encodedReceiver && buffer_size)
+                {
+                    
+                    
+                    CMTime duration = CMTimeMake(1024, self.sampleRate);
+                    uint64_t mach_now = atTime.mHostTime;
+                    
+                    double abs_pts = (double)mach_now/NSEC_PER_SEC;
+                    
+                    CMTime ptsTime = CMTimeMake(abs_pts*1000, 1000);
+                    
+                    CMSampleTimingInfo timeInfo;
+                    
+                    timeInfo.duration = duration;
+                    timeInfo.presentationTimeStamp = ptsTime;
+                    timeInfo.decodeTimeStamp = kCMTimeInvalid;
+                    
+                    CMSampleBufferRef newSampleBuf;
+                    CMSampleBufferRef timingSampleBuf;
+                    CMBlockBufferRef bufferRef;
+                    
+                    
+                    CMBlockBufferCreateWithMemoryBlock(NULL, aacBuffer, buffer_size, kCFAllocatorMalloc, NULL, 0, buffer_size, 0, &bufferRef);
+                    
+                    
+                    CMAudioSampleBufferCreateWithPacketDescriptions(kCFAllocatorDefault, bufferRef, YES, NULL, NULL, cmFormat, 1, ptsTime, &packetDesc, &newSampleBuf);
+                    
+                    
+                    CMSampleBufferCreateCopyWithNewTiming(kCFAllocatorDefault, newSampleBuf, 1, &timeInfo, &timingSampleBuf);
+                    
+                    CFRelease(newSampleBuf);
+                    //The sample buffer retains the block buffer when it is handed over to it, we can release ours.
+                    CFRelease(bufferRef);
+                    
+                    
+                    [self.encodedReceiver captureOutputAudio:nil didOutputSampleBuffer:timingSampleBuf];
+                    
+                    //Individual video compressors retain the buffer until they push it to their output, we can release it now.
+                    CFRelease(timingSampleBuf);
+                    
+                } else {
+                    free(aacBuffer);
+                }
+                
+                
+                
+                buffer_size = maxOutputSize;
+                num_packets = 1;
+                
+                outputSampleCount += 1024;
             }
-
-
-            if (self.encodedReceiver && buffer_size)
-            {
-                
-                
-                CMTime duration = CMTimeMake(1024, self.sampleRate);
-                uint64_t mach_now = mach_absolute_time();
-                double abs_pts = (double)mach_now/NSEC_PER_SEC;
-                abs_pts -= CMTimeGetSeconds(duration);
-
-                CMTime ptsTime = CMTimeMake(abs_pts*1000, 1000);
-                
-                CMSampleTimingInfo timeInfo;
-                
-                timeInfo.duration = duration;
-                timeInfo.presentationTimeStamp = ptsTime;
-                timeInfo.decodeTimeStamp = kCMTimeInvalid;
-                
-                CMSampleBufferRef newSampleBuf;
-                CMSampleBufferRef timingSampleBuf;
-                CMBlockBufferRef bufferRef;
-                
-                
-                CMBlockBufferCreateWithMemoryBlock(NULL, aacBuffer, buffer_size, kCFAllocatorMalloc, NULL, 0, buffer_size, 0, &bufferRef);
-                
-                
-                CMAudioSampleBufferCreateWithPacketDescriptions(kCFAllocatorDefault, bufferRef, YES, NULL, NULL, cmFormat, 1, ptsTime, &packetDesc, &newSampleBuf);
-                
-                
-                //CMAudioSampleBufferCreateReadyWithPacketDescriptions(kCFAllocatorDefault, bufferRef, cmFormat, 1, ptsTime, &packetDesc, &newSampleBuf);
-                
-                CMSampleBufferCreateCopyWithNewTiming(kCFAllocatorDefault, newSampleBuf, 1, &timeInfo, &timingSampleBuf);
-                CFRelease(newSampleBuf);
-                //The sample buffer retains the block buffer when it is handed over to it, we can release ours.
-                CFRelease(bufferRef);
-                
-                
-                [self.encodedReceiver captureOutputAudio:nil didOutputSampleBuffer:timingSampleBuf];
-                //Individual video compressors retain the buffer until they push it to their output, we can release it now.
-                CFRelease(timingSampleBuf);
-                
-            } else {
-                free(aacBuffer);
-            }
-            
-
-            
-            buffer_size = maxOutputSize;
-            num_packets = 1;
-
-            outputSampleCount += 1024;
-            if (wrote_bytes >= orig_size)
-            {
-                break;
-            }
-            
             
         }
-        
-        
-    });
-    
+    }
 }
-
 
 -(void) setupEncoder
 {

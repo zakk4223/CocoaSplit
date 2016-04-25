@@ -166,8 +166,11 @@
             });
         } else {
             dispatch_async(_output_queue, ^{
+                @autoreleasepool {
+                
                 [self.ffmpeg_out stopProcess];
                 self.ffmpeg_out = nil;
+                }
                 dispatch_async(dispatch_get_main_queue(), ^{
                     self.textColor = [NSColor blackColor];
                 });
@@ -494,17 +497,19 @@
                 _consecutive_dropped_frames = 0;
                 
                 dispatch_async(_output_queue, ^{
-                    _p_buffered_frame_size += f_size;
-                    _p_buffered_frame_count++;
-                    
-                    BOOL write_ret = [self.ffmpeg_out writeEncodedData:sendData];
-                    
-                    if (write_ret)
-                    {
-                        _p_output_framecnt++;
-                        _p_buffered_frame_count--;
-                        _p_buffered_frame_size -= f_size;
-                        _p_output_bytes += f_size;
+                    @autoreleasepool {
+                        _p_buffered_frame_size += f_size;
+                        _p_buffered_frame_count++;
+                        
+                        BOOL write_ret = [self.ffmpeg_out writeEncodedData:sendData];
+                        
+                        if (write_ret)
+                        {
+                            _p_output_framecnt++;
+                            _p_buffered_frame_count--;
+                            _p_buffered_frame_size -= f_size;
+                            _p_output_bytes += f_size;
+                        }
                     }
                     
                 });

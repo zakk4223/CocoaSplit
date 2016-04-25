@@ -152,7 +152,6 @@
         return NO;
     }
     
-    [self setAudioData:frameData syncObj:self];
 
     
     if (!_compressor)

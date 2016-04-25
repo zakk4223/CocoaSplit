@@ -105,6 +105,7 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
         self.compressorType = @"AppleVTCompressor";
 
         self.profiles = @[[NSNull null], @"Baseline", @"Main", @"High"];
+        _compressor_queue = dispatch_queue_create("Apple VT Compressor Queue", 0);
     }
     
     return self;
@@ -163,6 +164,9 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
         return NO;
     }
 
+    
+    
+        
     if (!_compression_session)
     {
         
@@ -209,8 +213,6 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     
     
     CVPixelBufferRelease(imageBuffer);
-    
-    [self setAudioData:frameData syncObj:self];
 
     VTCompressionSessionEncodeFrame(_compression_session, converted_frame, frameData.videoPTS, frameData.videoDuration, frameProperties, (__bridge_retained void *)(frameData), NULL);
     
@@ -218,7 +220,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     {
         CFRelease(frameProperties);
     }
-    
+
     
     return YES;
 }

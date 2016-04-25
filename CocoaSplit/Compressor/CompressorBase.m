@@ -72,55 +72,6 @@
 
 
 
--(void) addAudioData:(CMSampleBufferRef)audioData
-{
-    
-   if ([self hasOutputs] && audioData && _audioBuffer)
-   {
-       @synchronized(self)
-       {
-
-           [_audioBuffer addObject:(__bridge id)audioData];
-       }
-   }
-}
-
-
--(void) setAudioData:(CapturedFrameData *)forFrame syncObj:(id)syncObj
-{
-
-    NSUInteger audioConsumed = 0;
-    @synchronized(syncObj)
-    {
-        NSUInteger audioBufferSize = [_audioBuffer count];
-        
-        for (int i = 0; i < audioBufferSize; i++)
-        {
-            CMSampleBufferRef audioData = (__bridge CMSampleBufferRef)[_audioBuffer objectAtIndex:i];
-            
-            CMTime audioTime = CMSampleBufferGetOutputPresentationTimeStamp(audioData);
-            
-            
-            
-            
-            if (CMTIME_COMPARE_INLINE(audioTime, <=, forFrame.videoPTS))
-            {
-                
-                audioConsumed++;
-                [forFrame.audioSamples addObject:(__bridge id)audioData];
-            } else {
-                break;
-            }
-        }
-        
-        if (audioConsumed > 0)
-        {
-            [_audioBuffer removeObjectsInRange:NSMakeRange(0, audioConsumed)];
-        }
-        
-    }
- 
-}
 
 
 -(void) reset

@@ -18,13 +18,33 @@
 @synthesize avcodec_pkt = _avcodec_pkt;
 
 
+
+-(instancetype) copyWithZone:(NSZone *)zone
+{
+    
+    CapturedFrameData *copy = [[[self class] allocWithZone:zone] init];
+    copy.frameNumber = self.frameNumber;
+    copy.frameTime = self.frameTime;
+    copy.videoFrame = self.videoFrame;
+    copy.encoderData = self.encoderData;
+    copy.isKeyFrame = self.isKeyFrame;
+    copy.audioSamples = self.audioSamples;
+    copy.videoPTS = self.videoPTS;
+    copy.videoDuration = self.videoDuration;
+    copy.encodedSampleBuffer = self.encodedSampleBuffer;
+    copy.avcodec_pkt = self.avcodec_pkt;
+    copy.avcodec_ctx = self.avcodec_ctx;
+    return copy;
+}
+
+
 -(id)init
 {
     if (self = [super init])
     {
         _videoFrame = nil;
         self.frameNumber = 0;
-        self.audioSamples = [[NSMutableArray alloc] init];
+        //self.audioSamples = [[NSMutableArray alloc] init];
     }
     
     return self;
@@ -52,7 +72,8 @@
         av_free(_avcodec_pkt);
 
     }
-	
+
+    
 	self.audioSamples = nil;
 }
 
