@@ -686,6 +686,7 @@
        
        self.transitionDirections = @[kCATransitionFromTop, kCATransitionFromRight, kCATransitionFromBottom, kCATransitionFromLeft];
        self.useInstantRecord = YES;
+       self.instantRecordActive = YES;
        self.instantRecordBufferDuration = 60;
        
        
@@ -890,7 +891,6 @@
     
     if ([layout isEqual:self.livePreviewView.sourceLayout])
     {
-        NSLog(@"LAYOUT CHANNGED");
         
         [self resetInstantRecorder];
     }
@@ -1225,9 +1225,7 @@
         {
             _needsIRReset = YES;
         } else {
-            NSLog(@"RESETTING IR COMPRESSOR");
             [irCompressor reset];
-            NSLog(@"RESET IR COMPRESSOR DONE");
         }
 
     }
@@ -1409,6 +1407,8 @@
     {
         self.useInstantRecord = [[saveRoot valueForKey:@"useInstantRecord"] boolValue];
     }
+    
+    self.instantRecordActive = YES;
     
     if (saveRoot[@"instantRecordBufferDuration"])
     {
@@ -1618,8 +1618,10 @@
     if (useInstantRecord)
     {
         [self setupInstantRecorder];
+        self.instantRecordActive = YES;
     } else {
         self.instantRecorder = nil;
+        self.instantRecordActive = NO;
     }
 }
 
@@ -2440,6 +2442,10 @@
     {
         CapturedFrameData *newFrameData = frameData.copy;
         [self.instantRecorder.compressor compressFrame:newFrameData];
+        if (self.instantRecorder.compressor.errored)
+        {
+            self.instantRecordActive = NO;
+        }
     }
 }
 
@@ -3218,7 +3224,7 @@
 
 - (IBAction)doInstantRecord:(id)sender
 {
-    if (self.instantRecorder)
+    if (self.instantRecordActive && self.instantRecorder)
     {
         
         NSString *directory = self.instantRecordDirectory;

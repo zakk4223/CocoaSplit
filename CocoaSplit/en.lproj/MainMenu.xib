@@ -1603,6 +1603,7 @@
                                         </buttonCell>
                                         <connections>
                                             <action selector="doInstantRecord:" target="816" id="VVT-DK-grI"/>
+                                            <binding destination="816" name="enabled" keyPath="self.instantRecordActive" id="2JQ-Ts-KOO"/>
                                         </connections>
                                     </button>
                                 </subviews>
