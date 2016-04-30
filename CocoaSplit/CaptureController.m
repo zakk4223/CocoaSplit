@@ -2436,7 +2436,7 @@
     
     
     
-    if (self.instantRecorder && self.instantRecorder.compressor)
+    if (self.instantRecorder && self.instantRecorder.compressor && !self.instantRecorder.compressor.errored)
     {
         CapturedFrameData *newFrameData = frameData.copy;
         [self.instantRecorder.compressor compressFrame:newFrameData];

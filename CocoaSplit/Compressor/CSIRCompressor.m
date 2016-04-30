@@ -123,13 +123,14 @@
 
 -(void) reset
 {
-    self.errored = NO;
     if (_compressor)
     {
         [_compressor reset];
     }
     
     _compressor = nil;
+    self.errored = NO;
+
     
     
     
