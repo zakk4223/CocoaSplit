@@ -639,8 +639,7 @@
     }
 
     _noSceneTransactions = NO;
-    self.canvas_height = layout.canvas_height;
-    self.canvas_width = layout.canvas_width;
+    [self updateCanvasWidth:layout.canvas_width height:layout.canvas_height];
     self.frameRate = layout.frameRate;
     
 }
