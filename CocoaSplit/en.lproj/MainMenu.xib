@@ -653,7 +653,7 @@
                                                                 <outlet property="menu" destination="Wwr-bS-1EX" id="3mz-6W-mQM"/>
                                                             </connections>
                                                         </scrollView>
-                                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rzE-ZM-Eom">
+                                                        <button verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rzE-ZM-Eom">
                                                             <rect key="frame" x="684" y="233" width="126" height="28"/>
                                                             <buttonCell key="cell" type="push" title="Swap" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="XZO-uo-5LB">
                                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -666,6 +666,7 @@
                                                         </button>
                                                     </subviews>
                                                     <constraints>
+                                                        <constraint firstItem="rzE-ZM-Eom" firstAttribute="leading" secondItem="b93-ds-aBr" secondAttribute="trailing" constant="45" id="FKE-zH-nIL"/>
                                                         <constraint firstItem="CRm-nK-baf" firstAttribute="leading" secondItem="3290" secondAttribute="leading" constant="17" id="Gl1-qV-X93"/>
                                                         <constraint firstItem="b93-ds-aBr" firstAttribute="leading" secondItem="CRm-nK-baf" secondAttribute="leading" id="HRU-yn-Vms"/>
                                                         <constraint firstItem="3nh-Gb-0rO" firstAttribute="top" secondItem="b93-ds-aBr" secondAttribute="top" id="PeZ-mA-y9Q"/>
