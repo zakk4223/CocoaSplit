@@ -112,9 +112,7 @@
         
         self.compressorType = @"Instant Replay Compressor";
         self.tryAppleHardware = YES;
-        self.useAppleH264 = YES;
-        
-        
+        self.useNone = YES;
     }
     
     return self;
