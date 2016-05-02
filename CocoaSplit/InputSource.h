@@ -232,6 +232,7 @@ typedef enum resize_style_t {
 -(void)updateRotationTransform;
 -(void) directSize:(CGFloat)width height:(CGFloat)height;
 -(bool)isDifferentInput:(InputSource *)from;
+-(void)addedToLayout;
 
 
 

@@ -765,16 +765,6 @@
            dispatch_strict_flag = 0;
        }
        
-       /*
-       _dispatch_timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, dispatch_strict_flag, _main_capture_queue);
-       
-       dispatch_source_set_timer(_dispatch_timer, DISPATCH_TIME_NOW, _frame_interval, 0);
-       
-       dispatch_source_set_event_handler(_dispatch_timer, ^{[self newFrameDispatched];});
-       
-       dispatch_resume(_dispatch_timer);
-       */
-       
        _audio_statistics_timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
        
        dispatch_source_set_timer(_audio_statistics_timer, DISPATCH_TIME_NOW, 0.10*NSEC_PER_SEC, 0);

@@ -401,16 +401,6 @@ static NSArray *_sourceTypes = nil;
         self.cornerRadius = [aDecoder decodeFloatForKey:@"cornerRadius"];
         self.layoutPosition = self.layer.frame;
         
-        InputSource *parentInput = [aDecoder decodeObjectForKey:@"parentInput"];
-        if (parentInput)
-        {
-            
-            [parentInput.layer addSublayer:self.layer];
-            [parentInput.attachedInputs addObject:self];
-            self.parentInput = parentInput;
-
-            
-        }
 
         
         self.startColor = [aDecoder decodeObjectForKey:@"gradientStartColor"];
@@ -447,8 +437,19 @@ static NSArray *_sourceTypes = nil;
             self.transitionEnabled = [aDecoder decodeBoolForKey:@"transitionEnabled"];
         }
         
-        
         [CATransaction commit];
+
+        InputSource *parentInput = [aDecoder decodeObjectForKey:@"parentInput"];
+        self.parentInput = parentInput;
+        
+        if (self.parentInput)
+        {
+            
+            [self.parentInput.layer addSublayer:self.layer];
+            [self.parentInput.attachedInputs addObject:self];
+        }
+
+        
     }
     
     return self;
@@ -456,6 +457,16 @@ static NSArray *_sourceTypes = nil;
 
 
 
+-(void)addedToLayout
+{
+    if (self.parentInput)
+    {
+        
+        [self.parentInput.layer addSublayer:self.layer];
+        [self.parentInput.attachedInputs addObject:self];
+    }
+
+}
 -(CGRect)globalLayoutPosition
 {
     return [self.sourceLayout.rootLayer convertRect:self.layoutPosition fromLayer:self.layer.superlayer];
@@ -1917,6 +1928,7 @@ static NSArray *_sourceTypes = nil;
 -(void)attachInput:(InputSource *)toAttach
 {
     
+    
     if (toAttach.parentInput)
     {
         if (toAttach.parentInput == self)
@@ -1952,10 +1964,13 @@ static NSArray *_sourceTypes = nil;
     
     return ret;
 }
+
+
 -(void)makeSublayerOfLayer:(CALayer *)parentLayer
 {
     
     [CATransaction begin];
+    
     [parentLayer addSublayer:self.layer];
     //translate the position to the new sublayers coordinates
     
@@ -1965,13 +1980,11 @@ static NSArray *_sourceTypes = nil;
     for (CALayer *curr in [layers reverseObjectEnumerator])
     {
       //We start at the layer just before the canvas layer and the point we are converting is in canvas coordinate space
-        
         newPosition = [curr convertPoint:newPosition fromLayer:curr.superlayer];
     }
     
     NSRect oldFrame = self.layer.frame;
     oldFrame.origin = newPosition;
-    
     self.layer.frame = oldFrame;
     [CATransaction commit];
 

@@ -759,12 +759,18 @@
         }
         if (eSrc && !onlyAdd)
         {
-            [eSrc.layer.superlayer addSublayer:src.layer];
+            if (!src.layer.superlayer)
+            {
+                [eSrc.layer.superlayer addSublayer:src.layer];
+            }
             eSrc.layer.hidden = YES;
             [undoSources addObject:eSrc];
             eSrc.refCount = 0;
         } else {
-            [self.rootLayer addSublayer:src.layer];
+            if (!src.layer.superlayer)
+            {
+                [self.rootLayer addSublayer:src.layer];
+            }
         }
         [NSApp registerMIDIResponder:src];
         [self incrementInputRef:src];
@@ -843,8 +849,10 @@
             }
             
             src.layer.hidden = YES;
-            [eSrc.layer.superlayer addSublayer:src.layer];
-            
+            if (!src.layer.superlayer)
+            {
+                [eSrc.layer.superlayer addSublayer:src.layer];
+            }
             [CATransaction flush];
             
             [CATransaction begin];
@@ -878,9 +886,11 @@
             }
             src.layer.hidden = YES;
             
-            
-            [self.rootLayer addSublayer:src.layer];
-            
+            if (!src.layer.superlayer)
+            {
+                [self.rootLayer addSublayer:src.layer];
+            }
+
             [CATransaction flush];
             [CATransaction begin];
             if (rTrans)
