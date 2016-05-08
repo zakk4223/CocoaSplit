@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9060" systemVersion="15C50" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9060"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CSLibraryInputItemViewController">
@@ -18,7 +18,6 @@
             <subviews>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dKB-El-5wv">
                     <rect key="frame" x="113" y="6" width="135" height="60"/>
-                    <animations/>
                     <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="center" title="Multiline Label" id="CSG-Y9-YdX">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -34,7 +33,6 @@
                         <constraint firstAttribute="width" constant="32" id="NCl-xD-4CV"/>
                         <constraint firstAttribute="height" constant="32" id="aa4-Af-DCo"/>
                     </constraints>
-                    <animations/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="p4Y-Ca-Z9G"/>
                     <connections>
                         <binding destination="6Ke-IM-eF7" name="value" keyPath="selection.inputImage" id="KYo-Va-yzp"/>
@@ -49,7 +47,6 @@
                 <constraint firstItem="Y2D-ot-fbg" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="20" symbolic="YES" id="n6o-qI-Y1A"/>
                 <constraint firstItem="dKB-El-5wv" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" id="vQf-eg-Utn"/>
             </constraints>
-            <animations/>
             <point key="canvasLocation" x="354" y="289"/>
         </customView>
         <objectController id="6Ke-IM-eF7">

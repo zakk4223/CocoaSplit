@@ -56,7 +56,8 @@ static NSArray *_sourceTypes = nil;
 {
     [CATransaction begin];
     InputSource *newSource = [[InputSource allocWithZone:zone] init];
-    
+    newSource.name = _editedName;
+
     newSource.videoInput = self.videoInput;
     [newSource registerVideoInput:self.videoInput];
     newSource->_currentLayer = [self.videoInput layerForInput:newSource];
@@ -66,7 +67,7 @@ static NSArray *_sourceTypes = nil;
     newSource.rotationAngleY = self.rotationAngleY;
     newSource.rotationAngleX = self.rotationAngleX;
     newSource.opacity =  self.opacity;
-    newSource.name = self.name;
+    
     newSource.depth = self.depth;
     newSource.crop_top = self.crop_top;
     newSource.crop_bottom = self.crop_bottom;
@@ -125,7 +126,7 @@ static NSArray *_sourceTypes = nil;
     [aCoder encodeFloat:self.rotationAngleY forKey:@"rotationAngleY"];
 
     [aCoder encodeFloat:self.opacity forKey:@"opacity"];
-    [aCoder encodeObject:self.name forKey:@"name"];
+    [aCoder encodeObject:_editedName forKey:@"name"];
     [aCoder encodeFloat:self.depth forKey:@"CAdepth"];
     [aCoder encodeFloat:self.crop_top forKey:@"CAcrop_top"];
     [aCoder encodeFloat:self.crop_bottom forKey:@"CAcrop_bottom"];
@@ -476,6 +477,7 @@ static NSArray *_sourceTypes = nil;
 {
     forInput.inputSource = self;
     forInput.isLive = self.is_live;
+    //[forInput addObserver:self forKeyPath:@"captureName" options:NSKeyValueChangeNewKey context:NULL];
     [forInput createNewLayerForInput:self];
 
 }
@@ -489,6 +491,7 @@ static NSArray *_sourceTypes = nil;
     
     forInput.isLive = NO;
     [forInput removeLayerForInput:self];
+    //[forInput removeObserver:self forKeyPath:@"captureName"];
     
 }
 
@@ -1303,21 +1306,34 @@ static NSArray *_sourceTypes = nil;
     
     [self registerUndoForProperty:@"name" withAction:@"Set Name"];
     
+    _name = name;
+
+
+    _editedName = name;
+    
+    if (!_name)
+    {
+        if (self.videoInput)
+        {
+            _name = self.videoInput.captureName;
+            _editedName = nil;
+        }
+    }
+    
+    if (!_name)
+    {
+        _name = @"No Name";
+        _editedName = nil;
+    }
 
     [CATransaction begin];
     self.layer.name = name;
     [CATransaction commit];
-    _name = name;
 }
 
 
 -(NSString *)name
 {
-    if (!_name && self.videoInput)
-    {
-        return self.videoInput.captureName;
-    }
-    
     return _name;
 }
 
@@ -2101,6 +2117,8 @@ static NSArray *_sourceTypes = nil;
 
  
     _selectedVideoType = selectedVideoType;
+    self.name = _editedName;
+    
  }
 
 -(NSData *)saveData
@@ -2864,8 +2882,11 @@ static NSArray *_sourceTypes = nil;
         [self.sourceLayout.undoManager setActionName:@"Constraint Change"];
 
         [self buildLayerConstraints];
+    } else if ([keyPath isEqualToString:@"captureName"]) {
+        self.name = _editedName;
     }
 }
+
 
 
 -(void)setClonedFromInput:(InputSource *)clonedFromInput

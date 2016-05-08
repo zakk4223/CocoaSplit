@@ -37,7 +37,7 @@
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = Paths;
-			dstSubfolderSpec = 13;
+			dstSubfolderSpec = 7;
 			files = (
 				34F2FF2B1B8AAAC1000B5964 /* arc.py in CopyFiles */,
 				34E301141B6515C9000C16DB /* circle.py in CopyFiles */,

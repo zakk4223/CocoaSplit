@@ -16,7 +16,7 @@ plugin_base = PluginBase(package='shapeplugins')
 
 library_dirs = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSAllDomainsMask - NSSystemDomainMask, YES)
 plugin_dirs = map(lambda x: x + "/Application Support/CocoaSplit/Plugins/Paths", library_dirs)
-plugin_dirs.append(NSBundle.bundleForClass_(objc.lookUpClass("CSShapeCapture").class__()).builtInPlugInsPath() + "/Paths")
+plugin_dirs.append(NSBundle.bundleForClass_(objc.lookUpClass("CSShapeCapture").class__()).resourcePath() + "/Paths")
 plugin_source = plugin_base.make_plugin_source(searchpath=plugin_dirs)
 
 

@@ -1197,6 +1197,15 @@
 }
 
 
+-(void)undoAddInput:(NSString *)uuid
+{
+    InputSource *toDelete = [self.sourceLayout inputForUUID:uuid];
+    if (toDelete)
+    {
+        [self deleteInput:toDelete];
+    }
+}
+
 
 - (IBAction)addInputSource:(id)sender
 {
@@ -1206,7 +1215,7 @@
         InputSource *newSource = [[InputSource alloc] init];
         
         [self.sourceLayout addSource:newSource];
-        [[self.undoManager prepareWithInvocationTarget:self] deleteInput:newSource];
+        [[self.undoManager prepareWithInvocationTarget:self] undoAddInput:newSource.uuid];
         [self spawnInputSettings:newSource atRect:NSZeroRect];
     }
 }
