@@ -51,7 +51,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @class PreviewView;
 
 
-@interface CaptureController : NSObject <NSMenuDelegate, MIKMIDIMappableResponder, MIKMIDIResponder, MIKMIDIMappingGeneratorDelegate, CSTimerSourceProtocol, NSCollectionViewDelegate> {
+@interface CaptureController : NSObject <NSTableViewDelegate, NSMenuDelegate, MIKMIDIMappableResponder, MIKMIDIResponder, MIKMIDIMappingGeneratorDelegate, CSTimerSourceProtocol, NSCollectionViewDelegate> {
     
     
     NSArray *_inputIdentifiers;
@@ -359,6 +359,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(void)openBuiltinLayoutPopover:(NSView *)sender spawnRect:(NSRect)spawnRect forLayout:(SourceLayout *)layout;
 
 
+@property (weak) IBOutlet NSTableView *inputTableView;
 
 @property (weak) IBOutlet NSTableView *outputTableView;
 - (IBAction)outputEditClicked:(id)sender;
@@ -395,6 +396,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 - (IBAction)inputTableControlClick:(NSSegmentedControl *)sender;
 
+-(void) resetInputTableHighlights;
 
 
 

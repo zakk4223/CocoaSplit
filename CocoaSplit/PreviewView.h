@@ -53,6 +53,8 @@
     NSPopover *_layoutpopOver;
     CSPreviewOverlayView *_overlayView;
     bool _inDrag;
+    NSMutableDictionary *_highlightedSourceMap;
+    
     
     
     
@@ -109,6 +111,12 @@
 -(NSRect)windowRectforWorldRect:(NSRect)worldRect;
 -(NSArray *)resizeRectsForSource:(InputSource *)inputSource withExtra:(float)withExtra;
 -(void)addInputSourceWithInput:(InputSource *)source;
+-(void) highlightSource:(InputSource *)source;
+-(void)stopHighlightingSource:(InputSource *)source;
+-(void)stopHighlightingAllSources;
+
+
+
 
 
 

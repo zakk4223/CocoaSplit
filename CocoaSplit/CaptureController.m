@@ -327,6 +327,12 @@
     
     SourceLayout *layout;
     
+    if (tableView == self.inputTableView)
+    {
+        return [tableView makeViewWithIdentifier:@"inputTableCellView" owner:tableView];
+    }
+    
+    
     if (tableView.tag == 0)
     {
         layout = self.stagingPreviewView.sourceLayout;
@@ -2281,6 +2287,38 @@
         
     }];
 }
+
+-(void) resetInputTableHighlights
+{
+    [self.activePreviewView stopHighlightingAllSources];
+    
+    if (self.inputTableSelectionIndexes)
+    {
+        NSArray *selectedInputs = [self.activeInputsArrayController.arrangedObjects objectsAtIndexes:self.inputTableSelectionIndexes];
+
+        for (InputSource *input in selectedInputs)
+        {
+            [self.activePreviewView highlightSource:input];
+        }
+    }
+}
+
+
+-(void) tableViewSelectionDidChange:(NSNotification *)notification
+{
+    NSTableView *table = notification.object;
+    
+    if (table == self.inputTableView)
+    {
+        NSArray *selectedInputs = [self.activeInputsArrayController.arrangedObjects objectsAtIndexes:self.inputTableSelectionIndexes];
+        [self.activePreviewView stopHighlightingAllSources];
+        for (InputSource *input in selectedInputs)
+        {
+            [self.activePreviewView highlightSource:input];
+        }
+    }
+}
+
 
 - (IBAction)inputTableControlClick:(NSSegmentedControl *)sender
 {

@@ -7,7 +7,6 @@
 //
 
 #import "CSAddInputViewController.h"
-#import "CSAddInputTypeViewController.h"
 #import "NSView+NSLayoutConstraintFilter.h"
 #import "CSCaptureSourceProtocol.h"
 #import "CSPluginServices.h"

@@ -27,6 +27,7 @@
                 <outlet property="editorPopover" destination="pVG-uK-v8x" id="Z4y-xI-k5M"/>
                 <outlet property="exportLayoutMenu" destination="Aks-2j-maL" id="SL3-RU-b4a"/>
                 <outlet property="extrasMenu" destination="wPc-B9-L1T" id="Ysq-1k-pbF"/>
+                <outlet property="inputTableView" destination="oGS-q4-Bd2" id="adm-Xd-jbN"/>
                 <outlet property="layoutCollectionView" destination="MEg-xk-wZF" id="qZn-W5-0en"/>
                 <outlet property="liveFullScreenMenu" destination="oei-ah-Eqx" id="3Ot-ve-qp2"/>
                 <outlet property="livePreviewView" destination="79f-hz-x80" id="iR0-Am-BlN"/>
@@ -664,7 +665,7 @@
                                                                                 </textFieldCell>
                                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                 <prototypeCellViews>
-                                                                                    <tableCellView id="ZMl-VY-rhs">
+                                                                                    <tableCellView identifier="inputTableCellView" id="ZMl-VY-rhs">
                                                                                         <rect key="frame" x="1" y="1" width="328" height="20"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                         <subviews>
@@ -690,6 +691,7 @@
                                                                         <connections>
                                                                             <binding destination="gNT-pk-SC6" name="content" keyPath="arrangedObjects" id="pie-1l-2Re"/>
                                                                             <binding destination="816" name="selectionIndexes" keyPath="self.inputTableSelectionIndexes" previousBinding="pie-1l-2Re" id="kzT-lt-Paw"/>
+                                                                            <outlet property="delegate" destination="816" id="UtV-za-VmP"/>
                                                                         </connections>
                                                                     </tableView>
                                                                 </subviews>

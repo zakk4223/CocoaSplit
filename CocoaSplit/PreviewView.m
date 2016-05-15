@@ -980,14 +980,74 @@
         }
         
         _overlayView.parentSource = self.mousedSource;
+        
+        if (self.mousedSource)
+        {
+            [self stopHighlightingSource:self.mousedSource];
+        } else {
+            [self.controller resetInputTableHighlights];
+        }
     }
-    
-    
-    
 }
 
 
 
+
+-(void) highlightSource:(InputSource *)source
+{
+    if (!_highlightedSourceMap)
+    {
+        _highlightedSourceMap = [[NSMutableDictionary alloc] init];
+    }
+    
+    
+    NSString *srcUUID = source.uuid;
+    
+    InputSource *realSrc = [self.sourceLayout inputForUUID:srcUUID];
+    if (!_highlightedSourceMap[srcUUID] && realSrc)
+    {
+        CSPreviewOverlayView *oview = [[CSPreviewOverlayView alloc] init];
+        oview.renderControls = NO;
+        oview.previewView = self;
+        oview.parentSource = realSrc;
+        _highlightedSourceMap[srcUUID] = oview;
+    }
+}
+
+
+-(void)stopHighlightingSource:(InputSource *)source
+{
+    if (!_highlightedSourceMap)
+    {
+        _highlightedSourceMap = [[NSMutableDictionary alloc] init];
+    }
+
+    NSString *srcUUID = source.uuid;
+    
+    if (_highlightedSourceMap[srcUUID])
+    {
+        CSPreviewOverlayView *oview = _highlightedSourceMap[srcUUID];
+        [oview removeFromSuperview];
+        [_highlightedSourceMap removeObjectForKey:srcUUID];
+    }
+}
+
+-(void)stopHighlightingAllSources
+{
+    if (!_highlightedSourceMap)
+    {
+        _highlightedSourceMap = [[NSMutableDictionary alloc] init];
+    }
+    for (NSString *key in _highlightedSourceMap)
+    {
+        CSPreviewOverlayView *oview = _highlightedSourceMap[key];
+        if (oview)
+        {
+            [oview removeFromSuperview];
+        }
+    }
+    [_highlightedSourceMap removeAllObjects];
+}
 
 
 - (IBAction)moveInputUp:(id)sender
@@ -1588,6 +1648,8 @@
 -(void)purgeConfigForInput:(InputSource *)src
 {
     NSString *uuid = src.uuid;
+    
+    [self stopHighlightingSource:src];
     
     NSWindow *cWindow = [self.activeConfigWindows objectForKey:uuid];
     InputPopupControllerViewController *cController = [self.activeConfigControllers objectForKey:uuid];
