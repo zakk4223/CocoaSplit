@@ -22,6 +22,7 @@
         <customObject id="816" customClass="CaptureController">
             <connections>
                 <outlet property="AudioDeviceArrayController" destination="896" id="H2R-qR-lrz"/>
+                <outlet property="activeInputsArrayController" destination="gNT-pk-SC6" id="Mce-4l-j7a"/>
                 <outlet property="canvasSplitView" destination="EvN-9x-8Di" id="Y7U-Zu-lP3"/>
                 <outlet property="editorPopover" destination="pVG-uK-v8x" id="Z4y-xI-k5M"/>
                 <outlet property="exportLayoutMenu" destination="Aks-2j-maL" id="SL3-RU-b4a"/>
@@ -577,33 +578,6 @@
                                                                 <constraint firstItem="wwd-Bm-G7P" firstAttribute="leading" secondItem="6mG-LN-iRu" secondAttribute="leading" constant="20" symbolic="YES" id="wAc-ib-RGL"/>
                                                             </constraints>
                                                         </customView>
-                                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CRm-nK-baf">
-                                                            <rect key="frame" x="12" y="287" width="95" height="28"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" constant="85" id="c6K-yl-ECN"/>
-                                                            </constraints>
-                                                            <buttonCell key="cell" type="push" title="New Source" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="NS1-x6-L1C">
-                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                <font key="font" metaFont="smallSystem"/>
-                                                            </buttonCell>
-                                                            <connections>
-                                                                <binding destination="816" name="target" keyPath="self.activePreviewView" id="PWf-cL-nWH">
-                                                                    <dictionary key="options">
-                                                                        <string key="NSSelectorName">addInputSource:</string>
-                                                                    </dictionary>
-                                                                </binding>
-                                                            </connections>
-                                                        </button>
-                                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="84m-c0-kOj">
-                                                            <rect key="frame" x="105" y="287" width="85" height="28"/>
-                                                            <buttonCell key="cell" type="push" title="New layout" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qt9-wK-gDI">
-                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                <font key="font" metaFont="smallSystem"/>
-                                                            </buttonCell>
-                                                            <connections>
-                                                                <action selector="openLayoutPopover:" target="816" id="z23-MZ-uVT"/>
-                                                            </connections>
-                                                        </button>
                                                         <button verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3nh-Gb-0rO">
                                                             <rect key="frame" x="684" y="261" width="126" height="28"/>
                                                             <constraints>
@@ -665,13 +639,13 @@
                                                             </connections>
                                                         </button>
                                                         <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="22" horizontalPageScroll="10" verticalLineScroll="22" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xCI-lO-DoN">
-                                                            <rect key="frame" x="311" y="17" width="333" height="268"/>
+                                                            <rect key="frame" x="311" y="35" width="333" height="250"/>
                                                             <clipView key="contentView" ambiguous="YES" id="NTx-cA-TVw">
-                                                                <rect key="frame" x="1" y="1" width="331" height="266"/>
+                                                                <rect key="frame" x="1" y="1" width="331" height="248"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <subviews>
                                                                     <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="none" columnReordering="NO" columnSelection="YES" columnResizing="NO" autosaveColumns="NO" rowHeight="20" rowSizeStyle="automatic" viewBased="YES" id="oGS-q4-Bd2">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="331" height="266"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="331" height="248"/>
                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                         <size key="intercellSpacing" width="3" height="2"/>
                                                                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -715,13 +689,14 @@
                                                                         </tableColumns>
                                                                         <connections>
                                                                             <binding destination="gNT-pk-SC6" name="content" keyPath="arrangedObjects" id="pie-1l-2Re"/>
+                                                                            <binding destination="816" name="selectionIndexes" keyPath="self.inputTableSelectionIndexes" previousBinding="pie-1l-2Re" id="kzT-lt-Paw"/>
                                                                         </connections>
                                                                     </tableView>
                                                                 </subviews>
                                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </clipView>
                                                             <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="zW4-eP-q7d">
-                                                                <rect key="frame" x="1" y="252" width="331" height="15"/>
+                                                                <rect key="frame" x="1" y="-14" width="0.0" height="15"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                             </scroller>
                                                             <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="4hc-4Q-t0I">
@@ -729,18 +704,40 @@
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                             </scroller>
                                                         </scrollView>
+                                                        <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lOg-Ii-e4u">
+                                                            <rect key="frame" x="311" y="16" width="333" height="21"/>
+                                                            <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" style="smallSquare" trackingMode="momentary" id="Hmn-fo-x09">
+                                                                <font key="font" metaFont="smallSystem"/>
+                                                                <segments>
+                                                                    <segment image="NSAddTemplate"/>
+                                                                    <segment image="NSRemoveTemplate" tag="1"/>
+                                                                    <segment image="NSActionTemplate">
+                                                                        <nil key="label"/>
+                                                                    </segment>
+                                                                    <segment width="256" enabled="NO">
+                                                                        <nil key="label"/>
+                                                                    </segment>
+                                                                </segments>
+                                                                <connections>
+                                                                    <action selector="inputTableControlClick:" target="816" id="RU3-PG-QHp"/>
+                                                                </connections>
+                                                            </segmentedCell>
+                                                        </segmentedControl>
+                                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="84m-c0-kOj">
+                                                            <rect key="frame" x="12" y="282" width="85" height="28"/>
+                                                            <buttonCell key="cell" type="push" title="New layout" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qt9-wK-gDI">
+                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                <font key="font" metaFont="smallSystem"/>
+                                                            </buttonCell>
+                                                            <connections>
+                                                                <action selector="openLayoutPopover:" target="816" id="z23-MZ-uVT"/>
+                                                            </connections>
+                                                        </button>
                                                     </subviews>
                                                     <constraints>
-                                                        <constraint firstItem="CRm-nK-baf" firstAttribute="leading" secondItem="3290" secondAttribute="leading" constant="17" id="Gl1-qV-X93"/>
-                                                        <constraint firstItem="b93-ds-aBr" firstAttribute="leading" secondItem="CRm-nK-baf" secondAttribute="leading" id="HRU-yn-Vms"/>
-                                                        <constraint firstItem="b93-ds-aBr" firstAttribute="top" secondItem="CRm-nK-baf" secondAttribute="bottom" constant="8" symbolic="YES" id="RIq-2y-VNl"/>
                                                         <constraint firstAttribute="bottom" secondItem="b93-ds-aBr" secondAttribute="bottom" constant="17" id="SHp-BN-Abf"/>
-                                                        <constraint firstItem="84m-c0-kOj" firstAttribute="leading" secondItem="CRm-nK-baf" secondAttribute="trailing" constant="8" symbolic="YES" id="awi-jp-OHn"/>
                                                         <constraint firstItem="3nh-Gb-0rO" firstAttribute="centerX" secondItem="6mG-LN-iRu" secondAttribute="centerX" id="co8-Qv-d4P"/>
-                                                        <constraint firstItem="CRm-nK-baf" firstAttribute="top" secondItem="3290" secondAttribute="top" constant="3" id="hOd-DH-ssC"/>
-                                                        <constraint firstItem="CRm-nK-baf" firstAttribute="baseline" secondItem="84m-c0-kOj" secondAttribute="baseline" id="iem-7E-PUe"/>
                                                         <constraint firstAttribute="trailing" secondItem="6mG-LN-iRu" secondAttribute="trailing" constant="-3" id="kV7-4S-rOy"/>
-                                                        <constraint firstItem="CRm-nK-baf" firstAttribute="top" secondItem="84m-c0-kOj" secondAttribute="top" id="msv-gr-lPh"/>
                                                         <constraint firstAttribute="bottom" secondItem="6mG-LN-iRu" secondAttribute="bottom" constant="77" id="way-tT-oOH"/>
                                                     </constraints>
                                                 </view>
@@ -1901,5 +1898,7 @@ MgA3AEEARwBQAFcAXABkAHkAewB9AH8AgQCLAJAAlQCgAKMApQCnAKkArgC5AMIAygDNANYA2wDoAOwA
     </objects>
     <resources>
         <image name="NSActionTemplate" width="14" height="14"/>
+        <image name="NSAddTemplate" width="11" height="11"/>
+        <image name="NSRemoveTemplate" width="11" height="11"/>
     </resources>
 </document>

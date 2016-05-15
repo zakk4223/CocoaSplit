@@ -22,6 +22,7 @@
 #import "CSNotifications.h"
 #import "PluginManagerWindowController.h"
 #import "CreateLayoutViewController.h"
+#import "CSAddInputViewController.h"
 #import "CAMultiAudioEngine.h"
 #import "CSAnimationRunnerObj.h"
 #import "CSAnimationChooserViewController.h"
@@ -101,6 +102,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     float _render_time_total;
     int _renderedFrames;
     
+    NSPopover *_addInputpopOver;
     
     NSPopover *_layoutpopOver;
     NSPopover *_animatepopOver;
@@ -323,6 +325,10 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 @property (strong) CSInputLibraryWindowController *inputLibraryController;
 
+@property (strong) NSIndexSet *inputTableSelectionIndexes;
+
+
+@property (weak) IBOutlet NSArrayController *activeInputsArrayController;
 
 
 - (IBAction)openAnimatePopover:(NSButton *)sender;
@@ -345,6 +351,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(InputSource *)findSource:(NSPoint)forPoint;
 -(SourceLayout *)addLayoutFromBase:(SourceLayout *)baseLayout;
 -(SourceLayout *)getLayoutForName:(NSString *)name;
+
+-(void)openAddInputPopover:(NSButton *)sender;
 
 - (IBAction)openLayoutPopover:(NSButton *)sender;
 -(void)openLayoutPopover:(NSButton *)sender forLayout:(SourceLayout *)layout;
@@ -385,6 +393,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (IBAction)configureIRCompressor:(id)sender;
 
 
+- (IBAction)inputTableControlClick:(NSSegmentedControl *)sender;
 
 
 

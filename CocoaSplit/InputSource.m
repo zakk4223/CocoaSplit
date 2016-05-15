@@ -477,7 +477,7 @@ static NSArray *_sourceTypes = nil;
 {
     forInput.inputSource = self;
     forInput.isLive = self.is_live;
-    //[forInput addObserver:self forKeyPath:@"captureName" options:NSKeyValueChangeNewKey context:NULL];
+    [forInput addObserver:self forKeyPath:@"captureName" options:NSKeyValueChangeNewKey context:NULL];
     [forInput createNewLayerForInput:self];
 
 }
@@ -491,7 +491,7 @@ static NSArray *_sourceTypes = nil;
     
     forInput.isLive = NO;
     [forInput removeLayerForInput:self];
-    //[forInput removeObserver:self forKeyPath:@"captureName"];
+    [forInput removeObserver:self forKeyPath:@"captureName"];
     
 }
 
@@ -523,6 +523,8 @@ static NSArray *_sourceTypes = nil;
 {
 
     [CATransaction begin];
+    self.name = nil;
+    
     _nextImageTime = 0.0f;
     _currentSourceIdx = 0;
     _needsAdjustment = NO;

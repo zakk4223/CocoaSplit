@@ -38,6 +38,11 @@
     return NSStringFromClass(self);
 }
 
+-(NSString *)label
+{
+    return [self.class label];
+}
+
 
 -(instancetype) init
 {

@@ -108,6 +108,7 @@
 -(void)needsUpdate;
 -(NSRect)windowRectforWorldRect:(NSRect)worldRect;
 -(NSArray *)resizeRectsForSource:(InputSource *)inputSource withExtra:(float)withExtra;
+-(void)addInputSourceWithInput:(InputSource *)source;
 
 
 

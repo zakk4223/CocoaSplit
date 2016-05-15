@@ -100,6 +100,29 @@
 }
 
 
+-(void)openAddInputPopover:(id)sender sourceRect:(NSRect)sourceRect
+{
+    CSAddInputViewController *vc;
+    if (!_addInputpopOver)
+    {
+        _addInputpopOver = [[NSPopover alloc] init];
+        _addInputpopOver.animates = YES;
+        _addInputpopOver.behavior = NSPopoverBehaviorTransient;
+    }
+    
+    //if (!_addInputpopOver.contentViewController)
+    {
+        vc = [[CSAddInputViewController alloc] init];
+        _addInputpopOver.contentViewController = vc;
+        vc.popover = _addInputpopOver;
+        
+        //_addInputpopOver.delegate = vc;
+    }
+    
+    [_addInputpopOver showRelativeToRect:sourceRect ofView:sender preferredEdge:NSMaxXEdge];
+}
+
+
 -(void)openLayoutPopover:(NSButton *)sender forLayout:(SourceLayout *)layout
 {
     CreateLayoutViewController *vc;
@@ -130,7 +153,6 @@
         useLayout = [[SourceLayout alloc] init];
     }
     vc.sourceLayout = useLayout;
-    
     [_layoutpopOver showRelativeToRect:sender.bounds ofView:sender preferredEdge:NSMinYEdge];
 }
 
@@ -2259,6 +2281,35 @@
         
     }];
 }
+
+- (IBAction)inputTableControlClick:(NSSegmentedControl *)sender
+{
+    NSInteger clicked = sender.selectedSegment;
+
+    NSArray *deleteInputs;
+    
+    switch (clicked) {
+        case 0:
+            //[self.activePreviewView addInputSource:sender];
+            [self openAddInputPopover:sender sourceRect:sender.bounds];
+            break;
+        case 1:
+            deleteInputs = [self.activeInputsArrayController.arrangedObjects objectsAtIndexes:self.inputTableSelectionIndexes];
+            for (InputSource *input in deleteInputs)
+            {
+                if (input)
+                {
+                    NSString *uuid = input.uuid;
+                    InputSource *realInput = [self.activePreviewView.sourceLayout inputForUUID:uuid];
+                    [self.activePreviewView.sourceLayout deleteSource:realInput];
+                }
+            }
+            break;
+        default:
+            break;
+    }
+}
+
 
 
 -(void) newFrameTimed

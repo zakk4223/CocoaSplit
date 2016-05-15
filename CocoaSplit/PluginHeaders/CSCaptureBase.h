@@ -104,6 +104,8 @@ typedef enum frame_render_behavior_t {
 -(void)setDeviceForUniqueID:(NSString *)uniqueID;
 -(NSView *)configurationView;
 +(NSString *) label;
+-(NSString *)label;
+
 //Class method to run code that messes with the CALayer(s). It has to be on the main thread even if it isn't in a view :(
 //All this method does is dispatch_sync to the main thread OR run the block immediately if we're already on the main thread
 +(void) layoutModification:(void (^)())modBlock;

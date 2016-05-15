@@ -335,6 +335,12 @@
 		34ED8CB91B073C1B002C0674 /* CSMidiManagerWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34ED8CB61B073C1B002C0674 /* CSMidiManagerWindowController.xib */; };
 		34ED8CBC1B07763F002C0674 /* CSMidiWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8CBB1B07763F002C0674 /* CSMidiWrapper.m */; };
 		34ED8CBD1B07763F002C0674 /* CSMidiWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8CBB1B07763F002C0674 /* CSMidiWrapper.m */; };
+		34F04D9F1CE0381D0054663A /* CSAddInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F04D9D1CE0381D0054663A /* CSAddInputViewController.m */; };
+		34F04DA01CE0381D0054663A /* CSAddInputViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34F04D9E1CE0381D0054663A /* CSAddInputViewController.xib */; };
+		34F04DA41CE04B670054663A /* CSAddInputTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F04DA21CE04B670054663A /* CSAddInputTypeViewController.m */; };
+		34F04DA51CE04B670054663A /* CSAddInputTypeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34F04DA31CE04B670054663A /* CSAddInputTypeViewController.xib */; };
+		34F04DA81CE0BA470054663A /* CSScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F04DA71CE0BA470054663A /* CSScrollView.m */; };
+		34F04DAB1CE0BB770054663A /* NSView+NSLayoutConstraintFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F04DAA1CE0BB770054663A /* NSView+NSLayoutConstraintFilter.m */; };
 		34F1EB921BCCA41F00B38E6C /* CSLayoutEditWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F1EB901BCCA41F00B38E6C /* CSLayoutEditWindowController.m */; };
 		34F1EB931BCCA41F00B38E6C /* CSLayoutEditWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34F1EB911BCCA41F00B38E6C /* CSLayoutEditWindowController.xib */; };
 		34F5141216FD6E4F00BA894D /* x264Compressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F5140F16FD6E4F00BA894D /* x264Compressor.m */; };
@@ -943,6 +949,16 @@
 		34ED8CB61B073C1B002C0674 /* CSMidiManagerWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSMidiManagerWindowController.xib; path = Interface/CSMidiManagerWindowController.xib; sourceTree = "<group>"; };
 		34ED8CBA1B07763F002C0674 /* CSMidiWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSMidiWrapper.h; sourceTree = "<group>"; };
 		34ED8CBB1B07763F002C0674 /* CSMidiWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSMidiWrapper.m; sourceTree = "<group>"; };
+		34F04D9C1CE0381D0054663A /* CSAddInputViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAddInputViewController.h; path = Interface/CSAddInputViewController.h; sourceTree = "<group>"; };
+		34F04D9D1CE0381D0054663A /* CSAddInputViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSAddInputViewController.m; path = Interface/CSAddInputViewController.m; sourceTree = "<group>"; };
+		34F04D9E1CE0381D0054663A /* CSAddInputViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSAddInputViewController.xib; path = Interface/CSAddInputViewController.xib; sourceTree = "<group>"; };
+		34F04DA11CE04B670054663A /* CSAddInputTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAddInputTypeViewController.h; path = Interface/CSAddInputTypeViewController.h; sourceTree = "<group>"; };
+		34F04DA21CE04B670054663A /* CSAddInputTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSAddInputTypeViewController.m; path = Interface/CSAddInputTypeViewController.m; sourceTree = "<group>"; };
+		34F04DA31CE04B670054663A /* CSAddInputTypeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSAddInputTypeViewController.xib; path = Interface/CSAddInputTypeViewController.xib; sourceTree = "<group>"; };
+		34F04DA61CE0BA470054663A /* CSScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSScrollView.h; path = Interface/CSScrollView.h; sourceTree = "<group>"; };
+		34F04DA71CE0BA470054663A /* CSScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSScrollView.m; path = Interface/CSScrollView.m; sourceTree = "<group>"; };
+		34F04DA91CE0BB770054663A /* NSView+NSLayoutConstraintFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSView+NSLayoutConstraintFilter.h"; sourceTree = "<group>"; };
+		34F04DAA1CE0BB770054663A /* NSView+NSLayoutConstraintFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSView+NSLayoutConstraintFilter.m"; sourceTree = "<group>"; };
 		34F1EB8F1BCCA41F00B38E6C /* CSLayoutEditWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSLayoutEditWindowController.h; path = Interface/CSLayoutEditWindowController.h; sourceTree = "<group>"; };
 		34F1EB901BCCA41F00B38E6C /* CSLayoutEditWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSLayoutEditWindowController.m; path = Interface/CSLayoutEditWindowController.m; sourceTree = "<group>"; };
 		34F1EB911BCCA41F00B38E6C /* CSLayoutEditWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSLayoutEditWindowController.xib; path = Interface/CSLayoutEditWindowController.xib; sourceTree = "<group>"; };
@@ -1291,6 +1307,8 @@
 		3441338E18667FE40059B686 /* Interface */ = {
 			isa = PBXGroup;
 			children = (
+				34F04DA91CE0BB770054663A /* NSView+NSLayoutConstraintFilter.h */,
+				34F04DAA1CE0BB770054663A /* NSView+NSLayoutConstraintFilter.m */,
 				3434CB291CA90C3D001B3DF9 /* Compressor */,
 				34ABEF3B17C0C2CB00AA5E62 /* advancedPrefPanel.xib */,
 				344825E41B253D6900AF9EAC /* CAMultiAudioMatrixCell.h */,
@@ -1343,6 +1361,14 @@
 				34DA1D3D1BF823E700132486 /* CSNewOutputWindowController.xib */,
 				34A7ADB61C01EF1400685044 /* CompressionSettingsPanelController.h */,
 				34A7ADB71C01EF1400685044 /* CompressionSettingsPanelController.m */,
+				34F04D9C1CE0381D0054663A /* CSAddInputViewController.h */,
+				34F04D9D1CE0381D0054663A /* CSAddInputViewController.m */,
+				34F04D9E1CE0381D0054663A /* CSAddInputViewController.xib */,
+				34F04DA11CE04B670054663A /* CSAddInputTypeViewController.h */,
+				34F04DA21CE04B670054663A /* CSAddInputTypeViewController.m */,
+				34F04DA31CE04B670054663A /* CSAddInputTypeViewController.xib */,
+				34F04DA61CE0BA470054663A /* CSScrollView.h */,
+				34F04DA71CE0BA470054663A /* CSScrollView.m */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -2136,6 +2162,7 @@
 				340FE4B215F3417E00E4CE4E /* Credits.rtf in Resources */,
 				340FE4B815F3417E00E4CE4E /* MainMenu.xib in Resources */,
 				34DA1D3F1BF823E700132486 /* CSNewOutputWindowController.xib in Resources */,
+				34F04DA51CE04B670054663A /* CSAddInputTypeViewController.xib in Resources */,
 				34F1EB931BCCA41F00B38E6C /* CSLayoutEditWindowController.xib in Resources */,
 				342B33B61980771200492CB7 /* line.vtsh in Resources */,
 				34938EEF1AE4D24200F3B1CF /* CSFilterChooserWindowController.xib in Resources */,
@@ -2158,6 +2185,7 @@
 				344825D21B2536EA00AF9EAC /* CAMultiAudioMatrixView.xib in Resources */,
 				349461761AC49BB300F28883 /* CSAnimationChooserViewController.xib in Resources */,
 				349461451AAD73BC00F28883 /* TestView.xib in Resources */,
+				34F04DA01CE0381D0054663A /* CSAddInputViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2203,12 +2231,14 @@
 				34C19053189EE60400AB2430 /* CapturedFrameData.m in Sources */,
 				34ED8C4B1B07371C002C0674 /* MIKMIDIClientDestinationEndpoint.m in Sources */,
 				34ED8C871B07371C002C0674 /* MIKMIDIMetaTimeSignatureEvent.m in Sources */,
+				34F04DAB1CE0BB770054663A /* NSView+NSLayoutConstraintFilter.m in Sources */,
 				34ED8C7B1B07371C002C0674 /* MIKMIDIMetaInstrumentNameEvent.m in Sources */,
 				34ED8C8B1B07371C002C0674 /* MIKMIDIMetronome.m in Sources */,
 				345F8B6D1A176A5D009A81E3 /* CAMultiAudioUnit.m in Sources */,
 				34ED8C771B07371C002C0674 /* MIKMIDIMetaCuePointEvent.m in Sources */,
 				34D2D5731A547628001004E5 /* CSTextCaptureBase.m in Sources */,
 				340FE4B515F3417E00E4CE4E /* AppDelegate.m in Sources */,
+				34F04D9F1CE0381D0054663A /* CSAddInputViewController.m in Sources */,
 				345F8B4F1A15F7DA009A81E3 /* CAMultiAudioPCMPlayer.m in Sources */,
 				34ED8C5B1B07371C002C0674 /* MIKMIDIDeviceManager.m in Sources */,
 				34AFC33319B19CD00007C07B /* SourceCache.m in Sources */,
@@ -2228,6 +2258,7 @@
 				34BD1E4D1B1F1A2D0015CBEC /* CAMultiAudioDownmixer.m in Sources */,
 				345F8B251A14E6A0009A81E3 /* CAMultiAudioNode.m in Sources */,
 				342346AA15F59A8500C8C77E /* AVFAudioCapture.m in Sources */,
+				34F04DA41CE04B670054663A /* CSAddInputTypeViewController.m in Sources */,
 				3498D94A1A94685000906532 /* CSAudioSwitchCell.m in Sources */,
 				34AB1C311B944F48003F2C03 /* CSPreviewOverlayView.m in Sources */,
 				345F8B051A1060D6009A81E3 /* CSAacEncoder.m in Sources */,
@@ -2242,6 +2273,7 @@
 				34ED8C531B07371C002C0674 /* MIKMIDICommandThrottler.m in Sources */,
 				345F8B611A161552009A81E3 /* CAMultiAudioAVCapturePlayer.m in Sources */,
 				34ED8CAD1B07371C002C0674 /* MIKMIDIUtilities.m in Sources */,
+				34F04DA81CE0BA470054663A /* CSScrollView.m in Sources */,
 				34ED8C7F1B07371C002C0674 /* MIKMIDIMetaLyricEvent.m in Sources */,
 				34ED8C711B07371C002C0674 /* MIKMIDIMappingManager.m in Sources */,
 				3481F30619B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m in Sources */,

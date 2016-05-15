@@ -10,6 +10,7 @@
 #import "CAMultiAudioPCMPlayer.h"
 #import "CSPcmPlayer.h"
 #import "AppDelegate.h"
+#import "PreviewView.h"
 
 
 @implementation CSPluginServices
@@ -25,6 +26,10 @@
     
     return sharedCSPluginServices;
 }
+
+
+
+
 
 
 

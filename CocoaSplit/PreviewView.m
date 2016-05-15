@@ -1207,6 +1207,17 @@
 }
 
 
+-(void)addInputSourceWithInput:(InputSource *)source
+{
+    if (self.sourceLayout)
+    {
+        
+        [self.sourceLayout addSource:source];
+        [[self.undoManager prepareWithInvocationTarget:self] undoAddInput:source.uuid];
+    }
+}
+
+
 - (IBAction)addInputSource:(id)sender
 {
     
