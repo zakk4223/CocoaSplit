@@ -394,7 +394,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (IBAction)configureIRCompressor:(id)sender;
 
 
-- (IBAction)inputTableControlClick:(NSSegmentedControl *)sender;
+- (IBAction)inputTableControlClick:(NSButton *)sender;
 
 -(void) resetInputTableHighlights;
 

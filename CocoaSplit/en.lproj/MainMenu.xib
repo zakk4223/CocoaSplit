@@ -706,25 +706,6 @@
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                             </scroller>
                                                         </scrollView>
-                                                        <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lOg-Ii-e4u">
-                                                            <rect key="frame" x="311" y="16" width="333" height="21"/>
-                                                            <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" style="smallSquare" trackingMode="momentary" id="Hmn-fo-x09">
-                                                                <font key="font" metaFont="smallSystem"/>
-                                                                <segments>
-                                                                    <segment image="NSAddTemplate"/>
-                                                                    <segment image="NSRemoveTemplate" tag="1"/>
-                                                                    <segment image="NSActionTemplate">
-                                                                        <nil key="label"/>
-                                                                    </segment>
-                                                                    <segment width="256" enabled="NO">
-                                                                        <nil key="label"/>
-                                                                    </segment>
-                                                                </segments>
-                                                                <connections>
-                                                                    <action selector="inputTableControlClick:" target="816" id="RU3-PG-QHp"/>
-                                                                </connections>
-                                                            </segmentedCell>
-                                                        </segmentedControl>
                                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="84m-c0-kOj">
                                                             <rect key="frame" x="12" y="282" width="85" height="28"/>
                                                             <buttonCell key="cell" type="push" title="New layout" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qt9-wK-gDI">
@@ -735,10 +716,51 @@
                                                                 <action selector="openLayoutPopover:" target="816" id="z23-MZ-uVT"/>
                                                             </connections>
                                                         </button>
+                                                        <button verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ben-Kb-lKd">
+                                                            <rect key="frame" x="311" y="16" width="20" height="21"/>
+                                                            <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kQV-Tk-3Nj">
+                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                <font key="font" metaFont="smallSystem"/>
+                                                            </buttonCell>
+                                                            <connections>
+                                                                <action selector="inputTableControlClick:" target="816" id="ICl-Td-l8w"/>
+                                                            </connections>
+                                                        </button>
+                                                        <button verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="CqS-aN-OHV">
+                                                            <rect key="frame" x="330" y="16" width="20" height="21"/>
+                                                            <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="MEn-Wu-hHx">
+                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                <font key="font" metaFont="smallSystem"/>
+                                                            </buttonCell>
+                                                            <connections>
+                                                                <action selector="inputTableControlClick:" target="816" id="4GJ-kl-e2f"/>
+                                                            </connections>
+                                                        </button>
+                                                        <button verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="fsP-NP-oJi">
+                                                            <rect key="frame" x="349" y="16" width="20" height="21"/>
+                                                            <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSActionTemplate" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="zqb-oK-dgS">
+                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                <font key="font" metaFont="smallSystem"/>
+                                                            </buttonCell>
+                                                            <connections>
+                                                                <action selector="inputTableControlClick:" target="816" id="j2n-Fm-bla"/>
+                                                            </connections>
+                                                        </button>
+                                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Lk-ZW-rGZ">
+                                                            <rect key="frame" x="367" y="16" width="277" height="21"/>
+                                                            <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" enabled="NO" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="F5b-B8-5NC">
+                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                <font key="font" metaFont="smallSystem"/>
+                                                            </buttonCell>
+                                                        </button>
                                                     </subviews>
                                                     <constraints>
+                                                        <constraint firstItem="ben-Kb-lKd" firstAttribute="top" secondItem="oGS-q4-Bd2" secondAttribute="bottom" id="0kq-mf-Qit"/>
+                                                        <constraint firstItem="CqS-aN-OHV" firstAttribute="leading" secondItem="ben-Kb-lKd" secondAttribute="trailing" constant="-1" id="5Zt-89-aVb"/>
                                                         <constraint firstAttribute="bottom" secondItem="b93-ds-aBr" secondAttribute="bottom" constant="17" id="SHp-BN-Abf"/>
+                                                        <constraint firstItem="fsP-NP-oJi" firstAttribute="leading" secondItem="CqS-aN-OHV" secondAttribute="trailing" constant="-1" id="SON-7C-xHt"/>
                                                         <constraint firstItem="3nh-Gb-0rO" firstAttribute="centerX" secondItem="6mG-LN-iRu" secondAttribute="centerX" id="co8-Qv-d4P"/>
+                                                        <constraint firstItem="ben-Kb-lKd" firstAttribute="leading" secondItem="oGS-q4-Bd2" secondAttribute="leading" id="hSA-QU-M69"/>
                                                         <constraint firstAttribute="trailing" secondItem="6mG-LN-iRu" secondAttribute="trailing" constant="-3" id="kV7-4S-rOy"/>
                                                         <constraint firstAttribute="bottom" secondItem="6mG-LN-iRu" secondAttribute="bottom" constant="77" id="way-tT-oOH"/>
                                                     </constraints>

@@ -35,7 +35,6 @@
 
 
 
-
 @implementation CaptureController
 
 @synthesize selectedLayout = _selectedLayout;
@@ -2320,26 +2319,43 @@
 }
 
 
-- (IBAction)inputTableControlClick:(NSSegmentedControl *)sender
+- (IBAction)inputTableControlClick:(NSButton *)sender
 {
-    NSInteger clicked = sender.selectedSegment;
+    NSInteger clicked = sender.tag;
 
-    NSArray *deleteInputs;
-    
+    NSArray *selectedInputs;
+    NSRect sbounds;
     switch (clicked) {
         case 0:
+            sbounds = sender.bounds;
             //[self.activePreviewView addInputSource:sender];
-            [self openAddInputPopover:sender sourceRect:sender.bounds];
+            //sbounds.origin.x = NSMaxX(sender.frame) - [sender widthForSegment:0];
+            NSLog(@"FRAME %@", NSStringFromRect(sbounds));
+            //sbounds.origin.x -= 333;
+            [self openAddInputPopover:sender sourceRect:sbounds];
             break;
         case 1:
-            deleteInputs = [self.activeInputsArrayController.arrangedObjects objectsAtIndexes:self.inputTableSelectionIndexes];
-            for (InputSource *input in deleteInputs)
+            if (self.inputTableSelectionIndexes)
             {
-                if (input)
+                selectedInputs = [self.activeInputsArrayController.arrangedObjects objectsAtIndexes:self.inputTableSelectionIndexes];
+                for (InputSource *input in selectedInputs)
                 {
-                    NSString *uuid = input.uuid;
-                    InputSource *realInput = [self.activePreviewView.sourceLayout inputForUUID:uuid];
-                    [self.activePreviewView.sourceLayout deleteSource:realInput];
+                    if (input)
+                    {
+                        NSString *uuid = input.uuid;
+                        InputSource *realInput = [self.activePreviewView.sourceLayout inputForUUID:uuid];
+                        [self.activePreviewView.sourceLayout deleteSource:realInput];
+                    }
+                }
+            }
+            break;
+        case 2:
+            if (self.inputTableSelectionIndexes)
+            {
+                selectedInputs = [self.activeInputsArrayController.arrangedObjects objectsAtIndexes:self.inputTableSelectionIndexes];
+                for (InputSource *input in selectedInputs)
+                {
+                    [self.activePreviewView spawnInputSettings:input atRect:NSZeroRect];
                 }
             }
             break;
