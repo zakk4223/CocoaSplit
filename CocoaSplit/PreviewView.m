@@ -1548,6 +1548,8 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sourceWasDeleted:) name:CSNotificationInputDeleted object:nil];
     
+
+    _configWindowCascadePoint = NSZeroPoint;
     
     _snap_x = _snap_y = -1;
     
@@ -1680,7 +1682,78 @@
     return self.undoManager;
 }
 
+-(void)openInputConfigWindows:(NSArray *)uuids
+{
+    _configWindowCascadePoint = NSZeroPoint;
+    for (NSString *uuid in uuids)
+    {
+        [self openInputConfigWindow:uuid];
+    }
+}
 
+
+-(void)openInputConfigWindow:(NSString *)uuid
+{
+    
+    
+    InputSource *configSrc = [self.sourceLayout inputForUUID:uuid];
+    
+    if (!configSrc)
+    {
+        return;
+    }
+    
+    InputPopupControllerViewController *newViewController = [[InputPopupControllerViewController alloc] init];
+    
+    newViewController.inputSource = configSrc;
+    
+    NSWindow *configWindow = [[NSWindow alloc] init];
+    
+    NSRect newFrame = [configWindow frameRectForContentRect:NSMakeRect(0.0f, 0.0f, newViewController.view.frame.size.width, newViewController.view.frame.size.height)];
+    
+    
+    
+    [configWindow setFrame:newFrame display:NO];
+    if (NSEqualPoints(_configWindowCascadePoint, NSZeroPoint))
+    {
+        [configWindow center];
+        
+        _configWindowCascadePoint = NSMakePoint(NSMinX(configWindow.frame), NSMaxY(configWindow.frame));
+    } else {
+        _configWindowCascadePoint = [configWindow cascadeTopLeftFromPoint:_configWindowCascadePoint];
+    }
+
+    [configWindow setReleasedWhenClosed:NO];
+    
+    
+    [configWindow.contentView addSubview:newViewController.view];
+    configWindow.title = [NSString stringWithFormat:@"CocoaSplit Input (%@)", newViewController.inputSource.name];
+    configWindow.delegate = self;
+    
+    configWindow.styleMask =  NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask;
+
+    NSWindow *cWindow = [self.activeConfigWindows objectForKey:uuid];
+    InputPopupControllerViewController *cController = [self.activeConfigControllers objectForKey:uuid];
+    
+    if (cController)
+    {
+        cController.inputSource = nil;
+        [self.activeConfigControllers removeObjectForKey:uuid];
+    }
+    
+    if (cWindow)
+    {
+        [self.activeConfigWindows removeObjectForKey:uuid];
+    }
+    
+    
+    [self.activeConfigWindows setObject:configWindow forKey:uuid];
+    [self.activeConfigControllers setObject:newViewController forKey:uuid];
+
+    [configWindow makeKeyAndOrderFront:nil];
+    
+    
+}
 -(NSWindow *)detachableWindowForPopover:(NSPopover *)popover
 {
 

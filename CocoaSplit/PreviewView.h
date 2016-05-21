@@ -54,8 +54,9 @@
     CSPreviewOverlayView *_overlayView;
     bool _inDrag;
     NSMutableDictionary *_highlightedSourceMap;
+    NSPoint _configWindowCascadePoint;
     
-    
+
     
     
 
@@ -114,6 +115,8 @@
 -(void) highlightSource:(InputSource *)source;
 -(void)stopHighlightingSource:(InputSource *)source;
 -(void)stopHighlightingAllSources;
+-(void)openInputConfigWindow:(NSString *)uuid;
+
 
 
 

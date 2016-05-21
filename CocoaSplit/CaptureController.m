@@ -709,6 +709,7 @@
    if (self = [super init])
    {
        
+       
        _layoutWindows = [NSMutableArray array];
        
        self.transitionDirections = @[kCATransitionFromTop, kCATransitionFromRight, kCATransitionFromBottom, kCATransitionFromLeft];
@@ -2330,7 +2331,6 @@
             sbounds = sender.bounds;
             //[self.activePreviewView addInputSource:sender];
             //sbounds.origin.x = NSMaxX(sender.frame) - [sender widthForSegment:0];
-            NSLog(@"FRAME %@", NSStringFromRect(sbounds));
             //sbounds.origin.x -= 333;
             [self openAddInputPopover:sender sourceRect:sbounds];
             break;
@@ -2344,7 +2344,7 @@
                     {
                         NSString *uuid = input.uuid;
                         InputSource *realInput = [self.activePreviewView.sourceLayout inputForUUID:uuid];
-                        [self.activePreviewView.sourceLayout deleteSource:realInput];
+                        [self.activePreviewView deleteInput:realInput];
                     }
                 }
             }
@@ -2355,7 +2355,8 @@
                 selectedInputs = [self.activeInputsArrayController.arrangedObjects objectsAtIndexes:self.inputTableSelectionIndexes];
                 for (InputSource *input in selectedInputs)
                 {
-                    [self.activePreviewView spawnInputSettings:input atRect:NSZeroRect];
+                    [self.activePreviewView openInputConfigWindow:input.uuid ];
+
                 }
             }
             break;
