@@ -1482,18 +1482,7 @@
     }
     
     
-    NSPoint tmp = [self convertPoint:[self.window mouseLocationOutsideOfEventStream] fromView:nil];
-
-    NSRect spawnRect = NSMakeRect(tmp.x, tmp.y, 1.0f, 1.0f);
-    
-    if (!NSPointInRect(NSMakePoint(tmp.x, 0), self.bounds))
-    {
-        spawnRect = NSMakeRect(self.bounds.size.width-5, tmp.y, 1.0f, 1.0f);
-    } else if (!NSPointInRect(NSMakePoint(0, tmp.y), self.bounds)) {
-        spawnRect = NSMakeRect(tmp.x, 5.0f, 1.0f, 1.0f);
-    }
-    
-    [self spawnInputSettings:configSource atRect:spawnRect];
+    [self openInputConfigWindow:configSource.uuid];
 
 }
 
