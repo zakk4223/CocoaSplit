@@ -1938,7 +1938,9 @@ static NSArray *_sourceTypes = nil;
     toDetach.layer.position = newPosition;
     [CATransaction commit];
     
-    [self.attachedInputs removeObject:toDetach];
+    [[self mutableArrayValueForKey:@"attachedInputs"] removeObject:toDetach];
+    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputDetached object:toDetach userInfo:nil];
+
 }
 
 
@@ -1958,8 +1960,10 @@ static NSArray *_sourceTypes = nil;
     }
     
     [toAttach makeSublayerOfLayer:self.layer];
-    [self.attachedInputs addObject:toAttach];
+    [[self mutableArrayValueForKey:@"attachedInputs"] addObject:toAttach];
     toAttach.parentInput = self;
+    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputAttached object:toAttach userInfo:nil];
+
 }
 
 

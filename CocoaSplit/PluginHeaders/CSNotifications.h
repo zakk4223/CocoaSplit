@@ -36,6 +36,9 @@ extern NSString *const CSNotificationInputDeleted;
 
 extern NSString *const CSNotificationInputSelected;
 
+extern NSString *const CSNotificationInputAttached;
+extern NSString *const CSNotificationInputDetached;
+
 
 
 

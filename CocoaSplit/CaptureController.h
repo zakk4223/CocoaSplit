@@ -51,7 +51,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @class PreviewView;
 
 
-@interface CaptureController : NSObject <NSTableViewDelegate, NSMenuDelegate, MIKMIDIMappableResponder, MIKMIDIResponder, MIKMIDIMappingGeneratorDelegate, CSTimerSourceProtocol, NSCollectionViewDelegate> {
+@interface CaptureController : NSObject <NSTableViewDelegate, NSMenuDelegate, MIKMIDIMappableResponder, MIKMIDIResponder, MIKMIDIMappingGeneratorDelegate, CSTimerSourceProtocol, NSCollectionViewDelegate, NSOutlineViewDelegate> {
     
     
     NSArray *_inputIdentifiers;
@@ -304,6 +304,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 
+@property (weak) IBOutlet NSOutlineView *inputOutlineView;
 
 
 @property (strong) NSDictionary *extraSaveData;
@@ -326,7 +327,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 @property (strong) CSInputLibraryWindowController *inputLibraryController;
 
-@property (strong) NSIndexSet *inputTableSelectionIndexes;
+@property (strong) NSIndexSet *inputOutlineSelectionIndexes;
 
 
 @property (weak) IBOutlet NSArrayController *activeInputsArrayController;

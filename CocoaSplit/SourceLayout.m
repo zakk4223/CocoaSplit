@@ -42,10 +42,25 @@
         //self.rootLayer.geometryFlipped = YES;
         _rootSize = NSMakeSize(_canvas_width, _canvas_height);
         self.sourceList = [NSMutableArray array];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(inputAttachEvent:) name:CSNotificationInputAttached object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(inputAttachEvent:) name:CSNotificationInputDetached object:nil];
+
+        
         
     }
     
     return self;
+}
+
+
+-(void)inputAttachEvent:(NSNotification *)notification
+{
+    InputSource *src = notification.object;
+    if (src.sourceLayout == self)
+    {
+        [self willChangeValueForKey:@"topLevelSourceList"];
+        [self didChangeValueForKey:@"topLevelSourceList"];
+    }
 }
 
 
@@ -400,6 +415,18 @@
         }
     }
 }
+
+
+-(NSArray *)topLevelSourceList
+{
+    NSPredicate *topLevelPredicate = [NSPredicate predicateWithBlock:^BOOL(InputSource *evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+       
+        return !evaluatedObject.parentInput;
+    }];
+    
+    return [self.sourceList filteredArrayUsingPredicate:topLevelPredicate];
+}
+
 
 -(NSArray *)sourceListOrdered
 {
@@ -776,8 +803,9 @@
         [self incrementInputRef:src];
         
         
-        
+        [self willChangeValueForKey:@"topLevelSourceList"];
         [[self mutableArrayValueForKey:@"sourceList" ] addObject:src];
+        [self didChangeValueForKey:@"topLevelSourceList"];
         [_uuidMap setObject:src forKey:src.uuid];
         
     }
@@ -907,7 +935,9 @@
         
         src.refCount = origRefCnt+1;
         
+        [self willChangeValueForKey:@"topLevelSourceList"];
         [[self mutableArrayValueForKey:@"sourceList" ] addObject:src];
+        [self didChangeValueForKey:@"topLevelSourceList"];
         [_uuidMap setObject:src forKey:src.uuid];
         
     }
@@ -1318,7 +1348,10 @@
     
     [delSource willDelete];
     
+    [self willChangeValueForKey:@"topLevelSourceList"];
     [[self mutableArrayValueForKey:@"sourceList" ] removeObject:delSource];
+    [self didChangeValueForKey:@"topLevelSourceList"];
+    
 
     InputSource *uSrc;
     uSrc = _uuidMap[delSource.uuid];
@@ -1374,8 +1407,10 @@
     newSource.sourceLayout = self;
     newSource.is_live = self.isActive;
     
-    
+    [self willChangeValueForKey:@"topLevelSourceList"];
     [[self mutableArrayValueForKey:@"sourceList" ] addObject:newSource];
+    [self didChangeValueForKey:@"topLevelSourceList"];
+    
 
     [self.rootLayer addSublayer:newSource.layer];
 
@@ -1397,7 +1432,10 @@
     self.rootLayer.sublayers = [NSArray array];
     @synchronized(self)
     {
+        [self willChangeValueForKey:@"topLevelSourceList"];
         [self.sourceList removeAllObjects];
+        [self didChangeValueForKey:@"topLevelSourceList"];
+
         
     }
     [self.animationList removeAllObjects];
@@ -1606,5 +1644,10 @@
 }
 
 
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+}
 
 @end

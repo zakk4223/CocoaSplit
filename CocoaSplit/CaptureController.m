@@ -2291,32 +2291,32 @@
 -(void) resetInputTableHighlights
 {
     [self.activePreviewView stopHighlightingAllSources];
-    
-    if (self.inputTableSelectionIndexes)
+    if (self.inputOutlineView && self.inputOutlineView.selectedRowIndexes)
     {
-        NSArray *selectedInputs = [self.activeInputsArrayController.arrangedObjects objectsAtIndexes:self.inputTableSelectionIndexes];
-
-        for (InputSource *input in selectedInputs)
-        {
-            [self.activePreviewView highlightSource:input];
-        }
+        [self.inputOutlineView.selectedRowIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+            NSTreeNode *node = [self.inputOutlineView itemAtRow:idx];
+            InputSource *src = node.representedObject;
+            
+            if (src)
+            {
+                [self.activePreviewView highlightSource:src];
+            }
+        }];
     }
 }
 
 
--(void) tableViewSelectionDidChange:(NSNotification *)notification
+-(void) outlineViewSelectionDidChange:(NSNotification *)notification
 {
-    NSTableView *table = notification.object;
-    
-    if (table == self.inputTableView)
+    NSOutlineView *outline = notification.object;
+   
+    if (outline == self.inputOutlineView)
     {
-        NSArray *selectedInputs = [self.activeInputsArrayController.arrangedObjects objectsAtIndexes:self.inputTableSelectionIndexes];
-        [self.activePreviewView stopHighlightingAllSources];
-        for (InputSource *input in selectedInputs)
-        {
-            [self.activePreviewView highlightSource:input];
-        }
+        [self resetInputTableHighlights];
+
     }
+             
+             
 }
 
 
@@ -2335,29 +2335,38 @@
             [self openAddInputPopover:sender sourceRect:sbounds];
             break;
         case 1:
-            if (self.inputTableSelectionIndexes)
+            if (self.inputOutlineView && self.inputOutlineView.selectedRowIndexes)
             {
-                selectedInputs = [self.activeInputsArrayController.arrangedObjects objectsAtIndexes:self.inputTableSelectionIndexes];
-                for (InputSource *input in selectedInputs)
-                {
-                    if (input)
+                [self.inputOutlineView.selectedRowIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+                    NSTreeNode *node = [self.inputOutlineView itemAtRow:idx];
+                    InputSource *src = node.representedObject;
+                    
+                    if (src)
                     {
-                        NSString *uuid = input.uuid;
+                        NSString *uuid = src.uuid;
                         InputSource *realInput = [self.activePreviewView.sourceLayout inputForUUID:uuid];
                         [self.activePreviewView deleteInput:realInput];
                     }
-                }
+                    
+                }];
+
+                
             }
             break;
         case 2:
-            if (self.inputTableSelectionIndexes)
+            if (self.inputOutlineView && self.inputOutlineView.selectedRowIndexes)
             {
-                selectedInputs = [self.activeInputsArrayController.arrangedObjects objectsAtIndexes:self.inputTableSelectionIndexes];
-                for (InputSource *input in selectedInputs)
-                {
-                    [self.activePreviewView openInputConfigWindow:input.uuid ];
-
-                }
+                
+                [self.inputOutlineView.selectedRowIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+                    NSTreeNode *node = [self.inputOutlineView itemAtRow:idx];
+                    InputSource *src = node.representedObject;
+                    
+                    if (src)
+                    {
+                        [self.activePreviewView openInputConfigWindow:src.uuid];
+                    }
+                    
+                }];
             }
             break;
         default:
