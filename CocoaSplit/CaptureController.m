@@ -2305,6 +2305,22 @@
     }
 }
 
+-(void)outlineView:(NSOutlineView *)outlineView didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row
+{
+    if (outlineView == self.inputOutlineView)
+    {
+
+        NSTreeNode *node = [outlineView itemAtRow:row];
+        InputSource *src = node.representedObject;
+        if (!src.parentInput)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [outlineView expandItem:nil expandChildren:YES];
+            });
+        }
+    }
+}
+
 
 -(void) outlineViewSelectionDidChange:(NSNotification *)notification
 {
