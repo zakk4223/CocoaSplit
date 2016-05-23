@@ -22,56 +22,80 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
     [self switchToInitialView];
+    
     // Do view setup here.
 }
 
 
 -(void)switchToInputListView
 {
-    if (self.initialView && self.initialView.superview)
-    {
-        [self.initialView removeFromSuperview];
-    }
-    NSInteger height = [self adjustTableHeight:self.deviceTable];
     
+    NSSize __block newSize;
     
-    NSRect vFrame = self.inputListView.frame;
-    //vFrame.size.height = height;
+    CATransition *transition = [CATransition animation];
+    transition.type = kCATransitionPush;
+    transition.subtype = kCATransitionFromRight;
+    self.view.animations = @{@"subviews": transition};
     
-    
-    [self.view addSubview:self.inputListView
-     ];
-    
-    
-    //[self.initialView setFrame:self.view.frame];
-    
-    self.popover.contentSize = self.inputListView.frame.size;
+    [NSAnimationContext runAnimationGroup:^(NSAnimationContext * _Nonnull context) {
+        if (self.initialView && self.initialView.superview)
+        {
+            [self.initialView.animator removeFromSuperview];
+        }
+        NSRect lRect = [self.deviceTable rectOfRow:self.deviceTable.numberOfRows - 1];
+        
+        
+        NSRect vRect = self.inputListView.frame;
+        newSize = NSMakeSize(vRect.size.width, lRect.origin.y+lRect.size.height+2+self.headerView.frame.size.height);
+        
+        vRect.size = newSize;
+        vRect.origin.y = self.view.frame.size.height/2 - newSize.height/2;
+        
+        [self.inputListView setFrame:vRect];
+        
+        [self.view.animator addSubview:self.inputListView];
+        
+        
+    } completionHandler:^{
+        
+        self.popover.contentSize = newSize;
+        [self.inputListView setFrameOrigin:NSMakePoint(0,0)];
+    }];
 }
 
 
 -(void)switchToInitialView
 {
-    if (self.inputListView && self.inputListView.superview)
-    {
-        [self.inputListView removeFromSuperview];
-    }
-    NSInteger height = [self adjustTableHeight:self.initialTable];
+    NSSize __block newSize;
     
-    NSLog(@"INITIAL FRAME %@ %@", NSStringFromRect(self.initialView.frame), NSStringFromRect(self.initialTable.frame));
+    CATransition *transition = [CATransition animation];
+    transition.type = kCATransitionPush;
+    transition.subtype = kCATransitionFromLeft;
+    self.view.animations = @{@"subviews": transition};
     
-    NSRect vFrame = self.initialView.frame;
-    //vFrame.size.height = height;
-    
-    NSLog(@"VIEW %@", self.view);
-    
-    [self.view addSubview:self.initialView];
-    
-    
-    //[self.initialView setFrame:self.view.frame];
-
-    self.popover.contentSize = self.initialView.frame.size;
-
+    [NSAnimationContext runAnimationGroup:^(NSAnimationContext * _Nonnull context) {
+        if (self.inputListView && self.inputListView.superview)
+        {
+            [self.inputListView.animator removeFromSuperview];
+        }
+        NSRect lRect = [self.initialTable rectOfRow:self.initialTable.numberOfRows - 1];
+        
+        
+        NSRect vRect = self.initialView.frame;
+        newSize = NSMakeSize(vRect.size.width, lRect.origin.y+lRect.size.height+2);
+        
+        vRect.size = newSize;
+        vRect.origin.y = self.view.frame.size.height/2 - newSize.height/2;
+        [self.initialView setFrame:vRect];
+        [self.view.animator addSubview:self.initialView];
+        
+        
+    } completionHandler:^{
+        self.popover.contentSize = newSize;
+        [self.initialView setFrameOrigin:NSMakePoint(0,0)];
+    }];
 }
 
 
@@ -85,15 +109,14 @@
         height += view.frame.size.height;
     }
     
-    height+=4;
+    height += 4;
+    
     
     NSScrollView *tSview = (NSScrollView *)table.superview.superview;
 
     NSLayoutConstraint *constraint = [tSview constraintForAttribute:NSLayoutAttributeHeight];
     [constraint setConstant:height];
 
-//    NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:tSview attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:height];
-//    [tSview addConstraint:constraint];
     return height;
 }
 
@@ -159,6 +182,26 @@
 -(BOOL)tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
 {
     return NO;
+}
+
+
+-(NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
+{
+    if (tableView == self.deviceTable)
+    {
+        return [tableView makeViewWithIdentifier:@"deviceTableView" owner:self];
+    } else if (tableView == self.initialTable) {
+        
+        NSObject <CSCaptureSourceProtocol> *item = [self.sourceTypesController.arrangedObjects objectAtIndex:row];
+        if (item.availableVideoDevices && item.availableVideoDevices.count > 0)
+        {
+            return [tableView makeViewWithIdentifier:@"initialInputView" owner:self];
+        } else {
+            return [tableView makeViewWithIdentifier:@"initialInputViewNoArrow" owner:self];
+        }
+    }
+    
+    return nil;
 }
 
 

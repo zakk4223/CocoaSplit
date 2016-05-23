@@ -630,6 +630,19 @@
                                                                 <binding destination="816" name="hidden" keyPath="self.stagingHidden" id="ugE-6e-RoW"/>
                                                             </connections>
                                                         </button>
+                                                        <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ben-Kb-lKd">
+                                                            <rect key="frame" x="311" y="16" width="20" height="21"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="20" id="Cwb-GG-7L0"/>
+                                                            </constraints>
+                                                            <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kQV-Tk-3Nj">
+                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                <font key="font" metaFont="smallSystem"/>
+                                                            </buttonCell>
+                                                            <connections>
+                                                                <action selector="inputTableControlClick:" target="816" id="ICl-Td-l8w"/>
+                                                            </connections>
+                                                        </button>
                                                         <button verticalHuggingPriority="750" misplaced="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="CqS-aN-OHV">
                                                             <rect key="frame" x="330" y="16" width="20" height="21"/>
                                                             <constraints>
@@ -656,6 +669,13 @@
                                                                 <action selector="inputTableControlClick:" target="816" id="j2n-Fm-bla"/>
                                                             </connections>
                                                         </button>
+                                                        <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Lk-ZW-rGZ">
+                                                            <rect key="frame" x="367" y="16" width="277" height="21"/>
+                                                            <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" enabled="NO" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="F5b-B8-5NC">
+                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                <font key="font" metaFont="smallSystem"/>
+                                                            </buttonCell>
+                                                        </button>
                                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Uvs-ZI-YJz">
                                                             <rect key="frame" x="17" y="16" width="20" height="21"/>
                                                             <constraints>
@@ -668,6 +688,13 @@
                                                             <connections>
                                                                 <action selector="openLayoutPopover:" target="816" id="TKb-OS-u5h"/>
                                                             </connections>
+                                                        </button>
+                                                        <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cbi-35-XlE">
+                                                            <rect key="frame" x="36" y="16" width="267" height="21"/>
+                                                            <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" enabled="NO" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cLo-Nw-hc7">
+                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                <font key="font" metaFont="smallSystem"/>
+                                                            </buttonCell>
                                                         </button>
                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pRw-wD-zpX">
                                                             <rect key="frame" x="15" y="292" width="45" height="14"/>
@@ -756,33 +783,6 @@
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                             </scroller>
                                                         </scrollView>
-                                                        <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ben-Kb-lKd">
-                                                            <rect key="frame" x="311" y="16" width="20" height="21"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" constant="20" id="Cwb-GG-7L0"/>
-                                                            </constraints>
-                                                            <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kQV-Tk-3Nj">
-                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                <font key="font" metaFont="smallSystem"/>
-                                                            </buttonCell>
-                                                            <connections>
-                                                                <action selector="inputTableControlClick:" target="816" id="ICl-Td-l8w"/>
-                                                            </connections>
-                                                        </button>
-                                                        <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Lk-ZW-rGZ">
-                                                            <rect key="frame" x="367" y="16" width="277" height="21"/>
-                                                            <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" enabled="NO" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="F5b-B8-5NC">
-                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                <font key="font" metaFont="smallSystem"/>
-                                                            </buttonCell>
-                                                        </button>
-                                                        <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cbi-35-XlE">
-                                                            <rect key="frame" x="36" y="16" width="267" height="21"/>
-                                                            <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" enabled="NO" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cLo-Nw-hc7">
-                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                <font key="font" metaFont="smallSystem"/>
-                                                            </buttonCell>
-                                                        </button>
                                                     </subviews>
                                                     <constraints>
                                                         <constraint firstItem="fsP-NP-oJi" firstAttribute="leading" secondItem="ben-Kb-lKd" secondAttribute="trailing" constant="18" id="1mD-Zi-Bqj"/>

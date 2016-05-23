@@ -29,6 +29,8 @@
 @property (weak) IBOutlet NSTableView *deviceTable;
 
 @property (readonly) NSArray *sourceTypes;
+@property (weak) IBOutlet NSView *headerView;
+@property (strong) IBOutlet NSArrayController *sourceTypesController;
 
 - (IBAction)nextViewButton:(id)sender;
 - (IBAction)previousViewButton:(id)sender;
