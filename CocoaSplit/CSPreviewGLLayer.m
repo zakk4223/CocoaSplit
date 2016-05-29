@@ -342,9 +342,13 @@
 
 -(void)setBounds:(CGRect)bounds
 {
-    _resizeDirty = YES;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.resizeDirty = YES;
+        
+    });
     [super setBounds:bounds];
 }
+
 
 
 -(BOOL)isAsynchronous

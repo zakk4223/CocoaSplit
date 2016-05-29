@@ -1,3 +1,5 @@
+from Foundation import NSLog
+
 animation_name = "RotateDemo"
 animation_description = "Rotate demo"
 
@@ -7,6 +9,7 @@ animation_params = ["degrees"]
 
 def do_animation(inputs, duration):
 
+    NSLog("RUNNING ANIMATION")
     source1 = inputs['source1']
     source2 = inputs['source2']
 

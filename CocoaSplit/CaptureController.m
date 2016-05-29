@@ -334,7 +334,7 @@
     
     if (tableView.tag == 0)
     {
-        layout = self.stagingPreviewView.sourceLayout;
+        layout = self.activePreviewView.sourceLayout;
     } else {
         layout = self.livePreviewView.sourceLayout;
     }
@@ -354,6 +354,8 @@
         
         retView = [tableView makeViewWithIdentifier:@"LabelCellView" owner:self];
     } else if ([tableColumn.identifier isEqualToString:@"value"]) {
+        NSLog(@"MY INPUT MAP %@", inputmap);
+        
         if ([inputmap[@"type"] isEqualToString:@"param"])
         {
             retView = [tableView makeViewWithIdentifier:@"InputParamView" owner:self];
@@ -3526,7 +3528,6 @@
     self.livePreviewView.midiActive = NO;
     self.activePreviewView = self.livePreviewView;
     self.stagingHidden = YES;
-    
 }
 
 -(void) showStagingView

@@ -150,10 +150,14 @@
 
 -(void)setAnimationIndexes:(NSIndexSet *)animationIndexes
 {
+    NSLog(@"SET ANIMATION INDEXES %@", self);
     _animationIndexes = animationIndexes;
     NSUInteger firstIndex = animationIndexes.firstIndex;
+    NSLog(@"FIRST INDEX %lu COUNT %lu", (unsigned long)firstIndex, self.animationList.count);
+    
     if (firstIndex < self.animationList.count)
     {
+        NSLog(@"SET SELECTED ANIMATION");
         self.selectedAnimation = [self.animationList objectAtIndex:firstIndex];
     }
 }
@@ -191,6 +195,7 @@
     }
     NSMutableDictionary *inputMap = [NSMutableDictionary dictionary];
 
+    
     for (NSDictionary *item in animation.inputs)
     {
         
@@ -198,14 +203,22 @@
         {
             if ([item[@"type"] isEqualToString:@"input"])
             {
-                NSString *suuid = item[@"savedUUID"];
-                if (suuid && ![suuid isEqualTo:[NSNull null]])
+                InputSource *nSrc = item[@"value"];
+                
+                if ([nSrc isEqualTo:[NSNull null]])
                 {
-                    InputSource *nSrc = [self inputForUUID:suuid];
-                    if (nSrc)
-                    {
-                        inputMap[item[@"label"]] = nSrc;
-                    }
+                    nSrc = nil;
+                }
+                
+                NSString *suuid = item[@"savedUUID"];
+                if (!nSrc && suuid && ![suuid isEqualTo:[NSNull null]])
+                {
+                    nSrc = [self inputForUUID:suuid];
+                }
+                
+                if (nSrc)
+                {
+                    inputMap[item[@"label"]] = nSrc;
                 }
             } else {
                 inputMap[item[@"label"]] = item[@"value"];
@@ -218,7 +231,7 @@
     NSDictionary *animMap = @{@"moduleName": animation.module_name, @"inputs": inputMap, @"rootLayer": self.rootLayer};
 
     //[self doAnimation:animMap];
-    
+
     NSThread *runThread = [[NSThread alloc] initWithTarget:self selector:@selector(doAnimation:) object:animMap];
     [runThread start];
 
@@ -292,6 +305,9 @@
 {
     CSAnimationItem *newItem = [[CSAnimationItem alloc] initWithDictionary:animation moduleName:animation[@"module"]];
     [[self mutableArrayValueForKey:@"animationList"] addObject:newItem];
+
+    
+
     
     
 }

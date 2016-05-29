@@ -47,7 +47,7 @@
             {
                 InputSource *inp = item[@"value"];
                 item[@"savedUUID"] = inp.uuid;
-                item[@"value"] = [NSNull null];
+                //item[@"value"] = [NSNull null];
             }
         }
     }

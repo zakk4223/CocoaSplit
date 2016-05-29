@@ -1485,9 +1485,9 @@
                                                                                                             </menu>
                                                                                                         </popUpButtonCell>
                                                                                                         <connections>
-                                                                                                            <binding destination="M8o-XP-qs3" name="selectedObject" keyPath="objectValue.value" previousBinding="0Yr-JI-iLJ" id="cFk-iE-7bM"/>
-                                                                                                            <binding destination="816" name="content" keyPath="self.stagingPreviewView.sourceLayout.sourceList" id="Buo-tz-Ziz"/>
-                                                                                                            <binding destination="816" name="contentValues" keyPath="self.stagingPreviewView.sourceLayout.sourceList.name" previousBinding="Buo-tz-Ziz" id="0Yr-JI-iLJ"/>
+                                                                                                            <binding destination="816" name="content" keyPath="self.activePreviewView.sourceLayout.sourceList" id="K9q-wi-xIR"/>
+                                                                                                            <binding destination="816" name="contentValues" keyPath="self.activePreviewView.sourceLayout.sourceList.name" previousBinding="K9q-wi-xIR" id="Ajr-tZ-1PL"/>
+                                                                                                            <binding destination="M8o-XP-qs3" name="selectedObject" keyPath="objectValue.value" previousBinding="Ajr-tZ-1PL" id="1P6-7e-zQh"/>
                                                                                                         </connections>
                                                                                                     </popUpButton>
                                                                                                 </subviews>
@@ -1812,8 +1812,8 @@
         </arrayController>
         <arrayController id="oWB-zA-4hG" userLabel="stagingAnimationsController">
             <connections>
+                <binding destination="816" name="selectionIndexes" keyPath="self.activePreviewView.sourceLayout.animationIndexes" id="lLA-Kt-v5V"/>
                 <binding destination="816" name="contentArray" keyPath="self.activePreviewView.sourceLayout.animationList" id="N0C-tK-wNx"/>
-                <binding destination="816" name="selectionIndexes" keyPath="self.stagingPreviewView.sourceLayout.animationIndexes" id="xaQ-n5-qXf"/>
             </connections>
         </arrayController>
         <objectController id="nWB-G2-33f">
