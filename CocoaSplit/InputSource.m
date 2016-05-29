@@ -636,6 +636,42 @@ static NSArray *_sourceTypes = nil;
 
     [self observeConstraintKeys];
     [CATransaction commit];
+    _undoActionMap = @{@"name": @"Set Name",
+                       @"crop_top": @"Crop Top",
+                       @"changeInterval": @"Change Interval",
+                       @"gradientStartX": @"Gradient Start Color X",
+                       @"gradientStartY": @"Gradient Start Color Y",
+                       @"gradientStopX": @"Gradient Stop Color X",
+                       @"gradientStopY": @"Gradient Stop Color Y",
+                       @"startColor": @"Gradient Start Color",
+                       @"stopColor": @"Gradient Stop Color",
+                       @"backgroundColor": @"Background Color",
+                       @"borderColor": @"Border Color",
+                       @"cornerRadius": @"Border Corner Radius",
+                       @"borderWidth": @"Border Width",
+                       @"compositingFilterName": @"Composition Filter",
+                       @"rotationAngle": @"Rotation",
+                       @"rotationAngleX": @"X Rotation",
+                       @"rotationAngleY": @"Y Rotation",
+                       @"transitionDuration": @"Effect Duration",
+                       @"transitionDirection": @"Transition Direction",
+                       @"transitionEnabled": @"Enable Transitions",
+                       @"alwaysDisplay": @"Always Show",
+                       @"transitionFilterName": @"Transition Effect",
+                       @"width": @"Width",
+                       @"height": @"Height",
+                       @"opacity": @"Opacity",
+                       @"scrollXSpeed": @"Horizontal Scroll Speed",
+                       @"scrollYSpeed": @"Vertical Scroll Speed",
+                       @"crop_left": @"Crop Left",
+                       @"crop_right": @"Crop Right",
+                       @"crop_bottom": @"Crop Bottom",
+                       @"chromaKeyColor": @"Chroma Key Color",
+                       @"chromaKeySmoothing": @"CK Smoothing",
+                       @"chromaKeyThreshold": @"CK Threshold",
+                       @"rotateStyle": @"Order",
+                       };
+    
  }
 
 
@@ -650,7 +686,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setRotateStyle:(input_rotate_style)rotateStyle
 {
-    [self registerUndoForProperty:@"rotateStyle" withAction:@"Order"];
     _rotateStyle = rotateStyle;
 }
 
@@ -663,7 +698,6 @@ static NSArray *_sourceTypes = nil;
 -(void)setChangeInterval:(float)changeInterval
 {
     
-    [self registerUndoForProperty:@"changeInterval" withAction:@"Change Interval"];
     _changeInterval = changeInterval;
 }
 
@@ -712,7 +746,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setGradientStartX:(CGFloat)gradientStartX
 {
-    [self registerUndoForProperty:@"gradientStartX" withAction:@"Gradient Start Color X"];
     self.layer.gradientStartX = gradientStartX;
 }
 
@@ -723,7 +756,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setGradientStartY:(CGFloat)gradientStartY
 {
-    [self registerUndoForProperty:@"gradientStartY" withAction:@"Gradient Start Color Y"];
     self.layer.gradientStartY = gradientStartY;
 }
 
@@ -734,7 +766,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setGradientStopX:(CGFloat)gradientStopX
 {
-    [self registerUndoForProperty:@"gradientStopX" withAction:@"Gradient Stop Color X"];
     self.layer.gradientStopX = gradientStopX;
 }
 
@@ -745,7 +776,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setGradientStopY:(CGFloat)gradientStopY
 {
-    [self registerUndoForProperty:@"gradientStopY" withAction:@"Gradient Stop Color Y"];
     self.layer.gradientStopY = gradientStopY;
 }
 
@@ -762,7 +792,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setStartColor:(NSColor *)startColor
 {
-    [self registerUndoForProperty:@"startColor" withAction:@"Gradient Start Color"];
 
     self.layer.startColor = startColor;
 }
@@ -775,7 +804,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setStopColor:(NSColor *)stopColor
 {
-    [self registerUndoForProperty:@"stopColor" withAction:@"Gradient Stop Color"];
     
     self.layer.stopColor = stopColor;
 }
@@ -791,7 +819,6 @@ static NSArray *_sourceTypes = nil;
 -(void)setBackgroundColor:(NSColor *)backgroundColor
 {
     
-    [self registerUndoForProperty:@"backgroundColor" withAction:@"Background Color"];
 
     [CATransaction begin];
     _userBackground = YES;
@@ -818,7 +845,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setBorderColor:(NSColor *)borderColor
 {
-    [self registerUndoForProperty:@"borderColor" withAction:@"Border Color"];
 
     [CATransaction begin];
     self.layer.borderColor = [borderColor CGColor];
@@ -837,7 +863,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setCornerRadius:(CGFloat)cornerRadius
 {
-    [self registerUndoForProperty:@"cornerRadius" withAction:@"Border Corner Radius"];
 
     [CATransaction begin];
     self.layer.cornerRadius = cornerRadius;
@@ -853,7 +878,6 @@ static NSArray *_sourceTypes = nil;
 -(void)setBorderWidth:(CGFloat)borderWidth
 {
     
-    [self registerUndoForProperty:@"borderWidth" withAction:@"Border Width"];
     
     
     [CATransaction begin];
@@ -876,7 +900,6 @@ static NSArray *_sourceTypes = nil;
 -(void)setCompositingFilterName:(NSString *)compositingFilterName
 {
     
-    [self registerUndoForProperty:@"compositingFilterName" withAction:@"Composition Filter"];
     CIFilter *newFilter = nil;
     if (compositingFilterName)
     {
@@ -892,7 +915,6 @@ static NSArray *_sourceTypes = nil;
 -(void)setIsMaskLayer:(bool)isMaskLayer
 {
     
-    [self registerUndoForProperty:@"isMaskLayer" withAction:isMaskLayer ? @"Set As Mask" : @"Unset As Mask"];
 
     [self.sourceLayout.undoManager disableUndoRegistration];
     if (isMaskLayer)
@@ -1306,7 +1328,6 @@ static NSArray *_sourceTypes = nil;
 -(void)setName:(NSString *)name
 {
     
-    [self registerUndoForProperty:@"name" withAction:@"Set Name"];
     
     _name = name;
 
@@ -1379,7 +1400,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setRotationAngle:(float)rotationAngle
 {
-    [self registerUndoForProperty:@"rotationAngle" withAction:@"Rotation"];
 
     
     _rotationAngle = rotationAngle;
@@ -1395,7 +1415,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setRotationAngleX:(float)rotationAngleX
 {
-    [self registerUndoForProperty:@"rotationAngleX" withAction:@"X Rotation"];
 
     _rotationAngleX = rotationAngleX;
     
@@ -1410,7 +1429,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setRotationAngleY:(float)rotationAngleY
 {
-    [self registerUndoForProperty:@"rotationAngleY" withAction:@"Y Rotation"];
 
     _rotationAngleY = rotationAngleY;
     
@@ -1443,7 +1461,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setTransitionDuration:(float)transitionDuration
 {
-    [self registerUndoForProperty:@"transitionDuration" withAction:@"Effect Duration"];
     _transitionDuration = transitionDuration;
 }
 
@@ -1454,7 +1471,6 @@ static NSArray *_sourceTypes = nil;
 }
 -(void)setTransitionDirection:(NSString *)transitionDirection
 {
-    [self registerUndoForProperty:@"transitionDirection" withAction:@"Transition Direction"];
     _transitionDirection = transitionDirection;
 }
 
@@ -1465,7 +1481,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setTransitionEnabled:(bool)transitionEnabled
 {
-    [self registerUndoForProperty:@"transitionEnabled" withAction:@"Enable Transitions"];
     [CATransaction begin];
     _transitionEnabled = transitionEnabled;
     
@@ -1497,7 +1512,6 @@ static NSArray *_sourceTypes = nil;
 {
     
     
-    [self registerUndoForProperty:@"alwaysDisplay" withAction:@"Always Show"];
     if (alwaysDisplay)
     {
         [CATransaction begin];
@@ -1537,7 +1551,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void) setTransitionFilterName:(NSString *)transitionFilterName
 {
-    [self registerUndoForProperty:@"transitionFilterName" withAction:@"Transition Effect"];
     _transitionFilterName = transitionFilterName;
     if ([transitionFilterName hasPrefix:@"CI"])
     {
@@ -1649,7 +1662,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setWidth:(float)width
 {
-    [self registerUndoForProperty:@"width" withAction:@"Width"];
     _width = width;
     [self directSize:_width height:_height];
 }
@@ -1661,7 +1673,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setHeight:(float)height
 {
-    [self registerUndoForProperty:@"height" withAction:@"Height"];
     _height = height;
     [self directSize:_width height:_height];
 }
@@ -2084,7 +2095,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setOpacity:(float)opacity
 {
-    [self registerUndoForProperty:@"opacity" withAction:@"Opacity"];
 
     _opacity = opacity;
     [CATransaction begin];
@@ -2182,7 +2192,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setScrollXSpeed:(float)scrollXSpeed
 {
-    [self registerUndoForProperty:@"scrollXSpeed" withAction:@"Horizontal Scroll Speed"];
 
     [CATransaction begin];
     self.layer.scrollXSpeed = scrollXSpeed;
@@ -2198,7 +2207,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setScrollYSpeed:(float)scrollYSpeed
 {
-    [self registerUndoForProperty:@"scrollYSpeed" withAction:@"Vertical Scroll Speed"];
 
     [CATransaction begin];
     self.layer.scrollYSpeed = scrollYSpeed;
@@ -2570,7 +2578,6 @@ static NSArray *_sourceTypes = nil;
 -(void) setActive:(bool)active
 {
     
-    [self registerUndoForProperty:@"active" withAction:active ? @"Set Active" : @"Unset Active"];
     _active = active;
     if (self.videoInput)
     {
@@ -2635,7 +2642,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void) setCrop_left:(float)crop_left
 {
-    [self registerUndoForProperty:@"crop_left" withAction:@"Crop Left"];
     if (crop_left < 0)
     {
         _crop_left = 0;
@@ -2656,7 +2662,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void) setCrop_right:(float)crop_right
 {
-    [self registerUndoForProperty:@"crop_right" withAction:@"Crop Right"];
     if (crop_right < 0)
     {
         _crop_right = 0;
@@ -2675,7 +2680,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void) setCrop_top:(float)crop_top
 {
-    [self registerUndoForProperty:@"crop_top" withAction:@"Crop Top"];
     if (crop_top < 0)
     {
         _crop_top = 0;
@@ -2692,9 +2696,31 @@ static NSArray *_sourceTypes = nil;
 }
 
 
+-(void)setValue:(id)value forKeyPath:(NSString *)keyPath
+{
+    
+    NSString *actionName = _undoActionMap[keyPath];
+    if (!actionName)
+    {
+        if ([keyPath isEqualToString:@"isMaskLayer"])
+        {
+            actionName = value ? @"Set As Mask" : @"Unset As Mask";
+        } else if ([keyPath isEqualToString: @"active"]) {
+            actionName = value ? @"Set Active" : @"Unset Active";
+        } else if ([keyPath isEqualToString:@"doChromaKey"]) {
+            actionName = value ? @"Set Chroma Key" : @"Unset Chroma Key";
+        } else {
+            actionName = [NSString stringWithFormat:@"Change %@", keyPath];
+        }
+    }
+    
+    [self registerUndoForProperty:keyPath withAction:actionName];
+    [super setValue:value forKey:keyPath];
+}
+
+
 -(void) setCrop_bottom:(float)crop_bottom
 {
-    [self registerUndoForProperty:@"crop_bottom" withAction:@"Crop Bottom"];
     if (crop_bottom < 0)
     {
         _crop_bottom = 0;
@@ -2722,7 +2748,6 @@ static NSArray *_sourceTypes = nil;
 -(void)setChromaKeyColor:(NSColor *)chromaKeyColor
 {
 
-    [self registerUndoForProperty:@"chromaKeyColor" withAction:@"Chroma Key Color"];
 
     _chromaKeyColor = chromaKeyColor;
     [CATransaction begin];
@@ -2737,7 +2762,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setChromaKeySmoothing:(float)chromaKeySmoothing
 {
-    [self registerUndoForProperty:@"chromaKeySmoothing" withAction:@"CK Smoothing"];
 
     _chromaKeySmoothing = chromaKeySmoothing;
     [CATransaction begin];
@@ -2752,7 +2776,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setChromaKeyThreshold:(float)chromaKeyThreshold
 {
-    [self registerUndoForProperty:@"chromaKeyThreshold" withAction:@"CK Threshold"];
     _chromaKeyThreshold = chromaKeyThreshold;
     [CATransaction begin];
     [self.layer.sourceLayer setValue:@(chromaKeyThreshold) forKeyPath:@"filters.Chromakey.inputThreshold"];
@@ -2769,7 +2792,6 @@ static NSArray *_sourceTypes = nil;
 -(void)setDoChromaKey:(bool)doChromaKey
 {
     
-    [self registerUndoForProperty:@"doChromaKey" withAction:doChromaKey ? @"Set Chroma Key" : @"Unset Chroma Key"];
     _doChromaKey = doChromaKey;
 
     [CATransaction begin];

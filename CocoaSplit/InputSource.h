@@ -77,6 +77,8 @@ typedef enum resize_style_t {
     NSArray *_constraintObserveKeys;
     NSMutableDictionary *_restoredConstraintMap;
     NSString *_editedName;
+    NSDictionary *_undoActionMap;
+    
     
     
 }
