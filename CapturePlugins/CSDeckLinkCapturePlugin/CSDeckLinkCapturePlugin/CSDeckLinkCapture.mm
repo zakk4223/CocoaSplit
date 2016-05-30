@@ -134,9 +134,10 @@
 {
     
     super.activeVideoDevice = activeVideoDevice;
-    
+
     if (activeVideoDevice)
     {
+        
         CSDeckLinkWrapper *devWrapper = activeVideoDevice.captureDevice;
         IDeckLink *deckLink = devWrapper.deckLink;
         

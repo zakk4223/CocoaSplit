@@ -2715,9 +2715,9 @@ static NSArray *_sourceTypes = nil;
     }
     
     [self registerUndoForProperty:keyPath withAction:actionName];
-    [super setValue:value forKey:keyPath];
+    
+    [super setValue:value forKeyPath:keyPath];
 }
-
 
 -(void) setCrop_bottom:(float)crop_bottom
 {

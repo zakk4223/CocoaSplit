@@ -162,9 +162,9 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
 
 -(void)releasePCM:(CAMultiAudioPCM *)buffer
 {
-    //dispatch_async(_pendingQueue, ^{
+    dispatch_async(_pendingQueue, ^{
         [_pendingBuffers removeObject:buffer];
-    //});
+    });
 }
 
 
@@ -248,11 +248,11 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList)
     CAMultiAudioPCM *pcmObj = (__bridge CAMultiAudioPCM *)(userData);
     //maybe put this on a dedicated queue?
     //why a queue? don't want to do any sort of memory/managed object operations in an audio callback.
-    dispatch_async(dispatch_get_main_queue(), ^{
+    //dispatch_async(dispatch_get_main_queue(), ^{
         CAMultiAudioPCMPlayer *pplayer = pcmObj.player;
         //pplayer.latestScheduledTime = pcmObj.audioSlice->mTimeStamp.mSampleTime + pcmObj.audioSlice->mNumberFrames;
         [pplayer releasePCM:pcmObj];
-    });
+    //});
     
     
 }
