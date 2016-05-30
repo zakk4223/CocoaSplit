@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
 #import <OpenGL/gl.h>
+
 #import "DeckLinkBridge.h"
 
 
@@ -16,7 +17,7 @@
 {
     CGLContextObj _myCGLContext;
     CGRect _lastBounds;
-    CGSize _lastImageSize;
+    NSRect _lastImageSize;
     CGRect _privateCropRect;
     CGRect _lastCrop;
     CGRect _calculatedCrop;
