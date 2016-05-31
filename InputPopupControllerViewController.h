@@ -37,20 +37,21 @@
 @property (strong) NSArray *compositionFilterNames;
 
 
-- (IBAction)configureFilter:(NSButton *)sender;
+- (IBAction)configureFilter:(NSSegmentedControl *)sender;
 
 - (IBAction)resetConstraints:(id)sender;
 
-- (IBAction)removeFilter:(NSButton *)sender;
+- (IBAction)removeFilter:(NSSegmentedControl *)sender;
 
 
+- (IBAction)filterControlAction:(id)sender;
 
 - (IBAction)deleteMultiSource:(id)sender;
 -(void)openTransitionFilterPanel:(CIFilter *)forFilter;
 -(IBAction) configureInputTransition:(NSButton *)sender;
 
 
-- (IBAction)addFilterAction:(NSButton *)sender;
+- (IBAction)addFilterAction:(NSSegmentedControl *)sender;
 
 -(IBAction) clearGradient:(NSButton *)sender;
 

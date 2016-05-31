@@ -1714,27 +1714,6 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="yBn-Om-RVE">
-                                <rect key="frame" x="12" y="62" width="84" height="28"/>
-                                <buttonCell key="cell" type="push" title="Configure" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="unH-xy-hvz">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="configureFilter:" target="-2" id="LD9-Kt-Uar"/>
-                                    <binding destination="-2" name="enabled" keyPath="self.backgroundTableHasSelection" id="gFE-tm-0oM"/>
-                                </connections>
-                            </button>
-                            <button fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="DSg-sC-g0C">
-                                <rect key="frame" x="127" y="65" width="21" height="23"/>
-                                <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="CvJ-ju-AZY">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="addFilterAction:" target="-2" id="Pea-DF-pA7"/>
-                                </connections>
-                            </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rxd-ut-78O">
                                 <rect key="frame" x="15" y="405" width="68" height="14"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Background" id="sUN-i0-qRa">
@@ -1790,17 +1769,6 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="ZE7-vz-Q7M">
-                                <rect key="frame" x="237" y="62" width="84" height="28"/>
-                                <buttonCell key="cell" type="push" title="Configure" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fhb-Gl-KyQ">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="configureFilter:" target="-2" id="Qcj-0h-oBL"/>
-                                    <binding destination="-2" name="enabled" keyPath="self.sourceTableHasSelection" id="IeR-Hw-VMb"/>
-                                </connections>
-                            </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zej-sk-OK4">
                                 <rect key="frame" x="240" y="405" width="42" height="14"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Source" id="uf0-iJ-R2J">
@@ -1855,17 +1823,6 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="doD-uG-jNT">
-                                <rect key="frame" x="463" y="62" width="84" height="28"/>
-                                <buttonCell key="cell" type="push" title="Configure" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="b0l-Uq-DYC">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="smallSystem"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="configureFilter:" target="-2" id="Wsf-rv-ed4"/>
-                                    <binding destination="-2" name="enabled" keyPath="self.layerTableHasSelection" id="b3b-Gk-URo"/>
-                                </connections>
-                            </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SpP-Ed-reh">
                                 <rect key="frame" x="466" y="405" width="31" height="14"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Input" id="RRn-tL-Gja">
@@ -1874,59 +1831,6 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <button fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="xwb-Il-zfO">
-                                <rect key="frame" x="152" y="65" width="21" height="23"/>
-                                <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Iyw-aU-qTT">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="removeFilter:" target="-2" id="b5c-tE-ApD"/>
-                                    <binding destination="-2" name="enabled" keyPath="self.backgroundTableHasSelection" id="6ny-Hk-QLH"/>
-                                </connections>
-                            </button>
-                            <button fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="6u5-YV-Twa">
-                                <rect key="frame" x="352" y="65" width="21" height="23"/>
-                                <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mg1-Tu-2rh">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="addFilterAction:" target="-2" id="cyL-ZL-Uxp"/>
-                                </connections>
-                            </button>
-                            <button fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="nKy-vH-Kkl">
-                                <rect key="frame" x="377" y="65" width="21" height="23"/>
-                                <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="DYI-dB-FE1">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="removeFilter:" target="-2" id="pyU-Pv-9vP"/>
-                                    <binding destination="-2" name="enabled" keyPath="self.sourceTableHasSelection" id="tg6-r6-8lC"/>
-                                </connections>
-                            </button>
-                            <button fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="0tM-Tq-Sta">
-                                <rect key="frame" x="578" y="65" width="21" height="23"/>
-                                <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="SvM-dd-GJl">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="addFilterAction:" target="-2" id="MLx-wI-JV0"/>
-                                </connections>
-                            </button>
-                            <button fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="dyM-bz-LIy">
-                                <rect key="frame" x="603" y="65" width="21" height="23"/>
-                                <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="KuN-5n-eRv">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="removeFilter:" target="-2" id="XhE-Jo-LBm"/>
-                                    <binding destination="-2" name="enabled" keyPath="self.layerTableHasSelection" id="Ttb-Xe-y4y"/>
-                                </connections>
-                            </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CJB-gi-9hu">
                                 <rect key="frame" x="240" y="17" width="72" height="14"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Composition" placeholderString="" id="0dM-GS-IwH">
@@ -1957,6 +1861,63 @@
                                     <binding destination="Gdf-y2-DdF" name="selectedObject" keyPath="selection.compositingFilterName" previousBinding="PnG-dl-OW4" id="BRJ-nl-KZa"/>
                                 </connections>
                             </popUpButton>
+                            <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="z4e-Fj-Rzk">
+                                <rect key="frame" x="17" y="73" width="154" height="23"/>
+                                <segmentedCell key="cell" borderStyle="border" alignment="left" style="smallSquare" trackingMode="momentary" id="QX5-UM-IDr">
+                                    <font key="font" metaFont="system"/>
+                                    <segments>
+                                        <segment image="NSAddTemplate"/>
+                                        <segment image="NSRemoveTemplate" tag="1"/>
+                                        <segment image="NSActionTemplate">
+                                            <nil key="label"/>
+                                        </segment>
+                                        <segment width="65" enabled="NO">
+                                            <nil key="label"/>
+                                        </segment>
+                                    </segments>
+                                </segmentedCell>
+                                <connections>
+                                    <action selector="filterControlAction:" target="-2" id="rGy-zs-uu1"/>
+                                </connections>
+                            </segmentedControl>
+                            <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="Cp1-qv-Bff">
+                                <rect key="frame" x="242" y="73" width="154" height="23"/>
+                                <segmentedCell key="cell" borderStyle="border" alignment="left" style="smallSquare" trackingMode="momentary" id="bbp-sk-7Or">
+                                    <font key="font" metaFont="system"/>
+                                    <segments>
+                                        <segment image="NSAddTemplate"/>
+                                        <segment image="NSRemoveTemplate" tag="1"/>
+                                        <segment image="NSActionTemplate">
+                                            <nil key="label"/>
+                                        </segment>
+                                        <segment width="65" enabled="NO">
+                                            <nil key="label"/>
+                                        </segment>
+                                    </segments>
+                                </segmentedCell>
+                                <connections>
+                                    <action selector="filterControlAction:" target="-2" id="atV-Sq-avf"/>
+                                </connections>
+                            </segmentedControl>
+                            <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="bKC-YP-hn7">
+                                <rect key="frame" x="468" y="73" width="154" height="23"/>
+                                <segmentedCell key="cell" borderStyle="border" alignment="left" style="smallSquare" trackingMode="momentary" id="ddL-U8-f7v">
+                                    <font key="font" metaFont="system"/>
+                                    <segments>
+                                        <segment image="NSAddTemplate"/>
+                                        <segment image="NSRemoveTemplate" tag="1"/>
+                                        <segment image="NSActionTemplate">
+                                            <nil key="label"/>
+                                        </segment>
+                                        <segment width="65" enabled="NO">
+                                            <nil key="label"/>
+                                        </segment>
+                                    </segments>
+                                </segmentedCell>
+                                <connections>
+                                    <action selector="filterControlAction:" target="-2" id="Y5D-j5-sZQ"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                     </view>
                 </tabViewItem>
@@ -2018,6 +1979,7 @@
         </arrayController>
     </objects>
     <resources>
+        <image name="NSActionTemplate" width="14" height="14"/>
         <image name="NSAddTemplate" width="11" height="11"/>
         <image name="NSRemoveTemplate" width="11" height="11"/>
     </resources>

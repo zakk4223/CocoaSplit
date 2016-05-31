@@ -98,7 +98,7 @@
 }
 
 
-- (IBAction)configureFilter:(NSButton *)sender
+- (IBAction)configureFilter:(NSSegmentedControl *)sender
 {
     CIFilter *selectedFilter;
     CALayer *useLayer = nil;
@@ -129,7 +129,7 @@
 }
 
 
-- (IBAction)removeFilter:(NSButton *)sender
+- (IBAction)removeFilter:(NSSegmentedControl *)sender
 {
     CIFilter *selectedFilter;
     
@@ -147,6 +147,26 @@
     } else if (sender.tag == 3) {
         selectedFilter = [self.inputSource.layer.filters objectAtIndex:self.layerFilterTableView.selectedRow];
         [self.inputSource deleteLayerFilter:selectedFilter.name];
+    }
+}
+
+- (IBAction)filterControlAction:(NSSegmentedControl *)sender
+{
+    NSInteger segment = sender.selectedSegment;
+    
+    switch (segment)
+    {
+        case 0:
+            [self addFilterAction:sender];
+            break;
+        case 1:
+            [self removeFilter:sender];
+            break;
+        case 2:
+            [self configureFilter:sender];
+            break;
+        default:
+            break;
     }
 }
 
@@ -352,7 +372,7 @@
     
 }
 
-- (IBAction)addFilterAction:(NSButton *)sender
+- (IBAction)addFilterAction:(NSSegmentedControl *)sender
 {
     NSString *filterName = [CSFilterChooserWindowController run];
     
