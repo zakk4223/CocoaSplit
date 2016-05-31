@@ -114,7 +114,7 @@
         vc = [[CSAddInputViewController alloc] init];
         _addInputpopOver.contentViewController = vc;
         vc.popover = _addInputpopOver;
-        
+        vc.previewView = self.activePreviewView;
         //_addInputpopOver.delegate = vc;
     }
     
@@ -408,19 +408,6 @@
     [self.advancedPrefPanel close];
     self.advancedPrefPanel = nil;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 -(void)openOutputSheet:(OutputDestination *)toEdit
 {

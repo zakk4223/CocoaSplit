@@ -10,6 +10,7 @@
 #import "CSPluginLoader.h"
 #import "InputSource.h"
 
+@class PreviewView;
 
 @interface CSAddInputViewController : NSViewController <NSTableViewDelegate>
 {
@@ -31,6 +32,8 @@
 @property (readonly) NSArray *sourceTypes;
 @property (weak) IBOutlet NSView *headerView;
 @property (strong) IBOutlet NSArrayController *sourceTypesController;
+
+@property (weak) PreviewView *previewView;
 
 - (IBAction)nextViewButton:(id)sender;
 - (IBAction)previousViewButton:(id)sender;

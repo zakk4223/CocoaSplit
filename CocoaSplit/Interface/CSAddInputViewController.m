@@ -169,11 +169,10 @@
 -(void)addInput:(id)toAdd
 {
     
-    AppDelegate *myAppDelegate = [[NSApplication sharedApplication] delegate];
-        
-    if (myAppDelegate.captureController)
+    
+    if (self.previewView)
     {
-        [myAppDelegate.captureController.activePreviewView addInputSourceWithInput:toAdd];
+        [self.previewView addInputSourceWithInput:toAdd];
     }
  
   }

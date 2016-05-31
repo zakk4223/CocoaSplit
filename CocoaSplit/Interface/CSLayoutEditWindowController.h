@@ -11,10 +11,13 @@
 #import "PreviewView.h"
 
 
-@interface CSLayoutEditWindowController : NSWindowController <NSWindowDelegate>
+@interface CSLayoutEditWindowController : NSWindowController <NSWindowDelegate, NSOutlineViewDelegate, NSTableViewDelegate>
 {
     float _frame_interval;
     NSPopover *_animatepopOver;
+    NSPopover *_addInputpopOver;
+    
+    
 
 }
 
@@ -28,5 +31,8 @@
 - (IBAction)editOK:(id)sender;
 - (IBAction)newSource:(id)sender;
 - (IBAction)openAnimatePopover:(NSButton *)sender;
+- (IBAction)inputTableControlClick:(NSButton *)sender;
+
+@property (weak) IBOutlet NSOutlineView *inputOutlineView;
 
 @end
