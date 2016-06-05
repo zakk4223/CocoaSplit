@@ -1569,7 +1569,8 @@
     }
     
     _firstAudioTime = kCMTimeZero;
-
+    _previousAudioTime = kCMTimeZero;
+    
     
     
     
@@ -2034,9 +2035,14 @@
     CMTime pts = CMTimeAdd(real_pts, adjust_pts);
 
     
+    
     CMSampleBufferSetOutputPresentationTimeStamp(sampleBuffer, pts);
     
-    [self addAudioData:sampleBuffer];
+    if (CMTIME_COMPARE_INLINE(pts, >, _previousAudioTime))
+    {
+        [self addAudioData:sampleBuffer];
+        _previousAudioTime = pts;
+    }
 }
 
 

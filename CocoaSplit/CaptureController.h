@@ -74,6 +74,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     CFAbsoluteTime _firstFrameTime;
     
     CMTime _firstAudioTime;
+    CMTime _previousAudioTime;
+    
     
     dispatch_queue_t _main_capture_queue;
     dispatch_queue_t _preview_queue;
