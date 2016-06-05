@@ -673,16 +673,19 @@
     if (layout == self.selectedLayout)
     {
         useLayout = self.livePreviewView.sourceLayout;
+        [useLayout saveSourceList];
+        [useLayout saveAnimationSource];
     } else if (layout == self.stagingLayout) {
         useLayout = self.stagingPreviewView.sourceLayout;
+        [useLayout saveSourceList];
+        [useLayout saveAnimationSource];
+
     }
 
     [panel beginWithCompletionHandler:^(NSInteger result) {
         if (result == NSFileHandlingPanelOKButton)
         {
             NSURL *saveFile = [panel URL];
-            [useLayout saveSourceList];
-            [useLayout saveAnimationSource];
             
             
             [NSKeyedArchiver archiveRootObject:useLayout toFile:saveFile.path];
