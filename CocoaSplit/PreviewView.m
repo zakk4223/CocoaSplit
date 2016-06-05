@@ -830,6 +830,14 @@
     NSPoint c_rt_snap;
     NSPoint c_center_snap;
     
+    NSPoint *c_snaps;
+    int c_snap_size = 0;
+    
+    if (!self.selectedSource)
+    {
+        return;
+    }
+
     if (superInput)
     {
         NSRect super_rect = superInput.globalLayoutPosition;
@@ -837,11 +845,36 @@
         c_lb_snap = super_rect.origin;
         c_rt_snap = NSMakePoint(NSMaxX(super_rect), NSMaxY(super_rect));
         c_center_snap = NSMakePoint(NSMidX(super_rect), NSMidY(super_rect));
+        c_snaps = malloc(sizeof(NSPoint) * 3);
+        c_snaps[0] = c_lb_snap;
+        c_snaps[1] = c_rt_snap;
+        c_snaps[2] = c_center_snap;
+        c_snap_size = 3;
     } else {
     //define snap points. basically edges and the center of the canvas
         c_lb_snap = NSMakePoint(0, 0);
         c_rt_snap = NSMakePoint(self.sourceLayout.canvas_width, self.sourceLayout.canvas_height);
         c_center_snap = NSMakePoint(self.sourceLayout.canvas_width/2, self.sourceLayout.canvas_height/2);
+        c_snap_size = 3;
+
+        NSArray *srcs = self.sourceLayout.topLevelSourceList;
+        
+        c_snap_size += srcs.count*3;
+        
+        c_snaps = malloc(sizeof(NSPoint) * c_snap_size);
+        c_snaps[0] = c_lb_snap;
+        c_snaps[1] = c_rt_snap;
+        c_snaps[2] = c_center_snap;
+        
+        int snap_idx = 3;
+        for (InputSource *src in srcs)
+        {
+            NSRect srect = src.globalLayoutPosition;
+            c_snaps[snap_idx++] = srect.origin;
+            c_snaps[snap_idx++] = NSMakePoint(NSMaxX(srect), NSMaxY(srect));
+            c_snaps[snap_idx++] = NSMakePoint(NSMidX(srect), NSMidY(srect));
+            
+        }
     }
     
     
@@ -849,10 +882,6 @@
     
     //selected source snap points. edges, and center
     
-    if (!self.selectedSource)
-    {
-        return;
-    }
     
     NSRect src_rect = self.selectedSource.globalLayoutPosition;
 
@@ -864,7 +893,6 @@
     NSPoint dist;
     
     NSPoint s_snaps[3] = {s_lb_snap, s_rt_snap, s_center_snap};
-    NSPoint c_snaps[3] = {c_lb_snap, c_rt_snap, c_center_snap};
     
     bool did_snap_x = NO;
     bool did_snap_y = NO;
@@ -904,7 +932,7 @@
     for(int i=0; i < sizeof(s_snaps)/sizeof(NSPoint); i++)
     {
         NSPoint s_snap = s_snaps[i];
-        for(int j=0; j < sizeof(c_snaps)/sizeof(NSPoint); j++)
+        for(int j=0; j < c_snap_size; j++)
         {
             
             NSPoint c_snap = c_snaps[j];
@@ -939,6 +967,11 @@
     {
         _glLayer.snap_x = _snap_x;
         _glLayer.snap_y  = _snap_y;
+    }
+    
+    if (c_snaps)
+    {
+        free(c_snaps);
     }
 }
 
