@@ -403,6 +403,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(void) resetInputTableHighlights;
 
 
+- (IBAction)outputSegmentedAction:(NSSegmentedControl *)sender;
 
 
 @end

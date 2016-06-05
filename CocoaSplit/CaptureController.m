@@ -2300,6 +2300,24 @@
     }
 }
 
+- (IBAction)outputSegmentedAction:(NSSegmentedControl *)sender
+{
+    NSUInteger clicked = sender.selectedSegment;
+    
+    switch (clicked)
+    {
+        case 0:
+            [self openCreateSheet:sender];
+            break;
+        case 1:
+            [self removeDestination:sender];
+            break;
+        default:
+            break;
+    }
+}
+
+
 -(void)outlineView:(NSOutlineView *)outlineView didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row
 {
     if (outlineView == self.inputOutlineView)
