@@ -150,14 +150,11 @@
 
 -(void)setAnimationIndexes:(NSIndexSet *)animationIndexes
 {
-    NSLog(@"SET ANIMATION INDEXES %@", self);
     _animationIndexes = animationIndexes;
     NSUInteger firstIndex = animationIndexes.firstIndex;
-    NSLog(@"FIRST INDEX %lu COUNT %lu", (unsigned long)firstIndex, self.animationList.count);
     
     if (firstIndex < self.animationList.count)
     {
-        NSLog(@"SET SELECTED ANIMATION");
         self.selectedAnimation = [self.animationList objectAtIndex:firstIndex];
     }
 }

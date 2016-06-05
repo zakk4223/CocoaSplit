@@ -354,7 +354,6 @@
         
         retView = [tableView makeViewWithIdentifier:@"LabelCellView" owner:self];
     } else if ([tableColumn.identifier isEqualToString:@"value"]) {
-        NSLog(@"MY INPUT MAP %@", inputmap);
         
         if ([inputmap[@"type"] isEqualToString:@"param"])
         {
