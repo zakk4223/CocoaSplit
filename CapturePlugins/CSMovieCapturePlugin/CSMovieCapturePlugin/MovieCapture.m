@@ -8,6 +8,8 @@
 
 #import "MovieCapture.h"
 
+extern void av_register_all();
+
 
 void tapInit(MTAudioProcessingTapRef tap, void *clientInfo, void **tapStorageOut) {
     *tapStorageOut = clientInfo;
@@ -117,6 +119,8 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 {
     if (self = [super init])
     {
+        
+
         self.repeat = kCSMovieRepeatNone;
         
         _currentMovieTime = 0.0f;
@@ -138,6 +142,9 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 {
     return [CSIOSurfaceLayer layer];
 }
+
+
+
 
 
 -(void)frameTick
@@ -200,7 +207,7 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
     {
         AudioStreamBasicDescription asbd = _bufferPCM.pcmFormat;
         
-        [self registerPCMOutput:_bufferPCM.frameCount audioFormat:&asbd];
+        [self registerPCMOutput:1024 audioFormat:&asbd];
     } else {
         [self deregisterPCMOutput];
     }

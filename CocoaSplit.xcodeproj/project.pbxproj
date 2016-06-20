@@ -67,6 +67,7 @@
 		343644081B78F01D0069B8F2 /* CSAnimation.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3494616C1ABD399B00F28883 /* CSAnimation.py */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		343644091B78F01D0069B8F2 /* pluginbase.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34E983841B78B19D00F26F1E /* pluginbase.py */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		343692501B6243D4007EC2D9 /* CSShapeCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 3436922B1B62364E007EC2D9 /* CSShapeCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		343C79ED1D0C796E00B36EEC /* CSFFMpegCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 343C79CC1D0C763A00B36EEC /* CSFFMpegCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		343ED9421BCAC1C80061FC4B /* EditBuiltinLayoutView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 343ED9411BCAC1C80061FC4B /* EditBuiltinLayoutView.xib */; };
 		3444D8E819A0CDE8000DC46B /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3444D8E719A0CDE8000DC46B /* Quartz.framework */; };
 		344825D21B2536EA00AF9EAC /* CAMultiAudioMatrixView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 344825D11B2536EA00AF9EAC /* CAMultiAudioMatrixView.xib */; };
@@ -360,6 +361,13 @@
 			remoteGlobalIDString = 343692111B62364E007EC2D9;
 			remoteInfo = CSShapeCapturePlugin;
 		};
+		343C79CB1D0C763A00B36EEC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 343C79C31D0C763A00B36EEC /* CSFFMpegCapturePlugin.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 343C79BA1D0C763A00B36EEC;
+			remoteInfo = CSFFMpegCapturePlugin;
+		};
 		34A7C1A019B9A41A00BC6882 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 34A7C19C19B9A41900BC6882 /* CSLayoutSwitcherExtraPlugin.xcodeproj */;
@@ -553,6 +561,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				343C79ED1D0C796E00B36EEC /* CSFFMpegCapturePlugin.bundle in Copy Files */,
 				343692501B6243D4007EC2D9 /* CSShapeCapturePlugin.bundle in Copy Files */,
 				34F7C5871B2C9A5300345230 /* CSDeckLinkCapturePlugin.bundle in Copy Files */,
 				34FDA83E1A84C46500E7F65E /* CSTimeCapturePlugin.bundle in Copy Files */,
@@ -657,6 +666,7 @@
 		3435E399188B90900015CC01 /* passthrough.fgsh */ = {isa = PBXFileReference; lastKnownFileType = text; name = passthrough.fgsh; path = Shaders/passthrough.fgsh; sourceTree = "<group>"; };
 		3435E39A188B93150015CC01 /* passthrough.vtsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = passthrough.vtsh; path = Shaders/passthrough.vtsh; sourceTree = "<group>"; };
 		3436921B1B62364E007EC2D9 /* CSShapeCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSShapeCapturePlugin.xcodeproj; path = CapturePlugins/CSShapeCapturePlugin/CSShapeCapturePlugin.xcodeproj; sourceTree = "<group>"; };
+		343C79C31D0C763A00B36EEC /* CSFFMpegCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSFFMpegCapturePlugin.xcodeproj; path = CSFFMpegCapturePlugin/CSFFMpegCapturePlugin.xcodeproj; sourceTree = "<group>"; };
 		343DD65919AAD3060017232A /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
 		343DD65C19AAD3060017232A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		343DD65E19AAD3060017232A /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
@@ -1272,6 +1282,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		343C79C41D0C763A00B36EEC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				343C79CC1D0C763A00B36EEC /* CSFFMpegCapturePlugin.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		3441338C18667F280059B686 /* Compressor */ = {
 			isa = PBXGroup;
 			children = (
@@ -1507,6 +1525,7 @@
 		34AFC24319B058800007C07B /* CapturePlugins */ = {
 			isa = PBXGroup;
 			children = (
+				343C79C31D0C763A00B36EEC /* CSFFMpegCapturePlugin.xcodeproj */,
 				3436921B1B62364E007EC2D9 /* CSShapeCapturePlugin.xcodeproj */,
 				34F7C55A1B2C908700345230 /* CSDeckLinkCapturePlugin.xcodeproj */,
 				34FDA8071A84BF9300E7F65E /* CSTimeCapturePlugin.xcodeproj */,
@@ -1934,6 +1953,10 @@
 					ProjectRef = 34AFC24519B05ADA0007C07B /* CSDesktopCapturePlugin.xcodeproj */;
 				},
 				{
+					ProductGroup = 343C79C41D0C763A00B36EEC /* Products */;
+					ProjectRef = 343C79C31D0C763A00B36EEC /* CSFFMpegCapturePlugin.xcodeproj */;
+				},
+				{
 					ProductGroup = 34AFC32C19B0AD500007C07B /* Products */;
 					ProjectRef = 34AFC2E019B08C050007C07B /* CSFileStreamServicePlugin.xcodeproj */;
 				},
@@ -2009,6 +2032,13 @@
 			fileType = wrapper.cfbundle;
 			path = CSShapeCapturePlugin.bundle;
 			remoteRef = 3436922A1B62364E007EC2D9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		343C79CC1D0C763A00B36EEC /* CSFFMpegCapturePlugin.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = CSFFMpegCapturePlugin.bundle;
+			remoteRef = 343C79CB1D0C763A00B36EEC /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		34A7C1A119B9A41A00BC6882 /* CSLayoutSwitcherExtraPlugin.bundle */ = {
@@ -2567,6 +2597,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "Developer ID Application: Zachary Girouard (L3JLUY4S5E)";
@@ -2587,12 +2618,14 @@
 				"LIBRARY_SEARCH_PATHS[arch=*]" = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				"OTHER_LDFLAGS[arch=*]" = (
+					/usr/local/lib/libswresample.a,
 					/usr/local/lib/libavutil.a,
 					/usr/local/lib/libavformat.a,
 					/usr/local/lib/libavcodec.a,
 					/usr/local/lib/libmp3lame.a,
 					/usr/local/lib/libswscale.a,
 					/usr/local/lib/libx264.a,
+					"-all_load",
 				);
 				PRODUCT_NAME = CocoaSplit;
 				PROVISIONING_PROFILE = "";
@@ -2607,6 +2640,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "Developer ID Application: Zachary Girouard (L3JLUY4S5E)";
@@ -2628,6 +2662,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				"OTHER_LDFLAGS[arch=*]" = (
+					/usr/local/lib/libswresample.a,
 					/usr/local/lib/libavformat.a,
 					/usr/local/lib/libavutil.a,
 					/usr/local/lib/libavcodec.a,
@@ -2635,6 +2670,7 @@
 					/usr/local/lib/libswscale.a,
 					/usr/local/lib/libx264.a,
 					"-flat_namespace",
+					"-all_load",
 				);
 				PRODUCT_NAME = CocoaSplit;
 				PROVISIONING_PROFILE = "";

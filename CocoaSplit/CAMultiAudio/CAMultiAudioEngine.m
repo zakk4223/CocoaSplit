@@ -441,6 +441,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     [self.graph addNode:input];
     [self attachInput:newConverter];
+    
     [self.graph connectNode:input toNode:newConverter sampleRate:input.inputFormat->mSampleRate];
 
 }

@@ -1576,11 +1576,6 @@
     
     
     
-    dispatch_async(_main_capture_queue, ^{[self newFrameTimed];});
-    
-    dispatch_async(_preview_queue, ^{
-        [self newStagingFrameTimed];
-    });
     
     CSAacEncoder *audioEnc = [[CSAacEncoder alloc] init];
     audioEnc.encodedReceiver = self;
@@ -1596,6 +1591,11 @@
         [self setupInstantRecorder];
     }
 
+    dispatch_async(_main_capture_queue, ^{[self newFrameTimed];});
+    
+    dispatch_async(_preview_queue, ^{
+        [self newStagingFrameTimed];
+    });
 
     
 }

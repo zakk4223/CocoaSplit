@@ -18,9 +18,14 @@
 
 @property (strong) NSString *name;
 @property (strong) NSString *nodeUID;
+@property (readonly) NSUInteger pendingFrames;
+@property (nonatomic, copy) void (^completedBlock)(CAMultiAudioPCM *pcmBuffer);
 
 -(void)scheduleBuffer:(CMSampleBufferRef)sampleBuffer;
 -(bool)playPcmBuffer:(CAMultiAudioPCM *)pcmBuffer;
+-(void)play;
+-(void)pause;
+-(void)flush;
 
 
 @end

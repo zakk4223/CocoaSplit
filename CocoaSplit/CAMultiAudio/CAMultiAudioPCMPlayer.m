@@ -41,6 +41,10 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     [self playPcmBuffer:pcmBuffer];
 }
 
+-(NSUInteger)pendingFrames
+{
+    return _pendingBuffers.count;
+}
 
 -(bool)playPcmBuffer:(CAMultiAudioPCM *)pcmBuffer
 {
@@ -101,6 +105,7 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ScheduleAudioSlice, kAudioUnitScope_Global, 0, pcmBuffer.audioSlice, sizeof(ScheduledAudioSlice));
     
 
+    
     
     dispatch_async(_pendingQueue, ^{
         
@@ -217,6 +222,33 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     }
 }
 
+-(void)pause
+{
+    if (self.audioUnit)
+    {
+        AudioTimeStamp ts = {0};
+        
+        OSStatus err;
+        
+        
+        
+        
+        ts.mFlags = kAudioTimeStampSampleTimeValid;
+        ts.mSampleTime = MAXFLOAT;
+        err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ScheduleStartTimeStamp, kAudioUnitScope_Global, 0, &ts, sizeof(ts));
+
+    }
+}
+
+
+-(void)flush
+{
+    if (self.audioUnit)
+    {
+        AudioUnitReset(self.audioUnit, kAudioUnitScope_Global, 0);
+    }
+}
+
 
 -(void)play
 {
@@ -225,6 +257,7 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     OSStatus err;
     
 
+ 
     
     ts.mFlags = kAudioTimeStampSampleTimeValid;
     ts.mSampleTime = -1;
@@ -251,7 +284,14 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList)
     //dispatch_async(dispatch_get_main_queue(), ^{
         CAMultiAudioPCMPlayer *pplayer = pcmObj.player;
         //pplayer.latestScheduledTime = pcmObj.audioSlice->mTimeStamp.mSampleTime + pcmObj.audioSlice->mNumberFrames;
+    if (pplayer.completedBlock)
+    {
+        pplayer.completedBlock(pcmObj);
+    }
+
         [pplayer releasePCM:pcmObj];
+    
+    
     //});
     
     

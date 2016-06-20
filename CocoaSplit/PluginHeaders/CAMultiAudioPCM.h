@@ -19,6 +19,7 @@
     size_t _audioBufferListSize;
     size_t _audioBufferDataSize;
     AudioBufferList *_pcmData;
+    bool _alloced_buffers;
     
 }
 @property (assign) ScheduledAudioSlice *audioSlice;

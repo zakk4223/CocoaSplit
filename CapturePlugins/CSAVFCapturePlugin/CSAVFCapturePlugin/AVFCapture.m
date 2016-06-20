@@ -233,6 +233,7 @@
     
     [_capture_session registerOutput:self];
     
+    
     self.captureName = newDev.captureName;
     
     self.videoFormats = _selectedVideoCaptureDevice.formats;

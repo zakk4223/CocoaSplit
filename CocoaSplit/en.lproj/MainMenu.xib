@@ -307,7 +307,7 @@
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1057"/>
             <view key="contentView" id="372">
                 <rect key="frame" x="0.0" y="0.0" width="919" height="726"/>
-                <autoresizingMask key="autoresizingMask"/>
+                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <splitView misplaced="YES" dividerStyle="thin" translatesAutoresizingMaskIntoConstraints="NO" id="2368">
                         <rect key="frame" x="0.0" y="29" width="886" height="697"/>
@@ -381,6 +381,17 @@
                                         </buttonCell>
                                         <connections>
                                             <action selector="streamButtonPushed:" target="816" id="825"/>
+                                        </connections>
+                                    </button>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ggC-Mg-kHj">
+                                        <rect key="frame" x="14" y="3" width="129" height="32"/>
+                                        <buttonCell key="cell" type="push" title="Instant Record" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="gnN-jG-RAU">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="doInstantRecord:" target="816" id="VVT-DK-grI"/>
+                                            <binding destination="816" name="enabled" keyPath="self.instantRecordActive" id="2JQ-Ts-KOO"/>
                                         </connections>
                                     </button>
                                     <tabView misplaced="YES" initialItem="3287" translatesAutoresizingMaskIntoConstraints="NO" id="3286">
@@ -607,11 +618,11 @@
                                                                     </collectionView>
                                                                 </subviews>
                                                             </clipView>
-                                                            <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="ASK-SC-h3C">
+                                                            <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="ASK-SC-h3C">
                                                                 <rect key="frame" x="1" y="144" width="233" height="15"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                             </scroller>
-                                                            <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="gMp-8O-OKM">
+                                                            <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="gMp-8O-OKM">
                                                                 <rect key="frame" x="234" y="1" width="15" height="143"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                             </scroller>
@@ -719,7 +730,7 @@
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <subviews>
                                                                     <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="8" outlineTableColumn="PAT-ub-Z3f" id="L2R-ff-Ef9">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="331" height="247"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="331" height="0.0"/>
                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                         <size key="intercellSpacing" width="3" height="2"/>
                                                                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1474,9 +1485,9 @@
                                                                                                             </menu>
                                                                                                         </popUpButtonCell>
                                                                                                         <connections>
+                                                                                                            <binding destination="M8o-XP-qs3" name="selectedObject" keyPath="objectValue.value" previousBinding="Ajr-tZ-1PL" id="1P6-7e-zQh"/>
                                                                                                             <binding destination="816" name="content" keyPath="self.activePreviewView.sourceLayout.sourceList" id="K9q-wi-xIR"/>
                                                                                                             <binding destination="816" name="contentValues" keyPath="self.activePreviewView.sourceLayout.sourceList.name" previousBinding="K9q-wi-xIR" id="Ajr-tZ-1PL"/>
-                                                                                                            <binding destination="M8o-XP-qs3" name="selectedObject" keyPath="objectValue.value" previousBinding="Ajr-tZ-1PL" id="1P6-7e-zQh"/>
                                                                                                         </connections>
                                                                                                     </popUpButton>
                                                                                                 </subviews>
@@ -1550,11 +1561,11 @@
                                                                 <scrollView misplaced="YES" autohidesScrollers="YES" horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qei-nK-1Al">
                                                                     <rect key="frame" x="20" y="163" width="108" height="130"/>
                                                                     <clipView key="contentView" id="kz3-G4-SAs">
-                                                                        <rect key="frame" x="1" y="1" width="106" height="113"/>
+                                                                        <rect key="frame" x="1" y="1" width="106" height="128"/>
                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                         <subviews>
                                                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="none" columnSelection="YES" autosaveColumns="NO" rowHeight="14" id="H3k-dU-KZ9">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="216" height="16"/>
+                                                                                <rect key="frame" x="0.0" y="0.0" width="216" height="128"/>
                                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                                 <size key="intercellSpacing" width="3" height="2"/>
                                                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1586,7 +1597,7 @@
                                                                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                     </clipView>
                                                                     <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="lhn-Yb-bwG">
-                                                                        <rect key="frame" x="1" y="114" width="106" height="15"/>
+                                                                        <rect key="frame" x="1" y="113" width="106" height="16"/>
                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                     </scroller>
                                                                     <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="Qxp-g3-yYs">
@@ -1723,17 +1734,6 @@
                                             <binding destination="816" name="selectedIndex" keyPath="self.selectedTabIndex" id="3817"/>
                                         </connections>
                                     </tabView>
-                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ggC-Mg-kHj">
-                                        <rect key="frame" x="14" y="3" width="129" height="32"/>
-                                        <buttonCell key="cell" type="push" title="Instant Record" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="gnN-jG-RAU">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
-                                        </buttonCell>
-                                        <connections>
-                                            <action selector="doInstantRecord:" target="816" id="VVT-DK-grI"/>
-                                            <binding destination="816" name="enabled" keyPath="self.instantRecordActive" id="2JQ-Ts-KOO"/>
-                                        </connections>
-                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="3286" firstAttribute="trailing" secondItem="Rb5-R9-Aqy" secondAttribute="trailing" id="37F-qJ-lNn"/>
