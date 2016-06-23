@@ -59,6 +59,7 @@
         self.currentlyPlaying = nil;
         _audio_done = NO;
         _video_done = NO;
+        _flushAudio = NO;
         _first_frame_host_time = 0;
     }
     
@@ -93,6 +94,7 @@
         [self.currentlyPlaying seek:toTime];
         _first_frame_host_time = CACurrentMediaTime();
         _peek_frame = NULL;
+        _first_video_pts = 0;
     }
 }
 
@@ -141,6 +143,7 @@
 
 -(void)next
 {
+    _flushAudio = YES;
     [self.currentlyPlaying stop];
     
 }
@@ -167,43 +170,63 @@
     CAMultiAudioPCM *audioPCM = NULL;
     CSFFMpegInput *useItem;
     bool good_audio = NO;
-    
-    while (self.playing && (audioPCM = [self.currentlyPlaying consumeAudioFrame:self.asbd error_out:&av_error]))
+    while (self.playing)
     {
-
+        if (self.paused)
+        {
+            [self.pcmPlayer pause];
+            return;
+        }
+        
+        audioPCM = [self.currentlyPlaying consumeAudioFrame:self.asbd error_out:&av_error];
         if (!self.playing) break;
         if (av_error == AVERROR_EOF)
         {
+            if (_flushAudio)
+            {
+                [self.pcmPlayer flush];
+            }
             break;
         }
-    
-        if (audioPCM.bufferCount == -1 && audioPCM.frameCount == -1)
+        
+        if (audioPCM)
         {
-            if (good_audio)
+            if (audioPCM.bufferCount == -1 && audioPCM.frameCount == -1)
             {
-            //input needs us to flush the player, probably due to seek
-            [self.pcmPlayer flush];
-            return;
-            } else {
+                if (good_audio)
+                {
+                    //input needs us to flush the player, probably due to seek
+                    [self.pcmPlayer flush];
+                    return;
+                } else {
+                    continue;
+                }
+            }
+            
+            good_audio = YES;
+            
+            if (self.muted)
+            {
                 continue;
             }
         }
-        
-        good_audio = YES;
-    
-        if (self.muted)
-        {
-            continue;
-        }
         if (!self.playing) break;
         
-        if (self.pcmPlayer.pendingFrames > 60)
+        if (self.pcmPlayer.pendingFrames > 60 || av_error == AVERROR(EAGAIN))
         {
             usleep(10000);
         }
         
         if (!self.playing) break;
-        [self.pcmPlayer playPcmBuffer:audioPCM];
+        if (audioPCM)
+        {
+            [self.pcmPlayer playPcmBuffer:audioPCM];
+        }
+        if (self.paused)
+        {
+            [self.pcmPlayer pause];
+            return;
+        }
         
         if (!self.playing) break;
     }
@@ -213,6 +236,18 @@
 }
 
 
+-(void)pause
+{
+    if (self.paused)
+    {
+        _first_video_pts = self.lastVideoTime / av_q2d(self.currentlyPlaying.videoTimeBase);
+        _first_frame_host_time = CACurrentMediaTime();
+        self.paused = NO;
+        [self startAudio];
+    } else {
+        self.paused = YES;
+    }
+}
 
 
 -(CVPixelBufferRef)frameForMediaTime:(CFTimeInterval)mediaTime
@@ -256,49 +291,60 @@
             _peek_frame = NULL;
             _last_buf = nil;
             audio_pts = use_frame->pkt_pts;
+            _first_video_pts = 0;
             [self startAudio];
         }
     } else {
-        CFTimeInterval host_delta = mediaTime - _first_frame_host_time;
-        int64_t target_pts = host_delta / av_q2d(self.currentlyPlaying.videoTimeBase);
-        target_pts += self.currentlyPlaying.first_video_pts;
-        
-        audio_pts = target_pts;
-        
-        
-        
-        int consumed = 0;
-        use_frame = NULL;
-        bool do_consume = YES;
-        
-        if (_last_buf && _peek_frame)
+        if (!self.paused)
         {
+            CFTimeInterval host_delta = mediaTime - _first_frame_host_time;
+            int64_t target_pts = host_delta / av_q2d(self.currentlyPlaying.videoTimeBase);
             
-            if (_peek_frame->pkt_pts > target_pts)
+            if (_first_video_pts)
             {
-                do_consume = NO;
+                target_pts += _first_video_pts;
             } else {
-                use_frame = _peek_frame;
-                do_consume = YES;
+                target_pts += _useInput.first_video_pts;
             }
-        }
-        
-        while (do_consume && (_peek_frame = [_useInput consumeFrame:&av_error]) && _peek_frame->pkt_pts < target_pts)
-        {
             
-            if (use_frame)
+            audio_pts = target_pts;
+            
+            
+            
+            int consumed = 0;
+            use_frame = NULL;
+            bool do_consume = YES;
+            
+            if (_last_buf && _peek_frame)
             {
-                av_frame_free(&use_frame);
-                use_frame = _peek_frame;
+                
+                if (_peek_frame->pkt_pts > target_pts)
+                {
+                    do_consume = NO;
+                } else {
+                    use_frame = _peek_frame;
+                    do_consume = YES;
+                }
             }
+            
+            
+            while (do_consume && (_peek_frame = [_useInput consumeFrame:&av_error]) && _peek_frame->pkt_pts < target_pts)
+            {
+                
+                if (use_frame)
+                {
+                    av_frame_free(&use_frame);
+                    use_frame = _peek_frame;
+                }
+                consumed++;
+            }
+            if (av_error == AVERROR_EOF)
+            {
+                _video_done = YES;
+            }
+            
             consumed++;
         }
-        if (av_error == AVERROR_EOF)
-        {
-            _video_done = YES;
-        }
-
-        consumed++;
     }
     if (use_frame && !_video_done)
     {

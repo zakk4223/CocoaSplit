@@ -134,7 +134,7 @@
     AudioBufferList *sampleABL = NULL;
     int av_ret = 0;
     
-    if (_audio_message_queue && (*error_out = av_thread_message_queue_recv(_audio_message_queue, &msg, 0) >= 0))
+    if (_audio_message_queue && ((*error_out = av_thread_message_queue_recv(_audio_message_queue, &msg, AV_THREAD_MESSAGE_NONBLOCK)) >= 0))
     {
         
         AVFrame *recv_frame;
@@ -231,6 +231,7 @@
         }
     }
     
+    
 }
 
 
@@ -268,10 +269,11 @@
     {
         
         int seek_ret = av_seek_frame(_format_ctx, _video_stream_idx, time, AVSEEK_FLAG_BACKWARD);
-        
+
         //int seek_ret = avformat_seek_file(_format_ctx, _video_stream_idx, time-10, time, time+10, AVSEEK_FLAG_BACKWARD);
         [self videoFlush:NO];
         [self audioFlush];
+        
         _first_video_pts = 0;
         _seek_request = NO;
     }
@@ -288,7 +290,8 @@
         
         _seek_time = seek_pts;
         _seek_request = YES;
-        [self videoFlush:NO];
+        av_thread_message_queue_set_err_send(_video_message_queue, AVERROR_EXTERNAL);
+
         //[self audioFlush];
     }
     
@@ -364,6 +367,8 @@
         if (_seek_request)
         {
             [self internal_seek:_seek_time];
+            av_thread_message_queue_set_err_send(_video_message_queue, 0);
+
         }
         
         
@@ -543,6 +548,9 @@
     
     if (_audio_message_queue)
     {
+        av_thread_message_queue_set_err_recv(_audio_message_queue, AVERROR_EOF);
+
+        
         while (av_thread_message_queue_recv(_audio_message_queue, &msg, AV_THREAD_MESSAGE_NONBLOCK) >= 0)
         {
             if (msg.frame)
@@ -550,7 +558,6 @@
                 av_frame_free(&msg.frame);
             }
         }
-        av_thread_message_queue_set_err_recv(_audio_message_queue, AVERROR_EOF);
 
     }
     
@@ -593,6 +600,7 @@
 
 -(void)dealloc
 {
+    NSLog(@"DEALLOC?");
     [self closeMedia];
     if (_video_message_queue)
     {

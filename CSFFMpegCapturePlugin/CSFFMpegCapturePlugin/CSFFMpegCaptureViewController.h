@@ -16,5 +16,7 @@
 - (IBAction)chooseFile:(id)sender;
 - (IBAction)nextAction:(id)sender;
 - (IBAction)sliderValueChanged:(id)sender;
+- (IBAction)pauseAction:(id)sender;
+
 
 @end

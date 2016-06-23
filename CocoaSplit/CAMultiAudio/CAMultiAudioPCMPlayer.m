@@ -27,6 +27,7 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
         _bufcnt = 0;
         _inputFormat = NULL;
         self.latestScheduledTime = 0;
+        _pauseBuffer = [[NSMutableArray alloc] init];
     }
     
     return self;
@@ -224,20 +225,9 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
 
 -(void)pause
 {
-    if (self.audioUnit)
-    {
-        AudioTimeStamp ts = {0};
-        
-        OSStatus err;
-        
-        
-        
-        
-        ts.mFlags = kAudioTimeStampSampleTimeValid;
-        ts.mSampleTime = MAXFLOAT;
-        err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ScheduleStartTimeStamp, kAudioUnitScope_Global, 0, &ts, sizeof(ts));
-
-    }
+    
+    self.save_buffer = YES;
+    [self flush];
 }
 
 
@@ -262,7 +252,15 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     ts.mFlags = kAudioTimeStampSampleTimeValid;
     ts.mSampleTime = -1;
     err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ScheduleStartTimeStamp, kAudioUnitScope_Global, 0, &ts, sizeof(ts));
+    _save_buffer = NO;
+    for (CAMultiAudioPCM *buffer in self.pauseBuffer)
+    {
+        [self playPcmBuffer:buffer];
+    }
+    
+    [self.pauseBuffer removeAllObjects];
 }
+
 
 -(void)dealloc
 {
@@ -289,7 +287,12 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList)
         pplayer.completedBlock(pcmObj);
     }
 
+    if (pplayer.save_buffer)
+    {
+        [pplayer.pauseBuffer addObject:pcmObj];
+    } else {
         [pplayer releasePCM:pcmObj];
+    }
     
     
     //});

@@ -140,6 +140,16 @@
                         <binding destination="oEH-Pr-eH8" name="value" keyPath="selection.currentMovieTime" previousBinding="tY5-ux-rot" id="3WD-8m-Go4"/>
                     </connections>
                 </slider>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GVe-Io-bJG">
+                    <rect key="frame" x="261" y="-7" width="77" height="32"/>
+                    <buttonCell key="cell" type="push" title="Pause" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="GtF-SP-Tyu">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="pauseAction:" target="-2" id="orY-mY-XAX"/>
+                    </connections>
+                </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SXP-7Z-utT">
                     <rect key="frame" x="-2" y="26" width="53" height="17"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="4Uo-PT-atT">

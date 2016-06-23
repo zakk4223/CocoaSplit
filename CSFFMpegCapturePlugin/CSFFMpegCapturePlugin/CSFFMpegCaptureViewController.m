@@ -39,6 +39,12 @@
     
 }
 
+- (IBAction)pauseAction:(id)sender
+{
+    [self.captureObj.player pause];
+}
+
+
 - (IBAction)nextAction:(id)sender
 {
     [self.captureObj.player next];

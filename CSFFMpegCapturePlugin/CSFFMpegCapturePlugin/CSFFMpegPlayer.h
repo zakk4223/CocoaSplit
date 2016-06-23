@@ -22,6 +22,9 @@
     CVPixelBufferPoolRef *_cvpool;
     NSSize _currentSize;
     bool _nextFlag;
+    int64_t _first_video_pts;
+    bool _flushAudio;
+    
     
     
 }
@@ -52,6 +55,8 @@
 -(void)play;
 -(void)stop;
 -(void)next;
+-(void)pause;
+
 -(void)seek:(double)toTime;
 -(void)startAudio;
 
