@@ -198,6 +198,8 @@
                 sampleABL->mBuffers[i].mNumberChannels = 1;
             }
         
+
+        
         av_frame_free(&recv_frame);
 
         CAMultiAudioPCM *retPCM = [[CAMultiAudioPCM alloc] initWithAudioBufferList:sampleABL streamFormat:asbd];
@@ -268,11 +270,42 @@
     if (_format_ctx)
     {
         
-        int seek_ret = av_seek_frame(_format_ctx, _video_stream_idx, time, AVSEEK_FLAG_BACKWARD);
+        int seek_ret = av_seek_frame(_format_ctx, -1, time, AVSEEK_FLAG_BACKWARD);
 
+        AVFifoBuffer *seek_buffer = av_fifo_alloc(sizeof(AVPacket) * 600);
+        
+        
         //int seek_ret = avformat_seek_file(_format_ctx, _video_stream_idx, time-10, time, time+10, AVSEEK_FLAG_BACKWARD);
         [self videoFlush:NO];
         [self audioFlush];
+        
+        AVPacket buf_pkt;
+        int64_t video_pts = AV_NOPTS_VALUE;
+        
+        while (av_read_frame(_format_ctx, &buf_pkt) >= 0)
+        {
+            if (buf_pkt.stream_index == _video_stream_idx)
+            {
+                video_pts = buf_pkt.pts;
+                [self decodeVideoPacket:&buf_pkt];
+                av_free_packet(&buf_pkt);
+                break;
+            } else if (buf_pkt.stream_index == _audio_stream_idx){
+                av_fifo_generic_write(seek_buffer, &buf_pkt, sizeof(AVPacket), NULL);
+            }
+        }
+        
+        while (av_fifo_size(seek_buffer) >= sizeof(AVPacket))
+        {
+            AVPacket a_pkt;
+            av_fifo_generic_read(seek_buffer, &a_pkt, sizeof(AVPacket), NULL);
+            if (av_compare_ts(a_pkt.pts, self.audioTimeBase, video_pts, self.videoTimeBase) >= 0)
+            {
+                [self decodeAudioPacket:&a_pkt];
+            }
+            av_free_packet(&a_pkt);
+        }
+        av_fifo_free(seek_buffer);
         
         _first_video_pts = 0;
         _seek_request = NO;
@@ -285,7 +318,7 @@
     
     if (_format_ctx)
     {
-        int64_t seek_pts = time / av_q2d(_video_codec_ctx->time_base);
+        int64_t seek_pts = time / av_q2d(AV_TIME_BASE_Q);
 
         
         _seek_time = seek_pts;
@@ -341,6 +374,7 @@
     AVPacket av_packet;
     bool do_audio = YES;
     bool do_video = YES;
+    int64_t seek_pts;
     struct frame_message msg;
     
     
@@ -360,7 +394,7 @@
         {
             [self closeMedia];
             _stop_request = NO;
-
+            
             return;
         }
         
@@ -368,16 +402,16 @@
         {
             [self internal_seek:_seek_time];
             av_thread_message_queue_set_err_send(_video_message_queue, 0);
-
+            
         }
         
         
         if (frameCnt == 0 && !self.is_ready)
         {
-
+            
             continue;
         }
-
+        
         output_frame = av_frame_alloc();
         int got_decoded_frame;
         int read_ret = 0;
@@ -413,120 +447,161 @@
         if (do_video && (av_packet.stream_index == _video_stream_idx))
         {
             
-            
-            //output_frame = av_frame_alloc();
-            
             if (_first_video_pts == 0 && av_packet.pts != AV_NOPTS_VALUE)
             {
                 _first_video_pts = av_packet.pts;
             }
             
-            avcodec_decode_video2(_video_codec_ctx, output_frame, &got_decoded_frame, &av_packet);
-            if (got_decoded_frame)
+            bool got_frame = [self decodeVideoPacket:&av_packet];
+            
+            
+            
+            if (!got_frame)
             {
-                int width = output_frame->width;
-                int height = output_frame->height;
-                
-
-                
-                AVFrame* conv_frame = avcodec_alloc_frame();
-                conv_frame->width = width;
-                conv_frame->height = height;
-                conv_frame->format = AV_PIX_FMT_YUV420P;
-                
-                int num_bytes = avpicture_get_size(AV_PIX_FMT_YUV420P, width, height);
-                uint8_t* conv_buffer = (uint8_t *)av_malloc(num_bytes);
-                avpicture_fill((AVPicture*)conv_frame, conv_buffer, AV_PIX_FMT_YUV420P, width, height);
-                sws_scale(_sws_ctx, output_frame->data, output_frame->linesize, 0, height, conv_frame->data, conv_frame->linesize);
-                conv_frame->pts = output_frame->pts;
-                conv_frame->pkt_dts = output_frame->pkt_dts;
-                if (output_frame->pkt_pts != AV_NOPTS_VALUE)
-                {
-                
-                    conv_frame->pkt_pts = output_frame->pkt_pts;
-                } else {
-                    conv_frame->pkt_pts = output_frame->pkt_dts; //I guess
-                }
-                
-                av_frame_free(&output_frame);
-                
-                read_frames++;
-                msg.frame = conv_frame;
-                msg.notused = 0;
-                av_thread_message_queue_send(_video_message_queue, &msg, 0);
-                av_free_packet(&av_packet);
-                
-            } else {
                 if (self.is_draining)
                 {
                     av_thread_message_queue_set_err_recv(_video_message_queue, AVERROR_EOF);
                     do_video = NO;
                 }
+            } else {
+                read_frames++;
             }
         } else if (do_audio && (av_packet.stream_index == _audio_stream_idx)) {
-            
-            
-            void *orig_data;
-            size_t orig_size;
-            orig_size = av_packet.size;
-            orig_data = av_packet.data;
             
             if (_first_audio_pts == 0)
             {
                 _first_audio_pts = av_packet.pts;
             }
             
-            int read_len;
-            while (av_packet.size > 0 || av_packet.data == NULL)
+            bool got_frame = [self decodeAudioPacket:&av_packet];
+            if (!got_frame && self.is_draining)
             {
-                
-                read_len = avcodec_decode_audio4(_audio_codec_ctx, output_frame, &got_decoded_frame, &av_packet);
-                if (got_decoded_frame)
-                {
-                    if (!output_frame->channel_layout)
-                    {
-                        output_frame->channel_layout = av_get_default_channel_layout(_audio_codec_ctx->channels);
-                    }
-                    AVFrame *cloned_frame = av_frame_clone(output_frame);
-                    
-                    msg.frame = cloned_frame;
-                    msg.notused = 0;
-                    av_thread_message_queue_send(_audio_message_queue, &msg, 0);
-                    
-                } else {
-                    if (self.is_draining)
-                    {
-                        do_audio = NO;
-                        av_thread_message_queue_set_err_recv(_audio_message_queue, AVERROR_EOF);
-                        break;
-                    }
-                }
-                if (!self.is_draining)
-                {
-                    if (read_len < 0)
-                    {
-                        av_packet.data = orig_data;
-                        av_packet.size = orig_size;
-                        break;
-                    } else {
-                        av_packet.data += read_len;
-                        av_packet.size -= read_len;
-                    }
-                }
+                do_audio = NO;
+                av_thread_message_queue_set_err_recv(_audio_message_queue, AVERROR_EOF);
             }
-            av_free_packet(&av_packet);
         }
+        av_free_packet(&av_packet);
+
         av_frame_free(&output_frame);
         if (frameCnt > 0 && read_frames >= frameCnt && !self.is_ready)
         {
             self.is_ready = YES;
             return;
         }
-
+        
     }
 }
 
 
+-(bool)decodeAudioPacket:(AVPacket *)av_packet
+{
+    
+    AVFrame *output_frame = NULL;
+    void *orig_data;
+    size_t orig_size;
+    orig_size = av_packet->size;
+    orig_data = av_packet->data;
+    bool ret = NO;
+    int got_decoded_frame = 0;
+    output_frame = av_frame_alloc();
+    struct frame_message msg;
+    
+    
+    int read_len;
+    while (av_packet->size > 0 || av_packet->data == NULL)
+    {
+        
+        read_len = avcodec_decode_audio4(_audio_codec_ctx, output_frame, &got_decoded_frame, av_packet);
+        if (got_decoded_frame)
+        {
+            if (!output_frame->channel_layout)
+            {
+                output_frame->channel_layout = av_get_default_channel_layout(_audio_codec_ctx->channels);
+            }
+            AVFrame *cloned_frame = av_frame_clone(output_frame);
+            
+            msg.frame = cloned_frame;
+            msg.notused = 0;
+            av_thread_message_queue_send(_audio_message_queue, &msg, 0);
+            ret = YES;
+            
+        } else {
+            if (self.is_draining)
+            {
+                ret = NO;
+                break;
+            }
+        }
+        if (!self.is_draining)
+        {
+            if (read_len < 0)
+            {
+                av_packet->data = orig_data;
+                av_packet->size = orig_size;
+                break;
+            } else {
+                av_packet->data += read_len;
+                av_packet->size -= read_len;
+            }
+        }
+    }
+    av_frame_free(&output_frame);
+    return ret;
+}
+
+
+-(bool)decodeVideoPacket:(AVPacket *)av_packet
+{
+    AVFrame *output_frame = NULL;
+    struct frame_message msg;
+    int got_decoded_frame = 0;
+    bool ret = NO;
+    
+
+    
+    
+    output_frame = av_frame_alloc();
+
+    avcodec_decode_video2(_video_codec_ctx, output_frame, &got_decoded_frame, av_packet);
+    if (got_decoded_frame)
+    {
+
+        int width = output_frame->width;
+        int height = output_frame->height;
+        
+        
+        
+        AVFrame* conv_frame = avcodec_alloc_frame();
+        conv_frame->width = width;
+        conv_frame->height = height;
+        conv_frame->format = AV_PIX_FMT_YUV420P;
+        
+        int num_bytes = avpicture_get_size(AV_PIX_FMT_YUV420P, width, height);
+        uint8_t* conv_buffer = (uint8_t *)av_malloc(num_bytes);
+        avpicture_fill((AVPicture*)conv_frame, conv_buffer, AV_PIX_FMT_YUV420P, width, height);
+        sws_scale(_sws_ctx, output_frame->data, output_frame->linesize, 0, height, conv_frame->data, conv_frame->linesize);
+        conv_frame->pts = output_frame->pts;
+        conv_frame->pkt_dts = output_frame->pkt_dts;
+        if (output_frame->pkt_pts != AV_NOPTS_VALUE)
+        {
+            
+            conv_frame->pkt_pts = output_frame->pkt_pts;
+        } else {
+            conv_frame->pkt_pts = output_frame->pkt_dts; //I guess
+        }
+        
+        
+        msg.frame = conv_frame;
+        msg.notused = 0;
+        av_thread_message_queue_send(_video_message_queue, &msg, 0);
+        ret = YES;
+    } else {
+        ret = NO;
+    }
+    av_frame_free(&output_frame);
+
+    return ret;
+}
 -(void) closeMedia
 {
     

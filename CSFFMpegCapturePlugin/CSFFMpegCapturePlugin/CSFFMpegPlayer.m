@@ -10,6 +10,8 @@
 
 @implementation CSFFMpegPlayer
 
+@synthesize muted = _muted;
+
 
 -(instancetype) init
 {
@@ -38,6 +40,22 @@
     [_inputQueue insertObject:object atIndex:index];
 }
 
+
+
+-(void)setMuted:(bool)muted
+{
+    _muted = muted;
+    if (self.pcmPlayer)
+    {
+        
+        self.pcmPlayer.muted = muted;
+    }
+}
+
+-(bool)muted
+{
+    return _muted;
+}
 
 
 -(void)readThread
@@ -92,7 +110,7 @@
     if (self.currentlyPlaying)
     {
         [self.currentlyPlaying seek:toTime];
-        _first_frame_host_time = CACurrentMediaTime();
+        _first_frame_host_time = 0;
         _peek_frame = NULL;
         _first_video_pts = 0;
     }
@@ -157,6 +175,7 @@
 -(void)startAudio
 {
     dispatch_async(_audio_queue, ^{
+
         [self.pcmPlayer play];
         [self audioThread];
     });
@@ -166,10 +185,13 @@
 
 -(void)audioThread
 {
+    
+    
     int av_error = 0;
     CAMultiAudioPCM *audioPCM = NULL;
     CSFFMpegInput *useItem;
     bool good_audio = NO;
+    
     while (self.playing)
     {
         if (self.paused)
@@ -197,7 +219,8 @@
                 {
                     //input needs us to flush the player, probably due to seek
                     [self.pcmPlayer flush];
-                    return;
+                    [self.pcmPlayer play];
+                    continue;
                 } else {
                     continue;
                 }
@@ -205,11 +228,10 @@
             
             good_audio = YES;
             
-            if (self.muted)
-            {
-                continue;
-            }
+
         }
+        
+        
         if (!self.playing) break;
         
         if (self.pcmPlayer.pendingFrames > 60 || av_error == AVERROR(EAGAIN))
@@ -231,6 +253,7 @@
         if (!self.playing) break;
     }
     
+    NSLog(@"OUT OF LOOP");
     _audio_done = YES;
     [self inputDone];
 }
@@ -348,11 +371,16 @@
     }
     if (use_frame && !_video_done)
     {
+        
+        
+        /*
         if (self.audio_needs_restart)
         {
-            [self startAudio];
+            [self.pcmPlayer flush];
+            [self.pcmPlayer play];
             self.audio_needs_restart = NO;
-        }
+        }*/
+        
         
         self.lastVideoTime = use_frame->pkt_pts * av_q2d(_useInput.videoTimeBase);
         

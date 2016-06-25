@@ -121,6 +121,21 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     return YES;
 }
 
+
+
+
+-(void)setVolume:(float)volume
+{
+    super.volume = volume;
+    
+    
+    if (self.converterNode)
+    {
+        
+        [(CAMultiAudioNode *)self.converterNode setVolumeOnConnectedNode];
+    }
+}
+
 -(void)scheduleBuffer:(CMSampleBufferRef)sampleBuffer
 {
     

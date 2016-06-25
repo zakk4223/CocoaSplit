@@ -195,9 +195,12 @@
         return;
     }
     
+    
     //if we're muting, save the current player volume
     if (muted == YES)
     {
+        NSLog(@"NODE MUTE %d", muted);
+
         _saved_volume = self.volume;
         self.volume = 0.0f;
     } else {

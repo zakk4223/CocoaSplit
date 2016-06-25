@@ -12,6 +12,8 @@
 #import "libavformat/avformat.h"
 #import "libavcodec/avcodec.h"
 #import "libavutil/threadmessage.h"
+#import "libavutil/fifo.h"
+
 #include "libswscale/swscale.h"
 #include "libswresample/swresample.h"
 #include "libavutil/samplefmt.h"
