@@ -85,6 +85,16 @@
     }
 }
 
+- (IBAction)manualAddItem:(id)sender
+{
+    if (self.stringItem)
+    {
+        [self.captureObj queuePath:self.stringItem];
+        self.stringItem = nil;
+    }
+}
+
+
 
 
 -(void)pauseStateChanged

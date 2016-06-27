@@ -14,6 +14,7 @@
 @property (weak) CSFFMpegCapture *captureObj;
 @property (weak) IBOutlet NSSegmentedControl *playlistControl;
 @property (strong) IBOutlet NSArrayController *queueArrayController;
+@property (strong) NSString *stringItem;
 
 
 - (IBAction)queueTableDoubleClick:(NSTableView *)sender;
@@ -24,5 +25,6 @@
 - (IBAction)pauseAction:(id)sender;
 
 - (IBAction)tableControlAction:(NSSegmentedControl *)sender;
+- (IBAction)manualAddItem:(id)sender;
 
 @end
