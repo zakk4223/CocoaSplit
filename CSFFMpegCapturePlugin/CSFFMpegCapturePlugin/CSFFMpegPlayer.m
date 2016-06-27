@@ -122,7 +122,14 @@
     
     
     
-    CSFFMpegInput *nextItem = [_inputQueue objectAtIndex:currentIdx];
+    CSFFMpegInput *nextItem = nil;
+    
+    
+    if (currentIdx >=0 && (currentIdx < _inputQueue.count))
+    {
+        nextItem = [_inputQueue objectAtIndex:currentIdx];
+
+    }
     if (nextItem)
     {
         [self playItem:nextItem];
@@ -153,7 +160,14 @@
         currentIdx = 0;
     }
     
-    CSFFMpegInput *nextItem = [_inputQueue objectAtIndex:currentIdx];
+    CSFFMpegInput *nextItem = nil;
+    
+    
+    if (currentIdx >=0 && (currentIdx < _inputQueue.count))
+    {
+        nextItem = [_inputQueue objectAtIndex:currentIdx];
+        
+    }
     if (nextItem)
     {
         [self playItem:nextItem];
@@ -555,11 +569,6 @@
     }
     
     
-    if (av_frame->linesize[1] != av_frame->linesize[2])
-    {
-        return nil;
-    }
-    
     NSSize frameSize = NSMakeSize(av_frame->width, av_frame->height);
     if (!NSEqualSizes(_currentSize, frameSize))
     {
@@ -570,32 +579,36 @@
     
     CVPixelBufferRef buf;
     CVPixelBufferPoolCreatePixelBuffer(NULL, _cvpool, &buf);
-    
-    size_t plane_size = av_frame->linesize[1]*av_frame->height/2;
-    size_t dst_plane_size = plane_size*2;
-    uint8_t *dst_plane = malloc(dst_plane_size);
-    for (size_t i = 0; i < plane_size; i++)
-    {
-        dst_plane[2*i] = av_frame->data[1][i];
-        dst_plane[2*i+1] = av_frame->data[2][i];
-    }
-    
-    size_t bytePerRowY = CVPixelBufferGetBytesPerRowOfPlane(buf, 0);
-    size_t bytesPerRowUV = CVPixelBufferGetBytesPerRowOfPlane(buf, 1);
+    int pbcnt = CVPixelBufferGetPlaneCount(buf);
     
     CVPixelBufferLockBaseAddress(buf, 0);
-    
-    void* base =  CVPixelBufferGetBaseAddressOfPlane(buf, 0);
-    memcpy(base, av_frame->data[0], bytePerRowY*av_frame->height);
-    
-    base = CVPixelBufferGetBaseAddressOfPlane(buf, 1);
-    memcpy(base, dst_plane, bytesPerRowUV*av_frame->height/2);
-    
-    
+
+    for (int i = 0; i < pbcnt; i++)
+    {
+        uint8_t *src_addr;
+        uint8_t *dst_addr;
+        int dst_stride, src_stride;
+        int rows;
+        
+        dst_addr = CVPixelBufferGetBaseAddressOfPlane(buf, i);
+        src_addr = av_frame->data[i];
+        dst_stride = CVPixelBufferGetBytesPerRowOfPlane(buf, i);
+        src_stride = av_frame->linesize[i];
+        rows = CVPixelBufferGetHeightOfPlane(buf, i);
+        
+        if (dst_stride == src_stride)
+        {
+            memcpy(dst_addr, src_addr, src_stride * rows);
+        } else {
+            int copy_bytes = dst_stride < src_stride ? dst_stride : src_stride;
+            for (int j = 0; j < rows; j++)
+            {
+                memcpy(dst_addr + j * dst_stride, src_addr + j * src_stride, copy_bytes);
+            }
+        }
+    }
     CVPixelBufferUnlockBaseAddress(buf, 0);
-    
-    free(dst_plane);
-    
+
     return buf;
 }
 
