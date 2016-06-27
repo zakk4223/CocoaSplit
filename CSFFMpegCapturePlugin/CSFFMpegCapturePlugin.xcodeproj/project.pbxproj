@@ -12,6 +12,7 @@
 		34BDCD651D10F4E100F51996 /* CSFFMpegCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34BDCD631D10F4E100F51996 /* CSFFMpegCaptureViewController.m */; };
 		34BDCD661D10F4E100F51996 /* CSFFMpegCaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34BDCD641D10F4E100F51996 /* CSFFMpegCaptureViewController.xib */; };
 		34BDCD7D1D14178800F51996 /* CSFFMpegPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34BDCD7C1D14178800F51996 /* CSFFMpegPlayer.m */; };
+		34BDCD7F1D1FE4A700F51996 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34BDCD7E1D1FE4A700F51996 /* Media.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,7 @@
 		34BDCD641D10F4E100F51996 /* CSFFMpegCaptureViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSFFMpegCaptureViewController.xib; sourceTree = "<group>"; };
 		34BDCD7B1D14178800F51996 /* CSFFMpegPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSFFMpegPlayer.h; sourceTree = "<group>"; };
 		34BDCD7C1D14178800F51996 /* CSFFMpegPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSFFMpegPlayer.m; sourceTree = "<group>"; };
+		34BDCD7E1D1FE4A700F51996 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +57,7 @@
 		343C79B11D0C763A00B36EEC = {
 			isa = PBXGroup;
 			children = (
+				34BDCD7E1D1FE4A700F51996 /* Media.xcassets */,
 				343C79E91D0C769100B36EEC /* PluginHeaders */,
 				343C79BC1D0C763A00B36EEC /* CSFFMpegCapturePlugin */,
 				343C79BB1D0C763A00B36EEC /* Products */,
@@ -163,6 +166,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34BDCD7F1D1FE4A700F51996 /* Media.xcassets in Resources */,
 				34BDCD661D10F4E100F51996 /* CSFFMpegCaptureViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

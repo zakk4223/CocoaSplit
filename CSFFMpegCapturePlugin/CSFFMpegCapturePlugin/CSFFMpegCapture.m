@@ -10,7 +10,6 @@
 
 @implementation CSFFMpegCapture
 
-@synthesize inputPath = _inputPath;
 @synthesize currentMovieTime  = _currentMovieTime;
 
 -(instancetype) init
@@ -44,6 +43,60 @@
     return self;
 }
 
+-(void)encodeWithCoder:(NSCoder *)aCoder
+{
+    NSMutableArray *queuePaths = [[NSMutableArray alloc] init];
+    
+    for (CSFFMpegInput *inp in self.player.inputQueue)
+    {
+        [queuePaths addObject:inp.mediaPath];
+    }
+    
+    [aCoder encodeObject:queuePaths forKey:@"queuePaths"];
+    
+    CSFFMpegInput *nowPlaying = self.player.currentlyPlaying;
+    
+    NSString *nPath = nil;
+    
+    if (nowPlaying)
+    {
+        nPath = nowPlaying.mediaPath;
+    }
+    
+    [aCoder encodeObject:nPath forKey:@"nowPlayingPath"];
+    
+}
+
+
+-(instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [self init])
+    {
+        
+        CSFFMpegInput *nowPlayingInput = nil;
+        NSString *nowPlayingPath = [aDecoder decodeObjectForKey:@"nowPlayingPath"];
+        
+        NSArray *paths = [aDecoder decodeObjectForKey:@"queuePaths"];
+        for (NSString *mPath in paths)
+        {
+            CSFFMpegInput *newInput = [[CSFFMpegInput alloc] initWithMediaPath:mPath];
+            [self.player enqueueItem:newInput];
+            if (nowPlayingPath && [newInput.mediaPath isEqualToString:nowPlayingPath])
+            {
+                nowPlayingInput = newInput;
+            }
+        }
+        
+        if (nowPlayingInput)
+        {
+            self.player.currentlyPlaying = nowPlayingInput;
+        }
+    }
+    
+    return self;
+}
+
+
 +(NSString *)label
 {
     return @"FFMPegPlayer";
@@ -76,25 +129,58 @@
 }
 
 
--(NSString *)inputPath
+-(void)queuePath:(NSString *)path
 {
-    return _inputPath;
-}
-
-
--(void)setInputPath:(NSString *)inputPath
-{
-    _inputPath = inputPath;
-    
     if (!self.player.pcmPlayer && self.pcmPlayer)
     {
         self.player.pcmPlayer = self.pcmPlayer;
     }
     
-    CSFFMpegInput *newItem = [[CSFFMpegInput alloc] initWithMediaPath:_inputPath];
+    CSFFMpegInput *newItem = [[CSFFMpegInput alloc] initWithMediaPath:path];
     
     [self.player enqueueItem:newItem ];
-    [self.player play];
+}
+
+-(void)pause
+{
+    if (self.player)
+    {
+        [self.player pause];
+    }
+}
+
+
+-(void)play
+{
+    if (self.player)
+    {
+        [self.player play];
+    }
+}
+
+
+-(void)mute
+{
+    if (self.player)
+    {
+        self.player.muted = !self.player.muted;
+    }
+}
+
+-(void)next
+{
+    if (self.player)
+    {
+        [self.player next];
+    }
+}
+
+-(void)back
+{
+    if (self.player)
+    {
+        [self.player back];
+    }
 }
 
 

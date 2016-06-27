@@ -90,6 +90,7 @@ struct frame_message {
 @property (assign) NSSize dimensions;
 @property (assign) double duration;
 
+@property (strong) NSString *shortName;
 
 
 -(AVFrame *)consumeFrame:(int *)error_out;

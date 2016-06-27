@@ -44,7 +44,6 @@
     
 }
 
-@property (strong) NSString *inputPath;
 
 @property (strong) CSPcmPlayer *pcmPlayer;
 @property (strong) CSFFMpegPlayer *player;
@@ -55,5 +54,12 @@
 @property (assign) double currentMovieDuration;
 
 
+-(void)queuePath:(NSString *)path;
+
+-(void)pause;
+-(void)play;
+-(void)mute;
+-(void)next;
+-(void)back;
 
 @end

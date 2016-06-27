@@ -24,6 +24,8 @@
     bool _nextFlag;
     int64_t _first_video_pts;
     bool _flushAudio;
+    int _doneDirection;
+    CSFFMpegInput *_forceNextInput;
     
     
     
@@ -40,6 +42,8 @@
 @property (assign) AudioStreamBasicDescription *asbd;
 
 @property (copy, nonatomic) void (^itemStarted)(CSFFMpegInput *);
+@property (copy, nonatomic) void (^pauseStateChanged)();
+
 @property (assign) double lastVideoTime;
 @property (assign) double videoDuration;
 @property (assign) bool muted;
@@ -51,11 +55,16 @@
 
 
 -(void)nextItem;
+-(void)previousItem;
 -(void)enqueueItem:(CSFFMpegInput *)item;
 -(void)play;
 -(void)stop;
 -(void)next;
 -(void)pause;
+-(void)back;
+-(void)playAndAddItem:(CSFFMpegInput *)item;
+
+
 
 -(void)seek:(double)toTime;
 -(void)startAudio;

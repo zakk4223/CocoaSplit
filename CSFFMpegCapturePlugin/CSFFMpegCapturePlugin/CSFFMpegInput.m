@@ -30,8 +30,6 @@
         
         _seek_queue = dispatch_queue_create("SEEK QUEUE", DISPATCH_QUEUE_SERIAL);
         
-        av_thread_message_queue_alloc(&_video_message_queue, 300, sizeof(struct frame_message));
-        av_thread_message_queue_alloc(&_audio_message_queue, 4096 , sizeof(struct frame_message));
     }
     return self;
 }
@@ -41,6 +39,7 @@
     if (self = [self init])
     {
         self.mediaPath = mediaPath;
+        self.shortName = [mediaPath lastPathComponent];
     }
     
     return self;
@@ -55,9 +54,28 @@
         return NO;
     }
 
-        
-        
-        
+    
+    if (!_video_message_queue)
+    {
+        av_thread_message_queue_alloc(&_video_message_queue, 300, sizeof(struct frame_message));
+    }
+    
+    if (!_audio_message_queue)
+    {
+        av_thread_message_queue_alloc(&_audio_message_queue, 4096 , sizeof(struct frame_message));
+    }
+    
+    av_thread_message_queue_set_err_recv(_video_message_queue, 0);
+    av_thread_message_queue_set_err_recv(_audio_message_queue, 0);
+    av_thread_message_queue_set_err_send(_video_message_queue, 0);
+    av_thread_message_queue_set_err_send(_audio_message_queue, 0);
+
+
+    
+
+
+    
+    
         AVCodecContext *v_codec_ctx_orig = NULL;
         AVCodecContext *a_codec_ctx_orig = NULL;
         avformat_open_input(&_format_ctx, self.mediaPath.UTF8String, NULL, NULL);
@@ -111,7 +129,16 @@
         }
     
     
+    self.is_ready = NO;
+    _stop_request = NO;
+    self.is_draining = NO;
+    _video_done = NO;
+    _audio_done = NO;
+    
+
     self.duration = _format_ctx->duration / (double)AV_TIME_BASE;
+    
+    
     
 
     
@@ -338,6 +365,12 @@
 -(AVFrame *)consumeFrame:(int *)error_out
 {
     
+    if (!_video_message_queue)
+    {
+        return NULL;
+    }
+    
+    
     if (_video_done)
     {
         return NULL;
@@ -366,6 +399,7 @@
 
 
 //You should run this is a gcd queue/block
+
 -(void)readAndDecodeVideoFrames:(int)frameCnt
 {
     
@@ -389,12 +423,10 @@
     
     while (do_audio || do_video)
     {
-        
         if (_stop_request)
         {
             [self closeMedia];
             _stop_request = NO;
-            
             return;
         }
         
@@ -602,6 +634,8 @@
 
     return ret;
 }
+
+
 -(void) closeMedia
 {
     

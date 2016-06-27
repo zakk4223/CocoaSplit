@@ -23,6 +23,7 @@
         _inputQueue = [[NSMutableArray alloc] init];
         _nextFlag = NO;
         _muted = NO;
+        _doneDirection = 1;
         
     }
     
@@ -67,9 +68,8 @@
 }
 
 
--(void)nextItem
+-(CSFFMpegInput *)preChangeItem
 {
-    
     CSFFMpegInput *useItem;
     _nextFlag = NO;
     @synchronized (self) {
@@ -89,19 +89,96 @@
         }
     }
     
+    if (useItem)
+    {
+        [useItem closeMedia];
+    }
+
+    
+    return useItem;
+
+}
+
+
+-(void)previousItem
+{
+    CSFFMpegInput *useItem = [self preChangeItem];
+    
+    if (!self.playing)
+    {
+        return;
+    }
+    
+    NSInteger currentIdx = 0;
+    
+    currentIdx = [_inputQueue indexOfObject:useItem];
+    
+    currentIdx--;
+    
+    if (currentIdx < 0)
+    {
+        currentIdx = _inputQueue.count-1;
+    }
+    
+    
+    
+    CSFFMpegInput *nextItem = [_inputQueue objectAtIndex:currentIdx];
+    if (nextItem)
+    {
+        [self playItem:nextItem];
+        //[self removeObjectFromInputQueueAtIndex:0];
+        
+    }
+    
+}
+
+
+-(void)nextItem
+{
+    CSFFMpegInput *useItem = [self preChangeItem];
+    
     if (!self.playing)
     {
         return;
     }
 
-    CSFFMpegInput *nextItem = _inputQueue.firstObject;
+    NSUInteger currentIdx = 0;
+    
+    currentIdx = [_inputQueue indexOfObject:useItem];
+    
+    currentIdx++;
+    
+    if (currentIdx >= _inputQueue.count)
+    {
+        currentIdx = 0;
+    }
+    
+    CSFFMpegInput *nextItem = [_inputQueue objectAtIndex:currentIdx];
     if (nextItem)
     {
         [self playItem:nextItem];
-        [self removeObjectFromInputQueueAtIndex:0];
+        //[self removeObjectFromInputQueueAtIndex:0];
         
     }
     
+}
+
+
+-(void)playAndAddItem:(CSFFMpegInput *)item;
+{
+    if ([_inputQueue indexOfObject:item] == NSNotFound)
+    {
+        [self enqueueItem:item];
+    }
+    
+    if (!self.playing)
+    {
+        self.currentlyPlaying = item;
+        [self playItem:item];
+    } else {
+        _forceNextInput = item;
+        [self.currentlyPlaying stop];
+    }
 }
 
 
@@ -155,16 +232,35 @@
     {
 
             [self nextItem];
-        
+    } else {
+        [self playItem:self.currentlyPlaying];
+    }
+    
+    if (self.paused)
+    {
+        [self pause];
     }
 }
 
 -(void)next
 {
     _flushAudio = YES;
+    _doneDirection = 1;
     [self.currentlyPlaying stop];
-    
 }
+
+-(void)back
+{
+    _flushAudio = YES;
+    if (self.lastVideoTime >= 1.5)
+    {
+        [self seek:0.0];
+    } else {
+        _doneDirection = -1;
+        [self.currentlyPlaying stop];
+    }
+}
+
 
 -(void)stop
 {
@@ -253,7 +349,6 @@
         if (!self.playing) break;
     }
     
-    NSLog(@"OUT OF LOOP");
     _audio_done = YES;
     [self inputDone];
 }
@@ -270,7 +365,13 @@
     } else {
         self.paused = YES;
     }
+    
+    if (self.pauseStateChanged)
+    {
+        self.pauseStateChanged();
+    }
 }
+
 
 
 -(CVPixelBufferRef)frameForMediaTime:(CFTimeInterval)mediaTime
@@ -285,12 +386,6 @@
     {
         return nil;
     }
-    
-    /*
-    if (!self.playing)
-    {
-        return nil;
-    }*/
     
     
     AVFrame *use_frame = NULL;
@@ -407,7 +502,17 @@
     {
         [self.currentlyPlaying stop];
         
+        if (_forceNextInput)
+        {
+            [self preChangeItem];
+            [self playItem:_forceNextInput];
+            _forceNextInput = nil;
+        } else if (_doneDirection > 0) {
             [self nextItem];
+        } else if (_doneDirection < 0) {
+            [self previousItem];
+        }
+        
     }
 }
 

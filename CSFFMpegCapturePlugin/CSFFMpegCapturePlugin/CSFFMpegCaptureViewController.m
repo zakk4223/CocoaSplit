@@ -17,7 +17,24 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do view setup here.
+    if (self.captureObj && self.captureObj.player)
+    {
+        self.captureObj.player.pauseStateChanged = ^{
+            [self pauseStateChanged];
+        };
+    }
 }
+
+
+- (IBAction)queueTableDoubleClick:(NSTableView *)sender
+{
+    CSFFMpegInput *inp = [self.queueArrayController.arrangedObjects objectAtIndex:sender.clickedRow];
+    if (inp)
+    {
+        [self.captureObj.player playAndAddItem:inp];
+    }
+}
+
 
 
 - (IBAction)chooseFile:(id)sender
@@ -25,31 +42,70 @@
     
     NSOpenPanel *panel = [NSOpenPanel openPanel];
     panel.canChooseDirectories = NO;
-    panel.canCreateDirectories = YES;
+    panel.canCreateDirectories = NO;
     panel.canChooseFiles = YES;
-    panel.allowsMultipleSelection = NO;
+    panel.allowsMultipleSelection = YES;
     
     [panel beginWithCompletionHandler:^(NSInteger result) {
         if (result == NSFileHandlingPanelOKButton)
         {
-            self.captureObj.inputPath = panel.URL.path;
+            for (NSURL *openURL in panel.URLs)
+            {
+                [self.captureObj queuePath:openURL.path];
+            }
         }
         
     }];
     
 }
 
-- (IBAction)pauseAction:(id)sender
+- (IBAction)tableControlAction:(NSSegmentedControl *)sender
 {
-    [self.captureObj.player pause];
+    NSUInteger clicked = sender.selectedSegment;
+    
+    switch (clicked)
+    {
+        case 0:
+            [self.queueArrayController removeObjectsAtArrangedObjectIndexes:self.queueArrayController.selectionIndexes];
+            break;
+        case 1:
+            [self.captureObj back];
+            break;
+        case 2:
+            if (!self.captureObj.player.playing || self.captureObj.player.paused)
+            {
+                [self.captureObj play];
+            } else {
+                [self.captureObj pause];
+            }
+            break;
+        case 3:
+            [self.captureObj next];
+            break;
+    }
 }
 
 
-- (IBAction)nextAction:(id)sender
-{
-    [self.captureObj.player next];
-}
 
+-(void)pauseStateChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.captureObj.player.paused)
+        {
+            NSImage *playImage = [[NSBundle bundleForClass:[self class]] imageForResource:@"play"];
+            
+            [self.playlistControl setImage:playImage forSegment:2];
+            
+        } else {
+            NSImage *pauseImage = [[NSBundle bundleForClass:[self class]] imageForResource:@"pause"];
+            
+            [self.playlistControl setImage:pauseImage forSegment:2];
+            
+        }
+    });
+    
+
+}
 - (IBAction)sliderValueChanged:(id)sender
 {
     NSEvent *event = [[NSApplication sharedApplication] currentEvent];
@@ -59,15 +115,12 @@
     
     
     if (startingDrag) {
-        self.captureObj.player.muted = YES;
-        self.captureObj.player.seeking = YES;
+        [self.captureObj mute];
     }
     
     
     if (endingDrag) {
-        self.captureObj.player.muted = NO;
-        self.captureObj.player.seeking = NO;
-        self.captureObj.player.audio_needs_restart = YES;
+        [self.captureObj mute];
     }
 }
     
