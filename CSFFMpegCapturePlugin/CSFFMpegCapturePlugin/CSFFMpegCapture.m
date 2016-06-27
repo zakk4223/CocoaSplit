@@ -99,7 +99,7 @@
 
 +(NSString *)label
 {
-    return @"FFMPegPlayer";
+    return @"Movie";
 }
 
 

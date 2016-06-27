@@ -598,7 +598,7 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 
 +(NSString *)label
 {
-    return @"Movie";
+    return @"AppleMovie";
 }
 
 
