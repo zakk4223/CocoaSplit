@@ -303,15 +303,18 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
     AVCodecContext *c_ctx = _av_video_stream->codec;
     
-    c_ctx->codec_type = AVMEDIA_TYPE_VIDEO;
-    c_ctx->codec_id = self.video_codec_id;
+    
+    //c_ctx->codec_type = AVMEDIA_TYPE_VIDEO;
+    //c_ctx->codec_id = self.video_codec_id;
     /*
     _av_video_stream->time_base.num = 1000000;
     _av_video_stream->time_base.den = self.framerate*1000000;
     */
     
-    _av_video_stream->time_base.num = 1;
-    _av_video_stream->time_base.den = 1000;
+    //_av_video_stream->time_base.num = 1;
+    //_av_video_stream->time_base.den = 1000;
+    
+    
 
     
     
@@ -371,7 +374,15 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
             c_ctx->extradata_size = (int)avcc_size;
         }
+        c_ctx->codec_type = AVMEDIA_TYPE_VIDEO;
+        c_ctx->codec_id = self.video_codec_id;
+
     } else if (codec_ctx) {
+        
+        avcodec_copy_context(_av_video_stream->codec, codec_ctx);
+        _av_video_stream->time_base = av_add_q(codec_ctx->time_base, (AVRational){0,1});
+        _av_video_stream->codec->codec = codec_ctx->codec;
+        
         self.width = codec_ctx->width;
         self.height = codec_ctx->height;
         
@@ -454,16 +465,19 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
     av_packet_ref(p, pkt);
     
-    
+    av_packet_rescale_ts(p, frameData.avcodec_ctx->time_base, _av_video_stream->time_base);
+
+    /*
     if (p->pts != AV_NOPTS_VALUE)
     {
+        
         p->pts = av_rescale_q(p->pts, frameData.avcodec_ctx->time_base, _av_video_stream->time_base);
     }
     
     if (p->dts != AV_NOPTS_VALUE)
     {
         p->dts = av_rescale_q(p->dts, frameData.avcodec_ctx->time_base, _av_video_stream->time_base);
-    }
+    }*/
     
     
     

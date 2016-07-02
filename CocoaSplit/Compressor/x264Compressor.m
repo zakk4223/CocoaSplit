@@ -215,7 +215,8 @@
         
         @autoreleasepool {
             
-        if (frameData.frameNumber == 1)
+            
+        if (_next_keyframe_time == 0.0f)
         {
             _next_keyframe_time = frameData.frameTime;
         }
@@ -249,7 +250,7 @@
         VTSessionSetProperty(_vtpt_ref, kVTPixelTransferPropertyKey_ScalingMode, kVTScalingMode_Letterbox);
     }
         
-        int64_t usePts = pts.value; //av_rescale_q(pts.value, (AVRational){1,1000000}, _av_codec_ctx->time_base);
+        int64_t usePts = av_rescale_q(pts.value, (AVRational){1,1000}, _av_codec_ctx->time_base);
         
     if (_last_pts > 0 && usePts <= _last_pts)
     {
@@ -425,6 +426,8 @@
         return NO;
     }
     
+    double captureFPS = [CSPluginServices sharedPluginServices].currentFPS;
+
     _next_keyframe_time = 0.0f;
     
     _av_codec_ctx = avcodec_alloc_context3(_av_codec);
@@ -436,12 +439,13 @@
     _av_codec_ctx->time_base.num = 1;
     _av_codec_ctx->time_base.den = 1000;
     
+    
+    
     _av_codec_ctx->pix_fmt = PIX_FMT_YUV420P;
     
     
     int real_keyframe_interval = 0;
     
-    double captureFPS = [CSPluginServices sharedPluginServices].currentFPS;
     
     
     if (!self.keyframe_interval)
@@ -531,6 +535,7 @@
         NSLog(@"CODEC SETUP FAILED!");
         return NO;
     }
+    
     
     
     _sws_ctx = NULL;
