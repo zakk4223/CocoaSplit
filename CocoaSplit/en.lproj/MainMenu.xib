@@ -1810,7 +1810,7 @@
         </objectController>
         <treeController childrenKeyPath="attachedInputs" avoidsEmptySelection="NO" preservesSelection="NO" selectsInsertedObjects="NO" id="dWz-5q-kjU" userLabel="InputsTreeController">
             <connections>
-                <binding destination="816" name="contentArray" keyPath="self.activePreviewView.sourceLayout.sourceList" id="bVa-hx-12F"/>
+                <binding destination="816" name="contentArray" keyPath="self.activePreviewView.sourceLayout.topLevelSourceList" id="jmD-ND-tMm"/>
             </connections>
         </treeController>
         <viewController nibName="InputPopupControllerViewController" id="8bQ-3X-DL4" userLabel="Popover View Controller" customClass="InputPopupControllerViewController"/>

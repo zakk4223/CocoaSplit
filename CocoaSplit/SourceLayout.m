@@ -60,6 +60,7 @@
     if (src.sourceLayout == self)
     {
         [self willChangeValueForKey:@"topLevelSourceList"];
+        [self generateTopLevelSourceList];
         [self didChangeValueForKey:@"topLevelSourceList"];
     }
 }
@@ -431,9 +432,8 @@
 }
 
 
--(NSArray *)topLevelSourceList
+-(void)generateTopLevelSourceList
 {
-    
     [_topLevelSourceArray removeAllObjects];
     for (InputSource *src in self.sourceListOrdered)
     {
@@ -442,6 +442,12 @@
             [_topLevelSourceArray addObject:src];
         }
     }
+}
+
+
+-(NSArray *)topLevelSourceList
+{
+    
     return _topLevelSourceArray;
     
 }
@@ -824,6 +830,7 @@
         
         [self willChangeValueForKey:@"topLevelSourceList"];
         [[self mutableArrayValueForKey:@"sourceList" ] addObject:src];
+        [self generateTopLevelSourceList];
         [self didChangeValueForKey:@"topLevelSourceList"];
         [_uuidMap setObject:src forKey:src.uuid];
         
@@ -956,6 +963,7 @@
         
         [self willChangeValueForKey:@"topLevelSourceList"];
         [[self mutableArrayValueForKey:@"sourceList" ] addObject:src];
+        [self generateTopLevelSourceList];
         [self didChangeValueForKey:@"topLevelSourceList"];
         [_uuidMap setObject:src forKey:src.uuid];
         
@@ -1369,6 +1377,7 @@
     
     [self willChangeValueForKey:@"topLevelSourceList"];
     [[self mutableArrayValueForKey:@"sourceList" ] removeObject:delSource];
+    [self generateTopLevelSourceList];
     [self didChangeValueForKey:@"topLevelSourceList"];
     
 
@@ -1428,6 +1437,7 @@
     
     [self willChangeValueForKey:@"topLevelSourceList"];
     [[self mutableArrayValueForKey:@"sourceList" ] addObject:newSource];
+    [self generateTopLevelSourceList];
     [self didChangeValueForKey:@"topLevelSourceList"];
     
 
@@ -1453,6 +1463,7 @@
     {
         [self willChangeValueForKey:@"topLevelSourceList"];
         [self.sourceList removeAllObjects];
+        [self generateTopLevelSourceList];
         [self didChangeValueForKey:@"topLevelSourceList"];
 
         
