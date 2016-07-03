@@ -20,12 +20,18 @@
 @implementation CSAddInputViewController
 
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
 
-    [self switchToInitialView];
+-(instancetype)init
+{
+    return [self initWithNibName:@"CSAddInputViewController" bundle:nil];
+}
+
+
+-(void)loadView
+{
     
-    // Do view setup here.
+    [super loadView];
+    [self switchToInitialView];
 }
 
 
