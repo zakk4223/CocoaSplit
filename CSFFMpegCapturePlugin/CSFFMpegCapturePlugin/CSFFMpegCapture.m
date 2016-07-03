@@ -36,8 +36,11 @@
         _player = [[CSFFMpegPlayer alloc] init];
         
         _player.asbd = &_asbd;
-        _player.itemStarted = ^(CSFFMpegInput *item) { [self itemStarted:item]; };
-        _player.queueStateChanged = ^() { [self queueChanged]; };
+        
+        __weak __typeof__(self) weakSelf = self;
+        
+        _player.itemStarted = ^(CSFFMpegInput *item) { [weakSelf itemStarted:item]; };
+        _player.queueStateChanged = ^() { [weakSelf queueChanged]; };
         
         self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
 
