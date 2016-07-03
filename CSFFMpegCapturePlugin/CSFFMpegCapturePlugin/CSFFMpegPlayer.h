@@ -26,6 +26,9 @@
     bool _flushAudio;
     int _doneDirection;
     CSFFMpegInput *_forceNextInput;
+    bool _seekRequest;
+    double _seekRequestTime;
+    
     
     
     

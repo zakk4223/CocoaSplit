@@ -15,11 +15,11 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="480" height="274"/>
+            <rect key="frame" x="0.0" y="0.0" width="480" height="308"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vOl-es-UsB">
-                    <rect key="frame" x="35" y="219" width="248" height="19"/>
+                    <rect key="frame" x="35" y="247" width="248" height="19"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="aCx-uQ-Hyw">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -30,13 +30,13 @@
                     </connections>
                 </textField>
                 <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f41-BA-QN1">
-                    <rect key="frame" x="0.0" y="51" width="480" height="160"/>
+                    <rect key="frame" x="0.0" y="85" width="480" height="154"/>
                     <clipView key="contentView" ambiguous="YES" id="brZ-Ue-OlN">
-                        <rect key="frame" x="1" y="1" width="478" height="158"/>
+                        <rect key="frame" x="1" y="1" width="478" height="152"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" id="I07-lW-ske">
-                                <rect key="frame" x="0.0" y="0.0" width="478" height="158"/>
+                                <rect key="frame" x="0.0" y="0.0" width="478" height="152"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -97,7 +97,7 @@
                     </scroller>
                 </scrollView>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SXP-7Z-utT">
-                    <rect key="frame" x="-2" y="14" width="53" height="14"/>
+                    <rect key="frame" x="-2" y="48" width="53" height="14"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="4Uo-PT-atT">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -108,7 +108,7 @@
                     </connections>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0A5-wU-ykQ">
-                    <rect key="frame" x="426" y="14" width="56" height="14"/>
+                    <rect key="frame" x="426" y="48" width="56" height="14"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="geK-QL-6Yn">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -119,7 +119,7 @@
                     </connections>
                 </textField>
                 <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Ff-r4-Piz">
-                    <rect key="frame" x="43" y="12" width="377" height="17"/>
+                    <rect key="frame" x="43" y="46" width="377" height="17"/>
                     <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="above" sliderType="linear" id="0CD-ye-G7q"/>
                     <connections>
                         <action selector="sliderValueChanged:" target="-2" id="n3I-VU-HBB"/>
@@ -128,7 +128,7 @@
                     </connections>
                 </slider>
                 <segmentedControl verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QyX-l5-Nc5">
-                    <rect key="frame" x="0.0" y="35" width="480" height="19"/>
+                    <rect key="frame" x="0.0" y="69" width="480" height="19"/>
                     <segmentedCell key="cell" controlSize="mini" borderStyle="border" alignment="left" style="smallSquare" trackingMode="momentary" id="qwJ-2s-Umv">
                         <font key="font" metaFont="miniSystem"/>
                         <segments>
@@ -150,7 +150,7 @@
                     </connections>
                 </segmentedControl>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rMk-Ss-9DA">
-                    <rect key="frame" x="-2" y="222" width="32" height="14"/>
+                    <rect key="frame" x="-2" y="250" width="32" height="14"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Add:" id="p7M-Xi-1dn">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -158,7 +158,7 @@
                     </textFieldCell>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pyb-Oa-cTq">
-                    <rect key="frame" x="-2" y="254" width="52" height="14"/>
+                    <rect key="frame" x="-2" y="288" width="52" height="14"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Playing:" id="b9z-O4-d9f">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -166,7 +166,7 @@
                     </textFieldCell>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Taf-5T-FT6">
-                    <rect key="frame" x="54" y="254" width="428" height="14"/>
+                    <rect key="frame" x="54" y="288" width="428" height="14"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="jIY-LY-9hI">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -177,7 +177,7 @@
                     </connections>
                 </textField>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Gg-JE-kf4">
-                    <rect key="frame" x="286" y="214" width="47" height="28"/>
+                    <rect key="frame" x="286" y="242" width="47" height="28"/>
                     <buttonCell key="cell" type="push" title="Add" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="VLP-Wp-4UT">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -187,7 +187,7 @@
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lvV-HJ-t1F">
-                    <rect key="frame" x="331" y="214" width="65" height="28"/>
+                    <rect key="frame" x="331" y="242" width="65" height="28"/>
                     <buttonCell key="cell" type="push" title="Browse" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Vlz-7L-vXD">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -196,11 +196,31 @@
                         <action selector="chooseFile:" target="-2" id="upc-a7-d92"/>
                     </connections>
                 </button>
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="i1u-Dr-69H">
+                    <rect key="frame" x="-3" y="23" width="96" height="20"/>
+                    <buttonCell key="cell" type="check" title="Play when live" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="meK-YV-QDR">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="oEH-Pr-eH8" name="value" keyPath="selection.playWhenLive" id="SP5-JY-yC1"/>
+                    </connections>
+                </button>
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o8b-MP-hMh">
+                    <rect key="frame" x="96" y="22" width="142" height="20"/>
+                    <buttonCell key="cell" type="check" title="Use current position" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="c7q-Ze-6Qj">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="oEH-Pr-eH8" name="value" keyPath="selection.useCurrentPosition" id="gTJ-ii-Wob"/>
+                    </connections>
+                </button>
             </subviews>
             <constraints>
                 <constraint firstItem="QyX-l5-Nc5" firstAttribute="top" secondItem="I07-lW-ske" secondAttribute="bottom" constant="-1" id="fLU-Tx-cYu"/>
             </constraints>
-            <point key="canvasLocation" x="671" y="456"/>
+            <point key="canvasLocation" x="671" y="473"/>
         </customView>
         <objectController id="oEH-Pr-eH8" userLabel="FFmpegCaptureController">
             <connections>

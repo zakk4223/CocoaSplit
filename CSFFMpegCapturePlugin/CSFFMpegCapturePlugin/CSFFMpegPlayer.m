@@ -72,6 +72,11 @@
 {
         if (self.currentlyPlaying)
         {
+            if (_seekRequest)
+            {
+                [self seek:_seekRequestTime];
+            }
+            
             [self.currentlyPlaying readAndDecodeVideoFrames:0];
         }
 }
@@ -207,13 +212,22 @@
 
 -(void)seek:(double)toTime
 {
-    if (self.currentlyPlaying)
+    
+    if (_seekRequest)
     {
         [self.currentlyPlaying seek:toTime];
         _first_frame_host_time = 0;
         _peek_frame = NULL;
         _first_video_pts = 0;
+        _seekRequest = NO;
+        _seekRequestTime = 0.0f;
+
+    } else {
+        _seekRequest = YES;
+        _seekRequestTime = toTime;
+
     }
+    
 }
 
 
@@ -262,6 +276,12 @@
     if (self.paused)
     {
         [self pause];
+    } else {
+    
+        if (self.pauseStateChanged)
+        {
+            self.pauseStateChanged();
+        }
     }
 }
 
@@ -408,6 +428,11 @@
     if (!_useInput)
     {
         return nil;
+    }
+    
+    if (_seekRequest)
+    {
+        [self seek:_seekRequestTime];
     }
     
     

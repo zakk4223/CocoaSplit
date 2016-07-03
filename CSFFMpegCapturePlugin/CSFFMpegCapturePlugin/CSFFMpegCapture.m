@@ -70,6 +70,9 @@
     }
     
     [aCoder encodeObject:nPath forKey:@"nowPlayingPath"];
+    [aCoder encodeBool:self.playWhenLive forKey:@"playWhenLive"];
+    [aCoder encodeBool:self.useCurrentPosition forKey:@"useCurrentPosition"];
+    [aCoder encodeDouble:_currentMovieTime forKey:@"savedTime"];
     
 }
 
@@ -97,6 +100,11 @@
         {
             self.player.currentlyPlaying = nowPlayingInput;
         }
+        
+        _savedTime = [aDecoder decodeDoubleForKey:@"savedTime"];
+        self.useCurrentPosition = [aDecoder decodeBoolForKey:@"useCurrentPosition"];
+        
+        self.playWhenLive = [aDecoder decodeBoolForKey:@"playWhenLive"];
     }
     
     return self;
@@ -160,6 +168,7 @@
         self.durationString = [self timeToString:item.duration];
         self.currentMovieDuration = item.duration;
         [self generateUniqueID];
+        self.captureName = item.shortName;
         if (self.pcmPlayer)
         {
             self.pcmPlayer.name = item.shortName;
@@ -271,7 +280,6 @@
         CVPixelBufferRelease(use_buf);
 
     }
-    //NSLog(@"FFMPEG FRAMETICK!");
 }
 
 -(void)setIsLive:(bool)isLive
@@ -287,8 +295,16 @@
     
     if (isLive)
     {
-        
         [self registerPCMOutput:1024 audioFormat:&_asbd];
+        if (self.playWhenLive)
+        {
+            [self.player play];
+            if (self.useCurrentPosition)
+            {
+                [self.player seek:_savedTime];
+            }
+        }
+
     } else {
         [self deregisterPCMOutput];
     }

@@ -39,6 +39,7 @@
     CAMultiAudioPCM *_bufferPCM;
     AudioStreamBasicDescription _asbd;
     CFTimeInterval _lastTimeUpdate;
+    double _savedTime;
     
     
     
@@ -52,6 +53,10 @@
 @property (strong) NSString *durationString;
 @property (assign) double currentMovieTime;
 @property (assign) double currentMovieDuration;
+@property (assign) bool playWhenLive;
+@property (assign) bool useCurrentPosition;
+
+
 
 
 -(void)queuePath:(NSString *)path;
