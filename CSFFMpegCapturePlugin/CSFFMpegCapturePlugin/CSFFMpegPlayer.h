@@ -43,6 +43,8 @@
 
 @property (copy, nonatomic) void (^itemStarted)(CSFFMpegInput *);
 @property (copy, nonatomic) void (^pauseStateChanged)();
+@property (copy, nonatomic) void (^queueStateChanged)();
+
 
 @property (assign) double lastVideoTime;
 @property (assign) double videoDuration;

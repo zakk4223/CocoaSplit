@@ -369,6 +369,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (IBAction)outputEditClicked:(id)sender;
 
 @property (weak) IBOutlet NSArrayController *sourceLayoutsArrayController;
+@property (weak) IBOutlet NSTreeController *inputTreeController;
 
 -(void)setupLogging;
 +(CSAnimationRunnerObj *) sharedAnimationObj;

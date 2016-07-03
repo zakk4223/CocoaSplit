@@ -857,7 +857,9 @@
         c_center_snap = NSMakePoint(self.sourceLayout.canvas_width/2, self.sourceLayout.canvas_height/2);
         c_snap_size = 3;
 
-        NSArray *srcs = self.sourceLayout.topLevelSourceList;
+        //NSArray *srcs = self.sourceLayout.topLevelSourceList;
+        
+        NSArray *srcs = @[];
         
         c_snap_size += srcs.count*3;
         

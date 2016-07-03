@@ -32,10 +32,11 @@
         _rFbo = 0;
         _uuidMap = [NSMutableDictionary dictionary];
         
+        
         _animationQueue = dispatch_queue_create("CSAnimationQueue", NULL);
         _containedLayouts = [[NSMutableArray alloc] init];
         _noSceneTransactions = NO;
-        
+        _topLevelSourceArray = [[NSMutableArray alloc] init];
         self.rootLayer = [self newRootLayer];
         self.animationList = [NSMutableArray array];
         
@@ -432,12 +433,17 @@
 
 -(NSArray *)topLevelSourceList
 {
-    NSPredicate *topLevelPredicate = [NSPredicate predicateWithBlock:^BOOL(InputSource *evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
-       
-        return !evaluatedObject.parentInput;
-    }];
     
-    return [self.sourceList filteredArrayUsingPredicate:topLevelPredicate];
+    [_topLevelSourceArray removeAllObjects];
+    for (InputSource *src in self.sourceListOrdered)
+    {
+        if (!src.parentInput)
+        {
+            [_topLevelSourceArray addObject:src];
+        }
+    }
+    return _topLevelSourceArray;
+    
 }
 
 

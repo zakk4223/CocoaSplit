@@ -28,6 +28,7 @@
                 <outlet property="exportLayoutMenu" destination="Aks-2j-maL" id="SL3-RU-b4a"/>
                 <outlet property="extrasMenu" destination="wPc-B9-L1T" id="Ysq-1k-pbF"/>
                 <outlet property="inputOutlineView" destination="L2R-ff-Ef9" id="XYc-4B-G6t"/>
+                <outlet property="inputTreeController" destination="dWz-5q-kjU" id="z14-To-dEK"/>
                 <outlet property="layoutCollectionView" destination="MEg-xk-wZF" id="qZn-W5-0en"/>
                 <outlet property="liveFullScreenMenu" destination="oei-ah-Eqx" id="3Ot-ve-qp2"/>
                 <outlet property="livePreviewView" destination="79f-hz-x80" id="iR0-Am-BlN"/>
@@ -400,7 +401,7 @@
                                         <tabViewItems>
                                             <tabViewItem label="Video" identifier="1" id="3287">
                                                 <view key="view" id="3290">
-                                                    <rect key="frame" x="10" y="33" width="840" height="314"/>
+                                                    <rect key="frame" x="10" y="33" width="884" height="314"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <customView misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6mG-LN-iRu">
@@ -778,7 +779,7 @@
                                                                             </tableColumn>
                                                                         </tableColumns>
                                                                         <connections>
-                                                                            <binding destination="dWz-5q-kjU" name="content" keyPath="arrangedObjects" id="LeU-f8-RWy"/>
+                                                                            <binding destination="dWz-5q-kjU" name="content" keyPath="arrangedObjects" id="huI-VC-gzP"/>
                                                                             <outlet property="delegate" destination="816" id="rbG-J4-vVE"/>
                                                                         </connections>
                                                                     </outlineView>
@@ -1565,7 +1566,7 @@
                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                         <subviews>
                                                                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="none" columnSelection="YES" autosaveColumns="NO" rowHeight="14" id="H3k-dU-KZ9">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="216" height="113"/>
+                                                                                <rect key="frame" x="0.0" y="0.0" width="216" height="16"/>
                                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                                 <size key="intercellSpacing" width="3" height="2"/>
                                                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1807,9 +1808,9 @@
                 <binding destination="816" name="contentObject" keyPath="self" id="zQo-gw-l6W"/>
             </connections>
         </objectController>
-        <treeController childrenKeyPath="attachedInputs" id="dWz-5q-kjU" userLabel="InputsTreeController">
+        <treeController childrenKeyPath="attachedInputs" avoidsEmptySelection="NO" preservesSelection="NO" selectsInsertedObjects="NO" id="dWz-5q-kjU" userLabel="InputsTreeController">
             <connections>
-                <binding destination="816" name="contentArray" keyPath="self.activePreviewView.sourceLayout.topLevelSourceList" id="UBV-E3-POa"/>
+                <binding destination="816" name="contentArray" keyPath="self.activePreviewView.sourceLayout.sourceList" id="bVa-hx-12F"/>
             </connections>
         </treeController>
         <viewController nibName="InputPopupControllerViewController" id="8bQ-3X-DL4" userLabel="Popover View Controller" customClass="InputPopupControllerViewController"/>

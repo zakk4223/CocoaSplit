@@ -34,11 +34,20 @@
 -(void)removeObjectFromInputQueueAtIndex:(NSUInteger)index
 {
     [_inputQueue removeObjectAtIndex:index];
+    if (self.queueStateChanged)
+    {
+        self.queueStateChanged();
+    }
 }
 
 -(void)insertObject:(NSObject *)object inInputQueueAtIndex:(NSUInteger)index
 {
     [_inputQueue insertObject:object atIndex:index];
+    if (self.queueStateChanged)
+    {
+        self.queueStateChanged();
+    }
+
 }
 
 
@@ -478,6 +487,7 @@
             consumed++;
         }
     }
+    
     if (use_frame && !_video_done)
     {
         
@@ -612,5 +622,14 @@
     return buf;
 }
 
+
+-(void)removeInputQueueAtIndexes:(NSIndexSet *)indexes
+{
+    [self.inputQueue removeObjectsAtIndexes:indexes];
+    if (self.queueStateChanged)
+    {
+        self.queueStateChanged();
+    }
+}
 
 @end

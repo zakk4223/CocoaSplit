@@ -20,6 +20,8 @@
         avformat_network_init();
         
         
+        self.needsSourceSelection = NO;
+
         //Inputs resample to floating point non-interleaved 48k for now.
         
         _asbd.mSampleRate = 48000;
@@ -35,6 +37,10 @@
         
         _player.asbd = &_asbd;
         _player.itemStarted = ^(CSFFMpegInput *item) { [self itemStarted:item]; };
+        _player.queueStateChanged = ^() { [self queueChanged]; };
+        
+        self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
+
         
 
 
@@ -102,6 +108,27 @@
     return @"Movie";
 }
 
+-(void) generateUniqueID
+{
+    NSMutableString *uID = [NSMutableString string];
+    
+    
+    for(CSFFMpegInput *item in self.player.inputQueue)
+    {
+        NSString *itemStr = item.mediaPath;
+        [uID appendString:itemStr];
+    }
+    
+    if (_pcmPlayer)
+    {
+        _pcmPlayer.nodeUID = uID;
+    }
+    
+    
+    self.activeVideoDevice.uniqueID = uID;
+}
+
+
 
 -(double)currentMovieTime
 {
@@ -117,6 +144,14 @@
 }
 
 
+-(void)queueChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self generateUniqueID];
+    });
+}
+
+
 -(void)itemStarted:(CSFFMpegInput *)item
 {
     
@@ -124,6 +159,11 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         self.durationString = [self timeToString:item.duration];
         self.currentMovieDuration = item.duration;
+        [self generateUniqueID];
+        if (self.pcmPlayer)
+        {
+            self.pcmPlayer.name = item.shortName;
+        }
     });
     
 }
@@ -139,6 +179,7 @@
     CSFFMpegInput *newItem = [[CSFFMpegInput alloc] initWithMediaPath:path];
     
     [self.player enqueueItem:newItem ];
+    [self generateUniqueID];
 }
 
 -(void)pause
@@ -269,6 +310,7 @@
     {
         self.player.asbd = &_asbd;
         self.player.pcmPlayer = self.pcmPlayer;
+        self.pcmPlayer.name = self.player.currentlyPlaying.shortName;
     }
     
 }
@@ -288,6 +330,13 @@
     
 }
 
+-(void)dealloc
+{
+    if (self.pcmPlayer)
+    {
+        [self deregisterPCMOutput];
+    }
+}
 
 
 

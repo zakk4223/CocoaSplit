@@ -2320,6 +2320,7 @@
 }
 
 
+
 -(void)outlineView:(NSOutlineView *)outlineView didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row
 {
     if (outlineView == self.inputOutlineView)

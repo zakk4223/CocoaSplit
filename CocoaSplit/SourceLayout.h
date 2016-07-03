@@ -27,6 +27,8 @@
     dispatch_queue_t _animationQueue;
     NSMutableDictionary *_uuidMap;
     bool _noSceneTransactions;
+    NSMutableArray *_topLevelSourceArray;
+    
     
     
     
