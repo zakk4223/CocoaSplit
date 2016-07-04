@@ -14,6 +14,13 @@
 
 @implementation CSInstantRecorderCompressorViewController
 
+
+-(instancetype)init
+{
+    return [self initWithNibName:@"CSInstantRecorderCompressorViewController" bundle:nil];
+}
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     

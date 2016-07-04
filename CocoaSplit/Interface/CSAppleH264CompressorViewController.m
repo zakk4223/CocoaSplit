@@ -15,9 +15,22 @@
 @implementation CSAppleH264CompressorViewController
 
 - (void)viewDidLoad {
-    self.profiles = @[[NSNull null], @"Baseline", @"Main", @"High"];
     [super viewDidLoad];
     // Do view setup here.
 }
+
+
+-(instancetype)init
+{
+    return [self initWithNibName:@"CSAppleH264CompressorViewController" bundle:nil];
+}
+
+-(void)loadView
+{
+    [super loadView];
+    self.profiles = @[[NSNull null], @"Baseline", @"Main", @"High"];
+
+}
+
 
 @end

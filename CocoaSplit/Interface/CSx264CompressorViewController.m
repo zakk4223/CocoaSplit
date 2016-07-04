@@ -14,6 +14,12 @@
 
 @implementation CSx264CompressorViewController
 
+
+-(instancetype)init
+{
+    return [self initWithNibName:@"CSx264CompressorViewController" bundle:nil];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do view setup here.

@@ -14,17 +14,30 @@
 
 @implementation CSAppleProResCompressorViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do view setup here.
-    
+
+-(instancetype)init
+{
+    return [self initWithNibName:@"CSAppleProResCompressorViewController" bundle:nil];
+}
+
+-(void)loadView
+{
+    [super loadView];
     self.compressorTypes = @{@"ProRes 4444": @(kCMVideoCodecType_AppleProRes4444),
                              @"ProRes 422":  @(kCMVideoCodecType_AppleProRes422),
                              @"ProRes 422HQ": @(kCMVideoCodecType_AppleProRes422HQ),
                              @"ProRes 422LT": @(kCMVideoCodecType_AppleProRes422LT),
                              @"ProRes 422Proxy": @(kCMVideoCodecType_AppleProRes422Proxy),
                              };
+    
 }
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do view setup here.
+    
+}
+
 
 
 
