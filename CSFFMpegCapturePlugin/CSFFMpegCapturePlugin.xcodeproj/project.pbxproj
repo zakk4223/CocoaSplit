@@ -12,7 +12,7 @@
 		34BDCD651D10F4E100F51996 /* CSFFMpegCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34BDCD631D10F4E100F51996 /* CSFFMpegCaptureViewController.m */; };
 		34BDCD661D10F4E100F51996 /* CSFFMpegCaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34BDCD641D10F4E100F51996 /* CSFFMpegCaptureViewController.xib */; };
 		34BDCD7D1D14178800F51996 /* CSFFMpegPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34BDCD7C1D14178800F51996 /* CSFFMpegPlayer.m */; };
-		34BDCD7F1D1FE4A700F51996 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34BDCD7E1D1FE4A700F51996 /* Media.xcassets */; };
+		34EA820A1D2AB65300928A06 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34BDCD7E1D1FE4A700F51996 /* Media.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -166,7 +166,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				34BDCD7F1D1FE4A700F51996 /* Media.xcassets in Resources */,
+				34EA820A1D2AB65300928A06 /* Media.xcassets in Resources */,
 				34BDCD661D10F4E100F51996 /* CSFFMpegCaptureViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -278,6 +278,7 @@
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				INFOPLIST_FILE = CSFFMpegCapturePlugin/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				OTHER_LDFLAGS = (
 					"-undefined",
 					suppress,
@@ -299,6 +300,7 @@
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				INFOPLIST_FILE = CSFFMpegCapturePlugin/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				OTHER_LDFLAGS = (
 					"-undefined",
 					suppress,
