@@ -2025,7 +2025,7 @@
     if (CMTIME_COMPARE_INLINE(_firstAudioTime, ==, kCMTimeZero))
     {
     
-        NSLog(@"FIRST AUDIO AT %f", CFAbsoluteTimeGetCurrent());
+        //NSLog(@"FIRST AUDIO AT %f", CFAbsoluteTimeGetCurrent());
         
         _firstAudioTime = orig_pts;
         return;
@@ -2442,7 +2442,7 @@
         
         if (![self sleepUntil:(startTime += _frame_interval)])
         {
-            NSLog(@"MISSED FRAME!");
+            //NSLog(@"MISSED FRAME!");
             continue;
         }
 
