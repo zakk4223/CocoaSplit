@@ -85,6 +85,37 @@
     return @"TwitchTV";
 }
 
+
+-(void)fetchTwitchStreamKey
+{
+    if (!self.oAuthKey)
+    {
+        return;
+    }
+    
+    NSString *apiString = @"https://api.twitch.tv/kraken/channel";
+    
+    NSURL *apiURL = [NSURL URLWithString:apiString];
+    
+    NSMutableURLRequest *apiRequest = [NSMutableURLRequest requestWithURL:apiURL];
+    
+    [apiRequest setValue:[NSString stringWithFormat:@"OAuth %@", self.oAuthKey] forHTTPHeaderField:@"Authorization"];
+    
+    [NSURLConnection sendAsynchronousRequest:apiRequest queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *err) {
+        
+        NSError *jsonError;
+        NSDictionary *channel_response = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonError];
+        //Handle error
+        
+        
+        NSString *stream_key = [channel_response objectForKey:@"stream_key"];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{self.streamKey = stream_key; });
+        return;
+    }];
+}
+
+
 -(void)loadTwitchIngest
 {
     

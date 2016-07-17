@@ -12,6 +12,10 @@
 		34AFC2E919B08C810007C07B /* FileStreamService.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AFC2E819B08C810007C07B /* FileStreamService.m */; };
 		34AFC2ED19B08CA80007C07B /* FileStreamServiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AFC2EB19B08CA80007C07B /* FileStreamServiceViewController.m */; };
 		34AFC2EE19B08CA80007C07B /* FileStreamServiceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34AFC2EC19B08CA80007C07B /* FileStreamServiceViewController.xib */; };
+		34EA82211D3A3B6900928A06 /* CSFileStreamServiceFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 34EA82201D3A3B6900928A06 /* CSFileStreamServiceFactory.m */; };
+		34EA82241D3A3C4E00928A06 /* CSFileStreamRTMPService.m in Sources */ = {isa = PBXBuildFile; fileRef = 34EA82231D3A3C4E00928A06 /* CSFileStreamRTMPService.m */; };
+		34EA82281D3A3FF600928A06 /* CSFileStreamRTMPServiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34EA82261D3A3FF600928A06 /* CSFileStreamRTMPServiceViewController.m */; };
+		34EA82291D3A3FF600928A06 /* CSFileStreamRTMPServiceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34EA82271D3A3FF600928A06 /* CSFileStreamRTMPServiceViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +37,13 @@
 		34D6580C19B343290012E32B /* CSCaptureSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureSourceProtocol.h; path = PluginHeaders/CSCaptureSourceProtocol.h; sourceTree = "<group>"; };
 		34D6580D19B343290012E32B /* CSStreamServiceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSStreamServiceProtocol.h; path = PluginHeaders/CSStreamServiceProtocol.h; sourceTree = "<group>"; };
 		34D6580E19B343290012E32B /* CSPluginFactoryProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPluginFactoryProtocol.h; path = PluginHeaders/CSPluginFactoryProtocol.h; sourceTree = "<group>"; };
+		34EA821F1D3A3B6900928A06 /* CSFileStreamServiceFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSFileStreamServiceFactory.h; sourceTree = "<group>"; };
+		34EA82201D3A3B6900928A06 /* CSFileStreamServiceFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSFileStreamServiceFactory.m; sourceTree = "<group>"; };
+		34EA82221D3A3C4E00928A06 /* CSFileStreamRTMPService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSFileStreamRTMPService.h; sourceTree = "<group>"; };
+		34EA82231D3A3C4E00928A06 /* CSFileStreamRTMPService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSFileStreamRTMPService.m; sourceTree = "<group>"; };
+		34EA82251D3A3FF600928A06 /* CSFileStreamRTMPServiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSFileStreamRTMPServiceViewController.h; sourceTree = "<group>"; };
+		34EA82261D3A3FF600928A06 /* CSFileStreamRTMPServiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSFileStreamRTMPServiceViewController.m; sourceTree = "<group>"; };
+		34EA82271D3A3FF600928A06 /* CSFileStreamRTMPServiceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSFileStreamRTMPServiceViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +104,13 @@
 				34AFC2EA19B08CA80007C07B /* FileStreamServiceViewController.h */,
 				34AFC2EB19B08CA80007C07B /* FileStreamServiceViewController.m */,
 				34AFC2EC19B08CA80007C07B /* FileStreamServiceViewController.xib */,
+				34EA821F1D3A3B6900928A06 /* CSFileStreamServiceFactory.h */,
+				34EA82201D3A3B6900928A06 /* CSFileStreamServiceFactory.m */,
+				34EA82221D3A3C4E00928A06 /* CSFileStreamRTMPService.h */,
+				34EA82231D3A3C4E00928A06 /* CSFileStreamRTMPService.m */,
+				34EA82251D3A3FF600928A06 /* CSFileStreamRTMPServiceViewController.h */,
+				34EA82261D3A3FF600928A06 /* CSFileStreamRTMPServiceViewController.m */,
+				34EA82271D3A3FF600928A06 /* CSFileStreamRTMPServiceViewController.xib */,
 			);
 			path = CSFileStreamServicePlugin;
 			sourceTree = "<group>";
@@ -171,6 +189,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34EA82291D3A3FF600928A06 /* CSFileStreamRTMPServiceViewController.xib in Resources */,
 				34AFC2EE19B08CA80007C07B /* FileStreamServiceViewController.xib in Resources */,
 				34AFC2D919B08C050007C07B /* InfoPlist.strings in Resources */,
 			);
@@ -184,7 +203,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				34AFC2ED19B08CA80007C07B /* FileStreamServiceViewController.m in Sources */,
+				34EA82281D3A3FF600928A06 /* CSFileStreamRTMPServiceViewController.m in Sources */,
 				34AFC2E919B08C810007C07B /* FileStreamService.m in Sources */,
+				34EA82241D3A3C4E00928A06 /* CSFileStreamRTMPService.m in Sources */,
+				34EA82211D3A3B6900928A06 /* CSFileStreamServiceFactory.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

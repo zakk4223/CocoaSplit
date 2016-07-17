@@ -98,13 +98,13 @@
 
 +(NSString *)label
 {
-    return @"File/RTMP";
+    return @"File";
 }
 
 
 +(NSString *)serviceDescription
 {
-    return @"File/RTMP";
+    return @"File";
 }
 
 @end

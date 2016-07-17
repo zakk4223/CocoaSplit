@@ -12,6 +12,7 @@
 		34AFC32019B0A5DC0007C07B /* TwitchStreamService.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AFC31F19B0A5DC0007C07B /* TwitchStreamService.m */; };
 		34AFC32419B0A5FD0007C07B /* TwitchStreamServiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AFC32219B0A5FD0007C07B /* TwitchStreamServiceViewController.m */; };
 		34AFC32519B0A5FD0007C07B /* TwitchStreamServiceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34AFC32319B0A5FD0007C07B /* TwitchStreamServiceViewController.xib */; };
+		34EA822B1D3AC49600928A06 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34EA822A1D3AC49600928A06 /* WebKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +34,7 @@
 		34D6580619B343210012E32B /* CSCaptureSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureSourceProtocol.h; path = PluginHeaders/CSCaptureSourceProtocol.h; sourceTree = "<group>"; };
 		34D6580719B343210012E32B /* CSStreamServiceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSStreamServiceProtocol.h; path = PluginHeaders/CSStreamServiceProtocol.h; sourceTree = "<group>"; };
 		34D6580819B343210012E32B /* CSPluginFactoryProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPluginFactoryProtocol.h; path = PluginHeaders/CSPluginFactoryProtocol.h; sourceTree = "<group>"; };
+		34EA822A1D3AC49600928A06 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,6 +42,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34EA822B1D3AC49600928A06 /* WebKit.framework in Frameworks */,
 				34AFC30219B0A5800007C07B /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -73,6 +76,7 @@
 		34AFC30019B0A5800007C07B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				34EA822A1D3AC49600928A06 /* WebKit.framework */,
 				34AFC30119B0A5800007C07B /* Cocoa.framework */,
 				34AFC30319B0A5800007C07B /* Other Frameworks */,
 			);

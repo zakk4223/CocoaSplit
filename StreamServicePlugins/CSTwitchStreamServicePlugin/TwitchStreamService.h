@@ -18,13 +18,16 @@
 @property (strong) NSArray *twitchServers;
 @property (strong) NSString *streamKey;
 @property (strong) NSString *selectedServer;
+@property (strong) NSString *oAuthKey;
 
 
 
 -(NSViewController *)getConfigurationView;
 -(NSString *)getServiceDestination;
+-(void)fetchTwitchStreamKey;
 +(NSString *)label;
 +(NSString *)serviceDescription;
+
 
 
 @end
