@@ -103,4 +103,10 @@
 }
 
 
+-(CSOauth2Authenticator *) createOAuth2Authenticator:(NSString *)serviceName authLocation:(NSString *)auth_location clientID:(NSString *)client_id redirectURL:(NSString *)redirect_url authScopes:(NSArray *)scopes forceVerify:(bool)force_verify
+{
+
+    return [[CSOauth2Authenticator alloc] initWithServiceName:serviceName authLocation:auth_location clientID:client_id redirectURL:redirect_url authScopes:scopes forceVerify:force_verify];
+}
+
 @end

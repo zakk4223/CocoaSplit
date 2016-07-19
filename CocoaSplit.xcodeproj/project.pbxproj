@@ -222,6 +222,8 @@
 		34DF75581AA272F100DA9FDE /* LayoutRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34DF75571AA272F100DA9FDE /* LayoutRenderer.m */; };
 		34DF75591AA272F100DA9FDE /* LayoutRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34DF75571AA272F100DA9FDE /* LayoutRenderer.m */; };
 		34E983701B78AE9100F26F1E /* Python.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34E9836F1B78AE9100F26F1E /* Python.framework */; };
+		34EA822E1D3C568400928A06 /* CSOauth2Authenticator.m in Sources */ = {isa = PBXBuildFile; fileRef = 34EA822D1D3C568400928A06 /* CSOauth2Authenticator.m */; };
+		34EA824E1D3CBFCA00928A06 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34EA824D1D3CBFCA00928A06 /* WebKit.framework */; };
 		34EAFB6F1A1A137600E12FBD /* CSMeterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 34EAFB6E1A1A137600E12FBD /* CSMeterCell.m */; };
 		34EAFB801A1BA86800E12FBD /* CoreMediaIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34EAFB7F1A1BA86800E12FBD /* CoreMediaIO.framework */; };
 		34EAFB811A1BA87000E12FBD /* CoreMediaIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34EAFB7F1A1BA86800E12FBD /* CoreMediaIO.framework */; };
@@ -837,6 +839,9 @@
 		34DF75571AA272F100DA9FDE /* LayoutRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayoutRenderer.m; sourceTree = "<group>"; };
 		34E9836F1B78AE9100F26F1E /* Python.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Python.framework; path = System/Library/Frameworks/Python.framework; sourceTree = SDKROOT; };
 		34E983841B78B19D00F26F1E /* pluginbase.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = pluginbase.py; sourceTree = "<group>"; };
+		34EA822C1D3C568400928A06 /* CSOauth2Authenticator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSOauth2Authenticator.h; path = PluginHeaders/CSOauth2Authenticator.h; sourceTree = "<group>"; };
+		34EA822D1D3C568400928A06 /* CSOauth2Authenticator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSOauth2Authenticator.m; sourceTree = "<group>"; };
+		34EA824D1D3CBFCA00928A06 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		34EAFB6D1A1A137600E12FBD /* CSMeterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSMeterCell.h; path = Interface/CSMeterCell.h; sourceTree = "<group>"; };
 		34EAFB6E1A1A137600E12FBD /* CSMeterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSMeterCell.m; path = Interface/CSMeterCell.m; sourceTree = "<group>"; };
 		34EAFB7F1A1BA86800E12FBD /* CoreMediaIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMediaIO.framework; path = System/Library/Frameworks/CoreMediaIO.framework; sourceTree = SDKROOT; };
@@ -989,6 +994,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34EA824E1D3CBFCA00928A06 /* WebKit.framework in Frameworks */,
 				34E983701B78AE9100F26F1E /* Python.framework in Frameworks */,
 				34ED8CB31B0737AC002C0674 /* CoreMIDI.framework in Frameworks */,
 				34EAFB801A1BA86800E12FBD /* CoreMediaIO.framework in Frameworks */,
@@ -1086,6 +1092,7 @@
 		340FE4A015F3417E00E4CE4E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				34EA824D1D3CBFCA00928A06 /* WebKit.framework */,
 				341A2D5B1C7AB04700FF7566 /* Sparkle.framework */,
 				34E9836F1B78AE9100F26F1E /* Python.framework */,
 				34ED8CB11B0737A3002C0674 /* CoreMIDI.framework */,
@@ -1205,6 +1212,7 @@
 				3400A0611BD44DF0003E1828 /* CSInputLibraryItem.m */,
 				3434CB3A1CB09BC4001B3DF9 /* CSTimedOutputBuffer.h */,
 				3434CB3B1CB09BC4001B3DF9 /* CSTimedOutputBuffer.m */,
+				34EA822D1D3C568400928A06 /* CSOauth2Authenticator.m */,
 			);
 			path = CocoaSplit;
 			sourceTree = "<group>";
@@ -1418,6 +1426,7 @@
 				34AFC2C119B08AF30007C07B /* CSStreamServiceProtocol.h */,
 				34D657F519B33DCF0012E32B /* CSPluginFactoryProtocol.h */,
 				34A7C17A19B98EA200BC6882 /* CSExtraPluginProtocol.h */,
+				34EA822C1D3C568400928A06 /* CSOauth2Authenticator.h */,
 				3408234619BC50AD00CD1F5F /* CSNotifications.h */,
 			);
 			name = PluginHeaders;
@@ -2363,6 +2372,7 @@
 				34ED8C651B07371C002C0674 /* MIKMIDIEvent.m in Sources */,
 				34ED8C7D1B07371C002C0674 /* MIKMIDIMetaKeySignatureEvent.m in Sources */,
 				348AC06B19B406910064F02D /* SourceLayout.m in Sources */,
+				34EA822E1D3C568400928A06 /* CSOauth2Authenticator.m in Sources */,
 				345F8B751A17A785009A81E3 /* CAMultiAudioMixer.m in Sources */,
 				34ED8C951B07371C002C0674 /* MIKMIDIOutputPort.m in Sources */,
 				34ED8CA71B07371C002C0674 /* MIKMIDISystemMessageCommand.m in Sources */,

@@ -44,21 +44,9 @@
 
 - (IBAction)doTwitchAuth:(id)sender
 {
- 
-    NSURL *authURL = [NSURL URLWithString:@"https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&force_verify=true&client_id=p2onxyxk17dlngdgtj43kl9gaj2yb2a&redirect_uri=cocoasplit-twitch://cocoasplit.com/oauth/redirect&scope=channel_read"];
     
-    
-    NSRect winFrame = NSMakeRect(0, 0, 1000, 1000);
-    self.authWebView = [[WebView alloc] initWithFrame:winFrame frameName:nil groupName:nil];
-    self.authWebView.policyDelegate = self;
-    
-    self.authWindow = [[NSWindow alloc] initWithContentRect:winFrame styleMask:NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask|NSResizableWindowMask backing:NSBackingStoreBuffered defer:NO];
-    
-    [self.authWindow center];
-    [self.authWindow setContentView:self.authWebView];
-    [self.authWindow makeKeyAndOrderFront:NSApp];
-    [[self.authWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:authURL]];
-    
+    [self.serviceObj fetchTwitchStreamKey];
+     
 }
 
 

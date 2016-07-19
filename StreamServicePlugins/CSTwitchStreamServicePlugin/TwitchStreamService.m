@@ -86,32 +86,43 @@
 }
 
 
+
+-(void)authenticateUser
+{
+    
+}
 -(void)fetchTwitchStreamKey
 {
-    if (!self.oAuthKey)
+    if (!self.oauthObject)
     {
-        return;
+        
+        if (!_oauth_client_id)
+        {
+            _oauth_client_id = [[NSBundle bundleForClass:[self class]] objectForInfoDictionaryKey:@"TwitchAPIClientID"];
+        }
+        self.oauthObject = [[CSPluginServices sharedPluginServices] createOAuth2Authenticator:@"twitchkraken" authLocation:@"https://api.twitch.tv/kraken/oauth2/authorize" clientID:_oauth_client_id redirectURL:@"cocoasplit-twitch://cocoasplit.com/oauth/redirect" authScopes:@[@"channel_read"] forceVerify:NO];
     }
+    
+    
     
     NSString *apiString = @"https://api.twitch.tv/kraken/channel";
     
     NSURL *apiURL = [NSURL URLWithString:apiString];
     
+    
+    
     NSMutableURLRequest *apiRequest = [NSMutableURLRequest requestWithURL:apiURL];
     
-    [apiRequest setValue:[NSString stringWithFormat:@"OAuth %@", self.oAuthKey] forHTTPHeaderField:@"Authorization"];
     
-    [NSURLConnection sendAsynchronousRequest:apiRequest queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *err) {
+    //[apiRequest setValue:[NSString stringWithFormat:@"OAuth %@", self.oAuthKey] forHTTPHeaderField:@"Authorization"];
+    
+    [self.oauthObject jsonRequest:apiRequest completionHandler:^(id decodedData) {
+        NSLog(@"DECODED DATA %@", decodedData);
         
-        NSError *jsonError;
-        NSDictionary *channel_response = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonError];
-        //Handle error
-        
-        
+        NSDictionary *channel_response = (NSDictionary *)decodedData;
         NSString *stream_key = [channel_response objectForKey:@"stream_key"];
         
         dispatch_async(dispatch_get_main_queue(), ^{self.streamKey = stream_key; });
-        return;
     }];
 }
 
