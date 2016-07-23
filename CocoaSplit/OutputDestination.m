@@ -151,6 +151,8 @@
 
 -(void) reset
 {
+    _output_prepared = NO;
+    
     self.buffer_draining = NO;
     [_delayBuffer removeAllObjects];
     [self initStatsValues];
@@ -297,6 +299,19 @@
         newout = self.ffmpeg_out;
     }
     
+    if (!_output_prepared)
+    {
+        [self.streamServiceObject prepareForStreamStart];
+        _output_prepared = YES;
+    }
+    
+    NSString *destination = self.destination;
+    
+    if (!destination)
+    {
+        return;
+    }
+    
     
     /*
     if (self.stream_delay > 0)
@@ -307,7 +322,7 @@
     
     newout.video_codec_id  = self.compressor.codec_id;
     newout.framerate = self.settingsController.captureFPS;
-    newout.stream_output = [self.destination stringByStandardizingPath];
+    newout.stream_output = [destination stringByStandardizingPath];
     newout.stream_format = self.output_format;
     newout.settingsController = self.settingsController;
     newout.samplerate = self.settingsController.audioSamplerate;

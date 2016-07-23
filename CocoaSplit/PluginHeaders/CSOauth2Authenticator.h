@@ -25,11 +25,20 @@
 @property (strong) NSURL *authURL;
 @property (strong) NSString *serviceName;
 @property (strong) NSString *accessToken;
+@property (strong) NSString *accountName;
+@property (assign) bool useKeychain;
+@property (nonatomic, copy) void(^accountNameFetcher)(CSOauth2Authenticator *authenticator);
+@property (strong) NSDictionary *extraAuthParams;
 
 
--(instancetype) initWithServiceName:(NSString *)serviceName authLocation:(NSString *)auth_location clientID:(NSString *)client_id redirectURL:(NSString *)redirect_url authScopes:(NSArray *)scopes forceVerify:(bool)force_verify;
+
+
+-(instancetype) initWithServiceName:(NSString *)serviceName authLocation:(NSString *)auth_location clientID:(NSString *)client_id redirectURL:(NSString *)redirect_url authScopes:(NSArray *)scopes forceVerify:(bool)force_verify useKeychain:(bool)use_keychain;
 
 -(void)jsonRequest:(NSMutableURLRequest *)request completionHandler:(void (^)(id decodedData))handler;
+
+-(void)saveToKeychain:(NSString *)accountName;
+-(void)authorize:(void (^)(bool success))authCallback;
 
 
 @end

@@ -11,21 +11,105 @@
 @implementation CSOauth2Authenticator
 
 
--(instancetype) initWithServiceName:(NSString *)serviceName authLocation:(NSString *)auth_location clientID:(NSString *)client_id redirectURL:(NSString *)redirect_url authScopes:(NSArray *)scopes forceVerify:(bool)force_verify
+-(instancetype) initWithServiceName:(NSString *)serviceName authLocation:(NSString *)auth_location clientID:(NSString *)client_id redirectURL:(NSString *)redirect_url authScopes:(NSArray *)scopes forceVerify:(bool)force_verify useKeychain:(bool)use_keychain
 {
     if (self = [self init])
     {
-        self.serviceName =
+        self.serviceName = serviceName;
         self.authLocation = auth_location;
         self.clientID = client_id;
         self.redirectURL = redirect_url;
         self.authScopes = scopes;
         self.forceVerify = force_verify;
-        
+        self.useKeychain = use_keychain;
     }
     
     return self;
 }
+
+
+
+-(NSMutableDictionary *)buildKeychainQuery
+{
+    NSString *useServiceName = [NSString stringWithFormat:@"CocoaSplit-%@", self.serviceName];
+    NSMutableDictionary *keyChainAttrs = [[NSMutableDictionary alloc] init];
+    [keyChainAttrs setObject:(__bridge NSString *)kSecClassGenericPassword forKey:(__bridge NSString *)kSecClass];
+    [keyChainAttrs setObject:useServiceName forKey:(__bridge NSString *)kSecAttrService];
+    [keyChainAttrs setObject:self.accountName forKey:(__bridge NSString *)kSecAttrAccount];
+    [keyChainAttrs setObject:(__bridge id)kSecAttrAccessibleAfterFirstUnlock forKey:(__bridge NSString *)kSecAttrAccessible];
+    return keyChainAttrs;
+}
+
+-(void)loadFromKeychain
+{
+    NSLog(@"ACCOUNT NAME %@", self.accountName);
+    
+    if (!self.useKeychain || !self.accountName || !self.serviceName)
+    {
+        return;
+    }
+
+    NSMutableDictionary *keyChainAttrs = [self buildKeychainQuery];
+
+    [keyChainAttrs setObject:(id)kCFBooleanTrue forKey:(__bridge NSString *)kSecReturnData];
+    [keyChainAttrs setObject:(__bridge id)kSecMatchLimitOne forKey:(__bridge NSString *)kSecMatchLimit];
+    
+    NSLog(@"QUERY %@", keyChainAttrs);
+    
+    CFDataRef keyData = NULL;
+    
+    if (!SecItemCopyMatching((__bridge CFDictionaryRef)keyChainAttrs, (CFTypeRef *)&keyData))
+    {
+        if (keyData)
+        {
+            NSDictionary *storedData = [NSKeyedUnarchiver unarchiveObjectWithData:(__bridge NSData *)keyData];
+            NSLog(@"STORED DATA %@", storedData);
+            
+            if (storedData)
+            {
+                self.accessToken = storedData[@"accessToken"];
+            }
+            CFRelease(keyData);
+        }
+        
+    }
+}
+
+
+-(void)saveToKeychain:(NSString *)accountName
+{
+    self.accountName = accountName;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        [self saveToKeychain];
+    });
+}
+
+
+-(void)saveToKeychain
+{
+    if (!self.useKeychain || !self.accountName)
+    {
+        return;
+    }
+    
+    NSMutableDictionary *keyChainAttrs = [self buildKeychainQuery];
+    
+    NSDictionary *keyDataDict = @{@"accessToken": self.accessToken};
+    
+    NSData *keyData = [NSKeyedArchiver archivedDataWithRootObject:keyDataDict];
+    [keyChainAttrs setObject:keyData forKey:(__bridge NSString *)kSecValueData];
+    
+
+    OSStatus addRes =  SecItemAdd((__bridge CFDictionaryRef)keyChainAttrs, NULL);
+    
+    if (addRes == errSecDuplicateItem)
+    {
+        SecItemDelete((__bridge CFDictionaryRef)keyChainAttrs);
+        SecItemAdd((__bridge CFDictionaryRef)keyChainAttrs, NULL);
+        
+    }
+}
+
 
 
 -(void)buildAuthURL
@@ -40,8 +124,18 @@
     [paramParts addObject:[NSString stringWithFormat:@"client_id=%@", self.clientID]];
     [paramParts addObject:[NSString stringWithFormat:@"redirect_uri=%@", self.redirectURL]];
     
-    NSString *scopeValue = [self.authScopes componentsJoinedByString:@","];
+    NSString *scopeValue = [self.authScopes componentsJoinedByString:@" "];
     [paramParts addObject:[NSString stringWithFormat:@"scope=%@", scopeValue]];
+    
+    if (self.extraAuthParams)
+    {
+        for(NSString *key in self.extraAuthParams)
+        {
+            NSString *val = self.extraAuthParams[key];
+            [paramParts addObject:[NSString stringWithFormat:@"%@=%@", key,val]];
+        }
+    }
+    
     
     NSString *paramString = [paramParts componentsJoinedByString:@"&"];
     
@@ -55,24 +149,55 @@
 -(void)authorize:(void (^)(bool success))authCallback
 {
     
-    _authorizeCallback = authCallback;
-    if (!self.authURL)
+    bool doAuth = NO;
+    
+    if (!self.accessToken)
     {
-        [self buildAuthURL];
+        
+        
+        if (!self.forceVerify)
+        {
+            [self loadFromKeychain];
+            if (self.accessToken)
+            {
+                doAuth = NO;
+            } else {
+                doAuth = YES;
+            }
+        }
     }
     
-    NSLog(@"AUTHORIZATION URL IS %@", self.authURL);
+    if (self.forceVerify)
+    {
+        doAuth = YES;
+    }
     
-    NSRect winFrame = NSMakeRect(0, 0, 1000, 1000);
-    _authWebView = [[WebView alloc] initWithFrame:winFrame frameName:nil groupName:nil];
-    _authWebView.policyDelegate = self;
-    
-    _authWindow = [[NSWindow alloc] initWithContentRect:winFrame styleMask:NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask|NSResizableWindowMask backing:NSBackingStoreBuffered defer:NO];
-    
-    [_authWindow center];
-    [_authWindow setContentView:_authWebView];
-    [_authWindow makeKeyAndOrderFront:NSApp];
-    [[_authWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:self.authURL]];
+    _authorizeCallback = authCallback;
+    if (doAuth)
+    {
+        if (!self.authURL)
+        {
+            [self buildAuthURL];
+        }
+        
+        NSLog(@"AUTHORIZATION URL IS %@", self.authURL);
+        
+        NSRect winFrame = NSMakeRect(0, 0, 1000, 1000);
+        _authWebView = [[WebView alloc] initWithFrame:winFrame frameName:nil groupName:nil];
+        _authWebView.policyDelegate = self;
+        
+        _authWindow = [[NSWindow alloc] initWithContentRect:winFrame styleMask:NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask|NSResizableWindowMask backing:NSBackingStoreBuffered defer:NO];
+        
+        [_authWindow center];
+        [_authWindow setContentView:_authWebView];
+        [_authWindow makeKeyAndOrderFront:NSApp];
+        [[_authWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:self.authURL]];
+    } else {
+        if (authCallback)
+        {
+            authCallback(!!self.accessToken);
+        }
+    }
 
 }
 
@@ -142,6 +267,14 @@
             if (_authorizeCallback)
             {
                 _authorizeCallback(!!self.accessToken);
+                if (self.accountNameFetcher && self.useKeychain)
+                {
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+                       
+                        self.accountNameFetcher(self);
+                        
+                    });
+                }
             }
         }
     }
@@ -177,7 +310,7 @@
 
 -(void)jsonRequest:(NSMutableURLRequest *)request completionHandler:(void (^)(id decodedData))handler
 {
-    if (!self.authURL)
+    if (!self.accessToken)
     {
         [self authorize:^(bool success) {
             if (success)

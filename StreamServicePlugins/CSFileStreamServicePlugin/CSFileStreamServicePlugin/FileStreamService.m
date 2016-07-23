@@ -107,4 +107,9 @@
     return @"File";
 }
 
+-(void)prepareForStreamStart
+{
+    return;
+}
+
 @end

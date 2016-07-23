@@ -18,5 +18,6 @@
 @property (strong) WebView *authWebView;
 
 - (IBAction)doTwitchAuth:(id)sender;
+- (IBAction)doTwitchstreamkey:(id)sender;
 
 @end

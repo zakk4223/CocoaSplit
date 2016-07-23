@@ -34,6 +34,8 @@
     int _pending_frame_count;
     int _consecutive_dropped_frames;
     BOOL _errored;
+    bool _output_prepared;
+    
     
     
     CFAbsoluteTime _input_frame_timestamp;

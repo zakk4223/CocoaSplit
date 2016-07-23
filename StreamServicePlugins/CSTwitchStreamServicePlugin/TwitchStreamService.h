@@ -15,6 +15,7 @@
 @interface TwitchStreamService : NSObject <CSStreamServiceProtocol>
 {
     NSString *_oauth_client_id;
+    bool _key_fetch_pending;
 }
 
 
@@ -25,6 +26,11 @@
 @property (strong) NSString *selectedServer;
 @property (strong) NSString *oAuthKey;
 @property (strong) CSOauth2Authenticator *oauthObject;
+@property (strong) NSString *accountName;
+@property (assign) bool alwaysFetchKey;
+
+
+
 
 
 
@@ -33,6 +39,8 @@
 -(void)fetchTwitchStreamKey;
 +(NSString *)label;
 +(NSString *)serviceDescription;
+-(void)authenticateUser;
+
 
 
 

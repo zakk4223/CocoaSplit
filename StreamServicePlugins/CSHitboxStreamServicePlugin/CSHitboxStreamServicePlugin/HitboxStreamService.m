@@ -149,5 +149,10 @@
     }];
 }
 
+-(void)prepareForStreamStart
+{
+    return;
+}
+
 
 @end

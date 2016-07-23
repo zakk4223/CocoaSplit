@@ -45,8 +45,14 @@
 - (IBAction)doTwitchAuth:(id)sender
 {
     
-    [self.serviceObj fetchTwitchStreamKey];
+    [self.serviceObj authenticateUser];
      
+}
+
+- (IBAction)doTwitchstreamkey:(id)sender
+{
+    [self.serviceObj fetchTwitchStreamKey];
+
 }
 
 

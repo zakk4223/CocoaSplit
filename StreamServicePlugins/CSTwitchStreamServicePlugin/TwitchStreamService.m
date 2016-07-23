@@ -26,6 +26,9 @@
 {
     [aCoder encodeObject:self.selectedServer forKey:@"selectedServer"];
     [aCoder encodeObject:self.streamKey forKey:@"streamKey"];
+    [aCoder encodeObject:self.accountName forKey:@"accountName"];
+    [aCoder encodeBool:self.alwaysFetchKey forKey:@"alwaysFetchKey"];
+    
 }
 
 -(instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -34,6 +37,8 @@
     {
         self.selectedServer = [aDecoder decodeObjectForKey:@"selectedServer"];
         self.streamKey = [aDecoder decodeObjectForKey:@"streamKey"];
+        self.accountName = [aDecoder decodeObjectForKey:@"accountName"];
+        self.alwaysFetchKey = [aDecoder decodeBoolForKey:@"alwaysFetchKey"];
     }
     return self;
 }
@@ -58,10 +63,29 @@
 }
 
 
+-(void)prepareForStreamStart
+{
+    if (self.alwaysFetchKey && !_key_fetch_pending)
+    {
+        @synchronized (self) {
+            self.streamKey = nil;
+            _key_fetch_pending = YES;
+        }
+        
+        [self fetchTwitchStreamKey];
+        
+    }
+}
+
+
 -(NSString *)getServiceDestination
 {
     
-    
+
+    if (!self.streamKey)
+    {
+        return nil;
+    }
     
     if (self.selectedServer)
     {
@@ -87,11 +111,7 @@
 
 
 
--(void)authenticateUser
-{
-    
-}
--(void)fetchTwitchStreamKey
+-(void)createAuthenticator
 {
     if (!self.oauthObject)
     {
@@ -100,10 +120,62 @@
         {
             _oauth_client_id = [[NSBundle bundleForClass:[self class]] objectForInfoDictionaryKey:@"TwitchAPIClientID"];
         }
-        self.oauthObject = [[CSPluginServices sharedPluginServices] createOAuth2Authenticator:@"twitchkraken" authLocation:@"https://api.twitch.tv/kraken/oauth2/authorize" clientID:_oauth_client_id redirectURL:@"cocoasplit-twitch://cocoasplit.com/oauth/redirect" authScopes:@[@"channel_read"] forceVerify:NO];
+        self.oauthObject = [[CSPluginServices sharedPluginServices] createOAuth2Authenticator:@"twitch" authLocation:@"https://api.twitch.tv/kraken/oauth2/authorize" clientID:_oauth_client_id redirectURL:@"cocoasplit-twitch://cocoasplit.com/oauth/redirect" authScopes:@[@"channel_read", @"user_read"] forceVerify:NO useKeychain:YES];
+        self.oauthObject.accountName = self.accountName;
+        self.oauthObject.accountNameFetcher = ^void(CSOauth2Authenticator *authenticator) {
+            [self fetchAccountname:authenticator];
+        };
+    }
+}
+
+-(void)authenticateUser
+{
+    [self createAuthenticator];
+    self.oauthObject.forceVerify = YES;
+    self.oauthObject.extraAuthParams = @{@"force_verify": @"true"};
+    [self fetchTwitchStreamKey];
+    self.oauthObject.forceVerify = NO;
+    self.oauthObject.extraAuthParams = nil;
+}
+
+
+
+
+-(void)fetchAccountname:(CSOauth2Authenticator *)authenticator
+{
+    if (self.accountName)
+    {
+        [authenticator saveToKeychain:self.accountName];
+        return;
     }
     
+    if (self.oauthObject && self.oauthObject.accessToken)
+    {
+        NSString *apiString = @"https://api.twitch.tv/kraken/channel";
+        
+        NSURL *apiURL = [NSURL URLWithString:apiString];
+        
+        
+        
+        NSMutableURLRequest *apiRequest = [NSMutableURLRequest requestWithURL:apiURL];
+        
+        [self.oauthObject jsonRequest:apiRequest completionHandler:^(id decodedData) {
+            
+            NSDictionary *user_response = (NSDictionary *)decodedData;
+            NSString *account_name = [user_response objectForKey:@"name"];
+            [authenticator saveToKeychain:account_name];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{self.accountName = account_name; });
+        }];
+    }
+}
+
+
+
+-(void)fetchTwitchStreamKey
+{
     
+    [self createAuthenticator];
     
     NSString *apiString = @"https://api.twitch.tv/kraken/channel";
     
@@ -117,12 +189,11 @@
     //[apiRequest setValue:[NSString stringWithFormat:@"OAuth %@", self.oAuthKey] forHTTPHeaderField:@"Authorization"];
     
     [self.oauthObject jsonRequest:apiRequest completionHandler:^(id decodedData) {
-        NSLog(@"DECODED DATA %@", decodedData);
         
         NSDictionary *channel_response = (NSDictionary *)decodedData;
         NSString *stream_key = [channel_response objectForKey:@"stream_key"];
         
-        dispatch_async(dispatch_get_main_queue(), ^{self.streamKey = stream_key; });
+        dispatch_async(dispatch_get_main_queue(), ^{self.streamKey = stream_key; _key_fetch_pending = NO;});
     }];
 }
 

@@ -77,4 +77,10 @@
     return @"RTMP";
 }
 
+-(void)prepareForStreamStart
+{
+    return;
+}
+
+
 @end
