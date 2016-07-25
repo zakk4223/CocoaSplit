@@ -20,6 +20,8 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Initialization code here.
+        self.serverSortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES]];
+        
     }
     return self;
 }

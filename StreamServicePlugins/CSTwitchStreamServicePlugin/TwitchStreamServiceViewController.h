@@ -16,6 +16,7 @@
 @property (weak) TwitchStreamService *serviceObj;
 @property (strong) NSWindow *authWindow;
 @property (strong) WebView *authWebView;
+@property (strong) NSArray *serverSortDescriptors;
 
 - (IBAction)doTwitchAuth:(id)sender;
 - (IBAction)doTwitchstreamkey:(id)sender;
