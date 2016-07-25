@@ -21,7 +21,10 @@
 -(void)loadPythonClass:(NSString *)pyClass fromFile:(NSString *)fromFile withBlock:(void(^)(Class))withBlock;
 -(Class)loadPythonClass:(NSString *)pyClass fromFile:(NSString *)fromFile;
 
--(CSOauth2Authenticator *) createOAuth2Authenticator:(NSString *)serviceName authLocation:(NSString *)auth_location clientID:(NSString *)client_id redirectURL:(NSString *)redirect_url authScopes:(NSArray *)scopes forceVerify:(bool)force_verify useKeychain:(bool)use_keychain;
+
+-(CSOauth2Authenticator *) createOAuth2Authenticator:(NSString *)serviceName clientID:(NSString *)client_id flowType:(NSString *)flow_type config:(NSDictionary *)config_dict;
+-(NSArray *)accountNamesForService:(NSString *)serviceName;
+
 
 @property (readonly) double currentFPS;
 @property (readonly) int audioSampleRate;

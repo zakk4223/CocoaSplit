@@ -120,7 +120,12 @@
         {
             _oauth_client_id = [[NSBundle bundleForClass:[self class]] objectForInfoDictionaryKey:@"TwitchAPIClientID"];
         }
-        self.oauthObject = [[CSPluginServices sharedPluginServices] createOAuth2Authenticator:@"twitch" authLocation:@"https://api.twitch.tv/kraken/oauth2/authorize" clientID:_oauth_client_id redirectURL:@"cocoasplit-twitch://cocoasplit.com/oauth/redirect" authScopes:@[@"channel_read", @"user_read"] forceVerify:NO useKeychain:YES];
+        
+        NSDictionary *oconfig = @{kCSOauth2ConfigAuthURL:@"https://api.twitch.tv/kraken/oauth2/authorize", kCSOauth2ConfigRedirectURL:@"cocoasplit-twitch://cocoasplit.com/oauth/redirect", kCSOauth2ConfigScopes:@[@"channel_read", @"user_read"]};
+        
+        self.oauthObject = [[CSPluginServices sharedPluginServices] createOAuth2Authenticator:@"twitch" clientID:_oauth_client_id flowType:kCSOauth2ImplicitGrantFlow config:oconfig];
+        
+        
         self.oauthObject.accountName = self.accountName;
         self.oauthObject.accountNameFetcher = ^void(CSOauth2Authenticator *authenticator) {
             [self fetchAccountname:authenticator];
@@ -132,10 +137,12 @@
 {
     [self createAuthenticator];
     self.oauthObject.forceVerify = YES;
-    self.oauthObject.extraAuthParams = @{@"force_verify": @"true"};
+    [self.oauthObject configurationVariableSet:@{@"force_verify": @"true"} forName:kCSOauth2ExtraAuthParams];
+    
     [self fetchTwitchStreamKey];
     self.oauthObject.forceVerify = NO;
-    self.oauthObject.extraAuthParams = nil;
+    [self.oauthObject configurationVariableRemove:kCSOauth2ExtraAuthParams];
+    
 }
 
 
@@ -192,6 +199,9 @@
         
         NSDictionary *channel_response = (NSDictionary *)decodedData;
         NSString *stream_key = [channel_response objectForKey:@"stream_key"];
+        
+        NSLog(@"GOT CHANNEL RESPONSE %@", channel_response);
+        NSLog(@"STREAM KEY IS %@", stream_key);
         
         dispatch_async(dispatch_get_main_queue(), ^{self.streamKey = stream_key; _key_fetch_pending = NO;});
     }];

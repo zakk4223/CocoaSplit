@@ -8,25 +8,74 @@
 
 #import "CSOauth2Authenticator.h"
 
+NSString *const kCSOauth2ConfigRedirectURL = @"CSOauth2ConfigRedirectURL";
+NSString *const kCSOauth2ConfigScopes = @"CSOauth2ConfigScopes";
+NSString *const kCSOauth2ConfigAuthURL = @"CSOauth2ConfigAuthURL";
+NSString *const kCSOauth2CodeFlow = @"CSOauth2CodeFlow";
+NSString *const kCSOauth2ImplicitGrantFlow = @"CSOauth2ImplicitGrantFlow";
+NSString *const kCSOauth2ExtraAuthParams = @"CSOauth2ExtraAuthParams";
+NSString *const kCSOauth2AccessTokenRequestURL = @"CSOauth2AccessTokenRequestURL";
+NSString *const kCSOauth2AccessRefreshURL = @"CSOauth2AccessRefreshURL";
+NSString *const kCSOauth2ClientSecret = @"CSOauth2ClientSecret";
+
+
+
+
+
+
+@interface CSOauth2Authenticator()
+{
+    NSMutableDictionary *_config_dict;
+}
+
+@property (strong) NSString *refreshToken;
+@property (strong) NSDate *expireDate;
+
+@end
+
+
 @implementation CSOauth2Authenticator
 
-
--(instancetype) initWithServiceName:(NSString *)serviceName authLocation:(NSString *)auth_location clientID:(NSString *)client_id redirectURL:(NSString *)redirect_url authScopes:(NSArray *)scopes forceVerify:(bool)force_verify useKeychain:(bool)use_keychain
+-(instancetype) initWithServiceName:(NSString *)serviceName clientID:(NSString *)client_id flowType:(NSString *)flow_type config:(NSDictionary *)config_dict
 {
     if (self = [self init])
     {
         self.serviceName = serviceName;
-        self.authLocation = auth_location;
         self.clientID = client_id;
-        self.redirectURL = redirect_url;
-        self.authScopes = scopes;
-        self.forceVerify = force_verify;
-        self.useKeychain = use_keychain;
+        self.forceVerify = NO;
+        self.useKeychain = YES;
+        self.flowType = flow_type;
+
+        if (config_dict)
+        {
+            _config_dict = [config_dict mutableCopy];
+        } else {
+            _config_dict = [[NSMutableDictionary alloc] init];
+        }
     }
     
     return self;
 }
 
+
+
+
+-(void)configurationVariableSet:(id)val forName:(NSString *)forName
+{
+    [_config_dict setObject:val forKey:forName];
+}
+
+-(id)configurationVariableGet:(NSString *)forName
+{
+    return [_config_dict objectForKey:forName];
+}
+
+-(id)configurationVariableRemove:(NSString *)forName
+{
+    id ret = [_config_dict objectForKey:forName];
+    [_config_dict removeObjectForKey:forName];
+    return ret;
+}
 
 
 -(NSMutableDictionary *)buildKeychainQuery
@@ -39,6 +88,7 @@
     [keyChainAttrs setObject:(__bridge id)kSecAttrAccessibleAfterFirstUnlock forKey:(__bridge NSString *)kSecAttrAccessible];
     return keyChainAttrs;
 }
+
 
 -(void)loadFromKeychain
 {
@@ -68,6 +118,9 @@
             if (storedData)
             {
                 self.accessToken = storedData[@"accessToken"];
+                self.refreshToken = storedData[@"refreshToken"];
+                self.expireDate = storedData[@"expireDate"];
+                
             }
             CFRelease(keyData);
         }
@@ -94,7 +147,19 @@
     
     NSMutableDictionary *keyChainAttrs = [self buildKeychainQuery];
     
-    NSDictionary *keyDataDict = @{@"accessToken": self.accessToken};
+    NSMutableDictionary *keyDataDict = [[NSMutableDictionary alloc] init];
+    [keyDataDict setObject:self.accessToken forKey:@"accessToken"];
+    if (self.refreshToken)
+    {
+        [keyDataDict setObject:self.refreshToken forKey:@"refreshToken"];
+
+    }
+  
+    if (self.expireDate)
+    {
+        [keyDataDict setObject:self.expireDate forKey:@"expireDate"];
+   
+    }
     
     NSData *keyData = [NSKeyedArchiver archivedDataWithRootObject:keyDataDict];
     [keyChainAttrs setObject:keyData forKey:(__bridge NSString *)kSecValueData];
@@ -112,26 +177,73 @@
 
 
 
+-(NSString *)buildQueryString:(NSDictionary *)params
+{
+    NSMutableArray *paramParts = [[NSMutableArray alloc] init];
+    
+    for (NSString *pname in params)
+    {
+        NSString *pval = params[pname];
+        NSString *equalString = [NSString stringWithFormat:@"%@=%@", pname, [pval stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+        [paramParts addObject:equalString];
+    }
+    
+    return [paramParts componentsJoinedByString:@"&"];
+}
+
+
 -(void)buildAuthURL
 {
     //NSQueryItems is 10.10+, so we can't use it :/
     
-    NSURLComponents *urlComponent = [NSURLComponents componentsWithString:self.authLocation];
+    NSString *authLocation = [self configurationVariableGet:kCSOauth2ConfigAuthURL];
+    
+    if (!authLocation)
+    {
+        return;
+    }
+    
+    NSURLComponents *urlComponent = [NSURLComponents componentsWithString:authLocation];
     
     NSMutableArray *paramParts = [[NSMutableArray alloc] init];
     
-    [paramParts addObject:@"response_type=token"];
-    [paramParts addObject:[NSString stringWithFormat:@"client_id=%@", self.clientID]];
-    [paramParts addObject:[NSString stringWithFormat:@"redirect_uri=%@", self.redirectURL]];
+    NSString *response_type = nil;
     
-    NSString *scopeValue = [self.authScopes componentsJoinedByString:@" "];
-    [paramParts addObject:[NSString stringWithFormat:@"scope=%@", scopeValue]];
-    
-    if (self.extraAuthParams)
+    if ([self.flowType isEqualToString:kCSOauth2CodeFlow])
     {
-        for(NSString *key in self.extraAuthParams)
+        response_type = @"code";
+    } else if ([self.flowType isEqualToString:kCSOauth2ImplicitGrantFlow]) {
+        response_type = @"token";
+    }
+    
+    
+    [paramParts addObject:[NSString stringWithFormat:@"response_type=%@", response_type]];
+    
+    [paramParts addObject:[NSString stringWithFormat:@"client_id=%@", self.clientID]];
+    
+    NSString *redirectURL = [self configurationVariableGet:kCSOauth2ConfigRedirectURL];
+    
+    if (redirectURL)
+    {
+        [paramParts addObject:[NSString stringWithFormat:@"redirect_uri=%@", redirectURL]];
+    }
+    
+    
+    NSArray *authScopes = [self configurationVariableGet:kCSOauth2ConfigScopes];
+    
+    if (authScopes)
+    {
+        NSString *scopeValue = [authScopes componentsJoinedByString:@" "];
+        [paramParts addObject:[NSString stringWithFormat:@"scope=%@", scopeValue]];
+    }
+    
+    NSDictionary *extraAuthParams = [self configurationVariableGet:kCSOauth2ExtraAuthParams];
+    
+    if (extraAuthParams)
+    {
+        for(NSString *key in extraAuthParams)
         {
-            NSString *val = self.extraAuthParams[key];
+            NSString *val = extraAuthParams[key];
             [paramParts addObject:[NSString stringWithFormat:@"%@=%@", key,val]];
         }
     }
@@ -146,39 +258,59 @@
 }
 
 
+-(bool)doesTokenNeedRefresh
+{
+    
+    NSLog(@"EXPIRE DATE %@", self.expireDate);
+    
+    if (!self.expireDate)
+    {
+        return NO;
+    }
+    
+    NSDate *nowDate = [NSDate date];
+    
+    NSLog(@"NOW DATE %@", nowDate);
+    
+    if ([nowDate compare:self.expireDate] == NSOrderedDescending)
+    {
+        return YES;
+    }
+    
+    return NO;
+}
+
+
 -(void)authorize:(void (^)(bool success))authCallback
 {
     
     bool doAuth = NO;
     
-    if (!self.accessToken)
+    if (!self.forceVerify)
     {
-        
-        
-        if (!self.forceVerify)
+        [self loadFromKeychain];
+        if ([self doesTokenNeedRefresh])
         {
-            [self loadFromKeychain];
-            if (self.accessToken)
-            {
-                doAuth = NO;
-            } else {
-                doAuth = YES;
-            }
+            _authorizeCallback = authCallback;
+            [self refreshAccessToken];
+            return;
         }
-    }
-    
-    if (self.forceVerify)
-    {
+        
+        if (self.accessToken)
+        {
+            doAuth = NO;
+        } else {
+            doAuth = YES;
+        }
+    } else {
         doAuth = YES;
     }
     
-    _authorizeCallback = authCallback;
     if (doAuth)
     {
-        if (!self.authURL)
-        {
-            [self buildAuthURL];
-        }
+        _authorizeCallback = authCallback;
+
+        [self buildAuthURL];
         
         NSLog(@"AUTHORIZATION URL IS %@", self.authURL);
         
@@ -195,6 +327,7 @@
     } else {
         if (authCallback)
         {
+            NSLog(@"CALLING AUTH CALLBACK FROM AUTHORIZE");
             authCallback(!!self.accessToken);
         }
     }
@@ -206,6 +339,147 @@
 {
     _authWindow = nil;
 }
+
+-(void)refreshAccessToken
+{
+    NSString *refreshLocation = [self configurationVariableGet:kCSOauth2AccessRefreshURL];
+    NSString *clientSecret = [self configurationVariableGet:kCSOauth2ClientSecret];
+    NSString *redirectURL = [self configurationVariableGet:kCSOauth2ConfigRedirectURL];
+    
+    
+    NSLog(@"DOING REFRESH LOC %@ SEC %@ REDIR %@ REFRESH %@", refreshLocation, clientSecret, redirectURL, self.refreshToken);
+    if (!refreshLocation || !clientSecret || !redirectURL || !self.refreshToken)
+    {
+        return;
+    }
+    
+    
+    NSURL *locationURL = [NSURL URLWithString:refreshLocation];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:locationURL];
+    request.HTTPMethod = @"POST";
+    
+    NSDictionary *queryDict = @{@"grant_type": @"refresh_token",
+                                @"client_id": self.clientID,
+                                @"refresh_token": self.refreshToken,
+                                @"client_secret": clientSecret };
+    
+    NSString *queryString = [self buildQueryString:queryDict];
+    request.HTTPBody = [queryString dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSURLSession *urlSession = [NSURLSession sharedSession];
+    
+    NSURLSessionDataTask *dataTask = [urlSession dataTaskWithRequest:request
+                                                   completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                                                       NSError *jsonError;
+                                                       NSDictionary *tokenData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonError];
+                                                       
+                                                       self.accessToken = tokenData[@"access_token"];
+                                                       NSNumber *expire_seconds = tokenData[@"expires_in"];
+                                                       self.expireDate = [NSDate dateWithTimeIntervalSinceNow:expire_seconds.integerValue];
+                                                       if (_authorizeCallback)
+                                                       {
+                                                           _authorizeCallback(!!self.accessToken);
+                                                       }
+                                                       
+                                                       
+                                                   }];
+    
+    [dataTask resume];
+
+    
+}
+-(void)requestAccessToken:(NSString *)forCode
+{
+    
+    NSLog(@"GET ACCESS TOKEN FOR %@", forCode);
+    
+    NSString *tokenLocation = [self configurationVariableGet:kCSOauth2AccessTokenRequestURL];
+    NSString *clientSecret = [self configurationVariableGet:kCSOauth2ClientSecret];
+    NSString *redirectURL = [self configurationVariableGet:kCSOauth2ConfigRedirectURL];
+    
+    
+    if (!tokenLocation || !clientSecret || !redirectURL)
+    {
+        return;
+    }
+    
+    
+    NSURL *locationURL = [NSURL URLWithString:tokenLocation];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:locationURL];
+    request.HTTPMethod = @"POST";
+    
+    NSDictionary *queryDict = @{@"grant_type": @"authorization_code",
+                                @"code": forCode,
+                                @"redirect_uri": redirectURL,
+                                @"client_id": self.clientID,
+                                @"client_secret": clientSecret };
+    
+    NSString *queryString = [self buildQueryString:queryDict];
+    request.HTTPBody = [queryString dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSURLSession *urlSession = [NSURLSession sharedSession];
+
+    NSLog(@"DOING ACCESS %@", request);
+    
+    NSURLSessionDataTask *dataTask = [urlSession dataTaskWithRequest:request
+                                                   completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                                                       NSError *jsonError;
+                                                       NSDictionary *tokenData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonError];
+                                                       
+                                                       NSLog(@"TOKEN DATA IS %@", tokenData);
+                                                       
+                                                       self.accessToken = tokenData[@"access_token"];
+                                                       self.refreshToken = tokenData[@"refresh_token"];
+                                                       NSNumber *expire_seconds = tokenData[@"expires_in"];
+                                                       self.expireDate = [NSDate dateWithTimeIntervalSinceNow:expire_seconds.integerValue];
+                                                       if (_authorizeCallback)
+                                                       {
+                                                           _authorizeCallback(!!self.accessToken);
+                                                           if (self.accountNameFetcher && self.useKeychain)
+                                                           {
+                                                               dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+                                                                   
+                                                                   self.accountNameFetcher(self);
+                                                                   
+                                                               });
+                                                           }
+                                                       }
+
+                                                       
+                                                   }];
+    
+    [dataTask resume];
+
+    
+    
+    
+    
+}
+-(NSString *)extractCodeFromURL:(NSURL *)url
+{
+    NSString *query = url.query;
+    
+    for (NSString *param in [query componentsSeparatedByString:@"&"])
+    {
+        NSArray *pparts = [param componentsSeparatedByString:@"="];
+        if (pparts.count < 2)
+        {
+            //what?
+            continue;
+        }
+        
+        NSString *pname = pparts.firstObject;
+        NSString *pvalue = pparts.lastObject;
+        
+        if ([pname isEqualToString:@"code"])
+        {
+            return pvalue;
+        }
+    }
+    return nil;
+}
+
+
 
 -(NSString *)extractAccessTokenFromURL:(NSURL *)url
 {
@@ -225,8 +499,18 @@
 
 -(bool)isURLRedirect:(NSURL *)testurl
 {
+    
+    
+    NSString *redirectURL = [self configurationVariableGet:kCSOauth2ConfigRedirectURL];
+    
+    NSLog(@"TESTING REDIRECT %@ AGAINST %@", redirectURL, testurl);
+    if (!redirectURL)
+    {
+        return NO;
+    }
+    
     NSURLComponents *testComp = [NSURLComponents componentsWithURL:testurl resolvingAgainstBaseURL:NO];
-    NSURLComponents *redirectComp = [NSURLComponents componentsWithString:self.redirectURL];
+    NSURLComponents *redirectComp = [NSURLComponents componentsWithString:redirectURL];
     
     if (![testComp.scheme isEqualToString:redirectComp.scheme])
     {
@@ -254,7 +538,9 @@
 {
     
     NSURL *reqUrl = request.URL;
-    if (reqUrl && self.redirectURL)
+    NSString *redirectURL = [self configurationVariableGet:kCSOauth2ConfigRedirectURL];
+    
+    if (reqUrl && redirectURL)
     {
         
         
@@ -262,20 +548,28 @@
         if ([self isURLRedirect:reqUrl])
         {
             [listener ignore];
-            self.accessToken = [self extractAccessTokenFromURL:reqUrl];
-            [self closeAuthWindow];
-            if (_authorizeCallback)
+            NSLog(@"REQ URL %@", reqUrl);
+            
+            if ([self.flowType isEqualToString:kCSOauth2ImplicitGrantFlow])
             {
-                _authorizeCallback(!!self.accessToken);
-                if (self.accountNameFetcher && self.useKeychain)
+                self.accessToken = [self extractAccessTokenFromURL:reqUrl];
+                if (_authorizeCallback)
                 {
-                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-                       
-                        self.accountNameFetcher(self);
-                        
-                    });
+                    _authorizeCallback(!!self.accessToken);
+                    if (self.accountNameFetcher && self.useKeychain)
+                    {
+                        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+                            
+                            self.accountNameFetcher(self);
+                            
+                        });
+                    }
                 }
+            } else if ([self.flowType isEqualToString:kCSOauth2CodeFlow]) {
+                NSString *flowCode = [self extractCodeFromURL:reqUrl];
+                [self requestAccessToken:flowCode];
             }
+            [self closeAuthWindow];
         }
     }
     
@@ -290,10 +584,22 @@
 {
     //Set OAuth Bearer header
     
+    NSString *authType;
     
-    [request setValue:[NSString stringWithFormat:@"OAuth %@", self.accessToken] forHTTPHeaderField:@"Authorization"];
+    if ([self.flowType isEqualToString:kCSOauth2ImplicitGrantFlow])
+    {
+        authType = @"OAuth";
+    } else if ([self.flowType isEqualToString:kCSOauth2CodeFlow]) {
+        authType = @"Bearer";
+    }
+    
+    
+    
+    [request setValue:[NSString stringWithFormat:@"%@ %@", authType, self.accessToken] forHTTPHeaderField:@"Authorization"];
 
     NSURLSession *urlSession = [NSURLSession sharedSession];
+    
+    NSLog(@"CALLING REQUEST %@", request);
     
     NSURLSessionDataTask *dataTask = [urlSession dataTaskWithRequest:request
         completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
@@ -310,19 +616,13 @@
 
 -(void)jsonRequest:(NSMutableURLRequest *)request completionHandler:(void (^)(id decodedData))handler
 {
-    if (!self.accessToken)
-    {
-        [self authorize:^(bool success) {
-            if (success)
-            {
-                [self authorizedJsonRequest:request completionHandler:handler];
-            }
-            
-        }];
-    } else {
-        [self authorizedJsonRequest:request completionHandler:handler];
-
-    }
+    [self authorize:^(bool success) {
+        if (success)
+        {
+            [self authorizedJsonRequest:request completionHandler:handler];
+        }
+        
+    }];
 }
 
 

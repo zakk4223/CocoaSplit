@@ -33,6 +33,34 @@
 
 
 
+-(NSArray *)accountNamesForService:(NSString *)serviceName
+{
+    
+    NSString *useServiceName = [NSString stringWithFormat:@"CocoaSplit-%@", serviceName];
+    NSMutableDictionary *keyChainAttrs = [[NSMutableDictionary alloc] init];
+    
+    [keyChainAttrs setObject:(__bridge NSString *)kSecClassGenericPassword forKey:(__bridge NSString *)kSecClass];
+    [keyChainAttrs setObject:useServiceName forKey:(__bridge NSString *)kSecAttrService];
+    [keyChainAttrs setObject:(id)kCFBooleanTrue forKey:(__bridge NSString *)kSecReturnAttributes];
+    [keyChainAttrs setObject:(__bridge id)kSecMatchLimitAll forKey:(__bridge NSString *)kSecMatchLimit];
+    
+    CFArrayRef resultArray = NULL;
+    
+    NSMutableArray *retArr = [[NSMutableArray alloc] init];
+    
+    SecItemCopyMatching((CFDictionaryRef)keyChainAttrs, (CFTypeRef *)&resultArray);
+    
+    
+    for (NSDictionary *itemDict in (__bridge NSArray *)resultArray)
+    {
+        NSString *accountName = itemDict[(__bridge NSString *)kSecAttrAccount];
+        [retArr addObject:accountName];
+    }
+    
+    return retArr;
+}
+
+
 -(double) currentFPS
 {
     AppDelegate *myAppDelegate = [[NSApplication sharedApplication] delegate];
@@ -103,10 +131,11 @@
 }
 
 
--(CSOauth2Authenticator *) createOAuth2Authenticator:(NSString *)serviceName authLocation:(NSString *)auth_location clientID:(NSString *)client_id redirectURL:(NSString *)redirect_url authScopes:(NSArray *)scopes forceVerify:(bool)force_verify useKeychain:(bool)use_keychain
+-(CSOauth2Authenticator *) createOAuth2Authenticator:(NSString *)serviceName clientID:(NSString *)client_id flowType:(NSString *)flow_type config:(NSDictionary *)config_dict;
 {
 
-    return [[CSOauth2Authenticator alloc] initWithServiceName:serviceName authLocation:auth_location clientID:client_id redirectURL:redirect_url authScopes:scopes forceVerify:force_verify useKeychain:use_keychain];
+    return [[CSOauth2Authenticator alloc] initWithServiceName:serviceName clientID:client_id flowType:flow_type config:config_dict];
 }
+
 
 @end
