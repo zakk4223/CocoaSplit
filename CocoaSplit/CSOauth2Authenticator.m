@@ -92,7 +92,6 @@ NSString *const kCSOauth2ClientSecret = @"CSOauth2ClientSecret";
 
 -(void)loadFromKeychain
 {
-    NSLog(@"ACCOUNT NAME %@", self.accountName);
     
     if (!self.useKeychain || !self.accountName || !self.serviceName)
     {
@@ -132,9 +131,7 @@ NSString *const kCSOauth2ClientSecret = @"CSOauth2ClientSecret";
 -(void)saveToKeychain:(NSString *)accountName
 {
     self.accountName = accountName;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        [self saveToKeychain];
-    });
+    [self saveToKeychain];
 }
 
 

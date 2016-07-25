@@ -28,6 +28,7 @@
 @property (strong) CSOauth2Authenticator *oauthObject;
 @property (strong) NSString *accountName;
 @property (assign) bool alwaysFetchKey;
+@property (strong) NSArray *knownAccounts;
 
 
 

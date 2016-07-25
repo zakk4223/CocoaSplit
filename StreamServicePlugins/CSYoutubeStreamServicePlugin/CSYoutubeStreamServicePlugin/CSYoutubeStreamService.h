@@ -34,5 +34,6 @@
 @property (strong) CSOauth2Authenticator *oauthObject;
 @property (strong) NSArray *liveStreams;
 @property (strong) NSDictionary *selectedLiveStream;
+@property (strong) NSArray *knownAccounts;
 
 @end

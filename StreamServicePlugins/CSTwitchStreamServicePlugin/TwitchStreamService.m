@@ -12,12 +12,17 @@
 
 @implementation TwitchStreamService
 
+@synthesize accountName = _accountName;
+
 -(instancetype) init
 {
     if(self = [super init])
     {
         self.isReady = YES;
+        self.knownAccounts = [[CSPluginServices sharedPluginServices] accountNamesForService:@"twitch"];
     }
+    
+    
     return self;
 }
 
@@ -60,6 +65,18 @@
 -(NSString *)getServiceFormat
 {
     return @"FLV";
+}
+
+
+-(NSString *)accountName
+{
+    return _accountName;
+}
+
+-(void)setAccountName:(NSString *)accountName
+{
+    _accountName = accountName;
+    self.oauthObject = nil;
 }
 
 
@@ -135,6 +152,8 @@
 
 -(void)authenticateUser
 {
+    self.accountName = nil;
+    
     [self createAuthenticator];
     self.oauthObject.forceVerify = YES;
     [self.oauthObject configurationVariableSet:@{@"force_verify": @"true"} forName:kCSOauth2ExtraAuthParams];
@@ -153,6 +172,13 @@
     if (self.accountName)
     {
         [authenticator saveToKeychain:self.accountName];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            self.knownAccounts = [[CSPluginServices sharedPluginServices] accountNamesForService:@"twitch"];
+        });
+
+
         return;
     }
     
@@ -172,7 +198,11 @@
             NSString *account_name = [user_response objectForKey:@"name"];
             [authenticator saveToKeychain:account_name];
             
-            dispatch_async(dispatch_get_main_queue(), ^{self.accountName = account_name; });
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                self.accountName = account_name;
+                self.knownAccounts = [[CSPluginServices sharedPluginServices] accountNamesForService:@"twitch"];
+            });
         }];
     }
 }
@@ -199,10 +229,6 @@
         
         NSDictionary *channel_response = (NSDictionary *)decodedData;
         NSString *stream_key = [channel_response objectForKey:@"stream_key"];
-        
-        NSLog(@"GOT CHANNEL RESPONSE %@", channel_response);
-        NSLog(@"STREAM KEY IS %@", stream_key);
-        
         dispatch_async(dispatch_get_main_queue(), ^{self.streamKey = stream_key; _key_fetch_pending = NO;});
     }];
 }

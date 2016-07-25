@@ -17,23 +17,13 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ask-61-FLF">
-                    <rect key="frame" x="-2" y="242" width="51" height="17"/>
-                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Account:" id="2Yn-R0-VNK">
+                    <rect key="frame" x="-2" y="242" width="33" height="17"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="User:" id="2Yn-R0-VNK">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iBy-V8-dFp">
-                    <rect key="frame" x="392" y="237" width="93" height="28"/>
-                    <buttonCell key="cell" type="push" title="Authenticate" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="iXQ-AD-YtY">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="authenticateUser:" target="-2" id="xnm-hC-k9T"/>
-                    </connections>
-                </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aZF-iv-cmc">
                     <rect key="frame" x="-2" y="223" width="70" height="14"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Live Stream:" id="tNN-Cr-LRn">
@@ -43,7 +33,7 @@
                     </textFieldCell>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O7W-RP-seN">
-                    <rect key="frame" x="71" y="218" width="147" height="22"/>
+                    <rect key="frame" x="71" y="218" width="261" height="22"/>
                     <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="CY6-nQ-yns" id="fIo-gV-5IE">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -61,17 +51,34 @@
                         <binding destination="-2" name="selectedObject" keyPath="self.serviceObj.selectedLiveStream" previousBinding="B4a-fG-wrw" id="uMZ-1x-cTN"/>
                     </connections>
                 </popUpButton>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wCK-1u-iAb">
-                    <rect key="frame" x="72" y="245" width="319" height="14"/>
-                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="KhP-u6-LiE">
+                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vKR-ys-ILJ">
+                    <rect key="frame" x="71" y="238" width="261" height="22"/>
+                    <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="9D9-tm-ric" id="nKD-z7-mLD">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
+                        <menu key="menu" id="tue-Km-lF5">
+                            <items>
+                                <menuItem title="Item 1" state="on" id="9D9-tm-ric"/>
+                                <menuItem title="Item 2" id="6w0-Bm-BTS"/>
+                                <menuItem title="Item 3" id="34O-ot-Rz2"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
                     <connections>
-                        <binding destination="-2" name="value" keyPath="self.serviceObj.accountName" id="Vbr-0a-ib0"/>
+                        <binding destination="-2" name="content" keyPath="self.serviceObj.knownAccounts" id="qEx-8R-539"/>
+                        <binding destination="-2" name="selectedObject" keyPath="self.serviceObj.accountName" previousBinding="qEx-8R-539" id="zJu-jH-Tn0"/>
                     </connections>
-                </textField>
+                </popUpButton>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iBy-V8-dFp">
+                    <rect key="frame" x="332" y="235" width="75" height="28"/>
+                    <buttonCell key="cell" type="push" title="Add User" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="iXQ-AD-YtY">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="authenticateUser:" target="-2" id="xnm-hC-k9T"/>
+                    </connections>
+                </button>
             </subviews>
         </customView>
         <arrayController id="WMQ-k3-5wE" userLabel="LiveStreamArrayController">

@@ -11,7 +11,23 @@
 
 @implementation CSYoutubeStreamService
 
+@synthesize accountName = _accountName;
 
+
+-(instancetype) init
+{
+    if(self = [super init])
+    {
+        self.knownAccounts = [[CSPluginServices sharedPluginServices] accountNamesForService:@"youtube"];
+        if (self.knownAccounts.count == 1)
+        {
+            self.accountName = self.knownAccounts.firstObject;
+        }
+    }
+    
+    
+    return self;
+}
 
 
 -(void)encodeWithCoder:(NSCoder *)aCoder
@@ -39,6 +55,19 @@
     return self;
 }
 
+
+
+-(NSString *)accountName
+{
+    return _accountName;
+}
+
+-(void)setAccountName:(NSString *)accountName
+{
+    _accountName = accountName;
+    self.oauthObject = nil;
+    [self fetchliveStreams];
+}
 
 
 +(NSString *)label
@@ -190,7 +219,6 @@
     NSURL *apiURL = [NSURL URLWithString:apiString];
     
     
-    
     NSMutableURLRequest *apiRequest = [NSMutableURLRequest requestWithURL:apiURL];
     
     
@@ -199,8 +227,11 @@
     [self.oauthObject jsonRequest:apiRequest completionHandler:^(id decodedData) {
         
         NSDictionary *livestream_response = (NSDictionary *)decodedData;
-        self.liveStreams = livestream_response[@"items"];
-        [self selectStream];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.liveStreams = livestream_response[@"items"];
+            [self selectStream];
+        });
         
         //dispatch_async(dispatch_get_main_queue(), ^{self.streamKey = stream_key; _key_fetch_pending = NO;});
     }];
@@ -212,6 +243,12 @@
     if (self.accountName)
     {
         [authenticator saveToKeychain:self.accountName];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            self.knownAccounts = [[CSPluginServices sharedPluginServices] accountNamesForService:@"twitch"];
+            [self fetchliveStreams];
+        });
+
         return;
     }
     
@@ -231,7 +268,12 @@
             NSString *account_name = [user_response objectForKey:@"email"];
             [authenticator saveToKeychain:account_name];
             
-            dispatch_async(dispatch_get_main_queue(), ^{self.accountName = account_name; });
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                self.accountName = account_name;
+                self.knownAccounts = [[CSPluginServices sharedPluginServices] accountNamesForService:@"twitch"];
+                //[self fetchliveStreams];
+            });
         }];
     }
 }
