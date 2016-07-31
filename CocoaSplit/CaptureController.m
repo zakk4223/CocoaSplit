@@ -99,6 +99,32 @@
 }
 
 
+-(void)openAddOutputPopover:(id)sender sourceRect:(NSRect)sourceRect
+{
+    CSAddOutputPopupViewController *vc;
+    if (!_addOutputpopOver)
+    {
+        _addOutputpopOver = [[NSPopover alloc] init];
+        _addOutputpopOver.animates = YES;
+        _addOutputpopOver.behavior = NSPopoverBehaviorTransient;
+    }
+    
+    //if (!_addInputpopOver.contentViewController)
+    {
+        vc = [[CSAddOutputPopupViewController alloc] init];
+        vc.addOutput = ^void(Class outputClass) {
+            [self outputPopupButtonAction:outputClass];
+        };
+        
+        _addOutputpopOver.contentViewController = vc;
+        vc.popover = _addOutputpopOver;
+        //_addInputpopOver.delegate = vc;
+    }
+    
+    [_addOutputpopOver showRelativeToRect:sourceRect ofView:sender preferredEdge:NSMaxXEdge];
+}
+
+
 -(void)openAddInputPopover:(id)sender sourceRect:(NSRect)sourceRect
 {
     CSAddInputViewController *vc;
@@ -408,6 +434,18 @@
     self.advancedPrefPanel = nil;
 }
 
+
+-(void)outputPopupButtonAction:(Class)outputClass
+{
+    
+    OutputDestination *newDest = [[OutputDestination alloc] initWithType:[outputClass label]];
+    id serviceObj = [[outputClass alloc] init];
+    newDest.streamServiceObject = serviceObj;
+    
+    [self openOutputSheet:newDest];
+}
+
+
 -(void)openOutputSheet:(OutputDestination *)toEdit
 {
     self.addOutputWindowController = [[CSNewOutputWindowController alloc] init];
@@ -424,9 +462,15 @@
             if (newDest)
             {
                 newDest.settingsController = self;
+                
+                NSInteger idx = NSNotFound;
+                
                 if (toEdit)
                 {
-                    NSInteger idx = [self.captureDestinations indexOfObject:toEdit];
+                    idx = [self.captureDestinations indexOfObject:toEdit];
+                }
+                if (idx != NSNotFound)
+                {
                     [self replaceObjectInCaptureDestinationsAtIndex:idx withObject:newDest];
                 } else {
                     [self insertObject:newDest inCaptureDestinationsAtIndex:self.captureDestinations.count];
@@ -2302,14 +2346,14 @@
     }
 }
 
-- (IBAction)outputSegmentedAction:(NSSegmentedControl *)sender
+- (IBAction)outputSegmentedAction:(NSButton *)sender
 {
-    NSUInteger clicked = sender.selectedSegment;
+    NSUInteger clicked = sender.tag;
     
     switch (clicked)
     {
         case 0:
-            [self openCreateSheet:sender];
+            [self openAddOutputPopover:sender sourceRect:sender.bounds];
             break;
         case 1:
             [self removeDestination:sender];

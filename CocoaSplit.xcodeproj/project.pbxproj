@@ -139,6 +139,9 @@
 		346CF44D1A5C10C2008E5BFF /* CSInputLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 346CF44B1A5C10C2008E5BFF /* CSInputLayer.m */; };
 		347277FD1A5A2758008801A9 /* CSIOSurfaceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 347277FC1A5A2758008801A9 /* CSIOSurfaceLayer.m */; };
 		347277FE1A5A2758008801A9 /* CSIOSurfaceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 347277FC1A5A2758008801A9 /* CSIOSurfaceLayer.m */; };
+		3473D2871D4C359700842EEE /* CSVaughnliveStreamServicePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 3473D27E1D4C349700842EEE /* CSVaughnliveStreamServicePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3473D29A1D4C3D0E00842EEE /* CSAddOutputPopupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3473D2981D4C3D0E00842EEE /* CSAddOutputPopupViewController.m */; };
+		3473D29B1D4C3D0E00842EEE /* CSAddOutputPopupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3473D2991D4C3D0E00842EEE /* CSAddOutputPopupViewController.xib */; };
 		34792AF616104AA70065A859 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AF516104AA70065A859 /* IOKit.framework */; };
 		34792AFB1611A6B90065A859 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AFA1611A6B90065A859 /* IOSurface.framework */; };
 		3479A9971A9007DD00A524F0 /* CocoaSplit.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 3479A9961A9007DD00A524F0 /* CocoaSplit.sdef */; };
@@ -379,6 +382,13 @@
 			remoteGlobalIDString = 343C79BA1D0C763A00B36EEC;
 			remoteInfo = CSFFMpegCapturePlugin;
 		};
+		3473D27D1D4C349700842EEE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3473D2791D4C349700842EEE /* CSVaughnliveStreamServicePlugin.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 34BD1E121B1B970C0015CBEC;
+			remoteInfo = CSVaughnliveStreamServicePlugin;
+		};
 		34A7C1A019B9A41A00BC6882 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 34A7C19C19B9A41900BC6882 /* CSLayoutSwitcherExtraPlugin.xcodeproj */;
@@ -572,6 +582,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				3473D2871D4C359700842EEE /* CSVaughnliveStreamServicePlugin.bundle in Copy Files */,
 				340C802D1D450A5100B2FD7D /* CSYoutubeStreamServicePlugin.bundle in Copy Files */,
 				343C79ED1D0C796E00B36EEC /* CSFFMpegCapturePlugin.bundle in Copy Files */,
 				343692501B6243D4007EC2D9 /* CSShapeCapturePlugin.bundle in Copy Files */,
@@ -742,6 +753,10 @@
 		346EAAF6197A7B28000892CF /* Capture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Capture.h; sourceTree = "<group>"; };
 		347277FB1A5A2758008801A9 /* CSIOSurfaceLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSIOSurfaceLayer.h; path = PluginHeaders/CSIOSurfaceLayer.h; sourceTree = "<group>"; };
 		347277FC1A5A2758008801A9 /* CSIOSurfaceLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSIOSurfaceLayer.m; sourceTree = "<group>"; };
+		3473D2791D4C349700842EEE /* CSVaughnliveStreamServicePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSVaughnliveStreamServicePlugin.xcodeproj; path = StreamServicePlugins/CSVaughnliveStreamServicePlugin/CSVaughnliveStreamServicePlugin.xcodeproj; sourceTree = "<group>"; };
+		3473D2971D4C3D0E00842EEE /* CSAddOutputPopupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAddOutputPopupViewController.h; path = Interface/CSAddOutputPopupViewController.h; sourceTree = "<group>"; };
+		3473D2981D4C3D0E00842EEE /* CSAddOutputPopupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSAddOutputPopupViewController.m; path = Interface/CSAddOutputPopupViewController.m; sourceTree = "<group>"; };
+		3473D2991D4C3D0E00842EEE /* CSAddOutputPopupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSAddOutputPopupViewController.xib; path = Interface/CSAddOutputPopupViewController.xib; sourceTree = "<group>"; };
 		34792AF516104AA70065A859 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		34792AFA1611A6B90065A859 /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = System/Library/Frameworks/IOSurface.framework; sourceTree = SDKROOT; };
 		3479A9961A9007DD00A524F0 /* CocoaSplit.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CocoaSplit.sdef; sourceTree = "<group>"; };
@@ -1409,6 +1424,9 @@
 				34F04D9E1CE0381D0054663A /* CSAddInputViewController.xib */,
 				34F04DA61CE0BA470054663A /* CSScrollView.h */,
 				34F04DA71CE0BA470054663A /* CSScrollView.m */,
+				3473D2971D4C3D0E00842EEE /* CSAddOutputPopupViewController.h */,
+				3473D2981D4C3D0E00842EEE /* CSAddOutputPopupViewController.m */,
+				3473D2991D4C3D0E00842EEE /* CSAddOutputPopupViewController.xib */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -1493,6 +1511,14 @@
 				3460E5871AC764500080358E /* rotate.py */,
 			);
 			path = AnimationSamples;
+			sourceTree = "<group>";
+		};
+		3473D27A1D4C349700842EEE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3473D27E1D4C349700842EEE /* CSVaughnliveStreamServicePlugin.bundle */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		349461581AB420E600F28883 /* CSAnimationRunner */ = {
@@ -1665,6 +1691,7 @@
 		34AFC2E619B08C1E0007C07B /* StreamServicePlugins */ = {
 			isa = PBXGroup;
 			children = (
+				3473D2791D4C349700842EEE /* CSVaughnliveStreamServicePlugin.xcodeproj */,
 				340C80101D44722000B2FD7D /* CSYoutubeStreamServicePlugin.xcodeproj */,
 				34C67B731A2D7B690012DC1B /* CSHitboxStreamServicePlugin.xcodeproj */,
 				34AFC31319B0A5800007C07B /* CSTwitchStreamServicePlugin.xcodeproj */,
@@ -2041,6 +2068,10 @@
 					ProjectRef = 34AFC31319B0A5800007C07B /* CSTwitchStreamServicePlugin.xcodeproj */;
 				},
 				{
+					ProductGroup = 3473D27A1D4C349700842EEE /* Products */;
+					ProjectRef = 3473D2791D4C349700842EEE /* CSVaughnliveStreamServicePlugin.xcodeproj */;
+				},
+				{
 					ProductGroup = 34AFC25519B05B470007C07B /* Products */;
 					ProjectRef = 34576C9819AFE6F7007BAD90 /* CSWindowCapturePlugin.xcodeproj */;
 				},
@@ -2082,6 +2113,13 @@
 			fileType = wrapper.cfbundle;
 			path = CSFFMpegCapturePlugin.bundle;
 			remoteRef = 343C79CB1D0C763A00B36EEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3473D27E1D4C349700842EEE /* CSVaughnliveStreamServicePlugin.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = CSVaughnliveStreamServicePlugin.bundle;
+			remoteRef = 3473D27D1D4C349700842EEE /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		34A7C1A119B9A41A00BC6882 /* CSLayoutSwitcherExtraPlugin.bundle */ = {
@@ -2247,6 +2285,7 @@
 				3415CED31AE257DA002F11F5 /* CSTextCaptureBaseView.xib in Resources */,
 				342B33B3198073EC00492CB7 /* line.fgsh in Resources */,
 				344825D21B2536EA00AF9EAC /* CAMultiAudioMatrixView.xib in Resources */,
+				3473D29B1D4C3D0E00842EEE /* CSAddOutputPopupViewController.xib in Resources */,
 				349461761AC49BB300F28883 /* CSAnimationChooserViewController.xib in Resources */,
 				349461451AAD73BC00F28883 /* TestView.xib in Resources */,
 				34F04DA01CE0381D0054663A /* CSAddInputViewController.xib in Resources */,
@@ -2351,6 +2390,7 @@
 				34ED8C9B1B07371C002C0674 /* MIKMIDIPrivateUtilities.m in Sources */,
 				345F8B391A15D850009A81E3 /* CAMultiAudioDefaultOutput.m in Sources */,
 				34ED8CA51B07371C002C0674 /* MIKMIDISystemExclusiveCommand.m in Sources */,
+				3473D29A1D4C3D0E00842EEE /* CSAddOutputPopupViewController.m in Sources */,
 				34ED8C5D1B07371C002C0674 /* MIKMIDIEndpoint.m in Sources */,
 				34ED8C5F1B07371C002C0674 /* MIKMIDIEndpointSynthesizer.m in Sources */,
 				34ED8CA11B07371C002C0674 /* MIKMIDISequencer.m in Sources */,

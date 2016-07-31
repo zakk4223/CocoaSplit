@@ -34,6 +34,8 @@
 #import "CSNewOutputWindowController.h"
 #import "CompressionSettingsPanelController.h"
 #import "AppleProResCompressor.h"
+#import "CSAddOutputPopupViewController.h"
+
 
 @class FFMpegTask;
 @protocol VideoCompressor;
@@ -106,11 +108,15 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     
     NSPopover *_addInputpopOver;
     
+    NSPopover *_addOutputpopOver;
+    
     NSPopover *_layoutpopOver;
     NSPopover *_animatepopOver;
     
     NSMutableArray *_screensCache;
     NSMutableArray *_layoutWindows;
+    NSMutableArray *_outputWindows;
+    
     bool _needsIRReset;
     
     NSMutableArray *_audioBuffer;
@@ -404,7 +410,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(void) resetInputTableHighlights;
 
 
-- (IBAction)outputSegmentedAction:(NSSegmentedControl *)sender;
+- (IBAction)outputSegmentedAction:(NSButton *)sender;
 
 
 @end

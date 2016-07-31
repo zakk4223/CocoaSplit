@@ -115,8 +115,8 @@
                         </menu>
                     </popUpButtonCell>
                     <connections>
-                        <binding destination="eLP-7h-dlf" name="content" keyPath="selection.knownAccounts" id="Nhf-HY-pX7"/>
                         <binding destination="eLP-7h-dlf" name="selectedObject" keyPath="selection.accountName" previousBinding="Nhf-HY-pX7" id="n1P-m5-KQw"/>
+                        <binding destination="eLP-7h-dlf" name="content" keyPath="selection.knownAccounts" id="Nhf-HY-pX7"/>
                     </connections>
                 </popUpButton>
             </subviews>

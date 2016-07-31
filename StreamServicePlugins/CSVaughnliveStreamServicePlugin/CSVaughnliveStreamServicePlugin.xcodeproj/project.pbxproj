@@ -6,7 +6,32 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		3473D2841D4C34B500842EEE /* CSVaughnliveStreamService.m in Sources */ = {isa = PBXBuildFile; fileRef = 3473D2801D4C34B500842EEE /* CSVaughnliveStreamService.m */; };
+		3473D2851D4C34B500842EEE /* CSVaughnliveStreamServiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3473D2821D4C34B500842EEE /* CSVaughnliveStreamServiceViewController.m */; };
+		3473D2861D4C34B500842EEE /* CSVaughnliveStreamServiceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3473D2831D4C34B500842EEE /* CSVaughnliveStreamServiceViewController.xib */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		3473D27F1D4C34B500842EEE /* CSVaughnliveStreamService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSVaughnliveStreamService.h; sourceTree = "<group>"; };
+		3473D2801D4C34B500842EEE /* CSVaughnliveStreamService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSVaughnliveStreamService.m; sourceTree = "<group>"; };
+		3473D2811D4C34B500842EEE /* CSVaughnliveStreamServiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSVaughnliveStreamServiceViewController.h; sourceTree = "<group>"; };
+		3473D2821D4C34B500842EEE /* CSVaughnliveStreamServiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSVaughnliveStreamServiceViewController.m; sourceTree = "<group>"; };
+		3473D2831D4C34B500842EEE /* CSVaughnliveStreamServiceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSVaughnliveStreamServiceViewController.xib; sourceTree = "<group>"; };
+		3473D2881D4C35B900842EEE /* CSPluginServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPluginServices.h; path = PluginHeaders/CSPluginServices.h; sourceTree = "<group>"; };
+		3473D2891D4C35B900842EEE /* CSIOSurfaceLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSIOSurfaceLayer.h; path = PluginHeaders/CSIOSurfaceLayer.h; sourceTree = "<group>"; };
+		3473D28A1D4C35B900842EEE /* CSPcmPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPcmPlayer.h; path = PluginHeaders/CSPcmPlayer.h; sourceTree = "<group>"; };
+		3473D28B1D4C35B900842EEE /* CAMultiAudioPCM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioPCM.h; path = PluginHeaders/CAMultiAudioPCM.h; sourceTree = "<group>"; };
+		3473D28C1D4C35B900842EEE /* CSAbstractCaptureDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAbstractCaptureDevice.h; path = PluginHeaders/CSAbstractCaptureDevice.h; sourceTree = "<group>"; };
+		3473D28D1D4C35B900842EEE /* CSTextCaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTextCaptureBase.h; path = PluginHeaders/CSTextCaptureBase.h; sourceTree = "<group>"; };
+		3473D28E1D4C35B900842EEE /* CSTextCaptureViewControllerBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTextCaptureViewControllerBase.h; path = PluginHeaders/CSTextCaptureViewControllerBase.h; sourceTree = "<group>"; };
+		3473D28F1D4C35B900842EEE /* CSCaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureBase.h; path = PluginHeaders/CSCaptureBase.h; sourceTree = "<group>"; };
+		3473D2901D4C35B900842EEE /* CSCaptureSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureSourceProtocol.h; path = PluginHeaders/CSCaptureSourceProtocol.h; sourceTree = "<group>"; };
+		3473D2911D4C35B900842EEE /* CSStreamServiceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSStreamServiceProtocol.h; path = PluginHeaders/CSStreamServiceProtocol.h; sourceTree = "<group>"; };
+		3473D2921D4C35B900842EEE /* CSPluginFactoryProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPluginFactoryProtocol.h; path = PluginHeaders/CSPluginFactoryProtocol.h; sourceTree = "<group>"; };
+		3473D2931D4C35B900842EEE /* CSExtraPluginProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSExtraPluginProtocol.h; path = PluginHeaders/CSExtraPluginProtocol.h; sourceTree = "<group>"; };
+		3473D2941D4C35B900842EEE /* CSOauth2Authenticator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSOauth2Authenticator.h; path = PluginHeaders/CSOauth2Authenticator.h; sourceTree = "<group>"; };
+		3473D2951D4C35B900842EEE /* CSNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSNotifications.h; path = PluginHeaders/CSNotifications.h; sourceTree = "<group>"; };
 		34BD1E121B1B970C0015CBEC /* CSVaughnliveStreamServicePlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSVaughnliveStreamServicePlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		34BD1E161B1B970C0015CBEC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -22,6 +47,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3473D2961D4C35B900842EEE /* PluginHeaders */ = {
+			isa = PBXGroup;
+			children = (
+				3473D2881D4C35B900842EEE /* CSPluginServices.h */,
+				3473D2891D4C35B900842EEE /* CSIOSurfaceLayer.h */,
+				3473D28A1D4C35B900842EEE /* CSPcmPlayer.h */,
+				3473D28B1D4C35B900842EEE /* CAMultiAudioPCM.h */,
+				3473D28C1D4C35B900842EEE /* CSAbstractCaptureDevice.h */,
+				3473D28D1D4C35B900842EEE /* CSTextCaptureBase.h */,
+				3473D28E1D4C35B900842EEE /* CSTextCaptureViewControllerBase.h */,
+				3473D28F1D4C35B900842EEE /* CSCaptureBase.h */,
+				3473D2901D4C35B900842EEE /* CSCaptureSourceProtocol.h */,
+				3473D2911D4C35B900842EEE /* CSStreamServiceProtocol.h */,
+				3473D2921D4C35B900842EEE /* CSPluginFactoryProtocol.h */,
+				3473D2931D4C35B900842EEE /* CSExtraPluginProtocol.h */,
+				3473D2941D4C35B900842EEE /* CSOauth2Authenticator.h */,
+				3473D2951D4C35B900842EEE /* CSNotifications.h */,
+			);
+			name = PluginHeaders;
+			path = ../../../CocoaSplit;
+			sourceTree = "<group>";
+		};
 		34BD1E091B1B970C0015CBEC = {
 			isa = PBXGroup;
 			children = (
@@ -41,6 +88,12 @@
 		34BD1E141B1B970C0015CBEC /* CSVaughnliveStreamServicePlugin */ = {
 			isa = PBXGroup;
 			children = (
+				3473D2961D4C35B900842EEE /* PluginHeaders */,
+				3473D27F1D4C34B500842EEE /* CSVaughnliveStreamService.h */,
+				3473D2801D4C34B500842EEE /* CSVaughnliveStreamService.m */,
+				3473D2811D4C34B500842EEE /* CSVaughnliveStreamServiceViewController.h */,
+				3473D2821D4C34B500842EEE /* CSVaughnliveStreamServiceViewController.m */,
+				3473D2831D4C34B500842EEE /* CSVaughnliveStreamServiceViewController.xib */,
 				34BD1E151B1B970C0015CBEC /* Supporting Files */,
 			);
 			path = CSVaughnliveStreamServicePlugin;
@@ -110,6 +163,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3473D2861D4C34B500842EEE /* CSVaughnliveStreamServiceViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,6 +174,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3473D2841D4C34B500842EEE /* CSVaughnliveStreamService.m in Sources */,
+				3473D2851D4C34B500842EEE /* CSVaughnliveStreamServiceViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -246,6 +302,7 @@
 				34BD1E1B1B1B970C0015CBEC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
