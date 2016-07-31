@@ -448,17 +448,30 @@
 
 -(void)openOutputSheet:(OutputDestination *)toEdit
 {
-    self.addOutputWindowController = [[CSNewOutputWindowController alloc] init];
-    self.addOutputWindowController.compressors = self.compressors;
+    
+    CSNewOutputWindowController *newController = nil;
+    
+    if (!_outputWindows)
+    {
+        _outputWindows = [[NSMutableArray alloc] init];
+    }
+    
+    
+    
+    newController = [[CSNewOutputWindowController alloc] init];
+    newController.compressors = self.compressors;
     if (toEdit)
     {
-        self.addOutputWindowController.outputDestination = toEdit;
+        newController.outputDestination = toEdit;
     }
-    [self.mainWindow beginSheet:self.addOutputWindowController.window completionHandler:^(NSModalResponse returnCode) {
+    
+    
+    newController.windowDone = ^void(NSModalResponse returnCode, CSNewOutputWindowController *window) {
+    
         if (returnCode == NSModalResponseOK)
         {
-            
-            OutputDestination *newDest = self.addOutputWindowController.outputDestination;
+                        
+            OutputDestination *newDest = window.outputDestination;
             if (newDest)
             {
                 newDest.settingsController = self;
@@ -477,10 +490,16 @@
                 }
             }
         }
-    }];
 
+        [_outputWindows removeObject:window];
+        [window close];
+    };
     
+    [_outputWindows addObject:newController];
+    [newController showWindow:nil];
 }
+
+
 -(IBAction)openCreateSheet:(id)sender
 {
     [self openOutputSheet:nil];

@@ -31,4 +31,8 @@
 @property (strong) CompressionSettingsPanelController *compressionPanelController;
 @property (strong) NSString *buttonLabel;
 
+@property (nonatomic, copy) void (^windowDone)(NSModalResponse response, CSNewOutputWindowController *windowController);
+
+
+
 @end

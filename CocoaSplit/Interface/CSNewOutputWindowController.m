@@ -36,12 +36,30 @@
 {
     _outputDestination = outputDestination;
     self.buttonLabel = @"Save";
+    
+    NSString *windowTitlePart = nil;
+    
+    if (outputDestination.name)
+    {
+        windowTitlePart = outputDestination.name;
+    }
+    
     if (outputDestination.streamServiceObject)
     {
         self.streamServiceObject = outputDestination.streamServiceObject;
         Class serviceClass = self.streamServiceObject.class;
         self.selectedOutputType = [serviceClass label];
+        if (!windowTitlePart)
+        {
+            windowTitlePart = [self.streamServiceObject.class label];
+        }
     }
+    
+    if (windowTitlePart)
+    {
+        self.window.title = [NSString stringWithFormat:@"Output Configuration - %@", windowTitlePart];
+    }
+    
     
     if (self.outputDestination.compressor_name)
     {
@@ -144,7 +162,10 @@
     [self.outputObjectController discardEditing];
     [self.pluginViewController discardEditing];
     
-    [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseCancel];
+    if (self.windowDone)
+    {
+        self.windowDone(NSModalResponseCancel, self);
+    }
 }
 
 - (IBAction)addButtonAction:(id)sender
@@ -152,8 +173,12 @@
     [self.outputObjectController commitEditing];
     [self.pluginViewController commitEditing];
     self.outputDestination.streamServiceObject = self.streamServiceObject;
-    [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseOK];
+    if (self.windowDone)
+    {
+        self.windowDone(NSModalResponseOK, self);
+    }
 }
+
 
 - (IBAction)openCompressorEdit:(id)sender
 {

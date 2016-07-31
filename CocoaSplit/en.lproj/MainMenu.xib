@@ -1342,21 +1342,8 @@
                                                                 <action selector="outputSegmentedAction:" target="816" id="YCR-vU-uye"/>
                                                             </connections>
                                                         </button>
-                                                        <button verticalHuggingPriority="750" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="RRF-WP-A7h">
-                                                            <rect key="frame" x="43" y="-1" width="24" height="21"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" constant="24" id="2UV-oa-6BX"/>
-                                                            </constraints>
-                                                            <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSActionTemplate" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ued-M4-76q">
-                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                <font key="font" metaFont="smallSystem"/>
-                                                            </buttonCell>
-                                                            <connections>
-                                                                <action selector="outputSegmentedAction:" target="816" id="ICo-Mq-p6a"/>
-                                                            </connections>
-                                                        </button>
-                                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jYb-x2-o6f">
-                                                            <rect key="frame" x="66" y="-1" width="821" height="21"/>
+                                                        <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jYb-x2-o6f">
+                                                            <rect key="frame" x="52" y="-1" width="835" height="21"/>
                                                             <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" enabled="NO" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="CM5-lX-g8K">
                                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                 <font key="font" metaFont="smallSystem"/>
@@ -1364,18 +1351,16 @@
                                                         </button>
                                                     </subviews>
                                                     <constraints>
+                                                        <constraint firstItem="jYb-x2-o6f" firstAttribute="leading" secondItem="ErG-YU-9Fv" secondAttribute="trailing" constant="-1" id="8FK-yp-1Qt"/>
                                                         <constraint firstItem="YRJ-1f-PDP" firstAttribute="top" secondItem="2212" secondAttribute="bottom" constant="-1" id="EcK-hO-vrC"/>
-                                                        <constraint firstItem="RRF-WP-A7h" firstAttribute="leading" secondItem="ErG-YU-9Fv" secondAttribute="trailing" constant="-1" id="Faq-ai-C1P"/>
                                                         <constraint firstItem="ErG-YU-9Fv" firstAttribute="leading" secondItem="YRJ-1f-PDP" secondAttribute="trailing" constant="-3" id="JHW-GA-mhg"/>
+                                                        <constraint firstItem="jYb-x2-o6f" firstAttribute="baseline" secondItem="ErG-YU-9Fv" secondAttribute="baseline" id="LDw-OX-Mxo"/>
                                                         <constraint firstItem="2212" firstAttribute="top" secondItem="3289" secondAttribute="top" constant="3" id="Lcg-Gf-yel"/>
                                                         <constraint firstItem="ErG-YU-9Fv" firstAttribute="baseline" secondItem="YRJ-1f-PDP" secondAttribute="baseline" id="MU0-Iw-dhD"/>
                                                         <constraint firstItem="jYb-x2-o6f" firstAttribute="trailing" secondItem="2212" secondAttribute="trailing" id="O5s-Ls-Wfe"/>
                                                         <constraint firstAttribute="bottom" secondItem="YRJ-1f-PDP" secondAttribute="bottom" id="R3g-Ve-u6R"/>
-                                                        <constraint firstItem="jYb-x2-o6f" firstAttribute="leading" secondItem="RRF-WP-A7h" secondAttribute="trailing" constant="-1" id="SrL-9z-YrS"/>
                                                         <constraint firstItem="YRJ-1f-PDP" firstAttribute="leading" secondItem="2212" secondAttribute="leading" id="YIS-yV-67A"/>
-                                                        <constraint firstItem="jYb-x2-o6f" firstAttribute="baseline" secondItem="RRF-WP-A7h" secondAttribute="baseline" id="eEa-WN-f8Q"/>
                                                         <constraint firstItem="2212" firstAttribute="leading" secondItem="3289" secondAttribute="leading" constant="-1" id="gTS-o5-dv4"/>
-                                                        <constraint firstItem="RRF-WP-A7h" firstAttribute="baseline" secondItem="ErG-YU-9Fv" secondAttribute="baseline" id="nOD-w8-z4A"/>
                                                         <constraint firstAttribute="trailing" secondItem="2212" secondAttribute="trailing" constant="-3" id="oUi-FH-Fsg"/>
                                                     </constraints>
                                                 </view>
