@@ -81,6 +81,14 @@
     return @"Youtube";
 }
 
++(NSImage *)serviceImage
+{
+    
+    
+    return [[NSBundle bundleForClass:[self class]] imageForResource:@"YouTube-icon-full_color"];
+}
+
+
 
 
 -(void)prepareForStreamStart

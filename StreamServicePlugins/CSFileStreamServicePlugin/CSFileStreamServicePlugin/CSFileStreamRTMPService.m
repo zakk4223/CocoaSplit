@@ -68,14 +68,20 @@
 
 +(NSString *)label
 {
-    return @"RTMP";
+    return @"RTMP/Network";
 }
 
 
 +(NSString *)serviceDescription
 {
-    return @"RTMP";
+    return @"RTMP/Network";
 }
+
++(NSImage *)serviceImage
+{
+    return [NSImage imageNamed:NSImageNameNetwork];
+}
+
 
 -(void)prepareForStreamStart
 {

@@ -107,6 +107,12 @@
     return @"File";
 }
 
++(NSImage *)serviceImage
+{
+    return [NSImage imageNamed:NSImageNameFolder];
+}
+
+
 -(void)prepareForStreamStart
 {
     return;

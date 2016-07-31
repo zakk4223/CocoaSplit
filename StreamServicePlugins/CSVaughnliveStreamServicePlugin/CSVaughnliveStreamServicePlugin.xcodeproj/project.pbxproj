@@ -10,6 +10,7 @@
 		3473D2841D4C34B500842EEE /* CSVaughnliveStreamService.m in Sources */ = {isa = PBXBuildFile; fileRef = 3473D2801D4C34B500842EEE /* CSVaughnliveStreamService.m */; };
 		3473D2851D4C34B500842EEE /* CSVaughnliveStreamServiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3473D2821D4C34B500842EEE /* CSVaughnliveStreamServiceViewController.m */; };
 		3473D2861D4C34B500842EEE /* CSVaughnliveStreamServiceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3473D2831D4C34B500842EEE /* CSVaughnliveStreamServiceViewController.xib */; };
+		3473D2A31D4E5C3900842EEE /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3473D2A21D4E5C3900842EEE /* Media.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		3473D2931D4C35B900842EEE /* CSExtraPluginProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSExtraPluginProtocol.h; path = PluginHeaders/CSExtraPluginProtocol.h; sourceTree = "<group>"; };
 		3473D2941D4C35B900842EEE /* CSOauth2Authenticator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSOauth2Authenticator.h; path = PluginHeaders/CSOauth2Authenticator.h; sourceTree = "<group>"; };
 		3473D2951D4C35B900842EEE /* CSNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSNotifications.h; path = PluginHeaders/CSNotifications.h; sourceTree = "<group>"; };
+		3473D2A21D4E5C3900842EEE /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Media.xcassets; path = CSVaughnliveStreamServicePlugin/Media.xcassets; sourceTree = "<group>"; };
 		34BD1E121B1B970C0015CBEC /* CSVaughnliveStreamServicePlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSVaughnliveStreamServicePlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		34BD1E161B1B970C0015CBEC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -72,6 +74,7 @@
 		34BD1E091B1B970C0015CBEC = {
 			isa = PBXGroup;
 			children = (
+				3473D2A21D4E5C3900842EEE /* Media.xcassets */,
 				34BD1E141B1B970C0015CBEC /* CSVaughnliveStreamServicePlugin */,
 				34BD1E131B1B970C0015CBEC /* Products */,
 			);
@@ -163,6 +166,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3473D2A31D4E5C3900842EEE /* Media.xcassets in Resources */,
 				3473D2861D4C34B500842EEE /* CSVaughnliveStreamServiceViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

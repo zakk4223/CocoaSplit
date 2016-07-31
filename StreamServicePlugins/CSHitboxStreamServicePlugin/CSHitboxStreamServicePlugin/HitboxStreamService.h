@@ -30,6 +30,8 @@
 +(NSString *)serviceDescription;
 -(void)authenticate:(NSString *)username password:(NSString *)password onComplete:(void(^)(void))callback;
 -(void)fetchIngestServers:(void(^)(void))callback;
++(NSImage *)serviceImage;
+
 
 
 

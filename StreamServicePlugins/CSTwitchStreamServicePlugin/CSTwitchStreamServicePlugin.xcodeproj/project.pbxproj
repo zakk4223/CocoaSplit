@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3473D29D1D4E4B8C00842EEE /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3473D29C1D4E4B8C00842EEE /* Media.xcassets */; };
 		34AFC30219B0A5800007C07B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AFC30119B0A5800007C07B /* Cocoa.framework */; };
 		34AFC30C19B0A5800007C07B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 34AFC30A19B0A5800007C07B /* InfoPlist.strings */; };
 		34AFC32019B0A5DC0007C07B /* TwitchStreamService.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AFC31F19B0A5DC0007C07B /* TwitchStreamService.m */; };
@@ -15,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3473D29C1D4E4B8C00842EEE /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Media.xcassets; path = CSTwitchStreamServicePlugin/Media.xcassets; sourceTree = "<group>"; };
 		34AFC2FE19B0A5800007C07B /* CSTwitchStreamServicePlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSTwitchStreamServicePlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		34AFC30119B0A5800007C07B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		34AFC30419B0A5800007C07B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -60,6 +62,7 @@
 		34AFC2F519B0A5800007C07B = {
 			isa = PBXGroup;
 			children = (
+				3473D29C1D4E4B8C00842EEE /* Media.xcassets */,
 				34EA824C1D3CBD3600928A06 /* PluginHeaders */,
 				34AFC30719B0A5800007C07B /* CSTwitchStreamServicePlugin */,
 				34AFC30019B0A5800007C07B /* Frameworks */,
@@ -192,6 +195,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				34AFC30C19B0A5800007C07B /* InfoPlist.strings in Resources */,
+				3473D29D1D4E4B8C00842EEE /* Media.xcassets in Resources */,
 				34AFC32519B0A5FD0007C07B /* TwitchStreamServiceViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -117,14 +117,23 @@
 
 +(NSString *)label
 {
-    return @"TwitchTV";
+    return @"Twitch";
 }
 
 
 +(NSString *)serviceDescription
 {
-    return @"TwitchTV";
+    return @"Twitch";
 }
+
+
++(NSImage *)serviceImage
+{
+    NSImage *ret = [[NSBundle bundleForClass:[self class]] imageForResource:@"GlitchIcon_PurpleonWhite"];
+    
+    return ret;
+}
+
 
 
 

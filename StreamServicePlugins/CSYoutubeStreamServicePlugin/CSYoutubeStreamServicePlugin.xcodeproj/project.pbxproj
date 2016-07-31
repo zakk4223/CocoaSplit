@@ -10,6 +10,7 @@
 		340C80271D44F5AD00B2FD7D /* CSYoutubeStreamService.m in Sources */ = {isa = PBXBuildFile; fileRef = 340C80261D44F5AD00B2FD7D /* CSYoutubeStreamService.m */; };
 		340C802B1D44F6DB00B2FD7D /* CSYoutubeStreamServiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340C80291D44F6DB00B2FD7D /* CSYoutubeStreamServiceViewController.m */; };
 		340C802C1D44F6DB00B2FD7D /* CSYoutubeStreamServiceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 340C802A1D44F6DB00B2FD7D /* CSYoutubeStreamServiceViewController.xib */; };
+		3473D2A11D4E562400842EEE /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3473D2A01D4E562400842EEE /* Media.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		340C80281D44F6DB00B2FD7D /* CSYoutubeStreamServiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSYoutubeStreamServiceViewController.h; sourceTree = "<group>"; };
 		340C80291D44F6DB00B2FD7D /* CSYoutubeStreamServiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSYoutubeStreamServiceViewController.m; sourceTree = "<group>"; };
 		340C802A1D44F6DB00B2FD7D /* CSYoutubeStreamServiceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSYoutubeStreamServiceViewController.xib; sourceTree = "<group>"; };
+		3473D2A01D4E562400842EEE /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Media.xcassets; path = CSYoutubeStreamServicePlugin/Media.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +52,7 @@
 		340C7FFE1D44722000B2FD7D = {
 			isa = PBXGroup;
 			children = (
+				3473D2A01D4E562400842EEE /* Media.xcassets */,
 				340C80241D44742900B2FD7D /* PluginHeaders */,
 				340C80091D44722000B2FD7D /* CSYoutubeStreamServicePlugin */,
 				340C80081D44722000B2FD7D /* Products */,
@@ -155,6 +158,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3473D2A11D4E562400842EEE /* Media.xcassets in Resources */,
 				340C802C1D44F6DB00B2FD7D /* CSYoutubeStreamServiceViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -310,6 +314,7 @@
 				340C800F1D44722000B2FD7D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -24,6 +24,8 @@
 -(NSString *)getServiceDestination;
 +(NSString *)label;
 +(NSString *)serviceDescription;
++(NSImage *)serviceImage;
+
 
 
 @end

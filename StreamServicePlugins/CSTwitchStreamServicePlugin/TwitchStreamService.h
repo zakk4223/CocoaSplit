@@ -41,6 +41,7 @@
 +(NSString *)label;
 +(NSString *)serviceDescription;
 -(void)authenticateUser;
++(NSImage *)serviceImage;
 
 
 

@@ -32,6 +32,12 @@
     return @"Hitbox";
 }
 
++(NSImage *)serviceImage
+{
+    return [[NSBundle bundleForClass:[self class]] imageForResource:@"hitbox-icon-green"];;
+}
+
+
 /*
 @property (strong) NSString *authKey;
 @property (strong) NSArray *ingestServers;

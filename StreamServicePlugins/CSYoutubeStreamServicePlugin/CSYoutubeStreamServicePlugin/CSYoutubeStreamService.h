@@ -28,6 +28,8 @@
 +(NSString *)label;
 +(NSString *)serviceDescription;
 -(void)authenticateUser;
++(NSImage *)serviceImage;
+
 
 
 @property (strong) NSString *accountName;

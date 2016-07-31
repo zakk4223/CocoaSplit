@@ -48,14 +48,15 @@
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qbm-dk-uUS">
-                                                        <rect key="frame" x="-3" y="-2" width="184" height="23"/>
-                                                        <buttonCell key="cell" type="smallSquare" title="Test" bezelStyle="smallSquare" imagePosition="right" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="UI9-bW-1hj">
-                                                            <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
+                                                        <rect key="frame" x="-9" y="-8" width="196" height="32"/>
+                                                        <buttonCell key="cell" type="push" title="Test" bezelStyle="rounded" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="UI9-bW-1hj">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
                                                         <connections>
                                                             <action selector="inputTableButtonClicked:" target="-2" id="2oh-2c-pT9"/>
-                                                            <binding destination="iH1-2P-a6J" name="title" keyPath="objectValue.label" id="9si-Xi-cC6"/>
+                                                            <binding destination="iH1-2P-a6J" name="image" keyPath="objectValue.serviceImage" id="iE1-fb-R1z"/>
+                                                            <binding destination="iH1-2P-a6J" name="title" keyPath="objectValue.label" previousBinding="iE1-fb-R1z" id="2sk-I4-k3U"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>
