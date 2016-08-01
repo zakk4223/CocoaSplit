@@ -103,7 +103,6 @@ NSString *const kCSOauth2ClientSecret = @"CSOauth2ClientSecret";
     [keyChainAttrs setObject:(id)kCFBooleanTrue forKey:(__bridge NSString *)kSecReturnData];
     [keyChainAttrs setObject:(__bridge id)kSecMatchLimitOne forKey:(__bridge NSString *)kSecMatchLimit];
     
-    NSLog(@"QUERY %@", keyChainAttrs);
     
     CFDataRef keyData = NULL;
     
@@ -112,7 +111,6 @@ NSString *const kCSOauth2ClientSecret = @"CSOauth2ClientSecret";
         if (keyData)
         {
             NSDictionary *storedData = [NSKeyedUnarchiver unarchiveObjectWithData:(__bridge NSData *)keyData];
-            NSLog(@"STORED DATA %@", storedData);
             
             if (storedData)
             {
@@ -258,7 +256,6 @@ NSString *const kCSOauth2ClientSecret = @"CSOauth2ClientSecret";
 -(bool)doesTokenNeedRefresh
 {
     
-    NSLog(@"EXPIRE DATE %@", self.expireDate);
     
     if (!self.expireDate)
     {
@@ -267,7 +264,6 @@ NSString *const kCSOauth2ClientSecret = @"CSOauth2ClientSecret";
     
     NSDate *nowDate = [NSDate date];
     
-    NSLog(@"NOW DATE %@", nowDate);
     
     if ([nowDate compare:self.expireDate] == NSOrderedDescending)
     {
@@ -309,7 +305,6 @@ NSString *const kCSOauth2ClientSecret = @"CSOauth2ClientSecret";
 
         [self buildAuthURL];
         
-        NSLog(@"AUTHORIZATION URL IS %@", self.authURL);
         
         NSRect winFrame = NSMakeRect(0, 0, 1000, 1000);
         _authWebView = [[WebView alloc] initWithFrame:winFrame frameName:nil groupName:nil];
@@ -324,7 +319,6 @@ NSString *const kCSOauth2ClientSecret = @"CSOauth2ClientSecret";
     } else {
         if (authCallback)
         {
-            NSLog(@"CALLING AUTH CALLBACK FROM AUTHORIZE");
             authCallback(!!self.accessToken);
         }
     }
@@ -344,7 +338,6 @@ NSString *const kCSOauth2ClientSecret = @"CSOauth2ClientSecret";
     NSString *redirectURL = [self configurationVariableGet:kCSOauth2ConfigRedirectURL];
     
     
-    NSLog(@"DOING REFRESH LOC %@ SEC %@ REDIR %@ REFRESH %@", refreshLocation, clientSecret, redirectURL, self.refreshToken);
     if (!refreshLocation || !clientSecret || !redirectURL || !self.refreshToken)
     {
         return;
@@ -388,7 +381,6 @@ NSString *const kCSOauth2ClientSecret = @"CSOauth2ClientSecret";
 -(void)requestAccessToken:(NSString *)forCode
 {
     
-    NSLog(@"GET ACCESS TOKEN FOR %@", forCode);
     
     NSString *tokenLocation = [self configurationVariableGet:kCSOauth2AccessTokenRequestURL];
     NSString *clientSecret = [self configurationVariableGet:kCSOauth2ClientSecret];
@@ -416,14 +408,12 @@ NSString *const kCSOauth2ClientSecret = @"CSOauth2ClientSecret";
     
     NSURLSession *urlSession = [NSURLSession sharedSession];
 
-    NSLog(@"DOING ACCESS %@", request);
     
     NSURLSessionDataTask *dataTask = [urlSession dataTaskWithRequest:request
                                                    completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
                                                        NSError *jsonError;
                                                        NSDictionary *tokenData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonError];
                                                        
-                                                       NSLog(@"TOKEN DATA IS %@", tokenData);
                                                        
                                                        self.accessToken = tokenData[@"access_token"];
                                                        self.refreshToken = tokenData[@"refresh_token"];
@@ -500,7 +490,6 @@ NSString *const kCSOauth2ClientSecret = @"CSOauth2ClientSecret";
     
     NSString *redirectURL = [self configurationVariableGet:kCSOauth2ConfigRedirectURL];
     
-    NSLog(@"TESTING REDIRECT %@ AGAINST %@", redirectURL, testurl);
     if (!redirectURL)
     {
         return NO;
@@ -545,7 +534,6 @@ NSString *const kCSOauth2ClientSecret = @"CSOauth2ClientSecret";
         if ([self isURLRedirect:reqUrl])
         {
             [listener ignore];
-            NSLog(@"REQ URL %@", reqUrl);
             
             if ([self.flowType isEqualToString:kCSOauth2ImplicitGrantFlow])
             {
@@ -596,7 +584,6 @@ NSString *const kCSOauth2ClientSecret = @"CSOauth2ClientSecret";
 
     NSURLSession *urlSession = [NSURLSession sharedSession];
     
-    NSLog(@"CALLING REQUEST %@", request);
     
     NSURLSessionDataTask *dataTask = [urlSession dataTaskWithRequest:request
         completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
