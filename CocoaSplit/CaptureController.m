@@ -2016,17 +2016,14 @@
         
         
         
-        if ([self startStream] == YES)
+        if ([self startStream] != YES)
         {
-            self.selectedTabIndex = 2;
-        } else {
             [sender setNextState];
 
         }
 
     } else {
         
-        self.selectedTabIndex = 0;
         [self stopStream];
     }
     
