@@ -138,6 +138,8 @@
 		346CF44C1A5C10C2008E5BFF /* CSInputLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 346CF44B1A5C10C2008E5BFF /* CSInputLayer.m */; };
 		346CF44D1A5C10C2008E5BFF /* CSInputLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 346CF44B1A5C10C2008E5BFF /* CSInputLayer.m */; };
 		3470CD0F1D57065B006404D9 /* CSAdvancedAudioCollectionViewItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3470CD0E1D57065B006404D9 /* CSAdvancedAudioCollectionViewItem.xib */; };
+		3470CD291D57A088006404D9 /* CSAnimationWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3470CD271D57A088006404D9 /* CSAnimationWindowController.m */; };
+		3470CD2A1D57A088006404D9 /* CSAnimationWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3470CD281D57A088006404D9 /* CSAnimationWindowController.xib */; };
 		347277FD1A5A2758008801A9 /* CSIOSurfaceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 347277FC1A5A2758008801A9 /* CSIOSurfaceLayer.m */; };
 		347277FE1A5A2758008801A9 /* CSIOSurfaceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 347277FC1A5A2758008801A9 /* CSIOSurfaceLayer.m */; };
 		3473D2871D4C359700842EEE /* CSVaughnliveStreamServicePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 3473D27E1D4C349700842EEE /* CSVaughnliveStreamServicePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -350,7 +352,6 @@
 		34ED8CBD1B07763F002C0674 /* CSMidiWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8CBB1B07763F002C0674 /* CSMidiWrapper.m */; };
 		34F04D9F1CE0381D0054663A /* CSAddInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F04D9D1CE0381D0054663A /* CSAddInputViewController.m */; };
 		34F04DA01CE0381D0054663A /* CSAddInputViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34F04D9E1CE0381D0054663A /* CSAddInputViewController.xib */; };
-		34F04DA81CE0BA470054663A /* CSScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F04DA71CE0BA470054663A /* CSScrollView.m */; };
 		34F04DAB1CE0BB770054663A /* NSView+NSLayoutConstraintFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F04DAA1CE0BB770054663A /* NSView+NSLayoutConstraintFilter.m */; };
 		34F1EB921BCCA41F00B38E6C /* CSLayoutEditWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F1EB901BCCA41F00B38E6C /* CSLayoutEditWindowController.m */; };
 		34F1EB931BCCA41F00B38E6C /* CSLayoutEditWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34F1EB911BCCA41F00B38E6C /* CSLayoutEditWindowController.xib */; };
@@ -757,6 +758,9 @@
 		346CF44B1A5C10C2008E5BFF /* CSInputLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSInputLayer.m; sourceTree = "<group>"; };
 		346EAAF6197A7B28000892CF /* Capture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Capture.h; sourceTree = "<group>"; };
 		3470CD0E1D57065B006404D9 /* CSAdvancedAudioCollectionViewItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSAdvancedAudioCollectionViewItem.xib; path = Interface/CSAdvancedAudioCollectionViewItem.xib; sourceTree = "<group>"; };
+		3470CD261D57A088006404D9 /* CSAnimationWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAnimationWindowController.h; path = Interface/CSAnimationWindowController.h; sourceTree = "<group>"; };
+		3470CD271D57A088006404D9 /* CSAnimationWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSAnimationWindowController.m; path = Interface/CSAnimationWindowController.m; sourceTree = "<group>"; };
+		3470CD281D57A088006404D9 /* CSAnimationWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSAnimationWindowController.xib; path = Interface/CSAnimationWindowController.xib; sourceTree = "<group>"; };
 		347277FB1A5A2758008801A9 /* CSIOSurfaceLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSIOSurfaceLayer.h; path = PluginHeaders/CSIOSurfaceLayer.h; sourceTree = "<group>"; };
 		347277FC1A5A2758008801A9 /* CSIOSurfaceLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSIOSurfaceLayer.m; sourceTree = "<group>"; };
 		3473D2791D4C349700842EEE /* CSVaughnliveStreamServicePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSVaughnliveStreamServicePlugin.xcodeproj; path = StreamServicePlugins/CSVaughnliveStreamServicePlugin/CSVaughnliveStreamServicePlugin.xcodeproj; sourceTree = "<group>"; };
@@ -1004,8 +1008,6 @@
 		34F04D9C1CE0381D0054663A /* CSAddInputViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAddInputViewController.h; path = Interface/CSAddInputViewController.h; sourceTree = "<group>"; };
 		34F04D9D1CE0381D0054663A /* CSAddInputViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSAddInputViewController.m; path = Interface/CSAddInputViewController.m; sourceTree = "<group>"; };
 		34F04D9E1CE0381D0054663A /* CSAddInputViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSAddInputViewController.xib; path = Interface/CSAddInputViewController.xib; sourceTree = "<group>"; };
-		34F04DA61CE0BA470054663A /* CSScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSScrollView.h; path = Interface/CSScrollView.h; sourceTree = "<group>"; };
-		34F04DA71CE0BA470054663A /* CSScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSScrollView.m; path = Interface/CSScrollView.m; sourceTree = "<group>"; };
 		34F04DA91CE0BB770054663A /* NSView+NSLayoutConstraintFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSView+NSLayoutConstraintFilter.h"; sourceTree = "<group>"; };
 		34F04DAA1CE0BB770054663A /* NSView+NSLayoutConstraintFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSView+NSLayoutConstraintFilter.m"; sourceTree = "<group>"; };
 		34F1EB8F1BCCA41F00B38E6C /* CSLayoutEditWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSLayoutEditWindowController.h; path = Interface/CSLayoutEditWindowController.h; sourceTree = "<group>"; };
@@ -1435,8 +1437,6 @@
 				34F04D9C1CE0381D0054663A /* CSAddInputViewController.h */,
 				34F04D9D1CE0381D0054663A /* CSAddInputViewController.m */,
 				34F04D9E1CE0381D0054663A /* CSAddInputViewController.xib */,
-				34F04DA61CE0BA470054663A /* CSScrollView.h */,
-				34F04DA71CE0BA470054663A /* CSScrollView.m */,
 				3473D2971D4C3D0E00842EEE /* CSAddOutputPopupViewController.h */,
 				3473D2981D4C3D0E00842EEE /* CSAddOutputPopupViewController.m */,
 				3473D2991D4C3D0E00842EEE /* CSAddOutputPopupViewController.xib */,
@@ -1446,6 +1446,9 @@
 				3473D2AC1D56920B00842EEE /* CSAdvancedAudioWindowController.m */,
 				3473D2AD1D56920B00842EEE /* CSAdvancedAudioWindowController.xib */,
 				3470CD0E1D57065B006404D9 /* CSAdvancedAudioCollectionViewItem.xib */,
+				3470CD261D57A088006404D9 /* CSAnimationWindowController.h */,
+				3470CD271D57A088006404D9 /* CSAnimationWindowController.m */,
+				3470CD281D57A088006404D9 /* CSAnimationWindowController.xib */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -2276,6 +2279,7 @@
 			files = (
 				34F52A281BC1CE2700662911 /* CSLayoutCollectionItem.xib in Resources */,
 				347B14DD198492D900DC7DF0 /* InputPopupControllerViewController.xib in Resources */,
+				3470CD2A1D57A088006404D9 /* CSAnimationWindowController.xib in Resources */,
 				3400A07A1BD4533A003E1828 /* CSInputLibraryWindowController.xib in Resources */,
 				34ED8CB91B073C1B002C0674 /* CSMidiManagerWindowController.xib in Resources */,
 				3470CD0F1D57065B006404D9 /* CSAdvancedAudioCollectionViewItem.xib in Resources */,
@@ -2359,6 +2363,7 @@
 				34F04DAB1CE0BB770054663A /* NSView+NSLayoutConstraintFilter.m in Sources */,
 				34ED8C7B1B07371C002C0674 /* MIKMIDIMetaInstrumentNameEvent.m in Sources */,
 				34ED8C8B1B07371C002C0674 /* MIKMIDIMetronome.m in Sources */,
+				3470CD291D57A088006404D9 /* CSAnimationWindowController.m in Sources */,
 				345F8B6D1A176A5D009A81E3 /* CAMultiAudioUnit.m in Sources */,
 				34ED8C771B07371C002C0674 /* MIKMIDIMetaCuePointEvent.m in Sources */,
 				34D2D5731A547628001004E5 /* CSTextCaptureBase.m in Sources */,
@@ -2397,7 +2402,6 @@
 				34ED8C531B07371C002C0674 /* MIKMIDICommandThrottler.m in Sources */,
 				345F8B611A161552009A81E3 /* CAMultiAudioAVCapturePlayer.m in Sources */,
 				34ED8CAD1B07371C002C0674 /* MIKMIDIUtilities.m in Sources */,
-				34F04DA81CE0BA470054663A /* CSScrollView.m in Sources */,
 				34ED8C7F1B07371C002C0674 /* MIKMIDIMetaLyricEvent.m in Sources */,
 				34ED8C711B07371C002C0674 /* MIKMIDIMappingManager.m in Sources */,
 				3481F30619B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m in Sources */,

@@ -35,6 +35,8 @@
 #import "CompressionSettingsPanelController.h"
 #import "AppleProResCompressor.h"
 #import "CSAddOutputPopupViewController.h"
+#import "CSAnimationWindowController.h"
+
 
 
 @class FFMpegTask;
@@ -122,6 +124,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     
     NSMutableArray *_audioBuffer;
     CSAdvancedAudioWindowController *_audioWindowController;
+    CSAnimationWindowController *_animationWindowController;
+    
     
     
     
@@ -416,5 +420,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (IBAction)outputSegmentedAction:(NSButton *)sender;
 
 - (IBAction)openAdvancedAudio:(id)sender;
+- (IBAction)openAnimationWindow:(id)sender;
 
 @end

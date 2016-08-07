@@ -2381,6 +2381,18 @@
     }
 }
 
+
+- (IBAction)openAnimationWindow:(id)sender
+{
+    if (!_animationWindowController)
+    {
+        _animationWindowController = [[CSAnimationWindowController alloc] init];
+    }
+    
+    [_animationWindowController showWindow:nil];
+}
+
+
 - (IBAction)openAdvancedAudio:(id)sender
 {
     if (!_audioWindowController)
