@@ -156,6 +156,19 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
             [node updatePowerlevel];
         });
     }
+    
+    float rawPreview = [self.previewMixer outputPower];
+    float rawStream = [self.encodeMixer outputPower];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.previewAudioPowerLevel = pow(10.0f, 0.05f * rawPreview) * 10.0f;
+        self.streamAudioPowerLevel = pow(10.0f, 0.05f * rawStream) * 10.0f;
+    });
+
+    
+    
+    
+
 }
 
 

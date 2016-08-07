@@ -45,6 +45,7 @@
 @class LayoutPreviewWindowController;
 @class CSLayoutEditWindowController;
 @class CSTimedOutputBuffer;
+@class CSAdvancedAudioWindowController;
 
 
 void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , CMSampleBufferRef );
@@ -120,6 +121,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     bool _needsIRReset;
     
     NSMutableArray *_audioBuffer;
+    CSAdvancedAudioWindowController *_audioWindowController;
+    
     
     
 }
@@ -412,5 +415,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 - (IBAction)outputSegmentedAction:(NSButton *)sender;
 
+- (IBAction)openAdvancedAudio:(id)sender;
 
 @end

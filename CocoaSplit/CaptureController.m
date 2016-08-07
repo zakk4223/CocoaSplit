@@ -28,6 +28,8 @@
 #import "CSCaptureBase+TimerDelegate.h"
 #import "CSLayoutEditWindowController.h"
 #import "CSTimedOutputBuffer.h"
+#import "CSAdvancedAudioWindowController.h"
+
 
 #import <Python/Python.h>
 
@@ -2380,6 +2382,18 @@
         default:
             break;
     }
+}
+
+- (IBAction)openAdvancedAudio:(id)sender
+{
+    if (!_audioWindowController)
+    {
+        _audioWindowController = [[CSAdvancedAudioWindowController alloc] init];
+    }
+    
+    _audioWindowController.controller = self;
+    [_audioWindowController showWindow:nil];
+    
 }
 
 
