@@ -80,7 +80,6 @@
     {
         vc = [[CreateLayoutViewController alloc] initForBuiltin];
         
-        vc.controller = self;
         
         _layoutpopOver.contentViewController = vc;
         _layoutpopOver.delegate = vc;
@@ -165,7 +164,6 @@
     {
         vc = [[CreateLayoutViewController alloc] init];
         
-        vc.controller = self;
         
         _layoutpopOver.contentViewController = vc;
         _layoutpopOver.delegate = vc;
@@ -413,7 +411,6 @@
     {
         vc = [[CSAnimationChooserViewController alloc] init];
         
-        vc.controller = self;
         
         _animatepopOver.contentViewController = vc;
         _animatepopOver.delegate = vc;
@@ -2382,6 +2379,20 @@
 }
 
 
+- (IBAction)openStreamOutputWindow:(id)sender
+{
+    if (!_streamOutputWindowController)
+    {
+        _streamOutputWindowController = [[CSStreamOutputWindowController alloc] init];
+    }
+    
+    _streamOutputWindowController.controller = self;
+    
+    [_streamOutputWindowController showWindow:nil];
+}
+
+
+
 - (IBAction)openAnimationWindow:(id)sender
 {
     if (!_animationWindowController)
@@ -3724,9 +3735,8 @@
 }
 
 
-- (IBAction)outputEditClicked:(id)sender
+- (IBAction)outputEditClicked:(OutputDestination *)toEdit
 {
-    OutputDestination *toEdit = [self.captureDestinations objectAtIndex:self.outputTableView.clickedRow];
     [self openOutputSheet:toEdit];
 }
 

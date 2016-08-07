@@ -7,6 +7,8 @@
 //
 
 #import "CreateLayoutViewController.h"
+#import "CaptureController.h"
+#import "AppDelegate.h"
 
 @interface CreateLayoutViewController ()
 
@@ -53,7 +55,11 @@
     
     if (self.sourceLayout && self.createDialog)
     {
-        [self.controller addLayoutFromBase:self.sourceLayout];
+        AppDelegate *appDel = NSApp.delegate;
+        
+        CaptureController *controller = appDel.captureController;
+        
+        [controller addLayoutFromBase:self.sourceLayout];
     }
     [self.popover close];
     
@@ -62,9 +68,14 @@
 
 -(void)popoverDidClose:(NSNotification *)notification
 {
+    
+    AppDelegate *appDel = NSApp.delegate;
+    
+    CaptureController *controller = appDel.captureController;
+
     self.popover.contentViewController = nil;
     //This is only relevant if we're a custom edit popup for staging/live, but just do it unconditionally because reasons/lazy
-    [self.controller updateFrameIntervals];
+    [controller updateFrameIntervals];
 }
 
 

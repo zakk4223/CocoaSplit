@@ -14,7 +14,6 @@
 
 @class CAMultiAudioPCMPlayer;
 
-@class CaptureController;
 
 @interface AVFAudioCapture : CSCaptureBase <CSCaptureSourceProtocol, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate>
 {
@@ -29,7 +28,6 @@
 
 
 @property (strong) AVFChannelManager *audioChannelManager;
-@property (strong) CaptureController *audioDelegate;
 @property (assign) int audioBitrate;
 @property (assign) float audioSamplerate;
 @property (strong) AVCaptureDevice *activeAudioDevice;

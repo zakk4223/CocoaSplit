@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
 #import <VideoToolbox/VideoToolbox.h>
-#import "AVFAudioCapture.h"
 #import <CoreMedia/CoreMedia.h>
 #import "CSCaptureSourceProtocol.h"
 #import "CSAbstractCaptureDevice.h"
@@ -36,7 +35,7 @@
 #import "AppleProResCompressor.h"
 #import "CSAddOutputPopupViewController.h"
 #import "CSAnimationWindowController.h"
-
+#import "CSStreamOutputWindowController.h"
 
 
 @class FFMpegTask;
@@ -125,10 +124,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     NSMutableArray *_audioBuffer;
     CSAdvancedAudioWindowController *_audioWindowController;
     CSAnimationWindowController *_animationWindowController;
-    
-    
-    
-    
+    CSStreamOutputWindowController *_streamOutputWindowController;
 }
 
 
@@ -379,7 +375,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (weak) IBOutlet NSTableView *inputTableView;
 
 @property (weak) IBOutlet NSTableView *outputTableView;
-- (IBAction)outputEditClicked:(id)sender;
+- (IBAction)outputEditClicked:(OutputDestination *)sender;
 
 @property (weak) IBOutlet NSArrayController *sourceLayoutsArrayController;
 @property (weak) IBOutlet NSTreeController *inputTreeController;
@@ -421,5 +417,9 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 - (IBAction)openAdvancedAudio:(id)sender;
 - (IBAction)openAnimationWindow:(id)sender;
+- (IBAction)openStreamOutputWindow:(id)sender;
+-(void) removeObjectFromCaptureDestinationsAtIndex:(NSUInteger)index;
+-(void)openAddOutputPopover:(id)sender sourceRect:(NSRect)sourceRect;
+
 
 @end

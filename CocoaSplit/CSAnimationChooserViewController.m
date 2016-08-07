@@ -7,6 +7,8 @@
 //
 
 #import "CSAnimationChooserViewController.h"
+#import "CaptureController.h"
+
 
 @interface CSAnimationChooserViewController ()
 

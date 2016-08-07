@@ -140,6 +140,8 @@
 		3470CD0F1D57065B006404D9 /* CSAdvancedAudioCollectionViewItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3470CD0E1D57065B006404D9 /* CSAdvancedAudioCollectionViewItem.xib */; };
 		3470CD291D57A088006404D9 /* CSAnimationWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3470CD271D57A088006404D9 /* CSAnimationWindowController.m */; };
 		3470CD2A1D57A088006404D9 /* CSAnimationWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3470CD281D57A088006404D9 /* CSAnimationWindowController.xib */; };
+		3470CD2E1D57D2AA006404D9 /* CSStreamOutputWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3470CD2C1D57D2AA006404D9 /* CSStreamOutputWindowController.m */; };
+		3470CD2F1D57D2AA006404D9 /* CSStreamOutputWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3470CD2D1D57D2AA006404D9 /* CSStreamOutputWindowController.xib */; };
 		347277FD1A5A2758008801A9 /* CSIOSurfaceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 347277FC1A5A2758008801A9 /* CSIOSurfaceLayer.m */; };
 		347277FE1A5A2758008801A9 /* CSIOSurfaceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 347277FC1A5A2758008801A9 /* CSIOSurfaceLayer.m */; };
 		3473D2871D4C359700842EEE /* CSVaughnliveStreamServicePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 3473D27E1D4C349700842EEE /* CSVaughnliveStreamServicePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -761,6 +763,9 @@
 		3470CD261D57A088006404D9 /* CSAnimationWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAnimationWindowController.h; path = Interface/CSAnimationWindowController.h; sourceTree = "<group>"; };
 		3470CD271D57A088006404D9 /* CSAnimationWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSAnimationWindowController.m; path = Interface/CSAnimationWindowController.m; sourceTree = "<group>"; };
 		3470CD281D57A088006404D9 /* CSAnimationWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSAnimationWindowController.xib; path = Interface/CSAnimationWindowController.xib; sourceTree = "<group>"; };
+		3470CD2B1D57D2AA006404D9 /* CSStreamOutputWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSStreamOutputWindowController.h; path = Interface/CSStreamOutputWindowController.h; sourceTree = "<group>"; };
+		3470CD2C1D57D2AA006404D9 /* CSStreamOutputWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSStreamOutputWindowController.m; path = Interface/CSStreamOutputWindowController.m; sourceTree = "<group>"; };
+		3470CD2D1D57D2AA006404D9 /* CSStreamOutputWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSStreamOutputWindowController.xib; path = Interface/CSStreamOutputWindowController.xib; sourceTree = "<group>"; };
 		347277FB1A5A2758008801A9 /* CSIOSurfaceLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSIOSurfaceLayer.h; path = PluginHeaders/CSIOSurfaceLayer.h; sourceTree = "<group>"; };
 		347277FC1A5A2758008801A9 /* CSIOSurfaceLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSIOSurfaceLayer.m; sourceTree = "<group>"; };
 		3473D2791D4C349700842EEE /* CSVaughnliveStreamServicePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSVaughnliveStreamServicePlugin.xcodeproj; path = StreamServicePlugins/CSVaughnliveStreamServicePlugin/CSVaughnliveStreamServicePlugin.xcodeproj; sourceTree = "<group>"; };
@@ -1449,6 +1454,9 @@
 				3470CD261D57A088006404D9 /* CSAnimationWindowController.h */,
 				3470CD271D57A088006404D9 /* CSAnimationWindowController.m */,
 				3470CD281D57A088006404D9 /* CSAnimationWindowController.xib */,
+				3470CD2B1D57D2AA006404D9 /* CSStreamOutputWindowController.h */,
+				3470CD2C1D57D2AA006404D9 /* CSStreamOutputWindowController.m */,
+				3470CD2D1D57D2AA006404D9 /* CSStreamOutputWindowController.xib */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -2309,6 +2317,7 @@
 				343ED9421BCAC1C80061FC4B /* EditBuiltinLayoutView.xib in Resources */,
 				3415CED31AE257DA002F11F5 /* CSTextCaptureBaseView.xib in Resources */,
 				342B33B3198073EC00492CB7 /* line.fgsh in Resources */,
+				3470CD2F1D57D2AA006404D9 /* CSStreamOutputWindowController.xib in Resources */,
 				344825D21B2536EA00AF9EAC /* CAMultiAudioMatrixView.xib in Resources */,
 				3473D2A81D5685DA00842EEE /* Media.xcassets in Resources */,
 				3473D29B1D4C3D0E00842EEE /* CSAddOutputPopupViewController.xib in Resources */,
@@ -2449,6 +2458,7 @@
 				3494DF391CCD2DB000E921BF /* TPCircularBuffer+AudioBufferList.c in Sources */,
 				3473D2A61D56391700842EEE /* CSAudioLevelView.m in Sources */,
 				3498D94F1A9472BD00906532 /* CSAudioSwitchControl.m in Sources */,
+				3470CD2E1D57D2AA006404D9 /* CSStreamOutputWindowController.m in Sources */,
 				3400A0621BD44DF0003E1828 /* CSInputLibraryItem.m in Sources */,
 				34ED8C831B07371C002C0674 /* MIKMIDIMetaSequenceEvent.m in Sources */,
 				3434CB2D1CA90D28001B3DF9 /* CSx264CompressorViewController.m in Sources */,

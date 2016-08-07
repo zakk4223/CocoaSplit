@@ -8,12 +8,10 @@
 
 #import <Cocoa/Cocoa.h>
 #import "SourceLayout.h"
-#import "CaptureController.h"
 
 @interface CSAnimationChooserViewController : NSViewController <NSPopoverDelegate>
 
 
-@property (weak) CaptureController *controller;
 @property (weak) NSPopover *popover;
 
 @property (strong) SourceLayout *sourceLayout;
