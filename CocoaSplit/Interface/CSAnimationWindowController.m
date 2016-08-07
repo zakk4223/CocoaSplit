@@ -27,7 +27,8 @@
 
 - (void)windowDidLoad {
     [super windowDidLoad];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupLayoutViews:) name:CSNotificationLayoutModeChanged object:nil];
+
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
 }
 
@@ -36,11 +37,11 @@
 -(void)showWindow:(id)sender
 {
     [super showWindow:sender];
-    [self setupLayoutViews];
+    [self setupLayoutViews:nil];
 
 }
 
--(void)setupLayoutViews
+-(void)setupLayoutViews:(id)sender
 {
     AppDelegate *appDel = [NSApp delegate];
     

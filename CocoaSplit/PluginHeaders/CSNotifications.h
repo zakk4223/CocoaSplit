@@ -39,6 +39,7 @@ extern NSString *const CSNotificationInputSelected;
 extern NSString *const CSNotificationInputAttached;
 extern NSString *const CSNotificationInputDetached;
 
+extern NSString *const CSNotificationLayoutModeChanged;
 
 
 

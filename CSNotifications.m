@@ -36,4 +36,6 @@ NSString *const CSNotificationInputSelected = @"CSNotificationInputSelected";
 NSString *const CSNotificationInputAttached = @"CSNotificationInputAttached";
 NSString *const CSNotificationInputDetached = @"CSNotificationInputDetached";
 
+NSString *const CSNotificationLayoutModeChanged = @"CSNotificationLayoutModeChanged";
+
 
