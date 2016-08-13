@@ -500,8 +500,8 @@
                                         </textFieldCell>
                                     </textField>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pzK-8X-A5m">
-                                        <rect key="frame" x="356" y="342" width="37" height="14"/>
-                                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Inputs" id="PGo-SE-KaE">
+                                        <rect key="frame" x="356" y="342" width="80" height="14"/>
+                                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Video Sources" id="PGo-SE-KaE">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -632,7 +632,7 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" enabled="NO" rowHeight="30" rowSizeStyle="automatic" viewBased="YES" id="aQN-sB-Ke6">
-                                                    <rect key="frame" x="0.0" y="0.0" width="188" height="0.0"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="188" height="228"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <size key="intercellSpacing" width="3" height="2"/>
                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -997,6 +997,7 @@
                                     <constraint firstItem="4Os-cy-Qte" firstAttribute="baseline" secondItem="T7c-kD-tu4" secondAttribute="baseline" id="cRD-Uf-dJp"/>
                                     <constraint firstItem="WVW-0n-Rw1" firstAttribute="leading" secondItem="hQL-UV-A4y" secondAttribute="trailing" constant="9" id="ccd-yF-1hT"/>
                                     <constraint firstItem="Y7F-zZ-G1v" firstAttribute="trailing" secondItem="WVW-0n-Rw1" secondAttribute="trailing" id="dfc-Bm-wjM"/>
+                                    <constraint firstItem="CGb-co-hRP" firstAttribute="top" secondItem="XZ2-bt-DLe" secondAttribute="bottom" constant="154" id="eSt-N6-uVR"/>
                                     <constraint firstItem="ELT-rG-e24" firstAttribute="centerX" secondItem="597" secondAttribute="centerX" id="g6b-YP-TUJ"/>
                                     <constraint firstItem="ggC-Mg-kHj" firstAttribute="leading" secondItem="ZMK-1p-sVF" secondAttribute="leading" id="gaV-nK-VCa"/>
                                     <constraint firstItem="xTB-uk-xkF" firstAttribute="leading" secondItem="S3f-OT-hge" secondAttribute="trailing" constant="8" id="gdU-FZ-EKS"/>
