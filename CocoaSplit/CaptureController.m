@@ -882,8 +882,11 @@
            
            
            
-           self.outputStatsString = [NSString stringWithFormat:@"Active Outputs: %d Errored %d", total_outputs, errored_outputs];
-           self.renderStatsString = [NSString stringWithFormat:@"Render min/max/avg: %f/%f/%f", _min_render_time, _max_render_time, _render_time_total / _renderedFrames];
+           dispatch_async(dispatch_get_main_queue(), ^{
+               self.outputStatsString = [NSString stringWithFormat:@"Active Outputs: %d Errored %d", total_outputs, errored_outputs];
+               self.renderStatsString = [NSString stringWithFormat:@"Render min/max/avg: %f/%f/%f", _min_render_time, _max_render_time, _render_time_total / _renderedFrames];
+               self.active_output_count = total_outputs;
+           });
            _renderedFrames = 0;
            _render_time_total = 0.0f;
            
@@ -1831,7 +1834,6 @@
 -(void) setTransitionName:(NSString *)transitionName
 {
     
-    NSLog(@"SETTING TRANSITION %@", transitionName);
     
     _transitionName = transitionName;
     if ([transitionName hasPrefix:@"CI"])

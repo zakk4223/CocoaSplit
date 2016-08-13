@@ -374,6 +374,7 @@
                                         </buttonCell>
                                         <connections>
                                             <action selector="streamButtonPushed:" target="816" id="825"/>
+                                            <binding destination="816" name="enabled" keyPath="self.active_output_count" id="k1g-8T-k2f"/>
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ggC-Mg-kHj">
@@ -388,7 +389,7 @@
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZMK-1p-sVF">
-                                        <rect key="frame" x="15" y="402" width="126" height="28"/>
+                                        <rect key="frame" x="15" y="402" width="66" height="28"/>
                                         <buttonCell key="cell" type="push" title="Go Live" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="8xu-dD-cVh">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="smallSystem"/>
@@ -978,7 +979,7 @@
                                     <constraint firstItem="rPZ-cL-r3T" firstAttribute="top" secondItem="pzK-8X-A5m" secondAttribute="bottom" constant="8" symbolic="YES" id="WKX-JF-nDb"/>
                                     <constraint firstItem="T7c-kD-tu4" firstAttribute="leading" secondItem="xTB-uk-xkF" secondAttribute="trailing" constant="17" id="Ztx-6u-DJs"/>
                                     <constraint firstItem="iC4-7V-Wd2" firstAttribute="top" secondItem="HdA-UM-xTY" secondAttribute="bottom" constant="8" symbolic="YES" id="a1c-38-wHs"/>
-                                    <constraint firstItem="ggC-Mg-kHj" firstAttribute="centerX" secondItem="ZMK-1p-sVF" secondAttribute="centerX" id="apL-qJ-xhC"/>
+                                    <constraint firstItem="ggC-Mg-kHj" firstAttribute="centerX" secondItem="ZMK-1p-sVF" secondAttribute="centerX" constant="30.5" id="apL-qJ-xhC"/>
                                     <constraint firstItem="4xM-kf-gaf" firstAttribute="centerX" secondItem="2370" secondAttribute="centerX" id="bPA-Z2-yqj"/>
                                     <constraint firstItem="4Os-cy-Qte" firstAttribute="baseline" secondItem="T7c-kD-tu4" secondAttribute="baseline" id="cRD-Uf-dJp"/>
                                     <constraint firstItem="WVW-0n-Rw1" firstAttribute="leading" secondItem="hQL-UV-A4y" secondAttribute="trailing" constant="9" id="ccd-yF-1hT"/>
@@ -1024,7 +1025,7 @@
                     <constraint firstAttribute="bottom" secondItem="2368" secondAttribute="bottom" id="hh8-Vu-6Ys"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="1272.5" y="864"/>
+            <point key="canvasLocation" x="1282.5" y="872"/>
         </window>
         <dictionaryController objectClassName="_NSControllerKeyValuePair" id="gSI-N4-DsK" userLabel="CompressorDictionaryController">
             <connections>

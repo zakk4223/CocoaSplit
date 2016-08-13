@@ -216,6 +216,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) NSString *transitionDirection;
 @property (strong) CIFilter *transitionFilter;
 @property (assign) bool transitionFullScene;
+@property (assign) NSInteger active_output_count;
 
 
 @property (strong) NSWindow *transitionFilterWindow;
