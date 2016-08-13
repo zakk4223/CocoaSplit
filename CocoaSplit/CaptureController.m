@@ -1830,6 +1830,9 @@
 
 -(void) setTransitionName:(NSString *)transitionName
 {
+    
+    NSLog(@"SETTING TRANSITION %@", transitionName);
+    
     _transitionName = transitionName;
     if ([transitionName hasPrefix:@"CI"])
     {
