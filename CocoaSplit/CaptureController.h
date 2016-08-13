@@ -176,6 +176,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 @property (strong) NSString *renderStatsString;
+@property (strong) NSString *outputStatsString;
 
 
 

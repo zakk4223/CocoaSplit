@@ -65,6 +65,10 @@
 -(void)awakeFromNib
 {
     [super awakeFromNib];
+    if (!self.backgroundColor)
+    {
+        self.backgroundColor = [NSColor disabledControlTextColor];
+    }
     [self setupLayers];
 }
 
@@ -84,7 +88,7 @@
     
     CALayer *outerLayer = [CALayer layer];
     //outerLayer.borderWidth = 0.5f;
-    outerLayer.backgroundColor = [NSColor disabledControlTextColor].CGColor;
+    outerLayer.backgroundColor = self.backgroundColor.CGColor;
     
     CAGradientLayer *gLayer = [CAGradientLayer layer];
     NSArray *colors = [NSArray arrayWithObjects:(__bridge id)([NSColor greenColor].CGColor), (__bridge id)[NSColor yellowColor].CGColor, (__bridge id)[NSColor yellowColor].CGColor, (__bridge id)[NSColor redColor].CGColor, nil];

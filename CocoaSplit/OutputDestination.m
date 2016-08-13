@@ -158,7 +158,7 @@
     [self initStatsValues];
     if (self.ffmpeg_out)
     {
-        if (_errored)
+        if (self.errored)
         {
             //errors jump the queue and just kill the ffmpeg output
             [self.ffmpeg_out stopProcess];
@@ -349,6 +349,7 @@
         
         if (errVal == YES)
         {
+            self.errored = YES;
             newColor = [NSColor redColor];
         }
         
@@ -500,7 +501,7 @@
             
             if ([self resetOutputIfNeeded])
             {
-                _errored = YES;
+                self.errored = YES;
                 self.active = NO;
                 return;
             }

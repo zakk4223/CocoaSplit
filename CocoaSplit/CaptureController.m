@@ -865,13 +865,24 @@
        dispatch_source_set_timer(_statistics_timer, DISPATCH_TIME_NOW, 1*NSEC_PER_SEC, 0);
        dispatch_source_set_event_handler(_statistics_timer, ^{
            
+           int total_outputs = 0;
+           int errored_outputs = 0;
            for (OutputDestination *outdest in _captureDestinations)
            {
+               if (outdest.active)
+               {
+                   total_outputs++;
+                   if (outdest.errored)
+                   {
+                       errored_outputs++;
+                   }
+               }
                [outdest updateStatistics];
            }
            
            
            
+           self.outputStatsString = [NSString stringWithFormat:@"Active Outputs: %d Errored %d", total_outputs, errored_outputs];
            self.renderStatsString = [NSString stringWithFormat:@"Render min/max/avg: %f/%f/%f", _min_render_time, _max_render_time, _render_time_total / _renderedFrames];
            _renderedFrames = 0;
            _render_time_total = 0.0f;

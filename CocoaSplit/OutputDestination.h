@@ -33,7 +33,6 @@
     int _p_output_bytes;
     int _pending_frame_count;
     int _consecutive_dropped_frames;
-    BOOL _errored;
     bool _output_prepared;
     
     
@@ -44,7 +43,7 @@
 
 
 
-
+@property (assign) BOOL errored;
 @property (strong) NSString *server_name;
 @property (strong) NSString *type_name;
 @property (strong) NSString *type_class_name;
