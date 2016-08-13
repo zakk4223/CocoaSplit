@@ -24,6 +24,7 @@
                 <outlet property="editorPopover" destination="pVG-uK-v8x" id="Z4y-xI-k5M"/>
                 <outlet property="exportLayoutMenu" destination="Aks-2j-maL" id="SL3-RU-b4a"/>
                 <outlet property="extrasMenu" destination="wPc-B9-L1T" id="Ysq-1k-pbF"/>
+                <outlet property="inputOutlineView" destination="hQL-UV-A4y" id="HAG-e1-fLa"/>
                 <outlet property="inputTreeController" destination="dWz-5q-kjU" id="z14-To-dEK"/>
                 <outlet property="liveFullScreenMenu" destination="oei-ah-Eqx" id="3Ot-ve-qp2"/>
                 <outlet property="livePreviewView" destination="79f-hz-x80" id="iR0-Am-BlN"/>
@@ -840,10 +841,22 @@
                                                     </menu>
                                                 </popUpButtonCell>
                                                 <connections>
-                                                    <binding destination="nSm-CJ-gxC" name="content" keyPath="arrangedObjects" id="vtP-Za-3T4"/>
-                                                    <binding destination="nSm-CJ-gxC" name="contentObjects" keyPath="arrangedObjects.key" previousBinding="vtP-Za-3T4" id="9W9-B3-XMe"/>
-                                                    <binding destination="nSm-CJ-gxC" name="contentValues" keyPath="arrangedObjects.value" previousBinding="9W9-B3-XMe" id="9zf-Nx-b3o"/>
-                                                    <binding destination="816" name="selectedObject" keyPath="self.transitionName" previousBinding="9zf-Nx-b3o" id="hxK-pn-pFj"/>
+                                                    <binding destination="nSm-CJ-gxC" name="content" keyPath="arrangedObjects" id="1ZR-kj-QVN">
+                                                        <dictionary key="options">
+                                                            <bool key="NSInsertsNullPlaceholder" value="YES"/>
+                                                        </dictionary>
+                                                    </binding>
+                                                    <binding destination="nSm-CJ-gxC" name="contentObjects" keyPath="arrangedObjects.key" previousBinding="1ZR-kj-QVN" id="bU3-br-GVc">
+                                                        <dictionary key="options">
+                                                            <bool key="NSInsertsNullPlaceholder" value="YES"/>
+                                                        </dictionary>
+                                                    </binding>
+                                                    <binding destination="nSm-CJ-gxC" name="contentValues" keyPath="arrangedObjects.value" previousBinding="bU3-br-GVc" id="cRU-E6-DWC">
+                                                        <dictionary key="options">
+                                                            <bool key="NSInsertsNullPlaceholder" value="YES"/>
+                                                        </dictionary>
+                                                    </binding>
+                                                    <binding destination="816" name="selectedObject" keyPath="self.transitionName" previousBinding="cRU-E6-DWC" id="OAk-Ur-fj1"/>
                                                 </connections>
                                             </popUpButton>
                                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EkK-o9-Ah2">
@@ -907,8 +920,8 @@
                                                 </connections>
                                             </textField>
                                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="auQ-3t-SM1">
-                                                <rect key="frame" x="-3" y="31" width="61" height="20"/>
-                                                <buttonCell key="cell" type="check" title="Layout" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="cQ8-5q-uwE">
+                                                <rect key="frame" x="-3" y="31" width="75" height="20"/>
+                                                <buttonCell key="cell" type="check" title="Layout" bezelStyle="regularSquare" imagePosition="right" controlSize="small" state="on" inset="2" id="cQ8-5q-uwE">
                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                     <font key="font" metaFont="smallSystem"/>
                                                 </buttonCell>

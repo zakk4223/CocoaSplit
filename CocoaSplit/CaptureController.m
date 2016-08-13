@@ -867,6 +867,8 @@
            
            int total_outputs = 0;
            int errored_outputs = 0;
+           int dropped_frame_cnt = 0;
+           
            for (OutputDestination *outdest in _captureDestinations)
            {
                if (outdest.active)
@@ -876,6 +878,8 @@
                    {
                        errored_outputs++;
                    }
+                   
+                   dropped_frame_cnt += outdest.dropped_frame_count;
                }
                [outdest updateStatistics];
            }
@@ -883,9 +887,11 @@
            
            
            dispatch_async(dispatch_get_main_queue(), ^{
-               self.outputStatsString = [NSString stringWithFormat:@"Active Outputs: %d Errored %d", total_outputs, errored_outputs];
+               self.outputStatsString = [NSString stringWithFormat:@"Active Outputs: %d Errored %d Frames dropped %d", total_outputs, errored_outputs,dropped_frame_cnt];
                self.renderStatsString = [NSString stringWithFormat:@"Render min/max/avg: %f/%f/%f", _min_render_time, _max_render_time, _render_time_total / _renderedFrames];
                self.active_output_count = total_outputs;
+               self.total_dropped_frames = dropped_frame_cnt;
+               
            });
            _renderedFrames = 0;
            _render_time_total = 0.0f;
