@@ -647,7 +647,7 @@
                                                 <real key="value" value="0.0"/>
                                             </userDefinedRuntimeAttribute>
                                             <userDefinedRuntimeAttribute type="number" keyPath="endValue">
-                                                <real key="value" value="7"/>
+                                                <real key="value" value="1"/>
                                             </userDefinedRuntimeAttribute>
                                             <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
                                                 <color key="value" name="controlHighlightColor" catalog="System" colorSpace="catalog"/>
@@ -727,7 +727,7 @@
                                                                                     <real key="value" value="0.0"/>
                                                                                 </userDefinedRuntimeAttribute>
                                                                                 <userDefinedRuntimeAttribute type="number" keyPath="endValue">
-                                                                                    <real key="value" value="7"/>
+                                                                                    <real key="value" value="1"/>
                                                                                 </userDefinedRuntimeAttribute>
                                                                                 <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
                                                                                     <color key="value" name="gridColor" catalog="System" colorSpace="catalog"/>

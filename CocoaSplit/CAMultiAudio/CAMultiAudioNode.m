@@ -140,8 +140,7 @@
         id<CAMultiAudioMixingProtocol>mixerNode = (id<CAMultiAudioMixingProtocol>)self.connectedTo;
         float rawPower = [mixerNode powerForInputBus:self.connectedToBus];
         
-        self.powerLevel = pow(10.0f, 0.05f * rawPower) * 10.0f;
-        
+        self.powerLevel = pow(10.0f, rawPower/20.0f);
     }
 }
 
