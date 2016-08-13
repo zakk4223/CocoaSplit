@@ -28,54 +28,14 @@
                     </connections>
                 </textField>
                 <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pd4-sc-PYL">
-                    <rect key="frame" x="20" y="30" width="15" height="219"/>
+                    <rect key="frame" x="24" y="30" width="15" height="219"/>
                     <sliderCell key="cell" controlSize="mini" continuous="YES" alignment="left" maxValue="1" doubleValue="1" tickMarkPosition="right" sliderType="linear" id="2RI-Lu-dIV"/>
                     <connections>
                         <binding destination="-2" name="value" keyPath="self.representedObject.volume" id="uxA-75-5Ir"/>
                     </connections>
                 </slider>
-                <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="guS-Wt-aKN" customClass="CSAudioSwitchControl">
-                    <rect key="frame" x="6" y="5" width="43" height="19"/>
-                    <animations>
-                        <caTransition key="subviews">
-                            <mutableData key="keyedArchiveRepresentation">
-YnBsaXN0MDDUAQIDBAUGJCVYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKkHCBES
-EwsKGR9VJG51bGzUCQoLDA0ODxBWJGNsYXNzVHR5cGVXc3VidHlwZV8QEl9fQ0FDb2RpbmdDb250ZW50
-c4AIgAOAAoAEWWZyb21SaWdodFRwdXNo0hQJFRhaTlMub2JqZWN0c6IWF4AFgAaAB9IaGxwdWiRjbGFz
-c25hbWVYJGNsYXNzZXNXTlNBcnJheaIcHlhOU09iamVjdNIaGyAhXENBVHJhbnNpdGlvbqMiIx5cQ0FU
-cmFuc2l0aW9uW0NBQW5pbWF0aW9uXxAPTlNLZXllZEFyY2hpdmVy0SYnVHJvb3SAAQAIABEAGgAjAC0A
-MgA3AEEARwBQAFcAXABkAHkAewB9AH8AgQCLAJAAlQCgAKMApQCnAKkArgC5AMIAygDNANYA2wDoAOwA
-+QEFARcBGgEfAAAAAAAAAgEAAAAAAAAAKAAAAAAAAAAAAAAAAAAAASE
-</mutableData>
-                        </caTransition>
-                    </animations>
-                    <segmentedCell key="cell" controlSize="mini" continuous="YES" borderStyle="border" alignment="left" style="smallSquare" trackingMode="selectOne" id="gsV-Ii-pej" customClass="CSAudioSwitchCell">
-                        <font key="font" metaFont="miniSystem"/>
-                        <segments>
-                            <segment label="On" width="20" tag="1"/>
-                            <segment label="Off" width="20"/>
-                        </segments>
-                    </segmentedCell>
-                    <connections>
-                        <binding destination="-2" name="selectedTag" keyPath="representedObject.enabled" id="jGc-xZ-CmG"/>
-                    </connections>
-                </segmentedControl>
-                <button horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MJn-HC-shB">
-                    <rect key="frame" x="35" y="31" width="14" height="29"/>
-                    <buttonCell key="cell" type="squareTextured" bezelStyle="texturedSquare" image="NSActionTemplate" imagePosition="above" alignment="left" controlSize="mini" imageScaling="proportionallyDown" inset="2" id="N1e-Tr-x93">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="miniSystem"/>
-                    </buttonCell>
-                    <connections>
-                        <binding destination="-2" name="target" keyPath="self.representedObject" id="YMN-nf-QKw">
-                            <dictionary key="options">
-                                <string key="NSSelectorName">openMixerWindow:</string>
-                            </dictionary>
-                        </binding>
-                    </connections>
-                </button>
                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jAk-5M-F9b" customClass="CSAudioLevelView">
-                    <rect key="frame" x="7" y="31" width="5" height="218"/>
+                    <rect key="frame" x="11" y="31" width="5" height="218"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="startValue">
                             <real key="value" value="0.0"/>
@@ -88,12 +48,42 @@ MgA3AEEARwBQAFcAXABkAHkAewB9AH8AgQCLAJAAlQCgAKMApQCnAKkArgC5AMIAygDNANYA2wDoAOwA
                         <binding destination="-2" name="level" keyPath="self.representedObject.powerLevel" id="inz-yW-amh"/>
                     </connections>
                 </customView>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NEC-Me-vM5">
+                    <rect key="frame" x="22" y="5" width="18" height="18"/>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Speaker_Icon" imagePosition="only" alignment="center" alternateImage="Mute_Icon" controlSize="small" imageScaling="proportionallyDown" inset="2" id="34x-aG-uoX">
+                        <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="-2" name="value" keyPath="self.representedObject.enabled" id="61F-h7-isU">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </button>
+                <button horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MJn-HC-shB">
+                    <rect key="frame" x="46" y="31" width="14" height="29"/>
+                    <buttonCell key="cell" type="squareTextured" bezelStyle="texturedSquare" image="NSActionTemplate" imagePosition="above" alignment="left" controlSize="mini" imageScaling="proportionallyDown" inset="2" id="N1e-Tr-x93">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="miniSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="-2" name="target" keyPath="self.representedObject" id="YMN-nf-QKw">
+                            <dictionary key="options">
+                                <string key="NSSelectorName">openMixerWindow:</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </button>
             </subviews>
             <point key="canvasLocation" x="330.5" y="480.5"/>
         </view>
         <userDefaultsController representsSharedInstance="YES" id="ERZ-lW-tiD"/>
     </objects>
     <resources>
+        <image name="Mute_Icon" width="240" height="240"/>
         <image name="NSActionTemplate" width="14" height="14"/>
+        <image name="Speaker_Icon" width="240" height="240"/>
     </resources>
 </document>
