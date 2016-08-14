@@ -20,5 +20,7 @@
 @property (assign) IBInspectable float startValue;
 @property (assign) IBInspectable float endValue;
 @property (strong) IBInspectable NSColor *backgroundColor;
+@property (assign) IBInspectable float backgroundSize;
+
 
 @end

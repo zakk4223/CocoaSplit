@@ -87,7 +87,7 @@
     }
     
     CALayer *outerLayer = [CALayer layer];
-    //outerLayer.borderWidth = 0.5f;
+    outerLayer.borderWidth = self.backgroundSize;
     outerLayer.backgroundColor = self.backgroundColor.CGColor;
     
     CAGradientLayer *gLayer = [CAGradientLayer layer];
