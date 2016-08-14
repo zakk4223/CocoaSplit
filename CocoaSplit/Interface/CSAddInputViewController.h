@@ -12,7 +12,7 @@
 
 @class PreviewView;
 
-@interface CSAddInputViewController : NSViewController <NSTableViewDelegate>
+@interface CSAddInputViewController : NSViewController <NSTableViewDelegate, NSPopoverDelegate>
 {
     NSView *_typeListView;
     NSArray *_sourceTypeList;

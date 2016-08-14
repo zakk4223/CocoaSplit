@@ -19,6 +19,7 @@
 
 @implementation CSAddInputViewController
 
+@synthesize popover = _popover;
 
 
 -(instancetype)init
@@ -32,6 +33,32 @@
     
     [super loadView];
     [self switchToInitialView];
+}
+
+
+-(NSPopover *)popover
+{
+    return _popover;
+}
+
+-(void)setPopover:(NSPopover *)popover
+{
+    [self willChangeValueForKey:@"sourceTypes"];
+    _sourceTypeList = nil;
+    [self didChangeValueForKey:@"sourceTypes"];
+
+    _popover = popover;
+    _popover.delegate = self;
+}
+
+
+-(void)popoverWillClose:(NSNotification *)notification
+{
+    [self willChangeValueForKey:@"sourceTypes"];
+    _sourceTypeList = @[];
+    [self didChangeValueForKey:@"sourceTypes"];
+    self.selectedInput = nil;
+    
 }
 
 
@@ -192,6 +219,7 @@
 
 -(NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
+    
     if (tableView == self.deviceTable)
     {
         return [tableView makeViewWithIdentifier:@"deviceTableView" owner:self];
@@ -217,6 +245,7 @@
     {
         return _sourceTypeList;
     }
+     
     
     
     NSMutableDictionary *pluginMap = [[CSPluginLoader sharedPluginLoader] sourcePlugins];
