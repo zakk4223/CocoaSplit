@@ -12,6 +12,8 @@
 		343692431B6236DF007EC2D9 /* CSShapeCaptureFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 343692421B6236DF007EC2D9 /* CSShapeCaptureFactory.m */; };
 		3436924C1B6238C6007EC2D9 /* CSShapeCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 3436924B1B6238C6007EC2D9 /* CSShapeCapture.m */; };
 		343692641B63891C007EC2D9 /* CSShapeLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 343692631B63891C007EC2D9 /* CSShapeLayer.m */; };
+		3470CD3C1D6085AE006404D9 /* rectangle.py in Resources */ = {isa = PBXBuildFile; fileRef = 3470CD3B1D6085AE006404D9 /* rectangle.py */; };
+		3470CD3D1D6085DB006404D9 /* rectangle.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3470CD3B1D6085AE006404D9 /* rectangle.py */; };
 		34E3010A1B64A39E000C16DB /* CSShapeCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E301081B64A39E000C16DB /* CSShapeCaptureViewController.m */; };
 		34E3010B1B64A39E000C16DB /* CSShapeCaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34E301091B64A39E000C16DB /* CSShapeCaptureViewController.xib */; };
 		34E301141B6515C9000C16DB /* circle.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34E3010D1B6514F9000C16DB /* circle.py */; };
@@ -39,6 +41,7 @@
 			dstPath = Paths;
 			dstSubfolderSpec = 7;
 			files = (
+				3470CD3D1D6085DB006404D9 /* rectangle.py in CopyFiles */,
 				34F2FF2B1B8AAAC1000B5964 /* arc.py in CopyFiles */,
 				34E301141B6515C9000C16DB /* circle.py in CopyFiles */,
 				34E301151B6515C9000C16DB /* triangle.py in CopyFiles */,
@@ -72,6 +75,7 @@
 		3436925F1B638382007EC2D9 /* CSShapePathLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSShapePathLoader.h; sourceTree = "<group>"; };
 		343692621B63891C007EC2D9 /* CSShapeLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSShapeLayer.h; sourceTree = "<group>"; };
 		343692631B63891C007EC2D9 /* CSShapeLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSShapeLayer.m; sourceTree = "<group>"; };
+		3470CD3B1D6085AE006404D9 /* rectangle.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = rectangle.py; sourceTree = "<group>"; };
 		34E301071B64A39E000C16DB /* CSShapeCaptureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSShapeCaptureViewController.h; sourceTree = "<group>"; };
 		34E301081B64A39E000C16DB /* CSShapeCaptureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSShapeCaptureViewController.m; sourceTree = "<group>"; };
 		34E301091B64A39E000C16DB /* CSShapeCaptureViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSShapeCaptureViewController.xib; sourceTree = "<group>"; };
@@ -179,6 +183,7 @@
 				34E3010F1B651515000C16DB /* triangle.py */,
 				34E301111B65153A000C16DB /* rtriangle.py */,
 				34F2FF291B8AA717000B5964 /* arc.py */,
+				3470CD3B1D6085AE006404D9 /* rectangle.py */,
 			);
 			name = ShapePaths;
 			path = CSShapeCapturePlugin/ShapePaths;
@@ -243,6 +248,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				34E3010B1B64A39E000C16DB /* CSShapeCaptureViewController.xib in Resources */,
+				3470CD3C1D6085AE006404D9 /* rectangle.py in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

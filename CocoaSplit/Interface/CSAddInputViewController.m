@@ -264,6 +264,7 @@
         [ret addObject:newCaptureSession];
     }
     
+    
     _sourceTypeList = ret;
     return ret;
 }
