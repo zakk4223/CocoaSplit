@@ -204,6 +204,7 @@
     if (self.active)
     {
         [self reset];
+        [self stopCompressor];
     }
 }
 
@@ -367,7 +368,7 @@
 
 -(void) setupCompressor
 {
-    if (!self.active)
+    if (!self.active || !self.settingsController.captureRunning)
     {
         return;
     }

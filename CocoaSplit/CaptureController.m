@@ -898,9 +898,9 @@
            
 
        });
-       
+
+        
        dispatch_resume(_statistics_timer);
-       
        
        self.extraSaveData = [[NSMutableDictionary alloc] init];
        

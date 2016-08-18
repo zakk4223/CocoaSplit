@@ -150,12 +150,14 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 -(void)updateStatistics
 {
-    for(CAMultiAudioNode *node in self.audioInputs)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        for(CAMultiAudioNode *node in self.audioInputs)
+        {
             [node updatePowerlevel];
-        });
-    }
+        }
+    });
+    
     
     float rawPreview = [self.previewMixer outputPower];
     float rawStream = [self.encodeMixer outputPower];

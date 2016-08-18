@@ -101,7 +101,7 @@
         _glLayer.doRender = self.isEditWindow;
     }
     
-    _layoutRenderer = layoutRenderer;
+   _layoutRenderer = layoutRenderer;
 }
 
 
