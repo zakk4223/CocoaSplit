@@ -28,6 +28,7 @@
 
 -(instancetype) init
 {
+    
     if (self = [super init])
     {
         self.cacheMap = [NSMapTable strongToWeakObjectsMapTable];
