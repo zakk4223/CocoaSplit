@@ -621,12 +621,15 @@
     
     NSMutableArray *runAnimations = [[NSMutableArray alloc] init];
     
-    for (CSAnimationItem *anim in layout.animationList)
+    if (!self.in_staging)
     {
-        if (![self animationForUUID:anim.uuid] && anim.onLive)
+        for (CSAnimationItem *anim in layout.animationList)
         {
-            [runAnimations addObject:anim.uuid];
-            
+            if (![self animationForUUID:anim.uuid] && anim.onLive)
+            {
+                [runAnimations addObject:anim.uuid];
+                
+            }
         }
     }
     
@@ -729,7 +732,7 @@
         self.addLayoutBlock(toMerge);
     }
     
-    if (mergedAnim)
+    if (mergedAnim && !self.in_staging)
     {
         for (CSAnimationItem *anim in mergedAnim)
         {
@@ -1633,6 +1636,11 @@
 
 -(void)didBecomeVisible
 {
+    if (self.in_staging)
+    {
+        return;
+    }
+    
     for (CSAnimationItem  *anim in self.animationList)
     {
         if (anim.onLive)

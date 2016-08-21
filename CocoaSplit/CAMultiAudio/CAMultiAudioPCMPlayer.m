@@ -176,7 +176,10 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     CMSampleBufferCopyPCMDataIntoAudioBufferList(sampleBuffer, 0, (int32_t)numSamples, sampleABL);
     CAMultiAudioPCM *pcmBuffer = [[CAMultiAudioPCM alloc] initWithAudioBufferList:sampleABL streamFormat:asbd];
 
+    pcmBuffer.handleFreeBuffer = YES;
     
+    
+
     
     [self playPcmBuffer:pcmBuffer];
 }

@@ -104,7 +104,7 @@
 
 -(void)dealloc
 {
-    if (_alloced_buffers)
+    if (_alloced_buffers || self.handleFreeBuffer)
     {
         for (int i=0; i < self.bufferCount; i++)
         {

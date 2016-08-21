@@ -632,7 +632,7 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" enabled="NO" rowHeight="30" rowSizeStyle="automatic" viewBased="YES" id="aQN-sB-Ke6">
-                                                    <rect key="frame" x="0.0" y="0.0" width="188" height="228"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="188" height="0.0"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <size key="intercellSpacing" width="3" height="2"/>
                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -867,25 +867,25 @@
                                             </popUpButton>
                                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EkK-o9-Ah2">
                                                 <rect key="frame" x="53" y="79" width="101" height="22"/>
-                                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="a5o-1s-3y3">
+                                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="a5o-1s-3y3">
                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                     <font key="font" metaFont="smallSystem"/>
                                                     <menu key="menu" id="R4a-Jf-a2F">
                                                         <items>
-                                                            <menuItem title="Item 1" state="on" id="BYt-IW-fXW"/>
+                                                            <menuItem title="Item 1" id="BYt-IW-fXW"/>
                                                             <menuItem title="Item 2" id="CMh-mH-jmj"/>
                                                             <menuItem title="Item 3" id="pkT-CY-Qbl"/>
                                                         </items>
                                                     </menu>
                                                 </popUpButtonCell>
                                                 <connections>
+                                                    <binding destination="816" name="selectedObject" keyPath="self.transitionDirection" previousBinding="xfM-Tu-Yx3" id="5w3-De-BWP"/>
                                                     <binding destination="816" name="content" keyPath="self.transitionDirections" id="xfM-Tu-Yx3"/>
                                                     <binding destination="816" name="hidden" keyPath="self.transitionFilter" id="ral-NB-Beu">
                                                         <dictionary key="options">
                                                             <string key="NSValueTransformerName">NSIsNotNil</string>
                                                         </dictionary>
                                                     </binding>
-                                                    <binding destination="816" name="selectedObject" keyPath="self.transitionDirection" previousBinding="xfM-Tu-Yx3" id="5w3-De-BWP"/>
                                                 </connections>
                                             </popUpButton>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zFM-iE-kbV">
@@ -958,6 +958,39 @@
                                             <action selector="openAnimationWindow:" target="816" id="edi-fl-qnt"/>
                                         </connections>
                                     </button>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="btt-iR-Avy">
+                                        <rect key="frame" x="154" y="408" width="282" height="17"/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="Zvs-h8-IjV">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                        <connections>
+                                            <binding destination="816" name="value" keyPath="self.pendingAnimationString" id="8dY-Lz-jaw"/>
+                                            <binding destination="816" name="hidden2" keyPath="self.pendingAnimations" previousBinding="eVx-ci-Ybh" id="vZK-s8-01i">
+                                                <dictionary key="options">
+                                                    <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                                    <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                                    <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                                    <integer key="NSNullPlaceholder" value="-1"/>
+                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                </dictionary>
+                                            </binding>
+                                            <binding destination="816" name="hidden" keyPath="self.stagingHidden" id="eVx-ci-Ybh"/>
+                                        </connections>
+                                    </textField>
+                                    <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iAd-7X-4rD">
+                                        <rect key="frame" x="27" y="380" width="94" height="21"/>
+                                        <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" style="smallSquare" trackingMode="momentary" id="a9l-y4-qsQ">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <segments>
+                                                <segment label="Go Live" width="82"/>
+                                                <segment tag="1">
+                                                    <nil key="label"/>
+                                                </segment>
+                                            </segments>
+                                        </segmentedCell>
+                                    </segmentedControl>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="TVb-Ia-ifl" firstAttribute="leading" secondItem="WVW-0n-Rw1" secondAttribute="leading" id="0PH-fB-qfT"/>

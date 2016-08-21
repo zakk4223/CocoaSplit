@@ -218,6 +218,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (assign) bool transitionFullScene;
 @property (assign) NSInteger active_output_count;
 @property (assign) NSInteger total_dropped_frames;
+@property (assign) NSInteger pendingAnimations;
+@property (strong) NSString *pendingAnimationString;
 
 
 

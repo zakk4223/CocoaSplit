@@ -3014,6 +3014,31 @@
 }
 
 
+-(void)changePendingAnimations
+{
+    NSInteger finalCount = 0;
+    
+    if (self.stagingHidden)
+    {
+        finalCount = 0;
+    } else {
+        
+        for (CSAnimationItem *anim in self.stagingLayout.animationList)
+        {
+            if (![self.selectedLayout animationForUUID:anim.uuid] && anim.onLive)
+            {
+                finalCount++;
+            }
+        }
+        
+    }
+    
+    self.pendingAnimations = finalCount;
+    self.pendingAnimationString = [NSString stringWithFormat:@"%ld pending animations", (long)self.pendingAnimations];
+    
+}
+
+
 -(void)toggleLayout:(SourceLayout *)layout
 {
     SourceLayout *activeLayout = self.activePreviewView.sourceLayout;
@@ -3025,6 +3050,8 @@
     } else {
         [activeLayout mergeSourceLayout:layout withLayer:nil];
     }
+    
+    [self changePendingAnimations];
 }
 
 
@@ -3602,6 +3629,7 @@
         [self stagingSave:sender];
     
         [self.selectedLayout replaceWithSourceLayout:self.stagingLayout];
+        [self changePendingAnimations];
     }
 }
 

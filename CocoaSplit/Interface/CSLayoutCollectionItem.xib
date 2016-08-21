@@ -18,14 +18,15 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oEZ-7b-gAG" customClass="CSLayoutButton">
-                    <rect key="frame" x="0.0" y="0.0" width="73" height="52"/>
-                    <buttonCell key="cell" type="square" title="Button" bezelStyle="shadowlessSquare" alignment="center" borderStyle="border" inset="2" id="Vh8-Yh-V5k">
+                    <rect key="frame" x="0.0" y="-3" width="73" height="55"/>
+                    <buttonCell key="cell" type="bevel" title="Button" bezelStyle="regularSquare" alignment="center" controlSize="small" borderStyle="border" inset="2" id="Vh8-Yh-V5k">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
+                        <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
                     <connections>
                         <action selector="layoutButtonPushed:" target="-2" id="eIQ-Dg-C9j"/>
                         <binding destination="-2" name="title" keyPath="self.representedObject.name" id="1Hd-9E-nXm"/>
+                        <binding destination="-2" name="toolTip" keyPath="self.representedObject.name" previousBinding="1Hd-9E-nXm" id="T9G-sC-dpe"/>
                         <outlet property="viewController" destination="-2" id="psA-8B-2rC"/>
                     </connections>
                 </button>

@@ -120,6 +120,8 @@
 -(void)clearSourceList;
 -(void)setupMIDI;
 -(void)updateCanvasWidth:(int)width height:(int)height;
+-(CSAnimationItem *)animationForUUID:(NSString *)uuid;
+
 
 
 
