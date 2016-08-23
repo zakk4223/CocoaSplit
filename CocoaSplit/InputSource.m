@@ -126,12 +126,14 @@ static NSArray *_sourceTypes = nil;
     [aCoder encodeFloat:self.rotationAngleY forKey:@"rotationAngleY"];
 
     [aCoder encodeFloat:self.opacity forKey:@"opacity"];
+    
     [aCoder encodeObject:_editedName forKey:@"name"];
     [aCoder encodeFloat:self.depth forKey:@"CAdepth"];
     [aCoder encodeFloat:self.crop_top forKey:@"CAcrop_top"];
     [aCoder encodeFloat:self.crop_bottom forKey:@"CAcrop_bottom"];
     [aCoder encodeFloat:self.crop_left forKey:@"CAcrop_left"];
     [aCoder encodeFloat:self.crop_right forKey:@"CAcrop_right"];
+    
     [aCoder encodeObject:self.selectedVideoType forKey:@"selectedVideoType"];
     [aCoder encodeObject:self.uuid forKey:@"uuid"];
 
@@ -139,7 +141,6 @@ static NSArray *_sourceTypes = nil;
     [aCoder encodeFloat:self.scrollYSpeed forKey:@"scrollYSpeed"];
     
     [aCoder encodeInt:self.rotateStyle forKey:@"rotateStyle"];
-    
     if (self.videoInput)
     {
         [aCoder encodeObject:self.videoInput forKey:@"videoInput"];
@@ -162,13 +163,13 @@ static NSArray *_sourceTypes = nil;
     [aCoder encodeObject:self.videoSources forKey:@"videoSources"];
     [aCoder encodeObject:self.currentEffects forKey:@"currentEffects"];
     [aCoder encodeFloat:self.changeInterval forKey:@"changeInterval"];
-    
 
     [aCoder encodeFloat:self.layer.position.x forKey:@"CAx_pos"];
     [aCoder encodeFloat:self.layer.position.y forKey:@"CAy_pos"];
     
     [aCoder encodeFloat:self.layer.bounds.size.width forKey:@"CAdisplay_width"];
     [aCoder encodeFloat:self.layer.bounds.size.height forKey:@"CAdisplay_height"];
+    
     [aCoder encodeFloat:self.borderWidth forKey:@"borderWidth"];
     [aCoder encodeObject:self.borderColor forKey:@"borderColor"];
     [aCoder encodeFloat:self.cornerRadius forKey:@"cornerRadius"];
@@ -178,13 +179,16 @@ static NSArray *_sourceTypes = nil;
     [aCoder encodeFloat:self.transitionDuration forKey:@"transitionDuration"];
     [aCoder encodeObject:self.advancedTransition forKey:@"advancedTransition"];
     
-    
     [aCoder encodeObject:self.parentInput forKey:@"parentInput"];
     
     
+    //if we directly encode constraintMap the resulting NSData is not equal to an 'equal' InputSource, so double encode?
     
-    [aCoder encodeObject:self.constraintMap forKey:@"constraintMap"];
+    NSData *constraintData = [NSKeyedArchiver archivedDataWithRootObject:self.constraintMap];
+
+    [aCoder encodeObject:constraintData forKey:@"constraintMapData"];
     
+    //[aCoder encodeObject:self.constraintMap forKey:@"constraintMap"];
     
     [aCoder encodeObject:self.startColor forKey:@"gradientStartColor"];
     [aCoder encodeObject:self.stopColor forKey:@"gradientStopColor"];
@@ -196,7 +200,6 @@ static NSArray *_sourceTypes = nil;
 
     
     [aCoder encodeObject:self.layer.filters forKey:@"layerFilters"];
-    
     if (_userBackground)
     {
         [aCoder encodeObject:self.backgroundColor forKey:@"backgroundColor"];
@@ -243,6 +246,7 @@ static NSArray *_sourceTypes = nil;
             if (!_userBackground)
             {
                 self.backgroundColor = nil;
+                _userBackground = NO;
             }
         }
         
@@ -293,7 +297,12 @@ static NSArray *_sourceTypes = nil;
         if (constraintData)
         {
             self.constraintMap = constraintData;
+        } else if ((constraintData = [aDecoder decodeObjectForKey:@"constraintMapData"])) {
+            self.constraintMap = [NSKeyedUnarchiver unarchiveObjectWithData:constraintData];
         }
+        
+        
+        
         
         _rotationAngle = [aDecoder decodeFloatForKey:@"rotationAngle"];
         _rotationAngleX = [aDecoder decodeFloatForKey:@"rotationAngleX"];
@@ -554,6 +563,7 @@ static NSArray *_sourceTypes = nil;
     
     self.constraintMap = [NSMutableDictionary dictionary];
 
+    
     _constraintAttributeMap = @{@"LeftEdge": @(kCAConstraintMinX),
                                 @"RightEdge": @(kCAConstraintMaxX),
                                 @"TopEdge": @(kCAConstraintMaxY),
@@ -714,7 +724,10 @@ static NSArray *_sourceTypes = nil;
     
     for (NSString *base in baseKeys)
     {
-        [dict setObject:[NSMutableDictionary dictionaryWithDictionary:@{@"attr": [NSNull null], @"offset": @0}] forKey:base];
+        NSMutableDictionary *valDict = [[NSMutableDictionary alloc] init];
+        [valDict setObject:[NSNumber numberWithInt:0] forKey:@"attr"];
+        [valDict setObject:[NSNumber numberWithInt:0] forKey:@"offset"];
+        [dict setObject:valDict forKey:base];
     }
 }
 
@@ -2141,6 +2154,7 @@ static NSArray *_sourceTypes = nil;
 {
     NSMutableData *saveData = [NSMutableData data];
     NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:saveData];
+    
     [archiver encodeObject:self forKey:@"root"];
     [archiver finishEncoding];
     return saveData;
@@ -2155,6 +2169,7 @@ static NSArray *_sourceTypes = nil;
     
     NSData *myData = [self saveData];
     NSData *fromData = [from saveData];
+    
     
     if ([myData isEqualToData:fromData])
     {
@@ -2718,7 +2733,6 @@ static NSArray *_sourceTypes = nil;
     
     [super setValue:value forKeyPath:keyPath];
 }
-
 -(void) setCrop_bottom:(float)crop_bottom
 {
     if (crop_bottom < 0)
@@ -2842,7 +2856,6 @@ static NSArray *_sourceTypes = nil;
 -(void) buildLayerConstraints
 {
     
-    
     NSMutableArray *constraints = [NSMutableArray array];
     
     for (NSString *key in self.constraintMap)
@@ -2879,6 +2892,10 @@ static NSArray *_sourceTypes = nil;
         }
         
         CAConstraintAttribute parentAttrib = [parentVal intValue];
+        if (!parentAttrib)
+        {
+            continue;
+        }
         [constraints addObject:[CAConstraint constraintWithAttribute:toConstrain relativeTo:@"superlayer" attribute:parentAttrib scale:1 offset:offsetFloat]];
         
     }

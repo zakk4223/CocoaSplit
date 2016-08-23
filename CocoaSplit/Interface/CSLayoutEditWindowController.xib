@@ -76,6 +76,11 @@ Gw
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                     <connections>
+                                                        <binding destination="-2" name="enabled" keyPath="self.previewOnly" id="sMu-iL-QaT">
+                                                            <dictionary key="options">
+                                                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                            </dictionary>
+                                                        </binding>
                                                         <binding destination="XWe-tQ-Eyy" name="value" keyPath="selection.canvas_width" id="WLD-Mz-Lns"/>
                                                     </connections>
                                                 </textField>
@@ -98,6 +103,11 @@ Gw
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                     <connections>
+                                                        <binding destination="-2" name="enabled" keyPath="self.previewOnly" id="k03-QP-k5L">
+                                                            <dictionary key="options">
+                                                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                            </dictionary>
+                                                        </binding>
                                                         <binding destination="XWe-tQ-Eyy" name="value" keyPath="selection.canvas_height" id="OrI-y3-cbN"/>
                                                     </connections>
                                                 </textField>
@@ -120,6 +130,11 @@ Gw
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                     <connections>
+                                                        <binding destination="-2" name="enabled" keyPath="self.previewOnly" id="ThS-zx-LtL">
+                                                            <dictionary key="options">
+                                                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                            </dictionary>
+                                                        </binding>
                                                         <binding destination="XWe-tQ-Eyy" name="value" keyPath="selection.frameRate" id="pe1-z8-QjB"/>
                                                     </connections>
                                                 </textField>
@@ -131,6 +146,11 @@ Gw
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                     <connections>
+                                                        <binding destination="-2" name="enabled" keyPath="self.previewOnly" id="mEV-u4-e7q">
+                                                            <dictionary key="options">
+                                                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                            </dictionary>
+                                                        </binding>
                                                         <binding destination="XWe-tQ-Eyy" name="value" keyPath="selection.name" id="3q3-gk-OV3"/>
                                                     </connections>
                                                 </textField>
@@ -181,11 +201,11 @@ Gw
                                         <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7z2-Lq-AR1">
                                             <rect key="frame" x="374" y="32" width="295" height="259"/>
                                             <clipView key="contentView" id="Zty-rL-xbN">
-                                                <rect key="frame" x="1" y="1" width="293" height="257"/>
+                                                <rect key="frame" x="1" y="1" width="293" height="242"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="16" outlineTableColumn="OaX-it-GBz" id="K71-cY-UaO">
-                                                        <rect key="frame" x="0.0" y="0.0" width="293" height="0.0"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="294" height="242"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <size key="intercellSpacing" width="3" height="2"/>
                                                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -240,8 +260,8 @@ Gw
                                                 </subviews>
                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </clipView>
-                                            <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="Oe4-Fg-lX6">
-                                                <rect key="frame" x="1" y="116" width="232" height="15"/>
+                                            <scroller key="horizontalScroller" verticalHuggingPriority="750" doubleValue="0.5" horizontal="YES" id="Oe4-Fg-lX6">
+                                                <rect key="frame" x="1" y="243" width="293" height="15"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
                                             <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="q1m-EG-ou1">
@@ -260,6 +280,11 @@ Gw
                                             </buttonCell>
                                             <connections>
                                                 <action selector="inputTableControlClick:" target="-2" id="Clf-Er-kRo"/>
+                                                <binding destination="-2" name="enabled" keyPath="self.previewOnly" id="pHJ-QX-76i">
+                                                    <dictionary key="options">
+                                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                    </dictionary>
+                                                </binding>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="Hnv-Ql-NKn">
@@ -273,6 +298,11 @@ Gw
                                             </buttonCell>
                                             <connections>
                                                 <action selector="inputTableControlClick:" target="-2" id="Lbm-y3-yC9"/>
+                                                <binding destination="-2" name="enabled" keyPath="self.previewOnly" id="b5c-01-cM1">
+                                                    <dictionary key="options">
+                                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                    </dictionary>
+                                                </binding>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="k7c-1r-uO9">
@@ -286,6 +316,11 @@ Gw
                                             </buttonCell>
                                             <connections>
                                                 <action selector="inputTableControlClick:" target="-2" id="iwa-u4-8CA"/>
+                                                <binding destination="-2" name="enabled" keyPath="self.previewOnly" id="A5c-u1-Tgv">
+                                                    <dictionary key="options">
+                                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                    </dictionary>
+                                                </binding>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tBH-uQ-caS">
@@ -359,7 +394,7 @@ Gw
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" id="qtf-7h-1HQ">
-                                                        <rect key="frame" x="0.0" y="0.0" width="144" height="0.0"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="144" height="266"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <size key="intercellSpacing" width="3" height="2"/>
                                                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -418,7 +453,7 @@ Gw
                                                 </subviews>
                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </clipView>
-                                            <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="XNe-Tf-UFU">
+                                            <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="0.5" horizontal="YES" id="XNe-Tf-UFU">
                                                 <rect key="frame" x="1" y="252" width="144" height="15"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
@@ -448,7 +483,7 @@ Gw
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="22" viewBased="YES" id="69V-4q-log">
-                                                        <rect key="frame" x="0.0" y="0.0" width="419" height="0.0"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="419" height="266"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <size key="intercellSpacing" width="3" height="2"/>
                                                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -468,7 +503,7 @@ Gw
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                 <prototypeCellViews>
                                                                     <tableCellView identifier="LabelCellView" id="Y0S-6H-LYk">
-                                                                        <rect key="frame" x="1" y="1" width="116" height="17"/>
+                                                                        <rect key="frame" x="1" y="1" width="116.5" height="17"/>
                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                         <subviews>
                                                                             <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="GdZ-U0-4kx">
@@ -494,7 +529,7 @@ Gw
                                                                     </tableCellView>
                                                                 </prototypeCellViews>
                                                             </tableColumn>
-                                                            <tableColumn identifier="value" width="297" minWidth="40" maxWidth="1000" id="u74-I3-Ywh">
+                                                            <tableColumn identifier="value" width="295.5" minWidth="40" maxWidth="1000" id="u74-I3-Ywh">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                                     <font key="font" metaFont="smallSystem"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -508,10 +543,10 @@ Gw
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                 <prototypeCellViews>
                                                                     <tableCellView identifier="InputSourceView" id="Yhp-8H-qrY">
-                                                                        <rect key="frame" x="120" y="1" width="297" height="23"/>
+                                                                        <rect key="frame" x="120" y="1" width="295.5" height="23"/>
                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                         <subviews>
-                                                                            <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="qRD-ve-K4C">
+                                                                            <popUpButton misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qRD-ve-K4C">
                                                                                 <rect key="frame" x="0.0" y="0.0" width="280" height="23"/>
                                                                                 <popUpButtonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" lineBreakMode="truncatingTail" inset="2" id="rnV-M2-yEN">
                                                                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -539,7 +574,7 @@ Gw
                                                                         </constraints>
                                                                     </tableCellView>
                                                                     <tableCellView identifier="InputParamView" misplaced="YES" id="8Km-Vd-n7Q">
-                                                                        <rect key="frame" x="120" y="26" width="297" height="24"/>
+                                                                        <rect key="frame" x="120" y="26" width="295.5" height="24"/>
                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                         <subviews>
                                                                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SU9-F0-FTc">
@@ -565,7 +600,7 @@ Gw
                                                                         </constraints>
                                                                     </tableCellView>
                                                                     <tableCellView identifier="InputBoolView" misplaced="YES" id="hg3-Bp-yv4">
-                                                                        <rect key="frame" x="120" y="52" width="297" height="17"/>
+                                                                        <rect key="frame" x="120" y="52" width="295.5" height="17"/>
                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                         <subviews>
                                                                             <button translatesAutoresizingMaskIntoConstraints="NO" id="jPG-hv-YBr">
@@ -600,7 +635,7 @@ Gw
                                                 </subviews>
                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </clipView>
-                                            <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="qO8-8y-p48">
+                                            <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="0.5" horizontal="YES" id="qO8-8y-p48">
                                                 <rect key="frame" x="1" y="130" width="156" height="15"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>

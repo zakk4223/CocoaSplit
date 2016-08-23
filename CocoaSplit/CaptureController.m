@@ -125,6 +125,52 @@
     [_addOutputpopOver showRelativeToRect:sourceRect ofView:sender preferredEdge:NSMaxXEdge];
 }
 
+- (IBAction)previewAnimations:(id)sender
+{
+    
+    if (self.stagingHidden)
+    {
+        return;
+    }
+    
+    //save and copy both live and staging
+    //set staging layout to copy of live
+    //apply transition settings to staging
+    //replace staging with copy of 'old' staging
+    //when done, delay 1.5 seconds and then restore old staging
+    
+    [self.selectedLayout saveSourceList];
+    [self.stagingLayout saveSourceList];
+    
+    SourceLayout *stagingSave = self.activePreviewView.sourceLayout;
+    
+    SourceLayout *liveCopy = [self.selectedLayout copy];
+    SourceLayout *stagingCopy = [self.stagingLayout copy];
+    NSLog(@"SWITCH TO LIVE COPY");
+    
+    [liveCopy restoreSourceList:liveCopy.savedSourceListData];
+
+    self.activePreviewView.sourceLayout = liveCopy;
+    
+    liveCopy.in_staging = NO;
+    
+    [self applyTransitionSettings:liveCopy];
+    NSLog(@"REPLACE WITH SOURCE LAYOUT");
+    dispatch_time_t delay_dispatch = dispatch_time(DISPATCH_TIME_NOW, 1.0 * NSEC_PER_SEC);
+    dispatch_after(delay_dispatch, dispatch_get_main_queue(), ^{
+    [liveCopy replaceWithSourceLayout:stagingCopy withCompletionBlock:^{
+        
+        self.activePreviewView.sourceLayout.in_staging = YES;
+        NSLog(@"DONE REPLACE");
+    }];
+        
+    });
+    
+    
+}
+
+
+
 
 -(void)openAddInputPopover:(id)sender sourceRect:(NSRect)sourceRect
 {
@@ -1646,6 +1692,7 @@
         //[self.stagingLayout mergeSourceLayout:tmpLayout withLayer:nil];
     }
     
+    [self changePendingAnimations];
     self.inputLibrary = [saveRoot valueForKey:@"inputLibrary"];
     if (!self.inputLibrary)
     {
@@ -1678,6 +1725,7 @@
     dispatch_async(_preview_queue, ^{
         [self newStagingFrameTimed];
     });
+    
 
     
 }
@@ -2382,6 +2430,17 @@
         }];
     }
 }
+
+- (IBAction)removePendingAnimations:(id)sender
+{
+    if (!self.stagingHidden)
+    {
+        [self.activePreviewView.sourceLayout clearAnimations];
+        [self changePendingAnimations];
+    }
+}
+
+
 
 - (IBAction)outputSegmentedAction:(NSButton *)sender
 {
@@ -3624,11 +3683,28 @@
     
     [self applyTransitionSettings:self.livePreviewView.sourceLayout];
 
+    /*
+    InputSource *src1 = [[InputSource alloc] init];
+    InputSource *src2 = src1.copy;
+    src2.uuid = src1.uuid;
+    
+    
+    bool diffInp = [src1 isDifferentInput:src2];
+    
+    
+    NSLog(@"DIFFERENT INPUT %d", diffInp);
+    
+     */
+    
+    
     if (self.stagingLayout)
     {
         [self stagingSave:sender];
     
-        [self.selectedLayout replaceWithSourceLayout:self.stagingLayout];
+        [self.selectedLayout replaceWithSourceLayout:self.stagingLayout withCompletionBlock:^{
+          
+            
+        }];
         [self changePendingAnimations];
     }
 }

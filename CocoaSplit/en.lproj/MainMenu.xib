@@ -958,10 +958,20 @@
                                             <action selector="openAnimationWindow:" target="816" id="edi-fl-qnt"/>
                                         </connections>
                                     </button>
+                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="McV-V6-HPV">
+                                        <rect key="frame" x="15" y="374" width="66" height="28"/>
+                                        <buttonCell key="cell" type="push" title="Preview" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="lCl-3O-Rb1">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="previewAnimations:" target="816" id="lUd-ns-VRV"/>
+                                        </connections>
+                                    </button>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="btt-iR-Avy">
-                                        <rect key="frame" x="154" y="408" width="282" height="17"/>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="Zvs-h8-IjV">
-                                            <font key="font" metaFont="system"/>
+                                        <rect key="frame" x="109" y="382" width="307" height="14"/>
+                                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="Zvs-h8-IjV">
+                                            <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
@@ -979,18 +989,26 @@
                                             <binding destination="816" name="hidden" keyPath="self.stagingHidden" id="eVx-ci-Ybh"/>
                                         </connections>
                                     </textField>
-                                    <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iAd-7X-4rD">
-                                        <rect key="frame" x="27" y="380" width="94" height="21"/>
-                                        <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" style="smallSquare" trackingMode="momentary" id="a9l-y4-qsQ">
+                                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vyz-tz-Km5">
+                                        <rect key="frame" x="84" y="382" width="19" height="14"/>
+                                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSStopProgressFreestandingTemplate" imagePosition="only" alignment="center" controlSize="small" imageScaling="proportionallyUpOrDown" inset="2" id="6ik-UE-auC">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="smallSystem"/>
-                                            <segments>
-                                                <segment label="Go Live" width="82"/>
-                                                <segment tag="1">
-                                                    <nil key="label"/>
-                                                </segment>
-                                            </segments>
-                                        </segmentedCell>
-                                    </segmentedControl>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="removePendingAnimations:" target="816" id="ZYW-Rb-4ql"/>
+                                            <binding destination="816" name="hidden2" keyPath="self.pendingAnimations" previousBinding="Jut-H7-cFh" id="m8n-2u-Pqz">
+                                                <dictionary key="options">
+                                                    <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                                    <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                                    <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                                    <integer key="NSNullPlaceholder" value="-1"/>
+                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                </dictionary>
+                                            </binding>
+                                            <binding destination="816" name="hidden" keyPath="self.stagingHidden" id="Jut-H7-cFh"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="TVb-Ia-ifl" firstAttribute="leading" secondItem="WVW-0n-Rw1" secondAttribute="leading" id="0PH-fB-qfT"/>
@@ -1158,6 +1176,7 @@
         <image name="NSActionTemplate" width="14" height="14"/>
         <image name="NSAddTemplate" width="11" height="11"/>
         <image name="NSRemoveTemplate" width="11" height="11"/>
+        <image name="NSStopProgressFreestandingTemplate" width="14" height="14"/>
         <image name="Speaker_Icon" width="240" height="240"/>
     </resources>
 </document>

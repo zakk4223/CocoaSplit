@@ -186,7 +186,14 @@
 
 }
 
+
 -(void)runSingleAnimation:(CSAnimationItem *)animation
+{
+    [self runSingleAnimation:animation withCompletionBlock:nil];
+}
+
+
+-(void)runSingleAnimation:(CSAnimationItem *)animation withCompletionBlock:(void (^)(void))completionBlock
 {
     if (!animation)
     {
@@ -227,7 +234,11 @@
         }
     }
 
-    NSDictionary *animMap = @{@"moduleName": animation.module_name, @"inputs": inputMap, @"rootLayer": self.rootLayer};
+    NSMutableDictionary *animMap = @{@"moduleName": animation.module_name, @"inputs": inputMap, @"rootLayer": self.rootLayer}.mutableCopy;
+    if (completionBlock)
+    {
+        [animMap setObject:completionBlock forKey:@"completionBlock"];
+    }
 
     //[self doAnimation:animMap];
 
@@ -278,17 +289,28 @@
     NSString *modName = threadDict[@"moduleName"];
     NSDictionary *inpMap = threadDict[@"inputs"];
     CALayer *rootLayer = threadDict[@"rootLayer"];
+    void (^completionBlock)(void) = [threadDict objectForKey:@"completionBlock"];
     
     
     @try {
-        [runner runAnimation:modName forInput:inpMap withSuperlayer:rootLayer];
 
+        if (completionBlock)
+        {
+            [CATransaction begin];
+            [CATransaction setCompletionBlock:completionBlock];
+        }
+        [runner runAnimation:modName forInput:inpMap withSuperlayer:rootLayer];
     }
     @catch (NSException *exception) {
         NSLog(@"Animation module %@ failed with exception: %@: %@", modName, [exception name], [exception reason]);
 
     }
     @finally {
+        if (completionBlock)
+        {
+            [CATransaction commit];
+        }
+
         [CATransaction flush];
     }
 }
@@ -323,7 +345,7 @@
     newLayout.canvas_width = self.canvas_width;
     newLayout.frameRate = self.frameRate;
     newLayout.isActive = NO;
-    newLayout.containedLayouts = self.containedLayouts.copy;
+    newLayout.containedLayouts = self.containedLayouts.mutableCopy;
     
     return newLayout;
 }
@@ -582,13 +604,42 @@
 }
 
 
-
 -(void)replaceWithSourceLayout:(SourceLayout *)layout
 {
+    [self replaceWithSourceLayout:layout withCompletionBlock:nil];
+}
+
+
+-(void)replaceWithSourceLayout:(SourceLayout *)layout withCompletionBlock:(void (^)(void))completionBlock
+{
+    
+    NSInteger __block pendingCount = 0;
+    void (^internalCompletionBlock)(void) = ^{
+        @synchronized (self)
+        {
+            pendingCount--;
+            if (pendingCount <= 0 && completionBlock)
+            {
+                completionBlock();
+            }
+        }
+    };
     
     _noSceneTransactions = YES;
     CATransition *rTrans = nil;
     
+    [CATransaction begin];
+    if (completionBlock)
+    {
+        @synchronized (self)
+        {
+            pendingCount++;
+        }
+        [CATransaction setCompletionBlock:^{
+            internalCompletionBlock();
+        }];
+    }
+
     if (self.transitionFullScene)
     {
         if (self.transitionName || self.transitionFilter)
@@ -604,7 +655,6 @@
             }
         }
         
-        [CATransaction begin];
     }
     
     
@@ -631,6 +681,14 @@
                 
             }
         }
+        
+        if (completionBlock)
+        {
+            @synchronized (self)
+            {
+                pendingCount += [runAnimations count];
+            }
+        }
     }
     
     [self.animationList removeAllObjects];
@@ -650,6 +708,8 @@
             [rList addObject:src];
         }
     }
+    
+    
     
     [self removeSourceInputs:rList withLayer:nil];
     
@@ -681,18 +741,25 @@
             [self.rootLayer addAnimation:rTrans forKey:nil];
         }
 
-        [CATransaction commit];
     }
     
+    [CATransaction commit];
+
     for (NSString *anim in runAnimations)
     {
         CSAnimationItem *eItem = [self animationForUUID:anim];
         if (eItem)
         {
-            [self runSingleAnimation:eItem];
+            [self runSingleAnimation:eItem withCompletionBlock:^{
+                if (completionBlock)
+                {
+                    internalCompletionBlock();
+                }
+            }];
         }
     }
 
+    
     _noSceneTransactions = NO;
     [self updateCanvasWidth:layout.canvas_width height:layout.canvas_height];
     self.frameRate = layout.frameRate;
@@ -704,6 +771,12 @@
 -(bool)containsLayout:(SourceLayout *)layout
 {
     return [self.containedLayouts containsObject:layout];
+}
+
+
+-(void)clearAnimations
+{
+    [self.animationList removeAllObjects];
 }
 
 
@@ -796,17 +869,20 @@
     
     for(InputSource *src in inputs)
     {
+        NSLog(@"TESTING %@", src);
         src.sourceLayout = self;
         src.is_live = self.isActive;
         InputSource *eSrc = [self inputForUUID:src.uuid];
         bool isDifferent = YES;
         
+        NSLog(@"ESRC %@", eSrc);
         if (eSrc)
         {
 
             isDifferent = [eSrc isDifferentInput:src];
             if (!isDifferent)
             {
+                NSLog(@"INCREMENT ESRC");
                 [self incrementInputRef:eSrc];
 
                 continue;
@@ -818,6 +894,7 @@
             {
                 [eSrc.layer.superlayer addSublayer:src.layer];
             }
+            NSLog(@"HIDDING ESRC");
             eSrc.layer.hidden = YES;
             [undoSources addObject:eSrc];
             eSrc.refCount = 0;
@@ -843,6 +920,7 @@
     
     if (undoSources.count > 0)
     {
+        NSLog(@"UNDO SOURCES HAVE STUFF");
         [CATransaction setCompletionBlock:^{
             for (InputSource *dInput in undoSources)
             {

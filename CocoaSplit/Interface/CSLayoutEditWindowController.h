@@ -34,5 +34,6 @@
 - (IBAction)inputTableControlClick:(NSButton *)sender;
 
 @property (weak) IBOutlet NSOutlineView *inputOutlineView;
+@property (assign) bool previewOnly;
 
 @end

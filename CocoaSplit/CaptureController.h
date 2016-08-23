@@ -418,6 +418,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 -(void) resetInputTableHighlights;
 
+- (IBAction)removePendingAnimations:(id)sender;
 
 - (IBAction)outputSegmentedAction:(NSButton *)sender;
 
@@ -427,5 +428,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(void) removeObjectFromCaptureDestinationsAtIndex:(NSUInteger)index;
 -(void)openAddOutputPopover:(id)sender sourceRect:(NSRect)sourceRect;
 
+- (IBAction)previewAnimations:(id)sender;
 
 @end
