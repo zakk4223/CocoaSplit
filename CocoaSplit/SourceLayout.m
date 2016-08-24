@@ -517,6 +517,22 @@
 
 }
 
+
+-(void) resetAllRefCounts
+{
+    for (InputSource *src in self.sourceList)
+    {
+        src.refCount = 1;
+    }
+    
+    for (CSAnimationItem *item in self.animationList)
+    {
+        item.refCount = 1;
+    }
+}
+
+
+
 -(NSInteger) incrementAnimationRef:(CSAnimationItem *)anim
 {
     anim.refCount++;
@@ -526,7 +542,9 @@
 
 -(NSInteger)decrementAnimationRef:(CSAnimationItem *)anim
 {
+    
     anim.refCount--;
+    
     if (anim.refCount < 0)
     {
         anim.refCount = 0;
@@ -546,7 +564,9 @@
 
 -(NSInteger)decrementInputRef:(InputSource *)input
 {
+    
     input.refCount--;
+    
     if (input.refCount < 0)
     {
         input.refCount = 0;
@@ -706,9 +726,9 @@
             }
         } else {
             [rList addObject:src];
+            
         }
     }
-    
     
     
     [self removeSourceInputs:rList withLayer:nil];
@@ -763,6 +783,7 @@
     _noSceneTransactions = NO;
     [self updateCanvasWidth:layout.canvas_width height:layout.canvas_height];
     self.frameRate = layout.frameRate;
+    [self resetAllRefCounts];
     
 }
 
@@ -869,20 +890,17 @@
     
     for(InputSource *src in inputs)
     {
-        NSLog(@"TESTING %@", src);
         src.sourceLayout = self;
         src.is_live = self.isActive;
         InputSource *eSrc = [self inputForUUID:src.uuid];
         bool isDifferent = YES;
         
-        NSLog(@"ESRC %@", eSrc);
         if (eSrc)
         {
 
             isDifferent = [eSrc isDifferentInput:src];
             if (!isDifferent)
             {
-                NSLog(@"INCREMENT ESRC");
                 [self incrementInputRef:eSrc];
 
                 continue;
@@ -894,7 +912,6 @@
             {
                 [eSrc.layer.superlayer addSublayer:src.layer];
             }
-            NSLog(@"HIDDING ESRC");
             eSrc.layer.hidden = YES;
             [undoSources addObject:eSrc];
             eSrc.refCount = 0;
@@ -920,7 +937,6 @@
     
     if (undoSources.count > 0)
     {
-        NSLog(@"UNDO SOURCES HAVE STUFF");
         [CATransaction setCompletionBlock:^{
             for (InputSource *dInput in undoSources)
             {
@@ -1190,8 +1206,9 @@
 
         if (eSrc)
         {
-        
             NSInteger refCnt = [self decrementInputRef:eSrc];
+            
+
             if (refCnt != 0)
             {
                 continue;

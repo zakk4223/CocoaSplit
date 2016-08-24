@@ -28,6 +28,8 @@
     NSMutableDictionary *_uuidMap;
     bool _noSceneTransactions;
     NSMutableArray *_topLevelSourceArray;
+    bool _skipRefCounting;
+    
     
     
     
