@@ -349,6 +349,9 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 @property (weak) IBOutlet NSArrayController *activeInputsArrayController;
 
+@property (assign) bool inLayoutTransition;
+
+
 
 - (IBAction)openAnimatePopover:(NSButton *)sender;
 

@@ -645,7 +645,7 @@
         }
     };
     
-    _noSceneTransactions = YES;
+    //_noSceneTransactions = YES;
     CATransition *rTrans = nil;
     
     [CATransaction begin];
@@ -695,6 +695,7 @@
     {
         for (CSAnimationItem *anim in layout.animationList)
         {
+            
             if (![self animationForUUID:anim.uuid] && anim.onLive)
             {
                 [runAnimations addObject:anim.uuid];
@@ -758,7 +759,7 @@
     {
         if (rTrans)
         {
-            [self.rootLayer addAnimation:rTrans forKey:nil];
+            //[self.rootLayer addAnimation:rTrans forKey:kCATransition];
         }
 
     }
@@ -1028,29 +1029,44 @@
             [CATransaction commit];
             [undoSources addObject:eSrc];
         } else {
-            
+            [CATransaction begin];
+
             if (eSrc && !isDifferent)
             {
                 [self incrementInputRef:eSrc];
 
                 continue;
             }
-            src.layer.hidden = YES;
+            
             
             if (!src.layer.superlayer)
             {
                 [self.rootLayer addSublayer:src.layer];
             }
 
-            [CATransaction flush];
+
+            src.layer.hidden = YES;
+            
+            [CATransaction commit];
+            dispatch_async(dispatch_get_main_queue(), ^{
             [CATransaction begin];
+            
             if (rTrans)
             {
+
                 [src.layer addAnimation:rTrans forKey:nil];
             }
-            
+
+
             src.layer.hidden = NO;
+
+
+
+            
             [CATransaction commit];
+            });
+            
+
         }
 
         [NSApp registerMIDIResponder:src];

@@ -146,22 +146,26 @@
     
     SourceLayout *liveCopy = [self.selectedLayout copy];
     SourceLayout *stagingCopy = [self.stagingLayout copy];
-    NSLog(@"SWITCH TO LIVE COPY");
+    
     
     [liveCopy restoreSourceList:liveCopy.savedSourceListData];
 
-    self.activePreviewView.sourceLayout = liveCopy;
+    [stagingCopy restoreSourceList:stagingCopy.savedSourceListData];
     
+    self.activePreviewView.sourceLayout = liveCopy;
     liveCopy.in_staging = NO;
     
     [self applyTransitionSettings:liveCopy];
-    NSLog(@"REPLACE WITH SOURCE LAYOUT");
     dispatch_time_t delay_dispatch = dispatch_time(DISPATCH_TIME_NOW, 1.0 * NSEC_PER_SEC);
     dispatch_after(delay_dispatch, dispatch_get_main_queue(), ^{
     [liveCopy replaceWithSourceLayout:stagingCopy withCompletionBlock:^{
         
         self.activePreviewView.sourceLayout.in_staging = YES;
-        NSLog(@"DONE REPLACE");
+        dispatch_time_t inner_dispatch = dispatch_time(DISPATCH_TIME_NOW, 1.5 * NSEC_PER_SEC);
+        dispatch_after(inner_dispatch, dispatch_get_main_queue(), ^{
+            self.activePreviewView.sourceLayout = stagingSave;
+        });
+        
     }];
         
     });
@@ -3701,8 +3705,12 @@
     {
         [self stagingSave:sender];
     
+        self.inLayoutTransition = YES;
         [self.selectedLayout replaceWithSourceLayout:self.stagingLayout withCompletionBlock:^{
-          
+          dispatch_async(dispatch_get_main_queue(), ^{
+              NSLog(@"COMPLETED");
+              self.inLayoutTransition = NO;
+          });
             
         }];
         [self changePendingAnimations];

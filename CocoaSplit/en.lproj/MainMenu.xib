@@ -397,12 +397,12 @@
                                         </buttonCell>
                                         <connections>
                                             <action selector="stagingGoLive:" target="816" id="OXW-rX-0yz"/>
-                                            <binding destination="816" name="enabled" keyPath="self.stagingHidden" id="YAq-o7-vxN">
+                                            <binding destination="816" name="enabled" keyPath="self.inLayoutTransition" id="4Nd-Jy-WHO">
                                                 <dictionary key="options">
                                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                 </dictionary>
                                             </binding>
-                                            <binding destination="816" name="hidden" keyPath="self.stagingHidden" previousBinding="YAq-o7-vxN" id="qP7-yQ-Dx9"/>
+                                            <binding destination="816" name="hidden" keyPath="self.stagingHidden" previousBinding="4Nd-Jy-WHO" id="McS-2m-LUe"/>
                                         </connections>
                                     </button>
                                     <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iC4-7V-Wd2">
@@ -966,6 +966,12 @@
                                         </buttonCell>
                                         <connections>
                                             <action selector="previewAnimations:" target="816" id="lUd-ns-VRV"/>
+                                            <binding destination="816" name="enabled" keyPath="self.inLayoutTransition" id="2hI-qQ-iDS">
+                                                <dictionary key="options">
+                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                </dictionary>
+                                            </binding>
+                                            <binding destination="816" name="hidden" keyPath="self.stagingHidden" previousBinding="2hI-qQ-iDS" id="vuh-mF-jT3"/>
                                         </connections>
                                     </button>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="btt-iR-Avy">
