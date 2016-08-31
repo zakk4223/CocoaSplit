@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11198.2" systemVersion="16A294a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11198.2"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CSAddInputViewController">
@@ -27,9 +27,9 @@
             <rect key="frame" x="0.0" y="0.0" width="184" height="41"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <scrollView ambiguous="YES" misplaced="YES" autohidesScrollers="YES" horizontalLineScroll="17" horizontalPageScroll="10" verticalLineScroll="17" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q9h-rz-4lQ">
+                <scrollView autohidesScrollers="YES" horizontalLineScroll="17" horizontalPageScroll="10" verticalLineScroll="17" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q9h-rz-4lQ">
                     <rect key="frame" x="0.0" y="0.0" width="184" height="21"/>
-                    <clipView key="contentView" ambiguous="YES" id="fdS-TY-3Z3">
+                    <clipView key="contentView" id="fdS-TY-3Z3">
                         <rect key="frame" x="1" y="1" width="182" height="19"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -70,9 +70,9 @@
                                                     </button>
                                                 </subviews>
                                                 <constraints>
-                                                    <constraint firstItem="Te1-Zu-MDB" firstAttribute="centerX" secondItem="XMP-nm-PrE" secondAttribute="centerX" id="AXN-LU-hX1"/>
-                                                    <constraint firstItem="Te1-Zu-MDB" firstAttribute="leading" secondItem="XMP-nm-PrE" secondAttribute="leading" constant="-2" id="FSE-2Y-pFl"/>
-                                                    <constraint firstItem="Te1-Zu-MDB" firstAttribute="centerY" secondItem="XMP-nm-PrE" secondAttribute="centerY" id="Unw-DV-7YL"/>
+                                                    <constraint firstItem="Te1-Zu-MDB" firstAttribute="leading" secondItem="XMP-nm-PrE" secondAttribute="leading" constant="-2" id="NfF-o0-a9a"/>
+                                                    <constraint firstItem="Te1-Zu-MDB" firstAttribute="centerY" secondItem="XMP-nm-PrE" secondAttribute="centerY" id="Ovs-P7-Psy"/>
+                                                    <constraint firstItem="Te1-Zu-MDB" firstAttribute="centerX" secondItem="XMP-nm-PrE" secondAttribute="centerX" id="fGc-mK-bbZ"/>
                                                 </constraints>
                                             </tableCellView>
                                         </prototypeCellViews>
@@ -84,7 +84,6 @@
                                 </connections>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </clipView>
                     <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="p8Z-B0-esl">
                         <rect key="frame" x="1" y="5" width="0.0" height="15"/>
@@ -95,11 +94,12 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                 </scrollView>
-                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uig-x0-Q9k">
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="uig-x0-Q9k">
                     <rect key="frame" x="0.0" y="20" width="184" height="21"/>
                     <subviews>
                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NnF-ti-XLH">
                             <rect key="frame" x="0.0" y="-1" width="184" height="23"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <buttonCell key="cell" type="smallSquare" title="Previous" bezelStyle="smallSquare" image="NSGoLeftTemplate" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="MCc-RM-MnU">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="system"/>
@@ -112,8 +112,14 @@
                 </customView>
             </subviews>
             <constraints>
+                <constraint firstAttribute="bottom" secondItem="uig-x0-Q9k" secondAttribute="bottom" constant="20" symbolic="YES" id="4Be-Tp-9bE"/>
+                <constraint firstItem="q9h-rz-4lQ" firstAttribute="leading" secondItem="4jz-Bw-J61" secondAttribute="leading" id="Cri-ht-ayH"/>
+                <constraint firstItem="uig-x0-Q9k" firstAttribute="top" secondItem="4jz-Bw-J61" secondAttribute="top" id="PkO-Pw-SBi"/>
                 <constraint firstAttribute="bottom" secondItem="q9h-rz-4lQ" secondAttribute="bottom" id="Xf0-JK-I7Y"/>
+                <constraint firstItem="q9h-rz-4lQ" firstAttribute="trailing" secondItem="uig-x0-Q9k" secondAttribute="trailing" id="h12-fg-eF9"/>
+                <constraint firstAttribute="trailing" secondItem="q9h-rz-4lQ" secondAttribute="trailing" id="p7k-Cc-NgD"/>
                 <constraint firstItem="q9h-rz-4lQ" firstAttribute="top" secondItem="4jz-Bw-J61" secondAttribute="top" constant="20" symbolic="YES" id="pnS-ph-C9T"/>
+                <constraint firstItem="q9h-rz-4lQ" firstAttribute="leading" secondItem="uig-x0-Q9k" secondAttribute="leading" id="rP5-ez-Ng4"/>
             </constraints>
             <point key="canvasLocation" x="704" y="208.5"/>
         </customView>
@@ -128,7 +134,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" id="uxn-6S-Bv0">
-                                <rect key="frame" x="0.0" y="0.0" width="182" height="0.0"/>
+                                <rect key="frame" x="0.0" y="0.0" width="182" height="62"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <size key="intercellSpacing" width="3" height="0.0"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -200,7 +206,6 @@
                                 </connections>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </clipView>
                     <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="qKM-IM-30y">
                         <rect key="frame" x="1" y="358" width="0.0" height="15"/>

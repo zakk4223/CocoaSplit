@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <QuartzCore/QuartzCore.h>
+
 #import "CSFFMpegInput.h"
 #import "CSPcmPlayer.h"
 

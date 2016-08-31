@@ -1029,7 +1029,6 @@
             [CATransaction commit];
             [undoSources addObject:eSrc];
         } else {
-            [CATransaction begin];
 
             if (eSrc && !isDifferent)
             {
@@ -1038,7 +1037,8 @@
                 continue;
             }
             
-            
+            [CATransaction begin];
+
             if (!src.layer.superlayer)
             {
                 [self.rootLayer addSublayer:src.layer];
@@ -1048,6 +1048,20 @@
             src.layer.hidden = YES;
             
             [CATransaction commit];
+            
+            //worst hack ever. add a dummy animation of same length so the outer transaction doesn't complete until we do
+            
+            [CATransaction begin];
+            CABasicAnimation *hackAnim = [CABasicAnimation animationWithKeyPath:@"dummyKeyPath"];
+            hackAnim.duration = rTrans.duration;
+            hackAnim.fromValue = @0;
+            hackAnim.toValue = @100;
+            hackAnim.removedOnCompletion = YES;
+            
+            [src.layer addAnimation:hackAnim forKey:@"dummyKey"];
+            [CATransaction commit];
+            
+            
             dispatch_async(dispatch_get_main_queue(), ^{
             [CATransaction begin];
             

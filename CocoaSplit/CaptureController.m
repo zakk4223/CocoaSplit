@@ -3713,7 +3713,10 @@
           });
             
         }];
+        
+
         [self changePendingAnimations];
+
     }
 }
 
