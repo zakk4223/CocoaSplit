@@ -612,7 +612,12 @@
                                         </buttonCell>
                                         <connections>
                                             <action selector="swapStagingAndLive:" target="816" id="v7f-W8-dva"/>
-                                            <binding destination="816" name="hidden" keyPath="self.stagingHidden" id="vbG-PM-buo"/>
+                                            <binding destination="816" name="enabled" keyPath="self.inLayoutTransition" id="HQA-Rd-aVK">
+                                                <dictionary key="options">
+                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                </dictionary>
+                                            </binding>
+                                            <binding destination="816" name="hidden" keyPath="self.stagingHidden" previousBinding="HQA-Rd-aVK" id="ABV-ht-4Lp"/>
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4Os-cy-Qte">

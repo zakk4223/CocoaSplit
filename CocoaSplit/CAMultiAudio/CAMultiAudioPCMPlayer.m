@@ -110,7 +110,7 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     
     dispatch_async(_pendingQueue, ^{
         
-        [_pendingBuffers addObject:pcmBuffer];
+        [self->_pendingBuffers addObject:pcmBuffer];
     });
     
 

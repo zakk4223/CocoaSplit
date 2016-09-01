@@ -3708,7 +3708,6 @@
         self.inLayoutTransition = YES;
         [self.selectedLayout replaceWithSourceLayout:self.stagingLayout withCompletionBlock:^{
           dispatch_async(dispatch_get_main_queue(), ^{
-              NSLog(@"COMPLETED");
               self.inLayoutTransition = NO;
           });
             
