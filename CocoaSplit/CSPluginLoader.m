@@ -102,7 +102,9 @@
         NSURL *filterURL = [NSURL fileURLWithPath:IUPath];
         [CIPlugIn loadPlugIn:filterURL allowExecutableCode:YES];
     }
+    
 }
+
 
 
 -(bool)validateAndRegisterPluginClass:(Class)toLoad
