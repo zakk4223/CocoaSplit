@@ -252,6 +252,12 @@
     
     NSMutableURLRequest *apiRequest = [NSMutableURLRequest requestWithURL:apiURL];
     
+    if (!_oauth_client_id)
+    {
+        _oauth_client_id = [[NSBundle bundleForClass:[self class]] objectForInfoDictionaryKey:@"TwitchAPIClientID"];
+    }
+
+    [apiRequest setValue:_oauth_client_id forHTTPHeaderField:@"Client-ID"];
     [NSURLConnection sendAsynchronousRequest:apiRequest queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *err) {
         
         NSError *jsonError;

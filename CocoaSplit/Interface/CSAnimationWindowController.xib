@@ -147,7 +147,7 @@
                                                             <rect key="frame" x="120" y="1" width="115" height="23"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
-                                                                <popUpButton translatesAutoresizingMaskIntoConstraints="NO" id="uCm-4V-JUb">
+                                                                <popUpButton misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uCm-4V-JUb">
                                                                     <rect key="frame" x="0.0" y="5" width="99" height="18"/>
                                                                     <popUpButtonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" lineBreakMode="truncatingTail" inset="2" id="6eu-QZ-eRk">
                                                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -245,11 +245,11 @@
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CT9-5J-r2H">
                                 <rect key="frame" x="254" y="277" width="108" height="130"/>
                                 <clipView key="contentView" id="Jup-9E-daf">
-                                    <rect key="frame" x="1" y="1" width="106" height="128"/>
+                                    <rect key="frame" x="1" y="1" width="106" height="113"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="none" columnSelection="YES" autosaveColumns="NO" rowHeight="14" id="bYv-25-hlA">
-                                            <rect key="frame" x="0.0" y="0.0" width="216" height="16"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="216" height="113"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
