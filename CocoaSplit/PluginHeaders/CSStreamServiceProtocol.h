@@ -9,14 +9,19 @@
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
 
-@protocol CSStreamServiceProtocol <NSObject>
+@protocol CSStreamServiceProtocol <NSObject, NSCoding>
 
 @property bool isReady;
 
 -(NSViewController  *)getConfigurationView;
 -(NSString *)getServiceDestination;
+-(NSString *)getServiceFormat;
 +(NSString *)label;
 +(NSString *)serviceDescription;
++(NSImage *)serviceImage;
+
+-(void)prepareForStreamStart;
+
 
 
 @end

@@ -19,6 +19,8 @@
 
 @property (weak) InputSource *parentSource;
 @property (weak) PreviewView *previewView;
+@property (assign) bool renderControls;
+
 -(void)updatePosition;
 
 @end

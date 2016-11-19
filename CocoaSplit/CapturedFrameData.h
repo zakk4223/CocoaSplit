@@ -12,7 +12,7 @@
 #import "libavcodec/avcodec.h"
 
 
-@interface CapturedFrameData : NSObject
+@interface CapturedFrameData : NSObject <NSCopying>
 
 
 
@@ -21,6 +21,7 @@
 
 @property CVImageBufferRef videoFrame;
 @property (assign) void *encoderData;
+@property (assign) BOOL isKeyFrame;
 
 
 //Array of CMSampleBuffers from audio capture.
@@ -29,9 +30,12 @@
 
 @property CMTime videoPTS;
 @property CMTime videoDuration;
-@property CMSampleBufferRef encodedSampleBuffer;
+@property (assign) CMSampleBufferRef encodedSampleBuffer;
 
 @property (assign) AVPacket *avcodec_pkt;
 @property AVCodecContext *avcodec_ctx;
+
+
+-(NSInteger) encodedDataLength;
 
 @end

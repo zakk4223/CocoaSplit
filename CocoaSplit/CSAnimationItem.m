@@ -19,7 +19,8 @@
     {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sourceWasDeleted:) name:CSNotificationInputDeleted object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sourceWasAdded:) name:CSNotificationInputAdded object:nil];
-
+        [self createUUID];
+        self.refCount = 0;
     }
     
     return self;
@@ -38,7 +39,24 @@
     
     [aCoder encodeObject:self.name forKey:@"name"];
     [aCoder encodeObject:self.module_name forKey:@"module_name"];
+    for (NSMutableDictionary *item in self.inputs)
+    {
+        if ([item[@"type"] isEqualToString:@"input"])
+        {
+            if (item[@"value"] && ![item[@"value"] isEqualTo:[NSNull null]])
+            {
+                InputSource *inp = item[@"value"];
+                item[@"savedUUID"] = inp.uuid;
+                //item[@"value"] = [NSNull null];
+            }
+        }
+    }
     [aCoder encodeObject:self.inputs forKey:@"inputs"];
+
+    if (self.uuid)
+    {
+        [aCoder encodeObject:self.uuid forKey:@"uuid"];
+    }
 }
 
 -(instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -48,11 +66,23 @@
         self.name = [aDecoder decodeObjectForKey:@"name"];
         self.module_name = [aDecoder decodeObjectForKey:@"module_name"];
         self.inputs = [aDecoder decodeObjectForKey:@"inputs"];
+        if ([aDecoder containsValueForKey:@"uuid"])
+        {
+            self.uuid = [aDecoder decodeObjectForKey:@"uuid"];
+        }
     }
     
     return self;
 }
 
+
+-(void)createUUID
+{
+    CFUUIDRef tmpUUID = CFUUIDCreate(NULL);
+    self.uuid = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, tmpUUID);
+    CFRelease(tmpUUID);
+    
+}
 
 -(instancetype)copyWithZone:(NSZone *)zone
 {
@@ -97,7 +127,7 @@
         if ([inputType isEqualToString:@"input"])
         {
             InputSource *inpsrc = inp[@"value"];
-            if (inpsrc == srcDel)
+            if (inpsrc == srcDel && inpsrc.sourceLayout == srcDel.sourceLayout)
             {
                 inp[@"deletedUUID"] = srcDel.uuid;
                 inp[@"value"] = [NSNull null];

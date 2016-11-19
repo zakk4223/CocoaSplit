@@ -26,12 +26,19 @@
 
         self.resolutionOption = @"Use Source";
         
+        self.codec_id = AV_CODEC_ID_H264;
+        
         self.outputs = [[NSMutableDictionary alloc] init];
         _audioBuffer = [[NSMutableArray alloc] init];
         
     }
     
     return self;
+}
+
+-(instancetype)copyWithZone:(NSZone *)zone
+{
+    return [[self.class allocWithZone:zone] init];
 }
 
 
@@ -65,53 +72,6 @@
 
 
 
--(void) addAudioData:(CMSampleBufferRef)audioData
-{
-   if ([self hasOutputs] && audioData && _audioBuffer)
-   {
-       @synchronized(self)
-       {
-           [_audioBuffer addObject:(__bridge id)audioData];
-       }
-   }
-}
-
-
--(void) setAudioData:(CapturedFrameData *)forFrame syncObj:(id)syncObj
-{
-    
-    NSUInteger audioConsumed = 0;
-    @synchronized(syncObj)
-    {
-        NSUInteger audioBufferSize = [_audioBuffer count];
-        
-        for (int i = 0; i < audioBufferSize; i++)
-        {
-            CMSampleBufferRef audioData = (__bridge CMSampleBufferRef)[_audioBuffer objectAtIndex:i];
-            
-            CMTime audioTime = CMSampleBufferGetOutputPresentationTimeStamp(audioData);
-            
-            
-            
-            
-            if (CMTIME_COMPARE_INLINE(audioTime, <=, forFrame.videoPTS))
-            {
-                
-                audioConsumed++;
-                [forFrame.audioSamples addObject:(__bridge id)audioData];
-            } else {
-                break;
-            }
-        }
-        
-        if (audioConsumed > 0)
-        {
-            [_audioBuffer removeObjectsInRange:NSMakeRange(0, audioConsumed)];
-        }
-        
-    }
- 
-}
 
 
 -(void) reset
@@ -127,8 +87,10 @@
 
 -(id) initWithCoder:(NSCoder *)aDecoder
 {
+    self.codec_id = AV_CODEC_ID_H264;
     return self;
 }
+
 
 
 
@@ -147,16 +109,26 @@
 
 -(void) addOutput:(OutputDestination *)destination
 {
-    [self.outputs setObject:destination forKey:destination.name];
+    
+    
+    [self.outputs setObject:destination forKey:[NSValue valueWithPointer:(__bridge const void * _Nullable)(destination)]];
+    self.active = YES;
 }
+
+-(NSInteger)outputCount
+{
+    return self.outputs.count;
+}
+
 
 -(void) removeOutput:(OutputDestination *)destination
 {
 
-    [self.outputs removeObjectForKey:destination.name];
+    [self.outputs removeObjectForKey:[NSValue valueWithPointer:(__bridge const void * _Nullable)(destination)]];
     if (self.outputs.count == 0)
     {
         [self reset];
+        self.active = NO;
     }
 }
 
@@ -171,6 +143,7 @@
     
     self.working_height = self.height;
     self.working_width = self.width;
+    
     
     if (!self.resolutionOption || [self.resolutionOption isEqualToString:@"None"])
     {
@@ -187,6 +160,7 @@
     {
         self.working_height = (int)CVPixelBufferGetHeight(withFrame);
         self.working_width = (int)CVPixelBufferGetWidth(withFrame);
+        
     } else if ([self.resolutionOption isEqualToString:@"Preserve AR"]) {
         float inputAR = (float)CVPixelBufferGetWidth(withFrame) / (float)CVPixelBufferGetHeight(withFrame);
         int newWidth;
@@ -209,6 +183,10 @@
     }
     
     return YES;
+}
+-(id <CSCompressorViewControllerProtocol>)getConfigurationView
+{
+    return nil;
 }
 
 

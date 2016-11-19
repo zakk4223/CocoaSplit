@@ -16,6 +16,7 @@
 
 @synthesize isActive = _isActive;
 @synthesize animationIndexes = _animationIndexes;
+@synthesize frameRate = _frameRate;
 
 -(instancetype) init
 {
@@ -31,20 +32,37 @@
         _rFbo = 0;
         _uuidMap = [NSMutableDictionary dictionary];
         
+        
         _animationQueue = dispatch_queue_create("CSAnimationQueue", NULL);
-        
-        
+        _containedLayouts = [[NSMutableArray alloc] init];
+        _noSceneTransactions = NO;
+        _topLevelSourceArray = [[NSMutableArray alloc] init];
         self.rootLayer = [self newRootLayer];
         self.animationList = [NSMutableArray array];
-        
         
         //self.rootLayer.geometryFlipped = YES;
         _rootSize = NSMakeSize(_canvas_width, _canvas_height);
         self.sourceList = [NSMutableArray array];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(inputAttachEvent:) name:CSNotificationInputAttached object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(inputAttachEvent:) name:CSNotificationInputDetached object:nil];
+
+        
         
     }
     
     return self;
+}
+
+
+-(void)inputAttachEvent:(NSNotification *)notification
+{
+    InputSource *src = notification.object;
+    if (src.sourceLayout == self)
+    {
+        [self willChangeValueForKey:@"topLevelSourceList"];
+        [self generateTopLevelSourceList];
+        [self didChangeValueForKey:@"topLevelSourceList"];
+    }
 }
 
 
@@ -68,13 +86,7 @@
 
 -(NSString *)MIDIIdentifier
 {
-    NSString *liveStr = @"Staging";
-    if (self.isActive)
-    {
-        liveStr = @"Live";
-    }
-    
-    return [NSString stringWithFormat:@"%@Layout:%@", liveStr, self.name];
+    return [NSString stringWithFormat:@"Layout:%@", self.name];
 }
 
 
@@ -142,6 +154,7 @@
 {
     _animationIndexes = animationIndexes;
     NSUInteger firstIndex = animationIndexes.firstIndex;
+    
     if (firstIndex < self.animationList.count)
     {
         self.selectedAnimation = [self.animationList objectAtIndex:firstIndex];
@@ -173,7 +186,14 @@
 
 }
 
+
 -(void)runSingleAnimation:(CSAnimationItem *)animation
+{
+    [self runSingleAnimation:animation withCompletionBlock:nil];
+}
+
+
+-(void)runSingleAnimation:(CSAnimationItem *)animation withCompletionBlock:(void (^)(void))completionBlock
 {
     if (!animation)
     {
@@ -181,20 +201,47 @@
     }
     NSMutableDictionary *inputMap = [NSMutableDictionary dictionary];
 
+    
     for (NSDictionary *item in animation.inputs)
     {
+        
         if (item[@"value"])
         {
-            inputMap[item[@"label"]] = item[@"value"];
+            if ([item[@"type"] isEqualToString:@"input"])
+            {
+                InputSource *nSrc = item[@"value"];
+                
+                if ([nSrc isEqualTo:[NSNull null]])
+                {
+                    nSrc = nil;
+                }
+                
+                NSString *suuid = item[@"savedUUID"];
+                if (!nSrc && suuid && ![suuid isEqualTo:[NSNull null]])
+                {
+                    nSrc = [self inputForUUID:suuid];
+                }
+                
+                if (nSrc)
+                {
+                    inputMap[item[@"label"]] = nSrc;
+                }
+            } else {
+                inputMap[item[@"label"]] = item[@"value"];
+            }
         } else {
             inputMap[item[@"label"]] = [NSNull null];
         }
     }
 
-    NSDictionary *animMap = @{@"moduleName": animation.module_name, @"inputs": inputMap, @"rootLayer": self.rootLayer};
+    NSMutableDictionary *animMap = @{@"moduleName": animation.module_name, @"inputs": inputMap, @"rootLayer": self.rootLayer}.mutableCopy;
+    if (completionBlock)
+    {
+        [animMap setObject:completionBlock forKey:@"completionBlock"];
+    }
 
     //[self doAnimation:animMap];
-    
+
     NSThread *runThread = [[NSThread alloc] initWithTarget:self selector:@selector(doAnimation:) object:animMap];
     [runThread start];
 
@@ -242,17 +289,28 @@
     NSString *modName = threadDict[@"moduleName"];
     NSDictionary *inpMap = threadDict[@"inputs"];
     CALayer *rootLayer = threadDict[@"rootLayer"];
+    void (^completionBlock)(void) = [threadDict objectForKey:@"completionBlock"];
     
     
     @try {
-        [runner runAnimation:modName forInput:inpMap withSuperlayer:rootLayer];
 
+        if (completionBlock)
+        {
+            [CATransaction begin];
+            [CATransaction setCompletionBlock:completionBlock];
+        }
+        [runner runAnimation:modName forInput:inpMap withSuperlayer:rootLayer];
     }
     @catch (NSException *exception) {
         NSLog(@"Animation module %@ failed with exception: %@: %@", modName, [exception name], [exception reason]);
 
     }
     @finally {
+        if (completionBlock)
+        {
+            [CATransaction commit];
+        }
+
         [CATransaction flush];
     }
 }
@@ -268,6 +326,9 @@
 {
     CSAnimationItem *newItem = [[CSAnimationItem alloc] initWithDictionary:animation moduleName:animation[@"module"]];
     [[self mutableArrayValueForKey:@"animationList"] addObject:newItem];
+
+    
+
     
     
 }
@@ -284,6 +345,7 @@
     newLayout.canvas_width = self.canvas_width;
     newLayout.frameRate = self.frameRate;
     newLayout.isActive = NO;
+    newLayout.containedLayouts = self.containedLayouts.mutableCopy;
     
     return newLayout;
 }
@@ -295,10 +357,11 @@
 {
     [aCoder encodeObject:self.name forKey:@"name"];
     
-    if (self.isActive)
+    if (self.doSaveSourceList)
     {
         [self saveSourceList];
     }
+    
     
     
     [aCoder encodeObject:self.savedSourceListData forKey:@"savedSourceData"];
@@ -309,7 +372,14 @@
     {
         [aCoder encodeObject:self.animationSaveData forKey:@"animationSaveData"];
     }
+    
+    if (self.containedLayouts)
+    {
+        [aCoder encodeObject:self.containedLayouts forKey:@"containedLayouts"];
+    }
+    
 }
+
 
 
 
@@ -339,10 +409,69 @@
         {
             self.animationSaveData = [aDecoder decodeObjectForKey:@"animationSaveData"];
         }
+    
+        if ([aDecoder containsValueForKey:@"containedLayouts"])
+        {
+            self.containedLayouts = [[aDecoder decodeObjectForKey:@"containedLayouts"] mutableCopy];
+            //set live/staging status for each layout
+        }
         
     }
     
     return self;
+}
+
+
+
+-(float)frameRate
+{
+    return _frameRate;
+}
+
+
+-(void)setFrameRate:(float)frameRate
+{
+    float oldframerate = _frameRate;
+    
+    _frameRate = frameRate;
+    
+    if (_frameRate != oldframerate)
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutFramerateChanged object:self userInfo:nil];
+    }
+}
+
+
+-(void)applyAddBlock
+{
+    if (self.addLayoutBlock)
+    {
+        for (SourceLayout *layout in self.containedLayouts)
+        {
+            self.addLayoutBlock(layout);
+        }
+    }
+}
+
+
+-(void)generateTopLevelSourceList
+{
+    [_topLevelSourceArray removeAllObjects];
+    for (InputSource *src in self.sourceListOrdered)
+    {
+        if (!src.parentInput)
+        {
+            [_topLevelSourceArray addObject:src];
+        }
+    }
+}
+
+
+-(NSArray *)topLevelSourceList
+{
+    
+    return _topLevelSourceArray;
+    
 }
 
 
@@ -387,6 +516,66 @@
     return retInput;
 
 }
+
+
+-(void) resetAllRefCounts
+{
+    for (InputSource *src in self.sourceList)
+    {
+        src.refCount = 1;
+    }
+    
+    for (CSAnimationItem *item in self.animationList)
+    {
+        item.refCount = 1;
+    }
+}
+
+
+
+-(NSInteger) incrementAnimationRef:(CSAnimationItem *)anim
+{
+    anim.refCount++;
+    return anim.refCount;
+    
+}
+
+-(NSInteger)decrementAnimationRef:(CSAnimationItem *)anim
+{
+    
+    anim.refCount--;
+    
+    if (anim.refCount < 0)
+    {
+        anim.refCount = 0;
+    }
+    
+    return anim.refCount;
+}
+
+
+-(NSInteger)incrementInputRef:(InputSource *)input
+{
+    
+    input.refCount++;
+    
+    return input.refCount;
+}
+
+-(NSInteger)decrementInputRef:(InputSource *)input
+{
+    
+    input.refCount--;
+    
+    if (input.refCount < 0)
+    {
+        input.refCount = 0;
+    }
+    
+    return input.refCount;
+}
+
+
 -(InputSource *)findSource:(NSPoint)forPoint deepParent:(bool)deepParent
 {
     
@@ -435,8 +624,491 @@
 }
 
 
--(NSObject *)mergeSourceListData:(NSData *)mergeData withLayer:(CALayer *)withLayer
+-(void)replaceWithSourceLayout:(SourceLayout *)layout
 {
+    [self replaceWithSourceLayout:layout withCompletionBlock:nil];
+}
+
+
+-(void)replaceWithSourceLayout:(SourceLayout *)layout withCompletionBlock:(void (^)(void))completionBlock
+{
+    
+    NSInteger __block pendingCount = 0;
+    void (^internalCompletionBlock)(void) = ^{
+        @synchronized (self)
+        {
+            pendingCount--;
+            if (pendingCount <= 0 && completionBlock)
+            {
+                completionBlock();
+            }
+        }
+    };
+    
+    //_noSceneTransactions = YES;
+    CATransition *rTrans = nil;
+    
+    [CATransaction begin];
+    if (completionBlock)
+    {
+        @synchronized (self)
+        {
+            pendingCount++;
+        }
+        [CATransaction setCompletionBlock:^{
+            internalCompletionBlock();
+        }];
+    }
+
+    if (self.transitionFullScene)
+    {
+        if (self.transitionName || self.transitionFilter)
+        {
+            rTrans = [CATransition animation];
+            rTrans.type = self.transitionName;
+            rTrans.duration = self.transitionDuration;
+            rTrans.removedOnCompletion = YES;
+            rTrans.subtype = self.transitionDirection;
+            if (self.transitionFilter)
+            {
+                rTrans.filter = self.transitionFilter;
+            }
+        }
+        
+    }
+    
+    
+    for (SourceLayout *cLayout in self.containedLayouts.copy)
+    {
+        if (self.removeLayoutBlock)
+        {
+            self.removeLayoutBlock(cLayout);
+        }
+        
+        [self.containedLayouts removeObject:cLayout];
+    }
+    //Only run animations that aren't already in the layout
+    
+    NSMutableArray *runAnimations = [[NSMutableArray alloc] init];
+    
+    if (!self.in_staging)
+    {
+        for (CSAnimationItem *anim in layout.animationList)
+        {
+            
+            if (![self animationForUUID:anim.uuid] && anim.onLive)
+            {
+                [runAnimations addObject:anim.uuid];
+                
+            }
+        }
+        
+        if (completionBlock)
+        {
+            @synchronized (self)
+            {
+                pendingCount += [runAnimations count];
+            }
+        }
+    }
+    
+    [self.animationList removeAllObjects];
+    //If an input exists in both lists, only remove it if the new one is different/changed
+    
+    NSMutableArray *rList = [[NSMutableArray alloc] init];
+    for (InputSource *src in self.sourceList)
+    {
+        InputSource *nSrc = [layout inputForUUID:src.uuid];
+        if (nSrc)
+        {
+            if ([nSrc isDifferentInput:src])
+            {
+                [rList addObject:src];
+            }
+        } else {
+            [rList addObject:src];
+            
+        }
+    }
+    
+    
+    [self removeSourceInputs:rList withLayer:nil];
+    
+    
+    if (self.addLayoutBlock)
+    {
+        self.addLayoutBlock(layout);
+    }
+    
+    [self.containedLayouts addObject:layout];
+
+    for (SourceLayout *cLayout in layout.containedLayouts.copy)
+    {
+        if (self.addLayoutBlock)
+        {
+            self.addLayoutBlock(cLayout);
+        }
+        
+        [self.containedLayouts addObject:cLayout];
+    }
+
+    [self mergeSourceListData:layout.savedSourceListData onlyAdd:YES];
+    
+    
+    if (self.transitionFullScene)
+    {
+        if (rTrans)
+        {
+            //[self.rootLayer addAnimation:rTrans forKey:kCATransition];
+        }
+
+    }
+    
+    [CATransaction commit];
+
+    for (NSString *anim in runAnimations)
+    {
+        CSAnimationItem *eItem = [self animationForUUID:anim];
+        if (eItem)
+        {
+            [self runSingleAnimation:eItem withCompletionBlock:^{
+                if (completionBlock)
+                {
+                    internalCompletionBlock();
+                }
+            }];
+        }
+    }
+
+    
+    _noSceneTransactions = NO;
+    [self updateCanvasWidth:layout.canvas_width height:layout.canvas_height];
+    self.frameRate = layout.frameRate;
+    [self resetAllRefCounts];
+    
+}
+
+
+
+-(bool)containsLayout:(SourceLayout *)layout
+{
+    return [self.containedLayouts containsObject:layout];
+}
+
+
+-(void)clearAnimations
+{
+    [self.animationList removeAllObjects];
+}
+
+
+-(void)mergeSourceLayout:(SourceLayout *)toMerge withLayer:(CALayer *)withLayer
+{
+    
+    if ([self.containedLayouts containsObject:toMerge])
+    {
+        return;
+    }
+    
+    NSArray *mergedAnim = nil;
+    
+    NSObject *dictOrObj = [self mergeSourceListData:toMerge.savedSourceListData];
+    
+    if ([dictOrObj isKindOfClass:[NSDictionary class]])
+    {
+        NSDictionary *dict = (NSDictionary *)dictOrObj;
+        mergedAnim = [dict valueForKey:@"animationList"];
+    }
+    
+    [self adjustAllInputs];
+    [self.containedLayouts addObject:toMerge];
+    if (self.addLayoutBlock)
+    {
+        self.addLayoutBlock(toMerge);
+    }
+    
+    if (mergedAnim && !self.in_staging)
+    {
+        for (CSAnimationItem *anim in mergedAnim)
+        {
+            if (anim.onLive)
+            {
+                CSAnimationItem *eItem = [self animationForUUID:anim.uuid];
+                if (eItem && eItem.refCount == 1)
+                {
+                    [self runSingleAnimation:eItem];
+                }
+            }
+        }
+    }
+}
+
+
+-(void)removeSourceLayout:(SourceLayout *)toRemove withLayer:(CALayer *)withLayer
+{
+    
+    if (![self.containedLayouts containsObject:toRemove])
+    {
+        return;
+    }
+    
+    [self removeSourceListData:toRemove.savedSourceListData withLayer:withLayer];
+    
+    [self.containedLayouts removeObject:toRemove];
+    if (self.removeLayoutBlock)
+    {
+        self.removeLayoutBlock(toRemove);
+    }
+}
+
+
+
+
+-(NSArray *)mergeSourceInputsScene:(NSArray *)inputs onlyAdd:(bool)onlyAdd
+{
+    
+    NSMutableArray *undoSources = [NSMutableArray array];
+    
+    
+    CATransition *rTrans = nil;
+    if (!_noSceneTransactions && (self.transitionName || self.transitionFilter))
+    {
+        rTrans = [CATransition animation];
+        rTrans.type = self.transitionName;
+        rTrans.duration = self.transitionDuration;
+        rTrans.removedOnCompletion = YES;
+        rTrans.subtype = self.transitionDirection;
+        if (self.transitionFilter)
+        {
+            rTrans.filter = self.transitionFilter;
+        }
+    }
+    
+    if (!_noSceneTransactions)
+    {
+        [CATransaction begin];
+    }
+    
+    for(InputSource *src in inputs)
+    {
+        src.sourceLayout = self;
+        src.is_live = self.isActive;
+        InputSource *eSrc = [self inputForUUID:src.uuid];
+        bool isDifferent = YES;
+        
+        if (eSrc)
+        {
+
+            isDifferent = [eSrc isDifferentInput:src];
+            if (!isDifferent)
+            {
+                [self incrementInputRef:eSrc];
+
+                continue;
+            }
+        }
+        if (eSrc && !onlyAdd)
+        {
+            if (!src.layer.superlayer)
+            {
+                [eSrc.layer.superlayer addSublayer:src.layer];
+            }
+            eSrc.layer.hidden = YES;
+            [undoSources addObject:eSrc];
+            eSrc.refCount = 0;
+        } else {
+            if (!src.layer.superlayer)
+            {
+                [self.rootLayer addSublayer:src.layer];
+            }
+        }
+        [NSApp registerMIDIResponder:src];
+        [self incrementInputRef:src];
+        
+        
+        [self willChangeValueForKey:@"topLevelSourceList"];
+        [[self mutableArrayValueForKey:@"sourceList" ] addObject:src];
+        [self generateTopLevelSourceList];
+        [self didChangeValueForKey:@"topLevelSourceList"];
+        [_uuidMap setObject:src forKey:src.uuid];
+        
+    }
+    
+    __weak SourceLayout *weakSelf = self;
+    
+    if (undoSources.count > 0)
+    {
+        [CATransaction setCompletionBlock:^{
+            for (InputSource *dInput in undoSources)
+            {
+                [weakSelf deleteSource:dInput];
+            }
+        }];
+    }
+    
+    if (rTrans)
+    {
+        [self.rootLayer addAnimation:rTrans forKey:nil];
+    }
+    if (!_noSceneTransactions)
+    {
+        [CATransaction commit];
+    }
+    
+    return undoSources;
+}
+
+
+-(NSArray *)mergeSourceInputsIndividual:(NSArray *)inputs onlyAdd:(bool)onlyAdd
+{
+    
+    NSMutableArray *undoSources = [NSMutableArray array];
+    CATransition *rTrans = nil;
+    NSInteger origRefCnt = 0;
+    
+    if (self.transitionName || self.transitionFilter)
+    {
+        rTrans = [CATransition animation];
+        rTrans.type = self.transitionName;
+        rTrans.duration = self.transitionDuration;
+        rTrans.removedOnCompletion = YES;
+        rTrans.subtype = self.transitionDirection;
+        if (self.transitionFilter)
+        {
+            rTrans.filter = self.transitionFilter;
+        }
+    }
+    
+    for(InputSource *src in inputs)
+    {
+        src.sourceLayout = self;
+        src.is_live = self.isActive;
+        InputSource *eSrc = [self inputForUUID:src.uuid];
+        
+        bool isDifferent = NO;
+        
+        if (eSrc)
+        {
+            isDifferent = [eSrc isDifferentInput:src];
+        }
+        
+        if (eSrc && !onlyAdd)
+        {
+            if (!isDifferent)
+            {
+                [self incrementInputRef:eSrc];
+                continue;
+            }
+            
+            src.layer.hidden = YES;
+            if (!src.layer.superlayer)
+            {
+                [eSrc.layer.superlayer addSublayer:src.layer];
+            }
+            [CATransaction flush];
+            
+            [CATransaction begin];
+            __weak SourceLayout *weakSelf = self;
+            
+            [CATransaction setCompletionBlock:^{
+                [weakSelf deleteSource:eSrc];
+            }];
+            
+            
+            
+            if (rTrans)
+            {
+                [eSrc.layer addAnimation:rTrans forKey:nil];
+                [src.layer addAnimation:rTrans forKey:nil];
+            }
+            
+            origRefCnt = eSrc.refCount;
+            eSrc.refCount = 0;
+            eSrc.layer.hidden = YES;
+            src.layer.hidden = NO;
+            [CATransaction commit];
+            [undoSources addObject:eSrc];
+        } else {
+
+            if (eSrc && !isDifferent)
+            {
+                [self incrementInputRef:eSrc];
+
+                continue;
+            }
+            
+            [CATransaction begin];
+
+            if (!src.layer.superlayer)
+            {
+                [self.rootLayer addSublayer:src.layer];
+            }
+
+
+            src.layer.hidden = YES;
+            
+            [CATransaction commit];
+            
+            //worst hack ever. add a dummy animation of same length so the outer transaction doesn't complete until we do
+            
+            [CATransaction begin];
+            CABasicAnimation *hackAnim = [CABasicAnimation animationWithKeyPath:@"dummyKeyPath"];
+            hackAnim.duration = rTrans.duration;
+            hackAnim.fromValue = @0;
+            hackAnim.toValue = @100;
+            hackAnim.removedOnCompletion = YES;
+            
+            [src.layer addAnimation:hackAnim forKey:@"dummyKey"];
+            [CATransaction commit];
+            
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+            [CATransaction begin];
+            
+            if (rTrans)
+            {
+
+                [src.layer addAnimation:rTrans forKey:nil];
+            }
+
+
+            src.layer.hidden = NO;
+
+
+
+            
+            [CATransaction commit];
+            });
+            
+
+        }
+
+        [NSApp registerMIDIResponder:src];
+        
+        
+        src.refCount = origRefCnt+1;
+        
+        [self willChangeValueForKey:@"topLevelSourceList"];
+        [[self mutableArrayValueForKey:@"sourceList" ] addObject:src];
+        [self generateTopLevelSourceList];
+        [self didChangeValueForKey:@"topLevelSourceList"];
+        [_uuidMap setObject:src forKey:src.uuid];
+        
+    }
+    
+    return undoSources;
+}
+
+
+-(NSObject *)mergeSourceListData:(NSData *)mergeData
+{
+    return [self mergeSourceListData:mergeData onlyAdd:NO];
+}
+
+
+-(NSObject *)mergeSourceListData:(NSData *)mergeData onlyAdd:(bool)onlyAdd
+{
+    
     
     
     if (!self.sourceList)
@@ -449,13 +1121,6 @@
         return nil;
     }
     
-    if (!withLayer)
-    {
-        withLayer = self.rootLayer;
-    }
-    
-    NSMutableArray *undoSources = [NSMutableArray array];
-    
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:mergeData];
     
     [unarchiver setDelegate:self];
@@ -464,10 +1129,13 @@
     [unarchiver finishDecoding];
     
     NSArray *mergeList;
+    NSArray *mergeAnimationList = nil;
+    
     
     if ([mergeObj isKindOfClass:[NSDictionary class]])
     {
         mergeList = [((NSDictionary *)mergeObj) objectForKey:@"sourcelist"];
+        mergeAnimationList = [((NSDictionary *)mergeObj) objectForKey:@"animationList"];
     } else {
         mergeList = (NSArray *)mergeObj;
     }
@@ -476,21 +1144,150 @@
     {
         [self.undoManager beginUndoGrouping];
     }
-    for(InputSource *src in mergeList)
+   
+    
+    if (mergeAnimationList)
+    {
+        for (CSAnimationItem *aItem in mergeAnimationList)
+        {
+            CSAnimationItem *eItem = [self animationForUUID:aItem.uuid];
+            if (eItem)
+            {
+                [self incrementAnimationRef:eItem];
+            } else {
+                [[self mutableArrayValueForKey:@"animationList"] addObject:aItem];
+                [self incrementAnimationRef:aItem];
+            }
+        }
+    }
+    
+    
+    NSArray *undoSources;
+    
+    if (self.transitionFullScene)
+    {
+        undoSources = [self mergeSourceInputsScene:mergeList onlyAdd:onlyAdd];
+    } else {
+        undoSources = [self mergeSourceInputsIndividual:mergeList onlyAdd:onlyAdd];
+    }
+    
+    
+    if (undoSources.count > 0)
+    {
+        NSData *undoData = [NSKeyedArchiver archivedDataWithRootObject:undoSources];
+        [[self.undoManager prepareWithInvocationTarget:self] mergeSourceListData:undoData];
+    } else {
+        [[self.undoManager prepareWithInvocationTarget:self] removeSourceListData:mergeData withLayer:nil];
+    }
+
+    if (self.undoManager)
+    {
+        [self.undoManager endUndoGrouping];
+    }
+    
+    return mergeObj;
+}
+
+
+-(NSArray *)removeSourceInputsScene:(NSArray *)inputs
+{
+    NSMutableArray *undoSources = [NSMutableArray array];
+    
+    CATransition *rTrans = nil;
+    
+    if (!_noSceneTransactions && (self.transitionName || self.transitionFilter))
+    {
+        rTrans = [CATransition animation];
+        rTrans.type = self.transitionName;
+        rTrans.duration = self.transitionDuration;
+        rTrans.subtype = self.transitionDirection;
+
+        if (self.transitionFilter)
+        {
+            rTrans.filter = self.transitionFilter;
+        }
+        rTrans.removedOnCompletion = YES;
+    }
+    
+    if (!_noSceneTransactions)
+    {
+        [CATransaction begin];
+        
+    }
+    __weak SourceLayout *weakSelf = self;
+
+    [CATransaction setCompletionBlock:^{
+        for (InputSource *dInput in undoSources)
+        {
+            [weakSelf deleteSource:dInput];
+        }
+    }];
+    if (rTrans)
+    {
+        [self.rootLayer addAnimation:rTrans forKey:nil];
+    }
+
+    for(InputSource *src in inputs)
     {
         src.sourceLayout = self;
-        src.is_live = self.isActive;
+        InputSource *eSrc = [self inputForUUID:src.uuid];
+        
+
+
+        if (eSrc)
+        {
+            NSInteger refCnt = [self decrementInputRef:eSrc];
+            
+
+            if (refCnt != 0)
+            {
+                continue;
+            }
+
+            eSrc.layer.hidden = YES;
+            [undoSources addObject:eSrc];
+        }
+    }
+    
+    if (!_noSceneTransactions)
+    {
+        [CATransaction commit];
+    }
+    
+    return undoSources;
+}
+
+
+-(NSArray *)removeSourceInputsIndividual:(NSArray *)inputs
+{
+    
+    NSMutableArray *undoSources = [NSMutableArray array];
+    
+    CATransition *rTrans = nil;
+    if (self.transitionName || self.transitionFilter)
+    {
+        rTrans = [CATransition animation];
+        rTrans.type = self.transitionName;
+        rTrans.duration = self.transitionDuration;
+        rTrans.subtype = self.transitionDirection;
+        if (self.transitionFilter)
+        {
+            rTrans.filter = self.transitionFilter;
+        }
+        rTrans.removedOnCompletion = YES;
+    }
+    
+    for(InputSource *src in inputs)
+    {
+        src.sourceLayout = self;
         InputSource *eSrc = [self inputForUUID:src.uuid];
         if (eSrc)
         {
-            CATransition *rTrans = [CATransition animation];
-            rTrans.type = @"flip";
-            rTrans.duration = 2.5;
-            rTrans.removedOnCompletion = YES;
-            [CATransaction begin];
-            [eSrc.layer.superlayer addSublayer:src.layer];
-            src.layer.hidden = YES;
-            [CATransaction commit];
+            NSInteger refCnt = [self decrementInputRef:eSrc];
+            if (refCnt != 0)
+            {
+                continue;
+            }
             
             [CATransaction begin];
             __weak SourceLayout *weakSelf = self;
@@ -500,48 +1297,55 @@
             }];
             
             
-            
-            //[eSrc.layer addAnimation:rTrans forKey:nil];
-            // [src.layer addAnimation:rTrans forKey:nil];
+            if (rTrans)
+            {
+                [eSrc.layer addAnimation:rTrans forKey:nil];
+            }
             
             eSrc.layer.hidden = YES;
-            src.layer.hidden = NO;
-            
             [CATransaction commit];
             [undoSources addObject:eSrc];
         }
         
         
-        if (undoSources.count > 0)
-        {
-            NSData *undoData = [NSKeyedArchiver archivedDataWithRootObject:undoSources];
-            [[self.undoManager prepareWithInvocationTarget:self] mergeSourceListData:undoData withLayer:nil];
-        } else {
-            [[self.undoManager prepareWithInvocationTarget:self] removeSourceListData:mergeData withLayer:nil];
-        }
-        
-        
-        [NSApp registerMIDIResponder:src];
-        
-        if (!src.layer.superlayer)
-        {
-            [CATransaction begin];
-            [withLayer addSublayer:src.layer];
-            [CATransaction commit];
-            
-        }
-        
-        
-        [[self mutableArrayValueForKey:@"sourceList" ] addObject:src];
-        [_uuidMap setObject:src forKey:src.uuid];
-        
     }
+    
+    return undoSources;
+}
+
+
+
+-(void)removeSourceInputs:(NSArray *)inputs withLayer:(CALayer *)withLayer
+{
+    
+
+    if (self.undoManager)
+    {
+        [self.undoManager beginUndoGrouping];
+    }
+    
+    NSArray *undoSources;
+    
+    if (self.transitionFullScene)
+    {
+        undoSources = [self removeSourceInputsScene:inputs];
+    } else {
+        undoSources = [self removeSourceInputsIndividual:inputs];
+    }
+    
+    
+    if (undoSources.count > 0)
+    {
+        NSData *undoData = [NSKeyedArchiver archivedDataWithRootObject:undoSources];
+        [[self.undoManager prepareWithInvocationTarget:self] mergeSourceListData:undoData];
+    }
+
     if (self.undoManager)
     {
         [self.undoManager endUndoGrouping];
     }
+
     
-    return mergeObj;
 }
 
 
@@ -564,7 +1368,6 @@
         withLayer = self.rootLayer;
     }
     
-    NSMutableArray *undoSources = [NSMutableArray array];
     
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:mergeData];
     
@@ -574,59 +1377,35 @@
     [unarchiver finishDecoding];
     
     NSArray *mergeList;
+    NSArray *mergeAnim;
     
     if ([mergeObj isKindOfClass:[NSDictionary class]])
     {
         mergeList = [((NSDictionary *)mergeObj) objectForKey:@"sourcelist"];
+        mergeAnim = [((NSDictionary *)mergeObj) objectForKey:@"animationList"];
+
     } else {
         mergeList = (NSArray *)mergeObj;
     }
     
-    if (self.undoManager)
-    {
-        [self.undoManager beginUndoGrouping];
-    }
-    for(InputSource *src in mergeList)
-    {
-        src.sourceLayout = self;
-        InputSource *eSrc = [self inputForUUID:src.uuid];
-        if (eSrc)
-        {
-            CATransition *rTrans = [CATransition animation];
-            rTrans.type = @"flip";
-            rTrans.duration = 2.5;
-            rTrans.removedOnCompletion = YES;
 
-            [CATransaction begin];
-            __weak SourceLayout *weakSelf = self;
-
-            [CATransaction setCompletionBlock:^{
-                [weakSelf deleteSource:eSrc];
-            }];
-
-
-            
-            [eSrc.layer addAnimation:rTrans forKey:nil];
-           // [src.layer addAnimation:rTrans forKey:nil];
-            
-            eSrc.layer.hidden = YES;
-            
-            [CATransaction commit];
-            [undoSources addObject:eSrc];
-        }
-        
-     
-        if (undoSources.count > 0)
-        {
-            NSData *undoData = [NSKeyedArchiver archivedDataWithRootObject:undoSources];
-            [[self.undoManager prepareWithInvocationTarget:self] mergeSourceListData:undoData withLayer:nil];
-        }
-    }
-    if (self.undoManager)
-    {
-        [self.undoManager endUndoGrouping];
-    }
+    [self removeSourceInputs:mergeList withLayer:withLayer];
     
+    if (mergeAnim)
+    {
+        for (CSAnimationItem *aItem in mergeAnim)
+        {
+            CSAnimationItem *eItem = [self animationForUUID:aItem.uuid];
+            if (eItem)
+            {
+                NSInteger eCnt = [self decrementAnimationRef:eItem];
+                if (eCnt <= 0)
+                {
+                    [[self mutableArrayValueForKey:@"animationList"] removeObject:eItem];
+                }
+            }
+        }
+    }
     return mergeObj;
 }
 
@@ -634,10 +1413,17 @@
 -(void)restoreSourceList:(NSData *)withData
 {
     
+    CALayer *oldSuperLayer = nil;
+    CALayer *newRoot = nil;
+    if (self.rootLayer)
+    {
+        oldSuperLayer = self.rootLayer.superlayer;
+    }
     
     if (self.savedSourceListData)
     {
-        CALayer *newRoot = [self newRootLayer];
+        
+        newRoot = [self newRootLayer];
         
         [CATransaction begin];
         newRoot.sublayers = [NSArray array];
@@ -653,7 +1439,7 @@
         {
             withData = self.savedSourceListData;
         }
-        NSObject *restData = [self mergeSourceListData:withData withLayer:newRoot];
+        NSObject *restData = [self mergeSourceListData:withData];
         
         
         if (restData && [restData isKindOfClass:[NSDictionary class]])
@@ -676,8 +1462,10 @@
             self.layoutTimingSource = ((InputSource *)timerSrc);
         }
         
-        [self.rootLayer.superlayer replaceSublayer:self.rootLayer with:newRoot];
-        self.rootLayer = newRoot;
+        if (oldSuperLayer)
+        {
+            [oldSuperLayer replaceSublayer:self.rootLayer with:newRoot];
+        }
 
         for(InputSource *src in oldSourceList)
         {
@@ -709,12 +1497,17 @@
 }
 
 
+
 -(void)deleteSource:(InputSource *)delSource
 {
     
     [delSource willDelete];
     
+    [self willChangeValueForKey:@"topLevelSourceList"];
     [[self mutableArrayValueForKey:@"sourceList" ] removeObject:delSource];
+    [self generateTopLevelSourceList];
+    [self didChangeValueForKey:@"topLevelSourceList"];
+    
 
     InputSource *uSrc;
     uSrc = _uuidMap[delSource.uuid];
@@ -739,17 +1532,51 @@
 
 
 
+-(void)setupMIDI
+{
+    [NSApp registerMIDIResponder:self];
+    for (InputSource *src in self.sourceList)
+    {
+        [NSApp registerMIDIResponder:src];
+
+    }
+}
+
+
+-(void) adjustAllInputs
+{
+    
+    NSArray *copiedInputs = [self sourceListOrdered];
+    
+    for (InputSource *src in copiedInputs)
+    {
+        src.needsAdjustPosition = YES;
+        src.needsAdjustment = YES;
+    }
+}
+
+
+
+
 -(void) addSource:(InputSource *)newSource
 {
     newSource.sourceLayout = self;
     newSource.is_live = self.isActive;
     
-    
+    [self willChangeValueForKey:@"topLevelSourceList"];
     [[self mutableArrayValueForKey:@"sourceList" ] addObject:newSource];
-
+    [self generateTopLevelSourceList];
+    [self didChangeValueForKey:@"topLevelSourceList"];
     
+
     [self.rootLayer addSublayer:newSource.layer];
+
+
+    newSource.needsAdjustPosition = NO;
+    newSource.needsAdjustment = YES;
+    
     [_uuidMap setObject:newSource forKey:newSource.uuid];
+    
     
     [NSApp registerMIDIResponder:newSource];
     
@@ -757,6 +1584,25 @@
 }
 
 
+-(void)clearSourceList
+{
+    self.rootLayer.sublayers = [NSArray array];
+    @synchronized(self)
+    {
+        [self willChangeValueForKey:@"topLevelSourceList"];
+        [self.sourceList removeAllObjects];
+        [self generateTopLevelSourceList];
+        [self didChangeValueForKey:@"topLevelSourceList"];
+
+        
+    }
+    [self.animationList removeAllObjects];
+    [_uuidMap removeAllObjects];
+    self.selectedAnimation = nil;
+}
+
+
+/*
 -(void) setIsActive:(bool)isActive
 {
     
@@ -811,6 +1657,8 @@
     return _isActive;
 }
 
+*/
+
 
 
 
@@ -860,11 +1708,25 @@
 }
 
 
+-(void)updateCanvasWidth:(int)width height:(int)height 
+{
+    int old_height = self.canvas_height;
+    int old_width = self.canvas_width;
+    
+    self.canvas_height = height;
+    self.canvas_width = width;
+    
+    if ((old_height != height) || (old_width != width))
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutCanvasChanged object:self userInfo:nil];
+    }
+}
+
 
 -(void)frameTick
 {
     
-    
+    bool needsResize = NO;
     NSSize curSize = NSMakeSize(self.canvas_width, self.canvas_height);
     
     if (!NSEqualSizes(curSize, _rootSize))
@@ -873,6 +1735,7 @@
         self.rootLayer.bounds = CGRectMake(0, 0, self.canvas_width, self.canvas_height);
         
         _rootSize = curSize;
+        needsResize = YES;
     }
     
     NSArray *listCopy = [self sourceListOrdered];
@@ -880,6 +1743,11 @@
     
     for (InputSource *isource in listCopy)
     {
+        if (needsResize)
+        {
+            isource.needsAdjustPosition = YES;
+            isource.needsAdjustment = YES;
+        }
         
         if (isource.active)
         {
@@ -893,6 +1761,11 @@
 
 -(void)didBecomeVisible
 {
+    if (self.in_staging)
+    {
+        return;
+    }
+    
     for (CSAnimationItem  *anim in self.animationList)
     {
         if (anim.onLive)
@@ -914,6 +1787,18 @@
 }
 
 
+-(CSAnimationItem *)animationForUUID:(NSString *)uuid
+{
+    for (CSAnimationItem *item in self.animationList)
+    {
+        if ([item.uuid isEqualToString:uuid])
+        {
+            return item;
+        }
+    }
+    return nil;
+}
+
 
 -(InputSource *)inputForUUID:(NSString *)uuid
 {
@@ -922,5 +1807,10 @@
 }
 
 
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+}
 
 @end

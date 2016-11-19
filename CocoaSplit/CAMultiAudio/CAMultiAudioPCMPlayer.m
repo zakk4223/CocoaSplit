@@ -27,6 +27,7 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
         _bufcnt = 0;
         _inputFormat = NULL;
         self.latestScheduledTime = 0;
+        _pauseBuffer = [[NSMutableArray alloc] init];
     }
     
     return self;
@@ -41,6 +42,10 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     [self playPcmBuffer:pcmBuffer];
 }
 
+-(NSUInteger)pendingFrames
+{
+    return _pendingBuffers.count;
+}
 
 -(bool)playPcmBuffer:(CAMultiAudioPCM *)pcmBuffer
 {
@@ -102,9 +107,10 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     
 
     
+    
     dispatch_async(_pendingQueue, ^{
         
-        [_pendingBuffers addObject:pcmBuffer];
+        [self->_pendingBuffers addObject:pcmBuffer];
     });
     
 
@@ -113,6 +119,21 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     
     
     return YES;
+}
+
+
+
+
+-(void)setVolume:(float)volume
+{
+    super.volume = volume;
+    
+    
+    if (self.converterNode)
+    {
+        
+        [(CAMultiAudioNode *)self.converterNode setVolumeOnConnectedNode];
+    }
 }
 
 -(void)scheduleBuffer:(CMSampleBufferRef)sampleBuffer
@@ -155,7 +176,10 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     CMSampleBufferCopyPCMDataIntoAudioBufferList(sampleBuffer, 0, (int32_t)numSamples, sampleABL);
     CAMultiAudioPCM *pcmBuffer = [[CAMultiAudioPCM alloc] initWithAudioBufferList:sampleABL streamFormat:asbd];
 
+    pcmBuffer.handleFreeBuffer = YES;
     
+    
+
     
     [self playPcmBuffer:pcmBuffer];
 }
@@ -217,6 +241,22 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     }
 }
 
+-(void)pause
+{
+    
+    self.save_buffer = YES;
+    [self flush];
+}
+
+
+-(void)flush
+{
+    if (self.audioUnit)
+    {
+        AudioUnitReset(self.audioUnit, kAudioUnitScope_Global, 0);
+    }
+}
+
 
 -(void)play
 {
@@ -225,11 +265,20 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     OSStatus err;
     
 
+ 
     
     ts.mFlags = kAudioTimeStampSampleTimeValid;
     ts.mSampleTime = -1;
     err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ScheduleStartTimeStamp, kAudioUnitScope_Global, 0, &ts, sizeof(ts));
+    _save_buffer = NO;
+    for (CAMultiAudioPCM *buffer in self.pauseBuffer)
+    {
+        [self playPcmBuffer:buffer];
+    }
+    
+    [self.pauseBuffer removeAllObjects];
 }
+
 
 -(void)dealloc
 {
@@ -248,11 +297,23 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList)
     CAMultiAudioPCM *pcmObj = (__bridge CAMultiAudioPCM *)(userData);
     //maybe put this on a dedicated queue?
     //why a queue? don't want to do any sort of memory/managed object operations in an audio callback.
-    dispatch_async(dispatch_get_main_queue(), ^{
+    //dispatch_async(dispatch_get_main_queue(), ^{
         CAMultiAudioPCMPlayer *pplayer = pcmObj.player;
         //pplayer.latestScheduledTime = pcmObj.audioSlice->mTimeStamp.mSampleTime + pcmObj.audioSlice->mNumberFrames;
+    if (pplayer.completedBlock)
+    {
+        pplayer.completedBlock(pcmObj);
+    }
+
+    if (pplayer.save_buffer)
+    {
+        [pplayer.pauseBuffer addObject:pcmObj];
+    } else {
         [pplayer releasePCM:pcmObj];
-    });
+    }
+    
+    
+    //});
     
     
 }

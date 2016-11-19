@@ -38,6 +38,11 @@
     return NSStringFromClass(self);
 }
 
+-(NSString *)label
+{
+    return [self.class label];
+}
+
 
 -(instancetype) init
 {
@@ -75,6 +80,13 @@
     
     return self;
 }
+
+
+-(NSImage *)libraryImage
+{
+    return nil;
+}
+
 
 -(NSString *) configurationViewClassName
 {
@@ -219,7 +231,9 @@
 
 -(CALayer *)createNewLayer
 {
-    return [CALayer layer];
+    CALayer *newLayer = [CALayer layer];
+    return newLayer;
+
 }
 
 

@@ -112,6 +112,7 @@
     glLoadIdentity();
     glOrtho(0, _cvpool_size.width, 0,_cvpool_size.height, -1, 1);
     
+    NSLog(@"CVPOOL %@", NSStringFromSize(_cvpool_size));
     
     
     glMatrixMode(GL_MODELVIEW);
@@ -128,7 +129,7 @@
     CGLSetCurrentContext(self.cglCtx);
     
     
-
+    
     if (!self.rootLayer)
     {
         self.rootLayer = [CALayer layer];
@@ -136,57 +137,26 @@
     }
     
     
-
-    _transitionLayout = _currentLayout;
     
-    if (self.transitionName && _transitionLayout)
+    
+    [CATransaction begin];
+    _currentLayout.inTransition = NO;
+    
+    if (_transitionLayout)
     {
-        [CATransaction begin];
-        [CATransaction setDisableActions:YES];
-        _layoutTransition = [CATransition animation];
-        _layoutTransition.type = self.transitionName  ;
-        _layoutTransition.subtype = self.transitionDirection;
-        _layoutTransition.duration = self.transitionDuration;
-        _layoutTransition.filter = self.transitionFilter;
-        _layoutTransition.removedOnCompletion = YES;
-        [CATransaction setCompletionBlock:^{
-            [CATransaction begin];
-            if (_transitionLayout)
-            {
-                [_transitionLayout.rootLayer removeFromSuperlayer];
-                _transitionLayout.isActive = NO;
-                _transitionLayout = nil;
-            }
-            
-            
-            [CATransaction commit];
-        }];
-        [self.rootLayer addAnimation:_layoutTransition forKey:nil];
         
-        [self.rootLayer addSublayer:self.layout.rootLayer];
-        [CATransaction commit];
-        
-    } else {
-        [CATransaction begin];
-        _currentLayout.inTransition = NO;
-
-        if (_transitionLayout)
-        {
-            
-            [_transitionLayout.rootLayer removeFromSuperlayer];
-            _transitionLayout.isActive = NO;
-            _transitionLayout = nil;
-        }
-        
-        [self.renderer.layer addSublayer:self.layout.rootLayer];
-        [CATransaction commit];
+        [_transitionLayout.rootLayer removeFromSuperlayer];
+        _transitionLayout.isActive = NO;
+        _transitionLayout = nil;
     }
     
-
-
+    [self.renderer.layer addSublayer:self.layout.rootLayer];
+    [CATransaction commit];
+    
+    
+    
     _currentLayout = self.layout;
     [_currentLayout didBecomeVisible];
-    
     
 }
 
@@ -216,6 +186,7 @@
     //glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glDisable(GL_DEPTH_TEST);
     glDepthMask(GL_FALSE);
+    
     
     
     CGLTexImageIOSurface2D(self.cglCtx, GL_TEXTURE_RECTANGLE_ARB, GL_RGBA, (int)IOSurfaceGetWidth(ioSurface), (int)IOSurfaceGetHeight(ioSurface), GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, ioSurface, 0);
@@ -248,6 +219,10 @@
 -(CVPixelBufferRef)currentImg
 {
     
+    if (self.cglCtx)
+    {
+        CGLSetCurrentContext(self.cglCtx);
+    }
     
     CVPixelBufferRef destFrame = NULL;
     CGFloat frameWidth, frameHeight;
@@ -284,7 +259,7 @@
 
     }
     
-    CVPixelBufferPoolCreatePixelBuffer(kCVReturnSuccess, _cvpool, &destFrame);
+    CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, _cvpool, &destFrame);
     
 
     [self renderToSurface:CVPixelBufferGetIOSurface(destFrame)];
@@ -317,7 +292,10 @@
     
     @synchronized(self)
     {
-        CVPixelBufferRetain(_currentPB);
+        if (_currentPB)
+        {
+            CVPixelBufferRetain(_currentPB);
+        }
         return _currentPB;
     }
 }

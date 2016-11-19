@@ -25,20 +25,15 @@
 }
 
 
-/*
 -(void)setContentsRect:(CGRect)contentsRect
 {
     _privateCropRect = contentsRect;
-    [self calculateCrop:_lastImageSize];
-    _needsRedraw = YES;
-    [self setNeedsDisplay];
 }
 
 -(CGRect)contentsRect
 {
     return _privateCropRect;
 }
-*/
 
 
 -(CGLContextObj)copyCGLContextForPixelFormat:(CGLPixelFormatObj)pf
@@ -86,16 +81,23 @@
 
     
     NSSize useSize = self.bounds.size;
+    CGRect newCrop;
+    
+    newCrop.origin.x = _deckLinkFrameSize.width * _privateCropRect.origin.x;
+    newCrop.origin.y = _deckLinkFrameSize.height * _privateCropRect.origin.y;
+    newCrop.size.width = _deckLinkFrameSize.width * _privateCropRect.size.width;
+    newCrop.size.height = _deckLinkFrameSize.height * _privateCropRect.size.height;
 
     if ([self.contentsGravity isEqualToString:kCAGravityResizeAspect])
     {
-        float wr = _deckLinkFrameSize.width / self.bounds.size.width;
-        float hr = _deckLinkFrameSize.height / self.bounds.size.height;
+        float wr = newCrop.size.width / self.bounds.size.width;
+        float hr = newCrop.size.height / self.bounds.size.height;
         
         float ratio = (hr < wr ? wr : hr);
-        useSize = NSMakeSize(_deckLinkFrameSize.width / ratio, _deckLinkFrameSize.height / ratio);
+        useSize = NSMakeSize(newCrop.size.width / ratio, newCrop.size.height / ratio);
     }
     
+
     GLint vpx = (self.bounds.size.width - useSize.width)/2;
     GLint vpy = (self.bounds.size.height - useSize.height)/2;
 
@@ -103,9 +105,22 @@
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
+
     
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+
+    
+    NSRect cropRect;
+    glMatrixMode(GL_TEXTURE);
+    glLoadIdentity();
+    
+    
+    GLfloat yt = 1.0 - (_privateCropRect.origin.y + _privateCropRect.size.height);
+    
+
+    glScalef(_privateCropRect.size.width, _privateCropRect.size.height, 1);
+    glTranslatef(_privateCropRect.origin.x * _deckLinkFrameSize.width, yt * _deckLinkFrameSize.height, 0);
 
     
     
@@ -114,9 +129,6 @@
         _deckLinkOGL->PaintGL();
     }
 
-    /*
-    glTranslated(self.bounds.size.width * 0.5, self.bounds.size.height * 0.5, 0.0);
-    */
     
     
     [super drawInCGLContext:ctx pixelFormat:pf forLayerTime:t displayTime:ts];

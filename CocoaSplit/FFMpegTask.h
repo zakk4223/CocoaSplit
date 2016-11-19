@@ -11,18 +11,17 @@
 #import "libavformat/avformat.h"
 #import "CapturedFrameData.h"
 #import "CaptureController.h"
+#import "libavutil/opt.h"
+
 
 
 
 #define AUDIO_BUFFER_SIZE 1000
+
+
+
 @interface FFMpegTask : NSObject
 {
-    
-    
-   
-    
-    dispatch_queue_t _stream_dispatch;
-    
     AVFormatContext *_av_fmt_ctx;
     AVStream *_av_video_stream;
     AVStream *_av_audio_stream;
@@ -30,8 +29,6 @@
     char *_audio_extradata;
     size_t _audio_extradata_size;
     
-    CFAbsoluteTime _input_frame_timestamp;
-    CFAbsoluteTime _output_frame_timestamp;
     int _input_framecnt;
     int _output_framecnt;
     int _output_bytes;
@@ -43,10 +40,10 @@
 }
 
 
--(void) writeVideoSampleBuffer:(CapturedFrameData *)frameData;
--(void) writeAudioSampleBuffer:(CMSampleBufferRef)theBuffer presentationTimeStamp:(CMTime)pts;
--(void) writeAVPacket:(CapturedFrameData *)frameData;
--(void) writeEncodedData:(CapturedFrameData *)frameData;
+-(BOOL) writeVideoSampleBuffer:(CapturedFrameData *)frameData;
+-(BOOL) writeAudioSampleBuffer:(CMSampleBufferRef)theBuffer presentationTimeStamp:(CMTime)pts;
+-(BOOL) writeAVPacket:(CapturedFrameData *)frameData;
+-(BOOL) writeEncodedData:(CapturedFrameData *)frameData;
 -(void) updateOutputStats;
 -(void) updateInputStats;
 
@@ -60,7 +57,6 @@
 
 
 @property (assign) BOOL init_done;
-@property (assign) BOOL active;
 @property (strong) NSString *stream_output;
 @property (strong) NSString *stream_format;
 @property (assign) int framerate;
@@ -75,6 +71,8 @@
 @property (assign) double output_bitrate;
 @property (assign) int dropped_frame_count;
 @property (assign) BOOL errored;
+@property (assign) enum AVCodecID video_codec_id;
+
 
 
 @property (strong) CaptureController *settingsController;

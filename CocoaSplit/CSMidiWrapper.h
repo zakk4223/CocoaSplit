@@ -17,6 +17,7 @@
 
 @property (strong) MIKMIDIDevice *device;
 @property (strong) MIKMIDIMapping *deviceMapping;
+@property (nonatomic, copy) id<MIKMIDIResponder>(^redirectResponderBlock)(MIKMIDICommand *command, MIKMIDIMappingItem *item);
 
 
 

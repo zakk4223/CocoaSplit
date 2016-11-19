@@ -7,19 +7,19 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "h264Compressor.h"
+#import "VideoCompressor.h"
+#import "CSCompressorViewControllerProtocol.h"
 
 
 @class captureController;
 
-@interface CompressorBase : NSObject <h264Compressor, NSCoding>
+@interface CompressorBase : NSObject <VideoCompressor, NSCoding>
 {
     NSMutableArray *_audioBuffer;
 }
 
 
 
-@property (strong) CaptureController *settingsController;
 
 
 @property (strong) NSMutableDictionary *outputs;
@@ -37,14 +37,15 @@
 @property (strong) NSString *compressorType;
 @property (strong) NSMutableString *name;
 @property (assign) bool errored;
+@property (assign) bool active;
+@property (assign) enum AVCodecID codec_id;
 
 
 
 
 -(void) reset;
 -(BOOL) setupResolution:(CVImageBufferRef)withFrame;
--(void) addAudioData:(CMSampleBufferRef)audioData;
--(void) setAudioData:(CapturedFrameData *)forFrame syncObj:(id)syncObj;
+-(id <CSCompressorViewControllerProtocol>)getConfigurationView;
 
 
 

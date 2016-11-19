@@ -35,11 +35,13 @@
         self.frameCount = _audioSlice->mNumberFrames;
         
         self.bufferCount = streamFormat->mChannelsPerFrame;
+        _alloced_buffers = NO;
         
     }
     
     return self;
 }
+
 
 
 -(void)copyFromAudioBufferList:(AudioBufferList *)copyFrom
@@ -91,6 +93,7 @@
         }
         _audioSlice->mBufferList = _pcmData;
         memcpy(&_pcmFormat, streamFormat, sizeof(AudioStreamBasicDescription));
+        _alloced_buffers = YES;
     }
     
     
@@ -101,13 +104,14 @@
 
 -(void)dealloc
 {
-    //You better not have freed this before
-    for (int i=0; i < self.bufferCount; i++)
+    if (_alloced_buffers || self.handleFreeBuffer)
     {
-        free(_audioSlice->mBufferList->mBuffers[i].mData);
+        for (int i=0; i < self.bufferCount; i++)
+        {
+            free(_audioSlice->mBufferList->mBuffers[i].mData);
+        }
+        free(_audioSlice->mBufferList);
     }
-    
-    free(_audioSlice->mBufferList);
     free(_audioSlice);
 }
 

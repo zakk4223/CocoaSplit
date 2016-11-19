@@ -9,6 +9,7 @@
 #import "x264Compressor.h"
 #import "OutputDestination.h"
 #import <libavutil/opt.h>
+#import "CSx264CompressorViewController.h"
 
 
 
@@ -25,7 +26,6 @@
     copy.x264presets = self.x264presets;
     copy.x264profiles = self.x264profiles;
     
-    copy.settingsController = self.settingsController;
     
     copy.isNew = self.isNew;
     copy.name = self.name;
@@ -185,11 +185,6 @@
         return NO;
     }
     
-    if (!self.settingsController)
-    {
-        return NO;
-    }
-    
     
     if (!_av_codec && !self.errored)
     {
@@ -215,17 +210,19 @@
         CVPixelBufferRetain(frameData.videoFrame);
     }
     
-    [self setAudioData:frameData syncObj:self];
 
     dispatch_async(_compressor_queue, ^{
         
-        
-        if (frameData.frameNumber == 1)
+        @autoreleasepool {
+            
+            
+        if (_next_keyframe_time == 0.0f)
         {
             _next_keyframe_time = frameData.frameTime;
         }
         
         BOOL isKeyFrame = NO;
+        
         
         if (frameData.frameTime >= _next_keyframe_time)
         {
@@ -253,7 +250,7 @@
         VTSessionSetProperty(_vtpt_ref, kVTPixelTransferPropertyKey_ScalingMode, kVTScalingMode_Letterbox);
     }
         
-    int64_t usePts = av_rescale_q(pts.value, (AVRational){1,1000000}, _av_codec_ctx->time_base);
+        int64_t usePts = av_rescale_q(pts.value, (AVRational){1,1000}, _av_codec_ctx->time_base);
         
     if (_last_pts > 0 && usePts <= _last_pts)
     {
@@ -348,7 +345,7 @@
         
         frameData.avcodec_ctx = _av_codec_ctx;
         frameData.avcodec_pkt = pkt;
-        
+        frameData.isKeyFrame = pkt->flags & AV_PKT_FLAG_KEY;
         
         for (id dKey in self.outputs)
         {
@@ -367,7 +364,7 @@
         //av_free_packet(pkt);
          //av_free(pkt);
         
-        
+        }
     });
     
     return YES;
@@ -413,13 +410,6 @@
     
     
 
-    NSLog(@"IN COMPRESSOR SETUP");
-    if (!self.settingsController)
-    {
-        return NO;
-    }
-    
-
     NSString *useAdvancedSettings = self.advancedSettings.copy;
     
     
@@ -436,6 +426,8 @@
         return NO;
     }
     
+    double captureFPS = [CSPluginServices sharedPluginServices].currentFPS;
+
     _next_keyframe_time = 0.0f;
     
     _av_codec_ctx = avcodec_alloc_context3(_av_codec);
@@ -444,18 +436,23 @@
     //_av_codec_ctx->max_b_frames = 0;
     _av_codec_ctx->width = self.working_width;
     _av_codec_ctx->height = self.working_height;
-    _av_codec_ctx->time_base.num = 1000000;
+    _av_codec_ctx->time_base.num = 1;
+    _av_codec_ctx->time_base.den = 1000;
     
-    _av_codec_ctx->time_base.den = self.settingsController.captureFPS*1000000;
+    
+    
     _av_codec_ctx->pix_fmt = PIX_FMT_YUV420P;
     
     
     int real_keyframe_interval = 0;
+    
+    
+    
     if (!self.keyframe_interval)
     {
-        real_keyframe_interval = self.settingsController.captureFPS*2;
+        real_keyframe_interval = captureFPS*2;
     } else {
-        real_keyframe_interval  = self.settingsController.captureFPS*self.keyframe_interval;
+        real_keyframe_interval  = captureFPS*self.keyframe_interval;
     }
     
     
@@ -479,8 +476,7 @@
 
     } else {
         
-        //what did we learn today? Don't believe shit you read in forum posts...
-         //_av_codec_ctx->rc_buffer_size = ((1/self.settingsController.captureFPS)*self.settingsController.captureVideoAverageBitrate)*1000;
+
         
         _av_codec_ctx->bit_rate = self.vbv_maxrate*1000;
         
@@ -490,7 +486,6 @@
         } else {
             useAdvancedSettings = [useAdvancedSettings stringByAppendingString:@":filler=1"];
         }
-        //av_dict_set(&opts, "nal-hrd", "cbr", 0);
     }
     
     _av_codec_ctx->flags |= CODEC_FLAG_GLOBAL_HEADER;
@@ -542,6 +537,7 @@
     }
     
     
+    
     _sws_ctx = NULL;
     
     _audioBuffer = [[NSMutableArray alloc] init];
@@ -563,6 +559,10 @@
     [super setNilValueForKey:key];
 }
 
+-(id <CSCompressorViewControllerProtocol>)getConfigurationView
+{
+    return [[CSx264CompressorViewController alloc] init];
+}
 
 
 @end

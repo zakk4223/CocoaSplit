@@ -26,5 +26,7 @@
 	<string>Copyright © 2014 Zakk. All rights reserved.</string>
 	<key>NSPrincipalClass</key>
 	<string>TwitchStreamService</string>
+	<key>TwitchAPIClientID</key>
+	<string>p2onxyxk17dlngdgtj43kl9gaj2yb2a</string>
 </dict>
 </plist>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="CSLayoutCollectionItem">
+            <connections>
+                <outlet property="layoutButton" destination="oEZ-7b-gAG" id="vTT-n9-tmF"/>
+                <outlet property="view" destination="Hz6-mo-xeY" id="Edh-QE-Kq0"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView wantsLayer="YES" id="Hz6-mo-xeY" customClass="CSLayoutCollectionItemView">
+            <rect key="frame" x="0.0" y="0.0" width="73" height="52"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oEZ-7b-gAG" customClass="CSLayoutButton">
+                    <rect key="frame" x="0.0" y="-3" width="73" height="55"/>
+                    <buttonCell key="cell" type="bevel" title="Button" bezelStyle="regularSquare" alignment="center" controlSize="small" borderStyle="border" inset="2" id="Vh8-Yh-V5k">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="layoutButtonPushed:" target="-2" id="eIQ-Dg-C9j"/>
+                        <binding destination="-2" name="title" keyPath="self.representedObject.name" id="1Hd-9E-nXm"/>
+                        <binding destination="-2" name="toolTip" keyPath="self.representedObject.name" previousBinding="1Hd-9E-nXm" id="T9G-sC-dpe"/>
+                        <outlet property="viewController" destination="-2" id="psA-8B-2rC"/>
+                    </connections>
+                </button>
+            </subviews>
+            <point key="canvasLocation" x="306.5" y="322"/>
+        </customView>
+    </objects>
+</document>

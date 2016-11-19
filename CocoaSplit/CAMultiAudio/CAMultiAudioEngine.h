@@ -42,7 +42,8 @@
 @property (strong) CAMultiAudioDevice *outputNode;
 @property (strong) CAMultiAudioDevice *graphOutputNode;
 @property (strong) NSArray *validSamplerates;
-
+@property (assign) Float32 streamAudioPowerLevel;
+@property (assign) Float32 previewAudioPowerLevel;
 
 
 

@@ -7,12 +7,15 @@
 //
 
 #import "CreateLayoutViewController.h"
+#import "CaptureController.h"
+#import "AppDelegate.h"
 
 @interface CreateLayoutViewController ()
 
 @end
 
 @implementation CreateLayoutViewController
+@synthesize sourceLayout = _sourceLayout;
 
 
 -(instancetype) init
@@ -21,10 +24,18 @@
 }
 
 
+-(instancetype) initForBuiltin
+{
+    return [self initWithNibName:@"EditBuiltinLayoutView" bundle:nil];
+}
+
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        _createDialog = NO;
+        
         // Initialization code here.
     }
     return self;
@@ -38,7 +49,17 @@
     
     if (self.sourceLayout)
     {
-        [self.controller addLayoutFromBase:self.sourceLayout];
+        [self.sourceLayout updateCanvasWidth:self.canvas_width height:self.canvas_height];
+    }
+    
+    
+    if (self.sourceLayout && self.createDialog)
+    {
+        AppDelegate *appDel = NSApp.delegate;
+        
+        CaptureController *controller = appDel.captureController;
+        
+        [controller addLayoutFromBase:self.sourceLayout];
     }
     [self.popover close];
     
@@ -47,9 +68,32 @@
 
 -(void)popoverDidClose:(NSNotification *)notification
 {
+    
+    AppDelegate *appDel = NSApp.delegate;
+    
+    CaptureController *controller = appDel.captureController;
+
     self.popover.contentViewController = nil;
+    //This is only relevant if we're a custom edit popup for staging/live, but just do it unconditionally because reasons/lazy
+    [controller updateFrameIntervals];
 }
 
+
+-(SourceLayout *)sourceLayout
+{
+    return _sourceLayout;
+}
+
+
+-(void) setSourceLayout:(SourceLayout *)sourceLayout
+{
+    _sourceLayout = sourceLayout;
+    if (_sourceLayout)
+    {
+        self.canvas_width = sourceLayout.canvas_width;
+        self.canvas_height = sourceLayout.canvas_height;
+    }
+}
 
 
 @end

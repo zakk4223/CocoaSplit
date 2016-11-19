@@ -11,6 +11,8 @@
 
 extern NSString *const CSNotificationLayoutAdded;
 extern NSString *const CSNotificationLayoutDeleted;
+extern NSString *const CSNotificationLayoutCanvasChanged;
+extern NSString *const CSNotificationLayoutFramerateChanged;
 
 
 
@@ -24,6 +26,9 @@ extern NSString *const CSNotificationOutputDeleted;
 
 extern NSString *const CSNotificationCompressorAdded;
 extern NSString *const CSNotificationCompressorDeleted;
+extern NSString *const CSNotificationCompressorRenamed;
+extern NSString *const CSNotificationCompressorReconfigured;
+
 
 
 extern NSString *const CSNotificationInputAdded;
@@ -31,6 +36,10 @@ extern NSString *const CSNotificationInputDeleted;
 
 extern NSString *const CSNotificationInputSelected;
 
+extern NSString *const CSNotificationInputAttached;
+extern NSString *const CSNotificationInputDetached;
+
+extern NSString *const CSNotificationLayoutModeChanged;
 
 
 

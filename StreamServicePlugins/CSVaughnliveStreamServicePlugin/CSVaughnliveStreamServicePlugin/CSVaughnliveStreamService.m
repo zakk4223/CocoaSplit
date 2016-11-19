@@ -45,6 +45,10 @@
     return destination;
 }
 
++(NSImage *)serviceImage
+{
+    return [[NSBundle bundleForClass:[self class]] imageForResource:@"vaughnlive_icon"];
+}
 
 
 +(NSString *)label

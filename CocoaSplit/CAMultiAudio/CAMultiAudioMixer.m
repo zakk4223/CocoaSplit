@@ -69,6 +69,25 @@
 }
 
 
+-(Float32)outputPower
+{
+    Float32 result = 0;
+    OSStatus err;
+    
+    
+    err = AudioUnitGetParameter(self.audioUnit, kStereoMixerParam_PostAveragePower, kAudioUnitScope_Output, 0, &result);
+    
+    
+    if (err)
+    {
+        NSLog(@"GET POWER ERROR %d", err);
+    }
+    
+    return result;
+
+}
+
+
 -(Float32)powerForInputBus:(UInt32)bus
 {
     Float32 result = 0;

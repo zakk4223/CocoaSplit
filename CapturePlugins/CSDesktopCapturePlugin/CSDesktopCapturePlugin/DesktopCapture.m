@@ -85,6 +85,12 @@
 }
 
 
+-(NSImage *)libraryImage
+{
+    return [NSImage imageNamed:NSImageNameComputer];
+}
+
+
 -(void)frameTick
 {
     
@@ -244,6 +250,7 @@
     
     _displayStreamRef = CGDisplayStreamCreateWithDispatchQueue(self.currentDisplay, width, height,  kCVPixelFormatType_420YpCbCr8BiPlanarFullRange, (__bridge CFDictionaryRef)(opts), _capture_queue, ^(CGDisplayStreamFrameStatus status, uint64_t displayTime, IOSurfaceRef frameSurface, CGDisplayStreamUpdateRef updateRef) {
         
+
 
         CFAbsoluteTime nowTime = CFAbsoluteTimeGetCurrent();
         _lastFrame = nowTime;
@@ -406,6 +413,7 @@
 
 -(void)dealloc
 {
+    
     [self removeObserver:self forKeyPath:@"propertiesChanged"];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }

@@ -20,6 +20,7 @@
     NSSize _lastSurfaceSize;
     bool _resizeDirty;
     CIContext *_cictx;
+    bool _resetClearColor;
     
     
     GLint       _viewport[4];
@@ -36,10 +37,14 @@
 
 @property (assign) float snap_y;
 @property (assign) float snap_x;
+@property (assign) bool doRender;
+@property (assign) bool midiActive;
+@property (assign) bool resizeDirty;
 
 
 -(NSPoint)realPointforWindowPoint:(NSPoint)winPoint;
 -(NSRect)windowRectforWorldRect:(NSRect)worldRect;
+
 
 
 

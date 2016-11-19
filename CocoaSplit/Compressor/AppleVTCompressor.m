@@ -8,6 +8,9 @@
 
 #import "AppleVTCompressor.h"
 #import "OutputDestination.h"
+#import "CSAppleH264CompressorViewController.h"
+#import "CSPluginServices.h"
+
 
 OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessionRef, CFDictionaryRef *);
 
@@ -20,7 +23,6 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
 {
     AppleVTCompressor *copy = [[[self class] allocWithZone:zone] init];
     
-    copy.settingsController = self.settingsController;
     
     copy.isNew = self.isNew;
     
@@ -61,6 +63,9 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
 
     [aCoder encodeObject:self.resolutionOption forKey:@"resolutionOption"];
 
+    [aCoder encodeBool:self.noHardware forKey:@"noHardware"];
+    [aCoder encodeBool:self.forceHardware forKey:@"forceHardware"];
+    
 }
 
 -(id) initWithCoder:(NSCoder *)aDecoder
@@ -75,6 +80,9 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
         self.use_cbr = [aDecoder decodeBoolForKey:@"use_cbr"];
         self.width = (int)[aDecoder decodeIntegerForKey:@"videoWidth"];
         self.height = (int)[aDecoder decodeIntegerForKey:@"videoHeight"];
+        self.noHardware = [aDecoder decodeBoolForKey:@"noHardware"];
+        self.forceHardware = [aDecoder decodeBoolForKey:@"forceHardware"];
+        
         if ([aDecoder containsValueForKey:@"resolutionOption"])
         {
             self.resolutionOption = [aDecoder decodeObjectForKey:@"resolutionOption"];
@@ -97,6 +105,7 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
         self.compressorType = @"AppleVTCompressor";
 
         self.profiles = @[[NSNull null], @"Baseline", @"Main", @"High"];
+        _compressor_queue = dispatch_queue_create("Apple VT Compressor Queue", 0);
     }
     
     return self;
@@ -106,16 +115,17 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
 -(void) reset
 {
 
-    
+    _resetPending = YES;
     self.errored = NO;
+    VTCompressionSessionCompleteFrames(_compression_session, CMTimeMake(0, 0));
     VTCompressionSessionInvalidate(_compression_session);
     if (_compression_session)
     {
         CFRelease(_compression_session);
     }
     
-    _compression_session = nil;
-
+    _compression_session = NULL;
+    _resetPending = NO;
 }
 
 
@@ -143,12 +153,20 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 -(bool)compressFrame:(CapturedFrameData *)frameData
 {
     
+    if (_resetPending)
+    {
+        return NO;
+    }
+    
     
     if (![self hasOutputs])
     {
         return NO;
     }
 
+    
+    
+        
     if (!_compression_session)
     {
         
@@ -159,7 +177,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
         return NO;
     }
     
-    
+
     
     CFMutableDictionaryRef frameProperties;
     
@@ -195,8 +213,6 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     
     
     CVPixelBufferRelease(imageBuffer);
-    
-    [self setAudioData:frameData syncObj:self];
 
     VTCompressionSessionEncodeFrame(_compression_session, converted_frame, frameData.videoPTS, frameData.videoDuration, frameProperties, (__bridge_retained void *)(frameData), NULL);
     
@@ -204,22 +220,44 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     {
         CFRelease(frameProperties);
     }
-    
+
     
     return YES;
 }
 
 
++(bool)intelQSVAvailable
+{
+    NSMutableDictionary *encoderSpec = [[NSMutableDictionary alloc] init];
+    encoderSpec[(__bridge NSString *)kVTVideoEncoderSpecification_RequireHardwareAcceleratedVideoEncoder] = @YES;
+    
+    
+    VTCompressionSessionRef testSession = NULL;
+    OSStatus status;
+    
+    status = VTCompressionSessionCreate(NULL, 1920, 1080, kCMVideoCodecType_H264, (__bridge CFDictionaryRef)encoderSpec, NULL, NULL, NULL,  (__bridge void *)self, &testSession);
+    
+    bool ret;
+    if (status != noErr || !testSession)
+    {
+        ret = NO;
+    } else {
+        VTCompressionSessionInvalidate(testSession);
+        if (testSession)
+        {
+            CFRelease(testSession);
+        }
+        ret = YES;
+    }
+
+    return ret;
+}
 
 
 - (bool)setupCompressor:(CVPixelBufferRef)videoFrame
 {
     OSStatus status;
     
-    if (!self.settingsController)
-    {
-        return NO;
-    }
 
     [self setupResolution:videoFrame];
     
@@ -229,10 +267,21 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
         return NO;
     }
     
-	NSDictionary *encoderSpec = @{
-		@"RequireHardwareAcceleratedVideoEncoder": @YES,
-	};
-	
+    
+    
+    NSMutableDictionary *encoderSpec = [[NSMutableDictionary alloc] init];
+    
+    bool enableVal = !self.noHardware;
+    
+    encoderSpec[(__bridge NSString *)kVTVideoEncoderSpecification_EnableHardwareAcceleratedVideoEncoder] = @(enableVal);
+    
+    
+    if (self.forceHardware)
+    {
+        encoderSpec[(__bridge NSString *)kVTVideoEncoderSpecification_RequireHardwareAcceleratedVideoEncoder] = @YES;
+    }
+    
+  
     _compression_session = NULL;
     status = VTCompressionSessionCreate(NULL, self.working_width, self.working_height, kCMVideoCodecType_H264, (__bridge CFDictionaryRef)encoderSpec, NULL, NULL, VideoCompressorReceiveFrame,  (__bridge void *)self, &_compression_session);
     
@@ -265,7 +314,13 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     
     
     
+    double captureFPS = [CSPluginServices sharedPluginServices].currentFPS;
     
+    if (captureFPS > 0)
+    {
+        VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_ExpectedFrameRate, (__bridge CFTypeRef)(@(captureFPS)));
+    }
+     
     
     int real_keyframe_interval = 2;
     if (self.keyframe_interval && self.keyframe_interval > 0)
@@ -308,18 +363,6 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     
     
 
-    /*
-    
-    if (self.settingsController.captureFPS && self.settingsController.captureFPS > 0)
-    {
-        
-        
-        
-        VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_ExpectedFrameRate, (__bridge CFTypeRef)(@(self.settingsController.captureFPS)));
-        
-    }
-    
-     */
     
     
     //This doesn't appear to work at all (2012 rMBP, 10.8.4). Even if you set DataRateLimits, you don't get anything back if you
@@ -421,8 +464,19 @@ void VideoCompressorReceiveFrame(void *VTref, void *VTFrameRef, OSStatus status,
 
         //frameData.videoFrame = nil;
         frameData.encodedSampleBuffer = sampleBuffer;
+        CFArrayRef sample_attachments;
+        sample_attachments = CMSampleBufferGetSampleAttachmentsArray(sampleBuffer, NO);
+        if (sample_attachments)
+        {
+            CFDictionaryRef attach;
+            CFBooleanRef depends_on_others;
+            
+            attach = CFArrayGetValueAtIndex(sample_attachments, 0);
+            depends_on_others = CFDictionaryGetValue(attach, kCMSampleAttachmentKey_DependsOnOthers);
+            frameData.isKeyFrame = depends_on_others;
+        }
         
-        
+    
         AppleVTCompressor *selfobj = (__bridge AppleVTCompressor *)VTref;
     
     
@@ -441,6 +495,11 @@ void VideoCompressorReceiveFrame(void *VTref, void *VTFrameRef, OSStatus status,
         
         CFRelease(sampleBuffer);
     //}
+}
+
+-(id <CSCompressorViewControllerProtocol>)getConfigurationView
+{
+    return [[CSAppleH264CompressorViewController alloc] init];
 }
 
 

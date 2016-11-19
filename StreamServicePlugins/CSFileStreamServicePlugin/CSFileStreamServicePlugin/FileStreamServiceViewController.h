@@ -14,4 +14,6 @@
 @property (weak) FileStreamService *serviceObj;
 @property (strong) IBOutlet NSObjectController *fileStreamServiceController;
 
+- (IBAction)chooseDestination:(id)sender;
+
 @end

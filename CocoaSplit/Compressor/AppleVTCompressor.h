@@ -13,16 +13,19 @@
 #import <VideoToolbox/VideoToolbox.h>
 #import <VideoToolbox/VTVideoEncoderList.h>
 
-@interface AppleVTCompressor : CompressorBase <h264Compressor, NSCoding>
+@interface AppleVTCompressor : CompressorBase <VideoCompressor, NSCoding>
 {
     
     VTCompressionSessionRef _compression_session;
     VTPixelTransferSessionRef _vtpt_ref;
+    bool _resetPending;
+    dispatch_queue_t _compressor_queue;
+    
+    
 
 }
 
 
-//@property (strong) id<ControllerProtocol> settingsController;
 //@property (strong) id<ControllerProtocol> outputDelegate;
 
 @property (assign) int average_bitrate;
@@ -32,8 +35,12 @@
 @property (assign) BOOL use_cbr;
 @property (strong) NSArray *profiles;
 
+@property (assign) bool noHardware;
+@property (assign) bool forceHardware;
+
 
 -(bool)compressFrame:(CapturedFrameData *)frameData;
++(bool)intelQSVAvailable;
 
 
 @end

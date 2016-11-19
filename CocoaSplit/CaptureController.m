@@ -26,8 +26,12 @@
 #import "MIKMIDI.h"
 #import "CSMidiWrapper.h"
 #import "CSCaptureBase+TimerDelegate.h"
-#import <Python/Python.h>
+#import "CSLayoutEditWindowController.h"
+#import "CSTimedOutputBuffer.h"
+#import "CSAdvancedAudioWindowController.h"
 
+
+#import <Python/Python.h>
 
 
 
@@ -35,49 +39,17 @@
 
 @implementation CaptureController
 
-@synthesize selectedCompressorType = _selectedCompressorType;
 @synthesize selectedLayout = _selectedLayout;
 @synthesize stagingLayout = _stagingLayout;
 @synthesize audioSamplerate  = _audioSamplerate;
 @synthesize transitionName = _transitionName;
+@synthesize useInstantRecord = _useInstantRecord;
+@synthesize instantRecordBufferDuration = _instantRecordBufferDuration;
 
 
 
--(IBAction)mainDeleteLayoutClicked:(id)sender
-{
-    
-    NSInteger selectedIdx = self.mainSourceLayoutTableView.selectedRow;
-    if (selectedIdx != -1)
-    {
-        [self deleteLayout:selectedIdx];
-        [self layoutTableSelected:self.mainSourceLayoutTableView];
-    }
-}
-
--(IBAction)stagingDeleteLayoutClicked:(id)sender
-{
-
-    NSInteger selectedIdx = self.stagingSourceLayoutTableView.selectedRow;
-    if (selectedIdx != -1)
-    {
-        [self deleteLayout:selectedIdx];
-        [self layoutTableSelected:self.stagingSourceLayoutTableView];
-    }
-}
-
--(IBAction)stagingCopyLayoutClicked:(id)sender
-{
-    [self cloneSelectedSourceLayout:self.stagingSourceLayoutTableView];
-}
-
-- (IBAction)stagingAnimationSelected:(id)sender {
-}
 
 
--(IBAction)mainCopyLayoutClicked:(id)sender
-{
-    [self cloneSelectedSourceLayout:self.mainSourceLayoutTableView];
-}
 
 
 -(void) cloneSelectedSourceLayout:(NSTableView *)fromTable
@@ -93,9 +65,142 @@
 }
 
 
-- (IBAction)openLayoutPopover:(NSButton *)sender
+-(void)openBuiltinLayoutPopover:(NSView *)sender spawnRect:(NSRect)spawnRect forLayout:(SourceLayout *)layout
+{
+    CreateLayoutViewController *vc;
+    if (!_layoutpopOver)
+    {
+        _layoutpopOver = [[NSPopover alloc] init];
+        
+        _layoutpopOver.animates = YES;
+        _layoutpopOver.behavior = NSPopoverBehaviorTransient;
+    }
+    
+    if (!_layoutpopOver.contentViewController)
+    {
+        vc = [[CreateLayoutViewController alloc] initForBuiltin];
+        
+        
+        _layoutpopOver.contentViewController = vc;
+        _layoutpopOver.delegate = vc;
+        vc.popover = _layoutpopOver;
+        
+    }
+    
+    SourceLayout *useLayout = layout;
+    if (!useLayout)
+    {
+        vc.createDialog = YES;
+        useLayout = [[SourceLayout alloc] init];
+    }
+    vc.sourceLayout = useLayout;
+    
+    
+    [_layoutpopOver showRelativeToRect:spawnRect ofView:sender preferredEdge:NSMinYEdge];
+}
+
+
+-(void)openAddOutputPopover:(id)sender sourceRect:(NSRect)sourceRect
+{
+    CSAddOutputPopupViewController *vc;
+    if (!_addOutputpopOver)
+    {
+        _addOutputpopOver = [[NSPopover alloc] init];
+        _addOutputpopOver.animates = YES;
+        _addOutputpopOver.behavior = NSPopoverBehaviorTransient;
+    }
+    
+    //if (!_addInputpopOver.contentViewController)
+    {
+        vc = [[CSAddOutputPopupViewController alloc] init];
+        vc.addOutput = ^void(Class outputClass) {
+            [self outputPopupButtonAction:outputClass];
+        };
+        
+        _addOutputpopOver.contentViewController = vc;
+        vc.popover = _addOutputpopOver;
+        //_addInputpopOver.delegate = vc;
+    }
+    
+    [_addOutputpopOver showRelativeToRect:sourceRect ofView:sender preferredEdge:NSMaxXEdge];
+}
+
+- (IBAction)previewAnimations:(id)sender
 {
     
+    if (self.stagingHidden)
+    {
+        return;
+    }
+    
+    //save and copy both live and staging
+    //set staging layout to copy of live
+    //apply transition settings to staging
+    //replace staging with copy of 'old' staging
+    //when done, delay 1.5 seconds and then restore old staging
+    
+    [self.selectedLayout saveSourceList];
+    [self.stagingLayout saveSourceList];
+    
+    SourceLayout *stagingSave = self.activePreviewView.sourceLayout;
+    
+    SourceLayout *liveCopy = [self.selectedLayout copy];
+    SourceLayout *stagingCopy = [self.stagingLayout copy];
+    
+    
+    [liveCopy restoreSourceList:liveCopy.savedSourceListData];
+
+    [stagingCopy restoreSourceList:stagingCopy.savedSourceListData];
+    
+    self.activePreviewView.sourceLayout = liveCopy;
+    liveCopy.in_staging = NO;
+    
+    [self applyTransitionSettings:liveCopy];
+    dispatch_time_t delay_dispatch = dispatch_time(DISPATCH_TIME_NOW, 1.0 * NSEC_PER_SEC);
+    dispatch_after(delay_dispatch, dispatch_get_main_queue(), ^{
+    [liveCopy replaceWithSourceLayout:stagingCopy withCompletionBlock:^{
+        
+        self.activePreviewView.sourceLayout.in_staging = YES;
+        dispatch_time_t inner_dispatch = dispatch_time(DISPATCH_TIME_NOW, 1.5 * NSEC_PER_SEC);
+        dispatch_after(inner_dispatch, dispatch_get_main_queue(), ^{
+            self.activePreviewView.sourceLayout = stagingSave;
+        });
+        
+    }];
+        
+    });
+    
+    
+}
+
+
+
+
+-(void)openAddInputPopover:(id)sender sourceRect:(NSRect)sourceRect
+{
+    CSAddInputViewController *vc;
+    if (!_addInputpopOver)
+    {
+        _addInputpopOver = [[NSPopover alloc] init];
+        _addInputpopOver.animates = YES;
+        _addInputpopOver.behavior = NSPopoverBehaviorTransient;
+    }
+    
+    //if (!_addInputpopOver.contentViewController)
+    {
+        vc = [[CSAddInputViewController alloc] init];
+        _addInputpopOver.contentViewController = vc;
+        vc.popover = _addInputpopOver;
+        vc.previewView = self.activePreviewView;
+        //_addInputpopOver.delegate = vc;
+    }
+    
+    [_addInputpopOver showRelativeToRect:sourceRect ofView:sender preferredEdge:NSMaxXEdge];
+}
+
+
+-(void)openLayoutPopover:(NSButton *)sender forLayout:(SourceLayout *)layout
+{
     CreateLayoutViewController *vc;
     if (!_layoutpopOver)
     {
@@ -109,7 +214,6 @@
     {
         vc = [[CreateLayoutViewController alloc] init];
         
-        vc.controller = self;
         
         _layoutpopOver.contentViewController = vc;
         _layoutpopOver.delegate = vc;
@@ -117,16 +221,86 @@
         
     }
     
-    vc.sourceLayout = [[SourceLayout alloc] init];
-
+    SourceLayout *useLayout = layout;
+    if (!useLayout)
+    {
+        vc.createDialog = YES;
+        useLayout = [[SourceLayout alloc] init];
+    }
+    vc.sourceLayout = useLayout;
     [_layoutpopOver showRelativeToRect:sender.bounds ofView:sender preferredEdge:NSMinYEdge];
+}
+
+
+-(void)layoutWindowWillClose:(CSLayoutEditWindowController *)windowController
+{
+    
+    if ([_layoutWindows containsObject:windowController])
+    {
+        [_layoutWindows removeObject:windowController];
+    }
+}
+
+
+- (IBAction)openLibraryWindow:(id) sender
+{
+    CSInputLibraryWindowController *newController = [[CSInputLibraryWindowController alloc] init];
+    
+    [newController showWindow:nil];
+    
+    newController.controller = self;
+    
+    self.inputLibraryController = newController;
+}
+
+-(void)addInputToLibrary:(InputSource *)source
+{
+    CSInputLibraryItem *newItem = [[CSInputLibraryItem alloc] initWithInput:source];
+    
+    NSUInteger cIdx = self.inputLibrary.count;
+    
+    [self insertObject:newItem inInputLibraryAtIndex:cIdx];
     
 }
 
 
-- (void)deleteLayout:(NSInteger)deleteIdx
+-(CSLayoutEditWindowController *)openLayoutWindow:(SourceLayout *)layout
 {
-    SourceLayout *toDelete = [self.sourceLayoutsArrayController.arrangedObjects objectAtIndex:deleteIdx];
+    CSLayoutEditWindowController *newController = [[CSLayoutEditWindowController alloc] init];
+
+    [newController showWindow:nil];
+    
+    newController.previewView.isEditWindow = YES;
+    
+    LayoutRenderer *wRenderer = [[LayoutRenderer alloc] init];
+    
+    newController.previewView.layoutRenderer = wRenderer;
+    
+    newController.previewView.controller = self;
+    newController.previewView.sourceLayout = layout;
+    [newController.previewView.sourceLayout restoreSourceList:nil];
+    newController.delegate = self;
+    
+    
+    [_layoutWindows addObject:newController];
+    return newController;
+}
+
+
+
+
+
+- (IBAction)openLayoutPopover:(NSButton *)sender
+{
+    
+
+    [self openLayoutPopover:sender forLayout:nil];
+    
+}
+
+
+- (bool)deleteLayout:(SourceLayout *)toDelete
+{
     
     if (toDelete)
     {
@@ -135,15 +309,11 @@
             
             
             toDelete.isActive = NO;
-         
-            [self.sourceLayoutsArrayController removeObjectAtArrangedObjectIndex:deleteIdx];
-            
-            if (self.selectedLayout == toDelete)
-            {
-                self.selectedLayout = nil;
-            }
+            [self.sourceLayoutsArrayController removeObject:toDelete];
+            return YES;
         }
     }
+    return NO;
 }
 
 
@@ -191,6 +361,7 @@
         newLayout.canvas_height = self.captureHeight;
     }
     
+    
     [self insertObject:newLayout inSourceLayoutsAtIndex:self.sourceLayouts.count];
     
     
@@ -231,9 +402,15 @@
     
     SourceLayout *layout;
     
+    if (tableView == self.inputTableView)
+    {
+        return [tableView makeViewWithIdentifier:@"inputTableCellView" owner:tableView];
+    }
+    
+    
     if (tableView.tag == 0)
     {
-        layout = self.stagingPreviewView.sourceLayout;
+        layout = self.activePreviewView.sourceLayout;
     } else {
         layout = self.livePreviewView.sourceLayout;
     }
@@ -253,6 +430,7 @@
         
         retView = [tableView makeViewWithIdentifier:@"LabelCellView" owner:self];
     } else if ([tableColumn.identifier isEqualToString:@"value"]) {
+        
         if ([inputmap[@"type"] isEqualToString:@"param"])
         {
             retView = [tableView makeViewWithIdentifier:@"InputParamView" owner:self];
@@ -283,7 +461,6 @@
     {
         vc = [[CSAnimationChooserViewController alloc] init];
         
-        vc.controller = self;
         
         _animatepopOver.contentViewController = vc;
         _animatepopOver.delegate = vc;
@@ -291,12 +468,7 @@
         
     }
     
-    if (sender.tag == 1)
-    {
-        vc.sourceLayout = self.stagingPreviewView.sourceLayout;
-    } else {
-        vc.sourceLayout = self.livePreviewView.sourceLayout;
-    }
+    vc.sourceLayout = self.activePreviewView.sourceLayout;
     
     
     [_animatepopOver showRelativeToRect:sender.bounds ofView:sender preferredEdge:NSMinYEdge];
@@ -312,421 +484,94 @@
 }
 
 
--(NSString *)selectedCompressorType
+-(void)outputPopupButtonAction:(Class)outputClass
 {
- 
-    return _selectedCompressorType;
+    
+    OutputDestination *newDest = [[OutputDestination alloc] initWithType:[outputClass label]];
+    id serviceObj = [[outputClass alloc] init];
+    newDest.streamServiceObject = serviceObj;
+    
+    [self openOutputSheet:newDest];
 }
 
 
--(void)setSelectedCompressorType:(NSString *)selectedCompressorType
+-(void)openOutputSheet:(OutputDestination *)toEdit
 {
-    _selectedCompressorType = selectedCompressorType;
-    self.compressTabLabel = selectedCompressorType;
-
-    if (!self.editingCompressor || self.editingCompressor.isNew)
+    
+    CSNewOutputWindowController *newController = nil;
+    
+    if (!_outputWindows)
     {
-        if ([selectedCompressorType isEqualToString:@"x264"])
+        _outputWindows = [[NSMutableArray alloc] init];
+    }
+    
+    
+    
+    newController = [[CSNewOutputWindowController alloc] init];
+    newController.compressors = self.compressors;
+    if (toEdit)
+    {
+        newController.outputDestination = toEdit;
+    }
+    
+    
+    newController.windowDone = ^void(NSModalResponse returnCode, CSNewOutputWindowController *window) {
+    
+        if (returnCode == NSModalResponseOK)
         {
-            self.editingCompressor = [[x264Compressor alloc] init];
-        } else if ([selectedCompressorType isEqualToString:@"AppleVTCompressor"]) {
-            self.editingCompressor = [[AppleVTCompressor alloc] init];
-        } else {
-            self.editingCompressor = nil;
-        }
-        if (self.editingCompressor)
-        {
-            self.editingCompressor.isNew = YES;
-        }
-
-    }
-    
-    
-}
-
-
-
-
--(IBAction)newCompressPanel
-{
-    [self openCompressPanel:NO];
-}
-
--(IBAction)editCompressPanel
-{
-    [self openCompressPanel:YES];
-}
-
-
--(IBAction)deleteCompressorPanel
-{
-    
-    if (self.editingCompressor)
-    {
-        NSString *deleteKey = self.editingCompressor.name;
-        
-        if (deleteKey)
-        {
-            self.selectedCompressor = nil;
-            self.editingCompressor = nil;
-            
-            [self deleteCompressorForName:deleteKey];
-        }
-    }
-    
-    [self closeCompressPanel];
-}
-
-
--(void)deleteCompressorForName:(NSString *)name
-{
-    id to_delete = self.compressors[name];
-    
-    [self willChangeValueForKey:@"compressors"];
-    [self.compressors removeObjectForKey:name];
-    [self didChangeValueForKey:@"compressors"];
-    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorDeleted object:to_delete userInfo:nil];
-}
-
-
--(IBAction)openCompressPanel:(bool)doEdit
-{
-    self.selectedCompressor = nil;
-    
-    if (self.compressController.selectedObjects.count > 0)
-    {
-        id <h264Compressor> tmpCompressor;
-        tmpCompressor = [[self.compressController.selectedObjects objectAtIndex:0] valueForKey:@"value"];
-        
-        
-        self.selectedCompressor = self.compressors[tmpCompressor.name];
-    }
-    
-
-    if (doEdit)
-    {
-        self.editingCompressor = self.selectedCompressor;
-        self.editingCompressorKey = self.selectedCompressor.name;
-        
-        
-        if (self.editingCompressor)
-        {
-            self.selectedCompressorType = self.editingCompressor.compressorType;
-            self.compressTabLabel = self.editingCompressor.compressorType;
-        }
-    } else {
-        self.selectedCompressorType = self.selectedCompressorType;
-    }
-    
-    
-    
-    if (!self.compressPanel)
-    {
-        NSString *panelName;
-        
-        panelName = @"CompressionSettingsPanel";
-        
-        [[NSBundle mainBundle] loadNibNamed:panelName owner:self topLevelObjects:nil];
-        
-
-        
-        [NSApp beginSheet:self.compressPanel modalForWindow:[NSApplication sharedApplication].mainWindow modalDelegate:self didEndSelector:NULL contextInfo:NULL];
-        
-    }
-    
-}
-
-
--(NSString *)addCompressor:(id <h264Compressor>)newCompressor
-{
-    NSMutableString *baseName = newCompressor.name;
-    
-    NSMutableString *newName = baseName;
-    int name_try = 1;
-    
-    while (self.compressors[newName]) {
-        newName = [NSMutableString stringWithFormat:@"%@#%d", baseName, name_try];
-        name_try++;
-    }
-    
-    newCompressor.name = newName;
-    [self willChangeValueForKey:@"compressors"];
-    [self.compressors setObject:newCompressor forKey:newName];
-    [self didChangeValueForKey:@"compressors"];
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:newCompressor userInfo:nil];
-    
-    return newName;
-    
-}
-
-
-
--(void) setCompressSelection:(NSString *)forName
-{
-    
-    for (id tmpval in self.compressController.arrangedObjects)
-    {
-        if ([[tmpval valueForKey:@"key"] isEqualToString:forName] )
-        {
-            [self.compressController setSelectedObjects:@[tmpval]];
-            break;
-        }
-    }
-}
-
-
-
--(IBAction)saveCompressPanel
-{
-
-    NSError *compressError;
-    
-    
-    if (self.editingCompressor)
-    {
-        
-        if (![self.editingCompressor validate:&compressError])
-        {
-            if (compressError)
+                        
+            OutputDestination *newDest = window.outputDestination;
+            if (newDest)
             {
-                [NSApp presentError:compressError];
+                newDest.settingsController = self;
+                
+                NSInteger idx = NSNotFound;
+                
+                if (toEdit)
+                {
+                    idx = [self.captureDestinations indexOfObject:toEdit];
+                }
+                if (idx != NSNotFound)
+                {
+                    [self replaceObjectInCaptureDestinationsAtIndex:idx withObject:newDest];
+                } else {
+                    [self insertObject:newDest inCaptureDestinationsAtIndex:self.captureDestinations.count];
+                }
             }
-            return;
         }
-        
-        
-        
-        if (self.editingCompressor.isNew)
-        {
-            
-            self.editingCompressor.isNew = NO;
 
-            NSString *newName = [self addCompressor:self.editingCompressor];
-            
-            [self setCompressSelection:newName];
-
-            
-            
-        } else if (![self.editingCompressorKey isEqualToString:self.editingCompressor.name]) {
-            //the name was changed in the edit dialog, so create a new key entry and delete the old one
-            NSString *newName = [self addCompressor:self.editingCompressor];
-            
-            
-
-
-            [self willChangeValueForKey:@"compressors"];
-            [self.compressors removeObjectForKey:self.editingCompressorKey];
-            [self didChangeValueForKey:@"compressors"];
-            [self setCompressSelection:newName];
-
-            
-            
-        } else {
-            [self.compressors setObject:self.editingCompressor forKey:self.editingCompressor.name];
-        }
-    }
+        [_outputWindows removeObject:window];
+        [window close];
+    };
     
-    [self closeCompressPanel];
-    
+    [_outputWindows addObject:newController];
+    [newController showWindow:nil];
 }
 
-
--(IBAction)closeCompressPanel
-{
-        
-    [NSApp endSheet:self.compressPanel];
-    [self.compressPanel close];
-    self.compressPanel = nil;
-    self.editingCompressor = nil;
-    self.editingCompressorKey = nil;
-}
-
-- (IBAction)addInputSource:(id)sender
-{
-    if (self.selectedLayout)
-    {
-        
-    
-        InputSource *newSource = [[InputSource alloc] init];
-        [self.selectedLayout addSource:newSource];
-        [self.previewCtx spawnInputSettings:newSource atRect:NSZeroRect];
-    }
-}
-
-
-
-- (IBAction)openAudioMixerPanel:(id)sender {
-    
-    if (!self.audioMixerPanel)
-    {
-        [[NSBundle mainBundle] loadNibNamed:@"AudioMixer" owner:self topLevelObjects:nil];
-        [NSApp beginSheet:self.audioMixerPanel modalForWindow:[NSApplication sharedApplication].mainWindow modalDelegate:self didEndSelector:NULL contextInfo:NULL];
-    }
-}
-
-
-- (IBAction)closeAudioMixerPanel:(id)sender {
-    
-    [NSApp endSheet:self.audioMixerPanel];
-    [self.audioMixerPanel close];
-    self.audioMixerPanel = nil;
-}
-
-
-
--(IBAction)openVideoAdvanced:(id)sender
-{
-    
-    
-    NSString *panelName;
-    
-    if (!self.advancedVideoPanel)
-    {
-        
-    
-        panelName = [NSString stringWithFormat:@"%@AdvancedPanel", self.selectedVideoType];
-        
-        
-        [[NSBundle mainBundle] loadNibNamed:panelName owner:self topLevelObjects:nil];
-        
-        [NSApp beginSheet:self.advancedVideoPanel modalForWindow:[NSApplication sharedApplication].mainWindow modalDelegate:self didEndSelector:NULL contextInfo:NULL];
-    
-    }
-    
-}
-
--(IBAction)closeVideoAdvanced:(id)sender
-{
-    [NSApp endSheet:self.advancedVideoPanel];
-    [self.advancedVideoPanel close];
-    self.advancedVideoPanel = nil;
-}
 
 -(IBAction)openCreateSheet:(id)sender
 {
-    
-    
-    self.streamServiceObject = nil;
-    
-    NSMutableDictionary *servicePlugins = [[CSPluginLoader sharedPluginLoader] streamServicePlugins];
-    
-    
-    Class serviceClass = servicePlugins[self.selectedDestinationType];;
-    
-    
-    if (serviceClass)
-    {
-        self.streamServiceObject = [[serviceClass alloc] init];
-    }
-    
-    
-    
-    
-    
-    if (self.streamServiceObject)
-    {
-        NSViewController *serviceConfigView = [self.streamServiceObject getConfigurationView];
-        self.streamServiceAddView.frame = serviceConfigView.view.frame;
-        
-        [self.streamServiceAddView addSubview:serviceConfigView.view];
-        self.streamServicePluginViewController  = serviceConfigView;
-        [NSApp beginSheet:self.streamServiceConfWindow modalForWindow:[NSApplication sharedApplication].mainWindow modalDelegate:self didEndSelector:NULL contextInfo:NULL];
-    }
-    
+    [self openOutputSheet:nil];
 }
 
-
--(IBAction)closeCreateSheet:(id)sender
+- (IBAction)chooseInstantRecordDirectory:(id)sender
 {
+
+    NSOpenPanel *panel = [NSOpenPanel openPanel];
+    panel.canChooseDirectories = YES;
+    panel.canCreateDirectories = YES;
+    panel.canChooseFiles = NO;
+    panel.allowsMultipleSelection = NO;
     
-    
-    [self.streamServicePluginViewController.view removeFromSuperview];
-    
-    
-    [NSApp endSheet:self.streamServiceConfWindow];
-    [self.streamServiceConfWindow close];
-    self.streamServicePluginViewController = nil;
-    self.streamServiceObject = nil;
+    [panel beginWithCompletionHandler:^(NSInteger result) {
+        if (result == NSFileHandlingPanelOKButton)
+        {
+            self.instantRecordDirectory = panel.URL.path;
+        }
+        
+    }];
     
 }
-
-- (IBAction)openLayoutPanel:(id)sender
-{
-    if (!self.layoutPanel)
-    {
-        
-        [[NSBundle mainBundle] loadNibNamed:@"NewLayoutPanel" owner:self topLevelObjects:nil];
-        
-    }
-    [NSApp beginSheet:self.layoutPanel modalForWindow:[NSApp mainWindow] modalDelegate:self didEndSelector:NULL contextInfo:NULL];
-}
-
-
-
-
--(AVCaptureDevice *)selectedAudioCapture
-{
-    if (self.audioCaptureSession)
-    {
-        return self.audioCaptureSession.activeAudioDevice;
-    }
-    
-    return nil;
-}
-
-
--(void) selectedAudioCaptureFromID:(NSString *)uniqueID
-{
-    if (uniqueID)
-    {
-        self.audioCaptureSession.activeAudioDevice = [AVCaptureDevice deviceWithUniqueID:uniqueID];
-    }
-    
-}
-
-
--(void) createCGLContext
-{
-    NSOpenGLPixelFormatAttribute glAttributes[] = {
-        
-        NSOpenGLPFANoRecovery,
-        NSOpenGLPFAAccelerated,
-        //NSOpenGLPFAAllowOfflineRenderers,
-        NSOpenGLPFADepthSize, 32,
-        (NSOpenGLPixelFormatAttribute) 0,0,
-        (NSOpenGLPixelFormatAttribute) 0
-        
-    };
-    if (self.renderOnIntegratedGPU)
-    {
-        NSLog(@"RENDERING ON INTELHD!");
-        
-        glAttributes[5] = NSOpenGLPFARendererID;
-        glAttributes[6] = kCGLRendererIntelHDID;
-    }
-    
-    
-    NSOpenGLPixelFormat *pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:glAttributes];
-    
-    if (!pixelFormat)
-    {
-        return;
-    }
-    
-    _ogl_ctx = [[NSOpenGLContext alloc] initWithFormat:pixelFormat shareContext:nil];
-    
-    if (!_ogl_ctx)
-    {
-        return;
-    }
-
-    _cgl_ctx = [_ogl_ctx CGLContextObj];
-    
-    
-}
-
-
 
 
 -(void)buildScreensInfo:(NSNotification *)notification
@@ -925,6 +770,7 @@
 }
 
 
+
 -(void)exportLayout:(SourceLayout *)layout
 {
     NSSavePanel *panel = [NSSavePanel savePanel];
@@ -938,16 +784,19 @@
     if (layout == self.selectedLayout)
     {
         useLayout = self.livePreviewView.sourceLayout;
+        [useLayout saveSourceList];
+        [useLayout saveAnimationSource];
     } else if (layout == self.stagingLayout) {
         useLayout = self.stagingPreviewView.sourceLayout;
+        [useLayout saveSourceList];
+        [useLayout saveAnimationSource];
+
     }
 
     [panel beginWithCompletionHandler:^(NSInteger result) {
         if (result == NSFileHandlingPanelOKButton)
         {
             NSURL *saveFile = [panel URL];
-            [useLayout saveSourceList];
-            [useLayout saveAnimationSource];
             
             
             [NSKeyedArchiver archiveRootObject:useLayout toFile:saveFile.path];
@@ -963,8 +812,14 @@
    if (self = [super init])
    {
        
+       
+       _layoutWindows = [NSMutableArray array];
+       
        self.transitionDirections = @[kCATransitionFromTop, kCATransitionFromRight, kCATransitionFromBottom, kCATransitionFromLeft];
-
+       self.useInstantRecord = YES;
+       self.instantRecordActive = YES;
+       self.instantRecordBufferDuration = 60;
+       
        
        NSArray *caTransitionNames = @[kCATransitionFade, kCATransitionPush, kCATransitionMoveIn, kCATransitionReveal, @"cube", @"alignedCube", @"flip", @"alignedFlip"];
        NSArray *ciTransitionNames = [CIFilter filterNamesInCategory:kCICategoryTransition];
@@ -996,11 +851,10 @@
        
        
 
-       audioLastReadPosition = 0;
-       audioWritePosition = 0;
        
-       audioBuffer = [[NSMutableArray alloc] init];
        videoBuffer = [[NSMutableArray alloc] init];
+       _audioBuffer = [[NSMutableArray alloc] init];
+       
        
        
        
@@ -1012,19 +866,24 @@
        self.useStatusColors = YES;
        
        
+       
+       
        dispatch_source_t sigsrc = dispatch_source_create(DISPATCH_SOURCE_TYPE_SIGNAL, SIGPIPE, 0, dispatch_get_global_queue(0, 0));
        dispatch_source_set_event_handler(sigsrc, ^{ return;});
        dispatch_resume(sigsrc);
        
-       _main_capture_queue = dispatch_queue_create("CocoaSplit.main.queue", NULL);
+       /*
+       dispatch_queue_attr_t attr = dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_DEFAULT, 0);
+       _main_capture_queue = dispatch_queue_create("CocoaSplit.main.queue", attr);
        _preview_queue = dispatch_queue_create("CocoaSplit.preview.queue", NULL);
+        */
+       
+       _main_capture_queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+       _preview_queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
        
        
        
-       self.showPreview = YES;
-       self.videoTypes = @[@"Desktop", @"AVFoundation", @"QTCapture", @"Syphon", @"Image", @"Text"];
-       self.compressorTypes = @[@"x264", @"AppleVTCompressor", @"None"];
-       self.arOptions = @[@"None", @"Use Source", @"Preserve AR"];
+       
        
        mach_timebase_info(&_mach_timebase);
        
@@ -1037,22 +896,15 @@
            dispatch_strict_flag = 0;
        }
        
-       /*
-       _dispatch_timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, dispatch_strict_flag, _main_capture_queue);
-       
-       dispatch_source_set_timer(_dispatch_timer, DISPATCH_TIME_NOW, _frame_interval, 0);
-       
-       dispatch_source_set_event_handler(_dispatch_timer, ^{[self newFrameDispatched];});
-       
-       dispatch_resume(_dispatch_timer);
-       */
-       
        _audio_statistics_timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
        
        dispatch_source_set_timer(_audio_statistics_timer, DISPATCH_TIME_NOW, 0.10*NSEC_PER_SEC, 0);
 
        dispatch_source_set_event_handler(_audio_statistics_timer, ^{
-           [self.multiAudioEngine updateStatistics];
+           if (self.multiAudioEngine)
+           {
+               [self.multiAudioEngine updateStatistics];
+           }
        });
        dispatch_resume(_audio_statistics_timer);
 
@@ -1063,22 +915,42 @@
        dispatch_source_set_timer(_statistics_timer, DISPATCH_TIME_NOW, 1*NSEC_PER_SEC, 0);
        dispatch_source_set_event_handler(_statistics_timer, ^{
            
+           int total_outputs = 0;
+           int errored_outputs = 0;
+           int dropped_frame_cnt = 0;
+           
            for (OutputDestination *outdest in _captureDestinations)
            {
+               if (outdest.active)
+               {
+                   total_outputs++;
+                   if (outdest.errored)
+                   {
+                       errored_outputs++;
+                   }
+                   
+                   dropped_frame_cnt += outdest.dropped_frame_count;
+               }
                [outdest updateStatistics];
            }
            
            
            
-           self.renderStatsString = [NSString stringWithFormat:@"Render min/max/avg: %f/%f/%f", _min_render_time, _max_render_time, _render_time_total / _renderedFrames];
+           dispatch_async(dispatch_get_main_queue(), ^{
+               self.outputStatsString = [NSString stringWithFormat:@"Active Outputs: %d Errored %d Frames dropped %d", total_outputs, errored_outputs,dropped_frame_cnt];
+               self.renderStatsString = [NSString stringWithFormat:@"Render min/max/avg: %f/%f/%f", _min_render_time, _max_render_time, _render_time_total / _renderedFrames];
+               self.active_output_count = total_outputs;
+               self.total_dropped_frames = dropped_frame_cnt;
+               
+           });
            _renderedFrames = 0;
            _render_time_total = 0.0f;
            
 
        });
-       
+
+        
        dispatch_resume(_statistics_timer);
-       
        
        self.extraSaveData = [[NSMutableDictionary alloc] init];
        
@@ -1108,7 +980,15 @@
                                      @"ChangeInterval", @"EffectDuration", @"MultiTransition",
                                      @"PositionX", @"PositionY"];
 
+       
        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(buildScreensInfo:) name:NSApplicationDidChangeScreenParametersNotification object:nil];
+       
+       [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(layoutCanvasChanged:) name:CSNotificationLayoutCanvasChanged object:nil];
+       
+       [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(layoutFramerateChanged:) name:CSNotificationLayoutFramerateChanged object:nil];
+       
+       [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(compressorReconfigured:) name:CSNotificationCompressorReconfigured object:nil];
+
        
        
        
@@ -1118,6 +998,44 @@
     
 }
 
+
+-(void)compressorReconfigured:(NSNotification *)notification
+{
+    
+    
+    id<VideoCompressor> compressor = [notification object];
+    if (self.instantRecorder && [compressor isEqual:self.instantRecorder.compressor])
+    {
+        [self resetInstantRecorder];
+    }
+}
+
+
+-(void)layoutFramerateChanged:(NSNotification *)notification
+{
+    SourceLayout *layout = [notification object];
+    if (layout == self.livePreviewView.sourceLayout || layout == self.stagingPreviewView.sourceLayout)
+    {
+        [self updateFrameIntervals];
+    }
+    
+    if (layout == self.livePreviewView.sourceLayout)
+    {
+        [self resetInstantRecorder];
+    }
+}
+
+
+-(void)layoutCanvasChanged:(NSNotification *)notification
+{
+    SourceLayout *layout = [notification object];
+    
+    if ([layout isEqual:self.livePreviewView.sourceLayout])
+    {
+        
+        [self resetInstantRecorder];
+    }
+}
 
 
 -(NSData *)archiveLayout:(SourceLayout *)layout
@@ -1276,14 +1194,6 @@
 }
 
 
--(NSArray *)destinationTypes
-{
-    
-    NSMutableDictionary *servicePlugins = [[CSPluginLoader sharedPluginLoader] streamServicePlugins];
-
-    return servicePlugins.allKeys;
-}
-
 
 -(void)setAudioSamplerate:(int)audioSamplerate
 {
@@ -1328,7 +1238,15 @@
         [fileManager createDirectoryAtPath:saveFolder withIntermediateDirectories:NO attributes:nil error:nil];
     }
     
-    NSString *saveFile = [saveFolder stringByAppendingPathComponent:@"CocoaSplit-CA.settings"];
+    NSString *saveFile = [saveFolder stringByAppendingPathComponent:@"CocoaSplit-2.settings"];
+    
+    if ([fileManager fileExistsAtPath:saveFile])
+    {
+        return saveFile;
+    }
+
+    
+    saveFile = [saveFolder stringByAppendingPathComponent:@"CocoaSplit-CA.settings"];
     
     if ([fileManager fileExistsAtPath:saveFile])
     {
@@ -1355,7 +1273,7 @@
         [fileManager createDirectoryAtPath:saveFolder withIntermediateDirectories:NO attributes:nil error:nil];
     }
     
-    NSString *saveFile = @"CocoaSplit-CA.settings";
+    NSString *saveFile = @"CocoaSplit-2.settings";
     
     return [saveFolder stringByAppendingPathComponent:saveFile];
 }
@@ -1435,57 +1353,94 @@
     dispatch_resume(_log_source);
 }
 
+
+
+-(void) resetInstantRecorder
+{
+    
+    
+    if (self.instantRecorder && self.instantRecorder.compressor)
+    {
+        id<VideoCompressor> irCompressor = self.instantRecorder.compressor;
+        if ([irCompressor outputCount] > 1 && !_needsIRReset)
+        {
+            _needsIRReset = YES;
+        } else {
+            [irCompressor reset];
+        }
+
+    }
+}
+
+
+-(void) setupInstantRecorder
+{
+    id<VideoCompressor> irCompressor = self.compressors[@"InstantRecorder"];
+    
+    if (irCompressor)
+    {
+        self.instantRecorder = [[CSTimedOutputBuffer alloc] initWithCompressor:irCompressor];
+        self.instantRecorder.bufferDuration = self.instantRecordBufferDuration;
+    }
+}
+
+
 -(void) migrateDefaultCompressor:(NSMutableDictionary *)saveRoot
 {
     
-    if (self.compressors[@"default"])
+
+    id <VideoCompressor> defaultCompressor = self.compressors[@"default"];
+    if (defaultCompressor)
     {
-        //We already migrated, or the user did it for us?
-        return;
+        [self.compressors removeObjectForKey:@"default"];
+        defaultCompressor.name = defaultCompressor.compressorType.mutableCopy;
+        [self.compressors setObject:defaultCompressor forKey:@"x264"];
+        NSDictionary *notifyMsg = [NSDictionary dictionaryWithObjectsAndKeys:@"default", @"oldName", defaultCompressor, @"compressor", nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorRenamed object:notifyMsg];
     }
     
-
     
-    id <h264Compressor> newCompressor;
-    if ([self.selectedCompressorType isEqualToString:@"x264"])
+    
+    
+    if (!self.compressors[@"x264"])
     {
+        x264Compressor *newCompressor;
         
-        x264Compressor *tmpCompressor;
+        newCompressor = [[x264Compressor alloc] init];
+        newCompressor.name = @"x264".mutableCopy;
+        newCompressor.vbv_buffer = 1000;
+        newCompressor.vbv_maxrate = 1000;
+        newCompressor.keyframe_interval = 2;
         
-        tmpCompressor = [[x264Compressor alloc] init];
-        tmpCompressor.tune = [saveRoot valueForKey:@"x264tune"];
-        tmpCompressor.profile = [saveRoot valueForKey:@"x264profile"];
-        tmpCompressor.preset = [saveRoot valueForKey:@"x264preset"];
-        tmpCompressor.use_cbr = [[saveRoot valueForKey:@"videoCBR"] boolValue];
-        tmpCompressor.crf = [[saveRoot valueForKey:@"x264crf"] intValue];
-        tmpCompressor.vbv_maxrate = [[saveRoot valueForKey:@"captureVideoAverageBitrate"] intValue];
-        tmpCompressor.vbv_buffer = [[saveRoot valueForKey:@"captureVideoMaxBitrate"] intValue];
-        tmpCompressor.keyframe_interval = [[saveRoot valueForKey:@"captureVideoMaxKeyframeInterval"] intValue];
-        newCompressor = tmpCompressor;
-    } else if ([self.selectedCompressorType isEqualToString:@"AppleVTCompressor"]) {
-        AppleVTCompressor *tmpCompressor;
-        tmpCompressor = [[AppleVTCompressor alloc] init];
-        tmpCompressor.average_bitrate = [[saveRoot valueForKey:@"captureVideoAverageBitrate"] intValue];
-        tmpCompressor.max_bitrate = [[saveRoot valueForKey:@"captureVideoMaxBitrate"] intValue];
-        tmpCompressor.keyframe_interval = [[saveRoot valueForKey:@"captureVideoMaxKeyframeInterval"] intValue];
-        newCompressor = tmpCompressor;
-    } else {
-        newCompressor = nil;
+        self.compressors[@"x264"] = newCompressor;
+        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:newCompressor];
     }
-
-    if (newCompressor)
+    
+    if (!self.compressors[@"AppleVT"])
     {
-        
-        newCompressor.width = [[saveRoot valueForKey:@"captureWidth"] intValue];
-        newCompressor.height = [[saveRoot valueForKey:@"captureHeight"] intValue];
-        if ([saveRoot valueForKey:@"resolutionOption"])
-        {
-            newCompressor.resolutionOption = [saveRoot valueForKey:@"resolutionOption"];
-        }
-        
-        
-        newCompressor.name = [@"default" mutableCopy];
-        [self addCompressor:newCompressor];
+        AppleVTCompressor *newCompressor = [[AppleVTCompressor alloc] init];
+        newCompressor.name = @"AppleVT".mutableCopy;
+        newCompressor.average_bitrate = 1000;
+        newCompressor.max_bitrate = 1000;
+        newCompressor.keyframe_interval = 2;
+        self.compressors[@"AppleVT"] = newCompressor;
+        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:newCompressor];
+    }
+    
+    if (!self.compressors[@"AppleProRes"])
+    {
+        AppleProResCompressor *newCompressor = [[AppleProResCompressor alloc] init];
+        newCompressor.name = @"AppleProRes".mutableCopy;
+        self.compressors[@"AppleProRes"] = newCompressor;
+        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:newCompressor];
+    }
+    
+    if (!self.compressors[@"InstantRecorder"])
+    {
+        CSIRCompressor *newCompressor = [[CSIRCompressor alloc] init];
+        newCompressor.name = @"InstantRecorder".mutableCopy;
+        self.compressors[@"InstantRecorder"] = newCompressor;
+        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:newCompressor];
     }
     
 }
@@ -1510,27 +1465,22 @@
     [saveRoot setValue: [NSNumber numberWithInt:self.audioBitrate] forKey:@"audioBitrate"];
     [saveRoot setValue: [NSNumber numberWithInt:self.audioSamplerate] forKey:@"audioSamplerate"];
     [saveRoot setValue: self.selectedVideoType forKey:@"selectedVideoType"];
-    [saveRoot setValue: self.selectedAudioCapture.uniqueID forKey:@"audioCaptureID"];
     [saveRoot setValue: self.captureDestinations forKey:@"captureDestinations"];
-    [saveRoot setValue: self.selectedCompressorType forKey:@"selectedCompressorType"];
-    [saveRoot setValue:[NSNumber numberWithFloat:self.audioCaptureSession.previewVolume] forKey:@"previewVolume"];
     [saveRoot setValue:[NSNumber numberWithInt:self.maxOutputDropped] forKey:@"maxOutputDropped"];
     [saveRoot setValue:[NSNumber numberWithInt:self.maxOutputPending] forKey:@"maxOutputPending"];
-    [saveRoot setValue:self.resolutionOption forKey:@"resolutionOption"];
     [saveRoot setValue:[NSNumber numberWithDouble:self.audio_adjust] forKey:@"audioAdjust"];
     [saveRoot setValue: [NSNumber numberWithBool:self.useStatusColors] forKey:@"useStatusColors"];
     [saveRoot setValue:self.compressors forKey:@"compressors"];
     [saveRoot setValue:self.extraSaveData forKey:@"extraSaveData"];
+    [saveRoot setValue: [NSNumber numberWithBool:self.useInstantRecord] forKey:@"useInstantRecord"];
+    
+    [saveRoot setValue:[NSNumber numberWithInt:self.instantRecordBufferDuration] forKey:@"instantRecordBufferDuration"];
+    [saveRoot setValue:self.instantRecordDirectory forKey:@"instantRecordDirectory"];
+    
+    
 
-    [saveRoot setValue:[NSNumber numberWithBool:self.renderOnIntegratedGPU] forKey:@"renderOnIntegratedGPU"];
     
     
-    NSUInteger compressoridx =    [self.compressController selectionIndex];
-
-    
-    [saveRoot setValue:[NSNumber numberWithUnsignedInteger:compressoridx] forKey:@"selectedCompressor"];\
-    
-    //[saveRoot setValue:self.sourceList forKeyPath:@"sourceList"];
     
     [saveRoot setValue:self.selectedLayout forKey:@"selectedLayout"];
     
@@ -1565,6 +1515,7 @@
     
     [self saveMIDI];
 
+    [saveRoot setValue:self.inputLibrary forKey:@"inputLibrary"];
     [NSKeyedArchiver archiveRootObject:saveRoot toFile:path];
     
 }
@@ -1574,6 +1525,9 @@
 {
     
     //all color panels allow opacity
+    self.activePreviewView = self.stagingPreviewView;
+    [self.layoutCollectionView registerForDraggedTypes:@[@"CS_LAYOUT_DRAG"]];
+
     [NSColorPanel sharedColorPanel].showsAlpha = YES;
     [NSColor setIgnoresAlpha:NO];
     
@@ -1590,6 +1544,21 @@
     [saveRoot addEntriesFromDictionary:savedValues];
     
 
+    if (saveRoot[@"useInstantRecord"])
+    {
+        self.useInstantRecord = [[saveRoot valueForKey:@"useInstantRecord"] boolValue];
+    }
+    
+    self.instantRecordActive = YES;
+    
+    if (saveRoot[@"instantRecordBufferDuration"])
+    {
+        self.instantRecordBufferDuration = [[saveRoot valueForKey:@"instantRecordBufferDuration"] intValue];
+    }
+    
+    self.instantRecordDirectory = [saveRoot valueForKey:@"instantRecordDirectory"];
+    
+    
     
     self.transitionName = [saveRoot valueForKey:@"transitionName"];
     self.transitionDirection = [saveRoot valueForKey:@"transitionDirection"];
@@ -1611,14 +1580,8 @@
         
     }
     
-    NSUInteger selectedCompressoridx = [[saveRoot valueForKey:@"selectedCompressor"] unsignedIntegerValue];
     
     
-    if (self.compressors.count > 0)
-    {
-        [self.compressController setSelectionIndex:selectedCompressoridx];
-    }
-
     
     self.captureDestinations = [saveRoot valueForKey:@"captureDestinations"];
     
@@ -1647,14 +1610,9 @@
     
     
     self.selectedVideoType = [saveRoot valueForKey:@"selectedVideoType"];
-    self.selectedCompressorType = [saveRoot valueForKey:@"selectedCompressorType"];
 
     
     
-    NSString *audioID = [saveRoot valueForKey:@"audioCaptureID"];
-    
-    [self selectedAudioCaptureFromID:audioID];
-    self.audioCaptureSession.previewVolume = [[saveRoot valueForKey:@"previewVolume"] floatValue];
     
     self.captureFPS = [[saveRoot valueForKey:@"captureFPS"] doubleValue];
     self.maxOutputDropped = [[saveRoot valueForKey:@"maxOutputDropped"] intValue];
@@ -1662,20 +1620,7 @@
 
     self.audio_adjust = [[saveRoot valueForKey:@"audioAdjust"] doubleValue];
     
-    self.resolutionOption = [saveRoot valueForKey:@"resolutionOption"];
-    if (!self.resolutionOption)
-    {
-        self.resolutionOption = @"None";
-    }
 
-    
-    self.renderOnIntegratedGPU = [[saveRoot valueForKey:@"renderOnIntegratedGPU"] boolValue];
-
-    [self createCGLContext];
-    //mainThread = [[NSThread alloc] initWithTarget:self selector:@selector(newFrameTimed) object:nil];
-    //[mainThread start];
-    
-    
     self.stagingPreviewView.controller = self;
     self.livePreviewView.controller = self;
     LayoutRenderer *stagingRender = [[LayoutRenderer alloc] init];
@@ -1688,7 +1633,9 @@
 
     self.livePreviewView.viewOnly = YES;
     
-    
+    self.selectedLayout = [[SourceLayout alloc] init];
+    self.stagingLayout = [[SourceLayout alloc] init];
+
     
     self.extraPluginsSaveData = [saveRoot valueForKey:@"extraPluginsSaveData"];
     [self migrateDefaultCompressor:saveRoot];
@@ -1710,38 +1657,122 @@
     {
         self.multiAudioEngine = [[CAMultiAudioEngine alloc] init];
     }
+     
 
 
     self.extraPluginsSaveData = nil;
     self.sourceLayouts = [saveRoot valueForKey:@"sourceLayouts"];
     
+    
+    if (!self.sourceLayouts)
+    {
+        self.sourceLayouts = [[NSMutableArray alloc] init];
+    }
+    
+    SourceLayout *tmpLayout = [saveRoot valueForKey:@"selectedLayout"];
+    if (tmpLayout)
+    {
+        if (tmpLayout == self.stagingLayout || [self.sourceLayouts containsObject:tmpLayout])
+        {
+            SourceLayout *tmpCopy = [tmpLayout copy];
+            self.selectedLayout = tmpCopy;
+        } else {
+            self.selectedLayout = tmpLayout;
+        }
+        //[self.selectedLayout mergeSourceLayout:tmpLayout withLayer:nil];
+    }
+    
+    tmpLayout = [saveRoot valueForKey:@"stagingLayout"];
+    if (tmpLayout)
+    {
+        if (tmpLayout == self.selectedLayout || [self.sourceLayouts containsObject:tmpLayout])
+        {
+            SourceLayout *tmpCopy = [tmpLayout copy];
+            self.stagingLayout = tmpCopy;
+        } else {
+            self.stagingLayout = tmpLayout;
+        }
+        
+        //[self.stagingLayout mergeSourceLayout:tmpLayout withLayer:nil];
+    }
+    
+    [self changePendingAnimations];
+    self.inputLibrary = [saveRoot valueForKey:@"inputLibrary"];
+    if (!self.inputLibrary)
+    {
+        self.inputLibrary = [NSMutableArray array];
+    }
+    
+    _firstAudioTime = kCMTimeZero;
+    _previousAudioTime = kCMTimeZero;
+    
+    
+    
+    
+    
+    CSAacEncoder *audioEnc = [[CSAacEncoder alloc] init];
+    audioEnc.encodedReceiver = self;
+    audioEnc.sampleRate = self.audioSamplerate;
+    audioEnc.bitRate = self.audioBitrate*1000;
+    
+    audioEnc.inputASBD = self.multiAudioEngine.graph.graphAsbd;
+    [audioEnc setupEncoderBuffer];
+    self.multiAudioEngine.encoder = audioEnc;
+    
+    if (self.useInstantRecord)
+    {
+        [self setupInstantRecorder];
+    }
 
     dispatch_async(_main_capture_queue, ^{[self newFrameTimed];});
     
     dispatch_async(_preview_queue, ^{
         [self newStagingFrameTimed];
     });
-    if (!self.sourceLayouts)
-    {
-        self.sourceLayouts = [[NSMutableArray alloc] init];
-        SourceLayout *newLayout = [[SourceLayout alloc] init];
-        newLayout.name = @"default";
-        [[self mutableArrayValueForKey:@"sourceLayouts" ] addObject:newLayout];
-        self.selectedLayout = newLayout;
-        self.stagingLayout = newLayout;
-        newLayout.isActive = YES;
-        
-    } else {
-        
-        self.selectedLayout = [saveRoot valueForKey:@"selectedLayout"];
-        self.stagingLayout  = [saveRoot valueForKey:@"stagingLayout"];
-    }
+    
 
+    
+}
+
+-(void)setInstantRecordBufferDuration:(int)instantRecordBufferDuration
+{
+    _instantRecordBufferDuration = instantRecordBufferDuration;
+    
+    if (_instantRecordBufferDuration <= 0)
+    {
+        self.instantRecorder = nil;
+    } else {
+        if (self.instantRecorder)
+        {
+            self.instantRecorder.bufferDuration = _instantRecordBufferDuration;
+        }
+    }
+}
+
+-(int)instantRecordBufferDuration
+{
+    return _instantRecordBufferDuration;
 }
 
 
+-(void) setUseInstantRecord:(bool)useInstantRecord
+{
+    _useInstantRecord = useInstantRecord;
+    
+    if (useInstantRecord)
+    {
+        [self setupInstantRecorder];
+        self.instantRecordActive = YES;
+    } else {
+        self.instantRecorder = nil;
+        self.instantRecordActive = NO;
+    }
+}
 
-
+-(bool)useInstantRecord
+{
+    return _useInstantRecord;
+}
 
 
 -(void)controlTextDidEndEditing:(NSNotification *)obj
@@ -1764,50 +1795,43 @@
 -(void)setStagingLayout:(SourceLayout *)stagingLayout
 {
     
-    [self.objectController commitEditing];
-
-
-        self.stagingCtx.layoutRenderer.transitionName = self.transitionName;
-        self.stagingCtx.layoutRenderer.transitionDirection = self.transitionDirection;
-        self.stagingCtx.layoutRenderer.transitionDuration = self.transitionDuration;
-        self.stagingCtx.layoutRenderer.transitionFilter = self.transitionFilter;
-            [self stagingSave:self];
-            
-            
-            SourceLayout *previewCopy = stagingLayout.copy;
-
-            [previewCopy restoreSourceList:nil];
     
-    self.stagingPreviewView.sourceLayout = previewCopy;
+    [stagingLayout restoreSourceList:nil];
+    [stagingLayout setupMIDI];
     
+    self.stagingPreviewView.sourceLayout = stagingLayout;
+    self.stagingPreviewView.midiActive = YES;
     
-    
-    
-        if (self.sourceLayoutsArrayController)
-        {
-            NSUInteger sidx = [self.sourceLayoutsArrayController.arrangedObjects indexOfObject:stagingLayout];
-            if ((sidx != NSNotFound) && self.stagingSourceLayoutTableView)
-            {
-                    [self.stagingSourceLayoutTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:sidx] byExtendingSelection:NO];
-
-                
-            }
-        }
+    [stagingLayout setAddLayoutBlock:^(SourceLayout *layout) {
         
-        float framerate = stagingLayout.frameRate;
+        layout.in_staging = YES;
         
-        if (framerate && framerate > 0)
-        {
-            _staging_frame_interval = (1.0/framerate);
-        } else {
-            _staging_frame_interval = 1.0/60.0;
-        }
-        
-        self.currentMidiInputStagingIdx = 0;
-
-           _stagingLayout = stagingLayout;
+    }];
     
-       
+    [stagingLayout setRemoveLayoutBlock:^(SourceLayout *layout) {
+        
+        layout.in_staging = NO;
+        
+    }];
+
+    
+    [stagingLayout applyAddBlock];
+    
+    float framerate = stagingLayout.frameRate;
+    
+    if (framerate && framerate > 0)
+    {
+        _staging_frame_interval = (1.0/framerate);
+    } else {
+        _staging_frame_interval = 1.0/60.0;
+    }
+    
+    self.currentMidiInputStagingIdx = 0;
+    
+    _stagingLayout = stagingLayout;
+    stagingLayout.doSaveSourceList = YES;
+    
+    
     
 
 }
@@ -1821,45 +1845,41 @@
 
 -(void)setSelectedLayout:(SourceLayout *)selectedLayout
 {
-    if (selectedLayout == _selectedLayout)
-    {
-        return;
-    }
     
+
+    [selectedLayout setAddLayoutBlock:^(SourceLayout *layout) {
+        
+        layout.in_live = YES;
+        
+    }];
     
+    [selectedLayout setRemoveLayoutBlock:^(SourceLayout *layout) {
+        
+        layout.in_live = NO;
+        
+    }];
+
     
+    [selectedLayout applyAddBlock];
+
     [self.objectController commitEditing];
-
-
-        self.previewCtx.layoutRenderer.transitionName = self.transitionName;
-        self.previewCtx.layoutRenderer.transitionDirection = self.transitionDirection;
-        self.previewCtx.layoutRenderer.transitionDuration = self.transitionDuration;
-        self.previewCtx.layoutRenderer.transitionFilter = self.transitionFilter;
-        
-        
-        
-        selectedLayout.isActive = YES;
-        
-            [self setupFrameTimer:selectedLayout.frameRate];
-            self.previewCtx.sourceLayout = selectedLayout;
-
     
-        
-        if (self.sourceLayoutsArrayController)
-        {
-            NSUInteger sidx = [self.sourceLayoutsArrayController.arrangedObjects indexOfObject:selectedLayout];
-            if ((sidx != NSNotFound) && self.mainSourceLayoutTableView)
-            {
-                    [self.mainSourceLayoutTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:sidx] byExtendingSelection:NO];
-
-                
-            }
-        }
-        
-        
-        self.currentMidiInputLiveIdx = 0;
-            _selectedLayout = selectedLayout;
-
+    
+    selectedLayout.isActive = YES;
+    [selectedLayout restoreSourceList:nil];
+    
+    [selectedLayout setupMIDI];
+    
+    [self setupFrameTimer:selectedLayout.frameRate];
+    self.livePreviewView.sourceLayout = selectedLayout;
+    self.livePreviewView.midiActive = NO;
+    
+    
+    
+    self.currentMidiInputLiveIdx = 0;
+    _selectedLayout = selectedLayout;
+    selectedLayout.doSaveSourceList = YES;
+    
     
 }
 
@@ -1871,6 +1891,8 @@
 
 -(void) setTransitionName:(NSString *)transitionName
 {
+    
+    
     _transitionName = transitionName;
     if ([transitionName hasPrefix:@"CI"])
     {
@@ -1894,30 +1916,6 @@
 {
     return @[[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES] ];
 }
-
-
-
-- (IBAction)addStreamingService:(id)sender {
-    
-    
-    OutputDestination *newDest;
-    
-    [self.streamServicePluginViewController commitEditing];
-    
-    NSString *destination = [self.streamServiceObject getServiceDestination];
-    
-    newDest = [[OutputDestination alloc] initWithType:[self.streamServiceObject.class label]];
-    newDest.destination = destination;
-    newDest.settingsController = self;
-
-    [self insertObject:newDest inCaptureDestinationsAtIndex:self.captureDestinations.count];
-    [self closeCreateSheet:nil];
-
-    
-}
-
-
-
 
 
 - (void) outputEncodedData:(CapturedFrameData *)newFrameData 
@@ -1948,55 +1946,12 @@
 {
     
     
-    id <h264Compressor> tmpCompressor;
-    
-    for (id cKey in self.compressors)
-    {
-        id <h264Compressor> tmpcomp = self.compressors[cKey];
-        tmpcomp.settingsController = self;
-    }
-    
-    
-    if (!self.selectedCompressor)
-    {
-    
-        if (self.compressController.selectedObjects.count > 0)
-        {
-            tmpCompressor = [[self.compressController.selectedObjects objectAtIndex:0] valueForKey:@"value"];
-            if (tmpCompressor)
-            {
-                self.selectedCompressor = self.compressors[tmpCompressor.name];
-            }
-            
-        }
-    }
-
-    
-    if (self.selectedCompressor)
-    {
-        
-        self.selectedCompressor.settingsController = self;
-    }
     
     for (OutputDestination *outdest in _captureDestinations)
     {
         //make the outputs pick up the default selected compressor
         [outdest setupCompressor];
     }
-    
-    
-    
-    [self.audioCaptureSession setupAudioCompression];
-    
-    _frameCount = 0;
-    _firstAudioTime = kCMTimeZero;
-    _firstFrameTime = 0;
-    
-    _compressedFrameCount = 0;
-    _min_delay = _max_delay = _avg_delay = 0;
-
-    //self.videoCompressor = self.selectedCompressor;
-    
     return YES;
 
     
@@ -2007,21 +1962,9 @@
 {
     
     
-    if (_cmdLineInfo)
-    {
-        printf("%s", [[self buildCmdLineInfo] UTF8String]);
-        [NSApp performSelector:@selector(terminate:) withObject:nil afterDelay:0.0];
-        return YES;
-    }
-    
-    _frameCount = 0;
-    _firstAudioTime = kCMTimeZero;
-    _firstFrameTime = 0;
-    
-    _compressedFrameCount = 0;
-    _min_delay = _max_delay = _avg_delay = 0;
-    
-    
+    //_frameCount = 0;
+    //_firstAudioTime = kCMTimeZero;
+    //_firstFrameTime = [self mach_time_seconds];
     
     if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_8)
     {
@@ -2038,12 +1981,6 @@
     }
     
     
-    CSAacEncoder *audioEnc = [[CSAacEncoder alloc] init];
-    audioEnc.encodedReceiver = self;
-    audioEnc.sampleRate = self.audioSamplerate;
-    audioEnc.bitRate = self.audioBitrate*1000;
-    
-    self.multiAudioEngine.encoder = audioEnc;
 
     
     self.captureRunning = YES;
@@ -2053,6 +1990,7 @@
     return YES;
     
 }
+
 
 
 
@@ -2078,189 +2016,21 @@
 
 
 
--(NSString *) buildCmdLineInfo
-{
-    
-    NSMutableDictionary *infoDict = [[NSMutableDictionary alloc] init];
-    NSMutableArray *audioArray = [[NSMutableArray alloc] init];
-    
-    
-    for (AVCaptureDevice *audioDev in self.audioCaptureDevices)
-    {
-        [audioArray addObject:@{@"name": audioDev.localizedName, @"uniqueID": audioDev.uniqueID}];
-    }
-    
-    
-    
-    [infoDict setValue:audioArray forKey:@"audioDevices"];
-    
-    
-    NSMutableDictionary *x264dict = [[NSMutableDictionary alloc] init];
-    
-    [x264dict setValue:self.x264presets forKey:@"presets"];
-    [x264dict setValue:self.x264tunes forKey:@"tunes"];
-    [x264dict setValue:self.x264profiles forKey:@"profiles"];
-
-
-    
-    [infoDict setValue:x264dict forKey:@"x264"];
-    
-
-
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:infoDict options:0 error:nil];
-    
-    return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    
-}
-
-
--(id <h264Compressor>) buildCmdlineCompressor:(NSUserDefaults *)cmdargs
-{
-    
-    id <h264Compressor> newCompressor;
-    if ([self.selectedCompressorType isEqualToString:@"x264"])
-    {
-        
-        x264Compressor *tmpCompressor;
-        
-        tmpCompressor = [[x264Compressor alloc] init];
-        tmpCompressor.tune = [cmdargs stringForKey:@"x264tune"];
-        tmpCompressor.profile = [cmdargs stringForKey:@"x264profile"];
-        tmpCompressor.preset = [cmdargs stringForKey:@"x264preset"];
-        tmpCompressor.use_cbr = [cmdargs boolForKey:@"videoCBR"];
-        tmpCompressor.crf = (int)[cmdargs integerForKey:@"x264crf"];
-        tmpCompressor.vbv_maxrate = (int)[cmdargs integerForKey:@"captureVideoAverageBitrate"];
-        tmpCompressor.vbv_buffer = (int)[cmdargs integerForKey:@"captureVideoMaxBitrate"];
-        tmpCompressor.keyframe_interval = (int)[cmdargs integerForKey:@"captureVideoMaxKeyframeInterval"];
-        newCompressor = tmpCompressor;
-    } else if ([self.selectedCompressorType isEqualToString:@"AppleVTCompressor"]) {
-        AppleVTCompressor *tmpCompressor;
-        tmpCompressor = [[AppleVTCompressor alloc] init];
-        tmpCompressor.average_bitrate = (int)[cmdargs integerForKey:@"captureVideoAverageBitrate"];
-        tmpCompressor.max_bitrate = (int)[cmdargs integerForKey:@"captureVideoMaxBitrate"];
-        tmpCompressor.keyframe_interval = (int)[cmdargs integerForKey:@"captureVideoMaxKeyframeInterval"];
-        newCompressor = tmpCompressor;
-    } else {
-        newCompressor = nil;
-    }
-
-    return newCompressor;
-}
-
--(void) loadCmdlineSettings:(NSUserDefaults *)cmdargs
-{
-    
-    
-    if ([cmdargs objectForKey:@"dumpInfo"])
-    {
-        _cmdLineInfo = YES;
-    } else {
-        _cmdLineInfo = NO;
-    }
-    
-    
-    if ([cmdargs objectForKey:@"captureWidth"])
-    {
-        self.captureWidth = (int)[cmdargs integerForKey:@"captureWidth"];
-    }
-    
-    if ([cmdargs objectForKey:@"captureHeight"])
-    {
-        self.captureHeight = (int)[cmdargs integerForKey:@"captureHeight"];
-    }
-    
-    if ([cmdargs objectForKey:@"audioBitrate"])
-    {
-        self.audioBitrate = (int)[cmdargs integerForKey:@"audioBitrate"];
-    }
-    
-    if ([cmdargs objectForKey:@"audioSamplerate"])
-    {
-        self.audioSamplerate = (int)[cmdargs integerForKey:@"audioSamplerate"];
-    }
-    
-    if ([cmdargs objectForKey:@"selectedVideoType"])
-    {
-        self.selectedVideoType = [cmdargs stringForKey:@"selectedVideoType"];
-    }
-    
-    if ([cmdargs objectForKey:@"selectedCompressorType"])
-    {
-        self.selectedCompressorType = [cmdargs stringForKey:@"selectedCompressorType"];
-    }
-    
-    
-    /*
-    if ([cmdargs objectForKey:@"videoCaptureID"])
-    {
-        NSString *videoID = [cmdargs stringForKey:@"videoCaptureID"];
-        [self selectedVideoCaptureFromID:videoID];
-    }
-    
-     */
-    
-    if ([cmdargs objectForKey:@"audioCaptureID"])
-    {
-        NSString *audioID = [cmdargs stringForKey:@"audioCaptureID"];
-        [self selectedAudioCaptureFromID:audioID];
-    }
-    
-    if ([cmdargs objectForKey:@"captureFPS"])
-    {
-        self.captureFPS = [cmdargs doubleForKey:@"captureFPS"];
-    }
-    
-    if ([cmdargs objectForKey:@"outputDestinations"])
-    {
-        
-        if (!self.captureDestinations)
-        {
-            self.captureDestinations = [[NSMutableArray alloc] init];
-        }
-
-        NSArray *outputs = [cmdargs arrayForKey:@"outputDestinations"];
-        for (NSString *outstr in outputs)
-        {
-            OutputDestination *newDest = [[OutputDestination alloc] initWithType:@"file"];
-            
-            newDest.active = YES;
-            newDest.destination = outstr;
-            newDest.settingsController = self;
-            [[self mutableArrayValueForKey:@"captureDestinations"] addObject:newDest];
-        }
-        
-    }
-    
-    if ([cmdargs objectForKey:@"compressor"])
-    {
-        NSString *forName = [cmdargs stringForKey:@"compressor"];
-        
-        for (id tmpval in self.compressController.arrangedObjects)
-        {
-            if ([[tmpval valueForKey:@"key"] isEqualToString:forName] )
-            {
-                self.selectedCompressor = tmpval;
-                break;
-            }
-        }
-
-    } else {
-        self.selectedCompressor = [self buildCmdlineCompressor:cmdargs];
-    }
-}
-
 
 - (void)stopStream
 {
     
-    self.videoCompressor = nil;
-    self.selectedCompressor = nil;
     self.captureRunning = NO;
 
     
     for (id cKey in self.compressors)
     {
-        id <h264Compressor> ctmp = self.compressors[cKey];
+        id <VideoCompressor> ctmp = self.compressors[cKey];
+        if (ctmp && self.instantRecorder && [self.instantRecorder.compressor isEqual:ctmp])
+        {
+            continue;
+        }
+        
         if (ctmp)
         {
             [ctmp reset];
@@ -2287,8 +2057,14 @@
         [[NSProcessInfo processInfo] endActivity:_activity_token];
     }
     
-    //[self.audioCaptureSession stopAudioCompression];
-    self.multiAudioEngine.encoder = nil;
+    if (_needsIRReset)
+    {
+        [self resetInstantRecorder];
+        _needsIRReset = NO;
+    }
+    
+    
+    //self.multiAudioEngine.encoder = nil;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationStreamStopped object:self userInfo:nil];
 
@@ -2311,30 +2087,68 @@
         
         
         
-        if ([self startStream] == YES)
+        if ([self startStream] != YES)
         {
-            self.selectedTabIndex = 4;
-        } else {
             [sender setNextState];
 
         }
 
     } else {
         
-        self.selectedTabIndex = 0;
         [self stopStream];
     }
     
 }
 
+-(void) addAudioData:(CMSampleBufferRef)audioData
+{
+    
+        @synchronized(self)
+        {
+            
+            [_audioBuffer addObject:(__bridge id)audioData];
+        }
+}
+
+
+-(void) setAudioData:(NSMutableArray *)audioDestination videoPTS:(CMTime)videoPTS
+{
+    
+    NSUInteger audioConsumed = 0;
+    @synchronized(self)
+    {
+        NSUInteger audioBufferSize = [_audioBuffer count];
+        
+        for (int i = 0; i < audioBufferSize; i++)
+        {
+            CMSampleBufferRef audioData = (__bridge CMSampleBufferRef)[_audioBuffer objectAtIndex:i];
+            
+            CMTime audioTime = CMSampleBufferGetOutputPresentationTimeStamp(audioData);
+            
+            
+            
+            
+            if (CMTIME_COMPARE_INLINE(audioTime, <=, videoPTS))
+            {
+                
+                audioConsumed++;
+                [audioDestination addObject:(__bridge id)audioData];
+            } else {
+                break;
+            }
+        }
+        
+        if (audioConsumed > 0)
+        {
+            [_audioBuffer removeObjectsInRange:NSMakeRange(0, audioConsumed)];
+        }
+        
+    }
+}
+
 - (void)captureOutputAudio:(id)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 {
     
-    
-    if (!self.captureRunning)
-    {
-        return;
-    }
     
     CMTime orig_pts = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
     
@@ -2343,26 +2157,26 @@
     
     if (CMTIME_COMPARE_INLINE(_firstAudioTime, ==, kCMTimeZero))
     {
+    
+        //NSLog(@"FIRST AUDIO AT %f", CFAbsoluteTimeGetCurrent());
         
         _firstAudioTime = orig_pts;
         return;
     }
     
+    
     CMTime real_pts = CMTimeSubtract(orig_pts, _firstAudioTime);
     CMTime adjust_pts = CMTimeMakeWithSeconds(self.audio_adjust, orig_pts.timescale);
     CMTime pts = CMTimeAdd(real_pts, adjust_pts);
-    
 
+    
     
     CMSampleBufferSetOutputPresentationTimeStamp(sampleBuffer, pts);
     
-    for(id cKey in self.compressors)
+    if (CMTIME_COMPARE_INLINE(pts, >, _previousAudioTime))
     {
-        
-        id <h264Compressor> compressor;
-        compressor = self.compressors[cKey];
-        [compressor addAudioData:sampleBuffer];
-        
+        [self addAudioData:sampleBuffer];
+        _previousAudioTime = pts;
     }
 }
 
@@ -2372,7 +2186,6 @@
 -(double)mach_time_seconds
 {
     double retval;
-    
     uint64_t mach_now = mach_absolute_time();
     retval = (double)((mach_now * _mach_timebase.numer / _mach_timebase.denom))/NSEC_PER_SEC;
     return retval;
@@ -2398,21 +2211,6 @@
         }
     }
     
-    /*
-    double mach_duration = target_time - mach_now;
-    double mach_wait_time = mach_now + mach_duration/2.0;
-    
-    mach_wait_until(mach_wait_time*NSEC_PER_SEC);
-    
-    
-    while ([self mach_time_seconds] < target_time)
-    {
-        usleep(500);
-        
-            //wheeeeeeeeeeeee
-    }
-     
-     */
     return YES;
     
 }
@@ -2506,16 +2304,12 @@
 
 -(void)newStagingFrame
 {
-    if (_stagingHidden)
+    if (self.stagingHidden)
     {
         return;
     }
     
     [self.stagingCtx.layoutRenderer currentImg];
-    /*
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.stagingCtx setNeedsDisplay:YES];
-    });*/
 
 }
 
@@ -2534,7 +2328,7 @@
     while (1)
     {
         
-        if (_stagingHidden)
+        if (self.stagingHidden)
         {
             return;
         }
@@ -2559,17 +2353,252 @@
     }
 }
 
+-(void)updateFrameIntervals
+{
+    _staging_frame_interval = 1.0/self.stagingPreviewView.sourceLayout.frameRate;
+    [self setupFrameTimer:self.livePreviewView.sourceLayout.frameRate];
+}
+
+- (IBAction)configureIRCompressor:(id)sender {
+    
+    
+    CompressionSettingsPanelController *cPanel = [[CompressionSettingsPanelController alloc] init];
+    CSIRCompressor *compressor = self.compressors[@"InstantRecorder"];
+    
+    cPanel.compressor = compressor;
+    
+    
+    [self.advancedPrefPanel beginSheet:cPanel.window completionHandler:^(NSModalResponse returnCode) {
+        switch (returnCode) {
+            case NSModalResponseStop:
+                if (cPanel.compressor.active)
+                {
+                    return;
+                }
+                [self willChangeValueForKey:@"compressors"];
+                [self.compressors removeObjectForKey:cPanel.compressor.name];
+                [self didChangeValueForKey:@"compressors"];
+                [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorDeleted object:cPanel.compressor userInfo:nil];
+                
+                break;
+            case NSModalResponseOK:
+            {
+                
+                
+                if (!cPanel.compressor.active)
+                {
+                    if (![compressor.name isEqualToString:cPanel.compressor.name])
+                    {
+                        [self.compressors removeObjectForKey:compressor.name];
+                        NSDictionary *notifyMsg = [NSDictionary dictionaryWithObjectsAndKeys:compressor.name, @"oldName", cPanel.compressor, @"compressor", nil];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorRenamed object:notifyMsg];
+                        
+                    }
+                    self.compressors[cPanel.compressor.name] = cPanel.compressor;
+                }
+                [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorReconfigured object:cPanel.compressor];
+                
+                break;
+            }
+            case 4242:
+                if (cPanel.saveProfileName)
+                {
+                    cPanel.compressor.name = cPanel.saveProfileName.mutableCopy;
+                    [self willChangeValueForKey:@"compressors"];
+                    self.compressors[cPanel.compressor.name] = cPanel.compressor;
+                    [self didChangeValueForKey:@"compressors"];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:cPanel.compressor userInfo:nil];
+                    
+                }
+            default:
+                break;
+        }
+
+        
+    }];
+}
+
+-(void) resetInputTableHighlights
+{
+    [self.activePreviewView stopHighlightingAllSources];
+    if (self.inputOutlineView && self.inputOutlineView.selectedRowIndexes)
+    {
+        [self.inputOutlineView.selectedRowIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+            NSTreeNode *node = [self.inputOutlineView itemAtRow:idx];
+            InputSource *src = node.representedObject;
+            
+            if (src)
+            {
+                [self.activePreviewView highlightSource:src];
+            }
+        }];
+    }
+}
+
+- (IBAction)removePendingAnimations:(id)sender
+{
+    if (!self.stagingHidden)
+    {
+        [self.activePreviewView.sourceLayout clearAnimations];
+        [self changePendingAnimations];
+    }
+}
+
+
+
+- (IBAction)outputSegmentedAction:(NSButton *)sender
+{
+    NSUInteger clicked = sender.tag;
+    
+    switch (clicked)
+    {
+        case 0:
+            [self openAddOutputPopover:sender sourceRect:sender.bounds];
+            break;
+        case 1:
+            [self removeDestination:sender];
+            break;
+        default:
+            break;
+    }
+}
+
+
+- (IBAction)openStreamOutputWindow:(id)sender
+{
+    if (!_streamOutputWindowController)
+    {
+        _streamOutputWindowController = [[CSStreamOutputWindowController alloc] init];
+    }
+    
+    _streamOutputWindowController.controller = self;
+    
+    [_streamOutputWindowController showWindow:nil];
+}
+
+
+
+- (IBAction)openAnimationWindow:(id)sender
+{
+    if (!_animationWindowController)
+    {
+        _animationWindowController = [[CSAnimationWindowController alloc] init];
+    }
+    
+    [_animationWindowController showWindow:nil];
+}
+
+
+- (IBAction)openAdvancedAudio:(id)sender
+{
+    if (!_audioWindowController)
+    {
+        _audioWindowController = [[CSAdvancedAudioWindowController alloc] init];
+    }
+    
+    _audioWindowController.controller = self;
+    [_audioWindowController showWindow:nil];
+    
+}
+
+
+
+-(void)outlineView:(NSOutlineView *)outlineView didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row
+{
+    if (outlineView == self.inputOutlineView)
+    {
+
+        NSTreeNode *node = [outlineView itemAtRow:row];
+        InputSource *src = node.representedObject;
+        if (!src.parentInput)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [outlineView expandItem:nil expandChildren:YES];
+            });
+        }
+    }
+}
+
+
+-(void) outlineViewSelectionDidChange:(NSNotification *)notification
+{
+    NSOutlineView *outline = notification.object;
+   
+    if (outline == self.inputOutlineView)
+    {
+        [self resetInputTableHighlights];
+
+    }
+             
+             
+}
+
+
+- (IBAction)inputTableControlClick:(NSButton *)sender
+{
+    NSInteger clicked = sender.tag;
+
+    NSArray *selectedInputs;
+    NSRect sbounds;
+    switch (clicked) {
+        case 0:
+            sbounds = sender.bounds;
+            //[self.activePreviewView addInputSource:sender];
+            //sbounds.origin.x = NSMaxX(sender.frame) - [sender widthForSegment:0];
+            //sbounds.origin.x -= 333;
+            [self openAddInputPopover:sender sourceRect:sbounds];
+            break;
+        case 1:
+            if (self.inputOutlineView && self.inputOutlineView.selectedRowIndexes)
+            {
+                [self.inputOutlineView.selectedRowIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+                    NSTreeNode *node = [self.inputOutlineView itemAtRow:idx];
+                    InputSource *src = node.representedObject;
+                    
+                    if (src)
+                    {
+                        NSString *uuid = src.uuid;
+                        InputSource *realInput = [self.activePreviewView.sourceLayout inputForUUID:uuid];
+                        [self.activePreviewView deleteInput:realInput];
+                    }
+                    
+                }];
+
+                
+            }
+            break;
+        case 2:
+            if (self.inputOutlineView && self.inputOutlineView.selectedRowIndexes)
+            {
+                
+                [self.inputOutlineView.selectedRowIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+                    NSTreeNode *node = [self.inputOutlineView itemAtRow:idx];
+                    InputSource *src = node.representedObject;
+                    
+                    if (src)
+                    {
+                        [self.activePreviewView openInputConfigWindow:src.uuid];
+                    }
+                    
+                }];
+            }
+            break;
+        default:
+            break;
+    }
+}
+
+
 
 -(void) newFrameTimed
 {
     
-    
     double startTime;
     
     startTime = [self mach_time_seconds];
-    double lastLoopTime = startTime;
 
     _frame_time = startTime;
+    _firstFrameTime = startTime;
     [self newFrame];
     
     //[self setFrameThreadPriority];
@@ -2591,12 +2620,11 @@
         
         
         //_frame_time = nowTime;//startTime;
-        double nowTime = [self mach_time_seconds];
         
-        lastLoopTime = nowTime;
         
         if (![self sleepUntil:(startTime += _frame_interval)])
         {
+            //NSLog(@"MISSED FRAME!");
             continue;
         }
 
@@ -2621,15 +2649,6 @@
     
 }
 
-/*
--(NSArray *)sourceListOrdered
-{
-    NSArray *listCopy = [self.selectedLayout.sourceList sortedArrayUsingDescriptors:@[_sourceDepthSorter, _sourceUUIDSorter]];
-    return listCopy;
-}
- */
-
-
 
 -(InputSource *)findSource:(NSPoint)forPoint
 {
@@ -2646,119 +2665,134 @@
 
 -(void) newFrame
 {
-
-        CVPixelBufferRef newFrame;
     
-        //if (self.videoCaptureSession)
+    CVPixelBufferRef newFrame;
+    
+    
+    double nfstart = [self mach_time_seconds];
+    
+    newFrame = [self.previewCtx.layoutRenderer currentImg];
+    
+    
+    double nfdone = [self mach_time_seconds];
+    double nftime = nfdone - nfstart;
+    _renderedFrames++;
+    
+    _render_time_total += nftime;
+    if (nftime < _min_render_time || _min_render_time == 0.0f)
+    {
+        _min_render_time = nftime;
+    }
+    
+    if (nftime > _max_render_time)
+    {
+        _max_render_time = nftime;
+    }
+    
+    
+    
+    if (newFrame)
+    {
+        _frameCount++;
+        CVPixelBufferRetain(newFrame);
+        NSMutableArray *frameAudio = [[NSMutableArray alloc] init];
+        [self setAudioData:frameAudio videoPTS:CMTimeMake((_frame_time - _firstFrameTime)*1000, 1000)];
+        CapturedFrameData *newData = [self createFrameData];
+        newData.audioSamples = frameAudio;
+        newData.videoFrame = newFrame;
+        
+        [self sendFrameToReplay:newData];
+        if (self.captureRunning)
         {
-            
-            double nfstart = [self mach_time_seconds];
-            
-            //[CATransaction begin];
-            newFrame = [self.previewCtx.layoutRenderer currentImg];
-            //[CATransaction commit];
-            //newFrame = [self currentFrame];
-            
-            
-            double nfdone = [self mach_time_seconds];
-            double nftime = nfdone - nfstart;
-            _renderedFrames++;
-            
-            _render_time_total += nftime;
-            if (nftime < _min_render_time || _min_render_time == 0.0f)
+            if (self.captureRunning != _last_running_value)
             {
-                _min_render_time = nftime;
+                [self setupCompressors];
             }
             
-            if (nftime > _max_render_time)
-            {
-                _max_render_time = nftime;
-            }
-
+            
+            [self processVideoFrame:newData];
             
             
-            if (newFrame)
+        } else {
+            
+            for (OutputDestination *outdest in _captureDestinations)
             {
-                CVPixelBufferRetain(newFrame);
-                if (self.captureRunning)
-                {
-                    if (self.captureRunning != _last_running_value)
-                    {
-                        [self setupCompressors];
-                    }
-                    
-                    
-                    [self processVideoFrame:newFrame];
-
-                    
-                } else {
-                    
-                    for (OutputDestination *outdest in _captureDestinations)
-                    {
-                        [outdest writeEncodedData:nil];
-                    }
-
-                }
-                
-                _last_running_value = self.captureRunning;
-                
-                CVPixelBufferRelease(newFrame);
-
-                
+                [outdest writeEncodedData:nil];
             }
+            
         }
+        
+        _last_running_value = self.captureRunning;
+        
+        CVPixelBufferRelease(newFrame);
+        
+        
+    }
 }
 
 
-
--(void)processVideoFrame:(CVPixelBufferRef)videoFrame
+-(CapturedFrameData *)createFrameData
 {
-
     
-    //CVImageBufferRef imageBuffer = frameData.videoFrame;
-    
-    if (!self.captureRunning)
-    {
-        //CVPixelBufferRelease(imageBuffer);
+    CMTime pts = CMTimeMake((_frame_time - _firstFrameTime)*1000, 1000);
+    CMTime duration = CMTimeMake(1, self.captureFPS);
 
-        return;
-    }
+    CapturedFrameData *newFrameData = [[CapturedFrameData alloc] init];
+    newFrameData.videoPTS = pts;
+    newFrameData.videoDuration = duration;
+    newFrameData.frameNumber = _frameCount;
+    newFrameData.frameTime = _frame_time;
+    return newFrameData;
+}
+
+
+-(void)sendFrameToReplay:(CapturedFrameData *)frameData
+{
     CMTime pts;
     CMTime duration;
     
+    pts = CMTimeMake((_frame_time - _firstFrameTime)*1000, 1000);
+    
+    duration = CMTimeMake(1, self.captureFPS);
     
     
-    if (_firstFrameTime == 0)
+    
+    if (self.instantRecorder && self.instantRecorder.compressor && !self.instantRecorder.compressor.errored)
     {
-        _firstFrameTime = _frame_time;
-        
+        CapturedFrameData *newFrameData = frameData.copy;
+        [self.instantRecorder.compressor compressFrame:newFrameData];
+        if (self.instantRecorder.compressor.errored)
+        {
+            self.instantRecordActive = NO;
+        }
     }
-    
-    CFAbsoluteTime ptsTime = _frame_time - _firstFrameTime;
-    
-    
-    
-    
-    _frameCount++;
-    _lastFrameTime = _frame_time;
-    
-    
-    pts = CMTimeMake(ptsTime*1000000, 1000000);
+}
 
-    duration = CMTimeMake(1000, self.captureFPS*1000);
+
+-(void)processVideoFrame:(CapturedFrameData *)frameData
+{
+
+    
+    
+    if (!self.captureRunning)
+    {
+
+        return;
+    }
     
     for(id cKey in self.compressors)
     {
-        CapturedFrameData *newFrameData = [[CapturedFrameData alloc] init];
         
-        newFrameData.videoPTS = pts;
-        newFrameData.videoDuration = duration;
-        newFrameData.frameNumber = _frameCount;
-        newFrameData.frameTime = _frame_time;
-        newFrameData.videoFrame = videoFrame;
-        
-        id <h264Compressor> compressor;
+        id <VideoCompressor> compressor;
         compressor = self.compressors[cKey];
+
+        if (self.instantRecorder && [self.instantRecorder.compressor isEqual:compressor])
+        {
+            continue;
+        }
+        
+        CapturedFrameData *newFrameData = frameData.copy;
+        
         [compressor compressFrame:newFrameData];
 
     }
@@ -2843,7 +2877,7 @@
 {
     
     NSUInteger key_idx = [@[@"captureWidth", @"captureHeight", @"captureFPS",
-    @"captureVideoAverageBitrate", @"audioBitrate", @"audioSamplerate", @"captureVideoMaxBitrate", @"captureVideoMaxKeyframeInterval"] indexOfObject:key];
+    @"audioBitrate", @"audioSamplerate"] indexOfObject:key];
     
     if (key_idx != NSNotFound)
     {
@@ -2871,6 +2905,12 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputDeleted object:to_delete userInfo:nil];
 }
 
+-(void)replaceObjectInCaptureDestinationsAtIndex:(NSUInteger)index withObject:(id)object
+{
+    [self.captureDestinations replaceObjectAtIndex:index withObject:object];
+}
+
+
 -(void)insertObject:(OutputDestination *)object inCaptureDestinationsAtIndex:(NSUInteger)index
 {
     [self.captureDestinations insertObject:object atIndex:index];
@@ -2891,6 +2931,17 @@
     
     [self.sourceLayouts removeObjectAtIndex:index];
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutDeleted object:to_delete userInfo:nil];
+}
+
+
+-(void) insertObject:(CSInputLibraryItem *)item inInputLibraryAtIndex:(NSUInteger)index
+{
+    [self.inputLibrary insertObject:item atIndex:index];
+}
+
+-(void)removeObjectFromInputLibraryAtIndex:(NSUInteger)index
+{
+    [self.inputLibrary removeObjectAtIndex:index];
 }
 
 
@@ -2922,6 +2973,84 @@
 
 
 
+-(NSDragOperation)collectionView:(NSCollectionView *)collectionView validateDrop:(id<NSDraggingInfo>)draggingInfo proposedIndex:(NSInteger *)proposedDropIndex dropOperation:(NSCollectionViewDropOperation *)proposedDropOperation
+{
+    
+    NSPasteboard *pBoard = [draggingInfo draggingPasteboard];
+    NSData *indexSave = [pBoard dataForType:@"CS_LAYOUT_DRAG"];
+    NSIndexSet *indexes = [NSKeyedUnarchiver unarchiveObjectWithData:indexSave];
+    NSInteger draggedItemIdx = [indexes firstIndex];
+    
+    NSInteger useIdx = *proposedDropIndex;
+    
+    if (*proposedDropIndex > draggedItemIdx)
+    {
+        useIdx--;
+    }
+    
+    
+    if (useIdx < 0)
+    {
+        useIdx = 0;
+    }
+
+
+    
+    if (*proposedDropIndex == -1 || labs(draggedItemIdx - useIdx) < 1)
+    {
+        return NSDragOperationNone;
+    }
+    
+    return NSDragOperationMove;
+}
+
+
+-(BOOL)collectionView:(NSCollectionView *)collectionView writeItemsAtIndexes:(NSIndexSet *)indexes toPasteboard:(NSPasteboard *)pasteboard
+{
+    NSData *indexSave = [NSKeyedArchiver archivedDataWithRootObject:indexes];
+    [pasteboard declareTypes:@[@"CS_LAYOUT_DRAG"] owner:nil];
+    [pasteboard setData:indexSave forType:@"CS_LAYOUT_DRAG"];
+    return YES;
+}
+
+
+-(BOOL)collectionView:(NSCollectionView *)collectionView acceptDrop:(id<NSDraggingInfo>)draggingInfo index:(NSInteger)index dropOperation:(NSCollectionViewDropOperation)dropOperation
+{
+    NSPasteboard *pBoard = [draggingInfo draggingPasteboard];
+    NSData *indexSave = [pBoard dataForType:@"CS_LAYOUT_DRAG"];
+    NSIndexSet *indexes = [NSKeyedUnarchiver unarchiveObjectWithData:indexSave];
+    NSInteger draggedItemIdx = [indexes firstIndex];
+
+    
+    [self willChangeValueForKey:@"sourceLayouts"];
+    SourceLayout *draggedItem = [self.sourceLayouts objectAtIndex:draggedItemIdx];
+    NSInteger useIdx = index;
+    
+    if (index > draggedItemIdx)
+    {
+        useIdx--;
+    }
+    
+    
+    if (useIdx < 0)
+    {
+        useIdx = 0;
+    }
+    
+    [self.sourceLayouts removeObjectAtIndex:draggedItemIdx];
+    [self.sourceLayouts insertObject:draggedItem atIndex:useIdx];
+    [self didChangeValueForKey:@"sourceLayouts"];
+    
+    return YES;
+}
+
+
+-(BOOL)collectionView:(NSCollectionView *)collectionView canDragItemsAtIndexes:(NSIndexSet *)indexes withEvent:(NSEvent *)event
+{
+    return YES;
+}
+
+
 -(SourceLayout *)getLayoutForName:(NSString *)name
 {
     NSUInteger selectedIdx = [self.sourceLayouts indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
@@ -2941,45 +3070,61 @@
 
 }
 
-- (IBAction)layoutTableSelected:(NSTableView *)sender
+-(void)switchToLayout:(SourceLayout *)layout
 {
+    SourceLayout *activeLayout = self.activePreviewView.sourceLayout;
+    [activeLayout replaceWithSourceLayout:layout];
+}
+
+
+-(void)changePendingAnimations
+{
+    NSInteger finalCount = 0;
     
-    NSInteger selectedRow = [sender selectedRow];
-    
-    NSInteger selectedCount = sender.numberOfSelectedRows;
-    
-    if (selectedRow != -1)
+    if (self.stagingHidden)
     {
-        SourceLayout *selected = [self.sourceLayoutsArrayController.arrangedObjects objectAtIndex:selectedRow];
-        if (selected)
+        finalCount = 0;
+    } else {
+        
+        for (CSAnimationItem *anim in self.stagingLayout.animationList)
         {
-            if (sender == self.mainSourceLayoutTableView)
+            if (![self.selectedLayout animationForUUID:anim.uuid] && anim.onLive)
             {
-                if (selectedCount > 1)
-                {
-                    if (!self.livePreviewView.viewOnly)
-                    {
-                        [self.selectedLayout mergeSourceListData:selected.savedSourceListData withLayer:nil];
-                    }
-                } else {
-                    self.selectedLayout = selected;
-                }
-            } else {
-                if (selectedCount > 1)
-                {
-                    [self.stagingPreviewView.sourceLayout mergeSourceListData:selected.savedSourceListData withLayer:nil];
-                } else {
-                    self.stagingLayout = selected;
-                }
-            }
-            if (selectedCount > 1)
-            {
-                [sender deselectRow:selectedRow];
+                finalCount++;
             }
         }
+        
     }
     
+    self.pendingAnimations = finalCount;
+    self.pendingAnimationString = [NSString stringWithFormat:@"%ld pending animations", (long)self.pendingAnimations];
+    
 }
+
+
+-(void)toggleLayout:(SourceLayout *)layout
+{
+    SourceLayout *activeLayout = self.activePreviewView.sourceLayout;
+    [self applyTransitionSettings:activeLayout];
+
+    if ([activeLayout containsLayout:layout])
+    {
+        [activeLayout removeSourceLayout:layout withLayer:nil];
+    } else {
+        [activeLayout mergeSourceLayout:layout withLayer:nil];
+    }
+    
+    [self changePendingAnimations];
+}
+
+
+-(void)saveToLayout:(SourceLayout *)layout
+{
+    [self.activePreviewView.sourceLayout saveSourceList];
+    layout.savedSourceListData = self.activePreviewView.sourceLayout.savedSourceListData;
+}
+
+
 
 
 -(void)clearLearnedMidiForCommand:(NSString *)command withResponder:(id<MIKMIDIMappableResponder>)responder
@@ -3035,16 +3180,20 @@
 
 - (NSArray *)commandIdentifiers
 {
-    NSArray *baseIdentifiers = @[@"GoLive", @"StagingRevert", @"LiveRevert", @"InputNext", @"InputPrevious", @"ActivateLive", @"ActivateStaging", @"ActivateToggle"];
+    NSArray *baseIdentifiers = @[@"GoLive", @"InputNext", @"InputPrevious", @"ActivateLive", @"ActivateStaging", @"ActivateToggle", @"InstantRecord"];
     
      NSMutableArray *layoutIdentifiers = [NSMutableArray array];
     
     for (SourceLayout *layout in self.sourceLayouts)
     {
-        [layoutIdentifiers addObject:[NSString stringWithFormat:@"SwitchStaging:%@", layout.name]];
-        [layoutIdentifiers addObject:[NSString stringWithFormat:@"SwitchLive:%@", layout.name]];
+        [layoutIdentifiers addObject:[NSString stringWithFormat:@"ToggleLayout:%@", layout.name]];
     }
     
+    for (SourceLayout *layout in self.sourceLayouts)
+    {
+        [layoutIdentifiers addObject:[NSString stringWithFormat:@"SwitchToLayout:%@", layout.name]];
+    }
+
     baseIdentifiers = [baseIdentifiers arrayByAddingObjectsFromArray:layoutIdentifiers];
     baseIdentifiers = [baseIdentifiers arrayByAddingObjectsFromArray:_inputIdentifiers];
     return baseIdentifiers;
@@ -3091,6 +3240,13 @@
 
 -(SourceLayout *)currentMIDILayout
 {
+    
+    if (self.stagingHidden)
+    {
+        return self.activePreviewView.sourceLayout;
+    }
+    
+    
     if (self.currentMidiLayoutLive)
     {
         return self.livePreviewView.sourceLayout;
@@ -3140,18 +3296,34 @@
 
 -(void)handleMIDICommandActivateLive:(MIKMIDICommand *)command
 {
-    self.currentMidiLayoutLive = YES;
+    if (!self.stagingHidden)
+    {
+        self.currentMidiLayoutLive = YES;
+        self.stagingPreviewView.midiActive = NO;
+        self.livePreviewView.midiActive = YES;
+    }
 }
 
 -(void)handleMIDICommandActivateStaging:(MIKMIDICommand *)command
 {
-    self.currentMidiLayoutLive = NO;
+    if (!self.stagingHidden)
+    {
+        self.currentMidiLayoutLive = NO;
+        self.livePreviewView.midiActive = NO;
+        self.stagingPreviewView.midiActive = YES;
+    }
 }
 
 -(void)handleMIDICommandActivateToggle:(MIKMIDICommand *)command
 {
-    self.currentMidiLayoutLive = !self.currentMidiLayoutLive;
+    if (!self.stagingHidden)
+    {
+        self.currentMidiLayoutLive = !self.currentMidiLayoutLive;
+        self.stagingPreviewView.midiActive = !self.stagingPreviewView.midiActive;
+        self.livePreviewView.midiActive = !self.livePreviewView.midiActive;
+    }
 }
+
 
 -(void)handleMIDICommandInputNext:(MIKMIDIChannelVoiceCommand *)command
 {
@@ -3213,11 +3385,41 @@
         self.currentMidiInputStagingIdx = cVal;
     }
 }
+
+
+-(id<MIKMIDIResponder>)dispatchMIDI:(MIKMIDICommand *)command forItem:(MIKMIDIMappingItem *)item
+{
+    
+    id<MIKMIDIResponder> ret = nil;
+    
+    SourceLayout *currLayout = [self currentMIDILayout];
+    NSString *responderName = item.MIDIResponderIdentifier;
+    
+    if ([responderName hasPrefix:@"Layout:"])
+    {
+        ret = currLayout;
+    } else if ([responderName hasPrefix:@"Input:"]) {
+        NSString *uuid = [responderName substringFromIndex:6];
+        InputSource *input = [currLayout inputForUUID:uuid];
+        if (input)
+        {
+            ret = input;
+        }
+    }
+
+    return ret;
+}
+
+
+
+
+
 -(void)handleMIDICommand:(MIKMIDICommand *)command forIdentifier:(NSString *)identifier
 {
     
     __weak CaptureController *weakSelf = self;
 
+    
     if ([_inputIdentifiers containsObject:identifier])
     {
         InputSource *currInput = [self currentMIDIInput:command];
@@ -3239,9 +3441,11 @@
     }
     
     
-    if ([identifier hasPrefix:@"SwitchStaging:"])
+    if ([identifier hasPrefix:@"ToggleLayout:"])
     {
-        NSString *layoutName = [identifier substringFromIndex:14];
+        
+        
+        NSString *layoutName = [identifier substringFromIndex:13];
         NSUInteger indexOfLayout = [self.sourceLayouts indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
             SourceLayout *testLayout = obj;
             if ([testLayout.name isEqualToString:layoutName])
@@ -3256,32 +3460,7 @@
         {
             SourceLayout *layout = [self.sourceLayouts objectAtIndex:indexOfLayout];
             dispatch_async(dispatch_get_main_queue(), ^{
-                weakSelf.stagingLayout = layout;
-            });
-
-        }
-        return;
-    }
-
-    
-    if ([identifier hasPrefix:@"SwitchLive:"])
-    {
-        NSString *layoutName = [identifier substringFromIndex:11];
-        NSUInteger indexOfLayout = [self.sourceLayouts indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-            SourceLayout *testLayout = obj;
-            if ([testLayout.name isEqualToString:layoutName])
-            {
-                *stop = YES;
-                return YES;
-            }
-            return NO;
-        }];
-        
-        if (indexOfLayout != NSNotFound)
-        {
-            SourceLayout *layout = [self.sourceLayouts objectAtIndex:indexOfLayout];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                weakSelf.selectedLayout = layout;
+                [weakSelf toggleLayout:layout];
             });
             
         }
@@ -3289,18 +3468,48 @@
     }
 
     
+    if ([identifier hasPrefix:@"SwitchToLayout:"])
+    {
+        
+        
+        NSString *layoutName = [identifier substringFromIndex:15];
+        NSUInteger indexOfLayout = [self.sourceLayouts indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+            SourceLayout *testLayout = obj;
+            if ([testLayout.name isEqualToString:layoutName])
+            {
+                *stop = YES;
+                return YES;
+            }
+            return NO;
+        }];
+        
+        if (indexOfLayout != NSNotFound)
+        {
+            SourceLayout *layout = [self.sourceLayouts objectAtIndex:indexOfLayout];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf switchToLayout:layout];
+            });
+            
+        }
+        return;
+    }
+
     if ([identifier isEqualToString:@"GoLive"])
     {
     
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf stagingGoLive:nil];
         });
-    } else if ([identifier isEqualToString:@"StagingRevert"]) {
+    }
+    
+    if ([identifier isEqualToString:@"InstantRecord"])
+    {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf stagingRevert:nil];
+            [weakSelf doInstantRecord:nil];
         });
     }
 }
+
 
 
 -(void)saveMIDI
@@ -3344,6 +3553,10 @@
 
     for (CSMidiWrapper *wrap in self.midiMapGenerators)
     {
+        wrap.redirectResponderBlock = ^id<MIKMIDIResponder>(MIKMIDICommand *command, MIKMIDIMappingItem *item) {
+            return [self dispatchMIDI:command forItem:item];
+        };
+        
         self.midiDeviceMappings[wrap.device.name] = wrap;
         [wrap connect];
 
@@ -3351,6 +3564,36 @@
     
     [self loadMIDI];
     [NSApp registerMIDIResponder:self];
+}
+
+
+
+- (IBAction)doInstantRecord:(id)sender
+{
+    if (self.instantRecordActive && self.instantRecorder)
+    {
+        
+        NSString *directory = self.instantRecordDirectory;
+        
+        if (!directory)
+        {
+            NSArray *mPaths = NSSearchPathForDirectoriesInDomains(NSMoviesDirectory, NSUserDomainMask, YES);
+            directory = mPaths.firstObject;
+        }
+        
+        if (directory)
+        {
+            NSDateFormatter *dFormat = [[NSDateFormatter alloc] init];
+            dFormat.dateStyle = NSDateFormatterMediumStyle;
+            dFormat.timeStyle = NSDateFormatterMediumStyle;
+            NSString *dateStr = [dFormat stringFromDate:[NSDate date]];
+            NSString *useFilename = [NSString stringWithFormat:@"CS_instant_record-%@.mov", dateStr];
+
+            NSString *savePath = [NSString pathWithComponents:@[directory, useFilename]];
+            
+            [self.instantRecorder writeCurrentBuffer:savePath];
+        }
+    }
 }
 
 
@@ -3400,50 +3643,86 @@
     [self.pluginManagerController showWindow:nil];
 }
 
+
+
+-(void)applyTransitionSettings:(SourceLayout *)layout
+{
+    [self.objectController commitEditing];
+    layout.transitionName = self.transitionName;
+    layout.transitionDirection = self.transitionDirection;
+    layout.transitionDuration = self.transitionDuration;
+    layout.transitionFilter = self.transitionFilter;
+    layout.transitionFullScene = self.transitionFullScene;
+}
+
+-(void)clearTransitionSettings:(SourceLayout *)layout
+{
+    layout.transitionName = nil;
+    layout.transitionDirection = nil;
+    layout.transitionDuration = 0;
+    layout.transitionFilter = nil;
+    layout.transitionFullScene = nil;
+
+}
+-(IBAction) swapStagingAndLive:(id)sender
+{
+
+    //Save the current live layout to a temporary layout, do a normal staging->live and then restore old live into current staging
+
+    [self.livePreviewView.sourceLayout saveSourceList];
+    
+    SourceLayout *tmpLive = [self.livePreviewView.sourceLayout copy];
+    
+    [self stagingGoLive:self];
+
+    [self applyTransitionSettings:self.activePreviewView.sourceLayout];
+    [self switchToLayout:tmpLive];
+    [self clearTransitionSettings:self.activePreviewView.sourceLayout];
+}
+
+
+
 - (IBAction)stagingGoLive:(id)sender
 {
     
-    [self.objectController commitEditing];
+    [self applyTransitionSettings:self.livePreviewView.sourceLayout];
 
-    self.previewCtx.layoutRenderer.transitionName = self.transitionName;
-    self.previewCtx.layoutRenderer.transitionDirection = self.transitionDirection;
-    self.previewCtx.layoutRenderer.transitionDuration = self.transitionDuration;
-    self.previewCtx.layoutRenderer.transitionFilter = self.transitionFilter;
+    /*
+    InputSource *src1 = [[InputSource alloc] init];
+    InputSource *src2 = src1.copy;
+    src2.uuid = src1.uuid;
     
-
-
-    if (self.stagingLayout && self.stagingCtx.sourceLayout)
+    
+    bool diffInp = [src1 isDifferentInput:src2];
+    
+    
+    NSLog(@"DIFFERENT INPUT %d", diffInp);
+    
+     */
+    
+    
+    if (self.stagingLayout)
     {
         [self stagingSave:sender];
+    
+        self.inLayoutTransition = YES;
+        [self.selectedLayout replaceWithSourceLayout:self.stagingLayout withCompletionBlock:^{
+          dispatch_async(dispatch_get_main_queue(), ^{
+              self.inLayoutTransition = NO;
+          });
+            
+        }];
         
-        if (self.selectedLayout != self.stagingLayout)
-        {
-            self.selectedLayout = self.stagingLayout;
-        } else {
-            SourceLayout *previewCopy = self.stagingLayout.copy;
-            [previewCopy restoreSourceList:nil];
-            NSUInteger layoutIdx = [self.sourceLayoutsArrayController.arrangedObjects indexOfObject:self.selectedLayout];
-            [self.sourceLayoutsArrayController removeObjectAtArrangedObjectIndex:layoutIdx];
-            [self.sourceLayoutsArrayController insertObject:previewCopy atArrangedObjectIndex:layoutIdx];
-            
-            self.selectedLayout = previewCopy;
-            _stagingLayout = previewCopy;
-            
-        }
+
+        [self changePendingAnimations];
+
     }
 }
 
+
 -(IBAction)stagingSave:(id)sender
 {
-    if (self.stagingLayout && self.stagingCtx.sourceLayout)
-    {
-        [self.stagingCtx.sourceLayout saveSourceList];
-        self.stagingLayout.savedSourceListData = self.stagingCtx.sourceLayout.savedSourceListData;
-        
-        self.stagingLayout.frameRate = self.stagingCtx.sourceLayout.frameRate;
-        self.stagingLayout.canvas_width = self.stagingCtx.sourceLayout.canvas_width;
-        self.stagingLayout.canvas_height = self.stagingCtx.sourceLayout.canvas_height;
-    }
+    [self.stagingLayout saveSourceList];
 }
 
 -(IBAction)stagingRevert:(id)sender
@@ -3492,11 +3771,12 @@
     
     
     [self.canvasSplitView display];
-    self.stagingControls.hidden = YES;
-    self.goLiveControls.hidden = YES;
     self.livePreviewView.viewOnly = NO;
-    _stagingHidden = YES;
-    
+    self.livePreviewView.midiActive = NO;
+    self.activePreviewView = self.livePreviewView;
+    self.stagingHidden = YES;
+    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutModeChanged object:self];
+
 }
 
 -(void) showStagingView
@@ -3530,10 +3810,17 @@
     [self.canvasSplitView adjustSubviews];
     
     [self.canvasSplitView display];
-    self.stagingControls.hidden = NO;
-    self.goLiveControls.hidden = NO;
     self.livePreviewView.viewOnly = YES;
-    _stagingHidden = NO;
+    self.stagingHidden = NO;
+    self.activePreviewView = self.stagingPreviewView;
+    if (self.currentMidiLayoutLive)
+    {
+        self.livePreviewView.midiActive = YES;
+        self.stagingPreviewView.midiActive = NO;
+    } else {
+        self.livePreviewView.midiActive = YES;
+        self.stagingPreviewView.midiActive = NO;
+    }
     dispatch_async(_preview_queue, ^{
         [self newStagingFrameTimed];
     });
@@ -3583,5 +3870,10 @@
     }
 }
 
+
+- (IBAction)outputEditClicked:(OutputDestination *)toEdit
+{
+    [self openOutputSheet:toEdit];
+}
 
 @end

@@ -9,6 +9,7 @@
 #import "CSPreviewGLLayer.h"
 
 @implementation CSPreviewGLLayer
+@synthesize midiActive = _midiActive;
 
 -(instancetype)init
 {
@@ -30,22 +31,64 @@
 }
 
 
+-(void)setMidiActive:(bool)midiActive
+{
+    _midiActive = midiActive;
+    _resetClearColor = YES;
+}
+
+-(bool)midiActive
+{
+    return _midiActive;
+}
+
+
 -(void)drawInCGLContext:(CGLContextObj)ctx pixelFormat:(CGLPixelFormatObj)pf forLayerTime:(CFTimeInterval)t displayTime:(const CVTimeStamp *)ts
 {
     
     
+    CGLSetCurrentContext(ctx);
     
     if (!_initDone)
     {
         glGenTextures(1, &_renderTexture);
-        glClearColor(0.184314f, 0.309804f, 0.309804f, 0);
-
         _initDone = YES;
     }
+    
+    if (_resetClearColor)
+    {
+        if (self.midiActive)
+        {
+            glClearColor(0.309804f, 0.184314f, 0.309804f, 0);
+        } else {
+            glClearColor(0.184314f, 0.309804f, 0.309804f, 0);
+        }
+        
+        _resetClearColor = NO;
+    }
+    
+    
     glClear(GL_COLOR_BUFFER_BIT);
 
+    if (!self.renderer)
+    {
+        return;
+    }
     
-    CVPixelBufferRef toDraw = [self.renderer currentFrame];
+    
+    CVPixelBufferRef toDraw;
+    if (self.doRender)
+    {
+        toDraw = [self.renderer currentImg];
+        CGLSetCurrentContext(ctx);
+        
+        if (toDraw)
+        {
+            CVPixelBufferRetain(toDraw);
+        }
+    } else {
+        toDraw = [self.renderer currentFrame];
+    }
     
     if (!toDraw)
     {
@@ -103,6 +146,7 @@
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     
+    
     glOrtho(0.0, self.bounds.size.width, 0.0, self.bounds.size.height, 0, 1);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -149,7 +193,6 @@
     
     
     
-    GLfloat outline_verts[8];
     GLfloat snapx_verts[4];
     GLfloat snapy_verts[4];
     
@@ -248,8 +291,7 @@
     glBindTexture(GL_TEXTURE_RECTANGLE_ARB, 0);
     glDisable(GL_TEXTURE_RECTANGLE_ARB);
 
-
-    
+ 
     [super drawInCGLContext:ctx pixelFormat:pf forLayerTime:t displayTime:ts];
 
     
@@ -300,9 +342,13 @@
 
 -(void)setBounds:(CGRect)bounds
 {
-    _resizeDirty = YES;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.resizeDirty = YES;
+        
+    });
     [super setBounds:bounds];
 }
+
 
 
 -(BOOL)isAsynchronous

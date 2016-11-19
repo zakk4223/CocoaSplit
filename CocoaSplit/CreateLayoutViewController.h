@@ -8,15 +8,22 @@
 
 #import <Cocoa/Cocoa.h>
 #import "SourceLayout.h"
-#import "CaptureController.h"
+
+
 
 @interface CreateLayoutViewController : NSViewController <NSPopoverDelegate>
 
-@property (weak) CaptureController *controller;
 @property (weak) NSPopover *popover;
 
 @property (strong) SourceLayout *sourceLayout;
+@property (assign) bool createDialog;
+
+
+@property (assign) int canvas_width;
+@property (assign) int canvas_height;
 
 - (IBAction)createButtonClicked:(id)sender;
+-(instancetype) initForBuiltin;
+
 
 @end

@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
 #import <VideoToolbox/VideoToolbox.h>
-#import "AVFAudioCapture.h"
 #import <CoreMedia/CoreMedia.h>
 #import "CSCaptureSourceProtocol.h"
 #import "CSAbstractCaptureDevice.h"
@@ -22,22 +21,32 @@
 #import "CSNotifications.h"
 #import "PluginManagerWindowController.h"
 #import "CreateLayoutViewController.h"
+#import "CSAddInputViewController.h"
 #import "CAMultiAudioEngine.h"
 #import "CSAnimationRunnerObj.h"
 #import "CSAnimationChooserViewController.h"
 #import "CSMidiManagerWindowController.h"
 #import "MIKMIDI.h"
 #import "CSTimerSourceProtocol.h"
-
+#import "CSInputLibraryWindowController.h"
+#import "CSInputLibraryItem.h"
+#import "CSNewOutputWindowController.h"
+#import "CompressionSettingsPanelController.h"
+#import "AppleProResCompressor.h"
+#import "CSAddOutputPopupViewController.h"
+#import "CSAnimationWindowController.h"
+#import "CSStreamOutputWindowController.h"
 
 
 @class FFMpegTask;
-@protocol h264Compressor;
+@protocol VideoCompressor;
 @class OutputDestination;
 @class InputSource;
 @class SourceLayout;
 @class LayoutPreviewWindowController;
-
+@class CSLayoutEditWindowController;
+@class CSTimedOutputBuffer;
+@class CSAdvancedAudioWindowController;
 
 
 void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , CMSampleBufferRef );
@@ -46,31 +55,13 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @class PreviewView;
 
 
-@interface CaptureController : NSObject <NSMenuDelegate, MIKMIDIMappableResponder, MIKMIDIResponder, MIKMIDIMappingGeneratorDelegate, CSTimerSourceProtocol> {
+@interface CaptureController : NSObject <NSTableViewDelegate, NSMenuDelegate, MIKMIDIMappableResponder, MIKMIDIResponder, MIKMIDIMappingGeneratorDelegate, CSTimerSourceProtocol, NSCollectionViewDelegate, NSOutlineViewDelegate> {
     
-    bool _stagingHidden;
     
     NSArray *_inputIdentifiers;
-    
-    CIFilter *_compositeFilter;
-    CIImage *_backgroundImage;
-    
-    CVDisplayLinkRef _displayLink;
-    
 
     NSRect _stagingFrame;
     NSRect _liveFrame;
-    
-    
-    id _audio_capture_session;
-    
-    CFAbsoluteTime _lastcvtime;
-    
-    NSThread *mainThread;
-    
-    NSTimer *_captureTimer;
-    NSTimer *_idleTimer;
-    BOOL _cmdLineInfo;
     
 
     NSScreen *_fullscreenOn;
@@ -81,9 +72,15 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     id _activity_token;
     
     long long _frameCount;
-    CFAbsoluteTime _firstFrameTime;
+    long long _streamFrameStart;
+    
     CFAbsoluteTime _lastFrameTime;
+    CFAbsoluteTime _firstFrameTime;
+    
     CMTime _firstAudioTime;
+    CMTime _previousAudioTime;
+    
+    
     dispatch_queue_t _main_capture_queue;
     dispatch_queue_t _preview_queue;
     dispatch_source_t _dispatch_timer;
@@ -98,19 +95,11 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     double _frame_time;
     double _start_time;
     
-    CMSampleBufferRef audioRingBuffer[512];
-    size_t audioWritePosition;
-    size_t audioLastReadPosition;
-    NSMutableArray *audioBuffer;
     NSMutableArray *videoBuffer;
+    
     dispatch_source_t _log_source;
-    int _saved_stderr;
     bool _last_running_value;
     
-    
-    CIFilter *_cifilter;
-    NSOpenGLContext *_ogl_ctx;
-    CGLContextObj _cgl_ctx;
     
     
     float _min_render_time;
@@ -118,21 +107,43 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     float _avg_render_time;
     float _render_time_total;
     int _renderedFrames;
-    NSTask *_renderTask;
     
-    NSConnection *_remoteConn;
-    id _renderServer;
+    NSPopover *_addInputpopOver;
+    
+    NSPopover *_addOutputpopOver;
+    
     NSPopover *_layoutpopOver;
     NSPopover *_animatepopOver;
     
     NSMutableArray *_screensCache;
+    NSMutableArray *_layoutWindows;
+    NSMutableArray *_outputWindows;
     
-
+    bool _needsIRReset;
     
-    
+    NSMutableArray *_audioBuffer;
+    CSAdvancedAudioWindowController *_audioWindowController;
+    CSAnimationWindowController *_animationWindowController;
+    CSStreamOutputWindowController *_streamOutputWindowController;
 }
 
 
+@property (assign) bool useInstantRecord;
+@property (assign) int instantRecordBufferDuration;
+@property (strong) NSString *instantRecordCompressor;
+@property (strong) NSString *instantRecordDirectory;
+
+
+@property (assign) bool instantRecordActive;
+
+@property (strong) CSTimedOutputBuffer *instantRecorder;
+
+
+@property (weak) IBOutlet NSCollectionView *layoutCollectionView;
+
+@property (assign) bool stagingHidden;
+
+@property (strong) NSMutableArray *inputLibrary;
 
 @property (weak) IBOutlet NSMenu *stagingFullScreenMenu;
 @property (weak) IBOutlet NSMenu *liveFullScreenMenu;
@@ -160,30 +171,22 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) CAMultiAudioEngine *multiAudioEngine;
 
 
-@property (assign) bool renderOnIntegratedGPU;
-
-
-@property (strong) LayoutPreviewWindowController *layoutPreviewController;
 @property (strong) PluginManagerWindowController *pluginManagerController;
 @property (strong) CSMidiManagerWindowController *midiManagerController;
 
 
 @property (strong) NSString *renderStatsString;
+@property (strong) NSString *outputStatsString;
 
 
-@property (strong) NSString *layoutPanelName;
 
 @property (strong) NSMutableArray *sourceLayouts;
 @property (strong) SourceLayout *selectedLayout;
 @property (strong) SourceLayout *stagingLayout;
 
-@property (weak) IBOutlet NSView *stagingControls;
 
-@property (weak) IBOutlet NSView *goLiveControls;
 @property (weak) IBOutlet NSSplitView *canvasSplitView;
 
-@property (strong) id<h264Compressor> videoCompressor;
-@property (strong) AVFAudioCapture *audioCaptureSession;
 
 
 @property (assign) double captureFPS;
@@ -191,15 +194,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (assign) int audioSamplerate;
 
 
-@property (assign) double min_delay;
-@property (assign) double max_delay;
-@property (assign) double avg_delay;
-@property (assign) long long compressedFrameCount;
-@property (assign) NSMutableArray *streamPanelDestinations;
-@property (strong) NSUserDefaults *cmdLineArgs;
 @property (assign) double audio_adjust;
 
-@property (assign) CFAbsoluteTime last_dl_time;
 
 @property (weak) IBOutlet NSPopover *editorPopover;
 
@@ -207,9 +203,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (weak) IBOutlet PreviewView *stagingCtx;
 
 @property (unsafe_unretained) IBOutlet NSObjectController *objectController;
-@property (strong) IBOutlet NSObjectController *compressSettingsController;
-@property (strong) IBOutlet NSObjectController *outputPanelController;
-@property (strong) IBOutlet NSObjectController *layoutPanelController;
 
 @property (readonly) NSArray *layoutSortDescriptors;
 
@@ -222,9 +215,17 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) NSString *transitionName;
 @property (strong) NSString *transitionDirection;
 @property (strong) CIFilter *transitionFilter;
+@property (assign) bool transitionFullScene;
+@property (assign) NSInteger active_output_count;
+@property (assign) NSInteger total_dropped_frames;
+@property (assign) NSInteger pendingAnimations;
+@property (strong) NSString *pendingAnimationString;
+
+
 
 @property (strong) NSWindow *transitionFilterWindow;
 
+- (IBAction)doInstantRecord:(id)sender;
 
 -(IBAction)openTransitionFilterPanel:(NSButton *)sender;
 
@@ -237,6 +238,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (IBAction)openMidiManager:(id)sender;
 
 
+-(IBAction) swapStagingAndLive:(id)sender;
 - (IBAction)stagingGoLive:(id)sender;
 - (IBAction)stagingSave:(id)sender;
 - (IBAction)stagingRevert:(id)sender;
@@ -246,115 +248,61 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (IBAction)unlockStagingFPS:(id)sender;
 - (IBAction)unlockLiveFPS:(id)sender;
 
-- (void)deleteLayout:(NSInteger)deleteIdx;
+- (bool)deleteLayout:(SourceLayout *)toDelete;
 
-
-- (IBAction)addStreamingService:(id)sender;
 
 - (IBAction)streamButtonPushed:(id)sender;
 
 - (IBAction)closeAdvancedPrefPanel:(id)sender;
 - (IBAction)openAdvancedPrefPanel:(id)sender;
 - (IBAction)openCreateSheet:(id)sender;
-- (IBAction)openVideoAdvanced:(id)sender;
-- (IBAction)closeVideoAdvanced:(id)sender;
-- (void)openCompressPanel:(bool)doEdit;
-- (IBAction)newCompressPanel;
-- (IBAction)editCompressPanel;
--(IBAction)deleteCompressorPanel;
-
-- (IBAction)closeCompressPanel;
-
-- (IBAction)addInputSource:(id)sender;
-
-- (IBAction)openAudioMixerPanel:(id)sender;
-- (IBAction)closeAudioMixerPanel:(id)sender;
-
-- (IBAction)closeCreateSheet:(id)sender;
-- (IBAction)openLayoutPanel:(id)sender;
 
 
-@property (strong) NSString *compressTabLabel;
-
-@property (weak) IBOutlet NSDictionaryController *compressController;
+- (IBAction)chooseInstantRecordDirectory:(id)sender;
 
 
-@property (strong) id<h264Compressor> editingCompressor;
-@property (strong) NSString *editingCompressorKey;
+
+
+
 @property (strong) NSMutableDictionary *compressors;
-@property (strong) id<h264Compressor> selectedCompressor;
 
 
 @property (weak) NSString *selectedVideoType;
 @property (strong) NSString *selectedCompressorType;
 
 
-@property (strong) NSArray *videoTypes;
-@property (strong) NSArray *compressorTypes;
 
 
-@property (strong) NSMutableArray *ffmpeg_objects;
-@property (weak) NSString *streamingServiceServer;
-@property (weak) NSString *streamingServiceKey;
-
-@property (weak) NSString *streamingDestination;
 
 
-@property (weak) NSString *selectedDestinationType;
 
-@property (weak) IBOutlet NSTabView *compressTabs;
-@property (strong) IBOutlet NSWindow *createSheet;
-@property (strong) IBOutlet NSWindow *advancedVideoPanel;
-@property (strong) IBOutlet NSWindow *compressPanel;
+
 @property (strong) IBOutlet NSWindow *advancedPrefPanel;
 @property (strong) IBOutlet NSWindow *logWindow;
-@property (strong) IBOutlet NSWindow *audioMixerPanel;
-@property (strong) IBOutlet NSWindow *outputEditPanel;
-@property (strong) IBOutlet NSWindow *layoutPanel;
 
-@property (weak) IBOutlet NSView *streamServiceAddView;
+@property (strong) CSNewOutputWindowController *addOutputWindowController;
+@property (strong) CompressionSettingsPanelController *compressionEditPanelController;
+@property (weak) IBOutlet NSWindow *mainWindow;
 
-@property (unsafe_unretained) IBOutlet NSWindow *streamServiceConfWindow;
-@property (strong) NSViewController *streamServicePluginViewController;
-@property (strong) NSObject<CSStreamServiceProtocol>*streamServiceObject;
+
 
 
 - (IBAction)openLogWindow:(id)sender;
 
 
-@property (readonly) NSArray *destinationTypes;
 
 @property (strong) NSMutableArray *captureDestinations;
 @property (weak) NSIndexSet *selectedCaptureDestinations;
 @property (assign) int selectedTabIndex;
 
 
-@property (assign) BOOL showPreview;
 
-@property (assign) int captureVideoAverageBitrate;
-@property (assign) int captureVideoMaxBitrate;
-@property (assign) int captureVideoMaxKeyframeInterval;
-@property (strong) NSString *x264tune;
-@property (strong) NSString *x264preset;
-@property (strong) NSString *x264profile;
-@property (assign) int x264crf;
-@property (strong) NSMutableArray *x264tunes;
-@property (strong) NSMutableArray *x264presets;
-@property (strong) NSMutableArray *x264profiles;
-@property (strong) NSString *vtcompressor_profile;
-@property (assign) BOOL videoCBR;
 
 @property (assign) int maxOutputPending;
 @property (assign) int maxOutputDropped;
 
 @property (assign) BOOL captureRunning;
-@property (strong) NSArray *arOptions;
 @property (strong) NSString *resolutionOption;
-
-@property (strong) OutputDestination *editDestination;
-
-
-
 
 
 @property (assign) int captureHeight;
@@ -369,18 +317,12 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 @property (weak) NSArray *audioCaptureDevices;
 
-@property (strong) FFMpegTask *ffmpeg_obj;
-@property (strong) AVAssetWriterInput *video_writer;
-@property (strong) AVAssetWriterInput *audio_writer;
 
 
-@property (weak) CSAbstractCaptureDevice *selectedVideoCapture;
-@property (readonly) AVCaptureDevice *selectedAudioCapture;
 
 
-@property (weak)  NSString *ffmpeg_path;
+@property (weak) IBOutlet NSOutlineView *inputOutlineView;
 
-@property NSString *imageDirectory;
 
 @property (strong) NSDictionary *extraSaveData;
 
@@ -398,6 +340,17 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) NSMutableDictionary *extraPluginsSaveData;
 @property (strong) CSPluginLoader *sharedPluginLoader;
 
+@property (strong) PreviewView *activePreviewView;
+
+@property (strong) CSInputLibraryWindowController *inputLibraryController;
+
+@property (strong) NSIndexSet *inputOutlineSelectionIndexes;
+
+
+@property (weak) IBOutlet NSArrayController *activeInputsArrayController;
+
+@property (assign) bool inLayoutTransition;
+
 
 
 - (IBAction)openAnimatePopover:(NSButton *)sender;
@@ -406,7 +359,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (void)loadSettings;
 - (bool) startStream;
 - (void) stopStream;
-- (void) loadCmdlineSettings:(NSUserDefaults *)cmdargs;
 -(void)setExtraData:(id)saveData forKey:(NSString *)forKey;
 -(id)getExtraData:(NSString *)forkey;
 -(CVPixelBufferRef)currentFrame;
@@ -422,19 +374,20 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(SourceLayout *)addLayoutFromBase:(SourceLayout *)baseLayout;
 -(SourceLayout *)getLayoutForName:(NSString *)name;
 
-- (IBAction)layoutTableSelected:(NSTableView *)sender;
+-(void)openAddInputPopover:(NSButton *)sender;
+
 - (IBAction)openLayoutPopover:(NSButton *)sender;
-- (IBAction)mainDeleteLayoutClicked:(id)sender;
-- (IBAction)mainCopyLayoutClicked:(id)sender;
--(IBAction)stagingDeleteLayoutClicked:(id)sender;
--(IBAction)stagingCopyLayoutClicked:(id)sender;
+-(void)openLayoutPopover:(NSButton *)sender forLayout:(SourceLayout *)layout;
+-(void)openBuiltinLayoutPopover:(NSView *)sender spawnRect:(NSRect)spawnRect forLayout:(SourceLayout *)layout;
 
-- (IBAction)stagingAnimationSelected:(id)sender;
 
+@property (weak) IBOutlet NSTableView *inputTableView;
+
+@property (weak) IBOutlet NSTableView *outputTableView;
+- (IBAction)outputEditClicked:(OutputDestination *)sender;
 
 @property (weak) IBOutlet NSArrayController *sourceLayoutsArrayController;
-@property (weak) IBOutlet NSTableView *mainSourceLayoutTableView;
-@property (weak) IBOutlet NSTableView *stagingSourceLayoutTableView;
+@property (weak) IBOutlet NSTreeController *inputTreeController;
 
 -(void)setupLogging;
 +(CSAnimationRunnerObj *) sharedAnimationObj;
@@ -451,10 +404,33 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(void)layoutLeftFullscreen;
 +(void)loadPythonClass:(NSString *)pyClass fromFile:(NSString *)fromFile withBlock:(void(^)(Class))withBlock;
 +(Class)loadPythonClass:(NSString *)pyClass fromFile:(NSString *)fromFile;
+-(void)toggleLayout:(SourceLayout *)layout;
+-(void)saveToLayout:(SourceLayout *)layout;
+-(void)switchToLayout:(SourceLayout *)layout;
+-(CSLayoutEditWindowController *)openLayoutWindow:(SourceLayout *)layout;
+-(void)layoutWindowWillClose:(CSLayoutEditWindowController *)windowController;
+
+-(void)addInputToLibrary:(InputSource *)source;
+- (IBAction)openLibraryWindow:(id) sender;
+-(void)updateFrameIntervals;
+
+- (IBAction)configureIRCompressor:(id)sender;
 
 
+- (IBAction)inputTableControlClick:(NSButton *)sender;
 
+-(void) resetInputTableHighlights;
 
+- (IBAction)removePendingAnimations:(id)sender;
 
+- (IBAction)outputSegmentedAction:(NSButton *)sender;
+
+- (IBAction)openAdvancedAudio:(id)sender;
+- (IBAction)openAnimationWindow:(id)sender;
+- (IBAction)openStreamOutputWindow:(id)sender;
+-(void) removeObjectFromCaptureDestinationsAtIndex:(NSUInteger)index;
+-(void)openAddOutputPopover:(id)sender sourceRect:(NSRect)sourceRect;
+
+- (IBAction)previewAnimations:(id)sender;
 
 @end

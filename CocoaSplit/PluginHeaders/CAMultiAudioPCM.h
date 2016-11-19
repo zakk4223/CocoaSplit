@@ -18,7 +18,7 @@
 {
     size_t _audioBufferListSize;
     size_t _audioBufferDataSize;
-    AudioBufferList *_pcmData;
+    bool _alloced_buffers;
     
 }
 @property (assign) ScheduledAudioSlice *audioSlice;
@@ -26,6 +26,10 @@
 @property (assign) int frameCount;
 @property (weak) id player;
 @property (assign) AudioStreamBasicDescription pcmFormat;
+@property (assign) AudioBufferList *pcmData;
+@property (assign) bool handleFreeBuffer;
+
+
 
 -(instancetype)initWithAudioBufferList:(AudioBufferList *)bufferList streamFormat:(const AudioStreamBasicDescription *)streamFormat;
 -(instancetype)initWithDescription:(const AudioStreamBasicDescription *)streamFormat forFrameCount:(int)forFrameCount;

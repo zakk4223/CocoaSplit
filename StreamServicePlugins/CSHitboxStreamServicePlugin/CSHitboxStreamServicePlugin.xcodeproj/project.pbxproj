@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3473D29F1D4E51EA00842EEE /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3473D29E1D4E51EA00842EEE /* Media.xcassets */; };
 		34C67B861A2D7C490012DC1B /* HitboxStreamService.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C67B851A2D7C490012DC1B /* HitboxStreamService.m */; };
 		34C67B881A2D7DDB0012DC1B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34C67B871A2D7DDB0012DC1B /* Cocoa.framework */; };
 		34C67B8C1A2D82250012DC1B /* HitboxStreamServiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C67B8A1A2D82250012DC1B /* HitboxStreamServiceViewController.m */; };
@@ -14,6 +15,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3473D29E1D4E51EA00842EEE /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Media.xcassets; path = CSHitboxStreamServicePlugin/Media.xcassets; sourceTree = "<group>"; };
 		34C67B691A2D7B690012DC1B /* CSHitboxStreamServicePlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSHitboxStreamServicePlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		34C67B6D1A2D7B690012DC1B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		34C67B791A2D7B760012DC1B /* CSPluginServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPluginServices.h; sourceTree = "<group>"; };
@@ -49,6 +51,7 @@
 		34C67B601A2D7B690012DC1B = {
 			isa = PBXGroup;
 			children = (
+				3473D29E1D4E51EA00842EEE /* Media.xcassets */,
 				34C67B871A2D7DDB0012DC1B /* Cocoa.framework */,
 				34C67B831A2D7B760012DC1B /* PluginHeaders */,
 				34C67B6B1A2D7B690012DC1B /* CSHitboxStreamServicePlugin */,
@@ -159,6 +162,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3473D29F1D4E51EA00842EEE /* Media.xcassets in Resources */,
 				34C67B8D1A2D82250012DC1B /* HitboxStreamServiceViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -295,6 +299,7 @@
 				34C67B721A2D7B690012DC1B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

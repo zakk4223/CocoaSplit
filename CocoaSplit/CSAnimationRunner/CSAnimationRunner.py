@@ -19,7 +19,7 @@ plugin_base = PluginBase(package='animationplugins')
 
 library_dirs = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSAllDomainsMask - NSSystemDomainMask, YES)
 plugin_dirs = map(lambda x: x + "/Application Support/CocoaSplit/Plugins/Animations", library_dirs)
-plugin_dirs.append(NSBundle.mainBundle().builtInPlugInsPath() + "/Animations")
+plugin_dirs.append(NSBundle.mainBundle().resourcePath() + "/Animations")
 plugin_source = plugin_base.make_plugin_source(searchpath=plugin_dirs)
 
 

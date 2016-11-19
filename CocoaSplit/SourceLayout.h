@@ -21,17 +21,24 @@
     
     NSSortDescriptor *_sourceDepthSorter;
     NSSortDescriptor *_sourceUUIDSorter;
-    CVPixelBufferPoolRef _cvpool;
-    CVPixelBufferRef _currentPB;
     NSSize _rootSize;
     GLuint _fboTexture;
     GLuint _rFbo;
     dispatch_queue_t _animationQueue;
     NSMutableDictionary *_uuidMap;
+    bool _noSceneTransactions;
+    NSMutableArray *_topLevelSourceArray;
+    bool _skipRefCounting;
+    
+    
+    
     
     
 }
 
+
+
+@property (assign) bool doSaveSourceList;
 
 @property (assign) bool inTransition;
 @property (strong) NSMutableArray *animationList;
@@ -43,6 +50,8 @@
 
 
 @property (strong) NSMutableArray *sourceList;
+@property (readonly) NSArray *topLevelSourceList;
+
 @property (strong) NSData *savedSourceListData;
 @property (assign) bool isActive;
 
@@ -65,6 +74,25 @@
 @property (weak) InputSource *layoutTimingSource;
 @property (strong) NSUndoManager *undoManager;
 
+@property (strong) NSMutableArray *containedLayouts;
+
+
+@property (assign) bool in_live;
+@property (assign) bool in_staging;
+
+@property (nonatomic, copy) void (^addLayoutBlock)(SourceLayout *layout);
+@property (nonatomic, copy) void (^removeLayoutBlock)(SourceLayout *layout);
+
+@property (strong) NSString *transitionName;
+@property (strong) NSString *transitionDirection;
+@property (strong) CIFilter *transitionFilter;
+@property (assign) float transitionDuration;
+@property (assign) bool transitionFullScene;
+
+
+
+
+
 
 -(void)deleteSource:(InputSource *)delSource;
 -(void)addSource:(InputSource *)newSource;
@@ -78,13 +106,29 @@
 
 -(InputSource *)inputForUUID:(NSString *)uuid;
 -(void)frameTick;
--(NSObject *)mergeSourceListData:(NSData *)mergeData withLayer:(CALayer *)withLayer;
+-(NSObject *)mergeSourceListData:(NSData *)mergeData onlyAdd:(bool)onlyAdd;
 -(IBAction)runAnimations:(id)sender;
 -(void)addAnimation:(NSDictionary *)animation;
 -(InputSource *)sourceUnder:(InputSource *)source;
 -(void)didBecomeVisible;
 -(bool)containsInput:(InputSource *)cSource;
 -(void)modifyUUID:(NSString *)uuid withBlock:(void (^)(InputSource *input))withBlock;
+
+-(void)mergeSourceLayout:(SourceLayout *)toMerge withLayer:(CALayer *)withLayer;
+-(void)removeSourceLayout:(SourceLayout *)toRemove withLayer:(CALayer *)withLayer;
+-(bool)containsLayout:(SourceLayout *)layout;
+-(void)applyAddBlock;
+-(void)replaceWithSourceLayout:(SourceLayout *)layout;
+-(void)clearSourceList;
+-(void)setupMIDI;
+-(void)updateCanvasWidth:(int)width height:(int)height;
+-(CSAnimationItem *)animationForUUID:(NSString *)uuid;
+-(void)clearAnimations;
+-(void)runSingleAnimation:(CSAnimationItem *)animation withCompletionBlock:(void (^)(void))completionBlock;
+-(void)replaceWithSourceLayout:(SourceLayout *)layout withCompletionBlock:(void (^)(void))completionBlock;
+
+
+
 
 
 

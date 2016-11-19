@@ -130,15 +130,18 @@
     return;
 }
 
+
+
 -(void)updatePowerlevel
 {
-    
     [self.connectedTo updatePowerlevel];
     
     if ([self.connectedTo.class conformsToProtocol:@protocol(CAMultiAudioMixingProtocol)])
     {
         id<CAMultiAudioMixingProtocol>mixerNode = (id<CAMultiAudioMixingProtocol>)self.connectedTo;
-        self.powerLevel = [mixerNode powerForInputBus:self.connectedToBus];
+        float rawPower = [mixerNode powerForInputBus:self.connectedToBus];
+        
+        self.powerLevel = pow(10.0f, rawPower/20.0f);
     }
 }
 
@@ -164,8 +167,11 @@
     {
         self.mixerWindow = [[CAMultiAudioMatrixMixerWindowController alloc] initWithAudioMixer:self.downMixer];
         [self.mixerWindow showWindow:nil];
+        self.mixerWindow.window.title = self.name;
     }
 }
+
+
 -(void)nodeConnected:(CAMultiAudioNode *)toNode onBus:(UInt32)onBus
 {
     self.connectedTo = toNode;
@@ -189,9 +195,12 @@
         return;
     }
     
+    
     //if we're muting, save the current player volume
     if (muted == YES)
     {
+        NSLog(@"NODE MUTE %d", muted);
+
         _saved_volume = self.volume;
         self.volume = 0.0f;
     } else {

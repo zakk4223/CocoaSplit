@@ -86,9 +86,23 @@
     } else if (_animation) {
         [newLayer addAnimation:_animation forKey:@"contents"];
     }
+    
+    newLayer.minificationFilter = kCAFilterTrilinear;
+    newLayer.magnificationFilter = kCAFilterTrilinear;
+
     return newLayer;
 }
 
+
+
+-(NSImage *)libraryImage
+{
+    if (self.imagePath)
+    {
+        return [[NSImage alloc] initWithContentsOfFile:self.imagePath];
+    }
+    return nil;
+}
 
 
 -(NSString *)imagePath

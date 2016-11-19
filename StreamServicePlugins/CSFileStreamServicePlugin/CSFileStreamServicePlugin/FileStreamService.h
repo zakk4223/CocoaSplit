@@ -13,7 +13,10 @@
 
 
 @property bool isReady;
-@property (assign) NSString *fileName;
+@property (strong) NSString *fileName;
+
+@property (assign) BOOL useTimestamp;
+@property (assign) BOOL noClobber;
 
 
 
@@ -21,6 +24,8 @@
 -(NSString *)getServiceDestination;
 +(NSString *)label;
 +(NSString *)serviceDescription;
++(NSImage *)serviceImage;
+
 
 
 @end

@@ -37,6 +37,17 @@
 @synthesize selectedSource = _selectedSource;
 
 
+-(void)setMidiActive:(bool)midiActive
+{
+    _glLayer.midiActive = midiActive;
+}
+
+
+-(bool)midiActive
+{
+    return _glLayer.midiActive;
+}
+
 
 
 -(void)cursorUpdate:(NSEvent *)event
@@ -87,9 +98,10 @@
     if (_glLayer)
     {
         _glLayer.renderer = layoutRenderer;
+        _glLayer.doRender = self.isEditWindow;
     }
     
-    _layoutRenderer = layoutRenderer;
+   _layoutRenderer = layoutRenderer;
 }
 
 
@@ -98,6 +110,8 @@
 {
     return _layoutRenderer;
 }
+
+
 -(SourceLayout *)sourceLayout
 {
     return _sourceLayout;
@@ -106,7 +120,7 @@
 -(void) setSourceLayout:(SourceLayout *)sourceLayout
 {
     
-    if (_sourceLayout)
+    if (_sourceLayout && !self.isEditWindow)
     {
         [NSApp unregisterMIDIResponder:_sourceLayout];
         
@@ -115,7 +129,10 @@
     [self.undoManager removeAllActions];
     sourceLayout.undoManager = self.undoManager;
     
-    [NSApp registerMIDIResponder:sourceLayout];
+    if (!self.isEditWindow)
+    {
+        [NSApp registerMIDIResponder:sourceLayout];
+    }
     
     if (self.layoutRenderer)
     {
@@ -189,15 +206,37 @@
     if (self.selectedSource)
     {
 
-        InputSource *mapCopy = self.selectedSource.copy;
-        mapCopy.uuid = self.selectedSource.uuid;
-        
-        mapCopy.is_live = !self.selectedSource.is_live;
-        
-        [self.controller openMidiLearnerForResponders:@[self.selectedSource, mapCopy]];
+        [self.controller openMidiLearnerForResponders:@[self.selectedSource]];
     }
 }
 
+
+- (IBAction)addInputToLibrary:(id)sender
+{
+    
+    InputSource *toAdd = nil;
+    
+    if (sender)
+    {
+        if ([sender isKindOfClass:[NSMenuItem class]])
+        {
+            NSMenuItem *item = (NSMenuItem *)sender;
+            toAdd = (InputSource *)item.representedObject;
+        } else if ([sender isKindOfClass:[InputSource class]]) {
+            toAdd = (InputSource *)sender;
+        }
+    }
+    
+    if (!toAdd)
+    {
+        toAdd = self.selectedSource;
+    }
+    
+    if (toAdd)
+    {
+        [self.controller addInputToLibrary:toAdd];
+    }
+}
 
 -(void) buildSettingsMenu
 {
@@ -210,15 +249,14 @@
     tmp.target = self;
     tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Move Down" action:@selector(moveInputDown:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
-    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Auto Fit" action:@selector(autoFitInput:) keyEquivalent:@"" atIndex:idx++];
-    tmp.target = self;
     tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Settings" action:@selector(showInputSettings:) keyEquivalent:@"" atIndex:idx++];
-    tmp.target = self;
-    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Delete" action:@selector(deleteInput:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
     tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Clone" action:@selector(cloneInputSource:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
     
+    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Add to Library" action:@selector(addInputToLibrary:) keyEquivalent:@"" atIndex:idx++];
+    tmp.target = self;
+
     tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Midi Mapping" action:@selector(midiMapSource:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
     
@@ -256,6 +294,46 @@
 }
 
 
+-(void)menu:(NSMenu *)menu willHighlightItem:(nullable NSMenuItem *)item
+{
+    if (item.representedObject)
+    {
+        InputSource *hInput = (InputSource *)item.representedObject;
+        if (_overlayView)
+        {
+            _overlayView.parentSource = hInput;
+        }
+    }
+}
+
+
+
+-(void)resolutionMenuAction:(NSMenuItem *)sender
+{
+    NSInteger tag = sender.tag;
+    
+    if (!self.sourceLayout)
+    {
+        return;
+    }
+    
+    if (tag < 2)
+    {
+        [self.sourceLayout updateCanvasWidth:1280 height:720];
+    } else if (tag < 4) {
+        [self.sourceLayout updateCanvasWidth:1920 height:1080];
+    }
+    
+    if ((tag % 2) == 0)
+    {
+        self.sourceLayout.frameRate = 60.0f;
+    } else {
+        self.sourceLayout.frameRate = 30.0f;
+    }
+}
+
+
+
 -(NSMenu *) buildSourceMenu
 {
     
@@ -263,16 +341,51 @@
     NSArray *sourceList = [self.sourceLayout sourceListOrdered];
     
     NSMenu *sourceListMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
+    sourceListMenu.delegate = self;
     
     
+    NSString *resTitle = [NSString stringWithFormat:@"%dx%d@%.2f", self.sourceLayout.canvas_width, self.sourceLayout.canvas_height, self.sourceLayout.frameRate];
     
+    NSMenuItem *resItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:resTitle action:nil keyEquivalent:@""];
+    
+    NSMenu *resSubmenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
+    
+    [LAYOUT_RESOLUTIONS enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSString *resOpt = obj;
+        SEL menuAction = @selector(resolutionMenuAction:);
+        
+        if ([resOpt isEqualToString:@"Custom"])
+        {
+            menuAction = @selector(showLayoutSettings:);
+        }
+        
+        
+        NSMenuItem *item = [resSubmenu addItemWithTitle:resOpt action:menuAction keyEquivalent:@""];
+        item.target = self;
+        item.enabled = YES;
+        item.tag = idx;
+        
+    }];
 
+    [resItem setSubmenu:resSubmenu];
+    
+    
+    
+    [sourceListMenu insertItem:resItem atIndex:[sourceListMenu.itemArray count]];
+    
+    if (self.viewOnly)
+    {
+        return sourceListMenu;
+    }
+    
     NSMenuItem *midiItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Midi Mapping" action:@selector(doLayoutMidi:) keyEquivalent:@""];
     [midiItem setTarget:self];
     [midiItem setEnabled:YES];
     
     [sourceListMenu insertItem:midiItem atIndex:[sourceListMenu.itemArray count]];
 
+    [sourceListMenu insertItem:[NSMenuItem separatorItem] atIndex:[sourceListMenu.itemArray count]];
+    
     for (InputSource *src in sourceList)
     {
         NSString *srcName = src.name;
@@ -295,6 +408,13 @@
         [delItem setRepresentedObject:src];
         [delItem setTarget:self];
         [submenu addItem:delItem];
+        
+        NSMenuItem *libraryItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Add to Library" action:@selector(addInputToLibrary:) keyEquivalent:@""];
+        [libraryItem setEnabled:YES];
+        [libraryItem setRepresentedObject:src];
+        [libraryItem setTarget:self];
+        [submenu addItem:libraryItem];
+
         NSMenuItem *cloneItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Clone" action:@selector(cloneInputSource:) keyEquivalent:@""];
         [cloneItem setEnabled:YES];
         [cloneItem setRepresentedObject:src];
@@ -302,7 +422,8 @@
         [submenu addItem:cloneItem];
         
         [srcItem setSubmenu:submenu];
-        
+        [srcItem setRepresentedObject:src];
+
         [sourceListMenu insertItem:srcItem atIndex:[sourceListMenu.itemArray count]];
         
     }
@@ -386,9 +507,17 @@
 -(void)rightMouseDown:(NSEvent *)theEvent
 {
     
+    NSPoint tmp;
+    
+    tmp = [self convertPoint:theEvent.locationInWindow fromView:nil];
+
+    
     if (self.viewOnly)
     {
-        return;
+        NSMenu *srcListMenu = [self buildSourceMenu];
+        
+        [srcListMenu popUpMenuPositioningItem:srcListMenu.itemArray.firstObject atLocation:tmp inView:self];
+
     }
     
     bool doDeep = YES;
@@ -397,9 +526,6 @@
     {
         doDeep = NO;
     }
-    NSPoint tmp;
-    
-    tmp = [self convertPoint:theEvent.locationInWindow fromView:nil];
     NSPoint worldPoint = [self realPointforWindowPoint:tmp];
     self.selectedSource = [self.sourceLayout findSource:worldPoint deepParent:doDeep];
     
@@ -704,6 +830,14 @@
     NSPoint c_rt_snap;
     NSPoint c_center_snap;
     
+    NSPoint *c_snaps;
+    int c_snap_size = 0;
+    
+    if (!self.selectedSource)
+    {
+        return;
+    }
+
     if (superInput)
     {
         NSRect super_rect = superInput.globalLayoutPosition;
@@ -711,11 +845,38 @@
         c_lb_snap = super_rect.origin;
         c_rt_snap = NSMakePoint(NSMaxX(super_rect), NSMaxY(super_rect));
         c_center_snap = NSMakePoint(NSMidX(super_rect), NSMidY(super_rect));
+        c_snaps = malloc(sizeof(NSPoint) * 3);
+        c_snaps[0] = c_lb_snap;
+        c_snaps[1] = c_rt_snap;
+        c_snaps[2] = c_center_snap;
+        c_snap_size = 3;
     } else {
     //define snap points. basically edges and the center of the canvas
         c_lb_snap = NSMakePoint(0, 0);
         c_rt_snap = NSMakePoint(self.sourceLayout.canvas_width, self.sourceLayout.canvas_height);
         c_center_snap = NSMakePoint(self.sourceLayout.canvas_width/2, self.sourceLayout.canvas_height/2);
+        c_snap_size = 3;
+
+        //NSArray *srcs = self.sourceLayout.topLevelSourceList;
+        
+        NSArray *srcs = @[];
+        
+        c_snap_size += srcs.count*3;
+        
+        c_snaps = malloc(sizeof(NSPoint) * c_snap_size);
+        c_snaps[0] = c_lb_snap;
+        c_snaps[1] = c_rt_snap;
+        c_snaps[2] = c_center_snap;
+        
+        int snap_idx = 3;
+        for (InputSource *src in srcs)
+        {
+            NSRect srect = src.globalLayoutPosition;
+            c_snaps[snap_idx++] = srect.origin;
+            c_snaps[snap_idx++] = NSMakePoint(NSMaxX(srect), NSMaxY(srect));
+            c_snaps[snap_idx++] = NSMakePoint(NSMidX(srect), NSMidY(srect));
+            
+        }
     }
     
     
@@ -723,10 +884,6 @@
     
     //selected source snap points. edges, and center
     
-    if (!self.selectedSource)
-    {
-        return;
-    }
     
     NSRect src_rect = self.selectedSource.globalLayoutPosition;
 
@@ -738,7 +895,6 @@
     NSPoint dist;
     
     NSPoint s_snaps[3] = {s_lb_snap, s_rt_snap, s_center_snap};
-    NSPoint c_snaps[3] = {c_lb_snap, c_rt_snap, c_center_snap};
     
     bool did_snap_x = NO;
     bool did_snap_y = NO;
@@ -778,7 +934,7 @@
     for(int i=0; i < sizeof(s_snaps)/sizeof(NSPoint); i++)
     {
         NSPoint s_snap = s_snaps[i];
-        for(int j=0; j < sizeof(c_snaps)/sizeof(NSPoint); j++)
+        for(int j=0; j < c_snap_size; j++)
         {
             
             NSPoint c_snap = c_snaps[j];
@@ -813,6 +969,11 @@
     {
         _glLayer.snap_x = _snap_x;
         _glLayer.snap_y  = _snap_y;
+    }
+    
+    if (c_snaps)
+    {
+        free(c_snaps);
     }
 }
 
@@ -854,14 +1015,74 @@
         }
         
         _overlayView.parentSource = self.mousedSource;
+        
+        if (self.mousedSource)
+        {
+            [self stopHighlightingSource:self.mousedSource];
+        } else {
+            [self.controller resetInputTableHighlights];
+        }
     }
-    
-    
-    
 }
 
 
 
+
+-(void) highlightSource:(InputSource *)source
+{
+    if (!_highlightedSourceMap)
+    {
+        _highlightedSourceMap = [[NSMutableDictionary alloc] init];
+    }
+    
+    
+    NSString *srcUUID = source.uuid;
+    
+    InputSource *realSrc = [self.sourceLayout inputForUUID:srcUUID];
+    if (!_highlightedSourceMap[srcUUID] && realSrc)
+    {
+        CSPreviewOverlayView *oview = [[CSPreviewOverlayView alloc] init];
+        oview.renderControls = NO;
+        oview.previewView = self;
+        oview.parentSource = realSrc;
+        _highlightedSourceMap[srcUUID] = oview;
+    }
+}
+
+
+-(void)stopHighlightingSource:(InputSource *)source
+{
+    if (!_highlightedSourceMap)
+    {
+        _highlightedSourceMap = [[NSMutableDictionary alloc] init];
+    }
+
+    NSString *srcUUID = source.uuid;
+    
+    if (_highlightedSourceMap[srcUUID])
+    {
+        CSPreviewOverlayView *oview = _highlightedSourceMap[srcUUID];
+        [oview removeFromSuperview];
+        [_highlightedSourceMap removeObjectForKey:srcUUID];
+    }
+}
+
+-(void)stopHighlightingAllSources
+{
+    if (!_highlightedSourceMap)
+    {
+        _highlightedSourceMap = [[NSMutableDictionary alloc] init];
+    }
+    for (NSString *key in _highlightedSourceMap)
+    {
+        CSPreviewOverlayView *oview = _highlightedSourceMap[key];
+        if (oview)
+        {
+            [oview removeFromSuperview];
+        }
+    }
+    [_highlightedSourceMap removeAllObjects];
+}
 
 
 - (IBAction)moveInputUp:(id)sender
@@ -1071,6 +1292,26 @@
 }
 
 
+-(void)undoAddInput:(NSString *)uuid
+{
+    InputSource *toDelete = [self.sourceLayout inputForUUID:uuid];
+    if (toDelete)
+    {
+        [self deleteInput:toDelete];
+    }
+}
+
+
+-(void)addInputSourceWithInput:(InputSource *)source
+{
+    if (self.sourceLayout)
+    {
+        
+        [self.sourceLayout addSource:source];
+        [[self.undoManager prepareWithInvocationTarget:self] undoAddInput:source.uuid];
+    }
+}
+
 
 - (IBAction)addInputSource:(id)sender
 {
@@ -1080,7 +1321,7 @@
         InputSource *newSource = [[InputSource alloc] init];
         
         [self.sourceLayout addSource:newSource];
-        [[self.undoManager prepareWithInvocationTarget:self] deleteInput:newSource];
+        [[self.undoManager prepareWithInvocationTarget:self] undoAddInput:newSource.uuid];
         [self spawnInputSettings:newSource atRect:NSZeroRect];
     }
 }
@@ -1240,6 +1481,24 @@
 }
 
 
+- (void)showLayoutSettings:(id)sender
+{
+    
+    
+    NSPoint tmp = [self convertPoint:[self.window mouseLocationOutsideOfEventStream] fromView:nil];
+    
+    NSRect spawnRect = NSMakeRect(tmp.x, tmp.y, 1.0f, 1.0f);
+    
+    if (!NSPointInRect(NSMakePoint(tmp.x, 0), self.bounds))
+    {
+        spawnRect = NSMakeRect(self.bounds.size.width-5, tmp.y, 1.0f, 1.0f);
+    } else if (!NSPointInRect(NSMakePoint(0, tmp.y), self.bounds)) {
+        spawnRect = NSMakeRect(tmp.x, 5.0f, 1.0f, 1.0f);
+    }
+    
+    [self.controller openBuiltinLayoutPopover:self spawnRect:spawnRect forLayout:self.sourceLayout];
+}
+
 
 - (IBAction)showInputSettings:(id)sender
 {
@@ -1258,18 +1517,7 @@
     }
     
     
-    NSPoint tmp = [self convertPoint:[self.window mouseLocationOutsideOfEventStream] fromView:nil];
-
-    NSRect spawnRect = NSMakeRect(tmp.x, tmp.y, 1.0f, 1.0f);
-    
-    if (!NSPointInRect(NSMakePoint(tmp.x, 0), self.bounds))
-    {
-        spawnRect = NSMakeRect(self.bounds.size.width-5, tmp.y, 1.0f, 1.0f);
-    } else if (!NSPointInRect(NSMakePoint(0, tmp.y), self.bounds)) {
-        spawnRect = NSMakeRect(tmp.x, 5.0f, 1.0f, 1.0f);
-    }
-    
-    [self spawnInputSettings:configSource atRect:spawnRect];
+    [self openInputConfigWindow:configSource.uuid];
 
 }
 
@@ -1324,6 +1572,8 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sourceWasDeleted:) name:CSNotificationInputDeleted object:nil];
     
+
+    _configWindowCascadePoint = NSZeroPoint;
     
     _snap_x = _snap_y = -1;
     
@@ -1338,13 +1588,77 @@
     [self setWantsLayer:YES];
     
     self.layer.backgroundColor = CGColorCreateGenericRGB(0.184314f, 0.309804f, 0.309804f, 1);
+    [self registerForDraggedTypes:@[@"cocoasplit.library.item"]];
     
 }
+
+-(NSDragOperation)draggingEntered:(id<NSDraggingInfo>)sender
+{
+    NSPasteboard *pboard;
+    pboard = [sender draggingPasteboard];
+    if ([pboard.types containsObject:@"cocoasplit.library.item"] && !self.viewOnly)
+    {
+        return NSDragOperationGeneric;
+    }
+    return NSDragOperationNone;
+}
+
+-(BOOL)performDragOperation:(id<NSDraggingInfo>)sender
+{
+    NSPasteboard *pboard;
+    
+    pboard = [sender draggingPasteboard];
+    
+    
+    if ([pboard canReadItemWithDataConformingToTypes:@[@"cocoasplit.library.item"]])
+    {
+        
+        NSArray *classes = @[[CSInputLibraryItem class]];
+        NSArray *draggedObjects = [pboard readObjectsForClasses:classes options:@{}];
+        
+        for (CSInputLibraryItem *item in draggedObjects)
+        {
+            NSData *iData = item.inputData;
+            
+            NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:iData];
+            
+            
+            InputSource *iSrc = [unarchiver decodeObjectForKey:@"root"];
+            [unarchiver finishDecoding];
+
+            NSPoint mouseLoc = [NSEvent mouseLocation];
+            
+            NSRect rect = NSRectFromCGRect((CGRect){mouseLoc, CGSizeZero});
+            
+            mouseLoc = [self.window convertRectFromScreen:rect].origin;
+            mouseLoc = [self convertPoint:mouseLoc fromView:nil];
+            
+            if (![self mouse:mouseLoc inRect:self.bounds])
+            {
+                return NO;
+            }
+            
+            
+            NSPoint worldPoint = [self realPointforWindowPoint:mouseLoc];
+
+
+            [iSrc createUUID];
+            
+            [self.sourceLayout addSource:iSrc];
+            //[iSrc positionOrigin:worldPoint.x y:worldPoint.y];
+            iSrc.x_pos = worldPoint.x;
+            iSrc.y_pos = worldPoint.y;
+        }
+        return YES;
+    }
+    return NO;
+}
+
 
 -(CALayer *)makeBackingLayer
 {
     _glLayer = [CSPreviewGLLayer layer];
-
+    _glLayer.doRender = self.isEditWindow;
     return _glLayer;
 }
 
@@ -1360,6 +1674,8 @@
 -(void)purgeConfigForInput:(InputSource *)src
 {
     NSString *uuid = src.uuid;
+    
+    [self stopHighlightingSource:src];
     
     NSWindow *cWindow = [self.activeConfigWindows objectForKey:uuid];
     InputPopupControllerViewController *cController = [self.activeConfigControllers objectForKey:uuid];
@@ -1390,7 +1706,78 @@
     return self.undoManager;
 }
 
+-(void)openInputConfigWindows:(NSArray *)uuids
+{
+    _configWindowCascadePoint = NSZeroPoint;
+    for (NSString *uuid in uuids)
+    {
+        [self openInputConfigWindow:uuid];
+    }
+}
 
+
+-(void)openInputConfigWindow:(NSString *)uuid
+{
+    
+    
+    InputSource *configSrc = [self.sourceLayout inputForUUID:uuid];
+    
+    if (!configSrc)
+    {
+        return;
+    }
+    
+    InputPopupControllerViewController *newViewController = [[InputPopupControllerViewController alloc] init];
+    
+    newViewController.inputSource = configSrc;
+    
+    NSWindow *configWindow = [[NSWindow alloc] init];
+    
+    NSRect newFrame = [configWindow frameRectForContentRect:NSMakeRect(0.0f, 0.0f, newViewController.view.frame.size.width, newViewController.view.frame.size.height)];
+    
+    
+    
+    [configWindow setFrame:newFrame display:NO];
+    if (NSEqualPoints(_configWindowCascadePoint, NSZeroPoint))
+    {
+        [configWindow center];
+        
+        _configWindowCascadePoint = NSMakePoint(NSMinX(configWindow.frame), NSMaxY(configWindow.frame));
+    } else {
+        _configWindowCascadePoint = [configWindow cascadeTopLeftFromPoint:_configWindowCascadePoint];
+    }
+
+    [configWindow setReleasedWhenClosed:NO];
+    
+    
+    [configWindow.contentView addSubview:newViewController.view];
+    configWindow.title = [NSString stringWithFormat:@"CocoaSplit Input (%@)", newViewController.inputSource.name];
+    configWindow.delegate = self;
+    
+    configWindow.styleMask =  NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask;
+
+    NSWindow *cWindow = [self.activeConfigWindows objectForKey:uuid];
+    InputPopupControllerViewController *cController = [self.activeConfigControllers objectForKey:uuid];
+    
+    if (cController)
+    {
+        cController.inputSource = nil;
+        [self.activeConfigControllers removeObjectForKey:uuid];
+    }
+    
+    if (cWindow)
+    {
+        [self.activeConfigWindows removeObjectForKey:uuid];
+    }
+    
+    
+    [self.activeConfigWindows setObject:configWindow forKey:uuid];
+    [self.activeConfigControllers setObject:newViewController forKey:uuid];
+
+    [configWindow makeKeyAndOrderFront:nil];
+    
+    
+}
 -(NSWindow *)detachableWindowForPopover:(NSPopover *)popover
 {
 
@@ -1448,8 +1835,6 @@
 
 - (void)popoverDidClose:(NSNotification *)notification
 {
-    
-    
     NSString *closeReason = [[notification userInfo] valueForKey:NSPopoverCloseReasonKey];
     NSPopover *popover = notification.object;
     if (closeReason && closeReason == NSPopoverCloseReasonStandard)

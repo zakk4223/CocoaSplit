@@ -27,6 +27,18 @@
 
 #define RESIZE_HANDLE_SIZE 6.0f
 
+
+-(instancetype) init
+{
+    if (self = [super init])
+    {
+        self.renderControls = YES;
+    }
+    
+    return self;
+}
+
+
 -(BOOL)wantsDefaultClipping
 {
     return NO;
@@ -96,7 +108,7 @@
     CGContextSetStrokeColorWithColor(currentContext, [[NSColor blueColor] CGColor]);
     CGContextStrokeRect(currentContext, [self insetSelectionRect]);
 
-    if (self.parentSource && self.previewView)
+    if (self.renderControls && self.parentSource && self.previewView)
     {
         CGContextSetFillColorWithColor(currentContext, [NSColor knobColor].CGColor);
         CGContextFillRect(currentContext, [self bottomLeftResizeRect]);
@@ -191,6 +203,7 @@
 }
 
 
+
 -(InputSource *)parentSource
 {
     return _parentSource;
@@ -215,6 +228,7 @@
 {
     NSLog(@"MOUSE ENTERED!!!");
 }
+
 
 @end
 

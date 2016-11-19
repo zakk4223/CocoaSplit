@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVFoundation.h>
+#import "TPCircularBuffer.h"
+#import "TPCircularBuffer+AudioBufferList.h"
+
 
 @class CaptureController;
 
@@ -24,6 +27,14 @@
     long outputSampleCount;
     CMAudioFormatDescriptionRef cmFormat;
     void *_pcmData;
+    u_int64_t _last_sample_time;
+    int _last_write_sample_cnt;
+    TPCircularBuffer _inputBuffer;
+    TPCircularBuffer _scratchBuffer;
+    dispatch_source_t _dispatch_timer;
+    dispatch_semaphore_t _aSemaphore;
+    
+    
 }
 
 @property (assign) bool encoderStarted;
@@ -31,8 +42,11 @@
 @property (assign) int sampleRate;
 @property (assign) int bitRate;
 @property (assign) int preallocatedBuffersize;
+@property (assign) AudioStreamBasicDescription *inputASBD;
 
 -(void) enqueuePCM:(AudioBufferList *)pcmBuffer atTime:(const AudioTimeStamp *)atTime;
+-(void) setupEncoderBuffer;
+
 -(void) stopEncoder;
 
 

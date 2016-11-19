@@ -8,7 +8,6 @@
 
 #import "AVFAudioCapture.h"
 #import "CAMultiAudioPCMPlayer.h"
-#import "CaptureController.h"
 
 
 @implementation AVFAudioCapture
@@ -281,21 +280,14 @@
     
     if (connection.output == _audio_capture_output) {
         
-        if (!self.useAudioEngine && self.audioDelegate)
+        
+        if (self.multiInput)
         {
-            [_audioDelegate captureOutputAudio:self didOutputSampleBuffer:sampleBuffer];
-        } else {
             
-            if (self.multiInput)
-            {
-
-                [self.multiInput scheduleBuffer:sampleBuffer];
-
-            }
-
-            
+            [self.multiInput scheduleBuffer:sampleBuffer];
             
         }
+        
     }
 }
 

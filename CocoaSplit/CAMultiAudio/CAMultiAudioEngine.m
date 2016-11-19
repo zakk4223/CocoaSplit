@@ -150,11 +150,27 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 -(void)updateStatistics
 {
-    /*
-    for(CAMultiAudioNode *node in self.audioInputs)
-    {
-        [node updatePowerlevel];
-    }*/
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        for(CAMultiAudioNode *node in self.audioInputs)
+        {
+            [node updatePowerlevel];
+        }
+    });
+    
+    
+    float rawPreview = [self.previewMixer outputPower];
+    float rawStream = [self.encodeMixer outputPower];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.previewAudioPowerLevel = pow(10.0f, rawPreview/20.0f);
+        self.streamAudioPowerLevel = pow(10.0f, rawStream/20.0f);
+    });
+
+    
+    
+    
+
 }
 
 
@@ -440,6 +456,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     [self.graph addNode:input];
     [self attachInput:newConverter];
+    
     [self.graph connectNode:input toNode:newConverter sampleRate:input.inputFormat->mSampleRate];
 
 }
@@ -570,6 +587,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         
         if (selfPtr.encoder)
         {
+            
+                
             [selfPtr.encoder enqueuePCM:ioData atTime:inTimeStamp];
         }
         

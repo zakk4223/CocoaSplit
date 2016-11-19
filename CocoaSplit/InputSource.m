@@ -56,7 +56,8 @@ static NSArray *_sourceTypes = nil;
 {
     [CATransaction begin];
     InputSource *newSource = [[InputSource allocWithZone:zone] init];
-    
+    newSource.name = _editedName;
+
     newSource.videoInput = self.videoInput;
     [newSource registerVideoInput:self.videoInput];
     newSource->_currentLayer = [self.videoInput layerForInput:newSource];
@@ -66,7 +67,7 @@ static NSArray *_sourceTypes = nil;
     newSource.rotationAngleY = self.rotationAngleY;
     newSource.rotationAngleX = self.rotationAngleX;
     newSource.opacity =  self.opacity;
-    newSource.name = self.name;
+    
     newSource.depth = self.depth;
     newSource.crop_top = self.crop_top;
     newSource.crop_bottom = self.crop_bottom;
@@ -116,6 +117,7 @@ static NSArray *_sourceTypes = nil;
 
 
 
+
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
     
@@ -124,12 +126,14 @@ static NSArray *_sourceTypes = nil;
     [aCoder encodeFloat:self.rotationAngleY forKey:@"rotationAngleY"];
 
     [aCoder encodeFloat:self.opacity forKey:@"opacity"];
-    [aCoder encodeObject:self.name forKey:@"name"];
+    
+    [aCoder encodeObject:_editedName forKey:@"name"];
     [aCoder encodeFloat:self.depth forKey:@"CAdepth"];
     [aCoder encodeFloat:self.crop_top forKey:@"CAcrop_top"];
     [aCoder encodeFloat:self.crop_bottom forKey:@"CAcrop_bottom"];
     [aCoder encodeFloat:self.crop_left forKey:@"CAcrop_left"];
     [aCoder encodeFloat:self.crop_right forKey:@"CAcrop_right"];
+    
     [aCoder encodeObject:self.selectedVideoType forKey:@"selectedVideoType"];
     [aCoder encodeObject:self.uuid forKey:@"uuid"];
 
@@ -137,11 +141,20 @@ static NSArray *_sourceTypes = nil;
     [aCoder encodeFloat:self.scrollYSpeed forKey:@"scrollYSpeed"];
     
     [aCoder encodeInt:self.rotateStyle forKey:@"rotateStyle"];
-    
     if (self.videoInput)
     {
         [aCoder encodeObject:self.videoInput forKey:@"videoInput"];
     }
+    
+    if (self.sourceLayout)
+    {
+        [aCoder encodeFloat:self.canvas_width forKey:@"topLevelWidth"];
+        [aCoder encodeFloat:self.canvas_height forKey:@"topLevelHeight"];
+    } else {
+        [aCoder encodeFloat:_topLevelWidth forKey:@"topLevelWidth"];
+        [aCoder encodeFloat:_topLevelHeight forKey:@"topLevelHeight"];
+    }
+    
     
     [aCoder encodeBool:self.doChromaKey forKey:@"doChromaKey"];
     [aCoder encodeObject:self.chromaKeyColor forKey:@"chromaKeyColor"];
@@ -150,13 +163,13 @@ static NSArray *_sourceTypes = nil;
     [aCoder encodeObject:self.videoSources forKey:@"videoSources"];
     [aCoder encodeObject:self.currentEffects forKey:@"currentEffects"];
     [aCoder encodeFloat:self.changeInterval forKey:@"changeInterval"];
-    
 
     [aCoder encodeFloat:self.layer.position.x forKey:@"CAx_pos"];
     [aCoder encodeFloat:self.layer.position.y forKey:@"CAy_pos"];
     
     [aCoder encodeFloat:self.layer.bounds.size.width forKey:@"CAdisplay_width"];
     [aCoder encodeFloat:self.layer.bounds.size.height forKey:@"CAdisplay_height"];
+    
     [aCoder encodeFloat:self.borderWidth forKey:@"borderWidth"];
     [aCoder encodeObject:self.borderColor forKey:@"borderColor"];
     [aCoder encodeFloat:self.cornerRadius forKey:@"cornerRadius"];
@@ -166,13 +179,16 @@ static NSArray *_sourceTypes = nil;
     [aCoder encodeFloat:self.transitionDuration forKey:@"transitionDuration"];
     [aCoder encodeObject:self.advancedTransition forKey:@"advancedTransition"];
     
-    
     [aCoder encodeObject:self.parentInput forKey:@"parentInput"];
     
     
+    //if we directly encode constraintMap the resulting NSData is not equal to an 'equal' InputSource, so double encode?
     
-    [aCoder encodeObject:self.constraintMap forKey:@"constraintMap"];
+    NSData *constraintData = [NSKeyedArchiver archivedDataWithRootObject:self.constraintMap];
+
+    [aCoder encodeObject:constraintData forKey:@"constraintMapData"];
     
+    //[aCoder encodeObject:self.constraintMap forKey:@"constraintMap"];
     
     [aCoder encodeObject:self.startColor forKey:@"gradientStartColor"];
     [aCoder encodeObject:self.stopColor forKey:@"gradientStopColor"];
@@ -184,7 +200,6 @@ static NSArray *_sourceTypes = nil;
 
     
     [aCoder encodeObject:self.layer.filters forKey:@"layerFilters"];
-    
     if (_userBackground)
     {
         [aCoder encodeObject:self.backgroundColor forKey:@"backgroundColor"];
@@ -231,6 +246,7 @@ static NSArray *_sourceTypes = nil;
             if (!_userBackground)
             {
                 self.backgroundColor = nil;
+                _userBackground = NO;
             }
         }
         
@@ -281,14 +297,12 @@ static NSArray *_sourceTypes = nil;
         if (constraintData)
         {
             self.constraintMap = constraintData;
+        } else if ((constraintData = [aDecoder decodeObjectForKey:@"constraintMapData"])) {
+            self.constraintMap = [NSKeyedUnarchiver unarchiveObjectWithData:constraintData];
         }
         
         
-
-
         
-        
-
         
         _rotationAngle = [aDecoder decodeFloatForKey:@"rotationAngle"];
         _rotationAngleX = [aDecoder decodeFloatForKey:@"rotationAngleX"];
@@ -397,16 +411,6 @@ static NSArray *_sourceTypes = nil;
         self.cornerRadius = [aDecoder decodeFloatForKey:@"cornerRadius"];
         self.layoutPosition = self.layer.frame;
         
-        InputSource *parentInput = [aDecoder decodeObjectForKey:@"parentInput"];
-        if (parentInput)
-        {
-            
-            [parentInput.layer addSublayer:self.layer];
-            [parentInput.attachedInputs addObject:self];
-            self.parentInput = parentInput;
-
-            
-        }
 
         
         self.startColor = [aDecoder decodeObjectForKey:@"gradientStartColor"];
@@ -420,7 +424,15 @@ static NSArray *_sourceTypes = nil;
         self.gradientStopY = [aDecoder decodeFloatForKey:@"gradientEndPointY"];
         
         
-
+        if ([aDecoder containsValueForKey:@"topLevelWidth"])
+        {
+            _topLevelWidth = [aDecoder decodeFloatForKey:@"topLevelWidth"];
+        }
+        
+        if ([aDecoder containsValueForKey:@"topLevelHeight"])
+        {
+            _topLevelHeight = [aDecoder decodeFloatForKey:@"topLevelHeight"];
+        }
         
         
         self.layer.filters = [aDecoder decodeObjectForKey:@"layerFilters"];
@@ -435,13 +447,36 @@ static NSArray *_sourceTypes = nil;
             self.transitionEnabled = [aDecoder decodeBoolForKey:@"transitionEnabled"];
         }
         
-        
         [CATransaction commit];
+
+        InputSource *parentInput = [aDecoder decodeObjectForKey:@"parentInput"];
+        self.parentInput = parentInput;
+        
+        if (self.parentInput)
+        {
+            
+            [self.parentInput.layer addSublayer:self.layer];
+            [self.parentInput.attachedInputs addObject:self];
+        }
+
+        
     }
     
     return self;
 }
 
+
+
+-(void)addedToLayout
+{
+    if (self.parentInput)
+    {
+        
+        [self.parentInput.layer addSublayer:self.layer];
+        [self.parentInput.attachedInputs addObject:self];
+    }
+
+}
 -(CGRect)globalLayoutPosition
 {
     return [self.sourceLayout.rootLayer convertRect:self.layoutPosition fromLayer:self.layer.superlayer];
@@ -451,6 +486,7 @@ static NSArray *_sourceTypes = nil;
 {
     forInput.inputSource = self;
     forInput.isLive = self.is_live;
+    [forInput addObserver:self forKeyPath:@"captureName" options:NSKeyValueChangeNewKey context:NULL];
     [forInput createNewLayerForInput:self];
 
 }
@@ -464,6 +500,7 @@ static NSArray *_sourceTypes = nil;
     
     forInput.isLive = NO;
     [forInput removeLayerForInput:self];
+    [forInput removeObserver:self forKeyPath:@"captureName"];
     
 }
 
@@ -495,8 +532,14 @@ static NSArray *_sourceTypes = nil;
 {
 
     [CATransaction begin];
+    self.name = nil;
+    
     _nextImageTime = 0.0f;
     _currentSourceIdx = 0;
+    _needsAdjustment = NO;
+    _needsAdjustPosition = NO;
+    _topLevelHeight = 0;
+    _topLevelWidth = 0;
     
     self.changeInterval = 20.0f;
     
@@ -516,9 +559,11 @@ static NSArray *_sourceTypes = nil;
     self.crop_left = 0;
     self.crop_right = 0;
     self.videoSources = [[NSMutableArray alloc] init];
+    _refCount = 0;
     
     self.constraintMap = [NSMutableDictionary dictionary];
 
+    
     _constraintAttributeMap = @{@"LeftEdge": @(kCAConstraintMinX),
                                 @"RightEdge": @(kCAConstraintMaxX),
                                 @"TopEdge": @(kCAConstraintMaxY),
@@ -579,10 +624,7 @@ static NSArray *_sourceTypes = nil;
     _multiTransition.removedOnCompletion = YES;
     
     
-    
-    CFUUIDRef tmpUUID = CFUUIDCreate(NULL);
-    self.uuid = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, tmpUUID);
-    CFRelease(tmpUUID);
+    [self createUUID];
     
    
     self.layoutPosition = self.layer.frame;
@@ -604,13 +646,56 @@ static NSArray *_sourceTypes = nil;
 
     [self observeConstraintKeys];
     [CATransaction commit];
+    _undoActionMap = @{@"name": @"Set Name",
+                       @"crop_top": @"Crop Top",
+                       @"changeInterval": @"Change Interval",
+                       @"gradientStartX": @"Gradient Start Color X",
+                       @"gradientStartY": @"Gradient Start Color Y",
+                       @"gradientStopX": @"Gradient Stop Color X",
+                       @"gradientStopY": @"Gradient Stop Color Y",
+                       @"startColor": @"Gradient Start Color",
+                       @"stopColor": @"Gradient Stop Color",
+                       @"backgroundColor": @"Background Color",
+                       @"borderColor": @"Border Color",
+                       @"cornerRadius": @"Border Corner Radius",
+                       @"borderWidth": @"Border Width",
+                       @"compositingFilterName": @"Composition Filter",
+                       @"rotationAngle": @"Rotation",
+                       @"rotationAngleX": @"X Rotation",
+                       @"rotationAngleY": @"Y Rotation",
+                       @"transitionDuration": @"Effect Duration",
+                       @"transitionDirection": @"Transition Direction",
+                       @"transitionEnabled": @"Enable Transitions",
+                       @"alwaysDisplay": @"Always Show",
+                       @"transitionFilterName": @"Transition Effect",
+                       @"width": @"Width",
+                       @"height": @"Height",
+                       @"opacity": @"Opacity",
+                       @"scrollXSpeed": @"Horizontal Scroll Speed",
+                       @"scrollYSpeed": @"Vertical Scroll Speed",
+                       @"crop_left": @"Crop Left",
+                       @"crop_right": @"Crop Right",
+                       @"crop_bottom": @"Crop Bottom",
+                       @"chromaKeyColor": @"Chroma Key Color",
+                       @"chromaKeySmoothing": @"CK Smoothing",
+                       @"chromaKeyThreshold": @"CK Threshold",
+                       @"rotateStyle": @"Order",
+                       };
+    
  }
 
 
 
+-(void)createUUID
+{
+    CFUUIDRef tmpUUID = CFUUIDCreate(NULL);
+    self.uuid = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, tmpUUID);
+    CFRelease(tmpUUID);
+
+}
+
 -(void)setRotateStyle:(input_rotate_style)rotateStyle
 {
-    [self registerUndoForProperty:@"rotateStyle" withAction:@"Order"];
     _rotateStyle = rotateStyle;
 }
 
@@ -623,7 +708,6 @@ static NSArray *_sourceTypes = nil;
 -(void)setChangeInterval:(float)changeInterval
 {
     
-    [self registerUndoForProperty:@"changeInterval" withAction:@"Change Interval"];
     _changeInterval = changeInterval;
 }
 
@@ -640,7 +724,10 @@ static NSArray *_sourceTypes = nil;
     
     for (NSString *base in baseKeys)
     {
-        [dict setObject:[NSMutableDictionary dictionaryWithDictionary:@{@"attr": [NSNull null], @"offset": @0}] forKey:base];
+        NSMutableDictionary *valDict = [[NSMutableDictionary alloc] init];
+        [valDict setObject:[NSNumber numberWithInt:0] forKey:@"attr"];
+        [valDict setObject:[NSNumber numberWithInt:0] forKey:@"offset"];
+        [dict setObject:valDict forKey:base];
     }
 }
 
@@ -672,7 +759,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setGradientStartX:(CGFloat)gradientStartX
 {
-    [self registerUndoForProperty:@"gradientStartX" withAction:@"Gradient Start Color X"];
     self.layer.gradientStartX = gradientStartX;
 }
 
@@ -683,7 +769,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setGradientStartY:(CGFloat)gradientStartY
 {
-    [self registerUndoForProperty:@"gradientStartY" withAction:@"Gradient Start Color Y"];
     self.layer.gradientStartY = gradientStartY;
 }
 
@@ -694,7 +779,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setGradientStopX:(CGFloat)gradientStopX
 {
-    [self registerUndoForProperty:@"gradientStopX" withAction:@"Gradient Stop Color X"];
     self.layer.gradientStopX = gradientStopX;
 }
 
@@ -705,7 +789,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setGradientStopY:(CGFloat)gradientStopY
 {
-    [self registerUndoForProperty:@"gradientStopY" withAction:@"Gradient Stop Color Y"];
     self.layer.gradientStopY = gradientStopY;
 }
 
@@ -722,7 +805,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setStartColor:(NSColor *)startColor
 {
-    [self registerUndoForProperty:@"startColor" withAction:@"Gradient Start Color"];
 
     self.layer.startColor = startColor;
 }
@@ -735,7 +817,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setStopColor:(NSColor *)stopColor
 {
-    [self registerUndoForProperty:@"stopColor" withAction:@"Gradient Stop Color"];
     
     self.layer.stopColor = stopColor;
 }
@@ -751,7 +832,6 @@ static NSArray *_sourceTypes = nil;
 -(void)setBackgroundColor:(NSColor *)backgroundColor
 {
     
-    [self registerUndoForProperty:@"backgroundColor" withAction:@"Background Color"];
 
     [CATransaction begin];
     _userBackground = YES;
@@ -778,7 +858,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setBorderColor:(NSColor *)borderColor
 {
-    [self registerUndoForProperty:@"borderColor" withAction:@"Border Color"];
 
     [CATransaction begin];
     self.layer.borderColor = [borderColor CGColor];
@@ -797,7 +876,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setCornerRadius:(CGFloat)cornerRadius
 {
-    [self registerUndoForProperty:@"cornerRadius" withAction:@"Border Corner Radius"];
 
     [CATransaction begin];
     self.layer.cornerRadius = cornerRadius;
@@ -813,7 +891,6 @@ static NSArray *_sourceTypes = nil;
 -(void)setBorderWidth:(CGFloat)borderWidth
 {
     
-    [self registerUndoForProperty:@"borderWidth" withAction:@"Border Width"];
     
     
     [CATransaction begin];
@@ -836,7 +913,6 @@ static NSArray *_sourceTypes = nil;
 -(void)setCompositingFilterName:(NSString *)compositingFilterName
 {
     
-    [self registerUndoForProperty:@"compositingFilterName" withAction:@"Composition Filter"];
     CIFilter *newFilter = nil;
     if (compositingFilterName)
     {
@@ -852,7 +928,6 @@ static NSArray *_sourceTypes = nil;
 -(void)setIsMaskLayer:(bool)isMaskLayer
 {
     
-    [self registerUndoForProperty:@"isMaskLayer" withAction:isMaskLayer ? @"Set As Mask" : @"Unset As Mask"];
 
     [self.sourceLayout.undoManager disableUndoRegistration];
     if (isMaskLayer)
@@ -1255,32 +1330,46 @@ static NSArray *_sourceTypes = nil;
 }
 
 
+/*
 -(NSString *)description
 {
     return [NSString stringWithFormat:@"Name: %@ Depth %f", self.name, self.depth];
 }
+ */
 
 
 -(void)setName:(NSString *)name
 {
     
-    [self registerUndoForProperty:@"name" withAction:@"Set Name"];
     
+    _name = name;
+
+
+    _editedName = name;
+    
+    if (!_name)
+    {
+        if (self.videoInput)
+        {
+            _name = self.videoInput.captureName;
+            _editedName = nil;
+        }
+    }
+    
+    if (!_name)
+    {
+        _name = @"No Name";
+        _editedName = nil;
+    }
 
     [CATransaction begin];
     self.layer.name = name;
     [CATransaction commit];
-    _name = name;
 }
 
 
 -(NSString *)name
 {
-    if (!_name && self.videoInput)
-    {
-        return self.videoInput.captureName;
-    }
-    
     return _name;
 }
 
@@ -1324,7 +1413,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setRotationAngle:(float)rotationAngle
 {
-    [self registerUndoForProperty:@"rotationAngle" withAction:@"Rotation"];
 
     
     _rotationAngle = rotationAngle;
@@ -1340,7 +1428,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setRotationAngleX:(float)rotationAngleX
 {
-    [self registerUndoForProperty:@"rotationAngleX" withAction:@"X Rotation"];
 
     _rotationAngleX = rotationAngleX;
     
@@ -1355,7 +1442,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setRotationAngleY:(float)rotationAngleY
 {
-    [self registerUndoForProperty:@"rotationAngleY" withAction:@"Y Rotation"];
 
     _rotationAngleY = rotationAngleY;
     
@@ -1388,7 +1474,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setTransitionDuration:(float)transitionDuration
 {
-    [self registerUndoForProperty:@"transitionDuration" withAction:@"Effect Duration"];
     _transitionDuration = transitionDuration;
 }
 
@@ -1399,7 +1484,6 @@ static NSArray *_sourceTypes = nil;
 }
 -(void)setTransitionDirection:(NSString *)transitionDirection
 {
-    [self registerUndoForProperty:@"transitionDirection" withAction:@"Transition Direction"];
     _transitionDirection = transitionDirection;
 }
 
@@ -1410,7 +1494,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setTransitionEnabled:(bool)transitionEnabled
 {
-    [self registerUndoForProperty:@"transitionEnabled" withAction:@"Enable Transitions"];
     [CATransaction begin];
     _transitionEnabled = transitionEnabled;
     
@@ -1442,7 +1525,6 @@ static NSArray *_sourceTypes = nil;
 {
     
     
-    [self registerUndoForProperty:@"alwaysDisplay" withAction:@"Always Show"];
     if (alwaysDisplay)
     {
         [CATransaction begin];
@@ -1482,7 +1564,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void) setTransitionFilterName:(NSString *)transitionFilterName
 {
-    [self registerUndoForProperty:@"transitionFilterName" withAction:@"Transition Effect"];
     _transitionFilterName = transitionFilterName;
     if ([transitionFilterName hasPrefix:@"CI"])
     {
@@ -1594,9 +1675,8 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setWidth:(float)width
 {
-    [self registerUndoForProperty:@"width" withAction:@"Width"];
     _width = width;
-    [self updateSize:_width height:_height];
+    [self directSize:_width height:_height];
 }
 
 -(float)width
@@ -1606,9 +1686,8 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setHeight:(float)height
 {
-    [self registerUndoForProperty:@"height" withAction:@"Height"];
     _height = height;
-    [self updateSize:_width height:_height];
+    [self directSize:_width height:_height];
 }
 
 -(float)height
@@ -1619,7 +1698,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setX_pos:(float)x_pos
 {
-    [self registerUndoForProperty:@"x_pos" withAction:@"Position X"];
+    //[self registerUndoForProperty:@"x_pos" withAction:@"Position X"];
     if (x_pos > 0 && x_pos <= 1.0)
     {
         CALayer *sLayer = self.layer.superlayer;
@@ -1638,7 +1717,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setY_pos:(float)y_pos
 {
-    [self registerUndoForProperty:@"y_pos" withAction:@"Position Y"];
+    //[self registerUndoForProperty:@"y_pos" withAction:@"Position Y"];
     if (y_pos > 0 && y_pos <= 1.0)
     {
         CALayer *sLayer = self.layer.superlayer;
@@ -1657,6 +1736,31 @@ static NSArray *_sourceTypes = nil;
     return _y_pos;
 }
 
+
+
+-(void) adjustInputSize: (bool)doPosition
+{
+
+    if (self.topLevelHeight > 0 && self.topLevelWidth > 0)
+    {
+        float wRatio = self.canvas_width/self.topLevelWidth;
+        float hRatio = self.canvas_height/self.topLevelHeight;
+        float old_x = self.x_pos;
+        float old_y = self.y_pos;
+        float new_width = self.layer.bounds.size.width * wRatio;
+        float new_height = self.layer.bounds.size.height * hRatio;
+        [self directSize:new_width height:new_height];
+        if (doPosition)
+        {
+            self.x_pos = old_x*wRatio;
+            self.y_pos = old_y*hRatio;
+        }
+    }
+    
+    self.topLevelWidth = self.canvas_width;
+    self.topLevelHeight = self.canvas_height;
+    
+}
 
 -(void)frameTick
 {
@@ -1686,14 +1790,16 @@ static NSArray *_sourceTypes = nil;
         }
         
         self.layer.allowResize = self.videoInput.allowScaling;
-        
         self.layer.sourceLayer = _currentLayer;
     }
     
     [self.videoInput frameTick];
     [self.layer frameTick];
-
-    
+    if (self.needsAdjustment)
+    {
+        [self adjustInputSize:self.needsAdjustPosition];
+        self.needsAdjustment = NO;
+    }
 }
 
 
@@ -1741,6 +1847,17 @@ static NSArray *_sourceTypes = nil;
 
 
 
+-(void) directSize:(CGFloat)width height:(CGFloat)height
+{
+    NSRect newLayout = self.layoutPosition;
+    
+    newLayout.size.width = width;
+    newLayout.size.height = height;
+    
+    NSRect iRect = NSIntegralRect(newLayout);
+    
+    self.layer.bounds = iRect;
+}
 -(void) updateSize:(CGFloat)width height:(CGFloat)height
 {
     
@@ -1789,7 +1906,15 @@ static NSArray *_sourceTypes = nil;
         newLayout.size.height = height;
         
         self.layer.allowResize = tmpResize;
+        NSRect iRect = NSIntegralRect(newLayout);
+        NSRect cFrame = oldLayout;
+        cFrame.origin = iRect.origin;
+        
+        //self.layer.frame = cFrame;
+        //self.layer.bounds = iRect;
+        
         self.layer.frame = NSIntegralRect(newLayout);
+        
         self.layer.allowResize = oldResize;
         
     }
@@ -1837,13 +1962,16 @@ static NSArray *_sourceTypes = nil;
     toDetach.layer.position = newPosition;
     [CATransaction commit];
     
-    [self.attachedInputs removeObject:toDetach];
+    [[self mutableArrayValueForKey:@"attachedInputs"] removeObject:toDetach];
+    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputDetached object:toDetach userInfo:nil];
+
 }
 
 
 
 -(void)attachInput:(InputSource *)toAttach
 {
+    
     
     if (toAttach.parentInput)
     {
@@ -1856,8 +1984,10 @@ static NSArray *_sourceTypes = nil;
     }
     
     [toAttach makeSublayerOfLayer:self.layer];
-    [self.attachedInputs addObject:toAttach];
+    [[self mutableArrayValueForKey:@"attachedInputs"] addObject:toAttach];
     toAttach.parentInput = self;
+    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputAttached object:toAttach userInfo:nil];
+
 }
 
 
@@ -1880,10 +2010,13 @@ static NSArray *_sourceTypes = nil;
     
     return ret;
 }
+
+
 -(void)makeSublayerOfLayer:(CALayer *)parentLayer
 {
     
     [CATransaction begin];
+    
     [parentLayer addSublayer:self.layer];
     //translate the position to the new sublayers coordinates
     
@@ -1893,13 +2026,11 @@ static NSArray *_sourceTypes = nil;
     for (CALayer *curr in [layers reverseObjectEnumerator])
     {
       //We start at the layer just before the canvas layer and the point we are converting is in canvas coordinate space
-        
         newPosition = [curr convertPoint:newPosition fromLayer:curr.superlayer];
     }
     
     NSRect oldFrame = self.layer.frame;
     oldFrame.origin = newPosition;
-    
     self.layer.frame = oldFrame;
     [CATransaction commit];
 
@@ -1912,12 +2043,15 @@ static NSArray *_sourceTypes = nil;
     if (self.layer)
     {
         
+        /*
         NSRect newFrame = self.layer.frame;
         newFrame.origin.x = x;
         newFrame.origin.y = y;
         [CATransaction begin];
-        self.layer.frame = NSIntegralRect(newFrame);
+        self.layer.frame = newFrame;
         [CATransaction commit];
+         */
+        [self updateOrigin:x-self.layer.frame.origin.x y:y-self.layer.frame.origin.y];
         
     }
 
@@ -1974,7 +2108,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setOpacity:(float)opacity
 {
-    [self registerUndoForProperty:@"opacity" withAction:@"Opacity"];
 
     _opacity = opacity;
     [CATransaction begin];
@@ -2013,7 +2146,38 @@ static NSArray *_sourceTypes = nil;
 
  
     _selectedVideoType = selectedVideoType;
+    self.name = _editedName;
+    
  }
+
+-(NSData *)saveData
+{
+    NSMutableData *saveData = [NSMutableData data];
+    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:saveData];
+    
+    [archiver encodeObject:self forKey:@"root"];
+    [archiver finishEncoding];
+    return saveData;
+}
+
+-(bool)isDifferentInput:(InputSource *)from
+{
+    if (![from.uuid isEqualToString:self.uuid])
+    {
+        return YES;
+    }
+    
+    NSData *myData = [self saveData];
+    NSData *fromData = [from saveData];
+    
+    
+    if ([myData isEqualToData:fromData])
+    {
+        return NO;
+    }
+    
+    return YES;
+}
 
 
 -(NSViewController *)sourceConfigurationView
@@ -2043,7 +2207,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setScrollXSpeed:(float)scrollXSpeed
 {
-    [self registerUndoForProperty:@"scrollXSpeed" withAction:@"Horizontal Scroll Speed"];
 
     [CATransaction begin];
     self.layer.scrollXSpeed = scrollXSpeed;
@@ -2059,7 +2222,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setScrollYSpeed:(float)scrollYSpeed
 {
-    [self registerUndoForProperty:@"scrollYSpeed" withAction:@"Vertical Scroll Speed"];
 
     [CATransaction begin];
     self.layer.scrollYSpeed = scrollYSpeed;
@@ -2085,27 +2247,13 @@ static NSArray *_sourceTypes = nil;
 
 -(NSString *)MIDIShortIdentifier
 {
-    if (self.is_live)
-    {
-        return @"Live";
-    }
-    
-    return @"Staging";
+    return nil;
 }
 
 
 -(NSString *)MIDIIdentifier
 {
-    NSString *liveStr;
-    if (self.is_live)
-    {
-        liveStr = @"Live";
-    } else {
-        liveStr = @"Staging";
-    }
-    
-    
-    return [NSString stringWithFormat:@"%@:%@", liveStr, self.uuid];
+    return [NSString stringWithFormat:@"Input:%@", self.uuid];
 }
 
 -(NSArray *)commandIdentifiers
@@ -2445,7 +2593,6 @@ static NSArray *_sourceTypes = nil;
 -(void) setActive:(bool)active
 {
     
-    [self registerUndoForProperty:@"active" withAction:active ? @"Set Active" : @"Unset Active"];
     _active = active;
     if (self.videoInput)
     {
@@ -2510,7 +2657,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void) setCrop_left:(float)crop_left
 {
-    [self registerUndoForProperty:@"crop_left" withAction:@"Crop Left"];
     if (crop_left < 0)
     {
         _crop_left = 0;
@@ -2531,7 +2677,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void) setCrop_right:(float)crop_right
 {
-    [self registerUndoForProperty:@"crop_right" withAction:@"Crop Right"];
     if (crop_right < 0)
     {
         _crop_right = 0;
@@ -2550,7 +2695,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void) setCrop_top:(float)crop_top
 {
-    [self registerUndoForProperty:@"crop_top" withAction:@"Crop Top"];
     if (crop_top < 0)
     {
         _crop_top = 0;
@@ -2567,9 +2711,30 @@ static NSArray *_sourceTypes = nil;
 }
 
 
+-(void)setValue:(id)value forKeyPath:(NSString *)keyPath
+{
+    
+    NSString *actionName = _undoActionMap[keyPath];
+    if (!actionName)
+    {
+        if ([keyPath isEqualToString:@"isMaskLayer"])
+        {
+            actionName = value ? @"Set As Mask" : @"Unset As Mask";
+        } else if ([keyPath isEqualToString: @"active"]) {
+            actionName = value ? @"Set Active" : @"Unset Active";
+        } else if ([keyPath isEqualToString:@"doChromaKey"]) {
+            actionName = value ? @"Set Chroma Key" : @"Unset Chroma Key";
+        } else {
+            actionName = [NSString stringWithFormat:@"Change %@", keyPath];
+        }
+    }
+    
+    [self registerUndoForProperty:keyPath withAction:actionName];
+    
+    [super setValue:value forKeyPath:keyPath];
+}
 -(void) setCrop_bottom:(float)crop_bottom
 {
-    [self registerUndoForProperty:@"crop_bottom" withAction:@"Crop Bottom"];
     if (crop_bottom < 0)
     {
         _crop_bottom = 0;
@@ -2597,7 +2762,6 @@ static NSArray *_sourceTypes = nil;
 -(void)setChromaKeyColor:(NSColor *)chromaKeyColor
 {
 
-    [self registerUndoForProperty:@"chromaKeyColor" withAction:@"Chroma Key Color"];
 
     _chromaKeyColor = chromaKeyColor;
     [CATransaction begin];
@@ -2612,7 +2776,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setChromaKeySmoothing:(float)chromaKeySmoothing
 {
-    [self registerUndoForProperty:@"chromaKeySmoothing" withAction:@"CK Smoothing"];
 
     _chromaKeySmoothing = chromaKeySmoothing;
     [CATransaction begin];
@@ -2627,7 +2790,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setChromaKeyThreshold:(float)chromaKeyThreshold
 {
-    [self registerUndoForProperty:@"chromaKeyThreshold" withAction:@"CK Threshold"];
     _chromaKeyThreshold = chromaKeyThreshold;
     [CATransaction begin];
     [self.layer.sourceLayer setValue:@(chromaKeyThreshold) forKeyPath:@"filters.Chromakey.inputThreshold"];
@@ -2644,7 +2806,6 @@ static NSArray *_sourceTypes = nil;
 -(void)setDoChromaKey:(bool)doChromaKey
 {
     
-    [self registerUndoForProperty:@"doChromaKey" withAction:doChromaKey ? @"Set Chroma Key" : @"Unset Chroma Key"];
     _doChromaKey = doChromaKey;
 
     [CATransaction begin];
@@ -2695,7 +2856,6 @@ static NSArray *_sourceTypes = nil;
 -(void) buildLayerConstraints
 {
     
-    
     NSMutableArray *constraints = [NSMutableArray array];
     
     for (NSString *key in self.constraintMap)
@@ -2732,6 +2892,10 @@ static NSArray *_sourceTypes = nil;
         }
         
         CAConstraintAttribute parentAttrib = [parentVal intValue];
+        if (!parentAttrib)
+        {
+            continue;
+        }
         [constraints addObject:[CAConstraint constraintWithAttribute:toConstrain relativeTo:@"superlayer" attribute:parentAttrib scale:1 offset:offsetFloat]];
         
     }
@@ -2763,8 +2927,11 @@ static NSArray *_sourceTypes = nil;
         [self.sourceLayout.undoManager setActionName:@"Constraint Change"];
 
         [self buildLayerConstraints];
+    } else if ([keyPath isEqualToString:@"captureName"]) {
+        self.name = _editedName;
     }
 }
+
 
 
 -(void)setClonedFromInput:(InputSource *)clonedFromInput

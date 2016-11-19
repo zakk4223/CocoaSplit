@@ -23,10 +23,10 @@
 
 
 
+#define LAYOUT_RESOLUTIONS @[@"1280x720@60", @"1280x720@30", @"1920x1080@60", @"1920x1080@30", @"Custom"]
 
 
-
-@interface PreviewView : NSView <NSPopoverDelegate, NSWindowDelegate>
+@interface PreviewView : NSView <NSPopoverDelegate, NSWindowDelegate, NSMenuDelegate>
 
 {
 
@@ -53,7 +53,10 @@
     NSPopover *_layoutpopOver;
     CSPreviewOverlayView *_overlayView;
     bool _inDrag;
+    NSMutableDictionary *_highlightedSourceMap;
+    NSPoint _configWindowCascadePoint;
     
+
     
     
 
@@ -84,6 +87,8 @@
 
 @property (strong) NSMenu *sourceSettingsMenu;
 
+@property (assign) bool midiActive;
+
 
 
 
@@ -101,10 +106,20 @@
 @property (strong) NSViewController *activePopupController;
 @property (strong) NSMutableDictionary *activeConfigWindows;
 @property (strong) NSMutableDictionary *activeConfigControllers;
+@property (assign) bool isEditWindow;
 
 -(void)needsUpdate;
 -(NSRect)windowRectforWorldRect:(NSRect)worldRect;
 -(NSArray *)resizeRectsForSource:(InputSource *)inputSource withExtra:(float)withExtra;
+-(void)addInputSourceWithInput:(InputSource *)source;
+-(void) highlightSource:(InputSource *)source;
+-(void)stopHighlightingSource:(InputSource *)source;
+-(void)stopHighlightingAllSources;
+-(void)openInputConfigWindow:(NSString *)uuid;
+
+
+
+
 
 
 
