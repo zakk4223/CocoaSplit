@@ -2263,7 +2263,7 @@ static NSArray *_sourceTypes = nil;
              @"CKEnable", @"CKThresh", @"CKSmooth", @"BorderWidth", @"CornerRadius",
              @"GradientStartX", @"GradientStartY", @"GradientStopX", @"GradientStopY",
              @"ChangeInterval", @"EffectDuration", @"MultiTransition",
-             @"PositionX", @"PositionY"];
+             @"PositionX", @"PositionY", @"Freeze"];
 }
 
 -(MIKMIDIResponderType)MIDIResponderTypeForCommandIdentifier:(NSString *)commandID
@@ -2275,7 +2275,7 @@ static NSArray *_sourceTypes = nil;
         ret |= MIKMIDIResponderTypeButton;
     }
     
-    if ([@[@"Active", @"AutoFit", @"CKEnable", @"MultiTransition"] containsObject:commandID])
+    if ([@[@"Active", @"AutoFit", @"CKEnable", @"MultiTransition", @"Freeze"] containsObject:commandID])
     {
         ret = MIKMIDIResponderTypeButton;
     }
@@ -2488,6 +2488,13 @@ static NSArray *_sourceTypes = nil;
 }
 
 
+
+-(void)handleMIDICommandFreeze:(MIKMIDICommand *)command
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.isFrozen = !self.isFrozen;
+    });
+}
 
 
 -(void)handleMIDICommandAutoFit:(MIKMIDICommand *)command
