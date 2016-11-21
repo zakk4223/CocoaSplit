@@ -353,10 +353,15 @@
 {
     CGRect newCrop;
     
+    //The y origin is different between opengl/calayer, so calculate the crops with that in mind.
+    
+    
+    CGFloat newHeight = extent.size.height * _privateCropRect.size.height;
+    CGFloat newOrigin = extent.size.height * _privateCropRect.origin.y;
     newCrop.origin.x = extent.size.width * _privateCropRect.origin.x;
-    newCrop.origin.y = extent.size.height * _privateCropRect.origin.y;
+    newCrop.origin.y = extent.size.height - (newOrigin+newHeight);
+    newCrop.size.height = newHeight;
     newCrop.size.width = extent.size.width * _privateCropRect.size.width;
-    newCrop.size.height = extent.size.height * _privateCropRect.size.height;
     _lastSurfaceSize = extent;
     _calculatedCrop = newCrop;
 }
@@ -373,6 +378,7 @@
         width = IOSurfaceGetWidth(self.imageWrapper.ioImage);
         height = IOSurfaceGetHeight(self.imageWrapper.ioImage);
         [self calculateCrop:NSMakeRect(0, 0, width, height)];
+        [self setNeedsDisplay];
     }
 }
 

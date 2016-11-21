@@ -8,6 +8,8 @@
 
 #import "CSCaptureBase.h"
 #import "CSTimerSourceProtocol.h"
+#import "InputSource.h"
+
 
 #import "SourceCache.h"
 #import <objc/runtime.h>
@@ -274,6 +276,13 @@
     [CATransaction begin];
     for (id key in layersCopy)
     {
+        InputSource *layerSrc = (InputSource *)key;
+        
+        if (layerSrc.isFrozen)
+        {
+            continue;
+        }
+        
         CALayer *clayer = [layersCopy objectForKey:key];
 
         updateBlock(clayer);

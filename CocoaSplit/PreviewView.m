@@ -254,6 +254,17 @@
     tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Clone" action:@selector(cloneInputSource:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
     
+    NSString *freezeString = @"Freeze";
+    if (self.selectedSource.isFrozen)
+    {
+        freezeString = @"Unfreeze";
+    }
+    
+    
+    tmp = [self.sourceSettingsMenu insertItemWithTitle:freezeString action:@selector(freezeInputSource:) keyEquivalent:@"" atIndex:idx++];
+    tmp.target = self;
+
+    
     tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Add to Library" action:@selector(addInputToLibrary:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
 
@@ -1261,6 +1272,34 @@
         }
     }
 }
+
+
+-(void)freezeInputSource:(id)sender
+{
+    InputSource *toFreeze = nil;
+    
+    if (sender)
+    {
+        if ([sender isKindOfClass:[NSMenuItem class]])
+        {
+            NSMenuItem *item = (NSMenuItem *)sender;
+            toFreeze = (InputSource *)item.representedObject;
+        } else if ([sender isKindOfClass:[InputSource class]]) {
+            toFreeze = (InputSource *)sender;
+        }
+    }
+    
+    if (!toFreeze)
+    {
+        toFreeze = self.selectedSource;
+    }
+    
+    if (toFreeze)
+    {
+        toFreeze.isFrozen = !toFreeze.isFrozen;
+    }
+}
+
 
 - (IBAction)cloneInputSource:(id)sender
 {

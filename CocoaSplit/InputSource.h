@@ -203,6 +203,7 @@ typedef enum resize_style_t {
 @property (assign) bool needsAdjustment;
 @property (assign) bool needsAdjustPosition;
 @property (assign) NSInteger refCount;
+@property (assign) bool isFrozen;
 
 
 -(void) updateOrigin:(CGFloat)x y:(CGFloat)y;

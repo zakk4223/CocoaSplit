@@ -28,6 +28,7 @@
 -(void)setContentsRect:(CGRect)contentsRect
 {
     _privateCropRect = contentsRect;
+    [self setNeedsDisplay];
 }
 
 -(CGRect)contentsRect
