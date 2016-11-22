@@ -727,17 +727,33 @@
         _inDrag = YES;
         tmp = [self convertPoint:theEvent.locationInWindow fromView:nil];
         
+        //NSLog(@"DELTA X %f Y %f", theEvent.deltaX, theEvent.deltaY);
+        
         worldPoint = [self realPointforWindowPoint:tmp];
         
         
         
-        
         CGFloat dx, dy;
-        dx = worldPoint.x - self.selectedOriginDistance.x;
-        dy = worldPoint.y - self.selectedOriginDistance.y;
+        dx = (worldPoint.x - self.selectedOriginDistance.x);
+        dy = (worldPoint.y - self.selectedOriginDistance.y);
+        
+        
         [self adjustDeltas:&dx dy:&dy];
 
         self.selectedOriginDistance = worldPoint;
+        
+        if (theEvent.deltaX == 0)
+        {
+            dx = 0;
+        }
+        
+        if (theEvent.deltaY == 0)
+        {
+            dy = 0;
+        }
+
+        //NSLog(@"DX %f DY %f", dx, dy);
+
         if (self.isResizing)
         {
             if (theEvent.modifierFlags & NSShiftKeyMask)
@@ -794,7 +810,6 @@
                 if (self.resizeType & kResizeLeft)
                 {
                     new_width -= dx;
-                    
                 }
                 
                 

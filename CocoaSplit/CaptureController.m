@@ -1411,6 +1411,8 @@
         newCompressor.vbv_buffer = 1000;
         newCompressor.vbv_maxrate = 1000;
         newCompressor.keyframe_interval = 2;
+        newCompressor.crf = 23;
+        newCompressor.use_cbr = YES;
         
         self.compressors[@"x264"] = newCompressor;
         [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:newCompressor];
