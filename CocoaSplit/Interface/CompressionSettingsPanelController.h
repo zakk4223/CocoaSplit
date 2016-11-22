@@ -27,7 +27,7 @@
 -(void)saveCompressPanel;
 -(void)deleteCompressPanel;
 -(void)closeCompressPanel;
-- (IBAction)saveCompressPanel:(id)sender;
+- (IBAction)saveCompressPanelProfile:(id)sender;
 
 
 

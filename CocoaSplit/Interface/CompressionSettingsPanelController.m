@@ -69,6 +69,7 @@
 -(void)saveCompressPanel
 {
     [self.compressorObjectController commitEditing];
+    [self.compressorViewController commitEditing];
     [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseOK];
 
 }
@@ -85,7 +86,7 @@
     [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseCancel];
 }
 
-- (IBAction)saveCompressPanel:(id)sender
+- (IBAction)saveCompressPanelProfile:(id)sender
 {
     [self.compressorObjectController commitEditing];
     [self.baseObjectController commitEditing];
