@@ -727,9 +727,13 @@
         _inDrag = YES;
         tmp = [self convertPoint:theEvent.locationInWindow fromView:nil];
         
-        //NSLog(@"DELTA X %f Y %f", theEvent.deltaX, theEvent.deltaY);
         
         worldPoint = [self realPointforWindowPoint:tmp];
+        
+        
+        NSRect worldRect = NSIntegralRect(NSMakeRect(worldPoint.x, worldPoint.y , self.selectedSource.globalLayoutPosition.size.width, self.selectedSource.globalLayoutPosition.size.height));
+        
+        worldPoint = worldRect.origin;
         
         
         
@@ -740,19 +744,9 @@
         
         [self adjustDeltas:&dx dy:&dy];
 
+        
         self.selectedOriginDistance = worldPoint;
         
-        if (theEvent.deltaX == 0)
-        {
-            dx = 0;
-        }
-        
-        if (theEvent.deltaY == 0)
-        {
-            dy = 0;
-        }
-
-        //NSLog(@"DX %f DY %f", dx, dy);
 
         if (self.isResizing)
         {
@@ -801,26 +795,29 @@
                 new_width = sPosition.size.width;
                 new_height = sPosition.size.height;
                 
-                if (self.resizeType & kResizeRight)
+                if (self.resizeType & kResizeRight && dx)
                 {
-                    new_width += dx;
+                    new_width = worldPoint.x - sPosition.origin.x;
+                    
                     
                 }
                 
-                if (self.resizeType & kResizeLeft)
+                if (self.resizeType & kResizeLeft && dx)
                 {
-                    new_width -= dx;
+                    new_width = (sPosition.origin.x+sPosition.size.width) - worldPoint.x;
                 }
                 
                 
-                if (self.resizeType & kResizeTop)
+                if (self.resizeType & kResizeTop && dy)
                 {
-                    new_height += dy;
+                    
+                    new_height = worldPoint.y - sPosition.origin.y;
                 }
                 
-                if (self.resizeType & kResizeBottom)
+                if (self.resizeType & kResizeBottom && dy)
                 {
-                    new_height -= dy;
+                    
+                    new_height = NSMaxY(sPosition) - worldPoint.y;
                 }
                 
                 

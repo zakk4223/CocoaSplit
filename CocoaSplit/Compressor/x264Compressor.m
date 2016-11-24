@@ -232,7 +232,7 @@
         
         
         CMTime pts = frameData.videoPTS;
-        
+            NSLog(@"FRAME PTS %@", CMTimeCopyDescription(NULL, pts));
         
         size_t src_height;
         size_t src_width;
@@ -251,7 +251,8 @@
     }
         
         int64_t usePts = av_rescale_q(pts.value, (AVRational){1,1000}, _av_codec_ctx->time_base);
-        
+            NSLog(@"USE PTS %lld", usePts);
+            
     if (_last_pts > 0 && usePts <= _last_pts)
     {
         //We got the frame too fast, or something else weird happened. Just send the audio along
@@ -265,6 +266,7 @@
             [dest writeEncodedData:frameData];
             
         }
+        NSLog(@"DID NOT ENCODE");
         return;
     }
         
@@ -437,7 +439,7 @@
     _av_codec_ctx->width = self.working_width;
     _av_codec_ctx->height = self.working_height;
     _av_codec_ctx->time_base.num = 1;
-    _av_codec_ctx->time_base.den = 1000;
+    _av_codec_ctx->time_base.den = captureFPS;
     
     
     

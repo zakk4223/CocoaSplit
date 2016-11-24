@@ -1858,6 +1858,8 @@ static NSArray *_sourceTypes = nil;
     
     self.layer.bounds = iRect;
 }
+
+
 -(void) updateSize:(CGFloat)width height:(CGFloat)height
 {
     
@@ -1871,6 +1873,7 @@ static NSArray *_sourceTypes = nil;
     
     bool oldResize = self.layer.allowResize;
     bool tmpResize = oldResize;
+    
     if (self.layer)
     {
         if (self.resizeType & kResizeFree)
@@ -1892,6 +1895,9 @@ static NSArray *_sourceTypes = nil;
         } else {
             if (self.resizeType & kResizeLeft)
             {
+                //Where does the origin need to be to keep the right side in the same place?
+                CGFloat oldRight = NSMaxX(oldLayout);
+                
                 newLayout.origin.x -= delta_w;
             }
         
@@ -1904,6 +1910,7 @@ static NSArray *_sourceTypes = nil;
         
         newLayout.size.width = width;
         newLayout.size.height = height;
+        
         
         self.layer.allowResize = tmpResize;
         NSRect iRect = NSIntegralRect(newLayout);
