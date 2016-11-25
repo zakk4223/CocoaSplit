@@ -21,7 +21,7 @@
     CGDirectDisplayID _currentDisplay;
     CIImage *_currentImg;
     CFAbsoluteTime _lastFrame;
-    
+    CGSize _lastSize;
 
 }
 

@@ -147,6 +147,12 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 
 
 
+-(NSSize)captureSize
+{
+    return _lastSize;
+}
+
+
 -(void)frameTick
 {
     
@@ -160,8 +166,8 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
         if (newFrame)
         {
             
-            
-            [self updateLayersWithBlock:^(CALayer *layer) {
+            _lastSize = NSMakeSize(CVPixelBufferGetWidth(newFrame), CVPixelBufferGetHeight(newFrame));
+            [self updateLayersWithFramedataBlock:^(CALayer *layer) {
                 ((CSIOSurfaceLayer *)layer).imageBuffer = newFrame;
             }];
             //outputlayer retains the pixel buffer until no longer needed

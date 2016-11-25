@@ -112,6 +112,19 @@
 }
 
 
+-(NSSize)captureSize
+{
+    if (_imageSource)
+    {
+        CFDictionaryRef imageProperties = CGImageSourceCopyPropertiesAtIndex(_imageSource, 0, NULL);
+        NSNumber *width = (NSNumber *)CFDictionaryGetValue(imageProperties, kCGImagePropertyPixelWidth);
+        NSNumber *height = (NSNumber *)CFDictionaryGetValue(imageProperties, kCGImagePropertyPixelHeight);
+        return NSMakeSize(width.floatValue, height.floatValue);
+    }
+    return NSZeroSize;
+}
+
+
 -(void)setImagePath:(NSString *)imagePath
 {
 
@@ -136,6 +149,7 @@
     CGImageSourceRef imgSrc = CGImageSourceCreateWithURL((__bridge CFURLRef)fileURL, (__bridge CFDictionaryRef)dict);
     
     
+
     if (_imageSource)
     {
         CFRelease(_imageSource);
@@ -147,10 +161,13 @@
     
     
     
+    CFDictionaryRef firstframeprop = CGImageSourceCopyPropertiesAtIndex(imgSrc, 0, NULL);
+    CFDictionaryRef gifTest = CFDictionaryGetValue(firstframeprop, kCGImagePropertyGIFDictionary);
+
     _totalFrames = CGImageSourceGetCount(imgSrc);
     float totalTime = 0;
     
-    if (_totalFrames > 1)
+    if (_totalFrames > 1 && gifTest)
     {
         NSMutableArray *frameArray = [NSMutableArray array];
         
@@ -161,6 +178,10 @@
             CFDictionaryRef frameprop = CGImageSourceCopyPropertiesAtIndex(imgSrc, i, NULL);
             CFDictionaryRef gProp = CFDictionaryGetValue(frameprop, kCGImagePropertyGIFDictionary);
         
+            if (!gProp)
+            {
+                continue;
+            }
             NSNumber *udelay = CFDictionaryGetValue(gProp, kCGImagePropertyGIFUnclampedDelayTime);
             NSNumber *gdelay = CFDictionaryGetValue(gProp, kCGImagePropertyGIFDelayTime);
             if ([udelay isEqualToNumber:@(0)])
@@ -195,7 +216,7 @@
         _animation.calculationMode = kCAAnimationDiscrete;
         dispatch_async(dispatch_get_main_queue(), ^{
 
-            [self updateLayersWithBlock:^(CALayer *layer) {
+            [self updateLayersWithFramedataBlock:^(CALayer *layer) {
                 [layer addAnimation:_animation forKey:@"contents"];
 
             }];
@@ -208,7 +229,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             _singleImage = CGImageSourceCreateImageAtIndex(_imageSource, 0, NULL);
 
-            [self updateLayersWithBlock:^(CALayer *layer) {
+            [self updateLayersWithFramedataBlock:^(CALayer *layer) {
                 layer.contents = (__bridge id)(_singleImage);
                 [layer removeAnimationForKey:@"contents"];
             }];

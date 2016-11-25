@@ -23,6 +23,7 @@
 {
     if (self = [super init])
     {
+        _lastSize = NSZeroSize;
         _discoveryDev = new DeckLinkDeviceDiscovery(self);
         _discoveryDev->Enable();
         self.canProvideTiming = YES;
@@ -230,13 +231,22 @@
 
 
 
+-(NSSize)captureSize
+{
+    return _lastSize;
+}
+
+
 -(void)frameArrived:(IDeckLinkVideoFrame *)frame
 {
     
     
     if (frame)
     {
-        [self updateLayersWithBlock:^(CALayer *layer) {
+        
+        _lastSize = NSMakeSize(frame->GetWidth(), frame->GetHeight());
+        
+        [self updateLayersWithFramedataBlock:^(CALayer *layer) {
             [(CSDeckLinkLayer *)layer setRenderFrame:frame];
             if (self.renderType == kCSRenderFrameArrived)
             {

@@ -1765,6 +1765,7 @@ static NSArray *_sourceTypes = nil;
 -(void)frameTick
 {
     
+    
     self.layoutPosition = self.layer.frame;
     _x_pos = self.layer.frame.origin.x;
     _y_pos = self.layer.frame.origin.y;
@@ -1779,6 +1780,7 @@ static NSArray *_sourceTypes = nil;
     {
         return;
     }
+
     
     
     if (self.layer.sourceLayer != _currentLayer)
@@ -1802,6 +1804,39 @@ static NSArray *_sourceTypes = nil;
     }
 }
 
+
+
+-(void)autoSize
+{
+    if (!self.videoInput)
+    {
+        return;
+    }
+    
+    NSSize videoSize = [self.videoInput captureSize];
+    
+    if (!NSEqualSizes(videoSize, NSZeroSize))
+    {
+        [self directSize:videoSize.width height:videoSize.height];
+    }
+}
+
+-(void)autoCenter:(NSRect)containerRect
+{
+    NSRect myRect = self.layer.bounds;
+    
+    
+    if (NSContainsRect(containerRect, myRect))
+    {
+        CGFloat newX = (containerRect.origin.x + containerRect.size.width/2) - myRect.size.width/2;
+        CGFloat newY = (containerRect.origin.y + containerRect.size.height/2) - myRect.size.height/2;
+        [self positionOrigin:newX y:newY];
+    } else {
+        //We're bigger than the container! Set ourselves to the exact same size and origin
+        [self directSize:containerRect.size.width height:containerRect.size.height];
+        [self positionOrigin:0 y:0];
+    }
+}
 
 
 -(void)autoFit
@@ -2602,6 +2637,16 @@ static NSArray *_sourceTypes = nil;
 }
 
 
+
+-(void)layerUpdated
+{
+    if (self.autoPlaceOnFrameUpdate)
+    {
+        [self autoSize];
+        [self autoCenter:NSMakeRect(0, 0, self.canvas_width, self.canvas_height)];
+        self.autoPlaceOnFrameUpdate = NO;
+    }
+}
 
 
 -(void) setActive:(bool)active

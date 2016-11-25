@@ -40,6 +40,8 @@
     AudioStreamBasicDescription _asbd;
     CFTimeInterval _lastTimeUpdate;
     double _savedTime;
+    NSSize _lastSize;
+    
     
     
     

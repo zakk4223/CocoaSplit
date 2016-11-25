@@ -22,6 +22,8 @@
     {
         
 
+        _lastSize = NSZeroSize;
+        
         _nextCaptureTime = 0.0f;
         self.captureFPS = 30.0f;
     }
@@ -100,6 +102,12 @@
 }
 
 
+-(NSSize)captureSize
+{
+    return _lastSize;
+}
+
+
 -(void)frameTick
 {
     
@@ -113,7 +121,10 @@
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
         CGImageRef windowImg = CGWindowListCreateImage(CGRectNull, kCGWindowListOptionIncludingWindow, [windowID unsignedIntValue], kCGWindowImageBoundsIgnoreFraming|kCGWindowImageBestResolution);
-            [self updateLayersWithBlock:^(CALayer *layer) {
+            
+            _lastSize = NSMakeSize(CGImageGetWidth(windowImg), CGImageGetHeight(windowImg));
+            
+            [self updateLayersWithFramedataBlock:^(CALayer *layer) {
                 
                layer.contents = (__bridge id)(windowImg);
             }];

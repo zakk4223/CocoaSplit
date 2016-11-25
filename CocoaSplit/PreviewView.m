@@ -742,6 +742,7 @@
         dy = (worldPoint.y - self.selectedOriginDistance.y);
         
         
+        
         [self adjustDeltas:&dx dy:&dy];
 
         

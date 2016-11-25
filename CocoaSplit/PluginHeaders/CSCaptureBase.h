@@ -91,10 +91,15 @@ typedef enum frame_render_behavior_t {
 -(CALayer *)createNewLayer;
 
 
-/* Update ALL the current layers for this Source. The provided block is run once for every layer. You should use this when you are updating content.
+/* Update ALL the current layers for this Source. The provided block is run once for every layer. You should use this when you are updating layer attributes.
  */
 
--(void)updateLayersWithBlock:(void(^)(CALayer *layer))updateBlock;
+-(void)updateLayersWithBlock:(void(^)(CALayer *))updateBlock;
+
+/* Update ALL the current layers for this Source. The provided block is run once for every layer. You should use this when you are updating layer video data.
+ */
+
+-(void)updateLayersWithFramedataBlock:(void(^)(CALayer *))updateBlock;
 
 /* Called when the input source goes away and the layer is no longer required. You probably don't need to override this. Default implementation just removes it from the underlying array */
 
@@ -109,6 +114,11 @@ typedef enum frame_render_behavior_t {
 //Class method to run code that messes with the CALayer(s). It has to be on the main thread even if it isn't in a view :(
 //All this method does is dispatch_sync to the main thread OR run the block immediately if we're already on the main thread
 +(void) layoutModification:(void (^)())modBlock;
+
+
+/* If the video source has a size, return it here. Called to size an input when it is first added. The default is NSZeroSize. If your input has no well-defined size just don't bother implementing this */
+-(NSSize)captureSize;
+
 
 //Don't ever call this, it's not for you.
 -(CALayer *)createNewLayerForInput:(id)inputsrc;

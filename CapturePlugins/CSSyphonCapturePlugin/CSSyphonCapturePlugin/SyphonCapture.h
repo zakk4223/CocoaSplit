@@ -29,6 +29,8 @@
     id _announce_observer;
     IOSurfaceRef _serverSurface;
     uint32_t _surfaceSeed;
+    bool _dummyFrameUpdate;
+    
     
     CATransform3D _flipTransform;
 }

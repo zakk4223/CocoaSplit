@@ -19,6 +19,8 @@
     NSString *_restoredMode;
     NSString *_restoredFormat;
     NSString *_restoredInput;
+    NSSize _lastSize;
+    
 }
 
 @property (strong) CSDeckLinkDevice *currentInput;

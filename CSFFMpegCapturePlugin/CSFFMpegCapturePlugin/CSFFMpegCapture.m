@@ -16,6 +16,9 @@
 {
     if (self = [super init])
     {
+        
+        _lastSize = NSZeroSize;
+        
         av_register_all();
         avformat_network_init();
         
@@ -257,6 +260,12 @@
 
 
 
+-(NSSize)captureSize
+{
+    return _lastSize;
+}
+
+
 -(void)frameTick
 {
     CFTimeInterval cTime = CACurrentMediaTime();
@@ -265,6 +274,8 @@
     if (use_buf)
     {
     
+        _lastSize = NSMakeSize(CVPixelBufferGetWidth(use_buf), CVPixelBufferGetHeight(use_buf));
+        
         if (cTime - _lastTimeUpdate > 0.5)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -275,7 +286,7 @@
                 [self didChangeValueForKey:@"currentMovieTime"];
             });
         }
-        [self updateLayersWithBlock:^(CALayer *layer) {
+        [self updateLayersWithFramedataBlock:^(CALayer *layer) {
             
             ((CSIOSurfaceLayer *)layer).imageBuffer = use_buf;
         }];

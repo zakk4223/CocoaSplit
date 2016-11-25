@@ -195,17 +195,20 @@
         newSrc.selectedVideoType = self.selectedInput.label;
         newSrc.videoInput.activeVideoDevice = clickedDevice;
         [self addInput:newSrc];
+        [newSrc autoSize];
+        
     }
     
 }
 
--(void)addInput:(id)toAdd
+-(void)addInput:(InputSource *)toAdd
 {
     
     
     if (self.previewView)
     {
         [self.previewView addInputSourceWithInput:toAdd];
+        toAdd.autoPlaceOnFrameUpdate = YES;
     }
  
   }

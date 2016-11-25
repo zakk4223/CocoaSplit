@@ -135,6 +135,7 @@ typedef enum resize_style_t {
 @property (readonly) float display_width;
 @property (readonly) float display_height;
 @property (assign) bool alwaysDisplay;
+@property (assign) bool autoPlaceOnFrameUpdate;
 
 @property (weak)     InputSource *clonedFromInput;
 
@@ -238,6 +239,9 @@ typedef enum resize_style_t {
 -(void) directSize:(CGFloat)width height:(CGFloat)height;
 -(bool)isDifferentInput:(InputSource *)from;
 -(void)addedToLayout;
+-(void)autoCenter:(NSRect)containerRect;
+-(void)autoSize;
+-(void)layerUpdated;
 
 
 

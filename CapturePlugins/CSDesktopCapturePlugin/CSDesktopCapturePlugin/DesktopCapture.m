@@ -171,12 +171,19 @@
 }
 
 
+-(NSSize)captureSize
+{
+    return _lastSize;
+}
+
+
 -(bool)setupDisplayStream
 {
 
     int width;
     int height;
     
+    _lastSize = CGSizeZero;
     
     if (_displayStreamRef)
     {
@@ -255,7 +262,6 @@
         CFAbsoluteTime nowTime = CFAbsoluteTimeGetCurrent();
         _lastFrame = nowTime;
         
-        _lastFrame = nowTime;
         
         
         if (!weakSelf)
@@ -280,7 +286,9 @@
         
         if (status == kCGDisplayStreamFrameStatusFrameComplete && frameSurface)
         {
-            [strongSelf updateLayersWithBlock:^(CALayer *layer) {
+            _lastSize = CGSizeMake(IOSurfaceGetWidth(frameSurface), IOSurfaceGetHeight(frameSurface));
+            
+            [strongSelf updateLayersWithFramedataBlock:^(CALayer *layer) {
 
                 ((CSIOSurfaceLayer *)layer).ioSurface = frameSurface;
                 if (self.renderType == kCSRenderFrameArrived)
@@ -293,6 +301,7 @@
                 // });
                 }
 
+                
 
             }];
             [self frameArrived];

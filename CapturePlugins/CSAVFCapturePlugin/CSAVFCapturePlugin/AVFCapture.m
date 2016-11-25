@@ -99,6 +99,8 @@
     if (self = [super init])
     {
         _lastFrameTime = 0;
+        _lastSize = CGSizeZero;
+        
         
          CMIOObjectPropertyAddress prop = { kCMIOHardwarePropertyAllowScreenCaptureDevices, kCMIOObjectPropertyScopeGlobal, kCMIOObjectPropertyElementMaster };
          UInt32 allow = 1;
@@ -356,6 +358,13 @@
 }
 
 
+-(NSSize)captureSize
+{
+    NSLog(@"CAPTURE SIZE %@", NSStringFromSize(_lastSize));
+    return _lastSize;
+}
+
+
 -(void)captureVideoOutput:(CMSampleBufferRef)sampleBuffer
 {
         CVImageBufferRef videoFrame = CMSampleBufferGetImageBuffer(sampleBuffer);
@@ -363,7 +372,10 @@
 
         if (videoFrame)
         {
-            [self updateLayersWithBlock:^(CALayer *layer) {
+            
+            _lastSize = CVImageBufferGetDisplaySize(videoFrame);
+            
+            [self updateLayersWithFramedataBlock:^(CALayer *layer) {
                 
                 ((CSIOSurfaceLayer *)layer).imageBuffer = videoFrame;
                 if (self.renderType == kCSRenderFrameArrived)

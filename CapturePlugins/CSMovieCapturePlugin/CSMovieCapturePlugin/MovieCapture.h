@@ -27,7 +27,7 @@ typedef enum movie_repeat_t {
     CAMultiAudioPCM *_bufferPCM;
     dispatch_queue_t _audioQueue;
     AVQueuePlayer *_avPlayer;
-    
+    NSSize _lastSize;
 }
 
 

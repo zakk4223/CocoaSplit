@@ -107,6 +107,8 @@
    
     _flipTransform = CATransform3DMakeScale(1, -1, 1);
 
+    _dummyFrameUpdate = YES;
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleSyphonServerRetire:) name:SyphonServerRetireNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleSyphonServerAnnounce:) name:SyphonServerAnnounceNotification object:nil];
 
@@ -194,6 +196,12 @@
 }
 
 
+-(NSSize)captureSize
+{
+    return _last_frame_size;
+}
+
+
 -(void) startSyphon
 {
     
@@ -212,10 +220,30 @@
     {
         _syphon_client = [[SyphonClient alloc] initWithServerDescription:_syphonServer.copy options:nil newFrameHandler:^(SyphonClient *client) {
    
-            if (self.renderType == kCSRenderFrameArrived)
+            //Big stupid hack to force at least one layer to update the size before we kick a framedata block off
+            
+            if (NSEqualSizes(_last_frame_size, NSZeroSize))
             {
-                [self updateLayersWithBlock:^(CALayer *layer) {                    
+                [self updateLayersWithBlock:^(CALayer *layer) {
+                    _last_frame_size = ((CSSyphonCaptureLayer *)layer).lastImageSize;
+                }];
+            } else if (_dummyFrameUpdate) {
+                [self updateLayersWithFramedataBlock:^(CALayer *layer) {
+                    return;
+                }];
+                _dummyFrameUpdate = NO;
+
+            }
+                
+            
+            
+            
+            if (self.renderType == kCSRenderFrameArrived && !_dummyFrameUpdate)
+            {
+                [self updateLayersWithFramedataBlock:^(CALayer *layer) {
+                    
                     [((CSSyphonCaptureLayer *)layer) setNeedsDisplay];
+
                 }];
                 [self frameArrived];
             }

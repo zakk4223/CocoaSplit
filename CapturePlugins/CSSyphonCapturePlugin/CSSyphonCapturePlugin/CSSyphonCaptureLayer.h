@@ -25,5 +25,7 @@
 
 @property (strong) SyphonClient *syphonClient;
 @property (assign) bool flipImage;
+@property (assign) NSSize lastImageSize;
+
 
 @end

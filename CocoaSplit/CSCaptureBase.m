@@ -183,6 +183,12 @@
 }
 
 
+-(NSSize)captureSize
+{
+    return NSZeroSize;
+}
+
+
 -(id) copyWithZone:(NSZone *)zone
 {
   
@@ -265,8 +271,18 @@
     }
 }
 
+-(void)updateLayersWithFramedataBlock:(void(^)(CALayer *))updateBlock
+{
+    [self internalUpdateLayerswithFrameData:true updateBlock:updateBlock];
+
+}
 
 -(void)updateLayersWithBlock:(void (^)(CALayer *layer))updateBlock
+{
+    [self internalUpdateLayerswithFrameData:false updateBlock:updateBlock];
+}
+
+-(void)internalUpdateLayerswithFrameData:(bool) frameData updateBlock:(void (^)(CALayer *layer))updateBlock
 {
     NSMapTable *layersCopy = nil;
     @synchronized(self)
@@ -284,16 +300,15 @@
         }
         
         CALayer *clayer = [layersCopy objectForKey:key];
-
+        
         updateBlock(clayer);
-
+        if (frameData)
+        {
+            [layerSrc layerUpdated];
+        }
     }
     [CATransaction commit];
-    
-
-
 }
-
 
 -(void)frameArrived
 {

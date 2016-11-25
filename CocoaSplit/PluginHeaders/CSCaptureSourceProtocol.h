@@ -102,14 +102,24 @@ If your source is 'shared' between inputSources each new one will call this func
 -(CALayer *)createNewLayer;
 
 
-/* Update ALL the current layers for this Source. The provided block is run once for every layer. You should use this when you are updating content. 
+/* Update ALL the current layers for this Source. The provided block is run once for every layer. You should use this when you are updating layer attributes.
  */
 
 -(void)updateLayersWithBlock:(void(^)(CALayer *))updateBlock;
 
+/* Update ALL the current layers for this Source. The provided block is run once for every layer. You should use this when you are updating layer video data.
+ */
+
+-(void)updateLayersWithFramedataBlock:(void(^)(CALayer *))updateBlock;
 /* Called when the input source goes away and the layer is no longer required. You probably don't need to override this. Default implementation just removes it from the underlying array */
 
 -(void)removeLayerForInput:(id)inputsrc;
+
+/* If the video source has a size, return it here. Called to size an input when it is first added. If the input has no defined size, just return NSZeroSize */
+
+
+-(NSSize)captureSize;
+
 
 //Don't ever call this, it's not for you.
 -(CALayer *)createNewLayerForInput:(id)inputsrc;
