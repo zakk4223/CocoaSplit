@@ -178,7 +178,8 @@
     {
         InputSource *newSrc = [[InputSource alloc] init];
         newSrc.selectedVideoType = clickedCapture.label;
-        [self addInput:newSrc];        
+        [self addInput:newSrc];
+        [self.previewView openInputConfigWindow:newSrc.uuid];
     } else {
         self.selectedInput = clickedCapture;
         [self switchToInputListView];
