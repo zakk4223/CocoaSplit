@@ -41,5 +41,6 @@ extern NSString *const CSNotificationInputDetached;
 
 extern NSString *const CSNotificationLayoutModeChanged;
 
+extern NSString *const CSNotificationStatisticsUpdate;
 
 

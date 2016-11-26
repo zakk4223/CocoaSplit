@@ -947,6 +947,8 @@
            _render_time_total = 0.0f;
            
 
+           [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationStatisticsUpdate object:self userInfo:nil];
+
        });
 
         

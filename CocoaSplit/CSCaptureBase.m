@@ -9,6 +9,7 @@
 #import "CSCaptureBase.h"
 #import "CSTimerSourceProtocol.h"
 #import "InputSource.h"
+#import "CSNotifications.h"
 
 
 #import "SourceCache.h"
@@ -18,11 +19,17 @@
 {
     NSMapTable *_allLayers;
     frame_render_behavior _saved_render_behavior;
+    CFAbsoluteTime _fps_start_time;
+    int _fps_frame_cnt;
+    
 }
 
 
 @property (weak) id<CSTimerSourceProtocol> timerDelegate;
 @property (weak) id timerDelegateCtx;
+@property (assign) CGFloat detectedInputWidth;
+@property (assign) CGFloat detectedInputHeight;
+@property (assign) double layerUpdateFPS;
 
 
 @end
@@ -56,10 +63,27 @@
         self.isVisible = YES;
         self.allowScaling = YES;
         _allLayers = [NSMapTable weakToStrongObjectsMapTable];
-        
+        _fps_start_time = CFAbsoluteTimeGetCurrent();
+        _fps_frame_cnt = 0;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateStatistics:) name:CSNotificationStatisticsUpdate object:nil];
     }
     
     return self;
+}
+
+-(void)updateStatistics:(NSNotification *)notification
+{
+    CFAbsoluteTime time_now = CFAbsoluteTimeGetCurrent();
+    
+    NSSize detectedInputSize = [self captureSize];
+    self.detectedInputWidth = detectedInputSize.width;
+    self.detectedInputHeight = detectedInputSize.height;
+    
+    
+    self.layerUpdateFPS = _fps_frame_cnt / (time_now - _fps_start_time);
+    
+    _fps_frame_cnt = 0;
+    _fps_start_time = time_now;
 }
 
 
@@ -273,6 +297,7 @@
 
 -(void)updateLayersWithFramedataBlock:(void(^)(CALayer *))updateBlock
 {
+    
     [self internalUpdateLayerswithFrameData:true updateBlock:updateBlock];
 
 }
@@ -304,6 +329,7 @@
         updateBlock(clayer);
         if (frameData)
         {
+            _fps_frame_cnt++;
             [layerSrc layerUpdated];
         }
     }
@@ -378,6 +404,7 @@
         [self.timerDelegate frameTimerWillStop:self.timerDelegateCtx];
     }
     
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     self.timerDelegate = nil;
 }
 
