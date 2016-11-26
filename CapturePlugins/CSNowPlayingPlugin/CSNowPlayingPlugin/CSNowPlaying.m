@@ -35,7 +35,24 @@
 -(void)iTunesChangedTrack:(NSNotification *)notify
 {
     NSDictionary *trackInfo = notify.userInfo;
-    self.text = [self formatUserStringWithDictionary:@{@"artist": trackInfo[@"Artist"], @"album": trackInfo[@"Album"], @"songname": trackInfo[@"Name"], @"tracknumber": trackInfo[@"Track Number"]}];
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    NSDictionary *keyMap = @{@"Artist": @"artist", @"Album":@"album", @"Name":@"songname", @"Track Number":@"tracknumber"};
+    
+    for (NSString *key in @[@"Artist", @"Album", @"Name", @"Track Number"])
+    {
+        
+        NSString *val = trackInfo[key];
+        NSString *usekey = keyMap[key];
+        
+        if (val)
+        {
+            dict[usekey] = val;
+        } else {
+            dict[usekey] = @"";
+        }
+    }
+
+    self.text = [self formatUserStringWithDictionary:dict];
 }
 
 
@@ -44,8 +61,27 @@
 {
     
     NSDictionary *trackInfo = notify.userInfo;
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    NSDictionary *keyMap = @{@"Artist": @"artist", @"Album":@"album", @"Name":@"songname", @"Track Number":@"tracknumber"};
     
-    self.text = [self formatUserStringWithDictionary:@{@"artist": trackInfo[@"Artist"], @"album": trackInfo[@"Album"], @"songname": trackInfo[@"Name"], @"tracknumber": trackInfo[@"Track Number"]}];
+    for (NSString *key in @[@"Artist", @"Album", @"Name", @"Track Number"])
+    {
+        
+        NSString *val = trackInfo[key];
+        NSString *usekey = keyMap[key];
+        
+        if (val)
+        {
+            dict[usekey] = val;
+        } else {
+            dict[usekey] = @"";
+        }
+    }
+    
+    self.text = [self formatUserStringWithDictionary:dict];
+    
+    
+
     
     
     
