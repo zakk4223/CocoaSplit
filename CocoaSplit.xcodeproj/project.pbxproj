@@ -2744,6 +2744,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				"LIBRARY_SEARCH_PATHS[arch=*]" = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				OTHER_CODE_SIGN_FLAGS = "";
 				"OTHER_LDFLAGS[arch=*]" = (
 					/usr/local/lib/libswresample.a,
 					/usr/local/lib/libavutil.a,
@@ -2789,6 +2790,7 @@
 				INFOPLIST_FILE = "CocoaSplit/CocoaSplit-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				OTHER_CODE_SIGN_FLAGS = "";
 				"OTHER_LDFLAGS[arch=*]" = (
 					/usr/local/lib/libswresample.a,
 					/usr/local/lib/libavformat.a,

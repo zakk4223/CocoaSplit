@@ -50,11 +50,11 @@
 
 - (IBAction)layoutButtonPushed:(id)sender
 {
-    if ([NSEvent modifierFlags] & NSCommandKeyMask)
+    if ([NSEvent modifierFlags] & NSShiftKeyMask)
     {
-        [self.captureController switchToLayout:self.representedObject];
-    } else {
         [self.captureController toggleLayout:self.representedObject];
+    } else {
+        [self.captureController switchToLayout:self.representedObject];
     }
 }
 

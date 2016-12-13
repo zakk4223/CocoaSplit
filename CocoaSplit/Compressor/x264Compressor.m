@@ -232,7 +232,6 @@
         
         
         CMTime pts = frameData.videoPTS;
-            NSLog(@"FRAME PTS %@", CMTimeCopyDescription(NULL, pts));
         
         size_t src_height;
         size_t src_width;
@@ -251,7 +250,6 @@
     }
         
         int64_t usePts = av_rescale_q(pts.value, (AVRational){1,1000}, _av_codec_ctx->time_base);
-            NSLog(@"USE PTS %lld", usePts);
             
     if (_last_pts > 0 && usePts <= _last_pts)
     {

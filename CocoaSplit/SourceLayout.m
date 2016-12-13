@@ -731,7 +731,6 @@
         }
     }
     
-    
     [self removeSourceInputs:rList withLayer:nil];
     
     
@@ -896,7 +895,9 @@
         InputSource *eSrc = [self inputForUUID:src.uuid];
         bool isDifferent = YES;
         
-        if (eSrc)
+        
+        
+        if (eSrc && eSrc.refCount)
         {
 
             isDifferent = [eSrc isDifferentInput:src];
@@ -907,7 +908,7 @@
                 continue;
             }
         }
-        if (eSrc && !onlyAdd)
+        if (eSrc && eSrc.refCount && !onlyAdd)
         {
             if (!src.layer.superlayer)
             {
@@ -992,7 +993,7 @@
             isDifferent = [eSrc isDifferentInput:src];
         }
         
-        if (eSrc && !onlyAdd)
+        if (eSrc && eSrc.refCount && !onlyAdd)
         {
             if (!isDifferent)
             {
@@ -1030,7 +1031,7 @@
             [undoSources addObject:eSrc];
         } else {
 
-            if (eSrc && !isDifferent)
+            if (eSrc && eSrc.refCount && !isDifferent)
             {
                 [self incrementInputRef:eSrc];
 
@@ -1102,6 +1103,7 @@
 
 -(NSObject *)mergeSourceListData:(NSData *)mergeData
 {
+    
     return [self mergeSourceListData:mergeData onlyAdd:NO];
 }
 
@@ -1802,7 +1804,6 @@
 
 -(InputSource *)inputForUUID:(NSString *)uuid
 {
-
     return [_uuidMap objectForKey:uuid];
 }
 

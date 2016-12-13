@@ -360,7 +360,6 @@
 
 -(NSSize)captureSize
 {
-    NSLog(@"CAPTURE SIZE %@", NSStringFromSize(_lastSize));
     return _lastSize;
 }
 
