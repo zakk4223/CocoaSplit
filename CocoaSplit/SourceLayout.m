@@ -484,6 +484,7 @@
         mylist = self.sourceList;
     }
     
+    
     NSArray *listCopy = [mylist sortedArrayUsingDescriptors:@[_sourceDepthSorter, _sourceUUIDSorter]];
     return listCopy;
 }
@@ -1506,7 +1507,9 @@
     [delSource willDelete];
     
     [self willChangeValueForKey:@"topLevelSourceList"];
-    [[self mutableArrayValueForKey:@"sourceList" ] removeObject:delSource];
+    @synchronized (self) {
+        [[self mutableArrayValueForKey:@"sourceList" ] removeObject:delSource];
+    }
     [self generateTopLevelSourceList];
     [self didChangeValueForKey:@"topLevelSourceList"];
     
@@ -1529,6 +1532,8 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputDeleted  object:delSource userInfo:nil];
     delSource.sourceLayout = nil;
 
+    
+    
 
 }
 
@@ -1727,35 +1732,41 @@
 
 -(void)frameTick
 {
-    
-    bool needsResize = NO;
-    NSSize curSize = NSMakeSize(self.canvas_width, self.canvas_height);
-    
-    if (!NSEqualSizes(curSize, _rootSize))
-    {
+    @autoreleasepool {
         
-        self.rootLayer.bounds = CGRectMake(0, 0, self.canvas_width, self.canvas_height);
+        bool needsResize = NO;
+        NSSize curSize = NSMakeSize(self.canvas_width, self.canvas_height);
         
-        _rootSize = curSize;
-        needsResize = YES;
-    }
-    
-    NSArray *listCopy = [self sourceListOrdered];
-    
-    
-    for (InputSource *isource in listCopy)
-    {
-        if (needsResize)
+        if (!NSEqualSizes(curSize, _rootSize))
         {
-            isource.needsAdjustPosition = YES;
-            isource.needsAdjustment = YES;
+            
+            self.rootLayer.bounds = CGRectMake(0, 0, self.canvas_width, self.canvas_height);
+            
+            _rootSize = curSize;
+            needsResize = YES;
         }
         
-        if (isource.active)
-        {
-            [isource frameTick];
-        }
         
+        NSArray *listCopy;
+        
+        listCopy = [self sourceListOrdered];
+        
+        
+        
+        for (InputSource *isource in listCopy)
+        {
+            if (needsResize)
+            {
+                isource.needsAdjustPosition = YES;
+                isource.needsAdjustment = YES;
+            }
+            
+            if (isource.active)
+            {
+                [isource frameTick];
+            }
+            
+        }
     }
     
 }

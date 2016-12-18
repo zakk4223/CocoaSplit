@@ -1438,6 +1438,7 @@
     
     if (toDelete)
     {
+        
         self.selectedSource = nil;
         self.mousedSource = nil;
 
@@ -1718,6 +1719,7 @@
 
 -(void)sourceWasDeleted:(NSNotification *)notification
 {
+
     InputSource *toDel = notification.object;
     [self purgeConfigForInput:toDel];
 }

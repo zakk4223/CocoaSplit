@@ -1799,7 +1799,6 @@
 -(void)setStagingLayout:(SourceLayout *)stagingLayout
 {
     
-    
     [stagingLayout restoreSourceList:nil];
     [stagingLayout setupMIDI];
     
@@ -1850,7 +1849,6 @@
 -(void)setSelectedLayout:(SourceLayout *)selectedLayout
 {
     
-
     [selectedLayout setAddLayoutBlock:^(SourceLayout *layout) {
         
         layout.in_live = YES;
@@ -2618,8 +2616,7 @@
             return;
         }
         
-        @autoreleasepool {
-            
+        
         
         
         
@@ -2635,6 +2632,7 @@
         
             
         _frame_time = startTime;
+        @autoreleasepool {
 
         [self newFrame];
         }
@@ -2672,11 +2670,9 @@
     
     CVPixelBufferRef newFrame;
     
-    
     double nfstart = [self mach_time_seconds];
     
     newFrame = [self.previewCtx.layoutRenderer currentImg];
-    
     
     double nfdone = [self mach_time_seconds];
     double nftime = nfdone - nfstart;

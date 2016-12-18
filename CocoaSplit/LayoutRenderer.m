@@ -227,6 +227,7 @@
     CVPixelBufferRef destFrame = NULL;
     CGFloat frameWidth, frameHeight;
 
+    
     [self.layout frameTick];
     if (_transitionLayout)
     {
