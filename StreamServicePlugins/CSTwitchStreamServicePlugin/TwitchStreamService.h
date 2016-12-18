@@ -29,6 +29,8 @@
 @property (strong) NSString *accountName;
 @property (assign) bool alwaysFetchKey;
 @property (strong) NSArray *knownAccounts;
+@property (assign) bool bandwidthTest;
+
 
 
 

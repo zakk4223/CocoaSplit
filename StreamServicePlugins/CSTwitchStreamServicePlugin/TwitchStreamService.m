@@ -33,6 +33,7 @@
     [aCoder encodeObject:self.streamKey forKey:@"streamKey"];
     [aCoder encodeObject:self.accountName forKey:@"accountName"];
     [aCoder encodeBool:self.alwaysFetchKey forKey:@"alwaysFetchKey"];
+    [aCoder encodeBool:self.bandwidthTest forKey:@"bandwidthTest"];
     
 }
 
@@ -44,6 +45,8 @@
         self.streamKey = [aDecoder decodeObjectForKey:@"streamKey"];
         self.accountName = [aDecoder decodeObjectForKey:@"accountName"];
         self.alwaysFetchKey = [aDecoder decodeBoolForKey:@"alwaysFetchKey"];
+        self.bandwidthTest = [aDecoder decodeBoolForKey:@"bandwidthTest"];
+        
     }
     return self;
 }
@@ -106,7 +109,16 @@
     
     if (self.selectedServer)
     {
-        NSString *destination = [self.selectedServer stringByReplacingOccurrencesOfString:@"{stream_key}" withString:self.streamKey];
+        NSString *destination;
+        
+        NSString *baseDestination = [self.selectedServer stringByReplacingOccurrencesOfString:@"{stream_key}" withString:self.streamKey];
+        if (self.bandwidthTest)
+        {
+            destination = [NSString stringWithFormat:@"%@?bandwidthtest=true", baseDestination];
+        } else {
+            destination = baseDestination;
+        }
+        
         return destination;
     }
     
