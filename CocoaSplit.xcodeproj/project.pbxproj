@@ -99,6 +99,7 @@
 		3451A1E81712C7D000DF6A8B /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 347B7FC516907A1700B5F4B3 /* libbz2.dylib */; };
 		3451A1E91712C7DE00DF6A8B /* VideoDecodeAcceleration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 347B7FC716907AE700B5F4B3 /* VideoDecodeAcceleration.framework */; };
 		3451A1EA1712C80400DF6A8B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4A115F3417E00E4CE4E /* Cocoa.framework */; };
+		34559A281E12D4400085883C /* CSCaptureBase+InputFrameTick.m in Sources */ = {isa = PBXBuildFile; fileRef = 34559A271E12D4400085883C /* CSCaptureBase+InputFrameTick.m */; };
 		34576C7819AFCA1B007BAD90 /* CSPluginLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 34576C7719AFCA1B007BAD90 /* CSPluginLoader.m */; };
 		34576C7919AFCA1B007BAD90 /* CSPluginLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 34576C7719AFCA1B007BAD90 /* CSPluginLoader.m */; };
 		345F89861976113C00BD4062 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A64A36165F208800A68428 /* QuartzCore.framework */; };
@@ -717,6 +718,8 @@
 		3451A1CA17111BD900DF6A8B /* CocoaSplitCmd.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = CocoaSplitCmd.1; sourceTree = "<group>"; };
 		3451A1D2171187D400DF6A8B /* ControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControllerProtocol.h; sourceTree = "<group>"; };
 		3451A1E11712C5F700DF6A8B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		34559A261E12D4400085883C /* CSCaptureBase+InputFrameTick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CSCaptureBase+InputFrameTick.h"; sourceTree = "<group>"; };
+		34559A271E12D4400085883C /* CSCaptureBase+InputFrameTick.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CSCaptureBase+InputFrameTick.m"; sourceTree = "<group>"; };
 		34576C7619AFCA1B007BAD90 /* CSPluginLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPluginLoader.h; sourceTree = "<group>"; };
 		34576C7719AFCA1B007BAD90 /* CSPluginLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSPluginLoader.m; sourceTree = "<group>"; };
 		34576C9819AFE6F7007BAD90 /* CSWindowCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSWindowCapturePlugin.xcodeproj; path = CapturePlugins/CSWindowCapturePlugin/CSWindowCapturePlugin.xcodeproj; sourceTree = "<group>"; };
@@ -1221,6 +1224,8 @@
 				349461581AB420E600F28883 /* CSAnimationRunner */,
 				349461571AB41DA000F28883 /* CSAnimationRunnerObj.h */,
 				340DC733197CF6E9003A0BB3 /* CSCaptureBase.m */,
+				34559A261E12D4400085883C /* CSCaptureBase+InputFrameTick.h */,
+				34559A271E12D4400085883C /* CSCaptureBase+InputFrameTick.m */,
 				34938EE61AE4A7E500F3B1CF /* CSCIFilterConfigProxy.h */,
 				34938EE71AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m */,
 				346CF44A1A5C10C2008E5BFF /* CSInputLayer.h */,
@@ -2456,6 +2461,7 @@
 				3400A0791BD4533A003E1828 /* CSInputLibraryWindowController.m in Sources */,
 				345F8B691A16C348009A81E3 /* CAMultiAudioGraph.m in Sources */,
 				3431FFE119786502000965FE /* InputSource.m in Sources */,
+				34559A281E12D4400085883C /* CSCaptureBase+InputFrameTick.m in Sources */,
 				3414C6AE1CBB9EBF00107C69 /* CSIRCompressor.m in Sources */,
 				34ED8C911B07371C002C0674 /* MIKMIDINoteOnCommand.m in Sources */,
 				346865471CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.m in Sources */,

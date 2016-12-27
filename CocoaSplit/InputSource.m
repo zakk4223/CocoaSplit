@@ -1794,7 +1794,9 @@ static NSArray *_sourceTypes = nil;
         self.layer.sourceLayer = _currentLayer;
     }
     
-    [self.videoInput frameTick];
+    
+    [self.videoInput frameTickFromInput:self];
+    
     [self.layer frameTick];
     if (self.needsAdjustment)
     {

@@ -21,6 +21,7 @@
     frame_render_behavior _saved_render_behavior;
     CFAbsoluteTime _fps_start_time;
     int _fps_frame_cnt;
+
     
 }
 
@@ -30,7 +31,7 @@
 @property (assign) CGFloat detectedInputWidth;
 @property (assign) CGFloat detectedInputHeight;
 @property (assign) double layerUpdateFPS;
-
+@property (weak) InputSource *tickInput;
 
 @end
 
@@ -181,6 +182,12 @@
     }
 }
 
+-(void)frameTickFromInput:(InputSource *)input
+{
+    [self frameTick];
+}
+
+
 -(void)frameTick
 {
     return;
@@ -276,6 +283,10 @@
     CALayer *newLayer = [self createNewLayer];
     @synchronized(self)
     {
+        if (!self.tickInput)
+        {
+            self.tickInput = inputsrc;
+        }
         [_allLayers setObject:newLayer forKey:inputsrc];
     }
     [CATransaction commit];
@@ -287,13 +298,29 @@
 {
     @synchronized(self)
     {
+        if (self.tickInput == inputsrc)
+        {
+            self.tickInput = nil;
+            
+        }
         [_allLayers removeObjectForKey:inputsrc];
+        if (!self.tickInput)
+        {
+            for (id key in _allLayers)
+            {
+                if (key)
+                {
+                    self.tickInput = key;
+                }
+            }
+        }
         if (_allLayers.count == 0)
         {
             [self willDelete];
         }
     }
 }
+
 
 -(void)updateLayersWithFramedataBlock:(void(^)(CALayer *))updateBlock
 {
@@ -315,6 +342,10 @@
         layersCopy = _allLayers.copy;
     }
     [CATransaction begin];
+    if (frameData)
+    {
+        _fps_frame_cnt++;
+    }
     for (id key in layersCopy)
     {
         InputSource *layerSrc = (InputSource *)key;
@@ -329,7 +360,6 @@
         updateBlock(clayer);
         if (frameData)
         {
-            _fps_frame_cnt++;
             [layerSrc layerUpdated];
         }
     }

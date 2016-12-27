@@ -10,6 +10,7 @@
 #import <QuartzCore/CoreImage.h>
 #import "Capture.h"
 #import "CSCaptureSourceProtocol.h"
+#import "CSCaptureBase+InputFrameTick.h"
 #import "CSPluginLoader.h"
 #import "SourceCache.h"
 #import "InputPopupControllerViewController.h"
@@ -97,7 +98,7 @@ typedef enum resize_style_t {
 @property (assign) float scrollXSpeed;
 @property (assign) float scrollYSpeed;
 
-@property (strong) NSObject<CSCaptureSourceProtocol> *videoInput;
+@property (strong) NSObject<CSCaptureSourceProtocol,CSCaptureBaseInputFrameTickProtocol> *videoInput;
 @property (assign) float rotationAngle;
 @property (assign) float rotationAngleY;
 @property (assign) float rotationAngleX;
