@@ -1903,9 +1903,31 @@ static NSArray *_sourceTypes = nil;
     NSRect oldLayout = self.layoutPosition;
     NSRect newLayout = self.layoutPosition;
     
+    
     float delta_w, delta_h;
     delta_w = width - oldLayout.size.width;
     delta_h = height - oldLayout.size.height;
+    //Preserve aspect ratio on resize. Take the dimension with the biggest change, and fit the other dimension to it
+    
+    if (self.videoInput && !NSEqualSizes(self.videoInput.captureSize, NSZeroSize) && !(self.resizeType & kResizeFree))
+    {
+        CGFloat inputAR = oldLayout.size.width / oldLayout.size.height;
+        /*
+        if (fabs(delta_w) > fabs(delta_h))
+        {
+            height = width/inputAR;
+            delta_h = height - oldLayout.size.height;
+        } else {
+            width = inputAR * height;
+            delta_w = width - oldLayout.size.width;
+        }*/
+        
+        
+        height = width/inputAR;
+        delta_h = height - oldLayout.size.height;
+
+    }
+    
     
     bool oldResize = self.layer.allowResize;
     bool tmpResize = oldResize;
@@ -1956,7 +1978,9 @@ static NSArray *_sourceTypes = nil;
         //self.layer.frame = cFrame;
         //self.layer.bounds = iRect;
         
-        self.layer.frame = NSIntegralRect(newLayout);
+        //self.layer.frame = NSIntegralRect(newLayout);
+        self.layer.frame = newLayout;
+        
         
         self.layer.allowResize = oldResize;
         
