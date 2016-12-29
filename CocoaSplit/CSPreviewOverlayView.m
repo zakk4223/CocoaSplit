@@ -104,8 +104,8 @@
 - (void)drawRect:(NSRect)dirtyRect {
     [super drawRect:dirtyRect];
     CGContextRef currentContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
-    CGContextSetLineWidth( currentContext, 2.0 );
-    CGContextSetStrokeColorWithColor(currentContext, [[NSColor blueColor] CGColor]);
+    CGContextSetLineWidth( currentContext, 1.0 );
+    CGContextSetStrokeColorWithColor(currentContext, [[NSColor cyanColor] CGColor]);
     CGContextStrokeRect(currentContext, [self insetSelectionRect]);
 
     if (self.renderControls && self.parentSource && self.previewView)

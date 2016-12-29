@@ -926,7 +926,7 @@
     if (_snap_x != -1)
     {
         _snap_x_accum += *dx;
-        if (fabs(_snap_x_accum) > SNAP_THRESHOLD*2)
+        if (fabs(_snap_x_accum) > SNAP_THRESHOLD)
         {
             _snap_x = -1;
             *dx = _snap_x_accum;
@@ -941,7 +941,7 @@
     if (_snap_y != -1)
     {
         _snap_y_accum += *dy;
-        if (fabs(_snap_y_accum) > SNAP_THRESHOLD*2)
+        if (fabs(_snap_y_accum) > SNAP_THRESHOLD)
         {
             _snap_y = -1;
             *dy = _snap_y_accum;
@@ -962,7 +962,7 @@
             
             NSPoint c_snap = c_snaps[j];
             dist = [self pointDistance:s_snap b:c_snap];
-            if (!did_snap_x && (copysignf(dist.x, *dx) != dist.x) && (fabs(dist.x) < SNAP_THRESHOLD))
+            if (!did_snap_x && (copysignf(dist.x, *dx) != dist.x) && (fabs(dist.x) < SNAP_THRESHOLD*2))
             {
                 if ((s_snap.x != c_snap.x) && (_snap_x == -1))
                 {
@@ -973,7 +973,7 @@
                 }
             }
             
-            if ((*dy != 0) && !did_snap_y && (copysignf(dist.y, *dy) != dist.y) && (fabs(dist.y) < SNAP_THRESHOLD))
+            if ((*dy != 0) && !did_snap_y && (copysignf(dist.y, *dy) != dist.y) && (fabs(dist.y) < SNAP_THRESHOLD*2))
             {
 
                 if ((s_snap.y != c_snap.y) && (_snap_y == -1))
