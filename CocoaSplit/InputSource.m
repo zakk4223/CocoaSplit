@@ -328,15 +328,17 @@ static NSArray *_sourceTypes = nil;
         
         if ([aDecoder containsValueForKey:@"CAcrop_top"])
         {
-            self.crop_top = [aDecoder decodeFloatForKey:@"CAcrop_top"];
-            self.crop_bottom = [aDecoder decodeFloatForKey:@"CAcrop_bottom"];
-            self.crop_left = [aDecoder decodeFloatForKey:@"CAcrop_left"];
-            self.crop_right = [aDecoder decodeFloatForKey:@"CAcrop_right"];
+            _crop_top = [aDecoder decodeFloatForKey:@"CAcrop_top"];
+            _crop_bottom = [aDecoder decodeFloatForKey:@"CAcrop_bottom"];
+            _crop_left = [aDecoder decodeFloatForKey:@"CAcrop_left"];
+            _crop_right = [aDecoder decodeFloatForKey:@"CAcrop_right"];
+            [self setCropRectWithoutResize];
         } else {
-            self.crop_top = [aDecoder decodeIntForKey:@"crop_top"];
-            self.crop_bottom = [aDecoder decodeIntForKey:@"crop_bottom"];
-            self.crop_left = [aDecoder decodeIntForKey:@"crop_left"];
-            self.crop_right = [aDecoder decodeIntForKey:@"crop_right"];
+            _crop_top = [aDecoder decodeIntForKey:@"crop_top"];
+            _crop_bottom = [aDecoder decodeIntForKey:@"crop_bottom"];
+            _crop_left = [aDecoder decodeIntForKey:@"crop_left"];
+            _crop_right = [aDecoder decodeIntForKey:@"crop_right"];
+            [self setCropRectWithoutResize];
         }
 
         
@@ -1452,6 +1454,20 @@ static NSArray *_sourceTypes = nil;
 -(float)rotationAngleY
 {
     return _rotationAngleY;
+}
+
+
+
+-(void)setCropRectWithoutResize
+{
+    CGRect contentsRect = self.layer.sourceLayer.contentsRect;
+    contentsRect.origin.x = self.crop_left;
+    contentsRect.origin.y = self.crop_bottom;
+    contentsRect.size.width = 1.0 - self.crop_right - self.crop_left;
+    contentsRect.size.height = 1.0 - self.crop_top - self.crop_bottom;
+    [CATransaction begin];
+    self.layer.cropRect = contentsRect;
+    [CATransaction commit];
 }
 
 
