@@ -280,10 +280,9 @@
         self.layoutManager = [CAConstraintLayoutManager layoutManager];
         
         
-        _allowResize = YES;
         self.sourceLayer = [CALayer layer];
         _sourceLayer.anchorPoint = CGPointMake(0.0, 0.0);
-        _sourceLayer.contentsGravity = kCAGravityResizeAspect;
+        _sourceLayer.contentsGravity = kCAGravityResize;
         _sourceLayer.frame = CGRectMake(0, 0, 1, 1);
         _scrollAnimation = [CABasicAnimation animation];
         _scrollAnimation.repeatCount = HUGE_VALF;

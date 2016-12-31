@@ -368,6 +368,7 @@
 
 
 //We handle this by cropping the source image, and never pass it on to the parent
+/*
 -(void)setContentsRect:(CGRect)contentsRect
 {
     _privateCropRect = contentsRect;
@@ -387,7 +388,7 @@
     return _privateCropRect;
 }
 
-
+*/
 
 -(void)setIoSurface:(IOSurfaceRef)ioSurface
 {
@@ -575,7 +576,7 @@
     
     if (!NSEqualRects(imageExtent, _lastSurfaceSize))
     {
-        [self calculateCrop:imageExtent];
+        //[self calculateCrop:imageExtent];
     }
     
     glMatrixMode(GL_PROJECTION);
@@ -595,14 +596,15 @@
     
     GLfloat tex_coords[] =
     {
-        _calculatedCrop.origin.x ,  _calculatedCrop.origin.y,
-        _calculatedCrop.origin.x+_calculatedCrop.size.width, _calculatedCrop.origin.y,
-        _calculatedCrop.origin.x+_calculatedCrop.size.width, _calculatedCrop.origin.y+_calculatedCrop.size.height,
-        _calculatedCrop.origin.x,    _calculatedCrop.origin.y+_calculatedCrop.size.height
+        imageExtent.origin.x ,  imageExtent.origin.y,
+        imageExtent.origin.x+imageExtent.size.width, imageExtent.origin.y,
+        imageExtent.origin.x+imageExtent.size.width, imageExtent.origin.y+imageExtent.size.height,
+        imageExtent.origin.x,    imageExtent.origin.y+imageExtent.size.height
     };
     
     NSSize useSize = self.bounds.size;
     
+    /*
     if ([self.contentsGravity isEqualToString:kCAGravityResizeAspect])
     {
         float wr = _calculatedCrop.size.width / self.bounds.size.width;
@@ -612,7 +614,7 @@
         useSize = NSMakeSize(_calculatedCrop.size.width / ratio, _calculatedCrop.size.height / ratio);
         
     }
-    
+    */
     
     
     

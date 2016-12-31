@@ -23,7 +23,6 @@
 @property (weak) InputSource *sourceInput;
 
 @property (strong) CALayer *sourceLayer;
-@property (assign) bool allowResize;
 @property (assign) float scrollXSpeed;
 @property (assign) float scrollYSpeed;
 @property (strong) CAReplicatorLayer *xLayer;

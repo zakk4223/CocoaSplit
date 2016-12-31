@@ -235,7 +235,6 @@ static NSArray *_sourceTypes = nil;
         
         self.videoInput = [aDecoder decodeObjectForKey:@"videoInput"];
 
-        self.layer.allowResize = self.videoInput.allowScaling;
         if (self.videoInput)
         {
             
@@ -597,7 +596,7 @@ static NSArray *_sourceTypes = nil;
     
     
     self.layer = [CSInputLayer layer];
-    self.layer.contentsGravity = kCAGravityResizeAspect;
+    self.layer.contentsGravity = kCAGravityTopRight;
     
     self.layer.sourceInput = self;
     
@@ -1399,8 +1398,10 @@ static NSArray *_sourceTypes = nil;
     CATransform3D transform = CATransform3DMakeRotation(self.rotationAngle * M_PI / 180.0, 0.0, 0.0, 1.0);
     transform = CATransform3DRotate(transform, self.rotationAngleX * M_PI / 180.0, 1.0, 0.0, 0.0);
     transform = CATransform3DRotate(transform, self.rotationAngleY * M_PI / 180.0, 0.0, 1.0, 0.0);
+    
     [CATransaction begin];
     self.layer.disableAnimation = YES;
+
     
     self.layer.transform = transform;
 
@@ -1456,14 +1457,49 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setCropRect
 {
-    CGRect contentsRect = self.layer.contentsRect;
+    CGRect contentsRect = self.layer.sourceLayer.contentsRect;
+    CGRect oldRect = contentsRect;
+    
     contentsRect.origin.x = self.crop_left;
     contentsRect.origin.y = self.crop_bottom;
     contentsRect.size.width = 1.0 - self.crop_right - self.crop_left;
     contentsRect.size.height = 1.0 - self.crop_top - self.crop_bottom;
 
+    
+    CGFloat delta_w = (contentsRect.size.width - oldRect.size.width);
+    CGFloat delta_h = (contentsRect.size.height - oldRect.size.height);
+    CGRect currentRect = self.layer.frame;
+
+    CGFloat new_width = currentRect.size.width;
+    CGFloat new_height = currentRect.size.height;
+
+    if (!NSEqualSizes(NSZeroSize,self.videoInput.captureSize))
+    {
+        
+        
+        CGFloat layer_full_width = currentRect.size.width/oldRect.size.width;
+        CGFloat layer_full_height = currentRect.size.height/oldRect.size.height;
+        
+        new_width = layer_full_width * contentsRect.size.width;
+        new_height = layer_full_height * contentsRect.size.height;
+        
+
+    
+    }
     [CATransaction begin];
     self.layer.cropRect = contentsRect;
+    if (delta_w || delta_h)
+    {
+        resize_style saveResize = self.resizeType;
+        self.resizeType &= ~kResizeCrop;
+        self.resizeType |= kResizeFree;
+
+        [self updateSize:new_width height:new_height];
+        
+        self.resizeType = saveResize;
+        
+    }
+
     [CATransaction commit];
     
 }
@@ -1790,7 +1826,6 @@ static NSArray *_sourceTypes = nil;
             _userBackground = NO;
         }
         
-        self.layer.allowResize = self.videoInput.allowScaling;
         self.layer.sourceLayer = _currentLayer;
     }
     
@@ -1892,7 +1927,7 @@ static NSArray *_sourceTypes = nil;
     
     NSRect iRect = NSIntegralRect(newLayout);
     
-    self.layer.bounds = iRect;
+    self.layer.bounds = newLayout;
 }
 
 
@@ -1900,90 +1935,82 @@ static NSArray *_sourceTypes = nil;
 {
     
     [CATransaction begin];
-    NSRect oldLayout = self.layoutPosition;
-    NSRect newLayout = self.layoutPosition;
+    NSRect oldLayout = self.layer.frame;
+    NSRect newLayout = self.layer.frame;
     
     
-    float delta_w, delta_h;
+    CGFloat delta_w, delta_h;
     delta_w = width - oldLayout.size.width;
     delta_h = height - oldLayout.size.height;
     //Preserve aspect ratio on resize. Take the dimension with the biggest change, and fit the other dimension to it
     
-    if (self.videoInput && !NSEqualSizes(self.videoInput.captureSize, NSZeroSize) && !(self.resizeType & kResizeFree))
+    if (self.videoInput && !NSEqualSizes(self.videoInput.captureSize, NSZeroSize) && !(self.resizeType & kResizeFree) && !(self.resizeType & kResizeCrop))
     {
         CGFloat inputAR = oldLayout.size.width / oldLayout.size.height;
-        /*
-        if (fabs(delta_w) > fabs(delta_h))
-        {
-            height = width/inputAR;
-            delta_h = height - oldLayout.size.height;
-        } else {
-            width = inputAR * height;
-            delta_w = width - oldLayout.size.width;
-        }*/
-        
-        
         height = width/inputAR;
         delta_h = height - oldLayout.size.height;
 
     }
     
-    
-    bool oldResize = self.layer.allowResize;
-    bool tmpResize = oldResize;
-    
     if (self.layer)
     {
-        if (self.resizeType & kResizeFree)
-        {
-            self.layer.sourceLayer.contentsGravity = kCAGravityResize;
-        } else {
-            self.layer.sourceLayer.contentsGravity = kCAGravityResizeAspect;
-        }
-        
-        if (self.resizeType & kResizeCrop)
-        {
-            tmpResize = NO;
-        }
-        
-        if (self.resizeType & kResizeCenter)
-        {
-            newLayout.origin.x -= delta_w/2;
-            newLayout.origin.y -= delta_h/2;
-        } else {
-            if (self.resizeType & kResizeLeft)
-            {
-                //Where does the origin need to be to keep the right side in the same place?
-                CGFloat oldRight = NSMaxX(oldLayout);
-                
-                newLayout.origin.x -= delta_w;
-            }
-        
-            if (self.resizeType & kResizeBottom)
-            {
-                newLayout.origin.y -= delta_h;
-            }
-        }
         
         
         newLayout.size.width = width;
         newLayout.size.height = height;
         
         
-        self.layer.allowResize = tmpResize;
-        NSRect iRect = NSIntegralRect(newLayout);
-        NSRect cFrame = oldLayout;
-        cFrame.origin = iRect.origin;
-        
-        //self.layer.frame = cFrame;
-        //self.layer.bounds = iRect;
-        
-        //self.layer.frame = NSIntegralRect(newLayout);
-        self.layer.frame = newLayout;
-        
-        
-        self.layer.allowResize = oldResize;
-        
+        if (self.resizeType & kResizeCrop)
+        {
+            //calculate the crop left/right/top/bottom values and let setCropRect handle the resize
+            
+            CGFloat full_width = oldLayout.size.width/self.layer.sourceLayer.contentsRect.size.width;
+            CGFloat delta_wp = delta_w/full_width;
+            CGFloat full_height = oldLayout.size.height/self.layer.sourceLayer.contentsRect.size.height;
+            CGFloat delta_hp = delta_h/full_height;
+            
+            
+            if (self.resizeType & kResizeLeft)
+            {
+                
+                self.crop_left -= delta_wp;
+            }
+            
+            if (self.resizeType & kResizeRight)
+            {
+                self.crop_right -= delta_wp;
+            }
+
+            if (self.resizeType & kResizeTop)
+            {
+                self.crop_top -= delta_hp;
+            }
+            
+            if (self.resizeType & kResizeBottom)
+            {
+                self.crop_bottom -= delta_hp;
+            }
+        } else {
+            if (self.resizeType & kResizeCenter)
+            {
+                newLayout.origin.x -= delta_w/2;
+                newLayout.origin.y -= delta_h/2;
+            } else {
+                if (self.resizeType & kResizeLeft)
+                {
+                    //Where does the origin need to be to keep the right side in the same place?
+                    newLayout.origin.x -= delta_w;
+                }
+                
+                if (self.resizeType & kResizeBottom)
+                {
+                    newLayout.origin.y -= delta_h;
+                }
+            }
+
+            self.layer.frame = newLayout;
+
+        }
     }
     [CATransaction commit];
 }
@@ -2733,13 +2760,13 @@ static NSArray *_sourceTypes = nil;
     return _is_selected;
 }
 
--(float) crop_left
+-(CGFloat) crop_left
 {
     return _crop_left;
 }
 
 
--(void) setCrop_left:(float)crop_left
+-(void) setCrop_left:(CGFloat)crop_left
 {
     if (crop_left < 0)
     {
@@ -2753,13 +2780,13 @@ static NSArray *_sourceTypes = nil;
     
 }
 
--(float) crop_right
+-(CGFloat) crop_right
 {
     return _crop_right;
 }
 
 
--(void) setCrop_right:(float)crop_right
+-(void) setCrop_right:(CGFloat)crop_right
 {
     if (crop_right < 0)
     {
@@ -2771,13 +2798,13 @@ static NSArray *_sourceTypes = nil;
 
 }
 
--(float) crop_top
+-(CGFloat) crop_top
 {
     return _crop_top;
 }
 
 
--(void) setCrop_top:(float)crop_top
+-(void) setCrop_top:(CGFloat)crop_top
 {
     if (crop_top < 0)
     {
@@ -2789,7 +2816,7 @@ static NSArray *_sourceTypes = nil;
 
 }
 
--(float) crop_bottom
+-(CGFloat) crop_bottom
 {
     return _crop_bottom;
 }
@@ -2817,7 +2844,7 @@ static NSArray *_sourceTypes = nil;
     
     [super setValue:value forKeyPath:keyPath];
 }
--(void) setCrop_bottom:(float)crop_bottom
+-(void) setCrop_bottom:(CGFloat)crop_bottom
 {
     if (crop_bottom < 0)
     {

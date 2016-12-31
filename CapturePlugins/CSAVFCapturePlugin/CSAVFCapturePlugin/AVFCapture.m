@@ -331,6 +331,7 @@
 -(CALayer *)createNewLayer
 {
     
+    /*
     CSIOSurfaceLayer *newLayer = [CSIOSurfaceLayer layer];
     
     if (self.renderType == kCSRenderAsync)
@@ -339,21 +340,28 @@
     } else {
         newLayer.asynchronous = NO;
     }
+     */
+    
+    return [CALayer layer];
+    
 
-    return newLayer;
+    //return newLayer;
 }
 
 
 -(void)frameTick
 {
     
+    /*
     if (self.renderType == kCSRenderOnFrameTick)
     {
         
         [self updateLayersWithBlock:^(CALayer *layer) {
             [((CSIOSurfaceLayer *)layer) setNeedsDisplay];
         }];
-    }
+    }*/
+    
+    
 
 }
 
@@ -376,12 +384,18 @@
             
             [self updateLayersWithFramedataBlock:^(CALayer *layer) {
                 
+                /*
                 ((CSIOSurfaceLayer *)layer).imageBuffer = videoFrame;
                 if (self.renderType == kCSRenderFrameArrived)
                 {
                     
                     [((CSIOSurfaceLayer *)layer) setNeedsDisplay];
-                }
+                }*/
+                
+                IOSurfaceRef vFIO = CVPixelBufferGetIOSurface(videoFrame);
+                
+                layer.contents = (__bridge id _Nullable)(vFIO);
+                
 
             }];
             [self frameArrived];

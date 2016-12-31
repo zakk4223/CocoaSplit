@@ -108,6 +108,7 @@
 -(CALayer *)createNewLayer
 {
     
+    //return [CALayer layer];
     CSIOSurfaceLayer *newLayer = [CSIOSurfaceLayer layer];
     
     if (self.renderType == kCSRenderAsync)

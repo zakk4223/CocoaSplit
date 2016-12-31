@@ -751,35 +751,8 @@
 
         if (self.isResizing)
         {
-            if (theEvent.modifierFlags & NSShiftKeyMask)
+            if (0)
             {
-                //Crop is expressed as a floating point number between 0.0 and 1.0, basically a percentage of that dimension.
-                //Convert appropriately.
-                
-                float x_crop = dx/self.selectedSource.globalLayoutPosition.size.width;
-                float y_crop = dy/self.selectedSource.globalLayoutPosition.size.height;
-                
-                
-                if (self.resizeType & kResizeRight)
-                {
-                    self.selectedSource.crop_right -= x_crop;
-                }
-                
-                if (self.resizeType & kResizeLeft)
-                {
-                    self.selectedSource.crop_left += x_crop;
-                }
-                
-                if (self.resizeType & kResizeTop)
-                {
-                    self.selectedSource.crop_top -= y_crop;
-                }
-                
-                if (self.resizeType & kResizeBottom)
-                {
-                    self.selectedSource.crop_bottom += y_crop;
-                }
-                
             } else {
                 
                 if (theEvent.modifierFlags & NSAlternateKeyMask)
@@ -848,6 +821,7 @@
 -(void)adjustDeltas:(CGFloat *)dx dy:(CGFloat *)dy
 {
     
+    return;
     InputSource *superInput = self.selectedSource.parentInput;
     
     NSPoint c_lb_snap;

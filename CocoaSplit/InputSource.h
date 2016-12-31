@@ -79,6 +79,8 @@ typedef enum resize_style_t {
     NSMutableDictionary *_restoredConstraintMap;
     NSString *_editedName;
     NSDictionary *_undoActionMap;
+    float _croppedAR;
+    
     
     
     
@@ -102,10 +104,10 @@ typedef enum resize_style_t {
 @property (assign) float rotationAngle;
 @property (assign) float rotationAngleY;
 @property (assign) float rotationAngleX;
-@property (assign) float crop_left;
-@property (assign) float crop_right;
-@property (assign) float crop_top;
-@property (assign) float crop_bottom;
+@property (assign) CGFloat crop_left;
+@property (assign) CGFloat crop_right;
+@property (assign) CGFloat crop_top;
+@property (assign) CGFloat crop_bottom;
 
 @property (assign) float opacity;
 
