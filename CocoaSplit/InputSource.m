@@ -1880,9 +1880,7 @@ static NSArray *_sourceTypes = nil;
     
     if (NSContainsRect(containerRect, myRect))
     {
-        CGFloat newX = (containerRect.origin.x + containerRect.size.width/2) - myRect.size.width/2;
-        CGFloat newY = (containerRect.origin.y + containerRect.size.height/2) - myRect.size.height/2;
-        [self positionOrigin:newX y:newY];
+        [self autoFit];
     } else {
         //We're bigger than the container! Set ourselves to the exact same size and origin
         [self directSize:containerRect.size.width height:containerRect.size.height];
@@ -1894,20 +1892,13 @@ static NSArray *_sourceTypes = nil;
 -(void)autoFit
 {
 
-    NSMutableDictionary *newConstraints = [NSMutableDictionary dictionary];
-    
-    [self initDictionaryForConstraints:newConstraints];
-    
-    newConstraints[@"HorizontalCenter"][@"attr"] = @(kCAConstraintMidX);
-    newConstraints[@"Width"][@"attr"] = @(kCAConstraintWidth);
-    newConstraints[@"VerticalCenter"][@"attr"] = @(kCAConstraintMidY);
-    newConstraints[@"Height"][@"attr"] = @(kCAConstraintHeight);
-    self.constraintMap = newConstraints;
-    
-    [self buildLayerConstraints];
-    //self.layer.bounds = self.layer.superlayer.bounds;
-    //self.layer.position = CGPointMake(self.layer.bounds.size.width/2, self.layer.bounds.size.height/2);
-
+    float wr = self.size.width / self.canvas_width;
+    float hr = self.size.height / self.canvas_height;
+    float ratio = (hr < wr ? wr : hr);
+    [self directSize:self.size.width / ratio height:self.size.height / ratio];
+    CGFloat newX = (self.canvas_width/2) - self.layer.bounds.size.width/2;
+    CGFloat newY = (self.canvas_height/2) - self.layer.bounds.size.height/2;
+    [self positionOrigin:newX y:newY];
 }
 
 
@@ -1958,13 +1949,19 @@ static NSArray *_sourceTypes = nil;
     CGFloat delta_w, delta_h;
     delta_w = width - oldLayout.size.width;
     delta_h = height - oldLayout.size.height;
-    //Preserve aspect ratio on resize. Take the dimension with the biggest change, and fit the other dimension to it
+    //Preserve aspect ratio on resize. Take the largest dimension and figure out hte other one
     
     if (self.videoInput && !NSEqualSizes(self.videoInput.captureSize, NSZeroSize) && !(self.resizeType & kResizeFree) && !(self.resizeType & kResizeCrop))
     {
         CGFloat inputAR = oldLayout.size.width / oldLayout.size.height;
-        height = width/inputAR;
-        delta_h = height - oldLayout.size.height;
+        if (height > width)
+        {
+            width = inputAR * height;
+            delta_w = width - oldLayout.size.width;
+        } else {
+            height = width/inputAR;
+            delta_h = height - oldLayout.size.height;
+        }
 
     }
     

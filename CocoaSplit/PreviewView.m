@@ -751,10 +751,7 @@
 
         if (self.isResizing)
         {
-            if (0)
-            {
-            } else {
-                
+            
                 if (theEvent.modifierFlags & NSAlternateKeyMask)
                 {
                     self.resizeType |= kResizeCenter;
@@ -797,7 +794,6 @@
                 
                 [self.selectedSource updateSize:new_width height:new_height];
 
-            }
             
         } else {
             
@@ -821,7 +817,6 @@
 -(void)adjustDeltas:(CGFloat *)dx dy:(CGFloat *)dy
 {
     
-    return;
     InputSource *superInput = self.selectedSource.parentInput;
     
     NSPoint c_lb_snap;
@@ -868,6 +863,10 @@
         int snap_idx = 3;
         for (InputSource *src in srcs)
         {
+            if (src == self.selectedSource)
+            {
+                continue;
+            }
             NSRect srect = src.globalLayoutPosition;
             c_snaps[snap_idx++] = srect.origin;
             c_snaps[snap_idx++] = NSMakePoint(NSMaxX(srect), NSMaxY(srect));
