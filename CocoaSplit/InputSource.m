@@ -1938,6 +1938,33 @@ static NSArray *_sourceTypes = nil;
 }
 
 
+-(void)resetAspectRatio
+{
+    
+
+    if (!self.videoInput || NSEqualSizes(NSZeroSize, self.videoInput.captureSize))
+    {
+        return;
+    }
+    
+    CGFloat height = self.height;
+    CGFloat width = self.width;
+    
+    CGFloat inputAR = self.videoInput.captureSize.width / self.videoInput.captureSize.height;
+    if (height > width)
+    {
+        width = inputAR * height;
+    } else {
+        height = width/inputAR;
+    }
+
+    resize_style resizeSave = self.resizeType;
+    self.resizeType = kResizeTop | kResizeRight | kResizeFree;
+    [self updateSize:width height:height];
+    self.resizeType = resizeSave;
+}
+
+
 -(void) updateSize:(CGFloat)width height:(CGFloat)height
 {
     
@@ -1962,7 +1989,6 @@ static NSArray *_sourceTypes = nil;
             height = width/inputAR;
             delta_h = height - oldLayout.size.height;
         }
-
     }
     
     if (self.layer)

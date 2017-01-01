@@ -283,8 +283,13 @@
     } else {
         tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Attach to underlying input" action:@selector(subLayerInputSource:) keyEquivalent:@"" atIndex:idx++];
     }
+    
+    tmp.target = self;
+    
+    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Reset to source AR" action:@selector(resetSourceAR:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
 }
+
 
 
 -(void)doLayoutMidi:(id)sender
@@ -1163,6 +1168,34 @@
     if (useSrc.videoInput && [useSrc.videoInput canProvideTiming])
     {
         self.sourceLayout.layoutTimingSource = useSrc;
+    }
+}
+
+
+
+-(void)resetSourceAR:(id)sender
+{
+    InputSource *toReset = nil;
+    
+    if (sender)
+    {
+        if ([sender isKindOfClass:[NSMenuItem class]])
+        {
+            NSMenuItem *item = (NSMenuItem *)sender;
+            toReset = (InputSource *)item.representedObject;
+        } else if ([sender isKindOfClass:[InputSource class]]) {
+            toReset = (InputSource *)sender;
+        }
+    }
+    
+    if (!toReset)
+    {
+        toReset = self.selectedSource;
+    }
+    
+    if (toReset)
+    {
+        [((InputSource *)toReset) resetAspectRatio];
     }
 }
 

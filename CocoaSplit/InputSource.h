@@ -245,6 +245,9 @@ typedef enum resize_style_t {
 -(void)autoCenter:(NSRect)containerRect;
 -(void)autoSize;
 -(void)layerUpdated;
+-(void)resetAspectRatio;
+
+
 
 
 
