@@ -9,12 +9,18 @@
 #import <Cocoa/Cocoa.h>
 #import "InputSource.h"
 
+
+@interface CSTextView : NSTextView
+
+@end
 @class PreviewView;
 
 @interface CSPreviewOverlayView : NSView
 {
     NSButton *_closeButton;
     NSButton *_autoFitButton;
+    CSTextView *_sizeTextView;
+    
 }
 
 @property (weak) InputSource *parentSource;

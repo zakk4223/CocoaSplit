@@ -9,6 +9,26 @@
 #import "CSPreviewOverlayView.h"
 #import "PreviewView.h"
 
+
+@implementation CSTextView
+
+- (NSSize) intrinsicContentSize {
+    NSTextContainer* textContainer = [self textContainer];
+    NSLayoutManager* layoutManager = [self layoutManager];
+    [layoutManager ensureLayoutForTextContainer: textContainer];
+    return [layoutManager usedRectForTextContainer: textContainer].size;
+}
+
+- (void) didChangeText {
+    [super didChangeText];
+    [self invalidateIntrinsicContentSize];
+}
+
+
+
+@end
+
+
 //wtf apple
 
 @interface NSCursor (CSApplePrivate)
@@ -121,6 +141,51 @@
         CGContextFillEllipseInRect(currentContext, [self topRightResizeRect]);
         CGContextFillEllipseInRect(currentContext, [self topLeftResizeRect]);
 */
+        
+        
+        if (!_sizeTextView)
+        {
+            _sizeTextView = [[CSTextView alloc] initWithFrame:NSMakeRect(50,50, 50, 50)];
+            _sizeTextView.wantsLayer = YES;
+            
+            _sizeTextView.layer.cornerRadius = 5;
+            _sizeTextView.backgroundColor = [NSColor blackColor];
+            _sizeTextView.textColor = [NSColor whiteColor];
+            _sizeTextView.font = [NSFont userFontOfSize:10.0];
+            [_sizeTextView.textContainer setContainerSize:NSMakeSize(1.0e6, 1.0e6)];
+            [_sizeTextView.textContainer setWidthTracksTextView:NO];
+            [_sizeTextView.textContainer setHeightTracksTextView:NO];
+            _sizeTextView.maxSize = NSMakeSize(FLT_MAX, FLT_MAX);
+            _sizeTextView.minSize = NSMakeSize(0, 0);
+
+            
+            [_sizeTextView setHorizontallyResizable:YES];
+            _sizeTextView.verticallyResizable = YES;
+            [self addSubview:_sizeTextView];
+            [self addConstraint: [NSLayoutConstraint constraintWithItem:_sizeTextView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+            [self addConstraint: [NSLayoutConstraint constraintWithItem:_sizeTextView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+            _sizeTextView.translatesAutoresizingMaskIntoConstraints = NO;
+
+            _sizeTextView.editable = NO;
+            _sizeTextView.alphaValue = 0.8;
+            
+            
+        }
+
+        if (_sizeTextView)
+        {
+            
+            _sizeTextView.string = [NSString stringWithFormat:@"W:%.f\nH:%.f", self.parentSource.display_width, self.parentSource.display_height];
+            [_sizeTextView sizeToFit];
+            
+            
+            if (self.parentSource.resizeType != kResizeNone)
+            {
+                _sizeTextView.hidden = NO;
+            } else {
+                _sizeTextView.hidden = YES;
+            }
+        }
         
         if (!_closeButton)
         {
