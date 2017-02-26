@@ -545,6 +545,7 @@
 
 -(void)setCropRect:(CGRect)cropRect
 {
+    self.contentsRect = cropRect;
     self.sourceLayer.contentsRect = cropRect;
 }
 

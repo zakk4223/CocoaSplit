@@ -766,7 +766,7 @@
                 
                 CGFloat new_width, new_height;
                 
-                NSRect sPosition = self.selectedSource.globalLayoutPosition;
+            NSRect sPosition = self.selectedSource.globalLayoutPosition;
                 
                 new_width = sPosition.size.width;
                 new_height = sPosition.size.height;
@@ -795,8 +795,11 @@
                     
                     new_height = NSMaxY(sPosition) - worldPoint.y;
                 }
-                
-                
+            
+            
+            
+            
+            
                 [self.selectedSource updateSize:new_width height:new_height];
 
             
@@ -810,12 +813,11 @@
             }
         }
     }
+    
     if (_overlayView)
     {
         [_overlayView updatePosition];
     }
-
-    
 }
 
 
@@ -904,7 +906,7 @@
     if (_snap_x != -1)
     {
         _snap_x_accum += *dx;
-        if (fabs(_snap_x_accum) > SNAP_THRESHOLD)
+        if (fabs(_snap_x_accum) > SNAP_THRESHOLD*2)
         {
             _snap_x = -1;
             *dx = _snap_x_accum;
@@ -912,14 +914,13 @@
         } else {
             *dx = 0;
         }
-        
         did_snap_x = YES;
     }
     
     if (_snap_y != -1)
     {
         _snap_y_accum += *dy;
-        if (fabs(_snap_y_accum) > SNAP_THRESHOLD)
+        if (fabs(_snap_y_accum) > SNAP_THRESHOLD*2)
         {
             _snap_y = -1;
             *dy = _snap_y_accum;
@@ -927,10 +928,8 @@
         } else {
             *dy = 0;
         }
-        
         did_snap_y = YES;
     }
-
 
     for(int i=0; i < sizeof(s_snaps)/sizeof(NSPoint); i++)
     {
@@ -940,10 +939,11 @@
             
             NSPoint c_snap = c_snaps[j];
             dist = [self pointDistance:s_snap b:c_snap];
-            if (!did_snap_x && (copysignf(dist.x, *dx) != dist.x) && (fabs(dist.x) < SNAP_THRESHOLD*2))
+            if (*dx && !did_snap_x && (copysignf(dist.x, *dx) != dist.x) && (fabs(dist.x) < SNAP_THRESHOLD))
             {
                 if ((s_snap.x != c_snap.x) && (_snap_x == -1))
                 {
+                    
                     *dx = -dist.x;
                     _snap_x = c_snap.x;
                     _snap_x_accum = 0;
@@ -951,7 +951,7 @@
                 }
             }
             
-            if ((*dy != 0) && !did_snap_y && (copysignf(dist.y, *dy) != dist.y) && (fabs(dist.y) < SNAP_THRESHOLD*2))
+            if (*dy && !did_snap_y && (copysignf(dist.y, *dy) != dist.y) && (fabs(dist.y) < SNAP_THRESHOLD))
             {
 
                 if ((s_snap.y != c_snap.y) && (_snap_y == -1))

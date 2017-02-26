@@ -18,7 +18,7 @@
 @class SourceLayout;
 //@class InputSource;
 
-#define SNAP_THRESHOLD 5.0f
+#define SNAP_THRESHOLD 10.0f
 
 
 

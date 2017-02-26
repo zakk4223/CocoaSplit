@@ -9,16 +9,18 @@
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
 #import <OpenGL/gl.h>
+#import "CSOpenGLLayer.h"
+
 
 #import "DeckLinkBridge.h"
 
 
-@interface CSDeckLinkLayer : CAOpenGLLayer
+@interface CSDeckLinkLayer : CSOpenGLLayer
 {
     CGLContextObj _myCGLContext;
     CGRect _lastBounds;
     NSRect _lastImageSize;
-    CGRect _privateCropRect;
+    //CGRect _privateCropRect;
     CGRect _lastCrop;
     CGRect _calculatedCrop;
     bool _needsRedraw;

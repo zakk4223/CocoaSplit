@@ -7,15 +7,16 @@
 //
 
 #import <QuartzCore/QuartzCore.h>
+#import "CSOpenGLLayer.h"
 #import "SyphonBuildMacros.h"
 #import "Syphon.h"
 
-@interface CSSyphonCaptureLayer : CAOpenGLLayer
+@interface CSSyphonCaptureLayer : CSOpenGLLayer
 {
     CGLContextObj _myCGLContext;
     CGRect _lastBounds;
     CGSize _lastImageSize;
-    CGRect _privateCropRect;
+    //CGRect _privateCropRect;
     CGRect _lastCrop;
     CGRect _calculatedCrop;
     bool _needsRedraw;

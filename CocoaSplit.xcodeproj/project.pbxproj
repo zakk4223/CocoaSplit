@@ -161,6 +161,7 @@
 		347B14DD198492D900DC7DF0 /* InputPopupControllerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 347B14DB198492D900DC7DF0 /* InputPopupControllerViewController.xib */; };
 		347B7FC616907A1700B5F4B3 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 347B7FC516907A1700B5F4B3 /* libbz2.dylib */; };
 		347B7FC816907AE700B5F4B3 /* VideoDecodeAcceleration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 347B7FC716907AE700B5F4B3 /* VideoDecodeAcceleration.framework */; };
+		347BEAAB1E5BCBAF0026A094 /* CSOpenGLLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 347BEAAA1E5BCBAF0026A094 /* CSOpenGLLayer.m */; };
 		3481F30619B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3481F30519B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m */; };
 		348AC06B19B406910064F02D /* SourceLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 348AC06A19B406910064F02D /* SourceLayout.m */; };
 		348AC06C19B406910064F02D /* SourceLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 348AC06A19B406910064F02D /* SourceLayout.m */; };
@@ -791,6 +792,8 @@
 		347B7FC516907A1700B5F4B3 /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = usr/lib/libbz2.dylib; sourceTree = SDKROOT; };
 		347B7FC716907AE700B5F4B3 /* VideoDecodeAcceleration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoDecodeAcceleration.framework; path = System/Library/Frameworks/VideoDecodeAcceleration.framework; sourceTree = SDKROOT; };
 		347B7FC916907AFA00B5F4B3 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		347BEAA91E5BCBAF0026A094 /* CSOpenGLLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSOpenGLLayer.h; path = PluginHeaders/CSOpenGLLayer.h; sourceTree = "<group>"; };
+		347BEAAA1E5BCBAF0026A094 /* CSOpenGLLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSOpenGLLayer.m; sourceTree = "<group>"; };
 		3481F30419B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SourceLayout+ScriptingAdditions.h"; path = "ScriptingAddditions/SourceLayout+ScriptingAdditions.h"; sourceTree = "<group>"; };
 		3481F30519B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "SourceLayout+ScriptingAdditions.m"; path = "ScriptingAddditions/SourceLayout+ScriptingAdditions.m"; sourceTree = "<group>"; };
 		348AC06919B406910064F02D /* SourceLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SourceLayout.h; sourceTree = "<group>"; };
@@ -1276,6 +1279,7 @@
 				3434CB3B1CB09BC4001B3DF9 /* CSTimedOutputBuffer.m */,
 				34EA822D1D3C568400928A06 /* CSOauth2Authenticator.m */,
 				3473D2A71D5685DA00842EEE /* Media.xcassets */,
+				347BEAAA1E5BCBAF0026A094 /* CSOpenGLLayer.m */,
 			);
 			path = CocoaSplit;
 			sourceTree = "<group>";
@@ -1493,6 +1497,7 @@
 			isa = PBXGroup;
 			children = (
 				34FDD6F01A215268009A7413 /* CSPluginServices.h */,
+				347BEAA91E5BCBAF0026A094 /* CSOpenGLLayer.h */,
 				347277FB1A5A2758008801A9 /* CSIOSurfaceLayer.h */,
 				342F73F41A245316007AA99F /* CSPcmPlayer.h */,
 				345F8B3B1A15F3BD009A81E3 /* CAMultiAudioPCM.h */,
@@ -2400,6 +2405,7 @@
 				34BD1E631B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.m in Sources */,
 				3434CB381CA93BCD001B3DF9 /* CSAppleProResCompressorViewController.m in Sources */,
 				3434CB321CA91D99001B3DF9 /* CSAppleH264CompressorViewController.m in Sources */,
+				347BEAAB1E5BCBAF0026A094 /* CSOpenGLLayer.m in Sources */,
 				34F52A271BC1CE2700662911 /* CSLayoutCollectionItem.m in Sources */,
 				347277FD1A5A2758008801A9 /* CSIOSurfaceLayer.m in Sources */,
 				344825E61B253D6900AF9EAC /* CAMultiAudioMatrixCell.m in Sources */,

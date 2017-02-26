@@ -480,7 +480,7 @@ static NSArray *_sourceTypes = nil;
 }
 -(CGRect)globalLayoutPosition
 {
-    return [self.sourceLayout.rootLayer convertRect:self.layoutPosition fromLayer:self.layer.superlayer];
+    return [self.sourceLayout.rootLayer convertRect:self.layer.frame fromLayer:self.layer.superlayer];
 }
 
 -(void) registerVideoInput:(NSObject<CSCaptureSourceProtocol> *)forInput
@@ -1975,6 +1975,7 @@ static NSArray *_sourceTypes = nil;
     [CATransaction begin];
     NSRect oldLayout = self.layer.frame;
     NSRect newLayout = self.layer.frame;
+    
     
     
     CGFloat delta_w, delta_h;
