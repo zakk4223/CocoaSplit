@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11542"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -301,7 +301,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="683" y="323" width="941" height="726"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1057"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="3440" height="1417"/>
             <view key="contentView" id="372">
                 <rect key="frame" x="0.0" y="0.0" width="941" height="726"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -413,7 +413,7 @@
                                     </button>
                                     <scrollView autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iC4-7V-Wd2">
                                         <rect key="frame" x="20" y="104" width="331" height="230"/>
-                                        <clipView key="contentView" id="Kqg-jx-fHj">
+                                        <clipView key="contentView" drawsBackground="NO" id="Kqg-jx-fHj">
                                             <rect key="frame" x="1" y="1" width="329" height="228"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
@@ -1060,6 +1060,19 @@
                                                 </dictionary>
                                             </binding>
                                             <binding destination="816" name="hidden" keyPath="self.stagingHidden" id="Jut-H7-cFh"/>
+                                        </connections>
+                                    </button>
+                                    <button ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FXU-iX-HyX">
+                                        <rect key="frame" x="69" y="340" width="17" height="17"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="17" id="SHs-JQ-Mjn"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSActionTemplate" imagePosition="only" alignment="center" controlSize="small" imageScaling="proportionallyUpOrDown" inset="2" id="LlC-da-U6W">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="openLayoutSwitcherWindow:" target="816" id="1Lc-5y-j9t"/>
                                         </connections>
                                     </button>
                                 </subviews>

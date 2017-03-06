@@ -76,6 +76,9 @@
     newRoot.masksToBounds = YES;
     newRoot.backgroundColor = CGColorCreateGenericRGB(0, 0, 0, 1);
     newRoot.layoutManager = [CAConstraintLayoutManager layoutManager];
+
+    //newRoot.autoresizingMask = kCALayerMinXMargin | kCALayerWidthSizable | kCALayerMaxXMargin | kCALayerMinYMargin | kCALayerHeightSizable | kCALayerMaxYMargin;
+    
     
     newRoot.delegate = self;
     [CATransaction commit];
@@ -608,6 +611,8 @@
     
     NSData *saveData = [self makeSaveData];
     self.savedSourceListData = saveData;
+    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutSaved object:self userInfo:nil];
+
 }
 
 -(id)archiver:(NSKeyedArchiver *)archiver willEncodeObject:(id)object
@@ -1741,7 +1746,6 @@
         {
             
             self.rootLayer.bounds = CGRectMake(0, 0, self.canvas_width, self.canvas_height);
-            
             _rootSize = curSize;
             needsResize = YES;
         }

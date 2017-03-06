@@ -72,6 +72,10 @@
 		343692501B6243D4007EC2D9 /* CSShapeCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 3436922B1B62364E007EC2D9 /* CSShapeCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		343C79ED1D0C796E00B36EEC /* CSFFMpegCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 343C79CC1D0C763A00B36EEC /* CSFFMpegCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		343ED9421BCAC1C80061FC4B /* EditBuiltinLayoutView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 343ED9411BCAC1C80061FC4B /* EditBuiltinLayoutView.xib */; };
+		3441269B1E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 344126991E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.m */; };
+		3441269C1E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3441269A1E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.xib */; };
+		3441269F1E6D0C4C0051DA06 /* CSLayoutSwitcherHostingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3441269E1E6D0C4C0051DA06 /* CSLayoutSwitcherHostingView.m */; };
+		344126A21E6DBBEE0051DA06 /* CSLayoutSwitcherView.m in Sources */ = {isa = PBXBuildFile; fileRef = 344126A11E6DBBEE0051DA06 /* CSLayoutSwitcherView.m */; };
 		3444D8E819A0CDE8000DC46B /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3444D8E719A0CDE8000DC46B /* Quartz.framework */; };
 		344825D21B2536EA00AF9EAC /* CAMultiAudioMatrixView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 344825D11B2536EA00AF9EAC /* CAMultiAudioMatrixView.xib */; };
 		344825E61B253D6900AF9EAC /* CAMultiAudioMatrixCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 344825E51B253D6900AF9EAC /* CAMultiAudioMatrixCell.m */; };
@@ -706,6 +710,13 @@
 		343DD65E19AAD3060017232A /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		343DD6AB19AAD3660017232A /* CSChromaKey.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSChromaKey.xcodeproj; path = ImageUnitPlugins/CSChromaKey/CSChromaKey.xcodeproj; sourceTree = "<group>"; };
 		343ED9411BCAC1C80061FC4B /* EditBuiltinLayoutView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EditBuiltinLayoutView.xib; path = Interface/EditBuiltinLayoutView.xib; sourceTree = "<group>"; };
+		344126981E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSLayoutSwitcherWithPreviewWindowController.h; path = Interface/CSLayoutSwitcherWithPreviewWindowController.h; sourceTree = "<group>"; };
+		344126991E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSLayoutSwitcherWithPreviewWindowController.m; path = Interface/CSLayoutSwitcherWithPreviewWindowController.m; sourceTree = "<group>"; };
+		3441269A1E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSLayoutSwitcherWithPreviewWindowController.xib; path = Interface/CSLayoutSwitcherWithPreviewWindowController.xib; sourceTree = "<group>"; };
+		3441269D1E6D0C4B0051DA06 /* CSLayoutSwitcherHostingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSLayoutSwitcherHostingView.h; path = Interface/CSLayoutSwitcherHostingView.h; sourceTree = "<group>"; };
+		3441269E1E6D0C4C0051DA06 /* CSLayoutSwitcherHostingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSLayoutSwitcherHostingView.m; path = Interface/CSLayoutSwitcherHostingView.m; sourceTree = "<group>"; };
+		344126A01E6DBBEE0051DA06 /* CSLayoutSwitcherView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSLayoutSwitcherView.h; path = Interface/CSLayoutSwitcherView.h; sourceTree = "<group>"; };
+		344126A11E6DBBEE0051DA06 /* CSLayoutSwitcherView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSLayoutSwitcherView.m; path = Interface/CSLayoutSwitcherView.m; sourceTree = "<group>"; };
 		3444D8E719A0CDE8000DC46B /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		344825D11B2536EA00AF9EAC /* CAMultiAudioMatrixView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CAMultiAudioMatrixView.xib; sourceTree = "<group>"; };
 		344825E41B253D6900AF9EAC /* CAMultiAudioMatrixCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioMatrixCell.h; path = Interface/CAMultiAudioMatrixCell.h; sourceTree = "<group>"; };
@@ -1469,6 +1480,13 @@
 				3470CD2D1D57D2AA006404D9 /* CSStreamOutputWindowController.xib */,
 				3470CD381D5EED3A006404D9 /* CSNobarSliderCell.h */,
 				3470CD391D5EED3A006404D9 /* CSNobarSliderCell.m */,
+				344126981E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.h */,
+				344126991E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.m */,
+				3441269A1E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.xib */,
+				3441269D1E6D0C4B0051DA06 /* CSLayoutSwitcherHostingView.h */,
+				3441269E1E6D0C4C0051DA06 /* CSLayoutSwitcherHostingView.m */,
+				344126A01E6DBBEE0051DA06 /* CSLayoutSwitcherView.h */,
+				344126A11E6DBBEE0051DA06 /* CSLayoutSwitcherView.m */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -2328,6 +2346,7 @@
 				3435E396188B902C0015CC01 /* 420v.fgsh in Resources */,
 				3473D2AF1D56920B00842EEE /* CSAdvancedAudioWindowController.xib in Resources */,
 				343ED9421BCAC1C80061FC4B /* EditBuiltinLayoutView.xib in Resources */,
+				3441269C1E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.xib in Resources */,
 				3415CED31AE257DA002F11F5 /* CSTextCaptureBaseView.xib in Resources */,
 				342B33B3198073EC00492CB7 /* line.fgsh in Resources */,
 				3470CD2F1D57D2AA006404D9 /* CSStreamOutputWindowController.xib in Resources */,
@@ -2386,6 +2405,7 @@
 				34F04DAB1CE0BB770054663A /* NSView+NSLayoutConstraintFilter.m in Sources */,
 				34ED8C7B1B07371C002C0674 /* MIKMIDIMetaInstrumentNameEvent.m in Sources */,
 				34ED8C8B1B07371C002C0674 /* MIKMIDIMetronome.m in Sources */,
+				344126A21E6DBBEE0051DA06 /* CSLayoutSwitcherView.m in Sources */,
 				3470CD291D57A088006404D9 /* CSAnimationWindowController.m in Sources */,
 				345F8B6D1A176A5D009A81E3 /* CAMultiAudioUnit.m in Sources */,
 				34ED8C771B07371C002C0674 /* MIKMIDIMetaCuePointEvent.m in Sources */,
@@ -2394,6 +2414,7 @@
 				34F04D9F1CE0381D0054663A /* CSAddInputViewController.m in Sources */,
 				345F8B4F1A15F7DA009A81E3 /* CAMultiAudioPCMPlayer.m in Sources */,
 				34ED8C5B1B07371C002C0674 /* MIKMIDIDeviceManager.m in Sources */,
+				3441269F1E6D0C4C0051DA06 /* CSLayoutSwitcherHostingView.m in Sources */,
 				34AFC33319B19CD00007C07B /* SourceCache.m in Sources */,
 				34ED8C491B07371C002C0674 /* MIKMIDIChannelVoiceCommand.m in Sources */,
 				340FE50815F444AA00E4CE4E /* CaptureController.m in Sources */,
@@ -2482,6 +2503,7 @@
 				34F1EB921BCCA41F00B38E6C /* CSLayoutEditWindowController.m in Sources */,
 				34ED8CA31B07371C002C0674 /* MIKMIDISourceEndpoint.m in Sources */,
 				34ED8C4D1B07371C002C0674 /* MIKMIDIClientSourceEndpoint.m in Sources */,
+				3441269B1E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.m in Sources */,
 				34ED8C811B07371C002C0674 /* MIKMIDIMetaMarkerTextEvent.m in Sources */,
 				34F5141216FD6E4F00BA894D /* x264Compressor.m in Sources */,
 				34A7ADB81C01EF1400685044 /* CompressionSettingsPanelController.m in Sources */,

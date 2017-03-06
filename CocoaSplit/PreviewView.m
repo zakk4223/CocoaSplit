@@ -598,6 +598,7 @@
             CGContextFillRect(currentContext, rect);
         }
     }
+    
 }
 
 

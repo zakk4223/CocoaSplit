@@ -13,6 +13,8 @@ extern NSString *const CSNotificationLayoutAdded;
 extern NSString *const CSNotificationLayoutDeleted;
 extern NSString *const CSNotificationLayoutCanvasChanged;
 extern NSString *const CSNotificationLayoutFramerateChanged;
+extern NSString *const CSNotificationLayoutSaved;
+
 
 
 

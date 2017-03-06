@@ -269,6 +269,8 @@
         self.disableAnimation = NO;
         
         
+        //self.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
+
         
         _xLayer = [CAReplicatorLayer layer];
         _yLayer = [CAReplicatorLayer layer];

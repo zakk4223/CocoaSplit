@@ -36,6 +36,7 @@
 #import "CSAddOutputPopupViewController.h"
 #import "CSAnimationWindowController.h"
 #import "CSStreamOutputWindowController.h"
+#import "CSLayoutSwitcherWithPreviewWindowController.h"
 
 
 @class FFMpegTask;
@@ -125,6 +126,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     CSAdvancedAudioWindowController *_audioWindowController;
     CSAnimationWindowController *_animationWindowController;
     CSStreamOutputWindowController *_streamOutputWindowController;
+    CSLayoutSwitcherWithPreviewWindowController *_layoutSwitcherWindowController;
+    
 }
 
 
@@ -432,5 +435,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(void)openAddOutputPopover:(id)sender sourceRect:(NSRect)sourceRect;
 
 - (IBAction)previewAnimations:(id)sender;
+- (IBAction)openLayoutSwitcherWindow:(id)sender;
 
 @end

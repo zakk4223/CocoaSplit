@@ -2504,6 +2504,21 @@
 }
 
 
+- (IBAction)openLayoutSwitcherWindow:(id)sender
+{
+    if (!_layoutSwitcherWindowController)
+    {
+        _layoutSwitcherWindowController = [[CSLayoutSwitcherWithPreviewWindowController alloc] init];
+    }
+
+    
+    //_audioWindowController.controller = self;
+    
+    [_layoutSwitcherWindowController showWindow:nil];
+    _layoutSwitcherWindowController.layouts = nil;
+
+    
+}
 
 -(void)outlineView:(NSOutlineView *)outlineView didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row
 {
@@ -2921,7 +2936,7 @@
 -(void) insertObject:(SourceLayout *)object inSourceLayoutsAtIndex:(NSUInteger)index
 {
     [self.sourceLayouts insertObject:object atIndex:index];
-    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputAdded object:object userInfo:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutAdded object:object userInfo:nil];
 }
 
 
@@ -3122,6 +3137,7 @@
 {
     [self.activePreviewView.sourceLayout saveSourceList];
     layout.savedSourceListData = self.activePreviewView.sourceLayout.savedSourceListData;
+    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutSaved object:layout userInfo:nil];
 }
 
 
