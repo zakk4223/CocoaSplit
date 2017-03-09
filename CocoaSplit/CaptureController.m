@@ -3088,6 +3088,8 @@
 -(void)switchToLayout:(SourceLayout *)layout
 {
     SourceLayout *activeLayout = self.activePreviewView.sourceLayout;
+    [self applyTransitionSettings:activeLayout];
+
     [activeLayout replaceWithSourceLayout:layout];
 }
 
@@ -3137,6 +3139,7 @@
 {
     [self.activePreviewView.sourceLayout saveSourceList];
     layout.savedSourceListData = self.activePreviewView.sourceLayout.savedSourceListData;
+    NSLog(@"SAVED TO LAYOUT %@", layout);
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutSaved object:layout userInfo:nil];
 }
 

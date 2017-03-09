@@ -9,8 +9,16 @@
 #import <Cocoa/Cocoa.h>
 #import "SourceLayout.h"
 
-@interface CSLayoutSwitcherView : NSView
+@interface CSSTextView : NSTextView
+@end
 
+
+@interface CSLayoutSwitcherView : NSView
+{
+    CATextLayer *_labelLayer;
+    CSSTextView *_textView;
+    
+}
 @property (strong) SourceLayout *sourceLayout;
 
 @end

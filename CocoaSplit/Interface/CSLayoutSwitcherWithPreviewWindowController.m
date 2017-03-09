@@ -21,11 +21,76 @@
 
 -(instancetype) init
 {
-    return [self initWithWindowNibName:@"CSLayoutSwitcherWithPreviewWindowController"];
+    if (self = [self initWithWindowNibName:@"CSLayoutSwitcherWithPreviewWindowController"])
+    {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(layoutDeleted:) name:CSNotificationLayoutDeleted object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(layoutAdded:) name:CSNotificationLayoutAdded object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(layoutSaved:) name:CSNotificationLayoutSaved object:nil];
+
+
+    }
+    return self;
 }
 
 
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
+
+-(void)layoutSaved:(NSNotification *)notification
+{
+    SourceLayout *layout = notification.object;
+    
+    CSLayoutSwitcherView *layoutView = [self findViewForLayout:layout];
+    if (layoutView)
+    {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [layout clearSourceList]; 
+            [layout restoreSourceList:nil];
+            [layoutView setNeedsLayout:YES];
+
+        });
+    }
+}
+
+
+-(void)layoutAdded:(NSNotification *)notification
+{
+    self.layouts = nil;
+}
+
+
+-(void)layoutDeleted:(NSNotification *)notification
+{
+    SourceLayout *layout = notification.object;
+    
+    CSLayoutSwitcherView *layoutView = [self findViewForLayout:layout];
+    
+    if (layoutView)
+    {
+        [layoutView.sourceLayout clearSourceList];
+        [layoutView removeFromSuperview];
+        self.layouts = nil;
+    }
+}
+
+
+-(CSLayoutSwitcherView *)findViewForLayout:(SourceLayout *)layout
+{
+    for (CSLayoutSwitcherView *view in self.gridView.subviews)
+    {
+        if (view.sourceLayout && view.sourceLayout == layout)
+        {
+            return view;
+        }
+    }
+    
+    return nil;
+}
 
 
 -(NSArray *)layouts
@@ -56,52 +121,26 @@
     NSUInteger rows = ceil(layoutCnt/(float)columns);
     
   
-    /*
-    for (int r = rows-1; r >= 0; r--)
-    {
-        
-        
-        for (int c = 0; c < columns; c++)
-        {
-            
-            if (layoutidx < _layouts.count)
-            {
-                
-                
-                
-            CSPreviewGLLayer *layoutView = [CSPreviewGLLayer layer];
-            layoutView.borderWidth = 2.0f;
-            layoutView.borderColor = [NSColor redColor].CGColor;
-            [layoutView addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintWidth relativeTo:@"superlayer" attribute:kCAConstraintWidth scale:1.0/columns offset:0]];
-            [layoutView addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintHeight relativeTo:@"superlayer" attribute:kCAConstraintHeight scale:1.0/rows offset:0]];
-            [layoutView addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinX relativeTo:@"superlayer" attribute:kCAConstraintMaxX scale:c/(float)columns offset:0]];
-            [layoutView addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMaxY scale:r/(float)rows offset:0]];
-                SourceLayout *useLayout = [_layouts objectAtIndex:layoutidx];
-                layoutView.doRender = YES;
-                layoutView.renderer = [[LayoutRenderer alloc] init];
-                layoutView.renderer.layout = useLayout;
-                [layoutView setActions:[NSDictionary dictionaryWithObjectsAndKeys:[NSNull null], @"position", [NSNull null], @"bounds",nil]];
-                [useLayout restoreSourceList:nil];
-                layoutidx++;
-                [self.gridView.layer addSublayer:layoutView];
-
-            }
-        }
-    }*/
-
     for (int x = 0; x < _layouts.count; x++)
     {
-        CSLayoutSwitcherView *newButton = [[CSLayoutSwitcherView alloc] init];
-        
-        newButton.translatesAutoresizingMaskIntoConstraints = NO;
         
         SourceLayout *layout = [_layouts objectAtIndex:x];
         
+        CSLayoutSwitcherView *newView = [self findViewForLayout:layout];
+        if (!newView)
+        {
+     
+            newView = [[CSLayoutSwitcherView alloc] init];
         
-        [self.gridView addSubview:newButton];
-        newButton.sourceLayout = layout;
-
+            newView.translatesAutoresizingMaskIntoConstraints = NO;
+        
+        
+        
+            [self.gridView addSubview:newView];
+            newView.sourceLayout = layout;
+        }
     }
+    
     
     [self.gridView setNeedsLayout:YES];
     
@@ -128,7 +167,9 @@
     {
         [layout clearSourceList];
     }
+    self.layouts = @[];
 }
+
 
 
 - (void)windowDidLoad {

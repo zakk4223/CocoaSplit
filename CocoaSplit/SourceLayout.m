@@ -611,6 +611,7 @@
     
     NSData *saveData = [self makeSaveData];
     self.savedSourceListData = saveData;
+    NSLog(@"SAVED SOURCE LIST %@", self);
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutSaved object:self userInfo:nil];
 
 }
@@ -1421,20 +1422,10 @@
 -(void)restoreSourceList:(NSData *)withData
 {
     
-    CALayer *oldSuperLayer = nil;
-    CALayer *newRoot = nil;
-    if (self.rootLayer)
-    {
-        oldSuperLayer = self.rootLayer.superlayer;
-    }
-    
     if (self.savedSourceListData)
     {
         
-        newRoot = [self newRootLayer];
-        
         [CATransaction begin];
-        newRoot.sublayers = [NSArray array];
         
         NSMutableArray *oldSourceList = self.sourceList;
         
@@ -1470,11 +1461,6 @@
             self.layoutTimingSource = ((InputSource *)timerSrc);
         }
         
-        if (oldSuperLayer)
-        {
-            [oldSuperLayer replaceSublayer:self.rootLayer with:newRoot];
-        }
-
         for(InputSource *src in oldSourceList)
         {
             [src willDelete];
