@@ -16,5 +16,6 @@
 @property (weak) IBOutlet NSView *gridView;
 
 -(void)layoutClicked:(SourceLayout *)layout withEvent:(NSEvent *)event;
+@property (weak) IBOutlet NSView *transitionView;
 
 @end

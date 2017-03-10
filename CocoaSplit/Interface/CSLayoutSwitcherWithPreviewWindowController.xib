@@ -9,6 +9,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="CSLayoutSwitcherWithPreviewWindowController">
             <connections>
                 <outlet property="gridView" destination="HKw-yZ-WV2" id="4uj-u0-Ubg"/>
+                <outlet property="transitionView" destination="J4d-aX-Zeo" id="aou-0R-RG0"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
@@ -17,27 +18,87 @@
         <window title="Layout Control" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="F0z-JX-Cv5">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="240" width="500" height="281"/>
+            <rect key="contentRect" x="196" y="240" width="838" height="402"/>
             <rect key="screenRect" x="0.0" y="0.0" width="3440" height="1417"/>
             <view key="contentView" wantsLayer="YES" id="se5-gp-TjO">
-                <rect key="frame" x="0.0" y="0.0" width="500" height="281"/>
+                <rect key="frame" x="0.0" y="0.0" width="838" height="402"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="HKw-yZ-WV2" customClass="CSLayoutSwitcherHostingView">
-                        <rect key="frame" x="10" y="6" width="480" height="270"/>
-                    </customView>
+                    <splitView dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WPz-kb-egM">
+                        <rect key="frame" x="0.0" y="0.0" width="838" height="402"/>
+                        <subviews>
+                            <customView id="J4d-aX-Zeo">
+                                <rect key="frame" x="0.0" y="0.0" width="167" height="402"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <subviews>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Ql-up-7Dl">
+                                        <rect key="frame" x="49" y="388" width="64" height="14"/>
+                                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Transition" id="fHJ-yT-VZE">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5n1-Cf-GFh">
+                                        <rect key="frame" x="-2" y="368" width="34" height="14"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="30" id="cdO-nP-oNe"/>
+                                        </constraints>
+                                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Type" id="mWq-2z-Jb7">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pfJ-V7-6KR">
+                                        <rect key="frame" x="35" y="363" width="131" height="22"/>
+                                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="ZBS-oq-loD" id="WdI-W2-EJd">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <menu key="menu" id="Jhx-QR-bcu">
+                                                <items>
+                                                    <menuItem title="Item 1" state="on" id="ZBS-oq-loD"/>
+                                                    <menuItem title="Item 2" id="KS2-QD-xWX"/>
+                                                    <menuItem title="Item 3" id="Tor-B0-kwm"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                    </popUpButton>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="167" id="7Ww-x4-JkR"/>
+                                    <constraint firstItem="5n1-Cf-GFh" firstAttribute="top" secondItem="J4d-aX-Zeo" secondAttribute="top" constant="20" symbolic="YES" id="CNY-bN-kWc"/>
+                                    <constraint firstItem="5n1-Cf-GFh" firstAttribute="baseline" secondItem="pfJ-V7-6KR" secondAttribute="baseline" id="DOa-KL-DPA"/>
+                                    <constraint firstItem="pfJ-V7-6KR" firstAttribute="leading" secondItem="5n1-Cf-GFh" secondAttribute="trailing" constant="8" symbolic="YES" id="S2Q-FW-RmL"/>
+                                    <constraint firstItem="1Ql-up-7Dl" firstAttribute="leading" secondItem="J4d-aX-Zeo" secondAttribute="leading" constant="51" id="Sh8-An-i7V"/>
+                                    <constraint firstItem="1Ql-up-7Dl" firstAttribute="top" secondItem="J4d-aX-Zeo" secondAttribute="top" id="V2N-Aa-4KO"/>
+                                    <constraint firstAttribute="trailing" secondItem="1Ql-up-7Dl" secondAttribute="trailing" constant="56" id="VkV-eI-Au2"/>
+                                    <constraint firstItem="5n1-Cf-GFh" firstAttribute="leading" secondItem="J4d-aX-Zeo" secondAttribute="leading" id="cbx-lE-zO5"/>
+                                    <constraint firstAttribute="trailing" secondItem="pfJ-V7-6KR" secondAttribute="trailing" constant="4" id="kWW-ai-im1"/>
+                                </constraints>
+                            </customView>
+                            <customView fixedFrame="YES" id="HKw-yZ-WV2" customClass="CSLayoutSwitcherHostingView">
+                                <rect key="frame" x="168" y="0.0" width="670" height="402"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            </customView>
+                        </subviews>
+                        <holdingPriorities>
+                            <real value="250"/>
+                            <real value="250"/>
+                        </holdingPriorities>
+                    </splitView>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="HKw-yZ-WV2" secondAttribute="bottom" constant="6" id="30a-0g-Crf"/>
-                    <constraint firstItem="HKw-yZ-WV2" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" constant="5" id="6Ro-wt-wpC"/>
-                    <constraint firstAttribute="trailing" secondItem="HKw-yZ-WV2" secondAttribute="trailing" constant="10" id="a2s-SS-tLD"/>
-                    <constraint firstItem="HKw-yZ-WV2" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" constant="10" id="etC-V2-zoY"/>
+                    <constraint firstItem="WPz-kb-egM" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" id="5Nr-78-Dbb"/>
+                    <constraint firstItem="WPz-kb-egM" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" id="EdJ-b6-jnw"/>
+                    <constraint firstAttribute="trailing" secondItem="WPz-kb-egM" secondAttribute="trailing" id="HO9-ng-lWk"/>
+                    <constraint firstAttribute="bottom" secondItem="WPz-kb-egM" secondAttribute="bottom" id="Znu-rK-9uv"/>
                 </constraints>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="0bl-1N-AYu"/>
             </connections>
-            <point key="canvasLocation" x="142" y="167.5"/>
+            <point key="canvasLocation" x="311" y="228"/>
         </window>
     </objects>
 </document>

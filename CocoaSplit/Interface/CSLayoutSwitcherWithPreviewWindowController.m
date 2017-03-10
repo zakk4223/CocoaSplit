@@ -58,6 +58,17 @@
 }
 
 
+-(void)windowWillEnterFullScreen:(NSNotification *)notification
+{
+    [self.transitionView setHidden:YES];
+}
+
+-(void)windowWillExitFullScreen:(NSNotification *)notification
+{
+    [self.transitionView setHidden:NO];
+}
+
+
 -(void)layoutAdded:(NSNotification *)notification
 {
     self.layouts = nil;
