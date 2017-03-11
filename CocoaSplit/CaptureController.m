@@ -45,7 +45,7 @@
 @synthesize transitionName = _transitionName;
 @synthesize useInstantRecord = _useInstantRecord;
 @synthesize instantRecordBufferDuration = _instantRecordBufferDuration;
-
+@synthesize useTransitions = _useTransitions;
 
 
 
@@ -1520,6 +1520,8 @@
     [self saveMIDI];
 
     [saveRoot setValue:self.inputLibrary forKey:@"inputLibrary"];
+    [saveRoot setValue:[NSNumber numberWithBool:self.useTransitions] forKey:@"useTransitions"];
+    
     [NSKeyedArchiver archiveRootObject:saveRoot toFile:path];
     
 }
@@ -1529,6 +1531,8 @@
 {
     
     //all color panels allow opacity
+    _savedAudioConstraintConstant = self.audioConstraint.constant;
+    
     self.activePreviewView = self.stagingPreviewView;
     [self.layoutCollectionView registerForDraggedTypes:@[@"CS_LAYOUT_DRAG"]];
 
@@ -1627,6 +1631,9 @@
 
     self.stagingPreviewView.controller = self;
     self.livePreviewView.controller = self;
+    self.livePreviewView.showTransitionToggle = YES;
+    
+    
     LayoutRenderer *stagingRender = [[LayoutRenderer alloc] init];
     stagingRender.isLiveRenderer = NO;
     self.stagingPreviewView.layoutRenderer = stagingRender;
@@ -1655,6 +1662,8 @@
     self.useMidiLiveChannelMapping   = [[saveRoot valueForKey:@"useMidiLiveChannelMapping"] boolValue];
     self.midiLiveChannel = [[saveRoot valueForKey:@"midiLiveChannel"] integerValue];
     
+    
+    self.useTransitions = [[saveRoot valueForKey:@"useTransitions"] boolValue];
     
     self.multiAudioEngine = [saveRoot valueForKey:@"multiAudioEngine"];
     if (!self.multiAudioEngine)
@@ -3586,36 +3595,58 @@
 }
 
 
-
-- (IBAction)toggleTransitionView:(id)sender
+-(void)setUseTransitions:(bool)useTransitions
 {
- 
+    _useTransitions = useTransitions;
     
-    //[self.audioView removeConstraint:self.transitionConstraint];
-    
-    if (!self.transitionConfigurationView.hidden)
+    if (_useTransitions)
     {
-        
-        //self.transitionConstraint.active = NO;
-       self.transitionConfigurationView.hidden = YES;
-        
-       _savedAudioConstraintConstant = self.audioConstraint.constant;
-
-        self.audioConstraint.constant = 8;
+        [self showTransitionView:nil];
     } else {
-
-       self.transitionConfigurationView.hidden = NO;
-
-        //self.audioConstraint.constant = _savedAudioConstraintConstant;
-       // self.transitionConstraint.active = YES;
-      //  [self.transitionConfigurationView.superview updateConstraints];
-
-
+        [self hideTransitionView:nil];
     }
+}
+
+-(bool)useTransitions
+{
+    return _useTransitions;
+}
+
+
+
+-(IBAction)showTransitionView:(id)sender
+{
+    [NSAnimationContext beginGrouping];
     
+    [[NSAnimationContext currentContext] setCompletionHandler:^{
+        self.audioConstraint.priority = 500;
+    }];
     
+    self.transitionConfigurationView.animator.hidden = NO;
+    self.transitionLabel.animator.hidden = NO;
+    self.audioConstraint.animator.constant = _savedAudioConstraintConstant;
+    
+    [NSAnimationContext endGrouping];
 
 }
+
+-(IBAction)hideTransitionView:(id)sender
+{
+    _savedAudioConstraintConstant = self.audioConstraint.constant;
+    
+    [NSAnimationContext beginGrouping];
+    
+    self.audioConstraint.animator.priority = 700;
+    self.audioConstraint.animator.constant = 8;
+    [self.transitionConfigurationView setHidden:YES];
+    self.transitionLabel.hidden = YES;
+
+    
+    [NSAnimationContext endGrouping];
+
+}
+
+
 
 - (IBAction)doInstantRecord:(id)sender
 {

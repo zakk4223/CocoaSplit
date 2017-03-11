@@ -229,13 +229,17 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (weak) IBOutlet NSView *transitionConfigurationView;
 @property (weak) IBOutlet NSView *transitionSuperView;
 @property (weak) IBOutlet NSScrollView *audioView;
+@property (assign) bool useTransitions;
 
 @property (weak) IBOutlet NSLayoutConstraint *transitionConstraint;
 @property (weak) IBOutlet NSLayoutConstraint *audioConstraint;
+@property (weak) IBOutlet NSTextField *transitionLabel;
 
 @property (strong) NSWindow *transitionFilterWindow;
 
-- (IBAction)toggleTransitionView:(id)sender;
+-(IBAction)hideTransitionView:(id)sender;
+-(IBAction)showTransitionView:(id)sender;
+
 
 - (IBAction)doInstantRecord:(id)sender;
 

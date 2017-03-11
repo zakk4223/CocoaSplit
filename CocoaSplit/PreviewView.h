@@ -107,6 +107,8 @@
 @property (strong) NSMutableDictionary *activeConfigWindows;
 @property (strong) NSMutableDictionary *activeConfigControllers;
 @property (assign) bool isEditWindow;
+@property (assign) bool showTransitionToggle;
+
 
 -(void)needsUpdate;
 -(NSRect)windowRectforWorldRect:(NSRect)worldRect;

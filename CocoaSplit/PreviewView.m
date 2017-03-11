@@ -292,6 +292,15 @@
 
 
 
+-(void)doToggleTransitions:(id)sender
+{
+    if (self.controller)
+    {
+        self.controller.useTransitions = !self.controller.useTransitions;
+    }
+}
+
+
 -(void)doLayoutMidi:(id)sender
 {
     if (self.sourceLayout)
@@ -389,6 +398,21 @@
     
     [sourceListMenu insertItem:resItem atIndex:[sourceListMenu.itemArray count]];
     
+    if (self.showTransitionToggle)
+    {
+        bool transitionState = self.controller.useTransitions;
+        NSString *transitionTitle = @"Enable Transitions";
+        if (transitionState)
+        {
+            transitionTitle = @"Disable Transitions";
+        }
+        
+        NSMenuItem *transitionItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:transitionTitle action:@selector(doToggleTransitions:) keyEquivalent:@""];
+        [transitionItem setTarget:self];
+        [transitionItem setEnabled:YES];
+        [sourceListMenu insertItem:transitionItem atIndex:[sourceListMenu.itemArray count]];
+
+    }
     if (self.viewOnly)
     {
         return sourceListMenu;
