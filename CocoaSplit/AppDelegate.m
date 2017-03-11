@@ -30,6 +30,8 @@
     });
     
     [self.captureController loadSettings];
+    //self.captureController.audioConstraint.constant = 0;
+
     
     // Insert code here to initialize your application
     

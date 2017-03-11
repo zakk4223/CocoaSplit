@@ -127,6 +127,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     CSAnimationWindowController *_animationWindowController;
     CSStreamOutputWindowController *_streamOutputWindowController;
     CSLayoutSwitcherWithPreviewWindowController *_layoutSwitcherWindowController;
+    CGFloat _savedAudioConstraintConstant;
+    NSArray *_savedTransitionConstraints;
     
 }
 
@@ -224,9 +226,16 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (assign) NSInteger pendingAnimations;
 @property (strong) NSString *pendingAnimationString;
 
+@property (weak) IBOutlet NSView *transitionConfigurationView;
+@property (weak) IBOutlet NSView *transitionSuperView;
+@property (weak) IBOutlet NSScrollView *audioView;
 
+@property (weak) IBOutlet NSLayoutConstraint *transitionConstraint;
+@property (weak) IBOutlet NSLayoutConstraint *audioConstraint;
 
 @property (strong) NSWindow *transitionFilterWindow;
+
+- (IBAction)toggleTransitionView:(id)sender;
 
 - (IBAction)doInstantRecord:(id)sender;
 

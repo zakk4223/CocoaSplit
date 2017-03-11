@@ -3587,6 +3587,36 @@
 
 
 
+- (IBAction)toggleTransitionView:(id)sender
+{
+ 
+    
+    //[self.audioView removeConstraint:self.transitionConstraint];
+    
+    if (!self.transitionConfigurationView.hidden)
+    {
+        
+        //self.transitionConstraint.active = NO;
+       self.transitionConfigurationView.hidden = YES;
+        
+       _savedAudioConstraintConstant = self.audioConstraint.constant;
+
+        self.audioConstraint.constant = 8;
+    } else {
+
+       self.transitionConfigurationView.hidden = NO;
+
+        //self.audioConstraint.constant = _savedAudioConstraintConstant;
+       // self.transitionConstraint.active = YES;
+      //  [self.transitionConfigurationView.superview updateConstraints];
+
+
+    }
+    
+    
+
+}
+
 - (IBAction)doInstantRecord:(id)sender
 {
     if (self.instantRecordActive && self.instantRecorder)
