@@ -3727,13 +3727,20 @@
 
 -(void)applyTransitionSettings:(SourceLayout *)layout
 {
-    [self.objectController commitEditing];
-    layout.transitionName = self.transitionName;
-    layout.transitionDirection = self.transitionDirection;
-    layout.transitionDuration = self.transitionDuration;
-    layout.transitionFilter = self.transitionFilter;
-    layout.transitionFullScene = self.transitionFullScene;
+    
+    if (self.useTransitions)
+    {
+        [self.objectController commitEditing];
+        layout.transitionName = self.transitionName;
+        layout.transitionDirection = self.transitionDirection;
+        layout.transitionDuration = self.transitionDuration;
+        layout.transitionFilter = self.transitionFilter;
+        layout.transitionFullScene = self.transitionFullScene;
+    } else {
+        [self clearTransitionSettings:layout];
+    }
 }
+
 
 -(void)clearTransitionSettings:(SourceLayout *)layout
 {
