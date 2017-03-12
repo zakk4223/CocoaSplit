@@ -209,6 +209,14 @@
 		34AFC33319B19CD00007C07B /* SourceCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AFC33219B19CD00007C07B /* SourceCache.m */; };
 		34AFC33419B19CD00007C07B /* SourceCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AFC33219B19CD00007C07B /* SourceCache.m */; };
 		34B0265A1712D8BA0063BB2D /* CmdLineDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B026591712D8BA0063BB2D /* CmdLineDelegate.m */; };
+		34B5FACB1E7461E60078FC51 /* CSLayoutSequence.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FACA1E7461E60078FC51 /* CSLayoutSequence.m */; };
+		34B5FACE1E748DD40078FC51 /* CSSequenceItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FACD1E748DD40078FC51 /* CSSequenceItem.m */; };
+		34B5FAD11E74B0E30078FC51 /* CSSequenceItemWait.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FAD01E74B0E30078FC51 /* CSSequenceItemWait.m */; };
+		34B5FAD41E74C34B0078FC51 /* CSSequenceItemLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FAD31E74C34B0078FC51 /* CSSequenceItemLayout.m */; };
+		34B5FAD71E75120C0078FC51 /* CSSequenceItemTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FAD61E75120C0078FC51 /* CSSequenceItemTransition.m */; };
+		34B5FADA1E75B9B30078FC51 /* CSGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FAD91E75B9B30078FC51 /* CSGridView.m */; };
+		34B5FADD1E75BC910078FC51 /* CSLayoutSwitcherViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FADC1E75BC910078FC51 /* CSLayoutSwitcherViewController.m */; };
+		34B5FAE01E75CBF20078FC51 /* CSSequenceActivatorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FADF1E75CBF20078FC51 /* CSSequenceActivatorViewController.m */; };
 		34B5FCDF19BF1C3F00F67D19 /* CreateLayoutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FCDD19BF1C3F00F67D19 /* CreateLayoutViewController.m */; };
 		34B5FCE019BF1C3F00F67D19 /* CreateLayoutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FCDD19BF1C3F00F67D19 /* CreateLayoutViewController.m */; };
 		34B5FCE119BF1C3F00F67D19 /* CreateLayoutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34B5FCDE19BF1C3F00F67D19 /* CreateLayoutViewController.xib */; };
@@ -866,6 +874,22 @@
 		34AFC33219B19CD00007C07B /* SourceCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SourceCache.m; sourceTree = "<group>"; };
 		34B026581712D8BA0063BB2D /* CmdLineDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CmdLineDelegate.h; sourceTree = "<group>"; };
 		34B026591712D8BA0063BB2D /* CmdLineDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CmdLineDelegate.m; sourceTree = "<group>"; };
+		34B5FAC91E7461E60078FC51 /* CSLayoutSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLayoutSequence.h; sourceTree = "<group>"; };
+		34B5FACA1E7461E60078FC51 /* CSLayoutSequence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSLayoutSequence.m; sourceTree = "<group>"; };
+		34B5FACC1E748DD40078FC51 /* CSSequenceItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSequenceItem.h; sourceTree = "<group>"; };
+		34B5FACD1E748DD40078FC51 /* CSSequenceItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSequenceItem.m; sourceTree = "<group>"; };
+		34B5FACF1E74B0E30078FC51 /* CSSequenceItemWait.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSequenceItemWait.h; sourceTree = "<group>"; };
+		34B5FAD01E74B0E30078FC51 /* CSSequenceItemWait.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSequenceItemWait.m; sourceTree = "<group>"; };
+		34B5FAD21E74C34B0078FC51 /* CSSequenceItemLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSequenceItemLayout.h; sourceTree = "<group>"; };
+		34B5FAD31E74C34B0078FC51 /* CSSequenceItemLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSequenceItemLayout.m; sourceTree = "<group>"; };
+		34B5FAD51E75120C0078FC51 /* CSSequenceItemTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSequenceItemTransition.h; sourceTree = "<group>"; };
+		34B5FAD61E75120C0078FC51 /* CSSequenceItemTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSequenceItemTransition.m; sourceTree = "<group>"; };
+		34B5FAD81E75B9B30078FC51 /* CSGridView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSGridView.h; path = Interface/CSGridView.h; sourceTree = "<group>"; };
+		34B5FAD91E75B9B30078FC51 /* CSGridView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSGridView.m; path = Interface/CSGridView.m; sourceTree = "<group>"; };
+		34B5FADB1E75BC910078FC51 /* CSLayoutSwitcherViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSLayoutSwitcherViewController.h; path = Interface/CSLayoutSwitcherViewController.h; sourceTree = "<group>"; };
+		34B5FADC1E75BC910078FC51 /* CSLayoutSwitcherViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSLayoutSwitcherViewController.m; path = Interface/CSLayoutSwitcherViewController.m; sourceTree = "<group>"; };
+		34B5FADE1E75CBF20078FC51 /* CSSequenceActivatorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSequenceActivatorViewController.h; path = Interface/CSSequenceActivatorViewController.h; sourceTree = "<group>"; };
+		34B5FADF1E75CBF20078FC51 /* CSSequenceActivatorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSSequenceActivatorViewController.m; path = Interface/CSSequenceActivatorViewController.m; sourceTree = "<group>"; };
 		34B5FCDC19BF1C3F00F67D19 /* CreateLayoutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateLayoutViewController.h; sourceTree = "<group>"; };
 		34B5FCDD19BF1C3F00F67D19 /* CreateLayoutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateLayoutViewController.m; sourceTree = "<group>"; };
 		34B5FCDE19BF1C3F00F67D19 /* CreateLayoutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CreateLayoutViewController.xib; sourceTree = "<group>"; };
@@ -1291,6 +1315,16 @@
 				34EA822D1D3C568400928A06 /* CSOauth2Authenticator.m */,
 				3473D2A71D5685DA00842EEE /* Media.xcassets */,
 				347BEAAA1E5BCBAF0026A094 /* CSOpenGLLayer.m */,
+				34B5FAC91E7461E60078FC51 /* CSLayoutSequence.h */,
+				34B5FACA1E7461E60078FC51 /* CSLayoutSequence.m */,
+				34B5FACC1E748DD40078FC51 /* CSSequenceItem.h */,
+				34B5FACD1E748DD40078FC51 /* CSSequenceItem.m */,
+				34B5FACF1E74B0E30078FC51 /* CSSequenceItemWait.h */,
+				34B5FAD01E74B0E30078FC51 /* CSSequenceItemWait.m */,
+				34B5FAD21E74C34B0078FC51 /* CSSequenceItemLayout.h */,
+				34B5FAD31E74C34B0078FC51 /* CSSequenceItemLayout.m */,
+				34B5FAD51E75120C0078FC51 /* CSSequenceItemTransition.h */,
+				34B5FAD61E75120C0078FC51 /* CSSequenceItemTransition.m */,
 			);
 			path = CocoaSplit;
 			sourceTree = "<group>";
@@ -1487,6 +1521,12 @@
 				3441269E1E6D0C4C0051DA06 /* CSLayoutSwitcherHostingView.m */,
 				344126A01E6DBBEE0051DA06 /* CSLayoutSwitcherView.h */,
 				344126A11E6DBBEE0051DA06 /* CSLayoutSwitcherView.m */,
+				34B5FAD81E75B9B30078FC51 /* CSGridView.h */,
+				34B5FAD91E75B9B30078FC51 /* CSGridView.m */,
+				34B5FADB1E75BC910078FC51 /* CSLayoutSwitcherViewController.h */,
+				34B5FADC1E75BC910078FC51 /* CSLayoutSwitcherViewController.m */,
+				34B5FADE1E75CBF20078FC51 /* CSSequenceActivatorViewController.h */,
+				34B5FADF1E75CBF20078FC51 /* CSSequenceActivatorViewController.m */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -2431,6 +2471,7 @@
 				347277FD1A5A2758008801A9 /* CSIOSurfaceLayer.m in Sources */,
 				344825E61B253D6900AF9EAC /* CAMultiAudioMatrixCell.m in Sources */,
 				34BD1E4D1B1F1A2D0015CBEC /* CAMultiAudioDownmixer.m in Sources */,
+				34B5FACE1E748DD40078FC51 /* CSSequenceItem.m in Sources */,
 				345F8B251A14E6A0009A81E3 /* CAMultiAudioNode.m in Sources */,
 				342346AA15F59A8500C8C77E /* AVFAudioCapture.m in Sources */,
 				3498D94A1A94685000906532 /* CSAudioSwitchCell.m in Sources */,
@@ -2465,6 +2506,7 @@
 				34ED8C5D1B07371C002C0674 /* MIKMIDIEndpoint.m in Sources */,
 				34ED8C5F1B07371C002C0674 /* MIKMIDIEndpointSynthesizer.m in Sources */,
 				34ED8CA11B07371C002C0674 /* MIKMIDISequencer.m in Sources */,
+				34B5FAD11E74B0E30078FC51 /* CSSequenceItemWait.m in Sources */,
 				34ED8C751B07371C002C0674 /* MIKMIDIMetaCopyrightEvent.m in Sources */,
 				3434CB3C1CB09BC4001B3DF9 /* CSTimedOutputBuffer.m in Sources */,
 				34ED8CB71B073C1B002C0674 /* CSMidiManagerWindowController.m in Sources */,
@@ -2478,6 +2520,7 @@
 				34ED8CAB1B07371C002C0674 /* MIKMIDITrack.m in Sources */,
 				34ED8CA91B07371C002C0674 /* MIKMIDITempoEvent.m in Sources */,
 				3450239D1C60B3EF00B461B5 /* CSLayoutCollectionItemView.m in Sources */,
+				34B5FADA1E75B9B30078FC51 /* CSGridView.m in Sources */,
 				3400A0841BD522A5003E1828 /* CSLibraryInputItemViewController.m in Sources */,
 				34ED8C631B07371C002C0674 /* MIKMIDIErrors.m in Sources */,
 				34ED8C551B07371C002C0674 /* MIKMIDIControlChangeCommand.m in Sources */,
@@ -2503,6 +2546,7 @@
 				34F1EB921BCCA41F00B38E6C /* CSLayoutEditWindowController.m in Sources */,
 				34ED8CA31B07371C002C0674 /* MIKMIDISourceEndpoint.m in Sources */,
 				34ED8C4D1B07371C002C0674 /* MIKMIDIClientSourceEndpoint.m in Sources */,
+				34B5FAD41E74C34B0078FC51 /* CSSequenceItemLayout.m in Sources */,
 				3441269B1E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.m in Sources */,
 				34ED8C811B07371C002C0674 /* MIKMIDIMetaMarkerTextEvent.m in Sources */,
 				34F5141216FD6E4F00BA894D /* x264Compressor.m in Sources */,
@@ -2515,6 +2559,8 @@
 				34ED8C8F1B07371C002C0674 /* MIKMIDINoteOffCommand.m in Sources */,
 				34ED8C571B07371C002C0674 /* MIKMIDIDestinationEndpoint.m in Sources */,
 				34ED8C8D1B07371C002C0674 /* MIKMIDINoteEvent.m in Sources */,
+				34B5FAE01E75CBF20078FC51 /* CSSequenceActivatorViewController.m in Sources */,
+				34B5FAD71E75120C0078FC51 /* CSSequenceItemTransition.m in Sources */,
 				34F5141316FD6E4F00BA894D /* AppleVTCompressor.m in Sources */,
 				34938EED1AE4D24200F3B1CF /* CSFilterChooserWindowController.m in Sources */,
 				34DF75581AA272F100DA9FDE /* LayoutRenderer.m in Sources */,
@@ -2526,7 +2572,9 @@
 				345F8B751A17A785009A81E3 /* CAMultiAudioMixer.m in Sources */,
 				34ED8C951B07371C002C0674 /* MIKMIDIOutputPort.m in Sources */,
 				34ED8CA71B07371C002C0674 /* MIKMIDISystemMessageCommand.m in Sources */,
+				34B5FADD1E75BC910078FC51 /* CSLayoutSwitcherViewController.m in Sources */,
 				34ED8C851B07371C002C0674 /* MIKMIDIMetaTextEvent.m in Sources */,
+				34B5FACB1E7461E60078FC51 /* CSLayoutSequence.m in Sources */,
 				34348C2A19BDBDC000A122C2 /* PluginManagerWindowController.m in Sources */,
 				34CFE4A018F154DD00092C6A /* AVFChannelManager.m in Sources */,
 				34ED8C6B1B07371C002C0674 /* MIKMIDIMacDebugQuickLookSupport.m in Sources */,

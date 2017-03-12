@@ -9,6 +9,7 @@
 #import "CSLayoutSwitcherView.h"
 #import "CSPreviewGLLayer.h"
 #import "AppDelegate.h"
+#import "CSLayoutSwitcherViewController.h"
 
 
 @implementation CSSTextView
@@ -27,6 +28,11 @@
 }
 
 
+-(NSView *)hitTest:(NSPoint)point
+{
+    return nil;
+}
+
 
 @end
 
@@ -37,10 +43,13 @@
 
 
 
--(instancetype)init
+
+-(instancetype)initWithIsSwitcherView:(bool)isSwitcherView
 {
     if (self = [super init])
     {
+
+        self.isSwitcherView = isSwitcherView;
         [self setWantsLayer:YES];
 
         //self.layerContentsRedrawPolicy = NSViewLayerContentsRedrawOnSetNeedsDisplay;
@@ -52,10 +61,25 @@
 
 -(CALayer *)makeBackingLayer
 {
-    CSPreviewGLLayer *newLayer = [CSPreviewGLLayer layer];
-    newLayer.layoutManager = [CAConstraintLayoutManager layoutManager];
+
+    CALayer *newLayer;
+    
+    if (self.isSwitcherView)
+    {
+        newLayer = [CSPreviewGLLayer layer];
+    } else {
+        newLayer = [CALayer layer];
+        newLayer.cornerRadius = 2.5f;
+    }
     return newLayer;
 }
+
+
+-(void)rightMouseDown:(NSEvent *)event
+{
+    [self.controller showLayoutMenu:event forView:self];
+}
+
 
 -(void)mouseDown:(NSEvent *)event
 {
@@ -92,13 +116,20 @@
     _sourceLayout = sourceLayout;
     if (_sourceLayout)
     {
-        CSPreviewGLLayer *newLayer = (CSPreviewGLLayer *)self.layer;
+    
+        CALayer *newLayer = self.layer;
+        
         newLayer.borderColor = [NSColor lightGrayColor].CGColor;
         newLayer.borderWidth = 2.0f;
-        newLayer.doRender = YES;
-        newLayer.renderer = [[LayoutRenderer alloc] init];
-        newLayer.renderer.layout = _sourceLayout;
-        [_sourceLayout restoreSourceList:nil];
+        if (self.isSwitcherView)
+        {
+            CSPreviewGLLayer *glLayer = (CSPreviewGLLayer *)newLayer;
+            glLayer.doRender = YES;
+            glLayer.renderer = [[LayoutRenderer alloc] init];
+            glLayer.renderer.layout = _sourceLayout;
+            [_sourceLayout restoreSourceList:nil];
+        }
+        
         [_sourceLayout addObserver:self forKeyPath:@"in_live" options:NSKeyValueObservingOptionNew context:NULL];
         [_sourceLayout addObserver:self forKeyPath:@"in_staging" options:NSKeyValueObservingOptionNew context:NULL];
 
@@ -130,10 +161,25 @@
             [_textView setWantsLayer:YES];
             _textView.layer.cornerRadius = 5;
 
-            _textView.backgroundColor = [NSColor blackColor];
-            _textView.alphaValue = 0.5;
+            if (self.isSwitcherView)
+            {
+                _textView.backgroundColor = [NSColor blackColor];
+                _textView.alphaValue = 0.5;
+
+            } else {
+                _textView.backgroundColor = [NSColor colorWithRed:0 green:0 blue:0 alpha:0];
+            }
+            
             _textView.editable = NO;
-            _textView.textColor = [NSColor whiteColor];
+            _textView.selectable = NO;
+            
+            if (self.isSwitcherView)
+            {
+                _textView.textColor = [NSColor whiteColor];
+            } else {
+                _textView.textColor = [NSColor blackColor];
+            }
+            
             _textView.font = [NSFont userFontOfSize:20.0f];
             [_textView.textContainer setContainerSize:NSMakeSize(1.0e6, 1.0e6)];
 
@@ -211,10 +257,22 @@
         _textView.string = self.sourceLayout.name;
         NSRect tFrame = _textView.frame;
         NSSize tSize = [_textView intrinsicContentSize];
+        CGFloat startFontSize = _textView.font.pointSize;
         
+        while (tSize.width > self.bounds.size.width)
+        {
+            _textView.font = [NSFont userFontOfSize:--startFontSize];
+            tSize = [_textView intrinsicContentSize];
+        }
         
         tFrame.origin.x = NSMidX(self.bounds) - tSize.width/2;
-        tFrame.origin.y = 5.0f;
+        if (self.isSwitcherView)
+        {
+            tFrame.origin.y = 5.0f;
+        } else {
+            tFrame.origin.y = NSMidY(self.bounds) - tSize.height/2;
+        }
+        
         tFrame.size.width = tSize.width;
         tFrame.size.height = tSize.height;
         [_textView setFrame:tFrame];

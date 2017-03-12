@@ -808,15 +808,50 @@
 }
 
 
--(void)mergeSourceLayout:(SourceLayout *)toMerge withLayer:(CALayer *)withLayer
+
+
+
+-(void)mergeSourceLayout:(SourceLayout *)toMerge
 {
+    [self mergeSourceLayout:toMerge withCompletionBlock:nil];
+}
+
+-(void)mergeSourceLayout:(SourceLayout *)toMerge withCompletionBlock:(void (^)(void))completionBlock
+{
+    
     
     if ([self.containedLayouts containsObject:toMerge])
     {
         return;
     }
     
+    NSInteger __block pendingCount = 0;
+    void (^internalCompletionBlock)(void) = ^{
+        @synchronized (self)
+        {
+            pendingCount--;
+            if (pendingCount <= 0 && completionBlock)
+            {
+                completionBlock();
+            }
+        }
+    };
+
     NSArray *mergedAnim = nil;
+    
+    [CATransaction begin];
+    
+    if (completionBlock)
+    {
+        @synchronized (self)
+        {
+            pendingCount++;
+        }
+
+        [CATransaction setCompletionBlock:^{
+            internalCompletionBlock();
+        }];
+    }
     
     NSObject *dictOrObj = [self mergeSourceListData:toMerge.savedSourceListData];
     
@@ -832,6 +867,8 @@
     {
         self.addLayoutBlock(toMerge);
     }
+
+    [CATransaction commit];
     
     if (mergedAnim && !self.in_staging)
     {
@@ -842,7 +879,17 @@
                 CSAnimationItem *eItem = [self animationForUUID:anim.uuid];
                 if (eItem && eItem.refCount == 1)
                 {
-                    [self runSingleAnimation:eItem];
+                    if (completionBlock)
+                    {
+                        @synchronized (self) {
+                            pendingCount++;
+                        }
+                        [self runSingleAnimation:eItem withCompletionBlock:^{
+                            internalCompletionBlock();
+                        }];
+                    } else {
+                        [self runSingleAnimation:eItem];
+                    }
                 }
             }
         }
@@ -1096,14 +1143,16 @@
         
         src.refCount = origRefCnt+1;
         
-        [self willChangeValueForKey:@"topLevelSourceList"];
         [[self mutableArrayValueForKey:@"sourceList" ] addObject:src];
-        [self generateTopLevelSourceList];
-        [self didChangeValueForKey:@"topLevelSourceList"];
         [_uuidMap setObject:src forKey:src.uuid];
         
     }
     
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self willChangeValueForKey:@"topLevelSourceList"];
+        [self generateTopLevelSourceList];
+        [self didChangeValueForKey:@"topLevelSourceList"];
+    });
     return undoSources;
 }
 

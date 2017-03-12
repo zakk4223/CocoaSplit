@@ -114,7 +114,9 @@
 -(bool)containsInput:(InputSource *)cSource;
 -(void)modifyUUID:(NSString *)uuid withBlock:(void (^)(InputSource *input))withBlock;
 
--(void)mergeSourceLayout:(SourceLayout *)toMerge withLayer:(CALayer *)withLayer;
+-(void)mergeSourceLayout:(SourceLayout *)toMerge withCompletionBlock:(void (^)(void))completionBlock;
+-(void)mergeSourceLayout:(SourceLayout *)toMerge;
+
 -(void)removeSourceLayout:(SourceLayout *)toRemove withLayer:(CALayer *)withLayer;
 -(bool)containsLayout:(SourceLayout *)layout;
 -(void)applyAddBlock;

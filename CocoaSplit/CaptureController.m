@@ -1682,6 +1682,15 @@
         self.sourceLayouts = [[NSMutableArray alloc] init];
     }
     
+    if (!_layoutViewController)
+    {
+        _layoutViewController = [[CSLayoutSwitcherViewController alloc] init];
+        _layoutViewController.isSwitcherView = NO;
+        _layoutViewController.view = self.layoutGridView;
+        _layoutViewController.layouts = self.sourceLayouts;
+    }
+    
+    
     SourceLayout *tmpLayout = [saveRoot valueForKey:@"selectedLayout"];
     if (tmpLayout)
     {
@@ -3137,7 +3146,7 @@
     {
         [activeLayout removeSourceLayout:layout withLayer:nil];
     } else {
-        [activeLayout mergeSourceLayout:layout withLayer:nil];
+        [activeLayout mergeSourceLayout:layout];
     }
     
     [self changePendingAnimations];
@@ -3630,6 +3639,35 @@
 
 }
 
+- (IBAction)testSequencer:(id)sender {
+
+    NSLog(@"TESTING SEQUENCER");
+    _testSequence = [[CSLayoutSequence alloc] init];
+    
+    CSSequenceItemLayout *firstseq = [[CSSequenceItemLayout alloc] initWithLayout:self.sourceLayouts.firstObject ];
+    CSSequenceItemLayout *secseq = [[CSSequenceItemLayout alloc] initWithLayout:[self.sourceLayouts objectAtIndex:1]];
+    CSSequenceItemWait *waitseq = [[CSSequenceItemWait alloc] init];
+    firstseq.actionType = kCSLayoutSequenceSwitch;
+    secseq.actionType = kCSLayoutSequenceSwitch;
+    
+    waitseq.waitTime = 2.5;
+
+    [_testSequence.sequenceItems addObject:firstseq];
+    [_testSequence.sequenceItems addObject:waitseq];
+    [_testSequence.sequenceItems addObject:secseq];
+
+    //[_testSequence runSequenceForLayout:self.activePreviewView.sourceLayout];
+    [_testSequence runSequenceForLayout:self.activePreviewView.sourceLayout withCompletionBlock:^{
+        NSLog(@"DONE WITH SEQUENCE");
+    } withItemCompletionBlock:^(CSSequenceItem *item) {
+        NSLog(@"DONE WITH SEQUENCE ITEM %@", item);
+        
+    }];
+    
+    
+    
+}
+
 -(IBAction)hideTransitionView:(id)sender
 {
     _savedAudioConstraintConstant = self.audioConstraint.constant;
@@ -3852,12 +3890,12 @@
     NSView *stagingView = self.canvasSplitView.subviews[0];
     NSView *liveView = self.canvasSplitView.subviews[1];
     _liveFrame = liveView.frame;
-    stagingView.hidden = YES;
+    stagingView.animator.hidden = YES;
     //[liveView setFrameSize:NSMakeSize(self.canvasSplitView.frame.size.width, liveView.frame.size.height)];
-    [self.canvasSplitView adjustSubviews];
+    [self.canvasSplitView.animator adjustSubviews];
     
     
-    [self.canvasSplitView display];
+    [self.canvasSplitView.animator display];
     self.livePreviewView.viewOnly = NO;
     self.livePreviewView.midiActive = NO;
     self.activePreviewView = self.livePreviewView;
@@ -3870,7 +3908,7 @@
 {
     NSView *stagingView = self.canvasSplitView.subviews[0];
     NSView *liveView = self.canvasSplitView.subviews[1];
-    stagingView.hidden = NO;
+    stagingView.animator.hidden = NO;
     
     
     /*
@@ -3892,11 +3930,11 @@
         }
     }
 
-    [self.canvasSplitView setPosition:_liveFrame.origin.x ofDividerAtIndex:0];
+    [self.canvasSplitView.animator setPosition:_liveFrame.origin.x ofDividerAtIndex:0];
     
-    [self.canvasSplitView adjustSubviews];
+    [self.canvasSplitView.animator adjustSubviews];
     
-    [self.canvasSplitView display];
+    [self.canvasSplitView.animator display];
     self.livePreviewView.viewOnly = YES;
     self.stagingHidden = NO;
     self.activePreviewView = self.stagingPreviewView;

@@ -37,6 +37,11 @@
 #import "CSAnimationWindowController.h"
 #import "CSStreamOutputWindowController.h"
 #import "CSLayoutSwitcherWithPreviewWindowController.h"
+#import "CSLayoutSequence.h"
+#import "CSSequenceItemLayout.h"
+#import "CSSequenceItemWait.h"
+#import "CSLayoutSwitcherViewController.h"
+#import "CSGridView.h"
 
 
 @class FFMpegTask;
@@ -58,6 +63,10 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 @interface CaptureController : NSObject <NSTableViewDelegate, NSMenuDelegate, MIKMIDIMappableResponder, MIKMIDIResponder, MIKMIDIMappingGeneratorDelegate, CSTimerSourceProtocol, NSCollectionViewDelegate, NSOutlineViewDelegate> {
     
+    
+    CSLayoutSwitcherViewController *_layoutViewController;
+    
+    CSLayoutSequence *_testSequence;
     
     NSArray *_inputIdentifiers;
 
@@ -132,6 +141,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     
 }
 
+@property (weak) IBOutlet CSGridView *layoutGridView;
 
 @property (assign) bool useInstantRecord;
 @property (assign) int instantRecordBufferDuration;
@@ -183,6 +193,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) NSString *renderStatsString;
 @property (strong) NSString *outputStatsString;
 
+
+@property (strong) NSMutableArray *layoutSequences;
 
 
 @property (strong) NSMutableArray *sourceLayouts;
@@ -240,6 +252,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(IBAction)hideTransitionView:(id)sender;
 -(IBAction)showTransitionView:(id)sender;
 
+- (IBAction)testSequencer:(id)sender;
 
 - (IBAction)doInstantRecord:(id)sender;
 
