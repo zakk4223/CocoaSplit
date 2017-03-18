@@ -11,6 +11,12 @@
 @implementation CSSequenceItemTransition
 
 
++(NSString *)label
+{
+    return @"Transition";
+}
+
+
 -(void)clearTransition
 {
     self.transitionName = nil;

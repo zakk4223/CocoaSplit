@@ -24,5 +24,4 @@
 
 -(void)runSequenceForLayout:(SourceLayout *)layout;
 -(void)runSequenceForLayout:(SourceLayout *)layout withCompletionBlock:(void (^)())completionBlock withItemCompletionBlock:(void (^)(CSSequenceItem *item))itemCompletionBlock;
-
 @end

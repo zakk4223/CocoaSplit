@@ -7,6 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "CSSequenceActivatorView.h"
 
 @interface CSSequenceActivatorViewController : NSViewController
 @property (strong) NSArray *sequences;

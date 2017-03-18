@@ -16,6 +16,9 @@ extern NSString *const CSNotificationLayoutFramerateChanged;
 extern NSString *const CSNotificationLayoutSaved;
 
 
+extern NSString *const CSNotificationSequenceAdded;
+extern NSString *const CSNotificationSequenceDeleted;
+extern NSString *const CSNotificationSequenceSaved;
 
 
 extern NSString *const CSNotificationStreamStarted;

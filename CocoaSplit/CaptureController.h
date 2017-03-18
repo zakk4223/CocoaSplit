@@ -42,6 +42,9 @@
 #import "CSSequenceItemWait.h"
 #import "CSLayoutSwitcherViewController.h"
 #import "CSGridView.h"
+#import "CSSequenceEditorWindowController.h"
+#import "CSSequenceActivatorViewController.h"
+
 
 
 @class FFMpegTask;
@@ -64,7 +67,12 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @interface CaptureController : NSObject <NSTableViewDelegate, NSMenuDelegate, MIKMIDIMappableResponder, MIKMIDIResponder, MIKMIDIMappingGeneratorDelegate, CSTimerSourceProtocol, NSCollectionViewDelegate, NSOutlineViewDelegate> {
     
     
+    CSSequenceEditorWindowController *_sequenceWindowController;
+    
+    
     CSLayoutSwitcherViewController *_layoutViewController;
+    CSSequenceActivatorViewController *_sequenceViewController;
+    
     
     CSLayoutSequence *_testSequence;
     
@@ -402,8 +410,10 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(InputSource *)findSource:(NSPoint)forPoint;
 -(SourceLayout *)addLayoutFromBase:(SourceLayout *)baseLayout;
 -(SourceLayout *)getLayoutForName:(NSString *)name;
+-(void)addSequenceWithNameDedup:(CSLayoutSequence *)sequence;
 
 -(void)openAddInputPopover:(NSButton *)sender;
+- (IBAction)createLayoutOrSequenceAction:(id)sender;
 
 - (IBAction)openLayoutPopover:(NSButton *)sender;
 -(void)openLayoutPopover:(NSButton *)sender forLayout:(SourceLayout *)layout;
@@ -462,5 +472,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 - (IBAction)previewAnimations:(id)sender;
 - (IBAction)openLayoutSwitcherWindow:(id)sender;
+- (IBAction)switchLayoutView:(id)sender;
 
 @end

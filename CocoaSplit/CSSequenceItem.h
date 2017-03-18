@@ -9,11 +9,20 @@
 #import <Foundation/Foundation.h>
 #import "CSLayoutSequence.h"
 
+@class CSSequenceItemViewController;
+
 @interface CSSequenceItem : NSObject
 
+@property (strong) NSString *itemDescription;
+
++(NSImage *)image;
++(NSString *)label;
 
 -(void)executeWithSequence:(CSLayoutSequence *)sequencer usingCompletionBlock:(void (^)())completionBlock;
 
+-(CSSequenceItemViewController *)configurationView;
+
+-(void)updateItemDescription;
 
 
 @end

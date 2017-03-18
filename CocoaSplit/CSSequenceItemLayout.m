@@ -20,10 +20,14 @@
     return self;
 }
 
++(NSString *)label
+{
+    return @"Layout";
+}
+
 
 -(void)executeWithSequence:(CSLayoutSequence *)sequencer usingCompletionBlock:(void (^)())completionBlock
 {
-    NSLog(@"EXECUTING LAYOUT");
     
     if (self.layout)
     {

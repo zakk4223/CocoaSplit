@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="CSAddSequenceItemPopupViewController">
+            <connections>
+                <outlet property="sequenceItemTypesTableView" destination="sfB-i5-6Nt" id="Aji-BP-JlW"/>
+                <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="Hz6-mo-xeY">
+            <rect key="frame" x="0.0" y="0.0" width="215" height="79"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="17" horizontalPageScroll="10" verticalLineScroll="17" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nhf-hU-yMq">
+                    <rect key="frame" x="0.0" y="0.0" width="215" height="79"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <clipView key="contentView" ambiguous="YES" id="Vdj-iW-hbn">
+                        <rect key="frame" x="1" y="1" width="213" height="77"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" id="sfB-i5-6Nt">
+                                <rect key="frame" x="0.0" y="0.0" width="213" height="77"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <size key="intercellSpacing" width="3" height="0.0"/>
+                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                <tableColumns>
+                                    <tableColumn width="210" minWidth="40" maxWidth="1000" id="hz1-Gb-U5p">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                        </tableHeaderCell>
+                                        <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="n5J-Nm-LXU">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                        <prototypeCellViews>
+                                            <tableCellView id="Wzz-yQ-tMt">
+                                                <rect key="frame" x="1" y="0.0" width="210" height="17"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <subviews>
+                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="35M-Fy-DFa">
+                                                        <rect key="frame" x="-9" y="-8" width="228" height="32"/>
+                                                        <buttonCell key="cell" type="push" title="Test" bezelStyle="rounded" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="TRb-DM-eMH">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="system"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <action selector="sequenceItemClicked:" target="-2" id="QQP-Dl-Qn6"/>
+                                                            <binding destination="Wzz-yQ-tMt" name="image" keyPath="objectValue.image" id="Ga0-gD-85T"/>
+                                                            <binding destination="Wzz-yQ-tMt" name="title" keyPath="objectValue.label" previousBinding="Ga0-gD-85T" id="g54-Zn-cVW"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="35M-Fy-DFa" firstAttribute="top" secondItem="Wzz-yQ-tMt" secondAttribute="top" constant="-3" id="Z0a-4b-gy8"/>
+                                                    <constraint firstItem="35M-Fy-DFa" firstAttribute="centerX" secondItem="Wzz-yQ-tMt" secondAttribute="centerX" id="cng-gF-WTx"/>
+                                                    <constraint firstItem="35M-Fy-DFa" firstAttribute="leading" secondItem="Wzz-yQ-tMt" secondAttribute="leading" constant="-3" id="ohZ-RJ-332"/>
+                                                </constraints>
+                                            </tableCellView>
+                                        </prototypeCellViews>
+                                    </tableColumn>
+                                </tableColumns>
+                                <connections>
+                                    <binding destination="LxN-8n-wqB" name="content" keyPath="arrangedObjects" id="Krd-Aj-ZKI"/>
+                                    <outlet property="delegate" destination="-2" id="e7r-0F-phu"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                    </clipView>
+                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="j4Q-LJ-JqR">
+                        <rect key="frame" x="1" y="-14" width="0.0" height="15"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="nsX-yi-Wbz">
+                        <rect key="frame" x="224" y="17" width="15" height="102"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                </scrollView>
+            </subviews>
+            <point key="canvasLocation" x="-0.5" y="71.5"/>
+        </customView>
+        <arrayController id="LxN-8n-wqB" userLabel="sequenceItemTypesController">
+            <connections>
+                <binding destination="-2" name="contentArray" keyPath="self.sequenceItemTypes" id="3kG-bh-ma9"/>
+            </connections>
+        </arrayController>
+    </objects>
+</document>

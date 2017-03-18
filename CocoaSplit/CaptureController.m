@@ -290,6 +290,20 @@
 
 
 
+- (IBAction)createLayoutOrSequenceAction:(id)sender
+{
+    if (_layoutViewController)
+    {
+        [self openLayoutPopover:sender];
+    } else {
+        _sequenceWindowController = [[CSSequenceEditorWindowController alloc] init];
+        _sequenceWindowController.addSequenceOnSave = YES;
+        _sequenceWindowController.sequence = [[CSLayoutSequence alloc] init];
+        [_sequenceWindowController showWindow:nil];
+    }
+}
+
+
 - (IBAction)openLayoutPopover:(NSButton *)sender
 {
     
@@ -317,6 +331,19 @@
 }
 
 
+-(CSLayoutSequence *)findSequenceWithName:(NSString *)name
+{
+    for(CSLayoutSequence *seq in self.layoutSequences)
+    {
+        if([seq.name isEqualToString:name])
+        {
+            return seq;
+        }
+    }
+    
+    return nil;
+}
+
 
 -(SourceLayout *)findLayoutWithName:(NSString *)name
 {
@@ -330,6 +357,28 @@
     
     return nil;
 }
+
+
+-(void)addSequenceWithNameDedup:(CSLayoutSequence *)sequence
+{
+    
+    NSLog(@"ADDING SEQUENCE %@", sequence);
+    NSMutableString *baseName = sequence.name.mutableCopy;
+    
+    NSMutableString *newName = baseName;
+    int name_try = 1;
+    
+    while ([self findSequenceWithName:newName]) {
+        newName = [NSMutableString stringWithFormat:@"%@#%d", baseName, name_try];
+        name_try++;
+    }
+    
+    
+    sequence.name = newName;
+
+    [self insertObject:sequence inLayoutSequencesAtIndex:self.layoutSequences.count];
+}
+
 
 
 -(SourceLayout *)addLayoutFromBase:(SourceLayout *)baseLayout
@@ -1673,6 +1722,13 @@
      
 
 
+    self.layoutSequences = [saveRoot valueForKey:@"layoutSequences"];
+    if (!self.layoutSequences)
+    {
+        self.layoutSequences = [[NSMutableArray alloc] init];
+    }
+    
+    
     self.extraPluginsSaveData = nil;
     self.sourceLayouts = [saveRoot valueForKey:@"sourceLayouts"];
     
@@ -1687,7 +1743,7 @@
         _layoutViewController = [[CSLayoutSwitcherViewController alloc] init];
         _layoutViewController.isSwitcherView = NO;
         _layoutViewController.view = self.layoutGridView;
-        _layoutViewController.layouts = self.sourceLayouts;
+       _layoutViewController.layouts = self.sourceLayouts;
     }
     
     
@@ -2530,13 +2586,33 @@
     }
 
     
-    //_audioWindowController.controller = self;
     
     [_layoutSwitcherWindowController showWindow:nil];
     _layoutSwitcherWindowController.layouts = nil;
 
     
 }
+
+- (IBAction)switchLayoutView:(id)sender
+{
+    if (_layoutViewController)
+    {
+        _layoutViewController.layouts = @[];
+        
+        _layoutViewController = nil;
+        _sequenceViewController = [[CSSequenceActivatorViewController alloc] init];
+        _sequenceViewController.view = self.layoutGridView;
+        _sequenceViewController.sequences = self.layoutSequences;
+    } else {
+        _sequenceViewController.sequences = @[];
+        _sequenceViewController = nil;
+        _layoutViewController = [[CSLayoutSwitcherViewController alloc] init];
+        _layoutViewController.view = self.layoutGridView;
+        _layoutViewController.isSwitcherView = NO;
+        _layoutViewController.layouts = self.sourceLayouts;
+    }
+}
+
 
 -(void)outlineView:(NSOutlineView *)outlineView didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row
 {
@@ -2964,6 +3040,21 @@
     
     [self.sourceLayouts removeObjectAtIndex:index];
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutDeleted object:to_delete userInfo:nil];
+}
+
+-(void) insertObject:(CSLayoutSequence *)object inLayoutSequencesAtIndex:(NSUInteger)index
+{
+    [self.layoutSequences insertObject:object atIndex:index];
+    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationSequenceAdded object:object userInfo:nil];
+}
+
+
+-(void) removeObjectFromLayoutSequencesAtIndex:(NSUInteger)index
+{
+    id to_delete = [self.layoutSequences objectAtIndex:index];
+    
+    [self.layoutSequences removeObjectAtIndex:index];
+    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationSequenceDeleted object:to_delete userInfo:nil];
 }
 
 
@@ -3641,7 +3732,13 @@
 
 - (IBAction)testSequencer:(id)sender {
 
-    NSLog(@"TESTING SEQUENCER");
+    _testSequence = [[CSLayoutSequence alloc] init];
+
+    _sequenceWindowController = [[CSSequenceEditorWindowController alloc] init];
+    _sequenceWindowController.sequence = _testSequence;
+    [_sequenceWindowController showWindow:nil];
+    return;
+    
     _testSequence = [[CSLayoutSequence alloc] init];
     
     CSSequenceItemLayout *firstseq = [[CSSequenceItemLayout alloc] initWithLayout:self.sourceLayouts.firstObject ];
