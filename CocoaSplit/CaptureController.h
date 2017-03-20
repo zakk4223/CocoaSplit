@@ -390,6 +390,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 
++(CaptureController *)sharedCaptureController;
+
 - (IBAction)openAnimatePopover:(NSButton *)sender;
 
 - (void)saveSettings;
@@ -411,6 +413,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(SourceLayout *)addLayoutFromBase:(SourceLayout *)baseLayout;
 -(SourceLayout *)getLayoutForName:(NSString *)name;
 -(void)addSequenceWithNameDedup:(CSLayoutSequence *)sequence;
+-(SourceLayout *)findLayoutWithName:(NSString *)name;
+
 
 -(void)openAddInputPopover:(NSButton *)sender;
 - (IBAction)createLayoutOrSequenceAction:(id)sender;

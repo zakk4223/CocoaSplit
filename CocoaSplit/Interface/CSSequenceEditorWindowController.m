@@ -39,10 +39,17 @@
     
     CSSequenceItem *newItem = [[sequenceClass alloc] init];
     
-    [self.sequenceItemsArrayController addObject:newItem];
     CSSequenceItemEditorWindowController *newController = [[CSSequenceItemEditorWindowController alloc] init];
     
-    [newController openWithItem:newItem usingCloseBlock:^(NSWindowController *controller) {
+    [newController openWithItem:newItem usingCloseBlock:^(CSSequenceItemEditorWindowController *controller) {
+        
+        if (controller.saveItemRequested)
+        {
+            [self.sequenceItemsArrayController addObject:controller.editItem];
+
+        }
+        
+        controller.editItem = nil;
         if ([_itemConfigWindows containsObject:controller])
         {
             [_itemConfigWindows removeObject:controller];

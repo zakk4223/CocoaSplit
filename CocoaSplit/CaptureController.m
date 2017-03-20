@@ -29,7 +29,7 @@
 #import "CSLayoutEditWindowController.h"
 #import "CSTimedOutputBuffer.h"
 #import "CSAdvancedAudioWindowController.h"
-
+#import "AppDelegate.h"
 
 #import <Python/Python.h>
 
@@ -50,6 +50,12 @@
 
 
 
+
++(CaptureController *)sharedCaptureController
+{
+    AppDelegate *appDel = [NSApp delegate];
+    return appDel.captureController;
+}
 
 
 -(void) cloneSelectedSourceLayout:(NSTableView *)fromTable
@@ -3730,40 +3736,6 @@
 
 }
 
-- (IBAction)testSequencer:(id)sender {
-
-    _testSequence = [[CSLayoutSequence alloc] init];
-
-    _sequenceWindowController = [[CSSequenceEditorWindowController alloc] init];
-    _sequenceWindowController.sequence = _testSequence;
-    [_sequenceWindowController showWindow:nil];
-    return;
-    
-    _testSequence = [[CSLayoutSequence alloc] init];
-    
-    CSSequenceItemLayout *firstseq = [[CSSequenceItemLayout alloc] initWithLayout:self.sourceLayouts.firstObject ];
-    CSSequenceItemLayout *secseq = [[CSSequenceItemLayout alloc] initWithLayout:[self.sourceLayouts objectAtIndex:1]];
-    CSSequenceItemWait *waitseq = [[CSSequenceItemWait alloc] init];
-    firstseq.actionType = kCSLayoutSequenceSwitch;
-    secseq.actionType = kCSLayoutSequenceSwitch;
-    
-    waitseq.waitTime = 2.5;
-
-    [_testSequence.sequenceItems addObject:firstseq];
-    [_testSequence.sequenceItems addObject:waitseq];
-    [_testSequence.sequenceItems addObject:secseq];
-
-    //[_testSequence runSequenceForLayout:self.activePreviewView.sourceLayout];
-    [_testSequence runSequenceForLayout:self.activePreviewView.sourceLayout withCompletionBlock:^{
-        NSLog(@"DONE WITH SEQUENCE");
-    } withItemCompletionBlock:^(CSSequenceItem *item) {
-        NSLog(@"DONE WITH SEQUENCE ITEM %@", item);
-        
-    }];
-    
-    
-    
-}
 
 -(IBAction)hideTransitionView:(id)sender
 {

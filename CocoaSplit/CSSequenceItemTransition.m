@@ -10,6 +10,7 @@
 
 @implementation CSSequenceItemTransition
 
+@synthesize transitionName = _transitionName;
 
 +(NSString *)label
 {
@@ -17,6 +18,29 @@
 }
 
 
+-(void)updateItemDescription
+{
+    NSString *sceneOrNot;
+    
+    
+    if (self.transitionFullScene)
+    {
+        sceneOrNot = @"entire layout";
+    } else {
+        sceneOrNot = @"changed inputs";
+    }
+    
+    if (self.transitionFilter)
+    {
+        self.itemDescription = [NSString stringWithFormat:@"Transition %@, Duration %f using %@", [CIFilter localizedNameForFilterName:self.transitionFilter.name], self.transitionDuration, sceneOrNot];
+    } else if (self.transitionName) {
+        self.itemDescription = [NSString stringWithFormat:@"Transition %@ direction %@, Duration %f using %@", self.transitionName, self.transitionDirection, self.transitionDuration, sceneOrNot];
+    } else {
+    
+        self.itemDescription = @"Remove transition";
+    }
+    
+}
 -(void)clearTransition
 {
     self.transitionName = nil;
@@ -37,6 +61,30 @@
     {
         completionBlock();
     }
+}
+
+
+-(void) setTransitionName:(NSString *)transitionName
+{
+    
+    
+    _transitionName = transitionName;
+    if ([transitionName hasPrefix:@"CI"])
+    {
+        CIFilter *newFilter = [CIFilter filterWithName:transitionName];
+        [newFilter setDefaults];
+        self.transitionFilter = newFilter;
+    } else {
+        self.transitionFilter = nil;
+    }
+}
+
+
+
+
+-(NSString *)transitionName
+{
+    return _transitionName;
 }
 
 

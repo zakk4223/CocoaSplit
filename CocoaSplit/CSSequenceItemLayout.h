@@ -19,8 +19,9 @@ typedef enum layout_sequence_type_t {
 
 
 @property (assign) layout_sequence_type actionType;
-@property (weak) SourceLayout *layout;
+@property (strong) NSString *layoutName;
 
--(instancetype) initWithLayout:(SourceLayout *)layout;
+
+-(instancetype) initWithLayoutName:(NSString *)layoutName;
 
 @end

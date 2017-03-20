@@ -7,15 +7,16 @@
 //
 
 #import "CSSequenceItemLayout.h"
+#import "CaptureController.h"
 
 @implementation CSSequenceItemLayout
 
 
--(instancetype) initWithLayout:(SourceLayout *)layout
+-(instancetype) initWithLayoutName:(NSString *)layoutName
 {
     if (self = [self init])
     {
-        self.layout = layout;
+        self.layoutName = layoutName;
     }
     return self;
 }
@@ -26,16 +27,44 @@
 }
 
 
+
+-(void)updateItemDescription
+{
+    NSString *actionString;
+
+    
+    switch (self.actionType) {
+        case kCSLayoutSequenceMerge:
+            actionString = @"Merge";
+            break;
+        case kCSLayoutSequenceSwitch:
+            actionString = @"Switch to";
+            break;
+        default:
+            actionString = @"???";
+            break;
+    }
+    self.itemDescription = [NSString stringWithFormat:@"%@ layout named %@", actionString, self.layoutName];
+}
+
+
+
 -(void)executeWithSequence:(CSLayoutSequence *)sequencer usingCompletionBlock:(void (^)())completionBlock
 {
     
-    if (self.layout)
+    if (self.layoutName)
     {
-        if (self.actionType == kCSLayoutSequenceMerge)
+        CaptureController *ccont = [CaptureController sharedCaptureController];
+        SourceLayout *myLayout = [ccont findLayoutWithName:self.layoutName];
+        
+        if (myLayout)
         {
-            [sequencer.sourceLayout mergeSourceLayout:self.layout withCompletionBlock:completionBlock];
-        } else if (self.actionType == kCSLayoutSequenceSwitch) {
-            [sequencer.sourceLayout replaceWithSourceLayout:self.layout withCompletionBlock:completionBlock];
+            if (self.actionType == kCSLayoutSequenceMerge)
+            {
+                [sequencer.sourceLayout mergeSourceLayout:myLayout withCompletionBlock:completionBlock];
+            } else if (self.actionType == kCSLayoutSequenceSwitch) {
+                [sequencer.sourceLayout replaceWithSourceLayout:myLayout withCompletionBlock:completionBlock];
+            }
         }
     }
 }

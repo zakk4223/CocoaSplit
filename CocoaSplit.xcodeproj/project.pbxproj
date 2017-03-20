@@ -227,6 +227,10 @@
 		34B5FB531E7C0BDB0078FC51 /* CSSequenceItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FB521E7C0BDB0078FC51 /* CSSequenceItemViewController.m */; };
 		34B5FB571E7C0C4B0078FC51 /* CSSequenceItemWaitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FB551E7C0C4B0078FC51 /* CSSequenceItemWaitViewController.m */; };
 		34B5FB581E7C0C4B0078FC51 /* CSSequenceItemWaitViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34B5FB561E7C0C4B0078FC51 /* CSSequenceItemWaitViewController.xib */; };
+		34B5FB731E7E6E0A0078FC51 /* CSSequenceItemLayoutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FB711E7E6E0A0078FC51 /* CSSequenceItemLayoutViewController.m */; };
+		34B5FB741E7E6E0A0078FC51 /* CSSequenceItemLayoutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34B5FB721E7E6E0A0078FC51 /* CSSequenceItemLayoutViewController.xib */; };
+		34B5FB8E1E7FA2610078FC51 /* CSSequenceItemTransitionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FB8C1E7FA2610078FC51 /* CSSequenceItemTransitionViewController.m */; };
+		34B5FB8F1E7FA2610078FC51 /* CSSequenceItemTransitionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34B5FB8D1E7FA2610078FC51 /* CSSequenceItemTransitionViewController.xib */; };
 		34B5FCDF19BF1C3F00F67D19 /* CreateLayoutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FCDD19BF1C3F00F67D19 /* CreateLayoutViewController.m */; };
 		34B5FCE019BF1C3F00F67D19 /* CreateLayoutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FCDD19BF1C3F00F67D19 /* CreateLayoutViewController.m */; };
 		34B5FCE119BF1C3F00F67D19 /* CreateLayoutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34B5FCDE19BF1C3F00F67D19 /* CreateLayoutViewController.xib */; };
@@ -916,6 +920,12 @@
 		34B5FB541E7C0C4B0078FC51 /* CSSequenceItemWaitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSequenceItemWaitViewController.h; sourceTree = "<group>"; };
 		34B5FB551E7C0C4B0078FC51 /* CSSequenceItemWaitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSequenceItemWaitViewController.m; sourceTree = "<group>"; };
 		34B5FB561E7C0C4B0078FC51 /* CSSequenceItemWaitViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSSequenceItemWaitViewController.xib; sourceTree = "<group>"; };
+		34B5FB701E7E6E0A0078FC51 /* CSSequenceItemLayoutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSequenceItemLayoutViewController.h; sourceTree = "<group>"; };
+		34B5FB711E7E6E0A0078FC51 /* CSSequenceItemLayoutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSequenceItemLayoutViewController.m; sourceTree = "<group>"; };
+		34B5FB721E7E6E0A0078FC51 /* CSSequenceItemLayoutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSSequenceItemLayoutViewController.xib; sourceTree = "<group>"; };
+		34B5FB8B1E7FA2610078FC51 /* CSSequenceItemTransitionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSequenceItemTransitionViewController.h; sourceTree = "<group>"; };
+		34B5FB8C1E7FA2610078FC51 /* CSSequenceItemTransitionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSequenceItemTransitionViewController.m; sourceTree = "<group>"; };
+		34B5FB8D1E7FA2610078FC51 /* CSSequenceItemTransitionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSSequenceItemTransitionViewController.xib; sourceTree = "<group>"; };
 		34B5FCDC19BF1C3F00F67D19 /* CreateLayoutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateLayoutViewController.h; sourceTree = "<group>"; };
 		34B5FCDD19BF1C3F00F67D19 /* CreateLayoutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateLayoutViewController.m; sourceTree = "<group>"; };
 		34B5FCDE19BF1C3F00F67D19 /* CreateLayoutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CreateLayoutViewController.xib; sourceTree = "<group>"; };
@@ -1863,6 +1873,12 @@
 				34B5FB541E7C0C4B0078FC51 /* CSSequenceItemWaitViewController.h */,
 				34B5FB551E7C0C4B0078FC51 /* CSSequenceItemWaitViewController.m */,
 				34B5FB561E7C0C4B0078FC51 /* CSSequenceItemWaitViewController.xib */,
+				34B5FB701E7E6E0A0078FC51 /* CSSequenceItemLayoutViewController.h */,
+				34B5FB711E7E6E0A0078FC51 /* CSSequenceItemLayoutViewController.m */,
+				34B5FB721E7E6E0A0078FC51 /* CSSequenceItemLayoutViewController.xib */,
+				34B5FB8B1E7FA2610078FC51 /* CSSequenceItemTransitionViewController.h */,
+				34B5FB8C1E7FA2610078FC51 /* CSSequenceItemTransitionViewController.m */,
+				34B5FB8D1E7FA2610078FC51 /* CSSequenceItemTransitionViewController.xib */,
 			);
 			name = SequenceItems;
 			path = Interface/SequenceItems;
@@ -2420,6 +2436,7 @@
 				340FE4B815F3417E00E4CE4E /* MainMenu.xib in Resources */,
 				34DA1D3F1BF823E700132486 /* CSNewOutputWindowController.xib in Resources */,
 				34F1EB931BCCA41F00B38E6C /* CSLayoutEditWindowController.xib in Resources */,
+				34B5FB741E7E6E0A0078FC51 /* CSSequenceItemLayoutViewController.xib in Resources */,
 				342B33B61980771200492CB7 /* line.vtsh in Resources */,
 				34938EEF1AE4D24200F3B1CF /* CSFilterChooserWindowController.xib in Resources */,
 				34B5FAED1E76297A0078FC51 /* CSAddSequenceItemPopupViewController.xib in Resources */,
@@ -2433,6 +2450,7 @@
 				344988131893CF0500044259 /* LogWindow.xib in Resources */,
 				34B5FAE81E760BDD0078FC51 /* CSSequenceEditorWindowController.xib in Resources */,
 				34D696FC1871B8F700B50EB6 /* Defaults.plist in Resources */,
+				34B5FB8F1E7FA2610078FC51 /* CSSequenceItemTransitionViewController.xib in Resources */,
 				34348C2B19BDBDC000A122C2 /* PluginManagerWindowController.xib in Resources */,
 				34ABEF3C17C0C2CB00AA5E62 /* advancedPrefPanel.xib in Resources */,
 				346865481CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.xib in Resources */,
@@ -2596,9 +2614,11 @@
 				3414C6AE1CBB9EBF00107C69 /* CSIRCompressor.m in Sources */,
 				34ED8C911B07371C002C0674 /* MIKMIDINoteOnCommand.m in Sources */,
 				346865471CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.m in Sources */,
+				34B5FB8E1E7FA2610078FC51 /* CSSequenceItemTransitionViewController.m in Sources */,
 				3494DF391CCD2DB000E921BF /* TPCircularBuffer+AudioBufferList.c in Sources */,
 				3473D2A61D56391700842EEE /* CSAudioLevelView.m in Sources */,
 				3498D94F1A9472BD00906532 /* CSAudioSwitchControl.m in Sources */,
+				34B5FB731E7E6E0A0078FC51 /* CSSequenceItemLayoutViewController.m in Sources */,
 				3470CD2E1D57D2AA006404D9 /* CSStreamOutputWindowController.m in Sources */,
 				3400A0621BD44DF0003E1828 /* CSInputLibraryItem.m in Sources */,
 				34ED8C831B07371C002C0674 /* MIKMIDIMetaSequenceEvent.m in Sources */,

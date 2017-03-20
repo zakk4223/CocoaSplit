@@ -59,7 +59,7 @@
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn width="234" minWidth="40" maxWidth="1000" id="MjA-ig-3iT">
+                                        <tableColumn width="623" minWidth="40" maxWidth="1000" id="MjA-ig-3iT">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -73,11 +73,11 @@
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
                                                 <tableCellView id="L84-CO-U78">
-                                                    <rect key="frame" x="1" y="1" width="234" height="17"/>
+                                                    <rect key="frame" x="1" y="1" width="623" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TU5-BW-kFq">
-                                                            <rect key="frame" x="0.0" y="0.0" width="234" height="17"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="623" height="17"/>
                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="pM1-ND-SOb">
                                                                 <font key="font" metaFont="system"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -107,7 +107,7 @@
                             </subviews>
                         </clipView>
                         <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="Xqv-p2-ZSg">
-                            <rect key="frame" x="1" y="-14" width="0.0" height="15"/>
+                            <rect key="frame" x="1" y="461" width="628" height="15"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="83P-Kt-8Rg">

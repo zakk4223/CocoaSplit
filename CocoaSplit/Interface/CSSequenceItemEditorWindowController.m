@@ -43,6 +43,7 @@
     if (_itemController)
     {
         [_itemController discardEditing];
+        self.saveItemRequested = NO;
         [self.editItem updateItemDescription];
     }
     [self close];
@@ -54,6 +55,7 @@
     {
         [_itemController commitEditing];
         [self.editItem updateItemDescription];
+        self.saveItemRequested = YES;
 
     }
     

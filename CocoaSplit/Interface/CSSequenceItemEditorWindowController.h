@@ -17,13 +17,14 @@
     
 }
 
+@property (assign) bool saveItemRequested;
 
-@property (weak) CSSequenceItem *editItem;
+@property (strong) CSSequenceItem *editItem;
 
 @property (weak) IBOutlet NSView *mainView;
 
 
--(void)openWithItem:(CSSequenceItem *)editItem usingCloseBlock:(void (^)(NSWindowController *controller))closeBlock;
+-(void)openWithItem:(CSSequenceItem *)editItem usingCloseBlock:(void (^)(CSSequenceItemEditorWindowController *controller))closeBlock;
 
 - (IBAction)cancelEditClicked:(id)sender;
 - (IBAction)saveEditClicked:(id)sender;
