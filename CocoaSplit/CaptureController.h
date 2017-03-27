@@ -418,6 +418,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 -(void)openAddInputPopover:(NSButton *)sender;
 - (IBAction)createLayoutOrSequenceAction:(id)sender;
+-(bool)deleteSequence:(CSLayoutSequence *)toDelete;
 
 - (IBAction)openLayoutPopover:(NSButton *)sender;
 -(void)openLayoutPopover:(NSButton *)sender forLayout:(SourceLayout *)layout;

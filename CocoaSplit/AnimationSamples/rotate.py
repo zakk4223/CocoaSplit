@@ -7,11 +7,11 @@ animation_inputs = ["source1", "source2"]
 animation_params = ["degrees"]
 
 
-def do_animation(inputs, duration):
+def do_animation():
 
     NSLog("RUNNING ANIMATION")
-    source1 = inputs['source1']
-    source2 = inputs['source2']
+    source1 = inputByName('source1')
+    source2 = inputsByName('source2')
 
     rotDegrees = float(inputs['degrees'])
 

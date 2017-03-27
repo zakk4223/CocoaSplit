@@ -2,6 +2,7 @@
 Animation runner base
 """
 import objc
+from types import ModuleType
 from Foundation import *
 #from CoreGraphics import *
 from Quartz import CACurrentMediaTime,CATransaction,CGPathRef,CGPathAddLines,CGPathCloseSubpath,CGPathRelease,CGPathCreateMutable
@@ -9,6 +10,7 @@ from pluginbase import PluginBase
 import math
 import CSAnimationBlock
 from CSAnimation import *
+from Foundation import NSObject,NSLog,NSApplication
 import sys
 import os
 
@@ -118,7 +120,7 @@ class CSAnimationInput(object):
         if withDuration != None:
             cab.setDuration_(withDuration)
         else:
-            cab.setDuration_(CSAnimationBlock.threadData.current_frame.duration)
+            cab.setDuration_(CSAnimationBlock.current_frame().duration)
         return cab
     
 
@@ -128,7 +130,7 @@ class CSAnimationInput(object):
         if withDuration != None:
             kanim.setDuration_(withDuration)
         else:
-            kanim.setDuration_(CSAnimationBlock.threadData.current_frame.duration)
+            kanim.setDuration_(CSAnimationBlock.current_frame().duration)
         kanim.setCalculationMode_('paced')
         kanim.setRotationMode_('autoReverse')
         
@@ -193,7 +195,7 @@ class CSAnimationInput(object):
 
     def add_animation(self, animation, target, keyPath):
         animation.cs_input = self
-        CSAnimationBlock.threadData.current_frame.add_animation(animation, target, keyPath)
+        CSAnimationBlock.current_frame().add_animation(animation, target, keyPath)
         return animation
     
 
@@ -254,14 +256,14 @@ class CSAnimationInput(object):
         
         Like the global waitAnimation() you can specify a keyword argument of 'label' to wait on a specific animation.
         """
-        return CSAnimationBlock.threadData.current_frame.waitAnimation(duration, self, **kwargs)
+        return CSAnimationBlock.current_frame().waitAnimation(duration, self, **kwargs)
     
     def wait(self, duration=0):
         """
         Wait duration seconds before starting any new animations on this input. As described previously in waitAnimation() this 
         only modifies the timing of animations on THIS input.
         """
-        return CSAnimationBlock.threadData.current_frame.wait(duration, self)
+        return CSAnimationBlock.current_frame().wait(duration, self)
     
     def scaleLayer(self, scaleVal, duration=None, **kwargs):
         """
@@ -516,7 +518,7 @@ class CSAnimationInput(object):
         #we want to move our center to root center. do anchor point correction..
         new_x = rootWidth * 0.5 - self.animationLayer.frame().size.width * 0.5
         new_y = rootHeight * 0.5 - self.animationLayer.frame().size.height * 0.5
-        return self.moveTo(new_x, new_y, duration, **kwargs)
+        return self.moveTo((new_x, new_y), duration, **kwargs)
     
     
     def moveYTo(self, move_y, duration=None, **kwargs):
@@ -785,10 +787,58 @@ class CSAnimationInput(object):
 
 
 
+def dummyCompletion():
+    return None
+
 
 def wait(duration=0):
-    CSAnimationBlock.wait(duration, None)
+    CSAnimationBlock.wait(duration)
 
+
+def setBasicTransition(name, direction=None, duration=0.25, **kwargs):
+    my_layout = CSAnimationBlock.current_frame().layout
+    my_layout.setTransitionName_(name)
+    my_layout.setTransitionDirection_(direction)
+    my_layout.setTransitionDuration_(duration)
+
+
+def layoutByName(name):
+    my_app = NSApplication.sharedApplication()
+    
+    app_delegate = my_app.delegate()
+    cap_controller = app_delegate.captureController()
+    layout = cap_controller.findLayoutWithName_(name)
+    return layout
+
+def switchToLayout(name):
+    layout = layoutByName(name)
+    if layout:
+        target_layout = CSAnimationBlock.current_frame().layout
+        target_layout.replaceWithSourceLayout_(layout)
+        if (target_layout.transitionName() or target_layout.transitionFilter()) and target_layout.transitionDuration() > 0:
+            dummy_animation = CSAnimation(None, None, None)
+            dummy_animation.duration = target_layout.transitionDuration()
+            CSAnimationBlock.current_frame().add_animation(dummy_animation, None, None)
+
+
+def mergeLayout(name):
+    layout = layoutByName(name)
+    if layout:
+        target_layout = CSAnimationBlock.current_frame().layout
+        target_layout.mergeSourceLayout_(layout)
+        if (target_layout.transitionName() or target_layout.transitionFilter()) and target_layout.transitionDuration() > 0:
+            dummy_animation = CSAnimation(None, None, None)
+            dummy_animation.duration = target_layout.transitionDuration()
+            CSAnimationBlock.current_frame().add_animation(dummy_animation, None, None)
+
+
+def inputByName(name):
+    
+    layout = CSAnimationBlock.current_frame().layout
+    real_input = layout.inputForName_(name)
+    if real_input:
+        return CSAnimationInput(real_input)
+    return None
 
 class CSAnimationRunnerObj(NSObject):
     
@@ -841,6 +891,81 @@ class CSAnimationRunnerObj(NSObject):
         return ret
 
 
+    def beginAnimation(self, duration=0.25):
+        CSAnimationBlock.beginAnimation(duration)
+        CSAnimationBlock.current_frame().layout = self.layout
+    
+
+    @objc.signature('v@:@@')
+    def runAnimation_forLayout_(self,animation_string, layout):
+    
+        animation = ModuleType('cs_fromstring_animation', '')
+        exec(animation_string, animation.__dict__)
+        CSAnimationBlock.beginAnimation()
+        CSAnimationBlock.current_frame().layout = layout
+        
+        animation.wait = CSAnimationBlock.wait
+        animation.waitAnimation = CSAnimationBlock.waitAnimation
+        animation.animationDuration = CSAnimationBlock.animationDuration
+        animation.inputByName = inputByName
+        animation.setCompletionBlock = CSAnimationBlock.setCompletionBlock
+        animation.beginAnimation = self.beginAnimation
+        animation.setCompletionBlock = CSAnimationBlock.setCompletionBlock
+        animation.commitAnimation = CSAnimationBlock.commitAnimation
+        animation.layoutByName = layoutByName
+        animation.switchToLayout = switchToLayout
+        animation.mergeLayout = mergeLayout
+        animation.setBasicTransition = setBasicTransition
+        
+        self.baseLayer = layout.rootLayer()
+        self.layout = layout
+        
+        
+        #try:
+        CSAnimationBlock.setCompletionBlock(dummyCompletion)
+        
+        animation.do_animation()
+        #except:
+        CSAnimationBlock.commitAnimation()
+            #else:
+            #CSAnimationBlock.commitAnimation()
+
+    
+    
+    @objc.signature('v@:@@@')
+    def runAnimation_forLayout_withSuperlayer_(self, pluginName, layout, superlayer):
+        animation = plugin_source.load_plugin(pluginName)
+        duration = None
+        
+        reload(animation)
+        CSAnimationBlock.beginAnimation(duration)
+        CSAnimationBlock.current_frame().layout = layout
+        
+        animation.wait = CSAnimationBlock.wait
+        animation.waitAnimation = CSAnimationBlock.waitAnimation
+        animation.animationDuration = CSAnimationBlock.animationDuration
+        animation.inputByName = inputByName
+        animation.setCompletionBlock = CSAnimationBlock.setCompletionBlock
+        animation.beginAnimation = self.beginAnimation
+        animation.setCompletionBlock = CSAnimationBlock.setCompletionBlock
+        animation.commitAnimation = CSAnimationBlock.commitAnimation
+        animation.layoutByName = layoutByName
+        animation.switchToLayout = switchToLayout
+        animation.mergeLayout = mergeLayout
+        animation.setBasicTransition = setBasicTransition
+        
+        self.baseLayer = layout.rootLayer()
+        self.layout = layout
+        
+
+            #try:
+        CSAnimationBlock.setCompletionBlock(dummyCompletion)
+        
+        animation.do_animation()
+            #except:
+        CSAnimationBlock.commitAnimation()
+            #else:
+            #CSAnimationBlock.commitAnimation()
 
     @objc.signature('v@:@@@')
     def runAnimation_forInput_withSuperlayer_(self, pluginName,input_or_dict,superlayer):
@@ -869,16 +994,16 @@ class CSAnimationRunnerObj(NSObject):
 
         animation = plugin_source.load_plugin(pluginName)
         reload(animation)
-        CSAnimationBlock.threadData.superLayer = superlayer
 
 
         CSAnimationBlock.beginAnimation(duration)
         animation.wait = CSAnimationBlock.wait
         animation.waitAnimation = CSAnimationBlock.waitAnimation
         animation.animationDuration = CSAnimationBlock.animationDuration
-
+        animation.inputByName = CSAnimationBlock.inputByName
+        
         try:
-            animation.do_animation(input_arg, duration)
+            animation.do_animation()
         except:
             CSAnimationBlock.commitAnimation()
             raise

@@ -127,7 +127,10 @@
 -(CSAnimationItem *)animationForUUID:(NSString *)uuid;
 -(void)clearAnimations;
 -(void)runSingleAnimation:(CSAnimationItem *)animation withCompletionBlock:(void (^)(void))completionBlock;
+-(void)runAnimationString:(NSString *)animationCode withCompletionBlock:(void (^)(void))completionBlock;
+
 -(void)replaceWithSourceLayout:(SourceLayout *)layout withCompletionBlock:(void (^)(void))completionBlock;
+-(InputSource *)inputForName:(NSString *)name;
 
 
 

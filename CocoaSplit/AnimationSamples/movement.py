@@ -4,10 +4,10 @@ animation_description = "Demonstration of some movement animations"
 animation_inputs = ["source1", "source2"]
 
 
-def do_animation(inputs, duration):
+def do_animation():
 
-    source1 = inputs['source1']
-    source2 = inputs['source2']
+    source1 = inputByName('source1')
+    source2 = inputByName('source2')
 
 
     #move to bottom left corner

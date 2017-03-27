@@ -21,6 +21,9 @@ class CSAnimation:
         self.completion_handler = None
         self.internal_completion_handler = None
         self.toValue = None
+        self.baseLayer = None
+        self.layout = None
+        
         
         if animation:
             animation.setRemovedOnCompletion_(False)

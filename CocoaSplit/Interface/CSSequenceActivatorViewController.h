@@ -11,5 +11,9 @@
 
 @interface CSSequenceActivatorViewController : NSViewController
 @property (strong) NSArray *sequences;
+@property (strong) NSMenu *sequenceMenu;
+
+-(void)showSequenceMenu:(NSEvent *)clickEvent forView:(CSSequenceActivatorView *)view;
+
 
 @end

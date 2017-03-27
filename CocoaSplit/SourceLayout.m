@@ -196,6 +196,27 @@
 }
 
 
+-(void)runAnimationString:(NSString *)animationCode withCompletionBlock:(void (^)(void))completionBlock
+{
+    if (!animationCode)
+    {
+        return;
+    }
+    
+    NSMutableDictionary *animMap = @{@"animationString": animationCode}.mutableCopy;
+    if (completionBlock)
+    {
+        [animMap setObject:completionBlock forKey:@"completionBlock"];
+    }
+    
+    //[self doAnimation:animMap];
+    
+    NSThread *runThread = [[NSThread alloc] initWithTarget:self selector:@selector(doAnimation:) object:animMap];
+    [runThread start];
+
+    
+    
+}
 -(void)runSingleAnimation:(CSAnimationItem *)animation withCompletionBlock:(void (^)(void))completionBlock
 {
     if (!animation)
@@ -292,6 +313,8 @@
     NSString *modName = threadDict[@"moduleName"];
     NSDictionary *inpMap = threadDict[@"inputs"];
     CALayer *rootLayer = threadDict[@"rootLayer"];
+    NSString *animationCode = threadDict[@"animationString"];
+    
     void (^completionBlock)(void) = [threadDict objectForKey:@"completionBlock"];
     
     
@@ -302,7 +325,13 @@
             [CATransaction begin];
             [CATransaction setCompletionBlock:completionBlock];
         }
-        [runner runAnimation:modName forInput:inpMap withSuperlayer:rootLayer];
+        
+        if (animationCode)
+        {
+            [runner runAnimation:animationCode forLayout:self];
+        } else {
+            [runner runAnimation:modName forLayout:self  withSuperlayer:rootLayer];
+        }
     }
     @catch (NSException *exception) {
         NSLog(@"Animation module %@ failed with exception: %@: %@", modName, [exception name], [exception reason]);
@@ -1846,6 +1875,19 @@
         if ([item.uuid isEqualToString:uuid])
         {
             return item;
+        }
+    }
+    return nil;
+}
+
+
+-(InputSource *)inputForName:(NSString *)name
+{
+    for (InputSource *tSrc in self.sourceList)
+    {
+        if (tSrc.name && [tSrc.name isEqualToString:name])
+        {
+            return tSrc;
         }
     }
     return nil;

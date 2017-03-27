@@ -337,6 +337,27 @@
 }
 
 
+-(bool)deleteSequence:(CSLayoutSequence *)toDelete
+{
+    if (toDelete)
+    {
+        if ([self actionConfirmation:[NSString stringWithFormat:@"Really delete %@?", toDelete.name] infoString:nil])
+        {
+            
+            
+            NSInteger seqIdx = [self.layoutSequences indexOfObject:toDelete];
+            if (seqIdx != NSNotFound)
+            {
+                [self removeObjectFromLayoutSequencesAtIndex:seqIdx];
+            }
+            return YES;
+        }
+    }
+    return NO;
+    
+}
+
+
 -(CSLayoutSequence *)findSequenceWithName:(NSString *)name
 {
     for(CSLayoutSequence *seq in self.layoutSequences)

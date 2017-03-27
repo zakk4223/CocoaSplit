@@ -43,7 +43,10 @@
 
 -(void)runSequenceForLayout:(SourceLayout *)layout
 {
-    [self runSequenceForLayout:layout withCompletionBlock:nil withItemCompletionBlock:nil];
+    [self runSequenceForLayout:layout withCompletionBlock:nil withItemCompletionBlock:^(CSSequenceItem *item) {
+        NSLog(@"DONE WITH ITEM %@", item);
+    }];
+    
 }
 
 
@@ -51,9 +54,16 @@
 {
     self.sourceLayout = layout;
     
+    if (self.animationCode)
+    {
+        [self.sourceLayout runAnimationString:self.animationCode withCompletionBlock:^{
+            NSLog(@"Finished running animation");
+        }];
+    }
+    /*
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self runItemAtIndex:0 withCompletionBlock:completionBlock withItemCompletionBlock:itemCompletionBlock];
-    });
+    });*/
     
 }
 

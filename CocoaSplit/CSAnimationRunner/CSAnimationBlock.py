@@ -3,11 +3,11 @@ import PyObjCTools.AppHelper
 from Foundation import NSObject,NSLog
 from Quartz import CACurrentMediaTime,CATransaction
 from CSAnimation import *
-from threading import local
-
-threadData = local()
 
 
+
+def current_frame():
+  return CATransaction.valueForKey_("__CS_BLOCK_OBJECT__")
 
 class CSAnimationDelegate(NSObject):
 
@@ -19,15 +19,27 @@ class CSAnimationDelegate(NSObject):
 
 class AnimationBlock:
     def __init__(self, duration = 0.0):
+        cframe = current_frame()
+        if cframe:
+            self.layout = cframe.layout
+        else:
+            self.layout = None
+        
         CATransaction.begin()
+        CATransaction.setValue_forKey_(self, "__CS_BLOCK_OBJECT__")
         self.animations = []
         self.duration = duration
         self.max_animation_time = 0.0
         self.beginTime =  0.0
+        self.real_completion_block = None
         if not self.duration:
             self.duration = 0.25
 
 
+
+    def set_completion_block(self, completion_callable):
+        if completion_callable:
+            CATransaction.setCompletionBlock_(completion_callable)
 
     def add_waitmarker(self, duration=0, target=None, **kwargs):
         new_mark = CSAnimation(None, "__CS_WAIT_MARK", None, **kwargs)
@@ -58,7 +70,7 @@ class AnimationBlock:
 
         target_map = {}
         anim_map = {}
-        slayer_time = self.baseLayer.convertTime_fromLayer_(add_time, None)
+        slayer_time = self.layout.rootLayer().convertTime_fromLayer_(add_time, None)
 
         total_time = 0.0
         c_begin = slayer_time
@@ -101,7 +113,7 @@ class AnimationBlock:
                     target_map[anim.cs_input]['c_begin'] = real_begin
                 else:
                     real_begin = t_begin
-            
+            NSLog("REAL BEGIN %f", real_begin)
             a_duration = anim.apply(real_begin)
             if not anim.ignore_wait:
                 latest_end_time = max(latest_end_time, real_begin+anim.duration)
@@ -113,41 +125,25 @@ class AnimationBlock:
 
 
 
+
+def setCompletionBlock(completion_block):
+    current_frame().set_completion_block(completion_block)
+
 def wait(duration=0):
-    global threadData
-    threadData.current_frame.wait(duration, None)
+    current_frame().wait(duration, None)
 
 def waitAnimation(duration=0, **kwargs):
-    global threadData
-    threadData.current_frame.waitAnimation(duration, None, **kwargs)
+    current_frame().waitAnimation(duration, None, **kwargs)
 
 def animationDuration():
-    global threadData
-    return threadData.current_frame.duration
+    current_frame().duration
 
 def beginAnimation(duration=0.25):
-    global threadData
-
-    if not hasattr(threadData, 'superLayer'):
-        threadData.superLayer = None
-    if not hasattr(threadData, 'current_frame'):
-        threadData.current_frame = None
-    if not hasattr(threadData, 'frames'):
-        threadData.frames = []
 
     new_frame = AnimationBlock(duration)
-    new_frame.baseLayer = threadData.superLayer
-    if threadData.current_frame:
-        frames.append(threadData.current_frame)
-    threadData.current_frame = new_frame
 
 
 def commitAnimation():
-    global threadData
-    threadData.current_frame.commit()
+    current_frame().commit()
 
-    if not threadData.frames:
-        threadData.current_frame = None
-    else:
-        threadData.current_frame = threadData.frames.pop()
 

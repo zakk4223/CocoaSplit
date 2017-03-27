@@ -10,6 +10,7 @@
 #import "CSSequenceItemLayout.h"
 #import "CSSequenceItemTransition.h"
 #import "CSSequenceItemWait.h"
+#import "CSSequenceItemAnimation.h"
 
 
 @interface CSAddSequenceItemPopupViewController ()
@@ -66,6 +67,7 @@
     [ret addObject:[CSSequenceItemLayout class]];
     [ret addObject:[CSSequenceItemTransition class]];
     [ret addObject:[CSSequenceItemWait class]];
+    [ret addObject:[CSSequenceItemAnimation class]];
     
 
     _sequenceItemTypes = ret;

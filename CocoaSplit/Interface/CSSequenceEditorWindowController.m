@@ -56,6 +56,7 @@
         }
     }];
     
+    
     [_itemConfigWindows addObject:newController];
     //Pop up configuration window with item.
     

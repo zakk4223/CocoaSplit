@@ -21,6 +21,7 @@
 @property (strong) NSString *name;
 @property (strong) NSMutableArray *sequenceItems;
 @property (weak) SourceLayout *sourceLayout;
+@property (strong) NSString *animationCode;
 
 -(void)runSequenceForLayout:(SourceLayout *)layout;
 -(void)runSequenceForLayout:(SourceLayout *)layout withCompletionBlock:(void (^)())completionBlock withItemCompletionBlock:(void (^)(CSSequenceItem *item))itemCompletionBlock;

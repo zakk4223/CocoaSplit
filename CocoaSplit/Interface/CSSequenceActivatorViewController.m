@@ -37,25 +37,6 @@
 }
 
 
-/*
--(void)layoutSaved:(NSNotification *)notification
-{
-    SourceLayout *layout = notification.object;
-    
-    CSLayoutSwitcherView *layoutView = [self findViewForLayout:layout];
-    if (layoutView)
-    {
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            [layout clearSourceList];
-            [layout restoreSourceList:nil];
-            [layoutView setNeedsLayout:YES];
-            
-        });
-    }
-}
-*/
 
 -(void)sequenceAdded:(NSNotification *)notification
 {
@@ -66,7 +47,6 @@
 
 -(void)sequenceDeleted:(NSNotification *)notification
 {
-    SourceLayout *layout = notification.object;
     
     self.sequences = nil;
 }
@@ -129,7 +109,6 @@
             
             
             [self.view addSubview:newView];
-            NSLog(@"ADDED %@ TO %@", newView, self.view);
             newView.layoutSequence = sequence;
             newView.controller = self;
         }
@@ -138,6 +117,42 @@
     
     [self.view setNeedsLayout:YES];
     
+}
+
+
+-(void)deleteSequence:(NSMenuItem *) sender
+{
+    
+    
+    CaptureController *controller = [CaptureController sharedCaptureController];
+    CSLayoutSequence *toDelete = sender.representedObject;
+    
+    [controller deleteSequence:toDelete];
+
+}
+
+
+
+-(void)buildSequenceMenuForView:(CSSequenceActivatorView *)view
+{
+    
+    NSInteger idx = 0;
+    
+    NSMenuItem *tmp;
+    CSLayoutSequence *forSequence = view.layoutSequence;
+    
+    self.sequenceMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
+    tmp = [self.sequenceMenu insertItemWithTitle:@"Delete" action:@selector(deleteSequence:) keyEquivalent:@"" atIndex:idx++];
+    tmp.target = self;
+    tmp.representedObject = forSequence;
+    
+}
+
+-(void)showSequenceMenu:(NSEvent *)clickEvent forView:(CSSequenceActivatorView *)view
+{
+    NSPoint tmp = [self.view convertPoint:clickEvent.locationInWindow fromView:nil];
+    [self buildSequenceMenuForView:view];
+    [self.sequenceMenu popUpMenuPositioningItem:self.sequenceMenu.itemArray.firstObject atLocation:tmp inView:self.view];
 }
 
 

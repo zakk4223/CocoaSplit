@@ -8,7 +8,7 @@
 
 #import "CSSequenceActivatorView.h"
 #import "CSSequenceActivatorViewController.h"
-
+#import "CaptureController.h"
 
 @implementation CSSequenceTextView
 
@@ -59,17 +59,24 @@
     return newLayer;
 }
 
-/*
 -(void)rightMouseDown:(NSEvent *)event
 {
-    [self.controller showLayoutMenu:event forView:self];
+    [self.controller showSequenceMenu:event forView:self];
 }
+     
 
 
 -(void)mouseDown:(NSEvent *)event
 {
     self.layer.opacity = 0.5f;
-    if (self.sourceLayout)
+    
+    if (self.layoutSequence)
+    {
+        CaptureController *captureController = [CaptureController sharedCaptureController];
+        [self.layoutSequence runSequenceForLayout:captureController.selectedLayout];
+    }
+    /*
+    if (self.layoutSequence)
     {
         AppDelegate *appDel = NSApp.delegate;
         
@@ -80,7 +87,7 @@
         } else {
             [controller switchToLayout:self.sourceLayout];
         }
-    }
+    }*/
     
 }
 
@@ -89,7 +96,6 @@
     self.layer.opacity = 1.0f;
 }
 
-*/
 -(CSLayoutSequence *)layoutSequence
 {
     return _layoutSequence;
