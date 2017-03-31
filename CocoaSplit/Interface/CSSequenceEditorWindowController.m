@@ -9,6 +9,10 @@
 #import "CSSequenceEditorWindowController.h"
 #import "CSAddSequenceItemPopupViewController.h"
 #import "CSSequenceItem.h"
+#import "CSSequenceItemLayout.h"
+#import "CSSequenceItemTransition.h"
+#import "CSSequenceItemWait.h"
+
 #import "AppDelegate.h"
 
 @interface CSSequenceEditorWindowController ()
@@ -28,42 +32,39 @@
     if (self = [self initWithWindowNibName:@"CSSequenceEditorWindowController"])
     {
         _itemConfigWindows = [NSMutableArray array];
+        _itemClasses = [NSMutableArray array];
+        
+        [_itemClasses addObject:[CSSequenceItemLayout class]];
+        [_itemClasses addObject:[CSSequenceItemTransition class]];
+        [_itemClasses addObject:[CSSequenceItemWait class]];
     }
     
     return self;
 }
 
 
--(void)addSequenceItemByClass:(Class) sequenceClass
+-(void)addSequenceItem:(CSSequenceItem *)newItem
 {
     
-    CSSequenceItem *newItem = [[sequenceClass alloc] init];
     
-    CSSequenceItemEditorWindowController *newController = [[CSSequenceItemEditorWindowController alloc] init];
     
-    [newController openWithItem:newItem usingCloseBlock:^(CSSequenceItemEditorWindowController *controller) {
-        
-        if (controller.saveItemRequested)
+    if (newItem)
+    {
+        NSString *newString = [newItem generateItemScript];
+        if (newString)
         {
-            [self.sequenceItemsArrayController addObject:controller.editItem];
-
+            NSString *stringWithNL = [NSString stringWithFormat:@"%@\n", newString];
+            [self.sequenceTextView.textStorage appendAttributedString:[[NSAttributedString alloc] initWithString:stringWithNL]];
+            
         }
         
-        controller.editItem = nil;
-        if ([_itemConfigWindows containsObject:controller])
-        {
-            [_itemConfigWindows removeObject:controller];
-        }
-    }];
+    }
     
-    
-    [_itemConfigWindows addObject:newController];
-    //Pop up configuration window with item.
-    
+    [_addStepPopover close];
 }
 
 
--(void)openAddStepPopover:(id)sender sourceRect:(NSRect)sourceRect
+-(IBAction)openAddStepPopover:(NSButton *)sender
 {
     CSAddSequenceItemPopupViewController *vc;
     if (!_addStepPopover)
@@ -73,9 +74,13 @@
         _addStepPopover.behavior = NSPopoverBehaviorTransient;
     }
     
+    Class sequenceClass = [_itemClasses objectAtIndex:sender.tag];
+    
+    CSSequenceItem *newItem = [[sequenceClass alloc] init];
+    
     //if (!_addInputpopOver.contentViewController)
     {
-        vc = [[CSAddSequenceItemPopupViewController alloc] init];
+        vc = [[CSAddSequenceItemPopupViewController alloc] initWithSequenceItem:newItem];
         //vc.addOutput = ^void(Class outputClass) {
        //     [self outputPopupButtonAction:outputClass];
       //  };
@@ -85,13 +90,13 @@
         //_addInputpopOver.delegate = vc;
     }
     
-    vc.addSequenceItem = ^(Class sequenceItem) {
+    vc.addSequenceItem = ^(CSSequenceItem *sequenceItem) {
     
-        [self addSequenceItemByClass:sequenceItem];
+        [self addSequenceItem:sequenceItem];
     };
     
     
-    [_addStepPopover showRelativeToRect:sourceRect ofView:self.window.contentView preferredEdge:NSMaxXEdge];
+    [_addStepPopover showRelativeToRect:sender.frame ofView:self.window.contentView preferredEdge:NSMaxXEdge];
 }
 
 
@@ -106,20 +111,6 @@
 }
 
 
-- (IBAction)itemSegmentControlClicked:(NSSegmentedControl *)sender {
-
-    NSPoint mousePoint = [self.window mouseLocationOutsideOfEventStream];
-    NSRect sourceRect = NSMakeRect(mousePoint.x, mousePoint.y, 2.0f, 2.0f);
-
-    switch (sender.tag) {
-        case 0:
-            [self openAddStepPopover:sender sourceRect:sourceRect];
-            break;
-            
-        default:
-            break;
-    }
-}
 - (IBAction)saveButtonAction:(id)sender
 {
     [self.sequenceObjectController commitEditing];

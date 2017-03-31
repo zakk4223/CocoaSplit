@@ -48,6 +48,23 @@
 }
 
 
+-(NSString *)generateItemScript
+{
+    if (!self.layoutName)
+    {
+        return nil;
+    }
+    
+    if (self.actionType == kCSLayoutSequenceMerge)
+    {
+        return [NSString stringWithFormat:@"mergeLayout('%@')", self.layoutName];
+    } else if (self.actionType == kCSLayoutSequenceSwitch) {
+        return [NSString stringWithFormat:@"switchToLayout('%@')", self.layoutName];
+    }
+    
+    return nil;
+}
+
 
 -(void)executeWithSequence:(CSLayoutSequence *)sequencer usingCompletionBlock:(void (^)())completionBlock
 {

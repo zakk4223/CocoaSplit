@@ -10,5 +10,6 @@
 
 @interface CSSequenceItemWait : CSSequenceItem
 @property (assign) float waitTime;
+@property (assign) bool waitForAnimations;
 
 @end

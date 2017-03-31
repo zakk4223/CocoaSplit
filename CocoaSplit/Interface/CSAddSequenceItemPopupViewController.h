@@ -7,16 +7,24 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "CSSequenceItem.h"
+#import "CSSequenceItemViewController.h"
 
 @interface CSAddSequenceItemPopupViewController : NSViewController
 {
-    NSArray *_sequenceItemTypes;
+    CSSequenceItemViewController *_itemController;
+
 }
 
-@property (nonatomic,copy) void (^addSequenceItem)(Class sequenceItemClass);
+@property (weak) IBOutlet NSView *itemConfigView;
 
-@property (readonly) NSArray *sequenceItemTypes;
-@property (weak) IBOutlet NSTableView *sequenceItemTypesTableView;
-- (IBAction)sequenceItemClicked:(id)sender;
+@property (nonatomic,copy) void (^addSequenceItem)(CSSequenceItem *sequenceItemClass);
+
+@property (strong) CSSequenceItem *editItem;
+
+- (IBAction)saveButtonClicked:(id)sender;
+- (IBAction)cancelButtonClicked:(id)sender;
+
+-(instancetype)initWithSequenceItem:(CSSequenceItem *)item;
 
 @end

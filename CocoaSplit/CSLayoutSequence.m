@@ -56,7 +56,24 @@
     
     if (self.animationCode)
     {
-        [self.sourceLayout runAnimationString:self.animationCode withCompletionBlock:^{
+        NSMutableString *realCode = [NSMutableString string];
+        
+        NSRegularExpression *method_regex = [NSRegularExpression regularExpressionWithPattern:@"def\\s+run_script" options:0 error:nil];
+        
+        if ([method_regex numberOfMatchesInString:_animationCode options:0 range:NSMakeRange(0, self.animationCode.length)] == 0)
+        {
+            [realCode appendString:@"def run_script():\n"];
+            [self.animationCode enumerateLinesUsingBlock:^(NSString * _Nonnull line, BOOL * _Nonnull stop) {
+                [realCode appendString:[NSString stringWithFormat:@"\t%@\n", line]];
+                
+            }];
+        } else {
+            realCode = self.animationCode.mutableCopy;
+        }
+        
+        NSLog(@"REAL CODE IS %@", realCode);
+        
+        [self.sourceLayout runAnimationString:realCode withCompletionBlock:^{
             NSLog(@"Finished running animation");
         }];
     }

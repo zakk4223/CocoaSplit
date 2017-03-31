@@ -40,6 +40,12 @@
 }
 
 
+-(NSString *)generateItemScript
+{
+    return nil;
+}
+
+
 -(void)executeWithSequence:(CSLayoutSequence *)sequencer usingCompletionBlock:(void (^)())completionBlock
 {
     completionBlock();

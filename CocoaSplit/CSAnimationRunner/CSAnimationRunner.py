@@ -801,6 +801,17 @@ def setBasicTransition(name, direction=None, duration=0.25, **kwargs):
     my_layout.setTransitionDirection_(direction)
     my_layout.setTransitionDuration_(duration)
 
+    if 'full_scene' in kwargs:
+        full_scene = kwargs['full_scene']
+        my_layout.setTransitionFullScene_(full_scene)
+
+
+def clearTransition():
+    my_layout = CSAnimationBlock.current_frame().layout
+    my_layout.setTransitionName_(None)
+    my_layout.setTransitionDuration_(0)
+    my_layout.setTransitionFilter_(None)
+
 
 def layoutByName(name):
     my_app = NSApplication.sharedApplication()
@@ -830,6 +841,7 @@ def mergeLayout(name):
             dummy_animation = CSAnimation(None, None, None)
             dummy_animation.duration = target_layout.transitionDuration()
             CSAnimationBlock.current_frame().add_animation(dummy_animation, None, None)
+
 
 
 def inputByName(name):
@@ -924,7 +936,7 @@ class CSAnimationRunnerObj(NSObject):
         #try:
         CSAnimationBlock.setCompletionBlock(dummyCompletion)
         
-        animation.do_animation()
+        animation.run_script()
         #except:
         CSAnimationBlock.commitAnimation()
             #else:
@@ -961,7 +973,7 @@ class CSAnimationRunnerObj(NSObject):
             #try:
         CSAnimationBlock.setCompletionBlock(dummyCompletion)
         
-        animation.do_animation()
+        animation.run_script()
             #except:
         CSAnimationBlock.commitAnimation()
             #else:

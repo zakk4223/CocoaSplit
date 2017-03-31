@@ -11,149 +11,168 @@
 #import "CaptureController.h"
 
 @interface CSSequenceActivatorViewController ()
-
-@end
+    
+    @end
 
 @implementation CSSequenceActivatorViewController
-@synthesize sequences = _sequences;
-
-
+    @synthesize sequences = _sequences;
+    
+    
 -(instancetype) init
-{
-    if (self = [super init])
     {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sequenceDeleted:) name:CSNotificationSequenceDeleted object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sequenceAdded:) name:CSNotificationSequenceAdded object:nil];
-        
-        
+        if (self = [super init])
+        {
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sequenceDeleted:) name:CSNotificationSequenceDeleted object:nil];
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sequenceAdded:) name:CSNotificationSequenceAdded object:nil];
+            
+            
+        }
+        return self;
     }
-    return self;
-}
-
-
+    
+    
 -(void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-
-
+    {
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+    }
+    
+    
+    
 -(void)sequenceAdded:(NSNotification *)notification
-{
-    NSLog(@"SEQUNCE ADDED!!");
-    self.sequences = nil;
-}
-
-
+    {
+        self.sequences = nil;
+    }
+    
+    
 -(void)sequenceDeleted:(NSNotification *)notification
-{
+    {
+        
+        self.sequences = nil;
+    }
     
-    self.sequences = nil;
-}
-
-
-
+    
+    
 -(CSSequenceActivatorView *)findViewForSequence:(CSLayoutSequence *)sequence
-{
-    for (CSSequenceActivatorView *view in self.view.subviews)
     {
-        if (view.layoutSequence && view.layoutSequence == sequence)
+        for (CSSequenceActivatorView *view in self.view.subviews)
         {
-            return view;
+            if (view.layoutSequence && view.layoutSequence == sequence)
+            {
+                return view;
+            }
         }
+        
+        return nil;
     }
     
-    return nil;
-}
-
-
+    
 -(NSArray *)sequences
-{
-    return _sequences;
-}
-
-
+    {
+        return _sequences;
+    }
+    
+    
 -(void)setSequences:(NSArray *)sequences
-{
-    if (sequences == nil)
     {
-        AppDelegate *appDel = NSApp.delegate;
+        if (sequences == nil)
+        {
+            AppDelegate *appDel = NSApp.delegate;
+            
+            CaptureController *controller = appDel.captureController;
+            _sequences = controller.layoutSequences;
+            NSLog(@"SEQUENCES %@", _sequences);
+            
+        } else {
+            _sequences = sequences;
+        }
         
-        CaptureController *controller = appDel.captureController;
-        _sequences = controller.layoutSequences;
-        NSLog(@"SEQUENCES %@", _sequences);
+        for (NSView *subview in self.view.subviews.copy)
+        {
+            [subview removeFromSuperview];
+        }
         
-    } else {
-        _sequences = sequences;
-    }
-    
-    for (NSView *subview in self.view.subviews.copy)
-    {
-        [subview removeFromSuperview];
-    }
-
-    
-    for (int x = 0; x < _sequences.count; x++)
-    {
         
-        CSLayoutSequence *sequence = [_sequences objectAtIndex:x];
-        
-        CSSequenceActivatorView *newView = [self findViewForSequence:sequence];
-        if (!newView)
+        for (int x = 0; x < _sequences.count; x++)
         {
             
-            newView = [[CSSequenceActivatorView alloc] init];
+            CSLayoutSequence *sequence = [_sequences objectAtIndex:x];
             
-            newView.translatesAutoresizingMaskIntoConstraints = NO;
-            
-            
-            
-            [self.view addSubview:newView];
-            newView.layoutSequence = sequence;
-            newView.controller = self;
+            CSSequenceActivatorView *newView = [self findViewForSequence:sequence];
+            if (!newView)
+            {
+                
+                newView = [[CSSequenceActivatorView alloc] init];
+                
+                newView.translatesAutoresizingMaskIntoConstraints = NO;
+                
+                
+                
+                [self.view addSubview:newView];
+                newView.layoutSequence = sequence;
+                newView.controller = self;
+            }
         }
+        
+        
+        [self.view setNeedsLayout:YES];
+        
     }
     
+
+-(void)editSequence:(NSMenuItem *) sender
+{
     
-    [self.view setNeedsLayout:YES];
+    CaptureController *controller = [CaptureController sharedCaptureController];
     
+    CSLayoutSequence *toEdit = sender.representedObject;
+    [controller openSequenceWindow:toEdit];
+    
+    //[self.captureController openLayoutPopover:self.layoutButton forLayout:toEdit];
 }
 
 
 -(void)deleteSequence:(NSMenuItem *) sender
-{
+    {
+        
+        
+        CaptureController *controller = [CaptureController sharedCaptureController];
+        CSLayoutSequence *toDelete = sender.representedObject;
+        
+        [controller deleteSequence:toDelete];
+        
+    }
     
     
-    CaptureController *controller = [CaptureController sharedCaptureController];
-    CSLayoutSequence *toDelete = sender.representedObject;
     
-    [controller deleteSequence:toDelete];
-
-}
-
-
-
+    
 -(void)buildSequenceMenuForView:(CSSequenceActivatorView *)view
-{
-    
-    NSInteger idx = 0;
-    
-    NSMenuItem *tmp;
-    CSLayoutSequence *forSequence = view.layoutSequence;
-    
-    self.sequenceMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
-    tmp = [self.sequenceMenu insertItemWithTitle:@"Delete" action:@selector(deleteSequence:) keyEquivalent:@"" atIndex:idx++];
-    tmp.target = self;
-    tmp.representedObject = forSequence;
-    
-}
+    {
+        
+        NSInteger idx = 0;
+        
+        NSMenuItem *tmp;
+        CSLayoutSequence *forSequence = view.layoutSequence;
+        
+        self.sequenceMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
+        tmp = [self.sequenceMenu insertItemWithTitle:@"Edit" action:@selector(editSequence:) keyEquivalent:@"" atIndex:idx++];
+        tmp.target = self;
+        tmp.representedObject = forSequence;
 
+        tmp = [self.sequenceMenu insertItemWithTitle:@"Delete" action:@selector(deleteSequence:) keyEquivalent:@"" atIndex:idx++];
+        tmp.target = self;
+        tmp.representedObject = forSequence;
+        
+        
+    }
+    
+    
+    
 -(void)showSequenceMenu:(NSEvent *)clickEvent forView:(CSSequenceActivatorView *)view
-{
-    NSPoint tmp = [self.view convertPoint:clickEvent.locationInWindow fromView:nil];
-    [self buildSequenceMenuForView:view];
-    [self.sequenceMenu popUpMenuPositioningItem:self.sequenceMenu.itemArray.firstObject atLocation:tmp inView:self.view];
-}
-
-
-@end
+    {
+        NSPoint tmp = [self.view convertPoint:clickEvent.locationInWindow fromView:nil];
+        [self buildSequenceMenuForView:view];
+        [self.sequenceMenu popUpMenuPositioningItem:self.sequenceMenu.itemArray.firstObject atLocation:tmp inView:self.view];
+    }
+    
+    
+    @end

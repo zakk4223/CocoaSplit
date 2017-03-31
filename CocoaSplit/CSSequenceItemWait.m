@@ -15,6 +15,33 @@
     return @"Wait";
 }
 
+
+-(NSString *)generateItemScript
+{
+    NSMutableString *animationCode = [NSMutableString string];
+    
+    if (self.waitForAnimations)
+    {
+        [animationCode appendString:@"waitAnimation("];
+        if (self.waitTime > 0)
+        {
+            [animationCode appendFormat:@"%f", self.waitTime];
+        }
+        
+        [animationCode appendString:@")"];
+        
+    } else {
+        [animationCode appendString:@"wait("];
+        if (self.waitTime > 0)
+        {
+            [animationCode appendFormat:@"%f", self.waitTime];
+        }
+        [animationCode appendString:@")"];
+    }
+    
+    return animationCode;
+}
+
 -(void)executeWithSequence:(CSLayoutSequence *)sequencer usingCompletionBlock:(void (^)())completionBlock
 {
     

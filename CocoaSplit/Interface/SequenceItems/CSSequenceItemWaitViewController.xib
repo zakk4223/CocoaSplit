@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16E195" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
@@ -14,20 +14,20 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="280" height="38"/>
+            <rect key="frame" x="0.0" y="0.0" width="260" height="41"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hIq-so-dpx">
-                    <rect key="frame" x="18" y="1" width="61" height="17"/>
+                    <rect key="frame" x="-2" y="25" width="61" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Seconds:" id="DYY-cG-nqc">
-                        <font key="font" metaFont="system"/>
+                        <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d2J-5T-c0p">
-                    <rect key="frame" x="85" y="0.0" width="195" height="19"/>
+                    <rect key="frame" x="65" y="22" width="195" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="M6v-vK-4tJ">
                         <font key="font" metaFont="smallSystem"/>
@@ -38,8 +38,19 @@
                         <binding destination="Cob-If-Fg0" name="value" keyPath="selection.waitTime" id="HJg-MO-nQy"/>
                     </connections>
                 </textField>
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d0q-aD-LTy">
+                    <rect key="frame" x="-3" y="-3" width="172" height="20"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="check" title="Wait for pending animations:" bezelStyle="regularSquare" imagePosition="right" controlSize="small" state="on" inset="2" id="vSr-IV-4gy">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="Cob-If-Fg0" name="value" keyPath="selection.waitForAnimations" id="eL9-oN-vaG"/>
+                    </connections>
+                </button>
             </subviews>
-            <point key="canvasLocation" x="32" y="51"/>
+            <point key="canvasLocation" x="22" y="45.5"/>
         </customView>
         <objectController id="Cob-If-Fg0" userLabel="sequenceItemController">
             <connections>

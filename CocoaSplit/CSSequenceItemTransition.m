@@ -41,6 +41,13 @@
     }
     
 }
+
+-(NSString *)generateItemScript
+{
+    return [NSString stringWithFormat:@"setBasicTransition(name='%@', direction='%@', duration=%f, full_scene=%u)", self.transitionName, self.transitionDirection, self.transitionDuration, self.transitionFullScene];
+}
+
+
 -(void)clearTransition
 {
     self.transitionName = nil;

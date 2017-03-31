@@ -295,6 +295,19 @@
 
 
 
+-(void)openSequenceWindow:(CSLayoutSequence *)forSequence
+{
+    _sequenceWindowController = [[CSSequenceEditorWindowController alloc] init];
+    _sequenceWindowController.addSequenceOnSave = NO;
+    if (!forSequence)
+    {
+        forSequence = [[CSLayoutSequence alloc] init];
+        
+    }
+    _sequenceWindowController.sequence = forSequence;
+    [_sequenceWindowController showWindow:nil];
+
+}
 
 - (IBAction)createLayoutOrSequenceAction:(id)sender
 {
@@ -308,6 +321,10 @@
         [_sequenceWindowController showWindow:nil];
     }
 }
+
+
+
+
 
 
 - (IBAction)openLayoutPopover:(NSButton *)sender

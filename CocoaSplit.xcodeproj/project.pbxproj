@@ -222,8 +222,6 @@
 		34B5FAE81E760BDD0078FC51 /* CSSequenceEditorWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34B5FAE61E760BDD0078FC51 /* CSSequenceEditorWindowController.xib */; };
 		34B5FAEC1E76297A0078FC51 /* CSAddSequenceItemPopupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FAEA1E76297A0078FC51 /* CSAddSequenceItemPopupViewController.m */; };
 		34B5FAED1E76297A0078FC51 /* CSAddSequenceItemPopupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34B5FAEB1E76297A0078FC51 /* CSAddSequenceItemPopupViewController.xib */; };
-		34B5FB081E7AAF660078FC51 /* CSSequenceItemEditorWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FB061E7AAF660078FC51 /* CSSequenceItemEditorWindowController.m */; };
-		34B5FB091E7AAF660078FC51 /* CSSequenceItemEditorWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34B5FB071E7AAF660078FC51 /* CSSequenceItemEditorWindowController.xib */; };
 		34B5FB531E7C0BDB0078FC51 /* CSSequenceItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FB521E7C0BDB0078FC51 /* CSSequenceItemViewController.m */; };
 		34B5FB571E7C0C4B0078FC51 /* CSSequenceItemWaitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FB551E7C0C4B0078FC51 /* CSSequenceItemWaitViewController.m */; };
 		34B5FB581E7C0C4B0078FC51 /* CSSequenceItemWaitViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34B5FB561E7C0C4B0078FC51 /* CSSequenceItemWaitViewController.xib */; };
@@ -915,9 +913,6 @@
 		34B5FAE91E76297A0078FC51 /* CSAddSequenceItemPopupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAddSequenceItemPopupViewController.h; path = Interface/CSAddSequenceItemPopupViewController.h; sourceTree = "<group>"; };
 		34B5FAEA1E76297A0078FC51 /* CSAddSequenceItemPopupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSAddSequenceItemPopupViewController.m; path = Interface/CSAddSequenceItemPopupViewController.m; sourceTree = "<group>"; };
 		34B5FAEB1E76297A0078FC51 /* CSAddSequenceItemPopupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSAddSequenceItemPopupViewController.xib; path = Interface/CSAddSequenceItemPopupViewController.xib; sourceTree = "<group>"; };
-		34B5FB051E7AAF660078FC51 /* CSSequenceItemEditorWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSequenceItemEditorWindowController.h; path = Interface/CSSequenceItemEditorWindowController.h; sourceTree = "<group>"; };
-		34B5FB061E7AAF660078FC51 /* CSSequenceItemEditorWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSSequenceItemEditorWindowController.m; path = Interface/CSSequenceItemEditorWindowController.m; sourceTree = "<group>"; };
-		34B5FB071E7AAF660078FC51 /* CSSequenceItemEditorWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSSequenceItemEditorWindowController.xib; path = Interface/CSSequenceItemEditorWindowController.xib; sourceTree = "<group>"; };
 		34B5FB511E7C0BDB0078FC51 /* CSSequenceItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSequenceItemViewController.h; sourceTree = "<group>"; };
 		34B5FB521E7C0BDB0078FC51 /* CSSequenceItemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSequenceItemViewController.m; sourceTree = "<group>"; };
 		34B5FB541E7C0C4B0078FC51 /* CSSequenceItemWaitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSequenceItemWaitViewController.h; sourceTree = "<group>"; };
@@ -1582,9 +1577,6 @@
 				34B5FAE91E76297A0078FC51 /* CSAddSequenceItemPopupViewController.h */,
 				34B5FAEA1E76297A0078FC51 /* CSAddSequenceItemPopupViewController.m */,
 				34B5FAEB1E76297A0078FC51 /* CSAddSequenceItemPopupViewController.xib */,
-				34B5FB051E7AAF660078FC51 /* CSSequenceItemEditorWindowController.h */,
-				34B5FB061E7AAF660078FC51 /* CSSequenceItemEditorWindowController.m */,
-				34B5FB071E7AAF660078FC51 /* CSSequenceItemEditorWindowController.xib */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -2477,7 +2469,6 @@
 				342B33B3198073EC00492CB7 /* line.fgsh in Resources */,
 				3470CD2F1D57D2AA006404D9 /* CSStreamOutputWindowController.xib in Resources */,
 				344825D21B2536EA00AF9EAC /* CAMultiAudioMatrixView.xib in Resources */,
-				34B5FB091E7AAF660078FC51 /* CSSequenceItemEditorWindowController.xib in Resources */,
 				3473D2A81D5685DA00842EEE /* Media.xcassets in Resources */,
 				3473D29B1D4C3D0E00842EEE /* CSAddOutputPopupViewController.xib in Resources */,
 				349461761AC49BB300F28883 /* CSAnimationChooserViewController.xib in Resources */,
@@ -2566,7 +2557,6 @@
 				342346AA15F59A8500C8C77E /* AVFAudioCapture.m in Sources */,
 				3498D94A1A94685000906532 /* CSAudioSwitchCell.m in Sources */,
 				34AB1C311B944F48003F2C03 /* CSPreviewOverlayView.m in Sources */,
-				34B5FB081E7AAF660078FC51 /* CSSequenceItemEditorWindowController.m in Sources */,
 				345F8B051A1060D6009A81E3 /* CSAacEncoder.m in Sources */,
 				342346BE15F6103D00C8C77E /* FFMpegTask.m in Sources */,
 				345F8B3D1A15F3BD009A81E3 /* CAMultiAudioPCM.m in Sources */,

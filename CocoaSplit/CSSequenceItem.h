@@ -24,5 +24,6 @@
 
 -(void)updateItemDescription;
 
+-(NSString *)generateItemScript;
 
 @end

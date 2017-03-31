@@ -19,71 +19,60 @@
 
 @implementation CSAddSequenceItemPopupViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    [self adjustTableHeight:self.sequenceItemTypesTableView];
-    
-    // Do view setup here.
-}
 
--(instancetype)init
+- (IBAction)saveButtonClicked:(id)sender
 {
-    return [self initWithNibName:@"CSAddSequenceItemPopupViewController" bundle:nil];
-}
-
-
-
--(BOOL)tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
-{
-    return NO;
-}
-
-
--(void)adjustTableHeight:(NSTableView *)table
-{
-    
-    
-    NSSize vSize = self.view.frame.size;
-    
-    vSize.height = table.numberOfRows * table.rowHeight + 3;
-    self.preferredContentSize = vSize;
-    
-    
-}
-
-
--(NSArray *)sequenceItemTypes
-{
-    
-    
-    if (_sequenceItemTypes)
+    [_itemController commitEditing];
+    if (self.addSequenceItem)
     {
-        return _sequenceItemTypes;
+        self.addSequenceItem(self.editItem);
+    }
+    self.editItem = nil;
+
+}
+
+- (IBAction)cancelButtonClicked:(id)sender
+{
+    [_itemController discardEditing];
+    
+    if (self.addSequenceItem)
+    {
+        self.addSequenceItem(nil);
+    }
+    self.editItem = nil;
+
+}
+
+
+-(instancetype)initWithSequenceItem:(CSSequenceItem *)item
+{
+    if (self = [self initWithNibName:@"CSAddSequenceItemPopupViewController" bundle:nil])
+    {
+        self.editItem = item;
     }
     
-
-    NSMutableArray *ret = [NSMutableArray array];
-    
-    [ret addObject:[CSSequenceItemLayout class]];
-    [ret addObject:[CSSequenceItemTransition class]];
-    [ret addObject:[CSSequenceItemWait class]];
-    [ret addObject:[CSSequenceItemAnimation class]];
-    
-
-    _sequenceItemTypes = ret;
-    return ret;
+    return self;
 }
 
 
-- (IBAction)sequenceItemClicked:(id)sender
+-(void)loadView
 {
+    [super loadView];
+
+    _itemController = [self.editItem configurationView];
+    //self.mainView.subviews = @[];
     
-    Class clickedSequenceclass;
-    clickedSequenceclass = [_sequenceItemTypes objectAtIndex:[self.sequenceItemTypesTableView rowForView:sender]];
-    if (clickedSequenceclass && self.addSequenceItem)
-    {
-        self.addSequenceItem(clickedSequenceclass);
-    }
+    
+    [self.itemConfigView addSubview:_itemController.view];
+    [_itemController.view setFrameOrigin:NSMakePoint(0, self.itemConfigView.frame.size.height - _itemController.view.frame.size.height)];
 
 }
+
+
+
+
+
+
+
+
 @end
