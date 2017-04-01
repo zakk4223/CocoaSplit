@@ -40,6 +40,7 @@
     
 -(void)sequenceAdded:(NSNotification *)notification
     {
+        NSLog(@"SEQUNCE ADDED IN VIEW CONTROLLER");
         self.sequences = nil;
     }
     

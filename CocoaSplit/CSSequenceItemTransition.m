@@ -44,31 +44,18 @@
 
 -(NSString *)generateItemScript
 {
-    return [NSString stringWithFormat:@"setBasicTransition(name='%@', direction='%@', duration=%f, full_scene=%u)", self.transitionName, self.transitionDirection, self.transitionDuration, self.transitionFullScene];
-}
-
-
--(void)clearTransition
-{
-    self.transitionName = nil;
-    self.transitionDirection = nil;
-    self.transitionFilter = nil;
-    self.transitionDuration = 0;
-}
-
--(void)executeWithSequence:(CSLayoutSequence *)sequencer usingCompletionBlock:(void (^)())completionBlock
-{
-    SourceLayout *layout = sequencer.sourceLayout;
-    layout.transitionName = self.transitionName;
-    layout.transitionDirection = self.transitionDirection;
-    layout.transitionFilter = self.transitionFilter;
-    layout.transitionDuration = self.transitionDuration;
-    layout.transitionFullScene = self.transitionFullScene;
-    if (completionBlock)
+    NSString *retString = nil;
+    if (!self.transitionName && !self.transitionFilter)
     {
-        completionBlock();
+        retString = @"clearTransition()";
+    } else {
+        retString = [NSString stringWithFormat:@"setBasicTransition(name='%@', direction='%@', duration=%f, full_scene=%u)", self.transitionName, self.transitionDirection, self.transitionDuration, self.transitionFullScene];
     }
+    
+    return retString;
 }
+
+
 
 
 -(void) setTransitionName:(NSString *)transitionName
@@ -83,7 +70,9 @@
         self.transitionFilter = newFilter;
     } else {
         self.transitionFilter = nil;
+        
     }
+    
 }
 
 

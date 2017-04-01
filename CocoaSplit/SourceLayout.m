@@ -926,15 +926,14 @@
 }
 
 
--(void)removeSourceLayout:(SourceLayout *)toRemove withLayer:(CALayer *)withLayer
-{
+-(void)removeSourceLayout:(SourceLayout *)toRemove{
     
     if (![self.containedLayouts containsObject:toRemove])
     {
         return;
     }
     
-    [self removeSourceListData:toRemove.savedSourceListData withLayer:withLayer];
+    [self removeSourceListData:toRemove.savedSourceListData];
     
     [self.containedLayouts removeObject:toRemove];
     if (self.removeLayoutBlock)
@@ -1264,7 +1263,7 @@
         NSData *undoData = [NSKeyedArchiver archivedDataWithRootObject:undoSources];
         [[self.undoManager prepareWithInvocationTarget:self] mergeSourceListData:undoData];
     } else {
-        [[self.undoManager prepareWithInvocationTarget:self] removeSourceListData:mergeData withLayer:nil];
+        [[self.undoManager prepareWithInvocationTarget:self] removeSourceListData:mergeData];
     }
 
     if (self.undoManager)
@@ -1436,9 +1435,10 @@
 }
 
 
--(NSObject *)removeSourceListData:(NSData *)mergeData withLayer:(CALayer *)withLayer
+-(NSObject *)removeSourceListData:(NSData *)mergeData
 {
     
+    CALayer *withLayer = nil;
     
     if (!self.sourceList)
     {

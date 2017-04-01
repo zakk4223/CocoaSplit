@@ -116,6 +116,8 @@
     [self.sequenceObjectController commitEditing];
     if (self.addSequenceOnSave)
     {
+        NSLog(@"ADD SEQUENCE %d", self.addSequenceOnSave);
+        
         AppDelegate *appdel = [NSApp delegate];
         CaptureController *controller = appdel.captureController;
         [controller addSequenceWithNameDedup:self.sequence];

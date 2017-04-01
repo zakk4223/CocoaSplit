@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16E195" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
@@ -56,12 +56,12 @@
                 </textField>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="idP-7s-TdX">
                     <rect key="frame" x="53" y="43" width="99" height="22"/>
-                    <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="phq-GW-1aZ">
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="phq-GW-1aZ">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
                         <menu key="menu" id="uzv-bk-Z87">
                             <items>
-                                <menuItem title="Item 1" state="on" id="3ym-b8-9XM"/>
+                                <menuItem title="Item 1" id="3ym-b8-9XM"/>
                                 <menuItem title="Item 2" id="Iax-mM-7s1"/>
                                 <menuItem title="Item 3" id="yzj-11-Q6Z"/>
                             </items>
@@ -69,12 +69,12 @@
                     </popUpButtonCell>
                     <connections>
                         <binding destination="ybF-9x-SLw" name="content" keyPath="arrangedObjects" id="R2P-we-R7S"/>
+                        <binding destination="1yy-Xm-YIH" name="selectedObject" keyPath="selection.transitionDirection" previousBinding="R2P-we-R7S" id="ALB-0Q-Cnz"/>
                         <binding destination="1yy-Xm-YIH" name="hidden" keyPath="selection.transitionFilter" id="b0x-lK-kHh">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
                             </dictionary>
                         </binding>
-                        <binding destination="1yy-Xm-YIH" name="selectedObject" keyPath="selection.transitionDirection" previousBinding="R2P-we-R7S" id="ALB-0Q-Cnz"/>
                     </connections>
                 </popUpButton>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Io1-hh-MGw">
@@ -91,10 +91,22 @@
                         </menu>
                     </popUpButtonCell>
                     <connections>
-                        <binding destination="2aK-01-t47" name="content" keyPath="arrangedObjects" id="6sd-1f-CpB"/>
-                        <binding destination="2aK-01-t47" name="contentObjects" keyPath="arrangedObjects.key" previousBinding="6sd-1f-CpB" id="F3s-oc-hbf"/>
-                        <binding destination="2aK-01-t47" name="contentValues" keyPath="arrangedObjects.value" previousBinding="F3s-oc-hbf" id="djr-bD-gWc"/>
-                        <binding destination="1yy-Xm-YIH" name="selectedObject" keyPath="selection.transitionName" previousBinding="djr-bD-gWc" id="Pur-ij-Uw8"/>
+                        <binding destination="2aK-01-t47" name="content" keyPath="arrangedObjects" id="BFA-8X-syB">
+                            <dictionary key="options">
+                                <bool key="NSInsertsNullPlaceholder" value="YES"/>
+                            </dictionary>
+                        </binding>
+                        <binding destination="2aK-01-t47" name="contentObjects" keyPath="arrangedObjects.key" previousBinding="BFA-8X-syB" id="NrE-Xi-LFj">
+                            <dictionary key="options">
+                                <bool key="NSInsertsNullPlaceholder" value="YES"/>
+                            </dictionary>
+                        </binding>
+                        <binding destination="2aK-01-t47" name="contentValues" keyPath="arrangedObjects.value" previousBinding="NrE-Xi-LFj" id="mPL-ZP-Q3J">
+                            <dictionary key="options">
+                                <bool key="NSInsertsNullPlaceholder" value="YES"/>
+                            </dictionary>
+                        </binding>
+                        <binding destination="1yy-Xm-YIH" name="selectedObject" keyPath="selection.transitionName" previousBinding="mPL-ZP-Q3J" id="UXA-uI-8AZ"/>
                     </connections>
                 </popUpButton>
                 <button translatesAutoresizingMaskIntoConstraints="NO" id="tvb-mz-p6n">

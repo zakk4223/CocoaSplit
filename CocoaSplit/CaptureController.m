@@ -1615,6 +1615,7 @@
     [saveRoot setValue:self.inputLibrary forKey:@"inputLibrary"];
     [saveRoot setValue:[NSNumber numberWithBool:self.useTransitions] forKey:@"useTransitions"];
     
+    [saveRoot setValue:self.layoutSequences forKey:@"layoutSequences"];
     [NSKeyedArchiver archiveRootObject:saveRoot toFile:path];
     
 }
@@ -3279,7 +3280,7 @@
 
     if ([activeLayout containsLayout:layout])
     {
-        [activeLayout removeSourceLayout:layout withLayer:nil];
+        [activeLayout removeSourceLayout:layout];
     } else {
         [activeLayout mergeSourceLayout:layout];
     }

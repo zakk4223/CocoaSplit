@@ -23,7 +23,8 @@
     if (self = [self initWithNibName:@"CSSequenceItemLayoutViewController" bundle:nil])
     {
             self.actionMap = @{@"Switch to Layout": @(kCSLayoutSequenceSwitch),
-                                    @"Merge Layout into current": @(kCSLayoutSequenceMerge)
+                                    @"Merge Layout into current": @(kCSLayoutSequenceMerge),
+                                    @"Remove Layout from current": @(kCSLayoutSequenceRemove)
                                     };
 
         AppDelegate *appDel = [NSApp delegate];

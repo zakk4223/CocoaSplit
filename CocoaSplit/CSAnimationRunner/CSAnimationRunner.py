@@ -58,6 +58,10 @@ class CSAnimationInput(object):
     
     
     @property
+    def position(self):
+        return self.animationLayer.frame().origin
+    
+    @property
     def width(self):
         """
         Current width of the input
@@ -115,6 +119,18 @@ class CSAnimationInput(object):
         return NSMidX(self.animationLayer.frame())
 
 
+    def save_data(self, name, value):
+        self.input.setValue_forKeyPath_(value, "scriptStorage."+name)
+    
+    def get_data(self, name):
+        return self.input.valueForKeyPath_("scriptStorage."+name)
+    
+    def delete_data(self, name):
+        self.input.setValue_forKeyPath_(None, "scriptStorage."+name)
+    
+    
+    
+    
     def basic_animation(self, forKey, withDuration):
         cab = CABasicAnimation.animationWithKeyPath_(forKey)
         if withDuration != None:
@@ -568,6 +584,9 @@ class CSAnimationInput(object):
             n_pos.y = c_pos.y + new_coord.y
             return NSValue.valueWithPoint_(n_pos)
 
+        if move_tpl and not (type(move_tpl[0]) in (list,tuple)):
+            move_tpl = [move_tpl]
+        
         anim_vals = self.make_animation_values(NSValue.valueWithPoint_(c_pos), move_tpl, vmk)
         
         return self.simple_animation('position', anim_vals, duration, **kwargs)
@@ -842,6 +861,16 @@ def mergeLayout(name):
             dummy_animation.duration = target_layout.transitionDuration()
             CSAnimationBlock.current_frame().add_animation(dummy_animation, None, None)
 
+
+def removeLayout(name):
+    layout = layoutByName(name)
+    if layout:
+        target_layout = CSAnimationBlock.current_frame().layout
+        target_layout.removeSourceLayout_(layout)
+        if (target_layout.transitionName() or target_layout.transitionFilter()) and target_layout.transitionDuration() > 0:
+            dummy_animation = CSAnimation(None, None, None)
+            dummy_animation.duration = target_layout.transitionDuration()
+            CSAnimationBlock.current_frame().add_animation(dummy_animation, None, None)
 
 
 def inputByName(name):

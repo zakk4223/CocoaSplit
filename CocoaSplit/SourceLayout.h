@@ -117,7 +117,7 @@
 -(void)mergeSourceLayout:(SourceLayout *)toMerge withCompletionBlock:(void (^)(void))completionBlock;
 -(void)mergeSourceLayout:(SourceLayout *)toMerge;
 
--(void)removeSourceLayout:(SourceLayout *)toRemove withLayer:(CALayer *)withLayer;
+-(void)removeSourceLayout:(SourceLayout *)toRemove;
 -(bool)containsLayout:(SourceLayout *)layout;
 -(void)applyAddBlock;
 -(void)replaceWithSourceLayout:(SourceLayout *)layout;

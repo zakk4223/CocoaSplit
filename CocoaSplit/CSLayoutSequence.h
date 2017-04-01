@@ -11,15 +11,13 @@
 
 @class CSSequenceItem;
 
-@interface CSLayoutSequence : NSObject
+@interface CSLayoutSequence : NSObject <NSCoding>
 {
 
-    dispatch_queue_t _run_queue;
 }
 
 
 @property (strong) NSString *name;
-@property (strong) NSMutableArray *sequenceItems;
 @property (weak) SourceLayout *sourceLayout;
 @property (strong) NSString *animationCode;
 

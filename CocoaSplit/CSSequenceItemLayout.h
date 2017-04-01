@@ -11,7 +11,8 @@
 
 typedef enum layout_sequence_type_t {
     kCSLayoutSequenceSwitch = 0,
-    kCSLayoutSequenceMerge = 1
+    kCSLayoutSequenceMerge = 1,
+    kCSLayoutSequenceRemove = 2
 } layout_sequence_type;
 
 

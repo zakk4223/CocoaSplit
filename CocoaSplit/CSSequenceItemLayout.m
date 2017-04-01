@@ -60,7 +60,10 @@
         return [NSString stringWithFormat:@"mergeLayout('%@')", self.layoutName];
     } else if (self.actionType == kCSLayoutSequenceSwitch) {
         return [NSString stringWithFormat:@"switchToLayout('%@')", self.layoutName];
+    } else if (self.actionType == kCSLayoutSequenceRemove) {
+        return [NSString stringWithFormat:@"removeLayout('%@')", self.layoutName];
     }
+    
     
     return nil;
 }

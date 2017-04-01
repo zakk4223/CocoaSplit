@@ -534,7 +534,7 @@ static NSArray *_sourceTypes = nil;
 
     [CATransaction begin];
     self.name = nil;
-    
+    self.scriptStorage = [NSMutableDictionary dictionary];
     _nextImageTime = 0.0f;
     _currentSourceIdx = 0;
     _needsAdjustment = NO;
@@ -623,7 +623,6 @@ static NSArray *_sourceTypes = nil;
     _multiTransition.subtype = kCATransitionFromRight;
     _multiTransition.duration = 2.0;
     _multiTransition.removedOnCompletion = YES;
-    
     
     [self createUUID];
     

@@ -86,6 +86,7 @@ typedef enum resize_style_t {
     
 }
 
+@property (strong) NSMutableDictionary *scriptStorage;
 
 @property (strong) CSInputLayer *layer;
 @property (weak) SourceLayout *sourceLayout;

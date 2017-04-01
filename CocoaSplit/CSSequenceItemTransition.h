@@ -16,6 +16,5 @@
 @property (assign) float transitionDuration;
 @property (assign) bool transitionFullScene;
 
--(void)clearTransition;
 
 @end
