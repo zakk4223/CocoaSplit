@@ -9,5 +9,8 @@
 #import <Cocoa/Cocoa.h>
 
 @interface CSGridView : NSView
+@property (assign) NSInteger minimumRows;
+@property (assign) NSInteger minimumColumns;
+@property (strong) NSColor *backgroundColor;
 
 @end

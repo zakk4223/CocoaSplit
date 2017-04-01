@@ -45,15 +45,10 @@
 }
 
 
--(void)runSequenceForLayout:(SourceLayout *)layout
-{
-    [self runSequenceForLayout:layout withCompletionBlock:nil withItemCompletionBlock:^(CSSequenceItem *item) {
-    }];
-    
-}
 
 
--(void)runSequenceForLayout:(SourceLayout *)layout withCompletionBlock:(void (^)())completionBlock withItemCompletionBlock:(void (^)(CSSequenceItem *item))itemCompletionBlock;
+
+-(void)runSequenceForLayout:(SourceLayout *)layout withCompletionBlock:(void (^)())completionBlock withExceptionBlock:(void (^)(NSException *exception))exceptionBlock
 {
     self.sourceLayout = layout;
     
@@ -75,10 +70,9 @@
         }
         
         
-        [self.sourceLayout runAnimationString:realCode withCompletionBlock:^{
-            NSLog(@"Finished running animation");
-        }];
+        [self.sourceLayout runAnimationString:realCode withCompletionBlock:completionBlock withExceptionBlock:exceptionBlock];
     }
+    
 }
 
 @end

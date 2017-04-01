@@ -962,14 +962,15 @@ class CSAnimationRunnerObj(NSObject):
         self.layout = layout
         
         
-        #try:
-        CSAnimationBlock.setCompletionBlock(dummyCompletion)
+        try:
+            CSAnimationBlock.setCompletionBlock(dummyCompletion)
         
-        animation.run_script()
-        #except:
-        CSAnimationBlock.commitAnimation()
-            #else:
-            #CSAnimationBlock.commitAnimation()
+            animation.run_script()
+        except:
+            CSAnimationBlock.commitAnimation()
+            raise
+        else:
+            CSAnimationBlock.commitAnimation()
 
     
     

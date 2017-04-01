@@ -196,7 +196,7 @@
 }
 
 
--(void)runAnimationString:(NSString *)animationCode withCompletionBlock:(void (^)(void))completionBlock
+-(void)runAnimationString:(NSString *)animationCode withCompletionBlock:(void (^)(void))completionBlock withExceptionBlock:(void (^)(NSException *exception))exceptionBlock
 {
     if (!animationCode)
     {
@@ -207,6 +207,12 @@
     if (completionBlock)
     {
         [animMap setObject:completionBlock forKey:@"completionBlock"];
+    }
+    
+    if (exceptionBlock)
+    {
+        [animMap setObject:exceptionBlock forKey:@"exceptionBlock"];
+        
     }
     
     //[self doAnimation:animMap];
@@ -316,6 +322,7 @@
     NSString *animationCode = threadDict[@"animationString"];
     
     void (^completionBlock)(void) = [threadDict objectForKey:@"completionBlock"];
+    void (^exceptionBlock)(NSException *exception) = [threadDict objectForKey:@"exceptionBlock"];
     
     
     @try {
@@ -334,8 +341,13 @@
         }
     }
     @catch (NSException *exception) {
+        
+        if (exceptionBlock)
+        {
+            exceptionBlock(exception);
+        }
+        
         NSLog(@"Animation module %@ failed with exception: %@: %@", modName, [exception name], [exception reason]);
-
     }
     @finally {
         if (completionBlock)

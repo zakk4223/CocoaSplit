@@ -21,6 +21,6 @@
 @property (weak) SourceLayout *sourceLayout;
 @property (strong) NSString *animationCode;
 
--(void)runSequenceForLayout:(SourceLayout *)layout;
--(void)runSequenceForLayout:(SourceLayout *)layout withCompletionBlock:(void (^)())completionBlock withItemCompletionBlock:(void (^)(CSSequenceItem *item))itemCompletionBlock;
+-(void)runSequenceForLayout:(SourceLayout *)layout withCompletionBlock:(void (^)())completionBlock withExceptionBlock:(void (^)(NSException *exception))exceptionBlock;
+
 @end

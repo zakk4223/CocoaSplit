@@ -55,7 +55,7 @@
 {
     
     CALayer *newLayer = [CALayer layer];
-    
+    newLayer.backgroundColor = [NSColor controlColor].CGColor;
     return newLayer;
 }
 
@@ -65,6 +65,22 @@
 }
      
 
+-(void)handleScriptException:(NSException *)exception
+{
+    
+    NSDictionary *errorUserInfo = @{
+                                    NSLocalizedDescriptionKey: exception.reason,
+                                    NSLocalizedFailureReasonErrorKey: exception.name
+                                    };
+    
+    NSError *pyError = [NSError errorWithDomain:@"zakk.lol.cocoasplit" code:-35 userInfo:errorUserInfo];
+    NSAlert *errAlert = [NSAlert alertWithError:pyError];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [errAlert beginSheetModalForWindow:[NSApp mainWindow] completionHandler:nil];
+        
+    });
+}
+
 
 -(void)mouseDown:(NSEvent *)event
 {
@@ -73,7 +89,9 @@
     if (self.layoutSequence)
     {
         CaptureController *captureController = [CaptureController sharedCaptureController];
-        [self.layoutSequence runSequenceForLayout:captureController.selectedLayout];
+        [self.layoutSequence runSequenceForLayout:captureController.selectedLayout withCompletionBlock:nil withExceptionBlock:^(NSException *exception) {
+            [self handleScriptException:exception];
+        }];
     }
     /*
     if (self.layoutSequence)

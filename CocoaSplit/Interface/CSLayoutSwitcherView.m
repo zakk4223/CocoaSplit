@@ -69,6 +69,8 @@
         newLayer = [CSPreviewGLLayer layer];
     } else {
         newLayer = [CALayer layer];
+        newLayer.backgroundColor = [NSColor controlColor].CGColor;
+
         newLayer.cornerRadius = 2.5f;
     }
     return newLayer;

@@ -8,16 +8,40 @@
 
 #import "CSGridView.h"
 
+
+
 @implementation CSGridView
+
+-(void)drawRect:(NSRect)dirtyRect
+{
+    if (self.backgroundColor)
+    {
+        [self.backgroundColor setFill];
+        NSRectFillUsingOperation(dirtyRect, NSCompositeSourceOver);
+    }
+    
+    [super drawRect:dirtyRect];
+}
+
 
 -(void)layout
 {
+    
     NSInteger subViewCnt = self.subviews.count;
     float countsq = sqrt(subViewCnt);
     NSInteger nextint = (NSInteger)ceil(countsq);
     NSInteger columns =  nextint;
+    if (self.minimumColumns && columns < self.minimumColumns)
+    {
+        columns = self.minimumColumns;
+    }
     NSInteger rows = ceil(subViewCnt/(float)columns);
     
+    if (self.minimumRows && rows < self.minimumRows)
+    {
+        rows = self.minimumRows;
+    }
+
     CGFloat boxWidth = self.frame.size.width/columns;
     CGFloat boxHeight = self.frame.size.height/rows;
     
