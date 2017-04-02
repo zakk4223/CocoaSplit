@@ -16,7 +16,6 @@
 
 @property (weak) IBOutlet CaptureController *captureController;
 @property (strong) NSMenu *layoutMenu;
-
 - (IBAction)layoutButtonPushed:(id)sender;
 
 -(void)buildLayoutMenu;

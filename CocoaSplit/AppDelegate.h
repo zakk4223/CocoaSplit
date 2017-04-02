@@ -20,6 +20,7 @@
 
 @property (unsafe_unretained) IBOutlet NSWindow *window;
 
+@property (weak) IBOutlet NSButton *layoutSequenceButton;
 
 
 @end

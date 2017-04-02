@@ -1626,6 +1626,7 @@
     
     //all color panels allow opacity
     _savedAudioConstraintConstant = self.audioConstraint.constant;
+    self.layoutScriptLabel = @"Layouts";
     
     self.activePreviewView = self.stagingPreviewView;
     [self.layoutCollectionView registerForDraggedTypes:@[@"CS_LAYOUT_DRAG"]];
@@ -2648,6 +2649,7 @@
         _sequenceViewController = [[CSSequenceActivatorViewController alloc] init];
         _sequenceViewController.view = self.layoutGridView;
         _sequenceViewController.sequences = self.layoutSequences;
+        self.layoutScriptLabel = @"Scripts";
     } else {
         _sequenceViewController.sequences = @[];
         _sequenceViewController = nil;
@@ -2655,6 +2657,8 @@
         _layoutViewController.view = self.layoutGridView;
         _layoutViewController.isSwitcherView = NO;
         _layoutViewController.layouts = self.sourceLayouts;
+        self.layoutScriptLabel = @"Layouts";
+
     }
 }
 

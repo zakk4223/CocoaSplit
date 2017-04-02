@@ -480,4 +480,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (IBAction)openLayoutSwitcherWindow:(id)sender;
 - (IBAction)switchLayoutView:(id)sender;
 
+@property (strong) NSString *layoutScriptLabel;
+
+
 @end

@@ -16,6 +16,17 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     
+    
+    NSImage *img = [[NSImage alloc] initWithContentsOfFile:@"/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/SidebarSmartFolder.icns"];
+    
+    NSImage *useimg = [[NSImage alloc] initWithSize:NSMakeSize(64,64)];
+    [useimg addRepresentation:img.representations[0]];
+    
+    NSImage *altImg = [[NSImage alloc] initWithContentsOfFile:@"/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/SidebarMoviesFolder.icns"];
+    
+    self.layoutSequenceButton.image = useimg;
+    self.layoutSequenceButton.alternateImage = altImg;
+
     [[NSBundle mainBundle] loadNibNamed:@"LogWindow" owner:self.captureController topLevelObjects:nil];
     
     /*
@@ -28,6 +39,8 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [CaptureController sharedAnimationObj];
     });
+    
+    
     
     [self.captureController loadSettings];
     //self.captureController.audioConstraint.constant = 0;

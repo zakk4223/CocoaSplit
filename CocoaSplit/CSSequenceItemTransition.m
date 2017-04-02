@@ -44,10 +44,24 @@
 
 -(NSString *)generateItemScript
 {
-    NSString *retString = nil;
+     NSString *retString = nil;
+    
     if (!self.transitionName && !self.transitionFilter)
     {
         retString = @"clearTransition()";
+    } else if (self.transitionFilter) {
+        NSArray *inputKeys = self.transitionFilter.inputKeys;
+        NSMutableString *blah = [NSMutableString string];
+        for (NSString *key in inputKeys)
+        {
+            if ([key isEqualToString:@"inputImage"])
+            {
+                continue;
+            }
+            [blah appendFormat:@"%@=%@\n", key, [self.transitionFilter valueForKeyPath:key]];
+            
+        }
+        retString = blah;
     } else {
         retString = [NSString stringWithFormat:@"setBasicTransition(name='%@', direction='%@', duration=%f, full_scene=%u)", self.transitionName, self.transitionDirection, self.transitionDuration, self.transitionFullScene];
     }
