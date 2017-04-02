@@ -616,31 +616,13 @@
         return;
     }
     
-    NSInteger __block pendingCount = 0;
-    void (^internalCompletionBlock)(void) = ^{
-        @synchronized (self)
-        {
-            pendingCount--;
-            if (pendingCount <= 0 && completionBlock)
-            {
-                completionBlock();
-            }
-        }
-    };
 
     
     [CATransaction begin];
     
     if (completionBlock)
     {
-        @synchronized (self)
-        {
-            pendingCount++;
-        }
-
-        [CATransaction setCompletionBlock:^{
-            internalCompletionBlock();
-        }];
+        [CATransaction setCompletionBlock:completionBlock];
     }
     
     NSObject *dictOrObj = [self mergeSourceListData:toMerge.savedSourceListData];
