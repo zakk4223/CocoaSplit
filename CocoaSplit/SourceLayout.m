@@ -57,9 +57,7 @@
     InputSource *src = notification.object;
     if (src.sourceLayout == self)
     {
-        [self willChangeValueForKey:@"topLevelSourceList"];
         [self generateTopLevelSourceList];
-        [self didChangeValueForKey:@"topLevelSourceList"];
     }
 }
 
@@ -324,6 +322,20 @@
 
 -(void)generateTopLevelSourceList
 {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self willChangeValueForKey:@"topLevelSourceList"];
+
+        [_topLevelSourceArray removeAllObjects];
+        for (InputSource *src in self.sourceListOrdered)
+        {
+            if (!src.parentInput)
+            {
+                [_topLevelSourceArray addObject:src];
+            }
+        }
+        [self didChangeValueForKey:@"topLevelSourceList"];
+
+    });
     [_topLevelSourceArray removeAllObjects];
     for (InputSource *src in self.sourceListOrdered)
     {
@@ -480,17 +492,6 @@
 -(void)replaceWithSourceLayout:(SourceLayout *)layout withCompletionBlock:(void (^)(void))completionBlock
 {
     
-    NSInteger __block pendingCount = 0;
-    void (^internalCompletionBlock)(void) = ^{
-        @synchronized (self)
-        {
-            pendingCount--;
-            if (pendingCount <= 0 && completionBlock)
-            {
-                completionBlock();
-            }
-        }
-    };
     
     //_noSceneTransactions = YES;
     CATransition *rTrans = nil;
@@ -498,13 +499,7 @@
     [CATransaction begin];
     if (completionBlock)
     {
-        @synchronized (self)
-        {
-            pendingCount++;
-        }
-        [CATransaction setCompletionBlock:^{
-            internalCompletionBlock();
-        }];
+        [CATransaction setCompletionBlock:completionBlock];
     }
 
     if (self.transitionFullScene)
@@ -749,12 +744,11 @@
         [NSApp registerMIDIResponder:src];
         [self incrementInputRef:src];
         
-        
-        [self willChangeValueForKey:@"topLevelSourceList"];
         [[self mutableArrayValueForKey:@"sourceList" ] addObject:src];
+
         [self generateTopLevelSourceList];
-        [self didChangeValueForKey:@"topLevelSourceList"];
-        [_uuidMap setObject:src forKey:src.uuid];
+
+         [_uuidMap setObject:src forKey:src.uuid];
         
     }
     
@@ -917,11 +911,7 @@
         
     }
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self willChangeValueForKey:@"topLevelSourceList"];
-        [self generateTopLevelSourceList];
-        [self didChangeValueForKey:@"topLevelSourceList"];
-    });
+    [self generateTopLevelSourceList];
     return undoSources;
 }
 
@@ -1340,10 +1330,7 @@
     newSource.sourceLayout = self;
     newSource.is_live = self.isActive;
     
-    [self willChangeValueForKey:@"topLevelSourceList"];
     [[self mutableArrayValueForKey:@"sourceList" ] addObject:newSource];
-    [self generateTopLevelSourceList];
-    [self didChangeValueForKey:@"topLevelSourceList"];
     
 
     [self.rootLayer addSublayer:newSource.layer];
@@ -1366,10 +1353,8 @@
     self.rootLayer.sublayers = [NSArray array];
     @synchronized(self)
     {
-        [self willChangeValueForKey:@"topLevelSourceList"];
         [self.sourceList removeAllObjects];
         [self generateTopLevelSourceList];
-        [self didChangeValueForKey:@"topLevelSourceList"];
 
         
     }

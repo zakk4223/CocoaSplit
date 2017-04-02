@@ -1,5 +1,8 @@
+from Foundation import NSObject,NSLog,NSApplication
 import CSAnimationBlock
 import CSAnimationInput
+from CSAnimation import *
+
 
 
 def getCaptureController():
