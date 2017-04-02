@@ -15,7 +15,6 @@
 
 
 @synthesize isActive = _isActive;
-@synthesize animationIndexes = _animationIndexes;
 @synthesize frameRate = _frameRate;
 
 -(instancetype) init
@@ -38,7 +37,6 @@
         _noSceneTransactions = NO;
         _topLevelSourceArray = [[NSMutableArray alloc] init];
         self.rootLayer = [self newRootLayer];
-        self.animationList = [NSMutableArray array];
         
         //self.rootLayer.geometryFlipped = YES;
         _rootSize = NSMakeSize(_canvas_width, _canvas_height);
@@ -109,31 +107,6 @@
     
     __weak SourceLayout *weakSelf = self;
     
-    if ([identifier hasPrefix:@"Animation:"])
-    {
-        NSString *animName = [identifier substringFromIndex:10];
-        NSUInteger indexOfAnim = [self.animationList indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-            CSAnimationItem *testAnim = obj;
-            if ([testAnim.name isEqualToString:animName])
-            {
-                *stop = YES;
-                return YES;
-            }
-            return NO;
-        }];
-        
-        if (indexOfAnim != NSNotFound)
-        {
-            CSAnimationItem *anim = [self.animationList objectAtIndex:indexOfAnim];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf runSingleAnimation:anim];
-                
-            });
-            
-        }
-        return;
-    }
     
 }
 
@@ -143,57 +116,15 @@
     
     NSMutableArray *ret = [NSMutableArray array];
     
-    for (CSAnimationItem *anim in self.animationList)
-    {
-        NSString *ident = [NSString stringWithFormat:@"Animation:%@", anim.name];
-        [ret addObject:ident];
-    }
     
     return ret;
 }
 
 
--(void)setAnimationIndexes:(NSIndexSet *)animationIndexes
-{
-    _animationIndexes = animationIndexes;
-    NSUInteger firstIndex = animationIndexes.firstIndex;
-    
-    if (firstIndex < self.animationList.count)
-    {
-        self.selectedAnimation = [self.animationList objectAtIndex:firstIndex];
-    }
-}
-
--(NSIndexSet *)animationIndexes
-{
-    return _animationIndexes;
-}
 
 
--(IBAction)runAnimations:(id)sender
-{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-    if (self.selectedAnimation)
-    {
-        
-        NSArray *animations = [self.animationList objectsAtIndexes:self.animationIndexes];
-        
-        for (CSAnimationItem *anim in animations)
-        {
-            [self runSingleAnimation:anim];
-            
-        }
-    }
-    });
-    
-
-}
 
 
--(void)runSingleAnimation:(CSAnimationItem *)animation
-{
-    [self runSingleAnimation:animation withCompletionBlock:nil];
-}
 
 
 -(void)runAnimationString:(NSString *)animationCode withCompletionBlock:(void (^)(void))completionBlock withExceptionBlock:(void (^)(NSException *exception))exceptionBlock
@@ -223,92 +154,8 @@
     
     
 }
--(void)runSingleAnimation:(CSAnimationItem *)animation withCompletionBlock:(void (^)(void))completionBlock
-{
-    if (!animation)
-    {
-        return;
-    }
-    NSMutableDictionary *inputMap = [NSMutableDictionary dictionary];
-
-    
-    for (NSDictionary *item in animation.inputs)
-    {
-        
-        if (item[@"value"])
-        {
-            if ([item[@"type"] isEqualToString:@"input"])
-            {
-                InputSource *nSrc = item[@"value"];
-                
-                if ([nSrc isEqualTo:[NSNull null]])
-                {
-                    nSrc = nil;
-                }
-                
-                NSString *suuid = item[@"savedUUID"];
-                if (!nSrc && suuid && ![suuid isEqualTo:[NSNull null]])
-                {
-                    nSrc = [self inputForUUID:suuid];
-                }
-                
-                if (nSrc)
-                {
-                    inputMap[item[@"label"]] = nSrc;
-                }
-            } else {
-                inputMap[item[@"label"]] = item[@"value"];
-            }
-        } else {
-            inputMap[item[@"label"]] = [NSNull null];
-        }
-    }
-
-    NSMutableDictionary *animMap = @{@"moduleName": animation.module_name, @"inputs": inputMap, @"rootLayer": self.rootLayer}.mutableCopy;
-    if (completionBlock)
-    {
-        [animMap setObject:completionBlock forKey:@"completionBlock"];
-    }
-
-    //[self doAnimation:animMap];
-
-    NSThread *runThread = [[NSThread alloc] initWithTarget:self selector:@selector(doAnimation:) object:animMap];
-    [runThread start];
-
-}
 
 
--(void)saveAnimationSource
-{
-    CSAnimationRunnerObj *runner = [CaptureController sharedAnimationObj];
-    NSBundle *mybundle = [NSBundle mainBundle];
-    NSString *bundlePath = [mybundle.bundleURL path];
-    self.animationSaveData = [NSMutableDictionary dictionary];
-
-
-    
-    for (CSAnimationItem *aitem in self.animationList)
-    {
-        NSString *mName = aitem.module_name;
-        
-        NSString *path = [runner animationPath:mName];
-        
-        //Don't save application bundled animations
-        
-        
-        if ([path hasPrefix:bundlePath])
-        {
-            continue;
-        }
-        
-        NSString *sourceString = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
-        NSString *moduleFile = [path lastPathComponent];
-        if (sourceString)
-        {
-            [self.animationSaveData setObject:sourceString forKey:moduleFile];
-        }
-     }
-}
 
 
 -(void)doAnimation:(NSDictionary *)threadDict
@@ -360,22 +207,8 @@
 }
 
 
--(void)deleteAnimations:(id)sender
-{
-    [[self mutableArrayValueForKey:@"animationList"] removeObjectsAtIndexes:self.animationIndexes];
-}
 
 
--(void)addAnimation:(NSDictionary *)animation
-{
-    CSAnimationItem *newItem = [[CSAnimationItem alloc] initWithDictionary:animation moduleName:animation[@"module"]];
-    [[self mutableArrayValueForKey:@"animationList"] addObject:newItem];
-
-    
-
-    
-    
-}
 
 
 
@@ -412,11 +245,6 @@
     [aCoder encodeInt:self.canvas_width forKey:@"canvas_width"];
     [aCoder encodeInt:self.canvas_height forKey:@"canvas_height"];
     [aCoder encodeFloat:self.frameRate forKey:@"frameRate"];
-    if (self.animationSaveData)
-    {
-        [aCoder encodeObject:self.animationSaveData forKey:@"animationSaveData"];
-    }
-    
     if (self.containedLayouts)
     {
         [aCoder encodeObject:self.containedLayouts forKey:@"containedLayouts"];
@@ -449,10 +277,6 @@
             self.frameRate = [aDecoder decodeFloatForKey:@"frameRate"];
         }
         
-        if ([aDecoder containsValueForKey:@"animationSaveData"])
-        {
-            self.animationSaveData = [aDecoder decodeObjectForKey:@"animationSaveData"];
-        }
     
         if ([aDecoder containsValueForKey:@"containedLayouts"])
         {
@@ -570,33 +394,9 @@
         src.refCount = 1;
     }
     
-    for (CSAnimationItem *item in self.animationList)
-    {
-        item.refCount = 1;
-    }
 }
 
 
-
--(NSInteger) incrementAnimationRef:(CSAnimationItem *)anim
-{
-    anim.refCount++;
-    return anim.refCount;
-    
-}
-
--(NSInteger)decrementAnimationRef:(CSAnimationItem *)anim
-{
-    
-    anim.refCount--;
-    
-    if (anim.refCount < 0)
-    {
-        anim.refCount = 0;
-    }
-    
-    return anim.refCount;
-}
 
 
 -(NSInteger)incrementInputRef:(InputSource *)input
@@ -636,7 +436,7 @@
         timerSrc = [NSNull null];
     }
     
-    NSDictionary *saveDict = @{@"sourcelist": self.sourceList, @"animationList": self.animationList, @"timingSource": timerSrc};
+    NSDictionary *saveDict = @{@"sourcelist": self.sourceList,  @"timingSource": timerSrc};
     NSMutableData *saveData = [NSMutableData data];
     NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:saveData];
     archiver.delegate = self;
@@ -652,7 +452,6 @@
     
     NSData *saveData = [self makeSaveData];
     self.savedSourceListData = saveData;
-    NSLog(@"SAVED SOURCE LIST %@", self);
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutSaved object:self userInfo:nil];
 
 }
@@ -735,32 +534,6 @@
         
         [self.containedLayouts removeObject:cLayout];
     }
-    //Only run animations that aren't already in the layout
-    
-    NSMutableArray *runAnimations = [[NSMutableArray alloc] init];
-    
-    if (!self.in_staging)
-    {
-        for (CSAnimationItem *anim in layout.animationList)
-        {
-            
-            if (![self animationForUUID:anim.uuid] && anim.onLive)
-            {
-                [runAnimations addObject:anim.uuid];
-                
-            }
-        }
-        
-        if (completionBlock)
-        {
-            @synchronized (self)
-            {
-                pendingCount += [runAnimations count];
-            }
-        }
-    }
-    
-    [self.animationList removeAllObjects];
     //If an input exists in both lists, only remove it if the new one is different/changed
     
     NSMutableArray *rList = [[NSMutableArray alloc] init];
@@ -813,20 +586,6 @@
     
     [CATransaction commit];
 
-    for (NSString *anim in runAnimations)
-    {
-        CSAnimationItem *eItem = [self animationForUUID:anim];
-        if (eItem)
-        {
-            [self runSingleAnimation:eItem withCompletionBlock:^{
-                if (completionBlock)
-                {
-                    internalCompletionBlock();
-                }
-            }];
-        }
-    }
-
     
     _noSceneTransactions = NO;
     [self updateCanvasWidth:layout.canvas_width height:layout.canvas_height];
@@ -843,10 +602,6 @@
 }
 
 
--(void)clearAnimations
-{
-    [self.animationList removeAllObjects];
-}
 
 
 
@@ -878,7 +633,6 @@
         }
     };
 
-    NSArray *mergedAnim = nil;
     
     [CATransaction begin];
     
@@ -899,7 +653,6 @@
     if ([dictOrObj isKindOfClass:[NSDictionary class]])
     {
         NSDictionary *dict = (NSDictionary *)dictOrObj;
-        mergedAnim = [dict valueForKey:@"animationList"];
     }
     
     [self adjustAllInputs];
@@ -911,30 +664,6 @@
 
     [CATransaction commit];
     
-    if (mergedAnim && !self.in_staging)
-    {
-        for (CSAnimationItem *anim in mergedAnim)
-        {
-            if (anim.onLive)
-            {
-                CSAnimationItem *eItem = [self animationForUUID:anim.uuid];
-                if (eItem && eItem.refCount == 1)
-                {
-                    if (completionBlock)
-                    {
-                        @synchronized (self) {
-                            pendingCount++;
-                        }
-                        [self runSingleAnimation:eItem withCompletionBlock:^{
-                            internalCompletionBlock();
-                        }];
-                    } else {
-                        [self runSingleAnimation:eItem];
-                    }
-                }
-            }
-        }
-    }
 }
 
 
@@ -1227,13 +956,11 @@
     [unarchiver finishDecoding];
     
     NSArray *mergeList;
-    NSArray *mergeAnimationList = nil;
     
     
     if ([mergeObj isKindOfClass:[NSDictionary class]])
     {
         mergeList = [((NSDictionary *)mergeObj) objectForKey:@"sourcelist"];
-        mergeAnimationList = [((NSDictionary *)mergeObj) objectForKey:@"animationList"];
     } else {
         mergeList = (NSArray *)mergeObj;
     }
@@ -1244,20 +971,6 @@
     }
    
     
-    if (mergeAnimationList)
-    {
-        for (CSAnimationItem *aItem in mergeAnimationList)
-        {
-            CSAnimationItem *eItem = [self animationForUUID:aItem.uuid];
-            if (eItem)
-            {
-                [self incrementAnimationRef:eItem];
-            } else {
-                [[self mutableArrayValueForKey:@"animationList"] addObject:aItem];
-                [self incrementAnimationRef:aItem];
-            }
-        }
-    }
     
     
     NSArray *undoSources;
@@ -1476,12 +1189,10 @@
     [unarchiver finishDecoding];
     
     NSArray *mergeList;
-    NSArray *mergeAnim;
     
     if ([mergeObj isKindOfClass:[NSDictionary class]])
     {
         mergeList = [((NSDictionary *)mergeObj) objectForKey:@"sourcelist"];
-        mergeAnim = [((NSDictionary *)mergeObj) objectForKey:@"animationList"];
 
     } else {
         mergeList = (NSArray *)mergeObj;
@@ -1490,21 +1201,6 @@
 
     [self removeSourceInputs:mergeList withLayer:withLayer];
     
-    if (mergeAnim)
-    {
-        for (CSAnimationItem *aItem in mergeAnim)
-        {
-            CSAnimationItem *eItem = [self animationForUUID:aItem.uuid];
-            if (eItem)
-            {
-                NSInteger eCnt = [self decrementAnimationRef:eItem];
-                if (eCnt <= 0)
-                {
-                    [[self mutableArrayValueForKey:@"animationList"] removeObject:eItem];
-                }
-            }
-        }
-    }
     return mergeObj;
 }
 
@@ -1533,13 +1229,6 @@
         
         if (restData && [restData isKindOfClass:[NSDictionary class]])
         {
-                self.animationList = [((NSDictionary *)restData) objectForKey:@"animationList"];
-                if (!self.animationList)
-                {
-                    self.animationList = [NSMutableArray array];
-                }
-
-            
             NSObject *timerSrc = nil;
             timerSrc = [((NSDictionary *)restData) objectForKey:@"timingSource"];
             if (timerSrc == [NSNull null])
@@ -1684,9 +1373,7 @@
 
         
     }
-    [self.animationList removeAllObjects];
     [_uuidMap removeAllObjects];
-    self.selectedAnimation = nil;
 }
 
 
@@ -1859,13 +1546,6 @@
         return;
     }
     
-    for (CSAnimationItem  *anim in self.animationList)
-    {
-        if (anim.onLive)
-        {
-            [self runSingleAnimation:anim];
-        }
-    }
 }
 
 
@@ -1880,17 +1560,6 @@
 }
 
 
--(CSAnimationItem *)animationForUUID:(NSString *)uuid
-{
-    for (CSAnimationItem *item in self.animationList)
-    {
-        if ([item.uuid isEqualToString:uuid])
-        {
-            return item;
-        }
-    }
-    return nil;
-}
 
 
 -(InputSource *)inputForName:(NSString *)name

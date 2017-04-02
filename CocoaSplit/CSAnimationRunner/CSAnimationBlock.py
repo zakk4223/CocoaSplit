@@ -113,7 +113,6 @@ class AnimationBlock:
                     target_map[anim.cs_input]['c_begin'] = real_begin
                 else:
                     real_begin = t_begin
-            NSLog("REAL BEGIN %f", real_begin)
             a_duration = anim.apply(real_begin)
             if not anim.ignore_wait:
                 latest_end_time = max(latest_end_time, real_begin+anim.duration)

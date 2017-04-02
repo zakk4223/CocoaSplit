@@ -10,7 +10,6 @@
 #import "CSSequenceItemLayout.h"
 #import "CSSequenceItemTransition.h"
 #import "CSSequenceItemWait.h"
-#import "CSSequenceItemAnimation.h"
 
 
 @interface CSAddSequenceItemPopupViewController ()

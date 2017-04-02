@@ -24,7 +24,6 @@
 #import "CSAddInputViewController.h"
 #import "CAMultiAudioEngine.h"
 #import "CSAnimationRunnerObj.h"
-#import "CSAnimationChooserViewController.h"
 #import "CSMidiManagerWindowController.h"
 #import "MIKMIDI.h"
 #import "CSTimerSourceProtocol.h"
@@ -34,7 +33,6 @@
 #import "CompressionSettingsPanelController.h"
 #import "AppleProResCompressor.h"
 #import "CSAddOutputPopupViewController.h"
-#import "CSAnimationWindowController.h"
 #import "CSStreamOutputWindowController.h"
 #import "CSLayoutSwitcherWithPreviewWindowController.h"
 #import "CSLayoutSequence.h"
@@ -131,7 +129,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     NSPopover *_addOutputpopOver;
     
     NSPopover *_layoutpopOver;
-    NSPopover *_animatepopOver;
     
     NSMutableArray *_screensCache;
     NSMutableArray *_layoutWindows;
@@ -141,7 +138,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     
     NSMutableArray *_audioBuffer;
     CSAdvancedAudioWindowController *_audioWindowController;
-    CSAnimationWindowController *_animationWindowController;
     CSStreamOutputWindowController *_streamOutputWindowController;
     CSLayoutSwitcherWithPreviewWindowController *_layoutSwitcherWindowController;
     CGFloat _savedAudioConstraintConstant;
@@ -243,8 +239,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (assign) bool transitionFullScene;
 @property (assign) NSInteger active_output_count;
 @property (assign) NSInteger total_dropped_frames;
-@property (assign) NSInteger pendingAnimations;
-@property (strong) NSString *pendingAnimationString;
 
 @property (weak) IBOutlet NSView *transitionConfigurationView;
 @property (weak) IBOutlet NSView *transitionSuperView;
@@ -260,7 +254,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(IBAction)hideTransitionView:(id)sender;
 -(IBAction)showTransitionView:(id)sender;
 
-- (IBAction)testSequencer:(id)sender;
 
 - (IBAction)doInstantRecord:(id)sender;
 
@@ -392,7 +385,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 +(CaptureController *)sharedCaptureController;
 
-- (IBAction)openAnimatePopover:(NSButton *)sender;
 
 - (void)saveSettings;
 - (void)loadSettings;
@@ -466,17 +458,14 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 -(void) resetInputTableHighlights;
 
-- (IBAction)removePendingAnimations:(id)sender;
 
 - (IBAction)outputSegmentedAction:(NSButton *)sender;
 
 - (IBAction)openAdvancedAudio:(id)sender;
-- (IBAction)openAnimationWindow:(id)sender;
 - (IBAction)openStreamOutputWindow:(id)sender;
 -(void) removeObjectFromCaptureDestinationsAtIndex:(NSUInteger)index;
 -(void)openAddOutputPopover:(id)sender sourceRect:(NSRect)sourceRect;
 
-- (IBAction)previewAnimations:(id)sender;
 - (IBAction)openLayoutSwitcherWindow:(id)sender;
 - (IBAction)switchLayoutView:(id)sender;
 

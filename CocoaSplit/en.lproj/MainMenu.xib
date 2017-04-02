@@ -997,14 +997,6 @@
                                             <action selector="openLayoutSwitcherWindow:" target="816" id="OJ4-8h-nqF"/>
                                         </connections>
                                     </button>
-                                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uXK-d4-r8k">
-                                        <rect key="frame" x="257" y="371" width="48" height="48"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/SidebarSmartFolder.icns" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="dMG-7i-mNc">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
-                                        </buttonCell>
-                                    </button>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HdA-UM-xTY">
                                         <rect key="frame" x="18" y="340" width="45" height="14"/>
                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Layouts" id="0gh-eB-jWC">
@@ -1176,7 +1168,6 @@
         <collectionViewItem nibName="CSLayoutCollectionItem" id="yDQ-rG-Cjn" userLabel="LayoutCollectionViewItem" customClass="CSLayoutCollectionItem"/>
     </objects>
     <resources>
-        <image name="/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/SidebarSmartFolder.icns" width="128" height="128"/>
         <image name="Mute_Icon" width="240" height="240"/>
         <image name="NSActionTemplate" width="14" height="14"/>
         <image name="NSAddTemplate" width="11" height="11"/>

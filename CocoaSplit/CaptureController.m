@@ -488,85 +488,8 @@
 }
 
 
-- (id)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
-{
-    
-    NSView *retView = nil;
-    
-    SourceLayout *layout;
-    
-    if (tableView == self.inputTableView)
-    {
-        return [tableView makeViewWithIdentifier:@"inputTableCellView" owner:tableView];
-    }
-    
-    
-    if (tableView.tag == 0)
-    {
-        layout = self.activePreviewView.sourceLayout;
-    } else {
-        layout = self.livePreviewView.sourceLayout;
-    }
-    CSAnimationItem *animation = layout.selectedAnimation;
-    
-    NSArray *inputs = animation.inputs;
-    
-    NSDictionary *inputmap = nil;
-    
-    if (row > -1 && row < inputs.count)
-    {
-        inputmap = [inputs objectAtIndex:row];
-    }
-    
-    if ([tableColumn.identifier isEqualToString:@"label"])
-    {
-        
-        retView = [tableView makeViewWithIdentifier:@"LabelCellView" owner:self];
-    } else if ([tableColumn.identifier isEqualToString:@"value"]) {
-        
-        if ([inputmap[@"type"] isEqualToString:@"param"])
-        {
-            retView = [tableView makeViewWithIdentifier:@"InputParamView" owner:self];
-        } else if ([inputmap[@"type"] isEqualToString:@"bool"]) {
-            retView = [tableView makeViewWithIdentifier:@"InputBoolView" owner:self];
-        } else {
-            retView = [tableView makeViewWithIdentifier:@"InputSourceView" owner:self];
-        }
-    }
-    
-    return retView;
-}
 
 
-- (IBAction)openAnimatePopover:(NSButton *)sender
-{
-    
-    CSAnimationChooserViewController *vc;
-    if (!_animatepopOver)
-    {
-        _animatepopOver = [[NSPopover alloc] init];
-        
-        _animatepopOver.animates = YES;
-        _animatepopOver.behavior = NSPopoverBehaviorTransient;
-    }
-    
-    if (!_animatepopOver.contentViewController)
-    {
-        vc = [[CSAnimationChooserViewController alloc] init];
-        
-        
-        _animatepopOver.contentViewController = vc;
-        _animatepopOver.delegate = vc;
-        vc.popover = _animatepopOver;
-        
-    }
-    
-    vc.sourceLayout = self.activePreviewView.sourceLayout;
-    
-    
-    [_animatepopOver showRelativeToRect:sender.bounds ofView:sender preferredEdge:NSMinYEdge];
-    
-}
 
 
 -(IBAction)closeAdvancedPrefPanel:(id)sender
@@ -769,28 +692,6 @@
                 }
                 
                 
-                if (newLayout.animationSaveData)
-                {
-                    for (NSString *moduleFile in newLayout.animationSaveData)
-                    {
-                        NSString *moduleSource = newLayout.animationSaveData[moduleFile];
-                        NSString *modulePath = [csAnimationDir stringByAppendingPathComponent:moduleFile];
-                        
-                        
-                        bool fileExists = [[NSFileManager defaultManager] fileExistsAtPath:modulePath];
-                        if (fileExists && !doClobber)
-                        {
-                            continue;
-                        }
-                        
-                        NSError *writeError;
-                        
-                        [moduleSource writeToFile:modulePath atomically:YES encoding:NSUTF8StringEncoding error:&writeError];
-                        
-                    }
-                }
-                
-                newLayout.animationSaveData = nil;
                 
                 [self insertObject:newLayout inSourceLayoutsAtIndex:self.sourceLayouts.count];
 
@@ -878,11 +779,9 @@
     {
         useLayout = self.livePreviewView.sourceLayout;
         [useLayout saveSourceList];
-        [useLayout saveAnimationSource];
     } else if (layout == self.stagingLayout) {
         useLayout = self.stagingPreviewView.sourceLayout;
         [useLayout saveSourceList];
-        [useLayout saveAnimationSource];
 
     }
 
@@ -894,7 +793,6 @@
             
             [NSKeyedArchiver archiveRootObject:useLayout toFile:saveFile.path];
             
-            useLayout.animationSaveData = nil;
         }
     }];
 }
@@ -1820,7 +1718,6 @@
         //[self.stagingLayout mergeSourceLayout:tmpLayout withLayer:nil];
     }
     
-    [self changePendingAnimations];
     self.inputLibrary = [saveRoot valueForKey:@"inputLibrary"];
     if (!self.inputLibrary)
     {
@@ -2557,14 +2454,6 @@
     }
 }
 
-- (IBAction)removePendingAnimations:(id)sender
-{
-    if (!self.stagingHidden)
-    {
-        [self.activePreviewView.sourceLayout clearAnimations];
-        [self changePendingAnimations];
-    }
-}
 
 
 
@@ -2600,15 +2489,6 @@
 
 
 
-- (IBAction)openAnimationWindow:(id)sender
-{
-    if (!_animationWindowController)
-    {
-        _animationWindowController = [[CSAnimationWindowController alloc] init];
-    }
-    
-    [_animationWindowController showWindow:nil];
-}
 
 
 - (IBAction)openAdvancedAudio:(id)sender
@@ -3252,29 +3132,6 @@
 }
 
 
--(void)changePendingAnimations
-{
-    NSInteger finalCount = 0;
-    
-    if (self.stagingHidden)
-    {
-        finalCount = 0;
-    } else {
-        
-        for (CSAnimationItem *anim in self.stagingLayout.animationList)
-        {
-            if (![self.selectedLayout animationForUUID:anim.uuid] && anim.onLive)
-            {
-                finalCount++;
-            }
-        }
-        
-    }
-    
-    self.pendingAnimations = finalCount;
-    self.pendingAnimationString = [NSString stringWithFormat:@"%ld pending animations", (long)self.pendingAnimations];
-    
-}
 
 
 -(void)toggleLayout:(SourceLayout *)layout
@@ -3289,7 +3146,6 @@
         [activeLayout mergeSourceLayout:layout];
     }
     
-    [self changePendingAnimations];
 }
 
 
@@ -3297,7 +3153,6 @@
 {
     [self.activePreviewView.sourceLayout saveSourceList];
     layout.savedSourceListData = self.activePreviewView.sourceLayout.savedSourceListData;
-    NSLog(@"SAVED TO LAYOUT %@", layout);
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutSaved object:layout userInfo:nil];
 }
 
@@ -3949,10 +3804,6 @@
           });
             
         }];
-        
-
-        [self changePendingAnimations];
-
     }
 }
 

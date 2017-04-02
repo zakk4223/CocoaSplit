@@ -10,7 +10,6 @@
 #import "InputSource.h"
 #import "CSNotifications.h"
 #import <malloc/malloc.h>
-#import "CSAnimationItem.h"
 #import "CSAnimationRunnerObj.h"
 #import "MIKMIDI.h"
 
@@ -41,12 +40,8 @@
 @property (assign) bool doSaveSourceList;
 
 @property (assign) bool inTransition;
-@property (strong) NSMutableArray *animationList;
-@property (strong) NSIndexSet *animationIndexes;
 
-@property (strong) CSAnimationItem *selectedAnimation;
 
-@property (strong) NSMutableDictionary *animationSaveData;
 
 
 @property (strong) NSMutableArray *sourceList;
@@ -101,14 +96,11 @@
 -(NSArray *)sourceListOrdered;
 -(void) saveSourceList;
 -(void)restoreSourceList:(NSData *)withData;
--(void) saveAnimationSource;
 -(NSData *)makeSaveData;
 
 -(InputSource *)inputForUUID:(NSString *)uuid;
 -(void)frameTick;
 -(NSObject *)mergeSourceListData:(NSData *)mergeData onlyAdd:(bool)onlyAdd;
--(IBAction)runAnimations:(id)sender;
--(void)addAnimation:(NSDictionary *)animation;
 -(InputSource *)sourceUnder:(InputSource *)source;
 -(void)didBecomeVisible;
 -(bool)containsInput:(InputSource *)cSource;
@@ -124,9 +116,6 @@
 -(void)clearSourceList;
 -(void)setupMIDI;
 -(void)updateCanvasWidth:(int)width height:(int)height;
--(CSAnimationItem *)animationForUUID:(NSString *)uuid;
--(void)clearAnimations;
--(void)runSingleAnimation:(CSAnimationItem *)animation withCompletionBlock:(void (^)(void))completionBlock;
 -(void)runAnimationString:(NSString *)animationCode withCompletionBlock:(void (^)(void))completionBlock withExceptionBlock:(void (^)(NSException *exception))exceptionBlock;
 
 -(void)replaceWithSourceLayout:(SourceLayout *)layout withCompletionBlock:(void (^)(void))completionBlock;
