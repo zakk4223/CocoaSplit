@@ -1701,7 +1701,6 @@
         } else {
             self.selectedLayout = tmpLayout;
         }
-        //[self.selectedLayout mergeSourceLayout:tmpLayout withLayer:nil];
     }
     
     tmpLayout = [saveRoot valueForKey:@"stagingLayout"];
@@ -1824,14 +1823,18 @@
     
     [stagingLayout setAddLayoutBlock:^(SourceLayout *layout) {
         
+        dispatch_async(dispatch_get_main_queue(), ^{
         layout.in_staging = YES;
-        
+        });
     }];
     
     [stagingLayout setRemoveLayoutBlock:^(SourceLayout *layout) {
         
+        dispatch_async(dispatch_get_main_queue(), ^{
+
         layout.in_staging = NO;
-        
+        });
+
     }];
 
     
@@ -1868,14 +1871,19 @@
     
     [selectedLayout setAddLayoutBlock:^(SourceLayout *layout) {
         
-        layout.in_live = YES;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            layout.in_live = YES;
+
+        });
         
     }];
     
     [selectedLayout setRemoveLayoutBlock:^(SourceLayout *layout) {
-        
+        dispatch_async(dispatch_get_main_queue(), ^{
+
         layout.in_live = NO;
-        
+        });
+
     }];
 
     

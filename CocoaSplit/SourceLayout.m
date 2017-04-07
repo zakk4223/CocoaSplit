@@ -585,18 +585,89 @@
 }
 
 
+-(void)undoReplaceSourceLayout:(NSData *)layoutData withContainedLayouts:(NSArray *)containedLayouts
+{
+    [self replaceWithSourceData:layoutData withCompletionBlock:nil];
+    
+    for (SourceLayout *cLayout in containedLayouts)
+    {
+        if (self.removeLayoutBlock)
+        {
+            self.removeLayoutBlock(cLayout);
+        }
+        
+    }
+
+    if (self.addLayoutBlock)
+    {
+        for (SourceLayout *newCont in containedLayouts)
+        {
+            self.addLayoutBlock(newCont);
+        }
+    }
+}
+
+
 -(void)replaceWithSourceLayout:(SourceLayout *)layout
 {
+    
+    
     [self replaceWithSourceLayout:layout withCompletionBlock:nil];
 }
 
 
 -(void)replaceWithSourceLayout:(SourceLayout *)layout withCompletionBlock:(void (^)(void))completionBlock
 {
+
+    if (self.undoManager)
+    {
+        [self.undoManager beginUndoGrouping];
+        [self saveSourceList];
+        [[self.undoManager prepareWithInvocationTarget:self] undoReplaceSourceLayout:self.savedSourceListData withContainedLayouts:self.containedLayouts.copy];
+        [self.undoManager endUndoGrouping];
+    }
     
+    
+    for (SourceLayout *cLayout in self.containedLayouts.copy)
+    {
+        if (self.removeLayoutBlock)
+        {
+            self.removeLayoutBlock(cLayout);
+        }
+        
+        [self.containedLayouts removeObject:cLayout];
+    }
+
+    [self replaceWithSourceData:layout.savedSourceListData withCompletionBlock:completionBlock];
+    
+    if (self.addLayoutBlock)
+    {
+        self.addLayoutBlock(layout);
+    }
+    
+    [self.containedLayouts addObject:layout];
+    
+    for (SourceLayout *cLayout in layout.containedLayouts.copy)
+    {
+        if (self.addLayoutBlock)
+        {
+            self.addLayoutBlock(cLayout);
+        }
+        
+        [self.containedLayouts addObject:cLayout];
+    }
 
     
-    NSDictionary *diffResult = [self diffSourceListWithData:layout.savedSourceListData];
+    [self updateCanvasWidth:layout.canvas_width height:layout.canvas_height];
+    self.frameRate = layout.frameRate;
+    [self resetAllRefCounts];
+
+}
+
+
+-(void)replaceWithSourceData:(NSData *)sourceData withCompletionBlock:(void (^)(void))completionBlock
+{
+    NSDictionary *diffResult = [self diffSourceListWithData:sourceData];
     NSMutableArray *changedRemove = [NSMutableArray array];
     
     NSArray *changedInputs = diffResult[@"changed"];
@@ -646,36 +717,6 @@
         }
     }];
 
-    
-    
-    for (SourceLayout *cLayout in self.containedLayouts.copy)
-    {
-        if (self.removeLayoutBlock)
-        {
-            self.removeLayoutBlock(cLayout);
-        }
-        
-        [self.containedLayouts removeObject:cLayout];
-    }
-    
-    
-    if (self.addLayoutBlock)
-    {
-        self.addLayoutBlock(layout);
-    }
-    
-    [self.containedLayouts addObject:layout];
-
-    for (SourceLayout *cLayout in layout.containedLayouts.copy)
-    {
-        if (self.addLayoutBlock)
-        {
-            self.addLayoutBlock(cLayout);
-        }
-        
-        [self.containedLayouts addObject:cLayout];
-    }
-    
     
     if (self.transitionFullScene)
     {
@@ -760,9 +801,6 @@
 
     
     _noSceneTransactions = NO;
-    [self updateCanvasWidth:layout.canvas_width height:layout.canvas_height];
-    self.frameRate = layout.frameRate;
-    [self resetAllRefCounts];
     
     
 }
@@ -788,13 +826,36 @@
 -(void)mergeSourceLayout:(SourceLayout *)toMerge withCompletionBlock:(void (^)(void))completionBlock
 {
     
-    
     if ([self.containedLayouts containsObject:toMerge])
     {
         return;
     }
+
     
-    NSDictionary *diffResult = [self diffSourceListWithData:toMerge.savedSourceListData];
+    [self mergeSourceData:toMerge.savedSourceListData withCompletionBlock:completionBlock];
+    
+    
+    if (self.undoManager)
+    {
+        [self.undoManager beginUndoGrouping];
+        [[self.undoManager prepareWithInvocationTarget:self] removeSourceLayout:toMerge];
+        [self.undoManager endUndoGrouping];
+    }
+    
+    
+    [self.containedLayouts addObject:toMerge];
+    if (self.addLayoutBlock)
+    {
+        self.addLayoutBlock(toMerge);
+    }
+
+}
+
+
+-(void)mergeSourceData:(NSData *)withData withCompletionBlock:(void (^)(void))completionBlock
+{
+    
+    NSDictionary *diffResult = [self diffSourceListWithData:withData];
     NSMutableArray *changedRemove = [NSMutableArray array];
     
     NSArray *changedInputs = diffResult[@"changed"];
@@ -888,12 +949,6 @@
         });
     }
     [self adjustAllInputs];
-    [self.containedLayouts addObject:toMerge];
-    if (self.addLayoutBlock)
-    {
-        self.addLayoutBlock(toMerge);
-    }
-
     
 }
 
@@ -904,13 +959,34 @@
 
 -(void)removeSourceLayout:(SourceLayout *)toRemove withCompletionBlock:(void (^)(void))completionBlock
 {
-    
     if (![self.containedLayouts containsObject:toRemove])
     {
         return;
     }
+
+    if (self.undoManager)
+    {
+        [self.undoManager beginUndoGrouping];
+        [[self.undoManager prepareWithInvocationTarget:self] mergeSourceLayout:toRemove];
+        [self.undoManager endUndoGrouping];
+    }
+
+    [self removeSourceData:toRemove.savedSourceListData withCompletionBlock:completionBlock];
     
-    NSDictionary *diffResult = [self diffSourceListWithData:toRemove.savedSourceListData];
+    [self.containedLayouts removeObject:toRemove];
+    if (self.removeLayoutBlock)
+    {
+        self.removeLayoutBlock(toRemove);
+    }
+
+}
+
+
+-(void)removeSourceData:(NSData *)toRemove withCompletionBlock:(void (^)(void))completionBlock
+{
+    
+    
+    NSDictionary *diffResult = [self diffSourceListWithData:toRemove];
     
     NSArray *changedInputs = diffResult[@"changed"];
     NSArray *sameInputs = diffResult[@"same"];
@@ -974,11 +1050,6 @@
     }
     [CATransaction commit];
     
-    [self.containedLayouts removeObject:toRemove];
-    if (self.removeLayoutBlock)
-    {
-        self.removeLayoutBlock(toRemove);
-    }
 }
 
 
