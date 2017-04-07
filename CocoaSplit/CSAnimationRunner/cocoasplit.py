@@ -1,6 +1,6 @@
 from Foundation import NSObject,NSLog,NSApplication
 import CSAnimationBlock
-import CSAnimationInput
+from CSAnimationInput import *
 from CSAnimation import *
 
 

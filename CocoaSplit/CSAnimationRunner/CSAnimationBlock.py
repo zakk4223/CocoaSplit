@@ -22,8 +22,10 @@ class AnimationBlock:
         cframe = current_frame()
         if cframe:
             self.layout = cframe.layout
+            self.animation_module = cframe.animation_module
         else:
             self.layout = None
+            self.animation_module = None
         
         CATransaction.begin()
         CATransaction.setValue_forKey_(self, "__CS_BLOCK_OBJECT__")
@@ -114,6 +116,9 @@ class AnimationBlock:
                 else:
                     real_begin = t_begin
             a_duration = anim.apply(real_begin)
+            if (anim.uukey and anim.target):
+                self.animation_module.all_animations[anim.uukey] = anim.target
+            
             if not anim.ignore_wait:
                 latest_end_time = max(latest_end_time, real_begin+anim.duration)
                 if anim.cs_input:

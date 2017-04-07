@@ -47,6 +47,15 @@
 
 
 
+-(void)cancelSequenceForLayout:(SourceLayout *)layout
+{
+    if (self.lastRunUUID)
+    {
+        [layout cancelScriptRun:self.lastRunUUID];
+        self.lastRunUUID = nil;
+    }
+}
+
 
 -(void)runSequenceForLayout:(SourceLayout *)layout withCompletionBlock:(void (^)())completionBlock withExceptionBlock:(void (^)(NSException *exception))exceptionBlock
 {
@@ -70,7 +79,23 @@
         }
         
         
-        [self.sourceLayout runAnimationString:realCode withCompletionBlock:completionBlock withExceptionBlock:exceptionBlock];
+        
+            
+
+        self.lastRunUUID = [self.sourceLayout runAnimationString:realCode withCompletionBlock:^{
+            self.lastRunUUID = nil;
+            if (completionBlock)
+            {
+                completionBlock();
+            }
+        } withExceptionBlock:^(NSException *exception) {
+            self.lastRunUUID = nil;
+            if (exceptionBlock)
+            {
+                exceptionBlock(exception);
+            }
+            
+        }];
     }
     
 }

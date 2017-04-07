@@ -42,6 +42,9 @@
     return self;
 }
 
+
+
+
 -(CALayer *)createNewLayer
 {
     CATextLayer *newLayer = [CATextLayer layer];
@@ -57,9 +60,13 @@
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
     [super encodeWithCoder:aCoder];
+    
+    NSData *attrData = [NSKeyedArchiver archivedDataWithRootObject:self.fontAttributes];
+    
+    
     [aCoder encodeObject:self.text forKey:@"text"];
     [aCoder encodeObject:self.font forKey:@"font"];
-    [aCoder encodeObject:self.fontAttributes forKey:@"fontAttributes"];
+    [aCoder encodeObject:attrData forKey:@"fontAttributesData"];
     [aCoder encodeBool:self.wrapped forKey:@"wrapped"];
     [aCoder encodeObject:self.alignmentMode forKey:@"alignmentMode"];
 }
@@ -69,6 +76,11 @@
 {
     if (self = [super initWithCoder:aDecoder])
     {
+        
+        if (!self.activeVideoDevice)
+        {
+            self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
+        }
         _text = [aDecoder decodeObjectForKey:@"text"];
         NSFont *savedFont = [aDecoder decodeObjectForKey:@"font"];
         if (savedFont)
@@ -79,10 +91,18 @@
         
         
         
+        
         NSDictionary *savedfontAttributes = [aDecoder decodeObjectForKey:@"fontAttributes"];
         if (savedfontAttributes)
         {
             _fontAttributes = savedfontAttributes;
+        } else {
+            NSData *encodedAttrData = [aDecoder decodeObjectForKey:@"fontAttributesData"];
+            if (encodedAttrData)
+            {
+                _fontAttributes = [NSKeyedUnarchiver unarchiveObjectWithData:encodedAttrData];
+            }
+
         }
         
         _wrapped = [aDecoder decodeBoolForKey:@"wrapped"];

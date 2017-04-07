@@ -23,6 +23,7 @@ class CSAnimation:
         self.toValue = None
         self.baseLayer = None
         self.layout = None
+        self.uukey = None
         
         
         if animation:

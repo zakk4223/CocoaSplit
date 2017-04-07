@@ -97,8 +97,8 @@
 
 -(void)setActiveVideoDevice:(CSAbstractCaptureDevice *)activeVideoDevice
 {
-    [super setActiveVideoDevice:activeVideoDevice];
-    self.captureName = activeVideoDevice.captureName;
+   [super setActiveVideoDevice:activeVideoDevice];
+   self.captureName = activeVideoDevice.captureName;
 }
 
 
@@ -130,6 +130,7 @@
             }];
             CGImageRelease(windowImg);
         });
+        
         
         _nextCaptureTime = currentTime + (1/self.captureFPS);
     }

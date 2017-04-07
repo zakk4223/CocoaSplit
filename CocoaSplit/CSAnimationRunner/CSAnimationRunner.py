@@ -90,37 +90,43 @@ class CSAnimationRunnerObj(NSObject):
 
     def beginAnimation(self, duration=0.25):
         CSAnimationBlock.beginAnimation(duration)
-        CSAnimationBlock.current_frame().layout = self.layout
     
 
-    @objc.signature('v@:@@')
+    @objc.signature('@@:@@')
     def runAnimation_forLayout_(self,animation_string, layout):
     
         animation = ModuleType('cs_fromstring_animation', '')
         exec("from cocoasplit import *", animation.__dict__)
+        exec("all_animations = {}", animation.__dict__)
+        
         exec(animation_string, animation.__dict__)
         CSAnimationBlock.beginAnimation()
         CSAnimationBlock.current_frame().layout = layout
-        
+        CSAnimationBlock.current_frame().animation_module = animation
+
         animation.wait = CSAnimationBlock.wait
         animation.waitAnimation = CSAnimationBlock.waitAnimation
         animation.animationDuration = CSAnimationBlock.animationDuration
         animation.setCompletionBlock = CSAnimationBlock.setCompletionBlock
         animation.commitAnimation = CSAnimationBlock.commitAnimation
+        animation.beginAnimation = self.beginAnimation
         
         self.baseLayer = layout.rootLayer()
         self.layout = layout
-        
         
         try:
             CSAnimationBlock.setCompletionBlock(dummyCompletion)
         
             animation.run_script()
+        
         except:
             CSAnimationBlock.commitAnimation()
             raise
         else:
             CSAnimationBlock.commitAnimation()
+        NSLog("ALL ANIMATIONS %@", animation.all_animations)
+        return animation.all_animations
+
 
     
     

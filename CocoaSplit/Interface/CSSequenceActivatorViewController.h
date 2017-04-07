@@ -14,6 +14,7 @@
 @property (strong) NSMenu *sequenceMenu;
 
 -(void)showSequenceMenu:(NSEvent *)clickEvent forView:(CSSequenceActivatorView *)view;
+-(void)sequenceViewClicked:(NSEvent *)clickEvent forView:(CSSequenceActivatorView *)view;
 
 
 @end

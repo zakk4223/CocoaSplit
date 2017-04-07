@@ -90,6 +90,7 @@
 
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
+    
     [aCoder encodeObject:self.activeVideoDevice.uniqueID forKey:@"active_uniqueID"];
     [aCoder encodeBool:self.allowDedup forKey:@"allowDedup"];
 }

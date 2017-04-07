@@ -1,5 +1,8 @@
 import CSAnimationBlock
-import CSAnimation
+from CSAnimation import *
+import math
+from Quartz import CACurrentMediaTime,CATransaction,CGPathRef,CGPathAddLines,CGPathCloseSubpath,CGPathRelease,CGPathCreateMutable
+from Foundation import *
 
 
 class CSAnimationInput(object):

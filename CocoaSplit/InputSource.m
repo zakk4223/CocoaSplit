@@ -120,27 +120,23 @@ static NSArray *_sourceTypes = nil;
 
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
-    
     [aCoder encodeFloat:self.rotationAngle forKey:@"rotationAngle"];
     [aCoder encodeFloat:self.rotationAngleX forKey:@"rotationAngleX"];
     [aCoder encodeFloat:self.rotationAngleY forKey:@"rotationAngleY"];
-
     [aCoder encodeFloat:self.opacity forKey:@"opacity"];
-    
     [aCoder encodeObject:_editedName forKey:@"name"];
     [aCoder encodeFloat:self.depth forKey:@"CAdepth"];
     [aCoder encodeFloat:self.crop_top forKey:@"CAcrop_top"];
     [aCoder encodeFloat:self.crop_bottom forKey:@"CAcrop_bottom"];
     [aCoder encodeFloat:self.crop_left forKey:@"CAcrop_left"];
     [aCoder encodeFloat:self.crop_right forKey:@"CAcrop_right"];
-    
     [aCoder encodeObject:self.selectedVideoType forKey:@"selectedVideoType"];
     [aCoder encodeObject:self.uuid forKey:@"uuid"];
-
     [aCoder encodeFloat:self.scrollXSpeed forKey:@"scrollXSpeed"];
     [aCoder encodeFloat:self.scrollYSpeed forKey:@"scrollYSpeed"];
     
     [aCoder encodeInt:self.rotateStyle forKey:@"rotateStyle"];
+     
     if (self.videoInput)
     {
         [aCoder encodeObject:self.videoInput forKey:@"videoInput"];
@@ -167,9 +163,9 @@ static NSArray *_sourceTypes = nil;
     [aCoder encodeFloat:self.layer.position.x forKey:@"CAx_pos"];
     [aCoder encodeFloat:self.layer.position.y forKey:@"CAy_pos"];
     
+    
     [aCoder encodeFloat:self.layer.bounds.size.width forKey:@"CAdisplay_width"];
     [aCoder encodeFloat:self.layer.bounds.size.height forKey:@"CAdisplay_height"];
-    
     [aCoder encodeFloat:self.borderWidth forKey:@"borderWidth"];
     [aCoder encodeObject:self.borderColor forKey:@"borderColor"];
     [aCoder encodeFloat:self.cornerRadius forKey:@"cornerRadius"];
@@ -197,7 +193,6 @@ static NSArray *_sourceTypes = nil;
     [aCoder encodeFloat: self.gradientStopX forKey:@"gradientEndPointX"];
     [aCoder encodeFloat: self.gradientStopY forKey:@"gradientEndPointY"];
 
-
     
     [aCoder encodeObject:self.layer.filters forKey:@"layerFilters"];
     if (_userBackground)
@@ -209,7 +204,6 @@ static NSArray *_sourceTypes = nil;
     
     [aCoder encodeBool:self.alwaysDisplay forKey:@"alwaysDisplay"];
     [aCoder encodeBool:self.transitionEnabled forKey:@"transitionEnabled"];
-    
 }
 
 
@@ -1865,6 +1859,7 @@ static NSArray *_sourceTypes = nil;
     
     NSSize videoSize = [self.videoInput captureSize];
     
+    
     if (!NSEqualSizes(videoSize, NSZeroSize))
     {
         [self directSize:videoSize.width height:videoSize.height];
@@ -1934,7 +1929,7 @@ static NSArray *_sourceTypes = nil;
     NSRect iRect = NSIntegralRect(newLayout);
     
     [CATransaction begin];
-    self.layer.frame = newLayout;
+    self.layer.frame = iRect;
     [CATransaction commit];
     
     
@@ -2306,6 +2301,7 @@ static NSArray *_sourceTypes = nil;
     
     NSData *myData = [self saveData];
     NSData *fromData = [from saveData];
+    
     
     
     if ([myData isEqualToData:fromData])

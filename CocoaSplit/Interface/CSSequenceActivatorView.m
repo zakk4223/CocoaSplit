@@ -65,54 +65,15 @@
 }
      
 
--(void)handleScriptException:(NSException *)exception
-{
-    
-    NSDictionary *errorUserInfo = @{
-                                    NSLocalizedDescriptionKey: exception.reason,
-                                    NSLocalizedFailureReasonErrorKey: exception.name
-                                    };
-    
-    NSError *pyError = [NSError errorWithDomain:@"zakk.lol.cocoasplit" code:-35 userInfo:errorUserInfo];
-    NSAlert *errAlert = [NSAlert alertWithError:pyError];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [errAlert beginSheetModalForWindow:[NSApp mainWindow] completionHandler:nil];
-        
-    });
-}
 
 
 -(void)mouseDown:(NSEvent *)event
 {
-    self.layer.opacity = 0.5f;
     
-    if (self.layoutSequence)
-    {
-        CaptureController *captureController = [CaptureController sharedCaptureController];
-        [self.layoutSequence runSequenceForLayout:captureController.selectedLayout withCompletionBlock:nil withExceptionBlock:^(NSException *exception) {
-            [self handleScriptException:exception];
-        }];
-    }
-    /*
-    if (self.layoutSequence)
-    {
-        AppDelegate *appDel = NSApp.delegate;
-        
-        CaptureController *controller = appDel.captureController;
-        if (event.modifierFlags & NSShiftKeyMask)
-        {
-            [controller toggleLayout:self.sourceLayout];
-        } else {
-            [controller switchToLayout:self.sourceLayout];
-        }
-    }*/
+    [self.controller sequenceViewClicked:event forView:self];
     
 }
 
--(void)mouseUp:(NSEvent *)event
-{
-    self.layer.opacity = 1.0f;
-}
 
 -(CSLayoutSequence *)layoutSequence
 {

@@ -40,7 +40,6 @@
     
 -(void)sequenceAdded:(NSNotification *)notification
     {
-        NSLog(@"SEQUNCE ADDED IN VIEW CONTROLLER");
         self.sequences = nil;
     }
     
@@ -169,11 +168,45 @@
     
     
 -(void)showSequenceMenu:(NSEvent *)clickEvent forView:(CSSequenceActivatorView *)view
+{
+    NSPoint tmp = [self.view convertPoint:clickEvent.locationInWindow fromView:nil];
+    [self buildSequenceMenuForView:view];
+    [self.sequenceMenu popUpMenuPositioningItem:self.sequenceMenu.itemArray.firstObject atLocation:tmp inView:self.view];
+}
+
+-(void)handleScriptException:(NSException *)exception
+{
+    
+    NSDictionary *errorUserInfo = @{
+                                    NSLocalizedDescriptionKey: exception.reason,
+                                    NSLocalizedFailureReasonErrorKey: exception.name
+                                    };
+    
+    NSError *pyError = [NSError errorWithDomain:@"zakk.lol.cocoasplit" code:-35 userInfo:errorUserInfo];
+    NSAlert *errAlert = [NSAlert alertWithError:pyError];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [errAlert beginSheetModalForWindow:[NSApp mainWindow] completionHandler:nil];
+        
+    });
+}
+
+
+-(void)sequenceViewClicked:(NSEvent *)clickEvent forView:(CSSequenceActivatorView *)view
+{
+    view.layer.opacity = 0.5f;
+    
+    if (view.layoutSequence)
     {
-        NSPoint tmp = [self.view convertPoint:clickEvent.locationInWindow fromView:nil];
-        [self buildSequenceMenuForView:view];
-        [self.sequenceMenu popUpMenuPositioningItem:self.sequenceMenu.itemArray.firstObject atLocation:tmp inView:self.view];
+        CaptureController *captureController = [CaptureController sharedCaptureController];
+        if (view.layoutSequence.lastRunUUID)
+        {
+            [view.layoutSequence cancelSequenceForLayout:captureController.selectedLayout];
+        } else {
+            [view.layoutSequence runSequenceForLayout:captureController.selectedLayout withCompletionBlock:^(){view.layer.opacity = 1.0f;} withExceptionBlock:^(NSException *exception) {
+                [self handleScriptException:exception];
+            }];
+        }
     }
-    
-    
-    @end
+
+}
+@end
