@@ -9,6 +9,7 @@
 #import "CSSequenceActivatorViewController.h"
 #import "AppDelegate.h"
 #import "CaptureController.h"
+#import "PreviewView.h"
 
 @interface CSSequenceActivatorViewController ()
     
@@ -80,7 +81,6 @@
             
             CaptureController *controller = appDel.captureController;
             _sequences = controller.layoutSequences;
-            NSLog(@"SEQUENCES %@", _sequences);
             
         } else {
             _sequences = sequences;
@@ -200,9 +200,9 @@
         CaptureController *captureController = [CaptureController sharedCaptureController];
         if (view.layoutSequence.lastRunUUID)
         {
-            [view.layoutSequence cancelSequenceForLayout:captureController.selectedLayout];
+            [view.layoutSequence cancelSequenceForLayout:captureController.activePreviewView.sourceLayout];
         } else {
-            [view.layoutSequence runSequenceForLayout:captureController.selectedLayout withCompletionBlock:^(){view.layer.opacity = 1.0f;} withExceptionBlock:^(NSException *exception) {
+            [view.layoutSequence runSequenceForLayout:captureController.activePreviewView.sourceLayout withCompletionBlock:^(){view.layer.opacity = 1.0f;} withExceptionBlock:^(NSException *exception) {
                 [self handleScriptException:exception];
             }];
         }

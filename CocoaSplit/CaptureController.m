@@ -2514,15 +2514,25 @@
 
 - (IBAction)openLayoutSwitcherWindow:(id)sender
 {
-    if (!_layoutSwitcherWindowController)
+    
+    
+    if (_layoutViewController)
     {
-        _layoutSwitcherWindowController = [[CSLayoutSwitcherWithPreviewWindowController alloc] init];
+        if (!_layoutSwitcherWindowController)
+        {
+            _layoutSwitcherWindowController = [[CSLayoutSwitcherWithPreviewWindowController alloc] init];
+        }
+        [_layoutSwitcherWindowController showWindow:nil];
+        _layoutSwitcherWindowController.layouts = nil;
+    } else {
+        if (!_scriptWindowViewController)
+        {
+            _scriptWindowViewController = [[CSScriptWindowViewController alloc] init];
+        }
+        [_scriptWindowViewController showWindow:nil];
+        _scriptWindowViewController.sequences = nil;
+        
     }
-
-    
-    
-    [_layoutSwitcherWindowController showWindow:nil];
-    _layoutSwitcherWindowController.layouts = nil;
 
     
 }

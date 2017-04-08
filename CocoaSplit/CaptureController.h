@@ -35,6 +35,7 @@
 #import "CSAddOutputPopupViewController.h"
 #import "CSStreamOutputWindowController.h"
 #import "CSLayoutSwitcherWithPreviewWindowController.h"
+#import "CSScriptWindowViewController.h"
 #import "CSLayoutSequence.h"
 #import "CSSequenceItemLayout.h"
 #import "CSSequenceItemWait.h"
@@ -69,6 +70,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     
     
     CSLayoutSwitcherViewController *_layoutViewController;
+    CSScriptWindowViewController *_scriptWindowViewController;
     CSSequenceActivatorViewController *_sequenceViewController;
     
     

@@ -14,7 +14,7 @@ def getCurrentLayout():
     current_frame = CSAnimationBlock.current_frame()
     if current_frame:
         return current_frame.layout
-    return getCaptureController().selectedLayout()
+    return getCaptureController().activePreviewView().sourceLayout()
     
 def setBasicTransition(name, direction=None, duration=0.25, **kwargs):
     my_layout = getCurrentLayout()
