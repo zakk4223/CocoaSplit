@@ -3121,6 +3121,21 @@
     return YES;
 }
 
+-(CSLayoutSequence *)getSequenceForName:(NSString *)name
+{
+    NSUInteger selectedIdx = [self.layoutSequences indexOfObjectPassingTest:^BOOL(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        return [((CSLayoutSequence *)obj).name isEqualToString:name];
+    }];
+    
+    CSLayoutSequence *foundSequence = nil;
+    
+    if (selectedIdx != NSNotFound)
+    {
+        foundSequence = [self.layoutSequences objectAtIndex:selectedIdx];
+    }
+    
+    return foundSequence;
+}
 
 -(SourceLayout *)getLayoutForName:(NSString *)name
 {

@@ -2,6 +2,7 @@ from Foundation import NSObject,NSLog,NSApplication
 import CSAnimationBlock
 from CSAnimationInput import *
 from CSAnimation import *
+import re
 
 
 
@@ -34,6 +35,39 @@ def clearTransition():
     my_layout.setTransitionFilter_(None)
 
 
+def scriptByName(name):
+    cap_controller = getCaptureController()
+    layout_script = cap_controller.getSequenceForName_(name)
+    return layout_script
+
+
+def runScriptByName(name):
+    my_func = getattr(CSAnimationBlock.current_frame().animation_module, "run_{0}_script".format(name))
+    if my_func:
+        return my_func()
+    
+    layout_script = scriptByName(name)
+    if layout_script:
+        script_code = layout_script.animationCode()
+        real_script_code = ""
+        if script_code:
+            re_ra = re.compile('def\s+run_script')
+            if re.search(re_ra, script_code):
+                real_script_code = re.sub(re_ra, script_code)
+            else:
+                real_script_code = "def run_{0}_script():\n".format(name)
+                sc_lines = script_code.splitlines(True)
+                for s_line in sc_lines:
+                    real_script_code += "\t{0}".format(s_line)
+            
+            
+            exec(real_script_code, CSAnimationBlock.current_frame().animation_module.__dict__)
+            my_func = getattr(CSAnimationBlock.current_frame().animation_module, "run_{0}_script".format(name))
+            my_func()
+
+
+
+
 def audioInputByRegex(regex):
     cap_controller = getCaptureController()
     all_audio_inputs = cap_controller.multiAudioEngine().audioInputs()
@@ -42,7 +76,6 @@ def audioInputByRegex(regex):
     
     for a_inp in all_audio_inputs:
         a_name = a_inp.name()
-        NSLog("A NAME %@", a_name)
         if re.search(re_c, a_name):
             return a_inp
 

@@ -409,6 +409,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(void)addSequenceWithNameDedup:(CSLayoutSequence *)sequence;
 -(SourceLayout *)findLayoutWithName:(NSString *)name;
 -(void)openSequenceWindow:(CSLayoutSequence *)forSequence;
+-(CSLayoutSequence *)getSequenceForName:(NSString *)name;
 
 
 -(void)openAddInputPopover:(NSButton *)sender;

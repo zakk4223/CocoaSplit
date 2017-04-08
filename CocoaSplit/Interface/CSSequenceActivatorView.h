@@ -20,5 +20,6 @@
 }
 @property (weak) CSLayoutSequence *layoutSequence;
 @property (weak) CSSequenceActivatorViewController *controller;
+@property (assign) bool isQueued;
 
 @end

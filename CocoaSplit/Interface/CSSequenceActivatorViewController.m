@@ -25,7 +25,7 @@
         {
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sequenceDeleted:) name:CSNotificationSequenceDeleted object:nil];
             [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sequenceAdded:) name:CSNotificationSequenceAdded object:nil];
-            
+            _queuedSequences = [NSMutableArray array];
             
         }
         return self;
@@ -195,16 +195,42 @@
 {
     view.layer.opacity = 0.5f;
     
-    if (view.layoutSequence)
+    
+    if ([clickEvent modifierFlags] & NSShiftKeyMask)
     {
-        CaptureController *captureController = [CaptureController sharedCaptureController];
-        if (view.layoutSequence.lastRunUUID)
+        if (view.isQueued)
         {
-            [view.layoutSequence cancelSequenceForLayout:captureController.activePreviewView.sourceLayout];
+            view.isQueued = NO;
+            [self.queuedSequences removeObject:view];
         } else {
-            [view.layoutSequence runSequenceForLayout:captureController.activePreviewView.sourceLayout withCompletionBlock:^(){view.layer.opacity = 1.0f;} withExceptionBlock:^(NSException *exception) {
-                [self handleScriptException:exception];
-            }];
+            view.isQueued = YES;
+            [self.queuedSequences addObject:view];
+
+        }
+    } else {
+
+        if (view.layoutSequence)
+        {
+            CaptureController *captureController = [CaptureController sharedCaptureController];
+            if (view.layoutSequence.lastRunUUID)
+            {
+                [view.layoutSequence cancelSequenceForLayout:captureController.activePreviewView.sourceLayout];
+            } else {
+                if (self.queuedSequences.count > 0)
+                {
+                    for (CSSequenceActivatorView *qView in self.queuedSequences)
+                    {
+                        [qView.layoutSequence runSequenceForLayout:captureController.activePreviewView.sourceLayout withCompletionBlock:^(){qView.layer.opacity = 1.0f; qView.isQueued = NO;} withExceptionBlock:^(NSException *exception) {
+                            [self handleScriptException:exception];
+                        }];
+
+                    }
+                    [self.queuedSequences removeAllObjects];
+                }
+                [view.layoutSequence runSequenceForLayout:captureController.activePreviewView.sourceLayout withCompletionBlock:^(){view.layer.opacity = 1.0f; view.isQueued = NO;} withExceptionBlock:^(NSException *exception) {
+                    [self handleScriptException:exception];
+                }];
+            }
         }
     }
 
