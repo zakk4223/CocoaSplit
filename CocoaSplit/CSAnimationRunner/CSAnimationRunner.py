@@ -13,17 +13,24 @@ import CSAnimationBlock
 from CSAnimation import *
 from Foundation import NSObject,NSLog,NSApplication
 import sys
+import traceback
 import os
 import re
 sys.dont_write_bytecode = True
 
 
-plugin_base = PluginBase(package='animationplugins')
+script_base = PluginBase(package='scriptplugins')
+plugin_base = PluginBase(package='cocoasplitplugins')
 
 library_dirs = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSAllDomainsMask - NSSystemDomainMask, YES)
-plugin_dirs = map(lambda x: x + "/Application Support/CocoaSplit/Plugins/Animations", library_dirs)
-plugin_dirs.append(NSBundle.mainBundle().resourcePath() + "/Animations")
+script_dirs = map(lambda x: x + "/Application Support/CocoaSplit/Plugins/Scripts", library_dirs)
+script_dirs.append(NSBundle.mainBundle().resourcePath() + "/Scripts")
+script_source = script_base.make_plugin_source(searchpath=script_dirs)
+
+plugin_dirs = map(lambda x: x + "/Application Support/CocoaSplit/Plugins/Python", library_dirs)
+plugin_dirs.append(NSBundle.mainBundle().builtInPlugInsPath() + "/Python")
 plugin_source = plugin_base.make_plugin_source(searchpath=plugin_dirs)
+
 
 
 
@@ -51,14 +58,31 @@ class CSAnimationRunnerObj(NSObject):
         real_path = os.path.realpath(plugin_file)
         return real_path
     
+    @objc.signature('@@:')
+    def allPlugins(self):
+        ret = []
+        plugin_names = plugin_source.list_plugins()
+
+        for plugin_n in plugin_names:
+            p_plugin = None
+            try:
+                p_plugin = plugin_source.load_plugin(plugin_n)
+            except Exception, e:
+                NSLog("Error loading plugin %@: %@", plugin_n, traceback.format_exc())
+            
+            if p_plugin:
+                plugin_classes = p_plugin.plugin_classes
+                ret.extend(plugin_classes)
+        
+        return ret
     
     @objc.signature('@@:')
     def allAnimations(self):
-        plugins = plugin_source.list_plugins()
+        plugins = script_source.list_plugins()
         ret = {}
         
         for m_name in plugins:
-            plugin = plugin_source.load_plugin(m_name)
+            plugin = script_source.load_plugin(m_name)
             reload(plugin)
 
 
@@ -124,7 +148,6 @@ class CSAnimationRunnerObj(NSObject):
             raise
         else:
             CSAnimationBlock.commitAnimation()
-        NSLog("ALL ANIMATIONS %@", animation.all_animations)
         return animation.all_animations
 
 

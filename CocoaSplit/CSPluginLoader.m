@@ -11,7 +11,7 @@
 #import "CSStreamServiceProtocol.h"
 #import "CSPluginFactoryProtocol.h"
 #import "CSExtraPluginProtocol.h"
-
+#import "CaptureController.h"
 
 
 
@@ -143,6 +143,21 @@
 }
 
 
+-(void)loadAllPythonPlugins
+{
+    CSAnimationRunnerObj *animObj = [CaptureController sharedAnimationObj];
+    
+    NSArray *pluginClasses  = nil;
+    
+    
+    pluginClasses = [animObj allPlugins];
+    for (Class pClass in pluginClasses)
+    {
+        [self validateAndRegisterPluginClass:pClass];
+    }
+}
+
+
 - (void)loadAllBundles
 {
     NSMutableArray *instances;
@@ -212,5 +227,6 @@
             
         }
     }
+    [self loadAllPythonPlugins];
 }
 @end
