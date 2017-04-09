@@ -16,12 +16,18 @@
 @class CAMultiAudioDownmixer;
 @class CAMultiAudioMatrixMixerWindowController;
 
+@interface CAMultiAudioVolumeAnimation : NSAnimation
 
+@property (assign) float target_volume;
+@property (assign) float original_volume;
+
+@end
 @interface CAMultiAudioNode : NSObject
 {
     float _saved_volume;
     
     AudioComponentDescription unitDescr;
+    CAMultiAudioVolumeAnimation *_volumeAnimation;
 }
 
 @property (assign) AUNode node;
@@ -64,6 +70,7 @@
 -(void)setVolumeOnConnectedNode;
 
 -(void)openMixerWindow:(id)sender;
+-(void)setVolumeAnimated:(float)volume withDuration:(float)duration;
 
 
 @end

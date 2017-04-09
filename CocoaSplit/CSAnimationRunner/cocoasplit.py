@@ -82,10 +82,10 @@ def audioInputByRegex(regex):
     return None
 
 
-def setAudioInputVolume(name_regex, volume):
+def setAudioInputVolume(name_regex, volume, duration):
     a_inp = audioInputByRegex(name_regex)
     if a_inp:
-        a_inp.setVolume_(volume)
+        a_inp.setVolumeAnimated_withDuration_(volume, duration)
 
 
 

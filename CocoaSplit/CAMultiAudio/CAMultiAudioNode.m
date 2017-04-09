@@ -11,6 +11,10 @@
 #import "CAMultiAudioMixingProtocol.h"
 #import "CAMultiAudioMatrixMixerWindowController.h"
 
+@implementation CAMultiAudioVolumeAnimation
+
+@end
+
 
 @implementation CAMultiAudioNode
 
@@ -226,8 +230,55 @@
     return _muted;
 }
 
+-(void)animationDidEnd:(NSAnimation *)animation
+{
+    CAMultiAudioVolumeAnimation *vAnim = (CAMultiAudioVolumeAnimation *)animation;
+
+    self.volume = vAnim.target_volume;
+}
 
 
+-(void)animation:(NSAnimation *)animation didReachProgressMark:(NSAnimationProgress)progress
+{
+    CAMultiAudioVolumeAnimation *vAnim = (CAMultiAudioVolumeAnimation *)animation;
+    
+    float volume_delta = fabs(vAnim.original_volume - vAnim.target_volume);
+    float progress_val = volume_delta * progress;
+    
+    float real_volume = 0;
+    
+    if (vAnim.target_volume > vAnim.original_volume)
+    {
+        real_volume = vAnim.original_volume + progress_val;
+    } else {
+        real_volume = vAnim.original_volume - progress_val;
+    }
+    
+    self.volume = real_volume;
+}
+
+
+-(void)setVolumeAnimated:(float)volume withDuration:(float)duration
+{
+    _volumeAnimation = [[CAMultiAudioVolumeAnimation alloc] initWithDuration:duration animationCurve:NSAnimationLinear];
+    [_volumeAnimation setFrameRate:20.0];
+    [_volumeAnimation setDelegate:self];
+    _volumeAnimation.animationBlockingMode = NSAnimationNonblockingThreaded;
+    _volumeAnimation.target_volume = volume;
+    _volumeAnimation.original_volume = self.volume;
+    
+    
+    float step_size = 1.0/20.0;
+    float step_vol = 0.0;
+    for (int i = 0; i <= 21; i++)
+    {
+        [_volumeAnimation addProgressMark:step_vol];
+
+        step_vol += step_size;
+    }
+    [_volumeAnimation startAnimation];
+    
+}
 -(void)setVolume:(float)volume
 {
     _volume = volume;
