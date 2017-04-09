@@ -44,7 +44,6 @@
     {
         
         self.needsSourceSelection = NO;
-        _animationQueue = dispatch_queue_create("imageCaptureQueue", NULL);
         self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
      }
     

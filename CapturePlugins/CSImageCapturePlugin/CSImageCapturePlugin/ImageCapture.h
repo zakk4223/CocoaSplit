@@ -18,7 +18,6 @@
     CGImageSourceRef _imageSource;
     size_t _totalFrames;
     int _frameNumber;
-    dispatch_queue_t _animationQueue;
 
     NSMutableArray *_imageCache;
     CAKeyframeAnimation *_animation;

@@ -464,6 +464,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void)addedToLayout
 {
+    
     if (self.parentInput)
     {
         
@@ -472,6 +473,8 @@ static NSArray *_sourceTypes = nil;
     }
 
 }
+
+
 -(CGRect)globalLayoutPosition
 {
     return [self.sourceLayout.rootLayer convertRect:self.layer.frame fromLayer:self.layer.superlayer];

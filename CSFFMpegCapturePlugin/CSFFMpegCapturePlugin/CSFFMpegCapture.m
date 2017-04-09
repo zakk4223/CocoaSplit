@@ -19,41 +19,48 @@
         
         _lastSize = NSZeroSize;
         
-        av_register_all();
-        avformat_network_init();
-        
-        
         self.needsSourceSelection = NO;
 
-        //Inputs resample to floating point non-interleaved 48k for now.
-        
-        _asbd.mSampleRate = 48000;
-        _asbd.mFormatID = kAudioFormatLinearPCM;
-        _asbd.mFormatFlags = kAudioFormatFlagsNativeEndian  | kAudioFormatFlagIsFloat | kAudioFormatFlagIsNonInterleaved;
-        _asbd.mChannelsPerFrame = 2;
-        _asbd.mBitsPerChannel = 32;
-        _asbd.mBytesPerFrame = 4;
-        _asbd.mBytesPerPacket = 4;
-        _asbd.mFramesPerPacket = 1;
-        
-        _player = [[CSFFMpegPlayer alloc] init];
-        
-        _player.asbd = &_asbd;
-        
-        __weak __typeof__(self) weakSelf = self;
-        
-        _player.itemStarted = ^(CSFFMpegInput *item) { [weakSelf itemStarted:item]; };
-        _player.queueStateChanged = ^() { [weakSelf queueChanged]; };
-        
         self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
-
-        
-
-
-        
     }
     return self;
 }
+
+-(void)setupPlayer
+{
+    
+    NSLog(@"SETUP PLAYER");
+    av_register_all();
+    avformat_network_init();
+    
+    
+    
+    //Inputs resample to floating point non-interleaved 48k for now.
+    
+    _asbd.mSampleRate = 48000;
+    _asbd.mFormatID = kAudioFormatLinearPCM;
+    _asbd.mFormatFlags = kAudioFormatFlagsNativeEndian  | kAudioFormatFlagIsFloat | kAudioFormatFlagIsNonInterleaved;
+    _asbd.mChannelsPerFrame = 2;
+    _asbd.mBitsPerChannel = 32;
+    _asbd.mBytesPerFrame = 4;
+    _asbd.mBytesPerPacket = 4;
+    _asbd.mFramesPerPacket = 1;
+    
+    self.player = [[CSFFMpegPlayer alloc] init];
+    
+    self.player.asbd = &_asbd;
+    
+    __weak __typeof__(self) weakSelf = self;
+    
+    _player.itemStarted = ^(CSFFMpegInput *item) { [weakSelf itemStarted:item]; };
+    _player.queueStateChanged = ^() { [weakSelf queueChanged]; };
+
+    if (self.isLive)
+    {
+        [self registerPCMOutput:1024 audioFormat:&_asbd];
+    }
+}
+
 
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
@@ -94,6 +101,10 @@
         NSArray *paths = [aDecoder decodeObjectForKey:@"queuePaths"];
         for (NSString *mPath in paths)
         {
+            if (!self.player)
+            {
+                [self setupPlayer];
+            }
             CSFFMpegInput *newInput = [[CSFFMpegInput alloc] initWithMediaPath:mPath];
             [self.player enqueueItem:newInput];
             if (nowPlayingPath && [newInput.mediaPath isEqualToString:nowPlayingPath])
@@ -186,8 +197,15 @@
 
 -(void)queuePath:(NSString *)path
 {
+    if (!self.player)
+    {
+        [self setupPlayer];
+    }
+    
+    
     if (!self.player.pcmPlayer && self.pcmPlayer)
     {
+        NSLog(@"SETTING PCM PLAYER TO %@", self.pcmPlayer);
         self.player.pcmPlayer = self.pcmPlayer;
     }
     
@@ -268,6 +286,12 @@
 
 -(void)frameTick
 {
+    if (!self.player)
+    {
+        return;
+    }
+    
+    
     CFTimeInterval cTime = CACurrentMediaTime();
     CVPixelBufferRef use_buf = [self.player frameForMediaTime:cTime];
     
@@ -309,13 +333,16 @@
     
     if (isLive)
     {
-        [self registerPCMOutput:1024 audioFormat:&_asbd];
-        if (self.playWhenLive)
+        if (self.player)
         {
-            [self.player play];
-            if (self.useCurrentPosition)
+            [self registerPCMOutput:1024 audioFormat:&_asbd];
+            if (self.playWhenLive)
             {
-                [self.player seek:_savedTime];
+                [self.player play];
+                if (self.useCurrentPosition)
+                {
+                    [self.player seek:_savedTime];
+                }
             }
         }
 
@@ -356,12 +383,16 @@
     }
     
     self.pcmPlayer = nil;
-    self.player.pcmPlayer = nil;
+    if (self.player)
+    {
+        self.player.pcmPlayer = nil;
+    }
     
 }
 
 -(void)dealloc
 {
+    NSLog(@"MOVIE DEALLOC");
     if (self.pcmPlayer)
     {
         [self deregisterPCMOutput];
