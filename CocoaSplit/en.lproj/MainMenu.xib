@@ -490,7 +490,7 @@
                                             <rect key="frame" x="1" y="1" width="219" height="224"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="8" outlineTableColumn="Vgi-bR-pOA" id="hQL-UV-A4y">
+                                                <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnResizing="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="8" outlineTableColumn="Vgi-bR-pOA" id="hQL-UV-A4y">
                                                     <rect key="frame" x="0.0" y="0.0" width="219" height="224"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <size key="intercellSpacing" width="3" height="2"/>
@@ -540,6 +540,7 @@
                                                     </tableColumns>
                                                     <connections>
                                                         <binding destination="dWz-5q-kjU" name="content" keyPath="arrangedObjects" id="k9g-WQ-l4N"/>
+                                                        <outlet property="dataSource" destination="816" id="gID-c6-ZPZ"/>
                                                         <outlet property="delegate" destination="816" id="5fx-i0-Gx5"/>
                                                     </connections>
                                                 </outlineView>

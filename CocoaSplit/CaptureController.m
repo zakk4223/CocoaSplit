@@ -1528,6 +1528,8 @@
     
     self.activePreviewView = self.stagingPreviewView;
     [self.layoutCollectionView registerForDraggedTypes:@[@"CS_LAYOUT_DRAG"]];
+    [self.inputOutlineView registerForDraggedTypes:@[@"cocoasplit.input.item"]];
+    
 
     [NSColorPanel sharedColorPanel].showsAlpha = YES;
     [NSColor setIgnoresAlpha:NO];
@@ -2577,6 +2579,85 @@
     }
 }
 
+- (id <NSPasteboardWriting>)outlineView:(NSOutlineView *)outlineView pasteboardWriterForItem:(id)item
+{
+    NSPasteboardItem *pItem = [[NSPasteboardItem alloc] init];
+    NSTreeNode *outlineNode = (NSTreeNode *)item;
+    InputSource *itemInput = outlineNode.representedObject;
+
+    [pItem setString:itemInput.uuid forType:@"cocoasplit.input.item"];
+    
+    return pItem;
+}
+
+-(NSDragOperation)outlineView:(NSOutlineView *)outlineView validateDrop:(id<NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(NSInteger)index
+{
+    
+    NSTreeNode *nodeItem = (NSTreeNode *)item;
+    InputSource *nodeInput = nil;
+    if (nodeItem)
+    {
+        nodeInput = nodeItem.representedObject;
+    }
+    
+    
+    NSPasteboard *pb = [info draggingPasteboard];
+    NSString *draggedUUID = [pb stringForType:@"cocoasplit.input.item"];
+    InputSource *draggedSource = [self.activePreviewView.sourceLayout inputForUUID:draggedUUID];
+
+    
+    if (nodeInput && nodeInput == draggedSource)
+    {
+        return NSDragOperationNone;
+    }
+    
+    if (nodeInput && draggedSource.parentInput == nodeInput)
+    {
+        return NSDragOperationNone;
+    }
+    
+    if (draggedSource.parentInput && nodeInput && nodeInput != draggedSource.parentInput)
+    {
+        return NSDragOperationMove;
+    }
+    
+    
+    if (draggedSource.parentInput && !nodeInput)
+    {
+        return NSDragOperationMove;
+    }
+    
+    
+    if (item && index == -1)
+    {
+        return NSDragOperationMove;
+    }
+    return NSDragOperationNone;
+}
+
+-(BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id<NSDraggingInfo>)info item:(id)item childIndex:(NSInteger)index
+{
+    
+    NSPasteboard *pb = [info draggingPasteboard];
+    NSString *draggedUUID = [pb stringForType:@"cocoasplit.input.item"];
+    NSTreeNode *parentNode = (NSTreeNode *)item;
+    InputSource *parentSource = nil;
+    InputSource *draggedSource = [self.activePreviewView.sourceLayout inputForUUID:draggedUUID];
+
+    if (parentNode)
+    {
+        parentSource = parentNode.representedObject;
+    }
+    
+    if (!parentSource)
+    {
+        [draggedSource.parentInput detachInput:draggedSource];
+    } else {
+        [parentSource attachInput:draggedSource];
+    }
+    
+    return YES;
+}
 
 -(void) outlineViewSelectionDidChange:(NSNotification *)notification
 {

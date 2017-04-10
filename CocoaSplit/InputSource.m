@@ -2152,11 +2152,21 @@ static NSArray *_sourceTypes = nil;
     
     [CATransaction begin];
     
+    NSPoint newPosition = self.layer.frame.origin;
+
+    
+    if (!NSIntersectsRect(parentLayer.frame, self.layer.frame))
+    {
+        newPosition.x = NSMidX(parentLayer.frame) - self.layer.frame.size.width/2;
+        newPosition.y = NSMidY(parentLayer.frame) - self.layer.frame.size.height/2;
+    }
+    
+    
+    
     [parentLayer addSublayer:self.layer];
     //translate the position to the new sublayers coordinates
     
     NSArray *layers = [self getLayersToCanvas:parentLayer];
-    NSPoint newPosition = self.layer.frame.origin;
     
     for (CALayer *curr in [layers reverseObjectEnumerator])
     {
@@ -2166,6 +2176,7 @@ static NSArray *_sourceTypes = nil;
     
     NSRect oldFrame = self.layer.frame;
     oldFrame.origin = newPosition;
+    
     self.layer.frame = oldFrame;
     [CATransaction commit];
 
