@@ -134,31 +134,32 @@ class CSAnimationInput(object):
     def simple_animation(self, forKey, toValue, withDuration=None, **kwargs):
         
         real_end_value = toValue
-        
+        merged_kwargs = getattr(CSAnimationBlock.current_frame().animation_module, '__cs_default_kwargs').copy()
+        merged_kwargs.update(**kwargs)
         if type(toValue) in (list,tuple,CGPathRef):
             banim = self.keyframe_animation(forKey, withDuration)
             real_end_value = toValue[-1]
             banim.setValues_(toValue)
         else:
             banim = self.basic_animation(forKey, withDuration)
-            if 'use_fromVal' in kwargs:
-                banim.setFromValue_(kwargs['use_fromVal'])
+            if 'use_fromVal' in merged_kwargs:
+                banim.setFromValue_(kmerged_wargs['use_fromVal'])
             banim.setToValue_(toValue)
         
         
         
         for_layer = self.layer
         
-        if 'source_only' in kwargs and kwargs['source_only']:
+        if 'source_only' in merged_kwargs and merged_kwargs['source_only']:
             for_layer = self.layer.sourceLayer()
-        if 'use_layer' in kwargs:
-            for_layer = kwargs['use_layer']
-        csanim = CSAnimation(for_layer, forKey, banim, **kwargs)
+        if 'use_layer' in merged_kwargs:
+            for_layer = merged_kwargs['use_layer']
+        csanim = CSAnimation(for_layer, forKey, banim, **merged_kwargs)
         
-        if not 'autoreverse' in kwargs:
+        if not 'autoreverse' in merged_kwargs:
             self.animationLayer.setValue_forKeyPath_(real_end_value, forKey)
-            if 'extra_keypath' in kwargs:
-                self.animationLayer.setValue_forKeyPath_(real_end_value, kwargs['extra_keypath'])
+            if 'extra_keypath' in merged_kwargs:
+                self.animationLayer.setValue_forKeyPath_(real_end_value, merged_kwargs['extra_keypath'])
         
         
         csanim.toValue = real_end_value

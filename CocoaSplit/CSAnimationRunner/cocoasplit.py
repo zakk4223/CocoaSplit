@@ -35,6 +35,14 @@ def clearTransition():
     my_layout.setTransitionFilter_(None)
 
 
+def setDefaultAnimationArguments(**kwargs):
+    a_module = CSAnimationBlock.current_frame().animation_module
+    a_module.__cs_default_kwargs = kwargs
+
+def clearDefaultAnimationArguments():
+    a_module = CSAnimationBlock.current_frame().animation_module
+    a_module.__cs_default_kwargs = {}
+
 def scriptByName(name):
     cap_controller = getCaptureController()
     layout_script = cap_controller.getSequenceForName_(name)
@@ -42,7 +50,7 @@ def scriptByName(name):
 
 
 def runScriptByName(name):
-    my_func = getattr(CSAnimationBlock.current_frame().animation_module, "run_{0}_script".format(name))
+    my_func = getattr(CSAnimationBlock.current_frame().animation_module, "run_{0}_script".format(name), None)
     if my_func:
         return my_func()
     

@@ -122,12 +122,11 @@ class CSAnimationRunnerObj(NSObject):
         animation = ModuleType('cs_fromstring_animation', '')
         exec("from cocoasplit import *", animation.__dict__)
         exec("all_animations = {}", animation.__dict__)
-        
+        exec("__cs_default_kwargs = {}", animation.__dict__)
         exec(animation_string, animation.__dict__)
         CSAnimationBlock.beginAnimation()
         CSAnimationBlock.current_frame().layout = layout
         CSAnimationBlock.current_frame().animation_module = animation
-
         animation.wait = CSAnimationBlock.wait
         animation.waitAnimation = CSAnimationBlock.waitAnimation
         animation.animationDuration = CSAnimationBlock.animationDuration
