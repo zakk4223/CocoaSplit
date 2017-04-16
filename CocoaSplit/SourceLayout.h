@@ -123,6 +123,7 @@
 -(InputSource *)inputForName:(NSString *)name;
 -(void)cancelTransition;
 -(void)cancelScriptRun:(NSString *)runUUID;
+-(bool)containsLayoutNamed:(NSString *)layoutName;
 
 
 

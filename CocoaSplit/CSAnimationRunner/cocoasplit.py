@@ -102,6 +102,10 @@ def layoutByName(name):
     layout = cap_controller.findLayoutWithName_(name)
     return layout
 
+def containsLayout(name):
+    target_layout = getCurrentLayout()
+    return target_layout.containsLayoutNamed_(name)
+
 def switchToLayout(name):
     layout = layoutByName(name)
     if layout:

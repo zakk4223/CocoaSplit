@@ -510,29 +510,34 @@
                                                             </textFieldCell>
                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             <prototypeCellViews>
-                                                                <tableCellView id="MRd-f7-chD">
+                                                                <tableCellView id="Ulv-k0-DXZ">
                                                                     <rect key="frame" x="1" y="1" width="216" height="17"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
-                                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="SJW-iX-v2R">
-                                                                            <rect key="frame" x="1" y="0.0" width="214" height="17"/>
-                                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="AzP-Vs-p59">
+                                                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RuV-IJ-bra">
+                                                                            <rect key="frame" x="3" y="0.0" width="17" height="17"/>
+                                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSActionTemplate" id="5Qd-lT-JdD"/>
+                                                                            <connections>
+                                                                                <binding destination="Ulv-k0-DXZ" name="value" keyPath="objectValue.videoInput.libraryImage" id="A8I-Rj-ZYn"/>
+                                                                            </connections>
+                                                                        </imageView>
+                                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HxE-pY-U5v">
+                                                                            <rect key="frame" x="25" y="0.0" width="191" height="17"/>
+                                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="fgN-Qa-03r">
                                                                                 <font key="font" metaFont="system"/>
                                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                             <connections>
-                                                                                <binding destination="MRd-f7-chD" name="value" keyPath="objectValue.name" id="tgh-SK-MoY"/>
+                                                                                <binding destination="Ulv-k0-DXZ" name="value" keyPath="objectValue.name" id="kjH-fg-fOW"/>
                                                                             </connections>
                                                                         </textField>
                                                                     </subviews>
-                                                                    <constraints>
-                                                                        <constraint firstAttribute="trailing" secondItem="SJW-iX-v2R" secondAttribute="trailing" constant="3" id="aV6-6L-067"/>
-                                                                        <constraint firstItem="SJW-iX-v2R" firstAttribute="centerX" secondItem="MRd-f7-chD" secondAttribute="centerX" id="i9X-Ly-SqM"/>
-                                                                        <constraint firstItem="SJW-iX-v2R" firstAttribute="centerY" secondItem="MRd-f7-chD" secondAttribute="centerY" id="txU-0v-L5H"/>
-                                                                    </constraints>
                                                                     <connections>
-                                                                        <outlet property="textField" destination="SJW-iX-v2R" id="McL-xC-gmV"/>
+                                                                        <outlet property="imageView" destination="RuV-IJ-bra" id="vbE-TS-Wyz"/>
+                                                                        <outlet property="textField" destination="HxE-pY-U5v" id="PSo-jU-cLB"/>
                                                                     </connections>
                                                                 </tableCellView>
                                                             </prototypeCellViews>

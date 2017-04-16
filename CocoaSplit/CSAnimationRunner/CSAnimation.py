@@ -1,6 +1,7 @@
 from uuid import uuid4
 from Quartz import CATransaction,CAMediaTimingFunction
 from Foundation import NSLog
+import CSAnimationBlock
 
 
 
@@ -75,6 +76,11 @@ class CSAnimation:
         return self.duration
 
 
+    def waitAnimation(self, duration=0, **kwargs):
+        CSAnimationBlock.current_frame().waitAnimation(duration, self, **kwargs)
+        return self
+    
+    
     def apply_immediate(self):
         if self.target:
             p_value = self.toValue

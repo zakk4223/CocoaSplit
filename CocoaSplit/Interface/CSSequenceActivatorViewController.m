@@ -195,7 +195,6 @@
 {
     view.layer.opacity = 0.5f;
     
-    
     if ([clickEvent modifierFlags] & NSShiftKeyMask)
     {
         if (view.isQueued)
@@ -227,7 +226,7 @@
                     }
                     [self.queuedSequences removeAllObjects];
                 }
-                [view.layoutSequence runSequenceForLayout:captureController.activePreviewView.sourceLayout withCompletionBlock:^(){view.layer.opacity = 1.0f; view.isQueued = NO;} withExceptionBlock:^(NSException *exception) {
+                [view.layoutSequence runSequenceForLayout:captureController.activePreviewView.sourceLayout withCompletionBlock:^(){NSLog(@"ANIMATION DONE");view.layer.opacity = 1.0f; view.isQueued = NO;} withExceptionBlock:^(NSException *exception) {
                     [self handleScriptException:exception];
                 }];
             }

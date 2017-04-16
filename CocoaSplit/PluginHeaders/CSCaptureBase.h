@@ -74,6 +74,7 @@ typedef enum frame_render_behavior_t {
 
 @property (assign) bool canProvideTiming;
 
+@property (readonly) NSImage *libraryImage;
 
 
 //frameTick is called every render loop. You are not required to do anything here, but it may be useful for some timing/lazy rendering
@@ -127,6 +128,5 @@ typedef enum frame_render_behavior_t {
 -(void)frameArrived;
 
 
--(NSImage *)libraryImage;
 
 @end

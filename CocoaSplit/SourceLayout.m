@@ -342,6 +342,7 @@
 }
 
 
+
 -(void)applyAddBlock
 {
     if (self.addLayoutBlock)
@@ -370,14 +371,6 @@
         [self didChangeValueForKey:@"topLevelSourceList"];
 
     });
-    [_topLevelSourceArray removeAllObjects];
-    for (InputSource *src in self.sourceListOrdered)
-    {
-        if (!src.parentInput)
-        {
-            [_topLevelSourceArray addObject:src];
-        }
-    }
 }
 
 
@@ -806,6 +799,18 @@
 }
 
 
+-(bool)containsLayoutNamed:(NSString *)layoutName
+{
+    for (SourceLayout *clayout in self.containedLayouts)
+    {
+        if ([clayout.name isEqualToString:layoutName])
+        {
+            return YES;
+        }
+    }
+    
+    return NO;
+}
 
 -(bool)containsLayout:(SourceLayout *)layout
 {

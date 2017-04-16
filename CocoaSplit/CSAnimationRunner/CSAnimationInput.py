@@ -143,7 +143,7 @@ class CSAnimationInput(object):
         else:
             banim = self.basic_animation(forKey, withDuration)
             if 'use_fromVal' in merged_kwargs:
-                banim.setFromValue_(kmerged_wargs['use_fromVal'])
+                banim.setFromValue_(merged_kwargs['use_fromVal'])
             banim.setToValue_(toValue)
         
         
@@ -190,6 +190,7 @@ class CSAnimationInput(object):
     
     def add_animation(self, animation, target, keyPath):
         animation.cs_input = self
+        NSLog("ADD ANIMATION")
         CSAnimationBlock.current_frame().add_animation(animation, target, keyPath)
         return animation
     
@@ -281,7 +282,7 @@ class CSAnimationInput(object):
             """
         curr_width = self.animationLayer.bounds().size.width
         curr_height = self.animationLayer.bounds().size.height
-        return self.size(curr_width * scaleVal, curr_height*scaleVal, duration, **kwargs)
+        return self.size((curr_width * scaleVal, curr_height*scaleVal), duration, **kwargs)
     
     def sizeWidth(self, width, duration=None, **kwargs):
         """
@@ -581,6 +582,7 @@ class CSAnimationInput(object):
     
     
     def rotateX(self, angle, duration=None, **kwargs):
+        
         """
             Rotate the input around the x-axis by angle degrees. This rotation is additive: a rotate of 45 degrees followed by another rotate of 45 degrees results in a total rotation of 90 degrees. This rotation is not permanent, it will not persist across save/restore or go live.
             """
@@ -591,6 +593,7 @@ class CSAnimationInput(object):
         return self.simple_animation('transform.rotation.x', anim_vals, duration, **kwargs)
     
     def rotateY(self, angle, duration=None, **kwargs):
+        NSLog("ROTATE")
         """
             Rotate the input around the y-axis by angle degrees. This rotation is additive: a rotate of 45 degrees followed by another rotate of 45 degrees results in a total rotation of 90 degrees. This rotation is not permanent, it will not persist across save/restore or go live.
             """

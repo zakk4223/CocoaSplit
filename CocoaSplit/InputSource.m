@@ -1089,7 +1089,7 @@ static NSArray *_sourceTypes = nil;
 
 
 
--(void)addLayerFilter:(NSString *)filterName
+-(NSString *)addLayerFilter:(NSString *)filterName
 {
 
     CIFilter *newFilter = [CIFilter filterWithName:filterName];
@@ -1114,10 +1114,12 @@ static NSArray *_sourceTypes = nil;
         [CATransaction begin];
         self.layer.filters = currentFilters;
         [CATransaction commit];
+        return filterID;
     }
+    return nil;
 }
 
--(void)addSourceFilter:(NSString *)filterName
+-(NSString *)addSourceFilter:(NSString *)filterName
 {
     
     CIFilter *newFilter = [CIFilter filterWithName:filterName];
@@ -1142,10 +1144,12 @@ static NSArray *_sourceTypes = nil;
         [CATransaction begin];
         self.layer.sourceLayer.filters = currentFilters;
         [CATransaction commit];
+        return filterID;
     }
+    return nil;
 }
 
--(void)addBackgroundFilter:(NSString *)filterName
+-(NSString *)addBackgroundFilter:(NSString *)filterName
 {
     
     CIFilter *newFilter = [CIFilter filterWithName:filterName];
@@ -1171,7 +1175,9 @@ static NSArray *_sourceTypes = nil;
         [CATransaction begin];
         self.layer.backgroundFilters = currentFilters;
         [CATransaction commit];
+        return filterID;
     }
+    return nil;
 }
 
 

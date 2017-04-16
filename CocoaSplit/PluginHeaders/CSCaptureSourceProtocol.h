@@ -87,6 +87,8 @@
 @property (assign) bool canProvideTiming;
 
 
+@property (readonly) NSImage *libraryImage;
+
 //frameTick is called every render loop. You are not required to do anything here, but it may be useful for some timing/lazy rendering
 -(void)frameTick;
 
@@ -133,7 +135,6 @@ If your source is 'shared' between inputSources each new one will call this func
 
 -(void)frameArrived;
 
--(NSImage *)libraryImage;
 
 
 
