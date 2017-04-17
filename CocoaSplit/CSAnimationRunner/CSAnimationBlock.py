@@ -55,7 +55,9 @@ class AnimationBlock:
 
 
     def add_waitmarker(self, duration=0, target=None, wait_only=None, **kwargs):
-        
+        if not self.current_begin_time:
+            self.current_begin_time = self.layout.rootLayer().convertTime_fromLayer_(CACurrentMediaTime(), None)
+
         new_mark = CSAnimation(None, "__CS_WAIT_MARK", None, **kwargs)
         new_mark.isWaitMark = True
         new_mark.duration = duration
@@ -84,6 +86,8 @@ class AnimationBlock:
 
         if animation.label:
             self.label_map[animation.label] = animation
+        
+        NSLog("CURRENT BEGIN %f", self.current_begin_time)
         
         a_duration = animation.apply(self.current_begin_time)
 

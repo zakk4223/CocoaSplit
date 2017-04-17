@@ -25,6 +25,7 @@
     GLuint _rFbo;
     dispatch_queue_t _animationQueue;
     NSMutableDictionary *_uuidMap;
+    NSMutableDictionary *_uuidMapPresentation;
     bool _noSceneTransactions;
     NSMutableArray *_topLevelSourceArray;
     bool _skipRefCounting;
@@ -45,6 +46,8 @@
 
 
 @property (strong) NSMutableArray *sourceList;
+@property (strong) NSMutableArray *sourceListPresentation;
+
 @property (readonly) NSArray *topLevelSourceList;
 
 @property (strong) NSData *savedSourceListData;

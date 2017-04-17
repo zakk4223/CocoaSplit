@@ -43,6 +43,7 @@
 		342346BB15F5FBD700C8C77E /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 342346BA15F5FBD700C8C77E /* CoreMedia.framework */; };
 		342346BE15F6103D00C8C77E /* FFMpegTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346BD15F6103D00C8C77E /* FFMpegTask.m */; };
 		342346CF15F9F07E00C8C77E /* CSAbstractCaptureDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346CE15F9F07E00C8C77E /* CSAbstractCaptureDevice.m */; };
+		3427864B1EA4337400877B7B /* CSTransitionAnimationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3427864A1EA4337400877B7B /* CSTransitionAnimationDelegate.m */; };
 		342B33B3198073EC00492CB7 /* line.fgsh in Resources */ = {isa = PBXBuildFile; fileRef = 342B33B2198073EC00492CB7 /* line.fgsh */; };
 		342B33B4198075F200492CB7 /* line.fgsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 342B33B2198073EC00492CB7 /* line.fgsh */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		342B33B61980771200492CB7 /* line.vtsh in Resources */ = {isa = PBXBuildFile; fileRef = 342B33B51980771200492CB7 /* line.vtsh */; };
@@ -703,6 +704,8 @@
 		342346CC15F9D52000C8C77E /* CSCaptureSourceProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSCaptureSourceProtocol.h; path = PluginHeaders/CSCaptureSourceProtocol.h; sourceTree = "<group>"; };
 		342346CD15F9F07E00C8C77E /* CSAbstractCaptureDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAbstractCaptureDevice.h; path = PluginHeaders/CSAbstractCaptureDevice.h; sourceTree = "<group>"; };
 		342346CE15F9F07E00C8C77E /* CSAbstractCaptureDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAbstractCaptureDevice.m; sourceTree = "<group>"; };
+		342786491EA4337400877B7B /* CSTransitionAnimationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSTransitionAnimationDelegate.h; sourceTree = "<group>"; };
+		3427864A1EA4337400877B7B /* CSTransitionAnimationDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSTransitionAnimationDelegate.m; sourceTree = "<group>"; };
 		342B33B2198073EC00492CB7 /* line.fgsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = line.fgsh; path = Shaders/line.fgsh; sourceTree = "<group>"; };
 		342B33B51980771200492CB7 /* line.vtsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = line.vtsh; path = Shaders/line.vtsh; sourceTree = "<group>"; };
 		342F73F41A245316007AA99F /* CSPcmPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPcmPlayer.h; path = PluginHeaders/CSPcmPlayer.h; sourceTree = "<group>"; };
@@ -1363,6 +1366,8 @@
 				34B5FAD31E74C34B0078FC51 /* CSSequenceItemLayout.m */,
 				34B5FAD51E75120C0078FC51 /* CSSequenceItemTransition.h */,
 				34B5FAD61E75120C0078FC51 /* CSSequenceItemTransition.m */,
+				342786491EA4337400877B7B /* CSTransitionAnimationDelegate.h */,
+				3427864A1EA4337400877B7B /* CSTransitionAnimationDelegate.m */,
 			);
 			path = CocoaSplit;
 			sourceTree = "<group>";
@@ -2657,6 +2662,7 @@
 				34B5FADD1E75BC910078FC51 /* CSLayoutSwitcherViewController.m in Sources */,
 				34ED8C851B07371C002C0674 /* MIKMIDIMetaTextEvent.m in Sources */,
 				34B5FACB1E7461E60078FC51 /* CSLayoutSequence.m in Sources */,
+				3427864B1EA4337400877B7B /* CSTransitionAnimationDelegate.m in Sources */,
 				34348C2A19BDBDC000A122C2 /* PluginManagerWindowController.m in Sources */,
 				34CFE4A018F154DD00092C6A /* AVFChannelManager.m in Sources */,
 				34ED8C6B1B07371C002C0674 /* MIKMIDIMacDebugQuickLookSupport.m in Sources */,

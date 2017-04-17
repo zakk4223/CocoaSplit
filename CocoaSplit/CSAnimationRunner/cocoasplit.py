@@ -110,33 +110,36 @@ def switchToLayout(name):
     layout = layoutByName(name)
     if layout:
         target_layout = getCurrentLayout()
-        target_layout.replaceWithSourceLayout_(layout)
         if (CSAnimationBlock.current_frame() and target_layout.transitionName() or target_layout.transitionFilter()) and target_layout.transitionDuration() > 0:
             dummy_animation = CSAnimation(None, None, None)
             dummy_animation.duration = target_layout.transitionDuration()
             CSAnimationBlock.current_frame().add_animation(dummy_animation, None, None)
+        target_layout.replaceWithSourceLayout_(layout)
+
 
 
 def mergeLayout(name):
     layout = layoutByName(name)
     if layout:
         target_layout = getCurrentLayout()
-        target_layout.mergeSourceLayout_(layout)
         if (CSAnimationBlock.current_frame() and target_layout.transitionName() or target_layout.transitionFilter()) and target_layout.transitionDuration() > 0:
             dummy_animation = CSAnimation(None, None, None)
             dummy_animation.duration = target_layout.transitionDuration()
             CSAnimationBlock.current_frame().add_animation(dummy_animation, None, None)
+    target_layout.mergeSourceLayout_(layout)
+
 
 
 def removeLayout(name):
     layout = layoutByName(name)
     if layout:
         target_layout = getCurrentLayout()
-        target_layout.removeSourceLayout_(layout)
         if (CSAnimationBlock.current_frame() and target_layout.transitionName() or target_layout.transitionFilter()) and target_layout.transitionDuration() > 0:
             dummy_animation = CSAnimation(None, None, None)
             dummy_animation.duration = target_layout.transitionDuration()
             CSAnimationBlock.current_frame().add_animation(dummy_animation, None, None)
+    target_layout.removeSourceLayout_(layout)
+
 
 
 def inputByName(name):

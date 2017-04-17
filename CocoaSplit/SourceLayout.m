@@ -9,6 +9,7 @@
 #import "SourceLayout.h"
 #import "InputSource.h"
 #import "CaptureController.h"
+#import "CSTransitionAnimationDelegate.h"
 
 
 @implementation SourceLayout
@@ -30,6 +31,8 @@
         _fboTexture = 0;
         _rFbo = 0;
         _uuidMap = [NSMutableDictionary dictionary];
+        _uuidMapPresentation = [NSMutableDictionary dictionary];
+        
         
         _pendingScripts = [NSMutableDictionary dictionary];
         
@@ -42,6 +45,8 @@
         //self.rootLayer.geometryFlipped = YES;
         _rootSize = NSMakeSize(_canvas_width, _canvas_height);
         self.sourceList = [NSMutableArray array];
+        self.sourceListPresentation = [NSMutableArray array];
+        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(inputAttachEvent:) name:CSNotificationInputAttached object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(inputAttachEvent:) name:CSNotificationInputDetached object:nil];
 
@@ -612,6 +617,8 @@
 -(void)replaceWithSourceLayout:(SourceLayout *)layout withCompletionBlock:(void (^)(void))completionBlock
 {
 
+    
+    
     if (self.undoManager)
     {
         [self.undoManager beginUndoGrouping];
@@ -668,13 +675,34 @@
     NSArray *sameInputs = diffResult[@"same"];
     NSArray *newInputs = diffResult[@"new"];
     
+    NSNumber *aStart = nil;
+    
+    id athing = [CATransaction valueForKey:@"__CS_BLOCK_OBJECT__"];
+    if (athing)
+    {
+        aStart = [athing valueForKey:@"current_begin_time"];
+    }
     
     
     CATransition *rTrans = nil;
+    CABasicAnimation *bTrans = nil;
+    
+    CSTransitionAnimationDelegate *transitionDelegate = [[CSTransitionAnimationDelegate alloc] init];
+    transitionDelegate.addedInputs = newInputs;
+    transitionDelegate.changedInputs = changedInputs;
+    transitionDelegate.removedInputs = removedInputs;
+    
     
     if (self.transitionName || self.transitionFilter)
     {
         rTrans = [CATransition animation];
+        
+        if (aStart)
+        {
+            [rTrans setBeginTime:aStart.floatValue];
+        }
+        
+        
         rTrans.type = self.transitionName;
         rTrans.duration = self.transitionDuration;
         rTrans.removedOnCompletion = YES;
@@ -683,14 +711,33 @@
         {
             rTrans.filter = self.transitionFilter;
         }
+        
     }
-
+    //We always create a dummy animation so we play nice with scripts that do additional animations. This way we don't do final remove/reveal until the proper time
+    NSString *dummyKey = [NSString stringWithFormat:@"__DUMMY_KEY_%f", aStart.floatValue];
+    bTrans = [CABasicAnimation animationWithKeyPath:dummyKey];
+    bTrans.removedOnCompletion = YES;
+    bTrans.fillMode = kCAFillModeForwards;
+    bTrans.beginTime = aStart.floatValue;
+    if (rTrans)
+    {
+        bTrans.duration = self.transitionDuration;
+    }
+    transitionDelegate.useAnimation = rTrans;
+    
+    bTrans.fromValue = @0;
+    bTrans.toValue = @1;
+    bTrans.delegate = transitionDelegate;
+    if (aStart)
+    {
+        bTrans.beginTime = aStart.floatValue;
+    }
     
     [CATransaction begin];
     
     [CATransaction setCompletionBlock:^{
         
-       
+        
         for (InputSource *rSrc in removedInputs)
         {
             [self deleteSource:rSrc];
@@ -709,58 +756,45 @@
             completionBlock();
         }
     }];
-
     
-    if (self.transitionFullScene)
+    
+    if (bTrans)
     {
-        if (rTrans)
-        {
-            [self.rootLayer addAnimation:rTrans forKey:kCATransition];
-        }
+        transitionDelegate.forLayout = self;
+        transitionDelegate.fullScreen = self.transitionFullScene;
         
+        [self.rootLayer addAnimation:bTrans forKey:bTrans.keyPath];
     }
-
+    
     
     for (InputSource *rSrc in removedInputs)
     {
-        if (!self.transitionFullScene)
-        {
-            [rSrc.layer addAnimation:rTrans forKey:nil];
-        }
-        rSrc.layer.hidden = YES;
+        [self deleteSourceFromPresentation:rSrc];
     }
     
     for (InputSource *cSrc in changedInputs)
     {
         InputSource *mSrc = [self inputForUUID:cSrc.uuid];
         
-        if (!self.transitionFullScene)
-        {
-            [mSrc.layer addAnimation:rTrans forKey:nil];
-        }
-
+        
+        [self deleteSourceFromPresentation:mSrc];
         [changedRemove addObject:mSrc];
         
-        if (!self.transitionFullScene)
-        {
-            cSrc.layer.hidden = YES;
-        }
+        cSrc.layer.hidden = YES;
         
         
         [self addSource:cSrc withParentLayer:mSrc.layer.superlayer];
-        mSrc.layer.hidden = YES;
+        
     }
+    transitionDelegate.changeremoveInputs = changedRemove;
     
     for (InputSource *nSrc in newInputs)
     {
-
-        if (!self.transitionFullScene)
-        {
-            nSrc.layer.hidden = YES;
-        }
-
+        
+        nSrc.layer.hidden = YES;
+        
         [self addSource:nSrc];
-
+        
     }
     
     
@@ -768,31 +802,8 @@
     
     
     [CATransaction commit];
-
-    [CATransaction flush];
-    if (!self.transitionFullScene)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [CATransaction begin];
-            for (InputSource *nSrc in newInputs)
-            {
-                
-                [nSrc.layer addAnimation:rTrans forKey:nil];
-                nSrc.layer.hidden = NO;
-            }
-            
-            for (InputSource *cSrc in changedInputs)
-            {
-                [cSrc.layer addAnimation:rTrans forKey:nil];
-                cSrc.layer.hidden = NO;
-            }
-
-            
-            [CATransaction commit];
-        });
-    }
-
     
+    [CATransaction flush];
     _noSceneTransactions = NO;
     
     
@@ -867,12 +878,34 @@
     NSArray *removedInputs = diffResult[@"removed"];
     NSArray *sameInputs = diffResult[@"same"];
     NSArray *newInputs = diffResult[@"new"];
-
+    
+    NSNumber *aStart = nil;
+    
+    id athing = [CATransaction valueForKey:@"__CS_BLOCK_OBJECT__"];
+    if (athing)
+    {
+        aStart = [athing valueForKey:@"current_begin_time"];
+    }
+    
+    
     CATransition *rTrans = nil;
+    CABasicAnimation *bTrans = nil;
+    CSTransitionAnimationDelegate *transitionDelegate = [[CSTransitionAnimationDelegate alloc] init];
+    transitionDelegate.addedInputs = newInputs;
+    transitionDelegate.changedInputs = changedInputs;
+    
+    
     
     if (self.transitionName || self.transitionFilter)
     {
         rTrans = [CATransition animation];
+        
+        if (aStart)
+        {
+            [rTrans setBeginTime:aStart.floatValue];
+        }
+        
+        
         rTrans.type = self.transitionName;
         rTrans.duration = self.transitionDuration;
         rTrans.removedOnCompletion = YES;
@@ -881,9 +914,24 @@
         {
             rTrans.filter = self.transitionFilter;
         }
+        
     }
     
-
+    //We always create a dummy animation so we play nice with scripts that do additional animations. This way we don't do final remove/reveal until the proper time
+    NSString *dummyKey = [NSString stringWithFormat:@"__DUMMY_KEY_%f", aStart.floatValue];
+    bTrans = [CABasicAnimation animationWithKeyPath:dummyKey];
+    bTrans.removedOnCompletion = YES;
+    bTrans.fillMode = kCAFillModeForwards;
+    if (aStart)
+    {
+        bTrans.beginTime = aStart.floatValue;
+    }
+    bTrans.fromValue = @0;
+    bTrans.toValue = @1;
+    bTrans.duration = self.transitionDuration;
+    transitionDelegate.useAnimation = rTrans;
+    bTrans.delegate = transitionDelegate;
+    
     
     [CATransaction begin];
     
@@ -894,65 +942,65 @@
             [self deleteSource:cSrc];
         }
         
-        
-        if (completionBlock)
+        if (bTrans)
         {
-            completionBlock();
-        }
-    }];
-    
-    if (self.transitionFullScene)
-    {
-        [self.rootLayer addAnimation:rTrans forKey:nil];
-    }
-    
-    for (InputSource *nSrc in newInputs)
-    {
-        if (!self.transitionFullScene)
-        {
-            nSrc.layer.hidden = YES;
-        }
-        
-        [self addSource:nSrc];
-    }
-    
-    for (InputSource *cSrc in changedInputs)
-    {
-        InputSource *mSrc = [self inputForUUID:cSrc.uuid];
-        [changedRemove addObject:mSrc];
-        mSrc.layer.hidden = YES;
-        cSrc.layer.hidden = YES;
-        [self addSource:cSrc];
-        [self incrementInputRef:cSrc];
-    }
-    [CATransaction commit];
-    [CATransaction flush];
-
-    if (!self.transitionFullScene)
-    {
-        
-        CABasicAnimation *hackAnim = [CABasicAnimation animationWithKeyPath:@"dummyKeyPath"];
-        hackAnim.duration = rTrans.duration;
-        hackAnim.fromValue = @0;
-        hackAnim.toValue = @100;
-        hackAnim.removedOnCompletion = YES;
-        
-        [self.rootLayer addAnimation:hackAnim forKey:@"dummyKey"];
-
-        dispatch_async(dispatch_get_main_queue(), ^{
             for (InputSource *nSrc in newInputs)
             {
-                [nSrc.layer addAnimation:rTrans forKey:nil];
                 nSrc.layer.hidden = NO;
             }
             
             for (InputSource *cSrc in changedInputs)
             {
-                [cSrc.layer addAnimation:rTrans forKey:nil];
                 cSrc.layer.hidden = NO;
             }
-        });
+            
+            
+            
+        }
+        
+        
+        if (completionBlock)
+        {
+            completionBlock();
+        }
+        
+        
+    }];
+    
+    if (bTrans)
+    {
+        transitionDelegate.forLayout = self;
+        transitionDelegate.fullScreen = self.transitionFullScene;
+        
+        [self.rootLayer addAnimation:bTrans forKey:bTrans.keyPath];
     }
+    
+    
+    for (InputSource *nSrc in newInputs)
+    {
+        
+        nSrc.layer.hidden = YES;
+        [self addSource:nSrc];
+        
+    }
+    
+    for (InputSource *cSrc in changedInputs)
+    {
+        InputSource *mSrc = [self inputForUUID:cSrc.uuid];
+        [self deleteSourceFromPresentation:mSrc];
+        [changedRemove addObject:mSrc];
+        
+        
+        cSrc.layer.hidden = YES;
+        
+        [self addSource:cSrc withParentLayer:mSrc.layer.superlayer];
+        [self incrementInputRef:cSrc];
+    }
+    transitionDelegate.changeremoveInputs = changedRemove;
+    
+    [CATransaction commit];
+    [CATransaction flush];
+    
     [self adjustAllInputs];
     
 }
@@ -993,6 +1041,8 @@
     
     NSDictionary *diffResult = [self diffSourceListWithData:toRemove];
     
+    NSMutableArray *realRemove = [NSMutableArray array];
+    
     NSArray *changedInputs = diffResult[@"changed"];
     NSArray *sameInputs = diffResult[@"same"];
     NSArray *newInputs = diffResult[@"new"];
@@ -1000,12 +1050,31 @@
     NSMutableArray *removeInputs = [NSMutableArray arrayWithArray:changedInputs];
     [removeInputs addObjectsFromArray:sameInputs];
     [removeInputs addObjectsFromArray:newInputs];
+    NSNumber *aStart = nil;
+    
+    id athing = [CATransaction valueForKey:@"__CS_BLOCK_OBJECT__"];
+    if (athing)
+    {
+        aStart = [athing valueForKey:@"current_begin_time"];
+    }
+    
     
     CATransition *rTrans = nil;
+    CABasicAnimation *bTrans = nil;
+    
+    CSTransitionAnimationDelegate *transitionDelegate = [[CSTransitionAnimationDelegate alloc] init];
+    
     
     if (self.transitionName || self.transitionFilter)
     {
         rTrans = [CATransition animation];
+        
+        if (aStart)
+        {
+            [rTrans setBeginTime:aStart.floatValue];
+        }
+        
+        
         rTrans.type = self.transitionName;
         rTrans.duration = self.transitionDuration;
         rTrans.removedOnCompletion = YES;
@@ -1015,16 +1084,34 @@
             rTrans.filter = self.transitionFilter;
         }
     }
-
+    
+    
+    //We always create a dummy animation so we play nice with scripts that do additional animations. This way we don't do final remove/reveal until the proper time
+    NSString *dummyKey = [NSString stringWithFormat:@"__DUMMY_KEY_%f", aStart.floatValue];
+    bTrans = [CABasicAnimation animationWithKeyPath:dummyKey];
+    bTrans.removedOnCompletion = YES;
+    bTrans.fillMode = kCAFillModeForwards;
+    if (aStart)
+    {
+        bTrans.beginTime = aStart.floatValue;
+    }
+    bTrans.fromValue = @0;
+    bTrans.toValue = @1;
+    if (rTrans)
+    {
+        bTrans.duration = self.transitionDuration;
+    }
+    transitionDelegate.useAnimation = rTrans;
+    bTrans.delegate = transitionDelegate;
+    
     [CATransaction begin];
     [CATransaction setCompletionBlock:^{
         
         
-        for (InputSource *rSrc in removeInputs)
+        for (InputSource *rSrc in realRemove)
         {
-            InputSource *eSrc = [self inputForUUID:rSrc.uuid];
-            [self decrementInputRef:eSrc];
-            [self deleteSource:eSrc];
+            [self decrementInputRef:rSrc];
+            [self deleteSource:rSrc];
         }
         
         if (completionBlock)
@@ -1032,6 +1119,16 @@
             completionBlock();
         }
     }];
+    
+    
+    if (bTrans)
+    {
+        transitionDelegate.forLayout = self;
+        transitionDelegate.fullScreen = self.transitionFullScene;
+        
+        [self.rootLayer addAnimation:bTrans forKey:bTrans.keyPath];
+    }
+    
     
     if (self.transitionFullScene)
     {
@@ -1045,13 +1142,11 @@
         
         if (eSrc)
         {
-            if (!self.transitionFullScene)
-            {
-                [eSrc.layer addAnimation:rTrans forKey:kCAOnOrderOut];
-            }
-            eSrc.layer.hidden = YES;
-
+            [realRemove addObject:eSrc];
+            [self deleteSourceFromPresentation:eSrc];
         }
+        
+        transitionDelegate.removedInputs = realRemove;
     }
     [CATransaction commit];
     
@@ -1135,6 +1230,9 @@
         
         self.sourceList = [NSMutableArray array];
         _uuidMap = [NSMutableDictionary dictionary];
+        self.sourceListPresentation = [NSMutableArray array];
+        _uuidMapPresentation = [NSMutableDictionary dictionary];
+
         
         
         if (!withData)
@@ -1206,6 +1304,21 @@
 
 
 
+-(void)deleteSourceFromPresentation:(InputSource *)delSource
+{
+    @synchronized (self) {
+        [self.sourceListPresentation removeObject:delSource];
+    }
+
+    InputSource *uSrc;
+    
+    uSrc = _uuidMapPresentation[delSource.uuid];
+    if ([uSrc isEqual:delSource])
+    {
+        [_uuidMapPresentation removeObjectForKey:delSource.uuid];
+    }
+
+}
 -(void)deleteSource:(InputSource *)delSource
 {
     
@@ -1214,6 +1327,7 @@
     [self willChangeValueForKey:@"topLevelSourceList"];
     @synchronized (self) {
         [[self mutableArrayValueForKey:@"sourceList" ] removeObject:delSource];
+        [self.sourceListPresentation removeObject:delSource];
     }
     [self generateTopLevelSourceList];
     [self didChangeValueForKey:@"topLevelSourceList"];
@@ -1226,6 +1340,12 @@
         [_uuidMap removeObjectForKey:delSource.uuid];
     }
     
+    uSrc = _uuidMapPresentation[delSource.uuid];
+    if ([uSrc isEqual:delSource])
+    {
+        [_uuidMapPresentation removeObjectForKey:delSource.uuid];
+    }
+
     //[self.sourceList removeObject:delSource];
     if (delSource == self.layoutTimingSource)
     {
@@ -1280,6 +1400,7 @@
     newSource.sourceLayout = self;
     newSource.is_live = self.isActive;
     
+    [self.sourceListPresentation addObject:newSource];
     [[self mutableArrayValueForKey:@"sourceList" ] addObject:newSource];
     
 
@@ -1290,7 +1411,7 @@
     newSource.needsAdjustment = YES;
     
     
-    
+    [_uuidMapPresentation setObject:newSource forKey:newSource.uuid];
     [_uuidMap setObject:newSource forKey:newSource.uuid];
     
     [self incrementInputRef:newSource];
@@ -1308,11 +1429,13 @@
     @synchronized(self)
     {
         [self.sourceList removeAllObjects];
+        [self.sourceListPresentation removeAllObjects];
         [self generateTopLevelSourceList];
 
         
     }
     [_uuidMap removeAllObjects];
+    [_uuidMapPresentation removeAllObjects];
 }
 
 
@@ -1503,7 +1626,10 @@
 
 -(InputSource *)inputForName:(NSString *)name
 {
-    for (InputSource *tSrc in self.sourceList)
+    
+    NSArray *useList = self.sourceListPresentation;
+    
+    for (InputSource *tSrc in useList)
     {
         if (tSrc.name && [tSrc.name isEqualToString:name])
         {
@@ -1516,7 +1642,7 @@
 
 -(InputSource *)inputForUUID:(NSString *)uuid
 {
-    return [_uuidMap objectForKey:uuid];
+    return [_uuidMapPresentation objectForKey:uuid];
 }
 
 
