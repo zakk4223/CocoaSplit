@@ -48,7 +48,7 @@
     return NSStringFromClass(self);
 }
 
--(NSString *)label
+-(NSString *)instanceLabel
 {
     return [self.class label];
 }
@@ -66,6 +66,7 @@
         _allLayers = [NSMapTable weakToStrongObjectsMapTable];
         _fps_start_time = CFAbsoluteTimeGetCurrent();
         _fps_frame_cnt = 0;
+        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateStatistics:) name:CSNotificationStatisticsUpdate object:nil];
     }
     
@@ -325,8 +326,7 @@
 
 -(void)updateLayersWithFramedataBlock:(void(^)(CALayer *))updateBlock
 {
-    
-    [self internalUpdateLayerswithFrameData:true updateBlock:updateBlock];
+        [self internalUpdateLayerswithFrameData:true updateBlock:updateBlock];
 
 }
 

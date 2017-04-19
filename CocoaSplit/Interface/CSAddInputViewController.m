@@ -177,7 +177,7 @@
     if (!clickedCapture.availableVideoDevices || clickedCapture.availableVideoDevices.count == 0)
     {
         InputSource *newSrc = [[InputSource alloc] init];
-        newSrc.selectedVideoType = clickedCapture.label;
+        newSrc.selectedVideoType = clickedCapture.instanceLabel;
         [self addInput:newSrc];
         [self.previewView openInputConfigWindow:newSrc.uuid];
     } else {
@@ -193,7 +193,7 @@
     if (clickedDevice)
     {
         InputSource *newSrc =  [[InputSource alloc] init];
-        newSrc.selectedVideoType = self.selectedInput.label;
+        newSrc.selectedVideoType = self.selectedInput.instanceLabel;
         newSrc.videoInput.activeVideoDevice = clickedDevice;
         [self addInput:newSrc];
         [newSrc autoSize];

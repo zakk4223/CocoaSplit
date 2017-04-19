@@ -928,7 +928,10 @@
     }
     bTrans.fromValue = @0;
     bTrans.toValue = @1;
-    bTrans.duration = self.transitionDuration;
+    if (rTrans)
+    {
+        bTrans.duration = self.transitionDuration;
+    }
     transitionDelegate.useAnimation = rTrans;
     bTrans.delegate = transitionDelegate;
     

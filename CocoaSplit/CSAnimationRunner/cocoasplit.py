@@ -6,6 +6,15 @@ import re
 
 
 
+objc.registerMetaDataForSelector('CSCaptureBase', 'updateLayersWithFramedataBlock:', {'arguments': {2: {'type': '@?', 'callable': {'arguments': {'0':'^v', '1':'@'}}}}})
+
+CSCaptureBase = objc.lookUpClass('CSCaptureBase')
+CSIOSurfaceLayer = objc.lookUpClass('CSIOSurfaceLayer')
+CSAbstractCaptureDevice = objc.lookUpClass('CSAbstractCaptureDevice')
+LayoutRenderer = objc.lookUpClass('LayoutRenderer')
+CSCaptureSourceProtocol = objc.protocolNamed('CSCaptureSourceProtocol')
+
+
 def getCaptureController():
     my_app = NSApplication.sharedApplication()
     app_delegate = my_app.delegate()

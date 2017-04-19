@@ -130,7 +130,7 @@ If your source is 'shared' between inputSources each new one will call this func
 
 -(NSViewController *)configurationView;
 +(NSString *) label;
--(NSString *)label;
+-(NSString *) instanceLabel;
 
 
 -(void)frameArrived;

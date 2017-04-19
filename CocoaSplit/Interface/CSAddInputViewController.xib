@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11198.2" systemVersion="16A294a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16E195" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11198.2"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CSAddInputViewController">
@@ -165,7 +166,7 @@
                                                         </buttonCell>
                                                         <connections>
                                                             <action selector="initalTableButtonClicked:" target="-2" id="7KU-UW-u6O"/>
-                                                            <binding destination="0ck-3a-7NW" name="title" keyPath="objectValue.label" id="vnF-ez-DBp"/>
+                                                            <binding destination="0ck-3a-7NW" name="title" keyPath="objectValue.instanceLabel" id="55g-i4-Goa"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>
@@ -187,7 +188,7 @@
                                                         </buttonCell>
                                                         <connections>
                                                             <action selector="initalTableButtonClicked:" target="-2" id="4em-1G-5mB"/>
-                                                            <binding destination="Q3y-sG-NQW" name="title" keyPath="objectValue.label" id="fbf-3C-NvW"/>
+                                                            <binding destination="Q3y-sG-NQW" name="title" keyPath="objectValue.instanceLabel" id="xX2-wf-hau"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>
