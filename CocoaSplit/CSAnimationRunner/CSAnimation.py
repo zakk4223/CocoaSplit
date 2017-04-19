@@ -94,6 +94,7 @@ class CSAnimation:
 
     def set_model_value(self, realme=None):
 
+        NSLog("SET MODEL VALUE")
         if self.target:
             p_layer = self.target.presentationLayer()
             if not p_layer:

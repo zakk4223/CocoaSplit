@@ -461,7 +461,8 @@ class CSAnimationInput(object):
         
         def vmk(val):
             new_coord = self.real_coordinate_from_fract(val,0)
-            return cpos.x+new_coord.x
+            cpos.x = cpos.x +new_coord.x
+            return cpos.x
         
         anim_vals = self.make_animation_values(cpos.x, move_x, vmk)
         return self.simple_animation('position.x', anim_vals, duration, **kwargs)
@@ -473,7 +474,8 @@ class CSAnimationInput(object):
         cpos = self.animationLayer.position()
         def vmk(val):
             new_coord = self.real_coordinate_from_fract(0,val)
-            return cpos.y+new_coord.y
+            cpos.y = cpos.y + new_coord.y
+            return cpos.y
         
         anim_vals = self.make_animation_values(cpos.y, move_y, vmk)
         
@@ -484,21 +486,25 @@ class CSAnimationInput(object):
         """
             Move the input's position by move_x and move_y units This change is permanent/saved. If you want non-saved move use the translate* animations
             """
-        curr_x = self.animationLayer.position().x
-        curr_y = self.animationLayer.position().y
-        
+        cpos = self.animationLayer.position()
+
         def vmk(val):
             new_coord = self.real_coordinate_from_fract(val[0],val[1])
-            return NSPoint(curr_x+new_coord.x, curr_y+new_coord.y)
+            cpos.x = cpos.x + new_coord.x
+            cpos.y = cpos.y + new_coord.y
+            NSLog("VMK %f %f", cpos.x, cpos.y)
+
+            return NSPoint(cpos.x, cpos.y)
         
-        anim_vals = self.make_animation_values(NSPoint(curr_x, curr_y), pos_tpl, vmk)
+        anim_vals = self.make_animation_values((cpos.x, cpos.y), pos_tpl, vmk)
         
-        path = CGPathCreateMutable()
-        CGPathAddLines(path, None, anim_vals, len(anim_vals))
+        #path = CGPathCreateMutable()
+        #CGPathAddLines(path, None, anim_vals, len(anim_vals))
         
+        NSLog("MOVE TO %@", anim_vals)
         ret = self.moveTo(anim_vals, duration, **kwargs)
         
-        CGPathCloseSubpath(path)
+        # CGPathCloseSubpath(path)
         #CGPathRelease(path)
         return ret
     

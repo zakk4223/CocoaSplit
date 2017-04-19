@@ -1705,9 +1705,11 @@
         }
     }
     
+    
     tmpLayout = [saveRoot valueForKey:@"stagingLayout"];
     if (tmpLayout)
     {
+        
         if (tmpLayout == self.selectedLayout || [self.sourceLayouts containsObject:tmpLayout])
         {
             SourceLayout *tmpCopy = [tmpLayout copy];
@@ -1816,13 +1818,8 @@
 
 -(void)setStagingLayout:(SourceLayout *)stagingLayout
 {
-    
-    [stagingLayout restoreSourceList:nil];
-    [stagingLayout setupMIDI];
-    
-    self.stagingPreviewView.sourceLayout = stagingLayout;
-    self.stagingPreviewView.midiActive = YES;
-    
+    _stagingLayout = stagingLayout;
+
     [stagingLayout setAddLayoutBlock:^(SourceLayout *layout) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -1853,8 +1850,15 @@
     
     self.currentMidiInputStagingIdx = 0;
     
-    _stagingLayout = stagingLayout;
     stagingLayout.doSaveSourceList = YES;
+    if (!self.stagingHidden)
+    {
+        [stagingLayout restoreSourceList:nil];
+        [stagingLayout setupMIDI];
+        self.stagingPreviewView.sourceLayout = stagingLayout;
+        self.stagingPreviewView.midiActive = YES;
+    }
+
     
     
     
@@ -3973,10 +3977,17 @@
     
     
     [self.canvasSplitView.animator display];
+    
+    if (self.stagingPreviewView.sourceLayout)
+    {
+        [self.stagingPreviewView.sourceLayout saveSourceList];
+        [self.stagingPreviewView.sourceLayout clearSourceList];
+    }
     self.livePreviewView.viewOnly = NO;
     self.livePreviewView.midiActive = NO;
     self.activePreviewView = self.livePreviewView;
     self.stagingHidden = YES;
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutModeChanged object:self];
 
 }

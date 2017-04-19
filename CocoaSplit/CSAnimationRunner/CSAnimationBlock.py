@@ -4,14 +4,18 @@ from Foundation import NSObject,NSLog
 from Quartz import CACurrentMediaTime,CATransaction
 from CSAnimation import *
 
+CAAnimationDelegate = objc.protocolNamed('CAAnimationDelegate')
+
 
 
 def current_frame():
   return CATransaction.valueForKey_("__CS_BLOCK_OBJECT__")
 
-class CSAnimationDelegate(NSObject):
+class CSAnimationDelegate(NSObject, CAAnimationDelegate):
 
-    @objc.signature('v@:@c')
+    def animationDidStart_(self, animation):
+        pass
+#@objc.signature('v@:@c')
     def animationDidStop_finished_(self, animation, finished):
         cs_anim = animation.valueForKeyPath_("__CS_COMPLETION__")
         cs_anim.completed()
@@ -30,7 +34,6 @@ class AnimationBlock:
             self.animation_module = None
             self.current_begin_time = None
             self.current_end_time = None
-        
         CATransaction.begin()
         CATransaction.setValue_forKey_(self, "__CS_BLOCK_OBJECT__")
         self.animations = []
@@ -87,8 +90,11 @@ class AnimationBlock:
         if animation.label:
             self.label_map[animation.label] = animation
         
-        NSLog("CURRENT BEGIN %f", self.current_begin_time)
-        
+        if not animation.ignore_wait and animation.animation:
+            animation.animation.setValue_forKeyPath_(animation, "__CS_COMPLETION__")
+            a_delegate = CSAnimationDelegate.alloc().init()
+            animation.animation.setDelegate_(a_delegate)
+
         a_duration = animation.apply(self.current_begin_time)
 
         self.latest_end_time = animation.end_time
@@ -105,9 +111,6 @@ class AnimationBlock:
                 self.input_map[animation.cs_input] = self.latest_end_time
 
 
-        if not animation.ignore_wait and animation.animation:
-            animation.animation.setValue_forKeyPath_(animation, "__CS_COMPLETION__")
-            animation.animation.setDelegate_(CSAnimationDelegate.alloc().init())
         self.animations.append(animation)
 
         return animation
@@ -125,7 +128,6 @@ class AnimationBlock:
 
 
 def setCompletionBlock(completion_block):
-    NSLog("SET BLOCK %@", completion_block)
     current_frame().set_completion_block(completion_block)
 
 def wait(duration=0):
