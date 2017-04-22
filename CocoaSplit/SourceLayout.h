@@ -87,6 +87,7 @@
 @property (assign) float transitionDuration;
 @property (assign) bool transitionFullScene;
 @property (strong) NSMutableDictionary *pendingScripts;
+@property (strong) NSMutableDictionary *transitionScripts;
 
 
 
@@ -120,13 +121,17 @@
 -(void)clearSourceList;
 -(void)setupMIDI;
 -(void)updateCanvasWidth:(int)width height:(int)height;
--(NSString *)runAnimationString:(NSString *)animationCode withCompletionBlock:(void (^)(void))completionBlock withExceptionBlock:(void (^)(NSException *exception))exceptionBlock;
+-(NSString *)runAnimationString:(NSString *)animationCode withCompletionBlock:(void (^)(void))completionBlock withExceptionBlock:(void (^)(NSException *exception))exceptionBlock withExtraDictionary:(NSDictionary *)extraDictionary;
 
 -(void)replaceWithSourceLayout:(SourceLayout *)layout withCompletionBlock:(void (^)(void))completionBlock;
 -(InputSource *)inputForName:(NSString *)name;
 -(void)cancelTransition;
 -(void)cancelScriptRun:(NSString *)runUUID;
 -(bool)containsLayoutNamed:(NSString *)layoutName;
+-(void)replaceWithSourceLayoutViaScript:(SourceLayout *)layout;
+-(void)mergeSourceLayoutViaScript:(SourceLayout *)layout;
+-(void)removeSourceLayoutViaScript:(SourceLayout *)layout;
+
 
 
 

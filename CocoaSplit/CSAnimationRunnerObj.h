@@ -20,7 +20,7 @@
 
 -(void)runAnimation:(NSString *)name forInput:(id)forInput withSuperlayer:(CALayer *)superLayer;
 -(void)runAnimation:(NSString *)name forLayout:(id)forLayout withSuperlayer:(CALayer *)superlayer;
--(NSDictionary *)runAnimation:(NSString *)code forLayout:(id)forLayout;
+-(NSDictionary *)runAnimation:(NSString *)code forLayout:(id)forLayout withExtraDictionary:(NSDictionary *)extraDictionary;
 
 -(NSString *)animationPath:(NSString *)name;
 

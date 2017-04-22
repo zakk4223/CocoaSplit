@@ -115,11 +115,14 @@ class CSAnimationRunnerObj(NSObject):
         CSAnimationBlock.beginAnimation(duration)
     
 
-    @objc.signature('@@:@@')
-    def runAnimation_forLayout_(self,animation_string, layout):
+    @objc.signature('@@:@@@')
+    def runAnimation_forLayout_withExtraDictionary_(self,animation_string, layout, extraDictionary):
     
+        NSLog("EXTRA DICT %@", extraDictionary);
         
         animation = ModuleType('cs_fromstring_animation', '')
+        animation.extraData = extraDictionary
+
         exec("from cocoasplit import *", animation.__dict__)
         exec("all_animations = {}", animation.__dict__)
         exec("__cs_default_kwargs = {}", animation.__dict__)
@@ -128,12 +131,6 @@ class CSAnimationRunnerObj(NSObject):
         CSAnimationBlock.beginAnimation()
         CSAnimationBlock.current_frame().layout = layout
         CSAnimationBlock.current_frame().animation_module = animation
-        animation.wait = CSAnimationBlock.wait
-        animation.waitAnimation = CSAnimationBlock.waitAnimation
-        animation.animationDuration = CSAnimationBlock.animationDuration
-        animation.setCompletionBlock = CSAnimationBlock.setCompletionBlock
-        animation.commitAnimation = CSAnimationBlock.commitAnimation
-        animation.beginAnimation = self.beginAnimation
         
         self.baseLayer = layout.rootLayer()
         self.layout = layout

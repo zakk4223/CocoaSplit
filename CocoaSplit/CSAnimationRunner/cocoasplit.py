@@ -15,6 +15,17 @@ LayoutRenderer = objc.lookUpClass('LayoutRenderer')
 CSCaptureSourceProtocol = objc.protocolNamed('CSCaptureSourceProtocol')
 
 
+
+wait = CSAnimationBlock.wait
+waitAnimation = CSAnimationBlock.waitAnimation
+animationDuration = CSAnimationBlock.animationDuration
+setCompletionBlock = CSAnimationBlock.setCompletionBlock
+commitAnimation = CSAnimationBlock.commitAnimation
+
+
+def beginAnimation(self, duration=0.25):
+    CSAnimationBlock.beginAnimation(duration)
+
 def getCaptureController():
     my_app = NSApplication.sharedApplication()
     app_delegate = my_app.delegate()
@@ -115,40 +126,79 @@ def containsLayout(name):
     target_layout = getCurrentLayout()
     return target_layout.containsLayoutNamed_(name)
 
-def switchToLayout(name):
+
+def switchToLayoutByName(name):
     layout = layoutByName(name)
+    if layout:
+        switchToLayout(layout)
+
+def switchToLayout(layout):
     if layout:
         target_layout = getCurrentLayout()
         if (CSAnimationBlock.current_frame() and target_layout.transitionName() or target_layout.transitionFilter()) and target_layout.transitionDuration() > 0:
             dummy_animation = CSAnimation(None, None, None)
             dummy_animation.duration = target_layout.transitionDuration()
             CSAnimationBlock.current_frame().add_animation(dummy_animation, None, None)
+        contained_layouts = target_layout.containedLayouts()
+        for c_lay in contained_layouts:
+            if c_lay == layout:
+                continue
+            c_scripts = c_lay.transitionScripts()
+            if 'replaced' in c_scripts:
+                rep_script = c_scripts['replaced']
+                exec(rep_script)
+
         target_layout.replaceWithSourceLayout_(layout)
+        layout_transition_scripts = layout.transitionScripts()
+        if 'replacing' in layout_transition_scripts:
+            layout_replacing_script = layout_transition_scripts['replacing']
+            exec(layout_replacing_script)
 
 
 
-def mergeLayout(name):
-    layout = layoutByName(name)
+
+
+
+
+def mergeLayout(layout):
     if layout:
         target_layout = getCurrentLayout()
         if (CSAnimationBlock.current_frame() and target_layout.transitionName() or target_layout.transitionFilter()) and target_layout.transitionDuration() > 0:
             dummy_animation = CSAnimation(None, None, None)
             dummy_animation.duration = target_layout.transitionDuration()
             CSAnimationBlock.current_frame().add_animation(dummy_animation, None, None)
-    target_layout.mergeSourceLayout_(layout)
+        target_layout.mergeSourceLayout_(layout)
+        layout_transition_scripts = layout.transitionScripts()
+        if 'merged' in layout_transition_scripts:
+            layout_merged_script = layout_transition_scripts['merged']
+            exec(layout_merged_script)
 
 
-
-def removeLayout(name):
+def mergeLayoutByName(name):
     layout = layoutByName(name)
+    if layout:
+        mergeLayout(layout)
+
+
+def removeLayout(layout):
     if layout:
         target_layout = getCurrentLayout()
         if (CSAnimationBlock.current_frame() and target_layout.transitionName() or target_layout.transitionFilter()) and target_layout.transitionDuration() > 0:
             dummy_animation = CSAnimation(None, None, None)
             dummy_animation.duration = target_layout.transitionDuration()
             CSAnimationBlock.current_frame().add_animation(dummy_animation, None, None)
-    target_layout.removeSourceLayout_(layout)
+        layout_transition_scripts = layout.transitionScripts()
+        if 'removed' in layout_transition_scripts:
+            layout_removed_script = layout_transition_scripts['removed']
+            exec(layout_removed_script)
 
+        target_layout.removeSourceLayout_(layout)
+
+
+def removeLayoutByName(name):
+    layout = layoutByName(name)
+    if layout:
+        removeLayout(layout)
 
 
 def inputByName(name):

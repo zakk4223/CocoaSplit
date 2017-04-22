@@ -33,6 +33,7 @@
         _uuidMap = [NSMutableDictionary dictionary];
         _uuidMapPresentation = [NSMutableDictionary dictionary];
         
+        _transitionScripts = [NSMutableDictionary dictionary];
         
         _pendingScripts = [NSMutableDictionary dictionary];
         
@@ -131,7 +132,7 @@
 
 
 
--(NSString *)runAnimationString:(NSString *)animationCode withCompletionBlock:(void (^)(void))completionBlock withExceptionBlock:(void (^)(NSException *exception))exceptionBlock
+-(NSString *)runAnimationString:(NSString *)animationCode withCompletionBlock:(void (^)(void))completionBlock withExceptionBlock:(void (^)(NSException *exception))exceptionBlock withExtraDictionary:(NSDictionary *)extraDictionary
 {
     if (!animationCode)
     {
@@ -148,6 +149,11 @@
     {
         [animMap setObject:exceptionBlock forKey:@"exceptionBlock"];
         
+    }
+    
+    if (extraDictionary)
+    {
+        [animMap setObject:extraDictionary forKey:@"extraDictionary"];
     }
     
     CFUUIDRef tmpUUID = CFUUIDCreate(NULL);
@@ -199,7 +205,7 @@
     CALayer *rootLayer = threadDict[@"rootLayer"];
     NSString *animationCode = threadDict[@"animationString"];
     NSString *runUUID = threadDict[@"runUUID"];
-    
+    NSDictionary *extraDict = threadDict[@"extraDictionary"];
     void (^completionBlock)(void) = [threadDict objectForKey:@"completionBlock"];
     void (^exceptionBlock)(NSException *exception) = [threadDict objectForKey:@"exceptionBlock"];
     
@@ -218,7 +224,7 @@
         
         if (animationCode)
         {
-            NSDictionary *pendingAnimations = [runner runAnimation:animationCode forLayout:self];
+            NSDictionary *pendingAnimations = [runner runAnimation:animationCode forLayout:self withExtraDictionary:extraDict];
             self.pendingScripts[runUUID] = pendingAnimations;
         } else {
             [runner runAnimation:modName forLayout:self  withSuperlayer:rootLayer];
@@ -281,6 +287,8 @@
     [aCoder encodeInt:self.canvas_width forKey:@"canvas_width"];
     [aCoder encodeInt:self.canvas_height forKey:@"canvas_height"];
     [aCoder encodeFloat:self.frameRate forKey:@"frameRate"];
+    [aCoder encodeObject:self.transitionScripts forKey:@"transitionScripts"];
+    
     if (self.containedLayouts)
     {
         [aCoder encodeObject:self.containedLayouts forKey:@"containedLayouts"];
@@ -314,6 +322,11 @@
         }
         
     
+        if ([aDecoder containsValueForKey:@"transitionScripts"])
+        {
+            self.transitionScripts = [[aDecoder decodeObjectForKey:@"transitionScripts"] mutableCopy];
+        }
+        
         if ([aDecoder containsValueForKey:@"containedLayouts"])
         {
             self.containedLayouts = [[aDecoder decodeObjectForKey:@"containedLayouts"] mutableCopy];
@@ -605,6 +618,14 @@
 }
 
 
+-(void)replaceWithSourceLayoutViaScript:(SourceLayout *)layout
+{
+    NSString *replaceScript = @"def run_script(toLayout=extraData['toLayout']):\n\tswitchToLayout(toLayout)\n";
+    NSDictionary *extraDict = @{@"toLayout": layout};
+    [self runAnimationString:replaceScript withCompletionBlock:nil withExceptionBlock:nil withExtraDictionary:extraDict];
+}
+
+
 -(void)replaceWithSourceLayout:(SourceLayout *)layout
 {
     
@@ -831,6 +852,12 @@
 
 
 
+-(void)mergeSourceLayoutViaScript:(SourceLayout *)layout
+{
+    NSString *mergeScript = @"def run_script(toLayout=extraData['toLayout']):\n\tmergeLayout(toLayout)\n";
+    NSDictionary *extraDict = @{@"toLayout": layout};
+    [self runAnimationString:mergeScript withCompletionBlock:nil withExceptionBlock:nil withExtraDictionary:extraDict];
+}
 
 
 -(void)mergeSourceLayout:(SourceLayout *)toMerge
@@ -1005,6 +1032,14 @@
     
     [self adjustAllInputs];
     
+}
+
+
+-(void)removeSourceLayoutViaScript:(SourceLayout *)layout
+{
+    NSString *removeScript = @"def run_script(toLayout=extraData['toLayout']):\n\tremoveLayout(toLayout)\n";
+    NSDictionary *extraDict = @{@"toLayout": layout};
+    [self runAnimationString:removeScript withCompletionBlock:nil withExceptionBlock:nil withExtraDictionary:extraDict];
 }
 
 -(void)removeSourceLayout:(SourceLayout *)toRemove

@@ -3246,7 +3246,8 @@
     SourceLayout *activeLayout = self.activePreviewView.sourceLayout;
     [self applyTransitionSettings:activeLayout];
 
-    [activeLayout replaceWithSourceLayout:layout];
+    [activeLayout replaceWithSourceLayoutViaScript:layout];
+    //[activeLayout replaceWithSourceLayout:layout];
 }
 
 
@@ -3259,9 +3260,9 @@
 
     if ([activeLayout containsLayout:layout])
     {
-        [activeLayout removeSourceLayout:layout];
+        [activeLayout removeSourceLayoutViaScript:layout];
     } else {
-        [activeLayout mergeSourceLayout:layout];
+        [activeLayout mergeSourceLayoutViaScript:layout];
     }
     
 }
