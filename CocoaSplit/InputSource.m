@@ -1799,8 +1799,9 @@ static NSArray *_sourceTypes = nil;
         float hRatio = self.canvas_height/self.topLevelHeight;
         float old_x = self.x_pos;
         float old_y = self.y_pos;
-        float new_width = self.layer.bounds.size.width * wRatio;
-        float new_height = self.layer.bounds.size.height * hRatio;
+        
+        float new_width = self.layer.frame.size.width * wRatio;
+        float new_height = self.layer.frame.size.height * hRatio;
         [self directSize:new_width height:new_height];
         if (doPosition)
         {

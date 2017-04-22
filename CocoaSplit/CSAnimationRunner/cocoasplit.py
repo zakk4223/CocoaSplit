@@ -127,32 +127,34 @@ def containsLayout(name):
     return target_layout.containsLayoutNamed_(name)
 
 
-def switchToLayoutByName(name):
+def switchToLayoutByName(name, **kwargs):
     layout = layoutByName(name)
     if layout:
         switchToLayout(layout)
 
-def switchToLayout(layout):
+def switchToLayout(layout, **kwargs):
     if layout:
         target_layout = getCurrentLayout()
         if (CSAnimationBlock.current_frame() and target_layout.transitionName() or target_layout.transitionFilter()) and target_layout.transitionDuration() > 0:
             dummy_animation = CSAnimation(None, None, None)
             dummy_animation.duration = target_layout.transitionDuration()
             CSAnimationBlock.current_frame().add_animation(dummy_animation, None, None)
-        contained_layouts = target_layout.containedLayouts()
-        for c_lay in contained_layouts:
-            if c_lay == layout:
-                continue
-            c_scripts = c_lay.transitionScripts()
-            if 'replaced' in c_scripts:
-                rep_script = c_scripts['replaced']
-                exec(rep_script)
+        if not 'noscripts' in kwargs:
+            contained_layouts = target_layout.containedLayouts()
+            for c_lay in contained_layouts:
+                if c_lay == layout:
+                    continue
+                c_scripts = c_lay.transitionScripts()
+                if 'replaced' in c_scripts:
+                    rep_script = c_scripts['replaced']
+                    exec(rep_script)
 
         target_layout.replaceWithSourceLayout_(layout)
-        layout_transition_scripts = layout.transitionScripts()
-        if 'replacing' in layout_transition_scripts:
-            layout_replacing_script = layout_transition_scripts['replacing']
-            exec(layout_replacing_script)
+        if not 'noscripts' in kwargs:
+            layout_transition_scripts = layout.transitionScripts()
+            if 'replacing' in layout_transition_scripts:
+                layout_replacing_script = layout_transition_scripts['replacing']
+                exec(layout_replacing_script)
 
 
 
@@ -160,7 +162,7 @@ def switchToLayout(layout):
 
 
 
-def mergeLayout(layout):
+def mergeLayout(layout, **kwargs):
     if layout:
         target_layout = getCurrentLayout()
         if (CSAnimationBlock.current_frame() and target_layout.transitionName() or target_layout.transitionFilter()) and target_layout.transitionDuration() > 0:
@@ -169,18 +171,18 @@ def mergeLayout(layout):
             CSAnimationBlock.current_frame().add_animation(dummy_animation, None, None)
         target_layout.mergeSourceLayout_(layout)
         layout_transition_scripts = layout.transitionScripts()
-        if 'merged' in layout_transition_scripts:
+        if 'merged' in layout_transition_scripts and not 'noscripts' in kwargs:
             layout_merged_script = layout_transition_scripts['merged']
             exec(layout_merged_script)
 
 
-def mergeLayoutByName(name):
+def mergeLayoutByName(name, **kwargs):
     layout = layoutByName(name)
     if layout:
         mergeLayout(layout)
 
 
-def removeLayout(layout):
+def removeLayout(layout, **kwargs):
     if layout:
         target_layout = getCurrentLayout()
         if (CSAnimationBlock.current_frame() and target_layout.transitionName() or target_layout.transitionFilter()) and target_layout.transitionDuration() > 0:
@@ -188,14 +190,14 @@ def removeLayout(layout):
             dummy_animation.duration = target_layout.transitionDuration()
             CSAnimationBlock.current_frame().add_animation(dummy_animation, None, None)
         layout_transition_scripts = layout.transitionScripts()
-        if 'removed' in layout_transition_scripts:
+        if 'removed' in layout_transition_scripts and not 'noscripts' in kwargs:
             layout_removed_script = layout_transition_scripts['removed']
             exec(layout_removed_script)
 
         target_layout.removeSourceLayout_(layout)
 
 
-def removeLayoutByName(name):
+def removeLayoutByName(name, **kwargs):
     layout = layoutByName(name)
     if layout:
         removeLayout(layout)

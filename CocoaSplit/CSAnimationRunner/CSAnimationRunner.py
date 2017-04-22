@@ -4,14 +4,14 @@ Animation runner base
 import objc
 import CSAnimationInput
 from types import ModuleType
-from Foundation import *
+#from Foundation import *
 #from CoreGraphics import *
 from Quartz import CACurrentMediaTime,CATransaction,CGPathRef,CGPathAddLines,CGPathCloseSubpath,CGPathRelease,CGPathCreateMutable
 from pluginbase import PluginBase
 import math
 import CSAnimationBlock
 from CSAnimation import *
-from Foundation import NSObject,NSLog,NSApplication
+#from Foundation import NSObject,NSLog,NSApplication
 import sys
 import traceback
 import os
