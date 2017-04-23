@@ -135,6 +135,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     NSMutableArray *_screensCache;
     NSMutableArray *_layoutWindows;
     NSMutableArray *_outputWindows;
+    NSMutableArray *_sequenceWindows;
     
     bool _needsIRReset;
     
@@ -449,6 +450,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(void)switchToLayout:(SourceLayout *)layout;
 -(CSLayoutEditWindowController *)openLayoutWindow:(SourceLayout *)layout;
 -(void)layoutWindowWillClose:(CSLayoutEditWindowController *)windowController;
+-(void)sequenceWindowWillClose:(CSSequenceEditorWindowController *)windowController;
+
 
 -(void)addInputToLibrary:(InputSource *)source;
 - (IBAction)openLibraryWindow:(id) sender;

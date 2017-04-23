@@ -238,6 +238,7 @@
 		34BD1E631B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34BD1E611B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.m */; };
 		34BD1E641B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34BD1E611B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.m */; };
 		34BD1E651B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34BD1E621B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.xib */; };
+		34C0E9FA1EABF92300B30DB4 /* CAMultiAudioDelay.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C0E9F91EABF92300B30DB4 /* CAMultiAudioDelay.m */; };
 		34C19053189EE60400AB2430 /* CapturedFrameData.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C19052189EE60400AB2430 /* CapturedFrameData.m */; };
 		34C19054189EE60400AB2430 /* CapturedFrameData.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C19052189EE60400AB2430 /* CapturedFrameData.m */; };
 		34C67B8E1A2E69F60012DC1B /* CSHitboxStreamServicePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34C67B781A2D7B6A0012DC1B /* CSHitboxStreamServicePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -935,6 +936,8 @@
 		34BD1E601B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioMatrixMixerWindowController.h; path = Interface/CAMultiAudioMatrixMixerWindowController.h; sourceTree = "<group>"; };
 		34BD1E611B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioMatrixMixerWindowController.m; path = Interface/CAMultiAudioMatrixMixerWindowController.m; sourceTree = "<group>"; };
 		34BD1E621B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CAMultiAudioMatrixMixerWindowController.xib; path = Interface/CAMultiAudioMatrixMixerWindowController.xib; sourceTree = "<group>"; };
+		34C0E9F81EABF92300B30DB4 /* CAMultiAudioDelay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioDelay.h; path = CAMultiAudio/CAMultiAudioDelay.h; sourceTree = "<group>"; };
+		34C0E9F91EABF92300B30DB4 /* CAMultiAudioDelay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioDelay.m; path = CAMultiAudio/CAMultiAudioDelay.m; sourceTree = "<group>"; };
 		34C19051189EE60400AB2430 /* CapturedFrameData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CapturedFrameData.h; sourceTree = "<group>"; };
 		34C19052189EE60400AB2430 /* CapturedFrameData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CapturedFrameData.m; sourceTree = "<group>"; };
 		34C67B731A2D7B690012DC1B /* CSHitboxStreamServicePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSHitboxStreamServicePlugin.xcodeproj; path = StreamServicePlugins/CSHitboxStreamServicePlugin/CSHitboxStreamServicePlugin.xcodeproj; sourceTree = "<group>"; };
@@ -1650,6 +1653,8 @@
 				345F8B7B1A184FBC009A81E3 /* CAMultiAudioMixingProtocol.h */,
 				34BD1E4B1B1F1A2D0015CBEC /* CAMultiAudioDownmixer.h */,
 				34BD1E4C1B1F1A2D0015CBEC /* CAMultiAudioDownmixer.m */,
+				34C0E9F81EABF92300B30DB4 /* CAMultiAudioDelay.h */,
+				34C0E9F91EABF92300B30DB4 /* CAMultiAudioDelay.m */,
 			);
 			name = CAMultiAudio;
 			sourceTree = "<group>";
@@ -2547,6 +2552,7 @@
 				34BD1E631B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.m in Sources */,
 				3434CB381CA93BCD001B3DF9 /* CSAppleProResCompressorViewController.m in Sources */,
 				3434CB321CA91D99001B3DF9 /* CSAppleH264CompressorViewController.m in Sources */,
+				34C0E9FA1EABF92300B30DB4 /* CAMultiAudioDelay.m in Sources */,
 				347BEAAB1E5BCBAF0026A094 /* CSOpenGLLayer.m in Sources */,
 				34F52A271BC1CE2700662911 /* CSLayoutCollectionItem.m in Sources */,
 				347277FD1A5A2758008801A9 /* CSIOSurfaceLayer.m in Sources */,

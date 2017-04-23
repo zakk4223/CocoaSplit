@@ -10,6 +10,7 @@
 #import "CAMultiAudioGraph.h"
 #import "CAMultiAudioMixingProtocol.h"
 #import "CAMultiAudioMatrixMixerWindowController.h"
+#import "CAMultiAudioDelay.h"
 
 @implementation CAMultiAudioVolumeAnimation
 
@@ -21,6 +22,7 @@
 @synthesize volume = _volume;
 @synthesize muted = _muted;
 @synthesize enabled = _enabled;
+@synthesize delay = _delay;
 
 
 -(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType
@@ -35,10 +37,39 @@
         //Default to two channels, subclasses can override this
         self.channelCount = 2;
         _volume = 1.0;
+        _delayNodes = [NSMutableArray array];
         self.nameColor = [NSColor blackColor];
     }
     
     return self;
+}
+
+
+
+-(void)setDelay:(Float32)delay
+{
+    if (self.delayNodes)
+    {
+        Float32 nodeDelay = delay;
+        for (CAMultiAudioDelay *dNode in self.delayNodes)
+        {
+            if (nodeDelay >= 2.0)
+            {
+                dNode.delay = 2.0;
+                nodeDelay -= 2.0;
+            } else {
+                dNode.delay = nodeDelay;
+                nodeDelay -= nodeDelay;
+            }
+        }
+    }
+    
+    _delay = delay;
+}
+
+-(Float32)delay
+{
+    return _delay;
 }
 
 
@@ -152,18 +183,24 @@
 
 -(void)setVolumeOnConnectedNode
 {
-    if (!self.connectedTo)
-    {
-        return;
-    }
+    
+    CAMultiAudioNode *volNode = self.connectedTo;
     
     
-    if ([self.connectedTo.class conformsToProtocol:@protocol(CAMultiAudioMixingProtocol)])
+    while (volNode)
     {
-        id<CAMultiAudioMixingProtocol>mixerNode = (id<CAMultiAudioMixingProtocol>)self.connectedTo;
-        [mixerNode setVolumeOnInputBus:self.connectedToBus volume:self.volume];
+        if ([volNode.class conformsToProtocol:@protocol(CAMultiAudioMixingProtocol)])
+        {
+            id<CAMultiAudioMixingProtocol>mixerNode = (id<CAMultiAudioMixingProtocol>)volNode;
+            [mixerNode setVolumeOnInputBus:self.downMixer volume:self.volume];
+            break;
+        } else {
+            volNode = volNode.connectedTo;
+        }
     }
 }
+
+
 
 -(void)openMixerWindow:(id)sender
 {

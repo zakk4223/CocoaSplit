@@ -297,17 +297,31 @@
 
 -(void)openSequenceWindow:(CSLayoutSequence *)forSequence
 {
-    _sequenceWindowController = [[CSSequenceEditorWindowController alloc] init];
-    _sequenceWindowController.addSequenceOnSave = NO;
+    CSSequenceEditorWindowController *editSequenceController = [[CSSequenceEditorWindowController alloc] init];
+    editSequenceController.addSequenceOnSave = NO;
     if (!forSequence)
     {
         forSequence = [[CSLayoutSequence alloc] init];
         
     }
-    _sequenceWindowController.sequence = forSequence;
-    [_sequenceWindowController showWindow:nil];
+    editSequenceController.sequence = forSequence;
+    [_sequenceWindows addObject:editSequenceController];
+    editSequenceController.delegate = self;
+    
+    
+    [editSequenceController showWindow:nil];
 
 }
+
+
+-(void)sequenceWindowWillClose:(CSSequenceEditorWindowController *)windowController
+{
+    if ([_sequenceWindows containsObject:windowController])
+    {
+        [_sequenceWindows removeObject:windowController];
+    }
+}
+
 
 - (IBAction)createLayoutOrSequenceAction:(id)sender
 {
@@ -805,6 +819,7 @@
        
        
        _layoutWindows = [NSMutableArray array];
+       _sequenceWindows = [NSMutableArray array];
        
        self.transitionDirections = @[kCATransitionFromTop, kCATransitionFromRight, kCATransitionFromBottom, kCATransitionFromLeft];
        self.useInstantRecord = YES;

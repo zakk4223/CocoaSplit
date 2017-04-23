@@ -21,6 +21,8 @@
 
 @implementation CSSequenceEditorWindowController
 
+@synthesize sequence = _sequence;
+
 - (void)windowDidLoad {
     [super windowDidLoad];
     
@@ -40,6 +42,18 @@
     }
     
     return self;
+}
+
+-(void) setSequence:(CSLayoutSequence *)sequence
+{
+    _sequence = sequence;
+    self.window.title = [NSString stringWithFormat:@"Script Editor - %@", sequence.name];
+}
+
+
+-(CSLayoutSequence *)sequence
+{
+    return _sequence;
 }
 
 
@@ -108,6 +122,12 @@
     {
         [wc close];
     }
+    
+    if (self.delegate)
+    {
+        [self.delegate sequenceWindowWillClose:self];
+    }
+    
 }
 
 
@@ -116,7 +136,6 @@
     [self.sequenceObjectController commitEditing];
     if (self.addSequenceOnSave)
     {
-        NSLog(@"ADD SEQUENCE %d", self.addSequenceOnSave);
         
         AppDelegate *appdel = [NSApp delegate];
         CaptureController *controller = appdel.captureController;

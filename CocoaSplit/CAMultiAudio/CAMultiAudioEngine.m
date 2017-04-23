@@ -8,6 +8,8 @@
 
 #import "CAMultiAudioEngine.h"
 #import "CAMultiAudioDownmixer.h"
+#import "CAMultiAudioDelay.h"
+
 
 OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList *ioData );
 
@@ -471,7 +473,21 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     [self.graph connectNode:dmix toNode:self.encodeMixer];
     
-    [self.graph connectNode:input toNode:dmix];
+    CAMultiAudioNode *connectNode = dmix;
+    CAMultiAudioDelay *delayNode = nil;
+    
+    for(int i=0; i < 5; i++)
+    {
+        delayNode = [[CAMultiAudioDelay alloc] init];
+        [self.graph addNode:delayNode];
+        [self.graph connectNode:delayNode toNode:connectNode];
+        connectNode = delayNode;
+        [input.delayNodes addObject:delayNode];
+    }
+    
+    
+    [self.graph connectNode:input toNode:delayNode];
+    
     input.downMixer = dmix;
 
 }
@@ -487,7 +503,21 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     [self.graph connectNode:dmix toNode:self.encodeMixer];
 
-    [self.graph connectNode:input toNode:dmix];
+    CAMultiAudioNode *connectNode = dmix;
+    CAMultiAudioDelay *delayNode = nil;
+
+    for(int i=0; i < 5; i++)
+    {
+        delayNode = [[CAMultiAudioDelay alloc] init];
+        [self.graph addNode:delayNode];
+        [self.graph connectNode:delayNode toNode:connectNode];
+        connectNode = delayNode;
+        [input.delayNodes addObject:delayNode];
+    }
+    
+    
+    [self.graph connectNode:input toNode:delayNode];
+    
     input.downMixer = dmix;
     
     if (input.nodeUID)
@@ -534,6 +564,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
         
         CAMultiAudioDownmixer *dmix = toRemove.downMixer;
+        toRemove.downMixer = nil;
         
         [self.graph removeNode:toRemove];
         
@@ -541,6 +572,16 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         {
             [self.graph removeNode:dmix];
         }
+        
+        NSArray *delayNodes = toRemove.delayNodes.copy;
+        
+        for (CAMultiAudioDelay *dNode in delayNodes)
+        {
+            [self.graph removeNode:dNode];
+            [toRemove.delayNodes removeObject:dNode];
+        }
+        
+        
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self removeObjectFromAudioInputsAtIndex:index];

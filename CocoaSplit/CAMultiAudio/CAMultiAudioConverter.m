@@ -85,7 +85,7 @@
         self.sourceNode.volume = volume;
     }
     
-    [self setVolumeOnConnectedNode];
+    //[self setVolumeOnConnectedNode];
     
 }
 

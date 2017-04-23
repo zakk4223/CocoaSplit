@@ -22,6 +22,9 @@
 @property (assign) bool addSequenceOnSave;
 
 @property (strong) CSLayoutSequence *sequence;
+
+@property (weak) id delegate;
+
 - (IBAction)saveButtonAction:(id)sender;
 - (IBAction)cancelButtonAction:(id)sender;
 -(IBAction)openAddStepPopover:(NSButton *)sender;

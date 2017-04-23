@@ -15,6 +15,7 @@
 @class CAMultiAudioGraph;
 @class CAMultiAudioDownmixer;
 @class CAMultiAudioMatrixMixerWindowController;
+@class CAMultiAudioDelay;
 
 @interface CAMultiAudioVolumeAnimation : NSAnimation
 
@@ -41,6 +42,8 @@
 @property (strong) NSString *nodeUID;
 
 @property (strong) CAMultiAudioDownmixer *downMixer;
+@property (strong) NSMutableArray *delayNodes;
+
 
 //There really has to be a better way to do something like this
 @property (strong) NSColor *nameColor;
@@ -52,6 +55,7 @@
 @property (assign) Float32 powerLevel;
 
 @property (strong) CAMultiAudioMatrixMixerWindowController *mixerWindow;
+@property (assign) Float32 delay;
 
 -(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType;
 

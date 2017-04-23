@@ -40,6 +40,8 @@
 
 -(void)setInputForDevice
 {
+    
+
     UInt32 enableIO;
     
     enableIO = 1;
