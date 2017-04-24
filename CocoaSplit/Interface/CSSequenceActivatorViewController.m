@@ -127,7 +127,6 @@
     CSLayoutSequence *toEdit = sender.representedObject;
     [controller openSequenceWindow:toEdit];
     
-    //[self.captureController openLayoutPopover:self.layoutButton forLayout:toEdit];
 }
 
 
@@ -215,18 +214,26 @@
             {
                 [view.layoutSequence cancelSequenceForLayout:captureController.activePreviewView.sourceLayout];
             } else {
+                SourceLayout *useLayout;
+                if ([clickEvent modifierFlags] & NSControlKeyMask)
+                {
+                    useLayout = captureController.livePreviewView.sourceLayout;
+                } else {
+                    useLayout = captureController.activePreviewView.sourceLayout;
+                }
+                
                 if (self.queuedSequences.count > 0)
                 {
                     for (CSSequenceActivatorView *qView in self.queuedSequences)
                     {
-                        [qView.layoutSequence runSequenceForLayout:captureController.activePreviewView.sourceLayout withCompletionBlock:^(){qView.layer.opacity = 1.0f; qView.isQueued = NO;} withExceptionBlock:^(NSException *exception) {
+                        [qView.layoutSequence runSequenceForLayout:useLayout withCompletionBlock:^(){qView.layer.opacity = 1.0f; qView.isQueued = NO;} withExceptionBlock:^(NSException *exception) {
                             [self handleScriptException:exception];
                         }];
 
                     }
                     [self.queuedSequences removeAllObjects];
                 }
-                [view.layoutSequence runSequenceForLayout:captureController.activePreviewView.sourceLayout withCompletionBlock:^(){NSLog(@"ANIMATION DONE");view.layer.opacity = 1.0f; view.isQueued = NO;} withExceptionBlock:^(NSException *exception) {
+                [view.layoutSequence runSequenceForLayout:useLayout withCompletionBlock:^(){NSLog(@"ANIMATION DONE");view.layer.opacity = 1.0f; view.isQueued = NO;} withExceptionBlock:^(NSException *exception) {
                     [self handleScriptException:exception];
                 }];
             }

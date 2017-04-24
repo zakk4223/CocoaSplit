@@ -4003,6 +4003,8 @@
     self.livePreviewView.midiActive = NO;
     self.activePreviewView = self.livePreviewView;
     self.stagingHidden = YES;
+    self.stagingLayout = self.livePreviewView.sourceLayout;
+    self.selectedLayout = self.livePreviewView.sourceLayout;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutModeChanged object:self];
 
@@ -4027,11 +4029,11 @@
     if (self.livePreviewView.sourceLayout)
     {
         [self.livePreviewView.sourceLayout saveSourceList];
-        if (self.selectedLayout == self.stagingLayout)
-        {
             self.stagingPreviewView.sourceLayout.savedSourceListData = self.livePreviewView.sourceLayout.savedSourceListData;
             [self.stagingPreviewView.sourceLayout restoreSourceList:nil];
-        }
+        
+        self.stagingLayout = self.stagingPreviewView.sourceLayout;
+        self.selectedLayout = self.livePreviewView.sourceLayout;
     }
 
     [self.canvasSplitView.animator setPosition:_liveFrame.origin.x ofDividerAtIndex:0];

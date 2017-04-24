@@ -492,6 +492,7 @@
         timerSrc = [NSNull null];
     }
     
+    NSLog(@"SAVING WITH %@", self.sourceList);
     NSDictionary *saveDict = @{@"sourcelist": self.sourceList,  @"timingSource": timerSrc};
     NSMutableData *saveData = [NSMutableData data];
     NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:saveData];
@@ -539,6 +540,7 @@
     
     NSArray *mergeList;
     
+    NSLog(@"MERGE OBJ %@", mergeObj);
     
     if ([mergeObj isKindOfClass:[NSDictionary class]])
     {
@@ -697,6 +699,7 @@
     
     NSNumber *aStart = nil;
     
+    NSLog(@"NEW INPUTS %@", newInputs);
     id athing = [CATransaction valueForKey:@"__CS_BLOCK_OBJECT__"];
     if (athing)
     {
