@@ -212,7 +212,7 @@
             CaptureController *captureController = [CaptureController sharedCaptureController];
             if (view.layoutSequence.lastRunUUID)
             {
-                [view.layoutSequence cancelSequenceForLayout:captureController.activePreviewView.sourceLayout];
+                [view.layoutSequence cancelSequence];
             } else {
                 SourceLayout *useLayout;
                 if ([clickEvent modifierFlags] & NSControlKeyMask)

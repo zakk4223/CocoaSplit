@@ -47,11 +47,11 @@
 
 
 
--(void)cancelSequenceForLayout:(SourceLayout *)layout
+-(void)cancelSequence
 {
-    if (self.lastRunUUID)
+    if (self.lastRunUUID && self.sourceLayout)
     {
-        [layout cancelScriptRun:self.lastRunUUID];
+        [self.sourceLayout cancelScriptRun:self.lastRunUUID];
         self.lastRunUUID = nil;
     }
 }
@@ -59,10 +59,11 @@
 
 -(void)runSequenceForLayout:(SourceLayout *)layout withCompletionBlock:(void (^)())completionBlock withExceptionBlock:(void (^)(NSException *exception))exceptionBlock
 {
-    self.sourceLayout = layout;
     
     if (self.animationCode)
     {
+        self.sourceLayout = layout;
+
         NSMutableString *realCode = [NSMutableString string];
         
         NSRegularExpression *method_regex = [NSRegularExpression regularExpressionWithPattern:@"def\\s+run_script" options:0 error:nil];
@@ -84,12 +85,14 @@
 
         self.lastRunUUID = [self.sourceLayout runAnimationString:realCode withCompletionBlock:^{
             self.lastRunUUID = nil;
+            self.sourceLayout = nil;
             if (completionBlock)
             {
                 completionBlock();
             }
         } withExceptionBlock:^(NSException *exception) {
             self.lastRunUUID = nil;
+            self.sourceLayout = nil;
             if (exceptionBlock)
             {
                 exceptionBlock(exception);
