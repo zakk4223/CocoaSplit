@@ -162,6 +162,26 @@
 }
 
 
+-(void)removeAudioFromLayout:(NSMenuItem *) sender
+{
+    
+    SourceLayout *toSave = sender.representedObject;
+    
+    toSave.audioData = nil;
+}
+
+
+-(void)saveAudioToLayout:(NSMenuItem *) sender
+{
+    
+    SourceLayout *toSave = sender.representedObject;
+    
+    CaptureController *controller = [CaptureController sharedCaptureController];
+    toSave.audioData = [controller.multiAudioEngine generateInputSettings];
+}
+
+
+
 -(void)saveToLayout:(NSMenuItem *) sender
 {
     
@@ -212,6 +232,17 @@
     tmp = [self.layoutMenu insertItemWithTitle:@"Save To" action:@selector(saveToLayout:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
     tmp.representedObject = forLayout;
+    tmp = [self.layoutMenu insertItemWithTitle:@"Save Audio Profile" action:@selector(saveAudioToLayout:) keyEquivalent:@"" atIndex:idx++];
+    tmp.target = self;
+    tmp.representedObject = forLayout;
+
+    if (forLayout.audioData)
+    {
+        tmp = [self.layoutMenu insertItemWithTitle:@"Remove Audio Profile" action:@selector(removeAudioFromLayout:) keyEquivalent:@"" atIndex:idx++];
+        tmp.target = self;
+        tmp.representedObject = forLayout;
+    }
+
     tmp = [self.layoutMenu insertItemWithTitle:@"Edit" action:@selector(editLayout:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
     tmp.representedObject = forLayout;

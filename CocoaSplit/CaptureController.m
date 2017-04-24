@@ -3261,7 +3261,17 @@
     SourceLayout *activeLayout = self.activePreviewView.sourceLayout;
     [self applyTransitionSettings:activeLayout];
 
-    [activeLayout replaceWithSourceLayoutViaScript:layout];
+    [activeLayout replaceWithSourceLayoutViaScript:layout withCompletionBlock:^{
+        
+        if (self.activePreviewView.sourceLayout == self.selectedLayout)
+        {
+            [self.multiAudioEngine applyInputSettings:layout.audioData];
+
+        } else if (self.activePreviewView.sourceLayout == self.stagingLayout) {
+            self.stagingLayout.audioData = layout.audioData;
+
+        }
+     } withExceptionBlock:nil];
     //[activeLayout replaceWithSourceLayout:layout];
 }
 
@@ -3913,18 +3923,6 @@
     
     [self applyTransitionSettings:self.livePreviewView.sourceLayout];
 
-    /*
-    InputSource *src1 = [[InputSource alloc] init];
-    InputSource *src2 = src1.copy;
-    src2.uuid = src1.uuid;
-    
-    
-    bool diffInp = [src1 isDifferentInput:src2];
-    
-    
-    NSLog(@"DIFFERENT INPUT %d", diffInp);
-    
-     */
     
     
     if (self.stagingLayout)
@@ -3934,6 +3932,10 @@
         self.inLayoutTransition = YES;
         [self.selectedLayout replaceWithSourceLayout:self.stagingLayout withCompletionBlock:^{
           dispatch_async(dispatch_get_main_queue(), ^{
+              if (self.stagingLayout.audioData)
+              {
+                  [self.multiAudioEngine applyInputSettings:self.stagingLayout.audioData];
+              }
               self.inLayoutTransition = NO;
           });
             

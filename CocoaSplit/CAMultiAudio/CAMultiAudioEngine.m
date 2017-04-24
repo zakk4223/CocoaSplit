@@ -150,6 +150,54 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
 }
 
+
+-(void)applyInputSettings:(NSDictionary *)inputSettings
+{
+    
+    for (CAMultiAudioNode *input in self.audioInputs)
+    {
+        if (input.nodeUID)
+        {
+            NSDictionary *settings = [inputSettings valueForKey:input.nodeUID];
+            if (settings)
+            {
+                input.volume = [(NSNumber *)[settings valueForKey:@"volume"] floatValue];
+                input.enabled = [(NSNumber *)[settings valueForKey:@"enabled"] boolValue];
+                NSDictionary *mixerData = [settings valueForKey:@"downMixerData"];
+                if (mixerData)
+                {
+                    [input.downMixer restoreData:mixerData];
+                }
+            }
+        }
+    }
+
+}
+
+
+-(NSDictionary *)generateInputSettings
+{
+    
+    NSMutableDictionary *iSettings = [NSMutableDictionary dictionary];
+    
+    for (CAMultiAudioNode *node in self.audioInputs)
+    {
+        NSString *deviceUID = node.nodeUID;
+        NSMutableDictionary *inputopts = [NSMutableDictionary dictionary];
+        [iSettings setValue:inputopts forKey:deviceUID];
+        [inputopts setValue:@(node.volume) forKey:@"volume"];
+        [inputopts setValue:@(node.enabled) forKey:@"enabled"];
+        if (node.downMixer)
+        {
+            [inputopts setValue:[node.downMixer saveData] forKey:@"downMixerData"];
+        }
+    }
+    
+    return iSettings;
+    
+}
+
+
 -(void)updateStatistics
 {
     dispatch_async(dispatch_get_main_queue(), ^{

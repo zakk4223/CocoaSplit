@@ -88,6 +88,7 @@
 @property (assign) bool transitionFullScene;
 @property (strong) NSMutableDictionary *pendingScripts;
 @property (strong) NSMutableDictionary *transitionScripts;
+@property (strong) NSDictionary *audioData;
 
 
 
@@ -128,8 +129,8 @@
 -(void)cancelTransition;
 -(void)cancelScriptRun:(NSString *)runUUID;
 -(bool)containsLayoutNamed:(NSString *)layoutName;
--(void)replaceWithSourceLayoutViaScript:(SourceLayout *)layout;
 -(void)mergeSourceLayoutViaScript:(SourceLayout *)layout;
+-(void)replaceWithSourceLayoutViaScript:(SourceLayout *)layout withCompletionBlock:(void (^)(void))completionBlock withExceptionBlock:(void (^)(NSException *exception))exceptionBlock;
 -(void)removeSourceLayoutViaScript:(SourceLayout *)layout;
 
 

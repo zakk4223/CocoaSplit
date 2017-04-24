@@ -265,7 +265,7 @@
     newLayout.frameRate = self.frameRate;
     newLayout.isActive = NO;
     newLayout.containedLayouts = self.containedLayouts.mutableCopy;
-    
+    newLayout.audioData = self.audioData;
     return newLayout;
 }
 
@@ -292,6 +292,11 @@
     if (self.containedLayouts)
     {
         [aCoder encodeObject:self.containedLayouts forKey:@"containedLayouts"];
+    }
+    
+    if (self.audioData)
+    {
+        [aCoder encodeObject:self.audioData forKey:@"audioData"];
     }
     
 }
@@ -332,6 +337,12 @@
             self.containedLayouts = [[aDecoder decodeObjectForKey:@"containedLayouts"] mutableCopy];
             //set live/staging status for each layout
         }
+        
+        if ([aDecoder containsValueForKey:@"audioData"])
+        {
+            self.audioData = [aDecoder decodeObjectForKey:@"audioData"];
+        }
+
         
     }
     
@@ -492,7 +503,8 @@
         timerSrc = [NSNull null];
     }
     
-    NSLog(@"SAVING WITH %@", self.sourceList);
+    
+    
     NSDictionary *saveDict = @{@"sourcelist": self.sourceList,  @"timingSource": timerSrc};
     NSMutableData *saveData = [NSMutableData data];
     NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:saveData];
@@ -620,11 +632,11 @@
 }
 
 
--(void)replaceWithSourceLayoutViaScript:(SourceLayout *)layout
+-(void)replaceWithSourceLayoutViaScript:(SourceLayout *)layout withCompletionBlock:(void (^)(void))completionBlock withExceptionBlock:(void (^)(NSException *exception))exceptionBlock
 {
     NSString *replaceScript = @"def run_script(toLayout=extraData['toLayout']):\n\tswitchToLayout(toLayout)\n";
     NSDictionary *extraDict = @{@"toLayout": layout};
-    [self runAnimationString:replaceScript withCompletionBlock:nil withExceptionBlock:nil withExtraDictionary:extraDict];
+    [self runAnimationString:replaceScript withCompletionBlock:completionBlock withExceptionBlock:exceptionBlock withExtraDictionary:extraDict];
 }
 
 
@@ -1267,7 +1279,6 @@
         
         NSMutableArray *oldSourceList = self.sourceList;
         
-        
         self.sourceList = [NSMutableArray array];
         _uuidMap = [NSMutableDictionary dictionary];
         self.sourceListPresentation = [NSMutableArray array];
@@ -1301,7 +1312,9 @@
             srcList = [((NSDictionary *)restData) objectForKey:@"sourcelist"];
             
             self.layoutTimingSource = ((InputSource *)timerSrc);
-        } else {
+            
+            
+        } else { 
             srcList = (NSArray *)restData;
         }
         
