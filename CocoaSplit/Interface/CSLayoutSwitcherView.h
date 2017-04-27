@@ -19,6 +19,7 @@
 {
     CATextLayer *_labelLayer;
     CSSTextView *_textView;
+    NSImageView *_audioImageView;
     
 }
 @property (strong) SourceLayout *sourceLayout;

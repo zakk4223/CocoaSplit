@@ -134,6 +134,8 @@
         
         [_sourceLayout addObserver:self forKeyPath:@"in_live" options:NSKeyValueObservingOptionNew context:NULL];
         [_sourceLayout addObserver:self forKeyPath:@"in_staging" options:NSKeyValueObservingOptionNew context:NULL];
+        [_sourceLayout addObserver:self forKeyPath:@"audioData" options:NSKeyValueObservingOptionNew context:NULL];
+
 
         if (_sourceLayout.in_live)
         {
@@ -204,6 +206,19 @@
 
         }
         
+        if (!_audioImageView)
+        {
+            _audioImageView = [NSImageView imageViewWithImage:[NSImage imageNamed:@"Speaker_Icon"]];
+            _audioImageView.editable = NO;
+            _audioImageView.hidden = YES;
+            _audioImageView.frame = NSMakeRect(0,4,16,16);
+            [self addSubview:_audioImageView];
+            if (_sourceLayout.audioData)
+            {
+                _audioImageView.hidden = NO;
+            }
+        }
+        
         
         [self setNeedsDisplay:YES];
         
@@ -235,8 +250,13 @@
             self.layer.borderColor = [NSColor yellowColor].CGColor;
             self.layer.borderWidth = 4.0f;
         }
-
-
+    } else if ([keyPath isEqualToString:@"audioData"]) {
+        if (_sourceLayout.audioData)
+        {
+            _audioImageView.hidden = NO;
+        } else {
+            _audioImageView.hidden = YES;
+        }
     }
 }
 
