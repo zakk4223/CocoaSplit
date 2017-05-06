@@ -239,6 +239,7 @@
 		34BD1E641B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34BD1E611B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.m */; };
 		34BD1E651B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34BD1E621B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.xib */; };
 		34C0E9FA1EABF92300B30DB4 /* CAMultiAudioDelay.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C0E9F91EABF92300B30DB4 /* CAMultiAudioDelay.m */; };
+		34C0EA411EB64D8E00B30DB4 /* CSLayoutRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C0EA401EB64D8E00B30DB4 /* CSLayoutRecorder.m */; };
 		34C19053189EE60400AB2430 /* CapturedFrameData.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C19052189EE60400AB2430 /* CapturedFrameData.m */; };
 		34C19054189EE60400AB2430 /* CapturedFrameData.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C19052189EE60400AB2430 /* CapturedFrameData.m */; };
 		34C67B8E1A2E69F60012DC1B /* CSHitboxStreamServicePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34C67B781A2D7B6A0012DC1B /* CSHitboxStreamServicePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -938,6 +939,8 @@
 		34BD1E621B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CAMultiAudioMatrixMixerWindowController.xib; path = Interface/CAMultiAudioMatrixMixerWindowController.xib; sourceTree = "<group>"; };
 		34C0E9F81EABF92300B30DB4 /* CAMultiAudioDelay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioDelay.h; path = CAMultiAudio/CAMultiAudioDelay.h; sourceTree = "<group>"; };
 		34C0E9F91EABF92300B30DB4 /* CAMultiAudioDelay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioDelay.m; path = CAMultiAudio/CAMultiAudioDelay.m; sourceTree = "<group>"; };
+		34C0EA3F1EB64D8E00B30DB4 /* CSLayoutRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLayoutRecorder.h; sourceTree = "<group>"; };
+		34C0EA401EB64D8E00B30DB4 /* CSLayoutRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSLayoutRecorder.m; sourceTree = "<group>"; };
 		34C19051189EE60400AB2430 /* CapturedFrameData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CapturedFrameData.h; sourceTree = "<group>"; };
 		34C19052189EE60400AB2430 /* CapturedFrameData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CapturedFrameData.m; sourceTree = "<group>"; };
 		34C67B731A2D7B690012DC1B /* CSHitboxStreamServicePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSHitboxStreamServicePlugin.xcodeproj; path = StreamServicePlugins/CSHitboxStreamServicePlugin/CSHitboxStreamServicePlugin.xcodeproj; sourceTree = "<group>"; };
@@ -1371,6 +1374,8 @@
 				34B5FAD61E75120C0078FC51 /* CSSequenceItemTransition.m */,
 				342786491EA4337400877B7B /* CSTransitionAnimationDelegate.h */,
 				3427864A1EA4337400877B7B /* CSTransitionAnimationDelegate.m */,
+				34C0EA3F1EB64D8E00B30DB4 /* CSLayoutRecorder.h */,
+				34C0EA401EB64D8E00B30DB4 /* CSLayoutRecorder.m */,
 			);
 			path = CocoaSplit;
 			sourceTree = "<group>";
@@ -2602,6 +2607,7 @@
 				34B5FB531E7C0BDB0078FC51 /* CSSequenceItemViewController.m in Sources */,
 				3408235519BC677A00CD1F5F /* CSNotifications.m in Sources */,
 				347B14DC198492D900DC7DF0 /* InputPopupControllerViewController.m in Sources */,
+				34C0EA411EB64D8E00B30DB4 /* CSLayoutRecorder.m in Sources */,
 				34BB29811B7652EA00F201C2 /* CSPreviewGLLayer.m in Sources */,
 				34D6581819B387DE0012E32B /* AppDelegate+AppDelegate_ScriptingAdditions.m in Sources */,
 				34ED8C991B07371C002C0674 /* MIKMIDIPort.m in Sources */,

@@ -368,7 +368,7 @@
 
 -(void) setupCompressor
 {
-    if (!self.active || !self.settingsController.captureRunning)
+    if (!self.active || !self.captureRunning)
     {
         return;
     }
@@ -455,7 +455,7 @@
         
         BOOL start_stream = NO;
         
-        if (self.settingsController.captureRunning && !self.ffmpeg_out)
+        if (self.captureRunning && !self.ffmpeg_out)
         {
             
             if (self.stream_delay == 0)
@@ -472,7 +472,6 @@
         
         if (start_stream)
         {
-            
             [self attachOutput];
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.textColor  = [NSColor greenColor];

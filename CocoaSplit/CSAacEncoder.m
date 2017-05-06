@@ -121,7 +121,6 @@
                 
                 if (outstatus == kAudioCodecProduceOutputPacketNeedsMoreInputData)
                 {
-                    NSLog(@"NEED MORE INPUT DATA");
                     free(aacBuffer);
                     break;
                 }

@@ -220,6 +220,18 @@
 }
 
 
+-(void) startRecordingLayout:(NSMenuItem *)sender
+{
+    [[CaptureController sharedCaptureController] startRecordingLayout:sender.representedObject];
+}
+
+
+-(void) stopRecordingLayout:(NSMenuItem *)sender
+{
+    [[CaptureController sharedCaptureController] stopRecordingLayout:sender.representedObject];
+}
+
+
 -(void)buildLayoutMenuForView:(CSLayoutSwitcherView *)view
 {
     
@@ -243,6 +255,18 @@
         tmp.representedObject = forLayout;
     }
 
+    if (forLayout.recordingLayout)
+    {
+        tmp = [self.layoutMenu insertItemWithTitle:@"Stop Recording" action:@selector(stopRecordingLayout:) keyEquivalent:@"" atIndex:idx++];
+        tmp.target = self;
+        tmp.representedObject = forLayout;
+
+    } else {
+        tmp = [self.layoutMenu insertItemWithTitle:@"Start Recording" action:@selector(startRecordingLayout:) keyEquivalent:@"" atIndex:idx++];
+        tmp.target = self;
+        tmp.representedObject = forLayout;
+
+    }
     tmp = [self.layoutMenu insertItemWithTitle:@"Edit" action:@selector(editLayout:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
     tmp.representedObject = forLayout;

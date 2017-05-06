@@ -228,6 +228,8 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 
 +(bool)intelQSVAvailable
 {
+    
+
     NSMutableDictionary *encoderSpec = [[NSMutableDictionary alloc] init];
     encoderSpec[(__bridge NSString *)kVTVideoEncoderSpecification_RequireHardwareAcceleratedVideoEncoder] = @YES;
     

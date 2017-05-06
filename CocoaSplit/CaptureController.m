@@ -32,6 +32,7 @@
 #import "AppDelegate.h"
 
 #import <Python/Python.h>
+#import "CSLayoutRecorder.h"
 
 
 
@@ -603,6 +604,24 @@
     
 }
 
+- (IBAction)chooseLayoutRecordDirectory:(id)sender
+{
+    
+    NSOpenPanel *panel = [NSOpenPanel openPanel];
+    panel.canChooseDirectories = YES;
+    panel.canCreateDirectories = YES;
+    panel.canChooseFiles = NO;
+    panel.allowsMultipleSelection = NO;
+    
+    [panel beginWithCompletionHandler:^(NSInteger result) {
+        if (result == NSFileHandlingPanelOKButton)
+        {
+            self.layoutRecordingDirectory = panel.URL.path;
+        }
+        
+    }];
+    
+}
 
 -(void)buildScreensInfo:(NSNotification *)notification
 {
@@ -820,6 +839,11 @@
        
        _layoutWindows = [NSMutableArray array];
        _sequenceWindows = [NSMutableArray array];
+       _layoutRecorders = [NSMutableArray array];
+       
+       _layoutRecordingDirectory = [[[NSFileManager defaultManager] URLsForDirectory:NSMoviesDirectory inDomains:NSUserDomainMask] firstObject].path;
+       
+       _layoutRecordingFormat = @"MOV";
        
        self.transitionDirections = @[kCATransitionFromTop, kCATransitionFromRight, kCATransitionFromBottom, kCATransitionFromLeft];
        self.useInstantRecord = YES;
@@ -1004,6 +1028,58 @@
     
     return self;
     
+}
+
+
+-(void)startRecordingLayout:(SourceLayout *)layout
+{
+    if (layout.recordingLayout)
+    {
+        return;
+    }
+    
+    if (!self.layoutRecordingDirectory)
+    {
+        self.layoutRecordingDirectory = [[[NSFileManager defaultManager] URLsForDirectory:NSMoviesDirectory inDomains:NSUserDomainMask] firstObject].path;
+    }
+    
+    if (!self.layoutRecorderCompressorName)
+    {
+        self.layoutRecorderCompressorName = @"AppleProRes";
+    }
+    
+    if (!self.layoutRecordingFormat)
+    {
+        self.layoutRecordingFormat = @"MOV";
+    }
+    CSLayoutRecorder *newRecorder = [[CSLayoutRecorder alloc] init];
+    newRecorder.layout = layout;
+    newRecorder.compressor_name = self.layoutRecorderCompressorName;
+    newRecorder.baseDirectory = self.layoutRecordingDirectory;
+    newRecorder.fileFormat  = self.layoutRecordingFormat;
+    [newRecorder startRecording];
+    [self.layoutRecorders addObject:newRecorder];
+}
+
+
+-(void)stopRecordingLayout:(SourceLayout *)layout
+{
+    if (!layout.recordingLayout)
+    {
+        return;
+    }
+    
+    NSArray *recCopy = self.layoutRecorders.copy;
+    
+    for (CSLayoutRecorder *rec in recCopy)
+    {
+        if (rec.layout == layout)
+        {
+            [rec stopRecording];
+            [self.layoutRecorders removeObject:rec];
+            [layout clearSourceList];
+        }
+    }
 }
 
 
@@ -1487,6 +1563,9 @@
     [saveRoot setValue:[NSNumber numberWithInt:self.instantRecordBufferDuration] forKey:@"instantRecordBufferDuration"];
     [saveRoot setValue:self.instantRecordDirectory forKey:@"instantRecordDirectory"];
     
+    [saveRoot setValue:self.layoutRecorderCompressorName forKey:@"layoutRecorderCompressorName"];
+    [saveRoot setValue:self.layoutRecordingFormat forKey:@"layoutRecordingFormat"];
+    [saveRoot setValue:self.layoutRecordingDirectory forKey:@"layoutRecordingDirectory"];
     
 
     
@@ -1746,7 +1825,19 @@
     _previousAudioTime = kCMTimeZero;
     
     
+
+    self.layoutRecorderCompressorName = [saveRoot valueForKey:@"layoutRecorderCompressorName"];
+    if (!self.layoutRecorderCompressorName)
+    {
+        self.layoutRecorderCompressorName = @"AppleProRes";
+    }
     
+    self.layoutRecordingDirectory = [saveRoot valueForKey:@"layoutRecordingDirectory"];
+    self.layoutRecordingFormat = [saveRoot valueForKey:@"layoutRecordingFormat"];
+    if (!self.layoutRecordingFormat)
+    {
+        _layoutRecordingFormat = @"MOV";
+    }
     
     
     CSAacEncoder *audioEnc = [[CSAacEncoder alloc] init];
@@ -1770,6 +1861,7 @@
     });
     
 
+    
     
 }
 
@@ -2025,6 +2117,7 @@
     
     for (OutputDestination *outdest in _captureDestinations)
     {
+        outdest.captureRunning = YES;
         [outdest reset];
     }
     
@@ -2087,6 +2180,7 @@
 
     for (OutputDestination *out in _captureDestinations)
     {
+        out.captureRunning = NO;
         [out stopOutput];
     }
     
@@ -2465,6 +2559,67 @@
         
     }];
 }
+
+- (IBAction)configureLayoutRecordingCompressor:(id)sender
+{
+    
+    
+    CompressionSettingsPanelController *cPanel = [[CompressionSettingsPanelController alloc] init];
+    CSIRCompressor *compressor = self.compressors[self.layoutRecorderCompressorName];
+    
+    cPanel.compressor = compressor;
+    
+    
+    [self.advancedPrefPanel beginSheet:cPanel.window completionHandler:^(NSModalResponse returnCode) {
+        switch (returnCode) {
+            case NSModalResponseStop:
+                if (cPanel.compressor.active)
+                {
+                    return;
+                }
+                [self willChangeValueForKey:@"compressors"];
+                [self.compressors removeObjectForKey:cPanel.compressor.name];
+                [self didChangeValueForKey:@"compressors"];
+                [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorDeleted object:cPanel.compressor userInfo:nil];
+                
+                break;
+            case NSModalResponseOK:
+            {
+                
+                
+                if (!cPanel.compressor.active)
+                {
+                    if (![compressor.name isEqualToString:cPanel.compressor.name])
+                    {
+                        [self.compressors removeObjectForKey:compressor.name];
+                        NSDictionary *notifyMsg = [NSDictionary dictionaryWithObjectsAndKeys:compressor.name, @"oldName", cPanel.compressor, @"compressor", nil];
+                        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorRenamed object:notifyMsg];
+                        
+                    }
+                    self.compressors[cPanel.compressor.name] = cPanel.compressor;
+                }
+                [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorReconfigured object:cPanel.compressor];
+                
+                break;
+            }
+            case 4242:
+                if (cPanel.saveProfileName)
+                {
+                    cPanel.compressor.name = cPanel.saveProfileName.mutableCopy;
+                    [self willChangeValueForKey:@"compressors"];
+                    self.compressors[cPanel.compressor.name] = cPanel.compressor;
+                    [self didChangeValueForKey:@"compressors"];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:cPanel.compressor userInfo:nil];
+                    
+                }
+            default:
+                break;
+        }
+        
+        
+    }];
+}
+
 
 -(void) resetInputTableHighlights
 {
@@ -3133,10 +3288,12 @@
     
     if ([self pendingStreamConfirmation:@"Quit now?"])
     {
+
         return NSTerminateNow;
     } else {
         return NSTerminateCancel;
     }
+
     return NSTerminateNow;
  
     

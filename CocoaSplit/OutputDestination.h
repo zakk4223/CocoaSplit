@@ -43,6 +43,8 @@
 
 
 
+@property (assign) BOOL captureRunning;
+
 @property (assign) BOOL errored;
 @property (strong) NSString *server_name;
 @property (strong) NSString *type_name;

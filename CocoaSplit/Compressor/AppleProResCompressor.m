@@ -286,12 +286,10 @@ void __ProResVideoCompressorReceiveFrame(void *VTref, void *VTFrameRef, OSStatus
     
     
     
-    
     for (id dKey in selfobj.outputs)
     {
         
         OutputDestination *dest = selfobj.outputs[dKey];
-        
         [dest writeEncodedData:frameData];
         
         

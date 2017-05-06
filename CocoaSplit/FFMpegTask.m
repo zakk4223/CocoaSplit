@@ -148,7 +148,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     {
         
         CMSampleBufferRef audioSample = (__bridge CMSampleBufferRef)[frameData.audioSamples objectAtIndex:0];
-        
         [self extractAudioCookie:audioSample];
     }
     

@@ -45,7 +45,6 @@
 #import "CSSequenceActivatorViewController.h"
 
 
-
 @class FFMpegTask;
 @protocol VideoCompressor;
 @class OutputDestination;
@@ -55,6 +54,7 @@
 @class CSLayoutEditWindowController;
 @class CSTimedOutputBuffer;
 @class CSAdvancedAudioWindowController;
+@class CSLayoutRecorder;
 
 
 void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , CMSampleBufferRef );
@@ -147,6 +147,14 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     NSArray *_savedTransitionConstraints;
     
 }
+
+@property (strong) NSMutableArray *layoutRecorders;
+@property (strong) NSString *layoutRecorderCompressorName;
+@property (strong) NSString *layoutRecordingDirectory;
+@property (strong) NSString *layoutRecordingFormat;
+
+
+@property (strong) CSLayoutRecorder *testRecorder;
 
 @property (weak) IBOutlet CSGridView *layoutGridView;
 
@@ -292,7 +300,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 - (IBAction)chooseInstantRecordDirectory:(id)sender;
-
+- (IBAction)chooseLayoutRecordDirectory:(id)sender;
 
 
 
@@ -458,6 +466,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(void)updateFrameIntervals;
 
 - (IBAction)configureIRCompressor:(id)sender;
+- (IBAction)configureLayoutRecordingCompressor:(id)sender;
+
 
 
 - (IBAction)inputTableControlClick:(NSButton *)sender;
@@ -474,7 +484,9 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 - (IBAction)openLayoutSwitcherWindow:(id)sender;
 - (IBAction)switchLayoutView:(id)sender;
-
+-(bool) sleepUntil:(double)target_time;
+-(void)startRecordingLayout:(SourceLayout *)layout;
+-(void)stopRecordingLayout:(SourceLayout *)layout;
 @property (strong) NSString *layoutScriptLabel;
 
 

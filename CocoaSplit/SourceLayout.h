@@ -89,6 +89,9 @@
 @property (strong) NSMutableDictionary *pendingScripts;
 @property (strong) NSMutableDictionary *transitionScripts;
 @property (strong) NSDictionary *audioData;
+@property (assign) bool recordingLayout;
+@property (assign) bool recordLayout;
+
 
 
 
