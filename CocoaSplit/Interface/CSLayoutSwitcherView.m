@@ -135,6 +135,8 @@
         [_sourceLayout addObserver:self forKeyPath:@"in_live" options:NSKeyValueObservingOptionNew context:NULL];
         [_sourceLayout addObserver:self forKeyPath:@"in_staging" options:NSKeyValueObservingOptionNew context:NULL];
         [_sourceLayout addObserver:self forKeyPath:@"audioData" options:NSKeyValueObservingOptionNew context:NULL];
+        [_sourceLayout addObserver:self forKeyPath:@"recordingLayout" options:NSKeyValueObservingOptionNew context:NULL];
+
 
 
         if (_sourceLayout.in_live)
@@ -219,6 +221,20 @@
             }
         }
         
+        if (!_recordImageView)
+        {
+            _recordImageView = [NSImageView imageViewWithImage:[NSImage imageNamed:@"Record_Icon"]];
+            _recordImageView.editable = NO;
+            _recordImageView.hidden = YES;
+            _recordImageView.frame = NSMakeRect(NSMaxX(self.frame)-16,4,16,16);
+            [self addSubview:_recordImageView];
+            if (_sourceLayout.recordingLayout)
+            {
+                _recordImageView.hidden = NO;
+            }
+
+        }
+        
         
         [self setNeedsDisplay:YES];
         
@@ -257,7 +273,16 @@
         } else {
             _audioImageView.hidden = YES;
         }
+    } else if ([keyPath isEqualToString:@"recordingLayout"]) {
+    
+        if (_sourceLayout.recordingLayout)
+        {
+            _recordImageView.hidden = NO;
+        } else {
+            _recordImageView.hidden = YES;
+        }
     }
+    
 }
 
 -(void)dealloc
@@ -273,6 +298,14 @@
 
 -(void)layout
 {
+    
+    if (_recordImageView)
+    {
+        [_recordImageView setFrame:NSMakeRect(4,NSMaxY(self.bounds)-24,16,16)];
+
+    }
+    
+    
     if (_textView)
     {
         
@@ -280,6 +313,7 @@
         NSRect tFrame = _textView.frame;
         NSSize tSize = [_textView intrinsicContentSize];
         CGFloat startFontSize = _textView.font.pointSize;
+        
         
         while (tSize.width > self.bounds.size.width)
         {

@@ -20,6 +20,7 @@
     CATextLayer *_labelLayer;
     CSSTextView *_textView;
     NSImageView *_audioImageView;
+    NSImageView *_recordImageView;
     
 }
 @property (strong) SourceLayout *sourceLayout;
