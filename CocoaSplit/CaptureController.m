@@ -1082,6 +1082,17 @@
     }
 }
 
+-(void)stopAllRecordings
+{
+    NSArray *recCopy = self.layoutRecorders.copy;
+    
+    for (CSLayoutRecorder *rec in recCopy)
+    {
+        [rec stopRecording];
+        [self.layoutRecorders removeObject:rec];
+        [rec.layout clearSourceList];
+    }
+}
 
 -(void)compressorReconfigured:(NSNotification *)notification
 {
@@ -2237,6 +2248,11 @@
 
     } else {
         
+        if ([self activeRecordingConfirmation:@"Also stop all recordings?"] == YES)
+        {
+            [self stopAllRecordings];
+        }
+        
         [self stopStream];
     }
     
@@ -3168,6 +3184,23 @@
 }
 
 
+-(bool)activeRecordingConfirmation:(NSString *)queryString
+{
+    NSUInteger recording_count = self.layoutRecorders.count;
+    
+    bool retval;
+    
+    if (recording_count > 0)
+    {
+        retval = [self actionConfirmation:queryString infoString:[NSString stringWithFormat:@"There are %lu active recordings", (unsigned long)recording_count]];
+    } else {
+        retval = YES;
+    }
+    
+    return retval;
+}
+
+
 -(bool)pendingStreamConfirmation:(NSString *)queryString
 {
     int pending_count = [self streamsPendingCount];
@@ -3278,21 +3311,25 @@
     if (self.captureRunning && [self streamsActiveCount] > 0)
 
     {
-        if ([self actionConfirmation:@"Really quit?" infoString:@"There are still active outputs"])
+        if (![self actionConfirmation:@"Really quit?" infoString:@"There are still active outputs"])
         {
-            return NSTerminateNow;
-        } else {
             return NSTerminateCancel;
         }
     }
     
-    if ([self pendingStreamConfirmation:@"Quit now?"])
+    if (![self activeRecordingConfirmation:@"Really quit?"])
+    {
+        return NSTerminateCancel;
+        
+    }
+
+    if (![self pendingStreamConfirmation:@"Quit now?"])
     {
 
-        return NSTerminateNow;
-    } else {
         return NSTerminateCancel;
     }
+
+    [self stopAllRecordings];
 
     return NSTerminateNow;
  
