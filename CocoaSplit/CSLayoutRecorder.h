@@ -14,10 +14,11 @@
 #import "CSStreamServiceProtocol.h"
 #import "CAMultiAudioEngine.h"
 #import "CSAacEncoder.h"
+#import "CSLayoutRecorderInfoProtocol.h"
 
 
 
-@interface CSLayoutRecorder : NSObject
+@interface CSLayoutRecorder : NSObject <CSLayoutRecorderInfoProtocol>
 {
     dispatch_queue_t _frame_queue;
     long long _frameCount;
@@ -48,12 +49,26 @@
 @property (strong) OutputDestination *output;
 @property (strong) NSString *fileFormat;
 
+@property (strong) NSMutableDictionary *compressors;
+@property (strong) NSMutableArray *outputs;
+@property (readonly) float frameRate;
+
 
 @property (assign) bool useTimestamp;
 @property (assign) bool noClobber;
 
+@property (assign) bool recordingActive;
+@property (assign) bool defaultRecordingActive;
+
+
 -(void) startRecording;
 -(void)stopRecording;
+-(void)stopDefaultRecording;
+-(void)stopRecordingForOutput:(OutputDestination *)output;
+-(void)startRecordingWithOutput:(OutputDestination *)output;
+-(void)stopRecordingAll;
+
+-(NSObject<VideoCompressor> *)compressorByName:(NSString *)name;
 
 
 @end

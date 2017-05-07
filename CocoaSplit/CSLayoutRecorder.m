@@ -13,13 +13,101 @@
 
 
 
+-(instancetype) init
+{
+    if (self = [super init])
+    {
+        _outputs = [NSMutableArray array];
+        _compressors = [NSMutableDictionary dictionary];
+    }
+    return self;
+}
+
+
+-(float)frameRate
+{
+    if (self.layout)
+    {
+        return self.layout.frameRate;
+    }
+    
+    return 0.0f;
+}
+
+
+-(void)checkOutputs
+{
+    if (self.outputs.count == 0)
+    {
+        self.layout.recorder = nil;
+        self.recordingActive = NO;
+    }
+}
+
+
 -(void)stopRecording
 {
     if (self.output)
     {
         [self.output stopOutput];
+        [self.outputs removeObject:self.output];
     }
     self.layout.recordingLayout = NO;
+}
+
+-(void)stopRecordingAll
+{
+    NSArray *outCopy = self.outputs.copy;
+    
+    for (OutputDestination *dest in outCopy)
+    {
+        [self stopRecordingForOutput:dest];
+    }
+    
+    if (self.output)
+    {
+        [self stopDefaultRecording];
+    }
+}
+
+
+-(void)startRecordingWithOutput:(OutputDestination *)output
+{
+    [self.outputs addObject:output];
+    output.settingsController = self;
+
+    output.captureRunning = YES;
+    output.active = YES;
+
+    
+    if (!self.recordingActive)
+    {
+        [self startRecordingCommon];
+    }
+    
+}
+
+-(void)stopRecordingForOutput:(OutputDestination *)output
+{
+    OutputDestination *useOut;
+    
+    for (OutputDestination *tmpOut in self.outputs)
+    {
+        if (tmpOut == output)
+        {
+            useOut = tmpOut;
+        }
+    }
+    
+    if (useOut)
+    {
+        useOut.captureRunning = NO;
+
+        useOut.active = NO;
+        [self.outputs removeObject:useOut];
+        [self checkOutputs];
+
+    }
 }
 
 
@@ -27,63 +115,128 @@
 {
     
     self.useTimestamp = YES;
-    
-    
-    self.outputFilename = [self.baseDirectory stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", self.layout.name, self.fileFormat]];
-    
-    _firstAudioTime = kCMTimeZero;
-    _previousAudioTime = kCMTimeZero;
 
+    CaptureController *captureController = [CaptureController sharedCaptureController];
+
+    OutputDestination *newOutput;
+    newOutput = [[OutputDestination alloc] init];
+    newOutput.settingsController = self;
+    newOutput.streamServiceObject = (id<CSStreamServiceProtocol>)self;
+    //NSObject<VideoCompressor> *origCompressor = [captureController compressorByName:captureController.layoutRecorderCompressorName];
+    newOutput.compressor_name = captureController.layoutRecorderCompressorName;
     
-    _audioBuffer = [NSMutableArray array];
-    self.renderer = [[LayoutRenderer alloc] init];
-    [self.layout restoreSourceList:nil];
-    self.renderer.layout = self.layout;
+    //newOutput.compressor = origCompressor.copy;
+    newOutput.settingsController = self;
     
-    NSObject<VideoCompressor> *origCompressor = [CaptureController sharedCaptureController].compressors[self.compressor_name];
+    NSString *baseDir = captureController.layoutRecordingDirectory;
+    NSString *fileFormat = captureController.layoutRecordingFormat;
+    newOutput.captureRunning = YES;
+    newOutput.active = YES;
+
+    self.output = newOutput;
+    self.outputFilename = [baseDir stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", self.layout.name, fileFormat]];
+    self.fileFormat = fileFormat;
     
-    self.compressor = origCompressor.copy;
-    
-    self.output = [[OutputDestination alloc] init];
-    self.output.settingsController = [CaptureController sharedCaptureController];
-    self.output.streamServiceObject = (id<CSStreamServiceProtocol>)self;
-    self.output.compressor = self.compressor;
-    self.audioEngine = [[CAMultiAudioEngine alloc] init];
-    self.audioEngine.sampleRate = [CaptureController sharedCaptureController].audioSamplerate;
-    
-    NSDictionary *inputSettings = [[CaptureController sharedCaptureController].multiAudioEngine generateInputSettings];
-    [self.audioEngine applyInputSettings:inputSettings];
-    self.audioEncoder = [[CSAacEncoder alloc] init];
-    self.audioEncoder.encodedReceiver = self;
-    self.audioEncoder.sampleRate = [CaptureController sharedCaptureController].audioSamplerate;
-    self.audioEncoder.bitRate = [CaptureController sharedCaptureController].audioBitrate*1000;
-    
-    self.audioEncoder.inputASBD = self.audioEngine.graph.graphAsbd;
-    [self.audioEncoder setupEncoderBuffer];
-    self.audioEngine.encoder = self.audioEncoder;
-    
-    
-    if (!_frame_queue)
+    [self.outputs addObject:newOutput];
+    [self startRecordingCommon];
+    self.defaultRecordingActive = YES;
+}
+
+
+-(void)stopDefaultRecording
+{
+    if (self.output)
     {
-        _frame_queue = dispatch_queue_create("layout.recorder.queue", DISPATCH_QUEUE_SERIAL);
+        self.output.active = NO;
+        self.output.captureRunning = NO;
+        [self.outputs removeObject:self.output];
+        [self checkOutputs];
+    }
+}
+
+
+-(void)startRecordingCommon
+{
+    
+    
+    
+    if (!self.recordingActive)
+    {
+        _firstAudioTime = kCMTimeZero;
+        _previousAudioTime = kCMTimeZero;
+        
+        
+        _audioBuffer = [NSMutableArray array];
+        self.renderer = [[LayoutRenderer alloc] init];
+        if (self.layout.sourceList.count == 0)
+        {
+            [self.layout restoreSourceList:nil];
+        }
+        
+        self.renderer.layout = self.layout;
+        
+        
+        
+        self.audioEngine = [[CAMultiAudioEngine alloc] init];
+        self.audioEngine.sampleRate = [CaptureController sharedCaptureController].audioSamplerate;
+        
+        NSDictionary *inputSettings = [[CaptureController sharedCaptureController].multiAudioEngine generateInputSettings];
+        [self.audioEngine applyInputSettings:inputSettings];
+        self.audioEncoder = [[CSAacEncoder alloc] init];
+        self.audioEncoder.encodedReceiver = self;
+        self.audioEncoder.sampleRate = [CaptureController sharedCaptureController].audioSamplerate;
+        self.audioEncoder.bitRate = [CaptureController sharedCaptureController].audioBitrate*1000;
+        
+        self.audioEncoder.inputASBD = self.audioEngine.graph.graphAsbd;
+        [self.audioEncoder setupEncoderBuffer];
+        self.audioEngine.encoder = self.audioEncoder;
+        
+        
+        if (!_frame_queue)
+        {
+            _frame_queue = dispatch_queue_create("layout.recorder.queue", DISPATCH_QUEUE_SERIAL);
+        }
+        
+        for (OutputDestination *tmpOut in self.outputs)
+        {
+            [tmpOut reset];
+        }
+        
+        dispatch_async(_frame_queue, ^{
+            [self newFrameTimed];
+        });
+        self.layout.recorder = self;
+        
+        self.recordingActive = YES;
     }
     
-    dispatch_async(_frame_queue, ^{
-        [self newFrameTimed];
-    });
-    self.output.captureRunning = YES;
-    self.output.active = YES;
-    self.layout.recordingLayout = YES;
-
     
 }
 
 
 
 
+
+-(NSObject<VideoCompressor> *)compressorByName:(NSString *)name
+{
+    NSObject<VideoCompressor> *compressor = nil;
+    
+    compressor = self.compressors[name];
+    
+    if (!compressor)
+    {
+        NSObject<VideoCompressor> *origCompressor =  [CaptureController sharedCaptureController].compressors[name];
+        compressor = origCompressor.copy;
+        self.compressors[compressor.name] = compressor;
+    }
+    
+    return compressor;
+}
+
+
 -(NSString *)getServiceFormat
 {
-    return nil;
+    return self.fileFormat;
 }
 
 
@@ -210,13 +363,19 @@
         newData.audioSamples = frameAudio;
         newData.videoFrame = newFrame;
         
-        if (self.compressor)
+        
+        for(id cKey in self.compressors)
         {
-            [self.compressor compressFrame:newData];
-        }
-        
-        
             
+            id <VideoCompressor> compressor;
+            compressor = self.compressors[cKey];
+            
+            CapturedFrameData *newFrameData = newData.copy;
+            
+            [compressor compressFrame:newFrameData];
+            
+        }
+
         CVPixelBufferRelease(newFrame);
         
         

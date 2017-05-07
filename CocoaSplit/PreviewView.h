@@ -118,6 +118,8 @@
 -(void)stopHighlightingSource:(InputSource *)source;
 -(void)stopHighlightingAllSources;
 -(void)openInputConfigWindow:(NSString *)uuid;
+-(void)disablePrimaryRender;
+-(void)enablePrimaryRender;
 
 
 

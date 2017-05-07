@@ -1746,6 +1746,16 @@
 }
 
 
+-(void)disablePrimaryRender
+{
+    _glLayer.doRender = NO;
+}
+
+-(void)enablePrimaryRender
+{
+    _glLayer.doRender = YES;
+}
+
 
 -(void)sourceWasDeleted:(NSNotification *)notification
 {

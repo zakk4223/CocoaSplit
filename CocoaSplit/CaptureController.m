@@ -248,6 +248,18 @@
     }
 }
 
+-(NSObject<VideoCompressor> *)compressorByName:(NSString *)name
+{
+    return self.compressors[name];
+}
+
+
+-(float)frameRate
+{
+    
+    return self.captureFPS;
+}
+
 
 - (IBAction)openLibraryWindow:(id) sender
 {
@@ -1030,12 +1042,36 @@
     
 }
 
+-(CSLayoutRecorder *)startRecordingLayout:(SourceLayout *)layout usingOutput:(OutputDestination *)output
+{
+    CSLayoutRecorder *newRecorder = [[CSLayoutRecorder alloc] init];
+    newRecorder.layout = layout;
+    [newRecorder startRecordingWithOutput:output];
+    [self.layoutRecorders addObject:newRecorder];
+    return newRecorder;
+}
 
--(void)startRecordingLayout:(SourceLayout *)layout
+-(void)stopRecordingLayout:(SourceLayout *)layout usingOutput:(OutputDestination *)output
+{
+    
+    CSLayoutRecorder *useRecorder = layout.recorder;
+    if (useRecorder)
+    {
+        [useRecorder stopRecordingForOutput:output];
+        if (!layout.recorder)
+        {
+            [self.layoutRecorders removeObject:useRecorder];
+            
+        }
+    }
+}
+
+
+-(CSLayoutRecorder *)startRecordingLayout:(SourceLayout *)layout
 {
     if (layout.recordingLayout)
     {
-        return;
+        return nil;
     }
     
     if (!self.layoutRecordingDirectory)
@@ -1059,26 +1095,29 @@
     newRecorder.fileFormat  = self.layoutRecordingFormat;
     [newRecorder startRecording];
     [self.layoutRecorders addObject:newRecorder];
+    return newRecorder;
 }
+
 
 
 -(void)stopRecordingLayout:(SourceLayout *)layout
 {
-    if (!layout.recordingLayout)
+    
+    CSLayoutRecorder *layoutRecorder = layout.recorder;
+    
+    if (!layoutRecorder)
     {
         return;
     }
     
-    NSArray *recCopy = self.layoutRecorders.copy;
     
-    for (CSLayoutRecorder *rec in recCopy)
+    
+    [layoutRecorder stopDefaultRecording];
+    
+    if (!layout.recorder)
     {
-        if (rec.layout == layout)
-        {
-            [rec stopRecording];
-            [self.layoutRecorders removeObject:rec];
-            [layout clearSourceList];
-        }
+        [self.layoutRecorders removeObject:layoutRecorder];
+        [layout clearSourceList];
     }
 }
 
@@ -1088,7 +1127,7 @@
     
     for (CSLayoutRecorder *rec in recCopy)
     {
-        [rec stopRecording];
+        [rec stopRecordingAll];
         [self.layoutRecorders removeObject:rec];
         [rec.layout clearSourceList];
     }

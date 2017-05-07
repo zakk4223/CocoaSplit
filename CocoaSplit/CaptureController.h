@@ -43,6 +43,7 @@
 #import "CSGridView.h"
 #import "CSSequenceEditorWindowController.h"
 #import "CSSequenceActivatorViewController.h"
+#import "CSLayoutRecorderInfoProtocol.h"
 
 
 @class FFMpegTask;
@@ -63,7 +64,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @class PreviewView;
 
 
-@interface CaptureController : NSObject <NSTableViewDelegate, NSMenuDelegate, MIKMIDIMappableResponder, MIKMIDIResponder, MIKMIDIMappingGeneratorDelegate, CSTimerSourceProtocol, NSCollectionViewDelegate, NSOutlineViewDelegate, NSOutlineViewDataSource> {
+@interface CaptureController : NSObject <NSTableViewDelegate, NSMenuDelegate, MIKMIDIMappableResponder, MIKMIDIResponder, MIKMIDIMappingGeneratorDelegate, CSTimerSourceProtocol, NSCollectionViewDelegate, NSOutlineViewDelegate, NSOutlineViewDataSource, CSLayoutRecorderInfoProtocol> {
     
     
     CSSequenceEditorWindowController *_sequenceWindowController;
@@ -163,6 +164,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) NSString *instantRecordCompressor;
 @property (strong) NSString *instantRecordDirectory;
 
+@property (readonly) float frameRate;
 
 @property (assign) bool instantRecordActive;
 
@@ -396,7 +398,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 +(CaptureController *)sharedCaptureController;
 
-
+-(NSObject<VideoCompressor> *)compressorByName:(NSString *)name;
 - (void)saveSettings;
 - (void)loadSettings;
 - (bool) startStream;
@@ -485,7 +487,10 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (IBAction)openLayoutSwitcherWindow:(id)sender;
 - (IBAction)switchLayoutView:(id)sender;
 -(bool) sleepUntil:(double)target_time;
--(void)startRecordingLayout:(SourceLayout *)layout;
+-(CSLayoutRecorder *)startRecordingLayout:(SourceLayout *)layout;
+-(CSLayoutRecorder *)startRecordingLayout:(SourceLayout *)layout usingOutput:(OutputDestination *)output;
+-(void)stopRecordingLayout:(SourceLayout *)layout usingOutput:(OutputDestination *)output;
+
 -(void)stopRecordingLayout:(SourceLayout *)layout;
 @property (strong) NSString *layoutScriptLabel;
 

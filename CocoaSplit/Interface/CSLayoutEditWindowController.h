@@ -7,9 +7,12 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import <AppKit/AppKit.h>
+
 #import "SourceLayout.h"
 #import "PreviewView.h"
-
+#import "OutputDestination.h"
+#import "CSLayoutRecorder.h"
 
 @interface CSLayoutEditWindowController : NSWindowController <NSWindowDelegate, NSOutlineViewDelegate, NSTableViewDelegate>
 {
@@ -21,6 +24,7 @@
 
 }
 
+@property (strong) IBOutlet NSMenu *recordingMenu;
 
 @property (weak) id delegate;
 
@@ -30,8 +34,8 @@
 - (IBAction)cancelEdit:(id)sender;
 - (IBAction)editOK:(id)sender;
 - (IBAction)newSource:(id)sender;
-- (IBAction)openAnimatePopover:(NSButton *)sender;
 - (IBAction)inputTableControlClick:(NSButton *)sender;
+- (IBAction)recordingButtonAction:(NSButton *)sender;
 
 @property (weak) IBOutlet NSOutlineView *inputOutlineView;
 @property (assign) bool previewOnly;

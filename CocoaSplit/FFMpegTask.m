@@ -88,9 +88,9 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 -(BOOL) resetOutputIfNeeded
 {
     //Should probably only do this if we're a network based output
-    if (self.settingsController.maxOutputDropped)
+    if ([CaptureController sharedCaptureController].maxOutputDropped)
     {
-        if (_consecutive_dropped_frames >= self.settingsController.maxOutputDropped)
+        if (_consecutive_dropped_frames >= [CaptureController sharedCaptureController].maxOutputDropped)
         {
             self.errored = YES;
             [self stopProcess];
@@ -105,9 +105,9 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 -(BOOL) shouldDropFrame
 {
 
-    if (self.settingsController.maxOutputPending)
+    if ([CaptureController sharedCaptureController].maxOutputPending)
     {
-        if (_pending_frame_count >= self.settingsController.maxOutputPending)
+        if (_pending_frame_count >= [CaptureController sharedCaptureController].maxOutputPending)
         {
             return YES;
         }

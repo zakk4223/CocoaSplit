@@ -322,12 +322,11 @@
     */
     
     newout.video_codec_id  = self.compressor.codec_id;
-    newout.framerate = self.settingsController.captureFPS;
+    newout.framerate = self.settingsController.frameRate;
     newout.stream_output = [destination stringByStandardizingPath];
     newout.stream_format = self.output_format;
-    newout.settingsController = self.settingsController;
-    newout.samplerate = self.settingsController.audioSamplerate;
-    newout.audio_bitrate = self.settingsController.audioBitrate;
+    newout.samplerate = [CaptureController sharedCaptureController].audioSamplerate;
+    newout.audio_bitrate = [CaptureController sharedCaptureController].audioBitrate;
     
     
     
@@ -377,7 +376,7 @@
 
     if (self.compressor_name)
     {
-        self.compressor = self.settingsController.compressors[self.compressor_name];
+        self.compressor = [self.settingsController compressorByName:self.compressor_name];
     }
     
     
@@ -406,9 +405,9 @@
 
 -(bool) resetOutputIfNeeded
 {
-    if (self.settingsController.maxOutputDropped)
+    if ([CaptureController sharedCaptureController].maxOutputDropped)
     {
-        if (_consecutive_dropped_frames >= self.settingsController.maxOutputDropped)
+        if (_consecutive_dropped_frames >= [CaptureController sharedCaptureController].maxOutputDropped)
         {
             return YES;
         }
@@ -419,9 +418,9 @@
 
 -(bool) shouldDropFrame
 {
-    if (self.settingsController.maxOutputPending)
+    if ([CaptureController sharedCaptureController].maxOutputPending)
     {
-        if (_pending_frame_count >= self.settingsController.maxOutputPending)
+        if (_pending_frame_count >= [CaptureController sharedCaptureController].maxOutputPending)
         {
             return YES;
         }
@@ -435,7 +434,7 @@
 {
     
     CapturedFrameData *sendData = nil;
-    double current_time = [self.settingsController mach_time_seconds];
+    double current_time = [[CaptureController sharedCaptureController] mach_time_seconds];
     
     if (self.active)
     {

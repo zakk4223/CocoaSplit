@@ -135,7 +135,7 @@
         [_sourceLayout addObserver:self forKeyPath:@"in_live" options:NSKeyValueObservingOptionNew context:NULL];
         [_sourceLayout addObserver:self forKeyPath:@"in_staging" options:NSKeyValueObservingOptionNew context:NULL];
         [_sourceLayout addObserver:self forKeyPath:@"audioData" options:NSKeyValueObservingOptionNew context:NULL];
-        [_sourceLayout addObserver:self forKeyPath:@"recordingLayout" options:NSKeyValueObservingOptionNew context:NULL];
+        [_sourceLayout addObserver:self forKeyPath:@"recorder" options:NSKeyValueObservingOptionNew context:NULL];
 
 
 
@@ -273,9 +273,9 @@
         } else {
             _audioImageView.hidden = YES;
         }
-    } else if ([keyPath isEqualToString:@"recordingLayout"]) {
+    } else if ([keyPath isEqualToString:@"recorder"]) {
     
-        if (_sourceLayout.recordingLayout)
+        if (_sourceLayout.recorder)
         {
             _recordImageView.hidden = NO;
         } else {

@@ -14,6 +14,9 @@
 #import "MIKMIDI.h"
 
 
+@class CSLayoutRecorder;
+
+
 
 @interface SourceLayout : NSObject <NSCoding, NSKeyedUnarchiverDelegate, NSKeyedArchiverDelegate, NSCopying, MIKMIDIMappableResponder, MIKMIDIResponder>
 {
@@ -91,6 +94,7 @@
 @property (strong) NSDictionary *audioData;
 @property (assign) bool recordingLayout;
 @property (assign) bool recordLayout;
+@property (weak) CSLayoutRecorder *recorder;
 
 
 

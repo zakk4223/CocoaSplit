@@ -75,7 +75,6 @@
 
 
 
-@property (strong) CaptureController *settingsController;
 
 
 

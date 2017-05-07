@@ -55,8 +55,6 @@
         self.compositionFilterNames = [CIFilter filterNamesInCategory:kCICategoryCompositeOperation];
         
         
-        //self = [super initWithNibName:@"TestView" bundle:nil];
-
     }
     
     return self;

@@ -24,12 +24,25 @@
 - (void)windowDidLoad {
     [super windowDidLoad];
     self.window.delegate = self;
+    [self.inputOutlineView registerForDraggedTypes:@[@"cocoasplit.input.item"]];
+
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
 }
 
 
 -(void)windowWillClose:(NSNotification *)notification
 {
+    
+    if (self.layoutController)
+    {
+        [self.layoutController discardEditing];
+    }
+    
+    if (self.previewView.sourceLayout && !self.previewView.sourceLayout.recordingLayout)
+    {
+        [self.previewView.sourceLayout clearSourceList];
+    }
+    
     if (self.delegate)
     {
         [self.delegate layoutWindowWillClose:self];
@@ -40,16 +53,6 @@
 
 - (IBAction)cancelEdit:(id)sender
 {
-    if (self.layoutController)
-    {
-        [self.layoutController discardEditing];
-    }
-    
-    if (self.previewView.sourceLayout)
-    {
-        [self.previewView.sourceLayout clearSourceList];
-    }
-    
     [self close];
 }
 
@@ -77,6 +80,85 @@
 
 
 
+- (id <NSPasteboardWriting>)outlineView:(NSOutlineView *)outlineView pasteboardWriterForItem:(id)item
+{
+    NSPasteboardItem *pItem = [[NSPasteboardItem alloc] init];
+    NSTreeNode *outlineNode = (NSTreeNode *)item;
+    InputSource *itemInput = outlineNode.representedObject;
+    
+    [pItem setString:itemInput.uuid forType:@"cocoasplit.input.item"];
+    
+    return pItem;
+}
+
+-(NSDragOperation)outlineView:(NSOutlineView *)outlineView validateDrop:(id<NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(NSInteger)index
+{
+    
+    NSTreeNode *nodeItem = (NSTreeNode *)item;
+    InputSource *nodeInput = nil;
+    if (nodeItem)
+    {
+        nodeInput = nodeItem.representedObject;
+    }
+    
+    
+    NSPasteboard *pb = [info draggingPasteboard];
+    NSString *draggedUUID = [pb stringForType:@"cocoasplit.input.item"];
+    InputSource *draggedSource = [self.previewView.sourceLayout inputForUUID:draggedUUID];
+    
+    
+    if (nodeInput && nodeInput == draggedSource)
+    {
+        return NSDragOperationNone;
+    }
+    
+    if (nodeInput && draggedSource.parentInput == nodeInput)
+    {
+        return NSDragOperationNone;
+    }
+    
+    if (draggedSource.parentInput && nodeInput && nodeInput != draggedSource.parentInput)
+    {
+        return NSDragOperationMove;
+    }
+    
+    
+    if (draggedSource.parentInput && !nodeInput)
+    {
+        return NSDragOperationMove;
+    }
+    
+    
+    if (item && index == -1)
+    {
+        return NSDragOperationMove;
+    }
+    return NSDragOperationNone;
+}
+
+-(BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id<NSDraggingInfo>)info item:(id)item childIndex:(NSInteger)index
+{
+    
+    NSPasteboard *pb = [info draggingPasteboard];
+    NSString *draggedUUID = [pb stringForType:@"cocoasplit.input.item"];
+    NSTreeNode *parentNode = (NSTreeNode *)item;
+    InputSource *parentSource = nil;
+    InputSource *draggedSource = [self.previewView.sourceLayout inputForUUID:draggedUUID];
+    
+    if (parentNode)
+    {
+        parentSource = parentNode.representedObject;
+    }
+    
+    if (!parentSource)
+    {
+        [draggedSource.parentInput detachInput:draggedSource];
+    } else {
+        [parentSource attachInput:draggedSource];
+    }
+    
+    return YES;
+}
 
 
 -(void) resetInputTableHighlights
@@ -87,7 +169,6 @@
         [self.inputOutlineView.selectedRowIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
             NSTreeNode *node = [self.inputOutlineView itemAtRow:idx];
             InputSource *src = node.representedObject;
-            
             if (src)
             {
                 [self.previewView highlightSource:src];
@@ -112,13 +193,13 @@
 
 -(void) outlineViewSelectionDidChange:(NSNotification *)notification
 {
-    
     [self resetInputTableHighlights];
 }
 
 
 -(void)openAddInputPopover:(id)sender sourceRect:(NSRect)sourceRect
 {
+    
     CSAddInputViewController *vc;
     if (!_addInputpopOver)
     {
@@ -140,6 +221,86 @@
     [_addInputpopOver showRelativeToRect:sourceRect ofView:sender preferredEdge:NSMaxXEdge];
 }
 
+
+-(void)recordWithDefaults:(NSMenuItem *)item
+{
+    
+    if (self.previewView.sourceLayout.recorder)
+    {
+        [[CaptureController sharedCaptureController] stopRecordingLayout:self.previewView.sourceLayout];
+        [self.previewView enablePrimaryRender];
+    } else {
+        CSLayoutRecorder *recorder = [[CaptureController sharedCaptureController] startRecordingLayout:self.previewView.sourceLayout];
+        self.previewView.layoutRenderer = recorder.renderer;
+        [self.previewView disablePrimaryRender];
+    }
+}
+
+
+
+-(void)recordWithOutput:(NSMenuItem *)item
+{
+    
+    
+    OutputDestination *useOutput = item.representedObject;
+    if (self.previewView.sourceLayout.recorder && [self.previewView.sourceLayout.recorder.outputs containsObject:useOutput])
+    {
+        [[CaptureController sharedCaptureController] stopRecordingLayout:self.previewView.sourceLayout usingOutput:useOutput];
+        [self.previewView enablePrimaryRender];
+        
+    } else {
+        
+        CSLayoutRecorder *recorder = [[CaptureController sharedCaptureController] startRecordingLayout:self.previewView.sourceLayout usingOutput:useOutput];
+        self.previewView.layoutRenderer = recorder.renderer;
+        [self.previewView disablePrimaryRender];
+    }
+}
+
+
+- (IBAction)recordingButtonAction:(NSButton *)sender
+{
+    [self buildRecordMenu];
+    
+    
+    [NSMenu popUpContextMenu:self.recordingMenu withEvent:[NSApp currentEvent] forView:sender];
+}
+
+
+
+-(void) buildRecordMenu
+{
+    
+    NSInteger idx = 0;
+    
+    NSMenuItem *tmp;
+    self.recordingMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
+    
+    if (self.previewView.sourceLayout.recorder && self.previewView.sourceLayout.recorder.defaultRecordingActive)
+    {
+        tmp = [self.recordingMenu insertItemWithTitle:@"Stop Default Recorder" action:@selector(recordWithDefaults:) keyEquivalent:@"" atIndex:idx++];
+    } else {
+        tmp = [self.recordingMenu insertItemWithTitle:@"With Defaults" action:@selector(recordWithDefaults:) keyEquivalent:@"" atIndex:idx++];
+    }
+    
+    tmp.target = self;
+    NSArray *outputs = [[CaptureController sharedCaptureController] captureDestinations];
+    for (OutputDestination *dest in outputs)
+    {
+        if (self.previewView.sourceLayout.recorder && [self.previewView.sourceLayout.recorder.outputs containsObject:dest])
+        {
+            tmp = [self.recordingMenu insertItemWithTitle:[NSString stringWithFormat:@"Stop %@", dest.name] action:@selector(recordWithOutput:) keyEquivalent:@"" atIndex:idx++];
+            tmp.target = self;
+            tmp.representedObject = dest;
+
+        } else if (!dest.active) {
+
+            tmp = [self.recordingMenu insertItemWithTitle:dest.name action:@selector(recordWithOutput:) keyEquivalent:@"" atIndex:idx++];
+            tmp.target = self;
+            tmp.representedObject = dest;
+        }
+
+    }
+}
 
 - (IBAction)inputTableControlClick:(NSButton *)sender
 {
@@ -174,6 +335,7 @@
             }
             break;
         case 2:
+            
             if (self.inputOutlineView && self.inputOutlineView.selectedRowIndexes)
             {
                 

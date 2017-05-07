@@ -10,6 +10,7 @@
 #import <AppKit/AppKit.h>
 #import "VideoCompressor.h"
 #import "CaptureController.h"
+#import "CSLayoutRecorderInfoProtocol.h"
 
 
 
@@ -54,7 +55,7 @@
 @property (strong) NSString *stream_key;
 @property (assign) int stream_delay;
 @property (strong) FFMpegTask *ffmpeg_out;
-@property (strong) CaptureController *settingsController;
+@property (weak) id<CSLayoutRecorderInfoProtocol> settingsController;
 @property (strong) NSColor *textColor;
 @property (assign) NSUInteger delay_buffer_frames;
 @property (assign) BOOL buffer_draining;
