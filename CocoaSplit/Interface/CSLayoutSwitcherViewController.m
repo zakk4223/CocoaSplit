@@ -255,7 +255,7 @@
         tmp.representedObject = forLayout;
     }
 
-    if (forLayout.recordingLayout)
+    if (forLayout.recorder)
     {
         tmp = [self.layoutMenu insertItemWithTitle:@"Stop Recording" action:@selector(stopRecordingLayout:) keyEquivalent:@"" atIndex:idx++];
         tmp.target = self;

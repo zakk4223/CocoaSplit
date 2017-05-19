@@ -490,9 +490,10 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(CSLayoutRecorder *)startRecordingLayout:(SourceLayout *)layout;
 -(CSLayoutRecorder *)startRecordingLayout:(SourceLayout *)layout usingOutput:(OutputDestination *)output;
 -(void)stopRecordingLayout:(SourceLayout *)layout usingOutput:(OutputDestination *)output;
-
+-(void)removeLayoutRecorder:(CSLayoutRecorder *)toRemove;
 -(void)stopRecordingLayout:(SourceLayout *)layout;
 @property (strong) NSString *layoutScriptLabel;
+@property (strong) CSLayoutRecorder *mainLayoutRecorder;
 
 
 @end

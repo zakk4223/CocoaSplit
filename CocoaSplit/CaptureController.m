@@ -1051,6 +1051,13 @@
     return newRecorder;
 }
 
+
+-(void)removeLayoutRecorder:(CSLayoutRecorder *)toRemove
+{
+    [self.layoutRecorders removeObject:toRemove];
+}
+
+
 -(void)stopRecordingLayout:(SourceLayout *)layout usingOutput:(OutputDestination *)output
 {
     
@@ -1058,10 +1065,10 @@
     if (useRecorder)
     {
         [useRecorder stopRecordingForOutput:output];
-        if (!layout.recorder)
+        output.active = NO;
+        if (self.mainLayoutRecorder)
         {
-            [self.layoutRecorders removeObject:useRecorder];
-            
+            output.settingsController = self.mainLayoutRecorder;
         }
     }
 }
@@ -1114,11 +1121,6 @@
     
     [layoutRecorder stopDefaultRecording];
     
-    if (!layout.recorder)
-    {
-        [self.layoutRecorders removeObject:layoutRecorder];
-        [layout clearSourceList];
-    }
 }
 
 -(void)stopAllRecordings
@@ -1129,7 +1131,6 @@
     {
         [rec stopRecordingAll];
         [self.layoutRecorders removeObject:rec];
-        [rec.layout clearSourceList];
     }
 }
 
@@ -1774,13 +1775,11 @@
     
     
     LayoutRenderer *stagingRender = [[LayoutRenderer alloc] init];
-    stagingRender.isLiveRenderer = NO;
     self.stagingPreviewView.layoutRenderer = stagingRender;
     
+    
     LayoutRenderer *liveRender = [[LayoutRenderer alloc] init];
-    liveRender.isLiveRenderer = YES;
     self.livePreviewView.layoutRenderer = liveRender;
-
     self.livePreviewView.viewOnly = YES;
     
     self.selectedLayout = [[SourceLayout alloc] init];
@@ -1904,11 +1903,11 @@
         [self setupInstantRecorder];
     }
 
-    dispatch_async(_main_capture_queue, ^{[self newFrameTimed];});
+    //dispatch_async(_main_capture_queue, ^{[self newFrameTimed];});
     
-    dispatch_async(_preview_queue, ^{
-        [self newStagingFrameTimed];
-    });
+    [self.livePreviewView enablePrimaryRender];
+    [self.stagingPreviewView enablePrimaryRender];
+
     
 
     
@@ -1975,6 +1974,7 @@
 
 -(void)setStagingLayout:(SourceLayout *)stagingLayout
 {
+    NSLog(@"STAGING LAYOUT %@", stagingLayout);
     _stagingLayout = stagingLayout;
 
     [stagingLayout setAddLayoutBlock:^(SourceLayout *layout) {
@@ -2031,6 +2031,8 @@
 
 -(void)setSelectedLayout:(SourceLayout *)selectedLayout
 {
+    
+    NSLog(@"SET SELECTED %@", selectedLayout);
     
     [selectedLayout setAddLayoutBlock:^(SourceLayout *layout) {
         
@@ -2165,13 +2167,45 @@
     }
 
     
+    self.mainLayoutRecorder = [[CSLayoutRecorder alloc] init];
+    
+    self.mainLayoutRecorder.layout = self.livePreviewView.sourceLayout;
+    self.mainLayoutRecorder.audioEngine = self.multiAudioEngine;
+    
+    self.mainLayoutRecorder.audioEngine.encoder.encodedReceiver = self.mainLayoutRecorder;
+    
+    
+    self.mainLayoutRecorder.compressors  = self.compressors;
+    self.mainLayoutRecorder.outputs = self.captureDestinations;
+    
+    
+    
+    
     for (OutputDestination *outdest in _captureDestinations)
     {
-        outdest.captureRunning = YES;
-        [outdest reset];
+    
+        
+        
+        outdest.settingsController = self.mainLayoutRecorder;
+
+        if (outdest.active && !outdest.captureRunning)
+        {
+            
+                   [outdest reset];
+
+            outdest.captureRunning = YES;
+
+            [outdest setupCompressor];
+        } else {
+            outdest.captureRunning = YES;
+        }
+        
     }
     
-    
+    [self.mainLayoutRecorder startRecordingCommon];
+
+    self.livePreviewView.layoutRenderer = self.mainLayoutRecorder.renderer;
+    [self.livePreviewView disablePrimaryRender];
 
     
     self.captureRunning = YES;
@@ -2228,10 +2262,24 @@
         }
     }
 
+    if (self.mainLayoutRecorder)
+    {
+        [self.livePreviewView enablePrimaryRender];
+    }
+    
+    
     for (OutputDestination *out in _captureDestinations)
     {
-        out.captureRunning = NO;
-        [out stopOutput];
+        if (out.settingsController == self.mainLayoutRecorder)
+        {
+            out.captureRunning = NO;
+            [out stopOutput];
+        }
+    }
+    
+    if (self.mainLayoutRecorder)
+    {
+        self.mainLayoutRecorder.recordingActive = NO;
     }
     
     
@@ -2461,94 +2509,6 @@
 
 
 
--(void) newFrameDispatched
-{
-    _frame_time = [self mach_time_seconds];
-    [self newFrame];
-
-}
-
-
--(void)frameArrived:(id)ctx
-{
-    if (ctx == self.previewCtx)
-    {
-        dispatch_async(_main_capture_queue, ^{
-            [self newFrameEvent];
-        });
-    } else if (ctx == self.stagingCtx) {
-        dispatch_async(_preview_queue, ^{
-            [self newStagingFrame];
-        });
-    }
-    
-}
-
--(void)frameTimerWillStop:(id)ctx
-{
-    if (ctx == self.previewCtx)
-    {
-        dispatch_async(_main_capture_queue, ^{
-            [self newFrameTimed];
-        });
-    } else if (ctx == self.stagingCtx) {
-        dispatch_async(_preview_queue, ^{
-            [self newStagingFrameTimed];
-        });
-    }
-}
-
-
--(void)newStagingFrame
-{
-    if (self.stagingHidden)
-    {
-        return;
-    }
-    
-    [self.stagingCtx.layoutRenderer currentImg];
-
-}
-
-
--(void)newFrameEvent
-{
-    _frame_time = [self mach_time_seconds];
-    [self newFrame];
-}
-
-
--(void)newStagingFrameTimed
-{
-    double startTime;
-    startTime = [self mach_time_seconds];
-    while (1)
-    {
-        
-        if (self.stagingHidden)
-        {
-            return;
-        }
-        
-        if (self.stagingCtx.sourceLayout.layoutTimingSource && self.stagingCtx.sourceLayout.layoutTimingSource.videoInput && self.stagingCtx.sourceLayout.layoutTimingSource.videoInput.canProvideTiming)
-        {
-            CSCaptureBase *newTiming = (CSCaptureBase *)self.stagingCtx.sourceLayout.layoutTimingSource.videoInput;
-            newTiming.timerDelegateCtx = self.stagingCtx;
-            newTiming.timerDelegate = self;
-            return;
-        }
-        
-        @autoreleasepool {
-            if (![self sleepUntil:(startTime += _staging_frame_interval)])
-            {
-                continue;
-            }
-            [self.stagingCtx.layoutRenderer currentImg];
-         }
-        
-
-    }
-}
 
 -(void)updateFrameIntervals
 {
@@ -2958,53 +2918,6 @@
 
 
 
--(void) newFrameTimed
-{
-    
-    double startTime;
-    
-    startTime = [self mach_time_seconds];
-
-    _frame_time = startTime;
-    _firstFrameTime = startTime;
-    [self newFrame];
-    
-    //[self setFrameThreadPriority];
-    while (1)
-    {
-        
-        
-        if (self.previewCtx.sourceLayout.layoutTimingSource && self.previewCtx.sourceLayout.layoutTimingSource.videoInput && self.previewCtx.sourceLayout.layoutTimingSource.videoInput.canProvideTiming)
-        {
-            CSCaptureBase *newTiming = (CSCaptureBase *)self.previewCtx.sourceLayout.layoutTimingSource.videoInput;
-            newTiming.timerDelegateCtx = self.previewCtx;
-            newTiming.timerDelegate = self;
-            return;
-        }
-        
-        
-        
-        
-        
-        //_frame_time = nowTime;//startTime;
-        
-        
-        if (![self sleepUntil:(startTime += _frame_interval)])
-        {
-            //NSLog(@"MISSED FRAME!");
-            continue;
-        }
-
-        
-            
-        _frame_time = startTime;
-        @autoreleasepool {
-
-        [self newFrame];
-        }
-        
-    }
-}
 
 -(void)deleteSource:(InputSource *)delSource
 {
@@ -3031,70 +2944,6 @@
 }
 
 
--(void) newFrame
-{
-    
-    CVPixelBufferRef newFrame;
-    
-    double nfstart = [self mach_time_seconds];
-    
-    newFrame = [self.previewCtx.layoutRenderer currentImg];
-    
-    double nfdone = [self mach_time_seconds];
-    double nftime = nfdone - nfstart;
-    _renderedFrames++;
-    
-    _render_time_total += nftime;
-    if (nftime < _min_render_time || _min_render_time == 0.0f)
-    {
-        _min_render_time = nftime;
-    }
-    
-    if (nftime > _max_render_time)
-    {
-        _max_render_time = nftime;
-    }
-    
-    
-    
-    if (newFrame)
-    {
-        _frameCount++;
-        CVPixelBufferRetain(newFrame);
-        NSMutableArray *frameAudio = [[NSMutableArray alloc] init];
-        [self setAudioData:frameAudio videoPTS:CMTimeMake((_frame_time - _firstFrameTime)*1000, 1000)];
-        CapturedFrameData *newData = [self createFrameData];
-        newData.audioSamples = frameAudio;
-        newData.videoFrame = newFrame;
-        
-        [self sendFrameToReplay:newData];
-        if (self.captureRunning)
-        {
-            if (self.captureRunning != _last_running_value)
-            {
-                [self setupCompressors];
-            }
-            
-            
-            [self processVideoFrame:newData];
-            
-            
-        } else {
-            
-            for (OutputDestination *outdest in _captureDestinations)
-            {
-                [outdest writeEncodedData:nil];
-            }
-            
-        }
-        
-        _last_running_value = self.captureRunning;
-        
-        CVPixelBufferRelease(newFrame);
-        
-        
-    }
-}
 
 
 -(CapturedFrameData *)createFrameData
@@ -4287,9 +4136,10 @@
         self.livePreviewView.midiActive = YES;
         self.stagingPreviewView.midiActive = NO;
     }
+    /*
     dispatch_async(_preview_queue, ^{
         [self newStagingFrameTimed];
-    });
+    });*/
 
 
 }

@@ -202,6 +202,7 @@
     
     if (fboStatus == GL_FRAMEBUFFER_COMPLETE && self.renderer && self.renderer.layer)
     {
+        
         [self.renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];
         [self.renderer addUpdateRect:self.renderer.bounds];
         [self.renderer render];
@@ -218,6 +219,13 @@
 
 -(CVPixelBufferRef)currentImg
 {
+    
+    
+    if (!self.layout)
+    {
+        return NULL;
+    }
+    
     
     if (self.cglCtx)
     {
@@ -283,13 +291,6 @@
 
 -(CVPixelBufferRef)currentFrame
 {
-    
-    /*
-    if (!self.isLiveRenderer)
-    {
-        [self currentImg];
-    }
-    */
     
     @synchronized(self)
     {

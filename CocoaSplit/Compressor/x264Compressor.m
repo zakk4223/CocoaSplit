@@ -159,7 +159,6 @@
 
 -(void) reset
 {
-    
     _compressor_queue = nil;
     
     self.errored = NO;

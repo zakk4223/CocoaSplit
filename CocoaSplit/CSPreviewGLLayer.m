@@ -46,7 +46,6 @@
 -(void)drawInCGLContext:(CGLContextObj)ctx pixelFormat:(CGLPixelFormatObj)pf forLayerTime:(CFTimeInterval)t displayTime:(const CVTimeStamp *)ts
 {
     
-    
     CGLSetCurrentContext(ctx);
     
     if (!_initDone)
@@ -79,6 +78,7 @@
     CVPixelBufferRef toDraw;
     if (self.doRender)
     {
+        
         toDraw = [self.renderer currentImg];
         CGLSetCurrentContext(ctx);
         

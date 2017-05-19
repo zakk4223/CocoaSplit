@@ -41,22 +41,19 @@
     {
         self.layout.recorder = nil;
         self.recordingActive = NO;
+        [self.audioEncoder stopEncoder];
+        self.audioEngine.encoder = nil;
+        self.audioEngine = nil;
+        [[CaptureController sharedCaptureController] removeLayoutRecorder:self];
     }
 }
 
 
--(void)stopRecording
-{
-    if (self.output)
-    {
-        [self.output stopOutput];
-        [self.outputs removeObject:self.output];
-    }
-    self.layout.recordingLayout = NO;
-}
+
 
 -(void)stopRecordingAll
 {
+    
     NSArray *outCopy = self.outputs.copy;
     
     for (OutputDestination *dest in outCopy)
@@ -73,15 +70,21 @@
 
 -(void)startRecordingWithOutput:(OutputDestination *)output
 {
-    [self.outputs addObject:output];
+    
+    if (![self.outputs containsObject:output])
+    {
+        [self.outputs addObject:output];
+    }
+    
     output.settingsController = self;
 
     output.captureRunning = YES;
     output.active = YES;
 
-    
+    [output setupCompressor];
     if (!self.recordingActive)
     {
+    
         [self startRecordingCommon];
     }
     
@@ -103,7 +106,8 @@
     {
         useOut.captureRunning = NO;
 
-        useOut.active = NO;
+        [useOut stopOutput];
+        
         [self.outputs removeObject:useOut];
         [self checkOutputs];
 
@@ -177,19 +181,24 @@
         
         
         
-        self.audioEngine = [[CAMultiAudioEngine alloc] init];
-        self.audioEngine.sampleRate = [CaptureController sharedCaptureController].audioSamplerate;
-        
-        NSDictionary *inputSettings = [[CaptureController sharedCaptureController].multiAudioEngine generateInputSettings];
-        [self.audioEngine applyInputSettings:inputSettings];
-        self.audioEncoder = [[CSAacEncoder alloc] init];
-        self.audioEncoder.encodedReceiver = self;
-        self.audioEncoder.sampleRate = [CaptureController sharedCaptureController].audioSamplerate;
-        self.audioEncoder.bitRate = [CaptureController sharedCaptureController].audioBitrate*1000;
-        
-        self.audioEncoder.inputASBD = self.audioEngine.graph.graphAsbd;
-        [self.audioEncoder setupEncoderBuffer];
-        self.audioEngine.encoder = self.audioEncoder;
+        if (!self.audioEngine)
+        {
+            self.audioEngine = [[CAMultiAudioEngine alloc] init];
+            self.audioEngine.sampleRate = [CaptureController sharedCaptureController].audioSamplerate;
+            
+            NSDictionary *inputSettings = [[CaptureController sharedCaptureController].multiAudioEngine generateInputSettings];
+            [self.audioEngine applyInputSettings:inputSettings];
+            self.audioEncoder = [[CSAacEncoder alloc] init];
+            self.audioEncoder.encodedReceiver = self;
+            self.audioEncoder.sampleRate = [CaptureController sharedCaptureController].audioSamplerate;
+            self.audioEncoder.bitRate = [CaptureController sharedCaptureController].audioBitrate*1000;
+            
+            self.audioEncoder.inputASBD = self.audioEngine.graph.graphAsbd;
+            [self.audioEncoder setupEncoderBuffer];
+            self.audioEngine.encoder = self.audioEncoder;
+        } else {
+            self.audioEncoder = self.audioEngine.encoder;
+        }
         
         
         if (!_frame_queue)
@@ -199,15 +208,16 @@
         
         for (OutputDestination *tmpOut in self.outputs)
         {
-            [tmpOut reset];
+           // [tmpOut reset];
         }
         
-        dispatch_async(_frame_queue, ^{
-            [self newFrameTimed];
-        });
         self.layout.recorder = self;
         
         self.recordingActive = YES;
+
+        dispatch_async(_frame_queue, ^{
+            [self newFrameTimed];
+        });
     }
     
     
@@ -223,6 +233,7 @@
     
     compressor = self.compressors[name];
     
+    NSLog(@"COMPRESSOR IS %@", compressor);
     if (!compressor)
     {
         NSObject<VideoCompressor> *origCompressor =  [CaptureController sharedCaptureController].compressors[name];
@@ -278,6 +289,29 @@
     return;
 }
 
+
+-(void)newFrameEvent
+{
+    _frame_time = [self mach_time_seconds];
+    [self newFrame];
+}
+
+
+-(void)frameArrived:(id)ctx
+{
+    dispatch_async(_frame_queue, ^{
+        [self newFrameEvent];
+    });
+}
+
+-(void)frameTimerWillStop:(id)ctx
+{
+    dispatch_async(_frame_queue, ^{
+        [self newFrameTimed];
+    });
+}
+
+
 -(void) newFrameTimed
 {
     
@@ -289,20 +323,17 @@
     _firstFrameTime = startTime;
     [self newFrame];
     
-    //[self setFrameThreadPriority];
     while (1)
     {
-        
- /*
-        if (self.previewCtx.sourceLayout.layoutTimingSource && self.previewCtx.sourceLayout.layoutTimingSource.videoInput && self.previewCtx.sourceLayout.layoutTimingSource.videoInput.canProvideTiming)
+        if (self.layout.layoutTimingSource && self.layout.layoutTimingSource.videoInput && self.layout.layoutTimingSource.videoInput.canProvideTiming)
         {
-            CSCaptureBase *newTiming = (CSCaptureBase *)self.previewCtx.sourceLayout.layoutTimingSource.videoInput;
-            newTiming.timerDelegateCtx = self.previewCtx;
+            CSCaptureBase *newTiming = (CSCaptureBase *)self.layout.layoutTimingSource.videoInput;
+            newTiming.timerDelegateCtx = nil;
             newTiming.timerDelegate = self;
+            NSLog(@"TIMER SWITCHED");
             return;
         }
         
-  */
         
         
         
@@ -316,6 +347,25 @@
         }
         
         
+        int drain_cnt = 0;
+        if (!self.recordingActive)
+        {
+            
+            for (OutputDestination *outdest in self.outputs)
+            {
+                if (outdest.buffer_draining)
+                {
+                    drain_cnt++;
+                }
+                [outdest writeEncodedData:nil];
+            }
+            
+            if (!drain_cnt)
+            {
+                return;
+            }
+        }
+
         
         _frame_time = startTime;
         @autoreleasepool {
@@ -363,6 +413,7 @@
         newData.audioSamples = frameAudio;
         newData.videoFrame = newFrame;
         
+        int used_compressor_count = 0;
         
         for(id cKey in self.compressors)
         {
@@ -373,11 +424,17 @@
             CapturedFrameData *newFrameData = newData.copy;
             
             [compressor compressFrame:newFrameData];
-            
+            if ([compressor hasOutputs])
+            {
+                used_compressor_count++;
+            }
         }
 
         CVPixelBufferRelease(newFrame);
-        
+        if (used_compressor_count == 0)
+        {
+            //[self stopRecordingAll];
+        }
         
     }
 }

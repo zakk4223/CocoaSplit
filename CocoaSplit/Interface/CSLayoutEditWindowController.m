@@ -26,6 +26,8 @@
     self.window.delegate = self;
     [self.inputOutlineView registerForDraggedTypes:@[@"cocoasplit.input.item"]];
 
+    [self.previewView addObserver:self forKeyPath:@"sourceLayout.recorder" options:NSKeyValueObservingOptionNew context:NULL];
+    
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
 }
 
@@ -33,6 +35,7 @@
 -(void)windowWillClose:(NSNotification *)notification
 {
     
+    [self.previewView removeObserver:self forKeyPath:@"sourceLayout.recorder"];
     if (self.layoutController)
     {
         [self.layoutController discardEditing];
@@ -356,6 +359,18 @@
     }
 }
 
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:@"sourceLayout.recorder"])
+    {
+        if (self.previewView.sourceLayout.recorder)
+        {
+            [self.previewView disablePrimaryRender];
+        } else {
+            [self.previewView enablePrimaryRender];
+        }
+    }
+}
 
 
 @end

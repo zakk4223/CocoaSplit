@@ -228,7 +228,7 @@
             _recordImageView.hidden = YES;
             _recordImageView.frame = NSMakeRect(NSMaxX(self.frame)-16,4,16,16);
             [self addSubview:_recordImageView];
-            if (_sourceLayout.recordingLayout)
+            if (_sourceLayout.recorder)
             {
                 _recordImageView.hidden = NO;
             }
@@ -282,6 +282,10 @@
             _recordImageView.hidden = YES;
         }
     }
+    
+    [self.layer setNeedsDisplay];
+    
+    
     
 }
 

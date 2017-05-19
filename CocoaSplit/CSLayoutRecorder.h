@@ -15,10 +15,11 @@
 #import "CAMultiAudioEngine.h"
 #import "CSAacEncoder.h"
 #import "CSLayoutRecorderInfoProtocol.h"
+#import "CSTimerSourceProtocol.h"
+#import "CSCaptureBase+TimerDelegate.h"
 
 
-
-@interface CSLayoutRecorder : NSObject <CSLayoutRecorderInfoProtocol>
+@interface CSLayoutRecorder : NSObject <CSLayoutRecorderInfoProtocol, CSTimerSourceProtocol>
 {
     dispatch_queue_t _frame_queue;
     long long _frameCount;
@@ -62,11 +63,11 @@
 
 
 -(void) startRecording;
--(void)stopRecording;
 -(void)stopDefaultRecording;
 -(void)stopRecordingForOutput:(OutputDestination *)output;
 -(void)startRecordingWithOutput:(OutputDestination *)output;
 -(void)stopRecordingAll;
+-(void)startRecordingCommon;
 
 -(NSObject<VideoCompressor> *)compressorByName:(NSString *)name;
 

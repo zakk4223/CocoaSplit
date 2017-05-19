@@ -30,7 +30,6 @@
 @property (assign) CGLContextObj cglCtx;
 @property (strong) CARenderer *renderer;
 @property (strong) CALayer *rootLayer;
-@property (assign) bool isLiveRenderer;
 @property (strong) NSString *transitionName;
 @property (strong) NSString *transitionDirection;
 @property (strong) CIFilter *transitionFilter;
