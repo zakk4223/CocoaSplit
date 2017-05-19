@@ -1514,10 +1514,15 @@
     
     if (irCompressor)
     {
+        if (!self.mainLayoutRecorder)
+        {
+            [self setupMainRecorder];
+        }
         self.instantRecorder = [[CSTimedOutputBuffer alloc] initWithCompressor:irCompressor];
         self.instantRecorder.bufferDuration = self.instantRecordBufferDuration;
     }
 }
+
 
 
 -(void) migrateDefaultCompressor:(NSMutableDictionary *)saveRoot
@@ -2150,6 +2155,29 @@
 }
 
 
+-(void)setupMainRecorder
+{
+    if (!self.mainLayoutRecorder)
+    {
+        self.mainLayoutRecorder = [[CSLayoutRecorder alloc] init];
+        
+        self.mainLayoutRecorder.layout = self.livePreviewView.sourceLayout;
+        self.mainLayoutRecorder.audioEngine = self.multiAudioEngine;
+        
+        self.mainLayoutRecorder.audioEngine.encoder.encodedReceiver = self.mainLayoutRecorder;
+        
+        
+        self.mainLayoutRecorder.compressors  = self.compressors;
+        self.mainLayoutRecorder.outputs = self.captureDestinations;
+        [self.mainLayoutRecorder startRecordingCommon];
+        
+        self.livePreviewView.layoutRenderer = self.mainLayoutRecorder.renderer;
+        [self.livePreviewView disablePrimaryRender];
+    }
+
+}
+
+
 -(bool) startStream
 {
     
@@ -2167,18 +2195,7 @@
     }
 
     
-    self.mainLayoutRecorder = [[CSLayoutRecorder alloc] init];
-    
-    self.mainLayoutRecorder.layout = self.livePreviewView.sourceLayout;
-    self.mainLayoutRecorder.audioEngine = self.multiAudioEngine;
-    
-    self.mainLayoutRecorder.audioEngine.encoder.encodedReceiver = self.mainLayoutRecorder;
-    
-    
-    self.mainLayoutRecorder.compressors  = self.compressors;
-    self.mainLayoutRecorder.outputs = self.captureDestinations;
-    
-    
+    [self setupMainRecorder];
     
     
     for (OutputDestination *outdest in _captureDestinations)
@@ -2202,11 +2219,6 @@
         
     }
     
-    [self.mainLayoutRecorder startRecordingCommon];
-
-    self.livePreviewView.layoutRenderer = self.mainLayoutRecorder.renderer;
-    [self.livePreviewView disablePrimaryRender];
-
     
     self.captureRunning = YES;
 
