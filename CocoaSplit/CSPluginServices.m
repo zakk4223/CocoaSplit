@@ -66,7 +66,7 @@
     AppDelegate *myAppDelegate = [[NSApplication sharedApplication] delegate];
     if (myAppDelegate.captureController)
     {
-        return myAppDelegate.captureController.captureFPS;
+        return myAppDelegate.captureController.livePreviewView.sourceLayout.frameRate;
     }
     return 0.0;
 }

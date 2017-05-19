@@ -1514,12 +1514,13 @@
     
     if (irCompressor)
     {
+        self.instantRecorder = [[CSTimedOutputBuffer alloc] initWithCompressor:irCompressor];
+        self.instantRecorder.bufferDuration = self.instantRecordBufferDuration;
         if (!self.mainLayoutRecorder)
         {
             [self setupMainRecorder];
         }
-        self.instantRecorder = [[CSTimedOutputBuffer alloc] initWithCompressor:irCompressor];
-        self.instantRecorder.bufferDuration = self.instantRecordBufferDuration;
+
     }
 }
 
@@ -1903,15 +1904,18 @@
     [audioEnc setupEncoderBuffer];
     self.multiAudioEngine.encoder = audioEnc;
     
-    if (self.useInstantRecord)
-    {
-        [self setupInstantRecorder];
-    }
 
     //dispatch_async(_main_capture_queue, ^{[self newFrameTimed];});
     
     [self.livePreviewView enablePrimaryRender];
     [self.stagingPreviewView enablePrimaryRender];
+    
+    
+    if (self.useInstantRecord)
+    {
+        [self setupInstantRecorder];
+    }
+
 
     
 
@@ -2067,7 +2071,6 @@
     
     [selectedLayout setupMIDI];
     
-    [self setupFrameTimer:selectedLayout.frameRate];
     self.livePreviewView.sourceLayout = selectedLayout;
     self.livePreviewView.midiActive = NO;
     
@@ -2229,31 +2232,6 @@
 }
 
 
-
-
--(void) setupFrameTimer:(double)framerate
-{
-    if (self.captureRunning)
-    {
-        //Don't change FPS mid-stream
-        return;
-    }
-    
-    
-    if (framerate && framerate > 0)
-    {
-        _frame_interval = (1.0/framerate);
-    } else {
-        _frame_interval = 1.0/60.0;
-    }
-    
-    self.captureFPS = framerate;
-    
-}
-
-
-
-
 - (void)stopStream
 {
     
@@ -2295,7 +2273,6 @@
     }
     
     
-    [self setupFrameTimer:self.selectedLayout.frameRate];
 
     if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_8)
     {
@@ -2521,12 +2498,6 @@
 
 
 
-
--(void)updateFrameIntervals
-{
-    _staging_frame_interval = 1.0/self.stagingPreviewView.sourceLayout.frameRate;
-    [self setupFrameTimer:self.livePreviewView.sourceLayout.frameRate];
-}
 
 - (IBAction)configureIRCompressor:(id)sender {
     
@@ -2956,75 +2927,6 @@
 }
 
 
-
-
--(CapturedFrameData *)createFrameData
-{
-    
-    CMTime pts = CMTimeMake((_frame_time - _firstFrameTime)*1000, 1000);
-    CMTime duration = CMTimeMake(1, self.captureFPS);
-
-    CapturedFrameData *newFrameData = [[CapturedFrameData alloc] init];
-    newFrameData.videoPTS = pts;
-    newFrameData.videoDuration = duration;
-    newFrameData.frameNumber = _frameCount;
-    newFrameData.frameTime = _frame_time;
-    return newFrameData;
-}
-
-
--(void)sendFrameToReplay:(CapturedFrameData *)frameData
-{
-    CMTime pts;
-    CMTime duration;
-    
-    pts = CMTimeMake((_frame_time - _firstFrameTime)*1000, 1000);
-    
-    duration = CMTimeMake(1, self.captureFPS);
-    
-    
-    
-    if (self.instantRecorder && self.instantRecorder.compressor && !self.instantRecorder.compressor.errored)
-    {
-        CapturedFrameData *newFrameData = frameData.copy;
-        [self.instantRecorder.compressor compressFrame:newFrameData];
-        if (self.instantRecorder.compressor.errored)
-        {
-            self.instantRecordActive = NO;
-        }
-    }
-}
-
-
--(void)processVideoFrame:(CapturedFrameData *)frameData
-{
-
-    
-    
-    if (!self.captureRunning)
-    {
-
-        return;
-    }
-    
-    for(id cKey in self.compressors)
-    {
-        
-        id <VideoCompressor> compressor;
-        compressor = self.compressors[cKey];
-
-        if (self.instantRecorder && [self.instantRecorder.compressor isEqual:compressor])
-        {
-            continue;
-        }
-        
-        CapturedFrameData *newFrameData = frameData.copy;
-        
-        [compressor compressFrame:newFrameData];
-
-    }
-        
-}
 
 -(int)streamsActiveCount
 {
