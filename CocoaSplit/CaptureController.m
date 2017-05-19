@@ -132,56 +132,6 @@
     [_addOutputpopOver showRelativeToRect:sourceRect ofView:sender preferredEdge:NSMaxXEdge];
 }
 
-- (IBAction)previewAnimations:(id)sender
-{
-    
-    if (self.stagingHidden)
-    {
-        return;
-    }
-    
-    //save and copy both live and staging
-    //set staging layout to copy of live
-    //apply transition settings to staging
-    //replace staging with copy of 'old' staging
-    //when done, delay 1.5 seconds and then restore old staging
-    
-    [self.selectedLayout saveSourceList];
-    [self.stagingLayout saveSourceList];
-    
-    SourceLayout *stagingSave = self.activePreviewView.sourceLayout;
-    
-    SourceLayout *liveCopy = [self.selectedLayout copy];
-    SourceLayout *stagingCopy = [self.stagingLayout copy];
-    
-    
-    [liveCopy restoreSourceList:liveCopy.savedSourceListData];
-
-    [stagingCopy restoreSourceList:stagingCopy.savedSourceListData];
-    
-    self.activePreviewView.sourceLayout = liveCopy;
-    liveCopy.in_staging = NO;
-    
-    [self applyTransitionSettings:liveCopy];
-    dispatch_time_t delay_dispatch = dispatch_time(DISPATCH_TIME_NOW, 1.0 * NSEC_PER_SEC);
-    dispatch_after(delay_dispatch, dispatch_get_main_queue(), ^{
-    [liveCopy replaceWithSourceLayout:stagingCopy withCompletionBlock:^{
-        
-        self.activePreviewView.sourceLayout.in_staging = YES;
-        dispatch_time_t inner_dispatch = dispatch_time(DISPATCH_TIME_NOW, 1.5 * NSEC_PER_SEC);
-        dispatch_after(inner_dispatch, dispatch_get_main_queue(), ^{
-            self.activePreviewView.sourceLayout = stagingSave;
-        });
-        
-    }];
-        
-    });
-    
-    
-}
-
-
-
 
 -(void)openAddInputPopover:(id)sender sourceRect:(NSRect)sourceRect
 {
@@ -433,7 +383,6 @@
 -(void)addSequenceWithNameDedup:(CSLayoutSequence *)sequence
 {
     
-    NSLog(@"ADDING SEQUENCE %@", sequence);
     NSMutableString *baseName = sequence.name.mutableCopy;
     
     NSMutableString *newName = baseName;
@@ -895,7 +844,6 @@
 
        
        videoBuffer = [[NSMutableArray alloc] init];
-       _audioBuffer = [[NSMutableArray alloc] init];
        
        
        
@@ -913,19 +861,6 @@
        dispatch_source_t sigsrc = dispatch_source_create(DISPATCH_SOURCE_TYPE_SIGNAL, SIGPIPE, 0, dispatch_get_global_queue(0, 0));
        dispatch_source_set_event_handler(sigsrc, ^{ return;});
        dispatch_resume(sigsrc);
-       
-       /*
-       dispatch_queue_attr_t attr = dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, QOS_CLASS_DEFAULT, 0);
-       _main_capture_queue = dispatch_queue_create("CocoaSplit.main.queue", attr);
-       _preview_queue = dispatch_queue_create("CocoaSplit.preview.queue", NULL);
-        */
-       
-       _main_capture_queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-       _preview_queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-       
-       
-       
-       
        
        mach_timebase_info(&_mach_timebase);
        
@@ -1876,10 +1811,6 @@
         self.inputLibrary = [NSMutableArray array];
     }
     
-    _firstAudioTime = kCMTimeZero;
-    _previousAudioTime = kCMTimeZero;
-    
-    
 
     self.layoutRecorderCompressorName = [saveRoot valueForKey:@"layoutRecorderCompressorName"];
     if (!self.layoutRecorderCompressorName)
@@ -1895,14 +1826,6 @@
     }
     
     
-    CSAacEncoder *audioEnc = [[CSAacEncoder alloc] init];
-    audioEnc.encodedReceiver = self;
-    audioEnc.sampleRate = self.audioSamplerate;
-    audioEnc.bitRate = self.audioBitrate*1000;
-    
-    audioEnc.inputASBD = self.multiAudioEngine.graph.graphAsbd;
-    [audioEnc setupEncoderBuffer];
-    self.multiAudioEngine.encoder = audioEnc;
     
 
     //dispatch_async(_main_capture_queue, ^{[self newFrameTimed];});
@@ -2004,15 +1927,6 @@
 
     
     [stagingLayout applyAddBlock];
-    
-    float framerate = stagingLayout.frameRate;
-    
-    if (framerate && framerate > 0)
-    {
-        _staging_frame_interval = (1.0/framerate);
-    } else {
-        _staging_frame_interval = 1.0/60.0;
-    }
     
     self.currentMidiInputStagingIdx = 0;
     
@@ -2167,6 +2081,18 @@
         self.mainLayoutRecorder.layout = self.livePreviewView.sourceLayout;
         self.mainLayoutRecorder.audioEngine = self.multiAudioEngine;
         
+        if (!self.multiAudioEngine.encoder)
+        {
+            CSAacEncoder *audioEnc = [[CSAacEncoder alloc] init];
+            audioEnc.encodedReceiver = self;
+            audioEnc.sampleRate = self.audioSamplerate;
+            audioEnc.bitRate = self.audioBitrate*1000;
+            
+            audioEnc.inputASBD = self.multiAudioEngine.graph.graphAsbd;
+            [audioEnc setupEncoderBuffer];
+            self.multiAudioEngine.encoder = audioEnc;
+
+        }
         self.mainLayoutRecorder.audioEngine.encoder.encodedReceiver = self.mainLayoutRecorder;
         
         
@@ -2333,88 +2259,6 @@
     }
     
 }
-
--(void) addAudioData:(CMSampleBufferRef)audioData
-{
-    
-        @synchronized(self)
-        {
-            
-            [_audioBuffer addObject:(__bridge id)audioData];
-        }
-}
-
-
--(void) setAudioData:(NSMutableArray *)audioDestination videoPTS:(CMTime)videoPTS
-{
-    
-    NSUInteger audioConsumed = 0;
-    @synchronized(self)
-    {
-        NSUInteger audioBufferSize = [_audioBuffer count];
-        
-        for (int i = 0; i < audioBufferSize; i++)
-        {
-            CMSampleBufferRef audioData = (__bridge CMSampleBufferRef)[_audioBuffer objectAtIndex:i];
-            
-            CMTime audioTime = CMSampleBufferGetOutputPresentationTimeStamp(audioData);
-            
-            
-            
-            
-            if (CMTIME_COMPARE_INLINE(audioTime, <=, videoPTS))
-            {
-                
-                audioConsumed++;
-                [audioDestination addObject:(__bridge id)audioData];
-            } else {
-                break;
-            }
-        }
-        
-        if (audioConsumed > 0)
-        {
-            [_audioBuffer removeObjectsInRange:NSMakeRange(0, audioConsumed)];
-        }
-        
-    }
-}
-
-- (void)captureOutputAudio:(id)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
-{
-    
-    
-    CMTime orig_pts = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
-    
-    
-
-    
-    if (CMTIME_COMPARE_INLINE(_firstAudioTime, ==, kCMTimeZero))
-    {
-    
-        //NSLog(@"FIRST AUDIO AT %f", CFAbsoluteTimeGetCurrent());
-        
-        _firstAudioTime = orig_pts;
-        return;
-    }
-    
-    
-    CMTime real_pts = CMTimeSubtract(orig_pts, _firstAudioTime);
-    CMTime adjust_pts = CMTimeMakeWithSeconds(self.audio_adjust, orig_pts.timescale);
-    CMTime pts = CMTimeAdd(real_pts, adjust_pts);
-
-    
-    
-    CMSampleBufferSetOutputPresentationTimeStamp(sampleBuffer, pts);
-    
-    if (CMTIME_COMPARE_INLINE(pts, >, _previousAudioTime))
-    {
-        [self addAudioData:sampleBuffer];
-        _previousAudioTime = pts;
-    }
-}
-
-
 
 
 -(double)mach_time_seconds

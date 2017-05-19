@@ -93,22 +93,10 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     long long _frameCount;
     long long _streamFrameStart;
     
-    CFAbsoluteTime _lastFrameTime;
-    CFAbsoluteTime _firstFrameTime;
-    
-    CMTime _firstAudioTime;
-    CMTime _previousAudioTime;
-    
-    
-    dispatch_queue_t _main_capture_queue;
-    dispatch_queue_t _preview_queue;
-    dispatch_source_t _dispatch_timer;
     dispatch_source_t _statistics_timer;
     dispatch_source_t _audio_statistics_timer;
 
     
-    CFAbsoluteTime _frame_interval;
-    CFAbsoluteTime _staging_frame_interval;
     
     mach_timebase_info_data_t _mach_timebase;
     double _frame_time;
@@ -140,7 +128,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     
     bool _needsIRReset;
     
-    NSMutableArray *_audioBuffer;
     CSAdvancedAudioWindowController *_audioWindowController;
     CSStreamOutputWindowController *_streamOutputWindowController;
     CSLayoutSwitcherWithPreviewWindowController *_layoutSwitcherWindowController;
@@ -154,8 +141,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) NSString *layoutRecordingDirectory;
 @property (strong) NSString *layoutRecordingFormat;
 
-
-@property (strong) CSLayoutRecorder *testRecorder;
 
 @property (weak) IBOutlet CSGridView *layoutGridView;
 
