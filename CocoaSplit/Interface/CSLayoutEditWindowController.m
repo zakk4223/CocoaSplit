@@ -26,6 +26,10 @@
     self.window.delegate = self;
     [self.inputOutlineView registerForDraggedTypes:@[@"cocoasplit.input.item"]];
 
+    if (self.previewView.sourceLayout.recorder)
+    {
+        [self.previewView disablePrimaryRender];
+    }
     [self.previewView addObserver:self forKeyPath:@"sourceLayout.recorder" options:NSKeyValueObservingOptionNew context:NULL];
     
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
@@ -225,85 +229,8 @@
 }
 
 
--(void)recordWithDefaults:(NSMenuItem *)item
-{
-    
-    if (self.previewView.sourceLayout.recorder)
-    {
-        [[CaptureController sharedCaptureController] stopRecordingLayout:self.previewView.sourceLayout];
-        [self.previewView enablePrimaryRender];
-    } else {
-        CSLayoutRecorder *recorder = [[CaptureController sharedCaptureController] startRecordingLayout:self.previewView.sourceLayout];
-        self.previewView.layoutRenderer = recorder.renderer;
-        [self.previewView disablePrimaryRender];
-    }
-}
 
 
-
--(void)recordWithOutput:(NSMenuItem *)item
-{
-    
-    
-    OutputDestination *useOutput = item.representedObject;
-    if (self.previewView.sourceLayout.recorder && [self.previewView.sourceLayout.recorder.outputs containsObject:useOutput])
-    {
-        [[CaptureController sharedCaptureController] stopRecordingLayout:self.previewView.sourceLayout usingOutput:useOutput];
-        [self.previewView enablePrimaryRender];
-        
-    } else {
-        
-        CSLayoutRecorder *recorder = [[CaptureController sharedCaptureController] startRecordingLayout:self.previewView.sourceLayout usingOutput:useOutput];
-        self.previewView.layoutRenderer = recorder.renderer;
-        [self.previewView disablePrimaryRender];
-    }
-}
-
-
-- (IBAction)recordingButtonAction:(NSButton *)sender
-{
-    [self buildRecordMenu];
-    
-    
-    [NSMenu popUpContextMenu:self.recordingMenu withEvent:[NSApp currentEvent] forView:sender];
-}
-
-
-
--(void) buildRecordMenu
-{
-    
-    NSInteger idx = 0;
-    
-    NSMenuItem *tmp;
-    self.recordingMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
-    
-    if (self.previewView.sourceLayout.recorder && self.previewView.sourceLayout.recorder.defaultRecordingActive)
-    {
-        tmp = [self.recordingMenu insertItemWithTitle:@"Stop Default Recorder" action:@selector(recordWithDefaults:) keyEquivalent:@"" atIndex:idx++];
-    } else {
-        tmp = [self.recordingMenu insertItemWithTitle:@"With Defaults" action:@selector(recordWithDefaults:) keyEquivalent:@"" atIndex:idx++];
-    }
-    
-    tmp.target = self;
-    NSArray *outputs = [[CaptureController sharedCaptureController] captureDestinations];
-    for (OutputDestination *dest in outputs)
-    {
-        if (self.previewView.sourceLayout.recorder && [self.previewView.sourceLayout.recorder.outputs containsObject:dest])
-        {
-            tmp = [self.recordingMenu insertItemWithTitle:[NSString stringWithFormat:@"Stop %@", dest.name] action:@selector(recordWithOutput:) keyEquivalent:@"" atIndex:idx++];
-            tmp.target = self;
-            tmp.representedObject = dest;
-
-        } else if (!dest.active) {
-
-            tmp = [self.recordingMenu insertItemWithTitle:dest.name action:@selector(recordWithOutput:) keyEquivalent:@"" atIndex:idx++];
-            tmp.target = self;
-            tmp.representedObject = dest;
-        }
-
-    }
-}
 
 - (IBAction)inputTableControlClick:(NSButton *)sender
 {

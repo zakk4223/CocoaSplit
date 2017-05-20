@@ -1,13 +1,15 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12120"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CSStreamOutputWindowController">
             <connections>
                 <outlet property="outputTableView" destination="KAq-Ix-OIC" id="HDe-yh-oyc"/>
+                <outlet property="sourceLayoutsArrayController" destination="b2n-cr-D6g" id="CwI-Rr-Fxk"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
@@ -17,7 +19,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="893" height="333"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1057"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="3440" height="1417"/>
             <view key="contentView" id="se5-gp-TjO">
                 <rect key="frame" x="0.0" y="0.0" width="893" height="333"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -63,8 +65,8 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <connections>
-                                                <binding destination="9DZ-Id-EYM" name="textColor" keyPath="arrangedObjects.textColor" id="wTD-Wr-0ns"/>
                                                 <binding destination="9DZ-Id-EYM" name="value" keyPath="arrangedObjects.name" id="9VA-iF-6Be"/>
+                                                <binding destination="9DZ-Id-EYM" name="textColor" keyPath="arrangedObjects.textColor" id="wTD-Wr-0ns"/>
                                             </connections>
                                         </tableColumn>
                                         <tableColumn width="51.04296875" minWidth="40" maxWidth="1000" id="zkL-Cc-CrE">
@@ -81,8 +83,8 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <connections>
-                                                <binding destination="9DZ-Id-EYM" name="textColor" keyPath="arrangedObjects.textColor" id="gyu-DE-mAi"/>
                                                 <binding destination="9DZ-Id-EYM" name="value" keyPath="arrangedObjects.input_framerate" id="2oS-KQ-p2E"/>
+                                                <binding destination="9DZ-Id-EYM" name="textColor" keyPath="arrangedObjects.textColor" id="gyu-DE-mAi"/>
                                             </connections>
                                         </tableColumn>
                                         <tableColumn width="51" minWidth="10" maxWidth="3.4028234663852886e+38" id="VRe-qV-Y6r">
@@ -99,8 +101,8 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <connections>
-                                                <binding destination="9DZ-Id-EYM" name="textColor" keyPath="arrangedObjects.textColor" id="8nN-U1-Crp"/>
                                                 <binding destination="9DZ-Id-EYM" name="value" keyPath="arrangedObjects.output_framerate" id="38N-iD-lVB"/>
+                                                <binding destination="9DZ-Id-EYM" name="textColor" keyPath="arrangedObjects.textColor" id="8nN-U1-Crp"/>
                                             </connections>
                                         </tableColumn>
                                         <tableColumn width="73" minWidth="10" maxWidth="3.4028234663852886e+38" id="JIP-w5-8wX">
@@ -116,8 +118,8 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <connections>
-                                                <binding destination="9DZ-Id-EYM" name="textColor" keyPath="arrangedObjects.textColor" id="kOG-6X-cvX"/>
                                                 <binding destination="9DZ-Id-EYM" name="value" keyPath="arrangedObjects.delay_buffer_frames" id="t5m-Jj-8IA"/>
+                                                <binding destination="9DZ-Id-EYM" name="textColor" keyPath="arrangedObjects.textColor" id="kOG-6X-cvX"/>
                                             </connections>
                                         </tableColumn>
                                         <tableColumn width="73" minWidth="10" maxWidth="3.4028234663852886e+38" id="eVt-0J-dta">
@@ -133,8 +135,8 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <connections>
-                                                <binding destination="9DZ-Id-EYM" name="textColor" keyPath="arrangedObjects.textColor" id="aWe-Kr-MdK"/>
                                                 <binding destination="9DZ-Id-EYM" name="value" keyPath="arrangedObjects.buffered_frame_count" id="wBy-25-XNE"/>
+                                                <binding destination="9DZ-Id-EYM" name="textColor" keyPath="arrangedObjects.textColor" id="aWe-Kr-MdK"/>
                                             </connections>
                                         </tableColumn>
                                         <tableColumn width="84" minWidth="10" maxWidth="3.4028234663852886e+38" id="dVF-5j-yev">
@@ -150,8 +152,8 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <connections>
-                                                <binding destination="9DZ-Id-EYM" name="textColor" keyPath="arrangedObjects.textColor" id="joc-cg-bLe"/>
                                                 <binding destination="9DZ-Id-EYM" name="value" keyPath="arrangedObjects.buffered_frame_size" id="teQ-Fc-KKv"/>
+                                                <binding destination="9DZ-Id-EYM" name="textColor" keyPath="arrangedObjects.textColor" id="joc-cg-bLe"/>
                                             </connections>
                                         </tableColumn>
                                         <tableColumn width="54" minWidth="10" maxWidth="3.4028234663852886e+38" id="ixg-zF-DOC">
@@ -167,8 +169,8 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <connections>
-                                                <binding destination="9DZ-Id-EYM" name="textColor" keyPath="arrangedObjects.textColor" id="Eho-zR-YlH"/>
                                                 <binding destination="9DZ-Id-EYM" name="value" keyPath="arrangedObjects.dropped_frame_count" id="npo-7g-wVS"/>
+                                                <binding destination="9DZ-Id-EYM" name="textColor" keyPath="arrangedObjects.textColor" id="Eho-zR-YlH"/>
                                             </connections>
                                         </tableColumn>
                                         <tableColumn width="82" minWidth="10" maxWidth="3.4028234663852886e+38" id="467-hB-MIY">
@@ -185,8 +187,8 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <connections>
-                                                <binding destination="9DZ-Id-EYM" name="textColor" keyPath="arrangedObjects.textColor" id="FGJ-lH-S5B"/>
                                                 <binding destination="9DZ-Id-EYM" name="value" keyPath="arrangedObjects.output_bitrate" id="qdn-td-EcV"/>
+                                                <binding destination="9DZ-Id-EYM" name="textColor" keyPath="arrangedObjects.textColor" id="FGJ-lH-S5B"/>
                                             </connections>
                                         </tableColumn>
                                         <tableColumn width="64" minWidth="10" maxWidth="3.4028234663852886e+38" id="QDP-Y3-n95">
@@ -204,14 +206,45 @@
                                             </buttonCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         </tableColumn>
+                                        <tableColumn identifier="" width="193" minWidth="10" maxWidth="3.4028234663852886e+38" id="PpR-d6-TI9">
+                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Layout">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            </tableHeaderCell>
+                                            <popUpButtonCell key="dataCell" type="bevel" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="bezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="NGd-x6-DSb" id="Ohj-ie-ddW">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                                <menu key="menu" id="bsu-VL-oEe">
+                                                    <items>
+                                                        <menuItem title="Item 1" state="on" id="NGd-x6-DSb"/>
+                                                        <menuItem title="Item 2" id="dqW-tC-09R"/>
+                                                        <menuItem title="Item 3" id="Idn-kh-Je6"/>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                            <connections>
+                                                <binding destination="b2n-cr-D6g" name="content" keyPath="arrangedObjects" id="6W7-XS-qt9">
+                                                    <dictionary key="options">
+                                                        <bool key="NSInsertsNullPlaceholder" value="YES"/>
+                                                        <string key="NSNullPlaceholder">Live Layout</string>
+                                                    </dictionary>
+                                                </binding>
+                                                <binding destination="b2n-cr-D6g" name="contentValues" keyPath="arrangedObjects.sdfsdafsd" previousBinding="6W7-XS-qt9" id="1co-NU-pYs">
+                                                    <dictionary key="options">
+                                                        <bool key="NSInsertsNullPlaceholder" value="YES"/>
+                                                    </dictionary>
+                                                </binding>
+                                                <binding destination="9DZ-Id-EYM" name="selectedValue" keyPath="arrangedObjects.assignedLayout" previousBinding="1co-NU-pYs" id="GCZ-gA-fsp"/>
+                                            </connections>
+                                        </tableColumn>
                                     </tableColumns>
                                     <connections>
-                                        <binding destination="9DZ-Id-EYM" name="content" keyPath="arrangedObjects" id="k6A-kF-ijM"/>
-                                        <binding destination="9DZ-Id-EYM" name="selectionIndexes" keyPath="selectionIndexes" previousBinding="k6A-kF-ijM" id="bhS-h8-7ha"/>
+                                        <binding destination="9DZ-Id-EYM" name="selectionIndexes" keyPath="selectionIndexes" id="glL-CN-LSp"/>
                                     </connections>
                                 </tableView>
                             </subviews>
-                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </clipView>
                         <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="bbp-Q4-Q7G">
                             <autoresizingMask key="autoresizingMask"/>
@@ -282,6 +315,11 @@
             <connections>
                 <binding destination="-2" name="contentArray" keyPath="self.controller.captureDestinations" id="3pY-bV-maK"/>
                 <binding destination="-2" name="selectionIndexes" keyPath="self.selectedCaptureDestinations" id="lAj-PU-96o"/>
+            </connections>
+        </arrayController>
+        <arrayController objectClassName="SourceLayout" id="b2n-cr-D6g" userLabel="sourceLayoutsArrayController">
+            <connections>
+                <binding destination="-2" name="contentArray" keyPath="self.sourceLayouts" id="ZrC-Wk-hnA"/>
             </connections>
         </arrayController>
     </objects>

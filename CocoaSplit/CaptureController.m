@@ -247,7 +247,11 @@
     
     newController.previewView.controller = self;
     newController.previewView.sourceLayout = layout;
-    [newController.previewView.sourceLayout restoreSourceList:nil];
+    if (!layout.recorder)
+    {
+        [newController.previewView.sourceLayout restoreSourceList:nil];
+    }
+    
     newController.delegate = self;
     
     
@@ -979,12 +983,21 @@
 
 -(CSLayoutRecorder *)startRecordingLayout:(SourceLayout *)layout usingOutput:(OutputDestination *)output
 {
-    CSLayoutRecorder *newRecorder = [[CSLayoutRecorder alloc] init];
-    newRecorder.layout = layout;
-    [newRecorder startRecordingWithOutput:output];
-    [self.layoutRecorders addObject:newRecorder];
-    return newRecorder;
+    
+    CSLayoutRecorder *useRecorder = layout.recorder;
+    if (!useRecorder)
+    {
+        useRecorder = [[CSLayoutRecorder alloc] init];
+        useRecorder.layout = layout;
+    }
+    [useRecorder startRecordingWithOutput:output];
+    if (![self.layoutRecorders containsObject:useRecorder])
+    {
+        [self.layoutRecorders addObject:useRecorder];
+    }
+    return useRecorder;
 }
+
 
 
 -(void)removeLayoutRecorder:(CSLayoutRecorder *)toRemove
@@ -1955,7 +1968,6 @@
 -(void)setSelectedLayout:(SourceLayout *)selectedLayout
 {
     
-    NSLog(@"SET SELECTED %@", selectedLayout);
     
     [selectedLayout setAddLayoutBlock:^(SourceLayout *layout) {
         
@@ -2178,7 +2190,7 @@
         }
     }
 
-    if (self.mainLayoutRecorder)
+    if (self.mainLayoutRecorder && !self.instantRecorder)
     {
         [self.livePreviewView enablePrimaryRender];
     }
@@ -2193,7 +2205,7 @@
         }
     }
     
-    if (self.mainLayoutRecorder)
+    if (self.mainLayoutRecorder && !self.instantRecorder)
     {
         self.mainLayoutRecorder.recordingActive = NO;
     }
@@ -2219,7 +2231,6 @@
     }
     
     
-    //self.multiAudioEngine.encoder = nil;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationStreamStopped object:self userInfo:nil];
 

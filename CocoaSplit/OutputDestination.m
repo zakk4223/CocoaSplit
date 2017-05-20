@@ -15,7 +15,7 @@
 
 @synthesize name = _name;
 @synthesize output_format = _output_format;
-
+@synthesize assignedLayout = _assignedLayout;
 
 
 -(instancetype)copyWithZone:(NSZone *)zone
@@ -73,6 +73,18 @@
     
 }
 
+
+-(SourceLayout *)assignedLayout
+{
+    return _assignedLayout;
+}
+
+-(void)setAssignedLayout:(SourceLayout *)assignedLayout
+{
+    NSLog(@"ASSIGNED LAYOUT %@", assignedLayout);
+    _assignedLayout = assignedLayout;
+}
+
 -(void)stopCompressor
 {
     if (self.compressor)
@@ -115,7 +127,8 @@
 }
 
 
--(void) setActive:(BOOL)is_active
+
+-(void) setup
 {
     
     if (!_output_queue)
@@ -123,21 +136,41 @@
         NSString *queue_name = [NSString stringWithFormat:@"Output Queue %@", self.name];
         _output_queue = dispatch_queue_create(queue_name.UTF8String, NULL);
     }
+
+    [self initStatsValues];
+    [self setupCompressor];
+}
+
+-(void) teardown
+{
+    [self stopCompressor];
+    [self reset];
+
+}
+-(void) setActive:(BOOL)is_active
+{
     
+    _active = is_active;
     
-    if (is_active != _active)
+    if (is_active)
     {
-        _active = is_active;
-        if (!is_active)
+        if (self.assignedLayout && ![self.assignedLayout isEqual:[NSNull null]])
         {
-            [self stopCompressor];
-            [self reset];
+            [[CaptureController sharedCaptureController] startRecordingLayout:self.assignedLayout usingOutput:self];
         } else {
-            [self initStatsValues];
-            [self setupCompressor];
+            [self setup];
         }
+    } else {
         
+        if (self.assignedLayout && ![self.assignedLayout isEqual:[NSNull null]])
+        {
+            [[CaptureController sharedCaptureController] stopRecordingLayout:self.assignedLayout usingOutput:self ];
+        } else {
+            [self teardown];
+        }
+
     }
+    
 }
 
 
@@ -214,7 +247,7 @@
     if (self = [super init])
     {
         
-        
+        self.assignedLayout = nil;
         self.type_name = type;
         self.textColor = [NSColor blackColor];
         _output_start_time = 0.0f;

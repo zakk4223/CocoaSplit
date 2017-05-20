@@ -79,9 +79,10 @@
     output.settingsController = self;
 
     output.captureRunning = YES;
-    output.active = YES;
 
-    [output setupCompressor];
+    [output setup];
+    
+    //[output setupCompressor];
     if (!self.recordingActive)
     {
     
@@ -107,6 +108,7 @@
         useOut.captureRunning = NO;
 
         [useOut stopOutput];
+        [useOut reset];
         
         [self.outputs removeObject:useOut];
         [self checkOutputs];

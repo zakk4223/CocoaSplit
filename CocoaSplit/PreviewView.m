@@ -13,6 +13,7 @@
 #import "InputPopupControllerViewController.h"
 #import "SourceLayout.h"
 #import "CreateLayoutViewController.h"
+#import "CSLayoutRecorder.h"
 
 //wtf apple
 
@@ -134,11 +135,19 @@
         [NSApp registerMIDIResponder:sourceLayout];
     }
     
-    if (self.layoutRenderer)
+    
+    if (_sourceLayout.recorder)
     {
-        self.layoutRenderer.layout = _sourceLayout;
+        self.layoutRenderer = _sourceLayout.recorder.renderer;
+        [self disablePrimaryRender];
+        
+    } else {
+        if (self.layoutRenderer)
+        {
+            self.layoutRenderer.layout = _sourceLayout;
+        }
     }
-
+    
 }
 
 
@@ -273,8 +282,16 @@
     
     if (self.selectedSource.videoInput && [self.selectedSource.videoInput canProvideTiming])
     {
-        tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Use as master timing" action:@selector(setSourceAsTimer:) keyEquivalent:@"" atIndex:idx++];
-        tmp.target = self;
+        
+        if (self.sourceLayout.layoutTimingSource == self.selectedSource)
+        {
+            tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Stop using as master timing" action:@selector(removeSourceTimer:) keyEquivalent:@"" atIndex:idx++];
+            tmp.target = self;
+
+        } else {
+            tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Use as master timing" action:@selector(setSourceAsTimer:) keyEquivalent:@"" atIndex:idx++];
+            tmp.target = self;
+        }
     }
     
     if (self.selectedSource.parentInput)
@@ -1175,6 +1192,13 @@
         [[self.undoManager prepareWithInvocationTarget:self] moveInputUp:toMove.uuid];
         
     }
+}
+
+
+-(void)removeSourceTimer:(id)sender
+{
+    self.sourceLayout.layoutTimingSource = nil;
+    
 }
 
 

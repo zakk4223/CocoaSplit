@@ -10,6 +10,8 @@
 #import "InputSource.h"
 #import "CaptureController.h"
 #import "CSTransitionAnimationDelegate.h"
+#import "CSCaptureBase+TimerDelegate.h"
+
 
 
 @implementation SourceLayout
@@ -17,6 +19,7 @@
 
 @synthesize isActive = _isActive;
 @synthesize frameRate = _frameRate;
+@synthesize layoutTimingSource = _layoutTimingSource;
 
 -(instancetype) init
 {
@@ -56,6 +59,26 @@
     }
     
     return self;
+}
+
+
+-(void)setLayoutTimingSource:(InputSource *)layoutTimingSource
+{
+    CSCaptureBase *currentTiming = (CSCaptureBase *)_layoutTimingSource.videoInput;
+    
+    if (currentTiming.timerDelegate)
+    {
+        [currentTiming.timerDelegate frameTimerWillStop:currentTiming.timerDelegateCtx];
+    }
+    
+    
+    _layoutTimingSource = layoutTimingSource;
+}
+
+
+-(InputSource *)layoutTimingSource
+{
+    return _layoutTimingSource;
 }
 
 
@@ -407,6 +430,12 @@
     
     return _topLevelSourceArray;
     
+}
+
+
+-(NSString *)description
+{
+    return self.name;
 }
 
 
