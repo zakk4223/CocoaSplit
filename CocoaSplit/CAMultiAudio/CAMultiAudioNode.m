@@ -169,15 +169,23 @@
 
 -(void)updatePowerlevel
 {
-    [self.connectedTo updatePowerlevel];
+    //[self.connectedTo updatePowerlevel];
     
-    if ([self.connectedTo.class conformsToProtocol:@protocol(CAMultiAudioMixingProtocol)])
+    CAMultiAudioNode *powerNode = self.connectedTo;
+    
+    while (powerNode)
     {
-        id<CAMultiAudioMixingProtocol>mixerNode = (id<CAMultiAudioMixingProtocol>)self.connectedTo;
-        float rawPower = [mixerNode powerForInputBus:self.connectedToBus];
-        
-        self.powerLevel = pow(10.0f, rawPower/20.0f);
+        if ([powerNode.class conformsToProtocol:@protocol(CAMultiAudioMixingProtocol)])
+        {
+            id<CAMultiAudioMixingProtocol>mixerNode = (id<CAMultiAudioMixingProtocol>)powerNode;
+            float rawPower = [mixerNode powerForInputBus:powerNode.connectedToBus];
+            self.powerLevel = pow(10.0f, rawPower/20.0f);
+            break;
+        } else {
+            powerNode = powerNode.connectedTo;
+        }
     }
+    
 }
 
 
