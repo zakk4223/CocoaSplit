@@ -45,6 +45,15 @@
     CGFloat boxWidth = self.frame.size.width/columns;
     CGFloat boxHeight = self.frame.size.height/rows;
     
+    /*
+    if (boxHeight > boxWidth)
+    {
+        boxHeight = boxWidth;
+    } else if (boxWidth > boxHeight) {
+        boxWidth = boxHeight;
+    }
+     */
+    
     NSInteger viewIdx = 0;
     
     NSPoint curPoint = NSMakePoint(0.0, NSMaxY(self.bounds)-boxHeight);

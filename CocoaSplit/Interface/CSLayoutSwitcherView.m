@@ -295,7 +295,9 @@
     {
         [self.sourceLayout removeObserver:self forKeyPath:@"in_live"];
         [self.sourceLayout removeObserver:self forKeyPath:@"in_staging"];
-
+        [self.sourceLayout removeObserver:self forKeyPath:@"audioData"];
+        [self.sourceLayout removeObserver:self forKeyPath:@"recorder.defaultRecordingActive"];
+        
     }
 }
 

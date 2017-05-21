@@ -78,7 +78,7 @@
     
     if (layoutView)
     {
-        [layoutView.sourceLayout clearSourceList];
+        //[layoutView.sourceLayout clearSourceList];
         [layoutView removeFromSuperview];
         self.layouts = nil;
     }

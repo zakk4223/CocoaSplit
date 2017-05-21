@@ -1115,11 +1115,6 @@
 -(void)layoutFramerateChanged:(NSNotification *)notification
 {
     SourceLayout *layout = [notification object];
-    if (layout == self.livePreviewView.sourceLayout || layout == self.stagingPreviewView.sourceLayout)
-    {
-        [self updateFrameIntervals];
-    }
-    
     if (layout == self.livePreviewView.sourceLayout)
     {
         [self resetInstantRecorder];
@@ -1970,7 +1965,7 @@
     }];
     
     [stagingLayout setRemoveLayoutBlock:^(SourceLayout *layout) {
-        
+
         dispatch_async(dispatch_get_main_queue(), ^{
 
         layout.in_staging = NO;
@@ -2986,6 +2981,7 @@
     
     [self.sourceLayouts removeObjectAtIndex:index];
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutDeleted object:to_delete userInfo:nil];
+    NSLog(@"NOTIFICATION DONE");
 }
 
 -(void) insertObject:(CSLayoutSequence *)object inLayoutSequencesAtIndex:(NSUInteger)index

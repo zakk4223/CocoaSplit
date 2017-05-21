@@ -411,6 +411,7 @@
 -(void)generateTopLevelSourceList
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        
         [self willChangeValueForKey:@"topLevelSourceList"];
 
         [_topLevelSourceArray removeAllObjects];
@@ -692,6 +693,8 @@
         [self.undoManager endUndoGrouping];
     }
     
+    
+    NSLog(@"CONTAINED LAYOUTS %@", self.containedLayouts);
     
     for (SourceLayout *cLayout in self.containedLayouts.copy)
     {

@@ -450,7 +450,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 -(void)addInputToLibrary:(InputSource *)source;
 - (IBAction)openLibraryWindow:(id) sender;
--(void)updateFrameIntervals;
 
 - (IBAction)configureIRCompressor:(id)sender;
 - (IBAction)configureLayoutRecordingCompressor:(id)sender;
