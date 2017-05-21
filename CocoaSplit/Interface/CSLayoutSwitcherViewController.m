@@ -9,6 +9,7 @@
 #import "CSLayoutSwitcherViewController.h"
 #import "CaptureController.h"
 #import "AppDelegate.h"
+#import "CSLayoutRecorder.h"
 
 @interface CSLayoutSwitcherViewController ()
 
@@ -255,7 +256,7 @@
         tmp.representedObject = forLayout;
     }
 
-    if (forLayout.recorder)
+    if (forLayout.recordingLayout)
     {
         tmp = [self.layoutMenu insertItemWithTitle:@"Stop Recording" action:@selector(stopRecordingLayout:) keyEquivalent:@"" atIndex:idx++];
         tmp.target = self;

@@ -44,6 +44,10 @@
     [aCoder encodeObject:self.compressor_name forKey:@"compressor_name"];
     [aCoder encodeObject:self.streamServiceObject forKey:@"streamServiceObject"];
     [aCoder encodeObject:_destination forKey:@"destination"];
+    if (self.assignedLayout)
+    {
+        [aCoder encodeObject:self.assignedLayout forKey:@"assignedLayout"];
+    }
 }
 
 
@@ -51,14 +55,20 @@
 {
     if (self = [self init])
     {
+        
+        if ([aDecoder containsValueForKey:@"assignedLayout"])
+        {
+            self.assignedLayout = [aDecoder decodeObjectForKey:@"assignedLayout"];
+        }
         _destination = [aDecoder decodeObjectForKey:@"destination"];
         self.name = [aDecoder decodeObjectForKey:@"name"];
         self.type_name = [aDecoder decodeObjectForKey:@"type_name"];
-        self.active = [aDecoder decodeBoolForKey:@"active"];
         self.stream_delay = (int)[aDecoder decodeIntegerForKey:@"stream_delay"];
         self.compressor_name = [aDecoder decodeObjectForKey:@"compressor_name"];
         self.streamServiceObject = [aDecoder decodeObjectForKey:@"streamServiceObject"];
         self.type_class_name = [aDecoder decodeObjectForKey:@"type_class_name"];
+        _active = [aDecoder decodeBoolForKey:@"active"];
+
     }
     return self;
 }
@@ -150,27 +160,35 @@
 -(void) setActive:(BOOL)is_active
 {
     
+    bool streamingActive = [CaptureController sharedCaptureController].captureRunning;
+    
+    bool old_active = _active;
     _active = is_active;
     
-    if (is_active)
+    if (old_active != is_active)
     {
-        if (self.assignedLayout && ![self.assignedLayout isEqual:[NSNull null]])
+        if (is_active)
         {
-            [[CaptureController sharedCaptureController] startRecordingLayout:self.assignedLayout usingOutput:self];
+            
+            if (self.assignedLayout && ![self.assignedLayout isEqual:[NSNull null]] && streamingActive)
+            {
+                [[CaptureController sharedCaptureController] startRecordingLayout:self.assignedLayout usingOutput:self];
+            } else {
+                [self setup];
+            }
         } else {
-            [self setup];
+            
+            if (self.assignedLayout && ![self.assignedLayout isEqual:[NSNull null]] && streamingActive)
+            {
+                [[CaptureController sharedCaptureController] stopRecordingLayout:self.assignedLayout usingOutput:self ];
+            } else {
+                [self teardown];
+            }
+            
         }
-    } else {
-        
-        if (self.assignedLayout && ![self.assignedLayout isEqual:[NSNull null]])
-        {
-            [[CaptureController sharedCaptureController] stopRecordingLayout:self.assignedLayout usingOutput:self ];
-        } else {
-            [self teardown];
-        }
-
     }
     
+
 }
 
 

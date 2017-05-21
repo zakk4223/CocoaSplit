@@ -10,7 +10,7 @@
 #import "CSPreviewGLLayer.h"
 #import "AppDelegate.h"
 #import "CSLayoutSwitcherViewController.h"
-
+#import "CSLayoutRecorder.h"
 
 @implementation CSSTextView
 
@@ -135,7 +135,7 @@
         [_sourceLayout addObserver:self forKeyPath:@"in_live" options:NSKeyValueObservingOptionNew context:NULL];
         [_sourceLayout addObserver:self forKeyPath:@"in_staging" options:NSKeyValueObservingOptionNew context:NULL];
         [_sourceLayout addObserver:self forKeyPath:@"audioData" options:NSKeyValueObservingOptionNew context:NULL];
-        [_sourceLayout addObserver:self forKeyPath:@"recorder" options:NSKeyValueObservingOptionNew context:NULL];
+        [_sourceLayout addObserver:self forKeyPath:@"recorder.defaultRecordingActive" options:NSKeyValueObservingOptionNew context:NULL];
 
 
 
@@ -228,7 +228,7 @@
             _recordImageView.hidden = YES;
             _recordImageView.frame = NSMakeRect(NSMaxX(self.frame)-16,4,16,16);
             [self addSubview:_recordImageView];
-            if (_sourceLayout.recorder)
+            if (_sourceLayout.recorder && _sourceLayout.recorder.defaultRecordingActive)
             {
                 _recordImageView.hidden = NO;
             }
@@ -273,9 +273,9 @@
         } else {
             _audioImageView.hidden = YES;
         }
-    } else if ([keyPath isEqualToString:@"recorder"]) {
+    } else if ([keyPath isEqualToString:@"recorder.defaultRecordingActive"]) {
     
-        if (_sourceLayout.recorder)
+        if (_sourceLayout.recorder && _sourceLayout.recorder.defaultRecordingActive)
         {
             _recordImageView.hidden = NO;
         } else {

@@ -322,6 +322,7 @@
         [aCoder encodeObject:self.audioData forKey:@"audioData"];
     }
     
+    [aCoder encodeBool:self.recordingLayout forKey:@"recordingLayout"];
 }
 
 
@@ -366,6 +367,7 @@
             self.audioData = [aDecoder decodeObjectForKey:@"audioData"];
         }
 
+        self.recordingLayout = [aDecoder decodeBoolForKey:@"recordingLayout"];
         
     }
     

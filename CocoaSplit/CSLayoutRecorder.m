@@ -146,6 +146,7 @@
     [self.outputs addObject:newOutput];
     [self startRecordingCommon];
     self.defaultRecordingActive = YES;
+    self.layout.recordingLayout = YES;
 }
 
 
@@ -153,6 +154,7 @@
 {
     if (self.output)
     {
+        self.layout.recordingLayout = NO;
         self.output.active = NO;
         self.output.captureRunning = NO;
         [self.outputs removeObject:self.output];
@@ -235,8 +237,7 @@
     
     compressor = self.compressors[name];
     
-    NSLog(@"COMPRESSOR IS %@", compressor);
-    if (!compressor)
+    if (!compressor || [compressor isEqualTo:[NSNull null]])
     {
         NSObject<VideoCompressor> *origCompressor =  [CaptureController sharedCaptureController].compressors[name];
         compressor = origCompressor.copy;

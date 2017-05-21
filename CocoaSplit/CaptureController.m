@@ -1013,7 +1013,7 @@
     if (useRecorder)
     {
         [useRecorder stopRecordingForOutput:output];
-        output.active = NO;
+        //output.active = NO;
         if (self.mainLayoutRecorder)
         {
             output.settingsController = self.mainLayoutRecorder;
@@ -1024,7 +1024,7 @@
 
 -(CSLayoutRecorder *)startRecordingLayout:(SourceLayout *)layout
 {
-    if (layout.recordingLayout)
+    if (layout.recordingLayout && layout.recorder && layout.recorder.defaultRecordingActive)
     {
         return nil;
     }
@@ -1043,14 +1043,20 @@
     {
         self.layoutRecordingFormat = @"MOV";
     }
-    CSLayoutRecorder *newRecorder = [[CSLayoutRecorder alloc] init];
-    newRecorder.layout = layout;
-    newRecorder.compressor_name = self.layoutRecorderCompressorName;
-    newRecorder.baseDirectory = self.layoutRecordingDirectory;
-    newRecorder.fileFormat  = self.layoutRecordingFormat;
-    [newRecorder startRecording];
-    [self.layoutRecorders addObject:newRecorder];
-    return newRecorder;
+    
+    CSLayoutRecorder *useRec = layout.recorder;
+    if (!useRec)
+    {
+        useRec = [[CSLayoutRecorder alloc] init];
+        useRec.layout = layout;
+        [self.layoutRecorders addObject:useRec];
+    }
+
+    //useRec.compressor_name = self.layoutRecorderCompressorName;
+    //useRec.baseDirectory = self.layoutRecordingDirectory;
+    //useRec.fileFormat  = self.layoutRecordingFormat;
+    [useRec startRecording];
+    return useRec;
 }
 
 
@@ -1077,8 +1083,20 @@
     
     for (CSLayoutRecorder *rec in recCopy)
     {
-        [rec stopRecordingAll];
-        [self.layoutRecorders removeObject:rec];
+        SourceLayout *forLayout = rec.layout;
+        if (!forLayout.recordingLayout)
+        {
+            forLayout = nil;
+        }
+        [rec stopDefaultRecording];
+        //Reassert recording flag for save
+        if (forLayout)
+        {
+            NSLog(@"REASSERT RECORDING");
+            forLayout.recordingLayout = YES;
+        }
+        
+        //[self.layoutRecorders removeObject:rec];
     }
 }
 
@@ -1675,6 +1693,7 @@
    
     self.compressors = [[saveRoot valueForKey:@"compressors"] mutableCopy];
     
+    NSLog(@"COMPRESSORS %@", self.compressors);
     
     if (!self.compressors)
     {
@@ -1847,6 +1866,27 @@
     [self.stagingPreviewView enablePrimaryRender];
     
     
+    
+    
+    for (SourceLayout *layout in self.sourceLayouts)
+    {
+        if (layout.recordingLayout)
+        {
+            NSLog(@"RECORD LAYOUT");
+            [self startRecordingLayout:layout];
+        }
+    }
+    
+    
+    /*
+    for (OutputDestination *output in self.captureDestinations)
+    {
+        if (output.active && output.assignedLayout)
+        {
+            [self startRecordingLayout:output.assignedLayout usingOutput:output];
+        }
+    }
+     */
     if (self.useInstantRecord)
     {
         [self setupInstantRecorder];
@@ -2142,22 +2182,24 @@
     for (OutputDestination *outdest in _captureDestinations)
     {
     
-        
-        
-        outdest.settingsController = self.mainLayoutRecorder;
+        outdest.captureRunning = YES;
 
-        if (outdest.active && !outdest.captureRunning)
+        if (outdest.assignedLayout && outdest.active)
         {
-            
-                   [outdest reset];
-
-            outdest.captureRunning = YES;
-
-            [outdest setupCompressor];
+            [self startRecordingLayout:outdest.assignedLayout usingOutput:outdest];
         } else {
-            outdest.captureRunning = YES;
+            
+            
+            outdest.settingsController = self.mainLayoutRecorder;
+            if (outdest.active)
+            {
+                [outdest reset];
+                [outdest setup];
+
+                //[outdest setupCompressor];
+
+            }
         }
-        
     }
     
     
@@ -2198,9 +2240,12 @@
     
     for (OutputDestination *out in _captureDestinations)
     {
-        if (out.settingsController == self.mainLayoutRecorder)
+        out.captureRunning = NO;
+        
+        if (out.assignedLayout && out.active)
         {
-            out.captureRunning = NO;
+            [self stopRecordingLayout:out.assignedLayout usingOutput:out];
+        } else {
             [out stopOutput];
         }
     }
@@ -2843,7 +2888,16 @@
 
 -(bool)activeRecordingConfirmation:(NSString *)queryString
 {
-    NSUInteger recording_count = self.layoutRecorders.count;
+    NSUInteger recording_count = 0;
+    
+    
+    for (CSLayoutRecorder *rec in self.layoutRecorders)
+    {
+        if (rec.defaultRecordingActive)
+        {
+            recording_count++;
+        }
+    }
     
     bool retval;
     
