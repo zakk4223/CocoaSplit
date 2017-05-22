@@ -1474,7 +1474,8 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setCropRect
 {
-    CGRect contentsRect = self.layer.sourceLayer.contentsRect;
+    
+    CGRect contentsRect = self.layer.contentsRect;//self.layer.sourceLayer.contentsRect;
     CGRect oldRect = contentsRect;
     
     contentsRect.origin.x = self.crop_left;

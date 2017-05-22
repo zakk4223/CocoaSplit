@@ -47,7 +47,7 @@
 @synthesize useInstantRecord = _useInstantRecord;
 @synthesize instantRecordBufferDuration = _instantRecordBufferDuration;
 @synthesize useTransitions = _useTransitions;
-
+@synthesize captureRunning = _captureRunning;
 
 
 
@@ -1634,6 +1634,10 @@
 -(void) loadSettings
 {
     
+    self.streamButton.layer.backgroundColor = CGColorCreateGenericRGB(0, 1, 0, 1);
+    self.streamButton.layer.borderColor   = CGColorCreateGenericRGB(0, 0, 0, 1);
+    self.streamButton.layer.borderWidth = 1.0f;
+    self.streamButton.layer.cornerRadius = 2.0f;
     //all color panels allow opacity
     _savedAudioConstraintConstant = self.audioConstraint.constant;
     self.layoutScriptLabel = @"Layouts";
@@ -1954,7 +1958,6 @@
 
 -(void)setStagingLayout:(SourceLayout *)stagingLayout
 {
-    NSLog(@"STAGING LAYOUT %@", stagingLayout);
     _stagingLayout = stagingLayout;
 
     [stagingLayout setAddLayoutBlock:^(SourceLayout *layout) {
@@ -2297,7 +2300,7 @@
         {
             [sender setNextState];
 
-        }
+         }
 
     } else {
         
@@ -2307,11 +2310,28 @@
         }
         
         [self stopStream];
+
     }
     
 }
 
+-(BOOL)captureRunning
+{
+    return _captureRunning;
+}
 
+
+-(void)setCaptureRunning:(BOOL)captureRunning
+{
+    _captureRunning = captureRunning;
+    if (captureRunning)
+    {
+        self.streamButton.layer.backgroundColor = CGColorCreateGenericRGB(1, 0, 0, 1);
+    } else {
+        self.streamButton.layer.backgroundColor = CGColorCreateGenericRGB(0, 1, 0, 1);
+
+    }
+}
 -(double)mach_time_seconds
 {
     double retval;
@@ -3254,10 +3274,23 @@
     return -1;
 }
 
+-(float)convertMidiValueForRange:(MIKMIDIChannelVoiceCommand *)command minValue:(float)minvalue maxValue:(float)maxvalue
+{
+    NSUInteger midiValue = command.value;
+    
+    float midifract = midiValue/127.0;
+    
+    float valRange = maxvalue - minvalue;
+    
+    float valFract = valRange * midifract;
+    
+    return minvalue + valFract;
+}
+
 
 - (NSArray *)commandIdentifiers
 {
-    NSArray *baseIdentifiers = @[@"GoLive", @"InputNext", @"InputPrevious", @"ActivateLive", @"ActivateStaging", @"ActivateToggle", @"InstantRecord"];
+    NSArray *baseIdentifiers = @[@"GoLive", @"InputNext", @"InputPrevious", @"ActivateLive", @"ActivateStaging", @"ActivateToggle", @"InstantRecord", @"MutePreview", @"MuteStream", @"AudioVolume:Stream", @"AudioVolume:Preview"];
     
      NSMutableArray *layoutIdentifiers = [NSMutableArray array];
     
@@ -3271,7 +3304,18 @@
         [layoutIdentifiers addObject:[NSString stringWithFormat:@"SwitchToLayout:%@", layout.name]];
     }
 
+    NSMutableArray *audioIdentifiers = [NSMutableArray array];
+    
+    for (CAMultiAudioNode *node in self.multiAudioEngine.audioInputs)
+    {
+        [audioIdentifiers addObject:[NSString stringWithFormat:@"MuteAudio:%@", node.name]];
+        [audioIdentifiers addObject:[NSString stringWithFormat:@"AudioVolume:%@", node.name]];
+
+    }
+    
+    
     baseIdentifiers = [baseIdentifiers arrayByAddingObjectsFromArray:layoutIdentifiers];
+    baseIdentifiers = [baseIdentifiers arrayByAddingObjectsFromArray:audioIdentifiers];
     baseIdentifiers = [baseIdentifiers arrayByAddingObjectsFromArray:_inputIdentifiers];
     return baseIdentifiers;
 }
@@ -3294,6 +3338,12 @@
             ret = MIKMIDIResponderTypeButton;
         }
     }
+    
+    if ([commandID containsString:@"Volume"])
+    {
+        ret = MIKMIDIResponderTypeAbsoluteSliderOrKnob | MIKMIDIResponderTypeButton;
+    }
+    
     return ret;
 }
 
@@ -3368,6 +3418,17 @@
     }
     
     return retval;
+}
+
+
+-(void)handleMIDICommandMuteStream:(MIKMIDICommand *)command
+{
+    self.multiAudioEngine.encodeMixer.muted = !self.multiAudioEngine.encodeMixer.muted;
+}
+
+-(void)handleMIDICommandMutePreview:(MIKMIDICommand *)command
+{
+    self.multiAudioEngine.previewMixer.muted = !self.multiAudioEngine.previewMixer.muted;
 }
 
 
@@ -3490,6 +3551,25 @@
 
 
 
+-(void)handleMIDIVolume:(MIKMIDICommand *)command forNode:(CAMultiAudioNode *)inputNode
+{
+    float newVal;
+    if (command.commandType == MIKMIDICommandTypeNoteOn)
+    {
+        if (inputNode.volume != 0)
+        {
+            newVal = 0;
+        } else {
+            newVal = 1;
+        }
+    } else {
+        newVal = [self convertMidiValueForRange:(MIKMIDIChannelVoiceCommand *)command minValue:0 maxValue:1.0];
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        inputNode.volume = newVal;
+    });
+}
 
 -(void)handleMIDICommand:(MIKMIDICommand *)command forIdentifier:(NSString *)identifier
 {
@@ -3571,6 +3651,55 @@
         return;
     }
 
+    if ([identifier hasPrefix:@"MuteAudio:"])
+    {
+        NSString *audioName = [identifier substringFromIndex:10];
+        CAMultiAudioNode *inputNode = nil;
+        for (CAMultiAudioNode *node in self.multiAudioEngine.audioInputs)
+        {
+            if ([node.name isEqualToString:audioName])
+            {
+                inputNode = node;
+                break;
+            }
+        }
+        
+        if (inputNode)
+        {
+            inputNode.enabled = !inputNode.enabled;
+        }
+        return;
+    }
+    
+    if ([identifier hasPrefix:@"AudioVolume:"])
+    {
+        CAMultiAudioNode *audioNode = nil;
+
+        NSString *audioName = [identifier substringFromIndex:12];
+        if ([audioName isEqualToString:@"Stream"])
+        {
+            audioNode = self.multiAudioEngine.encodeMixer;
+        } else if ([audioName isEqualToString:@"Preview"]) {
+            audioNode = self.multiAudioEngine.previewMixer;
+        } else {
+            
+            for (CAMultiAudioNode *node in self.multiAudioEngine.audioInputs)
+            {
+                if ([node.name isEqualToString:audioName])
+                {
+                    audioNode = node;
+                    break;
+                }
+            }
+        }
+        
+        if (audioNode)
+        {
+            [self handleMIDIVolume:command forNode:audioNode];
+        }
+        return;
+    }
+
     if ([identifier isEqualToString:@"GoLive"])
     {
     
@@ -3585,6 +3714,8 @@
             [weakSelf doInstantRecord:nil];
         });
     }
+    
+    
 }
 
 

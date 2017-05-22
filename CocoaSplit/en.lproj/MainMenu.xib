@@ -40,6 +40,7 @@
                 <outlet property="stagingCtx" destination="4Vq-5w-Nt7" id="emu-7h-Rym"/>
                 <outlet property="stagingFullScreenMenu" destination="9T8-BJ-6o1" id="dWH-S2-kfO"/>
                 <outlet property="stagingPreviewView" destination="4Vq-5w-Nt7" id="pZ6-mn-4wF"/>
+                <outlet property="streamButton" destination="597" id="gRV-IO-uRX"/>
                 <outlet property="transitionConfigurationView" destination="rSV-Iw-qby" id="Cu4-9H-PM7"/>
                 <outlet property="transitionLabel" destination="ZFw-Ai-mXd" id="CM6-NK-gEU"/>
             </connections>
@@ -360,7 +361,7 @@
                                 <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rb5-R9-Aqy">
-                                        <rect key="frame" x="640" y="21" width="283" height="14"/>
+                                        <rect key="frame" x="640" y="23" width="283" height="14"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="279" id="Ivd-hW-ORZ"/>
                                         </constraints>
@@ -373,14 +374,14 @@
                                             <binding destination="nWB-G2-33f" name="value" keyPath="selection.outputStatsString" id="53w-T1-Il0"/>
                                         </connections>
                                     </textField>
-                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="597">
-                                        <rect key="frame" x="430" y="11" width="82" height="32"/>
+                                    <button wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="597">
+                                        <rect key="frame" x="436" y="20" width="70" height="19"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="70" id="FxK-Y4-IFI"/>
                                         </constraints>
-                                        <buttonCell key="cell" type="push" title="Stream!" alternateTitle="Stop!" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="598">
+                                        <buttonCell key="cell" type="recessed" title="Stream!" alternateTitle="Stop!" bezelStyle="recessed" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="598">
                                             <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
-                                            <font key="font" metaFont="system"/>
+                                            <font key="font" metaFont="systemBold" size="12"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="streamButtonPushed:" target="816" id="825"/>
@@ -783,7 +784,7 @@
                                         </connections>
                                     </customView>
                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="Y7F-zZ-G1v">
-                                        <rect key="frame" x="762" y="90" width="17" height="17"/>
+                                        <rect key="frame" x="762" y="92" width="17" height="15"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="17" id="tpB-m4-S7Z"/>
                                         </constraints>
