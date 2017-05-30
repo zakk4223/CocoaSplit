@@ -257,10 +257,14 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 -(IBAction)openTransitionFilterPanel:(NSButton *)sender;
 
+
+
 - (IBAction)stagingViewToggle:(id)sender;
 -(IBAction)doImportLayout:(id)sender;
 
 -(void)showStagingView;
+-(void) hideStagingView;
+
 
 - (IBAction)openPluginManager:(id)sender;
 - (IBAction)openMidiManager:(id)sender;
@@ -441,9 +445,12 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(void)layoutLeftFullscreen;
 +(void)loadPythonClass:(NSString *)pyClass fromFile:(NSString *)fromFile withBlock:(void(^)(Class))withBlock;
 +(Class)loadPythonClass:(NSString *)pyClass fromFile:(NSString *)fromFile;
+-(void)toggleLayout:(SourceLayout *)layout usingLayout:(SourceLayout *)usingLayout;
 -(void)toggleLayout:(SourceLayout *)layout;
 -(void)saveToLayout:(SourceLayout *)layout;
 -(void)switchToLayout:(SourceLayout *)layout;
+-(void)switchToLayout:(SourceLayout *)layout usingLayout:(SourceLayout *)usingLayout;
+
 -(CSLayoutEditWindowController *)openLayoutWindow:(SourceLayout *)layout;
 -(void)layoutWindowWillClose:(CSLayoutEditWindowController *)windowController;
 -(void)sequenceWindowWillClose:(CSSequenceEditorWindowController *)windowController;

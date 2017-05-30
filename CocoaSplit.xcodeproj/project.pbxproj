@@ -394,6 +394,10 @@
 		34F52A281BC1CE2700662911 /* CSLayoutCollectionItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34F52A261BC1CE2700662911 /* CSLayoutCollectionItem.xib */; };
 		34F52A2B1BC1E0F900662911 /* CSLayoutButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F52A2A1BC1E0F800662911 /* CSLayoutButton.m */; };
 		34F7C5871B2C9A5300345230 /* CSDeckLinkCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34F7C5611B2C908700345230 /* CSDeckLinkCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		34F80D511EDBAF8700D890D3 /* CSLayoutSequence+ScriptingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F80D501EDBAF8700D890D3 /* CSLayoutSequence+ScriptingAdditions.m */; };
+		34F80D6A1EDBB36100D890D3 /* CAMultiAudioNode+ScriptingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F80D691EDBB36100D890D3 /* CAMultiAudioNode+ScriptingAdditions.m */; };
+		34F80D6D1EDBC8C800D890D3 /* OutputDestination+ScriptingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F80D6C1EDBC8C800D890D3 /* OutputDestination+ScriptingAdditions.m */; };
+		34F80D701EDCBE5100D890D3 /* CSScriptCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F80D6F1EDCBE5100D890D3 /* CSScriptCommand.m */; };
 		34FDA83E1A84C46500E7F65E /* CSTimeCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34FDA8191A84BF9400E7F65E /* CSTimeCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		34FDD6F21A215268009A7413 /* CSPluginServices.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FDD6F11A215268009A7413 /* CSPluginServices.m */; };
 		34FDD6F31A215268009A7413 /* CSPluginServices.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FDD6F11A215268009A7413 /* CSPluginServices.m */; };
@@ -1117,6 +1121,14 @@
 		34F52A291BC1E0F800662911 /* CSLayoutButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLayoutButton.h; sourceTree = "<group>"; };
 		34F52A2A1BC1E0F800662911 /* CSLayoutButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSLayoutButton.m; sourceTree = "<group>"; };
 		34F7C55A1B2C908700345230 /* CSDeckLinkCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSDeckLinkCapturePlugin.xcodeproj; path = CapturePlugins/CSDeckLinkCapturePlugin/CSDeckLinkCapturePlugin.xcodeproj; sourceTree = "<group>"; };
+		34F80D4F1EDBAF8700D890D3 /* CSLayoutSequence+ScriptingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CSLayoutSequence+ScriptingAdditions.h"; path = "ScriptingAddditions/CSLayoutSequence+ScriptingAdditions.h"; sourceTree = "<group>"; };
+		34F80D501EDBAF8700D890D3 /* CSLayoutSequence+ScriptingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CSLayoutSequence+ScriptingAdditions.m"; path = "ScriptingAddditions/CSLayoutSequence+ScriptingAdditions.m"; sourceTree = "<group>"; };
+		34F80D681EDBB36100D890D3 /* CAMultiAudioNode+ScriptingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CAMultiAudioNode+ScriptingAdditions.h"; path = "ScriptingAddditions/CAMultiAudioNode+ScriptingAdditions.h"; sourceTree = "<group>"; };
+		34F80D691EDBB36100D890D3 /* CAMultiAudioNode+ScriptingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CAMultiAudioNode+ScriptingAdditions.m"; path = "ScriptingAddditions/CAMultiAudioNode+ScriptingAdditions.m"; sourceTree = "<group>"; };
+		34F80D6B1EDBC8C800D890D3 /* OutputDestination+ScriptingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "OutputDestination+ScriptingAdditions.h"; path = "ScriptingAddditions/OutputDestination+ScriptingAdditions.h"; sourceTree = "<group>"; };
+		34F80D6C1EDBC8C800D890D3 /* OutputDestination+ScriptingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "OutputDestination+ScriptingAdditions.m"; path = "ScriptingAddditions/OutputDestination+ScriptingAdditions.m"; sourceTree = "<group>"; };
+		34F80D6E1EDCBE5100D890D3 /* CSScriptCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSScriptCommand.h; path = ScriptingAddditions/CSScriptCommand.h; sourceTree = "<group>"; };
+		34F80D6F1EDCBE5100D890D3 /* CSScriptCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSScriptCommand.m; path = ScriptingAddditions/CSScriptCommand.m; sourceTree = "<group>"; };
 		34FDA8071A84BF9300E7F65E /* CSTimeCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSTimeCapturePlugin.xcodeproj; path = CapturePlugins/CSTimeCapturePlugin/CSTimeCapturePlugin.xcodeproj; sourceTree = "<group>"; };
 		34FDD6DC1A204CE4009A7413 /* CAMultiAudioEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioEngine.h; path = CAMultiAudio/CAMultiAudioEngine.h; sourceTree = "<group>"; };
 		34FDD6F01A215268009A7413 /* CSPluginServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPluginServices.h; path = PluginHeaders/CSPluginServices.h; sourceTree = "<group>"; };
@@ -1939,6 +1951,14 @@
 				34D6581719B387DE0012E32B /* AppDelegate+AppDelegate_ScriptingAdditions.m */,
 				3481F30419B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.h */,
 				3481F30519B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m */,
+				34F80D4F1EDBAF8700D890D3 /* CSLayoutSequence+ScriptingAdditions.h */,
+				34F80D501EDBAF8700D890D3 /* CSLayoutSequence+ScriptingAdditions.m */,
+				34F80D681EDBB36100D890D3 /* CAMultiAudioNode+ScriptingAdditions.h */,
+				34F80D691EDBB36100D890D3 /* CAMultiAudioNode+ScriptingAdditions.m */,
+				34F80D6B1EDBC8C800D890D3 /* OutputDestination+ScriptingAdditions.h */,
+				34F80D6C1EDBC8C800D890D3 /* OutputDestination+ScriptingAdditions.m */,
+				34F80D6E1EDCBE5100D890D3 /* CSScriptCommand.h */,
+				34F80D6F1EDCBE5100D890D3 /* CSScriptCommand.m */,
 			);
 			name = ScriptingAdditions;
 			sourceTree = "<group>";
@@ -2541,6 +2561,7 @@
 				34ED8C871B07371C002C0674 /* MIKMIDIMetaTimeSignatureEvent.m in Sources */,
 				34F04DAB1CE0BB770054663A /* NSView+NSLayoutConstraintFilter.m in Sources */,
 				34ED8C7B1B07371C002C0674 /* MIKMIDIMetaInstrumentNameEvent.m in Sources */,
+				34F80D701EDCBE5100D890D3 /* CSScriptCommand.m in Sources */,
 				34ED8C8B1B07371C002C0674 /* MIKMIDIMetronome.m in Sources */,
 				344126A21E6DBBEE0051DA06 /* CSLayoutSwitcherView.m in Sources */,
 				345F8B6D1A176A5D009A81E3 /* CAMultiAudioUnit.m in Sources */,
@@ -2587,6 +2608,7 @@
 				34ED8C691B07371C002C0674 /* MIKMIDIInputPort.m in Sources */,
 				3434CB281CA8615A001B3DF9 /* AppleProResCompressor.m in Sources */,
 				34ED8C531B07371C002C0674 /* MIKMIDICommandThrottler.m in Sources */,
+				34F80D6A1EDBB36100D890D3 /* CAMultiAudioNode+ScriptingAdditions.m in Sources */,
 				345F8B611A161552009A81E3 /* CAMultiAudioAVCapturePlayer.m in Sources */,
 				34ED8CAD1B07371C002C0674 /* MIKMIDIUtilities.m in Sources */,
 				34ED8C7F1B07371C002C0674 /* MIKMIDIMetaLyricEvent.m in Sources */,
@@ -2628,6 +2650,7 @@
 				3400A0841BD522A5003E1828 /* CSLibraryInputItemViewController.m in Sources */,
 				34ED8C631B07371C002C0674 /* MIKMIDIErrors.m in Sources */,
 				34ED8C551B07371C002C0674 /* MIKMIDIControlChangeCommand.m in Sources */,
+				34F80D6D1EDBC8C800D890D3 /* OutputDestination+ScriptingAdditions.m in Sources */,
 				3494DF381CCD2DB000E921BF /* TPCircularBuffer.c in Sources */,
 				349461681ABC57C100F28883 /* CSAnimationItem.m in Sources */,
 				34ED8C971B07371C002C0674 /* MIKMIDIPlayer.m in Sources */,
@@ -2683,6 +2706,7 @@
 				34B5FACB1E7461E60078FC51 /* CSLayoutSequence.m in Sources */,
 				3427864B1EA4337400877B7B /* CSTransitionAnimationDelegate.m in Sources */,
 				34348C2A19BDBDC000A122C2 /* PluginManagerWindowController.m in Sources */,
+				34F80D511EDBAF8700D890D3 /* CSLayoutSequence+ScriptingAdditions.m in Sources */,
 				34CFE4A018F154DD00092C6A /* AVFChannelManager.m in Sources */,
 				34ED8C6B1B07371C002C0674 /* MIKMIDIMacDebugQuickLookSupport.m in Sources */,
 				34ED8C511B07371C002C0674 /* MIKMIDICommand.m in Sources */,

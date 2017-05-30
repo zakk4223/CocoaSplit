@@ -215,7 +215,7 @@
                 [view.layoutSequence cancelSequence];
             } else {
                 SourceLayout *useLayout;
-                if ([clickEvent modifierFlags] & NSControlKeyMask)
+                if ([clickEvent modifierFlags] & NSCommandKeyMask)
                 {
                     useLayout = captureController.livePreviewView.sourceLayout;
                 } else {

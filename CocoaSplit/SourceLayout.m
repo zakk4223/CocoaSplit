@@ -694,7 +694,6 @@
     }
     
     
-    NSLog(@"CONTAINED LAYOUTS %@", self.containedLayouts);
     
     for (SourceLayout *cLayout in self.containedLayouts.copy)
     {

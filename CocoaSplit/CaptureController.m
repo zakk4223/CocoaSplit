@@ -3177,40 +3177,59 @@
 
 }
 
--(void)switchToLayout:(SourceLayout *)layout
+-(void)switchToLayout:(SourceLayout *)layout usingLayout:(SourceLayout *)usingLayout
 {
-    SourceLayout *activeLayout = self.activePreviewView.sourceLayout;
-    [self applyTransitionSettings:activeLayout];
-
-    [activeLayout replaceWithSourceLayoutViaScript:layout withCompletionBlock:^{
+    if (!usingLayout)
+    {
+        return;
+    }
+    [self applyTransitionSettings:usingLayout];
+    
+    [usingLayout replaceWithSourceLayoutViaScript:layout withCompletionBlock:^{
         
-        if (self.activePreviewView.sourceLayout == self.selectedLayout)
+        if (usingLayout == self.selectedLayout)
         {
             [self.multiAudioEngine applyInputSettings:layout.audioData];
-
-        } else if (self.activePreviewView.sourceLayout == self.stagingLayout) {
-            self.stagingLayout.audioData = layout.audioData;
-
+            
+        } else if (usingLayout == self.stagingLayout) {
+            usingLayout.audioData = layout.audioData;
+            
         }
-     } withExceptionBlock:nil];
-    //[activeLayout replaceWithSourceLayout:layout];
+    } withExceptionBlock:nil];
+
+}
+
+
+-(void)switchToLayout:(SourceLayout *)layout
+{
+    [self switchToLayout:layout usingLayout:self.activePreviewView.sourceLayout];
 }
 
 
 
 
+-(void)toggleLayout:(SourceLayout *)layout usingLayout:(SourceLayout *)usingLayout
+{
+    if (!usingLayout)
+    {
+        return;
+        
+    }
+    [self applyTransitionSettings:usingLayout];
+    
+    if ([usingLayout containsLayout:layout])
+    {
+        [usingLayout removeSourceLayoutViaScript:layout];
+    } else {
+        [usingLayout mergeSourceLayoutViaScript:layout];
+    }
+
+    
+}
 -(void)toggleLayout:(SourceLayout *)layout
 {
-    SourceLayout *activeLayout = self.activePreviewView.sourceLayout;
-    [self applyTransitionSettings:activeLayout];
-
-    if ([activeLayout containsLayout:layout])
-    {
-        [activeLayout removeSourceLayoutViaScript:layout];
-    } else {
-        [activeLayout mergeSourceLayoutViaScript:layout];
-    }
     
+    [self toggleLayout:layout usingLayout:self.activePreviewView.sourceLayout];
 }
 
 

@@ -11,6 +11,7 @@
 #import "AppDelegate.h"
 #import "CSLayoutSwitcherViewController.h"
 #import "CSLayoutRecorder.h"
+#import "PreviewView.h"
 
 @implementation CSSTextView
 
@@ -91,15 +92,25 @@
         AppDelegate *appDel = NSApp.delegate;
         
         CaptureController *controller = appDel.captureController;
+        
+        SourceLayout *useLayout = controller.activePreviewView.sourceLayout;
+        
+        if (event.modifierFlags & NSCommandKeyMask)
+        {
+            useLayout = controller.selectedLayout;
+        }
+        
+        
         if (event.modifierFlags & NSShiftKeyMask)
         {
-            [controller toggleLayout:self.sourceLayout];
+            [controller toggleLayout:self.sourceLayout usingLayout:useLayout];
         } else {
-            [controller switchToLayout:self.sourceLayout];
+            [controller switchToLayout:self.sourceLayout usingLayout:useLayout];
         }
     }
 
 }
+
 
 -(void)mouseUp:(NSEvent *)event
 {
