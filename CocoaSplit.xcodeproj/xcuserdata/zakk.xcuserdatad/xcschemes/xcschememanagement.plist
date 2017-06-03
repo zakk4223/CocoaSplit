@@ -9,10 +9,20 @@
 			<key>orderHint</key>
 			<integer>14</integer>
 		</dict>
+		<key>CocoaSplitBackgroundURL.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>35</integer>
+		</dict>
 		<key>CocoaSplitCmd.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>16</integer>
+		</dict>
+		<key>CocoaSplitURLListener.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>36</integer>
 		</dict>
 		<key>QTCaptureHelper.xcscheme</key>
 		<dict>
@@ -28,6 +38,16 @@
 			<true/>
 		</dict>
 		<key>3451A1C217111BD900DF6A8B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>3487D5D61EE23AFA00B5BB02</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>3487D5F71EE24B9A00B5BB02</key>
 		<dict>
 			<key>primary</key>
 			<true/>

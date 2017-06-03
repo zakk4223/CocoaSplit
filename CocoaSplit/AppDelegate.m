@@ -17,6 +17,9 @@
 {
     
     
+    [_window setReleasedWhenClosed:NO];
+    
+    
     NSImage *img = [[NSImage alloc] initWithContentsOfFile:@"/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/SidebarSmartFolder.icns"];
     
     NSImage *useimg = [[NSImage alloc] initWithSize:NSMakeSize(64,64)];
@@ -71,7 +74,11 @@
     
 }
 
-
+-(BOOL)applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)flag
+{
+    [_window setIsVisible:YES];
+    return YES;
+}
 
 
 
