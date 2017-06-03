@@ -39,10 +39,13 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     for (SourceLayout *layout in self.layouts)
     {
-        [layout clearSourceList];
+        if (!layout.recorder || !layout.recorder.recordingActive)
+        {
+            [layout clearSourceList];
+        }
     }
-
 }
+
 
 
 -(void)layoutSaved:(NSNotification *)notification

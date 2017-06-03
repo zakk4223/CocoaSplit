@@ -838,7 +838,7 @@
        [self setupMIDI];
        
        
-       [[CSPluginLoader sharedPluginLoader] loadAllBundles];
+       //[[CSPluginLoader sharedPluginLoader] loadAllBundles];
        
 #ifndef DEBUG
        [self setupLogging];
@@ -1161,7 +1161,7 @@
         
         NSString *resourcePath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Python"];
         
-        NSString *sysstr = [NSString stringWithFormat:@"from Foundation import *; import sys; sys.path.append('%@');sys.dont_write_bytecode = True", resourcePath];
+        NSString *sysstr = [NSString stringWithFormat:@"import sys; sys.path.append('%@');sys.dont_write_bytecode = True", resourcePath];
         PyGILState_STATE gilState = PyGILState_Ensure();
         PyRun_SimpleString([sysstr UTF8String]);
         PyGILState_Release(gilState);
@@ -1633,7 +1633,8 @@
 
 -(void) loadSettings
 {
-    
+    [[CSPluginLoader sharedPluginLoader] loadAllBundles];
+
     self.streamButton.layer.backgroundColor = CGColorCreateGenericRGB(0, 1, 0, 1);
     self.streamButton.layer.borderColor   = CGColorCreateGenericRGB(0, 0, 0, 1);
     self.streamButton.layer.borderWidth = 1.0f;

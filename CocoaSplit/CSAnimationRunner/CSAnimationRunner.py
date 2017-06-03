@@ -6,7 +6,7 @@ import CSAnimationInput
 from types import ModuleType
 #from Foundation import *
 #from CoreGraphics import *
-from Quartz import CACurrentMediaTime,CATransaction,CGPathRef,CGPathAddLines,CGPathCloseSubpath,CGPathRelease,CGPathCreateMutable
+from Quartz import CACurrentMediaTime,CATransaction
 from pluginbase import PluginBase
 import math
 import CSAnimationBlock
