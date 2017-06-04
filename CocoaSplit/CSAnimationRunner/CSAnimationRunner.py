@@ -118,17 +118,18 @@ class CSAnimationRunnerObj(NSObject):
     @objc.signature('@@:@@@')
     def runAnimation_forLayout_withExtraDictionary_(self,animation_string, layout, extraDictionary):
     
-        NSLog("EXTRA DICT %@", extraDictionary);
-        
+    
         animation = ModuleType('cs_fromstring_animation', '')
         animation.extraData = extraDictionary
 
+        default_animation_time = extraDictionary['__default_animation_time__']
+        
         exec("from cocoasplit import *", animation.__dict__)
         exec("all_animations = {}", animation.__dict__)
         exec("__cs_default_kwargs = {}", animation.__dict__)
         exec(animation_string, animation.__dict__)
         #sys.modules['cs_fromstring_animation'] = animation
-        CSAnimationBlock.beginAnimation()
+        CSAnimationBlock.beginAnimation(default_animation_time)
         CSAnimationBlock.current_frame().layout = layout
         CSAnimationBlock.current_frame().animation_module = animation
         

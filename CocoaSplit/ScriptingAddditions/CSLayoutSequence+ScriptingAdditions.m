@@ -43,7 +43,10 @@
 {
     SourceLayout *useLayout = [self getUseLayout:command];
     
-    [self runSequenceForLayout:useLayout withCompletionBlock:nil withExceptionBlock:nil];
+    if (!self.lastRunUUID && !self.sourceLayout)
+    {
+        [self runSequenceForLayout:useLayout withCompletionBlock:nil withExceptionBlock:nil];
+    }
 }
 
 

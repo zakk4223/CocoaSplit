@@ -228,7 +228,18 @@
     CALayer *rootLayer = threadDict[@"rootLayer"];
     NSString *animationCode = threadDict[@"animationString"];
     NSString *runUUID = threadDict[@"runUUID"];
-    NSDictionary *extraDict = threadDict[@"extraDictionary"];
+    NSDictionary *extraDictRO = threadDict[@"extraDictionary"];
+    NSMutableDictionary *extraDict = nil;
+    if (extraDictRO)
+    {
+        extraDict = extraDictRO.mutableCopy;
+    } else {
+        extraDict = [NSMutableDictionary dictionary];
+    }
+    
+    extraDict[@"__default_animation_time__"] = @([CaptureController sharedCaptureController].transitionDuration);
+    
+    
     void (^completionBlock)(void) = [threadDict objectForKey:@"completionBlock"];
     void (^exceptionBlock)(NSException *exception) = [threadDict objectForKey:@"exceptionBlock"];
     
