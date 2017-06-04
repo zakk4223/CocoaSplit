@@ -18,10 +18,14 @@
 
 @property (weak) CSLayoutSwitcher *layoutSwitcher;
 
+@property (assign) layout_action actionType;
+
 @property (assign) layout_switch_event eventType;
 @property (strong) NSString *applicationString;
-@property (strong) NSString *layoutName;
+@property (strong) NSString *targetName;
 @property (readonly) NSArray *layoutNames;
+@property (readonly) NSArray *scriptNames;
+@property (readonly) NSArray *targetNames;
 
 @property (strong) IBOutlet NSArrayController *switchActionsController;
 

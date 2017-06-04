@@ -61,6 +61,21 @@
     [[CaptureController sharedCaptureController] toggleLayout:self usingLayout:useLayout];
 }
 
+-(void)scriptMergeLayout:(NSScriptCommand *)command
+{
+    SourceLayout *useLayout = [self getUseLayout:command];
+
+    [[CaptureController sharedCaptureController] mergeLayout:self usingLayout:useLayout];
+}
+
+-(void)scriptRemoveLayout:(NSScriptCommand *)command
+{
+    SourceLayout *useLayout = [self getUseLayout:command];
+    
+    [[CaptureController sharedCaptureController] removeLayout:self usingLayout:useLayout];
+}
+
+
 -(void)scriptSwitchToLayout:(NSScriptCommand *)command
 {
     SourceLayout *useLayout = [self getUseLayout:command];

@@ -4,7 +4,7 @@ Animation runner base
 import objc
 import CSAnimationInput
 from types import ModuleType
-#from Foundation import *
+from Foundation import *
 #from CoreGraphics import *
 from Quartz import CACurrentMediaTime,CATransaction
 from pluginbase import PluginBase

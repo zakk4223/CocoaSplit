@@ -15,14 +15,24 @@ typedef enum layout_switch_event_t {
     kEventDeactivated = 1,
 } layout_switch_event;
 
+typedef enum layout_action_t {
+    kLayoutMerge = 0,
+    kLayoutSwitch = 1,
+    kLayoutRemove = 2,
+    kScriptRun = 3,
+    kScriptStop = 4,
+} layout_action;
+
+
 
 @interface CSLayoutSwitchAction : NSObject <NSCoding>
 
 
 @property (strong) NSString *applicationString;
 @property (assign) layout_switch_event eventType;
-@property (strong) NSString *layoutName;
-@property (assign) bool active;
+@property (strong) NSString *targetName;
 
+@property (assign) bool active;
+@property (assign) layout_action actionType;
 
 @end

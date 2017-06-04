@@ -2,7 +2,7 @@ import CSAnimationBlock
 from CSAnimation import *
 import math
 from Quartz import CACurrentMediaTime,CATransaction,CGPathRef,CGPathAddLines,CGPathCloseSubpath,CGPathRelease,CGPathCreateMutable
-#from Foundation import *
+from Foundation import *
 
 
 class CSAnimationInput(object):

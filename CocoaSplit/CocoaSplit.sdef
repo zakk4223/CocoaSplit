@@ -82,6 +82,14 @@
             </property>
 
 
+            <responds-to name="merge">
+                <cocoa method="scriptMergeLayout:"/>
+            </responds-to>
+            
+            <responds-to name="remove">
+                <cocoa method="scriptRemoveLayout:"/>
+            </responds-to>
+
             <responds-to name="toggle">
                 <cocoa method="scriptToggleLayout:"/>
             </responds-to>
@@ -180,8 +188,22 @@
         </command>
 
 
-        
-        
+        <command name="merge" code="CSssmgly">
+            <direct-parameter type="layout"/>
+            <parameter name="to" code="toly" type="layout" description="Which layout to operate on" optional="yes">
+                <cocoa key="useLayout"/>
+            </parameter>
+    
+        </command>
+
+        <command name="remove" code="CSssrmly">
+            <direct-parameter type="layout"/>
+            <parameter name="to" code="toly" type="layout" description="Which layout to operate on" optional="yes">
+                <cocoa key="useLayout"/>
+            </parameter>
+    
+        </command>
+
     </suite>
     
     

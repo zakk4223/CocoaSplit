@@ -3208,6 +3208,42 @@
 
 
 
+-(void)mergeLayout:(SourceLayout *)layout usingLayout:(SourceLayout *)usingLayout
+{
+    if (!usingLayout)
+    {
+        return;
+    }
+    
+    if ([usingLayout containsLayout:layout])
+    {
+        return;
+    }
+    
+    [self applyTransitionSettings:usingLayout];
+
+    [usingLayout mergeSourceLayoutViaScript:layout];
+
+}
+
+
+-(void)removeLayout:(SourceLayout *)layout usingLayout:(SourceLayout *)usingLayout
+{
+    if (!usingLayout)
+    {
+        return;
+    }
+    
+    if (![usingLayout containsLayout:layout])
+    {
+        return;
+    }
+    
+    [self applyTransitionSettings:usingLayout];
+    
+    [usingLayout removeSourceLayoutViaScript:layout];
+    
+}
 
 -(void)toggleLayout:(SourceLayout *)layout usingLayout:(SourceLayout *)usingLayout
 {

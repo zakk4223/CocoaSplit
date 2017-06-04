@@ -12,6 +12,7 @@
 
 @implementation CSLayoutSwitcherWindowController
 
+@synthesize actionType = _actionType;
 
 
 
@@ -35,6 +36,33 @@
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
 }
 
+
+-(NSArray *)targetNames
+{
+    if (self.actionType == kScriptRun || self.actionType == kScriptStop)
+    {
+        return self.scriptNames;
+    } else {
+        return self.layoutNames;
+    }
+    
+    return @[];
+}
+
+
+-(void)setActionType:(layout_action)actionType
+{
+    _actionType = actionType;
+    [self willChangeValueForKey:@"targetNames"];
+    [self didChangeValueForKey:@"targetNames"];
+}
+
+-(layout_action)actionType
+{
+    return _actionType;
+}
+
+
 -(NSString *)layoutNames
 {
     NSObject *myDelegate = [NSApp delegate];
@@ -43,6 +71,16 @@
     return [layouts valueForKey:@"name"];
     
 
+}
+
+
+
+-(NSArray *)scriptNames
+{
+    NSObject *myDelegate = [NSApp delegate];
+    NSArray *layouts = [myDelegate valueForKey:@"layoutscripts"];
+    
+    return [layouts valueForKey:@"name"];
 }
 
 
@@ -55,7 +93,8 @@
 
     
     newAction.applicationString = self.applicationString;
-    newAction.layoutName = self.layoutName;
+    newAction.targetName = self.targetName;
+    newAction.actionType = self.actionType;
     newAction.eventType = self.eventType;
     [self.switchActionsController addObject:newAction];
 }
