@@ -147,6 +147,8 @@
         [_sourceLayout addObserver:self forKeyPath:@"in_staging" options:NSKeyValueObservingOptionNew context:NULL];
         [_sourceLayout addObserver:self forKeyPath:@"audioData" options:NSKeyValueObservingOptionNew context:NULL];
         [_sourceLayout addObserver:self forKeyPath:@"recorder.defaultRecordingActive" options:NSKeyValueObservingOptionNew context:NULL];
+        [_sourceLayout addObserver:self forKeyPath:@"name" options:NSKeyValueObservingOptionNew context:NULL];
+
 
 
 
@@ -295,6 +297,7 @@
     }
     
     [self.layer setNeedsDisplay];
+    [self setNeedsLayout:YES];
     
     
     
@@ -308,6 +311,8 @@
         [self.sourceLayout removeObserver:self forKeyPath:@"in_staging"];
         [self.sourceLayout removeObserver:self forKeyPath:@"audioData"];
         [self.sourceLayout removeObserver:self forKeyPath:@"recorder.defaultRecordingActive"];
+        [self.sourceLayout removeObserver:self forKeyPath:@"name"];
+
         
     }
 }

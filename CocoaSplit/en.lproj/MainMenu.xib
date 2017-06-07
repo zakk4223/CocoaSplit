@@ -386,6 +386,7 @@
                                         <connections>
                                             <action selector="streamButtonPushed:" target="816" id="825"/>
                                             <binding destination="816" name="enabled" keyPath="self.active_output_count" id="k1g-8T-k2f"/>
+                                            <binding destination="816" name="value" keyPath="self.captureRunning" id="PNO-8Q-fUl"/>
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ggC-Mg-kHj">

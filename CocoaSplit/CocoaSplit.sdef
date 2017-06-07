@@ -17,12 +17,9 @@
                 <cocoa key="captureDestinations"/>
             </element>
             
-            <property name="width" code="CSwd" type="integer"/>
-            <property name="height" code="CSht" type="integer"/>
-            <property name="fps" code="CSfp" type="real"/>
-            <property name="activelayout" code="CSal" type="layout"/>
-            <property name="staginglayout" code="CSsl" type="layout"/>
-            <property name="livelayout" code="CSll" type="layout"/>
+            <property name="activelayout" code="CSal" type="layout" access="r"/>
+            <property name="staginglayout" code="CSsl" type="layout" access = "r"/>
+            <property name="livelayout" code="CSll" type="layout" access="r"/>
             <property name="useTransitions" code="CSut" type="boolean"/>
             
         </class>
@@ -34,15 +31,15 @@
             <property name="layout" code="CSly" type="layout">
                 <cocoa key="assignedLayout"/>
             </property>
-            <property name="running" code="CSru" type="boolean">
+            <property name="running" code="CSru" type="boolean" access="r">
                 <cocoa key="scriptRunning"/>
             </property>
         </class>
             
         <class name="audioInput" code="CSai">
             <cocoa class="CAMultiAudioNode"/>
-            <property name="name" code="pnam" type="text"/>
-            <property name="volume" code="CSvl" type="real" access="rw">
+            <property name="name" code="pnam" type="text" access="r"/>
+            <property name="sound volume" code="CSvl" type="real">
                 <cocoa key="volume"/>
             </property>
             <property name="enabled" code="CSen" type="boolean"/>
@@ -156,14 +153,14 @@
 
         <command name="toggle" code="CSsstogl">
             <direct-parameter type="layout"/>
-            <parameter name="to" code="toly" type="layout" description="Which layout to operate on" optional="yes">
+            <parameter name="using" code="toly" type="layout" description="Which layout to operate on" optional="yes">
                 <cocoa key="useLayout"/>
             </parameter>
         </command>
         
         <command name="replace with" code="CSssrwly">
             <direct-parameter type="layout"/>
-            <parameter name="to" code="toly" type="layout" description="Which layout to operate on" optional="yes">
+            <parameter name="using" code="toly" type="layout" description="Which layout to operate on" optional="yes">
                 <cocoa key="useLayout"/>
             </parameter>
 
@@ -190,7 +187,7 @@
 
         <command name="merge" code="CSssmgly">
             <direct-parameter type="layout"/>
-            <parameter name="to" code="toly" type="layout" description="Which layout to operate on" optional="yes">
+            <parameter name="into" code="toly" type="layout" description="Which layout to operate on" optional="yes">
                 <cocoa key="useLayout"/>
             </parameter>
     
@@ -198,7 +195,7 @@
 
         <command name="remove" code="CSssrmly">
             <direct-parameter type="layout"/>
-            <parameter name="to" code="toly" type="layout" description="Which layout to operate on" optional="yes">
+            <parameter name="from" code="toly" type="layout" description="Which layout to operate on" optional="yes">
                 <cocoa key="useLayout"/>
             </parameter>
     

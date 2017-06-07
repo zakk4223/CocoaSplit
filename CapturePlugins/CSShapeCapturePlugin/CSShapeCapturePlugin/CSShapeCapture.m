@@ -276,7 +276,7 @@
     for(NSString *key in allShapes)
     {
         NSDictionary *shapeInfo = allShapes[key];
-        CSAbstractCaptureDevice *shape = [[CSAbstractCaptureDevice alloc] initWithName:shapeInfo[@"name"] device:shapeInfo[@"plugin"] uniqueID:shapeInfo[@"module"]];
+        CSAbstractCaptureDevice *shape = [[CSAbstractCaptureDevice alloc] initWithName:shapeInfo[@"name"] device:shapeInfo[@"wrapper"] uniqueID:shapeInfo[@"path"]];
         [ret addObject:shape];
     }
     return ret;

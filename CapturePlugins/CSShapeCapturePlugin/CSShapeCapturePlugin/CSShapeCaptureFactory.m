@@ -6,9 +6,11 @@
 //  Copyright (c) 2015 Zakk. All rights reserved.
 //
 
+#import <objc/runtime.h>
+
 #import "CSShapeCaptureFactory.h"
 #import "CSPluginServices.h"
-
+#import "NSBezierPathJSExport.h"
 @implementation CSShapeCaptureFactory
 
 
@@ -42,14 +44,13 @@
     static CSShapePathLoader *sharedPathLoader = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        CSPluginServices *sharedService = [CSPluginServices sharedPluginServices];
         
+        //[[CSPluginServices sharedPluginServices] exportClassForJavaScript:[NSBezierPath class]];
         
-        NSString *pathLoaderFilePath = [[NSBundle bundleForClass:[CSShapeCaptureFactory class]] pathForResource:@"CSShapePathLoader" ofType:@"py" inDirectory:@"Python"];
+        class_addProtocol([NSBezierPath class], @protocol(NSBezierPathJSExport));
         
-    
-        Class loaderClass = [sharedService loadPythonClass:@"CSShapePathLoader" fromFile:pathLoaderFilePath];
-       sharedPathLoader = [[loaderClass alloc] init];
+        sharedPathLoader = [[CSShapePathLoader alloc] init];
+        
    });
     return sharedPathLoader;
 }

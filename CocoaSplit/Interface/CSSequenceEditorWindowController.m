@@ -85,7 +85,7 @@
     {
         _addStepPopover = [[NSPopover alloc] init];
         _addStepPopover.animates = YES;
-        _addStepPopover.behavior = NSPopoverBehaviorTransient;
+        _addStepPopover.behavior = NSPopoverBehaviorSemitransient;
     }
     
     Class sequenceClass = [_itemClasses objectAtIndex:sender.tag];

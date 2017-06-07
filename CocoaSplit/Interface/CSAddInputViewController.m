@@ -173,8 +173,9 @@
     NSObject <CSCaptureSourceProtocol> *clickedCapture;
 
     clickedCapture = [ self.sourceTypes objectAtIndex:[self.initialTable rowForView:sender]];
+    NSArray *availableVideoDevices = clickedCapture.availableVideoDevices;
     
-    if (!clickedCapture.availableVideoDevices || clickedCapture.availableVideoDevices.count == 0)
+    if (!availableVideoDevices || availableVideoDevices.count == 0)
     {
         InputSource *newSrc = [[InputSource alloc] init];
         newSrc.selectedVideoType = clickedCapture.instanceLabel;
@@ -230,7 +231,8 @@
     } else if (tableView == self.initialTable) {
         
         NSObject <CSCaptureSourceProtocol> *item = [self.sourceTypesController.arrangedObjects objectAtIndex:row];
-        if (item.availableVideoDevices && item.availableVideoDevices.count > 0)
+        NSArray *availableVideoDevices = item.availableVideoDevices;
+        if (availableVideoDevices && availableVideoDevices.count > 0)
         {
             return [tableView makeViewWithIdentifier:@"initialInputView" owner:self];
         } else {

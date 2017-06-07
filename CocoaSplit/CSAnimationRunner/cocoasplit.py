@@ -36,7 +36,20 @@ def getCurrentLayout():
     if current_frame:
         return current_frame.layout
     return getCaptureController().activePreviewView().sourceLayout()
+
+def setCITransition(name, inputMap={}, duration=0.25, **kwargs):
     
+    new_transition = CIFilter.filterWithName_withInputParameters_(name, inputMap)
+    
+    my_layout = getCurrentLayout()
+    my_layout.setTransitionFilter_(new_transition)
+    my_layout.setTransitionDuration_(duration)
+    
+    if 'full_scene' in kwargs:
+        full_scene = kwargs['full_scene']
+        my_layout.setTransitionFullScene_(full_scene)
+
+
 def setBasicTransition(name, direction=None, duration=0.25, **kwargs):
     my_layout = getCurrentLayout()
     my_layout.setTransitionName_(name)

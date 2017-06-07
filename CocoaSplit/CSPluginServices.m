@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Zakk. All rights reserved.
 //
 
+#import <JavaScriptCore/JavaScriptCore.h>
+#import <objc/runtime.h>
 #import "CSPluginServices.h"
 #import "CAMultiAudioPCMPlayer.h"
 #import "CSPcmPlayer.h"

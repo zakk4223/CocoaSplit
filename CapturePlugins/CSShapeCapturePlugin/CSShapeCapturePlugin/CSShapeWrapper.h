@@ -7,13 +7,21 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Cocoa/Cocoa.h>
 #import "CSShapeLayer.h"
 
 @interface CSShapeWrapper : NSObject
 
-@property (nonatomic, strong) __attribute__((NSObject)) CGPathRef newPath;
 
--(void)getcgpath:(NSRect)withFrame forLayer:(CSShapeLayer *)forLayer;
+@property (strong) NSString *name;
+@property (strong) NSString *path;
+@property (strong) JSContext *jsCtx;
+
+
+
+-(instancetype)initWithName:(NSString *)name usingPath:(NSString *)path;
+
+-(void)getCGPath:(NSRect)withFrame forLayer:(CSShapeLayer *)forLayer;
 
 
 @end

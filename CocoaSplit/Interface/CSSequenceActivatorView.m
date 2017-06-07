@@ -11,7 +11,6 @@
 #import "CaptureController.h"
 
 @implementation CSSequenceTextView
-
 - (NSSize) intrinsicContentSize {
     NSTextContainer* textContainer = [self textContainer];
     NSLayoutManager* layoutManager = [self layoutManager];
@@ -36,6 +35,7 @@
 
 @implementation CSSequenceActivatorView
 @synthesize layoutSequence = _layoutSequence;
+@synthesize isQueued = _isQueued;
 
 
 
@@ -58,6 +58,19 @@
     newLayer.backgroundColor = [NSColor controlColor].CGColor;
     return newLayer;
 }
+
+
+-(void)setIsQueued:(bool)isQueued
+{
+    _isQueued = isQueued;
+    [self setNeedsLayout:YES];
+}
+
+-(bool)isQueued
+{
+    return _isQueued;
+}
+
 
 -(void)rightMouseDown:(NSEvent *)event
 {
@@ -83,6 +96,13 @@
 
 -(void)setLayoutSequence:(CSLayoutSequence *)layoutSequence
 {
+    
+    if (_layoutSequence)
+    {
+        [_layoutSequence removeObserver:self forKeyPath:@"name"];
+        [_layoutSequence removeObserver:self forKeyPath:@"lastRunUUID"];
+
+    }
     _layoutSequence = layoutSequence;
     if (_layoutSequence)
     {
@@ -92,9 +112,15 @@
         newLayer.borderColor = [NSColor lightGrayColor].CGColor;
         newLayer.borderWidth = 2.0f;
         
+        [_layoutSequence addObserver:self forKeyPath:@"name" options:NSKeyValueObservingOptionNew context:NULL];
+
+        [_layoutSequence addObserver:self forKeyPath:@"lastRunUUID" options:NSKeyValueObservingOptionNew context:NULL];
+        
+    
         if (!_textView)
         {
             
+
             _textView = [[CSSequenceTextView alloc] initWithFrame:NSMakeRect(50,50,50,50)];
             [_textView setWantsLayer:YES];
             _textView.layer.cornerRadius = 5;
@@ -136,6 +162,13 @@
 }
 
 
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
+{
+    
+    [self setNeedsLayout:YES];
+    
+}
+
 
 
 -(void)layout
@@ -147,7 +180,12 @@
         NSRect tFrame = _textView.frame;
         NSSize tSize = [_textView intrinsicContentSize];
         CGFloat startFontSize = _textView.font.pointSize;
-        
+        if (self.isQueued || self.layoutSequence.lastRunUUID)
+        {
+            self.layer.opacity = 0.5f;
+        } else {
+            self.layer.opacity = 1.0f;
+        }
         while (tSize.width > self.bounds.size.width)
         {
             _textView.font = [NSFont userFontOfSize:--startFontSize];
@@ -160,6 +198,16 @@
         tFrame.size.width = tSize.width;
         tFrame.size.height = tSize.height;
         [_textView setFrame:tFrame];
+    }
+}
+
+-(void)dealloc
+{
+    if (_layoutSequence)
+    {
+        [_layoutSequence removeObserver:self forKeyPath:@"name"];
+        [_layoutSequence removeObserver:self forKeyPath:@"lastRunUUID"];
+
     }
 }
 @end

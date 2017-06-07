@@ -52,15 +52,27 @@
     } else if (self.transitionFilter) {
         NSArray *inputKeys = self.transitionFilter.inputKeys;
         NSMutableString *blah = [NSMutableString string];
+        [blah appendString:@"filter_inputs = {"];
+        
         for (NSString *key in inputKeys)
         {
             if ([key isEqualToString:@"inputImage"])
             {
                 continue;
             }
-            [blah appendFormat:@"%@=%@\n", key, [self.transitionFilter valueForKeyPath:key]];
-            
+            id keyValue = [self.transitionFilter valueForKeyPath:key];
+            if (keyValue)
+            {
+                [blah appendFormat:@"'%@':%@,", key, keyValue];
+            }
         }
+        
+        [blah appendString:@"}\n"];
+
+        NSString *filterName = self.transitionFilter.attributes[kCIAttributeFilterName];
+        
+        [blah appendFormat:@"setCITransition(name='%@', inputMap=filter_inputs, duration=%f, full_scene=%u)", filterName, self.transitionDuration, self.transitionFullScene];
+        
         retString = blah;
     } else {
         retString = [NSString stringWithFormat:@"setBasicTransition(name='%@', direction='%@', duration=%f, full_scene=%u)", self.transitionName, self.transitionDirection, self.transitionDuration, self.transitionFullScene];

@@ -459,6 +459,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(void)sequenceWindowWillClose:(CSSequenceEditorWindowController *)windowController;
 
 
+
 -(void)addInputToLibrary:(InputSource *)source;
 - (IBAction)openLibraryWindow:(id) sender;
 

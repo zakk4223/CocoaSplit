@@ -192,7 +192,6 @@
 
 -(void)sequenceViewClicked:(NSEvent *)clickEvent forView:(CSSequenceActivatorView *)view
 {
-    view.layer.opacity = 0.5f;
     
     if ([clickEvent modifierFlags] & NSShiftKeyMask)
     {
@@ -226,14 +225,14 @@
                 {
                     for (CSSequenceActivatorView *qView in self.queuedSequences)
                     {
-                        [qView.layoutSequence runSequenceForLayout:useLayout withCompletionBlock:^(){qView.layer.opacity = 1.0f; qView.isQueued = NO;} withExceptionBlock:^(NSException *exception) {
+                        [qView.layoutSequence runSequenceForLayout:useLayout withCompletionBlock:^(){qView.isQueued = NO;} withExceptionBlock:^(NSException *exception) {
                             [self handleScriptException:exception];
                         }];
 
                     }
                     [self.queuedSequences removeAllObjects];
                 }
-                [view.layoutSequence runSequenceForLayout:useLayout withCompletionBlock:^(){NSLog(@"ANIMATION DONE");view.layer.opacity = 1.0f; view.isQueued = NO;} withExceptionBlock:^(NSException *exception) {
+                [view.layoutSequence runSequenceForLayout:useLayout withCompletionBlock:^(){view.isQueued = NO;} withExceptionBlock:^(NSException *exception) {
                     [self handleScriptException:exception];
                 }];
             }
