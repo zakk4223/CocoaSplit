@@ -771,14 +771,15 @@ static NSArray *_sourceTypes = nil;
 
 -(float)depth
 {
-    return self.layer.zPosition;
+    return self.geometryNode.renderingOrder;
 }
+
 
 -(void)setDepth:(float)depth
 {
-    [CATransaction begin];
-    self.layer.zPosition = depth;
-    [CATransaction commit];
+    
+    self.geometryNode.renderingOrder = depth;
+    
 }
 
 
