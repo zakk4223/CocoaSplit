@@ -7,15 +7,19 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <SceneKit/SceneKit.h>
+
 #import "SourceLayout.h"
 
-@interface LayoutRenderer : NSObject
+@interface LayoutRenderer : NSObject <SCNSceneRendererDelegate>
 {
     CVPixelBufferPoolRef _cvpool;
     CVPixelBufferRef _currentPB;
     NSSize _cvpool_size;
     GLuint _fboTexture;
     GLuint _rFbo;
+    GLuint _flipTexture;
+    GLuint _flipFbo;
     CALayer *_currentLayoutlayer;
     bool _layoutChanged;
     CATransition *_layoutTransition;
@@ -25,6 +29,11 @@
     
     
 }
+
+@property (strong) SCNScene *scene;
+@property (strong) SCNNode *cameraNode;
+@property (strong) SCNRenderer *sceneRenderer;
+@property (strong) SCNNode *caLayerNode;
 
 @property (strong) SourceLayout *layout;
 @property (assign) CGLContextObj cglCtx;

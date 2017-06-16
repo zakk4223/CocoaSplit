@@ -7,6 +7,7 @@
 //
 #import <Foundation/Foundation.h>
 #import <VideoToolbox/VideoToolbox.h>
+#import <SceneKit/SceneKit.h>
 
 #import "CaptureController.h"
 #import "InputSource.h"
@@ -26,7 +27,7 @@
 #define LAYOUT_RESOLUTIONS @[@"1280x720@60", @"1280x720@30", @"1920x1080@60", @"1920x1080@30", @"Custom"]
 
 
-@interface PreviewView : NSView <NSPopoverDelegate, NSWindowDelegate, NSMenuDelegate>
+@interface PreviewView : SCNView <NSPopoverDelegate, NSWindowDelegate, NSMenuDelegate, SCNSceneRendererDelegate>
 
 {
 
@@ -99,7 +100,9 @@
 @property (strong) InputSource *selectedSource;
 @property (strong) InputSource *mousedSource;
 
-@property (assign) NSPoint selectedOriginDistance;
+@property (assign) NSRect selectedOriginalRect;
+
+@property (assign) SCNVector3 selectedOriginDistance;
 @property (assign) bool isResizing;
 @property (assign) resize_style resizeType;
 @property (strong, atomic) SourceLayout *sourceLayout;

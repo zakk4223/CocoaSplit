@@ -10,6 +10,7 @@
 #import "CSTimerSourceProtocol.h"
 #import "InputSource.h"
 #import "CSNotifications.h"
+#import <SceneKit/SceneKit.h>
 
 
 #import "SourceCache.h"

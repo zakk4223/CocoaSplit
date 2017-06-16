@@ -160,12 +160,13 @@ static NSArray *_sourceTypes = nil;
     [aCoder encodeObject:self.currentEffects forKey:@"currentEffects"];
     [aCoder encodeFloat:self.changeInterval forKey:@"changeInterval"];
 
-    [aCoder encodeFloat:self.layer.position.x forKey:@"CAx_pos"];
-    [aCoder encodeFloat:self.layer.position.y forKey:@"CAy_pos"];
+    
+    [aCoder encodeFloat:self.sceneNode.position.x forKey:@"CAx_pos"];
+    [aCoder encodeFloat:self.sceneNode.position.y forKey:@"CAy_pos"];
     
     
-    [aCoder encodeFloat:self.layer.bounds.size.width forKey:@"CAdisplay_width"];
-    [aCoder encodeFloat:self.layer.bounds.size.height forKey:@"CAdisplay_height"];
+    [aCoder encodeFloat:self.globalLayoutPosition.size.width forKey:@"CAdisplay_width"];
+    [aCoder encodeFloat:self.globalLayoutPosition.size.height forKey:@"CAdisplay_height"];
     [aCoder encodeFloat:self.borderWidth forKey:@"borderWidth"];
     [aCoder encodeObject:self.borderColor forKey:@"borderColor"];
     [aCoder encodeFloat:self.cornerRadius forKey:@"cornerRadius"];
@@ -280,8 +281,11 @@ static NSArray *_sourceTypes = nil;
 
 
         NSRect tmpRect = NSIntegralRect(NSMakeRect(x_pos, y_pos, width, height));
-        self.layer.position = CGPointMake(tmpRect.origin.x, tmpRect.origin.y);
-        self.layer.bounds = CGRectMake(0, 0, tmpRect.size.width, tmpRect.size.height);
+        if (self.sceneNode)
+        {
+            self.sceneNode.position = SCNVector3Make(tmpRect.origin.x, tmpRect.origin.y, 0);
+            [self directSize:tmpRect.size.width height:tmpRect.size.height];
+        }
         
 
 
@@ -303,7 +307,7 @@ static NSArray *_sourceTypes = nil;
         [self updateRotationTransform];
 
 
-        self.layoutPosition = self.layer.frame;
+        
         
 
         _selectedVideoType = [aDecoder decodeObjectForKey:@"selectedVideoType"];
@@ -456,7 +460,8 @@ static NSArray *_sourceTypes = nil;
 
         
     }
-    
+    self.geometryNode.name = self.uuid;
+
     return self;
 }
 
@@ -477,7 +482,12 @@ static NSArray *_sourceTypes = nil;
 
 -(CGRect)globalLayoutPosition
 {
-    return [self.sourceLayout.rootLayer convertRect:self.layer.frame fromLayer:self.layer.superlayer];
+    
+    return self.layoutPosition;
+    
+    //return CGRectMake(self.sceneNode.position.x, self.sceneNode.position.y, self.scenePlane.width, self.scenePlane.height);
+    
+    //return [self.sourceLayout.rootLayer convertRect:self.layer.frame fromLayer:self.layer.superlayer];
 }
 
 -(void) registerVideoInput:(NSObject<CSCaptureSourceProtocol> *)forInput
@@ -556,6 +566,7 @@ static NSArray *_sourceTypes = nil;
     self.crop_top = 0;
     self.crop_left = 0;
     self.crop_right = 0;
+    
     self.videoSources = [[NSMutableArray alloc] init];
     _refCount = 0;
     
@@ -595,19 +606,39 @@ static NSArray *_sourceTypes = nil;
     
     
     self.layer = [CSInputLayer layer];
-    self.layer.contentsGravity = kCAGravityTopRight;
+    //self.layer.contentsGravity = kCAGravityTopRight;
     
     self.layer.sourceInput = self;
     
-    //self.layer.anchorPoint = CGPointMake(0.0, 0.0);
+   // self.layer.anchorPoint = CGPointMake(0.0, 0.0);
     
-    //self.layer.backgroundColor = CGColorCreateGenericRGB(0, 0, 1, 1);
+    self.layer.backgroundColor = CGColorCreateGenericRGB(0, 0, 1, 1);
 
-    self.layer.bounds = CGRectMake(0.0, 0.0, 200, 200);
+   self.layer.frame = CGRectMake(0.0, 0.0, 200, 200);
+  //  self.layer.position = CGPointMake(0, 0);
+    
     [self positionOrigin:0.0 y:0.0];
+    
+    [self createUUID];
 
+    self.sceneNode = [SCNNode node];
+    self.geometryNode = [SCNNode node];
     
+    self.geometryNode.geometry = [SCNPlane planeWithWidth:1 height:1];
     
+    self.sceneNode.position = SCNVector3Make(0,0, 0);
+    
+    //self.scenePlane = (SCNPlane *)self.geometryNode.geometry;
+    self.geometryNode.geometry.firstMaterial.diffuse.contents = self.layer;
+    self.geometryNode.geometry.firstMaterial.diffuse.wrapS = SCNWrapModeRepeat;
+    self.geometryNode.geometry.firstMaterial.diffuse.wrapT = SCNWrapModeRepeat;
+    self.geometryNode.geometry.firstMaterial.doubleSided = YES;
+    [self.sceneNode addChildNode:self.geometryNode];
+    
+    self.geometryNode.name = self.uuid;
+
+
+    [self directSize:200 height:200];
     CIFilter *cFilter = [CIFilter filterWithName:@"CSChromaKeyFilter"];
     [cFilter setDefaults];
     cFilter.name = @"Chromakey";
@@ -621,7 +652,6 @@ static NSArray *_sourceTypes = nil;
     _multiTransition.duration = 2.0;
     _multiTransition.removedOnCompletion = YES;
     
-    [self createUUID];
     
    
     self.layoutPosition = self.layer.frame;
@@ -1363,6 +1393,8 @@ static NSArray *_sourceTypes = nil;
         _editedName = nil;
     }
 
+    
+    
     [CATransaction begin];
     self.layer.name = name;
     [CATransaction commit];
@@ -1398,6 +1430,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void)updateRotationTransform
 {
+    /*
     CATransform3D transform = CATransform3DMakeRotation(self.rotationAngle * M_PI / 180.0, 0.0, 0.0, 1.0);
     transform = CATransform3DRotate(transform, self.rotationAngleX * M_PI / 180.0, 1.0, 0.0, 0.0);
     transform = CATransform3DRotate(transform, self.rotationAngleY * M_PI / 180.0, 0.0, 1.0, 0.0);
@@ -1411,6 +1444,10 @@ static NSArray *_sourceTypes = nil;
     
     self.layer.disableAnimation  = NO;
     [CATransaction commit];
+     */
+    
+    self.geometryNode.eulerAngles = SCNVector3Make(0,0, self.rotationAngle * M_PI/180.0);
+    self.sceneNode.eulerAngles = SCNVector3Make(self.rotationAngleX * M_PI/180.0, self.rotationAngleY * M_PI/180.0, 0);
 }
 
 
@@ -1729,7 +1766,11 @@ static NSArray *_sourceTypes = nil;
 -(void)setWidth:(float)width
 {
     _width = width;
+    
+    
+    
     [self directSize:_width height:_height];
+    
 }
 
 -(float)width
@@ -1759,6 +1800,8 @@ static NSArray *_sourceTypes = nil;
         x_pos = roundf(x_pos);
     }
     _x_pos = x_pos;
+    
+    
     
     [self positionOrigin:_x_pos y:_y_pos];
 }
@@ -1819,13 +1862,33 @@ static NSArray *_sourceTypes = nil;
 -(void)frameTick
 {
     
-    
+    /*
     self.layoutPosition = self.layer.frame;
     _x_pos = self.layer.frame.origin.x;
     _y_pos = self.layer.frame.origin.y;
     _width = self.layer.frame.size.width;
     _height = self.layer.frame.size.height;
+    */
     
+    _x_pos = self.sceneNode.position.x;
+    _y_pos = self.sceneNode.position.y;
+
+ //   _width = self.scenePlane.width;
+ //   _height = self.scenePlane.height;
+    
+    SCNVector3 minPoint;
+    SCNVector3 maxPoint;
+    if ([self.geometryNode getBoundingBoxMin:&minPoint max:&maxPoint])
+    {
+        SCNVector3 cMin = [self.geometryNode convertPosition:minPoint toNode:self.sceneNode.parentNode];
+        SCNVector3 cMax = [self.geometryNode convertPosition:maxPoint toNode:self.sceneNode.parentNode];
+
+        self.layoutPosition = NSMakeRect(cMin.x, cMin.y, cMax.x-cMin.x, cMax.y-cMin.y);
+        _width = cMax.x-cMin.x;
+        _height = cMax.y-cMin.y;
+        
+        //self.layoutPosition = NSMakeRect(self.sceneNode.position.x, self.sceneNode.position.y, self.scenePlane.width, self.scenePlane.height);
+    }
     [self multiChange];
 
     
@@ -1896,7 +1959,6 @@ static NSArray *_sourceTypes = nil;
 -(void)autoFit
 {
 
-    
     float wr = self.size.width / self.canvas_width;
     float hr = self.size.height / self.canvas_height;
     float ratio = (hr < wr ? wr : hr);
@@ -1938,12 +2000,23 @@ static NSArray *_sourceTypes = nil;
     newLayout.size.height = height;
     
     NSRect iRect = NSIntegralRect(newLayout);
+
+    iRect.origin.x = 0;
+    iRect.origin.y = 0;
     
     [CATransaction begin];
-    self.layer.frame = iRect;
+    //self.layer.frame = iRect;
+    //self.layer.sourceLayer.frame = iRect;
     [CATransaction commit];
     
+    //[self.scenePlane setBoundingBoxMin:&minPoint max:&maxPoint];
     
+    //self.scenePlane.width = iRect.size.width;
+    //self.scenePlane.height = iRect.size.height;
+    self.geometryNode.scale = SCNVector3Make(iRect.size.width, iRect.size.height, 1);
+    
+    
+    self.sceneNode.pivot = SCNMatrix4MakeTranslation(-iRect.size.width/2, -iRect.size.height/2, 0);
 }
 
 
@@ -1974,13 +2047,85 @@ static NSArray *_sourceTypes = nil;
 }
 
 
+
+-(void) resizeToPoint:(CGPoint)point withResizeFlags:(resize_style)resizeType
+{
+    
+    NSRect currentPos = self.globalLayoutPosition;
+    
+    
+    NSLog(@"CURRENT POSITION %@", NSStringFromRect(currentPos));
+    
+    SCNMatrix4 tmpPivot;
+    
+    CGFloat newWidth = currentPos.size.width;
+    CGFloat newHeight = currentPos.size.height;
+    CGFloat newX = currentPos.origin.x;
+    CGFloat newY = currentPos.origin.y;
+    
+
+    if (resizeType & kResizeRight)
+    {
+        
+        newWidth = (point.x - currentPos.origin.x);
+        
+        
+        NSLog(@"WIDTH DIFFERENCE %f", newWidth - currentPos.size.width);
+        
+        newX = ((point.x - newWidth) + (newWidth - currentPos.size.width));
+        
+    }
+    
+    if (resizeType & kResizeTop)
+    {
+        newHeight = point.y - currentPos.origin.y;
+        //newY = point.y - newHeight;
+    }
+    
+    if (resizeType & kResizeLeft)
+    {
+        
+        CGFloat currentMaxX = NSMaxX(currentPos);
+
+        newWidth = currentMaxX - point.x;
+        
+        newX = currentMaxX - newWidth;
+
+
+        //newX = point.x;
+    }
+    
+    if (resizeType & kResizeBottom)
+    {
+        CGFloat curMaxY = NSMaxY(currentPos);
+        
+        
+        newHeight = curMaxY - point.y;
+        newY = curMaxY - newHeight;
+    }
+
+
+    NSLog(@"NEW %f %f %f %f", newX, newY, newWidth, newHeight);
+    [self positionOrigin:newX y:newY];
+
+    [self directSize:newWidth height:newHeight];
+
+
+}
+
+
+
 -(void) updateSize:(CGFloat)width height:(CGFloat)height
 {
     
     [CATransaction begin];
-    NSRect oldLayout = self.layer.frame;
-    NSRect newLayout = self.layer.frame;
+    //NSRect oldLayout = self.layer.frame;
+   // NSRect newLayout = self.layer.frame;
     
+    NSRect oldLayout = self.layoutPosition; //NSMakeRect(self.sceneNode.position.x, self.sceneNode.position.y, self.scenePlane.width, self.scenePlane.height);
+    NSRect newLayout = oldLayout;
+    
+    NSLog(@"CURRENT POSITION %@", NSStringFromRect(oldLayout));
     
     
     CGFloat delta_w, delta_h;
@@ -2040,6 +2185,7 @@ static NSArray *_sourceTypes = nil;
                 self.crop_bottom -= delta_hp;
             }
         } else {
+            
             if (self.resizeType & kResizeCenter)
             {
                 newLayout.origin.x -= delta_w/2;
@@ -2053,12 +2199,18 @@ static NSArray *_sourceTypes = nil;
                 
                 if (self.resizeType & kResizeBottom)
                 {
-                    newLayout.origin.y -= delta_h;
+                    NSLog(@"DELTA H %f", delta_h);
+                    
+                    newLayout.origin.y -= delta_h/2;
                 }
             }
 
-            self.layer.frame = newLayout;
+            //self.layer.frame = newLayout;
+            [self directSize:newLayout.size.width height:newLayout.size.height];
 
+            [self positionOrigin:newLayout.origin.x y:newLayout.origin.y];
+            //self.sceneNode.position = SCNVector3Make(newLayout.origin.x, newLayout.origin.y, 0);
+            
         }
     }
     [CATransaction commit];
@@ -2205,7 +2357,18 @@ static NSArray *_sourceTypes = nil;
         self.layer.frame = newFrame;
         [CATransaction commit];
          */
-        [self updateOrigin:x-self.layer.frame.origin.x y:y-self.layer.frame.origin.y];
+        
+        
+        //[self updateOrigin:x-self.sceneNode.position.x y:y-self.sceneNode.position.y];
+        
+        //[self updateOrigin:x-self.layer.frame.origin.x y:y-self.layer.frame.origin.y];
+        
+        NSRect previousRect = self.globalLayoutPosition;
+        previousRect.origin.x = x;
+        previousRect.origin.y = y;
+        NSRect layoutRect = NSIntegralRect(previousRect);
+        
+        self.sceneNode.position = SCNVector3Make(layoutRect.origin.x, layoutRect.origin.y, 0);
         
     }
 
@@ -2222,7 +2385,7 @@ static NSArray *_sourceTypes = nil;
     if (self.layer)
     {
         
-        NSPoint newOrigin = self.layer.position;
+        NSPoint newOrigin = NSMakePoint(self.sceneNode.position.x, self.sceneNode.position.y);
         newOrigin.x += x;
         newOrigin.y += y;
         
@@ -2232,12 +2395,14 @@ static NSArray *_sourceTypes = nil;
         NSRect tmpRect = NSIntegralRect(NSMakeRect(newOrigin.x, newOrigin.y, 100, 100));
         
         self.layer.disableAnimation = YES;
-        self.layer.position = tmpRect.origin;
+        //self.layer.position = tmpRect.origin;
         
         self.layer.disableAnimation = NO;
             
         [CATransaction commit];
 
+        self.sceneNode.position = SCNVector3Make(newOrigin.x, newOrigin.y, 0);
+        
     }
     
 }
@@ -2264,9 +2429,9 @@ static NSArray *_sourceTypes = nil;
 {
 
     _opacity = opacity;
-    [CATransaction begin];
+    //[CATransaction begin];
     self.layer.opacity = _opacity;
-    [CATransaction commit];
+    //[CATransaction commit];
 }
 
 
@@ -2296,6 +2461,14 @@ static NSArray *_sourceTypes = nil;
     CALayer *newLayer = [newCaptureSession layerForInput:self];
     
     _currentLayer = newLayer;
+    [SCNTransaction begin];
+    
+    self.layer.sourceLayer = _currentLayer;
+    
+    //self.scenePlane.firstMaterial.diffuse.contents = _currentLayer;
+    
+    [SCNTransaction commit];
+    
     self.videoInput = newCaptureSession;
 
  
@@ -2359,34 +2532,62 @@ static NSArray *_sourceTypes = nil;
 
 
 
-
 -(void)setScrollXSpeed:(float)scrollXSpeed
 {
 
+    if (scrollXSpeed != 0)
+    {
+        CABasicAnimation *xanim = [CABasicAnimation animationWithKeyPath:@"firstMaterial.diffuse.contentsTransform.translation.x"];
+        if (scrollXSpeed < 0)
+        {
+            xanim.fromValue = @1.0f;
+            xanim.toValue = @0.0f;
+        } else {
+            xanim.fromValue = @0.0;
+            xanim.toValue = @1.0;
+        }
+        xanim.duration = fabs(scrollXSpeed);
+        xanim.repeatCount = INFINITY;
+        [self.geometryNode.geometry addAnimation:xanim forKey:@"scrollX"];
+    } else {
+        [self.geometryNode.geometry removeAnimationForKey:@"scrollX"];
+    }
+    _scrollXSpeed = scrollXSpeed;
+    
+    
+    /*
     [CATransaction begin];
     self.layer.scrollXSpeed = scrollXSpeed;
     [CATransaction commit];
-    
+   */
 }
 
 -(float)scrollXSpeed
 {
-    return self.layer.scrollXSpeed;
+    return _scrollXSpeed;
 }
 
 
 -(void)setScrollYSpeed:(float)scrollYSpeed
 {
 
-    [CATransaction begin];
-    self.layer.scrollYSpeed = scrollYSpeed;
-    [CATransaction commit];
+    if (scrollYSpeed != 0)
+    {
+        CABasicAnimation *yanim = [CABasicAnimation animationWithKeyPath:@"firstMaterial.diffuse.contentsTransform.translation.y"];
+        yanim.toValue = @1.0;
+        yanim.duration = scrollYSpeed;
+        yanim.repeatCount = INFINITY;
+        [self.geometryNode.geometry addAnimation:yanim forKey:@"scrollY"];
+    } else {
+        [self.geometryNode.geometry removeAnimationForKey:@"scrollY"];
+    }
+    _scrollYSpeed = scrollYSpeed;
 }
 
 
 -(float)scrollYSpeed
 {
-    return self.layer.scrollYSpeed;
+    return _scrollYSpeed;
 }
 
 

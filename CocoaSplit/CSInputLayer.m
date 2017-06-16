@@ -283,7 +283,7 @@
         
         
         self.sourceLayer = [CALayer layer];
-        _sourceLayer.anchorPoint = CGPointMake(0.0, 0.0);
+        //_sourceLayer.anchorPoint = CGPointMake(0.0, 0.0);
         _sourceLayer.contentsGravity = kCAGravityResize;
         _sourceLayer.frame = CGRectMake(0, 0, 1, 1);
         _scrollAnimation = [CABasicAnimation animation];
@@ -293,7 +293,7 @@
         _xLayer.layoutManager = self;
         _yLayer.layoutManager = self.layoutManager;
         _sourceLayer.layoutManager = self.layoutManager;
-        
+
         [_xLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinX relativeTo:@"superlayer" attribute:kCAConstraintMinX]];
         [_xLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY]];
         [_xLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"superlayer" attribute:kCAConstraintMaxX]];
@@ -305,24 +305,22 @@
         [_yLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"superlayer" attribute:kCAConstraintMaxX]];
         [_yLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY]];
 
-        
         [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinX relativeTo:@"superlayer" attribute:kCAConstraintMinX]];
         [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY]];
         [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"superlayer" attribute:kCAConstraintMaxX]];
         [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY]];
-        
         _xLayer.delegate = self;
         _yLayer.delegate = self;
 
         _xLayer.masksToBounds = NO;
         _yLayer.masksToBounds = NO;
         
-        self.masksToBounds = YES;
+        self.masksToBounds = NO;
         _yLayer.anchorPoint = CGPointMake(0.0, 0.0);
-        
-        [_xLayer addSublayer:_sourceLayer];
-        [_yLayer addSublayer:_xLayer];
-        [self addSublayer:_yLayer];
+       // [_xLayer addSublayer:_sourceLayer];
+       // [_yLayer addSublayer:_xLayer];
+       // [self addSublayer:_yLayer];
+        [self addSublayer:_sourceLayer];
         
     }
     
@@ -458,6 +456,7 @@
     toLayer.autoresizingMask = _sourceLayer.autoresizingMask;
     toLayer.constraints = _sourceLayer.constraints;
     toLayer.delegate = self;
+    toLayer.layoutManager = _sourceLayer.layoutManager;
 }
 
 

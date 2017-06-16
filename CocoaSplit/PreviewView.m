@@ -148,8 +148,24 @@
         }
     }
     
+    self.scene = _sourceLayout.rootScene;
+    self.pointOfView = _sourceLayout.cameraNode;
+    self.preferredFramesPerSecond = 60.0f;
+    self.showsStatistics = YES;
+    self.delegate = self;
+    self.backgroundColor = [NSColor blackColor];
+    
+    self.debugOptions = SCNDebugOptionShowBoundingBoxes;
+
+    
 }
 
+
+
+-(void)renderer:(id<SCNSceneRenderer>)renderer willRenderScene:(SCNScene *)scene atTime:(NSTimeInterval)time
+{
+    [self.sourceLayout frameTick];
+}
 
 
 -(SourceLayout *)sourceLayoutPreview
@@ -569,6 +585,7 @@
     tmp = [self convertPoint:theEvent.locationInWindow fromView:nil];
 
     
+    
     if (self.viewOnly)
     {
         NSMenu *srcListMenu = [self buildSourceMenu];
@@ -604,12 +621,33 @@
 -(NSArray *)resizeRectsForSource:(InputSource *)inputSource withExtra:(float)withExtra
 {
     
-    NSRect layoutRect = inputSource.globalLayoutPosition;
+    
+    SCNNode *geomNode = inputSource.geometryNode;
+    
+    SCNVector3 minBox;
+    SCNVector3 maxBox;
+    
+    if (![geomNode getBoundingBoxMin:&minBox max:&maxBox])
+    {
+        return @[];
+    }
+    
+    SCNVector3 minWorld = [geomNode convertPosition:minBox toNode:self.sourceLayout.rootScene.rootNode];
+    SCNVector3 maxWorld = [geomNode convertPosition:maxBox toNode:self.sourceLayout.rootScene.rootNode];
+
+    //get rectangle points via projecting to view space
+    
+    //"origin"
     
     
-    NSRect extraRect = NSInsetRect(layoutRect, -withExtra, -withExtra);
+    SCNVector3 bottomLeftPoint = [self projectPoint:minWorld];
+    SCNVector3 topRightPoint = [self projectPoint:maxWorld];
+
+    NSRect viewRect = NSMakeRect(bottomLeftPoint.x, bottomLeftPoint.y, topRightPoint.x-bottomLeftPoint.x, topRightPoint.y-bottomLeftPoint.y);
     
-    NSRect viewRect = [self windowRectforWorldRect:extraRect];
+    viewRect = NSInsetRect(viewRect, -withExtra, -withExtra);
+    
+    
     
     
     NSRect bottomLeftRect = NSMakeRect(viewRect.origin.x, viewRect.origin.y, 10.0f, 10.0f);
@@ -648,35 +686,72 @@
     
     if (self.viewOnly)
     {
+        [super mouseDown:theEvent];
         return;
     }
     
-    
+    InputSource *oldSource = self.selectedSource;
+
     NSPoint tmp;
     
     tmp = [self convertPoint:theEvent.locationInWindow fromView:nil];
     
-    NSPoint worldPoint = [self realPointforWindowPoint:tmp];
-    
-    InputSource *oldSource = self.selectedSource;
-    
-    InputSource *topSource = [self.sourceLayout findSource:worldPoint deepParent:NO];
+    NSArray *hits = [self hitTest:NSPointToCGPoint(tmp) options:nil];
 
-    InputSource *deepSource = [self.sourceLayout findSource:worldPoint deepParent:YES];
-;
+    
+    InputSource *topSource = nil;
+    InputSource *deepSource = nil;
+    
+    SCNVector3 topCoord;
+    SCNVector3 deepCoord;
+    
+    for (SCNHitTestResult *res in hits)
+    {
+        SCNNode *hitNode = res.node;
+        if (hitNode.name)
+        {
+            InputSource *iSrc = [self.sourceLayout inputForUUID:hitNode.name];
+            if (!topSource)
+            {
+                topSource = iSrc;
+                deepSource = iSrc;
+                topCoord = res.worldCoordinates;
+                deepCoord = res.worldCoordinates;
+            } else {
+                deepSource = iSrc;
+                deepCoord = res.worldCoordinates;
+            }
+        }
+    }
+
+    SCNVector3 projectedPoint;
+    SCNVector3 useWorldPoint;
     
     if (theEvent.modifierFlags & NSControlKeyMask)
     {
         self.selectedSource = topSource;
+        useWorldPoint = topCoord;
+
     } else {
         self.selectedSource = deepSource;
+        useWorldPoint = deepCoord;
+
     }
+    
+
     
     if (!self.selectedSource)
     {
+        [super mouseDown:theEvent];
         return;
     }
+
     
+    projectedPoint = [self projectPoint:useWorldPoint];
+    
+    SCNVector3 nodePos = self.selectedSource.sceneNode.position;
+    
+    self.selectedOriginDistance = SCNVector3Make(useWorldPoint.x-nodePos.x, useWorldPoint.y-nodePos.y, projectedPoint.z);
     
     self.selectedSource.is_selected = YES;
     if (oldSource)
@@ -696,6 +771,7 @@
     NSRect bottomRightRect = [[resizeRects objectAtIndex:3] rectValue];
     
     self.resizeType = kResizeNone;
+    
     
     if (NSPointInRect(tmp, topLeftRect))
     {
@@ -718,7 +794,7 @@
     }
     
     
-    self.selectedOriginDistance = worldPoint;
+    
     
     if (self.isResizing)
     {
@@ -737,6 +813,10 @@
             self.resizeType |= kResizeCrop;
         }
 
+        
+        self.selectedOriginDistance = SCNVector3Make(useWorldPoint.x, useWorldPoint.y, projectedPoint.z);
+        self.selectedOriginalRect = self.selectedSource.globalLayoutPosition;
+        
 
     }
     self.selectedSource.resizeType = self.resizeType;
@@ -752,10 +832,9 @@
     NSPoint tmp;
     
     
-    NSPoint worldPoint;
+    SCNVector3 worldPoint;
     if (self.selectedSource)
     {
-        
         if (!_inDrag)
         {
             NSRect curFrame = self.selectedSource.layoutPosition;
@@ -775,12 +854,13 @@
         tmp = [self convertPoint:theEvent.locationInWindow fromView:nil];
         
         
-        worldPoint = [self realPointforWindowPoint:tmp];
+        worldPoint = [self unprojectPoint:SCNVector3Make(tmp.x, tmp.y, self.selectedOriginDistance.z)];
         
         
-        NSRect worldRect = NSIntegralRect(NSMakeRect(worldPoint.x, worldPoint.y , self.selectedSource.globalLayoutPosition.size.width, self.selectedSource.globalLayoutPosition.size.height));
         
-        worldPoint = worldRect.origin;
+        //NSRect worldRect = NSIntegralRect(NSMakeRect(worldPoint.x, worldPoint.y , self.selectedSource.globalLayoutPosition.size.width, self.selectedSource.globalLayoutPosition.size.height));
+        
+        //worldPoint = worldRect.origin;
         
         
         
@@ -790,15 +870,16 @@
         
         
         
-        [self adjustDeltas:&dx dy:&dy];
+        //[self adjustDeltas:&dx dy:&dy];
 
         
-        self.selectedOriginDistance = worldPoint;
+        //self.selectedOriginDistance = worldPoint;
         
 
         if (self.isResizing)
         {
             
+            //[self.selectedSource resizeToPoint:CGPointMake(worldPoint.x, worldPoint.y) withResizeFlags:self.resizeType];
                 if (theEvent.modifierFlags & NSAlternateKeyMask)
                 {
                     self.resizeType |= kResizeCenter;
@@ -807,7 +888,8 @@
                 }
                 
                 CGFloat new_width, new_height;
-                
+            
+            SCNVector3 vectPos = self.selectedSource.sceneNode.position;
             NSRect sPosition = self.selectedSource.globalLayoutPosition;
                 
                 new_width = sPosition.size.width;
@@ -834,6 +916,7 @@
                 
                 if (self.resizeType & kResizeBottom && dy)
                 {
+                    NSLog(@"S POSITION %@ WORLD POINT %f", NSStringFromRect(sPosition), worldPoint.y);
                     
                     new_height = NSMaxY(sPosition) - worldPoint.y;
                 }
@@ -843,11 +926,13 @@
             
             
                 [self.selectedSource updateSize:new_width height:new_height];
-
             
         } else {
             
-            [self.selectedSource updateOrigin:dx y:dy];
+            NSPoint newPos = NSMakePoint(worldPoint.x-self.selectedOriginDistance.x, worldPoint.y-self.selectedOriginDistance.y);
+            
+            [self.selectedSource positionOrigin:newPos.x y:newPos.y];
+            
             if (_overlayView)
             {
                 NSRect newRect = [self windowRectforWorldRect:self.selectedSource.globalLayoutPosition];
@@ -1033,6 +1118,10 @@
 
 -(void) mouseUp:(NSEvent *)theEvent
 {
+    
+    [super mouseUp:theEvent];
+    return;
+    
     _snap_x = -1;
     _snap_y = -1;
     _snap_x_accum = 0;
@@ -1693,6 +1782,7 @@
     [self addTrackingArea:_trackingArea];
 
     [self setWantsLayer:YES];
+   
     
     self.layer.backgroundColor = CGColorCreateGenericRGB(0.184314f, 0.309804f, 0.309804f, 1);
     [self registerForDraggedTypes:@[@"cocoasplit.library.item"]];
@@ -1762,13 +1852,14 @@
 }
 
 
+/*
 -(CALayer *)makeBackingLayer
 {
     _glLayer = [CSPreviewGLLayer layer];
     _glLayer.doRender = self.isEditWindow;
     return _glLayer;
 }
-
+*/
 
 -(void)disablePrimaryRender
 {

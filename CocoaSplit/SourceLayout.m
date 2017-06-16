@@ -45,6 +45,35 @@
         _noSceneTransactions = NO;
         _topLevelSourceArray = [[NSMutableArray alloc] init];
         self.rootLayer = [self newRootLayer];
+        self.rootScene = [SCNScene scene];
+        
+        
+        
+        self.cameraNode = [SCNNode node];
+        self.cameraNode.camera = [SCNCamera camera];
+        float half_width = _canvas_width/2.0f;
+        float half_height = _canvas_height/2.0f;
+        _minBounding = SCNVector3Make(0, 0, 0);
+        _maxBounding = SCNVector3Make(_canvas_width, _canvas_height, 0);
+        
+        
+        [self.rootScene.rootNode setBoundingBoxMin:&_minBounding max:&_maxBounding];
+        
+        [self.rootScene.rootNode addChildNode:self.cameraNode];
+        
+        self.cameraNode.position = SCNVector3Make(half_width,half_height, 500);
+        self.cameraNode.camera.zFar = 10000;
+        self.cameraNode.camera.xFov = ((atan(half_width/500)*180/M_PI)*2);
+        self.cameraNode.camera.yFov = ((atan(half_height/500)*180/M_PI)*2);
+
+        
+        
+        SCNNode *newNode = [SCNNode node];
+        newNode.geometry = [SCNPlane planeWithWidth:_canvas_width height:_canvas_height];
+        newNode.geometry.firstMaterial.diffuse.contents = [NSColor redColor];
+        newNode.position = SCNVector3Make(half_width,half_height, 0);
+        
+        [self.rootScene.rootNode addChildNode:newNode];
         
         //self.rootLayer.geometryFlipped = YES;
         _rootSize = NSMakeSize(_canvas_width, _canvas_height);
@@ -1449,7 +1478,9 @@
         self.layoutTimingSource = nil;
     }
     
-    [delSource.layer removeFromSuperlayer];
+    //[delSource.layer removeFromSuperlayer];
+    [delSource.sceneNode removeFromParentNode];
+    
 
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputDeleted  object:delSource userInfo:nil];
     delSource.sourceLayout = nil;
@@ -1486,6 +1517,7 @@
 
 
 
+
 -(void) addSource:(InputSource *)newSource
 {
     [self addSource:newSource withParentLayer:self.rootLayer];
@@ -1501,11 +1533,15 @@
     [[self mutableArrayValueForKey:@"sourceList" ] addObject:newSource];
     
 
-    [parentLayer addSublayer:newSource.layer];
+
+   [self.rootScene.rootNode addChildNode:newSource.sceneNode];
+    [newSource positionOrigin:newSource.sceneNode.position.x y:newSource.sceneNode.position.y];
+    
+    //[parentLayer addSublayer:newSource.layer];
 
 
     newSource.needsAdjustPosition = NO;
-    newSource.needsAdjustment = YES;
+    //newSource.needsAdjustment = YES;
     
     
     [_uuidMapPresentation setObject:newSource forKey:newSource.uuid];

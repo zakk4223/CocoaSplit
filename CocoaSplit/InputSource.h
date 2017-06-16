@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import <QuartzCore/CoreImage.h>
+#import <SceneKit/SceneKit.h>
+
 #import "Capture.h"
 #import "CSCaptureSourceProtocol.h"
 #import "CSCaptureBase+InputFrameTick.h"
@@ -85,6 +87,11 @@ typedef enum resize_style_t {
     
     
 }
+
+@property (strong) SCNNode *geometryNode;
+
+@property (strong) SCNNode *sceneNode;
+@property (strong) SCNPlane *scenePlane;
 
 @property (strong) NSMutableDictionary *scriptStorage;
 
@@ -248,6 +255,7 @@ typedef enum resize_style_t {
 -(void)layerUpdated;
 -(void)resetAspectRatio;
 
+-(void) resizeToPoint:(CGPoint)point withResizeFlags:(resize_style)resizeType;
 
 
 

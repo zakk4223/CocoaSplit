@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <SceneKit/SceneKit.h>
 #import "InputSource.h"
 #import "CSNotifications.h"
 #import <malloc/malloc.h>
@@ -32,6 +33,8 @@
     bool _noSceneTransactions;
     NSMutableArray *_topLevelSourceArray;
     bool _skipRefCounting;
+    SCNVector3 _minBounding;
+    SCNVector3 _maxBounding;
     
     
     
@@ -39,6 +42,9 @@
     
 }
 
+
+@property (strong) SCNScene *rootScene;
+@property (strong) SCNNode *cameraNode;
 
 
 @property (assign) bool doSaveSourceList;

@@ -21,10 +21,8 @@
         self.doSnaplines = NO;
         self.needsDisplayOnBoundsChange = YES;
         self.opaque = YES;
-        
         _snap_x = -1;
         _snap_y  = -1;
-        
     }
     
     return self;
@@ -45,29 +43,27 @@
 
 -(void)drawInCGLContext:(CGLContextObj)ctx pixelFormat:(CGLPixelFormatObj)pf forLayerTime:(CFTimeInterval)t displayTime:(const CVTimeStamp *)ts
 {
-    
+ 
     CGLSetCurrentContext(ctx);
-    
     if (!_initDone)
     {
         glGenTextures(1, &_renderTexture);
         _initDone = YES;
     }
-    
     if (_resetClearColor)
     {
         if (self.midiActive)
         {
-            glClearColor(0.309804f, 0.184314f, 0.309804f, 0);
+            glClearColor(0.309804f, 0.184314f, 0.309804f, 1);
         } else {
-            glClearColor(0.184314f, 0.309804f, 0.309804f, 0);
+            glClearColor(0.184314f, 0.309804f, 0.309804f, 1);
         }
-        
+
         _resetClearColor = NO;
     }
     
-    
     glClear(GL_COLOR_BUFFER_BIT);
+
 
     if (!self.renderer)
     {
@@ -88,6 +84,7 @@
         }
     } else {
         toDraw = [self.renderer currentFrame];
+        CGLSetCurrentContext(ctx);
     }
     
     if (!toDraw)
@@ -145,7 +142,6 @@
     
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    
     
     glOrtho(0.0, self.bounds.size.width, 0.0, self.bounds.size.height, 0, 1);
     glMatrixMode(GL_MODELVIEW);
@@ -292,10 +288,10 @@
     glDisable(GL_TEXTURE_RECTANGLE_ARB);
 
  
+    
+
     [super drawInCGLContext:ctx pixelFormat:pf forLayerTime:t displayTime:ts];
 
-    
-    
 }
 
 -(NSRect)windowRectforWorldRect:(NSRect)worldRect
