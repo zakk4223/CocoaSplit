@@ -315,12 +315,11 @@
         _xLayer.masksToBounds = NO;
         _yLayer.masksToBounds = NO;
         
-        self.masksToBounds = NO;
+        self.masksToBounds = YES;
         _yLayer.anchorPoint = CGPointMake(0.0, 0.0);
-       // [_xLayer addSublayer:_sourceLayer];
-       // [_yLayer addSublayer:_xLayer];
-       // [self addSublayer:_yLayer];
-        [self addSublayer:_sourceLayer];
+       [_xLayer addSublayer:_sourceLayer];
+       [_yLayer addSublayer:_xLayer];
+    [self addSublayer:_yLayer];
         
     }
     

@@ -2534,6 +2534,7 @@ static NSArray *_sourceTypes = nil;
 -(void)setScrollXSpeed:(float)scrollXSpeed
 {
 
+    /*
     if (scrollXSpeed != 0)
     {
         CABasicAnimation *xanim = [CABasicAnimation animationWithKeyPath:@"firstMaterial.diffuse.contentsTransform.translation.x"];
@@ -2552,41 +2553,33 @@ static NSArray *_sourceTypes = nil;
         [self.geometryNode.geometry removeAnimationForKey:@"scrollX"];
     }
     _scrollXSpeed = scrollXSpeed;
+    */
     
     
-    /*
     [CATransaction begin];
     self.layer.scrollXSpeed = scrollXSpeed;
     [CATransaction commit];
-   */
+   
 }
 
 -(float)scrollXSpeed
 {
-    return _scrollXSpeed;
+    return self.layer.scrollXSpeed;
 }
 
 
 -(void)setScrollYSpeed:(float)scrollYSpeed
 {
 
-    if (scrollYSpeed != 0)
-    {
-        CABasicAnimation *yanim = [CABasicAnimation animationWithKeyPath:@"firstMaterial.diffuse.contentsTransform.translation.y"];
-        yanim.toValue = @1.0;
-        yanim.duration = scrollYSpeed;
-        yanim.repeatCount = INFINITY;
-        [self.geometryNode.geometry addAnimation:yanim forKey:@"scrollY"];
-    } else {
-        [self.geometryNode.geometry removeAnimationForKey:@"scrollY"];
-    }
-    _scrollYSpeed = scrollYSpeed;
+    [CATransaction begin];
+    self.layer.scrollYSpeed = scrollYSpeed;
+    [CATransaction commit];
 }
 
 
 -(float)scrollYSpeed
 {
-    return _scrollYSpeed;
+    return self.layer.scrollYSpeed;
 }
 
 
