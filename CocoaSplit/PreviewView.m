@@ -579,12 +579,41 @@
 
 -(void)rightMouseDown:(NSEvent *)theEvent
 {
-    
     NSPoint tmp;
     
     tmp = [self convertPoint:theEvent.locationInWindow fromView:nil];
-
     
+    NSArray *hits = [self hitTest:NSPointToCGPoint(tmp) options:nil];
+    
+    
+    InputSource *topSource = nil;
+    InputSource *deepSource = nil;
+    
+    for (SCNHitTestResult *res in hits)
+    {
+        SCNNode *hitNode = res.node;
+        if (hitNode.name)
+        {
+            InputSource *iSrc = [self.sourceLayout inputForUUID:hitNode.name];
+            if (!topSource)
+            {
+                topSource = iSrc;
+                deepSource = iSrc;
+            } else {
+                deepSource = iSrc;
+            }
+        }
+    }
+    
+    
+    if (theEvent.modifierFlags & NSControlKeyMask)
+    {
+        self.selectedSource = topSource;
+        
+    } else {
+        self.selectedSource = deepSource;
+    }
+ 
     
     if (self.viewOnly)
     {
@@ -594,15 +623,14 @@
 
     }
     
-    bool doDeep = YES;
     
     if (theEvent.modifierFlags & NSControlKeyMask)
     {
-        doDeep = NO;
+        self.selectedSource = deepSource;
+    } else {
+        self.selectedSource = topSource;
     }
-    NSPoint worldPoint = [self realPointforWindowPoint:tmp];
-    self.selectedSource = [self.sourceLayout findSource:worldPoint deepParent:doDeep];
-    
+
     if (self.selectedSource)
     {
         [self buildSettingsMenu];

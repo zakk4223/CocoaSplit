@@ -2005,7 +2005,7 @@ static NSArray *_sourceTypes = nil;
     iRect.origin.y = 0;
     
     [CATransaction begin];
-    //self.layer.frame = iRect;
+    self.layer.frame = iRect;
     //self.layer.sourceLayer.frame = iRect;
     [CATransaction commit];
     
@@ -2429,9 +2429,7 @@ static NSArray *_sourceTypes = nil;
 {
 
     _opacity = opacity;
-    //[CATransaction begin];
-    self.layer.opacity = _opacity;
-    //[CATransaction commit];
+    self.sceneNode.opacity = _opacity;
 }
 
 
@@ -2971,9 +2969,7 @@ static NSArray *_sourceTypes = nil;
     {
         self.videoInput.isActive = active;
     }
-    [CATransaction begin];
-    self.layer.hidden = !active;
-    [CATransaction commit];
+    self.sceneNode.hidden = !active;
     
 }
 
