@@ -2963,7 +2963,15 @@ static NSArray *_sourceTypes = nil;
     {
         self.videoInput.isActive = active;
     }
-    self.sceneNode.hidden = !active;
+    
+    CATransition *trans = [CATransition animation];
+    trans.type = kCATransitionPush;
+    trans.subtype = kCATransitionFromLeft;
+    trans.duration = 1.5;
+    trans.removedOnCompletion = YES;
+    NSLog(@"PARENT %@", self.layer.superlayer);
+    [self.layer addAnimation:trans forKey:kCATransition];
+    self.layer.hidden = !active;
     
 }
 
