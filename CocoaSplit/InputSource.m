@@ -1383,7 +1383,7 @@ static NSArray *_sourceTypes = nil;
     [CATransaction setDisableActions:YES];
     CALayer *nLayer = [CALayer layer];
     
-    
+    nLayer.name = @"ANIMATIONLAYER";
     nLayer.position = self.layer.position;
     nLayer.bounds = self.layer.bounds;
     nLayer.transform = self.layer.transform;

@@ -161,6 +161,18 @@
 		3473D2A81D5685DA00842EEE /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3473D2A71D5685DA00842EEE /* Media.xcassets */; };
 		3473D2AE1D56920B00842EEE /* CSAdvancedAudioWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3473D2AC1D56920B00842EEE /* CSAdvancedAudioWindowController.m */; };
 		3473D2AF1D56920B00842EEE /* CSAdvancedAudioWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3473D2AD1D56920B00842EEE /* CSAdvancedAudioWindowController.xib */; };
+		34788DB61EF511E100C3C9C5 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34788DB51EF511E100C3C9C5 /* JavaScriptCore.framework */; };
+		34788DD11EF52C1A00C3C9C5 /* cocoasplit.js in Resources */ = {isa = PBXBuildFile; fileRef = 34788DD01EF52C1A00C3C9C5 /* cocoasplit.js */; };
+		34788DD31EF52DA000C3C9C5 /* CSAnimationBlock.js in Resources */ = {isa = PBXBuildFile; fileRef = 34788DD21EF52DA000C3C9C5 /* CSAnimationBlock.js */; };
+		34788DD51EF52F5B00C3C9C5 /* cocoasplit.js in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34788DD01EF52C1A00C3C9C5 /* cocoasplit.js */; };
+		34788DD61EF52F5B00C3C9C5 /* CSAnimationBlock.js in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34788DD21EF52DA000C3C9C5 /* CSAnimationBlock.js */; };
+		34788DD81EF5569E00C3C9C5 /* CSAnimation.js in Resources */ = {isa = PBXBuildFile; fileRef = 34788DD71EF5569E00C3C9C5 /* CSAnimation.js */; };
+		34788DDB1EF5996000C3C9C5 /* CATransaction+JSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 34788DDA1EF5996000C3C9C5 /* CATransaction+JSExtensions.m */; };
+		34788DDE1EF59E5B00C3C9C5 /* CSAnimationInput.js in Resources */ = {isa = PBXBuildFile; fileRef = 34788DDD1EF59E5B00C3C9C5 /* CSAnimationInput.js */; };
+		34788DE01EF5A86800C3C9C5 /* CSAnimationInput.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 343B7BE41E9183BD00233DF1 /* CSAnimationInput.py */; };
+		34788DE11EF5A86800C3C9C5 /* CSAnimation.js in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34788DD71EF5569E00C3C9C5 /* CSAnimation.js */; };
+		34788DE21EF5A86800C3C9C5 /* CSAnimationInput.js in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34788DDD1EF59E5B00C3C9C5 /* CSAnimationInput.js */; };
+		34788DE71EF6753900C3C9C5 /* CSJSProxyObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 34788DE61EF6753900C3C9C5 /* CSJSProxyObj.m */; };
 		34792AF616104AA70065A859 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AF516104AA70065A859 /* IOKit.framework */; };
 		34792AFB1611A6B90065A859 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AFA1611A6B90065A859 /* IOSurface.framework */; };
 		3479A9971A9007DD00A524F0 /* CocoaSplit.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 3479A9961A9007DD00A524F0 /* CocoaSplit.sdef */; };
@@ -621,6 +633,20 @@
 			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		34788DD41EF52F3900C3C9C5 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Javascript;
+			dstSubfolderSpec = 7;
+			files = (
+				34788DE01EF5A86800C3C9C5 /* CSAnimationInput.py in CopyFiles */,
+				34788DE11EF5A86800C3C9C5 /* CSAnimation.js in CopyFiles */,
+				34788DE21EF5A86800C3C9C5 /* CSAnimationInput.js in CopyFiles */,
+				34788DD51EF52F5B00C3C9C5 /* cocoasplit.js in CopyFiles */,
+				34788DD61EF52F5B00C3C9C5 /* CSAnimationBlock.js in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		34D43556198DD00F00266169 /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -826,6 +852,22 @@
 		3473D2AB1D56920B00842EEE /* CSAdvancedAudioWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSAdvancedAudioWindowController.h; sourceTree = "<group>"; };
 		3473D2AC1D56920B00842EEE /* CSAdvancedAudioWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAdvancedAudioWindowController.m; sourceTree = "<group>"; };
 		3473D2AD1D56920B00842EEE /* CSAdvancedAudioWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSAdvancedAudioWindowController.xib; sourceTree = "<group>"; };
+		34788DB51EF511E100C3C9C5 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		34788DCE1EF51D0700C3C9C5 /* CATransactionJSExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CATransactionJSExport.h; sourceTree = "<group>"; };
+		34788DCF1EF5254700C3C9C5 /* JSExports.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSExports.h; sourceTree = "<group>"; };
+		34788DD01EF52C1A00C3C9C5 /* cocoasplit.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = cocoasplit.js; sourceTree = "<group>"; };
+		34788DD21EF52DA000C3C9C5 /* CSAnimationBlock.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = CSAnimationBlock.js; sourceTree = "<group>"; };
+		34788DD71EF5569E00C3C9C5 /* CSAnimation.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = CSAnimation.js; sourceTree = "<group>"; };
+		34788DD91EF5996000C3C9C5 /* CATransaction+JSExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CATransaction+JSExtensions.h"; sourceTree = "<group>"; };
+		34788DDA1EF5996000C3C9C5 /* CATransaction+JSExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CATransaction+JSExtensions.m"; sourceTree = "<group>"; };
+		34788DDC1EF59C1700C3C9C5 /* CALayerJSExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CALayerJSExport.h; sourceTree = "<group>"; };
+		34788DDD1EF59E5B00C3C9C5 /* CSAnimationInput.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = CSAnimationInput.js; sourceTree = "<group>"; };
+		34788DDF1EF5A1EC00C3C9C5 /* CAAnimationExports.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAAnimationExports.h; sourceTree = "<group>"; };
+		34788DE31EF6289F00C3C9C5 /* NSObjectJSExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSObjectJSExport.h; sourceTree = "<group>"; };
+		34788DE41EF65E8900C3C9C5 /* JSExportUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSExportUtil.h; sourceTree = "<group>"; };
+		34788DE51EF6753900C3C9C5 /* CSJSProxyObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSJSProxyObj.h; sourceTree = "<group>"; };
+		34788DE61EF6753900C3C9C5 /* CSJSProxyObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSJSProxyObj.m; sourceTree = "<group>"; };
+		34788DE81EF6A37200C3C9C5 /* CSJSProxyObjJSExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSJSProxyObjJSExport.h; sourceTree = "<group>"; };
 		34792AF516104AA70065A859 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		34792AFA1611A6B90065A859 /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = System/Library/Frameworks/IOSurface.framework; sourceTree = SDKROOT; };
 		3479A9961A9007DD00A524F0 /* CocoaSplit.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CocoaSplit.sdef; sourceTree = "<group>"; };
@@ -1140,6 +1182,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34788DB61EF511E100C3C9C5 /* JavaScriptCore.framework in Frameworks */,
 				340C7FE91D43D22000B2FD7D /* Security.framework in Frameworks */,
 				34EA824E1D3CBFCA00928A06 /* WebKit.framework in Frameworks */,
 				34E983701B78AE9100F26F1E /* Python.framework in Frameworks */,
@@ -1247,6 +1290,7 @@
 		340FE4A015F3417E00E4CE4E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				34788DB51EF511E100C3C9C5 /* JavaScriptCore.framework */,
 				340C7FE81D43D22000B2FD7D /* Security.framework */,
 				34EA824D1D3CBFCA00928A06 /* WebKit.framework */,
 				341A2D5B1C7AB04700FF7566 /* Sparkle.framework */,
@@ -1294,6 +1338,7 @@
 		340FE4A715F3417E00E4CE4E /* CocoaSplit */ = {
 			isa = PBXGroup;
 			children = (
+				34788DCD1EF51CB800C3C9C5 /* JSExports */,
 				3494DF341CCD2DB000E921BF /* TPCircularBuffer.c */,
 				3494DF351CCD2DB000E921BF /* TPCircularBuffer.h */,
 				3494DF361CCD2DB000E921BF /* TPCircularBuffer+AudioBufferList.c */,
@@ -1701,6 +1746,24 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		34788DCD1EF51CB800C3C9C5 /* JSExports */ = {
+			isa = PBXGroup;
+			children = (
+				34788DCE1EF51D0700C3C9C5 /* CATransactionJSExport.h */,
+				34788DCF1EF5254700C3C9C5 /* JSExports.h */,
+				34788DD91EF5996000C3C9C5 /* CATransaction+JSExtensions.h */,
+				34788DDA1EF5996000C3C9C5 /* CATransaction+JSExtensions.m */,
+				34788DDC1EF59C1700C3C9C5 /* CALayerJSExport.h */,
+				34788DDF1EF5A1EC00C3C9C5 /* CAAnimationExports.h */,
+				34788DE31EF6289F00C3C9C5 /* NSObjectJSExport.h */,
+				34788DE41EF65E8900C3C9C5 /* JSExportUtil.h */,
+				34788DE51EF6753900C3C9C5 /* CSJSProxyObj.h */,
+				34788DE61EF6753900C3C9C5 /* CSJSProxyObj.m */,
+				34788DE81EF6A37200C3C9C5 /* CSJSProxyObjJSExport.h */,
+			);
+			path = JSExports;
+			sourceTree = "<group>";
+		};
 		349461581AB420E600F28883 /* CSAnimationRunner */ = {
 			isa = PBXGroup;
 			children = (
@@ -1710,6 +1773,10 @@
 				34E983841B78B19D00F26F1E /* pluginbase.py */,
 				343B7BE11E917B1A00233DF1 /* cocoasplit.py */,
 				343B7BE41E9183BD00233DF1 /* CSAnimationInput.py */,
+				34788DD01EF52C1A00C3C9C5 /* cocoasplit.js */,
+				34788DD21EF52DA000C3C9C5 /* CSAnimationBlock.js */,
+				34788DD71EF5569E00C3C9C5 /* CSAnimation.js */,
+				34788DDD1EF59E5B00C3C9C5 /* CSAnimationInput.js */,
 			);
 			path = CSAnimationRunner;
 			sourceTree = "<group>";
@@ -2126,6 +2193,7 @@
 				3460E5891AC766120080358E /* CopyFiles */,
 				343644051B78EFF90069B8F2 /* CopyFiles */,
 				34BAAD3B1C13DF8F00A48C76 /* ShellScript */,
+				34788DD41EF52F3900C3C9C5 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -2477,13 +2545,17 @@
 				34BD1E651B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.xib in Resources */,
 				34E162E91E987420005157ED /* CSScriptWindowViewController.xib in Resources */,
 				3400A07E1BD49406003E1828 /* CSInputLibraryItemView.xib in Resources */,
+				34788DD11EF52C1A00C3C9C5 /* cocoasplit.js in Resources */,
 				340FE4B215F3417E00E4CE4E /* Credits.rtf in Resources */,
 				340FE4B815F3417E00E4CE4E /* MainMenu.xib in Resources */,
 				343B7BE21E917B1A00233DF1 /* cocoasplit.py in Resources */,
 				34DA1D3F1BF823E700132486 /* CSNewOutputWindowController.xib in Resources */,
+				34788DD31EF52DA000C3C9C5 /* CSAnimationBlock.js in Resources */,
 				34F1EB931BCCA41F00B38E6C /* CSLayoutEditWindowController.xib in Resources */,
 				34B5FB741E7E6E0A0078FC51 /* CSSequenceItemLayoutViewController.xib in Resources */,
+				34788DDE1EF59E5B00C3C9C5 /* CSAnimationInput.js in Resources */,
 				343B7BE51E9183BD00233DF1 /* CSAnimationInput.py in Resources */,
+				34788DD81EF5569E00C3C9C5 /* CSAnimation.js in Resources */,
 				342B33B61980771200492CB7 /* line.vtsh in Resources */,
 				34938EEF1AE4D24200F3B1CF /* CSFilterChooserWindowController.xib in Resources */,
 				34B5FAED1E76297A0078FC51 /* CSAddSequenceItemPopupViewController.xib in Resources */,
@@ -2560,6 +2632,7 @@
 				34ED8C4B1B07371C002C0674 /* MIKMIDIClientDestinationEndpoint.m in Sources */,
 				34ED8C871B07371C002C0674 /* MIKMIDIMetaTimeSignatureEvent.m in Sources */,
 				34F04DAB1CE0BB770054663A /* NSView+NSLayoutConstraintFilter.m in Sources */,
+				34788DE71EF6753900C3C9C5 /* CSJSProxyObj.m in Sources */,
 				34ED8C7B1B07371C002C0674 /* MIKMIDIMetaInstrumentNameEvent.m in Sources */,
 				34F80D701EDCBE5100D890D3 /* CSScriptCommand.m in Sources */,
 				34ED8C8B1B07371C002C0674 /* MIKMIDIMetronome.m in Sources */,
@@ -2617,6 +2690,7 @@
 				34EAFB6F1A1A137600E12FBD /* CSMeterCell.m in Sources */,
 				34D2D5771A547C35001004E5 /* CSTextCaptureViewControllerBase.m in Sources */,
 				34B5FCDF19BF1C3F00F67D19 /* CreateLayoutViewController.m in Sources */,
+				34788DDB1EF5996000C3C9C5 /* CATransaction+JSExtensions.m in Sources */,
 				34ED8C6F1B07371C002C0674 /* MIKMIDIMappingGenerator.m in Sources */,
 				342346CF15F9F07E00C8C77E /* CSAbstractCaptureDevice.m in Sources */,
 				34938EE81AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m in Sources */,

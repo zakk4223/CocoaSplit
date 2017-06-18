@@ -7,16 +7,69 @@
 //
 
 #import "AppDelegate.h"
+#import "JSExports.h"
+
+#import <objc/runtime.h>
 #import <AVFoundation/AVFoundation.h>
+#import <QuartzCore/QuartzCore.h>
+
 
 @implementation AppDelegate
 
 
 
+
+-(void)addProtocolsForClass:(Class)class
+{
+    Class tmpClass = class;
+    
+    while (tmpClass)
+    {
+        NSString *className = NSStringFromClass(tmpClass);
+        NSString *protoName = [NSString stringWithFormat:@"%@JSExport", className];
+        
+        Protocol *proto = NSProtocolFromString(protoName);
+        if (proto)
+        {
+            NSLog(@"ADD PROTO %@ TO %@", protoName, NSStringFromClass(class));
+            class_addProtocol(class, proto);
+        }
+        
+        unsigned int protoCnt;
+        Protocol *__unsafe_unretained *classProtos = class_copyProtocolList(tmpClass, &protoCnt);
+        if (classProtos)
+        {
+            for (int p = 0; p < protoCnt; p++)
+            {
+                Protocol *aProto = classProtos[p];
+                NSString *aProtoName = NSStringFromProtocol(aProto);
+                NSString *aExportName = [NSString stringWithFormat:@"%@JSExport", aProtoName];
+                Protocol *exProto = NSProtocolFromString(aExportName);
+                if (exProto)
+                {
+                    class_addProtocol(class, exProto);
+                }
+            }
+            free(classProtos);
+        }
+        
+        tmpClass = class_getSuperclass(tmpClass);
+    }
+}
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     
     
+    [self addProtocolsForClass:[CATransaction class]];
+    [self addProtocolsForClass:[CALayer class]];
+    [self addProtocolsForClass:[CAAnimation class]];
+    [self addProtocolsForClass:[CAPropertyAnimation class]];
+    [self addProtocolsForClass:[CABasicAnimation class]];
+    [self addProtocolsForClass:[CAKeyframeAnimation class]];
+    [self addProtocolsForClass:[CATransition class]];
+    [self addProtocolsForClass:[CSInputLayer class]];
+
+
     [_window setReleasedWhenClosed:NO];
     
     
@@ -42,7 +95,6 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [CaptureController sharedAnimationObj];
     });
-    
     
     
     [self.captureController loadSettings];

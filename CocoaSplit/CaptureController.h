@@ -44,6 +44,7 @@
 #import "CSSequenceEditorWindowController.h"
 #import "CSSequenceActivatorViewController.h"
 #import "CSLayoutRecorderInfoProtocol.h"
+#import "JavaScriptCore/JavaScriptCore.h"
 
 
 @class FFMpegTask;
@@ -63,171 +64,55 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 @class PreviewView;
 
-
-@interface CaptureController : NSObject <NSTableViewDelegate, NSMenuDelegate, MIKMIDIMappableResponder, MIKMIDIResponder, MIKMIDIMappingGeneratorDelegate, CSTimerSourceProtocol, NSCollectionViewDelegate, NSOutlineViewDelegate, NSOutlineViewDataSource, CSLayoutRecorderInfoProtocol> {
-    
-    
-    CSSequenceEditorWindowController *_sequenceWindowController;
-    
-    
-    CSLayoutSwitcherViewController *_layoutViewController;
-    CSScriptWindowViewController *_scriptWindowViewController;
-    CSSequenceActivatorViewController *_sequenceViewController;
-    
-    
-    CSLayoutSequence *_testSequence;
-    
-    NSArray *_inputIdentifiers;
-
-    NSRect _stagingFrame;
-    NSRect _liveFrame;
-    
-
-    NSScreen *_fullscreenOn;
-    
-    IOPMAssertionID _PMAssertionID;
-    IOReturn _PMAssertionRet;
-    
-    id _activity_token;
-    
-    long long _frameCount;
-    long long _streamFrameStart;
-    
-    dispatch_source_t _statistics_timer;
-    dispatch_source_t _audio_statistics_timer;
-
-    
-    
-    mach_timebase_info_data_t _mach_timebase;
-    double _frame_time;
-    double _start_time;
-    
-    NSMutableArray *videoBuffer;
-    
-    dispatch_source_t _log_source;
-    bool _last_running_value;
-    
-    
-    
-    float _min_render_time;
-    float _max_render_time;
-    float _avg_render_time;
-    float _render_time_total;
-    int _renderedFrames;
-    
-    NSPopover *_addInputpopOver;
-    
-    NSPopover *_addOutputpopOver;
-    
-    NSPopover *_layoutpopOver;
-    
-    NSMutableArray *_screensCache;
-    NSMutableArray *_layoutWindows;
-    NSMutableArray *_outputWindows;
-    NSMutableArray *_sequenceWindows;
-    
-    bool _needsIRReset;
-    
-    CSAdvancedAudioWindowController *_audioWindowController;
-    CSStreamOutputWindowController *_streamOutputWindowController;
-    CSLayoutSwitcherWithPreviewWindowController *_layoutSwitcherWindowController;
-    CGFloat _savedAudioConstraintConstant;
-    NSArray *_savedTransitionConstraints;
-    
-}
-
+@protocol CaptureControllerExport <JSExport>
 @property (strong) NSMutableArray *layoutRecorders;
 @property (strong) NSString *layoutRecorderCompressorName;
 @property (strong) NSString *layoutRecordingDirectory;
 @property (strong) NSString *layoutRecordingFormat;
-
-
 @property (weak) IBOutlet CSGridView *layoutGridView;
-
 @property (assign) bool useInstantRecord;
 @property (assign) int instantRecordBufferDuration;
 @property (strong) NSString *instantRecordCompressor;
 @property (strong) NSString *instantRecordDirectory;
-
 @property (readonly) float frameRate;
-
 @property (assign) bool instantRecordActive;
-
 @property (strong) CSTimedOutputBuffer *instantRecorder;
-
-
 @property (weak) IBOutlet NSCollectionView *layoutCollectionView;
-
 @property (assign) bool stagingHidden;
-
 @property (strong) NSMutableArray *inputLibrary;
-
 @property (weak) IBOutlet NSMenu *stagingFullScreenMenu;
 @property (weak) IBOutlet NSMenu *liveFullScreenMenu;
-
 @property (weak) IBOutlet NSMenu *exportLayoutMenu;
-
-
 @property (strong) MIKMIDIDeviceManager *midiManager;
-
 @property (strong) NSMutableDictionary *midiDeviceMappings;
-
 @property (strong) NSArray *midiMapGenerators;
-
 @property (assign) NSInteger currentMidiInputStagingIdx;
 @property (assign) NSInteger currentMidiInputLiveIdx;
-
 @property (assign) bool currentMidiLayoutLive;
-
 @property (assign) bool useMidiLiveChannelMapping;
 @property (assign) NSInteger midiLiveChannel;
-
-
 @property (weak) IBOutlet NSArrayController *AudioDeviceArrayController;
-
 @property (strong) CAMultiAudioEngine *multiAudioEngine;
-
-
 @property (strong) PluginManagerWindowController *pluginManagerController;
 @property (strong) CSMidiManagerWindowController *midiManagerController;
-
-
 @property (strong) NSString *renderStatsString;
 @property (strong) NSString *outputStatsString;
-
-
 @property (strong) NSMutableArray *layoutSequences;
-
-
 @property (strong) NSMutableArray *sourceLayouts;
 @property (strong) SourceLayout *selectedLayout;
 @property (strong) SourceLayout *stagingLayout;
-
-
 @property (weak) IBOutlet NSSplitView *canvasSplitView;
-
-
-
 @property (assign) double captureFPS;
 @property (assign) int audioBitrate;
 @property (assign) int audioSamplerate;
-
-
 @property (assign) double audio_adjust;
-
-
 @property (weak) IBOutlet NSPopover *editorPopover;
-
 @property (unsafe_unretained) IBOutlet PreviewView *previewCtx;
 @property (weak) IBOutlet PreviewView *stagingCtx;
-
 @property (unsafe_unretained) IBOutlet NSObjectController *objectController;
-
 @property (readonly) NSArray *layoutSortDescriptors;
-
 @property (weak) IBOutlet PreviewView *stagingPreviewView;
 @property (weak) IBOutlet PreviewView *livePreviewView;
-
 @property (strong) NSMutableDictionary *transitionNames;
 @property (strong) NSArray *transitionDirections;
 @property (assign) float transitionDuration;
@@ -237,24 +122,61 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (assign) bool transitionFullScene;
 @property (assign) NSInteger active_output_count;
 @property (assign) NSInteger total_dropped_frames;
-
 @property (weak) IBOutlet NSView *transitionConfigurationView;
 @property (weak) IBOutlet NSView *transitionSuperView;
 @property (weak) IBOutlet NSScrollView *audioView;
 @property (assign) bool useTransitions;
-
 @property (weak) IBOutlet NSLayoutConstraint *transitionConstraint;
 @property (weak) IBOutlet NSLayoutConstraint *audioConstraint;
 @property (weak) IBOutlet NSTextField *transitionLabel;
-
 @property (strong) NSWindow *transitionFilterWindow;
+@property (strong) NSMutableDictionary *compressors;
+@property (weak) NSString *selectedVideoType;
+@property (strong) NSString *selectedCompressorType;
+@property (strong) IBOutlet NSWindow *advancedPrefPanel;
+@property (strong) IBOutlet NSWindow *logWindow;
+@property (strong) CSNewOutputWindowController *addOutputWindowController;
+@property (strong) CompressionSettingsPanelController *compressionEditPanelController;
+@property (weak) IBOutlet NSWindow *mainWindow;
+@property (strong) NSMutableArray *captureDestinations;
+@property (weak) NSIndexSet *selectedCaptureDestinations;
+@property (assign) int selectedTabIndex;
+@property (assign) int maxOutputPending;
+@property (assign) int maxOutputDropped;
+@property (assign) BOOL captureRunning;
+@property (strong) NSString *resolutionOption;
+@property (assign) int captureHeight;
+@property (assign) int captureWidth;
+@property (strong) NSArray *validSamplerates;
+@property (weak) NSArray *audioCaptureDevices;
+@property (weak) IBOutlet NSOutlineView *inputOutlineView;
+@property (strong) NSDictionary *extraSaveData;
+@property (strong) NSPipe *loggingPipe;
+@property (strong) NSFileHandle *logReadHandle;
+@property (assign) bool useStatusColors;
+@property (unsafe_unretained) IBOutlet NSTextView *logTextView;
+@property (weak) IBOutlet NSMenu *extrasMenu;
+@property (strong) NSMutableDictionary *extraPlugins;
+@property (strong) NSMutableDictionary *extraPluginsSaveData;
+@property (strong) CSPluginLoader *sharedPluginLoader;
+@property (strong) PreviewView *activePreviewView;
+@property (strong) CSInputLibraryWindowController *inputLibraryController;
+@property (strong) NSIndexSet *inputOutlineSelectionIndexes;
+@property (weak) IBOutlet NSArrayController *activeInputsArrayController;
+@property (assign) bool inLayoutTransition;
+@property (weak) IBOutlet NSTableView *inputTableView;
+@property (weak) IBOutlet NSTableView *outputTableView;
+@property (weak) IBOutlet NSArrayController *sourceLayoutsArrayController;
+@property (weak) IBOutlet NSTreeController *inputTreeController;
+@property (weak) IBOutlet NSButton *streamButton;
+@property (strong) NSString *layoutScriptLabel;
+@property (strong) CSLayoutRecorder *mainLayoutRecorder;
+@property (readonly) SourceLayout *activeLayout;
+
 
 -(IBAction)hideTransitionView:(id)sender;
 -(IBAction)showTransitionView:(id)sender;
-
-
 - (IBAction)doInstantRecord:(id)sender;
-
 -(IBAction)openTransitionFilterPanel:(NSButton *)sender;
 
 
@@ -296,26 +218,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 
-@property (strong) NSMutableDictionary *compressors;
-
-
-@property (weak) NSString *selectedVideoType;
-@property (strong) NSString *selectedCompressorType;
-
-
-
-
-
-
-
-
-@property (strong) IBOutlet NSWindow *advancedPrefPanel;
-@property (strong) IBOutlet NSWindow *logWindow;
-
-@property (strong) CSNewOutputWindowController *addOutputWindowController;
-@property (strong) CompressionSettingsPanelController *compressionEditPanelController;
-@property (weak) IBOutlet NSWindow *mainWindow;
-
 
 
 
@@ -323,65 +225,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 
-@property (strong) NSMutableArray *captureDestinations;
-@property (weak) NSIndexSet *selectedCaptureDestinations;
-@property (assign) int selectedTabIndex;
-
-
-
-
-@property (assign) int maxOutputPending;
-@property (assign) int maxOutputDropped;
-
-@property (assign) BOOL captureRunning;
-@property (strong) NSString *resolutionOption;
-
-
-@property (assign) int captureHeight;
-@property (assign) int captureWidth;
-
-
-@property (strong) NSArray *validSamplerates;
-
-
-
 - (IBAction)removeDestination:(id)sender;
-
-@property (weak) NSArray *audioCaptureDevices;
-
-
-
-
-
-@property (weak) IBOutlet NSOutlineView *inputOutlineView;
-
-
-@property (strong) NSDictionary *extraSaveData;
-
-@property (strong) NSPipe *loggingPipe;
-@property (strong) NSFileHandle *logReadHandle;
-
-@property (assign) bool useStatusColors;
-
-@property (unsafe_unretained) IBOutlet NSTextView *logTextView;
-
-@property (weak) IBOutlet NSMenu *extrasMenu;
-
-@property (strong) NSMutableDictionary *extraPlugins;
-
-@property (strong) NSMutableDictionary *extraPluginsSaveData;
-@property (strong) CSPluginLoader *sharedPluginLoader;
-
-@property (strong) PreviewView *activePreviewView;
-
-@property (strong) CSInputLibraryWindowController *inputLibraryController;
-
-@property (strong) NSIndexSet *inputOutlineSelectionIndexes;
-
-
-@property (weak) IBOutlet NSArrayController *activeInputsArrayController;
-
-@property (assign) bool inLayoutTransition;
 
 
 
@@ -421,14 +265,9 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(void)openBuiltinLayoutPopover:(NSView *)sender spawnRect:(NSRect)spawnRect forLayout:(SourceLayout *)layout;
 
 
-@property (weak) IBOutlet NSTableView *inputTableView;
 
-@property (weak) IBOutlet NSTableView *outputTableView;
 - (IBAction)outputEditClicked:(OutputDestination *)sender;
 
-@property (weak) IBOutlet NSArrayController *sourceLayoutsArrayController;
-@property (weak) IBOutlet NSTreeController *inputTreeController;
-@property (weak) IBOutlet NSButton *streamButton;
 
 -(void)setupLogging;
 +(CSAnimationRunnerObj *) sharedAnimationObj;
@@ -488,8 +327,190 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(void)stopRecordingLayout:(SourceLayout *)layout usingOutput:(OutputDestination *)output;
 -(void)removeLayoutRecorder:(CSLayoutRecorder *)toRemove;
 -(void)stopRecordingLayout:(SourceLayout *)layout;
+@end
+
+
+
+@interface CaptureController : NSObject <CaptureControllerExport, NSTableViewDelegate, NSMenuDelegate, MIKMIDIMappableResponder, MIKMIDIResponder, MIKMIDIMappingGeneratorDelegate, CSTimerSourceProtocol, NSCollectionViewDelegate, NSOutlineViewDelegate, NSOutlineViewDataSource, CSLayoutRecorderInfoProtocol>
+
+{
+CSSequenceEditorWindowController *_sequenceWindowController;
+
+
+CSLayoutSwitcherViewController *_layoutViewController;
+CSScriptWindowViewController *_scriptWindowViewController;
+CSSequenceActivatorViewController *_sequenceViewController;
+
+
+CSLayoutSequence *_testSequence;
+
+NSArray *_inputIdentifiers;
+
+NSRect _stagingFrame;
+NSRect _liveFrame;
+
+
+NSScreen *_fullscreenOn;
+
+IOPMAssertionID _PMAssertionID;
+IOReturn _PMAssertionRet;
+
+id _activity_token;
+
+long long _frameCount;
+long long _streamFrameStart;
+
+dispatch_source_t _statistics_timer;
+dispatch_source_t _audio_statistics_timer;
+
+
+
+mach_timebase_info_data_t _mach_timebase;
+double _frame_time;
+double _start_time;
+
+NSMutableArray *videoBuffer;
+
+dispatch_source_t _log_source;
+bool _last_running_value;
+
+
+
+float _min_render_time;
+float _max_render_time;
+float _avg_render_time;
+float _render_time_total;
+int _renderedFrames;
+
+NSPopover *_addInputpopOver;
+
+NSPopover *_addOutputpopOver;
+
+NSPopover *_layoutpopOver;
+
+NSMutableArray *_screensCache;
+NSMutableArray *_layoutWindows;
+NSMutableArray *_outputWindows;
+NSMutableArray *_sequenceWindows;
+
+bool _needsIRReset;
+
+CSAdvancedAudioWindowController *_audioWindowController;
+CSStreamOutputWindowController *_streamOutputWindowController;
+CSLayoutSwitcherWithPreviewWindowController *_layoutSwitcherWindowController;
+CGFloat _savedAudioConstraintConstant;
+NSArray *_savedTransitionConstraints;
+
+}
+@property (strong) NSMutableArray *layoutRecorders;
+@property (strong) NSString *layoutRecorderCompressorName;
+@property (strong) NSString *layoutRecordingDirectory;
+@property (strong) NSString *layoutRecordingFormat;
+@property (weak) IBOutlet CSGridView *layoutGridView;
+@property (assign) bool useInstantRecord;
+@property (assign) int instantRecordBufferDuration;
+@property (strong) NSString *instantRecordCompressor;
+@property (strong) NSString *instantRecordDirectory;
+@property (readonly) float frameRate;
+@property (assign) bool instantRecordActive;
+@property (strong) CSTimedOutputBuffer *instantRecorder;
+@property (weak) IBOutlet NSCollectionView *layoutCollectionView;
+@property (assign) bool stagingHidden;
+@property (strong) NSMutableArray *inputLibrary;
+@property (weak) IBOutlet NSMenu *stagingFullScreenMenu;
+@property (weak) IBOutlet NSMenu *liveFullScreenMenu;
+@property (weak) IBOutlet NSMenu *exportLayoutMenu;
+@property (strong) MIKMIDIDeviceManager *midiManager;
+@property (strong) NSMutableDictionary *midiDeviceMappings;
+@property (strong) NSArray *midiMapGenerators;
+@property (assign) NSInteger currentMidiInputStagingIdx;
+@property (assign) NSInteger currentMidiInputLiveIdx;
+@property (assign) bool currentMidiLayoutLive;
+@property (assign) bool useMidiLiveChannelMapping;
+@property (assign) NSInteger midiLiveChannel;
+@property (weak) IBOutlet NSArrayController *AudioDeviceArrayController;
+@property (strong) CAMultiAudioEngine *multiAudioEngine;
+@property (strong) PluginManagerWindowController *pluginManagerController;
+@property (strong) CSMidiManagerWindowController *midiManagerController;
+@property (strong) NSString *renderStatsString;
+@property (strong) NSString *outputStatsString;
+@property (strong) NSMutableArray *layoutSequences;
+@property (strong) NSMutableArray *sourceLayouts;
+@property (strong) SourceLayout *selectedLayout;
+@property (strong) SourceLayout *stagingLayout;
+@property (weak) IBOutlet NSSplitView *canvasSplitView;
+@property (assign) double captureFPS;
+@property (assign) int audioBitrate;
+@property (assign) int audioSamplerate;
+@property (assign) double audio_adjust;
+@property (weak) IBOutlet NSPopover *editorPopover;
+@property (unsafe_unretained) IBOutlet PreviewView *previewCtx;
+@property (weak) IBOutlet PreviewView *stagingCtx;
+@property (unsafe_unretained) IBOutlet NSObjectController *objectController;
+@property (readonly) NSArray *layoutSortDescriptors;
+@property (weak) IBOutlet PreviewView *stagingPreviewView;
+@property (weak) IBOutlet PreviewView *livePreviewView;
+@property (strong) NSMutableDictionary *transitionNames;
+@property (strong) NSArray *transitionDirections;
+@property (assign) float transitionDuration;
+@property (strong) NSString *transitionName;
+@property (strong) NSString *transitionDirection;
+@property (strong) CIFilter *transitionFilter;
+@property (assign) bool transitionFullScene;
+@property (assign) NSInteger active_output_count;
+@property (assign) NSInteger total_dropped_frames;
+@property (weak) IBOutlet NSView *transitionConfigurationView;
+@property (weak) IBOutlet NSView *transitionSuperView;
+@property (weak) IBOutlet NSScrollView *audioView;
+@property (assign) bool useTransitions;
+@property (weak) IBOutlet NSLayoutConstraint *transitionConstraint;
+@property (weak) IBOutlet NSLayoutConstraint *audioConstraint;
+@property (weak) IBOutlet NSTextField *transitionLabel;
+@property (strong) NSWindow *transitionFilterWindow;
+@property (strong) NSMutableDictionary *compressors;
+@property (weak) NSString *selectedVideoType;
+@property (strong) NSString *selectedCompressorType;
+@property (strong) IBOutlet NSWindow *advancedPrefPanel;
+@property (strong) IBOutlet NSWindow *logWindow;
+@property (strong) CSNewOutputWindowController *addOutputWindowController;
+@property (strong) CompressionSettingsPanelController *compressionEditPanelController;
+@property (weak) IBOutlet NSWindow *mainWindow;
+@property (strong) NSMutableArray *captureDestinations;
+@property (weak) NSIndexSet *selectedCaptureDestinations;
+@property (assign) int selectedTabIndex;
+@property (assign) int maxOutputPending;
+@property (assign) int maxOutputDropped;
+@property (assign) BOOL captureRunning;
+@property (strong) NSString *resolutionOption;
+@property (assign) int captureHeight;
+@property (assign) int captureWidth;
+@property (strong) NSArray *validSamplerates;
+@property (weak) NSArray *audioCaptureDevices;
+@property (weak) IBOutlet NSOutlineView *inputOutlineView;
+@property (strong) NSDictionary *extraSaveData;
+@property (strong) NSPipe *loggingPipe;
+@property (strong) NSFileHandle *logReadHandle;
+@property (assign) bool useStatusColors;
+@property (unsafe_unretained) IBOutlet NSTextView *logTextView;
+@property (weak) IBOutlet NSMenu *extrasMenu;
+@property (strong) NSMutableDictionary *extraPlugins;
+@property (strong) NSMutableDictionary *extraPluginsSaveData;
+@property (strong) CSPluginLoader *sharedPluginLoader;
+@property (strong) PreviewView *activePreviewView;
+@property (strong) CSInputLibraryWindowController *inputLibraryController;
+@property (strong) NSIndexSet *inputOutlineSelectionIndexes;
+@property (weak) IBOutlet NSArrayController *activeInputsArrayController;
+@property (assign) bool inLayoutTransition;
+@property (weak) IBOutlet NSTableView *inputTableView;
+@property (weak) IBOutlet NSTableView *outputTableView;
+@property (weak) IBOutlet NSArrayController *sourceLayoutsArrayController;
+@property (weak) IBOutlet NSTreeController *inputTreeController;
+@property (weak) IBOutlet NSButton *streamButton;
 @property (strong) NSString *layoutScriptLabel;
 @property (strong) CSLayoutRecorder *mainLayoutRecorder;
+@property (readonly) SourceLayout *activeLayout;
 
+
+-(JSContext *)setupJavascriptContext;
 
 @end

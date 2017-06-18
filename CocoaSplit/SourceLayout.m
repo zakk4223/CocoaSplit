@@ -243,8 +243,9 @@
     void (^completionBlock)(void) = [threadDict objectForKey:@"completionBlock"];
     void (^exceptionBlock)(NSException *exception) = [threadDict objectForKey:@"exceptionBlock"];
     
+    JSContext *jsCtx = [[CaptureController sharedCaptureController] setupJavascriptContext];
     
-    @try {
+    //@try {
 
             [CATransaction begin];
             [CATransaction setCompletionBlock:^{
@@ -258,12 +259,27 @@
         
         if (animationCode)
         {
-            NSDictionary *pendingAnimations = [runner runAnimation:animationCode forLayout:self withExtraDictionary:extraDict];
+            jsCtx[@"extraDict"] = extraDict;
+            jsCtx[@"useLayout"] = self;
+            
+            NSLog(@"RUN ANIMATION CODE %@", animationCode);
+            
+           // runAnimationForLayoutWithExtraDictionary = function(animation_string, layout, extraDictionary) {
+            JSValue *runFunc = jsCtx[@"runAnimationForLayoutWithExtraDictionary"];
+            JSValue *scriptRet = [runFunc callWithArguments:@[animationCode, self, extraDict]];
+                                  
+
+        
+            NSLog(@"SCRIPT RET %@", scriptRet);
+            NSDictionary *pendingAnimations = @{};
+            
+            //NSDictionary *pendingAnimations = [runner runAnimation:animationCode forLayout:self withExtraDictionary:extraDict];
             self.pendingScripts[runUUID] = pendingAnimations;
         } else {
             [runner runAnimation:modName forLayout:self  withSuperlayer:rootLayer];
         }
-    }
+    //}
+    /*
     @catch (NSException *exception) {
         
         [self.pendingScripts removeObjectForKey:runUUID];
@@ -275,11 +291,11 @@
         
         NSLog(@"Animation module %@ failed with exception: %@: %@", modName, [exception name], [exception reason]);
     }
-    @finally {
+    @finally {*/
             [CATransaction commit];
 
         //[CATransaction flush];
-    }
+    //}
 }
 
 

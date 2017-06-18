@@ -33,7 +33,7 @@
 
 #import <Python/Python.h>
 #import "CSLayoutRecorder.h"
-
+#import "CSJSProxyObj.h"
 
 
 
@@ -50,6 +50,103 @@
 @synthesize captureRunning = _captureRunning;
 
 
+
+
+-(void)evaluateJavascriptFile:(NSString *)baseFile inContext:(JSContext *)ctx
+{
+    NSString *ret = nil;
+    NSString *path = [[NSBundle mainBundle] pathForResource:baseFile ofType:@"js" inDirectory:@"Javascript"];
+    if (path)
+    {
+        NSString *scriptSource = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+        if (scriptSource)
+        {
+            NSLog(@"EVALUATING %@", baseFile);
+            
+            [ctx evaluateScript:scriptSource];
+        }
+    }
+}
+
+
+-(JSContext *)setupJavascriptContext
+{
+    JSContext *ctx = [[JSContext alloc] init];
+    ctx.exceptionHandler = ^(JSContext *context, JSValue *exception) {
+        NSString *stackTrace = [exception objectForKeyedSubscript:@"stack"].toString;
+        NSNumber *lineNum = [exception objectForKeyedSubscript:@"line"].toNumber;
+        NSNumber *colNum = [exception objectForKeyedSubscript:@"column"].toNumber;
+        NSLog(@"JS EXCEPTION %@\n%@ LINE %@ COLUMN %@", exception, stackTrace, lineNum, colNum);
+    };
+
+    
+    ctx[@"generateUUID"] = ^(void) {
+        CFUUIDRef tmpUUID = CFUUIDCreate(NULL);
+        NSString *uuid = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, tmpUUID);
+        CFRelease(tmpUUID);
+        return uuid;
+    };
+    
+    ctx[@"console"][@"log"] = ^(NSString *msg) {
+        NSLog(@"JS: %@", msg);
+    };
+    
+    ctx[@"proxyWithObject"] = ^(JSValue *jObject) {
+        
+        CSJSProxyObj *retObj = [[CSJSProxyObj alloc] init];
+        retObj.jsObject = jObject;
+        return retObj;
+    };
+    
+    
+    ctx[@"captureController"] = self;
+    ctx[@"CATransaction"] = CATransaction.class;
+    ctx[@"CALayer"] = CALayer.class;
+    ctx[@"CAAnimation"] = CAAnimation.class;
+    ctx[@"CAPropertyAnimation"] = CAPropertyAnimation.class;
+    ctx[@"CABasicAnimation"] = CABasicAnimation.class;
+    ctx[@"CAKeyframeAnimation"] = CAKeyframeAnimation.class;
+    ctx[@"CATransition"] = CATransition.class;
+    ctx[@"HUGE_VALF"] = @(HUGE_VALF);
+    
+    ctx[@"CACurrentMediaTime"] = ^(void) {
+        return CACurrentMediaTime();
+    };
+    
+    
+    ctx[@"NSMinY"] = ^(NSRect rect) {
+        return NSMinY(rect);
+    };
+    
+    ctx[@"NSMinX"] = ^(NSRect rect) {
+        return NSMinX(rect);
+    };
+
+    ctx[@"NSMaxY"] = ^(NSRect rect) {
+        return NSMaxY(rect);
+    };
+
+    ctx[@"NSMaxX"] = ^(NSRect rect) {
+        return NSMaxX(rect);
+    };
+
+    ctx[@"NSMidY"] = ^(NSRect rect) {
+        return NSMidY(rect);
+    };
+
+    ctx[@"NSMidX"] = ^(NSRect rect) {
+        return NSMidX(rect);
+    };
+
+    
+
+    [self evaluateJavascriptFile:@"CSAnimationBlock" inContext:ctx];
+    [self evaluateJavascriptFile:@"CSAnimationInput" inContext:ctx];
+
+    [self evaluateJavascriptFile:@"CSAnimation" inContext:ctx];
+    [self evaluateJavascriptFile:@"cocoasplit" inContext:ctx];
+    return ctx;
+}
 
 
 +(CaptureController *)sharedCaptureController
@@ -1289,6 +1386,11 @@
     
 }
 
+
+-(SourceLayout *)activeLayout
+{
+    return self.activePreviewView.sourceLayout;
+}
 
 
 -(void)setAudioSamplerate:(int)audioSamplerate

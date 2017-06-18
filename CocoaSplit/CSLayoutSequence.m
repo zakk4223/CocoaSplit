@@ -65,7 +65,7 @@
         self.sourceLayout = layout;
 
         NSMutableString *realCode = [NSMutableString string];
-        
+        /*
         NSRegularExpression *method_regex = [NSRegularExpression regularExpressionWithPattern:@"def\\s+run_script" options:0 error:nil];
         
         if ([method_regex numberOfMatchesInString:_animationCode options:0 range:NSMakeRange(0, self.animationCode.length)] == 0)
@@ -75,9 +75,9 @@
                 [realCode appendString:[NSString stringWithFormat:@"\t%@\n", line]];
                 
             }];
-        } else {
+        } else {*/
             realCode = self.animationCode.mutableCopy;
-        }
+        //}
         
         
         
