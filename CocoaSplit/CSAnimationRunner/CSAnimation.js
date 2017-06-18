@@ -20,7 +20,7 @@ CSAnimation = function(target, keyPath, animation, kwargs) {
     this.baseLayer = null;
     this.layout = null;
     this.uukey = null;
-    
+    if (kwargs === undefined) { kwargs = {}; }
     
     
     
@@ -44,9 +44,10 @@ CSAnimation = function(target, keyPath, animation, kwargs) {
             this.target.addAnimationForKey(this.animation, this.uukey);
         }
         
+        console.log("ANIM BEGIN " + begin_time + " DURATION " + this.duration);
         if (!this.ignore_wait)
         {
-            this.end_time = begin_time = this.duration;
+            this.end_time = begin_time + this.duration;
         }
         
         return this.duration;
@@ -142,6 +143,7 @@ CSAnimation = function(target, keyPath, animation, kwargs) {
         animation.removedOnCompletion = 0;
         animation.fillMode = "forwards";
         this.duration = animation.duration;
+        console.log("MY DURATION " + this.duration);
     }
     
     if (kwargs["repeatcount"])

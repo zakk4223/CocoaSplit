@@ -89,6 +89,8 @@ function CSAnimationInput(cs_input) {
         {
             this.animationLayer.setValueForKeyPath(real_end_value, merged_kwargs["extra_keypath"]);
         }
+        console.log("REAL END VALUE " + real_end_value);
+        
         csanim.toValue = real_end_value;
         return this.add_animation(csanim, for_layer, forKey);
         

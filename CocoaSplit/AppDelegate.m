@@ -31,7 +31,6 @@
         Protocol *proto = NSProtocolFromString(protoName);
         if (proto)
         {
-            NSLog(@"ADD PROTO %@ TO %@", protoName, NSStringFromClass(class));
             class_addProtocol(class, proto);
         }
         

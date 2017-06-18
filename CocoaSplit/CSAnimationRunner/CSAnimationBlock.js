@@ -12,12 +12,10 @@ CSAnimationBlock.currentFrame = function() {
 
 function CSAnimationDelegate(animation) {
     this.animation = animation;
-    console.log("CREATE ANIMATION " + animation);
     this.animationDidStopFinished_signature = "v@:@c";
     this.animationDidStopFinished = function(animation, finished) {
         var a_proxy = animation.valueForKeyPath("__CS_COMPLETION__");
         var js_anim = a_proxy.jsObject;
-        console.log("THIS ANIMATION " + js_anim)
         if (js_anim)
         {
             js_anim.completed();
@@ -83,7 +81,7 @@ function AnimationBlock(duration) {
         if (animation.duration == 0)
         {
             animation.duration = 0.001;
-            animation.aniimation.duration = 0.001;
+            animation.animation.duration = 0.001;
         }
         
         if (animation.label)
@@ -97,7 +95,6 @@ function AnimationBlock(duration) {
             var a_delegate = proxyWithObject(new CSAnimationDelegate(animation));
             animation.animation.setValueForKeyPath(proxyWithObject(animation), "__CS_COMPLETION__");
             animation.animation.delegate = a_delegate;
-            console.log("SET DELEGATE TO " + a_delegate);
             //do delegate setup here
         }
         
@@ -129,14 +126,20 @@ function AnimationBlock(duration) {
             this.current_begin_time = this.layout.rootLayer.convertTimeFromLayer(CACurrentMediaTime(), null);
         }
         
+        if (duration === undefined)
+        {
+            duration = 0.0;
+        }
+        
+        
         new_mark = new CSAnimation(null, "__CS_WAIT_MARK", null, kwargs);
         new_mark.isWaitMark = true;
         new_mark.duration = duration;
         new_mark.cs_input = target;
-        if (new_mark.cs_input && this.input_map.indexOf(new_mark.cs_input.uuid) > -1)
+        if (new_mark.cs_input && this.input_map.indexOf(new_mark.cs_input.uuid) > -1) //TODO don't  use indexOf
         {
             this.current_begin_time = this.input_map[new_mark.cs_input.uuid];
-        } else if (new_mark.label && this.label_map.indexOf(new_mark.label) > -1) {
+        } else if (new_mark.label && this.label_map.indexOf(new_mark.label) > -1) { // TODO don't  use indexOf
             this.current_begin_time = this.label_map[new_mark.label].end_time;
         } else {
             if (!wait_only)
@@ -144,6 +147,8 @@ function AnimationBlock(duration) {
                 this.current_begin_time = this.latest_end_time;
             }
         }
+        
+        
         new_mark.apply(this.current_begin_time);
         this.latest_end_time = Math.max(this.latest_end_time, new_mark.end_time);
         this.current_begin_time += new_mark.duration;
