@@ -132,13 +132,40 @@ function CSAnimationInput(cs_input) {
         return this.add_animation(csanim, for_layer, forKey);
         
     }
-    
+    /**
+     * Wait for all in-progress animations on this input to complete before adding any more.
+     * This ONLY changes the timing for the input this wait is applied to. Example:
+     * input1.moveTo(0,0,2.5)
+     * input2.moveTo(100,100.5.5)
+     * input1.waitAnimation()
+     * input2.rotate(360, 5.5)
+     * input1.moveCenter(3.5)
+     *
+     * input1 will start to move towards the bottom left corner and simultaneously input2 will begin its rotation AND begin moving to 100,100.
+     * After input1 finishes moving to the corner it will then start moving towards the center.
+     * Notice that the timing of input2's animations are not modified by the waitAnimation() on input1.
+     
+     * Like the global waitAnimation() you can specify a keyword argument of 'label' to wait on a specific animation.
+     */
     this.waitAnimation = function(duration, kwargs) {
         return CSAnimationBlock.currentFrame().waitAnimation(duration, this, kwargs);
     }
     
+    /**
+     * Wait duration seconds before starting any new animations on this input. As described previously in waitAnimation() this
+     * only modifies the timing of animations on THIS input.
+     */
     this.wait = function(duration) {
         return CSAnimationBlock.currentFrame().wait(duration, this);
+    }
+
+    this.adjust_coordinates = function(x, y) {
+    
+        var m_width = this.animationLayer.frame.width;
+        var m_height = this.animationLayer.frame.height;
+        var c_x = this.animationLayer.frame.x;
+        var c_y = this.animationLayer.frame.y;
+        return {x:x-c_x, y:y-c_y};
     }
 
     
@@ -158,6 +185,7 @@ function CSAnimationInput(cs_input) {
         }
         return {x: ret_x, y: ret_y};
     }
+        
     
   
     
@@ -178,6 +206,7 @@ function CSAnimationInput(cs_input) {
         var anim_vals = this.make_animation_values(cpos.y, move_y, vmk);
         return this.simple_animation('position.y', anim_vals, duration, kwargs);
     }
+        
     
  
     /**
@@ -197,20 +226,32 @@ function CSAnimationInput(cs_input) {
         var anim_vals = this.make_animation_values(cpos.x, move_x, vmk);
         return this.simple_animation('position.x', anim_vals, duration, kwargs);
     }
+        
     
-    
+    /**
+     * Apply a uniform scale transform to the layer. Grows or shrinks the input by the given scale.
+     *
+     * Two important points about scale animations:
+     * 1) They ARE NOT PERMANENT. If you use an animation to apply a 0.5 scale to an input, then go live or save the layout, the scale does not carry over. If you want to make the change permanent use scaleSize()
+     * 2) The scale is relative to the original size of the input. So applying one 2x scale and then another 2x scale only results in the scale changing once.
+     */
     this.scaleLayer = function(scaleVal, duration, kwargs) {
         var cval = this.animationLayer.valueForKeyPath('transform.scale');
         var anim_vals = this.make_animation_values(cval, scaleVal, function(x) { return x; });
         return this.simple_animation('transform.scale', anim_vals, duration, kwargs);
     }
     
+    /**
+     * Changes the input bounds by scaleVal. This change IS permanent; if you save and restore the layout after performing a scaleSize() the input will retain the size it was set to by the animation. 
+     * Note that the scaleVal is relative to the CURRENT size of the input, so applying a 2x scaleSize followed by another 2x scaleSize will result in something 4x as big as the original bounds.
+     */
     this.scaleSize = function(scaleVal, duration, kwargs) {
         var curr_width = this.width;
         var curr_height = this.height;
         
         
     }
+        
     
     /**
      * Set the width of the input. This change saves/is permanent
@@ -247,6 +288,7 @@ function CSAnimationInput(cs_input) {
         this.moveX(move_frames, duration, kwargs);
         return ret;
     }
+        
     
     
     /**
@@ -284,7 +326,150 @@ function CSAnimationInput(cs_input) {
         this.moveY(move_frames, duration, kwargs);
         return ret;
     }
+        
 
+    /**
+     * Set the width and height of the input. This change saves/is permanent. It is applied to the underlying layer's bounds.
+     */
+    this.size = function(size_map, duration, kwargs) {
+        kwargs = kwargs || {};
+        
+        var width_vals;
+        var height_vals;
+        if (Array.isArray(size_map))
+        {
+            width_vals = [];
+            height_vals = [];
+            size_map.forEach(function (s) {
+                             width_vals.push(s.width);
+                             height_vals.push(s.height);
+                             });
+        } else {
+            width_vals = size_map.width;
+            height_vals = size_map.height;
+        }
+        
+        this.sizeWidth(width_vals, duration, kwargs);
+        return this.sizeHeight(height_vals, duration, kwargs);
+    }
+    
+    
+    /**
+     * Translate/move the input on the y-axis to the new value y. The final result of this translation is not permanent/saved. 
+     * If you translate an input and then manually move it via the UI or via the move* functions, it may not restore/go live in the exact position it appears in the layout. 
+     * Use caution.
+     */
+    this.translateYTo = function(y, duration, kwargs) {
+    
+        kwargs = kwargs || {};
+        var cval = this.animationLayer.valueForKeyPath('transform.translation.y');
+        var vmk = function(val) {
+            var new_coord = this.real_coordinate_from_fract(0, val);
+            new_coord = this.adjust_coordinates(0, new_coord.y);
+            return new_coord.y + cval;
+        }
+        
+        var anim_vals = this.make_animation_values(0, y, vmk);
+        return this.simple_animation('transform.translation.y', anim_vals, duration, kwargs);
+    }
+    
+    /**
+     * Translate/move the input on the x-axis to the new value x. The final result of this translation is not permanent/saved.
+     * If you translate an input and then manually move it via the UI or via the move* functions, it may not restore/go live in the exact position it appears in the layout.
+     * Use caution.
+     */
+    this.translateXTo = function(x, duration, kwargs) {
+            
+        kwargs = kwargs || {};
+        var cval = this.animationLayer.valueForKeyPath('transform.translation.x');
+        var vmk = function(val) {
+            var new_coord = this.real_coordinate_from_fract(val,x);
+            new_coord = this.adjust_coordinates(new_coord.x, 0);
+            return new_coord.x + cval;
+        }
+            
+        var anim_vals = this.make_animation_values(x, 0, vmk);
+        return this.simple_animation('transform.translation.x', anim_vals, duration, kwargs);
+    }
+
+    
+    /**
+     * Translate/move the input's origin to the coordinate (x,y) The final result of this translation is not permanent/saved. 
+     * If you translate an input and then manually move it via the UI or via the move* functions, it may not restore/go live in the exact position it appears in the layout. 
+     * Use caution.
+     */
+    this.translateTo = function(pos, duration, kwargs) {
+        var cpos = this.animationLayer.valueForKeyPath('transform.translation').sizeValue();
+        self = this;
+        
+        var vmk = function(val) {
+            var new_coord = self.real_coordinate_from_fract(val.x, val.y);
+            new_coord = self.adjust_coordinates(new_coord.x, new_coord.y);
+            var nsize = {width: cpos.width+new_coord.x, height: cpos.height+new_coord.y};
+            return NSValue.valueWithSize(nsize);
+        }
+        
+        var isize = {width: 0, height: 0};
+        var anim_vals = this.make_animation_values(isize, pos, vmk);
+        return this.simple_animation('transform.translation', anim_vals, duration, kwargs);
+    }
+    
+    this.translateY = function(y, duration, kwargs) {
+        kwargs = kwargs || {};
+        var cval = this.animationLayer.valueForKeyPath('transform.translation.y');
+        self = this;
+        var vmk = function(val) {
+            var new_coord = self.real_coordinate_from_fract(0,val);
+            return new_coord.y+cval;
+        }
+        var anim_vals = this.make_animation_values(0,y,vmk);
+        return this.simple_animation('transform.translation.y', anim_vals, duration, kwargs);
+    }
+    
+    this.translateX = function(x,duration,kwargs) {
+        kwargs = kwargs || {};
+        var cval = this.animationLayer.valueForKeyPath('transform.translation.x');
+        self = this;
+        var vmk = function(val) {
+            var new_coord = self.real_coordinate_from_fract(val, 0);
+            return new_coord.x+cval;
+        }
+        var anim_vals = this.make_animation_values(0,x,vmk);
+        return this.simple_animation('transform.translation.x', anim_vals, duration, kwargs);
+    }
+    
+    this.translate = function(pos, duration, kwargs) {
+        kwargs = kwargs || {};
+        
+        var cpos = this.animationLayer.valueForKeyPath('transform.translation').sizeValue();
+        self = this;
+        var vmk = function(val) {
+            var new_coord = self.real_coordinate_from_fract(val.x, val.y);
+            return {width: cpos.width+new_coord.x, height: cpos.height+new_coord.y};
+        }
+        var isize = {width: 0, height: 0};
+        var anim_vals = this.make_animation_values(isize, pos, vmk);
+        return this.simple_animation('transform.translation', anim_vals, duration, kwargs);
+    }
+    
+    /**
+     * Translate to the center of the layout. This translate is slight different from the other translate animations; it moves the input's CENTER to the center of the layout. 
+     * The final result of this translation is not permanent/saved. If you translate an input and then manually move it via the UI or via the move* functions, it may not restore/go live in the exact position it appears in the layout. 
+     * Use caution.
+     */
+    
+    this.translateCenter = function(duration,  kwargs) {
+        kwargs = kwargs || {};
+        var rootLayer = this.layer.superlayer;
+        var rootWidth = rootLayer.bounds.width;
+        var rootHeight = rootLayer.bounds.height;
+        
+        var new_x = rootWidth * 0.5 - this.animationLayer.frame.width * 0.5;
+        var new_y = rootHeight * 0.5 - this.animationLayer.frame.height * 0.5;
+        return this.translateTo(new_x, new_y, duration, kwargs);
+    }
+    
+    
     this.rotate = function(angle, duration, kwargs) {
         
         var fromVal = this.animationLayer.valueForKeyPath("transform.rotation.z");
@@ -292,5 +477,6 @@ function CSAnimationInput(cs_input) {
         
         return this.simple_animation("transform.rotation.z", anim_vals, duration, kwargs);
     }
+    
     
 }

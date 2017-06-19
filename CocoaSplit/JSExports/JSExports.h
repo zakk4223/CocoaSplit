@@ -13,5 +13,7 @@
 #import "CALayerJSExport.h"
 #import "CAAnimationExports.h"
 #import "NSObjectJSExport.h"
+#import "NSValueJSExport.h"
+
 
 #endif /* JSExports_h */

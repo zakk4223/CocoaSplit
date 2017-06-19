@@ -14,6 +14,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 
+
 @implementation AppDelegate
 
 
@@ -67,7 +68,11 @@
     [self addProtocolsForClass:[CAKeyframeAnimation class]];
     [self addProtocolsForClass:[CATransition class]];
     [self addProtocolsForClass:[CSInputLayer class]];
+    [self addProtocolsForClass:[NSValue class]];
 
+    
+    
+    
 
     [_window setReleasedWhenClosed:NO];
     

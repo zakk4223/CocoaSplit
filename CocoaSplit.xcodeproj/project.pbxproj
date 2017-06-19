@@ -868,6 +868,7 @@
 		34788DE51EF6753900C3C9C5 /* CSJSProxyObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSJSProxyObj.h; sourceTree = "<group>"; };
 		34788DE61EF6753900C3C9C5 /* CSJSProxyObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSJSProxyObj.m; sourceTree = "<group>"; };
 		34788DE81EF6A37200C3C9C5 /* CSJSProxyObjJSExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSJSProxyObjJSExport.h; sourceTree = "<group>"; };
+		34788DE91EF7F13B00C3C9C5 /* NSValueJSExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSValueJSExport.h; sourceTree = "<group>"; };
 		34792AF516104AA70065A859 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		34792AFA1611A6B90065A859 /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = System/Library/Frameworks/IOSurface.framework; sourceTree = SDKROOT; };
 		3479A9961A9007DD00A524F0 /* CocoaSplit.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CocoaSplit.sdef; sourceTree = "<group>"; };
@@ -1760,6 +1761,7 @@
 				34788DE51EF6753900C3C9C5 /* CSJSProxyObj.h */,
 				34788DE61EF6753900C3C9C5 /* CSJSProxyObj.m */,
 				34788DE81EF6A37200C3C9C5 /* CSJSProxyObjJSExport.h */,
+				34788DE91EF7F13B00C3C9C5 /* NSValueJSExport.h */,
 			);
 			path = JSExports;
 			sourceTree = "<group>";

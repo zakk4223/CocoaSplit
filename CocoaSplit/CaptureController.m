@@ -107,6 +107,7 @@
     ctx[@"CABasicAnimation"] = CABasicAnimation.class;
     ctx[@"CAKeyframeAnimation"] = CAKeyframeAnimation.class;
     ctx[@"CATransition"] = CATransition.class;
+    ctx[@"NSValue"] = NSValue.class;
     ctx[@"HUGE_VALF"] = @(HUGE_VALF);
     
     ctx[@"CACurrentMediaTime"] = ^(void) {
