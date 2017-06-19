@@ -147,7 +147,6 @@
     if (self.jsObject)
     {
         
-        NSLog(@"FORARD INVOKE");
         NSString *selName = [NSString stringWithUTF8String:sel_getName(anInvocation.selector)];
         
         NSString *jsFunction = [self mangleName:selName];

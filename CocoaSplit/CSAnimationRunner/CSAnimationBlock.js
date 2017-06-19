@@ -36,10 +36,12 @@ function AnimationBlock(duration) {
         this.layout = null;
         this.current_begin_time = null;
         this.current_end_time = null;
+        this.animation_info = {};
     } else {
         this.layout = cframe.layout;
         this.current_begin_time = cframe.current_begin_time;
         this.current_end_time = cframe.current_end_time;
+        this.animation_info = cframe.animation_info;
     }
     
     this.animations = [];
@@ -95,14 +97,13 @@ function AnimationBlock(duration) {
             var a_delegate = proxyWithObject(new CSAnimationDelegate(animation));
             animation.animation.setValueForKeyPath(proxyWithObject(animation), "__CS_COMPLETION__");
             animation.animation.delegate = a_delegate;
-            //do delegate setup here
         }
         
         var a_duration = animation.apply(this.current_begin_time);
         this.latest_end_time = animation.end_time;
         if (animation.uukey && animation.target)
         {
-            //set all animations map uukey->target
+            this.animation_info.all_animations[animation.uukey]= animation.target;
         }
         
         if (animation.cs_input)

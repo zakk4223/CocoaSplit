@@ -271,7 +271,7 @@
 
         
             NSLog(@"SCRIPT RET %@", scriptRet);
-            NSDictionary *pendingAnimations = @{};
+            NSDictionary *pendingAnimations = scriptRet.toDictionary;
             
             //NSDictionary *pendingAnimations = [runner runAnimation:animationCode forLayout:self withExtraDictionary:extraDict];
             self.pendingScripts[runUUID] = pendingAnimations;
