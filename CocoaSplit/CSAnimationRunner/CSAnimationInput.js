@@ -574,14 +574,14 @@ function CSAnimationInput(cs_input) {
     this.rotateXTo = function(angle, duration, kwargs) {
         kwargs = kwargs || {};
         var initVal = this.animationLayer.valueForKeyPath('transform.rotation.x');
-        var anim_vals = this.make_animation_values(initVal, angle, function(x) { return x * Math.PI/180;+);
+        var anim_vals = this.make_animation_values(initVal, angle, function(x) { return x * Math.PI/180;});
         return this.simple_animation('transform.rotation.x', anim_vals, duration, kwargs);
     }
     
     this.rotateYTo = function(angle, duration, kwargs) {
         kwargs = kwargs || {};
         var initVal = this.animationLayer.valueForKeyPath('transform.rotation.y');
-        var anim_vals = this.make_animation_values(initVal, angle, function(x) { return x * Math.PI/180;+);
+        var anim_vals = this.make_animation_values(initVal, angle, function(x) { return x * Math.PI/180;});
         return this.simple_animation('transform.rotation.y', anim_vals, duration, kwargs);
     }
 
@@ -647,10 +647,112 @@ function CSAnimationInput(cs_input) {
      * Toggle the visibility of the input. There is no fadein/fadeout animation for this change. 
      * The duration acts as a delay, if you hide an input with a duration of 2, it waits 2 seconds before hiding.
      */
-    this.togggle = function(duration, kwargs) {
+    this.toggle = function(duration, kwargs) {
         kwargs = kwargs || {};
         var cval = this.animationLayer.hidden;
         return this.hidden(!cval, duration, kwargs);
     }
     
+    this.zPosition = function(zpos, duration, kwargs) {
+        kwargs = kwargs || {};
+        return this.simple_animation('zPosition', zpos, duration, kwargs);
+    }
+    
+    this.__calculateRelativeMove = function(toInput, kwargs) {
+        kwargs = kwargs || {};
+        var new_coords = {x: this.animationLayer.frame.x, y: this.animationLayer.frame.y};
+        var my_size = {width: this.animationLayer.bounds.width, height: this.animationLayer.bounds.height};
+        if (kwargs['left']) {
+            var l_space = kwargs['left'];
+            new_coords.x = toInput.minX()-my_size.width-l_space;
+        } else if (kwargs['right']) {
+            var r_space = kwargs['right'];
+            new_coords.x = toInput.maxX()+r_space;
+        }
+        
+        if (kwargs['top']) {
+            var t_space = kwargs['top'];
+            new_coords.y = toInput.maxY()+t_space;
+        } else if (kwargs['bottom']) {
+            var b_space = kwargs['bottom'];
+            new_coords.y = toInput.minY()-my_size.height-b_space;
+        }
+        
+        if (kwargs['offsetX']) {
+            var ex_space = kwargs['offsetX'];
+            new_coords.x = toInput.minX()+ex_space;
+        }
+        
+        if (kwargs['offsetY']) {
+            var ex_space = kwargs['offsetY'];
+            new_coords.y = toInput.minY()+ex_space;
+        }
+        
+        return new_coords;
+    }
+    
+    /**
+     * Translates this input relative to toInput. The following keyword arguments describe positioning options:
+     *
+     * left=<margin>: The input is positioned so that its maximum X coordinate is equal to the x coordinate of toInput's origin. If <margin> is greater than zero, the input is positioned offset <margin> pixels from toInput.
+     * right=<margin>: The input is positioned so that its origin x coordinate is equal to the maximum x coordinate of toInput If <margin> is greater than zero, the input is positioned offset <margin> pixels from toInput.
+     * bottom=<margin>: The input is positioned so that its maximum Y coordinate is equal to the y coordinate of toInput's origin. If <margin> is greater than zero, the input is positioned offset <margin> pixels from toInput.
+     * top=<margin>: The input is positioned so that its origin y coordinate is equal to the maximum y coordinate of toInput If <margin> is greater than zero, the input is positioned offset <margin> pixels from toInput.
+     *
+     * offsetX=<value>: The input is positioned so that its origin X coordinate is equal to toInput.minX+<value>
+     *
+     * offsetY=<value>: The input is positioned so that its origin Y coordinate is equal to toInput.minY+<value>
+     *
+     *
+     * Positioning an input next to some other input typically requires TWO of the above arguments to properly set both the x and y position of the input. 
+     * Say you have two inputs, input1 and input2. Both are the same size. You wish to move input1 such that it is directly to the left of input2. Your end state looks like the bad ascii diagram below.
+     *
+     * +=========+=========+
+     * |         |         |
+     * | input1  |  input2 |
+     * |         |         |
+     * |         |         |
+     * +=========+=========+
+     *
+     * The animation to do this would be: input1.translateRelativeTo(input2, 1.5, left=0, offsetY=0)
+     *
+     */
+    this.translateRelativeTo = function(toInput, duration, kwargs) {
+        kwargs = kwargs || {};
+        var new_coords = this.__calculateRelativeMove(toInput, kwargs);
+        return this.translateTo(new_coords, duration, kwargs);
+    }
+    
+    /**
+     * Move this input relative to toInput. The following keyword arguments describe positioning options:
+     *
+     * left=<margin>: The input is positioned so that its maximum X coordinate is equal to the x coordinate of toInput's origin. If <margin> is greater than zero, the input is positioned offset <margin> pixels from toInput.
+     * right=<margin>: The input is positioned so that its origin x coordinate is equal to the maximum x coordinate of toInput If <margin> is greater than zero, the input is positioned offset <margin> pixels from toInput.
+     * bottom=<margin>: The input is positioned so that its maximum Y coordinate is equal to the y coordinate of toInput's origin. If <margin> is greater than zero, the input is positioned offset <margin> pixels from toInput.
+     * top=<margin>: The input is positioned so that its origin y coordinate is equal to the maximum y coordinate of toInput If <margin> is greater than zero, the input is positioned offset <margin> pixels from toInput.
+     *
+     * offsetX=<value>: The input is positioned so that its origin X coordinate is equal to toInput.minX+<value>
+     *
+     * offsetY=<value>: The input is positioned so that its origin Y coordinate is equal to toInput.minY+<value>
+     *
+     *
+     * Positioning an input next to some other input typically requires TWO of the above arguments to properly set both the x and y position of the input.
+     * Say you have two inputs, input1 and input2. Both are the same size. You wish to move input1 such that it is directly to the left of input2. Your end state looks like the bad ascii diagram below.
+     *
+     * +=========+=========+
+     * |         |         |
+     * | input1  |  input2 |
+     * |         |         |
+     * |         |         |
+     * +=========+=========+
+     *
+     * The animation to do this would be: input1.translateRelativeTo(input2, 1.5, left=0, offsetY=0)
+     *
+     */
+
+    this.moveRelativeTo = function(toInput, duration, kwargs) {
+        kwargs = kwargs || {};
+        var new_coords = this.__calculateRelativeMove(toInput, kwargs);
+        return this.moveTo(new_coords, duration, kwargs);
+    }
 }
