@@ -470,6 +470,121 @@ function CSAnimationInput(cs_input) {
     }
     
     
+    this.moveCenter = function(duration, kwargs) {
+        kwargs = kwargs || {};
+        var rootLayer = this.layer.superlayer;
+        var rootWidth = rootLayer.bounds.width;
+        var rootHeight = rootLayer.bounds.height;
+        
+        var new_x = rootWidth * 0.5 - this.animationLayer.frame.width * 0.5;
+        var new_y = rootHeight * 0.5 - this.animationLayer.frame.height * 0.5;
+        return this.moveTo(new_x, new_y, duration, kwargs);
+    }
+    
+    /**
+     * Move the y component of the input's origin to the move_y point. The origin of an input is the input's bottom left corner. 
+     * This is an absolute positioning, not a delta from the current position. This move is permanent/saved. 
+     * If you want a non-saved move use the translate* animations.
+     */
+    this.moveYTo = function(move_y, duration, kwargs) {
+        kwargs = kwargs || {};
+        var c_pos = this.animationLayer.position;
+        self = this;
+        var vmk = function(val) {
+            var new_coord = self.real_coordinate_from_fract(0,val);
+            new_coord = self.adjust_coordinates(0, new_coord.y);
+            var n_val = c_pos.y + new_coord.y;
+            return n_val;
+        }
+        
+        var anim_value = this.make_animation_values(c_pos.y, move_y, vmk);
+        return this.simple_animation('position.y', anim_value, duration, kwargs);
+    }
+    
+    /**
+     * Move the x component of the input's origin to the move_x point. The origin of an input is the input's bottom left corner.
+     * This is an absolute positioning, not a delta from the current position. This move is permanent/saved.
+     * If you want a non-saved move use the translate* animations.
+     */
+    this.moveXTo = function(move_x, duration, kwargs) {
+        kwargs = kwargs || {};
+        var c_pos = this.animationLayer.position;
+        self = this;
+        var vmk = function(val) {
+            var new_coord = self.real_coordinate_from_fract(val,0);
+            new_coord = self.adjust_coordinates(new_coord.x,0);
+            var n_val = c_pos.x + new_coord.x;
+            return n_val;
+        }
+        
+        var anim_value = this.make_animation_values(c_pos.x, move_x, vmk);
+        return this.simple_animation('position.x', anim_value, duration, kwargs);
+    }
+
+    /**
+     * Move the input's origin to (move_x, move_y) The origin of an input is the input's bottom left corner. 
+     * This is an absolute positioning, not a delta from the current position. This move is permanent/saved. 
+     * If you want a non-saved move use the translate* animations.
+     */
+    this.moveTo = function(pos, duration, kwargs) {
+        kwargs = kwargs || {};
+        var c_pos = this.animationLayer.position;
+        self = this;
+        var vmk = function(val) {
+            var new_coord = self.real_coordinate_from_fract(val.x, val.y);
+            new_coord = self.adjust_coordinates(new_coord.x, new_coord.y);
+            var n_pos = {x: c_pos.x + new_coord.x, y: c_pos.y + new_coord.y};
+            return NSValue.valueWithPoint(n_pos);
+        }
+        
+        var anim_vals = this.make_animation_values(NSValue.valueWithPoint(c_pos), pos, vmk);
+        return this.simple_animation('position', anim_vals, duration, kwargs);
+    }
+    
+    this.opacity = function(opacity, duration, kwargs) {
+        kwargs = kwargs || {};
+        var anim_vals = this.make_animation_values(this.animationLayer.opacity, opacity, function(x) { return x;});
+        return this.simple_animation('opacity', anim_vals, duration, kwargs);
+    }
+    
+    /**
+     * Rotate the input around the x-axis by angle degrees. This rotation is additive: a rotate of 45 degrees followed by another rotate of 45 degrees results in a total rotation of 90 degrees. 
+     * This rotation is not permanent, it will not persist across save/restore or go live.
+     */
+    this.rotateX = function(angle, duration, kwargs) {
+        kwargs = kwargs || {};
+        var fromVal = this.animationLayer.valueForKeyPath('transform.rotation.x')
+        var anim_vals = this.make_animation_values(fromVal, angle, function(x) { return fromVal+(x *Math.PI/180);});
+        return this.simple_animation('transform.rotation.x', anim_vals, duration, kwargs);
+    }
+    
+    
+    /**
+     * Rotate the input around the y-axis by angle degrees. This rotation is additive: a rotate of 45 degrees followed by another rotate of 45 degrees results in a total rotation of 90 degrees.
+     * This rotation is not permanent, it will not persist across save/restore or go live.
+     */
+    this.rotateY = function(angle, duration, kwargs) {
+        kwargs = kwargs || {};
+        var fromVal = this.animationLayer.valueForKeyPath('transform.rotation.y')
+        var anim_vals = this.make_animation_values(fromVal, angle, function(x) { return fromVal+(x *Math.PI/180);});
+        return this.simple_animation('transform.rotation.y', anim_vals, duration, kwargs);
+    }
+
+    
+    this.rotateXTo = function(angle, duration, kwargs) {
+        kwargs = kwargs || {};
+        var initVal = this.animationLayer.valueForKeyPath('transform.rotation.x');
+        var anim_vals = this.make_animation_values(initVal, angle, function(x) { return x * Math.PI/180;+);
+        return this.simple_animation('transform.rotation.x', anim_vals, duration, kwargs);
+    }
+    
+    this.rotateYTo = function(angle, duration, kwargs) {
+        kwargs = kwargs || {};
+        var initVal = this.animationLayer.valueForKeyPath('transform.rotation.y');
+        var anim_vals = this.make_animation_values(initVal, angle, function(x) { return x * Math.PI/180;+);
+        return this.simple_animation('transform.rotation.y', anim_vals, duration, kwargs);
+    }
+
     this.rotate = function(angle, duration, kwargs) {
         
         var fromVal = this.animationLayer.valueForKeyPath("transform.rotation.z");
@@ -478,5 +593,64 @@ function CSAnimationInput(cs_input) {
         return this.simple_animation("transform.rotation.z", anim_vals, duration, kwargs);
     }
     
+    this.rotateTo = function(angle, duration, kwargs) {
+        kwargs = kwargs || {};
+        var fromVal = this.animationLayer.valueForKeyPath('transform.rotation.z');
+        var anim_vals = this.make_animation_values(fromVal, angle, function(x) { return x * Math.PI/180;});
+        return this.simple_animation('transform.rotation.z', anim_vals, duration, kwargs);
+    }
+    
+    /** Change the border width of the input. You probably also want to set a border color. */
+    this.borderWidth = function(width, duration, kwargs) {
+        var fromVal = this.animationLayer.valueForKeyPath('borderWidth');
+        var anim_vals = this.make_animation_values(fromVal, width, function(x) { return x; });
+        return this.simple_animation('borderWidth', anim_vals, duration, kwargs);
+    }
+    
+    /** Change the corner radius of the input. The corner radius is what creates rounded corners. */
+    this.cornerRadius = function(radius, duration, kwargs) {
+        kwargs = kwargs || {};
+        var fromVal = this.animationLayer.valueForKeyPath('cornerRadius');
+        var anim_vals = this.make_animation_values(fromVal, radius, function(x) { return x;});
+        return this.simple_animation('cornerRadius', anim_vals, duration, kwargs);
+    }
+    
+    this.hidden = function(yesno, duration, kwargs) {
+        kwargs = kwargs || {};
+        var ret = this.simple_animation('hidden', yesno, duration, kwargs);
+        ret.internal_completion_handler = function(anim) {
+            anim.set_model_value();
+            anim.target.hidden = yesno;
+        }
+        return ret;
+    }
+    
+    /**
+     * Hide the input, making it not visible. 
+     * If it is already hidden this does nothing, but the duration will count towards any waitAnimation() calls
+     */
+    this.hide = function(duration, kwargs) {
+        kwargs = kwargs || {}
+        return this.hidden(true, duration, kwargs);
+    }
+    
+    /**
+     * Make the input visible. 
+     * If it is already visible this does nothing, but the duration will count towards any waitAnimation() calls
+     */
+    this.show = function(duration, kwargs) {
+        kwargs = kwargs || {};
+        return this.hidden(false, duration, kwargs);
+    }
+    
+    /**
+     * Toggle the visibility of the input. There is no fadein/fadeout animation for this change. 
+     * The duration acts as a delay, if you hide an input with a duration of 2, it waits 2 seconds before hiding.
+     */
+    this.togggle = function(duration, kwargs) {
+        kwargs = kwargs || {};
+        var cval = this.animationLayer.hidden;
+        return this.hidden(!cval, duration, kwargs);
+    }
     
 }

@@ -14,6 +14,7 @@
 
 -(NSSize)sizeValue;
 +(NSValue *)valueWithSize:(NSSize)size;
++(NSValue *)valueWithPoint:(NSPoint)point;
 
 
 @end
