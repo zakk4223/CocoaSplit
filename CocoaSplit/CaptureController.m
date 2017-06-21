@@ -109,6 +109,7 @@
     ctx[@"CATransition"] = CATransition.class;
     ctx[@"NSValue"] = NSValue.class;
     ctx[@"HUGE_VALF"] = @(HUGE_VALF);
+    ctx[@"CIFilter"] = CIFilter.class;
     
     ctx[@"CACurrentMediaTime"] = ^(void) {
         return CACurrentMediaTime();

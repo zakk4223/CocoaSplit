@@ -14,6 +14,7 @@
 #import "CAAnimationExports.h"
 #import "NSObjectJSExport.h"
 #import "NSValueJSExport.h"
+#import "CIFilterJSExport.h"
 
 
 #endif /* JSExports_h */

@@ -69,6 +69,8 @@
     [self addProtocolsForClass:[CATransition class]];
     [self addProtocolsForClass:[CSInputLayer class]];
     [self addProtocolsForClass:[NSValue class]];
+    [self addProtocolsForClass:[CIFilter class]];
+
 
     
     
