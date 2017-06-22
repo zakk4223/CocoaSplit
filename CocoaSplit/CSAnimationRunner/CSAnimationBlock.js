@@ -137,10 +137,10 @@ function AnimationBlock(duration) {
         new_mark.isWaitMark = true;
         new_mark.duration = duration;
         new_mark.cs_input = target;
-        if (new_mark.cs_input && this.input_map.indexOf(new_mark.cs_input.uuid) > -1) //TODO don't  use indexOf
+        if (new_mark.cs_input && this.input_map[new_mark.cs_input.uuid])
         {
             this.current_begin_time = this.input_map[new_mark.cs_input.uuid];
-        } else if (new_mark.label && this.label_map.indexOf(new_mark.label) > -1) { // TODO don't  use indexOf
+        } else if (new_mark.label && this.label_map[new_mark.label]) {
             this.current_begin_time = this.label_map[new_mark.label].end_time;
         } else {
             if (!wait_only)

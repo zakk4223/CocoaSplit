@@ -4,6 +4,7 @@ function CSAnimationInput(cs_input) {
     this.input = cs_input;
     this.layer = cs_input.layer;
     this.animationLayer = cs_input.animationLayer();
+    this.uuid = cs_input.uuid;
     
     this.position = function() { return this.animationLayer.frame.origin; }
     this.width = function() { return this.animationLayer.bounds.width; }
@@ -409,7 +410,7 @@ function CSAnimationInput(cs_input) {
             return NSValue.valueWithSize(nsize);
         }
         
-        var isize = {width: 0, height: 0};
+        var isize = NSValue.valueWithSize({width: cpos.width, height: cpos.height});
         var anim_vals = this.make_animation_values(isize, pos, vmk);
         return this.simple_animation('transform.translation', anim_vals, duration, kwargs);
     }
