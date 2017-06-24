@@ -136,7 +136,7 @@ var switchToLayout = function(layout, kwargs) {
     if (layout) {
         var target_layout = getCurrentLayout();
         if ((CSAnimationBlock.currentFrame() && target_layout.transitionName || target_layout.transitionFilter) && target_layout.transitionDuration > 0) {
-            var dummy_animation = CSAnimation(null, null, null);
+            var dummy_animation = new CSAnimation(null, null, null);
             dummy_animation.duration = target_layout.transitionDuration;
             CSAnimationBlock.currentFrame().add_animation(dummy_animation, null, null);
         }
@@ -174,7 +174,7 @@ var mergeLayout = function(layout, kwargs) {
     {
         var target_layout = getCurrentLayout();
         if ((CSAnimationBlock.currentFrame() && target_layout.transitionName || target_layout.transitionFilter) && target_layout.transitionDuration > 0) {
-            var dummy_animation = CSAnimation(null, null, null);
+            var dummy_animation = new CSAnimation(null, null, null);
             dummy_animation.duration = target_layout.transitionDuration;
             CSAnimationBlock.currentFrame().add_animation(dummy_animation, null, null);
         }
@@ -201,7 +201,7 @@ var removeLayout = function(layout, kwargs) {
     {
         var target_layout = getCurrentLayout();
         if ((CSAnimationBlock.currentFrame() && target_layout.transitionName || target_layout.transitionFilter) && target_layout.transitionDuration > 0) {
-            var dummy_animation = CSAnimation(null, null, null);
+            var dummy_animation = new CSAnimation(null, null, null);
             dummy_animation.duration = target_layout.transitionDuration;
             CSAnimationBlock.currentFrame().add_animation(dummy_animation, null, null);
         }
