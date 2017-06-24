@@ -131,6 +131,8 @@ var switchToLayoutByName = function(name, kwargs) {
 }
 
 var switchToLayout = function(layout, kwargs) {
+    kwargs = kwargs || {};
+    
     if (layout) {
         var target_layout = getCurrentLayout();
         if ((CSAnimationBlock.currentFrame() && target_layout.transitionName || target_layout.transitionFilter) && target_layout.transitionDuration > 0) {
@@ -165,6 +167,9 @@ var switchToLayout = function(layout, kwargs) {
 }
 
 var mergeLayout = function(layout, kwargs) {
+    
+    kwargs = kwargs || {};
+    
     if (layout)
     {
         var target_layout = getCurrentLayout();
@@ -190,6 +195,8 @@ var mergeLayoutByName = function(name, kwargs) {
 }
 
 var removeLayout = function(layout, kwargs) {
+    kwargs = kwargs || {};
+    
     if (layout)
     {
         var target_layout = getCurrentLayout();

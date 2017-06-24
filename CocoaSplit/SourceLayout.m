@@ -693,7 +693,7 @@
 
 -(void)replaceWithSourceLayoutViaScript:(SourceLayout *)layout withCompletionBlock:(void (^)(void))completionBlock withExceptionBlock:(void (^)(NSException *exception))exceptionBlock
 {
-    NSString *replaceScript = @"def run_script(toLayout=extraData['toLayout']):\n\tswitchToLayout(toLayout)\n";
+    NSString *replaceScript = @"switchToLayout(extraDict['toLayout']);";
     NSDictionary *extraDict = @{@"toLayout": layout};
     [self runAnimationString:replaceScript withCompletionBlock:completionBlock withExceptionBlock:exceptionBlock withExtraDictionary:extraDict];
 }
@@ -771,11 +771,14 @@
     
     NSNumber *aStart = nil;
     
-    NSLog(@"NEW INPUTS %@", newInputs);
-    id athing = [CATransaction valueForKey:@"__CS_BLOCK_OBJECT__"];
-    if (athing)
+    NSDictionary *blockObj = [CATransaction valueForKey:@"__CS_BLOCK_OBJECT__"];
+    if (blockObj)
     {
-        aStart = [athing valueForKey:@"current_begin_time"];
+            aStart = blockObj[@"current_begin_time"];
+        if ([aStart isEqual:[NSNull null]])
+        {
+            aStart = [NSNumber numberWithDouble:CACurrentMediaTime()];
+        }
     }
     
     
@@ -929,7 +932,8 @@
 
 -(void)mergeSourceLayoutViaScript:(SourceLayout *)layout
 {
-    NSString *mergeScript = @"def run_script(toLayout=extraData['toLayout']):\n\tmergeLayout(toLayout)\n";
+    NSString *mergeScript = @"mergeLayout(extraDict['toLayout']);";
+    
     NSDictionary *extraDict = @{@"toLayout": layout};
     [self runAnimationString:mergeScript withCompletionBlock:nil withExceptionBlock:nil withExtraDictionary:extraDict];
 }
@@ -982,10 +986,14 @@
     
     NSNumber *aStart = nil;
     
-    id athing = [CATransaction valueForKey:@"__CS_BLOCK_OBJECT__"];
-    if (athing)
+    NSDictionary *blockObj = [CATransaction valueForKey:@"__CS_BLOCK_OBJECT__"];
+    if (blockObj)
     {
-        aStart = [athing valueForKey:@"current_begin_time"];
+        aStart = blockObj[@"current_begin_time"];
+        if ([aStart isEqual:[NSNull null]])
+        {
+            aStart = [NSNumber numberWithDouble:CACurrentMediaTime()];
+        }
     }
     
     
@@ -1112,7 +1120,7 @@
 
 -(void)removeSourceLayoutViaScript:(SourceLayout *)layout
 {
-    NSString *removeScript = @"def run_script(toLayout=extraData['toLayout']):\n\tremoveLayout(toLayout)\n";
+    NSString *removeScript = @"removeLayout(extraDict['toLayout']);";
     NSDictionary *extraDict = @{@"toLayout": layout};
     [self runAnimationString:removeScript withCompletionBlock:nil withExceptionBlock:nil withExtraDictionary:extraDict];
 }
@@ -1164,10 +1172,14 @@
     [removeInputs addObjectsFromArray:newInputs];
     NSNumber *aStart = nil;
     
-    id athing = [CATransaction valueForKey:@"__CS_BLOCK_OBJECT__"];
-    if (athing)
+    NSDictionary *blockObj = [CATransaction valueForKey:@"__CS_BLOCK_OBJECT__"];
+    if (blockObj)
     {
-        aStart = [athing valueForKey:@"current_begin_time"];
+        aStart = blockObj[@"current_begin_time"];
+        if ([aStart isEqual:[NSNull null]])
+        {
+            aStart = [NSNumber numberWithDouble:CACurrentMediaTime()];
+        }
     }
     
     

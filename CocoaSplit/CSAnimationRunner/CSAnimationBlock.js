@@ -4,7 +4,7 @@ var CSAnimationBlock = {};
 
 CSAnimationBlock.currentFrame = function() {
     
-    var blockUUID = CATransaction.valueForKey("__CS_BLOCK_OBJECT__");
+    var blockUUID = CATransaction.valueForKey("__CS_BLOCK_UUID__");
     return block_uuid_map[blockUUID];
 }
 
@@ -173,7 +173,8 @@ function AnimationBlock(duration) {
     CATransaction.begin();
     block_uuid_map[this.uuid] = this;
     
-    CATransaction.setValueForKey(this.uuid, "__CS_BLOCK_OBJECT__");
+    CATransaction.setValueForKey(this.uuid, "__CS_BLOCK_UUID__");
+    CATransaction.setValueForKey(this, "__CS_BLOCK_OBJECT__");
 
 }
 
