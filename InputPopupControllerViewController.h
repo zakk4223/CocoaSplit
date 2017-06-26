@@ -11,11 +11,9 @@
 
 @class InputSource;
 
-@interface InputPopupControllerViewController : NSViewController <NSPopoverDelegate, NSWindowDelegate, NSTableViewDelegate>
+@interface InputPopupControllerViewController : NSViewController <NSWindowDelegate, NSTableViewDelegate>
 
-@property (strong) IBOutlet NSWindow *popupWIndow;
 
-@property (strong) NSPopover *myPopover;
 @property (strong) NSWindow *transitionFilterWindow;
 @property (strong) NSWindow *userFilterWindow;
 @property (strong) NSWindow *screenCropWindow;

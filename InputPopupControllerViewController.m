@@ -455,9 +455,9 @@
 {
     NSMutableDictionary *oldConstraints = self.inputSource.constraintMap;
     
-    [[self.inputSource.sourceLayout.undoManager prepareWithInvocationTarget:self.inputSource.sourceLayout] modifyUUID:self.inputSource.uuid withBlock:^(InputSource *input) {
+    [[self.inputSource.sourceLayout.undoManager prepareWithInvocationTarget:self.inputSource.sourceLayout] modifyUUID:self.inputSource.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
         
-        input.constraintMap = oldConstraints;
+        ((InputSource *)input).constraintMap = oldConstraints;
     }];
     
     

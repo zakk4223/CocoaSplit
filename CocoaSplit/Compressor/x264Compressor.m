@@ -215,18 +215,18 @@
         @autoreleasepool {
             
             
-        if (_next_keyframe_time == 0.0f)
+        if (self->_next_keyframe_time == 0.0f)
         {
-            _next_keyframe_time = frameData.frameTime;
+            self->_next_keyframe_time = frameData.frameTime;
         }
         
         BOOL isKeyFrame = NO;
         
         
-        if (frameData.frameTime >= _next_keyframe_time)
+        if (frameData.frameTime >= self->_next_keyframe_time)
         {
             isKeyFrame = YES;
-            _next_keyframe_time += self.keyframe_interval;
+            self->_next_keyframe_time += self.keyframe_interval;
         }
         
         
@@ -242,15 +242,15 @@
         src_width = CVPixelBufferGetWidth(imageBuffer);
     
     
-    if (!_vtpt_ref)
+    if (!self->_vtpt_ref)
     {
-        VTPixelTransferSessionCreate(kCFAllocatorDefault, &_vtpt_ref);
-        VTSessionSetProperty(_vtpt_ref, kVTPixelTransferPropertyKey_ScalingMode, kVTScalingMode_Letterbox);
+        VTPixelTransferSessionCreate(kCFAllocatorDefault, &self->_vtpt_ref);
+        VTSessionSetProperty(self->_vtpt_ref, kVTPixelTransferPropertyKey_ScalingMode, kVTScalingMode_Letterbox);
     }
         
-        int64_t usePts = av_rescale_q(pts.value, (AVRational){1,1000}, _av_codec_ctx->time_base);
+        int64_t usePts = av_rescale_q(pts.value, (AVRational){1,1000}, self->_av_codec_ctx->time_base);
             
-    if (_last_pts > 0 && usePts <= _last_pts)
+    if (self->_last_pts > 0 && usePts <= self->_last_pts)
     {
         //We got the frame too fast, or something else weird happened. Just send the audio along
         frameData.avcodec_pkt = NULL;
@@ -267,12 +267,12 @@
         return;
     }
         
-        _last_pts = usePts;
+        self->_last_pts = usePts;
     CVPixelBufferRef converted_frame;
     
-    CVPixelBufferCreate(kCFAllocatorDefault, _av_codec_ctx->width, _av_codec_ctx->height, kCVPixelFormatType_420YpCbCr8Planar, 0, &converted_frame);
+    CVPixelBufferCreate(kCFAllocatorDefault, self->_av_codec_ctx->width, self->_av_codec_ctx->height, kCVPixelFormatType_420YpCbCr8Planar, 0, &converted_frame);
     
-    VTPixelTransferSessionTransferImage(_vtpt_ref, imageBuffer, converted_frame);
+    VTPixelTransferSessionTransferImage(self->_vtpt_ref, imageBuffer, converted_frame);
         
     
         CVPixelBufferRelease(imageBuffer);
@@ -324,7 +324,7 @@
         outframe->pict_type = AV_PICTURE_TYPE_I;
     }
         
-    ret = avcodec_encode_video2(_av_codec_ctx, pkt, outframe, &got_output);
+    ret = avcodec_encode_video2(self->_av_codec_ctx, pkt, outframe, &got_output);
 
     CVPixelBufferUnlockBaseAddress(converted_frame, kCVPixelBufferLock_ReadOnly);
     
@@ -342,7 +342,7 @@
     if (got_output)
     {
         
-        frameData.avcodec_ctx = _av_codec_ctx;
+        frameData.avcodec_ctx = self->_av_codec_ctx;
         frameData.avcodec_pkt = pkt;
         frameData.isKeyFrame = pkt->flags & AV_PKT_FLAG_KEY;
         

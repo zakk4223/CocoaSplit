@@ -27,9 +27,9 @@
 + (void)setDisableActions:(BOOL)flag;
 + (nullable void (^)(void))completionBlock;
 + (void)setCompletionBlock:(nullable void (^)(void))block;
-+ (void)setCompletionBlockJS:(JSValue *)jsvalue;
-+ (nullable id)valueForKey:(NSString *)key;
-+ (void)setValue:(nullable id)anObject forKey:(NSString *)key;
++ (void)setCompletionBlockJS:( JSValue * _Nonnull )jsvalue;
++ (nullable id)valueForKey:(NSString *_Nonnull)key;
++ (void)setValue:(nullable id)anObject forKey:(NSString *_Nonnull)key;
 
 @end
 

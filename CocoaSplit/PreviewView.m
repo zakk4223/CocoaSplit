@@ -10,7 +10,6 @@
 #import <OpenGL/glu.h>
 
 #import "PreviewView.h"
-#import "InputPopupControllerViewController.h"
 #import "SourceLayout.h"
 #import "CreateLayoutViewController.h"
 #import "CSLayoutRecorder.h"
@@ -760,11 +759,12 @@
         {
             NSRect curFrame = self.selectedSource.layoutPosition;
             
-            [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.selectedSource.uuid withBlock:^(InputSource *input) {
+            [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.selectedSource.uuid withBlock:^(NSObject <CSInputSourceProtocol> *input) {
                 if (input)
                 {
-                    [input updateSize:curFrame.size.width height:curFrame.size.height];
-                    [input positionOrigin:curFrame.origin.x y:curFrame.origin.y];
+                    InputSource *vinput = (InputSource *)input;
+                    [vinput updateSize:curFrame.size.width height:curFrame.size.height];
+                    [vinput positionOrigin:curFrame.origin.x y:curFrame.origin.y];
                 }
 
                 
@@ -1081,7 +1081,7 @@
     
     NSString *srcUUID = source.uuid;
     
-    InputSource *realSrc = [self.sourceLayout inputForUUID:srcUUID];
+    InputSource *realSrc = (InputSource *)[self.sourceLayout inputForUUID:srcUUID];
     if (!_highlightedSourceMap[srcUUID] && realSrc)
     {
         CSPreviewOverlayView *oview = [[CSPreviewOverlayView alloc] init];
@@ -1141,7 +1141,7 @@
         } else if ([sender isKindOfClass:[InputSource class]]) {
             toMove = (InputSource *)sender;
         } else if ([sender isKindOfClass:[NSString class]]) {
-            toMove = [self.sourceLayout inputForUUID:sender];
+            toMove = (InputSource *)[self.sourceLayout inputForUUID:sender];
         }
     }
     
@@ -1175,7 +1175,7 @@
         } else if ([sender isKindOfClass:[InputSource class]]) {
             toMove = (InputSource *)sender;
         } else if ([sender isKindOfClass:[NSString class]]) {
-            toMove = [self.sourceLayout inputForUUID:sender];
+            toMove = (InputSource *)[self.sourceLayout inputForUUID:sender];
         }
     }
     
@@ -1400,7 +1400,7 @@
 
 -(void)undoAddInput:(NSString *)uuid
 {
-    InputSource *toDelete = [self.sourceLayout inputForUUID:uuid];
+    NSObject <CSInputSourceProtocol> *toDelete = [self.sourceLayout inputForUUID:uuid];
     if (toDelete)
     {
         [self deleteInput:toDelete];
@@ -1527,37 +1527,6 @@
         });
     }
 }
-
-
--(void)spawnInputSettings:(InputSource *)forInput atRect:(NSRect)atRect
-{
-    
-    NSRect spawnRect;
-    spawnRect = atRect;
-    
-    if (NSEqualRects(spawnRect, NSZeroRect))
-    {
-        NSRect inputRect = [self windowRectforWorldRect:forInput.globalLayoutPosition];
-        spawnRect = NSInsetRect(inputRect, inputRect.size.width/2-2.0f, inputRect.size.height/2-2.0f);
-    }
-    
-    //[[self.undoManager prepareWithInvocationTarget:self] undoEditsource:[NSKeyedArchiver archivedDataWithRootObject:forInput]];
-    InputPopupControllerViewController *popupController = [[InputPopupControllerViewController alloc] init];
-    
-    NSPopover *popover = [[NSPopover alloc] init];
-    popover.contentViewController = popupController;
-    popover.animates = YES;
-    popover.delegate = self;
-    popover.behavior = NSPopoverBehaviorSemitransient;
-    [popover showRelativeToRect:spawnRect ofView:self preferredEdge:NSMaxXEdge];
-    
-    popupController.inputSource = forInput;
-    
-    self.activePopupController = popupController;
-}
-
-
-
 
 
 -(IBAction) autoFitInput:(id)sender
@@ -1796,12 +1765,12 @@
     [self stopHighlightingSource:src];
     
     NSWindow *cWindow = [self.activeConfigWindows objectForKey:uuid];
-    InputPopupControllerViewController *cController = [self.activeConfigControllers objectForKey:uuid];
+    NSViewController *cController = [self.activeConfigControllers objectForKey:uuid];
     
     
     if (cController)
     {
-        cController.inputSource = nil;
+        //cController.inputSource = nil;
         [self.activeConfigControllers removeObjectForKey:uuid];
     }
     
@@ -1845,9 +1814,9 @@
         return;
     }
     
-    InputPopupControllerViewController *newViewController = [[InputPopupControllerViewController alloc] init];
+    NSViewController *newViewController = [configSrc configurationViewController];
     
-    newViewController.inputSource = configSrc;
+    
     
     NSWindow *configWindow = [[NSWindow alloc] init];
     
@@ -1869,17 +1838,17 @@
     
     
     [configWindow.contentView addSubview:newViewController.view];
-    configWindow.title = [NSString stringWithFormat:@"CocoaSplit Input (%@)", newViewController.inputSource.name];
+    configWindow.title = [NSString stringWithFormat:@"CocoaSplit Input (%@)", configSrc.name];
     configWindow.delegate = self;
     
     configWindow.styleMask =  NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask;
 
     NSWindow *cWindow = [self.activeConfigWindows objectForKey:uuid];
-    InputPopupControllerViewController *cController = [self.activeConfigControllers objectForKey:uuid];
+    NSViewController *cController = [self.activeConfigControllers objectForKey:uuid];
     
     if (cController)
     {
-        cController.inputSource = nil;
+        //cController.inputSource = nil;
         [self.activeConfigControllers removeObjectForKey:uuid];
     }
     
@@ -1895,79 +1864,6 @@
     [configWindow makeKeyAndOrderFront:nil];
     
     
-}
--(NSWindow *)detachableWindowForPopover:(NSPopover *)popover
-{
-
-    
-    
-    
-    InputPopupControllerViewController *newViewController = [[InputPopupControllerViewController alloc] init];
-    
-    InputPopupControllerViewController *oldViewController = (InputPopupControllerViewController *)popover.contentViewController;
-    
-    
-    
-    newViewController.inputSource = oldViewController.inputSource;
-    
-    NSWindow *popoverWindow;
-    popoverWindow = [[NSWindow alloc] init];
-    
-    
-    
-    NSRect newFrame = [popoverWindow frameRectForContentRect:NSMakeRect(0.0f, 0.0f, newViewController.view.frame.size.width, newViewController.view.frame.size.height)];
-    
-    [popoverWindow setFrame:newFrame display:NO];
-    
-    [popoverWindow setReleasedWhenClosed:NO];
-    
-    
-    [popoverWindow.contentView addSubview:newViewController.view];
-    popoverWindow.title = [NSString stringWithFormat:@"CocoaSplit Input (%@)", newViewController.inputSource.name];
-    popoverWindow.delegate = self;
-    
-    popoverWindow.styleMask =  NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask;
-    
-    NSString *uuid = newViewController.inputSource.uuid;
-    
-    NSWindow *cWindow = [self.activeConfigWindows objectForKey:uuid];
-    InputPopupControllerViewController *cController = [self.activeConfigControllers objectForKey:uuid];
-    
-    if (cController)
-    {
-        cController.inputSource = nil;
-        [self.activeConfigControllers removeObjectForKey:uuid];
-    }
-    
-    if (cWindow)
-    {
-        [self.activeConfigWindows removeObjectForKey:uuid];
-    }
-    
-    
-    [self.activeConfigWindows setObject:popoverWindow forKey:uuid];
-    [self.activeConfigControllers setObject:newViewController forKey:uuid];
-    
-    return popoverWindow;
-}
-
-- (void)popoverDidClose:(NSNotification *)notification
-{
-    NSString *closeReason = [[notification userInfo] valueForKey:NSPopoverCloseReasonKey];
-    NSPopover *popover = notification.object;
-    if (closeReason && closeReason == NSPopoverCloseReasonStandard)
-    {
-        InputPopupControllerViewController *vcont = (InputPopupControllerViewController *)popover.contentViewController;
-        
-        vcont.inputSource = nil;
-        
-    }
-    
-    if (popover.contentViewController == self.activePopupController)
-    {
-        self.activePopupController = nil;
-        popover.contentViewController = nil;
-    }
 }
 
 

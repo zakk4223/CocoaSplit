@@ -69,7 +69,7 @@
     
     [info enumerateDraggingItemsWithOptions:0 forView:tableView classes:classes searchOptions:@{} usingBlock:^(NSDraggingItem * _Nonnull draggingItem, NSInteger idx, BOOL * _Nonnull stop) {
         NSInteger newIdx = row+idx;
-        CSInputLibraryItem *dragItem = _draggingObjects[idx];
+        CSInputLibraryItem *dragItem = self->_draggingObjects[idx];
         NSInteger oldIdx = [self.itemArrayController.arrangedObjects indexOfObject:dragItem];
         if (oldIdx < newIdx)
         {

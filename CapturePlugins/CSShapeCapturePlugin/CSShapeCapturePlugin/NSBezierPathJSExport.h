@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <JavaScriptCore/JavaScriptCore.h>
 
+NS_ASSUME_NONNULL_BEGIN
 
 @protocol NSBezierPathJSExport <JSExport>
 // Creating common paths.
@@ -135,5 +136,5 @@
 
 // Hit detection.
 - (BOOL)containsPoint:(NSPoint)point;
-
+NS_ASSUME_NONNULL_END
 @end

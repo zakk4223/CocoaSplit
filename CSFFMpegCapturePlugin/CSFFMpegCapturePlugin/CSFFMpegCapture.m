@@ -180,7 +180,6 @@
 -(void)itemStarted:(CSFFMpegInput *)item
 {
     
-    NSString *timeString = [self timeToString:item.duration];
     dispatch_async(dispatch_get_main_queue(), ^{
         self.durationString = [self timeToString:item.duration];
         self.currentMovieDuration = item.duration;

@@ -16,7 +16,6 @@
 #import <mach/mach_time.h>
 #import "x264Compressor.h"
 #import "InputSource.h"
-#import "InputPopupControllerViewController.h"
 #import "SourceLayout.h"
 #import "CSExtraPluginProtocol.h"
 #import <OpenCL/opencl.h>
@@ -54,7 +53,6 @@
 
 -(void)evaluateJavascriptFile:(NSString *)baseFile inContext:(JSContext *)ctx
 {
-    NSString *ret = nil;
     NSString *path = [[NSBundle mainBundle] pathForResource:baseFile ofType:@"js" inDirectory:@"Javascript"];
     if (path)
     {
@@ -635,7 +633,7 @@
             }
         }
 
-        [_outputWindows removeObject:window];
+        [self->_outputWindows removeObject:window];
         [window close];
     };
     
@@ -758,7 +756,6 @@
         if (result == NSFileHandlingPanelOKButton)
         {
             
-            bool doClobber = clobberAnimButton.state == NSOnState;
             
             NSURL *fileURL = [panel.URLs objectAtIndex:0];
             if (fileURL)
@@ -999,7 +996,7 @@
            int errored_outputs = 0;
            int dropped_frame_cnt = 0;
            
-           for (OutputDestination *outdest in _captureDestinations)
+           for (OutputDestination *outdest in self->_captureDestinations)
            {
                if (outdest.active)
                {
@@ -1018,13 +1015,13 @@
            
            dispatch_async(dispatch_get_main_queue(), ^{
                self.outputStatsString = [NSString stringWithFormat:@"Active Outputs: %d Errored %d Frames dropped %d", total_outputs, errored_outputs,dropped_frame_cnt];
-               self.renderStatsString = [NSString stringWithFormat:@"Render min/max/avg: %f/%f/%f", _min_render_time, _max_render_time, _render_time_total / _renderedFrames];
+               self.renderStatsString = [NSString stringWithFormat:@"Render min/max/avg: %f/%f/%f", self->_min_render_time, self->_max_render_time, self->_render_time_total / self->_renderedFrames];
                self.active_output_count = total_outputs;
                self.total_dropped_frames = dropped_frame_cnt;
                
            });
-           _renderedFrames = 0;
-           _render_time_total = 0.0f;
+           self->_renderedFrames = 0;
+           self->_render_time_total = 0.0f;
            
 
            [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationStatisticsUpdate object:self userInfo:nil];
@@ -2877,9 +2874,6 @@
     switch (clicked) {
         case 0:
             sbounds = sender.bounds;
-            //[self.activePreviewView addInputSource:sender];
-            //sbounds.origin.x = NSMaxX(sender.frame) - [sender widthForSegment:0];
-            //sbounds.origin.x -= 333;
             [self openAddInputPopover:sender sourceRect:sbounds];
             break;
         case 1:
@@ -4210,19 +4204,7 @@
 -(void) showStagingView
 {
     NSView *stagingView = self.canvasSplitView.subviews[0];
-    NSView *liveView = self.canvasSplitView.subviews[1];
     stagingView.animator.hidden = NO;
-    
-    
-    /*
-    CGFloat dividerWidth = self.canvasSplitView.dividerThickness;
-    NSRect stagingFrame = stagingView.frame;
-    NSRect liveFrame = liveView.frame;
-    liveFrame.size.width = liveFrame.size.width - stagingFrame.size.width-dividerWidth;
-    liveFrame.origin.x = stagingFrame.size.width + dividerWidth;
-    [stagingView setFrameSize:stagingFrame.size];
-    [liveView setFrame:liveFrame];
-    */
     if (self.livePreviewView.sourceLayout)
     {
         [self.livePreviewView.sourceLayout saveSourceList];

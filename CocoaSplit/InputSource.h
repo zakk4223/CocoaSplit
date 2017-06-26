@@ -17,6 +17,9 @@
 #import "InputPopupControllerViewController.h"
 #import "CSInputLayer.h"
 #import "MIKMIDI.h"
+#import "CSInputSourceProtocol.h"
+#import "CSInputSourceBase.h"
+
 
 
 @class SourceLayout;
@@ -46,10 +49,8 @@ typedef enum resize_style_t {
 //@protocol CSCaptureSessionProtocol;
 
 @protocol InputSourceExport <JSExport>
-@property (strong) NSMutableDictionary *scriptStorage;
+@property (strong) NSString *scriptStorage;
 
-@property (strong) CSInputLayer *layer;
-@property (weak) SourceLayout *sourceLayout;
 
 @property (assign) bool isMaskLayer;
 
@@ -72,14 +73,11 @@ typedef enum resize_style_t {
 
 @property (assign) float opacity;
 
-@property (assign) bool is_live;
 @property (assign) bool is_selected;
 @property (assign) NSRect layoutPosition;
 
 @property (assign) bool propertiesChanged;
 @property (strong) NSString *selectedVideoType;
-@property (strong) NSString *name;
-@property (strong) NSString *uuid;
 
 @property (assign) float depth;
 
@@ -167,7 +165,6 @@ typedef enum resize_style_t {
 @property (assign) CGFloat topLevelHeight;
 @property (assign) bool needsAdjustment;
 @property (assign) bool needsAdjustPosition;
-@property (assign) NSInteger refCount;
 @property (assign) bool isFrozen;
 
 
@@ -202,7 +199,6 @@ typedef enum resize_style_t {
 -(void)createUUID;
 -(void)updateRotationTransform;
 -(void) directSize:(CGFloat)width height:(CGFloat)height;
--(bool)isDifferentInput:(InputSource *)from;
 -(void)addedToLayout;
 -(void)autoCenter:(NSRect)containerRect;
 -(void)autoSize;
@@ -211,7 +207,7 @@ typedef enum resize_style_t {
 @end
 
 
-@interface InputSource : NSObject <InputSourceExport, NSCoding, NSWindowDelegate, NSCopying, MIKMIDIMappableResponder, MIKMIDIResponder>
+@interface InputSource : CSInputSourceBase <CSInputSourceProtocol, InputSourceExport, NSCoding, NSWindowDelegate, NSCopying, MIKMIDIMappableResponder, MIKMIDIResponder>
 {
     
     bool _alwaysDisplay;
@@ -253,7 +249,9 @@ typedef enum resize_style_t {
     
 }
 
-@property (strong) NSMutableDictionary *scriptStorage;
+-(NSViewController *)configurationViewController;
+
+@property (strong) NSString *scriptStorage;
 
 @property (strong) CSInputLayer *layer;
 @property (weak) SourceLayout *sourceLayout;

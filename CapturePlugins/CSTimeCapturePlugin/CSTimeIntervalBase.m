@@ -91,7 +91,7 @@
 
 -(void)frameTick
 {
-    NSTimeInterval interval;
+    NSTimeInterval interval = 0;
     if (self.paused)
     {
         return;

@@ -10,6 +10,7 @@
 #import <JavaScriptCore/JavaScriptCore.h>
 #import "JSExportUtil.h"
 
+NS_ASSUME_NONNULL_BEGIN
 
 @protocol CALayerJSExport <JSExport>
 /** Layer creation and initialization. **/
@@ -707,6 +708,8 @@ CA_AVAILABLE_STARTING (10.8, 6.0, 9.0, 2.0);
 @property(nullable, copy) NSDictionary *style;
 
 @end
+
+NS_ASSUME_NONNULL_END
 
 /** Layout manager protocol. **/
 

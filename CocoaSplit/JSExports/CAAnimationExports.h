@@ -10,6 +10,8 @@
 
 #import <JavaScriptCore/JavaScriptCore.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol CAAnimationJSExport <JSExport>
 
 /* Creates a new animation object. */
@@ -321,6 +323,7 @@ CA_CLASS_AVAILABLE (10.5, 2.0, 9.0, 2.0)
 
 @end
 
+NS_ASSUME_NONNULL_END
 JSEXPORT_PROTO(CAKeyframeAnimationJSExport)
 JSEXPORT_PROTO(CASpringAnimationJSExport)
 JSEXPORT_PROTO(CATransitionJSExport)

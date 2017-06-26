@@ -121,7 +121,6 @@
     NSEvent *event = [[NSApplication sharedApplication] currentEvent];
     BOOL startingDrag = event.type == NSLeftMouseDown;
     BOOL endingDrag = event.type == NSLeftMouseUp;
-    BOOL dragging = event.type == NSLeftMouseDragged;
     
     
     if (startingDrag) {

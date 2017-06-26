@@ -241,9 +241,6 @@
     switch (clicked) {
         case 0:
             sbounds = sender.bounds;
-            //[self.activePreviewView addInputSource:sender];
-            //sbounds.origin.x = NSMaxX(sender.frame) - [sender widthForSegment:0];
-            //sbounds.origin.x -= 333;
             [self openAddInputPopover:sender sourceRect:sbounds];
             break;
         case 1:

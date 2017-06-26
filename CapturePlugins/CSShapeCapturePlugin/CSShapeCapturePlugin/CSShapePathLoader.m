@@ -26,7 +26,6 @@
 -(NSDictionary *)allPaths
 {
     
-    NSLog(@"ALL PATHS");
     NSMutableDictionary *ret = [NSMutableDictionary dictionary];
     
     NSArray *library_dirs = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSAllDomainsMask - NSSystemDomainMask, YES);
@@ -45,7 +44,6 @@
     NSPredicate *jsFilter = [NSPredicate predicateWithFormat:@"self ENDSWITH '.js'"];
     NSFileManager *fm = [NSFileManager defaultManager];
     
-    NSMutableArray *pathScripts = [NSMutableArray array];
     
     for (NSString *pPath in plugin_dirs)
     {

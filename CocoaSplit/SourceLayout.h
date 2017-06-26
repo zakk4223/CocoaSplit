@@ -13,6 +13,8 @@
 #import <malloc/malloc.h>
 #import "CSAnimationRunnerObj.h"
 #import "MIKMIDI.h"
+#import "CSInputSourceProtocol.h"
+
 
 
 @class CSLayoutRecorder;
@@ -74,8 +76,8 @@
 @property (assign) bool recordLayout;
 @property (weak) CSLayoutRecorder *recorder;
 
--(void)deleteSource:(InputSource *)delSource;
--(void)addSource:(InputSource *)newSource;
+-(void)deleteSource:(NSObject<CSInputSourceProtocol> *)delSource;
+-(void)addSource:(NSObject<CSInputSourceProtocol> *)newSource;
 -(InputSource *)findSource:(NSPoint)forPoint deepParent:(bool)deepParent;
 -(InputSource *)findSource:(NSPoint)forPoint withExtra:(float)withExtra deepParent:(bool)deepParent;
 -(NSArray *)sourceListOrdered;
@@ -83,13 +85,13 @@
 -(void)restoreSourceList:(NSData *)withData;
 -(NSData *)makeSaveData;
 
--(InputSource *)inputForUUID:(NSString *)uuid;
+-(NSObject<CSInputSourceProtocol> *)inputForUUID:(NSString *)uuid;
 -(void)frameTick;
 -(NSObject *)mergeSourceListData:(NSData *)mergeData onlyAdd:(bool)onlyAdd;
 -(InputSource *)sourceUnder:(InputSource *)source;
 -(void)didBecomeVisible;
 -(bool)containsInput:(InputSource *)cSource;
--(void)modifyUUID:(NSString *)uuid withBlock:(void (^)(InputSource *input))withBlock;
+-(void)modifyUUID:(NSString *)uuid withBlock:(void (^)(NSObject<CSInputSourceProtocol> *input))withBlock;
 
 -(void)mergeSourceLayout:(SourceLayout *)toMerge withCompletionBlock:(void (^)(void))completionBlock;
 -(void)mergeSourceLayout:(SourceLayout *)toMerge;
@@ -104,7 +106,7 @@
 -(NSString *)runAnimationString:(NSString *)animationCode withCompletionBlock:(void (^)(void))completionBlock withExceptionBlock:(void (^)(NSException *exception))exceptionBlock withExtraDictionary:(NSDictionary *)extraDictionary;
 
 -(void)replaceWithSourceLayout:(SourceLayout *)layout withCompletionBlock:(void (^)(void))completionBlock;
--(InputSource *)inputForName:(NSString *)name;
+-(NSObject<CSInputSourceProtocol> *)inputForName:(NSString *)name;
 -(void)cancelTransition;
 -(void)cancelScriptRun:(NSString *)runUUID;
 -(bool)containsLayoutNamed:(NSString *)layoutName;

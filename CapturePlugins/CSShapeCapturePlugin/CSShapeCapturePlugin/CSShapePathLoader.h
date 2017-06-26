@@ -20,7 +20,6 @@
 
 
 -(NSDictionary *)allPaths;
--(NSString *)pathLoaderPath:(NSString *)name;
 -(void)evaluateJavascriptAtPath:(NSString *)path usingContext:(JSContext *)context;
 
 

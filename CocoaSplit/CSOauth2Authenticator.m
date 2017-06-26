@@ -366,9 +366,9 @@ NSString *const kCSOauth2ClientSecret = @"CSOauth2ClientSecret";
                                                        self.accessToken = tokenData[@"access_token"];
                                                        NSNumber *expire_seconds = tokenData[@"expires_in"];
                                                        self.expireDate = [NSDate dateWithTimeIntervalSinceNow:expire_seconds.integerValue];
-                                                       if (_authorizeCallback)
+                                                       if (self->_authorizeCallback)
                                                        {
-                                                           _authorizeCallback(!!self.accessToken);
+                                                           self->_authorizeCallback(!!self.accessToken);
                                                        }
                                                        
                                                        
@@ -419,9 +419,9 @@ NSString *const kCSOauth2ClientSecret = @"CSOauth2ClientSecret";
                                                        self.refreshToken = tokenData[@"refresh_token"];
                                                        NSNumber *expire_seconds = tokenData[@"expires_in"];
                                                        self.expireDate = [NSDate dateWithTimeIntervalSinceNow:expire_seconds.integerValue];
-                                                       if (_authorizeCallback)
+                                                       if (self->_authorizeCallback)
                                                        {
-                                                           _authorizeCallback(!!self.accessToken);
+                                                           self->_authorizeCallback(!!self.accessToken);
                                                            if (self.accountNameFetcher && self.useKeychain)
                                                            {
                                                                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{

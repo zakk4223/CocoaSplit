@@ -107,7 +107,6 @@
 
     self.textureSize = _lastImageSize;
     
-    bool imageSizeChanged = !CGSizeEqualToSize(_lastImageSize, image.textureSize);
     
     
     GLfloat tex_coords[] =

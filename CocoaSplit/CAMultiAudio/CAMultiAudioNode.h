@@ -101,6 +101,8 @@
 @property (strong) CAMultiAudioMatrixMixerWindowController *mixerWindow;
 @property (assign) Float32 delay;
 
+-(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType NS_DESIGNATED_INITIALIZER;
+
 
 
 @end

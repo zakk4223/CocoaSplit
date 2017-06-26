@@ -531,7 +531,6 @@ static NSArray *_sourceTypes = nil;
 
     [CATransaction begin];
     self.name = nil;
-    self.scriptStorage = [NSMutableDictionary dictionary];
     _nextImageTime = 0.0f;
     _currentSourceIdx = 0;
     _needsAdjustment = NO;
@@ -557,7 +556,7 @@ static NSArray *_sourceTypes = nil;
     self.crop_left = 0;
     self.crop_right = 0;
     self.videoSources = [[NSMutableArray alloc] init];
-    _refCount = 0;
+    self.refCount = 0;
     
     self.constraintMap = [NSMutableDictionary dictionary];
 
@@ -683,13 +682,6 @@ static NSArray *_sourceTypes = nil;
 
 
 
--(void)createUUID
-{
-    CFUUIDRef tmpUUID = CFUUIDCreate(NULL);
-    self.uuid = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, tmpUUID);
-    CFRelease(tmpUUID);
-
-}
 
 -(void)setRotateStyle:(input_rotate_style)rotateStyle
 {
@@ -711,6 +703,14 @@ static NSArray *_sourceTypes = nil;
 -(float)changeInterval
 {
     return _changeInterval;
+}
+
+
+-(NSViewController *)configurationViewController
+{
+    InputPopupControllerViewController *controller = [[InputPopupControllerViewController alloc] init];
+    controller.inputSource = self;
+    return controller;
 }
 
 
@@ -989,7 +989,7 @@ static NSArray *_sourceTypes = nil;
     {
         NSData *saveData = [NSKeyedArchiver archivedDataWithRootObject:toDelete];
         __weak InputSource *weakSelf = self;
-        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(InputSource *input) {
+        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
             CIFilter *newFilter = [NSKeyedUnarchiver unarchiveObjectWithData:saveData];
             NSMutableArray *cFilters = weakSelf.layer.filters.mutableCopy;
             if (!cFilters)
@@ -1000,8 +1000,11 @@ static NSArray *_sourceTypes = nil;
             [CATransaction begin];
             weakSelf.layer.filters = cFilters;
             [CATransaction commit];
-            [[self.sourceLayout.undoManager prepareWithInvocationTarget:weakSelf.sourceLayout] modifyUUID:weakSelf.uuid withBlock:^(InputSource *input) {
-                [input deleteLayerFilter:newFilter.name];
+            [[self.sourceLayout.undoManager prepareWithInvocationTarget:weakSelf.sourceLayout] modifyUUID:weakSelf.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
+                if (input.layer)
+                {
+                    [(InputSource *)input deleteLayerFilter:newFilter.name];
+                }
             }];
             [self.sourceLayout.undoManager setActionName:@"Add Input Filter"];
             
@@ -1024,7 +1027,7 @@ static NSArray *_sourceTypes = nil;
     {
         NSData *saveData = [NSKeyedArchiver archivedDataWithRootObject:toDelete];
         __weak InputSource *weakSelf = self;
-        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(InputSource *input) {
+        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
             CIFilter *newFilter = [NSKeyedUnarchiver unarchiveObjectWithData:saveData];
             NSMutableArray *cFilters = weakSelf.layer.sourceLayer.filters.mutableCopy;
             if (!cFilters)
@@ -1035,8 +1038,11 @@ static NSArray *_sourceTypes = nil;
             [CATransaction begin];
             weakSelf.layer.sourceLayer.filters = cFilters;
             [CATransaction commit];
-            [[self.sourceLayout.undoManager prepareWithInvocationTarget:weakSelf.sourceLayout] modifyUUID:weakSelf.uuid withBlock:^(InputSource *input) {
-                [input deleteSourceFilter:newFilter.name];
+            [[self.sourceLayout.undoManager prepareWithInvocationTarget:weakSelf.sourceLayout] modifyUUID:weakSelf.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
+                if (input.layer)
+                {
+                    [(InputSource *)input deleteSourceFilter:newFilter.name];
+                }
             }];
             [self.sourceLayout.undoManager setActionName:@"Add Source Filter"];
             
@@ -1059,7 +1065,7 @@ static NSArray *_sourceTypes = nil;
     {
         NSData *saveData = [NSKeyedArchiver archivedDataWithRootObject:toDelete];
         __weak InputSource *weakSelf = self;
-        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(InputSource *input) {
+        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
             CIFilter *newFilter = [NSKeyedUnarchiver unarchiveObjectWithData:saveData];
             NSMutableArray *cFilters = weakSelf.layer.backgroundFilters.mutableCopy;
             if (!cFilters)
@@ -1070,8 +1076,11 @@ static NSArray *_sourceTypes = nil;
             [CATransaction begin];
             weakSelf.layer.backgroundFilters = cFilters;
             [CATransaction commit];
-            [[self.sourceLayout.undoManager prepareWithInvocationTarget:weakSelf.sourceLayout] modifyUUID:weakSelf.uuid withBlock:^(InputSource *input) {
-                [input deleteBackgroundFilter:newFilter.name];
+            [[self.sourceLayout.undoManager prepareWithInvocationTarget:weakSelf.sourceLayout] modifyUUID:weakSelf.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
+                if (input.layer)
+                {
+                    [(InputSource *)input deleteBackgroundFilter:newFilter.name];
+                }
             }];
             [self.sourceLayout.undoManager setActionName:@"Add Background Filter"];
 
@@ -1100,8 +1109,11 @@ static NSArray *_sourceTypes = nil;
         NSString *filterID = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, tmpUUID);
         CFRelease(tmpUUID);
         newFilter.name = filterID;
-        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(InputSource *input) {
-            [input deleteLayerFilter:filterID];
+        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
+            if (input.layer)
+            {
+                [(InputSource *)input deleteLayerFilter:filterID];
+            }
         }];
 
         NSMutableArray *currentFilters = self.layer.filters.mutableCopy;
@@ -1130,8 +1142,11 @@ static NSArray *_sourceTypes = nil;
         NSString *filterID = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, tmpUUID);
         CFRelease(tmpUUID);
         newFilter.name = filterID;
-        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(InputSource *input) {
-            [input deleteSourceFilter:filterID];
+        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
+            if (input.layer)
+            {
+                [(InputSource *)input deleteSourceFilter:filterID];
+            }
         }];
 
         NSMutableArray *currentFilters = self.layer.sourceLayer.filters.mutableCopy;
@@ -1161,8 +1176,11 @@ static NSArray *_sourceTypes = nil;
         CFRelease(tmpUUID);
         newFilter.name = filterID;
         
-        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(InputSource *input) {
-            [input deleteBackgroundFilter:filterID];
+        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
+            if (input.layer)
+            {
+                [(InputSource *)input deleteBackgroundFilter:filterID];
+            }
         }];
         [self.sourceLayout.undoManager setActionName:@"Add Background Filter"];
 
@@ -2922,7 +2940,7 @@ static NSArray *_sourceTypes = nil;
 {
     id propertyValue = [self valueForKeyPath:propName];
     
-    [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(InputSource *input) {
+    [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
         [input setValue:propertyValue forKeyPath:propName];
         
     }];
@@ -3090,10 +3108,14 @@ static NSArray *_sourceTypes = nil;
         id oldValue = change[NSKeyValueChangeOldKey];
         NSRect oldFrame = self.layoutPosition;
         
-        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(InputSource *input) {
-            [input setValue:oldValue forKeyPath:keyPath];
-            [input updateSize:oldFrame.size.width height:oldFrame.size.height];
-            [input positionOrigin:oldFrame.origin.x y:oldFrame.origin.y];
+        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
+            
+            if (input.layer)
+            {
+                [(InputSource *)input setValue:oldValue forKeyPath:keyPath];
+                [(InputSource *)input updateSize:oldFrame.size.width height:oldFrame.size.height];
+                [(InputSource *)input positionOrigin:oldFrame.origin.x y:oldFrame.origin.y];
+            }
             
         }];
         [self.sourceLayout.undoManager setActionName:@"Constraint Change"];

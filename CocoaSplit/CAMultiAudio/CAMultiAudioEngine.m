@@ -231,7 +231,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     
     NSUInteger selectedIdx = [self.audioOutputs indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-        return [((CAMultiAudioDevice *)obj).deviceUID isEqualToString:_outputId];
+        return [((CAMultiAudioDevice *)obj).deviceUID isEqualToString:self->_outputId];
     }];
 
     

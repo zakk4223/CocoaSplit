@@ -8,6 +8,7 @@
 #import <Foundation/Foundation.h>
 #import <JavaScriptCore/JavaScriptCore.h>
 
+NS_ASSUME_NONNULL_BEGIN
 
 @protocol CIFilterJSExport <JSExport>
 
@@ -116,6 +117,7 @@
 + (nullable NSURL *)localizedReferenceDocumentationForFilterName:(NSString *)filterName NS_AVAILABLE(10_4, 9_0);
 
 @end
+NS_ASSUME_NONNULL_END
 
 JSEXPORT_PROTO(CIFilterJSExport)
 

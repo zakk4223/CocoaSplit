@@ -148,8 +148,8 @@
 
         
         [self updateLayersWithBlock:^(CALayer *layer) {
-            layer.bounds = CGRectMake(0.0, 0.0, _attribString.size.width, _attribString.size.height);
-            ((CATextLayer *)layer).string = _attribString;
+            layer.bounds = CGRectMake(0.0, 0.0, self->_attribString.size.width, self->_attribString.size.height);
+            ((CATextLayer *)layer).string = self->_attribString;
             ((CATextLayer *)layer).alignmentMode = self.alignmentMode;
             ((CATextLayer *)layer).wrapped = self.wrapped;
         }];

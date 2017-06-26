@@ -43,7 +43,7 @@
 
 @end
 
-@interface CSInputLayer : CAGradientLayer <CSInputLayerJSExport>
+@interface CSInputLayer : CAGradientLayer <CSInputLayerJSExport,  CALayerDelegate, CALayoutManager>
 {
     //CAReplicatorLayer *_xLayer;
     CAReplicatorLayer *_yLayer;

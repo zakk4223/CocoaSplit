@@ -173,6 +173,7 @@
 		34788DE11EF5A86800C3C9C5 /* CSAnimation.js in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34788DD71EF5569E00C3C9C5 /* CSAnimation.js */; };
 		34788DE21EF5A86800C3C9C5 /* CSAnimationInput.js in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34788DDD1EF59E5B00C3C9C5 /* CSAnimationInput.js */; };
 		34788DE71EF6753900C3C9C5 /* CSJSProxyObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 34788DE61EF6753900C3C9C5 /* CSJSProxyObj.m */; };
+		34788DEE1F00C88300C3C9C5 /* CSInputSourceBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34788DED1F00C88300C3C9C5 /* CSInputSourceBase.m */; };
 		34792AF616104AA70065A859 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AF516104AA70065A859 /* IOKit.framework */; };
 		34792AFB1611A6B90065A859 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AFA1611A6B90065A859 /* IOSurface.framework */; };
 		3479A9971A9007DD00A524F0 /* CocoaSplit.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 3479A9961A9007DD00A524F0 /* CocoaSplit.sdef */; };
@@ -870,6 +871,9 @@
 		34788DE81EF6A37200C3C9C5 /* CSJSProxyObjJSExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSJSProxyObjJSExport.h; sourceTree = "<group>"; };
 		34788DE91EF7F13B00C3C9C5 /* NSValueJSExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSValueJSExport.h; sourceTree = "<group>"; };
 		34788DEA1EFA312C00C3C9C5 /* CIFilterJSExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CIFilterJSExport.h; sourceTree = "<group>"; };
+		34788DEB1F00682E00C3C9C5 /* CSInputSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSInputSourceProtocol.h; sourceTree = "<group>"; };
+		34788DEC1F00C88300C3C9C5 /* CSInputSourceBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSInputSourceBase.h; sourceTree = "<group>"; };
+		34788DED1F00C88300C3C9C5 /* CSInputSourceBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSInputSourceBase.m; sourceTree = "<group>"; };
 		34792AF516104AA70065A859 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		34792AFA1611A6B90065A859 /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = System/Library/Frameworks/IOSurface.framework; sourceTree = SDKROOT; };
 		3479A9961A9007DD00A524F0 /* CocoaSplit.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CocoaSplit.sdef; sourceTree = "<group>"; };
@@ -1435,6 +1439,9 @@
 				34C0EA3F1EB64D8E00B30DB4 /* CSLayoutRecorder.h */,
 				34C0EA401EB64D8E00B30DB4 /* CSLayoutRecorder.m */,
 				34C6DC341EBF545F0038FA44 /* CSLayoutRecorderInfoProtocol.h */,
+				34788DEB1F00682E00C3C9C5 /* CSInputSourceProtocol.h */,
+				34788DEC1F00C88300C3C9C5 /* CSInputSourceBase.h */,
+				34788DED1F00C88300C3C9C5 /* CSInputSourceBase.m */,
 			);
 			path = CocoaSplit;
 			sourceTree = "<group>";
@@ -2684,6 +2691,7 @@
 				34DA1D3E1BF823E700132486 /* CSNewOutputWindowController.m in Sources */,
 				34ED8C691B07371C002C0674 /* MIKMIDIInputPort.m in Sources */,
 				3434CB281CA8615A001B3DF9 /* AppleProResCompressor.m in Sources */,
+				34788DEE1F00C88300C3C9C5 /* CSInputSourceBase.m in Sources */,
 				34ED8C531B07371C002C0674 /* MIKMIDICommandThrottler.m in Sources */,
 				34F80D6A1EDBB36100D890D3 /* CAMultiAudioNode+ScriptingAdditions.m in Sources */,
 				345F8B611A161552009A81E3 /* CAMultiAudioAVCapturePlayer.m in Sources */,

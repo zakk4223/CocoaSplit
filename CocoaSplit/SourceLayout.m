@@ -84,7 +84,7 @@
 
 -(void)inputAttachEvent:(NSNotification *)notification
 {
-    InputSource *src = notification.object;
+    NSObject<CSInputSourceProtocol> *src = notification.object;
     if (src.sourceLayout == self)
     {
         [self generateTopLevelSourceList];
@@ -224,7 +224,6 @@
     CSAnimationRunnerObj *runner = [CaptureController sharedAnimationObj];
 
     NSString *modName = threadDict[@"moduleName"];
-    NSDictionary *inpMap = threadDict[@"inputs"];
     CALayer *rootLayer = threadDict[@"rootLayer"];
     NSString *animationCode = threadDict[@"animationString"];
     NSString *runUUID = threadDict[@"runUUID"];
@@ -441,12 +440,12 @@
         
         [self willChangeValueForKey:@"topLevelSourceList"];
 
-        [_topLevelSourceArray removeAllObjects];
-        for (InputSource *src in self.sourceListOrdered)
+        [self->_topLevelSourceArray removeAllObjects];
+        for (NSObject<CSInputSourceProtocol> *src in self.sourceListOrdered)
         {
-            if (!src.parentInput)
+            if (!src.layer || !((InputSource *)src).parentInput)
             {
-                [_topLevelSourceArray addObject:src];
+                [self->_topLevelSourceArray addObject:src];
             }
         }
         [self didChangeValueForKey:@"topLevelSourceList"];
@@ -515,7 +514,7 @@
 
 -(void) resetAllRefCounts
 {
-    for (InputSource *src in self.sourceList)
+    for (NSObject<CSInputSourceProtocol> *src in self.sourceList)
     {
         src.refCount = 1;
     }
@@ -525,7 +524,7 @@
 
 
 
--(NSInteger)incrementInputRef:(InputSource *)input
+-(NSInteger)incrementInputRef:(NSObject<CSInputSourceProtocol> *)input
 {
     
     input.refCount++;
@@ -533,7 +532,7 @@
     return input.refCount;
 }
 
--(NSInteger)decrementInputRef:(InputSource *)input
+-(NSInteger)decrementInputRef:(NSObject<CSInputSourceProtocol> *)input
 {
     
     input.refCount--;
@@ -632,11 +631,11 @@
 
     [retDict setObject:[NSMutableArray array] forKey:@"removed"];
     
-    for (InputSource *oSrc in mergeList)
+    for (NSObject<CSInputSourceProtocol> *oSrc in mergeList)
     {
         [uuidMap setObject:oSrc forKey:oSrc.uuid];
         
-        InputSource *eSrc = [self inputForUUID:oSrc.uuid];
+        NSObject<CSInputSourceProtocol> *eSrc = [self inputForUUID:oSrc.uuid];
         if (eSrc)
         {
             if ([eSrc isDifferentInput:oSrc])
@@ -652,7 +651,7 @@
         
     }
     
-    for (InputSource *sSrc in self.sourceList)
+    for (NSObject<CSInputSourceProtocol> *sSrc in self.sourceList)
     {
     
         InputSource *oSrc = [uuidMap objectForKey:sSrc.uuid];
@@ -766,7 +765,6 @@
     
     NSArray *changedInputs = diffResult[@"changed"];
     NSArray *removedInputs = diffResult[@"removed"];
-    NSArray *sameInputs = diffResult[@"same"];
     NSArray *newInputs = diffResult[@"new"];
     
     NSNumber *aStart = nil;
@@ -836,12 +834,12 @@
     [CATransaction setCompletionBlock:^{
         
         
-        for (InputSource *rSrc in removedInputs)
+        for (NSObject<CSInputSourceProtocol> *rSrc in removedInputs)
         {
             [self deleteSource:rSrc];
         }
         
-        for (InputSource *cSrc in changedRemove)
+        for (NSObject<CSInputSourceProtocol> *cSrc in changedRemove)
         {
             if (cSrc)
             {
@@ -865,14 +863,14 @@
     }
     
     
-    for (InputSource *rSrc in removedInputs)
+    for (NSObject<CSInputSourceProtocol> *rSrc in removedInputs)
     {
         [self deleteSourceFromPresentation:rSrc];
     }
     
-    for (InputSource *cSrc in changedInputs)
+    for (NSObject<CSInputSourceProtocol> *cSrc in changedInputs)
     {
-        InputSource *mSrc = [self inputForUUID:cSrc.uuid];
+        NSObject<CSInputSourceProtocol> *mSrc = [self inputForUUID:cSrc.uuid];
         
         
         [self deleteSourceFromPresentation:mSrc];
@@ -886,10 +884,13 @@
     }
     transitionDelegate.changeremoveInputs = changedRemove;
     
-    for (InputSource *nSrc in newInputs)
+    for (NSObject<CSInputSourceProtocol> *nSrc in newInputs)
     {
         
-        nSrc.layer.hidden = YES;
+        if (nSrc.layer)
+        {
+            nSrc.layer.hidden = YES;
+        }
         
         [self addSource:nSrc];
         
@@ -980,8 +981,6 @@
     NSMutableArray *changedRemove = [NSMutableArray array];
     
     NSArray *changedInputs = diffResult[@"changed"];
-    NSArray *removedInputs = diffResult[@"removed"];
-    NSArray *sameInputs = diffResult[@"same"];
     NSArray *newInputs = diffResult[@"new"];
     
     NSNumber *aStart = nil;
@@ -1049,21 +1048,28 @@
     
     [CATransaction setCompletionBlock:^{
         
-        for (InputSource *cSrc in changedRemove)
+        for (NSObject<CSInputSourceProtocol> *cSrc in changedRemove)
         {
             [self deleteSource:cSrc];
         }
         
         if (bTrans)
         {
-            for (InputSource *nSrc in newInputs)
+            for (NSObject<CSInputSourceProtocol> *nSrc in newInputs)
             {
-                nSrc.layer.hidden = NO;
+                if (nSrc.layer)
+                {
+                    nSrc.layer.hidden = NO;
+                }
             }
+                
             
-            for (InputSource *cSrc in changedInputs)
+            for (NSObject<CSInputSourceProtocol> *cSrc in changedInputs)
             {
-                cSrc.layer.hidden = NO;
+                if (cSrc.layer)
+                {
+                    cSrc.layer.hidden = NO;
+                }
             }
             
             
@@ -1088,22 +1094,29 @@
     }
     
     
-    for (InputSource *nSrc in newInputs)
+    for (NSObject<CSInputSourceProtocol> *nSrc in newInputs)
     {
         
-        nSrc.layer.hidden = YES;
+        if (nSrc.layer)
+        {
+            nSrc.layer.hidden = YES;
+        }
+        
         [self addSource:nSrc];
         
     }
     
-    for (InputSource *cSrc in changedInputs)
+    for (NSObject<CSInputSourceProtocol> *cSrc in changedInputs)
     {
-        InputSource *mSrc = [self inputForUUID:cSrc.uuid];
+        NSObject<CSInputSourceProtocol> *mSrc = [self inputForUUID:cSrc.uuid];
         [self deleteSourceFromPresentation:mSrc];
         [changedRemove addObject:mSrc];
         
         
-        cSrc.layer.hidden = YES;
+        if (cSrc.layer)
+        {
+            cSrc.layer.hidden = YES;
+        }
         
         [self addSource:cSrc withParentLayer:mSrc.layer.superlayer];
         [self incrementInputRef:cSrc];
@@ -1232,7 +1245,7 @@
     [CATransaction setCompletionBlock:^{
         
         
-        for (InputSource *rSrc in realRemove)
+        for (NSObject<CSInputSourceProtocol> *rSrc in realRemove)
         {
             [self decrementInputRef:rSrc];
             [self deleteSource:rSrc];
@@ -1260,9 +1273,9 @@
     }
     
     
-    for (InputSource *rSrc in removeInputs)
+    for (NSObject<CSInputSourceProtocol> *rSrc in removeInputs)
     {
-        InputSource *eSrc = [self inputForUUID:rSrc.uuid];
+        NSObject<CSInputSourceProtocol> *eSrc = [self inputForUUID:rSrc.uuid];
         
         if (eSrc)
         {
@@ -1392,13 +1405,13 @@
         
         
         
-        for (InputSource *nSrc in srcList)
+        for (NSObject<CSInputSourceProtocol> *nSrc in srcList)
         {
             [self addSource:nSrc];
         }
         
         
-        for(InputSource *src in oldSourceList)
+        for(NSObject<CSInputSourceProtocol> *src in oldSourceList)
         {
             [src willDelete];
             [src.layer removeFromSuperlayer];
@@ -1412,11 +1425,11 @@
 }
 
 
--(bool)containsInput:(InputSource *)cInput
+-(bool)containsInput:(NSObject<CSInputSourceProtocol> *)cInput
 {
     NSArray *listCopy = [self sourceListOrdered];
     
-    for (InputSource *testSrc in listCopy)
+    for (NSObject<CSInputSourceProtocol> *testSrc in listCopy)
     {
         if (testSrc == cInput)
         {
@@ -1429,7 +1442,7 @@
 
 
 
--(void)deleteSourceFromPresentation:(InputSource *)delSource
+-(void)deleteSourceFromPresentation:(NSObject<CSInputSourceProtocol> *)delSource
 {
     @synchronized (self) {
         [self.sourceListPresentation removeObject:delSource];
@@ -1444,7 +1457,7 @@
     }
 
 }
--(void)deleteSource:(InputSource *)delSource
+-(void)deleteSource:(NSObject<CSInputSourceProtocol> *)delSource
 {
     
     [delSource willDelete];
@@ -1458,7 +1471,7 @@
     [self didChangeValueForKey:@"topLevelSourceList"];
     
 
-    InputSource *uSrc;
+    NSObject<CSInputSourceProtocol> *uSrc;
     uSrc = _uuidMap[delSource.uuid];
     if ([uSrc isEqual:delSource])
     {
@@ -1492,7 +1505,7 @@
 -(void)setupMIDI
 {
     [NSApp registerMIDIResponder:self];
-    for (InputSource *src in self.sourceList)
+    for (NSObject<CSInputSourceProtocol> *src in self.sourceList)
     {
         [NSApp registerMIDIResponder:src];
 
@@ -1505,35 +1518,45 @@
     
     NSArray *copiedInputs = [self sourceListOrdered];
     
-    for (InputSource *src in copiedInputs)
+    for (NSObject<CSInputSourceProtocol> *src in copiedInputs)
     {
-        src.needsAdjustPosition = YES;
-        src.needsAdjustment = YES;
+     
+        if (src.layer)
+        {
+            InputSource *vSrc = (InputSource *)src;
+            
+            vSrc.needsAdjustPosition = YES;
+            vSrc.needsAdjustment = YES;
+        }
     }
 }
 
 
 
--(void) addSource:(InputSource *)newSource
+-(void) addSource:(NSObject<CSInputSourceProtocol> *)newSource
 {
     [self addSource:newSource withParentLayer:self.rootLayer];
 }
 
 
--(void) addSource:(InputSource *)newSource withParentLayer:(CALayer *)parentLayer
+-(void) addSource:(NSObject<CSInputSourceProtocol> *)newSource withParentLayer:(CALayer *)parentLayer
 {
     newSource.sourceLayout = self;
     newSource.is_live = self.isActive;
     
     [self.sourceListPresentation addObject:newSource];
     [[self mutableArrayValueForKey:@"sourceList" ] addObject:newSource];
+
+    if (newSource.layer)
+    {
+
+        InputSource *videoSource = (InputSource *)newSource;
+        
+        [parentLayer addSublayer:newSource.layer];
+        videoSource.needsAdjustPosition = NO;
+        videoSource.needsAdjustment = YES;
+    }
     
-
-    [parentLayer addSublayer:newSource.layer];
-
-
-    newSource.needsAdjustPosition = NO;
-    newSource.needsAdjustment = YES;
     
     
     [_uuidMapPresentation setObject:newSource forKey:newSource.uuid];
@@ -1634,8 +1657,14 @@
     
     NSArray *listCopy = [self sourceListOrdered];
 
-    for (InputSource *src in listCopy)
+    for (NSObject<CSInputSourceProtocol> *src in listCopy)
     {
+        
+        if (!src.layer)
+        {
+            continue;
+        }
+        
         if (src == source)
         {
             continue;
@@ -1653,7 +1682,7 @@
             {
                 if (!ret || src.layer.zPosition > ret.layer.zPosition || src.layer.superlayer == ret.layer)
                 {
-                    ret = src;
+                    ret = (InputSource *)src;
                 }
             }
         }
@@ -1707,12 +1736,15 @@
         
         
         
-        for (InputSource *isource in listCopy)
+        for (NSObject<CSInputSourceProtocol> *isource in listCopy)
         {
-            if (needsResize)
+            
+            
+            if (needsResize && isource.layer)
             {
-                isource.needsAdjustPosition = YES;
-                isource.needsAdjustment = YES;
+                InputSource *vsource = (InputSource *)isource;
+                vsource.needsAdjustPosition = YES;
+                vsource.needsAdjustment = YES;
             }
             
             if (isource.active)
@@ -1737,9 +1769,9 @@
 
 
 
--(void)modifyUUID:(NSString *)uuid withBlock:(void (^)(InputSource *input))withBlock
+-(void)modifyUUID:(NSString *)uuid withBlock:(void (^)(NSObject<CSInputSourceProtocol> *input))withBlock
 {
-    InputSource *useSource = [self inputForUUID:uuid];
+    NSObject<CSInputSourceProtocol> *useSource = [self inputForUUID:uuid];
     if (useSource)
     {
         withBlock(useSource);
@@ -1749,12 +1781,12 @@
 
 
 
--(InputSource *)inputForName:(NSString *)name
+-(NSObject<CSInputSourceProtocol> *)inputForName:(NSString *)name
 {
     
     NSArray *useList = self.sourceListPresentation;
     
-    for (InputSource *tSrc in useList)
+    for (NSObject<CSInputSourceProtocol> *tSrc in useList)
     {
         if (tSrc.name && [tSrc.name isEqualToString:name])
         {
@@ -1765,7 +1797,7 @@
 }
 
 
--(InputSource *)inputForUUID:(NSString *)uuid
+-(NSObject<CSInputSourceProtocol> *)inputForUUID:(NSString *)uuid
 {
     return [_uuidMapPresentation objectForKey:uuid];
 }

@@ -564,17 +564,17 @@
                 
                 dispatch_async(_output_queue, ^{
                     @autoreleasepool {
-                        _p_buffered_frame_size += f_size;
-                        _p_buffered_frame_count++;
+                        self->_p_buffered_frame_size += f_size;
+                        self->_p_buffered_frame_count++;
                         
                         BOOL write_ret = [self.ffmpeg_out writeEncodedData:sendData];
                         
                         if (write_ret)
                         {
-                            _p_output_framecnt++;
-                            _p_buffered_frame_count--;
-                            _p_buffered_frame_size -= f_size;
-                            _p_output_bytes += f_size;
+                            self->_p_output_framecnt++;
+                            self->_p_buffered_frame_count--;
+                            self->_p_buffered_frame_size -= f_size;
+                            self->_p_output_bytes += f_size;
                         }
                     }
                     

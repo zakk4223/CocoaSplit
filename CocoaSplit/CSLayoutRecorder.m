@@ -210,10 +210,6 @@
             _frame_queue = dispatch_queue_create("layout.recorder.queue", DISPATCH_QUEUE_SERIAL);
         }
         
-        for (OutputDestination *tmpOut in self.outputs)
-        {
-           // [tmpOut reset];
-        }
         
         self.layout.recorder = self;
         

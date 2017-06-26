@@ -133,11 +133,15 @@ var switchToLayoutByName = function(name, kwargs) {
 var switchToLayout = function(layout, kwargs) {
     kwargs = kwargs || {};
     
-    if (layout) {
+    if (layout) { 
         var target_layout = getCurrentLayout();
+        console.log("T NAME " + target_layout.transitionName);
+        console.log("T DURATION " + target_layout.transitionDuration);
         if ((CSAnimationBlock.currentFrame() && target_layout.transitionName || target_layout.transitionFilter) && target_layout.transitionDuration > 0) {
             var dummy_animation = new CSAnimation(null, null, null);
             dummy_animation.duration = target_layout.transitionDuration;
+            console.log("DUMMY DURATION " + dummy_animation.duration);
+            
             CSAnimationBlock.currentFrame().add_animation(dummy_animation, null, null);
         }
         if (!kwargs['noscripts']) {
