@@ -2239,7 +2239,6 @@
         if (!self.multiAudioEngine.encoder)
         {
             CSAacEncoder *audioEnc = [[CSAacEncoder alloc] init];
-            audioEnc.encodedReceiver = self;
             audioEnc.sampleRate = self.audioSamplerate;
             audioEnc.bitRate = self.audioBitrate*1000;
             
@@ -2869,7 +2868,6 @@
 {
     NSInteger clicked = sender.tag;
 
-    NSArray *selectedInputs;
     NSRect sbounds;
     switch (clicked) {
         case 0:

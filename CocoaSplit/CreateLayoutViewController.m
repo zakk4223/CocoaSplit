@@ -71,7 +71,6 @@
     
     AppDelegate *appDel = NSApp.delegate;
     
-    CaptureController *controller = appDel.captureController;
 
     self.popover.contentViewController = nil;
 }

@@ -3,7 +3,6 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 11/9/14.
-//  Copyright (c) 2014 Zakk. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -11,6 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "TPCircularBuffer.h"
 #import "TPCircularBuffer+AudioBufferList.h"
+#import "CSEncodedAudioReceiverProtocol.h"
 
 
 @class CaptureController;
@@ -38,7 +38,7 @@
 }
 
 @property (assign) bool encoderStarted;
-@property (weak) CaptureController *encodedReceiver;
+@property (weak) NSObject<CSEncodedAudioReceiverProtocol> *encodedReceiver;
 @property (assign) int sampleRate;
 @property (assign) int bitRate;
 @property (assign) int preallocatedBuffersize;

@@ -19,7 +19,7 @@
 #import "CSCaptureBase+TimerDelegate.h"
 
 
-@interface CSLayoutRecorder : NSObject <CSLayoutRecorderInfoProtocol, CSTimerSourceProtocol>
+@interface CSLayoutRecorder : NSObject <CSLayoutRecorderInfoProtocol, CSTimerSourceProtocol, CSEncodedAudioReceiverProtocol>
 {
     dispatch_queue_t _frame_queue;
     long long _frameCount;
@@ -70,6 +70,7 @@
 -(void)startRecordingCommon;
 
 -(NSObject<VideoCompressor> *)compressorByName:(NSString *)name;
+-(void)captureOutputAudio:(id)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer;
 
 
 @end

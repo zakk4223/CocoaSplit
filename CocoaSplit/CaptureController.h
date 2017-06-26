@@ -245,7 +245,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(int)streamsActiveCount;
 -(NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender;
 -(NSColor *)statusColor;
--(void)captureOutputAudio:(id)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer;
 -(void)deleteSource:(InputSource *)delSource;
 -(InputSource *)findSource:(NSPoint)forPoint;
 -(SourceLayout *)addLayoutFromBase:(SourceLayout *)baseLayout;
@@ -256,7 +255,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(CSLayoutSequence *)getSequenceForName:(NSString *)name;
 
 
--(void)openAddInputPopover:(NSButton *)sender;
 - (IBAction)createLayoutOrSequenceAction:(id)sender;
 -(bool)deleteSequence:(CSLayoutSequence *)toDelete;
 
@@ -331,7 +329,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 
-@interface CaptureController : NSObject <CaptureControllerExport, NSTableViewDelegate, NSMenuDelegate, MIKMIDIMappableResponder, MIKMIDIResponder, MIKMIDIMappingGeneratorDelegate, CSTimerSourceProtocol, NSCollectionViewDelegate, NSOutlineViewDelegate, NSOutlineViewDataSource, CSLayoutRecorderInfoProtocol>
+@interface CaptureController : NSObject <CaptureControllerExport, NSTableViewDelegate, NSMenuDelegate, MIKMIDIMappableResponder, MIKMIDIResponder, MIKMIDIMappingGeneratorDelegate, NSCollectionViewDelegate, NSOutlineViewDelegate, NSOutlineViewDataSource, CSLayoutRecorderInfoProtocol>
 
 {
 CSSequenceEditorWindowController *_sequenceWindowController;
@@ -512,5 +510,6 @@ NSArray *_savedTransitionConstraints;
 
 
 -(JSContext *)setupJavascriptContext;
+
 
 @end

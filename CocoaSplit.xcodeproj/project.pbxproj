@@ -14,12 +14,10 @@
 		3400A07E1BD49406003E1828 /* CSInputLibraryItemView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3400A07D1BD49406003E1828 /* CSInputLibraryItemView.xib */; };
 		3400A0841BD522A5003E1828 /* CSLibraryInputItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3400A0831BD522A5003E1828 /* CSLibraryInputItemViewController.m */; };
 		3408235519BC677A00CD1F5F /* CSNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 3408235419BC530300CD1F5F /* CSNotifications.m */; };
-		3408235619BC677C00CD1F5F /* CSNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 3408235419BC530300CD1F5F /* CSNotifications.m */; };
 		340C7FE91D43D22000B2FD7D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340C7FE81D43D22000B2FD7D /* Security.framework */; };
 		340C802D1D450A5100B2FD7D /* CSYoutubeStreamServicePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 340C80151D44722100B2FD7D /* CSYoutubeStreamServicePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		340D8C971959C7C100BE5144 /* CompressionSettingsPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 340D8C961959C7C100BE5144 /* CompressionSettingsPanel.xib */; };
 		340DC734197CF6E9003A0BB3 /* CSCaptureBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 340DC733197CF6E9003A0BB3 /* CSCaptureBase.m */; };
-		340DC735197CF6E9003A0BB3 /* CSCaptureBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 340DC733197CF6E9003A0BB3 /* CSCaptureBase.m */; };
 		340FE4A215F3417E00E4CE4E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4A115F3417E00E4CE4E /* Cocoa.framework */; };
 		340FE4AC15F3417E00E4CE4E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 340FE4AA15F3417E00E4CE4E /* InfoPlist.strings */; };
 		340FE4AE15F3417E00E4CE4E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FE4AD15F3417E00E4CE4E /* main.m */; };
@@ -36,7 +34,6 @@
 		341A2D5D1C7AB0D100FF7566 /* Sparkle.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 341A2D5B1C7AB04700FF7566 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		34210B3E1606001200362FC8 /* OutputDestination.m in Sources */ = {isa = PBXBuildFile; fileRef = 34210B3D1606001100362FC8 /* OutputDestination.m */; };
 		34213E1A196680880054E238 /* CompressorBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34213E19196680880054E238 /* CompressorBase.m */; };
-		34213E1B196680880054E238 /* CompressorBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34213E19196680880054E238 /* CompressorBase.m */; };
 		342346AA15F59A8500C8C77E /* AVFAudioCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346A915F59A8500C8C77E /* AVFAudioCapture.m */; };
 		342346AD15F59B0D00C8C77E /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 342346AC15F59B0D00C8C77E /* VideoToolbox.framework */; };
 		342346B915F5FBD200C8C77E /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 342346B815F5FBD200C8C77E /* CoreVideo.framework */; };
@@ -49,10 +46,8 @@
 		342B33B61980771200492CB7 /* line.vtsh in Resources */ = {isa = PBXBuildFile; fileRef = 342B33B51980771200492CB7 /* line.vtsh */; };
 		342B33B71980774000492CB7 /* line.vtsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 342B33B51980771200492CB7 /* line.vtsh */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3431FFE119786502000965FE /* InputSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 3431FFE019786502000965FE /* InputSource.m */; };
-		3431FFE219786502000965FE /* InputSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 3431FFE019786502000965FE /* InputSource.m */; };
 		34348C2A19BDBDC000A122C2 /* PluginManagerWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34348C2819BDBDC000A122C2 /* PluginManagerWindowController.m */; };
 		34348C2B19BDBDC000A122C2 /* PluginManagerWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34348C2919BDBDC000A122C2 /* PluginManagerWindowController.xib */; };
-		34348C3919BDC0D800A122C2 /* PluginManagerWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34348C2819BDBDC000A122C2 /* PluginManagerWindowController.m */; };
 		3434CB281CA8615A001B3DF9 /* AppleProResCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3434CB271CA8615A001B3DF9 /* AppleProResCompressor.m */; };
 		3434CB2D1CA90D28001B3DF9 /* CSx264CompressorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3434CB2B1CA90D28001B3DF9 /* CSx264CompressorViewController.m */; };
 		3434CB2E1CA90D28001B3DF9 /* CSx264CompressorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3434CB2C1CA90D28001B3DF9 /* CSx264CompressorViewController.xib */; };
@@ -84,76 +79,35 @@
 		3444D8E819A0CDE8000DC46B /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3444D8E719A0CDE8000DC46B /* Quartz.framework */; };
 		344825D21B2536EA00AF9EAC /* CAMultiAudioMatrixView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 344825D11B2536EA00AF9EAC /* CAMultiAudioMatrixView.xib */; };
 		344825E61B253D6900AF9EAC /* CAMultiAudioMatrixCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 344825E51B253D6900AF9EAC /* CAMultiAudioMatrixCell.m */; };
-		344825E71B253D6900AF9EAC /* CAMultiAudioMatrixCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 344825E51B253D6900AF9EAC /* CAMultiAudioMatrixCell.m */; };
 		344988131893CF0500044259 /* LogWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 344988121893CF0500044259 /* LogWindow.xib */; };
 		3450239D1C60B3EF00B461B5 /* CSLayoutCollectionItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3450239C1C60B3EF00B461B5 /* CSLayoutCollectionItemView.m */; };
-		3451A1C417111BD900DF6A8B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AE3C2F164E3E020052C95E /* Foundation.framework */; };
-		3451A1C717111BD900DF6A8B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3451A1C617111BD900DF6A8B /* main.m */; };
-		3451A1D31712C41000DF6A8B /* CaptureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FE50715F444AA00E4CE4E /* CaptureController.m */; };
-		3451A1D51712C57700DF6A8B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4D815F346CC00E4CE4E /* AVFoundation.framework */; };
-		3451A1D61712C58300DF6A8B /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 342346BA15F5FBD700C8C77E /* CoreMedia.framework */; };
-		3451A1D71712C5B300DF6A8B /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 342346B815F5FBD200C8C77E /* CoreVideo.framework */; };
-		3451A1D81712C5C400DF6A8B /* x264Compressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F5140F16FD6E4F00BA894D /* x264Compressor.m */; };
-		3451A1D91712C5C700DF6A8B /* AppleVTCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F5141116FD6E4F00BA894D /* AppleVTCompressor.m */; };
-		3451A1DC1712C5D000DF6A8B /* OutputDestination.m in Sources */ = {isa = PBXBuildFile; fileRef = 34210B3D1606001100362FC8 /* OutputDestination.m */; };
-		3451A1DD1712C5D300DF6A8B /* CSAbstractCaptureDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346CE15F9F07E00C8C77E /* CSAbstractCaptureDevice.m */; };
-		3451A1DF1712C5DC00DF6A8B /* FFMpegTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346BD15F6103D00C8C77E /* FFMpegTask.m */; };
-		3451A1E01712C5DF00DF6A8B /* AVFAudioCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346A915F59A8500C8C77E /* AVFAudioCapture.m */; };
-		3451A1E21712C5F700DF6A8B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3451A1E11712C5F700DF6A8B /* CoreGraphics.framework */; };
-		3451A1E31712C60D00DF6A8B /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 342346AC15F59B0D00C8C77E /* VideoToolbox.framework */; };
-		3451A1E41712C66E00DF6A8B /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34C6C3BE15FB5B440018A18B /* OpenGL.framework */; };
-		3451A1E51712C67900DF6A8B /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AFA1611A6B90065A859 /* IOSurface.framework */; };
-		3451A1E61712C6D200DF6A8B /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AF516104AA70065A859 /* IOKit.framework */; };
-		3451A1E71712C7C400DF6A8B /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 347B7FC916907AFA00B5F4B3 /* libz.dylib */; };
-		3451A1E81712C7D000DF6A8B /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 347B7FC516907A1700B5F4B3 /* libbz2.dylib */; };
-		3451A1E91712C7DE00DF6A8B /* VideoDecodeAcceleration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 347B7FC716907AE700B5F4B3 /* VideoDecodeAcceleration.framework */; };
-		3451A1EA1712C80400DF6A8B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4A115F3417E00E4CE4E /* Cocoa.framework */; };
 		34559A281E12D4400085883C /* CSCaptureBase+InputFrameTick.m in Sources */ = {isa = PBXBuildFile; fileRef = 34559A271E12D4400085883C /* CSCaptureBase+InputFrameTick.m */; };
 		34576C7819AFCA1B007BAD90 /* CSPluginLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 34576C7719AFCA1B007BAD90 /* CSPluginLoader.m */; };
-		34576C7919AFCA1B007BAD90 /* CSPluginLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 34576C7719AFCA1B007BAD90 /* CSPluginLoader.m */; };
-		345F89861976113C00BD4062 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A64A36165F208800A68428 /* QuartzCore.framework */; };
 		345F8B051A1060D6009A81E3 /* CSAacEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B041A1060D6009A81E3 /* CSAacEncoder.m */; };
-		345F8B061A1060D6009A81E3 /* CSAacEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B041A1060D6009A81E3 /* CSAacEncoder.m */; };
 		345F8B1A1A1218DE009A81E3 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 345F8B191A1218DE009A81E3 /* AudioToolbox.framework */; };
-		345F8B1B1A1218E5009A81E3 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 345F8B191A1218DE009A81E3 /* AudioToolbox.framework */; };
 		345F8B1D1A12AC2C009A81E3 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 345F8B1C1A12AC2C009A81E3 /* AudioUnit.framework */; };
-		345F8B1E1A12AC31009A81E3 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 345F8B1C1A12AC2C009A81E3 /* AudioUnit.framework */; };
 		345F8B251A14E6A0009A81E3 /* CAMultiAudioNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B241A14E6A0009A81E3 /* CAMultiAudioNode.m */; };
-		345F8B261A14E6A0009A81E3 /* CAMultiAudioNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B241A14E6A0009A81E3 /* CAMultiAudioNode.m */; };
 		345F8B2D1A156E15009A81E3 /* CAMultiAudioDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B2C1A156E15009A81E3 /* CAMultiAudioDevice.m */; };
-		345F8B2E1A156E15009A81E3 /* CAMultiAudioDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B2C1A156E15009A81E3 /* CAMultiAudioDevice.m */; };
 		345F8B351A157433009A81E3 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 345F8B341A157433009A81E3 /* CoreAudio.framework */; };
-		345F8B361A157444009A81E3 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 345F8B341A157433009A81E3 /* CoreAudio.framework */; };
 		345F8B391A15D850009A81E3 /* CAMultiAudioDefaultOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B381A15D850009A81E3 /* CAMultiAudioDefaultOutput.m */; };
-		345F8B3A1A15D850009A81E3 /* CAMultiAudioDefaultOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B381A15D850009A81E3 /* CAMultiAudioDefaultOutput.m */; };
 		345F8B3D1A15F3BD009A81E3 /* CAMultiAudioPCM.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B3C1A15F3BD009A81E3 /* CAMultiAudioPCM.m */; };
-		345F8B3E1A15F3BD009A81E3 /* CAMultiAudioPCM.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B3C1A15F3BD009A81E3 /* CAMultiAudioPCM.m */; };
 		345F8B4F1A15F7DA009A81E3 /* CAMultiAudioPCMPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B4E1A15F7DA009A81E3 /* CAMultiAudioPCMPlayer.m */; };
-		345F8B5E1A161012009A81E3 /* CAMultiAudioPCMPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B4E1A15F7DA009A81E3 /* CAMultiAudioPCMPlayer.m */; };
 		345F8B611A161552009A81E3 /* CAMultiAudioAVCapturePlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B601A161552009A81E3 /* CAMultiAudioAVCapturePlayer.m */; };
-		345F8B621A161552009A81E3 /* CAMultiAudioAVCapturePlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B601A161552009A81E3 /* CAMultiAudioAVCapturePlayer.m */; };
 		345F8B691A16C348009A81E3 /* CAMultiAudioGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B681A16C348009A81E3 /* CAMultiAudioGraph.m */; };
-		345F8B6A1A16C348009A81E3 /* CAMultiAudioGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B681A16C348009A81E3 /* CAMultiAudioGraph.m */; };
 		345F8B6D1A176A5D009A81E3 /* CAMultiAudioUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B6C1A176A5D009A81E3 /* CAMultiAudioUnit.m */; };
-		345F8B6E1A176A5D009A81E3 /* CAMultiAudioUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B6C1A176A5D009A81E3 /* CAMultiAudioUnit.m */; };
 		345F8B711A177C1F009A81E3 /* CAMultiAudioConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B701A177C1F009A81E3 /* CAMultiAudioConverter.m */; };
-		345F8B721A177C1F009A81E3 /* CAMultiAudioConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B701A177C1F009A81E3 /* CAMultiAudioConverter.m */; };
 		345F8B751A17A785009A81E3 /* CAMultiAudioMixer.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B741A17A785009A81E3 /* CAMultiAudioMixer.m */; };
-		345F8B761A17A785009A81E3 /* CAMultiAudioMixer.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B741A17A785009A81E3 /* CAMultiAudioMixer.m */; };
 		345F8B791A183D1D009A81E3 /* CAMultiAudioEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B781A183D1D009A81E3 /* CAMultiAudioEngine.m */; };
-		345F8B7A1A183D1D009A81E3 /* CAMultiAudioEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B781A183D1D009A81E3 /* CAMultiAudioEngine.m */; };
 		3460E58A1AC766260080358E /* rotate.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3460E5871AC764500080358E /* rotate.py */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3463F99F1AD1594300F3B5C8 /* movement.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3463F99D1AD0DC7100F3B5C8 /* movement.py */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		346865471CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 346865451CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.m */; };
 		346865481CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 346865461CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.xib */; };
 		346CF44C1A5C10C2008E5BFF /* CSInputLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 346CF44B1A5C10C2008E5BFF /* CSInputLayer.m */; };
-		346CF44D1A5C10C2008E5BFF /* CSInputLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 346CF44B1A5C10C2008E5BFF /* CSInputLayer.m */; };
 		3470CD0F1D57065B006404D9 /* CSAdvancedAudioCollectionViewItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3470CD0E1D57065B006404D9 /* CSAdvancedAudioCollectionViewItem.xib */; };
 		3470CD2E1D57D2AA006404D9 /* CSStreamOutputWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3470CD2C1D57D2AA006404D9 /* CSStreamOutputWindowController.m */; };
 		3470CD2F1D57D2AA006404D9 /* CSStreamOutputWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3470CD2D1D57D2AA006404D9 /* CSStreamOutputWindowController.xib */; };
 		3470CD3A1D5EED3A006404D9 /* CSNobarSliderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3470CD391D5EED3A006404D9 /* CSNobarSliderCell.m */; };
 		347277FD1A5A2758008801A9 /* CSIOSurfaceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 347277FC1A5A2758008801A9 /* CSIOSurfaceLayer.m */; };
-		347277FE1A5A2758008801A9 /* CSIOSurfaceLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 347277FC1A5A2758008801A9 /* CSIOSurfaceLayer.m */; };
 		3473D2871D4C359700842EEE /* CSVaughnliveStreamServicePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 3473D27E1D4C349700842EEE /* CSVaughnliveStreamServicePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3473D29A1D4C3D0E00842EEE /* CSAddOutputPopupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3473D2981D4C3D0E00842EEE /* CSAddOutputPopupViewController.m */; };
 		3473D29B1D4C3D0E00842EEE /* CSAddOutputPopupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3473D2991D4C3D0E00842EEE /* CSAddOutputPopupViewController.xib */; };
@@ -184,15 +138,10 @@
 		347BEAAB1E5BCBAF0026A094 /* CSOpenGLLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 347BEAAA1E5BCBAF0026A094 /* CSOpenGLLayer.m */; };
 		3481F30619B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3481F30519B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m */; };
 		348AC06B19B406910064F02D /* SourceLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 348AC06A19B406910064F02D /* SourceLayout.m */; };
-		348AC06C19B406910064F02D /* SourceLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 348AC06A19B406910064F02D /* SourceLayout.m */; };
 		34938EE81AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 34938EE71AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m */; };
-		34938EE91AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 34938EE71AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m */; };
 		34938EED1AE4D24200F3B1CF /* CSFilterChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34938EEB1AE4D24200F3B1CF /* CSFilterChooserWindowController.m */; };
-		34938EEE1AE4D24200F3B1CF /* CSFilterChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34938EEB1AE4D24200F3B1CF /* CSFilterChooserWindowController.m */; };
 		34938EEF1AE4D24200F3B1CF /* CSFilterChooserWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34938EEC1AE4D24200F3B1CF /* CSFilterChooserWindowController.xib */; };
-		34938EF01AE68EBD00F3B1CF /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3444D8E719A0CDE8000DC46B /* Quartz.framework */; };
 		349461681ABC57C100F28883 /* CSAnimationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 349461671ABC57C100F28883 /* CSAnimationItem.m */; };
-		349461691ABC73CF00F28883 /* CSAnimationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 349461671ABC57C100F28883 /* CSAnimationItem.m */; };
 		3494DF381CCD2DB000E921BF /* TPCircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 3494DF341CCD2DB000E921BF /* TPCircularBuffer.c */; };
 		3494DF391CCD2DB000E921BF /* TPCircularBuffer+AudioBufferList.c in Sources */ = {isa = PBXBuildFile; fileRef = 3494DF361CCD2DB000E921BF /* TPCircularBuffer+AudioBufferList.c */; };
 		3498D94A1A94685000906532 /* CSAudioSwitchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3498D9491A94685000906532 /* CSAudioSwitchCell.m */; };
@@ -203,13 +152,6 @@
 		34A7C1AD19B9A57600BC6882 /* CSLayoutSwitcherExtraPlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34A7C1A119B9A41A00BC6882 /* CSLayoutSwitcherExtraPlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		34AB1C311B944F48003F2C03 /* CSPreviewOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AB1C301B944F48003F2C03 /* CSPreviewOverlayView.m */; };
 		34ABEF3C17C0C2CB00AA5E62 /* advancedPrefPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34ABEF3B17C0C2CB00AA5E62 /* advancedPrefPanel.xib */; };
-		34AE3C30164E3E020052C95E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AE3C2F164E3E020052C95E /* Foundation.framework */; };
-		34AE3C36164E3E020052C95E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 34AE3C34164E3E020052C95E /* InfoPlist.strings */; };
-		34AE3C39164E3E020052C95E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AE3C38164E3E020052C95E /* main.m */; };
-		34AE3C44164E410D0052C95E /* XPCListenerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AE3C43164E410D0052C95E /* XPCListenerDelegate.m */; };
-		34AE3C4B164E68820052C95E /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4E015F3581200E4CE4E /* QTKit.framework */; };
-		34AE3C6B164F04B30052C95E /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AE3C6A164F04B30052C95E /* IOSurface.framework */; };
-		34AE3C6D164F04C90052C95E /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AE3C6C164F04C90052C95E /* CoreVideo.framework */; };
 		34AFC27819B05C4E0007C07B /* CSChromaKey.plugin in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC27219B05BE90007C07B /* CSChromaKey.plugin */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		34AFC27919B05C4E0007C07B /* TextureWrapPlugin.plugin in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC27719B05BF50007C07B /* TextureWrapPlugin.plugin */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		34AFC27A19B05C4E0007C07B /* CSDesktopCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC24A19B05ADA0007C07B /* CSDesktopCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -219,8 +161,6 @@
 		34AFC27E19B05C4E0007C07B /* CSTextCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC26319B05B6B0007C07B /* CSTextCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		34AFC28019B05C4E0007C07B /* CSAVFCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC26D19B05B930007C07B /* CSAVFCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		34AFC33319B19CD00007C07B /* SourceCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AFC33219B19CD00007C07B /* SourceCache.m */; };
-		34AFC33419B19CD00007C07B /* SourceCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AFC33219B19CD00007C07B /* SourceCache.m */; };
-		34B0265A1712D8BA0063BB2D /* CmdLineDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B026591712D8BA0063BB2D /* CmdLineDelegate.m */; };
 		34B5FACB1E7461E60078FC51 /* CSLayoutSequence.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FACA1E7461E60078FC51 /* CSLayoutSequence.m */; };
 		34B5FACE1E748DD40078FC51 /* CSSequenceItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FACD1E748DD40078FC51 /* CSSequenceItem.m */; };
 		34B5FAD11E74B0E30078FC51 /* CSSequenceItemWait.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FAD01E74B0E30078FC51 /* CSSequenceItemWait.m */; };
@@ -242,28 +182,20 @@
 		34B5FB8E1E7FA2610078FC51 /* CSSequenceItemTransitionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FB8C1E7FA2610078FC51 /* CSSequenceItemTransitionViewController.m */; };
 		34B5FB8F1E7FA2610078FC51 /* CSSequenceItemTransitionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34B5FB8D1E7FA2610078FC51 /* CSSequenceItemTransitionViewController.xib */; };
 		34B5FCDF19BF1C3F00F67D19 /* CreateLayoutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FCDD19BF1C3F00F67D19 /* CreateLayoutViewController.m */; };
-		34B5FCE019BF1C3F00F67D19 /* CreateLayoutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34B5FCDD19BF1C3F00F67D19 /* CreateLayoutViewController.m */; };
 		34B5FCE119BF1C3F00F67D19 /* CreateLayoutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34B5FCDE19BF1C3F00F67D19 /* CreateLayoutViewController.xib */; };
 		34BB29811B7652EA00F201C2 /* CSPreviewGLLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34BB29801B7652EA00F201C2 /* CSPreviewGLLayer.m */; };
 		34BD1E4D1B1F1A2D0015CBEC /* CAMultiAudioDownmixer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34BD1E4C1B1F1A2D0015CBEC /* CAMultiAudioDownmixer.m */; };
-		34BD1E5F1B1F2A100015CBEC /* CAMultiAudioDownmixer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34BD1E4C1B1F1A2D0015CBEC /* CAMultiAudioDownmixer.m */; };
 		34BD1E631B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34BD1E611B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.m */; };
-		34BD1E641B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34BD1E611B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.m */; };
 		34BD1E651B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34BD1E621B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.xib */; };
 		34C0E9FA1EABF92300B30DB4 /* CAMultiAudioDelay.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C0E9F91EABF92300B30DB4 /* CAMultiAudioDelay.m */; };
 		34C0EA411EB64D8E00B30DB4 /* CSLayoutRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C0EA401EB64D8E00B30DB4 /* CSLayoutRecorder.m */; };
 		34C19053189EE60400AB2430 /* CapturedFrameData.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C19052189EE60400AB2430 /* CapturedFrameData.m */; };
-		34C19054189EE60400AB2430 /* CapturedFrameData.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C19052189EE60400AB2430 /* CapturedFrameData.m */; };
 		34C67B8E1A2E69F60012DC1B /* CSHitboxStreamServicePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34C67B781A2D7B6A0012DC1B /* CSHitboxStreamServicePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		34C6C3BF15FB5B440018A18B /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34C6C3BE15FB5B440018A18B /* OpenGL.framework */; };
 		34CFE4A018F154DD00092C6A /* AVFChannelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 34CFE49F18F154DD00092C6A /* AVFChannelManager.m */; };
-		34CFE4A118F154DD00092C6A /* AVFChannelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 34CFE49F18F154DD00092C6A /* AVFChannelManager.m */; };
 		34CFE4A418F1992A00092C6A /* AVFAudioChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 34CFE4A318F1992A00092C6A /* AVFAudioChannel.m */; };
-		34CFE4A518F1992A00092C6A /* AVFAudioChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 34CFE4A318F1992A00092C6A /* AVFAudioChannel.m */; };
 		34D2D5731A547628001004E5 /* CSTextCaptureBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2D5721A547628001004E5 /* CSTextCaptureBase.m */; };
-		34D2D5741A547628001004E5 /* CSTextCaptureBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2D5721A547628001004E5 /* CSTextCaptureBase.m */; };
 		34D2D5771A547C35001004E5 /* CSTextCaptureViewControllerBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2D5761A547C35001004E5 /* CSTextCaptureViewControllerBase.m */; };
-		34D2D5781A547C35001004E5 /* CSTextCaptureViewControllerBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2D5761A547C35001004E5 /* CSTextCaptureViewControllerBase.m */; };
 		34D2D5B41A548B68001004E5 /* CSNowPlayingPlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34D2D59E1A54857D001004E5 /* CSNowPlayingPlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		34D6580219B342E00012E32B /* CSTwitchStreamServicePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC32B19B0AD360007C07B /* CSTwitchStreamServicePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		34D6580319B342E70012E32B /* CSFileStreamServicePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC33019B0AD500007C07B /* CSFileStreamServicePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -274,9 +206,7 @@
 		34DA1D3E1BF823E700132486 /* CSNewOutputWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34DA1D3C1BF823E700132486 /* CSNewOutputWindowController.m */; };
 		34DA1D3F1BF823E700132486 /* CSNewOutputWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34DA1D3D1BF823E700132486 /* CSNewOutputWindowController.xib */; };
 		34DC2FB01B512362008F12A2 /* CSCaptureBase+TimerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34DC2FAF1B512362008F12A2 /* CSCaptureBase+TimerDelegate.m */; };
-		34DC2FB11B512362008F12A2 /* CSCaptureBase+TimerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34DC2FAF1B512362008F12A2 /* CSCaptureBase+TimerDelegate.m */; };
 		34DF75581AA272F100DA9FDE /* LayoutRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34DF75571AA272F100DA9FDE /* LayoutRenderer.m */; };
-		34DF75591AA272F100DA9FDE /* LayoutRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34DF75571AA272F100DA9FDE /* LayoutRenderer.m */; };
 		34E162E81E987420005157ED /* CSScriptWindowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E162E61E987420005157ED /* CSScriptWindowViewController.m */; };
 		34E162E91E987420005157ED /* CSScriptWindowViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34E162E71E987420005157ED /* CSScriptWindowViewController.xib */; };
 		34E983701B78AE9100F26F1E /* Python.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34E9836F1B78AE9100F26F1E /* Python.framework */; };
@@ -284,118 +214,62 @@
 		34EA824E1D3CBFCA00928A06 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34EA824D1D3CBFCA00928A06 /* WebKit.framework */; };
 		34EAFB6F1A1A137600E12FBD /* CSMeterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 34EAFB6E1A1A137600E12FBD /* CSMeterCell.m */; };
 		34EAFB801A1BA86800E12FBD /* CoreMediaIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34EAFB7F1A1BA86800E12FBD /* CoreMediaIO.framework */; };
-		34EAFB811A1BA87000E12FBD /* CoreMediaIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34EAFB7F1A1BA86800E12FBD /* CoreMediaIO.framework */; };
 		34ED8C491B07371C002C0674 /* MIKMIDIChannelVoiceCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BDD1B07371B002C0674 /* MIKMIDIChannelVoiceCommand.m */; };
-		34ED8C4A1B07371C002C0674 /* MIKMIDIChannelVoiceCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BDD1B07371B002C0674 /* MIKMIDIChannelVoiceCommand.m */; };
 		34ED8C4B1B07371C002C0674 /* MIKMIDIClientDestinationEndpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BDF1B07371B002C0674 /* MIKMIDIClientDestinationEndpoint.m */; };
-		34ED8C4C1B07371C002C0674 /* MIKMIDIClientDestinationEndpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BDF1B07371B002C0674 /* MIKMIDIClientDestinationEndpoint.m */; };
 		34ED8C4D1B07371C002C0674 /* MIKMIDIClientSourceEndpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BE11B07371B002C0674 /* MIKMIDIClientSourceEndpoint.m */; };
-		34ED8C4E1B07371C002C0674 /* MIKMIDIClientSourceEndpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BE11B07371B002C0674 /* MIKMIDIClientSourceEndpoint.m */; };
 		34ED8C4F1B07371C002C0674 /* MIKMIDIClock.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BE31B07371B002C0674 /* MIKMIDIClock.m */; };
-		34ED8C501B07371C002C0674 /* MIKMIDIClock.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BE31B07371B002C0674 /* MIKMIDIClock.m */; };
 		34ED8C511B07371C002C0674 /* MIKMIDICommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BE61B07371B002C0674 /* MIKMIDICommand.m */; };
-		34ED8C521B07371C002C0674 /* MIKMIDICommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BE61B07371B002C0674 /* MIKMIDICommand.m */; };
 		34ED8C531B07371C002C0674 /* MIKMIDICommandThrottler.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BE81B07371B002C0674 /* MIKMIDICommandThrottler.m */; };
-		34ED8C541B07371C002C0674 /* MIKMIDICommandThrottler.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BE81B07371B002C0674 /* MIKMIDICommandThrottler.m */; };
 		34ED8C551B07371C002C0674 /* MIKMIDIControlChangeCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BEA1B07371B002C0674 /* MIKMIDIControlChangeCommand.m */; };
-		34ED8C561B07371C002C0674 /* MIKMIDIControlChangeCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BEA1B07371B002C0674 /* MIKMIDIControlChangeCommand.m */; };
 		34ED8C571B07371C002C0674 /* MIKMIDIDestinationEndpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BEC1B07371B002C0674 /* MIKMIDIDestinationEndpoint.m */; };
-		34ED8C581B07371C002C0674 /* MIKMIDIDestinationEndpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BEC1B07371B002C0674 /* MIKMIDIDestinationEndpoint.m */; };
 		34ED8C591B07371C002C0674 /* MIKMIDIDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BEE1B07371B002C0674 /* MIKMIDIDevice.m */; };
-		34ED8C5A1B07371C002C0674 /* MIKMIDIDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BEE1B07371B002C0674 /* MIKMIDIDevice.m */; };
 		34ED8C5B1B07371C002C0674 /* MIKMIDIDeviceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BF01B07371B002C0674 /* MIKMIDIDeviceManager.m */; };
-		34ED8C5C1B07371C002C0674 /* MIKMIDIDeviceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BF01B07371B002C0674 /* MIKMIDIDeviceManager.m */; };
 		34ED8C5D1B07371C002C0674 /* MIKMIDIEndpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BF21B07371B002C0674 /* MIKMIDIEndpoint.m */; };
-		34ED8C5E1B07371C002C0674 /* MIKMIDIEndpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BF21B07371B002C0674 /* MIKMIDIEndpoint.m */; };
 		34ED8C5F1B07371C002C0674 /* MIKMIDIEndpointSynthesizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BF41B07371B002C0674 /* MIKMIDIEndpointSynthesizer.m */; };
-		34ED8C601B07371C002C0674 /* MIKMIDIEndpointSynthesizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BF41B07371B002C0674 /* MIKMIDIEndpointSynthesizer.m */; };
 		34ED8C611B07371C002C0674 /* MIKMIDIEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BF61B07371B002C0674 /* MIKMIDIEntity.m */; };
-		34ED8C621B07371C002C0674 /* MIKMIDIEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BF61B07371B002C0674 /* MIKMIDIEntity.m */; };
 		34ED8C631B07371C002C0674 /* MIKMIDIErrors.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BF81B07371B002C0674 /* MIKMIDIErrors.m */; };
-		34ED8C641B07371C002C0674 /* MIKMIDIErrors.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BF81B07371B002C0674 /* MIKMIDIErrors.m */; };
 		34ED8C651B07371C002C0674 /* MIKMIDIEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BFB1B07371B002C0674 /* MIKMIDIEvent.m */; };
-		34ED8C661B07371C002C0674 /* MIKMIDIEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BFB1B07371B002C0674 /* MIKMIDIEvent.m */; };
 		34ED8C671B07371C002C0674 /* MIKMIDIEventIterator.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BFD1B07371B002C0674 /* MIKMIDIEventIterator.m */; };
-		34ED8C681B07371C002C0674 /* MIKMIDIEventIterator.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BFD1B07371B002C0674 /* MIKMIDIEventIterator.m */; };
 		34ED8C691B07371C002C0674 /* MIKMIDIInputPort.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BFF1B07371B002C0674 /* MIKMIDIInputPort.m */; };
-		34ED8C6A1B07371C002C0674 /* MIKMIDIInputPort.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BFF1B07371B002C0674 /* MIKMIDIInputPort.m */; };
 		34ED8C6B1B07371C002C0674 /* MIKMIDIMacDebugQuickLookSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C001B07371B002C0674 /* MIKMIDIMacDebugQuickLookSupport.m */; };
-		34ED8C6C1B07371C002C0674 /* MIKMIDIMacDebugQuickLookSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C001B07371B002C0674 /* MIKMIDIMacDebugQuickLookSupport.m */; };
 		34ED8C6D1B07371C002C0674 /* MIKMIDIMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C021B07371B002C0674 /* MIKMIDIMapping.m */; };
-		34ED8C6E1B07371C002C0674 /* MIKMIDIMapping.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C021B07371B002C0674 /* MIKMIDIMapping.m */; };
 		34ED8C6F1B07371C002C0674 /* MIKMIDIMappingGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C041B07371B002C0674 /* MIKMIDIMappingGenerator.m */; };
-		34ED8C701B07371C002C0674 /* MIKMIDIMappingGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C041B07371B002C0674 /* MIKMIDIMappingGenerator.m */; };
 		34ED8C711B07371C002C0674 /* MIKMIDIMappingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C061B07371B002C0674 /* MIKMIDIMappingManager.m */; };
-		34ED8C721B07371C002C0674 /* MIKMIDIMappingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C061B07371B002C0674 /* MIKMIDIMappingManager.m */; };
 		34ED8C731B07371C002C0674 /* MIKMIDIMappingXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C081B07371B002C0674 /* MIKMIDIMappingXMLParser.m */; };
-		34ED8C741B07371C002C0674 /* MIKMIDIMappingXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C081B07371B002C0674 /* MIKMIDIMappingXMLParser.m */; };
 		34ED8C751B07371C002C0674 /* MIKMIDIMetaCopyrightEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C0A1B07371B002C0674 /* MIKMIDIMetaCopyrightEvent.m */; };
-		34ED8C761B07371C002C0674 /* MIKMIDIMetaCopyrightEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C0A1B07371B002C0674 /* MIKMIDIMetaCopyrightEvent.m */; };
 		34ED8C771B07371C002C0674 /* MIKMIDIMetaCuePointEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C0C1B07371B002C0674 /* MIKMIDIMetaCuePointEvent.m */; };
-		34ED8C781B07371C002C0674 /* MIKMIDIMetaCuePointEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C0C1B07371B002C0674 /* MIKMIDIMetaCuePointEvent.m */; };
 		34ED8C791B07371C002C0674 /* MIKMIDIMetaEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C0E1B07371B002C0674 /* MIKMIDIMetaEvent.m */; };
-		34ED8C7A1B07371C002C0674 /* MIKMIDIMetaEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C0E1B07371B002C0674 /* MIKMIDIMetaEvent.m */; };
 		34ED8C7B1B07371C002C0674 /* MIKMIDIMetaInstrumentNameEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C101B07371B002C0674 /* MIKMIDIMetaInstrumentNameEvent.m */; };
-		34ED8C7C1B07371C002C0674 /* MIKMIDIMetaInstrumentNameEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C101B07371B002C0674 /* MIKMIDIMetaInstrumentNameEvent.m */; };
 		34ED8C7D1B07371C002C0674 /* MIKMIDIMetaKeySignatureEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C121B07371B002C0674 /* MIKMIDIMetaKeySignatureEvent.m */; };
-		34ED8C7E1B07371C002C0674 /* MIKMIDIMetaKeySignatureEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C121B07371B002C0674 /* MIKMIDIMetaKeySignatureEvent.m */; };
 		34ED8C7F1B07371C002C0674 /* MIKMIDIMetaLyricEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C141B07371B002C0674 /* MIKMIDIMetaLyricEvent.m */; };
-		34ED8C801B07371C002C0674 /* MIKMIDIMetaLyricEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C141B07371B002C0674 /* MIKMIDIMetaLyricEvent.m */; };
 		34ED8C811B07371C002C0674 /* MIKMIDIMetaMarkerTextEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C161B07371B002C0674 /* MIKMIDIMetaMarkerTextEvent.m */; };
-		34ED8C821B07371C002C0674 /* MIKMIDIMetaMarkerTextEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C161B07371B002C0674 /* MIKMIDIMetaMarkerTextEvent.m */; };
 		34ED8C831B07371C002C0674 /* MIKMIDIMetaSequenceEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C181B07371B002C0674 /* MIKMIDIMetaSequenceEvent.m */; };
-		34ED8C841B07371C002C0674 /* MIKMIDIMetaSequenceEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C181B07371B002C0674 /* MIKMIDIMetaSequenceEvent.m */; };
 		34ED8C851B07371C002C0674 /* MIKMIDIMetaTextEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C1A1B07371B002C0674 /* MIKMIDIMetaTextEvent.m */; };
-		34ED8C861B07371C002C0674 /* MIKMIDIMetaTextEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C1A1B07371B002C0674 /* MIKMIDIMetaTextEvent.m */; };
 		34ED8C871B07371C002C0674 /* MIKMIDIMetaTimeSignatureEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C1C1B07371B002C0674 /* MIKMIDIMetaTimeSignatureEvent.m */; };
-		34ED8C881B07371C002C0674 /* MIKMIDIMetaTimeSignatureEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C1C1B07371B002C0674 /* MIKMIDIMetaTimeSignatureEvent.m */; };
 		34ED8C891B07371C002C0674 /* MIKMIDIMetaTrackSequenceNameEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C1E1B07371B002C0674 /* MIKMIDIMetaTrackSequenceNameEvent.m */; };
-		34ED8C8A1B07371C002C0674 /* MIKMIDIMetaTrackSequenceNameEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C1E1B07371B002C0674 /* MIKMIDIMetaTrackSequenceNameEvent.m */; };
 		34ED8C8B1B07371C002C0674 /* MIKMIDIMetronome.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C201B07371B002C0674 /* MIKMIDIMetronome.m */; };
-		34ED8C8C1B07371C002C0674 /* MIKMIDIMetronome.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C201B07371B002C0674 /* MIKMIDIMetronome.m */; };
 		34ED8C8D1B07371C002C0674 /* MIKMIDINoteEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C221B07371B002C0674 /* MIKMIDINoteEvent.m */; };
-		34ED8C8E1B07371C002C0674 /* MIKMIDINoteEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C221B07371B002C0674 /* MIKMIDINoteEvent.m */; };
 		34ED8C8F1B07371C002C0674 /* MIKMIDINoteOffCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C241B07371B002C0674 /* MIKMIDINoteOffCommand.m */; };
-		34ED8C901B07371C002C0674 /* MIKMIDINoteOffCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C241B07371B002C0674 /* MIKMIDINoteOffCommand.m */; };
 		34ED8C911B07371C002C0674 /* MIKMIDINoteOnCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C261B07371B002C0674 /* MIKMIDINoteOnCommand.m */; };
-		34ED8C921B07371C002C0674 /* MIKMIDINoteOnCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C261B07371B002C0674 /* MIKMIDINoteOnCommand.m */; };
 		34ED8C931B07371C002C0674 /* MIKMIDIObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C291B07371B002C0674 /* MIKMIDIObject.m */; };
-		34ED8C941B07371C002C0674 /* MIKMIDIObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C291B07371B002C0674 /* MIKMIDIObject.m */; };
 		34ED8C951B07371C002C0674 /* MIKMIDIOutputPort.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C2B1B07371B002C0674 /* MIKMIDIOutputPort.m */; };
-		34ED8C961B07371C002C0674 /* MIKMIDIOutputPort.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C2B1B07371B002C0674 /* MIKMIDIOutputPort.m */; };
 		34ED8C971B07371C002C0674 /* MIKMIDIPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C2D1B07371C002C0674 /* MIKMIDIPlayer.m */; };
-		34ED8C981B07371C002C0674 /* MIKMIDIPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C2D1B07371C002C0674 /* MIKMIDIPlayer.m */; };
 		34ED8C991B07371C002C0674 /* MIKMIDIPort.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C301B07371C002C0674 /* MIKMIDIPort.m */; };
-		34ED8C9A1B07371C002C0674 /* MIKMIDIPort.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C301B07371C002C0674 /* MIKMIDIPort.m */; };
 		34ED8C9B1B07371C002C0674 /* MIKMIDIPrivateUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C331B07371C002C0674 /* MIKMIDIPrivateUtilities.m */; };
-		34ED8C9C1B07371C002C0674 /* MIKMIDIPrivateUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C331B07371C002C0674 /* MIKMIDIPrivateUtilities.m */; };
 		34ED8C9D1B07371C002C0674 /* MIKMIDIProgramChangeCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C351B07371C002C0674 /* MIKMIDIProgramChangeCommand.m */; };
-		34ED8C9E1B07371C002C0674 /* MIKMIDIProgramChangeCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C351B07371C002C0674 /* MIKMIDIProgramChangeCommand.m */; };
 		34ED8C9F1B07371C002C0674 /* MIKMIDISequence.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C381B07371C002C0674 /* MIKMIDISequence.m */; };
-		34ED8CA01B07371C002C0674 /* MIKMIDISequence.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C381B07371C002C0674 /* MIKMIDISequence.m */; };
 		34ED8CA11B07371C002C0674 /* MIKMIDISequencer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C3A1B07371C002C0674 /* MIKMIDISequencer.m */; };
-		34ED8CA21B07371C002C0674 /* MIKMIDISequencer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C3A1B07371C002C0674 /* MIKMIDISequencer.m */; };
 		34ED8CA31B07371C002C0674 /* MIKMIDISourceEndpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C3C1B07371C002C0674 /* MIKMIDISourceEndpoint.m */; };
-		34ED8CA41B07371C002C0674 /* MIKMIDISourceEndpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C3C1B07371C002C0674 /* MIKMIDISourceEndpoint.m */; };
 		34ED8CA51B07371C002C0674 /* MIKMIDISystemExclusiveCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C3E1B07371C002C0674 /* MIKMIDISystemExclusiveCommand.m */; };
-		34ED8CA61B07371C002C0674 /* MIKMIDISystemExclusiveCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C3E1B07371C002C0674 /* MIKMIDISystemExclusiveCommand.m */; };
 		34ED8CA71B07371C002C0674 /* MIKMIDISystemMessageCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C401B07371C002C0674 /* MIKMIDISystemMessageCommand.m */; };
-		34ED8CA81B07371C002C0674 /* MIKMIDISystemMessageCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C401B07371C002C0674 /* MIKMIDISystemMessageCommand.m */; };
 		34ED8CA91B07371C002C0674 /* MIKMIDITempoEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C421B07371C002C0674 /* MIKMIDITempoEvent.m */; };
-		34ED8CAA1B07371C002C0674 /* MIKMIDITempoEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C421B07371C002C0674 /* MIKMIDITempoEvent.m */; };
 		34ED8CAB1B07371C002C0674 /* MIKMIDITrack.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C441B07371C002C0674 /* MIKMIDITrack.m */; };
-		34ED8CAC1B07371C002C0674 /* MIKMIDITrack.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C441B07371C002C0674 /* MIKMIDITrack.m */; };
 		34ED8CAD1B07371C002C0674 /* MIKMIDIUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C461B07371C002C0674 /* MIKMIDIUtilities.m */; };
-		34ED8CAE1B07371C002C0674 /* MIKMIDIUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C461B07371C002C0674 /* MIKMIDIUtilities.m */; };
 		34ED8CAF1B07371C002C0674 /* NSUIApplication+MIKMIDI.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C481B07371C002C0674 /* NSUIApplication+MIKMIDI.m */; };
-		34ED8CB01B07371C002C0674 /* NSUIApplication+MIKMIDI.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8C481B07371C002C0674 /* NSUIApplication+MIKMIDI.m */; };
-		34ED8CB21B0737A3002C0674 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34ED8CB11B0737A3002C0674 /* CoreMIDI.framework */; };
 		34ED8CB31B0737AC002C0674 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34ED8CB11B0737A3002C0674 /* CoreMIDI.framework */; };
 		34ED8CB71B073C1B002C0674 /* CSMidiManagerWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8CB51B073C1B002C0674 /* CSMidiManagerWindowController.m */; };
-		34ED8CB81B073C1B002C0674 /* CSMidiManagerWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8CB51B073C1B002C0674 /* CSMidiManagerWindowController.m */; };
 		34ED8CB91B073C1B002C0674 /* CSMidiManagerWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34ED8CB61B073C1B002C0674 /* CSMidiManagerWindowController.xib */; };
 		34ED8CBC1B07763F002C0674 /* CSMidiWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8CBB1B07763F002C0674 /* CSMidiWrapper.m */; };
-		34ED8CBD1B07763F002C0674 /* CSMidiWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8CBB1B07763F002C0674 /* CSMidiWrapper.m */; };
 		34F04D9F1CE0381D0054663A /* CSAddInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F04D9D1CE0381D0054663A /* CSAddInputViewController.m */; };
 		34F04DA01CE0381D0054663A /* CSAddInputViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34F04D9E1CE0381D0054663A /* CSAddInputViewController.xib */; };
 		34F04DAB1CE0BB770054663A /* NSView+NSLayoutConstraintFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F04DAA1CE0BB770054663A /* NSView+NSLayoutConstraintFilter.m */; };
@@ -413,7 +287,6 @@
 		34F80D701EDCBE5100D890D3 /* CSScriptCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F80D6F1EDCBE5100D890D3 /* CSScriptCommand.m */; };
 		34FDA83E1A84C46500E7F65E /* CSTimeCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34FDA8191A84BF9400E7F65E /* CSTimeCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		34FDD6F21A215268009A7413 /* CSPluginServices.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FDD6F11A215268009A7413 /* CSPluginServices.m */; };
-		34FDD6F31A215268009A7413 /* CSPluginServices.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FDD6F11A215268009A7413 /* CSPluginServices.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -603,15 +476,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3451A1EC1712C8CA00DF6A8B /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		3460E5891AC766120080358E /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -786,7 +650,6 @@
 		344988121893CF0500044259 /* LogWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LogWindow.xib; path = Interface/LogWindow.xib; sourceTree = "<group>"; };
 		3450239B1C60B3EF00B461B5 /* CSLayoutCollectionItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSLayoutCollectionItemView.h; path = Interface/CSLayoutCollectionItemView.h; sourceTree = "<group>"; };
 		3450239C1C60B3EF00B461B5 /* CSLayoutCollectionItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSLayoutCollectionItemView.m; path = Interface/CSLayoutCollectionItemView.m; sourceTree = "<group>"; };
-		3451A1C317111BD900DF6A8B /* CocoaSplitCmd */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = CocoaSplitCmd; sourceTree = BUILT_PRODUCTS_DIR; };
 		3451A1C617111BD900DF6A8B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		3451A1C917111BD900DF6A8B /* CocoaSplitCmd-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CocoaSplitCmd-Prefix.pch"; sourceTree = "<group>"; };
 		3451A1CA17111BD900DF6A8B /* CocoaSplitCmd.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = CocoaSplitCmd.1; sourceTree = "<group>"; };
@@ -874,6 +737,7 @@
 		34788DEB1F00682E00C3C9C5 /* CSInputSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSInputSourceProtocol.h; sourceTree = "<group>"; };
 		34788DEC1F00C88300C3C9C5 /* CSInputSourceBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSInputSourceBase.h; sourceTree = "<group>"; };
 		34788DED1F00C88300C3C9C5 /* CSInputSourceBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSInputSourceBase.m; sourceTree = "<group>"; };
+		34788DEF1F01526F00C3C9C5 /* CSEncodedAudioReceiverProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSEncodedAudioReceiverProtocol.h; sourceTree = "<group>"; };
 		34792AF516104AA70065A859 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		34792AFA1611A6B90065A859 /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = System/Library/Frameworks/IOSurface.framework; sourceTree = SDKROOT; };
 		3479A9961A9007DD00A524F0 /* CocoaSplit.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CocoaSplit.sdef; sourceTree = "<group>"; };
@@ -918,7 +782,6 @@
 		34AB1C2F1B944F48003F2C03 /* CSPreviewOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPreviewOverlayView.h; sourceTree = "<group>"; };
 		34AB1C301B944F48003F2C03 /* CSPreviewOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSPreviewOverlayView.m; sourceTree = "<group>"; };
 		34ABEF3B17C0C2CB00AA5E62 /* advancedPrefPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = advancedPrefPanel.xib; path = Interface/advancedPrefPanel.xib; sourceTree = "<group>"; };
-		34AE3C2E164E3E020052C95E /* zakk.lol.QTCaptureHelper.xpc */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = zakk.lol.QTCaptureHelper.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
 		34AE3C2F164E3E020052C95E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		34AE3C33164E3E020052C95E /* QTCaptureHelper-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "QTCaptureHelper-Info.plist"; sourceTree = "<group>"; };
 		34AE3C35164E3E020052C95E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1215,44 +1078,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3451A1C017111BD900DF6A8B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				34ED8CB21B0737A3002C0674 /* CoreMIDI.framework in Frameworks */,
-				34938EF01AE68EBD00F3B1CF /* Quartz.framework in Frameworks */,
-				34EAFB811A1BA87000E12FBD /* CoreMediaIO.framework in Frameworks */,
-				345F8B361A157444009A81E3 /* CoreAudio.framework in Frameworks */,
-				345F8B1E1A12AC31009A81E3 /* AudioUnit.framework in Frameworks */,
-				345F8B1B1A1218E5009A81E3 /* AudioToolbox.framework in Frameworks */,
-				345F89861976113C00BD4062 /* QuartzCore.framework in Frameworks */,
-				3451A1EA1712C80400DF6A8B /* Cocoa.framework in Frameworks */,
-				3451A1E91712C7DE00DF6A8B /* VideoDecodeAcceleration.framework in Frameworks */,
-				3451A1E81712C7D000DF6A8B /* libbz2.dylib in Frameworks */,
-				3451A1E71712C7C400DF6A8B /* libz.dylib in Frameworks */,
-				3451A1E61712C6D200DF6A8B /* IOKit.framework in Frameworks */,
-				3451A1E51712C67900DF6A8B /* IOSurface.framework in Frameworks */,
-				3451A1E41712C66E00DF6A8B /* OpenGL.framework in Frameworks */,
-				3451A1E31712C60D00DF6A8B /* VideoToolbox.framework in Frameworks */,
-				3451A1E21712C5F700DF6A8B /* CoreGraphics.framework in Frameworks */,
-				3451A1D71712C5B300DF6A8B /* CoreVideo.framework in Frameworks */,
-				3451A1D61712C58300DF6A8B /* CoreMedia.framework in Frameworks */,
-				3451A1D51712C57700DF6A8B /* AVFoundation.framework in Frameworks */,
-				3451A1C417111BD900DF6A8B /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		34AE3C2B164E3E020052C95E /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				34AE3C6D164F04C90052C95E /* CoreVideo.framework in Frameworks */,
-				34AE3C6B164F04B30052C95E /* IOSurface.framework in Frameworks */,
-				34AE3C4B164E68820052C95E /* QTKit.framework in Frameworks */,
-				34AE3C30164E3E020052C95E /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -1287,8 +1112,6 @@
 			isa = PBXGroup;
 			children = (
 				340FE49D15F3417E00E4CE4E /* CocoaSplit.app */,
-				34AE3C2E164E3E020052C95E /* zakk.lol.QTCaptureHelper.xpc */,
-				3451A1C317111BD900DF6A8B /* CocoaSplitCmd */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1442,6 +1265,7 @@
 				34788DEB1F00682E00C3C9C5 /* CSInputSourceProtocol.h */,
 				34788DEC1F00C88300C3C9C5 /* CSInputSourceBase.h */,
 				34788DED1F00C88300C3C9C5 /* CSInputSourceBase.m */,
+				34788DEF1F01526F00C3C9C5 /* CSEncodedAudioReceiverProtocol.h */,
 			);
 			path = CocoaSplit;
 			sourceTree = "<group>";
@@ -2215,40 +2039,6 @@
 			productReference = 340FE49D15F3417E00E4CE4E /* CocoaSplit.app */;
 			productType = "com.apple.product-type.application";
 		};
-		3451A1C217111BD900DF6A8B /* CocoaSplitCmd */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 3451A1CE17111BD900DF6A8B /* Build configuration list for PBXNativeTarget "CocoaSplitCmd" */;
-			buildPhases = (
-				3451A1BF17111BD900DF6A8B /* Sources */,
-				3451A1C017111BD900DF6A8B /* Frameworks */,
-				3451A1EC1712C8CA00DF6A8B /* CopyFiles */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = CocoaSplitCmd;
-			productName = CocoaSplitCmd;
-			productReference = 3451A1C317111BD900DF6A8B /* CocoaSplitCmd */;
-			productType = "com.apple.product-type.tool";
-		};
-		34AE3C2D164E3E020052C95E /* QTCaptureHelper */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 34AE3C3C164E3E020052C95E /* Build configuration list for PBXNativeTarget "QTCaptureHelper" */;
-			buildPhases = (
-				34AE3C2A164E3E020052C95E /* Sources */,
-				34AE3C2B164E3E020052C95E /* Frameworks */,
-				34AE3C2C164E3E020052C95E /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = QTCaptureHelper;
-			productName = QTCaptureHelper;
-			productReference = 34AE3C2E164E3E020052C95E /* zakk.lol.QTCaptureHelper.xpc */;
-			productType = "com.apple.product-type.bundle";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -2269,9 +2059,6 @@
 								enabled = 0;
 							};
 						};
-					};
-					3451A1C217111BD900DF6A8B = {
-						DevelopmentTeam = L3JLUY4S5E;
 					};
 				};
 			};
@@ -2378,8 +2165,6 @@
 			projectRoot = "";
 			targets = (
 				340FE49C15F3417E00E4CE4E /* CocoaSplit */,
-				34AE3C2D164E3E020052C95E /* QTCaptureHelper */,
-				3451A1C217111BD900DF6A8B /* CocoaSplitCmd */,
 			);
 		};
 /* End PBXProject section */
@@ -2599,14 +2384,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		34AE3C2C164E3E020052C95E /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				34AE3C36164E3E020052C95E /* InfoPlist.strings in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -2797,122 +2574,6 @@
 				34ED8C6B1B07371C002C0674 /* MIKMIDIMacDebugQuickLookSupport.m in Sources */,
 				34ED8C511B07371C002C0674 /* MIKMIDICommand.m in Sources */,
 				34213E1A196680880054E238 /* CompressorBase.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3451A1BF17111BD900DF6A8B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				345F8B6E1A176A5D009A81E3 /* CAMultiAudioUnit.m in Sources */,
-				345F8B5E1A161012009A81E3 /* CAMultiAudioPCMPlayer.m in Sources */,
-				34ED8C5A1B07371C002C0674 /* MIKMIDIDevice.m in Sources */,
-				34ED8C641B07371C002C0674 /* MIKMIDIErrors.m in Sources */,
-				34ED8C621B07371C002C0674 /* MIKMIDIEntity.m in Sources */,
-				34ED8C9A1B07371C002C0674 /* MIKMIDIPort.m in Sources */,
-				3451A1C717111BD900DF6A8B /* main.m in Sources */,
-				340DC735197CF6E9003A0BB3 /* CSCaptureBase.m in Sources */,
-				346CF44D1A5C10C2008E5BFF /* CSInputLayer.m in Sources */,
-				34348C3919BDC0D800A122C2 /* PluginManagerWindowController.m in Sources */,
-				34ED8C741B07371C002C0674 /* MIKMIDIMappingXMLParser.m in Sources */,
-				34ED8C801B07371C002C0674 /* MIKMIDIMetaLyricEvent.m in Sources */,
-				34ED8C7C1B07371C002C0674 /* MIKMIDIMetaInstrumentNameEvent.m in Sources */,
-				34ED8C781B07371C002C0674 /* MIKMIDIMetaCuePointEvent.m in Sources */,
-				34ED8C901B07371C002C0674 /* MIKMIDINoteOffCommand.m in Sources */,
-				34ED8C961B07371C002C0674 /* MIKMIDIOutputPort.m in Sources */,
-				34C19054189EE60400AB2430 /* CapturedFrameData.m in Sources */,
-				34ED8CA01B07371C002C0674 /* MIKMIDISequence.m in Sources */,
-				34ED8CBD1B07763F002C0674 /* CSMidiWrapper.m in Sources */,
-				345F8B2E1A156E15009A81E3 /* CAMultiAudioDevice.m in Sources */,
-				34ED8CAE1B07371C002C0674 /* MIKMIDIUtilities.m in Sources */,
-				347277FE1A5A2758008801A9 /* CSIOSurfaceLayer.m in Sources */,
-				345F8B261A14E6A0009A81E3 /* CAMultiAudioNode.m in Sources */,
-				34ED8C681B07371C002C0674 /* MIKMIDIEventIterator.m in Sources */,
-				34ED8CAC1B07371C002C0674 /* MIKMIDITrack.m in Sources */,
-				34938EEE1AE4D24200F3B1CF /* CSFilterChooserWindowController.m in Sources */,
-				34ED8C501B07371C002C0674 /* MIKMIDIClock.m in Sources */,
-				345F8B761A17A785009A81E3 /* CAMultiAudioMixer.m in Sources */,
-				34BD1E5F1B1F2A100015CBEC /* CAMultiAudioDownmixer.m in Sources */,
-				34ED8C4C1B07371C002C0674 /* MIKMIDIClientDestinationEndpoint.m in Sources */,
-				34D2D5781A547C35001004E5 /* CSTextCaptureViewControllerBase.m in Sources */,
-				34ED8C701B07371C002C0674 /* MIKMIDIMappingGenerator.m in Sources */,
-				34AFC33419B19CD00007C07B /* SourceCache.m in Sources */,
-				344825E71B253D6900AF9EAC /* CAMultiAudioMatrixCell.m in Sources */,
-				34ED8C6C1B07371C002C0674 /* MIKMIDIMacDebugQuickLookSupport.m in Sources */,
-				34ED8C941B07371C002C0674 /* MIKMIDIObject.m in Sources */,
-				34ED8C541B07371C002C0674 /* MIKMIDICommandThrottler.m in Sources */,
-				34B5FCE019BF1C3F00F67D19 /* CreateLayoutViewController.m in Sources */,
-				34ED8C7E1B07371C002C0674 /* MIKMIDIMetaKeySignatureEvent.m in Sources */,
-				34ED8C9E1B07371C002C0674 /* MIKMIDIProgramChangeCommand.m in Sources */,
-				345F8B7A1A183D1D009A81E3 /* CAMultiAudioEngine.m in Sources */,
-				34ED8CA21B07371C002C0674 /* MIKMIDISequencer.m in Sources */,
-				34ED8C4E1B07371C002C0674 /* MIKMIDIClientSourceEndpoint.m in Sources */,
-				3451A1D31712C41000DF6A8B /* CaptureController.m in Sources */,
-				34DC2FB11B512362008F12A2 /* CSCaptureBase+TimerDelegate.m in Sources */,
-				34ED8C4A1B07371C002C0674 /* MIKMIDIChannelVoiceCommand.m in Sources */,
-				34ED8CB81B073C1B002C0674 /* CSMidiManagerWindowController.m in Sources */,
-				34ED8C661B07371C002C0674 /* MIKMIDIEvent.m in Sources */,
-				34FDD6F31A215268009A7413 /* CSPluginServices.m in Sources */,
-				34ED8C821B07371C002C0674 /* MIKMIDIMetaMarkerTextEvent.m in Sources */,
-				3431FFE219786502000965FE /* InputSource.m in Sources */,
-				34ED8C581B07371C002C0674 /* MIKMIDIDestinationEndpoint.m in Sources */,
-				34ED8CAA1B07371C002C0674 /* MIKMIDITempoEvent.m in Sources */,
-				348AC06C19B406910064F02D /* SourceLayout.m in Sources */,
-				34ED8CA41B07371C002C0674 /* MIKMIDISourceEndpoint.m in Sources */,
-				34ED8C8E1B07371C002C0674 /* MIKMIDINoteEvent.m in Sources */,
-				3451A1D81712C5C400DF6A8B /* x264Compressor.m in Sources */,
-				34938EE91AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m in Sources */,
-				345F8B3E1A15F3BD009A81E3 /* CAMultiAudioPCM.m in Sources */,
-				34ED8C8A1B07371C002C0674 /* MIKMIDIMetaTrackSequenceNameEvent.m in Sources */,
-				34CFE4A518F1992A00092C6A /* AVFAudioChannel.m in Sources */,
-				34ED8C861B07371C002C0674 /* MIKMIDIMetaTextEvent.m in Sources */,
-				3451A1D91712C5C700DF6A8B /* AppleVTCompressor.m in Sources */,
-				345F8B061A1060D6009A81E3 /* CSAacEncoder.m in Sources */,
-				34ED8CA81B07371C002C0674 /* MIKMIDISystemMessageCommand.m in Sources */,
-				34ED8C981B07371C002C0674 /* MIKMIDIPlayer.m in Sources */,
-				34ED8C841B07371C002C0674 /* MIKMIDIMetaSequenceEvent.m in Sources */,
-				34576C7919AFCA1B007BAD90 /* CSPluginLoader.m in Sources */,
-				345F8B621A161552009A81E3 /* CAMultiAudioAVCapturePlayer.m in Sources */,
-				34ED8C9C1B07371C002C0674 /* MIKMIDIPrivateUtilities.m in Sources */,
-				345F8B721A177C1F009A81E3 /* CAMultiAudioConverter.m in Sources */,
-				34CFE4A118F154DD00092C6A /* AVFChannelManager.m in Sources */,
-				34ED8C7A1B07371C002C0674 /* MIKMIDIMetaEvent.m in Sources */,
-				34DF75591AA272F100DA9FDE /* LayoutRenderer.m in Sources */,
-				34ED8C5E1B07371C002C0674 /* MIKMIDIEndpoint.m in Sources */,
-				3451A1DC1712C5D000DF6A8B /* OutputDestination.m in Sources */,
-				3451A1DD1712C5D300DF6A8B /* CSAbstractCaptureDevice.m in Sources */,
-				34D2D5741A547628001004E5 /* CSTextCaptureBase.m in Sources */,
-				34ED8C761B07371C002C0674 /* MIKMIDIMetaCopyrightEvent.m in Sources */,
-				34ED8C561B07371C002C0674 /* MIKMIDIControlChangeCommand.m in Sources */,
-				34ED8C5C1B07371C002C0674 /* MIKMIDIDeviceManager.m in Sources */,
-				34213E1B196680880054E238 /* CompressorBase.m in Sources */,
-				34ED8C6A1B07371C002C0674 /* MIKMIDIInputPort.m in Sources */,
-				349461691ABC73CF00F28883 /* CSAnimationItem.m in Sources */,
-				345F8B6A1A16C348009A81E3 /* CAMultiAudioGraph.m in Sources */,
-				34ED8C601B07371C002C0674 /* MIKMIDIEndpointSynthesizer.m in Sources */,
-				34ED8CA61B07371C002C0674 /* MIKMIDISystemExclusiveCommand.m in Sources */,
-				34ED8C8C1B07371C002C0674 /* MIKMIDIMetronome.m in Sources */,
-				34ED8CB01B07371C002C0674 /* NSUIApplication+MIKMIDI.m in Sources */,
-				34ED8C6E1B07371C002C0674 /* MIKMIDIMapping.m in Sources */,
-				34ED8C921B07371C002C0674 /* MIKMIDINoteOnCommand.m in Sources */,
-				3408235619BC677C00CD1F5F /* CSNotifications.m in Sources */,
-				34ED8C881B07371C002C0674 /* MIKMIDIMetaTimeSignatureEvent.m in Sources */,
-				3451A1DF1712C5DC00DF6A8B /* FFMpegTask.m in Sources */,
-				3451A1E01712C5DF00DF6A8B /* AVFAudioCapture.m in Sources */,
-				34BD1E641B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.m in Sources */,
-				34B0265A1712D8BA0063BB2D /* CmdLineDelegate.m in Sources */,
-				34ED8C721B07371C002C0674 /* MIKMIDIMappingManager.m in Sources */,
-				34ED8C521B07371C002C0674 /* MIKMIDICommand.m in Sources */,
-				345F8B3A1A15D850009A81E3 /* CAMultiAudioDefaultOutput.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		34AE3C2A164E3E020052C95E /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				34AE3C39164E3E020052C95E /* main.m in Sources */,
-				34AE3C44164E410D0052C95E /* XPCListenerDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3108,114 +2769,6 @@
 			};
 			name = Release;
 		};
-		3451A1CC17111BD900DF6A8B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)\"",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "CocoaSplitCmd/CocoaSplitCmd-Prefix.pch";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				ONLY_ACTIVE_ARCH = YES;
-				"OTHER_LDFLAGS[arch=*]" = (
-					/usr/local/lib/libavformat.a,
-					/usr/local/lib/libavutil.a,
-					/usr/local/lib/libavcodec.a,
-					/usr/local/lib/libswscale.a,
-					/usr/local/lib/libmp3lame.a,
-					/usr/local/lib/libx264.a,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				SDKROOT = macosx10.10;
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		3451A1CD17111BD900DF6A8B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)\"",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "CocoaSplitCmd/CocoaSplitCmd-Prefix.pch";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				"OTHER_LDFLAGS[arch=*]" = (
-					/usr/local/lib/libavformat.a,
-					/usr/local/lib/libswscale.a,
-					/usr/local/lib/libavcodec.a,
-					/usr/local/lib/libavutil.a,
-					/usr/local/lib/libx264.a,
-					/usr/local/lib/libmp3lame.a,
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				SDKROOT = macosx10.10;
-				SKIP_INSTALL = YES;
-			};
-			name = Release;
-		};
-		34AE3C3A164E3E020052C95E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_OBJC_ARC = NO;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CODE_SIGN_IDENTITY = "";
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "QTCaptureHelper/QTCaptureHelper-Prefix.pch";
-				INFOPLIST_FILE = "QTCaptureHelper/QTCaptureHelper-Info.plist";
-				MACH_O_TYPE = mh_execute;
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_NAME = "zakk.lol.$(TARGET_NAME:rfc1034identifier)";
-				SDKROOT = macosx10.9;
-				VALID_ARCHS = "i386 x86_64";
-				WRAPPER_EXTENSION = xpc;
-			};
-			name = Debug;
-		};
-		34AE3C3B164E3E020052C95E /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_OBJC_ARC = NO;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CODE_SIGN_IDENTITY = "";
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "QTCaptureHelper/QTCaptureHelper-Prefix.pch";
-				INFOPLIST_FILE = "QTCaptureHelper/QTCaptureHelper-Info.plist";
-				MACH_O_TYPE = mh_execute;
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				PRODUCT_NAME = "zakk.lol.$(TARGET_NAME:rfc1034identifier)";
-				SDKROOT = macosx10.9;
-				VALID_ARCHS = "i386 x86_64";
-				WRAPPER_EXTENSION = xpc;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -3233,24 +2786,6 @@
 			buildConfigurations = (
 				340FE4D015F3417E00E4CE4E /* Debug */,
 				340FE4D115F3417E00E4CE4E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		3451A1CE17111BD900DF6A8B /* Build configuration list for PBXNativeTarget "CocoaSplitCmd" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				3451A1CC17111BD900DF6A8B /* Debug */,
-				3451A1CD17111BD900DF6A8B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		34AE3C3C164E3E020052C95E /* Build configuration list for PBXNativeTarget "QTCaptureHelper" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				34AE3C3A164E3E020052C95E /* Debug */,
-				34AE3C3B164E3E020052C95E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
