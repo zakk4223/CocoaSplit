@@ -174,7 +174,10 @@ function AnimationBlock(duration) {
     block_uuid_map[this.uuid] = this;
     
     CATransaction.setValueForKey(this.uuid, "__CS_BLOCK_UUID__");
+    
     CATransaction.setValueForKey(this, "__CS_BLOCK_OBJECT__");
+    this.current_begin_time = 0;
+
 
 }
 

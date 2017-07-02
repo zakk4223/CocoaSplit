@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "SourceLayout.h"
 
-@interface LayoutRenderer : NSObject
+@interface LayoutRenderer : NSObject <CALayerDelegate>
 {
     CVPixelBufferPoolRef _cvpool;
     CVPixelBufferRef _currentPB;

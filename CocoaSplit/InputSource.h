@@ -79,7 +79,6 @@ typedef enum resize_style_t {
 @property (assign) bool propertiesChanged;
 @property (strong) NSString *selectedVideoType;
 
-@property (assign) float depth;
 
 @property (assign) NSSize oldSize;
 @property (assign) bool active;
@@ -141,7 +140,6 @@ typedef enum resize_style_t {
 @property (assign) CGFloat cornerRadius;
 @property (strong) NSColor *backgroundColor;
 @property (readonly) CGRect globalLayoutPosition;
-@property (strong) NSMutableArray *attachedInputs;
 @property (weak) InputSource* parentInput;
 
 @property (assign) float x_pos;
@@ -253,8 +251,6 @@ typedef enum resize_style_t {
 
 @property (strong) NSString *scriptStorage;
 
-@property (strong) CSInputLayer *layer;
-@property (weak) SourceLayout *sourceLayout;
 
 @property (assign) bool isMaskLayer;
 
@@ -284,9 +280,7 @@ typedef enum resize_style_t {
 @property (assign) bool propertiesChanged;
 @property (strong) NSString *selectedVideoType;
 @property (strong) NSString *name;
-@property (strong) NSString *uuid;
 
-@property (assign) float depth;
 
 @property (assign) NSSize oldSize;
 @property (assign) bool active;
@@ -348,7 +342,6 @@ typedef enum resize_style_t {
 @property (assign) CGFloat cornerRadius;
 @property (strong) NSColor *backgroundColor;
 @property (readonly) CGRect globalLayoutPosition;
-@property (strong) NSMutableArray *attachedInputs;
 @property (weak) InputSource* parentInput;
 
 @property (assign) float x_pos;
@@ -372,6 +365,5 @@ typedef enum resize_style_t {
 @property (assign) CGFloat topLevelHeight;
 @property (assign) bool needsAdjustment;
 @property (assign) bool needsAdjustPosition;
-@property (assign) NSInteger refCount;
 @property (assign) bool isFrozen;
 @end

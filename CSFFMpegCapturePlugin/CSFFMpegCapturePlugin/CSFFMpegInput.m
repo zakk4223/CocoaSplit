@@ -213,10 +213,8 @@
             
             int bufferCnt = asbd->mFormatFlags & kAudioFormatFlagIsNonInterleaved ? asbd->mChannelsPerFrame : 1;
             
-            int channelCnt = _audio_codec_ctx->channels;
-            
-            long byteCnt = asbd->mBytesPerFrame * dst_nb_samples;
-            
+        
+        
             sampleABL = malloc(sizeof(AudioBufferList) + (bufferCnt-1)*sizeof(AudioBuffer));
             
             
@@ -249,7 +247,6 @@
     
     struct frame_message msg;
     avcodec_flush_buffers(_video_codec_ctx);
-    int flush_cnt = 0;
     if (_video_message_queue)
     {
         while (av_thread_message_queue_recv(_video_message_queue, &msg, AV_THREAD_MESSAGE_NONBLOCK) >= 0)
@@ -273,7 +270,6 @@
 {
     
     struct frame_message msg;
-    int flush_cnt = 0;
     
     avcodec_flush_buffers(_audio_codec_ctx);
     if (_audio_message_queue)
@@ -413,8 +409,6 @@
     AVPacket av_packet;
     bool do_audio = YES;
     bool do_video = YES;
-    int64_t seek_pts;
-    struct frame_message msg;
     
     
     
@@ -424,7 +418,6 @@
     }
     
     
-    int pkt_cnt = 0;
     
     while (do_audio || do_video)
     {
@@ -450,7 +443,6 @@
         }
         
         output_frame = av_frame_alloc();
-        int got_decoded_frame;
         int read_ret = 0;
         
         if (!self.is_draining)

@@ -128,6 +128,9 @@
 		34788DE21EF5A86800C3C9C5 /* CSAnimationInput.js in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34788DDD1EF59E5B00C3C9C5 /* CSAnimationInput.js */; };
 		34788DE71EF6753900C3C9C5 /* CSJSProxyObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 34788DE61EF6753900C3C9C5 /* CSJSProxyObj.m */; };
 		34788DEE1F00C88300C3C9C5 /* CSInputSourceBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34788DED1F00C88300C3C9C5 /* CSInputSourceBase.m */; };
+		34788DF21F016F7A00C3C9C5 /* CSScriptInputSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 34788DF11F016F7A00C3C9C5 /* CSScriptInputSource.m */; };
+		34788DF61F01719800C3C9C5 /* CSScriptInputSourceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34788DF41F01719800C3C9C5 /* CSScriptInputSourceViewController.m */; };
+		34788DF71F01719800C3C9C5 /* CSScriptInputSourceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34788DF51F01719800C3C9C5 /* CSScriptInputSourceViewController.xib */; };
 		34792AF616104AA70065A859 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AF516104AA70065A859 /* IOKit.framework */; };
 		34792AFB1611A6B90065A859 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AFA1611A6B90065A859 /* IOSurface.framework */; };
 		3479A9971A9007DD00A524F0 /* CocoaSplit.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 3479A9961A9007DD00A524F0 /* CocoaSplit.sdef */; };
@@ -738,6 +741,11 @@
 		34788DEC1F00C88300C3C9C5 /* CSInputSourceBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSInputSourceBase.h; sourceTree = "<group>"; };
 		34788DED1F00C88300C3C9C5 /* CSInputSourceBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSInputSourceBase.m; sourceTree = "<group>"; };
 		34788DEF1F01526F00C3C9C5 /* CSEncodedAudioReceiverProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSEncodedAudioReceiverProtocol.h; sourceTree = "<group>"; };
+		34788DF01F016F7A00C3C9C5 /* CSScriptInputSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSScriptInputSource.h; sourceTree = "<group>"; };
+		34788DF11F016F7A00C3C9C5 /* CSScriptInputSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSScriptInputSource.m; sourceTree = "<group>"; };
+		34788DF31F01719800C3C9C5 /* CSScriptInputSourceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSScriptInputSourceViewController.h; path = Interface/CSScriptInputSourceViewController.h; sourceTree = "<group>"; };
+		34788DF41F01719800C3C9C5 /* CSScriptInputSourceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSScriptInputSourceViewController.m; path = Interface/CSScriptInputSourceViewController.m; sourceTree = "<group>"; };
+		34788DF51F01719800C3C9C5 /* CSScriptInputSourceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSScriptInputSourceViewController.xib; path = Interface/CSScriptInputSourceViewController.xib; sourceTree = "<group>"; };
 		34792AF516104AA70065A859 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		34792AFA1611A6B90065A859 /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = System/Library/Frameworks/IOSurface.framework; sourceTree = SDKROOT; };
 		3479A9961A9007DD00A524F0 /* CocoaSplit.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CocoaSplit.sdef; sourceTree = "<group>"; };
@@ -1266,6 +1274,8 @@
 				34788DEC1F00C88300C3C9C5 /* CSInputSourceBase.h */,
 				34788DED1F00C88300C3C9C5 /* CSInputSourceBase.m */,
 				34788DEF1F01526F00C3C9C5 /* CSEncodedAudioReceiverProtocol.h */,
+				34788DF01F016F7A00C3C9C5 /* CSScriptInputSource.h */,
+				34788DF11F016F7A00C3C9C5 /* CSScriptInputSource.m */,
 			);
 			path = CocoaSplit;
 			sourceTree = "<group>";
@@ -1482,6 +1492,9 @@
 				34E162E51E987420005157ED /* CSScriptWindowViewController.h */,
 				34E162E61E987420005157ED /* CSScriptWindowViewController.m */,
 				34E162E71E987420005157ED /* CSScriptWindowViewController.xib */,
+				34788DF31F01719800C3C9C5 /* CSScriptInputSourceViewController.h */,
+				34788DF41F01719800C3C9C5 /* CSScriptInputSourceViewController.m */,
+				34788DF51F01719800C3C9C5 /* CSScriptInputSourceViewController.xib */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -2046,7 +2059,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastTestingUpgradeCheck = 0510;
-				LastUpgradeCheck = 0440;
+				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = Zakk;
 				TargetAttributes = {
 					340FE49C15F3417E00E4CE4E = {
@@ -2373,6 +2386,7 @@
 				3435E396188B902C0015CC01 /* 420v.fgsh in Resources */,
 				3473D2AF1D56920B00842EEE /* CSAdvancedAudioWindowController.xib in Resources */,
 				343ED9421BCAC1C80061FC4B /* EditBuiltinLayoutView.xib in Resources */,
+				34788DF71F01719800C3C9C5 /* CSScriptInputSourceViewController.xib in Resources */,
 				3441269C1E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.xib in Resources */,
 				3415CED31AE257DA002F11F5 /* CSTextCaptureBaseView.xib in Resources */,
 				342B33B3198073EC00492CB7 /* line.fgsh in Resources */,
@@ -2523,6 +2537,7 @@
 				3431FFE119786502000965FE /* InputSource.m in Sources */,
 				34559A281E12D4400085883C /* CSCaptureBase+InputFrameTick.m in Sources */,
 				3414C6AE1CBB9EBF00107C69 /* CSIRCompressor.m in Sources */,
+				34788DF21F016F7A00C3C9C5 /* CSScriptInputSource.m in Sources */,
 				34ED8C911B07371C002C0674 /* MIKMIDINoteOnCommand.m in Sources */,
 				346865471CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.m in Sources */,
 				34B5FB8E1E7FA2610078FC51 /* CSSequenceItemTransitionViewController.m in Sources */,
@@ -2564,6 +2579,7 @@
 				345F8B751A17A785009A81E3 /* CAMultiAudioMixer.m in Sources */,
 				34ED8C951B07371C002C0674 /* MIKMIDIOutputPort.m in Sources */,
 				34ED8CA71B07371C002C0674 /* MIKMIDISystemMessageCommand.m in Sources */,
+				34788DF61F01719800C3C9C5 /* CSScriptInputSourceViewController.m in Sources */,
 				34B5FADD1E75BC910078FC51 /* CSLayoutSwitcherViewController.m in Sources */,
 				34ED8C851B07371C002C0674 /* MIKMIDIMetaTextEvent.m in Sources */,
 				34B5FACB1E7461E60078FC51 /* CSLayoutSequence.m in Sources */,
@@ -2627,15 +2643,25 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "Developer ID Application: Zachary Girouard (L3JLUY4S5E)";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -2644,11 +2670,13 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -2657,18 +2685,29 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "Developer ID Application: Zachary Girouard (L3JLUY4S5E)";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
@@ -2681,7 +2720,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -2714,6 +2752,7 @@
 					/usr/local/lib/libx264.a,
 					"-all_load",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "zakk.lol.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = CocoaSplit;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
@@ -2726,7 +2765,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -2761,6 +2799,7 @@
 					"-flat_namespace",
 					"-all_load",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "zakk.lol.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = CocoaSplit;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;

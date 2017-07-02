@@ -69,9 +69,6 @@
 -(void)popoverDidClose:(NSNotification *)notification
 {
     
-    AppDelegate *appDel = NSApp.delegate;
-    
-
     self.popover.contentViewController = nil;
 }
 

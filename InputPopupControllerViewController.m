@@ -3,7 +3,6 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 7/26/14.
-//  Copyright (c) 2014 Zakk. All rights reserved.
 //
 
 #import "InputPopupControllerViewController.h"

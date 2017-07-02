@@ -1323,7 +1323,7 @@
 
     if (inputUUID)
     {
-        InputSource *clonedSource = [self.sourceLayout inputForUUID:inputUUID];
+        NSObject<CSInputSourceProtocol> *clonedSource = [self.sourceLayout inputForUUID:inputUUID];
         if (clonedSource)
         {
             [self.sourceLayout deleteSource:clonedSource];
@@ -1332,7 +1332,7 @@
     }
     if (parentUUID)
     {
-        InputSource *parentSource = [self.sourceLayout inputForUUID:parentUUID];
+        NSObject<CSInputSourceProtocol> *parentSource = [self.sourceLayout inputForUUID:parentUUID];
         if (parentSource)
         {
             [[self.undoManager prepareWithInvocationTarget:self] cloneInputSource:parentSource];
@@ -1408,7 +1408,7 @@
 }
 
 
--(void)addInputSourceWithInput:(InputSource *)source
+-(void)addInputSourceWithInput:(NSObject<CSInputSourceProtocol> *)source
 {
     if (self.sourceLayout)
     {
@@ -1419,26 +1419,13 @@
 }
 
 
-- (IBAction)addInputSource:(id)sender
-{
-    
-    if (self.sourceLayout)
-    {
-        InputSource *newSource = [[InputSource alloc] init];
-        
-        [self.sourceLayout addSource:newSource];
-        [[self.undoManager prepareWithInvocationTarget:self] undoAddInput:newSource.uuid];
-        [self spawnInputSettings:newSource atRect:NSZeroRect];
-    }
-}
-
 
 -(void)undoEditsource:(NSData *)withData
 {
     
     
     InputSource *restoredSource = [NSKeyedUnarchiver unarchiveObjectWithData:withData];
-    InputSource *currentSource = [self.sourceLayout inputForUUID:restoredSource.uuid];
+    NSObject<CSInputSourceProtocol> *currentSource = [self.sourceLayout inputForUUID:restoredSource.uuid];
     if (currentSource)
     {
         [self.sourceLayout deleteSource:currentSource];
@@ -1459,10 +1446,11 @@
     [self.sourceLayout addSource:restoredSource];
     if (parentUUID)
     {
-        InputSource *parentSource = [self.sourceLayout inputForUUID:parentUUID];
-        if (parentSource)
+        NSObject<CSInputSourceProtocol> *parentSource = [self.sourceLayout inputForUUID:parentUUID];
+        if (parentSource && parentSource.layer)
         {
-            [self attachSource:restoredSource toSource:parentSource];
+            InputSource *vParent = (InputSource *)parentSource;
+            [self attachSource:restoredSource toSource:vParent];
         }
     }
     [[self.undoManager prepareWithInvocationTarget:self] deleteInput:restoredSource];
@@ -1521,7 +1509,7 @@
     if (_glLayer)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [_glLayer setNeedsDisplay];
+            [self->_glLayer setNeedsDisplay];
 
             
         });
@@ -1807,7 +1795,7 @@
 {
     
     
-    InputSource *configSrc = [self.sourceLayout inputForUUID:uuid];
+    NSObject<CSInputSourceProtocol> *configSrc = [self.sourceLayout inputForUUID:uuid];
     
     if (!configSrc)
     {

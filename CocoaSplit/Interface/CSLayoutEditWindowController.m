@@ -80,11 +80,6 @@
     [self close];
 }
 
-- (IBAction)newSource:(id)sender
-{
-    [self.previewView addInputSource:self];
-}
-
 
 
 - (id <NSPasteboardWriting>)outlineView:(NSOutlineView *)outlineView pasteboardWriterForItem:(id)item
@@ -236,7 +231,6 @@
 {
     NSInteger clicked = sender.tag;
     
-    NSArray *selectedInputs;
     NSRect sbounds;
     switch (clicked) {
         case 0:

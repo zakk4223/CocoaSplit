@@ -3,7 +3,6 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 5/8/16.
-//  Copyright © 2016 Zakk. All rights reserved.
 //
 
 #import "CSAddInputViewController.h"
@@ -12,6 +11,8 @@
 #import "CSPluginServices.h"
 #import "AppDelegate.h"
 #import "PreviewView.h"
+#import "CSScriptInputSource.h"
+
 
 @interface CSAddInputViewController ()
 
@@ -173,6 +174,18 @@
     NSObject <CSCaptureSourceProtocol> *clickedCapture;
 
     clickedCapture = [ self.sourceTypes objectAtIndex:[self.initialTable rowForView:sender]];
+    
+    if ([clickedCapture isEqualTo:[NSNull null]])
+    {
+        CSScriptInputSource *newSrc = [[CSScriptInputSource alloc] init];
+        [self addInput:newSrc];
+        [self.previewView openInputConfigWindow:newSrc.uuid];
+
+        NSLog(@"NULL!!!!!");
+        return;
+    }
+    
+    
     NSArray *availableVideoDevices = clickedCapture.availableVideoDevices;
     
     if (!availableVideoDevices || availableVideoDevices.count == 0)
@@ -203,14 +216,13 @@
     
 }
 
--(void)addInput:(InputSource *)toAdd
+-(void)addInput:(NSObject<CSInputSourceProtocol> *)toAdd
 {
     
     
     if (self.previewView)
     {
         [self.previewView addInputSourceWithInput:toAdd];
-        toAdd.autoPlaceOnFrameUpdate = YES;
     }
  
   }
@@ -231,6 +243,11 @@
     } else if (tableView == self.initialTable) {
         
         NSObject <CSCaptureSourceProtocol> *item = [self.sourceTypesController.arrangedObjects objectAtIndex:row];
+        if ([item isEqualTo:[NSNull null]])
+        {
+            return [tableView makeViewWithIdentifier:@"initialInputViewScript" owner:self];
+        }
+        
         NSArray *availableVideoDevices = item.availableVideoDevices;
         if (availableVideoDevices && availableVideoDevices.count > 0)
         {
@@ -270,6 +287,7 @@
         [ret addObject:newCaptureSession];
     }
     
+    [ret addObject:[NSNull null]];
     
     _sourceTypeList = ret;
     return ret;

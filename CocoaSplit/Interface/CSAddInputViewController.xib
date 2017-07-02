@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16E195" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12120" systemVersion="16G16b" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12120"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -196,6 +196,27 @@
                                                     <constraint firstItem="PSj-LN-dTf" firstAttribute="top" secondItem="Q3y-sG-NQW" secondAttribute="top" constant="-3" id="Hcz-S6-CB6"/>
                                                     <constraint firstItem="PSj-LN-dTf" firstAttribute="centerX" secondItem="Q3y-sG-NQW" secondAttribute="centerX" id="lUN-eF-Ntk"/>
                                                     <constraint firstItem="PSj-LN-dTf" firstAttribute="leading" secondItem="Q3y-sG-NQW" secondAttribute="leading" constant="-3" id="xya-Lt-ORK"/>
+                                                </constraints>
+                                            </tableCellView>
+                                            <tableCellView identifier="initialInputViewScript" id="Iwy-0Z-uug">
+                                                <rect key="frame" x="1" y="34" width="179" height="17"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <subviews>
+                                                    <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NQw-LI-cTP">
+                                                        <rect key="frame" x="-3" y="-3" width="184" height="23"/>
+                                                        <buttonCell key="cell" type="smallSquare" title="Script" bezelStyle="smallSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Q7Y-ur-iwy">
+                                                            <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
+                                                            <font key="font" metaFont="system"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <action selector="initalTableButtonClicked:" target="-2" id="DJP-BR-TcK"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="NQw-LI-cTP" firstAttribute="centerX" secondItem="Iwy-0Z-uug" secondAttribute="centerX" id="6d3-Ug-AGs"/>
+                                                    <constraint firstItem="NQw-LI-cTP" firstAttribute="top" secondItem="Iwy-0Z-uug" secondAttribute="top" constant="-3" id="7GA-Nl-Fgk"/>
+                                                    <constraint firstItem="NQw-LI-cTP" firstAttribute="leading" secondItem="Iwy-0Z-uug" secondAttribute="leading" constant="-3" id="Iwn-Y3-yAK"/>
                                                 </constraints>
                                             </tableCellView>
                                         </prototypeCellViews>

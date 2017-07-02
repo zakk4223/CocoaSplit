@@ -2760,8 +2760,8 @@
     {
 
         NSTreeNode *node = [outlineView itemAtRow:row];
-        InputSource *src = node.representedObject;
-        if (!src.parentInput)
+        NSObject<CSInputSourceProtocol> *src = node.representedObject;
+        if (!src.layer || !((InputSource *)src).parentInput)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [outlineView expandItem:nil expandChildren:YES];
@@ -2794,8 +2794,15 @@
     
     NSPasteboard *pb = [info draggingPasteboard];
     NSString *draggedUUID = [pb stringForType:@"cocoasplit.input.item"];
-    InputSource *draggedSource = [self.activePreviewView.sourceLayout inputForUUID:draggedUUID];
+    NSObject<CSInputSourceProtocol> *pdraggedSource = [self.activePreviewView.sourceLayout inputForUUID:draggedUUID];
 
+    
+    if (!pdraggedSource.layer)
+    {
+        return NSDragOperationNone;
+    }
+    
+    InputSource *draggedSource = (InputSource *)pdraggedSource;
     
     if (nodeInput && nodeInput == draggedSource)
     {
@@ -2833,8 +2840,15 @@
     NSString *draggedUUID = [pb stringForType:@"cocoasplit.input.item"];
     NSTreeNode *parentNode = (NSTreeNode *)item;
     InputSource *parentSource = nil;
-    InputSource *draggedSource = [self.activePreviewView.sourceLayout inputForUUID:draggedUUID];
+    NSObject<CSInputSourceProtocol> *pdraggedSource = [self.activePreviewView.sourceLayout inputForUUID:draggedUUID];
 
+    if (!pdraggedSource.layer)
+    {
+        return NO;
+    }
+    
+    InputSource *draggedSource = (InputSource *)pdraggedSource;
+    
     if (parentNode)
     {
         parentSource = parentNode.representedObject;
@@ -2884,7 +2898,7 @@
                     if (src)
                     {
                         NSString *uuid = src.uuid;
-                        InputSource *realInput = [self.activePreviewView.sourceLayout inputForUUID:uuid];
+                        NSObject<CSInputSourceProtocol> *realInput = [self.activePreviewView.sourceLayout inputForUUID:uuid];
                         [self.activePreviewView deleteInput:realInput];
                     }
                     
@@ -3693,10 +3707,10 @@
         ret = currLayout;
     } else if ([responderName hasPrefix:@"Input:"]) {
         NSString *uuid = [responderName substringFromIndex:6];
-        InputSource *input = [currLayout inputForUUID:uuid];
+        NSObject <CSInputSourceProtocol> *input = [currLayout inputForUUID:uuid];
         if (input)
         {
-            ret = input;
+            ret = (InputSource *)input;
         }
     }
 

@@ -114,6 +114,24 @@ var setAudioInputVolume = function(name_regex, volume, duration) {
 }
 
 
+var runTriggerScript = function(layout, scriptType) {
+    var s_inputs = layout.sourceList;
+    s_inputs.forEach(function (r_inp) {
+                     
+                     if (r_inp["script_"+scriptType])
+                     {
+                     
+                        var inputSelf = null;
+                        if (r_inp.animationLayer)
+                        {
+                            inputSelf = new CSAnimationInput(r_inp);
+                        }
+                        (new Function("self", r_inp["script_"+scriptType]))(inputSelf);
+                        inputSelf = null;
+                     }
+    });
+
+}
 var layoutByName = function(name) {
     return captureController.findLayoutWithName(name);
 }
@@ -135,12 +153,9 @@ var switchToLayout = function(layout, kwargs) {
     
     if (layout) { 
         var target_layout = getCurrentLayout();
-        console.log("T NAME " + target_layout.transitionName);
-        console.log("T DURATION " + target_layout.transitionDuration);
         if ((CSAnimationBlock.currentFrame() && target_layout.transitionName || target_layout.transitionFilter) && target_layout.transitionDuration > 0) {
             var dummy_animation = new CSAnimation(null, null, null);
             dummy_animation.duration = target_layout.transitionDuration;
-            console.log("DUMMY DURATION " + dummy_animation.duration);
             
             CSAnimationBlock.currentFrame().add_animation(dummy_animation, null, null);
         }
@@ -158,7 +173,11 @@ var switchToLayout = function(layout, kwargs) {
                                         }
                                       }
                                     });
+            runTriggerScript(target_layout, "beforeReplace");
+            
+
         }
+                    
         target_layout.replaceWithSourceLayout(layout);
         if (!kwargs['noscripts']) {
             var layout_transition_scripts = layout.transitionScripts;
@@ -166,6 +185,9 @@ var switchToLayout = function(layout, kwargs) {
                 var layout_replacing_script = layout_transition_scripts['replacing'];
                 eval(layout_replacing_script);
             }
+            
+            runTriggerScript(target_layout, "afterReplace");
+
         }
     }
 }
@@ -183,12 +205,21 @@ var mergeLayout = function(layout, kwargs) {
             CSAnimationBlock.currentFrame().add_animation(dummy_animation, null, null);
         }
         
+        if (!kwargs['noscripts'])
+        {
+            runTriggerScript(target_layout, "beforeMerge");
+        }
         target_layout.mergeSourceLayout(layout);
         var layout_transition_scripts = layout.transitionScripts;
         if (layout_transition_scripts['merged'] && !kwargs['noscripts'])
         {
             var layout_merged_script = layout_transition_scripts['merged'];
             eval(layout_merged_script);
+        }
+        
+        if (!kwargs['noscripts'])
+        {
+            runTriggerScript(target_layout, "afterMerge");
         }
     }
 }
@@ -214,6 +245,11 @@ var removeLayout = function(layout, kwargs) {
         {
             var layout_removed_script = layout_transition_scripts['removed'];
             eval(layout_removed_script);
+        }
+        
+        if (!kwargs['noscripts'])
+        {
+            runTriggerScript(target_layout, "beforeRemove");
         }
         target_layout.removeSourceLayout(layout);
 

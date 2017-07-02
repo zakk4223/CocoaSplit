@@ -304,7 +304,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.currentTimeString = [self timeToString:self.player.lastVideoTime];
                 [self willChangeValueForKey:@"currentMovieTime"];
-                _currentMovieTime = self.player.lastVideoTime;;
+                self->_currentMovieTime = self.player.lastVideoTime;;
                 
                 [self didChangeValueForKey:@"currentMovieTime"];
             });

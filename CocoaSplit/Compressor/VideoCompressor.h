@@ -49,7 +49,6 @@
 -(NSInteger) outputCount;
 -(void) reset;
 -(bool) validate:(NSError **)therror;
--(void) addAudioData:(CMSampleBufferRef)audioData;
 -(id <CSCompressorViewControllerProtocol>)getConfigurationView;
 
 

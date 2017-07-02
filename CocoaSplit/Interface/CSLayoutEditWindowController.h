@@ -33,9 +33,7 @@
 @property (strong) IBOutlet NSObjectController *layoutController;
 - (IBAction)cancelEdit:(id)sender;
 - (IBAction)editOK:(id)sender;
-- (IBAction)newSource:(id)sender;
 - (IBAction)inputTableControlClick:(NSButton *)sender;
-- (IBAction)recordingButtonAction:(NSButton *)sender;
 
 @property (weak) IBOutlet NSOutlineView *inputOutlineView;
 @property (assign) bool previewOnly;

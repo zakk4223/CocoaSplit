@@ -177,7 +177,7 @@
     CSFFMpegInput *nextItem = nil;
     
     
-    if (currentIdx >=0 && (currentIdx < _inputQueue.count))
+    if (currentIdx != NSNotFound && (currentIdx < _inputQueue.count))
     {
         nextItem = [_inputQueue objectAtIndex:currentIdx];
         
@@ -614,7 +614,7 @@
     
     CVPixelBufferRef buf;
     CVPixelBufferPoolCreatePixelBuffer(NULL, _cvpool, &buf);
-    int pbcnt = CVPixelBufferGetPlaneCount(buf);
+    size_t pbcnt = CVPixelBufferGetPlaneCount(buf);
     
     CVPixelBufferLockBaseAddress(buf, 0);
 
@@ -622,8 +622,8 @@
     {
         uint8_t *src_addr;
         uint8_t *dst_addr;
-        int dst_stride, src_stride;
-        int rows;
+        size_t dst_stride, src_stride;
+        size_t rows;
         
         dst_addr = CVPixelBufferGetBaseAddressOfPlane(buf, i);
         src_addr = av_frame->data[i];
@@ -635,7 +635,7 @@
         {
             memcpy(dst_addr, src_addr, src_stride * rows);
         } else {
-            int copy_bytes = dst_stride < src_stride ? dst_stride : src_stride;
+            size_t copy_bytes = dst_stride < src_stride ? dst_stride : src_stride;
             for (int j = 0; j < rows; j++)
             {
                 memcpy(dst_addr + j * dst_stride, src_addr + j * src_stride, copy_bytes);

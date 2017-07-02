@@ -24,6 +24,8 @@
 @synthesize delay = _delay;
 
 
+
+
 -(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType
 {
     if (self = [super init])

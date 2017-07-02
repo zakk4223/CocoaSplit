@@ -133,9 +133,6 @@
 {
     
     
-    __weak SourceLayout *weakSelf = self;
-    
-    
 }
 
 
@@ -240,7 +237,7 @@
     
     
     void (^completionBlock)(void) = [threadDict objectForKey:@"completionBlock"];
-    void (^exceptionBlock)(NSException *exception) = [threadDict objectForKey:@"exceptionBlock"];
+    //void (^exceptionBlock)(NSException *exception) = [threadDict objectForKey:@"exceptionBlock"];
     
     JSContext *jsCtx = [[CaptureController sharedCaptureController] setupJavascriptContext];
     
@@ -261,7 +258,6 @@
             jsCtx[@"extraDict"] = extraDict;
             jsCtx[@"useLayout"] = self;
             
-            NSLog(@"RUN ANIMATION CODE %@", animationCode);
             
            // runAnimationForLayoutWithExtraDictionary = function(animation_string, layout, extraDictionary) {
             JSValue *runFunc = jsCtx[@"runAnimationForLayoutWithExtraDictionary"];
@@ -269,7 +265,6 @@
                                   
 
         
-            NSLog(@"SCRIPT RET %@", scriptRet);
             NSDictionary *pendingAnimations = scriptRet.toDictionary;
             
             //NSDictionary *pendingAnimations = [runner runAnimation:animationCode forLayout:self withExtraDictionary:extraDict];
@@ -610,7 +605,6 @@
     
     NSArray *mergeList;
     
-    NSLog(@"MERGE OBJ %@", mergeObj);
     
     if ([mergeObj isKindOfClass:[NSDictionary class]])
     {
@@ -768,18 +762,33 @@
     NSArray *newInputs = diffResult[@"new"];
     
     NSNumber *aStart = nil;
+    NSString *blockUUID = [CATransaction valueForKey:@"__CS_BLOCK_UUID__"];
     
-    NSDictionary *blockObj = [CATransaction valueForKey:@"__CS_BLOCK_OBJECT__"];
-    if (blockObj)
+    if (blockUUID)
     {
-            aStart = blockObj[@"current_begin_time"];
-        if ([aStart isEqual:[NSNull null]])
+        JSContext *jCtx = [JSContext currentContext];
+        if (jCtx)
         {
-            aStart = [NSNumber numberWithDouble:CACurrentMediaTime()];
+            JSValue *mapValue = jCtx[@"block_uuid_map"];
+            if (mapValue)
+            {
+                NSDictionary *blockMap = mapValue.toDictionary;
+                NSDictionary *blockObj = blockMap[blockUUID];
+                if (blockMap && blockObj)
+                {
+                    aStart = blockObj[@"current_begin_time"];
+                    if ([aStart isEqual:[NSNull null]])
+                    {
+                        aStart = nil;
+                    }
+                }
+            }
         }
     }
-    
-    
+    if (!aStart)
+    {
+        aStart = [NSNumber numberWithDouble:CACurrentMediaTime()];
+    }
     CATransition *rTrans = nil;
     CABasicAnimation *bTrans = nil;
     
@@ -1507,7 +1516,10 @@
     [NSApp registerMIDIResponder:self];
     for (NSObject<CSInputSourceProtocol> *src in self.sourceList)
     {
-        [NSApp registerMIDIResponder:src];
+        if (src.layer)
+        {
+            [NSApp registerMIDIResponder:(InputSource *)src];
+        }
 
     }
 }
@@ -1555,6 +1567,8 @@
         [parentLayer addSublayer:newSource.layer];
         videoSource.needsAdjustPosition = NO;
         videoSource.needsAdjustment = YES;
+        videoSource.autoPlaceOnFrameUpdate = YES;
+
     }
     
     
@@ -1566,6 +1580,7 @@
     
     [self generateTopLevelSourceList];
     [NSApp registerMIDIResponder:newSource];
+    [newSource wasAdded];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputAdded object:newSource userInfo:nil];
 }
@@ -1728,7 +1743,6 @@
             _rootSize = curSize;
             needsResize = YES;
         }
-        
         
         NSArray *listCopy;
         

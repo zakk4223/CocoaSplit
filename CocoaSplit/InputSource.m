@@ -120,18 +120,19 @@ static NSArray *_sourceTypes = nil;
 
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
+    
+    [super encodeWithCoder:aCoder];
+    
     [aCoder encodeFloat:self.rotationAngle forKey:@"rotationAngle"];
     [aCoder encodeFloat:self.rotationAngleX forKey:@"rotationAngleX"];
     [aCoder encodeFloat:self.rotationAngleY forKey:@"rotationAngleY"];
     [aCoder encodeFloat:self.opacity forKey:@"opacity"];
     [aCoder encodeObject:_editedName forKey:@"name"];
-    [aCoder encodeFloat:self.depth forKey:@"CAdepth"];
     [aCoder encodeFloat:self.crop_top forKey:@"CAcrop_top"];
     [aCoder encodeFloat:self.crop_bottom forKey:@"CAcrop_bottom"];
     [aCoder encodeFloat:self.crop_left forKey:@"CAcrop_left"];
     [aCoder encodeFloat:self.crop_right forKey:@"CAcrop_right"];
     [aCoder encodeObject:self.selectedVideoType forKey:@"selectedVideoType"];
-    [aCoder encodeObject:self.uuid forKey:@"uuid"];
     [aCoder encodeFloat:self.scrollXSpeed forKey:@"scrollXSpeed"];
     [aCoder encodeFloat:self.scrollYSpeed forKey:@"scrollYSpeed"];
     
@@ -213,7 +214,7 @@ static NSArray *_sourceTypes = nil;
     There's some 'legacy' stuff in here to support loading older CocoaSplit save formats. Mostly related to the change from CoreImage to CoreAnimation. some types changed, some stuff like x/y position changed names. It's probably a bit slower when you're saving->going live but meh. Problematic variables are encoded with a prefix of 'CA' to avoid excessive use of try/catch
      */
     
-    if (self = [super init])
+    if (self = [super initWithCoder:aDecoder])
     {
         
         [CATransaction begin];
@@ -462,6 +463,13 @@ static NSArray *_sourceTypes = nil;
 
 
 
++(NSSet *)keyPathsForValuesAffectingLibraryImage
+{
+    return [NSSet setWithObjects:@"videoInput", @"videoInput.libraryImage", nil];
+}
+
+
+
 -(void)addedToLayout
 {
     
@@ -541,7 +549,6 @@ static NSArray *_sourceTypes = nil;
     self.changeInterval = 20.0f;
     
     
-    self.attachedInputs = [NSMutableArray array];
     
     self.scrollXSpeed = 0.0f;
     self.scrollYSpeed = 0.0f;
@@ -2305,7 +2312,7 @@ static NSArray *_sourceTypes = nil;
         [self deregisterVideoInput:self.videoInput];
     }
     
-    NSObject <CSCaptureSourceProtocol> *newCaptureSession;
+    NSObject <CSCaptureSourceProtocol,CSCaptureBaseInputFrameTickProtocol> *newCaptureSession;
     
     Class captureClass = [pluginMap objectForKey:selectedVideoType];
     newCaptureSession = [[captureClass alloc] init];
@@ -2769,6 +2776,17 @@ static NSArray *_sourceTypes = nil;
 
 
 
+-(NSImage *)libraryImage
+{
+    if (self.videoInput)
+    {
+        return self.videoInput.libraryImage;
+    }
+    
+    return nil;
+}
+
+
 -(void)layerUpdated
 {
     if (self.autoPlaceOnFrameUpdate)
@@ -3130,7 +3148,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setClonedFromInput:(InputSource *)clonedFromInput
 {
-    NSObject <CSCaptureSourceProtocol>*fromInput = clonedFromInput.videoInput;
+    NSObject <CSCaptureSourceProtocol,CSCaptureBaseInputFrameTickProtocol>*fromInput = clonedFromInput.videoInput;
     
     if (self.videoInput)
     {
