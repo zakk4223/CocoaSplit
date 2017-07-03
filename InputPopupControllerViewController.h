@@ -48,6 +48,7 @@
 -(void)openTransitionFilterPanel:(CIFilter *)forFilter;
 -(IBAction) configureInputTransition:(NSButton *)sender;
 
+- (IBAction)scriptSaveAll:(id)sender;
 
 - (IBAction)addFilterAction:(NSSegmentedControl *)sender;
 
@@ -59,5 +60,10 @@
 @property (weak) IBOutlet NSView *sourceConfigView;
 @property (strong) IBOutlet NSObjectController *inputobjctrl;
 @property (strong) NSViewController *inputConfigViewController;
+@property (strong) NSArray *scriptTypes;
+@property (strong) NSArray *scriptKeys;
+@property (unsafe_unretained) IBOutlet NSTextView *scriptTextView;
+@property (weak) IBOutlet NSTableView *scriptTableView;
+
 
 @end

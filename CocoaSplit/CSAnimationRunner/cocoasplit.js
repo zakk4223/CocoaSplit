@@ -114,6 +114,22 @@ var setAudioInputVolume = function(name_regex, volume, duration) {
 }
 
 
+var runTriggerScriptInput = function(input, scriptType) {
+    if (input["script_"+scriptType])
+    {
+        
+        var inputSelf = null;
+        if (input.animationLayer)
+        {
+            inputSelf = new CSAnimationInput(input);
+        }
+        (new Function("self", input["script_"+scriptType]))(inputSelf);
+        inputSelf = null;
+    }
+
+}
+
+
 var runTriggerScript = function(layout, scriptType) {
     var s_inputs = layout.sourceList;
     s_inputs.forEach(function (r_inp) {
@@ -173,7 +189,7 @@ var switchToLayout = function(layout, kwargs) {
                                         }
                                       }
                                     });
-            runTriggerScript(target_layout, "beforeReplace");
+            //runTriggerScript(target_layout, "beforeReplace");
             
 
         }
@@ -186,7 +202,7 @@ var switchToLayout = function(layout, kwargs) {
                 eval(layout_replacing_script);
             }
             
-            runTriggerScript(target_layout, "afterReplace");
+            //runTriggerScript(target_layout, "afterReplace");
 
         }
     }
@@ -205,10 +221,6 @@ var mergeLayout = function(layout, kwargs) {
             CSAnimationBlock.currentFrame().add_animation(dummy_animation, null, null);
         }
         
-        if (!kwargs['noscripts'])
-        {
-            runTriggerScript(target_layout, "beforeMerge");
-        }
         target_layout.mergeSourceLayout(layout);
         var layout_transition_scripts = layout.transitionScripts;
         if (layout_transition_scripts['merged'] && !kwargs['noscripts'])
@@ -217,10 +229,6 @@ var mergeLayout = function(layout, kwargs) {
             eval(layout_merged_script);
         }
         
-        if (!kwargs['noscripts'])
-        {
-            runTriggerScript(target_layout, "afterMerge");
-        }
     }
 }
 

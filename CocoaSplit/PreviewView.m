@@ -1081,13 +1081,13 @@
     
     NSString *srcUUID = source.uuid;
     
-    InputSource *realSrc = (InputSource *)[self.sourceLayout inputForUUID:srcUUID];
-    if (!_highlightedSourceMap[srcUUID] && realSrc)
+    NSObject<CSInputSourceProtocol> *realSrc = (InputSource *)[self.sourceLayout inputForUUID:srcUUID];
+    if (!_highlightedSourceMap[srcUUID] && realSrc && realSrc.layer)
     {
         CSPreviewOverlayView *oview = [[CSPreviewOverlayView alloc] init];
         oview.renderControls = NO;
         oview.previewView = self;
-        oview.parentSource = realSrc;
+        oview.parentSource = (InputSource *)realSrc;
         _highlightedSourceMap[srcUUID] = oview;
     }
 }
@@ -1460,7 +1460,7 @@
 
 - (IBAction)deleteInput:(id)sender
 {
-    InputSource *toDelete = nil;
+    NSObject<CSInputSourceProtocol> *toDelete = nil;
 
     if ([sender isKindOfClass:[NSMenuItem class]])
     {
@@ -1469,8 +1469,8 @@
         {
             toDelete = item.representedObject;
         }
-    } else if ([sender isKindOfClass:[InputSource class]]) {
-        toDelete = (InputSource *)sender;
+    } else if ([sender conformsToProtocol:@protocol(CSInputSourceProtocol)]) {
+        toDelete = (NSObject<CSInputSourceProtocol> *)sender;
     }
 
     if (!toDelete)
@@ -1485,10 +1485,14 @@
         self.mousedSource = nil;
 
         NSString *pUUID = nil;
-        if (toDelete.parentInput)
+        if (toDelete.layer)
         {
-            pUUID = toDelete.parentInput.uuid;
-            [toDelete.parentInput detachInput:toDelete];
+            InputSource *cInput = (InputSource *)toDelete;
+            if (cInput.parentInput)
+            {
+                pUUID = cInput.parentInput.uuid;
+                [cInput.parentInput detachInput:cInput];
+            }
         }
 
         NSData *saveData = [NSKeyedArchiver archivedDataWithRootObject:toDelete];

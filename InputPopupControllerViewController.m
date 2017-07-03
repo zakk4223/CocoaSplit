@@ -19,6 +19,7 @@
 @synthesize inputSource = _inputSource;
 
 
+
 -(instancetype) init
 {
     if (self = [super init])
@@ -52,6 +53,10 @@
         }
         
         self.compositionFilterNames = [CIFilter filterNamesInCategory:kCICategoryCompositeOperation];
+        
+        self.scriptTypes = @[@"After Add", @"Before Delete", @"FrameTick", @"Before Merge", @"After Merge", @"Before Remove", @"Before Replace", @"After Replace"];
+        self.scriptKeys = @[@"selection.script_afterAdd", @"selection.script_beforeDelete", @"selection.script_frameTick", @"selection.script_beforeMerge", @"selection.script_afterMerge", @"selection.script_beforeRemove", @"selection.script_beforeReplace", @"selection.script_afterReplace"];
+
         
         
     }
@@ -93,6 +98,12 @@
         [self openTransitionFilterPanel:self.inputSource.advancedTransition];
     }
 }
+
+- (IBAction)scriptSaveAll:(id)sender
+{
+    [self.inputobjctrl commitEditing];
+}
+
 
 
 - (IBAction)configureFilter:(NSSegmentedControl *)sender
@@ -384,6 +395,7 @@
 }
 
 
+
 -(void)tableViewSelectionDidChange:(NSNotification *)notification
 {
     NSTableView *tableView = notification.object;
@@ -411,6 +423,10 @@
         } else {
             self.layerTableHasSelection = NO;
         }
+    } else if (tableView == self.scriptTableView) {
+        NSString *scriptKey = self.scriptKeys[tableView.selectedRow];
+        [self.scriptTextView bind:@"value" toObject:self.inputobjctrl withKeyPath:scriptKey options:nil];
+
     }
 }
 

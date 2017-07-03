@@ -16,14 +16,21 @@
 {
     if (self = [super init])
     {
-        self.attachedInputs = [NSMutableArray array];
-        self.active = YES;
+
+        [self basecommonInit];
     }
     
     return self;
 }
 
 
+
+-(void)basecommonInit
+{
+    self.attachedInputs = [NSMutableArray array];
+    self.active = YES;
+
+}
 -(void)createUUID
 {
     CFUUIDRef tmpUUID = CFUUIDCreate(NULL);
@@ -120,8 +127,8 @@
 
 -(instancetype)initWithCoder:(NSCoder *)aDecoder {
     
-    if (self = [self init])
-    {
+    [self basecommonInit];
+    
         self.name = [aDecoder decodeObjectForKey:@"name"];
         self.uuid = [aDecoder decodeObjectForKey:@"uuid"];
         self.depth = [aDecoder decodeFloatForKey:@"CAdepth"];
@@ -134,9 +141,6 @@
         self.script_beforeReplace = [aDecoder decodeObjectForKey:@"script_beforeReplace"];
         self.script_afterReplace = [aDecoder decodeObjectForKey:@"script_afterReplace"];
 
-    }
-    
-    
     return self;
 }
 

@@ -762,11 +762,25 @@
     NSArray *newInputs = diffResult[@"new"];
     
     NSNumber *aStart = nil;
+    JSContext *jCtx = [JSContext currentContext];
+
     NSString *blockUUID = [CATransaction valueForKey:@"__CS_BLOCK_UUID__"];
+
+    if (jCtx)
+    {
+        JSValue *scriptFunc = jCtx[@"runTriggerScriptInput"];
+        
+        if (scriptFunc)
+        {
+            for (InputSource *src in self.sourceListPresentation)
+            {
+                [scriptFunc callWithArguments:@[src, @"beforeReplace"]];
+            }
+        }
+    }
     
     if (blockUUID)
     {
-        JSContext *jCtx = [JSContext currentContext];
         if (jCtx)
         {
             JSValue *mapValue = jCtx[@"block_uuid_map"];
@@ -908,7 +922,18 @@
     
     
     
-    
+    if (jCtx)
+    {
+        JSValue *scriptFunc = jCtx[@"runTriggerScriptInput"];
+        
+        if (scriptFunc)
+        {
+            for (InputSource *src in self.sourceListPresentation)
+            {
+                [scriptFunc callWithArguments:@[src, @"afterReplace"]];
+            }
+        }
+    }
     [CATransaction commit];
     
     [CATransaction flush];
@@ -994,14 +1019,49 @@
     
     NSNumber *aStart = nil;
     
-    NSDictionary *blockObj = [CATransaction valueForKey:@"__CS_BLOCK_OBJECT__"];
-    if (blockObj)
+    
+    
+    JSContext *jCtx = [JSContext currentContext];
+    
+    NSString *blockUUID = [CATransaction valueForKey:@"__CS_BLOCK_UUID__"];
+    
+    if (jCtx)
     {
-        aStart = blockObj[@"current_begin_time"];
-        if ([aStart isEqual:[NSNull null]])
+        JSValue *scriptFunc = jCtx[@"runTriggerScriptInput"];
+        
+        if (scriptFunc)
         {
-            aStart = [NSNumber numberWithDouble:CACurrentMediaTime()];
+            for (InputSource *src in self.sourceListPresentation)
+            {
+                [scriptFunc callWithArguments:@[src, @"beforeMerge"]];
+            }
         }
+    }
+    
+    if (blockUUID)
+    {
+        if (jCtx)
+        {
+            JSValue *mapValue = jCtx[@"block_uuid_map"];
+            if (mapValue)
+            {
+                NSDictionary *blockMap = mapValue.toDictionary;
+                NSDictionary *blockObj = blockMap[blockUUID];
+                if (blockMap && blockObj)
+                {
+                    aStart = blockObj[@"current_begin_time"];
+                    if ([aStart isEqual:[NSNull null]])
+                    {
+                        aStart = nil;
+                    }
+                }
+            }
+        }
+    }
+
+    if (!aStart)
+    {
+        aStart = [NSNumber numberWithDouble:CACurrentMediaTime()];
     }
     
     
@@ -1132,6 +1192,19 @@
     }
     transitionDelegate.changeremoveInputs = changedRemove;
     
+    if (jCtx)
+    {
+        JSValue *scriptFunc = jCtx[@"runTriggerScriptInput"];
+        
+        if (scriptFunc)
+        {
+            for (InputSource *src in self.sourceListPresentation)
+            {
+                [scriptFunc callWithArguments:@[src, @"afterMerge"]];
+            }
+        }
+    }
+
     [CATransaction commit];
     [CATransaction flush];
     
