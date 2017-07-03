@@ -1033,7 +1033,8 @@
         {
             for (NSObject<CSInputSourceProtocol> *src in changedInputs)
             {
-                [scriptFunc callWithArguments:@[src, @"beforeMerge"]];
+                NSObject<CSInputSourceProtocol> *mSrc = [self inputForUUID:src.uuid];
+                [scriptFunc callWithArguments:@[mSrc, @"beforeMerge"]];
             }
         }
     }
@@ -1198,7 +1199,7 @@
         
         if (scriptFunc)
         {
-            for (InputSource *src in self.sourceListPresentation)
+            for (InputSource *src in [changedInputs arrayByAddingObjectsFromArray:newInputs])
             {
                 [scriptFunc callWithArguments:@[src, @"afterMerge"]];
             }
