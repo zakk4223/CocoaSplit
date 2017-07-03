@@ -19,9 +19,18 @@
         [self createUUID];
         self.name = @"SCRIPT TEST";
         self.active = YES;
+        self.scriptPriority = 9999;
 
     }
     
+    return self;
+}
+
+
+-(instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    self.scriptPriority = 9999;
     return self;
 }
 

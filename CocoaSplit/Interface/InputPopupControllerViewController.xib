@@ -2247,6 +2247,17 @@
                                     <action selector="scriptSaveAll:" target="-2" id="3RP-nD-Bue"/>
                                 </connections>
                             </button>
+                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RXE-iz-MGD">
+                                <rect key="frame" x="127" y="19" width="92" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="Always Run" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="hNB-2w-QPF">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <binding destination="Gdf-y2-DdF" name="value" keyPath="selection.scriptAlwaysRun" id="cAi-kd-KmY"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </view>
                 </tabViewItem>

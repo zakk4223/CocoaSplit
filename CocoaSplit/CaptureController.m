@@ -2797,6 +2797,7 @@
     NSObject<CSInputSourceProtocol> *pdraggedSource = [self.activePreviewView.sourceLayout inputForUUID:draggedUUID];
 
     
+    
     if (!pdraggedSource.layer)
     {
         return NSDragOperationNone;
@@ -2842,6 +2843,7 @@
     InputSource *parentSource = nil;
     NSObject<CSInputSourceProtocol> *pdraggedSource = [self.activePreviewView.sourceLayout inputForUUID:draggedUUID];
 
+    
     if (!pdraggedSource.layer)
     {
         return NO;

@@ -29,6 +29,7 @@
 {
     self.attachedInputs = [NSMutableArray array];
     self.active = YES;
+    self.scriptPriority = 0;
 
 }
 -(void)createUUID
@@ -121,6 +122,8 @@
     [aCoder encodeObject:self.script_beforeRemove forKey:@"script_beforeRemove"];
     [aCoder encodeObject:self.script_beforeReplace forKey:@"script_beforeReplace"];
     [aCoder encodeObject:self.script_afterReplace forKey:@"script_afterReplace"];
+    [aCoder encodeInteger:self.scriptPriority forKey:@"scriptPriority"];
+    [aCoder encodeBool:self.scriptAlwaysRun forKey:@"scriptAlwaysRun"];
 
 
 }
@@ -129,18 +132,29 @@
     
     [self basecommonInit];
     
-        self.name = [aDecoder decodeObjectForKey:@"name"];
-        self.uuid = [aDecoder decodeObjectForKey:@"uuid"];
-        self.depth = [aDecoder decodeFloatForKey:@"CAdepth"];
-        self.script_afterAdd = [aDecoder decodeObjectForKey:@"script_afterAdd"];
-        self.script_beforeDelete = [aDecoder decodeObjectForKey:@"script_beforeDelete"];
-        self.script_frameTick = [aDecoder decodeObjectForKey:@"script_frameTick"];
-        self.script_beforeMerge = [aDecoder decodeObjectForKey:@"script_beforeMerge"];
-        self.script_afterMerge = [aDecoder decodeObjectForKey:@"script_afterMerge"];
-        self.script_beforeRemove = [aDecoder decodeObjectForKey:@"script_beforeRemove"];
-        self.script_beforeReplace = [aDecoder decodeObjectForKey:@"script_beforeReplace"];
-        self.script_afterReplace = [aDecoder decodeObjectForKey:@"script_afterReplace"];
-
+    self.name = [aDecoder decodeObjectForKey:@"name"];
+    self.uuid = [aDecoder decodeObjectForKey:@"uuid"];
+    self.depth = [aDecoder decodeFloatForKey:@"CAdepth"];
+    self.script_afterAdd = [aDecoder decodeObjectForKey:@"script_afterAdd"];
+    self.script_beforeDelete = [aDecoder decodeObjectForKey:@"script_beforeDelete"];
+    self.script_frameTick = [aDecoder decodeObjectForKey:@"script_frameTick"];
+    self.script_beforeMerge = [aDecoder decodeObjectForKey:@"script_beforeMerge"];
+    self.script_afterMerge = [aDecoder decodeObjectForKey:@"script_afterMerge"];
+    self.script_beforeRemove = [aDecoder decodeObjectForKey:@"script_beforeRemove"];
+    self.script_beforeReplace = [aDecoder decodeObjectForKey:@"script_beforeReplace"];
+    self.script_afterReplace = [aDecoder decodeObjectForKey:@"script_afterReplace"];
+    if ([aDecoder containsValueForKey:@"scriptPriority"])
+    {
+        self.scriptPriority = [aDecoder decodeIntegerForKey:@"scriptPriority"];
+    }
+    
+    if ([aDecoder containsValueForKey:@"scriptAlwaysRun"])
+    {
+        self.scriptAlwaysRun = [aDecoder decodeBoolForKey:@"scriptAlwaysRun"];
+    }
+    
+    
+    
     return self;
 }
 

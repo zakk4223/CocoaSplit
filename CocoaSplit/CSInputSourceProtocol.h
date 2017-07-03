@@ -24,6 +24,9 @@
 @property (assign) float depth;
 @property (strong) NSMutableArray *attachedInputs;
 @property (strong) NSMutableDictionary *scriptStorage;
+@property (assign) NSInteger scriptPriority;
+@property (assign) bool scriptAlwaysRun;
+
 
 
 -(bool)isDifferentInput:(NSObject<CSInputSourceProtocol> *)from;

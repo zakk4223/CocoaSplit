@@ -29,6 +29,7 @@
 @property (readonly) NSImage *libraryImage;
 @property (assign) float depth;
 @property (strong) NSMutableArray *attachedInputs;
+@property (assign) NSInteger scriptPriority;
 @property (strong) NSString *script_afterAdd;
 @property (strong) NSString *script_beforeDelete;
 @property (strong) NSString *script_frameTick;
@@ -37,6 +38,7 @@
 @property (strong) NSString *script_beforeRemove;
 @property (strong) NSString *script_beforeReplace;
 @property (strong) NSString *script_afterReplace;
+@property (assign) bool scriptAlwaysRun;
 
 
 @end
@@ -56,6 +58,7 @@
 @property (readonly) NSImage *libraryImage;
 @property (assign) float depth;
 @property (strong) NSMutableArray *attachedInputs;
+@property (assign) NSInteger scriptPriority;
 @property (strong) NSString *script_afterAdd;
 @property (strong) NSString *script_beforeDelete;
 @property (strong) NSString *script_frameTick;
@@ -64,6 +67,8 @@
 @property (strong) NSString *script_beforeRemove;
 @property (strong) NSString *script_beforeReplace;
 @property (strong) NSString *script_afterReplace;
+@property (assign) bool scriptAlwaysRun;
+
 
 
 

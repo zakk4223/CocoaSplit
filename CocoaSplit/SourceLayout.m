@@ -623,6 +623,10 @@
     [retDict setObject:[NSMutableArray array] forKey:@"changed"];
     [retDict setObject:[NSMutableArray array] forKey:@"same"];
 
+    [retDict setObject:[NSMutableArray array] forKey:@"scriptExisting"];
+    [retDict setObject:[NSMutableArray array] forKey:@"scriptNew"];
+
+    
     [retDict setObject:[NSMutableArray array] forKey:@"removed"];
     
     for (NSObject<CSInputSourceProtocol> *oSrc in mergeList)
@@ -632,11 +636,23 @@
         NSObject<CSInputSourceProtocol> *eSrc = [self inputForUUID:oSrc.uuid];
         if (eSrc)
         {
+            
             if ([eSrc isDifferentInput:oSrc])
             {
                 [retDict[@"changed"] addObject:oSrc];
                 
             } else {
+                
+                if (eSrc.scriptAlwaysRun)
+                {
+                    [retDict[@"scriptExisting"] addObject:eSrc];
+
+                }
+                if (oSrc.scriptAlwaysRun)
+                {
+                    [retDict[@"scriptNew"] addObject:oSrc];
+
+                }
                 [retDict[@"same"] addObject:oSrc];
             }
         } else {
@@ -648,9 +664,15 @@
     for (NSObject<CSInputSourceProtocol> *sSrc in self.sourceList)
     {
     
+
         InputSource *oSrc = [uuidMap objectForKey:sSrc.uuid];
         if (!oSrc)
         {
+            if (sSrc.scriptAlwaysRun)
+            {
+                [retDict[@"scriptExisting"] addObject:sSrc];
+            }
+
             [retDict[@"removed"] addObject:sSrc];
 
         }
@@ -772,7 +794,9 @@
         
         if (scriptFunc)
         {
-            for (InputSource *src in self.sourceListPresentation)
+            NSArray *sortedSources = [self.sourceListPresentation sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"scriptPriority" ascending:YES]]];
+            
+            for (NSObject <CSInputSourceProtocol> *src in sortedSources)
             {
                 [scriptFunc callWithArguments:@[src, @"beforeReplace"]];
             }
@@ -928,7 +952,9 @@
         
         if (scriptFunc)
         {
-            for (InputSource *src in self.sourceListPresentation)
+            NSArray *sortedSources = [self.sourceListPresentation sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"scriptPriority" ascending:YES]]];
+
+            for (InputSource *src in sortedSources)
             {
                 [scriptFunc callWithArguments:@[src, @"afterReplace"]];
             }
@@ -1016,7 +1042,8 @@
     
     NSArray *changedInputs = diffResult[@"changed"];
     NSArray *newInputs = diffResult[@"new"];
-    
+    NSArray *newScript = diffResult[@"scriptNew"];
+    NSArray *existingScript = diffResult[@"scriptExisting"];
     NSNumber *aStart = nil;
     
     
@@ -1031,7 +1058,10 @@
         
         if (scriptFunc)
         {
-            for (NSObject<CSInputSourceProtocol> *src in changedInputs)
+            
+            NSArray *sortedSources = [[changedInputs arrayByAddingObjectsFromArray:existingScript] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"scriptPriority" ascending:YES]]];
+
+            for (NSObject<CSInputSourceProtocol> *src in sortedSources)
             {
                 NSObject<CSInputSourceProtocol> *mSrc = [self inputForUUID:src.uuid];
                 [scriptFunc callWithArguments:@[mSrc, @"beforeMerge"]];
@@ -1199,7 +1229,15 @@
         
         if (scriptFunc)
         {
-            for (InputSource *src in [changedInputs arrayByAddingObjectsFromArray:newInputs])
+            NSMutableArray *scriptSrcs = [NSMutableArray arrayWithCapacity:newInputs.count+changedInputs.count+newScript.count];
+            [scriptSrcs addObjectsFromArray:newInputs];
+            [scriptSrcs addObjectsFromArray:changedInputs];
+            [scriptSrcs addObjectsFromArray:newScript];
+
+            
+            NSArray *sortedSources = [scriptSrcs sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"scriptPriority" ascending:YES]]];
+
+            for (InputSource *src in sortedSources)
             {
                 [scriptFunc callWithArguments:@[src, @"afterMerge"]];
             }
@@ -1262,7 +1300,9 @@
     NSArray *changedInputs = diffResult[@"changed"];
     NSArray *sameInputs = diffResult[@"same"];
     NSArray *newInputs = diffResult[@"new"];
-    
+    NSArray *newScript = diffResult[@"scriptNew"];
+    NSArray *existingScript = diffResult[@"scriptExisting"];
+
     NSMutableArray *removeInputs = [NSMutableArray arrayWithArray:changedInputs];
     [removeInputs addObjectsFromArray:sameInputs];
     [removeInputs addObjectsFromArray:newInputs];
@@ -1277,7 +1317,9 @@
         
         if (scriptFunc)
         {
-            for (NSObject<CSInputSourceProtocol> *src in changedInputs)
+            NSArray *sortedSources = [[removeInputs arrayByAddingObjectsFromArray:existingScript] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"scriptPriority" ascending:YES]]];
+
+            for (NSObject<CSInputSourceProtocol> *src in sortedSources)
             {
                 NSObject<CSInputSourceProtocol> *mSrc = [self inputForUUID:src.uuid];
                 [scriptFunc callWithArguments:@[mSrc, @"beforeRemove"]];
