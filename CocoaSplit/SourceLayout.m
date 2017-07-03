@@ -1031,7 +1031,7 @@
         
         if (scriptFunc)
         {
-            for (InputSource *src in self.sourceListPresentation)
+            for (NSObject<CSInputSourceProtocol> *src in changedInputs)
             {
                 [scriptFunc callWithArguments:@[src, @"beforeMerge"]];
             }

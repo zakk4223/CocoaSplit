@@ -48,6 +48,7 @@
 
     if (pathFunction)
     {
+        [pathFunction callWithArguments:@[newPath, [JSValue valueWithRect:withFrame inContext:self.jsCtx]]];
         CGPathRef cgPath = [newPath CGPath];
         forLayer.path = cgPath;
         

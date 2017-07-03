@@ -251,6 +251,12 @@
 			attributes = {
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = Zakk;
+				TargetAttributes = {
+					34AFC1D219B04EB90007C07B = {
+						DevelopmentTeam = L3JLUY4S5E;
+						ProvisioningStyle = Automatic;
+					};
+				};
 			};
 			buildConfigurationList = 34AFC1CE19B04EB90007C07B /* Build configuration list for PBXProject "CSSyphonCapturePlugin" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -409,7 +415,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = L3JLUY4S5E;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -438,7 +446,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = L3JLUY4S5E;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",

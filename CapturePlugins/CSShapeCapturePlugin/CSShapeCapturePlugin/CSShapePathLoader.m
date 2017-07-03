@@ -17,6 +17,7 @@
 -(void)evaluateJavascriptAtPath:(NSString *)path usingContext:(JSContext *)context
 {
     
+    
     NSString *scriptContents = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
     [context evaluateScript:scriptContents];
 }
