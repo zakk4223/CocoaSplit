@@ -1267,15 +1267,48 @@
     [removeInputs addObjectsFromArray:sameInputs];
     [removeInputs addObjectsFromArray:newInputs];
     NSNumber *aStart = nil;
+    JSContext *jCtx = [JSContext currentContext];
     
-    NSDictionary *blockObj = [CATransaction valueForKey:@"__CS_BLOCK_OBJECT__"];
-    if (blockObj)
+    NSString *blockUUID = [CATransaction valueForKey:@"__CS_BLOCK_UUID__"];
+    
+    if (jCtx)
     {
-        aStart = blockObj[@"current_begin_time"];
-        if ([aStart isEqual:[NSNull null]])
+        JSValue *scriptFunc = jCtx[@"runTriggerScriptInput"];
+        
+        if (scriptFunc)
         {
-            aStart = [NSNumber numberWithDouble:CACurrentMediaTime()];
+            for (NSObject<CSInputSourceProtocol> *src in changedInputs)
+            {
+                NSObject<CSInputSourceProtocol> *mSrc = [self inputForUUID:src.uuid];
+                [scriptFunc callWithArguments:@[mSrc, @"beforeRemove"]];
+            }
         }
+    }
+    
+    if (blockUUID)
+    {
+        if (jCtx)
+        {
+            JSValue *mapValue = jCtx[@"block_uuid_map"];
+            if (mapValue)
+            {
+                NSDictionary *blockMap = mapValue.toDictionary;
+                NSDictionary *blockObj = blockMap[blockUUID];
+                if (blockMap && blockObj)
+                {
+                    aStart = blockObj[@"current_begin_time"];
+                    if ([aStart isEqual:[NSNull null]])
+                    {
+                        aStart = nil;
+                    }
+                }
+            }
+        }
+    }
+    
+    if (!aStart)
+    {
+        aStart = [NSNumber numberWithDouble:CACurrentMediaTime()];
     }
     
     
