@@ -175,26 +175,9 @@ var switchToLayout = function(layout, kwargs) {
             
             CSAnimationBlock.currentFrame().add_animation(dummy_animation, null, null);
         }
-        if (!kwargs['noscripts']) {
         
-            var contained_layouts = target_layout.containedLayouts;
-            contained_layouts.forEach(function(c_lay) {
-                                    
-                                      if (c_lay !== layout)
-                                      {
-                                        var c_scripts = c_lay.transitionScripts;
-                                        if (c_scripts['replaced']) {
-                                            var rep_script = c_scripts['replaced'];
-                                            eval(rep_script);
-                                        }
-                                      }
-                                    });
-            //runTriggerScript(target_layout, "beforeReplace");
-            
-
-        }
-                    
-        target_layout.replaceWithSourceLayout(layout);
+        var useScripts = !kwargs['noscripts'];
+        target_layout.replaceWithSourceLayoutUsingScripts(layout, useScripts);
         if (!kwargs['noscripts']) {
             var layout_transition_scripts = layout.transitionScripts;
             if (layout_transition_scripts['replacing']) {
@@ -221,13 +204,10 @@ var mergeLayout = function(layout, kwargs) {
             CSAnimationBlock.currentFrame().add_animation(dummy_animation, null, null);
         }
         
-        target_layout.mergeSourceLayout(layout);
+        var useScripts = !kwargs['noscripts'];
+        
+        target_layout.mergeSourceLayoutUsingScripts(layout, useScripts);
         var layout_transition_scripts = layout.transitionScripts;
-        if (layout_transition_scripts['merged'] && !kwargs['noscripts'])
-        {
-            var layout_merged_script = layout_transition_scripts['merged'];
-            eval(layout_merged_script);
-        }
         
     }
 }
@@ -248,18 +228,9 @@ var removeLayout = function(layout, kwargs) {
             dummy_animation.duration = target_layout.transitionDuration;
             CSAnimationBlock.currentFrame().add_animation(dummy_animation, null, null);
         }
-        var layout_transition_scripts = layout.transitionScripts;
-        if (layout_transition_scripts['removed'] && !kwargs['noscripts'])
-        {
-            var layout_removed_script = layout_transition_scripts['removed'];
-            eval(layout_removed_script);
-        }
+        var useScripts = !kwargs['noscripts'];
         
-        if (!kwargs['noscripts'])
-        {
-            runTriggerScript(target_layout, "beforeRemove");
-        }
-        target_layout.removeSourceLayout(layout);
+        target_layout.removeSourceLayoutUsingScripts(layout, useScripts);
 
     }
 }

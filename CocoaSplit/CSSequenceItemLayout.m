@@ -69,23 +69,4 @@
 }
 
 
--(void)executeWithSequence:(CSLayoutSequence *)sequencer usingCompletionBlock:(void (^)())completionBlock
-{
-    
-    if (self.layoutName)
-    {
-        CaptureController *ccont = [CaptureController sharedCaptureController];
-        SourceLayout *myLayout = [ccont findLayoutWithName:self.layoutName];
-        
-        if (myLayout)
-        {
-            if (self.actionType == kCSLayoutSequenceMerge)
-            {
-                [sequencer.sourceLayout mergeSourceLayout:myLayout withCompletionBlock:completionBlock];
-            } else if (self.actionType == kCSLayoutSequenceSwitch) {
-                [sequencer.sourceLayout replaceWithSourceLayout:myLayout withCompletionBlock:completionBlock];
-            }
-        }
-    }
-}
 @end

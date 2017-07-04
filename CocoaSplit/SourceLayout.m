@@ -683,9 +683,9 @@
 }
 
 
--(void)undoReplaceSourceLayout:(NSData *)layoutData withContainedLayouts:(NSArray *)containedLayouts
+-(void)undoReplaceSourceLayout:(NSData *)layoutData usingScripts:(bool)usingScripts withContainedLayouts:(NSArray *)containedLayouts
 {
-    [self replaceWithSourceData:layoutData withCompletionBlock:nil];
+    [self replaceWithSourceData:layoutData usingScripts:usingScripts withCompletionBlock:nil];
     
     for (SourceLayout *cLayout in containedLayouts)
     {
@@ -716,13 +716,19 @@
 
 -(void)replaceWithSourceLayout:(SourceLayout *)layout
 {
+
+    [self replaceWithSourceLayout:layout usingScripts:YES withCompletionBlock:nil];
+}
+
+-(void)replaceWithSourceLayout:(SourceLayout *)layout usingScripts:(bool)usingScripts
+{
     
     
-    [self replaceWithSourceLayout:layout withCompletionBlock:nil];
+    [self replaceWithSourceLayout:layout usingScripts:usingScripts withCompletionBlock:nil];
 }
 
 
--(void)replaceWithSourceLayout:(SourceLayout *)layout withCompletionBlock:(void (^)(void))completionBlock
+-(void)replaceWithSourceLayout:(SourceLayout *)layout usingScripts:(bool)usingScripts withCompletionBlock:(void (^)(void))completionBlock
 {
 
     
@@ -731,7 +737,7 @@
     {
         [self.undoManager beginUndoGrouping];
         [self saveSourceList];
-        [[self.undoManager prepareWithInvocationTarget:self] undoReplaceSourceLayout:self.savedSourceListData withContainedLayouts:self.containedLayouts.copy];
+        [[self.undoManager prepareWithInvocationTarget:self] undoReplaceSourceLayout:self.savedSourceListData usingScripts:usingScripts withContainedLayouts:self.containedLayouts.copy];
         [self.undoManager endUndoGrouping];
     }
     
@@ -747,7 +753,7 @@
         [self.containedLayouts removeObject:cLayout];
     }
 
-    [self replaceWithSourceData:layout.savedSourceListData withCompletionBlock:completionBlock];
+    [self replaceWithSourceData:layout.savedSourceListData usingScripts:usingScripts withCompletionBlock:completionBlock];
     
     if (self.addLayoutBlock)
     {
@@ -774,7 +780,7 @@
 }
 
 
--(void)replaceWithSourceData:(NSData *)sourceData withCompletionBlock:(void (^)(void))completionBlock
+-(void)replaceWithSourceData:(NSData *)sourceData usingScripts:(bool)usingScripts withCompletionBlock:(void (^)(void))completionBlock
 {
     NSDictionary *diffResult = [self diffSourceListWithData:sourceData];
     NSMutableArray *changedRemove = [NSMutableArray array];
@@ -788,7 +794,7 @@
 
     NSString *blockUUID = [CATransaction valueForKey:@"__CS_BLOCK_UUID__"];
 
-    if (jCtx)
+    if (jCtx && usingScripts)
     {
         JSValue *scriptFunc = jCtx[@"runTriggerScriptInput"];
         
@@ -946,7 +952,7 @@
     
     
     
-    if (jCtx)
+    if (jCtx && usingScripts)
     {
         JSValue *scriptFunc = jCtx[@"runTriggerScriptInput"];
         
@@ -1002,10 +1008,16 @@
 
 -(void)mergeSourceLayout:(SourceLayout *)toMerge
 {
-    [self mergeSourceLayout:toMerge withCompletionBlock:nil];
+    [self mergeSourceLayout:toMerge usingScripts:YES withCompletionBlock:nil];
 }
 
--(void)mergeSourceLayout:(SourceLayout *)toMerge withCompletionBlock:(void (^)(void))completionBlock
+
+-(void)mergeSourceLayout:(SourceLayout *)toMerge usingScripts:(bool)usingScripts
+{
+    [self mergeSourceLayout:toMerge usingScripts:usingScripts withCompletionBlock:nil];
+}
+
+-(void)mergeSourceLayout:(SourceLayout *)toMerge usingScripts:(bool)usingScripts withCompletionBlock:(void (^)(void))completionBlock
 {
     
     if ([self.containedLayouts containsObject:toMerge])
@@ -1014,13 +1026,13 @@
     }
 
     
-    [self mergeSourceData:toMerge.savedSourceListData withCompletionBlock:completionBlock];
+    [self mergeSourceData:toMerge.savedSourceListData usingScripts:usingScripts withCompletionBlock:completionBlock];
     
     
     if (self.undoManager)
     {
         [self.undoManager beginUndoGrouping];
-        [[self.undoManager prepareWithInvocationTarget:self] removeSourceLayout:toMerge];
+        [[self.undoManager prepareWithInvocationTarget:self] removeSourceLayout:toMerge usingScripts:usingScripts];
         [self.undoManager endUndoGrouping];
     }
     
@@ -1034,7 +1046,7 @@
 }
 
 
--(void)mergeSourceData:(NSData *)withData withCompletionBlock:(void (^)(void))completionBlock
+-(void)mergeSourceData:(NSData *)withData usingScripts:(bool)usingScripts withCompletionBlock:(void (^)(void))completionBlock
 {
     
     NSDictionary *diffResult = [self diffSourceListWithData:withData];
@@ -1052,7 +1064,7 @@
     
     NSString *blockUUID = [CATransaction valueForKey:@"__CS_BLOCK_UUID__"];
     
-    if (jCtx)
+    if (jCtx && usingScripts)
     {
         JSValue *scriptFunc = jCtx[@"runTriggerScriptInput"];
         
@@ -1223,7 +1235,7 @@
     }
     transitionDelegate.changeremoveInputs = changedRemove;
     
-    if (jCtx)
+    if (jCtx && usingScripts)
     {
         JSValue *scriptFunc = jCtx[@"runTriggerScriptInput"];
         
@@ -1261,10 +1273,15 @@
 
 -(void)removeSourceLayout:(SourceLayout *)toRemove
 {
-    [self removeSourceLayout:toRemove withCompletionBlock:nil];
+    [self removeSourceLayout:toRemove usingScripts:YES withCompletionBlock:nil];
+
+}
+-(void)removeSourceLayout:(SourceLayout *)toRemove usingScripts:(bool)usingScripts
+{
+    [self removeSourceLayout:toRemove usingScripts:usingScripts withCompletionBlock:nil];
 }
 
--(void)removeSourceLayout:(SourceLayout *)toRemove withCompletionBlock:(void (^)(void))completionBlock
+-(void)removeSourceLayout:(SourceLayout *)toRemove usingScripts:(bool)usingScripts withCompletionBlock:(void (^)(void))completionBlock
 {
     if (![self.containedLayouts containsObject:toRemove])
     {
@@ -1278,7 +1295,7 @@
         [self.undoManager endUndoGrouping];
     }
 
-    [self removeSourceData:toRemove.savedSourceListData withCompletionBlock:completionBlock];
+    [self removeSourceData:toRemove.savedSourceListData usingScripts:usingScripts withCompletionBlock:completionBlock];
     
     [self.containedLayouts removeObject:toRemove];
     if (self.removeLayoutBlock)
@@ -1289,7 +1306,7 @@
 }
 
 
--(void)removeSourceData:(NSData *)toRemove withCompletionBlock:(void (^)(void))completionBlock
+-(void)removeSourceData:(NSData *)toRemove usingScripts:(bool)usingScripts withCompletionBlock:(void (^)(void))completionBlock
 {
     
     
@@ -1311,7 +1328,7 @@
     
     NSString *blockUUID = [CATransaction valueForKey:@"__CS_BLOCK_UUID__"];
     
-    if (jCtx)
+    if (jCtx && usingScripts)
     {
         JSValue *scriptFunc = jCtx[@"runTriggerScriptInput"];
         
@@ -1467,49 +1484,6 @@
 
 
 
--(NSObject *)removeSourceListData:(NSData *)mergeData
-{
-    
-    CALayer *withLayer = nil;
-    
-    if (!self.sourceList)
-    {
-        return nil;
-    }
-
-    if (!mergeData)
-    {
-        return nil;
-    }
-    
-    if (!withLayer)
-    {
-        withLayer = self.rootLayer;
-    }
-    
-    
-    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:mergeData];
-    
-    [unarchiver setDelegate:self];
-    
-    NSObject *mergeObj = [unarchiver decodeObjectForKey:@"root"];
-    [unarchiver finishDecoding];
-    
-    NSArray *mergeList;
-    
-    if ([mergeObj isKindOfClass:[NSDictionary class]])
-    {
-        mergeList = [((NSDictionary *)mergeObj) objectForKey:@"sourcelist"];
-
-    } else {
-        mergeList = (NSArray *)mergeObj;
-    }
-    
-
-    //[self removeSourceInputs:mergeList withLayer:withLayer];
-    
-    return mergeObj;
-}
 
 
 -(void)restoreSourceList:(NSData *)withData

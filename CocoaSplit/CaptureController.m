@@ -4133,7 +4133,7 @@
         [self stagingSave:sender];
     
         self.inLayoutTransition = YES;
-        [self.selectedLayout replaceWithSourceLayout:self.stagingLayout withCompletionBlock:^{
+        [self.selectedLayout replaceWithSourceLayout:self.stagingLayout usingScripts:YES withCompletionBlock:^{
           dispatch_async(dispatch_get_main_queue(), ^{
               if (self.stagingLayout.audioData)
               {

@@ -93,19 +93,25 @@
 -(bool)containsInput:(InputSource *)cSource;
 -(void)modifyUUID:(NSString *)uuid withBlock:(void (^)(NSObject<CSInputSourceProtocol> *input))withBlock;
 
--(void)mergeSourceLayout:(SourceLayout *)toMerge withCompletionBlock:(void (^)(void))completionBlock;
+-(void)mergeSourceLayout:(SourceLayout *)toMerge usingScripts:(bool)usingScripts withCompletionBlock:(void (^)(void))completionBlock;
+-(void)mergeSourceLayout:(SourceLayout *)toMerge usingScripts:(bool)usingScripts;
 -(void)mergeSourceLayout:(SourceLayout *)toMerge;
 
+
+-(void)removeSourceLayout:(SourceLayout *)toRemove usingScripts:(bool)usingScripts;
 -(void)removeSourceLayout:(SourceLayout *)toRemove;
+
 -(bool)containsLayout:(SourceLayout *)layout;
 -(void)applyAddBlock;
+-(void)replaceWithSourceLayout:(SourceLayout *)layout usingScripts:(bool)usingScripts;
 -(void)replaceWithSourceLayout:(SourceLayout *)layout;
+
 -(void)clearSourceList;
 -(void)setupMIDI;
 -(void)updateCanvasWidth:(int)width height:(int)height;
 -(NSString *)runAnimationString:(NSString *)animationCode withCompletionBlock:(void (^)(void))completionBlock withExceptionBlock:(void (^)(NSException *exception))exceptionBlock withExtraDictionary:(NSDictionary *)extraDictionary;
 
--(void)replaceWithSourceLayout:(SourceLayout *)layout withCompletionBlock:(void (^)(void))completionBlock;
+-(void)replaceWithSourceLayout:(SourceLayout *)layout usingScripts:(bool)usingScripts withCompletionBlock:(void (^)(void))completionBlock;
 -(NSObject<CSInputSourceProtocol> *)inputForName:(NSString *)name;
 -(void)cancelTransition;
 -(void)cancelScriptRun:(NSString *)runUUID;
