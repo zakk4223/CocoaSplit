@@ -36,7 +36,6 @@
         _uuidMap = [NSMutableDictionary dictionary];
         _uuidMapPresentation = [NSMutableDictionary dictionary];
         
-        _transitionScripts = [NSMutableDictionary dictionary];
         
         _pendingScripts = [NSMutableDictionary dictionary];
         
@@ -331,7 +330,6 @@
     [aCoder encodeInt:self.canvas_width forKey:@"canvas_width"];
     [aCoder encodeInt:self.canvas_height forKey:@"canvas_height"];
     [aCoder encodeFloat:self.frameRate forKey:@"frameRate"];
-    [aCoder encodeObject:self.transitionScripts forKey:@"transitionScripts"];
     
     if (self.containedLayouts)
     {
@@ -372,11 +370,6 @@
         }
         
     
-        if ([aDecoder containsValueForKey:@"transitionScripts"])
-        {
-            self.transitionScripts = [[aDecoder decodeObjectForKey:@"transitionScripts"] mutableCopy];
-        }
-        
         if ([aDecoder containsValueForKey:@"containedLayouts"])
         {
             self.containedLayouts = [[aDecoder decodeObjectForKey:@"containedLayouts"] mutableCopy];

@@ -179,7 +179,6 @@ var switchToLayout = function(layout, kwargs) {
         var useScripts = !kwargs['noscripts'];
         target_layout.replaceWithSourceLayoutUsingScripts(layout, useScripts);
         if (!kwargs['noscripts']) {
-            var layout_transition_scripts = layout.transitionScripts;
             if (layout_transition_scripts['replacing']) {
                 var layout_replacing_script = layout_transition_scripts['replacing'];
                 eval(layout_replacing_script);
@@ -207,7 +206,6 @@ var mergeLayout = function(layout, kwargs) {
         var useScripts = !kwargs['noscripts'];
         
         target_layout.mergeSourceLayoutUsingScripts(layout, useScripts);
-        var layout_transition_scripts = layout.transitionScripts;
         
     }
 }
