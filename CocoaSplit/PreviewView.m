@@ -1412,6 +1412,11 @@
 {
     if (self.sourceLayout)
     {
+        if (source.layer)
+        {
+            InputSource *vSrc = (InputSource *)source;
+            vSrc.autoPlaceOnFrameUpdate = YES;
+        }
         
         [self.sourceLayout addSource:source];
         [[self.undoManager prepareWithInvocationTarget:self] undoAddInput:source.uuid];
@@ -1433,7 +1438,6 @@
         [[self.undoManager prepareWithInvocationTarget:self] undoEditsource:curData];
     }
     
-    
     [self.sourceLayout addSource:restoredSource];
     
 }
@@ -1443,6 +1447,7 @@
 {
     InputSource *restoredSource = [NSKeyedUnarchiver unarchiveObjectWithData:withData];
     
+
     [self.sourceLayout addSource:restoredSource];
     if (parentUUID)
     {
@@ -1711,7 +1716,7 @@
 
 
             [iSrc createUUID];
-            
+
             [self.sourceLayout addSource:iSrc];
             //[iSrc positionOrigin:worldPoint.x y:worldPoint.y];
             iSrc.x_pos = worldPoint.x;

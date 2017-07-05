@@ -210,7 +210,7 @@
         newSrc.selectedVideoType = self.selectedInput.instanceLabel;
         newSrc.videoInput.activeVideoDevice = clickedDevice;
         [self addInput:newSrc];
-        [newSrc autoSize];
+        [newSrc autoCenter];
         
     }
     

@@ -199,6 +199,7 @@ typedef enum resize_style_t {
 -(void) directSize:(CGFloat)width height:(CGFloat)height;
 -(void)addedToLayout;
 -(void)autoCenter:(NSRect)containerRect;
+-(void)autoCenter;
 -(void)autoSize;
 -(void)layerUpdated;
 -(void)resetAspectRatio;

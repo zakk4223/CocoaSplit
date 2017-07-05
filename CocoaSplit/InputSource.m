@@ -1895,38 +1895,55 @@ static NSArray *_sourceTypes = nil;
     }
     
     NSSize videoSize = [self.videoInput captureSize];
-    
-    
     if (!NSEqualSizes(videoSize, NSZeroSize))
     {
         [self directSize:videoSize.width height:videoSize.height];
     }
 }
 
+
+-(void)autoCenter
+{
+    [self autoCenter:NSMakeRect(0, 0, self.canvas_width, self.canvas_height)];
+}
+
+
 -(void)autoCenter:(NSRect)containerRect
 {
     NSRect myRect = self.layer.bounds;
     
-    
     if (NSContainsRect(containerRect, myRect))
     {
-        [self autoFit];
+        CGFloat newX = (self.canvas_width/2) - self.layer.frame.size.width/2;
+        CGFloat newY = (self.canvas_height/2) - self.layer.frame.size.height/2;
+        [self positionOrigin:newX y:newY];
     } else {
-        //We're bigger than the container! Set ourselves to the exact same size and origin
-        [self directSize:containerRect.size.width height:containerRect.size.height];
-        [self positionOrigin:0 y:0];
+        if (self.videoInput && !NSEqualSizes(NSZeroSize, self.videoInput.captureSize))
+        {
+            [self autoFitWithSize:self.videoInput.captureSize];
+        } else {
+            [self autoFit];
+        }
     }
 }
 
 
+
 -(void)autoFit
+{
+    [self autoFitWithSize:self.size];
+}
+
+
+-(void)autoFitWithSize:(NSSize)useSize
 {
 
     
-    float wr = self.size.width / self.canvas_width;
-    float hr = self.size.height / self.canvas_height;
+    float wr = useSize.width / self.canvas_width;
+    float hr = useSize.height / self.canvas_height;
     float ratio = (hr < wr ? wr : hr);
-    [self directSize:self.size.width / ratio height:self.size.height / ratio];
+    
+    [self directSize:useSize.width / ratio height:useSize.height / ratio];
     CGFloat newX = (self.canvas_width/2) - self.layer.frame.size.width/2;
     CGFloat newY = (self.canvas_height/2) - self.layer.frame.size.height/2;
     [self positionOrigin:newX y:newY];
@@ -1979,6 +1996,7 @@ static NSArray *_sourceTypes = nil;
 
     if (!self.videoInput || NSEqualSizes(NSZeroSize, self.videoInput.captureSize))
     {
+        NSLog(@"NO SIZE FOR RESET");
         return;
     }
     
@@ -1995,6 +2013,7 @@ static NSArray *_sourceTypes = nil;
 
     resize_style resizeSave = self.resizeType;
     self.resizeType = kResizeTop | kResizeRight | kResizeFree;
+    NSLog(@"NEW SIZE %f %f", width, height);
     [self updateSize:width height:height];
     self.resizeType = resizeSave;
 }

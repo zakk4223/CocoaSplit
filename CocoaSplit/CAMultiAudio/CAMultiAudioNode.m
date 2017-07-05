@@ -237,9 +237,6 @@
 
 -(void)setMuted:(bool)muted
 {
-    
-    
-    
     if (_muted == muted)
     {
         return;

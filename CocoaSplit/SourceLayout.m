@@ -1660,10 +1660,10 @@
 }
 
 
-
 -(void) addSource:(NSObject<CSInputSourceProtocol> *)newSource
 {
     [self addSource:newSource withParentLayer:self.rootLayer];
+
 }
 
 
@@ -1674,18 +1674,11 @@
     
     [self.sourceListPresentation addObject:newSource];
     [[self mutableArrayValueForKey:@"sourceList" ] addObject:newSource];
-
     if (newSource.layer)
     {
-
-        InputSource *videoSource = (InputSource *)newSource;
-        
         [parentLayer addSublayer:newSource.layer];
-        videoSource.needsAdjustPosition = NO;
-        videoSource.needsAdjustment = YES;
-        videoSource.autoPlaceOnFrameUpdate = YES;
-
     }
+
     
     
     
