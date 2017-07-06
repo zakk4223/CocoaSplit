@@ -308,7 +308,6 @@
     newLayout.frameRate = self.frameRate;
     newLayout.isActive = NO;
     newLayout.containedLayouts = self.containedLayouts.mutableCopy;
-    newLayout.audioData = self.audioData;
     return newLayout;
 }
 
@@ -334,11 +333,6 @@
     if (self.containedLayouts)
     {
         [aCoder encodeObject:self.containedLayouts forKey:@"containedLayouts"];
-    }
-    
-    if (self.audioData)
-    {
-        [aCoder encodeObject:self.audioData forKey:@"audioData"];
     }
     
     [aCoder encodeBool:self.recordingLayout forKey:@"recordingLayout"];
@@ -376,11 +370,6 @@
             //set live/staging status for each layout
         }
         
-        if ([aDecoder containsValueForKey:@"audioData"])
-        {
-            self.audioData = [aDecoder decodeObjectForKey:@"audioData"];
-        }
-
         self.recordingLayout = [aDecoder decodeBoolForKey:@"recordingLayout"];
         
     }
@@ -787,18 +776,20 @@
 
     NSString *blockUUID = [CATransaction valueForKey:@"__CS_BLOCK_UUID__"];
 
-    if (jCtx && usingScripts)
+    
+    NSArray *sortedSources = [self.sourceListPresentation sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"scriptPriority" ascending:YES]]];
+    
+    for (NSObject <CSInputSourceProtocol> *src in sortedSources)
     {
-        JSValue *scriptFunc = jCtx[@"runTriggerScriptInput"];
-        
-        if (scriptFunc)
+        [src beforeReplace];
+        if (jCtx && usingScripts)
         {
-            NSArray *sortedSources = [self.sourceListPresentation sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"scriptPriority" ascending:YES]]];
-            
-            for (NSObject <CSInputSourceProtocol> *src in sortedSources)
+            JSValue *scriptFunc = jCtx[@"runTriggerScriptInput"];
+            if (scriptFunc)
             {
                 [scriptFunc callWithArguments:@[src, @"beforeReplace"]];
             }
+                
         }
     }
     
@@ -945,18 +936,19 @@
     
     
     
-    if (jCtx && usingScripts)
+    sortedSources = [self.sourceListPresentation sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"scriptPriority" ascending:YES]]];
+    
+    for (NSObject <CSInputSourceProtocol> *src in sortedSources)
     {
-        JSValue *scriptFunc = jCtx[@"runTriggerScriptInput"];
-        
-        if (scriptFunc)
+        [src afterReplace];
+        if (jCtx && usingScripts)
         {
-            NSArray *sortedSources = [self.sourceListPresentation sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"scriptPriority" ascending:YES]]];
-
-            for (InputSource *src in sortedSources)
+            JSValue *scriptFunc = jCtx[@"runTriggerScriptInput"];
+            if (scriptFunc)
             {
                 [scriptFunc callWithArguments:@[src, @"afterReplace"]];
             }
+            
         }
     }
     [CATransaction commit];
@@ -1046,6 +1038,7 @@
     NSMutableArray *changedRemove = [NSMutableArray array];
     
     NSArray *changedInputs = diffResult[@"changed"];
+    NSArray *sameInputs = diffResult[@"same"];
     NSArray *newInputs = diffResult[@"new"];
     NSArray *newScript = diffResult[@"scriptNew"];
     NSArray *existingScript = diffResult[@"scriptExisting"];
@@ -1057,6 +1050,18 @@
     
     NSString *blockUUID = [CATransaction valueForKey:@"__CS_BLOCK_UUID__"];
     
+    
+    
+    for (NSObject<CSInputSourceProtocol> *src in changedInputs)
+    {
+        [src beforeMerge:YES];
+    }
+    
+    for (NSObject<CSInputSourceProtocol> *src in sameInputs)
+    {
+        [src beforeMerge:NO];
+    }
+
     if (jCtx && usingScripts)
     {
         JSValue *scriptFunc = jCtx[@"runTriggerScriptInput"];
@@ -1228,6 +1233,23 @@
     }
     transitionDelegate.changeremoveInputs = changedRemove;
     
+    
+    for (NSObject<CSInputSourceProtocol> *src in changedInputs)
+    {
+        [src afterMerge:YES];
+    }
+    
+    for (NSObject<CSInputSourceProtocol> *src in sameInputs)
+    {
+        [src afterMerge:NO];
+    }
+
+    for (NSObject<CSInputSourceProtocol> *src in newInputs)
+    {
+        [src afterMerge:NO];
+    }
+
+    
     if (jCtx && usingScripts)
     {
         JSValue *scriptFunc = jCtx[@"runTriggerScriptInput"];
@@ -1320,6 +1342,15 @@
     JSContext *jCtx = [JSContext currentContext];
     
     NSString *blockUUID = [CATransaction valueForKey:@"__CS_BLOCK_UUID__"];
+    
+    
+    for (NSObject<CSInputSourceProtocol> *src in removeInputs)
+    {
+        NSObject<CSInputSourceProtocol> *mSrc = [self inputForUUID:src.uuid];
+
+        [mSrc beforeRemove];
+    }
+
     
     if (jCtx && usingScripts)
     {
@@ -1538,7 +1569,7 @@
         
         for(NSObject<CSInputSourceProtocol> *src in oldSourceList)
         {
-            [src willDelete];
+            [src beforeDelete];
             [src.layer removeFromSuperlayer];
         }
 
@@ -1585,7 +1616,7 @@
 -(void)deleteSource:(NSObject<CSInputSourceProtocol> *)delSource
 {
     
-    [delSource willDelete];
+    [delSource beforeDelete];
     
     [self willChangeValueForKey:@"topLevelSourceList"];
     @synchronized (self) {
@@ -1689,7 +1720,7 @@
     
     [self generateTopLevelSourceList];
     [NSApp registerMIDIResponder:newSource];
-    [newSource wasAdded];
+    [newSource afterAdd];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputAdded object:newSource userInfo:nil];
 }

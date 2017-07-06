@@ -241,7 +241,7 @@ Gw
                                                             </constraints>
                                                             <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSActionTemplate" id="rBh-3j-f37"/>
                                                             <connections>
-                                                                <binding destination="GKk-OJ-apo" name="value" keyPath="objectValue.videoInput.libraryImage" id="qbW-rc-pHQ"/>
+                                                                <binding destination="GKk-OJ-apo" name="value" keyPath="objectValue.libraryImage" id="TEf-OQ-fkc"/>
                                                             </connections>
                                                         </imageView>
                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsExpansionToolTips="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z1G-aW-UWG">

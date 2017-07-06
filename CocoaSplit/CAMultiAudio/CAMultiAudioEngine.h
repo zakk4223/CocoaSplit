@@ -55,6 +55,7 @@
 -(void)updateStatistics;
 -(void)applyInputSettings:(NSDictionary *)inputSettings;
 -(NSDictionary *)generateInputSettings;
+-(CAMultiAudioNode *)inputForUUID:(NSString *)uuid;
 
 
 

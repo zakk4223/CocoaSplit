@@ -1,0 +1,167 @@
+//
+//  CSAudioInputSource.m
+//  CocoaSplit
+//
+//  Created by Zakk on 7/5/17.
+//  Copyright © 2017 Zakk. All rights reserved.
+//
+
+#import "CSAudioInputSource.h"
+#import "CSAudioInputSourceViewController.h"
+#import "CaptureController.h"
+#import "CSLayoutRecorder.h"
+
+@implementation CSAudioInputSource
+@synthesize audioUUID = _audioUUID;
+@synthesize audioEnabled = _audioEnabled;
+@synthesize audioVolume = _audioVolume;
+
+-(instancetype) init
+{
+    if (self = [super init])
+    {
+        [self createUUID];
+        self.active = YES;
+    }
+    
+    return self;
+}
+
+
+-(instancetype)copyWithZone:(NSZone *)zone
+{
+    CSAudioInputSource *newCopy = [super copyWithZone:zone];
+    newCopy.audioUUID = self.audioUUID;
+    newCopy.audioVolume = self.audioVolume;
+    newCopy.audioEnabled = self.audioEnabled;
+    return newCopy;
+}
+
+
+
+
+-(void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [super encodeWithCoder:aCoder];
+    [aCoder encodeObject:self.audioUUID forKey:@"audioUUID"];
+    [aCoder encodeFloat:self.audioVolume forKey:@"audioVolume"];
+    [aCoder encodeBool:self.audioEnabled forKey:@"audioEnabled"];
+}
+
+-(instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self=[super initWithCoder:aDecoder])
+    {
+        self.audioUUID = [aDecoder decodeObjectForKey:@"audioUUID"];
+        self.audioVolume = [aDecoder decodeFloatForKey:@"audioVolume"];
+        self.audioEnabled = [aDecoder decodeBoolForKey:@"audioEnabled"];
+    }
+    
+    return self;
+}
+
+
+-(NSImage *)libraryImage
+{
+    return [NSImage imageNamed:@"Speaker_Icon"];
+}
+
+
+-(NSViewController *)configurationViewController
+{
+    CSAudioInputSourceViewController *controller = [[CSAudioInputSourceViewController alloc] init];
+    controller.inputSource = self;
+    return controller;
+}
+
+
+-(float)audioVolume
+{
+    return _audioVolume;
+}
+
+-(void)setAudioVolume:(float)audioVolume
+{
+    _audioVolume = audioVolume;
+    if (self.is_live && self.audioNode)
+    {
+        self.audioNode.volume = audioVolume;
+    }
+}
+
+
+-(bool)audioEnabled
+{
+    return _audioEnabled;
+}
+
+-(void)setAudioEnabled:(bool)audioEnabled
+{
+    
+    if (self.is_live && self.audioNode)
+    {
+        self.audioNode.enabled = audioEnabled;
+    }
+    _audioEnabled = audioEnabled;
+}
+
+-(void)applyAudioSettings
+{
+    if (self.audioNode)
+    {
+        _previousVolume = self.audioNode.volume;
+        _previousEnabled = self.audioNode.enabled;
+        self.audioEnabled = self.audioEnabled;
+        self.audioVolume = self.audioVolume;
+
+    }
+}
+
+-(void)restoreAudioSettings
+{
+    
+    if (self.audioNode && self.is_live)
+    {
+        self.audioNode.enabled = _previousEnabled;
+        self.audioNode.volume = _previousVolume;
+    }
+
+}
+-(void)afterAdd
+{
+    if (self.audioUUID && self.sourceLayout)
+    {
+        
+        CAMultiAudioEngine *audioEngine = nil;
+        if (self.sourceLayout.recorder)
+        {
+            audioEngine = self.sourceLayout.recorder.audioEngine;
+        } else {
+            audioEngine = [CaptureController sharedCaptureController].multiAudioEngine;
+        }
+        self.audioNode = [audioEngine inputForUUID:self.audioUUID];
+        [self applyAudioSettings];
+    }
+}
+
+-(void)afterMerge:(bool)changed
+{
+    if (changed)
+    {
+        [self afterAdd];
+    }
+}
+
+-(void)beforeReplace
+{
+    [self restoreAudioSettings];
+}
+
+
+-(void)beforeRemove
+{
+    [self restoreAudioSettings];
+}
+
+
+@end

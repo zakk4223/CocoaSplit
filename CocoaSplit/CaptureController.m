@@ -29,7 +29,7 @@
 #import "CSTimedOutputBuffer.h"
 #import "CSAdvancedAudioWindowController.h"
 #import "AppDelegate.h"
-
+#import "CSAudioInputSource.h"
 #import <Python/Python.h>
 #import "CSLayoutRecorder.h"
 #import "CSJSProxyObj.h"
@@ -1746,7 +1746,9 @@
     
     self.activePreviewView = self.stagingPreviewView;
     [self.layoutCollectionView registerForDraggedTypes:@[@"CS_LAYOUT_DRAG"]];
-    [self.inputOutlineView registerForDraggedTypes:@[@"cocoasplit.input.item"]];
+    [self.inputOutlineView registerForDraggedTypes:@[@"cocoasplit.input.item", @"cocoasplit.audio.item"]];
+    [self.audioTableView registerForDraggedTypes:@[@"cocoasplit.audio.item"]];
+
     
 
     [NSColorPanel sharedColorPanel].showsAlpha = YES;
@@ -2754,6 +2756,17 @@
 }
 
 
+- (id <NSPasteboardWriting>) tableView:(NSTableView *)tableView pasteboardWriterForRow:(NSInteger)row
+{
+    NSPasteboardItem *pItem = [[NSPasteboardItem alloc] init];
+    CAMultiAudioNode *audioNode = [self.audioInputsArrayController.arrangedObjects objectAtIndex:row];
+    
+    [pItem setString:audioNode.nodeUID forType:@"cocoasplit.audio.item"];
+    
+    return pItem;
+}
+
+
 -(void)outlineView:(NSOutlineView *)outlineView didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row
 {
     if (outlineView == self.inputOutlineView)
@@ -2793,7 +2806,21 @@
     
     
     NSPasteboard *pb = [info draggingPasteboard];
-    NSString *draggedUUID = [pb stringForType:@"cocoasplit.input.item"];
+
+    NSString *draggedUUID = [pb stringForType:@"cocoasplit.audio.item"];
+
+    if (draggedUUID)
+    {
+        //audio can't be a sub-item
+        if (item)
+        {
+            return NSDragOperationNone;
+        } else {
+            return NSDragOperationMove;
+        }
+    }
+    
+    draggedUUID = [pb stringForType:@"cocoasplit.input.item"];
     NSObject<CSInputSourceProtocol> *pdraggedSource = [self.activePreviewView.sourceLayout inputForUUID:draggedUUID];
 
     
@@ -2838,7 +2865,28 @@
 {
     
     NSPasteboard *pb = [info draggingPasteboard];
-    NSString *draggedUUID = [pb stringForType:@"cocoasplit.input.item"];
+    
+    NSString *draggedUUID = [pb stringForType:@"cocoasplit.audio.item"];
+
+    if (draggedUUID)
+    {
+        CAMultiAudioNode *audioNode = [self.multiAudioEngine inputForUUID:draggedUUID];
+
+        if (audioNode)
+        {
+            CSAudioInputSource *newSource = [[CSAudioInputSource alloc] init];
+            newSource.audioUUID = draggedUUID;
+            newSource.audioVolume = audioNode.volume;
+            newSource.audioEnabled = audioNode.enabled;
+            newSource.name = audioNode.name;
+            [self.activePreviewView addInputSourceWithInput:newSource];
+            return YES;
+        } else {
+            return NO;
+        }
+    }
+    
+    draggedUUID = [pb stringForType:@"cocoasplit.input.item"];
     NSTreeNode *parentNode = (NSTreeNode *)item;
     InputSource *parentSource = nil;
     NSObject<CSInputSourceProtocol> *pdraggedSource = [self.activePreviewView.sourceLayout inputForUUID:draggedUUID];
@@ -3301,17 +3349,7 @@
     }
     [self applyTransitionSettings:usingLayout];
     
-    [usingLayout replaceWithSourceLayoutViaScript:layout withCompletionBlock:^{
-        
-        if (usingLayout == self.selectedLayout)
-        {
-            [self.multiAudioEngine applyInputSettings:layout.audioData];
-            
-        } else if (usingLayout == self.stagingLayout) {
-            usingLayout.audioData = layout.audioData;
-            
-        }
-    } withExceptionBlock:nil];
+    [usingLayout replaceWithSourceLayoutViaScript:layout withCompletionBlock:nil withExceptionBlock:nil];
 
 }
 
@@ -4135,10 +4173,6 @@
         self.inLayoutTransition = YES;
         [self.selectedLayout replaceWithSourceLayout:self.stagingLayout usingScripts:YES withCompletionBlock:^{
           dispatch_async(dispatch_get_main_queue(), ^{
-              if (self.stagingLayout.audioData)
-              {
-                  [self.multiAudioEngine applyInputSettings:self.stagingLayout.audioData];
-              }
               self.inLayoutTransition = NO;
           });
             

@@ -3,7 +3,6 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 8/6/16.
-//  Copyright © 2016 Zakk. All rights reserved.
 //
 
 #import "CSAudioLevelView.h"

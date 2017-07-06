@@ -55,7 +55,7 @@ static NSArray *_sourceTypes = nil;
 -(instancetype)copyWithZone:(NSZone *)zone
 {
     [CATransaction begin];
-    InputSource *newSource = [[InputSource allocWithZone:zone] init];
+    InputSource *newSource = [super copyWithZone:zone];
     newSource.name = _editedName;
 
     newSource.videoInput = self.videoInput;

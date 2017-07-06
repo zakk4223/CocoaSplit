@@ -221,18 +221,6 @@
 
         }
         
-        if (!_audioImageView)
-        {
-            _audioImageView = [NSImageView imageViewWithImage:[NSImage imageNamed:@"Speaker_Icon"]];
-            _audioImageView.editable = NO;
-            _audioImageView.hidden = YES;
-            _audioImageView.frame = NSMakeRect(0,4,16,16);
-            [self addSubview:_audioImageView];
-            if (_sourceLayout.audioData)
-            {
-                _audioImageView.hidden = NO;
-            }
-        }
         
         if (!_recordImageView)
         {
@@ -280,12 +268,6 @@
             self.layer.borderWidth = 4.0f;
         }
     } else if ([keyPath isEqualToString:@"audioData"]) {
-        if (_sourceLayout.audioData)
-        {
-            _audioImageView.hidden = NO;
-        } else {
-            _audioImageView.hidden = YES;
-        }
     } else if ([keyPath isEqualToString:@"recorder.defaultRecordingActive"]) {
     
         if (_sourceLayout.recorder && _sourceLayout.recorder.defaultRecordingActive)

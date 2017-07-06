@@ -27,6 +27,13 @@
 }
 
 
+-(instancetype)copyWithZone:(NSZone *)zone
+{
+    CSScriptInputSource *newCopy = [super copyWithZone:zone];
+    return newCopy;
+}
+
+
 -(instancetype)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];

@@ -131,6 +131,9 @@
 		34788DF21F016F7A00C3C9C5 /* CSScriptInputSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 34788DF11F016F7A00C3C9C5 /* CSScriptInputSource.m */; };
 		34788DF61F01719800C3C9C5 /* CSScriptInputSourceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34788DF41F01719800C3C9C5 /* CSScriptInputSourceViewController.m */; };
 		34788DF71F01719800C3C9C5 /* CSScriptInputSourceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34788DF51F01719800C3C9C5 /* CSScriptInputSourceViewController.xib */; };
+		34788E291F0D166C00C3C9C5 /* CSAudioInputSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 34788E281F0D166C00C3C9C5 /* CSAudioInputSource.m */; };
+		34788E431F0DD56B00C3C9C5 /* CSAudioInputSourceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34788E411F0DD56B00C3C9C5 /* CSAudioInputSourceViewController.m */; };
+		34788E441F0DD56B00C3C9C5 /* CSAudioInputSourceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34788E421F0DD56B00C3C9C5 /* CSAudioInputSourceViewController.xib */; };
 		34792AF616104AA70065A859 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AF516104AA70065A859 /* IOKit.framework */; };
 		34792AFB1611A6B90065A859 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AFA1611A6B90065A859 /* IOSurface.framework */; };
 		3479A9971A9007DD00A524F0 /* CocoaSplit.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 3479A9961A9007DD00A524F0 /* CocoaSplit.sdef */; };
@@ -746,6 +749,11 @@
 		34788DF31F01719800C3C9C5 /* CSScriptInputSourceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSScriptInputSourceViewController.h; path = Interface/CSScriptInputSourceViewController.h; sourceTree = "<group>"; };
 		34788DF41F01719800C3C9C5 /* CSScriptInputSourceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSScriptInputSourceViewController.m; path = Interface/CSScriptInputSourceViewController.m; sourceTree = "<group>"; };
 		34788DF51F01719800C3C9C5 /* CSScriptInputSourceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSScriptInputSourceViewController.xib; path = Interface/CSScriptInputSourceViewController.xib; sourceTree = "<group>"; };
+		34788E271F0D166C00C3C9C5 /* CSAudioInputSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSAudioInputSource.h; sourceTree = "<group>"; };
+		34788E281F0D166C00C3C9C5 /* CSAudioInputSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAudioInputSource.m; sourceTree = "<group>"; };
+		34788E401F0DD56B00C3C9C5 /* CSAudioInputSourceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAudioInputSourceViewController.h; path = Interface/CSAudioInputSourceViewController.h; sourceTree = "<group>"; };
+		34788E411F0DD56B00C3C9C5 /* CSAudioInputSourceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSAudioInputSourceViewController.m; path = Interface/CSAudioInputSourceViewController.m; sourceTree = "<group>"; };
+		34788E421F0DD56B00C3C9C5 /* CSAudioInputSourceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSAudioInputSourceViewController.xib; path = Interface/CSAudioInputSourceViewController.xib; sourceTree = "<group>"; };
 		34792AF516104AA70065A859 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		34792AFA1611A6B90065A859 /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = System/Library/Frameworks/IOSurface.framework; sourceTree = SDKROOT; };
 		3479A9961A9007DD00A524F0 /* CocoaSplit.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CocoaSplit.sdef; sourceTree = "<group>"; };
@@ -1276,6 +1284,8 @@
 				34788DEF1F01526F00C3C9C5 /* CSEncodedAudioReceiverProtocol.h */,
 				34788DF01F016F7A00C3C9C5 /* CSScriptInputSource.h */,
 				34788DF11F016F7A00C3C9C5 /* CSScriptInputSource.m */,
+				34788E271F0D166C00C3C9C5 /* CSAudioInputSource.h */,
+				34788E281F0D166C00C3C9C5 /* CSAudioInputSource.m */,
 			);
 			path = CocoaSplit;
 			sourceTree = "<group>";
@@ -1495,6 +1505,9 @@
 				34788DF31F01719800C3C9C5 /* CSScriptInputSourceViewController.h */,
 				34788DF41F01719800C3C9C5 /* CSScriptInputSourceViewController.m */,
 				34788DF51F01719800C3C9C5 /* CSScriptInputSourceViewController.xib */,
+				34788E401F0DD56B00C3C9C5 /* CSAudioInputSourceViewController.h */,
+				34788E411F0DD56B00C3C9C5 /* CSAudioInputSourceViewController.m */,
+				34788E421F0DD56B00C3C9C5 /* CSAudioInputSourceViewController.xib */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -2361,6 +2374,7 @@
 				34DA1D3F1BF823E700132486 /* CSNewOutputWindowController.xib in Resources */,
 				34788DD31EF52DA000C3C9C5 /* CSAnimationBlock.js in Resources */,
 				34F1EB931BCCA41F00B38E6C /* CSLayoutEditWindowController.xib in Resources */,
+				34788E441F0DD56B00C3C9C5 /* CSAudioInputSourceViewController.xib in Resources */,
 				34B5FB741E7E6E0A0078FC51 /* CSSequenceItemLayoutViewController.xib in Resources */,
 				34788DDE1EF59E5B00C3C9C5 /* CSAnimationInput.js in Resources */,
 				343B7BE51E9183BD00233DF1 /* CSAnimationInput.py in Resources */,
@@ -2549,10 +2563,12 @@
 				3400A0621BD44DF0003E1828 /* CSInputLibraryItem.m in Sources */,
 				34ED8C831B07371C002C0674 /* MIKMIDIMetaSequenceEvent.m in Sources */,
 				3434CB2D1CA90D28001B3DF9 /* CSx264CompressorViewController.m in Sources */,
+				34788E291F0D166C00C3C9C5 /* CSAudioInputSource.m in Sources */,
 				34ED8C6D1B07371C002C0674 /* MIKMIDIMapping.m in Sources */,
 				34F1EB921BCCA41F00B38E6C /* CSLayoutEditWindowController.m in Sources */,
 				34ED8CA31B07371C002C0674 /* MIKMIDISourceEndpoint.m in Sources */,
 				34ED8C4D1B07371C002C0674 /* MIKMIDIClientSourceEndpoint.m in Sources */,
+				34788E431F0DD56B00C3C9C5 /* CSAudioInputSourceViewController.m in Sources */,
 				34B5FAD41E74C34B0078FC51 /* CSSequenceItemLayout.m in Sources */,
 				3441269B1E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.m in Sources */,
 				34ED8C811B07371C002C0674 /* MIKMIDIMetaMarkerTextEvent.m in Sources */,

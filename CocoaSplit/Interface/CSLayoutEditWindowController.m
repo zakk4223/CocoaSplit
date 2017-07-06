@@ -86,7 +86,7 @@
 {
     NSPasteboardItem *pItem = [[NSPasteboardItem alloc] init];
     NSTreeNode *outlineNode = (NSTreeNode *)item;
-    InputSource *itemInput = outlineNode.representedObject;
+    NSObject<CSInputSourceProtocol> *itemInput = outlineNode.representedObject;
     
     [pItem setString:itemInput.uuid forType:@"cocoasplit.input.item"];
     
@@ -170,10 +170,10 @@
     {
         [self.inputOutlineView.selectedRowIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
             NSTreeNode *node = [self.inputOutlineView itemAtRow:idx];
-            InputSource *src = node.representedObject;
-            if (src)
+            NSObject<CSInputSourceProtocol> *src = node.representedObject;
+            if (src.layer)
             {
-                [self.previewView highlightSource:src];
+                [self.previewView highlightSource:(InputSource *)src];
             }
         }];
     }
@@ -183,8 +183,8 @@
 -(void)outlineView:(NSOutlineView *)outlineView didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row
 {
     NSTreeNode *node = [outlineView itemAtRow:row];
-    InputSource *src = node.representedObject;
-    if (!src.parentInput)
+    NSObject<CSInputSourceProtocol> *src = node.representedObject;
+    if (!src.layer || !((InputSource *)src).parentInput)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             [outlineView expandItem:nil expandChildren:YES];
@@ -247,7 +247,7 @@
                     if (src)
                     {
                         NSString *uuid = src.uuid;
-                        InputSource *realInput = [self.previewView.sourceLayout inputForUUID:uuid];
+                        NSObject<CSInputSourceProtocol> *realInput = [self.previewView.sourceLayout inputForUUID:uuid];
                         [self.previewView deleteInput:realInput];
                     }
                     
@@ -262,7 +262,7 @@
                 
                 [self.inputOutlineView.selectedRowIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
                     NSTreeNode *node = [self.inputOutlineView itemAtRow:idx];
-                    InputSource *src = node.representedObject;
+                    NSObject<CSInputSourceProtocol> *src = node.representedObject;
                     
                     if (src)
                     {

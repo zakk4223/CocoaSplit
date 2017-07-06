@@ -32,6 +32,30 @@
     self.scriptPriority = 0;
 
 }
+
+
+-(instancetype)copyWithZone:(NSZone *)zone
+{
+    CSInputSourceBase *newCopy = [[[self class] allocWithZone:zone] init];
+    newCopy.is_live = self.is_live;
+    newCopy.name = self.name;
+    newCopy.uuid = self.uuid;
+    newCopy.active = self.active;
+    newCopy.depth = self.depth;
+    newCopy.scriptPriority = self.scriptPriority;
+    newCopy.script_afterAdd = self.script_afterAdd;
+    newCopy.script_beforeDelete = self.script_beforeDelete;
+    newCopy.script_frameTick = self.script_frameTick;
+    newCopy.script_beforeMerge = self.script_beforeMerge;
+    newCopy.script_afterMerge = self.script_afterMerge;
+    newCopy.script_beforeRemove = self.script_beforeRemove;
+    newCopy.script_beforeReplace = self.script_beforeReplace;
+    newCopy.script_afterReplace = self.script_afterReplace;
+    newCopy.scriptAlwaysRun = self.scriptAlwaysRun;
+    return newCopy;
+}
+
+
 -(void)createUUID
 {
     CFUUIDRef tmpUUID = CFUUIDCreate(NULL);
@@ -40,6 +64,36 @@
     
 }
 
+
+-(void)afterAdd
+{
+    return;
+}
+
+-(void)beforeDelete
+{
+    return;
+}
+-(void)beforeMerge:(bool)changed;
+{
+    return;
+}
+-(void)afterMerge:(bool)changed
+{
+    return;
+}
+-(void)beforeRemove
+{
+    return;
+}
+-(void)beforeReplace
+{
+    return;
+}
+-(void)afterReplace
+{
+    return;
+}
 
 -(void)frameTick
 {
@@ -57,14 +111,10 @@
     return;
 }
 
--(void)willDelete
-{
-    return;
-}
 
 -(bool)isDifferentInput:(NSObject<CSInputSourceProtocol> *)from
 {
-    return YES;
+    return ![self.uuid isEqualToString:from.uuid];
 }
 
 -(NSImage *)libraryImage
@@ -76,38 +126,6 @@
 {
     return nil;
 }
-
--(void)wasAdded
-{
-    if (self.script_afterAdd)
-    {
-        JSContext *addCtx = [[CaptureController sharedCaptureController] setupJavascriptContext];
-        addCtx[@"source"] = self;
-        [addCtx evaluateScript:self.script_afterAdd];
-    }
-}
-
-
--(void)mergedIntoLayout:(bool)changed
-{
-    return;
-}
-
--(void)removedFromLayout:(bool)changed
-{
-    return;
-}
-
--(void)replacedWithLayout
-{
-    return;
-}
-
--(void)replacingIntoLayout
-{
-    return;
-}
-
 
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {

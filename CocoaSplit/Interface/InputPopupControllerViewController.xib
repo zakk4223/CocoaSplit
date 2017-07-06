@@ -2708,7 +2708,7 @@
             <connections>
                 <binding destination="Gdf-y2-DdF" name="selectedLabel" keyPath="selection.settingsTab" id="hiM-bU-1lm"/>
             </connections>
-            <point key="canvasLocation" x="652.5" y="152.5"/>
+            <point key="canvasLocation" x="687" y="100"/>
         </tabView>
         <objectController id="Gdf-y2-DdF" userLabel="InputSourceController">
             <connections>

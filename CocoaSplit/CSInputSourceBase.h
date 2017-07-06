@@ -12,13 +12,14 @@
 @protocol CSInputSourceBaseJSExport <JSExport>
 -(void)createUUID;
 -(NSViewController *)configurationViewController;
--(void)wasAdded;
--(void)willDelete;
+-(void)afterAdd;
+-(void)beforeDelete;
 -(void)frameTick;
--(void)mergedIntoLayout:(bool)changed;
--(void)removedFromLayout:(bool)changed;
--(void)replacedWithLayout;
--(void)replacingIntoLayout;
+-(void)beforeMerge:(bool)changed;
+-(void)afterMerge:(bool)changed;
+-(void)beforeRemove;
+-(void)beforeReplace;
+-(void)afterReplace;
 @property (weak) SourceLayout *sourceLayout;
 @property (strong) CSInputLayer *layer;
 @property (assign) bool is_live;
@@ -43,7 +44,7 @@
 
 @end
 
-@interface CSInputSourceBase : NSObject <CSInputSourceProtocol, NSCoding, CSInputSourceBaseJSExport>
+@interface CSInputSourceBase : NSObject <CSInputSourceProtocol, NSCoding, CSInputSourceBaseJSExport, NSCopying>
 {
     JSContext *_scriptContext;
 }

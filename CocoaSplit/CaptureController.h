@@ -329,7 +329,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 
-@interface CaptureController : NSObject <CaptureControllerExport, NSTableViewDelegate, NSMenuDelegate, MIKMIDIMappableResponder, MIKMIDIResponder, MIKMIDIMappingGeneratorDelegate, NSCollectionViewDelegate, NSOutlineViewDelegate, NSOutlineViewDataSource, CSLayoutRecorderInfoProtocol>
+@interface CaptureController : NSObject <CaptureControllerExport, NSTableViewDelegate, NSMenuDelegate, MIKMIDIMappableResponder, MIKMIDIResponder, MIKMIDIMappingGeneratorDelegate, NSCollectionViewDelegate, NSOutlineViewDelegate, NSOutlineViewDataSource, CSLayoutRecorderInfoProtocol, NSTableViewDataSource>
 
 {
 CSSequenceEditorWindowController *_sequenceWindowController;
@@ -485,6 +485,8 @@ NSArray *_savedTransitionConstraints;
 @property (strong) NSArray *validSamplerates;
 @property (weak) NSArray *audioCaptureDevices;
 @property (weak) IBOutlet NSOutlineView *inputOutlineView;
+@property (weak) IBOutlet NSTableView *audioTableView;
+
 @property (strong) NSDictionary *extraSaveData;
 @property (strong) NSPipe *loggingPipe;
 @property (strong) NSFileHandle *logReadHandle;
@@ -508,6 +510,7 @@ NSArray *_savedTransitionConstraints;
 @property (strong) CSLayoutRecorder *mainLayoutRecorder;
 @property (readonly) SourceLayout *activeLayout;
 
+@property (weak) IBOutlet NSArrayController *audioInputsArrayController;
 
 -(JSContext *)setupJavascriptContext;
 

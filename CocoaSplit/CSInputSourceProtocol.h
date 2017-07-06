@@ -23,7 +23,6 @@
 @property (readonly) NSImage *libraryImage;
 @property (assign) float depth;
 @property (strong) NSMutableArray *attachedInputs;
-@property (strong) NSMutableDictionary *scriptStorage;
 @property (assign) NSInteger scriptPriority;
 @property (assign) bool scriptAlwaysRun;
 
@@ -32,13 +31,14 @@
 -(bool)isDifferentInput:(NSObject<CSInputSourceProtocol> *)from;
 -(NSViewController *)configurationViewController;
 //Lifecycle hooks, primarily for scripting/animation
--(void)wasAdded;
--(void)willDelete;
+-(void)afterAdd;
+-(void)beforeDelete;
 -(void)frameTick;
--(void)mergedIntoLayout:(bool)changed;
--(void)removedFromLayout:(bool)changed;
--(void)replacedWithLayout;
--(void)replacingIntoLayout;
+-(void)beforeMerge:(bool)changed;
+-(void)afterMerge:(bool)changed;
+-(void)beforeRemove;
+-(void)beforeReplace;
+-(void)afterReplace;
 
 
 @end

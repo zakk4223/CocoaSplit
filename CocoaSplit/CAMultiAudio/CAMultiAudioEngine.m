@@ -640,6 +640,21 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
 }
 
+
+-(CAMultiAudioNode *)inputForUUID:(NSString *)uuid
+{
+    for(CAMultiAudioNode *node in self.audioInputs)
+    {
+        if ([node.nodeUID isEqualToString:uuid])
+        {
+            return node;
+        }
+    }
+    
+    return nil;
+}
+
+
 -(void)addAudioInputsObject:(CAMultiAudioNode *)object
 {
     [self insertObject:object inAudioInputsAtIndex:self.audioInputs.count];
