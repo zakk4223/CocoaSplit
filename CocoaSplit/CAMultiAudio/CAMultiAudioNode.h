@@ -67,7 +67,7 @@
 
 @end
 
-@interface CAMultiAudioNode : NSObject <CAMultiAudioNodeJSExport, NSAnimationDelegate>
+@interface CAMultiAudioNode : NSObject <CAMultiAudioNodeJSExport, NSAnimationDelegate, NSPasteboardItemDataProvider>
 {
     float _saved_volume;
     

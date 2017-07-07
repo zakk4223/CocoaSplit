@@ -178,15 +178,6 @@ var switchToLayout = function(layout, kwargs) {
         
         var useScripts = !kwargs['noscripts'];
         target_layout.replaceWithSourceLayoutUsingScripts(layout, useScripts);
-        if (!kwargs['noscripts']) {
-            if (layout_transition_scripts['replacing']) {
-                var layout_replacing_script = layout_transition_scripts['replacing'];
-                eval(layout_replacing_script);
-            }
-            
-            //runTriggerScript(target_layout, "afterReplace");
-
-        }
     }
 }
 

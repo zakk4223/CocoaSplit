@@ -910,12 +910,15 @@
         c_snaps[2] = c_center_snap;
         
         int snap_idx = 3;
-        for (InputSource *src in srcs)
+        for (NSObject<CSInputSourceProtocol> *psrc in srcs)
         {
-            if (src == self.selectedSource)
+            if (psrc == self.selectedSource || !psrc.layer)
             {
                 continue;
             }
+            
+            InputSource *src = (InputSource *)psrc;
+            
             NSRect srect = src.globalLayoutPosition;
             c_snaps[snap_idx++] = srect.origin;
             c_snaps[snap_idx++] = NSMakePoint(NSMaxX(srect), NSMaxY(srect));

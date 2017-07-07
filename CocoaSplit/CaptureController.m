@@ -2755,7 +2755,25 @@
     }
 }
 
+-(BOOL)tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
+{
+    
 
+    NSArray *audioNodes = [self.audioInputsArrayController.arrangedObjects objectsAtIndexes:rowIndexes];
+    
+    NSPasteboardItem *pItem = [[NSPasteboardItem alloc] init];
+    
+    NSArray *audioUIDS = [audioNodes valueForKey:@"nodeUID"];
+    
+    
+    [pItem setPropertyList:audioUIDS forType:@"cocoasplit.audio.item"];
+    [pboard writeObjects:@[pItem]];
+    
+    return YES;
+}
+
+
+/*
 - (id <NSPasteboardWriting>) tableView:(NSTableView *)tableView pasteboardWriterForRow:(NSInteger)row
 {
     NSPasteboardItem *pItem = [[NSPasteboardItem alloc] init];
@@ -2764,7 +2782,10 @@
     [pItem setString:audioNode.nodeUID forType:@"cocoasplit.audio.item"];
     
     return pItem;
-}
+}*/
+
+
+
 
 
 -(void)outlineView:(NSOutlineView *)outlineView didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row
@@ -2803,15 +2824,14 @@
     {
         nodeInput = nodeItem.representedObject;
     }
+
+
     
     
     NSPasteboard *pb = [info draggingPasteboard];
 
-    NSString *draggedUUID = [pb stringForType:@"cocoasplit.audio.item"];
-
-    if (draggedUUID)
+    if ([pb.types containsObject:@"cocoasplit.audio.item" ])
     {
-        //audio can't be a sub-item
         if (item)
         {
             return NSDragOperationNone;
@@ -2820,7 +2840,8 @@
         }
     }
     
-    draggedUUID = [pb stringForType:@"cocoasplit.input.item"];
+    
+    NSString *draggedUUID = [pb stringForType:@"cocoasplit.input.item"];
     NSObject<CSInputSourceProtocol> *pdraggedSource = [self.activePreviewView.sourceLayout inputForUUID:draggedUUID];
 
     
@@ -2866,27 +2887,27 @@
     
     NSPasteboard *pb = [info draggingPasteboard];
     
-    NSString *draggedUUID = [pb stringForType:@"cocoasplit.audio.item"];
-
-    if (draggedUUID)
+    NSArray *audioUUIDS = [pb propertyListForType:@"cocoasplit.audio.item"];
+    if (audioUUIDS)
     {
-        CAMultiAudioNode *audioNode = [self.multiAudioEngine inputForUUID:draggedUUID];
-
-        if (audioNode)
+        for(NSString *aUID in audioUUIDS)
         {
-            CSAudioInputSource *newSource = [[CSAudioInputSource alloc] init];
-            newSource.audioUUID = draggedUUID;
-            newSource.audioVolume = audioNode.volume;
-            newSource.audioEnabled = audioNode.enabled;
-            newSource.name = audioNode.name;
-            [self.activePreviewView addInputSourceWithInput:newSource];
-            return YES;
-        } else {
-            return NO;
+            CAMultiAudioNode *audioNode = [self.multiAudioEngine inputForUUID:aUID];
+            if (audioNode)
+            {
+                CSAudioInputSource *newSource = [[CSAudioInputSource alloc] init];
+                newSource.audioUUID = aUID;
+                newSource.audioVolume = audioNode.volume;
+                newSource.audioEnabled = audioNode.enabled;
+                newSource.name = audioNode.name;
+                [self.activePreviewView addInputSourceWithInput:newSource];
+
+            }
         }
+        return YES;
     }
-    
-    draggedUUID = [pb stringForType:@"cocoasplit.input.item"];
+
+    NSString *draggedUUID = [pb stringForType:@"cocoasplit.input.item"];
     NSTreeNode *parentNode = (NSTreeNode *)item;
     InputSource *parentSource = nil;
     NSObject<CSInputSourceProtocol> *pdraggedSource = [self.activePreviewView.sourceLayout inputForUUID:draggedUUID];

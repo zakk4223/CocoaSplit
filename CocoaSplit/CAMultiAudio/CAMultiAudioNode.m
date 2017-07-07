@@ -335,6 +335,10 @@
 }
 
 
+-(void)pasteboard:(NSPasteboard *)pasteboard item:(NSPasteboardItem *)item provideDataForType:(NSString *)type
+{
+    
+}
 -(void) dealloc
 {
     if (self.graph)
