@@ -534,7 +534,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     }
     
     
-    [self.graph connectNode:input toNode:delayNode];
+    [self.graph connectNode:input toNode:connectNode];
     
     input.downMixer = dmix;
 
@@ -564,7 +564,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     }
     
     
-    [self.graph connectNode:input toNode:delayNode];
+    [self.graph connectNode:input toNode:connectNode];
     
     input.downMixer = dmix;
     
@@ -583,11 +583,16 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         }
     }
 
-    //[self.graph connectNode:input toNode:self.encodeMixer];
-    dispatch_async(dispatch_get_main_queue(), ^{
+    //ughhhhh
+    if ([NSThread isMainThread])
+    {
         [self addAudioInputsObject:input];
-    });
-    
+    } else {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self addAudioInputsObject:input];
+        });
+    }
+
 
     
     
@@ -662,7 +667,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 -(void)insertObject:(CAMultiAudioNode *)object inAudioInputsAtIndex:(NSUInteger)index
 {
-    [self.audioInputs insertObject:object atIndex:index];
+    [_audioInputs insertObject:object atIndex:index];
 
 }
 

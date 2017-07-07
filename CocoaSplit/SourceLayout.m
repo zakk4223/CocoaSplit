@@ -1742,6 +1742,24 @@
 }
 
 
+
+
+-(void)setIsActive:(bool)isActive
+{
+    for(NSObject <CSInputSourceProtocol>*src in self.sourceListOrdered)
+    {
+        src.is_live = isActive;
+    }
+    
+    _isActive = isActive;
+}
+
+-(bool)isActive
+{
+    return _isActive;
+}
+
+
 /*
 -(void) setIsActive:(bool)isActive
 {

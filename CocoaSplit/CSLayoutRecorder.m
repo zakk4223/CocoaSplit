@@ -40,6 +40,7 @@
     if (self.outputs.count == 0)
     {
         self.layout.recorder = nil;
+        self.layout.isActive = NO;
         self.recordingActive = NO;
         [self.audioEncoder stopEncoder];
         self.audioEngine.encoder = nil;
@@ -214,6 +215,7 @@
         self.layout.recorder = self;
         
         self.recordingActive = YES;
+        self.layout.isActive = YES;
 
         dispatch_async(_frame_queue, ^{
             [self newFrameTimed];

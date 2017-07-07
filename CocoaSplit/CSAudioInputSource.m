@@ -107,6 +107,20 @@
 
 -(void)applyAudioSettings
 {
+    if (self.audioUUID && self.sourceLayout)
+    {
+        
+        CAMultiAudioEngine *audioEngine = nil;
+        if (self.sourceLayout.recorder)
+        {
+            audioEngine = self.sourceLayout.recorder.audioEngine;
+        } else {
+            audioEngine = [CaptureController sharedCaptureController].multiAudioEngine;
+        }
+        
+        self.audioNode = [audioEngine inputForUUID:self.audioUUID];
+    }
+
     if (self.audioNode)
     {
         _previousVolume = self.audioNode.volume;
@@ -127,21 +141,10 @@
     }
 
 }
+
 -(void)afterAdd
 {
-    if (self.audioUUID && self.sourceLayout)
-    {
-        
-        CAMultiAudioEngine *audioEngine = nil;
-        if (self.sourceLayout.recorder)
-        {
-            audioEngine = self.sourceLayout.recorder.audioEngine;
-        } else {
-            audioEngine = [CaptureController sharedCaptureController].multiAudioEngine;
-        }
-        self.audioNode = [audioEngine inputForUUID:self.audioUUID];
         [self applyAudioSettings];
-    }
 }
 
 -(void)afterMerge:(bool)changed
@@ -163,5 +166,14 @@
     [self restoreAudioSettings];
 }
 
+
+-(void)setIs_live:(bool)is_live
+{
+    [super setIs_live:is_live];
+    if (is_live)
+    {
+        [self applyAudioSettings];
+    }
+}
 
 @end
