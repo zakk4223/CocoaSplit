@@ -107,7 +107,7 @@
 
 -(void)applyAudioSettings
 {
-    if (self.audioUUID && self.sourceLayout)
+    if (!self.audioNode && self.audioUUID && self.sourceLayout)
     {
         
         CAMultiAudioEngine *audioEngine = nil;
@@ -119,12 +119,13 @@
         }
         
         self.audioNode = [audioEngine inputForUUID:self.audioUUID];
+        _previousVolume = self.audioNode.volume;
+        _previousEnabled = self.audioNode.enabled;
+
     }
 
     if (self.audioNode)
     {
-        _previousVolume = self.audioNode.volume;
-        _previousEnabled = self.audioNode.enabled;
         self.audioEnabled = self.audioEnabled;
         self.audioVolume = self.audioVolume;
 
@@ -157,6 +158,7 @@
 
 -(void)beforeReplace
 {
+    NSLog(@"BEFORE REPLACE %@ %d", self.audioNode, self.is_live);
     [self restoreAudioSettings];
 }
 

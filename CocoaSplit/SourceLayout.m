@@ -725,6 +725,9 @@
     
     
     
+
+    [self replaceWithSourceData:layout.savedSourceListData usingScripts:usingScripts withCompletionBlock:completionBlock];
+
     for (SourceLayout *cLayout in self.containedLayouts.copy)
     {
         if (self.removeLayoutBlock)
@@ -735,7 +738,6 @@
         [self.containedLayouts removeObject:cLayout];
     }
 
-    [self replaceWithSourceData:layout.savedSourceListData usingScripts:usingScripts withCompletionBlock:completionBlock];
     
     if (self.addLayoutBlock)
     {
