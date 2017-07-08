@@ -34,6 +34,7 @@
 - (IBAction)cancelEdit:(id)sender;
 - (IBAction)editOK:(id)sender;
 - (IBAction)inputTableControlClick:(NSButton *)sender;
+- (IBAction)layoutGoLive:(id)sender;
 
 @property (weak) IBOutlet NSOutlineView *inputOutlineView;
 @property (assign) bool previewOnly;

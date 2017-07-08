@@ -277,6 +277,18 @@
     }
 }
 
+- (IBAction)layoutGoLive:(id)sender
+{
+    
+    CaptureController *controller = [CaptureController sharedCaptureController];
+    SourceLayout *useLayout = controller.activePreviewView.sourceLayout;
+    [self.previewView.sourceLayout saveSourceList];
+    
+    [controller switchToLayout:self.previewView.sourceLayout usingLayout:useLayout];
+}
+
+
+
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
 {
     if ([keyPath isEqualToString:@"sourceLayout.recorder"])
