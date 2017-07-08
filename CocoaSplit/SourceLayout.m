@@ -783,6 +783,11 @@
     
     for (NSObject <CSInputSourceProtocol> *src in sortedSources)
     {
+        if (!src.active)
+        {
+            continue;
+        }
+        
         [src beforeReplace];
         if (jCtx && usingScripts)
         {
@@ -942,6 +947,11 @@
     
     for (NSObject <CSInputSourceProtocol> *src in sortedSources)
     {
+        if (!src.active)
+        {
+            continue;
+        }
+        
         [src afterReplace];
         if (jCtx && usingScripts)
         {
@@ -1056,11 +1066,20 @@
     
     for (NSObject<CSInputSourceProtocol> *src in changedInputs)
     {
+        if (!src.active)
+        {
+            continue;
+        }
         [src beforeMerge:YES];
     }
     
     for (NSObject<CSInputSourceProtocol> *src in sameInputs)
     {
+        if (!src.active)
+        {
+            continue;
+        }
+
         [src beforeMerge:NO];
     }
 
@@ -1076,6 +1095,11 @@
             for (NSObject<CSInputSourceProtocol> *src in sortedSources)
             {
                 NSObject<CSInputSourceProtocol> *mSrc = [self inputForUUID:src.uuid];
+                if (!mSrc.active)
+                {
+                    continue;
+                }
+
                 [scriptFunc callWithArguments:@[mSrc, @"beforeMerge"]];
             }
         }
@@ -1238,16 +1262,31 @@
     
     for (NSObject<CSInputSourceProtocol> *src in changedInputs)
     {
+        if (!src.active)
+        {
+            continue;
+        }
+
         [src afterMerge:YES];
     }
     
     for (NSObject<CSInputSourceProtocol> *src in sameInputs)
     {
+        if (!src.active)
+        {
+            continue;
+        }
+
         [src afterMerge:NO];
     }
 
     for (NSObject<CSInputSourceProtocol> *src in newInputs)
     {
+        if (!src.active)
+        {
+            continue;
+        }
+
         [src afterMerge:NO];
     }
 
@@ -1268,6 +1307,11 @@
 
             for (InputSource *src in sortedSources)
             {
+                if (!src.active)
+                {
+                    continue;
+                }
+
                 [scriptFunc callWithArguments:@[src, @"afterMerge"]];
             }
         }
@@ -1349,6 +1393,10 @@
     for (NSObject<CSInputSourceProtocol> *src in removeInputs)
     {
         NSObject<CSInputSourceProtocol> *mSrc = [self inputForUUID:src.uuid];
+        if (!mSrc.active)
+        {
+            continue;
+        }
 
         [mSrc beforeRemove];
     }
@@ -1365,6 +1413,11 @@
             for (NSObject<CSInputSourceProtocol> *src in sortedSources)
             {
                 NSObject<CSInputSourceProtocol> *mSrc = [self inputForUUID:src.uuid];
+                if (!mSrc.active)
+                {
+                    continue;
+                }
+
                 [scriptFunc callWithArguments:@[mSrc, @"beforeRemove"]];
             }
         }
