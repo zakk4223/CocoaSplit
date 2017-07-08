@@ -230,43 +230,45 @@ Gw
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
-                                                <tableCellView id="GKk-OJ-apo">
+                                                <tableCellView id="PtK-8g-bbF">
                                                     <rect key="frame" x="1" y="1" width="263" height="17"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
-                                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Of3-fK-XcL">
-                                                            <rect key="frame" x="3" y="0.0" width="17" height="17"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" constant="17" id="wRV-8r-wdh"/>
-                                                            </constraints>
-                                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSActionTemplate" id="rBh-3j-f37"/>
+                                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MZc-m0-Urm">
+                                                            <rect key="frame" x="28" y="0.0" width="17" height="17"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSActionTemplate" id="id0-p7-1ey"/>
                                                             <connections>
-                                                                <binding destination="GKk-OJ-apo" name="value" keyPath="objectValue.libraryImage" id="TEf-OQ-fkc"/>
+                                                                <binding destination="PtK-8g-bbF" name="value" keyPath="objectValue.libraryImage" id="bmQ-d8-Sxb"/>
                                                             </connections>
                                                         </imageView>
-                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsExpansionToolTips="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z1G-aW-UWG">
-                                                            <rect key="frame" x="25" y="0.0" width="238" height="17"/>
-                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="qkq-kI-1Jy">
+                                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M5c-5m-UHg">
+                                                            <rect key="frame" x="2" y="-1" width="20" height="22"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <buttonCell key="cell" type="check" title="Check" bezelStyle="regularSquare" imagePosition="only" controlSize="mini" state="on" inset="2" id="4NL-EC-dIz">
+                                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                <font key="font" metaFont="miniSystem"/>
+                                                            </buttonCell>
+                                                            <connections>
+                                                                <binding destination="PtK-8g-bbF" name="value" keyPath="objectValue.active" id="du2-9c-NfA"/>
+                                                            </connections>
+                                                        </button>
+                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsExpansionToolTips="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6eV-Vg-xGv">
+                                                            <rect key="frame" x="51" y="0.0" width="238" height="17"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="2o7-w5-7G0">
                                                                 <font key="font" metaFont="system"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
-                                                                <binding destination="GKk-OJ-apo" name="value" keyPath="objectValue.name" id="hlV-GT-Tzv"/>
+                                                                <binding destination="PtK-8g-bbF" name="value" keyPath="objectValue.name" id="FJY-9Q-olF"/>
                                                             </connections>
                                                         </textField>
                                                     </subviews>
-                                                    <constraints>
-                                                        <constraint firstAttribute="trailing" secondItem="z1G-aW-UWG" secondAttribute="trailing" constant="2" id="817-LW-H8d"/>
-                                                        <constraint firstItem="Of3-fK-XcL" firstAttribute="centerY" secondItem="GKk-OJ-apo" secondAttribute="centerY" id="Eqi-qU-NrF"/>
-                                                        <constraint firstItem="Of3-fK-XcL" firstAttribute="bottom" secondItem="z1G-aW-UWG" secondAttribute="bottom" id="G7w-Pr-a90"/>
-                                                        <constraint firstItem="Of3-fK-XcL" firstAttribute="leading" secondItem="GKk-OJ-apo" secondAttribute="leading" constant="3" id="Vxo-lU-FpG"/>
-                                                        <constraint firstItem="z1G-aW-UWG" firstAttribute="leading" secondItem="Of3-fK-XcL" secondAttribute="trailing" constant="7" id="qOM-QM-kR8"/>
-                                                        <constraint firstItem="Of3-fK-XcL" firstAttribute="top" secondItem="z1G-aW-UWG" secondAttribute="top" id="x2T-Mt-PBF"/>
-                                                    </constraints>
                                                     <connections>
-                                                        <outlet property="imageView" destination="Of3-fK-XcL" id="T42-XO-fAN"/>
-                                                        <outlet property="textField" destination="z1G-aW-UWG" id="aSY-Pa-Otp"/>
+                                                        <outlet property="imageView" destination="MZc-m0-Urm" id="G21-4r-4tI"/>
+                                                        <outlet property="textField" destination="6eV-Vg-xGv" id="hR9-lJ-QRt"/>
                                                     </connections>
                                                 </tableCellView>
                                             </prototypeCellViews>
