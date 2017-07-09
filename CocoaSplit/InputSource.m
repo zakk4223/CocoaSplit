@@ -755,7 +755,7 @@ static NSArray *_sourceTypes = nil;
 {
     [CATransaction begin];
     self.layer.zPosition = depth;
-    [CATransaction commit];
+    [CATransaction commit];    
 }
 
 

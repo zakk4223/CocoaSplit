@@ -1146,6 +1146,7 @@
         <treeController childrenKeyPath="attachedInputs" avoidsEmptySelection="NO" preservesSelection="NO" selectsInsertedObjects="NO" id="dWz-5q-kjU" userLabel="InputsTreeController">
             <connections>
                 <binding destination="816" name="contentArray" keyPath="self.activePreviewView.sourceLayout.topLevelSourceList" id="jmD-ND-tMm"/>
+                <binding destination="816" name="sortDescriptors" keyPath="self.inputViewSortDescriptors" id="GBf-F6-h1h"/>
             </connections>
         </treeController>
         <arrayController id="Pfj-DP-55b" userLabel="audioInputsController">

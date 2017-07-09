@@ -897,7 +897,8 @@
    if (self = [super init])
    {
        
-       
+       _inputViewSortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"depth" ascending:NO]];
+
        _layoutWindows = [NSMutableArray array];
        _sequenceWindows = [NSMutableArray array];
        _layoutRecorders = [NSMutableArray array];
@@ -2863,6 +2864,8 @@
         return NSDragOperationNone;
     }
     
+    return NSDragOperationMove;
+    
     if (draggedSource.parentInput && nodeInput && nodeInput != draggedSource.parentInput)
     {
         return NSDragOperationMove;
@@ -2920,18 +2923,64 @@
     
     InputSource *draggedSource = (InputSource *)pdraggedSource;
     
+    NSIndexPath *droppedIdxPath = nil;
+    
     if (parentNode)
     {
         parentSource = parentNode.representedObject;
+        droppedIdxPath = [[parentNode indexPath] indexPathByAddingIndex:index];
+    } else {
+        droppedIdxPath = [NSIndexPath indexPathWithIndex:index];
     }
     
+    
+    
+    NSLog(@"ITEM IS %@ INDEX IS %ld", item, index);
+
     if (!parentSource)
     {
-        [draggedSource.parentInput detachInput:draggedSource];
-    } else {
+        if (draggedSource.parentInput)
+        {
+            [draggedSource.parentInput detachInput:draggedSource];
+        }
+    }
+    
+    
+    if (parentSource)
+    {
         [parentSource attachInput:draggedSource];
     }
     
+    NSTreeNode *idxNode = nil;
+    float newDepth = 1;
+    
+    if (index == -1)
+    {
+        newDepth = -FLT_MAX;
+    } else {
+        idxNode = [self.inputTreeController.arrangedObjects descendantNodeAtIndexPath:droppedIdxPath];
+        
+    }
+    
+    if (idxNode)
+    {
+        NSObject<CSInputSourceProtocol> *iSrc = idxNode.representedObject;
+        NSLog(@"I SOURCE IS %@", iSrc.name);
+        if (iSrc.layer)
+        {
+            InputSource *dSrc = (InputSource *)iSrc;
+            newDepth = dSrc.depth + 1;
+        } else {
+            newDepth = -FLT_MAX;
+        }
+    }
+    NSLog(@"SET DEPTH TO %f", newDepth);
+
+    draggedSource.depth = newDepth;
+    
+    
+    
+    [self.activePreviewView.sourceLayout generateTopLevelSourceList];
     return YES;
 }
 

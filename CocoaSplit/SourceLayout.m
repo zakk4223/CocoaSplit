@@ -26,6 +26,8 @@
     if (self = [super init])
     {
         _sourceDepthSorter = [[NSSortDescriptor alloc] initWithKey:@"depth" ascending:YES];
+        _sourceDepthSorterRev = [[NSSortDescriptor alloc] initWithKey:@"depth" ascending:NO];
+
         _sourceUUIDSorter = [[NSSortDescriptor alloc] initWithKey:@"uuid" ascending:YES];
         self.sourceCache = [[SourceCache alloc] init];
         _frameRate = 30;
@@ -411,20 +413,50 @@
 }
 
 
+-(float)setDepthForSource:(InputSource *)src startDepth:(float)startDepth
+{
+    
+    float currentDepth = startDepth;
+    src.layer.zPosition = currentDepth;
+    currentDepth += 100.0f;
+    for (InputSource *cSrc in src.attachedInputs)
+    {
+        currentDepth = [self setDepthForSource:cSrc startDepth:currentDepth];
+    }
+    
+    return currentDepth;
+}
+
+
 -(void)generateTopLevelSourceList
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        
+        NSMutableArray *tmpArray = [NSMutableArray array];
+        
+        NSMutableArray *noLayer = [NSMutableArray array];
+        float currentDepth = 0.0f;
         
         [self willChangeValueForKey:@"topLevelSourceList"];
 
         [self->_topLevelSourceArray removeAllObjects];
         for (NSObject<CSInputSourceProtocol> *src in self.sourceListOrdered)
         {
-            if (!src.layer || !((InputSource *)src).parentInput)
+            if (!src.layer)
             {
-                [self->_topLevelSourceArray addObject:src];
+                [noLayer addObject:src];
+            } else if (!((InputSource *)src).parentInput) {
+                [tmpArray addObject:src];
+                if (src.layer)
+                {
+                    currentDepth = [self setDepthForSource:(InputSource *)src startDepth:currentDepth];
+                }
             }
         }
+        
+        self->_topLevelSourceArray = tmpArray;
+        [self->_topLevelSourceArray addObjectsFromArray:noLayer];
+        
         [self didChangeValueForKey:@"topLevelSourceList"];
 
     });
@@ -447,15 +479,28 @@
 
 -(NSArray *)sourceListOrdered
 {
+    return [self sourceListOrdered:NO];
+}
+
+
+-(NSArray *)sourceListOrdered:(bool)depthReverse
+{
     NSArray *mylist;
     
     @synchronized(self)
     {
         mylist = self.sourceList;
     }
+    NSSortDescriptor *depthSorter = nil;
+    if (depthReverse)
+    {
+        depthSorter = _sourceDepthSorterRev;
+    } else {
+        depthSorter = _sourceDepthSorter;
+    }
     
     
-    NSArray *listCopy = [mylist sortedArrayUsingDescriptors:@[_sourceDepthSorter, _sourceUUIDSorter]];
+    NSArray *listCopy = [mylist sortedArrayUsingDescriptors:@[depthSorter, _sourceUUIDSorter]];
     return listCopy;
 }
 
@@ -528,7 +573,6 @@
     
     return [self findSource:forPoint withExtra:0 deepParent:deepParent];
 }
-
 
 -(NSData *)makeSaveData
 {
@@ -1703,6 +1747,7 @@
     
     [delSource.layer removeFromSuperlayer];
 
+    [delSource removeObserver:self forKeyPath:@"depth"];
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputDeleted  object:delSource userInfo:nil];
     delSource.sourceLayout = nil;
 
@@ -1777,6 +1822,7 @@
     [NSApp registerMIDIResponder:newSource];
     [newSource afterAdd];
     
+    [newSource addObserver:self forKeyPath:@"depth" options:NSKeyValueObservingOptionNew context:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputAdded object:newSource userInfo:nil];
 }
 
@@ -2029,9 +2075,22 @@
     return [_uuidMapPresentation objectForKey:uuid];
 }
 
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:@"depth"])
+    {
+        [self generateTopLevelSourceList];
+    }
+}
 
 -(void)dealloc
 {
+    
+    for (NSObject<CSInputSourceProtocol> *src in self.sourceList)
+    {
+        [src removeObserver:self forKeyPath:@"depth"];
+    }
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
 }

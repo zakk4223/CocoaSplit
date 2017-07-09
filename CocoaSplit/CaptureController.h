@@ -400,6 +400,8 @@ CGFloat _savedAudioConstraintConstant;
 NSArray *_savedTransitionConstraints;
 
 }
+@property (strong) NSArray *inputViewSortDescriptors;
+
 @property (strong) NSMutableArray *layoutRecorders;
 @property (strong) NSString *layoutRecorderCompressorName;
 @property (strong) NSString *layoutRecordingDirectory;

@@ -124,6 +124,7 @@
 {
     
     NSSortDescriptor *_sourceDepthSorter;
+    NSSortDescriptor *_sourceDepthSorterRev;
     NSSortDescriptor *_sourceUUIDSorter;
     NSSize _rootSize;
     GLuint _fboTexture;
@@ -195,5 +196,7 @@
 @property (assign) bool recordingLayout;
 @property (assign) bool recordLayout;
 @property (weak) CSLayoutRecorder *recorder;
+-(void)generateTopLevelSourceList;
+
 
 @end

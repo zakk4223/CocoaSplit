@@ -1156,7 +1156,7 @@
     if (toMove)
     {
 
-        toMove.depth += 1;
+        toMove.depth += 150;
         
 
         [[self.undoManager prepareWithInvocationTarget:self] moveInputDown:toMove.uuid];
@@ -1189,7 +1189,7 @@
     
     if (toMove)
     {
-        toMove.depth -= 1;
+        toMove.depth -= 150;
 
         
         [[self.undoManager prepareWithInvocationTarget:self] moveInputUp:toMove.uuid];
