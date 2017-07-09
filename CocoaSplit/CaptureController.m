@@ -2805,7 +2805,27 @@
     }
 }
 
-- (id <NSPasteboardWriting>)outlineView:(NSOutlineView *)outlineView pasteboardWriterForItem:(id)item
+
+-(BOOL)outlineView:(NSOutlineView *)outlineView writeItems:(NSArray *)items toPasteboard:(NSPasteboard *)pasteboard
+{
+    
+    NSPasteboardItem *pItem = [[NSPasteboardItem alloc] init];
+
+    NSMutableArray *sourceIDS = [NSMutableArray array];
+    for (NSTreeNode *node in items)
+    {
+        NSObject<CSInputSourceProtocol> *iSrc = node.representedObject;
+        NSString *iUUID = iSrc.uuid;
+        [sourceIDS addObject:iUUID];
+        
+    }
+    [pItem setPropertyList:sourceIDS forType:@"cocoasplit.input.item"];
+    [pasteboard writeObjects:@[pItem]];
+    return YES;
+}
+
+/*
+- (id<NSPasteboardWriting>)outlineView:(NSOutlineView *)outlineView pasteboardWriterForItem:(id)item
 {
     NSPasteboardItem *pItem = [[NSPasteboardItem alloc] init];
     NSTreeNode *outlineNode = (NSTreeNode *)item;
@@ -2815,7 +2835,7 @@
     
     return pItem;
 }
-
+*/
 -(NSDragOperation)outlineView:(NSOutlineView *)outlineView validateDrop:(id<NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(NSInteger)index
 {
     
@@ -2841,8 +2861,13 @@
         }
     }
     
+    NSArray *draggedUUIDS = [pb propertyListForType:@"cocoasplit.input.item"];
+    if (!draggedUUIDS)
+    {
+        return NSDragOperationNone;
+    }
     
-    NSString *draggedUUID = [pb stringForType:@"cocoasplit.input.item"];
+    NSString *draggedUUID = draggedUUIDS.lastObject;
     NSObject<CSInputSourceProtocol> *pdraggedSource = [self.activePreviewView.sourceLayout inputForUUID:draggedUUID];
 
     
@@ -2910,21 +2935,15 @@
         return YES;
     }
 
+    NSArray *draggedUUIDS = [pb propertyListForType:@"cocoasplit.input.item"];
+    
     NSString *draggedUUID = [pb stringForType:@"cocoasplit.input.item"];
     NSTreeNode *parentNode = (NSTreeNode *)item;
     InputSource *parentSource = nil;
-    NSObject<CSInputSourceProtocol> *pdraggedSource = [self.activePreviewView.sourceLayout inputForUUID:draggedUUID];
-
     
-    if (!pdraggedSource.layer)
-    {
-        return NO;
-    }
-    
-    InputSource *draggedSource = (InputSource *)pdraggedSource;
     
     NSIndexPath *droppedIdxPath = nil;
-    
+
     if (parentNode)
     {
         parentSource = parentNode.representedObject;
@@ -2932,24 +2951,11 @@
     } else {
         droppedIdxPath = [NSIndexPath indexPathWithIndex:index];
     }
-    
-    
-    
-    NSLog(@"ITEM IS %@ INDEX IS %ld", item, index);
 
-    if (!parentSource)
-    {
-        if (draggedSource.parentInput)
-        {
-            [draggedSource.parentInput detachInput:draggedSource];
-        }
-    }
+    NSObject<CSInputSourceProtocol> *pdraggedSource = [self.activePreviewView.sourceLayout inputForUUID:draggedUUID];
+
+    InputSource *draggedSource = (InputSource *)pdraggedSource;
     
-    
-    if (parentSource)
-    {
-        [parentSource attachInput:draggedSource];
-    }
     
     NSTreeNode *idxNode = nil;
     float newDepth = 1;
@@ -2961,11 +2967,11 @@
         idxNode = [self.inputTreeController.arrangedObjects descendantNodeAtIndexPath:droppedIdxPath];
         
     }
+
     
     if (idxNode)
     {
         NSObject<CSInputSourceProtocol> *iSrc = idxNode.representedObject;
-        NSLog(@"I SOURCE IS %@", iSrc.name);
         if (iSrc.layer)
         {
             InputSource *dSrc = (InputSource *)iSrc;
@@ -2974,10 +2980,35 @@
             newDepth = -FLT_MAX;
         }
     }
-    NSLog(@"SET DEPTH TO %f", newDepth);
 
-    draggedSource.depth = newDepth;
     
+
+    for (NSString *srcID in draggedUUIDS.reverseObjectEnumerator)
+    {
+        
+        NSObject <CSInputSourceProtocol> *pSrc = [self.activePreviewView.sourceLayout inputForUUID:srcID];
+        if (!pSrc || !pSrc.layer)
+        {
+            continue;
+        }
+        
+        InputSource *iSrc = (InputSource *)pSrc;
+        if (iSrc.parentInput)
+        {
+            if ([draggedUUIDS containsObject:iSrc.parentInput.uuid])
+            {
+                continue;
+            }
+        
+            [iSrc.parentInput detachInput:iSrc];
+
+        }
+        if (parentSource)
+        {
+            [parentSource attachInput:iSrc];
+        }
+        iSrc.depth = newDepth++;
+    }
     
     
     [self.activePreviewView.sourceLayout generateTopLevelSourceList];
