@@ -9,6 +9,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="CSLayoutEditWindowController">
             <connections>
                 <outlet property="inputOutlineView" destination="WEK-c8-DUG" id="At6-Ub-OJ9"/>
+                <outlet property="inputTreeController" destination="kDD-qn-do6" id="tI7-cJ-jvz"/>
                 <outlet property="layoutController" destination="XWe-tQ-Eyy" id="Zg2-Ce-zEx"/>
                 <outlet property="previewView" destination="uUD-nM-Xzg" id="HNn-21-ate"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
@@ -376,6 +377,7 @@ Gw
         <treeController childrenKeyPath="attachedInputs" id="kDD-qn-do6" userLabel="inputTreeController">
             <connections>
                 <binding destination="-2" name="contentArray" keyPath="self.previewView.sourceLayout.topLevelSourceList" id="MUZ-lW-WjT"/>
+                <binding destination="-2" name="sortDescriptors" keyPath="self.inputViewSortDescriptors" id="Czr-8Y-Yso"/>
             </connections>
         </treeController>
         <button verticalHuggingPriority="750" id="Uft-iJ-WM4">

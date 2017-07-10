@@ -38,5 +38,6 @@
 
 @property (weak) IBOutlet NSOutlineView *inputOutlineView;
 @property (assign) bool previewOnly;
-
+@property (strong) IBOutlet NSTreeController *inputTreeController;
+@property (strong) NSArray *inputViewSortDescriptors;
 @end

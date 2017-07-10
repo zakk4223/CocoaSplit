@@ -7,6 +7,9 @@
 //
 
 #import "CSLayoutEditWindowController.h"
+#import "CSInputSourceProtocol.h"
+#import "CSAudioInputSource.h"
+
 
 @interface CSLayoutEditWindowController ()
 
@@ -17,6 +20,8 @@
 
 -(instancetype) init
 {
+    _inputViewSortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"depth" ascending:NO]];
+
     return [self initWithWindowNibName:@"CSLayoutEditWindowController"];
 }
 
@@ -24,7 +29,7 @@
 - (void)windowDidLoad {
     [super windowDidLoad];
     self.window.delegate = self;
-    [self.inputOutlineView registerForDraggedTypes:@[@"cocoasplit.input.item"]];
+    [self.inputOutlineView registerForDraggedTypes:@[@"cocoasplit.input.item", @"cocoasplit.audio.item"]];
 
     if (self.previewView.sourceLayout.recorder)
     {
@@ -82,15 +87,22 @@
 
 
 
-- (id <NSPasteboardWriting>)outlineView:(NSOutlineView *)outlineView pasteboardWriterForItem:(id)item
+-(BOOL)outlineView:(NSOutlineView *)outlineView writeItems:(NSArray *)items toPasteboard:(NSPasteboard *)pasteboard
 {
+    
     NSPasteboardItem *pItem = [[NSPasteboardItem alloc] init];
-    NSTreeNode *outlineNode = (NSTreeNode *)item;
-    NSObject<CSInputSourceProtocol> *itemInput = outlineNode.representedObject;
     
-    [pItem setString:itemInput.uuid forType:@"cocoasplit.input.item"];
-    
-    return pItem;
+    NSMutableArray *sourceIDS = [NSMutableArray array];
+    for (NSTreeNode *node in items)
+    {
+        NSObject<CSInputSourceProtocol> *iSrc = node.representedObject;
+        NSString *iUUID = iSrc.uuid;
+        [sourceIDS addObject:iUUID];
+        
+    }
+    [pItem setPropertyList:sourceIDS forType:@"cocoasplit.input.item"];
+    [pasteboard writeObjects:@[pItem]];
+    return YES;
 }
 
 -(NSDragOperation)outlineView:(NSOutlineView *)outlineView validateDrop:(id<NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(NSInteger)index
@@ -104,10 +116,37 @@
     }
     
     
-    NSPasteboard *pb = [info draggingPasteboard];
-    NSString *draggedUUID = [pb stringForType:@"cocoasplit.input.item"];
-    InputSource *draggedSource = [self.previewView.sourceLayout inputForUUID:draggedUUID];
     
+    
+    NSPasteboard *pb = [info draggingPasteboard];
+    
+    if ([pb.types containsObject:@"cocoasplit.audio.item" ])
+    {
+        if (item)
+        {
+            return NSDragOperationNone;
+        } else {
+            return NSDragOperationMove;
+        }
+    }
+    
+    NSArray *draggedUUIDS = [pb propertyListForType:@"cocoasplit.input.item"];
+    if (!draggedUUIDS)
+    {
+        return NSDragOperationNone;
+    }
+    
+    NSString *draggedUUID = draggedUUIDS.lastObject;
+    NSObject<CSInputSourceProtocol> *pdraggedSource = [self.previewView.sourceLayout inputForUUID:draggedUUID];
+    
+    
+    
+    if (!pdraggedSource.layer)
+    {
+        return NSDragOperationNone;
+    }
+    
+    InputSource *draggedSource = (InputSource *)pdraggedSource;
     
     if (nodeInput && nodeInput == draggedSource)
     {
@@ -119,46 +158,127 @@
         return NSDragOperationNone;
     }
     
-    if (draggedSource.parentInput && nodeInput && nodeInput != draggedSource.parentInput)
-    {
-        return NSDragOperationMove;
-    }
+    return NSDragOperationMove;
     
-    
-    if (draggedSource.parentInput && !nodeInput)
-    {
-        return NSDragOperationMove;
-    }
-    
-    
-    if (item && index == -1)
-    {
-        return NSDragOperationMove;
-    }
-    return NSDragOperationNone;
 }
+
+
+-(CAMultiAudioNode *)findNodeForUUID:(NSString *)uuid
+{
+    CAMultiAudioEngine *useEngine = nil;
+    if (self.previewView.sourceLayout.recorder && self.previewView.sourceLayout.recorder.audioEngine)
+    {
+        useEngine = self.previewView.sourceLayout.recorder.audioEngine;
+    } else {
+        useEngine = [CaptureController sharedCaptureController].multiAudioEngine;
+    }
+    
+    return [useEngine inputForUUID:uuid];
+}
+
 
 -(BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id<NSDraggingInfo>)info item:(id)item childIndex:(NSInteger)index
 {
     
     NSPasteboard *pb = [info draggingPasteboard];
+    
+    NSArray *audioUUIDS = [pb propertyListForType:@"cocoasplit.audio.item"];
+    if (audioUUIDS)
+    {
+        for(NSString *aUID in audioUUIDS)
+        {
+            CAMultiAudioNode *audioNode = [self findNodeForUUID:aUID];
+            if (audioNode)
+            {
+                CSAudioInputSource *newSource = [[CSAudioInputSource alloc] init];
+                newSource.audioUUID = aUID;
+                newSource.audioVolume = audioNode.volume;
+                newSource.audioEnabled = audioNode.enabled;
+                newSource.name = audioNode.name;
+                [self.previewView addInputSourceWithInput:newSource];
+                
+            }
+        }
+        return YES;
+    }
+    
+    NSArray *draggedUUIDS = [pb propertyListForType:@"cocoasplit.input.item"];
+    
     NSString *draggedUUID = [pb stringForType:@"cocoasplit.input.item"];
     NSTreeNode *parentNode = (NSTreeNode *)item;
     InputSource *parentSource = nil;
-    InputSource *draggedSource = [self.previewView.sourceLayout inputForUUID:draggedUUID];
+    
+    
+    NSIndexPath *droppedIdxPath = nil;
     
     if (parentNode)
     {
         parentSource = parentNode.representedObject;
-    }
-    
-    if (!parentSource)
-    {
-        [draggedSource.parentInput detachInput:draggedSource];
+        droppedIdxPath = [[parentNode indexPath] indexPathByAddingIndex:index];
     } else {
-        [parentSource attachInput:draggedSource];
+        droppedIdxPath = [NSIndexPath indexPathWithIndex:index];
     }
     
+    NSObject<CSInputSourceProtocol> *pdraggedSource = [self.previewView.sourceLayout inputForUUID:draggedUUID];
+    
+    InputSource *draggedSource = (InputSource *)pdraggedSource;
+    
+    
+    NSTreeNode *idxNode = nil;
+    float newDepth = 1;
+    
+    if (index == -1)
+    {
+        newDepth = -FLT_MAX;
+    } else {
+        idxNode = [self.inputTreeController.arrangedObjects descendantNodeAtIndexPath:droppedIdxPath];
+        
+    }
+    
+    
+    if (idxNode)
+    {
+        NSObject<CSInputSourceProtocol> *iSrc = idxNode.representedObject;
+        if (iSrc.layer)
+        {
+            InputSource *dSrc = (InputSource *)iSrc;
+            newDepth = dSrc.depth + 1;
+        } else {
+            newDepth = -FLT_MAX;
+        }
+    }
+    
+    
+    
+    for (NSString *srcID in draggedUUIDS.reverseObjectEnumerator)
+    {
+        
+        NSObject <CSInputSourceProtocol> *pSrc = [self.previewView.sourceLayout inputForUUID:srcID];
+        if (!pSrc || !pSrc.layer)
+        {
+            continue;
+        }
+        
+        InputSource *iSrc = (InputSource *)pSrc;
+        if (iSrc.parentInput)
+        {
+            if ([draggedUUIDS containsObject:iSrc.parentInput.uuid])
+            {
+                continue;
+            }
+            
+            [iSrc.parentInput detachInput:iSrc];
+            
+        }
+        if (parentSource)
+        {
+            [parentSource attachInput:iSrc];
+        }
+        iSrc.depth = newDepth++;
+    }
+    
+    
+    [self.previewView.sourceLayout generateTopLevelSourceList];
     return YES;
 }
 
