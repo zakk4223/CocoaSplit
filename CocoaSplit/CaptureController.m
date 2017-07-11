@@ -2892,7 +2892,6 @@
     NSPasteboard *pb = [info draggingPasteboard];
 
     
-    return NSDragOperationMove;
     
     if ([pb.types containsObject:@"cocoasplit.audio.item" ])
     {
