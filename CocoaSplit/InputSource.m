@@ -524,6 +524,7 @@ static NSArray *_sourceTypes = nil;
     [self initDictionaryForConstraints:self.constraintMap];
 }
 
+
 -(id)init
 {
     if (self = [super init])
@@ -2322,6 +2323,24 @@ static NSArray *_sourceTypes = nil;
     return _selectedVideoType;
 }
 
+
+-(void) setDirectVideoInput:(NSObject <CSCaptureSourceProtocol> *)videoInput
+{
+    if (_videoInput)
+    {
+        [self deregisterVideoInput:self.videoInput];
+    }
+    
+    _videoInput = (NSObject<CSCaptureSourceProtocol,CSCaptureBaseInputFrameTickProtocol> *)videoInput;
+    
+    _selectedVideoType = videoInput.instanceLabel;
+    
+    [self registerVideoInput:_videoInput];
+    CALayer *newLayer = [_videoInput layerForInput:self];
+    
+    _currentLayer = newLayer;
+    self.name = _editedName;
+}
 -(void) setSelectedVideoType:(NSString *)selectedVideoType
 {
     NSMutableDictionary *pluginMap = [[CSPluginLoader sharedPluginLoader] sourcePlugins];

@@ -22,6 +22,10 @@
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:self.imagePath forKey:@"imagePath"];
+    if (self.imagePath)
+    {
+        //[aCoder encodeObject:_imageData forKey:@"imageData"];
+    }
 }
 
 
@@ -30,6 +34,8 @@
 {
     if (self = [self init])
     {
+        //_imageData = [aDecoder decodeObjectForKey:@"imageData"];
+        
         self.imagePath = [aDecoder decodeObjectForKey:@"imagePath"];
     }
     
@@ -68,6 +74,48 @@
 
 
 
++(bool)canCreateSourceFromPasteboardItem:(NSPasteboardItem *)item
+{
+    
+    if ([item.types containsObject:@"public.file-url"])
+    {
+        
+        NSString *stuff = [item stringForType:@"public.file-url"];
+        if (stuff)
+        {
+            NSURL *fileURL = [NSURL URLWithString:stuff];
+            
+            NSString *dType;
+            [fileURL getResourceValue:&dType forKey:NSURLTypeIdentifierKey error:nil];
+            if (dType)
+            {
+                if ([NSImage.imageTypes containsObject:dType])
+                {
+                    return YES;
+                }
+            }
+        }
+
+    }
+    return NO;
+}
+
+
++(NSObject<CSCaptureSourceProtocol> *)createSourceFromPasteboardItem:(NSPasteboardItem *)item
+{
+    
+    ImageCapture *ret = nil;
+    
+    NSString *imagePath = [item stringForType:@"public.file-url"];
+    if (imagePath)
+    {
+        NSURL *fileURL = [NSURL URLWithString:imagePath];
+        NSString *realPath = [fileURL path];
+        ret = [[ImageCapture alloc] init];
+        ret.imagePath = realPath;
+    }
+    return ret;
+}
 
 
 +(NSString *)label
@@ -145,7 +193,16 @@
 
     NSURL *fileURL = [NSURL fileURLWithPath:imagePath];
     
+    /*
+    if (!_imageData)
+    {
+        _imageData = [NSData dataWithContentsOfURL:fileURL];
+    }
+    */
+    
     CGImageSourceRef imgSrc = CGImageSourceCreateWithURL((__bridge CFURLRef)fileURL, (__bridge CFDictionaryRef)dict);
+    
+    //CGImageSourceRef imgSrc = CGImageSourceCreateWithData((__bridge CFDataRef)_imageData, (__bridge CFDictionaryRef)dict);
     
     
 

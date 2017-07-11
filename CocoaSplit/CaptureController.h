@@ -515,6 +515,8 @@ NSArray *_savedTransitionConstraints;
 @property (weak) IBOutlet NSArrayController *audioInputsArrayController;
 
 -(JSContext *)setupJavascriptContext;
+-(NSObject<CSInputSourceProtocol>*)inputSourceForPasteboardItem:(NSPasteboardItem *)item;
+
 
 
 @end

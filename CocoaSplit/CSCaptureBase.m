@@ -439,5 +439,15 @@
     self.timerDelegate = nil;
 }
 
++(bool)canCreateSourceFromPasteboardItem:(NSPasteboardItem *)item
+{
+    return NO;
+}
+
++(NSObject <CSCaptureSourceProtocol> *)createSourceFromPasteboardItem:(NSPasteboardItem *)item
+{
+    return nil;
+}
+
 
 @end

@@ -135,6 +135,8 @@ If your source is 'shared' between inputSources each new one will call this func
 
 -(void)frameArrived;
 
++(bool)canCreateSourceFromPasteboardItem:(NSPasteboardItem *)item;
++(NSObject <CSCaptureSourceProtocol> *)createSourceFromPasteboardItem:(NSPasteboardItem *)item;
 
 
 

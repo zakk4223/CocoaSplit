@@ -1747,7 +1747,8 @@
     
     self.activePreviewView = self.stagingPreviewView;
     [self.layoutCollectionView registerForDraggedTypes:@[@"CS_LAYOUT_DRAG"]];
-    [self.inputOutlineView registerForDraggedTypes:@[@"cocoasplit.input.item", @"cocoasplit.audio.item"]];
+    //[self.inputOutlineView registerForDraggedTypes:@[@"cocoasplit.input.item", @"cocoasplit.audio.item"]];
+    [self.inputOutlineView registerForDraggedTypes:@[NSSoundPboardType,NSFilenamesPboardType, NSFilesPromisePboardType, NSFileContentsPboardType, @"cocoasplit.input.item", @"cocoasplit.audio.item"]];
     [self.audioTableView registerForDraggedTypes:@[@"cocoasplit.audio.item"]];
 
     
@@ -2005,6 +2006,45 @@
     
     
 }
+
+
+-(NSObject<CSInputSourceProtocol>*)inputSourceForPasteboardItem:(NSPasteboardItem *)item
+{
+    NSArray *captureClasses = [self captureSourcesForPasteboardItem:item];
+    Class<CSCaptureSourceProtocol> useClass = captureClasses.firstObject;
+    
+    if (useClass)
+    {
+        NSObject<CSCaptureSourceProtocol> *newSource = [useClass createSourceFromPasteboardItem:item];
+        InputSource *newInput = [[InputSource alloc] init];
+        [newInput setDirectVideoInput:newSource];
+        return newInput;
+    }
+    
+    return nil;
+}
+
+
+-(NSArray *)captureSourcesForPasteboardItem:(NSPasteboardItem *)item
+{
+    NSMutableArray *candidates = [NSMutableArray array];
+    
+    CSPluginLoader *loader = [CSPluginLoader sharedPluginLoader];
+    
+    for (NSString *key in loader.sourcePlugins)
+    {
+        Class<CSCaptureSourceProtocol> captureClass = loader.sourcePlugins[key];
+        
+        if ([captureClass canCreateSourceFromPasteboardItem:item])
+        {
+            [candidates addObject:captureClass];
+        }
+        
+    }
+    
+    return candidates;
+}
+
 
 -(void)setInstantRecordBufferDuration:(int)instantRecordBufferDuration
 {
@@ -2851,6 +2891,9 @@
     
     NSPasteboard *pb = [info draggingPasteboard];
 
+    
+    return NSDragOperationMove;
+    
     if ([pb.types containsObject:@"cocoasplit.audio.item" ])
     {
         if (item)
@@ -2907,7 +2950,7 @@
     {
         return NSDragOperationMove;
     }
-    return NSDragOperationNone;
+    return NSDragOperationMove;
 }
 
 -(BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id<NSDraggingInfo>)info item:(id)item childIndex:(NSInteger)index
@@ -2937,7 +2980,6 @@
 
     NSArray *draggedUUIDS = [pb propertyListForType:@"cocoasplit.input.item"];
     
-    NSString *draggedUUID = [pb stringForType:@"cocoasplit.input.item"];
     NSTreeNode *parentNode = (NSTreeNode *)item;
     InputSource *parentSource = nil;
     
@@ -2952,10 +2994,6 @@
         droppedIdxPath = [NSIndexPath indexPathWithIndex:index];
     }
 
-    NSObject<CSInputSourceProtocol> *pdraggedSource = [self.activePreviewView.sourceLayout inputForUUID:draggedUUID];
-
-    InputSource *draggedSource = (InputSource *)pdraggedSource;
-    
     
     NSTreeNode *idxNode = nil;
     float newDepth = 1;
@@ -2982,6 +3020,8 @@
     }
 
     
+    if (draggedUUIDS)
+    {
 
     for (NSString *srcID in draggedUUIDS.reverseObjectEnumerator)
     {
@@ -3012,7 +3052,39 @@
     
     
     [self.activePreviewView.sourceLayout generateTopLevelSourceList];
-    return YES;
+        return YES;
+    }
+    
+    bool retVal = NO;
+    for(NSPasteboardItem *item in pb.pasteboardItems)
+    {
+        
+        NSObject<CSInputSourceProtocol> *itemSrc = [self inputSourceForPasteboardItem:item];
+        if (itemSrc)
+        {
+            
+            [self.activePreviewView addInputSourceWithInput:itemSrc];
+            if (itemSrc.layer)
+            {
+                InputSource *lsrc = (InputSource *)itemSrc;
+                
+                [lsrc autoCenter];
+                if (parentSource)
+                {
+                    [parentSource attachInput:lsrc];
+                }
+                lsrc.depth = newDepth++;
+            }
+            retVal = YES;
+        }
+    }
+
+    if (retVal)
+    {
+        [self.activePreviewView.sourceLayout generateTopLevelSourceList];
+
+    }
+    return retVal;
 }
 
 -(void) outlineViewSelectionDidChange:(NSNotification *)notification

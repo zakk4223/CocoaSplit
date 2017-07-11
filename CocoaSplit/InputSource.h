@@ -367,4 +367,6 @@ typedef enum resize_style_t {
 @property (assign) bool needsAdjustment;
 @property (assign) bool needsAdjustPosition;
 @property (assign) bool isFrozen;
+-(void) setDirectVideoInput:(NSObject <CSCaptureSourceProtocol> *)videoInput;
+
 @end

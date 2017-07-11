@@ -22,6 +22,8 @@
     NSMutableArray *_imageCache;
     CAKeyframeAnimation *_animation;
     CGImageRef _singleImage;
+    NSData *_imageData;
+    
     
 }
 
