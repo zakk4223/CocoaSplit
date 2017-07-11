@@ -2904,50 +2904,47 @@
     }
     
     NSArray *draggedUUIDS = [pb propertyListForType:@"cocoasplit.input.item"];
-    if (!draggedUUIDS)
+    if (draggedUUIDS && draggedUUIDS.lastObject)
     {
-        return NSDragOperationNone;
-    }
-    
-    NSString *draggedUUID = draggedUUIDS.lastObject;
-    NSObject<CSInputSourceProtocol> *pdraggedSource = [self.activePreviewView.sourceLayout inputForUUID:draggedUUID];
-
-    
-    
-    if (!pdraggedSource.layer)
-    {
-        return NSDragOperationNone;
-    }
-    
-    InputSource *draggedSource = (InputSource *)pdraggedSource;
-    
-    if (nodeInput && nodeInput == draggedSource)
-    {
-        return NSDragOperationNone;
-    }
-    
-    if (nodeInput && draggedSource.parentInput == nodeInput)
-    {
-        return NSDragOperationNone;
-    }
-    
-    return NSDragOperationMove;
-    
-    if (draggedSource.parentInput && nodeInput && nodeInput != draggedSource.parentInput)
-    {
-        return NSDragOperationMove;
-    }
-    
-    
-    if (draggedSource.parentInput && !nodeInput)
-    {
-        return NSDragOperationMove;
-    }
-    
-    
-    if (item && index == -1)
-    {
-        return NSDragOperationMove;
+        NSString *draggedUUID = draggedUUIDS.lastObject;
+        NSObject<CSInputSourceProtocol> *pdraggedSource = [self.activePreviewView.sourceLayout inputForUUID:draggedUUID];
+        
+        
+        
+        if (!pdraggedSource || !pdraggedSource.layer)
+        {
+            return NSDragOperationNone;
+        }
+        
+        InputSource *draggedSource = (InputSource *)pdraggedSource;
+        
+        if (nodeInput && nodeInput == draggedSource)
+        {
+            return NSDragOperationNone;
+        }
+        
+        if (nodeInput && draggedSource.parentInput == nodeInput)
+        {
+            return NSDragOperationNone;
+        }
+        
+        
+        if (draggedSource.parentInput && nodeInput && nodeInput != draggedSource.parentInput)
+        {
+            return NSDragOperationMove;
+        }
+        
+        
+        if (draggedSource.parentInput && !nodeInput)
+        {
+            return NSDragOperationMove;
+        }
+        
+        
+        if (item && index == -1)
+        {
+            return NSDragOperationMove;
+        }
     }
     return NSDragOperationMove;
 }

@@ -1664,12 +1664,20 @@
     [self setWantsLayer:YES];
     
     self.layer.backgroundColor = CGColorCreateGenericRGB(0.184314f, 0.309804f, 0.309804f, 1);
-    [self registerForDraggedTypes:@[@"cocoasplit.library.item"]];
+    [self registerForDraggedTypes:@[@"cocoasplit.library.item",NSSoundPboardType,NSFilenamesPboardType, NSFilesPromisePboardType, NSFileContentsPboardType, @"cocoasplit.input.item", @"cocoasplit.audio.item"]];
     
 }
 
 -(NSDragOperation)draggingEntered:(id<NSDraggingInfo>)sender
 {
+    
+    if (self.viewOnly)
+    {
+        return NSDragOperationNone;
+    }
+    
+    return NSDragOperationCopy;
+    /*
     NSPasteboard *pboard;
     pboard = [sender draggingPasteboard];
     if ([pboard.types containsObject:@"cocoasplit.library.item"] && !self.viewOnly)
@@ -1677,6 +1685,7 @@
         return NSDragOperationGeneric;
     }
     return NSDragOperationNone;
+     */
 }
 
 -(BOOL)performDragOperation:(id<NSDraggingInfo>)sender
@@ -1727,7 +1736,27 @@
         }
         return YES;
     }
-    return NO;
+    
+    bool retVal = NO;
+    for(NSPasteboardItem *item in pboard.pasteboardItems)
+    {
+        
+        NSObject<CSInputSourceProtocol> *itemSrc = [CaptureController.sharedCaptureController inputSourceForPasteboardItem:item];
+        if (itemSrc)
+        {
+            
+            [self addInputSourceWithInput:itemSrc];
+            if (itemSrc.layer)
+            {
+                InputSource *lsrc = (InputSource *)itemSrc;
+                
+                [lsrc autoCenter];
+            }
+            retVal = YES;
+        }
+    }
+
+    return retVal;
 }
 
 
