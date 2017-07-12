@@ -72,7 +72,7 @@
             [self.captureObj back];
             break;
         case 2:
-            if (!self.captureObj.player.playing || self.captureObj.player.paused)
+            if (!self.captureObj.player.playing)// || self.captureObj.player.paused)
             {
                 [self.captureObj play];
             } else {

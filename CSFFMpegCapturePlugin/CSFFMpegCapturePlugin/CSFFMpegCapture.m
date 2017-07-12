@@ -22,8 +22,60 @@
         self.needsSourceSelection = NO;
 
         self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
+        _firstFrame = YES;
     }
     return self;
+}
+
++(bool)canCreateSourceFromPasteboardItem:(NSPasteboardItem *)item
+{
+    
+    if ([item.types containsObject:@"public.file-url"])
+    {
+        
+        NSString *stuff = [item stringForType:@"public.file-url"];
+        if (stuff)
+        {
+            NSURL *fileURL = [NSURL URLWithString:stuff];
+            
+            NSString *dType;
+            [fileURL getResourceValue:&dType forKey:NSURLTypeIdentifierKey error:nil];
+            if (dType)
+            {
+                NSLog(@"FFMPEG TRYING %@", dType);
+
+                if ([dType containsString:@"videolan"])
+                {
+                    return YES;
+                }
+                
+                if ([dType isEqualToString:@"public.mpeg-4"])
+                {
+                    return YES;
+                }
+            }
+        }
+        
+    }
+    return NO;
+}
+
+
++(NSObject<CSCaptureSourceProtocol> *)createSourceFromPasteboardItem:(NSPasteboardItem *)item
+{
+    
+    CSFFMpegCapture *ret = nil;
+    
+    NSString *imagePath = [item stringForType:@"public.file-url"];
+    if (imagePath)
+    {
+        NSURL *fileURL = [NSURL URLWithString:imagePath];
+        NSString *realPath = [fileURL path];
+        ret = [[CSFFMpegCapture alloc] init];
+        [ret queuePath:realPath];
+        [ret play];
+    }
+    return ret;
 }
 
 -(void)setupPlayer
@@ -314,6 +366,11 @@
             ((CSIOSurfaceLayer *)layer).imageBuffer = use_buf;
         }];
         
+        if (_firstFrame)
+        {
+            _firstFrame = NO;
+            [self.player pause];
+        }
         CVPixelBufferRelease(use_buf);
 
     }

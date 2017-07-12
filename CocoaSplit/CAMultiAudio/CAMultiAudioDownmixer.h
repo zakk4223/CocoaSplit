@@ -26,6 +26,6 @@
 
 -(NSDictionary *)saveData;
 -(void)restoreData:(NSDictionary *)saveData;
-
+-(void)setOutputVolume;
 
 @end

@@ -233,8 +233,10 @@
 
 -(void)playItem:(CSFFMpegInput *)item
 {
+    
     dispatch_async(_input_read_queue, ^{
         
+        NSLog(@"OPEN MEDIA");
         [item openMedia:15];
         
         if (self.itemStarted)

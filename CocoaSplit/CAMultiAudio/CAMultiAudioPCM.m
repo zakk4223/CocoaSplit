@@ -44,6 +44,17 @@
 
 
 
+-(void)silenceBuffer
+{
+
+    
+    size_t bufSize = sizeof(AudioBufferList) + (self.bufferCount-1)*sizeof(AudioBuffer);
+    for (int i=0; i < _audioSlice->mBufferList->mNumberBuffers; i++)
+    {
+        memset(_audioSlice->mBufferList->mBuffers[i].mData, 0, _audioSlice->mBufferList->mBuffers[i].mDataByteSize);
+    }
+
+}
 -(void)copyFromAudioBufferList:(AudioBufferList *)copyFrom
 {
     //Just copy the data, we already allocated the List.

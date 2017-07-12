@@ -3,10 +3,11 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 11/14/14.
-//  Copyright (c) 2014 Zakk. All rights reserved.
 //
 
 #import "CAMultiAudioPCMPlayer.h"
+#import "CAMultiAudioDownmixer.h"
+
 #import <AVFoundation/AVFoundation.h>
 
 
@@ -28,6 +29,7 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
         _inputFormat = NULL;
         self.latestScheduledTime = 0;
         _pauseBuffer = [[NSMutableArray alloc] init];
+        self.enabled = NO;
     }
     
     return self;
@@ -47,6 +49,18 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     return _pendingBuffers.count;
 }
 
+-(void)setEnabled:(bool)enabled
+{
+    [super setEnabled:enabled];
+    if (enabled)
+    {
+        [self setMuted:NO];
+    } else {
+        [self setMuted:YES];
+    }
+}
+
+
 -(bool)playPcmBuffer:(CAMultiAudioPCM *)pcmBuffer
 {
     
@@ -65,11 +79,6 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     pcmBuffer.audioSlice->mCompletionProcUserData = (__bridge void *)(pcmBuffer);
     pcmBuffer.audioSlice->mCompletionProc = BufferCompletedPlaying;
     pcmBuffer.player = self;
-    
-    if (!self.enabled)
-    {
-        return YES;
-    }
     
     if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_9)
     {

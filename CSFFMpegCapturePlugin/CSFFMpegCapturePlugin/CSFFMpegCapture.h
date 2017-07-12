@@ -41,10 +41,7 @@
     CFTimeInterval _lastTimeUpdate;
     double _savedTime;
     NSSize _lastSize;
-    
-    
-    
-    
+    bool _firstFrame;
 }
 
 
