@@ -21,6 +21,7 @@
         
         self.needsSourceSelection = NO;
 
+        self.updateMovieTime = YES;
         self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
         _firstFrame = YES;
     }
@@ -42,14 +43,12 @@
             [fileURL getResourceValue:&dType forKey:NSURLTypeIdentifierKey error:nil];
             if (dType)
             {
-                NSLog(@"FFMPEG TRYING %@", dType);
-
                 if ([dType containsString:@"videolan"])
                 {
                     return YES;
                 }
-                
-                if ([dType isEqualToString:@"public.mpeg-4"])
+
+                if ([FILE_UTI_TYPES containsObject:dType])
                 {
                     return YES;
                 }
@@ -217,6 +216,8 @@
     if (self.player)
     {
         [self.player seek:currentMovieTime];
+        self.currentTimeString = [self timeToString:self.player.lastVideoTime];
+
     }
 }
 
@@ -351,7 +352,7 @@
     
         _lastSize = NSMakeSize(CVPixelBufferGetWidth(use_buf), CVPixelBufferGetHeight(use_buf));
         
-        if (cTime - _lastTimeUpdate > 0.5)
+        if ((cTime - _lastTimeUpdate > 0.5) && self.updateMovieTime)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.currentTimeString = [self timeToString:self.player.lastVideoTime];

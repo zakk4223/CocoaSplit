@@ -1905,6 +1905,15 @@
         self.sourceLayouts = [[NSMutableArray alloc] init];
     }
     
+    if (self.sourceLayouts.count < 12)
+    {
+        for(int i=self.sourceLayouts.count+1; i <= 12; i++)
+        {
+            SourceLayout *nLayout = [[SourceLayout alloc] init];
+            nLayout.name = [NSString stringWithFormat:@"Layout %d", i];
+            [self.sourceLayouts addObject:nLayout];
+        }
+    }
     if (!_layoutViewController)
     {
         _layoutViewController = [[CSLayoutSwitcherViewController alloc] init];

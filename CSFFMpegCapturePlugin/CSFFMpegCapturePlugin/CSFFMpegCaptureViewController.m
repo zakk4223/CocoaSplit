@@ -124,11 +124,13 @@
     
     
     if (startingDrag) {
+        self.captureObj.updateMovieTime = NO;
         [self.captureObj mute];
     }
     
     
     if (endingDrag) {
+        self.captureObj.updateMovieTime = YES;
         [self.captureObj mute];
     }
 }

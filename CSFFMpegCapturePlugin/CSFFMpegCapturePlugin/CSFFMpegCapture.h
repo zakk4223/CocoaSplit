@@ -27,6 +27,8 @@
 #import "libavutil/pixdesc.h"
 
 
+#define FILE_UTI_TYPES @[@"com.apple.quicktime-movie", @"public.mpeg-4"]
+
 @interface CSFFMpegCapture : CSCaptureBase <CSCaptureSourceProtocol>
 {
     AVFormatContext *_avFmtCtx;
@@ -42,6 +44,7 @@
     double _savedTime;
     NSSize _lastSize;
     bool _firstFrame;
+    
 }
 
 
@@ -54,6 +57,7 @@
 @property (assign) double currentMovieDuration;
 @property (assign) bool playWhenLive;
 @property (assign) bool useCurrentPosition;
+@property (assign) bool updateMovieTime;
 
 
 
