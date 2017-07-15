@@ -2,16 +2,14 @@
 Animation runner base
 """
 import objc
-import CSAnimationInput
 from types import ModuleType
-from Foundation import *
+from Foundation import NSSearchPathForDirectoriesInDomains,NSLibraryDirectory, NSAllDomainsMask,NSSystemDomainMask,NSBundle,NSObject
+#from Foundation import *
 #from CoreGraphics import *
 from Quartz import CACurrentMediaTime,CATransaction
 from pluginbase import PluginBase
 import math
-import CSAnimationBlock
-from CSAnimation import *
-#from Foundation import NSObject,NSLog,NSApplication
+from Foundation import NSObject,NSLog,NSApplication
 import sys
 import traceback
 import os
@@ -22,10 +20,7 @@ sys.dont_write_bytecode = True
 script_base = PluginBase(package='scriptplugins')
 plugin_base = PluginBase(package='cocoasplitplugins')
 
-library_dirs = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSAllDomainsMask - NSSystemDomainMask, YES)
-script_dirs = map(lambda x: x + "/Application Support/CocoaSplit/Plugins/Scripts", library_dirs)
-script_dirs.append(NSBundle.mainBundle().resourcePath() + "/Scripts")
-script_source = script_base.make_plugin_source(searchpath=script_dirs)
+library_dirs = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSAllDomainsMask - NSSystemDomainMask, True)
 
 plugin_dirs = map(lambda x: x + "/Application Support/CocoaSplit/Plugins/Python", library_dirs)
 plugin_dirs.append(NSBundle.mainBundle().builtInPlugInsPath() + "/Python")
@@ -109,44 +104,6 @@ class CSAnimationRunnerObj(NSObject):
             
             ret[m_name] = {'params': plugin_parameters, 'inputs': plugin_inputs, 'name':plugin_name, 'module':m_name, 'description':plugin_description}
         return ret
-
-
-    def beginAnimation(self, duration=0.25):
-        CSAnimationBlock.beginAnimation(duration)
-    
-
-    @objc.signature('@@:@@@')
-    def runAnimation_forLayout_withExtraDictionary_(self,animation_string, layout, extraDictionary):
-    
-    
-        animation = ModuleType('cs_fromstring_animation', '')
-        animation.extraData = extraDictionary
-
-        default_animation_time = extraDictionary['__default_animation_time__']
-        
-        exec("from cocoasplit import *", animation.__dict__)
-        exec("all_animations = {}", animation.__dict__)
-        exec("__cs_default_kwargs = {}", animation.__dict__)
-        exec(animation_string, animation.__dict__)
-        #sys.modules['cs_fromstring_animation'] = animation
-        CSAnimationBlock.beginAnimation(default_animation_time)
-        CSAnimationBlock.current_frame().layout = layout
-        CSAnimationBlock.current_frame().animation_module = animation
-        
-        self.baseLayer = layout.rootLayer()
-        self.layout = layout
-        
-        try:
-            CSAnimationBlock.setCompletionBlock(dummyCompletion)
-            animation.run_script()
-        
-        except:
-            CSAnimationBlock.commitAnimation()
-            raise
-        else:
-            CSAnimationBlock.commitAnimation()
-        return animation.all_animations
-
 
 
     

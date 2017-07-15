@@ -98,10 +98,11 @@
 
     //Force loading of python stuff now
     
+    /*
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [CaptureController sharedAnimationObj];
     });
-    
+*/    
     
     [self.captureController loadSettings];
     //self.captureController.audioConstraint.constant = 0;

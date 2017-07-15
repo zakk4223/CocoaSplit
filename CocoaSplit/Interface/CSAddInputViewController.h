@@ -12,7 +12,7 @@
 
 @class PreviewView;
 
-@interface CSAddInputViewController : NSViewController <NSTableViewDelegate, NSPopoverDelegate>
+@interface CSAddInputViewController : NSViewController <NSTableViewDelegate, NSPopoverDelegate, NSTableViewDataSource>
 {
     NSView *_typeListView;
     NSArray *_sourceTypeList;
@@ -33,8 +33,12 @@
 @property (weak) IBOutlet NSView *headerView;
 @property (strong) IBOutlet NSArrayController *sourceTypesController;
 
-@property (weak) PreviewView *previewView;
+@property (assign) NSObject<CSCaptureSourceProtocol> *parentSourceType;
 
+@property (strong) NSArray *contentData;
+
+@property (weak) PreviewView *previewView;
+@property (weak) IBOutlet NSTableView *contentTable;
 - (IBAction)nextViewButton:(id)sender;
 - (IBAction)previousViewButton:(id)sender;
 - (IBAction)initalTableButtonClicked:(id)sender;

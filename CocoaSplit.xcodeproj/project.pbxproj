@@ -62,14 +62,10 @@
 		3435E39E188BD82F0015CC01 /* passthrough.vtsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3435E39A188B93150015CC01 /* passthrough.vtsh */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3435E39F188CD8EE0015CC01 /* 420v.fgsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3435E395188B902C0015CC01 /* 420v.fgsh */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		343644061B78F01D0069B8F2 /* CSAnimationRunner.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 349461591AB4213B00F28883 /* CSAnimationRunner.py */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		343644071B78F01D0069B8F2 /* CSAnimationBlock.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3494616A1ABD1B5900F28883 /* CSAnimationBlock.py */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		343644081B78F01D0069B8F2 /* CSAnimation.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3494616C1ABD399B00F28883 /* CSAnimation.py */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		343644091B78F01D0069B8F2 /* pluginbase.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34E983841B78B19D00F26F1E /* pluginbase.py */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		343692501B6243D4007EC2D9 /* CSShapeCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 3436922B1B62364E007EC2D9 /* CSShapeCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		343B7BE21E917B1A00233DF1 /* cocoasplit.py in Resources */ = {isa = PBXBuildFile; fileRef = 343B7BE11E917B1A00233DF1 /* cocoasplit.py */; };
 		343B7BE31E91803B00233DF1 /* cocoasplit.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 343B7BE11E917B1A00233DF1 /* cocoasplit.py */; };
-		343B7BE51E9183BD00233DF1 /* CSAnimationInput.py in Resources */ = {isa = PBXBuildFile; fileRef = 343B7BE41E9183BD00233DF1 /* CSAnimationInput.py */; };
-		343B7BE61E91840E00233DF1 /* CSAnimationInput.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 343B7BE41E9183BD00233DF1 /* CSAnimationInput.py */; };
 		343C79ED1D0C796E00B36EEC /* CSFFMpegCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 343C79CC1D0C763A00B36EEC /* CSFFMpegCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		343ED9421BCAC1C80061FC4B /* EditBuiltinLayoutView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 343ED9411BCAC1C80061FC4B /* EditBuiltinLayoutView.xib */; };
 		3441269B1E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 344126991E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.m */; };
@@ -123,7 +119,6 @@
 		34788DD81EF5569E00C3C9C5 /* CSAnimation.js in Resources */ = {isa = PBXBuildFile; fileRef = 34788DD71EF5569E00C3C9C5 /* CSAnimation.js */; };
 		34788DDB1EF5996000C3C9C5 /* CATransaction+JSExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 34788DDA1EF5996000C3C9C5 /* CATransaction+JSExtensions.m */; };
 		34788DDE1EF59E5B00C3C9C5 /* CSAnimationInput.js in Resources */ = {isa = PBXBuildFile; fileRef = 34788DDD1EF59E5B00C3C9C5 /* CSAnimationInput.js */; };
-		34788DE01EF5A86800C3C9C5 /* CSAnimationInput.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 343B7BE41E9183BD00233DF1 /* CSAnimationInput.py */; };
 		34788DE11EF5A86800C3C9C5 /* CSAnimation.js in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34788DD71EF5569E00C3C9C5 /* CSAnimation.js */; };
 		34788DE21EF5A86800C3C9C5 /* CSAnimationInput.js in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34788DDD1EF59E5B00C3C9C5 /* CSAnimationInput.js */; };
 		34788DE71EF6753900C3C9C5 /* CSJSProxyObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 34788DE61EF6753900C3C9C5 /* CSJSProxyObj.m */; };
@@ -473,11 +468,8 @@
 			dstPath = Python;
 			dstSubfolderSpec = 7;
 			files = (
-				343B7BE61E91840E00233DF1 /* CSAnimationInput.py in CopyFiles */,
 				343B7BE31E91803B00233DF1 /* cocoasplit.py in CopyFiles */,
 				343644061B78F01D0069B8F2 /* CSAnimationRunner.py in CopyFiles */,
-				343644071B78F01D0069B8F2 /* CSAnimationBlock.py in CopyFiles */,
-				343644081B78F01D0069B8F2 /* CSAnimation.py in CopyFiles */,
 				343644091B78F01D0069B8F2 /* pluginbase.py in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -510,7 +502,6 @@
 			dstPath = Javascript;
 			dstSubfolderSpec = 7;
 			files = (
-				34788DE01EF5A86800C3C9C5 /* CSAnimationInput.py in CopyFiles */,
 				34788DE11EF5A86800C3C9C5 /* CSAnimation.js in CopyFiles */,
 				34788DE21EF5A86800C3C9C5 /* CSAnimationInput.js in CopyFiles */,
 				34788DD51EF52F5B00C3C9C5 /* cocoasplit.js in CopyFiles */,
@@ -635,7 +626,6 @@
 		3435E39A188B93150015CC01 /* passthrough.vtsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = passthrough.vtsh; path = Shaders/passthrough.vtsh; sourceTree = "<group>"; };
 		3436921B1B62364E007EC2D9 /* CSShapeCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSShapeCapturePlugin.xcodeproj; path = CapturePlugins/CSShapeCapturePlugin/CSShapeCapturePlugin.xcodeproj; sourceTree = "<group>"; };
 		343B7BE11E917B1A00233DF1 /* cocoasplit.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = cocoasplit.py; sourceTree = "<group>"; };
-		343B7BE41E9183BD00233DF1 /* CSAnimationInput.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = CSAnimationInput.py; sourceTree = "<group>"; };
 		343C79C31D0C763A00B36EEC /* CSFFMpegCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSFFMpegCapturePlugin.xcodeproj; path = CSFFMpegCapturePlugin/CSFFMpegCapturePlugin.xcodeproj; sourceTree = "<group>"; };
 		343DD65919AAD3060017232A /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
 		343DD65C19AAD3060017232A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -778,8 +768,6 @@
 		349461591AB4213B00F28883 /* CSAnimationRunner.py */ = {isa = PBXFileReference; explicitFileType = text.script.python; fileEncoding = 4; path = CSAnimationRunner.py; sourceTree = "<group>"; };
 		349461661ABC57C100F28883 /* CSAnimationItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSAnimationItem.h; sourceTree = "<group>"; };
 		349461671ABC57C100F28883 /* CSAnimationItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAnimationItem.m; sourceTree = "<group>"; };
-		3494616A1ABD1B5900F28883 /* CSAnimationBlock.py */ = {isa = PBXFileReference; explicitFileType = text.script.python; fileEncoding = 4; path = CSAnimationBlock.py; sourceTree = "<group>"; };
-		3494616C1ABD399B00F28883 /* CSAnimation.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = CSAnimation.py; sourceTree = "<group>"; };
 		3494DF341CCD2DB000E921BF /* TPCircularBuffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = TPCircularBuffer.c; sourceTree = "<group>"; };
 		3494DF351CCD2DB000E921BF /* TPCircularBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPCircularBuffer.h; sourceTree = "<group>"; };
 		3494DF361CCD2DB000E921BF /* TPCircularBuffer+AudioBufferList.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "TPCircularBuffer+AudioBufferList.c"; sourceTree = "<group>"; };
@@ -1629,11 +1617,8 @@
 			isa = PBXGroup;
 			children = (
 				349461591AB4213B00F28883 /* CSAnimationRunner.py */,
-				3494616A1ABD1B5900F28883 /* CSAnimationBlock.py */,
-				3494616C1ABD399B00F28883 /* CSAnimation.py */,
 				34E983841B78B19D00F26F1E /* pluginbase.py */,
 				343B7BE11E917B1A00233DF1 /* cocoasplit.py */,
-				343B7BE41E9183BD00233DF1 /* CSAnimationInput.py */,
 				34788DD01EF52C1A00C3C9C5 /* cocoasplit.js */,
 				34788DD21EF52DA000C3C9C5 /* CSAnimationBlock.js */,
 				34788DD71EF5569E00C3C9C5 /* CSAnimation.js */,
@@ -2377,7 +2362,6 @@
 				34788E441F0DD56B00C3C9C5 /* CSAudioInputSourceViewController.xib in Resources */,
 				34B5FB741E7E6E0A0078FC51 /* CSSequenceItemLayoutViewController.xib in Resources */,
 				34788DDE1EF59E5B00C3C9C5 /* CSAnimationInput.js in Resources */,
-				343B7BE51E9183BD00233DF1 /* CSAnimationInput.py in Resources */,
 				34788DD81EF5569E00C3C9C5 /* CSAnimation.js in Resources */,
 				342B33B61980771200492CB7 /* line.vtsh in Resources */,
 				34938EEF1AE4D24200F3B1CF /* CSFilterChooserWindowController.xib in Resources */,

@@ -1258,7 +1258,7 @@
         
         NSString *resourcePath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Python"];
         
-        NSString *sysstr = [NSString stringWithFormat:@"import sys; from Foundation import *; sys.path.append('%@');sys.dont_write_bytecode = True", resourcePath];
+        NSString *sysstr = [NSString stringWithFormat:@"import sys;sys.path.append('%@');sys.dont_write_bytecode = True", resourcePath];
         PyGILState_STATE gilState = PyGILState_Ensure();
         PyRun_SimpleString([sysstr UTF8String]);
         PyGILState_Release(gilState);
