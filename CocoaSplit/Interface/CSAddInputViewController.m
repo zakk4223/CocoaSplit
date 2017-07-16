@@ -12,6 +12,7 @@
 #import "AppDelegate.h"
 #import "PreviewView.h"
 #import "CSScriptInputSource.h"
+#import "CSAudioInputSource.h"
 
 
 @interface CSAddInputViewController ()
@@ -87,7 +88,6 @@
 
     NSRect vRect = table.frame;
     NSRect lRect = [table rectOfRow:self.contentTable.numberOfRows - 1];
-    NSLog(@"USING HEIGHT %f", NSMaxY(lRect));
 
     NSSize newSize = NSMakeSize(vRect.size.width+2, NSMaxY(lRect)+(lRect.size.height/2));
     
@@ -109,14 +109,24 @@
         [self adjustTableHeight:self.contentTable];
         return;
     } else {
-        CSAbstractCaptureDevice *clickedDev = [self.parentSourceType.availableVideoDevices objectAtIndex:self.contentTable.clickedRow-1];
+        NSArray *devices = [self.parentSourceType valueForKey:@"availableVideoDevices"];
+        CSAbstractCaptureDevice *clickedDev = [devices objectAtIndex:self.contentTable.clickedRow-1];
         if (clickedDev)
         {
+            NSString *selectedType = [self.parentSourceType valueForKey:@"instanceLabel"];
+
+            if ([selectedType isEqualToString:@"Audio"])
+            {
+            
+                CSAudioInputSource *audioSrc = [[CSAudioInputSource alloc] initWithAudioNode:(CAMultiAudioNode *)clickedDev.captureDevice];
+                [self addInput:audioSrc];
+            } else {
             InputSource *newSrc =  [[InputSource alloc] init];
-            newSrc.selectedVideoType = self.parentSourceType.instanceLabel;
+            newSrc.selectedVideoType = selectedType;
             newSrc.videoInput.activeVideoDevice = clickedDev;
             [self addInput:newSrc];
             [newSrc autoCenter];
+            }
             return;
         }
         
@@ -131,12 +141,22 @@
     {
         [self deviceClicked];
     } else {
-        NSObject <CSCaptureSourceProtocol> *clickedCapture;
         
-        clickedCapture = [ self.contentData objectAtIndex:self.contentTable.clickedRow];
+        NSObject *clickedItem = [ _sourceTypeList objectAtIndex:self.contentTable.clickedRow];
+        if ([[clickedItem valueForKey:@"instanceLabel"] isEqualToString:@"Script"])
+        {
+            CSScriptInputSource *newScript = [[CSScriptInputSource alloc] init];
+            [self addInput:newScript];
+            [self.previewView openInputConfigWindow:newScript.uuid];
+            return;
+        }
+        
+        NSObject <CSCaptureSourceProtocol> *clickedCapture = (NSObject <CSCaptureSourceProtocol> *)clickedItem;
         
         
-        if (clickedCapture.availableVideoDevices.count > 0)
+        NSArray *availableDevices = [clickedCapture valueForKey:@"availableVideoDevices"];
+        
+        if (availableDevices.count > 0)
         {
             self.parentSourceType = clickedCapture;
             
@@ -179,7 +199,8 @@
         {
             return nil;
         }
-        return [self.parentSourceType.availableVideoDevices objectAtIndex:row-1];
+        NSArray *devices = [self.parentSourceType valueForKey:@"availableVideoDevices"];
+        return [devices objectAtIndex:row-1];
     }
     
     return [_sourceTypeList objectAtIndex:row];
@@ -190,7 +211,8 @@
 {
     if (self.parentSourceType)
     {
-        return self.parentSourceType.availableVideoDevices.count+1;
+        NSArray *devices = [self.parentSourceType valueForKey:@"availableVideoDevices"];
+        return devices.count+1;
     } else {
         if (!_sourceTypeList)
         {
@@ -239,7 +261,7 @@
         return [tableView makeViewWithIdentifier:@"initialInputViewScript" owner:self];
     }
     
-    NSArray *availableVideoDevices = item.availableVideoDevices;
+    NSArray *availableVideoDevices = [item valueForKey:@"availableVideoDevices"];
     if (availableVideoDevices && availableVideoDevices.count > 0)
     {
         return [tableView makeViewWithIdentifier:@"arrowView" owner:self];
@@ -271,6 +293,28 @@
             [ret addObject:newCaptureSession];
         }
         
+        NSImage *scriptImage = [NSImage imageNamed:@"NSScriptTemplate"];
+        scriptImage.template = NO;
+        
+        [ret addObject:@{@"libraryImage": scriptImage, @"instanceLabel": @"Script", @"availableVideoDevices": @[]}];
+        
+        NSMutableDictionary *audioDict = [NSMutableDictionary dictionary];
+
+        NSMutableArray *audioInputs = [NSMutableArray array];
+        
+        for(CAMultiAudioNode *input in [CaptureController sharedCaptureController].multiAudioEngine.audioInputs)
+        {
+            CSAbstractCaptureDevice *newDev = [[CSAbstractCaptureDevice alloc] initWithName:input.name device:input uniqueID:input.nodeUID];
+            [audioInputs addObject:newDev];
+        }
+        audioDict[@"availableVideoDevices"] = audioInputs;
+        audioDict[@"instanceLabel"] = @"Audio";
+        NSImage *audioImage = [NSImage imageNamed:@"NSAudioOutputVolumeMedTemplate"];
+        audioImage.template = NO;
+        
+        audioDict[@"libraryImage"] = audioImage;
+        
+        [ret addObject:audioDict];
         //[ret addObject:[NSNull null]];
         
         _sourceTypeList = ret;

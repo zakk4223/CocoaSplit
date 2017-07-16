@@ -2971,11 +2971,7 @@
             CAMultiAudioNode *audioNode = [self.multiAudioEngine inputForUUID:aUID];
             if (audioNode)
             {
-                CSAudioInputSource *newSource = [[CSAudioInputSource alloc] init];
-                newSource.audioUUID = aUID;
-                newSource.audioVolume = audioNode.volume;
-                newSource.audioEnabled = audioNode.enabled;
-                newSource.name = audioNode.name;
+                CSAudioInputSource *newSource = [[CSAudioInputSource alloc] initWithAudioNode:audioNode];
                 [self.activePreviewView addInputSourceWithInput:newSource];
 
             }

@@ -124,6 +124,7 @@
 }
 
 
+
 -(CALayer *)createNewLayer
 {
     CALayer *newLayer = [CALayer layer];
@@ -147,6 +148,8 @@
     if (self.imagePath)
     {
         return [[NSImage alloc] initWithContentsOfFile:self.imagePath];
+    } else {
+        return [NSImage imageNamed:@"NSMediaBrowserMediaTypePhotos"];
     }
     return nil;
 }

@@ -20,5 +20,8 @@
 @property (assign) bool audioEnabled;
 @property (strong) CAMultiAudioNode *audioNode;
 
+
+-(instancetype) initWithAudioNode:(CAMultiAudioNode *)node;
+
 @end
 

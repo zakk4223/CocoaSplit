@@ -28,6 +28,19 @@
 }
 
 
+
+-(instancetype) initWithAudioNode:(CAMultiAudioNode *)node
+{
+    if (self = [self init])
+    {
+        self.audioUUID = node.nodeUID;
+        self.audioVolume = node.volume;
+        self.name = node.name;
+        self.audioEnabled = node.enabled;
+    }
+    
+    return self;
+}
 -(instancetype)copyWithZone:(NSZone *)zone
 {
     CSAudioInputSource *newCopy = [super copyWithZone:zone];

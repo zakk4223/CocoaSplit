@@ -1830,6 +1830,10 @@
 -(void)clearSourceList
 {
     self.rootLayer.sublayers = [NSArray array];
+    for (NSObject<CSInputSourceProtocol> *src in self.sourceList)
+    {
+        [src removeObserver:self forKeyPath:@"depth"];
+    }
     @synchronized(self)
     {
         [self.sourceList removeAllObjects];

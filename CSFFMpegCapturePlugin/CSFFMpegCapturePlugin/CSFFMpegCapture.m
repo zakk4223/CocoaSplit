@@ -205,7 +205,12 @@
 }
 
 
-
+-(NSImage *)libraryImage
+{
+    return [NSImage imageNamed:@"NSMediaBrowserMediaTypeMoviesTemplate32"];
+}
+            
+            
 -(double)currentMovieTime
 {
     return _currentMovieTime;
