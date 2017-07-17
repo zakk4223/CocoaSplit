@@ -85,7 +85,6 @@
 
 -(NSObject<CSInputSourceProtocol> *)inputForUUID:(NSString *)uuid;
 -(void)frameTick;
--(NSObject *)mergeSourceListData:(NSData *)mergeData onlyAdd:(bool)onlyAdd;
 -(InputSource *)sourceUnder:(InputSource *)source;
 -(void)didBecomeVisible;
 -(bool)containsInput:(InputSource *)cSource;

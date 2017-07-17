@@ -168,6 +168,7 @@
 {
     
     
+    NSLog(@"RECORDING ACTIVE? %d", self.recordingActive);
     
     if (!self.recordingActive)
     {
@@ -176,7 +177,10 @@
         
         
         _audioBuffer = [NSMutableArray array];
-        self.renderer = [[LayoutRenderer alloc] init];
+        if (!self.renderer)
+        {
+            self.renderer = [[LayoutRenderer alloc] init];
+        }
         if (self.layout.sourceList.count == 0)
         {
             [self.layout restoreSourceList:nil];
@@ -219,6 +223,7 @@
 
         dispatch_async(_frame_queue, ^{
             [self newFrameTimed];
+            
         });
     }
     
@@ -322,6 +327,7 @@
     
     _frame_time = startTime;
     _firstFrameTime = startTime;
+    
     [self newFrame];
     
     while (1)
@@ -363,6 +369,7 @@
             
             if (!drain_cnt)
             {
+                
                 return;
             }
         }

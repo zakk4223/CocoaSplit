@@ -92,6 +92,7 @@
     
     if (!self.rootLayer)
     {
+        
         self.rootLayer = [CALayer layer];
         self.renderer.layer = self.rootLayer;
     }
@@ -132,6 +133,7 @@
     
     if (!self.rootLayer)
     {
+        
         self.rootLayer = [CALayer layer];
         self.rootLayer.delegate = self;
     }
@@ -220,7 +222,6 @@
 -(CVPixelBufferRef)currentImg
 {
     
-    
     if (!self.layout)
     {
         return NULL;
@@ -291,6 +292,7 @@
 
 -(CVPixelBufferRef)currentFrame
 {
+
     
     @synchronized(self)
     {

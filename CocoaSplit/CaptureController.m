@@ -2284,10 +2284,9 @@
     if (!self.mainLayoutRecorder)
     {
         self.mainLayoutRecorder = [[CSLayoutRecorder alloc] init];
-        
+        self.mainLayoutRecorder.renderer = self.livePreviewView.layoutRenderer;
         self.mainLayoutRecorder.layout = self.livePreviewView.sourceLayout;
         self.mainLayoutRecorder.audioEngine = self.multiAudioEngine;
-        
         if (!self.multiAudioEngine.encoder)
         {
             CSAacEncoder *audioEnc = [[CSAacEncoder alloc] init];
@@ -2299,16 +2298,20 @@
             self.multiAudioEngine.encoder = audioEnc;
 
         }
+    }
         self.mainLayoutRecorder.audioEngine.encoder.encodedReceiver = self.mainLayoutRecorder;
-        
-        
+    
         self.mainLayoutRecorder.compressors  = self.compressors;
         self.mainLayoutRecorder.outputs = self.captureDestinations;
         [self.mainLayoutRecorder startRecordingCommon];
-        
-        self.livePreviewView.layoutRenderer = self.mainLayoutRecorder.renderer;
+    
+
+    //if (!self.livePreviewView.layoutRenderer)
+    //{
+        //self.livePreviewView.layoutRenderer = self.mainLayoutRecorder.renderer;
+   // }
+    
         [self.livePreviewView disablePrimaryRender];
-    }
 
 }
 
@@ -2347,6 +2350,7 @@
             outdest.settingsController = self.mainLayoutRecorder;
             if (outdest.active)
             {
+                NSLog(@"RESET AND SETUP %@", outdest);
                 [outdest reset];
                 [outdest setup];
 
@@ -2388,6 +2392,7 @@
 
     if (self.mainLayoutRecorder && !self.instantRecorder)
     {
+        
         [self.livePreviewView enablePrimaryRender];
     }
     

@@ -78,7 +78,7 @@
     CVPixelBufferRef toDraw;
     if (self.doRender)
     {
-        
+     
         toDraw = [self.renderer currentImg];
         CGLSetCurrentContext(ctx);
         
