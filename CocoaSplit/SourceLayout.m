@@ -1619,6 +1619,7 @@
         
         NSMutableArray *oldSourceList = self.sourceList;
         
+        
         self.sourceList = [NSMutableArray array];
         _uuidMap = [NSMutableDictionary dictionary];
         self.sourceListPresentation = [NSMutableArray array];
@@ -1669,6 +1670,7 @@
         for(NSObject<CSInputSourceProtocol> *src in oldSourceList)
         {
             [src beforeDelete];
+            [src removeObserver:self forKeyPath:@"depth"];
             [src.layer removeFromSuperlayer];
         }
 
