@@ -10,12 +10,16 @@
 
 @implementation FileTextCapture
 
+@synthesize currentFile = _currentFile;
+@synthesize startLine = _startLine;
+@synthesize lineLimit = _lineLimit;
 
 -(instancetype)init
 {
     if (self = [super init])
     {
         self.lineLimit = 0;
+        self.startLine = 0;
         self.collapseLines = NO;
     }
     
@@ -27,16 +31,54 @@
 {
     [super encodeWithCoder:aCoder];
     [aCoder encodeObject:self.currentFile forKey:@"currentFile"];
+    [aCoder encodeInt:self.startLine forKey:@"startLine"];
+    [aCoder encodeInt:self.lineLimit forKey:@"lineLimit"];
 }
 
 -(instancetype)initWithCoder:(NSCoder *)aDecoder
 {
     if (self = [super initWithCoder:aDecoder])
     {
-        NSString *fileName = [aDecoder decodeObjectForKey:@"currentFile"];
-        [self openFile:fileName];
+        _lineLimit = [aDecoder decodeIntForKey:@"lineLimit"];
+        _startLine = [aDecoder decodeIntForKey:@"startLine"];
+        self.currentFile = [aDecoder decodeObjectForKey:@"currentFile"];
     }
     return self;
+}
+
+
+-(void)setStartLine:(int)startLine
+{
+    _startLine = startLine;
+    [self openFile:self.currentFile];
+}
+
+-(int)startLine
+{
+    return _startLine;
+}
+
+-(void)setLineLimit:(int)lineLimit
+{
+    _lineLimit = lineLimit;
+    [self openFile:self.currentFile];
+}
+
+-(int)lineLimit
+{
+    return _lineLimit;
+}
+
+
+-(void)setCurrentFile:(NSString *)currentFile
+{
+    _currentFile = currentFile;
+    [self openFile:self.currentFile];
+}
+
+-(NSString *)currentFile
+{
+    return _currentFile;
 }
 
 
@@ -48,22 +90,35 @@
 
 -(void)openFile:(NSString *)filename
 {
+    if (!self.currentFile)
+    {
+        return;
+    }
     [self cancelWatch];
     
-    self.currentFile = filename;
+    //self.currentFile = filename;
     NSString *fileText = [[NSString alloc] initWithContentsOfFile:filename encoding:NSUTF8StringEncoding error:nil];
     
-    if (self.lineLimit > 0)
+    long lineCount = self.lineLimit;
+    long startLine = self.startLine;
+    
+    
+    if (lineCount || startLine)
     {
         NSArray *lines = [fileText componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-        long useLimit = self.lineLimit;
-        
-        if (useLimit > lines.count)
+        if (startLine > lines.count)
         {
-            useLimit = lines.count;
+            startLine = 0;
         }
         
-        NSArray *lineSlice = [lines subarrayWithRange:NSMakeRange(0, useLimit)];
+        long totalLength = lines.count - startLine;
+        
+        if (lineCount > totalLength)
+        {
+            lineCount = totalLength;
+        }
+        
+        NSArray *lineSlice = [lines subarrayWithRange:NSMakeRange(startLine, lineCount)];
         fileText = [lineSlice componentsJoinedByString:@"\n"];
     }
     

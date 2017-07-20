@@ -30,7 +30,7 @@
     [super windowDidLoad];
     
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
-    [self.tableView registerForDraggedTypes:@[@"cocoasplit.library.item"]];
+    [self.tableView registerForDraggedTypes:@[NSSoundPboardType,NSFilenamesPboardType, NSFilesPromisePboardType, NSFileContentsPboardType, @"cocoasplit.library.item"]];
 }
 
 
@@ -51,14 +51,19 @@
 
 -(NSDragOperation)tableView:(NSTableView *)tableView validateDrop:(id<NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)dropOperation
 {
-    if (dropOperation == NSTableViewDropAbove && (_dragRange.location > row || _dragRange.location+_dragRange.length < row))
+    if (_draggingObjects)
     {
-        if ([info draggingSource] == self.tableView)
+        if (dropOperation == NSTableViewDropAbove && (_dragRange.location > row || _dragRange.location+_dragRange.length < row))
         {
-            return NSDragOperationMove;
+            if ([info draggingSource] == self.tableView)
+            {
+                return NSDragOperationMove;
+            }
         }
+        return NSDragOperationNone;
     }
-    return NSDragOperationNone;
+
+    return NSDragOperationCopy;
 }
 
 
@@ -68,6 +73,8 @@
     NSArray *classes = @[[CSInputLibraryItem class]];
     
     [info enumerateDraggingItemsWithOptions:0 forView:tableView classes:classes searchOptions:@{} usingBlock:^(NSDraggingItem * _Nonnull draggingItem, NSInteger idx, BOOL * _Nonnull stop) {
+        NSLog(@"DRAG %@", draggingItem);
+        
         NSInteger newIdx = row+idx;
         CSInputLibraryItem *dragItem = self->_draggingObjects[idx];
         NSInteger oldIdx = [self.itemArrayController.arrangedObjects indexOfObject:dragItem];
