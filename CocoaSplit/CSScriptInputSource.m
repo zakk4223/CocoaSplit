@@ -17,7 +17,7 @@
     if (self = [super init])
     {
         [self createUUID];
-        self.name = @"SCRIPT TEST";
+        self.name = @"Scripts";
         self.active = YES;
         self.scriptPriority = 9999;
 
@@ -41,6 +41,11 @@
     return self;
 }
 
+
+-(NSString *)label
+{
+    return @"Script";
+}
 
 -(NSViewController *)configurationViewController
 {

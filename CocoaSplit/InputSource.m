@@ -2316,6 +2316,17 @@ static NSArray *_sourceTypes = nil;
 }
 
 
+-(NSString *)label
+{
+    if (self.videoInput)
+    {
+        return [self.videoInput.class label];
+    }
+    
+    return @"None";
+}
+
+
 
 
 -(NSString *) selectedVideoType
@@ -2339,6 +2350,9 @@ static NSArray *_sourceTypes = nil;
     CALayer *newLayer = [_videoInput layerForInput:self];
     
     _currentLayer = newLayer;
+    NSLog(@"EDITED NAME %@", _editedName);
+    NSLog(@"VIDEO INPUT %@", self.videoInput.captureName);
+    
     self.name = _editedName;
 }
 -(void) setSelectedVideoType:(NSString *)selectedVideoType

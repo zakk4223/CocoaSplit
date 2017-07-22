@@ -17,8 +17,8 @@
 @property (strong) NSImage *inputImage;
 @property (strong) InputSource *editInput;
 
--(instancetype) initWithInput:(InputSource *)input;
--(void)makeDataFromInput:(InputSource *)input;
+-(instancetype) initWithInput:(NSObject<CSInputSourceProtocol> *)input;
+-(void)makeDataFromInput:(NSObject<CSInputSourceProtocol> *)input;
 -(InputSource *)makeInput;
 
 @end

@@ -269,6 +269,15 @@
     CSFFMpegInput *newItem = [[CSFFMpegInput alloc] initWithMediaPath:path];
     
     [self.player enqueueItem:newItem ];
+    if (!self.captureName)
+    {
+        CSFFMpegInput *firstItem = self.player.inputQueue.firstObject;
+        if (firstItem)
+        {
+            self.captureName = firstItem.shortName;
+        }
+    }
+
     [self generateUniqueID];
 }
 

@@ -11,27 +11,27 @@
 @implementation CSInputLibraryItem
 
 
--(instancetype) initWithInput:(InputSource *)input
+-(instancetype) initWithInput:(NSObject<CSInputSourceProtocol> *)input
 {
     if (self = [super init])
     {
         NSString *inputType = @"None";
         NSString *inputName = @"No Name";
         
-        if (input.videoInput)
+        
+        NSImage *img = [input libraryImage];
+        if (img)
         {
-            inputType = [input.videoInput.class label];
-            NSImage *img = [input.videoInput libraryImage];
-            if (img)
-            {
-                NSImage *thumb = [[NSImage alloc] initWithSize:NSMakeSize(32, 32)];
-                NSRect fromRect = NSMakeRect(0, 0, img.size.width, img.size.height);
-                [thumb lockFocus];
-                [img drawInRect:NSMakeRect(0, 0, 32, 32) fromRect:fromRect operation:NSCompositeCopy fraction:1.0f];
-                [thumb unlockFocus];
-                self.inputImage = thumb;
-            }
+            NSImage *thumb = [[NSImage alloc] initWithSize:NSMakeSize(32, 32)];
+            NSRect fromRect = NSMakeRect(0, 0, img.size.width, img.size.height);
+            [thumb lockFocus];
+            [img drawInRect:NSMakeRect(0, 0, 32, 32) fromRect:fromRect operation:NSCompositeCopy fraction:1.0f];
+            [thumb unlockFocus];
+            self.inputImage = thumb;
         }
+        
+        
+        inputType = input.label;
         
         if (input.name)
         {
@@ -84,7 +84,7 @@
 }
 
 
--(InputSource *)makeInput
+-(NSObject<CSInputSourceProtocol> *)makeInput
 {
     if (!self.inputData)
     {
@@ -96,12 +96,12 @@
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:iData];
     
     
-    InputSource *iSrc = [unarchiver decodeObjectForKey:@"root"];
+    NSObject<CSInputSourceProtocol> *iSrc = [unarchiver decodeObjectForKey:@"root"];
     [unarchiver finishDecoding];
     return iSrc;
 }
 
--(void)makeDataFromInput:(InputSource *)input
+-(void)makeDataFromInput:(NSObject<CSInputSourceProtocol> *)input
 {
     NSMutableData *saveData = [NSMutableData data];
     NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:saveData];

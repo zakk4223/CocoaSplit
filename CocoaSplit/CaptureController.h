@@ -297,7 +297,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 
--(void)addInputToLibrary:(InputSource *)source;
+-(void)addInputToLibrary:(NSObject<CSInputSourceProtocol> *)source;
 - (IBAction)openLibraryWindow:(id) sender;
 
 - (IBAction)configureIRCompressor:(id)sender;

@@ -319,7 +319,7 @@
     self.inputLibraryController = newController;
 }
 
--(void)addInputToLibrary:(InputSource *)source
+-(void)addInputToLibrary:(NSObject<CSInputSourceProtocol> *)source
 {
     CSInputLibraryItem *newItem = [[CSInputLibraryItem alloc] initWithInput:source];
     

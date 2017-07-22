@@ -71,6 +71,8 @@
 {
     [tableView beginUpdates];
     NSArray *classes = @[[CSInputLibraryItem class]];
+
+    __block bool trySources = YES;
     
     [info enumerateDraggingItemsWithOptions:0 forView:tableView classes:classes searchOptions:@{} usingBlock:^(NSDraggingItem * _Nonnull draggingItem, NSInteger idx, BOOL * _Nonnull stop) {
         NSLog(@"DRAG %@", draggingItem);
@@ -83,11 +85,33 @@
             newIdx -= idx+1;
         }
         
+        trySources = NO;
+        
         [self.controller.inputLibrary removeObjectAtIndex:oldIdx];
         [self.controller.inputLibrary insertObject:dragItem atIndex:newIdx];
         [self.tableView moveRowAtIndex:oldIdx toIndex:newIdx];
     }];
+    
     [tableView endUpdates];
+    
+    if (trySources)
+    {
+        NSPasteboard *pb = [info draggingPasteboard];
+        for (NSPasteboardItem *item in pb.pasteboardItems)
+        {
+            NSObject<CSInputSourceProtocol> *itemSrc = [[CaptureController sharedCaptureController] inputSourceForPasteboardItem:item];
+            if (itemSrc)
+            {
+                //CSInputLibraryItem *libItem = [[CSInputLibraryItem alloc] initWithInput:itemSrc];
+                [[CaptureController sharedCaptureController] addInputToLibrary:itemSrc];
+               // [self.controller.inputLibrary insertObject:libItem atIndex:row];
+                
+                
+            }
+        }
+        
+    }
+
     return YES;
 }
 

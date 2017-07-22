@@ -52,6 +52,11 @@
 
 
 
+-(NSString *)label
+{
+    return @"Audio";
+}
+
 
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
