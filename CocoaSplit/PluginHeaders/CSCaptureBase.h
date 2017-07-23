@@ -129,6 +129,8 @@ typedef enum frame_render_behavior_t {
 
 +(bool)canCreateSourceFromPasteboardItem:(NSPasteboardItem *)item;
 +(NSObject <CSCaptureSourceProtocol> *)createSourceFromPasteboardItem;
+-(void)willExport;
+-(void)didExport;
 
 
 @end

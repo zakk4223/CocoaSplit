@@ -595,6 +595,15 @@
 }
 
 
+-(void) saveSourceListForExport
+{
+    _doingLayoutExport = YES;
+    [self saveSourceList];
+    _doingLayoutExport = NO;
+}
+
+
+
 -(void) saveSourceList
 {
     
@@ -615,9 +624,29 @@
         }
     }
     
+    if ([object conformsToProtocol:@protocol(CSCaptureSourceProtocol)])
+    {
+        NSObject<CSCaptureSourceProtocol> *capSrc = (NSObject<CSCaptureSourceProtocol> *)object;
+        if (_doingLayoutExport)
+        {
+            [capSrc willExport];
+        }
+    }
+    
     return object;
 }
 
+-(void)archiver:(NSKeyedArchiver *)archiver didEncodeObject:(id)object
+{
+    if ([object conformsToProtocol:@protocol(CSCaptureSourceProtocol)])
+    {
+        NSObject<CSCaptureSourceProtocol> *capSrc = (NSObject<CSCaptureSourceProtocol> *)object;
+        if (_doingLayoutExport)
+        {
+            [capSrc didExport];
+        }
+    }
+}
 
 -(NSDictionary *)diffSourceListWithData:(NSData *)useData
 {

@@ -22,9 +22,9 @@
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:self.imagePath forKey:@"imagePath"];
-    if (self.imagePath)
+    if (_imageData)
     {
-        //[aCoder encodeObject:_imageData forKey:@"imageData"];
+        [aCoder encodeObject:_imageData forKey:@"imageData"];
     }
 }
 
@@ -34,8 +34,11 @@
 {
     if (self = [self init])
     {
-        //_imageData = [aDecoder decodeObjectForKey:@"imageData"];
-        
+        if ([aDecoder containsValueForKey:@"imageData"])
+        {
+            _imageData = [aDecoder decodeObjectForKey:@"imageData"];
+            _wasLoadedFromData = YES;
+        }
         self.imagePath = [aDecoder decodeObjectForKey:@"imagePath"];
     }
     
@@ -48,13 +51,30 @@
 {
     if (self = [super init])
     {
-        
+        _wasLoadedFromData = NO;
         self.needsSourceSelection = NO;
         self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
      }
     
     return self;
     
+}
+
+-(void)willExport
+{
+    if (self.imagePath && !_wasLoadedFromData)
+    {
+        NSURL *fileURL = [NSURL fileURLWithPath:self.imagePath];
+        _imageData = [NSData dataWithContentsOfURL:fileURL];
+    }
+}
+
+-(void)didExport
+{
+    if (!_wasLoadedFromData)
+    {
+        _imageData = nil;
+    }
 }
 
 
@@ -196,19 +216,20 @@
 
     NSURL *fileURL = [NSURL fileURLWithPath:imagePath];
     
+    CGImageSourceRef imgSrc;
+    
+    if (_imageData)
+    {
+        imgSrc = CGImageSourceCreateWithData((__bridge CFDataRef)_imageData, (__bridge CFDictionaryRef)dict);
+    } else {
+        imgSrc = CGImageSourceCreateWithURL((__bridge CFURLRef)fileURL, (__bridge CFDictionaryRef)dict);
+    }
     /*
     if (!_imageData)
     {
         _imageData = [NSData dataWithContentsOfURL:fileURL];
     }
     */
-    
-    CGImageSourceRef imgSrc = CGImageSourceCreateWithURL((__bridge CFURLRef)fileURL, (__bridge CFDictionaryRef)dict);
-    
-    //CGImageSourceRef imgSrc = CGImageSourceCreateWithData((__bridge CFDataRef)_imageData, (__bridge CFDictionaryRef)dict);
-    
-    
-
     if (_imageSource)
     {
         CFRelease(_imageSource);

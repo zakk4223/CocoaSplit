@@ -23,6 +23,8 @@
     CAKeyframeAnimation *_animation;
     CGImageRef _singleImage;
     NSData *_imageData;
+    bool _wasLoadedFromData;
+    
     
     
 }

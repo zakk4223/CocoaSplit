@@ -319,14 +319,20 @@
     self.inputLibraryController = newController;
 }
 
--(void)addInputToLibrary:(NSObject<CSInputSourceProtocol> *)source
+-(void)addInputToLibrary:(NSObject<CSInputSourceProtocol> *)source atIndex:(NSUInteger)idx
 {
     CSInputLibraryItem *newItem = [[CSInputLibraryItem alloc] initWithInput:source];
     
+    
+    [self insertObject:newItem inInputLibraryAtIndex:idx];
+
+}
+
+-(void)addInputToLibrary:(NSObject<CSInputSourceProtocol> *)source
+{
+    
     NSUInteger cIdx = self.inputLibrary.count;
-    
-    [self insertObject:newItem inInputLibraryAtIndex:cIdx];
-    
+    [self addInputToLibrary:source atIndex:cIdx];
 }
 
 
@@ -872,11 +878,17 @@
     if (layout == self.selectedLayout)
     {
         useLayout = self.livePreviewView.sourceLayout;
-        [useLayout saveSourceList];
+        [useLayout saveSourceListForExport];
     } else if (layout == self.stagingLayout) {
         useLayout = self.stagingPreviewView.sourceLayout;
-        [useLayout saveSourceList];
+        [useLayout saveSourceListForExport];
 
+    } else {
+        //It's not an active source layout, so restore the source list, and re-save it. This way any sources that do special export saving will work properly
+        SourceLayout *useCopy = [useLayout copy];
+        [useCopy restoreSourceList:nil];
+        [useCopy saveSourceListForExport];
+        useLayout = useCopy;
     }
 
     [panel beginWithCompletionHandler:^(NSInteger result) {

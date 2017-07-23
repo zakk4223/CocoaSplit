@@ -80,6 +80,7 @@
 -(InputSource *)findSource:(NSPoint)forPoint withExtra:(float)withExtra deepParent:(bool)deepParent;
 -(NSArray *)sourceListOrdered;
 -(void) saveSourceList;
+-(void) saveSourceListForExport;
 -(void)restoreSourceList:(NSData *)withData;
 -(NSData *)makeSaveData;
 
@@ -134,6 +135,7 @@
     bool _noSceneTransactions;
     NSMutableArray *_topLevelSourceArray;
     bool _skipRefCounting;
+    bool _doingLayoutExport;
     
     
     
