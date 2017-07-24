@@ -215,6 +215,7 @@
 		34EA824E1D3CBFCA00928A06 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34EA824D1D3CBFCA00928A06 /* WebKit.framework */; };
 		34EAFB6F1A1A137600E12FBD /* CSMeterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 34EAFB6E1A1A137600E12FBD /* CSMeterCell.m */; };
 		34EAFB801A1BA86800E12FBD /* CoreMediaIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34EAFB7F1A1BA86800E12FBD /* CoreMediaIO.framework */; };
+		34EB705B1F24F65900F61E6A /* CAMultiAudioFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 34EB705A1F24F65900F61E6A /* CAMultiAudioFile.m */; };
 		34ED8C491B07371C002C0674 /* MIKMIDIChannelVoiceCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BDD1B07371B002C0674 /* MIKMIDIChannelVoiceCommand.m */; };
 		34ED8C4B1B07371C002C0674 /* MIKMIDIClientDestinationEndpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BDF1B07371B002C0674 /* MIKMIDIClientDestinationEndpoint.m */; };
 		34ED8C4D1B07371C002C0674 /* MIKMIDIClientSourceEndpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8BE11B07371B002C0674 /* MIKMIDIClientSourceEndpoint.m */; };
@@ -900,6 +901,8 @@
 		34EAFB6D1A1A137600E12FBD /* CSMeterCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSMeterCell.h; path = Interface/CSMeterCell.h; sourceTree = "<group>"; };
 		34EAFB6E1A1A137600E12FBD /* CSMeterCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSMeterCell.m; path = Interface/CSMeterCell.m; sourceTree = "<group>"; };
 		34EAFB7F1A1BA86800E12FBD /* CoreMediaIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMediaIO.framework; path = System/Library/Frameworks/CoreMediaIO.framework; sourceTree = SDKROOT; };
+		34EB70591F24F65900F61E6A /* CAMultiAudioFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioFile.h; path = CAMultiAudio/CAMultiAudioFile.h; sourceTree = "<group>"; };
+		34EB705A1F24F65900F61E6A /* CAMultiAudioFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioFile.m; path = CAMultiAudio/CAMultiAudioFile.m; sourceTree = "<group>"; };
 		34ED8BDA1B07371B002C0674 /* MIKMIDI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MIKMIDI.h; sourceTree = "<group>"; };
 		34ED8BDB1B07371B002C0674 /* MIKMIDIChannelVoiceCommand_SubclassMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MIKMIDIChannelVoiceCommand_SubclassMethods.h; sourceTree = "<group>"; };
 		34ED8BDC1B07371B002C0674 /* MIKMIDIChannelVoiceCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MIKMIDIChannelVoiceCommand.h; sourceTree = "<group>"; };
@@ -1572,6 +1575,8 @@
 				34BD1E4C1B1F1A2D0015CBEC /* CAMultiAudioDownmixer.m */,
 				34C0E9F81EABF92300B30DB4 /* CAMultiAudioDelay.h */,
 				34C0E9F91EABF92300B30DB4 /* CAMultiAudioDelay.m */,
+				34EB70591F24F65900F61E6A /* CAMultiAudioFile.h */,
+				34EB705A1F24F65900F61E6A /* CAMultiAudioFile.m */,
 			);
 			name = CAMultiAudio;
 			sourceTree = "<group>";
@@ -2501,6 +2506,7 @@
 				34ED8CA51B07371C002C0674 /* MIKMIDISystemExclusiveCommand.m in Sources */,
 				3473D29A1D4C3D0E00842EEE /* CSAddOutputPopupViewController.m in Sources */,
 				34ED8C5D1B07371C002C0674 /* MIKMIDIEndpoint.m in Sources */,
+				34EB705B1F24F65900F61E6A /* CAMultiAudioFile.m in Sources */,
 				34ED8C5F1B07371C002C0674 /* MIKMIDIEndpointSynthesizer.m in Sources */,
 				34ED8CA11B07371C002C0674 /* MIKMIDISequencer.m in Sources */,
 				34E162E81E987420005157ED /* CSScriptWindowViewController.m in Sources */,

@@ -1761,7 +1761,7 @@
     [self.layoutCollectionView registerForDraggedTypes:@[@"CS_LAYOUT_DRAG"]];
     //[self.inputOutlineView registerForDraggedTypes:@[@"cocoasplit.input.item", @"cocoasplit.audio.item"]];
     [self.inputOutlineView registerForDraggedTypes:@[NSSoundPboardType,NSFilenamesPboardType, NSFilesPromisePboardType, NSFileContentsPboardType, @"cocoasplit.input.item", @"cocoasplit.audio.item"]];
-    [self.audioTableView registerForDraggedTypes:@[@"cocoasplit.audio.item"]];
+    [self.audioTableView registerForDraggedTypes:@[@"cocoasplit.audio.item", NSFilenamesPboardType]];
 
     
 
@@ -2902,6 +2902,54 @@
     return pItem;
 }
 */
+
+-(NSDragOperation)tableView:(NSTableView *)tableView validateDrop:(id<NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)dropOperation
+{
+    NSPasteboard *pb = [info draggingPasteboard];
+    if ([pb.types containsObject:NSFilenamesPboardType])
+    {
+        return NSDragOperationCopy;
+    }
+    
+    return NSDragOperationNone;
+}
+
+-(BOOL)tableView:(NSTableView *)tableView acceptDrop:(id<NSDraggingInfo>)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)dropOperation
+{
+    NSPasteboard *pb = [info draggingPasteboard];
+
+    bool retVal = NO;
+    for(NSPasteboardItem *item in pb.pasteboardItems)
+    {
+        
+        if ([item.types containsObject:@"public.file-url"])
+        {
+            NSString *dragPath = [item stringForType:@"public.file-url"];
+            if (dragPath)
+            {
+                NSURL *fileURL = [NSURL URLWithString:dragPath];
+                NSString *dType;
+                [fileURL getResourceValue:&dType forKey:NSURLTypeIdentifierKey error:nil];
+                if (dType)
+                {
+                    NSLog(@"DRAGGED TYPE %@", dType);
+                    if ([AUDIO_FILE_UTIS containsObject:dType])
+                    {
+                        NSString *realPath = [fileURL path];
+
+                        [self.multiAudioEngine createFileInput:realPath];
+                        retVal = YES;
+                    }
+                }
+            }
+        }
+        
+    }
+
+    return retVal;
+}
+
+
 -(NSDragOperation)outlineView:(NSOutlineView *)outlineView validateDrop:(id<NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(NSInteger)index
 {
     

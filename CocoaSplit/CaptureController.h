@@ -47,6 +47,8 @@
 #import "JavaScriptCore/JavaScriptCore.h"
 
 
+#define AUDIO_FILE_UTIS @[@"public.mp3", @"public.aac-audio", @"public.aifc-audio", @"com.microsoft.waveform-audio", @"org.videolan.flac"]
+
 @class FFMpegTask;
 @protocol VideoCompressor;
 @class OutputDestination;

@@ -13,6 +13,8 @@
 #import "CAMultiAudioAVCapturePlayer.h"
 #import "CAMultiAudioMixer.h"
 #import "CAMultiAudioDevice.h"
+#import "CAMultiAudioFile.h"
+
 
 
 

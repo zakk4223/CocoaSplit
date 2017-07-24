@@ -26,6 +26,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
     self.audioInputs = [NSMutableArray array];
     self.pcmInputs = [NSMutableArray array];
+    self.fileInputs = [NSMutableArray array];
     self.validSamplerates = @[@44100, @48000];
     self.sampleRate = 44100;
     self.audioOutputs = [[CAMultiAudioDevice allDevices] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"hasOutput == YES"]];
@@ -386,6 +387,16 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         }
 
     }
+    
+    for (CAMultiAudioFile *node in self.fileInputs)
+    {
+        if (node.converterNode)
+        {
+            [self removeInput:node.converterNode];
+        }
+        
+    }
+
     /*
     for (CAMultiAudioNode *node in self.audioInputs)
     {
@@ -407,6 +418,12 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     {
         [self attachPCMInput:node];
     }
+    
+    for (CAMultiAudioFile *node in self.fileInputs)
+    {
+        [self attachFileInput:node];
+    }
+
     
 }
 
@@ -448,6 +465,18 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     }
     
     
+}
+
+
+-(CAMultiAudioFile *)createFileInput:(NSString *)filePath
+{
+    CAMultiAudioFile *newInput = [[CAMultiAudioFile alloc] initWithPath:filePath];
+    
+    [self attachFileInput:newInput];
+    
+    //[newInput play];
+    [self.fileInputs addObject:newInput];
+    return newInput;
 }
 
 
@@ -496,6 +525,21 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 }
 
 
+-(void)attachFileInput:(CAMultiAudioFile *)input
+{
+    CAMultiAudioConverter *newConverter = [[CAMultiAudioConverter alloc] initWithInputFormat:input.outputFormat];
+    newConverter.nodeUID = input.nodeUID; //Not so unique, lol
+    
+    newConverter.sourceNode = input;
+    input.converterNode = newConverter;
+    
+    [self.graph addNode:input];
+    [self attachInput:newConverter];
+    
+    [self.graph connectNode:input toNode:newConverter sampleRate:input.outputFormat->mSampleRate];
+}
+
+
 -(void)attachPCMInput:(CAMultiAudioPCMPlayer *)input
 {
     CAMultiAudioConverter *newConverter = [[CAMultiAudioConverter alloc] initWithInputFormat:input.inputFormat];
@@ -510,6 +554,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     [self.graph connectNode:input toNode:newConverter sampleRate:input.inputFormat->mSampleRate];
 
 }
+
+
 -(void)reattachInput:(CAMultiAudioNode *)input
 {
     

@@ -34,6 +34,7 @@
 @property (strong) CAMultiAudioDefaultOutput *defaultOutputNode;
 @property (strong) NSMutableArray *audioInputs;
 @property (strong) NSMutableArray *pcmInputs;
+@property (strong) NSMutableArray *fileInputs;
 
 @property (strong) CAMultiAudioMixer *encodeMixer;
 @property (strong) CSAacEncoder *encoder;
@@ -48,6 +49,7 @@
 
 
 -(CAMultiAudioPCMPlayer *)createPCMInput:(NSString *)uniqueID withFormat:(const AudioStreamBasicDescription *)withFormat;
+-(CAMultiAudioFile *)createFileInput:(NSString *)filePath;
 
 
 -(void)removePCMInput:(CAMultiAudioPCMPlayer *)toRemove;
