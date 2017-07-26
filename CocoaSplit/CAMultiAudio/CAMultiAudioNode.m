@@ -10,6 +10,10 @@
 #import "CAMultiAudioMixingProtocol.h"
 #import "CAMultiAudioMatrixMixerWindowController.h"
 #import "CAMultiAudioDelay.h"
+#include <AudioUnit/AUCocoaUIView.h>
+#include <CoreAudioKit/CoreAudioKit.h>
+#include "CaptureController.h"
+
 
 @implementation CAMultiAudioVolumeAnimation
 
@@ -44,6 +48,45 @@
     
     return self;
 }
+
+-(NSView *)audioUnitNSView
+{
+    UInt32 cuiSize;
+    Boolean isWriteable;
+    
+    NSView *retView = nil;
+    
+    OSStatus res;
+    res = AudioUnitGetPropertyInfo(self.audioUnit, kAudioUnitProperty_CocoaUI, kAudioUnitScope_Global, 0, &cuiSize, &isWriteable);
+    
+    if (res == noErr)
+    {
+        AudioUnitCocoaViewInfo *AUViewInfo = malloc(cuiSize);
+        res = AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_CocoaUI, kAudioUnitScope_Global, 0, AUViewInfo, &cuiSize);
+        if (res == noErr && AUViewInfo)
+        {
+            CFURLRef auBundlePath = AUViewInfo->mCocoaAUViewBundleLocation;
+            CFStringRef factoryName = AUViewInfo->mCocoaAUViewClass[0];
+            NSBundle *auBundle = [NSBundle bundleWithURL:(__bridge NSURL * _Nonnull)(auBundlePath)];
+            if (auBundle)
+            {
+                Class factoryClass = [auBundle classNamed:(__bridge NSString * _Nonnull)(factoryName)];
+                id<AUCocoaUIBase> factoryInstance = [[factoryClass alloc] init];
+                retView = [factoryInstance uiViewForAudioUnit:self.audioUnit withSize:NSZeroSize];
+            }
+        }
+        free(AUViewInfo);
+    }
+    if (!retView)
+    {
+        NSLog(@"NO GOOD VIEW");
+        AUGenericView *genView = [[AUGenericView alloc] initWithAudioUnit:self.audioUnit];
+        genView.showsExpertParameters = YES;
+        retView = genView;
+    }
+    return retView;
+}
+
 
 
 
@@ -215,7 +258,7 @@
 {
     if (self.downMixer)
     {
-        self.mixerWindow = [[CAMultiAudioMatrixMixerWindowController alloc] initWithAudioMixer:self.downMixer];
+        self.mixerWindow = [[CAMultiAudioMatrixMixerWindowController alloc] initWithAudioMixer:self];
         [self.mixerWindow showWindow:nil];
         self.mixerWindow.window.title = self.name;
     }

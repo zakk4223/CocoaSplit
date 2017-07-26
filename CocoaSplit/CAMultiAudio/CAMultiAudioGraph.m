@@ -114,6 +114,13 @@
 
 -(bool)addNode:(CAMultiAudioNode *)newNode
 {
+    
+    if ([self.nodeList containsObject:newNode])
+    {
+        return YES;
+    }
+    
+    
     if ([newNode createNode:_graphInst])
     {
         

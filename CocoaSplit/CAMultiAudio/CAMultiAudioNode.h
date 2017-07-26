@@ -18,6 +18,7 @@
 @class CAMultiAudioMatrixMixerWindowController;
 @class CAMultiAudioDelay;
 @class CAMultiAudioNode;
+@class CAMultiAudioEqualizer;
 
 @interface CAMultiAudioVolumeAnimation : NSAnimation
 
@@ -37,6 +38,8 @@
 @property (strong) NSString *name;
 @property (strong) NSString *nodeUID;
 @property (strong) CAMultiAudioDownmixer *downMixer;
+@property (strong) CAMultiAudioEqualizer *equalizer;
+
 @property (strong) NSMutableArray *delayNodes;
 @property (strong) NSColor *nameColor;
 @property (assign) float volume;
@@ -64,6 +67,8 @@
 
 -(void)openMixerWindow:(id)sender;
 -(void)setVolumeAnimated:(float)volume withDuration:(float)duration;
+-(NSView *)audioUnitNSView;
+
 
 @end
 
@@ -84,9 +89,11 @@
 @property (assign) UInt32 connectedToBus;
 @property (strong) NSString *name;
 @property (strong) NSString *nodeUID;
+@property (strong) CAMultiAudioNode *downstreamNode;
 
 @property (strong) CAMultiAudioDownmixer *downMixer;
 @property (strong) NSMutableArray *delayNodes;
+@property (strong) CAMultiAudioEqualizer *equalizer;
 
 
 //There really has to be a better way to do something like this

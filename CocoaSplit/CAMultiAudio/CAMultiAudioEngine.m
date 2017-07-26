@@ -9,6 +9,7 @@
 #import "CAMultiAudioEngine.h"
 #import "CAMultiAudioDownmixer.h"
 #import "CAMultiAudioDelay.h"
+#import "CAMultiAudioEqualizer.h"
 
 
 OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList *ioData );
@@ -532,9 +533,11 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     newConverter.sourceNode = input;
     input.converterNode = newConverter;
+    input.downstreamNode = newConverter;
     
     [self.graph addNode:input];
-    [self attachInput:newConverter];
+
+    [self attachInput:input];
     
     [self.graph connectNode:input toNode:newConverter sampleRate:input.outputFormat->mSampleRate];
 }
@@ -547,9 +550,10 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     newConverter.sourceNode = input;
     input.converterNode = newConverter;
+    input.downstreamNode = newConverter;
     
     [self.graph addNode:input];
-    [self attachInput:newConverter];
+    [self attachInput:input];
     
     [self.graph connectNode:input toNode:newConverter sampleRate:input.inputFormat->mSampleRate];
 
@@ -561,11 +565,16 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     
     [self.graph addNode:input];
-    
+    CAMultiAudioEqualizer *eq = [[CAMultiAudioEqualizer alloc] init];
+
     CAMultiAudioDownmixer *dmix = [[CAMultiAudioDownmixer alloc] initWithInputChannels:input.channelCount];
     [self.graph addNode:dmix];
-    
-    [self.graph connectNode:dmix toNode:self.encodeMixer];
+    [self.graph addNode:eq];
+    [self.graph connectNode:eq toNode:self.encodeMixer];
+    [self.graph connectNode:dmix toNode:eq];
+    input.equalizer = eq;
+
+    //[self.graph connectNode:dmix toNode:self.encodeMixer];
     
     CAMultiAudioNode *connectNode = dmix;
     CAMultiAudioDelay *delayNode = nil;
@@ -589,13 +598,22 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 -(void)attachInput:(CAMultiAudioNode *)input
 {
     
+    CAMultiAudioNode *graphInput = input;
+    if (graphInput.downstreamNode)
+    {
+        graphInput = graphInput.downstreamNode;
+    }
     
-    [self.graph addNode:input];
+    [self.graph addNode:graphInput];
+    
+    CAMultiAudioEqualizer *eq = [[CAMultiAudioEqualizer alloc] init];
     
     CAMultiAudioDownmixer *dmix = [[CAMultiAudioDownmixer alloc] initWithInputChannels:input.channelCount];
     [self.graph addNode:dmix];
-    
-    [self.graph connectNode:dmix toNode:self.encodeMixer];
+    [self.graph addNode:eq];
+    input.equalizer = eq;
+    [self.graph connectNode:eq toNode:self.encodeMixer];
+    [self.graph connectNode:dmix toNode:eq];
 
     CAMultiAudioNode *connectNode = dmix;
     CAMultiAudioDelay *delayNode = nil;
@@ -610,7 +628,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     }
     
     
-    [self.graph connectNode:input toNode:connectNode];
+    [self.graph connectNode:graphInput toNode:connectNode];
     
     input.downMixer = dmix;
     

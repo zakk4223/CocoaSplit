@@ -30,6 +30,10 @@
     if (self = [self initWithWindowNibName:@"CAMultiAudioMatrixMixerWindowController"])
     {
         self.audioNode = node;
+        //NSView *audioView = [node audioUnitNSView];
+       // NSLog(@"AUDIO VIEW SIZE %@", NSStringFromRect(audioView.frame));
+        //self.window.contentView = audioView;
+        
     }
     
     return self;
@@ -41,7 +45,6 @@
     
     return self.audioNode.inputChannelCount;
 }
-
 
 -(NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
@@ -100,5 +103,4 @@
     [self.matrixTable reloadData];
     
 }
-
 @end

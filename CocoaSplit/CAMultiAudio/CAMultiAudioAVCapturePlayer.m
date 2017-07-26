@@ -7,6 +7,7 @@
 //
 
 #import "CAMultiAudioAVCapturePlayer.h"
+#import "CAMultiAudioMatrixMixerWindowController.h"
 
 @implementation CAMultiAudioAVCapturePlayer
 
