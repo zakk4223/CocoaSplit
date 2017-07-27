@@ -13,6 +13,8 @@
 @synthesize outputFormat = _outputFormat;
 @synthesize currentTime = _currentTime;
 
+
+
 -(instancetype)initWithPath:(NSString *)path
 {
     if (self = [self init])
@@ -41,6 +43,29 @@
     
     return self;
 }
+
+-(void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:self.filePath forKey:@"filePath"];
+    [aCoder encodeFloat:self.currentTime forKey:@"currentTime"];
+    [aCoder encodeFloat:self.currentTime*_outputSampleRate forKey:@"currentSampletime"];
+}
+
+
+-(instancetype) initWithCoder:(NSCoder *)aDecoder
+{
+    NSString *filePath = [aDecoder decodeObjectForKey:@"filePath"];
+
+    if (self = [self initWithPath:filePath])
+    {
+        self.currentTime = [aDecoder decodeFloatForKey:@"currentTime"];
+        Float64 sampleTime = [aDecoder decodeFloatForKey:@"currentSampletime"];
+        _lastStartFrame = sampleTime;
+    }
+    
+    return self;
+}
+
 
 -(void)setVolume:(float)volume
 {

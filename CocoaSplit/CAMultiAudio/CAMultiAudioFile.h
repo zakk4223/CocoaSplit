@@ -8,7 +8,7 @@
 
 #import "CAMultiAudioNode.h"
 
-@interface CAMultiAudioFile : CAMultiAudioNode
+@interface CAMultiAudioFile : CAMultiAudioNode <NSCoding>
 {
     AudioFileID _audioFile;
     Float64 _outputSampleRate;

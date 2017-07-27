@@ -111,6 +111,14 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
             self.previewMixer.muted = [aDecoder decodeBoolForKey:@"previewMuted"];
         }
         
+        if ([aDecoder containsValueForKey:@"fileInputs"])
+        {
+            self.fileInputs = [aDecoder decodeObjectForKey:@"fileInputs"];
+            for(CAMultiAudioFile *fileInput in self.fileInputs)
+            {
+                [self attachFileInput:fileInput];
+            }
+        }
     }
     
     return self;
@@ -148,7 +156,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     [aCoder encodeObject:_inputSettings forKey:@"inputSettings"];
     
-    
+    [aCoder encodeObject:self.fileInputs forKey:@"fileInputs"];
     
 }
 
