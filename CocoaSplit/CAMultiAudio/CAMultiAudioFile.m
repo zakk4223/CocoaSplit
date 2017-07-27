@@ -141,6 +141,15 @@
     [self stop];
 }
 
+-(void)rewind
+{
+    [self stop];
+    _lastStartFrame = 0;
+    [self createAudioPlayer];
+    [self play];
+}
+
+
 -(void)createAudioPlayer
 {
     
@@ -183,8 +192,14 @@
 
 -(void)stop
 {
+
+    AudioTimeStamp currentTime;
+
+    UInt32 timesize = sizeof(currentTime);
+    AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_CurrentPlayTime, kAudioUnitScope_Global, 0, &currentTime, &timesize);
     AudioUnitReset(self.audioUnit, kAudioUnitScope_Global, 0);
     self.playing = NO;
+    _lastStartFrame = currentTime.mSampleTime + _lastStartFrame;
 }
 
 

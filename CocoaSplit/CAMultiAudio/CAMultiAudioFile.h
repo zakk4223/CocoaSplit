@@ -28,5 +28,7 @@
 -(instancetype)initWithPath:(NSString *)path;
 -(void)play;
 -(void)stop;
+-(void)rewind;
+
 
 @end
