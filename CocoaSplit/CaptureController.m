@@ -2867,7 +2867,6 @@
 
 
 
-
 -(void)outlineView:(NSOutlineView *)outlineView didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row
 {
     if (outlineView == self.inputOutlineView)
@@ -3231,6 +3230,11 @@
 }
 
 
+
+-(void)removeFileAudio:(CAMultiAudioFile *)toDelete
+{
+    [self.multiAudioEngine removeFileInput:toDelete];
+}
 
 
 -(void)deleteSource:(InputSource *)delSource

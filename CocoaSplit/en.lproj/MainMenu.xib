@@ -742,7 +742,7 @@
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ndq-in-6iu">
-                                                                            <rect key="frame" x="0.0" y="39" width="186" height="11"/>
+                                                                            <rect key="frame" x="0.0" y="39" width="161" height="11"/>
                                                                             <textFieldCell key="cell" controlSize="mini" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="z8v-Gr-nRa">
                                                                                 <font key="font" metaFont="miniSystem"/>
                                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -757,7 +757,7 @@
                                                                             <subviews>
                                                                                 <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bws-uj-WDw">
                                                                                     <rect key="frame" x="0.0" y="-1" width="156" height="15"/>
-                                                                                    <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="1" doubleValue="0.41066209532374098" tickMarkPosition="above" sliderType="linear" id="eIo-8e-W2o" customClass="CSNobarSliderCell"/>
+                                                                                    <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="1" doubleValue="0.66955310314685312" tickMarkPosition="above" sliderType="linear" id="eIo-8e-W2o" customClass="CSNobarSliderCell"/>
                                                                                     <connections>
                                                                                         <binding destination="Z3K-p0-4ZE" name="value" keyPath="objectValue.volume" id="dX1-g6-4Rx"/>
                                                                                     </connections>
@@ -841,29 +841,52 @@
                                                                             </constraints>
                                                                             <sliderCell key="cell" controlSize="mini" continuous="YES" state="on" alignment="left" maxValue="100" doubleValue="85.984108664772734" tickMarkPosition="above" sliderType="linear" id="jVa-Ps-9BL"/>
                                                                             <connections>
-                                                                                <binding destination="Z3K-p0-4ZE" name="maxValue" keyPath="objectValue.duration" id="uiS-i5-nJm"/>
                                                                                 <binding destination="Z3K-p0-4ZE" name="value" keyPath="objectValue.currentTime" previousBinding="uiS-i5-nJm" id="BwR-fy-glh"/>
+                                                                                <binding destination="Z3K-p0-4ZE" name="maxValue" keyPath="objectValue.duration" id="uiS-i5-nJm"/>
                                                                             </connections>
                                                                         </slider>
+                                                                        <button translatesAutoresizingMaskIntoConstraints="NO" id="uIR-eO-seb">
+                                                                            <rect key="frame" x="170" y="39" width="10" height="10"/>
+                                                                            <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSStopProgressFreestandingTemplate" imagePosition="only" alignment="center" controlSize="small" state="on" imageScaling="proportionallyUpOrDown" inset="2" id="U6e-pY-pZM">
+                                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                                <font key="font" metaFont="smallSystem"/>
+                                                                            </buttonCell>
+                                                                            <connections>
+                                                                                <binding destination="Z3K-p0-4ZE" name="argument" keyPath="objectValue" id="o8Q-Ma-alP">
+                                                                                    <dictionary key="options">
+                                                                                        <string key="NSSelectorName">removeFileAudio:</string>
+                                                                                    </dictionary>
+                                                                                </binding>
+                                                                                <binding destination="816" name="target" keyPath="self" previousBinding="o8Q-Ma-alP" id="csg-FA-FKe">
+                                                                                    <dictionary key="options">
+                                                                                        <string key="NSSelectorName">removeFileAudio:</string>
+                                                                                    </dictionary>
+                                                                                </binding>
+                                                                            </connections>
+                                                                        </button>
                                                                     </subviews>
                                                                     <constraints>
+                                                                        <constraint firstItem="jiA-sY-AFw" firstAttribute="leading" secondItem="Ndq-in-6iu" secondAttribute="trailing" constant="8" symbolic="YES" id="10O-DN-PJn"/>
                                                                         <constraint firstItem="S2y-EI-dtu" firstAttribute="baseline" secondItem="gOR-Q4-Q30" secondAttribute="baseline" id="1zL-Om-Wsj"/>
                                                                         <constraint firstItem="RB5-mf-9I2" firstAttribute="leading" secondItem="Z3K-p0-4ZE" secondAttribute="leading" constant="3" id="4QY-2D-BMg"/>
+                                                                        <constraint firstItem="RB5-mf-9I2" firstAttribute="top" secondItem="Ndq-in-6iu" secondAttribute="bottom" constant="1" id="4oZ-pK-wZ2"/>
                                                                         <constraint firstItem="jiA-sY-AFw" firstAttribute="leading" secondItem="RB5-mf-9I2" secondAttribute="trailing" constant="8" symbolic="YES" id="7fI-Xh-pK4"/>
                                                                         <constraint firstItem="jiA-sY-AFw" firstAttribute="leading" secondItem="RB5-mf-9I2" secondAttribute="trailing" constant="8" id="91J-bU-xkP"/>
-                                                                        <constraint firstItem="Ndq-in-6iu" firstAttribute="top" secondItem="Z3K-p0-4ZE" secondAttribute="top" id="Qg6-uO-Gcr"/>
-                                                                        <constraint firstItem="jiA-sY-AFw" firstAttribute="trailing" secondItem="Ndq-in-6iu" secondAttribute="trailing" id="RNe-JS-EWE"/>
+                                                                        <constraint firstItem="Ndq-in-6iu" firstAttribute="centerX" secondItem="RB5-mf-9I2" secondAttribute="centerX" id="RYj-0M-ahv"/>
+                                                                        <constraint firstAttribute="trailing" secondItem="Ndq-in-6iu" secondAttribute="trailing" constant="28" id="WpC-LD-tld"/>
                                                                         <constraint firstItem="S2y-EI-dtu" firstAttribute="leading" secondItem="RB5-mf-9I2" secondAttribute="leading" id="XVL-0Y-Q19"/>
                                                                         <constraint firstItem="gOR-Q4-Q30" firstAttribute="trailing" secondItem="jiA-sY-AFw" secondAttribute="trailing" id="Zr8-KN-j8E"/>
                                                                         <constraint firstItem="gOR-Q4-Q30" firstAttribute="leading" secondItem="5Zd-4K-Of7" secondAttribute="trailing" constant="8" symbolic="YES" id="a55-MG-ki4"/>
+                                                                        <constraint firstItem="uIR-eO-seb" firstAttribute="centerX" secondItem="jiA-sY-AFw" secondAttribute="centerX" id="bnZ-42-RVh"/>
                                                                         <constraint firstItem="jiA-sY-AFw" firstAttribute="top" secondItem="Z3K-p0-4ZE" secondAttribute="top" constant="10" id="ees-Bb-6sk"/>
-                                                                        <constraint firstAttribute="trailing" secondItem="Ndq-in-6iu" secondAttribute="trailing" constant="3" id="f4D-k2-qgO"/>
-                                                                        <constraint firstItem="RB5-mf-9I2" firstAttribute="top" secondItem="Ndq-in-6iu" secondAttribute="bottom" constant="1" id="fRR-Gh-dXA"/>
+                                                                        <constraint firstItem="Ndq-in-6iu" firstAttribute="top" secondItem="Z3K-p0-4ZE" secondAttribute="top" id="fZ9-tZ-FjL"/>
+                                                                        <constraint firstItem="uIR-eO-seb" firstAttribute="centerY" secondItem="Ndq-in-6iu" secondAttribute="centerY" id="gMq-wQ-zKu"/>
                                                                         <constraint firstItem="jiA-sY-AFw" firstAttribute="centerY" secondItem="RB5-mf-9I2" secondAttribute="centerY" id="gjN-RM-WSz"/>
+                                                                        <constraint firstItem="uIR-eO-seb" firstAttribute="bottom" secondItem="jiA-sY-AFw" secondAttribute="top" constant="1" id="iCu-8B-3mB"/>
                                                                         <constraint firstItem="5Zd-4K-Of7" firstAttribute="centerY" secondItem="S2y-EI-dtu" secondAttribute="centerY" id="k6L-eI-oNq"/>
                                                                         <constraint firstItem="5Zd-4K-Of7" firstAttribute="leading" secondItem="Z3K-p0-4ZE" secondAttribute="leading" constant="31" id="kxg-R6-bzM"/>
                                                                         <constraint firstItem="gOR-Q4-Q30" firstAttribute="top" secondItem="jiA-sY-AFw" secondAttribute="bottom" constant="8" symbolic="YES" id="mqq-Qe-bU3"/>
-                                                                        <constraint firstItem="Ndq-in-6iu" firstAttribute="leading" secondItem="Z3K-p0-4ZE" secondAttribute="leading" constant="2" id="nQa-aB-ab9"/>
+                                                                        <constraint firstItem="uIR-eO-seb" firstAttribute="leading" secondItem="Ndq-in-6iu" secondAttribute="trailing" constant="11" id="nMF-bf-GL4"/>
                                                                     </constraints>
                                                                     <connections>
                                                                         <outlet property="textField" destination="Ndq-in-6iu" id="ZLf-ZN-oII"/>
@@ -1330,6 +1353,7 @@
         <image name="NSFolderSmart" width="32" height="32"/>
         <image name="NSIconViewTemplate" width="10" height="10"/>
         <image name="NSRemoveTemplate" width="11" height="11"/>
+        <image name="NSStopProgressFreestandingTemplate" width="14" height="14"/>
         <image name="Speaker_Icon" width="240" height="240"/>
     </resources>
 </document>
