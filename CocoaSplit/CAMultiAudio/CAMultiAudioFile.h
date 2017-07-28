@@ -23,6 +23,7 @@
 @property (assign) Float64 duration;
 @property (assign) Float64 currentTime;
 @property (assign) bool playing;
+@property (assign) NSInteger refCount;
 
 
 -(instancetype)initWithPath:(NSString *)path;

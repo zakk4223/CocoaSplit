@@ -86,7 +86,7 @@
 {
     return;
 }
--(void)beforeReplace
+-(void)beforeReplace:(bool)removing
 {
     return;
 }

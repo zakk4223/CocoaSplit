@@ -329,6 +329,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(void)stopRecordingLayout:(SourceLayout *)layout usingOutput:(OutputDestination *)output;
 -(void)removeLayoutRecorder:(CSLayoutRecorder *)toRemove;
 -(void)stopRecordingLayout:(SourceLayout *)layout;
+-(void)removeFileAudio:(CAMultiAudioFile *)toDelete;
+
 @end
 
 

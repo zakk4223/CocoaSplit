@@ -19,6 +19,8 @@
 @property (assign) float audioVolume;
 @property (assign) bool audioEnabled;
 @property (strong) CAMultiAudioNode *audioNode;
+@property (strong) NSString *audioFilePath;
+
 
 
 -(instancetype) initWithAudioNode:(CAMultiAudioNode *)node;

@@ -23,6 +23,7 @@
         self.nodeUID = path;
         _outputSampleRate = 0.0f;
         _lastStartFrame = 0;
+        self.refCount = 0;
         
         if (self.filePath)
         {

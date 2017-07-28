@@ -10,6 +10,8 @@
 #import "CSAudioInputSourceViewController.h"
 #import "CaptureController.h"
 #import "CSLayoutRecorder.h"
+#import "CAMultiAudioFile.h"
+
 
 @implementation CSAudioInputSource
 @synthesize audioUUID = _audioUUID;
@@ -37,10 +39,16 @@
         self.audioVolume = node.volume;
         self.name = node.name;
         self.audioEnabled = node.enabled;
+        if ([node isKindOfClass:CAMultiAudioFile.class])
+        {
+            self.audioFilePath = ((CAMultiAudioFile *)node).filePath;
+        }
     }
     
     return self;
 }
+
+
 -(instancetype)copyWithZone:(NSZone *)zone
 {
     CSAudioInputSource *newCopy = [super copyWithZone:zone];
@@ -64,6 +72,8 @@
     [aCoder encodeObject:self.audioUUID forKey:@"audioUUID"];
     [aCoder encodeFloat:self.audioVolume forKey:@"audioVolume"];
     [aCoder encodeBool:self.audioEnabled forKey:@"audioEnabled"];
+    [aCoder encodeObject:self.audioFilePath forKey:@"audioFilePath"];
+
 }
 
 -(instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -73,6 +83,7 @@
         self.audioUUID = [aDecoder decodeObjectForKey:@"audioUUID"];
         self.audioVolume = [aDecoder decodeFloatForKey:@"audioVolume"];
         self.audioEnabled = [aDecoder decodeBoolForKey:@"audioEnabled"];
+        self.audioFilePath = [aDecoder decodeObjectForKey:@"audioFilePath"];
     }
     
     return self;
@@ -123,11 +134,12 @@
     _audioEnabled = audioEnabled;
 }
 
--(void)applyAudioSettings
+
+-(void)findAudioNode
 {
+    
     if (!self.audioNode && self.audioUUID && self.sourceLayout)
     {
-        
         CAMultiAudioEngine *audioEngine = nil;
         if (self.sourceLayout.recorder)
         {
@@ -137,8 +149,30 @@
         }
         
         self.audioNode = [audioEngine inputForUUID:self.audioUUID];
+        
+        if (!self.audioNode && self.audioFilePath)
+        {
+            self.audioNode = [audioEngine createFileInput:self.audioFilePath];
+            
+        }
+    }
+
+}
+-(void)applyAudioSettings
+{
+    if (!self.audioNode)
+    {
+        [self findAudioNode];
+        if (self.audioNode && [self.audioNode isKindOfClass:CAMultiAudioFile.class])
+        {
+            
+            ((CAMultiAudioFile *)self.audioNode).refCount++;
+        }
+        
         _previousVolume = self.audioNode.volume;
         _previousEnabled = self.audioNode.enabled;
+        
+
 
     }
 
@@ -158,34 +192,80 @@
         self.audioNode.enabled = _previousEnabled;
         self.audioNode.volume = _previousVolume;
     }
+    
+    if ([self.audioNode isKindOfClass:CAMultiAudioFile.class])
+    {
+        CAMultiAudioFile *fileNode = (CAMultiAudioFile *)self.audioNode;
+        fileNode.refCount--;
+        if (fileNode.refCount <= 0)
+        {
+            [[CaptureController sharedCaptureController] removeFileAudio:fileNode];
+        }
+    }
 
 }
 
+-(void)afterReplace
+{
+    [self applyAudioSettings];
+
+}
 -(void)afterAdd
 {
-        [self applyAudioSettings];
+    [self applyAudioSettings];
 }
 
 -(void)afterMerge:(bool)changed
 {
-    if (changed)
+   // if (changed)
     {
-        [self afterAdd];
+        
+        [self findAudioNode];
     }
+    
+    if (self.audioNode && [self.audioNode isKindOfClass:CAMultiAudioFile.class])
+    {
+        
+        ((CAMultiAudioFile *)self.audioNode).refCount++;
+
+    }
+
+    
+    
+
 }
 
--(void)beforeReplace
+-(void)beforeReplace:(bool)removing
 {
-    NSLog(@"BEFORE REPLACE %@ %d", self.audioNode, self.is_live);
-    [self restoreAudioSettings];
+    if (removing)
+    {
+        [self restoreAudioSettings];
+
+    }
 }
 
 
 -(void)beforeRemove
 {
+    
     [self restoreAudioSettings];
+    if ([self.audioNode isKindOfClass:CAMultiAudioFile.class])
+    {
+        [[CaptureController sharedCaptureController] removeFileAudio:(CAMultiAudioFile *)self.audioNode];
+    }
+
 }
 
+-(bool)isDifferentInput:(NSObject<CSInputSourceProtocol> *)from
+{
+    if ([from isKindOfClass:self.class])
+    {
+        CSAudioInputSource *fromAudio = (CSAudioInputSource *)from;
+        return ![self.audioUUID isEqualToString:fromAudio.audioUUID];
+    }
+    
+    return [super isDifferentInput:from];
+}
 
 -(void)setIs_live:(bool)is_live
 {

@@ -18,7 +18,7 @@
 -(void)beforeMerge:(bool)changed;
 -(void)afterMerge:(bool)changed;
 -(void)beforeRemove;
--(void)beforeReplace;
+-(void)beforeReplace:(bool)removing;
 -(void)afterReplace;
 @property (weak) SourceLayout *sourceLayout;
 @property (strong) CSInputLayer *layer;

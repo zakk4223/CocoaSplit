@@ -2825,13 +2825,10 @@
 -(NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
     CAMultiAudioNode *audioNode = [self.audioInputsArrayController.arrangedObjects objectAtIndex:row];
-    NSLog(@"AUDIO NODE %@", audioNode);
     if ([audioNode isKindOfClass:CAMultiAudioFile.class])
     {
-        NSLog(@"FILE AUDIO VIEW");
         return [tableView makeViewWithIdentifier:@"fileAudioView" owner:self];
     } else {
-        NSLog(@"STANDARD AUDIO VIEW");
         return [tableView makeViewWithIdentifier:@"standardAudioView" owner:self];
     }
 }

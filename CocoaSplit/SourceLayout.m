@@ -708,7 +708,7 @@
                     [retDict[@"scriptNew"] addObject:oSrc];
 
                 }
-                [retDict[@"same"] addObject:oSrc];
+                [retDict[@"same"] addObject:eSrc];
             }
         } else {
             [retDict[@"new"] addObject:oSrc];
@@ -861,7 +861,14 @@
             continue;
         }
         
-        [src beforeReplace];
+        bool isRemoving = NO;
+        if ([removedInputs containsObject:src])
+        {
+            isRemoving = YES;
+        }
+        
+        
+        [src beforeReplace:isRemoving];
         if (jCtx && usingScripts)
         {
             JSValue *scriptFunc = jCtx[@"runTriggerScriptInput"];
@@ -1461,8 +1468,7 @@
     JSContext *jCtx = [JSContext currentContext];
     
     NSString *blockUUID = [CATransaction valueForKey:@"__CS_BLOCK_UUID__"];
-    
-    
+        
     for (NSObject<CSInputSourceProtocol> *src in removeInputs)
     {
         NSObject<CSInputSourceProtocol> *mSrc = [self inputForUUID:src.uuid];
@@ -1471,6 +1477,7 @@
             continue;
         }
 
+        
         [mSrc beforeRemove];
     }
 
@@ -1831,6 +1838,7 @@
 
 -(void) addSource:(NSObject<CSInputSourceProtocol> *)newSource withParentLayer:(CALayer *)parentLayer
 {
+    
     newSource.sourceLayout = self;
     newSource.is_live = self.isActive;
     
