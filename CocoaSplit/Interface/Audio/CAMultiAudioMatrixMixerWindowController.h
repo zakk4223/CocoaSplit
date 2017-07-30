@@ -12,12 +12,15 @@
 @interface CAMultiAudioMatrixMixerWindowController : NSWindowController <NSTableViewDataSource, NSTableViewDelegate>
 
 @property (weak) IBOutlet NSTableView *matrixTable;
-@property (strong) CAMultiAudioDownmixer *audioNode;
+@property (strong) CAMultiAudioNode *audioNode;
+@property (strong) CAMultiAudioDownmixer *downMixer;
 @property (assign) UInt32 matrixRows;
 @property (assign) UInt32 matrixColumns;
+@property (strong) NSWindow *eqWindow;
 
 - (IBAction)matrixVolumeChanged:(NSSlider *)sender;
 
--(instancetype)initWithAudioMixer:(CAMultiAudioDownmixer *)node;
+-(instancetype)initWithAudioMixer:(CAMultiAudioNode *)node;
+- (IBAction)openEQWindow:(id)sender;
 
 @end

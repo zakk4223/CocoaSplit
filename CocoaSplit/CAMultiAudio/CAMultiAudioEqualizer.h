@@ -9,5 +9,6 @@
 #import "CAMultiAudioNode.h"
 
 @interface CAMultiAudioEqualizer : CAMultiAudioNode
-
+-(NSDictionary *)saveData;
+-(void)restoreData:(NSDictionary *)saveData;
 @end

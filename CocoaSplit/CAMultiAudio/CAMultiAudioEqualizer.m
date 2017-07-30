@@ -20,4 +20,28 @@
     return self;
 }
 
+
+-(NSDictionary *)saveData
+{
+    CFPropertyListRef saveData;
+    UInt32 size = sizeof(CFPropertyListRef);
+    
+    AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_ClassInfo, kAudioUnitScope_Global, 0, &saveData, &size);
+    
+    if (saveData)
+    {
+        return (NSDictionary *)CFBridgingRelease(saveData);
+    }
+    return nil;
+}
+
+-(void)restoreData:(NSDictionary *)saveData
+{
+    CFDictionaryRef cfValue = (__bridge CFDictionaryRef)saveData;
+    
+    UInt32 size = sizeof(cfValue);
+
+    AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ClassInfo, kAudioUnitScope_Global, 0, &cfValue, size);
+    
+}
 @end

@@ -8,6 +8,7 @@
 
 #import "CAMultiAudioMatrixMixerWindowController.h"
 #import "CAMultiAudioMatrixCell.h"
+#import "CAMultiAudioEqualizer.h"
 
 @interface CAMultiAudioMatrixMixerWindowController ()
 
@@ -21,15 +22,16 @@
     UInt32 inputChannel = (UInt32)((sender.tag / 100) - 1 );
     UInt32 outputChannel = sender.tag % 100;
     
-    [self.audioNode setVolume:[sender doubleValue] forChannel:inputChannel outChannel:outputChannel];
+    [self.downMixer setVolume:[sender doubleValue] forChannel:inputChannel outChannel:outputChannel];
 }
 
 
--(instancetype)initWithAudioMixer:(CAMultiAudioDownmixer *)node
+-(instancetype)initWithAudioMixer:(CAMultiAudioNode *)node
 {
     if (self = [self initWithWindowNibName:@"CAMultiAudioMatrixMixerWindowController"])
     {
         self.audioNode = node;
+        self.downMixer = node.downMixer;
         //NSView *audioView = [node audioUnitNSView];
        // NSLog(@"AUDIO VIEW SIZE %@", NSStringFromRect(audioView.frame));
         //self.window.contentView = audioView;
@@ -39,11 +41,26 @@
     return self;
 }
 
+- (IBAction)openEQWindow:(id)sender
+{
+    NSView *nodeView = [self.audioNode.equalizer audioUnitNSView];
+    if (nodeView)
+    {
+        self.eqWindow = [[NSWindow alloc] initWithContentRect:nodeView.frame styleMask:NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask|NSResizableWindowMask backing:NSBackingStoreBuffered defer:NO];
+        
+        [self.eqWindow center];
+        [self.eqWindow setContentView:nodeView];
+        [self.eqWindow makeKeyAndOrderFront:NSApp];
+    }
+    
+}
+
+
 
 -(NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
     
-    return self.audioNode.inputChannelCount;
+    return self.downMixer.inputChannelCount;
 }
 
 -(NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
@@ -67,7 +84,7 @@
     
     slider.tag = ((row+1)*100) + columnIndex-1;
     
-    Float32 volume = [self.audioNode getVolumeforChannel:(UInt32)row outChannel:(UInt32)columnIndex-1];
+    Float32 volume = [self.downMixer getVolumeforChannel:(UInt32)row outChannel:(UInt32)columnIndex-1];
     slider.doubleValue = volume;
     
     
@@ -86,9 +103,9 @@
     
     [self.matrixTable registerNib:cellNib forIdentifier:@"MatrixMixerCell"];
     
-    if (self.matrixTable.numberOfColumns < self.audioNode.outputChannelCount)
+    if (self.matrixTable.numberOfColumns < self.downMixer.outputChannelCount)
     {
-        for (int i = 0; i < self.audioNode.outputChannelCount; i++)
+        for (int i = 0; i < self.downMixer.outputChannelCount; i++)
         {
             NSTableColumn *newCol = [[NSTableColumn alloc] init];
             [newCol.headerCell setStringValue:[NSString stringWithFormat:@"Output %d",i]];

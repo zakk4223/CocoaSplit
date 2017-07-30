@@ -7,6 +7,7 @@
 //
 
 #import "CSAdvancedAudioWindowController.h"
+#import "CAMultiAudioEqualizer.h"
 
 @interface CSAdvancedAudioWindowController ()
 
@@ -26,6 +27,21 @@
     [super windowDidLoad];
     
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
+}
+
+
+- (IBAction)openEQWindow:(id)sender
+{
+    NSView *nodeView = [self.controller.multiAudioEngine.equalizer audioUnitNSView];
+    if (nodeView)
+    {
+        self.eqWindow = [[NSWindow alloc] initWithContentRect:nodeView.frame styleMask:NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask|NSResizableWindowMask backing:NSBackingStoreBuffered defer:NO];
+        
+        [self.eqWindow center];
+        [self.eqWindow setContentView:nodeView];
+        [self.eqWindow makeKeyAndOrderFront:NSApp];
+    }
+    
 }
 
 @end

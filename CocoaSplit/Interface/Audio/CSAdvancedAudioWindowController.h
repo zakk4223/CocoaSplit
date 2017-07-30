@@ -12,6 +12,9 @@
 
 
 @property (weak) CaptureController *controller;
+@property (strong) NSWindow *eqWindow;
+
+- (IBAction)openEQWindow:(id)sender;
 
 
 @end

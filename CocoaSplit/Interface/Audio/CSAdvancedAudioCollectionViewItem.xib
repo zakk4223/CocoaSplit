@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16E195" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12120" systemVersion="16G29" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12120"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -14,11 +14,11 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <view id="QCX-Hj-8Bs">
-            <rect key="frame" x="0.0" y="0.0" width="63" height="313"/>
+            <rect key="frame" x="0.0" y="0.0" width="56" height="319"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AMF-oF-4IT">
-                    <rect key="frame" x="2" y="265" width="63" height="34"/>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" setsMaxLayoutWidthAtFirstLayout="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AMF-oF-4IT">
+                    <rect key="frame" x="2" y="271" width="63" height="34"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" title="Multiline Label" id="Ztb-xc-qAU">
                         <font key="font" metaFont="miniSystem"/>
@@ -30,7 +30,7 @@
                     </connections>
                 </textField>
                 <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pd4-sc-PYL">
-                    <rect key="frame" x="24" y="30" width="13" height="219"/>
+                    <rect key="frame" x="24" y="36" width="13" height="219"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <sliderCell key="cell" controlSize="mini" continuous="YES" alignment="left" maxValue="1" doubleValue="1" tickMarkPosition="right" sliderType="linear" id="2RI-Lu-dIV"/>
                     <connections>
@@ -38,7 +38,7 @@
                     </connections>
                 </slider>
                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jAk-5M-F9b" customClass="CSAudioLevelView">
-                    <rect key="frame" x="11" y="31" width="5" height="218"/>
+                    <rect key="frame" x="11" y="37" width="5" height="218"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="startValue">
@@ -53,7 +53,7 @@
                     </connections>
                 </customView>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NEC-Me-vM5">
-                    <rect key="frame" x="22" y="5" width="18" height="18"/>
+                    <rect key="frame" x="22" y="11" width="18" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Speaker_Icon" imagePosition="only" alignment="center" alternateImage="Mute_Icon" controlSize="small" imageScaling="proportionallyDown" inset="2" id="34x-aG-uoX">
                         <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
@@ -68,7 +68,7 @@
                     </connections>
                 </button>
                 <button horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MJn-HC-shB">
-                    <rect key="frame" x="46" y="31" width="14" height="29"/>
+                    <rect key="frame" x="6" y="0.0" width="14" height="29"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="squareTextured" bezelStyle="texturedSquare" image="NSActionTemplate" imagePosition="above" alignment="left" controlSize="mini" imageScaling="proportionallyDown" inset="2" id="N1e-Tr-x93">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -82,16 +82,8 @@
                         </binding>
                     </connections>
                 </button>
-                <slider horizontalHuggingPriority="750" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mBu-Mk-2So">
-                    <rect key="frame" x="44" y="67" width="13" height="182"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <sliderCell key="cell" controlSize="mini" alignment="left" maxValue="10" tickMarkPosition="right" sliderType="linear" id="Dfi-ir-2Sv"/>
-                    <connections>
-                        <binding destination="-2" name="value" keyPath="self.representedObject.delay" id="hqR-u7-li5"/>
-                    </connections>
-                </slider>
             </subviews>
-            <point key="canvasLocation" x="330.5" y="480.5"/>
+            <point key="canvasLocation" x="327" y="483.5"/>
         </view>
         <userDefaultsController representsSharedInstance="YES" id="ERZ-lW-tiD"/>
     </objects>
