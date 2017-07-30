@@ -28,35 +28,9 @@
     return self;
 }
 
-+(bool)canCreateSourceFromPasteboardItem:(NSPasteboardItem *)item
++(NSSet *)mediaUTIs
 {
-    
-    if ([item.types containsObject:@"public.file-url"])
-    {
-        
-        NSString *stuff = [item stringForType:@"public.file-url"];
-        if (stuff)
-        {
-            NSURL *fileURL = [NSURL URLWithString:stuff];
-            
-            NSString *dType;
-            [fileURL getResourceValue:&dType forKey:NSURLTypeIdentifierKey error:nil];
-            if (dType)
-            {
-                if ([dType containsString:@"videolan"])
-                {
-                    return YES;
-                }
-
-                if ([FILE_UTI_TYPES containsObject:dType])
-                {
-                    return YES;
-                }
-            }
-        }
-        
-    }
-    return NO;
+    return [NSSet setWithArray:@[@"public.movie"]];
 }
 
 
@@ -80,7 +54,6 @@
 -(void)setupPlayer
 {
     
-    NSLog(@"SETUP PLAYER");
     av_register_all();
     avformat_network_init();
     

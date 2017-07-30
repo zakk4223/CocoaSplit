@@ -94,30 +94,10 @@
 
 
 
-+(bool)canCreateSourceFromPasteboardItem:(NSPasteboardItem *)item
-{
-    
-    if ([item.types containsObject:@"public.file-url"])
-    {
-        
-        NSString *stuff = [item stringForType:@"public.file-url"];
-        if (stuff)
-        {
-            NSURL *fileURL = [NSURL URLWithString:stuff];
-            
-            NSString *dType;
-            [fileURL getResourceValue:&dType forKey:NSURLTypeIdentifierKey error:nil];
-            if (dType)
-            {
-                if ([NSImage.imageTypes containsObject:dType])
-                {
-                    return YES;
-                }
-            }
-        }
 
-    }
-    return NO;
++(NSSet *)mediaUTIs
+{
+    return [NSSet setWithArray:NSImage.imageTypes];
 }
 
 

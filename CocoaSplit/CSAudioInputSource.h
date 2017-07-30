@@ -24,6 +24,7 @@
 
 
 -(instancetype) initWithAudioNode:(CAMultiAudioNode *)node;
+-(instancetype) initWithPath:(NSString *)path;
 
 @end
 

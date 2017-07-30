@@ -47,7 +47,6 @@
 #import "JavaScriptCore/JavaScriptCore.h"
 
 
-#define AUDIO_FILE_UTIS @[@"public.mp3", @"public.aac-audio", @"public.aifc-audio", @"com.microsoft.waveform-audio", @"org.videolan.flac"]
 
 @class FFMpegTask;
 @protocol VideoCompressor;
@@ -517,6 +516,8 @@ NSArray *_savedTransitionConstraints;
 @property (strong) NSString *layoutScriptLabel;
 @property (strong) CSLayoutRecorder *mainLayoutRecorder;
 @property (readonly) SourceLayout *activeLayout;
+@property (strong) NSSet *audioFileUTIs;
+
 
 @property (weak) IBOutlet NSArrayController *audioInputsArrayController;
 

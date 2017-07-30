@@ -137,6 +137,8 @@ If your source is 'shared' between inputSources each new one will call this func
 
 +(bool)canCreateSourceFromPasteboardItem:(NSPasteboardItem *)item;
 +(NSObject <CSCaptureSourceProtocol> *)createSourceFromPasteboardItem:(NSPasteboardItem *)item;
++(NSSet *)mediaUTIs;
+
 -(void)willExport;
 -(void)didExport;
 

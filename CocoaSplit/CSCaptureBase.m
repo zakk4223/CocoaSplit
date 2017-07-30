@@ -459,5 +459,10 @@
     return nil;
 }
 
++(NSSet *)mediaUTIs
+{
+    return nil;
+}
+
 
 @end

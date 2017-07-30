@@ -31,6 +31,21 @@
 
 
 
+-(instancetype) initWithPath:(NSString *)path
+{
+    if (self = [self init])
+    {
+        self.audioUUID = path;
+        self.audioVolume = 0;
+        self.name = [path lastPathComponent];
+        self.audioEnabled = NO;
+        self.audioFilePath = path;
+    }
+    
+    return self;
+}
+
+
 -(instancetype) initWithAudioNode:(CAMultiAudioNode *)node
 {
     if (self = [self init])

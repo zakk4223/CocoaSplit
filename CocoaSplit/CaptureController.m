@@ -942,7 +942,21 @@
        }
 
        self.sharedPluginLoader = [CSPluginLoader sharedPluginLoader];
+       OSStatus err;
+       NSArray *audioTypes;
+       UInt32 size;
        
+       self.audioFileUTIs = [NSSet set];
+       
+       err = AudioFileGetGlobalInfoSize(kAudioFileGlobalInfo_AllUTIs, 0, NULL, &size);
+       if (err == noErr)
+       {
+           err = AudioFileGetGlobalInfo(kAudioFileGlobalInfo_AllUTIs, 0, NULL, &size, &audioTypes);
+           if (err == noErr)
+           {
+               self.audioFileUTIs = [NSSet setWithArray:audioTypes];
+           }
+       }
 
        [self setupMIDI];
        
@@ -2031,6 +2045,8 @@
 
 -(NSObject<CSInputSourceProtocol>*)inputSourceForPasteboardItem:(NSPasteboardItem *)item
 {
+    
+
     NSArray *captureClasses = [self captureSourcesForPasteboardItem:item];
     Class<CSCaptureSourceProtocol> useClass = captureClasses.firstObject;
     
@@ -2048,21 +2064,60 @@
 
 -(NSArray *)captureSourcesForPasteboardItem:(NSPasteboardItem *)item
 {
+    
     NSMutableArray *candidates = [NSMutableArray array];
     
     CSPluginLoader *loader = [CSPluginLoader sharedPluginLoader];
+
     
-    for (NSString *key in loader.sourcePlugins)
+    
+    NSString *urlString = [item stringForType:@"public.file-url"];
+    if (urlString)
     {
-        Class<CSCaptureSourceProtocol> captureClass = loader.sourcePlugins[key];
+        NSURL *fileURL = [NSURL URLWithString:urlString];
+        NSString *realPath = [fileURL path];
         
-        if ([captureClass canCreateSourceFromPasteboardItem:item])
+        MDItemRef mditem = MDItemCreate(NULL, (__bridge CFStringRef)realPath);
+        if (mditem)
         {
-            [candidates addObject:captureClass];
+            NSArray *attrs = @[(__bridge NSString *)kMDItemContentTypeTree];
+            NSDictionary *attrMap = CFBridgingRelease(MDItemCopyAttributes(mditem, (__bridge CFArrayRef)attrs));
+            NSArray *fileTypes = attrMap[(__bridge NSString *)kMDItemContentTypeTree];
+            if (fileTypes)
+            {
+                NSSet *typeSet = [NSSet setWithArray:fileTypes];
+                for (NSString *key in loader.sourcePlugins)
+                {
+                    Class<CSCaptureSourceProtocol> captureClass = loader.sourcePlugins[key];
+                    NSSet *captureSet = [captureClass mediaUTIs];
+                    if (captureSet)
+                    {
+                        if([typeSet intersectsSet:captureSet])
+                        {
+                            [candidates addObject:captureClass];
+                        }
+                    }
+                    
+                }
+            }
         }
         
     }
-    
+
+    /*
+    if (candidates.count == 0)
+    {
+        for (NSString *key in loader.sourcePlugins)
+        {
+            Class<CSCaptureSourceProtocol> captureClass = loader.sourcePlugins[key];
+            
+            if ([captureClass canCreateSourceFromPasteboardItem:item])
+            {
+                [candidates addObject:captureClass];
+            }
+            
+        }
+    }*/
     return candidates;
 }
 
@@ -2912,6 +2967,25 @@
 }
 */
 
+-(NSString *)primaryTypeForURL:(NSURL *)url
+{
+    NSString *dType;
+    [url getResourceValue:&dType forKey:NSURLTypeIdentifierKey error:nil];
+    return dType;
+}
+
+
+-(bool)fileURLIsAudio:(NSURL *)url
+{
+    NSString *dType = [self primaryTypeForURL:url];
+    if (dType && [self.audioFileUTIs containsObject:dType])
+    {
+        return YES;
+    }
+    return NO;
+}
+
+
 -(NSDragOperation)tableView:(NSTableView *)tableView validateDrop:(id<NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)dropOperation
 {
     NSPasteboard *pb = [info draggingPasteboard];
@@ -2937,18 +3011,13 @@
             if (dragPath)
             {
                 NSURL *fileURL = [NSURL URLWithString:dragPath];
-                NSString *dType;
-                [fileURL getResourceValue:&dType forKey:NSURLTypeIdentifierKey error:nil];
-                if (dType)
+                
+                if ([self fileURLIsAudio:fileURL])
                 {
-                    NSLog(@"DRAGGED TYPE %@", dType);
-                    if ([AUDIO_FILE_UTIS containsObject:dType])
-                    {
-                        NSString *realPath = [fileURL path];
-
-                        [self.multiAudioEngine createFileInput:realPath];
-                        retVal = YES;
-                    }
+                    NSString *realPath = [fileURL path];
+                    
+                    [self.multiAudioEngine createFileInput:realPath];
+                    retVal = YES;
                 }
             }
         }
@@ -3131,8 +3200,24 @@
     }
     
     bool retVal = NO;
+    
+    
     for(NSPasteboardItem *item in pb.pasteboardItems)
     {
+        
+        NSString *urlString = [item stringForType:@"public.file-url"];
+        if (urlString)
+        {
+            NSURL *fileURL = [NSURL URLWithString:urlString];
+            if ([self fileURLIsAudio:fileURL])
+            {
+                CSAudioInputSource *audioSrc = [[CSAudioInputSource alloc] initWithPath:fileURL.path];
+                [self.activePreviewView addInputSourceWithInput:audioSrc];
+                retVal = YES;
+                continue;
+            }
+
+        }
         
         NSObject<CSInputSourceProtocol> *itemSrc = [self inputSourceForPasteboardItem:item];
         if (itemSrc)
