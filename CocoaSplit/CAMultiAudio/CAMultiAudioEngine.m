@@ -113,13 +113,12 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         
         if ([aDecoder containsValueForKey:@"fileInputs"])
         {
-            self.fileInputs = [aDecoder decodeObjectForKey:@"fileInputs"];
-            for(CAMultiAudioFile *fileInput in self.fileInputs)
+            NSArray *fnames = [aDecoder decodeObjectForKey:@"fileInputs"];
+            for(NSString *inputPath in fnames)
             {
-                [self attachFileInput:fileInput];
+                [self createFileInput:inputPath];
             }
         }
-        
         if ([aDecoder containsValueForKey:@"equalizerData"])
         {
             NSDictionary *eqdata = [aDecoder decodeObjectForKey:@"equalizerData"];
@@ -142,24 +141,13 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     NSMutableDictionary *saveInputSettings = [NSMutableDictionary dictionary];
     
-    for (CAMultiAudioNode *node in self.audioInputs)
+    
+    for (CAMultiAudioInput *node in self.audioInputs)
     {
         NSString *deviceUID = node.nodeUID;
         NSMutableDictionary *inputopts = [NSMutableDictionary dictionary];
         
-        
-        [inputopts setValue:@(node.volume) forKey:@"volume"];
-        [inputopts setValue:@(node.enabled) forKey:@"enabled"];
-        if (node.downMixer)
-        {
-            [inputopts setValue:[node.downMixer saveData] forKey:@"downMixerData"];
-        }
-        
-        if (node.equalizer)
-        {
-            [inputopts setValue:[node.equalizer saveData] forKey:@"equalizerData"];
-        }
-        
+        [node saveDataToDict:inputopts];
         [saveInputSettings setValue:inputopts forKey:deviceUID];
     }
     
@@ -169,7 +157,13 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     [aCoder encodeObject:saveInputSettings forKey:@"inputSettings"];
     
-    [aCoder encodeObject:self.fileInputs forKey:@"fileInputs"];
+    NSMutableArray *fileSave = [NSMutableArray array];
+    for (CAMultiAudioFile *fInput in self.fileInputs)
+    {
+        [fileSave addObject:fInput.filePath];
+    }
+    
+    [aCoder encodeObject:fileSave forKey:@"fileInputs"];
     
 }
 
@@ -177,7 +171,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 -(void)applyInputSettings:(NSDictionary *)inputSettings
 {
     
-    for (CAMultiAudioNode *input in self.audioInputs)
+    for (CAMultiAudioInput *input in self.audioInputs)
     {
         if (input.nodeUID)
         {
@@ -209,7 +203,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     NSMutableDictionary *iSettings = [NSMutableDictionary dictionary];
     
-    for (CAMultiAudioNode *node in self.audioInputs)
+    for (CAMultiAudioInput *node in self.audioInputs)
     {
         NSString *deviceUID = node.nodeUID;
         NSMutableDictionary *inputopts = [NSMutableDictionary dictionary];
@@ -603,7 +597,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 }
 
 
--(void)reattachInput:(CAMultiAudioNode *)input
+-(void)reattachInput:(CAMultiAudioInput *)input
 {
     
     
@@ -638,7 +632,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 }
 
--(void)attachInput:(CAMultiAudioNode *)input
+-(void)attachInput:(CAMultiAudioInput *)input
 {
     
     CAMultiAudioNode *graphInput = input;
@@ -680,22 +674,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         NSDictionary *settings = [_inputSettings valueForKey:input.nodeUID];
         if (settings)
         {
-            input.volume = [(NSNumber *)[settings valueForKey:@"volume"] floatValue];
-            input.enabled = [(NSNumber *)[settings valueForKey:@"enabled"] boolValue];
-            NSDictionary *mixerData = [settings valueForKey:@"downMixerData"];
-            if (mixerData)
-            {
-                [input.downMixer restoreData:mixerData];
-            }
-            
-            if (input.equalizer)
-            {
-                NSDictionary *equalizerData = [settings valueForKey:@"equalizerData"];
-                if (equalizerData)
-                {
-                    [input.equalizer restoreData:equalizerData];
-                }
-            }
+            [input restoreDataFromDict:settings];
         }
     }
 
@@ -715,24 +694,15 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 }
 
 
--(void)removeInput:(CAMultiAudioNode *)toRemove
+-(void)removeInput:(CAMultiAudioInput *)toRemove
 {
     NSUInteger index = [self.audioInputs indexOfObject:toRemove];
     if (index != NSNotFound)
     {
         NSMutableDictionary *saveSettings = [NSMutableDictionary dictionary];
         
-        saveSettings[@"volume"] = @(toRemove.volume);
-        saveSettings[@"enabled"] = @(toRemove.enabled);
-        if (toRemove.downMixer)
-        {
-            saveSettings[@"downMixerData"] = [toRemove.downMixer saveData];
-        }
+        [toRemove saveDataToDict:saveSettings];
         
-        if (toRemove.equalizer)
-        {
-            saveSettings[@"equalizerData"] = [toRemove.equalizer saveData];
-        }
         
         _inputSettings[toRemove.nodeUID] = saveSettings;
 

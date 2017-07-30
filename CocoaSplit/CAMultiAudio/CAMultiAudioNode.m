@@ -25,10 +25,6 @@
 @synthesize volume = _volume;
 @synthesize muted = _muted;
 @synthesize enabled = _enabled;
-@synthesize delay = _delay;
-
-
-
 
 -(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType
 {
@@ -40,14 +36,30 @@
         unitDescr.componentType = unitType;
         
         //Default to two channels, subclasses can override this
+        
         self.channelCount = 2;
         _volume = 1.0;
-        _delayNodes = [NSMutableArray array];
-        self.nameColor = [NSColor blackColor];
+
     }
     
     return self;
 }
+
+
+//We don't use NSCoding here because the audio engine/graph does deferred creating of audio unit objects, so most of what we load/save doesn't matter at creating time.
+//The engine applies our saved settings after the node is added to the graph and properly connected
+-(void)saveDataToDict:(NSMutableDictionary *)saveDict
+{
+    saveDict[@"volume"] = [NSNumber numberWithFloat:self.volume];
+    saveDict[@"enabled"] = [NSNumber numberWithBool:self.enabled];
+}
+
+-(void)restoreDataFromDict:(NSDictionary *)restoreDict
+{
+    self.volume = [restoreDict[@"volume"] floatValue];
+    self.enabled = [restoreDict[@"enabled"] boolValue];
+}
+
 
 -(NSView *)audioUnitNSView
 {
@@ -79,7 +91,6 @@
     }
     if (!retView)
     {
-        NSLog(@"NO GOOD VIEW");
         AUGenericView *genView = [[AUGenericView alloc] initWithAudioUnit:self.audioUnit];
         genView.showsExpertParameters = YES;
         retView = genView;
@@ -90,31 +101,6 @@
 
 
 
--(void)setDelay:(Float32)delay
-{
-    if (self.delayNodes)
-    {
-        Float32 nodeDelay = delay;
-        for (CAMultiAudioDelay *dNode in self.delayNodes)
-        {
-            if (nodeDelay >= 2.0)
-            {
-                dNode.delay = 2.0;
-                nodeDelay -= 2.0;
-            } else {
-                dNode.delay = nodeDelay;
-                nodeDelay -= nodeDelay;
-            }
-        }
-    }
-    
-    _delay = delay;
-}
-
--(Float32)delay
-{
-    return _delay;
-}
 
 
 -(bool)enabled
@@ -125,19 +111,7 @@
 
 -(void)setEnabled:(bool)enabled
 {
-    NSColor *newColor;
     _enabled = enabled;
-    if (enabled)
-    {
-        newColor = [NSColor greenColor];
-    } else {
-        newColor = [NSColor blackColor];
-    }
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.nameColor = newColor;
-    });
-
     
     
 }
@@ -233,6 +207,7 @@
 }
 
 
+/*
 -(void)setVolumeOnConnectedNode
 {
     
@@ -251,25 +226,15 @@
         }
     }
 }
+*/
 
 
-
--(void)openMixerWindow:(id)sender
-{
-    if (self.downMixer)
-    {
-        self.mixerWindow = [[CAMultiAudioMatrixMixerWindowController alloc] initWithAudioMixer:self];
-        [self.mixerWindow showWindow:nil];
-        self.mixerWindow.window.title = self.name;
-    }
-}
 
 
 -(void)nodeConnected:(CAMultiAudioNode *)toNode onBus:(UInt32)onBus
 {
     self.connectedTo = toNode;
     self.connectedToBus = onBus;
-    [self setVolumeOnConnectedNode];
 }
 
 -(void)willConnectNode:(CAMultiAudioNode *)node toBus:(UInt32)toBus
@@ -289,8 +254,6 @@
     //if we're muting, save the current player volume
     if (muted == YES)
     {
-        NSLog(@"NODE MUTE %d", muted);
-
         _saved_volume = self.volume;
         self.volume = 0.0f;
     } else {
@@ -365,23 +328,8 @@
     [_volumeAnimation startAnimation];
     
 }
--(void)setVolume:(float)volume
-{
-    _volume = volume;
-    [self setVolumeOnConnectedNode];
-    
-}
-
--(float)volume
-{
-    return _volume;
-}
 
 
--(void)pasteboard:(NSPasteboard *)pasteboard item:(NSPasteboardItem *)item provideDataForType:(NSString *)type
-{
-    
-}
 -(void) dealloc
 {
     if (self.graph)

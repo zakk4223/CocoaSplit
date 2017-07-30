@@ -13,6 +13,7 @@
 		3400A07A1BD4533A003E1828 /* CSInputLibraryWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3400A0781BD4533A003E1828 /* CSInputLibraryWindowController.xib */; };
 		3400A07E1BD49406003E1828 /* CSInputLibraryItemView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3400A07D1BD49406003E1828 /* CSInputLibraryItemView.xib */; };
 		3400A0841BD522A5003E1828 /* CSLibraryInputItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3400A0831BD522A5003E1828 /* CSLibraryInputItemViewController.m */; };
+		340620761F2E2BFE0016D997 /* CAMultiAudioInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 340620751F2E2BFE0016D997 /* CAMultiAudioInput.m */; };
 		3408235519BC677A00CD1F5F /* CSNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 3408235419BC530300CD1F5F /* CSNotifications.m */; };
 		340C7FE91D43D22000B2FD7D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340C7FE81D43D22000B2FD7D /* Security.framework */; };
 		340C802D1D450A5100B2FD7D /* CSYoutubeStreamServicePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 340C80151D44722100B2FD7D /* CSYoutubeStreamServicePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -554,6 +555,8 @@
 		3400A07D1BD49406003E1828 /* CSInputLibraryItemView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSInputLibraryItemView.xib; path = Interface/CSInputLibraryItemView.xib; sourceTree = "<group>"; };
 		3400A0821BD522A5003E1828 /* CSLibraryInputItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSLibraryInputItemViewController.h; path = Interface/CSLibraryInputItemViewController.h; sourceTree = "<group>"; };
 		3400A0831BD522A5003E1828 /* CSLibraryInputItemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSLibraryInputItemViewController.m; path = Interface/CSLibraryInputItemViewController.m; sourceTree = "<group>"; };
+		340620741F2E2BFE0016D997 /* CAMultiAudioInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioInput.h; path = CAMultiAudio/CAMultiAudioInput.h; sourceTree = "<group>"; };
+		340620751F2E2BFE0016D997 /* CAMultiAudioInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioInput.m; path = CAMultiAudio/CAMultiAudioInput.m; sourceTree = "<group>"; };
 		3408234619BC50AD00CD1F5F /* CSNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSNotifications.h; path = PluginHeaders/CSNotifications.h; sourceTree = "<group>"; };
 		3408235419BC530300CD1F5F /* CSNotifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSNotifications.m; path = ../CSNotifications.m; sourceTree = "<group>"; };
 		340C7FE81D43D22000B2FD7D /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -1591,6 +1594,8 @@
 				34EB705A1F24F65900F61E6A /* CAMultiAudioFile.m */,
 				34EB705E1F2774DF00F61E6A /* CAMultiAudioEqualizer.h */,
 				34EB705F1F2774DF00F61E6A /* CAMultiAudioEqualizer.m */,
+				340620741F2E2BFE0016D997 /* CAMultiAudioInput.h */,
+				340620751F2E2BFE0016D997 /* CAMultiAudioInput.m */,
 			);
 			name = CAMultiAudio;
 			sourceTree = "<group>";
@@ -2469,6 +2474,7 @@
 				34AFC33319B19CD00007C07B /* SourceCache.m in Sources */,
 				34ED8C491B07371C002C0674 /* MIKMIDIChannelVoiceCommand.m in Sources */,
 				340FE50815F444AA00E4CE4E /* CaptureController.m in Sources */,
+				340620761F2E2BFE0016D997 /* CAMultiAudioInput.m in Sources */,
 				34ED8C4F1B07371C002C0674 /* MIKMIDIClock.m in Sources */,
 				34ED8C611B07371C002C0674 /* MIKMIDIEntity.m in Sources */,
 				34DA08C61E87F3CB00E02543 /* CSSequenceItemAnimationViewController.m in Sources */,

@@ -10,8 +10,9 @@
 
 #import "CAMultiAudioNode.h"
 #import "CAMultiAudioPCM.h"
+#import "CAMultiAudioInput.h"
 
-@interface CAMultiAudioPCMPlayer : CAMultiAudioNode
+@interface CAMultiAudioPCMPlayer : CAMultiAudioInput
 {
     NSMutableArray *_pendingBuffers;
     dispatch_queue_t _pendingQueue;

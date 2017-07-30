@@ -45,40 +45,23 @@
     return self;
 }
 
--(void)encodeWithCoder:(NSCoder *)aCoder
+-(void)saveDataToDict:(NSMutableDictionary *)saveDict
 {
-    [aCoder encodeObject:self.filePath forKey:@"filePath"];
-    [aCoder encodeFloat:self.currentTime forKey:@"currentTime"];
-    [aCoder encodeFloat:self.currentTime*_outputSampleRate forKey:@"currentSampletime"];
+    [super saveDataToDict:saveDict];
+    saveDict[@"filePath"] = self.filePath;
+    saveDict[@"currentTime"] = [NSNumber numberWithFloat:self.currentTime];
+    saveDict[@"currentSampletime"] = [NSNumber numberWithFloat:self.currentTime*_outputSampleRate];
 }
 
 
--(instancetype) initWithCoder:(NSCoder *)aDecoder
+-(void)restoreDataFromDict:(NSDictionary *)restoreDict
 {
-    NSString *filePath = [aDecoder decodeObjectForKey:@"filePath"];
-
-    if (self = [self initWithPath:filePath])
-    {
-        self.currentTime = [aDecoder decodeFloatForKey:@"currentTime"];
-        Float64 sampleTime = [aDecoder decodeFloatForKey:@"currentSampletime"];
-        _lastStartFrame = sampleTime;
-    }
-    
-    return self;
+    [super restoreDataFromDict:restoreDict];
+    self.filePath = restoreDict[@"filePath"];
+    self.currentTime = [restoreDict[@"currentTime"] floatValue];
+    _lastStartFrame = [restoreDict[@"currentSampletime"] floatValue];
 }
 
-
--(void)setVolume:(float)volume
-{
-    super.volume = volume;
-    
-    
-    if (self.converterNode)
-    {
-        
-        [(CAMultiAudioNode *)self.converterNode setVolumeOnConnectedNode];
-    }
-}
 
 
 -(Float64)currentTime

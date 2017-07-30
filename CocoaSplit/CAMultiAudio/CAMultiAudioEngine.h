@@ -55,7 +55,7 @@
 
 -(void)removePCMInput:(CAMultiAudioPCMPlayer *)toRemove;
 -(void)removeFileInput:(CAMultiAudioFile *)toRemove;
--(void)attachInput:(CAMultiAudioNode *)input;
+-(void)attachInput:(CAMultiAudioInput *)input;
 -(void)updateStatistics;
 -(void)applyInputSettings:(NSDictionary *)inputSettings;
 -(NSDictionary *)generateInputSettings;

@@ -26,7 +26,7 @@
 }
 
 
--(instancetype)initWithAudioMixer:(CAMultiAudioNode *)node
+-(instancetype)initWithAudioMixer:(CAMultiAudioInput *)node
 {
     if (self = [self initWithWindowNibName:@"CAMultiAudioMatrixMixerWindowController"])
     {

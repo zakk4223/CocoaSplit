@@ -37,19 +37,13 @@
 @property (assign) UInt32 connectedToBus;
 @property (strong) NSString *name;
 @property (strong) NSString *nodeUID;
-@property (strong) CAMultiAudioDownmixer *downMixer;
-@property (strong) CAMultiAudioEqualizer *equalizer;
-
-@property (strong) NSMutableArray *delayNodes;
-@property (strong) NSColor *nameColor;
 @property (assign) float volume;
 @property (assign) bool muted;
 @property (assign) bool enabled;
 @property (assign) Float32 powerLevel;
-@property (strong) CAMultiAudioMatrixMixerWindowController *mixerWindow;
-@property (assign) Float32 delay;
 
 -(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType;
+-(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType withCoder:(NSCoder *)aDecoder;
 
 -(bool)createNode:(AUGraph)forGraph;
 -(void)nodeConnected:(CAMultiAudioNode *)toNode onBus:(UInt32)onBus;
@@ -63,11 +57,12 @@
 -(void)resetFormat:(AudioStreamBasicDescription *)format;
 
 -(void)updatePowerlevel;
--(void)setVolumeOnConnectedNode;
 
 -(void)openMixerWindow:(id)sender;
 -(void)setVolumeAnimated:(float)volume withDuration:(float)duration;
 -(NSView *)audioUnitNSView;
+-(void)saveDataToDict:(NSMutableDictionary *)saveDict;
+-(void)restoreDataFromDict:(NSDictionary *)restoreDict;
 
 
 @end
@@ -91,13 +86,8 @@
 @property (strong) NSString *nodeUID;
 @property (strong) CAMultiAudioNode *downstreamNode;
 
-@property (strong) CAMultiAudioDownmixer *downMixer;
-@property (strong) NSMutableArray *delayNodes;
-@property (strong) CAMultiAudioEqualizer *equalizer;
 
 
-//There really has to be a better way to do something like this
-@property (strong) NSColor *nameColor;
 
 @property (assign) float volume;
 @property (assign) bool muted;
@@ -105,8 +95,6 @@
 @property (assign) bool enabled;
 @property (assign) Float32 powerLevel;
 
-@property (strong) CAMultiAudioMatrixMixerWindowController *mixerWindow;
-@property (assign) Float32 delay;
 
 -(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType NS_DESIGNATED_INITIALIZER;
 
