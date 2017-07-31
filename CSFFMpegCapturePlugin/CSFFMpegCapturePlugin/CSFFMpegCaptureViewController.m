@@ -16,7 +16,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.queueTableView registerForDraggedTypes:@[NSFilenamesPboardType]];
+    [self.queueTableView registerForDraggedTypes:@[NSFilenamesPboardType, @"cocoasplit.ffmpegcapture.queueitem"]];
     // Do view setup here.
     if (self.captureObj && self.captureObj.player)
     {
@@ -44,10 +44,28 @@
     return nil;
 }
 
+-(BOOL)tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
+{
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:rowIndexes];
+    [pboard declareTypes:@[@"cocoasplit.ffmpegcapture.queueitem"] owner:self];
+    [pboard setData:data forType:@"cocoasplit.ffmpegcapture.queueitem"];
+    
+    return YES;
+}
+
 
 -(NSDragOperation) tableView:(NSTableView *)tableView validateDrop:(id<NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)dropOperation
 {
     NSPasteboard *pb = [info draggingPasteboard];
+    
+    if ([pb.types containsObject:@"cocoasplit.ffmpegcapture.queueitem"])
+    {
+        if (dropOperation == NSTableViewDropAbove)
+        {
+            return NSDragOperationMove;
+        }
+        return NSDragOperationNone;
+    }
     
     for(NSPasteboardItem *item in pb.pasteboardItems)
     {
@@ -74,6 +92,41 @@
 {
  
     NSPasteboard *pb = [info draggingPasteboard];
+    
+    if ([pb.types containsObject:@"cocoasplit.ffmpegcapture.queueitem"])
+    {
+        NSData *indexData = [pb dataForType:@"cocoasplit.ffmpegcapture.queueitem"];
+        if (indexData)
+        {
+            NSIndexSet *rowIndexes = [NSKeyedUnarchiver unarchiveObjectWithData:indexData];
+            NSInteger __block oldOffset = 0;
+            NSInteger __block newOffset = 0;
+
+            [rowIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+                id currObj = [self.queueArrayController.arrangedObjects objectAtIndex:idx];
+                
+                if (idx < row)
+                {
+                    
+                    
+                    [self.captureObj.player.inputQueue removeObjectAtIndex:idx + oldOffset];
+                    [self.captureObj.player.inputQueue insertObject:currObj atIndex:row-1];
+                    //[self.queueTableView moveRowAtIndex:idx + oldOffset toIndex:row - 1];
+                    oldOffset -= 1;
+                } else {
+                    [self.captureObj.player.inputQueue removeObjectAtIndex:idx];
+                    [self.captureObj.player.inputQueue insertObject:currObj atIndex:row+newOffset];
+                    //[self.queueTableView moveRowAtIndex:idx toIndex:row+newOffset];
+                    newOffset += 1;
+                }
+                
+            }];
+            [self.queueTableView reloadData];
+            
+        }
+        return YES;
+    }
+    
     
     for(NSPasteboardItem *item in pb.pasteboardItems)
     {
