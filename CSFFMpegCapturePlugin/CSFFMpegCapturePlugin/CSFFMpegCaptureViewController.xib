@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12120" systemVersion="16G16b" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12120" systemVersion="16G29" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12120"/>
@@ -10,6 +10,7 @@
             <connections>
                 <outlet property="playlistControl" destination="QyX-l5-Nc5" id="w6z-OF-Sap"/>
                 <outlet property="queueArrayController" destination="IJW-AP-l9B" id="Iav-jl-1Al"/>
+                <outlet property="queueTableView" destination="I07-lW-ske" id="J4g-od-2N1"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
         </customObject>
@@ -86,6 +87,8 @@
                                     <action trigger="doubleAction" selector="queueTableDoubleClick:" target="-2" id="DqU-hT-tKe"/>
                                     <binding destination="IJW-AP-l9B" name="content" keyPath="arrangedObjects" id="Obn-rt-gTO"/>
                                     <binding destination="IJW-AP-l9B" name="selectionIndexes" keyPath="selectionIndexes" previousBinding="Obn-rt-gTO" id="uSY-FM-WQr"/>
+                                    <outlet property="dataSource" destination="-2" id="w3k-g5-HSa"/>
+                                    <outlet property="delegate" destination="-2" id="Aad-xr-opM"/>
                                 </connections>
                             </tableView>
                         </subviews>

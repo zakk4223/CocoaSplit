@@ -16,6 +16,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.queueTableView registerForDraggedTypes:@[NSFilenamesPboardType]];
     // Do view setup here.
     if (self.captureObj && self.captureObj.player)
     {
@@ -23,6 +24,72 @@
             [self pauseStateChanged];
         };
     }
+}
+
+
+-(NSSet *)contentTypesForPath:(NSString *)path
+{
+    MDItemRef mditem = MDItemCreate(NULL, (__bridge CFStringRef)path);
+    if (mditem)
+    {
+        NSArray *attrs = @[(__bridge NSString *)kMDItemContentTypeTree];
+        NSDictionary *attrMap = CFBridgingRelease(MDItemCopyAttributes(mditem, (__bridge CFArrayRef)attrs));
+        NSArray *fileTypes = attrMap[(__bridge NSString *)kMDItemContentTypeTree];
+        if (fileTypes)
+        {
+            NSSet *typeSet = [NSSet setWithArray:fileTypes];
+            return typeSet;
+        }
+    }
+    return nil;
+}
+
+
+-(NSDragOperation) tableView:(NSTableView *)tableView validateDrop:(id<NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)dropOperation
+{
+    NSPasteboard *pb = [info draggingPasteboard];
+    
+    for(NSPasteboardItem *item in pb.pasteboardItems)
+    {
+        if ([item.types containsObject:@"public.file-url"])
+        {
+            NSString *draggedPath = [item stringForType:@"public.file-url"];
+            if (draggedPath)
+            {
+                NSURL *fileURL = [NSURL URLWithString:draggedPath];
+                NSString *realPath = [fileURL path];
+                NSSet *fileTypes = [self contentTypesForPath:realPath];
+                NSSet *myTypes = [CSFFMpegCapture mediaUTIs];
+                if ([fileTypes intersectsSet:myTypes])
+                {
+                    return NSDragOperationCopy;
+                }
+            }
+        }
+    }
+    return NSDragOperationNone;
+}
+
+-(BOOL) tableView:(NSTableView *)tableView acceptDrop:(id<NSDraggingInfo>)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)dropOperation
+{
+ 
+    NSPasteboard *pb = [info draggingPasteboard];
+    
+    for(NSPasteboardItem *item in pb.pasteboardItems)
+    {
+        if ([item.types containsObject:@"public.file-url"])
+        {
+            NSString *draggedPath = [item stringForType:@"public.file-url"];
+            if (draggedPath)
+            {
+                NSURL *fileURL = [NSURL URLWithString:draggedPath];
+                NSString *realPath = [fileURL path];
+                [self.captureObj queuePath:realPath];
+            }
+        }
+    }
+
+    return YES;
 }
 
 

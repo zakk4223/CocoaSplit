@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "CSFFMpegCapture.h"
 
-@interface CSFFMpegCaptureViewController : NSViewController
+@interface CSFFMpegCaptureViewController : NSViewController <NSTableViewDelegate, NSTableViewDataSource>
 
 @property (weak) CSFFMpegCapture *captureObj;
 @property (weak) IBOutlet NSSegmentedControl *playlistControl;
@@ -26,5 +26,6 @@
 
 - (IBAction)tableControlAction:(NSSegmentedControl *)sender;
 - (IBAction)manualAddItem:(id)sender;
+@property (weak) IBOutlet NSTableView *queueTableView;
 
 @end
