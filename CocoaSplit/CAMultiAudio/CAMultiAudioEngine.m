@@ -146,9 +146,14 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     {
         NSString *deviceUID = node.nodeUID;
         NSMutableDictionary *inputopts = [NSMutableDictionary dictionary];
-        
-        [node saveDataToDict:inputopts];
-        [saveInputSettings setValue:inputopts forKey:deviceUID];
+        if (!node.noSettings)
+        {
+            [node saveDataToDict:inputopts];
+            if (inputopts.count > 0)
+            {
+                [saveInputSettings setValue:inputopts forKey:deviceUID];
+            }
+        }
     }
     
     
@@ -506,14 +511,18 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 }
 
 
+-(void)addFileInput:(CAMultiAudioFile *)fileInput
+{
+    [self attachFileInput:fileInput];
+    [self.fileInputs addObject:fileInput];
+}
+
 -(CAMultiAudioFile *)createFileInput:(NSString *)filePath
 {
     CAMultiAudioFile *newInput = [[CAMultiAudioFile alloc] initWithPath:filePath];
     
-    [self attachFileInput:newInput];
+    [self addFileInput:newInput];
     
-    //[newInput play];
-    [self.fileInputs addObject:newInput];
     return newInput;
 }
 
@@ -569,14 +578,14 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     newConverter.nodeUID = input.nodeUID; //Not so unique, lol
     
     newConverter.sourceNode = input;
-    input.converterNode = newConverter;
-    input.downstreamNode = newConverter;
-    
+    //input.converterNode = newConverter;
+   // input.downstreamNode = newConverter;
+    //
     [self.graph addNode:input];
 
     [self attachInput:input];
     
-    [self.graph connectNode:input toNode:newConverter sampleRate:input.outputFormat->mSampleRate];
+   // [self.graph connectNode:input toNode:newConverter sampleRate:input.outputFormat->mSampleRate];
 }
 
 
@@ -669,7 +678,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     input.downMixer = dmix;
     
-    if (input.nodeUID)
+    if (input.nodeUID && !input.noSettings)
     {
         NSDictionary *settings = [_inputSettings valueForKey:input.nodeUID];
         if (settings)
@@ -701,10 +710,17 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     {
         NSMutableDictionary *saveSettings = [NSMutableDictionary dictionary];
         
-        [toRemove saveDataToDict:saveSettings];
+        if (!toRemove.noSettings)
+        {
+            [toRemove saveDataToDict:saveSettings];
         
         
-        _inputSettings[toRemove.nodeUID] = saveSettings;
+            if (saveSettings.count > 0)
+            {
+                _inputSettings[toRemove.nodeUID] = saveSettings;
+            }
+        }
+        
 
         
         CAMultiAudioDownmixer *dmix = toRemove.downMixer;
@@ -737,9 +753,9 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 }
 
 
--(CAMultiAudioNode *)inputForUUID:(NSString *)uuid
+-(CAMultiAudioInput *)inputForUUID:(NSString *)uuid
 {
-    for(CAMultiAudioNode *node in self.audioInputs)
+    for(CAMultiAudioInput *node in self.audioInputs)
     {
         if ([node.nodeUID isEqualToString:uuid])
         {

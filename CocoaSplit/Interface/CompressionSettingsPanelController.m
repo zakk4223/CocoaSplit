@@ -3,7 +3,6 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 11/22/15.
-//  Copyright © 2015 Zakk. All rights reserved.
 //
 
 #import "CompressionSettingsPanelController.h"
@@ -68,6 +67,8 @@
 
 -(void)saveCompressPanel
 {
+    
+    NSLog(@"SAVING COMPRESS PANEL %@ %@", self.compressorObjectController, self.compressorViewController);
     [self.compressorObjectController commitEditing];
     [self.compressorViewController commitEditing];
     [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseOK];

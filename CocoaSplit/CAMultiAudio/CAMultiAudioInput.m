@@ -46,6 +46,7 @@
 
 -(void)restoreDataFromDict:(NSDictionary *)restoreDict
 {
+    
     [super restoreDataFromDict:restoreDict];
     self.delay = [restoreDict[@"delay"] floatValue];
     if (self.downMixer && restoreDict[@"downMixerData"])

@@ -47,6 +47,8 @@
 
     copy.resolutionOption = self.resolutionOption;
     
+    copy.advancedSettings = self.advancedSettings;
+    
     return copy;
 }
 
@@ -67,7 +69,7 @@
     [aCoder encodeInteger:self.height forKey:@"videoHeight"];
     
     [aCoder encodeObject:self.resolutionOption forKey:@"resolutionOption"];
-    
+    [aCoder encodeObject:self.advancedSettings forKey:@"advancedSettings"];
 }
 
 -(id) initWithCoder:(NSCoder *)aDecoder
@@ -111,7 +113,7 @@
             self.resolutionOption = nil;
         }
 
-        
+        self.advancedSettings = [aDecoder decodeObjectForKey:@"advancedSettings"];
     }
     
     return self;
@@ -518,7 +520,6 @@
     {
         av_dict_set(&opts, "tune", [x264tune UTF8String], 0);
     }
-    
     
     
     if (useAdvancedSettings)

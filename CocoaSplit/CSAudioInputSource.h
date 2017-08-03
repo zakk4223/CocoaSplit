@@ -18,8 +18,11 @@
 @property (strong) NSString *audioUUID;
 @property (assign) float audioVolume;
 @property (assign) bool audioEnabled;
-@property (strong) CAMultiAudioNode *audioNode;
+@property (strong) CAMultiAudioInput *audioNode;
 @property (strong) NSString *audioFilePath;
+@property (assign) bool fileLoop;
+@property (assign) Float64 fileStartTime;
+@property (assign) Float64 fileEndTime;
 
 
 

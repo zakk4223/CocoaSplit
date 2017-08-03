@@ -88,6 +88,9 @@
     [aCoder encodeFloat:self.audioVolume forKey:@"audioVolume"];
     [aCoder encodeBool:self.audioEnabled forKey:@"audioEnabled"];
     [aCoder encodeObject:self.audioFilePath forKey:@"audioFilePath"];
+    [aCoder encodeFloat:self.fileStartTime forKey:@"fileStartTime"];
+    [aCoder encodeFloat:self.fileEndTime forKey:@"fileEndTime"];
+    [aCoder encodeBool:self.fileLoop forKey:@"fileLoop"];
 
 }
 
@@ -99,6 +102,28 @@
         self.audioVolume = [aDecoder decodeFloatForKey:@"audioVolume"];
         self.audioEnabled = [aDecoder decodeBoolForKey:@"audioEnabled"];
         self.audioFilePath = [aDecoder decodeObjectForKey:@"audioFilePath"];
+        if ([aDecoder containsValueForKey:@"fileStartTime"])
+        {
+            self.fileStartTime = [aDecoder decodeFloatForKey:@"fileStartTime"];
+        } else {
+            self.fileStartTime = 0.0f;
+        }
+        if ([aDecoder containsValueForKey:@"fileEndTime"])
+        {
+            self.fileEndTime = [aDecoder decodeFloatForKey:@"fileEndTime"];
+        } else {
+            self.fileEndTime = 0.0f;
+        }
+
+        if ([aDecoder containsValueForKey:@"fileLoop"])
+        {
+            self.fileLoop = [aDecoder decodeBoolForKey:@"fileLoop"];
+        } else {
+            self.fileLoop = NO;
+        }
+
+        
+        
     }
     
     return self;
@@ -167,12 +192,15 @@
         
         if (!self.audioNode && self.audioFilePath)
         {
-            self.audioNode = [audioEngine createFileInput:self.audioFilePath];
-            
+            self.audioNode = [[CAMultiAudioFile alloc] initWithPath:self.audioFilePath];
+            //Tell the audio engine not to save or restore settings for this input
+            self.audioNode.noSettings = YES;
+            [audioEngine addFileInput:self.audioNode];
         }
     }
-
 }
+
+
 -(void)applyAudioSettings
 {
     if (!self.audioNode)
@@ -193,8 +221,16 @@
 
     if (self.audioNode)
     {
+        if ([self.audioNode isKindOfClass:CAMultiAudioFile.class])
+        {
+            CAMultiAudioFile *fileNode = (CAMultiAudioFile *)self.audioNode;
+            fileNode.loop = self.fileLoop;
+            fileNode.startTime = self.fileStartTime;
+            fileNode.endTime = self.fileEndTime;
+        }
         self.audioEnabled = self.audioEnabled;
         self.audioVolume = self.audioVolume;
+
 
     }
 }
@@ -212,6 +248,8 @@
     {
         CAMultiAudioFile *fileNode = (CAMultiAudioFile *)self.audioNode;
         fileNode.refCount--;
+        NSLog(@"REF COUNT %ld", (long)fileNode.refCount);
+        
         if (fileNode.refCount <= 0)
         {
             [[CaptureController sharedCaptureController] removeFileAudio:fileNode];
@@ -220,15 +258,20 @@
 
 }
 
+/*
 -(void)afterReplace
 {
+    NSLog(@"AFTER REPLACE");
     [self applyAudioSettings];
 
 }
+ 
 -(void)afterAdd
 {
+    NSLog(@"AFTER ADD");
     [self applyAudioSettings];
 }
+
 
 -(void)afterMerge:(bool)changed
 {
@@ -249,6 +292,7 @@
     
 
 }
+ */
 
 -(void)beforeReplace:(bool)removing
 {
@@ -287,6 +331,7 @@
     [super setIs_live:is_live];
     if (is_live)
     {
+        NSLog(@"IS LIVE");
         [self applyAudioSettings];
     }
 }

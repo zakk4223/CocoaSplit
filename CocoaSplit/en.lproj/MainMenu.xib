@@ -672,7 +672,7 @@
                                                                             <rect key="frame" x="28" y="5" width="131" height="13"/>
                                                                             <subviews>
                                                                                 <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Urq-gX-vkr">
-                                                                                    <rect key="frame" x="0.0" y="-1" width="156" height="15"/>
+                                                                                    <rect key="frame" x="0.0" y="-1" width="131" height="15"/>
                                                                                     <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="1" doubleValue="0.41066209532374098" tickMarkPosition="above" sliderType="linear" id="TJ1-Pe-So7" customClass="CSNobarSliderCell"/>
                                                                                     <connections>
                                                                                         <binding destination="jjj-Dq-tBd" name="value" keyPath="objectValue.volume" id="yfD-E7-UwV"/>
@@ -680,10 +680,10 @@
                                                                                 </slider>
                                                                             </subviews>
                                                                             <constraints>
-                                                                                <constraint firstAttribute="trailing" secondItem="Urq-gX-vkr" secondAttribute="trailing" constant="-25" id="Ssh-C2-nrs"/>
-                                                                                <constraint firstItem="Urq-gX-vkr" firstAttribute="top" secondItem="Aue-50-L31" secondAttribute="top" id="Uzg-Vu-IG9"/>
-                                                                                <constraint firstItem="Urq-gX-vkr" firstAttribute="leading" secondItem="Aue-50-L31" secondAttribute="leading" id="Vuc-Qw-mLO"/>
-                                                                                <constraint firstAttribute="bottom" secondItem="Urq-gX-vkr" secondAttribute="bottom" id="dpV-po-Dd5"/>
+                                                                                <constraint firstItem="Urq-gX-vkr" firstAttribute="top" secondItem="Aue-50-L31" secondAttribute="top" id="3qV-2d-Tgh"/>
+                                                                                <constraint firstAttribute="trailing" secondItem="Urq-gX-vkr" secondAttribute="trailing" id="69y-yE-W0B"/>
+                                                                                <constraint firstAttribute="bottom" secondItem="Urq-gX-vkr" secondAttribute="bottom" id="C43-8v-Jed"/>
+                                                                                <constraint firstItem="Urq-gX-vkr" firstAttribute="leading" secondItem="Aue-50-L31" secondAttribute="leading" id="VR0-vN-hTj"/>
                                                                             </constraints>
                                                                             <userDefinedRuntimeAttributes>
                                                                                 <userDefinedRuntimeAttribute type="number" keyPath="startValue">
@@ -773,18 +773,18 @@
                                                                             <rect key="frame" x="28" y="25" width="131" height="13"/>
                                                                             <subviews>
                                                                                 <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bws-uj-WDw">
-                                                                                    <rect key="frame" x="0.0" y="-1" width="156" height="15"/>
-                                                                                    <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="1" doubleValue="0.66955310314685312" tickMarkPosition="above" sliderType="linear" id="eIo-8e-W2o" customClass="CSNobarSliderCell"/>
+                                                                                    <rect key="frame" x="0.0" y="-1" width="131" height="15"/>
+                                                                                    <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" maxValue="1" doubleValue="0.37549169580419578" tickMarkPosition="above" sliderType="linear" id="eIo-8e-W2o" customClass="CSNobarSliderCell"/>
                                                                                     <connections>
                                                                                         <binding destination="Z3K-p0-4ZE" name="value" keyPath="objectValue.volume" id="dX1-g6-4Rx"/>
                                                                                     </connections>
                                                                                 </slider>
                                                                             </subviews>
                                                                             <constraints>
-                                                                                <constraint firstItem="bws-uj-WDw" firstAttribute="leading" secondItem="RB5-mf-9I2" secondAttribute="leading" id="Am3-p7-OQe"/>
-                                                                                <constraint firstAttribute="trailing" secondItem="bws-uj-WDw" secondAttribute="trailing" constant="-25" id="DXz-zm-M3M"/>
-                                                                                <constraint firstAttribute="bottom" secondItem="bws-uj-WDw" secondAttribute="bottom" id="b3J-jf-ywO"/>
-                                                                                <constraint firstItem="bws-uj-WDw" firstAttribute="top" secondItem="RB5-mf-9I2" secondAttribute="top" id="r1b-i5-v4h"/>
+                                                                                <constraint firstAttribute="trailing" secondItem="bws-uj-WDw" secondAttribute="trailing" id="4k5-Zh-A30"/>
+                                                                                <constraint firstAttribute="bottom" secondItem="bws-uj-WDw" secondAttribute="bottom" id="8dg-7J-cI2"/>
+                                                                                <constraint firstItem="bws-uj-WDw" firstAttribute="leading" secondItem="RB5-mf-9I2" secondAttribute="leading" id="9qx-v6-Wzd"/>
+                                                                                <constraint firstItem="bws-uj-WDw" firstAttribute="top" secondItem="RB5-mf-9I2" secondAttribute="top" id="nlO-a9-DZf"/>
                                                                             </constraints>
                                                                             <userDefinedRuntimeAttributes>
                                                                                 <userDefinedRuntimeAttribute type="number" keyPath="startValue">

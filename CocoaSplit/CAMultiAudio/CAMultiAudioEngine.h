@@ -51,6 +51,8 @@
 
 -(CAMultiAudioPCMPlayer *)createPCMInput:(NSString *)uniqueID withFormat:(const AudioStreamBasicDescription *)withFormat;
 -(CAMultiAudioFile *)createFileInput:(NSString *)filePath;
+-(void)addFileInput:(CAMultiAudioFile *)fileInput;
+
 
 
 -(void)removePCMInput:(CAMultiAudioPCMPlayer *)toRemove;
@@ -59,7 +61,7 @@
 -(void)updateStatistics;
 -(void)applyInputSettings:(NSDictionary *)inputSettings;
 -(NSDictionary *)generateInputSettings;
--(CAMultiAudioNode *)inputForUUID:(NSString *)uuid;
+-(CAMultiAudioInput *)inputForUUID:(NSString *)uuid;
 
 
 

@@ -16,6 +16,10 @@
 @property (strong) NSColor *nameColor;
 @property (strong) CAMultiAudioMatrixMixerWindowController *mixerWindow;
 @property (assign) Float32 delay;
+@property (assign) bool noSettings;
+
+
+
 -(void)openMixerWindow:(id)sender;
 
 @end
@@ -30,5 +34,7 @@
 @property (strong) NSColor *nameColor;
 @property (strong) CAMultiAudioMatrixMixerWindowController *mixerWindow;
 @property (assign) Float32 delay;
+@property (assign) bool noSettings;
+
 
 @end
