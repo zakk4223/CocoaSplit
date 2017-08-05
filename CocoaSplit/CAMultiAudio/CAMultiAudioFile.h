@@ -35,6 +35,7 @@
 -(void)play;
 -(void)stop;
 -(void)rewind;
++(Float64)durationForPath:(NSString *)path;
 
 
 @end

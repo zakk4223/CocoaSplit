@@ -11,6 +11,9 @@
 @interface CSGridView : NSView
 @property (assign) NSInteger minimumRows;
 @property (assign) NSInteger minimumColumns;
+@property (assign) CGFloat columnGap;
+@property (assign) CGFloat rowGap;
+
 @property (strong) NSColor *backgroundColor;
 
 @end

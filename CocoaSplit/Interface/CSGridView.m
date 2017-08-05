@@ -42,8 +42,11 @@
         rows = self.minimumRows;
     }
 
-    CGFloat boxWidth = self.frame.size.width/columns;
-    CGFloat boxHeight = self.frame.size.height/rows;
+    CGFloat totalWidth = self.frame.size.width - ((columns) * self.columnGap);
+    CGFloat totalHeight = self.frame.size.height - ((rows) * self.rowGap);;
+    
+    CGFloat boxWidth = totalWidth/columns;
+    CGFloat boxHeight = totalHeight/rows;
     
     /*
     if (boxHeight > boxWidth)
@@ -70,12 +73,12 @@
                 NSRect viewFrame = NSIntegralRect(NSMakeRect(curPoint.x, curPoint.y, boxWidth, boxHeight));
                 [subView setFrame:viewFrame];
                 
-                curPoint.x += boxWidth;
+                curPoint.x += boxWidth+self.columnGap;
                 viewIdx++;
                 
             }
         }
-        curPoint.y -= boxHeight;
+        curPoint.y -= (boxHeight+self.rowGap);
         curPoint.x = 0;
     }
 }

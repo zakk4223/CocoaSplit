@@ -33,7 +33,7 @@
 #import <Python/Python.h>
 #import "CSLayoutRecorder.h"
 #import "CSJSProxyObj.h"
-
+#import "CSLayoutCollectionItem.h"
 
 
 
@@ -1777,6 +1777,11 @@
     [self.inputOutlineView registerForDraggedTypes:@[NSSoundPboardType,NSFilenamesPboardType, NSFilesPromisePboardType, NSFileContentsPboardType, @"cocoasplit.input.item", @"cocoasplit.audio.item"]];
     [self.audioTableView registerForDraggedTypes:@[@"cocoasplit.audio.item", NSFilenamesPboardType]];
 
+    NSNib *layoutNib = [[NSNib alloc] initWithNibNamed:@"CSLayoutCollectionItem" bundle:nil];
+    NSLog(@"LAYOUT NIB %@", self.layoutCollectionView);
+    [self.layoutCollectionView registerNib:layoutNib forItemWithIdentifier:@"layout_item"];
+    
+    
     
 
     [NSColorPanel sharedColorPanel].showsAlpha = YES;
@@ -1948,7 +1953,6 @@
        _layoutViewController.layouts = self.sourceLayouts;
     }
     
-    
     SourceLayout *tmpLayout = [saveRoot valueForKey:@"selectedLayout"];
     if (tmpLayout)
     {
@@ -2041,6 +2045,7 @@
     
     
 }
+
 
 
 -(NSObject<CSInputSourceProtocol>*)inputSourceForPasteboardItem:(NSPasteboardItem *)item

@@ -40,6 +40,9 @@
         self.name = [path lastPathComponent];
         self.audioEnabled = NO;
         self.audioFilePath = path;
+        self.fileDuration = [CAMultiAudioFile durationForPath:path];
+        self.fileEndTime = self.fileDuration;
+        self.fileStartTime = 0.0f;
     }
     
     return self;
@@ -102,6 +105,12 @@
         self.audioVolume = [aDecoder decodeFloatForKey:@"audioVolume"];
         self.audioEnabled = [aDecoder decodeBoolForKey:@"audioEnabled"];
         self.audioFilePath = [aDecoder decodeObjectForKey:@"audioFilePath"];
+        
+        if (self.audioFilePath)
+        {
+            self.fileDuration = [CAMultiAudioFile durationForPath:self.audioFilePath];
+        }
+
         if ([aDecoder containsValueForKey:@"fileStartTime"])
         {
             self.fileStartTime = [aDecoder decodeFloatForKey:@"fileStartTime"];
@@ -112,7 +121,7 @@
         {
             self.fileEndTime = [aDecoder decodeFloatForKey:@"fileEndTime"];
         } else {
-            self.fileEndTime = 0.0f;
+            self.fileEndTime = self.fileDuration;
         }
 
         if ([aDecoder containsValueForKey:@"fileLoop"])
@@ -122,7 +131,6 @@
             self.fileLoop = NO;
         }
 
-        
         
     }
     

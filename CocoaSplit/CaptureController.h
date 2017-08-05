@@ -334,7 +334,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 
-@interface CaptureController : NSObject <CaptureControllerExport, NSTableViewDelegate, NSMenuDelegate, MIKMIDIMappableResponder, MIKMIDIResponder, MIKMIDIMappingGeneratorDelegate, NSCollectionViewDelegate, NSOutlineViewDelegate, NSOutlineViewDataSource, CSLayoutRecorderInfoProtocol, NSTableViewDataSource>
+@interface CaptureController : NSObject <CaptureControllerExport, NSTableViewDelegate, NSMenuDelegate, MIKMIDIMappableResponder, MIKMIDIResponder, MIKMIDIMappingGeneratorDelegate, NSCollectionViewDelegate, NSOutlineViewDelegate, NSOutlineViewDataSource, CSLayoutRecorderInfoProtocol, NSTableViewDataSource, NSCollectionViewDataSource>
 
 {
 CSSequenceEditorWindowController *_sequenceWindowController;

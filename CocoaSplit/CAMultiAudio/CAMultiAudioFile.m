@@ -30,7 +30,10 @@
         {
             self.name = [self.filePath lastPathComponent];
         }
-        [self openAudioFile];
+        if (![self openAudioFile])
+        {
+            return nil;
+        }
     }
     
     return self;
@@ -72,7 +75,6 @@
 
 -(void)setCurrentTime:(Float64)currentTime
 {
-    AudioTimeStamp auTime;
     
     bool is_playing = self.playing;
     
@@ -94,7 +96,6 @@
     [super updatePowerlevel];
     AudioTimeStamp currentTime;
     
-    UInt32 asbdSize = sizeof(_outputSampleRate);
     
     UInt32 timeSize = sizeof(currentTime);
     
@@ -126,7 +127,45 @@
 }
 
 
--(void)openAudioFile
+
++(Float64)durationForPath:(NSString *)path
+{
+    OSStatus err;
+    
+    if (!path)
+    {
+        return 0.0f;
+    }
+    
+    
+    CFURLRef audioURL = CFURLCreateWithFileSystemPath(NULL, (__bridge CFStringRef)path, kCFURLPOSIXPathStyle, false);
+    UInt32 durationSize = sizeof(Float64);
+    AudioFileID audioFile;
+    Float64 duration;
+    
+    err = AudioFileOpenURL(audioURL, kAudioFileReadPermission, 0, &audioFile);
+    CFRelease(audioURL);
+    
+    if (err != noErr)
+    {
+        return 0.0f;
+    }
+    
+    err = AudioFileGetProperty(audioFile, kAudioFilePropertyEstimatedDuration, &durationSize, &duration);
+    AudioFileClose(audioFile);
+
+    if (err != noErr)
+    {
+        return 0.0f;
+    }
+    
+    
+    return duration;
+}
+
+
+
+-(bool)openAudioFile
 {
     if (self.filePath)
     {
@@ -135,17 +174,20 @@
         UInt32 absdSize = sizeof(AudioStreamBasicDescription);
         UInt32 durationSize = sizeof(Float64);
         Float64 fileDuration;
-        UInt64 pktCnt;
-        UInt32 pktSize = sizeof(UInt64);
-        
+
         if (!_outputFormat)
         {
             _outputFormat = malloc(sizeof(AudioStreamBasicDescription));
         }
         err = AudioFileOpenURL(audioURL, kAudioFileReadPermission, 0, &_audioFile);
+        CFRelease(audioURL);
+
+        if (err != noErr)
+        {
+            return NO;
+        }
         err = AudioFileGetProperty(_audioFile, kAudioFilePropertyDataFormat, &absdSize, _outputFormat);
         AudioFileGetProperty(_audioFile, kAudioFilePropertyEstimatedDuration, &durationSize, &fileDuration);
-        AudioFileGetProperty(_audioFile, kAudioFilePropertyAudioDataPacketCount, &pktSize, &pktCnt);
         
         Float64 realEnd = fileDuration;
 
@@ -158,9 +200,11 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             self.duration = realEnd - self.startTime;
         });
-
+        return YES;
+        
 
     }
+    return NO;
 }
 
 -(void)completed
@@ -313,6 +357,11 @@
     
     _outputSampleRate = format->mSampleRate;
     return;
+}
+
+-(void)dealloc
+{
+    AudioFileClose(_audioFile);
 }
 
 

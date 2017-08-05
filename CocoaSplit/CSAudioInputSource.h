@@ -23,7 +23,7 @@
 @property (assign) bool fileLoop;
 @property (assign) Float64 fileStartTime;
 @property (assign) Float64 fileEndTime;
-
+@property (assign) Float64 fileDuration;
 
 
 -(instancetype) initWithAudioNode:(CAMultiAudioNode *)node;
