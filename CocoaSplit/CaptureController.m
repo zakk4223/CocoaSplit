@@ -2834,6 +2834,17 @@
 }
 
 
+-(IBAction)openScriptSwitcherWindow:(id)sender
+{
+    if (!_scriptWindowViewController)
+    {
+        _scriptWindowViewController = [[CSScriptWindowViewController alloc] init];
+    }
+    [_scriptWindowViewController showWindow:nil];
+    _scriptWindowViewController.sequences = nil;
+}
+
+
 - (IBAction)openLayoutSwitcherWindow:(id)sender
 {
     
@@ -2846,6 +2857,7 @@
         }
         [_layoutSwitcherWindowController showWindow:nil];
         _layoutSwitcherWindowController.layouts = nil;
+        /*
     } else {
         if (!_scriptWindowViewController)
         {
@@ -2854,7 +2866,9 @@
         [_scriptWindowViewController showWindow:nil];
         _scriptWindowViewController.sequences = nil;
         
+         */
     }
+         
 
     
 }

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16E195" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12120" systemVersion="16G29" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12120"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CSScriptWindowViewController">
             <connections>
-                <outlet property="gridView" destination="se5-gp-TjO" id="6JZ-Ck-jXh"/>
+                <outlet property="gridView" destination="67n-Ce-Qkq" id="V8M-Ht-1qS"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
@@ -19,20 +19,43 @@
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="626" height="418"/>
             <rect key="screenRect" x="0.0" y="0.0" width="3440" height="1417"/>
-            <view key="contentView" wantsLayer="YES" id="se5-gp-TjO" customClass="CSGridView">
+            <view key="contentView" wantsLayer="YES" id="se5-gp-TjO">
                 <rect key="frame" x="0.0" y="0.0" width="626" height="418"/>
                 <autoresizingMask key="autoresizingMask"/>
-                <userDefinedRuntimeAttributes>
-                    <userDefinedRuntimeAttribute type="number" keyPath="minimumRows">
-                        <integer key="value" value="2"/>
-                    </userDefinedRuntimeAttribute>
-                    <userDefinedRuntimeAttribute type="number" keyPath="minimumColumns">
-                        <integer key="value" value="3"/>
-                    </userDefinedRuntimeAttribute>
-                    <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
-                        <color key="value" white="1" alpha="1" colorSpace="deviceWhite"/>
-                    </userDefinedRuntimeAttribute>
-                </userDefinedRuntimeAttributes>
+                <subviews>
+                    <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dTt-AM-CpL">
+                        <rect key="frame" x="0.0" y="-1" width="626" height="23"/>
+                        <segmentedCell key="cell" borderStyle="border" alignment="left" style="smallSquare" trackingMode="momentary" id="2jV-bX-sky">
+                            <font key="font" metaFont="system"/>
+                            <segments>
+                                <segment image="NSAddTemplate"/>
+                                <segment width="596" enabled="NO" tag="1"/>
+                            </segments>
+                        </segmentedCell>
+                    </segmentedControl>
+                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="67n-Ce-Qkq" customClass="CSGridView">
+                        <rect key="frame" x="0.0" y="20" width="626" height="398"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="minimumColumns">
+                                <integer key="value" value="3"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="minimumRows">
+                                <integer key="value" value="3"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
+                                <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </customView>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="67n-Ce-Qkq" secondAttribute="bottom" constant="20" symbolic="YES" id="6BT-8A-8ga"/>
+                    <constraint firstItem="67n-Ce-Qkq" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" id="BYZ-fh-wUr"/>
+                    <constraint firstItem="67n-Ce-Qkq" firstAttribute="trailing" secondItem="dTt-AM-CpL" secondAttribute="trailing" id="Fen-52-t9Z"/>
+                    <constraint firstItem="67n-Ce-Qkq" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" id="GIu-zc-ZU9"/>
+                    <constraint firstItem="67n-Ce-Qkq" firstAttribute="leading" secondItem="dTt-AM-CpL" secondAttribute="leading" id="ajc-cE-hTh"/>
+                    <constraint firstAttribute="bottom" secondItem="dTt-AM-CpL" secondAttribute="bottom" id="nx4-Eh-LhR"/>
+                </constraints>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="0bl-1N-AYu"/>
@@ -40,4 +63,7 @@
             <point key="canvasLocation" x="71" y="192"/>
         </window>
     </objects>
+    <resources>
+        <image name="NSAddTemplate" width="11" height="11"/>
+    </resources>
 </document>

@@ -79,8 +79,9 @@
     [_window setReleasedWhenClosed:NO];
     
     
-    NSImage *img = [[NSImage alloc] initWithContentsOfFile:@"/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/SidebarSmartFolder.icns"];
+    //NSImage *img = [[NSImage alloc] initWithContentsOfFile:@"/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/SidebarSmartFolder.icns"];
     
+    NSImage *img = [NSImage imageNamed:@"NSScriptTemplate"];
     NSImage *useimg = [[NSImage alloc] initWithSize:NSMakeSize(64,64)];
     [useimg addRepresentation:img.representations[0]];
     

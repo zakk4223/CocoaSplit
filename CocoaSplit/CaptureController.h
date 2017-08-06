@@ -524,6 +524,7 @@ NSArray *_savedTransitionConstraints;
 -(JSContext *)setupJavascriptContext;
 -(NSObject<CSInputSourceProtocol>*)inputSourceForPasteboardItem:(NSPasteboardItem *)item;
 
+-(IBAction)openScriptSwitcherWindow:(id)sender;
 
 
 @end
