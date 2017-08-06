@@ -33,6 +33,13 @@
 
 
 
+-(IBAction)addScriptAction:(id)sender
+{
+    _sequenceWindowController = [[CSSequenceEditorWindowController alloc] init];
+    _sequenceWindowController.addSequenceOnSave = YES;
+    _sequenceWindowController.sequence = [[CSLayoutSequence alloc] init];
+    [_sequenceWindowController showWindow:nil];
+}
 
 
 -(NSArray *)sequences

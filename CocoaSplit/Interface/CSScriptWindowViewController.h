@@ -9,11 +9,17 @@
 #import <Cocoa/Cocoa.h>
 #import "CSSequenceActivatorViewController.h"
 #import "CSGridView.h"
+#import "CSSequenceEditorWindowController.h"
+
 
 @interface CSScriptWindowViewController : NSWindowController
 {
     CSSequenceActivatorViewController *_sequenceViewController;
+    CSSequenceEditorWindowController *_sequenceWindowController;
 }
+
+-(IBAction)addScriptAction:(id)sender;
+
 @property (weak) IBOutlet CSGridView *gridView;
 @property (strong) NSArray *sequences;
 

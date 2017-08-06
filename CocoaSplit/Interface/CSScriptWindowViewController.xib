@@ -32,6 +32,9 @@
                                 <segment width="596" enabled="NO" tag="1"/>
                             </segments>
                         </segmentedCell>
+                        <connections>
+                            <action selector="addScriptAction:" target="-2" id="dJP-ee-SGp"/>
+                        </connections>
                     </segmentedControl>
                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="67n-Ce-Qkq" customClass="CSGridView">
                         <rect key="frame" x="0.0" y="20" width="626" height="398"/>
@@ -49,12 +52,12 @@
                     </customView>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="67n-Ce-Qkq" secondAttribute="bottom" constant="20" symbolic="YES" id="6BT-8A-8ga"/>
-                    <constraint firstItem="67n-Ce-Qkq" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" id="BYZ-fh-wUr"/>
-                    <constraint firstItem="67n-Ce-Qkq" firstAttribute="trailing" secondItem="dTt-AM-CpL" secondAttribute="trailing" id="Fen-52-t9Z"/>
-                    <constraint firstItem="67n-Ce-Qkq" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" id="GIu-zc-ZU9"/>
-                    <constraint firstItem="67n-Ce-Qkq" firstAttribute="leading" secondItem="dTt-AM-CpL" secondAttribute="leading" id="ajc-cE-hTh"/>
+                    <constraint firstAttribute="bottom" secondItem="67n-Ce-Qkq" secondAttribute="bottom" constant="20" symbolic="YES" id="2M9-b1-M4T"/>
+                    <constraint firstItem="67n-Ce-Qkq" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" id="A9k-aq-wGz"/>
+                    <constraint firstItem="67n-Ce-Qkq" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" id="gvH-cB-XFC"/>
+                    <constraint firstItem="67n-Ce-Qkq" firstAttribute="leading" secondItem="dTt-AM-CpL" secondAttribute="leading" id="k0G-77-Yet"/>
                     <constraint firstAttribute="bottom" secondItem="dTt-AM-CpL" secondAttribute="bottom" id="nx4-Eh-LhR"/>
+                    <constraint firstItem="67n-Ce-Qkq" firstAttribute="trailing" secondItem="dTt-AM-CpL" secondAttribute="trailing" id="ylA-5N-XM5"/>
                 </constraints>
             </view>
             <connections>
