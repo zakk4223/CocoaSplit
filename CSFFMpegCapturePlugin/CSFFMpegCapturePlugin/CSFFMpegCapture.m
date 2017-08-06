@@ -3,7 +3,6 @@
 //  CSFFMpegCapturePlugin
 //
 //  Created by Zakk on 6/11/16.
-//  Copyright © 2016 Zakk. All rights reserved.
 //
 
 #import "CSFFMpegCapture.h"
@@ -235,7 +234,6 @@
     
     if (!self.player.pcmPlayer && self.pcmPlayer)
     {
-        NSLog(@"SETTING PCM PLAYER TO %@", self.pcmPlayer);
         self.player.pcmPlayer = self.pcmPlayer;
     }
     

@@ -47,6 +47,29 @@
 }
 
 
++(NSSet *)mediaUTIs
+{
+    return [NSSet setWithArray:@[@"public.plain-text"]];
+}
+
+
++(NSObject<CSCaptureSourceProtocol> *)createSourceFromPasteboardItem:(NSPasteboardItem *)item
+{
+    
+    FileTextCapture *ret = nil;
+    
+    NSString *textPath = [item stringForType:@"public.file-url"];
+    if (textPath)
+    {
+        NSURL *fileURL = [NSURL URLWithString:textPath];
+        NSString *realPath = [fileURL path];
+        ret = [[FileTextCapture alloc] init];
+        ret.currentFile = realPath;
+    }
+    return ret;
+}
+
+
 -(void)setStartLine:(int)startLine
 {
     _startLine = startLine;
