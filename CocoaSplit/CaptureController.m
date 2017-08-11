@@ -946,7 +946,7 @@
        NSArray *audioTypes;
        UInt32 size;
        
-       self.audioFileUTIs = [NSSet set];
+       self.audioFileUTIs = [NSMutableSet set];
        
        err = AudioFileGetGlobalInfoSize(kAudioFileGlobalInfo_AllUTIs, 0, NULL, &size);
        if (err == noErr)
@@ -954,7 +954,11 @@
            err = AudioFileGetGlobalInfo(kAudioFileGlobalInfo_AllUTIs, 0, NULL, &size, &audioTypes);
            if (err == noErr)
            {
-               self.audioFileUTIs = [NSSet setWithArray:audioTypes];
+               
+               self.audioFileUTIs = [NSMutableSet setWithArray:audioTypes];
+               [self.audioFileUTIs removeObject:@"public.movie"];
+               [self.audioFileUTIs removeObject:@"public.mpeg-4"];
+
            }
        }
 

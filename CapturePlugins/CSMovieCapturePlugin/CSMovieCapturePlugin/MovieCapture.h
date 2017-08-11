@@ -3,7 +3,6 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 8/26/14.
-//  Copyright (c) 2014 Zakk. All rights reserved.
 //
 
 #import "CSCaptureBase.h"

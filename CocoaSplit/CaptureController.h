@@ -516,7 +516,7 @@ NSArray *_savedTransitionConstraints;
 @property (strong) NSString *layoutScriptLabel;
 @property (strong) CSLayoutRecorder *mainLayoutRecorder;
 @property (readonly) SourceLayout *activeLayout;
-@property (strong) NSSet *audioFileUTIs;
+@property (strong) NSMutableSet *audioFileUTIs;
 
 
 @property (weak) IBOutlet NSArrayController *audioInputsArrayController;

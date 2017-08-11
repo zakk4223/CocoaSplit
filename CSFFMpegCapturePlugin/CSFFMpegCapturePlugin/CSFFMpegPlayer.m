@@ -165,12 +165,24 @@
 
     NSUInteger currentIdx = 0;
     
-    currentIdx = [_inputQueue indexOfObject:useItem];
+    if (useItem)
+    {
+        currentIdx = [_inputQueue indexOfObject:useItem];
+    }
     
-    currentIdx++;
+    if (self.repeat == kCSFFMovieRepeatNone || self.repeat == kCSFFMovieRepeatAll)
+    {
+        currentIdx++;
+    }
+    
     
     if (currentIdx >= _inputQueue.count)
     {
+        if (self.repeat == kCSFFMovieRepeatNone)
+        {
+            [self stop];
+            return;
+        }
         currentIdx = 0;
     }
     
@@ -549,8 +561,11 @@
 
 -(void)inputDone
 {
+    
     if (_audio_done && _video_done)
     {
+        NSLog(@"INPUT DONE");
+
         [self.currentlyPlaying stop];
         
         if (_forceNextInput)

@@ -12,6 +12,14 @@
 #import "CSFFMpegInput.h"
 #import "CSPcmPlayer.h"
 
+
+typedef enum ff_movie_repeat_t {
+    kCSFFMovieRepeatNone = 0,
+    kCSFFMovieRepeatOne = 1,
+    kCSFFMovieRepeatAll = 2
+} ff_movie_repeat;
+
+
 @interface CSFFMpegPlayer : NSObject
 {
     CFTimeInterval _first_frame_host_time;
@@ -56,6 +64,7 @@
 @property (assign) bool muted;
 @property (assign) bool seeking;
 @property (assign) bool audio_needs_restart;
+@property (assign) ff_movie_repeat repeat;
 
 
 

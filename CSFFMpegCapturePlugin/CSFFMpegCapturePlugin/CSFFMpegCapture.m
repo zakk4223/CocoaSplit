@@ -10,6 +10,7 @@
 @implementation CSFFMpegCapture
 
 @synthesize currentMovieTime  = _currentMovieTime;
+@synthesize repeat = _repeat;
 
 -(instancetype) init
 {
@@ -23,6 +24,8 @@
         self.updateMovieTime = YES;
         self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
         _firstFrame = YES;
+        _repeat = kCSFFMovieRepeatNone;
+        
     }
     return self;
 }
@@ -49,6 +52,31 @@
     }
     return ret;
 }
+
+
+-(void)setRepeat:(ff_movie_repeat)repeat
+{
+    _repeat = repeat;
+    
+    if (self.player)
+    {
+        self.player.repeat = repeat;
+    }
+}
+
+-(ff_movie_repeat)repeat
+{
+    if (self.player)
+    {
+        _repeat = self.player.repeat;
+        
+    }
+    
+    return _repeat;
+}
+
+
+
 
 -(void)setupPlayer
 {
@@ -77,7 +105,9 @@
     
     _player.itemStarted = ^(CSFFMpegInput *item) { [weakSelf itemStarted:item]; };
     _player.queueStateChanged = ^() { [weakSelf queueChanged]; };
+    _player.repeat = _repeat;
 
+    
     if (self.isLive)
     {
         [self registerPCMOutput:1024 audioFormat:&_asbd];
@@ -109,6 +139,8 @@
     [aCoder encodeBool:self.playWhenLive forKey:@"playWhenLive"];
     [aCoder encodeBool:self.useCurrentPosition forKey:@"useCurrentPosition"];
     [aCoder encodeDouble:_currentMovieTime forKey:@"savedTime"];
+    [aCoder encodeInt:self.repeat forKey:@"repeat"];
+    
     
 }
 
@@ -145,6 +177,7 @@
         self.useCurrentPosition = [aDecoder decodeBoolForKey:@"useCurrentPosition"];
         
         self.playWhenLive = [aDecoder decodeBoolForKey:@"playWhenLive"];
+        self.repeat = [aDecoder decodeIntForKey:@"repeat"];
     }
     
     return self;

@@ -232,6 +232,33 @@
                         <binding destination="oEH-Pr-eH8" name="value" keyPath="selection.useCurrentPosition" id="gTJ-ii-Wob"/>
                     </connections>
                 </button>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IEf-UH-Kgb">
+                    <rect key="frame" x="242" y="25" width="41" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Repeat" id="rDX-h9-STO">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zV2-KA-ig6">
+                    <rect key="frame" x="286" y="19" width="95" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="UbH-Gg-9jj" id="sQk-jw-qzF">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" id="lru-RP-mX3">
+                            <items>
+                                <menuItem title="None" state="on" id="UbH-Gg-9jj"/>
+                                <menuItem title="All" tag="2" id="cg5-NZ-cE9"/>
+                                <menuItem title="Current" tag="1" id="x9J-aD-GCG"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="oEH-Pr-eH8" name="selectedTag" keyPath="selection.repeat" id="FkA-UH-zVe"/>
+                    </connections>
+                </popUpButton>
             </subviews>
             <constraints>
                 <constraint firstItem="QyX-l5-Nc5" firstAttribute="top" secondItem="I07-lW-ske" secondAttribute="bottom" constant="-1" id="fLU-Tx-cYu"/>
