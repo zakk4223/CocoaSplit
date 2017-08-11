@@ -80,6 +80,7 @@
 		3450239D1C60B3EF00B461B5 /* CSLayoutCollectionItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3450239C1C60B3EF00B461B5 /* CSLayoutCollectionItemView.m */; };
 		34559A281E12D4400085883C /* CSCaptureBase+InputFrameTick.m in Sources */ = {isa = PBXBuildFile; fileRef = 34559A271E12D4400085883C /* CSCaptureBase+InputFrameTick.m */; };
 		34576C7819AFCA1B007BAD90 /* CSPluginLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 34576C7719AFCA1B007BAD90 /* CSPluginLoader.m */; };
+		345BECE51F3DB4F000B46F29 /* CSLayoutCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 345BECC31F3DADF700B46F29 /* CSLayoutCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		345F8B051A1060D6009A81E3 /* CSAacEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B041A1060D6009A81E3 /* CSAacEncoder.m */; };
 		345F8B1A1A1218DE009A81E3 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 345F8B191A1218DE009A81E3 /* AudioToolbox.framework */; };
 		345F8B1D1A12AC2C009A81E3 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 345F8B1C1A12AC2C009A81E3 /* AudioUnit.framework */; };
@@ -317,6 +318,13 @@
 			remoteGlobalIDString = 343C79BA1D0C763A00B36EEC;
 			remoteInfo = CSFFMpegCapturePlugin;
 		};
+		345BECC21F3DADF700B46F29 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 345BECB61F3DADF600B46F29 /* CSLayoutCapturePlugin.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 345BECAD1F3DADF600B46F29;
+			remoteInfo = CSLayoutCapturePlugin;
+		};
 		3473D27D1D4C349700842EEE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3473D2791D4C349700842EEE /* CSVaughnliveStreamServicePlugin.xcodeproj */;
@@ -520,6 +528,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				345BECE51F3DB4F000B46F29 /* CSLayoutCapturePlugin.bundle in Copy Files */,
 				3414047D1D76EA3200505A5D /* CSSyphonCapturePlugin.bundle in Copy Files */,
 				3473D2871D4C359700842EEE /* CSVaughnliveStreamServicePlugin.bundle in Copy Files */,
 				340C802D1D450A5100B2FD7D /* CSYoutubeStreamServicePlugin.bundle in Copy Files */,
@@ -665,6 +674,7 @@
 		34576C9819AFE6F7007BAD90 /* CSWindowCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSWindowCapturePlugin.xcodeproj; path = CapturePlugins/CSWindowCapturePlugin/CSWindowCapturePlugin.xcodeproj; sourceTree = "<group>"; };
 		34576D2019B023E2007BAD90 /* CSMovieCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSMovieCapturePlugin.xcodeproj; path = CapturePlugins/CSMovieCapturePlugin/CSMovieCapturePlugin.xcodeproj; sourceTree = "<group>"; };
 		34576D5219B024EB007BAD90 /* CSImageCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSImageCapturePlugin.xcodeproj; path = CapturePlugins/CSImageCapturePlugin/CSImageCapturePlugin.xcodeproj; sourceTree = "<group>"; };
+		345BECB61F3DADF600B46F29 /* CSLayoutCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSLayoutCapturePlugin.xcodeproj; path = CapturePlugins/CSLayoutCapturePlugin/CSLayoutCapturePlugin.xcodeproj; sourceTree = "<group>"; };
 		345F8B031A1060D6009A81E3 /* CSAacEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSAacEncoder.h; sourceTree = "<group>"; };
 		345F8B041A1060D6009A81E3 /* CSAacEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAacEncoder.m; sourceTree = "<group>"; };
 		345F8B191A1218DE009A81E3 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -1560,6 +1570,14 @@
 			name = PluginHeaders;
 			sourceTree = "<group>";
 		};
+		345BECB71F3DADF600B46F29 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				345BECC31F3DADF700B46F29 /* CSLayoutCapturePlugin.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		345F8B331A1571B1009A81E3 /* CAMultiAudio */ = {
 			isa = PBXGroup;
 			children = (
@@ -1701,6 +1719,7 @@
 		34AFC24319B058800007C07B /* CapturePlugins */ = {
 			isa = PBXGroup;
 			children = (
+				345BECB61F3DADF600B46F29 /* CSLayoutCapturePlugin.xcodeproj */,
 				343C79C31D0C763A00B36EEC /* CSFFMpegCapturePlugin.xcodeproj */,
 				3436921B1B62364E007EC2D9 /* CSShapeCapturePlugin.xcodeproj */,
 				34F7C55A1B2C908700345230 /* CSDeckLinkCapturePlugin.xcodeproj */,
@@ -2141,6 +2160,10 @@
 					ProjectRef = 34576D5219B024EB007BAD90 /* CSImageCapturePlugin.xcodeproj */;
 				},
 				{
+					ProductGroup = 345BECB71F3DADF600B46F29 /* Products */;
+					ProjectRef = 345BECB61F3DADF600B46F29 /* CSLayoutCapturePlugin.xcodeproj */;
+				},
+				{
 					ProductGroup = 34A7C19D19B9A41900BC6882 /* Products */;
 					ProjectRef = 34A7C19C19B9A41900BC6882 /* CSLayoutSwitcherExtraPlugin.xcodeproj */;
 				},
@@ -2224,6 +2247,13 @@
 			fileType = wrapper.cfbundle;
 			path = CSFFMpegCapturePlugin.bundle;
 			remoteRef = 343C79CB1D0C763A00B36EEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		345BECC31F3DADF700B46F29 /* CSLayoutCapturePlugin.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = CSLayoutCapturePlugin.bundle;
+			remoteRef = 345BECC21F3DADF700B46F29 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		3473D27E1D4C349700842EEE /* CSVaughnliveStreamServicePlugin.bundle */ = {

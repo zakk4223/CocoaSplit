@@ -33,6 +33,10 @@
 
 
 
+-(NSObject *)captureController
+{
+    return [CaptureController sharedCaptureController];
+}
 
 
 -(NSArray *)accountNamesForService:(NSString *)serviceName

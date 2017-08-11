@@ -26,6 +26,7 @@
 
 -(CSOauth2Authenticator *) createOAuth2Authenticator:(NSString *)serviceName clientID:(NSString *)client_id flowType:(NSString *)flow_type config:(NSDictionary *)config_dict;
 -(NSArray *)accountNamesForService:(NSString *)serviceName;
+-(NSObject *)captureController;
 
 
 @property (readonly) double currentFPS;
