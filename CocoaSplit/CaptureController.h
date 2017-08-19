@@ -117,11 +117,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (weak) IBOutlet PreviewView *livePreviewView;
 @property (strong) NSMutableDictionary *transitionNames;
 @property (strong) NSArray *transitionDirections;
-@property (assign) float transitionDuration;
 @property (strong) NSString *transitionName;
-@property (strong) NSString *transitionDirection;
-@property (strong) CIFilter *transitionFilter;
-@property (assign) bool transitionFullScene;
 @property (assign) NSInteger active_output_count;
 @property (assign) NSInteger total_dropped_frames;
 @property (weak) IBOutlet NSView *transitionConfigurationView;

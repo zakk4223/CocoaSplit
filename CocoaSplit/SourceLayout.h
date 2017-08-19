@@ -66,11 +66,6 @@
 @property (nonatomic, copy) void (^addLayoutBlock)(SourceLayout *layout);
 @property (nonatomic, copy) void (^removeLayoutBlock)(SourceLayout *layout);
 
-@property (strong) NSString *transitionName;
-@property (strong) NSString *transitionDirection;
-@property (strong) CIFilter *transitionFilter;
-@property (assign) float transitionDuration;
-@property (assign) bool transitionFullScene;
 @property (strong) NSMutableDictionary *pendingScripts;
 @property (assign) bool recordingLayout;
 @property (assign) bool recordLayout;
@@ -121,7 +116,7 @@
 -(void)removeSourceLayoutViaScript:(SourceLayout *)layout;
 -(void)sequenceThroughLayoutsViaScript:(NSArray *)sequence withCompletionBlock:(void (^)(void))completionBlock withExceptionBlock:(void (^)(NSException *exception))exceptionBlock;
 -(SourceLayout *)mergedSourceLayout:(SourceLayout *)withLayout;
-
+-(SourceLayout *)sourceLayoutWithRemoved:(SourceLayout *)withRemoved;
 
 @end
 
@@ -193,11 +188,6 @@
 @property (nonatomic, copy) void (^addLayoutBlock)(SourceLayout *layout);
 @property (nonatomic, copy) void (^removeLayoutBlock)(SourceLayout *layout);
 
-@property (strong) NSString *transitionName;
-@property (strong) NSString *transitionDirection;
-@property (strong) CIFilter *transitionFilter;
-@property (assign) float transitionDuration;
-@property (assign) bool transitionFullScene;
 @property (strong) NSMutableDictionary *pendingScripts;
 @property (assign) bool recordingLayout;
 @property (assign) bool recordLayout;

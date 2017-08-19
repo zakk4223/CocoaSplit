@@ -1160,6 +1160,18 @@
 }
 
 
+-(SourceLayout *)sourceLayoutWithRemoved:(SourceLayout *)withRemoved
+{
+    SourceLayout *retLayout = [self copy];
+    retLayout.transitionInfo = nil;
+    [retLayout restoreSourceList:[self makeSaveData]];
+    
+    [retLayout removeSourceLayout:withRemoved usingScripts:NO];
+    [retLayout saveSourceList];
+    [retLayout clearSourceList];
+    return retLayout;
+
+}
 -(SourceLayout *)mergedSourceLayout:(SourceLayout *)withLayout
 {
     SourceLayout *retLayout = [self copy];
@@ -1292,7 +1304,7 @@
         rTrans.duration = useTransition.transitionDuration;
         rTrans.removedOnCompletion = YES;
         rTrans.subtype = useTransition.transitionDirection;
-        if (self.transitionFilter)
+        if (useTransition.transitionFilter)
         {
             rTrans.filter = useTransition.transitionFilter;
         }
@@ -1618,7 +1630,7 @@
         rTrans.duration = useTransition.transitionDuration;
         rTrans.removedOnCompletion = YES;
         rTrans.subtype = useTransition.transitionDirection;
-        if (self.transitionFilter)
+        if (useTransition.transitionFilter)
         {
             rTrans.filter = useTransition.transitionFilter;
         }
@@ -1669,13 +1681,13 @@
     if (bTrans)
     {
         transitionDelegate.forLayout = self;
-        transitionDelegate.fullScreen = self.transitionFullScene;
+        transitionDelegate.fullScreen = useTransition.transitionFullScene;
         
         [self.rootLayer addAnimation:bTrans forKey:bTrans.keyPath];
     }
     
     
-    if (self.transitionFullScene)
+    if (useTransition.transitionFullScene)
     {
         [self.rootLayer addAnimation:rTrans forKey:nil];
     }

@@ -217,15 +217,6 @@ var switchToLayout = function(layout, kwargs) {
             target_layout.transitionInfo = layoutTransition.postTransition;
         }
         
-        /*
-        if ((CSAnimationBlock.currentFrame() && target_layout.transitionName || target_layout.transitionFilter) && target_layout.transitionDuration > 0) {
-            var dummy_animation = new CSAnimation(null, null, null);
-            dummy_animation.duration = target_layout.transitionDuration;
-            
-            //CSAnimationBlock.currentFrame().add_animation(dummy_animation, null, null);
-        }*/
-        
-        
         target_layout.replaceWithSourceLayoutUsingScripts(layout, useScripts);
     }
 }
@@ -269,17 +260,31 @@ var mergeLayoutByName = function(name, kwargs) {
 var removeLayout = function(layout, kwargs) {
     kwargs = kwargs || {};
     
+    var useScripts = !kwargs['noscripts'];
+
     if (layout)
     {
         var target_layout = getCurrentLayout();
-        if ((CSAnimationBlock.currentFrame() && target_layout.transitionName || target_layout.transitionFilter) && target_layout.transitionDuration > 0) {
-            var dummy_animation = new CSAnimation(null, null, null);
-            dummy_animation.duration = target_layout.transitionDuration;
-            CSAnimationBlock.currentFrame().add_animation(dummy_animation, null, null);
+        var layoutTransition = target_layout.transitionInfo;
+        var endLayout = layout;
+
+        if (layoutTransition && layoutTransition.transitionLayout)
+        {
+            endLayout = target_layout.sourceLayoutWithRemoved(layout);
+            if (layoutTransition.preTransition)
+            {
+                target_layout.transitionInfo = layoutTransition.preTransition;
+                target_layout.replaceWithSourceLayoutUsingScripts(layoutTransition.transitionLayout, useScripts);
+                waitAnimation(layoutTransition.transitionHoldTime);
+            }
+            target_layout.transitionInfo = layoutTransition.postTransition;
+            target_layout.replaceWithSourceLayoutUsingScripts(endLayout, useScripts);
+        } else {
+            
+            
+            target_layout.removeSourceLayoutUsingScripts(layout, useScripts);
         }
-        var useScripts = !kwargs['noscripts'];
-        
-        target_layout.removeSourceLayoutUsingScripts(layout, useScripts);
+
 
     }
 }

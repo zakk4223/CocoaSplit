@@ -4531,11 +4531,6 @@
 
 -(void)clearTransitionSettings:(SourceLayout *)layout
 {
-    layout.transitionName = nil;
-    layout.transitionDirection = nil;
-    layout.transitionDuration = 0;
-    layout.transitionFilter = nil;
-    layout.transitionFullScene = nil;
     layout.transitionInfo = nil;
     
 
