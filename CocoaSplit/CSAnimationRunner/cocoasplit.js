@@ -47,36 +47,57 @@ var inputByName = function(name) {
     return null;
 }
 
-var setBasicTransition = function(name, direction, duration, kwargs) {
-    kwargs = kwargs || {};
+var setTransition = function(transition) {
     var my_layout = getCurrentLayout();
-    my_layout.transitionName = name;
-    my_layout.transitionDirection = direction;
-    my_layout.transitionDuration = duration;
+    my_layout.transitionInfo = transition;
+}
+
+
+var createBasicTransition = function(name, direction, duration, kwargs) {
+    kwargs = kwargs || {};
+    var new_transition = CSLayoutTransition.alloc().init();
+    
+    new_transition.transitionName = name;
+    new_transition.transitionDirection = direction;
+    new_transition.transitionDuration = duration;
     if (kwargs['full_scene']) {
-        my_layout.transitionFullScene = kwargs['full_scene'];
+        new_transition.transitionFullScene = kwargs['full_scene'];
     }
+    
+    return new_transition;
 }
 
 var clearTransition = function() {
     var my_layout = getCurrentLayout();
-    my_layout.transitionName = null;
-    my_layout.transitionDuration = 0;
-    my_layout.transitionFilter = null;
+    my_layout.transitionInfo = null;
 }
 
-var setCITransition = function(name, inputMap, duration, kwargs) {
+
+var createLayoutTransition = function(useLayout, inTransition, outTransition, layoutHoldTime) {
+    var new_transition = CSLayoutTransition.alloc().init();
+    new_transition.transitionLayout = useLayout;
+    new_transition.preTransition = inTransition;
+    new_transition.postTransition = outTransition;
+    new_transition.layoutHoldTime = layoutHoldTime;
+    return new_transition;
+}
+
+
+var createCITransition = function(name, inputMap, duration, kwargs) {
     inputMap = inputMap || {};
     if (duration === undefined) { duration = 0.25; }
+    var new_cs_transition = CSLayoutTransition.alloc().init();
+    
     var new_transition = CIFilter.filterWithNameWithInputParameters(name, inputMap);
-    var my_layout = getCurrentLayout();
-    my_layout.transitionFilter = new_transition;
-    my_layout.transitionDuration = duration;
+    new_cs_transition.transitionFilter = new_transition;
+    new_cs_transition.transitionDuration = duration;
     
     if (kwargs['full_scene'])
     {
-        my_layout.transitionFullScene = kwargs['full_scene'];
+        new_cs_transition.transitionFullScene = kwargs['full_scene'];
     }
+    
+    return new_cs_transition;
 }
 
 
