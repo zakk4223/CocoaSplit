@@ -74,6 +74,14 @@ function AnimationBlock(duration) {
     }
     
     
+    this.advance_begin_time = function(duration) {
+        if (this.current_begin_time)
+        {
+            this.latest_end_time = this.current_begin_time + duration;
+        }
+    }
+    
+    
     this.add_animation = function(animation, target, keyPath) {
         if (!this.current_begin_time)
         {

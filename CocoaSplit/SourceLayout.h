@@ -18,6 +18,7 @@
 
 
 @class CSLayoutRecorder;
+@class CSLayoutTransition;
 
 
 @protocol SourceLayoutExport <JSExport>
@@ -25,6 +26,7 @@
 
 @property (assign) bool inTransition;
 
+@property (strong) CSLayoutTransition *transitionInfo;
 
 
 
@@ -117,6 +119,9 @@
 -(void)mergeSourceLayoutViaScript:(SourceLayout *)layout;
 -(void)replaceWithSourceLayoutViaScript:(SourceLayout *)layout withCompletionBlock:(void (^)(void))completionBlock withExceptionBlock:(void (^)(NSException *exception))exceptionBlock;
 -(void)removeSourceLayoutViaScript:(SourceLayout *)layout;
+-(void)sequenceThroughLayoutsViaScript:(NSArray *)sequence withCompletionBlock:(void (^)(void))completionBlock withExceptionBlock:(void (^)(NSException *exception))exceptionBlock;
+-(SourceLayout *)mergedSourceLayout:(SourceLayout *)withLayout;
+
 
 @end
 
@@ -197,6 +202,8 @@
 @property (assign) bool recordingLayout;
 @property (assign) bool recordLayout;
 @property (weak) CSLayoutRecorder *recorder;
+@property (strong) CSLayoutTransition *transitionInfo;
+
 -(void)generateTopLevelSourceList;
 
 

@@ -148,6 +148,20 @@ var runTriggerScript = function(layout, scriptType) {
     });
 
 }
+
+
+var advanceBeginTime = function(duration) {
+    CSAnimationBlock.currentFrame().advance_begin_time(duration);
+}
+
+
+var addDummyAnimation = function(duration) {
+    var dummy_animation = new CSAnimation(null, null, null);
+    dummy_animation.duration = duration;
+    CSAnimationBlock.currentFrame().add_animation(dummy_animation, null, null);
+}
+
+
 var layoutByName = function(name) {
     return captureController.findLayoutWithName(name);
 }
@@ -166,17 +180,31 @@ var switchToLayoutByName = function(name, kwargs) {
 
 var switchToLayout = function(layout, kwargs) {
     kwargs = kwargs || {};
-    
-    if (layout) { 
+    var useScripts = !kwargs['noscripts'];
+
+    if (layout) {
         var target_layout = getCurrentLayout();
+        var layoutTransition = target_layout.transitionInfo;
+        if (layoutTransition && layoutTransition.transitionLayout)
+        {
+            if (layoutTransition.preTransition)
+            {
+                target_layout.transitionInfo = layoutTransition.preTransition;
+                target_layout.replaceWithSourceLayoutUsingScripts(layoutTransition.transitionLayout, useScripts);
+                waitAnimation(layoutTransition.transitionHoldTime);
+            }
+            target_layout.transitionInfo = layoutTransition.postTransition;
+        }
+        
+        /*
         if ((CSAnimationBlock.currentFrame() && target_layout.transitionName || target_layout.transitionFilter) && target_layout.transitionDuration > 0) {
             var dummy_animation = new CSAnimation(null, null, null);
             dummy_animation.duration = target_layout.transitionDuration;
             
-            CSAnimationBlock.currentFrame().add_animation(dummy_animation, null, null);
-        }
+            //CSAnimationBlock.currentFrame().add_animation(dummy_animation, null, null);
+        }*/
         
-        var useScripts = !kwargs['noscripts'];
+        
         target_layout.replaceWithSourceLayoutUsingScripts(layout, useScripts);
     }
 }
@@ -184,19 +212,30 @@ var switchToLayout = function(layout, kwargs) {
 var mergeLayout = function(layout, kwargs) {
     
     kwargs = kwargs || {};
-    
+    var useScripts = !kwargs['noscripts'];
+
     if (layout)
     {
         var target_layout = getCurrentLayout();
-        if ((CSAnimationBlock.currentFrame() && target_layout.transitionName || target_layout.transitionFilter) && target_layout.transitionDuration > 0) {
-            var dummy_animation = new CSAnimation(null, null, null);
-            dummy_animation.duration = target_layout.transitionDuration;
-            CSAnimationBlock.currentFrame().add_animation(dummy_animation, null, null);
+        var layoutTransition = target_layout.transitionInfo;
+        var endLayout = layout;
+        
+        if (layoutTransition && layoutTransition.transitionLayout)
+        {
+            endLayout = target_layout.mergedSourceLayout(layout);
+            if (layoutTransition.preTransition)
+            {
+                target_layout.transitionInfo = layoutTransition.preTransition;
+                target_layout.replaceWithSourceLayoutUsingScripts(layoutTransition.transitionLayout, useScripts);
+                waitAnimation(layoutTransition.transitionHoldTime);
+            }
+            target_layout.transitionInfo = layoutTransition.postTransition;
+            target_layout.replaceWithSourceLayoutUsingScripts(endLayout, useScripts);
+        } else {
+        
+        
+            target_layout.mergeSourceLayoutUsingScripts(endLayout, useScripts);
         }
-        
-        var useScripts = !kwargs['noscripts'];
-        
-        target_layout.mergeSourceLayoutUsingScripts(layout, useScripts);
         
     }
 }

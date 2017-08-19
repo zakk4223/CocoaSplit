@@ -11,6 +11,7 @@
 #import "CaptureController.h"
 #import "CSTransitionAnimationDelegate.h"
 #import "CSCaptureBase+TimerDelegate.h"
+#import "CSLayoutTransition.h"
 
 
 
@@ -716,10 +717,10 @@
         
     }
     
-    for (NSObject<CSInputSourceProtocol> *sSrc in self.sourceList)
+    for (NSString *srcKey in _uuidMapPresentation)
     {
     
-
+        NSObject<CSInputSourceProtocol> *sSrc = _uuidMapPresentation[srcKey];
         InputSource *oSrc = [uuidMap objectForKey:sSrc.uuid];
         if (!oSrc)
         {
@@ -760,6 +761,23 @@
     }
 }
 
+
+-(void)sequenceThroughLayoutsViaScript:(NSArray *)sequence withCompletionBlock:(void (^)(void))completionBlock withExceptionBlock:(void (^)(NSException *exception))exceptionBlock
+{
+    NSInteger idx = 0;
+    NSMutableDictionary *extraDict = [NSMutableDictionary dictionary];
+    NSMutableString *sequenceScript = [NSMutableString string];
+    
+    for (SourceLayout *layout in sequence)
+    {
+        NSString *lName = [NSString stringWithFormat:@"%@%ld", layout.name, (long)idx];
+        extraDict[lName] = layout;
+        [sequenceScript appendFormat:@"switchToLayout(extraDict['%@']);", lName];
+        [sequenceScript appendString:@"waitAnimation();"];
+    }
+    
+    [self runAnimationString:sequenceScript withCompletionBlock:completionBlock withExceptionBlock:exceptionBlock withExtraDictionary:extraDict];
+}
 
 -(void)replaceWithSourceLayoutViaScript:(SourceLayout *)layout withCompletionBlock:(void (^)(void))completionBlock withExceptionBlock:(void (^)(NSException *exception))exceptionBlock
 {
@@ -904,6 +922,7 @@
     {
         aStart = [NSNumber numberWithDouble:CACurrentMediaTime()];
     }
+    
     CATransition *rTrans = nil;
     CABasicAnimation *bTrans = nil;
     
@@ -913,7 +932,14 @@
     transitionDelegate.removedInputs = removedInputs;
     
     
-    if (self.transitionName || self.transitionFilter)
+    CSLayoutTransition *useTransition = self.transitionInfo;
+    if (useTransition.preTransition)
+    {
+        useTransition = useTransition.preTransition;
+    }
+    
+    
+    if (useTransition.transitionName || useTransition.transitionFilter)
     {
         rTrans = [CATransition animation];
         
@@ -923,13 +949,13 @@
         }
         
         
-        rTrans.type = self.transitionName;
-        rTrans.duration = self.transitionDuration;
+        rTrans.type = useTransition.transitionName;
+        rTrans.duration = useTransition.transitionDuration;
         rTrans.removedOnCompletion = YES;
-        rTrans.subtype = self.transitionDirection;
-        if (self.transitionFilter)
+        rTrans.subtype = useTransition.transitionDirection;
+        if (useTransition.transitionFilter)
         {
-            rTrans.filter = self.transitionFilter;
+            rTrans.filter = useTransition.transitionFilter;
         }
         
     }
@@ -941,7 +967,7 @@
     bTrans.beginTime = aStart.floatValue;
     if (rTrans)
     {
-        bTrans.duration = self.transitionDuration;
+        bTrans.duration = useTransition.transitionDuration;
     }
     transitionDelegate.useAnimation = rTrans;
     
@@ -953,6 +979,13 @@
         bTrans.beginTime = aStart.floatValue;
     }
     
+    
+    
+    if (jCtx && rTrans)
+    {
+        JSValue *runFunc = jCtx[@"addDummyAnimation"];
+        [runFunc callWithArguments:@[@(useTransition.transitionDuration)]];
+    }
     [CATransaction begin];
     
     [CATransaction setCompletionBlock:^{
@@ -981,7 +1014,7 @@
     if (bTrans)
     {
         transitionDelegate.forLayout = self;
-        transitionDelegate.fullScreen = self.transitionFullScene;
+        transitionDelegate.fullScreen = useTransition.transitionFullScene;
         
         [self.rootLayer addAnimation:bTrans forKey:bTrans.keyPath];
     }
@@ -1002,8 +1035,9 @@
         
         cSrc.layer.hidden = YES;
         
-        
-        [self addSource:cSrc withParentLayer:mSrc.layer.superlayer];
+        [mSrc.layer.superlayer addSublayer:cSrc.layer];
+        [self addSourceToPresentation:cSrc];
+        //[self addSource:cSrc withParentLayer:mSrc.layer.superlayer];
         
     }
     transitionDelegate.changeremoveInputs = changedRemove;
@@ -1016,7 +1050,10 @@
             nSrc.layer.hidden = YES;
         }
         
-        [self addSource:nSrc];
+        [self.rootLayer addSublayer:nSrc.layer];
+        
+        [self addSourceToPresentation:nSrc];
+        //[self addSource:nSrc];
         
     }
     
@@ -1123,6 +1160,20 @@
 }
 
 
+-(SourceLayout *)mergedSourceLayout:(SourceLayout *)withLayout
+{
+    SourceLayout *retLayout = [self copy];
+    retLayout.transitionInfo = nil;
+    [retLayout restoreSourceList:[self makeSaveData]];
+    
+    [retLayout mergeSourceLayout:withLayout usingScripts:NO ];
+    [retLayout saveSourceList];
+    [retLayout clearSourceList];
+    return retLayout;
+}
+
+
+
 -(void)mergeSourceData:(NSData *)withData usingScripts:(bool)usingScripts withCompletionBlock:(void (^)(void))completionBlock
 {
     
@@ -1219,8 +1270,15 @@
     transitionDelegate.changedInputs = changedInputs;
     
     
+    CSLayoutTransition *useTransition = self.transitionInfo;
     
-    if (self.transitionName || self.transitionFilter)
+    if (useTransition.preTransition)
+    {
+        useTransition = useTransition.preTransition;
+    }
+    
+    
+    if (useTransition.transitionName || useTransition.transitionFilter)
     {
         rTrans = [CATransition animation];
         
@@ -1230,13 +1288,13 @@
         }
         
         
-        rTrans.type = self.transitionName;
-        rTrans.duration = self.transitionDuration;
+        rTrans.type = useTransition.transitionName;
+        rTrans.duration = useTransition.transitionDuration;
         rTrans.removedOnCompletion = YES;
-        rTrans.subtype = self.transitionDirection;
+        rTrans.subtype = useTransition.transitionDirection;
         if (self.transitionFilter)
         {
-            rTrans.filter = self.transitionFilter;
+            rTrans.filter = useTransition.transitionFilter;
         }
         
     }
@@ -1254,12 +1312,17 @@
     bTrans.toValue = @1;
     if (rTrans)
     {
-        bTrans.duration = self.transitionDuration;
+        bTrans.duration = useTransition.transitionDuration;
     }
     transitionDelegate.useAnimation = rTrans;
     bTrans.delegate = transitionDelegate;
     
-    
+    if (jCtx && rTrans)
+    {
+        JSValue *runFunc = jCtx[@"advanceBeginTime"];
+        [runFunc callWithArguments:@[@(useTransition.transitionDuration)]];
+    }
+
     [CATransaction begin];
     
     [CATransaction setCompletionBlock:^{
@@ -1304,7 +1367,7 @@
     if (bTrans)
     {
         transitionDelegate.forLayout = self;
-        transitionDelegate.fullScreen = self.transitionFullScene;
+        transitionDelegate.fullScreen = useTransition.transitionFullScene;
         
         [self.rootLayer addAnimation:bTrans forKey:bTrans.keyPath];
     }
@@ -1534,9 +1597,14 @@
     CABasicAnimation *bTrans = nil;
     
     CSTransitionAnimationDelegate *transitionDelegate = [[CSTransitionAnimationDelegate alloc] init];
+    CSLayoutTransition *useTransition = self.transitionInfo;
+    if (useTransition.preTransition)
+    {
+        useTransition = useTransition.preTransition;
+    }
+
     
-    
-    if (self.transitionName || self.transitionFilter)
+    if (useTransition.transitionName || useTransition.transitionFilter)
     {
         rTrans = [CATransition animation];
         
@@ -1546,13 +1614,13 @@
         }
         
         
-        rTrans.type = self.transitionName;
-        rTrans.duration = self.transitionDuration;
+        rTrans.type = useTransition.transitionName;
+        rTrans.duration = useTransition.transitionDuration;
         rTrans.removedOnCompletion = YES;
-        rTrans.subtype = self.transitionDirection;
+        rTrans.subtype = useTransition.transitionDirection;
         if (self.transitionFilter)
         {
-            rTrans.filter = self.transitionFilter;
+            rTrans.filter = useTransition.transitionFilter;
         }
     }
     
@@ -1570,11 +1638,17 @@
     bTrans.toValue = @1;
     if (rTrans)
     {
-        bTrans.duration = self.transitionDuration;
+        bTrans.duration = useTransition.transitionDuration;
     }
     transitionDelegate.useAnimation = rTrans;
+
     bTrans.delegate = transitionDelegate;
-    
+    if (jCtx && rTrans)
+    {
+        JSValue *runFunc = jCtx[@"advanceBeginTime"];
+        [runFunc callWithArguments:@[@(useTransition.transitionDuration)]];
+    }
+
     [CATransaction begin];
     [CATransaction setCompletionBlock:^{
         
@@ -1734,6 +1808,17 @@
 }
 
 
+-(void)addSourceToPresentation:(NSObject<CSInputSourceProtocol> *)addSource
+{
+    NSObject<CSInputSourceProtocol> *eSrc = _uuidMapPresentation[addSource.uuid];
+    if (eSrc)
+    {
+        return;
+    }
+    
+    _uuidMapPresentation[addSource.uuid] = addSource;
+}
+
 
 -(void)deleteSourceFromPresentation:(NSObject<CSInputSourceProtocol> *)delSource
 {
@@ -1753,30 +1838,15 @@
 -(void)deleteSource:(NSObject<CSInputSourceProtocol> *)delSource
 {
     
-    [delSource beforeDelete];
-    
-    [self willChangeValueForKey:@"topLevelSourceList"];
-    @synchronized (self) {
-        [[self mutableArrayValueForKey:@"sourceList" ] removeObject:delSource];
-        [self.sourceListPresentation removeObject:delSource];
-    }
-    [self generateTopLevelSourceList];
-    [self didChangeValueForKey:@"topLevelSourceList"];
-    
-
+    NSLog(@"DELELETE SOURCE LAYER %@ %@", delSource.layer, delSource.name);
     NSObject<CSInputSourceProtocol> *uSrc;
-    uSrc = _uuidMap[delSource.uuid];
-    if ([uSrc isEqual:delSource])
-    {
-        [_uuidMap removeObjectForKey:delSource.uuid];
-    }
-    
+
     uSrc = _uuidMapPresentation[delSource.uuid];
     if ([uSrc isEqual:delSource])
     {
         [_uuidMapPresentation removeObjectForKey:delSource.uuid];
     }
-
+    
     //[self.sourceList removeObject:delSource];
     if (delSource == self.layoutTimingSource)
     {
@@ -1785,8 +1855,28 @@
     
     [delSource.layer removeFromSuperlayer];
 
-    [delSource removeObserver:self forKeyPath:@"depth"];
-    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputDeleted  object:delSource userInfo:nil];
+    uSrc = _uuidMap[delSource.uuid];
+    if ([uSrc isEqual:delSource])
+    {
+        [delSource beforeDelete];
+
+        [_uuidMap removeObjectForKey:delSource.uuid];
+        
+        
+        [self willChangeValueForKey:@"topLevelSourceList"];
+        @synchronized (self) {
+            [[self mutableArrayValueForKey:@"sourceList" ] removeObject:delSource];
+            [self.sourceListPresentation removeObject:delSource];
+        }
+        [self generateTopLevelSourceList];
+        [self didChangeValueForKey:@"topLevelSourceList"];
+        
+        
+        //[self.sourceList removeObject:delSource];
+        
+        [delSource removeObserver:self forKeyPath:@"depth"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputDeleted  object:delSource userInfo:nil];
+    }
     delSource.sourceLayout = nil;
 
     
@@ -1844,7 +1934,7 @@
     
     [self.sourceListPresentation addObject:newSource];
     [[self mutableArrayValueForKey:@"sourceList" ] addObject:newSource];
-    if (newSource.layer)
+    if (newSource.layer && !newSource.layer.superlayer)
     {
         [parentLayer addSublayer:newSource.layer];
     }

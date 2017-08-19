@@ -12,6 +12,7 @@
 #import <objc/runtime.h>
 #import <AVFoundation/AVFoundation.h>
 #import <QuartzCore/QuartzCore.h>
+#import "CSLayoutTransition.h"
 
 
 
@@ -71,6 +72,8 @@
     [self addProtocolsForClass:[NSValue class]];
     [self addProtocolsForClass:[CIFilter class]];
 
+    [self addProtocolsForClass:[CSLayoutTransition class]];
+    
 
     
     

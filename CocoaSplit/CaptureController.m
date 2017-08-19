@@ -34,6 +34,10 @@
 #import "CSLayoutRecorder.h"
 #import "CSJSProxyObj.h"
 #import "CSLayoutCollectionItem.h"
+#import "CSLayoutTransition.h"
+#import "CSSimpleLayoutTransitionViewController.h"
+#import "CSCIFilterLayoutTransitionViewController.h"
+#import "CSLayoutLayoutTransitionViewController.h"
 
 
 
@@ -925,8 +929,10 @@
        self.instantRecordBufferDuration = 60;
        
        
-       NSArray *caTransitionNames = @[kCATransitionFade, kCATransitionPush, kCATransitionMoveIn, kCATransitionReveal, @"cube", @"alignedCube", @"flip", @"alignedFlip"];
+       NSArray *caTransitionNames = @[@"Layout", kCATransitionFade, kCATransitionPush, kCATransitionMoveIn, kCATransitionReveal, @"cube", @"alignedCube", @"flip", @"alignedFlip"];
        NSArray *ciTransitionNames = [CIFilter filterNamesInCategory:kCICategoryTransition];
+       
+    
        
        self.transitionNames = [NSMutableDictionary dictionary];
        
@@ -1692,8 +1698,8 @@
     saveRoot = [NSMutableDictionary dictionary];
     
     [saveRoot setValue:self.transitionName forKey:@"transitionName"];
-    [saveRoot setValue:self.transitionDirection forKey:@"transitionDirection"];
-    [saveRoot setValue:[NSNumber numberWithFloat:self.transitionDuration] forKey:@"transitionDuration"];
+
+
     
     [saveRoot setValue: [NSNumber numberWithInt:self.captureWidth] forKey:@"captureWidth"];
     [saveRoot setValue: [NSNumber numberWithInt:self.captureHeight] forKey:@"captureHeight"];
@@ -1748,7 +1754,6 @@
     
     [saveRoot setValue:self.multiAudioEngine forKey:@"multiAudioEngine"];
     
-    [saveRoot setValue:self.transitionFilter forKey:@"transitionFilter"];
     [saveRoot setValue:[NSNumber numberWithBool:self.useMidiLiveChannelMapping] forKey:@"useMidiLiveChannelMapping"];
     [saveRoot setValue:[NSNumber numberWithInteger:self.midiLiveChannel] forKey:@"midiLiveChannel"];
     
@@ -1756,7 +1761,10 @@
 
     [saveRoot setValue:self.inputLibrary forKey:@"inputLibrary"];
     [saveRoot setValue:[NSNumber numberWithBool:self.useTransitions] forKey:@"useTransitions"];
-    
+    if (self.layoutTransitionViewController && self.layoutTransitionViewController.transition)
+    {
+        [saveRoot setValue:self.layoutTransitionViewController.transition forKey:@"transitionInfo"];
+    }
     [saveRoot setValue:self.layoutSequences forKey:@"layoutSequences"];
     [NSKeyedArchiver archiveRootObject:saveRoot toFile:path];
     
@@ -1775,6 +1783,7 @@
     _savedAudioConstraintConstant = self.audioConstraint.constant;
     self.layoutScriptLabel = @"Layouts";
     
+    
     self.activePreviewView = self.stagingPreviewView;
     [self.layoutCollectionView registerForDraggedTypes:@[@"CS_LAYOUT_DRAG"]];
     //[self.inputOutlineView registerForDraggedTypes:@[@"cocoasplit.input.item", @"cocoasplit.audio.item"]];
@@ -1782,7 +1791,6 @@
     [self.audioTableView registerForDraggedTypes:@[@"cocoasplit.audio.item", NSFilenamesPboardType]];
 
     NSNib *layoutNib = [[NSNib alloc] initWithNibNamed:@"CSLayoutCollectionItem" bundle:nil];
-    NSLog(@"LAYOUT NIB %@", self.layoutCollectionView);
     [self.layoutCollectionView registerNib:layoutNib forItemWithIdentifier:@"layout_item"];
     
     
@@ -1820,10 +1828,6 @@
     
     
     
-    self.transitionName = [saveRoot valueForKey:@"transitionName"];
-    self.transitionDirection = [saveRoot valueForKey:@"transitionDirection"];
-    self.transitionDuration = [[saveRoot valueForKey:@"transitionDuration"] floatValue];
-    self.transitionFilter = [saveRoot valueForKey:@"transitionFilter"];
     
     
     self.captureWidth = [[saveRoot valueForKey:@"captureWidth"] intValue];
@@ -1915,6 +1919,25 @@
     
     
     self.useTransitions = [[saveRoot valueForKey:@"useTransitions"] boolValue];
+    
+    self.transitionName = [saveRoot valueForKey:@"transitionName"];
+
+    if (self.transitionName)
+    {
+        CSLayoutTransition *savedTransition = [saveRoot valueForKey:@"transitionInfo"];
+
+        if (savedTransition)
+        {
+            self.layoutTransitionViewController.transition = savedTransition;
+        } else {
+            savedTransition = self.layoutTransitionViewController.transition;
+            
+            savedTransition.transitionDirection = [saveRoot valueForKey:@"transitionDirection"];
+            savedTransition.transitionDuration = [[saveRoot valueForKey:@"transitionDuration"] floatValue];
+            savedTransition.transitionFilter = [saveRoot valueForKey:@"transitionFilter"];
+        }
+    }
+    
     
     self.multiAudioEngine = [saveRoot valueForKey:@"multiAudioEngine"];
     if (!self.multiAudioEngine)
@@ -2289,19 +2312,47 @@
 -(void) setTransitionName:(NSString *)transitionName
 {
     
-    
     _transitionName = transitionName;
-    if ([transitionName hasPrefix:@"CI"])
+
+    if (!transitionName)
     {
+        self.layoutTransitionViewController = nil;
+    } else if ([transitionName hasPrefix:@"CI"]) {
         CIFilter *newFilter = [CIFilter filterWithName:transitionName];
         [newFilter setDefaults];
         self.transitionFilter = newFilter;
+        self.layoutTransitionViewController = nil;
+        self.layoutTransitionViewController = [[CSCIFilterLayoutTransitionViewController alloc] init];
+        self.layoutTransitionViewController.transition = [[CSLayoutTransition alloc] init];
+        self.layoutTransitionViewController.transition.transitionFilter = newFilter;
+    } else if ([transitionName isEqualToString:@"Layout"]) {
+        self.layoutTransitionViewController = nil;
+        self.layoutTransitionViewController = [[CSLayoutLayoutTransitionViewController alloc] init];
+        self.layoutTransitionViewController.transition = [[CSLayoutTransition alloc] init];
+
     } else {
+        
         self.transitionFilter = nil;
+        self.layoutTransitionViewController = [[CSSimpleLayoutTransitionViewController alloc] init];
+        self.layoutTransitionViewController.transition = [[CSLayoutTransition alloc] init];
+        self.layoutTransitionViewController.transition.transitionName = transitionName;
     }
+    [self changeTransitionView];
 }
 
 
+
+
+-(void)changeTransitionView
+{
+    self.layoutTransitionConfigView.subviews = @[];
+    if (self.layoutTransitionViewController)
+    {
+        self.layoutTransitionViewController.view.frame = self.layoutTransitionConfigView.bounds;
+        [self.layoutTransitionConfigView addSubview:self.layoutTransitionViewController.view];
+    }
+    
+}
 
 
 -(NSString *)transitionName
@@ -3710,6 +3761,8 @@
     }
     [self applyTransitionSettings:usingLayout];
     
+    
+    //[usingLayout sequenceThroughLayoutsViaScript:@[layout] withCompletionBlock:nil withExceptionBlock:nil];
     [usingLayout replaceWithSourceLayoutViaScript:layout withCompletionBlock:nil withExceptionBlock:nil];
 
 }
@@ -4366,11 +4419,15 @@
 
 -(IBAction)showTransitionView:(id)sender
 {
+    
     [NSAnimationContext beginGrouping];
     
     [[NSAnimationContext currentContext] setCompletionHandler:^{
         self.audioConstraint.priority = 500;
+        [self changeTransitionView];
+
     }];
+    
     
     self.transitionConfigurationView.animator.hidden = NO;
     self.transitionLabel.animator.hidden = NO;
@@ -4384,7 +4441,6 @@
 -(IBAction)hideTransitionView:(id)sender
 {
     _savedAudioConstraintConstant = self.audioConstraint.constant;
-    
     [NSAnimationContext beginGrouping];
     
     self.audioConstraint.animator.priority = 700;
@@ -4392,8 +4448,11 @@
     [self.transitionConfigurationView setHidden:YES];
     self.transitionLabel.hidden = YES;
 
+    self.layoutTransitionConfigView.subviews = @[];
+    self.layoutTransitionViewController = nil;
     
     [NSAnimationContext endGrouping];
+
 
 }
 
@@ -4429,28 +4488,6 @@
 
 
 
--(IBAction)openTransitionFilterPanel:(NSButton *)sender
-{
-    
-    
-    if (!self.transitionFilter)
-    {
-        return;
-    }
-    
-    IKFilterUIView *filterView = [self.transitionFilter viewForUIConfiguration:@{IKUISizeFlavor:IKUISizeMini} excludedKeys:@[kCIInputImageKey, kCIInputTargetImageKey, kCIInputTimeKey]];
-    
-    
-    self.transitionFilterWindow = [[NSWindow alloc] init];
-    [self.transitionFilterWindow setContentSize:filterView.bounds.size];
-    [self.transitionFilterWindow.contentView addSubview:filterView];
-    
-    self.transitionFilterWindow.styleMask =  NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask;
-    [self.transitionFilterWindow setReleasedWhenClosed:NO];
-    
-    [self.transitionFilterWindow makeKeyAndOrderFront:self.transitionFilterWindow];
-    
-}
 
 
 -(void)openMidiLearnerForResponders:(NSArray *)responders
@@ -4479,14 +4516,11 @@
 -(void)applyTransitionSettings:(SourceLayout *)layout
 {
     
-    if (self.useTransitions)
+    if (self.useTransitions && self.layoutTransitionViewController)
     {
-        [self.objectController commitEditing];
-        layout.transitionName = self.transitionName;
-        layout.transitionDirection = self.transitionDirection;
-        layout.transitionDuration = self.transitionDuration;
-        layout.transitionFilter = self.transitionFilter;
-        layout.transitionFullScene = self.transitionFullScene;
+        [self.layoutTransitionViewController commitEditing];
+        layout.transitionInfo = [self.layoutTransitionViewController.transition copy];
+        
     } else {
         [self clearTransitionSettings:layout];
     }
@@ -4500,6 +4534,8 @@
     layout.transitionDuration = 0;
     layout.transitionFilter = nil;
     layout.transitionFullScene = nil;
+    layout.transitionInfo = nil;
+    
 
 }
 -(IBAction) swapStagingAndLive:(id)sender

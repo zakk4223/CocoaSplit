@@ -26,6 +26,7 @@
         {
             [nSrc.layer addAnimation:self.useAnimation forKey:nil];
         }
+        [self.forLayout addSource:nSrc];
         nSrc.layer.hidden = NO;
 
     }
@@ -36,6 +37,7 @@
         {
             [cSrc.layer addAnimation:self.useAnimation forKey:nil];
         }
+        [self.forLayout addSource:cSrc];
         cSrc.layer.hidden = NO;
 
     }

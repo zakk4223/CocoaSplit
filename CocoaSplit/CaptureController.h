@@ -45,6 +45,7 @@
 #import "CSSequenceActivatorViewController.h"
 #import "CSLayoutRecorderInfoProtocol.h"
 #import "JavaScriptCore/JavaScriptCore.h"
+#import "CSLayoutTransitionViewProtocol.h"
 
 
 
@@ -517,6 +518,8 @@ NSArray *_savedTransitionConstraints;
 @property (strong) CSLayoutRecorder *mainLayoutRecorder;
 @property (readonly) SourceLayout *activeLayout;
 @property (strong) NSMutableSet *audioFileUTIs;
+@property (weak) IBOutlet NSView *layoutTransitionConfigView;
+@property (strong) NSObject<CSLayoutTransitionViewProtocol> *layoutTransitionViewController;
 
 
 @property (weak) IBOutlet NSArrayController *audioInputsArrayController;

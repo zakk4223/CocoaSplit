@@ -81,6 +81,15 @@
 		34559A281E12D4400085883C /* CSCaptureBase+InputFrameTick.m in Sources */ = {isa = PBXBuildFile; fileRef = 34559A271E12D4400085883C /* CSCaptureBase+InputFrameTick.m */; };
 		34576C7819AFCA1B007BAD90 /* CSPluginLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 34576C7719AFCA1B007BAD90 /* CSPluginLoader.m */; };
 		345BECE51F3DB4F000B46F29 /* CSLayoutCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 345BECC31F3DADF700B46F29 /* CSLayoutCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		345BECE81F3FD21200B46F29 /* CSLayoutTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 345BECE71F3FD21200B46F29 /* CSLayoutTransition.m */; };
+		345BECF41F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 345BECF21F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.m */; };
+		345BECF51F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 345BECF31F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.xib */; };
+		345BECFB1F455AF700B46F29 /* CSCIFilterLayoutTransitionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 345BECF91F455AF700B46F29 /* CSCIFilterLayoutTransitionViewController.m */; };
+		345BECFC1F455AF700B46F29 /* CSCIFilterLayoutTransitionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 345BECFA1F455AF700B46F29 /* CSCIFilterLayoutTransitionViewController.xib */; };
+		345BED001F456C6500B46F29 /* CSLayoutLayoutTransitionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 345BECFE1F456C6500B46F29 /* CSLayoutLayoutTransitionViewController.m */; };
+		345BED011F456C6500B46F29 /* CSLayoutLayoutTransitionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 345BECFF1F456C6500B46F29 /* CSLayoutLayoutTransitionViewController.xib */; };
+		345BED051F45A36000B46F29 /* CSSubLayoutTransitionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 345BED031F45A36000B46F29 /* CSSubLayoutTransitionViewController.m */; };
+		345BED061F45A36000B46F29 /* CSSubLayoutTransitionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 345BED041F45A36000B46F29 /* CSSubLayoutTransitionViewController.xib */; };
 		345F8B051A1060D6009A81E3 /* CSAacEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B041A1060D6009A81E3 /* CSAacEncoder.m */; };
 		345F8B1A1A1218DE009A81E3 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 345F8B191A1218DE009A81E3 /* AudioToolbox.framework */; };
 		345F8B1D1A12AC2C009A81E3 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 345F8B1C1A12AC2C009A81E3 /* AudioUnit.framework */; };
@@ -675,6 +684,21 @@
 		34576D2019B023E2007BAD90 /* CSMovieCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSMovieCapturePlugin.xcodeproj; path = CapturePlugins/CSMovieCapturePlugin/CSMovieCapturePlugin.xcodeproj; sourceTree = "<group>"; };
 		34576D5219B024EB007BAD90 /* CSImageCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSImageCapturePlugin.xcodeproj; path = CapturePlugins/CSImageCapturePlugin/CSImageCapturePlugin.xcodeproj; sourceTree = "<group>"; };
 		345BECB61F3DADF600B46F29 /* CSLayoutCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSLayoutCapturePlugin.xcodeproj; path = CapturePlugins/CSLayoutCapturePlugin/CSLayoutCapturePlugin.xcodeproj; sourceTree = "<group>"; };
+		345BECE61F3FD21200B46F29 /* CSLayoutTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLayoutTransition.h; sourceTree = "<group>"; };
+		345BECE71F3FD21200B46F29 /* CSLayoutTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSLayoutTransition.m; sourceTree = "<group>"; };
+		345BECF11F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSimpleLayoutTransitionViewController.h; path = Interface/CSSimpleLayoutTransitionViewController.h; sourceTree = "<group>"; };
+		345BECF21F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSSimpleLayoutTransitionViewController.m; path = Interface/CSSimpleLayoutTransitionViewController.m; sourceTree = "<group>"; };
+		345BECF31F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSSimpleLayoutTransitionViewController.xib; path = Interface/CSSimpleLayoutTransitionViewController.xib; sourceTree = "<group>"; };
+		345BECF71F447ACC00B46F29 /* CSLayoutTransitionViewProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLayoutTransitionViewProtocol.h; sourceTree = "<group>"; };
+		345BECF81F455AF700B46F29 /* CSCIFilterLayoutTransitionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSCIFilterLayoutTransitionViewController.h; sourceTree = "<group>"; };
+		345BECF91F455AF700B46F29 /* CSCIFilterLayoutTransitionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSCIFilterLayoutTransitionViewController.m; sourceTree = "<group>"; };
+		345BECFA1F455AF700B46F29 /* CSCIFilterLayoutTransitionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSCIFilterLayoutTransitionViewController.xib; sourceTree = "<group>"; };
+		345BECFD1F456C6500B46F29 /* CSLayoutLayoutTransitionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLayoutLayoutTransitionViewController.h; sourceTree = "<group>"; };
+		345BECFE1F456C6500B46F29 /* CSLayoutLayoutTransitionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSLayoutLayoutTransitionViewController.m; sourceTree = "<group>"; };
+		345BECFF1F456C6500B46F29 /* CSLayoutLayoutTransitionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSLayoutLayoutTransitionViewController.xib; sourceTree = "<group>"; };
+		345BED021F45A36000B46F29 /* CSSubLayoutTransitionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSubLayoutTransitionViewController.h; sourceTree = "<group>"; };
+		345BED031F45A36000B46F29 /* CSSubLayoutTransitionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSubLayoutTransitionViewController.m; sourceTree = "<group>"; };
+		345BED041F45A36000B46F29 /* CSSubLayoutTransitionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSSubLayoutTransitionViewController.xib; sourceTree = "<group>"; };
 		345F8B031A1060D6009A81E3 /* CSAacEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSAacEncoder.h; sourceTree = "<group>"; };
 		345F8B041A1060D6009A81E3 /* CSAacEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAacEncoder.m; sourceTree = "<group>"; };
 		345F8B191A1218DE009A81E3 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -1300,6 +1324,8 @@
 				34788DF11F016F7A00C3C9C5 /* CSScriptInputSource.m */,
 				34788E271F0D166C00C3C9C5 /* CSAudioInputSource.h */,
 				34788E281F0D166C00C3C9C5 /* CSAudioInputSource.m */,
+				345BECE61F3FD21200B46F29 /* CSLayoutTransition.h */,
+				345BECE71F3FD21200B46F29 /* CSLayoutTransition.m */,
 			);
 			path = CocoaSplit;
 			sourceTree = "<group>";
@@ -1439,6 +1465,7 @@
 		3441338E18667FE40059B686 /* Interface */ = {
 			isa = PBXGroup;
 			children = (
+				345BECF61F447AA200B46F29 /* Transitions */,
 				34238BCD1EBED3110057BA46 /* Audio */,
 				34B5FB501E7C0B6E0078FC51 /* SequenceItems */,
 				34F04DA91CE0BB770054663A /* NSView+NSLayoutConstraintFilter.h */,
@@ -1524,6 +1551,9 @@
 				34788E421F0DD56B00C3C9C5 /* CSAudioInputSourceViewController.xib */,
 				34C1379D1F28DE0C00F53DE2 /* CSTimeFormatter.h */,
 				34C1379E1F28DE0C00F53DE2 /* CSTimeFormatter.m */,
+				345BECF11F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.h */,
+				345BECF21F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.m */,
+				345BECF31F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.xib */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -1576,6 +1606,24 @@
 				345BECC31F3DADF700B46F29 /* CSLayoutCapturePlugin.bundle */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		345BECF61F447AA200B46F29 /* Transitions */ = {
+			isa = PBXGroup;
+			children = (
+				345BECF71F447ACC00B46F29 /* CSLayoutTransitionViewProtocol.h */,
+				345BECF81F455AF700B46F29 /* CSCIFilterLayoutTransitionViewController.h */,
+				345BECF91F455AF700B46F29 /* CSCIFilterLayoutTransitionViewController.m */,
+				345BECFA1F455AF700B46F29 /* CSCIFilterLayoutTransitionViewController.xib */,
+				345BECFD1F456C6500B46F29 /* CSLayoutLayoutTransitionViewController.h */,
+				345BECFE1F456C6500B46F29 /* CSLayoutLayoutTransitionViewController.m */,
+				345BECFF1F456C6500B46F29 /* CSLayoutLayoutTransitionViewController.xib */,
+				345BED021F45A36000B46F29 /* CSSubLayoutTransitionViewController.h */,
+				345BED031F45A36000B46F29 /* CSSubLayoutTransitionViewController.m */,
+				345BED041F45A36000B46F29 /* CSSubLayoutTransitionViewController.xib */,
+			);
+			name = Transitions;
+			path = Interface/Transitions;
 			sourceTree = "<group>";
 		};
 		345F8B331A1571B1009A81E3 /* CAMultiAudio */ = {
@@ -2407,6 +2455,7 @@
 				34E162E91E987420005157ED /* CSScriptWindowViewController.xib in Resources */,
 				3400A07E1BD49406003E1828 /* CSInputLibraryItemView.xib in Resources */,
 				34788DD11EF52C1A00C3C9C5 /* cocoasplit.js in Resources */,
+				345BED061F45A36000B46F29 /* CSSubLayoutTransitionViewController.xib in Resources */,
 				340FE4B215F3417E00E4CE4E /* Credits.rtf in Resources */,
 				340FE4B815F3417E00E4CE4E /* MainMenu.xib in Resources */,
 				343B7BE21E917B1A00233DF1 /* cocoasplit.py in Resources */,
@@ -2423,7 +2472,9 @@
 				3434CB2E1CA90D28001B3DF9 /* CSx264CompressorViewController.xib in Resources */,
 				3435E39B188B93150015CC01 /* passthrough.vtsh in Resources */,
 				34B5FCE119BF1C3F00F67D19 /* CreateLayoutViewController.xib in Resources */,
+				345BED011F456C6500B46F29 /* CSLayoutLayoutTransitionViewController.xib in Resources */,
 				34B5FB581E7C0C4B0078FC51 /* CSSequenceItemWaitViewController.xib in Resources */,
+				345BECFC1F455AF700B46F29 /* CSCIFilterLayoutTransitionViewController.xib in Resources */,
 				3479A9971A9007DD00A524F0 /* CocoaSplit.sdef in Resources */,
 				340D8C971959C7C100BE5144 /* CompressionSettingsPanel.xib in Resources */,
 				3434CB331CA91D99001B3DF9 /* CSAppleH264CompressorViewController.xib in Resources */,
@@ -2435,6 +2486,7 @@
 				34ABEF3C17C0C2CB00AA5E62 /* advancedPrefPanel.xib in Resources */,
 				346865481CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.xib in Resources */,
 				3434CB391CA93BCD001B3DF9 /* CSAppleProResCompressorViewController.xib in Resources */,
+				345BECF51F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.xib in Resources */,
 				3435E396188B902C0015CC01 /* 420v.fgsh in Resources */,
 				3473D2AF1D56920B00842EEE /* CSAdvancedAudioWindowController.xib in Resources */,
 				343ED9421BCAC1C80061FC4B /* EditBuiltinLayoutView.xib in Resources */,
@@ -2504,6 +2556,7 @@
 				34AFC33319B19CD00007C07B /* SourceCache.m in Sources */,
 				34ED8C491B07371C002C0674 /* MIKMIDIChannelVoiceCommand.m in Sources */,
 				340FE50815F444AA00E4CE4E /* CaptureController.m in Sources */,
+				345BED001F456C6500B46F29 /* CSLayoutLayoutTransitionViewController.m in Sources */,
 				340620761F2E2BFE0016D997 /* CAMultiAudioInput.m in Sources */,
 				34ED8C4F1B07371C002C0674 /* MIKMIDIClock.m in Sources */,
 				34ED8C611B07371C002C0674 /* MIKMIDIEntity.m in Sources */,
@@ -2519,6 +2572,7 @@
 				34F52A271BC1CE2700662911 /* CSLayoutCollectionItem.m in Sources */,
 				347277FD1A5A2758008801A9 /* CSIOSurfaceLayer.m in Sources */,
 				344825E61B253D6900AF9EAC /* CAMultiAudioMatrixCell.m in Sources */,
+				345BECE81F3FD21200B46F29 /* CSLayoutTransition.m in Sources */,
 				34BD1E4D1B1F1A2D0015CBEC /* CAMultiAudioDownmixer.m in Sources */,
 				34B5FACE1E748DD40078FC51 /* CSSequenceItem.m in Sources */,
 				345F8B251A14E6A0009A81E3 /* CAMultiAudioNode.m in Sources */,
@@ -2583,9 +2637,11 @@
 				3400A0841BD522A5003E1828 /* CSLibraryInputItemViewController.m in Sources */,
 				34ED8C631B07371C002C0674 /* MIKMIDIErrors.m in Sources */,
 				34ED8C551B07371C002C0674 /* MIKMIDIControlChangeCommand.m in Sources */,
+				345BECFB1F455AF700B46F29 /* CSCIFilterLayoutTransitionViewController.m in Sources */,
 				34F80D6D1EDBC8C800D890D3 /* OutputDestination+ScriptingAdditions.m in Sources */,
 				3494DF381CCD2DB000E921BF /* TPCircularBuffer.c in Sources */,
 				349461681ABC57C100F28883 /* CSAnimationItem.m in Sources */,
+				345BED051F45A36000B46F29 /* CSSubLayoutTransitionViewController.m in Sources */,
 				34ED8C971B07371C002C0674 /* MIKMIDIPlayer.m in Sources */,
 				34ED8C591B07371C002C0674 /* MIKMIDIDevice.m in Sources */,
 				3400A0791BD4533A003E1828 /* CSInputLibraryWindowController.m in Sources */,
@@ -2614,6 +2670,7 @@
 				34B5FAD41E74C34B0078FC51 /* CSSequenceItemLayout.m in Sources */,
 				3441269B1E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.m in Sources */,
 				34ED8C811B07371C002C0674 /* MIKMIDIMetaMarkerTextEvent.m in Sources */,
+				345BECF41F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.m in Sources */,
 				34F5141216FD6E4F00BA894D /* x264Compressor.m in Sources */,
 				34A7ADB81C01EF1400685044 /* CompressionSettingsPanelController.m in Sources */,
 				34DC2FB01B512362008F12A2 /* CSCaptureBase+TimerDelegate.m in Sources */,
