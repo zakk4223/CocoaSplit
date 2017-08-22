@@ -1082,6 +1082,17 @@
     }
     [CATransaction commit];
     
+    for (NSObject<CSInputSourceProtocol> *nSrc in newInputs)
+    {
+        
+        if (jCtx && rTrans && nSrc.duration)
+        {
+            JSValue *runFunc = jCtx[@"addDummyAnimation"];
+            [runFunc callWithArguments:@[@(nSrc.duration)]];
+            
+        }
+    }
+
     [CATransaction flush];
     _noSceneTransactions = NO;
     
@@ -1395,6 +1406,13 @@
         
         [self addSource:nSrc];
         
+        if (jCtx && rTrans && nSrc.duration)
+        {
+            JSValue *runFunc = jCtx[@"addDummyAnimation"];
+            [runFunc callWithArguments:@[@(nSrc.duration)]];
+            
+        }
+
     }
     
     for (NSObject<CSInputSourceProtocol> *cSrc in changedInputs)
@@ -1850,7 +1868,6 @@
 -(void)deleteSource:(NSObject<CSInputSourceProtocol> *)delSource
 {
     
-    NSLog(@"DELELETE SOURCE LAYER %@ %@", delSource.layer, delSource.name);
     NSObject<CSInputSourceProtocol> *uSrc;
 
     uSrc = _uuidMapPresentation[delSource.uuid];

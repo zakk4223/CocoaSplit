@@ -30,7 +30,7 @@ var isArray = function(arr) {
 
 var getCurrentLayout = function() {
     current_frame = CSAnimationBlock.currentFrame();
-    if (current_frame)
+    if (current_frame && current_frame.layout)
     {
         return current_frame.layout;
     }
@@ -177,9 +177,11 @@ var advanceBeginTime = function(duration) {
 
 
 var addDummyAnimation = function(duration) {
-    var dummy_animation = new CSAnimation(null, null, null);
-    dummy_animation.duration = duration;
-    CSAnimationBlock.currentFrame().add_animation(dummy_animation, null, null);
+    var basic_anim = CABasicAnimation.animationWithKeyPath("__DUMMY_ANIMATION__");
+    basic_anim.duration = duration;
+    
+    var dummy_animation = new CSAnimation(getCurrentLayout().rootLayer, "__DUMMY_ANIMATION__", basic_anim);
+    CSAnimationBlock.currentFrame().add_animation(dummy_animation, getCurrentLayout().rootLayer, "__DUMMY_ANIMATION__");
 }
 
 
@@ -211,12 +213,12 @@ var switchToLayout = function(layout, kwargs) {
             if (layoutTransition.preTransition)
             {
                 target_layout.transitionInfo = layoutTransition.preTransition;
+                
                 target_layout.replaceWithSourceLayoutUsingScripts(layoutTransition.transitionLayout, useScripts);
                 waitAnimation(layoutTransition.transitionHoldTime);
             }
             target_layout.transitionInfo = layoutTransition.postTransition;
         }
-        
         target_layout.replaceWithSourceLayoutUsingScripts(layout, useScripts);
     }
 }

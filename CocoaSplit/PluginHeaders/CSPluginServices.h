@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "CSPcmPlayer.h"
 #import "CSOauth2Authenticator.h"
+#import <JavaScriptCore/JavaScriptCore.h>
 
 
 @interface CSPluginServices : NSObject
@@ -27,6 +28,7 @@
 -(CSOauth2Authenticator *) createOAuth2Authenticator:(NSString *)serviceName clientID:(NSString *)client_id flowType:(NSString *)flow_type config:(NSDictionary *)config_dict;
 -(NSArray *)accountNamesForService:(NSString *)serviceName;
 -(NSObject *)captureController;
+-(JSValue *)runJavascript:(NSString *)script;
 
 
 @property (readonly) double currentFPS;

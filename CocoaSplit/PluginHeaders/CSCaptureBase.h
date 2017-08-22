@@ -76,6 +76,10 @@ typedef enum frame_render_behavior_t {
 
 @property (readonly) NSImage *libraryImage;
 
+//Unit: seconds
+//If this source has a duration (movie, animated gif, etc) return it here. Used for transitions and animations
+@property (readonly) float duration;
+
 
 //frameTick is called every render loop. You are not required to do anything here, but it may be useful for some timing/lazy rendering
 -(void)frameTick;
@@ -132,6 +136,7 @@ typedef enum frame_render_behavior_t {
 +(NSSet *)mediaUTIs;
 -(void)willExport;
 -(void)didExport;
+
 
 
 @end

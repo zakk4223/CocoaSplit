@@ -39,7 +39,10 @@
 @property (strong) NSString *script_beforeRemove;
 @property (strong) NSString *script_beforeReplace;
 @property (strong) NSString *script_afterReplace;
+@property (strong) NSString *script_afterAddCombined;
+
 @property (assign) bool scriptAlwaysRun;
+@property (assign) float duration;
 
 
 @end
@@ -68,8 +71,9 @@
 @property (strong) NSString *script_beforeRemove;
 @property (strong) NSString *script_beforeReplace;
 @property (strong) NSString *script_afterReplace;
-@property (assign) bool scriptAlwaysRun;
 
+@property (assign) bool scriptAlwaysRun;
+@property (assign) float duration;
 
 
 

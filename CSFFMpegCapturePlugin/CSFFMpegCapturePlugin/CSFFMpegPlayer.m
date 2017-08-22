@@ -158,6 +158,7 @@
 {
     CSFFMpegInput *useItem = [self preChangeItem];
     
+    
     if (!self.playing)
     {
         return;
@@ -168,14 +169,15 @@
     if (useItem)
     {
         currentIdx = [_inputQueue indexOfObject:useItem];
+        if (self.repeat == kCSFFMovieRepeatNone || self.repeat == kCSFFMovieRepeatAll)
+        {
+            currentIdx++;
+        }
+
     }
     
-    if (self.repeat == kCSFFMovieRepeatNone || self.repeat == kCSFFMovieRepeatAll)
-    {
-        currentIdx++;
-    }
     
-    
+
     if (currentIdx >= _inputQueue.count)
     {
         if (self.repeat == kCSFFMovieRepeatNone)
@@ -187,6 +189,7 @@
     }
     
     CSFFMpegInput *nextItem = nil;
+    
     
     
     if (currentIdx != NSNotFound && (currentIdx < _inputQueue.count))
@@ -248,7 +251,6 @@
     
     dispatch_async(_input_read_queue, ^{
         
-        NSLog(@"OPEN MEDIA");
         [item openMedia:15];
         
         if (self.itemStarted)
@@ -478,6 +480,7 @@
         if (!self.paused)
         {
             CFTimeInterval host_delta = mediaTime - _first_frame_host_time;
+            
             int64_t target_pts = host_delta / av_q2d(self.currentlyPlaying.videoTimeBase);
             
             if (_first_video_pts)
@@ -501,6 +504,7 @@
                 if (_peek_frame->pkt_pts > target_pts)
                 {
                     do_consume = NO;
+                    
                 } else {
                     use_frame = _peek_frame;
                     do_consume = YES;
@@ -510,7 +514,6 @@
             
             while (do_consume && (_peek_frame = [_useInput consumeFrame:&av_error]) && _peek_frame->pkt_pts < target_pts)
             {
-                
                 if (use_frame)
                 {
                     av_frame_free(&use_frame);
@@ -526,6 +529,8 @@
             consumed++;
         }
     }
+    
+    
     
     if (use_frame && !_video_done)
     {
@@ -564,7 +569,6 @@
     
     if (_audio_done && _video_done)
     {
-        NSLog(@"INPUT DONE");
 
         [self.currentlyPlaying stop];
         

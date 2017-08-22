@@ -31,6 +31,18 @@
 
 
 
+-(JSValue *)runJavascript:(NSString *)script
+{
+    JSContext *jCtx = [JSContext currentContext];
+    if (!jCtx)
+    {
+        jCtx = [[CaptureController sharedCaptureController] setupJavascriptContext];
+
+    }
+    
+    return [jCtx evaluateScript:script];
+}
+
 
 
 -(NSObject *)captureController

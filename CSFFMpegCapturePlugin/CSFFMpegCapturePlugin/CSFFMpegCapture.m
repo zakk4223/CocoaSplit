@@ -356,11 +356,12 @@
 
 -(void)frameTick
 {
+    
     if (!self.player)
     {
         return;
     }
-    
+
     
     CFTimeInterval cTime = CACurrentMediaTime();
     CVPixelBufferRef use_buf = [self.player frameForMediaTime:cTime];
@@ -381,14 +382,15 @@
             });
         }
         [self updateLayersWithFramedataBlock:^(CALayer *layer) {
-            
+
             ((CSIOSurfaceLayer *)layer).imageBuffer = use_buf;
+            
         }];
         
         if (_firstFrame)
         {
             _firstFrame = NO;
-            [self.player pause];
+            //[self.player pause];
         }
         CVPixelBufferRelease(use_buf);
 
@@ -446,6 +448,22 @@
     }
     
 }
+
+-(float)duration
+{
+    float startpos = 0;
+    if (self.useCurrentPosition)
+    {
+        startpos = _savedTime;
+    }
+    float totalDuration = 0;
+    for (CSFFMpegInput *item in self.player.inputQueue)
+    {
+        totalDuration += item.duration;
+    }
+    return totalDuration - startpos;
+}
+
 
 -(void)deregisterPCMOutput
 {

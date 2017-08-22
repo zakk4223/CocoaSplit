@@ -256,7 +256,6 @@
     {
         CAMultiAudioFile *fileNode = (CAMultiAudioFile *)self.audioNode;
         fileNode.refCount--;
-        NSLog(@"REF COUNT %ld", (long)fileNode.refCount);
         
         if (fileNode.refCount <= 0)
         {
@@ -265,6 +264,12 @@
     }
 
 }
+
+-(float)duration
+{
+    return self.fileEndTime - self.fileStartTime;
+}
+
 
 /*
 -(void)afterReplace

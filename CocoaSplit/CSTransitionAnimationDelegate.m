@@ -14,7 +14,7 @@
 -(void)animationDidStart:(CAAnimation *)anim
 {
     NSLog(@"DELEGATE ANIMATION STARTED");
-    
+    [CATransaction begin];
     if (self.fullScreen)
     {
         [self.forLayout.rootLayer addAnimation:self.useAnimation forKey:nil];
@@ -60,6 +60,7 @@
         }
         rSrc.layer.hidden = YES;
     }
+    [CATransaction commit];
 
 }
 

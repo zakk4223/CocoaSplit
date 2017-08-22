@@ -40,10 +40,31 @@
     {
         self.mediaPath = mediaPath;
         self.shortName = [mediaPath lastPathComponent];
+        [self fetchMediaInfo];
     }
     
     return self;
 }
+
+
+-(bool)fetchMediaInfo
+{
+    if (!self.mediaPath)
+    {
+        return NO;
+    }
+    
+    int open_ret = avformat_open_input(&_format_ctx, self.mediaPath.UTF8String, NULL, NULL);
+    if (open_ret < 0)
+    {
+        return NO;
+    }
+
+    avformat_find_stream_info(_format_ctx, NULL);
+    self.duration = _format_ctx->duration / (double)AV_TIME_BASE;
+    return YES;
+}
+
 
 -(bool)openMedia:(int)bufferVideoFrames
 {
@@ -78,14 +99,19 @@
     
         AVCodecContext *v_codec_ctx_orig = NULL;
         AVCodecContext *a_codec_ctx_orig = NULL;
-        int open_ret = avformat_open_input(&_format_ctx, self.mediaPath.UTF8String, NULL, NULL);
-    if (open_ret < 0)
+    if (!_format_ctx)
     {
-        return NO;
-    }
+        int open_ret = avformat_open_input(&_format_ctx, self.mediaPath.UTF8String, NULL, NULL);
+        if (open_ret < 0)
+        {
+            _format_ctx = NULL;
+            return NO;
+        }
     
     
         avformat_find_stream_info(_format_ctx, NULL);
+    }
+    
         //av_dump_format(_format_ctx, 0, self.mediaPath.UTF8String, 0);
         for (int i=0; i < _format_ctx->nb_streams; i++)
         {

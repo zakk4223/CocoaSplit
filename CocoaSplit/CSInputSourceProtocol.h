@@ -26,6 +26,7 @@
 @property (assign) NSInteger scriptPriority;
 @property (assign) bool scriptAlwaysRun;
 @property (readonly) NSString *label;
+@property (assign) float duration;
 
 
 

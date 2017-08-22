@@ -2518,6 +2518,8 @@ static NSArray *_sourceTypes = nil;
 }
 
 
+
+
 -(BOOL)respondsToMIDICommand:(MIKMIDICommand *)command
 {
     return YES;
@@ -3227,6 +3229,18 @@ static NSArray *_sourceTypes = nil;
     return _clonedFromInput;
 }
 
+
+
+-(float)duration
+{
+    if (self.videoInput)
+    {
+        NSLog(@"RETURNING VIDEO INPUT DURATION %@ %f", self.videoInput, self.videoInput.duration);
+        return self.videoInput.duration;
+    }
+    
+    return 0.0f;
+}
 
 
 -(void)stopObservingConstraintKeys

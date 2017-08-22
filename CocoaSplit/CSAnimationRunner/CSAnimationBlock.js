@@ -33,7 +33,7 @@ function AnimationBlock(duration) {
     cframe = CSAnimationBlock.currentFrame();
     if (cframe === undefined)
     {
-        this.layout = null;
+        this.layout = getCurrentLayout();
         this.current_begin_time = null;
         this.current_end_time = null;
         this.animation_info = {};
