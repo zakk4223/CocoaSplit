@@ -383,7 +383,7 @@
         }
         [self updateLayersWithFramedataBlock:^(CALayer *layer) {
 
-            ((CSIOSurfaceLayer *)layer).imageBuffer = use_buf;
+        ((CSIOSurfaceLayer *)layer).imageBuffer = use_buf;
             
         }];
         

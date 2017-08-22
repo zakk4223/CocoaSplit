@@ -39,8 +39,8 @@
                         </menu>
                     </popUpButtonCell>
                     <connections>
+                        <binding destination="QLM-Zf-hvH" name="selectedObject" keyPath="selection.transitionDirection" previousBinding="xwv-Aa-fRB" id="Tgv-b1-x8Q"/>
                         <binding destination="-2" name="content" keyPath="self.transitionDirections" id="xwv-Aa-fRB"/>
-                        <binding destination="QLM-Zf-hvH" name="selectedValue" keyPath="selection.transitionDirection" previousBinding="xwv-Aa-fRB" id="8Ie-BF-AIE"/>
                     </connections>
                 </popUpButton>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="57s-Hb-mRU">

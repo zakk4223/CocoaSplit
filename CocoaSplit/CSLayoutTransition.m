@@ -22,6 +22,7 @@
     copy.transitionHoldTime = self.transitionHoldTime;
     copy.preTransition = [self.preTransition copy];
     copy.postTransition = [self.postTransition copy];
+    copy.transitionDirection = self.transitionDirection;
 
     return copy;
 }
@@ -36,6 +37,8 @@
     [aCoder encodeFloat:self.transitionHoldTime forKey:@"transitionHoldTime"];
     [aCoder encodeObject:self.preTransition forKey:@"preTransition"];
     [aCoder encodeObject:self.postTransition forKey:@"postTransition"];
+    [aCoder encodeObject:self.transitionDirection forKey:@"transitionDirection"];
+
 }
 
 -(instancetype) initWithCoder:(NSCoder *)aDecoder
@@ -50,6 +53,8 @@
         self.transitionHoldTime = [aDecoder decodeFloatForKey:@"transitionHoldTime"];
         self.preTransition = [aDecoder decodeObjectForKey:@"preTransition"];
         self.postTransition = [aDecoder decodeObjectForKey:@"postTransition"];
+        self.transitionDirection = [aDecoder decodeObjectForKey:@"transitionDirection"];
+
     }
     return self;
     
