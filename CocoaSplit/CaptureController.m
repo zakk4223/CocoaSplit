@@ -2327,11 +2327,13 @@
         self.layoutTransitionViewController = [[CSCIFilterLayoutTransitionViewController alloc] init];
         self.layoutTransitionViewController.transition = [[CSLayoutTransition alloc] init];
         self.layoutTransitionViewController.transition.transitionFilter = newFilter;
+        self.layoutTransitionViewController.transition.transitionName = transitionName;
+        
     } else if ([transitionName isEqualToString:@"Layout"]) {
         self.layoutTransitionViewController = nil;
         self.layoutTransitionViewController = [[CSLayoutLayoutTransitionViewController alloc] init];
         self.layoutTransitionViewController.transition = [[CSLayoutTransition alloc] init];
-
+        self.layoutTransitionViewController.transition.transitionName = transitionName;
     } else {
         
         self.transitionFilter = nil;

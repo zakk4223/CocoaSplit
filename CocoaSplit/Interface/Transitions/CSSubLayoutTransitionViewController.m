@@ -19,6 +19,7 @@
 
 @implementation CSSubLayoutTransitionViewController
 @synthesize transitionName = _transitionName;
+@synthesize transition = _transition;
 
 
 -(instancetype) init
@@ -37,6 +38,24 @@
     // Do view setup here.
 }
 
+-(CSLayoutTransition *) transition
+{
+    return _transition;
+}
+
+-(void)setTransition:(CSLayoutTransition *)transition
+{
+    _transition = transition;
+
+    if (transition)
+    {
+        self.transitionName = transition.transitionName;
+    } else {
+        self.transitionName = nil;
+    }
+}
+
+
 -(void) setTransitionName:(NSString *)transitionName
 {
     
@@ -53,10 +72,14 @@
         self.layoutTransitionViewController = [[CSCIFilterLayoutTransitionViewController alloc] init];
         self.layoutTransitionViewController.transition = self.transition;
         self.layoutTransitionViewController.transition.transitionFilter = newFilter;
+        self.layoutTransitionViewController.transition.transitionName = transitionName;
+
     } else if ([transitionName isEqualToString:@"Layout"]) {
         self.layoutTransitionViewController = nil;
         self.layoutTransitionViewController = [[CSLayoutLayoutTransitionViewController alloc] init];
         self.layoutTransitionViewController.transition = self.transition;
+        self.layoutTransitionViewController.transition.transitionName = transitionName;
+
 
     } else {
         self.layoutTransitionViewController = [[CSSimpleLayoutTransitionViewController alloc] init];

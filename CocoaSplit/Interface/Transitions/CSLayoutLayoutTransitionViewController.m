@@ -86,7 +86,6 @@
     {
         vc = [[CSSubLayoutTransitionViewController alloc] init];
         
-        vc.transition = self.subTransition;
         
         _subPopover.contentViewController = vc;
         _subPopover.delegate = vc;
@@ -95,6 +94,8 @@
     }
     
     [_subPopover showRelativeToRect:spawnRect ofView:sender.superview preferredEdge:NSMaxXEdge];
+    vc.transition = self.subTransition;
+
 }
 
 -(BOOL) commitEditing
