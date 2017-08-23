@@ -162,6 +162,17 @@
 }
 
 
+-(float)duration
+{
+    if (_animation)
+    {
+        return _animation.duration;
+    } else {
+        return 0.0f;
+    }
+}
+
+
 -(NSSize)captureSize
 {
     if (_imageSource)
@@ -259,6 +270,7 @@
         
         NSMutableArray *timesArray = [NSMutableArray array];
         float base = 0;
+        
         for (NSNumber *duration in _delayList)
         {
             base = base + (duration.floatValue/totalTime);
