@@ -176,12 +176,14 @@ var advanceBeginTime = function(duration) {
 }
 
 
-var addDummyAnimation = function(duration) {
-    var basic_anim = CABasicAnimation.animationWithKeyPath("__DUMMY_ANIMATION__");
+var addDummyAnimation = function(duration, kwargs) {
+    var keyname = "__DUMMY_ANIMATION__" + generateUUID();
+    
+    var basic_anim = CABasicAnimation.animationWithKeyPath(keyname);
     basic_anim.duration = duration;
     
-    var dummy_animation = new CSAnimation(getCurrentLayout().rootLayer, "__DUMMY_ANIMATION__", basic_anim);
-    CSAnimationBlock.currentFrame().add_animation(dummy_animation, getCurrentLayout().rootLayer, "__DUMMY_ANIMATION__");
+    var dummy_animation = new CSAnimation(getCurrentLayout().rootLayer, keyname, basic_anim, kwargs);
+    CSAnimationBlock.currentFrame().add_animation(dummy_animation, getCurrentLayout().rootLayer, keyname);
 }
 
 
@@ -213,7 +215,7 @@ var switchToLayout = function(layout, kwargs) {
             if (layoutTransition.preTransition)
             {
                 target_layout.transitionInfo = layoutTransition.preTransition;
-                
+                target_layout.transitionInfo.waitForMedia = layoutTransition.waitForMedia;
                 target_layout.replaceWithSourceLayoutUsingScripts(layoutTransition.transitionLayout, useScripts);
                 waitAnimation(layoutTransition.transitionHoldTime);
             }
@@ -240,6 +242,8 @@ var mergeLayout = function(layout, kwargs) {
             if (layoutTransition.preTransition)
             {
                 target_layout.transitionInfo = layoutTransition.preTransition;
+                target_layout.transitionInfo.waitForMedia = layoutTransition.waitForMedia;
+
                 target_layout.replaceWithSourceLayoutUsingScripts(layoutTransition.transitionLayout, useScripts);
                 waitAnimation(layoutTransition.transitionHoldTime);
             }
@@ -276,6 +280,7 @@ var removeLayout = function(layout, kwargs) {
             if (layoutTransition.preTransition)
             {
                 target_layout.transitionInfo = layoutTransition.preTransition;
+                target_layout.transitionInfo.waitForMedia = layoutTransition.waitForMedia;
                 target_layout.replaceWithSourceLayoutUsingScripts(layoutTransition.transitionLayout, useScripts);
                 waitAnimation(layoutTransition.transitionHoldTime);
             }

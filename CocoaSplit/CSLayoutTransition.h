@@ -19,7 +19,7 @@
 @property (assign) float transitionHoldTime;
 @property (strong) CSLayoutTransition *preTransition;
 @property (strong) CSLayoutTransition *postTransition;
-
+@property (assign) bool waitForMedia;
 @end
 
 @interface CSLayoutTransition : NSObject <CSLayoutTransitionExport, NSCopying, NSCoding>
@@ -33,6 +33,7 @@
 @property (assign) float transitionHoldTime;
 @property (strong) CSLayoutTransition *preTransition;
 @property (strong) CSLayoutTransition *postTransition;
+@property (assign) bool waitForMedia;
 
 
 @end

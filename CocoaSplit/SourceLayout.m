@@ -1085,7 +1085,7 @@
     for (NSObject<CSInputSourceProtocol> *nSrc in newInputs)
     {
         
-        if (jCtx && rTrans && nSrc.duration)
+        if (jCtx && rTrans && nSrc.duration && self.transitionInfo.waitForMedia)
         {
             JSValue *runFunc = jCtx[@"addDummyAnimation"];
             [runFunc callWithArguments:@[@(nSrc.duration)]];
@@ -1342,7 +1342,7 @@
     
     if (jCtx && rTrans)
     {
-        JSValue *runFunc = jCtx[@"advanceBeginTime"];
+        JSValue *runFunc = jCtx[@"addDummyAnimation"];
         [runFunc callWithArguments:@[@(useTransition.transitionDuration)]];
     }
 
@@ -1406,7 +1406,7 @@
         
         [self addSource:nSrc];
         
-        if (jCtx && rTrans && nSrc.duration)
+        if (jCtx && rTrans && nSrc.duration && self.transitionInfo.waitForMedia)
         {
             JSValue *runFunc = jCtx[@"addDummyAnimation"];
             [runFunc callWithArguments:@[@(nSrc.duration)]];
@@ -1675,7 +1675,7 @@
     bTrans.delegate = transitionDelegate;
     if (jCtx && rTrans)
     {
-        JSValue *runFunc = jCtx[@"advanceBeginTime"];
+        JSValue *runFunc = jCtx[@"addDummyAnimation"];
         [runFunc callWithArguments:@[@(useTransition.transitionDuration)]];
     }
 

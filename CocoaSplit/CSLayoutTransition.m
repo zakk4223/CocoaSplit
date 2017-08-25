@@ -10,6 +10,18 @@
 
 @implementation CSLayoutTransition
 
+
+-(instancetype) init
+{
+    if (self = [super init])
+    {
+        self.waitForMedia = YES;
+    }
+    
+    return self;
+}
+
+
 -(instancetype) copyWithZone:(NSZone *)zone
 {
     CSLayoutTransition *copy = [[CSLayoutTransition alloc] init];
@@ -23,7 +35,7 @@
     copy.preTransition = [self.preTransition copy];
     copy.postTransition = [self.postTransition copy];
     copy.transitionDirection = self.transitionDirection;
-
+    copy.waitForMedia = self.waitForMedia;
     return copy;
 }
 
@@ -38,7 +50,7 @@
     [aCoder encodeObject:self.preTransition forKey:@"preTransition"];
     [aCoder encodeObject:self.postTransition forKey:@"postTransition"];
     [aCoder encodeObject:self.transitionDirection forKey:@"transitionDirection"];
-
+    [aCoder encodeBool:self.waitForMedia forKey:@"waitForMedia"];
 }
 
 -(instancetype) initWithCoder:(NSCoder *)aDecoder
@@ -54,6 +66,7 @@
         self.preTransition = [aDecoder decodeObjectForKey:@"preTransition"];
         self.postTransition = [aDecoder decodeObjectForKey:@"postTransition"];
         self.transitionDirection = [aDecoder decodeObjectForKey:@"transitionDirection"];
+        self.waitForMedia = [aDecoder decodeBoolForKey:@"waitForMedia"];
 
     }
     return self;
