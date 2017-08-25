@@ -524,6 +524,6 @@ NSArray *_savedTransitionConstraints;
 -(NSObject<CSInputSourceProtocol>*)inputSourceForPasteboardItem:(NSPasteboardItem *)item;
 
 -(IBAction)openScriptSwitcherWindow:(id)sender;
-
+-(IBAction)inputOutlineViewDoubleClick:(NSOutlineView *)outlineView;
 
 @end

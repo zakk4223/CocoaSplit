@@ -2996,6 +2996,16 @@
 
 
 
+-(IBAction)inputOutlineViewDoubleClick:(NSOutlineView *)outlineView
+{
+    NSTreeNode *node = [outlineView itemAtRow:outlineView.clickedRow];
+    if (node)
+    {
+        NSObject<CSInputSourceProtocol> *src = node.representedObject;
+        [self.activePreviewView openInputConfigWindow:src.uuid];
+    }
+}
+
 
 -(void)outlineView:(NSOutlineView *)outlineView didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row
 {

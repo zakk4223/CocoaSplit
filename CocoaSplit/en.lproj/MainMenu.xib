@@ -578,6 +578,7 @@
                                                         </tableColumn>
                                                     </tableColumns>
                                                     <connections>
+                                                        <action trigger="doubleAction" selector="inputOutlineViewDoubleClick:" target="816" id="JvY-C8-Sex"/>
                                                         <binding destination="dWz-5q-kjU" name="content" keyPath="arrangedObjects" id="k9g-WQ-l4N"/>
                                                         <outlet property="dataSource" destination="816" id="gID-c6-ZPZ"/>
                                                         <outlet property="delegate" destination="816" id="5fx-i0-Gx5"/>
