@@ -471,7 +471,6 @@
     
     if (self.pcmPlayer)
     {
-        
         [[CSPluginServices sharedPluginServices] removePCMInput:self.pcmPlayer];
     }
     
@@ -490,6 +489,9 @@
     {
         [self deregisterPCMOutput];
     }
+     
+    self.player = nil;
+    
 }
 
 

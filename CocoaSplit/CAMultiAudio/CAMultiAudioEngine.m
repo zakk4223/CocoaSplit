@@ -497,7 +497,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 {
     CAMultiAudioConverter *converter = toRemove.converterNode;
     
-    [self removeInput:converter];
+    [self removeInput:toRemove];
 
     
    

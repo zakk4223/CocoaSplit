@@ -245,7 +245,9 @@
             
             
             sampleABL->mNumberBuffers = bufferCnt;
-            
+        
+        if (dst_data)
+        {
             for (int i=0; i<bufferCnt; i++)
             {
                 sampleABL->mBuffers[i].mData = dst_data[i];
@@ -260,6 +262,9 @@
 
         CAMultiAudioPCM *retPCM = [[CAMultiAudioPCM alloc] initWithAudioBufferList:sampleABL streamFormat:asbd];
         return retPCM;
+        } else {
+            return NULL;
+        }
         
     } else {
         return NULL;
