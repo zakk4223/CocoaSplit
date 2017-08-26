@@ -400,6 +400,9 @@ CSStreamOutputWindowController *_streamOutputWindowController;
 CSLayoutSwitcherWithPreviewWindowController *_layoutSwitcherWindowController;
 CGFloat _savedAudioConstraintConstant;
 NSArray *_savedTransitionConstraints;
+    
+    NSMenu *_inputsMenu;
+    
 
 }
 @property (strong) NSArray *inputViewSortDescriptors;

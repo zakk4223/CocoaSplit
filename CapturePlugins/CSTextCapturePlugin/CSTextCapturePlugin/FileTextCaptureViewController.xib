@@ -61,7 +61,7 @@
                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cBX-Lj-ak6">
                     <rect key="frame" x="-1" y="-1" width="110" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="check" title="Strip newlines" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="2tn-p6-3LN">
+                    <buttonCell key="cell" type="check" title="Strip newlines" bezelStyle="regularSquare" imagePosition="right" controlSize="small" state="on" inset="2" id="2tn-p6-3LN">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
@@ -69,15 +69,6 @@
                         <binding destination="vHC-Iv-oOo" name="value" keyPath="selection.collapseLines" id="vzF-pa-k8i"/>
                     </connections>
                 </button>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r4f-fe-h76">
-                    <rect key="frame" x="2" y="25" width="52" height="14"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Start line" id="04e-UG-Eti">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
                 <textField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hlq-PY-7Wy">
                     <rect key="frame" x="183" y="22" width="42" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -102,6 +93,15 @@
                     <connections>
                         <binding destination="-2" name="value" keyPath="self.startLine" id="alE-0N-Rgl"/>
                     </connections>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r4f-fe-h76">
+                    <rect key="frame" x="-2" y="25" width="52" height="14"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Start line" id="04e-UG-Eti">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
                 </textField>
             </subviews>
             <point key="canvasLocation" x="464.5" y="288"/>
