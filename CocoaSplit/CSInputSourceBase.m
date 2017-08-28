@@ -129,20 +129,21 @@
 
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
+    
     [aCoder encodeObject:self.name forKey:@"name"];
     [aCoder encodeObject:self.uuid forKey:@"uuid"];
-    [aCoder encodeFloat:self.depth forKey:@"CAdepth"];
+    
+//    [aCoder encodeFloat:self.depth forKey:@"CAdepth"];
     [aCoder encodeObject:self.script_afterAdd forKey:@"script_afterAdd"];
     [aCoder encodeObject:self.script_beforeDelete forKey:@"script_beforeDelete"];
     [aCoder encodeObject:self.script_frameTick forKey:@"script_frameTick"];
-    [aCoder encodeObject:self.script_beforeMerge forKey:@"script_beforeMerge"];
+     [aCoder encodeObject:self.script_beforeMerge forKey:@"script_beforeMerge"];
     [aCoder encodeObject:self.script_afterMerge forKey:@"script_afterMerge"];
     [aCoder encodeObject:self.script_beforeRemove forKey:@"script_beforeRemove"];
     [aCoder encodeObject:self.script_beforeReplace forKey:@"script_beforeReplace"];
     [aCoder encodeObject:self.script_afterReplace forKey:@"script_afterReplace"];
     [aCoder encodeInteger:self.scriptPriority forKey:@"scriptPriority"];
     [aCoder encodeBool:self.scriptAlwaysRun forKey:@"scriptAlwaysRun"];
-
 
 }
 

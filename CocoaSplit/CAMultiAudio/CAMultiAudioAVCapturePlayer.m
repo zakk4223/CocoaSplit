@@ -22,7 +22,7 @@
         self.name = avDevice.localizedName;
         self.nodeUID = avDevice.uniqueID;
         self.inputFormat = withFormat;
-        
+        self.systemDevice = YES;
         
     }
     return self;

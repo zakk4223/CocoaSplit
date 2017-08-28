@@ -30,7 +30,6 @@
         self.allowScaling = NO;
         self.needsSourceSelection = NO;
         self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
-        
         [self addObserver:self forKeyPath:@"propertiesChanged" options:NSKeyValueObservingOptionNew context:NULL];
         
         _font = [NSFont fontWithName:@"Helvetica" size:50];
@@ -180,6 +179,7 @@
         self.captureName = text;
 
     });
+    
     
     
     

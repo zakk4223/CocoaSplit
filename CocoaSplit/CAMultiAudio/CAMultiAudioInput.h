@@ -17,6 +17,7 @@
 @property (strong) CAMultiAudioMatrixMixerWindowController *mixerWindow;
 @property (assign) Float32 delay;
 @property (assign) bool noSettings;
+@property (assign) bool systemDevice;
 
 
 
@@ -35,6 +36,7 @@
 @property (strong) CAMultiAudioMatrixMixerWindowController *mixerWindow;
 @property (assign) Float32 delay;
 @property (assign) bool noSettings;
+@property (assign) bool systemDevice;
 
 
 @end

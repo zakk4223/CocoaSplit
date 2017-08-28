@@ -333,6 +333,7 @@
 
         NSObject <CSCaptureSourceProtocol> *newCapture = [[captureClass alloc] init];
 
+        NSLog(@"INPUT NAME %@", inputName);
         item = [[NSMenuItem alloc] initWithTitle:inputName action:nil keyEquivalent:@""];
         item.image = newCapture.libraryImage;
         item.image.size = iconSize;
@@ -368,13 +369,16 @@
     item.image.size = iconSize;
     item.submenu = [[NSMenu alloc] init];
 
-    for(CAMultiAudioNode *input in [CaptureController sharedCaptureController].multiAudioEngine.audioInputs)
+    for(CAMultiAudioInput *input in [CaptureController sharedCaptureController].multiAudioEngine.audioInputs)
     {
-        NSMenuItem *audioItem = [[NSMenuItem alloc] initWithTitle:input.name action:nil keyEquivalent:@""];
-        audioItem.representedObject = input;
-        audioItem.target = self;
-        audioItem.action = @selector(audioInputItemClicked:);
-        [item.submenu addItem:audioItem];
+        if (input.systemDevice)
+        {
+            NSMenuItem *audioItem = [[NSMenuItem alloc] initWithTitle:input.name action:nil keyEquivalent:@""];
+            audioItem.representedObject = input;
+            audioItem.target = self;
+            audioItem.action = @selector(audioInputItemClicked:);
+            [item.submenu addItem:audioItem];
+        }
     }
 
     [_inputsMenu addItem:item];

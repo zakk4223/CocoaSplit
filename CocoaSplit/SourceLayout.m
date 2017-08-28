@@ -695,6 +695,8 @@
             
             if ([eSrc isDifferentInput:oSrc])
             {
+                NSLog(@"ADDING TO CHANGED %@", oSrc);
+                
                 [retDict[@"changed"] addObject:oSrc];
                 
             } else {
@@ -871,6 +873,9 @@
 
     
     NSArray *sortedSources = [self.sourceListPresentation sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"scriptPriority" ascending:YES]]];
+    NSLog(@"CHANGED %@", changedInputs);
+    NSLog(@"REMOVED %@", removedInputs);
+    NSLog(@"NEW %@", newInputs);
     
     for (NSObject <CSInputSourceProtocol> *src in sortedSources)
     {
@@ -1000,6 +1005,7 @@
         {
             if (cSrc)
             {
+                NSLog(@"DELETING %@", cSrc);
                 [self deleteSource:cSrc];
             }
         }
@@ -1404,8 +1410,13 @@
             nSrc.layer.hidden = YES;
         }
         
-        [self addSource:nSrc];
+        //[self addSource:nSrc];
         
+        [self.rootLayer addSublayer:nSrc.layer];
+        
+        [self addSourceToPresentation:nSrc];
+        
+
         if (jCtx && rTrans && nSrc.duration && self.transitionInfo.waitForMedia)
         {
             JSValue *runFunc = jCtx[@"addDummyAnimation"];
@@ -1427,9 +1438,16 @@
             cSrc.layer.hidden = YES;
         }
         
-        [self addSource:cSrc withParentLayer:mSrc.layer.superlayer];
+        [mSrc.layer.superlayer addSublayer:cSrc.layer];
+        
+        [self addSourceToPresentation:cSrc];
+        
+
+        //[self addSource:cSrc withParentLayer:mSrc.layer.superlayer];
         [self incrementInputRef:cSrc];
     }
+    
+    
     transitionDelegate.changeremoveInputs = changedRemove;
     
     
