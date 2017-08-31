@@ -584,6 +584,7 @@
     }
     
     
+    NSMutableDictionary *savedDepths = [NSMutableDictionary dictionary];
     
     NSDictionary *saveDict = @{@"sourcelist": self.sourceList,  @"timingSource": timerSrc};
     NSMutableData *saveData = [NSMutableData data];
@@ -616,6 +617,7 @@
 
 -(id)archiver:(NSKeyedArchiver *)archiver willEncodeObject:(id)object
 {
+    
     if ([object isKindOfClass:[InputSource class]])
     {
         InputSource *src = (InputSource *)object;
@@ -876,6 +878,7 @@
     NSLog(@"CHANGED %@", changedInputs);
     NSLog(@"REMOVED %@", removedInputs);
     NSLog(@"NEW %@", newInputs);
+    NSLog(@"PRESENTATION %@", self.sourceListPresentation);
     
     for (NSObject <CSInputSourceProtocol> *src in sortedSources)
     {
@@ -1037,6 +1040,7 @@
         
         
         [self deleteSourceFromPresentation:mSrc];
+        NSLog(@"ADDED TO CHANGED REMOVE %@", mSrc);
         [changedRemove addObject:mSrc];
         
         cSrc.layer.hidden = YES;
@@ -1902,12 +1906,16 @@
     
     [delSource.layer removeFromSuperlayer];
 
-    uSrc = _uuidMap[delSource.uuid];
-    if ([uSrc isEqual:delSource])
+   // uSrc = _uuidMap[delSource.uuid];
+    if ([self.sourceList containsObject:delSource])
     {
         [delSource beforeDelete];
 
-        [_uuidMap removeObjectForKey:delSource.uuid];
+        uSrc = _uuidMap[delSource.uuid];
+        if (uSrc && uSrc == delSource)
+        {
+            [_uuidMap removeObjectForKey:delSource.uuid];
+        }
         
         
         [self willChangeValueForKey:@"topLevelSourceList"];

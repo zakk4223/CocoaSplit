@@ -11,6 +11,7 @@
 
 #import "CSAbstractCaptureDevice.h"
 #import "CSTextCaptureViewControllerBase.h"
+#import "CSPluginServices.h"
 
 
 @interface CSTextCaptureBase()
@@ -30,6 +31,8 @@
         self.allowScaling = NO;
         self.needsSourceSelection = NO;
         self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
+        self.activeVideoDevice.uniqueID = [[CSPluginServices sharedPluginServices] generateUUID];
+
         [self addObserver:self forKeyPath:@"propertiesChanged" options:NSKeyValueObservingOptionNew context:NULL];
         
         _font = [NSFont fontWithName:@"Helvetica" size:50];
@@ -62,8 +65,7 @@
     
     NSData *attrData = [NSKeyedArchiver archivedDataWithRootObject:self.fontAttributes];
     
-    
-    [aCoder encodeObject:self.text forKey:@"text"];
+    [aCoder encodeObject:self.saveText forKey:@"text"];
     [aCoder encodeObject:self.font forKey:@"font"];
     [aCoder encodeObject:attrData forKey:@"fontAttributesData"];
     [aCoder encodeBool:self.wrapped forKey:@"wrapped"];
@@ -79,6 +81,8 @@
         if (!self.activeVideoDevice)
         {
             self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
+            self.activeVideoDevice.uniqueID = [[CSPluginServices sharedPluginServices] generateUUID];
+            
         }
         _text = [aDecoder decodeObjectForKey:@"text"];
         NSFont *savedFont = [aDecoder decodeObjectForKey:@"font"];
@@ -113,6 +117,16 @@
     return self;
 }
 
+-(void)setDeviceForUniqueID:(NSString *)uniqueID
+{
+    
+    CSAbstractCaptureDevice *dummydev = [[CSAbstractCaptureDevice alloc] init];
+    
+    dummydev.uniqueID = uniqueID;
+
+    self.activeVideoDevice = dummydev;
+    
+}
 
 -(void)dealloc
 {
@@ -132,7 +146,6 @@
     if (self.text)
     {
         
-        self.activeVideoDevice.uniqueID = self.text;
         
         NSMutableDictionary *strAttrs = [NSMutableDictionary dictionaryWithDictionary:self.fontAttributes];
         strAttrs[NSFontAttributeName] = self.font;
@@ -274,6 +287,12 @@
     
     return returnViewController;
     
+}
+
+
+-(NSString *)saveText
+{
+    return self.text;
 }
 
 

@@ -29,11 +29,11 @@
             <tabViewItems>
                 <tabViewItem label="Settings" identifier="2" id="iXD-as-NHa">
                     <view key="view" id="byO-4p-D9j">
-                        <rect key="frame" x="10" y="25" width="642" height="428"/>
+                        <rect key="frame" x="10" y="29" width="642" height="424"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EBg-Vi-cL7">
-                                <rect key="frame" x="15" y="355" width="53" height="14"/>
+                                <rect key="frame" x="15" y="351" width="53" height="14"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Source" id="YYN-k4-jke">
                                     <font key="font" metaFont="smallSystem"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -49,7 +49,7 @@
                                 </connections>
                             </textField>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Icu-pd-WRg">
-                                <rect key="frame" x="64" y="376" width="146" height="22"/>
+                                <rect key="frame" x="64" y="372" width="146" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="140" id="dg2-sJ-odq"/>
                                 </constraints>
@@ -70,7 +70,7 @@
                                 </connections>
                             </popUpButton>
                             <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gJP-2X-7HB">
-                                <rect key="frame" x="15" y="377" width="34" height="18"/>
+                                <rect key="frame" x="15" y="373" width="34" height="18"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Type" id="kpE-OE-l7z">
                                     <font key="font" metaFont="smallSystem"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -78,7 +78,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GaR-E0-cDn">
-                                <rect key="frame" x="307" y="398" width="80" height="28"/>
+                                <rect key="frame" x="307" y="394" width="80" height="28"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="70" id="d6j-3V-eLO"/>
                                 </constraints>
@@ -95,7 +95,7 @@
                                 </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bWQ-Fl-ROJ">
-                                <rect key="frame" x="15" y="406" width="35" height="14"/>
+                                <rect key="frame" x="15" y="402" width="35" height="14"/>
                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Name" id="hR6-Ol-IPm">
                                     <font key="font" metaFont="smallSystem"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -103,7 +103,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X91-Lt-pl4">
-                                <rect key="frame" x="67" y="403" width="237" height="19"/>
+                                <rect key="frame" x="67" y="399" width="237" height="19"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="237" id="f06-eu-cVl"/>
                                 </constraints>
@@ -121,10 +121,10 @@
                                 </connections>
                             </textField>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="qdF-gh-veZ">
-                                <rect key="frame" x="17" y="-7" width="608" height="338"/>
+                                <rect key="frame" x="17" y="-7" width="608" height="334"/>
                             </customView>
                             <button translatesAutoresizingMaskIntoConstraints="NO" id="Eoh-8E-U5F">
-                                <rect key="frame" x="575" y="404" width="72" height="18"/>
+                                <rect key="frame" x="575" y="400" width="72" height="18"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="67" id="Bg0-pZ-h7L"/>
                                 </constraints>
@@ -141,10 +141,10 @@
                                 </connections>
                             </button>
                             <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="gFW-Ox-2QM">
-                                <rect key="frame" x="17" y="337" width="608" height="5"/>
+                                <rect key="frame" x="17" y="333" width="608" height="5"/>
                             </box>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ESc-uJ-Gih">
-                                <rect key="frame" x="64" y="350" width="146" height="22"/>
+                                <rect key="frame" x="64" y="346" width="146" height="22"/>
                                 <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="Uwd-iE-r9j">
                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="smallSystem"/>
@@ -1370,12 +1370,12 @@
                                             <bool key="NSInsertsNullPlaceholder" value="YES"/>
                                         </dictionary>
                                     </binding>
-                                    <binding destination="5ZX-ve-K4l" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="LGt-C4-9mz" id="Yh6-so-unH">
+                                    <binding destination="5ZX-ve-K4l" name="contentValues" keyPath="arrangedObjects.key" previousBinding="Yh6-so-unH" id="LBC-hJ-Tb2">
                                         <dictionary key="options">
                                             <bool key="NSInsertsNullPlaceholder" value="YES"/>
                                         </dictionary>
                                     </binding>
-                                    <binding destination="5ZX-ve-K4l" name="contentValues" keyPath="arrangedObjects.key" previousBinding="Yh6-so-unH" id="LBC-hJ-Tb2">
+                                    <binding destination="5ZX-ve-K4l" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="LGt-C4-9mz" id="Yh6-so-unH">
                                         <dictionary key="options">
                                             <bool key="NSInsertsNullPlaceholder" value="YES"/>
                                         </dictionary>
@@ -1410,12 +1410,12 @@
                                             <bool key="NSInsertsNullPlaceholder" value="YES"/>
                                         </dictionary>
                                     </binding>
-                                    <binding destination="5ZX-ve-K4l" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="Ck5-7j-lM0" id="rEc-K2-O7X">
+                                    <binding destination="5ZX-ve-K4l" name="contentValues" keyPath="arrangedObjects.key" previousBinding="rEc-K2-O7X" id="ycN-ZB-UzG">
                                         <dictionary key="options">
                                             <bool key="NSInsertsNullPlaceholder" value="YES"/>
                                         </dictionary>
                                     </binding>
-                                    <binding destination="5ZX-ve-K4l" name="contentValues" keyPath="arrangedObjects.key" previousBinding="rEc-K2-O7X" id="ycN-ZB-UzG">
+                                    <binding destination="5ZX-ve-K4l" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="Ck5-7j-lM0" id="rEc-K2-O7X">
                                         <dictionary key="options">
                                             <bool key="NSInsertsNullPlaceholder" value="YES"/>
                                         </dictionary>
@@ -1442,12 +1442,12 @@
                                             <bool key="NSInsertsNullPlaceholder" value="YES"/>
                                         </dictionary>
                                     </binding>
-                                    <binding destination="5ZX-ve-K4l" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="WMd-0g-gXO" id="MAt-Qo-Xet">
+                                    <binding destination="5ZX-ve-K4l" name="contentValues" keyPath="arrangedObjects.key" previousBinding="MAt-Qo-Xet" id="sUH-1F-eK4">
                                         <dictionary key="options">
                                             <bool key="NSInsertsNullPlaceholder" value="YES"/>
                                         </dictionary>
                                     </binding>
-                                    <binding destination="5ZX-ve-K4l" name="contentValues" keyPath="arrangedObjects.key" previousBinding="MAt-Qo-Xet" id="sUH-1F-eK4">
+                                    <binding destination="5ZX-ve-K4l" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="WMd-0g-gXO" id="MAt-Qo-Xet">
                                         <dictionary key="options">
                                             <bool key="NSInsertsNullPlaceholder" value="YES"/>
                                         </dictionary>
@@ -1474,12 +1474,12 @@
                                             <bool key="NSInsertsNullPlaceholder" value="YES"/>
                                         </dictionary>
                                     </binding>
-                                    <binding destination="5ZX-ve-K4l" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="x9U-iM-khU" id="OQI-Nv-lgl">
+                                    <binding destination="5ZX-ve-K4l" name="contentValues" keyPath="arrangedObjects.key" previousBinding="OQI-Nv-lgl" id="UIc-Ri-VwD">
                                         <dictionary key="options">
                                             <bool key="NSInsertsNullPlaceholder" value="YES"/>
                                         </dictionary>
                                     </binding>
-                                    <binding destination="5ZX-ve-K4l" name="contentValues" keyPath="arrangedObjects.key" previousBinding="OQI-Nv-lgl" id="UIc-Ri-VwD">
+                                    <binding destination="5ZX-ve-K4l" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="x9U-iM-khU" id="OQI-Nv-lgl">
                                         <dictionary key="options">
                                             <bool key="NSInsertsNullPlaceholder" value="YES"/>
                                         </dictionary>
@@ -1506,12 +1506,12 @@
                                             <bool key="NSInsertsNullPlaceholder" value="YES"/>
                                         </dictionary>
                                     </binding>
-                                    <binding destination="5ZX-ve-K4l" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="zl3-v6-pFl" id="Mc2-H5-xET">
+                                    <binding destination="5ZX-ve-K4l" name="contentValues" keyPath="arrangedObjects.key" previousBinding="Mc2-H5-xET" id="YSh-ma-OzC">
                                         <dictionary key="options">
                                             <bool key="NSInsertsNullPlaceholder" value="YES"/>
                                         </dictionary>
                                     </binding>
-                                    <binding destination="5ZX-ve-K4l" name="contentValues" keyPath="arrangedObjects.key" previousBinding="Mc2-H5-xET" id="YSh-ma-OzC">
+                                    <binding destination="5ZX-ve-K4l" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="zl3-v6-pFl" id="Mc2-H5-xET">
                                         <dictionary key="options">
                                             <bool key="NSInsertsNullPlaceholder" value="YES"/>
                                         </dictionary>
@@ -1538,12 +1538,12 @@
                                             <bool key="NSInsertsNullPlaceholder" value="YES"/>
                                         </dictionary>
                                     </binding>
-                                    <binding destination="5ZX-ve-K4l" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="5wR-SR-tWF" id="2Co-pE-pZm">
+                                    <binding destination="5ZX-ve-K4l" name="contentValues" keyPath="arrangedObjects.key" previousBinding="2Co-pE-pZm" id="pX5-mW-tvW">
                                         <dictionary key="options">
                                             <bool key="NSInsertsNullPlaceholder" value="YES"/>
                                         </dictionary>
                                     </binding>
-                                    <binding destination="5ZX-ve-K4l" name="contentValues" keyPath="arrangedObjects.key" previousBinding="2Co-pE-pZm" id="pX5-mW-tvW">
+                                    <binding destination="5ZX-ve-K4l" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="5wR-SR-tWF" id="2Co-pE-pZm">
                                         <dictionary key="options">
                                             <bool key="NSInsertsNullPlaceholder" value="YES"/>
                                         </dictionary>
@@ -1570,12 +1570,12 @@
                                             <bool key="NSInsertsNullPlaceholder" value="YES"/>
                                         </dictionary>
                                     </binding>
-                                    <binding destination="5ZX-ve-K4l" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="gym-H2-KAw" id="UK2-Jg-2qw">
+                                    <binding destination="5ZX-ve-K4l" name="contentValues" keyPath="arrangedObjects.key" previousBinding="UK2-Jg-2qw" id="p1u-jD-s01">
                                         <dictionary key="options">
                                             <bool key="NSInsertsNullPlaceholder" value="YES"/>
                                         </dictionary>
                                     </binding>
-                                    <binding destination="5ZX-ve-K4l" name="contentValues" keyPath="arrangedObjects.key" previousBinding="UK2-Jg-2qw" id="p1u-jD-s01">
+                                    <binding destination="5ZX-ve-K4l" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="gym-H2-KAw" id="UK2-Jg-2qw">
                                         <dictionary key="options">
                                             <bool key="NSInsertsNullPlaceholder" value="YES"/>
                                         </dictionary>
@@ -1602,12 +1602,12 @@
                                             <bool key="NSInsertsNullPlaceholder" value="YES"/>
                                         </dictionary>
                                     </binding>
-                                    <binding destination="5ZX-ve-K4l" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="Ura-EW-atH" id="MFC-ai-ZxR">
+                                    <binding destination="5ZX-ve-K4l" name="contentValues" keyPath="arrangedObjects.key" previousBinding="MFC-ai-ZxR" id="05s-ap-ntS">
                                         <dictionary key="options">
                                             <bool key="NSInsertsNullPlaceholder" value="YES"/>
                                         </dictionary>
                                     </binding>
-                                    <binding destination="5ZX-ve-K4l" name="contentValues" keyPath="arrangedObjects.key" previousBinding="MFC-ai-ZxR" id="05s-ap-ntS">
+                                    <binding destination="5ZX-ve-K4l" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="Ura-EW-atH" id="MFC-ai-ZxR">
                                         <dictionary key="options">
                                             <bool key="NSInsertsNullPlaceholder" value="YES"/>
                                         </dictionary>
@@ -2147,7 +2147,7 @@
                                 <rect key="frame" x="17" y="165" width="456" height="171"/>
                                 <clipView key="contentView" id="VU8-cU-Tot">
                                     <rect key="frame" x="1" y="0.0" width="454" height="155"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="28" headerView="Cja-SV-r3z" id="Wec-Fy-TOT">
                                             <rect key="frame" x="0.0" y="0.0" width="458" height="132"/>
@@ -2590,7 +2590,7 @@
                                 <rect key="frame" x="-3" y="54" width="124" height="368"/>
                                 <clipView key="contentView" id="ptW-r4-ihY">
                                     <rect key="frame" x="1" y="1" width="122" height="366"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" id="7TO-Cw-mOa">
                                             <rect key="frame" x="0.0" y="0.0" width="122" height="366"/>
@@ -2660,7 +2660,7 @@
                                 <rect key="frame" x="120" y="54" width="525" height="368"/>
                                 <clipView key="contentView" id="hAW-Jx-skG">
                                     <rect key="frame" x="1" y="1" width="508" height="366"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <textView importsGraphics="NO" richText="NO" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="XJb-k2-QUc">
                                             <rect key="frame" x="0.0" y="0.0" width="508" height="366"/>

@@ -29,6 +29,14 @@
     return sharedCSPluginServices;
 }
 
+-(NSString *)generateUUID
+{
+    CFUUIDRef tmpUUID = CFUUIDCreate(NULL);
+    NSString *uuid = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, tmpUUID);
+    CFRelease(tmpUUID);
+    return uuid;
+}
+
 
 
 -(JSValue *)runJavascript:(NSString *)script

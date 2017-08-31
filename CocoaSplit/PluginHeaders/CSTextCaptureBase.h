@@ -29,6 +29,7 @@
 @property (strong) NSDictionary *fontAttributes;
 @property (strong) NSString *alignmentMode;
 @property (assign) bool wrapped;
+@property (readonly) NSString *saveText;
 
 
 @end

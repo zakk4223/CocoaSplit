@@ -80,6 +80,12 @@
 }
 
 
+-(NSString *)saveText
+{
+    return @"";
+}
+
+
 -(void)setFormat:(NSString *)format
 {
     _format = format;

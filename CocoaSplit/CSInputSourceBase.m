@@ -129,7 +129,6 @@
 
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
-    
     [aCoder encodeObject:self.name forKey:@"name"];
     [aCoder encodeObject:self.uuid forKey:@"uuid"];
     
@@ -144,7 +143,6 @@
     [aCoder encodeObject:self.script_afterReplace forKey:@"script_afterReplace"];
     [aCoder encodeInteger:self.scriptPriority forKey:@"scriptPriority"];
     [aCoder encodeBool:self.scriptAlwaysRun forKey:@"scriptAlwaysRun"];
-
 }
 
 -(instancetype)initWithCoder:(NSCoder *)aDecoder {
@@ -153,7 +151,8 @@
     
     self.name = [aDecoder decodeObjectForKey:@"name"];
     self.uuid = [aDecoder decodeObjectForKey:@"uuid"];
-    self.depth = [aDecoder decodeFloatForKey:@"CAdepth"];
+    
+    //self.depth = [aDecoder decodeFloatForKey:@"CAdepth"];
     self.script_afterAdd = [aDecoder decodeObjectForKey:@"script_afterAdd"];
     self.script_beforeDelete = [aDecoder decodeObjectForKey:@"script_beforeDelete"];
     self.script_frameTick = [aDecoder decodeObjectForKey:@"script_frameTick"];

@@ -29,6 +29,8 @@
 -(NSArray *)accountNamesForService:(NSString *)serviceName;
 -(NSObject *)captureController;
 -(JSValue *)runJavascript:(NSString *)script;
+-(NSString *)generateUUID;
+
 
 
 @property (readonly) double currentFPS;

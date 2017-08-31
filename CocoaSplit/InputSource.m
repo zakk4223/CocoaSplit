@@ -18,6 +18,7 @@ static NSArray *_sourceTypes = nil;
 @class Foobar;
 
 
+
 @implementation InputSource
 
 
@@ -121,6 +122,7 @@ static NSArray *_sourceTypes = nil;
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
     
+    
     [super encodeWithCoder:aCoder];
     
     [aCoder encodeFloat:self.rotationAngle forKey:@"rotationAngle"];
@@ -137,7 +139,12 @@ static NSArray *_sourceTypes = nil;
     [aCoder encodeFloat:self.scrollYSpeed forKey:@"scrollYSpeed"];
     
     [aCoder encodeInt:self.rotateStyle forKey:@"rotateStyle"];
-     
+    
+    if (!_encodingForCompare)
+    {
+        [aCoder encodeFloat:self.depth forKey:@"CAdepth"];
+    }
+    
     if (self.videoInput)
     {
         [aCoder encodeObject:self.videoInput forKey:@"videoInput"];
@@ -196,6 +203,9 @@ static NSArray *_sourceTypes = nil;
 
     
     [aCoder encodeObject:self.layer.filters forKey:@"layerFilters"];
+    [aCoder encodeObject:self.layer.backgroundFilters forKey:@"backgroundFilters"];
+    [aCoder encodeObject:self.layer.sourceLayer.filters forKey:@"sourceFilters"];
+    
     if (_userBackground)
     {
         [aCoder encodeObject:self.backgroundColor forKey:@"backgroundColor"];
@@ -432,6 +442,8 @@ static NSArray *_sourceTypes = nil;
         
         
         self.layer.filters = [aDecoder decodeObjectForKey:@"layerFilters"];
+        self.layer.backgroundFilters = [aDecoder decodeObjectForKey:@"backgroundFilters"];
+        self.layer.sourceLayer.filters = [aDecoder decodeObjectForKey:@"sourceFilters"];
         self.compositingFilterName = [aDecoder decodeObjectForKey:@"compositingFilterName"];
         if ([aDecoder containsValueForKey:@"alwaysDisplay"])
         {
@@ -2382,34 +2394,200 @@ static NSArray *_sourceTypes = nil;
     
  }
 
+
 -(NSData *)saveData
+{
+    return [self saveData:NO];
+}
+
+
+-(NSData *)saveData:(bool)forCompare
 {
     NSMutableData *saveData = [NSMutableData data];
     NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:saveData];
+
     
-    [archiver encodeObject:self forKey:@"root"];
+    NSMutableDictionary *savDict = [NSMutableDictionary dictionary];
+    if (self.videoInput)
+    {
+        savDict[@"videoInput"] = self.videoInput;
+    }
+    
+    if (self.layer)
+    {
+        if (self.layer.filters)
+        {
+            savDict[@"filters"] = self.layer.filters;
+        }
+        
+        if (self.layer.backgroundFilters)
+        {
+            savDict[@"backgroundFilters"] = self.layer.backgroundFilters;
+        }
+        
+        if (self.layer.sourceLayer && self.layer.sourceLayer.filters)
+        {
+            savDict[@"sourceFilters"] = self.layer.sourceLayer.filters;
+        }
+    }
+    
+    
+    [archiver encodeObject:savDict forKey:@"root"];
     [archiver finishEncoding];
+    
     return saveData;
 }
 
--(bool)isDifferentInput:(InputSource *)from
+-(bool)stringCompare:(NSString *)str1 withString:(NSString *)str2
 {
-    if (![from.uuid isEqualToString:self.uuid])
+    NSString *r1 = str1 ? str1 : @"";
+    NSString *r2 = str2 ? str2 : @"";
+    return [r1 isEqualToString:r2];
+}
+
+-(bool)isEqualNilSafe:(id)o1 withObject:(id)o2
+{
+    if (!o1 && !o2)
     {
         return YES;
     }
     
-    NSData *myData = [self saveData];
-    NSData *fromData = [from saveData];
-    
-    
-    
-    if ([myData isEqualToData:fromData])
+    if (o1 && o2)
     {
-        return NO;
+        return [o1 isEqual:o2];
     }
     
-    return YES;
+    return NO;
+}
+
+
+-(bool)isDifferentInput:(InputSource *)from
+{
+    if (![self stringCompare:from.uuid withString:self.uuid])
+        return YES;
+    
+    if (![self stringCompare:self.selectedVideoType withString:from.selectedVideoType])
+        return YES;
+
+    if (self.parentInput != from.parentInput)
+        return YES;
+    
+    if (!NSEqualSizes(self.layer.bounds.size, from.layer.bounds.size))
+        return YES;
+    
+    if (!NSEqualPoints(self.layer.position, from.layer.position))
+        return YES;
+    
+    
+    if (self.rotationAngle != from.rotationAngle)
+        return YES;
+
+    if (self.rotationAngleX != from.rotationAngleX)
+        return YES;
+
+    if (self.rotationAngleY != from.rotationAngleY)
+        return YES;
+
+    if (self.opacity != from.opacity)
+        return YES;
+
+
+    if (!NSEqualRects(self.layer.cropRect, from.layer.cropRect))
+        return YES;
+    
+    if (self.scrollXSpeed != from.scrollXSpeed)
+        return YES;
+    
+    if (self.scrollYSpeed != from.scrollYSpeed)
+        return YES;
+    
+    if (self.borderWidth != from.borderWidth)
+        return YES;
+    
+    if (![self isEqualNilSafe:self.borderColor withObject:from.borderColor])
+        return YES;
+    
+    if (self.cornerRadius != from.cornerRadius)
+        return YES;
+    
+    if (self.doChromaKey != from.doChromaKey)
+        return YES;
+    
+    if (![self isEqualNilSafe:self.chromaKeyColor withObject:from.chromaKeyColor])
+        return YES;
+    
+    if (self.chromaKeySmoothing != from.chromaKeySmoothing)
+        return YES;
+    
+    if (self.chromaKeyThreshold != from.chromaKeyThreshold)
+        return YES;
+    
+    
+    if (!CGPointEqualToPoint(self.layer.startPoint, from.layer.startPoint))
+        return YES;
+    
+    if (!CGPointEqualToPoint(self.layer.endPoint, from.layer.endPoint))
+        return YES;
+
+    if (![self isEqualNilSafe:self.startColor withObject:from.startColor])
+        return YES;
+
+    if (![self isEqualNilSafe:self.stopColor withObject:from.stopColor])
+        return YES;
+
+    if (![self stringCompare:self.compositingFilterName withString:from.compositingFilterName])
+        return YES;
+    
+    if (![self isEqualNilSafe:self.backgroundColor withObject:from.backgroundColor])
+        return YES;
+    
+    if (self.constraintMap.count != from.constraintMap.count)
+        return YES;
+    
+    for(NSString *constraintName in self.constraintMap)
+    {
+        NSDictionary *myConstraint = self.constraintMap[constraintName];
+        NSDictionary *fromConstraint = from.constraintMap[constraintName];
+        if (!fromConstraint)
+        {
+            return YES;
+        }
+        
+        
+        
+        if (![myConstraint[@"attr"] isEqual:fromConstraint[@"attr"]])
+        {
+            return YES;
+        }
+        
+        if (![myConstraint[@"offset"] isEqual:fromConstraint[@"offset"]])
+        {
+            return YES;
+        }
+    }
+    
+    
+    
+
+    if (self.layer.filters.count != from.layer.filters.count)
+        return YES;
+    
+    if (self.layer.backgroundFilters.count != from.layer.backgroundFilters.count)
+        return YES;
+
+    if (self.layer.sourceLayer.filters.count != from.layer.sourceLayer.filters.count)
+        return YES;
+    
+    NSData *myData = [self saveData:YES];
+    NSData *fromData = [from saveData:YES];
+    
+    
+    
+    if (![myData isEqualToData:fromData])
+    {
+        return YES;
+    }
+    return NO;
 }
 
 

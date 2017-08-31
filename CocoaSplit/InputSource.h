@@ -229,6 +229,7 @@ typedef enum resize_style_t {
 
     int _frameCount;
     
+    bool _encodingForCompare;
     
     
     
