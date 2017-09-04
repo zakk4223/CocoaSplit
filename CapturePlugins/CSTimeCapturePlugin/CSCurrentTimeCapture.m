@@ -63,6 +63,7 @@
 
 -(NSImage *)libraryImage
 {
+    
     NSString *calPath = [[NSWorkspace sharedWorkspace] absolutePathForAppBundleWithIdentifier:@"com.apple.iCal"];
     
     if (calPath)

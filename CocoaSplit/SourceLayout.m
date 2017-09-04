@@ -438,6 +438,7 @@
         NSMutableArray *noLayer = [NSMutableArray array];
         float currentDepth = 0.0f;
         
+        NSLog(@"GENERATING TOP LEVEL");
         [self willChangeValueForKey:@"topLevelSourceList"];
 
         [self->_topLevelSourceArray removeAllObjects];
@@ -697,7 +698,6 @@
             
             if ([eSrc isDifferentInput:oSrc])
             {
-                NSLog(@"ADDING TO CHANGED %@", oSrc);
                 
                 [retDict[@"changed"] addObject:oSrc];
                 
@@ -875,10 +875,6 @@
 
     
     NSArray *sortedSources = [self.sourceListPresentation sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"scriptPriority" ascending:YES]]];
-    NSLog(@"CHANGED %@", changedInputs);
-    NSLog(@"REMOVED %@", removedInputs);
-    NSLog(@"NEW %@", newInputs);
-    NSLog(@"PRESENTATION %@", self.sourceListPresentation);
     
     for (NSObject <CSInputSourceProtocol> *src in sortedSources)
     {
@@ -1040,7 +1036,6 @@
         
         
         [self deleteSourceFromPresentation:mSrc];
-        NSLog(@"ADDED TO CHANGED REMOVE %@", mSrc);
         [changedRemove addObject:mSrc];
         
         cSrc.layer.hidden = YES;

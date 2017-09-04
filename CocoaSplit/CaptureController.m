@@ -333,7 +333,6 @@
 
         NSObject <CSCaptureSourceProtocol> *newCapture = [[captureClass alloc] init];
 
-        NSLog(@"INPUT NAME %@", inputName);
         item = [[NSMenuItem alloc] initWithTitle:inputName action:nil keyEquivalent:@""];
         item.image = newCapture.libraryImage;
         item.image.size = iconSize;
@@ -3429,7 +3428,7 @@
     
     
     [self.activePreviewView.sourceLayout generateTopLevelSourceList];
-        return YES;
+                    return YES;
     }
     
     bool retVal = NO;

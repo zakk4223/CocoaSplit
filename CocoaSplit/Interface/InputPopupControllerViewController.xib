@@ -2146,18 +2146,18 @@
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="30" horizontalPageScroll="10" verticalLineScroll="30" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SCi-uN-txg">
                                 <rect key="frame" x="17" y="165" width="456" height="171"/>
                                 <clipView key="contentView" id="VU8-cU-Tot">
-                                    <rect key="frame" x="1" y="0.0" width="454" height="155"/>
-                                    <autoresizingMask key="autoresizingMask"/>
+                                    <rect key="frame" x="1" y="0.0" width="454" height="170"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="28" headerView="Cja-SV-r3z" id="Wec-Fy-TOT">
-                                            <rect key="frame" x="0.0" y="0.0" width="458" height="132"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="454" height="147"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                             <tableColumns>
-                                                <tableColumn width="40" minWidth="40" maxWidth="1000" id="A5i-Y3-Jwn">
-                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
+                                                <tableColumn width="371" minWidth="40" maxWidth="1000" id="A5i-Y3-Jwn">
+                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Source">
                                                         <font key="font" metaFont="smallSystem"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
@@ -2176,7 +2176,7 @@
                                                         </binding>
                                                     </connections>
                                                 </tableColumn>
-                                                <tableColumn width="77" minWidth="10" maxWidth="3.4028234663852886e+38" id="zOy-Jf-sUa">
+                                                <tableColumn width="76" minWidth="10" maxWidth="3.4028234663852886e+38" id="zOy-Jf-sUa">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Always show">
                                                         <font key="font" metaFont="smallSystem"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -2191,21 +2191,6 @@
                                                         <binding destination="4mF-fx-iLB" name="value" keyPath="arrangedObjects.alwaysDisplay" id="oBv-Yg-yV0"/>
                                                     </connections>
                                                 </tableColumn>
-                                                <tableColumn width="332" minWidth="40" maxWidth="1000" id="iao-Il-U0R">
-                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
-                                                    </tableHeaderCell>
-                                                    <buttonCell key="dataCell" type="push" title="Settings" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="9hm-rX-Xt7">
-                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <connections>
-                                                            <action selector="deleteMultiSource:" target="-2" id="zaO-XE-PC2"/>
-                                                        </connections>
-                                                    </buttonCell>
-                                                    <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
-                                                </tableColumn>
                                             </tableColumns>
                                             <connections>
                                                 <binding destination="4mF-fx-iLB" name="content" keyPath="arrangedObjects" id="Qsl-gU-eSC"/>
@@ -2213,7 +2198,7 @@
                                         </tableView>
                                     </subviews>
                                 </clipView>
-                                <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="7AG-OO-3Z9">
+                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="7AG-OO-3Z9">
                                     <rect key="frame" x="1" y="155" width="454" height="15"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -2222,7 +2207,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <tableHeaderView key="headerView" id="Cja-SV-r3z">
-                                    <rect key="frame" x="0.0" y="0.0" width="458" height="23"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="454" height="23"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableHeaderView>
                             </scrollView>
