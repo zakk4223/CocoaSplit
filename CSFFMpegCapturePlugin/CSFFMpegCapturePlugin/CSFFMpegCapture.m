@@ -225,6 +225,7 @@
 {
     if (self.player)
     {
+        
         [self.player seek:currentMovieTime];
         self.currentTimeString = [self timeToString:self.player.lastVideoTime];
 

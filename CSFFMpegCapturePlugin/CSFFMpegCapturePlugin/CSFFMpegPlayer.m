@@ -68,18 +68,6 @@
 }
 
 
--(void)readThread
-{
-        if (self.currentlyPlaying)
-        {
-            if (_seekRequest)
-            {
-                [self seek:_seekRequestTime];
-            }
-            
-            [self.currentlyPlaying readAndDecodeVideoFrames:0];
-        }
-}
 
 
 -(CSFFMpegInput *)preChangeItem
@@ -90,6 +78,7 @@
         useItem = self.currentlyPlaying;
         self.currentlyPlaying = nil;
         _audio_done = NO;
+        _audio_running = NO;
         _video_done = NO;
         _flushAudio = NO;
         _first_frame_host_time = 0;
@@ -156,8 +145,11 @@
 
 -(void)nextItem
 {
+    if (self.currentlyPlaying && (_inputQueue.count == 1) && (self.repeat == kCSFFMovieRepeatNone))
+    {
+        return;
+    }
     CSFFMpegInput *useItem = [self preChangeItem];
-    
     
     if (!self.playing)
     {
@@ -227,6 +219,26 @@
 
 -(void)seek:(double)toTime
 {
+    _first_frame_host_time = 0;
+    _peek_frame = NULL;
+    _first_video_pts = 0;
+
+    
+    [self.currentlyPlaying seek:toTime];
+    if (_audio_done)
+    {
+        [self startAudio];
+    }
+    _first_frame_host_time = 0;
+    _peek_frame = NULL;
+    _first_video_pts = 0;
+    
+    _seekRequest = NO;
+    _seekRequestTime = 0.0f;
+    _video_done = NO;
+    _audio_done = NO;
+
+    return;
     
     if (_seekRequest)
     {
@@ -234,8 +246,11 @@
         _first_frame_host_time = 0;
         _peek_frame = NULL;
         _first_video_pts = 0;
+    
         _seekRequest = NO;
         _seekRequestTime = 0.0f;
+        _video_done = NO;
+        _audio_done = NO;
 
     } else {
         _seekRequest = YES;
@@ -251,7 +266,7 @@
     
     dispatch_async(_input_read_queue, ^{
         
-        [item openMedia:15];
+        [item openMedia:20];
         
         if (self.itemStarted)
         {
@@ -266,7 +281,8 @@
             self.currentlyPlaying = item;
             self.playing = YES;
         }
-        [self readThread];
+        [item start];
+        
     });
 }
 
@@ -329,6 +345,8 @@
 
 -(void)startAudio
 {
+    _audio_running = YES;
+    
     dispatch_async(_audio_queue, ^{
 
         [self.pcmPlayer play];
@@ -346,6 +364,7 @@
     CAMultiAudioPCM *audioPCM = NULL;
     CSFFMpegInput *useItem;
     bool good_audio = NO;
+    _audio_done = NO;
     
     while (self.playing)
     {
@@ -462,7 +481,6 @@
     
     if (_first_frame_host_time == 0)
     {
-        
         play_audio = NO;
         
         use_frame = [_useInput consumeFrame:&av_error];
@@ -474,7 +492,7 @@
             _last_buf = nil;
             audio_pts = use_frame->pkt_pts;
             _first_video_pts = 0;
-            [self startAudio];
+            //[self startAudio];
         }
     } else {
         if (!self.paused)
@@ -511,7 +529,6 @@
                 }
             }
             
-            
             while (do_consume && (_peek_frame = [_useInput consumeFrame:&av_error]) && _peek_frame->pkt_pts < target_pts)
             {
                 if (use_frame)
@@ -534,7 +551,10 @@
     
     if (use_frame && !_video_done)
     {
-        
+        if ((use_frame->pkt_pts >= _useInput.first_audio_pts) && !_audio_running && !_audio_done)
+        {
+            [self startAudio];
+        }
         
         /*
         if (self.audio_needs_restart)
@@ -570,7 +590,7 @@
     if (_audio_done && _video_done)
     {
 
-        [self.currentlyPlaying stop];
+        //[self.currentlyPlaying stop];
         
         if (_forceNextInput)
         {

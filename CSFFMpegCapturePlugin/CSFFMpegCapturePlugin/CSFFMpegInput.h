@@ -38,11 +38,13 @@ struct frame_message {
     int _audio_stream_idx;
     struct SwsContext *_sws_ctx;
     struct SwrContext *_swr_ctx;
-    bool _video_done;
-    bool _audio_done;
     uint64_t _seek_time;
     bool _seek_request;
     bool _stop_request;
+    bool _seen_audio_pkt;
+    bool _seen_video_pkt;
+    dispatch_semaphore_t _read_loop_semaphore;
+    dispatch_queue_t _read_thread;
     
     dispatch_queue_t _seek_queue;
     
@@ -57,6 +59,7 @@ struct frame_message {
 -(AVFrame *)consumeFrameWithRefill;
 -(void)readAndDecodeVideoFrames:(int)frameCnt;
 -(void)stop;
+-(void)start;
 
 
 

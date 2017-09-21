@@ -24,9 +24,13 @@
 
         _first_video_pts = 0;
         _first_audio_pts = 0;
+        _seen_video_pkt = NO;
+        _seen_audio_pkt = NO;
         _duration = 0.0f;
         _seek_request = NO;
         _seek_time = 0;
+        _read_loop_semaphore = dispatch_semaphore_create(0);
+        _read_thread = dispatch_queue_create("READ QUEUE", DISPATCH_QUEUE_SERIAL);
         
         _seek_queue = dispatch_queue_create("SEEK QUEUE", DISPATCH_QUEUE_SERIAL);
         
@@ -163,8 +167,6 @@
     self.is_ready = NO;
     _stop_request = NO;
     self.is_draining = NO;
-    _video_done = NO;
-    _audio_done = NO;
     
 
     self.duration = _format_ctx->duration / (double)AV_TIME_BASE;
@@ -173,8 +175,10 @@
     
 
     
+    dispatch_async(_read_thread, ^{
         [self readAndDecodeVideoFrames:bufferVideoFrames];
-        
+    });
+    
      return YES;
 }
 
@@ -290,6 +294,8 @@
         if (withEOF)
         {
             av_thread_message_queue_set_err_recv(_video_message_queue, AVERROR_EOF);
+        } else {
+            av_thread_message_queue_set_err_recv(_video_message_queue, 0);
         }
     }
     
@@ -317,7 +323,7 @@
         AVFrame *flushFrame = av_frame_alloc();
         flushFrame->width = 999;
         msg.frame = flushFrame;
-        
+        av_thread_message_queue_set_err_recv(_audio_message_queue, 0);
         av_thread_message_queue_send(_audio_message_queue, &msg, AV_THREAD_MESSAGE_NONBLOCK);
         
     }
@@ -367,13 +373,17 @@
         av_fifo_free(seek_buffer);
         
         _first_video_pts = 0;
-        _seek_request = NO;
+        _seen_video_pkt = NO;
+        @synchronized (self) {
+            _seek_request = NO;
+
+        }
     }
 }
 
 -(void)seek:(double)time
 {
-    if (_seek_request) return;
+    //if (_seek_request) return;
     
     if (_format_ctx)
     {
@@ -382,6 +392,8 @@
         
         _seek_time = seek_pts;
         _seek_request = YES;
+        self.is_draining = NO;
+        dispatch_semaphore_signal(_read_loop_semaphore);
         av_thread_message_queue_set_err_send(_video_message_queue, AVERROR_EXTERNAL);
 
         //[self audioFlush];
@@ -392,7 +404,14 @@
 -(void)stop
 {
     _stop_request = YES;
+    dispatch_semaphore_signal(_read_loop_semaphore);
 }
+
+-(void)start
+{
+    dispatch_semaphore_signal(_read_loop_semaphore);
+}
+
 
 -(AVFrame *)consumeFrame:(int *)error_out
 {
@@ -403,22 +422,20 @@
     }
     
     
+    /*
     if (_video_done)
     {
         return NULL;
-    }
+    }*/
     *error_out = 0;
     
     struct frame_message msg;
     AVFrame *recv_frame;
     if ((*error_out = av_thread_message_queue_recv(_video_message_queue, &msg, AV_THREAD_MESSAGE_NONBLOCK)) >= 0)
     {
+        
         recv_frame = msg.frame;
     } else {
-        if (*error_out == AVERROR_EOF)
-        {
-            _video_done = YES;
-        }
         
         if (self.is_draining)
         {
@@ -438,8 +455,6 @@
     int read_frames = 0;
     AVFrame *output_frame = NULL;
     AVPacket av_packet;
-    bool do_audio = YES;
-    bool do_video = YES;
     
     
     
@@ -450,95 +465,83 @@
     
     
     
-    while (do_audio || do_video)
+    while (YES)
     {
-        if (_stop_request)
-        {
-            [self closeMedia];
-            _stop_request = NO;
-            return;
-        }
-        
-        if (_seek_request)
-        {
-            [self internal_seek:_seek_time];
-            av_thread_message_queue_set_err_send(_video_message_queue, 0);
-            
-        }
-        
         
         if (frameCnt == 0 && !self.is_ready)
         {
             
             continue;
         }
+
+        
+        if (_stop_request)
+        {
+            [self internal_closeMedia];
+            _stop_request = NO;
+            return;
+        }
+        
+        bool seekreq;
+        @synchronized (self) {
+            seekreq = _seek_request;
+        }
+        
+        if (seekreq)
+        {
+            [self internal_seek:_seek_time];
+            av_thread_message_queue_set_err_send(_video_message_queue, 0);
+            continue;
+        }
         
         output_frame = av_frame_alloc();
         int read_ret = 0;
         
-        if (!self.is_draining)
-        {
-            read_ret = av_read_frame(_format_ctx, &av_packet);
-        } else {
-            
-            if (do_video)
-            {
-                av_init_packet(&av_packet);
-                av_packet.stream_index = _video_stream_idx;
-                av_packet.size = 0;
-                av_packet.data = NULL;
-                
-            } else if (do_audio) {
-                av_init_packet(&av_packet);
-                av_packet.stream_index = _audio_stream_idx;
-                av_packet.size = 0;
-                av_packet.data = NULL;
-            }
-        }
+        read_ret = av_read_frame(_format_ctx, &av_packet);
         
         if (read_ret < 0)
         {
-            self.is_draining = YES;
+            av_thread_message_queue_set_err_recv(_video_message_queue, AVERROR_EOF);
+            av_thread_message_queue_set_err_recv(_audio_message_queue, AVERROR_EOF);
+
+            
+            dispatch_semaphore_wait(_read_loop_semaphore, dispatch_time(DISPATCH_TIME_NOW, 16*NSEC_PER_MSEC));
             continue;
-        }
-        
-        
-        
-        if (do_video && (av_packet.stream_index == _video_stream_idx))
-        {
-            
-            if (_first_video_pts == 0 && av_packet.pts != AV_NOPTS_VALUE)
+
+        } else {
+            if (av_packet.stream_index == _video_stream_idx)
             {
-                _first_video_pts = av_packet.pts;
-            }
-            
-            bool got_frame = [self decodeVideoPacket:&av_packet];
-            
-            
-            
-            if (!got_frame)
-            {
-                if (self.is_draining)
+                if (!_seen_video_pkt && av_packet.pts != AV_NOPTS_VALUE)
                 {
-                    av_thread_message_queue_set_err_recv(_video_message_queue, AVERROR_EOF);
-                    do_video = NO;
+                    _first_video_pts = av_packet.pts;
+                    _seen_video_pkt = YES;
+                    
                 }
-            } else {
-                read_frames++;
+                
+                bool got_frame = [self decodeVideoPacket:&av_packet];
+                
+                
+                
+                if (got_frame)
+                {
+                    read_frames++;
+                }
+            } else if (av_packet.stream_index == _audio_stream_idx) {
+                
+                if (!_seen_audio_pkt)
+                {
+                    _first_audio_pts = av_packet.pts;
+                    _seen_audio_pkt = YES;
+                }
+                
+                bool got_frame = [self decodeAudioPacket:&av_packet];
+                if (!got_frame)
+                {
+                   // av_thread_message_queue_set_err_recv(_audio_message_queue, AVERROR_EOF);
+                }
             }
-        } else if (do_audio && (av_packet.stream_index == _audio_stream_idx)) {
-            
-            if (_first_audio_pts == 0)
-            {
-                _first_audio_pts = av_packet.pts;
-            }
-            
-            bool got_frame = [self decodeAudioPacket:&av_packet];
-            if (!got_frame && self.is_draining)
-            {
-                do_audio = NO;
-                av_thread_message_queue_set_err_recv(_audio_message_queue, AVERROR_EOF);
-            }
+
+
         }
         av_free_packet(&av_packet);
 
@@ -546,7 +549,7 @@
         if (frameCnt > 0 && read_frames >= frameCnt && !self.is_ready)
         {
             self.is_ready = YES;
-            return;
+            dispatch_semaphore_wait(_read_loop_semaphore, DISPATCH_TIME_FOREVER);
         }
         
     }
@@ -664,7 +667,16 @@
 }
 
 
--(void) closeMedia
+
+-(void)closeMedia
+{
+    @synchronized (self) {
+        _stop_request = YES;
+    }
+}
+
+
+-(void) internal_closeMedia
 {
     
     struct frame_message msg;
@@ -737,7 +749,6 @@
 
 -(void)dealloc
 {
-    NSLog(@"DEALLOC?");
     [self closeMedia];
     if (_video_message_queue)
     {

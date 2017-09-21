@@ -38,6 +38,9 @@ typedef enum ff_movie_repeat_t {
     CSFFMpegInput *_forceNextInput;
     bool _seekRequest;
     double _seekRequestTime;
+    bool _audio_running;
+    int64_t _first_pts;
+    
     
     
     
