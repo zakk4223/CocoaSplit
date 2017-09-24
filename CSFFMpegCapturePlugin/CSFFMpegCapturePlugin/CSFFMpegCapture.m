@@ -48,7 +48,7 @@
         NSString *realPath = [fileURL path];
         ret = [[CSFFMpegCapture alloc] init];
         [ret queuePath:realPath];
-        [ret play];
+        
     }
     return ret;
 }
@@ -170,6 +170,7 @@
         
         if (nowPlayingInput)
         {
+            
             self.player.currentlyPlaying = nowPlayingInput;
         }
         
@@ -178,6 +179,7 @@
         
         self.playWhenLive = [aDecoder decodeBoolForKey:@"playWhenLive"];
         self.repeat = [aDecoder decodeIntForKey:@"repeat"];
+        NSLog(@"INIT WITH CODER DONE");
     }
     
     return self;
@@ -394,6 +396,16 @@
             //[self.player pause];
         }
         CVPixelBufferRelease(use_buf);
+
+    } else if (_firstFrame) {
+        use_buf = [self.player firstFrame];
+        _lastSize = NSMakeSize(CVPixelBufferGetWidth(use_buf), CVPixelBufferGetHeight(use_buf));
+        [self updateLayersWithFramedataBlock:^(CALayer *layer) {
+            
+            ((CSIOSurfaceLayer *)layer).imageBuffer = use_buf;
+            
+        }];
+        _firstFrame = NO;
 
     }
 }

@@ -33,6 +33,7 @@
         _read_thread = dispatch_queue_create("READ QUEUE", DISPATCH_QUEUE_SERIAL);
         
         _seek_queue = dispatch_queue_create("SEEK QUEUE", DISPATCH_QUEUE_SERIAL);
+        _first_frame = NULL;
         
     }
     return self;
@@ -330,6 +331,12 @@
 }
 
 
+-(AVFrame *)firstVideoFrame
+{
+    return _first_frame;
+}
+
+
 -(void)internal_seek:(int64_t)time
 {
     if (_format_ctx)
@@ -344,6 +351,12 @@
         [self videoFlush:NO];
         [self audioFlush];
         
+        if (_first_frame)
+        {
+            av_frame_free(&_first_frame);
+            _first_frame = NULL;
+            
+        }
         AVPacket buf_pkt;
         int64_t video_pts = AV_NOPTS_VALUE;
         
@@ -657,6 +670,11 @@
         msg.frame = conv_frame;
         msg.notused = 0;
         av_thread_message_queue_send(_video_message_queue, &msg, 0);
+        if (!_first_frame)
+        {
+            _first_frame = av_frame_alloc();
+            av_frame_ref(_first_frame, conv_frame);
+        }
         ret = YES;
     } else {
         ret = NO;

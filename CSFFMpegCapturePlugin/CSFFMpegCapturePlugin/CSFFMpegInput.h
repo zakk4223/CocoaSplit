@@ -47,6 +47,7 @@ struct frame_message {
     dispatch_queue_t _read_thread;
     
     dispatch_queue_t _seek_queue;
+    AVFrame *_first_frame;
     
     
     
@@ -60,6 +61,7 @@ struct frame_message {
 -(void)readAndDecodeVideoFrames:(int)frameCnt;
 -(void)stop;
 -(void)start;
+-(AVFrame *)firstVideoFrame;
 
 
 

@@ -266,7 +266,7 @@
     
     dispatch_async(_input_read_queue, ^{
         
-        [item openMedia:20];
+        //[item openMedia:20];
         
         if (self.itemStarted)
         {
@@ -290,6 +290,11 @@
 -(void)enqueueItem:(CSFFMpegInput *)item
 {
     [self insertObject:item inInputQueueAtIndex:self.inputQueue.count];
+    if (self.inputQueue.count == 1)
+    {
+        NSLog(@"OPEN MEDIA");
+        [item openMedia:20];
+    }
     
 }
 
@@ -450,6 +455,34 @@
     }
 }
 
+
+-(CVPixelBufferRef)firstFrame
+{
+    CSFFMpegInput *useInput;
+    AVFrame *frame = NULL;
+    
+    @synchronized (self) {
+        useInput = self.currentlyPlaying;
+    }
+
+    if (!useInput)
+    {
+        useInput = self.inputQueue.firstObject;
+    }
+    
+    NSLog(@"USE INPUT %@", useInput);
+    if (useInput)
+    {
+    
+        frame = [useInput firstVideoFrame];
+        if (frame)
+        {
+            CVPixelBufferRef ret = [self convertFrameToPixelBuffer:frame];
+            return ret;
+        }
+    }
+    return NULL;
+}
 
 
 -(CVPixelBufferRef)frameForMediaTime:(CFTimeInterval)mediaTime

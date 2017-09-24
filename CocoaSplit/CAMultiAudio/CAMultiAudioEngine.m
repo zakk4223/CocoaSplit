@@ -713,39 +713,40 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         if (!toRemove.noSettings)
         {
             [toRemove saveDataToDict:saveSettings];
-        
-        
+            
+            
             if (saveSettings.count > 0)
             {
                 _inputSettings[toRemove.nodeUID] = saveSettings;
             }
         }
         
-
+        
         
         CAMultiAudioDownmixer *dmix = toRemove.downMixer;
         toRemove.downMixer = nil;
         
         [self.graph removeNode:toRemove];
         
-        if (dmix)
-        {
-            [self.graph removeNode:dmix];
-        }
-        
         NSArray *delayNodes = toRemove.delayNodes.copy;
-        
-        for (CAMultiAudioDelay *dNode in delayNodes)
+        for (CAMultiAudioDelay *dNode in [delayNodes reverseObjectEnumerator])
         {
             [self.graph removeNode:dNode];
             [toRemove.delayNodes removeObject:dNode];
         }
         
         
+        if (dmix)
+        {
+            [self.graph removeNode:dmix];
+        }
+        
+        
+        
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self removeObjectFromAudioInputsAtIndex:index];
-
+            
         });
     }
     

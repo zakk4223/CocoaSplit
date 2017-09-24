@@ -85,12 +85,14 @@ typedef enum ff_movie_repeat_t {
 
 
 
+
 -(void)seek:(double)toTime;
 -(void)startAudio;
 
 
 
 -(CVPixelBufferRef)frameForMediaTime:(CFTimeInterval)mediaTime;
+-(CVPixelBufferRef)firstFrame;
 
 
 
