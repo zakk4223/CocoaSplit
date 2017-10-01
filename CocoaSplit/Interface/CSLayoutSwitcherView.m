@@ -78,6 +78,12 @@
 }
 
 
+-(BOOL)wantsUpdateLayer
+{
+    return YES;
+}
+
+
 -(void)rightMouseDown:(NSEvent *)event
 {
     [self.controller showLayoutMenu:event forView:self];
@@ -238,6 +244,7 @@
         
         
         [self setNeedsDisplay:YES];
+        [self setNeedsLayout:YES];
         
     }
 }
@@ -312,7 +319,7 @@
     
     if (_textView)
     {
-        
+
         _textView.string = self.sourceLayout.name;
         NSRect tFrame = _textView.frame;
         NSSize tSize = [_textView intrinsicContentSize];

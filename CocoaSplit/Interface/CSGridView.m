@@ -3,7 +3,6 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 3/12/17.
-//  Copyright © 2017 Zakk. All rights reserved.
 //
 
 #import "CSGridView.h"
@@ -72,7 +71,7 @@
                 
                 NSRect viewFrame = NSIntegralRect(NSMakeRect(curPoint.x, curPoint.y, boxWidth, boxHeight));
                 [subView setFrame:viewFrame];
-                
+                [subView layout];
                 curPoint.x += boxWidth+self.columnGap;
                 viewIdx++;
                 
