@@ -414,68 +414,6 @@
                                             <binding destination="816" name="hidden" keyPath="self.stagingHidden" previousBinding="4Nd-Jy-WHO" id="McS-2m-LUe"/>
                                         </connections>
                                     </button>
-                                    <button toolTip="New Source" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xTB-uk-xkF">
-                                        <rect key="frame" x="358" y="75" width="20" height="21"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="20" id="aO8-oq-1vf"/>
-                                        </constraints>
-                                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qKq-J6-9kp">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="smallSystem"/>
-                                        </buttonCell>
-                                        <connections>
-                                            <action selector="inputTableControlClick:" target="816" id="dBa-1V-aSj"/>
-                                        </connections>
-                                    </button>
-                                    <button toolTip="Remove Source" verticalHuggingPriority="750" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="NXd-7g-Q7o">
-                                        <rect key="frame" x="377" y="75" width="20" height="21"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="20" id="gZi-Bb-9iN"/>
-                                        </constraints>
-                                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="QZy-Ii-HpO">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="smallSystem"/>
-                                        </buttonCell>
-                                        <connections>
-                                            <action selector="inputTableControlClick:" target="816" id="Cq3-YP-dO1"/>
-                                        </connections>
-                                    </button>
-                                    <button toolTip="Configure Source" verticalHuggingPriority="750" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="T7c-kD-tu4">
-                                        <rect key="frame" x="395" y="75" width="20" height="21"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="20" id="xbL-PS-YGo"/>
-                                        </constraints>
-                                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSActionTemplate" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="4CT-TJ-dvx">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="smallSystem"/>
-                                        </buttonCell>
-                                        <connections>
-                                            <action selector="inputTableControlClick:" target="816" id="YRr-3w-6yG"/>
-                                        </connections>
-                                    </button>
-                                    <button toolTip="New Layout" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vaG-89-fnQ">
-                                        <rect key="frame" x="21" y="75" width="20" height="21"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="20" id="MCl-GU-xCh"/>
-                                        </constraints>
-                                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bhi-2j-OaJ">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="smallSystem"/>
-                                        </buttonCell>
-                                        <connections>
-                                            <action selector="createLayoutOrSequenceAction:" target="816" id="6yO-TI-yom"/>
-                                        </connections>
-                                    </button>
-                                    <button horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="S3f-OT-hge">
-                                        <rect key="frame" x="40" y="75" width="310" height="21"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="310" id="JpW-zt-juI"/>
-                                        </constraints>
-                                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" enabled="NO" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="U9n-DQ-9D3">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="smallSystem"/>
-                                        </buttonCell>
-                                    </button>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pzK-8X-A5m">
                                         <rect key="frame" x="356" y="340" width="47" height="14"/>
                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Sources" id="PGo-SE-KaE">
@@ -613,16 +551,6 @@
                                             </binding>
                                             <binding destination="816" name="hidden" keyPath="self.stagingHidden" previousBinding="HQA-Rd-aVK" id="ABV-ht-4Lp"/>
                                         </connections>
-                                    </button>
-                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4Os-cy-Qte">
-                                        <rect key="frame" x="414" y="75" width="165" height="21"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="165" id="G1Z-PH-aKO"/>
-                                        </constraints>
-                                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" enabled="NO" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="sc7-Rt-FoP">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="smallSystem"/>
-                                        </buttonCell>
                                     </button>
                                     <scrollView autohidesScrollers="YES" horizontalLineScroll="52" horizontalPageScroll="10" verticalLineScroll="52" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WVW-0n-Rw1">
                                         <rect key="frame" x="587" y="106" width="192" height="226"/>
@@ -950,53 +878,6 @@
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="Z1U-9v-Vnp" customClass="CSAudioLevelView">
-                                        <rect key="frame" x="587" y="76" width="167" height="19"/>
-                                        <subviews>
-                                            <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2Pb-qC-5Ay">
-                                                <rect key="frame" x="0.0" y="1" width="167" height="15"/>
-                                                <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="1" doubleValue="1" tickMarkPosition="above" sliderType="linear" id="bk6-S8-yco" customClass="CSNobarSliderCell"/>
-                                                <connections>
-                                                    <binding destination="816" name="value" keyPath="self.multiAudioEngine.encodeMixer.volume" id="FWr-f1-gDF"/>
-                                                </connections>
-                                            </slider>
-                                        </subviews>
-                                        <constraints>
-                                            <constraint firstItem="2Pb-qC-5Ay" firstAttribute="leading" secondItem="Z1U-9v-Vnp" secondAttribute="leading" id="ApQ-iv-vSX"/>
-                                            <constraint firstAttribute="trailing" secondItem="2Pb-qC-5Ay" secondAttribute="trailing" id="JOq-1G-WNZ"/>
-                                            <constraint firstItem="2Pb-qC-5Ay" firstAttribute="top" secondItem="Z1U-9v-Vnp" secondAttribute="top" constant="4" id="n05-hJ-lZY"/>
-                                        </constraints>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="startValue">
-                                                <real key="value" value="0.0"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="endValue">
-                                                <real key="value" value="1"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
-                                                <color key="value" name="controlHighlightColor" catalog="System" colorSpace="catalog"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="backgroundSize">
-                                                <real key="value" value="0.5"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <binding destination="816" name="level" keyPath="self.multiAudioEngine.streamAudioPowerLevel" id="aud-TG-zi5"/>
-                                        </connections>
-                                    </customView>
-                                    <button translatesAutoresizingMaskIntoConstraints="NO" id="Y7F-zZ-G1v">
-                                        <rect key="frame" x="762" y="95" width="17" height="0.0"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="17" id="tpB-m4-S7Z"/>
-                                        </constraints>
-                                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Speaker_Icon" imagePosition="only" alignment="center" alternateImage="Mute_Icon" controlSize="small" imageScaling="proportionallyUpOrDown" inset="2" id="7BM-rU-Scs">
-                                            <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
-                                            <font key="font" metaFont="smallSystem"/>
-                                        </buttonCell>
-                                        <connections>
-                                            <binding destination="816" name="value" keyPath="self.multiAudioEngine.encodeMixer.muted" id="M9a-Ng-5FP"/>
-                                        </connections>
-                                    </button>
                                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="rSV-Iw-qby">
                                         <rect key="frame" x="786" y="88" width="155" height="244"/>
                                         <subviews>
@@ -1121,71 +1002,191 @@
                                             <action selector="doInstantRecord:" target="816" id="bP2-vD-tT1"/>
                                         </connections>
                                     </button>
+                                    <button toolTip="New Source" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xTB-uk-xkF">
+                                        <rect key="frame" x="358" y="87" width="20" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="20" id="XSk-SG-XVq"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qKq-J6-9kp">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="inputTableControlClick:" target="816" id="dBa-1V-aSj"/>
+                                        </connections>
+                                    </button>
+                                    <button toolTip="Remove Source" verticalHuggingPriority="750" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="NXd-7g-Q7o">
+                                        <rect key="frame" x="377" y="87" width="20" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="20" id="86d-fE-fXS"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="QZy-Ii-HpO">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="inputTableControlClick:" target="816" id="Cq3-YP-dO1"/>
+                                        </connections>
+                                    </button>
+                                    <button toolTip="Configure Source" verticalHuggingPriority="750" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="T7c-kD-tu4">
+                                        <rect key="frame" x="395" y="87" width="20" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="20" id="7so-m1-zUU"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSActionTemplate" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="4CT-TJ-dvx">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="inputTableControlClick:" target="816" id="YRr-3w-6yG"/>
+                                        </connections>
+                                    </button>
+                                    <button toolTip="New Layout" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vaG-89-fnQ">
+                                        <rect key="frame" x="21" y="87" width="20" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="20" id="vBb-zV-buw"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bhi-2j-OaJ">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="createLayoutOrSequenceAction:" target="816" id="6yO-TI-yom"/>
+                                        </connections>
+                                    </button>
+                                    <button horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="S3f-OT-hge">
+                                        <rect key="frame" x="40" y="87" width="310" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="310" id="CBC-X7-jEj"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" enabled="NO" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="U9n-DQ-9D3">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                        </buttonCell>
+                                    </button>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4Os-cy-Qte">
+                                        <rect key="frame" x="414" y="87" width="165" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="165" id="XxY-F4-v1M"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" enabled="NO" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="sc7-Rt-FoP">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                        </buttonCell>
+                                    </button>
+                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="Z1U-9v-Vnp" customClass="CSAudioLevelView">
+                                        <rect key="frame" x="587" y="88" width="167" height="19"/>
+                                        <subviews>
+                                            <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2Pb-qC-5Ay">
+                                                <rect key="frame" x="0.0" y="1" width="167" height="15"/>
+                                                <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="1" doubleValue="1" tickMarkPosition="above" sliderType="linear" id="bk6-S8-yco" customClass="CSNobarSliderCell"/>
+                                                <connections>
+                                                    <binding destination="816" name="value" keyPath="self.multiAudioEngine.encodeMixer.volume" id="FWr-f1-gDF"/>
+                                                </connections>
+                                            </slider>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="2Pb-qC-5Ay" firstAttribute="leading" secondItem="Z1U-9v-Vnp" secondAttribute="leading" id="5gg-H5-uO4"/>
+                                            <constraint firstAttribute="trailing" secondItem="2Pb-qC-5Ay" secondAttribute="trailing" id="KDO-3i-nfb"/>
+                                            <constraint firstItem="2Pb-qC-5Ay" firstAttribute="top" secondItem="Z1U-9v-Vnp" secondAttribute="top" constant="4" id="tkt-Yw-Iml"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="startValue">
+                                                <real key="value" value="0.0"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="endValue">
+                                                <real key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
+                                                <color key="value" name="controlHighlightColor" catalog="System" colorSpace="catalog"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="backgroundSize">
+                                                <real key="value" value="0.5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <binding destination="816" name="level" keyPath="self.multiAudioEngine.streamAudioPowerLevel" id="aud-TG-zi5"/>
+                                        </connections>
+                                    </customView>
+                                    <button translatesAutoresizingMaskIntoConstraints="NO" id="Y7F-zZ-G1v">
+                                        <rect key="frame" x="762" y="88" width="17" height="19"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="17" id="zMX-rW-qrp"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Speaker_Icon" imagePosition="only" alignment="center" alternateImage="Mute_Icon" controlSize="small" imageScaling="proportionallyUpOrDown" inset="2" id="7BM-rU-Scs">
+                                            <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <binding destination="816" name="value" keyPath="self.multiAudioEngine.encodeMixer.muted" id="M9a-Ng-5FP"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="Y7F-zZ-G1v" firstAttribute="leading" secondItem="Z1U-9v-Vnp" secondAttribute="trailing" constant="8" symbolic="YES" id="4Xl-Gk-J11"/>
                                     <constraint firstItem="ZMK-1p-sVF" firstAttribute="baseline" secondItem="4xM-kf-gaf" secondAttribute="baseline" id="4bd-Ot-vjg"/>
-                                    <constraint firstItem="S3f-OT-hge" firstAttribute="leading" secondItem="2370" secondAttribute="leading" constant="40" id="5DS-ch-voh"/>
-                                    <constraint firstItem="vaG-89-fnQ" firstAttribute="baseline" secondItem="S3f-OT-hge" secondAttribute="baseline" id="6sg-06-A8C"/>
+                                    <constraint firstItem="Y7F-zZ-G1v" firstAttribute="bottom" secondItem="rSV-Iw-qby" secondAttribute="bottom" id="5Tw-Pj-jDV"/>
+                                    <constraint firstItem="rPZ-cL-r3T" firstAttribute="leading" secondItem="S3f-OT-hge" secondAttribute="trailing" constant="8" symbolic="YES" id="8vd-wA-SeK"/>
                                     <constraint firstItem="WVW-0n-Rw1" firstAttribute="top" secondItem="rSV-Iw-qby" secondAttribute="top" id="990-Op-eap"/>
                                     <constraint firstItem="4xM-kf-gaf" firstAttribute="centerX" secondItem="2370" secondAttribute="centerX" id="9L3-QF-aHW"/>
-                                    <constraint firstItem="597" firstAttribute="top" secondItem="4Os-cy-Qte" secondAttribute="bottom" constant="34" id="9X4-To-F0m"/>
                                     <constraint firstItem="ZFw-Ai-mXd" firstAttribute="baseline" secondItem="TVb-Ia-ifl" secondAttribute="baseline" id="9jt-tv-hpj"/>
+                                    <constraint firstItem="Y7F-zZ-G1v" firstAttribute="leading" secondItem="Z1U-9v-Vnp" secondAttribute="trailing" constant="8" symbolic="YES" id="A5J-B6-qlj"/>
                                     <constraint firstItem="HdA-UM-xTY" firstAttribute="baseline" secondItem="pzK-8X-A5m" secondAttribute="baseline" id="Atw-oT-o72"/>
-                                    <constraint firstItem="vaG-89-fnQ" firstAttribute="leading" secondItem="2370" secondAttribute="leading" constant="21" id="Bg5-VU-YNM"/>
                                     <constraint firstItem="WVW-0n-Rw1" firstAttribute="leading" secondItem="rPZ-cL-r3T" secondAttribute="trailing" constant="8" symbolic="YES" id="D4c-Ow-Ksi"/>
-                                    <constraint firstItem="WVW-0n-Rw1" firstAttribute="leading" secondItem="4Os-cy-Qte" secondAttribute="trailing" constant="8" symbolic="YES" id="DIR-Df-pE3"/>
-                                    <constraint firstItem="NXd-7g-Q7o" firstAttribute="baseline" secondItem="T7c-kD-tu4" secondAttribute="baseline" id="DrQ-yh-UFb"/>
+                                    <constraint firstItem="S3f-OT-hge" firstAttribute="baseline" secondItem="xTB-uk-xkF" secondAttribute="baseline" id="DUh-Xa-Jo7"/>
+                                    <constraint firstItem="xTB-uk-xkF" firstAttribute="baseline" secondItem="NXd-7g-Q7o" secondAttribute="baseline" id="EOn-OP-hmM"/>
                                     <constraint firstItem="QJ6-Ne-Zed" firstAttribute="top" secondItem="Ysd-ry-lvg" secondAttribute="bottom" constant="7" id="GdK-Zq-SGX"/>
+                                    <constraint firstItem="T7c-kD-tu4" firstAttribute="leading" secondItem="xTB-uk-xkF" secondAttribute="trailing" constant="17" id="HBr-pf-TX2"/>
                                     <constraint firstItem="cxB-MZ-6mz" firstAttribute="leading" secondItem="TVb-Ia-ifl" secondAttribute="trailing" constant="8" symbolic="YES" id="HDy-zc-yVh"/>
-                                    <constraint firstItem="Rb5-R9-Aqy" firstAttribute="top" secondItem="Y7F-zZ-G1v" secondAttribute="bottom" constant="55" id="Kyy-gr-GUs"/>
-                                    <constraint firstItem="4Os-cy-Qte" firstAttribute="leading" secondItem="NXd-7g-Q7o" secondAttribute="trailing" constant="17" id="Ln5-cY-fpt"/>
-                                    <constraint firstItem="T7c-kD-tu4" firstAttribute="baseline" secondItem="4Os-cy-Qte" secondAttribute="baseline" id="LvY-y4-nbh"/>
+                                    <constraint firstItem="4Os-cy-Qte" firstAttribute="leading" secondItem="NXd-7g-Q7o" secondAttribute="trailing" constant="17" id="Hzm-DP-Xlq"/>
+                                    <constraint firstItem="xTB-uk-xkF" firstAttribute="leading" secondItem="rPZ-cL-r3T" secondAttribute="leading" id="JMV-4p-Kep"/>
+                                    <constraint firstItem="Z1U-9v-Vnp" firstAttribute="bottom" secondItem="Y7F-zZ-G1v" secondAttribute="bottom" id="JZW-tA-4j3"/>
+                                    <constraint firstItem="NXd-7g-Q7o" firstAttribute="leading" secondItem="S3f-OT-hge" secondAttribute="trailing" constant="27" id="Lss-3l-kz9"/>
                                     <constraint firstItem="rSV-Iw-qby" firstAttribute="leading" secondItem="WVW-0n-Rw1" secondAttribute="trailing" priority="600" constant="7" id="NBQ-CZ-wh5"/>
-                                    <constraint firstItem="T7c-kD-tu4" firstAttribute="leading" secondItem="xTB-uk-xkF" secondAttribute="trailing" constant="17" id="O16-7y-jBw"/>
+                                    <constraint firstItem="4Os-cy-Qte" firstAttribute="bottom" secondItem="Z1U-9v-Vnp" secondAttribute="bottom" id="OIx-yh-Kro"/>
+                                    <constraint firstItem="vaG-89-fnQ" firstAttribute="leading" secondItem="QJ6-Ne-Zed" secondAttribute="leading" id="OK2-lS-LBg"/>
                                     <constraint firstItem="TVb-Ia-ifl" firstAttribute="leading" secondItem="WVW-0n-Rw1" secondAttribute="leading" id="OQO-mg-3Ys"/>
                                     <constraint firstItem="rPZ-cL-r3T" firstAttribute="top" secondItem="pzK-8X-A5m" secondAttribute="bottom" constant="8" symbolic="YES" id="OfL-8d-yXN"/>
-                                    <constraint firstItem="rPZ-cL-r3T" firstAttribute="leading" secondItem="xTB-uk-xkF" secondAttribute="leading" id="PDv-ug-dHN"/>
+                                    <constraint firstItem="NXd-7g-Q7o" firstAttribute="baseline" secondItem="T7c-kD-tu4" secondAttribute="baseline" id="QZj-hG-oZ8"/>
                                     <constraint firstItem="cxB-MZ-6mz" firstAttribute="centerY" secondItem="TVb-Ia-ifl" secondAttribute="centerY" id="RfX-s4-llV"/>
                                     <constraint firstItem="597" firstAttribute="centerX" secondItem="4xM-kf-gaf" secondAttribute="centerX" id="SKw-wh-qkl"/>
                                     <constraint firstItem="ZFw-Ai-mXd" firstAttribute="leading" secondItem="rSV-Iw-qby" secondAttribute="leading" id="SLj-1N-ejT"/>
-                                    <constraint firstItem="QJ6-Ne-Zed" firstAttribute="leading" secondItem="vaG-89-fnQ" secondAttribute="leading" id="Seh-a6-Bk7"/>
-                                    <constraint firstItem="NXd-7g-Q7o" firstAttribute="leading" secondItem="S3f-OT-hge" secondAttribute="trailing" constant="27" id="UJg-2n-kGI"/>
                                     <constraint firstItem="ZMK-1p-sVF" firstAttribute="leading" secondItem="2370" secondAttribute="leading" constant="20" symbolic="YES" id="UqS-JG-vT0"/>
-                                    <constraint firstItem="Z1U-9v-Vnp" firstAttribute="top" secondItem="Y7F-zZ-G1v" secondAttribute="top" id="W1M-JL-FoH"/>
+                                    <constraint firstItem="S3f-OT-hge" firstAttribute="top" secondItem="QJ6-Ne-Zed" secondAttribute="bottom" constant="-1" id="VX2-Tl-f2h"/>
+                                    <constraint firstItem="S3f-OT-hge" firstAttribute="leading" secondItem="2370" secondAttribute="leading" constant="40" id="WRx-a5-WQR"/>
                                     <constraint firstItem="Ysd-ry-lvg" firstAttribute="leading" secondItem="HdA-UM-xTY" secondAttribute="trailing" constant="8" symbolic="YES" id="WvL-px-hnG"/>
                                     <constraint firstItem="pzK-8X-A5m" firstAttribute="leading" secondItem="rPZ-cL-r3T" secondAttribute="leading" id="WyZ-eT-Niv"/>
                                     <constraint firstItem="rPZ-cL-r3T" firstAttribute="top" secondItem="WVW-0n-Rw1" secondAttribute="top" id="XhD-Vy-ufx"/>
+                                    <constraint firstItem="4Os-cy-Qte" firstAttribute="top" secondItem="Z1U-9v-Vnp" secondAttribute="top" id="YQm-nt-94i"/>
                                     <constraint firstItem="Ysd-ry-lvg" firstAttribute="top" secondItem="ZMK-1p-sVF" secondAttribute="bottom" constant="53" id="Zvb-I8-Jsu"/>
                                     <constraint firstItem="pIm-oO-eRB" firstAttribute="top" secondItem="597" secondAttribute="top" id="afa-xN-xXC"/>
                                     <constraint firstItem="pzK-8X-A5m" firstAttribute="baseline" secondItem="TVb-Ia-ifl" secondAttribute="baseline" id="bQ8-yG-WXK"/>
                                     <constraint firstAttribute="trailing" secondItem="ZFw-Ai-mXd" secondAttribute="trailing" constant="95" id="bmj-AJ-y9b"/>
                                     <constraint firstItem="WVW-0n-Rw1" firstAttribute="top" secondItem="cxB-MZ-6mz" secondAttribute="bottom" constant="7" id="bti-sU-YRz"/>
                                     <constraint firstItem="597" firstAttribute="leading" secondItem="pIm-oO-eRB" secondAttribute="trailing" constant="8" symbolic="YES" id="c2c-BU-I3k"/>
-                                    <constraint firstItem="WVW-0n-Rw1" firstAttribute="trailing" secondItem="Y7F-zZ-G1v" secondAttribute="trailing" id="cEy-fo-J4v"/>
                                     <constraint firstItem="HdA-UM-xTY" firstAttribute="baseline" secondItem="TVb-Ia-ifl" secondAttribute="firstBaseline" id="cfR-0c-2Vo"/>
-                                    <constraint firstItem="S3f-OT-hge" firstAttribute="baseline" secondItem="xTB-uk-xkF" secondAttribute="baseline" id="cgi-nT-INB"/>
+                                    <constraint firstItem="Z1U-9v-Vnp" firstAttribute="leading" secondItem="4Os-cy-Qte" secondAttribute="trailing" constant="8" symbolic="YES" id="dDe-1L-HL8"/>
                                     <constraint firstItem="ELT-rG-e24" firstAttribute="top" secondItem="597" secondAttribute="top" id="dwy-jM-0HD"/>
                                     <constraint firstItem="pIm-oO-eRB" firstAttribute="centerY" secondItem="ELT-rG-e24" secondAttribute="centerY" id="ehl-NO-0S1"/>
                                     <constraint firstAttribute="trailing" secondItem="Rb5-R9-Aqy" secondAttribute="trailing" constant="20" symbolic="YES" id="elq-X8-3YP"/>
                                     <constraint firstItem="ELT-rG-e24" firstAttribute="leading" secondItem="597" secondAttribute="trailing" constant="8" symbolic="YES" id="epQ-sc-jsk"/>
-                                    <constraint firstItem="WVW-0n-Rw1" firstAttribute="leading" secondItem="Z1U-9v-Vnp" secondAttribute="leading" id="gdn-eH-vjF"/>
                                     <constraint firstItem="Ysd-ry-lvg" firstAttribute="centerY" secondItem="HdA-UM-xTY" secondAttribute="centerY" id="gyV-qH-Mqh"/>
                                     <constraint firstAttribute="trailing" secondItem="rSV-Iw-qby" secondAttribute="trailing" id="i9n-fB-ynk"/>
+                                    <constraint firstItem="vaG-89-fnQ" firstAttribute="leading" secondItem="2370" secondAttribute="leading" constant="21" id="kVX-56-86F"/>
+                                    <constraint firstItem="Z1U-9v-Vnp" firstAttribute="leading" secondItem="WVW-0n-Rw1" secondAttribute="leading" id="l0C-6o-XCk"/>
                                     <constraint firstAttribute="trailing" secondItem="WVW-0n-Rw1" secondAttribute="trailing" priority="500" constant="162" id="lKe-N7-2Lm"/>
-                                    <constraint firstItem="4Os-cy-Qte" firstAttribute="top" secondItem="Z1U-9v-Vnp" secondAttribute="top" id="lbU-2j-KJl"/>
+                                    <constraint firstItem="vaG-89-fnQ" firstAttribute="baseline" secondItem="S3f-OT-hge" secondAttribute="baseline" id="mUh-z3-Biq"/>
                                     <constraint firstItem="ZMK-1p-sVF" firstAttribute="top" secondItem="2370" secondAttribute="top" constant="13" id="n0u-1L-vE4"/>
                                     <constraint firstItem="HdA-UM-xTY" firstAttribute="leading" secondItem="ZMK-1p-sVF" secondAttribute="leading" id="ntF-g7-VCz"/>
-                                    <constraint firstItem="xTB-uk-xkF" firstAttribute="baseline" secondItem="NXd-7g-Q7o" secondAttribute="baseline" id="oef-99-nAv"/>
+                                    <constraint firstItem="Y7F-zZ-G1v" firstAttribute="trailing" secondItem="WVW-0n-Rw1" secondAttribute="trailing" id="qnM-X2-Im3"/>
                                     <constraint firstItem="pIm-oO-eRB" firstAttribute="centerY" secondItem="597" secondAttribute="centerY" id="qy7-Ve-MKk"/>
-                                    <constraint firstItem="4Os-cy-Qte" firstAttribute="bottom" secondItem="Z1U-9v-Vnp" secondAttribute="bottom" id="s41-u0-6Dr"/>
                                     <constraint firstItem="rPZ-cL-r3T" firstAttribute="leading" secondItem="QJ6-Ne-Zed" secondAttribute="trailing" constant="8" symbolic="YES" id="sXu-MA-dyO"/>
                                     <constraint firstItem="QJ6-Ne-Zed" firstAttribute="bottom" secondItem="rPZ-cL-r3T" secondAttribute="bottom" id="tu5-A6-I6b"/>
                                     <constraint firstItem="rPZ-cL-r3T" firstAttribute="bottom" secondItem="WVW-0n-Rw1" secondAttribute="bottom" id="vLC-Vn-bKH"/>
+                                    <constraint firstItem="Z1U-9v-Vnp" firstAttribute="top" secondItem="Y7F-zZ-G1v" secondAttribute="top" id="vXI-Cs-xcf"/>
+                                    <constraint firstItem="T7c-kD-tu4" firstAttribute="baseline" secondItem="4Os-cy-Qte" secondAttribute="baseline" id="wEN-PW-OiU"/>
                                     <constraint firstAttribute="bottom" secondItem="QJ6-Ne-Zed" secondAttribute="bottom" constant="106" id="xIU-lv-Yp9"/>
                                     <constraint firstAttribute="bottom" secondItem="597" secondAttribute="bottom" constant="24" id="xU3-C8-kyl"/>
                                     <constraint firstItem="597" firstAttribute="baseline" secondItem="Rb5-R9-Aqy" secondAttribute="baseline" id="y39-dq-zSW"/>
-                                    <constraint firstItem="rPZ-cL-r3T" firstAttribute="leading" secondItem="S3f-OT-hge" secondAttribute="trailing" constant="8" symbolic="YES" id="y7D-eR-bzx"/>
                                 </constraints>
                             </customView>
                         </subviews>
