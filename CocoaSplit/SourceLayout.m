@@ -418,6 +418,7 @@
 {
     
     float currentDepth = startDepth;
+
     src.layer.zPosition = currentDepth;
     currentDepth += 100.0f;
     for (InputSource *cSrc in src.attachedInputs)

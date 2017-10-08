@@ -267,6 +267,7 @@
     
     InputSource *newSrc = [[InputSource alloc] init];
     newSrc.selectedVideoType = clickedCapture.instanceLabel;
+    newSrc.depth = FLT_MAX;
     [self.activePreviewView addInputSourceWithInput:newSrc];
     [self.activePreviewView openInputConfigWindow:newSrc.uuid];
     
@@ -283,6 +284,7 @@
         
         newSrc.selectedVideoType = clickedCapture.instanceLabel;
         newSrc.videoInput.activeVideoDevice = clickedDevice;
+        newSrc.depth = FLT_MAX;
         [self.activePreviewView addInputSourceWithInput:newSrc];
         [newSrc autoCenter];
         
