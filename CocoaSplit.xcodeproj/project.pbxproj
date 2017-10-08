@@ -167,7 +167,6 @@
 		34AFC27819B05C4E0007C07B /* CSChromaKey.plugin in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC27219B05BE90007C07B /* CSChromaKey.plugin */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		34AFC27919B05C4E0007C07B /* TextureWrapPlugin.plugin in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC27719B05BF50007C07B /* TextureWrapPlugin.plugin */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		34AFC27A19B05C4E0007C07B /* CSDesktopCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC24A19B05ADA0007C07B /* CSDesktopCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		34AFC27B19B05C4E0007C07B /* CSMovieCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC25419B05B380007C07B /* CSMovieCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		34AFC27C19B05C4E0007C07B /* CSWindowCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC25919B05B470007C07B /* CSWindowCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		34AFC27D19B05C4E0007C07B /* CSImageCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC24F19B05B0A0007C07B /* CSImageCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		34AFC27E19B05C4E0007C07B /* CSTextCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC26319B05B6B0007C07B /* CSTextCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -553,7 +552,6 @@
 				34AFC27819B05C4E0007C07B /* CSChromaKey.plugin in Copy Files */,
 				34AFC27919B05C4E0007C07B /* TextureWrapPlugin.plugin in Copy Files */,
 				34AFC27A19B05C4E0007C07B /* CSDesktopCapturePlugin.bundle in Copy Files */,
-				34AFC27B19B05C4E0007C07B /* CSMovieCapturePlugin.bundle in Copy Files */,
 				34AFC27C19B05C4E0007C07B /* CSWindowCapturePlugin.bundle in Copy Files */,
 				34AFC27D19B05C4E0007C07B /* CSImageCapturePlugin.bundle in Copy Files */,
 				34AFC27E19B05C4E0007C07B /* CSTextCapturePlugin.bundle in Copy Files */,
