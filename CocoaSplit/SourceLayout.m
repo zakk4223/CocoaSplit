@@ -439,7 +439,6 @@
         NSMutableArray *noLayer = [NSMutableArray array];
         float currentDepth = 0.0f;
         
-        NSLog(@"GENERATING TOP LEVEL");
         [self willChangeValueForKey:@"topLevelSourceList"];
 
         [self->_topLevelSourceArray removeAllObjects];
