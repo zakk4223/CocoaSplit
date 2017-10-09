@@ -23,21 +23,8 @@
                 <rect key="frame" x="0.0" y="0.0" width="626" height="418"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dTt-AM-CpL">
-                        <rect key="frame" x="0.0" y="-1" width="626" height="23"/>
-                        <segmentedCell key="cell" borderStyle="border" alignment="left" style="smallSquare" trackingMode="momentary" id="2jV-bX-sky">
-                            <font key="font" metaFont="system"/>
-                            <segments>
-                                <segment image="NSAddTemplate"/>
-                                <segment width="596" enabled="NO" tag="1"/>
-                            </segments>
-                        </segmentedCell>
-                        <connections>
-                            <action selector="addScriptAction:" target="-2" id="dJP-ee-SGp"/>
-                        </connections>
-                    </segmentedControl>
                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="67n-Ce-Qkq" customClass="CSGridView">
-                        <rect key="frame" x="0.0" y="20" width="626" height="398"/>
+                        <rect key="frame" x="0.0" y="51" width="626" height="367"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="minimumColumns">
                                 <integer key="value" value="3"/>
@@ -50,14 +37,24 @@
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </customView>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="VLE-jI-MDD">
+                        <rect key="frame" x="545" y="3" width="67" height="32"/>
+                        <buttonCell key="cell" type="push" title="New" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="o8W-0Q-3Q8">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="addScriptAction:" target="-2" id="K4o-Zw-d9z"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="67n-Ce-Qkq" secondAttribute="bottom" constant="20" symbolic="YES" id="2M9-b1-M4T"/>
-                    <constraint firstItem="67n-Ce-Qkq" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" id="A9k-aq-wGz"/>
-                    <constraint firstItem="67n-Ce-Qkq" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" id="gvH-cB-XFC"/>
-                    <constraint firstItem="67n-Ce-Qkq" firstAttribute="leading" secondItem="dTt-AM-CpL" secondAttribute="leading" id="k0G-77-Yet"/>
-                    <constraint firstAttribute="bottom" secondItem="dTt-AM-CpL" secondAttribute="bottom" id="nx4-Eh-LhR"/>
-                    <constraint firstItem="67n-Ce-Qkq" firstAttribute="trailing" secondItem="dTt-AM-CpL" secondAttribute="trailing" id="ylA-5N-XM5"/>
+                    <constraint firstItem="67n-Ce-Qkq" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" id="2u5-Bd-a5l"/>
+                    <constraint firstAttribute="bottom" secondItem="VLE-jI-MDD" secondAttribute="bottom" constant="10" id="4zE-Oh-2Kz"/>
+                    <constraint firstItem="67n-Ce-Qkq" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" id="7xC-5T-B1y"/>
+                    <constraint firstItem="VLE-jI-MDD" firstAttribute="top" secondItem="67n-Ce-Qkq" secondAttribute="bottom" constant="20" symbolic="YES" id="dfp-ov-RRU"/>
+                    <constraint firstAttribute="trailing" secondItem="67n-Ce-Qkq" secondAttribute="trailing" id="h6T-zj-oLX"/>
+                    <constraint firstAttribute="trailing" secondItem="VLE-jI-MDD" secondAttribute="trailing" constant="20" symbolic="YES" id="xhe-Sh-RKe"/>
                 </constraints>
             </view>
             <connections>
@@ -66,7 +63,4 @@
             <point key="canvasLocation" x="71" y="192"/>
         </window>
     </objects>
-    <resources>
-        <image name="NSAddTemplate" width="11" height="11"/>
-    </resources>
 </document>
