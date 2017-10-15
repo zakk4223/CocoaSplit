@@ -488,7 +488,8 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     BOOL write_status = YES;
     if (av_interleaved_write_frame(_av_fmt_ctx, p) < 0)
     {
-        NSLog(@"INTERLEAVED WRITE FRAME FAILED FOR %@ frame number %lld", self.stream_output, frameData.frameNumber);
+        
+        //NSLog(@"INTERLEAVED WRITE FRAME FAILED FOR %@ frame number %lld", self.stream_output, frameData.frameNumber);
         write_status = NO;
     }
     
