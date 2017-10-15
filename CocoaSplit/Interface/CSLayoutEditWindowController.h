@@ -13,18 +13,23 @@
 #import "PreviewView.h"
 #import "OutputDestination.h"
 #import "CSLayoutRecorder.h"
+#import "CSScriptInputSource.h"
+
 
 @interface CSLayoutEditWindowController : NSWindowController <NSWindowDelegate, NSOutlineViewDelegate, NSTableViewDelegate>
 {
     float _frame_interval;
     NSPopover *_animatepopOver;
     NSPopover *_addInputpopOver;
+    NSMenu *_inputsMenu;
+    
     
     
 
 }
 
 @property (strong) IBOutlet NSMenu *recordingMenu;
+-(IBAction)inputOutlineViewDoubleClick:(NSOutlineView *)outlineView;
 
 @property (weak) id delegate;
 

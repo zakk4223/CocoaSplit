@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12120" systemVersion="16G16b" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12120" systemVersion="17A405" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12120"/>
@@ -218,7 +218,7 @@ Gw
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn width="263" minWidth="40" maxWidth="1000" id="P2Z-Tx-5ha">
+                                        <tableColumn identifier="" width="263" minWidth="40" maxWidth="1000" id="P2Z-Tx-5ha">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -276,6 +276,7 @@ Gw
                                         </tableColumn>
                                     </tableColumns>
                                     <connections>
+                                        <action selector="inputOutlineViewDoubleClick:" target="-2" id="x0i-xT-hyl"/>
                                         <binding destination="kDD-qn-do6" name="content" keyPath="arrangedObjects" id="TJa-9S-GXe"/>
                                         <outlet property="dataSource" destination="-2" id="INu-pV-L7E"/>
                                         <outlet property="delegate" destination="-2" id="R35-RD-yxJ"/>
@@ -376,8 +377,8 @@ Gw
         </objectController>
         <treeController childrenKeyPath="attachedInputs" id="kDD-qn-do6" userLabel="inputTreeController">
             <connections>
-                <binding destination="-2" name="contentArray" keyPath="self.previewView.sourceLayout.topLevelSourceList" id="MUZ-lW-WjT"/>
                 <binding destination="-2" name="sortDescriptors" keyPath="self.inputViewSortDescriptors" id="Czr-8Y-Yso"/>
+                <binding destination="-2" name="contentArray" keyPath="self.previewView.sourceLayout.topLevelSourceList" id="MUZ-lW-WjT"/>
             </connections>
         </treeController>
         <button verticalHuggingPriority="750" id="Uft-iJ-WM4">

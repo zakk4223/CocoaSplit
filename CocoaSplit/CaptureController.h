@@ -528,5 +528,6 @@ NSArray *_savedTransitionConstraints;
 
 -(IBAction)openScriptSwitcherWindow:(id)sender;
 -(IBAction)inputOutlineViewDoubleClick:(NSOutlineView *)outlineView;
+-(bool)fileURLIsAudio:(NSURL *)url;
 
 @end

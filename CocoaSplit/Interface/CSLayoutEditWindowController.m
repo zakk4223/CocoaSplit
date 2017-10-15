@@ -120,6 +120,8 @@
     
     NSPasteboard *pb = [info draggingPasteboard];
     
+    
+    
     if ([pb.types containsObject:@"cocoasplit.audio.item" ])
     {
         if (item)
@@ -138,7 +140,7 @@
         
         
         
-        if (!pdraggedSource.layer)
+        if (!pdraggedSource || !pdraggedSource.layer)
         {
             return NSDragOperationNone;
         }
@@ -154,9 +156,26 @@
         {
             return NSDragOperationNone;
         }
+        
+        
+        if (draggedSource.parentInput && nodeInput && nodeInput != draggedSource.parentInput)
+        {
+            return NSDragOperationMove;
+        }
+        
+        
+        if (draggedSource.parentInput && !nodeInput)
+        {
+            return NSDragOperationMove;
+        }
+        
+        
+        if (item && index == -1)
+        {
+            return NSDragOperationMove;
+        }
     }
     return NSDragOperationMove;
-    
 }
 
 
@@ -173,6 +192,16 @@
     return [useEngine inputForUUID:uuid];
 }
 
+-(IBAction)inputOutlineViewDoubleClick:(NSOutlineView *)outlineView
+{
+    NSTreeNode *node = [outlineView itemAtRow:outlineView.clickedRow];
+    if (node)
+    {
+        NSObject<CSInputSourceProtocol> *src = node.representedObject;
+        [self.previewView openInputConfigWindow:src.uuid];
+    }
+}
+
 
 -(BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id<NSDraggingInfo>)info item:(id)item childIndex:(NSInteger)index
 {
@@ -184,24 +213,10 @@
     {
         for(NSString *aUID in audioUUIDS)
         {
-            CAMultiAudioEngine *useEngine;
-            if (self.previewView.sourceLayout && self.previewView.sourceLayout.recorder)
-            {
-                useEngine = self.previewView.sourceLayout.recorder.audioEngine;
-            }
-            
-            if (!useEngine)
-            {
-                useEngine = [CaptureController sharedCaptureController].multiAudioEngine;
-            }
-            CAMultiAudioNode *audioNode = [useEngine inputForUUID:aUID];
+            CAMultiAudioNode *audioNode = [CaptureController.sharedCaptureController.multiAudioEngine inputForUUID:aUID];
             if (audioNode)
             {
-                CSAudioInputSource *newSource = [[CSAudioInputSource alloc] init];
-                newSource.audioUUID = aUID;
-                newSource.audioVolume = audioNode.volume;
-                newSource.audioEnabled = audioNode.enabled;
-                newSource.name = audioNode.name;
+                CSAudioInputSource *newSource = [[CSAudioInputSource alloc] initWithAudioNode:audioNode];
                 [self.previewView addInputSourceWithInput:newSource];
                 
             }
@@ -287,8 +302,24 @@
     }
     
     bool retVal = NO;
+    
+    
     for(NSPasteboardItem *item in pb.pasteboardItems)
     {
+        
+        NSString *urlString = [item stringForType:@"public.file-url"];
+        if (urlString)
+        {
+            NSURL *fileURL = [NSURL URLWithString:urlString];
+            if ([CaptureController.sharedCaptureController fileURLIsAudio:fileURL])
+            {
+                CSAudioInputSource *audioSrc = [[CSAudioInputSource alloc] initWithPath:fileURL.path];
+                [self.previewView addInputSourceWithInput:audioSrc];
+                retVal = YES;
+                continue;
+            }
+            
+        }
         
         NSObject<CSInputSourceProtocol> *itemSrc = [CaptureController.sharedCaptureController inputSourceForPasteboardItem:item];
         if (itemSrc)
@@ -354,29 +385,163 @@
     [self resetInputTableHighlights];
 }
 
+-(void)menuEndedTracking:(NSNotification *)notification
+{
+    NSMenu *menu = notification.object;
+    
+    if (menu == _inputsMenu)
+    {
+        _inputsMenu = nil;
+    }
+}
+
+
+- (void)topLevelInputClicked:(NSMenuItem *)item
+{
+    
+    
+    NSObject *clickedItem = item.representedObject;
+    if ([[clickedItem valueForKey:@"instanceLabel"] isEqualToString:@"Script"])
+    {
+        CSScriptInputSource *newScript = [[CSScriptInputSource alloc] init];
+        [self.previewView addInputSourceWithInput:newScript];
+        [self.previewView openInputConfigWindow:newScript.uuid];
+        return;
+    }
+    
+    NSObject <CSCaptureSourceProtocol> *clickedCapture = (NSObject <CSCaptureSourceProtocol> *)clickedItem;
+    
+    
+    
+    InputSource *newSrc = [[InputSource alloc] init];
+    newSrc.selectedVideoType = clickedCapture.instanceLabel;
+    newSrc.depth = FLT_MAX;
+    [self.previewView addInputSourceWithInput:newSrc];
+    [self.previewView openInputConfigWindow:newSrc.uuid];
+    
+}
+
+- (void)videoInputItemClicked:(NSMenuItem *)item
+{
+    CSAbstractCaptureDevice *clickedDevice;
+    clickedDevice = item.representedObject;
+    if (clickedDevice)
+    {
+        InputSource *newSrc =  [[InputSource alloc] init];
+        NSObject <CSCaptureSourceProtocol> *clickedCapture = (NSObject <CSCaptureSourceProtocol> *)item.parentItem.representedObject;
+        
+        newSrc.selectedVideoType = clickedCapture.instanceLabel;
+        newSrc.videoInput.activeVideoDevice = clickedDevice;
+        newSrc.depth = FLT_MAX;
+        [self.previewView addInputSourceWithInput:newSrc];
+        [newSrc autoCenter];
+        
+    }
+    
+}
+
+-(void)audioInputItemClicked:(NSMenuItem *)item
+{
+    
+    CAMultiAudioNode *audioNode = item.representedObject;
+    
+    CSAudioInputSource *newSource = [[CSAudioInputSource alloc] initWithAudioNode:audioNode];
+    [self.previewView addInputSourceWithInput:newSource];
+}
+
+-(void)buildInputSubMenu:(NSMenuItem *)forItem
+{
+    NSObject <CSCaptureSourceProtocol> *captureObj = forItem.representedObject;
+    
+    for (CSAbstractCaptureDevice *dev in captureObj.availableVideoDevices)
+    {
+        NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:dev.captureName action:nil keyEquivalent:@""];
+        item.representedObject = dev;
+        item.target = self;
+        item.action = @selector(videoInputItemClicked:);
+        [forItem.submenu addItem:item];
+    }
+}
+
+
+-(void)buildInputMenu
+{
+    _inputsMenu = [[NSMenu alloc] init];
+    
+    NSMutableDictionary *pluginMap = [[CSPluginLoader sharedPluginLoader] sourcePlugins];
+    
+    NSArray *sortedKeys = [pluginMap.allKeys sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    
+    NSMenuItem *item = nil;
+    NSSize iconSize;
+    iconSize.width = [[NSFont menuFontOfSize:0] pointSize];
+    iconSize.height = iconSize.width;
+    for (NSString *inputName in sortedKeys)
+    {
+        Class captureClass = pluginMap[inputName];
+        
+        NSObject <CSCaptureSourceProtocol> *newCapture = [[captureClass alloc] init];
+        
+        item = [[NSMenuItem alloc] initWithTitle:inputName action:nil keyEquivalent:@""];
+        item.image = newCapture.libraryImage;
+        item.image.size = iconSize;
+        item.representedObject = newCapture;
+        item.target = self;
+        [_inputsMenu addItem:item];
+        
+        if (newCapture.availableVideoDevices && newCapture.availableVideoDevices.count > 0)
+        {
+            item.submenu = [[NSMenu alloc] init];
+            [self buildInputSubMenu:item];
+        } else {
+            item.action = @selector(topLevelInputClicked:);
+            item.target = self;
+        }
+    }
+    
+    item = [[NSMenuItem alloc] initWithTitle:@"Script" action:nil keyEquivalent:@""];
+    NSImage *scriptImage  = [NSImage imageNamed:@"NSScriptTemplate"];
+    scriptImage.template = NO;
+    item.image = scriptImage;
+    item.image.size = iconSize;
+    item.representedObject = @{@"instanceLabel":@"Script"};
+    item.action = @selector(topLevelInputClicked:);
+    item.target = self;
+    
+    [_inputsMenu addItem:item];
+    
+    item = [[NSMenuItem alloc] initWithTitle:@"Audio" action:nil keyEquivalent:@""];
+    NSImage *audioImage = [NSImage imageNamed:@"NSAudioOutputVolumeMedTemplate"];
+    audioImage.template = NO;
+    item.image = audioImage;
+    item.image.size = iconSize;
+    item.submenu = [[NSMenu alloc] init];
+    
+    for(CAMultiAudioInput *input in [CaptureController sharedCaptureController].multiAudioEngine.audioInputs)
+    {
+        if (input.systemDevice)
+        {
+            NSMenuItem *audioItem = [[NSMenuItem alloc] initWithTitle:input.name action:nil keyEquivalent:@""];
+            audioItem.representedObject = input;
+            audioItem.target = self;
+            audioItem.action = @selector(audioInputItemClicked:);
+            [item.submenu addItem:audioItem];
+        }
+    }
+    
+    [_inputsMenu addItem:item];
+    
+}
+
 
 -(void)openAddInputPopover:(id)sender sourceRect:(NSRect)sourceRect
 {
+    [self buildInputMenu];
     
-    CSAddInputViewController *vc;
-    if (!_addInputpopOver)
-    {
-        _addInputpopOver = [[NSPopover alloc] init];
-        _addInputpopOver.animates = YES;
-        _addInputpopOver.behavior = NSPopoverBehaviorTransient;
-    }
+    NSInteger midItem = _inputsMenu.itemArray.count/2;
+    NSPoint popupPoint = NSMakePoint(NSMaxY(sourceRect), NSMidY(sourceRect));
+    [_inputsMenu popUpMenuPositioningItem:[_inputsMenu itemAtIndex:midItem] atLocation:popupPoint inView:sender];
     
-    //if (!_addInputpopOver.contentViewController)
-    {
-        vc = [[CSAddInputViewController alloc] init];
-        _addInputpopOver.contentViewController = vc;
-        vc.popover = _addInputpopOver;
-        vc.previewView = self.previewView;
-        
-        //_addInputpopOver.delegate = vc;
-    }
-    
-    [_addInputpopOver showRelativeToRect:sourceRect ofView:sender preferredEdge:NSMaxXEdge];
 }
 
 
