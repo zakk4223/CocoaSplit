@@ -451,6 +451,7 @@
 {
     
     CMTime pts = CMTimeMake((_frame_time - _firstFrameTime)*1000, 1000);
+    
     CMTime duration = CMTimeMake(1, self.layout.frameRate);
     
     CapturedFrameData *newFrameData = [[CapturedFrameData alloc] init];
