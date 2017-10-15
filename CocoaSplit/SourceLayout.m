@@ -852,7 +852,7 @@
     }
 
     
-    [self updateCanvasWidth:layout.canvas_width height:layout.canvas_height];
+    //[self updateCanvasWidth:layout.canvas_width height:layout.canvas_height];
     //self.frameRate = layout.frameRate;
     [self resetAllRefCounts];
 
