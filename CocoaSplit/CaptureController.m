@@ -2031,6 +2031,17 @@
     self.maxOutputDropped = [[saveRoot valueForKey:@"maxOutputDropped"] intValue];
     self.maxOutputPending = [[saveRoot valueForKey:@"maxOutputPending"] intValue];
 
+    if (!self.maxOutputDropped)
+    {
+        self.maxOutputDropped = 300;
+    }
+    
+    if (!self.maxOutputPending)
+    {
+        self.maxOutputPending = 600;
+    }
+    
+    
     self.audio_adjust = [[saveRoot valueForKey:@"audioAdjust"] doubleValue];
     
 

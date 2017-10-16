@@ -471,7 +471,7 @@
 {
     if ([CaptureController sharedCaptureController].maxOutputPending)
     {
-        if (_pending_frame_count >= [CaptureController sharedCaptureController].maxOutputPending)
+        if (_p_buffered_frame_count >= [CaptureController sharedCaptureController].maxOutputPending)
         {
             return YES;
         }

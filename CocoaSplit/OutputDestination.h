@@ -32,7 +32,6 @@
     int _p_input_framecnt;
     int _p_output_framecnt;
     int _p_output_bytes;
-    int _pending_frame_count;
     int _consecutive_dropped_frames;
     bool _output_prepared;
     
