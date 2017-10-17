@@ -147,6 +147,11 @@
         _output_queue = dispatch_queue_create(queue_name.UTF8String, NULL);
     }
 
+    self.errored = NO;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.textColor = [NSColor greenColor];
+    });
+
     [self initStatsValues];
     [self setupCompressor];
 }
@@ -642,6 +647,7 @@
     _input_frame_timestamp = time_now;
     _p_output_bytes = 0;
 
+    
     [self.ffmpeg_out initStatsValues];
     
 }
