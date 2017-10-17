@@ -606,6 +606,7 @@
     _p_dropped_frame_count = 0;
     _p_output_framecnt = 0;
     _p_output_bytes = 0;
+    _consecutive_dropped_frames = 0;
 }
 
 
