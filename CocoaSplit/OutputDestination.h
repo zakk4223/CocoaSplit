@@ -77,6 +77,7 @@
 
 @property (assign) BOOL active;
 
+@property (assign) BOOL autoRetry;
 
 
 -(id)initWithType:(NSString *)type;

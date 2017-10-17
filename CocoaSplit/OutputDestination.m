@@ -558,8 +558,13 @@
             {
                 self.errored = YES;
                 self.active = NO;
+                if (self.autoRetry)
+                {
+                    self.active = YES;
+                }
                 return;
             }
+            
             if ([self shouldDropFrame])
             {
                 _dropped_frame_count++;
