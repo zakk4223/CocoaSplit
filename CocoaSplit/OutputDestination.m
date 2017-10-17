@@ -44,6 +44,7 @@
     [aCoder encodeObject:self.compressor_name forKey:@"compressor_name"];
     [aCoder encodeObject:self.streamServiceObject forKey:@"streamServiceObject"];
     [aCoder encodeObject:_destination forKey:@"destination"];
+    [aCoder encodeBool:self.autoRetry forKey:@"autoRetry"];
     if (self.assignedLayout)
     {
         [aCoder encodeObject:self.assignedLayout forKey:@"assignedLayout"];
@@ -67,6 +68,7 @@
         self.compressor_name = [aDecoder decodeObjectForKey:@"compressor_name"];
         self.streamServiceObject = [aDecoder decodeObjectForKey:@"streamServiceObject"];
         self.type_class_name = [aDecoder decodeObjectForKey:@"type_class_name"];
+        self.autoRetry = [aDecoder decodeBoolForKey:@"autoRetry"];
         _active = [aDecoder decodeBoolForKey:@"active"];
 
     }
