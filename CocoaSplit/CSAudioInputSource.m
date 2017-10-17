@@ -202,8 +202,11 @@
         {
             self.audioNode = [[CAMultiAudioFile alloc] initWithPath:self.audioFilePath];
             //Tell the audio engine not to save or restore settings for this input
-            self.audioNode.noSettings = YES;
-            [audioEngine addFileInput:self.audioNode];
+            if (self.audioNode)
+            {
+                self.audioNode.noSettings = YES;
+                [audioEngine addFileInput:self.audioNode];
+            }
         }
     }
 }

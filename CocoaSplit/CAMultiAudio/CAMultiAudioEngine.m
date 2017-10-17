@@ -521,7 +521,10 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 {
     CAMultiAudioFile *newInput = [[CAMultiAudioFile alloc] initWithPath:filePath];
     
-    [self addFileInput:newInput];
+    if (newInput)
+    {
+        [self addFileInput:newInput];
+    }
     
     return newInput;
 }
