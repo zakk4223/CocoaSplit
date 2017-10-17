@@ -1398,9 +1398,26 @@
     SourceLayout *layout = [notification object];
     if (layout == self.livePreviewView.sourceLayout)
     {
+        SourceLayout *sLayout = self.stagingPreviewView.sourceLayout;
+
+        if (sLayout.frameRate != layout.frameRate)
+        {
+            sLayout.frameRate = layout.frameRate;
+        }
         [self resetInstantRecorder];
+        
+    }
+    
+    if (layout == self.stagingPreviewView.sourceLayout)
+    {
+        SourceLayout *lLayout = self.livePreviewView.sourceLayout;
+        if (lLayout.frameRate != layout.frameRate)
+        {
+            lLayout.frameRate = layout.frameRate;
+        }
     }
 }
+
 
 
 -(void)layoutCanvasChanged:(NSNotification *)notification
@@ -1410,7 +1427,26 @@
     if ([layout isEqual:self.livePreviewView.sourceLayout])
     {
         
+        SourceLayout *sLayout = self.stagingPreviewView.sourceLayout;
+        if (sLayout.canvas_width != layout.canvas_width || sLayout.canvas_height != layout.canvas_height)
+        {
+            [sLayout updateCanvasWidth:layout.canvas_width height:layout.canvas_height];
+        }
         [self resetInstantRecorder];
+
+        
+    }
+    
+    if ([layout isEqual:self.stagingPreviewView.sourceLayout])
+    {
+        SourceLayout *lLayout = self.livePreviewView.sourceLayout;
+        
+        if (lLayout.canvas_width != layout.canvas_width || lLayout.canvas_height != layout.canvas_height)
+        {
+            [lLayout updateCanvasWidth:layout.canvas_width height:layout.canvas_height];
+        }
+
+        
     }
 }
 
