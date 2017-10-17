@@ -18,6 +18,91 @@
 #include "libavformat/avformat.h"
 
 
+-(NSUInteger)frameQueueSize
+{
+    NSUInteger ret = 0;
+    @synchronized (self) {
+        ret = _frameQueue.count;
+    }
+    
+    return ret;
+}
+
+
+-(void)clearFrameQueue
+{
+    @synchronized (self) {
+        [_frameQueue removeAllObjects];
+        self.buffered_frame_size = 0;
+    }
+}
+
+
+-(CapturedFrameData *)consumeframeData
+{
+    CapturedFrameData *retData = nil;
+    
+    @synchronized (self) {
+        if (_frameQueue.count > 0)
+        {
+            retData = [_frameQueue objectAtIndex:0];
+            [_frameQueue removeObjectAtIndex:0];
+            _buffered_frame_size -= [retData encodedDataLength];
+        }
+    }
+    
+    return retData;
+}
+
+
+-(void)startConsumerThread
+{
+    if (!_frameConsumerQueue)
+    {
+        _frameConsumerQueue = dispatch_queue_create("FFMpeg consumer", DISPATCH_QUEUE_SERIAL);
+        
+        dispatch_async(_frameConsumerQueue, ^{
+           
+            while (1)
+            {
+                @synchronized (self) {
+                    if (_close_flag)
+                    {
+                        [self _internal_stopProcess];
+                        break;
+                    }
+                }
+                
+                CapturedFrameData *useData = [self consumeframeData];
+                if (!useData)
+                {
+                    dispatch_semaphore_wait(_frameSemaphore, DISPATCH_TIME_FOREVER);
+                } else {
+                    [self writeEncodedData:useData];
+                }
+            }
+            
+        });
+    }
+}
+
+
+-(bool)queueFramedata:(CapturedFrameData *)frameData
+{
+    if (!_frameConsumerQueue)
+    {
+        [self startConsumerThread];
+    }
+    
+    @synchronized (self) {
+        [_frameQueue addObject:frameData];
+        _buffered_frame_size += [frameData encodedDataLength];
+        dispatch_semaphore_signal(_frameSemaphore);
+    }
+    return YES;
+}
+
+
 
 int readAudioTagLength(char **buffer)
 {
@@ -33,6 +118,12 @@ int readAudioTagLength(char **buffer)
             break;
     }
     return length;
+}
+
+
+-(NSUInteger)buffered_frame_count
+{
+    return [self frameQueueSize];
 }
 
 
@@ -85,36 +176,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 }
 
 
--(BOOL) resetOutputIfNeeded
-{
-    //Should probably only do this if we're a network based output
-    if ([CaptureController sharedCaptureController].maxOutputDropped)
-    {
-        if (_consecutive_dropped_frames >= [CaptureController sharedCaptureController].maxOutputDropped)
-        {
-            self.errored = YES;
-            [self stopProcess];
-            return YES;
-        }
-    }
-    return NO;
-}
-
-
-
--(BOOL) shouldDropFrame
-{
-
-    if ([CaptureController sharedCaptureController].maxOutputPending)
-    {
-        if (_pending_frame_count >= [CaptureController sharedCaptureController].maxOutputPending)
-        {
-            return YES;
-        }
-    }
-    
-    return NO;
-}
 
 
 -(void) extractAudioCookie:(CMSampleBufferRef)theBuffer
@@ -234,7 +295,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
             if (av_interleaved_write_frame(_av_fmt_ctx, &pkt) < 0)
             {
                 ret_val = NO;
-                [self stopProcess];
+                //[self stopProcess];
             }
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
                 CFRelease(theBuffer);
@@ -447,10 +508,11 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 
 -(void) initStatsValues
 {
-    _input_framecnt = 0;
     _output_framecnt = 0;
     _output_bytes = 0;
+    _buffered_frame_size = 0;
 }
+
 
 -(BOOL) writeAVPacket:(CapturedFrameData *)frameData
 {
@@ -491,6 +553,10 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         
         //NSLog(@"INTERLEAVED WRITE FRAME FAILED FOR %@ frame number %lld", self.stream_output, frameData.frameNumber);
         write_status = NO;
+    } else {
+        _output_framecnt++;
+        _output_bytes += [frameData encodedDataLength];
+
     }
     
     return write_status;
@@ -553,6 +619,9 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         NSLog(@"VIDEO WRITE FRAME failed for %@", self.stream_output);
         send_status = NO;
         //[self stopProcess];
+    } else {
+        _output_framecnt++;
+        _output_bytes += [frameData encodedDataLength];
     }
 
     CFRelease(theBuffer);
@@ -571,6 +640,13 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     self = [super init];
     self.init_done = NO;
     self.errored = NO;
+    _close_flag = NO;
+    
+    _frameQueue = [NSMutableArray arrayWithCapacity:1000];
+    _frameSemaphore = dispatch_semaphore_create(0);
+    _pending_frame_size = 0;
+    _output_bytes = 0;
+    _output_framecnt = 0;
     
     av_register_all();
     avformat_network_init();
@@ -582,7 +658,12 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 -(bool)stopProcess
 {
     
-    [self _internal_stopProcess];
+    @synchronized (self) {
+        _close_flag = YES;
+        dispatch_semaphore_signal(_frameSemaphore);
+    }
+    
+    //[self _internal_stopProcess];
     return YES;
 }
 

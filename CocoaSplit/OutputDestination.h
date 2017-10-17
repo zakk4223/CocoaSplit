@@ -66,8 +66,8 @@
 //through this class allows us to be a bit smarter about the UI status updates
 
 @property (assign) double input_framerate;
-@property (assign) int buffered_frame_count;
-@property (assign) int buffered_frame_size;
+@property (assign) NSUInteger buffered_frame_count;
+@property (assign) NSUInteger buffered_frame_size;
 @property (assign) int dropped_frame_count;
 @property (assign) double output_framerate;
 @property (assign) double output_bitrate;

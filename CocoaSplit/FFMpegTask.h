@@ -30,14 +30,20 @@
     size_t _audio_extradata_size;
     
     int _input_framecnt;
-    int _output_framecnt;
-    int _output_bytes;
     int _pending_frame_count;
     int _pending_frame_size;
     int _consecutive_dropped_frames;
     int _dropped_frames;
 
+    NSMutableArray *_frameQueue;
+    dispatch_semaphore_t _frameSemaphore;
+    dispatch_queue_t _frameConsumerQueue;
+    bool _close_flag;
+    
+    
+
 }
+
 
 
 -(BOOL) writeVideoSampleBuffer:(CapturedFrameData *)frameData;
@@ -46,6 +52,12 @@
 -(BOOL) writeEncodedData:(CapturedFrameData *)frameData;
 -(void) updateOutputStats;
 -(void) updateInputStats;
+-(void)clearFrameQueue;
+-(bool)queueFramedata:(CapturedFrameData *)frameData;
+-(NSUInteger)frameQueueSize;
+-(void) initStatsValues;
+
+
 
 
 
@@ -55,6 +67,8 @@
 
 
 
+@property (assign) int output_framecnt;
+@property (assign) int output_bytes;
 
 @property (assign) BOOL init_done;
 @property (strong) NSString *stream_output;
@@ -64,12 +78,9 @@
 @property (assign) int height;
 @property (assign) int samplerate;
 @property (assign) int audio_bitrate;
-@property (assign) int buffered_frame_count;
-@property (assign) int buffered_frame_size;
-@property (assign) double output_framerate;
-@property (assign) double input_framerate;
-@property (assign) double output_bitrate;
-@property (assign) int dropped_frame_count;
+@property (readonly) NSUInteger buffered_frame_count;
+@property (assign) NSUInteger buffered_frame_size;
+@property (assign) NSUInteger dropped_frame_count;
 @property (assign) BOOL errored;
 @property (assign) enum AVCodecID video_codec_id;
 

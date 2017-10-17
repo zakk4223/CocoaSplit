@@ -471,7 +471,7 @@
 {
     if ([CaptureController sharedCaptureController].maxOutputPending)
     {
-        if (_p_buffered_frame_count >= [CaptureController sharedCaptureController].maxOutputPending)
+        if ([self.ffmpeg_out frameQueueSize] >= [CaptureController sharedCaptureController].maxOutputPending)
         {
             return YES;
         }
@@ -561,6 +561,8 @@
                 _consecutive_dropped_frames++;
             } else {
                 _consecutive_dropped_frames = 0;
+                [self.ffmpeg_out queueFramedata:sendData];
+                /*
                 self->_p_buffered_frame_size += f_size;
                 self->_p_buffered_frame_count++;
 
@@ -578,7 +580,7 @@
                         }
                     }
                     
-                });
+                });*/
             }
         }
         
@@ -612,26 +614,35 @@
     
     CFAbsoluteTime time_now = CFAbsoluteTimeGetCurrent();
     
-    double calculated_input_framerate = _p_input_framecnt / (time_now - _input_frame_timestamp);
-    double calculated_output_framerate = _p_output_framecnt / (time_now - _output_frame_timestamp);
-    double calculated_output_bitrate = (_p_output_bytes / (time_now - _output_frame_timestamp)) * 8;
+    int f_output_framecnt;
+    int f_output_bytes;
     
-    _p_input_framecnt = 0;
-    _p_output_framecnt = 0;
-    _output_frame_timestamp = time_now;
-    _input_frame_timestamp = time_now;
-    _p_output_bytes = 0;
+    f_output_framecnt = self.ffmpeg_out.output_framecnt;
+    f_output_bytes = self.ffmpeg_out.output_bytes;
+    
+    double calculated_input_framerate = _p_input_framecnt / (time_now - _input_frame_timestamp);
+    double calculated_output_framerate = f_output_framecnt / (time_now - _output_frame_timestamp);
+    double calculated_output_bitrate = (f_output_bytes / (time_now - _output_frame_timestamp)) * 8;
+    
     
     
     self.output_framerate = calculated_output_framerate;
     self.input_framerate = calculated_input_framerate;
     self.output_bitrate = calculated_output_bitrate;
-    self.buffered_frame_count = _p_buffered_frame_count;
-    self.buffered_frame_size = _p_buffered_frame_size;
+    self.buffered_frame_count = self.ffmpeg_out.buffered_frame_count;
+    self.buffered_frame_size = self.ffmpeg_out.buffered_frame_size;
+    
     //TODO
     self.dropped_frame_count = 0;
     self.delay_buffer_frames = [_delayBuffer count];
+    _p_input_framecnt = 0;
+    _p_output_framecnt = 0;
+    _output_frame_timestamp = time_now;
+    _input_frame_timestamp = time_now;
+    _p_output_bytes = 0;
 
+    [self.ffmpeg_out initStatsValues];
+    
 }
 
 
