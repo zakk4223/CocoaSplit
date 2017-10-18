@@ -163,6 +163,11 @@
 {
     _compressor_queue = nil;
     
+    if (_av_codec_ctx)
+    {
+        avcodec_free_context(&_av_codec_ctx);
+        
+    }
     self.errored = NO;
     _av_codec = NULL;
     _last_pts = 0;
@@ -530,7 +535,7 @@
     
     if (avcodec_open2(_av_codec_ctx, _av_codec, &opts) < 0)
     {
-        _av_codec_ctx = NULL;
+        avcodec_free_context(&_av_codec_ctx);
         _av_codec = NULL;
         NSLog(@"CODEC SETUP FAILED!");
         return NO;

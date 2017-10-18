@@ -693,7 +693,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         //free(_audio_extradata);
         _audio_extradata = NULL;
     }
-    NSLog(@"Stopped FFMPEG");
     return YES;
         
 }

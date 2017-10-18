@@ -181,7 +181,9 @@
             {
                 [[CaptureController sharedCaptureController] startRecordingLayout:self.assignedLayout usingOutput:self];
             } else {
+                
                 [self setup];
+                
             }
         } else {
             
@@ -353,6 +355,7 @@
     
     if (!self.ffmpeg_out)
     {
+        
         newout = [[FFMpegTask alloc] init];
     } else {
         newout = self.ffmpeg_out;
@@ -646,7 +649,7 @@
     self.buffered_frame_size = self.ffmpeg_out.buffered_frame_size;
     
     //TODO
-    self.dropped_frame_count = 0;
+    self.dropped_frame_count = _dropped_frame_count;
     self.delay_buffer_frames = [_delayBuffer count];
     _p_input_framecnt = 0;
     _p_output_framecnt = 0;
