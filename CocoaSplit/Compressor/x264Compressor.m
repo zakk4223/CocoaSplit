@@ -161,16 +161,22 @@
 
 -(void) reset
 {
-    _compressor_queue = nil;
+    //_compressor_queue = nil;
+    
+    self.errored = NO;
+    _last_pts = 0;
+    
+    dispatch_async(_compressor_queue, ^{
+
     
     if (_av_codec_ctx)
     {
         avcodec_free_context(&_av_codec_ctx);
         
     }
-    self.errored = NO;
     _av_codec = NULL;
-    _last_pts = 0;
+    });
+
     
 }
 
