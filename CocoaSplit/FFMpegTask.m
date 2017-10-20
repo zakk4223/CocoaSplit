@@ -62,23 +62,26 @@
         _frameConsumerQueue = dispatch_queue_create("FFMpeg consumer", DISPATCH_QUEUE_SERIAL);
         
         dispatch_async(_frameConsumerQueue, ^{
-           
+            
             while (1)
             {
-                @synchronized (self) {
-                    if (_close_flag)
-                    {
-                        [self _internal_stopProcess];
-                        break;
+                @autoreleasepool {
+                    
+                    @synchronized (self) {
+                        if (_close_flag)
+                        {
+                            [self _internal_stopProcess];
+                            break;
+                        }
                     }
-                }
-                
-                CapturedFrameData *useData = [self consumeframeData];
-                if (!useData)
-                {
-                    dispatch_semaphore_wait(_frameSemaphore, DISPATCH_TIME_FOREVER);
-                } else {
-                    [self writeEncodedData:useData];
+                    
+                    CapturedFrameData *useData = [self consumeframeData];
+                    if (!useData)
+                    {
+                        dispatch_semaphore_wait(_frameSemaphore, DISPATCH_TIME_FOREVER);
+                    } else {
+                        [self writeEncodedData:useData];
+                    }
                 }
             }
             
@@ -297,9 +300,9 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
                 ret_val = NO;
                 //[self stopProcess];
             }
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+            //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
                 CFRelease(theBuffer);
-            });
+            //});
     }
     
     return ret_val;
@@ -558,6 +561,8 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         _output_bytes += [frameData encodedDataLength];
 
     }
+    av_packet_unref(p);
+    av_free(p);
     
     return write_status;
 }
