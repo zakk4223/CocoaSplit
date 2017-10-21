@@ -78,6 +78,7 @@
 		344825E61B253D6900AF9EAC /* CAMultiAudioMatrixCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 344825E51B253D6900AF9EAC /* CAMultiAudioMatrixCell.m */; };
 		344988131893CF0500044259 /* LogWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 344988121893CF0500044259 /* LogWindow.xib */; };
 		3450239D1C60B3EF00B461B5 /* CSLayoutCollectionItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3450239C1C60B3EF00B461B5 /* CSLayoutCollectionItemView.m */; };
+		34528B8F1F9A707400C090E0 /* InputSource+ScriptingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 34528B8E1F9A707400C090E0 /* InputSource+ScriptingAdditions.m */; };
 		34559A281E12D4400085883C /* CSCaptureBase+InputFrameTick.m in Sources */ = {isa = PBXBuildFile; fileRef = 34559A271E12D4400085883C /* CSCaptureBase+InputFrameTick.m */; };
 		34576C7819AFCA1B007BAD90 /* CSPluginLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 34576C7719AFCA1B007BAD90 /* CSPluginLoader.m */; };
 		345BECE51F3DB4F000B46F29 /* CSLayoutCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 345BECC31F3DADF700B46F29 /* CSLayoutCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -674,6 +675,8 @@
 		3451A1CA17111BD900DF6A8B /* CocoaSplitCmd.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = CocoaSplitCmd.1; sourceTree = "<group>"; };
 		3451A1D2171187D400DF6A8B /* ControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControllerProtocol.h; sourceTree = "<group>"; };
 		3451A1E11712C5F700DF6A8B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		34528B8D1F9A707400C090E0 /* InputSource+ScriptingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "InputSource+ScriptingAdditions.h"; sourceTree = "<group>"; };
+		34528B8E1F9A707400C090E0 /* InputSource+ScriptingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "InputSource+ScriptingAdditions.m"; sourceTree = "<group>"; };
 		34559A261E12D4400085883C /* CSCaptureBase+InputFrameTick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CSCaptureBase+InputFrameTick.h"; sourceTree = "<group>"; };
 		34559A271E12D4400085883C /* CSCaptureBase+InputFrameTick.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CSCaptureBase+InputFrameTick.m"; sourceTree = "<group>"; };
 		34576C7619AFCA1B007BAD90 /* CSPluginLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPluginLoader.h; sourceTree = "<group>"; };
@@ -1961,6 +1964,8 @@
 				34F80D6C1EDBC8C800D890D3 /* OutputDestination+ScriptingAdditions.m */,
 				34F80D6E1EDCBE5100D890D3 /* CSScriptCommand.h */,
 				34F80D6F1EDCBE5100D890D3 /* CSScriptCommand.m */,
+				34528B8D1F9A707400C090E0 /* InputSource+ScriptingAdditions.h */,
+				34528B8E1F9A707400C090E0 /* InputSource+ScriptingAdditions.m */,
 			);
 			name = ScriptingAdditions;
 			sourceTree = "<group>";
@@ -2629,6 +2634,7 @@
 				34A64A2F165EFE4C00A68428 /* PreviewView.m in Sources */,
 				34ED8CAB1B07371C002C0674 /* MIKMIDITrack.m in Sources */,
 				34ED8CA91B07371C002C0674 /* MIKMIDITempoEvent.m in Sources */,
+				34528B8F1F9A707400C090E0 /* InputSource+ScriptingAdditions.m in Sources */,
 				3450239D1C60B3EF00B461B5 /* CSLayoutCollectionItemView.m in Sources */,
 				34B5FAE71E760BDD0078FC51 /* CSSequenceEditorWindowController.m in Sources */,
 				34B5FADA1E75B9B30078FC51 /* CSGridView.m in Sources */,

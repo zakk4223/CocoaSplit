@@ -12,7 +12,11 @@
 
 -(NSArray *)layouts
 {
-    return self.captureController.sourceLayouts;
+    NSArray *layouts = self.captureController.sourceLayouts;
+    
+    return [layouts arrayByAddingObjectsFromArray:@[self.captureController.activeLayout, self.captureController.stagingLayout]];
+    
+    //return self.captureController.sourceLayouts;
 }
 
 -(NSArray *)layoutscripts
@@ -46,7 +50,7 @@
 
 
 - (unsigned int)countOfLayoutsArray {
-    return (unsigned int)self.captureController.sourceLayouts.count;
+    return (unsigned int)self.captureController.sourceLayouts.count+2;
 }
 
 

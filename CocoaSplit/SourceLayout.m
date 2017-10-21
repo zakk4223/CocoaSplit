@@ -585,7 +585,6 @@
     }
     
     
-    NSMutableDictionary *savedDepths = [NSMutableDictionary dictionary];
     
     NSDictionary *saveDict = @{@"sourcelist": self.sourceList,  @"timingSource": timerSrc};
     NSMutableData *saveData = [NSMutableData data];

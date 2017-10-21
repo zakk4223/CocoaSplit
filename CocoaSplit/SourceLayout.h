@@ -158,6 +158,7 @@
 @property (readonly) NSArray *topLevelSourceList;
 
 @property (strong) NSData *savedSourceListData;
+
 @property (assign) bool isActive;
 
 
