@@ -184,19 +184,19 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
 
 -(void)releasePCM:(CAMultiAudioPCM *)buffer
 {
-    
+    /*
     @synchronized (self) {
         [self->_pendingBuffers removeObject:buffer];
 
     }
-    /*
+    
     @autoreleasepool {
-        
+    */
     
     dispatch_async(_pendingQueue, ^{
         [self->_pendingBuffers removeObject:buffer];
     });
-    }*/
+/*    }*/
 }
 
 
