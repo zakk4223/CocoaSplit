@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12120" systemVersion="16G29" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12120" systemVersion="17A405" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12120"/>
@@ -394,7 +394,6 @@
                                         </buttonCell>
                                         <connections>
                                             <action selector="streamButtonPushed:" target="816" id="825"/>
-                                            <binding destination="816" name="enabled" keyPath="self.active_output_count" id="k1g-8T-k2f"/>
                                             <binding destination="816" name="value" keyPath="self.captureRunning" id="PNO-8Q-fUl"/>
                                         </connections>
                                     </button>
@@ -802,7 +801,7 @@
                                                                             </constraints>
                                                                             <buttonCell key="cell" type="square" title="R" bezelStyle="shadowlessSquare" alignment="center" controlSize="small" state="on" imageScaling="proportionallyUpOrDown" inset="2" id="jUR-fn-JNm">
                                                                                 <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
-                                                                                <font key="font" metaFont="system" size="9"/>
+                                                                                <font key="font" metaFont="miniSystem"/>
                                                                             </buttonCell>
                                                                             <connections>
                                                                                 <binding destination="Z3K-p0-4ZE" name="value" keyPath="objectValue.loop" id="mGt-5a-ej3"/>

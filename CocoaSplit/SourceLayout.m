@@ -579,6 +579,14 @@
 -(NSData *)makeSaveData
 {
     NSObject *timerSrc = self.layoutTimingSource;
+    
+    if (!timerSrc && self.sourceList.count == 0)
+    {
+        return nil;
+    }
+    
+    
+    
     if (!timerSrc)
     {
         timerSrc = [NSNull null];
@@ -1747,6 +1755,32 @@
 
 
 
+
+
+-(bool)hasSources
+{
+    NSUInteger srcCount = 0;
+    bool ret = NO;
+    
+    if (self.sourceList)
+    {
+        srcCount = self.sourceList.count;
+    }
+    
+    if (!srcCount)
+    {
+        if (self.savedSourceListData)
+        {
+            ret = YES;
+        } else {
+            ret = NO;
+        }
+    } else {
+        ret = YES;
+    }
+    
+    return ret;
+}
 
 
 

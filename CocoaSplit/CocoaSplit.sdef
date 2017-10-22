@@ -82,9 +82,16 @@
                 <cocoa key="sources"/>
             </element>
 
+
             <property name="name" code="pnam" type="text">
                 <cocoa key="name"/>
             </property>
+            
+            <property name="hasSources" code="CShs" type="boolean">
+                <cocoa key="hasSources"/>
+            </property>
+            
+            
             <property name="width" code="CSwd" type="integer">
                 <cocoa key="canvas_width"/>
             </property>

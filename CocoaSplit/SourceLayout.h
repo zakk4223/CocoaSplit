@@ -70,6 +70,7 @@
 @property (assign) bool recordingLayout;
 @property (assign) bool recordLayout;
 @property (weak) CSLayoutRecorder *recorder;
+@property (readonly) bool hasSources;
 
 -(void)deleteSource:(NSObject<CSInputSourceProtocol> *)delSource;
 -(void)addSource:(NSObject<CSInputSourceProtocol> *)newSource;
@@ -117,6 +118,8 @@
 -(void)sequenceThroughLayoutsViaScript:(NSArray *)sequence withCompletionBlock:(void (^)(void))completionBlock withExceptionBlock:(void (^)(NSException *exception))exceptionBlock;
 -(SourceLayout *)mergedSourceLayout:(SourceLayout *)withLayout;
 -(SourceLayout *)sourceLayoutWithRemoved:(SourceLayout *)withRemoved;
+-(void)generateTopLevelSourceList;
+
 
 @end
 
@@ -194,8 +197,8 @@
 @property (assign) bool recordLayout;
 @property (weak) CSLayoutRecorder *recorder;
 @property (strong) CSLayoutTransition *transitionInfo;
+@property (readonly) bool hasSources;
 
--(void)generateTopLevelSourceList;
 
 
 @end
