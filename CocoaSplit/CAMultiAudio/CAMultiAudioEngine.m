@@ -19,6 +19,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 @synthesize sampleRate = _sampleRate;
 @synthesize outputNode = _outputNode;
+@synthesize encoder = _encoder;
 
 
 -(void)commonInit
@@ -226,24 +227,47 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 }
 
 
+-(CSAacEncoder *)encoder
+{
+    return _encoder;
+}
+
+-(void)setEncoder:(CSAacEncoder *)encoder
+{
+    CSAacEncoder *oldEncoder = _encoder;
+    
+    _encoder = encoder;
+    
+    if (oldEncoder)
+    {
+        AudioUnitRemoveRenderNotify(self.equalizer.audioUnit, encoderRenderCallback, [oldEncoder inputBufferPtr]);
+    }
+    
+    AudioUnitAddRenderNotify(self.equalizer.audioUnit, encoderRenderCallback, [_encoder inputBufferPtr]);
+}
+
+
 -(void)updateStatistics
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
+    CAMultiAudioEngine *__weak blockSelf = self;
+    
+    //dispatch_async(dispatch_get_main_queue(), ^{
         
-        for(CAMultiAudioNode *node in self.audioInputs)
+        for(CAMultiAudioNode *node in blockSelf.audioInputs)
         {
             [node updatePowerlevel];
         }
-    });
+   // });
+    
     
     
     float rawPreview = [self.previewMixer outputPower];
     float rawStream = [self.encodeMixer outputPower];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
+    //dispatch_async(dispatch_get_main_queue(), ^{
         self.previewAudioPowerLevel = pow(10.0f, rawPreview/20.0f);
         self.streamAudioPowerLevel = pow(10.0f, rawStream/20.0f);
-    });
+   // });
 
     
     
@@ -307,10 +331,15 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     
     
-    AudioUnitAddRenderNotify(self.equalizer.audioUnit, encoderRenderCallback, (__bridge void *)(self));
+    if (self.encoder)
+    {
+        AudioUnitAddRenderNotify(self.equalizer.audioUnit, encoderRenderCallback, [self.encoder inputBufferPtr]);
+    }
 
     return YES;
 }
+
+
 
 
 -(void)inputsForSystemAudio
@@ -798,11 +827,15 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 {
     
     
+    TPCircularBuffer *encodeBuffer = (TPCircularBuffer *)inRefCon;
     
+
     if ((*ioActionFlags) & kAudioUnitRenderAction_PostRender)
     {
         
-        
+        TPCircularBufferCopyAudioBufferList(encodeBuffer, ioData, inTimeStamp, kTPCircularBufferCopyAll, NULL);
+
+        /*
         CAMultiAudioEngine *selfPtr = (__bridge CAMultiAudioEngine *)inRefCon;
         
         if (selfPtr.encoder)
@@ -812,8 +845,9 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
             [selfPtr.encoder enqueuePCM:ioData atTime:inTimeStamp];
         }
         
-
+*/
     }
+    
     return noErr;
     
 }
