@@ -1201,6 +1201,13 @@
                self.outputStatsString = [NSString stringWithFormat:@"Active Outputs: %d Errored %d Frames dropped %d", total_outputs, errored_outputs,dropped_frame_cnt];
                self.renderStatsString = [NSString stringWithFormat:@"Render min/max/avg: %f/%f/%f", self->_min_render_time, self->_max_render_time, self->_render_time_total / self->_renderedFrames];
                self.active_output_count = total_outputs;
+               bool streamButtonEnabled = YES;
+               if (total_outputs == 0 && !self.captureRunning)
+               {
+                   streamButtonEnabled = NO;
+               }
+               
+               self.streamButton.enabled = streamButtonEnabled;
                self.total_dropped_frames = dropped_frame_cnt;
                
            });

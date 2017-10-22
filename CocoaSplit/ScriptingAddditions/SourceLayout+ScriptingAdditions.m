@@ -92,6 +92,15 @@
     
 }
 
+-(NSArray *)sources
+{
+    NSArray *ret = self.sourceListOrdered;
+    return ret;
+}
+
+- (unsigned int)countOfSources {
+    return (unsigned int)self.sourceListOrdered.count;
+}
 
 
 

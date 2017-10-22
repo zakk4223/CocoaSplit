@@ -35,7 +35,20 @@
                 <cocoa key="scriptRunning"/>
             </property>
         </class>
-            
+        
+        <class name="inputSource" code="CSis">
+            <cocoa class="InputSource"/>
+            <property name="name" code="pnam" type="text"/>
+            <property name="opacity" code="CSop" type="real">
+                <cocoa key="opacity"/>
+            </property>
+            <property name="uuid" code="CSuu" type="text">
+                <cocoa key="uuid"/>
+            </property>
+
+        </class>
+        
+        
         <class name="audioInput" code="CSai">
             <cocoa class="CAMultiAudioNode"/>
             <property name="name" code="pnam" type="text" access="r"/>
@@ -65,9 +78,20 @@
         
         <class name="layout" code="CSly">
             <cocoa class="SourceLayout"/>
+            <element type="inputSource">
+                <cocoa key="sources"/>
+            </element>
+
+
             <property name="name" code="pnam" type="text">
                 <cocoa key="name"/>
             </property>
+            
+            <property name="hasSources" code="CShs" type="boolean">
+                <cocoa key="hasSources"/>
+            </property>
+            
+            
             <property name="width" code="CSwd" type="integer">
                 <cocoa key="canvas_width"/>
             </property>
