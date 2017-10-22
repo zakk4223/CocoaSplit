@@ -327,7 +327,7 @@
             
             if (!_av_codec_ctx || !_av_codec)
             {
-                return;
+                return NO;
             }
         if (self->_next_keyframe_time == 0.0f)
         {
