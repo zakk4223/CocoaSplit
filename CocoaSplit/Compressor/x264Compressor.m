@@ -228,6 +228,10 @@
         @autoreleasepool {
             
             
+            if (!_av_codec_ctx || !_av_codec)
+            {
+                return;
+            }
         if (self->_next_keyframe_time == 0.0f)
         {
             self->_next_keyframe_time = frameData.frameTime;
