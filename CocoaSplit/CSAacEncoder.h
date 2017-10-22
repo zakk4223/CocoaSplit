@@ -48,6 +48,7 @@
 -(void) setupEncoderBuffer;
 
 -(void) stopEncoder;
+-(void *)inputBufferPtr;
 
 
 

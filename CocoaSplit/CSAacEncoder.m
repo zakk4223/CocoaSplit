@@ -43,6 +43,12 @@
 }
 
 
+-(void *)inputBufferPtr
+{
+    return &_inputBuffer;
+}
+
+
 -(void)encodeAudio
 {
     
@@ -55,7 +61,7 @@
     
     while (1)
     {
-        dispatch_semaphore_wait(_aSemaphore, DISPATCH_TIME_FOREVER);
+        //dispatch_semaphore_wait(_aSemaphore, DISPATCH_TIME_FOREVER);
         
         
         
@@ -84,17 +90,7 @@
                 
                 UInt32 num_packets = 1;
                 UInt32 outstatus = 0;
-                
-                
-                
-                
-                
-                
                 UInt32 bufsize =  inBuffer->mBuffers[0].mDataByteSize*2;//This should be equal to 2x pcmBuffer->mBuffers[0].mDataByteSize
-                
-                
-                
-                
                 
                 UInt32 buffer_size = maxOutputSize;
                 
@@ -128,8 +124,6 @@
                 
                 if (self.encodedReceiver && buffer_size)
                 {
-                    
-                    
                     CMTime duration = CMTimeMake(1024, self.sampleRate);
                     uint64_t mach_now = atTime.mHostTime;
                     
@@ -179,6 +173,13 @@
             }
             
         }
+        
+        double secs_sleep = (1.0f/self.sampleRate)*512.0f;
+        
+        int32_t msecs_sleep = secs_sleep * USEC_PER_SEC;
+        
+        usleep(msecs_sleep);
+        
     }
 }
 

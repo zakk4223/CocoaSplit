@@ -127,6 +127,11 @@
     {
         
 
+        _queueSemaphore = dispatch_semaphore_create(0);
+        _compressQueue = [NSMutableArray array];
+        _reset_flag = NO;
+        
+        
         self.compressorType = @"x264";
         
         //this all seems like I should be doing it one time, in some sort of thing you might call a class variable...
@@ -159,15 +164,25 @@
 }
 
 
+
 -(void) reset
+{
+    @synchronized (self) {
+        _reset_flag = YES;
+        dispatch_semaphore_signal(_queueSemaphore);
+    }
+}
+
+
+-(void) internal_reset
 {
     //_compressor_queue = nil;
     
     self.errored = NO;
     _last_pts = 0;
     
-    dispatch_async(_compressor_queue, ^{
 
+    [self clearFrameQueue];
     
     if (_av_codec_ctx)
     {
@@ -175,7 +190,7 @@
         
     }
     _av_codec = NULL;
-    });
+    _reset_flag = NO;
 
     
 }
@@ -190,7 +205,79 @@
 }
 
 
-- (bool)compressFrame:(CapturedFrameData *)frameData
+-(bool)queueFramedata:(CapturedFrameData *)frameData
+{
+    if (!_consumerThread)
+    {
+        [self startConsumerThread];
+    }
+    
+    @synchronized (self) {
+        [_compressQueue addObject:frameData];
+        dispatch_semaphore_signal(_queueSemaphore);
+    }
+    
+    return YES;
+}
+
+
+-(void)clearFrameQueue
+{
+    @synchronized (self) {
+        [_compressQueue removeAllObjects];
+    }
+}
+
+
+-(CapturedFrameData *)consumeframeData
+{
+    CapturedFrameData *retData = nil;
+    @synchronized (self) {
+        
+        
+        if (_compressQueue.count > 0)
+        {
+            retData = [_compressQueue objectAtIndex:0];
+            [_compressQueue removeObjectAtIndex:0];
+        }
+    }
+    return retData;
+}
+
+
+-(void)startConsumerThread
+{
+    if (!_consumerThread)
+    {
+        _consumerThread = dispatch_queue_create("x264 consumer", DISPATCH_QUEUE_SERIAL);
+        dispatch_async(_consumerThread, ^{
+            
+            while (1)
+            {
+                @autoreleasepool {
+                    @synchronized (self) {
+                        
+                        if (_reset_flag)
+                        {
+                            [self internal_reset];
+                        }
+                    }
+                    CapturedFrameData *useData = [self consumeframeData];
+                    if (!useData)
+                    {
+                        dispatch_semaphore_wait(_queueSemaphore, DISPATCH_TIME_FOREVER);
+                    } else {
+                        [self real_compressFrame:useData];
+                    }
+                }
+            }
+        });
+    }
+}
+
+
+
+-(bool)compressFrame:(CapturedFrameData *)frameData
 {
     if (![self hasOutputs])
     {
@@ -201,7 +288,7 @@
     if (!_av_codec && !self.errored)
     {
         BOOL setupOK;
-
+        
         setupOK = [self setupCompressor:frameData.videoFrame];
         
         if (!setupOK)
@@ -214,17 +301,27 @@
     }
     
     
-
+    
     [self reconfigureCompressor];
     
     if (frameData.videoFrame)
     {
         CVPixelBufferRetain(frameData.videoFrame);
     }
+
+    [self queueFramedata:frameData];
+    return YES;
+}
+
+
+- (bool)real_compressFrame:(CapturedFrameData *)frameData
+{
     
 
-    dispatch_async(_compressor_queue, ^{
-        
+    
+    //dispatch_async(_compressor_queue, ^{
+    
+    
         @autoreleasepool {
             
             
@@ -277,7 +374,7 @@
             
         }
         NSLog(@"DID NOT ENCODE");
-        return;
+        return NO;
     }
         
         self->_last_pts = usePts;
@@ -377,7 +474,7 @@
          //av_free(pkt);
         
         }
-    });
+    //});
     
     return YES;
     
