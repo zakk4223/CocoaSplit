@@ -171,7 +171,7 @@
     
     bool old_active = _active;
     _active = is_active;
-    
+
     if (old_active != is_active)
     {
         if (is_active)
@@ -179,9 +179,10 @@
             
             if (self.assignedLayout && ![self.assignedLayout isEqual:[NSNull null]] && streamingActive)
             {
+                NSLog(@"START RECORDING");
                 [[CaptureController sharedCaptureController] startRecordingLayout:self.assignedLayout usingOutput:self];
             } else {
-                
+                NSLog(@"SETUP");
                 [self setup];
                 
             }
@@ -196,6 +197,7 @@
             
         }
     }
+
     
 
 }
@@ -261,7 +263,7 @@
     }
     
     
-    if (self.active)
+   // if (self.active)
     {
         [self reset];
         [self stopCompressor];

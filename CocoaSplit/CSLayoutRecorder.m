@@ -192,6 +192,7 @@
         
         if (!self.audioEngine)
         {
+            NSLog(@"CREATING AUDIO ENGINE");
             self.audioEngine = [[CAMultiAudioEngine alloc] init];
             self.audioEngine.sampleRate = [CaptureController sharedCaptureController].audioSamplerate;
             

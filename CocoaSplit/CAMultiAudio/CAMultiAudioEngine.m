@@ -830,8 +830,9 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     TPCircularBuffer *encodeBuffer = (TPCircularBuffer *)inRefCon;
     
 
-    if ((*ioActionFlags) & kAudioUnitRenderAction_PostRender)
+    if (encodeBuffer && ((*ioActionFlags) & kAudioUnitRenderAction_PostRender))
     {
+        
         
         TPCircularBufferCopyAudioBufferList(encodeBuffer, ioData, inTimeStamp, kTPCircularBufferCopyAll, NULL);
 
