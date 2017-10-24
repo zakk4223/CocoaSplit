@@ -480,7 +480,8 @@ void VideoCompressorReceiveFrame(void *VTref, void *VTFrameRef, OSStatus status,
             
             attach = CFArrayGetValueAtIndex(sample_attachments, 0);
             depends_on_others = CFDictionaryGetValue(attach, kCMSampleAttachmentKey_DependsOnOthers);
-            frameData.isKeyFrame = depends_on_others;
+            frameData.isKeyFrame = CFBooleanGetValue(depends_on_others);
+            
         }
         
     

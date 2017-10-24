@@ -3,7 +3,6 @@
 //  H264Streamer
 //
 //  Created by Zakk on 9/7/12.
-//  Copyright (c) 2012 Zakk. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -141,14 +140,14 @@ If your source is 'shared' between inputSources each new one will call this func
 
 -(void)frameArrived;
 
-+(bool)canCreateSourceFromPasteboardItem:(NSPasteboardItem *)item;
-+(NSObject <CSCaptureSourceProtocol> *)createSourceFromPasteboardItem:(NSPasteboardItem *)item;
-+(NSSet *)mediaUTIs;
 
 -(void)willExport;
 -(void)didExport;
 
-
+@optional
++(bool)canCreateSourceFromPasteboardItem:(NSPasteboardItem *)item;
++(NSObject <CSCaptureSourceProtocol> *)createSourceFromPasteboardItem:(NSPasteboardItem *)item;
++(NSSet *)mediaUTIs;
 
 
 

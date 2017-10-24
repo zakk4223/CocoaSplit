@@ -195,7 +195,6 @@
     struct frame_message msg;
     
     AudioBufferList *sampleABL = NULL;
-    int av_ret = 0;
     
     if (_audio_message_queue && ((*error_out = av_thread_message_queue_recv(_audio_message_queue, &msg, AV_THREAD_MESSAGE_NONBLOCK)) >= 0))
     {
@@ -234,14 +233,9 @@
             }
             
             
-            int dst_nb_samples = av_rescale_rnd(recv_frame->nb_samples, asbd->mSampleRate, _audio_codec_ctx->sample_rate, AV_ROUND_UP);
-            av_samples_alloc_array_and_samples(&dst_data, &dst_linesize, 2, dst_nb_samples, AV_SAMPLE_FMT_FLTP, 1);
-            int conv_samples = swr_convert(_swr_ctx, dst_data, dst_nb_samples, recv_frame->extended_data, recv_frame->nb_samples);
-            
-            
-            
-            
-            
+            int64_t dst_nb_samples = av_rescale_rnd(recv_frame->nb_samples, asbd->mSampleRate, _audio_codec_ctx->sample_rate, AV_ROUND_UP);
+            av_samples_alloc_array_and_samples(&dst_data, &dst_linesize, 2, (int)dst_nb_samples, AV_SAMPLE_FMT_FLTP, 1);
+            swr_convert(_swr_ctx, dst_data, (int)dst_nb_samples, recv_frame->extended_data, recv_frame->nb_samples);
             int bufferCnt = asbd->mFormatFlags & kAudioFormatFlagIsNonInterleaved ? asbd->mChannelsPerFrame : 1;
             
         
@@ -344,6 +338,13 @@
         
         int seek_ret = av_seek_frame(_format_ctx, -1, time, AVSEEK_FLAG_BACKWARD);
 
+        if (seek_ret < 0)
+        {
+            @synchronized (self) {
+                _seek_request = NO;
+            }
+            return;
+        }
         AVFifoBuffer *seek_buffer = av_fifo_alloc(sizeof(AVPacket) * 600);
         
         
@@ -655,7 +656,8 @@
         int num_bytes = avpicture_get_size(AV_PIX_FMT_NV12, width, height);
         uint8_t* conv_buffer = (uint8_t *)av_malloc(num_bytes);
         avpicture_fill((AVPicture*)conv_frame, conv_buffer, AV_PIX_FMT_NV12, width, height);
-        int scale_ret = sws_scale(_sws_ctx, output_frame->data, output_frame->linesize, 0, height, conv_frame->data, conv_frame->linesize);
+        sws_scale(_sws_ctx, output_frame->data, output_frame->linesize, 0, height, conv_frame->data, conv_frame->linesize);
+        
         conv_frame->pts = output_frame->pts;
         conv_frame->pkt_dts = output_frame->pkt_dts;
         if (output_frame->pkt_pts != AV_NOPTS_VALUE)

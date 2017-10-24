@@ -56,8 +56,6 @@ struct frame_message {
 
 -(instancetype) initWithMediaPath:(NSString *)mediaPath;
 -(bool)openMedia:(int)bufferVideoFrames;
--(AVFrame *)consumeFrame;
--(AVFrame *)consumeFrameWithRefill;
 -(void)readAndDecodeVideoFrames:(int)frameCnt;
 -(void)stop;
 -(void)start;

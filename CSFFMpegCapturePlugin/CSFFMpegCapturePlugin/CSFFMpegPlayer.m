@@ -239,6 +239,7 @@
     _audio_done = NO;
 
     return;
+    /*
     
     if (_seekRequest)
     {
@@ -256,7 +257,7 @@
         _seekRequest = YES;
         _seekRequestTime = toTime;
 
-    }
+    }*/
     
 }
 
@@ -367,7 +368,6 @@
     
     int av_error = 0;
     CAMultiAudioPCM *audioPCM = NULL;
-    CSFFMpegInput *useItem;
     bool good_audio = NO;
     _audio_done = NO;
     

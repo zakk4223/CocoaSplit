@@ -467,7 +467,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     self.graph = nil;
     [self buildGraph];
     
-    for (CAMultiAudioNode *node in self.audioInputs)
+    for (CAMultiAudioInput *node in self.audioInputs)
     {
         [node resetFormat:self.graph.graphAsbd];
         [self reattachInput:node];
@@ -524,12 +524,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 -(void)removePCMInput:(CAMultiAudioPCMPlayer *)toRemove
 {
-    CAMultiAudioConverter *converter = toRemove.converterNode;
     
     [self removeInput:toRemove];
-
-    
-   
     NSUInteger index = [self.pcmInputs indexOfObject:toRemove];
     if (index != NSNotFound)
     {

@@ -14,17 +14,15 @@
 {
     
     NSArray *_sourceList;
-    NSMutableArray *_delayList;
-    CGImageSourceRef _imageSource;
     size_t _totalFrames;
     int _frameNumber;
 
-    NSMutableArray *_imageCache;
     CAKeyframeAnimation *_animation;
-    CGImageRef _singleImage;
+    NSImage *_singleImage;
     NSData *_imageData;
     bool _wasLoadedFromData;
-    
+    float _imageDuration;
+    NSSize _imageSize;
     
     
 }

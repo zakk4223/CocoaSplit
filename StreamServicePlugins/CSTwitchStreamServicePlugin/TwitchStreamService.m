@@ -165,8 +165,11 @@
         
         
         self.oauthObject.accountName = self.accountName;
+        __weak TwitchStreamService *weakSelf = self;
+        
         self.oauthObject.accountNameFetcher = ^void(CSOauth2Authenticator *authenticator) {
-            [self fetchAccountname:authenticator];
+            TwitchStreamService *strongSelf = weakSelf;
+            [strongSelf fetchAccountname:authenticator];
         };
     }
 }

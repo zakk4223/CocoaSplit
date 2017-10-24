@@ -130,7 +130,7 @@
     CALayer *newLayer = [CALayer layer];
     if (_singleImage)
     {
-        newLayer.contents = (__bridge id)(_singleImage);
+        newLayer.contents = _singleImage;
     } else if (_animation) {
         [newLayer addAnimation:_animation forKey:@"contents"];
     }
@@ -145,9 +145,13 @@
 
 -(NSImage *)libraryImage
 {
-    if (self.imagePath)
+    
+    
+    if (_singleImage)
     {
-        return [[NSImage alloc] initWithContentsOfFile:self.imagePath];
+        return _singleImage;
+    } else if (_animation) {
+        return _animation.values.firstObject;
     } else {
         return [NSImage imageNamed:@"NSMediaBrowserMediaTypePhotos"];
     }
@@ -175,14 +179,7 @@
 
 -(NSSize)captureSize
 {
-    if (_imageSource)
-    {
-        CFDictionaryRef imageProperties = CGImageSourceCopyPropertiesAtIndex(_imageSource, 0, NULL);
-        NSNumber *width = (NSNumber *)CFDictionaryGetValue(imageProperties, kCGImagePropertyPixelWidth);
-        NSNumber *height = (NSNumber *)CFDictionaryGetValue(imageProperties, kCGImagePropertyPixelHeight);
-        return NSMakeSize(width.floatValue, height.floatValue);
-    }
-    return NSZeroSize;
+    return _imageSize;
 }
 
 
@@ -196,6 +193,8 @@
     
     
 
+    _imageSize = NSZeroSize;
+    
     _imagePath = imagePath;
     
     
@@ -213,7 +212,7 @@
     {
         imgSrc = CGImageSourceCreateWithData((__bridge CFDataRef)_imageData, (__bridge CFDictionaryRef)dict);
     } else {
-        imgSrc = CGImageSourceCreateWithURL((__bridge CFURLRef)fileURL, (__bridge CFDictionaryRef)dict);
+       imgSrc = CGImageSourceCreateWithURL((__bridge CFURLRef)fileURL, (__bridge CFDictionaryRef)dict);
     }
     /*
     if (!_imageData)
@@ -221,13 +220,16 @@
         _imageData = [NSData dataWithContentsOfURL:fileURL];
     }
     */
+    
+    /*
     if (_imageSource)
     {
         CFRelease(_imageSource);
     }
     
+    
     _imageSource = imgSrc;
-    _imageCache = [[NSMutableArray alloc] init];
+     */
     
     
     
@@ -235,14 +237,25 @@
     CFDictionaryRef firstframeprop = CGImageSourceCopyPropertiesAtIndex(imgSrc, 0, NULL);
     CFDictionaryRef gifTest = CFDictionaryGetValue(firstframeprop, kCGImagePropertyGIFDictionary);
 
+    bool isGif;
+    
+    if (gifTest)
+    {
+        isGif = YES;
+    } else {
+        isGif = NO;
+    }
+
+    
     _totalFrames = CGImageSourceGetCount(imgSrc);
+    CFRelease(firstframeprop);
     float totalTime = 0;
     
-    if (_totalFrames > 1 && gifTest)
+    if (_totalFrames > 1 && isGif)
     {
         NSMutableArray *frameArray = [NSMutableArray array];
         
-        _delayList = [[NSMutableArray alloc] init];
+        NSMutableArray *delayList = [[NSMutableArray alloc] init];
         
         for (int i=0; i < _totalFrames; i++)
         {
@@ -257,25 +270,35 @@
             NSNumber *gdelay = CFDictionaryGetValue(gProp, kCGImagePropertyGIFDelayTime);
             if ([udelay isEqualToNumber:@(0)])
             {
-                [_delayList insertObject:gdelay atIndex:i];
+                [delayList insertObject:gdelay atIndex:i];
                 totalTime += gdelay.floatValue;
             } else {
-                [_delayList insertObject:udelay atIndex:i];
+                [delayList insertObject:udelay atIndex:i];
                 totalTime += udelay.floatValue;
             }
-            CGImageRef frame = CGImageSourceCreateImageAtIndex(_imageSource, i, NULL);
-            [frameArray addObject:(__bridge id)frame];
+            CGImageRef frame = CGImageSourceCreateImageAtIndex(imgSrc, i, NULL);
+            NSImage *tmpImg = [[NSImage alloc] initWithCGImage:frame size:NSZeroSize];
+            if (i==0)
+            {
+                _imageSize = tmpImg.size;
+            }
+            
+            [frameArray addObject:tmpImg];
+            CFRelease(frame);
+            
+            //[frameArray addObject:(__bridge id)frame];
             
         }
         
         NSMutableArray *timesArray = [NSMutableArray array];
         float base = 0;
         
-        for (NSNumber *duration in _delayList)
+        for (NSNumber *duration in delayList)
         {
             base = base + (duration.floatValue/totalTime);
             [timesArray addObject:[NSNumber numberWithFloat:base]];
         }
+        
         
         _animation = [CAKeyframeAnimation animationWithKeyPath:@"contents"];
         _animation.duration = totalTime;
@@ -286,6 +309,9 @@
         _animation.keyTimes = timesArray;
         _animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
         _animation.calculationMode = kCAAnimationDiscrete;
+        _imageDuration = totalTime;
+        _singleImage = nil;
+        
         dispatch_async(dispatch_get_main_queue(), ^{
 
             [self updateLayersWithFramedataBlock:^(CALayer *layer) {
@@ -298,18 +324,27 @@
         
     } else {
         _animation = nil;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            _singleImage = CGImageSourceCreateImageAtIndex(_imageSource, 0, NULL);
+        CGImageRef sImg = CGImageSourceCreateImageAtIndex(imgSrc, 0, NULL);
+        
+        _singleImage = [[NSImage alloc] initWithCGImage:sImg size:NSZeroSize];
 
+        CGImageRelease(sImg);
+
+        _imageSize = _singleImage.size;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
             [self updateLayersWithFramedataBlock:^(CALayer *layer) {
-                layer.contents = (__bridge id)(_singleImage);
+                layer.contents = _singleImage;
                 [layer removeAnimationForKey:@"contents"];
             }];
                     });
     }
     
     
-    
+    if (imgSrc)
+    {
+        CFRelease(imgSrc);
+    }
     _frameNumber = 0;
     
 }

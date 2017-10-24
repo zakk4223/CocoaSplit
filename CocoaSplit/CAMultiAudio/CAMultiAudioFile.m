@@ -286,7 +286,7 @@
             fileRegion.mFramesToPlay = -1;
         }
         
-        OSStatus err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ScheduledFileRegion, kAudioUnitScope_Global, 0, &fileRegion, sizeof(fileRegion));
+        AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ScheduledFileRegion, kAudioUnitScope_Global, 0, &fileRegion, sizeof(fileRegion));
         
     }
     UInt32 primeFrames = 0;

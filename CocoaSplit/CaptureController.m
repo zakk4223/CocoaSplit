@@ -1708,7 +1708,7 @@
 {
     
     return;
-    
+    /*
     NSAttributedString *appendStr = [[NSAttributedString alloc] initWithString:logLine];
     [[self.logTextView textStorage] beginEditing];
 
@@ -1721,7 +1721,7 @@
     range = NSMakeRange([[self.logTextView string] length], 0);
     
     [self.logTextView scrollRangeToVisible:range];
-    
+    */
 }
 
 

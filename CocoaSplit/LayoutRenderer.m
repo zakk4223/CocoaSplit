@@ -216,7 +216,7 @@
     glDisable(GL_TEXTURE_RECTANGLE_ARB);
     
     glFlush();
-    [CATransaction flush];
+   // [CATransaction flush];
 }
 
 -(CVPixelBufferRef)currentImg
@@ -272,7 +272,9 @@
     CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, _cvpool, &destFrame);
     
 
+    [CATransaction begin];
     [self renderToSurface:CVPixelBufferGetIOSurface(destFrame)];
+    [CATransaction commit];
 
     
     @synchronized(self)
