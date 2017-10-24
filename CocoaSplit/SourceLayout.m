@@ -64,6 +64,28 @@
 }
 
 
+-(void)runTriggerScriptForInput:(NSObject <CSInputSourceProtocol>*)input withName:(NSString *)scriptName usingContext:(JSContext *)jsCtx
+{
+    if (!jsCtx || !input || !scriptName)
+    {
+        return;
+    }
+    
+    
+    NSString *property_name = [NSString stringWithFormat:@"script_%@", scriptName];
+    
+    if ([input valueForKey:property_name])
+    {
+        
+        JSValue *scriptFunc = jsCtx[@"runTriggerScriptInput"];
+        if (scriptFunc)
+        {
+            [scriptFunc callWithArguments:@[input, scriptName]];
+        }
+    }
+}
+
+
 -(void)setLayoutTimingSource:(InputSource *)layoutTimingSource
 {
     CSCaptureBase *currentTiming = (CSCaptureBase *)_layoutTimingSource.videoInput;
@@ -241,7 +263,14 @@
     void (^completionBlock)(void) = [threadDict objectForKey:@"completionBlock"];
     //void (^exceptionBlock)(NSException *exception) = [threadDict objectForKey:@"exceptionBlock"];
     
-    JSContext *jsCtx = [[CaptureController sharedCaptureController] setupJavascriptContext];
+    JSContext *jsCtx = nil;
+    
+    if (!_animationContext)
+    {
+        _animationContext = [[CaptureController sharedCaptureController] setupJavascriptContext];
+    }
+    
+    jsCtx = _animationContext;
     
     //@try {
 
@@ -898,14 +927,9 @@
         
         
         [src beforeReplace:isRemoving];
-        if (jCtx && usingScripts)
+        if (usingScripts)
         {
-            JSValue *scriptFunc = jCtx[@"runTriggerScriptInput"];
-            if (scriptFunc)
-            {
-                [scriptFunc callWithArguments:@[src, @"beforeReplace"]];
-            }
-                
+            [self runTriggerScriptForInput:src withName:@"beforeReplace" usingContext:jCtx];
         }
     }
     
@@ -1082,14 +1106,9 @@
         }
         
         [src afterReplace];
-        if (jCtx && usingScripts)
+        if (usingScripts)
         {
-            JSValue *scriptFunc = jCtx[@"runTriggerScriptInput"];
-            if (scriptFunc)
-            {
-                [scriptFunc callWithArguments:@[src, @"afterReplace"]];
-            }
-            
+            [self runTriggerScriptForInput:src withName:@"afterReplace" usingContext:jCtx];
         }
     }
     [CATransaction commit];
@@ -1266,7 +1285,7 @@
                     continue;
                 }
 
-                [scriptFunc callWithArguments:@[mSrc, @"beforeMerge"]];
+                [self runTriggerScriptForInput:mSrc withName:@"beforeMerge" usingContext:jCtx];
             }
         }
     }
@@ -1509,7 +1528,7 @@
                     continue;
                 }
 
-                [scriptFunc callWithArguments:@[src, @"afterMerge"]];
+                [self runTriggerScriptForInput:src withName:@"afterMerge" usingContext:jCtx];
             }
         }
     }
@@ -1615,7 +1634,7 @@
                     continue;
                 }
 
-                [scriptFunc callWithArguments:@[mSrc, @"beforeRemove"]];
+                [self runTriggerScriptForInput:mSrc withName:@"beforeRemove" usingContext:jCtx];
             }
         }
     }

@@ -139,6 +139,8 @@
     NSMutableArray *_topLevelSourceArray;
     bool _skipRefCounting;
     bool _doingLayoutExport;
+    JSContext *_animationContext;
+    
     
     
     
