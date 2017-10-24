@@ -756,6 +756,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         
         
         CAMultiAudioDownmixer *dmix = toRemove.downMixer;
+        CAMultiAudioEqualizer *rEq = toRemove.equalizer;
         toRemove.downMixer = nil;
         
         [self.graph removeNode:toRemove];
@@ -773,6 +774,10 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
             [self.graph removeNode:dmix];
         }
         
+        if (rEq)
+        {
+            [self.graph removeNode:rEq];
+        }
         
         
         

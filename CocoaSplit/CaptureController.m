@@ -1707,6 +1707,7 @@
 -(void) appendToLogView:(NSString *)logLine
 {
     
+    return;
     
     NSAttributedString *appendStr = [[NSAttributedString alloc] initWithString:logLine];
     [[self.logTextView textStorage] beginEditing];

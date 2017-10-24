@@ -656,7 +656,10 @@ static NSArray *_sourceTypes = nil;
     
     self.chromaKeyColor = [NSColor greenColor];
     _userBackground = NO;
-    self.layer.backgroundColor = CGColorCreateGenericRGB(0, 0, 1, 1);
+    CGColorRef bgColor = CGColorCreateGenericRGB(0, 0, 1, 1);
+    self.layer.backgroundColor = bgColor;
+    CGColorRelease(bgColor);
+    
     _currentInput = self;
     
 
