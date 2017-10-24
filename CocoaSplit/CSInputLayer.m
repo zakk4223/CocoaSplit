@@ -290,7 +290,7 @@
         _scrollAnimation.repeatCount = HUGE_VALF;
         self.zPosition = 0;
 
-        _xLayer.layoutManager = self;
+        //_xLayer.layoutManager = self;
         _yLayer.layoutManager = self.layoutManager;
         _sourceLayer.layoutManager = self.layoutManager;
         
@@ -598,5 +598,11 @@
         return nil;
     }
 }
+
+-(void)dealloc
+{
+    NSLog(@"INPUT LAYER DEALLOC %@", self);
+}
+
 
 @end
