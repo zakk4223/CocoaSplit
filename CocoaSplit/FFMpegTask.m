@@ -290,7 +290,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
             pkt.data = (uint8_t *)sampledata;
         
             pkt.size = (int)buffer_length;
-            pkt.destruct = NULL;
+            //pkt.destruct = NULL;
             
             
             

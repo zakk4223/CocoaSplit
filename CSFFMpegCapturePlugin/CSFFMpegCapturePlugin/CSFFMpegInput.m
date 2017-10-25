@@ -145,12 +145,12 @@
             avcodec_open2(_video_codec_ctx, _video_codec, NULL);
             self.dimensions = NSMakeSize(_video_codec_ctx->width, _video_codec_ctx->height);
             _sws_ctx = sws_alloc_context();
-            av_set_int(_sws_ctx, "srcw", _video_codec_ctx->width);
-            av_set_int(_sws_ctx, "srch", _video_codec_ctx->height);
-            av_set_int(_sws_ctx, "src_format", _video_codec_ctx->pix_fmt);
-            av_set_int(_sws_ctx, "dstw", _video_codec_ctx->width);
-            av_set_int(_sws_ctx, "dsth", _video_codec_ctx->height);
-            av_set_int(_sws_ctx, "dst_format", AV_PIX_FMT_NV12);
+            av_opt_set_int(_sws_ctx, "srcw", _video_codec_ctx->width);
+            av_opt_set_int(_sws_ctx, "srch", _video_codec_ctx->height);
+            av_opt_set_int(_sws_ctx, "src_format", _video_codec_ctx->pix_fmt);
+            av_opt_set_int(_sws_ctx, "dstw", _video_codec_ctx->width);
+            av_opt_set_int(_sws_ctx, "dsth", _video_codec_ctx->height);
+            av_opt_set_int(_sws_ctx, "dst_format", AV_PIX_FMT_NV12);
             sws_init_context(_sws_ctx, NULL, NULL);
         }
         if (_audio_stream_idx > -1)
@@ -648,7 +648,7 @@
         
         
         
-        AVFrame* conv_frame = avcodec_alloc_frame();
+        AVFrame* conv_frame = av_frame_alloc();
         conv_frame->width = width;
         conv_frame->height = height;
         conv_frame->format = AV_PIX_FMT_NV12;

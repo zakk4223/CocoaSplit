@@ -15,6 +15,9 @@
 		3400A0841BD522A5003E1828 /* CSLibraryInputItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3400A0831BD522A5003E1828 /* CSLibraryInputItemViewController.m */; };
 		340620761F2E2BFE0016D997 /* CAMultiAudioInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 340620751F2E2BFE0016D997 /* CAMultiAudioInput.m */; };
 		3408235519BC677A00CD1F5F /* CSNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 3408235419BC530300CD1F5F /* CSNotifications.m */; };
+		3409A7701FA0D6CC0073866E /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3409A76F1FA0D6CC0073866E /* libiconv.tbd */; };
+		3409A7711FA0D80A0073866E /* OpenCL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3409A76E1FA0D67F0073866E /* OpenCL.framework */; };
+		3409A7731FA0EA340073866E /* libc++.1.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3409A7721FA0EA340073866E /* libc++.1.tbd */; };
 		340C7FE91D43D22000B2FD7D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340C7FE81D43D22000B2FD7D /* Security.framework */; };
 		340C802D1D450A5100B2FD7D /* CSYoutubeStreamServicePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 340C80151D44722100B2FD7D /* CSYoutubeStreamServicePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		340D8C971959C7C100BE5144 /* CompressionSettingsPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 340D8C961959C7C100BE5144 /* CompressionSettingsPanel.xib */; };
@@ -576,6 +579,9 @@
 		340620751F2E2BFE0016D997 /* CAMultiAudioInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioInput.m; path = CAMultiAudio/CAMultiAudioInput.m; sourceTree = "<group>"; };
 		3408234619BC50AD00CD1F5F /* CSNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSNotifications.h; path = PluginHeaders/CSNotifications.h; sourceTree = "<group>"; };
 		3408235419BC530300CD1F5F /* CSNotifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSNotifications.m; path = ../CSNotifications.m; sourceTree = "<group>"; };
+		3409A76E1FA0D67F0073866E /* OpenCL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenCL.framework; path = System/Library/Frameworks/OpenCL.framework; sourceTree = SDKROOT; };
+		3409A76F1FA0D6CC0073866E /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
+		3409A7721FA0EA340073866E /* libc++.1.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.1.tbd"; path = "usr/lib/libc++.1.tbd"; sourceTree = SDKROOT; };
 		340C7FE81D43D22000B2FD7D /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		340C80101D44722000B2FD7D /* CSYoutubeStreamServicePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSYoutubeStreamServicePlugin.xcodeproj; path = StreamServicePlugins/CSYoutubeStreamServicePlugin/CSYoutubeStreamServicePlugin.xcodeproj; sourceTree = "<group>"; };
 		340D8C961959C7C100BE5144 /* CompressionSettingsPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CompressionSettingsPanel.xib; path = Interface/CompressionSettingsPanel.xib; sourceTree = "<group>"; };
@@ -1104,6 +1110,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3409A7711FA0D80A0073866E /* OpenCL.framework in Frameworks */,
 				34EB705D1F276EAD00F61E6A /* CoreAudioKit.framework in Frameworks */,
 				34788DB61EF511E100C3C9C5 /* JavaScriptCore.framework in Frameworks */,
 				340C7FE91D43D22000B2FD7D /* Security.framework in Frameworks */,
@@ -1118,6 +1125,7 @@
 				3400777016E6FE5D00097E8F /* libz.dylib in Frameworks */,
 				347B7FC816907AE700B5F4B3 /* VideoDecodeAcceleration.framework in Frameworks */,
 				347B7FC616907A1700B5F4B3 /* libbz2.dylib in Frameworks */,
+				3409A7731FA0EA340073866E /* libc++.1.tbd in Frameworks */,
 				341A2D5C1C7AB04700FF7566 /* Sparkle.framework in Frameworks */,
 				34A64A37165F208800A68428 /* QuartzCore.framework in Frameworks */,
 				34792AFB1611A6B90065A859 /* IOSurface.framework in Frameworks */,
@@ -1126,6 +1134,7 @@
 				342346BB15F5FBD700C8C77E /* CoreMedia.framework in Frameworks */,
 				342346B915F5FBD200C8C77E /* CoreVideo.framework in Frameworks */,
 				342346AD15F59B0D00C8C77E /* VideoToolbox.framework in Frameworks */,
+				3409A7701FA0D6CC0073866E /* libiconv.tbd in Frameworks */,
 				340FE4E115F3581200E4CE4E /* QTKit.framework in Frameworks */,
 				340FE4DA15F346D900E4CE4E /* AVFoundation.framework in Frameworks */,
 				340FE4A215F3417E00E4CE4E /* Cocoa.framework in Frameworks */,
@@ -1173,6 +1182,9 @@
 		340FE4A015F3417E00E4CE4E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3409A7721FA0EA340073866E /* libc++.1.tbd */,
+				3409A76F1FA0D6CC0073866E /* libiconv.tbd */,
+				3409A76E1FA0D67F0073866E /* OpenCL.framework */,
 				34EB705C1F276EAD00F61E6A /* CoreAudioKit.framework */,
 				34788DB51EF511E100C3C9C5 /* JavaScriptCore.framework */,
 				340C7FE81D43D22000B2FD7D /* Security.framework */,
@@ -2124,6 +2136,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 340FE4CF15F3417E00E4CE4E /* Build configuration list for PBXNativeTarget "CocoaSplit" */;
 			buildPhases = (
+				3409A7741FA0EEEE0073866E /* ShellScript */,
 				340FE49915F3417E00E4CE4E /* Sources */,
 				340FE49A15F3417E00E4CE4E /* Frameworks */,
 				340FE49B15F3417E00E4CE4E /* Resources */,
@@ -2508,6 +2521,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		3409A7741FA0EEEE0073866E /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "rm -r $TEMP_FILES_DIR/ffmpeg-fix\nmkdir $TEMP_FILES_DIR/ffmpeg-fix\ncd $TEMP_FILES_DIR/ffmpeg-fix\ncp /usr/local/lib/libswresample.a .\ncp /usr/local/lib/libavutil.a .\ncp /usr/local/lib/libavformat.a .\ncp /usr/local/lib/libavcodec.a .\ncp /usr/local/lib/libmp3lame.a .\ncp /usr/local/lib/libswscale.a .\ncp /usr/local/lib/libxvidcore.a .\ncp /usr/local/lib/libx264.a .\ncp /usr/local/lib/libx265.a .\ncp /usr/local/lib/libfdk-aac.a .\ncp /usr/local/lib/libvpx.a .\nchmod 755 *.a\nar -dv libswresample.a log2_tab.o\nar -dv libavformat.a log2_tab.o\nar -dv libavformat.a golomb.o\nar -dv libavformat.a reverse.o\nar -dv libavutil.a reverse.o\nar -dv libavcodec.a log2_tab.o\nar -dv libavformat.a golomb_tab.o\nar -dv libswscale.a log2_tab.o\nar -dv libx265.a x265-extras.cpp.o\nar -dv libx265.a x265-extras.cpp.o";
+		};
 		34BAAD3B1C13DF8F00A48C76 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2861,14 +2887,18 @@
 				"LIBRARY_SEARCH_PATHS[arch=*]" = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				OTHER_CODE_SIGN_FLAGS = "";
-				"OTHER_LDFLAGS[arch=*]" = (
-					/usr/local/lib/libswresample.a,
-					/usr/local/lib/libavutil.a,
-					/usr/local/lib/libavformat.a,
-					/usr/local/lib/libavcodec.a,
-					/usr/local/lib/libmp3lame.a,
-					/usr/local/lib/libswscale.a,
-					/usr/local/lib/libx264.a,
+				OTHER_LDFLAGS = (
+					"$TEMP_FILES_DIR/ffmpeg-fix/libswresample.a",
+					"$TEMP_FILES_DIR/ffmpeg-fix/libavutil.a",
+					"$TEMP_FILES_DIR/ffmpeg-fix/libfdk-aac.a",
+					"$TEMP_FILES_DIR/ffmpeg-fix/libx265.a",
+					"$TEMP_FILES_DIR/ffmpeg-fix/libx264.a",
+					"$TEMP_FILES_DIR/ffmpeg-fix/libxvidcore.a",
+					"$TEMP_FILES_DIR/ffmpeg-fix/libswscale.a",
+					"$TEMP_FILES_DIR/ffmpeg-fix/libmp3lame.a",
+					"$TEMP_FILES_DIR/ffmpeg-fix/libavcodec.a",
+					"$TEMP_FILES_DIR/ffmpeg-fix/libavformat.a",
+					"$TEMP_FILES_DIR/ffmpeg-fix/libvpx.a",
 					"-all_load",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "zakk.lol.${PRODUCT_NAME:rfc1034identifier}";
@@ -2907,15 +2937,18 @@
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				OTHER_CODE_SIGN_FLAGS = "";
-				"OTHER_LDFLAGS[arch=*]" = (
-					/usr/local/lib/libswresample.a,
-					/usr/local/lib/libavformat.a,
-					/usr/local/lib/libavutil.a,
-					/usr/local/lib/libavcodec.a,
-					/usr/local/lib/libmp3lame.a,
-					/usr/local/lib/libswscale.a,
-					/usr/local/lib/libx264.a,
-					"-flat_namespace",
+				OTHER_LDFLAGS = (
+					"$TEMP_FILES_DIR/ffmpeg-fix/libswresample.a",
+					"$TEMP_FILES_DIR/ffmpeg-fix/libavutil.a",
+					"$TEMP_FILES_DIR/ffmpeg-fix/libfdk-aac.a",
+					"$TEMP_FILES_DIR/ffmpeg-fix/libx265.a",
+					"$TEMP_FILES_DIR/ffmpeg-fix/libx264.a",
+					"$TEMP_FILES_DIR/ffmpeg-fix/libxvidcore.a",
+					"$TEMP_FILES_DIR/ffmpeg-fix/libswscale.a",
+					"$TEMP_FILES_DIR/ffmpeg-fix/libmp3lame.a",
+					"$TEMP_FILES_DIR/ffmpeg-fix/libavcodec.a",
+					"$TEMP_FILES_DIR/ffmpeg-fix/libavformat.a",
+					"$TEMP_FILES_DIR/ffmpeg-fix/libvpx.a",
 					"-all_load",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "zakk.lol.${PRODUCT_NAME:rfc1034identifier}";

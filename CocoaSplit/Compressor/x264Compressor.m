@@ -410,7 +410,7 @@
         
         
     AVFrame *outframe = av_frame_alloc();
-    outframe->format = PIX_FMT_YUV420P;
+            outframe->format = AV_PIX_FMT_YUV420P;
     outframe->width = (int)src_width;
     outframe->height = (int)src_height;
     CVPixelBufferLockBaseAddress(converted_frame, kCVPixelBufferLock_ReadOnly);
@@ -570,7 +570,7 @@
     
     
     
-    _av_codec_ctx->pix_fmt = PIX_FMT_YUV420P;
+    _av_codec_ctx->pix_fmt = AV_PIX_FMT_YUV420P;
     
     
     int real_keyframe_interval = 0;
