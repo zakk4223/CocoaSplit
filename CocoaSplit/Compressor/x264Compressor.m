@@ -190,6 +190,15 @@
         avcodec_free_context(&_av_codec_ctx);
         
     }
+    
+    if (_vtpt_ref)
+    {
+        VTPixelTransferSessionInvalidate(_vtpt_ref);
+        CFRelease(_vtpt_ref);
+        _vtpt_ref = NULL;
+    }
+    
+    
     _av_codec = NULL;
     _reset_flag = NO;
 
@@ -474,6 +483,10 @@
         
         
         //[self.outputDelegate outputAVPacket:pkt codec_ctx:_av_codec_ctx];
+    } else {
+        av_free_packet(pkt);
+        av_free(pkt);
+
     }
         av_free(outframe);
     CVPixelBufferRelease(converted_frame);
@@ -647,12 +660,15 @@
     {
         avcodec_free_context(&_av_codec_ctx);
         _av_codec = NULL;
+        av_dict_free(&opts);
+        
         NSLog(@"CODEC SETUP FAILED!");
         return NO;
     }
     
     
     
+    av_dict_free(&opts);
     _sws_ctx = NULL;
     
     _audioBuffer = [[NSMutableArray alloc] init];

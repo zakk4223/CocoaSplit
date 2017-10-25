@@ -229,7 +229,6 @@
                 self.textColor = [NSColor redColor];
             });
         } else {
-            dispatch_async(_output_queue, ^{
                 @autoreleasepool {
                 
                 [self.ffmpeg_out stopProcess];
@@ -239,7 +238,6 @@
                     self.textColor = [NSColor blackColor];
                 });
                 
-            });
         }
 
     }

@@ -17,6 +17,10 @@
 
 #include "libavformat/avformat.h"
 
+-(void)dealloc
+{
+    NSLog(@"DEALLOC FFMPEG");
+}
 
 -(NSUInteger)frameQueueSize
 {

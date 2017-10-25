@@ -475,7 +475,7 @@
     
     @synchronized(self)
     {
-        
+
         [_audioBuffer addObject:(__bridge id)audioData];
     }
 }
@@ -518,6 +518,12 @@
 
 - (void)captureOutputAudio:(id)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 {
+    
+    
+    if (!self.recordingActive)
+    {
+        return;
+    }
     
     
     CMTime orig_pts = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
