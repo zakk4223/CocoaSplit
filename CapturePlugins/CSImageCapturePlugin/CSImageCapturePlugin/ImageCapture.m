@@ -264,6 +264,7 @@
         
             if (!gProp)
             {
+                CFRelease(frameprop);
                 continue;
             }
             NSNumber *udelay = CFDictionaryGetValue(gProp, kCGImagePropertyGIFUnclampedDelayTime);
@@ -285,7 +286,7 @@
             
             [frameArray addObject:tmpImg];
             CFRelease(frame);
-            
+            CFRelease(frameprop);
             //[frameArray addObject:(__bridge id)frame];
             
         }

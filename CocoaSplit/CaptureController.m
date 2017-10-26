@@ -1967,8 +1967,13 @@
 {
     [[CSPluginLoader sharedPluginLoader] loadAllBundles];
 
-    self.streamButton.layer.backgroundColor = CGColorCreateGenericRGB(0, 1, 0, 1);
-    self.streamButton.layer.borderColor   = CGColorCreateGenericRGB(0, 0, 0, 1);
+    CGColorRef tmpColor = CGColorCreateGenericRGB(0, 1, 0, 1);
+    self.streamButton.layer.backgroundColor = tmpColor;
+    CGColorRelease(tmpColor);
+    tmpColor = CGColorCreateGenericRGB(0, 0, 0, 1);
+    self.streamButton.layer.borderColor   = tmpColor;
+    CGColorRelease(tmpColor);
+    
     self.streamButton.layer.borderWidth = 1.0f;
     self.streamButton.layer.cornerRadius = 2.0f;
     //all color panels allow opacity
@@ -2817,13 +2822,17 @@
 -(void)setCaptureRunning:(BOOL)captureRunning
 {
     _captureRunning = captureRunning;
+    CGColorRef tmpColor;
+    
     if (captureRunning)
     {
-        self.streamButton.layer.backgroundColor = CGColorCreateGenericRGB(1, 0, 0, 1);
+        tmpColor = CGColorCreateGenericRGB(1, 0, 0, 1);
     } else {
-        self.streamButton.layer.backgroundColor = CGColorCreateGenericRGB(0, 1, 0, 1);
-
+        tmpColor = CGColorCreateGenericRGB(0, 1, 0, 1);
     }
+    
+    self.streamButton.layer.backgroundColor = tmpColor;
+    CGColorRelease(tmpColor);
 }
 -(double)mach_time_seconds
 {

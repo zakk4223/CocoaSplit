@@ -98,7 +98,9 @@
     }
 
     self.rootLayer.bounds = CGRectMake(0, 0, _cvpool_size.width, _cvpool_size.height);
-    self.rootLayer.backgroundColor = CGColorCreateGenericRGB(0, 0, 0, 1);
+    CGColorRef tmpColor = CGColorCreateGenericRGB(0, 0, 0, 1);
+    self.rootLayer.backgroundColor = tmpColor;
+    CGColorRelease(tmpColor);
     self.rootLayer.position = CGPointMake(0.0, 0.0);
     self.rootLayer.anchorPoint = CGPointMake(0.0, 0.0);
     self.rootLayer.masksToBounds = YES;

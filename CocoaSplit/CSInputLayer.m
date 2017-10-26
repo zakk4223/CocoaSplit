@@ -211,8 +211,8 @@
     }
 
     
-    CGColorRetain(firstColor);
-    CGColorRetain(lastColor);
+    //CGColorRetain(firstColor);
+   // CGColorRetain(lastColor);
     
     self.colors = [NSArray arrayWithObjects:CFBridgingRelease(firstColor),CFBridgingRelease(lastColor), nil];
     

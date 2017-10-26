@@ -124,7 +124,9 @@
     newRoot.anchorPoint = CGPointMake(0.0, 0.0);
     newRoot.position = CGPointMake(0.0, 0.0);
     newRoot.masksToBounds = YES;
-    newRoot.backgroundColor = CGColorCreateGenericRGB(0, 0, 0, 1);
+    CGColorRef tmpColor = CGColorCreateGenericRGB(0, 0, 0, 1);
+    newRoot.backgroundColor = tmpColor;
+    CGColorRelease(tmpColor);
     newRoot.layoutManager = [CAConstraintLayoutManager layoutManager];
 
     //newRoot.autoresizingMask = kCALayerMinXMargin | kCALayerWidthSizable | kCALayerMaxXMargin | kCALayerMinYMargin | kCALayerHeightSizable | kCALayerMaxYMargin;
@@ -242,6 +244,9 @@
 -(void)doAnimation:(NSDictionary *)threadDict
 {
     
+    
+    @autoreleasepool {
+        
     CSAnimationRunnerObj *runner = [CaptureController sharedAnimationObj];
 
     NSString *modName = threadDict[@"moduleName"];
@@ -321,6 +326,7 @@
 
         //[CATransaction flush];
     //}
+    }
 }
 
 

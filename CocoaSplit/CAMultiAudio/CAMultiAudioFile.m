@@ -362,6 +362,10 @@
 -(void)dealloc
 {
     AudioFileClose(_audioFile);
+    if (_outputFormat)
+    {
+        free(_outputFormat);
+    }
 }
 
 

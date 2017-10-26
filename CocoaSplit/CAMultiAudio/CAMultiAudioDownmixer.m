@@ -313,6 +313,10 @@
             [self setVolume:xpoint forChannel:ichan outChannel:ochan];
         }
     }
+    if (levels)
+    {
+        free(levels);
+    }
 }
 
 -(NSDictionary *)saveData

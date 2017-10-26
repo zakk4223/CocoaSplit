@@ -333,6 +333,9 @@
     
     while (1)
     {
+        @autoreleasepool {
+            
+    
         if (self.layout.layoutTimingSource && self.layout.layoutTimingSource.videoInput && self.layout.layoutTimingSource.videoInput.canProvideTiming)
         {
             CSCaptureBase *newTiming = (CSCaptureBase *)self.layout.layoutTimingSource.videoInput;
@@ -377,11 +380,10 @@
 
         
         _frame_time = startTime;
-        @autoreleasepool {
-            
+
             [self newFrame];
-        }
         
+    }
     }
 }
 

@@ -43,7 +43,9 @@
     }
     
     
-    self.path = CGPathCreateCopyByTransformingPath(self.path, &useTransform);
+    CGPathRef newPath = CGPathCreateCopyByTransformingPath(self.path, &useTransform);
+    self.path = newPath;
+    CGPathRelease(newPath);
                                                 
 
 }
