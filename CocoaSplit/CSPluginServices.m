@@ -83,6 +83,8 @@
         [retArr addObject:accountName];
     }
     
+    CFRelease(resultArray);
+    
     return retArr;
 }
 

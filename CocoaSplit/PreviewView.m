@@ -1792,7 +1792,7 @@
 }
 
 
--(void)purgeConfigForInput:(InputSource *)src
+-(void)purgeConfigForInput:(NSObject<CSInputSourceProtocol> *)src
 {
     NSString *uuid = src.uuid;
     
@@ -1895,10 +1895,35 @@
     [self.activeConfigWindows setObject:configWindow forKey:uuid];
     [self.activeConfigControllers setObject:newViewController forKey:uuid];
 
+    configWindow.identifier = uuid;
+    
     [configWindow makeKeyAndOrderFront:nil];
-    
-    
 }
 
+
+-(void)windowWillClose:(NSNotification *)notification
+{
+    NSWindow *closedWindow = notification.object;
+    
+    if (closedWindow)
+    {
+        NSString *uuid = closedWindow.identifier;
+        NSWindow *cWindow = [self.activeConfigWindows objectForKey:uuid];
+        NSViewController *cController = [self.activeConfigControllers objectForKey:uuid];
+        
+        
+        if (cController)
+        {
+            [self.activeConfigControllers removeObjectForKey:uuid];
+        }
+        
+        if (cWindow)
+        {
+           [self.activeConfigWindows removeObjectForKey:uuid];
+        }
+        
+    }
+    
+}
 
 @end

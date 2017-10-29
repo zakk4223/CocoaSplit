@@ -3165,6 +3165,10 @@
     }
 }
 
+
+
+
+
 -(NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
     CAMultiAudioNode *audioNode = [self.audioInputsArrayController.arrangedObjects objectAtIndex:row];
