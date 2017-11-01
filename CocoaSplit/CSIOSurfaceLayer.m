@@ -658,6 +658,13 @@
 
 
 
+-(void)releaseCGLContext:(CGLContextObj)ctx
+{
+    NSLog(@"RELEASE CGL CONTEXT!");
+    CGLDestroyContext(ctx);
+}
+
+
 -(CGLContextObj)copyCGLContextForPixelFormat:(CGLPixelFormatObj)pf
 {
     CGLContextObj currCtx = CGLGetCurrentContext();

@@ -1664,7 +1664,7 @@
     [self setWantsLayer:YES];
     
     CGColorRef tmpColor = CGColorCreateGenericRGB(0.184314f, 0.309804f, 0.309804f, 1);
-    self.layer.backgroundColor = CGColorCreateGenericRGB(0.184314f, 0.309804f, 0.309804f, 1);
+    self.layer.backgroundColor = tmpColor;
     CGColorRelease(tmpColor);
     
     [self registerForDraggedTypes:@[@"cocoasplit.library.item",NSSoundPboardType,NSFilenamesPboardType, NSFilesPromisePboardType, NSFileContentsPboardType, @"cocoasplit.input.item", @"cocoasplit.audio.item"]];

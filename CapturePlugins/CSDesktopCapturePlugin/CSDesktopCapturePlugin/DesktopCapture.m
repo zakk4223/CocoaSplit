@@ -250,6 +250,8 @@
     
     NSDictionary *opts = @{(NSString *)kCGDisplayStreamQueueDepth : @8, (NSString *)kCGDisplayStreamMinimumFrameTime : minframetime, (NSString *)kCGDisplayStreamPreserveAspectRatio: @YES, (NSString *)kCGDisplayStreamShowCursor:@(self.showCursor), (NSString *)kCGDisplayStreamSourceRect: (__bridge NSDictionary *)rectDict};
     
+
+    CFRelease(rectDict);
     
     
 

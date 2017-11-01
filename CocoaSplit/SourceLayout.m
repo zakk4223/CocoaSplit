@@ -324,7 +324,7 @@
     @finally {*/
             [CATransaction commit];
 
-        //[CATransaction flush];
+       // [CATransaction flush];
     //}
     }
 }
@@ -700,7 +700,7 @@
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:useData];
     
     [unarchiver setDelegate:self];
-    
+
     NSObject *mergeObj = [unarchiver decodeObjectForKey:@"root"];
     [unarchiver finishDecoding];
     
@@ -1591,10 +1591,8 @@
 
 -(void)removeSourceData:(NSData *)toRemove usingScripts:(bool)usingScripts withCompletionBlock:(void (^)(void))completionBlock
 {
-    
-    
-    NSDictionary *diffResult = [self diffSourceListWithData:toRemove];
-    
+    NSDictionary *diffResult = nil;
+    diffResult = [self diffSourceListWithData:toRemove];
     NSMutableArray *realRemove = [NSMutableArray array];
     
     NSArray *changedInputs = diffResult[@"changed"];
@@ -1610,7 +1608,7 @@
     JSContext *jCtx = [JSContext currentContext];
     
     NSString *blockUUID = [CATransaction valueForKey:@"__CS_BLOCK_UUID__"];
-        
+    
     for (NSObject<CSInputSourceProtocol> *src in removeInputs)
     {
         NSObject<CSInputSourceProtocol> *mSrc = [self inputForUUID:src.uuid];
@@ -1731,7 +1729,7 @@
     [CATransaction begin];
     [CATransaction setCompletionBlock:^{
         
-        
+        @autoreleasepool {
         for (NSObject<CSInputSourceProtocol> *rSrc in realRemove)
         {
             [self decrementInputRef:rSrc];
@@ -1741,6 +1739,7 @@
         if (completionBlock)
         {
             completionBlock();
+        }
         }
     }];
     

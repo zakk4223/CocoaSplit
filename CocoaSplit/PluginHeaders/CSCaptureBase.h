@@ -118,7 +118,7 @@ typedef enum frame_render_behavior_t {
 
 //Class method to run code that messes with the CALayer(s). It has to be on the main thread even if it isn't in a view :(
 //All this method does is dispatch_sync to the main thread OR run the block immediately if we're already on the main thread
-+(void) layoutModification:(void (^)())modBlock;
++(void) layoutModification:(void (^)(void))modBlock;
 
 
 /* If the video source has a size, return it here. Called to size an input when it is first added. The default is NSZeroSize. If your input has no well-defined size just don't bother implementing this */

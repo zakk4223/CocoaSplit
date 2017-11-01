@@ -550,6 +550,8 @@ static NSArray *_sourceTypes = nil;
 -(void)commonInit
 {
 
+    NSLog(@"COMMON INIT %@", self);
+    
     [CATransaction begin];
     self.name = nil;
     _nextImageTime = 0.0f;
@@ -1345,6 +1347,7 @@ static NSArray *_sourceTypes = nil;
 {
     
     NSLog(@"DEALLOC GOD DAMNIT %@", self);
+    
     [self deregisterVideoInput:self.videoInput];
     for(id vInput in self.videoSources)
     {
@@ -1352,6 +1355,7 @@ static NSArray *_sourceTypes = nil;
     }
     
     [self stopObservingConstraintKeys];
+    self.layer = nil;
     
     
 }
