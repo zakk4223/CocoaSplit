@@ -223,7 +223,8 @@
 
 -(CVPixelBufferRef)currentImg
 {
-    
+    [CATransaction begin];
+
     if (!self.layout)
     {
         return NULL;
@@ -274,9 +275,7 @@
     CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, _cvpool, &destFrame);
     
 
-    [CATransaction begin];
     [self renderToSurface:CVPixelBufferGetIOSurface(destFrame)];
-    [CATransaction commit];
 
     
     @synchronized(self)
@@ -289,7 +288,8 @@
         _currentPB = destFrame;
     }
     
-    
+    [CATransaction commit];
+
     return _currentPB;
 }
 

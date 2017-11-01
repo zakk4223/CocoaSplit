@@ -256,6 +256,7 @@
 -(void)frameTick
 {
 
+    
     if (!_xLayer && !_yLayer)
     {
         _xLayer = [CAReplicatorLayer layer];
