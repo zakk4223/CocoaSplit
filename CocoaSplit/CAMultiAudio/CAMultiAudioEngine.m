@@ -142,7 +142,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     NSMutableDictionary *saveInputSettings = [NSMutableDictionary dictionary];
     
-    
     for (CAMultiAudioInput *node in self.audioInputs)
     {
         NSString *deviceUID = node.nodeUID;
@@ -252,12 +251,14 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     CAMultiAudioEngine *__weak blockSelf = self;
     
     //dispatch_async(dispatch_get_main_queue(), ^{
-        
+    
+    @synchronized(self) {
         for(CAMultiAudioNode *node in blockSelf.audioInputs)
         {
             [node updatePowerlevel];
         }
-   // });
+        // });
+    }
     
     
     
@@ -367,15 +368,18 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     if ([removedDev hasMediaType:AVMediaTypeAudio])
     {
-        NSUInteger selectedIdx = [self.audioInputs indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-            if ([obj isKindOfClass:[CAMultiAudioAVCapturePlayer class]])
-            {
-                CAMultiAudioAVCapturePlayer *testObj = obj;
-                return testObj.captureDevice.uniqueID == removedDev.uniqueID;
-            }
-            return NO;
-        }];
+        NSUInteger selectedIdx = NSNotFound;
         
+        @synchronized(self) {
+            selectedIdx = [self.audioInputs indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+                if ([obj isKindOfClass:[CAMultiAudioAVCapturePlayer class]])
+                {
+                    CAMultiAudioAVCapturePlayer *testObj = obj;
+                    return testObj.captureDevice.uniqueID == removedDev.uniqueID;
+                }
+                return NO;
+            }];
+        }
         if (selectedIdx != NSNotFound)
         {
             [self removeObjectFromAudioInputsAtIndex:selectedIdx];
@@ -391,15 +395,17 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     if ([newDev hasMediaType:AVMediaTypeAudio])
     {
-        NSUInteger selectedIdx = [self.audioInputs indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-            if ([obj isKindOfClass:[CAMultiAudioAVCapturePlayer class]])
-            {
-                CAMultiAudioAVCapturePlayer *testObj = obj;
-                return testObj.captureDevice.uniqueID == newDev.uniqueID;
-            }
-            return NO;
-        }];
-        
+        NSUInteger selectedIdx = NSNotFound;
+        @synchronized(self) {
+            selectedIdx = [self.audioInputs indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+                if ([obj isKindOfClass:[CAMultiAudioAVCapturePlayer class]])
+                {
+                    CAMultiAudioAVCapturePlayer *testObj = obj;
+                    return testObj.captureDevice.uniqueID == newDev.uniqueID;
+                }
+                return NO;
+            }];
+        }
         if (selectedIdx == NSNotFound)
         {
             CAMultiAudioAVCapturePlayer *avplayer = [[CAMultiAudioAVCapturePlayer alloc] initWithDevice:newDev withFormat:self.graph.graphAsbd];
@@ -733,7 +739,11 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 -(void)removeInput:(CAMultiAudioInput *)toRemove
 {
-    NSUInteger index = [self.audioInputs indexOfObject:toRemove];
+    NSUInteger index = NSNotFound;
+    @synchronized(self) {
+        index = [self.audioInputs indexOfObject:toRemove];
+    }
+    
     if (index != NSNotFound)
     {
         NSMutableDictionary *saveSettings = [NSMutableDictionary dictionary];
@@ -789,35 +799,42 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 -(CAMultiAudioInput *)inputForUUID:(NSString *)uuid
 {
-    for(CAMultiAudioInput *node in self.audioInputs)
-    {
-        if ([node.nodeUID isEqualToString:uuid])
+    @synchronized(self) {
+        for(CAMultiAudioInput *node in self.audioInputs)
         {
-            return node;
+            if ([node.nodeUID isEqualToString:uuid])
+            {
+                return node;
+            }
         }
     }
-    
     return nil;
 }
 
 
 -(void)addAudioInputsObject:(CAMultiAudioNode *)object
 {
+    
     [self insertObject:object inAudioInputsAtIndex:self.audioInputs.count];
 }
 
 -(void)insertObject:(CAMultiAudioNode *)object inAudioInputsAtIndex:(NSUInteger)index
 {
-    [_audioInputs insertObject:object atIndex:index];
+    @synchronized(self) {
+        [_audioInputs insertObject:object atIndex:index];
+    }
 
 }
 
 
 -(void)removeObjectFromAudioInputsAtIndex:(NSUInteger)index
 {
-    if (index < self.audioInputs.count)
+    @synchronized(self)
     {
-        [self.audioInputs removeObjectAtIndex:index];
+        if (index < self.audioInputs.count)
+        {
+            [self.audioInputs removeObjectAtIndex:index];
+        }
     }
 }
 

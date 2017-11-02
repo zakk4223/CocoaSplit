@@ -277,7 +277,8 @@
 
     [self renderToSurface:CVPixelBufferGetIOSurface(destFrame)];
 
-    
+    [CATransaction commit];
+
     @synchronized(self)
     {
         if (_currentPB)
@@ -288,7 +289,6 @@
         _currentPB = destFrame;
     }
     
-    [CATransaction commit];
 
     return _currentPB;
 }
