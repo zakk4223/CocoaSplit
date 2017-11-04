@@ -50,8 +50,8 @@
 -(void)willConnectNode:(CAMultiAudioNode *)node toBus:(UInt32)toBus;
 -(void)willInitializeNode;
 -(void)didInitializeNode;
--(void)setInputStreamFormat:(AudioStreamBasicDescription *)format;
--(void)setOutputStreamFormat:(AudioStreamBasicDescription *)format;
+-(bool)setInputStreamFormat:(AudioStreamBasicDescription *)format;
+-(bool)setOutputStreamFormat:(AudioStreamBasicDescription *)format;
 
 -(void)resetSamplerate:(UInt32)sampleRate;
 -(void)resetFormat:(AudioStreamBasicDescription *)format;

@@ -136,6 +136,7 @@
         if (err)
         {
             NSLog(@"AudioUnitInitialize failed for node %@ with status %d", newNode, err);
+            return NO;
         }
         
         [newNode didInitializeNode];

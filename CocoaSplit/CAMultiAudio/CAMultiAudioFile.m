@@ -346,17 +346,19 @@
     }
 }
 
--(void)setInputStreamFormat:(AudioStreamBasicDescription *)format
+-(bool)setInputStreamFormat:(AudioStreamBasicDescription *)format
 {
-    return;
+    return YES;
 }
 
--(void)setOutputStreamFormat:(AudioStreamBasicDescription *)format
+-(bool)setOutputStreamFormat:(AudioStreamBasicDescription *)format
 {
-    [super setOutputStreamFormat:format];
+    
+    
+    bool ret = [super setOutputStreamFormat:format];
     
     _outputSampleRate = format->mSampleRate;
-    return;
+    return ret;
 }
 
 -(void)dealloc

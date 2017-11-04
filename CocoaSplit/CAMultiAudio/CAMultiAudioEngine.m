@@ -623,6 +623,109 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 }
 
 
+
+-(bool)attachInputCommon:(CAMultiAudioInput *)input
+{
+    bool ret;
+    
+    CAMultiAudioNode *graphInput = input;
+    if (graphInput.downstreamNode)
+    {
+        graphInput = graphInput.downstreamNode;
+    }
+    
+    ret = [self.graph addNode:graphInput];
+    
+    if (!ret)
+    {
+        NSLog(@"ADD NODE %@ FAILED", graphInput);
+        return NO;
+    }
+    
+    CAMultiAudioEqualizer *eq = [[CAMultiAudioEqualizer alloc] init];
+    
+    CAMultiAudioDownmixer *dmix = [[CAMultiAudioDownmixer alloc] initWithInputChannels:input.channelCount];
+    
+    ret = [self.graph addNode:dmix];
+    if (!ret)
+    {
+        NSLog(@"ADD MIXER %@ failed", dmix);
+        [self disconnectInputNode:input];
+        return NO;
+    }
+    
+    input.downMixer = dmix;
+    ret = [self.graph addNode:eq];
+    if (!ret)
+    {
+        NSLog(@"ADD EQ %@ failed", eq);
+        [self disconnectInputNode:input];
+        return NO;
+    }
+    
+    input.equalizer = eq;
+    
+    if (![self.graph connectNode:eq toNode:self.encodeMixer])
+    {
+        NSLog(@"CONNECT EQ TO ENCODE FAILED");
+        [self disconnectInputNode:input];
+        return NO;
+    }
+    
+    
+
+    
+    
+    CAMultiAudioNode *connectNode = eq;
+    CAMultiAudioDelay *delayNode = nil;
+    
+    for(int i=0; i < 5; i++)
+    {
+        delayNode = [[CAMultiAudioDelay alloc] init];
+        //delayNode.channelCount = input.channelCount;
+        ret = [self.graph addNode:delayNode];
+        if (!ret)
+        {
+            NSLog(@"ADD DELAY %@ (%d) failed %d", delayNode, i, input.channelCount);
+            [self disconnectInputNode:input];
+            return NO;
+        }
+        ret = [self.graph connectNode:delayNode toNode:connectNode];
+        if (!ret)
+        {
+            NSLog(@"CONNECT DELAY %@ (%d) failed", delayNode, i);
+
+            [self.graph removeNode:delayNode];
+            [self disconnectInputNode:input];
+            return NO;
+        }
+        connectNode = delayNode;
+        [input.delayNodes addObject:delayNode];
+    }
+    
+    if (![self.graph connectNode:dmix toNode:connectNode])
+    {
+        
+        NSLog(@"CONNECT EQ/DMIX FAILED");
+        [self disconnectInputNode:input];
+        return NO;
+    }
+    
+    if (![self.graph connectNode:graphInput toNode:dmix])
+    {
+        NSLog(@"LAST CONNECT FAILED %@", graphInput);
+        [self disconnectInputNode:input];
+        return NO;
+    }
+    
+    
+    
+
+
+    return YES;
+}
+
+
 -(void)attachPCMInput:(CAMultiAudioPCMPlayer *)input
 {
     CAMultiAudioConverter *newConverter = [[CAMultiAudioConverter alloc] initWithInputFormat:input.inputFormat];
@@ -640,77 +743,22 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 }
 
 
--(void)reattachInput:(CAMultiAudioInput *)input
+-(bool)reattachInput:(CAMultiAudioInput *)input
 {
     
-    
-    [self.graph addNode:input];
-    CAMultiAudioEqualizer *eq = [[CAMultiAudioEqualizer alloc] init];
-
-    CAMultiAudioDownmixer *dmix = [[CAMultiAudioDownmixer alloc] initWithInputChannels:input.channelCount];
-    [self.graph addNode:dmix];
-    [self.graph addNode:eq];
-    [self.graph connectNode:eq toNode:self.encodeMixer];
-    [self.graph connectNode:dmix toNode:eq];
-    input.equalizer = eq;
-
-    //[self.graph connectNode:dmix toNode:self.encodeMixer];
-    
-    CAMultiAudioNode *connectNode = dmix;
-    CAMultiAudioDelay *delayNode = nil;
-    
-    for(int i=0; i < 5; i++)
-    {
-        delayNode = [[CAMultiAudioDelay alloc] init];
-        [self.graph addNode:delayNode];
-        [self.graph connectNode:delayNode toNode:connectNode];
-        connectNode = delayNode;
-        [input.delayNodes addObject:delayNode];
-    }
-    
-    
-    [self.graph connectNode:input toNode:connectNode];
-    
-    input.downMixer = dmix;
-
+    return [self attachInputCommon:input];
 }
 
--(void)attachInput:(CAMultiAudioInput *)input
+-(bool)attachInput:(CAMultiAudioInput *)input
 {
     
-    CAMultiAudioNode *graphInput = input;
-    if (graphInput.downstreamNode)
+    
+    bool ret = [self attachInputCommon:input];
+    if (!ret)
     {
-        graphInput = graphInput.downstreamNode;
+        return NO;
     }
     
-    [self.graph addNode:graphInput];
-    
-    CAMultiAudioEqualizer *eq = [[CAMultiAudioEqualizer alloc] init];
-    
-    CAMultiAudioDownmixer *dmix = [[CAMultiAudioDownmixer alloc] initWithInputChannels:input.channelCount];
-    [self.graph addNode:dmix];
-    [self.graph addNode:eq];
-    input.equalizer = eq;
-    [self.graph connectNode:eq toNode:self.encodeMixer];
-    [self.graph connectNode:dmix toNode:eq];
-
-    CAMultiAudioNode *connectNode = dmix;
-    CAMultiAudioDelay *delayNode = nil;
-
-    for(int i=0; i < 5; i++)
-    {
-        delayNode = [[CAMultiAudioDelay alloc] init];
-        [self.graph addNode:delayNode];
-        [self.graph connectNode:delayNode toNode:connectNode];
-        connectNode = delayNode;
-        [input.delayNodes addObject:delayNode];
-    }
-    
-    
-    [self.graph connectNode:graphInput toNode:connectNode];
-    
-    input.downMixer = dmix;
     
     if (input.nodeUID && !input.noSettings)
     {
@@ -731,9 +779,39 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         });
     }
 
+    return YES;
+    
+}
 
+
+-(bool)disconnectInputNode:(CAMultiAudioInput *)disconnectNode
+{
+    
+    CAMultiAudioDownmixer *dmix = disconnectNode.downMixer;
+    CAMultiAudioEqualizer *rEq = disconnectNode.equalizer;
+    disconnectNode.downMixer = nil;
+    
+    [self.graph disconnectNode:disconnectNode];
+    
+    NSArray *delayNodes = disconnectNode.delayNodes.copy;
+    for (CAMultiAudioDelay *dNode in [delayNodes reverseObjectEnumerator])
+    {
+        [self.graph removeNode:dNode];
+        [disconnectNode.delayNodes removeObject:dNode];
+    }
     
     
+    if (dmix)
+    {
+        [self.graph disconnectNode:dmix];
+    }
+    
+    if (rEq)
+    {
+        [self.graph disconnectNode:rEq];
+    }
+    
+    return YES;
 }
 
 
@@ -761,31 +839,9 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         
         
         
-        CAMultiAudioDownmixer *dmix = toRemove.downMixer;
-        CAMultiAudioEqualizer *rEq = toRemove.equalizer;
+        [self disconnectInputNode:toRemove];
         toRemove.downMixer = nil;
-        
-        [self.graph removeNode:toRemove];
-        
-        NSArray *delayNodes = toRemove.delayNodes.copy;
-        for (CAMultiAudioDelay *dNode in [delayNodes reverseObjectEnumerator])
-        {
-            [self.graph removeNode:dNode];
-            [toRemove.delayNodes removeObject:dNode];
-        }
-        
-        
-        if (dmix)
-        {
-            [self.graph removeNode:dmix];
-        }
-        
-        if (rEq)
-        {
-            [self.graph removeNode:rEq];
-        }
-        
-        
+        toRemove.equalizer = nil;
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self removeObjectFromAudioInputsAtIndex:index];

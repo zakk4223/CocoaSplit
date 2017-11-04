@@ -145,30 +145,35 @@
     return YES;
 }
 
--(void)setInputStreamFormat:(AudioStreamBasicDescription *)format
+-(bool)setInputStreamFormat:(AudioStreamBasicDescription *)format
 {
     
     OSStatus err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 0, format, sizeof(AudioStreamBasicDescription));
     if (err)
     {
         NSLog(@"Failed to set StreamFormat for input %@ in willInitializeNode: %d", self, err);
+        return NO;
     }
+    
+    return YES;
 }
 
 
--(void)setOutputStreamFormat:(AudioStreamBasicDescription *)format
+-(bool)setOutputStreamFormat:(AudioStreamBasicDescription *)format
 {
     AudioStreamBasicDescription casbd;
     
     memcpy(&casbd, format, sizeof(casbd));
     casbd.mChannelsPerFrame = self.channelCount;
-    
     OSStatus err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 0, &casbd, sizeof(AudioStreamBasicDescription));
     
     if (err)
     {
         NSLog(@"Failed to set StreamFormat for output on node %@ with %d", self, err);
+        return NO;
     }
+    
+    return YES;
 
 }
 

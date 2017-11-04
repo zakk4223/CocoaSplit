@@ -174,13 +174,17 @@
 }
 
 
--(void)setOutputStreamFormat:(AudioStreamBasicDescription *)format
+-(bool)setOutputStreamFormat:(AudioStreamBasicDescription *)format
 {
-    [super setOutputStreamFormat:format];
+    bool ret =     [super setOutputStreamFormat:format];
+
     self.outputChannelCount = format->mChannelsPerFrame;
-    
+
+    return ret;
 }
--(void)setInputStreamFormat:(AudioStreamBasicDescription *)format
+
+
+-(bool)setInputStreamFormat:(AudioStreamBasicDescription *)format
 {
     
     
@@ -191,7 +195,7 @@
     fCopy.mChannelsPerFrame = _inputChannels;
     
     
-    [super setInputStreamFormat:&fCopy];
+    return [super setInputStreamFormat:&fCopy];
 }
 
 -(void)didInitializeNode

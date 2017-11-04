@@ -34,28 +34,36 @@
 
 
 
--(void)setInputStreamFormat:(AudioStreamBasicDescription *)format
+-(bool)setInputStreamFormat:(AudioStreamBasicDescription *)format
 {
+    
+    bool ret = NO;
     if (&_inputFormat)
     {
-        [super setInputStreamFormat:&_inputFormat];
+        ret = [super setInputStreamFormat:&_inputFormat];
     } else {
-        [super setInputStreamFormat:format];
+        ret = [super setInputStreamFormat:format];
     }
+    
+    return ret;
 }
 
 
--(void)setOutputStreamFormat:(AudioStreamBasicDescription *)format
+
+-(bool)setOutputStreamFormat:(AudioStreamBasicDescription *)format
 {
     //ignore if we have our own
     
+    bool ret = NO;
     if (self.outputFormat)
     {
         
-        [super setOutputStreamFormat:self.outputFormat];
+        ret = [super setOutputStreamFormat:self.outputFormat];
     } else {
-        [super setOutputStreamFormat:format];
+        ret = [super setOutputStreamFormat:format];
     }
+    
+    return ret;
 }
 
 

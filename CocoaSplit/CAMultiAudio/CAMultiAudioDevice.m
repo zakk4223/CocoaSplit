@@ -70,16 +70,16 @@
 
 
 
--(void)setInputStreamFormat:(AudioStreamBasicDescription *)format
+-(bool)setInputStreamFormat:(AudioStreamBasicDescription *)format
 {
-    [super setInputStreamFormat:[self getOutputFormat]];
+    return [super setInputStreamFormat:[self getOutputFormat]];
     
 }
 
 
--(void)setOutputStreamFormat:(AudioStreamBasicDescription *)format
+-(bool)setOutputStreamFormat:(AudioStreamBasicDescription *)format
 {
-    return;
+    return YES;
 }
 
 
