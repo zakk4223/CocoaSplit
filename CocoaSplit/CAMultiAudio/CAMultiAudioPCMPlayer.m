@@ -80,7 +80,7 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
             @autoreleasepool {
             int32_t availBytes;
             void *pcmPtr = NULL;
-            while (pcmPtr = TPCircularBufferTail(&_completedBuffer, &availBytes))
+            while ((pcmPtr = TPCircularBufferTail(&_completedBuffer, &availBytes)))
             {
                 struct cspcm_buffer_msg *cMsg = pcmPtr;
                 

@@ -415,7 +415,7 @@
 }
 
 
-+(void) layoutModification:(void (^)())modBlock
++(void) layoutModification:(void (^)(void))modBlock
 {
     //On main thread already, just execute the block, otherwise execute on main and wait
     if ([NSThread isMainThread])

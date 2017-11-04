@@ -790,6 +790,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
             [input restoreDataFromDict:settings];
         }
     }
+    
+    return YES;
 }
 
 

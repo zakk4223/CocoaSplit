@@ -46,7 +46,7 @@
 }
 
 
--(void)executeWithSequence:(CSLayoutSequence *)sequencer usingCompletionBlock:(void (^)())completionBlock
+-(void)executeWithSequence:(CSLayoutSequence *)sequencer usingCompletionBlock:(void (^)(void))completionBlock
 {
     completionBlock();
 }

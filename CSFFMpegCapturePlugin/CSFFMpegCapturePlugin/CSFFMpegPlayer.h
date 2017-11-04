@@ -58,8 +58,8 @@ typedef enum ff_movie_repeat_t {
 @property (assign) AudioStreamBasicDescription *asbd;
 
 @property (copy, nonatomic) void (^itemStarted)(CSFFMpegInput *);
-@property (copy, nonatomic) void (^pauseStateChanged)();
-@property (copy, nonatomic) void (^queueStateChanged)();
+@property (copy, nonatomic) void (^pauseStateChanged)(void);
+@property (copy, nonatomic) void (^queueStateChanged)(void);
 
 
 @property (assign) double lastVideoTime;

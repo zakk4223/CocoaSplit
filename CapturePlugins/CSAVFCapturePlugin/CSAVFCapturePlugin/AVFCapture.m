@@ -360,9 +360,11 @@
                     [((CSIOSurfaceLayer *)layer) setNeedsDisplay];
                 }*/
                 
-                IOSurfaceRef vFIO = CVPixelBufferGetIOSurface(videoFrame);
+                //IOSurfaceRef vFIO = CVPixelBufferGetIOSurface(videoFrame);
                 
-                layer.contents = (__bridge id _Nullable)(vFIO);
+                //layer.contents = (__bridge id _Nullable)(vFIO);
+                layer.contents = (__bridge id _Nullable)(videoFrame);
+                
                 
 
             }];

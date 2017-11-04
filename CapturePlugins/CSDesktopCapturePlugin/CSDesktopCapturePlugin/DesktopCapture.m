@@ -97,9 +97,10 @@
     if (self.renderType == kCSRenderOnFrameTick)
     {
         
+        /*
         [self updateLayersWithBlock:^(CALayer *layer) {
             [((CSIOSurfaceLayer *)layer) setNeedsDisplay];
-        }];
+        }];*/
     }
     
 }
@@ -108,7 +109,8 @@
 -(CALayer *)createNewLayer
 {
     
-    //return [CALayer layer];
+    return [CALayer layer];
+    /*
     CSIOSurfaceLayer *newLayer = [CSIOSurfaceLayer layer];
     
     if (self.renderType == kCSRenderAsync)
@@ -119,6 +121,7 @@
     }
     
     return newLayer;
+     */
 }
 
 
@@ -156,12 +159,12 @@
         asyncValue = YES;
     }
     
-    
+    /*
     [self updateLayersWithBlock:^(CALayer *layer) {
         
         ((CSIOSurfaceLayer *)layer).asynchronous = asyncValue;
     }];
-    
+    */
     _renderType = renderType;
 }
 
@@ -293,14 +296,17 @@
             
             [strongSelf updateLayersWithFramedataBlock:^(CALayer *layer) {
 
-                ((CSIOSurfaceLayer *)layer).ioSurface = frameSurface;
+                layer.contents = (__bridge id _Nullable)(frameSurface);
+                
+                
+                //((CSIOSurfaceLayer *)layer).ioSurface = frameSurface;
                 if (self.renderType == kCSRenderFrameArrived)
                 {
                     
                     
                     //dispatch through the main queue because otherwise the display stream events bounce between threads and confuse core animation
                   //dispatch_async(dispatch_get_main_queue(), ^{
-                        [((CSIOSurfaceLayer *)layer) setNeedsDisplay];
+                        //[((CSIOSurfaceLayer *)layer) setNeedsDisplay];
                 // });
                 }
 

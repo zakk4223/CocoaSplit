@@ -107,7 +107,6 @@
     
     if (matchedAction)
     {
-        NSMutableString *scriptSrc = [NSMutableString string];
         
         if (matchedAction.targetName)
         {

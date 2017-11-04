@@ -18,7 +18,7 @@
 @property (strong) NSString *animationCode;
 @property (strong) NSString *lastRunUUID;
 
--(void)runSequenceForLayout:(SourceLayout *)layout withCompletionBlock:(void (^)())completionBlock withExceptionBlock:(void (^)(NSException *exception))exceptionBlock;
+-(void)runSequenceForLayout:(SourceLayout *)layout withCompletionBlock:(void (^)(void))completionBlock withExceptionBlock:(void (^)(NSException *exception))exceptionBlock;
 -(void)cancelSequence;
 
 @end
