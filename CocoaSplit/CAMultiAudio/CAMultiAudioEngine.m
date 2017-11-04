@@ -131,15 +131,9 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 }
 
 
--(void)encodeWithCoder:(NSCoder *)aCoder
+
+-(NSDictionary *)createInputSettings
 {
-    [aCoder encodeInt32:self.sampleRate forKey:@"sampleRate"];
-    [aCoder encodeObject:self.outputNode.deviceUID forKey:@"selectedAudioId"];
-    [aCoder encodeFloat:self.encodeMixer.volume forKey:@"streamVolume"];
-    [aCoder encodeBool:self.encodeMixer.muted forKey:@"streamMuted"];
-    [aCoder encodeFloat:self.previewMixer.volume forKey:@"previewVolume"];
-    [aCoder encodeBool:self.previewMixer.muted forKey:@"previewMuted"];
-    
     NSMutableDictionary *saveInputSettings = [NSMutableDictionary dictionary];
     
     for (CAMultiAudioInput *node in self.audioInputs)
@@ -156,7 +150,21 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         }
     }
     
+    return saveInputSettings;
+}
+
+
+-(void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeInt32:self.sampleRate forKey:@"sampleRate"];
+    [aCoder encodeObject:self.outputNode.deviceUID forKey:@"selectedAudioId"];
+    [aCoder encodeFloat:self.encodeMixer.volume forKey:@"streamVolume"];
+    [aCoder encodeBool:self.encodeMixer.muted forKey:@"streamMuted"];
+    [aCoder encodeFloat:self.previewMixer.volume forKey:@"previewVolume"];
+    [aCoder encodeBool:self.previewMixer.muted forKey:@"previewMuted"];
     
+    NSDictionary *saveInputSettings = [self generateInputSettings];
+
     NSDictionary *eqdata = [self.equalizer saveData];
     [aCoder encodeObject:eqdata forKey:@"equalizerData"];
     
@@ -295,7 +303,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     }
     
     
-    if (!self.graphOutputNode)
+    //if (!self.graphOutputNode)
     {
         self.graphOutputNode = self.outputNode;
         
@@ -312,6 +320,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     if ([self.graphOutputNode respondsToSelector:@selector(setOutputForDevice)])
     {
+        NSLog(@"SET OUTPUT NODE");
         [self.graphOutputNode setOutputForDevice];
     }
     
@@ -470,8 +479,24 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     }
     */
     
+    float emVolume = self.encodeMixer.volume;
+    bool emMuted = self.encodeMixer.muted;
+    float pmVolume = self.previewMixer.volume;
+    bool pmMuted = self.previewMixer.muted;
+    
+    NSDictionary *eqData = [self.equalizer saveData];
+    _inputSettings = [self generateInputSettings];
+    
     self.graph = nil;
     [self buildGraph];
+    
+    self.encodeMixer.volume = emVolume;
+    self.encodeMixer.muted = emMuted;
+    self.previewMixer.volume = pmVolume;
+    self.previewMixer.muted = pmMuted;
+    [self.equalizer restoreData:eqData];
+    
+    
     
     for (CAMultiAudioInput *node in self.audioInputs)
     {
@@ -511,6 +536,10 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         //It's easier to just rebuild the graph instead of trying to splunk through all the nodes and connections
         //to change them all.
         [self resetEngine];
+        if (self.graph)
+        {
+            CAShow(self.graph.graphInst);
+        }
     }
     
 }
@@ -679,6 +708,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     CAMultiAudioNode *connectNode = eq;
     CAMultiAudioDelay *delayNode = nil;
     
+    
     for(int i=0; i < 5; i++)
     {
         delayNode = [[CAMultiAudioDelay alloc] init];
@@ -746,8 +776,23 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 -(bool)reattachInput:(CAMultiAudioInput *)input
 {
     
-    return [self attachInputCommon:input];
+    bool ret = [self attachInputCommon:input];
+    if (!ret)
+    {
+        return NO;
+    }
+    
+    if (input.nodeUID && !input.noSettings)
+    {
+        NSDictionary *settings = [_inputSettings valueForKey:input.nodeUID];
+        if (settings)
+        {
+            [input restoreDataFromDict:settings];
+        }
+    }
 }
+
+
 
 -(bool)attachInput:(CAMultiAudioInput *)input
 {
