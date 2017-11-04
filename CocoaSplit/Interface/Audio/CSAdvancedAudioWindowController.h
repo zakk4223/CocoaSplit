@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "CaptureController.h"
-@interface CSAdvancedAudioWindowController : NSWindowController
+@interface CSAdvancedAudioWindowController : NSWindowController <NSWindowDelegate>
 
 
 @property (weak) CaptureController *controller;

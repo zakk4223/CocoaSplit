@@ -48,6 +48,8 @@
     {
         self.eqWindow = [[NSWindow alloc] initWithContentRect:nodeView.frame styleMask:NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask|NSResizableWindowMask backing:NSBackingStoreBuffered defer:NO];
         
+        self.eqWindow.delegate = self;
+        [self.eqWindow setReleasedWhenClosed:NO];
         [self.eqWindow center];
         [self.eqWindow setContentView:nodeView];
         [self.eqWindow makeKeyAndOrderFront:NSApp];
@@ -55,8 +57,15 @@
     
 }
 
-
-
+-(void)windowWillClose:(NSNotification *)notification
+{
+    
+    NSWindow *closingWindow = [notification object];
+    if (closingWindow && self.eqWindow == closingWindow)
+    {
+        self.eqWindow = nil;
+    }
+}
 -(NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
     

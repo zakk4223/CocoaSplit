@@ -10,7 +10,7 @@
 #import "CAMultiAudioDownmixer.h"
 #import "CAMultiAudioInput.h"
 
-@interface CAMultiAudioMatrixMixerWindowController : NSWindowController <NSTableViewDataSource, NSTableViewDelegate>
+@interface CAMultiAudioMatrixMixerWindowController : NSWindowController <NSTableViewDataSource, NSTableViewDelegate, NSWindowDelegate>
 
 @property (weak) IBOutlet NSTableView *matrixTable;
 @property (strong) CAMultiAudioInput *audioNode;
