@@ -101,6 +101,7 @@
 {
     if (self.compressor)
     {
+        NSLog(@"REMOVING COMPRESSOR");
         [self.compressor removeOutput:self];
     }
 }
@@ -179,10 +180,8 @@
             
             if (self.assignedLayout && ![self.assignedLayout isEqual:[NSNull null]] && streamingActive)
             {
-                NSLog(@"START RECORDING");
                 [[CaptureController sharedCaptureController] startRecordingLayout:self.assignedLayout usingOutput:self];
             } else {
-                NSLog(@"SETUP");
                 [self setup];
                 
             }
@@ -215,6 +214,7 @@
 {
     _output_prepared = NO;
     
+    NSLog(@"RESET");
     self.buffer_draining = NO;
     [_delayBuffer removeAllObjects];
     [self initStatsValues];
@@ -222,7 +222,6 @@
     {
         if (self.errored)
         {
-            //errors jump the queue and just kill the ffmpeg output
             [self.ffmpeg_out stopProcess];
             self.ffmpeg_out = nil;
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -466,6 +465,12 @@
 
 -(bool) resetOutputIfNeeded
 {
+    
+    if (self.ffmpeg_out && self.ffmpeg_out.errored)
+    {
+        return YES;
+    }
+    
     if ([CaptureController sharedCaptureController].maxOutputDropped)
     {
         if (_consecutive_dropped_frames >= [CaptureController sharedCaptureController].maxOutputDropped)
@@ -654,6 +659,7 @@
 
 -(void)dealloc
 {
+    NSLog(@"DEALLOC");
     [self stopCompressor];
     
     if (self.ffmpeg_out)

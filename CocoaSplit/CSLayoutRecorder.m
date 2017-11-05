@@ -94,6 +94,7 @@
 
 -(void)stopRecordingForOutput:(OutputDestination *)output
 {
+    NSLog(@"STOP RECORDING");
     OutputDestination *useOut;
     
     for (OutputDestination *tmpOut in self.outputs)
@@ -109,6 +110,7 @@
         useOut.captureRunning = NO;
 
         [useOut stopOutput];
+        NSLog(@"RESETTING OUTPUT");
         [useOut reset];
         
         [self.outputs removeObject:useOut];

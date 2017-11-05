@@ -287,6 +287,8 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         
             CMBlockBufferGetDataPointer(blockBufferRef, 0, &offset_length, &buffer_length, &sampledata);
         
+        
+        
             pkt.data = (uint8_t *)sampledata;
         
             pkt.size = (int)buffer_length;
@@ -297,7 +299,8 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
             pkt.pts = av_rescale_q(pts.value, (AVRational) {1.0, pts.timescale}, _av_audio_stream->time_base);
 
 
-            
+        
+        
             
             if (av_interleaved_write_frame(_av_fmt_ctx, &pkt) < 0)
             {
@@ -343,15 +346,19 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     NSLog(@"Creating output format %@ DESTINATION %@", _stream_format, _stream_output);
     AVOutputFormat *av_out_fmt;
     
+    int avErr = 0;
     
     if (_stream_format) {
-        avformat_alloc_output_context2(&_av_fmt_ctx, NULL, [_stream_format UTF8String], [_stream_output UTF8String]);
+        avErr = avformat_alloc_output_context2(&_av_fmt_ctx, NULL, [_stream_format UTF8String], [_stream_output UTF8String]);
     } else {
-        avformat_alloc_output_context2(&_av_fmt_ctx, NULL, NULL, [_stream_output UTF8String]);
+        avErr = avformat_alloc_output_context2(&_av_fmt_ctx, NULL, NULL, [_stream_output UTF8String]);
     }
+    
+    NSLog(@"AV ERR %d", avErr);
     
     if (!_av_fmt_ctx)
     {
+        NSLog(@"NO FMT CTX");
         return NO;
     }
     
@@ -364,6 +371,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
     if (!_av_video_stream)
     {
+        NSLog(@"VIDEO STREAM SETUP FAIL");
         return NO;
     }
     
@@ -488,9 +496,11 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     }
         if (_av_fmt_ctx == NULL || avformat_write_header(_av_fmt_ctx, NULL) < 0)
     {
+ 
         NSLog(@"AVFORMAT_WRITE_HEADER failed");
         self.errored = YES;
         [self stopProcess];
+        return NO;
     }
     
     self.init_done = YES;
@@ -683,7 +693,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
     if (_av_fmt_ctx)
     {
-        if (_av_fmt_ctx->pb)
+        if (_av_fmt_ctx->pb && !self.errored)
         {
             av_write_trailer(_av_fmt_ctx);
         }

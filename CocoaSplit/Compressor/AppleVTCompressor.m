@@ -117,6 +117,9 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
 
     _resetPending = YES;
     self.errored = NO;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+
     VTCompressionSessionCompleteFrames(_compression_session, CMTimeMake(0, 0));
     VTCompressionSessionInvalidate(_compression_session);
     if (_compression_session)
@@ -126,6 +129,7 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
     
     _compression_session = NULL;
     _resetPending = NO;
+    });
 }
 
 
