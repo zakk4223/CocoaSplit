@@ -127,8 +127,12 @@
     [self.outputs removeObjectForKey:[NSValue valueWithPointer:(__bridge const void * _Nullable)(destination)]];
     if (self.outputs.count == 0)
     {
-        [self reset];
-        self.active = NO;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self reset];
+            self.active = NO;
+        });
+
     }
 }
 

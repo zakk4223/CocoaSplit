@@ -94,9 +94,7 @@
 -(void) reset
 {
     
-    //There's a possibility this can get called from within the VTCompressionSession's receive frame callback.
-    //If you try to invalidate the session inside the callback it creates a deadlock, so dispatch out to the main queue
-    dispatch_async(dispatch_get_main_queue(), ^{
+
         
     self.errored = NO;
         VTCompressionSessionCompleteFrames(_compression_session, CMTimeMake(0, 0));
@@ -108,7 +106,6 @@
     }
     
     _compression_session = nil;
-    });
     
 }
 
