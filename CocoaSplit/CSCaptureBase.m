@@ -360,6 +360,7 @@
         CALayer *clayer = [layersCopy objectForKey:key];
         
         updateBlock(clayer);
+        [clayer displayIfNeeded];
         if (frameData)
         {
             [layerSrc layerUpdated];

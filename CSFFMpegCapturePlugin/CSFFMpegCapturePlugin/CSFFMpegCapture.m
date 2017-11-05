@@ -333,11 +333,13 @@
 
 -(CALayer *)createNewLayer
 {
-    
+    return [CALayer layer];
+    /*
     CSIOSurfaceLayer *newLayer = [CSIOSurfaceLayer layer];
     
     
     return newLayer;
+     */
 }
 
 
@@ -386,8 +388,8 @@
         }
         [self updateLayersWithFramedataBlock:^(CALayer *layer) {
 
-        ((CSIOSurfaceLayer *)layer).imageBuffer = use_buf;
-            
+          
+            layer.contents = (__bridge id _Nullable)(use_buf);
         }];
         
         if (_firstFrame)
@@ -401,8 +403,8 @@
         use_buf = [self.player firstFrame];
         _lastSize = NSMakeSize(CVPixelBufferGetWidth(use_buf), CVPixelBufferGetHeight(use_buf));
         [self updateLayersWithFramedataBlock:^(CALayer *layer) {
-            
-            ((CSIOSurfaceLayer *)layer).imageBuffer = use_buf;
+            layer.contents = (__bridge id _Nullable)(use_buf);
+            [layer displayIfNeeded];
             
         }];
         _firstFrame = NO;

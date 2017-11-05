@@ -297,7 +297,6 @@
     
     if (!_av_codec && !self.errored)
     {
-        NSLog(@"SETUP COMPRESSOR");
         BOOL setupOK;
         
         setupOK = [self setupCompressor:frameData.videoFrame];
@@ -308,7 +307,6 @@
             return NO;
         }
     } else if (!_av_codec) {
-        NSLog(@"NOT COMPRESSING");
         return NO;
     }
     

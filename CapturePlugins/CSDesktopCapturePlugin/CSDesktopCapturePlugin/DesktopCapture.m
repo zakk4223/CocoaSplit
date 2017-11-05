@@ -110,18 +110,7 @@
 {
     
     return [CALayer layer];
-    /*
-    CSIOSurfaceLayer *newLayer = [CSIOSurfaceLayer layer];
-    
-    if (self.renderType == kCSRenderAsync)
-    {
-        newLayer.asynchronous = YES;
-    } else {
-        newLayer.asynchronous = NO;
-    }
-    
-    return newLayer;
-     */
+
 }
 
 

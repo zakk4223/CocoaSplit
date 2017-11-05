@@ -351,22 +351,7 @@
             _lastSize = CVImageBufferGetDisplaySize(videoFrame);
             
             [self updateLayersWithFramedataBlock:^(CALayer *layer) {
-                
-                /*
-                ((CSIOSurfaceLayer *)layer).imageBuffer = videoFrame;
-                if (self.renderType == kCSRenderFrameArrived)
-                {
-                    
-                    [((CSIOSurfaceLayer *)layer) setNeedsDisplay];
-                }*/
-                
-                //IOSurfaceRef vFIO = CVPixelBufferGetIOSurface(videoFrame);
-                
-                //layer.contents = (__bridge id _Nullable)(vFIO);
                 layer.contents = (__bridge id _Nullable)(videoFrame);
-                
-                
-
             }];
             [self frameArrived];
         }

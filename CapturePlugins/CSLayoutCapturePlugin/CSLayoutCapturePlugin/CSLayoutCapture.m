@@ -61,7 +61,7 @@
 
 -(CALayer *)createNewLayer
 {
-    return [CSIOSurfaceLayer layer];
+    return [CALayer layer];
 }
 
 -(void)frameTick
@@ -70,11 +70,8 @@
     {
         [self updateLayersWithBlock:^(CALayer *layer) {
            
-            CSIOSurfaceLayer *ioLayer = (CSIOSurfaceLayer *)layer;
-            
             CVImageBufferRef pb = [_current_renderer currentImg];
-            [ioLayer setImageBuffer:pb];
-            
+            layer.contents = (__bridge id _Nullable)(pb);
         }];
     }
 }

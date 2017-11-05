@@ -343,7 +343,6 @@
             CSCaptureBase *newTiming = (CSCaptureBase *)self.layout.layoutTimingSource.videoInput;
             newTiming.timerDelegateCtx = nil;
             newTiming.timerDelegate = self;
-            NSLog(@"TIMER SWITCHED");
             return;
         }
         

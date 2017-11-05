@@ -164,11 +164,11 @@
         asyncValue = YES;
     }
     
-    
+ /*
     [self updateLayersWithBlock:^(CALayer *layer) {
         ((CSDeckLinkLayer *)layer).asynchronous = asyncValue;
     }];
-    
+   */
     _renderType = renderType;
 }
 
@@ -248,16 +248,17 @@
         
         [self updateLayersWithFramedataBlock:^(CALayer *layer) {
             [(CSDeckLinkLayer *)layer setRenderFrame:frame];
-            if (self.renderType == kCSRenderFrameArrived)
-            {
+            //if (self.renderType == kCSRenderFrameArrived)
+           // {
                 [((CSDeckLinkLayer *)layer) setNeedsDisplay];
-            }
+          //  }
             
         }];
         [self frameArrived];
     }
 }
 
+/*
 -(void)frameTick
 {
     
@@ -270,6 +271,8 @@
     }
     
 }
+*/
+
 
 -(void)dealloc
 {
