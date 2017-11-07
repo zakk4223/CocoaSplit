@@ -18,7 +18,7 @@
 @interface CSCaptureBase()
 {
     
-    NSMutableArray *_allInputs;
+    //NSPointerArray *_allInputs;
     
     NSMapTable *_allLayers;
     frame_render_behavior _saved_render_behavior;
@@ -66,7 +66,7 @@
         self.isVisible = YES;
         self.allowScaling = YES;
         _allLayers = [NSMapTable weakToStrongObjectsMapTable];
-        _allInputs = [NSMutableArray array];
+        
         _fps_start_time = CFAbsoluteTimeGetCurrent();
         _fps_frame_cnt = 0;
         
@@ -95,8 +95,6 @@
 
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
-    
-    
     [aCoder encodeObject:self.activeVideoDevice.uniqueID forKey:@"active_uniqueID"];
     [aCoder encodeBool:self.allowDedup forKey:@"allowDedup"];
 }
@@ -286,12 +284,7 @@
 -(CALayer *)createNewLayerForInput:(id)inputsrc
 {
     
-    if ([_allInputs containsObject:inputsrc])
-    {
-        NSLog(@"ALREADY HAVE INPUTSRC");
-        return nil;
-    }
-    
+
     CALayer *newLayer = [self createNewLayer];
     @synchronized(self)
     {
@@ -301,9 +294,9 @@
         }
         
         
-        [_allInputs addObject:inputsrc];
+        //[_allInputs addObject:inputsrc];
         
-        //[_allLayers setObject:newLayer forKey:inputsrc];
+        [_allLayers setObject:newLayer forKey:inputsrc];
     }
 
     return newLayer;
@@ -318,23 +311,23 @@
             self.tickInput = nil;
             
         }
+
         
-        [_allInputs removeObject:inputsrc];
+        [_allLayers removeObjectForKey:inputsrc];
         
-        //[_allLayers removeObjectForKey:inputsrc];
         if (!self.tickInput)
         {
-            self.tickInput = _allInputs.firstObject;
-            /*
             for (id key in _allLayers)
             {
                 if (key)
                 {
                     self.tickInput = key;
                 }
-            }*/
+            }
         }
-        if (_allInputs.count == 0)
+        
+        
+        if (_allLayers.count == 0)
         {
             [self willDelete];
         }
@@ -362,18 +355,26 @@
 
 -(void)internalUpdateLayerswithFrameData:(bool) frameData updateBlock:(void (^)(CALayer *layer))updateBlock preBlock:(void(^)(void))preBlock postBlock:(void(^)(void))postBlock
 {
-    NSArray *inputsCopy = nil;
+    NSMapTable *inputsCopy = nil;
     @synchronized(self)
     {
-        inputsCopy = _allInputs.copy;
+        inputsCopy = _allLayers.copy;
     }
+    
     if (frameData)
     {
         _fps_frame_cnt++;
     }
-    for (InputSource *layerSrc in inputsCopy)
+    for (id key in inputsCopy)
     {
         
+        if (!key)
+        {
+            continue;
+        }
+        
+        
+        InputSource *layerSrc = (InputSource *)key;
         if (frameData)
         {
             [layerSrc updateLayersWithNewFrame:updateBlock withPreuseBlock:preBlock withPostuseBlock:postBlock];
