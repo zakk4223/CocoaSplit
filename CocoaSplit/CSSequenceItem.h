@@ -18,7 +18,7 @@
 +(NSImage *)image;
 +(NSString *)label;
 
--(void)executeWithSequence:(CSLayoutSequence *)sequencer usingCompletionBlock:(void (^)())completionBlock;
+-(void)executeWithSequence:(CSLayoutSequence *)sequencer usingCompletionBlock:(void (^)(void))completionBlock;
 
 -(CSSequenceItemViewController *)configurationView;
 

@@ -58,7 +58,6 @@
 
 -(void)updatePowerlevel;
 
--(void)openMixerWindow:(id)sender;
 -(void)setVolumeAnimated:(float)volume withDuration:(float)duration;
 -(NSView *)audioUnitNSView;
 -(void)saveDataToDict:(NSMutableDictionary *)saveDict;
@@ -67,7 +66,7 @@
 
 @end
 
-@interface CAMultiAudioNode : NSObject <CAMultiAudioNodeJSExport, NSAnimationDelegate, NSPasteboardItemDataProvider>
+@interface CAMultiAudioNode : NSObject <CAMultiAudioNodeJSExport, NSAnimationDelegate>
 {
     float _saved_volume;
     

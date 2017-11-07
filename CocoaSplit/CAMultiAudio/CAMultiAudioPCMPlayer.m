@@ -80,7 +80,7 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
             @autoreleasepool {
             int32_t availBytes;
             void *pcmPtr = NULL;
-            while ((pcmPtr = TPCircularBufferTail(&_completedBuffer, &availBytes)))
+            while ((pcmPtr = TPCircularBufferTail(&(self->_completedBuffer), &availBytes)))
             {
                 struct cspcm_buffer_msg *cMsg = pcmPtr;
                 
@@ -101,12 +101,12 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
                 } else {
                     [self releasePCM:pcmObj];
                 }
-                TPCircularBufferConsume(&_completedBuffer, sizeof(struct cspcm_buffer_msg));
+                TPCircularBufferConsume(&(self->_completedBuffer), sizeof(struct cspcm_buffer_msg));
                 
             }
             }
             
-            if (_exitPending)
+            if (self->_exitPending)
             {
                 return;
             }

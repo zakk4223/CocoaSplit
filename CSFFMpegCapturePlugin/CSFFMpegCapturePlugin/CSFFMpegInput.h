@@ -17,6 +17,7 @@
 #include "libswscale/swscale.h"
 #include "libswresample/swresample.h"
 #include "libavutil/samplefmt.h"
+#include "libavutil/opt.h"
 
 #import "CAMultiAudioPCM.h"
 #import "CSPcmPlayer.h"

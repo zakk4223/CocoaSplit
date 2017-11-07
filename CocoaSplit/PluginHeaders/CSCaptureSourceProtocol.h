@@ -112,12 +112,19 @@ If your source is 'shared' between inputSources each new one will call this func
 /* Update ALL the current layers for this Source. The provided block is run once for every layer. You should use this when you are updating layer attributes.
  */
 
--(void)updateLayersWithBlock:(void(^)(CALayer *))updateBlock;
+-(void)updateLayersWithBlock:(void(^)(CALayer *layer))updateBlock;
 
 /* Update ALL the current layers for this Source. The provided block is run once for every layer. You should use this when you are updating layer video data.
  */
 
--(void)updateLayersWithFramedataBlock:(void(^)(CALayer *))updateBlock;
+-(void)updateLayersWithFramedataBlock:(void(^)(CALayer *layer))updateBlock;
+
+/* If the update mechanism is going to store your block beyond the initial call, it will call preuse/postuse blocks. Calls to these blocks will always be balanced. You can do retain/release or other memory management here. The primary use for these blocks is if your update is buffered due to the user setting a video delay on an input.
+ */
+-(void)updateLayersWithFramedataBlock:(void (^)(CALayer *layer))updateBlock withPreuseBlock:(void(^)(void))preUseBlock withPostuseBlock:(void(^)(void))postUseBlock;
+
+
+
 /* Called when the input source goes away and the layer is no longer required. You probably don't need to override this. Default implementation just removes it from the underlying array */
 
 -(void)removeLayerForInput:(id)inputsrc;

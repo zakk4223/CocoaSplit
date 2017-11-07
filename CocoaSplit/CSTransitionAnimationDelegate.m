@@ -13,7 +13,7 @@
 
 -(void)animationDidStart:(CAAnimation *)anim
 {
-    NSLog(@"DELEGATE ANIMATION STARTED");
+    
     [CATransaction begin];
     if (self.fullScreen)
     {

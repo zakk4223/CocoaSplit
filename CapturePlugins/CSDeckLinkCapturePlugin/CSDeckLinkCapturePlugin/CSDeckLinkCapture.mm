@@ -245,15 +245,21 @@
     {
         
         _lastSize = NSMakeSize(frame->GetWidth(), frame->GetHeight());
-        
+
         [self updateLayersWithFramedataBlock:^(CALayer *layer) {
             [(CSDeckLinkLayer *)layer setRenderFrame:frame];
-            //if (self.renderType == kCSRenderFrameArrived)
-           // {
-                [((CSDeckLinkLayer *)layer) setNeedsDisplay];
-          //  }
-            
+            [((CSDeckLinkLayer *)layer) setNeedsDisplay];
+
+        } withPreuseBlock:^{
+            frame->AddRef();
+        } withPostuseBlock:^{
+            frame->Release();
         }];
+        
+        
+        
+        
+
         [self frameArrived];
     }
 }

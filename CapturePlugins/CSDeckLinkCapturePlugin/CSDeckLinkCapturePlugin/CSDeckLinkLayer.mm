@@ -57,6 +57,8 @@
 
 -(void)setRenderFrame:(IDeckLinkVideoFrame *)frame
 {
+    
+    
     if (_deckLinkOGL)
     {
         _deckLinkOGL->SetFrame(frame);

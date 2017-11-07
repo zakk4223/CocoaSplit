@@ -1598,7 +1598,7 @@
     NSArray *changedInputs = diffResult[@"changed"];
     NSArray *sameInputs = diffResult[@"same"];
     NSArray *newInputs = diffResult[@"new"];
-    NSArray *newScript = diffResult[@"scriptNew"];
+    //NSArray *newScript = diffResult[@"scriptNew"];
     NSArray *existingScript = diffResult[@"scriptExisting"];
 
     NSMutableArray *removeInputs = [NSMutableArray arrayWithArray:changedInputs];

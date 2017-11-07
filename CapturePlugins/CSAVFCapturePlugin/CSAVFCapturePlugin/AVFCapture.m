@@ -350,9 +350,16 @@
             
             _lastSize = CVImageBufferGetDisplaySize(videoFrame);
             
+            //CFRetain(sampleBuffer);
+            
             [self updateLayersWithFramedataBlock:^(CALayer *layer) {
                 layer.contents = (__bridge id _Nullable)(videoFrame);
+            } withPreuseBlock:^{
+                CFRetain(sampleBuffer);
+            } withPostuseBlock:^{
+                CFRelease(sampleBuffer);
             }];
+            
             [self frameArrived];
         }
 }

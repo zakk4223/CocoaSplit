@@ -2173,10 +2173,10 @@
     
     if (self.sourceLayouts.count < 12)
     {
-        for(int i=self.sourceLayouts.count+1; i <= 12; i++)
+        for(NSUInteger i=self.sourceLayouts.count+1; i <= 12; i++)
         {
             SourceLayout *nLayout = [[SourceLayout alloc] init];
-            nLayout.name = [NSString stringWithFormat:@"Layout %d", i];
+            nLayout.name = [NSString stringWithFormat:@"Layout %lu", (unsigned long)i];
             [self.sourceLayouts addObject:nLayout];
         }
     }

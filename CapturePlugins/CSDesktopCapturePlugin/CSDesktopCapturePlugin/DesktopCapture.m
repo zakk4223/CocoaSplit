@@ -284,24 +284,10 @@
             _lastSize = CGSizeMake(IOSurfaceGetWidth(frameSurface), IOSurfaceGetHeight(frameSurface));
             
             [strongSelf updateLayersWithFramedataBlock:^(CALayer *layer) {
-
                 layer.contents = (__bridge id _Nullable)(frameSurface);
-                
-                
-                //((CSIOSurfaceLayer *)layer).ioSurface = frameSurface;
-                if (self.renderType == kCSRenderFrameArrived)
-                {
-                    
-                    
-                    //dispatch through the main queue because otherwise the display stream events bounce between threads and confuse core animation
-                  //dispatch_async(dispatch_get_main_queue(), ^{
-                        //[((CSIOSurfaceLayer *)layer) setNeedsDisplay];
-                // });
-                }
-
-                
-
             }];
+
+
             [self frameArrived];
 
             

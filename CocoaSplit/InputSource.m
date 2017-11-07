@@ -15,14 +15,19 @@
 static NSArray *_sourceTypes = nil;
 
 
+
+
 @class Foobar;
 
+
+@implementation InputSourcePrivateFrameUpdate
+@end
 
 
 @implementation InputSource
 
 
-
+@synthesize frameDelay = _frameDelay;
 @synthesize selectedVideoType = _selectedVideoType;
 @synthesize name = _name;
 @synthesize transitionFilterName = _transitionFilterName;
@@ -61,7 +66,7 @@ static NSArray *_sourceTypes = nil;
 
     newSource.videoInput = self.videoInput;
     [newSource registerVideoInput:self.videoInput];
-    newSource->_currentLayer = [self.videoInput layerForInput:newSource];
+    //newSource->_currentLayer = [self.videoInput layerForInput:newSource];
     newSource.layer.sourceLayer = newSource->_currentLayer;
     
     newSource.rotationAngle = self.rotationAngle;
@@ -245,7 +250,7 @@ static NSArray *_sourceTypes = nil;
             
             [self registerVideoInput:self.videoInput];
 
-            _currentLayer = [self.videoInput layerForInput:self];
+            //_currentLayer = [self.videoInput layerForInput:self];
             //self.layer.sourceLayer = _currentLayer;
             if (!_userBackground)
             {
@@ -480,7 +485,100 @@ static NSArray *_sourceTypes = nil;
     return [NSSet setWithObjects:@"videoInput", @"videoInput.libraryImage", nil];
 }
 
+-(void)setFrameDelay:(int)frameDelay
+{
+    _frameDelay = frameDelay;
+    if (!_frameDelay)
+    {
+        @synchronized(self)
+        {
+            for (InputSourcePrivateFrameUpdate *update in _frameUpdateQueue)
+            {
+                if (update.postBlock)
+                {
+                    update.postBlock();
+                }
+            }
+            [_frameUpdateQueue removeAllObjects];
+        }
+    }
+}
 
+-(int)frameDelay
+{
+    return _frameDelay;
+}
+
+
+-(void)updateLayersWithNewFrame:(void (^)(CALayer *))updateBlock withPreuseBlock:(void(^)(void))preUseBlock withPostuseBlock:(void(^)(void))postUseBlock
+{
+    
+    if (_currentLayer)
+    {
+        
+
+        if (preUseBlock)
+        {
+            preUseBlock();
+        }
+        
+        InputSourcePrivateFrameUpdate *useUpdate = [[InputSourcePrivateFrameUpdate alloc] init];
+        useUpdate.updateBlock = updateBlock;
+        useUpdate.postBlock = postUseBlock;
+        
+        
+        
+        if (self.frameDelay > 0 && preUseBlock && postUseBlock)
+        {
+            @synchronized(self) {
+                [_frameUpdateQueue addObject:useUpdate];
+                
+                if (_frameUpdateQueue.count >= self.frameDelay)
+                {
+                    useUpdate = [_frameUpdateQueue objectAtIndex:0];
+                    [_frameUpdateQueue removeObjectAtIndex:0];
+                } else {
+                    return;
+                }
+            }
+        }
+        
+        
+        if (self.isFrozen)
+        {
+            if (useUpdate.postBlock)
+            {
+                useUpdate.postBlock();
+            }
+            return;
+        }
+        
+        [CATransaction begin];
+        if (useUpdate.updateBlock) /* it should always have one, but.... */
+        {
+            useUpdate.updateBlock(_currentLayer);
+        }
+        [_currentLayer displayIfNeeded];
+        [self layerUpdated];
+        if (useUpdate.postBlock)
+        {
+            useUpdate.postBlock();
+        }
+        [CATransaction commit];
+    }
+}
+
+
+-(void)updateLayer:(void (^)(CALayer *layer))updateBlock
+{
+    if (_currentLayer)
+    {
+        [CATransaction begin];
+        updateBlock(_currentLayer);
+        [_currentLayer displayIfNeeded];
+        [CATransaction commit];
+    }
+}
 
 -(void)addedToLayout
 {
@@ -505,7 +603,8 @@ static NSArray *_sourceTypes = nil;
     forInput.inputSource = self;
     forInput.isLive = self.is_live;
     [forInput addObserver:self forKeyPath:@"captureName" options:NSKeyValueChangeNewKey context:NULL];
-    [forInput createNewLayerForInput:self];
+    _currentLayer = [forInput createNewLayerForInput:self];
+    
 
 }
 
@@ -519,6 +618,7 @@ static NSArray *_sourceTypes = nil;
     forInput.isLive = NO;
     [forInput removeLayerForInput:self];
     [forInput removeObserver:self forKeyPath:@"captureName"];
+    _currentLayer = nil;
     
 }
 
@@ -560,7 +660,7 @@ static NSArray *_sourceTypes = nil;
     _needsAdjustPosition = NO;
     _topLevelHeight = 0;
     _topLevelWidth = 0;
-    
+    _frameUpdateQueue = [NSMutableArray array];
     self.changeInterval = 20.0f;
     
     
@@ -2366,11 +2466,9 @@ static NSArray *_sourceTypes = nil;
     _selectedVideoType = videoInput.instanceLabel;
     
     [self registerVideoInput:_videoInput];
-    CALayer *newLayer = [_videoInput layerForInput:self];
+    //CALayer *newLayer = [_videoInput layerForInput:self];
     
-    _currentLayer = newLayer;
-    NSLog(@"EDITED NAME %@", _editedName);
-    NSLog(@"VIDEO INPUT %@", self.videoInput.captureName);
+    //_currentLayer = newLayer;
     
     self.name = _editedName;
 }
@@ -2390,9 +2488,9 @@ static NSArray *_sourceTypes = nil;
     newCaptureSession = [[captureClass alloc] init];
     
     [self registerVideoInput:newCaptureSession];
-    CALayer *newLayer = [newCaptureSession layerForInput:self];
+   //CALayer *newLayer = [newCaptureSession layerForInput:self];
     
-    _currentLayer = newLayer;
+   // _currentLayer = newLayer;
     self.videoInput = newCaptureSession;
 
  
@@ -3393,7 +3491,7 @@ static NSArray *_sourceTypes = nil;
     if (self.videoInput)
     {
         [self deregisterVideoInput:fromInput];
-        _currentLayer = nil;
+        //_currentLayer = nil;
     }
     
     
@@ -3401,7 +3499,7 @@ static NSArray *_sourceTypes = nil;
     {
         self.videoInput = fromInput;
         [self registerVideoInput:fromInput];
-        _currentLayer = [fromInput layerForInput:self];
+        //_currentLayer = [fromInput layerForInput:self];
     }
     
     

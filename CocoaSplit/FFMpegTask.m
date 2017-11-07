@@ -72,7 +72,7 @@
                 @autoreleasepool {
                     
                     @synchronized (self) {
-                        if (_close_flag)
+                        if (self->_close_flag)
                         {
                             [self _internal_stopProcess];
                             break;
@@ -82,7 +82,7 @@
                     CapturedFrameData *useData = [self consumeframeData];
                     if (!useData)
                     {
-                        dispatch_semaphore_wait(_frameSemaphore, DISPATCH_TIME_FOREVER);
+                        dispatch_semaphore_wait(self->_frameSemaphore, DISPATCH_TIME_FOREVER);
                     } else {
                         [self writeEncodedData:useData];
                     }
@@ -376,7 +376,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     }
     
     
-    AVCodecContext *c_ctx = _av_video_stream->codec;
+    AVCodecParameters *c_ctx = _av_video_stream->codecpar;
     
     
     //c_ctx->codec_type = AVMEDIA_TYPE_VIDEO;
@@ -400,7 +400,8 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         return NO;
     }
     
-    AVCodecContext *a_ctx = _av_audio_stream->codec;
+    AVCodecParameters *a_ctx = _av_audio_stream->codecpar;
+    //AVCodecContext *a_ctx = _av_audio_stream->codec;
     
     
     a_ctx->codec_type = AVMEDIA_TYPE_AUDIO;
@@ -454,9 +455,12 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 
     } else if (codec_ctx) {
         
-        avcodec_copy_context(_av_video_stream->codec, codec_ctx);
+        AVCodecParameters avc_parms = { 0 };
+        
+        avcodec_parameters_from_context(&avc_parms, codec_ctx);
+        avcodec_parameters_copy(_av_video_stream->codecpar, &avc_parms);
+        
         _av_video_stream->time_base = av_add_q(codec_ctx->time_base, (AVRational){0,1});
-        _av_video_stream->codec->codec = codec_ctx->codec;
         
         self.width = codec_ctx->width;
         self.height = codec_ctx->height;
@@ -466,11 +470,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         memcpy(c_ctx->extradata, codec_ctx->extradata, c_ctx->extradata_size);
 
     }
-    if (_av_fmt_ctx->oformat->flags & AVFMT_GLOBALHEADER)
-        c_ctx->flags |= CODEC_FLAG_GLOBAL_HEADER;
-    
-    if (_av_fmt_ctx->oformat->flags & AVFMT_GLOBALHEADER)
-        a_ctx->flags |= CODEC_FLAG_GLOBAL_HEADER;
 
 
     c_ctx->width = self.width;

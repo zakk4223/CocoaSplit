@@ -62,5 +62,32 @@
     return @"Vaughnlive.TV";
 }
 
+-(NSString *)getServiceFormat
+{
+    return @"FLV";
+}
+
+-(void)prepareForStreamStart
+{
+    return;
+}
+
+-(void)encodeWithCoder:(NSCoder *)aCoder
+{
+    
+    [aCoder encodeObject:self.streamKey forKey:@"streamKey"];
+
+}
+
+-(instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [self init])
+    {
+        self.streamKey = [aDecoder decodeObjectForKey:@"streamKey"];
+    }
+    
+    return self;
+}
+
 
 @end

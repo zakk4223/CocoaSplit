@@ -60,7 +60,7 @@
 -(bool)attachInput:(CAMultiAudioInput *)input;
 -(void)updateStatistics;
 -(void)applyInputSettings:(NSDictionary *)inputSettings;
--(NSDictionary *)generateInputSettings;
+-(NSMutableDictionary *)generateInputSettings;
 -(CAMultiAudioInput *)inputForUUID:(NSString *)uuid;
 
 

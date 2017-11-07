@@ -22,7 +22,6 @@
 - (IBAction)chooseFile:(id)sender;
 - (IBAction)nextAction:(id)sender;
 - (IBAction)sliderValueChanged:(id)sender;
-- (IBAction)pauseAction:(id)sender;
 
 - (IBAction)tableControlAction:(NSSegmentedControl *)sender;
 - (IBAction)manualAddItem:(id)sender;

@@ -29,7 +29,7 @@ typedef enum ff_movie_repeat_t {
     dispatch_queue_t _audio_queue;
     bool _audio_done;
     bool _video_done;
-    CVPixelBufferPoolRef *_cvpool;
+    CVPixelBufferPoolRef _cvpool;
     NSSize _currentSize;
     bool _nextFlag;
     int64_t _first_video_pts;

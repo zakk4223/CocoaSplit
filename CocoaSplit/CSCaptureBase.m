@@ -17,12 +17,14 @@
 
 @interface CSCaptureBase()
 {
+    
+    NSMutableArray *_allInputs;
+    
     NSMapTable *_allLayers;
     frame_render_behavior _saved_render_behavior;
     CFAbsoluteTime _fps_start_time;
     int _fps_frame_cnt;
 
-    
 }
 
 
@@ -64,8 +66,10 @@
         self.isVisible = YES;
         self.allowScaling = YES;
         _allLayers = [NSMapTable weakToStrongObjectsMapTable];
+        _allInputs = [NSMutableArray array];
         _fps_start_time = CFAbsoluteTimeGetCurrent();
         _fps_frame_cnt = 0;
+        
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateStatistics:) name:CSNotificationStatisticsUpdate object:nil];
     }
@@ -282,7 +286,12 @@
 -(CALayer *)createNewLayerForInput:(id)inputsrc
 {
     
-    [CATransaction begin];
+    if ([_allInputs containsObject:inputsrc])
+    {
+        NSLog(@"ALREADY HAVE INPUTSRC");
+        return nil;
+    }
+    
     CALayer *newLayer = [self createNewLayer];
     @synchronized(self)
     {
@@ -290,9 +299,12 @@
         {
             self.tickInput = inputsrc;
         }
-        [_allLayers setObject:newLayer forKey:inputsrc];
+        
+        
+        [_allInputs addObject:inputsrc];
+        
+        //[_allLayers setObject:newLayer forKey:inputsrc];
     }
-    [CATransaction commit];
 
     return newLayer;
 }
@@ -306,18 +318,23 @@
             self.tickInput = nil;
             
         }
-        [_allLayers removeObjectForKey:inputsrc];
+        
+        [_allInputs removeObject:inputsrc];
+        
+        //[_allLayers removeObjectForKey:inputsrc];
         if (!self.tickInput)
         {
+            self.tickInput = _allInputs.firstObject;
+            /*
             for (id key in _allLayers)
             {
                 if (key)
                 {
                     self.tickInput = key;
                 }
-            }
+            }*/
         }
-        if (_allLayers.count == 0)
+        if (_allInputs.count == 0)
         {
             [self willDelete];
         }
@@ -325,48 +342,46 @@
 }
 
 
+
+-(void)updateLayersWithFramedataBlock:(void (^)(CALayer *))updateBlock withPreuseBlock:(void(^)(void))preUseBlock withPostuseBlock:(void(^)(void))postUseBlock
+{
+    [self internalUpdateLayerswithFrameData:true updateBlock:updateBlock preBlock:preUseBlock postBlock:postUseBlock];
+
+}
+
 -(void)updateLayersWithFramedataBlock:(void(^)(CALayer *))updateBlock
 {
-        [self internalUpdateLayerswithFrameData:true updateBlock:updateBlock];
+    [self internalUpdateLayerswithFrameData:true updateBlock:updateBlock preBlock:nil postBlock:nil];
 
 }
 
 -(void)updateLayersWithBlock:(void (^)(CALayer *layer))updateBlock
 {
-    [self internalUpdateLayerswithFrameData:false updateBlock:updateBlock];
+    [self internalUpdateLayerswithFrameData:false updateBlock:updateBlock preBlock:nil postBlock:nil];
 }
 
--(void)internalUpdateLayerswithFrameData:(bool) frameData updateBlock:(void (^)(CALayer *layer))updateBlock
+-(void)internalUpdateLayerswithFrameData:(bool) frameData updateBlock:(void (^)(CALayer *layer))updateBlock preBlock:(void(^)(void))preBlock postBlock:(void(^)(void))postBlock
 {
-    NSMapTable *layersCopy = nil;
+    NSArray *inputsCopy = nil;
     @synchronized(self)
     {
-        layersCopy = _allLayers.copy;
+        inputsCopy = _allInputs.copy;
     }
-    [CATransaction begin];
     if (frameData)
     {
         _fps_frame_cnt++;
     }
-    for (id key in layersCopy)
+    for (InputSource *layerSrc in inputsCopy)
     {
-        InputSource *layerSrc = (InputSource *)key;
         
-        if (layerSrc.isFrozen)
-        {
-            continue;
-        }
-        
-        CALayer *clayer = [layersCopy objectForKey:key];
-        
-        updateBlock(clayer);
-        [clayer displayIfNeeded];
         if (frameData)
         {
-            [layerSrc layerUpdated];
+            [layerSrc updateLayersWithNewFrame:updateBlock withPreuseBlock:preBlock withPostuseBlock:postBlock];
+        } else {
+            [layerSrc updateLayer:updateBlock];
         }
     }
-    [CATransaction commit];
+
 }
 
 -(void)frameArrived

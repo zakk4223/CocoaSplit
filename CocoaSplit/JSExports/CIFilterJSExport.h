@@ -58,12 +58,10 @@ NS_ASSUME_NONNULL_BEGIN
 /** Similar to above except that all argument values and option key-value are specified inline. The list of key-value pairs must be terminated by the 'nil' object. */
 - (nullable CIImage *)apply:(CIKernel *)k, ... NS_REQUIRES_NIL_TERMINATION NS_AVAILABLE_MAC(10_4) NS_SWIFT_UNAVAILABLE("");
 
-@end
 
 
 /** Methods to register a filter and get access to the list of registered filters
  Use these methods to create filters and find filters. */
-@interface CIFilter (CIFilterRegistry)
 
 /** Creates a new filter of type 'name'.
  On OSX, all input values will be undefined.

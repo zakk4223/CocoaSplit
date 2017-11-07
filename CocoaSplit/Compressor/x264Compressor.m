@@ -267,7 +267,7 @@
                 @autoreleasepool {
                     @synchronized (self) {
                         
-                        if (_reset_flag)
+                        if (self->_reset_flag)
                         {
                             [self internal_reset];
                         }
@@ -275,7 +275,7 @@
                     CapturedFrameData *useData = [self consumeframeData];
                     if (!useData)
                     {
-                        dispatch_semaphore_wait(_queueSemaphore, DISPATCH_TIME_FOREVER);
+                        dispatch_semaphore_wait(self->_queueSemaphore, DISPATCH_TIME_FOREVER);
                     } else {
                         [self real_compressFrame:useData];
                     }
@@ -482,7 +482,7 @@
         
         //[self.outputDelegate outputAVPacket:pkt codec_ctx:_av_codec_ctx];
     } else {
-        av_free_packet(pkt);
+        av_packet_unref(pkt);
         av_free(pkt);
 
     }

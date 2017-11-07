@@ -280,8 +280,11 @@
                 <rect key="frame" x="0.0" y="0.0" width="416" height="270"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xXv-D2-0SI">
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xXv-D2-0SI">
                         <rect key="frame" x="182" y="120" width="117" height="28"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="107" id="b47-ho-E4H"/>
+                        </constraints>
                         <buttonCell key="cell" type="push" title="Click to select capture area" bezelStyle="rounded" alignment="center" controlSize="small" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="i4w-jU-K8m">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -296,8 +299,8 @@
                     </button>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="centerY" secondItem="xXv-D2-0SI" secondAttribute="centerY" id="2Rh-Z4-ibJ"/>
-                    <constraint firstAttribute="centerX" secondItem="xXv-D2-0SI" secondAttribute="centerX" constant="-0.5" id="yE4-pQ-FbL"/>
+                    <constraint firstItem="xXv-D2-0SI" firstAttribute="leading" secondItem="TvA-3W-5a3" secondAttribute="leading" constant="187" id="CE3-AS-6TU"/>
+                    <constraint firstItem="xXv-D2-0SI" firstAttribute="centerY" secondItem="TvA-3W-5a3" secondAttribute="centerY" id="gaD-qL-dTF"/>
                 </constraints>
             </view>
         </window>

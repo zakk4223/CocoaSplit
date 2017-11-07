@@ -211,7 +211,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 }
 
 
--(NSDictionary *)generateInputSettings
+-(NSMutableDictionary *)generateInputSettings
 {
     
     NSMutableDictionary *iSettings = [NSMutableDictionary dictionary];

@@ -119,7 +119,7 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self willChangeValueForKey:@"currentTime"];
-            _currentTime = realTime;
+            self->_currentTime = realTime;
             [self didChangeValueForKey:@"currentTime"];
             
         });

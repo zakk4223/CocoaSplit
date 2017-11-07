@@ -39,8 +39,6 @@
 
 @property (weak) PreviewView *previewView;
 @property (weak) IBOutlet NSTableView *contentTable;
-- (IBAction)nextViewButton:(id)sender;
-- (IBAction)previousViewButton:(id)sender;
 - (IBAction)initalTableButtonClicked:(id)sender;
 - (IBAction)inputTableButtonClicked:(id)sender;
 

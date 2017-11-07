@@ -20,7 +20,13 @@
 #import "CSInputSourceProtocol.h"
 #import "CSInputSourceBase.h"
 
+@interface InputSourcePrivateFrameUpdate : NSObject
 
+@property (strong) void (^updateBlock)(CALayer *);
+@property (strong) void (^postBlock)(void);
+
+
+@end
 
 @class SourceLayout;
 
@@ -164,7 +170,7 @@ typedef enum resize_style_t {
 @property (assign) bool needsAdjustment;
 @property (assign) bool needsAdjustPosition;
 @property (assign) bool isFrozen;
-
+@property (assign) int frameDelay;
 
 
 -(void) updateOrigin:(CGFloat)x y:(CGFloat)y;
@@ -243,11 +249,20 @@ typedef enum resize_style_t {
     NSString *_editedName;
     NSDictionary *_undoActionMap;
     float _croppedAR;
+    NSMutableArray *_frameUpdateQueue;
+    
     
     
     
     
 }
+
+-(void)updateLayersWithNewFrame:(void (^)(CALayer *))updateBlock withPreuseBlock:(void(^)(void))preUseBlock withPostuseBlock:(void(^)(void))postUseBlock;
+
+-(void)updateLayer:(void (^)(CALayer *layer))updateBlock;
+
+
+-(void) setDirectVideoInput:(NSObject <CSCaptureSourceProtocol> *)videoInput;
 
 -(NSViewController *)configurationViewController;
 
@@ -368,6 +383,7 @@ typedef enum resize_style_t {
 @property (assign) bool needsAdjustment;
 @property (assign) bool needsAdjustPosition;
 @property (assign) bool isFrozen;
--(void) setDirectVideoInput:(NSObject <CSCaptureSourceProtocol> *)videoInput;
+@property (assign) int frameDelay;
+
 
 @end

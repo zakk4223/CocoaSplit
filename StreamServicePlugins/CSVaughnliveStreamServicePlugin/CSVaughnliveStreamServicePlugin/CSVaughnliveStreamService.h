@@ -28,6 +28,9 @@
 +(NSString *)label;
 +(NSString *)serviceDescription;
 +(NSImage *)serviceImage;
+-(NSString *)getServiceFormat;
+-(void)prepareForStreamStart;
+
 
 
 
