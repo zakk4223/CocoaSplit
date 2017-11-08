@@ -68,11 +68,17 @@
 {
     if (_current_renderer)
     {
-        [self updateLayersWithBlock:^(CALayer *layer) {
-           
-            CVImageBufferRef pb = [_current_renderer currentImg];
+        CVImageBufferRef pb = [_current_renderer currentImg];
+        
+        [self updateLayersWithFramedataBlock:^(CALayer *layer) {
             layer.contents = (__bridge id _Nullable)(pb);
+            
+        } withPreuseBlock:^{
+            CFRetain(pb);
+        } withPostuseBlock:^{
+            CFRelease(pb);
         }];
+
     }
 }
 

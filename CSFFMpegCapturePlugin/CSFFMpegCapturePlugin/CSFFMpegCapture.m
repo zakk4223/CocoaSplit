@@ -386,10 +386,13 @@
                 [self didChangeValueForKey:@"currentMovieTime"];
             });
         }
+        
         [self updateLayersWithFramedataBlock:^(CALayer *layer) {
-
-          
             layer.contents = (__bridge id _Nullable)(use_buf);
+        } withPreuseBlock:^{
+            CVPixelBufferRetain(use_buf);
+        } withPostuseBlock:^{
+            CVPixelBufferRelease(use_buf);
         }];
         
         if (_firstFrame)
