@@ -177,7 +177,7 @@
         {
             
             NSImage *ret = [[NSImage alloc] initWithCGImage:fImg size:NSZeroSize];
-
+            CGImageRelease(fImg);
             return ret;
         } else {
             return nil;
@@ -373,5 +373,19 @@
             self.imagePath = [fileUrl path];
         }
     }
+}
+
+-(void)dealloc
+{
+    if (_imageSource)
+    {
+        CFRelease(_imageSource);
+    }
+    
+    if (_singleImage)
+    {
+        CFRelease(_singleImage);
+    }
+
 }
 @end

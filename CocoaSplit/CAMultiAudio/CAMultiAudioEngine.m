@@ -552,6 +552,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     NSUInteger index = [self.fileInputs indexOfObject:toRemove];
     if (index != NSNotFound)
     {
+
         [self.fileInputs removeObjectAtIndex:index];
     }
 }
@@ -838,7 +839,14 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     CAMultiAudioEqualizer *rEq = disconnectNode.equalizer;
     disconnectNode.downMixer = nil;
     
-    [self.graph disconnectNode:disconnectNode];
+    [self.graph removeNode:disconnectNode];
+    
+
+    
+    if (dmix)
+    {
+        [self.graph removeNode:dmix];
+    }
     
     NSArray *delayNodes = disconnectNode.delayNodes.copy;
     for (CAMultiAudioDelay *dNode in [delayNodes reverseObjectEnumerator])
@@ -847,15 +855,9 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         [disconnectNode.delayNodes removeObject:dNode];
     }
     
-    
-    if (dmix)
-    {
-        [self.graph disconnectNode:dmix];
-    }
-    
     if (rEq)
     {
-        [self.graph disconnectNode:rEq];
+        [self.graph removeNode:rEq];
     }
     
     return YES;

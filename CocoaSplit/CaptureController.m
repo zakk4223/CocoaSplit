@@ -3617,6 +3617,7 @@
 
 -(void)removeFileAudio:(CAMultiAudioFile *)toDelete
 {
+    
     [self.multiAudioEngine removeFileInput:toDelete];
 }
 
