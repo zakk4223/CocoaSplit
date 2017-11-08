@@ -54,6 +54,8 @@
         _wasLoadedFromData = NO;
         self.needsSourceSelection = NO;
         self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
+        _animation = nil;
+        
      }
     
     return self;
@@ -93,8 +95,6 @@
 
 
 
-
-
 +(NSSet *)mediaUTIs
 {
     return [NSSet setWithArray:NSImage.imageTypes];
@@ -125,14 +125,35 @@
 
 
 
+-(void)displayLayer:(ImageCaptureLayer *)layer
+{
+    int gifIndex = layer.presentationLayer.gifIndex;
+    if (_imageSource)
+    {
+        CGImageRef newImg = CGImageSourceCreateImageAtIndex(_imageSource, gifIndex, NULL);
+        
+        [self updateLayersWithFramedataBlock:^(CALayer *layer) {
+            layer.contents = (__bridge id _Nullable)(newImg);
+        } withPreuseBlock:^{
+            CGImageRetain(newImg);
+        } withPostuseBlock:^{
+            CGImageRelease(newImg);
+        }];
+        CGImageRelease(newImg);
+    }
+}
+
+
 -(CALayer *)createNewLayer
 {
-    CALayer *newLayer = [CALayer layer];
+    ImageCaptureLayer *newLayer = [ImageCaptureLayer layer];
+
     if (_singleImage)
     {
-        newLayer.contents = _singleImage;
+        newLayer.contents = (__bridge id _Nullable)(_singleImage);
     } else if (_animation) {
-        [newLayer addAnimation:_animation forKey:@"contents"];
+        [newLayer addAnimation:_animation forKey:@"gifIndex"];
+        newLayer.delegate = self;
     }
     
     newLayer.minificationFilter = kCAFilterTrilinear;
@@ -149,9 +170,18 @@
     
     if (_singleImage)
     {
-        return _singleImage;
-    } else if (_animation) {
-        return _animation.values.firstObject;
+        return [[NSImage alloc] initWithCGImage:_singleImage size:NSZeroSize];
+    } else if (_imageSource) {
+        CGImageRef fImg = CGImageSourceCreateImageAtIndex(_imageSource, 0, NULL);
+        if (fImg)
+        {
+            
+            NSImage *ret = [[NSImage alloc] initWithCGImage:fImg size:NSZeroSize];
+
+            return ret;
+        } else {
+            return nil;
+        }
     } else {
         return [NSImage imageNamed:@"NSMediaBrowserMediaTypePhotos"];
     }
@@ -185,14 +215,13 @@
 
 -(void)setImagePath:(NSString *)imagePath
 {
-
+    
     if(!imagePath)
     {
         return;
     }
     
     
-
     _imageSize = NSZeroSize;
     
     _imagePath = imagePath;
@@ -201,42 +230,27 @@
     self.activeVideoDevice.uniqueID = imagePath;
     
     self.captureName = [_imagePath lastPathComponent];
-    
     NSDictionary *dict = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:(id)kCGImageSourceShouldCacheImmediately];
-
+    
     NSURL *fileURL = [NSURL fileURLWithPath:imagePath];
     
-    CGImageSourceRef imgSrc;
-    
-    if (_imageData)
-    {
-        imgSrc = CGImageSourceCreateWithData((__bridge CFDataRef)_imageData, (__bridge CFDictionaryRef)dict);
-    } else {
-       imgSrc = CGImageSourceCreateWithURL((__bridge CFURLRef)fileURL, (__bridge CFDictionaryRef)dict);
-    }
-    /*
-    if (!_imageData)
-    {
-        _imageData = [NSData dataWithContentsOfURL:fileURL];
-    }
-    */
-    
-    /*
     if (_imageSource)
     {
         CFRelease(_imageSource);
     }
     
     
-    _imageSource = imgSrc;
-     */
+    if (_imageData)
+    {
+        _imageSource = CGImageSourceCreateWithData((__bridge CFDataRef)_imageData, (__bridge CFDictionaryRef)dict);
+    } else {
+        _imageSource = CGImageSourceCreateWithURL((__bridge CFURLRef)fileURL, (__bridge CFDictionaryRef)dict);
+    }
     
     
-    
-    
-    CFDictionaryRef firstframeprop = CGImageSourceCopyPropertiesAtIndex(imgSrc, 0, NULL);
+    CFDictionaryRef firstframeprop = CGImageSourceCopyPropertiesAtIndex(_imageSource, 0, NULL);
     CFDictionaryRef gifTest = CFDictionaryGetValue(firstframeprop, kCGImagePropertyGIFDictionary);
-
+    
     bool isGif;
     
     if (gifTest)
@@ -245,12 +259,13 @@
     } else {
         isGif = NO;
     }
-
     
-    _totalFrames = CGImageSourceGetCount(imgSrc);
+    
+    _totalFrames = CGImageSourceGetCount(_imageSource);
     CFRelease(firstframeprop);
     float totalTime = 0;
     
+    ;
     if (_totalFrames > 1 && isGif)
     {
         NSMutableArray *frameArray = [NSMutableArray array];
@@ -259,9 +274,9 @@
         
         for (int i=0; i < _totalFrames; i++)
         {
-            CFDictionaryRef frameprop = CGImageSourceCopyPropertiesAtIndex(imgSrc, i, NULL);
+            CFDictionaryRef frameprop = CGImageSourceCopyPropertiesAtIndex(_imageSource, i, NULL);
             CFDictionaryRef gProp = CFDictionaryGetValue(frameprop, kCGImagePropertyGIFDictionary);
-        
+            
             if (!gProp)
             {
                 CFRelease(frameprop);
@@ -277,18 +292,15 @@
                 [delayList insertObject:udelay atIndex:i];
                 totalTime += udelay.floatValue;
             }
-            CGImageRef frame = CGImageSourceCreateImageAtIndex(imgSrc, i, NULL);
-            NSImage *tmpImg = [[NSImage alloc] initWithCGImage:frame size:NSZeroSize];
             if (i==0)
             {
-                _imageSize = tmpImg.size;
+                NSNumber *iWidth = CFDictionaryGetValue(frameprop, kCGImagePropertyPixelWidth);
+                NSNumber *iHeight = CFDictionaryGetValue(frameprop, kCGImagePropertyPixelHeight);
+                _imageSize = NSMakeSize([iWidth floatValue], [iHeight floatValue]);
+                
             }
-            
-            [frameArray addObject:tmpImg];
-            CFRelease(frame);
+            [frameArray addObject:[NSNumber numberWithInt:i]];
             CFRelease(frameprop);
-            //[frameArray addObject:(__bridge id)frame];
-            
         }
         
         NSMutableArray *timesArray = [NSMutableArray array];
@@ -301,52 +313,43 @@
         }
         
         
-        _animation = [CAKeyframeAnimation animationWithKeyPath:@"contents"];
+        _animation = [CAKeyframeAnimation animationWithKeyPath:@"gifIndex"];
         _animation.duration = totalTime;
         _animation.repeatCount = HUGE_VALF;
         _animation.removedOnCompletion = NO;
-        //animation.fillMode = kCAFillModeForwards;
-        _animation.values = frameArray;
         _animation.keyTimes = timesArray;
+        _animation.values = frameArray;
         _animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
         _animation.calculationMode = kCAAnimationDiscrete;
         _imageDuration = totalTime;
         _singleImage = nil;
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-
-            [self updateLayersWithFramedataBlock:^(CALayer *layer) {
-                [layer addAnimation:_animation forKey:@"contents"];
-
-            }];
-        });
-
+        [self updateLayersWithFramedataBlock:^(CALayer *layer) {
+            [layer addAnimation:_animation forKey:@"gifIndex"];
+        }];
+        
         
         
     } else {
         _animation = nil;
-        CGImageRef sImg = CGImageSourceCreateImageAtIndex(imgSrc, 0, NULL);
+        CGImageRef sImg = CGImageSourceCreateImageAtIndex(_imageSource, 0, NULL);
+        size_t iWidth = CGImageGetWidth(sImg);
+        size_t iHeight = CGImageGetHeight(sImg);
         
-        _singleImage = [[NSImage alloc] initWithCGImage:sImg size:NSZeroSize];
-
-        CGImageRelease(sImg);
-
-        _imageSize = _singleImage.size;
+        _imageSize = NSMakeSize(iWidth, iHeight);
+        if (_singleImage)
+        {
+            CGImageRelease(_singleImage);
+        }
+        _singleImage = sImg;
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self updateLayersWithFramedataBlock:^(CALayer *layer) {
-                layer.contents = _singleImage;
-                [layer removeAnimationForKey:@"contents"];
+                layer.contents = (__bridge id _Nullable)(_singleImage);
+                [layer removeAnimationForKey:@"gifIndex"];
             }];
-                    });
+        });
     }
-    
-    
-    if (imgSrc)
-    {
-        CFRelease(imgSrc);
-    }
-    _frameNumber = 0;
     
 }
 

@@ -344,6 +344,8 @@
 
 -(void)updateLayersWithFramedataBlock:(void(^)(CALayer *))updateBlock
 {
+    
+
     [self internalUpdateLayerswithFrameData:true updateBlock:updateBlock preBlock:nil postBlock:nil];
 
 }
@@ -355,6 +357,8 @@
 
 -(void)internalUpdateLayerswithFrameData:(bool) frameData updateBlock:(void (^)(CALayer *layer))updateBlock preBlock:(void(^)(void))preBlock postBlock:(void(^)(void))postBlock
 {
+    
+
     NSMapTable *inputsCopy = nil;
     @synchronized(self)
     {
@@ -365,6 +369,8 @@
     {
         _fps_frame_cnt++;
     }
+    
+
     for (id key in inputsCopy)
     {
         
@@ -382,6 +388,8 @@
             [layerSrc updateLayer:updateBlock];
         }
     }
+    
+
 
 }
 

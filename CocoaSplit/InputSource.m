@@ -516,7 +516,7 @@ static NSArray *_sourceTypes = nil;
     if (_currentLayer)
     {
         
-
+        
         if (preUseBlock)
         {
             preUseBlock();

@@ -276,12 +276,12 @@
         [_yLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"superlayer" attribute:kCAConstraintMaxX]];
         [_yLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY]];
         
-        
         [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinX relativeTo:@"superlayer" attribute:kCAConstraintMinX]];
         [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY]];
         [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"superlayer" attribute:kCAConstraintMaxX]];
         [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY]];
-        
+        _sourceLayer.actions = @{@"position": NSNull.null, @"bounds":NSNull.null};
+
         _xLayer.delegate = self;
         _yLayer.delegate = self;
         
@@ -464,7 +464,9 @@
     toLayer.contentsRect = _sourceLayer.contentsRect;
     toLayer.autoresizingMask = _sourceLayer.autoresizingMask;
     toLayer.constraints = _sourceLayer.constraints;
-    toLayer.delegate = self;
+    //toLayer.delegate = self;
+    toLayer.actions = @{@"position": NSNull.null, @"bounds":NSNull.null};
+    
 }
 
 
@@ -575,12 +577,12 @@
     return self.sourceLayer.contentsRect;
 }
 
-
+/*
 -(id<CAAction>)actionForLayer:(CALayer *)layer forKey:(NSString *)event
 {
     return (id<CAAction>)[NSNull null];
 }
-
+*/
 
 - (id<CAAction>)actionForKey:(NSString *)key
 {
