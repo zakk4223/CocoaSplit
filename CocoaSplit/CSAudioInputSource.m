@@ -183,19 +183,25 @@
 }
 
 
+
+-(CAMultiAudioEngine *)findAudioEngine
+{
+    CAMultiAudioEngine *audioEngine = nil;
+    if (self.sourceLayout.recorder)
+    {
+        audioEngine = self.sourceLayout.recorder.audioEngine;
+    } else {
+        audioEngine = [CaptureController sharedCaptureController].multiAudioEngine;
+    }
+    
+    return audioEngine;
+}
 -(void)findAudioNode
 {
     
     if (!self.audioNode && self.audioUUID && self.sourceLayout)
     {
-        CAMultiAudioEngine *audioEngine = nil;
-        if (self.sourceLayout.recorder)
-        {
-            audioEngine = self.sourceLayout.recorder.audioEngine;
-        } else {
-            audioEngine = [CaptureController sharedCaptureController].multiAudioEngine;
-        }
-        
+        CAMultiAudioEngine *audioEngine = [self findAudioEngine];
         self.audioNode = [audioEngine inputForUUID:self.audioUUID];
         
         if (!self.audioNode && self.audioFilePath)
@@ -262,7 +268,7 @@
         
         if (fileNode.refCount <= 0)
         {
-            [[CaptureController sharedCaptureController] removeFileAudio:fileNode];
+            [[self findAudioEngine] removeFileInput:fileNode];
         }
     }
 
@@ -326,9 +332,10 @@
     [self restoreAudioSettings];
     if ([self.audioNode isKindOfClass:CAMultiAudioFile.class])
     {
-        [[CaptureController sharedCaptureController] removeFileAudio:(CAMultiAudioFile *)self.audioNode];
-    }
 
+        
+        [[self findAudioEngine] removeFileInput:(CAMultiAudioFile *)self.audioNode];
+    }
 }
 
 -(bool)isDifferentInput:(NSObject<CSInputSourceProtocol> *)from
