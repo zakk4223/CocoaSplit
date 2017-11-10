@@ -3806,7 +3806,6 @@
     
     [self.sourceLayouts removeObjectAtIndex:index];
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutDeleted object:to_delete userInfo:nil];
-    NSLog(@"NOTIFICATION DONE");
 }
 
 -(void) insertObject:(CSLayoutSequence *)object inLayoutSequencesAtIndex:(NSUInteger)index

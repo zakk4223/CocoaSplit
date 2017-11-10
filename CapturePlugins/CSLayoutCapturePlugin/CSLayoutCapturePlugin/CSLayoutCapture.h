@@ -23,7 +23,7 @@
 @interface CSLayoutCapture : CSCaptureBase <CSCaptureSourceProtocol>
 {
     LayoutRendererHack *_current_renderer;
-    
+    NSObject *_originalLayout;
 }
 
 @end

@@ -9,7 +9,7 @@
 #import "CSLayoutCapture.h"
 #import "CSPluginServices.h"
 #import "CSIOSurfaceLayer.h"
-
+#import "CSNotifications.h"
 
 
 
@@ -19,6 +19,44 @@
 {
     return @"Layout";
 }
+
+
+-(instancetype)init
+{
+    if (self = [super init])
+    {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(layoutChanged:) name:CSNotificationLayoutSaved object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(layoutDeleted:) name:CSNotificationLayoutDeleted object:nil];
+
+    }
+    return self;
+}
+
+
+-(void)layoutChanged:(NSNotification *)notification
+{
+    NSObject *changedLayout = [notification object];
+    
+    if (self.activeVideoDevice && (self.activeVideoDevice.captureDevice == changedLayout))
+    {
+        [self setupRenderer];
+    }
+}
+
+-(void)layoutDeleted:(NSNotification *)notification
+{
+    NSObject *deletedLayout = [notification object];
+    
+    if (self.activeVideoDevice && (self.activeVideoDevice.captureDevice == deletedLayout) && _current_renderer)
+    {
+        @synchronized(self)
+        {
+            [_current_renderer setValue:nil forKey:@"layout"];
+            _current_renderer = nil;
+        }
+    }
+}
+
 
 -(NSArray *)availableVideoDevices
 {
@@ -36,17 +74,31 @@
     return ret;
 }
 
+
+-(void)setupRenderer
+{
+    Class renderClass = NSClassFromString(@"LayoutRenderer");
+    
+    self.captureName = self.activeVideoDevice.captureName;
+    NSObject *capDev = [self.activeVideoDevice.captureDevice copy];
+    SEL restoreSEL = NSSelectorFromString(@"restoreSourceList:");
+    [capDev performSelector:restoreSEL withObject:nil];
+    @synchronized(self)
+    {
+        if (!_current_renderer)
+        {
+            _current_renderer = [[renderClass alloc] init];
+        }
+    }
+    [_current_renderer setValue:capDev forKey:@"layout"];
+}
 -(void)setActiveVideoDevice:(CSAbstractCaptureDevice *)activeVideoDevice
 {
     Class renderClass = NSClassFromString(@"LayoutRenderer");
     
     [super setActiveVideoDevice:activeVideoDevice];
-    self.captureName = activeVideoDevice.captureName;
-    NSObject *capDev = activeVideoDevice.captureDevice;
-    SEL restoreSEL = NSSelectorFromString(@"restoreSourceList:");
-    [capDev performSelector:restoreSEL withObject:nil];
-    _current_renderer = [[renderClass alloc] init];
-    [_current_renderer setValue:capDev forKey:@"layout"];
+     
+     [self setupRenderer];
 }
 
 -(NSSize)captureSize
@@ -66,17 +118,33 @@
 
 -(void)frameTick
 {
-    if (_current_renderer)
+    
+    LayoutRendererHack *renderer = nil;
+    @synchronized(self)
     {
-        CVImageBufferRef pb = [_current_renderer currentImg];
+        renderer = _current_renderer;
+    }
+    if (renderer)
+    {
+        CVImageBufferRef pb = [renderer currentImg];
+        
+
         
         [self updateLayersWithFramedataBlock:^(CALayer *layer) {
-            layer.contents = (__bridge id _Nullable)(pb);
+            
+            if (pb)
+            {
+                layer.contents = (__bridge id _Nullable)(pb);
+            } else {
+                layer.contents = nil;
+            }
             
         } withPreuseBlock:^{
-            CFRetain(pb);
+            if (pb)
+                CFRetain(pb);
         } withPostuseBlock:^{
-            CFRelease(pb);
+            if (pb)
+                CFRelease(pb);
         }];
 
     }
