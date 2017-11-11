@@ -11,6 +11,10 @@
 
 @interface CSAudioInputSource : CSInputSourceBase
 {
+    
+    NSMutableDictionary *_previousSaveData;
+    NSMutableDictionary *_savedAudioSettings;
+    
     float _previousVolume;
     bool _previousEnabled;
 }

@@ -32,4 +32,17 @@
     // Do view setup here.
 }
 
+
+-(IBAction)openMixerWindow:(id)sender
+{
+    
+    if (self.inputSource.audioNode.downMixer)
+    {
+        self.mixerWindow = [[CAMultiAudioMatrixMixerWindowController alloc] initWithAudioMixer:self.inputSource.audioNode];
+        [self.mixerWindow showWindow:nil];
+        self.mixerWindow.window.title = self.inputSource.name;
+    }
+}
+
+
 @end

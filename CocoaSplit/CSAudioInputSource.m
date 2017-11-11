@@ -94,6 +94,12 @@
     [aCoder encodeFloat:self.fileStartTime forKey:@"fileStartTime"];
     [aCoder encodeFloat:self.fileEndTime forKey:@"fileEndTime"];
     [aCoder encodeBool:self.fileLoop forKey:@"fileLoop"];
+    if (self.audioNode)
+    {
+        NSMutableDictionary *nodeData = [NSMutableDictionary dictionary];
+        [self.audioNode saveDataToDict:nodeData];
+        [aCoder encodeObject:nodeData forKey:@"savedAudioSettings"];
+    }
 
 }
 
@@ -104,6 +110,7 @@
         self.audioUUID = [aDecoder decodeObjectForKey:@"audioUUID"];
         self.audioVolume = [aDecoder decodeFloatForKey:@"audioVolume"];
         self.audioEnabled = [aDecoder decodeBoolForKey:@"audioEnabled"];
+        
         self.audioFilePath = [aDecoder decodeObjectForKey:@"audioFilePath"];
         
         if (self.audioFilePath)
@@ -129,6 +136,11 @@
             self.fileLoop = [aDecoder decodeBoolForKey:@"fileLoop"];
         } else {
             self.fileLoop = NO;
+        }
+        
+        if ([aDecoder containsValueForKey:@"savedAudioSettings"])
+        {
+            _savedAudioSettings = [aDecoder decodeObjectForKey:@"savedAudioSettings"];
         }
 
         
@@ -229,8 +241,11 @@
             ((CAMultiAudioFile *)self.audioNode).refCount++;
         }
         
-        _previousVolume = self.audioNode.volume;
-        _previousEnabled = self.audioNode.enabled;
+        
+        _previousSaveData = [NSMutableDictionary dictionary];
+        [self.audioNode saveDataToDict:_previousSaveData];
+        //_previousVolume = self.audioNode.volume;
+        //_previousEnabled = self.audioNode.enabled;
         
 
 
@@ -245,8 +260,17 @@
             fileNode.startTime = self.fileStartTime;
             fileNode.endTime = self.fileEndTime;
         }
+        
         self.audioEnabled = self.audioEnabled;
         self.audioVolume = self.audioVolume;
+        
+        if (_savedAudioSettings)
+        {
+                if (self.is_live)
+                {
+                    [self.audioNode restoreDataFromDict:_savedAudioSettings];
+                }
+        }
 
 
     }
@@ -255,10 +279,12 @@
 -(void)restoreAudioSettings
 {
     
-    if (self.audioNode && self.is_live)
+    if (self.audioNode && self.is_live && _previousSaveData)
     {
-        self.audioNode.enabled = _previousEnabled;
-        self.audioNode.volume = _previousVolume;
+        
+        [self.audioNode restoreDataFromDict:_previousSaveData];
+        //self.audioNode.enabled = _previousEnabled;
+        //self.audioNode.volume = _previousVolume;
     }
     
     if ([self.audioNode isKindOfClass:CAMultiAudioFile.class])
@@ -354,7 +380,6 @@
     [super setIs_live:is_live];
     if (is_live)
     {
-        NSLog(@"IS LIVE");
         [self applyAudioSettings];
     }
 }

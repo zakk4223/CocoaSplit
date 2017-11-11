@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "CSAudioInputSource.h"
+#import "CAMultiAudioMatrixMixerWindowController.h"
 
 @interface CSAudioInputSourceViewController : NSViewController
 @property (weak) CSAudioInputSource *inputSource;
@@ -17,5 +18,11 @@
 
 @property (strong) NSArray *scriptTypes;
 @property (strong) NSArray *scriptKeys;
+
+@property (strong) CAMultiAudioMatrixMixerWindowController *mixerWindow;
+
+
+-(IBAction)openMixerWindow:(id)sender;
+
 
 @end
