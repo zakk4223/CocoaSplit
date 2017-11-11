@@ -94,7 +94,6 @@
 }
 -(void)setActiveVideoDevice:(CSAbstractCaptureDevice *)activeVideoDevice
 {
-    Class renderClass = NSClassFromString(@"LayoutRenderer");
     
     [super setActiveVideoDevice:activeVideoDevice];
      

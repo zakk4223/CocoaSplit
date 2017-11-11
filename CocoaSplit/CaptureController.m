@@ -3999,6 +3999,7 @@
 -(void)switchToLayout:(SourceLayout *)layout
 {
     [self switchToLayout:layout usingLayout:self.activePreviewView.sourceLayout];
+    [self.activePreviewView stopHighlightingAllSources];
 }
 
 

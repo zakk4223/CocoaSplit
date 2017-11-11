@@ -1048,6 +1048,18 @@
 }
 
 
+-(void)mouseExited:(NSEvent *)event
+{
+    if (self.mousedSource)
+    {
+        [self stopHighlightingSource:self.mousedSource];
+        _overlayView.parentSource = nil;
+    }
+    
+    self.mousedSource = nil;
+}
+
+
 -(void) mouseMoved:(NSEvent *)theEvent
 {
     

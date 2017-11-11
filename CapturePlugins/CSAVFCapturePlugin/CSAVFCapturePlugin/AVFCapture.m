@@ -343,7 +343,7 @@
 -(void)captureVideoOutput:(CMSampleBufferRef)sampleBuffer
 {
         CVImageBufferRef videoFrame = CMSampleBufferGetImageBuffer(sampleBuffer);
-        
+    
 
         if (videoFrame)
         {
