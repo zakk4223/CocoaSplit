@@ -147,7 +147,7 @@
 -(CALayer *)createNewLayer
 {
     ImageCaptureLayer *newLayer = [ImageCaptureLayer layer];
-
+    
     if (_singleImage)
     {
         newLayer.contents = (__bridge id _Nullable)(_singleImage);

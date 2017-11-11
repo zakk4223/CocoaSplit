@@ -301,7 +301,7 @@
     if (self = [super init])
     {
         
-        
+                
         NSLog(@"CREATE INPUT LAYER %@", self);
         
         self.minificationFilter = kCAFilterTrilinear;

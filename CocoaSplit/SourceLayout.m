@@ -66,6 +66,8 @@
 
 -(void)runTriggerScriptForInput:(NSObject <CSInputSourceProtocol>*)input withName:(NSString *)scriptName usingContext:(JSContext *)jsCtx
 {
+    
+    NSLog(@"RUN SCRIPT FOR %@", scriptName);
     if (!jsCtx || !input || !scriptName)
     {
         return;
@@ -1102,10 +1104,16 @@
     
     
     
+
+    
+    NSLog(@"SOURCE LIST PRESENTATION %@", self.sourceListPresentation);
+    
     sortedSources = [self.sourceListPresentation sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"scriptPriority" ascending:YES]]];
     
     for (NSObject <CSInputSourceProtocol> *src in sortedSources)
     {
+        
+        NSLog(@"TRYING SOURCE %@", src);
         if (!src.active)
         {
             continue;
@@ -1921,6 +1929,10 @@
     }
     
     _uuidMapPresentation[addSource.uuid] = addSource;
+    @synchronized(self)
+    {
+        [self.sourceListPresentation addObject:addSource];
+    }
 }
 
 

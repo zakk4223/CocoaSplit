@@ -293,15 +293,7 @@
         }
     }
     
-    if (self.selectedSource.parentInput)
-    {
-        tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Detach from parent" action:@selector(detachSource:) keyEquivalent:@"" atIndex:idx++];
-    } else {
-        tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Attach to underlying input" action:@selector(subLayerInputSource:) keyEquivalent:@"" atIndex:idx++];
-    }
-    
-    tmp.target = self;
-    
+
     tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Reset to source AR" action:@selector(resetSourceAR:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
 }
