@@ -27,7 +27,6 @@
 - (void)windowDidLoad {
     [super windowDidLoad];
     self.sourceLayouts = [CaptureController sharedCaptureController].sourceLayouts;
-    
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
 }
 
@@ -35,7 +34,8 @@
 - (IBAction)outputEditClicked:(id)sender
 {
     //hax
-    OutputDestination *toEdit = [self.controller.captureDestinations objectAtIndex:self.outputTableView.clickedRow];
+    OutputDestination *toEdit = sender;
+    
 
     [self.controller outputEditClicked:toEdit];
 }

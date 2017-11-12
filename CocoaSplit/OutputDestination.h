@@ -43,6 +43,8 @@
 
 
 
+@property (strong) NSImage *statusImage;
+
 @property (assign) BOOL captureRunning;
 
 @property (assign) BOOL errored;

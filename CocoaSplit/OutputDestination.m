@@ -157,7 +157,7 @@
 
     self.errored = NO;
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.textColor = [NSColor greenColor];
+        self.statusImage = [NSImage imageNamed:@"ok"];
     });
 
     [self initStatsValues];
@@ -232,7 +232,7 @@
             [self.ffmpeg_out stopProcess];
             self.ffmpeg_out = nil;
             dispatch_async(dispatch_get_main_queue(), ^{
-                self.textColor = [NSColor redColor];
+                self.statusImage = [NSImage imageNamed:@"Record_Icon"];
             });
         } else {
                 @autoreleasepool {
@@ -243,7 +243,7 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputStopped object:self userInfo:nil];
 
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    self.textColor = [NSColor blackColor];
+                    self.statusImage = [NSImage imageNamed:@"inactive"];
                 });
                 
         }
@@ -263,7 +263,7 @@
     {
         self.buffer_draining = YES;
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.textColor = [NSColor orangeColor];
+            self.statusImage = [NSImage imageNamed:@"draining"];
         });
         return;
     }
@@ -284,7 +284,7 @@
         
         self.assignedLayout = nil;
         self.type_name = type;
-        self.textColor = [NSColor blackColor];
+        self.statusImage = [NSImage imageNamed:@"inactive"];
         _output_start_time = 0.0f;
         _delayBuffer = [[NSMutableArray alloc] init];
         self.delay_buffer_frames = 0;
@@ -410,7 +410,7 @@
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     
-    NSColor *newColor = nil;
+    NSImage *newImage = nil;
     
     if ([keyPath isEqualToString:@"errored"]) {
         
@@ -419,7 +419,7 @@
         if (errVal == YES)
         {
             self.errored = YES;
-            newColor = [NSColor redColor];
+            newImage = [NSImage imageNamed:@"Record_Icon"];
             [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputErrored object:self userInfo:nil];
 
         }
@@ -427,10 +427,10 @@
     }
     
     
-    if (newColor)
+    if (newImage)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.textColor = newColor;
+            self.statusImage = newImage;
         });
     }
     
@@ -552,7 +552,7 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputStarted object:self userInfo:nil];
 
             dispatch_async(dispatch_get_main_queue(), ^{
-                self.textColor  = [NSColor greenColor];
+                self.statusImage  = [NSImage imageNamed:@"ok"];
             });
         }
         
