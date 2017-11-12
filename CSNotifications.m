@@ -24,6 +24,15 @@ NSString *const CSNotificationStreamStopped = @"CSNotificationStreamStopped";
 
 NSString *const CSNotificationOutputAdded = @"CSNotificationOutputAdded";
 NSString *const CSNotificationOutputDeleted = @"CSNotificationOutputDeleted";
+NSString *const CSNotificationOutputErrored = @"CSNotificationOutputErrored";
+NSString *const CSNotificationOutputStarted = @"CSNotificationOutputStarted";
+NSString *const CSNotificationOutputRestarted = @"CSNotificationOutputRestarted";
+NSString *const CSNotificationOutputSetActive = @"CSNotificationOutputSetActive";
+NSString *const CSNotificationOutputSetInactive = @"CSNotificationOutputSetInactive";
+NSString *const CSNotificationOutputReconfigured = @"CSNotificationOutputReconfigured";
+NSString *const CSNotificationOutputStopped = @"CSNotificationOutputStopped";
+
+
 
 
 NSString *const CSNotificationCompressorAdded = @"CSNotificationCompressorAdded";

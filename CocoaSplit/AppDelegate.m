@@ -61,6 +61,8 @@
 {
     
     
+    _notificationController = [[CSUserNotificationController alloc] init];
+    
     [self addProtocolsForClass:[CATransaction class]];
     [self addProtocolsForClass:[CALayer class]];
     [self addProtocolsForClass:[CAAnimation class]];

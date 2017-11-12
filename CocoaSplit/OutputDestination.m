@@ -150,6 +150,11 @@
         _output_queue = dispatch_queue_create(queue_name.UTF8String, NULL);
     }
 
+    if (self.errored)
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputRestarted object:self userInfo:nil];
+    }
+
     self.errored = NO;
     dispatch_async(dispatch_get_main_queue(), ^{
         self.textColor = [NSColor greenColor];
@@ -183,8 +188,8 @@
                 [[CaptureController sharedCaptureController] startRecordingLayout:self.assignedLayout usingOutput:self];
             } else {
                 [self setup];
-                
             }
+            [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputSetActive object:self userInfo:nil];
         } else {
             
             if (self.assignedLayout && ![self.assignedLayout isEqual:[NSNull null]] && streamingActive)
@@ -193,6 +198,9 @@
             } else {
                 [self teardown];
             }
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputSetInactive object:self userInfo:nil];
+
             
         }
     }
@@ -214,7 +222,6 @@
 {
     _output_prepared = NO;
     
-    NSLog(@"RESET");
     self.buffer_draining = NO;
     [_delayBuffer removeAllObjects];
     [self initStatsValues];
@@ -233,6 +240,8 @@
                 [self.ffmpeg_out stopProcess];
                 self.ffmpeg_out = nil;
                 }
+            [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputStopped object:self userInfo:nil];
+
                 dispatch_async(dispatch_get_main_queue(), ^{
                     self.textColor = [NSColor blackColor];
                 });
@@ -411,6 +420,8 @@
         {
             self.errored = YES;
             newColor = [NSColor redColor];
+            [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputErrored object:self userInfo:nil];
+
         }
         
     }
@@ -538,6 +549,8 @@
         if (start_stream)
         {
             [self attachOutput];
+            [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputStarted object:self userInfo:nil];
+
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.textColor  = [NSColor greenColor];
             });
@@ -567,6 +580,8 @@
             {
                 self.errored = YES;
                 self.active = NO;
+                [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputErrored object:self userInfo:nil];
+
                 if (self.autoRetry)
                 {
                     self.active = YES;

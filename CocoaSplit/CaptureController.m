@@ -2826,8 +2826,12 @@
     
     if (captureRunning)
     {
+        
+         [NSApp setApplicationIconImage:[NSImage imageNamed:@"StreamingIcon"]];
         tmpColor = CGColorCreateGenericRGB(1, 0, 0, 1);
     } else {
+        [NSApp setApplicationIconImage:[NSImage imageNamed:@"AppIcon"]];
+
         tmpColor = CGColorCreateGenericRGB(0, 1, 0, 1);
     }
     

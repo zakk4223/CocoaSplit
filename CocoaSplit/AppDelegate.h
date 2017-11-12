@@ -8,12 +8,12 @@
 
 #import <Cocoa/Cocoa.h>
 #import "CaptureController.h"
-
+#import "CSUserNotificationController.h"
 
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 {
-    
+    CSUserNotificationController *_notificationController;
     
 }
 @property (unsafe_unretained) IBOutlet CaptureController *captureController;

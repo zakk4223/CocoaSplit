@@ -208,6 +208,7 @@
 		34C19053189EE60400AB2430 /* CapturedFrameData.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C19052189EE60400AB2430 /* CapturedFrameData.m */; };
 		34C67B8E1A2E69F60012DC1B /* CSHitboxStreamServicePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34C67B781A2D7B6A0012DC1B /* CSHitboxStreamServicePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		34C6C3BF15FB5B440018A18B /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34C6C3BE15FB5B440018A18B /* OpenGL.framework */; };
+		34CACC991FB886FB00C04BC6 /* CSUserNotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34CACC981FB886FB00C04BC6 /* CSUserNotificationController.m */; };
 		34CFE4A018F154DD00092C6A /* AVFChannelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 34CFE49F18F154DD00092C6A /* AVFChannelManager.m */; };
 		34CFE4A418F1992A00092C6A /* AVFAudioChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 34CFE4A318F1992A00092C6A /* AVFAudioChannel.m */; };
 		34D2D5731A547628001004E5 /* CSTextCaptureBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D2D5721A547628001004E5 /* CSTextCaptureBase.m */; };
@@ -914,6 +915,8 @@
 		34C6807E19DD01C300413468 /* CSSyphonInjectExtraPlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSSyphonInjectExtraPlugin.xcodeproj; path = ExtraPlugins/CSSyphonInjectExtraPlugin/CSSyphonInjectExtraPlugin.xcodeproj; sourceTree = "<group>"; };
 		34C6C3BE15FB5B440018A18B /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		34C6DC341EBF545F0038FA44 /* CSLayoutRecorderInfoProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSLayoutRecorderInfoProtocol.h; sourceTree = "<group>"; };
+		34CACC971FB886FB00C04BC6 /* CSUserNotificationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSUserNotificationController.h; sourceTree = "<group>"; };
+		34CACC981FB886FB00C04BC6 /* CSUserNotificationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSUserNotificationController.m; sourceTree = "<group>"; };
 		34CFE49E18F154DD00092C6A /* AVFChannelManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVFChannelManager.h; sourceTree = "<group>"; };
 		34CFE49F18F154DD00092C6A /* AVFChannelManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVFChannelManager.m; sourceTree = "<group>"; };
 		34CFE4A218F1992A00092C6A /* AVFAudioChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVFAudioChannel.h; sourceTree = "<group>"; };
@@ -1339,6 +1342,8 @@
 				34788E281F0D166C00C3C9C5 /* CSAudioInputSource.m */,
 				345BECE61F3FD21200B46F29 /* CSLayoutTransition.h */,
 				345BECE71F3FD21200B46F29 /* CSLayoutTransition.m */,
+				34CACC971FB886FB00C04BC6 /* CSUserNotificationController.h */,
+				34CACC981FB886FB00C04BC6 /* CSUserNotificationController.m */,
 			);
 			path = CocoaSplit;
 			sourceTree = "<group>";
@@ -2653,6 +2658,7 @@
 				347B14DC198492D900DC7DF0 /* InputPopupControllerViewController.m in Sources */,
 				34C0EA411EB64D8E00B30DB4 /* CSLayoutRecorder.m in Sources */,
 				34BB29811B7652EA00F201C2 /* CSPreviewGLLayer.m in Sources */,
+				34CACC991FB886FB00C04BC6 /* CSUserNotificationController.m in Sources */,
 				34D6581819B387DE0012E32B /* AppDelegate+AppDelegate_ScriptingAdditions.m in Sources */,
 				34ED8C991B07371C002C0674 /* MIKMIDIPort.m in Sources */,
 				340DC734197CF6E9003A0BB3 /* CSCaptureBase.m in Sources */,
@@ -2877,6 +2883,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
@@ -2926,6 +2933,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
