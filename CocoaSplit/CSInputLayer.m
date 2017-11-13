@@ -280,7 +280,7 @@
         [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY]];
         [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"superlayer" attribute:kCAConstraintMaxX]];
         [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY]];
-        _sourceLayer.actions = @{@"position": NSNull.null, @"bounds":NSNull.null};
+        _sourceLayer.actions = @{@"position": NSNull.null, @"bounds":NSNull.null, @"contentsRect":NSNull.null};
 
         _xLayer.delegate = self;
         _yLayer.delegate = self;
@@ -300,10 +300,7 @@
 {
     if (self = [super init])
     {
-        
-                
-        NSLog(@"CREATE INPUT LAYER %@", self);
-        
+
         self.minificationFilter = kCAFilterTrilinear;
         self.magnificationFilter = kCAFilterTrilinear;
         self.disableAnimation = NO;
@@ -465,7 +462,7 @@
     toLayer.autoresizingMask = _sourceLayer.autoresizingMask;
     toLayer.constraints = _sourceLayer.constraints;
     //toLayer.delegate = self;
-    toLayer.actions = @{@"position": NSNull.null, @"bounds":NSNull.null};
+    toLayer.actions = @{@"position": NSNull.null, @"bounds":NSNull.null, @"contentsRect":NSNull.null};
     
 }
 
