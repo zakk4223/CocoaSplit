@@ -13,6 +13,7 @@
 #import "CSCaptureBase+TimerDelegate.h"
 #import "CSLayoutTransition.h"
 
+JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 
 
 @implementation SourceLayout
@@ -42,7 +43,6 @@
         
         _pendingScripts = [NSMutableDictionary dictionary];
         
-        _animationQueue = dispatch_queue_create("CSAnimationQueue", NULL);
         _containedLayouts = [[NSMutableArray alloc] init];
         _noSceneTransactions = NO;
         _topLevelSourceArray = [[NSMutableArray alloc] init];
@@ -67,7 +67,6 @@
 -(void)runTriggerScriptForInput:(NSObject <CSInputSourceProtocol>*)input withName:(NSString *)scriptName usingContext:(JSContext *)jsCtx
 {
     
-    NSLog(@"RUN SCRIPT FOR %@", scriptName);
     if (!jsCtx || !input || !scriptName)
     {
         return;
@@ -82,6 +81,8 @@
         JSValue *scriptFunc = jsCtx[@"runTriggerScriptInput"];
         if (scriptFunc)
         {
+            NSLog(@"CALLING FOR %@ LAYER %@", input, input.layer);
+            
             [scriptFunc callWithArguments:@[input, scriptName]];
         }
     }
@@ -213,8 +214,20 @@
 
     //[self doAnimation:animMap];
     
-    NSThread *runThread = [[NSThread alloc] initWithTarget:self selector:@selector(doAnimation:) object:animMap];
-    [runThread start];
+    
+    
+    if (!_animationQueue)
+    {
+        _animationQueue = dispatch_queue_create("Javascript layout queue", DISPATCH_QUEUE_SERIAL);
+    }
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self doAnimation:animMap];
+    });
+    
+    
+    //NSThread *runThread = [[NSThread alloc] initWithTarget:self selector:@selector(doAnimation:) object:animMap];
+    //[runThread start];
     return runUUID;
     
 
@@ -268,18 +281,23 @@
     
     
     void (^completionBlock)(void) = [threadDict objectForKey:@"completionBlock"];
-    //void (^exceptionBlock)(NSException *exception) = [threadDict objectForKey:@"exceptionBlock"];
+    void (^exceptionBlock)(NSException *exception) = [threadDict objectForKey:@"exceptionBlock"];
     
     JSContext *jsCtx = nil;
     
-    if (!_animationContext)
+        /*
+    if (!_animationVirtualMachine)
     {
-        _animationContext = [[CaptureController sharedCaptureController] setupJavascriptContext];
-    }
+        _animationVirtualMachine = [[JSVirtualMachine alloc] init];
+    }*/
+        
+        
     
-    jsCtx = _animationContext;
+        jsCtx = [[CaptureController sharedCaptureController] setupJavascriptContext:_animationVirtualMachine];
+        
+        
     
-    //@try {
+    @try {
 
             [CATransaction begin];
             [CATransaction setCompletionBlock:^{
@@ -297,7 +315,6 @@
             jsCtx[@"useLayout"] = self;
             
             
-           // runAnimationForLayoutWithExtraDictionary = function(animation_string, layout, extraDictionary) {
             JSValue *runFunc = jsCtx[@"runAnimationForLayoutWithExtraDictionary"];
             JSValue *scriptRet = [runFunc callWithArguments:@[animationCode, self, extraDict]];
                                   
@@ -305,13 +322,12 @@
         
             NSDictionary *pendingAnimations = scriptRet.toDictionary;
             
-            //NSDictionary *pendingAnimations = [runner runAnimation:animationCode forLayout:self withExtraDictionary:extraDict];
+            
             self.pendingScripts[runUUID] = pendingAnimations;
         } else {
             [runner runAnimation:modName forLayout:self  withSuperlayer:rootLayer];
         }
-    //}
-    /*
+    }
     @catch (NSException *exception) {
         
         [self.pendingScripts removeObjectForKey:runUUID];
@@ -323,11 +339,13 @@
         
         NSLog(@"Animation module %@ failed with exception: %@: %@", modName, [exception name], [exception reason]);
     }
-    @finally {*/
+    @finally {
             [CATransaction commit];
 
+        jsCtx = nil;
+
        // [CATransaction flush];
-    //}
+    }
     }
 }
 

@@ -39,7 +39,7 @@
 #import "CSCIFilterLayoutTransitionViewController.h"
 #import "CSLayoutLayoutTransitionViewController.h"
 #import "CSScriptInputSource.h"
-
+#import "CSJSAnimationDelegate.h"
 
 
 @implementation CaptureController
@@ -58,23 +58,52 @@
 
 -(void)evaluateJavascriptFile:(NSString *)baseFile inContext:(JSContext *)ctx
 {
-    NSString *path = [[NSBundle mainBundle] pathForResource:baseFile ofType:@"js" inDirectory:@"Javascript"];
-    if (path)
+    if (!_javaScriptFileCache)
     {
-        NSString *scriptSource = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
-        if (scriptSource)
+        _javaScriptFileCache = [NSMutableDictionary dictionary];
+    }
+    
+    NSString *scriptSource = nil;
+    
+    scriptSource = _javaScriptFileCache[baseFile];
+    
+    if (!scriptSource)
+    {
+        NSString *path = [[NSBundle mainBundle] pathForResource:baseFile ofType:@"js" inDirectory:@"Javascript"];
+        if (path)
         {
-            NSLog(@"EVALUATING %@", baseFile);
-            
-            [ctx evaluateScript:scriptSource];
+            scriptSource = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
+            if (scriptSource)
+            {
+                _javaScriptFileCache[baseFile] = scriptSource;
+            }
         }
+    }
+    
+    if (scriptSource)
+    {
+        [ctx evaluateScript:scriptSource];
     }
 }
 
 
 -(JSContext *)setupJavascriptContext
 {
-    JSContext *ctx = [[JSContext alloc] init];
+
+    return [self setupJavascriptContext:nil];
+}
+
+
+-(JSContext *)setupJavascriptContext:(JSVirtualMachine *)machine
+{
+    
+    JSContext *ctx = nil;
+    if (machine)
+    {
+        ctx = [[JSContext alloc] initWithVirtualMachine:machine];
+    } else {
+        ctx = [[JSContext alloc] init];
+    }
     ctx.exceptionHandler = ^(JSContext *context, JSValue *exception) {
         NSString *stackTrace = [exception objectForKeyedSubscript:@"stack"].toString;
         NSNumber *lineNum = [exception objectForKeyedSubscript:@"line"].toNumber;
@@ -93,6 +122,8 @@
     ctx[@"console"][@"log"] = ^(NSString *msg) {
         NSLog(@"JS: %@", msg);
     };
+    
+    ctx[@"CSJSAnimationDelegate"] = CSJSAnimationDelegate.class;
     
     ctx[@"proxyWithObject"] = ^(JSValue *jObject) {
         

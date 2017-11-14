@@ -334,6 +334,9 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @interface CaptureController : NSObject <CaptureControllerExport, NSTableViewDelegate, NSMenuDelegate, MIKMIDIMappableResponder, MIKMIDIResponder, MIKMIDIMappingGeneratorDelegate, NSCollectionViewDelegate, NSOutlineViewDelegate, NSOutlineViewDataSource, CSLayoutRecorderInfoProtocol, NSTableViewDataSource, NSCollectionViewDataSource>
 
 {
+    
+    NSMutableDictionary *_javaScriptFileCache;
+    
 CSSequenceEditorWindowController *_sequenceWindowController;
 
 
@@ -524,6 +527,7 @@ NSArray *_savedTransitionConstraints;
 @property (weak) IBOutlet NSArrayController *audioInputsArrayController;
 
 -(JSContext *)setupJavascriptContext;
+-(JSContext *)setupJavascriptContext:(JSVirtualMachine *)machine;
 -(NSObject<CSInputSourceProtocol>*)inputSourceForPasteboardItem:(NSPasteboardItem *)item;
 
 -(IBAction)openScriptSwitcherWindow:(id)sender;

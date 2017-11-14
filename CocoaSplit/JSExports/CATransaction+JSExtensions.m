@@ -12,12 +12,13 @@
 
 + (void)setCompletionBlockJS:(JSValue *)jsvalue
 {
+    
+    
+    
     [CATransaction setCompletionBlock:^{
         
         [jsvalue callWithArguments:nil];
     }];
 }
-
-
 
 @end

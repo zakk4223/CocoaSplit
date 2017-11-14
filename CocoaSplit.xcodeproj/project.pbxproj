@@ -162,6 +162,7 @@
 		3494DF391CCD2DB000E921BF /* TPCircularBuffer+AudioBufferList.c in Sources */ = {isa = PBXBuildFile; fileRef = 3494DF361CCD2DB000E921BF /* TPCircularBuffer+AudioBufferList.c */; };
 		3498D94A1A94685000906532 /* CSAudioSwitchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3498D9491A94685000906532 /* CSAudioSwitchCell.m */; };
 		3498D94F1A9472BD00906532 /* CSAudioSwitchControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 3498D94E1A9472BD00906532 /* CSAudioSwitchControl.m */; };
+		34A629451FBB6DC500B4E16A /* CSJSAnimationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A629441FBB6DC500B4E16A /* CSJSAnimationDelegate.m */; };
 		34A64A2F165EFE4C00A68428 /* PreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A64A2E165EFE4B00A68428 /* PreviewView.m */; };
 		34A64A37165F208800A68428 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A64A36165F208800A68428 /* QuartzCore.framework */; };
 		34A7ADB81C01EF1400685044 /* CompressionSettingsPanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A7ADB71C01EF1400685044 /* CompressionSettingsPanelController.m */; };
@@ -825,6 +826,9 @@
 		3498D9491A94685000906532 /* CSAudioSwitchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAudioSwitchCell.m; sourceTree = "<group>"; };
 		3498D94D1A9472BD00906532 /* CSAudioSwitchControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSAudioSwitchControl.h; sourceTree = "<group>"; };
 		3498D94E1A9472BD00906532 /* CSAudioSwitchControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAudioSwitchControl.m; sourceTree = "<group>"; };
+		34A629431FBB6DC500B4E16A /* CSJSAnimationDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSJSAnimationDelegate.h; sourceTree = "<group>"; };
+		34A629441FBB6DC500B4E16A /* CSJSAnimationDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSJSAnimationDelegate.m; sourceTree = "<group>"; };
+		34A6295D1FBB6F0D00B4E16A /* CSJSAnimationDelegateJSExport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSJSAnimationDelegateJSExport.h; sourceTree = "<group>"; };
 		34A64A2D165EFE4B00A68428 /* PreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PreviewView.h; sourceTree = "<group>"; };
 		34A64A2E165EFE4B00A68428 /* PreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreviewView.m; sourceTree = "<group>"; };
 		34A64A36165F208800A68428 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -1717,6 +1721,9 @@
 				34788DE81EF6A37200C3C9C5 /* CSJSProxyObjJSExport.h */,
 				34788DE91EF7F13B00C3C9C5 /* NSValueJSExport.h */,
 				34788DEA1EFA312C00C3C9C5 /* CIFilterJSExport.h */,
+				34A629431FBB6DC500B4E16A /* CSJSAnimationDelegate.h */,
+				34A629441FBB6DC500B4E16A /* CSJSAnimationDelegate.m */,
+				34A6295D1FBB6F0D00B4E16A /* CSJSAnimationDelegateJSExport.h */,
 			);
 			path = JSExports;
 			sourceTree = "<group>";
@@ -2734,6 +2741,7 @@
 				34B5FADD1E75BC910078FC51 /* CSLayoutSwitcherViewController.m in Sources */,
 				34ED8C851B07371C002C0674 /* MIKMIDIMetaTextEvent.m in Sources */,
 				34B5FACB1E7461E60078FC51 /* CSLayoutSequence.m in Sources */,
+				34A629451FBB6DC500B4E16A /* CSJSAnimationDelegate.m in Sources */,
 				3427864B1EA4337400877B7B /* CSTransitionAnimationDelegate.m in Sources */,
 				34348C2A19BDBDC000A122C2 /* PluginManagerWindowController.m in Sources */,
 				34F80D511EDBAF8700D890D3 /* CSLayoutSequence+ScriptingAdditions.m in Sources */,

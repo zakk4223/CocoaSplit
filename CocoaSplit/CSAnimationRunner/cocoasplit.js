@@ -19,6 +19,7 @@ var runAnimationForLayoutWithExtraDictionary = function(animation_string, layout
         commitAnimation();
     }
     
+    
     return all_animations;
 }
 
@@ -145,7 +146,10 @@ var runTriggerScriptInput = function(input, scriptType) {
             inputSelf = new CSAnimationInput(input);
         }
         (new Function("self", input["script_"+scriptType]))(inputSelf);
+        inputSelf.input = null;
+        inputSelf.layer = null;
         inputSelf = null;
+        
     }
 
 }
@@ -164,6 +168,7 @@ var runTriggerScript = function(layout, scriptType) {
                             inputSelf = new CSAnimationInput(r_inp);
                         }
                         (new Function("self", r_inp["script_"+scriptType]))(inputSelf);
+
                         inputSelf = null;
                      }
     });

@@ -9,6 +9,7 @@
 #import <JavaScriptCore/JavaScriptCore.h>
 
 @interface CATransaction (JSExtensions)
+
 + (void)setCompletionBlockJS:(JSValue *)jsvalue;
 
 @end

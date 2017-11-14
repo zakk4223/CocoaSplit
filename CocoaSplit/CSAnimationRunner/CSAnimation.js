@@ -24,14 +24,15 @@ CSAnimation = function(target, keyPath, animation, kwargs) {
     
     
     
+    self = this;
     this.completed = function() {
-        if (this.internal_completion_handler)
+        if (self.internal_completion_handler)
         {
-            this.internal_completion_handler();
+            self.internal_completion_handler();
         }
-        if (this.completion_handler)
+        if (self.completion_handler)
         {
-            this.completion_handler();
+            self.completion_handler();
         }
     }
     
@@ -90,6 +91,8 @@ CSAnimation = function(target, keyPath, animation, kwargs) {
             }
             this.target.removeAnimationForKey(this.uukey);
             CATransaction.commit();
+            this.target = null;
+            this.animation.delegate = null;
         }
     }
     

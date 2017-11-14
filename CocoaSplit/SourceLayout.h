@@ -139,7 +139,10 @@
     NSMutableArray *_topLevelSourceArray;
     bool _skipRefCounting;
     bool _doingLayoutExport;
-    JSContext *_animationContext;
+    JSVirtualMachine *_animationVirtualMachine;
+    //dispatch_queue_t _animationQueue;
+    
+    
     
     
     

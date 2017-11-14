@@ -10,18 +10,6 @@ CSAnimationBlock.currentFrame = function() {
 
 
 
-function CSAnimationDelegate(animation) {
-    this.animation = animation;
-    this.animationDidStopFinished_signature = "v@:@c";
-    this.animationDidStopFinished = function(animation, finished) {
-        var a_proxy = animation.valueForKeyPath("__CS_COMPLETION__");
-        var js_anim = a_proxy.jsObject;
-        if (js_anim)
-        {
-            js_anim.completed();
-        }
-    }
-}
 
 function AnimationBlock(duration) {
     
@@ -101,10 +89,8 @@ function AnimationBlock(duration) {
         
         if (!animation.ignore_wait && animation.animation)
         {
-           
-            var a_delegate = proxyWithObject(new CSAnimationDelegate(animation));
-            animation.animation.setValueForKeyPath(proxyWithObject(animation), "__CS_COMPLETION__");
-            animation.animation.delegate = a_delegate;
+            var a_delegate = new CSJSAnimationDelegate(animation);
+           animation.animation.delegate = a_delegate;
         }
         
         var a_duration = animation.apply(this.current_begin_time);
@@ -167,7 +153,11 @@ function AnimationBlock(duration) {
     
     this.commit = function()
     {
+        CATransaction.setValueForKey(null, "__CS_BLOCK_UUID__");
+        this.animation_info = null;
+        delete block_uuid_map[this.uuid];
         CATransaction.commit();
+        
     }
     
     this.waitAnimation = function(duration, target, kwargs) {
@@ -182,8 +172,6 @@ function AnimationBlock(duration) {
     block_uuid_map[this.uuid] = this;
     
     CATransaction.setValueForKey(this.uuid, "__CS_BLOCK_UUID__");
-    
-    CATransaction.setValueForKey(this, "__CS_BLOCK_OBJECT__");
     this.current_begin_time = 0;
 
 

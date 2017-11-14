@@ -10,7 +10,9 @@
 #import "CSJSProxyObjJSExport.h"
 
 @interface CSJSProxyObj : NSObject <CSJSProxyObjJSExport>
-
+{
+    JSManagedValue *_managedObject;
+}
 
 @property (strong) JSValue *jsObject;
 

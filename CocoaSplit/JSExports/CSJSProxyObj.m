@@ -13,6 +13,29 @@
 
 @implementation CSJSProxyObj
 
+@synthesize jsObject = _jsObject;
+
+
+
+-(void)setJsObject:(JSValue *)jsObject
+{
+
+    
+    _jsObject = jsObject;
+    
+    //_managedObject = [JSManagedValue managedValueWithValue:jsObject];
+    
+    
+    //[_managedObject.value.context.virtualMachine addManagedReference:_managedObject withOwner:self];
+}
+
+
+-(JSValue *)jsObject
+{
+    return _jsObject;
+}
+
+
 
 -(NSArray *)argumentListForInvocation:(NSInvocation *)invocation
 {
@@ -30,6 +53,8 @@
             BOOL tmp;
             [invocation getArgument:&tmp atIndex:idx];
             [argArray addObject:@(tmp)];
+            NSLog(@"BOOL ARG IS %hhd", tmp);
+            
         } else if (ISARGUMENTTYPE(char, aType)) {
             char tmp;
             [invocation getArgument:&tmp atIndex:idx];
@@ -87,6 +112,7 @@
             id tmp;
             [invocation getArgument:&tmp atIndex:idx];
             [argArray addObject:tmp];
+            NSLog(@"TMP IS %@", tmp);
 
         } else {
         
@@ -151,6 +177,7 @@
         
         NSString *jsFunction = [self mangleName:selName];
         
+        NSLog(@"CALL JSFUNCTION %@", jsFunction);
         if (!self.jsObject[jsFunction].isUndefined)
         {
             NSArray *argArray = [self argumentListForInvocation:anInvocation];
@@ -187,4 +214,15 @@
     return NO;
     
 }
+
+/*
+-(void)dealloc
+{
+    if (_managedObject)
+    {
+        [_managedObject.value.context.virtualMachine removeManagedReference:_managedObject withOwner:self];
+    }
+}*/
 @end
+
+
