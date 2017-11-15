@@ -10,7 +10,7 @@
 #import "CSStreamServiceProtocol.h"
 
 
-#define HITBOX_API_BASE "http://api.hitbox.tv/"
+#define HITBOX_API_BASE "https://api.hitbox.tv/"
 
 @interface HitboxStreamService : NSObject <CSStreamServiceProtocol>
 

@@ -24,17 +24,17 @@
 
 +(NSString *)label
 {
-    return @"Hitbox";
+    return @"Smashcast";
 }
 
 +(NSString *)serviceDescription
 {
-    return @"Hitbox";
+    return @"Smashcast";
 }
 
 +(NSImage *)serviceImage
 {
-    return [[NSBundle bundleForClass:[self class]] imageForResource:@"hitbox-icon-green"];;
+    return [[NSBundle bundleForClass:[self class]] imageForResource:@"smashcast-icon"];;
 }
 
 
