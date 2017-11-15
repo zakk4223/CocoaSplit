@@ -126,14 +126,7 @@
         newLayer.syphonClient = _syphon_client;
     }
     
-    if (self.renderType == kCSRenderAsync)
-    {
-        newLayer.asynchronous = YES;
-    } else {
-        newLayer.asynchronous = NO;
-    }
-    
-    
+
     newLayer.flipImage = self.isFlipped;
     return newLayer;
 }
@@ -169,9 +162,7 @@
     }
     
     
-    [self updateLayersWithBlock:^(CALayer *layer) {
-        ((CSSyphonCaptureLayer *)layer).asynchronous = asyncValue;
-    }];
+
 
     _renderType = renderType;
 }
@@ -182,18 +173,6 @@
     return _renderType;
 }
 
-
--(void)frameTick
-{
-    if (self.renderType == kCSRenderOnFrameTick)
-    {
-        [self updateLayersWithBlock:^(CALayer *layer) {
-            [((CSSyphonCaptureLayer *)layer) setNeedsDisplay];
-            
-        }];
-
-    }
-}
 
 
 -(NSSize)captureSize
@@ -238,7 +217,7 @@
             
             
             
-            if (self.renderType == kCSRenderFrameArrived && !_dummyFrameUpdate)
+            if (!_dummyFrameUpdate)
             {
                 [self updateLayersWithFramedataBlock:^(CALayer *layer) {
                     
