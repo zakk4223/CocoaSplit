@@ -33,6 +33,13 @@
 }
 
 
+- (IBAction)saveButtonAction:(id)sender
+{
+    [self.inputSourceController commitEditing];
+    [self.view.window close];
+    
+}
+
 -(IBAction)openMixerWindow:(id)sender
 {
     
@@ -44,5 +51,15 @@
     }
 }
 
+-(void) tableViewSelectionDidChange:(NSNotification *)notification
+{
+    NSTableView *tableView = notification.object;
+    
+    
+    NSString *scriptKey = self.scriptKeys[tableView.selectedRow];
+    [self.textView bind:@"value" toObject:self.inputSourceController withKeyPath:scriptKey options:nil];
+    
+    
+}
 
 @end
