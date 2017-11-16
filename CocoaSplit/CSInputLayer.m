@@ -91,7 +91,6 @@
 {
     if (self = [super initWithLayer:layer])
     {
-        NSLog(@"INIT WITH LAYER %@", self);
         
         self.fakeHeight = ((CALayer *)layer).bounds.size.height;
         self.fakeWidth = ((CALayer *)layer).bounds.size.width;
