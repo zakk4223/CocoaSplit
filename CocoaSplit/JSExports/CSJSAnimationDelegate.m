@@ -7,6 +7,7 @@
 //
 
 #import "CSJSAnimationDelegate.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation CSJSAnimationDelegate
 
@@ -26,15 +27,12 @@
 -(void)animationDidStop:(CAAnimation *)animation finished:(BOOL)finished
 {
     
-    NSLog(@"ANIMATION STOPPED");
     if (_jsAnimation)
     {
         JSValue *realAnim = _jsAnimation.value;
-        NSLog(@"REAL ANIMATION %@", realAnim);
         if (realAnim[@"completed"])
         {
-            NSLog(@"CALLING COMPLETED");
-            [realAnim[@"completed"] callWithArguments:nil];
+            [realAnim[@"completed"] callWithArguments:@[realAnim]];
             _jsCtx = nil;
         }
     }

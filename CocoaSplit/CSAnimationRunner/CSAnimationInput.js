@@ -175,13 +175,13 @@ function CSAnimationInput(cs_input) {
         var ret_y = y;
         if (x > 0.0 && x <= 1.0)
         {
-            var slayer = this.layer.superlayer();
+            var slayer = this.layer.superlayer;
             ret_x = slayer.bounds.x + (slayer.bounds.width * x);
         }
         
         if (y > 0.0 && y <= 1.0)
         {
-            var slayer = this.layer.superlayer();
+            var slayer = this.layer.superlayer;
             ret_y = slayer.bounds.y + (slayer.bounds.height *y);
         }
         return {x: ret_x, y: ret_y};

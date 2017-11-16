@@ -38,7 +38,7 @@
     CSInputSourceBase *newCopy = [[[self class] allocWithZone:zone] init];
     newCopy.is_live = self.is_live;
     newCopy.name = self.name;
-    newCopy.uuid = self.uuid;
+    [newCopy createUUID];
     newCopy.active = self.active;
     newCopy.depth = self.depth;
     newCopy.scriptPriority = self.scriptPriority;
@@ -57,9 +57,8 @@
 
 -(void)createUUID
 {
-    CFUUIDRef tmpUUID = CFUUIDCreate(NULL);
-    self.uuid = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, tmpUUID);
-    CFRelease(tmpUUID);
+
+    self.uuid = NSUUID.UUID.UUIDString;
     
 }
 
