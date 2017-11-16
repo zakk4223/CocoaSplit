@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12120" systemVersion="17A405" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12120"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -254,7 +254,7 @@ Gw
                                                                 <binding destination="PtK-8g-bbF" name="value" keyPath="objectValue.active" id="du2-9c-NfA"/>
                                                             </connections>
                                                         </button>
-                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsExpansionToolTips="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6eV-Vg-xGv">
+                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6eV-Vg-xGv">
                                                             <rect key="frame" x="51" y="0.0" width="238" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" title="Table View Cell" id="2o7-w5-7G0">
@@ -276,7 +276,7 @@ Gw
                                         </tableColumn>
                                     </tableColumns>
                                     <connections>
-                                        <action selector="inputOutlineViewDoubleClick:" target="-2" id="x0i-xT-hyl"/>
+                                        <action trigger="doubleAction" selector="inputOutlineViewDoubleClick:" target="-2" id="eWV-lE-wau"/>
                                         <binding destination="kDD-qn-do6" name="content" keyPath="arrangedObjects" id="TJa-9S-GXe"/>
                                         <outlet property="dataSource" destination="-2" id="INu-pV-L7E"/>
                                         <outlet property="delegate" destination="-2" id="R35-RD-yxJ"/>
@@ -300,7 +300,7 @@ Gw
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
                     </button>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2J5-Pb-RaS">
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2J5-Pb-RaS">
                         <rect key="frame" x="18" y="297" width="47" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Sources" id="GOd-5I-neb">
                             <font key="font" metaFont="smallSystem"/>
