@@ -310,7 +310,29 @@ static NSArray *_sourceTypes = nil;
             self.constraintMap = [NSKeyedUnarchiver unarchiveObjectWithData:constraintData];
         }
         
+        //if all the constraint attributes are zero reset to null based map
         
+        
+        bool convert_constraints = YES;
+        for (NSString *cKey in self.constraintMap)
+        {
+            NSDictionary *cons = self.constraintMap[cKey];
+            NSNumber *attr = cons[@"attr"];
+            
+            if ((id)attr == [NSNull null])
+            {
+                convert_constraints = NO;
+                break;
+            } else if (attr.intValue != 0) {
+                convert_constraints = NO;
+                break;
+            }
+        }
+        
+        if (convert_constraints)
+        {
+            [self resetConstraints];
+        }
         
         
         _rotationAngle = [aDecoder decodeFloatForKey:@"rotationAngle"];
@@ -834,6 +856,7 @@ static NSArray *_sourceTypes = nil;
 -(NSViewController *)configurationViewController
 {
     InputPopupControllerViewController *controller = [[InputPopupControllerViewController alloc] init];
+    NSLog(@"CONSTRAINT MAP %@", self.constraintMap);
     controller.inputSource = self;
     return controller;
 }
@@ -847,7 +870,7 @@ static NSArray *_sourceTypes = nil;
     for (NSString *base in baseKeys)
     {
         NSMutableDictionary *valDict = [[NSMutableDictionary alloc] init];
-        [valDict setObject:[NSNumber numberWithInt:0] forKey:@"attr"];
+        [valDict setObject:[NSNull null] forKey:@"attr"];
         [valDict setObject:[NSNumber numberWithInt:0] forKey:@"offset"];
         [dict setObject:valDict forKey:base];
     }
@@ -3408,6 +3431,7 @@ static NSArray *_sourceTypes = nil;
     {
         
         
+        
         NSNumber *constraintVal;
         constraintVal = _constraintAttributeMap[key];
         
@@ -3425,7 +3449,7 @@ static NSArray *_sourceTypes = nil;
         NSNumber *parentVal = valMap[@"attr"];
         NSNumber *offsetVal = valMap[@"offset"];
         
-        if (!parentVal || (id)parentVal == [NSNull null])
+        if ((id)parentVal == [NSNull null])
         {
             continue;
         }
@@ -3438,10 +3462,7 @@ static NSArray *_sourceTypes = nil;
         }
         
         CAConstraintAttribute parentAttrib = [parentVal intValue];
-        if (!parentAttrib)
-        {
-            continue;
-        }
+        
         [constraints addObject:[CAConstraint constraintWithAttribute:toConstrain relativeTo:@"superlayer" attribute:parentAttrib scale:1 offset:offsetFloat]];
         
     }
