@@ -204,6 +204,7 @@
 @property (strong) CSLayoutTransition *transitionInfo;
 @property (readonly) bool hasSources;
 
+-(void) adjustAllInputs;
 
 
 @end

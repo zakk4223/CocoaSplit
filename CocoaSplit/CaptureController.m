@@ -527,6 +527,7 @@
     if (!layout.recorder)
     {
         [newController.previewView.sourceLayout restoreSourceList:nil];
+        [layout adjustAllInputs];
     }
     
     newController.delegate = self;
