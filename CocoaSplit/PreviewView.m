@@ -1920,6 +1920,7 @@
         
         if (cController)
         {
+            [cController commitEditing];
             [self.activeConfigControllers removeObjectForKey:uuid];
         }
         

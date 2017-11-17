@@ -425,6 +425,7 @@
         }
     } else if (tableView == self.scriptTableView) {
         NSString *scriptKey = self.scriptKeys[tableView.selectedRow];
+        [self scriptSaveAll:nil];
         [self.scriptTextView bind:@"value" toObject:self.inputobjctrl withKeyPath:scriptKey options:nil];
 
     }
@@ -464,6 +465,11 @@
     [self.undoManager endUndoGrouping];
 }
 
+
+-(void)tabView:(NSTabView *)tabView willSelectTabViewItem:(NSTabViewItem *)tabViewItem
+{
+    [self scriptSaveAll:nil];
+}
 
 
 - (IBAction)resetConstraints:(id)sender

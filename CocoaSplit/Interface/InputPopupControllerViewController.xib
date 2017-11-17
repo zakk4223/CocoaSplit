@@ -2731,6 +2731,7 @@
             </tabViewItems>
             <connections>
                 <binding destination="Gdf-y2-DdF" name="selectedLabel" keyPath="selection.settingsTab" id="hiM-bU-1lm"/>
+                <outlet property="delegate" destination="-2" id="zHT-jQ-wwc"/>
             </connections>
             <point key="canvasLocation" x="686" y="99.5"/>
         </tabView>

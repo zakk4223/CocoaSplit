@@ -3,7 +3,6 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 7/26/14.
-//  Copyright (c) 2014 Zakk. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -11,7 +10,7 @@
 
 @class InputSource;
 
-@interface InputPopupControllerViewController : NSViewController <NSWindowDelegate, NSTableViewDelegate>
+@interface InputPopupControllerViewController : NSViewController <NSWindowDelegate, NSTableViewDelegate, NSTabViewDelegate>
 
 
 @property (strong) NSWindow *transitionFilterWindow;
