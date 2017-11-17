@@ -215,6 +215,7 @@ typedef enum resize_style_t {
 @interface InputSource : CSInputSourceBase <CSInputSourceProtocol, InputSourceExport, NSCoding, NSWindowDelegate, NSCopying, MIKMIDIMappableResponder, MIKMIDIResponder>
 {
     
+    
     bool _alwaysDisplay;
 
     float _transitionDuration;

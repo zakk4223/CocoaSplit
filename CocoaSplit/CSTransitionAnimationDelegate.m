@@ -14,7 +14,27 @@
 -(void)animationDidStart:(CAAnimation *)anim
 {
     
+    NSLog(@"ANIMATION DID START");
     [CATransaction begin];
+    [CATransaction setCompletionBlock:^{
+        for (InputSource *nSrc in self.addedInputs)
+        {
+            if (nSrc.layer)
+            {
+                [nSrc buildLayerConstraints];
+            }
+        }
+        
+        for (InputSource *cSrc in self.changedInputs)
+        {
+            if (cSrc.layer)
+            {
+                [cSrc buildLayerConstraints];
+            }
+        }
+    }];
+  
+    
     if (self.fullScreen)
     {
         [self.forLayout.rootLayer addAnimation:self.useAnimation forKey:nil];
@@ -27,6 +47,7 @@
             [nSrc.layer addAnimation:self.useAnimation forKey:nil];
         }
         [self.forLayout addSource:nSrc];
+
         nSrc.layer.hidden = NO;
 
     }
@@ -37,6 +58,7 @@
         {
             [cSrc.layer addAnimation:self.useAnimation forKey:nil];
         }
+        
         [self.forLayout addSource:cSrc];
         cSrc.layer.hidden = NO;
 

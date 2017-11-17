@@ -35,7 +35,6 @@
                                     @"Height": @(kCAConstraintHeight),
                                     };
 
-        NSLog(@"LEFT EDGE VALUE %d", kCAConstraintMinX);
         
         self.constraintSortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"value" ascending:YES]];
         self.availableTransitions = [NSMutableDictionary dictionary];

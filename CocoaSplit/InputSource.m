@@ -302,37 +302,7 @@ static NSArray *_sourceTypes = nil;
 
 
 
-        id constraintData = [aDecoder decodeObjectForKey:@"constraintMap"];
-        if (constraintData)
-        {
-            self.constraintMap = constraintData;
-        } else if ((constraintData = [aDecoder decodeObjectForKey:@"constraintMapData"])) {
-            self.constraintMap = [NSKeyedUnarchiver unarchiveObjectWithData:constraintData];
-        }
-        
-        //if all the constraint attributes are zero reset to null based map
-        
-        
-        bool convert_constraints = YES;
-        for (NSString *cKey in self.constraintMap)
-        {
-            NSDictionary *cons = self.constraintMap[cKey];
-            NSNumber *attr = cons[@"attr"];
-            
-            if ((id)attr == [NSNull null])
-            {
-                convert_constraints = NO;
-                break;
-            } else if (attr.intValue != 0) {
-                convert_constraints = NO;
-                break;
-            }
-        }
-        
-        if (convert_constraints)
-        {
-            [self resetConstraints];
-        }
+
         
         
         _rotationAngle = [aDecoder decodeFloatForKey:@"rotationAngle"];
@@ -493,6 +463,43 @@ static NSArray *_sourceTypes = nil;
             [self.parentInput.layer addSublayer:self.layer];
             [self.parentInput.attachedInputs addObject:self];
         }
+        
+        id constraintData = [aDecoder decodeObjectForKey:@"constraintMap"];
+        NSMutableDictionary *tmpConstraints;
+        
+        if (constraintData)
+        {
+            tmpConstraints = constraintData;
+        } else if ((constraintData = [aDecoder decodeObjectForKey:@"constraintMapData"])) {
+            tmpConstraints = [NSKeyedUnarchiver unarchiveObjectWithData:constraintData];
+        }
+        
+        //if all the constraint attributes are zero reset to null based map
+        
+        
+        bool convert_constraints = YES;
+        for (NSString *cKey in tmpConstraints)
+        {
+            NSDictionary *cons = self.constraintMap[cKey];
+            NSNumber *attr = cons[@"attr"];
+            
+            if ((id)attr == [NSNull null])
+            {
+                convert_constraints = NO;
+                break;
+            } else if (attr.intValue != 0) {
+                convert_constraints = NO;
+                break;
+            }
+        }
+        
+        if (convert_constraints)
+        {
+            [self resetConstraints];
+        } else {
+            self.constraintMap = tmpConstraints;
+        }
+        [self observeConstraintKeys];
 
         
     }
@@ -664,6 +671,8 @@ static NSArray *_sourceTypes = nil;
     if (self = [super init])
     {
         [self commonInit];
+        [self observeConstraintKeys];
+
     }
     return self;
 }
@@ -673,7 +682,6 @@ static NSArray *_sourceTypes = nil;
 {
 
     NSLog(@"COMMON INIT %@", self);
-    
     [CATransaction begin];
     self.name = nil;
     _nextImageTime = 0.0f;
@@ -787,7 +795,6 @@ static NSArray *_sourceTypes = nil;
     _currentInput = self;
     
 
-    [self observeConstraintKeys];
     [CATransaction commit];
     _undoActionMap = @{@"name": @"Set Name",
                        @"crop_top": @"Crop Top",
@@ -856,7 +863,6 @@ static NSArray *_sourceTypes = nil;
 -(NSViewController *)configurationViewController
 {
     InputPopupControllerViewController *controller = [[InputPopupControllerViewController alloc] init];
-    NSLog(@"CONSTRAINT MAP %@", self.constraintMap);
     controller.inputSource = self;
     return controller;
 }
@@ -1989,6 +1995,7 @@ static NSArray *_sourceTypes = nil;
 {
     
     
+    
     self.layoutPosition = self.layer.frame;
     _x_pos = self.layer.frame.origin.x;
     _y_pos = self.layer.frame.origin.y;
@@ -2015,6 +2022,7 @@ static NSArray *_sourceTypes = nil;
         }
         
         self.layer.sourceLayer = _currentLayer;
+
     }
     
     
@@ -2024,8 +2032,11 @@ static NSArray *_sourceTypes = nil;
     if (self.needsAdjustment)
     {
         [self adjustInputSize:self.needsAdjustPosition];
+
         self.needsAdjustment = NO;
     }
+
+
 }
 
 
@@ -3425,6 +3436,7 @@ static NSArray *_sourceTypes = nil;
 -(void) buildLayerConstraints
 {
     
+    NSLog(@"BUILD LAYER CONSTRAITNS");
     NSMutableArray *constraints = [NSMutableArray array];
     
     for (NSString *key in self.constraintMap)
@@ -3482,6 +3494,7 @@ static NSArray *_sourceTypes = nil;
     
     if ([keyPath hasPrefix:@"constraintMap"])
     {
+        
         id oldValue = change[NSKeyValueChangeOldKey];
         NSRect oldFrame = self.layoutPosition;
         

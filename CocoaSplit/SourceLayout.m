@@ -1061,7 +1061,6 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         {
             if (cSrc)
             {
-                NSLog(@"DELETING %@", cSrc);
                 [self deleteSource:cSrc];
             }
         }
@@ -1111,7 +1110,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         {
             nSrc.layer.hidden = YES;
         }
-        
+
         [self.rootLayer addSublayer:nSrc.layer];
         
         [self addSourceToPresentation:nSrc];
@@ -1856,7 +1855,15 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     {
         
         [CATransaction begin];
-        
+        [CATransaction setCompletionBlock:^{
+            for (NSObject<CSInputSourceProtocol> *nSrc in self.sourceList)
+            {
+                if (nSrc.layer)
+                {
+                    [((InputSource *)nSrc) buildLayerConstraints];
+                }
+            }
+        }];
         NSMutableArray *oldSourceList = self.sourceList;
         
         
@@ -2073,7 +2080,13 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     [[self mutableArrayValueForKey:@"sourceList" ] addObject:newSource];
     if (newSource.layer && !newSource.layer.superlayer)
     {
+        [CATransaction begin];
+        [CATransaction setCompletionBlock:^{
+            [((InputSource *)newSource) buildLayerConstraints];
+        }];
+        
         [parentLayer addSublayer:newSource.layer];
+        [CATransaction commit];
     }
 
     
