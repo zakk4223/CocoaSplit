@@ -53,6 +53,8 @@
 
 -(IBAction) clearGradient:(NSButton *)sender;
 
+-(IBAction) scriptUndo:(NSButton *)sender;
+
 @property (weak) IBOutlet NSArrayController *multiSourceController;
 @property (weak) IBOutlet NSArrayController *currentEffectsController;
 @property (weak) IBOutlet NSWindow *cropSelectionWindow;

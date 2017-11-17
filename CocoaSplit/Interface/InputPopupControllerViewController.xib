@@ -2667,13 +2667,13 @@
                                 </scroller>
                             </scrollView>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TwI-nz-Xed">
-                                <rect key="frame" x="547" y="10" width="88" height="32"/>
-                                <buttonCell key="cell" type="push" title="Save All" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xo4-dg-Idl">
+                                <rect key="frame" x="548" y="10" width="87" height="32"/>
+                                <buttonCell key="cell" type="push" title="Discard" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xo4-dg-Idl">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="scriptSaveAll:" target="-2" id="3RP-nD-Bue"/>
+                                    <action selector="scriptUndo:" target="-2" id="F8q-GZ-Btt"/>
                                 </connections>
                             </button>
                             <button translatesAutoresizingMaskIntoConstraints="NO" id="RXE-iz-MGD">

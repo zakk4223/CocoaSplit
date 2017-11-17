@@ -471,6 +471,11 @@
     [self scriptSaveAll:nil];
 }
 
+-(IBAction)scriptUndo:(NSButton *)sender
+{
+    [self.inputobjctrl discardEditing];
+}
+
 
 - (IBAction)resetConstraints:(id)sender
 {
