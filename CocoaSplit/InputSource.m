@@ -3436,7 +3436,6 @@ static NSArray *_sourceTypes = nil;
 -(void) buildLayerConstraints
 {
     
-    NSLog(@"BUILD LAYER CONSTRAITNS");
     NSMutableArray *constraints = [NSMutableArray array];
     
     for (NSString *key in self.constraintMap)
@@ -3461,7 +3460,8 @@ static NSArray *_sourceTypes = nil;
         NSNumber *parentVal = valMap[@"attr"];
         NSNumber *offsetVal = valMap[@"offset"];
         
-        if ((id)parentVal == [NSNull null])
+        
+        if ((id)parentVal == [NSNull null] || !parentVal)
         {
             continue;
         }
