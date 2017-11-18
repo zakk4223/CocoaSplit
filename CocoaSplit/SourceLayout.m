@@ -1148,6 +1148,8 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     }
 
     [CATransaction flush];
+    [self adjustAllInputs];
+    
     _noSceneTransactions = NO;
     
     
@@ -2035,7 +2037,8 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 -(void) adjustAllInputs
 {
     
-    NSArray *copiedInputs = [self sourceListOrdered];
+    NSArray *copiedInputs = self.sourceListPresentation.copy;
+    
     
     for (NSObject<CSInputSourceProtocol> *src in copiedInputs)
     {
@@ -2071,6 +2074,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         [CATransaction begin];
         [CATransaction setCompletionBlock:^{
             [((InputSource *)newSource) buildLayerConstraints];
+          
         }];
         
         [parentLayer addSublayer:newSource.layer];

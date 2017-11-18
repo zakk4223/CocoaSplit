@@ -479,7 +479,7 @@ static NSArray *_sourceTypes = nil;
         bool convert_constraints = YES;
         for (NSString *cKey in tmpConstraints)
         {
-            NSDictionary *cons = self.constraintMap[cKey];
+            NSDictionary *cons = tmpConstraints[cKey];
             NSNumber *attr = cons[@"attr"];
             
             if ((id)attr == [NSNull null])
