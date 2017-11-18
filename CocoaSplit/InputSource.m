@@ -582,6 +582,8 @@ static NSArray *_sourceTypes = nil;
         }
         
         [CATransaction begin];
+        
+
         if (useUpdate.updateBlock) /* it should always have one, but.... */
         {
             useUpdate.updateBlock(_currentLayer);
@@ -1474,7 +1476,6 @@ static NSArray *_sourceTypes = nil;
 -(void)dealloc
 {
     
-    NSLog(@"DEALLOC GOD DAMNIT %@", self);
     
     [self deregisterVideoInput:self.videoInput];
     for(id vInput in self.videoSources)

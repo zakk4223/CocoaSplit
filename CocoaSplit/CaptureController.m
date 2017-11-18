@@ -142,7 +142,7 @@
     ctx[@"CAKeyframeAnimation"] = CAKeyframeAnimation.class;
     ctx[@"CATransition"] = CATransition.class;
     ctx[@"NSValue"] = NSValue.class;
-    ctx[@"HUGE_VALF"] = @(HUGE_VALF);
+    ctx[@"FLT_MAX"] = @(FLT_MAX);
     ctx[@"CIFilter"] = CIFilter.class;
     ctx[@"CSLayoutTransition"] = CSLayoutTransition.class;
     
@@ -176,6 +176,12 @@
         return NSMidX(rect);
     };
 
+
+    ctx[@"applyAnimationAsync"] = ^(CALayer *target, CAAnimation *animation, NSString *uukey) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [target addAnimation:animation forKey:uukey];
+        });
+    };
     
 
     [self evaluateJavascriptFile:@"CSAnimationBlock" inContext:ctx];

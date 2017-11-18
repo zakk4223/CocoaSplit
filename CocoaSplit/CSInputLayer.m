@@ -618,10 +618,6 @@
     }
 }
 
--(void)dealloc
-{
-    NSLog(@"INPUT LAYER DEALLOC %@", self);
-}
 
 
 @end

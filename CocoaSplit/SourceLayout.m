@@ -220,13 +220,14 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         _animationQueue = dispatch_queue_create("Javascript layout queue", DISPATCH_QUEUE_SERIAL);
     }
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    /*
+    dispatch_async(_animationQueue, ^{
         [self doAnimation:animMap];
-    });
+    });*/
     
     
-    //NSThread *runThread = [[NSThread alloc] initWithTarget:self selector:@selector(doAnimation:) object:animMap];
-    //[runThread start];
+    NSThread *runThread = [[NSThread alloc] initWithTarget:self selector:@selector(doAnimation:) object:animMap];
+    [runThread start];
     return runUUID;
     
 
@@ -1050,7 +1051,6 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     
     [CATransaction setCompletionBlock:^{
         
-        
         for (NSObject<CSInputSourceProtocol> *rSrc in removedInputs)
         {
             [self deleteSource:rSrc];
@@ -1134,7 +1134,6 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
             [self runTriggerScriptForInput:src withName:@"afterReplace" usingContext:jCtx];
         }
     }
-    [CATransaction commit];
     
     for (NSObject<CSInputSourceProtocol> *nSrc in newInputs)
     {
@@ -1147,7 +1146,8 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         }
     }
 
-    [CATransaction flush];
+    [CATransaction commit];
+
     [self adjustAllInputs];
     
     _noSceneTransactions = NO;

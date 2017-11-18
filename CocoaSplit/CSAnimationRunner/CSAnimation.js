@@ -42,7 +42,7 @@ CSAnimation = function(target, keyPath, animation, kwargs) {
         {
             this.animation.beginTime = begin_time;
             this.uukey = this.keyPath + "-" + generateUUID();
-            this.target.addAnimationForKey(this.animation, this.uukey);
+            applyAnimationAsync(this.target, this.animation, this.uukey);
         }
         
         if (!this.ignore_wait)
@@ -123,7 +123,7 @@ CSAnimation = function(target, keyPath, animation, kwargs) {
             if (r_count == 'forever')
             {
                 this.ignore_wait = true;
-                r_count = HUGE_VALF;
+                r_count = FLT_MAX;
             } else {
                 this.duration *= r_count;
             }

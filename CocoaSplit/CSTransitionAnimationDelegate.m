@@ -17,6 +17,7 @@
     NSLog(@"ANIMATION DID START");
     [CATransaction begin];
     [CATransaction setCompletionBlock:^{
+        NSLog(@"TRANSACTION COMPLETION BLOCK");
         for (InputSource *nSrc in self.addedInputs)
         {
             if (nSrc.layer)
