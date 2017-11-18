@@ -3,7 +3,6 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 8/31/14.
-//  Copyright (c) 2014 Zakk. All rights reserved.
 //
 
 #import "SourceLayout.h"
@@ -1094,34 +1093,27 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         [self deleteSourceFromPresentation:mSrc];
         [changedRemove addObject:mSrc];
         
-        cSrc.layer.hidden = YES;
-        
-        [mSrc.layer.superlayer addSublayer:cSrc.layer];
+        if (cSrc.layer)
+        {
+            cSrc.layer.hidden = YES;
+            [mSrc.layer.superlayer addSublayer:cSrc.layer];
+        }
         [self addSourceToPresentation:cSrc];
-        //[self addSource:cSrc withParentLayer:mSrc.layer.superlayer];
-        
     }
     transitionDelegate.changeremoveInputs = changedRemove;
     
     for (NSObject<CSInputSourceProtocol> *nSrc in newInputs)
     {
         
-        if (nSrc.layer)
+        if (nSrc.layer && !nSrc.layer.superlayer)
         {
             nSrc.layer.hidden = YES;
+            [self.rootLayer addSublayer:nSrc.layer];
+
         }
 
-        [self.rootLayer addSublayer:nSrc.layer];
-        
         [self addSourceToPresentation:nSrc];
-        //[self addSource:nSrc];
-        
     }
-    
-    
-    
-    
-
     
     NSLog(@"SOURCE LIST PRESENTATION %@", self.sourceListPresentation);
     
@@ -1461,15 +1453,13 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     for (NSObject<CSInputSourceProtocol> *nSrc in newInputs)
     {
         
-        if (nSrc.layer)
+        if (nSrc.layer && !nSrc.layer.superlayer)
         {
             nSrc.layer.hidden = YES;
+            [self.rootLayer addSublayer:nSrc.layer];
+
         }
-        
-        //[self addSource:nSrc];
-        
-        [self.rootLayer addSublayer:nSrc.layer];
-        
+
         [self addSourceToPresentation:nSrc];
         
 
@@ -1489,17 +1479,15 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         [changedRemove addObject:mSrc];
         
         
-        if (cSrc.layer)
+        if (cSrc.layer && !cSrc.layer.superlayer)
         {
             cSrc.layer.hidden = YES;
+            [mSrc.layer.superlayer addSublayer:cSrc.layer];
+
         }
         
-        [mSrc.layer.superlayer addSublayer:cSrc.layer];
         
         [self addSourceToPresentation:cSrc];
-        
-
-        //[self addSource:cSrc withParentLayer:mSrc.layer.superlayer];
         [self incrementInputRef:cSrc];
     }
     

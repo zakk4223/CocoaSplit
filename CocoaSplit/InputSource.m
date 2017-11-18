@@ -459,9 +459,8 @@ static NSArray *_sourceTypes = nil;
         
         if (self.parentInput)
         {
-            
-            [self.parentInput.layer addSublayer:self.layer];
-            [self.parentInput.attachedInputs addObject:self];
+            [self makeSublayerOfLayer:self.parentInput.layer];
+            [[self.parentInput mutableArrayValueForKey:@"attachedInputs"] addObject:self];
         }
         
         id constraintData = [aDecoder decodeObjectForKey:@"constraintMap"];
