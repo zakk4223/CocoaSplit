@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12120" systemVersion="16G29" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12120"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -22,7 +22,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="249" height="276"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6qE-t2-zqe">
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6qE-t2-zqe">
                         <rect key="frame" x="19" y="160" width="84" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Stream Volume" id="clH-Fr-TJ1">
                             <font key="font" metaFont="smallSystem"/>
@@ -44,7 +44,7 @@
                             <binding destination="Mpd-4L-AyW" name="value" keyPath="selection.multiAudioEngine.encodeMixer.volume" id="vIQ-AP-0nG"/>
                         </connections>
                     </slider>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wwP-vq-QJZ">
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wwP-vq-QJZ">
                         <rect key="frame" x="18" y="217" width="65" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Samplerate" id="qPp-Ym-izV">
                             <font key="font" metaFont="smallSystem"/>
@@ -52,7 +52,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ssR-h6-svZ">
+                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ssR-h6-svZ">
                         <rect key="frame" x="91" y="237" width="93" height="19"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="lBZ-LI-XH0">
                             <font key="font" metaFont="smallSystem"/>
@@ -86,7 +86,7 @@
                             <binding destination="Mpd-4L-AyW" name="content" keyPath="selection.multiAudioEngine.validSamplerates" id="IZW-dj-Ps8"/>
                         </connections>
                     </popUpButton>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ycu-9s-oiz">
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ycu-9s-oiz">
                         <rect key="frame" x="189" y="239" width="62" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="kbits/sec" id="S8r-Xg-ebh">
                             <font key="font" metaFont="smallSystem"/>
@@ -94,7 +94,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zuo-gj-1Pr">
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zuo-gj-1Pr">
                         <rect key="frame" x="18" y="195" width="63" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Audio Shift" id="6Pl-mK-60G">
                             <font key="font" metaFont="smallSystem"/>
@@ -102,7 +102,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I72-n8-A7m">
+                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="I72-n8-A7m">
                         <rect key="frame" x="91" y="193" width="93" height="19"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="Utr-K4-fTZ">
                             <font key="font" metaFont="smallSystem"/>
@@ -113,7 +113,7 @@
                             <binding destination="Mpd-4L-AyW" name="value" keyPath="selection.audio_adjust" id="MVg-Z1-7iG"/>
                         </connections>
                     </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3S3-NA-Pfr">
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3S3-NA-Pfr">
                         <rect key="frame" x="191" y="195" width="49" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="seconds" id="ktg-pa-9dP">
                             <font key="font" metaFont="smallSystem"/>
@@ -121,7 +121,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nao-kV-Rtm">
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nao-kV-Rtm">
                         <rect key="frame" x="19" y="239" width="40" height="14"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="36" id="4Fu-v1-NAh"/>
@@ -134,7 +134,7 @@
                     </textField>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="NeC-nP-8fw">
                         <rect key="frame" x="169" y="124" width="25" height="18"/>
-                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Speaker_Icon" imagePosition="only" alignment="center" alternateImage="Mute_Icon" controlSize="small" imageScaling="proportionallyUpOrDown" inset="2" id="HFf-ty-SwM">
+                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Speaker_Icon" imagePosition="only" alignment="center" alternateImage="Mute_Icon" controlSize="small" imageScaling="proportionallyUpOrDown" inset="2" id="HFf-ty-SwM" customClass="CSNSButtonCellThemed">
                             <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
@@ -144,7 +144,7 @@
                     </button>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="S23-4m-kb7">
                         <rect key="frame" x="169" y="68" width="25" height="18"/>
-                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Speaker_Icon" imagePosition="only" alignment="center" alternateImage="Mute_Icon" controlSize="small" imageScaling="proportionallyUpOrDown" inset="2" id="6fp-6X-2wk">
+                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Speaker_Icon" imagePosition="only" alignment="center" alternateImage="Mute_Icon" controlSize="small" imageScaling="proportionallyUpOrDown" inset="2" id="6fp-6X-2wk" customClass="CSNSButtonCellThemed">
                             <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
@@ -152,7 +152,7 @@
                             <binding destination="Mpd-4L-AyW" name="value" keyPath="selection.multiAudioEngine.previewMixer.muted" id="ST4-Rx-TRY"/>
                         </connections>
                     </button>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GNm-og-wRf">
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GNm-og-wRf">
                         <rect key="frame" x="19" y="105" width="135" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Preview volume" id="IAm-lt-PXz">
                             <font key="font" metaFont="smallSystem"/>
@@ -174,7 +174,7 @@
                             <binding destination="Mpd-4L-AyW" name="level" keyPath="selection.multiAudioEngine.previewAudioPowerLevel" id="fdS-Wb-FqB"/>
                         </connections>
                     </customView>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5HX-Gi-83X">
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5HX-Gi-83X">
                         <rect key="frame" x="18" y="46" width="80" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Output Device" id="41g-2s-fF7">
                             <font key="font" metaFont="smallSystem"/>

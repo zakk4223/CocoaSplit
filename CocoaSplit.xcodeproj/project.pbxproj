@@ -111,6 +111,9 @@
 		345F8B791A183D1D009A81E3 /* CAMultiAudioEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B781A183D1D009A81E3 /* CAMultiAudioEngine.m */; };
 		3460E58A1AC766260080358E /* rotate.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3460E5871AC764500080358E /* rotate.py */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3463F99F1AD1594300F3B5C8 /* movement.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3463F99D1AD0DC7100F3B5C8 /* movement.py */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		346544DC1FC22CF0003B9991 /* CSNSButtonCellThemed.m in Sources */ = {isa = PBXBuildFile; fileRef = 346544DB1FC22CF0003B9991 /* CSNSButtonCellThemed.m */; };
+		346544DF1FC24248003B9991 /* NSImage+tintedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 346544DE1FC24248003B9991 /* NSImage+tintedImage.m */; };
+		346544E21FC2457E003B9991 /* CSNSImageCellThemed.m in Sources */ = {isa = PBXBuildFile; fileRef = 346544E11FC2457E003B9991 /* CSNSImageCellThemed.m */; };
 		346865471CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 346865451CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.m */; };
 		346865481CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 346865461CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.xib */; };
 		346CF44C1A5C10C2008E5BFF /* CSInputLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 346CF44B1A5C10C2008E5BFF /* CSInputLayer.m */; };
@@ -738,6 +741,12 @@
 		345F8B7B1A184FBC009A81E3 /* CAMultiAudioMixingProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAMultiAudioMixingProtocol.h; sourceTree = "<group>"; };
 		3460E5871AC764500080358E /* rotate.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = rotate.py; sourceTree = "<group>"; };
 		3463F99D1AD0DC7100F3B5C8 /* movement.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = movement.py; sourceTree = "<group>"; };
+		346544DA1FC22CF0003B9991 /* CSNSButtonCellThemed.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSNSButtonCellThemed.h; path = Interface/CSNSButtonCellThemed.h; sourceTree = "<group>"; };
+		346544DB1FC22CF0003B9991 /* CSNSButtonCellThemed.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CSNSButtonCellThemed.m; path = Interface/CSNSButtonCellThemed.m; sourceTree = "<group>"; };
+		346544DD1FC24248003B9991 /* NSImage+tintedImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSImage+tintedImage.h"; sourceTree = "<group>"; };
+		346544DE1FC24248003B9991 /* NSImage+tintedImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSImage+tintedImage.m"; sourceTree = "<group>"; };
+		346544E01FC2457E003B9991 /* CSNSImageCellThemed.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSNSImageCellThemed.h; sourceTree = "<group>"; };
+		346544E11FC2457E003B9991 /* CSNSImageCellThemed.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSNSImageCellThemed.m; sourceTree = "<group>"; };
 		346865441CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSInstantRecorderCompressorViewController.h; path = Compressor/CSInstantRecorderCompressorViewController.h; sourceTree = "<group>"; };
 		346865451CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSInstantRecorderCompressorViewController.m; path = Compressor/CSInstantRecorderCompressorViewController.m; sourceTree = "<group>"; };
 		346865461CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSInstantRecorderCompressorViewController.xib; path = Compressor/CSInstantRecorderCompressorViewController.xib; sourceTree = "<group>"; };
@@ -1348,6 +1357,10 @@
 				345BECE71F3FD21200B46F29 /* CSLayoutTransition.m */,
 				34CACC971FB886FB00C04BC6 /* CSUserNotificationController.h */,
 				34CACC981FB886FB00C04BC6 /* CSUserNotificationController.m */,
+				346544DD1FC24248003B9991 /* NSImage+tintedImage.h */,
+				346544DE1FC24248003B9991 /* NSImage+tintedImage.m */,
+				346544E01FC2457E003B9991 /* CSNSImageCellThemed.h */,
+				346544E11FC2457E003B9991 /* CSNSImageCellThemed.m */,
 			);
 			path = CocoaSplit;
 			sourceTree = "<group>";
@@ -1576,6 +1589,8 @@
 				345BECF11F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.h */,
 				345BECF21F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.m */,
 				345BECF31F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.xib */,
+				346544DA1FC22CF0003B9991 /* CSNSButtonCellThemed.h */,
+				346544DB1FC22CF0003B9991 /* CSNSButtonCellThemed.m */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -2606,6 +2621,7 @@
 				34ED8C9D1B07371C002C0674 /* MIKMIDIProgramChangeCommand.m in Sources */,
 				34ED8C731B07371C002C0674 /* MIKMIDIMappingXMLParser.m in Sources */,
 				34BD1E631B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.m in Sources */,
+				346544DF1FC24248003B9991 /* NSImage+tintedImage.m in Sources */,
 				3434CB381CA93BCD001B3DF9 /* CSAppleProResCompressorViewController.m in Sources */,
 				3434CB321CA91D99001B3DF9 /* CSAppleH264CompressorViewController.m in Sources */,
 				34C0E9FA1EABF92300B30DB4 /* CAMultiAudioDelay.m in Sources */,
@@ -2616,6 +2632,7 @@
 				345BECE81F3FD21200B46F29 /* CSLayoutTransition.m in Sources */,
 				34BD1E4D1B1F1A2D0015CBEC /* CAMultiAudioDownmixer.m in Sources */,
 				34B5FACE1E748DD40078FC51 /* CSSequenceItem.m in Sources */,
+				346544E21FC2457E003B9991 /* CSNSImageCellThemed.m in Sources */,
 				345F8B251A14E6A0009A81E3 /* CAMultiAudioNode.m in Sources */,
 				342346AA15F59A8500C8C77E /* AVFAudioCapture.m in Sources */,
 				3498D94A1A94685000906532 /* CSAudioSwitchCell.m in Sources */,
@@ -2721,6 +2738,7 @@
 				34F52A2B1BC1E0F900662911 /* CSLayoutButton.m in Sources */,
 				34576C7819AFCA1B007BAD90 /* CSPluginLoader.m in Sources */,
 				34FDD6F21A215268009A7413 /* CSPluginServices.m in Sources */,
+				346544DC1FC22CF0003B9991 /* CSNSButtonCellThemed.m in Sources */,
 				34ED8C8F1B07371C002C0674 /* MIKMIDINoteOffCommand.m in Sources */,
 				34ED8C571B07371C002C0674 /* MIKMIDIDestinationEndpoint.m in Sources */,
 				34ED8C8D1B07371C002C0674 /* MIKMIDINoteEvent.m in Sources */,
