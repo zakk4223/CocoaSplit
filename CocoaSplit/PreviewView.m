@@ -1858,8 +1858,7 @@
     
     
     
-    NSWindow *configWindow = [[NSWindow alloc] init];
-    
+    NSWindow *configWindow = [[NSWindow alloc] init];    
     NSRect newFrame = [configWindow frameRectForContentRect:NSMakeRect(0.0f, 0.0f, newViewController.view.frame.size.width, newViewController.view.frame.size.height)];
     
     

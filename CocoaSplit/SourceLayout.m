@@ -220,14 +220,13 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         _animationQueue = dispatch_queue_create("Javascript layout queue", DISPATCH_QUEUE_SERIAL);
     }
     
-    /*
     dispatch_async(_animationQueue, ^{
         [self doAnimation:animMap];
-    });*/
+    });
     
     
-    NSThread *runThread = [[NSThread alloc] initWithTarget:self selector:@selector(doAnimation:) object:animMap];
-    [runThread start];
+    //NSThread *runThread = [[NSThread alloc] initWithTarget:self selector:@selector(doAnimation:) object:animMap];
+   // [runThread start];
     return runUUID;
     
 
@@ -1115,14 +1114,12 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         [self addSourceToPresentation:nSrc];
     }
     
-    NSLog(@"SOURCE LIST PRESENTATION %@", self.sourceListPresentation);
     
     sortedSources = [self.sourceListPresentation sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"scriptPriority" ascending:YES]]];
     
     for (NSObject <CSInputSourceProtocol> *src in sortedSources)
     {
         
-        NSLog(@"TRYING SOURCE %@", src);
         if (!src.active)
         {
             continue;

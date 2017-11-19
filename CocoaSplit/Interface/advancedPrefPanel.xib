@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12120" systemVersion="17A405" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12120"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -50,7 +50,7 @@
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wuR-82-Hud">
                         <rect key="frame" x="18" y="319" width="134" height="14"/>
-                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Show warning colors:" id="7h4-G4-x90">
+                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Use Dark Mode Theme:" id="7h4-G4-x90">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -62,6 +62,9 @@
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
+                        <connections>
+                            <binding destination="-2" name="value" keyPath="self.useDarkMode" id="bBs-gr-fzw"/>
+                        </connections>
                     </button>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="RKX-ZY-VTM">
                         <rect key="frame" x="17" y="294" width="221" height="20"/>
@@ -264,7 +267,7 @@ DQ
                             <action selector="closeAdvancedPrefPanel:" target="-2" id="9"/>
                         </connections>
                     </button>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mni-PZ-N9j">
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mni-PZ-N9j">
                         <rect key="frame" x="18" y="111" width="157" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Layout Recorder Compressor" id="ULE-ba-99b">
                             <font key="font" metaFont="smallSystem"/>
@@ -301,7 +304,7 @@ DQ
                             <action selector="configureLayoutRecordingCompressor:" target="-2" id="7Bi-vz-zR3"/>
                         </connections>
                     </button>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yFx-Dc-r5O">
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yFx-Dc-r5O">
                         <rect key="frame" x="18" y="89" width="144" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Layout Recorder directory:" id="h4Z-5f-4dw">
                             <font key="font" metaFont="smallSystem"/>
@@ -309,7 +312,7 @@ DQ
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WPI-lc-ZSI">
+                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WPI-lc-ZSI">
                         <rect key="frame" x="217" y="86" width="226" height="19"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="2ya-EN-6qJ">
                             <font key="font" metaFont="smallSystem"/>
@@ -330,7 +333,7 @@ DQ
                             <action selector="chooseLayoutRecordDirectory:" target="-2" id="Mu7-xG-lVS"/>
                         </connections>
                     </button>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jnn-Ku-88G">
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jnn-Ku-88G">
                         <rect key="frame" x="18" y="67" width="132" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Layout Recorder format:" id="Rs7-Dl-lJd">
                             <font key="font" metaFont="smallSystem"/>
@@ -338,7 +341,7 @@ DQ
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vjt-Mb-NYc">
+                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Vjt-Mb-NYc">
                         <rect key="frame" x="217" y="64" width="96" height="19"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="96" id="tX7-cS-1MI"/>
@@ -457,7 +460,7 @@ DQ
                     <constraint firstItem="fLM-xf-W9i" firstAttribute="leading" secondItem="Thd-yE-kvK" secondAttribute="trailing" constant="8" symbolic="YES" id="zvv-bC-7EF"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="617.5" y="425.5"/>
+            <point key="canvasLocation" x="500" y="365"/>
         </window>
         <customObject id="8zn-qH-lHi" userLabel="SUUpdater" customClass="SUUpdater"/>
         <userDefaultsController representsSharedInstance="YES" id="87"/>

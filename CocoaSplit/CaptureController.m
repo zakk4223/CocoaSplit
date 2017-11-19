@@ -52,7 +52,7 @@
 @synthesize instantRecordBufferDuration = _instantRecordBufferDuration;
 @synthesize useTransitions = _useTransitions;
 @synthesize captureRunning = _captureRunning;
-
+@synthesize useDarkMode = _useDarkMode;
 
 
 
@@ -197,6 +197,19 @@
 {
     AppDelegate *appDel = [NSApp delegate];
     return appDel.captureController;
+}
+
+
+-(void)setUseDarkMode:(bool)useDarkMode
+{
+    _useDarkMode = useDarkMode;
+    AppDelegate *aDel = [NSApp delegate];
+    [aDel changeAppearance];
+}
+
+-(bool)useDarkMode
+{
+    return _useDarkMode;
 }
 
 
@@ -1956,6 +1969,7 @@
 
     
     
+    [saveRoot setValue:[NSNumber numberWithBool:self.useDarkMode] forKey:@"useDarkMode"];
     
     [saveRoot setValue:self.selectedLayout forKey:@"selectedLayout"];
     
@@ -2063,6 +2077,7 @@
     
     
     
+    self.useDarkMode = [[saveRoot valueForKey:@"useDarkMode"] boolValue];
     
     
     self.captureWidth = [[saveRoot valueForKey:@"captureWidth"] intValue];

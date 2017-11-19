@@ -23,4 +23,6 @@
 @property (weak) IBOutlet NSButton *layoutSequenceButton;
 
 
+-(void)changeAppearance;
+
 @end

@@ -57,9 +57,11 @@
         tmpClass = class_getSuperclass(tmpClass);
     }
 }
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
+
+-(void)applicationWillFinishLaunching:(NSNotification *)notification
 {
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleNotification:) name:@"_NSWindowWillBecomeVisible" object:nil];
     
     _notificationController = [[CSUserNotificationController alloc] init];
     
@@ -73,14 +75,15 @@
     [self addProtocolsForClass:[CSInputLayer class]];
     [self addProtocolsForClass:[NSValue class]];
     [self addProtocolsForClass:[CIFilter class]];
-
+    
     [self addProtocolsForClass:[CSLayoutTransition class]];
     
-
     
     
     
-
+    
+    
+    
     [_window setReleasedWhenClosed:NO];
     
     
@@ -94,28 +97,66 @@
     
     self.layoutSequenceButton.image = useimg;
     self.layoutSequenceButton.alternateImage = altImg;
-
+    
     [[NSBundle mainBundle] loadNibNamed:@"LogWindow" owner:self.captureController topLevelObjects:nil];
     
     /*
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.captureController setupLogging];
-    });*/
-
+     dispatch_async(dispatch_get_main_queue(), ^{
+     [self.captureController setupLogging];
+     });*/
+    
     //Force loading of python stuff now
     
     /*
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [CaptureController sharedAnimationObj];
-    });
-*/    
+     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+     [CaptureController sharedAnimationObj];
+     });
+     */
     
     [self.captureController loadSettings];
     //self.captureController.audioConstraint.constant = 0;
-
+    
     // Insert code here to initialize your application
     
     
+    _window.appearance = [self getAppearance];
+    
+}
+
+-(NSAppearance *)getAppearance
+{
+    if (self.captureController.useDarkMode)
+    {
+        return [NSAppearance appearanceNamed:NSAppearanceNameVibrantDark];
+    }
+    
+    return NSAppearance.currentAppearance;
+}
+
+
+-(void)handleNotification:(NSNotification *)notification
+{
+    
+
+    NSWindow *window = notification.object;
+    window.appearance = [self getAppearance];
+}
+
+
+
+-(void)changeAppearance
+{
+    NSAppearance *useAppearance = [self getAppearance];
+    for (NSWindow *win in [NSApplication sharedApplication].windows)
+    {
+        win.appearance = useAppearance;
+    }
+}
+
+
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
+{
+
 }
 
 

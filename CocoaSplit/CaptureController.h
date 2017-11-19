@@ -409,6 +409,7 @@ NSArray *_savedTransitionConstraints;
 
 }
 @property (strong) NSArray *inputViewSortDescriptors;
+@property (assign) bool useDarkMode;
 
 @property (strong) NSMutableArray *layoutRecorders;
 @property (strong) NSString *layoutRecorderCompressorName;
