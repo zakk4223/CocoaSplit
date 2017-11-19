@@ -121,16 +121,17 @@ function AnimationBlock(duration) {
     }
     
     
-    this.add_waitmarker = function(duration, target, wait_only, kwargs) {
+    this.add_waitmarker = function(duration, target, wait_only) {
         if (duration === undefined)
         {
             duration = 0.0;
         }
-        new_mark = new CSAnimation(null, "__CS_WAIT_MARK", null, kwargs);
+        new_mark = new CSAnimation(null, "__CS_WAIT_MARK", null);
         new_mark.isWaitMark = true;
         new_mark.duration = duration;
         new_mark.cs_input = target;
         this.animations.push(new_mark);
+        return new_mark;
     }
     
     
@@ -185,12 +186,12 @@ function AnimationBlock(duration) {
         
     }
     
-    this.waitAnimation = function(duration, target, kwargs) {
-        return this.add_waitmarker(duration, target, 0, kwargs);
+    this.waitAnimation = function(duration, target) {
+        return this.add_waitmarker(duration, target, 0);
     }
     
-    this.wait = function(duration, target, kwargs) {
-        return this.add_waitmarker(duration, target, 1, kwargs);
+    this.wait = function(duration, target) {
+        return this.add_waitmarker(duration, target, 1);
     }
     
     CATransaction.begin();
@@ -210,11 +211,11 @@ var setCompletionBlock = function(completion_block) {
 
 var wait = function(duration)
 {
-    CSAnimationBlock.currentFrame().wait(duration);
+    return CSAnimationBlock.currentFrame().wait(duration);
 }
 
-var waitAnimation = function(duration, kwargs) {
-    CSAnimationBlock.currentFrame().waitAnimation(duration, kwargs);
+var waitAnimation = function(duration) {
+    return CSAnimationBlock.currentFrame().waitAnimation(duration);
 }
 
 var animationDuration = function() { CSAnimationBlock.currentFrame().duration; }

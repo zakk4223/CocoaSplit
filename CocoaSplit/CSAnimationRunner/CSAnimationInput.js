@@ -148,8 +148,8 @@ function CSAnimationInput(cs_input) {
      
      * Like the global waitAnimation() you can specify a keyword argument of 'label' to wait on a specific animation.
      */
-    this.waitAnimation = function(duration, kwargs) {
-        return CSAnimationBlock.currentFrame().waitAnimation(duration, this, kwargs);
+    this.waitAnimation = function(duration) {
+        return CSAnimationBlock.currentFrame().waitAnimation(duration, this);
     }
     
     /**

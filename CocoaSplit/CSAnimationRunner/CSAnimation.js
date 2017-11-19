@@ -1,6 +1,6 @@
 
 
-CSAnimation = function(target, keyPath, animation, kwargs) {
+CSAnimation = function(target, keyPath, animation) {
     
     this.target = target;
     this.keyPath = keyPath;
@@ -20,7 +20,7 @@ CSAnimation = function(target, keyPath, animation, kwargs) {
     this.baseLayer = null;
     this.layout = null;
     this.uukey = null;
-    if (kwargs === undefined) { kwargs = {}; }
+    
     
     
     
@@ -53,8 +53,8 @@ CSAnimation = function(target, keyPath, animation, kwargs) {
         return this.duration;
     }
     
-    this.waitAnimation = function(duration, kwargs) {
-        CSAnimationBlock.currentFrame().waitAnimation(duration, this, kwargs);
+    this.waitAnimation = function(duration) {
+        CSAnimationBlock.currentFrame().waitAnimation(duration, this);
         return this;
     }
     
@@ -118,6 +118,11 @@ CSAnimation = function(target, keyPath, animation, kwargs) {
         return this;
     }
     
+    this.repeatforever = function() {
+        return this.repeatcount('forever');
+    }
+    
+    
     this.repeatcount = function(r_count) {
         if (this.animation)
         {
@@ -166,41 +171,6 @@ CSAnimation = function(target, keyPath, animation, kwargs) {
         return this;
     }
     
-    
-    if (kwargs["repeatcount"])
-    {
-        this.repeatcount(kwargs["repeatcount"]);
-    }
-    
-    if (kwargs["autoreverse"])
-    {
-        this.autoreverse();
-    }
-    
-    if (kwargs["timing"])
-    {
-        this.timingFunction(kwargs["timing"]);
-    }
-    
-    if (kwargs["repeatduration"])
-    {
-        this.repeatduration(kwargs["repeatduration"]);
-    }
-    
-    if (kwargs["extra_model"])
-    {
-        this.extra_model = kwargs["extra_model"];
-    }
-    
-    if (kwargs["on_complete"])
-    {
-        this.completion_handler = kwargs["on_complete"];
-    }
-    
-    if (kwargs["label"])
-    {
-        this.label = kwargs["label"];
-    }
 
 }
 
