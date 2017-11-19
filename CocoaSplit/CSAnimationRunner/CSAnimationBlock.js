@@ -70,7 +70,13 @@ function AnimationBlock(duration) {
     }
     
     
-    this.add_animation = function(animation, target, keyPath) {
+    this.add_animation = function(animation)  {
+
+        this.animations.push(animation);
+    }
+    
+    
+    this.add_animation_real = function(animation) {
         if (!this.current_begin_time)
         {
             this.current_begin_time = this.layout.rootLayer.convertTimeFromLayer(CACurrentMediaTime(), null);
@@ -110,32 +116,39 @@ function AnimationBlock(duration) {
             }
         }
         
-        this.animations.push(animation);
+        //this.animations.push(animation);
         return animation;
     }
     
     
     this.add_waitmarker = function(duration, target, wait_only, kwargs) {
+        if (duration === undefined)
+        {
+            duration = 0.0;
+        }
+        new_mark = new CSAnimation(null, "__CS_WAIT_MARK", null, kwargs);
+        new_mark.isWaitMark = true;
+        new_mark.duration = duration;
+        new_mark.cs_input = target;
+        this.animations.push(new_mark);
+    }
+    
+    
+    this.add_waitmarker_real = function(waitMark) {
         if (!this.current_begin_time)
         {
             this.current_begin_time = this.layout.rootLayer.convertTimeFromLayer(CACurrentMediaTime(), null);
         }
         
-        if (duration === undefined)
-        {
-            duration = 0.0;
-        }
+
         
         
-        new_mark = new CSAnimation(null, "__CS_WAIT_MARK", null, kwargs);
-        new_mark.isWaitMark = true;
-        new_mark.duration = duration;
-        new_mark.cs_input = target;
-        if (new_mark.cs_input && this.input_map[new_mark.cs_input.uuid])
+
+        if (waitMark.cs_input && this.input_map[waitMark.cs_input.uuid])
         {
-            this.current_begin_time = this.input_map[new_mark.cs_input.uuid];
-        } else if (new_mark.label && this.label_map[new_mark.label]) {
-            this.current_begin_time = this.label_map[new_mark.label].end_time;
+            this.current_begin_time = this.input_map[waitMark.cs_input.uuid];
+        } else if (waitMark.label && this.label_map[waitMark.label]) {
+            this.current_begin_time = this.label_map[waitMark.label].end_time;
         } else {
             if (!wait_only)
             {
@@ -144,15 +157,27 @@ function AnimationBlock(duration) {
         }
         
         
-        new_mark.apply(this.current_begin_time);
-        this.latest_end_time = Math.max(this.latest_end_time, new_mark.end_time);
-        this.current_begin_time += new_mark.duration;
-        return new_mark;
+        waitMark.apply(this.current_begin_time);
+        this.latest_end_time = Math.max(this.latest_end_time, waitMark.end_time);
+        this.current_begin_time += waitMark.duration;
+        return waitMark;
     }
     
     
     this.commit = function()
     {
+        
+        for(var i = 0, len = this.animations.length; i < len; i++)
+        {
+            var anim = this.animations[i];
+            if (anim.isWaitMark)
+            {
+                this.add_waitmarker_real(anim);
+            } else {
+                this.add_animation_real(anim);
+            }
+        }
+        
         CATransaction.setValueForKey(null, "__CS_BLOCK_UUID__");
         this.animation_info = null;
         delete block_uuid_map[this.uuid];

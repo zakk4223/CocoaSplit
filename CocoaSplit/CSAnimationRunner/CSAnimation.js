@@ -115,13 +115,16 @@ CSAnimation = function(target, keyPath, animation, kwargs) {
                 this.animation.setTimingFunction(tfunc);
             }
         }
+        return this;
     }
     
     this.repeatcount = function(r_count) {
         if (this.animation)
         {
+
             if (r_count == 'forever')
             {
+
                 this.ignore_wait = true;
                 r_count = FLT_MAX;
             } else {
@@ -129,6 +132,7 @@ CSAnimation = function(target, keyPath, animation, kwargs) {
             }
             this.animation.repeatCount = r_count;
         }
+        return this;
     }
     
     this.autoreverse = function() {
@@ -146,6 +150,22 @@ CSAnimation = function(target, keyPath, animation, kwargs) {
         animation.fillMode = "forwards";
         this.duration = animation.duration;
     }
+    
+    this.extra_model = function(extra_model) {
+        this.extra_model = extra_model;
+        return this;
+    }
+    
+    this.on_complete = function(on_complete) {
+        this.completion_handler = on_complete;
+        return this;
+    }
+    
+    this.label = function(label) {
+        this.label = label;
+        return this;
+    }
+    
     
     if (kwargs["repeatcount"])
     {
