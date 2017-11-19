@@ -2801,10 +2801,7 @@ static NSArray *_sourceTypes = nil;
 }
 
 
--(NSString *)MIDIIdentifier
-{
-    return [NSString stringWithFormat:@"Input:%@", self.uuid];
-}
+
 
 -(NSArray *)commandIdentifiers
 {

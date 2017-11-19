@@ -331,10 +331,10 @@
 {
     if (item.representedObject)
     {
-        InputSource *hInput = (InputSource *)item.representedObject;
-        if (_overlayView)
+        NSObject<CSInputSourceProtocol> *hInput = (NSObject<CSInputSourceProtocol> *)item.representedObject;
+        if (_overlayView && hInput.layer)
         {
-            _overlayView.parentSource = hInput;
+            _overlayView.parentSource = (InputSource *)hInput;
         }
     }
 }

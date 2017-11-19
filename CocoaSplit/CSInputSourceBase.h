@@ -8,6 +8,7 @@
 #import <Foundation/Foundation.h>
 #import "CSInputSourceProtocol.h"
 #import <JavaScriptCore/JavaScriptCore.h>
+#import "MIKMIDI.h"
 
 @protocol CSInputSourceBaseJSExport <JSExport>
 -(void)createUUID;
@@ -47,7 +48,7 @@
 
 @end
 
-@interface CSInputSourceBase : NSObject <CSInputSourceProtocol, NSCoding, CSInputSourceBaseJSExport, NSCopying>
+@interface CSInputSourceBase : NSObject <CSInputSourceProtocol, NSCoding, CSInputSourceBaseJSExport, NSCopying, MIKMIDIMappableResponder, MIKMIDIResponder>
 {
     JSContext *_scriptContext;
 }

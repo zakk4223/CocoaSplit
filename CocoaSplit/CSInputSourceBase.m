@@ -174,6 +174,11 @@
     return self;
 }
 
+-(NSString *)MIDIIdentifier
+{
+    return [NSString stringWithFormat:@"Input:%@", self.uuid];
+}
+
 /*
 -(NSString *)script_beforeDeleteCombined;
 @property (readonly) NSString *script_frameTickCombined;
