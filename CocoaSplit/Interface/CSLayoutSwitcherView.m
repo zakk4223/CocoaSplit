@@ -51,12 +51,20 @@
     {
 
         self.isSwitcherView = isSwitcherView;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(themeChanged:) name:CSNotificationThemeChanged object:nil];
         [self setWantsLayer:YES];
 
         //self.layerContentsRedrawPolicy = NSViewLayerContentsRedrawOnSetNeedsDisplay;
     }
     
     return self;
+}
+
+
+
+-(void)themeChanged:(NSNotification *)notification
+{
+    [self setupColors];
 }
 
 
@@ -69,8 +77,14 @@
     {
         newLayer = [CSPreviewGLLayer layer];
     } else {
+        bool darkMode = [CaptureController sharedCaptureController].useDarkMode;
         newLayer = [CALayer layer];
-        newLayer.backgroundColor = [NSColor controlColor].CGColor;
+        if (darkMode)
+        {
+            newLayer.backgroundColor = [NSColor blackColor].CGColor;
+        } else {
+            newLayer.backgroundColor = [NSColor controlColor].CGColor;
+        }
 
         newLayer.cornerRadius = 2.5f;
     }
@@ -121,6 +135,43 @@
 -(void)mouseUp:(NSEvent *)event
 {
     self.layer.opacity = 1.0f;
+}
+
+
+
+-(void)setupColors
+{
+    
+    bool darkMode = [CaptureController sharedCaptureController].useDarkMode;
+    
+    if (self.isSwitcherView)
+    {
+        _textView.textColor = [NSColor whiteColor];
+        _textView.backgroundColor = [NSColor blackColor];
+        _textView.alphaValue = 0.5;
+    } else {
+        bool darkMode = [CaptureController sharedCaptureController].useDarkMode;
+        
+        if (darkMode)
+        {
+            _textView.backgroundColor = [NSColor colorWithRed:1 green:1 blue:1 alpha:0];
+            _textView.textColor = [NSColor whiteColor];
+        } else {
+            _textView.backgroundColor = [NSColor colorWithRed:0 green:0 blue:0 alpha:0];
+            _textView.textColor = [NSColor blackColor];
+        }
+    }
+    
+    if (!self.isSwitcherView)
+    {
+        
+        if (darkMode)
+        {
+            self.layer.backgroundColor = [NSColor blackColor].CGColor;
+        } else {
+            self.layer.backgroundColor = [NSColor controlColor].CGColor;
+        }
+    }
 }
 
 
@@ -186,25 +237,13 @@
             [_textView setWantsLayer:YES];
             _textView.layer.cornerRadius = 5;
 
-            if (self.isSwitcherView)
-            {
-                _textView.backgroundColor = [NSColor blackColor];
-                _textView.alphaValue = 0.5;
 
-            } else {
-                _textView.backgroundColor = [NSColor colorWithRed:0 green:0 blue:0 alpha:0];
-            }
-            
             _textView.editable = NO;
             _textView.selectable = NO;
             
-            if (self.isSwitcherView)
-            {
-                _textView.textColor = [NSColor whiteColor];
-            } else {
-                _textView.textColor = [NSColor blackColor];
-            }
+            [self setupColors];
             
+ 
             _textView.font = [NSFont userFontOfSize:20.0f];
             [_textView.textContainer setContainerSize:NSMakeSize(1.0e6, 1.0e6)];
 
@@ -294,6 +333,7 @@
 
 -(void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     if (self.sourceLayout)
     {
         [self.sourceLayout removeObserver:self forKeyPath:@"in_live"];
@@ -301,8 +341,6 @@
         [self.sourceLayout removeObserver:self forKeyPath:@"audioData"];
         [self.sourceLayout removeObserver:self forKeyPath:@"recorder.defaultRecordingActive"];
         [self.sourceLayout removeObserver:self forKeyPath:@"name"];
-
-        
     }
 }
 

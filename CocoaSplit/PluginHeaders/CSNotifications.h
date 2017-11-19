@@ -57,4 +57,5 @@ extern NSString *const CSNotificationLayoutModeChanged;
 
 extern NSString *const CSNotificationStatisticsUpdate;
 
+extern NSString *const CSNotificationThemeChanged;
 

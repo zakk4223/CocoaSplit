@@ -146,6 +146,7 @@
 
 -(void)changeAppearance
 {
+    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationThemeChanged object:self];
     NSAppearance *useAppearance = [self getAppearance];
     for (NSWindow *win in [NSApplication sharedApplication].windows)
     {
