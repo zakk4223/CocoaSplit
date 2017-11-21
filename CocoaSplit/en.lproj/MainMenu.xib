@@ -1022,6 +1022,11 @@
                                         </buttonCell>
                                         <connections>
                                             <action selector="doInstantRecord:" target="816" id="bP2-vD-tT1"/>
+                                            <binding destination="816" name="hidden" keyPath="self.useInstantRecord" id="pJI-1I-ZGn">
+                                                <dictionary key="options">
+                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                </dictionary>
+                                            </binding>
                                         </connections>
                                     </button>
                                     <button toolTip="New Source" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xTB-uk-xkF">
