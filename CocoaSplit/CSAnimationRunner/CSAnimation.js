@@ -85,6 +85,7 @@ CSAnimation = function(target, keyPath, animation) {
             CATransaction.begin();
             CATransaction.setDisableActions(true);
             this.target.setValueForKeyPath(p_value, this.animation.keyPath);
+            console.log(this.extra_model);
             if (this.extra_model)
             {
                 this.extra_model.setValueForKeyPath(p_value, this.animation.keyPath);
@@ -156,17 +157,17 @@ CSAnimation = function(target, keyPath, animation) {
         this.duration = animation.duration;
     }
     
-    this.extra_model = function(extra_model) {
+    this.set_extra_model = function(extra_model) {
         this.extra_model = extra_model;
         return this;
     }
     
-    this.on_complete = function(on_complete) {
+    this.set_on_complete = function(on_complete) {
         this.completion_handler = on_complete;
         return this;
     }
     
-    this.label = function(label) {
+    this.set_label = function(label) {
         this.label = label;
         return this;
     }

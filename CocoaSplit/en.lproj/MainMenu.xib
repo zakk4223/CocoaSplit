@@ -369,7 +369,7 @@
                                 <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rb5-R9-Aqy">
-                                        <rect key="frame" x="640" y="26" width="283" height="14"/>
+                                        <rect key="frame" x="640" y="24" width="283" height="14"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="279" id="Ivd-hW-ORZ"/>
                                         </constraints>
@@ -383,17 +383,17 @@
                                         </connections>
                                     </textField>
                                     <button wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="597">
-                                        <rect key="frame" x="435" y="23" width="70" height="19"/>
+                                        <rect key="frame" x="435" y="24" width="70" height="17"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="70" id="mTc-Eb-GMx"/>
                                         </constraints>
-                                        <buttonCell key="cell" type="recessed" title="Stream!" alternateTitle="Stop!" bezelStyle="recessed" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="598">
+                                        <buttonCell key="cell" type="square" title="Stream!" alternateTitle="Stop!" bezelStyle="shadowlessSquare" alignment="center" imageScaling="proportionallyDown" inset="2" id="598">
                                             <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
-                                            <font key="font" metaFont="systemBold" size="12"/>
+                                            <font key="font" metaFont="system"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="streamButtonPushed:" target="816" id="825"/>
-                                            <binding destination="816" name="value" keyPath="self.captureRunning" id="PNO-8Q-fUl"/>
+                                            <binding destination="816" name="value" keyPath="self.captureRunning" id="pGb-5n-F7G"/>
                                         </connections>
                                     </button>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZMK-1p-sVF">
@@ -1002,7 +1002,7 @@
                                         </connections>
                                     </button>
                                     <button toolTip="Configure Outputs" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ELT-rG-e24">
-                                        <rect key="frame" x="513" y="24" width="17" height="18"/>
+                                        <rect key="frame" x="513" y="23" width="17" height="18"/>
                                         <buttonCell key="cell" type="inline" bezelStyle="inline" image="NSActionTemplate" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" inset="2" id="46q-bp-hBT">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="smallSystemBold"/>
@@ -1012,7 +1012,7 @@
                                         </connections>
                                     </button>
                                     <button toolTip="Instant Record" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pIm-oO-eRB">
-                                        <rect key="frame" x="405" y="25" width="22" height="17"/>
+                                        <rect key="frame" x="405" y="24" width="22" height="17"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="22" id="bCR-ac-lgI"/>
                                         </constraints>

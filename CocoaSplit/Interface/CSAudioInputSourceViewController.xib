@@ -73,7 +73,7 @@
                                         <constraints>
                                             <constraint firstAttribute="width" constant="34" id="KCd-XZ-HOS"/>
                                         </constraints>
-                                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Speaker_Icon" imagePosition="only" alignment="center" alternateImage="Mute_Icon" imageScaling="proportionallyDown" inset="2" id="pD7-lv-M7G">
+                                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Speaker_Icon" imagePosition="only" alignment="center" alternateImage="Mute_Icon" imageScaling="proportionallyDown" inset="2" id="pD7-lv-M7G" customClass="CSNSButtonCellThemed">
                                             <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
