@@ -221,12 +221,16 @@ var switchToLayout = function(layout, kwargs) {
             {
                 target_layout.transitionInfo = layoutTransition.preTransition;
                 target_layout.transitionInfo.waitForMedia = layoutTransition.waitForMedia;
+                beginAnimation();
                 target_layout.replaceWithSourceLayoutUsingScripts(layoutTransition.transitionLayout, useScripts);
                 waitAnimation(layoutTransition.transitionHoldTime);
+                commitAnimation();
             }
             target_layout.transitionInfo = layoutTransition.postTransition;
         }
+        beginAnimation();
         target_layout.replaceWithSourceLayoutUsingScripts(layout, useScripts);
+        commitAnimation();
     }
 }
 

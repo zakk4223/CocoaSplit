@@ -934,7 +934,6 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 
     NSString *blockUUID = [CATransaction valueForKey:@"__CS_BLOCK_UUID__"];
 
-    
     NSArray *sortedSources = [self.sourceListPresentation sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"scriptPriority" ascending:YES]]];
     
     for (NSObject <CSInputSourceProtocol> *src in sortedSources)
@@ -967,6 +966,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
             {
                 NSDictionary *blockMap = mapValue.toDictionary;
                 NSDictionary *blockObj = blockMap[blockUUID];
+                
                 if (blockMap && blockObj)
                 {
                     aStart = blockObj[@"current_begin_time"];

@@ -20,6 +20,7 @@ CSAnimation = function(target, keyPath, animation) {
     this.baseLayer = null;
     this.layout = null;
     this.uukey = null;
+    this.wait_only = null;
     
     
     
@@ -85,7 +86,6 @@ CSAnimation = function(target, keyPath, animation) {
             CATransaction.begin();
             CATransaction.setDisableActions(true);
             this.target.setValueForKeyPath(p_value, this.animation.keyPath);
-            console.log(this.extra_model);
             if (this.extra_model)
             {
                 this.extra_model.setValueForKeyPath(p_value, this.animation.keyPath);

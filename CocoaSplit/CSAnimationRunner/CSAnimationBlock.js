@@ -23,12 +23,13 @@ function AnimationBlock(duration) {
     {
         this.layout = getCurrentLayout();
         this.current_begin_time = null;
-        this.current_end_time = null;
+        this.latest_end_time = null;
         this.animation_info = {};
     } else {
+        cframe.applyPendingAnimations();
         this.layout = cframe.layout;
         this.current_begin_time = cframe.current_begin_time;
-        this.current_end_time = cframe.current_end_time;
+        this.latest_end_time = cframe.latest_end_time;
         this.animation_info = cframe.animation_info;
     }
     
@@ -100,7 +101,8 @@ function AnimationBlock(duration) {
         }
         
         var a_duration = animation.apply(this.current_begin_time);
-        this.latest_end_time = animation.end_time;
+        this.latest_end_time = Math.max(this.latest_end_time, animation.end_time);
+        
         if (animation.uukey && animation.target)
         {
             this.animation_info.all_animations[animation.uukey]= animation.target;
@@ -130,6 +132,7 @@ function AnimationBlock(duration) {
         new_mark.isWaitMark = true;
         new_mark.duration = duration;
         new_mark.cs_input = target;
+        new_mark.wait_only = wait_only;
         this.animations.push(new_mark);
         return new_mark;
     }
@@ -151,7 +154,7 @@ function AnimationBlock(duration) {
         } else if (waitMark.label && this.label_map[waitMark.label]) {
             this.current_begin_time = this.label_map[waitMark.label].end_time;
         } else {
-            if (!wait_only)
+            if (!waitMark.wait_only)
             {
                 this.current_begin_time = this.latest_end_time;
             }
@@ -165,9 +168,8 @@ function AnimationBlock(duration) {
     }
     
     
-    this.commit = function()
+    this.applyPendingAnimations = function()
     {
-        
         for(var i = 0, len = this.animations.length; i < len; i++)
         {
             var anim = this.animations[i];
@@ -179,11 +181,28 @@ function AnimationBlock(duration) {
             }
         }
         
+        this.animations = [];
+    }
+    
+    
+    this.commit = function()
+    {
+        
+        this.applyPendingAnimations();
+        
         CATransaction.setValueForKey(null, "__CS_BLOCK_UUID__");
         this.animation_info = null;
         delete block_uuid_map[this.uuid];
+
         CATransaction.commit();
-        
+        let cframe = CSAnimationBlock.currentFrame();
+        if (cframe)
+        {
+
+            cframe.current_begin_time = this.current_begin_time;
+            cframe.latest_end_time = this.latest_end_time;
+            
+        }
     }
     
     this.waitAnimation = function(duration, target) {
@@ -198,7 +217,7 @@ function AnimationBlock(duration) {
     block_uuid_map[this.uuid] = this;
     
     CATransaction.setValueForKey(this.uuid, "__CS_BLOCK_UUID__");
-    this.current_begin_time = 0;
+    //this.current_begin_time = 0;
 
 
 }
