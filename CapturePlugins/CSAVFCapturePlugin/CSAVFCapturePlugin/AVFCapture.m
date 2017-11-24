@@ -344,6 +344,7 @@
 {
         CVImageBufferRef videoFrame = CMSampleBufferGetImageBuffer(sampleBuffer);
     
+    
 
         if (videoFrame)
         {

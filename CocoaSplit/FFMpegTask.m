@@ -353,9 +353,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     } else {
         avErr = avformat_alloc_output_context2(&_av_fmt_ctx, NULL, NULL, [_stream_output UTF8String]);
     }
-    
-    NSLog(@"AV ERR %d", avErr);
-    
+        
     if (!_av_fmt_ctx)
     {
         NSLog(@"NO FMT CTX");

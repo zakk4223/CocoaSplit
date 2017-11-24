@@ -356,6 +356,7 @@
         
         CMTime pts = frameData.videoPTS;
         
+            
         size_t src_height;
         size_t src_width;
         CVImageBufferRef imageBuffer = frameData.videoFrame;
@@ -376,9 +377,11 @@
             
     if (self->_last_pts > 0 && usePts <= self->_last_pts)
     {
+        
         //We got the frame too fast, or something else weird happened. Just send the audio along
         frameData.avcodec_pkt = NULL;
         frameData.encodedSampleBuffer = NULL;
+        frameData.avcodec_ctx = _av_codec_ctx;
         
         for (id dKey in self.outputs)
         {

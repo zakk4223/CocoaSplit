@@ -2780,11 +2780,7 @@
         }
     }
 
-    if (self.mainLayoutRecorder && !self.instantRecorder)
-    {
-        
-        [self.livePreviewView enablePrimaryRender];
-    }
+
     
     
     for (OutputDestination *out in _captureDestinations)
@@ -2804,7 +2800,11 @@
         self.mainLayoutRecorder.recordingActive = NO;
     }
     
-    
+    if (self.mainLayoutRecorder && !self.instantRecorder)
+    {
+        
+        [self.livePreviewView enablePrimaryRender];
+    }
 
     if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_8)
     {

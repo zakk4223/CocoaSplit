@@ -309,7 +309,10 @@
 -(void)frameArrived:(id)ctx
 {
     dispatch_async(_frame_queue, ^{
-        [self newFrameEvent];
+        if (self.recordingActive)
+        {
+            [self newFrameEvent];
+        }
     });
 }
 
