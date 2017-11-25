@@ -1802,7 +1802,10 @@
 {
     NSString *uuid = src.uuid;
     
-    [self stopHighlightingSource:src];
+    if (src.layer)
+    {
+        [self stopHighlightingSource:(InputSource *)src];
+    }
     
     NSWindow *cWindow = [self.activeConfigWindows objectForKey:uuid];
     NSViewController *cController = [self.activeConfigControllers objectForKey:uuid];

@@ -294,9 +294,12 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
             pkt.size = (int)buffer_length;
             //pkt.destruct = NULL;
             
-            
-            
+        
+        
             pkt.pts = av_rescale_q(pts.value, (AVRational) {1.0, pts.timescale}, _av_audio_stream->time_base);
+        pkt.dts = pkt.pts;
+        
+
 
 
         
@@ -621,6 +624,13 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         
     pkt.pts = av_rescale_q(CMSampleBufferGetPresentationTimeStamp(theBuffer).value, (AVRational) {1.0, CMSampleBufferGetPresentationTimeStamp(theBuffer).timescale}, _av_video_stream->time_base);
 
+    
+    if (pkt.dts == AV_NOPTS_VALUE)
+    {
+        pkt.dts = pkt.pts;
+    }
+    
+    
     if (frameData.isKeyFrame)
     {
         pkt.flags |= AV_PKT_FLAG_KEY;

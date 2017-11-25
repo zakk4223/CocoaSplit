@@ -223,7 +223,7 @@
             if (self.audioNode)
             {
                 self.audioNode.noSettings = YES;
-                [audioEngine addFileInput:self.audioNode];
+                [audioEngine addFileInput:(CAMultiAudioFile *)self.audioNode];
             }
         }
     }

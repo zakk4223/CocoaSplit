@@ -8,10 +8,11 @@
 #import <Foundation/Foundation.h>
 #import <JavaScriptCore/JavaScriptCore.h>
 #import "CSInputLayer.h"
+#import "MIKMIDI.h"
 
 @class SourceLayout;
 
-@protocol CSInputSourceProtocol <NSObject, JSExport>
+@protocol CSInputSourceProtocol <NSObject, JSExport, MIKMIDIResponder>
 
 @property (weak) SourceLayout *sourceLayout;
 @property (strong) CSInputLayer *layer;

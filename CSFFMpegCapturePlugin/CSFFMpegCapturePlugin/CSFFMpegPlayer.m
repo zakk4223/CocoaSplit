@@ -523,7 +523,7 @@
             _first_frame_host_time = mediaTime;
             _peek_frame = NULL;
             _last_buf = nil;
-            audio_pts = use_frame->pkt_pts;
+            audio_pts = use_frame->pts;
             _first_video_pts = 0;
             //[self startAudio];
         }
@@ -552,7 +552,7 @@
             if (_last_buf && _peek_frame)
             {
                 
-                if (_peek_frame->pkt_pts > target_pts)
+                if (_peek_frame->pts > target_pts)
                 {
                     do_consume = NO;
                     
@@ -562,7 +562,7 @@
                 }
             }
             
-            while (do_consume && (_peek_frame = [_useInput consumeFrame:&av_error]) && _peek_frame->pkt_pts < target_pts)
+            while (do_consume && (_peek_frame = [_useInput consumeFrame:&av_error]) && _peek_frame->pts < target_pts)
             {
                 if (use_frame)
                 {
@@ -584,7 +584,7 @@
     
     if (use_frame && !_video_done)
     {
-        if ((use_frame->pkt_pts >= _useInput.first_audio_pts) && !_audio_running && !_audio_done)
+        if ((use_frame->pts >= _useInput.first_audio_pts) && !_audio_running && !_audio_done)
         {
             [self startAudio];
         }
@@ -598,7 +598,7 @@
         }*/
         
         
-        self.lastVideoTime = use_frame->pkt_pts * av_q2d(_useInput.videoTimeBase);
+        self.lastVideoTime = use_frame->pts * av_q2d(_useInput.videoTimeBase);
         
         ret = [self convertFrameToPixelBuffer:use_frame];
         av_frame_free(&use_frame);

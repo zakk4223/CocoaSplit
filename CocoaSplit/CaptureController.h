@@ -175,7 +175,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(IBAction)hideTransitionView:(id)sender;
 -(IBAction)showTransitionView:(id)sender;
 - (IBAction)doInstantRecord:(id)sender;
--(IBAction)openTransitionFilterPanel:(NSButton *)sender;
 
 
 

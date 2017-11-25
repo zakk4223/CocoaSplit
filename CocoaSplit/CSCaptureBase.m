@@ -114,6 +114,7 @@
 }
 
 
+
 -(NSImage *)libraryImage
 {
     return nil;
@@ -440,6 +441,12 @@
 }
 
 
++(bool)canCreateSourceFromPasteboardItem:(NSPasteboardItem *)item
+{
+    return NO;
+}
+
+
 +(void) layoutModification:(void (^)(void))modBlock
 {
     //On main thread already, just execute the block, otherwise execute on main and wait
@@ -475,15 +482,17 @@
     self.timerDelegate = nil;
 }
 
-+(bool)canCreateSourceFromPasteboardItem:(NSPasteboardItem *)item
-{
-    return NO;
-}
 
 +(NSObject <CSCaptureSourceProtocol> *)createSourceFromPasteboardItem:(NSPasteboardItem *)item
 {
     return nil;
 }
+
++(NSObject <CSCaptureSourceProtocol> *)createSourceFromPasteboardItem
+{
+    return nil;
+}
+
 
 +(NSSet *)mediaUTIs
 {

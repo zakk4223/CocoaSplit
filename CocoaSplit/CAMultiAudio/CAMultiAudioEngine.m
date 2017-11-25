@@ -458,7 +458,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     {
         if (node.converterNode)
         {
-            [self removeInput:node.converterNode];
+            [self removeInput:node];
         }
 
     }
@@ -467,7 +467,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     {
         if (node.converterNode)
         {
-            [self removeInput:node.converterNode];
+            [self removeInput:node];
         }
         
     }
@@ -612,8 +612,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         return; //what?
     }
     
-    CAMultiAudioNode *toAttach = nil;
-    
     AudioStreamBasicDescription *devFormat = device.inputFormat;
     
     if (devFormat)
@@ -623,15 +621,9 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
         newConverter.sourceNode = device;
         device.converterNode = newConverter;
-        toAttach = newConverter;
     }
     
-    [self.graph addNode:device];
-    [self attachInput:toAttach];
-    if (devFormat)
-    {
-        [self.graph connectNode:device toNode:toAttach sampleRate:devFormat->mSampleRate];
-    }
+    [self attachInput:device];
 
 }
 
@@ -642,14 +634,9 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     newConverter.nodeUID = input.nodeUID; //Not so unique, lol
     
     newConverter.sourceNode = input;
-    //input.converterNode = newConverter;
-   // input.downstreamNode = newConverter;
-    //
-    [self.graph addNode:input];
-
+    input.converterNode = newConverter;
     [self attachInput:input];
     
-   // [self.graph connectNode:input toNode:newConverter sampleRate:input.outputFormat->mSampleRate];
 }
 
 
@@ -659,11 +646,11 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     bool ret;
     
     CAMultiAudioNode *graphInput = input;
-    if (graphInput.downstreamNode)
+  /*  if (graphInput.downstreamNode)
     {
         graphInput = graphInput.downstreamNode;
     }
-    
+    */
     ret = [self.graph addNode:graphInput];
     
     if (!ret)
@@ -733,25 +720,41 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         connectNode = delayNode;
         [input.delayNodes addObject:delayNode];
     }
-    
+   
     if (![self.graph connectNode:dmix toNode:connectNode])
     {
-        
+   
         NSLog(@"CONNECT EQ/DMIX FAILED");
         [self disconnectInputNode:input];
         return NO;
     }
     
-    if (![self.graph connectNode:graphInput toNode:dmix])
+    
+    if (input.converterNode)
     {
-        NSLog(@"LAST CONNECT FAILED %@", graphInput);
-        [self disconnectInputNode:input];
-        return NO;
+        [self.graph addNode:input.converterNode];
+        NSLog(@"ADDED CONVERTER");
+        if (![self.graph connectNode:input.converterNode toNode:dmix])
+        {
+            [self disconnectInputNode:input];
+            return NO;
+        }
+        
+        if (![self.graph connectNode:input toNode:input.converterNode sampleRate:input.converterNode.inputFormat.mSampleRate])
+        {
+            [self disconnectInputNode:input];
+            return NO;
+        }
+    } else {
+        
+        
+        if (![self.graph connectNode:graphInput toNode:dmix])
+        {
+            NSLog(@"LAST CONNECT FAILED %@", graphInput);
+            [self disconnectInputNode:input];
+            return NO;
+        }
     }
-    
-    
-    
-
 
     return YES;
 }
@@ -764,9 +767,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     newConverter.sourceNode = input;
     input.converterNode = newConverter;
-    input.downstreamNode = newConverter;
     
-    [self.graph addNode:input];
     [self attachInput:input];
     
     [self.graph connectNode:input toNode:newConverter sampleRate:input.inputFormat->mSampleRate];
@@ -837,11 +838,19 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     CAMultiAudioDownmixer *dmix = disconnectNode.downMixer;
     CAMultiAudioEqualizer *rEq = disconnectNode.equalizer;
+    CAMultiAudioConverter *iConv = disconnectNode.converterNode;
+    
     disconnectNode.downMixer = nil;
     
     [self.graph removeNode:disconnectNode];
     
 
+    
+    if (iConv)
+    {
+        [self.graph removeNode:iConv];
+    }
+    
     
     if (dmix)
     {
@@ -891,6 +900,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         [self disconnectInputNode:toRemove];
         toRemove.downMixer = nil;
         toRemove.equalizer = nil;
+        toRemove.converterNode = nil;
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self removeObjectFromAudioInputsAtIndex:index];

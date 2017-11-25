@@ -26,6 +26,17 @@
 @synthesize muted = _muted;
 @synthesize enabled = _enabled;
 
+-(instancetype)init
+{
+    if (self = [self initWithSubType:0 unitType:0])
+    {
+        
+    }
+    
+    return self;
+}
+
+
 -(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType
 {
     if (self = [super init])
@@ -333,6 +344,8 @@
     [_volumeAnimation startAnimation];
     
 }
+
+
 
 
 

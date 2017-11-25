@@ -99,7 +99,7 @@
                 
                 OSStatus err;
                 
-                err = AudioCodecAppendInputData(aacCodec, writebuf, &bufsize, NULL, NULL);
+                err = AudioCodecAppendInputData(aacCodec, writebuf, &bufsize, &num_packets, NULL);
                 
                 free(writebuf);
                 AudioStreamPacketDescription packetDesc;

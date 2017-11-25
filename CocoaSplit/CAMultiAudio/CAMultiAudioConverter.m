@@ -37,6 +37,7 @@
 -(bool)setInputStreamFormat:(AudioStreamBasicDescription *)format
 {
     
+    /*
     bool ret = NO;
     if (&_inputFormat)
     {
@@ -46,6 +47,8 @@
     }
     
     return ret;
+     */
+    return YES;
 }
 
 
@@ -116,20 +119,6 @@
 }
 
 
--(bool)createNode:(AUGraph)forGraph
-{
-    bool retval = [super createNode:forGraph];
-    
-    OSStatus err;
-    err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 0, &_inputFormat, sizeof(_inputFormat));
-    
-    if (err)
-    {
-        NSLog(@"AudioConverter failed to set input Stream Format, continuing anyways. err: %d", err);
-    }
-    
-    return retval;
-}
 
 -(void)setEnabled:(bool)enabled
 {

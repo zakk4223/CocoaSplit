@@ -10,6 +10,7 @@
 
 @implementation CSInputSourceBase
 
+@synthesize label = _label;
 
 -(instancetype) init
 {
@@ -179,15 +180,37 @@
     return [NSString stringWithFormat:@"Input:%@", self.uuid];
 }
 
-/*
--(NSString *)script_beforeDeleteCombined;
-@property (readonly) NSString *script_frameTickCombined;
-@property (readonly) NSString *script_beforeMergeCombined;
-@property (readonly) NSString *script_afterMergeCombined;
-@property (readonly) NSString *script_beforeRemoveCombined;
-@property (readonly) NSString *script_beforeReplaceCombined;
-@property (readonly) NSString *script_afterReplaceCombined;
-*/
+- (void)handleMIDICommand:(MIKMIDICommand *)command {
+    return;
+}
 
+
+- (BOOL)respondsToMIDICommand:(MIKMIDICommand *)command
+{
+    return NO;
+}
+
+
+
+/*
+ -(NSString *)script_beforeDeleteCombined;
+ @property (readonly) NSString *script_frameTickCombined;
+ @property (readonly) NSString *script_beforeMergeCombined;
+ @property (readonly) NSString *script_afterMergeCombined;
+ @property (readonly) NSString *script_beforeRemoveCombined;
+ @property (readonly) NSString *script_beforeReplaceCombined;
+ @property (readonly) NSString *script_afterReplaceCombined;
+ */
+
+
+
+- (MIKMIDIResponderType)MIDIResponderTypeForCommandIdentifier:(NSString *)commandID
+{
+    return MIKMIDIResponderTypeNone;
+}
+
+- (NSArray *)commandIdentifiers {
+    return nil;
+}
 
 @end

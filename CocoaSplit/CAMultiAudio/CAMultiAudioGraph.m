@@ -27,7 +27,7 @@
         
         _graphAsbd->mSampleRate = self.sampleRate;
         _graphAsbd->mFormatID = kAudioFormatLinearPCM;
-        _graphAsbd->mFormatFlags = kAudioFormatFlagsAudioUnitCanonical;
+        _graphAsbd->mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked | kAudioFormatFlagIsNonInterleaved;
         _graphAsbd->mFramesPerPacket = 1;
         _graphAsbd->mChannelsPerFrame = 2;
         _graphAsbd->mReserved = 0;

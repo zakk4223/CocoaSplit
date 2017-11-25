@@ -43,7 +43,6 @@
 @property (assign) Float32 powerLevel;
 
 -(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType;
--(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType withCoder:(NSCoder *)aDecoder;
 
 -(bool)createNode:(AUGraph)forGraph;
 -(void)nodeConnected:(CAMultiAudioNode *)toNode onBus:(UInt32)onBus;
@@ -83,7 +82,6 @@
 @property (assign) UInt32 connectedToBus;
 @property (strong) NSString *name;
 @property (strong) NSString *nodeUID;
-@property (strong) CAMultiAudioNode *downstreamNode;
 
 
 

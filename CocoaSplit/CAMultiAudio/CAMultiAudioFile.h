@@ -20,7 +20,6 @@
 
 @property (strong) NSString *filePath;
 @property (assign) AudioStreamBasicDescription *outputFormat;
-@property (weak) id converterNode;
 @property (assign) Float64 duration;
 @property (assign) Float64 currentTime;
 @property (assign) bool playing;

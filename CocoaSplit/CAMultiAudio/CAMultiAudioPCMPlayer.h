@@ -38,7 +38,6 @@ struct cspcm_buffer_msg {
 }
 
 @property (strong) NSString *inputUID;
-@property (weak) id converterNode;
 @property (assign) Float64 latestScheduledTime;
 @property (assign) AudioStreamBasicDescription *inputFormat;
 @property (readonly) NSUInteger pendingFrames;

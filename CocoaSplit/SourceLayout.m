@@ -134,7 +134,6 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     //newRoot.autoresizingMask = kCALayerMinXMargin | kCALayerWidthSizable | kCALayerMaxXMargin | kCALayerMinYMargin | kCALayerHeightSizable | kCALayerMaxYMargin;
     
     
-    newRoot.delegate = self;
     [CATransaction commit];
 
     return newRoot;
@@ -162,6 +161,12 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     
     
 }
+
+- (void)handleMIDICommand:(MIKMIDICommand *)command
+{
+    return;
+}
+
 
 
 -(NSArray *)commandIdentifiers

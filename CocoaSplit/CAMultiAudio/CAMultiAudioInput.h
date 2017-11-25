@@ -7,6 +7,7 @@
 //
 
 #import "CAMultiAudioNode.h"
+#import "CAMultiAudioConverter.h"
 
 @protocol CAMultiAudioInputJSExport <JSExport>
 @property (strong) CAMultiAudioDownmixer *downMixer;
@@ -30,7 +31,7 @@
 
 @property (strong) CAMultiAudioDownmixer *downMixer;
 @property (strong) CAMultiAudioEqualizer *equalizer;
-
+@property (weak) CAMultiAudioConverter *converterNode;
 @property (strong) NSMutableArray *delayNodes;
 @property (strong) NSColor *nameColor;
 @property (strong) CAMultiAudioMatrixMixerWindowController *mixerWindow;
