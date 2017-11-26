@@ -152,7 +152,7 @@
 
 -(NSImage *)libraryImage
 {
-    return [NSImage imageNamed:@"Speaker_IconTemplate"];
+    return [NSImage imageNamed:@"Speaker_Icon"];
 }
 
 
