@@ -10,7 +10,9 @@
 #import "CSTimerSourceProtocol.h"
 #import "InputSource.h"
 #import "CSNotifications.h"
-
+#import "CSPcmPlayer.h"
+#import "CaptureController.h"
+#import "CSLayoutRecorder.h"
 
 #import "SourceCache.h"
 #import <objc/runtime.h>
@@ -392,6 +394,52 @@
     
 
 
+}
+
+-(CSPcmPlayer *)createPCMInput:(NSString *)forUID withFormat:(const AudioStreamBasicDescription *)withFormat
+{
+    
+    CAMultiAudioEngine *useEngine = nil;
+    
+    NSMapTable *inputsCopy = nil;
+    @synchronized(self)
+    {
+        inputsCopy = _allLayers.copy;
+    }
+    
+
+    for (id key in inputsCopy)
+    {
+        
+        if (!key)
+        {
+            continue;
+        }
+        
+        
+        InputSource *layerSrc = (InputSource *)key;
+        if (layerSrc && layerSrc.sourceLayout && layerSrc.sourceLayout.recorder && layerSrc.sourceLayout.recorder.audioEngine)
+        {
+            useEngine = layerSrc.sourceLayout.recorder.audioEngine;
+        }
+    }
+    
+    if (!useEngine)
+    {
+        useEngine = [CaptureController sharedCaptureController].multiAudioEngine;
+    }
+    
+    
+    if (useEngine)
+    {
+        
+        CAMultiAudioPCMPlayer *player;
+        
+        player = [useEngine createPCMInput:forUID withFormat:withFormat];
+        return (CSPcmPlayer *)player;
+    }
+    
+    return nil;
 }
 
 -(void)frameArrived

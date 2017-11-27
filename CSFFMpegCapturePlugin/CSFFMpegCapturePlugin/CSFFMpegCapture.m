@@ -465,8 +465,10 @@
     }
     
     
-    self.pcmPlayer = [[CSPluginServices sharedPluginServices] createPCMInput:self.uuid withFormat:audioFormat];
+    self.pcmPlayer = [self createPCMInput:self.uuid withFormat:audioFormat];
+    
 
+    
     if (self.player)
     {
         self.player.asbd = &_asbd;
