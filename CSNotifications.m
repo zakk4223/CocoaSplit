@@ -57,3 +57,6 @@ NSString *const CSNotificationThemeChanged = @"CSNotificationThemeChanged";
 
 NSString *const CSNotificationStatisticsUpdate = @"CSNotificationStatisticsUpdate";
 
+NSString *const CSNotificationAudioAdded = @"CSNotificationAudioAdded";
+NSString *const CSNotificationAudioRemoved = @"CSNotificationAudioRemoved";
+

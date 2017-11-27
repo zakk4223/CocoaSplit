@@ -59,3 +59,6 @@ extern NSString *const CSNotificationStatisticsUpdate;
 
 extern NSString *const CSNotificationThemeChanged;
 
+extern NSString *const CSNotificationAudioAdded;
+extern NSString *const CSNotificationAudioRemoved;
+

@@ -283,7 +283,7 @@
                                         <rect key="frame" x="-3" y="99" width="125" height="211"/>
                                         <clipView key="contentView" id="IHl-ti-IFm">
                                             <rect key="frame" x="1" y="1" width="123" height="209"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" id="VH4-D3-FtD">
                                                     <rect key="frame" x="0.0" y="0.0" width="123" height="209"/>
@@ -353,7 +353,7 @@
                                         <rect key="frame" x="122" y="99" width="355" height="211"/>
                                         <clipView key="contentView" id="sZd-8i-NW5">
                                             <rect key="frame" x="1" y="1" width="338" height="209"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="aC1-bD-jSM">
                                                     <rect key="frame" x="0.0" y="-1" width="338" height="209"/>

@@ -61,6 +61,7 @@
 @property (assign) bool useCurrentPosition;
 @property (assign) bool updateMovieTime;
 @property (assign) ff_movie_repeat repeat;
+@property (strong) NSString *uuid;
 
 
 

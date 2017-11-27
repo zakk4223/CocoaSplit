@@ -53,6 +53,8 @@
 {
     if (self = [self init])
     {
+        NSLog(@"INIT WITH NODE: NODE UUID %@", node.nodeUID);
+        
         self.audioUUID = node.nodeUID;
         self.audioVolume = node.volume;
         self.name = node.name;
@@ -76,6 +78,28 @@
     return newCopy;
 }
 
+
+
+-(void)setSourceLayout:(SourceLayout *)sourceLayout
+{
+    [super setSourceLayout:sourceLayout];
+    CAMultiAudioEngine *myEngine = [self findAudioEngine];
+    if (myEngine)
+    {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioNotification:) name:CSNotificationAudioAdded object:myEngine];
+    }
+}
+
+-(void)audioNotification:(NSNotification *)notification
+{
+    NSDictionary *userData = notification.userInfo;
+    NSString *nodeUUID = userData[@"UUID"];
+    NSLog(@"NOTIFICAION FOR %@", nodeUUID);
+    if (nodeUUID && [nodeUUID isEqualToString:self.audioUUID])
+    {
+        [self applyAudioSettings];
+    }
+}
 
 
 -(NSString *)label
@@ -208,6 +232,8 @@
     
     return audioEngine;
 }
+
+
 -(void)findAudioNode
 {
     

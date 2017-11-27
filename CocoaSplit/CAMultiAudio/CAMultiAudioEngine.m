@@ -10,7 +10,7 @@
 #import "CAMultiAudioDownmixer.h"
 #import "CAMultiAudioDelay.h"
 #import "CAMultiAudioEqualizer.h"
-
+#import "CSNotifications.h"
 
 OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList *ioData );
 
@@ -392,6 +392,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         if (selectedIdx != NSNotFound)
         {
             [self removeObjectFromAudioInputsAtIndex:selectedIdx];
+            [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioRemoved object:self userInfo:@{@"UUID": removedDev.uniqueID}];
+
 
         }
     }
@@ -555,6 +557,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
         [self.fileInputs removeObjectAtIndex:index];
     }
+    
+
 }
 
 
@@ -567,8 +571,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     {
         [self.pcmInputs removeObjectAtIndex:index];
     }
-    
-    
 }
 
 
@@ -601,6 +603,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     //[newInput play];
     [self.pcmInputs addObject:newInput];
+
     return newInput;
     
 }
@@ -762,6 +765,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 -(void)attachPCMInput:(CAMultiAudioPCMPlayer *)input
 {
+    NSLog(@"ATTACH PCM %@", input.nodeUID);
+    
     CAMultiAudioConverter *newConverter = [[CAMultiAudioConverter alloc] initWithInputFormat:input.inputFormat];
     newConverter.nodeUID = input.nodeUID; //Not so unique, lol
     
@@ -827,6 +832,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
             [self addAudioInputsObject:input];
         });
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioAdded object:self userInfo:@{@"UUID": input.nodeUID}];
 
     return YES;
     
@@ -868,7 +874,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     {
         [self.graph removeNode:rEq];
     }
-    
+    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioRemoved object:self userInfo:@{@"UUID": disconnectNode.nodeUID}];
+
     return YES;
 }
 

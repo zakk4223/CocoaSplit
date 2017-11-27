@@ -25,6 +25,7 @@
         self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
         _firstFrame = YES;
         _repeat = kCSFFMovieRepeatNone;
+        self.uuid = [[NSUUID UUID] UUIDString];
         
     }
     return self;
@@ -140,7 +141,7 @@
     [aCoder encodeBool:self.useCurrentPosition forKey:@"useCurrentPosition"];
     [aCoder encodeDouble:_currentMovieTime forKey:@"savedTime"];
     [aCoder encodeInt:self.repeat forKey:@"repeat"];
-    
+    [aCoder encodeObject:self.uuid forKey:@"uuid"];
     
 }
 
@@ -153,6 +154,12 @@
         CSFFMpegInput *nowPlayingInput = nil;
         NSString *nowPlayingPath = [aDecoder decodeObjectForKey:@"nowPlayingPath"];
         
+        self.uuid = [aDecoder decodeObjectForKey:@"uuid"];
+        
+        if (!self.uuid)
+        {
+            self.uuid = [[NSUUID UUID] UUIDString];
+        }
         NSArray *paths = [aDecoder decodeObjectForKey:@"queuePaths"];
         for (NSString *mPath in paths)
         {
@@ -202,10 +209,11 @@
         [uID appendString:itemStr];
     }
     
+    /*
     if (_pcmPlayer)
     {
         _pcmPlayer.nodeUID = uID;
-    }
+    }*/
     
     
     self.activeVideoDevice.uniqueID = uID;
@@ -457,7 +465,8 @@
     }
     
     
-    self.pcmPlayer = [[CSPluginServices sharedPluginServices] createPCMInput:@"BLAHBLAH" withFormat:audioFormat];
+    self.pcmPlayer = [[CSPluginServices sharedPluginServices] createPCMInput:self.uuid withFormat:audioFormat];
+
     if (self.player)
     {
         self.player.asbd = &_asbd;
