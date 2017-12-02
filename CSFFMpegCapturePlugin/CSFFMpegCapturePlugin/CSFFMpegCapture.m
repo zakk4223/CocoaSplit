@@ -179,14 +179,20 @@
         {
             
             self.player.currentlyPlaying = nowPlayingInput;
+            self.captureName = nowPlayingInput.shortName;
+    
+        } else {
+            CSFFMpegInput *firstItem = self.player.inputQueue.firstObject;
+
+            self.captureName = firstItem.shortName;
         }
+        
         
         _savedTime = [aDecoder decodeDoubleForKey:@"savedTime"];
         self.useCurrentPosition = [aDecoder decodeBoolForKey:@"useCurrentPosition"];
         
         self.playWhenLive = [aDecoder decodeBoolForKey:@"playWhenLive"];
         self.repeat = [aDecoder decodeIntForKey:@"repeat"];
-        NSLog(@"INIT WITH CODER DONE");
     }
     
     return self;
@@ -290,6 +296,10 @@
         if (firstItem)
         {
             self.captureName = firstItem.shortName;
+            if (self.pcmPlayer)
+            {
+                self.pcmPlayer.name = firstItem.shortName;
+            }
         }
     }
 
@@ -473,10 +483,19 @@
     {
         self.player.asbd = &_asbd;
         self.player.pcmPlayer = self.pcmPlayer;
-        self.pcmPlayer.name = self.player.currentlyPlaying.shortName;
+        
+        if (self.player.currentlyPlaying)
+        {
+            self.pcmPlayer.name = self.player.currentlyPlaying.shortName;
+        } else {
+            CSFFMpegInput *firstItem = self.player.inputQueue.firstObject;
+
+            self.pcmPlayer.name = firstItem.shortName;
+        }
     }
     
 }
+
 
 -(float)duration
 {
