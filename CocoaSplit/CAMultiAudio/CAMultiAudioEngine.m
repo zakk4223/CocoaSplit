@@ -759,13 +759,17 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         }
     }
 
+    if (dmix)
+    {
+        dmix.volume = graphInput.volume;
+    }
+    
     return YES;
 }
 
 
 -(void)attachPCMInput:(CAMultiAudioPCMPlayer *)input
 {
-    NSLog(@"ATTACH PCM %@", input.nodeUID);
     
     CAMultiAudioConverter *newConverter = [[CAMultiAudioConverter alloc] initWithInputFormat:input.inputFormat];
     newConverter.nodeUID = input.nodeUID; //Not so unique, lol
@@ -775,7 +779,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     [self attachInput:input];
     
-    [self.graph connectNode:input toNode:newConverter sampleRate:input.inputFormat->mSampleRate];
+    input.enabled = NO;
+    //[self.graph connectNode:input toNode:newConverter sampleRate:input.inputFormat->mSampleRate];
 
 }
 
