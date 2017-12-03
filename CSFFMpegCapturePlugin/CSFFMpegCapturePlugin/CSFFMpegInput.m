@@ -262,6 +262,7 @@
         
 
         
+            av_frame_unref(recv_frame);
         av_frame_free(&recv_frame);
 
         CAMultiAudioPCM *retPCM = [[CAMultiAudioPCM alloc] initWithAudioBufferList:sampleABL streamFormat:asbd];
@@ -288,6 +289,7 @@
         {
             if (msg.frame)
             {
+                av_frame_unref(msg.frame);
                 av_frame_free(&msg.frame);
             }
         }
@@ -523,7 +525,6 @@
             av_thread_message_queue_set_err_recv(_video_message_queue, AVERROR_EOF);
             av_thread_message_queue_set_err_recv(_audio_message_queue, AVERROR_EOF);
 
-            
             dispatch_semaphore_wait(_read_loop_semaphore, dispatch_time(DISPATCH_TIME_NOW, 16*NSEC_PER_MSEC));
             continue;
 
@@ -618,6 +619,7 @@
             ret = YES;
             
         }
+    av_frame_unref(output_frame);
     av_frame_free(&output_frame);
     return ret;
 }
@@ -682,6 +684,8 @@
     } else {
         ret = NO;
     }
+    av_frame_unref(output_frame);
+    
     av_frame_free(&output_frame);
 
     return ret;
@@ -693,6 +697,9 @@
 {
     @synchronized (self) {
         _stop_request = YES;
+        dispatch_semaphore_signal(_read_loop_semaphore);
+        av_thread_message_queue_set_err_send(_video_message_queue, AVERROR_EOF);
+        av_thread_message_queue_set_err_send(_audio_message_queue, AVERROR_EOF);
     }
 }
 
@@ -708,6 +715,7 @@
         {
             if (msg.frame)
             {
+                av_frame_unref(msg.frame);
                 av_frame_free(&msg.frame);
             }
         }
@@ -725,6 +733,7 @@
         {
             if (msg.frame)
             {
+                av_frame_unref(msg.frame);
                 av_frame_free(&msg.frame);
             }
         }
@@ -762,7 +771,11 @@
         swr_free(&_swr_ctx);
     }
 
-
+    if (_first_frame)
+    {
+        av_frame_unref(_first_frame);
+        av_frame_free(&_first_frame);
+    }
     self.duration = 0.0f;
     
  
@@ -770,6 +783,7 @@
 
 -(void)dealloc
 {
+    
     [self closeMedia];
     if (_video_message_queue)
     {
@@ -783,6 +797,23 @@
         _audio_message_queue = NULL;
 
     }
+    
+    if (_video_codec_ctx)
+    {
+        avcodec_free_context(&_video_codec_ctx);
+    }
+    
+    if (_audio_codec_ctx)
+    {
+        avcodec_free_context(&_audio_codec_ctx);
+    }
+    
+    if (_format_ctx)
+    {
+        avformat_free_context(_format_ctx);
+    }
+    
+    
 }
 
 @end

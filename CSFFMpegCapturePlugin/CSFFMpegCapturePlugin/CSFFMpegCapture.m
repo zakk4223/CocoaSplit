@@ -537,6 +537,7 @@
     {
         [self deregisterPCMOutput];
     }
+    [self.player stop];
     
     self.player = nil;
     

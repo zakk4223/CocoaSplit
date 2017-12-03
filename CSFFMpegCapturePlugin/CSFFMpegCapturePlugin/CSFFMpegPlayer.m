@@ -566,6 +566,7 @@
             {
                 if (use_frame)
                 {
+                    av_frame_unref(use_frame);
                     av_frame_free(&use_frame);
                     use_frame = _peek_frame;
                 }
@@ -601,6 +602,7 @@
         self.lastVideoTime = use_frame->pts * av_q2d(_useInput.videoTimeBase);
         
         ret = [self convertFrameToPixelBuffer:use_frame];
+        av_frame_unref(use_frame);
         av_frame_free(&use_frame);
         CVPixelBufferRetain(ret);
         if (_last_buf)
@@ -730,5 +732,24 @@
         self.queueStateChanged();
     }
 }
+
+-(void)dealloc
+{
+    
+    NSLog(@"DEALLOC PLAYER %@", self.currentlyPlaying);
+    
+    if (self.currentlyPlaying)
+    {
+        [self.currentlyPlaying closeMedia];
+    }
+    
+    for (CSFFMpegInput *item in self.inputQueue)
+    {
+        NSLog(@"ITEM %@", item);
+        [item closeMedia];
+    }
+    
+}
+
 
 @end
