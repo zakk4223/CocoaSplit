@@ -222,15 +222,19 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     
     
     sampleABL->mNumberBuffers = bufferCnt;
-    
+    uint8_t *dataBuf = malloc(bufferCnt*byteCnt);
     
     for (int i=0; i<bufferCnt; i++)
     {
+        /*
         if (byteCnt > 0)
         {
             sampleABL->mBuffers[i].mData = malloc(byteCnt);
             
-        }
+        }*/
+        
+        sampleABL->mBuffers[i].mData = dataBuf+(byteCnt*i);
+        
         sampleABL->mBuffers[i].mDataByteSize = (UInt32)byteCnt;
         sampleABL->mBuffers[i].mNumberChannels = channelCnt;
     }
@@ -238,6 +242,8 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     
     CMSampleBufferCopyPCMDataIntoAudioBufferList(sampleBuffer, 0, (int32_t)numSamples, sampleABL);
     CAMultiAudioPCM *pcmBuffer = [[CAMultiAudioPCM alloc] initWithAudioBufferList:sampleABL streamFormat:asbd];
+    pcmBuffer.dataBuffer = dataBuf;
+    
 
     pcmBuffer.handleFreeBuffer = YES;
     

@@ -373,63 +373,65 @@
     
     while (self.playing)
     {
-        if (self.paused)
-        {
-            [self.pcmPlayer pause];
-            return;
-        }
-        
-        audioPCM = [self.currentlyPlaying consumeAudioFrame:self.asbd error_out:&av_error];
-        if (!self.playing) break;
-        if (av_error == AVERROR_EOF)
-        {
-            if (_flushAudio)
+        @autoreleasepool {
+            if (self.paused)
             {
-                [self.pcmPlayer flush];
+                [self.pcmPlayer pause];
+                return;
             }
-            break;
-        }
-        
-        if (audioPCM)
-        {
-            if (audioPCM.bufferCount == -1 && audioPCM.frameCount == -1)
+            
+            audioPCM = [self.currentlyPlaying consumeAudioFrame:self.asbd error_out:&av_error];
+            if (!self.playing) break;
+            if (av_error == AVERROR_EOF)
             {
-                if (good_audio)
+                if (_flushAudio)
                 {
-                    //input needs us to flush the player, probably due to seek
                     [self.pcmPlayer flush];
-                    [self.pcmPlayer play];
-                    continue;
-                } else {
-                    continue;
                 }
+                break;
             }
             
-            good_audio = YES;
+            if (audioPCM)
+            {
+                if (audioPCM.bufferCount == -1 && audioPCM.frameCount == -1)
+                {
+                    if (good_audio)
+                    {
+                        //input needs us to flush the player, probably due to seek
+                        [self.pcmPlayer flush];
+                        [self.pcmPlayer play];
+                        continue;
+                    } else {
+                        continue;
+                    }
+                }
+                
+                good_audio = YES;
+                
+                
+            }
             
-
+            
+            if (!self.playing) break;
+            
+            if (self.pcmPlayer.pendingFrames > 60 || av_error == AVERROR(EAGAIN))
+            {
+                usleep(10000);
+            }
+            
+            if (!self.playing) break;
+            if (audioPCM)
+            {
+                [self.pcmPlayer playPcmBuffer:audioPCM];
+            }
+            if (self.paused)
+            {
+                [self.pcmPlayer pause];
+                return;
+            }
+            
+            if (!self.playing) break;
         }
-        
-        
-        if (!self.playing) break;
-        
-        if (self.pcmPlayer.pendingFrames > 60 || av_error == AVERROR(EAGAIN))
-        {
-            usleep(10000);
-        }
-        
-        if (!self.playing) break;
-        if (audioPCM)
-        {
-            [self.pcmPlayer playPcmBuffer:audioPCM];
-        }
-        if (self.paused)
-        {
-            [self.pcmPlayer pause];
-            return;
-        }
-        
-        if (!self.playing) break;
     }
     
     _audio_done = YES;
@@ -574,6 +576,8 @@
             }
             if (av_error == AVERROR_EOF)
             {
+                av_frame_unref(use_frame);
+                av_frame_free(&use_frame);
                 _video_done = YES;
             }
             
@@ -747,6 +751,12 @@
     {
         NSLog(@"ITEM %@", item);
         [item closeMedia];
+    }
+    
+    if (_peek_frame)
+    {
+        av_frame_unref(_peek_frame);
+        av_frame_free(&_peek_frame);
     }
     
 }

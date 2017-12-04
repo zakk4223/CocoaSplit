@@ -83,21 +83,29 @@
         
         long byteCnt = streamFormat->mBytesPerFrame * forFrameCount;
         
-        _audioBufferListSize = sizeof(AudioBufferList) + (bufferCnt-1)*sizeof(AudioBuffer);
         _audioBufferDataSize = byteCnt;
+
+        _audioBufferListSize = sizeof(AudioBufferList) + (bufferCnt-1)*sizeof(AudioBuffer);
         
         _pcmData = malloc(_audioBufferListSize);
         
+        _dataBuffer = malloc(_audioBufferDataSize*bufferCnt);
         
         _pcmData->mNumberBuffers = bufferCnt;
         
+        
         for (int i=0; i<bufferCnt; i++)
         {
+            /*
             if (byteCnt > 0)
             {
                 _pcmData->mBuffers[i].mData = malloc(_audioBufferDataSize);
                 
-            }
+            }*/
+            
+            
+            _pcmData->mBuffers[i].mData = _dataBuffer+(_audioBufferDataSize*i);
+            
             _pcmData->mBuffers[i].mDataByteSize = (UInt32)_audioBufferDataSize;
             _pcmData->mBuffers[i].mNumberChannels = channelCnt;
         }
@@ -116,11 +124,14 @@
 {
     if (_alloced_buffers || self.handleFreeBuffer)
     {
+        /*
         for (int i=0; i < self.bufferCount; i++)
         {
             free(_audioSlice->mBufferList->mBuffers[i].mData);
-        }
+        }*/
         free(_audioSlice->mBufferList);
+        free(_dataBuffer);
+        
     }
     free(_audioSlice);
 }

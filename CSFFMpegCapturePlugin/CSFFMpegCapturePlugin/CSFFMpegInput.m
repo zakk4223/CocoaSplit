@@ -198,8 +198,8 @@
 -(CAMultiAudioPCM *)consumeAudioFrame:(AudioStreamBasicDescription *)asbd error_out:(int *)error_out
 {
     struct frame_message msg;
+    uint8_t *arrBuf[2] = {0};
     
-    AudioBufferList *sampleABL = NULL;
     
     if (_audio_message_queue && ((*error_out = av_thread_message_queue_recv(_audio_message_queue, &msg, AV_THREAD_MESSAGE_NONBLOCK)) >= 0))
     {
@@ -223,54 +223,38 @@
             return flushPCM;
         }
         
-            uint8_t **dst_data = NULL;
-            int dst_linesize;
-            
-            if (!_swr_ctx)
-            {
-                uint64_t channel_layout = _audio_codec_ctx->channel_layout;
-                if (!channel_layout)
-                {
-                    channel_layout = av_get_default_channel_layout(_audio_codec_ctx->channels);
-                }
-                _swr_ctx = swr_alloc_set_opts(NULL, AV_CH_LAYOUT_STEREO, AV_SAMPLE_FMT_FLTP, asbd->mSampleRate, channel_layout, _audio_codec_ctx->sample_fmt, _audio_codec_ctx->sample_rate, 0, NULL);
-                swr_init(_swr_ctx);
-            }
-            
-            
-            int64_t dst_nb_samples = av_rescale_rnd(recv_frame->nb_samples, asbd->mSampleRate, _audio_codec_ctx->sample_rate, AV_ROUND_UP);
-            av_samples_alloc_array_and_samples(&dst_data, &dst_linesize, 2, (int)dst_nb_samples, AV_SAMPLE_FMT_FLTP, 1);
-            swr_convert(_swr_ctx, dst_data, (int)dst_nb_samples, (const uint8_t **)recv_frame->extended_data, recv_frame->nb_samples);
-            int bufferCnt = asbd->mFormatFlags & kAudioFormatFlagIsNonInterleaved ? asbd->mChannelsPerFrame : 1;
-            
+        int dst_linesize;
         
-        
-            sampleABL = malloc(sizeof(AudioBufferList) + (bufferCnt-1)*sizeof(AudioBuffer));
-            
-            
-            sampleABL->mNumberBuffers = bufferCnt;
-        
-        if (dst_data)
+        if (!_swr_ctx)
         {
-            for (int i=0; i<bufferCnt; i++)
+            uint64_t channel_layout = _audio_codec_ctx->channel_layout;
+            if (!channel_layout)
             {
-                sampleABL->mBuffers[i].mData = dst_data[i];
-                
-                sampleABL->mBuffers[i].mDataByteSize = (UInt32)dst_linesize;
-                sampleABL->mBuffers[i].mNumberChannels = 1;
+                channel_layout = av_get_default_channel_layout(_audio_codec_ctx->channels);
             }
+            _swr_ctx = swr_alloc_set_opts(NULL, AV_CH_LAYOUT_STEREO, AV_SAMPLE_FMT_FLTP, asbd->mSampleRate, channel_layout, _audio_codec_ctx->sample_fmt, _audio_codec_ctx->sample_rate, 0, NULL);
+            swr_init(_swr_ctx);
+        }
+        int64_t dst_nb_samples = av_rescale_rnd(recv_frame->nb_samples, asbd->mSampleRate, _audio_codec_ctx->sample_rate, AV_ROUND_UP);
         
+        CAMultiAudioPCM *retPCM = [[CAMultiAudioPCM alloc] initWithDescription:asbd forFrameCount:(int)dst_nb_samples];
+        
+        uint8_t *dBuf =  retPCM.dataBuffer;
+        
+        
+        if (dBuf) //Just in case
+        {
+            av_samples_fill_arrays((uint8_t **)&arrBuf, &dst_linesize, dBuf, 2, (int)dst_nb_samples, AV_SAMPLE_FMT_FLTP, 1);
+            av_samples_set_silence((uint8_t **)&arrBuf, 0, (int)dst_nb_samples, 2, AV_SAMPLE_FMT_FLTP);
+            swr_convert(_swr_ctx, (uint8_t **)&arrBuf, (int)dst_nb_samples, (const uint8_t **)recv_frame->extended_data, recv_frame->nb_samples);
+            int bufferCnt = asbd->mFormatFlags & kAudioFormatFlagIsNonInterleaved ? asbd->mChannelsPerFrame : 1;
 
-        
             av_frame_unref(recv_frame);
-        av_frame_free(&recv_frame);
-
-        CAMultiAudioPCM *retPCM = [[CAMultiAudioPCM alloc] initWithAudioBufferList:sampleABL streamFormat:asbd];
-        return retPCM;
+            av_frame_free(&recv_frame);
+            return retPCM;
         } else {
             return NULL;
         }
-        
     } else {
         return NULL;
     }
@@ -300,6 +284,8 @@
             av_thread_message_queue_set_err_recv(_video_message_queue, 0);
         }
     }
+    
+    
     
     
 }
@@ -474,7 +460,6 @@
 {
     
     int read_frames = 0;
-    AVFrame *output_frame = NULL;
     AVPacket av_packet;
     
     
@@ -488,90 +473,88 @@
     
     while (YES)
     {
-        
-        if (frameCnt == 0 && !self.is_ready)
-        {
-            
-            continue;
-        }
-
-        
-        if (_stop_request)
-        {
-            [self internal_closeMedia];
-            _stop_request = NO;
-            return;
-        }
-        
-        bool seekreq;
-        @synchronized (self) {
-            seekreq = _seek_request;
-        }
-        
-        if (seekreq)
-        {
-            [self internal_seek:_seek_time];
-            av_thread_message_queue_set_err_send(_video_message_queue, 0);
-            continue;
-        }
-        
-        output_frame = av_frame_alloc();
-        int read_ret = 0;
-        
-        read_ret = av_read_frame(_format_ctx, &av_packet);
-        
-        if (read_ret < 0)
-        {
-            av_thread_message_queue_set_err_recv(_video_message_queue, AVERROR_EOF);
-            av_thread_message_queue_set_err_recv(_audio_message_queue, AVERROR_EOF);
-
-            dispatch_semaphore_wait(_read_loop_semaphore, dispatch_time(DISPATCH_TIME_NOW, 16*NSEC_PER_MSEC));
-            continue;
-
-        } else {
-            if (av_packet.stream_index == _video_stream_idx)
+        @autoreleasepool {
+            if (frameCnt == 0 && !self.is_ready)
             {
-                if (!_seen_video_pkt && av_packet.pts != AV_NOPTS_VALUE)
-                {
-                    _first_video_pts = av_packet.pts;
-                    _seen_video_pkt = YES;
-                    
-                }
                 
-                bool got_frame = [self decodeVideoPacket:&av_packet];
-                
-                
-                
-                if (got_frame)
-                {
-                    read_frames++;
-                }
-            } else if (av_packet.stream_index == _audio_stream_idx) {
-                
-                if (!_seen_audio_pkt)
-                {
-                    _first_audio_pts = av_packet.pts;
-                    _seen_audio_pkt = YES;
-                }
-                
-                bool got_frame = [self decodeAudioPacket:&av_packet];
-                if (!got_frame)
-                {
-                   // av_thread_message_queue_set_err_recv(_audio_message_queue, AVERROR_EOF);
-                }
+                continue;
             }
-
-
+            
+            
+            if (_stop_request)
+            {
+                [self internal_closeMedia];
+                _stop_request = NO;
+                return;
+            }
+            
+            bool seekreq;
+            @synchronized (self) {
+                seekreq = _seek_request;
+            }
+            
+            if (seekreq)
+            {
+                [self internal_seek:_seek_time];
+                av_thread_message_queue_set_err_send(_video_message_queue, 0);
+                continue;
+            }
+            
+            int read_ret = 0;
+            
+            read_ret = av_read_frame(_format_ctx, &av_packet);
+            
+            if (read_ret < 0)
+            {
+                av_thread_message_queue_set_err_recv(_video_message_queue, AVERROR_EOF);
+                av_thread_message_queue_set_err_recv(_audio_message_queue, AVERROR_EOF);
+                
+                dispatch_semaphore_wait(_read_loop_semaphore, dispatch_time(DISPATCH_TIME_NOW, 16*NSEC_PER_MSEC));
+                continue;
+                
+            } else {
+                if (av_packet.stream_index == _video_stream_idx)
+                {
+                    if (!_seen_video_pkt && av_packet.pts != AV_NOPTS_VALUE)
+                    {
+                        _first_video_pts = av_packet.pts;
+                        _seen_video_pkt = YES;
+                        
+                    }
+                    
+                    bool got_frame = [self decodeVideoPacket:&av_packet];
+                    
+                    
+                    
+                    if (got_frame)
+                    {
+                        read_frames++;
+                    }
+                } else if (av_packet.stream_index == _audio_stream_idx) {
+                    
+                    if (!_seen_audio_pkt)
+                    {
+                        _first_audio_pts = av_packet.pts;
+                        _seen_audio_pkt = YES;
+                    }
+                    
+                    bool got_frame = [self decodeAudioPacket:&av_packet];
+                    if (!got_frame)
+                    {
+                        // av_thread_message_queue_set_err_recv(_audio_message_queue, AVERROR_EOF);
+                    }
+                }
+                
+                
+            }
+            av_packet_unref(&av_packet);
+            
+            if (frameCnt > 0 && read_frames >= frameCnt && !self.is_ready)
+            {
+                self.is_ready = YES;
+                dispatch_semaphore_wait(_read_loop_semaphore, DISPATCH_TIME_FOREVER);
+            }
         }
-        av_packet_unref(&av_packet);
-
-        av_frame_free(&output_frame);
-        if (frameCnt > 0 && read_frames >= frameCnt && !self.is_ready)
-        {
-            self.is_ready = YES;
-            dispatch_semaphore_wait(_read_loop_semaphore, DISPATCH_TIME_FOREVER);
-        }
-        
     }
 }
 
@@ -634,15 +617,14 @@
 
     
     
-    output_frame = av_frame_alloc();
 
     int send_err = avcodec_send_packet(_video_codec_ctx, av_packet);
     if (send_err != 0)
     {
-        av_frame_free(&output_frame);
         return NO;
     }
-    
+    output_frame = av_frame_alloc();
+
     int recv_err = avcodec_receive_frame(_video_codec_ctx, output_frame);
     if (!recv_err)
     {
@@ -674,7 +656,12 @@
         
         msg.frame = conv_frame;
         msg.notused = 0;
-        av_thread_message_queue_send(_video_message_queue, &msg, 0);
+        int sendret = av_thread_message_queue_send(_video_message_queue, &msg, 0);
+        if (sendret)
+        {
+            av_frame_unref(conv_frame);
+            av_frame_free(&conv_frame);
+        }
         if (!_first_frame)
         {
             _first_frame = av_frame_alloc();
@@ -743,6 +730,7 @@
     if (_video_codec_ctx)
     {
         avcodec_close(_video_codec_ctx);
+ 
     }
     
     if (_audio_codec_ctx)

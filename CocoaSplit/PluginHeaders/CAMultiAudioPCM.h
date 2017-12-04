@@ -28,6 +28,7 @@
 @property (assign) AudioStreamBasicDescription pcmFormat;
 @property (assign) AudioBufferList *pcmData;
 @property (assign) bool handleFreeBuffer;
+@property (assign) uint8_t *dataBuffer;
 
 
 
