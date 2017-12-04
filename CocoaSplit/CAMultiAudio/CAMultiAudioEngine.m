@@ -549,6 +549,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 -(void)removeFileInput:(CAMultiAudioFile *)toRemove
 {
+    
     [self removeInput:toRemove];
     
     NSUInteger index = [self.fileInputs indexOfObject:toRemove];

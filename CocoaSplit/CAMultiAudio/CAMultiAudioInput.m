@@ -123,7 +123,10 @@
     }
 }
 
-
+-(void)didRemoveInput
+{
+    return;
+}
 
 
 
