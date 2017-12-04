@@ -376,7 +376,7 @@
         @autoreleasepool {
             if (self.paused)
             {
-                [self.pcmPlayer pause];
+                //[self.pcmPlayer pause];
                 return;
             }
             
@@ -740,7 +740,6 @@
 -(void)dealloc
 {
     
-    NSLog(@"DEALLOC PLAYER %@", self.currentlyPlaying);
     
     if (self.currentlyPlaying)
     {
@@ -749,7 +748,6 @@
     
     for (CSFFMpegInput *item in self.inputQueue)
     {
-        NSLog(@"ITEM %@", item);
         [item closeMedia];
     }
     

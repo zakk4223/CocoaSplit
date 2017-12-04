@@ -78,42 +78,56 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
         {
             
             @autoreleasepool {
-            int32_t availBytes;
-            void *pcmPtr = NULL;
-            while ((pcmPtr = TPCircularBufferTail(&(self->_completedBuffer), &availBytes)))
-            {
-                struct cspcm_buffer_msg *cMsg = pcmPtr;
-                
-                CAMultiAudioPCM *pcmObj = (__bridge CAMultiAudioPCM *)(cMsg->pcmObj);
-                if (cMsg->msgPtr)
+                int32_t availBytes;
+                void *pcmPtr = NULL;
+                while ((pcmPtr = TPCircularBufferTail(&(self->_completedBuffer), &availBytes)))
                 {
-                    free(cMsg->msgPtr);
+                    struct cspcm_buffer_msg *cMsg = pcmPtr;
+                    
+                    CAMultiAudioPCM *pcmObj = (__bridge CAMultiAudioPCM *)(cMsg->pcmObj);
+                    if (cMsg->msgPtr)
+                    {
+                        free(cMsg->msgPtr);
+                    }
+                    
+                    if (self.completedBlock)
+                    {
+                        self.completedBlock(pcmObj);
+                    }
+                    
+                    if (self.save_buffer)
+                    {
+                        [self.pauseBuffer addObject:pcmObj];
+                    } else {
+                        [self releasePCM:pcmObj];
+                    }
+                    TPCircularBufferConsume(&(self->_completedBuffer), sizeof(struct cspcm_buffer_msg));
+                    
                 }
-                
-                if (self.completedBlock)
-                {
-                    self.completedBlock(pcmObj);
-                }
-                
-                if (self.save_buffer)
-                {
-                    [self.pauseBuffer addObject:pcmObj];
-                } else {
-                    [self releasePCM:pcmObj];
-                }
-                TPCircularBufferConsume(&(self->_completedBuffer), sizeof(struct cspcm_buffer_msg));
-                
-            }
             }
             
-            if (self->_exitPending)
+            @synchronized(self)
             {
-                return;
+                if (self->_exitPending)
+                {
+                    return;
+                }
             }
             usleep(20);
         }
     });
 }
+
+
+-(void)didRemoveInput
+{
+    @synchronized(self)
+    {
+        _exitPending = YES;
+    }
+}
+
+
 -(bool)playPcmBuffer:(CAMultiAudioPCM *)pcmBuffer
 {
     
@@ -367,12 +381,16 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
 
 -(void)dealloc
 {
+    
+    NSLog(@"DEALLOC PCM PLAYER");
     [self flush];
     _pendingBuffers = nil;
     if (_inputFormat)
     {
         free(_inputFormat);
     }
+    
+    TPCircularBufferCleanup(&_completedBuffer);
 }
 
 

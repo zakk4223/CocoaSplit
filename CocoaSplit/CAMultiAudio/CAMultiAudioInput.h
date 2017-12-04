@@ -3,7 +3,6 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 7/30/17.
-//  Copyright © 2017 Zakk. All rights reserved.
 //
 
 #import "CAMultiAudioNode.h"
@@ -24,6 +23,7 @@
 
 -(void)openMixerWindow:(id)sender;
 
+
 @end
 
 
@@ -39,5 +39,6 @@
 @property (assign) bool noSettings;
 @property (assign) bool systemDevice;
 
+-(void)didRemoveInput;
 
 @end

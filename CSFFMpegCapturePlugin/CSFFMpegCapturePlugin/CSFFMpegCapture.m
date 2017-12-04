@@ -483,7 +483,6 @@
     {
         self.player.asbd = &_asbd;
         self.player.pcmPlayer = self.pcmPlayer;
-        
         if (self.player.currentlyPlaying)
         {
             self.pcmPlayer.name = self.player.currentlyPlaying.shortName;

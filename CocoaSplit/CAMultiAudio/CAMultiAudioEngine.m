@@ -918,6 +918,9 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
             [self removeObjectFromAudioInputsAtIndex:index];
             
         });
+        
+        [toRemove didRemoveInput];
+        
     }
     
     

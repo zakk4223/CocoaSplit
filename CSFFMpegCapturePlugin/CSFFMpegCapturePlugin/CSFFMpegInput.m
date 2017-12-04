@@ -729,13 +729,18 @@
     
     if (_video_codec_ctx)
     {
+        
         avcodec_close(_video_codec_ctx);
+        avcodec_free_context(&_video_codec_ctx);
+
  
     }
     
     if (_audio_codec_ctx)
     {
         avcodec_close(_audio_codec_ctx);
+        avcodec_free_context(&_audio_codec_ctx);
+
     }
 
     
