@@ -757,6 +757,11 @@
         av_frame_free(&_peek_frame);
     }
     
+    if (_cvpool)
+    {
+        CVPixelBufferPoolRelease(_cvpool);
+    }
+    
 }
 
 

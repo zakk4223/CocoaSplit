@@ -934,9 +934,6 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     NSArray *removedInputs = diffResult[@"removed"];
     NSArray *newInputs = diffResult[@"new"];
     
-    NSLog(@"CHANGED %@", changedInputs);
-    NSLog(@"REMOVED %@", removedInputs);
-    NSLog(@"NEW INPUTS %@", newInputs);
     
     NSNumber *aStart = nil;
     JSContext *jCtx = [JSContext currentContext];
@@ -945,7 +942,6 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 
     NSArray *sortedSources = [self.sourceListPresentation sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"scriptPriority" ascending:YES]]];
     
-    NSLog(@"START LOOP");
     for (NSObject <CSInputSourceProtocol> *src in sortedSources)
     {
         if (!src.active)
@@ -959,14 +955,12 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
             isRemoving = YES;
         }
         
-        NSLog(@"BEFORE REPLACE %@", src);
         [src beforeReplace:isRemoving];
         if (usingScripts)
         {
             [self runTriggerScriptForInput:src withName:@"beforeReplace" usingContext:jCtx];
         }
     }
-    NSLog(@"DONE LOOP");
     if (blockUUID)
     {
         if (jCtx)
