@@ -26,7 +26,6 @@
 -(void)setDelay:(float)delay
 {
     _delay = delay;
-    NSLog(@"DELAY SET %f", delay);
     
     AudioUnitSetParameter(self.audioUnit, kDelayParam_DelayTime, kAudioUnitScope_Global, 0, self.delay, 0);
 

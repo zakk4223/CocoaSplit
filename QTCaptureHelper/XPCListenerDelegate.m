@@ -213,7 +213,6 @@ void qt_xpc_list_devices(xpc_connection_t conn, xpc_object_t event)
 {
     
     NSArray *devices = [QTCaptureDevice inputDevicesWithMediaType:QTMediaTypeVideo];
-    NSLog(@"DEVICES IN HELPER %@", devices);
     
     QTCaptureDevice *devinstance;
     

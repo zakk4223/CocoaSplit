@@ -192,11 +192,13 @@
     }
     OSStatus err;
     
+    /*
     if (![self stopGraph])
     {
         NSLog(@"Graph %@: graphUpdate, stopGraph failed", self);
         return NO;
     }
+    */
     
     err = AUGraphUpdate(_graphInst, NULL);
     if (err)
@@ -205,12 +207,13 @@
         return NO;
     }
     
+    /*
     if (![self startGraph])
     {
         NSLog(@"Graph %@: graphUpdate, startGraph failed", self);
         return NO;
 
-    }
+    }*/
     
     return YES;
 }
@@ -266,11 +269,10 @@
 
     if (![self graphUpdate])
     {
+        
         NSLog(@"Graph %@ graphUpdate for connection failed %@ -> %@", self, node, toNode);
         return NO;
     }
-    
-
 
     return YES;
 }

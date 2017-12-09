@@ -73,7 +73,6 @@
         
         if (configViewController)
         {
-            NSLog(@"CONFIG VIEW C %@", configViewController);
             //Be gross like input view controllers!
             configViewController.sequenceItem = self;
         }

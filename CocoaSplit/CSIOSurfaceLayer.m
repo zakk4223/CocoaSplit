@@ -232,7 +232,6 @@
     
     if (infologLength > 0)
     {
-        NSLog(@"LOG FOR SHADER %@:  %s\n",shaderPath, infoLog);
     }
     
 }
@@ -660,7 +659,6 @@
 
 -(void)releaseCGLContext:(CGLContextObj)ctx
 {
-    NSLog(@"RELEASE CGL CONTEXT!");
     CGLDestroyContext(ctx);
 }
 

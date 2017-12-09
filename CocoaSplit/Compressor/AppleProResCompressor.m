@@ -229,7 +229,6 @@ void __ProResPixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     
     if (status != noErr || !_compression_session)
     {
-        NSLog(@"COMPRESSOR SETUP ERROR");
         self.errored = YES;
         return NO;
     }

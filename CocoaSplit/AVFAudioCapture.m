@@ -243,7 +243,6 @@
                 [_capture_session addOutput:_audio_capture_output];
 
     } else {
-        NSLog(@"COULDN'T ADD AUDIO OUTPUT");
     }
     
     [_capture_session commitConfiguration];

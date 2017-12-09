@@ -53,7 +53,6 @@
             BOOL tmp;
             [invocation getArgument:&tmp atIndex:idx];
             [argArray addObject:@(tmp)];
-            NSLog(@"BOOL ARG IS %hhd", tmp);
             
         } else if (ISARGUMENTTYPE(char, aType)) {
             char tmp;
@@ -112,11 +111,8 @@
             id tmp;
             [invocation getArgument:&tmp atIndex:idx];
             [argArray addObject:tmp];
-            NSLog(@"TMP IS %@", tmp);
 
         } else {
-        
-            NSLog(@"UNSUPPORTED TYPE");
             [argArray addObject:@(0)];
         }
     }
@@ -177,7 +173,6 @@
         
         NSString *jsFunction = [self mangleName:selName];
         
-        NSLog(@"CALL JSFUNCTION %@", jsFunction);
         if (!self.jsObject[jsFunction].isUndefined)
         {
             NSArray *argArray = [self argumentListForInvocation:anInvocation];
@@ -207,7 +202,6 @@
     
     if (!self.jsObject[jsFunction].isUndefined)
     {
-        NSLog(@"DID IMPLEMENT");
         return YES;
     }
     

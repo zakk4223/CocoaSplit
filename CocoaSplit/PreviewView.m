@@ -1400,7 +1400,6 @@
     {
         InputSource *newSource = toClone.copy;
         [self.sourceLayout addSource:newSource];
-        NSLog(@"NEW SOURCE UUID %@ PARENT %@", newSource.uuid, toClone.uuid);
         
         [[self.undoManager prepareWithInvocationTarget:self] undoCloneInput:newSource.uuid parentUUID:toClone.uuid];
     }

@@ -64,7 +64,6 @@
     CAShow(_audioUnit);
     
     OSStatus err = AudioOutputUnitStart(_audioUnit);
-    NSLog(@"AU OUTPUT START %d", err);
 }
 
 @end

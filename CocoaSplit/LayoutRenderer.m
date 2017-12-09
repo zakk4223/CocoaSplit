@@ -115,8 +115,6 @@
     glLoadIdentity();
     glOrtho(0, _cvpool_size.width, 0,_cvpool_size.height, -1, 1);
     
-    NSLog(@"CVPOOL %@", NSStringFromSize(_cvpool_size));
-    
     
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -312,7 +310,6 @@
 
 -(bool) createPixelBufferPoolForSize:(NSSize) size
 {
-    NSLog(@"Controller: Creating Pixel Buffer Pool %f x %f LAYOUT %@", size.width, size.height, self.layout);
     
     NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
     [attributes setValue:[NSNumber numberWithInt:size.width] forKey:(NSString *)kCVPixelBufferWidthKey];

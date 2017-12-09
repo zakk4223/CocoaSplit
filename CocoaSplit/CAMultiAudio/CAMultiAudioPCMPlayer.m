@@ -382,7 +382,6 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
 -(void)dealloc
 {
     
-    NSLog(@"DEALLOC PCM PLAYER");
     [self flush];
     _pendingBuffers = nil;
     if (_inputFormat)

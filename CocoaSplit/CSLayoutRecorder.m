@@ -94,7 +94,6 @@
 
 -(void)stopRecordingForOutput:(OutputDestination *)output
 {
-    NSLog(@"STOP RECORDING");
     OutputDestination *useOut;
     
     for (OutputDestination *tmpOut in self.outputs)
@@ -110,7 +109,6 @@
         useOut.captureRunning = NO;
 
         [useOut stopOutput];
-        NSLog(@"RESETTING OUTPUT");
         [useOut reset];
         
         [self.outputs removeObject:useOut];
@@ -170,7 +168,7 @@
 {
     
     
-    NSLog(@"RECORDING ACTIVE? %d", self.recordingActive);
+
     
     if (!self.recordingActive)
     {
@@ -194,7 +192,6 @@
         
         if (!self.audioEngine)
         {
-            NSLog(@"CREATING AUDIO ENGINE");
             self.audioEngine = [[CAMultiAudioEngine alloc] init];
             self.audioEngine.sampleRate = [CaptureController sharedCaptureController].audioSamplerate;
             
@@ -540,7 +537,6 @@
     if (CMTIME_COMPARE_INLINE(_firstAudioTime, ==, kCMTimeZero))
     {
         
-        NSLog(@"FIRST AUDIO AT %f", CFAbsoluteTimeGetCurrent());
         
         _firstAudioTime = orig_pts;
         return;

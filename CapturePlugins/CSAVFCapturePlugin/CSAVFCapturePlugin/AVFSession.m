@@ -197,7 +197,6 @@
 {
     if (connection.output == _video_capture_output)
     {
-        NSLog(@"DROPPED FRAME!!!");
     }
     
 }

@@ -63,7 +63,6 @@
     
     OSStatus err = AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 0, outfmt, &outsize);
     
-    NSLog(@"MY OUTPUT FORMAT %d %f", err, outfmt->mSampleRate);
     
     return outfmt;
 }

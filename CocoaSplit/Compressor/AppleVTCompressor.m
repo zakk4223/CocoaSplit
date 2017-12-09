@@ -234,10 +234,9 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 {
     
 
-    CFArrayRef encoders = NULL;
+  //  CFArrayRef encoders = NULL;
     
-    VTCopyVideoEncoderList(NULL, &encoders);
-    NSLog(@"ENCODERS %@", encoders);
+ //   VTCopyVideoEncoderList(NULL, &encoders);
     
     NSMutableDictionary *encoderSpec = [[NSMutableDictionary alloc] init];
     encoderSpec[(__bridge NSString *)kVTVideoEncoderSpecification_RequireHardwareAcceleratedVideoEncoder] = @YES;
@@ -301,7 +300,6 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     
     if (status != noErr || !_compression_session)
     {
-        NSLog(@"COMPRESSOR SETUP ERROR");
         self.errored = YES;
         return NO;
     }

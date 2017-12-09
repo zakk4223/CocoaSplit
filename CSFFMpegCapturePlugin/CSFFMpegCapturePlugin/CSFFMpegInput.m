@@ -662,7 +662,7 @@
             av_frame_unref(conv_frame);
             av_frame_free(&conv_frame);
         }
-        if (!_first_frame)
+        if (!_first_frame && conv_frame)
         {
             _first_frame = av_frame_alloc();
             av_frame_ref(_first_frame, conv_frame);

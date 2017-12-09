@@ -301,7 +301,6 @@
 {
     if (self = [super init])
     {
-        NSLog(@"INPUT LAYER INIT %@", self);
 
         self.minificationFilter = kCAFilterTrilinear;
         self.magnificationFilter = kCAFilterTrilinear;

@@ -68,7 +68,6 @@
 -(void)saveCompressPanel
 {
     
-    NSLog(@"SAVING COMPRESS PANEL %@ %@", self.compressorObjectController, self.compressorViewController);
     [self.compressorObjectController commitEditing];
     [self.compressorViewController commitEditing];
     [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseOK];

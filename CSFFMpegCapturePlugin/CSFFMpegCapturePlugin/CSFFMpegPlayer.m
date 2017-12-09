@@ -293,7 +293,6 @@
     [self insertObject:item inInputQueueAtIndex:self.inputQueue.count];
     if (self.inputQueue.count == 1)
     {
-        NSLog(@"OPEN MEDIA");
         [item openMedia:20];
     }
     
@@ -472,7 +471,6 @@
         useInput = self.inputQueue.firstObject;
     }
     
-    NSLog(@"USE INPUT %@", useInput);
     if (useInput)
     {
     

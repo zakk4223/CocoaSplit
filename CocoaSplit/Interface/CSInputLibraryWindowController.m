@@ -208,7 +208,6 @@
     
     //self.editLayout.canvas_width = parent_width;
     //self.editLayout.canvas_height = parent_height;
-    NSLog(@"PARENT WIDTH %f HEIGHT %f", parent_width, parent_height);
     
     
     //[self.editLayout addSource:iSrc];

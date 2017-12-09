@@ -19,7 +19,6 @@
 -(void)setRepresentedObject:(id)representedObject
 {
     [super setRepresentedObject:representedObject];
-    NSLog(@"SET REPRESENTED OBJECT %@", representedObject);
 
     [self.representedObject addObserver:self forKeyPath:@"in_live" options:NSKeyValueObservingOptionNew context:NULL];
     [self.representedObject addObserver:self forKeyPath:@"in_staging" options:NSKeyValueObservingOptionNew context:NULL];
@@ -32,8 +31,6 @@
     AppDelegate *appDel = [NSApp delegate];
     
     self.captureController = appDel.captureController;
-    NSLog(@"LAYOUT BUTTON %@", self.layoutButton);
-    NSLog(@"REPRESENT AWAKE %@", self.representedObject);
     
 
 

@@ -80,8 +80,6 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         JSValue *scriptFunc = jsCtx[@"runTriggerScriptInput"];
         if (scriptFunc)
         {
-            NSLog(@"CALLING FOR %@ LAYER %@", input, input.layer);
-            
             [scriptFunc callWithArguments:@[input, scriptName]];
         }
     }

@@ -53,7 +53,6 @@
 {
     if (self = [self init])
     {
-        NSLog(@"INIT WITH NODE: NODE UUID %@", node.nodeUID);
         
         self.audioUUID = node.nodeUID;
         self.audioVolume = node.volume;
@@ -94,7 +93,6 @@
 {
     NSDictionary *userData = notification.userInfo;
     NSString *nodeUUID = userData[@"UUID"];
-    NSLog(@"NOTIFICAION FOR %@", nodeUUID);
     if (nodeUUID && [nodeUUID isEqualToString:self.audioUUID])
     {
         [self applyAudioSettings];

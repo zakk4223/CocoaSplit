@@ -320,7 +320,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     if ([self.graphOutputNode respondsToSelector:@selector(setOutputForDevice)])
     {
-        NSLog(@"SET OUTPUT NODE");
         [self.graphOutputNode setOutputForDevice];
     }
     
@@ -549,9 +548,9 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 -(void)removeFileInput:(CAMultiAudioFile *)toRemove
 {
-    
+
     [self removeInput:toRemove];
-    
+
     NSUInteger index = [self.fileInputs indexOfObject:toRemove];
     if (index != NSNotFound)
     {
@@ -578,6 +577,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 -(void)addFileInput:(CAMultiAudioFile *)fileInput
 {
     [self attachFileInput:fileInput];
+    
     [self.fileInputs addObject:fileInput];
 }
 
@@ -659,7 +659,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     if (!ret)
     {
-        NSLog(@"ADD NODE %@ FAILED", graphInput);
         return NO;
     }
     
@@ -670,7 +669,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     ret = [self.graph addNode:dmix];
     if (!ret)
     {
-        NSLog(@"ADD MIXER %@ failed", dmix);
         [self disconnectInputNode:input];
         return NO;
     }
@@ -679,7 +677,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     ret = [self.graph addNode:eq];
     if (!ret)
     {
-        NSLog(@"ADD EQ %@ failed", eq);
         [self disconnectInputNode:input];
         return NO;
     }
@@ -688,7 +685,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     if (![self.graph connectNode:eq toNode:self.encodeMixer])
     {
-        NSLog(@"CONNECT EQ TO ENCODE FAILED");
         [self disconnectInputNode:input];
         return NO;
     }
@@ -708,14 +704,12 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         ret = [self.graph addNode:delayNode];
         if (!ret)
         {
-            NSLog(@"ADD DELAY %@ (%d) failed %d", delayNode, i, input.channelCount);
             [self disconnectInputNode:input];
             return NO;
         }
         ret = [self.graph connectNode:delayNode toNode:connectNode];
         if (!ret)
         {
-            NSLog(@"CONNECT DELAY %@ (%d) failed", delayNode, i);
 
             [self.graph removeNode:delayNode];
             [self disconnectInputNode:input];
@@ -728,7 +722,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     if (![self.graph connectNode:dmix toNode:connectNode])
     {
    
-        NSLog(@"CONNECT EQ/DMIX FAILED");
         [self disconnectInputNode:input];
         return NO;
     }
@@ -737,7 +730,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     if (input.converterNode)
     {
         [self.graph addNode:input.converterNode];
-        NSLog(@"ADDED CONVERTER");
         if (![self.graph connectNode:input.converterNode toNode:dmix])
         {
             [self disconnectInputNode:input];
@@ -754,7 +746,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         
         if (![self.graph connectNode:graphInput toNode:dmix])
         {
-            NSLog(@"LAST CONNECT FAILED %@", graphInput);
             [self disconnectInputNode:input];
             return NO;
         }
@@ -764,6 +755,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     {
         dmix.volume = graphInput.volume;
     }
+    
     
     return YES;
 }
@@ -811,7 +803,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 -(bool)attachInput:(CAMultiAudioInput *)input
 {
-    
     
     bool ret = [self attachInputCommon:input];
     if (!ret)

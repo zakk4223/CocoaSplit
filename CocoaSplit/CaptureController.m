@@ -1431,7 +1431,6 @@
         //Reassert recording flag for save
         if (forLayout)
         {
-            NSLog(@"REASSERT RECORDING");
             forLayout.recordingLayout = YES;
         }
         
@@ -1581,7 +1580,6 @@
     PyObject *ret = PyRun_File(runnerFile, (char *)[[fromFile lastPathComponent] UTF8String], Py_file_input, dict_copy, dict_copy);
     if (!ret)
     {
-        NSLog(@"PYTHON RETURNED NULL!");
         PyErr_Print();
         return nil;
     }
@@ -2087,7 +2085,6 @@
    
     self.compressors = [[saveRoot valueForKey:@"compressors"] mutableCopy];
     
-    NSLog(@"COMPRESSORS %@", self.compressors);
     
     if (!self.compressors)
     {
@@ -2307,7 +2304,6 @@
     {
         if (layout.recordingLayout)
         {
-            NSLog(@"RECORD LAYOUT");
             [self startRecordingLayout:layout];
         }
     }
@@ -2740,7 +2736,6 @@
             outdest.settingsController = self.mainLayoutRecorder;
             if (outdest.active)
             {
-                NSLog(@"RESET AND SETUP %@", outdest);
                 [outdest reset];
                 [outdest setup];
 

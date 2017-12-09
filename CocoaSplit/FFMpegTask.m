@@ -17,10 +17,6 @@
 
 #include "libavformat/avformat.h"
 
--(void)dealloc
-{
-    NSLog(@"DEALLOC FFMPEG");
-}
 
 -(NSUInteger)frameQueueSize
 {
@@ -359,7 +355,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         
     if (!_av_fmt_ctx)
     {
-        NSLog(@"NO FMT CTX");
         return NO;
     }
     
@@ -372,7 +367,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
     if (!_av_video_stream)
     {
-        NSLog(@"VIDEO STREAM SETUP FAIL");
         return NO;
     }
     

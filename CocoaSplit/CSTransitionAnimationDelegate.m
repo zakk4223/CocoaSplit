@@ -14,10 +14,8 @@
 -(void)animationDidStart:(CAAnimation *)anim
 {
     
-    NSLog(@"ANIMATION DID START");
     [CATransaction begin];
     [CATransaction setCompletionBlock:^{
-        NSLog(@"TRANSACTION COMPLETION BLOCK");
         for (InputSource *nSrc in self.addedInputs)
         {
             if (nSrc.layer)
@@ -87,9 +85,11 @@
 
 }
 
-
+/*
 -(void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag
 {
     NSLog(@"DELEGATE ANIMATION STOPPED");
-}
+}*/
+
+
 @end

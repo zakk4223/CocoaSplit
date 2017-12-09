@@ -531,7 +531,6 @@
 
 -(void)dealloc
 {
-    NSLog(@"MOVIE DEALLOC");
     if (self.pcmPlayer)
     {
         [self deregisterPCMOutput];

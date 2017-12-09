@@ -682,7 +682,6 @@ static NSArray *_sourceTypes = nil;
 -(void)commonInit
 {
 
-    NSLog(@"COMMON INIT %@", self);
     [CATransaction begin];
     self.name = nil;
     _nextImageTime = 0.0f;
@@ -1476,7 +1475,6 @@ static NSArray *_sourceTypes = nil;
 -(void)dealloc
 {
     
-    NSLog(@"INPUT SOURCE DEALLOC");
     [self deregisterVideoInput:self.videoInput];
     for(id vInput in self.videoSources)
     {
@@ -2150,7 +2148,6 @@ static NSArray *_sourceTypes = nil;
 
     if (!self.videoInput || NSEqualSizes(NSZeroSize, self.videoInput.captureSize))
     {
-        NSLog(@"NO SIZE FOR RESET");
         return;
     }
     
@@ -2167,7 +2164,6 @@ static NSArray *_sourceTypes = nil;
 
     resize_style resizeSave = self.resizeType;
     self.resizeType = kResizeTop | kResizeRight | kResizeFree;
-    NSLog(@"NEW SIZE %f %f", width, height);
     [self updateSize:width height:height];
     self.resizeType = resizeSave;
 }
@@ -3549,7 +3545,6 @@ static NSArray *_sourceTypes = nil;
 {
     if (self.videoInput)
     {
-        NSLog(@"RETURNING VIDEO INPUT DURATION %@ %f", self.videoInput, self.videoInput.duration);
         return self.videoInput.duration;
     }
     

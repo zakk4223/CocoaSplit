@@ -521,7 +521,6 @@
 }
 -(void)dealloc
 {
-    NSLog(@"CAPTURE BASE DEALLOC");
     if (self.timerDelegate)
     {
         [self.timerDelegate frameTimerWillStop:self.timerDelegateCtx];

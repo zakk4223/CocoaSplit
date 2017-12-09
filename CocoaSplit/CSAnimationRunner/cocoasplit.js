@@ -10,7 +10,7 @@ var runAnimationForLayoutWithExtraDictionary = function(animation_string, layout
 
     
     try {
-        setCompletionBlock(function() { console.log("COMPLETION BLOCK");});
+        //setCompletionBlock(function() { console.log("COMPLETION BLOCK");});
         eval(animation_string);
     }
     catch(err) {

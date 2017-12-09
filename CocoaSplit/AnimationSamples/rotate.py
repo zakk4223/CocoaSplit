@@ -9,7 +9,6 @@ animation_params = ["degrees"]
 
 def do_animation():
 
-    NSLog("RUNNING ANIMATION")
     source1 = inputByName('source1')
     source2 = inputsByName('source2')
 

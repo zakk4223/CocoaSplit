@@ -208,8 +208,6 @@
     if (self.fillColor)
     {
         newLayer.fillColor = [self.fillColor CGColor];
-        NSLog(@"REF COUNT OF BG COLOR %ld", CFGetRetainCount(newLayer.fillColor));
-
     }
     
     if (self.lineColor)

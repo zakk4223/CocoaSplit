@@ -169,7 +169,6 @@
 {
     @synchronized (self) {
         _reset_flag = YES;
-        NSLog(@"DISPATCH SIGNAL FOR RESET");
         dispatch_semaphore_signal(_queueSemaphore);
     }
 }
@@ -390,7 +389,6 @@
                 [dest writeEncodedData:frameData];
                 
             }
-            NSLog(@"DID NOT ENCODE");
             return NO;
         }
         
@@ -673,7 +671,6 @@
         _av_codec = NULL;
         av_dict_free(&opts);
         
-        NSLog(@"CODEC SETUP FAILED!");
         return NO;
     }
     
