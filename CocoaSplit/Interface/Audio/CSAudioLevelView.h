@@ -12,7 +12,6 @@
 @interface CSAudioLevelView : NSView
 {
     bool _isVertical;
-    CALayer *_maskLayer;
 }
 
 

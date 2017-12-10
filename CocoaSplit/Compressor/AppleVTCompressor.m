@@ -234,9 +234,16 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 {
     
 
-  //  CFArrayRef encoders = NULL;
+    /*
+    CFArrayRef encoders = NULL;
     
- //   VTCopyVideoEncoderList(NULL, &encoders);
+    VTCopyVideoEncoderList(NULL, &encoders);
+    
+
+    
+    NSLog(@"ENCODERS %@", encoders);
+    */
+    
     
     NSMutableDictionary *encoderSpec = [[NSMutableDictionary alloc] init];
     encoderSpec[(__bridge NSString *)kVTVideoEncoderSpecification_RequireHardwareAcceleratedVideoEncoder] = @YES;

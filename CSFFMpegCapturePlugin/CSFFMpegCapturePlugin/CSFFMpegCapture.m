@@ -426,8 +426,12 @@
         [self updateLayersWithFramedataBlock:^(CALayer *layer) {
             layer.contents = (__bridge id _Nullable)(use_buf);
             [layer displayIfNeeded];
-            
+        } withPreuseBlock:^{
+            CVPixelBufferRetain(use_buf);
+        } withPostuseBlock:^{
+            CVPixelBufferRelease(use_buf);
         }];
+        CVPixelBufferRelease(use_buf);
         _firstFrame = NO;
 
     }

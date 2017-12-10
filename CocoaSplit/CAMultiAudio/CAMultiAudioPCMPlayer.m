@@ -131,6 +131,12 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
 -(bool)playPcmBuffer:(CAMultiAudioPCM *)pcmBuffer
 {
     
+    if (_exitPending)
+    {
+        return NO;
+    }
+    
+    
     if (!_pendingQueue)
     {
         [self startPendingProcessor];

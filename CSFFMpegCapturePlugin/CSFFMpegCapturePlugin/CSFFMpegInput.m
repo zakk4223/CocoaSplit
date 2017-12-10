@@ -784,6 +784,7 @@
         _video_message_queue = NULL;
     }
     
+    
     if (_audio_message_queue)
     {
         av_thread_message_queue_free(&_audio_message_queue);

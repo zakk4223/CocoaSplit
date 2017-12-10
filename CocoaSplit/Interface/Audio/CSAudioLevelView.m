@@ -11,9 +11,36 @@
 @synthesize level = _level;
 
 - (void)drawRect:(NSRect)dirtyRect {
-    [super drawRect:dirtyRect];
-    
     // Drawing code here.
+    //CGContextRef currentContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
+    NSGradient *grad = [[NSGradient alloc] initWithColorsAndLocations:[NSColor greenColor], 0.0f, [NSColor yellowColor], 0.5f, [NSColor redColor], 1.0f, nil];
+    NSRect dRect = dirtyRect;
+    
+    float myRange = self.endValue - self.startValue;
+    
+    
+    if (_isVertical)
+    {
+        dRect.size.height = (self.level/myRange) * self.bounds.size.height;
+    } else {
+        dRect.size.width = (self.level/myRange) * self.bounds.size.width;
+    }
+    
+
+    [self.backgroundColor setFill];
+    NSRectFill(dirtyRect);
+    NSBezierPath *borderPath = [NSBezierPath bezierPathWithRect:dirtyRect];
+    borderPath.lineWidth = self.backgroundSize;
+    [borderPath stroke];
+    if (self.level > 0)
+    {
+        NSBezierPath *clipPath = [NSBezierPath bezierPathWithRect:dRect];
+        [clipPath stroke];
+        [clipPath setClip];
+        [grad drawInRect:NSInsetRect(dirtyRect, self.backgroundSize, self.backgroundSize) angle:0.0f];
+    }
+    [super drawRect:dirtyRect];
+
 }
 
 
@@ -26,38 +53,12 @@
 -(void)setLevel:(float)level
 {
     
-    float myRange = self.endValue - self.startValue;
-    CALayer *mLayer = _maskLayer;
+    _level = level;
     
-    
-    
-    CGRect cFrame = self.frame;
-    CGRect nFrame = CGRectMake(0,0,cFrame.size.width, cFrame.size.height);
-    if (_isVertical)
-    {
-        nFrame.size.height = (level/myRange) * cFrame.size.height;
-    } else {
-        nFrame.size.width = (level/myRange) * cFrame.size.width;
-    }
+    [self display];
 
-        [CATransaction begin];
-    [CATransaction setDisableActions:YES];
-    [mLayer setFrame:nFrame];
-    [CATransaction commit];
 }
 
-/*
--(instancetype)initWithFrame:(NSRect)frameRect
-{
-    if (self = [super initWithFrame:frameRect])
-    {
-        [self setupLayers];
-    }
-    
-    return self;
-}
-
- */
 
 
 
@@ -68,64 +69,11 @@
     {
         self.backgroundColor = [NSColor disabledControlTextColor];
     }
-    [self setupLayers];
-}
-
--(void)setupLayers
-{
-    if (_maskLayer)
-    {
-        return;
-    }
-    
-    _isVertical = NO;
-    
     if (self.frame.size.height > self.frame.size.width)
     {
         _isVertical = YES;
     }
-    
-    CALayer *outerLayer = [CALayer layer];
-    outerLayer.borderWidth = self.backgroundSize;
-    outerLayer.backgroundColor = self.backgroundColor.CGColor;
-    
-    CAGradientLayer *gLayer = [CAGradientLayer layer];
-    NSArray *colors = [NSArray arrayWithObjects:(__bridge id)([NSColor greenColor].CGColor), (__bridge id)[NSColor yellowColor].CGColor, (__bridge id)[NSColor yellowColor].CGColor, (__bridge id)[NSColor redColor].CGColor, nil];
-    gLayer.colors = colors;
-    
-    if (_isVertical)
-    {
-        gLayer.startPoint = CGPointMake(0.5, 0.0);
-        gLayer.endPoint = CGPointMake(0.5, 1.0);
-        
-    } else {
-        
-        gLayer.startPoint = CGPointMake(0.0, 0.5);
-        gLayer.endPoint = CGPointMake(1.0, 0.5);
-    }
-    
-    self.layer = outerLayer;
-    self.wantsLayer = YES;
-    
-    [outerLayer addSublayer:gLayer];
-    
-    gLayer.frame = CGRectMake(0.0, 0.0, self.frame.size.width, self.frame.size.height);
-    _maskLayer = [CALayer layer];
-    
-    
-    _maskLayer.backgroundColor = [NSColor blackColor].CGColor;
-    
-    
-    CGRect maskFrame = CGRectMake(0.0, 0.0, self.frame.size.width, self.frame.size.height);
-    if (_isVertical)
-    {
-        maskFrame.size.height = 0.0;
-    } else {
-        maskFrame.size.width = 0.0;
-    }
-    _maskLayer.frame = maskFrame;
-    gLayer.mask = _maskLayer;
-
 }
+
 
 @end

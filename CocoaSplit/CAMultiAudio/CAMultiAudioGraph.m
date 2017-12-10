@@ -290,7 +290,7 @@
         return YES;
     }
     
-    if (!node.audioUnit)
+    if (!node.audioUnit) 
     {
         NSLog(@"Node %@ has no audio unit", node);
         return NO;

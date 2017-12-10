@@ -692,6 +692,7 @@
     
     CVPixelBufferRef buf;
     CVPixelBufferPoolCreatePixelBuffer(NULL, _cvpool, &buf);
+    
     size_t pbcnt = CVPixelBufferGetPlaneCount(buf);
     
     CVPixelBufferLockBaseAddress(buf, 0);
@@ -755,8 +756,15 @@
         av_frame_free(&_peek_frame);
     }
     
+    if (_last_buf)
+    {
+        CVPixelBufferRelease(_last_buf);
+    }
+    
+    
     if (_cvpool)
     {
+        CVPixelBufferPoolFlush(_cvpool, 0);
         CVPixelBufferPoolRelease(_cvpool);
     }
     
