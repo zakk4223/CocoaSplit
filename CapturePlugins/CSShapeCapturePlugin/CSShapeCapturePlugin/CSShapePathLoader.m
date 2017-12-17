@@ -55,7 +55,7 @@
         {
             JSContext *jsCtx = [[JSContext alloc] init];
             NSString *fullPath = [NSString stringWithFormat:@"%@/%@", pPath, scriptPath];
-            
+            NSString *pathName = [scriptPath stringByDeletingPathExtension];
             [self evaluateJavascriptAtPath:fullPath usingContext:jsCtx];
             if (jsCtx[@"name"])
             {
@@ -63,7 +63,7 @@
                 NSString *name = jName.toString;
                 
                 CSShapeWrapper *wrapper = [[CSShapeWrapper alloc] initWithName:name usingPath:fullPath];
-                ret[name] = @{@"name": name, @"path":scriptPath, @"wrapper":wrapper};
+                ret[name] = @{@"name": name, @"path":pathName, @"wrapper":wrapper};
                 
             }
         }

@@ -245,7 +245,6 @@
 -(void) setActiveVideoDevice:(CSAbstractCaptureDevice *)newDev
 {
     
-    
     _activeVideoDevice = newDev;
     self.captureName = newDev.captureName;
     
