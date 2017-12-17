@@ -128,6 +128,14 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
         CFRelease(_compression_session);
     }
     
+    
+    if (_vtpt_ref)
+    {
+        VTPixelTransferSessionInvalidate(_vtpt_ref);
+        CFRelease(_vtpt_ref);
+    }
+    
+    _vtpt_ref = NULL;
     _compression_session = NULL;
     _resetPending = NO;
 }

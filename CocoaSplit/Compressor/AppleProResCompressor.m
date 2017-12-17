@@ -80,8 +80,6 @@
     if (self = [super init])
     {
         
-        
-        
         self.compressorType = @"AppleProResCompressor";
         self.codec_id = AV_CODEC_ID_PRORES;
         self.proResType = @(kCMVideoCodecType_AppleProRes422);
@@ -94,8 +92,6 @@
 -(void) reset
 {
     
-
-        
     self.errored = NO;
         VTCompressionSessionCompleteFrames(_compression_session, CMTimeMake(0, 0));
 
@@ -107,7 +103,14 @@
     
     _compression_session = nil;
     
+    if (_vtpt_ref)
+    {
+        VTPixelTransferSessionInvalidate(_vtpt_ref);
+        CFRelease(_vtpt_ref);
+        _vtpt_ref = nil;
+    }
 }
+
 
 
 
@@ -136,7 +139,6 @@ void __ProResPixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 -(bool)compressFrame:(CapturedFrameData *)frameData
 {
     
-    
     if (![self hasOutputs])
     {
         return NO;
@@ -152,7 +154,7 @@ void __ProResPixelBufferRelease( void *releaseRefCon, const void *baseAddress )
         return NO;
     }
     
-    
+
     
     CFMutableDictionaryRef frameProperties;
     

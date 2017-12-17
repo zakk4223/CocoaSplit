@@ -83,7 +83,7 @@
     
     if (!_video_message_queue)
     {
-        av_thread_message_queue_alloc(&_video_message_queue, 300, sizeof(struct frame_message));
+        av_thread_message_queue_alloc(&_video_message_queue, 60, sizeof(struct frame_message));
     }
     
     if (!_audio_message_queue)

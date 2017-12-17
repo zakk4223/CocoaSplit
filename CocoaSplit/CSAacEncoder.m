@@ -63,8 +63,7 @@
     {
         //dispatch_semaphore_wait(_aSemaphore, DISPATCH_TIME_FOREVER);
         
-        
-        
+
         while (TPCircularBufferPeek(&_inputBuffer, NULL, self.inputASBD) >= 1024)
         {
             AudioBufferList *inBuffer = TPCircularBufferPrepareEmptyAudioBufferListWithAudioFormat(&_scratchBuffer, self.inputASBD, 1024, NULL);

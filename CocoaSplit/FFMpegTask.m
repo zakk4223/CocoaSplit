@@ -70,6 +70,7 @@
                     @synchronized (self) {
                         if (self->_close_flag)
                         {
+                            
                             [self _internal_stopProcess];
                             break;
                         }
@@ -678,12 +679,16 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 -(bool)stopProcess
 {
     
-    @synchronized (self) {
-        _close_flag = YES;
-        dispatch_semaphore_signal(_frameSemaphore);
+    if (_frameConsumerQueue)
+    {
+        @synchronized (self) {
+            _close_flag = YES;
+            dispatch_semaphore_signal(_frameSemaphore);
+        }
+    } else {
+        [self _internal_stopProcess];
     }
     
-    //[self _internal_stopProcess];
     return YES;
 }
 

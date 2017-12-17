@@ -384,7 +384,7 @@
     {
 
         
-        [[self findAudioEngine] removeFileInput:(CAMultiAudioFile *)self.audioNode];
+        //[[self findAudioEngine] removeFileInput:(CAMultiAudioFile *)self.audioNode];
     }
 }
 

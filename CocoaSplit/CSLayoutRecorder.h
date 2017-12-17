@@ -60,6 +60,7 @@
 
 @property (assign) bool recordingActive;
 @property (assign) bool defaultRecordingActive;
+@property (nonatomic, copy) void(^frameReadyBlock)(void);
 
 
 -(void) startRecording;

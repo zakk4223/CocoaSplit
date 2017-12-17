@@ -397,6 +397,11 @@
     
     newFrame = [self.renderer currentImg];
     
+    if (self.frameReadyBlock)
+    {
+        self.frameReadyBlock();
+    }
+    
     /*
     double nfdone = [self mach_time_seconds];
     double nftime = nfdone - nfstart;
