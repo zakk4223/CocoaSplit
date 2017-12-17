@@ -102,7 +102,7 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
         
 
         
-        self.compressorType = @"AppleVTCompressor";
+        self.compressorType = @"Apple h264";
 
         _compression_session = NULL;
         

@@ -1883,6 +1883,18 @@
     
     
     
+    if (self.compressors[@"AppleVT"])
+    {
+        NSObject<VideoCompressor> *vtComp = self.compressors[@"AppleVT"];
+        
+        vtComp.name = @"AppleH264".mutableCopy;
+        
+        self.compressors[@"AppleH264"] = vtComp;
+        [self.compressors removeObjectForKey:@"AppleVT"];
+    }
+    
+    
+    
     if (!self.compressors[@"x264"])
     {
         x264Compressor *newCompressor;
@@ -1899,14 +1911,14 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:newCompressor];
     }
     
-    if (!self.compressors[@"AppleVT"])
+    if (!self.compressors[@"AppleH264"])
     {
         AppleVTCompressor *newCompressor = [[AppleVTCompressor alloc] init];
-        newCompressor.name = @"AppleVT".mutableCopy;
+        newCompressor.name = @"AppleH264".mutableCopy;
         newCompressor.average_bitrate = 1000;
         newCompressor.max_bitrate = 1000;
         newCompressor.keyframe_interval = 2;
-        self.compressors[@"AppleVT"] = newCompressor;
+        self.compressors[@"AppleH264"] = newCompressor;
         [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:newCompressor];
     }
     
