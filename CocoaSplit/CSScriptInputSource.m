@@ -41,6 +41,12 @@
     return self;
 }
 
+-(void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [super encodeWithCoder:aCoder];
+    [aCoder encodeObject:self.name forKey:@"name"];
+
+}
 
 -(NSString *)label
 {

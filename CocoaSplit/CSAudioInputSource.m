@@ -109,6 +109,8 @@
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
     [super encodeWithCoder:aCoder];
+    [aCoder encodeObject:self.name forKey:@"name"];
+
     [aCoder encodeObject:self.audioUUID forKey:@"audioUUID"];
     [aCoder encodeFloat:self.audioVolume forKey:@"audioVolume"];
     [aCoder encodeBool:self.audioEnabled forKey:@"audioEnabled"];

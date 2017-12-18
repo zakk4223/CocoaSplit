@@ -128,7 +128,6 @@
 
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
-    [aCoder encodeObject:self.name forKey:@"name"];
     [aCoder encodeObject:self.uuid forKey:@"uuid"];
     
 //    [aCoder encodeFloat:self.depth forKey:@"CAdepth"];

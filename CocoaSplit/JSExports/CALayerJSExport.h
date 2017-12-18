@@ -28,7 +28,6 @@ NS_ASSUME_NONNULL_BEGIN
  * layer (subclasses should call the superclass afterwards). Calling this
  * method in any other situation will result in undefined behavior. */
 
-- (instancetype)initWithLayer:(id)layer;
 
 /* Returns a copy of the layer containing all properties as they were
  * at the start of the current transaction, with any active animations
