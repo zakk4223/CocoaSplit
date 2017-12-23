@@ -1116,7 +1116,6 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         [self addSourceToPresentation:nSrc];
     }
     
-    
     sortedSources = [self.sourceListPresentation sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"scriptPriority" ascending:YES]]];
     
     for (NSObject <CSInputSourceProtocol> *src in sortedSources)
@@ -1623,6 +1622,22 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     
     NSString *blockUUID = [CATransaction valueForKey:@"__CS_BLOCK_UUID__"];
     
+    [CATransaction begin];
+    [CATransaction setCompletionBlock:^{
+        
+        @autoreleasepool {
+            for (NSObject<CSInputSourceProtocol> *rSrc in realRemove)
+            {
+                [self decrementInputRef:rSrc];
+                [self deleteSource:rSrc];
+            }
+            
+            if (completionBlock)
+            {
+                completionBlock();
+            }
+        }
+    }];
     for (NSObject<CSInputSourceProtocol> *src in removeInputs)
     {
         NSObject<CSInputSourceProtocol> *mSrc = [self inputForUUID:src.uuid];
@@ -1740,22 +1755,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         [runFunc callWithArguments:@[@(useTransition.transitionDuration)]];
     }
 
-    [CATransaction begin];
-    [CATransaction setCompletionBlock:^{
-        
-        @autoreleasepool {
-        for (NSObject<CSInputSourceProtocol> *rSrc in realRemove)
-        {
-            [self decrementInputRef:rSrc];
-            [self deleteSource:rSrc];
-        }
-        
-        if (completionBlock)
-        {
-            completionBlock();
-        }
-        }
-    }];
+
     
     
     if (bTrans)

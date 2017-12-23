@@ -11,26 +11,35 @@ CSAnimationBlock.currentFrame = function() {
 
 
 
-function AnimationBlock(duration) {
+function AnimationBlock(duration, inherit_frame) {
     
     if (duration === undefined)
     {
         duration = 0.0;
     }
     
-    cframe = CSAnimationBlock.currentFrame();
+    var cframe = undefined;
+    
+    if (inherit_frame)
+    {
+        cframe = CSAnimationBlock.currentFrame();
+    }
+    
     if (cframe === undefined)
     {
         this.layout = getCurrentLayout();
         this.current_begin_time = null;
         this.latest_end_time = null;
         this.animation_info = {};
+        this.animation_info["all_animations"] = {};
+        this.isolated = !inherit_frame;
     } else {
         cframe.applyPendingAnimations();
         this.layout = cframe.layout;
         this.current_begin_time = cframe.current_begin_time;
         this.latest_end_time = cframe.latest_end_time;
         this.animation_info = cframe.animation_info;
+        this.isolated = !inherit_frame;
     }
     
     this.animations = [];
@@ -72,7 +81,8 @@ function AnimationBlock(duration) {
     
     
     this.add_animation = function(animation)  {
-
+        
+        this.applyPendingAnimations();
         this.animations.push(animation);
     }
     
@@ -134,7 +144,10 @@ function AnimationBlock(duration) {
         new_mark.cs_input = target;
         new_mark.wait_only = wait_only;
         this.animations.push(new_mark);
+        this.applyPendingAnimations();
+
         return new_mark;
+
     }
     
     
@@ -185,6 +198,7 @@ function AnimationBlock(duration) {
     }
     
     
+    
     this.commit = function()
     {
         
@@ -193,16 +207,23 @@ function AnimationBlock(duration) {
         CATransaction.setValueForKey(null, "__CS_BLOCK_UUID__");
         this.animation_info = null;
         delete block_uuid_map[this.uuid];
-
-        CATransaction.commit();
-        let cframe = CSAnimationBlock.currentFrame();
-        if (cframe)
+        if (this.doScriptWait)
         {
-
-            cframe.current_begin_time = this.current_begin_time;
-            cframe.latest_end_time = this.latest_end_time;
-            
+            this.waitAnimation();
         }
+        CATransaction.commit();
+        if (!this.isolated)
+        {
+            let cframe = CSAnimationBlock.currentFrame();
+            if (cframe)
+            {
+
+                cframe.current_begin_time = this.current_begin_time;
+                cframe.latest_end_time = this.latest_end_time;
+            }
+        }
+        
+
     }
     
     this.waitAnimation = function(duration, target) {
@@ -214,8 +235,8 @@ function AnimationBlock(duration) {
     }
     
     CATransaction.begin();
+    this.doScriptWait = false;
     block_uuid_map[this.uuid] = this;
-    
     CATransaction.setValueForKey(this.uuid, "__CS_BLOCK_UUID__");
     //this.current_begin_time = 0;
 
@@ -239,6 +260,16 @@ var waitAnimation = function(duration) {
 
 var animationDuration = function() { CSAnimationBlock.currentFrame().duration; }
 
+var beginIsolatedAnimation = function(duration) {
+    if (duration === undefined)
+    {
+        duration = 0.25;
+    }
+    
+    return new AnimationBlock(duration, false);
+}
+
+
 var beginAnimation = function(duration) {
     
     if (duration === undefined)
@@ -246,10 +277,19 @@ var beginAnimation = function(duration) {
         duration = 0.25;
     }
     
-    return new AnimationBlock(duration);
+    return new AnimationBlock(duration, true);
 }
 
 var commitAnimation = function() {
     var cframe = CSAnimationBlock.currentFrame();
     cframe.commit();
+}
+
+var waitScript = function() {
+    var cframe = CSAnimationBlock.currentFrame();
+    if (cframe)
+    {
+        cframe.isolated = false;
+        cframe.doScriptWait = true;
+    }
 }

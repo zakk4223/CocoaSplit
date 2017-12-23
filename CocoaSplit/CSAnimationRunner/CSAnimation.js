@@ -29,11 +29,11 @@ CSAnimation = function(target, keyPath, animation) {
     this.completed = function(what) {
         if (self.internal_completion_handler)
         {
-            self.internal_completion_handler();
+            self.internal_completion_handler(self);
         }
         if (self.completion_handler)
         {
-            self.completion_handler();
+            self.completion_handler(self);
         }
     }
     

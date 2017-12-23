@@ -133,6 +133,19 @@ function CSAnimationInput(cs_input) {
         return this.add_animation(csanim, for_layer, forKey);
         
     }
+    
+    this.applyAnimation = function(useAnim, forKey, for_layer) {
+        var useLayer = this.layer;
+        if (for_layer)
+        {
+            useLayer = for_layer;
+        }
+        var csanim = new CSAnimation(useLayer, forKey, useAnim, {});
+
+        return this.add_animation(csanim, useLayer, forKey);
+    }
+    
+    
     /**
      * Wait for all in-progress animations on this input to complete before adding any more.
      * This ONLY changes the timing for the input this wait is applied to. Example:

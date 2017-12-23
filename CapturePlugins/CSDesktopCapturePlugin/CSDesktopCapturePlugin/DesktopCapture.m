@@ -400,6 +400,7 @@
 
 -(void)willDelete
 {
+
     [self stopDisplayStream];
 
 }

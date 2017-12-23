@@ -145,11 +145,14 @@ var runTriggerScriptInput = function(input, scriptType) {
         {
             inputSelf = new CSAnimationInput(input);
         }
-        (new Function("self", input["script_"+scriptType]))(inputSelf);
+        
+        beginIsolatedAnimation();
+        var retval = (new Function("self", input["script_"+scriptType]))(inputSelf);
+        commitAnimation();
         inputSelf.input = null;
         inputSelf.layer = null;
         inputSelf = null;
-        
+        return retval;
     }
 
 }
