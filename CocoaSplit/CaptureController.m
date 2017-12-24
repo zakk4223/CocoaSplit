@@ -4859,12 +4859,12 @@
         [self stagingSave:sender];
     
         self.inLayoutTransition = YES;
-        [self.selectedLayout replaceWithSourceLayout:self.stagingLayout usingScripts:YES withCompletionBlock:^{
-          dispatch_async(dispatch_get_main_queue(), ^{
-              self.inLayoutTransition = NO;
-          });
-            
-        }];
+        [self.selectedLayout replaceWithSourceLayoutViaScript:self.stagingLayout  withCompletionBlock:^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.inLayoutTransition = NO;
+            });} withExceptionBlock:nil];
+
+ 
     }
 }
 
