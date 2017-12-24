@@ -25,7 +25,7 @@
 
 -(void)layout
 {
-    
+    [super layout];
     NSInteger subViewCnt = self.subviews.count;
     float countsq = sqrt(subViewCnt);
     NSInteger nextint = (NSInteger)ceil(countsq);

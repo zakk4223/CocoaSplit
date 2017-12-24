@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13529"/>
-        <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -536,7 +535,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                     </scrollView>
-                                    <button toolTip="Global Audio Configuration" translatesAutoresizingMaskIntoConstraints="NO" id="cxB-MZ-6mz">
+                                    <button toolTip="Global Audio Configuration" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cxB-MZ-6mz">
                                         <rect key="frame" x="625" y="339" width="17" height="17"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="17" id="3OK-Wg-Av4"/>
@@ -892,7 +891,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                     </scrollView>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TVb-Ia-ifl">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TVb-Ia-ifl">
                                         <rect key="frame" x="585" y="340" width="34" height="14"/>
                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Audio" id="XNT-5T-Oyd">
                                             <font key="font" metaFont="smallSystem"/>
@@ -1152,12 +1151,11 @@
                                 <constraints>
                                     <constraint firstItem="ZMK-1p-sVF" firstAttribute="baseline" secondItem="4xM-kf-gaf" secondAttribute="baseline" id="4bd-Ot-vjg"/>
                                     <constraint firstItem="Y7F-zZ-G1v" firstAttribute="bottom" secondItem="rSV-Iw-qby" secondAttribute="bottom" id="5Tw-Pj-jDV"/>
+                                    <constraint firstItem="QJ6-Ne-Zed" firstAttribute="top" secondItem="hQL-UV-A4y" secondAttribute="top" id="6PH-9e-CNG"/>
                                     <constraint firstItem="rPZ-cL-r3T" firstAttribute="leading" secondItem="S3f-OT-hge" secondAttribute="trailing" constant="8" symbolic="YES" id="8vd-wA-SeK"/>
                                     <constraint firstItem="WVW-0n-Rw1" firstAttribute="top" secondItem="rSV-Iw-qby" secondAttribute="top" id="990-Op-eap"/>
                                     <constraint firstItem="4xM-kf-gaf" firstAttribute="centerX" secondItem="2370" secondAttribute="centerX" id="9L3-QF-aHW"/>
-                                    <constraint firstItem="ZFw-Ai-mXd" firstAttribute="baseline" secondItem="TVb-Ia-ifl" secondAttribute="baseline" id="9jt-tv-hpj"/>
                                     <constraint firstItem="Y7F-zZ-G1v" firstAttribute="leading" secondItem="Z1U-9v-Vnp" secondAttribute="trailing" constant="8" symbolic="YES" id="A5J-B6-qlj"/>
-                                    <constraint firstItem="HdA-UM-xTY" firstAttribute="baseline" secondItem="pzK-8X-A5m" secondAttribute="baseline" id="Atw-oT-o72"/>
                                     <constraint firstItem="WVW-0n-Rw1" firstAttribute="leading" secondItem="rPZ-cL-r3T" secondAttribute="trailing" constant="8" symbolic="YES" id="D4c-Ow-Ksi"/>
                                     <constraint firstItem="S3f-OT-hge" firstAttribute="baseline" secondItem="xTB-uk-xkF" secondAttribute="baseline" id="DUh-Xa-Jo7"/>
                                     <constraint firstItem="xTB-uk-xkF" firstAttribute="baseline" secondItem="NXd-7g-Q7o" secondAttribute="baseline" id="EOn-OP-hmM"/>
@@ -1186,11 +1184,9 @@
                                     <constraint firstItem="4Os-cy-Qte" firstAttribute="top" secondItem="Z1U-9v-Vnp" secondAttribute="top" id="YQm-nt-94i"/>
                                     <constraint firstItem="Ysd-ry-lvg" firstAttribute="top" secondItem="ZMK-1p-sVF" secondAttribute="bottom" constant="53" id="Zvb-I8-Jsu"/>
                                     <constraint firstItem="pIm-oO-eRB" firstAttribute="top" secondItem="597" secondAttribute="top" id="afa-xN-xXC"/>
-                                    <constraint firstItem="pzK-8X-A5m" firstAttribute="baseline" secondItem="TVb-Ia-ifl" secondAttribute="baseline" id="bQ8-yG-WXK"/>
                                     <constraint firstAttribute="trailing" secondItem="ZFw-Ai-mXd" secondAttribute="trailing" constant="95" id="bmj-AJ-y9b"/>
                                     <constraint firstItem="WVW-0n-Rw1" firstAttribute="top" secondItem="cxB-MZ-6mz" secondAttribute="bottom" constant="7" id="bti-sU-YRz"/>
                                     <constraint firstItem="597" firstAttribute="leading" secondItem="pIm-oO-eRB" secondAttribute="trailing" constant="8" symbolic="YES" id="c2c-BU-I3k"/>
-                                    <constraint firstItem="HdA-UM-xTY" firstAttribute="baseline" secondItem="TVb-Ia-ifl" secondAttribute="firstBaseline" id="cfR-0c-2Vo"/>
                                     <constraint firstItem="Z1U-9v-Vnp" firstAttribute="leading" secondItem="4Os-cy-Qte" secondAttribute="trailing" constant="8" symbolic="YES" id="dDe-1L-HL8"/>
                                     <constraint firstItem="ELT-rG-e24" firstAttribute="top" secondItem="597" secondAttribute="top" id="dwy-jM-0HD"/>
                                     <constraint firstItem="pIm-oO-eRB" firstAttribute="centerY" secondItem="ELT-rG-e24" secondAttribute="centerY" id="ehl-NO-0S1"/>
@@ -1206,6 +1202,7 @@
                                     <constraint firstItem="HdA-UM-xTY" firstAttribute="leading" secondItem="ZMK-1p-sVF" secondAttribute="leading" id="ntF-g7-VCz"/>
                                     <constraint firstItem="Y7F-zZ-G1v" firstAttribute="trailing" secondItem="WVW-0n-Rw1" secondAttribute="trailing" id="qnM-X2-Im3"/>
                                     <constraint firstItem="pIm-oO-eRB" firstAttribute="centerY" secondItem="597" secondAttribute="centerY" id="qy7-Ve-MKk"/>
+                                    <constraint firstItem="ZFw-Ai-mXd" firstAttribute="baseline" secondItem="pzK-8X-A5m" secondAttribute="baseline" id="s7s-I2-Q7q"/>
                                     <constraint firstItem="rPZ-cL-r3T" firstAttribute="leading" secondItem="QJ6-Ne-Zed" secondAttribute="trailing" constant="8" symbolic="YES" id="sXu-MA-dyO"/>
                                     <constraint firstItem="QJ6-Ne-Zed" firstAttribute="bottom" secondItem="rPZ-cL-r3T" secondAttribute="bottom" id="tu5-A6-I6b"/>
                                     <constraint firstItem="rPZ-cL-r3T" firstAttribute="bottom" secondItem="WVW-0n-Rw1" secondAttribute="bottom" id="vLC-Vn-bKH"/>

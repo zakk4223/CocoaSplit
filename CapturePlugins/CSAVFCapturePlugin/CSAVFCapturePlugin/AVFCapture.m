@@ -354,7 +354,7 @@
             //CFRetain(sampleBuffer);
             
             [self updateLayersWithFramedataBlock:^(CALayer *layer) {
-                layer.contents = (__bridge id _Nullable)(videoFrame);
+                layer.contents = (__bridge id _Nullable)(CVPixelBufferGetIOSurface(videoFrame));
             } withPreuseBlock:^{
                 CFRetain(sampleBuffer);
             } withPostuseBlock:^{

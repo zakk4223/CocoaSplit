@@ -269,7 +269,8 @@
         
         if (!_recordImageView)
         {
-            _recordImageView = [NSImageView imageViewWithImage:[NSImage imageNamed:@"Record_Icon"]];
+            _recordImageView = [[NSImageView alloc] init];
+            _recordImageView.image = [NSImage imageNamed:@"Record_Icon"];
             _recordImageView.editable = NO;
             _recordImageView.hidden = YES;
             _recordImageView.frame = NSMakeRect(NSMaxX(self.frame)-16,4,16,16);
@@ -348,6 +349,7 @@
 -(void)layout
 {
     
+    [super layout];
     if (_recordImageView)
     {
         [_recordImageView setFrame:NSMakeRect(4,NSMaxY(self.bounds)-24,16,16)];

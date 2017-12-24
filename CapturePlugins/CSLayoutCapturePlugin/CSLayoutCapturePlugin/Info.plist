@@ -21,6 +21,6 @@
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2017 Zakk. All rights reserved.</string>
 	<key>NSPrincipalClass</key>
-	<string></string>
+	<string>CSLayoutCapture</string>
 </dict>
 </plist>

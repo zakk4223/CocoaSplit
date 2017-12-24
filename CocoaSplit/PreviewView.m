@@ -551,26 +551,21 @@
 
 
 
-
--(void)rightMouseDown:(NSEvent *)theEvent
+-(NSMenu *)menuForEvent:(NSEvent *)event
 {
-    
     NSPoint tmp;
     
-    tmp = [self convertPoint:theEvent.locationInWindow fromView:nil];
+    tmp = [self convertPoint:event.locationInWindow fromView:nil];
 
     
     if (self.viewOnly)
     {
-        NSMenu *srcListMenu = [self buildSourceMenu];
-        
-        [srcListMenu popUpMenuPositioningItem:srcListMenu.itemArray.firstObject atLocation:tmp inView:self];
-
+        return [self buildSourceMenu];
     }
     
     bool doDeep = YES;
     
-    if (theEvent.modifierFlags & NSControlKeyMask)
+    if (event.modifierFlags & NSControlKeyMask)
     {
         doDeep = NO;
     }
@@ -580,13 +575,14 @@
     if (self.selectedSource)
     {
         [self buildSettingsMenu];
-        [self.sourceSettingsMenu popUpMenuPositioningItem:self.sourceSettingsMenu.itemArray.firstObject atLocation:tmp inView:self];
+        return self.sourceSettingsMenu;
     } else {
         
         NSMenu *srcListMenu = [self buildSourceMenu];
-        
-        [srcListMenu popUpMenuPositioningItem:srcListMenu.itemArray.firstObject atLocation:tmp inView:self];
+        return srcListMenu;
     }
+    
+    return nil;
 }
 
 

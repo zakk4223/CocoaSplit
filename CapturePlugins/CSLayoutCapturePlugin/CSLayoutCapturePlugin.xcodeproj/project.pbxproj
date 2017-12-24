@@ -124,8 +124,7 @@
 				TargetAttributes = {
 					345BECAC1F3DADF600B46F29 = {
 						CreatedOnToolsVersion = 8.3.2;
-						DevelopmentTeam = L3JLUY4S5E;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -272,10 +271,12 @@
 		345BECB41F3DADF600B46F29 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = L3JLUY4S5E;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = CSLayoutCapturePlugin/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				"OTHER_LDFLAGS[arch=*]" = (
 					"-undefined",
 					suppress,
@@ -283,6 +284,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = zakk.lol.CSLayoutCapturePlugin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = bundle;
 			};
@@ -291,10 +293,12 @@
 		345BECB51F3DADF600B46F29 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = L3JLUY4S5E;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = CSLayoutCapturePlugin/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				"OTHER_LDFLAGS[arch=*]" = (
 					"-undefined",
 					suppress,
@@ -302,6 +306,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = zakk.lol.CSLayoutCapturePlugin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = bundle;
 			};
