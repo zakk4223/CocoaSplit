@@ -7,6 +7,7 @@
 //
 
 #import "CSLayoutSwitcher.h"
+#import <ScriptingBridge/ScriptingBridge.h>
 
 @implementation CSLayoutSwitcher
 
@@ -106,8 +107,54 @@
     
     if (matchedAction)
     {
-        SEL changeSelector = NSSelectorFromString(@"setActivelayoutByString:");
-        [[NSApp delegate] performSelector:changeSelector withObject:matchedAction.layoutName];
+        
+        if (matchedAction.targetName)
+        {
+            NSString *verb = nil;
+            NSString *subjectType = nil;
+            
+            switch(matchedAction.actionType)
+            {
+                case kScriptRun:
+                    verb = @"run";
+                    subjectType = @"layoutscript";
+                    break;
+                case kScriptStop:
+                    verb = @"stop";
+                    subjectType = @"layoutscript";
+                    break;
+                case kLayoutMerge:
+                    verb = @"merge";
+                    subjectType = @"layout";
+                case kLayoutRemove:
+                    verb = @"remove";
+                    subjectType = @"layout";
+                    break;
+                case kLayoutSwitch:
+                    verb = @"replace with";
+                    subjectType = @"layout";
+                    break;
+                default:
+                    verb = nil;
+                    subjectType = nil;
+                    break;
+            }
+            
+            if (verb && subjectType)
+            {
+                NSString *scriptSrc = [NSString stringWithFormat:@"%@ %@ \"%@\"", verb, subjectType, matchedAction.targetName];
+                NSAppleScript *script = [[NSAppleScript alloc] initWithSource:scriptSrc];
+                [script executeAndReturnError:nil];
+            }
+        }
+        
     }
 }
+
+- (void)eventDidFail:(const AppleEvent *)event withError:(NSError *)error
+{
+    
+    return;
+}
+
 @end

@@ -1,7 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="14D136" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12120" systemVersion="16G29" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6250"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12120"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CSTimeIntervalCaptureViewController">
@@ -12,19 +13,19 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="271" height="64"/>
+            <rect key="frame" x="0.0" y="0.0" width="271" height="115"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="am6-ab-keq">
-                    <rect key="frame" x="0.0" y="47" width="99" height="14"/>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="am6-ab-keq">
+                    <rect key="frame" x="0.0" y="98" width="99" height="14"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Count Down Start" id="kT5-47-M7Y">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RXM-PQ-qe5">
-                    <rect key="frame" x="118" y="45" width="66" height="19"/>
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RXM-PQ-qe5">
+                    <rect key="frame" x="118" y="96" width="66" height="19"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="jCU-yt-2al">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -34,26 +35,16 @@
                         <binding destination="hkC-ud-uEg" name="value" keyPath="selection.countdownStart" id="jn7-MC-YGz"/>
                     </connections>
                 </textField>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uwt-nT-Qgn">
-                    <rect key="frame" x="1" y="0.0" width="120" height="20"/>
-                    <buttonCell key="cell" type="check" title="Reset at go live" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="iXM-sH-9TY">
-                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                    </buttonCell>
-                    <connections>
-                        <binding destination="hkC-ud-uEg" name="value" keyPath="selection.restartWhenLive" id="opg-K3-whg"/>
-                    </connections>
-                </button>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zqI-H1-2S6">
-                    <rect key="frame" x="0.0" y="25" width="42" height="14"/>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zqI-H1-2S6">
+                    <rect key="frame" x="0.0" y="76" width="42" height="14"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Format" id="El4-a5-qxL">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Vq-ID-Vlf">
-                    <rect key="frame" x="118" y="23" width="96" height="19"/>
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Vq-ID-Vlf">
+                    <rect key="frame" x="118" y="74" width="96" height="19"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="VpE-BI-lJp">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -63,8 +54,8 @@
                         <binding destination="hkC-ud-uEg" name="value" keyPath="selection.format" id="wFQ-ck-guO"/>
                     </connections>
                 </textField>
-                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uti-ha-Ad6">
-                    <rect key="frame" x="118" y="-5" width="80" height="28"/>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Uti-ha-Ad6">
+                    <rect key="frame" x="-5" y="16" width="80" height="28"/>
                     <buttonCell key="cell" type="push" title="Reset" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="TFP-rI-9di">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -73,8 +64,11 @@
                         <action selector="reset:" target="-2" id="ahp-R2-VdQ"/>
                     </connections>
                 </button>
-                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rDL-aH-T8g">
-                    <rect key="frame" x="196" y="-5" width="80" height="28"/>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rDL-aH-T8g">
+                    <rect key="frame" x="-5" y="44" width="80" height="28"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="70" id="cFk-fP-Dl1"/>
+                    </constraints>
                     <buttonCell key="cell" type="push" title="Pause" alternateTitle="Go!" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="JWi-es-GZv">
                         <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -83,8 +77,39 @@
                         <binding destination="hkC-ud-uEg" name="value" keyPath="selection.paused" id="Zfy-GI-bRk"/>
                     </connections>
                 </button>
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="uwt-nT-Qgn">
+                    <rect key="frame" x="-1" y="-3" width="149" height="20"/>
+                    <buttonCell key="cell" type="check" title="Reset when brought live" bezelStyle="regularSquare" imagePosition="right" controlSize="small" state="on" inset="2" id="iXM-sH-9TY">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="hkC-ud-uEg" name="value" keyPath="selection.restartWhenLive" id="opg-K3-whg"/>
+                    </connections>
+                </button>
             </subviews>
-            <point key="canvasLocation" x="402.5" y="286"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="4Vq-ID-Vlf" secondAttribute="trailing" constant="57" id="1eN-xR-hTf"/>
+                <constraint firstItem="RXM-PQ-qe5" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="2J9-S4-IYx"/>
+                <constraint firstItem="zqI-H1-2S6" firstAttribute="centerY" secondItem="4Vq-ID-Vlf" secondAttribute="centerY" id="2mS-0w-WFe"/>
+                <constraint firstItem="am6-ab-keq" firstAttribute="centerY" secondItem="RXM-PQ-qe5" secondAttribute="centerY" id="6Kh-0k-hX8"/>
+                <constraint firstItem="RXM-PQ-qe5" firstAttribute="leading" secondItem="4Vq-ID-Vlf" secondAttribute="leading" id="823-Ij-t6d"/>
+                <constraint firstItem="4Vq-ID-Vlf" firstAttribute="leading" secondItem="zqI-H1-2S6" secondAttribute="trailing" constant="78" id="9f3-Kb-goI"/>
+                <constraint firstItem="rDL-aH-T8g" firstAttribute="leading" secondItem="Uti-ha-Ad6" secondAttribute="leading" id="AGF-Bc-ii9"/>
+                <constraint firstItem="RXM-PQ-qe5" firstAttribute="leading" secondItem="am6-ab-keq" secondAttribute="trailing" constant="21" id="Cfg-48-t5j"/>
+                <constraint firstItem="rDL-aH-T8g" firstAttribute="trailing" secondItem="Uti-ha-Ad6" secondAttribute="trailing" id="GfS-G0-Twi"/>
+                <constraint firstAttribute="bottom" secondItem="uwt-nT-Qgn" secondAttribute="bottom" id="Sls-EM-Gft"/>
+                <constraint firstItem="uwt-nT-Qgn" firstAttribute="top" secondItem="Uti-ha-Ad6" secondAttribute="bottom" constant="8" symbolic="YES" id="Uam-2g-SgQ"/>
+                <constraint firstItem="rDL-aH-T8g" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="Yqs-V1-69R"/>
+                <constraint firstItem="zqI-H1-2S6" firstAttribute="leading" secondItem="uwt-nT-Qgn" secondAttribute="leading" id="cs5-cS-9TZ"/>
+                <constraint firstItem="Uti-ha-Ad6" firstAttribute="top" secondItem="rDL-aH-T8g" secondAttribute="bottom" constant="10" symbolic="YES" id="djp-0H-ind"/>
+                <constraint firstItem="rDL-aH-T8g" firstAttribute="top" secondItem="zqI-H1-2S6" secondAttribute="bottom" constant="8" symbolic="YES" id="lk7-BJ-Zta"/>
+                <constraint firstItem="am6-ab-keq" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="2" id="trO-4M-qTR"/>
+                <constraint firstItem="zqI-H1-2S6" firstAttribute="top" secondItem="am6-ab-keq" secondAttribute="bottom" constant="8" symbolic="YES" id="wIs-tz-q87"/>
+                <constraint firstItem="am6-ab-keq" firstAttribute="leading" secondItem="zqI-H1-2S6" secondAttribute="leading" id="ynd-Pm-OFK"/>
+                <constraint firstAttribute="trailing" secondItem="RXM-PQ-qe5" secondAttribute="trailing" constant="87" id="ytY-Co-zrj"/>
+            </constraints>
+            <point key="canvasLocation" x="17.5" y="169.5"/>
         </customView>
         <objectController id="hkC-ud-uEg">
             <connections>

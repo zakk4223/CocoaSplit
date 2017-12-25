@@ -8,6 +8,7 @@
 
 #import "CSShapeLayer.h"
 #import "CSShapeWrapper.h"
+#import <Cocoa/Cocoa.h>
 
 @implementation CSShapeLayer
 
@@ -42,7 +43,10 @@
     }
     
     
-    self.path = CGPathCreateCopyByTransformingPath(self.path, &useTransform);
+    CGPathRef newPath = CGPathCreateCopyByTransformingPath(self.path, &useTransform);
+    self.path = newPath;
+    CGPathRelease(newPath);
+                                                
 
 }
 
@@ -51,12 +55,13 @@
     
     if (self.shapeCreator)
     {
-        @try {
-            [self.shapeCreator getcgpath:self.frame forLayer:self];
-        }
-        @catch (NSException *exception) {
-            NSLog(@"Path creation for layer failed with exception %@", exception);
-        }
+        //@try {
+            
+            [self.shapeCreator getCGPath:self.frame forLayer:self];
+       // }
+       // @catch (NSException *exception) {
+      //      NSLog(@"Path creation for layer failed with exception %@", exception);
+     //   }
         
         if (self.path)
         {

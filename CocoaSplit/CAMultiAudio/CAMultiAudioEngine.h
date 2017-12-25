@@ -34,6 +34,7 @@
 @property (strong) CAMultiAudioDefaultOutput *defaultOutputNode;
 @property (strong) NSMutableArray *audioInputs;
 @property (strong) NSMutableArray *pcmInputs;
+@property (strong) NSMutableArray *fileInputs;
 
 @property (strong) CAMultiAudioMixer *encodeMixer;
 @property (strong) CSAacEncoder *encoder;
@@ -44,15 +45,25 @@
 @property (strong) NSArray *validSamplerates;
 @property (assign) Float32 streamAudioPowerLevel;
 @property (assign) Float32 previewAudioPowerLevel;
+@property (strong) CAMultiAudioEqualizer *equalizer;
 
 
 
 -(CAMultiAudioPCMPlayer *)createPCMInput:(NSString *)uniqueID withFormat:(const AudioStreamBasicDescription *)withFormat;
+-(CAMultiAudioFile *)createFileInput:(NSString *)filePath;
+-(void)addFileInput:(CAMultiAudioFile *)fileInput;
+
 
 
 -(void)removePCMInput:(CAMultiAudioPCMPlayer *)toRemove;
--(void)attachInput:(CAMultiAudioNode *)input;
+-(void)removeFileInput:(CAMultiAudioFile *)toRemove;
+-(bool)attachInput:(CAMultiAudioInput *)input;
 -(void)updateStatistics;
+-(void)applyInputSettings:(NSDictionary *)inputSettings;
+-(NSMutableDictionary *)generateInputSettings;
+-(CAMultiAudioInput *)inputForUUID:(NSString *)uuid;
+
+
 
 
 @end

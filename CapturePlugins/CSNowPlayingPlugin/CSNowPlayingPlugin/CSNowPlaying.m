@@ -18,7 +18,7 @@
         
         [[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(spotifyChangedTrack:) name:@"com.spotify.client.PlaybackStateChanged" object:nil];
         [[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(iTunesChangedTrack:) name:@"com.apple.iTunes.playerInfo" object:nil];
-        
+
     }
     
     return self;
@@ -27,10 +27,16 @@
 
 -(void)dealloc
 {
+    
     [[NSDistributedNotificationCenter defaultCenter] removeObserver:self];
     
 }
 
+-(void)setIsActive:(bool)isActive
+{
+    [super setIsActive:isActive];
+
+}
 
 -(void)iTunesChangedTrack:(NSNotification *)notify
 {

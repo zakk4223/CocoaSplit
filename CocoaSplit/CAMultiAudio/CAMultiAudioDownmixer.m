@@ -37,7 +37,7 @@
 
 -(void)setOutputVolume
 {
-    AudioUnitSetParameter(self.audioUnit, kMatrixMixerParam_Volume, kAudioUnitScope_Output, 0, self.volume, 0);
+    AudioUnitSetParameter(self.audioUnit, kMatrixMixerParam_Volume, kAudioUnitScope_Global, 0xFFFFFFFF, self.volume, 0);
 }
 
 
@@ -174,13 +174,17 @@
 }
 
 
--(void)setOutputStreamFormat:(AudioStreamBasicDescription *)format
+-(bool)setOutputStreamFormat:(AudioStreamBasicDescription *)format
 {
-    [super setOutputStreamFormat:format];
+    bool ret =     [super setOutputStreamFormat:format];
+
     self.outputChannelCount = format->mChannelsPerFrame;
-    
+
+    return ret;
 }
--(void)setInputStreamFormat:(AudioStreamBasicDescription *)format
+
+
+-(bool)setInputStreamFormat:(AudioStreamBasicDescription *)format
 {
     
     
@@ -191,7 +195,7 @@
     fCopy.mChannelsPerFrame = _inputChannels;
     
     
-    [super setInputStreamFormat:&fCopy];
+    return [super setInputStreamFormat:&fCopy];
 }
 
 -(void)didInitializeNode
@@ -312,6 +316,10 @@
             Float32 xpoint = levels[(ichan * (outputCount+1)) + ochan];
             [self setVolume:xpoint forChannel:ichan outChannel:ochan];
         }
+    }
+    if (levels)
+    {
+        free(levels);
     }
 }
 

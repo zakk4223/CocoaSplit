@@ -7,7 +7,8 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "CSGridView.h"
 
-@interface CSLayoutSwitcherHostingView : NSView
+@interface CSLayoutSwitcherHostingView : CSGridView
 
 @end

@@ -13,5 +13,7 @@
 @property (weak) FileTextCapture *captureObj;
 
 - (IBAction)chooseFile:(id)sender;
+@property (assign) int startLine;
+
 
 @end

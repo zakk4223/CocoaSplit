@@ -12,6 +12,7 @@
 		34576D6319B02513007BAD90 /* ImageCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34576D5F19B02513007BAD90 /* ImageCapture.m */; };
 		34576D6419B02513007BAD90 /* ImageCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34576D6119B02513007BAD90 /* ImageCaptureViewController.m */; };
 		34576D6519B02513007BAD90 /* ImageCaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34576D6219B02513007BAD90 /* ImageCaptureViewController.xib */; };
+		346726571FB28A7D00665903 /* ImageCaptureLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 346726561FB28A7D00665903 /* ImageCaptureLayer.m */; };
 		34AFC23319B0557D0007C07B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34AFC23219B0557D0007C07B /* CoreGraphics.framework */; };
 /* End PBXBuildFile section */
 
@@ -29,6 +30,8 @@
 		34576D6019B02513007BAD90 /* ImageCaptureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCaptureViewController.h; sourceTree = "<group>"; };
 		34576D6119B02513007BAD90 /* ImageCaptureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageCaptureViewController.m; sourceTree = "<group>"; };
 		34576D6219B02513007BAD90 /* ImageCaptureViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageCaptureViewController.xib; sourceTree = "<group>"; };
+		346726551FB28A7D00665903 /* ImageCaptureLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageCaptureLayer.h; sourceTree = "<group>"; };
+		346726561FB28A7D00665903 /* ImageCaptureLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ImageCaptureLayer.m; sourceTree = "<group>"; };
 		34AFC23219B0557D0007C07B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		34AFC2B119B0624A0007C07B /* CSAbstractCaptureDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAbstractCaptureDevice.h; path = PluginHeaders/CSAbstractCaptureDevice.h; sourceTree = "<group>"; };
 		34AFC2B219B0624A0007C07B /* CSCaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureBase.h; path = PluginHeaders/CSCaptureBase.h; sourceTree = "<group>"; };
@@ -95,6 +98,8 @@
 				34576D6119B02513007BAD90 /* ImageCaptureViewController.m */,
 				34576D6219B02513007BAD90 /* ImageCaptureViewController.xib */,
 				34576D4719B024EB007BAD90 /* Supporting Files */,
+				346726551FB28A7D00665903 /* ImageCaptureLayer.h */,
+				346726561FB28A7D00665903 /* ImageCaptureLayer.m */,
 			);
 			path = CSImageCapturePlugin;
 			sourceTree = "<group>";
@@ -146,7 +151,7 @@
 		34576D3519B024EB007BAD90 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = Zakk;
 			};
 			buildConfigurationList = 34576D3819B024EB007BAD90 /* Build configuration list for PBXProject "CSImageCapturePlugin" */;
@@ -185,6 +190,7 @@
 			files = (
 				34576D6419B02513007BAD90 /* ImageCaptureViewController.m in Sources */,
 				34576D6319B02513007BAD90 /* ImageCapture.m in Sources */,
+				346726571FB28A7D00665903 /* ImageCaptureLayer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -210,18 +216,30 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -248,19 +266,30 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -285,6 +314,7 @@
 					suppress,
 					"-flat_namespace",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "zakk.lol.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = bundle;
@@ -304,6 +334,7 @@
 					suppress,
 					"-flat_namespace",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "zakk.lol.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = bundle;

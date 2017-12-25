@@ -12,6 +12,14 @@
 #import "CSFFMpegInput.h"
 #import "CSPcmPlayer.h"
 
+
+typedef enum ff_movie_repeat_t {
+    kCSFFMovieRepeatNone = 0,
+    kCSFFMovieRepeatOne = 1,
+    kCSFFMovieRepeatAll = 2
+} ff_movie_repeat;
+
+
 @interface CSFFMpegPlayer : NSObject
 {
     CFTimeInterval _first_frame_host_time;
@@ -21,7 +29,7 @@
     dispatch_queue_t _audio_queue;
     bool _audio_done;
     bool _video_done;
-    CVPixelBufferPoolRef *_cvpool;
+    CVPixelBufferPoolRef _cvpool;
     NSSize _currentSize;
     bool _nextFlag;
     int64_t _first_video_pts;
@@ -30,6 +38,9 @@
     CSFFMpegInput *_forceNextInput;
     bool _seekRequest;
     double _seekRequestTime;
+    bool _audio_running;
+    int64_t _first_pts;
+    
     
     
     
@@ -47,8 +58,8 @@
 @property (assign) AudioStreamBasicDescription *asbd;
 
 @property (copy, nonatomic) void (^itemStarted)(CSFFMpegInput *);
-@property (copy, nonatomic) void (^pauseStateChanged)();
-@property (copy, nonatomic) void (^queueStateChanged)();
+@property (copy, nonatomic) void (^pauseStateChanged)(void);
+@property (copy, nonatomic) void (^queueStateChanged)(void);
 
 
 @property (assign) double lastVideoTime;
@@ -56,6 +67,7 @@
 @property (assign) bool muted;
 @property (assign) bool seeking;
 @property (assign) bool audio_needs_restart;
+@property (assign) ff_movie_repeat repeat;
 
 
 
@@ -73,12 +85,14 @@
 
 
 
+
 -(void)seek:(double)toTime;
 -(void)startAudio;
 
 
 
 -(CVPixelBufferRef)frameForMediaTime:(CFTimeInterval)mediaTime;
+-(CVPixelBufferRef)firstFrame;
 
 
 

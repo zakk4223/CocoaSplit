@@ -11,8 +11,11 @@
 #import "CSStreamServiceProtocol.h"
 #import "CSPluginFactoryProtocol.h"
 #import "CSExtraPluginProtocol.h"
+#import "CaptureController.h"
+#import <Foundation/NSObjCRuntime.h>
 
-
+#import <objc/objc.h>
+#import <objc/runtime.h>
 
 
 @implementation CSPluginLoader
@@ -134,12 +137,64 @@
     if (registerMap)
     {
         [registerMap setObject:toLoad forKey:classLabel];
-        [self.allPlugins addObject:toLoad];
+
+       // [self.allPlugins addObject:toLoad];
         
         didLoad = YES;
     }
     
     return didLoad;
+}
+
+
+-(void)loadAllPythonPlugins
+{
+    CSAnimationRunnerObj *animObj = [CaptureController sharedAnimationObj];
+    
+    NSArray *pluginClasses  = nil;
+    
+    
+    pluginClasses = [animObj allPlugins];
+    for (Class pClass in pluginClasses)
+    {
+        [self addToPluginTracker:pClass fromBundle:nil];
+
+        [self validateAndRegisterPluginClass:pClass];
+    }
+}
+
+
+-(void)addToPluginTracker:(Class) toAdd fromBundle:(NSBundle *)fromBundle
+{
+    
+    NSMutableDictionary *addMap = [NSMutableDictionary dictionary];
+    addMap[@"label"] = [toAdd label];
+    
+
+    if (fromBundle)
+    {
+        NSString *version = [fromBundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+        if (version)
+        {
+            addMap[@"version"] = version;
+        }
+        addMap[@"source"] = @"MacOS bundle";
+        addMap[@"path"] = fromBundle.bundlePath;
+        
+    } else {
+            addMap[@"source"] = @"Python file";
+    }
+    
+    if ([toAdd conformsToProtocol:@protocol(CSCaptureSourceProtocol)])
+    {
+        addMap[@"plugin_type"] = @"Capture Source";
+    } else if ([toAdd conformsToProtocol:@protocol(CSStreamServiceProtocol)]) {
+        addMap[@"plugin_type"] = @"Streaming Service";
+    } else if ([toAdd conformsToProtocol:@protocol(CSExtraPluginProtocol)]) {
+        addMap[@"plugin_type"] = @"Extra";
+    }
+
+    [self.allPlugins addObject:addMap];
 }
 
 
@@ -178,6 +233,7 @@
                 {
                     for(Class tryClass in tryClasses)
                     {
+                        [self addToPluginTracker:tryClass fromBundle:currBundle];
                         [self validateAndRegisterPluginClass:tryClass];
                     }
 
@@ -188,6 +244,8 @@
                 {
                     for(Class tryClass in tryClasses)
                     {
+                        [self addToPluginTracker:tryClass fromBundle:currBundle];
+
                         [self validateAndRegisterPluginClass:tryClass];
                     }
                     
@@ -198,6 +256,8 @@
                 {
                     for(Class tryClass in tryClasses)
                     {
+                        [self addToPluginTracker:tryClass fromBundle:currBundle];
+
                         [self validateAndRegisterPluginClass:tryClass];
                     }
                     
@@ -206,11 +266,14 @@
 
                 
             } else {
+                [self addToPluginTracker:currPrincipalClass fromBundle:currBundle];
+
                 [self validateAndRegisterPluginClass:currPrincipalClass];
             }
             
             
         }
     }
+    [self loadAllPythonPlugins];
 }
 @end

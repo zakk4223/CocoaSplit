@@ -13,6 +13,7 @@
     dispatch_source_t _fileSource;
 }
 
+@property (assign) int startLine;
 @property (assign) int lineLimit;
 @property (assign) bool collapseLines;
 @property (strong) NSString *currentFile;

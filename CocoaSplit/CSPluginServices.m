@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Zakk. All rights reserved.
 //
 
+#import <JavaScriptCore/JavaScriptCore.h>
+#import <objc/runtime.h>
 #import "CSPluginServices.h"
 #import "CAMultiAudioPCMPlayer.h"
 #import "CSPcmPlayer.h"
@@ -27,10 +29,34 @@
     return sharedCSPluginServices;
 }
 
+-(NSString *)generateUUID
+{
+    CFUUIDRef tmpUUID = CFUUIDCreate(NULL);
+    NSString *uuid = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, tmpUUID);
+    CFRelease(tmpUUID);
+    return uuid;
+}
 
 
 
+-(JSValue *)runJavascript:(NSString *)script
+{
+    JSContext *jCtx = [JSContext currentContext];
+    if (!jCtx)
+    {
+        jCtx = [[CaptureController sharedCaptureController] setupJavascriptContext];
 
+    }
+    
+    return [jCtx evaluateScript:script];
+}
+
+
+
+-(NSObject *)captureController
+{
+    return [CaptureController sharedCaptureController];
+}
 
 
 -(NSArray *)accountNamesForService:(NSString *)serviceName
@@ -57,6 +83,8 @@
         [retArr addObject:accountName];
     }
     
+    CFRelease(resultArray);
+    
     return retArr;
 }
 
@@ -66,7 +94,7 @@
     AppDelegate *myAppDelegate = [[NSApplication sharedApplication] delegate];
     if (myAppDelegate.captureController)
     {
-        return myAppDelegate.captureController.captureFPS;
+        return myAppDelegate.captureController.livePreviewView.sourceLayout.frameRate;
     }
     return 0.0;
 }

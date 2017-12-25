@@ -9,6 +9,8 @@
 #ifndef CSShapeCapturePlugin_CSShapePathLoader_h
 #define CSShapeCapturePlugin_CSShapePathLoader_h
 #import <Foundation/Foundation.h>
+#import <JavaScriptCore/JavaScriptCore.h>
+
 
 
 
@@ -18,7 +20,7 @@
 
 
 -(NSDictionary *)allPaths;
--(NSString *)pathLoaderPath:(NSString *)name;
+-(void)evaluateJavascriptAtPath:(NSString *)path usingContext:(JSContext *)context;
 
 
 

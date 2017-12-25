@@ -3,7 +3,6 @@
 //  CSYoutubeStreamServicePlugin
 //
 //  Created by Zakk on 7/24/16.
-//  Copyright © 2016 Zakk. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -31,6 +30,7 @@
 +(NSImage *)serviceImage;
 
 
+@property (assign) bool isReady;
 
 @property (strong) NSString *accountName;
 @property (strong) CSOauth2Authenticator *oauthObject;

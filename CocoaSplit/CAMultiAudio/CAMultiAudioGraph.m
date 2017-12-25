@@ -27,7 +27,7 @@
         
         _graphAsbd->mSampleRate = self.sampleRate;
         _graphAsbd->mFormatID = kAudioFormatLinearPCM;
-        _graphAsbd->mFormatFlags = kAudioFormatFlagsAudioUnitCanonical;
+        _graphAsbd->mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked | kAudioFormatFlagIsNonInterleaved;
         _graphAsbd->mFramesPerPacket = 1;
         _graphAsbd->mChannelsPerFrame = 2;
         _graphAsbd->mReserved = 0;
@@ -114,6 +114,13 @@
 
 -(bool)addNode:(CAMultiAudioNode *)newNode
 {
+    
+    if ([self.nodeList containsObject:newNode])
+    {
+        return YES;
+    }
+    
+    
     if ([newNode createNode:_graphInst])
     {
         
@@ -129,6 +136,7 @@
         if (err)
         {
             NSLog(@"AudioUnitInitialize failed for node %@ with status %d", newNode, err);
+            return NO;
         }
         
         [newNode didInitializeNode];
@@ -184,11 +192,13 @@
     }
     OSStatus err;
     
+    /*
     if (![self stopGraph])
     {
         NSLog(@"Graph %@: graphUpdate, stopGraph failed", self);
         return NO;
     }
+    */
     
     err = AUGraphUpdate(_graphInst, NULL);
     if (err)
@@ -197,12 +207,13 @@
         return NO;
     }
     
+    /*
     if (![self startGraph])
     {
         NSLog(@"Graph %@: graphUpdate, startGraph failed", self);
         return NO;
 
-    }
+    }*/
     
     return YES;
 }
@@ -258,11 +269,10 @@
 
     if (![self graphUpdate])
     {
+        
         NSLog(@"Graph %@ graphUpdate for connection failed %@ -> %@", self, node, toNode);
         return NO;
     }
-    
-
 
     return YES;
 }
@@ -280,7 +290,7 @@
         return YES;
     }
     
-    if (!node.audioUnit)
+    if (!node.audioUnit) 
     {
         NSLog(@"Node %@ has no audio unit", node);
         return NO;

@@ -11,6 +11,7 @@
 
 #import "CSAbstractCaptureDevice.h"
 #import "CSTextCaptureViewControllerBase.h"
+#import "CSPluginServices.h"
 
 
 @interface CSTextCaptureBase()
@@ -30,7 +31,8 @@
         self.allowScaling = NO;
         self.needsSourceSelection = NO;
         self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
-        
+        self.activeVideoDevice.uniqueID = [[CSPluginServices sharedPluginServices] generateUUID];
+
         [self addObserver:self forKeyPath:@"propertiesChanged" options:NSKeyValueObservingOptionNew context:NULL];
         
         _font = [NSFont fontWithName:@"Helvetica" size:50];
@@ -41,6 +43,9 @@
     
     return self;
 }
+
+
+
 
 -(CALayer *)createNewLayer
 {
@@ -57,9 +62,12 @@
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
     [super encodeWithCoder:aCoder];
-    [aCoder encodeObject:self.text forKey:@"text"];
+    
+    NSData *attrData = [NSKeyedArchiver archivedDataWithRootObject:self.fontAttributes];
+    
+    [aCoder encodeObject:self.saveText forKey:@"text"];
     [aCoder encodeObject:self.font forKey:@"font"];
-    [aCoder encodeObject:self.fontAttributes forKey:@"fontAttributes"];
+    [aCoder encodeObject:attrData forKey:@"fontAttributesData"];
     [aCoder encodeBool:self.wrapped forKey:@"wrapped"];
     [aCoder encodeObject:self.alignmentMode forKey:@"alignmentMode"];
 }
@@ -69,6 +77,13 @@
 {
     if (self = [super initWithCoder:aDecoder])
     {
+        
+        if (!self.activeVideoDevice)
+        {
+            self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
+            self.activeVideoDevice.uniqueID = [[CSPluginServices sharedPluginServices] generateUUID];
+            
+        }
         _text = [aDecoder decodeObjectForKey:@"text"];
         NSFont *savedFont = [aDecoder decodeObjectForKey:@"font"];
         if (savedFont)
@@ -79,10 +94,18 @@
         
         
         
+        
         NSDictionary *savedfontAttributes = [aDecoder decodeObjectForKey:@"fontAttributes"];
         if (savedfontAttributes)
         {
             _fontAttributes = savedfontAttributes;
+        } else {
+            NSData *encodedAttrData = [aDecoder decodeObjectForKey:@"fontAttributesData"];
+            if (encodedAttrData)
+            {
+                _fontAttributes = [NSKeyedUnarchiver unarchiveObjectWithData:encodedAttrData];
+            }
+
         }
         
         _wrapped = [aDecoder decodeBoolForKey:@"wrapped"];
@@ -94,6 +117,16 @@
     return self;
 }
 
+-(void)setDeviceForUniqueID:(NSString *)uniqueID
+{
+    
+    CSAbstractCaptureDevice *dummydev = [[CSAbstractCaptureDevice alloc] init];
+    
+    dummydev.uniqueID = uniqueID;
+
+    self.activeVideoDevice = dummydev;
+    
+}
 
 -(void)dealloc
 {
@@ -113,7 +146,6 @@
     if (self.text)
     {
         
-        self.activeVideoDevice.uniqueID = self.text;
         
         NSMutableDictionary *strAttrs = [NSMutableDictionary dictionaryWithDictionary:self.fontAttributes];
         strAttrs[NSFontAttributeName] = self.font;
@@ -128,8 +160,8 @@
 
         
         [self updateLayersWithBlock:^(CALayer *layer) {
-            layer.bounds = CGRectMake(0.0, 0.0, _attribString.size.width, _attribString.size.height);
-            ((CATextLayer *)layer).string = _attribString;
+            layer.bounds = CGRectMake(0.0, 0.0, self->_attribString.size.width, self->_attribString.size.height);
+            ((CATextLayer *)layer).string = self->_attribString;
             ((CATextLayer *)layer).alignmentMode = self.alignmentMode;
             ((CATextLayer *)layer).wrapped = self.wrapped;
         }];
@@ -160,6 +192,7 @@
         self.captureName = text;
 
     });
+    
     
     
     
@@ -254,6 +287,12 @@
     
     return returnViewController;
     
+}
+
+
+-(NSString *)saveText
+{
+    return self.text;
 }
 
 

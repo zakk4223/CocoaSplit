@@ -9,13 +9,18 @@
 #import <Cocoa/Cocoa.h>
 #import <Quartz/Quartz.h>
 #import "CSPreviewGLLayer.h"
+#import "CSLayoutSwitcherViewController.h"
 
 
 @interface CSLayoutSwitcherWithPreviewWindowController : NSWindowController
+{
+
+    CSLayoutSwitcherViewController *_layoutViewController;
+    
+}
 @property (strong) NSArray *layouts;
 @property (weak) IBOutlet NSView *gridView;
 
--(void)layoutClicked:(SourceLayout *)layout withEvent:(NSEvent *)event;
 @property (weak) IBOutlet NSView *transitionView;
 
 @end

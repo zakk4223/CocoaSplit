@@ -97,9 +97,10 @@
     if (self.renderType == kCSRenderOnFrameTick)
     {
         
+        /*
         [self updateLayersWithBlock:^(CALayer *layer) {
             [((CSIOSurfaceLayer *)layer) setNeedsDisplay];
-        }];
+        }];*/
     }
     
 }
@@ -108,17 +109,8 @@
 -(CALayer *)createNewLayer
 {
     
-    //return [CALayer layer];
-    CSIOSurfaceLayer *newLayer = [CSIOSurfaceLayer layer];
-    
-    if (self.renderType == kCSRenderAsync)
-    {
-        newLayer.asynchronous = YES;
-    } else {
-        newLayer.asynchronous = NO;
-    }
-    
-    return newLayer;
+    return [CALayer layer];
+
 }
 
 
@@ -156,12 +148,12 @@
         asyncValue = YES;
     }
     
-    
+    /*
     [self updateLayersWithBlock:^(CALayer *layer) {
         
         ((CSIOSurfaceLayer *)layer).asynchronous = asyncValue;
     }];
-    
+    */
     _renderType = renderType;
 }
 
@@ -250,6 +242,8 @@
     
     NSDictionary *opts = @{(NSString *)kCGDisplayStreamQueueDepth : @8, (NSString *)kCGDisplayStreamMinimumFrameTime : minframetime, (NSString *)kCGDisplayStreamPreserveAspectRatio: @YES, (NSString *)kCGDisplayStreamShowCursor:@(self.showCursor), (NSString *)kCGDisplayStreamSourceRect: (__bridge NSDictionary *)rectDict};
     
+
+    CFRelease(rectDict);
     
     
 
@@ -290,21 +284,10 @@
             _lastSize = CGSizeMake(IOSurfaceGetWidth(frameSurface), IOSurfaceGetHeight(frameSurface));
             
             [strongSelf updateLayersWithFramedataBlock:^(CALayer *layer) {
-
-                ((CSIOSurfaceLayer *)layer).ioSurface = frameSurface;
-                if (self.renderType == kCSRenderFrameArrived)
-                {
-                    
-                    
-                    //dispatch through the main queue because otherwise the display stream events bounce between threads and confuse core animation
-                  //dispatch_async(dispatch_get_main_queue(), ^{
-                        [((CSIOSurfaceLayer *)layer) setNeedsDisplay];
-                // });
-                }
-
-                
-
+                layer.contents = (__bridge id _Nullable)(frameSurface);
             }];
+
+
             [self frameArrived];
 
             
@@ -417,6 +400,7 @@
 
 -(void)willDelete
 {
+
     [self stopDisplayStream];
 
 }

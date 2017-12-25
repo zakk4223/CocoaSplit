@@ -3,7 +3,6 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 5/8/16.
-//  Copyright © 2016 Zakk. All rights reserved.
 //
 
 #import "CSAddInputViewController.h"
@@ -12,6 +11,9 @@
 #import "CSPluginServices.h"
 #import "AppDelegate.h"
 #import "PreviewView.h"
+#import "CSScriptInputSource.h"
+#import "CSAudioInputSource.h"
+
 
 @interface CSAddInputViewController ()
 
@@ -32,7 +34,7 @@
 {
     
     [super loadView];
-    [self switchToInitialView];
+    [self adjustTableHeight:self.contentTable];
 }
 
 
@@ -62,75 +64,12 @@
 }
 
 
--(void)switchToInputListView
+/*
+- (NSIndexSet *)tableView:(NSTableView *)tableView selectionIndexesForProposedSelection:(NSIndexSet *)proposedSelectionIndexes
 {
-    
-    NSSize __block newSize;
-    
-    CATransition *transition = [CATransition animation];
-    transition.type = kCATransitionPush;
-    transition.subtype = kCATransitionFromRight;
-    self.view.animations = @{@"subviews": transition};
-    
-    [NSAnimationContext runAnimationGroup:^(NSAnimationContext * _Nonnull context) {
-        if (self.initialView && self.initialView.superview)
-        {
-            [self.initialView.animator removeFromSuperview];
-        }
-        NSRect lRect = [self.deviceTable rectOfRow:self.deviceTable.numberOfRows - 1];
-        
-        
-        NSRect vRect = self.inputListView.frame;
-        newSize = NSMakeSize(vRect.size.width, lRect.origin.y+lRect.size.height+2+self.headerView.frame.size.height);
-        
-        vRect.size = newSize;
-        vRect.origin.y = self.view.frame.size.height/2 - newSize.height/2;
-        
-        [self.inputListView setFrame:vRect];
-        
-        [self.view.animator addSubview:self.inputListView];
-        
-        
-    } completionHandler:^{
-        
-        self.popover.contentSize = newSize;
-        [self.inputListView setFrameOrigin:NSMakePoint(0,0)];
-    }];
+    return nil;
 }
-
-
--(void)switchToInitialView
-{
-    NSSize __block newSize;
-    
-    CATransition *transition = [CATransition animation];
-    transition.type = kCATransitionPush;
-    transition.subtype = kCATransitionFromLeft;
-    self.view.animations = @{@"subviews": transition};
-    
-    [NSAnimationContext runAnimationGroup:^(NSAnimationContext * _Nonnull context) {
-        if (self.inputListView && self.inputListView.superview)
-        {
-            [self.inputListView.animator removeFromSuperview];
-        }
-        NSRect lRect = [self.initialTable rectOfRow:self.initialTable.numberOfRows - 1];
-        
-        
-        NSRect vRect = self.initialView.frame;
-        newSize = NSMakeSize(vRect.size.width, lRect.origin.y+lRect.size.height+2);
-        
-        vRect.size = newSize;
-        vRect.origin.y = self.view.frame.size.height/2 - newSize.height/2;
-        [self.initialView setFrame:vRect];
-        [self.view.animator addSubview:self.initialView];
-        
-        
-    } completionHandler:^{
-        self.popover.contentSize = newSize;
-        [self.initialView setFrameOrigin:NSMakePoint(0,0)];
-    }];
-}
-
+*/
 
 
 -(NSInteger)adjustTableHeight:(NSTableView *)table
@@ -139,51 +78,102 @@
     for (int i = 0; i < table.numberOfRows; i++)
     {
         NSView *view = [table viewAtColumn:0 row:i makeIfNecessary:YES];
+
         height += view.frame.size.height;
+        height += table.intercellSpacing.height;
+        
     }
     
-    height += 4;
-    
-    
-    NSScrollView *tSview = (NSScrollView *)table.superview.superview;
 
-    NSLayoutConstraint *constraint = [tSview constraintForAttribute:NSLayoutAttributeHeight];
-    [constraint setConstant:height];
 
+    NSRect vRect = table.frame;
+    NSRect lRect = [table rectOfRow:self.contentTable.numberOfRows - 1];
+
+    NSSize newSize = NSMakeSize(vRect.size.width+2, NSMaxY(lRect)+(lRect.size.height/2));
+    
+    vRect.size = newSize;
+    vRect.origin.y = self.view.frame.size.height/2 - newSize.height/2;
+
+    
+    self.popover.contentSize = newSize;
     return height;
 }
 
 
-- (IBAction)nextViewButton:(id)sender
+-(void)deviceClicked
 {
-    [self.initialView removeFromSuperview];
-    self.popover.contentSize = self.inputListView.frame.size;
-    [self.view addSubview:self.inputListView];
-}
+    if (self.contentTable.clickedRow == 0)
+    {
+        self.parentSourceType = nil;
+        [self.contentTable reloadData];
+        [self adjustTableHeight:self.contentTable];
+        return;
+    } else {
+        NSArray *devices = [self.parentSourceType valueForKey:@"availableVideoDevices"];
+        CSAbstractCaptureDevice *clickedDev = [devices objectAtIndex:self.contentTable.clickedRow-1];
+        if (clickedDev)
+        {
+            NSString *selectedType = [self.parentSourceType valueForKey:@"instanceLabel"];
 
-- (IBAction)previousViewButton:(id)sender
-{
-    [self switchToInitialView];
-    self.selectedInput = nil;
+            if ([selectedType isEqualToString:@"Audio"])
+            {
+            
+                CSAudioInputSource *audioSrc = [[CSAudioInputSource alloc] initWithAudioNode:(CAMultiAudioNode *)clickedDev.captureDevice];
+                [self addInput:audioSrc];
+            } else {
+            InputSource *newSrc =  [[InputSource alloc] init];
+            newSrc.selectedVideoType = selectedType;
+            newSrc.videoInput.activeVideoDevice = clickedDev;
+            [self addInput:newSrc];
+            [newSrc autoCenter];
+            }
+            return;
+        }
+        
+    }
+    
 }
-
 - (IBAction)initalTableButtonClicked:(id)sender
 {
     
-    NSObject <CSCaptureSourceProtocol> *clickedCapture;
-
-    clickedCapture = [ self.sourceTypes objectAtIndex:[self.initialTable rowForView:sender]];
     
-    if (!clickedCapture.availableVideoDevices || clickedCapture.availableVideoDevices.count == 0)
+    if (self.parentSourceType)
     {
-        InputSource *newSrc = [[InputSource alloc] init];
-        newSrc.selectedVideoType = clickedCapture.label;
-        [self addInput:newSrc];
-        [self.previewView openInputConfigWindow:newSrc.uuid];
+        [self deviceClicked];
     } else {
-        self.selectedInput = clickedCapture;
-        [self switchToInputListView];
+        
+        NSObject *clickedItem = [ _sourceTypeList objectAtIndex:self.contentTable.clickedRow];
+        if ([[clickedItem valueForKey:@"instanceLabel"] isEqualToString:@"Script"])
+        {
+            CSScriptInputSource *newScript = [[CSScriptInputSource alloc] init];
+            [self addInput:newScript];
+            [self.previewView openInputConfigWindow:newScript.uuid];
+            return;
+        }
+        
+        NSObject <CSCaptureSourceProtocol> *clickedCapture = (NSObject <CSCaptureSourceProtocol> *)clickedItem;
+        
+        
+        NSArray *availableDevices = [clickedCapture valueForKey:@"availableVideoDevices"];
+        
+        if (availableDevices.count > 0)
+        {
+            self.parentSourceType = clickedCapture;
+            
+            [self.contentTable reloadData];
+            
+            [self adjustTableHeight:self.contentTable];
+            
+        } else {
+            InputSource *newSrc = [[InputSource alloc] init];
+            newSrc.selectedVideoType = clickedCapture.instanceLabel;
+            newSrc.depth = -FLT_MAX;
+            [self addInput:newSrc];
+            [self.previewView openInputConfigWindow:newSrc.uuid];
+            
+        }
     }
+    [self.contentTable deselectAll:nil];
 }
 
 - (IBAction)inputTableButtonClicked:(id)sender
@@ -193,84 +183,148 @@
     if (clickedDevice)
     {
         InputSource *newSrc =  [[InputSource alloc] init];
-        newSrc.selectedVideoType = self.selectedInput.label;
+        newSrc.selectedVideoType = self.selectedInput.instanceLabel;
         newSrc.videoInput.activeVideoDevice = clickedDevice;
+        newSrc.depth = -FLT_MAX;
         [self addInput:newSrc];
-        [newSrc autoSize];
+        [newSrc autoCenter];
         
     }
     
 }
 
--(void)addInput:(InputSource *)toAdd
+-(id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
+{
+    if (self.parentSourceType)
+    {
+        if (row == 0)
+        {
+            return nil;
+        }
+        NSArray *devices = [self.parentSourceType valueForKey:@"availableVideoDevices"];
+        return [devices objectAtIndex:row-1];
+    }
+    
+    return [_sourceTypeList objectAtIndex:row];
+}
+
+
+-(NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
+{
+    if (self.parentSourceType)
+    {
+        NSArray *devices = [self.parentSourceType valueForKey:@"availableVideoDevices"];
+        return devices.count+1;
+    } else {
+        if (!_sourceTypeList)
+        {
+            [self makeSourceTypes];
+        }
+        return _sourceTypeList.count;
+    }
+    
+    return 0;
+}
+
+
+-(void)addInput:(NSObject<CSInputSourceProtocol> *)toAdd
 {
     
     
     if (self.previewView)
     {
         [self.previewView addInputSourceWithInput:toAdd];
-        toAdd.autoPlaceOnFrameUpdate = YES;
     }
  
   }
 
-
+/*
 -(BOOL)tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
 {
     return NO;
 }
 
+*/
 
 -(NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
-    
-    if (tableView == self.deviceTable)
+    if (self.parentSourceType)
     {
-        return [tableView makeViewWithIdentifier:@"deviceTableView" owner:self];
-    } else if (tableView == self.initialTable) {
-        
-        NSObject <CSCaptureSourceProtocol> *item = [self.sourceTypesController.arrangedObjects objectAtIndex:row];
-        if (item.availableVideoDevices && item.availableVideoDevices.count > 0)
+        if (row == 0)
         {
-            return [tableView makeViewWithIdentifier:@"initialInputView" owner:self];
-        } else {
-            return [tableView makeViewWithIdentifier:@"initialInputViewNoArrow" owner:self];
+            return [tableView makeViewWithIdentifier:@"goBackView" owner:self];
         }
+        return [tableView makeViewWithIdentifier:@"deviceView" owner:self];
     }
     
+    NSObject <CSCaptureSourceProtocol> *item = [_sourceTypeList objectAtIndex:row];
+    if ([item isEqualTo:[NSNull null]])
+    {
+        return [tableView makeViewWithIdentifier:@"initialInputViewScript" owner:self];
+    }
+    
+    NSArray *availableVideoDevices = [item valueForKey:@"availableVideoDevices"];
+    if (availableVideoDevices && availableVideoDevices.count > 0)
+    {
+        return [tableView makeViewWithIdentifier:@"arrowView" owner:self];
+    } else {
+        return [tableView makeViewWithIdentifier:@"defaultView" owner:self];
+    }
+
     return nil;
 }
 
 
--(NSArray *)sourceTypes
+-(void)makeSourceTypes
 {
-    
-    if (_sourceTypeList)
+    if (!_sourceTypeList)
     {
-        return _sourceTypeList;
-    }
-     
-    
-    
-    NSMutableDictionary *pluginMap = [[CSPluginLoader sharedPluginLoader] sourcePlugins];
-    
-    NSArray *sortedKeys = [pluginMap.allKeys sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
-
-    
-    NSMutableArray *ret = [[NSMutableArray alloc] init];
-    for (NSString *key in sortedKeys)
-    {
-        Class captureClass = pluginMap[key];
-        NSObject <CSCaptureSourceProtocol> *newCaptureSession;
+        NSMutableDictionary *pluginMap = [[CSPluginLoader sharedPluginLoader] sourcePlugins];
         
-        newCaptureSession = [[captureClass alloc] init];
+        NSArray *sortedKeys = [pluginMap.allKeys sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+        
+        
+        NSMutableArray *ret = [[NSMutableArray alloc] init];
+        for (NSString *key in sortedKeys)
+        {
+            Class captureClass = pluginMap[key];
+            NSObject <CSCaptureSourceProtocol> *newCaptureSession;
+            
+            newCaptureSession = [[captureClass alloc] init];
+            
+            [ret addObject:newCaptureSession];
+        }
+        
+        NSImage *scriptImage = [NSImage imageNamed:@"NSScriptTemplate"];
+        scriptImage.template = NO;
+        
+        [ret addObject:@{@"libraryImage": scriptImage, @"instanceLabel": @"Script", @"availableVideoDevices": @[]}];
+        
+        NSMutableDictionary *audioDict = [NSMutableDictionary dictionary];
 
-        [ret addObject:newCaptureSession];
+        NSMutableArray *audioInputs = [NSMutableArray array];
+        
+        for(CAMultiAudioNode *input in [CaptureController sharedCaptureController].multiAudioEngine.audioInputs)
+        {
+            CSAbstractCaptureDevice *newDev = [[CSAbstractCaptureDevice alloc] initWithName:input.name device:input uniqueID:input.nodeUID];
+            [audioInputs addObject:newDev];
+        }
+        audioDict[@"availableVideoDevices"] = audioInputs;
+        audioDict[@"instanceLabel"] = @"Audio";
+        NSImage *audioImage = [NSImage imageNamed:@"NSAudioOutputVolumeMedTemplate"];
+        audioImage.template = NO;
+        
+        audioDict[@"libraryImage"] = audioImage;
+        
+        [ret addObject:audioDict];
+        //[ret addObject:[NSNull null]];
+        
+        _sourceTypeList = ret;
+        
     }
     
-    
-    _sourceTypeList = ret;
-    return ret;
+    self.contentData = _sourceTypeList;
+
 }
 
 

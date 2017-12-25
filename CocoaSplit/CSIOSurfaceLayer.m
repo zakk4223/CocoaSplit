@@ -232,7 +232,6 @@
     
     if (infologLength > 0)
     {
-        NSLog(@"LOG FOR SHADER %@:  %s\n",shaderPath, infoLog);
     }
     
 }
@@ -656,6 +655,12 @@
     
 }
 
+
+
+-(void)releaseCGLContext:(CGLContextObj)ctx
+{
+    CGLDestroyContext(ctx);
+}
 
 
 -(CGLContextObj)copyCGLContextForPixelFormat:(CGLPixelFormatObj)pf

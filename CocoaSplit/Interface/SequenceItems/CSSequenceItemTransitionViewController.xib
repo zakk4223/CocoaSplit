@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16E195" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="CSSequenceItemTransitionViewController">
+            <connections>
+                <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="Hz6-mo-xeY">
+            <rect key="frame" x="0.0" y="0.0" width="149" height="93"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FOm-Ey-pzO">
+                    <rect key="frame" x="-2" y="48" width="52" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Direction" id="tD0-wi-FNo">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="1yy-Xm-YIH" name="hidden" keyPath="selection.transitionFilter" id="Mn1-Sm-uxO">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Qac-OI-dWR">
+                    <rect key="frame" x="-2" y="77" width="29" height="14"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="25" id="Zyr-WZ-luL"/>
+                    </constraints>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Type" id="Y8p-nm-69B">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BYP-qc-D09">
+                    <rect key="frame" x="56" y="18" width="35" height="19"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="Rrf-gw-N7b">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="1yy-Xm-YIH" name="value" keyPath="selection.transitionDuration" id="dMB-w7-TYj"/>
+                    </connections>
+                </textField>
+                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="idP-7s-TdX">
+                    <rect key="frame" x="53" y="43" width="99" height="22"/>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="phq-GW-1aZ">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" id="uzv-bk-Z87">
+                            <items>
+                                <menuItem title="Item 1" id="3ym-b8-9XM"/>
+                                <menuItem title="Item 2" id="Iax-mM-7s1"/>
+                                <menuItem title="Item 3" id="yzj-11-Q6Z"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="ybF-9x-SLw" name="content" keyPath="arrangedObjects" id="R2P-we-R7S"/>
+                        <binding destination="1yy-Xm-YIH" name="selectedObject" keyPath="selection.transitionDirection" previousBinding="R2P-we-R7S" id="ALB-0Q-Cnz"/>
+                        <binding destination="1yy-Xm-YIH" name="hidden" keyPath="selection.transitionFilter" id="b0x-lK-kHh">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </popUpButton>
+                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Io1-hh-MGw">
+                    <rect key="frame" x="53" y="72" width="99" height="22"/>
+                    <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="9hD-Az-UEa" id="mm3-kg-Fn7">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" id="CQr-FZ-fpA">
+                            <items>
+                                <menuItem title="Item 1" state="on" id="9hD-Az-UEa"/>
+                                <menuItem title="Item 2" id="gnz-TB-UPb"/>
+                                <menuItem title="Item 3" id="ZK1-7U-jIA"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="2aK-01-t47" name="content" keyPath="arrangedObjects" id="BFA-8X-syB">
+                            <dictionary key="options">
+                                <bool key="NSInsertsNullPlaceholder" value="YES"/>
+                            </dictionary>
+                        </binding>
+                        <binding destination="2aK-01-t47" name="contentObjects" keyPath="arrangedObjects.key" previousBinding="BFA-8X-syB" id="NrE-Xi-LFj">
+                            <dictionary key="options">
+                                <bool key="NSInsertsNullPlaceholder" value="YES"/>
+                            </dictionary>
+                        </binding>
+                        <binding destination="2aK-01-t47" name="contentValues" keyPath="arrangedObjects.value" previousBinding="NrE-Xi-LFj" id="mPL-ZP-Q3J">
+                            <dictionary key="options">
+                                <bool key="NSInsertsNullPlaceholder" value="YES"/>
+                            </dictionary>
+                        </binding>
+                        <binding destination="1yy-Xm-YIH" name="selectedObject" keyPath="selection.transitionName" previousBinding="mPL-ZP-Q3J" id="UXA-uI-8AZ"/>
+                    </connections>
+                </popUpButton>
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="tvb-mz-p6n">
+                    <rect key="frame" x="-3" y="-3" width="73" height="18"/>
+                    <buttonCell key="cell" type="check" title="Layout" bezelStyle="regularSquare" imagePosition="right" controlSize="small" state="on" inset="2" id="zRA-Jd-GLf">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="1yy-Xm-YIH" name="value" keyPath="selection.transitionFullScene" id="kzR-CE-AxD"/>
+                    </connections>
+                </button>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1YE-yo-ZSO">
+                    <rect key="frame" x="-2" y="20" width="49" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Duration" id="jeU-2K-2kn">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jKd-Cf-tdP">
+                    <rect key="frame" x="-5" y="40" width="78" height="28"/>
+                    <buttonCell key="cell" type="push" title="Configure" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ICj-MD-uvX">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="openTransitionFilterPanel:" target="-2" id="d5x-Td-dMy"/>
+                        <binding destination="1yy-Xm-YIH" name="hidden" keyPath="selection.transitionFilter" id="et5-0a-0XJ">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNil</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </button>
+            </subviews>
+            <constraints>
+                <constraint firstItem="idP-7s-TdX" firstAttribute="leading" secondItem="BYP-qc-D09" secondAttribute="leading" id="98Z-82-qmB"/>
+                <constraint firstItem="1YE-yo-ZSO" firstAttribute="leading" secondItem="tvb-mz-p6n" secondAttribute="leading" id="A8R-z1-kWA"/>
+                <constraint firstAttribute="trailing" secondItem="BYP-qc-D09" secondAttribute="trailing" constant="58" id="Bf7-Zc-KCw"/>
+                <constraint firstAttribute="trailing" secondItem="Io1-hh-MGw" secondAttribute="trailing" id="CbZ-qV-CJU"/>
+                <constraint firstItem="Qac-OI-dWR" firstAttribute="leading" secondItem="FOm-Ey-pzO" secondAttribute="leading" id="Dlh-gZ-WEI"/>
+                <constraint firstItem="FOm-Ey-pzO" firstAttribute="leading" secondItem="jKd-Cf-tdP" secondAttribute="leading" id="FWH-ba-szG"/>
+                <constraint firstItem="jKd-Cf-tdP" firstAttribute="baseline" secondItem="idP-7s-TdX" secondAttribute="baseline" id="IWV-6T-W3L"/>
+                <constraint firstItem="tvb-mz-p6n" firstAttribute="top" secondItem="1YE-yo-ZSO" secondAttribute="bottom" constant="8" symbolic="YES" id="JRM-OZ-JcF"/>
+                <constraint firstItem="Io1-hh-MGw" firstAttribute="leading" secondItem="idP-7s-TdX" secondAttribute="leading" id="Lr9-Kl-yyD"/>
+                <constraint firstAttribute="bottom" secondItem="1YE-yo-ZSO" secondAttribute="bottom" constant="20" symbolic="YES" id="Lyu-ez-j7O"/>
+                <constraint firstItem="BYP-qc-D09" firstAttribute="top" secondItem="jKd-Cf-tdP" secondAttribute="bottom" constant="9" id="RBg-6B-q5g"/>
+                <constraint firstItem="Qac-OI-dWR" firstAttribute="baseline" secondItem="Io1-hh-MGw" secondAttribute="baseline" id="Re9-Yw-X5R"/>
+                <constraint firstItem="1YE-yo-ZSO" firstAttribute="centerY" secondItem="BYP-qc-D09" secondAttribute="centerY" id="Tod-QC-8S8"/>
+                <constraint firstItem="FOm-Ey-pzO" firstAttribute="leading" secondItem="1YE-yo-ZSO" secondAttribute="leading" id="Vw3-hX-fsL"/>
+                <constraint firstItem="idP-7s-TdX" firstAttribute="leading" secondItem="FOm-Ey-pzO" secondAttribute="trailing" constant="8" symbolic="YES" id="YzL-gF-pRq"/>
+                <constraint firstItem="Io1-hh-MGw" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="bmx-kQ-xLn"/>
+                <constraint firstItem="Qac-OI-dWR" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="e84-lt-BeH"/>
+                <constraint firstItem="FOm-Ey-pzO" firstAttribute="baseline" secondItem="jKd-Cf-tdP" secondAttribute="baseline" id="igH-sD-h1k"/>
+                <constraint firstItem="Io1-hh-MGw" firstAttribute="trailing" secondItem="idP-7s-TdX" secondAttribute="trailing" id="nM1-vg-1Ix"/>
+                <constraint firstItem="jKd-Cf-tdP" firstAttribute="trailing" secondItem="tvb-mz-p6n" secondAttribute="trailing" id="nQx-69-YMY"/>
+            </constraints>
+            <point key="canvasLocation" x="-34.5" y="78.5"/>
+        </customView>
+        <objectController id="1yy-Xm-YIH" userLabel="sequenceItemTransitionController">
+            <connections>
+                <binding destination="-2" name="contentObject" keyPath="self.sequenceItem" id="kjv-dT-1o8"/>
+            </connections>
+        </objectController>
+        <dictionaryController objectClassName="_NSDictionaryControllerKeyValuePair" id="2aK-01-t47" userLabel="transitionNamesController">
+            <connections>
+                <binding destination="-2" name="contentDictionary" keyPath="self.captureController.transitionNames" id="avs-NS-MdE"/>
+            </connections>
+        </dictionaryController>
+        <arrayController id="ybF-9x-SLw" userLabel="transitionDirectionsController">
+            <connections>
+                <binding destination="-2" name="contentArray" keyPath="self.captureController.transitionDirections" id="dqa-LD-dFC"/>
+            </connections>
+        </arrayController>
+    </objects>
+</document>

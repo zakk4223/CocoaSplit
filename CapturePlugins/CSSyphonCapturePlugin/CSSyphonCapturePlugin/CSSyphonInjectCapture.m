@@ -223,7 +223,6 @@
 {
     
     
-    NSLog(@"INJECTING %@", toInject);
     self.injectSB = [SBApplication applicationWithProcessIdentifier:toInject.processIdentifier];
     
     [self.injectSB setTimeout:10*60];

@@ -8,22 +8,20 @@
 
 #import <Foundation/Foundation.h>
 #import "CSCaptureBase.h"
+#import "ImageCaptureLayer.h"
 
-
-@interface ImageCapture : CSCaptureBase <CSCaptureSourceProtocol>
+@interface ImageCapture : CSCaptureBase <CSCaptureSourceProtocol, CALayerDelegate>
 {
     
     NSArray *_sourceList;
-    NSMutableArray *_delayList;
-    CGImageSourceRef _imageSource;
     size_t _totalFrames;
-    int _frameNumber;
-    dispatch_queue_t _animationQueue;
-
-    NSMutableArray *_imageCache;
     CAKeyframeAnimation *_animation;
     CGImageRef _singleImage;
-    
+    NSData *_imageData;
+    bool _wasLoadedFromData;
+    float _imageDuration;
+    NSSize _imageSize;
+    CGImageSourceRef _imageSource;
 }
 
 

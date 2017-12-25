@@ -102,8 +102,10 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
         
 
         
-        self.compressorType = @"AppleVTCompressor";
+        self.compressorType = @"Apple h264";
 
+        _compression_session = NULL;
+        
         self.profiles = @[[NSNull null], @"Baseline", @"Main", @"High"];
         _compressor_queue = dispatch_queue_create("Apple VT Compressor Queue", 0);
     }
@@ -117,13 +119,23 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
 
     _resetPending = YES;
     self.errored = NO;
-    VTCompressionSessionCompleteFrames(_compression_session, CMTimeMake(0, 0));
-    VTCompressionSessionInvalidate(_compression_session);
+    
+
     if (_compression_session)
     {
+        VTCompressionSessionCompleteFrames(_compression_session, CMTimeMake(0, 0));
+        VTCompressionSessionInvalidate(_compression_session);
         CFRelease(_compression_session);
     }
     
+    
+    if (_vtpt_ref)
+    {
+        VTPixelTransferSessionInvalidate(_vtpt_ref);
+        CFRelease(_vtpt_ref);
+    }
+    
+    _vtpt_ref = NULL;
     _compression_session = NULL;
     _resetPending = NO;
 }
@@ -228,6 +240,19 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 
 +(bool)intelQSVAvailable
 {
+    
+
+    /*
+    CFArrayRef encoders = NULL;
+    
+    VTCopyVideoEncoderList(NULL, &encoders);
+    
+
+    
+    NSLog(@"ENCODERS %@", encoders);
+    */
+    
+    
     NSMutableDictionary *encoderSpec = [[NSMutableDictionary alloc] init];
     encoderSpec[(__bridge NSString *)kVTVideoEncoderSpecification_RequireHardwareAcceleratedVideoEncoder] = @YES;
     
@@ -290,7 +315,6 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     
     if (status != noErr || !_compression_session)
     {
-        NSLog(@"COMPRESSOR SETUP ERROR");
         self.errored = YES;
         return NO;
     }
@@ -473,7 +497,8 @@ void VideoCompressorReceiveFrame(void *VTref, void *VTFrameRef, OSStatus status,
             
             attach = CFArrayGetValueAtIndex(sample_attachments, 0);
             depends_on_others = CFDictionaryGetValue(attach, kCMSampleAttachmentKey_DependsOnOthers);
-            frameData.isKeyFrame = depends_on_others;
+            frameData.isKeyFrame = CFBooleanGetValue(depends_on_others);
+            
         }
         
     

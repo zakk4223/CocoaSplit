@@ -97,8 +97,8 @@
 
 -(void)setActiveVideoDevice:(CSAbstractCaptureDevice *)activeVideoDevice
 {
-    [super setActiveVideoDevice:activeVideoDevice];
-    self.captureName = activeVideoDevice.captureName;
+   [super setActiveVideoDevice:activeVideoDevice];
+   self.captureName = activeVideoDevice.captureName;
 }
 
 
@@ -125,11 +125,15 @@
             _lastSize = NSMakeSize(CGImageGetWidth(windowImg), CGImageGetHeight(windowImg));
             
             [self updateLayersWithFramedataBlock:^(CALayer *layer) {
-                
-               layer.contents = (__bridge id)(windowImg);
+                layer.contents = (__bridge id)(windowImg);
+            } withPreuseBlock:^{
+                CGImageRetain(windowImg);
+            } withPostuseBlock:^{
+                CGImageRelease(windowImg);
             }];
             CGImageRelease(windowImg);
         });
+        
         
         _nextCaptureTime = currentTime + (1/self.captureFPS);
     }

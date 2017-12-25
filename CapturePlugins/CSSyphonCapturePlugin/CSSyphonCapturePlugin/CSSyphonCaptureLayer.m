@@ -107,7 +107,6 @@
 
     self.textureSize = _lastImageSize;
     
-    bool imageSizeChanged = !CGSizeEqualToSize(_lastImageSize, image.textureSize);
     
     
     GLfloat tex_coords[] =
@@ -127,6 +126,15 @@
         1.0f, 1.0f,
         -1.0f,    1.0f
     };
+    
+    if (self.flipImage)
+    {
+        verts[1] = 1.0f;
+        verts[3] = 1.0f;
+        verts[5] = -1.0f;
+        verts[7] = -1.0f;
+    }
+    
     
     glEnable(GL_TEXTURE_RECTANGLE_EXT);
     glBindTexture(GL_TEXTURE_RECTANGLE_EXT, image.textureName);

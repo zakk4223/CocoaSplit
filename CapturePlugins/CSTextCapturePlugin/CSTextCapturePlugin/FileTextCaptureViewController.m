@@ -14,6 +14,7 @@
 @end
 
 @implementation FileTextCaptureViewController
+@synthesize startLine = _startLine;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -21,6 +22,18 @@
 }
 
 
+
+-(void)setStartLine:(int)startLine
+{
+    ((FileTextCapture *)self.captureObj).startLine = startLine - 1;
+    _startLine = startLine;
+}
+
+
+-(int)startLine
+{
+    return _startLine;
+}
 
 - (IBAction)chooseFile:(id)sender;
 {
@@ -38,7 +51,8 @@
         {
             if (fileUrl)
             {
-                [(FileTextCapture *)self.captureObj openFile:fileUrl.path];
+                ((FileTextCapture *)self.captureObj).currentFile = fileUrl.path;
+                //[(FileTextCapture *)self.captureObj openFile:fileUrl.path];
                 
             }
         }

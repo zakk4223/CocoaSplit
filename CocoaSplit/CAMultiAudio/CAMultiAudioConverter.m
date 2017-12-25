@@ -34,28 +34,39 @@
 
 
 
--(void)setInputStreamFormat:(AudioStreamBasicDescription *)format
+-(bool)setInputStreamFormat:(AudioStreamBasicDescription *)format
 {
+    
+    /*
+    bool ret = NO;
     if (&_inputFormat)
     {
-        [super setInputStreamFormat:&_inputFormat];
+        ret = [super setInputStreamFormat:&_inputFormat];
     } else {
-        [super setInputStreamFormat:format];
+        ret = [super setInputStreamFormat:format];
     }
+    
+    return ret;
+     */
+    return YES;
 }
 
 
--(void)setOutputStreamFormat:(AudioStreamBasicDescription *)format
+
+-(bool)setOutputStreamFormat:(AudioStreamBasicDescription *)format
 {
     //ignore if we have our own
     
+    bool ret = NO;
     if (self.outputFormat)
     {
         
-        [super setOutputStreamFormat:self.outputFormat];
+        ret = [super setOutputStreamFormat:self.outputFormat];
     } else {
-        [super setOutputStreamFormat:format];
+        ret = [super setOutputStreamFormat:format];
     }
+    
+    return ret;
 }
 
 
@@ -85,7 +96,7 @@
         self.sourceNode.volume = volume;
     }
     
-    [self setVolumeOnConnectedNode];
+    //[self setVolumeOnConnectedNode];
     
 }
 
@@ -108,20 +119,6 @@
 }
 
 
--(bool)createNode:(AUGraph)forGraph
-{
-    bool retval = [super createNode:forGraph];
-    
-    OSStatus err;
-    err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 0, &_inputFormat, sizeof(_inputFormat));
-    
-    if (err)
-    {
-        NSLog(@"AudioConverter failed to set input Stream Format, continuing anyways. err: %d", err);
-    }
-    
-    return retval;
-}
 
 -(void)setEnabled:(bool)enabled
 {

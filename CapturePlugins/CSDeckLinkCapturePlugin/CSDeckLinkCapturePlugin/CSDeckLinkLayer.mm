@@ -38,10 +38,18 @@
 }
 
 
+-(void)releaseCGLContext:(CGLContextObj)ctx
+{
+    if (_deckLinkOGL)
+    {
+        _deckLinkOGL->Release();
+        _deckLinkOGL = NULL;
+    }
+    CGLReleaseContext(ctx);
+}
+
 -(BOOL)canDrawInCGLContext:(CGLContextObj)ctx pixelFormat:(CGLPixelFormatObj)pf forLayerTime:(CFTimeInterval)t displayTime:(const CVTimeStamp *)ts
 {
-    
-    
     return YES;
 }
 
@@ -49,6 +57,8 @@
 
 -(void)setRenderFrame:(IDeckLinkVideoFrame *)frame
 {
+    
+    
     if (_deckLinkOGL)
     {
         _deckLinkOGL->SetFrame(frame);

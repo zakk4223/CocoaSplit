@@ -47,6 +47,8 @@
 
     copy.resolutionOption = self.resolutionOption;
     
+    copy.advancedSettings = self.advancedSettings;
+    
     return copy;
 }
 
@@ -67,7 +69,7 @@
     [aCoder encodeInteger:self.height forKey:@"videoHeight"];
     
     [aCoder encodeObject:self.resolutionOption forKey:@"resolutionOption"];
-    
+    [aCoder encodeObject:self.advancedSettings forKey:@"advancedSettings"];
 }
 
 -(id) initWithCoder:(NSCoder *)aDecoder
@@ -111,7 +113,7 @@
             self.resolutionOption = nil;
         }
 
-        
+        self.advancedSettings = [aDecoder decodeObjectForKey:@"advancedSettings"];
     }
     
     return self;
@@ -125,6 +127,11 @@
     {
         
 
+        _queueSemaphore = dispatch_semaphore_create(0);
+        _compressQueue = [NSMutableArray array];
+        _reset_flag = NO;
+        
+        
         self.compressorType = @"x264";
         
         //this all seems like I should be doing it one time, in some sort of thing you might call a class variable...
@@ -157,14 +164,43 @@
 }
 
 
+
 -(void) reset
 {
-    
-    _compressor_queue = nil;
+    @synchronized (self) {
+        _reset_flag = YES;
+        dispatch_semaphore_signal(_queueSemaphore);
+    }
+}
+
+
+-(void) internal_reset
+{
+    //_compressor_queue = nil;
     
     self.errored = NO;
-    _av_codec = NULL;
     _last_pts = 0;
+    
+
+    [self clearFrameQueue];
+    
+    if (_av_codec_ctx)
+    {
+        avcodec_free_context(&_av_codec_ctx);
+        
+    }
+    
+    if (_vtpt_ref)
+    {
+        VTPixelTransferSessionInvalidate(_vtpt_ref);
+        CFRelease(_vtpt_ref);
+        _vtpt_ref = NULL;
+    }
+    
+    
+    _av_codec = NULL;
+    _reset_flag = NO;
+
     
 }
 
@@ -178,7 +214,79 @@
 }
 
 
-- (bool)compressFrame:(CapturedFrameData *)frameData
+-(bool)queueFramedata:(CapturedFrameData *)frameData
+{
+    if (!_consumerThread)
+    {
+        [self startConsumerThread];
+    }
+    
+    @synchronized (self) {
+        [_compressQueue addObject:frameData];
+        dispatch_semaphore_signal(_queueSemaphore);
+    }
+    
+    return YES;
+}
+
+
+-(void)clearFrameQueue
+{
+    @synchronized (self) {
+        [_compressQueue removeAllObjects];
+    }
+}
+
+
+-(CapturedFrameData *)consumeframeData
+{
+    CapturedFrameData *retData = nil;
+    @synchronized (self) {
+        
+        
+        if (_compressQueue.count > 0)
+        {
+            retData = [_compressQueue objectAtIndex:0];
+            [_compressQueue removeObjectAtIndex:0];
+        }
+    }
+    return retData;
+}
+
+
+-(void)startConsumerThread
+{
+    if (!_consumerThread)
+    {
+        _consumerThread = dispatch_queue_create("x264 consumer", DISPATCH_QUEUE_SERIAL);
+        dispatch_async(_consumerThread, ^{
+            
+            while (1)
+            {
+                @autoreleasepool {
+                    @synchronized (self) {
+                        
+                        if (self->_reset_flag)
+                        {
+                            [self internal_reset];
+                        }
+                    }
+                    CapturedFrameData *useData = [self consumeframeData];
+                    if (!useData)
+                    {
+                        dispatch_semaphore_wait(self->_queueSemaphore, DISPATCH_TIME_FOREVER);
+                    } else {
+                        [self real_compressFrame:useData];
+                    }
+                }
+            }
+        });
+    }
+}
+
+
+
+-(bool)compressFrame:(CapturedFrameData *)frameData
 {
     if (![self hasOutputs])
     {
@@ -189,7 +297,7 @@
     if (!_av_codec && !self.errored)
     {
         BOOL setupOK;
-
+        
         setupOK = [self setupCompressor:frameData.videoFrame];
         
         if (!setupOK)
@@ -202,36 +310,51 @@
     }
     
     
-
+    
     [self reconfigureCompressor];
     
     if (frameData.videoFrame)
     {
         CVPixelBufferRetain(frameData.videoFrame);
     }
-    
 
-    dispatch_async(_compressor_queue, ^{
+    [self queueFramedata:frameData];
+    return YES;
+}
+
+
+- (bool)real_compressFrame:(CapturedFrameData *)frameData
+{
+    
+    
+    
+    //dispatch_async(_compressor_queue, ^{
+    
+    
+    @autoreleasepool {
         
-        @autoreleasepool {
-            
-            
-        if (_next_keyframe_time == 0.0f)
+        
+        if (!_av_codec_ctx || !_av_codec)
         {
-            _next_keyframe_time = frameData.frameTime;
+            return NO;
+        }
+        if (self->_next_keyframe_time == 0.0f)
+        {
+            self->_next_keyframe_time = frameData.frameTime;
         }
         
         BOOL isKeyFrame = NO;
         
         
-        if (frameData.frameTime >= _next_keyframe_time)
+        if (frameData.frameTime >= self->_next_keyframe_time)
         {
             isKeyFrame = YES;
-            _next_keyframe_time += self.keyframe_interval;
+            self->_next_keyframe_time += self.keyframe_interval;
         }
         
         
         CMTime pts = frameData.videoPTS;
+        
         
         size_t src_height;
         size_t src_width;
@@ -241,41 +364,42 @@
         
         src_height = CVPixelBufferGetHeight(imageBuffer);
         src_width = CVPixelBufferGetWidth(imageBuffer);
-    
-    
-    if (!_vtpt_ref)
-    {
-        VTPixelTransferSessionCreate(kCFAllocatorDefault, &_vtpt_ref);
-        VTSessionSetProperty(_vtpt_ref, kVTPixelTransferPropertyKey_ScalingMode, kVTScalingMode_Letterbox);
-    }
         
-        int64_t usePts = av_rescale_q(pts.value, (AVRational){1,1000}, _av_codec_ctx->time_base);
-            
-    if (_last_pts > 0 && usePts <= _last_pts)
-    {
-        //We got the frame too fast, or something else weird happened. Just send the audio along
-        frameData.avcodec_pkt = NULL;
-        frameData.encodedSampleBuffer = NULL;
         
-        for (id dKey in self.outputs)
+        if (!self->_vtpt_ref)
         {
-            OutputDestination *dest = self.outputs[dKey];
-            
-            [dest writeEncodedData:frameData];
-            
+            VTPixelTransferSessionCreate(kCFAllocatorDefault, &self->_vtpt_ref);
+            VTSessionSetProperty(self->_vtpt_ref, kVTPixelTransferPropertyKey_ScalingMode, kVTScalingMode_Letterbox);
         }
-        NSLog(@"DID NOT ENCODE");
-        return;
-    }
         
-        _last_pts = usePts;
-    CVPixelBufferRef converted_frame;
-    
-    CVPixelBufferCreate(kCFAllocatorDefault, _av_codec_ctx->width, _av_codec_ctx->height, kCVPixelFormatType_420YpCbCr8Planar, 0, &converted_frame);
-    
-    VTPixelTransferSessionTransferImage(_vtpt_ref, imageBuffer, converted_frame);
+        int64_t usePts = av_rescale_q(pts.value, (AVRational){1,1000}, self->_av_codec_ctx->time_base);
         
-    
+        if (self->_last_pts > 0 && usePts <= self->_last_pts)
+        {
+            
+            //We got the frame too fast, or something else weird happened. Just send the audio along
+            frameData.avcodec_pkt = NULL;
+            frameData.encodedSampleBuffer = NULL;
+            frameData.avcodec_ctx = _av_codec_ctx;
+            
+            for (id dKey in self.outputs)
+            {
+                OutputDestination *dest = self.outputs[dKey];
+                
+                [dest writeEncodedData:frameData];
+                
+            }
+            return NO;
+        }
+        
+        self->_last_pts = usePts;
+        CVPixelBufferRef converted_frame;
+        
+        CVPixelBufferCreate(kCFAllocatorDefault, self->_av_codec_ctx->width, self->_av_codec_ctx->height, kCVPixelFormatType_420YpCbCr8Planar, 0, &converted_frame);
+        
+        VTPixelTransferSessionTransferImage(self->_vtpt_ref, imageBuffer, converted_frame);
+        
+        
         CVPixelBufferRelease(imageBuffer);
         imageBuffer = nil;
         
@@ -284,23 +408,23 @@
         
         
         
-    AVFrame *outframe = av_frame_alloc();
-    outframe->format = PIX_FMT_YUV420P;
-    outframe->width = (int)src_width;
-    outframe->height = (int)src_height;
-    CVPixelBufferLockBaseAddress(converted_frame, kCVPixelBufferLock_ReadOnly);
-    size_t plane_count = CVPixelBufferGetPlaneCount(converted_frame);
-    int i;
-    for (i=0; i < plane_count; i++)
-    {
-        outframe->linesize[i] = (int)CVPixelBufferGetBytesPerRowOfPlane(converted_frame, i);
-        outframe->data[i] = CVPixelBufferGetBaseAddressOfPlane(converted_frame, i);
+        AVFrame *outframe = av_frame_alloc();
+        outframe->format = AV_PIX_FMT_YUV420P;
+        outframe->width = (int)src_width;
+        outframe->height = (int)src_height;
+        CVPixelBufferLockBaseAddress(converted_frame, kCVPixelBufferLock_ReadOnly);
+        size_t plane_count = CVPixelBufferGetPlaneCount(converted_frame);
+        int i;
+        for (i=0; i < plane_count; i++)
+        {
+            outframe->linesize[i] = (int)CVPixelBufferGetBytesPerRowOfPlane(converted_frame, i);
+            outframe->data[i] = CVPixelBufferGetBaseAddressOfPlane(converted_frame, i);
+            
+        }
         
-    }
-    
-    
-    
-    
+        
+        
+        
         outframe->pts = usePts;
         
         
@@ -308,64 +432,78 @@
         
         
         
-    AVPacket *pkt = av_malloc(sizeof (AVPacket));
-    av_init_packet(pkt);
-                                                                                                    
+        AVPacket *pkt = av_malloc(sizeof (AVPacket));
+        av_init_packet(pkt);
         
         
-    int ret;
-    int got_output;
-    
-    pkt->data = NULL;
-    pkt->size = 0;
-    
-
-    if (isKeyFrame)
-    {
-        outframe->pict_type = AV_PICTURE_TYPE_I;
-    }
         
-    ret = avcodec_encode_video2(_av_codec_ctx, pkt, outframe, &got_output);
-
-    CVPixelBufferUnlockBaseAddress(converted_frame, kCVPixelBufferLock_ReadOnly);
-    
-
-
-    
-
-    
-    
-    if (ret < 0)
-    {
-        NSLog(@"ERROR IN AVCODEC ENCODE");
-    }
-    
-    if (got_output)
-    {
         
-        frameData.avcodec_ctx = _av_codec_ctx;
-        frameData.avcodec_pkt = pkt;
-        frameData.isKeyFrame = pkt->flags & AV_PKT_FLAG_KEY;
+        pkt->data = NULL;
+        pkt->size = 0;
         
-        for (id dKey in self.outputs)
+        
+        if (isKeyFrame)
         {
-            OutputDestination *dest = self.outputs[dKey];
+            outframe->pict_type = AV_PICTURE_TYPE_I;
+        }
+        
+        
+        
+        
+        int send_ret = avcodec_send_frame(self->_av_codec_ctx, outframe);
+        int receive_ret = -1;
+        
+        CVPixelBufferUnlockBaseAddress(converted_frame, kCVPixelBufferLock_ReadOnly);
 
-            [dest writeEncodedData:frameData];
+        if (send_ret >= 0)
+        {
+            receive_ret = avcodec_receive_packet(self->_av_codec_ctx, pkt);
+        }
+        
+        //ret = avcodec_encode_video2(self->_av_codec_ctx, pkt, outframe, &got_output);
+        
+        
+        
+        
+        
+        
+        
+        
+        if (send_ret < 0)
+        {
+            NSLog(@"ERROR IN AVCODEC ENCODE");
+        }
+        
+        if (receive_ret == 0)
+        {
+            
+            frameData.avcodec_ctx = self->_av_codec_ctx;
+            frameData.avcodec_pkt = pkt;
+            frameData.isKeyFrame = pkt->flags & AV_PKT_FLAG_KEY;
+            
+            for (id dKey in self.outputs)
+            {
+                OutputDestination *dest = self.outputs[dKey];
+                
+                [dest writeEncodedData:frameData];
+                
+            }
+            //[self.outputDelegate outputEncodedData:frameData];
+            
+            
+            //[self.outputDelegate outputAVPacket:pkt codec_ctx:_av_codec_ctx];
+        } else {
+            av_packet_unref(pkt);
+            av_free(pkt);
             
         }
-        //[self.outputDelegate outputEncodedData:frameData];
-        
-        
-        //[self.outputDelegate outputAVPacket:pkt codec_ctx:_av_codec_ctx];
-    }
         av_free(outframe);
-    CVPixelBufferRelease(converted_frame);
+        CVPixelBufferRelease(converted_frame);
         //av_free_packet(pkt);
-         //av_free(pkt);
+        //av_free(pkt);
         
-        }
-    });
+    }
+    //});
     
     return YES;
     
@@ -376,7 +514,7 @@
 
 -(void)reconfigureCompressor
 {
-
+    
     if (!_av_codec_ctx)
     {
         return;
@@ -399,24 +537,24 @@
         
         _av_codec_ctx->bit_rate = self.vbv_maxrate*1000;
     }
-
+    
 }
 
 -(bool)setupCompressor:(CVPixelBufferRef)videoFrame
 {
- 
+    
     avcodec_register_all();
     
     
     
-
+    
     NSString *useAdvancedSettings = self.advancedSettings.copy;
     
     
     [self setupResolution:videoFrame];
     
     _compressor_queue = dispatch_queue_create("x264 encoder queue", NULL);
-
+    
     
     _av_codec = avcodec_find_encoder(AV_CODEC_ID_H264);
     
@@ -427,7 +565,7 @@
     }
     
     double captureFPS = [CSPluginServices sharedPluginServices].currentFPS;
-
+    
     _next_keyframe_time = 0.0f;
     
     _av_codec_ctx = avcodec_alloc_context3(_av_codec);
@@ -441,7 +579,7 @@
     
     
     
-    _av_codec_ctx->pix_fmt = PIX_FMT_YUV420P;
+    _av_codec_ctx->pix_fmt = AV_PIX_FMT_YUV420P;
     
     
     int real_keyframe_interval = 0;
@@ -457,26 +595,26 @@
     
     
     _av_codec_ctx->gop_size = real_keyframe_interval;
-
+    
     AVDictionary *opts = NULL;
-
+    
     
     _av_codec_ctx->rc_max_rate = self.vbv_maxrate*1000;
-
+    
     if (self.vbv_buffer > 0)
     {
         _av_codec_ctx->rc_buffer_size = self.vbv_buffer*1000;
     } else {
         _av_codec_ctx->rc_buffer_size = self.vbv_maxrate*1000;
     }
-
+    
     if (!self.use_cbr)
     {
         av_dict_set(&opts, "crf", [[NSString stringWithFormat:@"%d", self.crf] UTF8String], 0);
-
+        
     } else {
         
-
+        
         
         _av_codec_ctx->bit_rate = self.vbv_maxrate*1000;
         
@@ -506,7 +644,7 @@
         x264profile = self.profile;
     }
     
-
+    
     
     if (x264profile)
     {
@@ -514,12 +652,11 @@
     }
     
     id x264tune = self.tune;
-
+    
     if (x264tune)
     {
         av_dict_set(&opts, "tune", [x264tune UTF8String], 0);
     }
-    
     
     
     if (useAdvancedSettings)
@@ -530,18 +667,20 @@
     
     if (avcodec_open2(_av_codec_ctx, _av_codec, &opts) < 0)
     {
-        _av_codec_ctx = NULL;
+        avcodec_free_context(&_av_codec_ctx);
         _av_codec = NULL;
-        NSLog(@"CODEC SETUP FAILED!");
+        av_dict_free(&opts);
+        
         return NO;
     }
     
     
     
+    av_dict_free(&opts);
     _sws_ctx = NULL;
     
     _audioBuffer = [[NSMutableArray alloc] init];
-
+    
     
     return YES;
 }

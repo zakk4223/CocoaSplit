@@ -61,7 +61,6 @@
     {
         NSMutableDictionary *videoSettings = [[NSMutableDictionary alloc] init];
         
-        //I know CIImage can handle this input type. Maybe make this some sort of advanced config if some devices can't handle it?
         
         //[videoSettings setValue:@(kCVPixelFormatType_32BGRA) forKey:(__bridge NSString *)kCVPixelBufferPixelFormatTypeKey];
 
@@ -198,7 +197,6 @@
 {
     if (connection.output == _video_capture_output)
     {
-        NSLog(@"DROPPED FRAME!!!");
     }
     
 }

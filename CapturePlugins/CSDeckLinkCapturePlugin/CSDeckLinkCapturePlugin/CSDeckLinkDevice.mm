@@ -403,7 +403,6 @@
 -(void)stopCapture
 {
     
-    NSLog(@"STOPPING CAPTURE!");
     if (_deviceInput)
     {
         _deviceInput->StopStreams();

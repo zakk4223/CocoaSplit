@@ -68,7 +68,7 @@
     
     if (_avcodec_pkt)
     {
-        av_free_packet(_avcodec_pkt);
+        av_packet_unref(_avcodec_pkt);
         av_free(_avcodec_pkt);
 
     }

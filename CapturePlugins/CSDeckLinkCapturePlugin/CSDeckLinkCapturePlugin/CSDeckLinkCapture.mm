@@ -164,11 +164,11 @@
         asyncValue = YES;
     }
     
-    
+ /*
     [self updateLayersWithBlock:^(CALayer *layer) {
         ((CSDeckLinkLayer *)layer).asynchronous = asyncValue;
     }];
-    
+   */
     _renderType = renderType;
 }
 
@@ -245,19 +245,26 @@
     {
         
         _lastSize = NSMakeSize(frame->GetWidth(), frame->GetHeight());
-        
+
         [self updateLayersWithFramedataBlock:^(CALayer *layer) {
             [(CSDeckLinkLayer *)layer setRenderFrame:frame];
-            if (self.renderType == kCSRenderFrameArrived)
-            {
-                [((CSDeckLinkLayer *)layer) setNeedsDisplay];
-            }
-            
+            [((CSDeckLinkLayer *)layer) setNeedsDisplay];
+
+        } withPreuseBlock:^{
+            frame->AddRef();
+        } withPostuseBlock:^{
+            frame->Release();
         }];
+        
+        
+        
+        
+
         [self frameArrived];
     }
 }
 
+/*
 -(void)frameTick
 {
     
@@ -270,6 +277,8 @@
     }
     
 }
+*/
+
 
 -(void)dealloc
 {

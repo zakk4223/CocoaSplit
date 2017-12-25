@@ -3,7 +3,6 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 7/26/14.
-//  Copyright (c) 2014 Zakk. All rights reserved.
 //
 
 #import "InputPopupControllerViewController.h"
@@ -18,6 +17,7 @@
 
 @implementation InputPopupControllerViewController
 @synthesize inputSource = _inputSource;
+
 
 
 -(instancetype) init
@@ -35,6 +35,7 @@
                                     @"Height": @(kCAConstraintHeight),
                                     };
 
+        
         self.constraintSortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"value" ascending:YES]];
         self.availableTransitions = [NSMutableDictionary dictionary];
 
@@ -54,9 +55,11 @@
         
         self.compositionFilterNames = [CIFilter filterNamesInCategory:kCICategoryCompositeOperation];
         
-        
-        //self = [super initWithNibName:@"TestView" bundle:nil];
+        self.scriptTypes = @[@"After Add", @"Before Delete", @"FrameTick", @"Before Merge", @"After Merge", @"Before Remove", @"Before Replace", @"After Replace"];
+        self.scriptKeys = @[@"selection.script_afterAdd", @"selection.script_beforeDelete", @"selection.script_frameTick", @"selection.script_beforeMerge", @"selection.script_afterMerge", @"selection.script_beforeRemove", @"selection.script_beforeReplace", @"selection.script_afterReplace"];
 
+        
+        
     }
     
     return self;
@@ -96,6 +99,12 @@
         [self openTransitionFilterPanel:self.inputSource.advancedTransition];
     }
 }
+
+- (IBAction)scriptSaveAll:(id)sender
+{
+    [self.inputobjctrl commitEditing];
+}
+
 
 
 - (IBAction)configureFilter:(NSSegmentedControl *)sender
@@ -387,6 +396,7 @@
 }
 
 
+
 -(void)tableViewSelectionDidChange:(NSNotification *)notification
 {
     NSTableView *tableView = notification.object;
@@ -414,6 +424,11 @@
         } else {
             self.layerTableHasSelection = NO;
         }
+    } else if (tableView == self.scriptTableView) {
+        NSString *scriptKey = self.scriptKeys[tableView.selectedRow];
+        [self scriptSaveAll:nil];
+        [self.scriptTextView bind:@"value" toObject:self.inputobjctrl withKeyPath:scriptKey options:nil];
+
     }
 }
 
@@ -452,14 +467,24 @@
 }
 
 
+-(void)tabView:(NSTabView *)tabView willSelectTabViewItem:(NSTabViewItem *)tabViewItem
+{
+    [self scriptSaveAll:nil];
+}
+
+-(IBAction)scriptUndo:(NSButton *)sender
+{
+    [self.inputobjctrl discardEditing];
+}
+
 
 - (IBAction)resetConstraints:(id)sender
 {
     NSMutableDictionary *oldConstraints = self.inputSource.constraintMap;
     
-    [[self.inputSource.sourceLayout.undoManager prepareWithInvocationTarget:self.inputSource.sourceLayout] modifyUUID:self.inputSource.uuid withBlock:^(InputSource *input) {
+    [[self.inputSource.sourceLayout.undoManager prepareWithInvocationTarget:self.inputSource.sourceLayout] modifyUUID:self.inputSource.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
         
-        input.constraintMap = oldConstraints;
+        ((InputSource *)input).constraintMap = oldConstraints;
     }];
     
     

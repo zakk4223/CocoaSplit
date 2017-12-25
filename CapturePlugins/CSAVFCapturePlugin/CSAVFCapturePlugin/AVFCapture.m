@@ -305,23 +305,6 @@
 
 
 
--(void)setRenderType:(frame_render_behavior)renderType
-{
-    bool asyncValue = NO;
-    if (renderType == kCSRenderAsync)
-    {
-        asyncValue = YES;
-    }
-    
-    
-    [self updateLayersWithBlock:^(CALayer *layer) {
-        ((CSIOSurfaceLayer *)layer).asynchronous = asyncValue;
-    }];
-    
-    _renderType = renderType;
-}
-
-
 -(frame_render_behavior)renderType
 {
     return _renderType;
@@ -331,35 +314,20 @@
 -(CALayer *)createNewLayer
 {
     
-    /*
-    CSIOSurfaceLayer *newLayer = [CSIOSurfaceLayer layer];
-    
-    if (self.renderType == kCSRenderAsync)
-    {
-        newLayer.asynchronous = YES;
-    } else {
-        newLayer.asynchronous = NO;
-    }
-     */
-    
     return [CALayer layer];
-    
-
-    //return newLayer;
-}
+ }
 
 
 -(void)frameTick
 {
     
-    /*
     if (self.renderType == kCSRenderOnFrameTick)
     {
         
         [self updateLayersWithBlock:^(CALayer *layer) {
-            [((CSIOSurfaceLayer *)layer) setNeedsDisplay];
+            [layer setNeedsDisplay];
         }];
-    }*/
+    }
     
     
 
@@ -375,29 +343,24 @@
 -(void)captureVideoOutput:(CMSampleBufferRef)sampleBuffer
 {
         CVImageBufferRef videoFrame = CMSampleBufferGetImageBuffer(sampleBuffer);
-        
+    
+    
 
         if (videoFrame)
         {
             
             _lastSize = CVImageBufferGetDisplaySize(videoFrame);
             
+            //CFRetain(sampleBuffer);
+            
             [self updateLayersWithFramedataBlock:^(CALayer *layer) {
-                
-                /*
-                ((CSIOSurfaceLayer *)layer).imageBuffer = videoFrame;
-                if (self.renderType == kCSRenderFrameArrived)
-                {
-                    
-                    [((CSIOSurfaceLayer *)layer) setNeedsDisplay];
-                }*/
-                
-                IOSurfaceRef vFIO = CVPixelBufferGetIOSurface(videoFrame);
-                
-                layer.contents = (__bridge id _Nullable)(vFIO);
-                
-
+                layer.contents = (__bridge id _Nullable)(CVPixelBufferGetIOSurface(videoFrame));
+            } withPreuseBlock:^{
+                CFRetain(sampleBuffer);
+            } withPostuseBlock:^{
+                CFRelease(sampleBuffer);
             }];
+            
             [self frameArrived];
         }
 }

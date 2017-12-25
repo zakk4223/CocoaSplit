@@ -18,10 +18,12 @@
 
 @property (weak) IBOutlet NSTableView *outputTableView;
 @property (strong) NSIndexSet *selectedCaptureDestinations;
+@property (strong) NSArray *sourceLayouts;
 
 
 - (IBAction)outputEditClicked:(id)sender;
 - (IBAction)outputSegmentedAction:(NSButton *)sender;
 
+@property (strong) IBOutlet NSArrayController *sourceLayoutsArrayController;
 
 @end

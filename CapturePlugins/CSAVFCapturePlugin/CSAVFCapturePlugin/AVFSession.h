@@ -18,7 +18,7 @@
     AVCaptureVideoDataOutput *_video_capture_output;
     NSHashTable *_outputs;
     AVCaptureDevice *_capture_device;
-    AVCaptureScreenInput *_video_capture_input;
+    AVCaptureDeviceInput *_video_capture_input;
     dispatch_queue_t _audio_capture_queue;
     
     AVCaptureAudioDataOutput *_audio_capture_output;

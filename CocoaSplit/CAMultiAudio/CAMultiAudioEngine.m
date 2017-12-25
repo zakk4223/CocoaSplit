@@ -8,6 +8,9 @@
 
 #import "CAMultiAudioEngine.h"
 #import "CAMultiAudioDownmixer.h"
+#import "CAMultiAudioDelay.h"
+#import "CAMultiAudioEqualizer.h"
+#import "CSNotifications.h"
 
 OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList *ioData );
 
@@ -16,6 +19,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 @synthesize sampleRate = _sampleRate;
 @synthesize outputNode = _outputNode;
+@synthesize encoder = _encoder;
 
 
 -(void)commonInit
@@ -24,6 +28,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
     self.audioInputs = [NSMutableArray array];
     self.pcmInputs = [NSMutableArray array];
+    self.fileInputs = [NSMutableArray array];
     self.validSamplerates = @[@44100, @48000];
     self.sampleRate = 44100;
     self.audioOutputs = [[CAMultiAudioDevice allDevices] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"hasOutput == YES"]];
@@ -107,9 +112,45 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
             self.previewMixer.muted = [aDecoder decodeBoolForKey:@"previewMuted"];
         }
         
+        if ([aDecoder containsValueForKey:@"fileInputs"])
+        {
+            NSArray *fnames = [aDecoder decodeObjectForKey:@"fileInputs"];
+            for(NSString *inputPath in fnames)
+            {
+                [self createFileInput:inputPath];
+            }
+        }
+        if ([aDecoder containsValueForKey:@"equalizerData"])
+        {
+            NSDictionary *eqdata = [aDecoder decodeObjectForKey:@"equalizerData"];
+            [self.equalizer restoreData:eqdata];
+        }
     }
     
     return self;
+}
+
+
+
+-(NSDictionary *)createInputSettings
+{
+    NSMutableDictionary *saveInputSettings = [NSMutableDictionary dictionary];
+    
+    for (CAMultiAudioInput *node in self.audioInputs)
+    {
+        NSString *deviceUID = node.nodeUID;
+        NSMutableDictionary *inputopts = [NSMutableDictionary dictionary];
+        if (!node.noSettings)
+        {
+            [node saveDataToDict:inputopts];
+            if (inputopts.count > 0)
+            {
+                [saveInputSettings setValue:inputopts forKey:deviceUID];
+            }
+        }
+    }
+    
+    return saveInputSettings;
 }
 
 
@@ -122,18 +163,64 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     [aCoder encodeFloat:self.previewMixer.volume forKey:@"previewVolume"];
     [aCoder encodeBool:self.previewMixer.muted forKey:@"previewMuted"];
     
-    for (CAMultiAudioNode *node in self.audioInputs)
+    NSDictionary *saveInputSettings = [self generateInputSettings];
+
+    NSDictionary *eqdata = [self.equalizer saveData];
+    [aCoder encodeObject:eqdata forKey:@"equalizerData"];
+    
+    [aCoder encodeObject:saveInputSettings forKey:@"inputSettings"];
+    
+    NSMutableArray *fileSave = [NSMutableArray array];
+    for (CAMultiAudioFile *fInput in self.fileInputs)
+    {
+        [fileSave addObject:fInput.filePath];
+    }
+    
+    [aCoder encodeObject:fileSave forKey:@"fileInputs"];
+    
+}
+
+
+-(void)applyInputSettings:(NSDictionary *)inputSettings
+{
+    
+    for (CAMultiAudioInput *input in self.audioInputs)
+    {
+        if (input.nodeUID)
+        {
+            NSDictionary *settings = [inputSettings valueForKey:input.nodeUID];
+            if (settings)
+            {
+                input.volume = [(NSNumber *)[settings valueForKey:@"volume"] floatValue];
+                input.enabled = [(NSNumber *)[settings valueForKey:@"enabled"] boolValue];
+                NSDictionary *mixerData = [settings valueForKey:@"downMixerData"];
+                if (mixerData)
+                {
+                    [input.downMixer restoreData:mixerData];
+                }
+                
+                NSDictionary *equalizerData = [settings valueForKey:@"equalizerData"];
+                if (equalizerData)
+                {
+                    [input.equalizer restoreData:equalizerData];
+                }
+            }
+        }
+    }
+
+}
+
+
+-(NSMutableDictionary *)generateInputSettings
+{
+    
+    NSMutableDictionary *iSettings = [NSMutableDictionary dictionary];
+    
+    for (CAMultiAudioInput *node in self.audioInputs)
     {
         NSString *deviceUID = node.nodeUID;
-        NSMutableDictionary *inputopts = [_inputSettings valueForKey:deviceUID];
-        
-        
-        if (!inputopts)
-        {
-            inputopts = [NSMutableDictionary dictionary];
-            [_inputSettings setValue:inputopts forKey:deviceUID];
-            
-        }
+        NSMutableDictionary *inputopts = [NSMutableDictionary dictionary];
+        [iSettings setValue:inputopts forKey:deviceUID];
         [inputopts setValue:@(node.volume) forKey:@"volume"];
         [inputopts setValue:@(node.enabled) forKey:@"enabled"];
         if (node.downMixer)
@@ -142,30 +229,54 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         }
     }
     
-    [aCoder encodeObject:_inputSettings forKey:@"inputSettings"];
-    
-    
+    return iSettings;
     
 }
 
+
+-(CSAacEncoder *)encoder
+{
+    return _encoder;
+}
+
+-(void)setEncoder:(CSAacEncoder *)encoder
+{
+    CSAacEncoder *oldEncoder = _encoder;
+    
+    _encoder = encoder;
+    
+    if (oldEncoder)
+    {
+        AudioUnitRemoveRenderNotify(self.equalizer.audioUnit, encoderRenderCallback, [oldEncoder inputBufferPtr]);
+    }
+    
+    AudioUnitAddRenderNotify(self.equalizer.audioUnit, encoderRenderCallback, [_encoder inputBufferPtr]);
+}
+
+
 -(void)updateStatistics
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        for(CAMultiAudioNode *node in self.audioInputs)
+    CAMultiAudioEngine *__weak blockSelf = self;
+    
+    //dispatch_async(dispatch_get_main_queue(), ^{
+    
+    @synchronized(self) {
+        for(CAMultiAudioNode *node in blockSelf.audioInputs)
         {
             [node updatePowerlevel];
         }
-    });
+        // });
+    }
+    
     
     
     float rawPreview = [self.previewMixer outputPower];
     float rawStream = [self.encodeMixer outputPower];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
+    //dispatch_async(dispatch_get_main_queue(), ^{
         self.previewAudioPowerLevel = pow(10.0f, rawPreview/20.0f);
         self.streamAudioPowerLevel = pow(10.0f, rawStream/20.0f);
-    });
+   // });
 
     
     
@@ -181,7 +292,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     
     NSUInteger selectedIdx = [self.audioOutputs indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-        return [((CAMultiAudioDevice *)obj).deviceUID isEqualToString:_outputId];
+        return [((CAMultiAudioDevice *)obj).deviceUID isEqualToString:self->_outputId];
     }];
 
     
@@ -192,7 +303,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     }
     
     
-    if (!self.graphOutputNode)
+    //if (!self.graphOutputNode)
     {
         self.graphOutputNode = self.outputNode;
         
@@ -203,6 +314,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     self.silentNode = [[CAMultiAudioPCMPlayer alloc] init];
     self.encodeMixer = [[CAMultiAudioMixer alloc] init];
     self.previewMixer = [[CAMultiAudioMixer alloc] init];
+    self.equalizer = [[CAMultiAudioEqualizer alloc] init];
     
     [self.graph addNode:self.outputNode];
     
@@ -217,18 +329,26 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     [self.graph addNode:self.silentNode];
     [self.graph addNode:self.encodeMixer];
     [self.graph addNode:self.previewMixer];
+    [self.graph addNode:self.equalizer];
     
     [self.graph connectNode:self.previewMixer toNode:self.graphOutputNode];
-    [self.graph connectNode:self.encodeMixer toNode:self.previewMixer];
+    [self.graph connectNode:self.equalizer toNode:self.previewMixer];
+    
+    [self.graph connectNode:self.encodeMixer toNode:self.equalizer];
     [self.graph connectNode:self.silentNode toNode:self.encodeMixer];
     [self.graph startGraph];
     
     
     
-    AudioUnitAddRenderNotify(self.encodeMixer.audioUnit, encoderRenderCallback, (__bridge void *)(self));
+    if (self.encoder)
+    {
+        AudioUnitAddRenderNotify(self.equalizer.audioUnit, encoderRenderCallback, [self.encoder inputBufferPtr]);
+    }
 
     return YES;
 }
+
+
 
 
 -(void)inputsForSystemAudio
@@ -256,18 +376,23 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     if ([removedDev hasMediaType:AVMediaTypeAudio])
     {
-        NSUInteger selectedIdx = [self.audioInputs indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-            if ([obj isKindOfClass:[CAMultiAudioAVCapturePlayer class]])
-            {
-                CAMultiAudioAVCapturePlayer *testObj = obj;
-                return testObj.captureDevice.uniqueID == removedDev.uniqueID;
-            }
-            return NO;
-        }];
+        NSUInteger selectedIdx = NSNotFound;
         
+        @synchronized(self) {
+            selectedIdx = [self.audioInputs indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+                if ([obj isKindOfClass:[CAMultiAudioAVCapturePlayer class]])
+                {
+                    CAMultiAudioAVCapturePlayer *testObj = obj;
+                    return testObj.captureDevice.uniqueID == removedDev.uniqueID;
+                }
+                return NO;
+            }];
+        }
         if (selectedIdx != NSNotFound)
         {
             [self removeObjectFromAudioInputsAtIndex:selectedIdx];
+            [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioRemoved object:self userInfo:@{@"UUID": removedDev.uniqueID}];
+
 
         }
     }
@@ -280,15 +405,17 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     if ([newDev hasMediaType:AVMediaTypeAudio])
     {
-        NSUInteger selectedIdx = [self.audioInputs indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-            if ([obj isKindOfClass:[CAMultiAudioAVCapturePlayer class]])
-            {
-                CAMultiAudioAVCapturePlayer *testObj = obj;
-                return testObj.captureDevice.uniqueID == newDev.uniqueID;
-            }
-            return NO;
-        }];
-        
+        NSUInteger selectedIdx = NSNotFound;
+        @synchronized(self) {
+            selectedIdx = [self.audioInputs indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+                if ([obj isKindOfClass:[CAMultiAudioAVCapturePlayer class]])
+                {
+                    CAMultiAudioAVCapturePlayer *testObj = obj;
+                    return testObj.captureDevice.uniqueID == newDev.uniqueID;
+                }
+                return NO;
+            }];
+        }
         if (selectedIdx == NSNotFound)
         {
             CAMultiAudioAVCapturePlayer *avplayer = [[CAMultiAudioAVCapturePlayer alloc] initWithDevice:newDev withFormat:self.graph.graphAsbd];
@@ -332,10 +459,20 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     {
         if (node.converterNode)
         {
-            [self removeInput:node.converterNode];
+            [self removeInput:node];
         }
 
     }
+    
+    for (CAMultiAudioFile *node in self.fileInputs)
+    {
+        if (node.converterNode)
+        {
+            [self removeInput:node];
+        }
+        
+    }
+
     /*
     for (CAMultiAudioNode *node in self.audioInputs)
     {
@@ -343,10 +480,26 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     }
     */
     
+    float emVolume = self.encodeMixer.volume;
+    bool emMuted = self.encodeMixer.muted;
+    float pmVolume = self.previewMixer.volume;
+    bool pmMuted = self.previewMixer.muted;
+    
+    NSDictionary *eqData = [self.equalizer saveData];
+    _inputSettings = [self generateInputSettings];
+    
     self.graph = nil;
     [self buildGraph];
     
-    for (CAMultiAudioNode *node in self.audioInputs)
+    self.encodeMixer.volume = emVolume;
+    self.encodeMixer.muted = emMuted;
+    self.previewMixer.volume = pmVolume;
+    self.previewMixer.muted = pmMuted;
+    [self.equalizer restoreData:eqData];
+    
+    
+    
+    for (CAMultiAudioInput *node in self.audioInputs)
     {
         [node resetFormat:self.graph.graphAsbd];
         [self reattachInput:node];
@@ -357,6 +510,12 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     {
         [self attachPCMInput:node];
     }
+    
+    for (CAMultiAudioFile *node in self.fileInputs)
+    {
+        [self attachFileInput:node];
+    }
+
     
 }
 
@@ -378,26 +537,60 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         //It's easier to just rebuild the graph instead of trying to splunk through all the nodes and connections
         //to change them all.
         [self resetEngine];
+        if (self.graph)
+        {
+            CAShow(self.graph.graphInst);
+        }
     }
     
 }
 
 
+-(void)removeFileInput:(CAMultiAudioFile *)toRemove
+{
+
+    [self removeInput:toRemove];
+
+    NSUInteger index = [self.fileInputs indexOfObject:toRemove];
+    if (index != NSNotFound)
+    {
+
+        [self.fileInputs removeObjectAtIndex:index];
+    }
+    
+
+}
+
+
 -(void)removePCMInput:(CAMultiAudioPCMPlayer *)toRemove
 {
-    CAMultiAudioConverter *converter = toRemove.converterNode;
     
-    [self removeInput:converter];
-
-    
-   
+    [self removeInput:toRemove];
     NSUInteger index = [self.pcmInputs indexOfObject:toRemove];
     if (index != NSNotFound)
     {
         [self.pcmInputs removeObjectAtIndex:index];
     }
+}
+
+
+-(void)addFileInput:(CAMultiAudioFile *)fileInput
+{
+    [self attachFileInput:fileInput];
     
+    [self.fileInputs addObject:fileInput];
+}
+
+-(CAMultiAudioFile *)createFileInput:(NSString *)filePath
+{
+    CAMultiAudioFile *newInput = [[CAMultiAudioFile alloc] initWithPath:filePath];
     
+    if (newInput)
+    {
+        [self addFileInput:newInput];
+    }
+    
+    return newInput;
 }
 
 
@@ -411,6 +604,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     //[newInput play];
     [self.pcmInputs addObject:newInput];
+
     return newInput;
     
 }
@@ -422,8 +616,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         return; //what?
     }
     
-    CAMultiAudioNode *toAttach = nil;
-    
     AudioStreamBasicDescription *devFormat = device.inputFormat;
     
     if (devFormat)
@@ -433,141 +625,338 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
         newConverter.sourceNode = device;
         device.converterNode = newConverter;
-        toAttach = newConverter;
     }
     
-    [self.graph addNode:device];
-    [self attachInput:toAttach];
-    if (devFormat)
+    [self attachInput:device];
+
+}
+
+
+-(void)attachFileInput:(CAMultiAudioFile *)input
+{
+    CAMultiAudioConverter *newConverter = [[CAMultiAudioConverter alloc] initWithInputFormat:input.outputFormat];
+    newConverter.nodeUID = input.nodeUID; //Not so unique, lol
+    
+    newConverter.sourceNode = input;
+    input.converterNode = newConverter;
+    [self attachInput:input];
+    
+}
+
+
+
+-(bool)attachInputCommon:(CAMultiAudioInput *)input
+{
+    bool ret;
+    
+    CAMultiAudioNode *graphInput = input;
+  /*  if (graphInput.downstreamNode)
     {
-        [self.graph connectNode:device toNode:toAttach sampleRate:devFormat->mSampleRate];
+        graphInput = graphInput.downstreamNode;
+    }
+    */
+    ret = [self.graph addNode:graphInput];
+    
+    if (!ret)
+    {
+        return NO;
+    }
+    
+    CAMultiAudioEqualizer *eq = [[CAMultiAudioEqualizer alloc] init];
+    
+    CAMultiAudioDownmixer *dmix = [[CAMultiAudioDownmixer alloc] initWithInputChannels:input.channelCount];
+    
+    ret = [self.graph addNode:dmix];
+    if (!ret)
+    {
+        [self disconnectInputNode:input];
+        return NO;
+    }
+    
+    input.downMixer = dmix;
+    ret = [self.graph addNode:eq];
+    if (!ret)
+    {
+        [self disconnectInputNode:input];
+        return NO;
+    }
+    
+    input.equalizer = eq;
+    
+    if (![self.graph connectNode:eq toNode:self.encodeMixer])
+    {
+        [self disconnectInputNode:input];
+        return NO;
+    }
+    
+    
+
+    
+    
+    CAMultiAudioNode *connectNode = eq;
+    CAMultiAudioDelay *delayNode = nil;
+    
+    
+    for(int i=0; i < 5; i++)
+    {
+        delayNode = [[CAMultiAudioDelay alloc] init];
+        //delayNode.channelCount = input.channelCount;
+        ret = [self.graph addNode:delayNode];
+        if (!ret)
+        {
+            [self disconnectInputNode:input];
+            return NO;
+        }
+        ret = [self.graph connectNode:delayNode toNode:connectNode];
+        if (!ret)
+        {
+
+            [self.graph removeNode:delayNode];
+            [self disconnectInputNode:input];
+            return NO;
+        }
+        connectNode = delayNode;
+        [input.delayNodes addObject:delayNode];
+    }
+   
+    if (![self.graph connectNode:dmix toNode:connectNode])
+    {
+   
+        [self disconnectInputNode:input];
+        return NO;
+    }
+    
+    
+    if (input.converterNode)
+    {
+        [self.graph addNode:input.converterNode];
+        if (![self.graph connectNode:input.converterNode toNode:dmix])
+        {
+            [self disconnectInputNode:input];
+            return NO;
+        }
+        
+        if (![self.graph connectNode:input toNode:input.converterNode sampleRate:input.converterNode.inputFormat.mSampleRate])
+        {
+            [self disconnectInputNode:input];
+            return NO;
+        }
+    } else {
+        
+        
+        if (![self.graph connectNode:graphInput toNode:dmix])
+        {
+            [self disconnectInputNode:input];
+            return NO;
+        }
     }
 
+    if (dmix)
+    {
+        dmix.volume = graphInput.volume;
+    }
+    
+    
+    return YES;
 }
 
 
 -(void)attachPCMInput:(CAMultiAudioPCMPlayer *)input
 {
+    
     CAMultiAudioConverter *newConverter = [[CAMultiAudioConverter alloc] initWithInputFormat:input.inputFormat];
     newConverter.nodeUID = input.nodeUID; //Not so unique, lol
     
     newConverter.sourceNode = input;
     input.converterNode = newConverter;
     
-    [self.graph addNode:input];
-    [self attachInput:newConverter];
+    [self attachInput:input];
     
-    [self.graph connectNode:input toNode:newConverter sampleRate:input.inputFormat->mSampleRate];
-
-}
--(void)reattachInput:(CAMultiAudioNode *)input
-{
-    
-    
-    [self.graph addNode:input];
-    
-    CAMultiAudioDownmixer *dmix = [[CAMultiAudioDownmixer alloc] initWithInputChannels:input.channelCount];
-    [self.graph addNode:dmix];
-    
-    [self.graph connectNode:dmix toNode:self.encodeMixer];
-    
-    [self.graph connectNode:input toNode:dmix];
-    input.downMixer = dmix;
+    input.enabled = NO;
+    //[self.graph connectNode:input toNode:newConverter sampleRate:input.inputFormat->mSampleRate];
 
 }
 
--(void)attachInput:(CAMultiAudioNode *)input
+
+-(bool)reattachInput:(CAMultiAudioInput *)input
 {
     
+    bool ret = [self attachInputCommon:input];
+    if (!ret)
+    {
+        return NO;
+    }
     
-    [self.graph addNode:input];
-    
-    CAMultiAudioDownmixer *dmix = [[CAMultiAudioDownmixer alloc] initWithInputChannels:input.channelCount];
-    [self.graph addNode:dmix];
-    
-    [self.graph connectNode:dmix toNode:self.encodeMixer];
-
-    [self.graph connectNode:input toNode:dmix];
-    input.downMixer = dmix;
-    
-    if (input.nodeUID)
+    if (input.nodeUID && !input.noSettings)
     {
         NSDictionary *settings = [_inputSettings valueForKey:input.nodeUID];
         if (settings)
         {
-            input.volume = [(NSNumber *)[settings valueForKey:@"volume"] floatValue];
-            input.enabled = [(NSNumber *)[settings valueForKey:@"enabled"] boolValue];
-            NSDictionary *mixerData = [settings valueForKey:@"downMixerData"];
-            if (mixerData)
-            {
-                [input.downMixer restoreData:mixerData];
-            }
+            [input restoreDataFromDict:settings];
+        }
+    }
+    
+    return YES;
+}
+
+
+
+-(bool)attachInput:(CAMultiAudioInput *)input
+{
+    
+    bool ret = [self attachInputCommon:input];
+    if (!ret)
+    {
+        return NO;
+    }
+    
+    
+    if (input.nodeUID && !input.noSettings)
+    {
+        NSDictionary *settings = [_inputSettings valueForKey:input.nodeUID];
+        if (settings)
+        {
+            [input restoreDataFromDict:settings];
         }
     }
 
-    //[self.graph connectNode:input toNode:self.encodeMixer];
-    dispatch_async(dispatch_get_main_queue(), ^{
+    //ughhhhh
+    if ([NSThread isMainThread])
+    {
         [self addAudioInputsObject:input];
-    });
-    
+    } else {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self addAudioInputsObject:input];
+        });
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioAdded object:self userInfo:@{@"UUID": input.nodeUID}];
 
-    
+    return YES;
     
 }
 
 
--(void)removeInput:(CAMultiAudioNode *)toRemove
+-(bool)disconnectInputNode:(CAMultiAudioInput *)disconnectNode
 {
-    NSUInteger index = [self.audioInputs indexOfObject:toRemove];
+    
+    CAMultiAudioDownmixer *dmix = disconnectNode.downMixer;
+    CAMultiAudioEqualizer *rEq = disconnectNode.equalizer;
+    CAMultiAudioConverter *iConv = disconnectNode.converterNode;
+    
+    disconnectNode.downMixer = nil;
+    
+    [self.graph removeNode:disconnectNode];
+    
+
+    
+    if (iConv)
+    {
+        [self.graph removeNode:iConv];
+    }
+    
+    
+    if (dmix)
+    {
+        [self.graph removeNode:dmix];
+    }
+    
+    NSArray *delayNodes = disconnectNode.delayNodes.copy;
+    for (CAMultiAudioDelay *dNode in [delayNodes reverseObjectEnumerator])
+    {
+        [self.graph removeNode:dNode];
+        [disconnectNode.delayNodes removeObject:dNode];
+    }
+    
+    if (rEq)
+    {
+        [self.graph removeNode:rEq];
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioRemoved object:self userInfo:@{@"UUID": disconnectNode.nodeUID}];
+
+    return YES;
+}
+
+
+-(void)removeInput:(CAMultiAudioInput *)toRemove
+{
+    NSUInteger index = NSNotFound;
+    @synchronized(self) {
+        index = [self.audioInputs indexOfObject:toRemove];
+    }
+    
     if (index != NSNotFound)
     {
         NSMutableDictionary *saveSettings = [NSMutableDictionary dictionary];
         
-        saveSettings[@"volume"] = @(toRemove.volume);
-        saveSettings[@"enabled"] = @(toRemove.enabled);
-        if (toRemove.downMixer)
+        if (!toRemove.noSettings)
         {
-            saveSettings[@"downMixerData"] = [toRemove.downMixer saveData];
+            [toRemove saveDataToDict:saveSettings];
+            
+            
+            if (saveSettings.count > 0)
+            {
+                _inputSettings[toRemove.nodeUID] = saveSettings;
+            }
         }
         
-        _inputSettings[toRemove.nodeUID] = saveSettings;
-
         
-        CAMultiAudioDownmixer *dmix = toRemove.downMixer;
         
-        [self.graph removeNode:toRemove];
-        
-        if (dmix)
-        {
-            [self.graph removeNode:dmix];
-        }
+        [self disconnectInputNode:toRemove];
+        toRemove.downMixer = nil;
+        toRemove.equalizer = nil;
+        toRemove.converterNode = nil;
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self removeObjectFromAudioInputsAtIndex:index];
-
+            
         });
+        
+        [toRemove didRemoveInput];
+        
     }
     
     
 }
 
+
+-(CAMultiAudioInput *)inputForUUID:(NSString *)uuid
+{
+    @synchronized(self) {
+        for(CAMultiAudioInput *node in self.audioInputs)
+        {
+            if ([node.nodeUID isEqualToString:uuid])
+            {
+                return node;
+            }
+        }
+    }
+    return nil;
+}
+
+
 -(void)addAudioInputsObject:(CAMultiAudioNode *)object
 {
+    
     [self insertObject:object inAudioInputsAtIndex:self.audioInputs.count];
 }
 
 -(void)insertObject:(CAMultiAudioNode *)object inAudioInputsAtIndex:(NSUInteger)index
 {
-    [self.audioInputs insertObject:object atIndex:index];
+    @synchronized(self) {
+        [_audioInputs insertObject:object atIndex:index];
+    }
 
 }
 
 
 -(void)removeObjectFromAudioInputsAtIndex:(NSUInteger)index
 {
-    if (index < self.audioInputs.count)
+    @synchronized(self)
     {
-        [self.audioInputs removeObjectAtIndex:index];
+        if (index < self.audioInputs.count)
+        {
+            [self.audioInputs removeObjectAtIndex:index];
+        }
     }
 }
 
@@ -578,11 +967,16 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 {
     
     
+    TPCircularBuffer *encodeBuffer = (TPCircularBuffer *)inRefCon;
     
-    if ((*ioActionFlags) & kAudioUnitRenderAction_PostRender)
+
+    if (encodeBuffer && ((*ioActionFlags) & kAudioUnitRenderAction_PostRender))
     {
         
         
+        TPCircularBufferCopyAudioBufferList(encodeBuffer, ioData, inTimeStamp, kTPCircularBufferCopyAll, NULL);
+
+        /*
         CAMultiAudioEngine *selfPtr = (__bridge CAMultiAudioEngine *)inRefCon;
         
         if (selfPtr.encoder)
@@ -592,8 +986,9 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
             [selfPtr.encoder enqueuePCM:ioData atTime:inTimeStamp];
         }
         
-
+*/
     }
+    
     return noErr;
     
 }

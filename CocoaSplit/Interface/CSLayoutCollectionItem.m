@@ -19,6 +19,7 @@
 -(void)setRepresentedObject:(id)representedObject
 {
     [super setRepresentedObject:representedObject];
+
     [self.representedObject addObserver:self forKeyPath:@"in_live" options:NSKeyValueObservingOptionNew context:NULL];
     [self.representedObject addObserver:self forKeyPath:@"in_staging" options:NSKeyValueObservingOptionNew context:NULL];
 }
@@ -32,17 +33,25 @@
     self.captureController = appDel.captureController;
     
 
+
 }
 
+-(void)viewDidAppear
+{
+    self.layoutButton.sourceLayout = self.representedObject;
+    [self.layoutButton layout];
+
+}
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
 {
-    [self.layoutButton setNeedsDisplay];
+    //[self.layoutButton setNeedsDisplay];
 }
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+
     //self.view.layer.backgroundColor = [[NSColor blackColor] CGColor];
 
     // Do view setup here.

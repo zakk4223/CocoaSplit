@@ -16,6 +16,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.queueTableView registerForDraggedTypes:@[NSFilenamesPboardType, @"cocoasplit.ffmpegcapture.queueitem"]];
     // Do view setup here.
     if (self.captureObj && self.captureObj.player)
     {
@@ -23,6 +24,125 @@
             [self pauseStateChanged];
         };
     }
+}
+
+
+-(NSSet *)contentTypesForPath:(NSString *)path
+{
+    MDItemRef mditem = MDItemCreate(NULL, (__bridge CFStringRef)path);
+    if (mditem)
+    {
+        NSArray *attrs = @[(__bridge NSString *)kMDItemContentTypeTree];
+        NSDictionary *attrMap = CFBridgingRelease(MDItemCopyAttributes(mditem, (__bridge CFArrayRef)attrs));
+        NSArray *fileTypes = attrMap[(__bridge NSString *)kMDItemContentTypeTree];
+        if (fileTypes)
+        {
+            NSSet *typeSet = [NSSet setWithArray:fileTypes];
+            return typeSet;
+        }
+    }
+    return nil;
+}
+
+-(BOOL)tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
+{
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:rowIndexes];
+    [pboard declareTypes:@[@"cocoasplit.ffmpegcapture.queueitem"] owner:self];
+    [pboard setData:data forType:@"cocoasplit.ffmpegcapture.queueitem"];
+    
+    return YES;
+}
+
+
+-(NSDragOperation) tableView:(NSTableView *)tableView validateDrop:(id<NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)dropOperation
+{
+    NSPasteboard *pb = [info draggingPasteboard];
+    
+    if ([pb.types containsObject:@"cocoasplit.ffmpegcapture.queueitem"])
+    {
+        if (dropOperation == NSTableViewDropAbove)
+        {
+            return NSDragOperationMove;
+        }
+        return NSDragOperationNone;
+    }
+    
+    for(NSPasteboardItem *item in pb.pasteboardItems)
+    {
+        if ([item.types containsObject:@"public.file-url"])
+        {
+            NSString *draggedPath = [item stringForType:@"public.file-url"];
+            if (draggedPath)
+            {
+                NSURL *fileURL = [NSURL URLWithString:draggedPath];
+                NSString *realPath = [fileURL path];
+                NSSet *fileTypes = [self contentTypesForPath:realPath];
+                NSSet *myTypes = [CSFFMpegCapture mediaUTIs];
+                if ([fileTypes intersectsSet:myTypes])
+                {
+                    return NSDragOperationCopy;
+                }
+            }
+        }
+    }
+    return NSDragOperationNone;
+}
+
+-(BOOL) tableView:(NSTableView *)tableView acceptDrop:(id<NSDraggingInfo>)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)dropOperation
+{
+ 
+    NSPasteboard *pb = [info draggingPasteboard];
+    
+    if ([pb.types containsObject:@"cocoasplit.ffmpegcapture.queueitem"])
+    {
+        NSData *indexData = [pb dataForType:@"cocoasplit.ffmpegcapture.queueitem"];
+        if (indexData)
+        {
+            NSIndexSet *rowIndexes = [NSKeyedUnarchiver unarchiveObjectWithData:indexData];
+            NSInteger __block oldOffset = 0;
+            NSInteger __block newOffset = 0;
+
+            [rowIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+                id currObj = [self.queueArrayController.arrangedObjects objectAtIndex:idx];
+                
+                if (idx < row)
+                {
+                    
+                    
+                    [self.captureObj.player.inputQueue removeObjectAtIndex:idx + oldOffset];
+                    [self.captureObj.player.inputQueue insertObject:currObj atIndex:row-1];
+                    //[self.queueTableView moveRowAtIndex:idx + oldOffset toIndex:row - 1];
+                    oldOffset -= 1;
+                } else {
+                    [self.captureObj.player.inputQueue removeObjectAtIndex:idx];
+                    [self.captureObj.player.inputQueue insertObject:currObj atIndex:row+newOffset];
+                    //[self.queueTableView moveRowAtIndex:idx toIndex:row+newOffset];
+                    newOffset += 1;
+                }
+                
+            }];
+            [self.queueTableView reloadData];
+            
+        }
+        return YES;
+    }
+    
+    
+    for(NSPasteboardItem *item in pb.pasteboardItems)
+    {
+        if ([item.types containsObject:@"public.file-url"])
+        {
+            NSString *draggedPath = [item stringForType:@"public.file-url"];
+            if (draggedPath)
+            {
+                NSURL *fileURL = [NSURL URLWithString:draggedPath];
+                NSString *realPath = [fileURL path];
+                [self.captureObj queuePath:realPath];
+            }
+        }
+    }
+
+    return YES;
 }
 
 
@@ -72,7 +192,7 @@
             [self.captureObj back];
             break;
         case 2:
-            if (!self.captureObj.player.playing || self.captureObj.player.paused)
+            if (!self.captureObj.player.playing)// || self.captureObj.player.paused)
             {
                 [self.captureObj play];
             } else {
@@ -121,15 +241,16 @@
     NSEvent *event = [[NSApplication sharedApplication] currentEvent];
     BOOL startingDrag = event.type == NSLeftMouseDown;
     BOOL endingDrag = event.type == NSLeftMouseUp;
-    BOOL dragging = event.type == NSLeftMouseDragged;
     
     
     if (startingDrag) {
+        self.captureObj.updateMovieTime = NO;
         [self.captureObj mute];
     }
     
     
     if (endingDrag) {
+        self.captureObj.updateMovieTime = YES;
         [self.captureObj mute];
     }
 }

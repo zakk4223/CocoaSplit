@@ -69,11 +69,9 @@
 - (IBAction)moveInputUp:(id)sender;
 - (IBAction)moveInputDown:(id)sender;
 - (IBAction)deleteInput:(id)sender;
-- (IBAction)addInputSource:(id)sender;
 - (IBAction)showInputSettings:(id)sender;
 
 
--(void)spawnInputSettings:(InputSource *)forInput atRect:(NSRect)atRect;
 -(void)goFullscreen:(NSScreen *)onScreen;
 
 
@@ -107,15 +105,19 @@
 @property (strong) NSMutableDictionary *activeConfigWindows;
 @property (strong) NSMutableDictionary *activeConfigControllers;
 @property (assign) bool isEditWindow;
+@property (assign) bool showTransitionToggle;
+
 
 -(void)needsUpdate;
 -(NSRect)windowRectforWorldRect:(NSRect)worldRect;
 -(NSArray *)resizeRectsForSource:(InputSource *)inputSource withExtra:(float)withExtra;
--(void)addInputSourceWithInput:(InputSource *)source;
+-(void)addInputSourceWithInput:(NSObject<CSInputSourceProtocol> *)source;
 -(void) highlightSource:(InputSource *)source;
 -(void)stopHighlightingSource:(InputSource *)source;
 -(void)stopHighlightingAllSources;
 -(void)openInputConfigWindow:(NSString *)uuid;
+-(void)disablePrimaryRender;
+-(void)enablePrimaryRender;
 
 
 

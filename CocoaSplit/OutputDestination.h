@@ -10,6 +10,7 @@
 #import <AppKit/AppKit.h>
 #import "VideoCompressor.h"
 #import "CaptureController.h"
+#import "CSLayoutRecorderInfoProtocol.h"
 
 
 
@@ -31,7 +32,6 @@
     int _p_input_framecnt;
     int _p_output_framecnt;
     int _p_output_bytes;
-    int _pending_frame_count;
     int _consecutive_dropped_frames;
     bool _output_prepared;
     
@@ -43,6 +43,10 @@
 
 
 
+@property (strong) NSImage *statusImage;
+
+@property (assign) BOOL captureRunning;
+
 @property (assign) BOOL errored;
 @property (strong) NSString *server_name;
 @property (strong) NSString *type_name;
@@ -52,19 +56,20 @@
 @property (strong) NSString *stream_key;
 @property (assign) int stream_delay;
 @property (strong) FFMpegTask *ffmpeg_out;
-@property (strong) CaptureController *settingsController;
+@property (weak) id<CSLayoutRecorderInfoProtocol> settingsController;
 @property (strong) NSColor *textColor;
 @property (assign) NSUInteger delay_buffer_frames;
 @property (assign) BOOL buffer_draining;
 @property (strong) NSString *name;
 @property (strong) NSObject<CSStreamServiceProtocol>*streamServiceObject;
+@property (weak) SourceLayout *assignedLayout;
 
 //stats, mostly we just interrogate the ffmpeg_out object for these, but bouncing
 //through this class allows us to be a bit smarter about the UI status updates
 
 @property (assign) double input_framerate;
-@property (assign) int buffered_frame_count;
-@property (assign) int buffered_frame_size;
+@property (assign) NSUInteger buffered_frame_count;
+@property (assign) NSUInteger buffered_frame_size;
 @property (assign) int dropped_frame_count;
 @property (assign) double output_framerate;
 @property (assign) double output_bitrate;
@@ -74,6 +79,7 @@
 
 @property (assign) BOOL active;
 
+@property (assign) BOOL autoRetry;
 
 
 -(id)initWithType:(NSString *)type;
@@ -83,6 +89,8 @@
 -(void) updateStatistics;
 -(void) reset;
 -(void) setupCompressor;
+-(void) setup;
+-(void) teardown;
 
 
 

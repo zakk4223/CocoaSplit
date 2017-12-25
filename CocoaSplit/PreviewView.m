@@ -10,9 +10,9 @@
 #import <OpenGL/glu.h>
 
 #import "PreviewView.h"
-#import "InputPopupControllerViewController.h"
 #import "SourceLayout.h"
 #import "CreateLayoutViewController.h"
+#import "CSLayoutRecorder.h"
 
 //wtf apple
 
@@ -134,11 +134,19 @@
         [NSApp registerMIDIResponder:sourceLayout];
     }
     
-    if (self.layoutRenderer)
+    
+    if (_sourceLayout.recorder)
     {
-        self.layoutRenderer.layout = _sourceLayout;
+        self.layoutRenderer = _sourceLayout.recorder.renderer;
+        [self disablePrimaryRender];
+        
+    } else {
+        if (self.layoutRenderer)
+        {
+            self.layoutRenderer.layout = _sourceLayout;
+        }
     }
-
+    
 }
 
 
@@ -273,23 +281,32 @@
     
     if (self.selectedSource.videoInput && [self.selectedSource.videoInput canProvideTiming])
     {
-        tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Use as master timing" action:@selector(setSourceAsTimer:) keyEquivalent:@"" atIndex:idx++];
-        tmp.target = self;
+        
+        if (self.sourceLayout.layoutTimingSource == self.selectedSource)
+        {
+            tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Stop using as master timing" action:@selector(removeSourceTimer:) keyEquivalent:@"" atIndex:idx++];
+            tmp.target = self;
+
+        } else {
+            tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Use as master timing" action:@selector(setSourceAsTimer:) keyEquivalent:@"" atIndex:idx++];
+            tmp.target = self;
+        }
     }
     
-    if (self.selectedSource.parentInput)
-    {
-        tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Detach from parent" action:@selector(detachSource:) keyEquivalent:@"" atIndex:idx++];
-    } else {
-        tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Attach to underlying input" action:@selector(subLayerInputSource:) keyEquivalent:@"" atIndex:idx++];
-    }
-    
-    tmp.target = self;
-    
+
     tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Reset to source AR" action:@selector(resetSourceAR:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
 }
 
+
+
+-(void)doToggleTransitions:(id)sender
+{
+    if (self.controller)
+    {
+        self.controller.useTransitions = !self.controller.useTransitions;
+    }
+}
 
 
 -(void)doLayoutMidi:(id)sender
@@ -314,10 +331,10 @@
 {
     if (item.representedObject)
     {
-        InputSource *hInput = (InputSource *)item.representedObject;
-        if (_overlayView)
+        NSObject<CSInputSourceProtocol> *hInput = (NSObject<CSInputSourceProtocol> *)item.representedObject;
+        if (_overlayView && hInput.layer)
         {
-            _overlayView.parentSource = hInput;
+            _overlayView.parentSource = (InputSource *)hInput;
         }
     }
 }
@@ -389,6 +406,21 @@
     
     [sourceListMenu insertItem:resItem atIndex:[sourceListMenu.itemArray count]];
     
+    if (self.showTransitionToggle)
+    {
+        bool transitionState = self.controller.useTransitions;
+        NSString *transitionTitle = @"Enable Transitions";
+        if (transitionState)
+        {
+            transitionTitle = @"Disable Transitions";
+        }
+        
+        NSMenuItem *transitionItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:transitionTitle action:@selector(doToggleTransitions:) keyEquivalent:@""];
+        [transitionItem setTarget:self];
+        [transitionItem setEnabled:YES];
+        [sourceListMenu insertItem:transitionItem atIndex:[sourceListMenu.itemArray count]];
+
+    }
     if (self.viewOnly)
     {
         return sourceListMenu;
@@ -519,26 +551,21 @@
 
 
 
-
--(void)rightMouseDown:(NSEvent *)theEvent
+-(NSMenu *)menuForEvent:(NSEvent *)event
 {
-    
     NSPoint tmp;
     
-    tmp = [self convertPoint:theEvent.locationInWindow fromView:nil];
+    tmp = [self convertPoint:event.locationInWindow fromView:nil];
 
     
     if (self.viewOnly)
     {
-        NSMenu *srcListMenu = [self buildSourceMenu];
-        
-        [srcListMenu popUpMenuPositioningItem:srcListMenu.itemArray.firstObject atLocation:tmp inView:self];
-
+        return [self buildSourceMenu];
     }
     
     bool doDeep = YES;
     
-    if (theEvent.modifierFlags & NSControlKeyMask)
+    if (event.modifierFlags & NSControlKeyMask)
     {
         doDeep = NO;
     }
@@ -548,13 +575,14 @@
     if (self.selectedSource)
     {
         [self buildSettingsMenu];
-        [self.sourceSettingsMenu popUpMenuPositioningItem:self.sourceSettingsMenu.itemArray.firstObject atLocation:tmp inView:self];
+        return self.sourceSettingsMenu;
     } else {
         
         NSMenu *srcListMenu = [self buildSourceMenu];
-        
-        [srcListMenu popUpMenuPositioningItem:srcListMenu.itemArray.firstObject atLocation:tmp inView:self];
+        return srcListMenu;
     }
+    
+    return nil;
 }
 
 
@@ -599,6 +627,7 @@
         }
     }
     
+
 }
 
 
@@ -719,11 +748,12 @@
         {
             NSRect curFrame = self.selectedSource.layoutPosition;
             
-            [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.selectedSource.uuid withBlock:^(InputSource *input) {
+            [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.selectedSource.uuid withBlock:^(NSObject <CSInputSourceProtocol> *input) {
                 if (input)
                 {
-                    [input updateSize:curFrame.size.width height:curFrame.size.height];
-                    [input positionOrigin:curFrame.origin.x y:curFrame.origin.y];
+                    InputSource *vinput = (InputSource *)input;
+                    [vinput updateSize:curFrame.size.width height:curFrame.size.height];
+                    [vinput positionOrigin:curFrame.origin.x y:curFrame.origin.y];
                 }
 
                 
@@ -869,12 +899,15 @@
         c_snaps[2] = c_center_snap;
         
         int snap_idx = 3;
-        for (InputSource *src in srcs)
+        for (NSObject<CSInputSourceProtocol> *psrc in srcs)
         {
-            if (src == self.selectedSource)
+            if (psrc == self.selectedSource || !psrc.layer)
             {
                 continue;
             }
+            
+            InputSource *src = (InputSource *)psrc;
+            
             NSRect srect = src.globalLayoutPosition;
             c_snaps[snap_idx++] = srect.origin;
             c_snaps[snap_idx++] = NSMakePoint(NSMaxX(srect), NSMaxY(srect));
@@ -1004,6 +1037,18 @@
 }
 
 
+-(void)mouseExited:(NSEvent *)event
+{
+    if (self.mousedSource)
+    {
+        [self stopHighlightingSource:self.mousedSource];
+        _overlayView.parentSource = nil;
+    }
+    
+    self.mousedSource = nil;
+}
+
+
 -(void) mouseMoved:(NSEvent *)theEvent
 {
     
@@ -1040,13 +1085,13 @@
     
     NSString *srcUUID = source.uuid;
     
-    InputSource *realSrc = [self.sourceLayout inputForUUID:srcUUID];
-    if (!_highlightedSourceMap[srcUUID] && realSrc)
+    NSObject<CSInputSourceProtocol> *realSrc = (InputSource *)[self.sourceLayout inputForUUID:srcUUID];
+    if (!_highlightedSourceMap[srcUUID] && realSrc && realSrc.layer)
     {
         CSPreviewOverlayView *oview = [[CSPreviewOverlayView alloc] init];
         oview.renderControls = NO;
         oview.previewView = self;
-        oview.parentSource = realSrc;
+        oview.parentSource = (InputSource *)realSrc;
         _highlightedSourceMap[srcUUID] = oview;
     }
 }
@@ -1100,7 +1145,7 @@
         } else if ([sender isKindOfClass:[InputSource class]]) {
             toMove = (InputSource *)sender;
         } else if ([sender isKindOfClass:[NSString class]]) {
-            toMove = [self.sourceLayout inputForUUID:sender];
+            toMove = (InputSource *)[self.sourceLayout inputForUUID:sender];
         }
     }
     
@@ -1112,7 +1157,7 @@
     if (toMove)
     {
 
-        toMove.depth += 1;
+        toMove.depth += 150;
         
 
         [[self.undoManager prepareWithInvocationTarget:self] moveInputDown:toMove.uuid];
@@ -1134,7 +1179,7 @@
         } else if ([sender isKindOfClass:[InputSource class]]) {
             toMove = (InputSource *)sender;
         } else if ([sender isKindOfClass:[NSString class]]) {
-            toMove = [self.sourceLayout inputForUUID:sender];
+            toMove = (InputSource *)[self.sourceLayout inputForUUID:sender];
         }
     }
     
@@ -1145,12 +1190,19 @@
     
     if (toMove)
     {
-        toMove.depth -= 1;
+        toMove.depth -= 150;
 
         
         [[self.undoManager prepareWithInvocationTarget:self] moveInputUp:toMove.uuid];
         
     }
+}
+
+
+-(void)removeSourceTimer:(id)sender
+{
+    self.sourceLayout.layoutTimingSource = nil;
+    
 }
 
 
@@ -1275,7 +1327,7 @@
 
     if (inputUUID)
     {
-        InputSource *clonedSource = [self.sourceLayout inputForUUID:inputUUID];
+        NSObject<CSInputSourceProtocol> *clonedSource = [self.sourceLayout inputForUUID:inputUUID];
         if (clonedSource)
         {
             [self.sourceLayout deleteSource:clonedSource];
@@ -1284,7 +1336,7 @@
     }
     if (parentUUID)
     {
-        InputSource *parentSource = [self.sourceLayout inputForUUID:parentUUID];
+        NSObject<CSInputSourceProtocol> *parentSource = [self.sourceLayout inputForUUID:parentUUID];
         if (parentSource)
         {
             [[self.undoManager prepareWithInvocationTarget:self] cloneInputSource:parentSource];
@@ -1345,6 +1397,7 @@
     {
         InputSource *newSource = toClone.copy;
         [self.sourceLayout addSource:newSource];
+        
         [[self.undoManager prepareWithInvocationTarget:self] undoCloneInput:newSource.uuid parentUUID:toClone.uuid];
     }
 }
@@ -1352,7 +1405,7 @@
 
 -(void)undoAddInput:(NSString *)uuid
 {
-    InputSource *toDelete = [self.sourceLayout inputForUUID:uuid];
+    NSObject <CSInputSourceProtocol> *toDelete = [self.sourceLayout inputForUUID:uuid];
     if (toDelete)
     {
         [self deleteInput:toDelete];
@@ -1360,10 +1413,15 @@
 }
 
 
--(void)addInputSourceWithInput:(InputSource *)source
+-(void)addInputSourceWithInput:(NSObject<CSInputSourceProtocol> *)source
 {
     if (self.sourceLayout)
     {
+        if (source.layer)
+        {
+            InputSource *vSrc = (InputSource *)source;
+            vSrc.autoPlaceOnFrameUpdate = YES;
+        }
         
         [self.sourceLayout addSource:source];
         [[self.undoManager prepareWithInvocationTarget:self] undoAddInput:source.uuid];
@@ -1371,33 +1429,19 @@
 }
 
 
-- (IBAction)addInputSource:(id)sender
-{
-    
-    if (self.sourceLayout)
-    {
-        InputSource *newSource = [[InputSource alloc] init];
-        
-        [self.sourceLayout addSource:newSource];
-        [[self.undoManager prepareWithInvocationTarget:self] undoAddInput:newSource.uuid];
-        [self spawnInputSettings:newSource atRect:NSZeroRect];
-    }
-}
-
 
 -(void)undoEditsource:(NSData *)withData
 {
     
     
     InputSource *restoredSource = [NSKeyedUnarchiver unarchiveObjectWithData:withData];
-    InputSource *currentSource = [self.sourceLayout inputForUUID:restoredSource.uuid];
+    NSObject<CSInputSourceProtocol> *currentSource = [self.sourceLayout inputForUUID:restoredSource.uuid];
     if (currentSource)
     {
         [self.sourceLayout deleteSource:currentSource];
         NSData *curData = [NSKeyedArchiver archivedDataWithRootObject:currentSource];
         [[self.undoManager prepareWithInvocationTarget:self] undoEditsource:curData];
     }
-    
     
     [self.sourceLayout addSource:restoredSource];
     
@@ -1408,13 +1452,15 @@
 {
     InputSource *restoredSource = [NSKeyedUnarchiver unarchiveObjectWithData:withData];
     
+
     [self.sourceLayout addSource:restoredSource];
     if (parentUUID)
     {
-        InputSource *parentSource = [self.sourceLayout inputForUUID:parentUUID];
-        if (parentSource)
+        NSObject<CSInputSourceProtocol> *parentSource = [self.sourceLayout inputForUUID:parentUUID];
+        if (parentSource && parentSource.layer)
         {
-            [self attachSource:restoredSource toSource:parentSource];
+            InputSource *vParent = (InputSource *)parentSource;
+            [self attachSource:restoredSource toSource:vParent];
         }
     }
     [[self.undoManager prepareWithInvocationTarget:self] deleteInput:restoredSource];
@@ -1424,7 +1470,7 @@
 
 - (IBAction)deleteInput:(id)sender
 {
-    InputSource *toDelete = nil;
+    NSObject<CSInputSourceProtocol> *toDelete = nil;
 
     if ([sender isKindOfClass:[NSMenuItem class]])
     {
@@ -1433,8 +1479,8 @@
         {
             toDelete = item.representedObject;
         }
-    } else if ([sender isKindOfClass:[InputSource class]]) {
-        toDelete = (InputSource *)sender;
+    } else if ([sender conformsToProtocol:@protocol(CSInputSourceProtocol)]) {
+        toDelete = (NSObject<CSInputSourceProtocol> *)sender;
     }
 
     if (!toDelete)
@@ -1449,10 +1495,14 @@
         self.mousedSource = nil;
 
         NSString *pUUID = nil;
-        if (toDelete.parentInput)
+        if (toDelete.layer)
         {
-            pUUID = toDelete.parentInput.uuid;
-            [toDelete.parentInput detachInput:toDelete];
+            InputSource *cInput = (InputSource *)toDelete;
+            if (cInput.parentInput)
+            {
+                pUUID = cInput.parentInput.uuid;
+                [cInput.parentInput detachInput:cInput];
+            }
         }
 
         NSData *saveData = [NSKeyedArchiver archivedDataWithRootObject:toDelete];
@@ -1473,43 +1523,12 @@
     if (_glLayer)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [_glLayer setNeedsDisplay];
+            [self->_glLayer setNeedsDisplay];
 
             
         });
     }
 }
-
-
--(void)spawnInputSettings:(InputSource *)forInput atRect:(NSRect)atRect
-{
-    
-    NSRect spawnRect;
-    spawnRect = atRect;
-    
-    if (NSEqualRects(spawnRect, NSZeroRect))
-    {
-        NSRect inputRect = [self windowRectforWorldRect:forInput.globalLayoutPosition];
-        spawnRect = NSInsetRect(inputRect, inputRect.size.width/2-2.0f, inputRect.size.height/2-2.0f);
-    }
-    
-    //[[self.undoManager prepareWithInvocationTarget:self] undoEditsource:[NSKeyedArchiver archivedDataWithRootObject:forInput]];
-    InputPopupControllerViewController *popupController = [[InputPopupControllerViewController alloc] init];
-    
-    NSPopover *popover = [[NSPopover alloc] init];
-    popover.contentViewController = popupController;
-    popover.animates = YES;
-    popover.delegate = self;
-    popover.behavior = NSPopoverBehaviorSemitransient;
-    [popover showRelativeToRect:spawnRect ofView:self preferredEdge:NSMaxXEdge];
-    
-    popupController.inputSource = forInput;
-    
-    self.activePopupController = popupController;
-}
-
-
-
 
 
 -(IBAction) autoFitInput:(id)sender
@@ -1646,13 +1665,26 @@
 
     [self setWantsLayer:YES];
     
-    self.layer.backgroundColor = CGColorCreateGenericRGB(0.184314f, 0.309804f, 0.309804f, 1);
-    [self registerForDraggedTypes:@[@"cocoasplit.library.item"]];
+    CGColorRef tmpColor = CGColorCreateGenericRGB(0.184314f, 0.309804f, 0.309804f, 1);
+    self.layer.backgroundColor = tmpColor;
+    CGColorRelease(tmpColor);
+    
+    [self registerForDraggedTypes:@[@"cocoasplit.library.item",NSSoundPboardType,NSFilenamesPboardType, NSFilesPromisePboardType, NSFileContentsPboardType, @"cocoasplit.input.item", @"cocoasplit.audio.item"]];
+    self.undoManager.levelsOfUndo = 20;
+    
     
 }
 
 -(NSDragOperation)draggingEntered:(id<NSDraggingInfo>)sender
 {
+    
+    if (self.viewOnly)
+    {
+        return NSDragOperationNone;
+    }
+    
+    return NSDragOperationCopy;
+    /*
     NSPasteboard *pboard;
     pboard = [sender draggingPasteboard];
     if ([pboard.types containsObject:@"cocoasplit.library.item"] && !self.viewOnly)
@@ -1660,6 +1692,7 @@
         return NSDragOperationGeneric;
     }
     return NSDragOperationNone;
+     */
 }
 
 -(BOOL)performDragOperation:(id<NSDraggingInfo>)sender
@@ -1702,7 +1735,7 @@
 
 
             [iSrc createUUID];
-            
+
             [self.sourceLayout addSource:iSrc];
             //[iSrc positionOrigin:worldPoint.x y:worldPoint.y];
             iSrc.x_pos = worldPoint.x;
@@ -1710,7 +1743,27 @@
         }
         return YES;
     }
-    return NO;
+    
+    bool retVal = NO;
+    for(NSPasteboardItem *item in pboard.pasteboardItems)
+    {
+        
+        NSObject<CSInputSourceProtocol> *itemSrc = [CaptureController.sharedCaptureController inputSourceForPasteboardItem:item];
+        if (itemSrc)
+        {
+            
+            [self addInputSourceWithInput:itemSrc];
+            if (itemSrc.layer)
+            {
+                InputSource *lsrc = (InputSource *)itemSrc;
+                
+                [lsrc autoCenter];
+            }
+            retVal = YES;
+        }
+    }
+
+    return retVal;
 }
 
 
@@ -1722,6 +1775,16 @@
 }
 
 
+-(void)disablePrimaryRender
+{
+    _glLayer.doRender = NO;
+}
+
+-(void)enablePrimaryRender
+{
+    _glLayer.doRender = YES;
+}
+
 
 -(void)sourceWasDeleted:(NSNotification *)notification
 {
@@ -1731,19 +1794,22 @@
 }
 
 
--(void)purgeConfigForInput:(InputSource *)src
+-(void)purgeConfigForInput:(NSObject<CSInputSourceProtocol> *)src
 {
     NSString *uuid = src.uuid;
     
-    [self stopHighlightingSource:src];
+    if (src.layer)
+    {
+        [self stopHighlightingSource:(InputSource *)src];
+    }
     
     NSWindow *cWindow = [self.activeConfigWindows objectForKey:uuid];
-    InputPopupControllerViewController *cController = [self.activeConfigControllers objectForKey:uuid];
+    NSViewController *cController = [self.activeConfigControllers objectForKey:uuid];
     
     
     if (cController)
     {
-        cController.inputSource = nil;
+        //cController.inputSource = nil;
         [self.activeConfigControllers removeObjectForKey:uuid];
     }
     
@@ -1780,19 +1846,18 @@
 {
     
     
-    InputSource *configSrc = [self.sourceLayout inputForUUID:uuid];
+    NSObject<CSInputSourceProtocol> *configSrc = [self.sourceLayout inputForUUID:uuid];
     
     if (!configSrc)
     {
         return;
     }
     
-    InputPopupControllerViewController *newViewController = [[InputPopupControllerViewController alloc] init];
+    NSViewController *newViewController = [configSrc configurationViewController];
     
-    newViewController.inputSource = configSrc;
     
-    NSWindow *configWindow = [[NSWindow alloc] init];
     
+    NSWindow *configWindow = [[NSWindow alloc] init];    
     NSRect newFrame = [configWindow frameRectForContentRect:NSMakeRect(0.0f, 0.0f, newViewController.view.frame.size.width, newViewController.view.frame.size.height)];
     
     
@@ -1811,17 +1876,17 @@
     
     
     [configWindow.contentView addSubview:newViewController.view];
-    configWindow.title = [NSString stringWithFormat:@"CocoaSplit Input (%@)", newViewController.inputSource.name];
+    configWindow.title = [NSString stringWithFormat:@"CocoaSplit Input (%@)", configSrc.name];
     configWindow.delegate = self;
     
     configWindow.styleMask =  NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask;
 
     NSWindow *cWindow = [self.activeConfigWindows objectForKey:uuid];
-    InputPopupControllerViewController *cController = [self.activeConfigControllers objectForKey:uuid];
+    NSViewController *cController = [self.activeConfigControllers objectForKey:uuid];
     
     if (cController)
     {
-        cController.inputSource = nil;
+        //cController.inputSource = nil;
         [self.activeConfigControllers removeObjectForKey:uuid];
     }
     
@@ -1834,83 +1899,36 @@
     [self.activeConfigWindows setObject:configWindow forKey:uuid];
     [self.activeConfigControllers setObject:newViewController forKey:uuid];
 
+    configWindow.identifier = uuid;
+    
     [configWindow makeKeyAndOrderFront:nil];
-    
-    
-}
--(NSWindow *)detachableWindowForPopover:(NSPopover *)popover
-{
-
-    
-    
-    
-    InputPopupControllerViewController *newViewController = [[InputPopupControllerViewController alloc] init];
-    
-    InputPopupControllerViewController *oldViewController = (InputPopupControllerViewController *)popover.contentViewController;
-    
-    
-    
-    newViewController.inputSource = oldViewController.inputSource;
-    
-    NSWindow *popoverWindow;
-    popoverWindow = [[NSWindow alloc] init];
-    
-    
-    
-    NSRect newFrame = [popoverWindow frameRectForContentRect:NSMakeRect(0.0f, 0.0f, newViewController.view.frame.size.width, newViewController.view.frame.size.height)];
-    
-    [popoverWindow setFrame:newFrame display:NO];
-    
-    [popoverWindow setReleasedWhenClosed:NO];
-    
-    
-    [popoverWindow.contentView addSubview:newViewController.view];
-    popoverWindow.title = [NSString stringWithFormat:@"CocoaSplit Input (%@)", newViewController.inputSource.name];
-    popoverWindow.delegate = self;
-    
-    popoverWindow.styleMask =  NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask;
-    
-    NSString *uuid = newViewController.inputSource.uuid;
-    
-    NSWindow *cWindow = [self.activeConfigWindows objectForKey:uuid];
-    InputPopupControllerViewController *cController = [self.activeConfigControllers objectForKey:uuid];
-    
-    if (cController)
-    {
-        cController.inputSource = nil;
-        [self.activeConfigControllers removeObjectForKey:uuid];
-    }
-    
-    if (cWindow)
-    {
-        [self.activeConfigWindows removeObjectForKey:uuid];
-    }
-    
-    
-    [self.activeConfigWindows setObject:popoverWindow forKey:uuid];
-    [self.activeConfigControllers setObject:newViewController forKey:uuid];
-    
-    return popoverWindow;
 }
 
-- (void)popoverDidClose:(NSNotification *)notification
+
+-(void)windowWillClose:(NSNotification *)notification
 {
-    NSString *closeReason = [[notification userInfo] valueForKey:NSPopoverCloseReasonKey];
-    NSPopover *popover = notification.object;
-    if (closeReason && closeReason == NSPopoverCloseReasonStandard)
+    NSWindow *closedWindow = notification.object;
+    
+    if (closedWindow)
     {
-        InputPopupControllerViewController *vcont = (InputPopupControllerViewController *)popover.contentViewController;
+        NSString *uuid = closedWindow.identifier;
+        NSWindow *cWindow = [self.activeConfigWindows objectForKey:uuid];
+        NSViewController *cController = [self.activeConfigControllers objectForKey:uuid];
         
-        vcont.inputSource = nil;
+        
+        if (cController)
+        {
+            [cController commitEditing];
+            [self.activeConfigControllers removeObjectForKey:uuid];
+        }
+        
+        if (cWindow)
+        {
+           [self.activeConfigWindows removeObjectForKey:uuid];
+        }
         
     }
     
-    if (popover.contentViewController == self.activePopupController)
-    {
-        self.activePopupController = nil;
-        popover.contentViewController = nil;
-    }
 }
-
 
 @end

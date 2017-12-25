@@ -15,13 +15,19 @@
 static NSArray *_sourceTypes = nil;
 
 
+
+
 @class Foobar;
+
+
+@implementation InputSourcePrivateFrameUpdate
+@end
 
 
 @implementation InputSource
 
 
-
+@synthesize frameDelay = _frameDelay;
 @synthesize selectedVideoType = _selectedVideoType;
 @synthesize name = _name;
 @synthesize transitionFilterName = _transitionFilterName;
@@ -55,12 +61,12 @@ static NSArray *_sourceTypes = nil;
 -(instancetype)copyWithZone:(NSZone *)zone
 {
     [CATransaction begin];
-    InputSource *newSource = [[InputSource allocWithZone:zone] init];
+    InputSource *newSource = [super copyWithZone:zone];
     newSource.name = _editedName;
 
     newSource.videoInput = self.videoInput;
     [newSource registerVideoInput:self.videoInput];
-    newSource->_currentLayer = [self.videoInput layerForInput:newSource];
+    //newSource->_currentLayer = [self.videoInput layerForInput:newSource];
     newSource.layer.sourceLayer = newSource->_currentLayer;
     
     newSource.rotationAngle = self.rotationAngle;
@@ -121,26 +127,29 @@ static NSArray *_sourceTypes = nil;
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
     
+    
+    [super encodeWithCoder:aCoder];
+    
     [aCoder encodeFloat:self.rotationAngle forKey:@"rotationAngle"];
     [aCoder encodeFloat:self.rotationAngleX forKey:@"rotationAngleX"];
     [aCoder encodeFloat:self.rotationAngleY forKey:@"rotationAngleY"];
-
     [aCoder encodeFloat:self.opacity forKey:@"opacity"];
-    
     [aCoder encodeObject:_editedName forKey:@"name"];
-    [aCoder encodeFloat:self.depth forKey:@"CAdepth"];
     [aCoder encodeFloat:self.crop_top forKey:@"CAcrop_top"];
     [aCoder encodeFloat:self.crop_bottom forKey:@"CAcrop_bottom"];
     [aCoder encodeFloat:self.crop_left forKey:@"CAcrop_left"];
     [aCoder encodeFloat:self.crop_right forKey:@"CAcrop_right"];
-    
     [aCoder encodeObject:self.selectedVideoType forKey:@"selectedVideoType"];
-    [aCoder encodeObject:self.uuid forKey:@"uuid"];
-
     [aCoder encodeFloat:self.scrollXSpeed forKey:@"scrollXSpeed"];
     [aCoder encodeFloat:self.scrollYSpeed forKey:@"scrollYSpeed"];
     
     [aCoder encodeInt:self.rotateStyle forKey:@"rotateStyle"];
+    
+    if (!_encodingForCompare)
+    {
+        [aCoder encodeFloat:self.depth forKey:@"CAdepth"];
+    }
+    
     if (self.videoInput)
     {
         [aCoder encodeObject:self.videoInput forKey:@"videoInput"];
@@ -167,9 +176,9 @@ static NSArray *_sourceTypes = nil;
     [aCoder encodeFloat:self.layer.position.x forKey:@"CAx_pos"];
     [aCoder encodeFloat:self.layer.position.y forKey:@"CAy_pos"];
     
+    
     [aCoder encodeFloat:self.layer.bounds.size.width forKey:@"CAdisplay_width"];
     [aCoder encodeFloat:self.layer.bounds.size.height forKey:@"CAdisplay_height"];
-    
     [aCoder encodeFloat:self.borderWidth forKey:@"borderWidth"];
     [aCoder encodeObject:self.borderColor forKey:@"borderColor"];
     [aCoder encodeFloat:self.cornerRadius forKey:@"cornerRadius"];
@@ -197,9 +206,11 @@ static NSArray *_sourceTypes = nil;
     [aCoder encodeFloat: self.gradientStopX forKey:@"gradientEndPointX"];
     [aCoder encodeFloat: self.gradientStopY forKey:@"gradientEndPointY"];
 
-
     
     [aCoder encodeObject:self.layer.filters forKey:@"layerFilters"];
+    [aCoder encodeObject:self.layer.backgroundFilters forKey:@"backgroundFilters"];
+    [aCoder encodeObject:self.layer.sourceLayer.filters forKey:@"sourceFilters"];
+    
     if (_userBackground)
     {
         [aCoder encodeObject:self.backgroundColor forKey:@"backgroundColor"];
@@ -209,7 +220,6 @@ static NSArray *_sourceTypes = nil;
     
     [aCoder encodeBool:self.alwaysDisplay forKey:@"alwaysDisplay"];
     [aCoder encodeBool:self.transitionEnabled forKey:@"transitionEnabled"];
-    
 }
 
 
@@ -219,7 +229,7 @@ static NSArray *_sourceTypes = nil;
     There's some 'legacy' stuff in here to support loading older CocoaSplit save formats. Mostly related to the change from CoreImage to CoreAnimation. some types changed, some stuff like x/y position changed names. It's probably a bit slower when you're saving->going live but meh. Problematic variables are encoded with a prefix of 'CA' to avoid excessive use of try/catch
      */
     
-    if (self = [super init])
+    if (self = [super initWithCoder:aDecoder])
     {
         
         [CATransaction begin];
@@ -240,7 +250,7 @@ static NSArray *_sourceTypes = nil;
             
             [self registerVideoInput:self.videoInput];
 
-            _currentLayer = [self.videoInput layerForInput:self];
+            //_currentLayer = [self.videoInput layerForInput:self];
             //self.layer.sourceLayer = _currentLayer;
             if (!_userBackground)
             {
@@ -292,15 +302,7 @@ static NSArray *_sourceTypes = nil;
 
 
 
-        id constraintData = [aDecoder decodeObjectForKey:@"constraintMap"];
-        if (constraintData)
-        {
-            self.constraintMap = constraintData;
-        } else if ((constraintData = [aDecoder decodeObjectForKey:@"constraintMapData"])) {
-            self.constraintMap = [NSKeyedUnarchiver unarchiveObjectWithData:constraintData];
-        }
-        
-        
+
         
         
         _rotationAngle = [aDecoder decodeFloatForKey:@"rotationAngle"];
@@ -437,6 +439,8 @@ static NSArray *_sourceTypes = nil;
         
         
         self.layer.filters = [aDecoder decodeObjectForKey:@"layerFilters"];
+        self.layer.backgroundFilters = [aDecoder decodeObjectForKey:@"backgroundFilters"];
+        self.layer.sourceLayer.filters = [aDecoder decodeObjectForKey:@"sourceFilters"];
         self.compositingFilterName = [aDecoder decodeObjectForKey:@"compositingFilterName"];
         if ([aDecoder containsValueForKey:@"alwaysDisplay"])
         {
@@ -455,10 +459,46 @@ static NSArray *_sourceTypes = nil;
         
         if (self.parentInput)
         {
-            
-            [self.parentInput.layer addSublayer:self.layer];
-            [self.parentInput.attachedInputs addObject:self];
+            [self makeSublayerOfLayer:self.parentInput.layer];
+            [[self.parentInput mutableArrayValueForKey:@"attachedInputs"] addObject:self];
         }
+        
+        id constraintData = [aDecoder decodeObjectForKey:@"constraintMap"];
+        NSMutableDictionary *tmpConstraints;
+        
+        if (constraintData)
+        {
+            tmpConstraints = constraintData;
+        } else if ((constraintData = [aDecoder decodeObjectForKey:@"constraintMapData"])) {
+            tmpConstraints = [NSKeyedUnarchiver unarchiveObjectWithData:constraintData];
+        }
+        
+        //if all the constraint attributes are zero reset to null based map
+        
+        
+        bool convert_constraints = YES;
+        for (NSString *cKey in tmpConstraints)
+        {
+            NSDictionary *cons = tmpConstraints[cKey];
+            NSNumber *attr = cons[@"attr"];
+            
+            if ((id)attr == [NSNull null])
+            {
+                convert_constraints = NO;
+                break;
+            } else if (attr.intValue != 0) {
+                convert_constraints = NO;
+                break;
+            }
+        }
+        
+        if (convert_constraints)
+        {
+            [self resetConstraints];
+        } else {
+            self.constraintMap = tmpConstraints;
+        }
+        [self observeConstraintKeys];
 
         
     }
@@ -468,8 +508,111 @@ static NSArray *_sourceTypes = nil;
 
 
 
++(NSSet *)keyPathsForValuesAffectingLibraryImage
+{
+    return [NSSet setWithObjects:@"videoInput", @"videoInput.libraryImage", nil];
+}
+
+-(void)setFrameDelay:(int)frameDelay
+{
+    _frameDelay = frameDelay;
+    if (!_frameDelay)
+    {
+        @synchronized(self)
+        {
+            for (InputSourcePrivateFrameUpdate *update in _frameUpdateQueue)
+            {
+                if (update.postBlock)
+                {
+                    update.postBlock();
+                }
+            }
+            [_frameUpdateQueue removeAllObjects];
+        }
+    }
+}
+
+-(int)frameDelay
+{
+    return _frameDelay;
+}
+
+
+-(void)updateLayersWithNewFrame:(void (^)(CALayer *))updateBlock withPreuseBlock:(void(^)(void))preUseBlock withPostuseBlock:(void(^)(void))postUseBlock
+{
+    
+    if (_currentLayer)
+    {
+        
+        
+        if (preUseBlock)
+        {
+            preUseBlock();
+        }
+        
+        InputSourcePrivateFrameUpdate *useUpdate = [[InputSourcePrivateFrameUpdate alloc] init];
+        useUpdate.updateBlock = updateBlock;
+        useUpdate.postBlock = postUseBlock;
+        
+        
+        
+        if (self.frameDelay > 0 && preUseBlock && postUseBlock)
+        {
+            @synchronized(self) {
+                [_frameUpdateQueue addObject:useUpdate];
+                
+                if (_frameUpdateQueue.count >= self.frameDelay)
+                {
+                    useUpdate = [_frameUpdateQueue objectAtIndex:0];
+                    [_frameUpdateQueue removeObjectAtIndex:0];
+                } else {
+                    return;
+                }
+            }
+        }
+        
+        
+        if (self.isFrozen)
+        {
+            if (useUpdate.postBlock)
+            {
+                useUpdate.postBlock();
+            }
+            return;
+        }
+        
+        [CATransaction begin];
+        
+
+        if (useUpdate.updateBlock) /* it should always have one, but.... */
+        {
+            useUpdate.updateBlock(_currentLayer);
+        }
+        [_currentLayer displayIfNeeded];
+        [self layerUpdated];
+        if (useUpdate.postBlock)
+        {
+            useUpdate.postBlock();
+        }
+        [CATransaction commit];
+    }
+}
+
+
+-(void)updateLayer:(void (^)(CALayer *layer))updateBlock
+{
+    if (_currentLayer)
+    {
+        [CATransaction begin];
+        updateBlock(_currentLayer);
+        [_currentLayer displayIfNeeded];
+        [CATransaction commit];
+    }
+}
+
 -(void)addedToLayout
 {
+    
     if (self.parentInput)
     {
         
@@ -478,6 +621,8 @@ static NSArray *_sourceTypes = nil;
     }
 
 }
+
+
 -(CGRect)globalLayoutPosition
 {
     return [self.sourceLayout.rootLayer convertRect:self.layer.frame fromLayer:self.layer.superlayer];
@@ -487,8 +632,9 @@ static NSArray *_sourceTypes = nil;
 {
     forInput.inputSource = self;
     forInput.isLive = self.is_live;
-    [forInput addObserver:self forKeyPath:@"captureName" options:NSKeyValueChangeNewKey context:NULL];
-    [forInput createNewLayerForInput:self];
+    [forInput addObserver:self forKeyPath:@"captureName" options:NSKeyValueObservingOptionNew context:NULL];
+    _currentLayer = [forInput createNewLayerForInput:self];
+    
 
 }
 
@@ -502,6 +648,7 @@ static NSArray *_sourceTypes = nil;
     forInput.isLive = NO;
     [forInput removeLayerForInput:self];
     [forInput removeObserver:self forKeyPath:@"captureName"];
+    _currentLayer = nil;
     
 }
 
@@ -519,11 +666,14 @@ static NSArray *_sourceTypes = nil;
     [self initDictionaryForConstraints:self.constraintMap];
 }
 
+
 -(id)init
 {
     if (self = [super init])
     {
         [self commonInit];
+        [self observeConstraintKeys];
+
     }
     return self;
 }
@@ -534,18 +684,16 @@ static NSArray *_sourceTypes = nil;
 
     [CATransaction begin];
     self.name = nil;
-    
     _nextImageTime = 0.0f;
     _currentSourceIdx = 0;
     _needsAdjustment = NO;
     _needsAdjustPosition = NO;
     _topLevelHeight = 0;
     _topLevelWidth = 0;
-    
+    _frameUpdateQueue = [NSMutableArray array];
     self.changeInterval = 20.0f;
     
     
-    self.attachedInputs = [NSMutableArray array];
     
     self.scrollXSpeed = 0.0f;
     self.scrollYSpeed = 0.0f;
@@ -560,7 +708,7 @@ static NSArray *_sourceTypes = nil;
     self.crop_left = 0;
     self.crop_right = 0;
     self.videoSources = [[NSMutableArray alloc] init];
-    _refCount = 0;
+    self.refCount = 0;
     
     self.constraintMap = [NSMutableDictionary dictionary];
 
@@ -624,7 +772,6 @@ static NSArray *_sourceTypes = nil;
     _multiTransition.duration = 2.0;
     _multiTransition.removedOnCompletion = YES;
     
-    
     [self createUUID];
     
    
@@ -641,11 +788,13 @@ static NSArray *_sourceTypes = nil;
     
     self.chromaKeyColor = [NSColor greenColor];
     _userBackground = NO;
-    self.layer.backgroundColor = CGColorCreateGenericRGB(0, 0, 1, 1);
+    CGColorRef bgColor = CGColorCreateGenericRGB(0, 0, 1, 1);
+    self.layer.backgroundColor = bgColor;
+    CGColorRelease(bgColor);
+    
     _currentInput = self;
     
 
-    [self observeConstraintKeys];
     [CATransaction commit];
     _undoActionMap = @{@"name": @"Set Name",
                        @"crop_top": @"Crop Top",
@@ -687,13 +836,6 @@ static NSArray *_sourceTypes = nil;
 
 
 
--(void)createUUID
-{
-    CFUUIDRef tmpUUID = CFUUIDCreate(NULL);
-    self.uuid = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, tmpUUID);
-    CFRelease(tmpUUID);
-
-}
 
 -(void)setRotateStyle:(input_rotate_style)rotateStyle
 {
@@ -718,6 +860,14 @@ static NSArray *_sourceTypes = nil;
 }
 
 
+-(NSViewController *)configurationViewController
+{
+    InputPopupControllerViewController *controller = [[InputPopupControllerViewController alloc] init];
+    controller.inputSource = self;
+    return controller;
+}
+
+
 -(void)initDictionaryForConstraints:(NSMutableDictionary *)dict
 {
     NSArray *baseKeys = @[@"LeftEdge", @"RightEdge", @"TopEdge", @"BottomEdge", @"HorizontalCenter", @"VerticalCenter", @"Width", @"Height"];
@@ -726,7 +876,7 @@ static NSArray *_sourceTypes = nil;
     for (NSString *base in baseKeys)
     {
         NSMutableDictionary *valDict = [[NSMutableDictionary alloc] init];
-        [valDict setObject:[NSNumber numberWithInt:0] forKey:@"attr"];
+        [valDict setObject:[NSNull null] forKey:@"attr"];
         [valDict setObject:[NSNumber numberWithInt:0] forKey:@"offset"];
         [dict setObject:valDict forKey:base];
     }
@@ -752,7 +902,7 @@ static NSArray *_sourceTypes = nil;
 {
     [CATransaction begin];
     self.layer.zPosition = depth;
-    [CATransaction commit];
+    [CATransaction commit];    
 }
 
 
@@ -993,7 +1143,7 @@ static NSArray *_sourceTypes = nil;
     {
         NSData *saveData = [NSKeyedArchiver archivedDataWithRootObject:toDelete];
         __weak InputSource *weakSelf = self;
-        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(InputSource *input) {
+        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
             CIFilter *newFilter = [NSKeyedUnarchiver unarchiveObjectWithData:saveData];
             NSMutableArray *cFilters = weakSelf.layer.filters.mutableCopy;
             if (!cFilters)
@@ -1004,8 +1154,11 @@ static NSArray *_sourceTypes = nil;
             [CATransaction begin];
             weakSelf.layer.filters = cFilters;
             [CATransaction commit];
-            [[self.sourceLayout.undoManager prepareWithInvocationTarget:weakSelf.sourceLayout] modifyUUID:weakSelf.uuid withBlock:^(InputSource *input) {
-                [input deleteLayerFilter:newFilter.name];
+            [[self.sourceLayout.undoManager prepareWithInvocationTarget:weakSelf.sourceLayout] modifyUUID:weakSelf.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
+                if (input.layer)
+                {
+                    [(InputSource *)input deleteLayerFilter:newFilter.name];
+                }
             }];
             [self.sourceLayout.undoManager setActionName:@"Add Input Filter"];
             
@@ -1028,7 +1181,7 @@ static NSArray *_sourceTypes = nil;
     {
         NSData *saveData = [NSKeyedArchiver archivedDataWithRootObject:toDelete];
         __weak InputSource *weakSelf = self;
-        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(InputSource *input) {
+        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
             CIFilter *newFilter = [NSKeyedUnarchiver unarchiveObjectWithData:saveData];
             NSMutableArray *cFilters = weakSelf.layer.sourceLayer.filters.mutableCopy;
             if (!cFilters)
@@ -1039,8 +1192,11 @@ static NSArray *_sourceTypes = nil;
             [CATransaction begin];
             weakSelf.layer.sourceLayer.filters = cFilters;
             [CATransaction commit];
-            [[self.sourceLayout.undoManager prepareWithInvocationTarget:weakSelf.sourceLayout] modifyUUID:weakSelf.uuid withBlock:^(InputSource *input) {
-                [input deleteSourceFilter:newFilter.name];
+            [[self.sourceLayout.undoManager prepareWithInvocationTarget:weakSelf.sourceLayout] modifyUUID:weakSelf.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
+                if (input.layer)
+                {
+                    [(InputSource *)input deleteSourceFilter:newFilter.name];
+                }
             }];
             [self.sourceLayout.undoManager setActionName:@"Add Source Filter"];
             
@@ -1063,7 +1219,7 @@ static NSArray *_sourceTypes = nil;
     {
         NSData *saveData = [NSKeyedArchiver archivedDataWithRootObject:toDelete];
         __weak InputSource *weakSelf = self;
-        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(InputSource *input) {
+        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
             CIFilter *newFilter = [NSKeyedUnarchiver unarchiveObjectWithData:saveData];
             NSMutableArray *cFilters = weakSelf.layer.backgroundFilters.mutableCopy;
             if (!cFilters)
@@ -1074,8 +1230,11 @@ static NSArray *_sourceTypes = nil;
             [CATransaction begin];
             weakSelf.layer.backgroundFilters = cFilters;
             [CATransaction commit];
-            [[self.sourceLayout.undoManager prepareWithInvocationTarget:weakSelf.sourceLayout] modifyUUID:weakSelf.uuid withBlock:^(InputSource *input) {
-                [input deleteBackgroundFilter:newFilter.name];
+            [[self.sourceLayout.undoManager prepareWithInvocationTarget:weakSelf.sourceLayout] modifyUUID:weakSelf.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
+                if (input.layer)
+                {
+                    [(InputSource *)input deleteBackgroundFilter:newFilter.name];
+                }
             }];
             [self.sourceLayout.undoManager setActionName:@"Add Background Filter"];
 
@@ -1093,7 +1252,7 @@ static NSArray *_sourceTypes = nil;
 
 
 
--(void)addLayerFilter:(NSString *)filterName
+-(NSString *)addLayerFilter:(NSString *)filterName
 {
 
     CIFilter *newFilter = [CIFilter filterWithName:filterName];
@@ -1104,8 +1263,11 @@ static NSArray *_sourceTypes = nil;
         NSString *filterID = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, tmpUUID);
         CFRelease(tmpUUID);
         newFilter.name = filterID;
-        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(InputSource *input) {
-            [input deleteLayerFilter:filterID];
+        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
+            if (input.layer)
+            {
+                [(InputSource *)input deleteLayerFilter:filterID];
+            }
         }];
 
         NSMutableArray *currentFilters = self.layer.filters.mutableCopy;
@@ -1118,10 +1280,12 @@ static NSArray *_sourceTypes = nil;
         [CATransaction begin];
         self.layer.filters = currentFilters;
         [CATransaction commit];
+        return filterID;
     }
+    return nil;
 }
 
--(void)addSourceFilter:(NSString *)filterName
+-(NSString *)addSourceFilter:(NSString *)filterName
 {
     
     CIFilter *newFilter = [CIFilter filterWithName:filterName];
@@ -1132,8 +1296,11 @@ static NSArray *_sourceTypes = nil;
         NSString *filterID = (__bridge_transfer NSString *)CFUUIDCreateString(NULL, tmpUUID);
         CFRelease(tmpUUID);
         newFilter.name = filterID;
-        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(InputSource *input) {
-            [input deleteSourceFilter:filterID];
+        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
+            if (input.layer)
+            {
+                [(InputSource *)input deleteSourceFilter:filterID];
+            }
         }];
 
         NSMutableArray *currentFilters = self.layer.sourceLayer.filters.mutableCopy;
@@ -1146,10 +1313,12 @@ static NSArray *_sourceTypes = nil;
         [CATransaction begin];
         self.layer.sourceLayer.filters = currentFilters;
         [CATransaction commit];
+        return filterID;
     }
+    return nil;
 }
 
--(void)addBackgroundFilter:(NSString *)filterName
+-(NSString *)addBackgroundFilter:(NSString *)filterName
 {
     
     CIFilter *newFilter = [CIFilter filterWithName:filterName];
@@ -1161,8 +1330,11 @@ static NSArray *_sourceTypes = nil;
         CFRelease(tmpUUID);
         newFilter.name = filterID;
         
-        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(InputSource *input) {
-            [input deleteBackgroundFilter:filterID];
+        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
+            if (input.layer)
+            {
+                [(InputSource *)input deleteBackgroundFilter:filterID];
+            }
         }];
         [self.sourceLayout.undoManager setActionName:@"Add Background Filter"];
 
@@ -1175,7 +1347,9 @@ static NSArray *_sourceTypes = nil;
         [CATransaction begin];
         self.layer.backgroundFilters = currentFilters;
         [CATransaction commit];
+        return filterID;
     }
+    return nil;
 }
 
 
@@ -1308,6 +1482,7 @@ static NSArray *_sourceTypes = nil;
     }
     
     [self stopObservingConstraintKeys];
+    self.layer = nil;
     
     
 }
@@ -1381,7 +1556,7 @@ static NSArray *_sourceTypes = nil;
     [CATransaction setDisableActions:YES];
     CALayer *nLayer = [CALayer layer];
     
-    
+    nLayer.name = @"ANIMATIONLAYER";
     nLayer.position = self.layer.position;
     nLayer.bounds = self.layer.bounds;
     nLayer.transform = self.layer.transform;
@@ -1472,7 +1647,8 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setCropRect
 {
-    CGRect contentsRect = self.layer.sourceLayer.contentsRect;
+    
+    CGRect contentsRect = self.layer.contentsRect;//self.layer.sourceLayer.contentsRect;
     CGRect oldRect = contentsRect;
     
     contentsRect.origin.x = self.crop_left;
@@ -1797,8 +1973,9 @@ static NSArray *_sourceTypes = nil;
         float hRatio = self.canvas_height/self.topLevelHeight;
         float old_x = self.x_pos;
         float old_y = self.y_pos;
-        float new_width = self.layer.bounds.size.width * wRatio;
-        float new_height = self.layer.bounds.size.height * hRatio;
+        
+        float new_width = self.layer.frame.size.width * wRatio;
+        float new_height = self.layer.frame.size.height * hRatio;
         [self directSize:new_width height:new_height];
         if (doPosition)
         {
@@ -1814,6 +1991,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void)frameTick
 {
+    
     
     
     self.layoutPosition = self.layer.frame;
@@ -1842,6 +2020,7 @@ static NSArray *_sourceTypes = nil;
         }
         
         self.layer.sourceLayer = _currentLayer;
+
     }
     
     
@@ -1851,8 +2030,11 @@ static NSArray *_sourceTypes = nil;
     if (self.needsAdjustment)
     {
         [self adjustInputSize:self.needsAdjustPosition];
+
         self.needsAdjustment = NO;
     }
+
+
 }
 
 
@@ -1865,37 +2047,55 @@ static NSArray *_sourceTypes = nil;
     }
     
     NSSize videoSize = [self.videoInput captureSize];
-    
     if (!NSEqualSizes(videoSize, NSZeroSize))
     {
         [self directSize:videoSize.width height:videoSize.height];
     }
 }
 
+
+-(void)autoCenter
+{
+    [self autoCenter:NSMakeRect(0, 0, self.canvas_width, self.canvas_height)];
+}
+
+
 -(void)autoCenter:(NSRect)containerRect
 {
     NSRect myRect = self.layer.bounds;
     
-    
     if (NSContainsRect(containerRect, myRect))
     {
-        [self autoFit];
+        CGFloat newX = (self.canvas_width/2) - self.layer.frame.size.width/2;
+        CGFloat newY = (self.canvas_height/2) - self.layer.frame.size.height/2;
+        [self positionOrigin:newX y:newY];
     } else {
-        //We're bigger than the container! Set ourselves to the exact same size and origin
-        [self directSize:containerRect.size.width height:containerRect.size.height];
-        [self positionOrigin:0 y:0];
+        if (self.videoInput && !NSEqualSizes(NSZeroSize, self.videoInput.captureSize))
+        {
+            [self autoFitWithSize:self.videoInput.captureSize];
+        } else {
+            [self autoFit];
+        }
     }
 }
 
 
+
 -(void)autoFit
+{
+    [self autoFitWithSize:self.size];
+}
+
+
+-(void)autoFitWithSize:(NSSize)useSize
 {
 
     
-    float wr = self.size.width / self.canvas_width;
-    float hr = self.size.height / self.canvas_height;
+    float wr = useSize.width / self.canvas_width;
+    float hr = useSize.height / self.canvas_height;
     float ratio = (hr < wr ? wr : hr);
-    [self directSize:self.size.width / ratio height:self.size.height / ratio];
+    
+    [self directSize:useSize.width / ratio height:useSize.height / ratio];
     CGFloat newX = (self.canvas_width/2) - self.layer.frame.size.width/2;
     CGFloat newY = (self.canvas_height/2) - self.layer.frame.size.height/2;
     [self positionOrigin:newX y:newY];
@@ -1935,7 +2135,7 @@ static NSArray *_sourceTypes = nil;
     NSRect iRect = NSIntegralRect(newLayout);
     
     [CATransaction begin];
-    self.layer.frame = newLayout;
+    self.layer.frame = iRect;
     [CATransaction commit];
     
     
@@ -2155,11 +2355,21 @@ static NSArray *_sourceTypes = nil;
     
     [CATransaction begin];
     
+    NSPoint newPosition = self.layer.frame.origin;
+
+    
+    if (!NSIntersectsRect(parentLayer.frame, self.layer.frame))
+    {
+        newPosition.x = NSMidX(parentLayer.frame) - self.layer.frame.size.width/2;
+        newPosition.y = NSMidY(parentLayer.frame) - self.layer.frame.size.height/2;
+    }
+    
+    
+    
     [parentLayer addSublayer:self.layer];
     //translate the position to the new sublayers coordinates
     
     NSArray *layers = [self getLayersToCanvas:parentLayer];
-    NSPoint newPosition = self.layer.frame.origin;
     
     for (CALayer *curr in [layers reverseObjectEnumerator])
     {
@@ -2169,6 +2379,7 @@ static NSArray *_sourceTypes = nil;
     
     NSRect oldFrame = self.layer.frame;
     oldFrame.origin = newPosition;
+    
     self.layer.frame = oldFrame;
     [CATransaction commit];
 
@@ -2254,6 +2465,17 @@ static NSArray *_sourceTypes = nil;
 }
 
 
+-(NSString *)label
+{
+    if (self.videoInput)
+    {
+        return [self.videoInput.class label];
+    }
+    
+    return @"None";
+}
+
+
 
 
 -(NSString *) selectedVideoType
@@ -2261,6 +2483,25 @@ static NSArray *_sourceTypes = nil;
     return _selectedVideoType;
 }
 
+
+-(void) setDirectVideoInput:(NSObject <CSCaptureSourceProtocol> *)videoInput
+{
+    if (_videoInput)
+    {
+        [self deregisterVideoInput:self.videoInput];
+    }
+    
+    _videoInput = (NSObject<CSCaptureSourceProtocol,CSCaptureBaseInputFrameTickProtocol> *)videoInput;
+    
+    _selectedVideoType = videoInput.instanceLabel;
+    
+    [self registerVideoInput:_videoInput];
+    //CALayer *newLayer = [_videoInput layerForInput:self];
+    
+    //_currentLayer = newLayer;
+    
+    self.name = _editedName;
+}
 -(void) setSelectedVideoType:(NSString *)selectedVideoType
 {
     NSMutableDictionary *pluginMap = [[CSPluginLoader sharedPluginLoader] sourcePlugins];
@@ -2271,15 +2512,15 @@ static NSArray *_sourceTypes = nil;
         [self deregisterVideoInput:self.videoInput];
     }
     
-    NSObject <CSCaptureSourceProtocol> *newCaptureSession;
+    NSObject <CSCaptureSourceProtocol,CSCaptureBaseInputFrameTickProtocol> *newCaptureSession;
     
     Class captureClass = [pluginMap objectForKey:selectedVideoType];
     newCaptureSession = [[captureClass alloc] init];
     
     [self registerVideoInput:newCaptureSession];
-    CALayer *newLayer = [newCaptureSession layerForInput:self];
+   //CALayer *newLayer = [newCaptureSession layerForInput:self];
     
-    _currentLayer = newLayer;
+   // _currentLayer = newLayer;
     self.videoInput = newCaptureSession;
 
  
@@ -2288,33 +2529,200 @@ static NSArray *_sourceTypes = nil;
     
  }
 
+
 -(NSData *)saveData
+{
+    return [self saveData:NO];
+}
+
+
+-(NSData *)saveData:(bool)forCompare
 {
     NSMutableData *saveData = [NSMutableData data];
     NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:saveData];
+
     
-    [archiver encodeObject:self forKey:@"root"];
+    NSMutableDictionary *savDict = [NSMutableDictionary dictionary];
+    if (self.videoInput)
+    {
+        savDict[@"videoInput"] = self.videoInput;
+    }
+    
+    if (self.layer)
+    {
+        if (self.layer.filters)
+        {
+            savDict[@"filters"] = self.layer.filters;
+        }
+        
+        if (self.layer.backgroundFilters)
+        {
+            savDict[@"backgroundFilters"] = self.layer.backgroundFilters;
+        }
+        
+        if (self.layer.sourceLayer && self.layer.sourceLayer.filters)
+        {
+            savDict[@"sourceFilters"] = self.layer.sourceLayer.filters;
+        }
+    }
+    
+    
+    [archiver encodeObject:savDict forKey:@"root"];
     [archiver finishEncoding];
+    
     return saveData;
 }
 
--(bool)isDifferentInput:(InputSource *)from
+-(bool)stringCompare:(NSString *)str1 withString:(NSString *)str2
 {
-    if (![from.uuid isEqualToString:self.uuid])
+    NSString *r1 = str1 ? str1 : @"";
+    NSString *r2 = str2 ? str2 : @"";
+    return [r1 isEqualToString:r2];
+}
+
+-(bool)isEqualNilSafe:(id)o1 withObject:(id)o2
+{
+    if (!o1 && !o2)
     {
         return YES;
     }
     
-    NSData *myData = [self saveData];
-    NSData *fromData = [from saveData];
-    
-    
-    if ([myData isEqualToData:fromData])
+    if (o1 && o2)
     {
-        return NO;
+        return [o1 isEqual:o2];
     }
     
-    return YES;
+    return NO;
+}
+
+
+-(bool)isDifferentInput:(InputSource *)from
+{
+    if (![self stringCompare:from.uuid withString:self.uuid])
+        return YES;
+    
+    if (![self stringCompare:self.selectedVideoType withString:from.selectedVideoType])
+        return YES;
+
+    if (self.parentInput != from.parentInput)
+        return YES;
+    
+    if (!NSEqualSizes(self.layer.bounds.size, from.layer.bounds.size))
+        return YES;
+    
+    if (!NSEqualPoints(self.layer.position, from.layer.position))
+        return YES;
+    
+    
+    if (self.rotationAngle != from.rotationAngle)
+        return YES;
+
+    if (self.rotationAngleX != from.rotationAngleX)
+        return YES;
+
+    if (self.rotationAngleY != from.rotationAngleY)
+        return YES;
+
+    if (self.opacity != from.opacity)
+        return YES;
+
+
+    if (!NSEqualRects(self.layer.cropRect, from.layer.cropRect))
+        return YES;
+    
+    if (self.scrollXSpeed != from.scrollXSpeed)
+        return YES;
+    
+    if (self.scrollYSpeed != from.scrollYSpeed)
+        return YES;
+    
+    if (self.borderWidth != from.borderWidth)
+        return YES;
+    
+    if (![self isEqualNilSafe:self.borderColor withObject:from.borderColor])
+        return YES;
+    
+    if (self.cornerRadius != from.cornerRadius)
+        return YES;
+    
+    if (self.doChromaKey != from.doChromaKey)
+        return YES;
+    
+    if (![self isEqualNilSafe:self.chromaKeyColor withObject:from.chromaKeyColor])
+        return YES;
+    
+    if (self.chromaKeySmoothing != from.chromaKeySmoothing)
+        return YES;
+    
+    if (self.chromaKeyThreshold != from.chromaKeyThreshold)
+        return YES;
+    
+    
+    if (!CGPointEqualToPoint(self.layer.startPoint, from.layer.startPoint))
+        return YES;
+    
+    if (!CGPointEqualToPoint(self.layer.endPoint, from.layer.endPoint))
+        return YES;
+
+    if (![self isEqualNilSafe:self.startColor withObject:from.startColor])
+        return YES;
+
+    if (![self isEqualNilSafe:self.stopColor withObject:from.stopColor])
+        return YES;
+
+    if (![self stringCompare:self.compositingFilterName withString:from.compositingFilterName])
+        return YES;
+    
+    if (![self isEqualNilSafe:self.backgroundColor withObject:from.backgroundColor])
+        return YES;
+    
+    if (self.constraintMap.count != from.constraintMap.count)
+        return YES;
+    
+    for(NSString *constraintName in self.constraintMap)
+    {
+        NSDictionary *myConstraint = self.constraintMap[constraintName];
+        NSDictionary *fromConstraint = from.constraintMap[constraintName];
+        if (!fromConstraint)
+        {
+            return YES;
+        }
+        
+        
+        
+        if (![myConstraint[@"attr"] isEqual:fromConstraint[@"attr"]])
+        {
+            return YES;
+        }
+        
+        if (![myConstraint[@"offset"] isEqual:fromConstraint[@"offset"]])
+        {
+            return YES;
+        }
+    }
+    
+    
+    
+
+    if (self.layer.filters.count != from.layer.filters.count)
+        return YES;
+    
+    if (self.layer.backgroundFilters.count != from.layer.backgroundFilters.count)
+        return YES;
+
+    if (self.layer.sourceLayer.filters.count != from.layer.sourceLayer.filters.count)
+        return YES;
+    
+    NSData *myData = [self saveData:YES];
+    NSData *fromData = [from saveData:YES];
+    
+    
+    
+    if (![myData isEqualToData:fromData])
+    {
+        return YES;
+    }
+    return NO;
 }
 
 
@@ -2389,10 +2797,7 @@ static NSArray *_sourceTypes = nil;
 }
 
 
--(NSString *)MIDIIdentifier
-{
-    return [NSString stringWithFormat:@"Input:%@", self.uuid];
-}
+
 
 -(NSArray *)commandIdentifiers
 {
@@ -2421,6 +2826,8 @@ static NSArray *_sourceTypes = nil;
     
     return ret;
 }
+
+
 
 
 -(BOOL)respondsToMIDICommand:(MIKMIDICommand *)command
@@ -2734,6 +3141,17 @@ static NSArray *_sourceTypes = nil;
 
 
 
+-(NSImage *)libraryImage
+{
+    if (self.videoInput)
+    {
+        return self.videoInput.libraryImage;
+    }
+    
+    return nil;
+}
+
+
 -(void)layerUpdated
 {
     if (self.autoPlaceOnFrameUpdate)
@@ -2905,7 +3323,7 @@ static NSArray *_sourceTypes = nil;
 {
     id propertyValue = [self valueForKeyPath:propName];
     
-    [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(InputSource *input) {
+    [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
         [input setValue:propertyValue forKeyPath:propName];
         
     }];
@@ -3017,6 +3435,7 @@ static NSArray *_sourceTypes = nil;
     {
         
         
+        
         NSNumber *constraintVal;
         constraintVal = _constraintAttributeMap[key];
         
@@ -3034,7 +3453,8 @@ static NSArray *_sourceTypes = nil;
         NSNumber *parentVal = valMap[@"attr"];
         NSNumber *offsetVal = valMap[@"offset"];
         
-        if (!parentVal || (id)parentVal == [NSNull null])
+        
+        if ((id)parentVal == [NSNull null] || !parentVal)
         {
             continue;
         }
@@ -3047,10 +3467,7 @@ static NSArray *_sourceTypes = nil;
         }
         
         CAConstraintAttribute parentAttrib = [parentVal intValue];
-        if (!parentAttrib)
-        {
-            continue;
-        }
+        
         [constraints addObject:[CAConstraint constraintWithAttribute:toConstrain relativeTo:@"superlayer" attribute:parentAttrib scale:1 offset:offsetFloat]];
         
     }
@@ -3070,13 +3487,18 @@ static NSArray *_sourceTypes = nil;
     
     if ([keyPath hasPrefix:@"constraintMap"])
     {
+        
         id oldValue = change[NSKeyValueChangeOldKey];
         NSRect oldFrame = self.layoutPosition;
         
-        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(InputSource *input) {
-            [input setValue:oldValue forKeyPath:keyPath];
-            [input updateSize:oldFrame.size.width height:oldFrame.size.height];
-            [input positionOrigin:oldFrame.origin.x y:oldFrame.origin.y];
+        [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
+            
+            if (input.layer)
+            {
+                [(InputSource *)input setValue:oldValue forKeyPath:keyPath];
+                [(InputSource *)input updateSize:oldFrame.size.width height:oldFrame.size.height];
+                [(InputSource *)input positionOrigin:oldFrame.origin.x y:oldFrame.origin.y];
+            }
             
         }];
         [self.sourceLayout.undoManager setActionName:@"Constraint Change"];
@@ -3091,12 +3513,12 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setClonedFromInput:(InputSource *)clonedFromInput
 {
-    NSObject <CSCaptureSourceProtocol>*fromInput = clonedFromInput.videoInput;
+    NSObject <CSCaptureSourceProtocol,CSCaptureBaseInputFrameTickProtocol>*fromInput = clonedFromInput.videoInput;
     
     if (self.videoInput)
     {
         [self deregisterVideoInput:fromInput];
-        _currentLayer = nil;
+        //_currentLayer = nil;
     }
     
     
@@ -3104,7 +3526,7 @@ static NSArray *_sourceTypes = nil;
     {
         self.videoInput = fromInput;
         [self registerVideoInput:fromInput];
-        _currentLayer = [fromInput layerForInput:self];
+        //_currentLayer = [fromInput layerForInput:self];
     }
     
     
@@ -3117,6 +3539,17 @@ static NSArray *_sourceTypes = nil;
     return _clonedFromInput;
 }
 
+
+
+-(float)duration
+{
+    if (self.videoInput)
+    {
+        return self.videoInput.duration;
+    }
+    
+    return 0.0f;
+}
 
 
 -(void)stopObservingConstraintKeys

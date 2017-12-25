@@ -92,12 +92,15 @@
     
     if (!self.rootLayer)
     {
+        
         self.rootLayer = [CALayer layer];
         self.renderer.layer = self.rootLayer;
     }
 
     self.rootLayer.bounds = CGRectMake(0, 0, _cvpool_size.width, _cvpool_size.height);
-    self.rootLayer.backgroundColor = CGColorCreateGenericRGB(0, 0, 0, 1);
+    CGColorRef tmpColor = CGColorCreateGenericRGB(0, 0, 0, 1);
+    self.rootLayer.backgroundColor = tmpColor;
+    CGColorRelease(tmpColor);
     self.rootLayer.position = CGPointMake(0.0, 0.0);
     self.rootLayer.anchorPoint = CGPointMake(0.0, 0.0);
     self.rootLayer.masksToBounds = YES;
@@ -111,8 +114,6 @@
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(0, _cvpool_size.width, 0,_cvpool_size.height, -1, 1);
-    
-    NSLog(@"CVPOOL %@", NSStringFromSize(_cvpool_size));
     
     
     glMatrixMode(GL_MODELVIEW);
@@ -132,6 +133,7 @@
     
     if (!self.rootLayer)
     {
+        
         self.rootLayer = [CALayer layer];
         self.rootLayer.delegate = self;
     }
@@ -202,6 +204,7 @@
     
     if (fboStatus == GL_FRAMEBUFFER_COMPLETE && self.renderer && self.renderer.layer)
     {
+        
         [self.renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];
         [self.renderer addUpdateRect:self.renderer.bounds];
         [self.renderer render];
@@ -213,11 +216,18 @@
     glDisable(GL_TEXTURE_RECTANGLE_ARB);
     
     glFlush();
-    [CATransaction flush];
+   // [CATransaction flush];
 }
 
 -(CVPixelBufferRef)currentImg
 {
+    [CATransaction begin];
+
+    if (!self.layout)
+    {
+        return NULL;
+    }
+    
     
     if (self.cglCtx)
     {
@@ -265,7 +275,8 @@
 
     [self renderToSurface:CVPixelBufferGetIOSurface(destFrame)];
 
-    
+    [CATransaction commit];
+
     @synchronized(self)
     {
         if (_currentPB)
@@ -276,20 +287,14 @@
         _currentPB = destFrame;
     }
     
-    
+
     return _currentPB;
 }
 
 
 -(CVPixelBufferRef)currentFrame
 {
-    
-    /*
-    if (!self.isLiveRenderer)
-    {
-        [self currentImg];
-    }
-    */
+
     
     @synchronized(self)
     {
@@ -305,7 +310,6 @@
 
 -(bool) createPixelBufferPoolForSize:(NSSize) size
 {
-    NSLog(@"Controller: Creating Pixel Buffer Pool %f x %f LAYOUT %@", size.width, size.height, self.layout);
     
     NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
     [attributes setValue:[NSNumber numberWithInt:size.width] forKey:(NSString *)kCVPixelBufferWidthKey];

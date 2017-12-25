@@ -91,6 +91,7 @@
 {
     if (self = [super initWithLayer:layer])
     {
+        
         self.fakeHeight = ((CALayer *)layer).bounds.size.height;
         self.fakeWidth = ((CALayer *)layer).bounds.size.width;
 
@@ -211,8 +212,8 @@
     }
 
     
-    CGColorRetain(firstColor);
-    CGColorRetain(lastColor);
+    //CGColorRetain(firstColor);
+   // CGColorRetain(lastColor);
     
     self.colors = [NSArray arrayWithObjects:CFBridgingRelease(firstColor),CFBridgingRelease(lastColor), nil];
     
@@ -256,6 +257,43 @@
 -(void)frameTick
 {
 
+    
+    if (!_xLayer && !_yLayer)
+    {
+        _xLayer = [CAReplicatorLayer layer];
+        _yLayer = [CAReplicatorLayer layer];
+        _xLayer.instanceCount = 1;
+        _yLayer.instanceCount = 1;
+        _yLayer.layoutManager = self.layoutManager;
+        _sourceLayer.layoutManager = self.layoutManager;
+        [_xLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinX relativeTo:@"superlayer" attribute:kCAConstraintMinX]];
+        [_xLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY]];
+        [_xLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"superlayer" attribute:kCAConstraintMaxX]];
+        [_xLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY]];
+        
+        
+        [_yLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinX relativeTo:@"superlayer" attribute:kCAConstraintMinX]];
+        [_yLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY]];
+        [_yLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"superlayer" attribute:kCAConstraintMaxX]];
+        [_yLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY]];
+        
+        [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinX relativeTo:@"superlayer" attribute:kCAConstraintMinX]];
+        [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY]];
+        [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"superlayer" attribute:kCAConstraintMaxX]];
+        [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY]];
+        _sourceLayer.actions = @{@"position": NSNull.null, @"bounds":NSNull.null, @"contentsRect":NSNull.null};
+
+        _xLayer.delegate = self;
+        _yLayer.delegate = self;
+        
+        _xLayer.masksToBounds = NO;
+        _yLayer.masksToBounds = NO;
+        _yLayer.anchorPoint = CGPointMake(0.0, 0.0);
+        
+        [_xLayer addSublayer:_sourceLayer];
+        [_yLayer addSublayer:_xLayer];
+        [self addSublayer:_yLayer];
+    }
 }
 
 
@@ -263,7 +301,7 @@
 {
     if (self = [super init])
     {
-        
+
         self.minificationFilter = kCAFilterTrilinear;
         self.magnificationFilter = kCAFilterTrilinear;
         self.disableAnimation = NO;
@@ -272,11 +310,7 @@
         //self.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
 
         
-        _xLayer = [CAReplicatorLayer layer];
-        _yLayer = [CAReplicatorLayer layer];
-        _xLayer.instanceCount = 1;
-        _yLayer.instanceCount = 1;
-        
+
         _cropRect = CGRectZero;
         
         self.layoutManager = [CAConstraintLayoutManager layoutManager];
@@ -290,40 +324,11 @@
         _scrollAnimation.repeatCount = HUGE_VALF;
         self.zPosition = 0;
 
-        _xLayer.layoutManager = self;
-        _yLayer.layoutManager = self.layoutManager;
-        _sourceLayer.layoutManager = self.layoutManager;
-        
-        [_xLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinX relativeTo:@"superlayer" attribute:kCAConstraintMinX]];
-        [_xLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY]];
-        [_xLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"superlayer" attribute:kCAConstraintMaxX]];
-        [_xLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY]];
-
-
-        [_yLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinX relativeTo:@"superlayer" attribute:kCAConstraintMinX]];
-        [_yLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY]];
-        [_yLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"superlayer" attribute:kCAConstraintMaxX]];
-        [_yLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY]];
 
         
-        [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinX relativeTo:@"superlayer" attribute:kCAConstraintMinX]];
-        [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY]];
-        [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxX relativeTo:@"superlayer" attribute:kCAConstraintMaxX]];
-        [_sourceLayer addConstraint:[CAConstraint constraintWithAttribute:kCAConstraintMaxY relativeTo:@"superlayer" attribute:kCAConstraintMaxY]];
-        
-        _xLayer.delegate = self;
-        _yLayer.delegate = self;
 
-        _xLayer.masksToBounds = NO;
-        _yLayer.masksToBounds = NO;
-        
         self.masksToBounds = YES;
-        _yLayer.anchorPoint = CGPointMake(0.0, 0.0);
-        
-        [_xLayer addSublayer:_sourceLayer];
-        [_yLayer addSublayer:_xLayer];
-        [self addSublayer:_yLayer];
-        
+
     }
     
     return self;
@@ -457,7 +462,9 @@
     toLayer.contentsRect = _sourceLayer.contentsRect;
     toLayer.autoresizingMask = _sourceLayer.autoresizingMask;
     toLayer.constraints = _sourceLayer.constraints;
-    toLayer.delegate = self;
+    //toLayer.delegate = self;
+    toLayer.actions = @{@"position": NSNull.null, @"bounds":NSNull.null, @"contentsRect":NSNull.null};
+    
 }
 
 
@@ -513,17 +520,28 @@
     
     if (_sourceLayer)
     {
-        [self copySourceSettings:sourceLayer];
-    
         
-        [_sourceLayer.superlayer replaceSublayer:_sourceLayer with:sourceLayer];
+        if (sourceLayer)
+        {
+            [self copySourceSettings:sourceLayer];
+            [_sourceLayer.superlayer replaceSublayer:_sourceLayer with:sourceLayer];
+        } else {
+            [_sourceLayer removeFromSuperlayer];
+        }
+        _sourceLayer.constraints = nil;
+        _sourceLayer.filters = nil;
+        _sourceLayer.backgroundFilters = nil;
     }
+    
     
     
     _sourceLayer = sourceLayer;
 
     [self setNeedsLayout];
-    [_sourceLayer layoutIfNeeded];
+    if (_sourceLayer)
+    {
+        [_sourceLayer layoutIfNeeded];
+    }
     
     
     [self setupXAnimation:_scrollXSpeed];
@@ -557,12 +575,12 @@
     return self.sourceLayer.contentsRect;
 }
 
-
+/*
 -(id<CAAction>)actionForLayer:(CALayer *)layer forKey:(NSString *)event
 {
     return (id<CAAction>)[NSNull null];
 }
-
+*/
 
 - (id<CAAction>)actionForKey:(NSString *)key
 {
@@ -598,5 +616,7 @@
         return nil;
     }
 }
+
+
 
 @end

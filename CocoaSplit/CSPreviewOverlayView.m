@@ -289,10 +289,6 @@
     return NO;
 }
 
--(void)mouseEntered:(NSEvent *)theEvent
-{
-    NSLog(@"MOUSE ENTERED!!!");
-}
 
 
 @end

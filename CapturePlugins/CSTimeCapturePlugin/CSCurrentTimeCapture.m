@@ -63,6 +63,7 @@
 
 -(NSImage *)libraryImage
 {
+    
     NSString *calPath = [[NSWorkspace sharedWorkspace] absolutePathForAppBundleWithIdentifier:@"com.apple.iCal"];
     
     if (calPath)
@@ -77,6 +78,12 @@
 +(NSString *)label
 {
     return @"Current Date/Time";
+}
+
+
+-(NSString *)saveText
+{
+    return @"";
 }
 
 

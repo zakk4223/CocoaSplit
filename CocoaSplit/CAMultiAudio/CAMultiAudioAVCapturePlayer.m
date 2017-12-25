@@ -7,6 +7,7 @@
 //
 
 #import "CAMultiAudioAVCapturePlayer.h"
+#import "CAMultiAudioMatrixMixerWindowController.h"
 
 @implementation CAMultiAudioAVCapturePlayer
 
@@ -21,7 +22,7 @@
         self.name = avDevice.localizedName;
         self.nodeUID = avDevice.uniqueID;
         self.inputFormat = withFormat;
-        
+        self.systemDevice = YES;
         
     }
     return self;

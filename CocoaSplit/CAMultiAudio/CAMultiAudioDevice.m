@@ -40,6 +40,8 @@
 
 -(void)setInputForDevice
 {
+    
+
     UInt32 enableIO;
     
     enableIO = 1;
@@ -61,23 +63,22 @@
     
     OSStatus err = AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 0, outfmt, &outsize);
     
-    NSLog(@"MY OUTPUT FORMAT %d %f", err, outfmt->mSampleRate);
     
     return outfmt;
 }
 
 
 
--(void)setInputStreamFormat:(AudioStreamBasicDescription *)format
+-(bool)setInputStreamFormat:(AudioStreamBasicDescription *)format
 {
-    [super setInputStreamFormat:[self getOutputFormat]];
+    return [super setInputStreamFormat:[self getOutputFormat]];
     
 }
 
 
--(void)setOutputStreamFormat:(AudioStreamBasicDescription *)format
+-(bool)setOutputStreamFormat:(AudioStreamBasicDescription *)format
 {
-    return;
+    return YES;
 }
 
 

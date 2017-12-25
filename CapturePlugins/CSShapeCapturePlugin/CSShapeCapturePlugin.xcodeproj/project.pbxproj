@@ -7,20 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3436440B1B78F34F0069B8F2 /* CSShapePathLoader.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3436925D1B637DD2007EC2D9 /* CSShapePathLoader.py */; };
-		3436440C1B78F34F0069B8F2 /* CSShapePathWrapper.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34FD2ABF1B6D39DA00181409 /* CSShapePathWrapper.py */; };
 		343692431B6236DF007EC2D9 /* CSShapeCaptureFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 343692421B6236DF007EC2D9 /* CSShapeCaptureFactory.m */; };
 		3436924C1B6238C6007EC2D9 /* CSShapeCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 3436924B1B6238C6007EC2D9 /* CSShapeCapture.m */; };
 		343692641B63891C007EC2D9 /* CSShapeLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 343692631B63891C007EC2D9 /* CSShapeLayer.m */; };
-		3470CD3C1D6085AE006404D9 /* rectangle.py in Resources */ = {isa = PBXBuildFile; fileRef = 3470CD3B1D6085AE006404D9 /* rectangle.py */; };
-		3470CD3D1D6085DB006404D9 /* rectangle.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3470CD3B1D6085AE006404D9 /* rectangle.py */; };
+		34C430BC1EE7A11E00D08885 /* CSShapePathLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C430BB1EE7A11E00D08885 /* CSShapePathLoader.m */; };
+		34C430BF1EE833B600D08885 /* circle.js in Resources */ = {isa = PBXBuildFile; fileRef = 34C430BE1EE833B600D08885 /* circle.js */; };
+		34C430C01EE833CE00D08885 /* circle.js in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34C430BE1EE833B600D08885 /* circle.js */; };
+		34C430C21EE8340700D08885 /* triangle.js in Resources */ = {isa = PBXBuildFile; fileRef = 34C430C11EE8340700D08885 /* triangle.js */; };
+		34C430C31EE834CB00D08885 /* triangle.js in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34C430C11EE8340700D08885 /* triangle.js */; };
+		34C430C51EE8350800D08885 /* rtriangle.js in Resources */ = {isa = PBXBuildFile; fileRef = 34C430C41EE8350800D08885 /* rtriangle.js */; };
+		34C430C71EE8359200D08885 /* arc.js in Resources */ = {isa = PBXBuildFile; fileRef = 34C430C61EE8359200D08885 /* arc.js */; };
+		34C430C81EE8382300D08885 /* rtriangle.js in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34C430C41EE8350800D08885 /* rtriangle.js */; };
+		34C430C91EE8382300D08885 /* arc.js in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34C430C61EE8359200D08885 /* arc.js */; };
+		34C430CB1EE83ED100D08885 /* rectangle.js in Resources */ = {isa = PBXBuildFile; fileRef = 34C430CA1EE83ED100D08885 /* rectangle.js */; };
+		34C430CC1EE83F4100D08885 /* rectangle.js in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34C430CA1EE83ED100D08885 /* rectangle.js */; };
 		34E3010A1B64A39E000C16DB /* CSShapeCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E301081B64A39E000C16DB /* CSShapeCaptureViewController.m */; };
 		34E3010B1B64A39E000C16DB /* CSShapeCaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34E301091B64A39E000C16DB /* CSShapeCaptureViewController.xib */; };
-		34E301141B6515C9000C16DB /* circle.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34E3010D1B6514F9000C16DB /* circle.py */; };
-		34E301151B6515C9000C16DB /* triangle.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34E3010F1B651515000C16DB /* triangle.py */; };
-		34E301161B6515CB000C16DB /* rtriangle.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34E301111B65153A000C16DB /* rtriangle.py */; };
 		34E56B0C1B6DF3D1006A621E /* CSShapeWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E56B0B1B6DF3D1006A621E /* CSShapeWrapper.m */; };
-		34F2FF2B1B8AAAC1000B5964 /* arc.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34F2FF291B8AA717000B5964 /* arc.py */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -30,8 +33,6 @@
 			dstPath = Python;
 			dstSubfolderSpec = 7;
 			files = (
-				3436440B1B78F34F0069B8F2 /* CSShapePathLoader.py in CopyFiles */,
-				3436440C1B78F34F0069B8F2 /* CSShapePathWrapper.py in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -41,11 +42,11 @@
 			dstPath = Paths;
 			dstSubfolderSpec = 7;
 			files = (
-				3470CD3D1D6085DB006404D9 /* rectangle.py in CopyFiles */,
-				34F2FF2B1B8AAAC1000B5964 /* arc.py in CopyFiles */,
-				34E301141B6515C9000C16DB /* circle.py in CopyFiles */,
-				34E301151B6515C9000C16DB /* triangle.py in CopyFiles */,
-				34E301161B6515CB000C16DB /* rtriangle.py in CopyFiles */,
+				34C430CC1EE83F4100D08885 /* rectangle.js in CopyFiles */,
+				34C430C81EE8382300D08885 /* rtriangle.js in CopyFiles */,
+				34C430C91EE8382300D08885 /* arc.js in CopyFiles */,
+				34C430C31EE834CB00D08885 /* triangle.js in CopyFiles */,
+				34C430C01EE833CE00D08885 /* circle.js in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,21 +72,21 @@
 		343692421B6236DF007EC2D9 /* CSShapeCaptureFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSShapeCaptureFactory.m; sourceTree = "<group>"; };
 		3436924A1B6238C6007EC2D9 /* CSShapeCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSShapeCapture.h; sourceTree = "<group>"; };
 		3436924B1B6238C6007EC2D9 /* CSShapeCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSShapeCapture.m; sourceTree = "<group>"; };
-		3436925D1B637DD2007EC2D9 /* CSShapePathLoader.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = CSShapePathLoader.py; sourceTree = "<group>"; };
 		3436925F1B638382007EC2D9 /* CSShapePathLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSShapePathLoader.h; sourceTree = "<group>"; };
 		343692621B63891C007EC2D9 /* CSShapeLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSShapeLayer.h; sourceTree = "<group>"; };
 		343692631B63891C007EC2D9 /* CSShapeLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSShapeLayer.m; sourceTree = "<group>"; };
-		3470CD3B1D6085AE006404D9 /* rectangle.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = rectangle.py; sourceTree = "<group>"; };
+		34C430BB1EE7A11E00D08885 /* CSShapePathLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSShapePathLoader.m; sourceTree = "<group>"; };
+		34C430BD1EE7B88D00D08885 /* NSBezierPathJSExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSBezierPathJSExport.h; sourceTree = "<group>"; };
+		34C430BE1EE833B600D08885 /* circle.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = circle.js; sourceTree = "<group>"; };
+		34C430C11EE8340700D08885 /* triangle.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = triangle.js; sourceTree = "<group>"; };
+		34C430C41EE8350800D08885 /* rtriangle.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = rtriangle.js; sourceTree = "<group>"; };
+		34C430C61EE8359200D08885 /* arc.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = arc.js; sourceTree = "<group>"; };
+		34C430CA1EE83ED100D08885 /* rectangle.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = rectangle.js; sourceTree = "<group>"; };
 		34E301071B64A39E000C16DB /* CSShapeCaptureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSShapeCaptureViewController.h; sourceTree = "<group>"; };
 		34E301081B64A39E000C16DB /* CSShapeCaptureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSShapeCaptureViewController.m; sourceTree = "<group>"; };
 		34E301091B64A39E000C16DB /* CSShapeCaptureViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSShapeCaptureViewController.xib; sourceTree = "<group>"; };
-		34E3010D1B6514F9000C16DB /* circle.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = circle.py; sourceTree = "<group>"; };
-		34E3010F1B651515000C16DB /* triangle.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = triangle.py; sourceTree = "<group>"; };
-		34E301111B65153A000C16DB /* rtriangle.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = rtriangle.py; sourceTree = "<group>"; };
 		34E56B0A1B6DF3D1006A621E /* CSShapeWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSShapeWrapper.h; sourceTree = "<group>"; };
 		34E56B0B1B6DF3D1006A621E /* CSShapeWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSShapeWrapper.m; sourceTree = "<group>"; };
-		34F2FF291B8AA717000B5964 /* arc.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = arc.py; sourceTree = "<group>"; };
-		34FD2ABF1B6D39DA00181409 /* CSShapePathWrapper.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = CSShapePathWrapper.py; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,7 +121,6 @@
 		343692131B62364E007EC2D9 /* CSShapeCapturePlugin */ = {
 			isa = PBXGroup;
 			children = (
-				3436925A1B637D46007EC2D9 /* CSShapePathPlugin */,
 				343692141B62364E007EC2D9 /* Supporting Files */,
 				343692411B6236DF007EC2D9 /* CSShapeCaptureFactory.h */,
 				343692421B6236DF007EC2D9 /* CSShapeCaptureFactory.m */,
@@ -134,6 +134,8 @@
 				34E301091B64A39E000C16DB /* CSShapeCaptureViewController.xib */,
 				34E56B0A1B6DF3D1006A621E /* CSShapeWrapper.h */,
 				34E56B0B1B6DF3D1006A621E /* CSShapeWrapper.m */,
+				34C430BB1EE7A11E00D08885 /* CSShapePathLoader.m */,
+				34C430BD1EE7B88D00D08885 /* NSBezierPathJSExport.h */,
 			);
 			path = CSShapeCapturePlugin;
 			sourceTree = "<group>";
@@ -167,23 +169,14 @@
 			path = ../../CocoaSplit;
 			sourceTree = "<group>";
 		};
-		3436925A1B637D46007EC2D9 /* CSShapePathPlugin */ = {
-			isa = PBXGroup;
-			children = (
-				3436925D1B637DD2007EC2D9 /* CSShapePathLoader.py */,
-				34FD2ABF1B6D39DA00181409 /* CSShapePathWrapper.py */,
-			);
-			path = CSShapePathPlugin;
-			sourceTree = "<group>";
-		};
 		34E3010C1B6514DA000C16DB /* ShapePaths */ = {
 			isa = PBXGroup;
 			children = (
-				34E3010D1B6514F9000C16DB /* circle.py */,
-				34E3010F1B651515000C16DB /* triangle.py */,
-				34E301111B65153A000C16DB /* rtriangle.py */,
-				34F2FF291B8AA717000B5964 /* arc.py */,
-				3470CD3B1D6085AE006404D9 /* rectangle.py */,
+				34C430BE1EE833B600D08885 /* circle.js */,
+				34C430C11EE8340700D08885 /* triangle.js */,
+				34C430C41EE8350800D08885 /* rtriangle.js */,
+				34C430C61EE8359200D08885 /* arc.js */,
+				34C430CA1EE83ED100D08885 /* rectangle.js */,
 			);
 			name = ShapePaths;
 			path = CSShapeCapturePlugin/ShapePaths;
@@ -217,7 +210,7 @@
 		343692091B62364E007EC2D9 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0640;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = Zakk;
 				TargetAttributes = {
 					343692101B62364E007EC2D9 = {
@@ -247,8 +240,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				34C430C21EE8340700D08885 /* triangle.js in Resources */,
+				34C430C51EE8350800D08885 /* rtriangle.js in Resources */,
+				34C430BF1EE833B600D08885 /* circle.js in Resources */,
+				34C430C71EE8359200D08885 /* arc.js in Resources */,
 				34E3010B1B64A39E000C16DB /* CSShapeCaptureViewController.xib in Resources */,
-				3470CD3C1D6085AE006404D9 /* rectangle.py in Resources */,
+				34C430CB1EE83ED100D08885 /* rectangle.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,6 +259,7 @@
 				3436924C1B6238C6007EC2D9 /* CSShapeCapture.m in Sources */,
 				343692641B63891C007EC2D9 /* CSShapeLayer.m in Sources */,
 				343692431B6236DF007EC2D9 /* CSShapeCaptureFactory.m in Sources */,
+				34C430BC1EE7A11E00D08885 /* CSShapePathLoader.m in Sources */,
 				34E56B0C1B6DF3D1006A621E /* CSShapeWrapper.m in Sources */,
 				34E3010A1B64A39E000C16DB /* CSShapeCaptureViewController.m in Sources */,
 			);
@@ -278,18 +276,27 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -320,13 +327,21 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
@@ -358,6 +373,7 @@
 					"-undefined",
 					suppress,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "zakk.lol.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = bundle;
@@ -375,6 +391,7 @@
 					"-undefined",
 					suppress,
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "zakk.lol.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = bundle;

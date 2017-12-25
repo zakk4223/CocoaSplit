@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12120" systemVersion="16G29" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12120"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CSTextCaptureViewControllerBase">
@@ -22,17 +23,7 @@
             <rect key="frame" x="0.0" y="0.0" width="242" height="105"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aVb-ZT-tZL">
-                    <rect key="frame" x="-3" y="39" width="63" height="28"/>
-                    <buttonCell key="cell" type="push" title="Font" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="R00-1U-mYA">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="openFontPanel:" target="-2" id="rYb-YW-h6h"/>
-                    </connections>
-                </button>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dz1-ZF-ZbP">
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dz1-ZF-ZbP">
                     <rect key="frame" x="0.0" y="71" width="57" height="14"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Alignment" id="rE9-rL-MTP">
                         <font key="font" metaFont="smallSystem"/>
@@ -40,7 +31,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oHy-e2-MFH">
+                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oHy-e2-MFH">
                     <rect key="frame" x="60" y="66" width="101" height="22"/>
                     <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="fSX-Ds-m32" id="nLz-dK-ImT">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -58,9 +49,9 @@
                         <binding destination="V1e-p2-LKl" name="selectedObject" keyPath="selection.alignmentMode" previousBinding="zcw-mT-S36" id="rlc-0r-U94"/>
                     </connections>
                 </popUpButton>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gup-FE-R1D">
-                    <rect key="frame" x="62" y="43" width="75" height="20"/>
-                    <buttonCell key="cell" type="check" title="Wrap Text" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="NxL-ei-Eeg">
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="gup-FE-R1D">
+                    <rect key="frame" x="-1" y="20" width="75" height="20"/>
+                    <buttonCell key="cell" type="check" title="Wrap Text" bezelStyle="regularSquare" imagePosition="right" controlSize="small" state="on" inset="2" id="NxL-ei-Eeg">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
@@ -68,7 +59,29 @@
                         <binding destination="V1e-p2-LKl" name="value" keyPath="selection.wrapped" id="dWn-cJ-thd"/>
                     </connections>
                 </button>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aVb-ZT-tZL">
+                    <rect key="frame" x="-3" y="39" width="105" height="28"/>
+                    <buttonCell key="cell" type="push" title="Configure Font" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="R00-1U-mYA">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="openFontPanel:" target="-2" id="rYb-YW-h6h"/>
+                    </connections>
+                </button>
             </subviews>
+            <constraints>
+                <constraint firstItem="Dz1-ZF-ZbP" firstAttribute="baseline" secondItem="oHy-e2-MFH" secondAttribute="baseline" id="A6O-7I-T0n"/>
+                <constraint firstItem="gup-FE-R1D" firstAttribute="top" secondItem="aVb-ZT-tZL" secondAttribute="bottom" constant="8" symbolic="YES" id="BOa-Bg-0K4"/>
+                <constraint firstItem="Dz1-ZF-ZbP" firstAttribute="leading" secondItem="aVb-ZT-tZL" secondAttribute="leading" id="GXP-N1-5aS"/>
+                <constraint firstItem="aVb-ZT-tZL" firstAttribute="top" secondItem="Dz1-ZF-ZbP" secondAttribute="bottom" constant="8" symbolic="YES" id="WcZ-XO-3mp"/>
+                <constraint firstItem="aVb-ZT-tZL" firstAttribute="leading" secondItem="gup-FE-R1D" secondAttribute="leading" id="XbJ-LO-ORX"/>
+                <constraint firstAttribute="trailing" secondItem="oHy-e2-MFH" secondAttribute="trailing" constant="84" id="lcS-Z5-ojk"/>
+                <constraint firstAttribute="bottom" secondItem="gup-FE-R1D" secondAttribute="bottom" constant="23" id="nhx-nx-sQp"/>
+                <constraint firstItem="Dz1-ZF-ZbP" firstAttribute="leading" secondItem="6JR-B1-0HO" secondAttribute="leading" constant="2" id="vSK-sx-K1n"/>
+                <constraint firstItem="Dz1-ZF-ZbP" firstAttribute="top" secondItem="6JR-B1-0HO" secondAttribute="top" constant="20" symbolic="YES" id="yp1-vB-jUV"/>
+                <constraint firstItem="oHy-e2-MFH" firstAttribute="leading" secondItem="Dz1-ZF-ZbP" secondAttribute="trailing" constant="8" symbolic="YES" id="zML-1I-lXB"/>
+            </constraints>
             <point key="canvasLocation" x="388" y="741.5"/>
         </customView>
         <arrayController id="KAf-yK-h1d" userLabel="textAlignmentModesController">

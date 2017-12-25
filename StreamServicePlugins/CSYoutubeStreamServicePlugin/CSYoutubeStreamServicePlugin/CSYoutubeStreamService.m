@@ -327,8 +327,10 @@
         
         
         self.oauthObject.accountName = self.accountName;
+        __weak CSYoutubeStreamService *weakSelf = self;
         self.oauthObject.accountNameFetcher = ^void(CSOauth2Authenticator *authenticator) {
-            [self fetchAccountname:authenticator];
+            CSYoutubeStreamService *strongSelf = weakSelf;
+            [strongSelf fetchAccountname:authenticator];
         };
     }
 }

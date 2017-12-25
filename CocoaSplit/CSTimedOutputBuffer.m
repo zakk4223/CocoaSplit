@@ -45,7 +45,6 @@
     newout.video_codec_id  = self.compressor.codec_id;
     newout.framerate = controller.captureFPS;
     newout.stream_output = [toFile stringByStandardizingPath];
-    newout.settingsController = controller;
     newout.samplerate = controller.audioSamplerate;
     newout.audio_bitrate = controller.audioBitrate;
 

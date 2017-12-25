@@ -127,9 +127,7 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
         self.needsSourceSelection = NO;
         self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
         self.playPauseTitle = @"Play";
-        _audioQueue = dispatch_queue_create("MoviePlayerAudioQueue", NULL);
         
-        [self setupPlayer];
         
         
         
@@ -284,6 +282,9 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 
 - (void) setupPlayer
 {
+    
+    _audioQueue = dispatch_queue_create("MoviePlayerAudioQueue", NULL);
+
     _avPlayer = [[AVQueuePlayer alloc] init];
     [_avPlayer pause];
     NSMutableDictionary *videoSettings = [[NSMutableDictionary alloc] init];
@@ -398,6 +399,11 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
 
 -(void) enqueueMedia:(NSURL *)mediaURL
 {
+    
+    if (!_avPlayer)
+    {
+        [self setupPlayer];
+    }
     
     AVPlayerItem *item = [AVPlayerItem playerItemWithURL:mediaURL];
 

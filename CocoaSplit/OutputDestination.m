@@ -15,7 +15,7 @@
 
 @synthesize name = _name;
 @synthesize output_format = _output_format;
-
+@synthesize assignedLayout = _assignedLayout;
 
 
 -(instancetype)copyWithZone:(NSZone *)zone
@@ -44,6 +44,11 @@
     [aCoder encodeObject:self.compressor_name forKey:@"compressor_name"];
     [aCoder encodeObject:self.streamServiceObject forKey:@"streamServiceObject"];
     [aCoder encodeObject:_destination forKey:@"destination"];
+    [aCoder encodeBool:self.autoRetry forKey:@"autoRetry"];
+    if (self.assignedLayout)
+    {
+        [aCoder encodeObject:self.assignedLayout forKey:@"assignedLayout"];
+    }
 }
 
 
@@ -51,14 +56,21 @@
 {
     if (self = [self init])
     {
+        
+        if ([aDecoder containsValueForKey:@"assignedLayout"])
+        {
+            self.assignedLayout = [aDecoder decodeObjectForKey:@"assignedLayout"];
+        }
         _destination = [aDecoder decodeObjectForKey:@"destination"];
         self.name = [aDecoder decodeObjectForKey:@"name"];
         self.type_name = [aDecoder decodeObjectForKey:@"type_name"];
-        self.active = [aDecoder decodeBoolForKey:@"active"];
         self.stream_delay = (int)[aDecoder decodeIntegerForKey:@"stream_delay"];
         self.compressor_name = [aDecoder decodeObjectForKey:@"compressor_name"];
         self.streamServiceObject = [aDecoder decodeObjectForKey:@"streamServiceObject"];
         self.type_class_name = [aDecoder decodeObjectForKey:@"type_class_name"];
+        self.autoRetry = [aDecoder decodeBoolForKey:@"autoRetry"];
+        _active = [aDecoder decodeBoolForKey:@"active"];
+
     }
     return self;
 }
@@ -73,10 +85,23 @@
     
 }
 
+
+-(SourceLayout *)assignedLayout
+{
+    return _assignedLayout;
+}
+
+-(void)setAssignedLayout:(SourceLayout *)assignedLayout
+{
+    NSLog(@"ASSIGNED LAYOUT %@", assignedLayout);
+    _assignedLayout = assignedLayout;
+}
+
 -(void)stopCompressor
 {
     if (self.compressor)
     {
+        NSLog(@"REMOVING COMPRESSOR");
         [self.compressor removeOutput:self];
     }
 }
@@ -115,7 +140,8 @@
 }
 
 
--(void) setActive:(BOOL)is_active
+
+-(void) setup
 {
     
     if (!_output_queue)
@@ -123,21 +149,64 @@
         NSString *queue_name = [NSString stringWithFormat:@"Output Queue %@", self.name];
         _output_queue = dispatch_queue_create(queue_name.UTF8String, NULL);
     }
-    
-    
-    if (is_active != _active)
+
+    if (self.errored)
     {
-        _active = is_active;
-        if (!is_active)
-        {
-            [self stopCompressor];
-            [self reset];
-        } else {
-            [self initStatsValues];
-            [self setupCompressor];
-        }
-        
+        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputRestarted object:self userInfo:nil];
     }
+
+    self.errored = NO;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.statusImage = [NSImage imageNamed:@"ok"];
+    });
+
+    [self initStatsValues];
+    [self setupCompressor];
+}
+
+-(void) teardown
+{
+    [self stopCompressor];
+    [self reset];
+
+}
+-(void) setActive:(BOOL)is_active
+{
+    
+    bool streamingActive = [CaptureController sharedCaptureController].captureRunning;
+    
+    bool old_active = _active;
+    _active = is_active;
+
+    if (old_active != is_active)
+    {
+        if (is_active)
+        {
+            
+            if (self.assignedLayout && ![self.assignedLayout isEqual:[NSNull null]] && streamingActive)
+            {
+                [[CaptureController sharedCaptureController] startRecordingLayout:self.assignedLayout usingOutput:self];
+            } else {
+                [self setup];
+            }
+            [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputSetActive object:self userInfo:nil];
+        } else {
+            
+            if (self.assignedLayout && ![self.assignedLayout isEqual:[NSNull null]] && streamingActive)
+            {
+                [[CaptureController sharedCaptureController] stopRecordingLayout:self.assignedLayout usingOutput:self ];
+            } else {
+                [self teardown];
+            }
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputSetInactive object:self userInfo:nil];
+
+            
+        }
+    }
+
+    
+
 }
 
 
@@ -160,24 +229,23 @@
     {
         if (self.errored)
         {
-            //errors jump the queue and just kill the ffmpeg output
             [self.ffmpeg_out stopProcess];
             self.ffmpeg_out = nil;
             dispatch_async(dispatch_get_main_queue(), ^{
-                self.textColor = [NSColor redColor];
+                self.statusImage = [NSImage imageNamed:@"Record_Icon"];
             });
         } else {
-            dispatch_async(_output_queue, ^{
                 @autoreleasepool {
                 
                 [self.ffmpeg_out stopProcess];
                 self.ffmpeg_out = nil;
                 }
+            [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputStopped object:self userInfo:nil];
+
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    self.textColor = [NSColor blackColor];
+                    self.statusImage = [NSImage imageNamed:@"inactive"];
                 });
                 
-            });
         }
 
     }
@@ -195,13 +263,13 @@
     {
         self.buffer_draining = YES;
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.textColor = [NSColor orangeColor];
+            self.statusImage = [NSImage imageNamed:@"draining"];
         });
         return;
     }
     
     
-    if (self.active)
+   // if (self.active)
     {
         [self reset];
         [self stopCompressor];
@@ -214,9 +282,9 @@
     if (self = [super init])
     {
         
-        
+        self.assignedLayout = nil;
         self.type_name = type;
-        self.textColor = [NSColor blackColor];
+        self.statusImage = [NSImage imageNamed:@"inactive"];
         _output_start_time = 0.0f;
         _delayBuffer = [[NSMutableArray alloc] init];
         self.delay_buffer_frames = 0;
@@ -295,6 +363,7 @@
     
     if (!self.ffmpeg_out)
     {
+        
         newout = [[FFMpegTask alloc] init];
     } else {
         newout = self.ffmpeg_out;
@@ -322,12 +391,11 @@
     */
     
     newout.video_codec_id  = self.compressor.codec_id;
-    newout.framerate = self.settingsController.captureFPS;
+    newout.framerate = self.settingsController.frameRate;
     newout.stream_output = [destination stringByStandardizingPath];
     newout.stream_format = self.output_format;
-    newout.settingsController = self.settingsController;
-    newout.samplerate = self.settingsController.audioSamplerate;
-    newout.audio_bitrate = self.settingsController.audioBitrate;
+    newout.samplerate = [CaptureController sharedCaptureController].audioSamplerate;
+    newout.audio_bitrate = [CaptureController sharedCaptureController].audioBitrate;
     
     
     
@@ -342,7 +410,7 @@
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     
-    NSColor *newColor = nil;
+    NSImage *newImage = nil;
     
     if ([keyPath isEqualToString:@"errored"]) {
         
@@ -351,16 +419,18 @@
         if (errVal == YES)
         {
             self.errored = YES;
-            newColor = [NSColor redColor];
+            newImage = [NSImage imageNamed:@"Record_Icon"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputErrored object:self userInfo:nil];
+
         }
         
     }
     
     
-    if (newColor)
+    if (newImage)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.textColor = newColor;
+            self.statusImage = newImage;
         });
     }
     
@@ -368,7 +438,7 @@
 
 -(void) setupCompressor
 {
-    if (!self.active || !self.settingsController.captureRunning)
+    if (!self.active || !self.captureRunning)
     {
         return;
     }
@@ -377,7 +447,7 @@
 
     if (self.compressor_name)
     {
-        self.compressor = self.settingsController.compressors[self.compressor_name];
+        self.compressor = [self.settingsController compressorByName:self.compressor_name];
     }
     
     
@@ -406,9 +476,15 @@
 
 -(bool) resetOutputIfNeeded
 {
-    if (self.settingsController.maxOutputDropped)
+    
+    if (self.ffmpeg_out && self.ffmpeg_out.errored)
     {
-        if (_consecutive_dropped_frames >= self.settingsController.maxOutputDropped)
+        return YES;
+    }
+    
+    if ([CaptureController sharedCaptureController].maxOutputDropped)
+    {
+        if (_consecutive_dropped_frames >= [CaptureController sharedCaptureController].maxOutputDropped)
         {
             return YES;
         }
@@ -419,9 +495,9 @@
 
 -(bool) shouldDropFrame
 {
-    if (self.settingsController.maxOutputPending)
+    if ([CaptureController sharedCaptureController].maxOutputPending)
     {
-        if (_pending_frame_count >= self.settingsController.maxOutputPending)
+        if ([self.ffmpeg_out frameQueueSize] >= [CaptureController sharedCaptureController].maxOutputPending)
         {
             return YES;
         }
@@ -435,7 +511,7 @@
 {
     
     CapturedFrameData *sendData = nil;
-    double current_time = [self.settingsController mach_time_seconds];
+    double current_time = [[CaptureController sharedCaptureController] mach_time_seconds];
     
     if (self.active)
     {
@@ -455,7 +531,7 @@
         
         BOOL start_stream = NO;
         
-        if (self.settingsController.captureRunning && !self.ffmpeg_out)
+        if (self.captureRunning && !self.ffmpeg_out)
         {
             
             if (self.stream_delay == 0)
@@ -472,10 +548,11 @@
         
         if (start_stream)
         {
-            
             [self attachOutput];
+            [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputStarted object:self userInfo:nil];
+
             dispatch_async(dispatch_get_main_queue(), ^{
-                self.textColor  = [NSColor greenColor];
+                self.statusImage  = [NSImage imageNamed:@"ok"];
             });
         }
         
@@ -498,38 +575,27 @@
 
         if (sendData && self.ffmpeg_out)
         {
-            NSInteger f_size = [sendData encodedDataLength];
             
             if ([self resetOutputIfNeeded])
             {
                 self.errored = YES;
                 self.active = NO;
+                [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputErrored object:self userInfo:nil];
+
+                if (self.autoRetry)
+                {
+                    self.active = YES;
+                }
                 return;
             }
+            
             if ([self shouldDropFrame])
             {
                 _dropped_frame_count++;
                 _consecutive_dropped_frames++;
             } else {
                 _consecutive_dropped_frames = 0;
-                
-                dispatch_async(_output_queue, ^{
-                    @autoreleasepool {
-                        _p_buffered_frame_size += f_size;
-                        _p_buffered_frame_count++;
-                        
-                        BOOL write_ret = [self.ffmpeg_out writeEncodedData:sendData];
-                        
-                        if (write_ret)
-                        {
-                            _p_output_framecnt++;
-                            _p_buffered_frame_count--;
-                            _p_buffered_frame_size -= f_size;
-                            _p_output_bytes += f_size;
-                        }
-                    }
-                    
-                });
+                [self.ffmpeg_out queueFramedata:sendData];
             }
         }
         
@@ -555,6 +621,7 @@
     _p_dropped_frame_count = 0;
     _p_output_framecnt = 0;
     _p_output_bytes = 0;
+    _consecutive_dropped_frames = 0;
 }
 
 
@@ -563,26 +630,36 @@
     
     CFAbsoluteTime time_now = CFAbsoluteTimeGetCurrent();
     
-    double calculated_input_framerate = _p_input_framecnt / (time_now - _input_frame_timestamp);
-    double calculated_output_framerate = _p_output_framecnt / (time_now - _output_frame_timestamp);
-    double calculated_output_bitrate = (_p_output_bytes / (time_now - _output_frame_timestamp)) * 8;
+    int f_output_framecnt;
+    int f_output_bytes;
     
-    _p_input_framecnt = 0;
-    _p_output_framecnt = 0;
-    _output_frame_timestamp = time_now;
-    _input_frame_timestamp = time_now;
-    _p_output_bytes = 0;
+    f_output_framecnt = self.ffmpeg_out.output_framecnt;
+    f_output_bytes = self.ffmpeg_out.output_bytes;
+    
+    double calculated_input_framerate = _p_input_framecnt / (time_now - _input_frame_timestamp);
+    double calculated_output_framerate = f_output_framecnt / (time_now - _output_frame_timestamp);
+    double calculated_output_bitrate = (f_output_bytes / (time_now - _output_frame_timestamp)) * 8;
+    
     
     
     self.output_framerate = calculated_output_framerate;
     self.input_framerate = calculated_input_framerate;
     self.output_bitrate = calculated_output_bitrate;
-    self.buffered_frame_count = _p_buffered_frame_count;
-    self.buffered_frame_size = _p_buffered_frame_size;
+    self.buffered_frame_count = self.ffmpeg_out.buffered_frame_count;
+    self.buffered_frame_size = self.ffmpeg_out.buffered_frame_size;
+    
     //TODO
-    self.dropped_frame_count = 0;
+    self.dropped_frame_count = _dropped_frame_count;
     self.delay_buffer_frames = [_delayBuffer count];
+    _p_input_framecnt = 0;
+    _p_output_framecnt = 0;
+    _output_frame_timestamp = time_now;
+    _input_frame_timestamp = time_now;
+    _p_output_bytes = 0;
 
+    
+    [self.ffmpeg_out initStatsValues];
+    
 }
 
 
@@ -597,6 +674,7 @@
 
 -(void)dealloc
 {
+    NSLog(@"DEALLOC");
     [self stopCompressor];
     
     if (self.ffmpeg_out)

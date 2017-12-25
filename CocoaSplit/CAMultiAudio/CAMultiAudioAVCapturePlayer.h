@@ -10,7 +10,7 @@
 
 #import "AVFAudioCapture.h"
 
-@interface CAMultiAudioAVCapturePlayer : CAMultiAudioPCMPlayer
+@interface CAMultiAudioAVCapturePlayer : CAMultiAudioPCMPlayer 
 
 @property (strong) AVCaptureDevice *captureDevice;
 

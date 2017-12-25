@@ -3,7 +3,6 @@
 //  CSShapeCapturePlugin
 //
 //  Created by Zakk on 7/24/15.
-//  Copyright (c) 2015 Zakk. All rights reserved.
 //
 
 #import "CSShapeCapture.h"
@@ -219,6 +218,7 @@
     if (self.backgroundColor)
     {
         newLayer.backgroundColor = [self.backgroundColor CGColor];
+        
     }
     
     if (self.activeVideoDevice)
@@ -244,7 +244,6 @@
 
 -(void) setActiveVideoDevice:(CSAbstractCaptureDevice *)newDev
 {
-    
     
     _activeVideoDevice = newDev;
     self.captureName = newDev.captureName;
@@ -276,7 +275,7 @@
     for(NSString *key in allShapes)
     {
         NSDictionary *shapeInfo = allShapes[key];
-        CSAbstractCaptureDevice *shape = [[CSAbstractCaptureDevice alloc] initWithName:shapeInfo[@"name"] device:shapeInfo[@"plugin"] uniqueID:shapeInfo[@"module"]];
+        CSAbstractCaptureDevice *shape = [[CSAbstractCaptureDevice alloc] initWithName:shapeInfo[@"name"] device:shapeInfo[@"wrapper"] uniqueID:shapeInfo[@"path"]];
         [ret addObject:shape];
     }
     return ret;

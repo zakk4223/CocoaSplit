@@ -16,46 +16,17 @@
 @end
 
 @implementation CSLayoutSwitcherWithPreviewWindowController
-@synthesize layouts = _layouts;
 
 
 -(instancetype) init
 {
-    if (self = [self initWithWindowNibName:@"CSLayoutSwitcherWithPreviewWindowController"])
-    {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(layoutDeleted:) name:CSNotificationLayoutDeleted object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(layoutAdded:) name:CSNotificationLayoutAdded object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(layoutSaved:) name:CSNotificationLayoutSaved object:nil];
-
-
-    }
-    return self;
-}
-
-
--(void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-
--(void)layoutSaved:(NSNotification *)notification
-{
-    SourceLayout *layout = notification.object;
     
-    CSLayoutSwitcherView *layoutView = [self findViewForLayout:layout];
-    if (layoutView)
-    {
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            [layout clearSourceList]; 
-            [layout restoreSourceList:nil];
-            [layoutView setNeedsLayout:YES];
-
-        });
-    }
+    
+    return [self initWithWindowNibName:@"CSLayoutSwitcherWithPreviewWindowController"];
+    
 }
+
+
 
 
 -(void)windowWillEnterFullScreen:(NSNotification *)notification
@@ -69,116 +40,33 @@
 }
 
 
--(void)layoutAdded:(NSNotification *)notification
-{
-    self.layouts = nil;
-}
 
-
--(void)layoutDeleted:(NSNotification *)notification
+-(NSArray *)layouts
 {
-    SourceLayout *layout = notification.object;
-    
-    CSLayoutSwitcherView *layoutView = [self findViewForLayout:layout];
-    
-    if (layoutView)
+    if (_layoutViewController)
     {
-        [layoutView.sourceLayout clearSourceList];
-        [layoutView removeFromSuperview];
-        self.layouts = nil;
-    }
-}
-
-
--(CSLayoutSwitcherView *)findViewForLayout:(SourceLayout *)layout
-{
-    for (CSLayoutSwitcherView *view in self.gridView.subviews)
-    {
-        if (view.sourceLayout && view.sourceLayout == layout)
-        {
-            return view;
-        }
+        return _layoutViewController.layouts;
     }
     
     return nil;
 }
 
 
--(NSArray *)layouts
-{
-    return _layouts;
-}
-
 -(void)setLayouts:(NSArray *)layouts
 {
-    if (layouts == nil)
+    
+    if (!_layoutViewController)
     {
-        AppDelegate *appDel = NSApp.delegate;
-        
-        CaptureController *controller = appDel.captureController;
-        _layouts = controller.sourceLayouts;
-
-    } else {
-        _layouts = layouts;
-    }
-    NSUInteger layoutidx = 0;
-    
-    NSUInteger layoutCnt = _layouts.count;
-    float countsq = sqrt(layoutCnt);
-
-    NSUInteger nextint = (NSUInteger)ceil(countsq);
-    
-    NSUInteger columns = nextint;
-    NSUInteger rows = ceil(layoutCnt/(float)columns);
-    
-  
-    for (int x = 0; x < _layouts.count; x++)
-    {
-        
-        SourceLayout *layout = [_layouts objectAtIndex:x];
-        
-        CSLayoutSwitcherView *newView = [self findViewForLayout:layout];
-        if (!newView)
-        {
-     
-            newView = [[CSLayoutSwitcherView alloc] init];
-        
-            newView.translatesAutoresizingMaskIntoConstraints = NO;
-        
-        
-        
-            [self.gridView addSubview:newView];
-            newView.sourceLayout = layout;
-        }
+        _layoutViewController = [[CSLayoutSwitcherViewController alloc] init];
+        _layoutViewController.view = self.gridView;
     }
     
-    
-    [self.gridView setNeedsLayout:YES];
-    
-}
-
--(void)layoutClicked:(SourceLayout *)layout withEvent:(NSEvent *)event
-{
-    
-    if (layout)
-    {
-        AppDelegate *appDel = NSApp.delegate;
-        
-        CaptureController *controller = appDel.captureController;
-        [controller switchToLayout:layout];
-    }
-    
+    _layoutViewController.layouts = layouts;
 }
 
 -(void)windowWillClose:(NSNotification *)notification
 {
-
-    self.gridView.subviews = @[];
-    for (SourceLayout *layout in self.layouts)
-    {
-        [layout clearSourceList];
-    }
-    self.layouts = @[];
+    _layoutViewController = nil;
 }
 
 

@@ -23,7 +23,7 @@
 
 -(void)willInitializeNode
 {
-    UInt32 elementCount = 32;
+    UInt32 elementCount = 64;
     
     OSStatus err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Input, 0,&elementCount, sizeof(UInt32));
     
@@ -47,9 +47,7 @@
     
     
     [self setOutputVolume];
-    for (UInt32 i = 0; i < 15; i++) {
-        [self setVolumeOnInputBus:i volume:1.0];
-    }
+ 
     
 }
 
@@ -117,27 +115,51 @@
 -(UInt32)getNextElement
 {
     UInt32 elementCount = 0;
-    UInt32 elementSize = 0;
+    UInt32 elementSize = sizeof(UInt32);
     
-    //AudioUnitUninitialize(self.audioUnit);
-    AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Input, 0, &elementCount, elementSize);
-   // AudioUnitInitialize(self.audioUnit);
+    UInt32 useElement = 0;
     
+    AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Input, 0, &elementCount, &elementSize);
     
-    /*
-    UInt32 interactionCnt = elementCount*2;
+    UInt32 interactionCnt = 0;
+    
+    AUGraphCountNodeInteractions(self.graph.graphInst, self.node, &interactionCnt);
     AUNodeInteraction *interactions = malloc(sizeof(AUNodeInteraction)*interactionCnt);
     
     
     AUGraphGetNodeInteractions(self.graph.graphInst, self.node, &interactionCnt, interactions);
-    */
     
-    //Naive implementation. bump up element count by one and return that as the bus to connect to.
+    useElement = 0;
+    UInt32 seenIdx = 0;
     
-    //elementCount = 3;
+    for (int i=0; i < interactionCnt; i++)
+    {
+        
+        AUNodeInteraction iact = interactions[i];
+        if (iact.nodeInteractionType == kAUNodeInteraction_Connection && iact.nodeInteraction.connection.destNode == self.node)
+        {
+            if (seenIdx != iact.nodeInteraction.connection.destInputNumber)
+            {
+                useElement = seenIdx;
+                break;
+            } else {
+                seenIdx++;
+                useElement = iact.nodeInteraction.connection.destInputNumber+1;
+            }
+            
+        }
+    }
+    
+    free(interactions);
+    if (useElement >= elementCount)
+    {
+        elementCount += 64;
+        AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Input, 0, &elementCount, sizeof(elementCount));
+    }
 
-    //NSLog(@"RETURNING ELEMENT %d", elementCount-1);
-    return _nextElement++;
+    [self setVolumeOnInputBus:useElement volume:1.0];
+    
+    return useElement;
 }
 
 

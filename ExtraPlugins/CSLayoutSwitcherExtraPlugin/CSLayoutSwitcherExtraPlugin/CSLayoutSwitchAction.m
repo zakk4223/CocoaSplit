@@ -17,8 +17,23 @@
     {
         self.applicationString = [aDecoder decodeObjectForKey:@"applicationString"];
         self.eventType = [aDecoder decodeIntForKey:@"eventType"];
-        self.layoutName = [aDecoder decodeObjectForKey:@"layoutName"];
+        if ([aDecoder containsValueForKey:@"layoutName"])
+        {
+            self.targetName = [aDecoder decodeObjectForKey:@"layoutName"];
+
+        } else {
+            self.targetName = [aDecoder decodeObjectForKey:@"targetName"];
+
+        }
         self.active = [aDecoder decodeBoolForKey:@"active"];
+        if ([aDecoder containsValueForKey:@"actionType"])
+        {
+            self.actionType = [aDecoder decodeIntForKey:@"actionType"];
+        } else {
+            self.actionType = kLayoutSwitch;
+        }
+
+        
     }
     
     return self;
@@ -29,11 +44,40 @@
 {
     [aCoder encodeObject:self.applicationString forKey:@"applicationString"];
     [aCoder encodeInt:self.eventType forKey:@"eventType"];
-    [aCoder encodeObject:self.layoutName forKey:@"layoutName"];
+    [aCoder encodeObject:self.targetName forKey:@"targetName"];
     [aCoder encodeBool:self.active forKey:@"active"];
+    [aCoder encodeInt:self.actionType forKey:@"actionType"];
 }
 
 
+
+-(NSString *)actionTypeString
+{
+    NSString *ret = nil;
+    
+    switch (self.actionType) {
+        case kScriptStop:
+            ret = @"Stop Script";
+            break;
+        case kScriptRun:
+            ret = @"Run Script";
+            break;
+        case kLayoutMerge:
+            ret = @"Merge Layout";
+            break;
+        case kLayoutRemove:
+            ret = @"Remove Layout";
+            break;
+        case kLayoutSwitch:
+            ret = @"Switch to Layout";
+            break;
+        default:
+            ret = @"Unknown";
+    }
+    
+    return ret;
+
+}
 -(NSString *)eventTypeString
 {
 

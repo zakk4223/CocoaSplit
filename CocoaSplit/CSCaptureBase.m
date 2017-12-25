@@ -10,19 +10,23 @@
 #import "CSTimerSourceProtocol.h"
 #import "InputSource.h"
 #import "CSNotifications.h"
-
+#import "CSPcmPlayer.h"
+#import "CaptureController.h"
+#import "CSLayoutRecorder.h"
 
 #import "SourceCache.h"
 #import <objc/runtime.h>
 
 @interface CSCaptureBase()
 {
+    
+    //NSPointerArray *_allInputs;
+    
     NSMapTable *_allLayers;
     frame_render_behavior _saved_render_behavior;
     CFAbsoluteTime _fps_start_time;
     int _fps_frame_cnt;
 
-    
 }
 
 
@@ -48,7 +52,7 @@
     return NSStringFromClass(self);
 }
 
--(NSString *)label
+-(NSString *)instanceLabel
 {
     return [self.class label];
 }
@@ -64,8 +68,11 @@
         self.isVisible = YES;
         self.allowScaling = YES;
         _allLayers = [NSMapTable weakToStrongObjectsMapTable];
+        
         _fps_start_time = CFAbsoluteTimeGetCurrent();
         _fps_frame_cnt = 0;
+        
+        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateStatistics:) name:CSNotificationStatisticsUpdate object:nil];
     }
     
@@ -107,6 +114,7 @@
     
     return self;
 }
+
 
 
 -(NSImage *)libraryImage
@@ -279,7 +287,7 @@
 -(CALayer *)createNewLayerForInput:(id)inputsrc
 {
     
-    [CATransaction begin];
+
     CALayer *newLayer = [self createNewLayer];
     @synchronized(self)
     {
@@ -287,9 +295,12 @@
         {
             self.tickInput = inputsrc;
         }
+        
+        
+        //[_allInputs addObject:inputsrc];
+        
         [_allLayers setObject:newLayer forKey:inputsrc];
     }
-    [CATransaction commit];
 
     return newLayer;
 }
@@ -303,7 +314,10 @@
             self.tickInput = nil;
             
         }
+
+        
         [_allLayers removeObjectForKey:inputsrc];
+        
         if (!self.tickInput)
         {
             for (id key in _allLayers)
@@ -314,6 +328,8 @@
                 }
             }
         }
+        
+        
         if (_allLayers.count == 0)
         {
             [self willDelete];
@@ -322,48 +338,108 @@
 }
 
 
+
+-(void)updateLayersWithFramedataBlock:(void (^)(CALayer *))updateBlock withPreuseBlock:(void(^)(void))preUseBlock withPostuseBlock:(void(^)(void))postUseBlock
+{
+    [self internalUpdateLayerswithFrameData:true updateBlock:updateBlock preBlock:preUseBlock postBlock:postUseBlock];
+
+}
+
 -(void)updateLayersWithFramedataBlock:(void(^)(CALayer *))updateBlock
 {
     
-    [self internalUpdateLayerswithFrameData:true updateBlock:updateBlock];
+
+    [self internalUpdateLayerswithFrameData:true updateBlock:updateBlock preBlock:nil postBlock:nil];
 
 }
 
 -(void)updateLayersWithBlock:(void (^)(CALayer *layer))updateBlock
 {
-    [self internalUpdateLayerswithFrameData:false updateBlock:updateBlock];
+    [self internalUpdateLayerswithFrameData:false updateBlock:updateBlock preBlock:nil postBlock:nil];
 }
 
--(void)internalUpdateLayerswithFrameData:(bool) frameData updateBlock:(void (^)(CALayer *layer))updateBlock
+-(void)internalUpdateLayerswithFrameData:(bool) frameData updateBlock:(void (^)(CALayer *layer))updateBlock preBlock:(void(^)(void))preBlock postBlock:(void(^)(void))postBlock
 {
-    NSMapTable *layersCopy = nil;
+    
+
+    NSMapTable *inputsCopy = nil;
     @synchronized(self)
     {
-        layersCopy = _allLayers.copy;
+        inputsCopy = _allLayers.copy;
     }
-    [CATransaction begin];
+    
     if (frameData)
     {
         _fps_frame_cnt++;
     }
-    for (id key in layersCopy)
+    
+
+    for (id key in inputsCopy)
     {
-        InputSource *layerSrc = (InputSource *)key;
         
-        if (layerSrc.isFrozen)
+        if (!key)
         {
             continue;
         }
         
-        CALayer *clayer = [layersCopy objectForKey:key];
         
-        updateBlock(clayer);
+        InputSource *layerSrc = (InputSource *)key;
         if (frameData)
         {
-            [layerSrc layerUpdated];
+            [layerSrc updateLayersWithNewFrame:updateBlock withPreuseBlock:preBlock withPostuseBlock:postBlock];
+        } else {
+            [layerSrc updateLayer:updateBlock];
         }
     }
-    [CATransaction commit];
+    
+
+
+}
+
+-(CSPcmPlayer *)createPCMInput:(NSString *)forUID withFormat:(const AudioStreamBasicDescription *)withFormat
+{
+    
+    CAMultiAudioEngine *useEngine = nil;
+    
+    NSMapTable *inputsCopy = nil;
+    @synchronized(self)
+    {
+        inputsCopy = _allLayers.copy;
+    }
+    
+
+    for (id key in inputsCopy)
+    {
+        
+        if (!key)
+        {
+            continue;
+        }
+        
+        
+        InputSource *layerSrc = (InputSource *)key;
+        if (layerSrc && layerSrc.sourceLayout && layerSrc.sourceLayout.recorder && layerSrc.sourceLayout.recorder.audioEngine)
+        {
+            useEngine = layerSrc.sourceLayout.recorder.audioEngine;
+        }
+    }
+    
+    if (!useEngine)
+    {
+        useEngine = [CaptureController sharedCaptureController].multiAudioEngine;
+    }
+    
+    
+    if (useEngine)
+    {
+        
+        CAMultiAudioPCMPlayer *player;
+        
+        player = [useEngine createPCMInput:forUID withFormat:withFormat];
+        return (CSPcmPlayer *)player;
+    }
+    
+    return nil;
 }
 
 -(void)frameArrived
@@ -413,7 +489,13 @@
 }
 
 
-+(void) layoutModification:(void (^)())modBlock
++(bool)canCreateSourceFromPasteboardItem:(NSPasteboardItem *)item
+{
+    return NO;
+}
+
+
++(void) layoutModification:(void (^)(void))modBlock
 {
     //On main thread already, just execute the block, otherwise execute on main and wait
     if ([NSThread isMainThread])
@@ -427,6 +509,16 @@
     
 }
 
+-(void)willExport
+{
+    return;
+}
+
+
+-(void)didExport
+{
+    return;
+}
 -(void)dealloc
 {
     if (self.timerDelegate)
@@ -436,6 +528,23 @@
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     self.timerDelegate = nil;
+}
+
+
++(NSObject <CSCaptureSourceProtocol> *)createSourceFromPasteboardItem:(NSPasteboardItem *)item
+{
+    return nil;
+}
+
++(NSObject <CSCaptureSourceProtocol> *)createSourceFromPasteboardItem
+{
+    return nil;
+}
+
+
++(NSSet *)mediaUTIs
+{
+    return nil;
 }
 
 

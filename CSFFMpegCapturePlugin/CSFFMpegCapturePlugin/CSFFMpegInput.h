@@ -17,6 +17,8 @@
 #include "libswscale/swscale.h"
 #include "libswresample/swresample.h"
 #include "libavutil/samplefmt.h"
+#include "libavutil/opt.h"
+#include "libavutil/imgutils.h"
 
 #import "CAMultiAudioPCM.h"
 #import "CSPcmPlayer.h"
@@ -38,13 +40,16 @@ struct frame_message {
     int _audio_stream_idx;
     struct SwsContext *_sws_ctx;
     struct SwrContext *_swr_ctx;
-    bool _video_done;
-    bool _audio_done;
     uint64_t _seek_time;
     bool _seek_request;
     bool _stop_request;
+    bool _seen_audio_pkt;
+    bool _seen_video_pkt;
+    dispatch_semaphore_t _read_loop_semaphore;
+    dispatch_queue_t _read_thread;
     
     dispatch_queue_t _seek_queue;
+    AVFrame *_first_frame;
     
     
     
@@ -53,10 +58,10 @@ struct frame_message {
 
 -(instancetype) initWithMediaPath:(NSString *)mediaPath;
 -(bool)openMedia:(int)bufferVideoFrames;
--(AVFrame *)consumeFrame;
--(AVFrame *)consumeFrameWithRefill;
 -(void)readAndDecodeVideoFrames:(int)frameCnt;
 -(void)stop;
+-(void)start;
+-(AVFrame *)firstVideoFrame;
 
 
 

@@ -69,13 +69,7 @@
 -(void)popoverDidClose:(NSNotification *)notification
 {
     
-    AppDelegate *appDel = NSApp.delegate;
-    
-    CaptureController *controller = appDel.captureController;
-
     self.popover.contentViewController = nil;
-    //This is only relevant if we're a custom edit popup for staging/live, but just do it unconditionally because reasons/lazy
-    [controller updateFrameIntervals];
 }
 
 

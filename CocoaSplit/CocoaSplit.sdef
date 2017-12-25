@@ -7,27 +7,224 @@
             <element type="layout">
                 <cocoa key="layouts"/>
             </element>
-            <property name="width" code="CSwd" type="integer"/>
-            <property name="height" code="CSht" type="integer"/>
-            <property name="fps" code="CSfp" type="real"/>
-            <property name="activelayout" code="CSal" type="layout"/>
+            <element type="layoutscript">
+                <cocoa key="layoutscripts"/>
+            </element>
+            <element type="audioInput">
+                <cocoa key="audioInputs"/>
+            </element>
+            <element type="output">
+                <cocoa key="captureDestinations"/>
+            </element>
             
+            <property name="activelayout" code="CSal" type="layout" access="r"/>
+            <property name="staginglayout" code="CSsl" type="layout" access = "r"/>
+            <property name="livelayout" code="CSll" type="layout" access="r"/>
+            <property name="useTransitions" code="CSut" type="boolean"/>
             
         </class>
         
-        <class name="layout" code="CSly">
-            <cocoa class="SourceLayout"/>
+        <class name="output" code="CSot">
+            <cocoa class="OutputDestination"/>
+            <property name="name" code="pnam" type="text"/>
+            <property name="active" code="CSac" type="boolean"/>
+            <property name="layout" code="CSly" type="layout">
+                <cocoa key="assignedLayout"/>
+            </property>
+            <property name="running" code="CSru" type="boolean" access="r">
+                <cocoa key="scriptRunning"/>
+            </property>
+        </class>
+        
+        <class name="inputSource" code="CSis">
+            <cocoa class="InputSource"/>
+            <property name="name" code="pnam" type="text"/>
+            <property name="opacity" code="CSop" type="real">
+                <cocoa key="opacity"/>
+            </property>
+            <property name="uuid" code="CSuu" type="text">
+                <cocoa key="uuid"/>
+            </property>
+
+        </class>
+        
+        
+        <class name="audioInput" code="CSai">
+            <cocoa class="CAMultiAudioNode"/>
+            <property name="name" code="pnam" type="text" access="r"/>
+            <property name="sound volume" code="CSvl" type="real">
+                <cocoa key="volume"/>
+            </property>
+            <property name="enabled" code="CSen" type="boolean"/>
+        </class>
+        
+        
+        <class name="layoutscript" code="CSsc">
+            <cocoa class="CSLayoutSequence"/>
             <property name="name" code="pnam" type="text">
                 <cocoa key="name"/>
             </property>
+            
+            <responds-to name="run">
+                <cocoa method="scriptRun:"/>
+            </responds-to>
+            
+            <responds-to name="stop">
+                <cocoa method="scriptStop:"/>
+            </responds-to>
+        </class>
+        
+        
+        
+        <class name="layout" code="CSly">
+            <cocoa class="SourceLayout"/>
+            <element type="inputSource">
+                <cocoa key="sources"/>
+            </element>
+
+
+            <property name="name" code="pnam" type="text">
+                <cocoa key="name"/>
+            </property>
+            
+            <property name="hasSources" code="CShs" type="boolean">
+                <cocoa key="hasSources"/>
+            </property>
+            
+            
+            <property name="width" code="CSwd" type="integer">
+                <cocoa key="canvas_width"/>
+            </property>
+            <property name="height" code="CSht" type="integer">
+                <cocoa key="canvas_height"/>
+            </property>
+            <property name="frame rate" code="CSfp" type="integer">
+                <cocoa key="frameRate"/>
+            </property>
+
+
+            <responds-to name="merge">
+                <cocoa method="scriptMergeLayout:"/>
+            </responds-to>
+            
+            <responds-to name="remove">
+                <cocoa method="scriptRemoveLayout:"/>
+            </responds-to>
+
+            <responds-to name="toggle">
+                <cocoa method="scriptToggleLayout:"/>
+            </responds-to>
+                
+            
+            <responds-to name="replace with">
+                <cocoa method="scriptSwitchToLayout:"/>
+            </responds-to>
+            
+            <responds-to name="record">
+                <cocoa method="scriptRecord:"/>
+            </responds-to>
+            
+            <responds-to name="stopRecord">
+                <cocoa method="scriptStopRecord:"/>
+            </responds-to>
+
             <responds-to name="activate">
                 <cocoa method="scriptActivate:"/>
             </responds-to>
         </class>
         
+        <command name="record" code="CSlyRecd">
+            <direct-parameter type="layout"/>
+        </command>
+        <command name="stopRecord" code="CSlystre">
+            <direct-parameter type="layout"/>
+        </command>
+
+        <command name="goLive" code="CSstlive">
+            <cocoa class="CSScriptCommand"/>
+        </command>
+        
+        <command name="swapLayouts" code="CSssswap">
+            <cocoa class="CSScriptCommand"/>
+        </command>
+        
+        <command name="startStream" code="CSssstrm">
+            <cocoa class="CSScriptCommand"/>
+        </command>
+        
+        <command name="stopStream" code="CSssstst">
+            <cocoa class="CSScriptCommand"/>
+        </command>
+        
+        <command name="instantRecord" code="CSssirec">
+            <cocoa class="CSScriptCommand"/>
+        </command>
+        
+        <command name="toggleStagingView" code="CSsstgst">
+            <cocoa class="CSScriptCommand"/>
+        </command>
+
+        <command name="hideStagingView" code="CSsshdst">
+            <cocoa class="CSScriptCommand"/>
+        </command>
+
+
+        <command name="showStagingView" code="CSssshst">
+            <cocoa class="CSScriptCommand"/>
+        </command>
+
+
+
+        <command name="toggle" code="CSsstogl">
+            <direct-parameter type="layout"/>
+            <parameter name="using" code="toly" type="layout" description="Which layout to operate on" optional="yes">
+                <cocoa key="useLayout"/>
+            </parameter>
+        </command>
+        
+        <command name="replace with" code="CSssrwly">
+            <direct-parameter type="layout"/>
+            <parameter name="using" code="toly" type="layout" description="Which layout to operate on" optional="yes">
+                <cocoa key="useLayout"/>
+            </parameter>
+
+
+        </command>
+        
+        
         <command name="activate" code="CSlyACtv">
             <direct-parameter type="layout"/>
         </command>
+        
+        <command name="run" code="CSssruns">
+            <direct-parameter type="layoutscript"/>
+            <parameter name="in" code="toly" type="layout" description="Which layout to operate on" optional="yes">
+                <cocoa key="useLayout"/>
+            </parameter>
+
+        </command>
+        
+        <command name="stop" code="CSssstls">
+            <direct-parameter type="layoutscript"/>
+        </command>
+
+
+        <command name="merge" code="CSssmgly">
+            <direct-parameter type="layout"/>
+            <parameter name="into" code="toly" type="layout" description="Which layout to operate on" optional="yes">
+                <cocoa key="useLayout"/>
+            </parameter>
+    
+        </command>
+
+        <command name="remove" code="CSssrmly">
+            <direct-parameter type="layout"/>
+            <parameter name="from" code="toly" type="layout" description="Which layout to operate on" optional="yes">
+                <cocoa key="useLayout"/>
+            </parameter>
+    
+        </command>
+
     </suite>
     
     

@@ -9,6 +9,8 @@
 #import <Cocoa/Cocoa.h>
 #import "SourceLayout.h"
 
+@class CSLayoutSwitcherViewController;
+
 @interface CSSTextView : NSTextView
 @end
 
@@ -17,8 +19,13 @@
 {
     CATextLayer *_labelLayer;
     CSSTextView *_textView;
+    NSImageView *_recordImageView;
     
 }
 @property (strong) SourceLayout *sourceLayout;
+@property (assign) bool isSwitcherView;
+@property (weak) CSLayoutSwitcherViewController *controller;
+
+-(instancetype)initWithIsSwitcherView:(bool)isSwitcherView;
 
 @end

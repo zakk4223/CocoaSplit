@@ -14,6 +14,9 @@ NSString *const CSNotificationLayoutCanvasChanged = @"CSNotificationLayoutCanvas
 NSString *const CSNotificationLayoutFramerateChanged = @"CSNotificationLayoutFramerateChanged";
 
 
+NSString *const CSNotificationSequenceAdded = @"CSNotificationSequenceAdded";
+NSString *const CSNotificationSequenceDeleted = @"CSNotificationSequenceDeleted";
+NSString *const CSNotificationSequenceSaved = @"CSNotificationSequenceSaved";
 
 NSString *const CSNotificationStreamStarted = @"CSNotificationStreamStarted";
 NSString *const CSNotificationStreamStopped = @"CSNotificationStreamStopped";
@@ -21,6 +24,15 @@ NSString *const CSNotificationStreamStopped = @"CSNotificationStreamStopped";
 
 NSString *const CSNotificationOutputAdded = @"CSNotificationOutputAdded";
 NSString *const CSNotificationOutputDeleted = @"CSNotificationOutputDeleted";
+NSString *const CSNotificationOutputErrored = @"CSNotificationOutputErrored";
+NSString *const CSNotificationOutputStarted = @"CSNotificationOutputStarted";
+NSString *const CSNotificationOutputRestarted = @"CSNotificationOutputRestarted";
+NSString *const CSNotificationOutputSetActive = @"CSNotificationOutputSetActive";
+NSString *const CSNotificationOutputSetInactive = @"CSNotificationOutputSetInactive";
+NSString *const CSNotificationOutputReconfigured = @"CSNotificationOutputReconfigured";
+NSString *const CSNotificationOutputStopped = @"CSNotificationOutputStopped";
+
+
 
 
 NSString *const CSNotificationCompressorAdded = @"CSNotificationCompressorAdded";
@@ -39,5 +51,12 @@ NSString *const CSNotificationInputDetached = @"CSNotificationInputDetached";
 
 NSString *const CSNotificationLayoutModeChanged = @"CSNotificationLayoutModeChanged";
 
+NSString *const CSNotificationThemeChanged = @"CSNotificationThemeChanged";
+
+
+
 NSString *const CSNotificationStatisticsUpdate = @"CSNotificationStatisticsUpdate";
+
+NSString *const CSNotificationAudioAdded = @"CSNotificationAudioAdded";
+NSString *const CSNotificationAudioRemoved = @"CSNotificationAudioRemoved";
 

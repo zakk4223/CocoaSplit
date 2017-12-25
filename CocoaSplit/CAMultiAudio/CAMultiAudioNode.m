@@ -3,13 +3,21 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 11/13/14.
-//  Copyright (c) 2014 Zakk. All rights reserved.
 //
 
 #import "CAMultiAudioNode.h"
 #import "CAMultiAudioGraph.h"
 #import "CAMultiAudioMixingProtocol.h"
 #import "CAMultiAudioMatrixMixerWindowController.h"
+#import "CAMultiAudioDelay.h"
+#include <AudioUnit/AUCocoaUIView.h>
+#include <CoreAudioKit/CoreAudioKit.h>
+#include "CaptureController.h"
+
+
+@implementation CAMultiAudioVolumeAnimation
+
+@end
 
 
 @implementation CAMultiAudioNode
@@ -17,6 +25,16 @@
 @synthesize volume = _volume;
 @synthesize muted = _muted;
 @synthesize enabled = _enabled;
+
+-(instancetype)init
+{
+    if (self = [self initWithSubType:0 unitType:0])
+    {
+        
+    }
+    
+    return self;
+}
 
 
 -(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType
@@ -29,13 +47,71 @@
         unitDescr.componentType = unitType;
         
         //Default to two channels, subclasses can override this
+        
         self.channelCount = 2;
         _volume = 1.0;
-        self.nameColor = [NSColor blackColor];
+
     }
     
     return self;
 }
+
+
+//We don't use NSCoding here because the audio engine/graph does deferred creating of audio unit objects, so most of what we load/save doesn't matter at creating time.
+//The engine applies our saved settings after the node is added to the graph and properly connected
+-(void)saveDataToDict:(NSMutableDictionary *)saveDict
+{
+    saveDict[@"volume"] = [NSNumber numberWithFloat:self.volume];
+    saveDict[@"enabled"] = [NSNumber numberWithBool:self.enabled];
+}
+
+-(void)restoreDataFromDict:(NSDictionary *)restoreDict
+{
+    self.volume = [restoreDict[@"volume"] floatValue];
+    self.enabled = [restoreDict[@"enabled"] boolValue];
+}
+
+
+-(NSView *)audioUnitNSView
+{
+    UInt32 cuiSize;
+    Boolean isWriteable;
+    
+    NSView *retView = nil;
+    
+    OSStatus res;
+    res = AudioUnitGetPropertyInfo(self.audioUnit, kAudioUnitProperty_CocoaUI, kAudioUnitScope_Global, 0, &cuiSize, &isWriteable);
+    
+    if (res == noErr)
+    {
+        AudioUnitCocoaViewInfo *AUViewInfo = malloc(cuiSize);
+        res = AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_CocoaUI, kAudioUnitScope_Global, 0, AUViewInfo, &cuiSize);
+        if (res == noErr && AUViewInfo)
+        {
+            CFURLRef auBundlePath = AUViewInfo->mCocoaAUViewBundleLocation;
+            CFStringRef factoryName = AUViewInfo->mCocoaAUViewClass[0];
+            NSBundle *auBundle = [NSBundle bundleWithURL:(__bridge NSURL * _Nonnull)(auBundlePath)];
+            if (auBundle)
+            {
+                Class factoryClass = [auBundle classNamed:(__bridge NSString * _Nonnull)(factoryName)];
+                id<AUCocoaUIBase> factoryInstance = [[factoryClass alloc] init];
+                retView = [factoryInstance uiViewForAudioUnit:self.audioUnit withSize:NSZeroSize];
+            }
+        }
+        free(AUViewInfo);
+    }
+    if (!retView)
+    {
+        AUGenericView *genView = [[AUGenericView alloc] initWithAudioUnit:self.audioUnit];
+        genView.showsExpertParameters = YES;
+        retView = genView;
+    }
+    return retView;
+}
+
+
+
+
 
 
 -(bool)enabled
@@ -46,19 +122,7 @@
 
 -(void)setEnabled:(bool)enabled
 {
-    NSColor *newColor;
     _enabled = enabled;
-    if (enabled)
-    {
-        newColor = [NSColor greenColor];
-    } else {
-        newColor = [NSColor blackColor];
-    }
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.nameColor = newColor;
-    });
-
     
     
 }
@@ -89,33 +153,39 @@
         return NO;
     }
     
+    
     return YES;
 }
 
--(void)setInputStreamFormat:(AudioStreamBasicDescription *)format
+-(bool)setInputStreamFormat:(AudioStreamBasicDescription *)format
 {
     
     OSStatus err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 0, format, sizeof(AudioStreamBasicDescription));
     if (err)
     {
         NSLog(@"Failed to set StreamFormat for input %@ in willInitializeNode: %d", self, err);
+        return NO;
     }
+    
+    return YES;
 }
 
 
--(void)setOutputStreamFormat:(AudioStreamBasicDescription *)format
+-(bool)setOutputStreamFormat:(AudioStreamBasicDescription *)format
 {
     AudioStreamBasicDescription casbd;
     
     memcpy(&casbd, format, sizeof(casbd));
     casbd.mChannelsPerFrame = self.channelCount;
-    
     OSStatus err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 0, &casbd, sizeof(AudioStreamBasicDescription));
     
     if (err)
     {
         NSLog(@"Failed to set StreamFormat for output on node %@ with %d", self, err);
+        return NO;
     }
+    
+    return YES;
 
 }
 
@@ -134,49 +204,54 @@
 
 -(void)updatePowerlevel
 {
-    [self.connectedTo updatePowerlevel];
+    //[self.connectedTo updatePowerlevel];
     
-    if ([self.connectedTo.class conformsToProtocol:@protocol(CAMultiAudioMixingProtocol)])
+    CAMultiAudioNode *powerNode = self.connectedTo;
+    
+    while (powerNode)
     {
-        id<CAMultiAudioMixingProtocol>mixerNode = (id<CAMultiAudioMixingProtocol>)self.connectedTo;
-        float rawPower = [mixerNode powerForInputBus:self.connectedToBus];
-        
-        self.powerLevel = pow(10.0f, rawPower/20.0f);
+        if ([powerNode.class conformsToProtocol:@protocol(CAMultiAudioMixingProtocol)])
+        {
+            id<CAMultiAudioMixingProtocol>mixerNode = (id<CAMultiAudioMixingProtocol>)powerNode;
+            float rawPower = [mixerNode powerForInputBus:powerNode.connectedToBus];
+            self.powerLevel = pow(10.0f, rawPower/20.0f);
+            break;
+        } else {
+            powerNode = powerNode.connectedTo;
+        }
     }
+    
 }
 
 
+/*
 -(void)setVolumeOnConnectedNode
 {
-    if (!self.connectedTo)
-    {
-        return;
-    }
+    
+    CAMultiAudioNode *volNode = self.connectedTo;
     
     
-    if ([self.connectedTo.class conformsToProtocol:@protocol(CAMultiAudioMixingProtocol)])
+    while (volNode)
     {
-        id<CAMultiAudioMixingProtocol>mixerNode = (id<CAMultiAudioMixingProtocol>)self.connectedTo;
-        [mixerNode setVolumeOnInputBus:self.connectedToBus volume:self.volume];
+        if ([volNode.class conformsToProtocol:@protocol(CAMultiAudioMixingProtocol)])
+        {
+            id<CAMultiAudioMixingProtocol>mixerNode = (id<CAMultiAudioMixingProtocol>)volNode;
+            [mixerNode setVolumeOnInputBus:self.downMixer volume:self.volume];
+            break;
+        } else {
+            volNode = volNode.connectedTo;
+        }
     }
 }
+*/
 
--(void)openMixerWindow:(id)sender
-{
-    if (self.downMixer)
-    {
-        self.mixerWindow = [[CAMultiAudioMatrixMixerWindowController alloc] initWithAudioMixer:self.downMixer];
-        [self.mixerWindow showWindow:nil];
-        self.mixerWindow.window.title = self.name;
-    }
-}
+
 
 
 -(void)nodeConnected:(CAMultiAudioNode *)toNode onBus:(UInt32)onBus
 {
     self.connectedTo = toNode;
     self.connectedToBus = onBus;
-    [self setVolumeOnConnectedNode];
 }
 
 -(void)willConnectNode:(CAMultiAudioNode *)node toBus:(UInt32)toBus
@@ -187,9 +262,6 @@
 
 -(void)setMuted:(bool)muted
 {
-    
-    
-    
     if (_muted == muted)
     {
         return;
@@ -199,8 +271,6 @@
     //if we're muting, save the current player volume
     if (muted == YES)
     {
-        NSLog(@"NODE MUTE %d", muted);
-
         _saved_volume = self.volume;
         self.volume = 0.0f;
     } else {
@@ -226,19 +296,59 @@
     return _muted;
 }
 
-
-
--(void)setVolume:(float)volume
+-(void)animationDidEnd:(NSAnimation *)animation
 {
-    _volume = volume;
-    [self setVolumeOnConnectedNode];
+    CAMultiAudioVolumeAnimation *vAnim = (CAMultiAudioVolumeAnimation *)animation;
+
+    self.volume = vAnim.target_volume;
+}
+
+
+-(void)animation:(NSAnimation *)animation didReachProgressMark:(NSAnimationProgress)progress
+{
+    CAMultiAudioVolumeAnimation *vAnim = (CAMultiAudioVolumeAnimation *)animation;
+    
+    float volume_delta = fabs(vAnim.original_volume - vAnim.target_volume);
+    float progress_val = volume_delta * progress;
+    
+    float real_volume = 0;
+    
+    if (vAnim.target_volume > vAnim.original_volume)
+    {
+        real_volume = vAnim.original_volume + progress_val;
+    } else {
+        real_volume = vAnim.original_volume - progress_val;
+    }
+    
+    self.volume = real_volume;
+}
+
+
+-(void)setVolumeAnimated:(float)volume withDuration:(float)duration
+{
+    _volumeAnimation = [[CAMultiAudioVolumeAnimation alloc] initWithDuration:duration animationCurve:NSAnimationLinear];
+    [_volumeAnimation setFrameRate:20.0];
+    [_volumeAnimation setDelegate:self];
+    _volumeAnimation.animationBlockingMode = NSAnimationNonblockingThreaded;
+    _volumeAnimation.target_volume = volume;
+    _volumeAnimation.original_volume = self.volume;
+    
+    
+    float step_size = 1.0/20.0;
+    float step_vol = 0.0;
+    for (int i = 0; i <= 21; i++)
+    {
+        [_volumeAnimation addProgressMark:step_vol];
+
+        step_vol += step_size;
+    }
+    [_volumeAnimation startAnimation];
     
 }
 
--(float)volume
-{
-    return _volume;
-}
+
+
+
 
 
 -(void) dealloc
