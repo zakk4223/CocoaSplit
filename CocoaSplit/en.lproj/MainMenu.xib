@@ -535,7 +535,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                     </scrollView>
-                                    <button toolTip="Global Audio Configuration" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cxB-MZ-6mz">
+                                    <button toolTip="Global Audio Configuration" translatesAutoresizingMaskIntoConstraints="NO" id="cxB-MZ-6mz">
                                         <rect key="frame" x="625" y="339" width="17" height="17"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="17" id="3OK-Wg-Av4"/>
@@ -891,7 +891,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                     </scrollView>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TVb-Ia-ifl">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TVb-Ia-ifl">
                                         <rect key="frame" x="585" y="340" width="34" height="14"/>
                                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Audio" id="XNT-5T-Oyd">
                                             <font key="font" metaFont="smallSystem"/>
@@ -1159,6 +1159,7 @@
                                     <constraint firstItem="WVW-0n-Rw1" firstAttribute="leading" secondItem="rPZ-cL-r3T" secondAttribute="trailing" constant="8" symbolic="YES" id="D4c-Ow-Ksi"/>
                                     <constraint firstItem="S3f-OT-hge" firstAttribute="baseline" secondItem="xTB-uk-xkF" secondAttribute="baseline" id="DUh-Xa-Jo7"/>
                                     <constraint firstItem="xTB-uk-xkF" firstAttribute="baseline" secondItem="NXd-7g-Q7o" secondAttribute="baseline" id="EOn-OP-hmM"/>
+                                    <constraint firstItem="aQN-sB-Ke6" firstAttribute="top" secondItem="TVb-Ia-ifl" secondAttribute="bottom" constant="9" id="Exm-WZ-i0n"/>
                                     <constraint firstItem="QJ6-Ne-Zed" firstAttribute="top" secondItem="Ysd-ry-lvg" secondAttribute="bottom" constant="7" id="GdK-Zq-SGX"/>
                                     <constraint firstItem="T7c-kD-tu4" firstAttribute="leading" secondItem="xTB-uk-xkF" secondAttribute="trailing" constant="17" id="HBr-pf-TX2"/>
                                     <constraint firstItem="cxB-MZ-6mz" firstAttribute="leading" secondItem="TVb-Ia-ifl" secondAttribute="trailing" constant="8" symbolic="YES" id="HDy-zc-yVh"/>
@@ -1193,6 +1194,7 @@
                                     <constraint firstAttribute="trailing" secondItem="Rb5-R9-Aqy" secondAttribute="trailing" constant="20" symbolic="YES" id="elq-X8-3YP"/>
                                     <constraint firstItem="ELT-rG-e24" firstAttribute="leading" secondItem="597" secondAttribute="trailing" constant="8" symbolic="YES" id="epQ-sc-jsk"/>
                                     <constraint firstItem="Ysd-ry-lvg" firstAttribute="centerY" secondItem="HdA-UM-xTY" secondAttribute="centerY" id="gyV-qH-Mqh"/>
+                                    <constraint firstItem="aQN-sB-Ke6" firstAttribute="top" secondItem="cxB-MZ-6mz" secondAttribute="bottom" constant="8" id="h0Z-zE-eVu"/>
                                     <constraint firstAttribute="trailing" secondItem="rSV-Iw-qby" secondAttribute="trailing" id="i9n-fB-ynk"/>
                                     <constraint firstItem="vaG-89-fnQ" firstAttribute="leading" secondItem="2370" secondAttribute="leading" constant="21" id="kVX-56-86F"/>
                                     <constraint firstItem="Z1U-9v-Vnp" firstAttribute="leading" secondItem="WVW-0n-Rw1" secondAttribute="leading" id="l0C-6o-XCk"/>

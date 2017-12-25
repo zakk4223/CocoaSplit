@@ -1111,6 +1111,9 @@
    if (self = [super init])
    {
        
+    
+       _stagingHidden = YES;
+       
        _inputViewSortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"depth" ascending:NO]];
 
        _layoutWindows = [NSMutableArray array];
@@ -1712,7 +1715,14 @@
         [fileManager createDirectoryAtPath:saveFolder withIntermediateDirectories:NO attributes:nil error:nil];
     }
     
-    NSString *saveFile = [saveFolder stringByAppendingPathComponent:@"CocoaSplit-2.settings"];
+    NSString *saveFile = [saveFolder stringByAppendingPathComponent:@"CocoaSplit-2.1.settings"];
+
+    if ([fileManager fileExistsAtPath:saveFile])
+    {
+        return saveFile;
+    }
+    
+    saveFile = [saveFolder stringByAppendingPathComponent:@"CocoaSplit-2.settings"];
     
     if ([fileManager fileExistsAtPath:saveFile])
     {
@@ -1747,7 +1757,7 @@
         [fileManager createDirectoryAtPath:saveFolder withIntermediateDirectories:NO attributes:nil error:nil];
     }
     
-    NSString *saveFile = @"CocoaSplit-2.settings";
+    NSString *saveFile = @"CocoaSplit-2-1.settings";
     
     return [saveFolder stringByAppendingPathComponent:saveFile];
 }
@@ -1756,8 +1766,7 @@
 -(void) appendToLogView:(NSString *)logLine
 {
     
-    return;
-    /*
+
     NSAttributedString *appendStr = [[NSAttributedString alloc] initWithString:logLine];
     [[self.logTextView textStorage] beginEditing];
 
@@ -1770,7 +1779,6 @@
     range = NSMakeRange([[self.logTextView string] length], 0);
     
     [self.logTextView scrollRangeToVisible:range];
-    */
 }
 
 
@@ -2003,8 +2011,8 @@
     
     [saveRoot setValue:self.extraPluginsSaveData forKeyPath:@"extraPluginsSaveData"];
     
-    BOOL stagingHidden = [self.canvasSplitView isSubviewCollapsed:self.canvasSplitView.subviews[0]];
-    [saveRoot setValue:[NSNumber numberWithBool:stagingHidden] forKey:@"stagingHidden"];
+    //BOOL stagingHidden = [self.canvasSplitView isSubviewCollapsed:self.canvasSplitView.subviews[0]];
+    [saveRoot setValue:[NSNumber numberWithBool:self.stagingHidden] forKey:@"stagingHidden"];
     
     [saveRoot setValue:self.multiAudioEngine forKey:@"multiAudioEngine"];
     
@@ -2172,6 +2180,8 @@
     self.selectedLayout = [[SourceLayout alloc] init];
     self.stagingLayout = [[SourceLayout alloc] init];
 
+    self.stagingPreviewView.sourceLayout = self.stagingLayout;
+    
     
     self.extraPluginsSaveData = [saveRoot valueForKey:@"extraPluginsSaveData"];
     [self migrateDefaultCompressor:saveRoot];
@@ -2179,11 +2189,18 @@
     
     BOOL stagingHidden = [[saveRoot valueForKeyPath:@"stagingHidden"] boolValue];
     
-    if (stagingHidden)
+    
+    if ([saveRoot objectForKey:@"stagingHidden"])
+    {
+        BOOL stagingHidden = [[saveRoot valueForKeyPath:@"stagingHidden"] boolValue];
+        self.stagingHidden = stagingHidden;
+    }
+    if (self.stagingHidden)
     {
         [self hideStagingView];
     }
 
+    
     self.useMidiLiveChannelMapping   = [[saveRoot valueForKey:@"useMidiLiveChannelMapping"] boolValue];
     self.midiLiveChannel = [[saveRoot valueForKey:@"midiLiveChannel"] integerValue];
     
@@ -2275,6 +2292,7 @@
             self.stagingLayout = tmpLayout;
         }
         
+        self.stagingPreviewView.sourceLayout = self.stagingLayout;
         self.stagingLayout.name = @"staging";
         self.selectedLayout.name = @"live";
         
@@ -2511,7 +2529,6 @@
     {
         [stagingLayout restoreSourceList:nil];
         [stagingLayout setupMIDI];
-        self.stagingPreviewView.sourceLayout = stagingLayout;
         self.stagingPreviewView.midiActive = YES;
     }
 
