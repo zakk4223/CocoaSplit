@@ -3,25 +3,18 @@
 //  streamOutput
 //
 //  Created by Zakk on 3/17/13.
-//  Copyright (c) 2013 Zakk. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import "CaptureController.h"
 #import "CompressorBase.h"
+#import "AppleVTCompressorBase.h"
 
 #import <VideoToolbox/VideoToolbox.h>
 #import <VideoToolbox/VTVideoEncoderList.h>
 
-@interface AppleVTCompressor : CompressorBase <VideoCompressor, NSCoding>
+@interface AppleVTCompressor : AppleVTCompressorBase <VideoCompressor, NSCoding>
 {
-    
-    VTCompressionSessionRef _compression_session;
-    VTPixelTransferSessionRef _vtpt_ref;
-    bool _resetPending;
-    dispatch_queue_t _compressor_queue;
-    
-    
 
 }
 
@@ -39,7 +32,6 @@
 @property (assign) bool forceHardware;
 
 
--(bool)compressFrame:(CapturedFrameData *)frameData;
 +(bool)intelQSVAvailable;
 
 

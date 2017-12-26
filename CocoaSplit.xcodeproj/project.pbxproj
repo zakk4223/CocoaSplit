@@ -155,6 +155,8 @@
 		347B7FC616907A1700B5F4B3 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 347B7FC516907A1700B5F4B3 /* libbz2.dylib */; };
 		347B7FC816907AE700B5F4B3 /* VideoDecodeAcceleration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 347B7FC716907AE700B5F4B3 /* VideoDecodeAcceleration.framework */; };
 		347BEAAB1E5BCBAF0026A094 /* CSOpenGLLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 347BEAAA1E5BCBAF0026A094 /* CSOpenGLLayer.m */; };
+		347DBC831FF1EA1700B98D5E /* AppleVTCompressorBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 347DBC821FF1EA1700B98D5E /* AppleVTCompressorBase.m */; };
+		347DBC9D1FF22C0100B98D5E /* CSAppleHEVCCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 347DBC9C1FF22C0100B98D5E /* CSAppleHEVCCompressor.m */; };
 		3481F30619B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3481F30519B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m */; };
 		348AC06B19B406910064F02D /* SourceLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 348AC06A19B406910064F02D /* SourceLayout.m */; };
 		34938EE81AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 34938EE71AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m */; };
@@ -814,6 +816,10 @@
 		347B7FC916907AFA00B5F4B3 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		347BEAA91E5BCBAF0026A094 /* CSOpenGLLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSOpenGLLayer.h; path = PluginHeaders/CSOpenGLLayer.h; sourceTree = "<group>"; };
 		347BEAAA1E5BCBAF0026A094 /* CSOpenGLLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSOpenGLLayer.m; sourceTree = "<group>"; };
+		347DBC811FF1EA1700B98D5E /* AppleVTCompressorBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppleVTCompressorBase.h; path = Compressor/AppleVTCompressorBase.h; sourceTree = "<group>"; };
+		347DBC821FF1EA1700B98D5E /* AppleVTCompressorBase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AppleVTCompressorBase.m; path = Compressor/AppleVTCompressorBase.m; sourceTree = "<group>"; };
+		347DBC9B1FF22C0100B98D5E /* CSAppleHEVCCompressor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSAppleHEVCCompressor.h; path = Compressor/CSAppleHEVCCompressor.h; sourceTree = "<group>"; };
+		347DBC9C1FF22C0100B98D5E /* CSAppleHEVCCompressor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CSAppleHEVCCompressor.m; path = Compressor/CSAppleHEVCCompressor.m; sourceTree = "<group>"; };
 		3481F30419B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SourceLayout+ScriptingAdditions.h"; path = "ScriptingAddditions/SourceLayout+ScriptingAdditions.h"; sourceTree = "<group>"; };
 		3481F30519B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "SourceLayout+ScriptingAdditions.m"; path = "ScriptingAddditions/SourceLayout+ScriptingAdditions.m"; sourceTree = "<group>"; };
 		348AC06919B406910064F02D /* SourceLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SourceLayout.h; sourceTree = "<group>"; };
@@ -1484,6 +1490,10 @@
 				3434CB271CA8615A001B3DF9 /* AppleProResCompressor.m */,
 				3414C6AC1CBB9EBF00107C69 /* CSIRCompressor.h */,
 				3414C6AD1CBB9EBF00107C69 /* CSIRCompressor.m */,
+				347DBC811FF1EA1700B98D5E /* AppleVTCompressorBase.h */,
+				347DBC821FF1EA1700B98D5E /* AppleVTCompressorBase.m */,
+				347DBC9B1FF22C0100B98D5E /* CSAppleHEVCCompressor.h */,
+				347DBC9C1FF22C0100B98D5E /* CSAppleHEVCCompressor.m */,
 			);
 			name = Compressor;
 			sourceTree = "<group>";
@@ -2662,6 +2672,7 @@
 				34788DDB1EF5996000C3C9C5 /* CATransaction+JSExtensions.m in Sources */,
 				34ED8C6F1B07371C002C0674 /* MIKMIDIMappingGenerator.m in Sources */,
 				342346CF15F9F07E00C8C77E /* CSAbstractCaptureDevice.m in Sources */,
+				347DBC831FF1EA1700B98D5E /* AppleVTCompressorBase.m in Sources */,
 				34938EE81AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m in Sources */,
 				34210B3E1606001200362FC8 /* OutputDestination.m in Sources */,
 				34ED8C9B1B07371C002C0674 /* MIKMIDIPrivateUtilities.m in Sources */,
@@ -2701,6 +2712,7 @@
 				34F80D6D1EDBC8C800D890D3 /* OutputDestination+ScriptingAdditions.m in Sources */,
 				3494DF381CCD2DB000E921BF /* TPCircularBuffer.c in Sources */,
 				349461681ABC57C100F28883 /* CSAnimationItem.m in Sources */,
+				347DBC9D1FF22C0100B98D5E /* CSAppleHEVCCompressor.m in Sources */,
 				345BED051F45A36000B46F29 /* CSSubLayoutTransitionViewController.m in Sources */,
 				34ED8C971B07371C002C0674 /* MIKMIDIPlayer.m in Sources */,
 				34ED8C591B07371C002C0674 /* MIKMIDIDevice.m in Sources */,

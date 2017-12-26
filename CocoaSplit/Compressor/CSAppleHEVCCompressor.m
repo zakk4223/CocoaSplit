@@ -1,66 +1,14 @@
 //
-//  AppleVTCompressor.m
-//  streamOutput
+//  CSAppleHEVCCompressor.m
+//  CocoaSplit
 //
-//  Created by Zakk on 3/17/13.
+//  Created by Zakk on 12/26/17.
+//
 
-#import "AppleVTCompressor.h"
-#import "OutputDestination.h"
+#import "CSAppleHEVCCompressor.h"
 #import "CSAppleH264CompressorViewController.h"
-#import "CSPluginServices.h"
 
-
-OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessionRef, CFDictionaryRef *);
-
-
-
-@implementation AppleVTCompressor
-
-
-- (id)copyWithZone:(NSZone *)zone
-{
-    AppleVTCompressor *copy = [super copyWithZone:zone];
-    
-    copy.average_bitrate = self.average_bitrate;
-    copy.max_bitrate = self.max_bitrate;
-    
-    copy.profile = self.profile;
-    copy.keyframe_interval = self.keyframe_interval;
-    copy.use_cbr = self.use_cbr;
-        return copy;
-}
-
-
--(void) encodeWithCoder:(NSCoder *)aCoder
-{
-    
-    [super encodeWithCoder:aCoder];
-    
-    [aCoder encodeInteger:self.average_bitrate forKey:@"average_bitrate"];
-    [aCoder encodeInteger:self.max_bitrate forKey:@"max_bitrate"];
-    [aCoder encodeInteger:self.keyframe_interval forKey:@"keyframe_interval"];
-    [aCoder encodeObject:self.profile forKey:@"profile"];
-    [aCoder encodeBool:self.use_cbr forKey:@"use_cbr"];
-    [aCoder encodeBool:self.noHardware forKey:@"noHardware"];
-    [aCoder encodeBool:self.forceHardware forKey:@"forceHardware"];
-    
-}
-
--(id) initWithCoder:(NSCoder *)aDecoder
-{
-    if (self = [super initWithCoder:aDecoder])
-    {
-        self.average_bitrate = (int)[aDecoder decodeIntegerForKey:@"average_bitrate"];
-        self.max_bitrate = (int)[aDecoder decodeIntegerForKey:@"max_bitrate"];
-        self.keyframe_interval = (int)[aDecoder decodeIntegerForKey:@"keyframe_interval"];
-        self.profile = [aDecoder decodeObjectForKey:@"profile"];
-        self.use_cbr = [aDecoder decodeBoolForKey:@"use_cbr"];
-        self.noHardware = [aDecoder decodeBoolForKey:@"noHardware"];
-        self.forceHardware = [aDecoder decodeBoolForKey:@"forceHardware"];
-    }
-    
-    return self;
-}
+@implementation CSAppleHEVCCompressor
 
 
 -(id)init
@@ -68,11 +16,11 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
     if (self = [super init])
     {
         
-
         
-        self.compressorType = @"Apple h264";
-        self.codec_id = AV_CODEC_ID_H264;
-
+        
+        self.compressorType = @"Apple HEVC";
+        self.codec_id = AV_CODEC_ID_HEVC;
+        
         self.profiles = @[[NSNull null], @"Baseline", @"Main", @"High"];
     }
     
@@ -80,27 +28,10 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
 }
 
 
-
-
-
--(NSString *)description
-{
-    return [NSString stringWithFormat:@"%@: Type: %@, Average Bitrate %d, Max Bitrate %d, CBR: %d, Profile %@", self.name, self.compressorType, self.average_bitrate, self.max_bitrate, self.use_cbr, self.profile];
-    
-}
-
-
-
-
-
-
-
 -(CMVideoCodecType) codecType
 {
-    return kCMVideoCodecType_H264;
+    return kCMVideoCodecType_HEVC;
 }
-
-
 
 -(NSMutableDictionary *)encoderSpec
 {
@@ -124,10 +55,10 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
 -(void)configureCompressionSession:(VTCompressionSessionRef)session
 {
     OSStatus status;
-
+    
     VTSessionSetProperty(session, kVTCompressionPropertyKey_AllowFrameReordering, kCFBooleanFalse);
     VTSessionSetProperty(session, (__bridge CFStringRef)@"RealTime", kCFBooleanTrue);
-
+    
     int real_keyframe_interval = 2;
     if (self.keyframe_interval && self.keyframe_interval > 0)
     {
@@ -135,7 +66,7 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
     }
     
     VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_MaxKeyFrameIntervalDuration, (__bridge CFTypeRef)@(real_keyframe_interval));
-  
+    
     int real_bitrate_limit = 0;
     float limit_seconds = 0.0f;
     
@@ -161,17 +92,17 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
         VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_AverageBitRate, CFNumberCreate(NULL, kCFNumberIntType, &real_bitrate));
         
     }
- 
+    
     //This doesn't appear to work at all (2012 rMBP, 10.8.4). Even if you set DataRateLimits, you don't get anything back if you
     //try to retrieve it.
     
     if (real_bitrate_limit > 0)
     {
         
-		NSArray *dataRateLimits = @[
-			@(real_bitrate_limit),
-			@(limit_seconds),
-		];
+        NSArray *dataRateLimits = @[
+                                    @(real_bitrate_limit),
+                                    @(limit_seconds),
+                                    ];
         
         OSStatus success = VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_DataRateLimits, (__bridge CFTypeRef)dataRateLimits);
         if (success != noErr)
@@ -179,7 +110,7 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
             NSLog(@"FAILED TO SET DATALIMITS");
         }
     }
-
+    
     
     if (self.profile)
     {
@@ -195,7 +126,7 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
                 session_profile = kVTProfileLevel_H264_Main_5_0;
             } else if ([self.profile isEqualToString:@"High"]) {
                 session_profile = kVTProfileLevel_H264_High_5_0;
-            }            
+            }
         } else {
             if ([self.profile isEqualToString:@"Baseline"])
             {
@@ -212,49 +143,10 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
         {
             VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_ProfileLevel, session_profile);
         }
-            
-            
+        
+        
     }
 }
-
-+(bool)intelQSVAvailable
-{
-    
-    /*
-     CFArrayRef encoders = NULL;
-     
-     VTCopyVideoEncoderList(NULL, &encoders);
-     
-     
-     
-     NSLog(@"ENCODERS %@", encoders);
-    */
-    
-    NSMutableDictionary *encoderSpec = [[NSMutableDictionary alloc] init];
-    encoderSpec[(__bridge NSString *)kVTVideoEncoderSpecification_RequireHardwareAcceleratedVideoEncoder] = @YES;
-    
-    
-    VTCompressionSessionRef testSession = NULL;
-    OSStatus status;
-    
-    status = VTCompressionSessionCreate(NULL, 1920, 1080, kCMVideoCodecType_H264, (__bridge CFDictionaryRef)encoderSpec, NULL, NULL, NULL,  (__bridge void *)self, &testSession);
-    
-    bool ret;
-    if (status != noErr || !testSession)
-    {
-        ret = NO;
-    } else {
-        VTCompressionSessionInvalidate(testSession);
-        if (testSession)
-        {
-            CFRelease(testSession);
-        }
-        ret = YES;
-    }
-    
-    return ret;
-}
-
 
 -(id <CSCompressorViewControllerProtocol>)getConfigurationView
 {
