@@ -93,7 +93,6 @@
 
 -(void)setAssignedLayout:(SourceLayout *)assignedLayout
 {
-    NSLog(@"ASSIGNED LAYOUT %@", assignedLayout);
     _assignedLayout = assignedLayout;
 }
 
@@ -101,7 +100,6 @@
 {
     if (self.compressor)
     {
-        NSLog(@"REMOVING COMPRESSOR");
         [self.compressor removeOutput:self];
     }
 }
@@ -451,14 +449,7 @@
     }
     
     
-    if (!self.compressor)
-    {
-        NSLog(@"NO COMPRESSOR");
-        
-    }
-    
-    
-    
+
     if (self.compressor)
     {
         [self.compressor addOutput:self];
@@ -674,7 +665,6 @@
 
 -(void)dealloc
 {
-    NSLog(@"DEALLOC");
     [self stopCompressor];
     
     if (self.ffmpeg_out)
