@@ -438,7 +438,24 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         avccKey = CFSTR("avcC");
         if (atoms)
         {
+            
             avcc_data = CFDictionaryGetValue(atoms, avccKey);
+            if (!avcc_data)
+            {
+                //Try the HEVC atom key
+                avccKey = CFSTR("hvcC");
+                avcc_data = CFDictionaryGetValue(atoms, avccKey);
+                if (avcc_data)
+                {
+                    c_ctx->codec_tag = MKTAG('h', 'v', 'c', '1');
+
+                }
+            }
+            
+            if (!avcc_data)
+            {
+                return NO;
+            }
             avcc_size = CFDataGetLength(avcc_data);
             c_ctx->extradata = malloc(avcc_size);
     
@@ -448,7 +465,8 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         }
         c_ctx->codec_type = AVMEDIA_TYPE_VIDEO;
         c_ctx->codec_id = self.video_codec_id;
-
+        
+        
     } else if (codec_ctx) {
         
         AVCodecParameters avc_parms = { 0 };

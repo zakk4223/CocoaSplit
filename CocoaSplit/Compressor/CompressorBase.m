@@ -25,9 +25,6 @@
         self.arOptions = @[@"Use Source", @"Preserve AR"];
 
         self.resolutionOption = @"Use Source";
-        
-        self.codec_id = AV_CODEC_ID_H264;
-        
         self.outputs = [[NSMutableDictionary alloc] init];
         _audioBuffer = [[NSMutableArray alloc] init];
         

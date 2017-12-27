@@ -40,6 +40,7 @@
 #import "CSLayoutLayoutTransitionViewController.h"
 #import "CSScriptInputSource.h"
 #import "CSJSAnimationDelegate.h"
+#import "CSAppleHEVCCompressor.h"
 
 
 @implementation CaptureController
@@ -1715,7 +1716,7 @@
         [fileManager createDirectoryAtPath:saveFolder withIntermediateDirectories:NO attributes:nil error:nil];
     }
     
-    NSString *saveFile = [saveFolder stringByAppendingPathComponent:@"CocoaSplit-2.1.settings"];
+    NSString *saveFile = [saveFolder stringByAppendingPathComponent:@"CocoaSplit-2-1.settings"];
 
     if ([fileManager fileExistsAtPath:saveFile])
     {
@@ -1901,6 +1902,20 @@
         [self.compressors removeObjectForKey:@"AppleVT"];
     }
     
+    
+    
+    
+    if (!self.compressors[@"AppleHEVC"])
+    {
+        CSAppleHEVCCompressor *newCompressor = [[CSAppleHEVCCompressor alloc] init];
+        newCompressor.name = @"AppleHEVC".mutableCopy;
+        newCompressor.average_bitrate = 1000;
+        newCompressor.max_bitrate = 1000;
+        newCompressor.keyframe_interval = 2;
+        self.compressors[@"AppleHEVC"] = newCompressor;
+        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:newCompressor];
+        
+    }
     
     
     if (!self.compressors[@"x264"])
@@ -2186,8 +2201,6 @@
     self.extraPluginsSaveData = [saveRoot valueForKey:@"extraPluginsSaveData"];
     [self migrateDefaultCompressor:saveRoot];
     [self buildExtrasMenu];
-    
-    BOOL stagingHidden = [[saveRoot valueForKeyPath:@"stagingHidden"] boolValue];
     
     
     if ([saveRoot objectForKey:@"stagingHidden"])

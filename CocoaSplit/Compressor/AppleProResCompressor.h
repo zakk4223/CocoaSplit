@@ -8,16 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import "CaptureController.h"
-#import "CompressorBase.h"
+#import "AppleVTCompressorBase.h"
 
 #import <VideoToolbox/VideoToolbox.h>
 #import <VideoToolbox/VTVideoEncoderList.h>
 
-@interface AppleProResCompressor : CompressorBase <VideoCompressor, NSCoding>
+@interface AppleProResCompressor : AppleVTCompressorBase <VideoCompressor, NSCoding>
 {
-    
-    VTCompressionSessionRef _compression_session;
-    VTPixelTransferSessionRef _vtpt_ref;
+
     
 }
 
@@ -27,6 +25,5 @@
 @property (strong) NSNumber *proResType;
 
 
--(bool)compressFrame:(CapturedFrameData *)frameData;
 
 @end
