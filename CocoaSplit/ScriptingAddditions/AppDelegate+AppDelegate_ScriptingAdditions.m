@@ -130,12 +130,23 @@
     self.captureController.useTransitions = useValue;
 }
 
+-(CAMultiAudioNode *)streamAudio
+{
+    return self.captureController.multiAudioEngine.encodeMixer;
+}
+
+
+-(CAMultiAudioNode *)previewAudio
+{
+    return self.captureController.multiAudioEngine.previewMixer;
+}
+
 
 -(BOOL)application:(NSApplication *)sender delegateHandlesKey:(NSString *)key
 {
     
     
-    NSArray *keys = @[@"layouts", @"width", @"height", @"fps", @"activelayout", @"layoutscripts", @"audioInputs", @"captureDestinations", @"staginglayout", @"livelayout", @"useTransitions"];
+    NSArray *keys = @[@"layouts", @"width", @"height", @"fps", @"activelayout", @"layoutscripts", @"audioInputs", @"captureDestinations", @"staginglayout", @"livelayout", @"useTransitions", @"previewAudio", @"streamAudio"];
     
     return [keys containsObject:key];
 }

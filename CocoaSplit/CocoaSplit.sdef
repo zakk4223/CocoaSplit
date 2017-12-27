@@ -21,6 +21,9 @@
             <property name="staginglayout" code="CSsl" type="layout" access = "r"/>
             <property name="livelayout" code="CSll" type="layout" access="r"/>
             <property name="useTransitions" code="CSut" type="boolean"/>
+            <property name="streamAudio" code="CSsa" type="audioInput" access="r"/>
+            <property name="previewAudio" code="CSpa" type="audioInput" access="r"/>
+            
             
         </class>
         
