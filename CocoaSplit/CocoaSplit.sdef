@@ -59,6 +59,16 @@
                 <cocoa key="volume"/>
             </property>
             <property name="enabled" code="CSen" type="boolean"/>
+            <property name="muted" code="CSmu" type="boolean"/>
+            <responds-to name="mute">
+                <cocoa method="scriptMute:"/>
+            </responds-to>
+            
+            <responds-to name="unmute">
+                <cocoa method="scriptUnmute:"/>
+            </responds-to>
+            
+            
         </class>
         
         
@@ -194,6 +204,13 @@
 
         </command>
         
+        <command name="mute" code="CSaumute">
+            <direct-parameter type="audioInput"/>
+        </command>
+        
+        <command name="unmute" code="CSauunmu">
+            <direct-parameter type="audioInput"/>
+        </command>
         
         <command name="activate" code="CSlyACtv">
             <direct-parameter type="layout"/>

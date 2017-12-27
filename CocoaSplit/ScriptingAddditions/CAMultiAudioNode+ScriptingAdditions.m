@@ -20,4 +20,16 @@
             name:[self name]];
 }
 
+
+-(void)scriptMute:(NSScriptCommand *)command
+{
+    self.muted = YES;
+}
+
+-(void)scriptUnmute:(NSScriptCommand *)command
+{
+    self.muted = NO;
+}
+
+
 @end
