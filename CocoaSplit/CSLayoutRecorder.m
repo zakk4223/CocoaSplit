@@ -205,6 +205,7 @@
             self.audioEncoder.inputASBD = self.audioEngine.graph.graphAsbd;
             [self.audioEncoder setupEncoderBuffer];
             self.audioEngine.encoder = self.audioEncoder;
+            self.audioEngine.previewMixer.enabled = NO;
         } else {
             self.audioEncoder = self.audioEngine.encoder;
         }
