@@ -28,6 +28,9 @@
 
 }
 
+@property (readonly) NSString *windowTitle;
+@property (readonly) NSString *resolutionDescription;
+
 @property (strong) IBOutlet NSMenu *recordingMenu;
 -(IBAction)inputOutlineViewDoubleClick:(NSOutlineView *)outlineView;
 

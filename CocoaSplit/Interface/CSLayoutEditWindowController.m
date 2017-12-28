@@ -41,6 +41,12 @@
 }
 
 
+-(NSString *)windowTitle
+{
+    return [NSString stringWithFormat:@"Layout - %@", self.previewView.sourceLayout.name];
+}
+
+
 -(void)windowWillClose:(NSNotification *)notification
 {
     
@@ -608,6 +614,22 @@
     [controller switchToLayout:self.previewView.sourceLayout usingLayout:useLayout];
 }
 
+
+-(NSString *)resolutionDescription
+{
+    return [NSString stringWithFormat:@"%dx%d@%.2f", self.previewView.sourceLayout.canvas_width, self.previewView.sourceLayout.canvas_height, self.previewView.sourceLayout.frameRate];
+}
+
++(NSSet *)keyPathsForValuesAffectingResolutionDescription
+{
+    return [NSSet setWithObjects:@"previewView.sourceLayout.canvas_height", @"previewView.sourceLayout.canvas_width", @"previewView.sourceLayout.frameRate", nil];
+}
+
+
++(NSSet *)keyPathsForValuesAffectingWindowTitle
+{
+    return [NSSet setWithObjects:@"previewView.sourceLayout.name", nil];
+}
 
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
