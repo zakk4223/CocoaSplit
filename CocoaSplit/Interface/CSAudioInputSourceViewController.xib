@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -43,7 +43,7 @@
                                         <rect key="frame" x="57" y="270" width="327" height="15"/>
                                         <subviews>
                                             <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="y86-TW-SPy">
-                                                <rect key="frame" x="-2" y="-2" width="371" height="19"/>
+                                                <rect key="frame" x="-2" y="-2" width="331" height="19"/>
                                                 <sliderCell key="cell" continuous="YES" state="on" alignment="left" maxValue="1" doubleValue="0.28506696428571426" tickMarkPosition="above" sliderType="linear" id="VNQ-l4-kfa" customClass="CSNobarSliderCell"/>
                                                 <connections>
                                                     <binding destination="Y7S-xz-v3h" name="value" keyPath="selection.audioVolume" id="Qkq-eK-9f8"/>
@@ -51,10 +51,10 @@
                                             </slider>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="y86-TW-SPy" secondAttribute="trailing" constant="-40" id="7eA-1y-eVY"/>
-                                            <constraint firstItem="y86-TW-SPy" firstAttribute="top" secondItem="cyc-R2-vVz" secondAttribute="top" id="Uty-KD-IAS"/>
-                                            <constraint firstAttribute="bottom" secondItem="y86-TW-SPy" secondAttribute="bottom" id="pwc-Ro-LHR"/>
-                                            <constraint firstItem="y86-TW-SPy" firstAttribute="leading" secondItem="cyc-R2-vVz" secondAttribute="leading" id="qsQ-cU-4iS"/>
+                                            <constraint firstAttribute="bottom" secondItem="y86-TW-SPy" secondAttribute="bottom" id="Dyk-jl-yg9"/>
+                                            <constraint firstAttribute="trailing" secondItem="y86-TW-SPy" secondAttribute="trailing" id="FKT-fs-fEJ"/>
+                                            <constraint firstItem="y86-TW-SPy" firstAttribute="leading" secondItem="cyc-R2-vVz" secondAttribute="leading" id="am0-En-wNP"/>
+                                            <constraint firstItem="y86-TW-SPy" firstAttribute="top" secondItem="cyc-R2-vVz" secondAttribute="top" id="iVH-mj-JJP"/>
                                         </constraints>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="startValue">
@@ -62,6 +62,9 @@
                                             </userDefinedRuntimeAttribute>
                                             <userDefinedRuntimeAttribute type="number" keyPath="endValue">
                                                 <real key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
+                                                <color key="value" name="gridColor" catalog="System" colorSpace="catalog"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
