@@ -16,7 +16,6 @@
 
 @synthesize inputFormat = _inputFormat;
 
-void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
 
 
 -(instancetype)init
@@ -30,7 +29,6 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
         self.latestScheduledTime = 0;
         _pauseBuffer = [[NSMutableArray alloc] init];
         self.enabled = NO;
-        TPCircularBufferInit(&_completedBuffer, sizeof(CAMultiAudioPCM *)*2048);
         _exitPending = NO;
         
     }
@@ -76,33 +74,25 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
         
         while (1)
         {
-            
             @autoreleasepool {
-                int32_t availBytes;
-                void *pcmPtr = NULL;
-                while ((pcmPtr = TPCircularBufferTail(&(self->_completedBuffer), &availBytes)))
+                NSArray *pendingCopy;
+                
+                @synchronized(self) {
+                    pendingCopy = [self->_pendingBuffers copy];
+                }
+                
+                
+                for (CAMultiAudioPCM *pcmObj in pendingCopy)
                 {
-                    struct cspcm_buffer_msg *cMsg = pcmPtr;
                     
-                    CAMultiAudioPCM *pcmObj = (__bridge CAMultiAudioPCM *)(cMsg->pcmObj);
-                    if (cMsg->msgPtr)
+                    if ((pcmObj.audioSlice)->mFlags & kScheduledAudioSliceFlag_Complete)
                     {
-                        free(cMsg->msgPtr);
-                    }
-                    
-                    if (self.completedBlock)
-                    {
-                        self.completedBlock(pcmObj);
-                    }
-                    
-                    if (self.save_buffer)
-                    {
-                        [self.pauseBuffer addObject:pcmObj];
-                    } else {
+                        if (self.save_buffer)
+                        {
+                            [self.pauseBuffer addObject:pcmObj];
+                        }
                         [self releasePCM:pcmObj];
                     }
-                    TPCircularBufferConsume(&(self->_completedBuffer), sizeof(struct cspcm_buffer_msg));
-                    
                 }
             }
             
@@ -113,7 +103,7 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
                     return;
                 }
             }
-            usleep(20);
+            usleep(20000);
         }
     });
 }
@@ -152,13 +142,7 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     Float64 playAtTime = 0;
     
     pcmBuffer.audioSlice->mFlags = 0;
-    struct cspcm_buffer_msg *uData = malloc(sizeof(struct cspcm_buffer_msg));
-    uData->msgPtr = uData;
-    uData->pcmObj = (__bridge void *)(pcmBuffer);
-    uData->tpBuffer = &_completedBuffer;
-    
-    pcmBuffer.audioSlice->mCompletionProcUserData = uData;
-    pcmBuffer.audioSlice->mCompletionProc = BufferCompletedPlaying;
+ 
     pcmBuffer.player = self;
     
     if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_9)
@@ -394,46 +378,10 @@ void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList);
     {
         free(_inputFormat);
     }
-    
-    TPCircularBufferCleanup(&_completedBuffer);
 }
 
 
 @end
 
 
-void BufferCompletedPlaying(void *userData, ScheduledAudioSlice *bufferList)
-{
-    
-    struct cspcm_buffer_msg *cMsg = userData;
-    
-    if (cMsg && cMsg->tpBuffer)
-    {
-        TPCircularBufferProduceBytes(cMsg->tpBuffer, cMsg, sizeof(struct cspcm_buffer_msg));
-    }
-    /*
-    CAMultiAudioPCM *pcmObj = (__bridge CAMultiAudioPCM *)(userData);
-    //maybe put this on a dedicated queue?
-    //why a queue? don't want to do any sort of memory/managed object operations in an audio callback.
-    //dispatch_async(dispatch_get_main_queue(), ^{
-        CAMultiAudioPCMPlayer *pplayer = pcmObj.player;
-    
-    
-        //pplayer.latestScheduledTime = pcmObj.audioSlice->mTimeStamp.mSampleTime + pcmObj.audioSlice->mNumberFrames;
-    if (pplayer.completedBlock)
-    {
-        pplayer.completedBlock(pcmObj);
-    }
 
-    if (pplayer.save_buffer)
-    {
-        [pplayer.pauseBuffer addObject:pcmObj];
-    } else {
-        [pplayer releasePCM:pcmObj];
-    }
-    
-    
-    //});
-    */
-    
-}
