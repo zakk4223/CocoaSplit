@@ -91,11 +91,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         
         
         [self buildGraph];
-        CAShow(self.graph.graphInst);
-
-
-        NSLog(@"SAMPLE RATE %f", self.sampleRate);
-        
         [self inputsForSystemAudio];
         if ([aDecoder containsValueForKey:@"streamVolume"])
         {
@@ -541,10 +536,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         //It's easier to just rebuild the graph instead of trying to splunk through all the nodes and connections
         //to change them all.
         [self resetEngine];
-        if (self.graph)
-        {
-            CAShow(self.graph.graphInst);
-        }
+
     }
     
 }

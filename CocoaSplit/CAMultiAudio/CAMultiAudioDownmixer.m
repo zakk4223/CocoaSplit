@@ -37,7 +37,6 @@
 
 -(void)setOutputVolume
 {
-    
     AudioUnitSetParameter(self.audioUnit, kMatrixMixerParam_Volume, kAudioUnitScope_Global, 0xFFFFFFFF, self.volume, 0);
 }
 

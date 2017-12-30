@@ -68,8 +68,9 @@
 
 -(void)restoreDataFromDict:(NSDictionary *)restoreDict
 {
-    self.volume = [restoreDict[@"volume"] floatValue];
     self.enabled = [restoreDict[@"enabled"] boolValue];
+
+    self.volume = [restoreDict[@"volume"] floatValue];
 }
 
 
@@ -144,7 +145,6 @@
     if (err)
     {
         NSLog(@"AUGraphAddNode failed for %@, err: %d", self, err);
-        CAShow(forGraph.graphInst);
         return NO;
     }
     err = AUGraphNodeInfo(forGraph.graphInst, _node, NULL, &_audioUnit);

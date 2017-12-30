@@ -296,7 +296,6 @@
     [super setVolume:volume];
     if (self.downMixer)
     {
-        NSLog(@"SETTING DOWNMIXER VOLUME %f", volume);
         self.downMixer.volume = volume;
         
     }
