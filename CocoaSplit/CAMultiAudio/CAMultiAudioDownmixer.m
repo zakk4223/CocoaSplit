@@ -37,6 +37,7 @@
 
 -(void)setOutputVolume
 {
+    
     AudioUnitSetParameter(self.audioUnit, kMatrixMixerParam_Volume, kAudioUnitScope_Global, 0xFFFFFFFF, self.volume, 0);
 }
 
@@ -133,7 +134,7 @@
 }
 
 
--(bool)createNode:(AUGraph)forGraph
+-(bool)createNode:(CAMultiAudioGraph *)forGraph
 {
     [super createNode:forGraph];
     
@@ -190,7 +191,9 @@
     
     AudioStreamBasicDescription fCopy;
     
+    
     memcpy(&fCopy, format, sizeof(fCopy));
+    
     
     fCopy.mChannelsPerFrame = _inputChannels;
     

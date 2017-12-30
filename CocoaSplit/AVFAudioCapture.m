@@ -214,6 +214,7 @@
         {
            
             
+            
             _audio_capture_output.audioSettings = @{
                                                     AVFormatIDKey: [NSNumber numberWithInt:kAudioFormatLinearPCM],
                                                     AVLinearPCMBitDepthKey: @32,

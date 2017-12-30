@@ -10,7 +10,7 @@
 #import "CAMultiAudio.h"
 #import "CSAacEncoder.h"
 #import "CAMultiAudioConverter.h"
-
+#import "CAMultiAudioSilence.h"
 
 
 /* our default graph setup looks like this:
@@ -30,7 +30,7 @@
 
 @property (strong) CAMultiAudioGraph *graph;
 @property (strong) CAMultiAudioMixer *previewMixer;
-@property (strong) CAMultiAudioPCMPlayer *silentNode;
+@property (strong) CAMultiAudioSilence *silentNode;
 @property (strong) CAMultiAudioDefaultOutput *defaultOutputNode;
 @property (strong) NSMutableArray *audioInputs;
 @property (strong) NSMutableArray *pcmInputs;

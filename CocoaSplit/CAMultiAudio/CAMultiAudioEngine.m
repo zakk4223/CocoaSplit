@@ -91,6 +91,11 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         
         
         [self buildGraph];
+        CAShow(self.graph.graphInst);
+
+
+        NSLog(@"SAMPLE RATE %f", self.sampleRate);
+        
         [self inputsForSystemAudio];
         if ([aDecoder containsValueForKey:@"streamVolume"])
         {
@@ -311,7 +316,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     }
     
     
-    self.silentNode = [[CAMultiAudioPCMPlayer alloc] init];
+    self.silentNode = [[CAMultiAudioSilence alloc] init];
     self.encodeMixer = [[CAMultiAudioMixer alloc] init];
     self.previewMixer = [[CAMultiAudioMixer alloc] init];
     self.equalizer = [[CAMultiAudioEqualizer alloc] init];
@@ -531,7 +536,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 {
     UInt32 old_samplerate = _sampleRate;
     _sampleRate = sampleRate;
-    
     if (sampleRate > 0 && (sampleRate != old_samplerate))
     {
         //It's easier to just rebuild the graph instead of trying to splunk through all the nodes and connections
@@ -622,11 +626,10 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     {
         CAMultiAudioConverter *newConverter = [[CAMultiAudioConverter alloc] initWithInputFormat:devFormat];
         newConverter.nodeUID = device.nodeUID;
-    
+        
         newConverter.sourceNode = device;
         device.converterNode = newConverter;
     }
-    
     [self attachInput:device];
 
 }
@@ -649,12 +652,12 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 {
     bool ret;
     
+    /*
     CAMultiAudioNode *graphInput = input;
-  /*  if (graphInput.downstreamNode)
+    if (graphInput.downstreamNode)
     {
         graphInput = graphInput.downstreamNode;
     }
-    */
     ret = [self.graph addNode:graphInput];
     
     if (!ret)
@@ -719,7 +722,20 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         [input.delayNodes addObject:delayNode];
     }
    
-    if (![self.graph connectNode:dmix toNode:connectNode])
+    CAMultiAudioCompressor *compressorNode = [[CAMultiAudioCompressor alloc] init];
+    input.dynamicCompressor = compressorNode;
+    input.dynamicCompressor.bypass = input.compressorBypass;
+    
+    [self.graph addNode:compressorNode];
+    
+    if (![self.graph connectNode:compressorNode toNode:connectNode])
+    {
+        
+        [self disconnectInputNode:input];
+        return NO;
+    }
+    
+    if (![self.graph connectNode:dmix toNode:compressorNode])
     {
    
         [self disconnectInputNode:input];
@@ -755,7 +771,26 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     {
         dmix.volume = graphInput.volume;
     }
-    
+    */
+    if (input)
+    {
+        CAMultiAudioSubgraph *inputSubGraph = [[CAMultiAudioSubgraph alloc] initWithParent:self.graph];
+        AUGraphConnectNodeInput(self.graph.graphInst, inputSubGraph.subgraphNode, 0, self.encodeMixer.node, self.encodeMixer.inputElement);
+       [self.graph graphUpdate];
+
+        
+        [inputSubGraph addNode:input];
+        [input setupGraph];
+        
+        CAMultiAudioNode *headNode = input.headNode;
+        if (!headNode)
+        {
+            headNode = input;
+        }
+        [inputSubGraph connectNode:headNode toNode:inputSubGraph.outputNode];
+        [inputSubGraph graphUpdate];
+
+    }
     
     return YES;
 }
@@ -839,40 +874,20 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 -(bool)disconnectInputNode:(CAMultiAudioInput *)disconnectNode
 {
     
-    CAMultiAudioDownmixer *dmix = disconnectNode.downMixer;
-    CAMultiAudioEqualizer *rEq = disconnectNode.equalizer;
-    CAMultiAudioConverter *iConv = disconnectNode.converterNode;
-    
-    disconnectNode.downMixer = nil;
-    
-    [self.graph removeNode:disconnectNode];
-    
 
     
-    if (iConv)
-    {
-        [self.graph removeNode:iConv];
-    }
+    CAMultiAudioSubgraph *inputGraph = (CAMultiAudioSubgraph *)disconnectNode.graph;
     
+    [disconnectNode teardownGraph];
     
-    if (dmix)
-    {
-        [self.graph removeNode:dmix];
-    }
+    [inputGraph removeNode:disconnectNode.headNode];
+    disconnectNode.headNode = nil;
+    disconnectNode.graph = nil;
+    [inputGraph removeNode:inputGraph.outputNode];
     
-    NSArray *delayNodes = disconnectNode.delayNodes.copy;
-    for (CAMultiAudioDelay *dNode in [delayNodes reverseObjectEnumerator])
-    {
-        [self.graph removeNode:dNode];
-        [disconnectNode.delayNodes removeObject:dNode];
-    }
-    
-    if (rEq)
-    {
-        [self.graph removeNode:rEq];
-    }
+    AUGraphRemoveNode(self.graph.graphInst, inputGraph.subgraphNode);
+    [self.graph graphUpdate];
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioRemoved object:self userInfo:@{@"UUID": disconnectNode.nodeUID}];
-
     return YES;
 }
 

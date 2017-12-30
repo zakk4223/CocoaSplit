@@ -232,6 +232,10 @@
 		34DF75581AA272F100DA9FDE /* LayoutRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34DF75571AA272F100DA9FDE /* LayoutRenderer.m */; };
 		34E162E81E987420005157ED /* CSScriptWindowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E162E61E987420005157ED /* CSScriptWindowViewController.m */; };
 		34E162E91E987420005157ED /* CSScriptWindowViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34E162E71E987420005157ED /* CSScriptWindowViewController.xib */; };
+		34E26DD61FF62C5D00ACE58B /* CAMultiAudioCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E26DD51FF62C5D00ACE58B /* CAMultiAudioCompressor.m */; };
+		34E26DD91FF6ED7B00ACE58B /* CAMultiAudioSubgraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E26DD81FF6ED7B00ACE58B /* CAMultiAudioSubgraph.m */; };
+		34E26DDC1FF702BD00ACE58B /* CAMultiAudioSilence.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E26DDB1FF702BD00ACE58B /* CAMultiAudioSilence.m */; };
+		34E26DDF1FF70E0E00ACE58B /* CAMultiAudioGenericOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E26DDE1FF70E0E00ACE58B /* CAMultiAudioGenericOutput.m */; };
 		34E983701B78AE9100F26F1E /* Python.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34E9836F1B78AE9100F26F1E /* Python.framework */; };
 		34EA822E1D3C568400928A06 /* CSOauth2Authenticator.m in Sources */ = {isa = PBXBuildFile; fileRef = 34EA822D1D3C568400928A06 /* CSOauth2Authenticator.m */; };
 		34EA824E1D3CBFCA00928A06 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34EA824D1D3CBFCA00928A06 /* WebKit.framework */; };
@@ -964,6 +968,14 @@
 		34E162E51E987420005157ED /* CSScriptWindowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSScriptWindowViewController.h; path = Interface/CSScriptWindowViewController.h; sourceTree = "<group>"; };
 		34E162E61E987420005157ED /* CSScriptWindowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSScriptWindowViewController.m; path = Interface/CSScriptWindowViewController.m; sourceTree = "<group>"; };
 		34E162E71E987420005157ED /* CSScriptWindowViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSScriptWindowViewController.xib; path = Interface/CSScriptWindowViewController.xib; sourceTree = "<group>"; };
+		34E26DD41FF62C5D00ACE58B /* CAMultiAudioCompressor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioCompressor.h; path = CAMultiAudio/CAMultiAudioCompressor.h; sourceTree = "<group>"; };
+		34E26DD51FF62C5D00ACE58B /* CAMultiAudioCompressor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioCompressor.m; path = CAMultiAudio/CAMultiAudioCompressor.m; sourceTree = "<group>"; };
+		34E26DD71FF6ED7B00ACE58B /* CAMultiAudioSubgraph.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioSubgraph.h; path = CAMultiAudio/CAMultiAudioSubgraph.h; sourceTree = "<group>"; };
+		34E26DD81FF6ED7B00ACE58B /* CAMultiAudioSubgraph.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioSubgraph.m; path = CAMultiAudio/CAMultiAudioSubgraph.m; sourceTree = "<group>"; };
+		34E26DDA1FF702BD00ACE58B /* CAMultiAudioSilence.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioSilence.h; path = CAMultiAudio/CAMultiAudioSilence.h; sourceTree = "<group>"; };
+		34E26DDB1FF702BD00ACE58B /* CAMultiAudioSilence.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioSilence.m; path = CAMultiAudio/CAMultiAudioSilence.m; sourceTree = "<group>"; };
+		34E26DDD1FF70E0E00ACE58B /* CAMultiAudioGenericOutput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioGenericOutput.h; path = CAMultiAudio/CAMultiAudioGenericOutput.h; sourceTree = "<group>"; };
+		34E26DDE1FF70E0E00ACE58B /* CAMultiAudioGenericOutput.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioGenericOutput.m; path = CAMultiAudio/CAMultiAudioGenericOutput.m; sourceTree = "<group>"; };
 		34E9836F1B78AE9100F26F1E /* Python.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Python.framework; path = System/Library/Frameworks/Python.framework; sourceTree = SDKROOT; };
 		34E983841B78B19D00F26F1E /* pluginbase.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = pluginbase.py; sourceTree = "<group>"; };
 		34EA822C1D3C568400928A06 /* CSOauth2Authenticator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSOauth2Authenticator.h; path = PluginHeaders/CSOauth2Authenticator.h; sourceTree = "<group>"; };
@@ -1709,6 +1721,14 @@
 				34EB705F1F2774DF00F61E6A /* CAMultiAudioEqualizer.m */,
 				340620741F2E2BFE0016D997 /* CAMultiAudioInput.h */,
 				340620751F2E2BFE0016D997 /* CAMultiAudioInput.m */,
+				34E26DD41FF62C5D00ACE58B /* CAMultiAudioCompressor.h */,
+				34E26DD51FF62C5D00ACE58B /* CAMultiAudioCompressor.m */,
+				34E26DD71FF6ED7B00ACE58B /* CAMultiAudioSubgraph.h */,
+				34E26DD81FF6ED7B00ACE58B /* CAMultiAudioSubgraph.m */,
+				34E26DDA1FF702BD00ACE58B /* CAMultiAudioSilence.h */,
+				34E26DDB1FF702BD00ACE58B /* CAMultiAudioSilence.m */,
+				34E26DDD1FF70E0E00ACE58B /* CAMultiAudioGenericOutput.h */,
+				34E26DDE1FF70E0E00ACE58B /* CAMultiAudioGenericOutput.m */,
 			);
 			name = CAMultiAudio;
 			sourceTree = "<group>";
@@ -2624,6 +2644,7 @@
 				340FE50815F444AA00E4CE4E /* CaptureController.m in Sources */,
 				345BED001F456C6500B46F29 /* CSLayoutLayoutTransitionViewController.m in Sources */,
 				340620761F2E2BFE0016D997 /* CAMultiAudioInput.m in Sources */,
+				34E26DD61FF62C5D00ACE58B /* CAMultiAudioCompressor.m in Sources */,
 				34ED8C4F1B07371C002C0674 /* MIKMIDIClock.m in Sources */,
 				34ED8C611B07371C002C0674 /* MIKMIDIEntity.m in Sources */,
 				34DA08C61E87F3CB00E02543 /* CSSequenceItemAnimationViewController.m in Sources */,
@@ -2723,6 +2744,7 @@
 				3414C6AE1CBB9EBF00107C69 /* CSIRCompressor.m in Sources */,
 				34788DF21F016F7A00C3C9C5 /* CSScriptInputSource.m in Sources */,
 				34ED8C911B07371C002C0674 /* MIKMIDINoteOnCommand.m in Sources */,
+				34E26DDF1FF70E0E00ACE58B /* CAMultiAudioGenericOutput.m in Sources */,
 				346865471CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.m in Sources */,
 				34B5FB8E1E7FA2610078FC51 /* CSSequenceItemTransitionViewController.m in Sources */,
 				3494DF391CCD2DB000E921BF /* TPCircularBuffer+AudioBufferList.c in Sources */,
@@ -2732,6 +2754,7 @@
 				3470CD2E1D57D2AA006404D9 /* CSStreamOutputWindowController.m in Sources */,
 				3400A0621BD44DF0003E1828 /* CSInputLibraryItem.m in Sources */,
 				34ED8C831B07371C002C0674 /* MIKMIDIMetaSequenceEvent.m in Sources */,
+				34E26DD91FF6ED7B00ACE58B /* CAMultiAudioSubgraph.m in Sources */,
 				3434CB2D1CA90D28001B3DF9 /* CSx264CompressorViewController.m in Sources */,
 				34788E291F0D166C00C3C9C5 /* CSAudioInputSource.m in Sources */,
 				34ED8C6D1B07371C002C0674 /* MIKMIDIMapping.m in Sources */,
@@ -2743,6 +2766,7 @@
 				3441269B1E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.m in Sources */,
 				34ED8C811B07371C002C0674 /* MIKMIDIMetaMarkerTextEvent.m in Sources */,
 				345BECF41F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.m in Sources */,
+				34E26DDC1FF702BD00ACE58B /* CAMultiAudioSilence.m in Sources */,
 				34F5141216FD6E4F00BA894D /* x264Compressor.m in Sources */,
 				34A7ADB81C01EF1400685044 /* CompressionSettingsPanelController.m in Sources */,
 				34DC2FB01B512362008F12A2 /* CSCaptureBase+TimerDelegate.m in Sources */,

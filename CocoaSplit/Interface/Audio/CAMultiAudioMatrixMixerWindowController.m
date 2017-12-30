@@ -57,15 +57,44 @@
     
 }
 
+
+- (IBAction)openCompressorWindow:(id)sender
+{
+    
+    NSView *nodeView = [self.audioNode.dynamicCompressor audioUnitNSView];
+    if (nodeView)
+    {
+        self.compressorWindow = [[NSWindow alloc] initWithContentRect:nodeView.frame styleMask:NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask|NSResizableWindowMask backing:NSBackingStoreBuffered defer:NO];
+        
+        self.compressorWindow.delegate = self;
+        [self.compressorWindow setReleasedWhenClosed:NO];
+        [self.compressorWindow center];
+        [self.compressorWindow setContentView:nodeView];
+        [self.compressorWindow makeKeyAndOrderFront:NSApp];
+    }
+    
+}
+
+
 -(void)windowWillClose:(NSNotification *)notification
 {
     
     NSWindow *closingWindow = [notification object];
-    if (closingWindow && self.eqWindow == closingWindow)
+    
+    if (!closingWindow)
+    {
+        return;
+    }
+    
+    if (self.eqWindow == closingWindow)
     {
         self.eqWindow = nil;
+    } else if (self.compressorWindow == closingWindow) {
+        self.compressorWindow = nil;
     }
 }
+
+
 -(NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
     

@@ -18,10 +18,13 @@
 @property (assign) UInt32 matrixRows;
 @property (assign) UInt32 matrixColumns;
 @property (strong) NSWindow *eqWindow;
+@property (strong) NSWindow *compressorWindow;
 
 - (IBAction)matrixVolumeChanged:(NSSlider *)sender;
 
 -(instancetype)initWithAudioMixer:(CAMultiAudioNode *)node;
 - (IBAction)openEQWindow:(id)sender;
+- (IBAction)openCompressorWindow:(id)sender;
+
 
 @end

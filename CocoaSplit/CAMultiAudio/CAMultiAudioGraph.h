@@ -15,6 +15,8 @@
 
 @interface CAMultiAudioGraph : NSObject
 {
+    AUGraph _graphInst;
+    AudioStreamBasicDescription *_graphAsbd;
     
 }
 

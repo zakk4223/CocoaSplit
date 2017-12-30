@@ -63,6 +63,7 @@
 {
     saveDict[@"volume"] = [NSNumber numberWithFloat:self.volume];
     saveDict[@"enabled"] = [NSNumber numberWithBool:self.enabled];
+
 }
 
 -(void)restoreDataFromDict:(NSDictionary *)restoreDict
@@ -132,27 +133,28 @@
 }
 
 
--(bool)createNode:(AUGraph)forGraph
+-(bool)createNode:(CAMultiAudioGraph *)forGraph
 {
     if (!forGraph)
     {
         return NO;
     }
     OSStatus err;
-    err = AUGraphAddNode(forGraph, &unitDescr, &_node);
+    err = AUGraphAddNode(forGraph.graphInst, &unitDescr, &_node);
     if (err)
     {
         NSLog(@"AUGraphAddNode failed for %@, err: %d", self, err);
-        CAShow(forGraph);
+        CAShow(forGraph.graphInst);
         return NO;
     }
-    err = AUGraphNodeInfo(forGraph, _node, NULL, &_audioUnit);
+    err = AUGraphNodeInfo(forGraph.graphInst, _node, NULL, &_audioUnit);
     if (err)
     {
         NSLog(@"AUGraphNodeInfo failed for %@, err: %d", self, err);
         return NO;
     }
     
+    self.graph = forGraph;
     
     return YES;
 }

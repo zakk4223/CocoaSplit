@@ -280,7 +280,7 @@
 
 
 
--(bool)createNode:(AUGraph)forGraph
+-(bool)createNode:(CAMultiAudioGraph *)forGraph
 {
     bool ret = [super createNode:forGraph];
     if (floor(NSAppKitVersionNumber > NSAppKitVersionNumber10_9))
@@ -322,9 +322,10 @@
 
 -(bool)setOutputStreamFormat:(AudioStreamBasicDescription *)format
 {
+    
     if (self.inputFormat)
     {
-        return [super setOutputStreamFormat:self.inputFormat];
+        return [super setOutputStreamFormat:format];
     }
     
     return YES;

@@ -44,7 +44,7 @@
 
 -(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType;
 
--(bool)createNode:(AUGraph)forGraph;
+-(bool)createNode:(CAMultiAudioGraph *)forGraph;
 -(void)nodeConnected:(CAMultiAudioNode *)toNode onBus:(UInt32)onBus;
 -(void)willConnectNode:(CAMultiAudioNode *)node toBus:(UInt32)toBus;
 -(void)willInitializeNode;

@@ -14,6 +14,7 @@
 
 
 @implementation CAMultiAudioGraph
+@synthesize graphAsbd = _graphAsbd;
 
 -(instancetype)initWithSamplerate:(int)samplerate
 {
@@ -121,10 +122,9 @@
     }
     
     
-    if ([newNode createNode:_graphInst])
+    if ([newNode createNode:self])
     {
         
-        newNode.graph = self;
         
 
        [newNode setInputStreamFormat:self.graphAsbd];
