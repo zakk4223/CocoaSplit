@@ -3,7 +3,6 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 7/30/17.
-//  Copyright © 2017 Zakk. All rights reserved.
 //
 
 #import "CAMultiAudioInput.h"
@@ -183,7 +182,10 @@
     {
         saveDict[@"downMixerData"] = [self.downMixer saveData];
     }
+    
+
 }
+
 
 -(void)restoreDataFromDict:(NSDictionary *)restoreDict
 {
@@ -195,7 +197,6 @@
     {
         [self.downMixer restoreData:restoreDict[@"downMixerData"]];
     }
-
 }
 
 

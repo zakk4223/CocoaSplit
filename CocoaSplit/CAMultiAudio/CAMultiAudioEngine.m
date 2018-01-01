@@ -218,13 +218,17 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     {
         NSString *deviceUID = node.nodeUID;
         NSMutableDictionary *inputopts = [NSMutableDictionary dictionary];
+        [node saveDataToDict:inputopts];
         [iSettings setValue:inputopts forKey:deviceUID];
+        /*
         [inputopts setValue:@(node.volume) forKey:@"volume"];
         [inputopts setValue:@(node.enabled) forKey:@"enabled"];
         if (node.downMixer)
         {
             [inputopts setValue:[node.downMixer saveData] forKey:@"downMixerData"];
         }
+         */
+        
     }
     
     return iSettings;

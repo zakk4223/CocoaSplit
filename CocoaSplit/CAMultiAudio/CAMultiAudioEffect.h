@@ -9,9 +9,15 @@
 #import "CAMultiAudioNode.h"
 
 @interface CAMultiAudioEffect : CAMultiAudioNode <NSCopying>
+{
+    NSDictionary *_auClassData;
+}
+
 
 @property (assign) bool bypass;
 
 +(NSArray *)availableEffects;
+-(NSArray *)effectPresets;
+-(void)selectPresetNumber:(SInt32)presetNumber;
 
 @end

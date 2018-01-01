@@ -190,7 +190,7 @@
                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p0k-ms-UGd">
                                                             <rect key="frame" x="0.0" y="0.0" width="187" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="dQS-kK-tV5">
+                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" title="Table View Cell" id="dQS-kK-tV5">
                                                                 <font key="font" metaFont="system"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -213,6 +213,7 @@
                                         <binding destination="mA7-t0-eY5" name="selectionIndexes" keyPath="selectionIndexes" previousBinding="F7b-g4-VcW" id="k6W-sl-LQr"/>
                                         <outlet property="dataSource" destination="eqr-21-uGE" id="XJb-fx-ofq"/>
                                         <outlet property="delegate" destination="eqr-21-uGE" id="JFT-dR-w7T"/>
+                                        <outlet property="menu" destination="ign-2S-Wo8" id="oQC-fR-ZxR"/>
                                     </connections>
                                 </tableView>
                             </subviews>
@@ -249,6 +250,9 @@
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
+                        <connections>
+                            <action selector="configureEffects:" target="eqr-21-uGE" id="BV0-Y8-qWk"/>
+                        </connections>
                     </button>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Fhi-KY-6Dc">
                         <rect key="frame" x="58" y="-1" width="196" height="23"/>
@@ -323,6 +327,17 @@
                 <outlet property="effectTable" destination="PkZ-NZ-pYC" id="FiW-C2-tbH"/>
             </connections>
         </customObject>
+        <menu id="ign-2S-Wo8">
+            <items>
+                <menuItem title="Item 1" id="dSk-yG-OGZ">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                </menuItem>
+            </items>
+            <connections>
+                <outlet property="delegate" destination="eqr-21-uGE" id="a12-R0-12a"/>
+            </connections>
+            <point key="canvasLocation" x="288" y="-51"/>
+        </menu>
     </objects>
     <resources>
         <image name="NSActionTemplate" width="14" height="14"/>

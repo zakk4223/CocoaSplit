@@ -97,6 +97,53 @@
 }
 
 
+-(IBAction)configureEffects:(id)sender
+{
+    NSArray *selectedEffects = self.effectArrayController.selectedObjects;
+    for (CAMultiAudioEffect *effect in selectedEffects)
+    {
+        [self openConfigWindowForEffect:effect];
+    }
+}
+
+
+-(void)setEffectPreset:(NSMenuItem *)item
+{
+    NSDictionary *effectData = item.representedObject;
+    CAMultiAudioEffect *effect = effectData[@"effect"];
+    if (effect)
+    {
+        NSNumber *pNum = effectData[@"number"];
+        SInt32 presetNumber = [pNum intValue];
+        [effect selectPresetNumber:presetNumber];
+    }
+}
+-(void)menuNeedsUpdate:(NSMenu *)menu
+{
+    [menu removeAllItems];
+    CAMultiAudioEffect *effect = [self.effectArrayController.arrangedObjects objectAtIndex:self.effectTable.clickedRow];
+    if (effect)
+    {
+        for (NSDictionary *pDict in [effect effectPresets])
+        {
+            NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:pDict[@"name"] action:@selector(setEffectPreset:) keyEquivalent:@""];
+            NSMutableDictionary *rDict = pDict.mutableCopy;
+            rDict[@"effect"] = effect;
+            item.representedObject = rDict;
+            item.target = self;
+            [menu addItem:item];
+        }
+        
+        if (menu.itemArray.count == 0)
+        {
+            NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:@"No Presets" action:nil keyEquivalent:@""];
+            item.representedObject = nil;
+            [menu addItem:item];
+        }
+    }
+}
+
+
 -(void)awakeFromNib
 {
     self.configWindows = [NSMutableDictionary dictionary];

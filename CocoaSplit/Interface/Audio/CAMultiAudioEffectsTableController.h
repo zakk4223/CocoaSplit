@@ -11,7 +11,7 @@
 #import "CAMultiAudioEffect.h"
 
 
-@interface CAMultiAudioEffectsTableController : NSObject <NSTableViewDelegate, NSTableViewDataSource, NSWindowDelegate>
+@interface CAMultiAudioEffectsTableController : NSObject <NSTableViewDelegate, NSTableViewDataSource, NSWindowDelegate, NSMenuDelegate>
 {
     NSMenu *_effectsMenu;
 }
@@ -28,6 +28,7 @@
 
 -(void)addEffect:(NSMenuItem *)item;
 -(IBAction)effectTableDoubleClick:(NSTableView *)tableView;
+-(IBAction)configureEffects:(id)sender;
 
 
 @end

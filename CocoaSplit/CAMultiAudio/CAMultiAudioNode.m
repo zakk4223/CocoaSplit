@@ -70,6 +70,14 @@
 {
     saveDict[@"volume"] = [NSNumber numberWithFloat:self.volume];
     saveDict[@"enabled"] = [NSNumber numberWithBool:self.enabled];
+    NSMutableArray *effectSaveData = [NSMutableArray array];
+    for (CAMultiAudioEffect *effect in self.effectChain)
+    {
+        NSMutableDictionary *eDict = [NSMutableDictionary dictionary];
+        [effect saveDataToDict:eDict];
+        [effectSaveData addObject:eDict];
+    }
+    saveDict[@"effectChain"] = effectSaveData;
 
 }
 
@@ -78,6 +86,21 @@
     self.enabled = [restoreDict[@"enabled"] boolValue];
 
     self.volume = [restoreDict[@"volume"] floatValue];
+    
+    if (restoreDict[@"effectChain"])
+    {
+        NSArray *effectData = restoreDict[@"effectChain"];
+        for (NSDictionary *eData in effectData)
+        {
+            CAMultiAudioEffect *newEffect = [[CAMultiAudioEffect alloc] init];
+            [newEffect restoreDataFromDict:eData];
+            [self.effectChain addObject:newEffect];
+        }
+        
+        [self rebuildEffectChain];
+        
+    }
+
 }
 
 
