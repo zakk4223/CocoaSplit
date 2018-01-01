@@ -9,30 +9,69 @@
 
 @implementation CAMultiAudioUnit
 
--(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType
+-(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType manufacturer:(OSType)manufacturer
 {
     if (self = [super init])
     {
-        AudioComponent comp = {0};
         AudioComponentDescription desc = {0};
         
-        desc.componentType = unitType;
-        desc.componentSubType = subType;
-        desc.componentManufacturer = kAudioUnitManufacturer_Apple;
         
-        comp = AudioComponentFindNext(NULL, &desc);
-        if (comp)
-        {
-            AudioComponentInstanceNew(comp, &_audioUnit);
-            OSStatus err;
-            err = AudioUnitInitialize(_audioUnit);
-        }
+        _unitDescription.componentType = unitType;
         
-        
+        _unitDescription.componentSubType = subType;
+        _unitDescription.componentManufacturer = manufacturer;
     }
     
     return self;
 }
+
+-(NSString *)description
+{
+    return self.name;
+}
+
+
++(NSArray *)availableEffects
+{
+    
+    NSMutableArray *ret = [NSMutableArray array];
+    AudioComponentDescription searchDesc = {0};
+    searchDesc.componentType = kAudioUnitType_Effect;
+    
+    AudioComponent result = NULL;
+    
+    while ((result = AudioComponentFindNext(result, &searchDesc)))
+    {
+        AudioComponentDescription resultDesc;
+        AudioComponentGetDescription(result, &resultDesc);
+        
+        CAMultiAudioUnit *newUnit = [[CAMultiAudioUnit alloc] initWithSubType:resultDesc.componentSubType unitType:resultDesc.componentType manufacturer:resultDesc.componentManufacturer];
+        CFStringRef name;
+        AudioComponentCopyName(result, &name);
+        newUnit.name = CFBridgingRelease(name);
+        [ret addObject:newUnit];
+    }
+    
+    return ret;
+}
+
+
+-(void)createUnit
+{
+    AudioComponent comp = {0};
+    
+    comp = AudioComponentFindNext(NULL, &_unitDescription);
+    if (comp)
+    {
+        CFStringRef cName;
+        
+        AudioComponentCopyName(comp, &cName);
+        self.name = CFBridgingRelease(cName);
+        
+        AudioComponentInstanceNew(comp, &_audioUnit);
+    }
+}
+
 
 -(void)connect:(AudioUnit)toNode
 {
@@ -61,9 +100,14 @@
 
 -(void)openUnit
 {
+
+    if (_audioUnit)
+    {
+        AudioUnitInitialize(_audioUnit);
+    }
     CAShow(_audioUnit);
     
-    OSStatus err = AudioOutputUnitStart(_audioUnit);
+    AudioOutputUnitStart(_audioUnit);
 }
 
 @end

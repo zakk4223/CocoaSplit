@@ -325,6 +325,7 @@
     
     if (self.inputFormat)
     {
+        
         return [super setOutputStreamFormat:format];
     }
     

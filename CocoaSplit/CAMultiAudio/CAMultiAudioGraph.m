@@ -142,6 +142,7 @@
         [newNode didInitializeNode];
         
         [self.nodeList addObject:newNode];
+        [newNode setupEffectsChain];
         return YES;
     }
     
@@ -155,7 +156,9 @@
         return NO;
     }
     
-    node.graph = nil;
+    [node willRemoveNode];
+    
+    
     
     OSStatus err;
     
@@ -179,7 +182,8 @@
     }
     
     [self.nodeList removeObject:node];
-    
+    [node removeEffectsChain];
+    node.graph = nil;
     return YES;
     
 }
@@ -248,15 +252,25 @@
     
     OSStatus err;
     
-    inNode = node.node;
-    connectTo = toNode.node;
-    aUnit = node.audioUnit;
-    
-
-
     UInt32 bus = toNode.inputElement;
     
+    [node willConnectToNode:toNode];
+    
     [toNode willConnectNode:node toBus:bus];
+    
+    CAMultiAudioNode *useNode = node;
+    if (node.headNode)
+    {
+        useNode = node.headNode;
+    }
+    inNode = useNode.node;
+    connectTo = toNode.node;
+    //aUnit = node.audioUnit;
+    
+
+
+    
+    
     
     err = AUGraphConnectNodeInput(_graphInst, inNode, 0, connectTo, bus);
     if (err)
@@ -265,8 +279,10 @@
         return NO;
     }
     
-    [node nodeConnected:toNode onBus:bus];
+    [useNode nodeConnected:toNode onBus:bus];
 
+    [toNode connectedToNode:node];
+    
     if (![self graphUpdate])
     {
         

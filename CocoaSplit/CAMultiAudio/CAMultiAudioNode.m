@@ -36,13 +36,12 @@
     return self;
 }
 
-
--(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType
+-(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType manufacturer:(OSType)manufacturer
 {
     if (self = [super init])
     {
         //Creating the node and unit are deferred until the node is attached to a graph, since we need the graph to create the node.
-        unitDescr.componentManufacturer = kAudioUnitManufacturer_Apple;
+        unitDescr.componentManufacturer = manufacturer;
         unitDescr.componentSubType = subType;
         unitDescr.componentType = unitType;
         
@@ -50,11 +49,19 @@
         
         self.channelCount = 2;
         _volume = 1.0;
-
+        self.effectChain = [NSMutableArray array];
+        
     }
     
     return self;
 }
+
+
+-(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType
+{
+    return [self initWithSubType:subType unitType:unitType manufacturer:kAudioUnitManufacturer_Apple];
+}
+
 
 
 //We don't use NSCoding here because the audio engine/graph does deferred creating of audio unit objects, so most of what we load/save doesn't matter at creating time.
@@ -155,13 +162,14 @@
     }
     
     self.graph = forGraph;
+
     
     return YES;
 }
 
 -(bool)setInputStreamFormat:(AudioStreamBasicDescription *)format
 {
-    
+
     OSStatus err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 0, format, sizeof(AudioStreamBasicDescription));
     if (err)
     {
@@ -179,6 +187,7 @@
     
     memcpy(&casbd, format, sizeof(casbd));
     casbd.mChannelsPerFrame = self.channelCount;
+    
     OSStatus err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 0, &casbd, sizeof(AudioStreamBasicDescription));
     
     if (err)
@@ -190,6 +199,7 @@
     return YES;
 
 }
+
 
 
 -(void)willInitializeNode
@@ -204,26 +214,7 @@
 
 
 
--(void)updatePowerlevel
-{
-    //[self.connectedTo updatePowerlevel];
-    
-    CAMultiAudioNode *powerNode = self.connectedTo;
-    
-    while (powerNode)
-    {
-        if ([powerNode.class conformsToProtocol:@protocol(CAMultiAudioMixingProtocol)])
-        {
-            id<CAMultiAudioMixingProtocol>mixerNode = (id<CAMultiAudioMixingProtocol>)powerNode;
-            float rawPower = [mixerNode powerForInputBus:powerNode.connectedToBus];
-            self.powerLevel = pow(10.0f, rawPower/20.0f);
-            break;
-        } else {
-            powerNode = powerNode.connectedTo;
-        }
-    }
-    
-}
+
 
 
 /*
@@ -348,15 +339,136 @@
     
 }
 
+-(void) willConnectToNode:(CAMultiAudioNode *)node
+{
+    return;
+}
+
+-(void) connectedToNode:(CAMultiAudioNode *)node
+{
+    return;
+}
+
+-(void)willRemoveNode
+{
+    return;
+}
 
 
 
+
+-(void)rebuildEffectChain
+{
+    //Disconnect every node from effectsHead -> headNode (including headNode) and then reconnect everything in effectchain array
+    
+    CAMultiAudioNode *currNode = self.effectsHead;
+    CAMultiAudioNode *headConn;
+    while (currNode && currNode != self.headNode)
+    {
+        CAMultiAudioNode *connNode = currNode.connectedTo;
+        [self.graph disconnectNode:currNode];
+        currNode = connNode;
+    }
+    
+    if (currNode) //This is headNode
+    {
+        headConn = currNode.connectedTo;
+        [self.graph disconnectNode:currNode];
+    }
+    
+    currNode = self.effectsHead;
+    for (CAMultiAudioNode *eNode in self.effectChain)
+    {
+        [self.graph addNode:eNode];
+        [self.graph connectNode:currNode toNode:eNode];
+        currNode = eNode;
+    }
+    
+    if (headConn && currNode)
+    {
+        [self.graph connectNode:currNode toNode:headConn];
+    }
+    
+    if (currNode)
+    {
+        self.headNode = currNode;
+    } else {
+        self.headNode = self.effectsHead;
+    }
+}
+
+-(void)addEffect:(CAMultiAudioNode *)effect;
+{
+
+    [self insertObject:effect inEffectChainAtIndex:self.effectChain.count];
+}
+
+
+-(void)addEffect:(CAMultiAudioNode *)effect atIndex:(NSUInteger)idx
+{
+
+    [self insertObject:effect inEffectChainAtIndex:idx];
+}
+
+
+
+-(NSUInteger)countOfEffectChain
+{
+    return self.effectChain.count;
+}
+
+-(id)objectInEffectChainAtIndex:(NSUInteger)index
+{
+    return [self.effectChain objectAtIndex:index];
+}
+
+
+-(void)insertObject:(CAMultiAudioNode *)object inEffectChainAtIndex:(NSUInteger)index
+{
+    
+    [self.effectChain insertObject:object atIndex:index];
+    [self rebuildEffectChain];
+}
+
+
+-(void)removeObjectFromEffectChainAtIndex:(NSUInteger)index
+{
+    [self.effectChain removeObjectAtIndex:index];
+    [self rebuildEffectChain];
+}
+
+
+
+-(void)setupEffectsChain
+{
+    [self rebuildEffectChain];
+    //Do restore here
+}
+
+
+
+-(void)removeEffectsChain
+{
+    if (self.effectsHead)
+    {
+        [self.graph disconnectNode:self.effectsHead];
+    }
+    
+    for(CAMultiAudioNode *eNode in self.effectChain)
+    {
+        [self.graph disconnectNode:eNode];
+        [self.graph removeNode:eNode];
+    }
+    
+    [self.effectChain removeAllObjects];
+}
 
 
 -(void) dealloc
 {
     if (self.graph)
     {
+        [self removeEffectsChain];
         [self.graph removeNode:self];
         
     }

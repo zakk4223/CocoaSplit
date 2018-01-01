@@ -173,6 +173,8 @@
 		34A7ADB81C01EF1400685044 /* CompressionSettingsPanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A7ADB71C01EF1400685044 /* CompressionSettingsPanelController.m */; };
 		34A7C1AD19B9A57600BC6882 /* CSLayoutSwitcherExtraPlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34A7C1A119B9A41A00BC6882 /* CSLayoutSwitcherExtraPlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		34AB1C311B944F48003F2C03 /* CSPreviewOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AB1C301B944F48003F2C03 /* CSPreviewOverlayView.m */; };
+		34AB70A71FF9AAB800C5BD8E /* CAMultiAudioEffectsTableController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AB70A61FF9AAB800C5BD8E /* CAMultiAudioEffectsTableController.m */; };
+		34AB70AA1FF9B35300C5BD8E /* CAMultiAudioEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AB70A91FF9B35300C5BD8E /* CAMultiAudioEffect.m */; };
 		34ABEF3C17C0C2CB00AA5E62 /* advancedPrefPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34ABEF3B17C0C2CB00AA5E62 /* advancedPrefPanel.xib */; };
 		34AFC27819B05C4E0007C07B /* CSChromaKey.plugin in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC27219B05BE90007C07B /* CSChromaKey.plugin */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		34AFC27919B05C4E0007C07B /* TextureWrapPlugin.plugin in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC27719B05BF50007C07B /* TextureWrapPlugin.plugin */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -857,6 +859,10 @@
 		34A7C19C19B9A41900BC6882 /* CSLayoutSwitcherExtraPlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSLayoutSwitcherExtraPlugin.xcodeproj; path = ExtraPlugins/CSLayoutSwitcherExtraPlugin/CSLayoutSwitcherExtraPlugin.xcodeproj; sourceTree = "<group>"; };
 		34AB1C2F1B944F48003F2C03 /* CSPreviewOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPreviewOverlayView.h; sourceTree = "<group>"; };
 		34AB1C301B944F48003F2C03 /* CSPreviewOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSPreviewOverlayView.m; sourceTree = "<group>"; };
+		34AB70A51FF9AAB800C5BD8E /* CAMultiAudioEffectsTableController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAMultiAudioEffectsTableController.h; sourceTree = "<group>"; };
+		34AB70A61FF9AAB800C5BD8E /* CAMultiAudioEffectsTableController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CAMultiAudioEffectsTableController.m; sourceTree = "<group>"; };
+		34AB70A81FF9B35300C5BD8E /* CAMultiAudioEffect.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioEffect.h; path = CAMultiAudio/CAMultiAudioEffect.h; sourceTree = "<group>"; };
+		34AB70A91FF9B35300C5BD8E /* CAMultiAudioEffect.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioEffect.m; path = CAMultiAudio/CAMultiAudioEffect.m; sourceTree = "<group>"; };
 		34ABEF3B17C0C2CB00AA5E62 /* advancedPrefPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = advancedPrefPanel.xib; path = Interface/advancedPrefPanel.xib; sourceTree = "<group>"; };
 		34AE3C2F164E3E020052C95E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		34AE3C33164E3E020052C95E /* QTCaptureHelper-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "QTCaptureHelper-Info.plist"; sourceTree = "<group>"; };
@@ -1435,6 +1441,8 @@
 				34BD1E611B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.m */,
 				34BD1E621B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.xib */,
 				344825D11B2536EA00AF9EAC /* CAMultiAudioMatrixView.xib */,
+				34AB70A51FF9AAB800C5BD8E /* CAMultiAudioEffectsTableController.h */,
+				34AB70A61FF9AAB800C5BD8E /* CAMultiAudioEffectsTableController.m */,
 			);
 			name = Audio;
 			path = Interface/Audio;
@@ -1729,6 +1737,8 @@
 				34E26DDB1FF702BD00ACE58B /* CAMultiAudioSilence.m */,
 				34E26DDD1FF70E0E00ACE58B /* CAMultiAudioGenericOutput.h */,
 				34E26DDE1FF70E0E00ACE58B /* CAMultiAudioGenericOutput.m */,
+				34AB70A81FF9B35300C5BD8E /* CAMultiAudioEffect.h */,
+				34AB70A91FF9B35300C5BD8E /* CAMultiAudioEffect.m */,
 			);
 			name = CAMultiAudio;
 			sourceTree = "<group>";
@@ -2758,6 +2768,7 @@
 				3434CB2D1CA90D28001B3DF9 /* CSx264CompressorViewController.m in Sources */,
 				34788E291F0D166C00C3C9C5 /* CSAudioInputSource.m in Sources */,
 				34ED8C6D1B07371C002C0674 /* MIKMIDIMapping.m in Sources */,
+				34AB70AA1FF9B35300C5BD8E /* CAMultiAudioEffect.m in Sources */,
 				34F1EB921BCCA41F00B38E6C /* CSLayoutEditWindowController.m in Sources */,
 				34ED8CA31B07371C002C0674 /* MIKMIDISourceEndpoint.m in Sources */,
 				34ED8C4D1B07371C002C0674 /* MIKMIDIClientSourceEndpoint.m in Sources */,
@@ -2783,6 +2794,7 @@
 				34F5141316FD6E4F00BA894D /* AppleVTCompressor.m in Sources */,
 				34938EED1AE4D24200F3B1CF /* CSFilterChooserWindowController.m in Sources */,
 				34DF75581AA272F100DA9FDE /* LayoutRenderer.m in Sources */,
+				34AB70A71FF9AAB800C5BD8E /* CAMultiAudioEffectsTableController.m in Sources */,
 				34ED8C651B07371C002C0674 /* MIKMIDIEvent.m in Sources */,
 				34ED8C7D1B07371C002C0674 /* MIKMIDIMetaKeySignatureEvent.m in Sources */,
 				3473D2AE1D56920B00842EEE /* CSAdvancedAudioWindowController.m in Sources */,

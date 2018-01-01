@@ -9,6 +9,7 @@
 #import "CAMultiAudioMatrixMixerWindowController.h"
 #import "CAMultiAudioMatrixCell.h"
 #import "CAMultiAudioEqualizer.h"
+#import "CAMultiAudioUnit.h"
 
 @interface CAMultiAudioMatrixMixerWindowController ()
 
@@ -32,6 +33,7 @@
     {
         self.audioNode = node;
         self.downMixer = node.downMixer;
+        
         //NSView *audioView = [node audioUnitNSView];
        // NSLog(@"AUDIO VIEW SIZE %@", NSStringFromRect(audioView.frame));
         //self.window.contentView = audioView;
@@ -41,39 +43,11 @@
     return self;
 }
 
-- (IBAction)openEQWindow:(id)sender
-{
-    NSView *nodeView = [self.audioNode.equalizer audioUnitNSView];
-    if (nodeView)
-    {
-        self.eqWindow = [[NSWindow alloc] initWithContentRect:nodeView.frame styleMask:NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask|NSResizableWindowMask backing:NSBackingStoreBuffered defer:NO];
-        
-        self.eqWindow.delegate = self;
-        [self.eqWindow setReleasedWhenClosed:NO];
-        [self.eqWindow center];
-        [self.eqWindow setContentView:nodeView];
-        [self.eqWindow makeKeyAndOrderFront:NSApp];
-    }
-    
-}
 
 
-- (IBAction)openCompressorWindow:(id)sender
-{
-    
-    NSView *nodeView = [self.audioNode.dynamicCompressor audioUnitNSView];
-    if (nodeView)
-    {
-        self.compressorWindow = [[NSWindow alloc] initWithContentRect:nodeView.frame styleMask:NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask|NSResizableWindowMask backing:NSBackingStoreBuffered defer:NO];
-        
-        self.compressorWindow.delegate = self;
-        [self.compressorWindow setReleasedWhenClosed:NO];
-        [self.compressorWindow center];
-        [self.compressorWindow setContentView:nodeView];
-        [self.compressorWindow makeKeyAndOrderFront:NSApp];
-    }
-    
-}
+
+
+
 
 
 -(void)windowWillClose:(NSNotification *)notification
@@ -156,6 +130,7 @@
     
     [self.matrixTable sizeToFit];
     [self.matrixTable reloadData];
+    self.effectsController.audioNode = self.audioNode;
     
 }
 @end

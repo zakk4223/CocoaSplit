@@ -22,6 +22,7 @@
 @property (assign) bool noSettings;
 @property (assign) bool systemDevice;
 @property (assign) bool compressorBypass;
+@property (assign) float powerLevel;
 
 
 -(void)openMixerWindow:(id)sender;
@@ -31,11 +32,9 @@
 
 
 @interface CAMultiAudioInput : CAMultiAudioNode
-
+{
+}
 @property (strong) CAMultiAudioDownmixer *downMixer;
-@property (strong) CAMultiAudioEqualizer *equalizer;
-@property (strong) CAMultiAudioCompressor *dynamicCompressor;
-@property (strong) CAMultiAudioNode *headNode;
 
 @property (strong) CAMultiAudioConverter *converterNode;
 @property (strong) NSMutableArray *delayNodes;
@@ -44,11 +43,12 @@
 @property (assign) Float32 delay;
 @property (assign) bool noSettings;
 @property (assign) bool systemDevice;
-@property (assign) bool compressorBypass;
 @property (strong) CAMultiAudioSubgraph *subGraph;
+@property (assign) float powerLevel;
 
 -(void)didRemoveInput;
 -(bool)teardownGraph;
 -(bool)setupGraph;
+-(void)updatePowerlevel;
 
 @end

@@ -9,8 +9,12 @@
 #import <Cocoa/Cocoa.h>
 #import "CAMultiAudioDownmixer.h"
 #import "CAMultiAudioInput.h"
+#import "CAMultiAudioEffectsTableController.h"
 
 @interface CAMultiAudioMatrixMixerWindowController : NSWindowController <NSTableViewDataSource, NSTableViewDelegate, NSWindowDelegate>
+{
+    
+}
 
 @property (weak) IBOutlet NSTableView *matrixTable;
 @property (strong) CAMultiAudioInput *audioNode;
@@ -19,6 +23,8 @@
 @property (assign) UInt32 matrixColumns;
 @property (strong) NSWindow *eqWindow;
 @property (strong) NSWindow *compressorWindow;
+@property (weak) IBOutlet CAMultiAudioEffectsTableController *effectsController;
+
 
 - (IBAction)matrixVolumeChanged:(NSSlider *)sender;
 

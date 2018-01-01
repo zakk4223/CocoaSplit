@@ -76,6 +76,13 @@
 {
     self.inputFormat = format;
     self.sampleRate = format->mSampleRate;
+    AudioStreamBasicDescription asbd;
+    UInt32 asbdSize = sizeof(asbd);
+    memcpy(&asbd, format, sizeof(asbd));
+
+    asbd.mChannelsPerFrame = self.channelCount;
+    
+    AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 0, &asbd, asbdSize);
     if (self.avfCapture)
     {
         self.avfCapture.audioSamplerate = self.sampleRate;

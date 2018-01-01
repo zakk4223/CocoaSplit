@@ -3,7 +3,6 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 11/15/14.
-//  Copyright (c) 2014 Zakk. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -16,11 +15,14 @@
 
 @interface CAMultiAudioUnit : NSObject
 
+@property (assign) AudioComponentDescription unitDescription;
 @property (assign) AudioUnit audioUnit;
+@property (strong) NSString *name;
 
--(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType;
+-(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType manufacturer:(OSType)manufacturer;
 
 -(void)connect:(AudioUnit)toNode;
 -(void)openUnit;
++(NSArray *)availableEffects;
 
 @end

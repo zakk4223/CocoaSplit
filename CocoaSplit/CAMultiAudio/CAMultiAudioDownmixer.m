@@ -162,7 +162,15 @@
 }
 
 
+-(void)willConnectNode:(CAMultiAudioNode *)node toBus:(UInt32)toBus
+{
+    AudioStreamBasicDescription nformat;
+    AudioStreamBasicDescription sformat;
+    UInt32 fsize = sizeof(nformat);
+    AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, toBus, &sformat, &fsize);
+    AudioUnitGetProperty(node.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 0, &nformat, &fsize);
 
+}
 -(void)setVolumeOnOutputBus:(UInt32)bus volume:(float)volume
 {
     [self setVolumeForScope:kAudioUnitScope_Output onBus:bus volume:volume];

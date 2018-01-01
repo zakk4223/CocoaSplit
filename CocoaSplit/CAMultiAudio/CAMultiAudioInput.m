@@ -9,11 +9,9 @@
 #import "CAMultiAudioInput.h"
 #import "CAMultiAudioDelay.h"
 #import "CAMultiAudioMatrixMixerWindowController.h"
-#import "CAMultiAudioEqualizer.h"
 
 @implementation CAMultiAudioInput
 @synthesize delay = _delay;
-@synthesize compressorBypass = _compressorBypass;
 
 
 -(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType
@@ -22,28 +20,26 @@
     {
         _delayNodes = [NSMutableArray array];
         self.nameColor = [NSColor blackColor];
-        _compressorBypass = YES;
 
     }
     
     return self;
 }
 
--(void)setCompressorBypass:(bool)compressorBypass
-{
 
-    _compressorBypass = compressorBypass;
-    
-    if (self.dynamicCompressor)
+
+
+-(void)updatePowerlevel
+{
+    if (!self.downMixer)
     {
-        self.dynamicCompressor.bypass = compressorBypass;
+        return;
     }
+    
+    float rawPower = [self.downMixer powerForInputBus:0];
+    self.powerLevel = pow(10.0f, rawPower/20.0f);
 }
 
--(bool) compressorBypass
-{
-    return _compressorBypass;
-}
 
 
 
@@ -55,7 +51,6 @@
         return NO;
     }
     
-    [self.graph removeNode:self];
     
     if (self.converterNode)
     {
@@ -68,20 +63,16 @@
     }
     
     NSArray *delayNodes = self.delayNodes.copy;
-    for (CAMultiAudioDelay *dNode in [delayNodes reverseObjectEnumerator])
+    for (CAMultiAudioDelay *dNode in delayNodes)
     {
         [self.graph removeNode:dNode];
         [self.delayNodes removeObject:dNode];
     }
     
-    if (self.equalizer)
-    {
-        [self.graph removeNode:self.equalizer];
-    }
-    
+
     self.converterNode = nil;
     self.downMixer = nil;
-    self.equalizer = nil;
+    self.headNode = nil;
     return YES;
 }
 
@@ -89,6 +80,7 @@
 -(bool)setupGraph
 {
     
+
     if (self.converterNode)
     {
 
@@ -101,13 +93,6 @@
 
     }
     
-    self.equalizer = [[CAMultiAudioEqualizer alloc] init];
-    if (![self.graph addNode:self.equalizer])
-    {
-        
-        [self teardownGraph];
-        return NO;
-    }
 
     self.downMixer = [[CAMultiAudioDownmixer alloc] initWithInputChannels:self.channelCount];
     
@@ -166,20 +151,27 @@
         [self.delayNodes addObject:delayNode];
     }
     
-    if(![self.graph connectNode:delayNode toNode:self.equalizer])
-    {
-        [self teardownGraph];
-        return NO;
-    }
     
 
-    
-    
-    self.headNode = self.equalizer;
+    self.effectsHead = delayNode;
     
     return YES;
     
 }
+
+
+-(void)setupEffectsChain
+{
+    [self setupGraph];
+    [super setupEffectsChain];
+}
+
+-(void)removeEffectsChain
+{
+    [self teardownGraph];
+    [super removeEffectsChain];
+}
+
 
 
 
@@ -187,21 +179,9 @@
 {
     [super saveDataToDict:saveDict];
     saveDict[@"delay"] = [NSNumber numberWithFloat:self.delay];
-    saveDict[@"compressorBypass"] = [NSNumber numberWithBool:self.compressorBypass];
     if (self.downMixer)
     {
         saveDict[@"downMixerData"] = [self.downMixer saveData];
-    }
-    
-    if (self.equalizer)
-    {
-        saveDict[@"equalizerData"] = [self.equalizer saveData];
-
-    }
-    
-    if (self.dynamicCompressor)
-    {
-        saveDict[@"compressorData"] = [self.dynamicCompressor saveData];
     }
 }
 
@@ -209,29 +189,11 @@
 {
     
     [super restoreDataFromDict:restoreDict];
-    if (restoreDict[@"compressorBypass"])
-    {
-        self.compressorBypass = [restoreDict[@"compressorBypass"] boolValue];
-    }
-    
+
     self.delay = [restoreDict[@"delay"] floatValue];
     if (self.downMixer && restoreDict[@"downMixerData"])
     {
         [self.downMixer restoreData:restoreDict[@"downMixerData"]];
-    }
-    if (self.equalizer && restoreDict[@"equalizerData"])
-    {
-        [self.equalizer restoreData:restoreDict[@"equalizerData"]];
-    }
-    
-    if (self.dynamicCompressor)
-    {
-        self.dynamicCompressor.bypass = self.compressorBypass;
-        
-        if (restoreDict[@"compressorData"])
-        {
-            [self.dynamicCompressor restoreData:restoreDict[@"compressorData"]];
-        }
     }
 
 }

@@ -40,9 +40,9 @@
 @property (assign) float volume;
 @property (assign) bool muted;
 @property (assign) bool enabled;
-@property (assign) Float32 powerLevel;
 
 -(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType;
+-(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType manufacturer:(OSType)manufacturer;
 
 -(bool)createNode:(CAMultiAudioGraph *)forGraph;
 -(void)nodeConnected:(CAMultiAudioNode *)toNode onBus:(UInt32)onBus;
@@ -54,8 +54,6 @@
 
 -(void)resetSamplerate:(UInt32)sampleRate;
 -(void)resetFormat:(AudioStreamBasicDescription *)format;
-
--(void)updatePowerlevel;
 
 -(void)setVolumeAnimated:(float)volume withDuration:(float)duration;
 -(NSView *)audioUnitNSView;
@@ -82,6 +80,9 @@
 @property (assign) UInt32 connectedToBus;
 @property (strong) NSString *name;
 @property (strong) NSString *nodeUID;
+@property (strong) CAMultiAudioNode *headNode;
+@property (strong) CAMultiAudioNode *effectsHead;
+@property (strong) NSMutableArray *effectChain;
 
 
 
@@ -90,11 +91,17 @@
 @property (assign) bool muted;
 
 @property (assign) bool enabled;
-@property (assign) Float32 powerLevel;
 
 
--(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType NS_DESIGNATED_INITIALIZER;
-
+-(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType;
+-(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType manufacturer:(OSType)manufacturer NS_DESIGNATED_INITIALIZER;
+-(void) willConnectToNode:(CAMultiAudioNode *)node;
+-(void) connectedToNode:(CAMultiAudioNode *)node;
+-(void)willRemoveNode;
+-(void)setupEffectsChain;
+-(void)removeEffectsChain;
+-(void)addEffect:(CAMultiAudioNode *)effect;
+-(void)addEffect:(CAMultiAudioNode *)effect atIndex:(NSUInteger)idx;
 
 
 @end
