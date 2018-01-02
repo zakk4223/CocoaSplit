@@ -8,7 +8,6 @@
 #import "CAMultiAudioEngine.h"
 #import "CAMultiAudioDownmixer.h"
 #import "CAMultiAudioDelay.h"
-#import "CAMultiAudioEqualizer.h"
 #import "CSNotifications.h"
 #import "CAMultiAudioUnit.h"
 OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList *ioData );

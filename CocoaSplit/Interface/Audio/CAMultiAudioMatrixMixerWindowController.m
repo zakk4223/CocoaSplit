@@ -8,7 +8,6 @@
 
 #import "CAMultiAudioMatrixMixerWindowController.h"
 #import "CAMultiAudioMatrixCell.h"
-#import "CAMultiAudioEqualizer.h"
 #import "CAMultiAudioUnit.h"
 
 @interface CAMultiAudioMatrixMixerWindowController ()

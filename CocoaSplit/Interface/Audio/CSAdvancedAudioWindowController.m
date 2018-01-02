@@ -3,11 +3,9 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 8/6/16.
-//  Copyright © 2016 Zakk. All rights reserved.
 //
 
 #import "CSAdvancedAudioWindowController.h"
-#import "CAMultiAudioEqualizer.h"
 
 @interface CSAdvancedAudioWindowController ()
 
@@ -36,10 +34,7 @@
 {
     
     NSWindow *closingWindow = [notification object];
-    if (closingWindow && self.eqWindow == closingWindow)
-    {
-        self.eqWindow = nil;
-    }
+
 }
 
 

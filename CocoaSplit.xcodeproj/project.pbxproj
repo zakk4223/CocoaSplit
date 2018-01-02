@@ -80,6 +80,7 @@
 		344825D21B2536EA00AF9EAC /* CAMultiAudioMatrixView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 344825D11B2536EA00AF9EAC /* CAMultiAudioMatrixView.xib */; };
 		344825E61B253D6900AF9EAC /* CAMultiAudioMatrixCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 344825E51B253D6900AF9EAC /* CAMultiAudioMatrixCell.m */; };
 		344988131893CF0500044259 /* LogWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 344988121893CF0500044259 /* LogWindow.xib */; };
+		344DE4281FFB0FEE00196E2E /* CAMultiAudioEffectWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 344DE4271FFB0FEE00196E2E /* CAMultiAudioEffectWindow.m */; };
 		3450239D1C60B3EF00B461B5 /* CSLayoutCollectionItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3450239C1C60B3EF00B461B5 /* CSLayoutCollectionItemView.m */; };
 		34528B8F1F9A707400C090E0 /* InputSource+ScriptingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 34528B8E1F9A707400C090E0 /* InputSource+ScriptingAdditions.m */; };
 		34559A281E12D4400085883C /* CSCaptureBase+InputFrameTick.m in Sources */ = {isa = PBXBuildFile; fileRef = 34559A271E12D4400085883C /* CSCaptureBase+InputFrameTick.m */; };
@@ -685,6 +686,8 @@
 		344825E41B253D6900AF9EAC /* CAMultiAudioMatrixCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAMultiAudioMatrixCell.h; sourceTree = "<group>"; };
 		344825E51B253D6900AF9EAC /* CAMultiAudioMatrixCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CAMultiAudioMatrixCell.m; sourceTree = "<group>"; };
 		344988121893CF0500044259 /* LogWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LogWindow.xib; path = Interface/LogWindow.xib; sourceTree = "<group>"; };
+		344DE4261FFB0FEE00196E2E /* CAMultiAudioEffectWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAMultiAudioEffectWindow.h; sourceTree = "<group>"; };
+		344DE4271FFB0FEE00196E2E /* CAMultiAudioEffectWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CAMultiAudioEffectWindow.m; sourceTree = "<group>"; };
 		3450239B1C60B3EF00B461B5 /* CSLayoutCollectionItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSLayoutCollectionItemView.h; path = Interface/CSLayoutCollectionItemView.h; sourceTree = "<group>"; };
 		3450239C1C60B3EF00B461B5 /* CSLayoutCollectionItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSLayoutCollectionItemView.m; path = Interface/CSLayoutCollectionItemView.m; sourceTree = "<group>"; };
 		3451A1C617111BD900DF6A8B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -1437,6 +1440,8 @@
 				344825D11B2536EA00AF9EAC /* CAMultiAudioMatrixView.xib */,
 				34AB70A51FF9AAB800C5BD8E /* CAMultiAudioEffectsTableController.h */,
 				34AB70A61FF9AAB800C5BD8E /* CAMultiAudioEffectsTableController.m */,
+				344DE4261FFB0FEE00196E2E /* CAMultiAudioEffectWindow.h */,
+				344DE4271FFB0FEE00196E2E /* CAMultiAudioEffectWindow.m */,
 			);
 			name = Audio;
 			path = Interface/Audio;
@@ -2637,6 +2642,7 @@
 				34F04D9F1CE0381D0054663A /* CSAddInputViewController.m in Sources */,
 				345F8B4F1A15F7DA009A81E3 /* CAMultiAudioPCMPlayer.m in Sources */,
 				34ED8C5B1B07371C002C0674 /* MIKMIDIDeviceManager.m in Sources */,
+				344DE4281FFB0FEE00196E2E /* CAMultiAudioEffectWindow.m in Sources */,
 				3441269F1E6D0C4C0051DA06 /* CSLayoutSwitcherHostingView.m in Sources */,
 				34AFC33319B19CD00007C07B /* SourceCache.m in Sources */,
 				34ED8C491B07371C002C0674 /* MIKMIDIChannelVoiceCommand.m in Sources */,
@@ -2985,7 +2991,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "zakk.lol.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = CocoaSplit;
 				PROVISIONING_PROFILE = "";
-				SDKROOT = macosx;
+				SDKROOT = macosx10.12;
 				STRIP_STYLE = debugging;
 				WRAPPER_EXTENSION = app;
 			};
@@ -3036,7 +3042,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "zakk.lol.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = CocoaSplit;
 				PROVISIONING_PROFILE = "";
-				SDKROOT = macosx;
+				SDKROOT = macosx10.12;
 				STRIP_STYLE = debugging;
 				WRAPPER_EXTENSION = app;
 			};

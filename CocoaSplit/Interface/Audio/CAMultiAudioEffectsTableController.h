@@ -3,7 +3,6 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 12/31/17.
-//  Copyright © 2017 Zakk. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

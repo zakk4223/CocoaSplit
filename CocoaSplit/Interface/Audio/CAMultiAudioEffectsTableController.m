@@ -3,11 +3,10 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 12/31/17.
-//  Copyright © 2017 Zakk. All rights reserved.
 //
 
 #import "CAMultiAudioEffectsTableController.h"
-
+#import "CAMultiAudioEffectWindow.h"
 @implementation CAMultiAudioEffectsTableController
 
 
@@ -32,7 +31,6 @@
     CAMultiAudioNode *useNode = self.audioNode;
 
     CAMultiAudioNode *newEffect = clickedEffect.copy;
-    NSLog(@"ADD TO AUDIO NODE %@", useNode);
 
     [useNode addEffect:newEffect];
 }
@@ -60,21 +58,6 @@
     [_effectsMenu popUpMenuPositioningItem:[_effectsMenu itemAtIndex:midItem] atLocation:popupPoint inView:sender];
     
 }
-
-
-
-/*
--(void)tableView:(NSTableView *)tableView draggingSession:(NSDraggingSession *)session endedAtPoint:(NSPoint)screenPoint operation:(NSDragOperation)operation
-{
-    bool removeRows = false;
-    
-    if (operation == NSDragOperationMove)
-    {
-        NSRect windowRect = [self.effectTable convertRect:self.effectTable.bounds toView:nil];
-    }
-
-}
- */
 
 
 
@@ -161,18 +144,17 @@
 
 -(void) openConfigWindowForEffect:(CAMultiAudioEffect *)effect
 {
-    NSWindow *newWindow;
+    CAMultiAudioEffectWindow *newWindow;
     
     NSView *nodeView = [effect audioUnitNSView];
     if (nodeView)
     {
-        newWindow = [[NSWindow alloc] initWithContentRect:nodeView.frame styleMask:NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask|NSResizableWindowMask backing:NSBackingStoreBuffered defer:NO];
+        newWindow = [[CAMultiAudioEffectWindow alloc] initWithAudioNode:effect];
         
         newWindow.delegate = self;
         [newWindow setReleasedWhenClosed:NO];
         [newWindow center];
-        [newWindow setContentView:nodeView];
-        [newWindow makeKeyAndOrderFront:NSApp];
+        [newWindow makeKeyAndOrderFront:nil];
         newWindow.identifier = effect.nodeUID;
         [self.configWindows setObject:newWindow forKey:newWindow.identifier];
     }
