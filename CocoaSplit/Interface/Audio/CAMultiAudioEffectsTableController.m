@@ -26,13 +26,10 @@
 -(void)addEffect:(NSMenuItem *)item
 {
     CAMultiAudioEffect *clickedEffect = item.representedObject;
-    
-    
-    CAMultiAudioNode *useNode = self.audioNode;
-
+ 
     CAMultiAudioNode *newEffect = clickedEffect.copy;
 
-    [useNode addEffect:newEffect];
+    [self.effectArrayController addObject:newEffect];
 }
 
 
