@@ -13,7 +13,6 @@
 
 @protocol CAMultiAudioInputJSExport <JSExport>
 @property (strong) CAMultiAudioDownmixer *downMixer;
-@property (strong) CAMultiAudioEqualizer *equalizer;
 
 @property (strong) NSMutableArray *delayNodes;
 @property (strong) NSColor *nameColor;

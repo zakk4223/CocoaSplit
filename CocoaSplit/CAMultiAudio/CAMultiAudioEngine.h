@@ -46,7 +46,6 @@
 @property (strong) NSArray *validSamplerates;
 @property (assign) Float32 streamAudioPowerLevel;
 @property (assign) Float32 previewAudioPowerLevel;
-@property (strong) CAMultiAudioEqualizer *equalizer;
 @property (strong) CAMultiAudioEffect *renderNode;
 
 

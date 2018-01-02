@@ -126,11 +126,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
                 [self createFileInput:inputPath];
             }
         }
-        if ([aDecoder containsValueForKey:@"equalizerData"])
-        {
-            NSDictionary *eqdata = [aDecoder decodeObjectForKey:@"equalizerData"];
-            [self.equalizer restoreData:eqdata];
-        }
+
     }
     
     return self;
@@ -323,7 +319,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     self.silentNode = [[CAMultiAudioSilence alloc] init];
     self.encodeMixer = [[CAMultiAudioMixer alloc] init];
     self.previewMixer = [[CAMultiAudioMixer alloc] init];
-    self.equalizer = [[CAMultiAudioEqualizer alloc] init];
     self.renderNode = [[CAMultiAudioEffect alloc] initWithSubType:kAudioUnitSubType_Delay unitType:kAudioUnitType_Effect];
     
     [self.graph addNode:self.outputNode];
@@ -478,7 +473,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     float pmVolume = self.previewMixer.volume;
     bool pmMuted = self.previewMixer.muted;
     
-    NSDictionary *eqData = [self.equalizer saveData];
     _inputSettings = [self generateInputSettings];
     
     self.graph = nil;
@@ -488,7 +482,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     self.encodeMixer.muted = emMuted;
     self.previewMixer.volume = pmVolume;
     self.previewMixer.muted = pmMuted;
-    [self.equalizer restoreData:eqData];
     
     
     
