@@ -80,9 +80,10 @@
 @property (assign) UInt32 connectedToBus;
 @property (strong) NSString *name;
 @property (strong) NSString *nodeUID;
-@property (strong) CAMultiAudioNode *headNode;
-@property (strong) CAMultiAudioNode *effectsHead;
+@property (weak) CAMultiAudioNode *headNode;
+@property (weak) CAMultiAudioNode *effectsHead;
 @property (strong) NSMutableArray *effectChain;
+@property (assign) bool deleteNode;
 
 
 

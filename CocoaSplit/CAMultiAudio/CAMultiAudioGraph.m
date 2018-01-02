@@ -267,11 +267,6 @@
     connectTo = toNode.node;
     //aUnit = node.audioUnit;
     
-
-
-    
-    
-    
     err = AUGraphConnectNodeInput(_graphInst, inNode, 0, connectTo, bus);
     if (err)
     {
@@ -297,12 +292,13 @@
 {
     if (!_graphInst || !node)
     {
+        NSLog(@"WHAT");
         return NO;
     }
     
     if (!node.connectedTo)
     {
-        NSLog(@"Node %@ is not connected to anything", node);
+       // NSLog(@"Node %@ is not connected to anything", node);
         return YES;
     }
     

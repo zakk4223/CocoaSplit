@@ -32,7 +32,8 @@
     CAMultiAudioNode *useNode = self.audioNode;
 
     CAMultiAudioNode *newEffect = clickedEffect.copy;
-    
+    NSLog(@"ADD TO AUDIO NODE %@", useNode);
+
     [useNode addEffect:newEffect];
 }
 

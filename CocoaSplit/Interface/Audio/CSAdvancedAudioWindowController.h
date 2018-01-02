@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 #import "CaptureController.h"
+#import "CAMultiAudioEffectsTableController.h"
+
 @interface CSAdvancedAudioWindowController : NSWindowController <NSWindowDelegate>
 
 
@@ -16,5 +18,6 @@
 
 - (IBAction)openEQWindow:(id)sender;
 
+@property (weak) IBOutlet CAMultiAudioEffectsTableController *effectsController;
 
 @end

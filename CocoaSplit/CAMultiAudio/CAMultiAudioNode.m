@@ -186,6 +186,10 @@
     
     self.graph = forGraph;
 
+    self.effectsHead = self;
+    self.headNode = self;
+    
+    
     
     return YES;
 }
@@ -383,13 +387,17 @@
 -(void)rebuildEffectChain
 {
     //Disconnect every node from effectsHead -> headNode (including headNode) and then reconnect everything in effectchain array
-    
     CAMultiAudioNode *currNode = self.effectsHead;
+
     CAMultiAudioNode *headConn;
     while (currNode && currNode != self.headNode)
     {
         CAMultiAudioNode *connNode = currNode.connectedTo;
         [self.graph disconnectNode:currNode];
+        if (currNode.deleteNode)
+        {
+            [self.graph removeNode:currNode];
+        }
         currNode = connNode;
     }
     
@@ -397,6 +405,12 @@
     {
         headConn = currNode.connectedTo;
         [self.graph disconnectNode:currNode];
+        if (currNode.deleteNode)
+        {
+            [self.graph removeNode:currNode];
+        }
+        
+        self.headNode = self.effectsHead;
     }
     
     currNode = self.effectsHead;
@@ -418,6 +432,12 @@
     } else {
         self.headNode = self.effectsHead;
     }
+    
+
+    
+    //CAShow(self.graph.graphInst);
+
+    
 }
 
 -(void)addEffect:(CAMultiAudioNode *)effect;
@@ -449,6 +469,7 @@
 -(void)insertObject:(CAMultiAudioNode *)object inEffectChainAtIndex:(NSUInteger)index
 {
     
+    object.deleteNode = NO;
     [self.effectChain insertObject:object atIndex:index];
     [self rebuildEffectChain];
 }
@@ -456,6 +477,9 @@
 
 -(void)removeObjectFromEffectChainAtIndex:(NSUInteger)index
 {
+    CAMultiAudioEffect *delNode = [self.effectChain objectAtIndex:index];
+    delNode.deleteNode = YES;
+    
     [self.effectChain removeObjectAtIndex:index];
     [self rebuildEffectChain];
 }

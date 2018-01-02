@@ -3,7 +3,6 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 11/15/14.
-//  Copyright (c) 2014 Zakk. All rights reserved.
 //
 
 #import "CAMultiAudioEngine.h"
@@ -92,7 +91,12 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         
         [self buildGraph];
         [self inputsForSystemAudio];
-        NSLog(@"EFFECTS %@", [CAMultiAudioUnit availableEffects]);
+        
+        if ([aDecoder containsValueForKey:@"encodeMixerSettings"])
+        {
+            [self.encodeMixer restoreDataFromDict:[aDecoder decodeObjectForKey:@"encodeMixerSettings"]];
+        }
+        
         
         if ([aDecoder containsValueForKey:@"streamVolume"])
         {
@@ -164,11 +168,14 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     [aCoder encodeBool:self.encodeMixer.muted forKey:@"streamMuted"];
     [aCoder encodeFloat:self.previewMixer.volume forKey:@"previewVolume"];
     [aCoder encodeBool:self.previewMixer.muted forKey:@"previewMuted"];
+
+    NSMutableDictionary *encodeMixerChain = [NSMutableDictionary dictionary];
+    [self.encodeMixer saveDataToDict:encodeMixerChain];
+    [aCoder encodeObject:encodeMixerChain forKey:@"encodeMixerSettings"];
     
     NSDictionary *saveInputSettings = [self generateInputSettings];
 
-    NSDictionary *eqdata = [self.equalizer saveData];
-    [aCoder encodeObject:eqdata forKey:@"equalizerData"];
+
     
     [aCoder encodeObject:saveInputSettings forKey:@"inputSettings"];
     
@@ -249,10 +256,10 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     if (oldEncoder)
     {
-        AudioUnitRemoveRenderNotify(self.equalizer.audioUnit, encoderRenderCallback, [oldEncoder inputBufferPtr]);
+        AudioUnitRemoveRenderNotify(self.renderNode.audioUnit, encoderRenderCallback, [oldEncoder inputBufferPtr]);
     }
     
-    AudioUnitAddRenderNotify(self.equalizer.audioUnit, encoderRenderCallback, [_encoder inputBufferPtr]);
+    AudioUnitAddRenderNotify(self.renderNode.audioUnit, encoderRenderCallback, [_encoder inputBufferPtr]);
 }
 
 
@@ -317,6 +324,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     self.encodeMixer = [[CAMultiAudioMixer alloc] init];
     self.previewMixer = [[CAMultiAudioMixer alloc] init];
     self.equalizer = [[CAMultiAudioEqualizer alloc] init];
+    self.renderNode = [[CAMultiAudioEffect alloc] initWithSubType:kAudioUnitSubType_Delay unitType:kAudioUnitType_Effect];
     
     [self.graph addNode:self.outputNode];
     
@@ -331,12 +339,13 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     [self.graph addNode:self.silentNode];
     [self.graph addNode:self.encodeMixer];
     [self.graph addNode:self.previewMixer];
-    [self.graph addNode:self.equalizer];
+    [self.graph addNode:self.renderNode];
+    self.renderNode.bypass = YES;
     
     [self.graph connectNode:self.previewMixer toNode:self.graphOutputNode];
-    [self.graph connectNode:self.equalizer toNode:self.previewMixer];
+    [self.graph connectNode:self.renderNode toNode:self.previewMixer];
     
-    [self.graph connectNode:self.encodeMixer toNode:self.equalizer];
+    [self.graph connectNode:self.encodeMixer toNode:self.renderNode];
     [self.graph connectNode:self.silentNode toNode:self.encodeMixer];
     [self.graph startGraph];
     
@@ -344,7 +353,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     if (self.encoder)
     {
-        AudioUnitAddRenderNotify(self.equalizer.audioUnit, encoderRenderCallback, [self.encoder inputBufferPtr]);
+        AudioUnitAddRenderNotify(self.renderNode.audioUnit, encoderRenderCallback, [self.encoder inputBufferPtr]);
     }
 
     return YES;
@@ -820,6 +829,12 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList *ioData )
 {
+    
+    
+    if ((*ioActionFlags) & kAudioUnitRenderAction_PostRenderError)
+    {
+        return noErr;
+    }
     
     
     TPCircularBuffer *encodeBuffer = (TPCircularBuffer *)inRefCon;

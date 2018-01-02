@@ -11,6 +11,7 @@
 #import "CSAacEncoder.h"
 #import "CAMultiAudioConverter.h"
 #import "CAMultiAudioSilence.h"
+#import "CAMultiAudioEffect.h"
 
 
 /* our default graph setup looks like this:
@@ -46,7 +47,7 @@
 @property (assign) Float32 streamAudioPowerLevel;
 @property (assign) Float32 previewAudioPowerLevel;
 @property (strong) CAMultiAudioEqualizer *equalizer;
-
+@property (strong) CAMultiAudioEffect *renderNode;
 
 
 -(CAMultiAudioPCMPlayer *)createPCMInput:(NSString *)uniqueID withFormat:(const AudioStreamBasicDescription *)withFormat;
