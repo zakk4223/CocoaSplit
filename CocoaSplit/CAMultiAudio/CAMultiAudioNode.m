@@ -94,7 +94,7 @@
         {
             CAMultiAudioEffect *newEffect = [[CAMultiAudioEffect alloc] init];
             [newEffect restoreDataFromDict:eData];
-            [self.effectChain addObject:newEffect];
+            [self addEffect:newEffect];
         }
         
         [self rebuildEffectChain];

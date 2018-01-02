@@ -118,7 +118,6 @@
 		346865471CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 346865451CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.m */; };
 		346865481CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 346865461CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.xib */; };
 		346CF44C1A5C10C2008E5BFF /* CSInputLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 346CF44B1A5C10C2008E5BFF /* CSInputLayer.m */; };
-		3470CD0F1D57065B006404D9 /* CSAdvancedAudioCollectionViewItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3470CD0E1D57065B006404D9 /* CSAdvancedAudioCollectionViewItem.xib */; };
 		3470CD2E1D57D2AA006404D9 /* CSStreamOutputWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3470CD2C1D57D2AA006404D9 /* CSStreamOutputWindowController.m */; };
 		3470CD2F1D57D2AA006404D9 /* CSStreamOutputWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3470CD2D1D57D2AA006404D9 /* CSStreamOutputWindowController.xib */; };
 		3470CD3A1D5EED3A006404D9 /* CSNobarSliderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3470CD391D5EED3A006404D9 /* CSNobarSliderCell.m */; };
@@ -762,7 +761,6 @@
 		346CF44A1A5C10C2008E5BFF /* CSInputLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSInputLayer.h; sourceTree = "<group>"; };
 		346CF44B1A5C10C2008E5BFF /* CSInputLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSInputLayer.m; sourceTree = "<group>"; };
 		346EAAF6197A7B28000892CF /* Capture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Capture.h; sourceTree = "<group>"; };
-		3470CD0E1D57065B006404D9 /* CSAdvancedAudioCollectionViewItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSAdvancedAudioCollectionViewItem.xib; sourceTree = "<group>"; };
 		3470CD2B1D57D2AA006404D9 /* CSStreamOutputWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSStreamOutputWindowController.h; path = Interface/CSStreamOutputWindowController.h; sourceTree = "<group>"; };
 		3470CD2C1D57D2AA006404D9 /* CSStreamOutputWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSStreamOutputWindowController.m; path = Interface/CSStreamOutputWindowController.m; sourceTree = "<group>"; };
 		3470CD2D1D57D2AA006404D9 /* CSStreamOutputWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSStreamOutputWindowController.xib; path = Interface/CSStreamOutputWindowController.xib; sourceTree = "<group>"; };
@@ -1427,7 +1425,6 @@
 				3473D2AB1D56920B00842EEE /* CSAdvancedAudioWindowController.h */,
 				3473D2AC1D56920B00842EEE /* CSAdvancedAudioWindowController.m */,
 				3473D2AD1D56920B00842EEE /* CSAdvancedAudioWindowController.xib */,
-				3470CD0E1D57065B006404D9 /* CSAdvancedAudioCollectionViewItem.xib */,
 				3498D9481A94685000906532 /* CSAudioSwitchCell.h */,
 				3498D9491A94685000906532 /* CSAudioSwitchCell.m */,
 				3498D94D1A9472BD00906532 /* CSAudioSwitchControl.h */,
@@ -2527,7 +2524,6 @@
 				34DA08C71E87F3CB00E02543 /* CSSequenceItemAnimationViewController.xib in Resources */,
 				3400A07A1BD4533A003E1828 /* CSInputLibraryWindowController.xib in Resources */,
 				34ED8CB91B073C1B002C0674 /* CSMidiManagerWindowController.xib in Resources */,
-				3470CD0F1D57065B006404D9 /* CSAdvancedAudioCollectionViewItem.xib in Resources */,
 				340FE4AC15F3417E00E4CE4E /* InfoPlist.strings in Resources */,
 				34BD1E651B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.xib in Resources */,
 				34E162E91E987420005157ED /* CSScriptWindowViewController.xib in Resources */,
@@ -2972,7 +2968,7 @@
 				INFOPLIST_FILE = "CocoaSplit/CocoaSplit-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				"LIBRARY_SEARCH_PATHS[arch=*]" = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				OTHER_CODE_SIGN_FLAGS = "";
 				OTHER_LDFLAGS = (
 					"$TEMP_FILES_DIR/ffmpeg-fix/libswresample.a",
@@ -3023,7 +3019,7 @@
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				INFOPLIST_FILE = "CocoaSplit/CocoaSplit-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				OTHER_CODE_SIGN_FLAGS = "";
 				OTHER_LDFLAGS = (
 					"$TEMP_FILES_DIR/ffmpeg-fix/libswresample.a",

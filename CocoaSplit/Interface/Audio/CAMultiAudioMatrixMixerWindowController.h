@@ -3,7 +3,6 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 6/7/15.
-//  Copyright (c) 2015 Zakk. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -29,7 +28,6 @@
 - (IBAction)matrixVolumeChanged:(NSSlider *)sender;
 
 -(instancetype)initWithAudioMixer:(CAMultiAudioNode *)node;
-- (IBAction)openEQWindow:(id)sender;
 - (IBAction)openCompressorWindow:(id)sender;
 
 

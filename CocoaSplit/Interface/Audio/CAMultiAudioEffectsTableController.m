@@ -146,8 +146,7 @@
 {
     CAMultiAudioEffectWindow *newWindow;
     
-    NSView *nodeView = [effect audioUnitNSView];
-    if (nodeView)
+    //if (nodeView)
     {
         newWindow = [[CAMultiAudioEffectWindow alloc] initWithAudioNode:effect];
         

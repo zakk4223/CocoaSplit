@@ -15,5 +15,6 @@
 }
 
 -(instancetype)initWithAudioNode:(CAMultiAudioNode *)node;
+@property (strong) NSView *audioUnitView;
 
 @end

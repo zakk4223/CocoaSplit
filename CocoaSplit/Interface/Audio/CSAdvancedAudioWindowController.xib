@@ -224,7 +224,7 @@
                     <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D83-Jn-WMM">
                         <rect key="frame" x="221" y="51" width="238" height="202"/>
                         <clipView key="contentView" id="UQf-sD-R9i">
-                            <rect key="frame" x="1" y="23" width="236" height="178"/>
+                            <rect key="frame" x="1" y="0.0" width="236" height="201"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" autosaveColumns="NO" rowSizeStyle="automatic" headerView="oHi-9d-DuX" viewBased="YES" id="hfC-9G-K15">
@@ -487,7 +487,6 @@
                 <binding destination="-2" name="contentObject" keyPath="self.controller" id="p38-PC-Qfd"/>
             </connections>
         </objectController>
-        <collectionViewItem nibName="CSAdvancedAudioCollectionViewItem" id="ygX-Uy-PT5"/>
         <arrayController id="xMr-1u-sQs" userLabel="audioInputArrayController">
             <connections>
                 <binding destination="Mpd-4L-AyW" name="contentArray" keyPath="selection.multiAudioEngine.audioInputs" id="sCR-JL-ysP"/>
@@ -495,7 +494,7 @@
         </arrayController>
         <arrayController id="C6s-yq-C8q" userLabel="effectsChainController">
             <connections>
-                <binding destination="Mpd-4L-AyW" name="contentArray" keyPath="selection.multiAudioEngine.encodeMixer.effectChain" id="nO2-yV-lJZ"/>
+                <binding destination="Mpd-4L-AyW" name="contentArray" keyPath="selection.multiAudioEngine.encodeMixer.effectChain" id="yZp-tP-NKt"/>
             </connections>
         </arrayController>
         <customObject id="XFG-Vd-VEf" userLabel="effectsTableController" customClass="CAMultiAudioEffectsTableController">

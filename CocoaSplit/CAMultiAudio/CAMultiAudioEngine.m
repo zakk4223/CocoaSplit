@@ -458,9 +458,14 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         return;
     }
     
+    
     [self.graph stopGraph];
     
+    _inputSettings = [self generateInputSettings];
 
+    NSMutableDictionary *encodeEffectChain = [NSMutableDictionary dictionary];
+    [self.encodeMixer saveDataToDict:encodeEffectChain];
+    
     for (CAMultiAudioNode *node in self.audioInputs)
     {
         [self.graph removeNode:node];
@@ -472,7 +477,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     float pmVolume = self.previewMixer.volume;
     bool pmMuted = self.previewMixer.muted;
     
-    _inputSettings = [self generateInputSettings];
     
     self.graph = nil;
     [self buildGraph];
@@ -501,6 +505,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         [self attachFileInput:node];
     }
 */
+    [self.encodeMixer restoreDataFromDict:encodeEffectChain];
     [self.graph graphUpdate];
     
 }

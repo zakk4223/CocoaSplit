@@ -13,21 +13,21 @@
 
 -(instancetype)initWithAudioNode:(CAMultiAudioNode *)node
 {
-    _audioUnitView = [node audioUnitNSView];
-    if (!_audioUnitView)
+    self.audioUnitView = [node audioUnitNSView];
+    if (!self.audioUnitView)
     {
         return nil;
     }
     
-    NSRect contentRect = NSMakeRect(0, 0, _audioUnitView.frame.size.width, _audioUnitView.frame.size.height);
+    NSRect contentRect = NSMakeRect(0, 0, self.audioUnitView.frame.size.width, self.audioUnitView.frame.size.height);
     if (self = [super initWithContentRect:contentRect styleMask:NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask|NSResizableWindowMask backing:NSBackingStoreBuffered defer:YES])
     {
         
         self.level = NSNormalWindowLevel;
-        [self setContentView:_audioUnitView];
+        [self setContentView:self.audioUnitView];
         
         self.title = node.name;
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(auViewChangedSize:) name:NSViewFrameDidChangeNotification object:_audioUnitView];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(auViewChangedSize:) name:NSViewFrameDidChangeNotification object:self.audioUnitView];
         
     }
     
@@ -37,11 +37,11 @@
 
 -(void)auViewChangedSize:(NSNotification *)notification
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSViewFrameDidChangeNotification object:_audioUnitView];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSViewFrameDidChangeNotification object:self.audioUnitView];
     
 
     NSSize oldSize = [self contentRectForFrameRect:self.frame].size;
-    NSSize newSize = _audioUnitView.frame.size;
+    NSSize newSize = self.audioUnitView.frame.size;
     
     NSRect wFrame = self.frame;
     
@@ -53,13 +53,13 @@
     wFrame.size.height -= dy;
     wFrame.size.width -= dx;
     [self setFrame:wFrame display:YES];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(auViewChangedSize:) name:NSViewFrameDidChangeNotification object:_audioUnitView];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(auViewChangedSize:) name:NSViewFrameDidChangeNotification object:self.audioUnitView];
 
 }
 
 -(void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSViewFrameDidChangeNotification object:_audioUnitView];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSViewFrameDidChangeNotification object:self.audioUnitView];
 }
 
 
