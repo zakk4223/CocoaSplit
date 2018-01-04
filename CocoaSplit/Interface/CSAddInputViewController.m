@@ -23,12 +23,10 @@
 
 @synthesize popover = _popover;
 
-
 -(instancetype)init
 {
     return [self initWithNibName:@"CSAddInputViewController" bundle:nil];
 }
-
 
 -(void)loadView
 {

@@ -80,11 +80,6 @@
 -(void)setMousedSource:(InputSource *)mousedSource
 {
     _mousedSource = mousedSource;
-    if (_glLayer)
-    {
-        _glLayer.outlineSource = mousedSource;
-    }
-
 }
 
 -(InputSource *)mousedSource
@@ -612,25 +607,6 @@
 }
 
 
-
--(void)drawRect:(NSRect)dirtyRect
-{
-    if (self.mousedSource)
-    {
-        NSArray *resizeRects = [self resizeRectsForSource:self.selectedSource withExtra:2];
-        for (NSValue *rVal in resizeRects)
-        {
-            NSRect rect = [rVal rectValue];
-            CGContextRef currentContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
-            CGContextSetFillColorWithColor(currentContext, [NSColor colorWithDeviceRed:1.0f green:0.0f blue:0.0f alpha:0.2].CGColor);
-            CGContextFillRect(currentContext, rect);
-        }
-    }
-    
-
-}
-
-
 - (void)mouseDown:(NSEvent *)theEvent
 {
     
@@ -839,6 +815,7 @@
             [self.selectedSource updateOrigin:dx y:dy];
             if (_overlayView)
             {
+
                 NSRect newRect = [self windowRectforWorldRect:self.selectedSource.globalLayoutPosition];
                 _overlayView.frame = newRect;
             }
@@ -1066,8 +1043,7 @@
         if (self.mousedSource)
         {
             [self stopHighlightingSource:self.mousedSource];
-        } else {
-            [self.controller resetInputTableHighlights];
+ 
         }
     }
 }
@@ -1517,18 +1493,6 @@
 }
 
 
-
--(void)needsUpdate
-{
-    if (_glLayer)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self->_glLayer setNeedsDisplay];
-
-            
-        });
-    }
-}
 
 
 -(IBAction) autoFitInput:(id)sender

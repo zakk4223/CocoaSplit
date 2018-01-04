@@ -3,8 +3,6 @@
 //  H264Streamer
 //
 //  Created by Zakk on 9/2/12.
-//  Copyright (c) 2012 Zakk. All rights reserved.
-//
 
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
@@ -46,6 +44,7 @@
 #import "CSLayoutRecorderInfoProtocol.h"
 #import "JavaScriptCore/JavaScriptCore.h"
 #import "CSLayoutTransitionViewProtocol.h"
+#import "CSSourceListViewController.h"
 
 
 
@@ -147,7 +146,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (assign) int captureWidth;
 @property (strong) NSArray *validSamplerates;
 @property (weak) NSArray *audioCaptureDevices;
-@property (weak) IBOutlet NSOutlineView *inputOutlineView;
 @property (strong) NSDictionary *extraSaveData;
 @property (strong) NSPipe *loggingPipe;
 @property (strong) NSFileHandle *logReadHandle;
@@ -330,9 +328,14 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 
-@interface CaptureController : NSObject <CaptureControllerExport, NSTableViewDelegate, NSMenuDelegate, MIKMIDIMappableResponder, MIKMIDIResponder, MIKMIDIMappingGeneratorDelegate, NSCollectionViewDelegate, NSOutlineViewDelegate, NSOutlineViewDataSource, CSLayoutRecorderInfoProtocol, NSTableViewDataSource, NSCollectionViewDataSource>
+@interface CaptureController : NSObject <CaptureControllerExport, NSTableViewDelegate, NSMenuDelegate, MIKMIDIMappableResponder, MIKMIDIResponder, MIKMIDIMappingGeneratorDelegate, NSCollectionViewDelegate, CSLayoutRecorderInfoProtocol, NSTableViewDataSource, NSCollectionViewDataSource, NSWindowDelegate>
 
 {
+    
+    NSMutableDictionary *_activeConfigWindows;
+    NSMutableDictionary *_activeConfigControllers;
+    
+    NSPoint _configWindowCascadePoint;
     
     NSMutableDictionary *_javaScriptFileCache;
     
@@ -496,7 +499,6 @@ NSArray *_savedTransitionConstraints;
 @property (assign) int captureWidth;
 @property (strong) NSArray *validSamplerates;
 @property (weak) NSArray *audioCaptureDevices;
-@property (weak) IBOutlet NSOutlineView *inputOutlineView;
 @property (weak) IBOutlet NSTableView *audioTableView;
 
 @property (strong) NSDictionary *extraSaveData;
@@ -524,6 +526,7 @@ NSArray *_savedTransitionConstraints;
 @property (strong) NSMutableSet *audioFileUTIs;
 @property (weak) IBOutlet NSView *layoutTransitionConfigView;
 @property (strong) NSObject<CSLayoutTransitionViewProtocol> *layoutTransitionViewController;
+@property (weak) IBOutlet CSSourceListViewController *sourceListViewController;
 
 
 @property (weak) IBOutlet NSArrayController *audioInputsArrayController;
@@ -533,7 +536,8 @@ NSArray *_savedTransitionConstraints;
 -(NSObject<CSInputSourceProtocol>*)inputSourceForPasteboardItem:(NSPasteboardItem *)item;
 
 -(IBAction)openScriptSwitcherWindow:(id)sender;
--(IBAction)inputOutlineViewDoubleClick:(NSOutlineView *)outlineView;
 -(bool)fileURLIsAudio:(NSURL *)url;
+-(void)openInputConfigWindow:(NSObject <CSInputSourceProtocol>*)configSrc;
+-(void)openInputConfigWindows:(NSArray *)sources;
 
 @end

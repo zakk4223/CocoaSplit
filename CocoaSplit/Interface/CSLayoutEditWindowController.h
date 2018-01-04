@@ -14,25 +14,22 @@
 #import "OutputDestination.h"
 #import "CSLayoutRecorder.h"
 #import "CSScriptInputSource.h"
+#import "CSSourceListViewController.h"
 
-
-@interface CSLayoutEditWindowController : NSWindowController <NSWindowDelegate, NSOutlineViewDelegate, NSTableViewDelegate>
+@interface CSLayoutEditWindowController : NSWindowController <NSWindowDelegate>
 {
     float _frame_interval;
-    NSPopover *_animatepopOver;
-    NSPopover *_addInputpopOver;
-    NSMenu *_inputsMenu;
-    
+    CSSourceListViewController *_sourceListController;
     
     
 
 }
 
+
 @property (readonly) NSString *windowTitle;
 @property (readonly) NSString *resolutionDescription;
 
 @property (strong) IBOutlet NSMenu *recordingMenu;
--(IBAction)inputOutlineViewDoubleClick:(NSOutlineView *)outlineView;
 
 @property (weak) id delegate;
 
@@ -41,11 +38,9 @@
 @property (strong) IBOutlet NSObjectController *layoutController;
 - (IBAction)cancelEdit:(id)sender;
 - (IBAction)editOK:(id)sender;
-- (IBAction)inputTableControlClick:(NSButton *)sender;
 - (IBAction)layoutGoLive:(id)sender;
 
-@property (weak) IBOutlet NSOutlineView *inputOutlineView;
 @property (assign) bool previewOnly;
-@property (strong) IBOutlet NSTreeController *inputTreeController;
-@property (strong) NSArray *inputViewSortDescriptors;
+@property (strong) IBOutlet CSSourceListViewController *sourceListViewController;
+
 @end

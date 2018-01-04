@@ -3,7 +3,6 @@
 //  H264Streamer
 //
 //  Created by Zakk on 9/2/12.
-//  Copyright (c) 2012 Zakk. All rights reserved.
 
 #import "CaptureController.h"
 #import "FFMpegTask.h"
@@ -1121,6 +1120,10 @@
        _sequenceWindows = [NSMutableArray array];
        _layoutRecorders = [NSMutableArray array];
        
+       _activeConfigWindows = [NSMutableDictionary dictionary];
+       _activeConfigControllers = [NSMutableDictionary dictionary];
+       _configWindowCascadePoint = NSZeroPoint;
+       
        _layoutRecordingDirectory = [[[NSFileManager defaultManager] URLsForDirectory:NSMoviesDirectory inDomains:NSUserDomainMask] firstObject].path;
        
        _layoutRecordingFormat = @"MOV";
@@ -1317,7 +1320,7 @@
        
        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(menuEndedTracking:) name:NSMenuDidEndTrackingNotification object:nil];
 
-       
+       [self addObserver:self forKeyPath:@"activePreviewView.mousedSource" options:NSKeyValueObservingOptionNew context:NULL];
    }
     
     return self;
@@ -2068,8 +2071,6 @@
     
     self.activePreviewView = self.stagingPreviewView;
     [self.layoutCollectionView registerForDraggedTypes:@[@"CS_LAYOUT_DRAG"]];
-    //[self.inputOutlineView registerForDraggedTypes:@[@"cocoasplit.input.item", @"cocoasplit.audio.item"]];
-    [self.inputOutlineView registerForDraggedTypes:@[NSSoundPboardType,NSFilenamesPboardType, NSFilesPromisePboardType, NSFileContentsPboardType, @"cocoasplit.input.item", @"cocoasplit.audio.item"]];
     [self.audioTableView registerForDraggedTypes:@[@"cocoasplit.audio.item", NSFilenamesPboardType]];
 
     NSNib *layoutNib = [[NSNib alloc] initWithNibNamed:@"CSLayoutCollectionItem" bundle:nil];
@@ -2366,6 +2367,7 @@
         [self setupInstantRecorder];
     }
 
+    [self.sourceListViewController addObserver:self forKeyPath:@"selectedObjects" options:NSKeyValueObservingOptionNew context:NULL];
 
     
 
@@ -3132,26 +3134,6 @@
 }
 
 
--(void) resetInputTableHighlights
-{
-    [self.activePreviewView stopHighlightingAllSources];
-    if (self.inputOutlineView && self.inputOutlineView.selectedRowIndexes)
-    {
-        [self.inputOutlineView.selectedRowIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
-            NSTreeNode *node = [self.inputOutlineView itemAtRow:idx];
-            InputSource *src = node.representedObject;
-            
-            if (src)
-            {
-                [self.activePreviewView highlightSource:src];
-            }
-        }];
-    }
-}
-
-
-
-
 - (IBAction)outputSegmentedAction:(NSButton *)sender
 {
     NSUInteger clicked = sender.tag;
@@ -3306,64 +3288,7 @@
 
 
 
--(IBAction)inputOutlineViewDoubleClick:(NSOutlineView *)outlineView
-{
-    NSTreeNode *node = [outlineView itemAtRow:outlineView.clickedRow];
-    if (node)
-    {
-        NSObject<CSInputSourceProtocol> *src = node.representedObject;
-        [self.activePreviewView openInputConfigWindow:src.uuid];
-    }
-}
 
-
--(void)outlineView:(NSOutlineView *)outlineView didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row
-{
-    if (outlineView == self.inputOutlineView)
-    {
-
-        NSTreeNode *node = [outlineView itemAtRow:row];
-        NSObject<CSInputSourceProtocol> *src = node.representedObject;
-        if (!src.layer || !((InputSource *)src).parentInput)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [outlineView expandItem:nil expandChildren:YES];
-            });
-        }
-    }
-}
-
-
--(BOOL)outlineView:(NSOutlineView *)outlineView writeItems:(NSArray *)items toPasteboard:(NSPasteboard *)pasteboard
-{
-    
-    NSPasteboardItem *pItem = [[NSPasteboardItem alloc] init];
-
-    NSMutableArray *sourceIDS = [NSMutableArray array];
-    for (NSTreeNode *node in items)
-    {
-        NSObject<CSInputSourceProtocol> *iSrc = node.representedObject;
-        NSString *iUUID = iSrc.uuid;
-        [sourceIDS addObject:iUUID];
-        
-    }
-    [pItem setPropertyList:sourceIDS forType:@"cocoasplit.input.item"];
-    [pasteboard writeObjects:@[pItem]];
-    return YES;
-}
-
-/*
-- (id<NSPasteboardWriting>)outlineView:(NSOutlineView *)outlineView pasteboardWriterForItem:(id)item
-{
-    NSPasteboardItem *pItem = [[NSPasteboardItem alloc] init];
-    NSTreeNode *outlineNode = (NSTreeNode *)item;
-    InputSource *itemInput = outlineNode.representedObject;
-
-    [pItem setString:itemInput.uuid forType:@"cocoasplit.input.item"];
-    
-    return pItem;
-}
-*/
 
 -(NSString *)primaryTypeForURL:(NSURL *)url
 {
@@ -3426,287 +3351,106 @@
 }
 
 
--(NSDragOperation)outlineView:(NSOutlineView *)outlineView validateDrop:(id<NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(NSInteger)index
+
+-(void)windowWillClose:(NSNotification *)notification
 {
+    NSWindow *closedWindow = notification.object;
     
-    NSTreeNode *nodeItem = (NSTreeNode *)item;
-    InputSource *nodeInput = nil;
-    if (nodeItem)
+    if (closedWindow)
     {
-        nodeInput = nodeItem.representedObject;
-    }
-
-
-    
-    
-    NSPasteboard *pb = [info draggingPasteboard];
-
-    
-    
-    if ([pb.types containsObject:@"cocoasplit.audio.item" ])
-    {
-        if (item)
+        NSString *uuid = closedWindow.identifier;
+        NSWindow *cWindow = [_activeConfigWindows objectForKey:uuid];
+        NSViewController *cController = [_activeConfigControllers objectForKey:uuid];
+        
+        
+        if (cController)
         {
-            return NSDragOperationNone;
-        } else {
-            return NSDragOperationMove;
+            [cController commitEditing];
+            [_activeConfigControllers removeObjectForKey:uuid];
         }
+        
+        if (cWindow)
+        {
+            [_activeConfigWindows removeObjectForKey:uuid];
+        }
+        
     }
     
-    NSArray *draggedUUIDS = [pb propertyListForType:@"cocoasplit.input.item"];
-    if (draggedUUIDS && draggedUUIDS.lastObject)
-    {
-        NSString *draggedUUID = draggedUUIDS.lastObject;
-        NSObject<CSInputSourceProtocol> *pdraggedSource = [self.activePreviewView.sourceLayout inputForUUID:draggedUUID];
-        
-        
-        
-        if (!pdraggedSource || !pdraggedSource.layer)
-        {
-            return NSDragOperationNone;
-        }
-        
-        InputSource *draggedSource = (InputSource *)pdraggedSource;
-        
-        if (nodeInput && nodeInput == draggedSource)
-        {
-            return NSDragOperationNone;
-        }
-        
-        if (nodeInput && draggedSource.parentInput == nodeInput)
-        {
-            return NSDragOperationNone;
-        }
-        
-        
-        if (draggedSource.parentInput && nodeInput && nodeInput != draggedSource.parentInput)
-        {
-            return NSDragOperationMove;
-        }
-        
-        
-        if (draggedSource.parentInput && !nodeInput)
-        {
-            return NSDragOperationMove;
-        }
-        
-        
-        if (item && index == -1)
-        {
-            return NSDragOperationMove;
-        }
-    }
-    return NSDragOperationMove;
 }
 
--(BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id<NSDraggingInfo>)info item:(id)item childIndex:(NSInteger)index
+
+-(void)openInputConfigWindows:(NSArray *)sources
+{
+    _configWindowCascadePoint = NSZeroPoint;
+    for (NSObject <CSInputSourceProtocol> *src in sources)
+    {
+        [self openInputConfigWindow:src];
+    }
+}
+
+
+-(void)openInputConfigWindow:(NSObject <CSInputSourceProtocol>*)configSrc
 {
     
-    NSPasteboard *pb = [info draggingPasteboard];
-    
-    NSArray *audioUUIDS = [pb propertyListForType:@"cocoasplit.audio.item"];
-    if (audioUUIDS)
+    if (!configSrc)
     {
-        for(NSString *aUID in audioUUIDS)
-        {
-            CAMultiAudioNode *audioNode = [self.multiAudioEngine inputForUUID:aUID];
-            if (audioNode)
-            {
-                CSAudioInputSource *newSource = [[CSAudioInputSource alloc] initWithAudioNode:audioNode];
-                [self.activePreviewView addInputSourceWithInput:newSource];
-
-            }
-        }
-        return YES;
+        return;
     }
-
-    NSArray *draggedUUIDS = [pb propertyListForType:@"cocoasplit.input.item"];
     
-    NSTreeNode *parentNode = (NSTreeNode *)item;
-    InputSource *parentSource = nil;
+    NSString *uuid = configSrc.uuid;
+    NSViewController *newViewController = [configSrc configurationViewController];
     
     
-    NSIndexPath *droppedIdxPath = nil;
-
-    if (parentNode)
+    
+    NSWindow *configWindow = [[NSWindow alloc] init];
+    NSRect newFrame = [configWindow frameRectForContentRect:NSMakeRect(0.0f, 0.0f, newViewController.view.frame.size.width, newViewController.view.frame.size.height)];
+    
+    
+    
+    [configWindow setFrame:newFrame display:NO];
+    [configWindow center];
+    _configWindowCascadePoint = [configWindow cascadeTopLeftFromPoint:_configWindowCascadePoint];
+    /*
+    if (NSEqualPoints(_configWindowCascadePoint, NSZeroPoint))
     {
-        parentSource = parentNode.representedObject;
-        droppedIdxPath = [[parentNode indexPath] indexPathByAddingIndex:index];
+        [configWindow center];
+        
+        _configWindowCascadePoint = NSMakePoint(NSMinX(configWindow.frame), NSMaxY(configWindow.frame));
     } else {
-        droppedIdxPath = [NSIndexPath indexPathWithIndex:index];
+        NSLog(@"CASCADING");
+        _configWindowCascadePoint = [configWindow cascadeTopLeftFromPoint:_configWindowCascadePoint];
     }
-
+    */
+    [configWindow setReleasedWhenClosed:NO];
     
-    NSTreeNode *idxNode = nil;
-    float newDepth = 1;
     
-    if (index == -1)
+    [configWindow.contentView addSubview:newViewController.view];
+    configWindow.title = [NSString stringWithFormat:@"CocoaSplit Input (%@)", configSrc.name];
+    configWindow.delegate = self;
+    
+    configWindow.styleMask =  NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask;
+    
+    NSWindow *cWindow = [_activeConfigWindows objectForKey:uuid];
+    NSViewController *cController = [_activeConfigControllers objectForKey:uuid];
+    
+    if (cController)
     {
-        newDepth = -FLT_MAX;
-    } else {
-        idxNode = [self.inputTreeController.arrangedObjects descendantNodeAtIndexPath:droppedIdxPath];
-        
+        //cController.inputSource = nil;
+        [_activeConfigControllers removeObjectForKey:uuid];
     }
-
     
-    if (idxNode)
+    if (cWindow)
     {
-        NSObject<CSInputSourceProtocol> *iSrc = idxNode.representedObject;
-        if (iSrc.layer)
-        {
-            InputSource *dSrc = (InputSource *)iSrc;
-            newDepth = dSrc.depth + 1;
-        } else {
-            newDepth = -FLT_MAX;
-        }
-    }
-
-    
-    if (draggedUUIDS)
-    {
-
-    for (NSString *srcID in draggedUUIDS.reverseObjectEnumerator)
-    {
-        
-        NSObject <CSInputSourceProtocol> *pSrc = [self.activePreviewView.sourceLayout inputForUUID:srcID];
-        if (!pSrc || !pSrc.layer)
-        {
-            continue;
-        }
-        
-        InputSource *iSrc = (InputSource *)pSrc;
-        if (iSrc.parentInput)
-        {
-            if ([draggedUUIDS containsObject:iSrc.parentInput.uuid])
-            {
-                continue;
-            }
-        
-            [iSrc.parentInput detachInput:iSrc];
-
-        }
-        if (parentSource)
-        {
-            [parentSource attachInput:iSrc];
-        }
-        iSrc.depth = newDepth++;
+        [_activeConfigWindows removeObjectForKey:uuid];
     }
     
     
-    [self.activePreviewView.sourceLayout generateTopLevelSourceList];
-                    return YES;
-    }
+    [_activeConfigWindows setObject:configWindow forKey:uuid];
+    [_activeConfigControllers setObject:newViewController forKey:uuid];
     
-    bool retVal = NO;
+    configWindow.identifier = uuid;
     
-    
-    for(NSPasteboardItem *item in pb.pasteboardItems)
-    {
-        
-        NSString *urlString = [item stringForType:@"public.file-url"];
-        if (urlString)
-        {
-            NSURL *fileURL = [NSURL URLWithString:urlString];
-            if ([self fileURLIsAudio:fileURL])
-            {
-                CSAudioInputSource *audioSrc = [[CSAudioInputSource alloc] initWithPath:fileURL.path];
-                [self.activePreviewView addInputSourceWithInput:audioSrc];
-                retVal = YES;
-                continue;
-            }
-
-        }
-        
-        NSObject<CSInputSourceProtocol> *itemSrc = [self inputSourceForPasteboardItem:item];
-        if (itemSrc)
-        {
-            
-            [self.activePreviewView addInputSourceWithInput:itemSrc];
-            if (itemSrc.layer)
-            {
-                InputSource *lsrc = (InputSource *)itemSrc;
-                
-                [lsrc autoCenter];
-                if (parentSource)
-                {
-                    [parentSource attachInput:lsrc];
-                }
-                lsrc.depth = newDepth++;
-            }
-            retVal = YES;
-        }
-    }
-
-    if (retVal)
-    {
-        [self.activePreviewView.sourceLayout generateTopLevelSourceList];
-
-    }
-    return retVal;
-}
-
--(void) outlineViewSelectionDidChange:(NSNotification *)notification
-{
-    NSOutlineView *outline = notification.object;
-   
-    if (outline == self.inputOutlineView)
-    {
-        [self resetInputTableHighlights];
-
-    }
-             
-             
-}
-
-
-- (IBAction)inputTableControlClick:(NSButton *)sender
-{
-    NSInteger clicked = sender.tag;
-
-    NSRect sbounds;
-    switch (clicked) {
-        case 0:
-            sbounds = sender.bounds;
-            [self openAddInputPopover:sender sourceRect:sbounds];
-            break;
-        case 1:
-            if (self.inputOutlineView && self.inputOutlineView.selectedRowIndexes)
-            {
-                [self.inputOutlineView.selectedRowIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
-                    NSTreeNode *node = [self.inputOutlineView itemAtRow:idx];
-                    InputSource *src = node.representedObject;
-                    
-                    if (src)
-                    {
-                        NSString *uuid = src.uuid;
-                        NSObject<CSInputSourceProtocol> *realInput = [self.activePreviewView.sourceLayout inputForUUID:uuid];
-                        [self.activePreviewView deleteInput:realInput];
-                    }
-                    
-                }];
-
-                
-            }
-            break;
-        case 2:
-            if (self.inputOutlineView && self.inputOutlineView.selectedRowIndexes)
-            {
-                
-                [self.inputOutlineView.selectedRowIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
-                    NSTreeNode *node = [self.inputOutlineView itemAtRow:idx];
-                    InputSource *src = node.representedObject;
-                    
-                    if (src)
-                    {
-                        [self.activePreviewView openInputConfigWindow:src.uuid];
-                    }
-                    
-                }];
-            }
-            break;
-        default:
-            break;
-    }
+    [configWindow makeKeyAndOrderFront:nil];
 }
 
 
@@ -5053,7 +4797,34 @@
     [self openOutputSheet:toEdit];
 }
 
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:@"activePreviewView.mousedSource"])
+    {
+        NSArray *srcs;
+        
+        if (self.activePreviewView && self.activePreviewView.mousedSource)
+        {
+            srcs = @[self.activePreviewView.mousedSource];
+        } else {
+            srcs = @[];
+        }
+        [self.sourceListViewController highlightSources:srcs];
+    } else if ([keyPath isEqualToString:@"selectedObjects"]) {
+        [self.activePreviewView stopHighlightingAllSources];
+        for (NSObject <CSInputSourceProtocol> *src in self.sourceListViewController.selectedObjects)
+        {
+            [self.activePreviewView highlightSource:src];
+        }
+    }
+}
 
+
+-(void)dealloc
+{
+    [self removeObserver:self forKeyPath:@"activePreviewView.mousedSource"];
+    [self.sourceListViewController removeObserver:self forKeyPath:@"selectedObjects"];
+}
 
 
 

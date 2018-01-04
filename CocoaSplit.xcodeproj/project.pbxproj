@@ -70,6 +70,12 @@
 		343692501B6243D4007EC2D9 /* CSShapeCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 3436922B1B62364E007EC2D9 /* CSShapeCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		343B7BE21E917B1A00233DF1 /* cocoasplit.py in Resources */ = {isa = PBXBuildFile; fileRef = 343B7BE11E917B1A00233DF1 /* cocoasplit.py */; };
 		343B7BE31E91803B00233DF1 /* cocoasplit.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 343B7BE11E917B1A00233DF1 /* cocoasplit.py */; };
+		343C2CB21FFBB8DC00849DA9 /* CSSourceListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 343C2CB01FFBB8DC00849DA9 /* CSSourceListViewController.m */; };
+		343C2CB31FFBB8DC00849DA9 /* CSSourceListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 343C2CB11FFBB8DC00849DA9 /* CSSourceListViewController.xib */; };
+		343C2CB61FFBC77100849DA9 /* BlahView.m in Sources */ = {isa = PBXBuildFile; fileRef = 343C2CB51FFBC77100849DA9 /* BlahView.m */; };
+		343C2CBA1FFCD28C00849DA9 /* CAMultiAudioEffectsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 343C2CB81FFCD28C00849DA9 /* CAMultiAudioEffectsViewController.m */; };
+		343C2CBB1FFCD28C00849DA9 /* CAMultiAudioEffectsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 343C2CB91FFCD28C00849DA9 /* CAMultiAudioEffectsViewController.xib */; };
+		343C2CBE1FFCE73000849DA9 /* CSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 343C2CBD1FFCE73000849DA9 /* CSViewController.m */; };
 		343C79ED1D0C796E00B36EEC /* CSFFMpegCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 343C79CC1D0C763A00B36EEC /* CSFFMpegCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		343ED9421BCAC1C80061FC4B /* EditBuiltinLayoutView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 343ED9411BCAC1C80061FC4B /* EditBuiltinLayoutView.xib */; };
 		3441269B1E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 344126991E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.m */; };
@@ -667,6 +673,16 @@
 		3435E39A188B93150015CC01 /* passthrough.vtsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = passthrough.vtsh; path = Shaders/passthrough.vtsh; sourceTree = "<group>"; };
 		3436921B1B62364E007EC2D9 /* CSShapeCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSShapeCapturePlugin.xcodeproj; path = CapturePlugins/CSShapeCapturePlugin/CSShapeCapturePlugin.xcodeproj; sourceTree = "<group>"; };
 		343B7BE11E917B1A00233DF1 /* cocoasplit.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = cocoasplit.py; sourceTree = "<group>"; };
+		343C2CAF1FFBB8DC00849DA9 /* CSSourceListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSSourceListViewController.h; path = Interface/CSSourceListViewController.h; sourceTree = "<group>"; };
+		343C2CB01FFBB8DC00849DA9 /* CSSourceListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CSSourceListViewController.m; path = Interface/CSSourceListViewController.m; sourceTree = "<group>"; };
+		343C2CB11FFBB8DC00849DA9 /* CSSourceListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = CSSourceListViewController.xib; path = Interface/CSSourceListViewController.xib; sourceTree = "<group>"; };
+		343C2CB41FFBC77100849DA9 /* BlahView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BlahView.h; path = Interface/BlahView.h; sourceTree = "<group>"; };
+		343C2CB51FFBC77100849DA9 /* BlahView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = BlahView.m; path = Interface/BlahView.m; sourceTree = "<group>"; };
+		343C2CB71FFCD28C00849DA9 /* CAMultiAudioEffectsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAMultiAudioEffectsViewController.h; sourceTree = "<group>"; };
+		343C2CB81FFCD28C00849DA9 /* CAMultiAudioEffectsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CAMultiAudioEffectsViewController.m; sourceTree = "<group>"; };
+		343C2CB91FFCD28C00849DA9 /* CAMultiAudioEffectsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CAMultiAudioEffectsViewController.xib; sourceTree = "<group>"; };
+		343C2CBC1FFCE73000849DA9 /* CSViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSViewController.h; path = Interface/CSViewController.h; sourceTree = "<group>"; };
+		343C2CBD1FFCE73000849DA9 /* CSViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CSViewController.m; path = Interface/CSViewController.m; sourceTree = "<group>"; };
 		343C79C31D0C763A00B36EEC /* CSFFMpegCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSFFMpegCapturePlugin.xcodeproj; path = CSFFMpegCapturePlugin/CSFFMpegCapturePlugin.xcodeproj; sourceTree = "<group>"; };
 		343DD65919AAD3060017232A /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
 		343DD65C19AAD3060017232A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -1439,6 +1455,9 @@
 				34AB70A61FF9AAB800C5BD8E /* CAMultiAudioEffectsTableController.m */,
 				344DE4261FFB0FEE00196E2E /* CAMultiAudioEffectWindow.h */,
 				344DE4271FFB0FEE00196E2E /* CAMultiAudioEffectWindow.m */,
+				343C2CB71FFCD28C00849DA9 /* CAMultiAudioEffectsViewController.h */,
+				343C2CB81FFCD28C00849DA9 /* CAMultiAudioEffectsViewController.m */,
+				343C2CB91FFCD28C00849DA9 /* CAMultiAudioEffectsViewController.xib */,
 			);
 			name = Audio;
 			path = Interface/Audio;
@@ -1617,6 +1636,13 @@
 				345BECF31F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.xib */,
 				346544DA1FC22CF0003B9991 /* CSNSButtonCellThemed.h */,
 				346544DB1FC22CF0003B9991 /* CSNSButtonCellThemed.m */,
+				343C2CAF1FFBB8DC00849DA9 /* CSSourceListViewController.h */,
+				343C2CB01FFBB8DC00849DA9 /* CSSourceListViewController.m */,
+				343C2CB11FFBB8DC00849DA9 /* CSSourceListViewController.xib */,
+				343C2CB41FFBC77100849DA9 /* BlahView.h */,
+				343C2CB51FFBC77100849DA9 /* BlahView.m */,
+				343C2CBC1FFCE73000849DA9 /* CSViewController.h */,
+				343C2CBD1FFCE73000849DA9 /* CSViewController.m */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -2534,6 +2560,7 @@
 				340FE4B815F3417E00E4CE4E /* MainMenu.xib in Resources */,
 				343B7BE21E917B1A00233DF1 /* cocoasplit.py in Resources */,
 				34DA1D3F1BF823E700132486 /* CSNewOutputWindowController.xib in Resources */,
+				343C2CB31FFBB8DC00849DA9 /* CSSourceListViewController.xib in Resources */,
 				34788DD31EF52DA000C3C9C5 /* CSAnimationBlock.js in Resources */,
 				34F1EB931BCCA41F00B38E6C /* CSLayoutEditWindowController.xib in Resources */,
 				34788E441F0DD56B00C3C9C5 /* CSAudioInputSourceViewController.xib in Resources */,
@@ -2556,6 +2583,7 @@
 				34B5FAE81E760BDD0078FC51 /* CSSequenceEditorWindowController.xib in Resources */,
 				34D696FC1871B8F700B50EB6 /* Defaults.plist in Resources */,
 				34B5FB8F1E7FA2610078FC51 /* CSSequenceItemTransitionViewController.xib in Resources */,
+				343C2CBB1FFCD28C00849DA9 /* CAMultiAudioEffectsViewController.xib in Resources */,
 				34348C2B19BDBDC000A122C2 /* PluginManagerWindowController.xib in Resources */,
 				34ABEF3C17C0C2CB00AA5E62 /* advancedPrefPanel.xib in Resources */,
 				346865481CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.xib in Resources */,
@@ -2682,6 +2710,7 @@
 				34788DEE1F00C88300C3C9C5 /* CSInputSourceBase.m in Sources */,
 				34ED8C531B07371C002C0674 /* MIKMIDICommandThrottler.m in Sources */,
 				34F80D6A1EDBB36100D890D3 /* CAMultiAudioNode+ScriptingAdditions.m in Sources */,
+				343C2CBA1FFCD28C00849DA9 /* CAMultiAudioEffectsViewController.m in Sources */,
 				345F8B611A161552009A81E3 /* CAMultiAudioAVCapturePlayer.m in Sources */,
 				34ED8CAD1B07371C002C0674 /* MIKMIDIUtilities.m in Sources */,
 				34ED8C7F1B07371C002C0674 /* MIKMIDIMetaLyricEvent.m in Sources */,
@@ -2705,6 +2734,7 @@
 				34ED8C5F1B07371C002C0674 /* MIKMIDIEndpointSynthesizer.m in Sources */,
 				34ED8CA11B07371C002C0674 /* MIKMIDISequencer.m in Sources */,
 				34E162E81E987420005157ED /* CSScriptWindowViewController.m in Sources */,
+				343C2CB61FFBC77100849DA9 /* BlahView.m in Sources */,
 				34B5FAD11E74B0E30078FC51 /* CSSequenceItemWait.m in Sources */,
 				34ED8C751B07371C002C0674 /* MIKMIDIMetaCopyrightEvent.m in Sources */,
 				3434CB3C1CB09BC4001B3DF9 /* CSTimedOutputBuffer.m in Sources */,
@@ -2719,6 +2749,7 @@
 				34ED8C991B07371C002C0674 /* MIKMIDIPort.m in Sources */,
 				340DC734197CF6E9003A0BB3 /* CSCaptureBase.m in Sources */,
 				34C1379F1F28DE0C00F53DE2 /* CSTimeFormatter.m in Sources */,
+				343C2CB21FFBB8DC00849DA9 /* CSSourceListViewController.m in Sources */,
 				34A64A2F165EFE4C00A68428 /* PreviewView.m in Sources */,
 				34ED8CAB1B07371C002C0674 /* MIKMIDITrack.m in Sources */,
 				34ED8CA91B07371C002C0674 /* MIKMIDITempoEvent.m in Sources */,
@@ -2765,6 +2796,7 @@
 				34788E431F0DD56B00C3C9C5 /* CSAudioInputSourceViewController.m in Sources */,
 				34B5FAD41E74C34B0078FC51 /* CSSequenceItemLayout.m in Sources */,
 				3441269B1E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.m in Sources */,
+				343C2CBE1FFCE73000849DA9 /* CSViewController.m in Sources */,
 				34ED8C811B07371C002C0674 /* MIKMIDIMetaMarkerTextEvent.m in Sources */,
 				345BECF41F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.m in Sources */,
 				34E26DDC1FF702BD00ACE58B /* CAMultiAudioSilence.m in Sources */,
