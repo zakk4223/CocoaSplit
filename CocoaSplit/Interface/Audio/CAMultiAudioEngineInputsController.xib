@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="CAMultiAudioEngineInputsController">
+            <connections>
+                <outlet property="audioInputsController" destination="mdx-ax-wDS" id="jLV-Wk-5y7"/>
+                <outlet property="multiAudioEngineController" destination="wvR-5j-Jjh" id="wlS-aN-hEr"/>
+                <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="Hz6-mo-xeY">
+            <rect key="frame" x="0.0" y="0.0" width="636" height="466"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <scrollView autohidesScrollers="YES" horizontalLineScroll="52" horizontalPageScroll="10" verticalLineScroll="52" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="COx-Qs-W2l">
+                    <rect key="frame" x="0.0" y="20" width="636" height="446"/>
+                    <clipView key="contentView" id="fJz-uO-wmj">
+                        <rect key="frame" x="1" y="1" width="634" height="444"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" rowHeight="50" rowSizeStyle="automatic" viewBased="YES" id="htL-F7-9OD">
+                                <rect key="frame" x="0.0" y="0.0" width="634" height="444"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <size key="intercellSpacing" width="3" height="2"/>
+                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                <tableColumns>
+                                    <tableColumn identifier="" width="631" minWidth="40" maxWidth="1000" id="O3y-0Y-Byx">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                        </tableHeaderCell>
+                                        <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="tiv-lc-oZd">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                        <prototypeCellViews>
+                                            <tableCellView identifier="standardAudioView" id="gXO-Xe-SNg">
+                                                <rect key="frame" x="1" y="1" width="631" height="30"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <subviews>
+                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ObQ-CN-7Y9">
+                                                        <rect key="frame" x="1" y="19" width="629" height="11"/>
+                                                        <textFieldCell key="cell" controlSize="mini" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="Fl2-kG-m10">
+                                                            <font key="font" metaFont="miniSystem"/>
+                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                        <connections>
+                                                            <binding destination="gXO-Xe-SNg" name="value" keyPath="objectValue.name" id="g8f-xM-5qa"/>
+                                                        </connections>
+                                                    </textField>
+                                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="moe-fd-J8P" customClass="CSAudioLevelView">
+                                                        <rect key="frame" x="28" y="5" width="576" height="13"/>
+                                                        <subviews>
+                                                            <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ebO-Yz-bOC">
+                                                                <rect key="frame" x="0.0" y="-1" width="576" height="15"/>
+                                                                <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="1" doubleValue="0.41066209532374098" tickMarkPosition="above" sliderType="linear" id="3UX-kh-3tf" customClass="CSNobarSliderCell"/>
+                                                                <connections>
+                                                                    <binding destination="gXO-Xe-SNg" name="value" keyPath="objectValue.volume" id="VJ8-iH-7eM"/>
+                                                                </connections>
+                                                            </slider>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="ebO-Yz-bOC" firstAttribute="top" secondItem="moe-fd-J8P" secondAttribute="top" id="8Od-81-1Ts"/>
+                                                            <constraint firstItem="ebO-Yz-bOC" firstAttribute="leading" secondItem="moe-fd-J8P" secondAttribute="leading" id="JvI-So-eWm"/>
+                                                            <constraint firstAttribute="bottom" secondItem="ebO-Yz-bOC" secondAttribute="bottom" id="PvG-DM-2Cf"/>
+                                                            <constraint firstAttribute="trailing" secondItem="ebO-Yz-bOC" secondAttribute="trailing" id="mAE-fm-vig"/>
+                                                        </constraints>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="startValue">
+                                                                <real key="value" value="0.0"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="endValue">
+                                                                <real key="value" value="1"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
+                                                                <color key="value" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="backgroundSize">
+                                                                <real key="value" value="0.5"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
+                                                        <connections>
+                                                            <binding destination="gXO-Xe-SNg" name="level" keyPath="objectValue.powerLevel" id="qSp-Zd-9es"/>
+                                                        </connections>
+                                                    </customView>
+                                                    <button translatesAutoresizingMaskIntoConstraints="NO" id="IWv-Gj-aan">
+                                                        <rect key="frame" x="612" y="3" width="16" height="17"/>
+                                                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Speaker_Icon" imagePosition="only" alignment="center" alternateImage="Mute_Icon" controlSize="small" imageScaling="proportionallyUpOrDown" inset="2" id="jlX-sN-tRf" customClass="CSNSButtonCellThemed">
+                                                            <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <binding destination="gXO-Xe-SNg" name="value" keyPath="objectValue.enabled" id="w13-VK-ulL">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                        </connections>
+                                                    </button>
+                                                    <button toolTip="Configure Audio Input" translatesAutoresizingMaskIntoConstraints="NO" id="qJi-tw-slz">
+                                                        <rect key="frame" x="3" y="3" width="17" height="17"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="17" id="5x0-Hd-pSt"/>
+                                                        </constraints>
+                                                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSActionTemplate" imagePosition="only" alignment="center" controlSize="small" imageScaling="proportionallyUpOrDown" inset="2" id="qVI-hj-Xzn">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <binding destination="gXO-Xe-SNg" name="argument" keyPath="objectValue" id="4bn-oH-nYd">
+                                                                <dictionary key="options">
+                                                                    <string key="NSSelectorName">openMixerWindow:</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="-2" name="target" keyPath="self" previousBinding="4bn-oH-nYd" id="gNE-fT-DB7">
+                                                                <dictionary key="options">
+                                                                    <string key="NSSelectorName">openMixerWindow:</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="qJi-tw-slz" firstAttribute="centerY" secondItem="moe-fd-J8P" secondAttribute="centerY" id="5R9-2W-Ggb"/>
+                                                    <constraint firstAttribute="bottom" secondItem="qJi-tw-slz" secondAttribute="bottom" constant="3" id="A23-Cl-Ir8"/>
+                                                    <constraint firstAttribute="trailing" secondItem="ObQ-CN-7Y9" secondAttribute="trailing" constant="3" id="DCN-Ro-CNx"/>
+                                                    <constraint firstItem="IWv-Gj-aan" firstAttribute="leading" secondItem="moe-fd-J8P" secondAttribute="trailing" constant="8" symbolic="YES" id="G55-gC-X0B"/>
+                                                    <constraint firstItem="qJi-tw-slz" firstAttribute="top" secondItem="IWv-Gj-aan" secondAttribute="top" id="GXG-fB-wIk"/>
+                                                    <constraint firstItem="qJi-tw-slz" firstAttribute="top" secondItem="gXO-Xe-SNg" secondAttribute="top" constant="10" id="Qaq-Cn-smD"/>
+                                                    <constraint firstItem="moe-fd-J8P" firstAttribute="top" secondItem="ObQ-CN-7Y9" secondAttribute="bottom" constant="1" id="am7-hY-Qy6"/>
+                                                    <constraint firstItem="ObQ-CN-7Y9" firstAttribute="trailing" secondItem="IWv-Gj-aan" secondAttribute="trailing" id="mFL-jm-CbW"/>
+                                                    <constraint firstItem="qJi-tw-slz" firstAttribute="bottom" secondItem="IWv-Gj-aan" secondAttribute="bottom" id="qBr-UX-jgF"/>
+                                                    <constraint firstItem="moe-fd-J8P" firstAttribute="leading" secondItem="qJi-tw-slz" secondAttribute="trailing" constant="8" symbolic="YES" id="qqn-z9-F4s"/>
+                                                    <constraint firstItem="ObQ-CN-7Y9" firstAttribute="centerX" secondItem="moe-fd-J8P" secondAttribute="centerX" id="rDZ-O6-6v6"/>
+                                                    <constraint firstItem="qJi-tw-slz" firstAttribute="leading" secondItem="gXO-Xe-SNg" secondAttribute="leading" constant="3" id="yHW-oE-g2L"/>
+                                                    <constraint firstItem="ObQ-CN-7Y9" firstAttribute="centerX" secondItem="gXO-Xe-SNg" secondAttribute="centerX" id="yKs-AZ-FbL"/>
+                                                </constraints>
+                                                <connections>
+                                                    <outlet property="textField" destination="ObQ-CN-7Y9" id="jeR-io-gMu"/>
+                                                </connections>
+                                            </tableCellView>
+                                            <tableCellView identifier="fileAudioView" id="4DU-Sc-fYD">
+                                                <rect key="frame" x="1" y="33" width="631" height="50"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <subviews>
+                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ADI-7u-3Hz">
+                                                        <rect key="frame" x="1" y="39" width="588" height="11"/>
+                                                        <textFieldCell key="cell" controlSize="mini" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="n8b-kr-zc9">
+                                                            <font key="font" metaFont="miniSystem"/>
+                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                        <connections>
+                                                            <binding destination="4DU-Sc-fYD" name="value" keyPath="objectValue.name" id="Dmc-6q-nzq"/>
+                                                        </connections>
+                                                    </textField>
+                                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="TtC-In-Sai" customClass="CSAudioLevelView">
+                                                        <rect key="frame" x="29" y="22" width="573" height="16"/>
+                                                        <subviews>
+                                                            <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ld7-P4-Bti">
+                                                                <rect key="frame" x="0.0" y="2" width="575" height="15"/>
+                                                                <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="1" doubleValue="0.37549169580419578" tickMarkPosition="above" sliderType="linear" id="HDL-5T-5Vf" customClass="CSNobarSliderCell"/>
+                                                                <connections>
+                                                                    <binding destination="4DU-Sc-fYD" name="value" keyPath="objectValue.volume" id="UYW-iR-iTg"/>
+                                                                </connections>
+                                                            </slider>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstAttribute="trailing" secondItem="ld7-P4-Bti" secondAttribute="trailing" constant="-2" id="215-Vw-uuF"/>
+                                                            <constraint firstItem="ld7-P4-Bti" firstAttribute="leading" secondItem="TtC-In-Sai" secondAttribute="leading" id="cvc-GH-Wxg"/>
+                                                            <constraint firstItem="ld7-P4-Bti" firstAttribute="top" secondItem="TtC-In-Sai" secondAttribute="top" id="yOS-Pw-5aF"/>
+                                                        </constraints>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="startValue">
+                                                                <real key="value" value="0.0"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="endValue">
+                                                                <real key="value" value="1"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
+                                                                <color key="value" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="backgroundSize">
+                                                                <real key="value" value="0.5"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
+                                                        <connections>
+                                                            <binding destination="4DU-Sc-fYD" name="level" keyPath="objectValue.powerLevel" id="OB2-RQ-Dkj"/>
+                                                        </connections>
+                                                    </customView>
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cfI-fF-2Dp">
+                                                        <rect key="frame" x="593" y="3" width="4" height="12"/>
+                                                        <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" id="DrQ-mV-gFN">
+                                                            <customFormatter key="formatter" id="vN6-OW-9PG" customClass="CSTimeFormatter"/>
+                                                            <font key="font" metaFont="miniSystem"/>
+                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                        <connections>
+                                                            <binding destination="4DU-Sc-fYD" name="value" keyPath="objectValue.duration" id="zqf-sa-aVx"/>
+                                                        </connections>
+                                                    </textField>
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aOI-uU-XWa">
+                                                        <rect key="frame" x="1" y="3" width="37" height="12"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="33" id="QcB-F2-Wu4"/>
+                                                        </constraints>
+                                                        <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" id="dCg-bE-1G6">
+                                                            <customFormatter key="formatter" id="gNQ-0g-CVW" customClass="CSTimeFormatter"/>
+                                                            <font key="font" metaFont="miniSystem"/>
+                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                        <connections>
+                                                            <binding destination="4DU-Sc-fYD" name="value" keyPath="objectValue.currentTime" id="xbj-eR-9a4"/>
+                                                        </connections>
+                                                    </textField>
+                                                    <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xae-TP-kLq">
+                                                        <rect key="frame" x="31" y="2" width="556" height="13"/>
+                                                        <sliderCell key="cell" controlSize="mini" continuous="YES" state="on" alignment="left" maxValue="100" doubleValue="85.984108664772734" tickMarkPosition="above" sliderType="linear" id="oun-mL-XyW"/>
+                                                        <connections>
+                                                            <binding destination="4DU-Sc-fYD" name="value" keyPath="objectValue.currentTime" previousBinding="jfb-vO-F6E" id="j5s-wW-cja"/>
+                                                            <binding destination="4DU-Sc-fYD" name="maxValue" keyPath="objectValue.duration" id="jfb-vO-F6E"/>
+                                                        </connections>
+                                                    </slider>
+                                                    <button translatesAutoresizingMaskIntoConstraints="NO" id="gUT-wM-Uzp">
+                                                        <rect key="frame" x="614" y="39" width="10" height="10"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="10" id="WCv-At-6Cb"/>
+                                                        </constraints>
+                                                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSStopProgressFreestandingTemplate" imagePosition="only" alignment="center" controlSize="small" state="on" imageScaling="proportionallyUpOrDown" inset="2" id="RgG-LO-3j8">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <binding destination="4DU-Sc-fYD" name="argument" keyPath="objectValue" id="od5-bK-lwd">
+                                                                <dictionary key="options">
+                                                                    <string key="NSSelectorName">removeFileAudio:</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                        </connections>
+                                                    </button>
+                                                    <button toolTip="Configure Audio Input" translatesAutoresizingMaskIntoConstraints="NO" id="oOH-9f-GgJ">
+                                                        <rect key="frame" x="3" y="23" width="18" height="14"/>
+                                                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSActionTemplate" imagePosition="only" alignment="center" controlSize="small" imageScaling="proportionallyUpOrDown" inset="2" id="HLk-Lg-Os0">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <binding destination="4DU-Sc-fYD" name="argument" keyPath="objectValue" id="TQJ-uR-3o9">
+                                                                <dictionary key="options">
+                                                                    <string key="NSSelectorName">openMixerWindow:</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="-2" name="target" keyPath="self" previousBinding="TQJ-uR-3o9" id="0DP-kw-MOU">
+                                                                <dictionary key="options">
+                                                                    <string key="NSSelectorName">openMixerWindow:</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                        </connections>
+                                                    </button>
+                                                    <button translatesAutoresizingMaskIntoConstraints="NO" id="M4S-dd-K97">
+                                                        <rect key="frame" x="595" y="39" width="10" height="10"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="10" id="K6q-q6-CXK"/>
+                                                        </constraints>
+                                                        <buttonCell key="cell" type="square" title="R" bezelStyle="shadowlessSquare" alignment="center" controlSize="small" state="on" imageScaling="proportionallyUpOrDown" inset="2" id="7O0-uG-1s3">
+                                                            <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
+                                                            <font key="font" metaFont="miniSystem"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <binding destination="4DU-Sc-fYD" name="value" keyPath="objectValue.loop" id="36G-lS-MUS"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button translatesAutoresizingMaskIntoConstraints="NO" id="FUh-7A-xP9">
+                                                        <rect key="frame" x="612" y="23" width="14" height="15"/>
+                                                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pause_main" imagePosition="overlaps" alignment="center" alternateImage="play_main" controlSize="small" imageScaling="proportionallyDown" inset="2" id="mMd-SY-Lhg" customClass="CSNSButtonCellThemed">
+                                                            <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <binding destination="4DU-Sc-fYD" name="value" keyPath="objectValue.enabled" id="Bl1-pw-Xza">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="xae-TP-kLq" firstAttribute="top" secondItem="TtC-In-Sai" secondAttribute="bottom" constant="7" id="1Ma-JR-vmN"/>
+                                                    <constraint firstItem="TtC-In-Sai" firstAttribute="top" secondItem="ADI-7u-3Hz" secondAttribute="bottom" constant="1" id="2Ik-GK-XLr"/>
+                                                    <constraint firstItem="oOH-9f-GgJ" firstAttribute="leading" secondItem="aOI-uU-XWa" secondAttribute="leading" id="2x6-di-hWt"/>
+                                                    <constraint firstItem="xae-TP-kLq" firstAttribute="leading" secondItem="4DU-Sc-fYD" secondAttribute="leading" constant="31" id="7S0-8A-ezd"/>
+                                                    <constraint firstItem="aOI-uU-XWa" firstAttribute="baseline" secondItem="cfI-fF-2Dp" secondAttribute="baseline" id="8od-NS-tJo"/>
+                                                    <constraint firstItem="ADI-7u-3Hz" firstAttribute="leading" secondItem="4DU-Sc-fYD" secondAttribute="leading" constant="3" id="9EK-bH-GXM"/>
+                                                    <constraint firstItem="M4S-dd-K97" firstAttribute="top" secondItem="gUT-wM-Uzp" secondAttribute="top" id="9xa-Gx-IMI"/>
+                                                    <constraint firstItem="ADI-7u-3Hz" firstAttribute="leading" secondItem="oOH-9f-GgJ" secondAttribute="leading" id="Cji-Di-Yi5"/>
+                                                    <constraint firstItem="aOI-uU-XWa" firstAttribute="centerY" secondItem="xae-TP-kLq" secondAttribute="centerY" id="GMi-Cx-jbV"/>
+                                                    <constraint firstAttribute="bottom" secondItem="aOI-uU-XWa" secondAttribute="bottom" constant="3" id="IYU-dB-egz"/>
+                                                    <constraint firstItem="gUT-wM-Uzp" firstAttribute="leading" secondItem="M4S-dd-K97" secondAttribute="trailing" constant="9" id="MVt-Iy-Fwb"/>
+                                                    <constraint firstItem="aOI-uU-XWa" firstAttribute="top" secondItem="oOH-9f-GgJ" secondAttribute="bottom" constant="8" symbolic="YES" id="O10-kr-xgz"/>
+                                                    <constraint firstAttribute="trailing" secondItem="gUT-wM-Uzp" secondAttribute="trailing" constant="7" id="UeH-LV-NkF"/>
+                                                    <constraint firstItem="cfI-fF-2Dp" firstAttribute="top" secondItem="FUh-7A-xP9" secondAttribute="bottom" constant="8" symbolic="YES" id="Ugo-2E-nvj"/>
+                                                    <constraint firstItem="FUh-7A-xP9" firstAttribute="top" secondItem="TtC-In-Sai" secondAttribute="top" id="Wgw-ol-9aa"/>
+                                                    <constraint firstItem="FUh-7A-xP9" firstAttribute="centerX" secondItem="gUT-wM-Uzp" secondAttribute="centerX" id="Y3a-TU-yLd"/>
+                                                    <constraint firstItem="M4S-dd-K97" firstAttribute="leading" secondItem="cfI-fF-2Dp" secondAttribute="leading" id="YQR-a3-d2U"/>
+                                                    <constraint firstAttribute="trailing" secondItem="FUh-7A-xP9" secondAttribute="trailing" constant="5" id="Zek-f6-mhd"/>
+                                                    <constraint firstItem="M4S-dd-K97" firstAttribute="leading" secondItem="ADI-7u-3Hz" secondAttribute="trailing" constant="8" symbolic="YES" id="aqG-VJ-njd"/>
+                                                    <constraint firstItem="M4S-dd-K97" firstAttribute="top" secondItem="4DU-Sc-fYD" secondAttribute="top" constant="1" id="dxS-ad-ql1"/>
+                                                    <constraint firstItem="TtC-In-Sai" firstAttribute="leading" secondItem="oOH-9f-GgJ" secondAttribute="trailing" constant="8" symbolic="YES" id="hIz-Vi-m0I"/>
+                                                    <constraint firstItem="aOI-uU-XWa" firstAttribute="top" secondItem="cfI-fF-2Dp" secondAttribute="top" id="i80-eH-Doh"/>
+                                                    <constraint firstItem="M4S-dd-K97" firstAttribute="centerY" secondItem="ADI-7u-3Hz" secondAttribute="centerY" id="iXB-gz-fep"/>
+                                                    <constraint firstItem="M4S-dd-K97" firstAttribute="bottom" secondItem="ADI-7u-3Hz" secondAttribute="bottom" id="tyo-vh-woS"/>
+                                                    <constraint firstItem="cfI-fF-2Dp" firstAttribute="leading" secondItem="xae-TP-kLq" secondAttribute="trailing" constant="8" symbolic="YES" id="uDj-FC-w8P"/>
+                                                    <constraint firstItem="FUh-7A-xP9" firstAttribute="leading" secondItem="TtC-In-Sai" secondAttribute="trailing" constant="10" id="vZd-AV-l5F"/>
+                                                    <constraint firstItem="oOH-9f-GgJ" firstAttribute="centerY" secondItem="TtC-In-Sai" secondAttribute="centerY" id="wCl-Ks-Kf6"/>
+                                                    <constraint firstItem="cfI-fF-2Dp" firstAttribute="top" secondItem="gUT-wM-Uzp" secondAttribute="bottom" constant="24" id="wNy-xR-HF7"/>
+                                                    <constraint firstItem="TtC-In-Sai" firstAttribute="centerX" secondItem="4DU-Sc-fYD" secondAttribute="centerX" id="xWb-XM-sSZ"/>
+                                                    <constraint firstItem="M4S-dd-K97" firstAttribute="bottom" secondItem="gUT-wM-Uzp" secondAttribute="bottom" id="yFy-Dc-e6V"/>
+                                                </constraints>
+                                                <connections>
+                                                    <outlet property="textField" destination="ADI-7u-3Hz" id="f12-yQ-uKK"/>
+                                                </connections>
+                                            </tableCellView>
+                                        </prototypeCellViews>
+                                    </tableColumn>
+                                </tableColumns>
+                                <connections>
+                                    <binding destination="mdx-ax-wDS" name="content" keyPath="arrangedObjects" id="BJh-Z9-zDQ"/>
+                                    <binding destination="mdx-ax-wDS" name="selectionIndexes" keyPath="selectionIndexes" previousBinding="BJh-Z9-zDQ" id="vI9-CW-XpL"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                    </clipView>
+                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="jon-lf-qk9">
+                        <rect key="frame" x="1" y="119" width="223" height="15"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="Geg-yj-gwS">
+                        <rect key="frame" x="224" y="17" width="15" height="102"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                </scrollView>
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="XUd-qr-99U">
+                    <rect key="frame" x="619" y="0.0" width="17" height="20"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="17" id="2bW-6D-CBZ"/>
+                        <constraint firstAttribute="height" constant="20" id="U8T-8k-nSl"/>
+                    </constraints>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Speaker_Icon" imagePosition="only" alignment="center" alternateImage="Mute_Icon" controlSize="small" imageScaling="proportionallyUpOrDown" inset="2" id="0n9-fE-ULU">
+                        <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="wvR-5j-Jjh" name="value" keyPath="selection.encodeMixer.muted" id="iu5-oo-nuG"/>
+                    </connections>
+                </button>
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="S7b-CH-xll" customClass="CSAudioLevelView">
+                    <rect key="frame" x="0.0" y="0.0" width="620" height="20"/>
+                    <subviews>
+                        <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5gm-ul-8QU">
+                            <rect key="frame" x="0.0" y="-1" width="620" height="22"/>
+                            <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" maxValue="1" doubleValue="0.53607753537735847" tickMarkPosition="above" sliderType="linear" id="SpI-Hf-Vj8" customClass="CSNobarSliderCell"/>
+                            <connections>
+                                <binding destination="wvR-5j-Jjh" name="value" keyPath="selection.encodeMixer.volume" id="eSX-eE-n58"/>
+                            </connections>
+                        </slider>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="5gm-ul-8QU" secondAttribute="trailing" id="2UB-V1-qrF"/>
+                        <constraint firstItem="5gm-ul-8QU" firstAttribute="leading" secondItem="S7b-CH-xll" secondAttribute="leading" id="JI1-q6-Cps"/>
+                        <constraint firstItem="5gm-ul-8QU" firstAttribute="top" secondItem="S7b-CH-xll" secondAttribute="top" id="Ka0-hN-Nx6"/>
+                        <constraint firstAttribute="bottom" secondItem="5gm-ul-8QU" secondAttribute="bottom" id="bFj-RA-1wH"/>
+                        <constraint firstAttribute="height" constant="20" id="fyb-oL-4rZ"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="startValue">
+                            <real key="value" value="0.0"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="endValue">
+                            <real key="value" value="1"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
+                            <color key="value" name="controlHighlightColor" catalog="System" colorSpace="catalog"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="backgroundSize">
+                            <real key="value" value="0.5"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </customView>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="COx-Qs-W2l" secondAttribute="bottom" constant="20" id="6Id-fs-bCX"/>
+                <constraint firstItem="S7b-CH-xll" firstAttribute="leading" secondItem="COx-Qs-W2l" secondAttribute="leading" id="F6L-tp-ZDM"/>
+                <constraint firstAttribute="bottom" secondItem="S7b-CH-xll" secondAttribute="bottom" id="LVG-3R-of8"/>
+                <constraint firstItem="COx-Qs-W2l" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="f2u-4T-mDj"/>
+                <constraint firstItem="XUd-qr-99U" firstAttribute="leading" secondItem="S7b-CH-xll" secondAttribute="trailing" constant="-1" id="iu5-Z7-3OJ"/>
+                <constraint firstAttribute="trailing" secondItem="COx-Qs-W2l" secondAttribute="trailing" id="k1p-AL-kxq"/>
+                <constraint firstItem="XUd-qr-99U" firstAttribute="top" secondItem="S7b-CH-xll" secondAttribute="top" id="ncN-aj-Brr"/>
+                <constraint firstItem="COx-Qs-W2l" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="q4l-is-zWU"/>
+                <constraint firstItem="XUd-qr-99U" firstAttribute="bottom" secondItem="S7b-CH-xll" secondAttribute="bottom" id="sSK-HZ-DN6"/>
+                <constraint firstItem="XUd-qr-99U" firstAttribute="trailing" secondItem="COx-Qs-W2l" secondAttribute="trailing" id="tJh-AH-BFy"/>
+            </constraints>
+            <point key="canvasLocation" x="131" y="266"/>
+        </customView>
+        <objectController id="wvR-5j-Jjh" userLabel="multiAudioEngineController"/>
+        <arrayController id="mdx-ax-wDS" userLabel="audioInputsController">
+            <connections>
+                <binding destination="wvR-5j-Jjh" name="contentArray" keyPath="selection.audioInputs" id="AaU-hR-HbK"/>
+            </connections>
+        </arrayController>
+    </objects>
+    <resources>
+        <image name="Mute_Icon" width="240" height="240"/>
+        <image name="NSActionTemplate" width="14" height="14"/>
+        <image name="NSStopProgressFreestandingTemplate" width="14" height="14"/>
+        <image name="Speaker_Icon" width="240" height="240"/>
+        <image name="pause_main" width="42.400001525878906" height="48"/>
+        <image name="play_main" width="50.400001525878906" height="58.400001525878906"/>
+    </resources>
+</document>

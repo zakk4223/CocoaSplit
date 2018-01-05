@@ -49,23 +49,6 @@
 
 
 
--(void)windowWillClose:(NSNotification *)notification
-{
-    
-    NSWindow *closingWindow = [notification object];
-    
-    if (!closingWindow)
-    {
-        return;
-    }
-    
-    if (self.eqWindow == closingWindow)
-    {
-        self.eqWindow = nil;
-    } else if (self.compressorWindow == closingWindow) {
-        self.compressorWindow = nil;
-    }
-}
 
 
 -(NSInteger)numberOfRowsInTableView:(NSTableView *)tableView

@@ -24,7 +24,6 @@
 @property (strong) NSWindow *compressorWindow;
 @property (weak) IBOutlet CAMultiAudioEffectsTableController *effectsController;
 
-
 - (IBAction)matrixVolumeChanged:(NSSlider *)sender;
 
 -(instancetype)initWithAudioMixer:(CAMultiAudioNode *)node;

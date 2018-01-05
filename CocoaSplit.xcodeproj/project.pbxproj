@@ -78,6 +78,8 @@
 		343C2CBE1FFCE73000849DA9 /* CSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 343C2CBD1FFCE73000849DA9 /* CSViewController.m */; };
 		343C79ED1D0C796E00B36EEC /* CSFFMpegCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 343C79CC1D0C763A00B36EEC /* CSFFMpegCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		343ED9421BCAC1C80061FC4B /* EditBuiltinLayoutView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 343ED9411BCAC1C80061FC4B /* EditBuiltinLayoutView.xib */; };
+		344037621FFEF7C1009183FB /* CAMultiAudioEngineInputsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 344037601FFEF7C1009183FB /* CAMultiAudioEngineInputsController.m */; };
+		344037631FFEF7C1009183FB /* CAMultiAudioEngineInputsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 344037611FFEF7C1009183FB /* CAMultiAudioEngineInputsController.xib */; };
 		3441269B1E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 344126991E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.m */; };
 		3441269C1E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3441269A1E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.xib */; };
 		3441269F1E6D0C4C0051DA06 /* CSLayoutSwitcherHostingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3441269E1E6D0C4C0051DA06 /* CSLayoutSwitcherHostingView.m */; };
@@ -689,6 +691,9 @@
 		343DD65E19AAD3060017232A /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		343DD6AB19AAD3660017232A /* CSChromaKey.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSChromaKey.xcodeproj; path = ImageUnitPlugins/CSChromaKey/CSChromaKey.xcodeproj; sourceTree = "<group>"; };
 		343ED9411BCAC1C80061FC4B /* EditBuiltinLayoutView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EditBuiltinLayoutView.xib; path = Interface/EditBuiltinLayoutView.xib; sourceTree = "<group>"; };
+		3440375F1FFEF7C1009183FB /* CAMultiAudioEngineInputsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAMultiAudioEngineInputsController.h; sourceTree = "<group>"; };
+		344037601FFEF7C1009183FB /* CAMultiAudioEngineInputsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CAMultiAudioEngineInputsController.m; sourceTree = "<group>"; };
+		344037611FFEF7C1009183FB /* CAMultiAudioEngineInputsController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CAMultiAudioEngineInputsController.xib; sourceTree = "<group>"; };
 		344126981E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSLayoutSwitcherWithPreviewWindowController.h; path = Interface/CSLayoutSwitcherWithPreviewWindowController.h; sourceTree = "<group>"; };
 		344126991E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSLayoutSwitcherWithPreviewWindowController.m; path = Interface/CSLayoutSwitcherWithPreviewWindowController.m; sourceTree = "<group>"; };
 		3441269A1E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSLayoutSwitcherWithPreviewWindowController.xib; path = Interface/CSLayoutSwitcherWithPreviewWindowController.xib; sourceTree = "<group>"; };
@@ -1458,6 +1463,9 @@
 				343C2CB71FFCD28C00849DA9 /* CAMultiAudioEffectsViewController.h */,
 				343C2CB81FFCD28C00849DA9 /* CAMultiAudioEffectsViewController.m */,
 				343C2CB91FFCD28C00849DA9 /* CAMultiAudioEffectsViewController.xib */,
+				3440375F1FFEF7C1009183FB /* CAMultiAudioEngineInputsController.h */,
+				344037601FFEF7C1009183FB /* CAMultiAudioEngineInputsController.m */,
+				344037611FFEF7C1009183FB /* CAMultiAudioEngineInputsController.xib */,
 			);
 			name = Audio;
 			path = Interface/Audio;
@@ -2552,6 +2560,7 @@
 				34ED8CB91B073C1B002C0674 /* CSMidiManagerWindowController.xib in Resources */,
 				340FE4AC15F3417E00E4CE4E /* InfoPlist.strings in Resources */,
 				34BD1E651B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.xib in Resources */,
+				344037631FFEF7C1009183FB /* CAMultiAudioEngineInputsController.xib in Resources */,
 				34E162E91E987420005157ED /* CSScriptWindowViewController.xib in Resources */,
 				3400A07E1BD49406003E1828 /* CSInputLibraryItemView.xib in Resources */,
 				34788DD11EF52C1A00C3C9C5 /* cocoasplit.js in Resources */,
@@ -2707,6 +2716,7 @@
 				34DA1D3E1BF823E700132486 /* CSNewOutputWindowController.m in Sources */,
 				34ED8C691B07371C002C0674 /* MIKMIDIInputPort.m in Sources */,
 				3434CB281CA8615A001B3DF9 /* AppleProResCompressor.m in Sources */,
+				344037621FFEF7C1009183FB /* CAMultiAudioEngineInputsController.m in Sources */,
 				34788DEE1F00C88300C3C9C5 /* CSInputSourceBase.m in Sources */,
 				34ED8C531B07371C002C0674 /* MIKMIDICommandThrottler.m in Sources */,
 				34F80D6A1EDBB36100D890D3 /* CAMultiAudioNode+ScriptingAdditions.m in Sources */,
