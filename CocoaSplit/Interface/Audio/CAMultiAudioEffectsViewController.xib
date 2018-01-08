@@ -21,7 +21,7 @@
                 <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0QH-Zn-NNE">
                     <rect key="frame" x="0.0" y="21" width="827" height="590"/>
                     <clipView key="contentView" id="zLV-2R-Cop">
-                        <rect key="frame" x="1" y="23" width="825" height="566"/>
+                        <rect key="frame" x="1" y="0.0" width="825" height="589"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnSelection="YES" columnResizing="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="O3T-qf-Biq" viewBased="YES" id="jMX-h0-QiF">
@@ -122,7 +122,7 @@
                         </subviews>
                     </clipView>
                     <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="q6b-MW-drK">
-                        <rect key="frame" x="1" y="118.99363207817078" width="237.98594665527344" height="15"/>
+                        <rect key="frame" x="1" y="118" width="237.98594665527344" height="15"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="Tzo-ei-oYe">

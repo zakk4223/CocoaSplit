@@ -4489,7 +4489,8 @@
 
 -(IBAction)showTransitionView:(id)sender
 {
-    
+  
+
     [NSAnimationContext beginGrouping];
     
     [[NSAnimationContext currentContext] setCompletionHandler:^{
@@ -4503,8 +4504,6 @@
     self.transitionLabel.animator.hidden = NO;
     self.audioConstraint.animator.constant = _savedAudioConstraintConstant;
     
-    [NSAnimationContext endGrouping];
-
 }
 
 

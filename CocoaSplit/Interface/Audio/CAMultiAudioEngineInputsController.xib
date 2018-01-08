@@ -9,7 +9,6 @@
         <customObject id="-2" userLabel="File's Owner" customClass="CAMultiAudioEngineInputsController">
             <connections>
                 <outlet property="audioInputsController" destination="mdx-ax-wDS" id="jLV-Wk-5y7"/>
-                <outlet property="multiAudioEngineController" destination="wvR-5j-Jjh" id="wlS-aN-hEr"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
         </customObject>
@@ -341,6 +340,8 @@
                                 <connections>
                                     <binding destination="mdx-ax-wDS" name="content" keyPath="arrangedObjects" id="BJh-Z9-zDQ"/>
                                     <binding destination="mdx-ax-wDS" name="selectionIndexes" keyPath="selectionIndexes" previousBinding="BJh-Z9-zDQ" id="vI9-CW-XpL"/>
+                                    <outlet property="dataSource" destination="-2" id="xcz-B5-STz"/>
+                                    <outlet property="delegate" destination="-2" id="BjG-Td-5BB"/>
                                 </connections>
                             </tableView>
                         </subviews>
@@ -365,7 +366,7 @@
                         <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
                     <connections>
-                        <binding destination="wvR-5j-Jjh" name="value" keyPath="selection.encodeMixer.muted" id="iu5-oo-nuG"/>
+                        <binding destination="-2" name="value" keyPath="self.multiAudioEngineController.selection.encodeMixer.muted" id="d13-Bs-jfZ"/>
                     </connections>
                 </button>
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="S7b-CH-xll" customClass="CSAudioLevelView">
@@ -375,7 +376,7 @@
                             <rect key="frame" x="0.0" y="-1" width="620" height="22"/>
                             <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" maxValue="1" doubleValue="0.53607753537735847" tickMarkPosition="above" sliderType="linear" id="SpI-Hf-Vj8" customClass="CSNobarSliderCell"/>
                             <connections>
-                                <binding destination="wvR-5j-Jjh" name="value" keyPath="selection.encodeMixer.volume" id="eSX-eE-n58"/>
+                                <binding destination="-2" name="value" keyPath="self.multiAudioEngineController.selection.encodeMixer.volume" id="H7b-1t-Whl"/>
                             </connections>
                         </slider>
                     </subviews>
@@ -400,6 +401,9 @@
                             <real key="value" value="0.5"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
+                    <connections>
+                        <binding destination="-2" name="level" keyPath="self.multiAudioEngineController.selection.streamAudioPowerLevel" id="chb-Tx-mJf"/>
+                    </connections>
                 </customView>
             </subviews>
             <constraints>
@@ -416,17 +420,16 @@
             </constraints>
             <point key="canvasLocation" x="131" y="266"/>
         </customView>
-        <objectController id="wvR-5j-Jjh" userLabel="multiAudioEngineController"/>
         <arrayController id="mdx-ax-wDS" userLabel="audioInputsController">
             <connections>
-                <binding destination="wvR-5j-Jjh" name="contentArray" keyPath="selection.audioInputs" id="AaU-hR-HbK"/>
+                <binding destination="-2" name="contentArray" keyPath="self.multiAudioEngineController.selection.audioInputs" id="D7m-fd-fLU"/>
             </connections>
         </arrayController>
     </objects>
     <resources>
         <image name="Mute_Icon" width="240" height="240"/>
         <image name="NSActionTemplate" width="14" height="14"/>
-        <image name="NSStopProgressFreestandingTemplate" width="14" height="14"/>
+        <image name="NSStopProgressFreestandingTemplate" width="11" height="11"/>
         <image name="Speaker_Icon" width="240" height="240"/>
         <image name="pause_main" width="42.400001525878906" height="48"/>
         <image name="play_main" width="50.400001525878906" height="58.400001525878906"/>

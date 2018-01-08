@@ -16,6 +16,16 @@
 
 @implementation CAMultiAudioEngineInputsController
 
+-(void)awakeFromNib
+{
+    if (!_mixerWindows)
+    {
+        _mixerWindows = [NSMutableDictionary dictionary];
+    }
+    [super awakeFromNib];
+}
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do view setup here.
@@ -25,9 +35,12 @@
 -(void)openMixerWindow:(CAMultiAudioNode *)node
 {
     
+    
     if (node)
     {
         CAMultiAudioMatrixMixerWindowController *mixerWindow = [[CAMultiAudioMatrixMixerWindowController alloc] initWithAudioMixer:node];
+        [mixerWindow showWindow:nil];
+
         mixerWindow.window.title = node.name;
         mixerWindow.window.identifier = node.nodeUID;
         mixerWindow.window.delegate = self;
@@ -52,6 +65,17 @@
     CAMultiAudioEngine *engine = self.multiAudioEngineController.content;
     
     [engine removeFileInput:toDelete];
+}
+
+-(NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
+{
+    CAMultiAudioNode *audioNode = [self.audioInputsController.arrangedObjects objectAtIndex:row];
+    if ([audioNode isKindOfClass:CAMultiAudioFile.class])
+    {
+        return [tableView makeViewWithIdentifier:@"fileAudioView" owner:self];
+    } else {
+        return [tableView makeViewWithIdentifier:@"standardAudioView" owner:self];
+    }
 }
 
 @end
