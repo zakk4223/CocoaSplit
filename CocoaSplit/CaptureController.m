@@ -2071,7 +2071,6 @@
     
     self.activePreviewView = self.stagingPreviewView;
     [self.layoutCollectionView registerForDraggedTypes:@[@"CS_LAYOUT_DRAG"]];
-    [self.audioTableView registerForDraggedTypes:@[@"cocoasplit.audio.item", NSFilenamesPboardType]];
 
     NSNib *layoutNib = [[NSNib alloc] initWithNibNamed:@"CSLayoutCollectionItem" bundle:nil];
     [self.layoutCollectionView registerNib:layoutNib forItemWithIdentifier:@"layout_item"];
@@ -3247,49 +3246,6 @@
 
 
 
--(NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
-{
-    CAMultiAudioNode *audioNode = [self.audioInputsArrayController.arrangedObjects objectAtIndex:row];
-    if ([audioNode isKindOfClass:CAMultiAudioFile.class])
-    {
-        return [tableView makeViewWithIdentifier:@"fileAudioView" owner:self];
-    } else {
-        return [tableView makeViewWithIdentifier:@"standardAudioView" owner:self];
-    }
-}
--(BOOL)tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
-{
-    
-
-    NSArray *audioNodes = [self.audioInputsArrayController.arrangedObjects objectsAtIndexes:rowIndexes];
-    
-    NSPasteboardItem *pItem = [[NSPasteboardItem alloc] init];
-    
-    NSArray *audioUIDS = [audioNodes valueForKey:@"nodeUID"];
-    
-    
-    [pItem setPropertyList:audioUIDS forType:@"cocoasplit.audio.item"];
-    [pboard writeObjects:@[pItem]];
-    
-    return YES;
-}
-
-
-/*
-- (id <NSPasteboardWriting>) tableView:(NSTableView *)tableView pasteboardWriterForRow:(NSInteger)row
-{
-    NSPasteboardItem *pItem = [[NSPasteboardItem alloc] init];
-    CAMultiAudioNode *audioNode = [self.audioInputsArrayController.arrangedObjects objectAtIndex:row];
-    
-    [pItem setString:audioNode.nodeUID forType:@"cocoasplit.audio.item"];
-    
-    return pItem;
-}*/
-
-
-
-
-
 -(NSString *)primaryTypeForURL:(NSURL *)url
 {
     NSString *dType;
@@ -3309,46 +3265,8 @@
 }
 
 
--(NSDragOperation)tableView:(NSTableView *)tableView validateDrop:(id<NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)dropOperation
-{
-    NSPasteboard *pb = [info draggingPasteboard];
-    if ([pb.types containsObject:NSFilenamesPboardType])
-    {
-        return NSDragOperationCopy;
-    }
-    
-    return NSDragOperationNone;
-}
 
--(BOOL)tableView:(NSTableView *)tableView acceptDrop:(id<NSDraggingInfo>)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)dropOperation
-{
-    NSPasteboard *pb = [info draggingPasteboard];
 
-    bool retVal = NO;
-    for(NSPasteboardItem *item in pb.pasteboardItems)
-    {
-        
-        if ([item.types containsObject:@"public.file-url"])
-        {
-            NSString *dragPath = [item stringForType:@"public.file-url"];
-            if (dragPath)
-            {
-                NSURL *fileURL = [NSURL URLWithString:dragPath];
-                
-                if ([self fileURLIsAudio:fileURL])
-                {
-                    NSString *realPath = [fileURL path];
-                    
-                    [self.multiAudioEngine createFileInput:realPath];
-                    retVal = YES;
-                }
-            }
-        }
-        
-    }
-
-    return retVal;
-}
 
 
 

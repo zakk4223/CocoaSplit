@@ -131,9 +131,19 @@
     {
         if (self.previewView.sourceLayout.recorder)
         {
+            
+            self.multiAudioEngineViewController.viewOnly = NO;
+            self.multiAudioEngine = self.previewView.sourceLayout.recorder.audioEngine;
             [self.previewView disablePrimaryRender];
         } else {
             [self.previewView enablePrimaryRender];
+            self.multiAudioEngineViewController.viewOnly = YES;
+            self.multiAudioEngine = [CaptureController sharedCaptureController].multiAudioEngine;
+        }
+        
+        if (!self.multiAudioEngine)
+        {
+            self.multiAudioEngine = [CaptureController sharedCaptureController].multiAudioEngine;
         }
     } else if ([keyPath isEqualToString:@"mousedSource"]) {
         NSArray *useSrcs;

@@ -9,6 +9,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="CAMultiAudioEngineInputsController">
             <connections>
                 <outlet property="audioInputsController" destination="mdx-ax-wDS" id="jLV-Wk-5y7"/>
+                <outlet property="audioTableView" destination="htL-F7-9OD" id="TN2-0U-Nfs"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
         </customObject>
@@ -67,6 +68,11 @@
                                                                 <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="1" doubleValue="0.41066209532374098" tickMarkPosition="above" sliderType="linear" id="3UX-kh-3tf" customClass="CSNobarSliderCell"/>
                                                                 <connections>
                                                                     <binding destination="gXO-Xe-SNg" name="value" keyPath="objectValue.volume" id="VJ8-iH-7eM"/>
+                                                                    <binding destination="-2" name="enabled" keyPath="self.viewOnly" id="QpX-j8-3ft">
+                                                                        <dictionary key="options">
+                                                                            <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                        </dictionary>
+                                                                    </binding>
                                                                 </connections>
                                                             </slider>
                                                         </subviews>
@@ -106,6 +112,11 @@
                                                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                                 </dictionary>
                                                             </binding>
+                                                            <binding destination="-2" name="enabled" keyPath="self.viewOnly" id="wdK-y4-gKT">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                </dictionary>
+                                                            </binding>
                                                         </connections>
                                                     </button>
                                                     <button toolTip="Configure Audio Input" translatesAutoresizingMaskIntoConstraints="NO" id="qJi-tw-slz">
@@ -126,6 +137,11 @@
                                                             <binding destination="-2" name="target" keyPath="self" previousBinding="4bn-oH-nYd" id="gNE-fT-DB7">
                                                                 <dictionary key="options">
                                                                     <string key="NSSelectorName">openMixerWindow:</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="-2" name="enabled" keyPath="self.viewOnly" id="uWP-ik-vy0">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                                 </dictionary>
                                                             </binding>
                                                         </connections>
@@ -173,6 +189,11 @@
                                                                 <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="1" doubleValue="0.37549169580419578" tickMarkPosition="above" sliderType="linear" id="HDL-5T-5Vf" customClass="CSNobarSliderCell"/>
                                                                 <connections>
                                                                     <binding destination="4DU-Sc-fYD" name="value" keyPath="objectValue.volume" id="UYW-iR-iTg"/>
+                                                                    <binding destination="-2" name="enabled" keyPath="self.viewOnly" id="Ve5-sL-lXv">
+                                                                        <dictionary key="options">
+                                                                            <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                        </dictionary>
+                                                                    </binding>
                                                                 </connections>
                                                             </slider>
                                                         </subviews>
@@ -232,6 +253,11 @@
                                                         <connections>
                                                             <binding destination="4DU-Sc-fYD" name="value" keyPath="objectValue.currentTime" previousBinding="jfb-vO-F6E" id="j5s-wW-cja"/>
                                                             <binding destination="4DU-Sc-fYD" name="maxValue" keyPath="objectValue.duration" id="jfb-vO-F6E"/>
+                                                            <binding destination="-2" name="enabled" keyPath="self.viewOnly" id="O4t-Ha-rhM">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                </dictionary>
+                                                            </binding>
                                                         </connections>
                                                     </slider>
                                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="gUT-wM-Uzp">
@@ -247,6 +273,11 @@
                                                             <binding destination="4DU-Sc-fYD" name="argument" keyPath="objectValue" id="od5-bK-lwd">
                                                                 <dictionary key="options">
                                                                     <string key="NSSelectorName">removeFileAudio:</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="-2" name="enabled" keyPath="self.viewOnly" id="T6F-iE-yu6">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                                 </dictionary>
                                                             </binding>
                                                         </connections>
@@ -268,6 +299,7 @@
                                                                     <string key="NSSelectorName">openMixerWindow:</string>
                                                                 </dictionary>
                                                             </binding>
+                                                            <binding destination="-2" name="enabled" keyPath="self.viewOnly" id="Qzn-kR-miy"/>
                                                         </connections>
                                                     </button>
                                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="M4S-dd-K97">
@@ -281,6 +313,11 @@
                                                         </buttonCell>
                                                         <connections>
                                                             <binding destination="4DU-Sc-fYD" name="value" keyPath="objectValue.loop" id="36G-lS-MUS"/>
+                                                            <binding destination="-2" name="enabled" keyPath="self.viewOnly" id="fxL-oF-b8U">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                </dictionary>
+                                                            </binding>
                                                         </connections>
                                                     </button>
                                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="FUh-7A-xP9">
@@ -291,6 +328,11 @@
                                                         </buttonCell>
                                                         <connections>
                                                             <binding destination="4DU-Sc-fYD" name="value" keyPath="objectValue.enabled" id="Bl1-pw-Xza">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="-2" name="enabled" keyPath="self.viewOnly" id="Z5X-ir-7Ty">
                                                                 <dictionary key="options">
                                                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                                 </dictionary>
@@ -367,6 +409,7 @@
                     </buttonCell>
                     <connections>
                         <binding destination="-2" name="value" keyPath="self.multiAudioEngineController.selection.encodeMixer.muted" id="d13-Bs-jfZ"/>
+                        <binding destination="-2" name="enabled" keyPath="self.viewOnly" id="tem-SX-k8L"/>
                     </connections>
                 </button>
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="S7b-CH-xll" customClass="CSAudioLevelView">
@@ -377,6 +420,7 @@
                             <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" maxValue="1" doubleValue="0.53607753537735847" tickMarkPosition="above" sliderType="linear" id="SpI-Hf-Vj8" customClass="CSNobarSliderCell"/>
                             <connections>
                                 <binding destination="-2" name="value" keyPath="self.multiAudioEngineController.selection.encodeMixer.volume" id="H7b-1t-Whl"/>
+                                <binding destination="-2" name="enabled" keyPath="self.viewOnly" id="L84-yJ-Ybi"/>
                             </connections>
                         </slider>
                     </subviews>

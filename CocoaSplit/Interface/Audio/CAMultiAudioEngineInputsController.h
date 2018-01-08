@@ -15,6 +15,8 @@
 
 @property (strong) IBOutlet NSObjectController *multiAudioEngineController;
 @property (strong) IBOutlet NSArrayController *audioInputsController;
+@property (assign) bool viewOnly;
+@property (weak) IBOutlet NSTableView *audioTableView;
 
 
 @end

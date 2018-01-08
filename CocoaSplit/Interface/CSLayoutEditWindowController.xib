@@ -8,6 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CSLayoutEditWindowController">
             <connections>
+                <outlet property="multiAudioEngineViewController" destination="mrK-o8-gTD" id="utv-T3-CU2"/>
                 <outlet property="previewView" destination="uUD-nM-Xzg" id="HNn-21-ate"/>
                 <outlet property="sourceListViewController" destination="HTf-ho-8it" id="43T-Ft-lFa"/>
                 <outlet property="testView" destination="mFf-xH-NMG" id="bRs-s7-NYy"/>
@@ -124,6 +125,10 @@ Gw
                             <userDefinedRuntimeAttribute type="boolean" keyPath="translatesAutoresizingMaskIntoConstraints" value="NO"/>
                         </userDefinedRuntimeAttributes>
                     </customView>
+                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hmW-Dr-8yt">
+                        <rect key="frame" x="411" y="54" width="260" height="235"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    </customView>
                 </subviews>
                 <constraints>
                     <constraint firstItem="1EC-0I-yZr" firstAttribute="leading" secondItem="ImN-fd-uwJ" secondAttribute="trailing" constant="12" symbolic="YES" id="0Y5-7C-P5h"/>
@@ -173,10 +178,21 @@ Gw
             </buttonCell>
             <point key="canvasLocation" x="379" y="861"/>
         </button>
+        <objectController id="klM-e7-Vj2" userLabel="multiAudioEngineController">
+            <connections>
+                <binding destination="-2" name="contentObject" keyPath="self.multiAudioEngine" id="sCr-ue-Pv6"/>
+            </connections>
+        </objectController>
         <viewController id="HTf-ho-8it" customClass="CSSourceListViewController">
             <connections>
                 <outlet property="parentView" destination="mFf-xH-NMG" id="6wX-of-jYb"/>
                 <outlet property="sourceLayoutController" destination="XWe-tQ-Eyy" id="kP7-cR-cqd"/>
+            </connections>
+        </viewController>
+        <viewController id="mrK-o8-gTD" customClass="CAMultiAudioEngineInputsController">
+            <connections>
+                <outlet property="multiAudioEngineController" destination="klM-e7-Vj2" id="Z2N-v3-El0"/>
+                <outlet property="parentView" destination="hmW-Dr-8yt" id="j3W-gv-EeM"/>
             </connections>
         </viewController>
     </objects>

@@ -15,7 +15,7 @@
 #import "CSLayoutRecorder.h"
 #import "CSScriptInputSource.h"
 #import "CSSourceListViewController.h"
-
+#import "CAMultiAudioEngineInputsController.h"
 @interface CSLayoutEditWindowController : NSWindowController <NSWindowDelegate>
 {
     float _frame_interval;
@@ -28,6 +28,7 @@
 
 @property (readonly) NSString *windowTitle;
 @property (readonly) NSString *resolutionDescription;
+@property (weak) CAMultiAudioEngine *multiAudioEngine;
 
 @property (strong) IBOutlet NSMenu *recordingMenu;
 
@@ -42,5 +43,6 @@
 
 @property (assign) bool previewOnly;
 @property (strong) IBOutlet CSSourceListViewController *sourceListViewController;
+@property (strong) IBOutlet CAMultiAudioEngineInputsController *multiAudioEngineViewController;
 
 @end
