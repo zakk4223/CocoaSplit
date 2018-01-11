@@ -1224,7 +1224,15 @@
            {
                [self.multiAudioEngine updateStatistics];
            }
+           for (CSLayoutRecorder *recorder in self.layoutRecorders)
+           {
+               if (recorder.audioEngine)
+               {
+                   [recorder.audioEngine updateStatistics];
+               }
+           }
        });
+       
        dispatch_resume(_audio_statistics_timer);
 
        

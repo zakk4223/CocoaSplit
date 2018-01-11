@@ -177,6 +177,42 @@
         
         
         _audioBuffer = [NSMutableArray array];
+
+        
+        
+        
+        
+        if (!self.audioEngine)
+        {
+        
+            CAMultiAudioEngine *useEngine = nil;
+
+
+            
+            if (!useEngine)
+            {
+                useEngine = [[CAMultiAudioEngine alloc] init];
+                useEngine.sampleRate = [CaptureController sharedCaptureController].audioSamplerate;
+                [useEngine disableAllInputs];
+            }
+            
+
+            self.audioEncoder = [[CSAacEncoder alloc] init];
+            self.audioEncoder.encodedReceiver = self;
+            self.audioEncoder.sampleRate = [CaptureController sharedCaptureController].audioSamplerate;
+            self.audioEncoder.bitRate = [CaptureController sharedCaptureController].audioBitrate*1000;
+            
+            self.audioEncoder.inputASBD = useEngine.graph.graphAsbd;
+            [self.audioEncoder setupEncoderBuffer];
+            useEngine.encoder = self.audioEncoder;
+            useEngine.previewMixer.muted = YES;
+            self.audioEngine = useEngine;
+            
+        } else {
+            self.audioEncoder = self.audioEngine.encoder;
+        }
+        
+        
         if (!self.renderer)
         {
             self.renderer = [[LayoutRenderer alloc] init];
@@ -184,32 +220,11 @@
         if (self.layout.sourceList.count == 0)
         {
             [self.layout restoreSourceList:nil];
+        } else {
+            [self.layout reapplyAudioSources];
         }
         
         self.renderer.layout = self.layout;
-        
-        
-        
-        if (!self.audioEngine)
-        {
-            self.audioEngine = [[CAMultiAudioEngine alloc] init];
-            self.audioEngine.sampleRate = [CaptureController sharedCaptureController].audioSamplerate;
-            
-            NSDictionary *inputSettings = [[CaptureController sharedCaptureController].multiAudioEngine generateInputSettings];
-            [self.audioEngine applyInputSettings:inputSettings];
-            self.audioEncoder = [[CSAacEncoder alloc] init];
-            self.audioEncoder.encodedReceiver = self;
-            self.audioEncoder.sampleRate = [CaptureController sharedCaptureController].audioSamplerate;
-            self.audioEncoder.bitRate = [CaptureController sharedCaptureController].audioBitrate*1000;
-            
-            self.audioEncoder.inputASBD = self.audioEngine.graph.graphAsbd;
-            [self.audioEncoder setupEncoderBuffer];
-            self.audioEngine.encoder = self.audioEncoder;
-            self.audioEngine.previewMixer.enabled = NO;
-        } else {
-            self.audioEncoder = self.audioEngine.encoder;
-        }
-        
         
         if (!_frame_queue)
         {

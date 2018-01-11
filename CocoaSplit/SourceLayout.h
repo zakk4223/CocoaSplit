@@ -3,8 +3,6 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 8/31/14.
-//  Copyright (c) 2014 Zakk. All rights reserved.
-//
 
 #import <Foundation/Foundation.h>
 #import <JavaScriptCore/JavaScriptCore.h>
@@ -14,6 +12,7 @@
 #import "CSAnimationRunnerObj.h"
 #import "MIKMIDI.h"
 #import "CSInputSourceProtocol.h"
+#import "CAMultiAudioEngine.h"
 
 
 
@@ -203,8 +202,11 @@
 @property (weak) CSLayoutRecorder *recorder;
 @property (strong) CSLayoutTransition *transitionInfo;
 @property (readonly) bool hasSources;
+@property (strong) NSData *audioData;
 
 -(void) adjustAllInputs;
+-(CAMultiAudioEngine *)restoreAudioData;
+-(void)reapplyAudioSources;
 
 
 @end

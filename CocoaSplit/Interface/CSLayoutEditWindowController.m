@@ -131,11 +131,12 @@
     {
         if (self.previewView.sourceLayout.recorder)
         {
-            
+            self.showAudioView = YES;
             self.multiAudioEngineViewController.viewOnly = NO;
             self.multiAudioEngine = self.previewView.sourceLayout.recorder.audioEngine;
             [self.previewView disablePrimaryRender];
         } else {
+            self.showAudioView = NO;
             [self.previewView enablePrimaryRender];
             self.multiAudioEngineViewController.viewOnly = YES;
             self.multiAudioEngine = [CaptureController sharedCaptureController].multiAudioEngine;

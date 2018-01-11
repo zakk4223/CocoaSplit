@@ -19,6 +19,8 @@
 
 -(void)awakeFromNib
 {
+    [super awakeFromNib];
+
     if (!_mixerWindows)
     {
         _mixerWindows = [NSMutableDictionary dictionary];
@@ -26,7 +28,6 @@
         [self.audioTableView registerForDraggedTypes:@[@"cocoasplit.audio.item", NSFilenamesPboardType]];
 
     }
-    [super awakeFromNib];
 }
 
 
@@ -101,6 +102,7 @@
 
 -(NSDragOperation)tableView:(NSTableView *)tableView validateDrop:(id<NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)dropOperation
 {
+    
     NSPasteboard *pb = [info draggingPasteboard];
     
     if (self.viewOnly)
@@ -146,6 +148,7 @@
     
     return retVal;
 }
+
 
 
 

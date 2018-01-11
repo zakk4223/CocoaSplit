@@ -125,10 +125,6 @@ Gw
                             <userDefinedRuntimeAttribute type="boolean" keyPath="translatesAutoresizingMaskIntoConstraints" value="NO"/>
                         </userDefinedRuntimeAttributes>
                     </customView>
-                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hmW-Dr-8yt">
-                        <rect key="frame" x="411" y="54" width="260" height="235"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    </customView>
                 </subviews>
                 <constraints>
                     <constraint firstItem="1EC-0I-yZr" firstAttribute="leading" secondItem="ImN-fd-uwJ" secondAttribute="trailing" constant="12" symbolic="YES" id="0Y5-7C-P5h"/>
@@ -192,7 +188,6 @@ Gw
         <viewController id="mrK-o8-gTD" customClass="CAMultiAudioEngineInputsController">
             <connections>
                 <outlet property="multiAudioEngineController" destination="klM-e7-Vj2" id="Z2N-v3-El0"/>
-                <outlet property="parentView" destination="hmW-Dr-8yt" id="j3W-gv-EeM"/>
             </connections>
         </viewController>
     </objects>

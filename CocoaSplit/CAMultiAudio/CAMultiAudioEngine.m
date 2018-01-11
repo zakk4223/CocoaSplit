@@ -258,6 +258,15 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 }
 
 
+-(void) disableAllInputs
+{
+    for (CAMultiAudioInput *input in self.audioInputs)
+    {
+        input.enabled = NO;
+    }
+}
+
+
 -(void)updateStatistics
 {
     CAMultiAudioEngine *__weak blockSelf = self;
@@ -725,16 +734,14 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
 
     
-    CAMultiAudioSubgraph *inputGraph = (CAMultiAudioSubgraph *)disconnectNode.graph;
+    CAMultiAudioGraph *inputGraph = (CAMultiAudioSubgraph *)disconnectNode.graph;
     
     [disconnectNode teardownGraph];
     
     [inputGraph removeNode:disconnectNode.headNode];
     disconnectNode.headNode = nil;
     disconnectNode.graph = nil;
-    [inputGraph removeNode:inputGraph.outputNode];
     
-    AUGraphRemoveNode(self.graph.graphInst, inputGraph.subgraphNode);
     [self.graph graphUpdate];
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioRemoved object:self userInfo:@{@"UUID": disconnectNode.nodeUID}];
     return YES;

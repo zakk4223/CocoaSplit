@@ -11,6 +11,8 @@
 #import "CSTransitionAnimationDelegate.h"
 #import "CSCaptureBase+TimerDelegate.h"
 #import "CSLayoutTransition.h"
+#import "CSLayoutRecorder.h"
+#import "CSAudioInputSource.h"
 
 JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 
@@ -633,7 +635,59 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     return [self findSource:forPoint withExtra:0 deepParent:deepParent];
 }
 
+
+-(NSData *)makeAudioSaveData
+{
+    CAMultiAudioEngine *audioEngine = nil;
+    
+    if (self.recorder && self.recorder.audioEngine)
+    {
+        audioEngine = self.recorder.audioEngine;
+    }
+    
+    if (!audioEngine)
+    {
+        return nil;
+    }
+    
+    NSMutableData *saveData = [NSMutableData data];
+
+    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:saveData];
+    [archiver encodeObject:audioEngine forKey:@"root"];
+    [archiver finishEncoding];
+
+    return saveData;
+}
+
+
+-(CAMultiAudioEngine *)restoreAudioData
+{
+    if (!self.audioData)
+    {
+        return nil;
+    }
+    
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:self.audioData];
+    CAMultiAudioEngine *audioRestore = [unarchiver decodeObjectForKey:@"root"];
+    [unarchiver finishDecoding];
+    
+    return audioRestore;
+}
+
+-(void)reapplyAudioSources
+{
+    for (NSObject <CSInputSourceProtocol> *input in self.sourceList)
+    {
+        if ([input isKindOfClass:[CSAudioInputSource class]])
+        {
+            CSAudioInputSource *audioSrc = (CSAudioInputSource *)input;
+            [audioSrc applyAudioSettings];
+        }
+    }
+}
+
 -(NSData *)makeSaveData
+
 {
     NSObject *timerSrc = self.layoutTimingSource;
     
@@ -676,6 +730,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     
     NSData *saveData = [self makeSaveData];
     self.savedSourceListData = saveData;
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutSaved object:self userInfo:nil];
 
 }

@@ -62,6 +62,7 @@
 -(void)applyInputSettings:(NSDictionary *)inputSettings;
 -(NSMutableDictionary *)generateInputSettings;
 -(CAMultiAudioInput *)inputForUUID:(NSString *)uuid;
+-(void) disableAllInputs;
 
 
 

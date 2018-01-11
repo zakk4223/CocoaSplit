@@ -44,5 +44,6 @@
 @property (assign) bool previewOnly;
 @property (strong) IBOutlet CSSourceListViewController *sourceListViewController;
 @property (strong) IBOutlet CAMultiAudioEngineInputsController *multiAudioEngineViewController;
+@property (assign) bool showAudioView;
 
 @end
