@@ -28,11 +28,12 @@
 @property (assign) Float64 fileStartTime;
 @property (assign) Float64 fileEndTime;
 @property (assign) Float64 fileDuration;
-
+@property (strong) NSMutableDictionary *savedAudioSettings;
 
 -(instancetype) initWithAudioNode:(CAMultiAudioNode *)node;
 -(instancetype) initWithPath:(NSString *)path;
 -(void)applyAudioSettings;
+-(CAMultiAudioInput *)findAudioNodeForEdit;
 
 @end
 

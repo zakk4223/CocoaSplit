@@ -125,6 +125,9 @@ Gw
                             <userDefinedRuntimeAttribute type="boolean" keyPath="translatesAutoresizingMaskIntoConstraints" value="NO"/>
                         </userDefinedRuntimeAttributes>
                     </customView>
+                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="Uim-le-iB0">
+                        <rect key="frame" x="400" y="54" width="271" height="235"/>
+                    </customView>
                 </subviews>
                 <constraints>
                     <constraint firstItem="1EC-0I-yZr" firstAttribute="leading" secondItem="ImN-fd-uwJ" secondAttribute="trailing" constant="12" symbolic="YES" id="0Y5-7C-P5h"/>
@@ -134,17 +137,21 @@ Gw
                     <constraint firstItem="2J5-Pb-RaS" firstAttribute="leading" secondItem="mFf-xH-NMG" secondAttribute="leading" id="Atv-uj-ls7"/>
                     <constraint firstItem="Z2d-qV-QuI" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" constant="20" symbolic="YES" id="HFE-0W-KML"/>
                     <constraint firstItem="yfb-Dt-tcg" firstAttribute="top" secondItem="uUD-nM-Xzg" secondAttribute="bottom" constant="8" symbolic="YES" id="OfX-a3-yJs"/>
+                    <constraint firstItem="Uim-le-iB0" firstAttribute="trailing" secondItem="1EC-0I-yZr" secondAttribute="trailing" id="QQO-aU-V9z"/>
+                    <constraint firstItem="Uim-le-iB0" firstAttribute="bottom" secondItem="mFf-xH-NMG" secondAttribute="bottom" id="Rr9-o7-Vq1"/>
                     <constraint firstItem="2J5-Pb-RaS" firstAttribute="top" secondItem="tX2-A6-u0S" secondAttribute="bottom" constant="56" id="WxZ-K7-H1c"/>
                     <constraint firstItem="yfb-Dt-tcg" firstAttribute="trailing" secondItem="tog-MO-bSt" secondAttribute="trailing" id="aeE-vO-QU4"/>
                     <constraint firstItem="uUD-nM-Xzg" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" id="bMg-of-gF0"/>
                     <constraint firstItem="uUD-nM-Xzg" firstAttribute="trailing" secondItem="YYB-zM-dHR" secondAttribute="trailing" id="cXa-mf-DVZ"/>
                     <constraint firstItem="yfb-Dt-tcg" firstAttribute="leading" secondItem="tog-MO-bSt" secondAttribute="leading" id="dcc-op-5ag"/>
                     <constraint firstItem="Z2d-qV-QuI" firstAttribute="leading" secondItem="tX2-A6-u0S" secondAttribute="leading" id="eWM-r1-MmS"/>
+                    <constraint firstItem="Uim-le-iB0" firstAttribute="top" secondItem="mFf-xH-NMG" secondAttribute="top" id="eg3-Y8-1tT"/>
                     <constraint firstItem="tog-MO-bSt" firstAttribute="top" secondItem="yfb-Dt-tcg" secondAttribute="bottom" constant="8" symbolic="YES" id="fnu-pc-yhF"/>
                     <constraint firstItem="uUD-nM-Xzg" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" id="fxJ-NU-WHS"/>
                     <constraint firstItem="tog-MO-bSt" firstAttribute="trailing" secondItem="mFf-xH-NMG" secondAttribute="trailing" id="gxT-zL-46V"/>
                     <constraint firstAttribute="bottom" secondItem="ImN-fd-uwJ" secondAttribute="bottom" constant="20" symbolic="YES" id="hqt-I1-SQM"/>
                     <constraint firstItem="mFf-xH-NMG" firstAttribute="top" secondItem="2J5-Pb-RaS" secondAttribute="bottom" constant="8" symbolic="YES" id="iNt-v1-019"/>
+                    <constraint firstItem="Uim-le-iB0" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" constant="400" id="q6r-p4-e0N"/>
                     <constraint firstItem="mFf-xH-NMG" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" constant="537" id="rdE-t8-a2L"/>
                     <constraint firstItem="YYB-zM-dHR" firstAttribute="trailing" secondItem="1EC-0I-yZr" secondAttribute="trailing" id="sv9-8h-Q9N"/>
                     <constraint firstItem="Z2d-qV-QuI" firstAttribute="baseline" secondItem="yfb-Dt-tcg" secondAttribute="baseline" id="tnj-N4-5dF"/>
@@ -188,6 +195,7 @@ Gw
         <viewController id="mrK-o8-gTD" customClass="CAMultiAudioEngineInputsController">
             <connections>
                 <outlet property="multiAudioEngineController" destination="klM-e7-Vj2" id="Z2N-v3-El0"/>
+                <outlet property="parentView" destination="Uim-le-iB0" id="mYK-iI-D8y"/>
             </connections>
         </viewController>
     </objects>

@@ -70,6 +70,7 @@
 @property (assign) bool recordLayout;
 @property (weak) CSLayoutRecorder *recorder;
 @property (readonly) bool hasSources;
+@property (strong) CAMultiAudioEngine *audioEngine;
 
 -(void)deleteSource:(NSObject<CSInputSourceProtocol> *)delSource;
 -(void)addSource:(NSObject<CSInputSourceProtocol> *)newSource;
@@ -203,10 +204,12 @@
 @property (strong) CSLayoutTransition *transitionInfo;
 @property (readonly) bool hasSources;
 @property (strong) NSData *audioData;
+@property (strong) CAMultiAudioEngine *audioEngine;
 
 -(void) adjustAllInputs;
 -(CAMultiAudioEngine *)restoreAudioData;
 -(void)reapplyAudioSources;
+-(CAMultiAudioEngine *)findAudioEngine;
 
 
 @end

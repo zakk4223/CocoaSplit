@@ -30,12 +30,12 @@
                         <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
                     <connections>
+                        <binding destination="-2" name="value" keyPath="self.multiAudioEngineController.selection.encodeMixer.muted" id="d13-Bs-jfZ"/>
                         <binding destination="-2" name="enabled" keyPath="self.viewOnly" id="1Xh-Zh-PX4">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
                             </dictionary>
                         </binding>
-                        <binding destination="-2" name="value" keyPath="self.multiAudioEngineController.selection.encodeMixer.muted" id="d13-Bs-jfZ"/>
                     </connections>
                 </button>
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="S7b-CH-xll" customClass="CSAudioLevelView">
@@ -45,12 +45,12 @@
                             <rect key="frame" x="0.0" y="-1" width="446" height="22"/>
                             <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" maxValue="1" doubleValue="0.53607753537735847" tickMarkPosition="above" sliderType="linear" id="SpI-Hf-Vj8" customClass="CSNobarSliderCell"/>
                             <connections>
+                                <binding destination="-2" name="value" keyPath="self.multiAudioEngineController.selection.encodeMixer.volume" id="H7b-1t-Whl"/>
                                 <binding destination="-2" name="enabled" keyPath="self.viewOnly" id="xmY-vZ-cnp">
                                     <dictionary key="options">
                                         <string key="NSValueTransformerName">NSNegateBoolean</string>
                                     </dictionary>
                                 </binding>
-                                <binding destination="-2" name="value" keyPath="self.multiAudioEngineController.selection.encodeMixer.volume" id="H7b-1t-Whl"/>
                             </connections>
                         </slider>
                     </subviews>
@@ -209,14 +209,10 @@
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
                                                         <connections>
+                                                            <binding destination="-2" name="hidden" keyPath="self.viewOnly" id="S8q-d3-7K3"/>
                                                             <binding destination="4DU-Sc-fYD" name="argument" keyPath="objectValue" id="od5-bK-lwd">
                                                                 <dictionary key="options">
                                                                     <string key="NSSelectorName">removeFileAudio:</string>
-                                                                </dictionary>
-                                                            </binding>
-                                                            <binding destination="-2" name="enabled" keyPath="self.viewOnly" id="T6F-iE-yu6">
-                                                                <dictionary key="options">
-                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                                 </dictionary>
                                                             </binding>
                                                             <binding destination="-2" name="target" keyPath="self" previousBinding="od5-bK-lwd" id="4mV-QG-q67">
@@ -233,11 +229,7 @@
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
                                                         <connections>
-                                                            <binding destination="-2" name="enabled" keyPath="self.viewOnly" id="JNt-eh-1OO">
-                                                                <dictionary key="options">
-                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                                                </dictionary>
-                                                            </binding>
+                                                            <binding destination="-2" name="hidden" keyPath="self.viewOnly" id="HvX-FE-Gvv"/>
                                                             <binding destination="4DU-Sc-fYD" name="argument" keyPath="objectValue" id="TQJ-uR-3o9">
                                                                 <dictionary key="options">
                                                                     <string key="NSSelectorName">openMixerWindow:</string>
@@ -408,6 +400,7 @@
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
                                                         <connections>
+                                                            <binding destination="-2" name="hidden" keyPath="self.viewOnly" id="riI-5B-rCd"/>
                                                             <binding destination="gXO-Xe-SNg" name="argument" keyPath="objectValue" id="4bn-oH-nYd">
                                                                 <dictionary key="options">
                                                                     <string key="NSSelectorName">openMixerWindow:</string>
@@ -416,11 +409,6 @@
                                                             <binding destination="-2" name="target" keyPath="self" previousBinding="4bn-oH-nYd" id="gNE-fT-DB7">
                                                                 <dictionary key="options">
                                                                     <string key="NSSelectorName">openMixerWindow:</string>
-                                                                </dictionary>
-                                                            </binding>
-                                                            <binding destination="-2" name="enabled" keyPath="self.viewOnly" id="uWP-ik-vy0">
-                                                                <dictionary key="options">
-                                                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                                 </dictionary>
                                                             </binding>
                                                         </connections>
@@ -490,7 +478,7 @@
     <resources>
         <image name="Mute_Icon" width="240" height="240"/>
         <image name="NSActionTemplate" width="14" height="14"/>
-        <image name="NSStopProgressFreestandingTemplate" width="11" height="11"/>
+        <image name="NSStopProgressFreestandingTemplate" width="14" height="14"/>
         <image name="Speaker_Icon" width="240" height="240"/>
         <image name="pause_main" width="42.400001525878906" height="48"/>
         <image name="play_main" width="50.400001525878906" height="58.400001525878906"/>

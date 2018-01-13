@@ -3,12 +3,17 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 6/7/15.
-//  Copyright (c) 2015 Zakk. All rights reserved.
 //
 
 #import "CAMultiAudioMatrixMixerWindowController.h"
 #import "CAMultiAudioMatrixCell.h"
 #import "CAMultiAudioUnit.h"
+
+
+@interface NSObject(CAMultiAudioMixerWindowDelegate)
+-(void)mixerWindowWillClose:(CAMultiAudioMatrixMixerWindowController *)mixerController;
+@end
+
 
 @interface CAMultiAudioMatrixMixerWindowController ()
 
@@ -83,6 +88,15 @@
     
     
     return cellView;
+}
+
+-(void)windowWillClose:(NSNotification *)notification
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(mixerWindowWillClose:)])
+    {
+    
+        [self.delegate mixerWindowWillClose:self];
+    }
 }
 
 

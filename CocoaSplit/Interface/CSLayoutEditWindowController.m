@@ -37,10 +37,27 @@
     [self.previewView addObserver:self forKeyPath:@"sourceLayout.recorder" options:NSKeyValueObservingOptionNew context:NULL];
     [self.previewView addObserver:self forKeyPath:@"mousedSource" options:NSKeyValueObservingOptionNew context:NULL];
     [self.sourceListViewController addObserver:self forKeyPath:@"selectedObjects" options:NSKeyValueObservingOptionNew context:NULL];
+    CAMultiAudioEngine *audioEngine = [self.previewView.sourceLayout findAudioEngine];
+
+    
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
 }
 
+-(void) setupDummyAudioEngine
+{
+    CAMultiAudioEngine *audioEngine = nil;
+    
+    NSLog(@"DUMMY AUDIO ENGINE");
+    audioEngine = [[CAMultiAudioEngine alloc] init];
+    audioEngine.sampleRate = [CaptureController sharedCaptureController].audioSamplerate;
+    
+    self.multiAudioEngine = audioEngine;
 
+    self.previewView.sourceLayout.audioEngine = audioEngine;
+//    [audioEngine disableAllInputs];
+
+    [self.previewView.sourceLayout reapplyAudioSources];
+}
 -(NSString *)windowTitle
 {
     return [NSString stringWithFormat:@"Layout - %@", self.previewView.sourceLayout.name];
@@ -53,7 +70,10 @@
 
     [self.previewView removeObserver:self forKeyPath:@"sourceLayout.recorder"];
     [self.previewView removeObserver:self forKeyPath:@"mousedSource"];
+    self.multiAudioEngine = nil;
+    self.previewView.sourceLayout.audioEngine = nil;
 
+    
     if (self.layoutController)
     {
         [self.layoutController discardEditing];
@@ -129,24 +149,28 @@
 {
     if ([keyPath isEqualToString:@"sourceLayout.recorder"])
     {
+        self.previewView.sourceLayout.isActive = YES;
         if (self.previewView.sourceLayout.recorder)
         {
-            self.showAudioView = YES;
             self.multiAudioEngineViewController.viewOnly = NO;
-            self.multiAudioEngine = self.previewView.sourceLayout.recorder.audioEngine;
             [self.previewView disablePrimaryRender];
+            if (!self.multiAudioEngine)
+            {
+                self.multiAudioEngine = self.previewView.sourceLayout.recorder.audioEngine;
+            }
         } else {
             self.showAudioView = NO;
             [self.previewView enablePrimaryRender];
+            if (!self.multiAudioEngine)
+            {
+                [self setupDummyAudioEngine];
+            }
             self.multiAudioEngineViewController.viewOnly = YES;
-            self.multiAudioEngine = [CaptureController sharedCaptureController].multiAudioEngine;
         }
+
+
         
-        if (!self.multiAudioEngine)
-        {
-            self.multiAudioEngine = [CaptureController sharedCaptureController].multiAudioEngine;
-        }
-    } else if ([keyPath isEqualToString:@"mousedSource"]) {
+     } else if ([keyPath isEqualToString:@"mousedSource"]) {
         NSArray *useSrcs;
         if (self.previewView.mousedSource)
         {

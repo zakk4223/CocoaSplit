@@ -87,6 +87,14 @@
 
     self.volume = [restoreDict[@"volume"] floatValue];
     
+
+    NSArray *effectCopy = [self.effectChain copy];
+    for (CAMultiAudioEffect *effect in effectCopy)
+    {
+        [self removeObjectFromEffectChainAtIndex:[effectCopy indexOfObject:effect]];
+    }
+    
+    
     if (restoreDict[@"effectChain"])
     {
         NSArray *effectData = restoreDict[@"effectChain"];
@@ -97,9 +105,10 @@
             [self addEffect:newEffect];
         }
         
-        [self rebuildEffectChain];
         
     }
+
+    [self rebuildEffectChain];
 
 }
 

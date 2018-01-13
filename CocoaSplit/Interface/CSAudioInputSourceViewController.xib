@@ -235,7 +235,7 @@
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                         <connections>
-                                            <action selector="openMixerWindow:" target="-2" id="AH4-yg-hyr"/>
+                                            <action selector="openMixerWindow:" target="-2" id="F2K-Co-CU8"/>
                                         </connections>
                                     </button>
                                 </subviews>

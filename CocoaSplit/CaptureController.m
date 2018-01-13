@@ -533,9 +533,10 @@
 {
     CSLayoutEditWindowController *newController = [[CSLayoutEditWindowController alloc] init];
 
-    [newController showWindow:nil];
     
     newController.previewView.isEditWindow = YES;
+    [newController showWindow:nil];
+
     
     LayoutRenderer *wRenderer = [[LayoutRenderer alloc] init];
     
@@ -551,8 +552,9 @@
     
     newController.delegate = self;
     
-    
+
     [_layoutWindows addObject:newController];
+
     return newController;
 }
 
@@ -1220,16 +1222,20 @@
        dispatch_source_set_timer(_audio_statistics_timer, DISPATCH_TIME_NOW, 0.10*NSEC_PER_SEC, 0);
 
        dispatch_source_set_event_handler(_audio_statistics_timer, ^{
+           
            if (self.multiAudioEngine)
            {
                [self.multiAudioEngine updateStatistics];
            }
-           for (CSLayoutRecorder *recorder in self.layoutRecorders)
+           for (SourceLayout *layout in self.sourceLayouts)
            {
-               if (recorder.audioEngine)
+               if (layout.recorder && layout.recorder.audioEngine)
                {
-                   [recorder.audioEngine updateStatistics];
+                   [layout.recorder.audioEngine updateStatistics];
+               } else if (layout.audioEngine) {
+                   [layout.audioEngine updateStatistics];
                }
+                   
            }
        });
        

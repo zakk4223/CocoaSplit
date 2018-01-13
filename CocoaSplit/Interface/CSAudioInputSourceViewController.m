@@ -40,16 +40,34 @@
     
 }
 
+
+
 -(IBAction)openMixerWindow:(id)sender
 {
+
+    CAMultiAudioInput *inputNode = nil;
     
-    if (self.inputSource.audioNode.downMixer)
+    inputNode = [self.inputSource findAudioNodeForEdit];
+    
+
+    if (inputNode)
     {
-        self.mixerWindow = [[CAMultiAudioMatrixMixerWindowController alloc] initWithAudioMixer:self.inputSource.audioNode];
+        self.mixerWindow = [[CAMultiAudioMatrixMixerWindowController alloc] initWithAudioMixer:inputNode];
         [self.mixerWindow showWindow:nil];
+        self.mixerWindow.delegate = self;
         self.mixerWindow.window.title = self.inputSource.name;
     }
 }
+
+-(void)mixerWindowWillClose:(CAMultiAudioMatrixMixerWindowController *)mixerController
+{
+    NSMutableDictionary *saveData = [NSMutableDictionary dictionary];
+    CAMultiAudioInput *inputNode = mixerController.audioNode;
+    [inputNode saveDataToDict:saveData];
+    self.inputSource.savedAudioSettings = saveData;
+}
+
+
 
 -(void) tableViewSelectionDidChange:(NSNotification *)notification
 {

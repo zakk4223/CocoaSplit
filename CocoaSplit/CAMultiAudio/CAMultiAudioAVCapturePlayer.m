@@ -31,6 +31,11 @@
 -(void)setEnabled:(bool)enabled
 {
     super.enabled = enabled;
+    if (!self.graph)
+    {
+        return;
+    }
+    
     if (enabled)
     {
         [self attachCaptureSession];

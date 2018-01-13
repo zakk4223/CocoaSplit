@@ -188,6 +188,7 @@
             CAMultiAudioEngine *useEngine = nil;
 
 
+            useEngine = self.layout.audioEngine;
             
             if (!useEngine)
             {

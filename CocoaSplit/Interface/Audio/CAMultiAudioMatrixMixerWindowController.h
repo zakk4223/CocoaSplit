@@ -23,6 +23,7 @@
 @property (strong) NSWindow *eqWindow;
 @property (strong) NSWindow *compressorWindow;
 @property (weak) IBOutlet CAMultiAudioEffectsTableController *effectsController;
+@property (weak) NSObject *delegate;
 
 - (IBAction)matrixVolumeChanged:(NSSlider *)sender;
 

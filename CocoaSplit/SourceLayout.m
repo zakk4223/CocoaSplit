@@ -674,6 +674,22 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     return audioRestore;
 }
 
+-(CAMultiAudioEngine *)findAudioEngine
+{
+    if (self.audioEngine)
+    {
+        return self.audioEngine;
+    }
+    
+    if (self.recorder.audioEngine)
+    {
+        return self.recorder.audioEngine;
+    }
+    
+    return nil;
+}
+
+
 -(void)reapplyAudioSources
 {
     for (NSObject <CSInputSourceProtocol> *input in self.sourceList)

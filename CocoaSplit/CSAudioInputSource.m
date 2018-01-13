@@ -123,6 +123,8 @@
         NSMutableDictionary *nodeData = [NSMutableDictionary dictionary];
         [self.audioNode saveDataToDict:nodeData];
         [aCoder encodeObject:nodeData forKey:@"savedAudioSettings"];
+    } else if (_savedAudioSettings) {
+        [aCoder encodeObject:_savedAudioSettings forKey:@"savedAudioSettings"];
     }
 
 }
@@ -223,14 +225,41 @@
 -(CAMultiAudioEngine *)findAudioEngine
 {
     CAMultiAudioEngine *audioEngine = nil;
-    if (self.sourceLayout.recorder)
+    audioEngine = [self.sourceLayout findAudioEngine];
+    if (!audioEngine)
     {
-        audioEngine = self.sourceLayout.recorder.audioEngine;
-    } else {
         audioEngine = [CaptureController sharedCaptureController].multiAudioEngine;
     }
     
     return audioEngine;
+}
+
+
+-(CAMultiAudioInput *)findAudioNodeForEdit
+{
+    CAMultiAudioInput *returnNode = nil;
+    
+    if (self.audioNode)
+    {
+        return self.audioNode;
+    }
+    CAMultiAudioEngine *audioEngine = [self findAudioEngine];
+    CAMultiAudioInput *existingNode = [audioEngine inputForUUID:self.audioUUID];
+    
+    if (!existingNode && self.audioFilePath)
+    {
+        existingNode = [[CAMultiAudioFile alloc] initWithPath:self.audioFilePath];
+    }
+    
+    
+    if (existingNode)
+    {
+        returnNode = [[[existingNode class] alloc] init];
+        
+        [self applyAudioSettingsForNode:returnNode];
+        return returnNode;
+    }
+    return returnNode;
 }
 
 
@@ -255,6 +284,27 @@
     }
 }
 
+-(void)applyAudioSettingsForNode:(CAMultiAudioInput *)node
+{
+    if (node)
+    {
+        if ([node isKindOfClass:CAMultiAudioFile.class])
+        {
+            CAMultiAudioFile *fileNode = (CAMultiAudioFile *)node;
+            fileNode.loop = self.fileLoop;
+            fileNode.startTime = self.fileStartTime;
+            fileNode.endTime = self.fileEndTime;
+        }
+        
+        node.enabled = self.audioEnabled;
+        node.volume = self.audioVolume;
+        
+        if (_savedAudioSettings)
+        {
+            [node restoreDataFromDict:_savedAudioSettings];
+        }
+    }
+}
 
 -(void)applyAudioSettings
 {
@@ -277,6 +327,7 @@
 
     }
 
+    NSLog(@"APPLY AUDIO SETTINGS %@", self.audioNode);
     if (self.audioNode)
     {
         if ([self.audioNode isKindOfClass:CAMultiAudioFile.class])
