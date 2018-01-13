@@ -3,12 +3,12 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 10/18/15.
-//  Copyright © 2015 Zakk. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
 #import "InputPopupControllerViewController.h"
 #import "CSInputLibraryItem.h"
+
 
 @class CaptureController;
 @class CSLayoutEditWindowController;
@@ -17,6 +17,7 @@
 {
     NSRange _dragRange;
     NSArray *_draggingObjects;
+
 }
 
 

@@ -3,7 +3,6 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 4/2/16.
-//  Copyright © 2016 Zakk. All rights reserved.
 //
 
 #import "CSTimedOutputBuffer.h"
@@ -45,8 +44,8 @@
     newout.video_codec_id  = self.compressor.codec_id;
     newout.framerate = controller.captureFPS;
     newout.stream_output = [toFile stringByStandardizingPath];
-    newout.samplerate = controller.audioSamplerate;
-    newout.audio_bitrate = controller.audioBitrate;
+    newout.samplerate = controller.multiAudioEngine.sampleRate;
+    newout.audio_bitrate = controller.multiAudioEngine.audioBitrate;
 
     NSMutableArray *fCopy;
     @synchronized(self) {

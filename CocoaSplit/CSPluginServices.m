@@ -105,7 +105,7 @@
     AppDelegate *myAppDelegate = [[NSApplication sharedApplication] delegate];
     if (myAppDelegate.captureController)
     {
-        return myAppDelegate.captureController.audioSamplerate;
+        return myAppDelegate.captureController.multiAudioEngine.sampleRate;
     }
     return 0;
 }

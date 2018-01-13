@@ -66,6 +66,18 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
             self.sampleRate = [aDecoder decodeInt32ForKey:@"sampleRate"];
         }
         
+        
+        if ([aDecoder containsValueForKey:@"audioBitrate"])
+        {
+            self.audioBitrate = [aDecoder decodeIntForKey:@"audioBitrate"];
+        }
+        
+        if ([aDecoder containsValueForKey:@"audioAdjust"])
+        {
+            self.audio_adjust = [aDecoder decodeDoubleForKey:@"audioAdjust"];
+        }
+        
+        
         if ([aDecoder containsValueForKey:@"selectedAudioId"])
         {
             
@@ -164,6 +176,9 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     [aCoder encodeFloat:self.previewMixer.volume forKey:@"previewVolume"];
     [aCoder encodeBool:self.previewMixer.muted forKey:@"previewMuted"];
 
+    [aCoder encodeInt:self.audioBitrate forKey:@"audioBitrate"];
+    [aCoder encodeDouble:self.audio_adjust forKey:@"audioAdjust"];
+    
     NSMutableDictionary *encodeMixerChain = [NSMutableDictionary dictionary];
     [self.encodeMixer saveDataToDict:encodeMixerChain];
     [aCoder encodeObject:encodeMixerChain forKey:@"encodeMixerSettings"];

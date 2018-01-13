@@ -193,15 +193,15 @@
             if (!useEngine)
             {
                 useEngine = [[CAMultiAudioEngine alloc] init];
-                useEngine.sampleRate = [CaptureController sharedCaptureController].audioSamplerate;
+                useEngine.sampleRate = [CaptureController sharedCaptureController].multiAudioEngine.sampleRate;
                 [useEngine disableAllInputs];
             }
             
 
             self.audioEncoder = [[CSAacEncoder alloc] init];
             self.audioEncoder.encodedReceiver = self;
-            self.audioEncoder.sampleRate = [CaptureController sharedCaptureController].audioSamplerate;
-            self.audioEncoder.bitRate = [CaptureController sharedCaptureController].audioBitrate*1000;
+            self.audioEncoder.sampleRate = [CaptureController sharedCaptureController].multiAudioEngine.sampleRate;
+            self.audioEncoder.bitRate = [CaptureController sharedCaptureController].multiAudioEngine.audioBitrate*1000;
             
             self.audioEncoder.inputASBD = useEngine.graph.graphAsbd;
             [self.audioEncoder setupEncoderBuffer];

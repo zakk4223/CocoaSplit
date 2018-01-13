@@ -34,14 +34,14 @@
                         <rect key="frame" x="20" y="82" width="104" height="15"/>
                         <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="1" doubleValue="0.5" tickMarkPosition="above" sliderType="linear" id="UnM-n9-fXM"/>
                         <connections>
-                            <binding destination="Mpd-4L-AyW" name="value" keyPath="selection.multiAudioEngine.previewMixer.volume" id="6xz-xB-ZMW"/>
+                            <binding destination="dRe-6o-71e" name="value" keyPath="selection.previewMixer.volume" id="1SB-e2-Okh"/>
                         </connections>
                     </slider>
                     <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HYJ-UD-4rz">
                         <rect key="frame" x="21" y="133" width="104" height="15"/>
                         <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" maxValue="1" doubleValue="1" tickMarkPosition="above" sliderType="linear" id="SQd-fM-eQ9"/>
                         <connections>
-                            <binding destination="Mpd-4L-AyW" name="value" keyPath="selection.multiAudioEngine.encodeMixer.volume" id="vIQ-AP-0nG"/>
+                            <binding destination="dRe-6o-71e" name="value" keyPath="selection.encodeMixer.volume" id="XeD-QF-UUJ"/>
                         </connections>
                     </slider>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wwP-vq-QJZ">
@@ -60,7 +60,7 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
-                            <binding destination="Mpd-4L-AyW" name="value" keyPath="selection.audioBitrate" id="0YA-BQ-yzB"/>
+                            <binding destination="dRe-6o-71e" name="value" keyPath="selection.audioBitrate" id="vaY-7n-Abm"/>
                         </connections>
                     </textField>
                     <popUpButton horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="67k-Zi-Ko9">
@@ -77,13 +77,8 @@
                             </menu>
                         </popUpButtonCell>
                         <connections>
-                            <binding destination="Mpd-4L-AyW" name="enabled" keyPath="selection.captureRunning" id="ywc-ht-TV0">
-                                <dictionary key="options">
-                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                </dictionary>
-                            </binding>
-                            <binding destination="Mpd-4L-AyW" name="selectedObject" keyPath="selection.multiAudioEngine.sampleRate" previousBinding="IZW-dj-Ps8" id="164-cc-mL3"/>
-                            <binding destination="Mpd-4L-AyW" name="content" keyPath="selection.multiAudioEngine.validSamplerates" id="IZW-dj-Ps8"/>
+                            <binding destination="dRe-6o-71e" name="content" keyPath="selection.validSamplerates" id="Vrh-4p-MVd"/>
+                            <binding destination="dRe-6o-71e" name="selectedObject" keyPath="selection.sampleRate" previousBinding="Vrh-4p-MVd" id="BLQ-rp-vWd"/>
                         </connections>
                     </popUpButton>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ycu-9s-oiz">
@@ -113,7 +108,7 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
-                            <binding destination="Mpd-4L-AyW" name="value" keyPath="selection.audio_adjust" id="MVg-Z1-7iG"/>
+                            <binding destination="dRe-6o-71e" name="value" keyPath="selection.audio_adjust" id="8kK-Na-TxQ"/>
                         </connections>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3S3-NA-Pfr">
@@ -142,7 +137,7 @@
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
                         <connections>
-                            <binding destination="Mpd-4L-AyW" name="value" keyPath="selection.multiAudioEngine.encodeMixer.muted" id="5aF-BD-jmd"/>
+                            <binding destination="dRe-6o-71e" name="value" keyPath="selection.encodeMixer.muted" id="BOX-jc-985"/>
                         </connections>
                     </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GNm-og-wRf">
@@ -170,7 +165,7 @@
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                         <connections>
-                            <binding destination="Mpd-4L-AyW" name="level" keyPath="selection.multiAudioEngine.previewAudioPowerLevel" id="fdS-Wb-FqB"/>
+                            <binding destination="dRe-6o-71e" name="level" keyPath="selection.previewAudioPowerLevel" id="dvF-Ka-ryp"/>
                         </connections>
                     </customView>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5HX-Gi-83X">
@@ -197,7 +192,7 @@
                         <connections>
                             <binding destination="K2Z-Fv-QYk" name="content" keyPath="arrangedObjects" id="jc5-dt-cWp"/>
                             <binding destination="K2Z-Fv-QYk" name="contentValues" keyPath="arrangedObjects.name" previousBinding="jc5-dt-cWp" id="0xx-Dh-gkf"/>
-                            <binding destination="Mpd-4L-AyW" name="selectedObject" keyPath="selection.multiAudioEngine.outputNode" previousBinding="0xx-Dh-gkf" id="KXh-ys-7IC"/>
+                            <binding destination="dRe-6o-71e" name="selectedObject" keyPath="selection.outputNode" previousBinding="0xx-Dh-gkf" id="xe5-nZ-TZL"/>
                         </connections>
                     </popUpButton>
                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="zwp-mN-H4b" customClass="CSAudioLevelView">
@@ -214,7 +209,7 @@
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                         <connections>
-                            <binding destination="Mpd-4L-AyW" name="level" keyPath="selection.multiAudioEngine.streamAudioPowerLevel" id="YRv-tE-vce"/>
+                            <binding destination="dRe-6o-71e" name="level" keyPath="selection.streamAudioPowerLevel" id="Mav-vP-lhe"/>
                         </connections>
                     </customView>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="S23-4m-kb7">
@@ -224,7 +219,7 @@
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
                         <connections>
-                            <binding destination="Mpd-4L-AyW" name="value" keyPath="selection.multiAudioEngine.previewMixer.muted" id="ST4-Rx-TRY"/>
+                            <binding destination="dRe-6o-71e" name="value" keyPath="selection.previewMixer.muted" id="4ok-xX-j1r"/>
                         </connections>
                     </button>
                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="3Xs-zj-OzR">
@@ -302,29 +297,21 @@
         </viewController>
         <arrayController id="K2Z-Fv-QYk" userLabel="audioDeviceArrayController">
             <connections>
-                <binding destination="Mpd-4L-AyW" name="contentArray" keyPath="selection.multiAudioEngine.audioOutputs" id="xDF-Ku-x3N"/>
+                <binding destination="dRe-6o-71e" name="contentArray" keyPath="selection.audioOutputs" id="L1W-ea-al7"/>
             </connections>
         </arrayController>
         <objectController id="uaF-2l-lb1" userLabel="audioNodeObjectController">
             <connections>
-                <binding destination="Mpd-4L-AyW" name="contentObject" keyPath="selection.multiAudioEngine.encodeMixer" id="zeo-JY-cda"/>
+                <binding destination="dRe-6o-71e" name="contentObject" keyPath="selection.encodeMixer" id="gO5-Q2-tRx"/>
             </connections>
         </objectController>
-        <objectController id="Mpd-4L-AyW" userLabel="captureController">
+        <objectController id="dRe-6o-71e" userLabel="audioEngineController">
             <connections>
-                <binding destination="-2" name="contentObject" keyPath="self.controller" id="p38-PC-Qfd"/>
+                <binding destination="-2" name="contentObject" keyPath="self.audioEngine" id="jzH-kB-bgo"/>
             </connections>
         </objectController>
-        <arrayController id="xMr-1u-sQs" userLabel="audioInputArrayController">
-            <connections>
-                <binding destination="Mpd-4L-AyW" name="contentArray" keyPath="selection.multiAudioEngine.audioInputs" id="sCR-JL-ysP"/>
-            </connections>
-        </arrayController>
-        <arrayController id="C6s-yq-C8q" userLabel="effectsChainController">
-            <connections>
-                <binding destination="Mpd-4L-AyW" name="contentArray" keyPath="selection.multiAudioEngine.encodeMixer.effectChain" id="yZp-tP-NKt"/>
-            </connections>
-        </arrayController>
+        <arrayController id="xMr-1u-sQs" userLabel="audioInputArrayController"/>
+        <arrayController id="C6s-yq-C8q" userLabel="effectsChainController"/>
     </objects>
     <resources>
         <image name="Mute_Icon" width="240" height="240"/>

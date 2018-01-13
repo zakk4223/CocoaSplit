@@ -128,17 +128,45 @@ Gw
                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="Uim-le-iB0">
                         <rect key="frame" x="400" y="54" width="271" height="235"/>
                     </customView>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rdr-KT-9Or">
+                        <rect key="frame" x="398" y="297" width="37" height="14"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="33" id="qBt-zr-Uzj"/>
+                        </constraints>
+                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Audio" id="0ET-nH-Fev">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <button toolTip="Global Audio Configuration" translatesAutoresizingMaskIntoConstraints="NO" id="vZe-Kw-lhA">
+                        <rect key="frame" x="441" y="297" width="17" height="14"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="17" id="LmT-sb-8Uc"/>
+                        </constraints>
+                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSActionTemplate" imagePosition="only" alignment="center" controlSize="small" imageScaling="proportionallyUpOrDown" inset="2" id="BKa-nk-exI">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="openAdvancedAudio:" target="-2" id="Jin-4v-hQk"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="1EC-0I-yZr" firstAttribute="leading" secondItem="ImN-fd-uwJ" secondAttribute="trailing" constant="12" symbolic="YES" id="0Y5-7C-P5h"/>
+                    <constraint firstItem="Uim-le-iB0" firstAttribute="top" secondItem="vZe-Kw-lhA" secondAttribute="bottom" constant="8" symbolic="YES" id="1os-yh-c3v"/>
                     <constraint firstItem="yfb-Dt-tcg" firstAttribute="top" secondItem="YYB-zM-dHR" secondAttribute="top" id="2qo-Ne-E6n"/>
                     <constraint firstItem="tog-MO-bSt" firstAttribute="leading" secondItem="tX2-A6-u0S" secondAttribute="trailing" constant="37" id="3Ll-Ru-IGP"/>
                     <constraint firstAttribute="bottom" secondItem="mFf-xH-NMG" secondAttribute="bottom" constant="54" id="5JD-6f-9yl"/>
                     <constraint firstItem="2J5-Pb-RaS" firstAttribute="leading" secondItem="mFf-xH-NMG" secondAttribute="leading" id="Atv-uj-ls7"/>
                     <constraint firstItem="Z2d-qV-QuI" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" constant="20" symbolic="YES" id="HFE-0W-KML"/>
+                    <constraint firstItem="rdr-KT-9Or" firstAttribute="top" secondItem="vZe-Kw-lhA" secondAttribute="top" id="KMz-yW-v6l"/>
+                    <constraint firstItem="rdr-KT-9Or" firstAttribute="leading" secondItem="Uim-le-iB0" secondAttribute="leading" id="LU2-my-6ZS"/>
                     <constraint firstItem="yfb-Dt-tcg" firstAttribute="top" secondItem="uUD-nM-Xzg" secondAttribute="bottom" constant="8" symbolic="YES" id="OfX-a3-yJs"/>
                     <constraint firstItem="Uim-le-iB0" firstAttribute="trailing" secondItem="1EC-0I-yZr" secondAttribute="trailing" id="QQO-aU-V9z"/>
                     <constraint firstItem="Uim-le-iB0" firstAttribute="bottom" secondItem="mFf-xH-NMG" secondAttribute="bottom" id="Rr9-o7-Vq1"/>
+                    <constraint firstItem="vZe-Kw-lhA" firstAttribute="leading" secondItem="rdr-KT-9Or" secondAttribute="trailing" constant="8" symbolic="YES" id="Tuk-8r-Q8b"/>
                     <constraint firstItem="2J5-Pb-RaS" firstAttribute="top" secondItem="tX2-A6-u0S" secondAttribute="bottom" constant="56" id="WxZ-K7-H1c"/>
                     <constraint firstItem="yfb-Dt-tcg" firstAttribute="trailing" secondItem="tog-MO-bSt" secondAttribute="trailing" id="aeE-vO-QU4"/>
                     <constraint firstItem="uUD-nM-Xzg" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" id="bMg-of-gF0"/>
@@ -156,6 +184,7 @@ Gw
                     <constraint firstItem="YYB-zM-dHR" firstAttribute="trailing" secondItem="1EC-0I-yZr" secondAttribute="trailing" id="sv9-8h-Q9N"/>
                     <constraint firstItem="Z2d-qV-QuI" firstAttribute="baseline" secondItem="yfb-Dt-tcg" secondAttribute="baseline" id="tnj-N4-5dF"/>
                     <constraint firstItem="tX2-A6-u0S" firstAttribute="leading" secondItem="2J5-Pb-RaS" secondAttribute="leading" id="uHt-d9-iY4"/>
+                    <constraint firstItem="rdr-KT-9Or" firstAttribute="baseline" secondItem="2J5-Pb-RaS" secondAttribute="baseline" id="uYX-PD-dLV"/>
                     <constraint firstItem="ImN-fd-uwJ" firstAttribute="baseline" secondItem="1EC-0I-yZr" secondAttribute="baseline" id="yB3-8m-Uxb"/>
                     <constraint firstItem="tX2-A6-u0S" firstAttribute="baseline" secondItem="tog-MO-bSt" secondAttribute="baseline" id="yCN-24-tOw"/>
                     <constraint firstAttribute="trailing" secondItem="uUD-nM-Xzg" secondAttribute="trailing" constant="5" id="yEC-6X-Pvn"/>
@@ -199,4 +228,7 @@ Gw
             </connections>
         </viewController>
     </objects>
+    <resources>
+        <image name="NSActionTemplate" width="14" height="14"/>
+    </resources>
 </document>

@@ -46,7 +46,6 @@
 
 @synthesize selectedLayout = _selectedLayout;
 @synthesize stagingLayout = _stagingLayout;
-@synthesize audioSamplerate  = _audioSamplerate;
 @synthesize transitionName = _transitionName;
 @synthesize useInstantRecord = _useInstantRecord;
 @synthesize instantRecordBufferDuration = _instantRecordBufferDuration;
@@ -1997,13 +1996,10 @@
     [saveRoot setValue: [NSNumber numberWithInt:self.captureWidth] forKey:@"captureWidth"];
     [saveRoot setValue: [NSNumber numberWithInt:self.captureHeight] forKey:@"captureHeight"];
     [saveRoot setValue: [NSNumber numberWithDouble:self.captureFPS] forKey:@"captureFPS"];
-    [saveRoot setValue: [NSNumber numberWithInt:self.audioBitrate] forKey:@"audioBitrate"];
-    [saveRoot setValue: [NSNumber numberWithInt:self.audioSamplerate] forKey:@"audioSamplerate"];
     [saveRoot setValue: self.selectedVideoType forKey:@"selectedVideoType"];
     [saveRoot setValue: self.captureDestinations forKey:@"captureDestinations"];
     [saveRoot setValue:[NSNumber numberWithInt:self.maxOutputDropped] forKey:@"maxOutputDropped"];
     [saveRoot setValue:[NSNumber numberWithInt:self.maxOutputPending] forKey:@"maxOutputPending"];
-    [saveRoot setValue:[NSNumber numberWithDouble:self.audio_adjust] forKey:@"audioAdjust"];
     [saveRoot setValue: [NSNumber numberWithBool:self.useStatusColors] forKey:@"useStatusColors"];
     [saveRoot setValue:self.compressors forKey:@"compressors"];
     [saveRoot setValue:self.extraSaveData forKey:@"extraSaveData"];
@@ -2129,9 +2125,8 @@
     
     self.captureWidth = [[saveRoot valueForKey:@"captureWidth"] intValue];
     self.captureHeight = [[saveRoot valueForKey:@"captureHeight"] intValue];
-    self.audioBitrate = [[saveRoot valueForKey:@"audioBitrate"] intValue];
-    self.audioSamplerate = [[saveRoot valueForKey:@"audioSamplerate"] intValue];
-   
+    
+
     self.compressors = [[saveRoot valueForKey:@"compressors"] mutableCopy];
     
     
@@ -2190,7 +2185,7 @@
     }
     
     
-    self.audio_adjust = [[saveRoot valueForKey:@"audioAdjust"] doubleValue];
+    //self.audio_adjust = [[saveRoot valueForKey:@"audioAdjust"] doubleValue];
     
 
     self.stagingPreviewView.controller = self;
@@ -2258,7 +2253,22 @@
     {
         self.multiAudioEngine = [[CAMultiAudioEngine alloc] init];
     }
-     
+    
+    NSNumber *legacyBitrate = [saveRoot valueForKey:@"audioBitrate"];
+    
+    if (legacyBitrate)
+    {
+        self.multiAudioEngine.audioBitrate = [legacyBitrate intValue];
+    }
+    
+    
+    NSNumber *legacy_audio_adjust = [saveRoot valueForKey:@"audioAdjust"];
+
+    if (legacy_audio_adjust)
+    {
+        self.multiAudioEngine.audio_adjust = [legacy_audio_adjust doubleValue];
+    }
+    
 
 
     self.layoutSequences = [saveRoot valueForKey:@"layoutSequences"];
@@ -2736,7 +2746,7 @@
         {
             CSAacEncoder *audioEnc = [[CSAacEncoder alloc] init];
             audioEnc.sampleRate = self.audioSamplerate;
-            audioEnc.bitRate = self.audioBitrate*1000;
+            audioEnc.bitRate = self.multiAudioEngine.audioBitrate*1000;
             
             audioEnc.inputASBD = self.multiAudioEngine.graph.graphAsbd;
             [audioEnc setupEncoderBuffer];
@@ -3188,7 +3198,8 @@
         _audioWindowController = [[CSAdvancedAudioWindowController alloc] init];
     }
     
-    _audioWindowController.controller = self;
+    _audioWindowController.audioEngine = self.multiAudioEngine;
+    
     [_audioWindowController showWindow:nil];
     
 }
@@ -3523,8 +3534,7 @@
 - (void) setNilValueForKey:(NSString *)key
 {
     
-    NSUInteger key_idx = [@[@"captureWidth", @"captureHeight", @"captureFPS",
-    @"audioBitrate", @"audioSamplerate"] indexOfObject:key];
+    NSUInteger key_idx = [@[@"captureWidth", @"captureHeight", @"captureFPS"] indexOfObject:key];
     
     if (key_idx != NSNotFound)
     {

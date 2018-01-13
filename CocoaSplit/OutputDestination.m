@@ -392,8 +392,8 @@
     newout.framerate = self.settingsController.frameRate;
     newout.stream_output = [destination stringByStandardizingPath];
     newout.stream_format = self.output_format;
-    newout.samplerate = [CaptureController sharedCaptureController].audioSamplerate;
-    newout.audio_bitrate = [CaptureController sharedCaptureController].audioBitrate;
+    newout.samplerate = [CaptureController sharedCaptureController].multiAudioEngine.sampleRate;
+    newout.audio_bitrate = [CaptureController sharedCaptureController].multiAudioEngine.audioBitrate;
     
     
     

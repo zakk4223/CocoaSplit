@@ -8,11 +8,12 @@
 #import <Cocoa/Cocoa.h>
 #import "CaptureController.h"
 #import "CAMultiAudioEffectsTableController.h"
-
 @interface CSAdvancedAudioWindowController : NSWindowController <NSWindowDelegate>
+{
+}
 
 
-@property (weak) CaptureController *controller;
+@property (strong) CAMultiAudioEngine *audioEngine;
+
 @property (weak) IBOutlet CAMultiAudioEffectsTableController *effectsController;
-
 @end

@@ -16,11 +16,13 @@
 #import "CSScriptInputSource.h"
 #import "CSSourceListViewController.h"
 #import "CAMultiAudioEngineInputsController.h"
+#import "CSAdvancedAudioWindowController.h"
+
 @interface CSLayoutEditWindowController : NSWindowController <NSWindowDelegate>
 {
     float _frame_interval;
     CSSourceListViewController *_sourceListController;
-    
+    CSAdvancedAudioWindowController *_audioWindowController;
     
 
 }
@@ -40,6 +42,7 @@
 - (IBAction)cancelEdit:(id)sender;
 - (IBAction)editOK:(id)sender;
 - (IBAction)layoutGoLive:(id)sender;
+- (IBAction)openAdvancedAudio:(id)sender;
 
 @property (assign) bool previewOnly;
 @property (strong) IBOutlet CSSourceListViewController *sourceListViewController;

@@ -43,16 +43,31 @@
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
 }
 
+- (IBAction)openAdvancedAudio:(id)sender
+{
+    if (!_audioWindowController)
+    {
+        _audioWindowController = [[CSAdvancedAudioWindowController alloc] init];
+    }
+    
+    _audioWindowController.audioEngine = self.multiAudioEngine;
+    
+    [_audioWindowController showWindow:nil];
+    
+}
+
+
 -(void) setupDummyAudioEngine
 {
     CAMultiAudioEngine *audioEngine = nil;
     
-    NSLog(@"DUMMY AUDIO ENGINE");
     audioEngine = [[CAMultiAudioEngine alloc] init];
-    audioEngine.sampleRate = [CaptureController sharedCaptureController].audioSamplerate;
+    audioEngine.sampleRate = [CaptureController sharedCaptureController].multiAudioEngine.sampleRate;
     
     self.multiAudioEngine = audioEngine;
 
+    audioEngine.previewMixer.muted = YES;
+    
     self.previewView.sourceLayout.audioEngine = audioEngine;
 //    [audioEngine disableAllInputs];
 
