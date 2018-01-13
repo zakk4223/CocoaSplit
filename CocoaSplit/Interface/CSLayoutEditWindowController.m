@@ -109,7 +109,11 @@
     if (self.previewView.sourceLayout)
     {
         [self.previewView.sourceLayout saveSourceList];
-        [self.previewView.sourceLayout clearSourceList];
+        if (!self.previewView.sourceLayout.recorder)
+        {
+            //Don't disturb any active recorder
+            [self.previewView.sourceLayout clearSourceList];
+        }
     }
     [self close];
 }
@@ -153,6 +157,13 @@
         if (self.previewView.sourceLayout.recorder)
         {
             self.multiAudioEngineViewController.viewOnly = NO;
+            if (!self.previewView.sourceLayout.recorder.renderer)
+            {
+                self.previewView.sourceLayout.recorder.renderer = self.previewView.layoutRenderer;
+            } else {
+                self.previewView.layoutRenderer = self.previewView.sourceLayout.recorder.renderer;
+            }
+            
             [self.previewView disablePrimaryRender];
             if (!self.multiAudioEngine)
             {
