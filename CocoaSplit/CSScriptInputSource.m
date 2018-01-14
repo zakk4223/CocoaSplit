@@ -53,6 +53,11 @@
     return @"Script";
 }
 
+-(bool) isScript
+{
+    return YES;
+}
+
 -(NSViewController *)configurationViewController
 {
     CSScriptInputSourceViewController *controller = [[CSScriptInputSourceViewController alloc] init];

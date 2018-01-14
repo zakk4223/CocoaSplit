@@ -63,7 +63,7 @@
     
     NSTreeNode *node = [outlineView itemAtRow:row];
     NSObject<CSInputSourceProtocol> *src = node.representedObject;
-    if (!src.layer || !((InputSource *)src).parentInput)
+    if (!src.isVideo || !((InputSource *)src).parentInput)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             [outlineView expandItem:nil expandChildren:YES];
@@ -172,7 +172,7 @@
     
     if (sourceLayout)
     {
-        if (source.layer)
+        if (source.isVideo)
         {
             InputSource *vSrc = (InputSource *)source;
             vSrc.autoPlaceOnFrameUpdate = YES;
@@ -245,7 +245,7 @@
     if (idxNode)
     {
         NSObject<CSInputSourceProtocol> *iSrc = idxNode.representedObject;
-        if (iSrc.layer)
+        if (iSrc.isVideo)
         {
             InputSource *dSrc = (InputSource *)iSrc;
             newDepth = dSrc.depth + 1;
@@ -315,7 +315,7 @@
         {
             
             [self addInputSourceWithInput:itemSrc];
-            if (itemSrc.layer)
+            if (itemSrc.isVideo)
             {
                 InputSource *lsrc = (InputSource *)itemSrc;
                 

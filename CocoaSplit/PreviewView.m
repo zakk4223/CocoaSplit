@@ -327,7 +327,7 @@
     if (item.representedObject)
     {
         NSObject<CSInputSourceProtocol> *hInput = (NSObject<CSInputSourceProtocol> *)item.representedObject;
-        if (_overlayView && hInput.layer)
+        if (_overlayView && hInput.isVideo)
         {
             _overlayView.parentSource = (InputSource *)hInput;
         }
@@ -878,7 +878,7 @@
         int snap_idx = 3;
         for (NSObject<CSInputSourceProtocol> *psrc in srcs)
         {
-            if (psrc == self.selectedSource || !psrc.layer)
+            if (psrc == self.selectedSource || !psrc.isVideo)
             {
                 continue;
             }
@@ -1062,7 +1062,7 @@
     NSString *srcUUID = source.uuid;
     
     NSObject<CSInputSourceProtocol> *realSrc = (InputSource *)[self.sourceLayout inputForUUID:srcUUID];
-    if (!_highlightedSourceMap[srcUUID] && realSrc && realSrc.layer)
+    if (!_highlightedSourceMap[srcUUID] && realSrc && realSrc.isVideo)
     {
         CSPreviewOverlayView *oview = [[CSPreviewOverlayView alloc] init];
         oview.renderControls = NO;
@@ -1393,7 +1393,7 @@
 {
     if (self.sourceLayout)
     {
-        if (source.layer)
+        if (source.isVideo)
         {
             InputSource *vSrc = (InputSource *)source;
             vSrc.autoPlaceOnFrameUpdate = YES;
@@ -1433,7 +1433,7 @@
     if (parentUUID)
     {
         NSObject<CSInputSourceProtocol> *parentSource = [self.sourceLayout inputForUUID:parentUUID];
-        if (parentSource && parentSource.layer)
+        if (parentSource && parentSource.isVideo)
         {
             InputSource *vParent = (InputSource *)parentSource;
             [self attachSource:restoredSource toSource:vParent];
@@ -1471,7 +1471,7 @@
         self.mousedSource = nil;
 
         NSString *pUUID = nil;
-        if (toDelete.layer)
+        if (toDelete.isVideo)
         {
             InputSource *cInput = (InputSource *)toDelete;
             if (cInput.parentInput)
@@ -1717,7 +1717,7 @@
         {
             
             [self addInputSourceWithInput:itemSrc];
-            if (itemSrc.layer)
+            if (itemSrc.isVideo)
             {
                 InputSource *lsrc = (InputSource *)itemSrc;
                 
@@ -1762,7 +1762,7 @@
 {
     NSString *uuid = src.uuid;
     
-    if (src.layer)
+    if (src.isVideo)
     {
         [self stopHighlightingSource:(InputSource *)src];
     }

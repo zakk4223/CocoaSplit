@@ -503,7 +503,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         [self->_topLevelSourceArray removeAllObjects];
         for (NSObject<CSInputSourceProtocol> *src in self.sourceListOrdered)
         {
-            if (!src.layer)
+            if (!src.isVideo)
             {
                 [noLayer addObject:src];
             } else if (!((InputSource *)src).parentInput) {
@@ -694,7 +694,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 {
     for (NSObject <CSInputSourceProtocol> *input in self.sourceList)
     {
-        if ([input isKindOfClass:[CSAudioInputSource class]])
+        if (input.isAudio)
         {
             CSAudioInputSource *audioSrc = (CSAudioInputSource *)input;
             [audioSrc applyAudioSettings];

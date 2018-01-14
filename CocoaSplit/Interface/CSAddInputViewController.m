@@ -236,13 +236,6 @@
  
   }
 
-/*
--(BOOL)tableView:(NSTableView *)tableView shouldSelectRow:(NSInteger)row
-{
-    return NO;
-}
-
-*/
 
 -(NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {

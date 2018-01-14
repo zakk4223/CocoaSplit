@@ -43,7 +43,9 @@
 
 @property (assign) bool scriptAlwaysRun;
 @property (assign) float duration;
-
+@property (readonly) bool isVideo;
+@property (readonly) bool isAudio;
+@property (readonly) bool isScript;
 
 @end
 
@@ -74,8 +76,9 @@
 
 @property (assign) bool scriptAlwaysRun;
 @property (assign) float duration;
-
-
+@property (readonly) bool isVideo;
+@property (readonly) bool isAudio;
+@property (readonly) bool isScript;
 
 
 

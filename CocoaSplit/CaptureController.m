@@ -3353,17 +3353,7 @@
     [configWindow setFrame:newFrame display:NO];
     [configWindow center];
     _configWindowCascadePoint = [configWindow cascadeTopLeftFromPoint:_configWindowCascadePoint];
-    /*
-    if (NSEqualPoints(_configWindowCascadePoint, NSZeroPoint))
-    {
-        [configWindow center];
-        
-        _configWindowCascadePoint = NSMakePoint(NSMinX(configWindow.frame), NSMaxY(configWindow.frame));
-    } else {
-        NSLog(@"CASCADING");
-        _configWindowCascadePoint = [configWindow cascadeTopLeftFromPoint:_configWindowCascadePoint];
-    }
-    */
+
     [configWindow setReleasedWhenClosed:NO];
     
     

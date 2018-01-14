@@ -202,6 +202,24 @@
  */
 
 
+-(bool) isVideo
+{
+    return NO;
+}
+
+-(bool) isAudio
+{
+    return NO;
+}
+
+-(bool) isScript
+{
+    return NO;
+}
+
+
+
+
 
 - (MIKMIDIResponderType)MIDIResponderTypeForCommandIdentifier:(NSString *)commandID
 {

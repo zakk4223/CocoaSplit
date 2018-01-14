@@ -28,6 +28,9 @@
 @property (assign) bool scriptAlwaysRun;
 @property (readonly) NSString *label;
 @property (assign) float duration;
+@property (readonly) bool isVideo;
+@property (readonly) bool isAudio;
+@property (readonly) bool isScript;
 
 
 

@@ -1155,7 +1155,7 @@ static NSArray *_sourceTypes = nil;
             weakSelf.layer.filters = cFilters;
             [CATransaction commit];
             [[self.sourceLayout.undoManager prepareWithInvocationTarget:weakSelf.sourceLayout] modifyUUID:weakSelf.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
-                if (input.layer)
+                if (input.isVideo)
                 {
                     [(InputSource *)input deleteLayerFilter:newFilter.name];
                 }
@@ -1193,7 +1193,7 @@ static NSArray *_sourceTypes = nil;
             weakSelf.layer.sourceLayer.filters = cFilters;
             [CATransaction commit];
             [[self.sourceLayout.undoManager prepareWithInvocationTarget:weakSelf.sourceLayout] modifyUUID:weakSelf.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
-                if (input.layer)
+                if (input.isVideo)
                 {
                     [(InputSource *)input deleteSourceFilter:newFilter.name];
                 }
@@ -1231,7 +1231,7 @@ static NSArray *_sourceTypes = nil;
             weakSelf.layer.backgroundFilters = cFilters;
             [CATransaction commit];
             [[self.sourceLayout.undoManager prepareWithInvocationTarget:weakSelf.sourceLayout] modifyUUID:weakSelf.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
-                if (input.layer)
+                if (input.isVideo)
                 {
                     [(InputSource *)input deleteBackgroundFilter:newFilter.name];
                 }
@@ -1264,7 +1264,7 @@ static NSArray *_sourceTypes = nil;
         CFRelease(tmpUUID);
         newFilter.name = filterID;
         [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
-            if (input.layer)
+            if (input.isVideo)
             {
                 [(InputSource *)input deleteLayerFilter:filterID];
             }
@@ -1297,7 +1297,7 @@ static NSArray *_sourceTypes = nil;
         CFRelease(tmpUUID);
         newFilter.name = filterID;
         [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
-            if (input.layer)
+            if (input.isVideo)
             {
                 [(InputSource *)input deleteSourceFilter:filterID];
             }
@@ -1331,7 +1331,7 @@ static NSArray *_sourceTypes = nil;
         newFilter.name = filterID;
         
         [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
-            if (input.layer)
+            if (input.isVideo)
             {
                 [(InputSource *)input deleteBackgroundFilter:filterID];
             }
@@ -3493,7 +3493,7 @@ static NSArray *_sourceTypes = nil;
         
         [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
             
-            if (input.layer)
+            if (input.isVideo)
             {
                 [(InputSource *)input setValue:oldValue forKeyPath:keyPath];
                 [(InputSource *)input updateSize:oldFrame.size.width height:oldFrame.size.height];
@@ -3551,6 +3551,11 @@ static NSArray *_sourceTypes = nil;
     return 0.0f;
 }
 
+
+-(bool) isVideo
+{
+    return YES;
+}
 
 -(void)stopObservingConstraintKeys
 {

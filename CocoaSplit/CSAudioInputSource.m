@@ -419,6 +419,13 @@
 }
  */
 
+
+-(bool) isAudio
+{
+    return YES;
+}
+
+
 -(void)beforeReplace:(bool)removing
 {
     if (removing)
