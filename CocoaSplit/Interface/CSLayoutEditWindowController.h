@@ -37,6 +37,7 @@
 @property (weak) id delegate;
 
 @property (weak) IBOutlet PreviewView *previewView;
+@property (weak) IBOutlet NSButton *recordButton;
 
 @property (strong) IBOutlet NSObjectController *layoutController;
 - (IBAction)cancelEdit:(id)sender;
@@ -48,5 +49,6 @@
 @property (strong) IBOutlet CSSourceListViewController *sourceListViewController;
 @property (strong) IBOutlet CAMultiAudioEngineInputsController *multiAudioEngineViewController;
 @property (assign) bool showAudioView;
+- (IBAction)recordButtonAction:(id)sender;
 
 @end

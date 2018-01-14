@@ -35,6 +35,8 @@
         [self.previewView disablePrimaryRender];
     }
     [self.previewView addObserver:self forKeyPath:@"sourceLayout.recorder" options:NSKeyValueObservingOptionNew context:NULL];
+    [self.previewView addObserver:self forKeyPath:@"sourceLayout.recordingLayout" options:NSKeyValueObservingOptionNew context:NULL];
+
     [self.previewView addObserver:self forKeyPath:@"mousedSource" options:NSKeyValueObservingOptionNew context:NULL];
     [self.sourceListViewController addObserver:self forKeyPath:@"selectedObjects" options:NSKeyValueObservingOptionNew context:NULL];
     CAMultiAudioEngine *audioEngine = [self.previewView.sourceLayout findAudioEngine];
@@ -55,6 +57,7 @@
     [_audioWindowController showWindow:nil];
     
 }
+
 
 
 -(void) setupDummyAudioEngine
@@ -84,6 +87,8 @@
     [self.sourceListViewController removeObserver:self forKeyPath:@"selectedObjects"];
 
     [self.previewView removeObserver:self forKeyPath:@"sourceLayout.recorder"];
+    [self.previewView removeObserver:self forKeyPath:@"sourceLayout.recordingLayout"];
+
     [self.previewView removeObserver:self forKeyPath:@"mousedSource"];
     self.multiAudioEngine = nil;
     self.previewView.sourceLayout.audioEngine = nil;
@@ -166,8 +171,20 @@
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
 {
+    if ([keyPath isEqualToString:@"sourceLayout.recordingLayout"])
+    {
+        if (self.previewView.sourceLayout.recordingLayout)
+        {
+            [self.recordButton setState:1];
+        } else {
+            [self.recordButton setState:0];
+        }
+    }
+    
+    
     if ([keyPath isEqualToString:@"sourceLayout.recorder"])
     {
+        
         self.previewView.sourceLayout.isActive = YES;
         if (self.previewView.sourceLayout.recorder)
         {
@@ -211,6 +228,17 @@
         {
             [self.previewView highlightSource:src];
         }
+    }
+}
+
+
+- (IBAction)recordButtonAction:(id)sender
+{
+    if (self.previewView.sourceLayout.recordingLayout)
+    {
+        [[CaptureController sharedCaptureController] stopRecordingLayout:self.previewView.sourceLayout];
+    } else {
+        [[CaptureController sharedCaptureController] startRecordingLayout:self.previewView.sourceLayout];
     }
 }
 

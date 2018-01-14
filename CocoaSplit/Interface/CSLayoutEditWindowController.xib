@@ -10,6 +10,7 @@
             <connections>
                 <outlet property="multiAudioEngineViewController" destination="mrK-o8-gTD" id="utv-T3-CU2"/>
                 <outlet property="previewView" destination="uUD-nM-Xzg" id="HNn-21-ate"/>
+                <outlet property="recordButton" destination="mhb-6H-Vsa" id="2Uh-sj-Zw8"/>
                 <outlet property="sourceListViewController" destination="HTf-ho-8it" id="43T-Ft-lFa"/>
                 <outlet property="testView" destination="mFf-xH-NMG" id="bRs-s7-NYy"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
@@ -152,6 +153,33 @@ Gw
                             <action selector="openAdvancedAudio:" target="-2" id="Jin-4v-hQk"/>
                         </connections>
                     </button>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mhb-6H-Vsa">
+                        <rect key="frame" x="303" y="13" width="70" height="32"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="58" id="ZQe-O0-daJ"/>
+                        </constraints>
+                        <buttonCell key="cell" type="push" title="Record" alternateTitle="Stop" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="oMj-ru-oM4">
+                            <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="recordButtonAction:" target="-2" id="gsY-8w-oNV"/>
+                        </connections>
+                    </button>
+                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="zDv-Do-BeY">
+                        <rect key="frame" x="281" y="20" width="20" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="20" id="nIC-Da-TUy"/>
+                        </constraints>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="Record_Icon" id="PjL-cu-xQp"/>
+                        <connections>
+                            <binding destination="XWe-tQ-Eyy" name="hidden" keyPath="selection.recordingLayout" id="IWX-Pz-KxF">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                </dictionary>
+                            </binding>
+                        </connections>
+                    </imageView>
                 </subviews>
                 <constraints>
                     <constraint firstItem="1EC-0I-yZr" firstAttribute="leading" secondItem="ImN-fd-uwJ" secondAttribute="trailing" constant="12" symbolic="YES" id="0Y5-7C-P5h"/>
@@ -163,20 +191,25 @@ Gw
                     <constraint firstItem="Z2d-qV-QuI" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" constant="20" symbolic="YES" id="HFE-0W-KML"/>
                     <constraint firstItem="rdr-KT-9Or" firstAttribute="top" secondItem="vZe-Kw-lhA" secondAttribute="top" id="KMz-yW-v6l"/>
                     <constraint firstItem="rdr-KT-9Or" firstAttribute="leading" secondItem="Uim-le-iB0" secondAttribute="leading" id="LU2-my-6ZS"/>
+                    <constraint firstItem="zDv-Do-BeY" firstAttribute="centerY" secondItem="ImN-fd-uwJ" secondAttribute="centerY" id="Lih-JP-oKK"/>
                     <constraint firstItem="yfb-Dt-tcg" firstAttribute="top" secondItem="uUD-nM-Xzg" secondAttribute="bottom" constant="8" symbolic="YES" id="OfX-a3-yJs"/>
+                    <constraint firstItem="zDv-Do-BeY" firstAttribute="centerY" secondItem="mhb-6H-Vsa" secondAttribute="centerY" id="PMz-Xd-ZPP"/>
                     <constraint firstItem="Uim-le-iB0" firstAttribute="trailing" secondItem="1EC-0I-yZr" secondAttribute="trailing" id="QQO-aU-V9z"/>
                     <constraint firstItem="Uim-le-iB0" firstAttribute="bottom" secondItem="mFf-xH-NMG" secondAttribute="bottom" id="Rr9-o7-Vq1"/>
+                    <constraint firstItem="zDv-Do-BeY" firstAttribute="bottom" secondItem="mhb-6H-Vsa" secondAttribute="bottom" id="TPX-Ak-TEN"/>
                     <constraint firstItem="vZe-Kw-lhA" firstAttribute="leading" secondItem="rdr-KT-9Or" secondAttribute="trailing" constant="8" symbolic="YES" id="Tuk-8r-Q8b"/>
                     <constraint firstItem="2J5-Pb-RaS" firstAttribute="top" secondItem="tX2-A6-u0S" secondAttribute="bottom" constant="56" id="WxZ-K7-H1c"/>
                     <constraint firstItem="yfb-Dt-tcg" firstAttribute="trailing" secondItem="tog-MO-bSt" secondAttribute="trailing" id="aeE-vO-QU4"/>
                     <constraint firstItem="uUD-nM-Xzg" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" id="bMg-of-gF0"/>
                     <constraint firstItem="uUD-nM-Xzg" firstAttribute="trailing" secondItem="YYB-zM-dHR" secondAttribute="trailing" id="cXa-mf-DVZ"/>
+                    <constraint firstItem="mhb-6H-Vsa" firstAttribute="leading" secondItem="zDv-Do-BeY" secondAttribute="trailing" constant="8" symbolic="YES" id="dL1-xR-llW"/>
                     <constraint firstItem="yfb-Dt-tcg" firstAttribute="leading" secondItem="tog-MO-bSt" secondAttribute="leading" id="dcc-op-5ag"/>
                     <constraint firstItem="Z2d-qV-QuI" firstAttribute="leading" secondItem="tX2-A6-u0S" secondAttribute="leading" id="eWM-r1-MmS"/>
                     <constraint firstItem="Uim-le-iB0" firstAttribute="top" secondItem="mFf-xH-NMG" secondAttribute="top" id="eg3-Y8-1tT"/>
                     <constraint firstItem="tog-MO-bSt" firstAttribute="top" secondItem="yfb-Dt-tcg" secondAttribute="bottom" constant="8" symbolic="YES" id="fnu-pc-yhF"/>
                     <constraint firstItem="uUD-nM-Xzg" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" id="fxJ-NU-WHS"/>
                     <constraint firstItem="tog-MO-bSt" firstAttribute="trailing" secondItem="mFf-xH-NMG" secondAttribute="trailing" id="gxT-zL-46V"/>
+                    <constraint firstItem="mhb-6H-Vsa" firstAttribute="baseline" secondItem="ImN-fd-uwJ" secondAttribute="baseline" id="hcr-09-JS3"/>
                     <constraint firstAttribute="bottom" secondItem="ImN-fd-uwJ" secondAttribute="bottom" constant="20" symbolic="YES" id="hqt-I1-SQM"/>
                     <constraint firstItem="mFf-xH-NMG" firstAttribute="top" secondItem="2J5-Pb-RaS" secondAttribute="bottom" constant="8" symbolic="YES" id="iNt-v1-019"/>
                     <constraint firstItem="Uim-le-iB0" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" constant="400" id="q6r-p4-e0N"/>
@@ -188,6 +221,7 @@ Gw
                     <constraint firstItem="ImN-fd-uwJ" firstAttribute="baseline" secondItem="1EC-0I-yZr" secondAttribute="baseline" id="yB3-8m-Uxb"/>
                     <constraint firstItem="tX2-A6-u0S" firstAttribute="baseline" secondItem="tog-MO-bSt" secondAttribute="baseline" id="yCN-24-tOw"/>
                     <constraint firstAttribute="trailing" secondItem="uUD-nM-Xzg" secondAttribute="trailing" constant="5" id="yEC-6X-Pvn"/>
+                    <constraint firstItem="mhb-6H-Vsa" firstAttribute="centerX" secondItem="se5-gp-TjO" secondAttribute="centerX" id="z8k-qJ-tgT"/>
                 </constraints>
             </view>
             <connections>
@@ -230,5 +264,6 @@ Gw
     </objects>
     <resources>
         <image name="NSActionTemplate" width="14" height="14"/>
+        <image name="Record_Icon" width="640" height="640"/>
     </resources>
 </document>
