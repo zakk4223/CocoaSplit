@@ -3,8 +3,7 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 11/22/12.
-//  Copyright (c) 2012 Zakk. All rights reserved.
-//
+
 #import <QuartzCore/QuartzCore.h>
 #import <OpenGL/OpenGL.h>
 #import <OpenGL/glu.h>
@@ -1252,7 +1251,7 @@
     if (toDetach && toDetach.parentInput)
     {
         [((InputSource *)toDetach.parentInput) detachInput:toDetach];
-        [[self.undoManager prepareWithInvocationTarget:self] subLayerInputSource:toDetach];
+        [[self.undoManager prepareWithInvocationTarget:self] attachByUUUID:toDetach.uuid toUUID:toDetach.parentInput.uuid];
     }
 }
 
@@ -1265,6 +1264,42 @@
 
     }
 }
+
+
+-(void)attachByUUUID:(NSString *)srcUUID toUUID:(NSString *)toUUID
+{
+    SourceLayout *sourceLayout = self.sourceLayout;
+    if (!srcUUID || !toUUID) //??
+    {
+        return;
+    }
+    
+    InputSource *src = (InputSource *)[sourceLayout inputForUUID:srcUUID];
+    InputSource *parent = (InputSource *)[sourceLayout inputForUUID:toUUID];
+    if (src && parent)
+    {
+        [parent attachInput:src];
+        [[self.undoManager prepareWithInvocationTarget:self] detachSourcesByUUID:@[src.uuid]];
+    }
+}
+
+-(void)detachSourcesByUUID:(NSArray *)uuids
+{
+    SourceLayout *sourceLayout = self.sourceLayout;
+    
+    for (NSString *uuid in uuids)
+    {
+        InputSource *src = (InputSource *)[sourceLayout inputForUUID:uuid];
+        InputSource *parent = src.parentInput;
+        if (parent)
+        {
+            [parent detachInput:src];
+            [[self.undoManager prepareWithInvocationTarget:self] attachByUUUID:src.uuid toUUID:parent.uuid];
+        }
+    }
+}
+
+
 -(void)subLayerInputSource:(id)sender
 {
     InputSource *toSub = nil;
@@ -1291,7 +1326,7 @@
         if (underSource)
         {
             [underSource attachInput:toSub];
-            [[self.undoManager prepareWithInvocationTarget:self] detachSource:toSub];
+            [[self.undoManager prepareWithInvocationTarget:self] detachSourcesByUUID:@[toSub.uuid]];
         }
     }
 }
@@ -1315,7 +1350,7 @@
         NSObject<CSInputSourceProtocol> *parentSource = [self.sourceLayout inputForUUID:parentUUID];
         if (parentSource)
         {
-            [[self.undoManager prepareWithInvocationTarget:self] cloneInputSource:parentSource];
+            [[self.undoManager prepareWithInvocationTarget:self] cloneInputSourceByUUID:parentUUID];
         }
     }
 }
@@ -1346,6 +1381,17 @@
         toFreeze.isFrozen = !toFreeze.isFrozen;
     }
 }
+
+
+-(void)cloneInputSourceByUUID:(NSString *)uuid
+{
+    InputSource *src = (InputSource *)[self.sourceLayout inputForUUID:uuid];
+    if (src)
+    {
+        [self cloneInputSource:src];
+    }
+}
+
 
 
 - (IBAction)cloneInputSource:(id)sender
@@ -1439,9 +1485,18 @@
             [self attachSource:restoredSource toSource:vParent];
         }
     }
-    [[self.undoManager prepareWithInvocationTarget:self] deleteInput:restoredSource];
+    [[self.undoManager prepareWithInvocationTarget:self] deleteInputByUUID:restoredSource.uuid];
 }
 
+
+-(void)deleteInputByUUID:(NSString *)uuid
+{
+    InputSource *src = (InputSource *)[self.sourceLayout inputForUUID:uuid];
+    if (src)
+    {
+        [self deleteInput:src];
+    }
+}
 
 
 - (IBAction)deleteInput:(id)sender
