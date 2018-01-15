@@ -54,7 +54,7 @@
     if (node)
     {
         NSObject<CSInputSourceProtocol>*src = node.representedObject;
-        [[CaptureController sharedCaptureController] openInputConfigWindows:@[src]];
+        [self openInputConfigWindows:@[src]];
     }
 }
 
@@ -531,6 +531,8 @@
         self.sourceTreeSortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"depth" ascending:NO]];
         [self.sourceOutlineView registerForDraggedTypes:@[NSSoundPboardType,NSFilenamesPboardType, NSFilesPromisePboardType, NSFileContentsPboardType, @"cocoasplit.input.item", @"cocoasplit.audio.item"]];
 
+        _activeConfigWindows = [NSMutableDictionary dictionary];
+        _activeConfigControllers = [NSMutableDictionary dictionary];
     }
 }
 - (void)viewDidLoad {
@@ -646,7 +648,7 @@
 -(IBAction)sourceConfigClicked:(NSButton *)sender
 {
     NSArray *selectedSources = self.sourceTreeController.selectedObjects;
-    [[CaptureController sharedCaptureController] openInputConfigWindows:selectedSources];
+    [self openInputConfigWindows:selectedSources];
 }
 
 -(IBAction)sourceAddClicked:(NSButton *)sender
@@ -697,7 +699,7 @@
         
         
         [self addInputSourceWithInput:newScript];
-        [[CaptureController sharedCaptureController] openInputConfigWindows:@[newScript]];
+        [self openInputConfigWindows:@[newScript]];
         return;
     }
     
@@ -709,7 +711,7 @@
     newSrc.selectedVideoType = clickedCapture.instanceLabel;
     newSrc.depth = FLT_MAX;
     [self addInputSourceWithInput:newSrc];
-    [[CaptureController sharedCaptureController] openInputConfigWindows:@[newSrc]];
+    [self openInputConfigWindows:@[newSrc]];
 
 }
 
@@ -835,5 +837,91 @@
     [_inputsMenu popUpMenuPositioningItem:[_inputsMenu itemAtIndex:midItem] atLocation:popupPoint inView:sender];
     
 }
+
+-(void)openInputConfigWindows:(NSArray *)sources
+{
+    
+    NSPoint cascadePoint = NSZeroPoint;
+    for (NSObject <CSInputSourceProtocol> *src in sources)
+    {
+        cascadePoint = [self openInputConfigWindow:src withCascade:cascadePoint];
+    }
+
+}
+
+
+
+
+-(NSPoint)openInputConfigWindow:(NSObject <CSInputSourceProtocol>*)configSrc withCascade:(NSPoint)cascadePoint
+{
+    
+    NSPoint retPoint = cascadePoint;
+    
+    if (!configSrc)
+    {
+        return retPoint;
+    }
+    
+    
+    NSString *uuid = configSrc.uuid;
+    NSViewController *newViewController = [configSrc configurationViewController];
+    
+    
+    
+    NSWindow *configWindow = [[NSWindow alloc] init];
+    NSRect newFrame = [configWindow frameRectForContentRect:NSMakeRect(0.0f, 0.0f, newViewController.view.frame.size.width, newViewController.view.frame.size.height)];
+    
+    
+    
+    [configWindow setFrame:newFrame display:NO];
+    [configWindow center];
+    retPoint = [configWindow cascadeTopLeftFromPoint:cascadePoint];
+    
+    [configWindow setReleasedWhenClosed:NO];
+    
+    
+    [configWindow.contentView addSubview:newViewController.view];
+    configWindow.title = [NSString stringWithFormat:@"CocoaSplit Input (%@)", configSrc.name];
+    configWindow.delegate = self;
+    
+    configWindow.styleMask =  NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask;
+    
+    NSWindow *cWindow = [_activeConfigWindows objectForKey:uuid];
+    NSViewController *cController = [_activeConfigControllers objectForKey:uuid];
+    
+    if (cController)
+    {
+        //cController.inputSource = nil;
+        [_activeConfigControllers removeObjectForKey:uuid];
+    }
+    
+    if (cWindow)
+    {
+        [_activeConfigWindows removeObjectForKey:uuid];
+    }
+    
+    
+    [_activeConfigWindows setObject:configWindow forKey:uuid];
+    [_activeConfigControllers setObject:newViewController forKey:uuid];
+    
+    configWindow.identifier = uuid;
+    
+    [configWindow makeKeyAndOrderFront:nil];
+    return retPoint;
+}
+
+-(void)windowWillClose:(NSNotification *)notification
+{
+
+    NSWindow *toClose = notification.object;
+    
+    if (toClose)
+    {
+        NSString *wId = toClose.identifier;
+        [_activeConfigWindows removeObjectForKey:wId];
+        [_activeConfigControllers removeObjectForKey:wId];
+    }
+}
+
 
 @end

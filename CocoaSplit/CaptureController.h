@@ -515,7 +515,7 @@ NSArray *_savedTransitionConstraints;
 @property (weak) IBOutlet NSTableView *outputTableView;
 @property (weak) IBOutlet NSArrayController *sourceLayoutsArrayController;
 @property (weak) IBOutlet NSTreeController *inputTreeController;
-@property (weak) IBOutlet NSButton *streamButton;
+@property (weak) IBOutlet NSButton *streamButton; 
 @property (strong) NSString *layoutScriptLabel;
 @property (strong) CSLayoutRecorder *mainLayoutRecorder;
 @property (readonly) SourceLayout *activeLayout;
@@ -533,7 +533,6 @@ NSArray *_savedTransitionConstraints;
 
 -(IBAction)openScriptSwitcherWindow:(id)sender;
 -(bool)fileURLIsAudio:(NSURL *)url;
--(void)openInputConfigWindow:(NSObject <CSInputSourceProtocol>*)configSrc;
--(void)openInputConfigWindows:(NSArray *)sources;
+
 
 @end

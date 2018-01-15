@@ -1950,4 +1950,16 @@
     
 }
 
+-(void)dealloc
+{
+    for(NSString *windowuuid in self.activeConfigWindows)
+    {
+        NSWindow *toClose = self.activeConfigWindows[windowuuid];
+        [toClose close];
+    }
+    
+    [self.activeConfigWindows removeAllObjects];
+}
+
+
 @end

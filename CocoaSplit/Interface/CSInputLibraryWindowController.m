@@ -201,25 +201,7 @@
 
     cItem.editInput = iSrc;
     
-    //self.editLayout = [[SourceLayout alloc] init];
-    
-    CGFloat parent_width = iSrc.topLevelWidth;
-    CGFloat parent_height = iSrc.topLevelHeight;
-    
-    //self.editLayout.canvas_width = parent_width;
-    //self.editLayout.canvas_height = parent_height;
-    
-    
-    //[self.editLayout addSource:iSrc];
-    
-    /*
-    self.editWindowController = [[CSLayoutEditWindowController alloc] init];
-    self.editWindowController.previewView.sourceLayout = self.editLayout;
-    [self.editWindowController showWindow:nil];
-     */
-    //self.editWindowController = [self.controller openLayoutWindow:self.editLayout];
-    //self.editWindowController.delegate = self;
-    
+
     InputPopupControllerViewController *popupController = [[InputPopupControllerViewController alloc] init];
     
     NSPopover *popover = [[NSPopover alloc] init];

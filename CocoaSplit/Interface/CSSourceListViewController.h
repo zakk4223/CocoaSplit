@@ -6,9 +6,11 @@
 
 #import <Cocoa/Cocoa.h>
 #import "CSViewController.h"
-@interface CSSourceListViewController : CSViewController <NSOutlineViewDelegate, NSOutlineViewDataSource>
+@interface CSSourceListViewController : CSViewController <NSOutlineViewDelegate, NSOutlineViewDataSource, NSWindowDelegate>
 {
     NSMenu *_inputsMenu;
+    NSMutableDictionary *_activeConfigWindows;
+    NSMutableDictionary *_activeConfigControllers;
 }
 
 //This is set by whatever instantiates us. Probably bound to something like activePreviewView.sourceLayout

@@ -248,7 +248,6 @@
     
     AUNode inNode;
     AUNode connectTo;
-    AudioUnit aUnit;
     
     OSStatus err;
     

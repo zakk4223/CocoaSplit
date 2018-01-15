@@ -54,7 +54,6 @@
 
 -(void)configureCompressionSession:(VTCompressionSessionRef)session
 {
-    OSStatus status;
     
     VTSessionSetProperty(session, kVTCompressionPropertyKey_AllowFrameReordering, kCFBooleanFalse);
     VTSessionSetProperty(session, (__bridge CFStringRef)@"RealTime", kCFBooleanTrue);

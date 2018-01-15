@@ -28,10 +28,6 @@
 
 
 
--(void)windowWillClose:(NSNotification *)notification
-{
-    NSWindow *closingWindow = [notification object];
-}
 
 
 

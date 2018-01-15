@@ -61,7 +61,7 @@
     AudioStreamBasicDescription *outfmt = malloc(sizeof(AudioStreamBasicDescription));
     UInt32 outsize = sizeof(AudioStreamBasicDescription);
     
-    OSStatus err = AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 0, outfmt, &outsize);
+    AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 0, outfmt, &outsize);
     
     
     return outfmt;

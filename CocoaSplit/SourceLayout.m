@@ -491,8 +491,9 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 
 -(void)generateTopLevelSourceList
 {
+    
     dispatch_async(dispatch_get_main_queue(), ^{
-        
+    
         NSMutableArray *tmpArray = [NSMutableArray array];
         
         NSMutableArray *noLayer = [NSMutableArray array];
@@ -511,12 +512,16 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
                 if (src.layer)
                 {
                     currentDepth = [self setDepthForSource:(InputSource *)src startDepth:currentDepth];
+
                 }
             }
         }
         
         self->_topLevelSourceArray = tmpArray;
         [self->_topLevelSourceArray addObjectsFromArray:noLayer];
+        [self->_topLevelSourceArray sortUsingComparator:^NSComparisonResult(id<CSInputSourceProtocol> obj1, id<CSInputSourceProtocol> obj2) {
+            return obj1.depth < obj2.depth;
+        }];
         
         [self didChangeValueForKey:@"topLevelSourceList"];
 

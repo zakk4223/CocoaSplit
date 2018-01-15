@@ -106,8 +106,8 @@
                                 </tableColumns>
                                 <connections>
                                     <action trigger="doubleAction" selector="outlineViewDoubleClick:" target="-2" id="SnR-fY-bsU"/>
-                                    <binding destination="d5r-1v-wmD" name="content" keyPath="arrangedObjects" id="18j-f0-pr9"/>
-                                    <binding destination="d5r-1v-wmD" name="selectionIndexPaths" keyPath="selectionIndexPaths" previousBinding="18j-f0-pr9" id="gqU-gc-TeR"/>
+                                    <binding destination="d5r-1v-wmD" name="content" keyPath="arrangedObjects" id="REu-8i-kkD"/>
+                                    <binding destination="d5r-1v-wmD" name="selectionIndexPaths" keyPath="selectionIndexPaths" previousBinding="REu-8i-kkD" id="Ccb-Xm-9EN"/>
                                     <outlet property="dataSource" destination="-2" id="J0b-9p-2zz"/>
                                     <outlet property="delegate" destination="-2" id="sxE-KE-Fjx"/>
                                 </connections>
@@ -195,7 +195,6 @@ CA
         <treeController childrenKeyPath="attachedInputs" id="d5r-1v-wmD" userLabel="sourceTreeController">
             <connections>
                 <binding destination="-2" name="contentArray" keyPath="self.sourceLayoutController.selection.topLevelSourceList" id="jp4-cZ-FTe"/>
-                <binding destination="-2" name="sortDescriptors" keyPath="self.sourceTreeSortDescriptors" id="UPx-Kq-hwg"/>
             </connections>
         </treeController>
     </objects>

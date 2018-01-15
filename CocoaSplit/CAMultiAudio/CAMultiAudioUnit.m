@@ -13,9 +13,7 @@
 {
     if (self = [super init])
     {
-        AudioComponentDescription desc = {0};
-        
-        
+
         _unitDescription.componentType = unitType;
         
         _unitDescription.componentSubType = subType;

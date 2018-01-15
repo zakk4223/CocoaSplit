@@ -39,7 +39,6 @@
 
     [self.previewView addObserver:self forKeyPath:@"mousedSource" options:NSKeyValueObservingOptionNew context:NULL];
     [self.sourceListViewController addObserver:self forKeyPath:@"selectedObjects" options:NSKeyValueObservingOptionNew context:NULL];
-    CAMultiAudioEngine *audioEngine = [self.previewView.sourceLayout findAudioEngine];
 
     
     // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
