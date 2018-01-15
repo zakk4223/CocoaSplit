@@ -943,19 +943,6 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 -(void)replaceWithSourceLayout:(SourceLayout *)layout usingScripts:(bool)usingScripts withCompletionBlock:(void (^)(void))completionBlock
 {
 
-    
-    
-    if (self.undoManager)
-    {
-        [self.undoManager beginUndoGrouping];
-        [self saveSourceList];
-        [[self.undoManager prepareWithInvocationTarget:self] undoReplaceSourceLayout:self.savedSourceListData usingScripts:usingScripts withContainedLayouts:self.containedLayouts.copy];
-        [self.undoManager endUndoGrouping];
-    }
-    
-    
-    
-
     [self replaceWithSourceData:layout.savedSourceListData usingScripts:usingScripts withCompletionBlock:completionBlock];
 
     for (SourceLayout *cLayout in self.containedLayouts.copy)
@@ -1277,16 +1264,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 
     
     [self mergeSourceData:toMerge.savedSourceListData usingScripts:usingScripts withCompletionBlock:completionBlock];
-    
-    
-    if (self.undoManager)
-    {
-        [self.undoManager beginUndoGrouping];
-        [[self.undoManager prepareWithInvocationTarget:self] removeSourceLayout:toMerge usingScripts:usingScripts];
-        [self.undoManager endUndoGrouping];
-    }
-    
-    
+
     [self.containedLayouts addObject:toMerge];
     if (self.addLayoutBlock)
     {
@@ -1655,12 +1633,6 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         return;
     }
 
-    if (self.undoManager)
-    {
-        [self.undoManager beginUndoGrouping];
-        [[self.undoManager prepareWithInvocationTarget:self] mergeSourceLayout:toRemove];
-        [self.undoManager endUndoGrouping];
-    }
 
     [self removeSourceData:toRemove.savedSourceListData usingScripts:usingScripts withCompletionBlock:completionBlock];
     

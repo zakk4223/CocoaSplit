@@ -657,9 +657,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 -(bool)attachInputCommon:(CAMultiAudioInput *)input
 {
-    bool ret;
-    
-
     if (input)
     {
         [self.graph addNode:input];

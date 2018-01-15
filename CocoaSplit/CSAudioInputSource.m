@@ -327,7 +327,6 @@
 
     }
 
-    NSLog(@"APPLY AUDIO SETTINGS %@", self.audioNode);
     if (self.audioNode)
     {
         if ([self.audioNode isKindOfClass:CAMultiAudioFile.class])

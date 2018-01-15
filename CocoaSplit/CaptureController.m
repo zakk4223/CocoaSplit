@@ -3753,13 +3753,39 @@
 
 }
 
+
+-(NSData *)undoDataForLayout:(SourceLayout *)layout
+{
+    [layout saveSourceList];
+    return layout.savedSourceListData;
+}
+
+
+-(void)undoSwitchToLayout:(SourceLayout *)usingLayout previousLayout:(SourceLayout *)previousLayout
+{
+    
+    [usingLayout saveSourceList];
+    SourceLayout *undoCopy = usingLayout.copy;
+    [undoCopy clearSourceList];
+    [usingLayout replaceWithSourceLayout:previousLayout];
+    
+    [[self.mainWindow.undoManager prepareWithInvocationTarget:self] switchToLayout:undoCopy usingLayout:usingLayout];
+}
+
+
 -(void)switchToLayout:(SourceLayout *)layout usingLayout:(SourceLayout *)usingLayout
 {
     if (!usingLayout)
     {
         return;
     }
+    
+    [usingLayout saveSourceList];
+    SourceLayout *undoCopy = usingLayout.copy;
+    [undoCopy clearSourceList];
+    [[self.mainWindow.undoManager prepareWithInvocationTarget:self] undoSwitchToLayout:usingLayout previousLayout:undoCopy];
     [self applyTransitionSettings:usingLayout];
+
     
     
     //[usingLayout sequenceThroughLayoutsViaScript:@[layout] withCompletionBlock:nil withExceptionBlock:nil];
@@ -3791,6 +3817,7 @@
     [self applyTransitionSettings:usingLayout];
 
     [usingLayout mergeSourceLayoutViaScript:layout];
+    [[self.mainWindow.undoManager prepareWithInvocationTarget:self] removeLayout:layout usingLayout:usingLayout];
 
 }
 
@@ -3810,8 +3837,9 @@
     [self applyTransitionSettings:usingLayout];
     
     [usingLayout removeSourceLayoutViaScript:layout];
-    
+    [[self.mainWindow.undoManager prepareWithInvocationTarget:self] mergeLayout:layout usingLayout:usingLayout];
 }
+
 
 -(void)toggleLayout:(SourceLayout *)layout usingLayout:(SourceLayout *)usingLayout
 {
@@ -3828,6 +3856,7 @@
     } else {
         [usingLayout mergeSourceLayoutViaScript:layout];
     }
+    [[self.mainWindow.undoManager prepareWithInvocationTarget:self] toggleLayout:layout usingLayout:usingLayout];
 
     
 }
