@@ -1221,7 +1221,6 @@
        dispatch_source_set_timer(_audio_statistics_timer, DISPATCH_TIME_NOW, 0.10*NSEC_PER_SEC, 0);
 
        dispatch_source_set_event_handler(_audio_statistics_timer, ^{
-           
            if (self.multiAudioEngine)
            {
                [self.multiAudioEngine updateStatistics];

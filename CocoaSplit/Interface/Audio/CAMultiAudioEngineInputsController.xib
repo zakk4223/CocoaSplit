@@ -478,7 +478,7 @@
     <resources>
         <image name="Mute_Icon" width="240" height="240"/>
         <image name="NSActionTemplate" width="14" height="14"/>
-        <image name="NSStopProgressFreestandingTemplate" width="14" height="14"/>
+        <image name="NSStopProgressFreestandingTemplate" width="11" height="11"/>
         <image name="Speaker_Icon" width="240" height="240"/>
         <image name="pause_main" width="42.400001525878906" height="48"/>
         <image name="play_main" width="50.400001525878906" height="58.400001525878906"/>

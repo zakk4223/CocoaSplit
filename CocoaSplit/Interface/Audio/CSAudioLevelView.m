@@ -13,6 +13,8 @@
 - (void)drawRect:(NSRect)dirtyRect {
     // Drawing code here.
     //CGContextRef currentContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
+    [super drawRect:dirtyRect];
+
     NSGradient *grad = [[NSGradient alloc] initWithColorsAndLocations:[NSColor greenColor], 0.0f, [NSColor yellowColor], 0.5f, [NSColor redColor], 1.0f, nil];
     NSRect dRect = dirtyRect;
     
@@ -39,7 +41,6 @@
         [clipPath setClip];
         [grad drawInRect:NSInsetRect(dirtyRect, self.backgroundSize, self.backgroundSize) angle:0.0f];
     }
-    [super drawRect:dirtyRect];
 
 }
 
@@ -55,7 +56,7 @@
     
     _level = level;
     
-    [self display];
+    [self setNeedsDisplay:YES];
 
 }
 
