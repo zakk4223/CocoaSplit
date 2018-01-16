@@ -61,19 +61,19 @@
 
 -(void) setupDummyAudioEngine
 {
-    CAMultiAudioEngine *audioEngine = nil;
     
-    audioEngine = [[CAMultiAudioEngine alloc] init];
-    audioEngine.sampleRate = [CaptureController sharedCaptureController].multiAudioEngine.sampleRate;
-    
-    self.multiAudioEngine = audioEngine;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        CAMultiAudioEngine *audioEngine = nil;
+        audioEngine = [[CAMultiAudioEngine alloc] init];
+        audioEngine.sampleRate = [CaptureController sharedCaptureController].multiAudioEngine.sampleRate;
+        audioEngine.previewMixer.muted = YES;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.multiAudioEngine = audioEngine;
+            self.previewView.sourceLayout.audioEngine = audioEngine;
+            [self.previewView.sourceLayout reapplyAudioSources];
+        });
+    });
 
-    audioEngine.previewMixer.muted = YES;
-    
-    self.previewView.sourceLayout.audioEngine = audioEngine;
-//    [audioEngine disableAllInputs];
-
-    [self.previewView.sourceLayout reapplyAudioSources];
 }
 -(NSString *)windowTitle
 {
