@@ -89,6 +89,7 @@
         
         _pcmData = malloc(_audioBufferListSize);
         
+        
         _dataBuffer = malloc(_audioBufferDataSize*bufferCnt);
         
         _pcmData->mNumberBuffers = bufferCnt;

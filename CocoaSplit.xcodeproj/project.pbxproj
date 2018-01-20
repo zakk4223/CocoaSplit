@@ -166,6 +166,7 @@
 		347DBC831FF1EA1700B98D5E /* AppleVTCompressorBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 347DBC821FF1EA1700B98D5E /* AppleVTCompressorBase.m */; };
 		347DBC9D1FF22C0100B98D5E /* CSAppleHEVCCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 347DBC9C1FF22C0100B98D5E /* CSAppleHEVCCompressor.m */; };
 		3481F30619B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3481F30519B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m */; };
+		3483599E2010807B00E711AF /* CSNDICapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 3446F05920105F0700977BBA /* CSNDICapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		348AC06B19B406910064F02D /* SourceLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 348AC06A19B406910064F02D /* SourceLayout.m */; };
 		34938EE81AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 34938EE71AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m */; };
 		34938EED1AE4D24200F3B1CF /* CSFilterChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34938EEB1AE4D24200F3B1CF /* CSFilterChooserWindowController.m */; };
@@ -348,6 +349,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 343C79BA1D0C763A00B36EEC;
 			remoteInfo = CSFFMpegCapturePlugin;
+		};
+		3446F05820105F0700977BBA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3446F05420105F0500977BBA /* CSNDICapturePlugin.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3446F04B20105F0500977BBA;
+			remoteInfo = CSNDICapturePlugin;
 		};
 		345BECC21F3DADF700B46F29 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -559,6 +567,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				3483599E2010807B00E711AF /* CSNDICapturePlugin.bundle in Copy Files */,
 				345BECE51F3DB4F000B46F29 /* CSLayoutCapturePlugin.bundle in Copy Files */,
 				3414047D1D76EA3200505A5D /* CSSyphonCapturePlugin.bundle in Copy Files */,
 				3473D2871D4C359700842EEE /* CSVaughnliveStreamServicePlugin.bundle in Copy Files */,
@@ -702,6 +711,7 @@
 		344126A01E6DBBEE0051DA06 /* CSLayoutSwitcherView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSLayoutSwitcherView.h; path = Interface/CSLayoutSwitcherView.h; sourceTree = "<group>"; };
 		344126A11E6DBBEE0051DA06 /* CSLayoutSwitcherView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSLayoutSwitcherView.m; path = Interface/CSLayoutSwitcherView.m; sourceTree = "<group>"; };
 		3444D8E719A0CDE8000DC46B /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
+		3446F05420105F0500977BBA /* CSNDICapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSNDICapturePlugin.xcodeproj; path = CSNDICapturePlugin/CSNDICapturePlugin.xcodeproj; sourceTree = "<group>"; };
 		344825D11B2536EA00AF9EAC /* CAMultiAudioMatrixView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CAMultiAudioMatrixView.xib; path = ../../CAMultiAudioMatrixView.xib; sourceTree = "<group>"; };
 		344825E41B253D6900AF9EAC /* CAMultiAudioMatrixCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAMultiAudioMatrixCell.h; sourceTree = "<group>"; };
 		344825E51B253D6900AF9EAC /* CAMultiAudioMatrixCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CAMultiAudioMatrixCell.m; sourceTree = "<group>"; };
@@ -1655,6 +1665,14 @@
 			name = Interface;
 			sourceTree = "<group>";
 		};
+		3446F05520105F0500977BBA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3446F05920105F0700977BBA /* CSNDICapturePlugin.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		3451A1C517111BD900DF6A8B /* CocoaSplitCmd */ = {
 			isa = PBXGroup;
 			children = (
@@ -1873,6 +1891,7 @@
 		34AFC24319B058800007C07B /* CapturePlugins */ = {
 			isa = PBXGroup;
 			children = (
+				3446F05420105F0500977BBA /* CSNDICapturePlugin.xcodeproj */,
 				345BECB61F3DADF600B46F29 /* CSLayoutCapturePlugin.xcodeproj */,
 				343C79C31D0C763A00B36EEC /* CSFFMpegCapturePlugin.xcodeproj */,
 				3436921B1B62364E007EC2D9 /* CSShapeCapturePlugin.xcodeproj */,
@@ -2329,6 +2348,10 @@
 					ProjectRef = 34576D2019B023E2007BAD90 /* CSMovieCapturePlugin.xcodeproj */;
 				},
 				{
+					ProductGroup = 3446F05520105F0500977BBA /* Products */;
+					ProjectRef = 3446F05420105F0500977BBA /* CSNDICapturePlugin.xcodeproj */;
+				},
+				{
 					ProductGroup = 34D2D59A1A54857C001004E5 /* Products */;
 					ProjectRef = 34D2D5991A54857C001004E5 /* CSNowPlayingPlugin.xcodeproj */;
 				},
@@ -2404,6 +2427,13 @@
 			fileType = wrapper.cfbundle;
 			path = CSFFMpegCapturePlugin.bundle;
 			remoteRef = 343C79CB1D0C763A00B36EEC /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3446F05920105F0700977BBA /* CSNDICapturePlugin.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = CSNDICapturePlugin.bundle;
+			remoteRef = 3446F05820105F0700977BBA /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		345BECC31F3DADF700B46F29 /* CSLayoutCapturePlugin.bundle */ = {
@@ -2627,7 +2657,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "rm -r $TEMP_FILES_DIR/ffmpeg-fix\nmkdir $TEMP_FILES_DIR/ffmpeg-fix\ncd $TEMP_FILES_DIR/ffmpeg-fix\ncp /usr/local/lib/libswresample.a .\ncp /usr/local/lib/libavutil.a .\ncp /usr/local/lib/libavformat.a .\ncp /usr/local/lib/libavcodec.a .\ncp /usr/local/lib/libmp3lame.a .\ncp /usr/local/lib/libswscale.a .\ncp /usr/local/lib/libxvidcore.a .\ncp /usr/local/lib/libx264.a .\ncp /usr/local/lib/libx265.a .\ncp /usr/local/lib/libfdk-aac.a .\ncp /usr/local/lib/libvpx.a .\nchmod 755 *.a\nar -dv libswresample.a log2_tab.o\nar -dv libavformat.a log2_tab.o\nar -dv libavformat.a golomb.o\nar -dv libavformat.a reverse.o\nar -dv libavutil.a reverse.o\nar -dv libavcodec.a log2_tab.o\nar -dv libavformat.a golomb_tab.o\nar -dv libswscale.a log2_tab.o\nar -dv libx265.a x265-extras.cpp.o\nar -dv libx265.a x265-extras.cpp.o";
+			shellScript = "rm -r $TEMP_FILES_DIR/ffmpeg-fix\nmkdir $TEMP_FILES_DIR/ffmpeg-fix\ncd $TEMP_FILES_DIR/ffmpeg-fix\ncp /usr/local/lib/libswresample.a .\ncp /usr/local/lib/libavutil.a .\ncp /usr/local/lib/libavformat.a .\ncp /usr/local/lib/libavcodec.a .\ncp /usr/local/lib/libmp3lame.a .\ncp /usr/local/lib/libswscale.a .\ncp /usr/local/lib/libxvidcore.a .\ncp /usr/local/lib/libx264.a .\ncp /usr/local/lib/libx265.a .\ncp /usr/local/lib/libfdk-aac.a .\ncp /usr/local/lib/libvpx.a .\nchmod 755 *.a\nar -dv libswresample.a log2_tab.o\nar -dv libavformat.a log2_tab.o\nar -dv libavformat.a golomb.o\nar -dv libavformat.a reverse.o\nar -dv libavutil.a reverse.o\nar -dv libavcodec.a log2_tab.o\nar -dv libavformat.a golomb_tab.o\nar -dv libswscale.a log2_tab.o\n#ar -dv libx265.a x265-extras.cpp.o\n#ar -dv libx265.a x265-extras.cpp.o";
 		};
 		34BAAD3B1C13DF8F00A48C76 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;

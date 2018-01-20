@@ -57,6 +57,8 @@
 {
     //ignore if we have our own
     
+    return YES;
+    
     bool ret = NO;
     if (self.outputFormat)
     {

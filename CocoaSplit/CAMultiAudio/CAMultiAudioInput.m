@@ -82,7 +82,6 @@
 
     if (self.converterNode)
     {
-
         if (![self.graph addNode:self.converterNode])
         {
             [self teardownGraph];

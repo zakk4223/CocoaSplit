@@ -3,7 +3,6 @@
 //  CSFFMpegCapturePlugin
 //
 //  Created by Zakk on 6/14/16.
-//  Copyright © 2016 Zakk. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>

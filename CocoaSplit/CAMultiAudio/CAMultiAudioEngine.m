@@ -670,6 +670,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 -(void)attachPCMInput:(CAMultiAudioPCMPlayer *)input
 {
     
+    
     CAMultiAudioConverter *newConverter = [[CAMultiAudioConverter alloc] initWithInputFormat:input.inputFormat];
     newConverter.nodeUID = input.nodeUID; //Not so unique, lol
     

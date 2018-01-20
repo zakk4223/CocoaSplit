@@ -751,13 +751,30 @@
     {
         NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:dev.captureName action:nil keyEquivalent:@""];
         item.representedObject = dev;
-        item.target = self;
-        item.action = @selector(videoInputItemClicked:);
+        if (dev.uniqueID)
+        {
+            item.target = self;
+            item.action = @selector(videoInputItemClicked:);
+        }
         [forItem.submenu addItem:item];
     }
 }
 
 
+-(void)menuNeedsUpdate:(NSMenu *)menu
+{
+    NSMenu *parentMenu = menu.supermenu;
+    NSInteger itemIdx = [parentMenu indexOfItemWithSubmenu:menu];
+    if (itemIdx > -1)
+    {
+        NSMenuItem *parentItem = [parentMenu itemAtIndex:itemIdx];
+        if (parentItem)
+        {
+            [menu removeAllItems];
+            [self buildInputSubMenu:parentItem];
+        }
+    }
+}
 -(void)buildInputMenu
 {
     _inputsMenu = [[NSMenu alloc] init];
@@ -786,6 +803,7 @@
         if (newCapture.availableVideoDevices && newCapture.availableVideoDevices.count > 0)
         {
             item.submenu = [[NSMenu alloc] init];
+            item.submenu.delegate = self;
             [self buildInputSubMenu:item];
         } else {
             item.action = @selector(topLevelInputClicked:);

@@ -3,7 +3,6 @@
 //  CSLayoutCapturePlugin
 //
 //  Created by Zakk on 8/11/17.
-//  Copyright © 2017 Zakk. All rights reserved.
 //
 
 #import "CSLayoutCapture.h"

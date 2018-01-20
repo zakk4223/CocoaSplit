@@ -1,0 +1,362 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3483599C20107B6B00E711AF /* CSNDICapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 3483599B20107B6B00E711AF /* CSNDICapture.m */; };
+		348359B82011048A00E711AF /* CSNDIReceiver.m in Sources */ = {isa = PBXBuildFile; fileRef = 348359B72011048A00E711AF /* CSNDIReceiver.m */; };
+		34DBBA8C2012C59700B3DFFD /* CSNDISource.m in Sources */ = {isa = PBXBuildFile; fileRef = 34DBBA8B2012C59700B3DFFD /* CSNDISource.m */; };
+		34DBBA902013348D00B3DFFD /* CSNDICaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34DBBA8E2013348D00B3DFFD /* CSNDICaptureViewController.m */; };
+		34DBBA912013348D00B3DFFD /* CSNDICaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34DBBA8F2013348D00B3DFFD /* CSNDICaptureViewController.xib */; };
+		34DBBA98201341A500B3DFFD /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34DBBA97201341A500B3DFFD /* Media.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		3446F04B20105F0500977BBA /* CSNDICapturePlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSNDICapturePlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		3446F04E20105F0500977BBA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3483598E20107A8C00E711AF /* Processing.NDI.deprecated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Processing.NDI.deprecated.h; sourceTree = "<group>"; };
+		3483598F20107A8C00E711AF /* Processing.NDI.Send.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Processing.NDI.Send.h; sourceTree = "<group>"; };
+		3483599020107A8C00E711AF /* Processing.NDI.utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Processing.NDI.utilities.h; sourceTree = "<group>"; };
+		3483599120107A8D00E711AF /* Processing.NDI.Lib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Processing.NDI.Lib.h; sourceTree = "<group>"; };
+		3483599220107A8D00E711AF /* Processing.NDI.Find.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Processing.NDI.Find.h; sourceTree = "<group>"; };
+		3483599320107A8D00E711AF /* Processing.NDI.Recv.ex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Processing.NDI.Recv.ex.h; sourceTree = "<group>"; };
+		3483599420107A8D00E711AF /* Processing.NDI.Routing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Processing.NDI.Routing.h; sourceTree = "<group>"; };
+		3483599520107A8D00E711AF /* Processing.NDI.compat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Processing.NDI.compat.h; sourceTree = "<group>"; };
+		3483599620107A8D00E711AF /* Processing.NDI.DynamicLoad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Processing.NDI.DynamicLoad.h; sourceTree = "<group>"; };
+		3483599720107A8D00E711AF /* Processing.NDI.Recv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Processing.NDI.Recv.h; sourceTree = "<group>"; };
+		3483599820107A8D00E711AF /* Processing.NDI.structs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Processing.NDI.structs.h; sourceTree = "<group>"; };
+		3483599920107A8D00E711AF /* Processing.NDI.Lib.cplusplus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Processing.NDI.Lib.cplusplus.h; sourceTree = "<group>"; };
+		3483599A20107B6B00E711AF /* CSNDICapture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSNDICapture.h; sourceTree = "<group>"; };
+		3483599B20107B6B00E711AF /* CSNDICapture.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSNDICapture.m; sourceTree = "<group>"; };
+		348359B62011048A00E711AF /* CSNDIReceiver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSNDIReceiver.h; sourceTree = "<group>"; };
+		348359B72011048A00E711AF /* CSNDIReceiver.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSNDIReceiver.m; sourceTree = "<group>"; };
+		34DBBA88201160B700B3DFFD /* NDIVideoOutputDelegateProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NDIVideoOutputDelegateProtocol.h; sourceTree = "<group>"; };
+		34DBBA892011A62F00B3DFFD /* NDIAudioOutputDelegateProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NDIAudioOutputDelegateProtocol.h; sourceTree = "<group>"; };
+		34DBBA8A2012C59700B3DFFD /* CSNDISource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSNDISource.h; sourceTree = "<group>"; };
+		34DBBA8B2012C59700B3DFFD /* CSNDISource.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSNDISource.m; sourceTree = "<group>"; };
+		34DBBA8D2013348D00B3DFFD /* CSNDICaptureViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSNDICaptureViewController.h; sourceTree = "<group>"; };
+		34DBBA8E2013348D00B3DFFD /* CSNDICaptureViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSNDICaptureViewController.m; sourceTree = "<group>"; };
+		34DBBA8F2013348D00B3DFFD /* CSNDICaptureViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CSNDICaptureViewController.xib; sourceTree = "<group>"; };
+		34DBBA97201341A500B3DFFD /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3446F04820105F0500977BBA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3446F04220105F0500977BBA = {
+			isa = PBXGroup;
+			children = (
+				34DBBA97201341A500B3DFFD /* Media.xcassets */,
+				3446F04D20105F0500977BBA /* CSNDICapturePlugin */,
+				3446F04C20105F0500977BBA /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3446F04C20105F0500977BBA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3446F04B20105F0500977BBA /* CSNDICapturePlugin.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3446F04D20105F0500977BBA /* CSNDICapturePlugin */ = {
+			isa = PBXGroup;
+			children = (
+				3483598D20107A5B00E711AF /* NDIHeaders */,
+				3446F04E20105F0500977BBA /* Info.plist */,
+				3483599A20107B6B00E711AF /* CSNDICapture.h */,
+				3483599B20107B6B00E711AF /* CSNDICapture.m */,
+				348359B62011048A00E711AF /* CSNDIReceiver.h */,
+				348359B72011048A00E711AF /* CSNDIReceiver.m */,
+				34DBBA88201160B700B3DFFD /* NDIVideoOutputDelegateProtocol.h */,
+				34DBBA892011A62F00B3DFFD /* NDIAudioOutputDelegateProtocol.h */,
+				34DBBA8A2012C59700B3DFFD /* CSNDISource.h */,
+				34DBBA8B2012C59700B3DFFD /* CSNDISource.m */,
+				34DBBA8D2013348D00B3DFFD /* CSNDICaptureViewController.h */,
+				34DBBA8E2013348D00B3DFFD /* CSNDICaptureViewController.m */,
+				34DBBA8F2013348D00B3DFFD /* CSNDICaptureViewController.xib */,
+			);
+			path = CSNDICapturePlugin;
+			sourceTree = "<group>";
+		};
+		3483598D20107A5B00E711AF /* NDIHeaders */ = {
+			isa = PBXGroup;
+			children = (
+				3483599520107A8D00E711AF /* Processing.NDI.compat.h */,
+				3483598E20107A8C00E711AF /* Processing.NDI.deprecated.h */,
+				3483599620107A8D00E711AF /* Processing.NDI.DynamicLoad.h */,
+				3483599220107A8D00E711AF /* Processing.NDI.Find.h */,
+				3483599920107A8D00E711AF /* Processing.NDI.Lib.cplusplus.h */,
+				3483599120107A8D00E711AF /* Processing.NDI.Lib.h */,
+				3483599320107A8D00E711AF /* Processing.NDI.Recv.ex.h */,
+				3483599720107A8D00E711AF /* Processing.NDI.Recv.h */,
+				3483599420107A8D00E711AF /* Processing.NDI.Routing.h */,
+				3483598F20107A8C00E711AF /* Processing.NDI.Send.h */,
+				3483599820107A8D00E711AF /* Processing.NDI.structs.h */,
+				3483599020107A8C00E711AF /* Processing.NDI.utilities.h */,
+			);
+			path = NDIHeaders;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3446F04A20105F0500977BBA /* CSNDICapturePlugin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3446F05120105F0500977BBA /* Build configuration list for PBXNativeTarget "CSNDICapturePlugin" */;
+			buildPhases = (
+				3446F04720105F0500977BBA /* Sources */,
+				3446F04820105F0500977BBA /* Frameworks */,
+				3446F04920105F0500977BBA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CSNDICapturePlugin;
+			productName = CSNDICapturePlugin;
+			productReference = 3446F04B20105F0500977BBA /* CSNDICapturePlugin.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3446F04320105F0500977BBA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0920;
+				ORGANIZATIONNAME = Zakk;
+				TargetAttributes = {
+					3446F04A20105F0500977BBA = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 3446F04620105F0500977BBA /* Build configuration list for PBXProject "CSNDICapturePlugin" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 3446F04220105F0500977BBA;
+			productRefGroup = 3446F04C20105F0500977BBA /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3446F04A20105F0500977BBA /* CSNDICapturePlugin */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3446F04920105F0500977BBA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34DBBA98201341A500B3DFFD /* Media.xcassets in Resources */,
+				34DBBA912013348D00B3DFFD /* CSNDICaptureViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3446F04720105F0500977BBA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34DBBA8C2012C59700B3DFFD /* CSNDISource.m in Sources */,
+				348359B82011048A00E711AF /* CSNDIReceiver.m in Sources */,
+				3483599C20107B6B00E711AF /* CSNDICapture.m in Sources */,
+				34DBBA902013348D00B3DFFD /* CSNDICaptureViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		3446F04F20105F0500977BBA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		3446F05020105F0500977BBA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		3446F05220105F0500977BBA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = L3JLUY4S5E;
+				INFOPLIST_FILE = CSNDICapturePlugin/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-flat_namespace",
+					"-undefined",
+					suppress,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = zakk.lol.CSNDICapturePlugin;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../CocoaSplit/PluginHeaders";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		3446F05320105F0500977BBA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = L3JLUY4S5E;
+				INFOPLIST_FILE = CSNDICapturePlugin/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-flat_namespace",
+					"-undefined",
+					suppress,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = zakk.lol.CSNDICapturePlugin;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../CocoaSplit/PluginHeaders";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3446F04620105F0500977BBA /* Build configuration list for PBXProject "CSNDICapturePlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3446F04F20105F0500977BBA /* Debug */,
+				3446F05020105F0500977BBA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3446F05120105F0500977BBA /* Build configuration list for PBXNativeTarget "CSNDICapturePlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3446F05220105F0500977BBA /* Debug */,
+				3446F05320105F0500977BBA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3446F04320105F0500977BBA /* Project object */;
+}

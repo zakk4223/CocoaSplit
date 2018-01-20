@@ -322,11 +322,9 @@
 
 -(bool)setOutputStreamFormat:(AudioStreamBasicDescription *)format
 {
-    
     if (self.inputFormat)
     {
-        
-        return [super setOutputStreamFormat:format];
+        return [super setOutputStreamFormat:self.inputFormat];
     }
     
     return YES;
