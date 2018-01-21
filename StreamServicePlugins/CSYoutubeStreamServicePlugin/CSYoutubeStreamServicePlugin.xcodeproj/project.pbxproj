@@ -16,20 +16,6 @@
 /* Begin PBXFileReference section */
 		340C80071D44722000B2FD7D /* CSYoutubeStreamServicePlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSYoutubeStreamServicePlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		340C800A1D44722000B2FD7D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		340C80161D44742900B2FD7D /* CSPluginServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPluginServices.h; path = PluginHeaders/CSPluginServices.h; sourceTree = "<group>"; };
-		340C80171D44742900B2FD7D /* CSIOSurfaceLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSIOSurfaceLayer.h; path = PluginHeaders/CSIOSurfaceLayer.h; sourceTree = "<group>"; };
-		340C80181D44742900B2FD7D /* CSPcmPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPcmPlayer.h; path = PluginHeaders/CSPcmPlayer.h; sourceTree = "<group>"; };
-		340C80191D44742900B2FD7D /* CAMultiAudioPCM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioPCM.h; path = PluginHeaders/CAMultiAudioPCM.h; sourceTree = "<group>"; };
-		340C801A1D44742900B2FD7D /* CSAbstractCaptureDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAbstractCaptureDevice.h; path = PluginHeaders/CSAbstractCaptureDevice.h; sourceTree = "<group>"; };
-		340C801B1D44742900B2FD7D /* CSTextCaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTextCaptureBase.h; path = PluginHeaders/CSTextCaptureBase.h; sourceTree = "<group>"; };
-		340C801C1D44742900B2FD7D /* CSTextCaptureViewControllerBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTextCaptureViewControllerBase.h; path = PluginHeaders/CSTextCaptureViewControllerBase.h; sourceTree = "<group>"; };
-		340C801D1D44742900B2FD7D /* CSCaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureBase.h; path = PluginHeaders/CSCaptureBase.h; sourceTree = "<group>"; };
-		340C801E1D44742900B2FD7D /* CSCaptureSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureSourceProtocol.h; path = PluginHeaders/CSCaptureSourceProtocol.h; sourceTree = "<group>"; };
-		340C801F1D44742900B2FD7D /* CSStreamServiceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSStreamServiceProtocol.h; path = PluginHeaders/CSStreamServiceProtocol.h; sourceTree = "<group>"; };
-		340C80201D44742900B2FD7D /* CSPluginFactoryProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPluginFactoryProtocol.h; path = PluginHeaders/CSPluginFactoryProtocol.h; sourceTree = "<group>"; };
-		340C80211D44742900B2FD7D /* CSExtraPluginProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSExtraPluginProtocol.h; path = PluginHeaders/CSExtraPluginProtocol.h; sourceTree = "<group>"; };
-		340C80221D44742900B2FD7D /* CSOauth2Authenticator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSOauth2Authenticator.h; path = PluginHeaders/CSOauth2Authenticator.h; sourceTree = "<group>"; };
-		340C80231D44742900B2FD7D /* CSNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSNotifications.h; path = PluginHeaders/CSNotifications.h; sourceTree = "<group>"; };
 		340C80251D44F5AD00B2FD7D /* CSYoutubeStreamService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSYoutubeStreamService.h; sourceTree = "<group>"; };
 		340C80261D44F5AD00B2FD7D /* CSYoutubeStreamService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSYoutubeStreamService.m; sourceTree = "<group>"; };
 		340C80281D44F6DB00B2FD7D /* CSYoutubeStreamServiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSYoutubeStreamServiceViewController.h; sourceTree = "<group>"; };
@@ -53,7 +39,6 @@
 			isa = PBXGroup;
 			children = (
 				3473D2A01D4E562400842EEE /* Media.xcassets */,
-				340C80241D44742900B2FD7D /* PluginHeaders */,
 				340C80091D44722000B2FD7D /* CSYoutubeStreamServicePlugin */,
 				340C80081D44722000B2FD7D /* Products */,
 			);
@@ -78,28 +63,6 @@
 				340C802A1D44F6DB00B2FD7D /* CSYoutubeStreamServiceViewController.xib */,
 			);
 			path = CSYoutubeStreamServicePlugin;
-			sourceTree = "<group>";
-		};
-		340C80241D44742900B2FD7D /* PluginHeaders */ = {
-			isa = PBXGroup;
-			children = (
-				340C80161D44742900B2FD7D /* CSPluginServices.h */,
-				340C80171D44742900B2FD7D /* CSIOSurfaceLayer.h */,
-				340C80181D44742900B2FD7D /* CSPcmPlayer.h */,
-				340C80191D44742900B2FD7D /* CAMultiAudioPCM.h */,
-				340C801A1D44742900B2FD7D /* CSAbstractCaptureDevice.h */,
-				340C801B1D44742900B2FD7D /* CSTextCaptureBase.h */,
-				340C801C1D44742900B2FD7D /* CSTextCaptureViewControllerBase.h */,
-				340C801D1D44742900B2FD7D /* CSCaptureBase.h */,
-				340C801E1D44742900B2FD7D /* CSCaptureSourceProtocol.h */,
-				340C801F1D44742900B2FD7D /* CSStreamServiceProtocol.h */,
-				340C80201D44742900B2FD7D /* CSPluginFactoryProtocol.h */,
-				340C80211D44742900B2FD7D /* CSExtraPluginProtocol.h */,
-				340C80221D44742900B2FD7D /* CSOauth2Authenticator.h */,
-				340C80231D44742900B2FD7D /* CSNotifications.h */,
-			);
-			name = PluginHeaders;
-			path = ../../CocoaSplit;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -289,6 +252,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = zakk.lol.CSYoutubeStreamServicePlugin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../CocoaSplit/PluginHeaders";
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Debug;
@@ -307,6 +271,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = zakk.lol.CSYoutubeStreamServicePlugin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../CocoaSplit/PluginHeaders";
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Release;

@@ -3,16 +3,15 @@
 //  CSTwitchStreamServicePlugin
 //
 //  Created by Zakk on 8/29/14.
-//  Copyright (c) 2014 Zakk. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import "CSStreamServiceProtocol.h"
 #import "CSPluginServices.h"
 #import "CSOauth2Authenticator.h"
+#import "CSOutputBase.h"
 
-
-@interface TwitchStreamService : NSObject <CSStreamServiceProtocol>
+@interface TwitchStreamService : CSOutputBase <CSStreamServiceProtocol>
 {
     NSString *_oauth_client_id;
     bool _key_fetch_pending;

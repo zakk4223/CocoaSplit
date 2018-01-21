@@ -3,13 +3,13 @@
 //  CSFileStreamServicePlugin
 //
 //  Created by Zakk on 8/29/14.
-//  Copyright (c) 2014 Zakk. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import "CSStreamServiceProtocol.h"
+#import "CSOutputBase.h"
 
-@interface FileStreamService : NSObject <CSStreamServiceProtocol>
+@interface FileStreamService : CSOutputBase <CSStreamServiceProtocol>
 
 
 @property bool isReady;

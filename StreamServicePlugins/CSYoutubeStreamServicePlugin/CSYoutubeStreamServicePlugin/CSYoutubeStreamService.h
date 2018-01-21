@@ -9,8 +9,9 @@
 #import "CSStreamServiceProtocol.h"
 #import "CSPluginServices.h"
 #import "CSOauth2Authenticator.h"
+#import "CSOutputBase.h"
 
-@interface CSYoutubeStreamService : NSObject <CSStreamServiceProtocol>
+@interface CSYoutubeStreamService : CSOutputBase <CSStreamServiceProtocol>
 {
     NSString *_currentStreamDest;
     bool _destination_fetch_pending;

@@ -7,7 +7,9 @@
 
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
-@protocol CSStreamServiceProtocol <NSObject, NSCoding>
+#import "CSOutputWriterProtocol.h"
+
+@protocol CSStreamServiceProtocol <NSObject, NSCoding, CSOutputWriterProtocol>
 
 @property bool isReady;
 

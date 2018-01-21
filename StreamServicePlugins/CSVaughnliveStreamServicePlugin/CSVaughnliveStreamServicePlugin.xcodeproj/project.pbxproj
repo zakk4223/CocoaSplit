@@ -249,6 +249,11 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = CSVaughnliveStreamServicePlugin/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-flat_namespace",
+					"-undefined",
+					suppress,
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "zakk.lol.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -263,6 +268,11 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = CSVaughnliveStreamServicePlugin/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-flat_namespace",
+					"-undefined",
+					suppress,
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "zakk.lol.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

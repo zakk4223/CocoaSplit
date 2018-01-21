@@ -18,16 +18,6 @@
 		3473D29E1D4E51EA00842EEE /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Media.xcassets; path = CSHitboxStreamServicePlugin/Media.xcassets; sourceTree = "<group>"; };
 		34C67B691A2D7B690012DC1B /* CSHitboxStreamServicePlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSHitboxStreamServicePlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		34C67B6D1A2D7B690012DC1B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		34C67B791A2D7B760012DC1B /* CSPluginServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPluginServices.h; sourceTree = "<group>"; };
-		34C67B7A1A2D7B760012DC1B /* CSPcmPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPcmPlayer.h; sourceTree = "<group>"; };
-		34C67B7B1A2D7B760012DC1B /* CAMultiAudioPCM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioPCM.h; path = CAMultiAudio/CAMultiAudioPCM.h; sourceTree = "<group>"; };
-		34C67B7C1A2D7B760012DC1B /* CSAbstractCaptureDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAbstractCaptureDevice.h; path = PluginHeaders/CSAbstractCaptureDevice.h; sourceTree = "<group>"; };
-		34C67B7D1A2D7B760012DC1B /* CSCaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureBase.h; path = PluginHeaders/CSCaptureBase.h; sourceTree = "<group>"; };
-		34C67B7E1A2D7B760012DC1B /* CSCaptureSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureSourceProtocol.h; path = PluginHeaders/CSCaptureSourceProtocol.h; sourceTree = "<group>"; };
-		34C67B7F1A2D7B760012DC1B /* CSStreamServiceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSStreamServiceProtocol.h; path = PluginHeaders/CSStreamServiceProtocol.h; sourceTree = "<group>"; };
-		34C67B801A2D7B760012DC1B /* CSPluginFactoryProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPluginFactoryProtocol.h; path = PluginHeaders/CSPluginFactoryProtocol.h; sourceTree = "<group>"; };
-		34C67B811A2D7B760012DC1B /* CSExtraPluginProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSExtraPluginProtocol.h; path = PluginHeaders/CSExtraPluginProtocol.h; sourceTree = "<group>"; };
-		34C67B821A2D7B760012DC1B /* CSNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSNotifications.h; path = PluginHeaders/CSNotifications.h; sourceTree = "<group>"; };
 		34C67B841A2D7C490012DC1B /* HitboxStreamService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HitboxStreamService.h; sourceTree = "<group>"; };
 		34C67B851A2D7C490012DC1B /* HitboxStreamService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HitboxStreamService.m; sourceTree = "<group>"; };
 		34C67B871A2D7DDB0012DC1B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -53,7 +43,6 @@
 			children = (
 				3473D29E1D4E51EA00842EEE /* Media.xcassets */,
 				34C67B871A2D7DDB0012DC1B /* Cocoa.framework */,
-				34C67B831A2D7B760012DC1B /* PluginHeaders */,
 				34C67B6B1A2D7B690012DC1B /* CSHitboxStreamServicePlugin */,
 				34C67B6A1A2D7B690012DC1B /* Products */,
 			);
@@ -86,24 +75,6 @@
 				34C67B6D1A2D7B690012DC1B /* Info.plist */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		34C67B831A2D7B760012DC1B /* PluginHeaders */ = {
-			isa = PBXGroup;
-			children = (
-				34C67B791A2D7B760012DC1B /* CSPluginServices.h */,
-				34C67B7A1A2D7B760012DC1B /* CSPcmPlayer.h */,
-				34C67B7B1A2D7B760012DC1B /* CAMultiAudioPCM.h */,
-				34C67B7C1A2D7B760012DC1B /* CSAbstractCaptureDevice.h */,
-				34C67B7D1A2D7B760012DC1B /* CSCaptureBase.h */,
-				34C67B7E1A2D7B760012DC1B /* CSCaptureSourceProtocol.h */,
-				34C67B7F1A2D7B760012DC1B /* CSStreamServiceProtocol.h */,
-				34C67B801A2D7B760012DC1B /* CSPluginFactoryProtocol.h */,
-				34C67B811A2D7B760012DC1B /* CSExtraPluginProtocol.h */,
-				34C67B821A2D7B760012DC1B /* CSNotifications.h */,
-			);
-			name = PluginHeaders;
-			path = ../../CocoaSplit;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -281,10 +252,15 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = CSHitboxStreamServicePlugin/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-undefined",
+					suppress,
+					"-flat_namespace",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "zakk.lol.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../CocoaSplit/PluginHeaders";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../CocoaSplit/PluginHeaders";
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Debug;
@@ -295,10 +271,15 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = CSHitboxStreamServicePlugin/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-undefined",
+					suppress,
+					"-flat_namespace",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "zakk.lol.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../CocoaSplit/PluginHeaders";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../CocoaSplit/PluginHeaders";
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Release;

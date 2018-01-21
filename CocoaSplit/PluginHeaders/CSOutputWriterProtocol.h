@@ -6,7 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "libavformat/avformat.h"
+#import "CapturedFrameData.h"
 
 @protocol CSOutputWriterProtocol <NSObject>
 
@@ -15,7 +15,6 @@
 @property (assign) int output_bytes;
 @property (readonly) NSUInteger buffered_frame_count;
 @property (assign) NSUInteger buffered_frame_size;
-@property (assign) enum AVCodecID video_codec_id;
 @property (assign) int framerate;
 @property (strong) NSString *stream_output;
 @property (strong) NSString *stream_format;

@@ -32,11 +32,6 @@
 		34AFC2EA19B08CA80007C07B /* FileStreamServiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileStreamServiceViewController.h; sourceTree = "<group>"; };
 		34AFC2EB19B08CA80007C07B /* FileStreamServiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileStreamServiceViewController.m; sourceTree = "<group>"; };
 		34AFC2EC19B08CA80007C07B /* FileStreamServiceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FileStreamServiceViewController.xib; sourceTree = "<group>"; };
-		34D6580A19B343290012E32B /* CSAbstractCaptureDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAbstractCaptureDevice.h; path = PluginHeaders/CSAbstractCaptureDevice.h; sourceTree = "<group>"; };
-		34D6580B19B343290012E32B /* CSCaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureBase.h; path = PluginHeaders/CSCaptureBase.h; sourceTree = "<group>"; };
-		34D6580C19B343290012E32B /* CSCaptureSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureSourceProtocol.h; path = PluginHeaders/CSCaptureSourceProtocol.h; sourceTree = "<group>"; };
-		34D6580D19B343290012E32B /* CSStreamServiceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSStreamServiceProtocol.h; path = PluginHeaders/CSStreamServiceProtocol.h; sourceTree = "<group>"; };
-		34D6580E19B343290012E32B /* CSPluginFactoryProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPluginFactoryProtocol.h; path = PluginHeaders/CSPluginFactoryProtocol.h; sourceTree = "<group>"; };
 		34EA821F1D3A3B6900928A06 /* CSFileStreamServiceFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSFileStreamServiceFactory.h; sourceTree = "<group>"; };
 		34EA82201D3A3B6900928A06 /* CSFileStreamServiceFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSFileStreamServiceFactory.m; sourceTree = "<group>"; };
 		34EA82221D3A3C4E00928A06 /* CSFileStreamRTMPService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSFileStreamRTMPService.h; sourceTree = "<group>"; };
@@ -61,7 +56,6 @@
 		34AFC2C219B08C050007C07B = {
 			isa = PBXGroup;
 			children = (
-				34D6580F19B343290012E32B /* PluginHeaders */,
 				34AFC2D419B08C050007C07B /* CSFileStreamServicePlugin */,
 				34AFC2CD19B08C050007C07B /* Frameworks */,
 				34AFC2CC19B08C050007C07B /* Products */,
@@ -123,19 +117,6 @@
 				34AFC2DA19B08C050007C07B /* CSFileStreamServicePlugin-Prefix.pch */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		34D6580F19B343290012E32B /* PluginHeaders */ = {
-			isa = PBXGroup;
-			children = (
-				34D6580A19B343290012E32B /* CSAbstractCaptureDevice.h */,
-				34D6580B19B343290012E32B /* CSCaptureBase.h */,
-				34D6580C19B343290012E32B /* CSCaptureSourceProtocol.h */,
-				34D6580D19B343290012E32B /* CSStreamServiceProtocol.h */,
-				34D6580E19B343290012E32B /* CSPluginFactoryProtocol.h */,
-			);
-			name = PluginHeaders;
-			path = ../../CocoaSplit;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -333,6 +314,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "zakk.lol.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../CocoaSplit/PluginHeaders";
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Debug;
@@ -353,6 +335,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "zakk.lol.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../CocoaSplit/PluginHeaders";
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Release;

@@ -3,16 +3,15 @@
 //  CSHitboxStreamServicePlugin
 //
 //  Created by Zakk on 12/1/14.
-//  Copyright (c) 2014 Zakk. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import "CSStreamServiceProtocol.h"
-
+#import "CSOutputBase.h"
 
 #define HITBOX_API_BASE "https://api.hitbox.tv/"
 
-@interface HitboxStreamService : NSObject <CSStreamServiceProtocol>
+@interface HitboxStreamService : CSOutputBase <CSStreamServiceProtocol>
 
 
 @property bool isReady;

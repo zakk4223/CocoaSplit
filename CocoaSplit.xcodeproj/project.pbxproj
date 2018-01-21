@@ -883,6 +883,7 @@
 		34A64A2E165EFE4B00A68428 /* PreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PreviewView.m; sourceTree = "<group>"; };
 		34A64A36165F208800A68428 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		34A7745220141DF70036F8B5 /* CSOutputWriterProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSOutputWriterProtocol.h; path = PluginHeaders/CSOutputWriterProtocol.h; sourceTree = "<group>"; };
+		34A77453201442B60036F8B5 /* CapturedFrameData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CapturedFrameData.h; path = PluginHeaders/CapturedFrameData.h; sourceTree = "<group>"; };
 		34A7ADB61C01EF1400685044 /* CompressionSettingsPanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CompressionSettingsPanelController.h; path = Interface/CompressionSettingsPanelController.h; sourceTree = "<group>"; };
 		34A7ADB71C01EF1400685044 /* CompressionSettingsPanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CompressionSettingsPanelController.m; path = Interface/CompressionSettingsPanelController.m; sourceTree = "<group>"; };
 		34A7C17A19B98EA200BC6882 /* CSExtraPluginProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSExtraPluginProtocol.h; path = PluginHeaders/CSExtraPluginProtocol.h; sourceTree = "<group>"; };
@@ -968,7 +969,6 @@
 		34C0EA401EB64D8E00B30DB4 /* CSLayoutRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSLayoutRecorder.m; sourceTree = "<group>"; };
 		34C1379D1F28DE0C00F53DE2 /* CSTimeFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTimeFormatter.h; path = Interface/CSTimeFormatter.h; sourceTree = "<group>"; };
 		34C1379E1F28DE0C00F53DE2 /* CSTimeFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSTimeFormatter.m; path = Interface/CSTimeFormatter.m; sourceTree = "<group>"; };
-		34C19051189EE60400AB2430 /* CapturedFrameData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CapturedFrameData.h; sourceTree = "<group>"; };
 		34C19052189EE60400AB2430 /* CapturedFrameData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CapturedFrameData.m; sourceTree = "<group>"; };
 		34C67B731A2D7B690012DC1B /* CSHitboxStreamServicePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSHitboxStreamServicePlugin.xcodeproj; path = StreamServicePlugins/CSHitboxStreamServicePlugin/CSHitboxStreamServicePlugin.xcodeproj; sourceTree = "<group>"; };
 		34C6807E19DD01C300413468 /* CSSyphonInjectExtraPlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSSyphonInjectExtraPlugin.xcodeproj; path = ExtraPlugins/CSSyphonInjectExtraPlugin/CSSyphonInjectExtraPlugin.xcodeproj; sourceTree = "<group>"; };
@@ -1695,8 +1695,8 @@
 		34576CFB19B020BF007BAD90 /* PluginHeaders */ = {
 			isa = PBXGroup;
 			children = (
+				34A77453201442B60036F8B5 /* CapturedFrameData.h */,
 				34A7745220141DF70036F8B5 /* CSOutputWriterProtocol.h */,
-				34C19051189EE60400AB2430 /* CapturedFrameData.h */,
 				34FDD6F01A215268009A7413 /* CSPluginServices.h */,
 				347BEAA91E5BCBAF0026A094 /* CSOpenGLLayer.h */,
 				347277FB1A5A2758008801A9 /* CSIOSurfaceLayer.h */,
