@@ -7,12 +7,12 @@
 
 #import <Foundation/Foundation.h>
 #import "CSStreamServiceProtocol.h"
-#import "CSOutputBase.h"
+#import "CSStreamServiceBase.h"
 
 #define INGEST_URL @"rtmp://live.vaughnlive.tv:443/live/"
 
 
-@interface CSVaughnliveStreamService : CSOutputBase <CSStreamServiceProtocol>
+@interface CSVaughnliveStreamService : CSStreamServiceBase <CSStreamServiceProtocol>
 {
     NSString *_ingestURL;
 }

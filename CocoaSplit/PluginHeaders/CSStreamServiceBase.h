@@ -1,17 +1,14 @@
 //
-//  CSStreamServiceProtocol.h
+//  CSStreamServiceBase.m
 //  CocoaSplit
 //
-//  Created by Zakk on 8/29/14.
+//  Created by Zakk on 1/20/18.
 //
 
 #import <Foundation/Foundation.h>
-#import <Cocoa/Cocoa.h>
-#import "CSOutputWriterProtocol.h"
+#import "CSStreamServiceProtocol.h"
 
-@protocol CSStreamServiceProtocol <NSObject, NSCoding>
-
-@property bool isReady;
+@interface CSStreamServiceBase : NSObject <CSStreamServiceProtocol, NSCoding>
 
 -(NSViewController  *)getConfigurationView;
 -(NSString *)getServiceDestination;
@@ -22,7 +19,7 @@
 -(NSObject<CSOutputWriterProtocol> *)createOutput;
 
 -(void)prepareForStreamStart;
-
-
-
 @end
+
+
+

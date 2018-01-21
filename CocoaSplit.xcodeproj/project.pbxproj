@@ -179,6 +179,8 @@
 		34A629451FBB6DC500B4E16A /* CSJSAnimationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A629441FBB6DC500B4E16A /* CSJSAnimationDelegate.m */; };
 		34A64A2F165EFE4C00A68428 /* PreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A64A2E165EFE4B00A68428 /* PreviewView.m */; };
 		34A64A37165F208800A68428 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A64A36165F208800A68428 /* QuartzCore.framework */; };
+		34A77455201449450036F8B5 /* CSStreamServiceBase.h in Sources */ = {isa = PBXBuildFile; fileRef = 34A77454201449450036F8B5 /* CSStreamServiceBase.h */; };
+		34A77457201449C30036F8B5 /* CSStreamServiceBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A77456201449C30036F8B5 /* CSStreamServiceBase.m */; };
 		34A7ADB81C01EF1400685044 /* CompressionSettingsPanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A7ADB71C01EF1400685044 /* CompressionSettingsPanelController.m */; };
 		34A7C1AD19B9A57600BC6882 /* CSLayoutSwitcherExtraPlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34A7C1A119B9A41A00BC6882 /* CSLayoutSwitcherExtraPlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		34AB1C311B944F48003F2C03 /* CSPreviewOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AB1C301B944F48003F2C03 /* CSPreviewOverlayView.m */; };
@@ -884,6 +886,8 @@
 		34A64A36165F208800A68428 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		34A7745220141DF70036F8B5 /* CSOutputWriterProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSOutputWriterProtocol.h; path = PluginHeaders/CSOutputWriterProtocol.h; sourceTree = "<group>"; };
 		34A77453201442B60036F8B5 /* CapturedFrameData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CapturedFrameData.h; path = PluginHeaders/CapturedFrameData.h; sourceTree = "<group>"; };
+		34A77454201449450036F8B5 /* CSStreamServiceBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSStreamServiceBase.h; path = PluginHeaders/CSStreamServiceBase.h; sourceTree = "<group>"; };
+		34A77456201449C30036F8B5 /* CSStreamServiceBase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSStreamServiceBase.m; sourceTree = "<group>"; };
 		34A7ADB61C01EF1400685044 /* CompressionSettingsPanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CompressionSettingsPanelController.h; path = Interface/CompressionSettingsPanelController.h; sourceTree = "<group>"; };
 		34A7ADB71C01EF1400685044 /* CompressionSettingsPanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CompressionSettingsPanelController.m; path = Interface/CompressionSettingsPanelController.m; sourceTree = "<group>"; };
 		34A7C17A19B98EA200BC6882 /* CSExtraPluginProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSExtraPluginProtocol.h; path = PluginHeaders/CSExtraPluginProtocol.h; sourceTree = "<group>"; };
@@ -1410,6 +1414,7 @@
 				346544DE1FC24248003B9991 /* NSImage+tintedImage.m */,
 				346544E01FC2457E003B9991 /* CSNSImageCellThemed.h */,
 				346544E11FC2457E003B9991 /* CSNSImageCellThemed.m */,
+				34A77456201449C30036F8B5 /* CSStreamServiceBase.m */,
 			);
 			path = CocoaSplit;
 			sourceTree = "<group>";
@@ -1713,6 +1718,7 @@
 				34EA822C1D3C568400928A06 /* CSOauth2Authenticator.h */,
 				3408234619BC50AD00CD1F5F /* CSNotifications.h */,
 				34DBBAB2201412FC00B3DFFD /* CSOutputBase.h */,
+				34A77454201449450036F8B5 /* CSStreamServiceBase.h */,
 			);
 			name = PluginHeaders;
 			sourceTree = "<group>";
@@ -2759,6 +2765,7 @@
 				34ED8C711B07371C002C0674 /* MIKMIDIMappingManager.m in Sources */,
 				3481F30619B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m in Sources */,
 				34EAFB6F1A1A137600E12FBD /* CSMeterCell.m in Sources */,
+				34A77457201449C30036F8B5 /* CSStreamServiceBase.m in Sources */,
 				34D2D5771A547C35001004E5 /* CSTextCaptureViewControllerBase.m in Sources */,
 				34B5FCDF19BF1C3F00F67D19 /* CreateLayoutViewController.m in Sources */,
 				34788DDB1EF5996000C3C9C5 /* CATransaction+JSExtensions.m in Sources */,
@@ -2846,6 +2853,7 @@
 				34A7ADB81C01EF1400685044 /* CompressionSettingsPanelController.m in Sources */,
 				34DC2FB01B512362008F12A2 /* CSCaptureBase+TimerDelegate.m in Sources */,
 				34ED8C791B07371C002C0674 /* MIKMIDIMetaEvent.m in Sources */,
+				34A77455201449450036F8B5 /* CSStreamServiceBase.h in Sources */,
 				34F52A2B1BC1E0F900662911 /* CSLayoutButton.m in Sources */,
 				34576C7819AFCA1B007BAD90 /* CSPluginLoader.m in Sources */,
 				34FDD6F21A215268009A7413 /* CSPluginServices.m in Sources */,

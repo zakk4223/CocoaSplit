@@ -3,7 +3,6 @@
 //  H264Streamer
 //
 //  Created by Zakk on 9/16/12.
-//  Copyright (c) 2012 Zakk. All rights reserved.
 //
 
 #import "OutputDestination.h"
@@ -35,7 +34,6 @@
 
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
-    
     [aCoder encodeObject:self.name forKey:@"name"];
     [aCoder encodeObject:self.type_name forKey:@"type_name"];
     [aCoder encodeObject:self.type_class_name forKey:@"type_class_name"];
@@ -353,7 +351,7 @@
 
 -(void) attachOutput
 {
-    CSOutputBase *newout;
+    NSObject<CSOutputWriterProtocol> *newout;
     if (!self.active)
     {
         return;
@@ -361,8 +359,12 @@
     
     if (!self.ffmpeg_out)
     {
-        
-        newout = [[CSOutputBase alloc] init];
+        if (self.streamServiceObject)
+        {
+            newout = [self.streamServiceObject createOutput];
+        } else {
+            newout = [[CSOutputBase alloc] init];
+        }
     } else {
         newout = self.ffmpeg_out;
     }

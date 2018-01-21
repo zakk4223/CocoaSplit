@@ -7,11 +7,11 @@
 
 #import <Foundation/Foundation.h>
 #import "CSStreamServiceProtocol.h"
-#import "CSOutputBase.h"
+#import "CSStreamServiceBase.h"
 
 #define HITBOX_API_BASE "https://api.hitbox.tv/"
 
-@interface HitboxStreamService : CSOutputBase <CSStreamServiceProtocol>
+@interface HitboxStreamService : CSStreamServiceBase <CSStreamServiceProtocol>
 
 
 @property bool isReady;

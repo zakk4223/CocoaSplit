@@ -3,7 +3,6 @@
 //  H264Streamer
 //
 //  Created by Zakk on 9/16/12.
-//  Copyright (c) 2012 Zakk. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -11,7 +10,7 @@
 #import "VideoCompressor.h"
 #import "CaptureController.h"
 #import "CSLayoutRecorderInfoProtocol.h"
-#import "CSOutputBase.h"
+#import "CSStreamServiceProtocol.h"
 
 
 
@@ -56,7 +55,7 @@
 @property (strong) NSString *output_format;
 @property (strong) NSString *stream_key;
 @property (assign) int stream_delay;
-@property (strong) CSOutputBase *ffmpeg_out;
+@property (strong) NSObject<CSOutputWriterProtocol> *ffmpeg_out;
 @property (weak) id<CSLayoutRecorderInfoProtocol> settingsController;
 @property (strong) NSColor *textColor;
 @property (assign) NSUInteger delay_buffer_frames;

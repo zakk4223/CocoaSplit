@@ -7,9 +7,9 @@
 
 #import <Foundation/Foundation.h>
 #import "CSStreamServiceProtocol.h"
-#import "CSOutputBase.h"
+#import "CSStreamServiceBase.h"
 
-@interface CSFileStreamRTMPService : CSOutputBase <CSStreamServiceProtocol>
+@interface CSFileStreamRTMPService : CSStreamServiceBase <CSStreamServiceProtocol>
 
 
 @property bool isReady;

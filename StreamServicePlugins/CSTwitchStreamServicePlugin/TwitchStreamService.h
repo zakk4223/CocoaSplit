@@ -9,9 +9,9 @@
 #import "CSStreamServiceProtocol.h"
 #import "CSPluginServices.h"
 #import "CSOauth2Authenticator.h"
-#import "CSOutputBase.h"
+#import "CSStreamServiceBase.h"
 
-@interface TwitchStreamService : CSOutputBase <CSStreamServiceProtocol>
+@interface TwitchStreamService : CSStreamServiceBase <CSStreamServiceProtocol>
 {
     NSString *_oauth_client_id;
     bool _key_fetch_pending;
