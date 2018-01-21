@@ -84,7 +84,6 @@
 
 -(id) initWithCoder:(NSCoder *)aDecoder
 {
-    self.codec_id = AV_CODEC_ID_H264;
     return self;
 }
 

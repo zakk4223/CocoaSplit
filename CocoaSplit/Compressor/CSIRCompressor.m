@@ -165,8 +165,6 @@
             self.errored = YES;
             return NO;
         } else {
-            self.codec_id = _compressor.codec_id;
-            
             [_compressor addOutput:self];
         }
     }

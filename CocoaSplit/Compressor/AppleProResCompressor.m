@@ -49,7 +49,6 @@
     {
         
         self.compressorType = @"AppleProResCompressor";
-        self.codec_id = AV_CODEC_ID_PRORES;
         self.proResType = @(kCMVideoCodecType_AppleProRes422);
     }
     

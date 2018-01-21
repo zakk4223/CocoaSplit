@@ -71,8 +71,6 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
 
         
         self.compressorType = @"Apple h264";
-        self.codec_id = AV_CODEC_ID_H264;
-
         self.profiles = @[[NSNull null], @"Baseline", @"Main", @"High"];
     }
     

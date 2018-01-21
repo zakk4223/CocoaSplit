@@ -38,7 +38,6 @@
 @property (strong) NSMutableString *name;
 @property (assign) bool errored;
 @property (assign) bool active;
-@property (assign) enum AVCodecID codec_id;
 
 
 

@@ -15,7 +15,7 @@
 
 @synthesize videoFrame = _videoFrame;
 @synthesize encodedSampleBuffer = _encodedSampleBuffer;
-@synthesize avcodec_pkt = _avcodec_pkt;
+//@synthesize avcodec_pkt = _avcodec_pkt;
 
 
 
@@ -32,8 +32,7 @@
     copy.videoPTS = self.videoPTS;
     copy.videoDuration = self.videoDuration;
     copy.encodedSampleBuffer = self.encodedSampleBuffer;
-    copy.avcodec_pkt = self.avcodec_pkt;
-    copy.avcodec_ctx = self.avcodec_ctx;
+
     return copy;
 }
 
@@ -65,15 +64,7 @@
     {
         CFRelease(_encodedSampleBuffer);
     }
-    
-    if (_avcodec_pkt)
-    {
-        av_packet_unref(_avcodec_pkt);
-        av_free(_avcodec_pkt);
 
-    }
-
-    
 	self.audioSamples = nil;
 }
 
@@ -81,10 +72,8 @@
 {
     NSInteger ret = 0;
     
-    if (self.avcodec_pkt)
+    if (self.encodedSampleBuffer)
     {
-        ret = self.avcodec_pkt->size;
-    } else if (self.encodedSampleBuffer) {
         ret = CMSampleBufferGetTotalSampleSize(self.encodedSampleBuffer);
     }
     

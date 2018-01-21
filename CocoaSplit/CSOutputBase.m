@@ -13,6 +13,7 @@
 #import "libavutil/opt.h"
 #import <sys/types.h>
 #import <sys/stat.h>
+#include "libavformat/avformat.h"
 
 #import <stdio.h>
 
@@ -46,7 +47,6 @@
 @implementation CSOutputBase
 
 
-#include "libavformat/avformat.h"
 
 
 -(NSUInteger)frameQueueSize
@@ -250,7 +250,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     if (!_av_video_stream && _audio_extradata)
     {
         
-        if ([self createAVFormatOut:frameData.encodedSampleBuffer codec_ctx:frameData.avcodec_ctx])
+        if ([self createAVFormatOut:frameData.encodedSampleBuffer])
         {
             [self initStatsValues];
         } else {
@@ -283,8 +283,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     {
         
         ret_status = [self writeVideoSampleBuffer:frameData];
-    } else if (frameData.avcodec_pkt) {
-        ret_status = [self writeAVPacket:frameData];
     }
     
     return ret_status;
@@ -371,7 +369,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 }
 
 
--(bool) createAVFormatOut:(CMSampleBufferRef)theBuffer codec_ctx:(AVCodecContext *)codec_ctx
+-(bool) createAVFormatOut:(CMSampleBufferRef)theBuffer
 {
  
     NSLog(@"Creating output format %@ DESTINATION %@", _stream_format, _stream_output);
@@ -404,22 +402,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
     
     AVCodecParameters *c_ctx = _av_video_stream->codecpar;
-    
-    
-    //c_ctx->codec_type = AVMEDIA_TYPE_VIDEO;
-    //c_ctx->codec_id = self.video_codec_id;
-    /*
-    _av_video_stream->time_base.num = 1000000;
-    _av_video_stream->time_base.den = self.framerate*1000000;
-    */
-    
-    //_av_video_stream->time_base.num = 1;
-    //_av_video_stream->time_base.den = 1000;
-    
-    
-
-    
-    
     _av_audio_stream = avformat_new_stream(_av_fmt_ctx, 0);
     
     if (!_av_audio_stream)
@@ -464,6 +446,8 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         avc_dimensions = CMVideoFormatDescriptionGetDimensions(fmt);
         self.width = avc_dimensions.width;
         self.height = avc_dimensions.height;
+        CMVideoCodecType videoCodec = CMVideoFormatDescriptionGetCodecType(fmt);
+        
         
         atoms = CMFormatDescriptionGetExtension(fmt, kCMFormatDescriptionExtension_SampleDescriptionExtensionAtoms);
         avccKey = CFSTR("avcC");
@@ -495,25 +479,24 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
             c_ctx->extradata_size = (int)avcc_size;
         }
         c_ctx->codec_type = AVMEDIA_TYPE_VIDEO;
-        c_ctx->codec_id = self.video_codec_id;
-        
-        
-    } else if (codec_ctx) {
-        
-        AVCodecParameters avc_parms = { 0 };
-        
-        avcodec_parameters_from_context(&avc_parms, codec_ctx);
-        avcodec_parameters_copy(_av_video_stream->codecpar, &avc_parms);
-        
-        _av_video_stream->time_base = av_add_q(codec_ctx->time_base, (AVRational){0,1});
-        
-        self.width = codec_ctx->width;
-        self.height = codec_ctx->height;
-        
-        c_ctx->extradata_size = codec_ctx->extradata_size;
-        c_ctx->extradata = malloc(c_ctx->extradata_size);
-        memcpy(c_ctx->extradata, codec_ctx->extradata, c_ctx->extradata_size);
-
+        switch(videoCodec)
+        {
+            case kCMVideoCodecType_H264:
+                c_ctx->codec_id = AV_CODEC_ID_H264;
+                break;
+            case kCMVideoCodecType_HEVC:
+                c_ctx->codec_id = AV_CODEC_ID_HEVC;
+                break;
+            case kCMVideoCodecType_AppleProRes422:
+            case kCMVideoCodecType_AppleProRes4444:
+            case kCMVideoCodecType_AppleProRes422HQ:
+            case kCMVideoCodecType_AppleProRes422LT:
+            case kCMVideoCodecType_AppleProRes422Proxy:
+                c_ctx->codec_id = AV_CODEC_ID_PRORES;
+                break;
+            default:
+                c_ctx->codec_id = AV_CODEC_ID_H264; //Whatever
+        }
     }
 
 
@@ -573,55 +556,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 }
 
 
--(BOOL) writeAVPacket:(CapturedFrameData *)frameData
-{
-    
-    
-    AVPacket *pkt = frameData.avcodec_pkt;
-    
-    AVPacket *p = av_malloc(sizeof (AVPacket));
-
-    av_init_packet(p);
-    
-    av_packet_ref(p, pkt);
-    
-    av_packet_rescale_ts(p, frameData.avcodec_ctx->time_base, _av_video_stream->time_base);
-
-    /*
-    if (p->pts != AV_NOPTS_VALUE)
-    {
-        
-        p->pts = av_rescale_q(p->pts, frameData.avcodec_ctx->time_base, _av_video_stream->time_base);
-    }
-    
-    if (p->dts != AV_NOPTS_VALUE)
-    {
-        p->dts = av_rescale_q(p->dts, frameData.avcodec_ctx->time_base, _av_video_stream->time_base);
-    }*/
-    
-    
-    
-    
-    
-    p->stream_index = _av_video_stream->index;
-    
-    /* Write the compressed frame to the media file. */
-    BOOL write_status = YES;
-    if (av_interleaved_write_frame(_av_fmt_ctx, p) < 0)
-    {
-        
-        //NSLog(@"INTERLEAVED WRITE FRAME FAILED FOR %@ frame number %lld", self.stream_output, frameData.frameNumber);
-        write_status = NO;
-    } else {
-        _output_framecnt++;
-        _output_bytes += [frameData encodedDataLength];
-
-    }
-    av_packet_unref(p);
-    av_free(p);
-    
-    return write_status;
-}
 
 
 -(BOOL) writeVideoSampleBuffer:(CapturedFrameData *)frameData

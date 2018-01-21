@@ -3,13 +3,10 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 12/3/13.
-//  Copyright (c) 2013 Zakk. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreMedia/CoreMedia.h>
-#import "libavformat/avformat.h"
-#import "libavcodec/avcodec.h"
 
 
 @interface CapturedFrameData : NSObject <NSCopying>
@@ -31,10 +28,6 @@
 @property CMTime videoPTS;
 @property CMTime videoDuration;
 @property (assign) CMSampleBufferRef encodedSampleBuffer;
-
-@property (assign) AVPacket *avcodec_pkt;
-@property AVCodecContext *avcodec_ctx;
-
 
 -(NSInteger) encodedDataLength;
 

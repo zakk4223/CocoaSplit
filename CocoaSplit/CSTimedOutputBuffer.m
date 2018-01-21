@@ -41,7 +41,6 @@
     
     CSOutputBase *newout = [[CSOutputBase alloc] init];
     
-    newout.video_codec_id  = self.compressor.codec_id;
     newout.framerate = controller.captureFPS;
     newout.stream_output = [toFile stringByStandardizingPath];
     newout.samplerate = controller.multiAudioEngine.sampleRate;

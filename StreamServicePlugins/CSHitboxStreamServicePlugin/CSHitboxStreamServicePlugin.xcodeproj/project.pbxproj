@@ -284,6 +284,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "zakk.lol.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../CocoaSplit/PluginHeaders";
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Debug;
@@ -297,6 +298,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "zakk.lol.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../CocoaSplit/PluginHeaders";
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Release;

@@ -41,7 +41,6 @@
 @property (strong) NSString *resolutionOption;
 @property (assign) bool errored;
 @property (assign) bool active;
-@property (assign) enum AVCodecID codec_id;
 
 -(void) addOutput:(id)destination;
 -(void) removeOutput:(id)destination;

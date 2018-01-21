@@ -38,6 +38,7 @@
     dispatch_queue_t _consumerThread;
     NSMutableArray *_compressQueue;
     dispatch_semaphore_t _queueSemaphore;
+    CFMutableDictionaryRef _formatExtensions;
     
     
     

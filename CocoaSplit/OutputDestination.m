@@ -388,7 +388,6 @@
     }
     */
     
-    newout.video_codec_id  = self.compressor.codec_id;
     newout.framerate = self.settingsController.frameRate;
     newout.stream_output = [destination stringByStandardizingPath];
     newout.stream_format = self.output_format;

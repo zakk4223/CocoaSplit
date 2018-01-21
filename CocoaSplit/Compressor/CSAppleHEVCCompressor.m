@@ -15,12 +15,7 @@
 {
     if (self = [super init])
     {
-        
-        
-        
         self.compressorType = @"Apple HEVC";
-        self.codec_id = AV_CODEC_ID_HEVC;
-        
         self.profiles = @[[NSNull null], @"Baseline", @"Main", @"High"];
     }
     

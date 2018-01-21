@@ -130,8 +130,6 @@
         _queueSemaphore = dispatch_semaphore_create(0);
         _compressQueue = [NSMutableArray array];
         _reset_flag = NO;
-        
-        
         self.compressorType = @"x264";
         
         //this all seems like I should be doing it one time, in some sort of thing you might call a class variable...
@@ -378,9 +376,9 @@
         {
             
             //We got the frame too fast, or something else weird happened. Just send the audio along
-            frameData.avcodec_pkt = NULL;
+            //frameData.avcodec_pkt = NULL;
             frameData.encodedSampleBuffer = NULL;
-            frameData.avcodec_ctx = _av_codec_ctx;
+            //frameData.avcodec_ctx = _av_codec_ctx;
             
             for (id dKey in self.outputs)
             {
@@ -421,17 +419,7 @@
             outframe->data[i] = CVPixelBufferGetBaseAddressOfPlane(converted_frame, i);
             
         }
-        
-        
-        
-        
         outframe->pts = usePts;
-        
-        
-        
-        
-        
-        
         AVPacket *pkt = av_malloc(sizeof (AVPacket));
         av_init_packet(pkt);
         
@@ -477,8 +465,42 @@
         if (receive_ret == 0)
         {
             
-            frameData.avcodec_ctx = self->_av_codec_ctx;
-            frameData.avcodec_pkt = pkt;
+        
+            uint8_t *dataCopy = malloc(pkt->size);
+            memcpy(dataCopy, pkt->data, pkt->size);
+            
+            CMBlockBufferRef dataBuffer;
+            
+            CMBlockBufferCreateWithMemoryBlock(NULL, dataCopy, pkt->size, kCFAllocatorMalloc, NULL, 0, pkt->size, 0, &dataBuffer);
+
+            CMFormatDescriptionRef sampleDesc;
+            CMVideoFormatDescriptionCreate(NULL, kCMVideoCodecType_H264, _av_codec_ctx->width, _av_codec_ctx->height, _formatExtensions, &sampleDesc);
+            
+            CMSampleBufferRef outBuffer;
+            CMSampleTimingInfo timingInfo;
+            size_t bufferSize = pkt->size;
+            timingInfo.presentationTimeStamp = CMTimeMake(pkt->pts, _av_codec_ctx->time_base.den);
+            if (pkt->dts == AV_NOPTS_VALUE)
+            {
+                timingInfo.decodeTimeStamp = timingInfo.presentationTimeStamp;
+            } else {
+                timingInfo.decodeTimeStamp = CMTimeMake(pkt->dts, _av_codec_ctx->time_base.den);
+            }
+            timingInfo.duration = CMTimeMake(pkt->duration, _av_codec_ctx->time_base.den);
+            
+            
+            CMSampleBufferCreateReady(NULL, dataBuffer, sampleDesc, 1, 1, &timingInfo, 1, &bufferSize, &outBuffer);
+        
+            
+            frameData.encodedSampleBuffer = outBuffer;
+            
+            CFRelease(outBuffer);
+            CFRelease(dataBuffer);
+            CFRelease(sampleDesc);
+            
+            //frameData.avcodec_pkt = pkt;
+            //frameData.avcodec_ctx = _av_codec_ctx;
+            
             frameData.isKeyFrame = pkt->flags & AV_PKT_FLAG_KEY;
             
             for (id dKey in self.outputs)
@@ -488,10 +510,10 @@
                 [dest writeEncodedData:frameData];
                 
             }
-            //[self.outputDelegate outputEncodedData:frameData];
             
+            av_packet_unref(pkt);
+            av_free(pkt);
             
-            //[self.outputDelegate outputAVPacket:pkt codec_ctx:_av_codec_ctx];
         } else {
             av_packet_unref(pkt);
             av_free(pkt);
@@ -537,6 +559,7 @@
         
         _av_codec_ctx->bit_rate = self.vbv_maxrate*1000;
     }
+    [self buildFormatExtensions];
     
 }
 
@@ -680,11 +703,32 @@
     _sws_ctx = NULL;
     
     _audioBuffer = [[NSMutableArray alloc] init];
-    
-    
+    [self buildFormatExtensions];
+
     return YES;
 }
 
+-(void)buildFormatExtensions
+{
+    if (!_av_codec_ctx)
+    {
+        return;
+    }
+    
+    if (_formatExtensions)
+    {
+        CFRelease(_formatExtensions);
+    }
+    
+    _formatExtensions = CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks , &kCFTypeDictionaryValueCallBacks);
+    CFMutableDictionaryRef atoms = CFDictionaryCreateMutable(NULL, 0, &kCFTypeDictionaryKeyCallBacks , &kCFTypeDictionaryValueCallBacks);
+    CFDataRef eData = CFDataCreate(NULL, _av_codec_ctx->extradata, _av_codec_ctx->extradata_size);
+    CFDictionarySetValue(atoms, CFSTR("avcC"), eData);
+    CFDictionarySetValue(_formatExtensions, kCMFormatDescriptionExtension_SampleDescriptionExtensionAtoms, atoms);
+    
+    CFRelease(eData);
+    CFRelease(atoms);
+}
 - (void) setNilValueForKey:(NSString *)key
 {
     
