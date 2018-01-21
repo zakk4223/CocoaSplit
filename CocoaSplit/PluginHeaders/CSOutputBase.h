@@ -21,10 +21,6 @@
 @property (strong) NSString *stream_format;
 @property (assign) int samplerate;
 @property (assign) int audio_bitrate;
-
-
--(BOOL) writeEncodedData:(CapturedFrameData *)frameDataIn;
-
 -(NSUInteger)frameQueueSize;
 -(bool)queueFramedata:(CapturedFrameData *)frameData;
 -(void) initStatsValues;

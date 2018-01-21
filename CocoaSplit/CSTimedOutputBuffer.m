@@ -7,7 +7,7 @@
 
 #import "CSTimedOutputBuffer.h"
 #import "AppDelegate.h"
-
+#import "CSLavfOutput.h"
 @implementation CSTimedOutputBuffer
 
 
@@ -39,7 +39,7 @@
     CaptureController *controller = appD.captureController;
     
     
-    CSOutputBase *newout = [[CSOutputBase alloc] init];
+    CSLavfOutput *newout = [[CSLavfOutput alloc] init];
     
     newout.framerate = controller.captureFPS;
     newout.stream_output = [toFile stringByStandardizingPath];

@@ -381,15 +381,6 @@
     {
         return;
     }
-    
-    
-    /*
-    if (self.stream_delay > 0)
-    {
-        _output_start_time = [self.settingsController mach_time_seconds] + self.stream_delay;
-    }
-    */
-    
     newout.framerate = self.settingsController.frameRate;
     newout.stream_output = [destination stringByStandardizingPath];
     newout.stream_format = self.output_format;

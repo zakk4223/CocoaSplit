@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CSStreamServiceBase.h"
-#import "CSOutputBase.h"
+#import "CSLavfOutput.h"
 
 @implementation CSStreamServiceBase
 
@@ -49,7 +49,7 @@
 
 -(NSObject<CSOutputWriterProtocol> *)createOutput;
 {
-    return [[CSOutputBase alloc] init];
+    return [[CSLavfOutput alloc] init];
 }
 
 
