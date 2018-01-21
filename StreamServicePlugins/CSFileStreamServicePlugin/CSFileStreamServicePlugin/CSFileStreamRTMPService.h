@@ -3,7 +3,6 @@
 //  CSFileStreamServicePlugin
 //
 //  Created by Zakk on 7/16/16.
-//  Copyright © 2016 Zakk. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

@@ -3,16 +3,47 @@
 //  H264Streamer
 //
 //  Created by Zakk on 9/4/12.
-//  Copyright (c) 2012 Zakk. All rights reserved.
 //
 
-#import "FFMpegTask.h"
+#import "CSOutputBase.h"
+#import <CoreMedia/CoreMedia.h>
+#import "libavformat/avformat.h"
+#import "CapturedFrameData.h"
+#import "CaptureController.h"
+#import "libavutil/opt.h"
 #import <sys/types.h>
 #import <sys/stat.h>
 
 #import <stdio.h>
 
-@implementation FFMpegTask
+@interface CSOutputBase ()
+{
+    AVFormatContext *_av_fmt_ctx;
+    AVStream *_av_video_stream;
+    AVStream *_av_audio_stream;
+    
+    char *_audio_extradata;
+    size_t _audio_extradata_size;
+    
+    int _input_framecnt;
+    int _pending_frame_count;
+    int _pending_frame_size;
+    int _consecutive_dropped_frames;
+    int _dropped_frames;
+    
+    NSMutableArray *_frameQueue;
+    dispatch_semaphore_t _frameSemaphore;
+    dispatch_queue_t _frameConsumerQueue;
+    bool _close_flag;
+}
+
+@property (assign) int width;
+@property (assign) int height;
+@property (assign) BOOL init_done;
+
+@end
+
+@implementation CSOutputBase
 
 
 #include "libavformat/avformat.h"
@@ -523,8 +554,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 
 -(void) updateInputStats
 {
-
-    self.dropped_frame_count = _dropped_frames;
 }
 
 

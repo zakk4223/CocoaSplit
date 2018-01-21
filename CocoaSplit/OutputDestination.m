@@ -7,7 +7,7 @@
 //
 
 #import "OutputDestination.h"
-#import "FFMpegTask.h"
+#import "CSOutputBase.h"
 
 
 @implementation OutputDestination
@@ -353,7 +353,7 @@
 
 -(void) attachOutput
 {
-    FFMpegTask *newout;
+    CSOutputBase *newout;
     if (!self.active)
     {
         return;
@@ -362,7 +362,7 @@
     if (!self.ffmpeg_out)
     {
         
-        newout = [[FFMpegTask alloc] init];
+        newout = [[CSOutputBase alloc] init];
     } else {
         newout = self.ffmpeg_out;
     }

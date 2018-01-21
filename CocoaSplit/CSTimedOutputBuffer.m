@@ -39,7 +39,7 @@
     CaptureController *controller = appD.captureController;
     
     
-    FFMpegTask *newout = [[FFMpegTask alloc] init];
+    CSOutputBase *newout = [[CSOutputBase alloc] init];
     
     newout.video_codec_id  = self.compressor.codec_id;
     newout.framerate = controller.captureFPS;

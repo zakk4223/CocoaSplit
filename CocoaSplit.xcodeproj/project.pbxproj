@@ -42,7 +42,7 @@
 		342346AD15F59B0D00C8C77E /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 342346AC15F59B0D00C8C77E /* VideoToolbox.framework */; };
 		342346B915F5FBD200C8C77E /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 342346B815F5FBD200C8C77E /* CoreVideo.framework */; };
 		342346BB15F5FBD700C8C77E /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 342346BA15F5FBD700C8C77E /* CoreMedia.framework */; };
-		342346BE15F6103D00C8C77E /* FFMpegTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346BD15F6103D00C8C77E /* FFMpegTask.m */; };
+		342346BE15F6103D00C8C77E /* CSOutputBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346BD15F6103D00C8C77E /* CSOutputBase.m */; };
 		342346CF15F9F07E00C8C77E /* CSAbstractCaptureDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346CE15F9F07E00C8C77E /* CSAbstractCaptureDevice.m */; };
 		3427864B1EA4337400877B7B /* CSTransitionAnimationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3427864A1EA4337400877B7B /* CSTransitionAnimationDelegate.m */; };
 		342B33B3198073EC00492CB7 /* line.fgsh in Resources */ = {isa = PBXBuildFile; fileRef = 342B33B2198073EC00492CB7 /* line.fgsh */; };
@@ -650,8 +650,7 @@
 		342346AC15F59B0D00C8C77E /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
 		342346B815F5FBD200C8C77E /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		342346BA15F5FBD700C8C77E /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
-		342346BC15F6103D00C8C77E /* FFMpegTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFMpegTask.h; sourceTree = "<group>"; };
-		342346BD15F6103D00C8C77E /* FFMpegTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFMpegTask.m; sourceTree = "<group>"; };
+		342346BD15F6103D00C8C77E /* CSOutputBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSOutputBase.m; sourceTree = "<group>"; };
 		342346CC15F9D52000C8C77E /* CSCaptureSourceProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSCaptureSourceProtocol.h; path = PluginHeaders/CSCaptureSourceProtocol.h; sourceTree = "<group>"; };
 		342346CD15F9F07E00C8C77E /* CSAbstractCaptureDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAbstractCaptureDevice.h; path = PluginHeaders/CSAbstractCaptureDevice.h; sourceTree = "<group>"; };
 		342346CE15F9F07E00C8C77E /* CSAbstractCaptureDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAbstractCaptureDevice.m; sourceTree = "<group>"; };
@@ -996,6 +995,8 @@
 		34DA1D3B1BF823E700132486 /* CSNewOutputWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSNewOutputWindowController.h; path = Interface/CSNewOutputWindowController.h; sourceTree = "<group>"; };
 		34DA1D3C1BF823E700132486 /* CSNewOutputWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSNewOutputWindowController.m; path = Interface/CSNewOutputWindowController.m; sourceTree = "<group>"; };
 		34DA1D3D1BF823E700132486 /* CSNewOutputWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSNewOutputWindowController.xib; path = Interface/CSNewOutputWindowController.xib; sourceTree = "<group>"; };
+		34DBBA992013F2E800B3DFFD /* CSOutputWriterProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSOutputWriterProtocol.h; sourceTree = "<group>"; };
+		34DBBAB2201412FC00B3DFFD /* CSOutputBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSOutputBase.h; path = PluginHeaders/CSOutputBase.h; sourceTree = "<group>"; };
 		34DC2F9B1B50FBCD008F12A2 /* CSTimerSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSTimerSourceProtocol.h; sourceTree = "<group>"; };
 		34DC2FAE1B512362008F12A2 /* CSCaptureBase+TimerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CSCaptureBase+TimerDelegate.h"; sourceTree = "<group>"; };
 		34DC2FAF1B512362008F12A2 /* CSCaptureBase+TimerDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CSCaptureBase+TimerDelegate.m"; sourceTree = "<group>"; };
@@ -1312,7 +1313,6 @@
 				3441338D18667F5B0059B686 /* Capture */,
 				340FE50615F444AA00E4CE4E /* CaptureController.h */,
 				340FE50715F444AA00E4CE4E /* CaptureController.m */,
-				34C19051189EE60400AB2430 /* CapturedFrameData.h */,
 				34C19052189EE60400AB2430 /* CapturedFrameData.m */,
 				3441338C18667F280059B686 /* Compressor */,
 				3451A1D2171187D400DF6A8B /* ControllerProtocol.h */,
@@ -1342,8 +1342,7 @@
 				34FDD6F11A215268009A7413 /* CSPluginServices.m */,
 				34D2D5721A547628001004E5 /* CSTextCaptureBase.m */,
 				34D2D5761A547C35001004E5 /* CSTextCaptureViewControllerBase.m */,
-				342346BC15F6103D00C8C77E /* FFMpegTask.h */,
-				342346BD15F6103D00C8C77E /* FFMpegTask.m */,
+				342346BD15F6103D00C8C77E /* CSOutputBase.m */,
 				347B14D9198492D900DC7DF0 /* InputPopupControllerViewController.h */,
 				347B14DA198492D900DC7DF0 /* InputPopupControllerViewController.m */,
 				3431FFDF19786502000965FE /* InputSource.h */,
@@ -1696,6 +1695,7 @@
 		34576CFB19B020BF007BAD90 /* PluginHeaders */ = {
 			isa = PBXGroup;
 			children = (
+				34C19051189EE60400AB2430 /* CapturedFrameData.h */,
 				34FDD6F01A215268009A7413 /* CSPluginServices.h */,
 				347BEAA91E5BCBAF0026A094 /* CSOpenGLLayer.h */,
 				347277FB1A5A2758008801A9 /* CSIOSurfaceLayer.h */,
@@ -1711,6 +1711,8 @@
 				34A7C17A19B98EA200BC6882 /* CSExtraPluginProtocol.h */,
 				34EA822C1D3C568400928A06 /* CSOauth2Authenticator.h */,
 				3408234619BC50AD00CD1F5F /* CSNotifications.h */,
+				34DBBA992013F2E800B3DFFD /* CSOutputWriterProtocol.h */,
+				34DBBAB2201412FC00B3DFFD /* CSOutputBase.h */,
 			);
 			name = PluginHeaders;
 			sourceTree = "<group>";
@@ -2736,7 +2738,7 @@
 				3498D94A1A94685000906532 /* CSAudioSwitchCell.m in Sources */,
 				34AB1C311B944F48003F2C03 /* CSPreviewOverlayView.m in Sources */,
 				345F8B051A1060D6009A81E3 /* CSAacEncoder.m in Sources */,
-				342346BE15F6103D00C8C77E /* FFMpegTask.m in Sources */,
+				342346BE15F6103D00C8C77E /* CSOutputBase.m in Sources */,
 				345F8B3D1A15F3BD009A81E3 /* CAMultiAudioPCM.m in Sources */,
 				34ED8C9F1B07371C002C0674 /* MIKMIDISequence.m in Sources */,
 				34B5FAE31E7602C60078FC51 /* CSSequenceActivatorView.m in Sources */,

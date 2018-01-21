@@ -5,7 +5,6 @@
 //  Created by Zakk on 9/2/12.
 
 #import "CaptureController.h"
-#import "FFMpegTask.h"
 #import "OutputDestination.h"
 #import "PreviewView.h"
 #import <IOSurface/IOSurface.h>

@@ -3,12 +3,11 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 4/2/16.
-//  Copyright © 2016 Zakk. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import "VideoCompressor.h"
-#import "FFMpegTask.h"
+#import "CSOutputBase.h"
 #import "CSIRCompressor.h"
 
 

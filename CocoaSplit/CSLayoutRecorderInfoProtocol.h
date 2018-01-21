@@ -3,7 +3,6 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 5/7/17.
-//  Copyright © 2017 Zakk. All rights reserved.
 //
 
 #ifndef CSLayoutRecorderInfoProtocol_h
