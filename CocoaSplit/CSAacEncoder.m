@@ -29,9 +29,11 @@
 
 -(void)setupEncoderBuffer
 {
-    TPCircularBufferInit(&_inputBuffer, self.inputASBD->mBytesPerFrame * 4096);
-    TPCircularBufferInit(&_scratchBuffer, self.inputASBD->mBytesPerFrame * 4096);
+    TPCircularBufferInit(&_inputBuffer, self.inputASBD->mBytesPerFrame * 8192);
+    TPCircularBufferInit(&_scratchBuffer, self.inputASBD->mBytesPerFrame * 8192);
 
+    CMAudioFormatDescriptionCreate(NULL, self.inputASBD, 0, nil, 0, nil, nil, &_pcmFormat);
+    
     dispatch_async(encoderQueue, ^{[self encodeAudio];});
 }
 
@@ -61,16 +63,34 @@
     
     while (1)
     {
-        //dispatch_semaphore_wait(_aSemaphore, DISPATCH_TIME_FOREVER);
-        
-
         while (TPCircularBufferPeek(&_inputBuffer, NULL, self.inputASBD) >= 1024)
         {
             AudioBufferList *inBuffer = TPCircularBufferPrepareEmptyAudioBufferListWithAudioFormat(&_scratchBuffer, self.inputASBD, 1024, NULL);
-            UInt32 inFrameCnt = 1024;
+            UInt32 inFrameCnt = 1024 ;
             AudioTimeStamp atTime;
             
             TPCircularBufferDequeueBufferListFrames(&_inputBuffer, &inFrameCnt, inBuffer, &atTime, self.inputASBD);
+            CMSampleBufferRef pcmSampleBuffer;
+            
+            uint64_t mach_now = atTime.mHostTime;
+            
+            double abs_pts = (double)mach_now/NSEC_PER_SEC;
+            
+            CMTime ptsTime = CMTimeMake(abs_pts*1000, 1000);
+            
+            CMSampleTimingInfo timeInfo;
+            CMTime duration = CMTimeMake(1, self.sampleRate);
+
+            timeInfo.duration = duration;
+            timeInfo.presentationTimeStamp = ptsTime;
+            timeInfo.decodeTimeStamp = kCMTimeInvalid;
+            CMSampleBufferCreate(kCFAllocatorDefault, NULL, NO, NULL, NULL, _pcmFormat, inFrameCnt, 1, &timeInfo, 0, NULL, &pcmSampleBuffer);
+            OSStatus ret = CMSampleBufferSetDataBufferFromAudioBufferList(pcmSampleBuffer, kCFAllocatorDefault, kCFAllocatorDefault, 0, inBuffer);
+            if (self.encodedReceiver)
+            {
+                [self.encodedReceiver captureOutputAudio:nil didOutputPCMSampleBuffer:pcmSampleBuffer];
+            }
+            
             
             Float32 *writebuf = malloc(inBuffer->mBuffers[0].mDataByteSize*2);
             AudioBuffer buffer0 = inBuffer->mBuffers[0];
@@ -124,18 +144,9 @@
                 if (self.encodedReceiver && buffer_size)
                 {
                     CMTime duration = CMTimeMake(1024, self.sampleRate);
-                    uint64_t mach_now = atTime.mHostTime;
-                    
-                    double abs_pts = (double)mach_now/NSEC_PER_SEC;
-                    
-                    CMTime ptsTime = CMTimeMake(abs_pts*1000, 1000);
-                    
-                    CMSampleTimingInfo timeInfo;
-                    
+
                     timeInfo.duration = duration;
-                    timeInfo.presentationTimeStamp = ptsTime;
-                    timeInfo.decodeTimeStamp = kCMTimeInvalid;
-                    
+
                     CMSampleBufferRef newSampleBuf;
                     CMSampleBufferRef timingSampleBuf;
                     CMBlockBufferRef bufferRef;
@@ -158,6 +169,7 @@
                     
                     //Individual video compressors retain the buffer until they push it to their output, we can release it now.
                     CFRelease(timingSampleBuf);
+                    CFRelease(pcmSampleBuffer);
                     
                 } else {
                     free(aacBuffer);

@@ -352,6 +352,7 @@
 -(void) attachOutput
 {
     NSObject<CSOutputWriterProtocol> *newout;
+    NSLog(@"ATTACH OUTPUT");
     if (!self.active)
     {
         return;
@@ -381,6 +382,8 @@
     {
         return;
     }
+    
+    
     newout.framerate = self.settingsController.frameRate;
     newout.stream_output = [destination stringByStandardizingPath];
     newout.stream_format = self.output_format;

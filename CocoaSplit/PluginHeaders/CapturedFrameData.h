@@ -23,6 +23,7 @@
 
 //Array of CMSampleBuffers from audio capture.
 @property (retain) NSMutableArray *audioSamples;
+@property (strong) NSMutableArray *pcmAudioSamples;
 
 
 @property CMTime videoPTS;

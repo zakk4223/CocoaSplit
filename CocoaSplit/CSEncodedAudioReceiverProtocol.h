@@ -9,5 +9,7 @@
 
 @protocol CSEncodedAudioReceiverProtocol <NSObject>
 -(void)captureOutputAudio:(id)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer;
+-(void)captureOutputAudio:(id)fromDevice didOutputPCMSampleBuffer:(CMSampleBufferRef)sampleBuffer;
+
 
 @end

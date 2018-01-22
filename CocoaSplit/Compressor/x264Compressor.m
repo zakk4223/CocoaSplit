@@ -296,7 +296,7 @@
     {
         BOOL setupOK;
         
-        setupOK = [self setupCompressor:frameData.videoFrame];
+        setupOK = [self setupCompressor:frameData];
         
         if (!setupOK)
         {
@@ -563,7 +563,7 @@
     
 }
 
--(bool)setupCompressor:(CVPixelBufferRef)videoFrame
+-(bool)setupCompressor:(CapturedFrameData *)videoFrame
 {
     
     avcodec_register_all();
@@ -574,7 +574,7 @@
     NSString *useAdvancedSettings = self.advancedSettings.copy;
     
     
-    [self setupResolution:videoFrame];
+    [self setupResolution:videoFrame.videoFrame];
     
     _compressor_queue = dispatch_queue_create("x264 encoder queue", NULL);
     
@@ -587,7 +587,6 @@
         return NO;
     }
     
-    double captureFPS = [CSPluginServices sharedPluginServices].currentFPS;
     
     _next_keyframe_time = 0.0f;
     
@@ -597,8 +596,8 @@
     //_av_codec_ctx->max_b_frames = 0;
     _av_codec_ctx->width = self.working_width;
     _av_codec_ctx->height = self.working_height;
-    _av_codec_ctx->time_base.num = 1;
-    _av_codec_ctx->time_base.den = captureFPS;
+    _av_codec_ctx->time_base.num = (int)videoFrame.videoDuration.value;
+    _av_codec_ctx->time_base.den = videoFrame.videoDuration.timescale;
     
     
     
@@ -606,14 +605,14 @@
     
     
     int real_keyframe_interval = 0;
-    
+    Float64 durationSecs = CMTimeGetSeconds(videoFrame.videoPTS);
     
     
     if (!self.keyframe_interval)
     {
-        real_keyframe_interval = captureFPS*2;
+        real_keyframe_interval = 2/durationSecs;
     } else {
-        real_keyframe_interval  = captureFPS*self.keyframe_interval;
+        real_keyframe_interval  = self.keyframe_interval/durationSecs;
     }
     
     

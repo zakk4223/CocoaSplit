@@ -29,6 +29,7 @@
     copy.encoderData = self.encoderData;
     copy.isKeyFrame = self.isKeyFrame;
     copy.audioSamples = self.audioSamples;
+    copy.pcmAudioSamples = self.pcmAudioSamples;
     copy.videoPTS = self.videoPTS;
     copy.videoDuration = self.videoDuration;
     copy.encodedSampleBuffer = self.encodedSampleBuffer;
@@ -66,6 +67,7 @@
     }
 
 	self.audioSamples = nil;
+    self.pcmAudioSamples = nil;
 }
 
 -(NSInteger) encodedDataLength

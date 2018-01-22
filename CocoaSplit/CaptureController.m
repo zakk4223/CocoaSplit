@@ -39,7 +39,7 @@
 #import "CSScriptInputSource.h"
 #import "CSJSAnimationDelegate.h"
 #import "CSAppleHEVCCompressor.h"
-
+#import "CSPassthroughCompressor.h"
 
 @implementation CaptureController
 
@@ -1919,6 +1919,16 @@
     
     
     
+    if (!self.compressors[@"Passthrough"])
+    {
+        CSPassthroughCompressor *newCompressor = [[CSPassthroughCompressor alloc] init];
+        newCompressor.name = @"Passthrough".mutableCopy;
+        self.compressors[@"Passthrough"] = newCompressor;
+        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:newCompressor];
+
+    }
+    
+    
     if (!self.compressors[@"AppleHEVC"])
     {
         CSAppleHEVCCompressor *newCompressor = [[CSAppleHEVCCompressor alloc] init];
@@ -2207,6 +2217,7 @@
     
     self.extraPluginsSaveData = [saveRoot valueForKey:@"extraPluginsSaveData"];
     [self migrateDefaultCompressor:saveRoot];
+    NSLog(@"COMPRESSORS %@", self.compressors);
     [self buildExtrasMenu];
     
     

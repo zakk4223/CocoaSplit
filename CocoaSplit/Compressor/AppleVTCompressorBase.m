@@ -205,12 +205,12 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 
 
 
-- (bool)setupCompressor:(CVPixelBufferRef)videoFrame
+- (bool)setupCompressor:(CapturedFrameData *)videoFrame
 {
     OSStatus status;
     
     
-    [self setupResolution:videoFrame];
+    [self setupResolution:videoFrame.videoFrame];
     
     if (!self.working_height || !self.working_width)
     {
@@ -234,10 +234,11 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     }
     
 
-    double captureFPS = [CSPluginServices sharedPluginServices].currentFPS;
+    Float64 durationSecs = CMTimeGetSeconds(videoFrame.videoDuration);
     
-    if (captureFPS > 0)
+    if (durationSecs > 0)
     {
+        double captureFPS = 1.0f/durationSecs;
         VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_ExpectedFrameRate, (__bridge CFTypeRef)(@(captureFPS)));
     }
     

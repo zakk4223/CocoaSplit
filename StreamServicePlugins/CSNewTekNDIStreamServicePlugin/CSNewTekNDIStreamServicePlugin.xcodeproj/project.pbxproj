@@ -1,0 +1,348 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		34BE2B4C2014F46A00E37382 /* CSNDIOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = 34BE2B4B2014F46A00E37382 /* CSNDIOutput.m */; };
+		34BE2B5C2015211300E37382 /* CSNewTekNDIStreamService.m in Sources */ = {isa = PBXBuildFile; fileRef = 34BE2B5B2015211300E37382 /* CSNewTekNDIStreamService.m */; };
+		34BE2B61201554FB00E37382 /* CSNewTekNDIStreamServiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34BE2B5F201554FB00E37382 /* CSNewTekNDIStreamServiceViewController.m */; };
+		34BE2B62201554FB00E37382 /* CSNewTekNDIStreamServiceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34BE2B60201554FB00E37382 /* CSNewTekNDIStreamServiceViewController.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		34BE2B3B2014F41300E37382 /* CSNewTekNDIStreamServicePlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSNewTekNDIStreamServicePlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		34BE2B3E2014F41300E37382 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		34BE2B4A2014F46A00E37382 /* CSNDIOutput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSNDIOutput.h; sourceTree = "<group>"; };
+		34BE2B4B2014F46A00E37382 /* CSNDIOutput.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSNDIOutput.m; sourceTree = "<group>"; };
+		34BE2B4E2014F4EB00E37382 /* Processing.NDI.deprecated.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Processing.NDI.deprecated.h; sourceTree = "<group>"; };
+		34BE2B4F2014F4EB00E37382 /* Processing.NDI.Send.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Processing.NDI.Send.h; sourceTree = "<group>"; };
+		34BE2B502014F4EB00E37382 /* Processing.NDI.utilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Processing.NDI.utilities.h; sourceTree = "<group>"; };
+		34BE2B512014F4EC00E37382 /* Processing.NDI.Lib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Processing.NDI.Lib.h; sourceTree = "<group>"; };
+		34BE2B522014F4EC00E37382 /* Processing.NDI.Find.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Processing.NDI.Find.h; sourceTree = "<group>"; };
+		34BE2B532014F4EC00E37382 /* Processing.NDI.Recv.ex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Processing.NDI.Recv.ex.h; sourceTree = "<group>"; };
+		34BE2B542014F4EC00E37382 /* Processing.NDI.Routing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Processing.NDI.Routing.h; sourceTree = "<group>"; };
+		34BE2B552014F4EC00E37382 /* Processing.NDI.compat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Processing.NDI.compat.h; sourceTree = "<group>"; };
+		34BE2B562014F4EC00E37382 /* Processing.NDI.DynamicLoad.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Processing.NDI.DynamicLoad.h; sourceTree = "<group>"; };
+		34BE2B572014F4EC00E37382 /* Processing.NDI.Recv.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Processing.NDI.Recv.h; sourceTree = "<group>"; };
+		34BE2B582014F4EC00E37382 /* Processing.NDI.structs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Processing.NDI.structs.h; sourceTree = "<group>"; };
+		34BE2B592014F4EC00E37382 /* Processing.NDI.Lib.cplusplus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Processing.NDI.Lib.cplusplus.h; sourceTree = "<group>"; };
+		34BE2B5A2015211300E37382 /* CSNewTekNDIStreamService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSNewTekNDIStreamService.h; sourceTree = "<group>"; };
+		34BE2B5B2015211300E37382 /* CSNewTekNDIStreamService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSNewTekNDIStreamService.m; sourceTree = "<group>"; };
+		34BE2B5E201554FB00E37382 /* CSNewTekNDIStreamServiceViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSNewTekNDIStreamServiceViewController.h; sourceTree = "<group>"; };
+		34BE2B5F201554FB00E37382 /* CSNewTekNDIStreamServiceViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSNewTekNDIStreamServiceViewController.m; sourceTree = "<group>"; };
+		34BE2B60201554FB00E37382 /* CSNewTekNDIStreamServiceViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CSNewTekNDIStreamServiceViewController.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		34BE2B382014F41300E37382 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		34BE2B322014F41300E37382 = {
+			isa = PBXGroup;
+			children = (
+				34BE2B3D2014F41300E37382 /* CSNewTekNDIStreamServicePlugin */,
+				34BE2B3C2014F41300E37382 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		34BE2B3C2014F41300E37382 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				34BE2B3B2014F41300E37382 /* CSNewTekNDIStreamServicePlugin.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		34BE2B3D2014F41300E37382 /* CSNewTekNDIStreamServicePlugin */ = {
+			isa = PBXGroup;
+			children = (
+				34BE2B4D2014F4D900E37382 /* NDIHeaders */,
+				34BE2B3E2014F41300E37382 /* Info.plist */,
+				34BE2B4A2014F46A00E37382 /* CSNDIOutput.h */,
+				34BE2B4B2014F46A00E37382 /* CSNDIOutput.m */,
+				34BE2B5A2015211300E37382 /* CSNewTekNDIStreamService.h */,
+				34BE2B5B2015211300E37382 /* CSNewTekNDIStreamService.m */,
+				34BE2B5E201554FB00E37382 /* CSNewTekNDIStreamServiceViewController.h */,
+				34BE2B5F201554FB00E37382 /* CSNewTekNDIStreamServiceViewController.m */,
+				34BE2B60201554FB00E37382 /* CSNewTekNDIStreamServiceViewController.xib */,
+			);
+			path = CSNewTekNDIStreamServicePlugin;
+			sourceTree = "<group>";
+		};
+		34BE2B4D2014F4D900E37382 /* NDIHeaders */ = {
+			isa = PBXGroup;
+			children = (
+				34BE2B552014F4EC00E37382 /* Processing.NDI.compat.h */,
+				34BE2B4E2014F4EB00E37382 /* Processing.NDI.deprecated.h */,
+				34BE2B562014F4EC00E37382 /* Processing.NDI.DynamicLoad.h */,
+				34BE2B522014F4EC00E37382 /* Processing.NDI.Find.h */,
+				34BE2B592014F4EC00E37382 /* Processing.NDI.Lib.cplusplus.h */,
+				34BE2B512014F4EC00E37382 /* Processing.NDI.Lib.h */,
+				34BE2B532014F4EC00E37382 /* Processing.NDI.Recv.ex.h */,
+				34BE2B572014F4EC00E37382 /* Processing.NDI.Recv.h */,
+				34BE2B542014F4EC00E37382 /* Processing.NDI.Routing.h */,
+				34BE2B4F2014F4EB00E37382 /* Processing.NDI.Send.h */,
+				34BE2B582014F4EC00E37382 /* Processing.NDI.structs.h */,
+				34BE2B502014F4EB00E37382 /* Processing.NDI.utilities.h */,
+			);
+			path = NDIHeaders;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		34BE2B3A2014F41300E37382 /* CSNewTekNDIStreamServicePlugin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 34BE2B412014F41300E37382 /* Build configuration list for PBXNativeTarget "CSNewTekNDIStreamServicePlugin" */;
+			buildPhases = (
+				34BE2B372014F41300E37382 /* Sources */,
+				34BE2B382014F41300E37382 /* Frameworks */,
+				34BE2B392014F41300E37382 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CSNewTekNDIStreamServicePlugin;
+			productName = CSNewTekNDIStreamServicePlugin;
+			productReference = 34BE2B3B2014F41300E37382 /* CSNewTekNDIStreamServicePlugin.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		34BE2B332014F41300E37382 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0920;
+				ORGANIZATIONNAME = Zakk;
+				TargetAttributes = {
+					34BE2B3A2014F41300E37382 = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 34BE2B362014F41300E37382 /* Build configuration list for PBXProject "CSNewTekNDIStreamServicePlugin" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 34BE2B322014F41300E37382;
+			productRefGroup = 34BE2B3C2014F41300E37382 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				34BE2B3A2014F41300E37382 /* CSNewTekNDIStreamServicePlugin */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		34BE2B392014F41300E37382 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34BE2B62201554FB00E37382 /* CSNewTekNDIStreamServiceViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		34BE2B372014F41300E37382 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34BE2B4C2014F46A00E37382 /* CSNDIOutput.m in Sources */,
+				34BE2B61201554FB00E37382 /* CSNewTekNDIStreamServiceViewController.m in Sources */,
+				34BE2B5C2015211300E37382 /* CSNewTekNDIStreamService.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		34BE2B3F2014F41300E37382 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		34BE2B402014F41300E37382 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		34BE2B422014F41300E37382 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = L3JLUY4S5E;
+				INFOPLIST_FILE = CSNewTekNDIStreamServicePlugin/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-undefined",
+					suppress,
+					"-flat_namespace",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = zakk.lol.CSNewTekNDIStreamServicePlugin;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../CocoaSplit/PluginHeaders";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		34BE2B432014F41300E37382 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = L3JLUY4S5E;
+				INFOPLIST_FILE = CSNewTekNDIStreamServicePlugin/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-undefined",
+					suppress,
+					"-flat_namespace",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = zakk.lol.CSNewTekNDIStreamServicePlugin;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../CocoaSplit/PluginHeaders";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		34BE2B362014F41300E37382 /* Build configuration list for PBXProject "CSNewTekNDIStreamServicePlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34BE2B3F2014F41300E37382 /* Debug */,
+				34BE2B402014F41300E37382 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		34BE2B412014F41300E37382 /* Build configuration list for PBXNativeTarget "CSNewTekNDIStreamServicePlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34BE2B422014F41300E37382 /* Debug */,
+				34BE2B432014F41300E37382 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 34BE2B332014F41300E37382 /* Project object */;
+}

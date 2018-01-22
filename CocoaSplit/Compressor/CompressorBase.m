@@ -84,7 +84,7 @@
 
 -(id) initWithCoder:(NSCoder *)aDecoder
 {
-    return self;
+    return [self init];
 }
 
 
@@ -96,7 +96,7 @@
 }
 
 
--(bool)setupCompressor:(CVPixelBufferRef)videoFrame
+-(bool)setupCompressor:(CapturedFrameData *)videoFrame
 {
     
     return YES;
@@ -105,7 +105,6 @@
 
 -(void) addOutput:(OutputDestination *)destination
 {
-    
     
     [self.outputs setObject:destination forKey:[NSValue valueWithPointer:(__bridge const void * _Nullable)(destination)]];
     self.active = YES;

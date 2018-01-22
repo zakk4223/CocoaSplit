@@ -157,7 +157,7 @@
     {
         bool compressor_status;
 
-        compressor_status = [self setupCompressor:frameData.videoFrame];
+        compressor_status = [self setupCompressor:frameData];
         
         
         if (!compressor_status)
@@ -190,7 +190,7 @@
 }
 
 
-- (bool)setupCompressor:(CVPixelBufferRef)videoFrame
+- (bool)setupCompressor:(CapturedFrameData *)videoFrame
 {
 
     

@@ -68,7 +68,7 @@
 
 
 -(bool)compressFrame:(CapturedFrameData *)frameData;
--(bool)setupCompressor:(CVPixelBufferRef)videoFrame;
+-(bool)setupCompressor:(CapturedFrameData *)videoFrame;
 
 
 @end

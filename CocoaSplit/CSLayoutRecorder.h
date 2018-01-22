@@ -27,7 +27,10 @@
     double _frame_time;
     CMTime _firstAudioTime;
     CMTime _previousAudioTime;
+    CMTime _firstPcmAudioTime;
+    CMTime _previousPcmAudioTime;
     NSMutableArray *_audioBuffer;
+    NSMutableArray *_pcmAudioBuffer;
 
 
 
@@ -72,6 +75,6 @@
 
 -(NSObject<VideoCompressor> *)compressorByName:(NSString *)name;
 -(void)captureOutputAudio:(id)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer;
-
+-(void)captureOutputAudio:(id)fromDevice didOutputPCMSampleBuffer:(CMSampleBufferRef)sampleBuffer;
 
 @end

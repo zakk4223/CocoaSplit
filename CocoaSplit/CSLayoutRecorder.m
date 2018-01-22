@@ -174,9 +174,13 @@
     {
         _firstAudioTime = kCMTimeZero;
         _previousAudioTime = kCMTimeZero;
+        _firstPcmAudioTime = kCMTimeZero;
+        _previousPcmAudioTime = kCMTimeZero;
         
         
         _audioBuffer = [NSMutableArray array];
+        _pcmAudioBuffer = [NSMutableArray array];
+
 
         
         
@@ -442,10 +446,16 @@
         _frameCount++;
         CVPixelBufferRetain(newFrame);
         NSMutableArray *frameAudio = [[NSMutableArray alloc] init];
+        NSMutableArray *pcmFrameAudio = [[NSMutableArray alloc] init];
+
         [self setAudioData:frameAudio videoPTS:CMTimeMake((_frame_time - _firstFrameTime)*1000, 1000)];
+        [self setPcmAudioData:pcmFrameAudio videoPTS:CMTimeMake((_frame_time - _firstFrameTime)*1000, 1000)];
+
+        
         CapturedFrameData *newData = [self createFrameData];
         newData.audioSamples = frameAudio;
         newData.videoFrame = newFrame;
+        newData.pcmAudioSamples = pcmFrameAudio;
         
         int used_compressor_count = 0;
         
@@ -495,6 +505,17 @@
 }
 
 
+-(void) addPcmAudioData:(CMSampleBufferRef)audioData
+{
+    
+    @synchronized(self)
+    {
+        
+        [_pcmAudioBuffer addObject:(__bridge id)audioData];
+    }
+}
+
+
 -(void) addAudioData:(CMSampleBufferRef)audioData
 {
     
@@ -505,6 +526,44 @@
     }
 }
 
+
+-(void)setPcmAudioData:(NSMutableArray *)audioDestination videoPTS:(CMTime)videoPTS
+{
+    NSUInteger audioConsumed = 0;
+    NSUInteger sampleCount = 0;
+    
+    NSMutableArray *pendingConsume = [NSMutableArray array];
+    
+    @synchronized(self)
+    {
+        NSUInteger audioBufferSize = [_pcmAudioBuffer count];
+        
+        for (int i = 0; i < audioBufferSize; i++)
+        {
+            CMSampleBufferRef audioData = (__bridge CMSampleBufferRef)[_pcmAudioBuffer objectAtIndex:i];
+            
+            CMTime audioTime = CMSampleBufferGetOutputPresentationTimeStamp(audioData);
+            
+            
+            
+            
+            if (CMTIME_COMPARE_INLINE(audioTime, <=, videoPTS))
+            {
+                sampleCount += CMSampleBufferGetNumSamples(audioData);
+                audioConsumed++;
+                [audioDestination addObject:(__bridge id)audioData];
+            } else {
+                break;
+            }
+        }
+        
+        if (audioConsumed > 0)
+        {
+            [_pcmAudioBuffer removeObjectsInRange:NSMakeRange(0, audioConsumed)];
+        }
+        
+    }
+}
 
 -(void) setAudioData:(NSMutableArray *)audioDestination videoPTS:(CMTime)videoPTS
 {
@@ -541,7 +600,48 @@
     }
 }
 
-- (void)captureOutputAudio:(id)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
+-(void)captureOutputAudio:(id)fromDevice didOutputPCMSampleBuffer:(CMSampleBufferRef)sampleBuffer
+{
+    if (!self.recordingActive)
+    {
+        return;
+    }
+    
+    
+    CMTime orig_pts = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
+    
+    
+    
+    
+    if (CMTIME_COMPARE_INLINE(_firstPcmAudioTime, ==, kCMTimeZero))
+    {
+        
+        
+        _firstPcmAudioTime = orig_pts;
+        return;
+    }
+    
+    
+    CMTime pts = CMTimeSubtract(orig_pts, _firstPcmAudioTime);
+    //CMTime adjust_pts = CMTimeMakeWithSeconds(self.audio_adjust, orig_pts.timescale);
+    //CMTime pts = CMTimeAdd(real_pts, adjust_pts);
+    
+    
+    
+    CMSampleBufferSetOutputPresentationTimeStamp(sampleBuffer, pts);
+    
+    if (CMTIME_COMPARE_INLINE(pts, >, _previousPcmAudioTime))
+    {
+        if (sampleBuffer)
+        {
+            [self addPcmAudioData:sampleBuffer];
+        }
+        _previousPcmAudioTime = pts;
+    }
+}
+
+
+- (void)captureOutputAudio:(id)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer 
 {
     
     
@@ -575,7 +675,10 @@
     
     if (CMTIME_COMPARE_INLINE(pts, >, _previousAudioTime))
     {
-        [self addAudioData:sampleBuffer];
+        if (sampleBuffer)
+        {
+            [self addAudioData:sampleBuffer];
+        }
         _previousAudioTime = pts;
     }
 }

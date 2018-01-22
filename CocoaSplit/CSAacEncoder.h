@@ -33,6 +33,7 @@
     TPCircularBuffer _scratchBuffer;
     dispatch_source_t _dispatch_timer;
     dispatch_semaphore_t _aSemaphore;
+    CMFormatDescriptionRef _pcmFormat;
     
     
 }

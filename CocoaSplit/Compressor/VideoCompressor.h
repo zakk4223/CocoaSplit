@@ -28,7 +28,7 @@
 -(bool)compressFrame:(CapturedFrameData *)imageBuffer;
 
 
--(bool)setupCompressor:(CVPixelBufferRef)videoFrame;
+-(bool)setupCompressor:(CapturedFrameData *)videoFrame;
 
 
 
@@ -41,6 +41,7 @@
 @property (strong) NSString *resolutionOption;
 @property (assign) bool errored;
 @property (assign) bool active;
+@property (assign) float frameRate;
 
 -(void) addOutput:(id)destination;
 -(void) removeOutput:(id)destination;
