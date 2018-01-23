@@ -48,7 +48,6 @@
 
 
 
-@class FFMpegTask;
 @protocol VideoCompressor;
 @class OutputDestination;
 @class InputSource;

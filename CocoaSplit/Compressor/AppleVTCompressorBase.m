@@ -147,7 +147,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     if (!_compression_session)
     {
         
-        if (![self setupCompressor:frameData.videoFrame])
+        if (![self setupCompressor:frameData])
         {
             return NO;
         }

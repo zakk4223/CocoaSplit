@@ -1905,6 +1905,8 @@
     
     
     
+    bool hasHEVC = [AppleVTCompressor HEVCAvailable];
+    
     
     if (self.compressors[@"AppleVT"])
     {
@@ -1928,17 +1930,20 @@
 
     }
     
-    
-    if (!self.compressors[@"AppleHEVC"])
+    if (hasHEVC)
     {
-        CSAppleHEVCCompressor *newCompressor = [[CSAppleHEVCCompressor alloc] init];
-        newCompressor.name = @"AppleHEVC".mutableCopy;
-        newCompressor.average_bitrate = 1000;
-        newCompressor.max_bitrate = 1000;
-        newCompressor.keyframe_interval = 2;
-        self.compressors[@"AppleHEVC"] = newCompressor;
-        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:newCompressor];
-        
+        if (!self.compressors[@"AppleHEVC"])
+        {
+            CSAppleHEVCCompressor *newCompressor = [[CSAppleHEVCCompressor alloc] init];
+            newCompressor.name = @"AppleHEVC".mutableCopy;
+            newCompressor.average_bitrate = 1000;
+            newCompressor.max_bitrate = 1000;
+            newCompressor.keyframe_interval = 2;
+            self.compressors[@"AppleHEVC"] = newCompressor;
+            [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:newCompressor];
+        }
+    } else if (self.compressors[@"AppleHEVC"]) {
+        [self.compressors removeObjectForKey:@"AppleHEVC"];
     }
     
     

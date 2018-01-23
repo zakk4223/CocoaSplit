@@ -33,6 +33,8 @@
 
 
 +(bool)intelQSVAvailable;
++(bool)HEVCAvailable;
+
 
 
 @end

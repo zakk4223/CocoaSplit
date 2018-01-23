@@ -14,7 +14,6 @@
 @interface CSTimedOutputBuffer : NSObject
 {
     NSMutableArray *_frameBuffer;
-    FFMpegTask *_outFFMpeg;
     float _currentBufferDuration;
     
 }

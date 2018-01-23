@@ -215,18 +215,34 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
     }
 }
 
++(bool)HEVCAvailable
+{
+    bool ret = NO;
+    CFArrayRef encoders = NULL;
+    
+    VTCopyVideoEncoderList(NULL, &encoders);
+    
+    
+    NSArray *nsEnc = (__bridge NSArray *)(encoders);
+    
+    for (NSDictionary *encode in nsEnc)
+    {
+        NSString *cName = [encode objectForKey:(NSString *)kVTVideoEncoderList_CodecName];
+        if ([cName isEqualToString:@"HEVC"])
+        {
+            ret = YES;
+        }
+    }
+    CFRelease(encoders);
+    
+    return ret;
+}
+
+
 +(bool)intelQSVAvailable
 {
     
-    /*
-     CFArrayRef encoders = NULL;
-     
-     VTCopyVideoEncoderList(NULL, &encoders);
-     
-     
-     
-     NSLog(@"ENCODERS %@", encoders);
-    */
+
     
     NSMutableDictionary *encoderSpec = [[NSMutableDictionary alloc] init];
     encoderSpec[(__bridge NSString *)kVTVideoEncoderSpecification_RequireHardwareAcceleratedVideoEncoder] = @YES;
