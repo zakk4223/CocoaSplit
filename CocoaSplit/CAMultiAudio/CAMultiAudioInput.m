@@ -145,7 +145,9 @@
             [self teardownGraph];
             return NO;
         }
+        
         connectNode = delayNode;
+        delayNode.bypass = YES;
         [self.delayNodes addObject:delayNode];
     }
     
@@ -211,8 +213,14 @@
             {
                 dNode.delay = 2.0;
                 nodeDelay -= 2.0;
+                dNode.bypass = NO;
             } else {
+                
                 dNode.delay = nodeDelay;
+                if (nodeDelay <= 0.0)
+                {
+                    dNode.bypass = YES;
+                }
                 nodeDelay -= nodeDelay;
             }
         }

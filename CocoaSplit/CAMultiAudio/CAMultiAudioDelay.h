@@ -6,8 +6,8 @@
 //
 
 #import "CAMultiAudioNode.h"
-
-@interface CAMultiAudioDelay : CAMultiAudioNode
+#import "CAMultiAudioEffect.h"
+@interface CAMultiAudioDelay : CAMultiAudioEffect
 
 @property (assign) float delay;
 
