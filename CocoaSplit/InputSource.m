@@ -2502,6 +2502,9 @@ static NSArray *_sourceTypes = nil;
     
     self.name = _editedName;
 }
+
+
+
 -(void) setSelectedVideoType:(NSString *)selectedVideoType
 {
     NSMutableDictionary *pluginMap = [[CSPluginLoader sharedPluginLoader] sourcePlugins];

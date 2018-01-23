@@ -45,7 +45,7 @@
                                         </textFieldCell>
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
-                                            <tableCellView id="K7P-gj-44p">
+                                            <tableCellView identifier="defaultView" id="K7P-gj-44p">
                                                 <rect key="frame" x="1" y="1" width="415" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
@@ -106,8 +106,6 @@
                                 </tableColumns>
                                 <connections>
                                     <action trigger="doubleAction" selector="outlineViewDoubleClick:" target="-2" id="SnR-fY-bsU"/>
-                                    <binding destination="d5r-1v-wmD" name="content" keyPath="arrangedObjects" id="REu-8i-kkD"/>
-                                    <binding destination="d5r-1v-wmD" name="selectionIndexPaths" keyPath="selectionIndexPaths" previousBinding="REu-8i-kkD" id="Ccb-Xm-9EN"/>
                                     <outlet property="dataSource" destination="-2" id="J0b-9p-2zz"/>
                                     <outlet property="delegate" destination="-2" id="sxE-KE-Fjx"/>
                                 </connections>
@@ -192,11 +190,7 @@ CA
             </constraints>
             <point key="canvasLocation" x="-90" y="137.5"/>
         </customView>
-        <treeController childrenKeyPath="attachedInputs" id="d5r-1v-wmD" userLabel="sourceTreeController">
-            <connections>
-                <binding destination="-2" name="contentArray" keyPath="self.sourceLayoutController.selection.topLevelSourceList" id="jp4-cZ-FTe"/>
-            </connections>
-        </treeController>
+        <treeController childrenKeyPath="attachedInputs" id="d5r-1v-wmD" userLabel="sourceTreeController"/>
     </objects>
     <resources>
         <image name="NSActionTemplate" width="14" height="14"/>

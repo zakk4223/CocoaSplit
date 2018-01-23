@@ -50,19 +50,73 @@
 
 -(void)outlineViewDoubleClick:(NSOutlineView *)sender
 {
-    NSTreeNode *node = [sender itemAtRow:sender.clickedRow];
-    if (node)
+    NSObject<CSInputSourceProtocol>*src = [sender itemAtRow:sender.clickedRow];
+    if (src)
     {
-        NSObject<CSInputSourceProtocol>*src = node.representedObject;
         [self openInputConfigWindows:@[src]];
     }
 }
 
+-(id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(id)item
+{
+    
+    if (!item)
+    {
+        SourceLayout *layout = self.sourceLayoutController.content;
+        
+        return [layout.topLevelSourceList objectAtIndex:index];
+    }
+    
+    
+    NSObject<CSInputSourceProtocol> *useItem = item;
+    if (useItem.isVideo)
+    {
+        InputSource *vItem = (InputSource *)useItem;
+        return [vItem.attachedInputs objectAtIndex:index];
+    }
+    
+    return nil;
+}
+
+-(BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item
+{
+    
+    if (!item)
+    {
+        return YES;
+    }
+    
+    
+    NSObject<CSInputSourceProtocol> *useItem = item;
+    if (!useItem.isVideo)
+    {
+        return NO;
+    }
+    InputSource *vSrc = item;
+    return vSrc.attachedInputs.count > 0;
+}
+
+-(NSInteger) outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item
+{
+    if (!item)
+    {
+        SourceLayout *layout = self.sourceLayoutController.content;
+        return layout.topLevelSourceList.count;
+    }
+    
+    NSObject<CSInputSourceProtocol> *useItem = item;
+    if (useItem.isVideo)
+    {
+        InputSource *vItem = item;
+        return vItem.attachedInputs.count;
+    }
+    
+    return 0;
+}
 -(void)outlineView:(NSOutlineView *)outlineView didAddRowView:(NSTableRowView *)rowView forRow:(NSInteger)row
 {
     
-    NSTreeNode *node = [outlineView itemAtRow:row];
-    NSObject<CSInputSourceProtocol> *src = node.representedObject;
+    NSObject<CSInputSourceProtocol> *src = [outlineView itemAtRow:row];
     if (!src.isVideo || !((InputSource *)src).parentInput)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -72,15 +126,23 @@
     
 }
 
+-(NSView *)outlineView:(NSOutlineView *)outlineView viewForTableColumn:(NSTableColumn *)tableColumn item:(id)item
+{
+    
+    NSTableCellView *ret = [outlineView makeViewWithIdentifier:@"defaultView" owner:self];
+    ret.objectValue = item;
+    return ret;
+}
+
+
 -(BOOL)outlineView:(NSOutlineView *)outlineView writeItems:(NSArray *)items toPasteboard:(NSPasteboard *)pasteboard
 {
     
     NSPasteboardItem *pItem = [[NSPasteboardItem alloc] init];
     
     NSMutableArray *sourceIDS = [NSMutableArray array];
-    for (NSTreeNode *node in items)
+    for (NSObject<CSInputSourceProtocol>*iSrc in items)
     {
-        NSObject<CSInputSourceProtocol> *iSrc = node.representedObject;
         NSString *iUUID = iSrc.uuid;
         [sourceIDS addObject:iUUID];
         
@@ -93,12 +155,7 @@
 -(NSDragOperation)outlineView:(NSOutlineView *)outlineView validateDrop:(id<NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(NSInteger)index
 {
     
-    NSTreeNode *nodeItem = (NSTreeNode *)item;
-    InputSource *nodeInput = nil;
-    if (nodeItem)
-    {
-        nodeInput = nodeItem.representedObject;
-    }
+    InputSource *nodeInput = item;
     
     
     
@@ -306,8 +363,7 @@
     
     NSArray *draggedUUIDS = [pb propertyListForType:@"cocoasplit.input.item"];
     
-    NSTreeNode *parentNode = (NSTreeNode *)item;
-    InputSource *parentSource = nil;
+    InputSource *parentSource = item;
     
     NSMutableDictionary *currentDepths = [NSMutableDictionary dictionary];
     
@@ -317,32 +373,26 @@
     }
     
     
-    NSIndexPath *droppedIdxPath = nil;
     
-    if (parentNode)
-    {
-        parentSource = parentNode.representedObject;
-        droppedIdxPath = [[parentNode indexPath] indexPathByAddingIndex:index];
-    } else {
-        droppedIdxPath = [NSIndexPath indexPathWithIndex:index];
-    }
+
     
     
-    NSTreeNode *idxNode = nil;
+    NSObject <CSInputSourceProtocol> *iSrc = nil;
     float newDepth = 1;
     
     if (index == -1)
     {
         newDepth = -FLT_MAX;
     } else {
-        idxNode = [self.sourceTreeController.arrangedObjects descendantNodeAtIndexPath:droppedIdxPath];
-        
+        if (index < [outlineView numberOfChildrenOfItem:item])
+        {
+            iSrc = [outlineView child:index ofItem:item];
+        }
     }
     
     
-    if (idxNode)
+    if (iSrc)
     {
-        NSObject<CSInputSourceProtocol> *iSrc = idxNode.representedObject;
         if (iSrc.isVideo)
         {
             InputSource *dSrc = (InputSource *)iSrc;
@@ -382,6 +432,7 @@
                 [parentSource attachInput:iSrc];
                 [[undoManager prepareWithInvocationTarget:self] detachSourcesByUUID:@[iSrc.uuid]];
             }
+            
             iSrc.depth = newDepth++;
         }
         
@@ -533,10 +584,29 @@
 
         _activeConfigWindows = [NSMutableDictionary dictionary];
         _activeConfigControllers = [NSMutableDictionary dictionary];
+        
+
+    }
+    
+
+}
+
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
+{
+    
+    if ([keyPath isEqualToString:@"content.topLevelSourceList"])
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.sourceOutlineView reloadData];
+        });
     }
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    if (self.sourceLayoutController)
+    {
+        [self.sourceLayoutController addObserver:self forKeyPath:@"content.topLevelSourceList" options:NSKeyValueObservingOptionNew context:NULL];
+    }
     // Do view setup here.
 }
 
@@ -607,11 +677,26 @@
 
 
 
+-(NSArray *)getSelectedItems
+{
+    NSIndexSet *selectedRows = [self.sourceOutlineView selectedRowIndexes];
+    NSMutableArray *selectedItems = [NSMutableArray array];
+    
+    [selectedRows enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+        id item = [self.sourceOutlineView itemAtRow:idx];
+        if (item)
+        {
+            [selectedItems addObject:item];
+        }
+    }];
+    
+    return selectedItems;
+}
 
 -(IBAction)sourceDeleteClicked:(NSButton *)sender
 {
     
-    NSArray *selectedSources = self.sourceTreeController.selectedObjects;
+    NSArray *selectedSources = [self getSelectedItems];
     
     NSUndoManager *undoManager = self.view.window.undoManager;
 
@@ -640,6 +725,8 @@
         [undoMap addObject:undoEntry];
     }
     
+    self.selectedObjects  = @[];
+    
     NSData *undoData = [NSKeyedArchiver archivedDataWithRootObject:undoMap];
     [[undoManager prepareWithInvocationTarget:self]  undoDeleteSources:undoData];
 }
@@ -647,7 +734,7 @@
 
 -(IBAction)sourceConfigClicked:(NSButton *)sender
 {
-    NSArray *selectedSources = self.sourceTreeController.selectedObjects;
+    NSArray *selectedSources = [self getSelectedItems];
     [self openInputConfigWindows:selectedSources];
 }
 
@@ -661,20 +748,23 @@
 
 -(void)highlightSources:(NSArray *)sources
 {
-    [self.sourceTreeController setSelectionIndexPaths:@[]];
+    NSMutableIndexSet *selectedRows = [[NSMutableIndexSet alloc] init];
+    
     for (NSObject *src in sources)
     {
-        NSIndexPath *srcPath = [self.sourceTreeController indexPathOfObject:src];
-        if (srcPath)
-        {
-            [self.sourceTreeController addSelectionIndexPaths:@[srcPath]];
-        }
+        NSInteger idx = [self.sourceOutlineView rowForItem:src];
+        
+        [selectedRows addIndex:idx];
     }
+    
+    [self.sourceOutlineView selectRowIndexes:selectedRows byExtendingSelection:NO];
 }
 
 -(void)outlineViewSelectionDidChange:(NSNotification *)notification
 {
-    self.selectedObjects = self.sourceTreeController.selectedObjects;
+    
+    self.selectedObjects = [self getSelectedItems];
+
 }
 
 -(void)menuEndedTracking:(NSNotification *)notification
@@ -941,5 +1031,12 @@
     }
 }
 
+-(void)dealloc
+{
+    if (self.sourceLayoutController)
+    {
+        [self.sourceLayoutController removeObserver:self forKeyPath:@"content.topLevelSourceList"];
+    }
+}
 
 @end

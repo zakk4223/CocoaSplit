@@ -423,7 +423,6 @@
             useEngine = layerSrc.sourceLayout.recorder.audioEngine;
         }
     }
-    
     if (!useEngine)
     {
         useEngine = [CaptureController sharedCaptureController].multiAudioEngine;

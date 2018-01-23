@@ -158,9 +158,11 @@
         return;
     }
     
-    
-    _pcmPlayer = [self createPCMInput:self.captureName withFormat:audioFormat];
-    _pcmPlayer.name = self.captureName;
+    //dispatch_async(dispatch_get_main_queue(), ^{
+        _pcmPlayer = [self createPCMInput:self.captureName withFormat:audioFormat];
+        _pcmPlayer.name = self.captureName;
+
+   // });
 
 }
 
@@ -180,8 +182,6 @@
 
 -(void)NDIAudioOutput:(CAMultiAudioPCM *)pcmData fromReceiver:(CSNDIReceiver *)fromReceiver
 {
-
-    
 
     if (!_pcmPlayer && self.isLive)
     {
@@ -311,5 +311,16 @@
     return [bundle imageForResource:@"ndi_logo"];
 }
 
+-(void)willDelete
+{
+    NSLog(@"WILL DELEGTE");
+    
+    [self deregisterPCMOutput];
+}
+
+-(void)dealloc
+{
+    NSLog(@"DEALLOC NDI");
+}
 
 @end

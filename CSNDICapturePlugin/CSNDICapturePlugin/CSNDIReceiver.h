@@ -19,8 +19,8 @@
     CSNDISource *_ndi_source;
     CVPixelBufferPoolRef _cvpool;
     NSSize _currentSize;
-    dispatch_queue_t _video_output_queue;
-    dispatch_queue_t _audio_output_queue;
+    __weak dispatch_queue_t _video_output_queue;
+    __weak dispatch_queue_t _audio_output_queue;
     bool _stop_audio;
     bool _stop_video;
     bool _audio_running;

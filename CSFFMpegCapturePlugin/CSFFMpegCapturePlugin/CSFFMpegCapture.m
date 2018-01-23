@@ -471,7 +471,6 @@
 
 -(void)registerPCMOutput:(CMItemCount)frameCount audioFormat:(const AudioStreamBasicDescription *)audioFormat
 {
-    
     if (self.pcmPlayer)
     {
         //looks like we already have one?

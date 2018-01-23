@@ -497,7 +497,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         NSMutableArray *tmpArray = [NSMutableArray array];
         
         NSMutableArray *noLayer = [NSMutableArray array];
-        float currentDepth = 0.0f;
+        float currentDepth = 100.0f;
         
         [self willChangeValueForKey:@"topLevelSourceList"];
 

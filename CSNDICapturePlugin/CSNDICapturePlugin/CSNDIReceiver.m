@@ -243,7 +243,9 @@
                 {
                     memcpy(dBuf, audio_frame.p_data, 4*audio_frame.no_samples*audio_frame.no_channels);
                 }
-                [_audioDelegate NDIAudioOutput:retPCM fromReceiver:self];
+                dispatch_async(_audio_output_queue, ^{
+                    [_audioDelegate NDIAudioOutput:retPCM fromReceiver:self];
+                });
             }
             
             dispatch->NDIlib_recv_free_audio(_receiver_instance, &audio_frame);
