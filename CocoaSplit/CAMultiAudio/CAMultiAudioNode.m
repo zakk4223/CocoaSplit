@@ -477,7 +477,6 @@
 
 -(void)insertObject:(CAMultiAudioNode *)object inEffectChainAtIndex:(NSUInteger)index
 {
-    
     object.deleteNode = NO;
     [self.effectChain insertObject:object atIndex:index];
     [self rebuildEffectChain];

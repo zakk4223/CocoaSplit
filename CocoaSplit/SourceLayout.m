@@ -129,6 +129,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     CGColorRef tmpColor = CGColorCreateGenericRGB(0, 0, 0, 1);
     newRoot.backgroundColor = tmpColor;
     CGColorRelease(tmpColor);
+    
     newRoot.layoutManager = [CAConstraintLayoutManager layoutManager];
 
     //newRoot.autoresizingMask = kCALayerMinXMargin | kCALayerWidthSizable | kCALayerMaxXMargin | kCALayerMinYMargin | kCALayerHeightSizable | kCALayerMaxYMargin;

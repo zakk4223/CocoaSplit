@@ -306,7 +306,6 @@
         self.magnificationFilter = kCAFilterTrilinear;
         self.disableAnimation = NO;
         
-        
         //self.autoresizingMask = kCALayerWidthSizable | kCALayerHeightSizable;
 
         
