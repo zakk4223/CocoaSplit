@@ -3,19 +3,17 @@
 //  H264Streamer
 //
 //  Created by Zakk on 9/3/12.
-//  Copyright (c) 2012 Zakk. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
-#import "CSCaptureBase.h"
 #import "AVFChannelManager.h"
 
 
 @class CAMultiAudioPCMPlayer;
 
 
-@interface AVFAudioCapture : CSCaptureBase <CSCaptureSourceProtocol, AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate>
+@interface AVFAudioCapture : NSObject <AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate>
 {
 
     AVCaptureSession *_capture_session;

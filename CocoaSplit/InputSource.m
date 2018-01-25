@@ -3,13 +3,13 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 7/17/14.
-//  Copyright (c) 2014 Zakk. All rights reserved.
 //
 
 #import "InputSource.h"
-#import "CSCaptureSourceProtocol.h"
+#import "CSCaptureSourceProtocolPrivate.h"
 #import "SourceLayout.h"
 #import "InputPopupControllerViewController.h"
+
 #import <objc/runtime.h>
 
 static NSArray *_sourceTypes = nil;
@@ -88,7 +88,7 @@ static NSArray *_sourceTypes = nil;
     newSource.chromaKeyThreshold = self.chromaKeyThreshold;
     newSource.chromaKeySmoothing = self.chromaKeySmoothing;
     newSource.videoSources = self.videoSources;
-    for(NSObject <CSCaptureSourceProtocol> *vsrc in newSource.videoSources)
+    for(NSObject <CSCaptureSourceProtocolPrivate> *vsrc in newSource.videoSources)
     {
         [newSource registerVideoInput:vsrc];
     }
@@ -628,7 +628,7 @@ static NSArray *_sourceTypes = nil;
     return [self.sourceLayout.rootLayer convertRect:self.layer.frame fromLayer:self.layer.superlayer];
 }
 
--(void) registerVideoInput:(NSObject<CSCaptureSourceProtocol> *)forInput
+-(void) registerVideoInput:(NSObject<CSCaptureSourceProtocolPrivate> *)forInput
 {
     forInput.inputSource = self;
     forInput.isLive = self.is_live;
@@ -638,7 +638,7 @@ static NSArray *_sourceTypes = nil;
 
 }
 
--(void)deregisterVideoInput:(NSObject<CSCaptureSourceProtocol> *)forInput
+-(void)deregisterVideoInput:(NSObject<CSCaptureSourceProtocolPrivate> *)forInput
 {
     if (!forInput)
     {
@@ -1475,6 +1475,7 @@ static NSArray *_sourceTypes = nil;
 -(void)dealloc
 {
     
+    [self detachAllInputs];
     [self deregisterVideoInput:self.videoInput];
     for(id vInput in self.videoSources)
     {
@@ -2265,14 +2266,19 @@ static NSArray *_sourceTypes = nil;
 {
     NSArray *aCopy = self.attachedInputs.copy;
     
-    for (InputSource *inp in aCopy)
+    for (NSObject<CSInputSourceProtocol> *inp in aCopy)
     {
-        [self detachInput:inp];
+        if (inp.isVideo)
+        {
+            [self detachInput:inp];
+        } else {
+            [self.sourceLayout deleteSource:inp];
+        }
     }
 }
 
 
--(void)detachInput:(InputSource *)toDetach
+-(void)detachInput:(NSObject<CSInputSourceProtocol> *)toDetach
 {
     if (!toDetach.parentInput)
     {
@@ -2283,31 +2289,37 @@ static NSArray *_sourceTypes = nil;
     {
         return;
     }
-
-    [CATransaction begin];
-    [toDetach resetConstraints];
-    
-    toDetach.parentInput = nil;
-    toDetach.alwaysDisplay = NO;
-    
-    [self.sourceLayout.rootLayer addSublayer:toDetach.layer];
-    toDetach.layer.hidden = NO;
-    
-    //translate the position to the new sublayers coordinates
     
     
-    NSPoint newPosition = [self.sourceLayout.rootLayer convertPoint:toDetach.layer.position fromLayer:self.layer];
-    toDetach.layer.position = newPosition;
-    [CATransaction commit];
+    if (toDetach.isVideo)
+    {
+        InputSource *vSrc = (InputSource *)toDetach;
+        [CATransaction begin];
+        [vSrc resetConstraints];
+        
+        vSrc.alwaysDisplay = NO;
+        
+        [self.sourceLayout.rootLayer addSublayer:vSrc.layer];
+        vSrc.layer.hidden = NO;
+        
+        //translate the position to the new sublayers coordinates
+        
+        
+        NSPoint newPosition = [self.sourceLayout.rootLayer convertPoint:vSrc.layer.position fromLayer:self.layer];
+        vSrc.layer.position = newPosition;
+        [CATransaction commit];
+    }
+    
     
     [[self mutableArrayValueForKey:@"attachedInputs"] removeObject:toDetach];
+    toDetach.parentInput = nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputDetached object:toDetach userInfo:nil];
 
 }
 
 
 
--(void)attachInput:(InputSource *)toAttach
+-(void)attachInput:(NSObject<CSInputSourceProtocol> *)toAttach
 {
     
     
@@ -2321,7 +2333,10 @@ static NSArray *_sourceTypes = nil;
         [toAttach.parentInput detachInput:toAttach];
     }
     
-    [toAttach makeSublayerOfLayer:self.layer];
+    if (toAttach.isVideo)
+    {
+        [(InputSource *)toAttach makeSublayerOfLayer:self.layer];
+    }
     [[self mutableArrayValueForKey:@"attachedInputs"] addObject:toAttach];
     toAttach.parentInput = self;
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputAttached object:toAttach userInfo:nil];
@@ -2484,14 +2499,14 @@ static NSArray *_sourceTypes = nil;
 }
 
 
--(void) setDirectVideoInput:(NSObject <CSCaptureSourceProtocol> *)videoInput
+-(void) setDirectVideoInput:(NSObject <CSCaptureSourceProtocolPrivate> *)videoInput
 {
     if (_videoInput)
     {
         [self deregisterVideoInput:self.videoInput];
     }
     
-    _videoInput = (NSObject<CSCaptureSourceProtocol,CSCaptureBaseInputFrameTickProtocol> *)videoInput;
+    _videoInput = (NSObject<CSCaptureSourceProtocolPrivate,CSCaptureBaseInputFrameTickProtocol> *)videoInput;
     
     _selectedVideoType = videoInput.instanceLabel;
     
@@ -2515,7 +2530,7 @@ static NSArray *_sourceTypes = nil;
         [self deregisterVideoInput:self.videoInput];
     }
     
-    NSObject <CSCaptureSourceProtocol,CSCaptureBaseInputFrameTickProtocol> *newCaptureSession;
+    NSObject <CSCaptureSourceProtocolPrivate,CSCaptureBaseInputFrameTickProtocol> *newCaptureSession;
     
     Class captureClass = [pluginMap objectForKey:selectedVideoType];
     newCaptureSession = [[captureClass alloc] init];
@@ -3172,7 +3187,7 @@ static NSArray *_sourceTypes = nil;
     _active = active;
     if (self.videoInput)
     {
-        self.videoInput.isActive = active;
+        [self.videoInput activeStatusChangedForInput:self];
     }
     [CATransaction begin];
     self.layer.hidden = !active;
@@ -3193,7 +3208,7 @@ static NSArray *_sourceTypes = nil;
     _is_live = is_live;
     if (self.videoInput)
     {
-        self.videoInput.isLive = is_live;
+        [self.videoInput liveStatusChangedForInput:self];
     }
 }
 
@@ -3516,7 +3531,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setClonedFromInput:(InputSource *)clonedFromInput
 {
-    NSObject <CSCaptureSourceProtocol,CSCaptureBaseInputFrameTickProtocol>*fromInput = clonedFromInput.videoInput;
+    NSObject <CSCaptureSourceProtocolPrivate,CSCaptureBaseInputFrameTickProtocol>*fromInput = clonedFromInput.videoInput;
     
     if (self.videoInput)
     {

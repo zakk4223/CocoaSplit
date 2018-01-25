@@ -185,7 +185,7 @@
             
         }
         
-        double secs_sleep = (1.0f/self.sampleRate)*512.0f;
+        double secs_sleep = (1.0f/self.sampleRate)*1024.0f;
         
         int32_t msecs_sleep = secs_sleep * USEC_PER_SEC;
         

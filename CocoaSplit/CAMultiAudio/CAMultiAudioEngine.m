@@ -316,6 +316,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 -(bool)buildGraph
 {
     self.graph = [[CAMultiAudioGraph alloc] initWithSamplerate:self.sampleRate];
+    self.graph.engine = self;
     
     
     
@@ -619,6 +620,17 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     return newInput;
     
 }
+
+-(void)removeInputAny:(CAMultiAudioInput *)input
+{
+    if ([input isKindOfClass: CAMultiAudioPCMPlayer.class])
+    {
+        [self removePCMInput:(CAMultiAudioPCMPlayer *)input];
+    } else if ([input isKindOfClass:CAMultiAudioFile.class]) {
+        [self removeFileInput:(CAMultiAudioFile *)input];
+    }
+}
+
 
 -(void)attachDeviceInput:(CAMultiAudioAVCapturePlayer *)device
 {

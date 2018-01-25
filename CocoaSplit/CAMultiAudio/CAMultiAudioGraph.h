@@ -26,6 +26,7 @@
 @property (strong) NSMutableArray *nodeList;
 @property (assign) int sampleRate;
 @property (assign) AudioStreamBasicDescription *graphAsbd;
+@property (weak) CAMultiAudioEngine *engine;
 
 -(instancetype)initWithSamplerate:(int)samplerate;
 

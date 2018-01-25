@@ -46,6 +46,7 @@
 @property (readonly) bool isVideo;
 @property (readonly) bool isAudio;
 @property (readonly) bool isScript;
+@property (weak) InputSource* parentInput;
 
 @end
 
@@ -79,6 +80,7 @@
 @property (readonly) bool isVideo;
 @property (readonly) bool isAudio;
 @property (readonly) bool isScript;
+@property (weak) InputSource* parentInput;
 
 
 

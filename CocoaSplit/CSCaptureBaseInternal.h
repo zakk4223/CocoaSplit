@@ -1,53 +1,36 @@
 //
-//  CaptureSessionProtocol.h
-//  H264Streamer
+//  CSCaptureBaseInternal.h
+//  CocoaSplit
 //
-//  Created by Zakk on 9/7/12.
+//  Created by Zakk on 1/25/18.
 //
-
 #import <Foundation/Foundation.h>
+#import "InputSource.h"
 
-#import "CSAbstractCaptureDevice.h"
-#import <AVFoundation/AVFoundation.h>
-#import <Cocoa/Cocoa.h>
+#import "CSCaptureSourceProtocol.h"
+#import "CSPcmPlayer.h"
 
+typedef enum frame_render_behavior_t {
+    kCSRenderFrameArrived = 0,
+    kCSRenderOnFrameTick = 1,
+    kCSRenderAsync = 2
+} frame_render_behavior;
 
+@interface CSCaptureBase : NSObject <NSCoding, NSCopying>
 
-
-
-@protocol CSCaptureSourceProtocol
-
-@required
-
-//HEY YOU, DEVELOPER
-//THIS IS ABSOLUTELY REQUIRED!!!! IF YOU DO CUSTOM UI FOR SETTING SOURCES
-//YOU MUST CREATE A DUMMY CSAbstractCaptureDevice AND MAKE SURE uniqueID IS SET TO SOMETHING
-
-//activeVideoDevice.uniqueID is observed for changes and source deduplication happens this way
-//if you aren't using availablevideo devices/active video device just create a dummy instance
-//and set uniqueID to something uniquely generated for your source. That or just don't support
-//deduplication. Be that way.
 
 @property CSAbstractCaptureDevice *activeVideoDevice;
-
 @property (strong) NSArray *availableVideoDevices;
-
+@property (weak) CIContext *imageContext;
 @property (readonly) float render_width;
-
 @property (readonly) float render_height;
-
 @property (strong) NSString *captureName;
-
-@property (strong) CIContext *imageContext;
-
+@property (strong) NSString *savedUniqueID;
 @property (assign) bool needsSourceSelection;
-
+//If you are accessing this in a plugin I will be very unhappy on the internet
 @property (weak) id inputSource;
 
 
-
-//Set this to true if you don't want source sharing/deduplication. You should really have a good reason
-//for this.
 @property (assign) bool allowDedup;
 
 
@@ -55,6 +38,7 @@
 //it'll be cropped to it instead. This is here mostly for text capture sources, but maybe you can do something weird with it.
 
 @property (assign) bool allowScaling;
+
 
 //These are set as state changes/events happen. You can check their values in your code at anytime
 //or observe them or override the setter/getter to do whatever you'd like.
@@ -74,6 +58,11 @@
 //You should also deregister it if you transition to isLive == NO. In summary: only create an audio out if you are live.
 @property (assign) bool isLive;
 
+
+
+//TODO: just load the class via a 'loadCSViewClass' type method and let the plugin twiddle its NIB however it wants.
+
+
 //Set this to the name of the configuration NIB file. This is the UI that appears in the lower half of the 'Source' tab that lets the user configure input specific settings. By default this is going to be {self.className}ViewController. Override if you want to do something fancy
 @property (readonly) NSString *configurationViewName;
 
@@ -82,12 +71,11 @@
 
 
 
+@property (assign) frame_render_behavior renderType;
 
 @property (assign) bool canProvideTiming;
 
-
 @property (readonly) NSImage *libraryImage;
-
 
 //Unit: seconds
 //If this source has a duration (movie, animated gif, etc) return it here. Used for transitions and animations
@@ -97,15 +85,15 @@
 //frameTick is called every render loop. You are not required to do anything here, but it may be useful for some timing/lazy rendering
 -(void)frameTick;
 
-//called before the input is removed. Allows you to clean up anything that isn't appropriate in -(void)dealloc
 
+//called before the input is removed. Allows you to clean up anything that isn't appropriate in -(void)dealloc
 -(void)willDelete;
 
 /*
-Called to create a new layer. You should create and return a layer of the appropriate type for your source. Default implementation is just a plain CALayer.
-If your source is 'shared' between inputSources each new one will call this function to create a new layer. You are responsible for updating ALL layers when updating content.
+ Called to create a new layer. You should create and return a layer of the appropriate type for your source. Default implementation is just a plain CALayer.
+ If your source is 'shared' between inputSources each new one will call this function to create a new layer. You are responsible for updating ALL layers when updating content.
  (See below)
-*/
+ */
 -(CALayer *)createNewLayer;
 
 
@@ -123,40 +111,43 @@ If your source is 'shared' between inputSources each new one will call this func
  */
 -(void)updateLayersWithFramedataBlock:(void (^)(CALayer *layer))updateBlock withPreuseBlock:(void(^)(void))preUseBlock withPostuseBlock:(void(^)(void))postUseBlock;
 
-
-
 /* Called when the input source goes away and the layer is no longer required. You probably don't need to override this. Default implementation just removes it from the underlying array */
 
 -(void)removeLayerForInput:(id)inputsrc;
 
-/* If the video source has a size, return it here. Called to size an input when it is first added. If the input has no defined size, just return NSZeroSize */
+
+-(void)setDeviceForUniqueID:(NSString *)uniqueID;
+-(NSView *)configurationView;
++(NSString *) label;
+-(NSString *)instanceLabel;
+
+//Class method to run code that messes with the CALayer(s). It has to be on the main thread even if it isn't in a view :(
+//All this method does is dispatch_sync to the main thread OR run the block immediately if we're already on the main thread
++(void) layoutModification:(void (^)(void))modBlock;
 
 
+/* If the video source has a size, return it here. Called to size an input when it is first added. The default is NSZeroSize. If your input has no well-defined size just don't bother implementing this */
 -(NSSize)captureSize;
 
+/* Create a PCM audio input. Use this and not the service plugin version. This version properly finds the appropriate audio engine and creates the PCM input there */
+-(CSPcmPlayer *)createPCMInput:(NSString *)forUID withFormat:(const AudioStreamBasicDescription *)withFormat;
+-(CSPcmPlayer *)createPCMInput:(NSString *)forUID named:(NSString *)withName withFormat:(const AudioStreamBasicDescription *)withFormat;
 
 //Don't ever call this, it's not for you.
 -(CALayer *)createNewLayerForInput:(id)inputsrc;
 -(CALayer *)layerForInput:(id)inputsrc;
 
-
--(NSViewController *)configurationView;
-+(NSString *) label;
--(NSString *) instanceLabel;
-
-
 -(void)frameArrived;
 
-
++(bool)canCreateSourceFromPasteboardItem:(NSPasteboardItem *)item;
++(NSObject <CSCaptureSourceProtocol> *)createSourceFromPasteboardItem;
++(NSSet *)mediaUTIs;
 -(void)willExport;
 -(void)didExport;
-
-
-@optional
-+(bool)canCreateSourceFromPasteboardItem:(NSPasteboardItem *)item;
-+(NSObject <CSCaptureSourceProtocol> *)createSourceFromPasteboardItem:(NSPasteboardItem *)item;
-+(NSSet *)mediaUTIs;
-
+-(void)activeStatusChangedForInput:(InputSource *)inputSource;
+-(void)liveStatusChangedForInput:(InputSource *)inputSource;
+-(void)removePCMPlayer:(CSPcmPlayer *)player;
+-(void)removeAllPcmPlayers;
 
 
 @end

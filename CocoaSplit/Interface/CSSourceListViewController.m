@@ -813,11 +813,11 @@
     {
         InputSource *newSrc =  [[InputSource alloc] init];
         NSObject <CSCaptureSourceProtocol> *clickedCapture = (NSObject <CSCaptureSourceProtocol> *)item.parentItem.representedObject;
-        
+        [self addInputSourceWithInput:newSrc];
+
         newSrc.selectedVideoType = clickedCapture.instanceLabel;
         newSrc.videoInput.activeVideoDevice = clickedDevice;
         newSrc.depth = FLT_MAX;
-        [self addInputSourceWithInput:newSrc];
         [newSrc autoCenter];
         
     }

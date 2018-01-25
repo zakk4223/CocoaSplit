@@ -19,6 +19,7 @@
 @class CAMultiAudioDelay;
 @class CAMultiAudioNode;
 @class CAMultiAudioEqualizer;
+@class CAMultiAudioEngine;
 
 @interface CAMultiAudioVolumeAnimation : NSAnimation
 
@@ -34,6 +35,7 @@
 @property (readonly) UInt32 inputElement;
 @property (weak) CAMultiAudioGraph *graph;
 @property (weak) CAMultiAudioNode *connectedTo;
+
 @property (assign) UInt32 connectedToBus;
 @property (strong) NSString *name;
 @property (strong) NSString *nodeUID;
@@ -77,6 +79,8 @@
 @property (readonly) UInt32 inputElement;
 @property (weak) CAMultiAudioGraph *graph;
 @property (weak) CAMultiAudioNode *connectedTo;
+@property (weak) CAMultiAudioEngine *engine;
+
 @property (assign) UInt32 connectedToBus;
 @property (strong) NSString *name;
 @property (strong) NSString *nodeUID;

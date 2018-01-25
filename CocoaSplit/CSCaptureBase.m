@@ -3,40 +3,51 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 7/21/14.
-//  Copyright (c) 2014 Zakk. All rights reserved
 //
 
-#import "CSCaptureBase.h"
+#import "CSCaptureBaseInternal.h"
 #import "CSTimerSourceProtocol.h"
 #import "InputSource.h"
 #import "CSNotifications.h"
 #import "CSPcmPlayer.h"
 #import "CaptureController.h"
 #import "CSLayoutRecorder.h"
+#import "CSPcmPlayer.h"
+#import "CSInputSourceProtocol.h"
 
 #import "SourceCache.h"
 #import <objc/runtime.h>
+
+
+@interface CSPcmPlayer ()
+
+-(instancetype) initWithPlayers:(NSArray  *)players;
+-(void) addPlayer:(id)player;
+-(AudioStreamBasicDescription *)audioDescription;
+
+@end
 
 @interface CSCaptureBase()
 {
     
     //NSPointerArray *_allInputs;
     
-    NSMapTable *_allLayers;
     frame_render_behavior _saved_render_behavior;
     CFAbsoluteTime _fps_start_time;
     int _fps_frame_cnt;
+    NSMutableDictionary *pcmPlayers;
 
 }
 
-
-@property (weak) id<CSTimerSourceProtocol> timerDelegate;
 @property (weak) id timerDelegateCtx;
 @property (assign) CGFloat detectedInputWidth;
 @property (assign) CGFloat detectedInputHeight;
 @property (assign) double layerUpdateFPS;
 @property (weak) InputSource *tickInput;
-
+@property (weak) id<CSTimerSourceProtocol> timerDelegate;
+@property (strong) NSMapTable *allLayers;
+@property (strong) NSString *attachedAudioUID;
+@property (strong) NSString *attachedAudioName;
 @end
 
 
@@ -67,8 +78,8 @@
         self.allowDedup = YES;
         self.isVisible = YES;
         self.allowScaling = YES;
-        _allLayers = [NSMapTable weakToStrongObjectsMapTable];
-        
+        self.allLayers = [NSMapTable weakToStrongObjectsMapTable];
+        pcmPlayers = [NSMutableDictionary dictionary];
         _fps_start_time = CFAbsoluteTimeGetCurrent();
         _fps_frame_cnt = 0;
         
@@ -299,9 +310,15 @@
         
         //[_allInputs addObject:inputsrc];
         
-        [_allLayers setObject:newLayer forKey:inputsrc];
+        [self.allLayers setObject:newLayer forKey:inputsrc];
     }
 
+    if (self.attachedAudioName && self.attachedAudioUID)
+    {
+        [self createAttachedAudioInputForUUID:self.attachedAudioUID withName:self.attachedAudioName];
+    }
+    
+    
     return newLayer;
 }
 
@@ -316,11 +333,11 @@
         }
 
         
-        [_allLayers removeObjectForKey:inputsrc];
+        [self.allLayers removeObjectForKey:inputsrc];
         
         if (!self.tickInput)
         {
-            for (id key in _allLayers)
+            for (id key in self.allLayers)
             {
                 if (key)
                 {
@@ -330,7 +347,7 @@
         }
         
         
-        if (_allLayers.count == 0)
+        if (self.allLayers.count == 0)
         {
             [self willDelete];
         }
@@ -365,7 +382,7 @@
     NSMapTable *inputsCopy = nil;
     @synchronized(self)
     {
-        inputsCopy = _allLayers.copy;
+        inputsCopy = self.allLayers.copy;
     }
     
     if (frameData)
@@ -396,15 +413,46 @@
 
 }
 
--(CSPcmPlayer *)createPCMInput:(NSString *)forUID withFormat:(const AudioStreamBasicDescription *)withFormat
+-(CAMultiAudioEngine *)findAudioEngineForInput:(NSObject<CSInputSourceProtocol> *)input
 {
     
     CAMultiAudioEngine *useEngine = nil;
     
+    if (input && input.sourceLayout)
+    {
+        if (input.sourceLayout.recorder && input.sourceLayout.recorder.audioEngine)
+        {
+            useEngine = input.sourceLayout.recorder.audioEngine;
+        } else {
+            useEngine = input.sourceLayout.audioEngine;
+        }
+    }
+    
+    if (!useEngine)
+    {
+        useEngine = [CaptureController sharedCaptureController].multiAudioEngine;
+    }
+    
+    return useEngine;
+}
+
+
+-(CSPcmPlayer *)createPCMInput:(NSString *)forUID  withFormat:(const AudioStreamBasicDescription *)withFormat
+{
+    return [self createPCMInput:forUID named:forUID withFormat:withFormat];
+}
+
+-(CSPcmPlayer *)createPCMInput:(NSString *)forUID named:(NSString *)withName withFormat:(const AudioStreamBasicDescription *)withFormat
+{
+    
+    CAMultiAudioEngine *useEngine = nil;
+    NSMutableArray *players = [NSMutableArray array];
+    
+    
     NSMapTable *inputsCopy = nil;
     @synchronized(self)
     {
-        inputsCopy = _allLayers.copy;
+        inputsCopy = self.allLayers.copy;
     }
     
 
@@ -418,28 +466,44 @@
         
         
         InputSource *layerSrc = (InputSource *)key;
-        if (layerSrc && layerSrc.sourceLayout && layerSrc.sourceLayout.recorder && layerSrc.sourceLayout.recorder.audioEngine)
-        {
-            useEngine = layerSrc.sourceLayout.recorder.audioEngine;
-        }
-    }
-    if (!useEngine)
-    {
-        useEngine = [CaptureController sharedCaptureController].multiAudioEngine;
-    }
-    
-    
-    if (useEngine)
-    {
+
+        useEngine = [self findAudioEngineForInput:layerSrc];
         
         CAMultiAudioPCMPlayer *player;
+
+        if (useEngine)
+        {
+            
+            
+            player = [useEngine createPCMInput:forUID withFormat:withFormat];
+        }
         
-        player = [useEngine createPCMInput:forUID withFormat:withFormat];
-        return (CSPcmPlayer *)player;
+        if (player)
+        {
+            [players addObject:player];
+        }
     }
     
-    return nil;
+    CSPcmPlayer *newPlayer = [[CSPcmPlayer alloc] initWithPlayers:players];
+
+    newPlayer.nodeUID = forUID;
+    
+    [pcmPlayers setObject:newPlayer forKey:newPlayer.nodeUID];
+    
+    return newPlayer;
 }
+
+
+-(void)removePCMPlayer:(CSPcmPlayer *)player
+{
+    [pcmPlayers removeObjectForKey:player.nodeUID];
+}
+
+-(void)removeAllPcmPlayers
+{
+    [pcmPlayers removeAllObjects];
+}
+
 
 -(void)frameArrived
 {
@@ -471,7 +535,7 @@
 
 -(CALayer *)layerForInput:(id)inputsrc
 {
-    return [_allLayers objectForKey:inputsrc];
+    return [self.allLayers objectForKey:inputsrc];
 }
 
 -(void)setAllowScaling:(bool)allowScaling
@@ -518,6 +582,128 @@
 {
     return;
 }
+
+-(void)activeStatusChangedForInput:(InputSource *)inputSource
+{
+    bool real_active = NO;
+    
+    for (id key in self.allLayers)
+    {
+        if (!key)
+        {
+            continue;
+        }
+        InputSource *lSrc = key;
+        if (lSrc.active)
+        {
+            real_active = YES;
+        }
+    }
+    
+    self.isActive = real_active;
+}
+
+-(void)createAttachedAudioInputForUUID:(NSString *)uuid withName:(NSString *)withName
+{
+    
+    self.attachedAudioUID = uuid;
+    self.attachedAudioName = withName;
+    NSMapTable *inputsCopy;
+    
+    @synchronized(self)
+    {
+        inputsCopy = self.allLayers.copy;
+    }
+    
+    
+    for (id key in inputsCopy)
+    {
+        
+        if (!key)
+        {
+            continue;
+        }
+        
+        
+        InputSource *layerSrc = (InputSource *)key;
+        
+        
+        if (layerSrc && layerSrc.sourceLayout)
+        {
+            if (![layerSrc.sourceLayout findSourceForAudioUUID:uuid])
+            {
+                NSLog(@"CREWATE");
+
+                CSAudioInputSource *newSrc = [[CSAudioInputSource alloc] init];
+                newSrc.audioUUID = uuid;
+                newSrc.name = withName;
+                [layerSrc.sourceLayout addSource:newSrc];
+                [layerSrc attachInput:newSrc];
+            }
+        }
+    }
+}
+    
+    
+-(void)liveStatusChangedForInput:(InputSource *)inputSource
+{
+    bool real_live = NO;
+    
+    for (id key in self.allLayers)
+    {
+        if (!key)
+        {
+            continue;
+        }
+        InputSource *lSrc = key;
+        if (lSrc.is_live)
+        {
+            real_live = YES;
+        }
+    }
+    self.isLive = real_live;
+    
+    if (pcmPlayers.count > 0)
+    {
+        for(NSString *pUUID in pcmPlayers)
+        {
+            CSPcmPlayer *pPlayer = [pcmPlayers objectForKey:pUUID];
+            if (pPlayer)
+            {
+                CAMultiAudioEngine *useEngine = [self findAudioEngineForInput:inputSource];
+                if (useEngine)
+                {
+                    CAMultiAudioInput *realPlayer = [useEngine inputForUUID:pPlayer.nodeUID];
+                    
+                    if (inputSource.is_live)
+                    {
+                        if (!realPlayer)
+                        {
+                            AudioStreamBasicDescription *useDesc = [pPlayer audioDescription];
+                            if (useDesc)
+                            {
+                                CAMultiAudioPCMPlayer *newPlayer = [useEngine createPCMInput:pPlayer.nodeUID withFormat:useDesc];
+                                [pPlayer addPlayer:newPlayer];
+                            }
+                        }
+                    } else {
+                        if (realPlayer)
+                        {
+                            [useEngine removeInputAny:realPlayer];
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if (!self.isLive)
+    {
+        [self removeAllPcmPlayers];
+    }
+}
+
+
+
 -(void)dealloc
 {
     if (self.timerDelegate)

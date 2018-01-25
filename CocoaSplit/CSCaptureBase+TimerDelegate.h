@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Zakk. All rights reserved.
 //
 
-#import "CSCaptureBase.h"
+#import "CSCaptureBaseInternal.h"
 #import "CSTimerSourceProtocol.h"
 
 @interface CSCaptureBase (TimerDelegate)

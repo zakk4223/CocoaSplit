@@ -194,6 +194,7 @@
     }
     
     self.graph = forGraph;
+    self.engine = forGraph.engine;
 
     self.effectsHead = self;
     self.headNode = self;

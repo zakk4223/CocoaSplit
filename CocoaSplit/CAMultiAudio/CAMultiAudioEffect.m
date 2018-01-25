@@ -133,6 +133,21 @@
         [ret addObject:newUnit];
     }
     
+    searchDesc.componentType = kAudioUnitType_MusicEffect;
+    
+    result = NULL;
+    
+    while ((result = AudioComponentFindNext(result, &searchDesc)))
+    {
+        AudioComponentDescription resultDesc;
+        AudioComponentGetDescription(result, &resultDesc);
+        
+        CAMultiAudioEffect *newUnit = [[CAMultiAudioEffect alloc] initWithSubType:resultDesc.componentSubType unitType:resultDesc.componentType manufacturer:resultDesc.componentManufacturer];
+        CFStringRef name;
+        AudioComponentCopyName(result, &name);
+        newUnit.name = CFBridgingRelease(name);
+        [ret addObject:newUnit];
+    }
     return ret;
 }
 
@@ -150,11 +165,19 @@
     
     if (ret && !self.name)
     {
+        
+
+        
         AudioComponent comp = AudioComponentFindNext(NULL, &unitDescr);
         CFStringRef cName;
         AudioComponentCopyName(comp, &cName);
         self.name = CFBridgingRelease(cName);
     }
+    
+    AUAudioUnit *blah = [[AUAudioUnit alloc] initWithComponentDescription:unitDescr error:nil];
+    NSLog(@"CHANN %@", blah.channelCapabilities);
+    NSLog(@"BUS COUNT %d", (unsigned long)blah.inputBusses.count);
+    
     
     if (self.audioUnit && _auClassData)
     {

@@ -101,6 +101,30 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     _layoutTimingSource = layoutTimingSource;
 }
 
+-(CSAudioInputSource *)findSourceForAudioUUID:(NSString *)audioUUID
+{
+    NSArray *useInputs;
+    @synchronized(self)
+    {
+        useInputs = self.sourceListPresentation.copy;
+    }
+    
+    for (NSObject <CSInputSourceProtocol> *src in useInputs)
+    {
+        if (src.isAudio)
+        {
+            CSAudioInputSource *aSrc = (CSAudioInputSource *)src;
+            if ([aSrc.audioUUID isEqualToString:audioUUID])
+            {
+                return aSrc;
+            }
+        }
+    }
+    
+    return nil;
+}
+
+
 
 -(InputSource *)layoutTimingSource
 {
@@ -505,7 +529,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         [self->_topLevelSourceArray removeAllObjects];
         for (NSObject<CSInputSourceProtocol> *src in self.sourceListOrdered)
         {
-            if (!src.isVideo)
+            if (!src.isVideo && !src.parentInput)
             {
                 [noLayer addObject:src];
             } else if (!((InputSource *)src).parentInput) {
@@ -2014,6 +2038,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     }
 
 }
+
 -(void)deleteSource:(NSObject<CSInputSourceProtocol> *)delSource
 {
     
@@ -2030,8 +2055,11 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     {
         self.layoutTimingSource = nil;
     }
-    
-    [delSource.layer removeFromSuperlayer];
+    if (delSource.isVideo)
+    {
+        [delSource.layer removeFromSuperlayer];
+        [(InputSource *)delSource detachAllInputs];
+    }
 
    // uSrc = _uuidMap[delSource.uuid];
     if ([self.sourceList containsObject:delSource])

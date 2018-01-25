@@ -169,16 +169,10 @@
 
 -(void)deregisterPCMOutput
 {
-    
-    
-    if (_pcmPlayer)
-    {
-        [[CSPluginServices sharedPluginServices] removePCMInput:_pcmPlayer];
-    }
-    
     _pcmPlayer = nil;
-
 }
+
+
 
 -(void)NDIAudioOutput:(CAMultiAudioPCM *)pcmData fromReceiver:(CSNDIReceiver *)fromReceiver
 {
@@ -284,6 +278,8 @@
             [_current_receiver registerVideoDelegate:self withQueue:_video_thread];
             [_current_receiver registerAudioDelegate:self withQueue:_audio_thread];
             [_current_receiver startCapture];
+            [self createAttachedAudioInputForUUID:ndiSource.name withName:ndiSource.name];
+
         }
     }
 }

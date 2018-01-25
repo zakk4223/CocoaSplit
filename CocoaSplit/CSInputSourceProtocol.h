@@ -32,6 +32,7 @@
 @property (readonly) bool isAudio;
 @property (readonly) bool isScript;
 
+@property (weak) InputSource* parentInput;
 
 
 -(bool)isDifferentInput:(NSObject<CSInputSourceProtocol> *)from;

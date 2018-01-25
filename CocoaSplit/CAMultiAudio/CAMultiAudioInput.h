@@ -48,5 +48,6 @@
 -(bool)teardownGraph;
 -(bool)setupGraph;
 -(void)updatePowerlevel;
+-(void)removeFromEngine;
 
 @end

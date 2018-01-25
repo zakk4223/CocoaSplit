@@ -8,6 +8,7 @@
 #import "CAMultiAudioInput.h"
 #import "CAMultiAudioDelay.h"
 #import "CAMultiAudioMatrixMixerWindowController.h"
+#import "CAMultiAudioEngine.h"
 
 @implementation CAMultiAudioInput
 @synthesize delay = _delay;
@@ -276,7 +277,13 @@
     return;
 }
 
-
+-(void)removeFromEngine
+{
+    if (self.engine)
+    {
+        [self.engine removeInputAny:self];
+    }
+}
 
 
 @end

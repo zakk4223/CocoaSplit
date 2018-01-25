@@ -13,6 +13,7 @@
 #import "MIKMIDI.h"
 #import "CSInputSourceProtocol.h"
 #import "CAMultiAudioEngine.h"
+#import "CSAudioInputSource.h"
 
 
 
@@ -205,6 +206,8 @@
 @property (readonly) bool hasSources;
 @property (strong) NSData *audioData;
 @property (strong) CAMultiAudioEngine *audioEngine;
+
+-(CSAudioInputSource *)findSourceForAudioUUID:(NSString *)audioUUID;
 
 -(void) adjustAllInputs;
 -(CAMultiAudioEngine *)restoreAudioData;
