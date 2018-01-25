@@ -84,7 +84,6 @@
 		3441269C1E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3441269A1E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.xib */; };
 		3441269F1E6D0C4C0051DA06 /* CSLayoutSwitcherHostingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3441269E1E6D0C4C0051DA06 /* CSLayoutSwitcherHostingView.m */; };
 		344126A21E6DBBEE0051DA06 /* CSLayoutSwitcherView.m in Sources */ = {isa = PBXBuildFile; fileRef = 344126A11E6DBBEE0051DA06 /* CSLayoutSwitcherView.m */; };
-		34414E522019C06B00CD9DCE /* CSCaptureBaseInternal.h in Sources */ = {isa = PBXBuildFile; fileRef = 34414E512019C06B00CD9DCE /* CSCaptureBaseInternal.h */; };
 		3444D8E819A0CDE8000DC46B /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3444D8E719A0CDE8000DC46B /* Quartz.framework */; };
 		344825D21B2536EA00AF9EAC /* CAMultiAudioMatrixView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 344825D11B2536EA00AF9EAC /* CAMultiAudioMatrixView.xib */; };
 		344825E61B253D6900AF9EAC /* CAMultiAudioMatrixCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 344825E51B253D6900AF9EAC /* CAMultiAudioMatrixCell.m */; };
@@ -180,9 +179,7 @@
 		34A629451FBB6DC500B4E16A /* CSJSAnimationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A629441FBB6DC500B4E16A /* CSJSAnimationDelegate.m */; };
 		34A64A2F165EFE4C00A68428 /* PreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A64A2E165EFE4B00A68428 /* PreviewView.m */; };
 		34A64A37165F208800A68428 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A64A36165F208800A68428 /* QuartzCore.framework */; };
-		34A77455201449450036F8B5 /* CSStreamServiceBase.h in Sources */ = {isa = PBXBuildFile; fileRef = 34A77454201449450036F8B5 /* CSStreamServiceBase.h */; };
 		34A77457201449C30036F8B5 /* CSStreamServiceBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A77456201449C30036F8B5 /* CSStreamServiceBase.m */; };
-		34A77459201466C30036F8B5 /* CSLavfOutput.h in Sources */ = {isa = PBXBuildFile; fileRef = 34A77458201466C30036F8B5 /* CSLavfOutput.h */; };
 		34A7745B201466F10036F8B5 /* CSOutputBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A7745A201466F10036F8B5 /* CSOutputBase.m */; };
 		34A7ADB81C01EF1400685044 /* CompressionSettingsPanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A7ADB71C01EF1400685044 /* CompressionSettingsPanelController.m */; };
 		34A7C1AD19B9A57600BC6882 /* CSLayoutSwitcherExtraPlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34A7C1A119B9A41A00BC6882 /* CSLayoutSwitcherExtraPlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -794,7 +791,6 @@
 		345F8B7B1A184FBC009A81E3 /* CAMultiAudioMixingProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAMultiAudioMixingProtocol.h; sourceTree = "<group>"; };
 		3460E5871AC764500080358E /* rotate.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = rotate.py; sourceTree = "<group>"; };
 		346395042018483300556407 /* CSPcmPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSPcmPlayer.m; sourceTree = "<group>"; };
-		3463950920189AA800556407 /* CSCaptureSourceProtocolPrivate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSCaptureSourceProtocolPrivate.h; sourceTree = "<group>"; };
 		3463F99D1AD0DC7100F3B5C8 /* movement.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = movement.py; sourceTree = "<group>"; };
 		346544DA1FC22CF0003B9991 /* CSNSButtonCellThemed.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSNSButtonCellThemed.h; path = Interface/CSNSButtonCellThemed.h; sourceTree = "<group>"; };
 		346544DB1FC22CF0003B9991 /* CSNSButtonCellThemed.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CSNSButtonCellThemed.m; path = Interface/CSNSButtonCellThemed.m; sourceTree = "<group>"; };
@@ -1436,7 +1432,6 @@
 				34A77458201466C30036F8B5 /* CSLavfOutput.h */,
 				34A7745A201466F10036F8B5 /* CSOutputBase.m */,
 				346395042018483300556407 /* CSPcmPlayer.m */,
-				3463950920189AA800556407 /* CSCaptureSourceProtocolPrivate.h */,
 				34414E512019C06B00CD9DCE /* CSCaptureBaseInternal.h */,
 				3457BCC52019C3F600B8DF5D /* CSCaptureBaseInputFrameTickProtocol.h */,
 			);
@@ -2790,7 +2785,6 @@
 				3498D94A1A94685000906532 /* CSAudioSwitchCell.m in Sources */,
 				34AB1C311B944F48003F2C03 /* CSPreviewOverlayView.m in Sources */,
 				345F8B051A1060D6009A81E3 /* CSAacEncoder.m in Sources */,
-				34A77459201466C30036F8B5 /* CSLavfOutput.h in Sources */,
 				342346BE15F6103D00C8C77E /* CSLavfOutput.m in Sources */,
 				345F8B3D1A15F3BD009A81E3 /* CAMultiAudioPCM.m in Sources */,
 				34ED8C9F1B07371C002C0674 /* MIKMIDISequence.m in Sources */,
@@ -2823,7 +2817,6 @@
 				34938EE81AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m in Sources */,
 				34210B3E1606001200362FC8 /* OutputDestination.m in Sources */,
 				34ED8C9B1B07371C002C0674 /* MIKMIDIPrivateUtilities.m in Sources */,
-				34414E522019C06B00CD9DCE /* CSCaptureBaseInternal.h in Sources */,
 				345F8B391A15D850009A81E3 /* CAMultiAudioDefaultOutput.m in Sources */,
 				34ED8CA51B07371C002C0674 /* MIKMIDISystemExclusiveCommand.m in Sources */,
 				3473D29A1D4C3D0E00842EEE /* CSAddOutputPopupViewController.m in Sources */,
@@ -2901,7 +2894,6 @@
 				34A7ADB81C01EF1400685044 /* CompressionSettingsPanelController.m in Sources */,
 				34DC2FB01B512362008F12A2 /* CSCaptureBase+TimerDelegate.m in Sources */,
 				34ED8C791B07371C002C0674 /* MIKMIDIMetaEvent.m in Sources */,
-				34A77455201449450036F8B5 /* CSStreamServiceBase.h in Sources */,
 				34F52A2B1BC1E0F900662911 /* CSLayoutButton.m in Sources */,
 				34576C7819AFCA1B007BAD90 /* CSPluginLoader.m in Sources */,
 				34FDD6F21A215268009A7413 /* CSPluginServices.m in Sources */,
@@ -3119,7 +3111,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "zakk.lol.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = CocoaSplit;
 				PROVISIONING_PROFILE = "";
-				SDKROOT = macosx10.13;
+				SDKROOT = macosx10.12;
 				STRIP_STYLE = debugging;
 				WRAPPER_EXTENSION = app;
 			};
@@ -3170,7 +3162,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "zakk.lol.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = CocoaSplit;
 				PROVISIONING_PROFILE = "";
-				SDKROOT = macosx10.13;
+				SDKROOT = macosx10.12;
 				STRIP_STYLE = debugging;
 				WRAPPER_EXTENSION = app;
 			};

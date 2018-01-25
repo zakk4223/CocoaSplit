@@ -532,7 +532,6 @@
     NSUInteger audioConsumed = 0;
     NSUInteger sampleCount = 0;
     
-    NSMutableArray *pendingConsume = [NSMutableArray array];
     
     @synchronized(self)
     {

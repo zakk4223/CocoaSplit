@@ -18,6 +18,8 @@
 +(NSImage *)serviceImage;
 -(NSObject<CSOutputWriterProtocol> *)createOutput;
 
+
+@property (assign) bool isReady;
 -(void)prepareForStreamStart;
 @end
 

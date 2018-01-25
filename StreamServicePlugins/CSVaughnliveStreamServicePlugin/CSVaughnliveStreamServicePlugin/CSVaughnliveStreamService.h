@@ -18,7 +18,6 @@
 }
 
 
-@property bool isReady;
 @property (assign) NSString *streamKey;
 
 

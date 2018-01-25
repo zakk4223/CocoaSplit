@@ -85,7 +85,7 @@
             timeInfo.presentationTimeStamp = ptsTime;
             timeInfo.decodeTimeStamp = kCMTimeInvalid;
             CMSampleBufferCreate(kCFAllocatorDefault, NULL, NO, NULL, NULL, _pcmFormat, inFrameCnt, 1, &timeInfo, 0, NULL, &pcmSampleBuffer);
-            OSStatus ret = CMSampleBufferSetDataBufferFromAudioBufferList(pcmSampleBuffer, kCFAllocatorDefault, kCFAllocatorDefault, 0, inBuffer);
+            CMSampleBufferSetDataBufferFromAudioBufferList(pcmSampleBuffer, kCFAllocatorDefault, kCFAllocatorDefault, 0, inBuffer);
             if (self.encodedReceiver)
             {
                 [self.encodedReceiver captureOutputAudio:nil didOutputPCMSampleBuffer:pcmSampleBuffer];

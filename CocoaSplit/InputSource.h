@@ -9,7 +9,6 @@
 #import <QuartzCore/CoreImage.h>
 #import <JavaScriptCore/JavaScriptCore.h>
 #import "Capture.h"
-#import "CSCaptureSourceProtocolPrivate.h"
 #import "CSPluginLoader.h"
 #import "SourceCache.h"
 #import "InputPopupControllerViewController.h"
@@ -18,6 +17,7 @@
 #import "CSInputSourceProtocol.h"
 #import "CSInputSourceBase.h"
 #import "CSCaptureBaseInputFrameTickProtocol.h"
+#import "CSCaptureBaseInternal.h"
 
 @interface InputSourcePrivateFrameUpdate : NSObject
 
@@ -67,7 +67,7 @@ typedef enum resize_style_t {
 @property (assign) float scrollXSpeed;
 @property (assign) float scrollYSpeed;
 
-@property (strong) NSObject<CSCaptureSourceProtocolPrivate,CSCaptureBaseInputFrameTickProtocol> *videoInput;
+@property (strong) NSObject<CSCaptureSourceProtocol,CSCaptureBaseInputFrameTickProtocol> *videoInput;
 @property (assign) float rotationAngle;
 @property (assign) float rotationAngleY;
 @property (assign) float rotationAngleX;
@@ -261,7 +261,7 @@ typedef enum resize_style_t {
 -(void)updateLayer:(void (^)(CALayer *layer))updateBlock;
 
 
--(void) setDirectVideoInput:(NSObject <CSCaptureSourceProtocolPrivate> *)videoInput;
+-(void) setDirectVideoInput:(NSObject <CSCaptureSourceProtocol> *)videoInput;
 
 -(NSViewController *)configurationViewController;
 
@@ -278,7 +278,7 @@ typedef enum resize_style_t {
 @property (assign) float scrollXSpeed;
 @property (assign) float scrollYSpeed;
 
-@property (strong) NSObject<CSCaptureSourceProtocolPrivate,CSCaptureBaseInputFrameTickProtocol> *videoInput;
+@property (strong) CSCaptureBase<CSCaptureSourceProtocol,CSCaptureBaseInputFrameTickProtocol> *videoInput;
 @property (assign) float rotationAngle;
 @property (assign) float rotationAngleY;
 @property (assign) float rotationAngleX;

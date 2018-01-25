@@ -247,7 +247,6 @@
             av_samples_fill_arrays((uint8_t **)&arrBuf, &dst_linesize, dBuf, 2, (int)dst_nb_samples, AV_SAMPLE_FMT_FLTP, 1);
             av_samples_set_silence((uint8_t **)&arrBuf, 0, (int)dst_nb_samples, 2, AV_SAMPLE_FMT_FLTP);
             swr_convert(_swr_ctx, (uint8_t **)&arrBuf, (int)dst_nb_samples, (const uint8_t **)recv_frame->extended_data, recv_frame->nb_samples);
-            int bufferCnt = asbd->mFormatFlags & kAudioFormatFlagIsNonInterleaved ? asbd->mChannelsPerFrame : 1;
 
             av_frame_unref(recv_frame);
             av_frame_free(&recv_frame);

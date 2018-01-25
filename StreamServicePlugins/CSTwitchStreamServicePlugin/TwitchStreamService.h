@@ -18,7 +18,6 @@
 }
 
 
-@property bool isReady;
 
 @property (strong) NSArray *twitchServers;
 @property (strong) NSString *streamKey;

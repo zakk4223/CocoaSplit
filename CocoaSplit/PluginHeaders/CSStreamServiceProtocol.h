@@ -11,7 +11,7 @@
 
 @protocol CSStreamServiceProtocol <NSObject, NSCoding>
 
-@property bool isReady;
+@property (assign) bool isReady;
 
 -(NSViewController  *)getConfigurationView;
 -(NSString *)getServiceDestination;

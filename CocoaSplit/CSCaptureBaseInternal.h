@@ -5,7 +5,6 @@
 //  Created by Zakk on 1/25/18.
 //
 #import <Foundation/Foundation.h>
-#import "InputSource.h"
 
 #import "CSCaptureSourceProtocol.h"
 #import "CSPcmPlayer.h"
@@ -15,6 +14,8 @@ typedef enum frame_render_behavior_t {
     kCSRenderOnFrameTick = 1,
     kCSRenderAsync = 2
 } frame_render_behavior;
+
+@class InputSource;
 
 @interface CSCaptureBase : NSObject <NSCoding, NSCopying>
 

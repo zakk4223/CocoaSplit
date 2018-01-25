@@ -6,7 +6,6 @@
 //
 
 #import "InputSource.h"
-#import "CSCaptureSourceProtocolPrivate.h"
 #import "SourceLayout.h"
 #import "InputPopupControllerViewController.h"
 
@@ -88,7 +87,7 @@ static NSArray *_sourceTypes = nil;
     newSource.chromaKeyThreshold = self.chromaKeyThreshold;
     newSource.chromaKeySmoothing = self.chromaKeySmoothing;
     newSource.videoSources = self.videoSources;
-    for(NSObject <CSCaptureSourceProtocolPrivate> *vsrc in newSource.videoSources)
+    for(NSObject <CSCaptureSourceProtocol> *vsrc in newSource.videoSources)
     {
         [newSource registerVideoInput:vsrc];
     }
@@ -628,7 +627,7 @@ static NSArray *_sourceTypes = nil;
     return [self.sourceLayout.rootLayer convertRect:self.layer.frame fromLayer:self.layer.superlayer];
 }
 
--(void) registerVideoInput:(NSObject<CSCaptureSourceProtocolPrivate> *)forInput
+-(void) registerVideoInput:(NSObject<CSCaptureSourceProtocol> *)forInput
 {
     forInput.inputSource = self;
     forInput.isLive = self.is_live;
@@ -638,7 +637,7 @@ static NSArray *_sourceTypes = nil;
 
 }
 
--(void)deregisterVideoInput:(NSObject<CSCaptureSourceProtocolPrivate> *)forInput
+-(void)deregisterVideoInput:(NSObject<CSCaptureSourceProtocol> *)forInput
 {
     if (!forInput)
     {
@@ -2499,14 +2498,14 @@ static NSArray *_sourceTypes = nil;
 }
 
 
--(void) setDirectVideoInput:(NSObject <CSCaptureSourceProtocolPrivate> *)videoInput
+-(void) setDirectVideoInput:(NSObject <CSCaptureSourceProtocol> *)videoInput
 {
     if (_videoInput)
     {
         [self deregisterVideoInput:self.videoInput];
     }
     
-    _videoInput = (NSObject<CSCaptureSourceProtocolPrivate,CSCaptureBaseInputFrameTickProtocol> *)videoInput;
+    _videoInput = (CSCaptureBase<CSCaptureSourceProtocol,CSCaptureBaseInputFrameTickProtocol> *)videoInput;
     
     _selectedVideoType = videoInput.instanceLabel;
     
@@ -2530,7 +2529,7 @@ static NSArray *_sourceTypes = nil;
         [self deregisterVideoInput:self.videoInput];
     }
     
-    NSObject <CSCaptureSourceProtocolPrivate,CSCaptureBaseInputFrameTickProtocol> *newCaptureSession;
+    NSObject <CSCaptureSourceProtocol,CSCaptureBaseInputFrameTickProtocol> *newCaptureSession;
     
     Class captureClass = [pluginMap objectForKey:selectedVideoType];
     newCaptureSession = [[captureClass alloc] init];
@@ -3531,7 +3530,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void)setClonedFromInput:(InputSource *)clonedFromInput
 {
-    NSObject <CSCaptureSourceProtocolPrivate,CSCaptureBaseInputFrameTickProtocol>*fromInput = clonedFromInput.videoInput;
+    CSCaptureBase <CSCaptureSourceProtocol, CSCaptureBaseInputFrameTickProtocol>*fromInput = clonedFromInput.videoInput;
     
     if (self.videoInput)
     {

@@ -617,7 +617,7 @@
     CFAbsoluteTime time_now = CFAbsoluteTimeGetCurrent();
     
     int f_output_framecnt;
-    int f_output_bytes;
+    NSUInteger f_output_bytes;
     
     f_output_framecnt = self.ffmpeg_out.output_framecnt;
     f_output_bytes = self.ffmpeg_out.output_bytes;

@@ -13,7 +13,7 @@
 
 @property (assign) BOOL errored;
 @property (assign) int output_framecnt;
-@property (assign) int output_bytes;
+@property (assign) NSUInteger output_bytes;
 @property (readonly) NSUInteger buffered_frame_count;
 @property (assign) NSUInteger buffered_frame_size;
 @property (assign) int framerate;

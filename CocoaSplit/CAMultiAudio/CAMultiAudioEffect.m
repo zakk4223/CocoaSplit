@@ -174,9 +174,6 @@
         self.name = CFBridgingRelease(cName);
     }
     
-    AUAudioUnit *blah = [[AUAudioUnit alloc] initWithComponentDescription:unitDescr error:nil];
-    NSLog(@"CHANN %@", blah.channelCapabilities);
-    NSLog(@"BUS COUNT %d", (unsigned long)blah.inputBusses.count);
     
     
     if (self.audioUnit && _auClassData)
