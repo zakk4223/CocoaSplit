@@ -290,9 +290,10 @@
     CSFFMpegInput *newItem = [[CSFFMpegInput alloc] initWithMediaPath:path];
     
     [self.player enqueueItem:newItem ];
+    CSFFMpegInput *firstItem = self.player.inputQueue.firstObject;
+
     if (!self.captureName)
     {
-        CSFFMpegInput *firstItem = self.player.inputQueue.firstObject;
         if (firstItem)
         {
             self.captureName = firstItem.shortName;
@@ -303,6 +304,7 @@
         }
     }
 
+    [self createAttachedAudioInputForUUID:self.uuid withName:firstItem.shortName];
     [self generateUniqueID];
 }
 

@@ -133,6 +133,8 @@ typedef enum frame_render_behavior_t {
 -(CSPcmPlayer *)createPCMInput:(NSString *)forUID named:(NSString *)withName withFormat:(const AudioStreamBasicDescription *)withFormat;
 
 -(void)createAttachedAudioInputForUUID:(NSString *)uuid withName:(NSString *)withName;
+-(void)changeAttachedAudioInputName:(NSString *)uuid withName:(NSString *)withName;
+-(void)removeAttachedAudioInput:(NSString *)uuid;
 
 
 //Don't ever call this, it's not for you.

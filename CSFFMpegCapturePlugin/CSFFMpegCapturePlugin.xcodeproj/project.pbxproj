@@ -18,19 +18,6 @@
 /* Begin PBXFileReference section */
 		343C79BA1D0C763A00B36EEC /* CSFFMpegCapturePlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSFFMpegCapturePlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		343C79BD1D0C763A00B36EEC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		343C79DC1D0C769100B36EEC /* CSPluginServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPluginServices.h; path = PluginHeaders/CSPluginServices.h; sourceTree = "<group>"; };
-		343C79DD1D0C769100B36EEC /* CSIOSurfaceLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSIOSurfaceLayer.h; path = PluginHeaders/CSIOSurfaceLayer.h; sourceTree = "<group>"; };
-		343C79DE1D0C769100B36EEC /* CSPcmPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPcmPlayer.h; path = PluginHeaders/CSPcmPlayer.h; sourceTree = "<group>"; };
-		343C79DF1D0C769100B36EEC /* CAMultiAudioPCM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioPCM.h; path = PluginHeaders/CAMultiAudioPCM.h; sourceTree = "<group>"; };
-		343C79E01D0C769100B36EEC /* CSAbstractCaptureDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSAbstractCaptureDevice.h; path = PluginHeaders/CSAbstractCaptureDevice.h; sourceTree = "<group>"; };
-		343C79E11D0C769100B36EEC /* CSTextCaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTextCaptureBase.h; path = PluginHeaders/CSTextCaptureBase.h; sourceTree = "<group>"; };
-		343C79E21D0C769100B36EEC /* CSTextCaptureViewControllerBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSTextCaptureViewControllerBase.h; path = PluginHeaders/CSTextCaptureViewControllerBase.h; sourceTree = "<group>"; };
-		343C79E31D0C769100B36EEC /* CSCaptureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureBase.h; path = PluginHeaders/CSCaptureBase.h; sourceTree = "<group>"; };
-		343C79E41D0C769100B36EEC /* CSCaptureSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSCaptureSourceProtocol.h; path = PluginHeaders/CSCaptureSourceProtocol.h; sourceTree = "<group>"; };
-		343C79E51D0C769100B36EEC /* CSStreamServiceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSStreamServiceProtocol.h; path = PluginHeaders/CSStreamServiceProtocol.h; sourceTree = "<group>"; };
-		343C79E61D0C769100B36EEC /* CSPluginFactoryProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPluginFactoryProtocol.h; path = PluginHeaders/CSPluginFactoryProtocol.h; sourceTree = "<group>"; };
-		343C79E71D0C769100B36EEC /* CSExtraPluginProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSExtraPluginProtocol.h; path = PluginHeaders/CSExtraPluginProtocol.h; sourceTree = "<group>"; };
-		343C79E81D0C769100B36EEC /* CSNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSNotifications.h; path = PluginHeaders/CSNotifications.h; sourceTree = "<group>"; };
 		343C79EA1D0C76C700B36EEC /* CSFFMpegCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSFFMpegCapture.h; sourceTree = "<group>"; };
 		343C79EB1D0C76C700B36EEC /* CSFFMpegCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSFFMpegCapture.m; sourceTree = "<group>"; };
 		343C79EE1D0CF3C100B36EEC /* CSFFMpegInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSFFMpegInput.h; sourceTree = "<group>"; };
@@ -58,7 +45,6 @@
 			isa = PBXGroup;
 			children = (
 				34BDCD7E1D1FE4A700F51996 /* Media.xcassets */,
-				343C79E91D0C769100B36EEC /* PluginHeaders */,
 				343C79BC1D0C763A00B36EEC /* CSFFMpegCapturePlugin */,
 				343C79BB1D0C763A00B36EEC /* Products */,
 			);
@@ -87,27 +73,6 @@
 				34BDCD7C1D14178800F51996 /* CSFFMpegPlayer.m */,
 			);
 			path = CSFFMpegCapturePlugin;
-			sourceTree = "<group>";
-		};
-		343C79E91D0C769100B36EEC /* PluginHeaders */ = {
-			isa = PBXGroup;
-			children = (
-				343C79DC1D0C769100B36EEC /* CSPluginServices.h */,
-				343C79DD1D0C769100B36EEC /* CSIOSurfaceLayer.h */,
-				343C79DE1D0C769100B36EEC /* CSPcmPlayer.h */,
-				343C79DF1D0C769100B36EEC /* CAMultiAudioPCM.h */,
-				343C79E01D0C769100B36EEC /* CSAbstractCaptureDevice.h */,
-				343C79E11D0C769100B36EEC /* CSTextCaptureBase.h */,
-				343C79E21D0C769100B36EEC /* CSTextCaptureViewControllerBase.h */,
-				343C79E31D0C769100B36EEC /* CSCaptureBase.h */,
-				343C79E41D0C769100B36EEC /* CSCaptureSourceProtocol.h */,
-				343C79E51D0C769100B36EEC /* CSStreamServiceProtocol.h */,
-				343C79E61D0C769100B36EEC /* CSPluginFactoryProtocol.h */,
-				343C79E71D0C769100B36EEC /* CSExtraPluginProtocol.h */,
-				343C79E81D0C769100B36EEC /* CSNotifications.h */,
-			);
-			name = PluginHeaders;
-			path = ../CocoaSplit;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -303,6 +268,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = zakk.lol.CSFFMpegCapturePlugin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../CocoaSplit/PluginHeaders";
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Debug;
@@ -325,6 +291,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = zakk.lol.CSFFMpegCapturePlugin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../CocoaSplit/PluginHeaders";
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Release;

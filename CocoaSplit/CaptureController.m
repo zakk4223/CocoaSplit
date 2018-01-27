@@ -4723,7 +4723,7 @@
         [self.activePreviewView stopHighlightingAllSources];
         for (NSObject <CSInputSourceProtocol> *src in self.sourceListViewController.selectedObjects)
         {
-            [self.activePreviewView highlightSource:src];
+            [self.activePreviewView highlightSource:(InputSource *)src];
         }
     }
 }
