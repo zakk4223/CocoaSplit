@@ -259,7 +259,6 @@
 
 -(void)itemStarted:(CSFFMpegInput *)item
 {
-    
     dispatch_async(dispatch_get_main_queue(), ^{
         self.durationString = [self timeToString:item.duration];
         self.currentMovieDuration = item.duration;

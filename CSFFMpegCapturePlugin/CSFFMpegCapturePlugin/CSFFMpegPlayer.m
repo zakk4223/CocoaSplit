@@ -267,7 +267,7 @@
     
     dispatch_async(_input_read_queue, ^{
         
-        //[item openMedia:20];
+        [item openMedia:20];
         
         if (self.itemStarted)
         {

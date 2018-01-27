@@ -75,6 +75,12 @@
 {
     
 
+    if (self.is_ready)
+    {
+        return YES;
+    }
+    
+    
     if (!self.mediaPath)
     {
         return NO;
@@ -461,7 +467,7 @@
     int read_frames = 0;
     AVPacket av_packet;
     
-    
+
     
     if (!_format_ctx)
     {
