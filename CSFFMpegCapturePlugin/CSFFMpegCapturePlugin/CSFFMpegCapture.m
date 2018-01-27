@@ -269,6 +269,7 @@
         {
             self.pcmPlayer.name = item.shortName;
         }
+        [self changeAttachedAudioInputName:self.uuid withName:item.shortName];
     });
     
 }
