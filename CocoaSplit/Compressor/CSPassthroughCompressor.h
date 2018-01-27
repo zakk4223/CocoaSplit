@@ -6,7 +6,14 @@
 //
 
 #import "CompressorBase.h"
+#import <VideoToolbox/VideoToolbox.h>
 
 @interface CSPassthroughCompressor : CompressorBase
+{
+    VTPixelTransferSessionRef _pvt_ref;
+    
+}
+
+@property (assign) bool copyFrame;
 
 @end

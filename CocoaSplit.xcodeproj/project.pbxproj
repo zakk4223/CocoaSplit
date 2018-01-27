@@ -167,6 +167,8 @@
 		347DBC9D1FF22C0100B98D5E /* CSAppleHEVCCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 347DBC9C1FF22C0100B98D5E /* CSAppleHEVCCompressor.m */; };
 		3481F30619B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3481F30519B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m */; };
 		3483599E2010807B00E711AF /* CSNDICapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 3446F05920105F0700977BBA /* CSNDICapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		348585B3201C998200C30A08 /* CSPassthroughCompressorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 348585B1201C998200C30A08 /* CSPassthroughCompressorViewController.m */; };
+		348585B4201C998200C30A08 /* CSPassthroughCompressorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 348585B2201C998200C30A08 /* CSPassthroughCompressorViewController.xib */; };
 		348AC06B19B406910064F02D /* SourceLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 348AC06A19B406910064F02D /* SourceLayout.m */; };
 		34938EE81AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 34938EE71AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m */; };
 		34938EED1AE4D24200F3B1CF /* CSFilterChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34938EEB1AE4D24200F3B1CF /* CSFilterChooserWindowController.m */; };
@@ -870,6 +872,9 @@
 		347DBC9C1FF22C0100B98D5E /* CSAppleHEVCCompressor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CSAppleHEVCCompressor.m; path = Compressor/CSAppleHEVCCompressor.m; sourceTree = "<group>"; };
 		3481F30419B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SourceLayout+ScriptingAdditions.h"; path = "ScriptingAddditions/SourceLayout+ScriptingAdditions.h"; sourceTree = "<group>"; };
 		3481F30519B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "SourceLayout+ScriptingAdditions.m"; path = "ScriptingAddditions/SourceLayout+ScriptingAdditions.m"; sourceTree = "<group>"; };
+		348585B0201C998200C30A08 /* CSPassthroughCompressorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSPassthroughCompressorViewController.h; path = Compressor/CSPassthroughCompressorViewController.h; sourceTree = "<group>"; };
+		348585B1201C998200C30A08 /* CSPassthroughCompressorViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CSPassthroughCompressorViewController.m; path = Compressor/CSPassthroughCompressorViewController.m; sourceTree = "<group>"; };
+		348585B2201C998200C30A08 /* CSPassthroughCompressorViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = CSPassthroughCompressorViewController.xib; path = Compressor/CSPassthroughCompressorViewController.xib; sourceTree = "<group>"; };
 		348AC06919B406910064F02D /* SourceLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SourceLayout.h; sourceTree = "<group>"; };
 		348AC06A19B406910064F02D /* SourceLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SourceLayout.m; sourceTree = "<group>"; };
 		34938EE61AE4A7E500F3B1CF /* CSCIFilterConfigProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSCIFilterConfigProxy.h; sourceTree = "<group>"; };
@@ -1520,6 +1525,9 @@
 				346865441CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.h */,
 				346865451CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.m */,
 				346865461CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.xib */,
+				348585B0201C998200C30A08 /* CSPassthroughCompressorViewController.h */,
+				348585B1201C998200C30A08 /* CSPassthroughCompressorViewController.m */,
+				348585B2201C998200C30A08 /* CSPassthroughCompressorViewController.xib */,
 			);
 			name = Compressor;
 			sourceTree = "<group>";
@@ -2656,6 +2664,7 @@
 				34788DDE1EF59E5B00C3C9C5 /* CSAnimationInput.js in Resources */,
 				34788DD81EF5569E00C3C9C5 /* CSAnimation.js in Resources */,
 				342B33B61980771200492CB7 /* line.vtsh in Resources */,
+				348585B4201C998200C30A08 /* CSPassthroughCompressorViewController.xib in Resources */,
 				34938EEF1AE4D24200F3B1CF /* CSFilterChooserWindowController.xib in Resources */,
 				34B5FAED1E76297A0078FC51 /* CSAddSequenceItemPopupViewController.xib in Resources */,
 				3434CB2E1CA90D28001B3DF9 /* CSx264CompressorViewController.xib in Resources */,
@@ -2920,6 +2929,7 @@
 				34B5FADD1E75BC910078FC51 /* CSLayoutSwitcherViewController.m in Sources */,
 				34ED8C851B07371C002C0674 /* MIKMIDIMetaTextEvent.m in Sources */,
 				34B5FACB1E7461E60078FC51 /* CSLayoutSequence.m in Sources */,
+				348585B3201C998200C30A08 /* CSPassthroughCompressorViewController.m in Sources */,
 				34A629451FBB6DC500B4E16A /* CSJSAnimationDelegate.m in Sources */,
 				3427864B1EA4337400877B7B /* CSTransitionAnimationDelegate.m in Sources */,
 				34348C2A19BDBDC000A122C2 /* PluginManagerWindowController.m in Sources */,
