@@ -8,7 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CSSourceLayoutFilterWindowController">
             <connections>
-                <outlet property="filterListTable" destination="PeX-QR-nAp" id="AX6-mU-52x"/>
+                <outlet property="filterListViewController" destination="B9c-zE-KhX" id="jvo-cK-HIA"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
@@ -23,75 +23,15 @@
                 <rect key="frame" x="0.0" y="0.0" width="187" height="371"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nbj-TW-zBj">
-                        <rect key="frame" x="20" y="40" width="154" height="311"/>
-                        <clipView key="contentView" id="gv5-33-kJs">
-                            <rect key="frame" x="1" y="1" width="152" height="309"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <subviews>
-                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" id="PeX-QR-nAp">
-                                    <rect key="frame" x="0.0" y="0.0" width="152" height="309"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <size key="intercellSpacing" width="3" height="2"/>
-                                    <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
-                                    <tableColumns>
-                                        <tableColumn identifier="" width="149" minWidth="40" maxWidth="1000" id="SwY-xM-VzM">
-                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                <font key="font" metaFont="smallSystem"/>
-                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
-                                            </tableHeaderCell>
-                                            <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="55T-dv-gkd">
-                                                <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
-                                            <connections>
-                                                <binding destination="ez2-6c-ozz" name="value" keyPath="arrangedObjects.attributes.CIAttributeFilterDisplayName" id="KPd-Ek-X5i"/>
-                                            </connections>
-                                        </tableColumn>
-                                    </tableColumns>
-                                </tableView>
-                            </subviews>
-                        </clipView>
-                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="923-KH-zDJ">
-                            <rect key="frame" x="-7" y="-14" width="0.0" height="15"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                        </scroller>
-                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="S14-kS-54C">
-                            <rect key="frame" x="-14" y="-7" width="15" height="0.0"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                        </scroller>
-                    </scrollView>
-                    <segmentedControl verticalHuggingPriority="750" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="n2Z-bZ-0mh">
-                        <rect key="frame" x="20" y="19" width="154" height="23"/>
-                        <segmentedCell key="cell" borderStyle="border" alignment="left" style="smallSquare" trackingMode="momentary" id="InV-bJ-evy">
-                            <font key="font" metaFont="system"/>
-                            <segments>
-                                <segment image="NSAddTemplate"/>
-                                <segment image="NSRemoveTemplate" tag="1"/>
-                                <segment image="NSActionTemplate">
-                                    <nil key="label"/>
-                                </segment>
-                                <segment width="65" enabled="NO">
-                                    <nil key="label"/>
-                                </segment>
-                            </segments>
-                        </segmentedCell>
-                        <connections>
-                            <action selector="filterControlAction:" target="-2" id="D4h-ni-FpU"/>
-                        </connections>
-                    </segmentedControl>
+                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="Io5-35-d90">
+                        <rect key="frame" x="12" y="20" width="163" height="331"/>
+                    </customView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="nbj-TW-zBj" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" constant="20" symbolic="YES" id="5n0-7Y-ngU"/>
-                    <constraint firstAttribute="bottom" secondItem="n2Z-bZ-0mh" secondAttribute="bottom" constant="20" symbolic="YES" id="OTI-5H-AhM"/>
-                    <constraint firstItem="nbj-TW-zBj" firstAttribute="leading" secondItem="n2Z-bZ-0mh" secondAttribute="leading" id="U2i-4M-kqm"/>
-                    <constraint firstItem="nbj-TW-zBj" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" constant="20" symbolic="YES" id="pAy-yh-f1s"/>
-                    <constraint firstAttribute="bottom" secondItem="nbj-TW-zBj" secondAttribute="bottom" constant="40" id="sHi-6O-5d8"/>
-                    <constraint firstItem="nbj-TW-zBj" firstAttribute="trailing" secondItem="n2Z-bZ-0mh" secondAttribute="trailing" id="whP-s2-7R9"/>
+                    <constraint firstItem="Io5-35-d90" firstAttribute="centerX" secondItem="se5-gp-TjO" secondAttribute="centerX" id="5Dh-9U-bTU"/>
+                    <constraint firstAttribute="bottom" secondItem="Io5-35-d90" secondAttribute="bottom" constant="20" symbolic="YES" id="Ga5-Bg-eSV"/>
+                    <constraint firstItem="Io5-35-d90" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" constant="20" symbolic="YES" id="loE-Gi-YFu"/>
+                    <constraint firstItem="Io5-35-d90" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" constant="12" id="uKw-ry-Vcq"/>
                 </constraints>
             </view>
             <connections>
@@ -104,10 +44,10 @@
                 <binding destination="-2" name="contentArray" keyPath="self.layout.rootLayer.filters" id="pom-pb-TMj"/>
             </connections>
         </arrayController>
+        <viewController id="B9c-zE-KhX" userLabel="filterListViewController" customClass="CSLayerFiltersViewController">
+            <connections>
+                <outlet property="parentView" destination="Io5-35-d90" id="YwL-IM-nVt"/>
+            </connections>
+        </viewController>
     </objects>
-    <resources>
-        <image name="NSActionTemplate" width="14" height="14"/>
-        <image name="NSAddTemplate" width="11" height="11"/>
-        <image name="NSRemoveTemplate" width="11" height="11"/>
-    </resources>
 </document>

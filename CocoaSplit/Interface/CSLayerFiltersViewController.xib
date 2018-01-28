@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="CSLayerFiltersViewController">
+            <connections>
+                <outlet property="filterArrayController" destination="bN2-9k-a9E" id="OJA-GA-HD1"/>
+                <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="Hz6-mo-xeY">
+            <rect key="frame" x="0.0" y="0.0" width="195" height="381"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dcn-NH-ZKw">
+                    <rect key="frame" x="0.0" y="20" width="195" height="361"/>
+                    <clipView key="contentView" id="Ye9-Jv-oJx">
+                        <rect key="frame" x="1" y="1" width="193" height="359"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" id="1vG-i5-Cwq">
+                                <rect key="frame" x="0.0" y="0.0" width="193" height="359"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <size key="intercellSpacing" width="3" height="2"/>
+                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                <tableColumns>
+                                    <tableColumn identifier="" width="190" minWidth="40" maxWidth="1000" id="T0u-D0-TMy">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                        </tableHeaderCell>
+                                        <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="Iqh-Bv-5QY">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                        <connections>
+                                            <binding destination="bN2-9k-a9E" name="value" keyPath="arrangedObjects.attributes.CIAttributeFilterDisplayName" id="eer-cO-6kD"/>
+                                        </connections>
+                                    </tableColumn>
+                                </tableColumns>
+                            </tableView>
+                        </subviews>
+                    </clipView>
+                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="EOg-Ec-3zI">
+                        <rect key="frame" x="-7" y="-14" width="0.0" height="15"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="fvL-AT-ZOJ">
+                        <rect key="frame" x="-14" y="-7" width="15" height="0.0"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                </scrollView>
+                <segmentedControl verticalHuggingPriority="750" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="9Jh-Ol-xL8">
+                    <rect key="frame" x="0.0" y="-1" width="154" height="23"/>
+                    <segmentedCell key="cell" borderStyle="border" alignment="left" style="smallSquare" trackingMode="momentary" id="DZ4-p0-Xt2">
+                        <font key="font" metaFont="system"/>
+                        <segments>
+                            <segment image="NSAddTemplate"/>
+                            <segment image="NSRemoveTemplate" tag="1"/>
+                            <segment image="NSActionTemplate">
+                                <nil key="label"/>
+                            </segment>
+                            <segment width="65" enabled="NO">
+                                <nil key="label"/>
+                            </segment>
+                        </segments>
+                    </segmentedCell>
+                    <connections>
+                        <action selector="filterControlAction:" target="-2" id="jLG-rE-yTt"/>
+                    </connections>
+                </segmentedControl>
+            </subviews>
+            <constraints>
+                <constraint firstItem="dcn-NH-ZKw" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="1rf-7R-HY1"/>
+                <constraint firstAttribute="bottom" secondItem="dcn-NH-ZKw" secondAttribute="bottom" constant="20" symbolic="YES" id="4EZ-hq-hYz"/>
+                <constraint firstAttribute="bottom" secondItem="9Jh-Ol-xL8" secondAttribute="bottom" id="H1W-4u-PfJ"/>
+                <constraint firstAttribute="trailing" secondItem="dcn-NH-ZKw" secondAttribute="trailing" id="M1g-ch-Cae"/>
+                <constraint firstItem="dcn-NH-ZKw" firstAttribute="leading" secondItem="9Jh-Ol-xL8" secondAttribute="leading" id="vlH-Ii-wFe"/>
+                <constraint firstItem="dcn-NH-ZKw" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="wpc-EF-ufn"/>
+            </constraints>
+            <point key="canvasLocation" x="-53.5" y="223.5"/>
+        </customView>
+        <arrayController id="bN2-9k-a9E" userLabel="filterArrayController"/>
+    </objects>
+    <resources>
+        <image name="NSActionTemplate" width="14" height="14"/>
+        <image name="NSAddTemplate" width="11" height="11"/>
+        <image name="NSRemoveTemplate" width="11" height="11"/>
+    </resources>
+</document>

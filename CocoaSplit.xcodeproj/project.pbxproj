@@ -171,6 +171,8 @@
 		348585B4201C998200C30A08 /* CSPassthroughCompressorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 348585B2201C998200C30A08 /* CSPassthroughCompressorViewController.xib */; };
 		348585D6201DDC9100C30A08 /* CSSourceLayoutFilterWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 348585D4201DDC9100C30A08 /* CSSourceLayoutFilterWindowController.m */; };
 		348585D7201DDC9100C30A08 /* CSSourceLayoutFilterWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 348585D5201DDC9100C30A08 /* CSSourceLayoutFilterWindowController.xib */; };
+		348585DE201E65F900C30A08 /* CSLayerFiltersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 348585DC201E65F900C30A08 /* CSLayerFiltersViewController.m */; };
+		348585DF201E65F900C30A08 /* CSLayerFiltersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 348585DD201E65F900C30A08 /* CSLayerFiltersViewController.xib */; };
 		348AC06B19B406910064F02D /* SourceLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 348AC06A19B406910064F02D /* SourceLayout.m */; };
 		34938EE81AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 34938EE71AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m */; };
 		34938EED1AE4D24200F3B1CF /* CSFilterChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34938EEB1AE4D24200F3B1CF /* CSFilterChooserWindowController.m */; };
@@ -880,6 +882,9 @@
 		348585D3201DDC9100C30A08 /* CSSourceLayoutFilterWindowController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSSourceLayoutFilterWindowController.h; path = Interface/CSSourceLayoutFilterWindowController.h; sourceTree = "<group>"; };
 		348585D4201DDC9100C30A08 /* CSSourceLayoutFilterWindowController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CSSourceLayoutFilterWindowController.m; path = Interface/CSSourceLayoutFilterWindowController.m; sourceTree = "<group>"; };
 		348585D5201DDC9100C30A08 /* CSSourceLayoutFilterWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = CSSourceLayoutFilterWindowController.xib; path = Interface/CSSourceLayoutFilterWindowController.xib; sourceTree = "<group>"; };
+		348585DB201E65F900C30A08 /* CSLayerFiltersViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSLayerFiltersViewController.h; path = Interface/CSLayerFiltersViewController.h; sourceTree = "<group>"; };
+		348585DC201E65F900C30A08 /* CSLayerFiltersViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CSLayerFiltersViewController.m; path = Interface/CSLayerFiltersViewController.m; sourceTree = "<group>"; };
+		348585DD201E65F900C30A08 /* CSLayerFiltersViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = CSLayerFiltersViewController.xib; path = Interface/CSLayerFiltersViewController.xib; sourceTree = "<group>"; };
 		348AC06919B406910064F02D /* SourceLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SourceLayout.h; sourceTree = "<group>"; };
 		348AC06A19B406910064F02D /* SourceLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SourceLayout.m; sourceTree = "<group>"; };
 		34938EE61AE4A7E500F3B1CF /* CSCIFilterConfigProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSCIFilterConfigProxy.h; sourceTree = "<group>"; };
@@ -1702,6 +1707,9 @@
 				348585D3201DDC9100C30A08 /* CSSourceLayoutFilterWindowController.h */,
 				348585D4201DDC9100C30A08 /* CSSourceLayoutFilterWindowController.m */,
 				348585D5201DDC9100C30A08 /* CSSourceLayoutFilterWindowController.xib */,
+				348585DB201E65F900C30A08 /* CSLayerFiltersViewController.h */,
+				348585DC201E65F900C30A08 /* CSLayerFiltersViewController.m */,
+				348585DD201E65F900C30A08 /* CSLayerFiltersViewController.xib */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -2688,6 +2696,7 @@
 				344988131893CF0500044259 /* LogWindow.xib in Resources */,
 				34B5FAE81E760BDD0078FC51 /* CSSequenceEditorWindowController.xib in Resources */,
 				34D696FC1871B8F700B50EB6 /* Defaults.plist in Resources */,
+				348585DF201E65F900C30A08 /* CSLayerFiltersViewController.xib in Resources */,
 				34B5FB8F1E7FA2610078FC51 /* CSSequenceItemTransitionViewController.xib in Resources */,
 				343C2CBB1FFCD28C00849DA9 /* CAMultiAudioEffectsViewController.xib in Resources */,
 				34348C2B19BDBDC000A122C2 /* PluginManagerWindowController.xib in Resources */,
@@ -2866,6 +2875,7 @@
 				34528B8F1F9A707400C090E0 /* InputSource+ScriptingAdditions.m in Sources */,
 				3450239D1C60B3EF00B461B5 /* CSLayoutCollectionItemView.m in Sources */,
 				34B5FAE71E760BDD0078FC51 /* CSSequenceEditorWindowController.m in Sources */,
+				348585DE201E65F900C30A08 /* CSLayerFiltersViewController.m in Sources */,
 				34B5FADA1E75B9B30078FC51 /* CSGridView.m in Sources */,
 				3400A0841BD522A5003E1828 /* CSLibraryInputItemViewController.m in Sources */,
 				34ED8C631B07371C002C0674 /* MIKMIDIErrors.m in Sources */,

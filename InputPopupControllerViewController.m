@@ -66,6 +66,7 @@
 }
 
 
+
 +(NSSet *)keyPathsForValuesAffectingSelectedVideoType
 {
     return [NSSet setWithObjects:@"inputSource", nil];
@@ -77,7 +78,12 @@
     _inputSource = inputSource;
     
     [self sourceConfigurationView];
-    
+    self.backgroundFilterViewController.baseLayer = inputSource.layer;
+    self.backgroundFilterViewController.filterArrayName = @"backgroundFilters";
+    self.inputFilterViewController.baseLayer = inputSource.layer;
+    self.inputFilterViewController.filterArrayName = @"filters";
+    self.sourceFilterViewController.baseLayer = inputSource.layer.sourceLayer;
+    self.sourceFilterViewController.filterArrayName = @"filters";
 }
 
 -(InputSource *)inputSource
@@ -249,96 +255,6 @@
 
 
 
--(NSString *)bindKeyForAffineTransform:(NSObject *)transform withProxy:(CSCIFilterConfigProxy *)withProxy
-{
-    NSString *baseBinding = nil;
-    
-    for (NSString *bindkey in transform.exposedBindings)
-    {
-        if ([bindkey isEqualToString:@"affineTransform"])
-        {
-            NSDictionary *bindInfo = [transform infoForBinding:bindkey];
-            NSString *bindpath = bindInfo[NSObservedKeyPathKey];
-            if (bindpath && [bindpath hasPrefix:@"selection."])
-            {
-                baseBinding = [bindpath substringFromIndex:@"selection.".length];
-                [transform unbind:bindkey];
-                [transform bind:bindkey toObject:withProxy withKeyPath:[NSString stringWithFormat:@"baseDict.%@",baseBinding] options:bindInfo[NSOptionsKey]];
-                
-            }
-        }
-    }
-    
-    return baseBinding;
-}
--(NSString *)bindKeyForVector:(NSObject *)vector withProxy:(CSCIFilterConfigProxy *)withProxy
-{
-    NSString *baseBinding = nil;
-    
-    for (NSString *bindkey in vector.exposedBindings)
-    {
-        if ([bindkey isEqualToString:@"vector"])
-        {
-            NSDictionary *bindInfo = [vector infoForBinding:bindkey];
-            NSString *bindpath = bindInfo[NSObservedKeyPathKey];
-            if (bindpath && [bindpath hasPrefix:@"selection."])
-            {
-                baseBinding = [bindpath substringFromIndex:@"selection.".length];
-                [vector unbind:bindkey];
-                [vector bind:bindkey toObject:withProxy withKeyPath:[NSString stringWithFormat:@"baseDict.%@",baseBinding] options:bindInfo[NSOptionsKey]];
-                
-            }
-        }
-    }
-    
-    return baseBinding;
-}
-
--(void)rebindViewControls:(NSView *)forView withProxy:(CSCIFilterConfigProxy *)withProxy
-{
-    for (NSString *b in forView.exposedBindings)
-    {
-        
-        NSDictionary *bindingInfo = [forView infoForBinding:b];
-        
-        
-        if (!bindingInfo)
-        {
-            continue;
-        }
-        
-        NSDictionary *bindingOptions = bindingInfo[NSOptionsKey];
-        
-        NSString *bindPath = bindingInfo[NSObservedKeyPathKey];
-        
-        NSObject *boundTo = bindingInfo[NSObservedObjectKey];
-        
-        
-        NSString *baseBinding;
-        
-        
-        if ([bindPath hasPrefix:@"selection."])
-        {
-            baseBinding = [bindPath substringFromIndex:@"selection.".length];
-            [forView unbind:b];
-            [forView bind:b toObject:withProxy withKeyPath:[NSString stringWithFormat:@"baseDict.%@",baseBinding] options:bindingOptions];
-
-        } else if ([boundTo.className isEqualToString:@"CIMutableVector"]) {
-            [self bindKeyForVector:boundTo withProxy:withProxy];
-        } else if ([boundTo.className isEqualToString:@"NSMutableAffineTransform"]) {
-            [self bindKeyForAffineTransform:boundTo withProxy:withProxy];
-            
-        }
-    }
-    
-    for (NSView *subview in forView.subviews)
-    {
-        [self rebindViewControls:subview withProxy:withProxy];
-        
-    }
-    
-
-}
 -(void)openUserFilterPanel:(CIFilter *)forFilter forLayer:(CALayer *)forLayer withType:(NSString *)withType
 {
     if (!forFilter)

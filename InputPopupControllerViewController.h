@@ -7,6 +7,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import <Quartz/Quartz.h>
+#import "CSLayerFiltersViewController.h"
 
 @class InputSource;
 
@@ -65,6 +66,9 @@
 @property (strong) NSArray *scriptKeys;
 @property (unsafe_unretained) IBOutlet NSTextView *scriptTextView;
 @property (weak) IBOutlet NSTableView *scriptTableView;
+@property (strong) IBOutlet CSLayerFiltersViewController *backgroundFilterViewController;
+@property (strong) IBOutlet CSLayerFiltersViewController *inputFilterViewController;
+@property (strong) IBOutlet CSLayerFiltersViewController *sourceFilterViewController;
 
 
 @end

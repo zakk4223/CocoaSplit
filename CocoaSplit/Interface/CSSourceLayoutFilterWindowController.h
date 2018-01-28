@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "SourceLayout.h"
+#import "CSLayerFiltersViewController.h"
 
 @interface CSSourceLayoutFilterWindowController : NSWindowController <NSWindowDelegate>
 
@@ -16,6 +17,7 @@
 @property (strong) NSWindow *userFilterWindow;
 
 - (IBAction)filterControlAction:(NSSegmentedControl *)sender;
+@property (strong) IBOutlet CSLayerFiltersViewController *filterListViewController;
 
 
 @end

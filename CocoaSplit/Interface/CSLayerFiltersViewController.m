@@ -1,68 +1,96 @@
 //
-//  CSSourceLayoutFilterWindowController.m
+//  CSLayerFiltersViewController.m
 //  CocoaSplit
 //
 //  Created by Zakk on 1/28/18.
 //
 
-#import "CSSourceLayoutFilterWindowController.h"
+#import "CSLayerFiltersViewController.h"
 #import "CSFilterChooserWindowController.h"
 #import "CSCIFilterConfigProxy.h"
+#import <QuartzCore/QuartzCore.h>
+#import <Quartz/Quartz.h>
 
-@interface CSSourceLayoutFilterWindowController ()
+@interface CSLayerFiltersViewController ()
 
 @end
 
-@implementation CSSourceLayoutFilterWindowController
+@implementation CSLayerFiltersViewController
+@synthesize baseLayer = _baseLayer;
+@synthesize filterArrayName = _filterArrayName;
 
-- (void)windowDidLoad {
-    [super windowDidLoad];
-    
-    // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do view setup here.
 }
 
 
--(instancetype)init
+-(NSString *)filterArrayName
 {
-    if (self = [self initWithWindowNibName:@"CSSourceLayoutFilterWindowController"])
+    return _filterArrayName;
+}
+
+-(void)setFilterArrayName:(NSString *)filterArrayName
+{
+    _filterArrayName = filterArrayName;
+    if (self.baseLayer)
     {
-        
+        [self.filterArrayController bind:@"contentArray" toObject:self.baseLayer withKeyPath:filterArrayName options:nil];
     }
-
-    return self;
 }
 
--(void)awakeFromNib
+-(CALayer *)baseLayer
 {
-    __weak CSSourceLayoutFilterWindowController *weakSelf = self;
-    
-    self.filterListViewController.addFilter = ^(NSString *filterName) {
-        [weakSelf.layout addLayoutFilter:filterName];
-    };
-    
-    self.filterListViewController.baseLayer = self.layout.rootLayer;
-    self.filterListViewController.filterArrayName = @"filters";
-    
-    /*
-    self.filterListViewController.deleteFilter = ^(NSString *filterName) {
-        [weakSelf.layout addLayoutFilter:filterName];
-    };*/
-    
+    return _baseLayer;
+}
+
+-(void) setBaseLayer:(CALayer *)baseLayer
+{
+    _baseLayer = baseLayer;
+    if (self.filterArrayName)
+    {
+        [self.filterArrayController bind:@"contentArray" toObject:baseLayer withKeyPath:self.filterArrayName options:nil];
+    }
 }
 
 
-- (IBAction)addFilterAction:(NSSegmentedControl *)sender
+
+-(IBAction)addFilterAction:(NSSegmentedControl *)sender
 {
+    
     NSString *filterName = [CSFilterChooserWindowController run];
+    if (!filterName)
+    {
+        return;
+    }
+    CIFilter *newFilter = [CIFilter filterWithName:filterName];
     
-    [self.layout addLayoutFilter:filterName];
+    if (!newFilter)
+    {
+        return;
+    }
+    
+    [newFilter setDefaults];
+    NSString *filterID = NSUUID.UUID.UUIDString;
+    newFilter.name = filterID;
+    NSArray *cFilters = [self.baseLayer valueForKeyPath:self.filterArrayName];
+    if (!cFilters)
+    {
+        [self.baseLayer setValue:@[] forKeyPath:self.filterArrayName];
+    }
+    
+    [CATransaction begin];
+
+    [self.filterArrayController addObject:newFilter];
+    [CATransaction commit];
 }
 
-- (IBAction)removeFilter:(NSSegmentedControl *)sender
+
+-(IBAction)deleteFilterAction:(NSSegmentedControl *)sender
 {
-    CIFilter *selectedFilter;
-    selectedFilter = [self.layout.rootLayer.filters objectAtIndex:self.filterListTable.selectedRow];
-    [self.layout deleteLayoutFilter:selectedFilter.name];
+    [CATransaction begin];
+    [self.filterArrayController removeObjectAtArrangedObjectIndex:self.filterArrayController.selectionIndex];
+    [CATransaction commit];
 }
 
 
@@ -108,26 +136,28 @@
     [self.userFilterWindow makeKeyAndOrderFront:self.userFilterWindow];
     
 }
+
+
 - (IBAction)configureFilter:(NSSegmentedControl *)sender
 {
     
     CIFilter *selectedFilter;
     
-    selectedFilter = [self.layout.rootLayer.filters objectAtIndex:self.filterListTable.selectedRow];
+    selectedFilter = [self.filterArrayController.arrangedObjects objectAtIndex:self.filterArrayController.selectionIndex];
+    
     if (selectedFilter)
     {
-        [self openUserFilterPanel:selectedFilter forLayer:self.layout.rootLayer withType:@"filters"];
+        [self openUserFilterPanel:selectedFilter forLayer:self.baseLayer withType:self.filterArrayName];
         
         
     }
-
+    
 }
 
 -(void)windowWillClose:(NSNotification *)notification
 {
     self.userFilterWindow = nil;
 }
-
 
 
 - (IBAction)filterControlAction:(NSSegmentedControl *)sender
@@ -140,7 +170,7 @@
             [self addFilterAction:sender];
             break;
         case 1:
-            [self removeFilter:sender];
+            [self deleteFilterAction:sender];
             break;
         case 2:
             [self configureFilter:sender];
@@ -149,7 +179,5 @@
             break;
     }
 }
-
-
-
 @end
+
