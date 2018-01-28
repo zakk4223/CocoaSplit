@@ -30,6 +30,7 @@
     self.attachedInputs = [NSMutableArray array];
     self.active = YES;
     self.scriptPriority = 0;
+    self.persistent = NO;
 
 }
 
@@ -52,6 +53,7 @@
     newCopy.script_beforeReplace = self.script_beforeReplace;
     newCopy.script_afterReplace = self.script_afterReplace;
     newCopy.scriptAlwaysRun = self.scriptAlwaysRun;
+    newCopy.persistent = self.persistent;
     return newCopy;
 }
 
@@ -141,7 +143,10 @@
     [aCoder encodeObject:self.script_afterReplace forKey:@"script_afterReplace"];
     [aCoder encodeInteger:self.scriptPriority forKey:@"scriptPriority"];
     [aCoder encodeBool:self.scriptAlwaysRun forKey:@"scriptAlwaysRun"];
+    [aCoder encodeBool:self.persistent forKey:@"persistent"];
 }
+
+
 
 -(instancetype)initWithCoder:(NSCoder *)aDecoder {
     
@@ -167,6 +172,11 @@
     if ([aDecoder containsValueForKey:@"scriptAlwaysRun"])
     {
         self.scriptAlwaysRun = [aDecoder decodeBoolForKey:@"scriptAlwaysRun"];
+    }
+    
+    if ([aDecoder containsValueForKey:@"persistent"])
+    {
+        self.persistent = [aDecoder decodeBoolForKey:@"persistent"];
     }
     
     

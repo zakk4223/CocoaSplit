@@ -31,6 +31,7 @@
 @property (readonly) bool isVideo;
 @property (readonly) bool isAudio;
 @property (readonly) bool isScript;
+@property (assign) bool persistent;
 
 @property (weak) InputSource* parentInput;
 

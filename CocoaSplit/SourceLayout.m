@@ -900,7 +900,10 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
                 [retDict[@"scriptExisting"] addObject:sSrc];
             }
 
-            [retDict[@"removed"] addObject:sSrc];
+            if (!sSrc.persistent)
+            {
+                [retDict[@"removed"] addObject:sSrc];
+            }
 
         }
     }
@@ -1689,9 +1692,14 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     //NSArray *newScript = diffResult[@"scriptNew"];
     NSArray *existingScript = diffResult[@"scriptExisting"];
 
-    NSMutableArray *removeInputs = [NSMutableArray arrayWithArray:changedInputs];
-    [removeInputs addObjectsFromArray:sameInputs];
-    [removeInputs addObjectsFromArray:newInputs];
+    NSPredicate *persistP = [NSPredicate predicateWithFormat:@"persistent == NO"];
+
+    NSMutableArray *removeInputs = [NSMutableArray array];
+    
+    [removeInputs addObjectsFromArray:[changedInputs filteredArrayUsingPredicate:persistP]];
+    [removeInputs addObjectsFromArray:[sameInputs filteredArrayUsingPredicate:persistP]];
+    [removeInputs addObjectsFromArray:[newInputs filteredArrayUsingPredicate:persistP]];
+
     NSNumber *aStart = nil;
     JSContext *jCtx = [JSContext currentContext];
     

@@ -67,6 +67,7 @@
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
+                                                            <binding destination="K7P-gj-44p" name="fontBold" keyPath="objectValue.persistent" id="IOf-bB-cSx"/>
                                                             <binding destination="K7P-gj-44p" name="value" keyPath="objectValue.name" id="jKx-zJ-Mdf"/>
                                                         </connections>
                                                     </textField>
