@@ -120,6 +120,8 @@
 -(SourceLayout *)mergedSourceLayout:(SourceLayout *)withLayout;
 -(SourceLayout *)sourceLayoutWithRemoved:(SourceLayout *)withRemoved;
 -(void)generateTopLevelSourceList;
+-(NSString *)addLayoutFilter:(NSString *)filterName;
+-(void)deleteLayoutFilter:(NSString *)filteruuid;
 
 
 @end

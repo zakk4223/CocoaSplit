@@ -423,6 +423,8 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     }
     
     [aCoder encodeBool:self.recordingLayout forKey:@"recordingLayout"];
+    [aCoder encodeObject:self.rootLayer.filters forKey:@"layoutFilters"];
+
 }
 
 
@@ -458,7 +460,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         }
         
         self.recordingLayout = [aDecoder decodeBoolForKey:@"recordingLayout"];
-        
+        self.rootLayer.filters = [aDecoder decodeObjectForKey:@"layoutFilters"];
     }
     
     return self;
@@ -2434,6 +2436,81 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         [self generateTopLevelSourceList];
     }
 }
+
+
+-(CIFilter *) filter:(NSString *)filterUUID fromArray:(NSArray *)fromArray
+{
+    
+    CIFilter *ret = nil;
+    NSPredicate *predicate = [NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+        CIFilter *obj = (CIFilter *)evaluatedObject;
+        return [obj.name isEqualToString:filterUUID];
+    }];
+    
+    NSArray *results = [fromArray filteredArrayUsingPredicate:predicate];
+    if (results)
+    {
+        ret = results.firstObject;
+    }
+    
+    return ret;
+}
+
+
+-(NSMutableArray *)newFilterArray:(NSArray *)filters withoutName:(NSString *)withoutName
+{
+    NSMutableArray *ret = [NSMutableArray array];
+    
+    for (CIFilter *filter in filters)
+    {
+        if ([filter.name isEqualToString:withoutName])
+        {
+            continue;
+        }
+        
+        [ret addObject:filter];
+    }
+    
+    return ret;
+}
+
+
+-(void)deleteLayoutFilter:(NSString *)filteruuid
+{
+    //CIFilter *toDelete = [self filter:filteruuid fromArray:self.rootLayer.filters];
+
+    
+    [CATransaction begin];
+    self.rootLayer.filters = [self newFilterArray:self.rootLayer.filters withoutName:filteruuid];
+    [CATransaction commit];
+}
+
+
+-(NSString *)addLayoutFilter:(NSString *)filterName
+{
+    
+    CIFilter *newFilter = [CIFilter filterWithName:filterName];
+    if (newFilter)
+    {
+        [newFilter setDefaults];
+        NSString *filterID = [[NSUUID UUID] UUIDString];
+        newFilter.name = filterID;
+
+        NSMutableArray *currentFilters = self.rootLayer.filters.mutableCopy;
+        if (!currentFilters)
+        {
+            currentFilters = [NSMutableArray array];
+        }
+        
+        [currentFilters addObject:newFilter];
+        [CATransaction begin];
+        self.rootLayer.filters = currentFilters;
+        [CATransaction commit];
+        return filterID;
+    }
+    return nil;
+}
+
 
 -(void)dealloc
 {

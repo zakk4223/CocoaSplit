@@ -3,7 +3,6 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 11/22/12.
-//  Copyright (c) 2012 Zakk. All rights reserved.
 //
 #import <Foundation/Foundation.h>
 #import <VideoToolbox/VideoToolbox.h>
@@ -13,7 +12,7 @@
 #import "LayoutRenderer.h"
 #import "CSPreviewGLLayer.h"
 #import "CSPreviewOverlayView.h"
-
+#import "CSSourceLayoutFilterWindowController.h"
 
 @class SourceLayout;
 //@class InputSource;
@@ -106,6 +105,7 @@
 @property (strong) NSMutableDictionary *activeConfigControllers;
 @property (assign) bool isEditWindow;
 @property (assign) bool showTransitionToggle;
+@property (strong) CSSourceLayoutFilterWindowController *filterConfigWindow;
 
 
 -(void)needsUpdate;

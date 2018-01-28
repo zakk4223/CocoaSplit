@@ -365,7 +365,8 @@
         filterProxy.layerFilterName = forFilter.name;
         filterProxy.filterType = withType;
 
-        [self rebindViewControls:filterView withProxy:filterProxy];
+        [filterProxy rebindViewControls:filterView];        
+
     }
     
     

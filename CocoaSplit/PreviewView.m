@@ -303,6 +303,17 @@
 }
 
 
+-(void)configureLayoutFilters:(id)sender
+{
+    if (self.sourceLayout)
+    {
+        self.filterConfigWindow = [[CSSourceLayoutFilterWindowController alloc] init];
+        self.filterConfigWindow.layout = self.sourceLayout;
+        [self.filterConfigWindow showWindow:nil];
+    }
+}
+
+
 -(void)doLayoutMidi:(id)sender
 {
     if (self.sourceLayout)
@@ -425,6 +436,11 @@
     [midiItem setEnabled:YES];
     
     [sourceListMenu insertItem:midiItem atIndex:[sourceListMenu.itemArray count]];
+
+    NSMenuItem *filterItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Filters" action:@selector(configureLayoutFilters:) keyEquivalent:@""];
+    [filterItem setTarget:self];
+    [filterItem setEnabled:YES];
+    [sourceListMenu insertItem:filterItem atIndex:[sourceListMenu.itemArray count]];
 
     [sourceListMenu insertItem:[NSMenuItem separatorItem] atIndex:[sourceListMenu.itemArray count]];
     
@@ -1930,6 +1946,13 @@
     
     if (closedWindow)
     {
+        if (closedWindow == self.filterConfigWindow.window)
+        {
+            self.filterConfigWindow = nil;
+            return;
+        }
+        
+        
         NSString *uuid = closedWindow.identifier;
         NSWindow *cWindow = [self.activeConfigWindows objectForKey:uuid];
         NSViewController *cController = [self.activeConfigControllers objectForKey:uuid];

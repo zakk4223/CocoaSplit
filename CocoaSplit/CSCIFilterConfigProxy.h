@@ -17,5 +17,7 @@
 @property (strong) NSMutableDictionary *baseDict;
 @property (strong) NSString *filterType;
 
+-(void)rebindViewControls:(NSView *)forView;
+
 
 @end
