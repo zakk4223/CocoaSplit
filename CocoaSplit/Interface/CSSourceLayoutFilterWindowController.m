@@ -34,20 +34,10 @@
 
 -(void)awakeFromNib
 {
-    __weak CSSourceLayoutFilterWindowController *weakSelf = self;
-    
-    self.filterListViewController.addFilter = ^(NSString *filterName) {
-        [weakSelf.layout addLayoutFilter:filterName];
-    };
+    self.window.title = [NSString stringWithFormat:@"%@ filters", self.layout.name];
     
     self.filterListViewController.baseLayer = self.layout.rootLayer;
     self.filterListViewController.filterArrayName = @"filters";
-    
-    /*
-    self.filterListViewController.deleteFilter = ^(NSString *filterName) {
-        [weakSelf.layout addLayoutFilter:filterName];
-    };*/
-    
 }
 
 

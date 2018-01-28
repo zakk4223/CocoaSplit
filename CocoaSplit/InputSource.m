@@ -2317,11 +2317,18 @@ static NSArray *_sourceTypes = nil;
 }
 
 
+-(void)setPersistent:(bool)persistent
+{
+    super.persistent = persistent;
+    for (NSObject <CSInputSourceProtocol> *cSrc in self.attachedInputs)
+    {
+        cSrc.persistent = persistent;
+    }
+}
+
 
 -(void)attachInput:(NSObject<CSInputSourceProtocol> *)toAttach
 {
-    
-    
     if (toAttach.parentInput)
     {
         if (toAttach.parentInput == self)
@@ -2337,6 +2344,7 @@ static NSArray *_sourceTypes = nil;
         [(InputSource *)toAttach makeSublayerOfLayer:self.layer];
     }
     [[self mutableArrayValueForKey:@"attachedInputs"] addObject:toAttach];
+    toAttach.persistent = self.persistent;
     toAttach.parentInput = self;
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputAttached object:toAttach userInfo:nil];
 

@@ -24,14 +24,27 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="Io5-35-d90">
-                        <rect key="frame" x="12" y="20" width="163" height="331"/>
+                        <rect key="frame" x="12" y="20" width="163" height="306"/>
                     </customView>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jyg-ss-GME">
+                        <rect key="frame" x="10" y="334" width="42" height="17"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="38" id="xgT-8T-QbU"/>
+                        </constraints>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Filters" id="Dmn-lO-BXu">
+                            <font key="font" metaFont="systemBold"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="Io5-35-d90" firstAttribute="centerX" secondItem="se5-gp-TjO" secondAttribute="centerX" id="5Dh-9U-bTU"/>
-                    <constraint firstAttribute="bottom" secondItem="Io5-35-d90" secondAttribute="bottom" constant="20" symbolic="YES" id="Ga5-Bg-eSV"/>
-                    <constraint firstItem="Io5-35-d90" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" constant="20" symbolic="YES" id="loE-Gi-YFu"/>
-                    <constraint firstItem="Io5-35-d90" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" constant="12" id="uKw-ry-Vcq"/>
+                    <constraint firstItem="jyg-ss-GME" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" constant="20" symbolic="YES" id="B8B-dk-p7v"/>
+                    <constraint firstAttribute="bottom" secondItem="Io5-35-d90" secondAttribute="bottom" constant="20" symbolic="YES" id="FvZ-78-72M"/>
+                    <constraint firstItem="Io5-35-d90" firstAttribute="centerX" secondItem="se5-gp-TjO" secondAttribute="centerX" id="OL9-f4-sNI"/>
+                    <constraint firstItem="jyg-ss-GME" firstAttribute="leading" secondItem="Io5-35-d90" secondAttribute="leading" id="f0l-pn-jCJ"/>
+                    <constraint firstItem="Io5-35-d90" firstAttribute="top" secondItem="jyg-ss-GME" secondAttribute="bottom" constant="8" symbolic="YES" id="tjO-rV-trW"/>
+                    <constraint firstItem="jyg-ss-GME" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" constant="12" id="yCA-xQ-qZH"/>
                 </constraints>
             </view>
             <connections>
