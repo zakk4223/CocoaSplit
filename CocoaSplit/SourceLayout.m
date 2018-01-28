@@ -16,7 +16,32 @@
 
 JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 
+@implementation SourceLayoutUnarchiverDelegate
 
+
+-(id)unarchiver:(NSKeyedUnarchiver *)unarchiver didDecodeObject:(id)object
+{
+    
+    if (![object conformsToProtocol:@protocol(CSInputSourceProtocol)])
+    {
+        return object;
+    }
+    
+    
+    if (self.layout)
+    {
+        NSObject <CSInputSourceProtocol> *src = object;
+        NSObject <CSInputSourceProtocol> *eSrc = [self.layout inputForUUID:src.uuid];
+        if (eSrc)
+        {
+            return eSrc;
+        }
+    }
+    return object;
+}
+
+
+@end
 @implementation SourceLayout
 
 
@@ -822,9 +847,11 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 -(NSDictionary *)diffSourceListWithData:(NSData *)useData
 {
     
+    SourceLayoutUnarchiverDelegate *delegate = [[SourceLayoutUnarchiverDelegate alloc] init];
+    delegate.layout = self;
     NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:useData];
     
-    [unarchiver setDelegate:self];
+    [unarchiver setDelegate:delegate];
 
     NSObject *mergeObj = [unarchiver decodeObjectForKey:@"root"];
     [unarchiver finishDecoding];
@@ -2496,7 +2523,6 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 
 -(NSString *)addLayoutFilter:(NSString *)filterName
 {
-    
     CIFilter *newFilter = [CIFilter filterWithName:filterName];
     if (newFilter)
     {

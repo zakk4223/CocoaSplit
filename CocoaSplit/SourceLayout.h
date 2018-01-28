@@ -20,6 +20,11 @@
 @class CSLayoutRecorder;
 @class CSLayoutTransition;
 
+@interface SourceLayoutUnarchiverDelegate : NSObject <NSKeyedUnarchiverDelegate>
+@property (strong) SourceLayout *layout;
+@end
+
+
 
 @protocol SourceLayoutExport <JSExport>
 @property (assign) bool doSaveSourceList;
