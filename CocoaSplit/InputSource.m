@@ -2312,6 +2312,7 @@ static NSArray *_sourceTypes = nil;
     
     [[self mutableArrayValueForKey:@"attachedInputs"] removeObject:toDetach];
     toDetach.parentInput = nil;
+    toDetach.persistent = NO;
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputDetached object:toDetach userInfo:nil];
 
 }
