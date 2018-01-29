@@ -11,7 +11,7 @@
 @implementation SourceCache
 
 
-+(id) sharedCache
++(SourceCache *) sharedCache
 {
     static SourceCache *sharedCache = nil;
     static dispatch_once_t onceToken;
@@ -38,10 +38,9 @@
 
 -(id) cacheSource:(NSObject <CSCaptureSourceProtocol>*)toCache uniqueID:(NSString *)uniqueID
 {
-    
-
     if (!toCache.allowDedup)
     {
+        NSLog(@"DID NOT ALLOW DEDUP %@", toCache);
         return toCache;
     }
     
@@ -50,23 +49,16 @@
         //don't cache things with null uniqueIDs, that just means they don't have an active source yet
         return toCache;
     }
-    
-    
     NSString *ofType = NSStringFromClass([toCache class]);
-    
-    
     NSString *sourceKey = [NSString stringWithFormat:@"%@:%@", ofType, uniqueID];
-
-    
-    
     id cachedSource = [self.cacheMap objectForKey:sourceKey];
-    
-    
     if (!cachedSource)
     {
         cachedSource = toCache;
         [self.cacheMap setObject:toCache forKey:sourceKey];
         
+    } else {
+        NSLog(@"USING CACHED SOURCE %@", cachedSource);
     }
     
     return cachedSource;

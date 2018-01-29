@@ -68,6 +68,8 @@ typedef enum resize_style_t {
 @property (assign) float scrollYSpeed;
 
 @property (strong) NSObject<CSCaptureSourceProtocol,CSCaptureBaseInputFrameTickProtocol> *videoInput;
+@property (strong) CSAbstractCaptureDevice *activeVideoDevice;
+
 @property (assign) float rotationAngle;
 @property (assign) float rotationAngleY;
 @property (assign) float rotationAngleX;
@@ -279,6 +281,8 @@ typedef enum resize_style_t {
 @property (assign) float scrollYSpeed;
 
 @property (strong) CSCaptureBase<CSCaptureSourceProtocol,CSCaptureBaseInputFrameTickProtocol> *videoInput;
+@property (strong) CSAbstractCaptureDevice *activeVideoDevice;
+
 @property (assign) float rotationAngle;
 @property (assign) float rotationAngleY;
 @property (assign) float rotationAngleX;

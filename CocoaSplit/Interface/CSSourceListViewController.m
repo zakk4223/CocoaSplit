@@ -11,6 +11,7 @@
 #import "CSAudioInputSource.h"
 #import "CSScriptInputSource.h"
 #import "CSLayoutRecorder.h"
+#import "SourceCache.h"
 
 //Thanks stack overflow user "Rob Keniger"
 
@@ -510,6 +511,8 @@
     if (useClass)
     {
         NSObject<CSCaptureSourceProtocol> *newSource = [useClass createSourceFromPasteboardItem:item];
+        newSource = [[SourceCache sharedCache] cacheSource:newSource uniqueID:newSource.activeVideoDevice.uniqueID];
+        
         InputSource *newInput = [[InputSource alloc] init];
         [newInput setDirectVideoInput:newSource];
         return newInput;
@@ -816,7 +819,7 @@
         [self addInputSourceWithInput:newSrc];
 
         newSrc.selectedVideoType = clickedCapture.instanceLabel;
-        newSrc.videoInput.activeVideoDevice = clickedDevice;
+        newSrc.activeVideoDevice = clickedDevice;
         newSrc.depth = FLT_MAX;
         [newSrc autoCenter];
         

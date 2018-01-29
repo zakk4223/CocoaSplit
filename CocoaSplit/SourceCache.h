@@ -14,7 +14,7 @@
 
 @property (strong) NSMapTable *cacheMap;
 
-+(id) sharedCache;
++(SourceCache *) sharedCache;
 
 -(id) cacheSource:(NSObject<CSCaptureSourceProtocol>*)ofType uniqueID:(NSString *)uniqueID;
 

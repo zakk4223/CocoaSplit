@@ -7,6 +7,8 @@
 
 #import "InputSource.h"
 #import "SourceLayout.h"
+#import "SourceCache.h"
+
 #import "InputPopupControllerViewController.h"
 
 #import <objc/runtime.h>
@@ -28,6 +30,8 @@ static NSArray *_sourceTypes = nil;
 
 @synthesize frameDelay = _frameDelay;
 @synthesize selectedVideoType = _selectedVideoType;
+@synthesize activeVideoDevice = _activeVideoDevice;
+
 @synthesize name = _name;
 @synthesize transitionFilterName = _transitionFilterName;
 @synthesize is_selected = _is_selected;
@@ -2499,6 +2503,34 @@ static NSArray *_sourceTypes = nil;
 
 
 
+-(CSAbstractCaptureDevice *)activeVideoDevice
+{
+    if (self.videoInput)
+    {
+        return self.videoInput.activeVideoDevice;
+    }
+    
+    return nil;
+}
+
+-(void) setActiveVideoDevice:(CSAbstractCaptureDevice *)activeVideoDevice
+{
+    if (self.videoInput)
+    {
+        CSCaptureBase <CSCaptureSourceProtocol, CSCaptureBaseInputFrameTickProtocol> *useInput = [[SourceCache sharedCache] cacheSource:self.videoInput uniqueID:activeVideoDevice.uniqueID];
+        
+        if (useInput != self.videoInput)
+        {
+            [self deregisterVideoInput:self.videoInput];
+            self.videoInput = useInput;
+            [self registerVideoInput:self.videoInput];
+        }
+        
+        self.videoInput.activeVideoDevice = activeVideoDevice;
+    }
+}
+
+
 
 -(NSString *) selectedVideoType
 {
@@ -2524,6 +2556,7 @@ static NSArray *_sourceTypes = nil;
     
     self.name = _editedName;
 }
+
 
 
 
