@@ -498,8 +498,6 @@ static NSArray *_sourceTypes = nil;
             self.constraintMap = tmpConstraints;
         }
         [self observeConstraintKeys];
-
-        
     }
     
     return self;
@@ -674,6 +672,7 @@ static NSArray *_sourceTypes = nil;
         [self observeConstraintKeys];
 
     }
+
     return self;
 }
 

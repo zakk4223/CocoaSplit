@@ -777,17 +777,68 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     }
     
     
+    NSMutableArray *orderedUUIDS = [NSMutableArray array];
     
-    NSDictionary *saveDict = @{@"sourcelist": self.sourceList,  @"timingSource": timerSrc};
+    for(NSObject <CSInputSourceProtocol> *src in self.sourceList)
+    {
+        [orderedUUIDS addObject:src.uuid];
+ //       NSMutableData *srcData = [NSMutableData data];
+//        NSKeyedArchiver *sArch = [[NSKeyedArchiver alloc] initForWritingWithMutableData:srcData];
+//        [sArch encodeObject:src forKey:@"root"];
+    }
+    
+    
+    //NSDictionary *saveDict = @{@"sourcelist": self.sourceList,  @"timingSource": timerSrc};
     NSMutableData *saveData = [NSMutableData data];
     NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:saveData];
     archiver.delegate = self;
-    [archiver encodeObject:saveDict forKey:@"root"];
+    [archiver encodeObject:orderedUUIDS forKey:@"orderedUUIDS"];
+    [archiver encodeObject:timerSrc forKey:@"timerSrc"];
+    for(NSObject <CSInputSourceProtocol> *src in self.sourceList)
+    {
+        [archiver encodeObject:src forKey:src.uuid];
+    }
+
+//    [archiver encodeObject:saveDict forKey:@"root"];
     [archiver finishEncoding];
     
     return saveData;
 }
 
+-(NSObject *)decodeSaveData:(NSData *)data
+{
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+    
+    NSObject *ret = nil;
+    
+    if ([unarchiver containsValueForKey:@"orderedUUIDS"])
+    {
+        NSArray *uuids = [unarchiver decodeObjectForKey:@"orderedUUIDS"];
+        NSMutableArray *srcList = [NSMutableArray array];
+        for (NSString *uuid in uuids)
+        {
+            //Check if we already have a matching persistent UUID, if so, just use that instead
+            NSObject <CSInputSourceProtocol> *newSrc = nil;
+            newSrc = [self inputForUUID:uuid];
+            if (!newSrc.persistent)
+            {
+                newSrc = [unarchiver decodeObjectForKey:uuid];
+            }
+            [srcList addObject:newSrc];
+        }
+        
+        NSObject *timerSrc = [unarchiver decodeObjectForKey:@"timerSrc"];
+        if (!timerSrc)
+        {
+            timerSrc = [NSNull null];
+        }
+        ret = @{@"sourcelist": srcList,  @"timingSource": timerSrc};
+    } else { //old style, just decode "root"
+        ret = [unarchiver decodeObjectForKey:@"root"];
+    }
+    [unarchiver finishDecoding];
+    return ret;
+}
 
 -(void) saveSourceListForExport
 {
@@ -847,15 +898,8 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 -(NSDictionary *)diffSourceListWithData:(NSData *)useData
 {
     
-    SourceLayoutUnarchiverDelegate *delegate = [[SourceLayoutUnarchiverDelegate alloc] init];
-    delegate.layout = self;
-    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:useData];
-    
-    [unarchiver setDelegate:delegate];
+    NSObject *mergeObj = [self decodeSaveData:useData];
 
-    NSObject *mergeObj = [unarchiver decodeObjectForKey:@"root"];
-    [unarchiver finishDecoding];
-    
     NSArray *mergeList;
     
     
@@ -1978,13 +2022,18 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
             withData = self.savedSourceListData;
         }
         
+        /*
         NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:withData];
         
         [unarchiver setDelegate:self];
         
         NSObject *restData = [unarchiver decodeObjectForKey:@"root"];
         [unarchiver finishDecoding];
+        */
         
+        
+        NSObject *restData = [self decodeSaveData:withData];
+
         NSArray *srcList = nil;
         
         if (restData && [restData isKindOfClass:[NSDictionary class]])
