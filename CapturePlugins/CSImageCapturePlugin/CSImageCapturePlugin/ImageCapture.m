@@ -101,6 +101,18 @@
 }
 
 
++(NSString *)uniqueIDFromPasteboardItem:(NSPasteboardItem *)item
+{
+    NSString *pPath = [item stringForType:@"public.file-url"];
+    if (!pPath)
+    {
+        return nil;
+    }
+    NSURL *fileURL = [NSURL URLWithString:pPath];
+    return [fileURL path];
+}
+
+
 +(NSObject<CSCaptureSourceProtocol> *)createSourceFromPasteboardItem:(NSPasteboardItem *)item
 {
     

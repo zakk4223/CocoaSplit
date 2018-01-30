@@ -213,6 +213,7 @@
 @property (readonly) bool hasSources;
 @property (strong) NSData *audioData;
 @property (strong) CAMultiAudioEngine *audioEngine;
+@property (assign) bool ignorePinnedInputs;
 
 -(CSAudioInputSource *)findSourceForAudioUUID:(NSString *)audioUUID;
 

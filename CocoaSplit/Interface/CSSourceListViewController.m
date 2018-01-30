@@ -510,12 +510,26 @@
     
     if (useClass)
     {
-        NSObject<CSCaptureSourceProtocol> *newSource = [useClass createSourceFromPasteboardItem:item];
-        newSource = [[SourceCache sharedCache] cacheSource:newSource uniqueID:newSource.activeVideoDevice.uniqueID];
+        NSObject<CSCaptureSourceProtocol> *newSource = nil;
+        NSString *pbUUID = [useClass uniqueIDFromPasteboardItem:item];
+        if (pbUUID)
+        {
+            newSource = [[SourceCache sharedCache] findCachedSourceForClass:useClass uniqueID:pbUUID];
+        }
         
-        InputSource *newInput = [[InputSource alloc] init];
-        [newInput setDirectVideoInput:newSource];
-        return newInput;
+        if (!newSource)
+        {
+            newSource = [useClass createSourceFromPasteboardItem:item];
+            newSource = [[SourceCache sharedCache] cacheSource:newSource];
+        } else {
+        }
+        
+        if (newSource)
+        {
+            InputSource *newInput = [[InputSource alloc] init];
+            [newInput setDirectVideoInput:newSource];
+            return newInput;
+        }
     }
     
     return nil;

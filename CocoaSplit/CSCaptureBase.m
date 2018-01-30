@@ -27,6 +27,8 @@
 
 @end
 
+
+
 @interface CSCaptureBase()
 {
     
@@ -58,6 +60,7 @@
 @synthesize timerDelegate = _timerDelegate;
 
 
+
 +(NSString *) label
 {
     return NSStringFromClass(self);
@@ -67,6 +70,7 @@
 {
     return [self.class label];
 }
+
 
 
 -(instancetype) init
@@ -809,6 +813,12 @@
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     self.timerDelegate = nil;
+}
+
+
++(NSString *)uniqueIDFromPasteboardItem:(NSPasteboardItem *)item
+{
+    return nil;
 }
 
 

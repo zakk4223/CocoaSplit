@@ -17,6 +17,8 @@
 +(SourceCache *) sharedCache;
 
 -(id) cacheSource:(NSObject<CSCaptureSourceProtocol>*)ofType uniqueID:(NSString *)uniqueID;
+-(id) cacheSource:(NSObject <CSCaptureSourceProtocol>*)toCache;
+-(id) findCachedSourceForClass:(Class)klass uniqueID:(NSString *)uniqueID;
 
 
 @end

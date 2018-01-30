@@ -147,6 +147,9 @@
 }
 
 
+
+
+
 -(void)loadAllPythonPlugins
 {
     CSAnimationRunnerObj *animObj = [CaptureController sharedAnimationObj];
@@ -187,6 +190,7 @@
     
     if ([toAdd conformsToProtocol:@protocol(CSCaptureSourceProtocol)])
     {
+        
         addMap[@"plugin_type"] = @"Capture Source";
     } else if ([toAdd conformsToProtocol:@protocol(CSStreamServiceProtocol)]) {
         addMap[@"plugin_type"] = @"Streaming Service";

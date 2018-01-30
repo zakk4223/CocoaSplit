@@ -26,6 +26,8 @@
         _firstFrame = YES;
         _repeat = kCSFFMovieRepeatNone;
         self.uuid = [[NSUUID UUID] UUIDString];
+        self.allowDedup = NO; //Seeking makes this impossible
+        
         
     }
     return self;

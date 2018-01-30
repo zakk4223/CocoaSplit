@@ -36,11 +36,37 @@
 }
 
 
+-(id) cacheSource:(NSObject <CSCaptureSourceProtocol>*)toCache
+{
+    NSString *uid = nil;
+    
+    if (toCache.activeVideoDevice)
+    {
+        uid = toCache.activeVideoDevice.uniqueID;
+    }
+    return [self cacheSource:toCache uniqueID:uid];
+}
+
+
+-(id) findCachedSourceForClass:(Class)klass uniqueID:(NSString *)uniqueID
+{
+    NSString *ofType = NSStringFromClass(klass);
+    NSString *sourceKey = [NSString stringWithFormat:@"%@:%@", ofType, uniqueID];
+    NSObject <CSCaptureSourceProtocol> *cachedSrc =  [self.cacheMap objectForKey:sourceKey];
+    if (cachedSrc && !cachedSrc.allowDedup)
+    {
+        [self.cacheMap removeObjectForKey:sourceKey];
+        return nil;
+    }
+    
+    return cachedSrc;
+}
+
+
 -(id) cacheSource:(NSObject <CSCaptureSourceProtocol>*)toCache uniqueID:(NSString *)uniqueID
 {
     if (!toCache.allowDedup)
     {
-        NSLog(@"DID NOT ALLOW DEDUP %@", toCache);
         return toCache;
     }
     
@@ -51,14 +77,21 @@
     }
     NSString *ofType = NSStringFromClass([toCache class]);
     NSString *sourceKey = [NSString stringWithFormat:@"%@:%@", ofType, uniqueID];
-    id cachedSource = [self.cacheMap objectForKey:sourceKey];
+    NSObject <CSCaptureSourceProtocol> *cachedSource = [self.cacheMap objectForKey:sourceKey];
     if (!cachedSource)
     {
         cachedSource = toCache;
         [self.cacheMap setObject:toCache forKey:sourceKey];
         
     } else {
-        NSLog(@"USING CACHED SOURCE %@", cachedSource);
+        if (!cachedSource.allowDedup)
+        {
+            NSLog(@"EVICT CACHE");
+            cachedSource = toCache;
+            [self.cacheMap setObject:toCache forKey:sourceKey];
+        } else {
+            NSLog(@"USE CACHE %@", cachedSource);
+        }
     }
     
     return cachedSource;

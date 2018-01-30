@@ -2328,6 +2328,8 @@
         } else {
             self.selectedLayout = tmpLayout;
         }
+        
+        self.selectedLayout.ignorePinnedInputs = YES;
     }
     
     
@@ -2417,16 +2419,32 @@
 -(NSObject<CSInputSourceProtocol>*)inputSourceForPasteboardItem:(NSPasteboardItem *)item
 {
     
-
+    
     NSArray *captureClasses = [self captureSourcesForPasteboardItem:item];
     Class<CSCaptureSourceProtocol> useClass = captureClasses.firstObject;
     
     if (useClass)
     {
-        NSObject<CSCaptureSourceProtocol> *newSource = [useClass createSourceFromPasteboardItem:item];
-        InputSource *newInput = [[InputSource alloc] init];
-        [newInput setDirectVideoInput:newSource];
-        return newInput;
+        NSObject<CSCaptureSourceProtocol> *newSource = nil;
+        NSString *pbUUID = [useClass uniqueIDFromPasteboardItem:item];
+        if (pbUUID)
+        {
+            newSource = [[SourceCache sharedCache] findCachedSourceForClass:useClass uniqueID:pbUUID];
+        }
+        
+        if (!newSource)
+        {
+            newSource = [useClass createSourceFromPasteboardItem:item];
+            newSource = [[SourceCache sharedCache] cacheSource:newSource];
+        } else {
+        }
+        
+        if (newSource)
+        {
+            InputSource *newInput = [[InputSource alloc] init];
+            [newInput setDirectVideoInput:newSource];
+            return newInput;
+        }
     }
     
     return nil;
@@ -4615,6 +4633,7 @@
     self.stagingHidden = YES;
     self.stagingLayout = self.livePreviewView.sourceLayout;
     self.selectedLayout = self.livePreviewView.sourceLayout;
+    self.livePreviewView.sourceLayout.ignorePinnedInputs = NO;
     
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutModeChanged object:self];
 
@@ -4640,6 +4659,7 @@
     
     [self.canvasSplitView.animator display];
     self.livePreviewView.viewOnly = YES;
+    self.livePreviewView.sourceLayout.ignorePinnedInputs = YES;
     self.stagingHidden = NO;
     self.activePreviewView = self.stagingPreviewView;
     if (self.currentMidiLayoutLive)
@@ -4650,6 +4670,7 @@
         self.livePreviewView.midiActive = YES;
         self.stagingPreviewView.midiActive = NO;
     }
+    
     /*
     dispatch_async(_preview_queue, ^{
         [self newStagingFrameTimed];

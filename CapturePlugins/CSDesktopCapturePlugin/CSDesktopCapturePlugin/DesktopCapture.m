@@ -74,6 +74,7 @@
         self.canProvideTiming = YES;
         self.videoCaptureFPS = 60.0f;
         self.showCursor = YES;
+        self.allowDedup = NO; //Area capture means we can't dedup
         [self addObserver:self forKeyPath:@"propertiesChanged" options:NSKeyValueObservingOptionNew context:NULL];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationTerminating:) name:NSApplicationWillTerminateNotification object:nil];
         
@@ -377,6 +378,16 @@
 + (NSString *)label
 {
     return @"Desktop Capture";
+}
+
+-(bool)allowDedup
+{
+    
+    if (self.width > 0 || self.height > 0 || self.x_origin > 0 || self.y_origin > 0 || self.region_width > 0 || self.region_height > 0)
+    {
+        return NO;
+    }
+    return YES;
 }
 
 

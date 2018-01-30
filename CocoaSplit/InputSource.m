@@ -248,6 +248,8 @@ static NSArray *_sourceTypes = nil;
         
         self.videoInput = [aDecoder decodeObjectForKey:@"videoInput"];
 
+        self.videoInput = [[SourceCache sharedCache] cacheSource:self.videoInput];
+        
         if (self.videoInput)
         {
             

@@ -820,7 +820,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
             //Check if we already have a matching persistent UUID, if so, just use that instead
             NSObject <CSInputSourceProtocol> *newSrc = nil;
             newSrc = [self inputForUUID:uuid];
-            if (!newSrc.persistent)
+            if (!newSrc.persistent || self.ignorePinnedInputs)
             {
                 newSrc = [unarchiver decodeObjectForKey:uuid];
             }
@@ -971,7 +971,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
                 [retDict[@"scriptExisting"] addObject:sSrc];
             }
 
-            if (!sSrc.persistent)
+            if (!sSrc.persistent || self.ignorePinnedInputs)
             {
                 [retDict[@"removed"] addObject:sSrc];
             }
@@ -1763,7 +1763,14 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     //NSArray *newScript = diffResult[@"scriptNew"];
     NSArray *existingScript = diffResult[@"scriptExisting"];
 
-    NSPredicate *persistP = [NSPredicate predicateWithFormat:@"persistent == NO"];
+    NSPredicate *persistP;
+    
+    if (self.ignorePinnedInputs)
+    {
+        persistP = [NSPredicate predicateWithValue:YES];
+    } else {
+        [NSPredicate predicateWithFormat:@"persistent == NO"];
+    }
 
     NSMutableArray *removeInputs = [NSMutableArray array];
     
