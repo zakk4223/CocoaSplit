@@ -51,17 +51,61 @@
 -(id) findCachedSourceForClass:(Class)klass uniqueID:(NSString *)uniqueID
 {
     NSString *ofType = NSStringFromClass(klass);
-    NSString *sourceKey = [NSString stringWithFormat:@"%@:%@", ofType, uniqueID];
-    NSObject <CSCaptureSourceProtocol> *cachedSrc =  [self.cacheMap objectForKey:sourceKey];
-    if (cachedSrc && !cachedSrc.allowDedup)
+    NSObject <CSCaptureSourceProtocol> *cachedSrc =  [self retrieveSource:klass uniqueID:uniqueID];
+    return cachedSrc;
+}
+
+-(id) retrieveSource:(Class)cacheClass uniqueID:(NSString *)uniqueID
+{
+    
+    
+    if (!uniqueID)
     {
+        return nil;
+    }
+    
+    NSString *ofType = NSStringFromClass(cacheClass);
+    NSString *sourceKey = [NSString stringWithFormat:@"%@:%@", ofType, uniqueID];
+    NSObject <CSCaptureSourceProtocol> *cachedSource = [self.cacheMap objectForKey:sourceKey];
+    if (!cachedSource)
+    {
+        return nil;
+    }
+    
+    
+    if (!cachedSource.allowDedup)
+    {
+        //dedup status changed, evict from cache
+        NSLog(@"EVICT DEDUP CHANGED");
         [self.cacheMap removeObjectForKey:sourceKey];
         return nil;
     }
     
-    return cachedSrc;
+    NSString *currentUID = nil;
+    
+    if (cachedSource.activeVideoDevice)
+    {
+        currentUID = cachedSource.activeVideoDevice.uniqueID;
+    }
+    
+    if (!currentUID)
+    {
+        NSLog(@"EVICT NO CURRENT ID");
+        [self.cacheMap removeObjectForKey:sourceKey];
+        return nil;
+    }
+    
+    if (![currentUID isEqualToString:uniqueID])
+    {
+        NSLog(@"EVICT + REPLACE ID CHANGED");
+        [self.cacheMap removeObjectForKey:sourceKey];
+        NSString *newKey = [NSString stringWithFormat:@"%@:%@", ofType, currentUID];
+        [self.cacheMap setObject:cachedSource forKey:newKey];
+        return nil;
+    }
+    
+    return cachedSource;
 }
-
 
 -(id) cacheSource:(NSObject <CSCaptureSourceProtocol>*)toCache uniqueID:(NSString *)uniqueID
 {
@@ -75,25 +119,20 @@
         //don't cache things with null uniqueIDs, that just means they don't have an active source yet
         return toCache;
     }
-    NSString *ofType = NSStringFromClass([toCache class]);
-    NSString *sourceKey = [NSString stringWithFormat:@"%@:%@", ofType, uniqueID];
-    NSObject <CSCaptureSourceProtocol> *cachedSource = [self.cacheMap objectForKey:sourceKey];
+    
+    NSObject <CSCaptureSourceProtocol> *cachedSource = [self retrieveSource:toCache.class uniqueID:uniqueID];
+
     if (!cachedSource)
     {
+        NSLog(@"INSERTING INTO CACHE %@", toCache);
+        NSString *ofType = NSStringFromClass([toCache class]);
+        NSString *sourceKey = [NSString stringWithFormat:@"%@:%@", ofType, uniqueID];
         cachedSource = toCache;
         [self.cacheMap setObject:toCache forKey:sourceKey];
-        
+
     } else {
-        if (!cachedSource.allowDedup)
-        {
-            NSLog(@"EVICT CACHE");
-            cachedSource = toCache;
-            [self.cacheMap setObject:toCache forKey:sourceKey];
-        } else {
-            NSLog(@"USE CACHE %@", cachedSource);
-        }
+        NSLog(@"USED CACHE %@", cachedSource);
     }
-    
     return cachedSource;
 }
 
