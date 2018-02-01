@@ -256,6 +256,11 @@
     tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Clone" action:@selector(cloneInputSource:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
     
+    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Clone Without Cache" action:@selector(cloneInputSourceNoCache:) keyEquivalent:@"" atIndex:idx++];
+    tmp.target = self;
+    tmp.alternate = YES;
+    tmp.keyEquivalentModifierMask = NSAlternateKeyMask;
+    
     NSString *freezeString = @"Freeze";
     if (self.selectedSource.isFrozen)
     {
@@ -1410,6 +1415,36 @@
 
 
 
+-(IBAction)cloneInputSourceNoCache:(id)sender
+{
+    InputSource *toClone = nil;
+    
+    if (sender)
+    {
+        if ([sender isKindOfClass:[NSMenuItem class]])
+        {
+            NSMenuItem *item = (NSMenuItem *)sender;
+            toClone = (InputSource *)item.representedObject;
+        } else if ([sender isKindOfClass:[InputSource class]]) {
+            toClone = (InputSource *)sender;
+        }
+    }
+    
+    if (!toClone)
+    {
+        toClone = self.selectedSource;
+    }
+    
+    if (toClone)
+    {
+        InputSource *newSource = [toClone cloneInputNoCache];
+        [self.sourceLayout addSource:newSource];
+        
+        [[self.undoManager prepareWithInvocationTarget:self] undoCloneInput:newSource.uuid parentUUID:toClone.uuid];
+    }
+}
+
+
 - (IBAction)cloneInputSource:(id)sender
 {
     
@@ -1433,7 +1468,7 @@
 
     if (toClone)
     {
-        InputSource *newSource = toClone.copy;
+        InputSource *newSource = [toClone cloneInput];
         [self.sourceLayout addSource:newSource];
         
         [[self.undoManager prepareWithInvocationTarget:self] undoCloneInput:newSource.uuid parentUUID:toClone.uuid];

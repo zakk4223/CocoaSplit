@@ -262,6 +262,8 @@ typedef enum resize_style_t {
 
 -(void)updateLayer:(void (^)(CALayer *layer))updateBlock;
 
+-(instancetype)cloneInput;
+-(instancetype)cloneInputNoCache;
 
 -(void) setDirectVideoInput:(NSObject <CSCaptureSourceProtocol> *)videoInput;
 

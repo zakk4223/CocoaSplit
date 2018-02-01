@@ -61,16 +61,45 @@ static NSArray *_sourceTypes = nil;
 @synthesize compositingFilterName = _compositingFilterName;
 
 
+
+
+-(instancetype)cloneInput
+{
+    [CATransaction begin];
+
+    InputSource *newSource = self.copy;
+    newSource.videoInput = self.videoInput;
+    [newSource registerVideoInput:self.videoInput];
+    newSource.layer.sourceLayer = newSource->_currentLayer;
+    [CATransaction commit];
+
+    return newSource;
+}
+
+-(instancetype)cloneInputNoCache
+{
+    [CATransaction begin];
+    InputSource *newSource = self.copy;
+    newSource.videoInput = self.videoInput.copy;
+    newSource.videoInput.allowDedup = NO;
+    [newSource registerVideoInput:newSource.videoInput];
+    newSource.layer.sourceLayer = newSource->_currentLayer;
+
+    [CATransaction commit];
+    
+    return newSource;
+}
+
+
+
 -(instancetype)copyWithZone:(NSZone *)zone
 {
     [CATransaction begin];
     InputSource *newSource = [super copyWithZone:zone];
     newSource.name = _editedName;
 
-    newSource.videoInput = self.videoInput;
-    [newSource registerVideoInput:self.videoInput];
+
     //newSource->_currentLayer = [self.videoInput layerForInput:newSource];
-    newSource.layer.sourceLayer = newSource->_currentLayer;
     
     newSource.rotationAngle = self.rotationAngle;
     newSource.rotationAngleY = self.rotationAngleY;

@@ -269,6 +269,10 @@
             const char *propName = property_getName(prop);
             
             NSString *pName = [[NSString alloc] initWithBytes:propName length:strlen(propName) encoding:NSUTF8StringEncoding];
+            if ([pName isEqualToString:@"allLayers"])
+            {
+                continue;
+            }
             id propertyValue = [self valueForKey:pName];
             
             [newCopy setValue:propertyValue forKey:pName];
@@ -313,6 +317,8 @@
         
         
         //[_allInputs addObject:inputsrc];
+        
+        NSLog(@"ADDING %@ TO MAP FOR %@ %ld", inputsrc, self, [self.allLayers count]);
         
         [self.allLayers setObject:newLayer forKey:inputsrc];
     }

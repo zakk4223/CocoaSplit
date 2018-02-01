@@ -50,7 +50,6 @@
 
 -(id) findCachedSourceForClass:(Class)klass uniqueID:(NSString *)uniqueID
 {
-    NSString *ofType = NSStringFromClass(klass);
     NSObject <CSCaptureSourceProtocol> *cachedSrc =  [self retrieveSource:klass uniqueID:uniqueID];
     return cachedSrc;
 }
