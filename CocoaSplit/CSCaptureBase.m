@@ -58,7 +58,7 @@
 @synthesize activeVideoDevice = _activeVideoDevice;
 @synthesize allowScaling = _allowScaling;
 @synthesize timerDelegate = _timerDelegate;
-
+@synthesize cachePersistent = _cachePersistent;
 
 
 +(NSString *) label
@@ -114,6 +114,7 @@
 {
     [aCoder encodeObject:self.activeVideoDevice.uniqueID forKey:@"active_uniqueID"];
     [aCoder encodeBool:self.allowDedup forKey:@"allowDedup"];
+    [aCoder encodeBool:self.cachePersistent forKey:@"cachePersistent"];
 }
 
 
@@ -125,6 +126,8 @@
         self.allowDedup = [aDecoder decodeBoolForKey:@"allowDedup"];
         self.savedUniqueID = [aDecoder decodeObjectForKey:@"active_uniqueID"];
         [self setDeviceForUniqueID:self.savedUniqueID];
+        self.cachePersistent = [aDecoder decodeBoolForKey:@"cachePersistent"];
+
     }
     
     return self;
@@ -179,6 +182,24 @@
     }
     return configViewController;
     
+}
+
+
+-(void)setCachePersistent:(bool)cachePersistent
+{
+    _cachePersistent = cachePersistent;
+    
+    if (cachePersistent)
+    {
+        [[SourceCache sharedCache] cacheSourcePersistent:self];
+    } else {
+        [[SourceCache sharedCache] removePersistentSource:self];
+    }
+}
+
+-(bool)cachePersistent
+{
+    return _cachePersistent;
 }
 
 
@@ -317,9 +338,6 @@
         
         
         //[_allInputs addObject:inputsrc];
-        
-        NSLog(@"ADDING %@ TO MAP FOR %@ %ld", inputsrc, self, [self.allLayers count]);
-        
         [self.allLayers setObject:newLayer forKey:inputsrc];
     }
 

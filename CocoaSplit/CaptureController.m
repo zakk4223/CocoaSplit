@@ -2226,15 +2226,6 @@
     [self buildExtrasMenu];
     
     
-    if ([saveRoot objectForKey:@"stagingHidden"])
-    {
-        BOOL stagingHidden = [[saveRoot valueForKeyPath:@"stagingHidden"] boolValue];
-        self.stagingHidden = stagingHidden;
-    }
-    if (self.stagingHidden)
-    {
-        [self hideStagingView];
-    }
 
     
     self.useMidiLiveChannelMapping   = [[saveRoot valueForKey:@"useMidiLiveChannelMapping"] boolValue];
@@ -2351,6 +2342,17 @@
         
         //[self.stagingLayout mergeSourceLayout:tmpLayout withLayer:nil];
     }
+    
+    if ([saveRoot objectForKey:@"stagingHidden"])
+    {
+        BOOL stagingHidden = [[saveRoot valueForKeyPath:@"stagingHidden"] boolValue];
+        self.stagingHidden = stagingHidden;
+    }
+    if (self.stagingHidden)
+    {
+        [self hideStagingView];
+    }
+
     
     self.inputLibrary = [saveRoot valueForKey:@"inputLibrary"];
     if (!self.inputLibrary)

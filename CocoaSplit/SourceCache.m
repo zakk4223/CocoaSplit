@@ -6,7 +6,7 @@
 //
 
 #import "SourceCache.h"
-
+#import "CSCaptureBaseInternal.h"
 
 @implementation SourceCache
 
@@ -31,8 +31,55 @@
     if (self = [super init])
     {
         self.cacheMap = [NSMapTable strongToWeakObjectsMapTable];
+        self.persistentMap = [NSMutableDictionary dictionary];
     }
     return self;
+}
+
+
+
+-(id) removePersistentSource:(NSObject <CSCaptureSourceProtocol>*)toRemove
+{
+    NSString *uid = nil;
+    NSString *sourceKey = nil;
+    
+    if (toRemove.activeVideoDevice)
+    {
+        uid = toRemove.activeVideoDevice.uniqueID;
+    }
+    
+    if (uid)
+    {
+        NSString *ofType = NSStringFromClass(toRemove.class);
+        sourceKey = [NSString stringWithFormat:@"%@:%@", ofType, uid];
+        [self.persistentMap removeObjectForKey:sourceKey];
+    }
+    return toRemove;
+}
+
+
+-(id) cacheSourcePersistent:(NSObject <CSCaptureSourceProtocol>*)toCache
+{
+    
+    NSString *uid = nil;
+    NSString *sourceKey = nil;
+    
+    
+    if (toCache.activeVideoDevice)
+    {
+        uid = toCache.activeVideoDevice.uniqueID;
+        
+    }
+    
+    if (uid)
+    {
+        NSString *ofType = NSStringFromClass(toCache.class);
+        sourceKey = [NSString stringWithFormat:@"%@:%@", ofType, uid];
+        //NSLog(@"ADD CACHE %@ %@", sourceKey, toCache);
+        [self.persistentMap setObject:toCache forKey:sourceKey];
+    }
+
+    return toCache;
 }
 
 
@@ -43,6 +90,7 @@
     if (toCache.activeVideoDevice)
     {
         uid = toCache.activeVideoDevice.uniqueID;
+        
     }
     return [self cacheSource:toCache uniqueID:uid];
 }
@@ -65,7 +113,15 @@
     
     NSString *ofType = NSStringFromClass(cacheClass);
     NSString *sourceKey = [NSString stringWithFormat:@"%@:%@", ofType, uniqueID];
-    NSObject <CSCaptureSourceProtocol> *cachedSource = [self.cacheMap objectForKey:sourceKey];
+    NSObject <CSCaptureSourceProtocol> *cachedSource = [self.persistentMap objectForKey:sourceKey];
+
+    if (!cachedSource)
+    {
+        cachedSource = [self.cacheMap objectForKey:sourceKey];
+
+    }
+    
+    
     if (!cachedSource)
     {
         return nil;
@@ -75,8 +131,9 @@
     if (!cachedSource.allowDedup)
     {
         //dedup status changed, evict from cache
-        NSLog(@"EVICT DEDUP CHANGED");
+        //NSLog(@"EVICT DEDUP CHANGED");
         [self.cacheMap removeObjectForKey:sourceKey];
+        [self.persistentMap removeObjectForKey:sourceKey];
         return nil;
     }
     
@@ -89,17 +146,27 @@
     
     if (!currentUID)
     {
-        NSLog(@"EVICT NO CURRENT ID");
+        //NSLog(@"EVICT NO CURRENT ID");
         [self.cacheMap removeObjectForKey:sourceKey];
+        [self.persistentMap removeObjectForKey:sourceKey];
+
         return nil;
     }
     
     if (![currentUID isEqualToString:uniqueID])
     {
-        NSLog(@"EVICT + REPLACE ID CHANGED");
+        //NSLog(@"EVICT + REPLACE ID CHANGED");
         [self.cacheMap removeObjectForKey:sourceKey];
+        CSCaptureBase *persistentSource = [self.persistentMap objectForKey:sourceKey];
+        [self.persistentMap removeObjectForKey:sourceKey];
         NSString *newKey = [NSString stringWithFormat:@"%@:%@", ofType, currentUID];
         [self.cacheMap setObject:cachedSource forKey:newKey];
+        
+        if (persistentSource && persistentSource.cachePersistent)
+        {
+            [self.persistentMap setObject:persistentSource forKey:newKey];
+        }
+
         return nil;
     }
     
@@ -123,14 +190,14 @@
 
     if (!cachedSource)
     {
-        NSLog(@"INSERTING INTO CACHE %@", toCache);
+        //NSLog(@"INSERTING INTO CACHE %@", toCache);
         NSString *ofType = NSStringFromClass([toCache class]);
         NSString *sourceKey = [NSString stringWithFormat:@"%@:%@", ofType, uniqueID];
         cachedSource = toCache;
         [self.cacheMap setObject:toCache forKey:sourceKey];
 
     } else {
-        NSLog(@"USED CACHE %@", cachedSource);
+        //NSLog(@"USED CACHE %@", cachedSource);
     }
     return cachedSource;
 }

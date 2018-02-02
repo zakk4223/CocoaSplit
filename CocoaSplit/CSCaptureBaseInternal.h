@@ -17,7 +17,7 @@ typedef enum frame_render_behavior_t {
 
 @class InputSource;
 
-@interface CSCaptureBase : NSObject <NSCoding, NSCopying>
+@interface CSCaptureBase : NSObject <NSCoding, NSCopying, CSCaptureSourceProtocol>
 
 
 @property CSAbstractCaptureDevice *activeVideoDevice;
@@ -33,6 +33,7 @@ typedef enum frame_render_behavior_t {
 
 
 @property (assign) bool allowDedup;
+@property (assign) bool cachePersistent;
 
 
 //Set this to false if you don't want to be scaled. Instead of this source being forced to scale to the size of the input box
