@@ -264,6 +264,7 @@ typedef enum resize_style_t {
 
 -(instancetype)cloneInput;
 -(instancetype)cloneInputNoCache;
+-(void)makeSourcePrivate;
 
 -(void) setDirectVideoInput:(NSObject <CSCaptureSourceProtocol> *)videoInput;
 

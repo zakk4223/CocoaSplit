@@ -261,6 +261,11 @@
     tmp.alternate = YES;
     tmp.keyEquivalentModifierMask = NSAlternateKeyMask;
     
+    tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Make Source Private" action:@selector(privatizeSource:) keyEquivalent:@"" atIndex:idx++];
+    tmp.target = self;
+    tmp.alternate = YES;
+    tmp.keyEquivalentModifierMask = NSControlKeyMask;
+    
     NSString *freezeString = @"Freeze";
     if (self.selectedSource.isFrozen)
     {
@@ -1413,6 +1418,34 @@
     }
 }
 
+
+
+-(void) privatizeSource:(id)sender //RIP ronpaulblimp.com
+
+{
+    InputSource *toClone = nil;
+    
+    if (sender)
+    {
+        if ([sender isKindOfClass:[NSMenuItem class]])
+        {
+            NSMenuItem *item = (NSMenuItem *)sender;
+            toClone = (InputSource *)item.representedObject;
+        } else if ([sender isKindOfClass:[InputSource class]]) {
+            toClone = (InputSource *)sender;
+        }
+    }
+    
+    if (!toClone)
+    {
+        toClone = self.selectedSource;
+    }
+    
+    if (toClone)
+    {
+        [toClone makeSourcePrivate];
+    }
+}
 
 
 -(IBAction)cloneInputSourceNoCache:(id)sender

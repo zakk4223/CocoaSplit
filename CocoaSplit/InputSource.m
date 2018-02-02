@@ -63,6 +63,19 @@ static NSArray *_sourceTypes = nil;
 
 
 
+-(void)makeSourcePrivate
+{
+    [CATransaction begin];
+    CSCaptureBase<CSCaptureSourceProtocol,CSCaptureBaseInputFrameTickProtocol> *newCapture = self.videoInput.copy;
+    newCapture.allowDedup = NO;
+    [self deregisterVideoInput:self.videoInput];
+    self.videoInput = newCapture;
+    [self registerVideoInput:self.videoInput];
+    self.layer.sourceLayer = _currentLayer;
+    [CATransaction commit];
+}
+
+
 -(instancetype)cloneInput
 {
     [CATransaction begin];
@@ -71,6 +84,8 @@ static NSArray *_sourceTypes = nil;
     newSource.videoInput = self.videoInput;
     [newSource registerVideoInput:self.videoInput];
     newSource.layer.sourceLayer = newSource->_currentLayer;
+    newSource.name = _editedName;
+
     [CATransaction commit];
 
     return newSource;
@@ -84,6 +99,8 @@ static NSArray *_sourceTypes = nil;
     newSource.videoInput.allowDedup = NO;
     [newSource registerVideoInput:newSource.videoInput];
     newSource.layer.sourceLayer = newSource->_currentLayer;
+    newSource.name = _editedName;
+
 
     [CATransaction commit];
     
