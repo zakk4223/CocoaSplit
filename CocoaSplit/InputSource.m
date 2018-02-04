@@ -682,6 +682,7 @@ static NSArray *_sourceTypes = nil;
     forInput.inputSource = self;
     forInput.isLive = self.is_live;
     [forInput addObserver:self forKeyPath:@"captureName" options:NSKeyValueObservingOptionNew context:NULL];
+    self.name = _editedName;
     _currentLayer = [forInput createNewLayerForInput:self];
     
 
