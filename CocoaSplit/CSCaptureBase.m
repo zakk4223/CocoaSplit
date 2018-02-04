@@ -387,7 +387,6 @@
         
         if (self.allLayers.count == 0 && !self.cachePersistent)
         {
-            NSLog(@"WILL DELETE %d", self.cachePersistent);
             [self willDelete];
         }
     }

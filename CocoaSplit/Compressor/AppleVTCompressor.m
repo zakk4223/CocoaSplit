@@ -222,7 +222,7 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
     VTCopyVideoEncoderList(NULL, &encoders);
     
     
-    NSLog(@"ENCODERS %@", encoders);
+    //NSLog(@"ENCODERS %@", encoders);
     NSArray *nsEnc = (__bridge NSArray *)(encoders);
     
     for (NSDictionary *encode in nsEnc)

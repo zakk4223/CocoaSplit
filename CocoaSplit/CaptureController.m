@@ -2222,7 +2222,6 @@
     
     self.extraPluginsSaveData = [saveRoot valueForKey:@"extraPluginsSaveData"];
     [self migrateDefaultCompressor:saveRoot];
-    NSLog(@"COMPRESSORS %@", self.compressors);
     [self buildExtrasMenu];
     
     

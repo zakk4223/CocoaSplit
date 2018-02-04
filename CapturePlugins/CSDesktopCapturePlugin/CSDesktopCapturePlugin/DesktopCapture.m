@@ -170,7 +170,6 @@
     int width;
     int height;
     
-    NSLog(@"SETUP DISPLAY STERAM");
     _lastSize = CGSizeZero;
     
     if (_displayStreamRef)
@@ -379,7 +378,6 @@
     
     if (self.width > 0 || self.height > 0 || self.x_origin > 0 || self.y_origin > 0 || self.region_width > 0 || self.region_height > 0)
     {
-        NSLog(@"NO DEDUP");
         return NO;
     }
     return YES;
