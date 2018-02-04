@@ -59,9 +59,9 @@
 }
 
 
--(void)encodeWithCoder:(NSCoder *)aCoder
+-(void)saveWithCoder:(NSCoder *)aCoder
 {
-    [super encodeWithCoder:aCoder];
+    [super saveWithCoder:aCoder];
     
     NSData *attrData = [NSKeyedArchiver archivedDataWithRootObject:self.fontAttributes];
     
@@ -73,48 +73,41 @@
 }
 
 
--(instancetype)initWithCoder:(NSCoder *)aDecoder
+-(void)restoreWithCoder:(NSCoder *)aDecoder
 {
-    if (self = [super initWithCoder:aDecoder])
+    
+    [super restoreWithCoder:aDecoder];
+    
+    if (!self.activeVideoDevice)
     {
+        self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
+        self.activeVideoDevice.uniqueID = [[CSPluginServices sharedPluginServices] generateUUID];
         
-        if (!self.activeVideoDevice)
+    }
+    _text = [aDecoder decodeObjectForKey:@"text"];
+    NSFont *savedFont = [aDecoder decodeObjectForKey:@"font"];
+    if (savedFont)
+    {
+        _font = savedFont;
+        
+    }
+    NSDictionary *savedfontAttributes = [aDecoder decodeObjectForKey:@"fontAttributes"];
+    if (savedfontAttributes)
+    {
+        _fontAttributes = savedfontAttributes;
+    } else {
+        NSData *encodedAttrData = [aDecoder decodeObjectForKey:@"fontAttributesData"];
+        if (encodedAttrData)
         {
-            self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
-            self.activeVideoDevice.uniqueID = [[CSPluginServices sharedPluginServices] generateUUID];
-            
+            _fontAttributes = [NSKeyedUnarchiver unarchiveObjectWithData:encodedAttrData];
         }
-        _text = [aDecoder decodeObjectForKey:@"text"];
-        NSFont *savedFont = [aDecoder decodeObjectForKey:@"font"];
-        if (savedFont)
-        {
-            _font = savedFont;
-            
-        }
-        
-        
-        
-        
-        NSDictionary *savedfontAttributes = [aDecoder decodeObjectForKey:@"fontAttributes"];
-        if (savedfontAttributes)
-        {
-            _fontAttributes = savedfontAttributes;
-        } else {
-            NSData *encodedAttrData = [aDecoder decodeObjectForKey:@"fontAttributesData"];
-            if (encodedAttrData)
-            {
-                _fontAttributes = [NSKeyedUnarchiver unarchiveObjectWithData:encodedAttrData];
-            }
-
-        }
-        
-        _wrapped = [aDecoder decodeBoolForKey:@"wrapped"];
-        _alignmentMode = [aDecoder decodeObjectForKey:@"alignmentMode"];
         
     }
     
+    _wrapped = [aDecoder decodeBoolForKey:@"wrapped"];
+    _alignmentMode = [aDecoder decodeObjectForKey:@"alignmentMode"];
+    
     [self buildString];
-    return self;
 }
 
 -(void)setDeviceForUniqueID:(NSString *)uniqueID

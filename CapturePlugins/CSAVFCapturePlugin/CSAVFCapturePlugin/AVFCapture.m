@@ -23,9 +23,9 @@
 
 
 
--(void)encodeWithCoder:(NSCoder *)aCoder
+-(void)saveWithCoder:(NSCoder *)aCoder
 {
-    [super encodeWithCoder:aCoder];
+    [super saveWithCoder:aCoder];
     
     if (self.activeVideoDevice)
     {
@@ -42,20 +42,14 @@
 }
 
 
--(id) initWithCoder:(NSCoder *)aDecoder
+-(void)restoreWithCoder:(NSCoder *)aDecoder
 {
-    if (self = [super initWithCoder:aDecoder])
-    {
-        
-        
+    [super restoreWithCoder:aDecoder];
+    
         _savedFormatData = [aDecoder decodeObjectForKey:@"activeVideoFormat"];
         _savedFrameRateData = [aDecoder decodeObjectForKey:@"activeVideoFramerate"];
         [self restoreFormatAndFrameRate];
         self.renderType = (frame_render_behavior)[aDecoder decodeIntForKey:@"renderType"];
-        
-    }
-    
-    return self;
 }
 
 +(NSString *)label

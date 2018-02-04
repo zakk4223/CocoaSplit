@@ -31,9 +31,9 @@
 }
 
 
--(void)encodeWithCoder:(NSCoder *)aCoder
+-(void)saveWithCoder:(NSCoder *)aCoder
 {
-    [super encodeWithCoder:aCoder];
+    [super saveWithCoder:aCoder];
     
     [aCoder encodeDouble:self.currentInterval forKey:@"currentInterval"];
     [aCoder encodeBool:self.restartWhenLive forKey:@"restartWhenLive"];
@@ -44,22 +44,20 @@
     
 }
 
--(instancetype)initWithCoder:(NSCoder *)aDecoder
+-(void)restoreWithCoder:(NSCoder *)aDecoder
 {
-    if (self = [super initWithCoder:aDecoder])
+    [super restoreWithCoder:aDecoder];
+    
+    if ([aDecoder containsValueForKey:@"countdownStart"])
     {
-        if ([aDecoder containsValueForKey:@"countdownStart"])
-        {
-            self.countdownStart = [aDecoder decodeDoubleForKey:@"countdownStart"];
-        }
-        self.currentInterval = [aDecoder decodeDoubleForKey:@"currentInterval"];
-        self.restartWhenLive = [aDecoder decodeBoolForKey:@"restartWhenLive"];
-        if (self.restartWhenLive)
-        {
-            [self reset];
-        }
+        self.countdownStart = [aDecoder decodeDoubleForKey:@"countdownStart"];
     }
-    return self;
+    self.currentInterval = [aDecoder decodeDoubleForKey:@"currentInterval"];
+    self.restartWhenLive = [aDecoder decodeBoolForKey:@"restartWhenLive"];
+    if (self.restartWhenLive)
+    {
+        [self reset];
+    }
 }
 
 

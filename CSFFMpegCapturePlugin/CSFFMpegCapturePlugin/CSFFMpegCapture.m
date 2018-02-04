@@ -20,7 +20,7 @@
         _lastSize = NSZeroSize;
         
         self.needsSourceSelection = NO;
-
+        
         self.updateMovieTime = YES;
         self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
         _firstFrame = YES;
@@ -109,7 +109,7 @@
     _player.itemStarted = ^(CSFFMpegInput *item) { [weakSelf itemStarted:item]; };
     _player.queueStateChanged = ^() { [weakSelf queueChanged]; };
     _player.repeat = _repeat;
-
+    
     
     if (self.isLive)
     {
@@ -118,7 +118,7 @@
 }
 
 
--(void)encodeWithCoder:(NSCoder *)aCoder
+-(void)saveWithCoder:(NSCoder *)aCoder
 {
     NSMutableArray *queuePaths = [[NSMutableArray alloc] init];
     
@@ -148,11 +148,10 @@
 }
 
 
--(instancetype)initWithCoder:(NSCoder *)aDecoder
+-(void)restoreWithCoder:(NSCoder *)aDecoder
 {
-    if (self = [self init])
-    {
-        
+
+    
         CSFFMpegInput *nowPlayingInput = nil;
         NSString *nowPlayingPath = [aDecoder decodeObjectForKey:@"nowPlayingPath"];
         
@@ -195,9 +194,7 @@
         
         self.playWhenLive = [aDecoder decodeBoolForKey:@"playWhenLive"];
         self.repeat = [aDecoder decodeIntForKey:@"repeat"];
-    }
-    
-    return self;
+
 }
 
 

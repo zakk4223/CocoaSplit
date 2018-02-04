@@ -148,6 +148,8 @@ typedef enum frame_render_behavior_t {
 +(NSSet *)mediaUTIs;
 -(void)willExport;
 -(void)didExport;
+-(void) restoreWithCoder:(NSCoder *)aDecoder;
+-(void) saveWithCoder:(NSCoder *)aCoder;
 
 
 

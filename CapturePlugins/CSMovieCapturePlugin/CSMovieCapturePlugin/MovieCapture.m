@@ -127,7 +127,7 @@ void tapProcess(MTAudioProcessingTapRef tap, CMItemCount numberFrames, MTAudioPr
         self.needsSourceSelection = NO;
         self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
         self.playPauseTitle = @"Play";
-        
+        self.allowDedup = NO;
         
         
         

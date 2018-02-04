@@ -19,8 +19,10 @@
 
 
 
--(void)encodeWithCoder:(NSCoder *)aCoder
+-(void)saveWithCoder:(NSCoder *)aCoder
 {
+    [super saveWithCoder:aCoder];
+    
     [aCoder encodeObject:self.imagePath forKey:@"imagePath"];
     if (_imageData)
     {
@@ -30,19 +32,16 @@
 
 
 
--(id) initWithCoder:(NSCoder *)aDecoder
+-(void)restoreWithCoder:(NSCoder *)aDecoder
 {
-    if (self = [self init])
-    {
-        if ([aDecoder containsValueForKey:@"imageData"])
-        {
-            _imageData = [aDecoder decodeObjectForKey:@"imageData"];
-            _wasLoadedFromData = YES;
-        }
-        self.imagePath = [aDecoder decodeObjectForKey:@"imagePath"];
-    }
+    [super restoreWithCoder:aDecoder];
     
-    return self;
+    if ([aDecoder containsValueForKey:@"imageData"])
+    {
+        _imageData = [aDecoder decodeObjectForKey:@"imageData"];
+        _wasLoadedFromData = YES;
+    }
+    self.imagePath = [aDecoder decodeObjectForKey:@"imagePath"];
 }
 
 
@@ -55,6 +54,7 @@
         self.needsSourceSelection = NO;
         self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
         _animation = nil;
+        self.allowDedup = YES;
         
      }
     

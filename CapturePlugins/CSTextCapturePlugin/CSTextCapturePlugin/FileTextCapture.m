@@ -3,7 +3,6 @@
 //  CSTextCapturePlugin
 //
 //  Created by Zakk on 12/31/14.
-//  Copyright (c) 2014 Zakk. All rights reserved.
 //
 
 #import "FileTextCapture.h"
@@ -27,23 +26,21 @@
 }
 
 
--(void)encodeWithCoder:(NSCoder *)aCoder
+-(void)saveWithCoder:(NSCoder *)aCoder
 {
-    [super encodeWithCoder:aCoder];
+    [super saveWithCoder:aCoder];
     [aCoder encodeObject:self.currentFile forKey:@"currentFile"];
     [aCoder encodeInt:self.startLine forKey:@"startLine"];
     [aCoder encodeInt:self.lineLimit forKey:@"lineLimit"];
 }
 
--(instancetype)initWithCoder:(NSCoder *)aDecoder
+-(void)restoreWithCoder:(NSCoder *)aDecoder
 {
-    if (self = [super initWithCoder:aDecoder])
-    {
-        _lineLimit = [aDecoder decodeIntForKey:@"lineLimit"];
-        _startLine = [aDecoder decodeIntForKey:@"startLine"];
-        self.currentFile = [aDecoder decodeObjectForKey:@"currentFile"];
-    }
-    return self;
+    [super restoreWithCoder:aDecoder];
+    
+    _lineLimit = [aDecoder decodeIntForKey:@"lineLimit"];
+    _startLine = [aDecoder decodeIntForKey:@"startLine"];
+    self.currentFile = [aDecoder decodeObjectForKey:@"currentFile"];
 }
 
 

@@ -19,6 +19,7 @@
     if (self = [super init])
     {
         _ndi_dispatch = [CSNDICapture ndi_dispatch_ptr];
+        self.allowDedup = YES;
     }
     return self;
 }

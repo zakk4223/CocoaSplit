@@ -115,25 +115,45 @@
     [aCoder encodeObject:self.activeVideoDevice.uniqueID forKey:@"active_uniqueID"];
     [aCoder encodeBool:self.allowDedup forKey:@"allowDedup"];
     [aCoder encodeBool:self.cachePersistent forKey:@"cachePersistent"];
+    [self saveWithCoder:aCoder];
 }
 
 
 -(id) initWithCoder:(NSCoder *)aDecoder
 {
+    
     if (self = [self init])
     {
+        NSString *savedUniqueID = [aDecoder decodeObjectForKey:@"active_uniqueID"];
+        id newSelf = [[SourceCache sharedCache] findCachedSourceForClass:self.class uniqueID:savedUniqueID];
+        if (newSelf)
+        {
+            NSLog(@"NEW SELF %@",  newSelf);
+            return newSelf;
+        }
      
         self.allowDedup = [aDecoder decodeBoolForKey:@"allowDedup"];
         self.savedUniqueID = [aDecoder decodeObjectForKey:@"active_uniqueID"];
-        [self setDeviceForUniqueID:self.savedUniqueID];
         self.cachePersistent = [aDecoder decodeBoolForKey:@"cachePersistent"];
 
     }
     
+    [self restoreWithCoder:aDecoder];
+    
+    [self setDeviceForUniqueID:self.savedUniqueID];
     return self;
 }
 
+-(void) restoreWithCoder:(NSCoder *)aCoder
+{
+    
+}
 
+
+-(void) saveWithCoder:(NSCoder *)aDecoder
+{
+    
+}
 
 -(NSImage *)libraryImage
 {
@@ -172,13 +192,7 @@
         
         configViewController = [[viewClass alloc] initWithNibName:self.configurationViewName bundle:[NSBundle bundleForClass:self.class]];
         
-        if (configViewController)
-        {
-            
-            //Should probably make a base class for view controllers and put captureObj there
-            //but for now be gross.
-            [configViewController setValue:self forKey:@"captureObj"];
-        }
+
     }
     return configViewController;
     
@@ -371,8 +385,9 @@
         }
         
         
-        if (self.allLayers.count == 0)
+        if (self.allLayers.count == 0 && !self.cachePersistent)
         {
+            NSLog(@"WILL DELETE %d", self.cachePersistent);
             [self willDelete];
         }
     }

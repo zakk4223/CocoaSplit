@@ -26,27 +26,25 @@
         
         _nextCaptureTime = 0.0f;
         self.captureFPS = 30.0f;
+        self.allowDedup = YES;
     }
     return self;
 }
 
 
--(void)encodeWithCoder:(NSCoder *)aCoder
+-(void)saveWithCoder:(NSCoder *)aCoder
 {
-    [super encodeWithCoder:aCoder];
+    [super saveWithCoder:aCoder];
     [aCoder encodeFloat:self.captureFPS forKey:@"captureFPS"];
 }
 
 
 
--(id) initWithCoder:(NSCoder *)aDecoder
+-(void)restoreWithCoder:(NSCoder *)aDecoder
 {
-    if (self = [super initWithCoder:aDecoder])
-    {
-        self.captureFPS = [aDecoder decodeFloatForKey:@"captureFPS"];
-    }
+    [super restoreWithCoder:aDecoder];
     
-    return self;
+    self.captureFPS = [aDecoder decodeFloatForKey:@"captureFPS"];
 }
 
 

@@ -27,15 +27,16 @@
         _discoveryDev = new DeckLinkDeviceDiscovery(self);
         _discoveryDev->Enable();
         self.canProvideTiming = YES;
+        self.allowDedup = YES;
     }
     
     return self;
 }
 
 
--(void)encodeWithCoder:(NSCoder *)aCoder
+-(void)saveWithCoder:(NSCoder *)aCoder
 {
-    [super encodeWithCoder:aCoder];
+    [super saveWithCoder:aCoder];
     
     if (self.currentInput && self.currentInput.selectedDisplayMode)
     {
@@ -58,37 +59,30 @@
 }
 
 
--(id) initWithCoder:(NSCoder *)aDecoder
+-(void)restoreWithCoder:(NSCoder *)aDecoder
 {
-    if (self = [super initWithCoder:aDecoder])
+    [super restoreWithCoder:aDecoder];
+    
+    
+    if ([aDecoder containsValueForKey:@"selectedDisplayMode"])
     {
-        
-
-
-        
-        if ([aDecoder containsValueForKey:@"selectedDisplayMode"])
-        {
-            _restoredMode = [aDecoder decodeObjectForKey:@"selectedDisplayMode"];
-        }
-        
-        if ([aDecoder containsValueForKey:@"selectedPixelFormat"])
-        {
-            _restoredFormat = [aDecoder decodeObjectForKey:@"selectedPixelFormat"];
-        }
-        
-        if ([aDecoder containsValueForKey:@"activeConnection"])
-        {
-            _restoredInput = [aDecoder decodeObjectForKey:@"activeConnection"];
-        }
-        
-        
-        self.renderType = (frame_render_behavior)[aDecoder decodeIntForKey:@"renderType"];
-        [self restoreInputSettings];
-        
-        
+        _restoredMode = [aDecoder decodeObjectForKey:@"selectedDisplayMode"];
     }
     
-    return self;
+    if ([aDecoder containsValueForKey:@"selectedPixelFormat"])
+    {
+        _restoredFormat = [aDecoder decodeObjectForKey:@"selectedPixelFormat"];
+    }
+    
+    if ([aDecoder containsValueForKey:@"activeConnection"])
+    {
+        _restoredInput = [aDecoder decodeObjectForKey:@"activeConnection"];
+    }
+    
+    
+    self.renderType = (frame_render_behavior)[aDecoder decodeIntForKey:@"renderType"];
+    [self restoreInputSettings];
+    
 }
 
 -(void)restoreInputSettings

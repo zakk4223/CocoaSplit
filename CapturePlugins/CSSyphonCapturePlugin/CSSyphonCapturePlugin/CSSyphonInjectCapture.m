@@ -3,7 +3,6 @@
 //  CSSyphonCapturePlugin
 //
 //  Created by Zakk on 12/7/14.
-//  Copyright (c) 2014 Zakk. All rights reserved.
 //
 
 #import "CSSyphonInjectCapture.h"

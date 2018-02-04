@@ -2563,18 +2563,31 @@ static NSArray *_sourceTypes = nil;
 
 -(void) setActiveVideoDevice:(CSAbstractCaptureDevice *)activeVideoDevice
 {
-    if (self.videoInput)
+    
+    CSCaptureBase <CSCaptureSourceProtocol, CSCaptureBaseInputFrameTickProtocol> *useInput = self.videoInput;
+    
+    if (useInput)
     {
-        CSCaptureBase <CSCaptureSourceProtocol, CSCaptureBaseInputFrameTickProtocol> *useInput = [[SourceCache sharedCache] cacheSource:self.videoInput uniqueID:activeVideoDevice.uniqueID];
+        
+        if (self.videoInput.activeVideoDevice && self.videoInput.activeVideoDevice.uniqueID)
+        {
+            if (![activeVideoDevice.uniqueID isEqualToString:self.videoInput.activeVideoDevice.uniqueID])
+            {
+                //The active device changed, Create a new instance, set the device and then use that as our new input
+                useInput = useInput.copy;
+                useInput.activeVideoDevice = activeVideoDevice;
+            }
+        }
+        useInput = [[SourceCache sharedCache] cacheSource:useInput uniqueID:activeVideoDevice.uniqueID];
         
         if (useInput != self.videoInput)
         {
             [self deregisterVideoInput:self.videoInput];
             self.videoInput = useInput;
             [self registerVideoInput:self.videoInput];
+        } else {
+            self.videoInput.activeVideoDevice = activeVideoDevice;
         }
-        
-        self.videoInput.activeVideoDevice = activeVideoDevice;
     }
 }
 
@@ -2843,7 +2856,7 @@ static NSArray *_sourceTypes = nil;
     
     if (vcont)
     {
-        [vcont setValue:self.videoInput forKey:@"captureObj"];
+        [vcont bind:@"captureObj" toObject:self withKeyPath:@"videoInput" options:nil];
     }
     
     return vcont;

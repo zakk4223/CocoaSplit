@@ -22,26 +22,23 @@
 @synthesize renderType = _renderType;
 
 
--(void)encodeWithCoder:(NSCoder *)aCoder
+-(void)saveWithCoder:(NSCoder *)aCoder
 {
-    [super encodeWithCoder:aCoder];
+    [super saveWithCoder:aCoder];
     
     [aCoder encodeBool:self.isFlipped forKey:@"isFlipped"];
     [aCoder encodeInt:self.renderType forKey:@"renderType"];
 }
 
 
--(id) initWithCoder:(NSCoder *)aDecoder
+-(void)restoreWithCoder:(NSCoder *)aDecoder
 {
     
-    if (self = [super initWithCoder:aDecoder])
-    {
-        [self commonInit];
-        self.isFlipped = [aDecoder decodeBoolForKey:@"isFlipped"];
-        self.renderType = [aDecoder decodeIntForKey:@"renderType"];
-    }
+    [super restoreWithCoder:aDecoder];
     
-    return self;
+    [self commonInit];
+    self.isFlipped = [aDecoder decodeBoolForKey:@"isFlipped"];
+    self.renderType = [aDecoder decodeIntForKey:@"renderType"];
 }
 
 

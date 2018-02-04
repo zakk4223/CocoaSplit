@@ -24,9 +24,9 @@
 
 
 
--(void)encodeWithCoder:(NSCoder *)aCoder
+-(void)saveWithCoder:(NSCoder *)aCoder
 {
-    [super encodeWithCoder:aCoder];
+    [super saveWithCoder:aCoder];
     
     [aCoder encodeInt:self.width forKey:@"width"];
     [aCoder encodeInt:self.height forKey:@"height"];
@@ -41,26 +41,20 @@
 
 
 
--(id) initWithCoder:(NSCoder *)aDecoder
+-(void)restoreWithCoder:(NSCoder *)aDecoder
 {
     
-    if (self = [super initWithCoder:aDecoder])
-    {
-        _width = [aDecoder decodeIntForKey:@"width"];
-        _height = [aDecoder decodeIntForKey:@"height"];
-        _videoCaptureFPS = [aDecoder decodeDoubleForKey:@"videoCaptureFPS"];
-        _showCursor = [aDecoder decodeBoolForKey:@"showCursor"];
-        _region_width = [aDecoder decodeIntForKey:@"region_width"];
-        _region_height = [aDecoder decodeIntForKey:@"region_height"];
-        _x_origin = [aDecoder decodeIntForKey:@"x_origin"];
-        _y_origin = [aDecoder decodeIntForKey:@"y_origin"];
-        _renderType = [aDecoder decodeIntForKey:@"renderType"];
-        
-        
-    }
+    [super restoreWithCoder:aDecoder];
     
-    [self setupDisplayStream];
-    return self;
+    _width = [aDecoder decodeIntForKey:@"width"];
+    _height = [aDecoder decodeIntForKey:@"height"];
+    _videoCaptureFPS = [aDecoder decodeDoubleForKey:@"videoCaptureFPS"];
+    _showCursor = [aDecoder decodeBoolForKey:@"showCursor"];
+    _region_width = [aDecoder decodeIntForKey:@"region_width"];
+    _region_height = [aDecoder decodeIntForKey:@"region_height"];
+    _x_origin = [aDecoder decodeIntForKey:@"x_origin"];
+    _y_origin = [aDecoder decodeIntForKey:@"y_origin"];
+    _renderType = [aDecoder decodeIntForKey:@"renderType"];
 }
 
 
@@ -74,7 +68,6 @@
         self.canProvideTiming = YES;
         self.videoCaptureFPS = 60.0f;
         self.showCursor = YES;
-        self.allowDedup = NO; //Area capture means we can't dedup
         [self addObserver:self forKeyPath:@"propertiesChanged" options:NSKeyValueObservingOptionNew context:NULL];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationTerminating:) name:NSApplicationWillTerminateNotification object:nil];
         
@@ -177,6 +170,7 @@
     int width;
     int height;
     
+    NSLog(@"SETUP DISPLAY STERAM");
     _lastSize = CGSizeZero;
     
     if (_displayStreamRef)
@@ -385,6 +379,7 @@
     
     if (self.width > 0 || self.height > 0 || self.x_origin > 0 || self.y_origin > 0 || self.region_width > 0 || self.region_height > 0)
     {
+        NSLog(@"NO DEDUP");
         return NO;
     }
     return YES;
@@ -411,7 +406,6 @@
 
 -(void)willDelete
 {
-
     [self stopDisplayStream];
 
 }

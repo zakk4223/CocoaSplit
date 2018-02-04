@@ -21,10 +21,10 @@
 @synthesize rotateAngle = _rotateAngle;
 
 
--(void)encodeWithCoder:(NSCoder *)aCoder
+-(void)saveWithCoder:(NSCoder *)aCoder
 {
     
-    [super encodeWithCoder:aCoder];
+    [super saveWithCoder:aCoder];
 
     [aCoder encodeObject:self.lineColor forKey:@"lineColor"];
     [aCoder encodeObject:self.fillColor forKey:@"fillColor"];
@@ -34,21 +34,20 @@
     [aCoder encodeBool:self.flipY forKey:@"flipY"];
 }
 
--(instancetype) initWithCoder:(NSCoder *)aDecoder
+
+-(void)restoreWithCoder:(NSCoder *)aDecoder
 {
     //force python loading
+    [super restoreWithCoder:aDecoder];
     [CSShapeCaptureFactory sharedPathLoader];
-
-    if (self = [super initWithCoder:aDecoder])
-    {
-        self.lineColor = [aDecoder decodeObjectForKey:@"lineColor"];
-        self.fillColor = [aDecoder decodeObjectForKey:@"fillColor"];
-        self.lineWidth = [aDecoder decodeFloatForKey:@"lineWidth"];
-        self.rotateAngle = [aDecoder decodeFloatForKey:@"rotateAngle"];
-        self.flipX = [aDecoder decodeBoolForKey:@"flipX"];
-        self.flipY = [aDecoder decodeBoolForKey:@"flipY"];
-    }
-    return self;
+    
+    
+    self.lineColor = [aDecoder decodeObjectForKey:@"lineColor"];
+    self.fillColor = [aDecoder decodeObjectForKey:@"fillColor"];
+    self.lineWidth = [aDecoder decodeFloatForKey:@"lineWidth"];
+    self.rotateAngle = [aDecoder decodeFloatForKey:@"rotateAngle"];
+    self.flipX = [aDecoder decodeBoolForKey:@"flipX"];
+    self.flipY = [aDecoder decodeBoolForKey:@"flipY"];
 }
 
 
@@ -60,6 +59,7 @@
         _lineColor = [NSColor blackColor];
         _fillColor = [NSColor whiteColor];
         _lineWidth = 2.0f;
+        self.allowDedup = NO;
 
     }
     

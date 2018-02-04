@@ -33,22 +33,19 @@
     return self;
 }
 
--(instancetype)initWithCoder:(NSCoder *)aDecoder
+-(void)restoreWithCoder:(NSCoder *)aDecoder
 {
-    if (self = [super initWithCoder:aDecoder])
-    {
-        self.endDate = [aDecoder decodeObjectForKey:@"endDate"];
-        self.startDate = [aDecoder decodeObjectForKey:@"startDate"];
-        self.format = [aDecoder decodeObjectForKey:@"format"];
-        self.paused = [aDecoder decodeBoolForKey:@"paused"];
-    }
+    [super restoreWithCoder:aDecoder];
     
-    return self;
+    self.endDate = [aDecoder decodeObjectForKey:@"endDate"];
+    self.startDate = [aDecoder decodeObjectForKey:@"startDate"];
+    self.format = [aDecoder decodeObjectForKey:@"format"];
+    self.paused = [aDecoder decodeBoolForKey:@"paused"];
 }
 
--(void)encodeWithCoder:(NSCoder *)aCoder
+-(void)saveWithCoder:(NSCoder *)aCoder
 {
-    [super encodeWithCoder:aCoder];
+    [super saveWithCoder:aCoder];
     [aCoder encodeObject:self.endDate forKey:@"endDate"];
     [aCoder encodeObject:self.startDate forKey:@"startDate"];
     [aCoder encodeObject:self.format forKey:@"format"];

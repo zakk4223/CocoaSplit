@@ -31,26 +31,23 @@
 }
 
 
--(instancetype)initWithCoder:(NSCoder *)aDecoder
+-(void)restoreWithCoder:(NSCoder *)aDecoder
 {
-    if (self = [super initWithCoder:aDecoder])
-    {
-        self.formatter.dateStyle = [aDecoder decodeIntegerForKey:@"dateStyle"];
-        self.formatter.timeStyle = [aDecoder decodeIntegerForKey:@"timeStyle"];
-
-        if ([aDecoder containsValueForKey:@"format"])
-        {
-            self.format = [aDecoder decodeObjectForKey:@"format"];
-        }
-    }
+    [super restoreWithCoder:aDecoder];
     
-    return self;
+    self.formatter.dateStyle = [aDecoder decodeIntegerForKey:@"dateStyle"];
+    self.formatter.timeStyle = [aDecoder decodeIntegerForKey:@"timeStyle"];
+    
+    if ([aDecoder containsValueForKey:@"format"])
+    {
+        self.format = [aDecoder decodeObjectForKey:@"format"];
+    }
 }
 
 
--(void)encodeWithCoder:(NSCoder *)aCoder
+-(void)saveWithCoder:(NSCoder *)aCoder
 {
-    [super encodeWithCoder:aCoder];
+    [super saveWithCoder:aCoder];
 
     [aCoder encodeInteger:self.formatter.dateStyle forKey:@"dateStyle"];
     [aCoder encodeInteger:self.formatter.timeStyle forKey:@"timeStyle"];

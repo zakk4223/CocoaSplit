@@ -157,6 +157,9 @@ If your source is 'shared' between inputSources each new one will call this func
 +(NSString *)uniqueIDFromPasteboardItem:(NSPasteboardItem *)item;
 +(NSObject <CSCaptureSourceProtocol> *)createSourceFromPasteboardItem:(NSPasteboardItem *)item;
 +(NSSet *)mediaUTIs;
+-(void) restoreWithCoder:(NSCoder *)aDecoder;
+-(void) saveWithCoder:(NSCoder *)aCoder;
+
 
 
 

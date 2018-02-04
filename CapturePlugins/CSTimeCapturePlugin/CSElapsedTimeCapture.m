@@ -27,23 +27,20 @@
 }
 
 
--(instancetype)initWithCoder:(NSCoder *)aDecoder
+-(void)restoreWithCoder:(NSCoder *)aDecoder
 {
-    if (self = [super initWithCoder:aDecoder])
-    {
-        self.restartWhenLive = [aDecoder decodeBoolForKey:@"restartWhenLive"];
-        if (self.restartWhenLive)
-        {
-            self.startDate = [NSDate date];
-        }
-    }
+    [super restoreWithCoder:aDecoder];
     
-    return self;
+    self.restartWhenLive = [aDecoder decodeBoolForKey:@"restartWhenLive"];
+    if (self.restartWhenLive)
+    {
+        self.startDate = [NSDate date];
+    }
 }
 
--(void)encodeWithCoder:(NSCoder *)aCoder
+-(void)saveWithCoder:(NSCoder *)aCoder
 {
-    [super encodeWithCoder:aCoder];
+    [super saveWithCoder:aCoder];
     [aCoder encodeBool:self.restartWhenLive forKey:@"restartWhenLive"];
 }
 

@@ -1763,13 +1763,13 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     //NSArray *newScript = diffResult[@"scriptNew"];
     NSArray *existingScript = diffResult[@"scriptExisting"];
 
-    NSPredicate *persistP;
+    NSPredicate *persistP = nil;
     
     if (self.ignorePinnedInputs)
     {
         persistP = [NSPredicate predicateWithValue:YES];
     } else {
-        [NSPredicate predicateWithFormat:@"persistent == NO"];
+        persistP = [NSPredicate predicateWithFormat:@"persistent == NO"];
     }
 
     NSMutableArray *removeInputs = [NSMutableArray array];
