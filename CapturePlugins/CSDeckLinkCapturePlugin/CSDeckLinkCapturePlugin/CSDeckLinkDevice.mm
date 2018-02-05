@@ -58,18 +58,6 @@
 @synthesize activeConnection = _activeConnection;
 
 
-+(id) deviceCache
-{
-    static NSMutableDictionary *deviceCache = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        
-        deviceCache = [NSMutableDictionary dictionary];
-    });
-    
-    return deviceCache;
-}
-
 
 +(NSString *)uniqueIDForDevice:(IDeckLink *)device
 {
@@ -97,16 +85,10 @@
 
 -(instancetype) initWithDevice:(IDeckLink *)device
 {
-    NSMutableDictionary *cachemap = [CSDeckLinkDevice deviceCache];
     NSString *uid = [CSDeckLinkDevice uniqueIDForDevice:device];
     
-    CSDeckLinkDevice *cachedSession = [cachemap objectForKey:uid];
-    
-    
-    if (cachedSession)
-    {
-        self = cachedSession;
-    } else if (self = [super init]) {
+
+    if (self = [super init]) {
         self.canDetectFormat = NO;
 
         
@@ -156,7 +138,6 @@
                 deviceAttributes->Release();
             
             }
-            [cachemap setObject:self forKey:self.uniqueID];
 
         }
 
@@ -469,6 +450,8 @@
 {
     
 
+    @autoreleasepool
+    {
     NSHashTable *outcopy;
     @synchronized(self)
     {
@@ -478,6 +461,7 @@
     for (CSDeckLinkCapture *capture in outcopy)
     {
         [capture frameArrived:frame];
+    }
     }
 }
 
@@ -500,16 +484,22 @@
 
 -(void)removeOutput:(CSDeckLinkCapture *)output
 {
+    bool doStop = NO;
+    
     @synchronized(self)
     {
         [_outputs removeObject:output];
         
         if (_outputs.count == 0)
         {
-            [self stopCapture];
+            doStop = YES;
         }
     }
     
+    if (doStop)
+    {
+        [self stopCapture];
+    }   
 }
 
 @end

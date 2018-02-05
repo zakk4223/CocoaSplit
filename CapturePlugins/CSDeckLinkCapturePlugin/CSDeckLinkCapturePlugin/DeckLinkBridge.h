@@ -3,7 +3,6 @@
 //  CSDeckLinkCapturePlugin
 //
 //  Created by Zakk on 6/13/15.
-//  Copyright (c) 2015 Zakk. All rights reserved.
 //
 
 #ifndef CSDeckLinkCapturePlugin_DeckLinkBridge_h
@@ -42,7 +41,7 @@ class DeckLinkDeviceDiscovery :  public IDeckLinkDeviceNotificationCallback
 {
 private:
     IDeckLinkDiscovery*             deckLinkDiscovery;
-    CSDeckLinkCapture*      captureDelegate;
+    __weak CSDeckLinkCapture*      captureDelegate;
     int32_t                         refCount;
 public:
     DeckLinkDeviceDiscovery(CSDeckLinkCapture* uiDelegate);

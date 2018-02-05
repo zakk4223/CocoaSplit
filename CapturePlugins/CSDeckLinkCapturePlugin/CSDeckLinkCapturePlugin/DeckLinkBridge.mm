@@ -3,7 +3,6 @@
 //  CSDeckLinkCapturePlugin
 //
 //  Created by Zakk on 6/13/15.
-//  Copyright (c) 2015 Zakk. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -163,7 +162,10 @@ HRESULT     DeckLinkDeviceDiscovery::DeckLinkDeviceArrived (/* in */ IDeckLink* 
     
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [captureDelegate addDevice:newDev];
+        if (captureDelegate)
+        {
+            [captureDelegate addDevice:newDev];
+        }
     });
     
     return S_OK;
@@ -172,7 +174,10 @@ HRESULT     DeckLinkDeviceDiscovery::DeckLinkDeviceArrived (/* in */ IDeckLink* 
 HRESULT     DeckLinkDeviceDiscovery::DeckLinkDeviceRemoved (/* in */ IDeckLink* deckLink)
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [captureDelegate removeDevice:deckLink];
+        if (captureDelegate)
+        {
+            [captureDelegate removeDevice:deckLink];
+        }
     });
     return S_OK;
 }

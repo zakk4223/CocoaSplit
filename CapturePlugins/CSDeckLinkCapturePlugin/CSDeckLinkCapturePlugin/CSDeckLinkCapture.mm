@@ -120,7 +120,6 @@
     } else {
         newLayer.asynchronous = NO;
     }
-    
     return newLayer;
 }
 
@@ -129,7 +128,7 @@
 {
     
     super.activeVideoDevice = activeVideoDevice;
-
+    
     if (activeVideoDevice)
     {
         
@@ -234,7 +233,6 @@
 -(void)frameArrived:(IDeckLinkVideoFrame *)frame
 {
     
-    
     if (frame)
     {
         
@@ -249,34 +247,14 @@
         } withPostuseBlock:^{
             frame->Release();
         }];
-        
-        
-        
-        
 
         [self frameArrived];
     }
 }
 
-/*
--(void)frameTick
-{
-    
-    if (self.renderType == kCSRenderOnFrameTick)
-    {
-        
-        [self updateLayersWithBlock:^(CALayer *layer) {
-            [((CSDeckLinkLayer *)layer) setNeedsDisplay];
-        }];
-    }
-    
-}
-*/
-
 
 -(void)dealloc
 {
-    
      if (self.currentInput)
     {
         [self.currentInput removeOutput:self];

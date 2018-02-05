@@ -416,39 +416,42 @@
 -(void)internalUpdateLayerswithFrameData:(bool) frameData updateBlock:(void (^)(CALayer *layer))updateBlock preBlock:(void(^)(void))preBlock postBlock:(void(^)(void))postBlock
 {
     
-
-    NSMapTable *inputsCopy = nil;
-    @synchronized(self)
-    {
-        inputsCopy = self.allLayers.copy;
-    }
-    
-    if (frameData)
-    {
-        _fps_frame_cnt++;
-    }
-    
-
-    for (id key in inputsCopy)
+    @autoreleasepool
     {
         
-        if (!key)
+        
+        NSMapTable *inputsCopy = nil;
+        @synchronized(self)
         {
-            continue;
+            inputsCopy = self.allLayers.copy;
         }
         
-        
-        InputSource *layerSrc = (InputSource *)key;
         if (frameData)
         {
-            [layerSrc updateLayersWithNewFrame:updateBlock withPreuseBlock:preBlock withPostuseBlock:postBlock];
-        } else {
-            [layerSrc updateLayer:updateBlock];
+            _fps_frame_cnt++;
         }
+        
+        
+        for (id key in inputsCopy)
+        {
+            
+            if (!key)
+            {
+                continue;
+            }
+            
+            
+            InputSource *layerSrc = (InputSource *)key;
+            if (frameData)
+            {
+                [layerSrc updateLayersWithNewFrame:updateBlock withPreuseBlock:preBlock withPostuseBlock:postBlock];
+            } else {
+                [layerSrc updateLayer:updateBlock];
+            }
+        }
+        
     }
     
-
-
 }
 
 -(CAMultiAudioEngine *)findAudioEngineForInput:(NSObject<CSInputSourceProtocol> *)input
@@ -482,53 +485,55 @@
 
 -(CSPcmPlayer *)createPCMInput:(NSString *)forUID named:(NSString *)withName withFormat:(const AudioStreamBasicDescription *)withFormat
 {
-    
-    CAMultiAudioEngine *useEngine = nil;
-    NSMutableArray *players = [NSMutableArray array];
-    
-    
-    NSMapTable *inputsCopy = nil;
-    @synchronized(self)
+    @autoreleasepool
     {
-        inputsCopy = self.allLayers.copy;
-    }
-    
-
-    for (id key in inputsCopy)
-    {
+        CAMultiAudioEngine *useEngine = nil;
+        NSMutableArray *players = [NSMutableArray array];
         
-        if (!key)
+        
+        NSMapTable *inputsCopy = nil;
+        @synchronized(self)
         {
-            continue;
+            inputsCopy = self.allLayers.copy;
         }
         
         
-        InputSource *layerSrc = (InputSource *)key;
-
-        useEngine = [self findAudioEngineForInput:layerSrc];
-        
-        CAMultiAudioPCMPlayer *player;
-
-        if (useEngine)
+        for (id key in inputsCopy)
         {
             
+            if (!key)
+            {
+                continue;
+            }
             
-            player = [useEngine createPCMInput:forUID withFormat:withFormat];
+            
+            InputSource *layerSrc = (InputSource *)key;
+            
+            useEngine = [self findAudioEngineForInput:layerSrc];
+            
+            CAMultiAudioPCMPlayer *player;
+            
+            if (useEngine)
+            {
+                
+                
+                player = [useEngine createPCMInput:forUID withFormat:withFormat];
+            }
+            
+            if (player)
+            {
+                [players addObject:player];
+            }
         }
         
-        if (player)
-        {
-            [players addObject:player];
-        }
+        CSPcmPlayer *newPlayer = [[CSPcmPlayer alloc] initWithPlayers:players];
+        
+        newPlayer.nodeUID = forUID;
+        
+        [pcmPlayers setObject:newPlayer forKey:newPlayer.nodeUID];
+        
+        return newPlayer;
     }
-    
-    CSPcmPlayer *newPlayer = [[CSPcmPlayer alloc] initWithPlayers:players];
-
-    newPlayer.nodeUID = forUID;
-    
-    [pcmPlayers setObject:newPlayer forKey:newPlayer.nodeUID];
-    
-    return newPlayer;
 }
 
 
@@ -643,38 +648,42 @@
 
 -(void)removeAttachedAudioInput:(NSString *)uuid
 {
-    if (!uuid || !self.attachedAudioMap || ![self.attachedAudioMap objectForKey:uuid])
+    
+    @autoreleasepool
     {
-        return;
-    }
-    
-    
-    [self.attachedAudioMap removeObjectForKey:uuid];
-    
-    NSMapTable *inputsCopy;
-    
-    @synchronized(self)
-    {
-        inputsCopy = self.allLayers.copy;
-    }
-    
-    
-    for (id key in inputsCopy)
-    {
-        
-        if (!key)
+        if (!uuid || !self.attachedAudioMap || ![self.attachedAudioMap objectForKey:uuid])
         {
-            continue;
+            return;
         }
         
         
-        InputSource *layerSrc = (InputSource *)key;
+        [self.attachedAudioMap removeObjectForKey:uuid];
         
+        NSMapTable *inputsCopy;
         
-        if (layerSrc && layerSrc.sourceLayout)
+        @synchronized(self)
         {
-            CSAudioInputSource *aSrc = [layerSrc.sourceLayout findSourceForAudioUUID:uuid];
-            [layerSrc.sourceLayout deleteSource:aSrc];
+            inputsCopy = self.allLayers.copy;
+        }
+        
+        
+        for (id key in inputsCopy)
+        {
+            
+            if (!key)
+            {
+                continue;
+            }
+            
+            
+            InputSource *layerSrc = (InputSource *)key;
+            
+            
+            if (layerSrc && layerSrc.sourceLayout)
+            {
+                CSAudioInputSource *aSrc = [layerSrc.sourceLayout findSourceForAudioUUID:uuid];
+                [layerSrc.sourceLayout deleteSource:aSrc];
+            }
         }
     }
 }
@@ -682,96 +691,102 @@
 
 -(void)changeAttachedAudioInputName:(NSString *)uuid withName:(NSString *)withName
 {
-    if (!uuid || !withName)
+    
+    @autoreleasepool
     {
-        return;
-    }
-    
-    if (!self.attachedAudioMap)
-    {
-        self.attachedAudioMap = [NSMutableDictionary dictionary];
-    }
-    
-    [self.attachedAudioMap setObject:withName forKey:uuid];
-    
-    NSMapTable *inputsCopy;
-    
-    @synchronized(self)
-    {
-        inputsCopy = self.allLayers.copy;
-    }
-    
-    
-    for (id key in inputsCopy)
-    {
-        
-        if (!key)
+        if (!uuid || !withName)
         {
-            continue;
+            return;
+        }
+        
+        if (!self.attachedAudioMap)
+        {
+            self.attachedAudioMap = [NSMutableDictionary dictionary];
+        }
+        
+        [self.attachedAudioMap setObject:withName forKey:uuid];
+        
+        NSMapTable *inputsCopy;
+        
+        @synchronized(self)
+        {
+            inputsCopy = self.allLayers.copy;
         }
         
         
-        InputSource *layerSrc = (InputSource *)key;
-        
-        
-        if (layerSrc && layerSrc.sourceLayout)
+        for (id key in inputsCopy)
         {
-            CSAudioInputSource *aSrc = [layerSrc.sourceLayout findSourceForAudioUUID:uuid];
             
-            if (aSrc)
+            if (!key)
             {
-                aSrc.name = withName;
+                continue;
+            }
+            
+            
+            InputSource *layerSrc = (InputSource *)key;
+            
+            
+            if (layerSrc && layerSrc.sourceLayout)
+            {
+                CSAudioInputSource *aSrc = [layerSrc.sourceLayout findSourceForAudioUUID:uuid];
+                
+                if (aSrc)
+                {
+                    aSrc.name = withName;
+                }
             }
         }
     }
-    
 }
+
 -(void)createAttachedAudioInputForUUID:(NSString *)uuid withName:(NSString *)withName
 {
-    
-    if (!self.attachedAudioMap)
+    @autoreleasepool
     {
-        self.attachedAudioMap = [NSMutableDictionary dictionary];
-    }
-    
-
-    
-    [self.attachedAudioMap setObject:withName forKey:uuid];
-    
-    NSMapTable *inputsCopy;
-    
-    @synchronized(self)
-    {
-        inputsCopy = self.allLayers.copy;
-    }
-    
-    
-    for (id key in inputsCopy)
-    {
-        
-        if (!key)
+        if (!self.attachedAudioMap)
         {
-            continue;
+            self.attachedAudioMap = [NSMutableDictionary dictionary];
         }
         
         
-        InputSource *layerSrc = (InputSource *)key;
         
+        [self.attachedAudioMap setObject:withName forKey:uuid];
         
-        if (layerSrc && layerSrc.sourceLayout)
+        NSMapTable *inputsCopy;
+        
+        @synchronized(self)
         {
-            if (![layerSrc.sourceLayout findSourceForAudioUUID:uuid])
+            inputsCopy = self.allLayers.copy;
+        }
+        
+        
+        for (id key in inputsCopy)
+        {
+            
+            if (!key)
             {
-                CSAudioInputSource *newSrc = [[CSAudioInputSource alloc] init];
-                newSrc.audioUUID = uuid;
-                newSrc.name = withName;
-                [layerSrc.sourceLayout addSource:newSrc];
-                [layerSrc attachInput:newSrc];
+                continue;
+            }
+            
+            
+            InputSource *layerSrc = (InputSource *)key;
+            
+            
+            if (layerSrc && layerSrc.sourceLayout)
+            {
+                if (![layerSrc.sourceLayout findSourceForAudioUUID:uuid])
+                {
+                    CSAudioInputSource *newSrc = [[CSAudioInputSource alloc] init];
+                    newSrc.audioUUID = uuid;
+                    newSrc.name = withName;
+                    [layerSrc.sourceLayout addSource:newSrc];
+                    [layerSrc attachInput:newSrc];
+                }
             }
         }
     }
 }
-    
+
     
 -(void)liveStatusChangedForInput:(InputSource *)inputSource
 {
