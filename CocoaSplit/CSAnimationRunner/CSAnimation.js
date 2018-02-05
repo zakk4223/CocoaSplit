@@ -153,7 +153,7 @@ CSAnimation = function(target, keyPath, animation) {
     if (animation)
     {
         animation.removedOnCompletion = 0;
-        animation.fillMode = "forwards";
+        //animation.fillMode = "forwards";
         this.duration = animation.duration;
     }
     

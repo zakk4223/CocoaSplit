@@ -379,7 +379,8 @@
     
     
     NSObject <CSInputSourceProtocol> *iSrc = nil;
-    float newDepth = 1;
+    float newDepth = 1.0f;
+    
     
     if (index == -1)
     {

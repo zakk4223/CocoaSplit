@@ -530,7 +530,9 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     
     float currentDepth = startDepth;
 
+    [CATransaction begin];
     src.layer.zPosition = currentDepth;
+    [CATransaction commit];
     currentDepth += 100.0f;
     for (InputSource *cSrc in src.attachedInputs)
     {
