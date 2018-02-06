@@ -1623,7 +1623,11 @@ static NSArray *_sourceTypes = nil;
 
 -(void)updateRotationTransform
 {
-    CATransform3D transform = CATransform3DMakeRotation(self.rotationAngle * M_PI / 180.0, 0.0, 0.0, 1.0);
+    
+    CATransform3D transform = CATransform3DIdentity;
+    transform.m34 = 1.0/-500.0;
+    
+    transform  = CATransform3DRotate(transform, self.rotationAngle * M_PI / 180.0, 0.0, 0.0, 1.0);
     transform = CATransform3DRotate(transform, self.rotationAngleX * M_PI / 180.0, 1.0, 0.0, 0.0);
     transform = CATransform3DRotate(transform, self.rotationAngleY * M_PI / 180.0, 0.0, 1.0, 0.0);
     

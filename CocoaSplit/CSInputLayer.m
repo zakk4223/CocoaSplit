@@ -322,6 +322,10 @@
         _scrollAnimation = [CABasicAnimation animation];
         _scrollAnimation.repeatCount = HUGE_VALF;
         self.zPosition = 0;
+        CATransform3D initT = CATransform3DIdentity;
+        initT.m34 = 1.0/-500.0;
+        self.transform = initT;
+        
 
 
         
@@ -461,6 +465,7 @@
     toLayer.contentsRect = _sourceLayer.contentsRect;
     toLayer.autoresizingMask = _sourceLayer.autoresizingMask;
     toLayer.constraints = _sourceLayer.constraints;
+    toLayer.transform = _sourceLayer.transform;
     //toLayer.delegate = self;
     toLayer.actions = @{@"position": NSNull.null, @"bounds":NSNull.null, @"contentsRect":NSNull.null};
     
