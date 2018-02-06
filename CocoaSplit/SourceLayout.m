@@ -1312,7 +1312,9 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 
     [CATransaction commit];
 
-    [self adjustAllInputs];
+
+    [self adjustInputs:changedInputs];
+    [self adjustInputs:newInputs];
     
     _noSceneTransactions = NO;
     
@@ -1712,7 +1714,9 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     [CATransaction commit];
     [CATransaction flush];
     
-    [self adjustAllInputs];
+    [self adjustInputs:changedInputs];
+    [self adjustInputs:newInputs];
+    //[self adjustAllInputs];
     
 }
 
@@ -2205,6 +2209,22 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 }
 
 
+-(void)adjustInputs:(NSArray *)inputs
+{
+    for (NSObject<CSInputSourceProtocol> *src in inputs)
+    {
+        
+        if (src.isVideo)
+        {
+            InputSource *vSrc = (InputSource *)src;
+            
+            vSrc.needsAdjustPosition = YES;
+            vSrc.needsAdjustment = YES;
+        }
+    }
+}
+
+
 -(void) adjustAllInputs
 {
     
@@ -2214,7 +2234,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     for (NSObject<CSInputSourceProtocol> *src in copiedInputs)
     {
      
-        if (src.layer)
+        if (src.isVideo)
         {
             InputSource *vSrc = (InputSource *)src;
             
@@ -2460,7 +2480,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         {
             
             
-            if (needsResize && isource.layer)
+            if (needsResize && isource.isVideo)
             {
                 InputSource *vsource = (InputSource *)isource;
                 vsource.needsAdjustPosition = YES;
