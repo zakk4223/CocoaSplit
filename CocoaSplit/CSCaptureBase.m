@@ -128,7 +128,6 @@
         id newSelf = [[SourceCache sharedCache] findCachedSourceForClass:self.class uniqueID:savedUniqueID];
         if (newSelf)
         {
-            NSLog(@"NEW SELF %@",  newSelf);
             return newSelf;
         }
      
