@@ -38,6 +38,8 @@
 @property (strong) NSMutableString *name;
 @property (assign) bool errored;
 @property (assign) bool active;
+@property (assign) float frameRate;
+
 
 
 

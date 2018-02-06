@@ -3,7 +3,6 @@
 //  streamOutput
 //
 //  Created by Zakk on 3/17/13.
-//  Copyright (c) 2013 Zakk. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

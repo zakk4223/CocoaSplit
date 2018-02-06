@@ -28,7 +28,6 @@
 - (IBAction)matrixVolumeChanged:(NSSlider *)sender;
 
 -(instancetype)initWithAudioMixer:(CAMultiAudioNode *)node;
-- (IBAction)openCompressorWindow:(id)sender;
 
 
 @end

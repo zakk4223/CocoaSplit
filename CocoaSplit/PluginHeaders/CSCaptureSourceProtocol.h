@@ -38,8 +38,6 @@
 
 @property (strong) NSString *captureName;
 
-@property (strong) CIContext *imageContext;
-
 @property (assign) bool needsSourceSelection;
 
 @property (weak) id inputSource;

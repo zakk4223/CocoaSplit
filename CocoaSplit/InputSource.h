@@ -365,7 +365,6 @@ typedef enum resize_style_t {
 @property (assign) CGFloat cornerRadius;
 @property (strong) NSColor *backgroundColor;
 @property (readonly) CGRect globalLayoutPosition;
-@property (weak) InputSource* parentInput;
 
 @property (assign) float x_pos;
 @property (assign) float y_pos;

@@ -108,7 +108,6 @@
 @property (strong) CSSourceLayoutFilterWindowController *filterConfigWindow;
 
 
--(void)needsUpdate;
 -(NSRect)windowRectforWorldRect:(NSRect)worldRect;
 -(NSArray *)resizeRectsForSource:(InputSource *)inputSource withExtra:(float)withExtra;
 -(void)addInputSourceWithInput:(NSObject<CSInputSourceProtocol> *)source;

@@ -22,7 +22,6 @@ typedef enum frame_render_behavior_t {
 
 @property CSAbstractCaptureDevice *activeVideoDevice;
 @property (strong) NSArray *availableVideoDevices;
-@property (weak) CIContext *imageContext;
 @property (readonly) float render_width;
 @property (readonly) float render_height;
 @property (strong) NSString *captureName;

@@ -3,7 +3,6 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 4/16/17.
-//  Copyright © 2017 Zakk. All rights reserved.
 //
 
 #import "CSTransitionAnimationDelegate.h"

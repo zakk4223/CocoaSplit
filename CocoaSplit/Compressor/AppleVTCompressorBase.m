@@ -72,6 +72,12 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
 }
 
 
+-(NSMutableDictionary *)encoderSpec
+{
+    return [NSMutableDictionary dictionary];
+}
+
+
 -(id)init
 {
     if (self = [super init])
@@ -247,6 +253,12 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     _audioBuffer = [[NSMutableArray alloc] init];
     return YES;
     
+}
+
+
+-(void)configureCompressionSession:(VTCompressionSessionRef)session
+{
+    return;
 }
 
 

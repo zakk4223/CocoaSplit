@@ -12,7 +12,6 @@
 @interface CSFileStreamRTMPService : CSStreamServiceBase <CSStreamServiceProtocol>
 
 
-@property bool isReady;
 @property (strong) NSString *destinationURI;
 
 

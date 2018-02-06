@@ -12,7 +12,6 @@
 @interface FileStreamService : CSStreamServiceBase <CSStreamServiceProtocol>
 
 
-@property bool isReady;
 @property (strong) NSString *fileName;
 
 @property (assign) BOOL useTimestamp;

@@ -2636,7 +2636,7 @@ static NSArray *_sourceTypes = nil;
         [self deregisterVideoInput:self.videoInput];
     }
     
-    NSObject <CSCaptureSourceProtocol,CSCaptureBaseInputFrameTickProtocol> *newCaptureSession;
+    CSCaptureBase <CSCaptureSourceProtocol,CSCaptureBaseInputFrameTickProtocol> *newCaptureSession;
     
     Class captureClass = [pluginMap objectForKey:selectedVideoType];
     newCaptureSession = [[captureClass alloc] init];
