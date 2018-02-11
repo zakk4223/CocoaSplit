@@ -18,14 +18,16 @@ function AnimationBlock(duration, inherit_frame) {
         duration = 0.0;
     }
     
-    var cframe = undefined;
+    var cframe = CSAnimationBlock.currentFrame();
     
-    if (inherit_frame)
+
+    if (cframe)
     {
-        cframe = CSAnimationBlock.currentFrame();
+        this.parent_frame_begin_time = cframe.current_begin_time;
     }
     
-    if (cframe === undefined)
+    
+    if (!inherit_frame || !cframe)
     {
         this.layout = getCurrentLayout();
         this.current_begin_time = null;
@@ -226,6 +228,14 @@ function AnimationBlock(duration, inherit_frame) {
 
     }
     
+    this.waitTransition = function() {
+        if (this.parent_frame_begin_time)
+        {
+            this.current_begin_time = this.parent_frame_begin_time;
+        }
+    }
+    
+    
     this.waitAnimation = function(duration, target) {
         return this.add_waitmarker(duration, target, 0);
     }
@@ -284,6 +294,15 @@ var commitAnimation = function() {
     var cframe = CSAnimationBlock.currentFrame();
     cframe.commit();
 }
+
+var waitTransition = function () {
+    var cframe = CSAnimationBlock.currentFrame();
+    if (cframe)
+    {
+        cframe.waitTransition();
+    }
+}
+
 
 var waitScript = function() {
     var cframe = CSAnimationBlock.currentFrame();

@@ -1138,6 +1138,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
                 if (blockMap && blockObj)
                 {
                     aStart = blockObj[@"current_begin_time"];
+
                     if ([aStart isEqual:[NSNull null]])
                     {
                         aStart = nil;

@@ -201,16 +201,6 @@
 
 
 
-/*
- -(NSString *)script_beforeDeleteCombined;
- @property (readonly) NSString *script_frameTickCombined;
- @property (readonly) NSString *script_beforeMergeCombined;
- @property (readonly) NSString *script_afterMergeCombined;
- @property (readonly) NSString *script_beforeRemoveCombined;
- @property (readonly) NSString *script_beforeReplaceCombined;
- @property (readonly) NSString *script_afterReplaceCombined;
- */
-
 
 -(bool) isVideo
 {
