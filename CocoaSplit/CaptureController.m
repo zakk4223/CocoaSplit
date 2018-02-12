@@ -2076,6 +2076,7 @@
 
 -(void) loadSettings
 {
+    
     [[CSPluginLoader sharedPluginLoader] loadAllBundles];
 
     CGColorRef tmpColor = CGColorCreateGenericRGB(0, 1, 0, 1);
@@ -2097,7 +2098,6 @@
 
     NSNib *layoutNib = [[NSNib alloc] initWithNibNamed:@"CSLayoutCollectionItem" bundle:nil];
     [self.layoutCollectionView registerNib:layoutNib forItemWithIdentifier:@"layout_item"];
-    
     
     
 
@@ -2132,7 +2132,6 @@
     self.instantRecordDirectory = [saveRoot valueForKey:@"instantRecordDirectory"];
     
     
-    
     self.useDarkMode = [[saveRoot valueForKey:@"useDarkMode"] boolValue];
     
     
@@ -2165,8 +2164,6 @@
         outdest.settingsController = self;
     }
 
-
-    
     self.useStatusColors = [[saveRoot valueForKeyPath:@"useStatusColors"] boolValue];
     
     id tmp_savedata = [saveRoot valueForKey:@"extraSaveData"];
@@ -2179,9 +2176,6 @@
     
     
     self.selectedVideoType = [saveRoot valueForKey:@"selectedVideoType"];
-
-    
-    
     
     self.captureFPS = [[saveRoot valueForKey:@"captureFPS"] doubleValue];
     self.maxOutputDropped = [[saveRoot valueForKey:@"maxOutputDropped"] intValue];
@@ -2200,7 +2194,6 @@
     
     //self.audio_adjust = [[saveRoot valueForKey:@"audioAdjust"] doubleValue];
     
-
     self.stagingPreviewView.controller = self;
     self.livePreviewView.controller = self;
     self.livePreviewView.showTransitionToggle = YES;
@@ -2224,14 +2217,12 @@
     [self migrateDefaultCompressor:saveRoot];
     [self buildExtrasMenu];
     
-    
 
     
     self.useMidiLiveChannelMapping   = [[saveRoot valueForKey:@"useMidiLiveChannelMapping"] boolValue];
     self.midiLiveChannel = [[saveRoot valueForKey:@"midiLiveChannel"] integerValue];
     
     
-    self.useTransitions = [[saveRoot valueForKey:@"useTransitions"] boolValue];
     
     self.transitionName = [saveRoot valueForKey:@"transitionName"];
 
@@ -2250,8 +2241,8 @@
             savedTransition.transitionFilter = [saveRoot valueForKey:@"transitionFilter"];
         }
     }
-    
-    
+    _useTransitions = [[saveRoot valueForKey:@"useTransitions"] boolValue];
+
     self.multiAudioEngine = [saveRoot valueForKey:@"multiAudioEngine"];
     if (!self.multiAudioEngine)
     {
@@ -2409,6 +2400,15 @@
 
     [self.sourceListViewController addObserver:self forKeyPath:@"selectedObjects" options:NSKeyValueObservingOptionNew context:NULL];
 
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if (_useTransitions)
+        {
+            [self showTransitionView:nil];
+        } else {
+            [self hideTransitionView:nil];
+        }
+    });
     
 
     
@@ -4432,6 +4432,7 @@
     self.transitionConfigurationView.animator.hidden = NO;
     self.transitionLabel.animator.hidden = NO;
     self.audioConstraint.animator.constant = _savedAudioConstraintConstant;
+    [NSAnimationContext endGrouping];
     
 }
 

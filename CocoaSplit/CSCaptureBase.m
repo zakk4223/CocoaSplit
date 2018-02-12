@@ -115,6 +115,7 @@
     [aCoder encodeObject:self.activeVideoDevice.uniqueID forKey:@"active_uniqueID"];
     [aCoder encodeBool:self.allowDedup forKey:@"allowDedup"];
     [aCoder encodeBool:self.cachePersistent forKey:@"cachePersistent"];
+    
     [self saveWithCoder:aCoder];
 }
 
@@ -125,13 +126,19 @@
     if (self = [self init])
     {
         NSString *savedUniqueID = [aDecoder decodeObjectForKey:@"active_uniqueID"];
-        id newSelf = [[SourceCache sharedCache] findCachedSourceForClass:self.class uniqueID:savedUniqueID];
-        if (newSelf)
+        self.allowDedup = [aDecoder decodeBoolForKey:@"allowDedup"];
+
+        NSLog(@"SELF IS %@", self);
+        if (self.allowDedup)
         {
-            return newSelf;
+            id newSelf = [[SourceCache sharedCache] findCachedSourceForClass:self.class uniqueID:savedUniqueID];
+            if (newSelf)
+            {
+                NSLog(@"RETURNING %@", newSelf);
+                return newSelf;
+            }
         }
      
-        self.allowDedup = [aDecoder decodeBoolForKey:@"allowDedup"];
         self.savedUniqueID = [aDecoder decodeObjectForKey:@"active_uniqueID"];
         self.cachePersistent = [aDecoder decodeBoolForKey:@"cachePersistent"];
 

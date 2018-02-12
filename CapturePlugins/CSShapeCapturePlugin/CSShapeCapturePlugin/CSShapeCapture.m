@@ -231,7 +231,6 @@
     newLayer.flipY = self.flipY;
     newLayer.rotateAngle = self.rotateAngle;
     
-    
     return newLayer;
 }
 
