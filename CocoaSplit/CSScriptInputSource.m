@@ -37,7 +37,7 @@
 -(instancetype)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
-    self.scriptPriority = 9999;
+    //self.scriptPriority = 9999;
     return self;
 }
 

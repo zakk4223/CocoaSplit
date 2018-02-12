@@ -149,8 +149,11 @@ var runTriggerScriptInput = function(input, scriptType) {
         beginIsolatedAnimation();
         var retval = (new Function("self", input["script_"+scriptType]))(inputSelf);
         commitAnimation();
-        inputSelf.input = null;
-        inputSelf.layer = null;
+        if (inputSelf)
+        {
+            inputSelf.input = null;
+            inputSelf.layer = null;
+        }
         inputSelf = null;
         return retval;
     }
