@@ -128,13 +128,11 @@
         NSString *savedUniqueID = [aDecoder decodeObjectForKey:@"active_uniqueID"];
         self.allowDedup = [aDecoder decodeBoolForKey:@"allowDedup"];
 
-        NSLog(@"SELF IS %@", self);
         if (self.allowDedup)
         {
             id newSelf = [[SourceCache sharedCache] findCachedSourceForClass:self.class uniqueID:savedUniqueID];
             if (newSelf)
             {
-                NSLog(@"RETURNING %@", newSelf);
                 return newSelf;
             }
         }

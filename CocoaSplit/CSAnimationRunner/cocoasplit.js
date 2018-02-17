@@ -194,7 +194,12 @@ var addDummyAnimation = function(duration, kwargs) {
     basic_anim.duration = duration;
     
     var dummy_animation = new CSAnimation(getCurrentLayout().rootLayer, keyname, basic_anim, kwargs);
+
+    beginAnimation();
     CSAnimationBlock.currentFrame().add_animation(dummy_animation, getCurrentLayout().rootLayer, keyname);
+    waitAnimation();
+    commitAnimation();
+    
 }
 
 
@@ -258,16 +263,20 @@ var mergeLayout = function(layout, kwargs) {
             {
                 target_layout.transitionInfo = layoutTransition.preTransition;
                 target_layout.transitionInfo.waitForMedia = layoutTransition.waitForMedia;
+                beginAnimation();
 
                 target_layout.replaceWithSourceLayoutUsingScripts(layoutTransition.transitionLayout, useScripts);
                 waitAnimation(layoutTransition.transitionHoldTime);
+                commitAnimation();
             }
             target_layout.transitionInfo = layoutTransition.postTransition;
             target_layout.replaceWithSourceLayoutUsingScripts(endLayout, useScripts);
         } else {
         
-        
+            beginAnimation();
+
             target_layout.mergeSourceLayoutUsingScripts(endLayout, useScripts);
+            commitAnimation();
         }
         
     }

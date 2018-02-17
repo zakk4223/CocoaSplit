@@ -21,6 +21,7 @@ function AnimationBlock(duration, inherit_frame) {
     var cframe = CSAnimationBlock.currentFrame();
     
 
+    
     if (cframe)
     {
         this.parent_frame_begin_time = cframe.current_begin_time;

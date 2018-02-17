@@ -2223,7 +2223,7 @@
     self.midiLiveChannel = [[saveRoot valueForKey:@"midiLiveChannel"] integerValue];
     
     
-    
+    self.useTransitions = [[saveRoot valueForKey:@"useTransitions"] boolValue];
     self.transitionName = [saveRoot valueForKey:@"transitionName"];
 
     if (self.transitionName)
@@ -2241,7 +2241,6 @@
             savedTransition.transitionFilter = [saveRoot valueForKey:@"transitionFilter"];
         }
     }
-    _useTransitions = [[saveRoot valueForKey:@"useTransitions"] boolValue];
 
     self.multiAudioEngine = [saveRoot valueForKey:@"multiAudioEngine"];
     if (!self.multiAudioEngine)
@@ -2299,6 +2298,19 @@
        _layoutViewController.layouts = self.sourceLayouts;
     }
     
+    
+    if ([saveRoot objectForKey:@"stagingHidden"])
+    {
+        BOOL stagingHidden = [[saveRoot valueForKeyPath:@"stagingHidden"] boolValue];
+        self.stagingHidden = stagingHidden;
+    }
+    if (self.stagingHidden)
+    {
+        [self hideStagingView];
+    }
+
+    
+    
     SourceLayout *tmpLayout = [saveRoot valueForKey:@"selectedLayout"];
     if (tmpLayout)
     {
@@ -2317,7 +2329,6 @@
     tmpLayout = [saveRoot valueForKey:@"stagingLayout"];
     if (tmpLayout)
     {
-        
         if (tmpLayout == self.selectedLayout || [self.sourceLayouts containsObject:tmpLayout])
         {
             SourceLayout *tmpCopy = [tmpLayout copy];
@@ -2326,22 +2337,14 @@
             self.stagingLayout = tmpLayout;
         }
         
+        
         self.stagingPreviewView.sourceLayout = self.stagingLayout;
         self.stagingLayout.name = @"staging";
         self.selectedLayout.name = @"live";
         
-        //[self.stagingLayout mergeSourceLayout:tmpLayout withLayer:nil];
+       // [self.stagingLayout mergeSourceLayout:tmpLayout withLayer:nil];
     }
     
-    if ([saveRoot objectForKey:@"stagingHidden"])
-    {
-        BOOL stagingHidden = [[saveRoot valueForKeyPath:@"stagingHidden"] boolValue];
-        self.stagingHidden = stagingHidden;
-    }
-    if (self.stagingHidden)
-    {
-        [self hideStagingView];
-    }
 
     
     self.inputLibrary = [saveRoot valueForKey:@"inputLibrary"];
@@ -2400,19 +2403,7 @@
 
     [self.sourceListViewController addObserver:self forKeyPath:@"selectedObjects" options:NSKeyValueObservingOptionNew context:NULL];
 
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        if (_useTransitions)
-        {
-            [self showTransitionView:nil];
-        } else {
-            [self hideTransitionView:nil];
-        }
-    });
-    
 
-    
-    
 }
 
 
@@ -2596,8 +2587,10 @@
     self.currentMidiInputStagingIdx = 0;
     
     stagingLayout.doSaveSourceList = YES;
+    NSLog(@"SET STAGING");
     if (!self.stagingHidden)
     {
+        NSLog(@"RESTORE STAGING");
         [stagingLayout restoreSourceList:nil];
         [stagingLayout setupMIDI];
         self.stagingPreviewView.midiActive = YES;

@@ -448,7 +448,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     }
     
     [aCoder encodeBool:self.recordingLayout forKey:@"recordingLayout"];
-    [aCoder encodeObject:self.rootLayer.filters forKey:@"layoutFilters"];
+    //[aCoder encodeObject:self.rootLayer.filters forKey:@"layoutFilters"];
 
 }
 
@@ -766,7 +766,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 {
     NSObject *timerSrc = self.layoutTimingSource;
     
-    if (!timerSrc && self.sourceList.count == 0)
+    if (!timerSrc && self.sourceList.count == 0 && self.rootLayer.filters.count == 0)
     {
         return nil;
     }
@@ -796,6 +796,11 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     archiver.delegate = self;
     [archiver encodeObject:orderedUUIDS forKey:@"orderedUUIDS"];
     [archiver encodeObject:timerSrc forKey:@"timerSrc"];
+    if (self.rootLayer.filters)
+    {
+        [archiver encodeObject:self.rootLayer.filters forKey:@"rootLayerFilters"];
+    }
+    
     for(NSObject <CSInputSourceProtocol> *src in self.sourceList)
     {
         [archiver encodeObject:src forKey:src.uuid];
@@ -834,7 +839,13 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         {
             timerSrc = [NSNull null];
         }
-        ret = @{@"sourcelist": srcList,  @"timingSource": timerSrc};
+        
+        NSObject *rootLayerFilters = [unarchiver decodeObjectForKey:@"rootLayerFilters"];
+        if (!rootLayerFilters)
+        {
+            rootLayerFilters = @[];
+        }
+        ret = @{@"sourcelist": srcList,  @"timingSource": timerSrc, @"rootLayerFilters": rootLayerFilters};
     } else { //old style, just decode "root"
         ret = [unarchiver decodeObjectForKey:@"root"];
     }
@@ -903,11 +914,12 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     NSObject *mergeObj = [self decodeSaveData:useData];
 
     NSArray *mergeList;
-    
+    NSArray *filterList = @[];
     
     if ([mergeObj isKindOfClass:[NSDictionary class]])
     {
         mergeList = [((NSDictionary *)mergeObj) objectForKey:@"sourcelist"];
+        filterList = [((NSDictionary *)mergeObj) objectForKey:@"rootLayerFilters"];
     } else {
         mergeList = (NSArray *)mergeObj;
     }
@@ -927,6 +939,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 
     
     [retDict setObject:[NSMutableArray array] forKey:@"removed"];
+    [retDict setObject:filterList forKey:@"filterList"];
     
     for (NSObject<CSInputSourceProtocol> *oSrc in mergeList)
     {
@@ -1097,7 +1110,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     NSArray *changedInputs = diffResult[@"changed"];
     NSArray *removedInputs = diffResult[@"removed"];
     NSArray *newInputs = diffResult[@"new"];
-    
+    NSArray *filters = diffResult[@"filterList"];
     
     NSNumber *aStart = nil;
     JSContext *jCtx = [JSContext currentContext];
@@ -1159,7 +1172,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     transitionDelegate.addedInputs = newInputs;
     transitionDelegate.changedInputs = changedInputs;
     transitionDelegate.removedInputs = removedInputs;
-    
+    transitionDelegate.useFilters = filters;
     
     CSLayoutTransition *useTransition = self.transitionInfo;
     if (useTransition.preTransition)
@@ -2063,6 +2076,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
             
             self.layoutTimingSource = ((InputSource *)timerSrc);
             
+            self.rootLayer.filters = [((NSDictionary *)restData) objectForKey:@"rootLayerFilters"];
             
         } else { 
             srcList = (NSArray *)restData;

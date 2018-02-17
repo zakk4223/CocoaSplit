@@ -3,7 +3,6 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 4/16/17.
-//  Copyright © 2017 Zakk. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -17,6 +16,8 @@
 @property (strong) NSArray *changeremoveInputs;
 
 @property (strong) CAAnimation *useAnimation;
+@property (strong) NSArray *useFilters;
+
 @property (assign) bool fullScreen;
 
 @property (weak) SourceLayout *forLayout;

@@ -30,14 +30,30 @@
                 [cSrc buildLayerConstraints];
             }
         }
+
     }];
   
+    
+    [CATransaction begin];
+    if (self.useAnimation)
+    {
+        CFTimeInterval duration = self.useAnimation.duration;
+        [CATransaction setAnimationDuration:duration];
+        
+    }
+    self.forLayout.rootLayer.filters = self.useFilters;
+    
+    [CATransaction commit];
+
     
     if (self.fullScreen)
     {
         [self.forLayout.rootLayer addAnimation:self.useAnimation forKey:nil];
+
     }
 
+
+    
     for (InputSource *nSrc in self.addedInputs)
     {
         if (self.useAnimation && !self.fullScreen)
