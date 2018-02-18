@@ -12,7 +12,7 @@
 #import "LayoutRenderer.h"
 #import "CSPreviewGLLayer.h"
 #import "CSPreviewOverlayView.h"
-#import "CSSourceLayoutFilterWindowController.h"
+#import "CSSourceLayoutSettingsWindowController.h"
 
 @class SourceLayout;
 //@class InputSource;
@@ -105,7 +105,7 @@
 @property (strong) NSMutableDictionary *activeConfigControllers;
 @property (assign) bool isEditWindow;
 @property (assign) bool showTransitionToggle;
-@property (strong) CSSourceLayoutFilterWindowController *filterConfigWindow;
+@property (strong) CSSourceLayoutSettingsWindowController *settingsConfigWindow;
 
 
 -(NSRect)windowRectforWorldRect:(NSRect)worldRect;

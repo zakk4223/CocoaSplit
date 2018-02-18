@@ -317,9 +317,10 @@
 {
     if (self.sourceLayout)
     {
-        self.filterConfigWindow = [[CSSourceLayoutFilterWindowController alloc] init];
-        self.filterConfigWindow.layout = self.sourceLayout;
-        [self.filterConfigWindow showWindow:nil];
+        self.settingsConfigWindow = [[CSSourceLayoutSettingsWindowController alloc] init];
+        self.settingsConfigWindow.layout = self.sourceLayout;
+        [self.settingsConfigWindow showWindow:nil];
+        NSLog(@"DID SHOW WINDOW");
     }
 }
 
@@ -2014,9 +2015,9 @@
     
     if (closedWindow)
     {
-        if (closedWindow == self.filterConfigWindow.window)
+        if (closedWindow == self.settingsConfigWindow.window)
         {
-            self.filterConfigWindow = nil;
+            self.settingsConfigWindow = nil;
             return;
         }
         

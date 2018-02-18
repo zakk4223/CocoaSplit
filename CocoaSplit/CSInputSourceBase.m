@@ -167,7 +167,6 @@
     if ([aDecoder containsValueForKey:@"scriptPriority"])
     {
         self.scriptPriority = [aDecoder decodeIntegerForKey:@"scriptPriority"];
-        NSLog(@"SCRIPT PRIORITY %d", self.scriptPriority);
     }
     
     if ([aDecoder containsValueForKey:@"scriptAlwaysRun"])

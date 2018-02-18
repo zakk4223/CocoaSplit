@@ -42,6 +42,7 @@
 
 @property (strong) NSData *savedSourceListData;
 @property (assign) bool isActive;
+@property (strong) NSColor *backgroundColor;
 
 
 @property (assign) int canvas_width;
@@ -177,6 +178,7 @@
 
 @property (assign) bool isActive;
 
+@property (strong) NSColor *backgroundColor;
 
 @property (assign) int canvas_width;
 @property (assign) int canvas_height;

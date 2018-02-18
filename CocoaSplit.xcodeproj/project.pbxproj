@@ -256,6 +256,8 @@
 		34E26DD91FF6ED7B00ACE58B /* CAMultiAudioSubgraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E26DD81FF6ED7B00ACE58B /* CAMultiAudioSubgraph.m */; };
 		34E26DDC1FF702BD00ACE58B /* CAMultiAudioSilence.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E26DDB1FF702BD00ACE58B /* CAMultiAudioSilence.m */; };
 		34E26DDF1FF70E0E00ACE58B /* CAMultiAudioGenericOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E26DDE1FF70E0E00ACE58B /* CAMultiAudioGenericOutput.m */; };
+		34E91E422038ECC000E96684 /* CSSourceLayoutSettingsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E91E402038ECC000E96684 /* CSSourceLayoutSettingsWindowController.m */; };
+		34E91E432038ECC000E96684 /* CSSourceLayoutSettingsWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34E91E412038ECC000E96684 /* CSSourceLayoutSettingsWindowController.xib */; };
 		34E983701B78AE9100F26F1E /* Python.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34E9836F1B78AE9100F26F1E /* Python.framework */; };
 		34EA822E1D3C568400928A06 /* CSOauth2Authenticator.m in Sources */ = {isa = PBXBuildFile; fileRef = 34EA822D1D3C568400928A06 /* CSOauth2Authenticator.m */; };
 		34EA824E1D3CBFCA00928A06 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34EA824D1D3CBFCA00928A06 /* WebKit.framework */; };
@@ -1046,6 +1048,9 @@
 		34E26DDB1FF702BD00ACE58B /* CAMultiAudioSilence.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioSilence.m; path = CAMultiAudio/CAMultiAudioSilence.m; sourceTree = "<group>"; };
 		34E26DDD1FF70E0E00ACE58B /* CAMultiAudioGenericOutput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioGenericOutput.h; path = CAMultiAudio/CAMultiAudioGenericOutput.h; sourceTree = "<group>"; };
 		34E26DDE1FF70E0E00ACE58B /* CAMultiAudioGenericOutput.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioGenericOutput.m; path = CAMultiAudio/CAMultiAudioGenericOutput.m; sourceTree = "<group>"; };
+		34E91E3F2038ECC000E96684 /* CSSourceLayoutSettingsWindowController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSSourceLayoutSettingsWindowController.h; path = Interface/CSSourceLayoutSettingsWindowController.h; sourceTree = "<group>"; };
+		34E91E402038ECC000E96684 /* CSSourceLayoutSettingsWindowController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CSSourceLayoutSettingsWindowController.m; path = Interface/CSSourceLayoutSettingsWindowController.m; sourceTree = "<group>"; };
+		34E91E412038ECC000E96684 /* CSSourceLayoutSettingsWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = CSSourceLayoutSettingsWindowController.xib; path = Interface/CSSourceLayoutSettingsWindowController.xib; sourceTree = "<group>"; };
 		34E9836F1B78AE9100F26F1E /* Python.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Python.framework; path = System/Library/Frameworks/Python.framework; sourceTree = SDKROOT; };
 		34E983841B78B19D00F26F1E /* pluginbase.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = pluginbase.py; sourceTree = "<group>"; };
 		34EA822C1D3C568400928A06 /* CSOauth2Authenticator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSOauth2Authenticator.h; path = PluginHeaders/CSOauth2Authenticator.h; sourceTree = "<group>"; };
@@ -1710,6 +1715,9 @@
 				348585DB201E65F900C30A08 /* CSLayerFiltersViewController.h */,
 				348585DC201E65F900C30A08 /* CSLayerFiltersViewController.m */,
 				348585DD201E65F900C30A08 /* CSLayerFiltersViewController.xib */,
+				34E91E3F2038ECC000E96684 /* CSSourceLayoutSettingsWindowController.h */,
+				34E91E402038ECC000E96684 /* CSSourceLayoutSettingsWindowController.m */,
+				34E91E412038ECC000E96684 /* CSSourceLayoutSettingsWindowController.xib */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -2658,6 +2666,7 @@
 			files = (
 				34F52A281BC1CE2700662911 /* CSLayoutCollectionItem.xib in Resources */,
 				347B14DD198492D900DC7DF0 /* InputPopupControllerViewController.xib in Resources */,
+				34E91E432038ECC000E96684 /* CSSourceLayoutSettingsWindowController.xib in Resources */,
 				34DA08C71E87F3CB00E02543 /* CSSequenceItemAnimationViewController.xib in Resources */,
 				3400A07A1BD4533A003E1828 /* CSInputLibraryWindowController.xib in Resources */,
 				34ED8CB91B073C1B002C0674 /* CSMidiManagerWindowController.xib in Resources */,
@@ -2846,6 +2855,7 @@
 				34210B3E1606001200362FC8 /* OutputDestination.m in Sources */,
 				34ED8C9B1B07371C002C0674 /* MIKMIDIPrivateUtilities.m in Sources */,
 				345F8B391A15D850009A81E3 /* CAMultiAudioDefaultOutput.m in Sources */,
+				34E91E422038ECC000E96684 /* CSSourceLayoutSettingsWindowController.m in Sources */,
 				34ED8CA51B07371C002C0674 /* MIKMIDISystemExclusiveCommand.m in Sources */,
 				3473D29A1D4C3D0E00842EEE /* CSAddOutputPopupViewController.m in Sources */,
 				34ED8C5D1B07371C002C0674 /* MIKMIDIEndpoint.m in Sources */,

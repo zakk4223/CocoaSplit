@@ -2638,6 +2638,31 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     return nil;
 }
 
+-(void)setBackgroundColor:(NSColor *)backgroundColor
+{
+    
+    
+    [CATransaction begin];
+    
+    if (backgroundColor)
+    {
+        self.rootLayer.backgroundColor = [backgroundColor CGColor];
+    } else {
+        self.rootLayer.backgroundColor = NULL;
+    }
+    [CATransaction commit];
+}
+
+-(NSColor *)backgroundColor
+{
+    if (self.rootLayer.backgroundColor)
+    {
+        return [NSColor colorWithCGColor:self.rootLayer.backgroundColor];
+    } else {
+        return nil;
+    }
+}
+
 
 -(void)dealloc
 {
