@@ -10,6 +10,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="CSSourceLayoutSettingsWindowController">
             <connections>
                 <outlet property="filterListViewController" destination="q5F-Us-lTS" id="26Q-TD-IlI"/>
+                <outlet property="layoutObjectController" destination="XbS-mZ-7Fs" id="4br-Ct-gxx"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
@@ -27,7 +28,7 @@
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2fv-pd-xyN">
                         <rect key="frame" x="18" y="303" width="35" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Color" id="at5-sM-qpE">
-                            <font key="font" metaFont="systemBold" size="11"/>
+                            <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -35,25 +36,25 @@
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="XQs-Q5-9Tk">
                         <rect key="frame" x="238" y="329" width="81" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Layout Filters" id="RlR-hz-CUI">
-                            <font key="font" metaFont="systemBold" size="11"/>
+                            <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <colorWell translatesAutoresizingMaskIntoConstraints="NO" id="zXB-vs-p2W">
+                    <colorWell translatesAutoresizingMaskIntoConstraints="NO" id="zXB-vs-p2W" customClass="CSColorWell">
                         <rect key="frame" x="59" y="298" width="44" height="23"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="44" id="XNm-EY-9Bj"/>
                         </constraints>
                         <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <connections>
-                            <binding destination="-2" name="value" keyPath="self.layout.backgroundColor" id="gXX-Dl-28B"/>
+                            <binding destination="XbS-mZ-7Fs" name="value" keyPath="selection.backgroundColor" id="7I9-Rw-4Dz"/>
                         </connections>
                     </colorWell>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0ju-an-7Bp">
                         <rect key="frame" x="18" y="271" width="117" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Gradient Start Color" id="c9b-96-XmL">
-                            <font key="font" metaFont="systemBold" size="11"/>
+                            <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -61,26 +62,26 @@
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yw0-1V-zB6">
                         <rect key="frame" x="18" y="219" width="115" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Gradient Stop Color" id="VLF-s4-fsm">
-                            <font key="font" metaFont="systemBold" size="11"/>
+                            <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <colorWell translatesAutoresizingMaskIntoConstraints="NO" id="53z-GX-FoC">
+                    <colorWell translatesAutoresizingMaskIntoConstraints="NO" id="53z-GX-FoC" customClass="CSColorWell">
                         <rect key="frame" x="135" y="267" width="44" height="23"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="44" id="2Fh-sX-Owq"/>
                         </constraints>
                         <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <connections>
-                            <binding destination="-2" name="value" keyPath="self.layout.startColor" id="3aY-xl-Xbx"/>
+                            <binding destination="XbS-mZ-7Fs" name="value" keyPath="selection.startColor" id="qGk-W9-JL8"/>
                         </connections>
                     </colorWell>
-                    <colorWell translatesAutoresizingMaskIntoConstraints="NO" id="xUy-oN-1M2">
+                    <colorWell translatesAutoresizingMaskIntoConstraints="NO" id="xUy-oN-1M2" customClass="CSColorWell">
                         <rect key="frame" x="135" y="215" width="44" height="23"/>
                         <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <connections>
-                            <binding destination="-2" name="value" keyPath="self.layout.stopColor" id="QZT-5h-n6i"/>
+                            <binding destination="XbS-mZ-7Fs" name="value" keyPath="selection.stopColor" id="cpz-op-WTQ"/>
                         </connections>
                     </colorWell>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qx5-FK-lcz">
@@ -123,7 +124,7 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
-                            <binding destination="-2" name="value" keyPath="self.layout.gradientStopX" id="kFY-Wg-VlC"/>
+                            <binding destination="XbS-mZ-7Fs" name="value" keyPath="selection.gradientStopX" id="cCX-GR-nb4"/>
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Igd-at-NN1">
@@ -134,7 +135,7 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
-                            <binding destination="-2" name="value" keyPath="self.layout.gradientStartX" id="9LN-rK-Uaw"/>
+                            <binding destination="XbS-mZ-7Fs" name="value" keyPath="selection.gradientStartX" id="UUo-2Q-yrw"/>
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZgD-RH-xh3">
@@ -148,7 +149,7 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
-                            <binding destination="-2" name="value" keyPath="self.layout.gradientStartY" id="Vee-tn-qme"/>
+                            <binding destination="XbS-mZ-7Fs" name="value" keyPath="selection.gradientStartY" id="HeY-h7-bwg"/>
                         </connections>
                     </textField>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="UGt-Sv-bUJ">
@@ -172,7 +173,7 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
-                            <binding destination="-2" name="value" keyPath="self.layout.gradientStopY" id="pEE-SG-guc"/>
+                            <binding destination="XbS-mZ-7Fs" name="value" keyPath="selection.gradientStopX" id="rTf-yz-Vto"/>
                         </connections>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Uhd-Rp-49T">
@@ -245,6 +246,11 @@
                 <outlet property="parentView" destination="wfY-bj-xEX" id="62R-jN-yRv"/>
             </connections>
         </viewController>
+        <objectController id="XbS-mZ-7Fs" customClass="CSUndoObjectController">
+            <connections>
+                <binding destination="-2" name="contentObject" keyPath="self.layout" id="BLG-0G-4fT"/>
+            </connections>
+        </objectController>
         <userDefaultsController representsSharedInstance="YES" id="HoJ-nO-6ch"/>
     </objects>
 </document>

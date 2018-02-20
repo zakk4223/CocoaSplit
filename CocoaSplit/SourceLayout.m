@@ -83,13 +83,29 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(inputAttachEvent:) name:CSNotificationInputAttached object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(inputAttachEvent:) name:CSNotificationInputDetached object:nil];
-
+        _undoActionMap = @{
+                           @"gradientStartX": @"Gradient Start Color X",
+                           @"gradientStartY": @"Gradient Start Color Y",
+                           @"gradientStopX": @"Gradient Stop Color X",
+                           @"gradientStopY": @"Gradient Stop Color Y",
+                           @"startColor": @"Gradient Start Color",
+                           @"stopColor": @"Gradient Stop Color",
+                           @"backgroundColor": @"Background Color",
+                           };
         
         
     }
     
     return self;
 }
+
+
+-(NSString *)undoNameForKeyPath:(NSString *)keyPath usingValue:(id)propertyValue
+{
+    NSString *actionName = _undoActionMap[keyPath];
+    return actionName;
+}
+
 
 
 -(void)runTriggerScriptForInput:(NSObject <CSInputSourceProtocol>*)input withName:(NSString *)scriptName usingContext:(JSContext *)jsCtx

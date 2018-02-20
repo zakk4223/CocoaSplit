@@ -160,6 +160,7 @@
     JSVirtualMachine *_animationVirtualMachine;
     //dispatch_queue_t _animationQueue;
     
+    NSDictionary *_undoActionMap;
     
     
     
@@ -238,6 +239,7 @@
 -(CAMultiAudioEngine *)restoreAudioData;
 -(void)reapplyAudioSources;
 -(CAMultiAudioEngine *)findAudioEngine;
+-(NSString *)undoNameForKeyPath:(NSString *)keyPath usingValue:(id)propertyValue;
 
 
 @end

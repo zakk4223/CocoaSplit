@@ -202,6 +202,7 @@
         firstColor = CGColorCreateGenericRGB(0, 0, 0, 1);
     } else {
         firstColor = [self.startColor CGColor];
+        CGColorRetain(firstColor);
     }
     
     if (!self.stopColor)
@@ -209,6 +210,7 @@
         lastColor = CGColorCreateGenericRGB(0, 0, 0, 1);
     } else {
         lastColor = [self.stopColor CGColor];
+        CGColorRetain(lastColor);
     }
 
     

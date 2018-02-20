@@ -8,12 +8,14 @@
 #import <Cocoa/Cocoa.h>
 #import "SourceLayout.h"
 #import "CSLayerFiltersViewController.h"
+#import "CSUndoObjectControllerDelegate.h"
+@interface CSSourceLayoutSettingsWindowController : NSWindowController <CSUndoObjectControllerDelegate, NSWindowDelegate>
 
-@interface CSSourceLayoutSettingsWindowController : NSWindowController
 @property (strong) SourceLayout *layout;
 @property (strong) IBOutlet CSLayerFiltersViewController *filterListViewController;
 @property (strong) NSArray *scriptTypes;
 @property (strong) NSArray *scriptKeys;
+@property (strong) IBOutlet CSUndoObjectController *layoutObjectController;
 
 - (IBAction)clearGradient:(id)sender;
 

@@ -108,9 +108,13 @@
 {
     NSColorWell *well = notification.object;
     
+    if (well.window != self.view.window)
+    {
+        return;
+    }
+    
     NSDictionary *bindInfo = [well infoForBinding:@"value"];
     NSString *keyPath = bindInfo[NSObservedKeyPathKey];
-    NSString *propName = [[keyPath componentsSeparatedByString:@"."] lastObject];
     [self.inputobjctrl setValue:well.color forKeyPath:keyPath];
     [self.inputobjctrl pauseUndoForKeyPath:keyPath];
 }
@@ -118,11 +122,17 @@
 
 -(void)colorWellDeactivate:(NSNotification *)notification
 {
+    
+    
     NSColorWell *well = notification.object;
+    
+    if (well.window != self.view.window)
+    {
+        return;
+    }
     
     NSDictionary *bindInfo = [well infoForBinding:@"value"];
     NSString *keyPath = bindInfo[NSObservedKeyPathKey];
-    NSString *propName = [[keyPath componentsSeparatedByString:@"."] lastObject];
     [self.inputobjctrl resumeUndoForKeyPath:keyPath];
     [self.inputobjctrl setValue:well.color forKeyPath:keyPath];
 }

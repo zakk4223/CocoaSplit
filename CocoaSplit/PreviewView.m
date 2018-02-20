@@ -320,7 +320,6 @@
         self.settingsConfigWindow = [[CSSourceLayoutSettingsWindowController alloc] init];
         self.settingsConfigWindow.layout = self.sourceLayout;
         [self.settingsConfigWindow showWindow:nil];
-        NSLog(@"DID SHOW WINDOW");
     }
 }
 
@@ -448,7 +447,7 @@
     
     [sourceListMenu insertItem:midiItem atIndex:[sourceListMenu.itemArray count]];
 
-    NSMenuItem *filterItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Filters" action:@selector(configureLayoutFilters:) keyEquivalent:@""];
+    NSMenuItem *filterItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Extra Settings" action:@selector(configureLayoutFilters:) keyEquivalent:@""];
     [filterItem setTarget:self];
     [filterItem setEnabled:YES];
     [sourceListMenu insertItem:filterItem atIndex:[sourceListMenu.itemArray count]];
