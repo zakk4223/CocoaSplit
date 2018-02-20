@@ -23,7 +23,7 @@
 {
     if (self = [self initWithWindowNibName:@"CSSourceLayoutSettingsWindowController"])
     {
-        
+
     }
     
     return self;
@@ -33,7 +33,12 @@
     self.window.title = [NSString stringWithFormat:@"%@ Settings", self.layout.name];
     
     self.filterListViewController.baseLayer = self.layout.rootLayer;
-    self.filterListViewController.filterArrayName = @"filters";
+    self.filterListViewController.filterArrayName = @"backgroundFilters";
 }
 
+- (IBAction)clearGradient:(id)sender
+{
+    [self.layout clearGradient];
+    
+}
 @end

@@ -48,6 +48,8 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 @synthesize isActive = _isActive;
 @synthesize frameRate = _frameRate;
 @synthesize layoutTimingSource = _layoutTimingSource;
+@synthesize startColor = _startColor;
+@synthesize stopColor = _stopColor;
 
 -(instancetype) init
 {
@@ -169,7 +171,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 
 -(CALayer *)newRootLayer
 {
-    CALayer *newRoot = [CALayer layer];
+    CAGradientLayer *newRoot = [CAGradientLayer layer];
     [CATransaction begin];
     newRoot.bounds = CGRectMake(0, 0, _canvas_width, _canvas_height);
     newRoot.anchorPoint = CGPointMake(0.0, 0.0);
@@ -448,6 +450,16 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     }
     
     [aCoder encodeBool:self.recordingLayout forKey:@"recordingLayout"];
+    [aCoder encodeFloat:self.gradientStartX forKey:@"gradientStartX"];
+    [aCoder encodeFloat:self.gradientStartY forKey:@"gradientStartY"];
+    [aCoder encodeFloat:self.gradientStopX forKey:@"gradientStopX"];
+    [aCoder encodeFloat:self.gradientStopY forKey:@"gradientStopY"];
+    [aCoder encodeObject:self.startColor forKey:@"gradientStartColor"];
+    [aCoder encodeObject:self.stopColor forKey:@"gradientStopColor"];
+    [aCoder encodeObject:self.backgroundColor forKey:@"backgroundColor"];
+    
+
+    
     //[aCoder encodeObject:self.rootLayer.filters forKey:@"layoutFilters"];
 
 }
@@ -483,9 +495,18 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
             self.containedLayouts = [[aDecoder decodeObjectForKey:@"containedLayouts"] mutableCopy];
             //set live/staging status for each layout
         }
-        
+
+        self.backgroundColor = [aDecoder decodeObjectForKey:@"backgroundColor"];
         self.recordingLayout = [aDecoder decodeBoolForKey:@"recordingLayout"];
         self.rootLayer.filters = [aDecoder decodeObjectForKey:@"layoutFilters"];
+        self.gradientStartX = [aDecoder decodeFloatForKey:@"gradientStartX"];
+        self.gradientStartY = [aDecoder decodeFloatForKey:@"gradientStartY"];
+        self.gradientStopX = [aDecoder decodeFloatForKey:@"gradientStopX"];
+        self.gradientStopY = [aDecoder decodeFloatForKey:@"gradientStopY"];
+        _startColor = [aDecoder decodeObjectForKey:@"gradientStartColor"];
+        _stopColor = [aDecoder decodeObjectForKey:@"gradientStopColor"];
+        [self setupColors];
+        
     }
     
     return self;
@@ -914,7 +935,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     NSObject *mergeObj = [self decodeSaveData:useData];
 
     NSArray *mergeList;
-    NSArray *filterList = @[];
+    NSArray *filterList;
     
     if ([mergeObj isKindOfClass:[NSDictionary class]])
     {
@@ -925,6 +946,10 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     }
 
     
+    if (!filterList)
+    {
+        filterList = @[];
+    }
     
     NSMutableDictionary *uuidMap = [NSMutableDictionary dictionary];
     
@@ -2662,6 +2687,138 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         return nil;
     }
 }
+
+-(void)clearGradient
+{
+    _startColor = _stopColor = nil;
+    [self setupColors];
+    
+    self.startColor = nil;
+    self.stopColor = nil;
+}
+
+
+-(void)setGradientStartX:(CGFloat)gradientStartX
+{
+    CGPoint cBounds = self.rootLayer.startPoint;
+    cBounds.x = gradientStartX;
+    self.rootLayer.startPoint = cBounds;
+}
+
+-(CGFloat)gradientStartX
+{
+    return self.rootLayer.startPoint.x;
+}
+
+
+-(void)setGradientStartY:(CGFloat)gradientStartY
+{
+    
+    CGPoint cBounds = self.rootLayer.startPoint;
+    cBounds.y = gradientStartY;
+    self.rootLayer.startPoint = cBounds;
+}
+
+
+
+-(CGFloat)gradientStartY
+{
+    return self.rootLayer.startPoint.y;
+}
+
+-(void)setGradientStopX:(CGFloat)gradientStopX
+{
+    CGPoint cBounds = self.rootLayer.endPoint;
+    cBounds.x = gradientStopX;
+    self.rootLayer.endPoint = cBounds;
+}
+
+-(CGFloat)gradientStopX
+{
+    return self.rootLayer.endPoint.x;
+}
+
+-(void)setGradientStopY:(CGFloat)gradientStopY
+{
+    CGPoint cBounds = self.rootLayer.endPoint;
+    cBounds.y = gradientStopY;
+    self.rootLayer.endPoint = cBounds;
+}
+
+-(CGFloat)gradientStopY
+{
+    return self.rootLayer.endPoint.y;
+}
+
+
+-(void)setupColors
+{
+    if (!self.startColor && !self.stopColor)
+    {
+        self.rootLayer.colors = nil;
+        return;
+    }
+    
+    CGColorRef firstColor;
+    CGColorRef lastColor;
+    if (!self.startColor)
+    {
+        firstColor = CGColorCreateGenericRGB(0, 0, 0, 1);
+    } else {
+        firstColor = [self.startColor CGColor];
+        CGColorRetain(firstColor);
+
+    }
+    
+    if (!self.stopColor)
+    {
+        lastColor = CGColorCreateGenericRGB(0, 0, 0, 1);
+    } else {
+        lastColor = [self.stopColor CGColor];
+        CGColorRetain(lastColor);
+
+    }
+    
+    
+    
+    self.rootLayer.colors = [NSArray arrayWithObjects:CFBridgingRelease(firstColor),CFBridgingRelease(lastColor), nil];
+    
+}
+
+-(void)setStartColor:(NSColor *)startColor
+{
+    
+    
+    _startColor = startColor;
+    
+    
+    [self setupColors];
+    
+}
+
+
+
+-(NSColor *)startColor
+{
+    return _startColor;
+}
+
+
+-(void)setStopColor:(NSColor *)stopColor
+{
+    
+    _stopColor = stopColor;
+    
+    [self setupColors];
+}
+
+
+
+-(NSColor *)stopColor
+{
+    return _stopColor;
+}
+
 
 
 -(void)dealloc

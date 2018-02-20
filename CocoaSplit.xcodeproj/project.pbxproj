@@ -13,6 +13,8 @@
 		3400A07A1BD4533A003E1828 /* CSInputLibraryWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3400A0781BD4533A003E1828 /* CSInputLibraryWindowController.xib */; };
 		3400A07E1BD49406003E1828 /* CSInputLibraryItemView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3400A07D1BD49406003E1828 /* CSInputLibraryItemView.xib */; };
 		3400A0841BD522A5003E1828 /* CSLibraryInputItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3400A0831BD522A5003E1828 /* CSLibraryInputItemViewController.m */; };
+		34027499203B6C4B0099328C /* CSColorWell.m in Sources */ = {isa = PBXBuildFile; fileRef = 34027498203B6C4B0099328C /* CSColorWell.m */; };
+		340274B5203B98130099328C /* CSUndoObjectController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340274B4203B98130099328C /* CSUndoObjectController.m */; };
 		340620761F2E2BFE0016D997 /* CAMultiAudioInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 340620751F2E2BFE0016D997 /* CAMultiAudioInput.m */; };
 		3408235519BC677A00CD1F5F /* CSNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 3408235419BC530300CD1F5F /* CSNotifications.m */; };
 		3409A7701FA0D6CC0073866E /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3409A76F1FA0D6CC0073866E /* libiconv.tbd */; };
@@ -623,6 +625,11 @@
 		3400A07D1BD49406003E1828 /* CSInputLibraryItemView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSInputLibraryItemView.xib; path = Interface/CSInputLibraryItemView.xib; sourceTree = "<group>"; };
 		3400A0821BD522A5003E1828 /* CSLibraryInputItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSLibraryInputItemViewController.h; path = Interface/CSLibraryInputItemViewController.h; sourceTree = "<group>"; };
 		3400A0831BD522A5003E1828 /* CSLibraryInputItemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSLibraryInputItemViewController.m; path = Interface/CSLibraryInputItemViewController.m; sourceTree = "<group>"; };
+		34027497203B6C4B0099328C /* CSColorWell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSColorWell.h; path = Interface/CSColorWell.h; sourceTree = "<group>"; };
+		34027498203B6C4B0099328C /* CSColorWell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CSColorWell.m; path = Interface/CSColorWell.m; sourceTree = "<group>"; };
+		340274B3203B98130099328C /* CSUndoObjectController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSUndoObjectController.h; path = Interface/CSUndoObjectController.h; sourceTree = "<group>"; };
+		340274B4203B98130099328C /* CSUndoObjectController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CSUndoObjectController.m; path = Interface/CSUndoObjectController.m; sourceTree = "<group>"; };
+		340274B6203B98A60099328C /* CSUndoObjectControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSUndoObjectControllerDelegate.h; path = Interface/CSUndoObjectControllerDelegate.h; sourceTree = "<group>"; };
 		340620741F2E2BFE0016D997 /* CAMultiAudioInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioInput.h; path = CAMultiAudio/CAMultiAudioInput.h; sourceTree = "<group>"; };
 		340620751F2E2BFE0016D997 /* CAMultiAudioInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioInput.m; path = CAMultiAudio/CAMultiAudioInput.m; sourceTree = "<group>"; };
 		3408234619BC50AD00CD1F5F /* CSNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSNotifications.h; path = PluginHeaders/CSNotifications.h; sourceTree = "<group>"; };
@@ -1718,6 +1725,11 @@
 				34E91E3F2038ECC000E96684 /* CSSourceLayoutSettingsWindowController.h */,
 				34E91E402038ECC000E96684 /* CSSourceLayoutSettingsWindowController.m */,
 				34E91E412038ECC000E96684 /* CSSourceLayoutSettingsWindowController.xib */,
+				34027497203B6C4B0099328C /* CSColorWell.h */,
+				34027498203B6C4B0099328C /* CSColorWell.m */,
+				340274B3203B98130099328C /* CSUndoObjectController.h */,
+				340274B4203B98130099328C /* CSUndoObjectController.m */,
+				340274B6203B98A60099328C /* CSUndoObjectControllerDelegate.h */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -2842,6 +2854,7 @@
 				34ED8CAD1B07371C002C0674 /* MIKMIDIUtilities.m in Sources */,
 				34ED8C7F1B07371C002C0674 /* MIKMIDIMetaLyricEvent.m in Sources */,
 				34ED8C711B07371C002C0674 /* MIKMIDIMappingManager.m in Sources */,
+				34027499203B6C4B0099328C /* CSColorWell.m in Sources */,
 				3481F30619B48C7C00CC76D8 /* SourceLayout+ScriptingAdditions.m in Sources */,
 				34EAFB6F1A1A137600E12FBD /* CSMeterCell.m in Sources */,
 				34A77457201449C30036F8B5 /* CSStreamServiceBase.m in Sources */,
@@ -2909,6 +2922,7 @@
 				34B5FB8E1E7FA2610078FC51 /* CSSequenceItemTransitionViewController.m in Sources */,
 				3494DF391CCD2DB000E921BF /* TPCircularBuffer+AudioBufferList.c in Sources */,
 				3473D2A61D56391700842EEE /* CSAudioLevelView.m in Sources */,
+				340274B5203B98130099328C /* CSUndoObjectController.m in Sources */,
 				3498D94F1A9472BD00906532 /* CSAudioSwitchControl.m in Sources */,
 				34B5FB731E7E6E0A0078FC51 /* CSSequenceItemLayoutViewController.m in Sources */,
 				3470CD2E1D57D2AA006404D9 /* CSStreamOutputWindowController.m in Sources */,

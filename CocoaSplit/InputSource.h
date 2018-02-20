@@ -270,6 +270,11 @@ typedef enum resize_style_t {
 
 -(NSViewController *)configurationViewController;
 
+
+-(NSString *)undoNameForKeyPath:(NSString *)keyPath usingValue:(id)propertyValue;
+
+
+
 @property (strong) NSString *scriptStorage;
 
 

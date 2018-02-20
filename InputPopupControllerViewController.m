@@ -58,13 +58,74 @@
         self.scriptTypes = @[@"After Add", @"Before Delete", @"FrameTick", @"Before Merge", @"After Merge", @"Before Remove", @"Before Replace", @"After Replace"];
         self.scriptKeys = @[@"selection.script_afterAdd", @"selection.script_beforeDelete", @"selection.script_frameTick", @"selection.script_beforeMerge", @"selection.script_afterMerge", @"selection.script_beforeRemove", @"selection.script_beforeReplace", @"selection.script_afterReplace"];
 
-        
-        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(colorWellActivate:) name:@"CSColorWellActivated" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(colorWellDeactivate:) name:@"CSColorWellDeactivated" object:nil];
+
     }
     
     return self;
 }
 
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+
+-(void)awakeFromNib
+{
+    if (self.inputobjctrl)
+    {
+        self.inputobjctrl.undoDelegate = self;
+    }
+}
+
+
+-(void)performUndoForKeyPath:(NSString *)keyPath usingValue:(id)usingValue
+{
+
+    if (!self.undoManager)
+    {
+        return;
+    }
+    
+    
+    NSString *propName = [[keyPath componentsSeparatedByString:@"."] lastObject];
+
+    [[self.undoManager prepareWithInvocationTarget:self.inputSource.sourceLayout] modifyUUID:self.inputSource.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
+        [input setValue:usingValue forKey:propName];
+    }];
+    
+    NSString *actionName = [self.inputSource undoNameForKeyPath:propName usingValue:usingValue];
+    if (actionName)
+    {
+        [self.undoManager setActionName:actionName];
+    }
+}
+
+
+-(void)colorWellActivate:(NSNotification *)notification
+{
+    NSColorWell *well = notification.object;
+    
+    NSDictionary *bindInfo = [well infoForBinding:@"value"];
+    NSString *keyPath = bindInfo[NSObservedKeyPathKey];
+    NSString *propName = [[keyPath componentsSeparatedByString:@"."] lastObject];
+    [self.inputobjctrl setValue:well.color forKeyPath:keyPath];
+    [self.inputobjctrl pauseUndoForKeyPath:keyPath];
+}
+
+
+-(void)colorWellDeactivate:(NSNotification *)notification
+{
+    NSColorWell *well = notification.object;
+    
+    NSDictionary *bindInfo = [well infoForBinding:@"value"];
+    NSString *keyPath = bindInfo[NSObservedKeyPathKey];
+    NSString *propName = [[keyPath componentsSeparatedByString:@"."] lastObject];
+    [self.inputobjctrl resumeUndoForKeyPath:keyPath];
+    [self.inputobjctrl setValue:well.color forKeyPath:keyPath];
+}
 
 
 +(NSSet *)keyPathsForValuesAffectingSelectedVideoType
@@ -392,6 +453,12 @@
 -(IBAction)scriptUndo:(NSButton *)sender
 {
     [self.inputobjctrl discardEditing];
+}
+
+- (IBAction)backgroundColorChanged:(NSColorWell *)sender {
+    NSUInteger mouseButtons = [NSEvent pressedMouseButtons];
+    NSLog(@"MOUSE BUTTONS %d", mouseButtons);
+    NSLog(@"COLOR CHANGED");
 }
 
 

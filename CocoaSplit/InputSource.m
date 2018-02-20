@@ -847,6 +847,7 @@ static NSArray *_sourceTypes = nil;
     
 
     [CATransaction commit];
+
     _undoActionMap = @{@"name": @"Set Name",
                        @"crop_top": @"Crop Top",
                        @"changeInterval": @"Change Interval",
@@ -1534,27 +1535,11 @@ static NSArray *_sourceTypes = nil;
     }
     
     [self stopObservingConstraintKeys];
+
     self.layer = nil;
     
     
 }
-
--(void)setSettingsTab:(NSString *)settingsTab
-{
-    return;
-}
-
-
--(NSString *)settingsTab
-{
-    if (self.videoInput)
-    {
-        return @"Settings";
-    }
-    
-    return @"Source";
-}
-
 
 /*
 -(NSString *)description
@@ -3408,28 +3393,6 @@ static NSArray *_sourceTypes = nil;
 }
 
 
--(void)setValue:(id)value forKeyPath:(NSString *)keyPath
-{
-    
-    NSString *actionName = _undoActionMap[keyPath];
-    if (!actionName)
-    {
-        if ([keyPath isEqualToString:@"isMaskLayer"])
-        {
-            actionName = value ? @"Set As Mask" : @"Unset As Mask";
-        } else if ([keyPath isEqualToString: @"active"]) {
-            actionName = value ? @"Set Active" : @"Unset Active";
-        } else if ([keyPath isEqualToString:@"doChromaKey"]) {
-            actionName = value ? @"Set Chroma Key" : @"Unset Chroma Key";
-        } else {
-            actionName = [NSString stringWithFormat:@"Change %@", keyPath];
-        }
-    }
-    
-    [self registerUndoForProperty:keyPath withAction:actionName];
-    
-    [super setValue:value forKeyPath:keyPath];
-}
 -(void) setCrop_bottom:(CGFloat)crop_bottom
 {
     if (crop_bottom < 0)
@@ -3443,16 +3406,58 @@ static NSArray *_sourceTypes = nil;
 }
 
 
--(void)registerUndoForProperty:(NSString *)propName withAction:(NSString *)action
+
+
+-(NSString *)undoNameForKeyPath:(NSString *)keyPath usingValue:(id)propertyValue
 {
-    id propertyValue = [self valueForKeyPath:propName];
+    NSString *actionName = _undoActionMap[keyPath];
+    if (!actionName)
+    {
+        if ([keyPath isEqualToString:@"isMaskLayer"])
+        {
+            actionName = propertyValue ? @"Set As Mask" : @"Unset As Mask";
+        } else if ([keyPath isEqualToString: @"active"]) {
+            actionName = propertyValue ? @"Set Active" : @"Unset Active";
+        } else if ([keyPath isEqualToString:@"doChromaKey"]) {
+            actionName = propertyValue ? @"Set Chroma Key" : @"Unset Chroma Key";
+        } else {
+            actionName = [NSString stringWithFormat:@"Change %@", keyPath];
+        }
+    }
+    
+    return actionName;
+}
+
+
+-(void)undoNotification:(NSNotification *)notification
+{
+    NSString *keyPath = notification.name;
+    id propertyValue = notification.object;
+
+    NSString *actionName = _undoActionMap[keyPath];
+    if (!actionName)
+    {
+        if ([keyPath isEqualToString:@"isMaskLayer"])
+        {
+            actionName = propertyValue ? @"Set As Mask" : @"Unset As Mask";
+        } else if ([keyPath isEqualToString: @"active"]) {
+            actionName = propertyValue ? @"Set Active" : @"Unset Active";
+        } else if ([keyPath isEqualToString:@"doChromaKey"]) {
+            actionName = propertyValue ? @"Set Chroma Key" : @"Unset Chroma Key";
+        } else {
+            actionName = [NSString stringWithFormat:@"Change %@", keyPath];
+        }
+    }
     
     [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
-        [input setValue:propertyValue forKeyPath:propName];
+        [input pauseUndoForKeyPath:keyPath];
+        [input setValue:propertyValue forKeyPath:keyPath];
+        [input resumeUndoForKeyPath:keyPath];
         
     }];
-    [self.sourceLayout.undoManager setActionName:action];
+    [self.sourceLayout.undoManager setActionName:actionName];
 }
+
 
 
 

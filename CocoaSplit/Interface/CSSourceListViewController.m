@@ -977,6 +977,23 @@
 
 
 
+-(NSUndoManager *)windowWillReturnUndoManager:(NSWindow *)window
+{
+    if (!window.identifier)
+    {
+        return nil;
+    }
+    
+    InputPopupControllerViewController *inputController = [_activeConfigControllers objectForKey:window.identifier];
+    
+    if (!inputController || !inputController.inputSource)
+    {
+        return nil;
+    }
+    
+    return inputController.inputSource.sourceLayout.undoManager;
+}
+
 
 -(NSPoint)openInputConfigWindow:(NSObject <CSInputSourceProtocol>*)configSrc withCascade:(NSPoint)cascadePoint
 {

@@ -55,7 +55,7 @@
 @property (strong) NSString *name;
 
 @property (strong) CARenderer *renderer;
-@property (strong) CALayer *rootLayer;
+@property (strong) CAGradientLayer *rootLayer;
 
 @property (strong) SourceCache *sourceCache;
 @property (strong) CIFilter *compositeFilter;
@@ -78,6 +78,13 @@
 @property (weak) CSLayoutRecorder *recorder;
 @property (readonly) bool hasSources;
 @property (strong) CAMultiAudioEngine *audioEngine;
+@property (strong) NSColor *startColor;
+@property (strong) NSColor *stopColor;
+@property (assign) CGFloat gradientStartX;
+@property (assign) CGFloat gradientStartY;
+@property (assign) CGFloat gradientStopX;
+@property (assign) CGFloat gradientStopY;
+
 
 -(void)deleteSource:(NSObject<CSInputSourceProtocol> *)delSource;
 -(void)addSource:(NSObject<CSInputSourceProtocol> *)newSource;
@@ -128,6 +135,8 @@
 -(void)generateTopLevelSourceList;
 -(NSString *)addLayoutFilter:(NSString *)filterName;
 -(void)deleteLayoutFilter:(NSString *)filteruuid;
+
+-(void)clearGradient;
 
 
 @end
@@ -190,7 +199,7 @@
 @property (strong) NSString *name;
 
 @property (strong) CARenderer *renderer;
-@property (strong) CALayer *rootLayer;
+@property (strong) CAGradientLayer *rootLayer;
 
 @property (strong) SourceCache *sourceCache;
 @property (strong) CIFilter *compositeFilter;
@@ -216,6 +225,12 @@
 @property (strong) NSData *audioData;
 @property (strong) CAMultiAudioEngine *audioEngine;
 @property (assign) bool ignorePinnedInputs;
+@property (strong) NSColor *startColor;
+@property (strong) NSColor *stopColor;
+@property (assign) CGFloat gradientStartX;
+@property (assign) CGFloat gradientStartY;
+@property (assign) CGFloat gradientStopX;
+@property (assign) CGFloat gradientStopY;
 
 -(CSAudioInputSource *)findSourceForAudioUUID:(NSString *)audioUUID;
 
