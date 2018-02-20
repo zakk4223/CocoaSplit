@@ -19,7 +19,6 @@
 #import "CSNotifications.h"
 #import "PluginManagerWindowController.h"
 #import "CreateLayoutViewController.h"
-#import "CSAddInputViewController.h"
 #import "CAMultiAudioEngine.h"
 #import "CSAnimationRunnerObj.h"
 #import "CSMidiManagerWindowController.h"

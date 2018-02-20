@@ -55,6 +55,8 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 {
     if (self = [super init])
     {
+        self.containerOnly = NO;
+        
         _sourceDepthSorter = [[NSSortDescriptor alloc] initWithKey:@"depth" ascending:YES];
         _sourceDepthSorterRev = [[NSSortDescriptor alloc] initWithKey:@"depth" ascending:NO];
 
@@ -437,6 +439,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     newLayout.canvas_width = self.canvas_width;
     newLayout.frameRate = self.frameRate;
     newLayout.isActive = NO;
+    newLayout.containerOnly = self.containerOnly;
     newLayout.containedLayouts = self.containedLayouts.mutableCopy;
     return newLayout;
 }
@@ -462,7 +465,15 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     
     if (self.containedLayouts)
     {
-        [aCoder encodeObject:self.containedLayouts forKey:@"containedLayouts"];
+        NSMutableArray *tmpArray = [NSMutableArray array];
+        for (SourceLayout *tmp in self.containedLayouts)
+        {
+            if (!tmp.containerOnly)
+            {
+                [tmpArray addObject:tmp];
+            }
+        }
+        [aCoder encodeObject:tmpArray forKey:@"containedLayouts"];
     }
     
     [aCoder encodeBool:self.recordingLayout forKey:@"recordingLayout"];
@@ -473,6 +484,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     [aCoder encodeObject:self.startColor forKey:@"gradientStartColor"];
     [aCoder encodeObject:self.stopColor forKey:@"gradientStopColor"];
     [aCoder encodeObject:self.backgroundColor forKey:@"backgroundColor"];
+    [aCoder encodeBool:self.containerOnly forKey:@"containerOnly"];
     
 
     
@@ -508,10 +520,17 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     
         if ([aDecoder containsValueForKey:@"containedLayouts"])
         {
-            self.containedLayouts = [[aDecoder decodeObjectForKey:@"containedLayouts"] mutableCopy];
-            //set live/staging status for each layout
+            NSMutableArray *tmpList = [[aDecoder decodeObjectForKey:@"containedLayouts"] mutableCopy];
+            for (SourceLayout *layout in tmpList)
+            {
+                if (!layout.containerOnly)
+                {
+                    [self.containedLayouts addObject:layout];
+                }
+            }
         }
 
+        self.containerOnly = [aDecoder decodeBoolForKey:@"containerOnly"];
         self.backgroundColor = [aDecoder decodeObjectForKey:@"backgroundColor"];
         self.recordingLayout = [aDecoder decodeBoolForKey:@"recordingLayout"];
         self.rootLayer.filters = [aDecoder decodeObjectForKey:@"layoutFilters"];
@@ -556,7 +575,10 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     {
         for (SourceLayout *layout in self.containedLayouts)
         {
-            self.addLayoutBlock(layout);
+            if (!layout.containerOnly)
+            {
+                self.addLayoutBlock(layout);
+            }
         }
     }
 }
@@ -1057,7 +1079,10 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     {
         for (SourceLayout *newCont in containedLayouts)
         {
-            self.addLayoutBlock(newCont);
+            if (!newCont.containerOnly)
+            {
+                self.addLayoutBlock(newCont);
+            }
         }
     }
 }
@@ -1118,15 +1143,25 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     }
 
     
-    if (self.addLayoutBlock)
+    if (!layout.containerOnly)
     {
-        self.addLayoutBlock(layout);
+        if (self.addLayoutBlock)
+        {
+            
+            self.addLayoutBlock(layout);
+        }
+        
+        NSLog(@"ADDED %@", layout);
+        [self.containedLayouts addObject:layout];
     }
-    
-    [self.containedLayouts addObject:layout];
-    
     for (SourceLayout *cLayout in layout.containedLayouts.copy)
     {
+        
+        if (cLayout.containerOnly)
+        {
+            continue;
+        }
+        
         if (self.addLayoutBlock)
         {
             self.addLayoutBlock(cLayout);
@@ -1430,10 +1465,13 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     
     [self mergeSourceData:toMerge.savedSourceListData usingScripts:usingScripts withCompletionBlock:completionBlock];
 
-    [self.containedLayouts addObject:toMerge];
-    if (self.addLayoutBlock)
+    if (!toMerge.containerOnly)
     {
-        self.addLayoutBlock(toMerge);
+        [self.containedLayouts addObject:toMerge];
+        if (self.addLayoutBlock)
+        {
+            self.addLayoutBlock(toMerge);
+        }
     }
 
 }

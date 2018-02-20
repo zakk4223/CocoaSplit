@@ -2210,6 +2210,9 @@
     self.selectedLayout = [[SourceLayout alloc] init];
     self.stagingLayout = [[SourceLayout alloc] init];
 
+    self.selectedLayout.containerOnly = YES;
+    self.stagingLayout.containerOnly = YES;
+    
     self.stagingPreviewView.sourceLayout = self.stagingLayout;
     
     
@@ -2323,6 +2326,7 @@
         }
         
         self.selectedLayout.ignorePinnedInputs = YES;
+        self.selectedLayout.containerOnly = YES;
     }
     
     
@@ -2337,6 +2341,7 @@
             self.stagingLayout = tmpLayout;
         }
         
+        self.stagingLayout.containerOnly = YES;
         
         self.stagingPreviewView.sourceLayout = self.stagingLayout;
         self.stagingLayout.name = @"staging";
@@ -4531,10 +4536,16 @@
     //Save the current live layout to a temporary layout, do a normal staging->live and then restore old live into current staging
 
     [self.livePreviewView.sourceLayout saveSourceList];
-    
+    [self stagingSave:sender];
+
     SourceLayout *tmpLive = [self.livePreviewView.sourceLayout copy];
+    SourceLayout *tmpStage = [self.stagingLayout copy];
     
-    [self stagingGoLive:self];
+    [self.selectedLayout replaceWithSourceLayoutViaScript:tmpStage  withCompletionBlock:^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.inLayoutTransition = NO;
+        });} withExceptionBlock:nil];
+    //[self stagingGoLive:self];
 
     [self applyTransitionSettings:self.activePreviewView.sourceLayout];
     [self switchToLayout:tmpLive];

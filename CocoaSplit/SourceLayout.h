@@ -232,6 +232,7 @@
 @property (assign) CGFloat gradientStartY;
 @property (assign) CGFloat gradientStopX;
 @property (assign) CGFloat gradientStopY;
+@property (assign) bool containerOnly;
 
 -(CSAudioInputSource *)findSourceForAudioUUID:(NSString *)audioUUID;
 
