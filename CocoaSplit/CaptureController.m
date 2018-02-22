@@ -2293,6 +2293,7 @@
             [self.sourceLayouts addObject:nLayout];
         }
     }
+    
     if (!_layoutViewController)
     {
         _layoutViewController = [[CSLayoutSwitcherViewController alloc] init];
@@ -4618,6 +4619,10 @@
 
 -(void) hideStagingView
 {
+    
+    self.stagingPreviewView.animator.hidden = YES;
+    
+    /*
     NSView *stagingView = self.canvasSplitView.subviews[0];
     NSView *liveView = self.canvasSplitView.subviews[1];
     _liveFrame = liveView.frame;
@@ -4627,7 +4632,7 @@
     
     
     [self.canvasSplitView.animator display];
-    
+    */
     if (self.stagingPreviewView.sourceLayout)
     {
         [self.stagingPreviewView.sourceLayout saveSourceList];
@@ -4647,8 +4652,9 @@
 
 -(void) showStagingView
 {
-    NSView *stagingView = self.canvasSplitView.subviews[0];
-    stagingView.animator.hidden = NO;
+    //NSView *stagingView = self.canvasSplitView.subviews[0];
+    
+    self.stagingPreviewView.animator.hidden = NO;
     if (self.livePreviewView.sourceLayout)
     {
         [self.livePreviewView.sourceLayout saveSourceList];
@@ -4659,11 +4665,13 @@
         self.selectedLayout = self.livePreviewView.sourceLayout;
     }
 
+    /*
     [self.canvasSplitView.animator setPosition:_liveFrame.origin.x ofDividerAtIndex:0];
     
     [self.canvasSplitView.animator adjustSubviews];
     
     [self.canvasSplitView.animator display];
+     */
     self.livePreviewView.viewOnly = YES;
     self.livePreviewView.sourceLayout.ignorePinnedInputs = YES;
     self.stagingHidden = NO;
@@ -4717,8 +4725,8 @@
 }
 - (IBAction)stagingViewToggle:(id)sender
 {
-    BOOL stagingCollapsed = [self.canvasSplitView isSubviewCollapsed:self.canvasSplitView.subviews[0]];
-    
+    //BOOL stagingCollapsed = [self.canvasSplitView isSubviewCollapsed:self.canvasSplitView.subviews[0]];
+    BOOL stagingCollapsed = self.stagingPreviewView.hidden;
     if (stagingCollapsed)
     {
         [self showStagingView];

@@ -54,7 +54,7 @@
     } else if (boxWidth > boxHeight) {
         boxWidth = boxHeight;
     }
-     */
+    */
     
     NSInteger viewIdx = 0;
     

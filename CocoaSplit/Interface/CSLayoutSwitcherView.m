@@ -107,6 +107,17 @@
 -(void)mouseDown:(NSEvent *)event
 {
     self.layer.opacity = 0.5f;
+
+}
+
+-(void)mouseDragged:(NSEvent *)event
+{
+    NSLog(@"DRAGGED LAYOUT VIEW");
+}
+
+-(void)mouseUp:(NSEvent *)event
+{
+    self.layer.opacity = 1.0f;
     if (self.sourceLayout)
     {
         AppDelegate *appDel = NSApp.delegate;
@@ -129,12 +140,6 @@
         }
     }
 
-}
-
-
--(void)mouseUp:(NSEvent *)event
-{
-    self.layer.opacity = 1.0f;
 }
 
 

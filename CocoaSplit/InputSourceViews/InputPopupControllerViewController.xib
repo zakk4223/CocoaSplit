@@ -2182,7 +2182,7 @@
                                 <rect key="frame" x="17" y="165" width="456" height="171"/>
                                 <clipView key="contentView" id="VU8-cU-Tot">
                                     <rect key="frame" x="1" y="0.0" width="454" height="170"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="28" headerView="Cja-SV-r3z" id="Wec-Fy-TOT">
                                             <rect key="frame" x="0.0" y="0.0" width="454" height="147"/>
@@ -2421,7 +2421,7 @@
                                 <rect key="frame" x="-3" y="54" width="124" height="368"/>
                                 <clipView key="contentView" id="ptW-r4-ihY">
                                     <rect key="frame" x="1" y="1" width="122" height="366"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" viewBased="YES" id="7TO-Cw-mOa">
                                             <rect key="frame" x="0.0" y="0.0" width="122" height="366"/>
@@ -2491,7 +2491,7 @@
                                 <rect key="frame" x="120" y="54" width="525" height="368"/>
                                 <clipView key="contentView" id="hAW-Jx-skG">
                                     <rect key="frame" x="1" y="1" width="508" height="366"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="XJb-k2-QUc">
                                             <rect key="frame" x="0.0" y="0.0" width="508" height="366"/>
