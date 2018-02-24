@@ -85,6 +85,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) MIKMIDIDeviceManager *midiManager;
 @property (strong) NSMutableDictionary *midiDeviceMappings;
 @property (strong) NSArray *midiMapGenerators;
+
 @property (assign) NSInteger currentMidiInputStagingIdx;
 @property (assign) NSInteger currentMidiInputLiveIdx;
 @property (assign) bool currentMidiLayoutLive;
@@ -100,7 +101,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) NSMutableArray *sourceLayouts;
 @property (strong) SourceLayout *selectedLayout;
 @property (strong) SourceLayout *stagingLayout;
-@property (weak) IBOutlet NSSplitView *canvasSplitView;
 @property (assign) double captureFPS;
 //@property (assign) double audio_adjust;
 @property (weak) IBOutlet NSPopover *editorPopover;
@@ -494,6 +494,7 @@ NSArray *_savedTransitionConstraints;
 @property (strong) NSArray *validSamplerates;
 @property (weak) NSArray *audioCaptureDevices;
 @property (weak) IBOutlet NSTableView *audioTableView;
+@property (weak) IBOutlet NSStackView *previewStackView;
 
 @property (strong) NSDictionary *extraSaveData;
 @property (strong) NSPipe *loggingPipe;

@@ -1708,29 +1708,12 @@
     
     if (self.isInFullScreenMode)
     {
-        
-        
         [self exitFullScreenModeWithOptions:nil];
-        
-        
-        [self.controller layoutLeftFullscreen];
-        
+        self.hidden = NO;
     } else {
-        
         NSNumber *fullscreenOptions = @(NSApplicationPresentationAutoHideMenuBar|NSApplicationPresentationAutoHideDock);
-        
-        
-        _fullscreenOn = onScreen;
-        
-        
-        
-        [self.controller layoutWentFullscreen];
-
-        [self enterFullScreenMode:_fullscreenOn withOptions:@{NSFullScreenModeAllScreens: @NO, NSFullScreenModeApplicationPresentationOptions: fullscreenOptions}];
-        
-
+        [self enterFullScreenMode:onScreen withOptions:@{NSFullScreenModeAllScreens: @NO, NSFullScreenModeApplicationPresentationOptions: fullscreenOptions}];
     }
-    
 }
 
 

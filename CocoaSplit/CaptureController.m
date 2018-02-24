@@ -2052,7 +2052,6 @@
     
     [saveRoot setValue:self.extraPluginsSaveData forKeyPath:@"extraPluginsSaveData"];
     
-    //BOOL stagingHidden = [self.canvasSplitView isSubviewCollapsed:self.canvasSplitView.subviews[0]];
     [saveRoot setValue:[NSNumber numberWithBool:self.stagingHidden] forKey:@"stagingHidden"];
     
     [saveRoot setValue:self.multiAudioEngine forKey:@"multiAudioEngine"];
@@ -4621,18 +4620,7 @@
 {
     
     self.stagingPreviewView.animator.hidden = YES;
-    
-    /*
-    NSView *stagingView = self.canvasSplitView.subviews[0];
-    NSView *liveView = self.canvasSplitView.subviews[1];
-    _liveFrame = liveView.frame;
-    stagingView.animator.hidden = YES;
-    //[liveView setFrameSize:NSMakeSize(self.canvasSplitView.frame.size.width, liveView.frame.size.height)];
-    [self.canvasSplitView.animator adjustSubviews];
-    
-    
-    [self.canvasSplitView.animator display];
-    */
+ 
     if (self.stagingPreviewView.sourceLayout)
     {
         [self.stagingPreviewView.sourceLayout saveSourceList];
@@ -4652,8 +4640,6 @@
 
 -(void) showStagingView
 {
-    //NSView *stagingView = self.canvasSplitView.subviews[0];
-    
     self.stagingPreviewView.animator.hidden = NO;
     if (self.livePreviewView.sourceLayout)
     {
@@ -4665,13 +4651,7 @@
         self.selectedLayout = self.livePreviewView.sourceLayout;
     }
 
-    /*
-    [self.canvasSplitView.animator setPosition:_liveFrame.origin.x ofDividerAtIndex:0];
-    
-    [self.canvasSplitView.animator adjustSubviews];
-    
-    [self.canvasSplitView.animator display];
-     */
+
     self.livePreviewView.viewOnly = YES;
     self.livePreviewView.sourceLayout.ignorePinnedInputs = YES;
     self.stagingHidden = NO;
@@ -4684,48 +4664,11 @@
         self.livePreviewView.midiActive = YES;
         self.stagingPreviewView.midiActive = NO;
     }
-    
-    /*
-    dispatch_async(_preview_queue, ^{
-        [self newStagingFrameTimed];
-    });*/
-
-
 }
 
--(void)layoutWentFullscreen
-{
-    
-    //[self.canvasSplitView adjustSubviews];
-    //[self.canvasSplitView display];
-    /*
-    _stagingFrame = self.stagingPreviewView.frame;
-    _liveFrame = self.livePreviewView.frame;
-     */
-    if (!self.stagingPreviewView.isInFullScreenMode && !self.stagingPreviewView.isInFullScreenMode)
-    {
-        _liveFrame = self.livePreviewView.frame;
-    }
 
-    
-}
-
--(void)layoutLeftFullscreen
-{
-    [self.canvasSplitView adjustSubviews];
-    [self.canvasSplitView setPosition:_liveFrame.origin.x ofDividerAtIndex:0];
-    [self.canvasSplitView display];
-    
-    
-    /*
-    self.stagingPreviewView.frame = _stagingFrame;
-    self.livePreviewView.frame = _liveFrame;
-     */
-    
-}
 - (IBAction)stagingViewToggle:(id)sender
 {
-    //BOOL stagingCollapsed = [self.canvasSplitView isSubviewCollapsed:self.canvasSplitView.subviews[0]];
     BOOL stagingCollapsed = self.stagingPreviewView.hidden;
     if (stagingCollapsed)
     {
