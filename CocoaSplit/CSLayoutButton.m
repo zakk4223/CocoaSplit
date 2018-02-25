@@ -57,7 +57,7 @@
 -(void)mouseDown:(NSEvent *)theEvent
 {
     [self highlight:YES];
-    //[self.nextResponder mouseDown:theEvent];'
+    [self.nextResponder mouseDown:theEvent];
     _savedMouseDown = theEvent;
 
     return;

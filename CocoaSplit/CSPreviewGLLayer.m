@@ -54,6 +54,11 @@
         _initDone = YES;
     }
     
+    
+    glClearColor(0.329412,0.329412,0.329412,0);
+
+    
+/*
     if (_resetClearColor)
     {
         if (self.midiActive)
@@ -65,7 +70,7 @@
         
         _resetClearColor = NO;
     }
-    
+  */
     
     glClear(GL_COLOR_BUFFER_BIT);
 

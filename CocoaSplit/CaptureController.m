@@ -2301,7 +2301,6 @@
        _layoutViewController.layouts = self.sourceLayouts;
     }
     
-    
     if ([saveRoot objectForKey:@"stagingHidden"])
     {
         BOOL stagingHidden = [[saveRoot valueForKeyPath:@"stagingHidden"] boolValue];

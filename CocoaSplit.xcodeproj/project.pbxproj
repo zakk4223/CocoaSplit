@@ -1417,8 +1417,8 @@
 				349461671ABC57C100F28883 /* CSAnimationItem.m */,
 				349461581AB420E600F28883 /* CSAnimationRunner */,
 				349461571AB41DA000F28883 /* CSAnimationRunnerObj.h */,
-				340DC733197CF6E9003A0BB3 /* CSCaptureBase.m */,
 				34938EE61AE4A7E500F3B1CF /* CSCIFilterConfigProxy.h */,
+				3462E79B204214950044B90D /* PluginBaseClasses */,
 				34938EE71AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m */,
 				346CF44A1A5C10C2008E5BFF /* CSInputLayer.h */,
 				346CF44B1A5C10C2008E5BFF /* CSInputLayer.m */,
@@ -1426,11 +1426,6 @@
 				34ED8CBA1B07763F002C0674 /* CSMidiWrapper.h */,
 				34ED8CBB1B07763F002C0674 /* CSMidiWrapper.m */,
 				3408235419BC530300CD1F5F /* CSNotifications.m */,
-				34576C7619AFCA1B007BAD90 /* CSPluginLoader.h */,
-				34576C7719AFCA1B007BAD90 /* CSPluginLoader.m */,
-				34FDD6F11A215268009A7413 /* CSPluginServices.m */,
-				34D2D5721A547628001004E5 /* CSTextCaptureBase.m */,
-				34D2D5761A547C35001004E5 /* CSTextCaptureViewControllerBase.m */,
 				342346BD15F6103D00C8C77E /* CSLavfOutput.m */,
 				347B14D9198492D900DC7DF0 /* InputPopupControllerViewController.h */,
 				347B14DA198492D900DC7DF0 /* InputPopupControllerViewController.m */,
@@ -1499,9 +1494,7 @@
 				346544DE1FC24248003B9991 /* NSImage+tintedImage.m */,
 				346544E01FC2457E003B9991 /* CSNSImageCellThemed.h */,
 				346544E11FC2457E003B9991 /* CSNSImageCellThemed.m */,
-				34A77456201449C30036F8B5 /* CSStreamServiceBase.m */,
 				34A77458201466C30036F8B5 /* CSLavfOutput.h */,
-				34A7745A201466F10036F8B5 /* CSOutputBase.m */,
 				346395042018483300556407 /* CSPcmPlayer.m */,
 				34414E512019C06B00CD9DCE /* CSCaptureBaseInternal.h */,
 				3457BCC52019C3F600B8DF5D /* CSCaptureBaseInputFrameTickProtocol.h */,
@@ -1891,6 +1884,21 @@
 				3460E5871AC764500080358E /* rotate.py */,
 			);
 			path = AnimationSamples;
+			sourceTree = "<group>";
+		};
+		3462E79B204214950044B90D /* PluginBaseClasses */ = {
+			isa = PBXGroup;
+			children = (
+				340DC733197CF6E9003A0BB3 /* CSCaptureBase.m */,
+				34576C7619AFCA1B007BAD90 /* CSPluginLoader.h */,
+				34576C7719AFCA1B007BAD90 /* CSPluginLoader.m */,
+				34FDD6F11A215268009A7413 /* CSPluginServices.m */,
+				34D2D5721A547628001004E5 /* CSTextCaptureBase.m */,
+				34D2D5761A547C35001004E5 /* CSTextCaptureViewControllerBase.m */,
+				34A77456201449C30036F8B5 /* CSStreamServiceBase.m */,
+				34A7745A201466F10036F8B5 /* CSOutputBase.m */,
+			);
+			path = PluginBaseClasses;
 			sourceTree = "<group>";
 		};
 		3473D27A1D4C349700842EEE /* Products */ = {
