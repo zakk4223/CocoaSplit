@@ -29,6 +29,7 @@
 
 {
 
+    PreviewView *_fullScreenView;
     
     CSPreviewGLLayer *_glLayer;
     

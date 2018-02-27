@@ -2225,24 +2225,7 @@
     self.midiLiveChannel = [[saveRoot valueForKey:@"midiLiveChannel"] integerValue];
     
     
-    self.useTransitions = [[saveRoot valueForKey:@"useTransitions"] boolValue];
-    self.transitionName = [saveRoot valueForKey:@"transitionName"];
 
-    if (self.transitionName)
-    {
-        CSLayoutTransition *savedTransition = [saveRoot valueForKey:@"transitionInfo"];
-
-        if (savedTransition)
-        {
-            self.layoutTransitionViewController.transition = savedTransition;
-        } else {
-            savedTransition = self.layoutTransitionViewController.transition;
-            
-            savedTransition.transitionDirection = [saveRoot valueForKey:@"transitionDirection"];
-            savedTransition.transitionDuration = [[saveRoot valueForKey:@"transitionDuration"] floatValue];
-            savedTransition.transitionFilter = [saveRoot valueForKey:@"transitionFilter"];
-        }
-    }
 
     self.multiAudioEngine = [saveRoot valueForKey:@"multiAudioEngine"];
     if (!self.multiAudioEngine)
@@ -2391,22 +2374,31 @@
     }
     
     
-    /*
-    for (OutputDestination *output in self.captureDestinations)
-    {
-        if (output.active && output.assignedLayout)
-        {
-            [self startRecordingLayout:output.assignedLayout usingOutput:output];
-        }
-    }
-     */
+
     if (self.useInstantRecord)
     {
         [self setupInstantRecorder];
     }
 
     [self.sourceListViewController addObserver:self forKeyPath:@"selectedObjects" options:NSKeyValueObservingOptionNew context:NULL];
-
+    self.useTransitions = [[saveRoot valueForKey:@"useTransitions"] boolValue];
+    self.transitionName = [saveRoot valueForKey:@"transitionName"];
+    
+    if (self.transitionName)
+    {
+        CSLayoutTransition *savedTransition = [saveRoot valueForKey:@"transitionInfo"];
+        
+        if (savedTransition)
+        {
+            self.layoutTransitionViewController.transition = savedTransition;
+        } else {
+            savedTransition = self.layoutTransitionViewController.transition;
+            
+            savedTransition.transitionDirection = [saveRoot valueForKey:@"transitionDirection"];
+            savedTransition.transitionDuration = [[saveRoot valueForKey:@"transitionDuration"] floatValue];
+            savedTransition.transitionFilter = [saveRoot valueForKey:@"transitionFilter"];
+        }
+    }
 
 }
 
@@ -4420,15 +4412,15 @@
     [NSAnimationContext beginGrouping];
     
     [[NSAnimationContext currentContext] setCompletionHandler:^{
-        self.audioConstraint.priority = 500;
+        self.transitionConfigurationView.animator.hidden = NO;
         [self changeTransitionView];
 
     }];
     
-    
-    self.transitionConfigurationView.animator.hidden = NO;
-    self.transitionLabel.animator.hidden = NO;
-    self.audioConstraint.animator.constant = _savedAudioConstraintConstant;
+    self.audioWidthConstraint.animator.active = YES;
+    self.sourcesWidthConstraint.animator.active = YES;
+
+    self.audioConstraint.animator.animator.active = YES;
     [NSAnimationContext endGrouping];
     
 }
@@ -4438,12 +4430,12 @@
 {
     _savedAudioConstraintConstant = self.audioConstraint.constant;
     [NSAnimationContext beginGrouping];
-    
-    self.audioConstraint.animator.priority = 700;
-    self.audioConstraint.animator.constant = 8;
     [self.transitionConfigurationView setHidden:YES];
-    self.transitionLabel.hidden = YES;
 
+    self.audioWidthConstraint.animator.active = NO;
+    self.sourcesWidthConstraint.animator.active = NO;
+    self.audioConstraint.animator.active = NO;
+    
     self.layoutTransitionConfigView.subviews = @[];
     self.layoutTransitionViewController = nil;
     
@@ -4618,8 +4610,11 @@
 -(void) hideStagingView
 {
     
-    self.stagingPreviewView.animator.hidden = YES;
- 
+
+    
+    self.stagingPreviewView.superview.animator.hidden = YES;
+    self.liveViewConstraint.active = NO;
+    
     if (self.stagingPreviewView.sourceLayout)
     {
         [self.stagingPreviewView.sourceLayout saveSourceList];
@@ -4639,7 +4634,8 @@
 
 -(void) showStagingView
 {
-    self.stagingPreviewView.animator.hidden = NO;
+    self.stagingPreviewView.superview.animator.hidden = NO;
+    self.liveViewConstraint.active = YES;
     if (self.livePreviewView.sourceLayout)
     {
         [self.livePreviewView.sourceLayout saveSourceList];
@@ -4668,7 +4664,7 @@
 
 - (IBAction)stagingViewToggle:(id)sender
 {
-    BOOL stagingCollapsed = self.stagingPreviewView.hidden;
+    BOOL stagingCollapsed = self.stagingPreviewView.superview.hidden;
     if (stagingCollapsed)
     {
         [self showStagingView];

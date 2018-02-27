@@ -120,7 +120,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (weak) IBOutlet NSScrollView *audioView;
 @property (assign) bool useTransitions;
 @property (weak) IBOutlet NSLayoutConstraint *transitionConstraint;
-@property (weak) IBOutlet NSLayoutConstraint *audioConstraint;
+@property (strong) IBOutlet NSLayoutConstraint *audioConstraint;
 @property (weak) IBOutlet NSTextField *transitionLabel;
 @property (strong) NSWindow *transitionFilterWindow;
 @property (strong) NSMutableDictionary *compressors;
@@ -471,7 +471,10 @@ NSArray *_savedTransitionConstraints;
 @property (weak) IBOutlet NSScrollView *audioView;
 @property (assign) bool useTransitions;
 @property (weak) IBOutlet NSLayoutConstraint *transitionConstraint;
-@property (weak) IBOutlet NSLayoutConstraint *audioConstraint;
+@property (strong) IBOutlet NSLayoutConstraint *audioConstraint;
+@property (strong) IBOutlet NSLayoutConstraint *audioWidthConstraint;
+@property (strong) IBOutlet NSLayoutConstraint *sourcesWidthConstraint;
+
 @property (weak) IBOutlet NSTextField *transitionLabel;
 @property (strong) NSWindow *transitionFilterWindow;
 @property (strong) NSMutableDictionary *compressors;
@@ -494,7 +497,6 @@ NSArray *_savedTransitionConstraints;
 @property (strong) NSArray *validSamplerates;
 @property (weak) NSArray *audioCaptureDevices;
 @property (weak) IBOutlet NSTableView *audioTableView;
-@property (weak) IBOutlet NSStackView *previewStackView;
 
 @property (strong) NSDictionary *extraSaveData;
 @property (strong) NSPipe *loggingPipe;
@@ -523,8 +525,10 @@ NSArray *_savedTransitionConstraints;
 @property (strong) NSObject<CSLayoutTransitionViewProtocol> *layoutTransitionViewController;
 @property (weak) IBOutlet CSSourceListViewController *sourceListViewController;
 
+@property (weak) IBOutlet NSStackView *previewStackView;
 
 @property (weak) IBOutlet NSArrayController *audioInputsArrayController;
+@property (strong) IBOutlet NSLayoutConstraint *liveViewConstraint;
 
 -(JSContext *)setupJavascriptContext;
 -(JSContext *)setupJavascriptContext:(JSVirtualMachine *)machine;

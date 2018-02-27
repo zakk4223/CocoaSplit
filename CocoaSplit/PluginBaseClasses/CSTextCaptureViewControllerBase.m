@@ -26,7 +26,6 @@
 {
     
     NSFontManager *fontManager = [NSFontManager sharedFontManager];
-    fontManager.delegate = self;
     
     NSFontPanel *fontPanel = [fontManager fontPanel:YES];
     fontPanel.delegate = self;

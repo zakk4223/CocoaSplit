@@ -13,7 +13,12 @@
 - (void)drawRect:(NSRect)dirtyRect {
     [super drawRect:dirtyRect];
     
-    [[NSColor redColor] setFill];
+    if (!self.blahColor)
+    {
+        [[NSColor redColor] setFill];
+    } else {
+        [self.blahColor setFill];
+    }
     NSRectFill(dirtyRect);
     
     // Drawing code here.

@@ -246,7 +246,7 @@
     NSInteger idx = 0;
     
     NSMenuItem *tmp;
-    self.sourceSettingsMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
+    self.sourceSettingsMenu = [[NSMenu alloc] init];
     tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Move Up" action:@selector(moveInputUp:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
     tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Move Down" action:@selector(moveInputDown:) keyEquivalent:@"" atIndex:idx++];
@@ -388,15 +388,15 @@
     
     NSArray *sourceList = [self.sourceLayout sourceListOrdered];
     
-    NSMenu *sourceListMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
+    NSMenu *sourceListMenu = [[NSMenu alloc] init];
     sourceListMenu.delegate = self;
     
     
     NSString *resTitle = [NSString stringWithFormat:@"%dx%d@%.2f", self.sourceLayout.canvas_width, self.sourceLayout.canvas_height, self.sourceLayout.frameRate];
     
-    NSMenuItem *resItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:resTitle action:nil keyEquivalent:@""];
+    NSMenuItem *resItem = [[NSMenuItem alloc] initWithTitle:resTitle action:nil keyEquivalent:@""];
     
-    NSMenu *resSubmenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
+    NSMenu *resSubmenu = [[NSMenu alloc] init];
     
     [LAYOUT_RESOLUTIONS enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         NSString *resOpt = obj;
@@ -430,7 +430,7 @@
             transitionTitle = @"Disable Transitions";
         }
         
-        NSMenuItem *transitionItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:transitionTitle action:@selector(doToggleTransitions:) keyEquivalent:@""];
+        NSMenuItem *transitionItem = [[NSMenuItem alloc] initWithTitle:transitionTitle action:@selector(doToggleTransitions:) keyEquivalent:@""];
         [transitionItem setTarget:self];
         [transitionItem setEnabled:YES];
         [sourceListMenu insertItem:transitionItem atIndex:[sourceListMenu.itemArray count]];
@@ -441,13 +441,13 @@
         return sourceListMenu;
     }
     
-    NSMenuItem *midiItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Midi Mapping" action:@selector(doLayoutMidi:) keyEquivalent:@""];
+    NSMenuItem *midiItem = [[NSMenuItem alloc] initWithTitle:@"Midi Mapping" action:@selector(doLayoutMidi:) keyEquivalent:@""];
     [midiItem setTarget:self];
     [midiItem setEnabled:YES];
     
     [sourceListMenu insertItem:midiItem atIndex:[sourceListMenu.itemArray count]];
 
-    NSMenuItem *filterItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Extra Settings" action:@selector(configureLayoutFilters:) keyEquivalent:@""];
+    NSMenuItem *filterItem = [[NSMenuItem alloc] initWithTitle:@"Extra Settings" action:@selector(configureLayoutFilters:) keyEquivalent:@""];
     [filterItem setTarget:self];
     [filterItem setEnabled:YES];
     [sourceListMenu insertItem:filterItem atIndex:[sourceListMenu.itemArray count]];
@@ -463,27 +463,27 @@
             
         }
     
-        NSMenuItem *srcItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:srcName action:nil keyEquivalent:@""];
+        NSMenuItem *srcItem = [[NSMenuItem alloc] initWithTitle:srcName action:nil keyEquivalent:@""];
         [srcItem setEnabled:YES];
-        NSMenu *submenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
-        NSMenuItem *setItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Settings" action:@selector(showInputSettings:) keyEquivalent:@""];
+        NSMenu *submenu = [[NSMenu alloc] init];
+        NSMenuItem *setItem = [[NSMenuItem alloc] initWithTitle:@"Settings" action:@selector(showInputSettings:) keyEquivalent:@""];
         [setItem setEnabled:YES];
         [setItem setRepresentedObject:src];
         [setItem setTarget:self];
         [submenu addItem:setItem];
-        NSMenuItem *delItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Delete" action:@selector(deleteInput:) keyEquivalent:@""];
+        NSMenuItem *delItem = [[NSMenuItem alloc] initWithTitle:@"Delete" action:@selector(deleteInput:) keyEquivalent:@""];
         [delItem setEnabled:YES];
         [delItem setRepresentedObject:src];
         [delItem setTarget:self];
         [submenu addItem:delItem];
         
-        NSMenuItem *libraryItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Add to Library" action:@selector(addInputToLibrary:) keyEquivalent:@""];
+        NSMenuItem *libraryItem = [[NSMenuItem alloc] initWithTitle:@"Add to Library" action:@selector(addInputToLibrary:) keyEquivalent:@""];
         [libraryItem setEnabled:YES];
         [libraryItem setRepresentedObject:src];
         [libraryItem setTarget:self];
         [submenu addItem:libraryItem];
 
-        NSMenuItem *cloneItem = [[NSMenuItem allocWithZone:[NSMenu menuZone]] initWithTitle:@"Clone" action:@selector(cloneInputSource:) keyEquivalent:@""];
+        NSMenuItem *cloneItem = [[NSMenuItem alloc] initWithTitle:@"Clone" action:@selector(cloneInputSource:) keyEquivalent:@""];
         [cloneItem setEnabled:YES];
         [cloneItem setRepresentedObject:src];
         [cloneItem setTarget:self];
@@ -1709,11 +1709,34 @@
     if (self.isInFullScreenMode)
     {
         [self exitFullScreenModeWithOptions:nil];
-        self.hidden = NO;
-    } else {
-        NSNumber *fullscreenOptions = @(NSApplicationPresentationAutoHideMenuBar|NSApplicationPresentationAutoHideDock);
-        [self enterFullScreenMode:onScreen withOptions:@{NSFullScreenModeAllScreens: @NO, NSFullScreenModeApplicationPresentationOptions: fullscreenOptions}];
+        return;
     }
+    
+    
+    _fullScreenView = [[PreviewView alloc] init];
+    [_fullScreenView awakeFromNib];
+    _fullScreenView.isEditWindow = self.isEditWindow;
+    _fullScreenView.layoutRenderer = self.layoutRenderer;
+    
+    
+    _fullScreenView.sourceLayout = self.sourceLayout;
+    NSNumber *fullscreenOptions = @(NSApplicationPresentationAutoHideMenuBar|NSApplicationPresentationAutoHideDock);
+    [_fullScreenView enterFullScreenMode:onScreen withOptions:@{NSFullScreenModeAllScreens: @NO, NSFullScreenModeApplicationPresentationOptions: fullscreenOptions}];
+    /*
+     if (self.isInFullScreenMode)
+     {
+     [self exitFullScreenModeWithOptions:nil];
+     self.hidden = NO;
+     } else {
+     if ([self.superview isKindOfClass:NSStackView.class])
+     {
+     NSLog(@"DO HIDE");
+     self.superview.hidden = YES;
+     }
+     NSNumber *fullscreenOptions = @(NSApplicationPresentationAutoHideMenuBar|NSApplicationPresentationAutoHideDock);
+     [self enterFullScreenMode:onScreen withOptions:@{NSFullScreenModeAllScreens: @NO, NSFullScreenModeApplicationPresentationOptions: fullscreenOptions}];
+     
+     }*/
 }
 
 

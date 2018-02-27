@@ -7,7 +7,6 @@
 
 #import <Cocoa/Cocoa.h>
 #import "CaptureController.h"
-#import "CSLayoutSwitcherView.h"
 
 
 @interface CSLayoutCollectionItem : NSCollectionViewItem

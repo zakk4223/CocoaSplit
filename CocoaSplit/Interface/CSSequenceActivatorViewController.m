@@ -152,7 +152,7 @@
         NSMenuItem *tmp;
         CSLayoutSequence *forSequence = view.layoutSequence;
         
-        self.sequenceMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
+        self.sequenceMenu = [[NSMenu alloc] init];
         tmp = [self.sequenceMenu insertItemWithTitle:@"Edit" action:@selector(editSequence:) keyEquivalent:@"" atIndex:idx++];
         tmp.target = self;
         tmp.representedObject = forSequence;

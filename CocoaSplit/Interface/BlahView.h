@@ -10,4 +10,6 @@
 
 @interface BlahView : NSView
 
+@property (strong) NSColor *blahColor;
+
 @end

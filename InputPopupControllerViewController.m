@@ -465,12 +465,6 @@
     [self.inputobjctrl discardEditing];
 }
 
-- (IBAction)backgroundColorChanged:(NSColorWell *)sender {
-    NSUInteger mouseButtons = [NSEvent pressedMouseButtons];
-    NSLog(@"MOUSE BUTTONS %d", mouseButtons);
-    NSLog(@"COLOR CHANGED");
-}
-
 
 - (IBAction)resetConstraints:(id)sender
 {

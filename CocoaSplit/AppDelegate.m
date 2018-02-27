@@ -82,7 +82,8 @@
     
     
     
-    
+    self.captureController = [CaptureController sharedCaptureController];
+
     
     [_window setReleasedWhenClosed:NO];
     
@@ -120,6 +121,7 @@
     
     
     _window.appearance = [self getAppearance];
+    
     
 }
 

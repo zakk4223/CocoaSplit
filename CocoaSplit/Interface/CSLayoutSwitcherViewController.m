@@ -231,7 +231,7 @@
     NSMenuItem *tmp;
     SourceLayout *forLayout = view.sourceLayout;
     
-    self.layoutMenu = [[NSMenu allocWithZone:[NSMenu menuZone]] init];
+    self.layoutMenu = [[NSMenu alloc] init];
     tmp = [self.layoutMenu insertItemWithTitle:@"Save To" action:@selector(saveToLayout:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
     tmp.representedObject = forLayout;
