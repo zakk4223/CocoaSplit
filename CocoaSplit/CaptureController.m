@@ -589,6 +589,8 @@
 
 - (IBAction)createLayoutOrSequenceAction:(id)sender
 {
+    [self openLayoutPopover:sender];
+    return;
     if (_layoutViewController)
     {
         [self openLayoutPopover:sender];
@@ -2277,11 +2279,12 @@
     }
     
     if (!_layoutViewController)
-    {
+    {/*
         _layoutViewController = [[CSLayoutSwitcherViewController alloc] init];
         _layoutViewController.isSwitcherView = NO;
         _layoutViewController.view = self.layoutGridView;
        _layoutViewController.layouts = self.sourceLayouts;
+      */
     }
     
     if ([saveRoot objectForKey:@"stagingHidden"])

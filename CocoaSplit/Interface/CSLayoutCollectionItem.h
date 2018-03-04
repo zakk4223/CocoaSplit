@@ -7,9 +7,9 @@
 
 #import <Cocoa/Cocoa.h>
 #import "CaptureController.h"
+#import "CSLayoutButtonView.h"
 
-
-@interface CSLayoutCollectionItem : NSCollectionViewItem
+@interface CSLayoutCollectionItem : NSCollectionViewItem <NSControlTextEditingDelegate>
 
 
 @property (weak) IBOutlet CaptureController *captureController;
@@ -18,7 +18,9 @@
 
 -(void)buildLayoutMenu;
 -(void)showLayoutMenu:(NSEvent *)clickEvent;
+-(void)layoutButtonHovered:(id)sender;
 
-@property (weak) IBOutlet CSLayoutSwitcherView *layoutButton;
+@property (weak) IBOutlet CSLayoutButtonView *layoutButton;
+@property (weak) IBOutlet NSTextField *buttonLabel;
 
 @end

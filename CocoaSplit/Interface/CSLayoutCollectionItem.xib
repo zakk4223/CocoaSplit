@@ -8,40 +8,75 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CSLayoutCollectionItem">
             <connections>
-                <outlet property="view" destination="Hz6-mo-xeY" id="bNT-9c-E2W"/>
+                <outlet property="buttonLabel" destination="vOF-qL-CuC" id="FPD-dC-WVw"/>
+                <outlet property="layoutButton" destination="ZiI-Ib-Kct" id="xZP-nV-ar4"/>
+                <outlet property="view" destination="3G9-dZ-Bca" id="LyL-4u-F1Z"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView wantsLayer="YES" id="Hz6-mo-xeY" customClass="CSLayoutCollectionItemView">
-            <rect key="frame" x="0.0" y="0.0" width="95" height="85"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <rect key="frame" x="0.0" y="0.0" width="40" height="31"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SaK-2v-TZV" customClass="CSLayoutButton">
-                    <rect key="frame" x="8" y="3" width="80" height="80"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="80" id="5zL-Jx-YrH"/>
-                        <constraint firstAttribute="height" constant="80" id="TxY-DZ-cIH"/>
-                    </constraints>
-                    <buttonCell key="cell" type="square" title="Button" bezelStyle="shadowlessSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="30a-aj-I0C">
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3Cb-Ks-HWC" customClass="CSLayoutButton">
+                    <rect key="frame" x="4" y="4" width="32" height="23"/>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="3bY-6A-Bo3">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                     <connections>
-                        <binding destination="-2" name="title" keyPath="self.representedObject.name" id="Mta-X6-GgE"/>
+                        <action selector="layoutButtonPushed:" target="-2" id="0LD-Ux-AsN"/>
+                        <binding destination="-2" name="title" keyPath="self.representedObject.name" id="0W3-rb-IHP"/>
+                        <outlet property="viewController" destination="-2" id="ynj-Sm-Qsi"/>
                     </connections>
                 </button>
             </subviews>
             <constraints>
-                <constraint firstItem="SaK-2v-TZV" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="Ab5-Ua-cGH"/>
-                <constraint firstItem="SaK-2v-TZV" firstAttribute="centerY" secondItem="Hz6-mo-xeY" secondAttribute="centerY" id="f3S-2d-k92"/>
+                <constraint firstItem="3Cb-Ks-HWC" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="4" id="DoT-Cz-4oF"/>
+                <constraint firstAttribute="trailing" secondItem="3Cb-Ks-HWC" secondAttribute="trailing" constant="4" id="E0B-ES-LmN"/>
+                <constraint firstItem="3Cb-Ks-HWC" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="4" id="PuA-6j-O6K"/>
+                <constraint firstAttribute="bottom" secondItem="3Cb-Ks-HWC" secondAttribute="bottom" constant="4" id="bqg-UX-2TE"/>
             </constraints>
-            <point key="canvasLocation" x="-840" y="401"/>
+            <point key="canvasLocation" x="-905" y="385.5"/>
         </customView>
-        <collectionViewItem id="rAf-ph-Ouj" customClass="CSLayoutCollectionItem">
-            <connections>
-                <outlet property="view" destination="Hz6-mo-xeY" id="dCc-pB-WBt"/>
-            </connections>
-        </collectionViewItem>
+        <customView wantsLayer="YES" id="3G9-dZ-Bca">
+            <rect key="frame" x="0.0" y="0.0" width="80" height="38"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="ZiI-Ib-Kct" customClass="CSLayoutButtonView">
+                    <rect key="frame" x="4" y="4" width="72" height="30"/>
+                    <subviews>
+                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vOF-qL-CuC">
+                            <rect key="frame" x="-2" y="7" width="76" height="17"/>
+                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Label" id="RCF-n8-wbW">
+                                <font key="font" metaFont="system"/>
+                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                            <connections>
+                                <binding destination="-2" name="value" keyPath="self.representedObject.name" id="EbT-w1-byj"/>
+                                <outlet property="delegate" destination="-2" id="FkF-zo-sbL"/>
+                            </connections>
+                        </textField>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="vOF-qL-CuC" secondAttribute="trailing" id="B3s-5a-DPK"/>
+                        <constraint firstItem="vOF-qL-CuC" firstAttribute="leading" secondItem="ZiI-Ib-Kct" secondAttribute="leading" id="KI0-nv-WtK"/>
+                        <constraint firstItem="vOF-qL-CuC" firstAttribute="centerY" secondItem="ZiI-Ib-Kct" secondAttribute="centerY" id="gUi-IN-oaO"/>
+                    </constraints>
+                    <connections>
+                        <outlet property="viewController" destination="-2" id="xvU-Lh-9SD"/>
+                    </connections>
+                </customView>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="ZiI-Ib-Kct" secondAttribute="trailing" constant="4" id="C4y-7e-e2t"/>
+                <constraint firstAttribute="bottom" secondItem="ZiI-Ib-Kct" secondAttribute="bottom" constant="4" id="iRf-fF-MXA"/>
+                <constraint firstItem="ZiI-Ib-Kct" firstAttribute="top" secondItem="3G9-dZ-Bca" secondAttribute="top" constant="4" id="mdU-uj-ZXX"/>
+                <constraint firstItem="ZiI-Ib-Kct" firstAttribute="leading" secondItem="3G9-dZ-Bca" secondAttribute="leading" constant="4" id="w6A-Jm-1mI"/>
+            </constraints>
+            <point key="canvasLocation" x="-671" y="322"/>
+        </customView>
     </objects>
 </document>

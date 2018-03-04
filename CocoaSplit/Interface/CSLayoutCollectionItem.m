@@ -3,11 +3,12 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 10/4/15.
-//  Copyright © 2015 Zakk. All rights reserved.
 //
 
 #import "CSLayoutCollectionItem.h"
 #import "AppDelegate.h"
+#import "PreviewView.h"
+
 @interface CSLayoutCollectionItem ()
 
 @end
@@ -20,10 +21,14 @@
 {
     [super setRepresentedObject:representedObject];
 
-    NSLog(@"REPRESENTED %@", self.representedObject);
 
-   // [self.representedObject addObserver:self forKeyPath:@"in_live" options:NSKeyValueObservingOptionNew context:NULL];
-   // [self.representedObject addObserver:self forKeyPath:@"in_staging" options:NSKeyValueObservingOptionNew context:NULL];
+    [self.layoutButton setNeedsDisplay:YES];
+    
+    if (self.representedObject)
+    {
+        [self.representedObject addObserver:self forKeyPath:@"in_live" options:NSKeyValueObservingOptionNew context:NULL];
+        [self.representedObject addObserver:self forKeyPath:@"in_staging" options:NSKeyValueObservingOptionNew context:NULL];
+    }
 }
 
 
@@ -37,34 +42,60 @@
 
 }
 
--(void)viewDidAppear
-{
-    [self.layoutButton layout];
 
-}
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
 {
-   // [self.layoutButton setNeedsDisplay];
+    [self.layoutButton setNeedsDisplay:YES];
 }
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.layoutButton.sourceLayout = self.representedObject;
 
     //self.view.layer.backgroundColor = [[NSColor blackColor] CGColor];
 
     // Do view setup here.
 }
+-(void)controlTextDidEndEditing:(NSNotification *)obj
+{
+    [self.view.window makeFirstResponder:self.buttonLabel.superview];
+    [self.buttonLabel setEditable:NO];
+}
 
+
+-(BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector
+{
+    NSString *selectorName = NSStringFromSelector(commandSelector);
+    if ([selectorName isEqualToString:@"cancel:"])
+    {
+        [self.view.window makeFirstResponder:nil];
+        [self.buttonLabel setEditable:NO];
+        return YES;
+    }
+    return NO;
+}
+
+
+-(void)layoutButtonHovered:(id)sender
+{
+    [self.buttonLabel setEditable:YES];
+    [self.view.window makeFirstResponder:self.buttonLabel];
+}
 - (IBAction)layoutButtonPushed:(id)sender
 {
+    SourceLayout *useLayout = self.captureController.activePreviewView.sourceLayout;
+    
+    if ([NSEvent modifierFlags]& NSCommandKeyMask)
+    {
+        useLayout = self.captureController.selectedLayout;
+    }
+    
     if ([NSEvent modifierFlags] & NSShiftKeyMask)
     {
-        [self.captureController toggleLayout:self.representedObject];
+        [self.captureController toggleLayout:self.representedObject usingLayout:useLayout];
     } else {
-        [self.captureController switchToLayout:self.representedObject];
+        [self.captureController switchToLayout:self.representedObject usingLayout:useLayout];
     }
 }
 
@@ -102,20 +133,52 @@
 }
 
 
+-(void) startRecordingLayout:(NSMenuItem *)sender
+{
+    [[CaptureController sharedCaptureController] startRecordingLayout:sender.representedObject];
+}
+
+
+-(void) stopRecordingLayout:(NSMenuItem *)sender
+{
+    [[CaptureController sharedCaptureController] stopRecordingLayout:sender.representedObject];
+}
+
+
+
 -(void)buildLayoutMenu
 {
 
     NSInteger idx = 0;
     
     NSMenuItem *tmp;
+    SourceLayout *forLayout = self.representedObject;
+    
     self.layoutMenu = [[NSMenu alloc] init];
     tmp = [self.layoutMenu insertItemWithTitle:@"Save To" action:@selector(saveToLayout:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
+    tmp.representedObject = forLayout;
+    
+    if (forLayout.recordingLayout)
+    {
+        tmp = [self.layoutMenu insertItemWithTitle:@"Stop Recording" action:@selector(stopRecordingLayout:) keyEquivalent:@"" atIndex:idx++];
+        tmp.target = self;
+        tmp.representedObject = forLayout;
+        
+    } else {
+        tmp = [self.layoutMenu insertItemWithTitle:@"Start Recording" action:@selector(startRecordingLayout:) keyEquivalent:@"" atIndex:idx++];
+        tmp.target = self;
+        tmp.representedObject = forLayout;
+        
+    }
     tmp = [self.layoutMenu insertItemWithTitle:@"Edit" action:@selector(editLayout:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
-
+    tmp.representedObject = forLayout;
+    
     tmp = [self.layoutMenu insertItemWithTitle:@"Delete" action:@selector(deleteLayout:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
+    tmp.representedObject = forLayout;
+
 }
 
 -(void)showLayoutMenu:(NSEvent *)clickEvent

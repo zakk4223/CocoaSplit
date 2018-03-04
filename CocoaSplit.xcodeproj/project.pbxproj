@@ -180,6 +180,7 @@
 		3494DF391CCD2DB000E921BF /* TPCircularBuffer+AudioBufferList.c in Sources */ = {isa = PBXBuildFile; fileRef = 3494DF361CCD2DB000E921BF /* TPCircularBuffer+AudioBufferList.c */; };
 		3498D94A1A94685000906532 /* CSAudioSwitchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3498D9491A94685000906532 /* CSAudioSwitchCell.m */; };
 		3498D94F1A9472BD00906532 /* CSAudioSwitchControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 3498D94E1A9472BD00906532 /* CSAudioSwitchControl.m */; };
+		34A271FD204BF6A600135A5D /* CSLayoutButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A271FC204BF6A600135A5D /* CSLayoutButtonView.m */; };
 		34A629451FBB6DC500B4E16A /* CSJSAnimationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A629441FBB6DC500B4E16A /* CSJSAnimationDelegate.m */; };
 		34A64A2F165EFE4C00A68428 /* PreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A64A2E165EFE4B00A68428 /* PreviewView.m */; };
 		34A64A37165F208800A68428 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A64A36165F208800A68428 /* QuartzCore.framework */; };
@@ -903,6 +904,8 @@
 		3498D9491A94685000906532 /* CSAudioSwitchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAudioSwitchCell.m; sourceTree = "<group>"; };
 		3498D94D1A9472BD00906532 /* CSAudioSwitchControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSAudioSwitchControl.h; sourceTree = "<group>"; };
 		3498D94E1A9472BD00906532 /* CSAudioSwitchControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAudioSwitchControl.m; sourceTree = "<group>"; };
+		34A271FB204BF6A600135A5D /* CSLayoutButtonView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSLayoutButtonView.h; path = Interface/CSLayoutButtonView.h; sourceTree = "<group>"; };
+		34A271FC204BF6A600135A5D /* CSLayoutButtonView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CSLayoutButtonView.m; path = Interface/CSLayoutButtonView.m; sourceTree = "<group>"; };
 		34A629431FBB6DC500B4E16A /* CSJSAnimationDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSJSAnimationDelegate.h; sourceTree = "<group>"; };
 		34A629441FBB6DC500B4E16A /* CSJSAnimationDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSJSAnimationDelegate.m; sourceTree = "<group>"; };
 		34A6295D1FBB6F0D00B4E16A /* CSJSAnimationDelegateJSExport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSJSAnimationDelegateJSExport.h; sourceTree = "<group>"; };
@@ -1747,6 +1750,8 @@
 				340274B3203B98130099328C /* CSUndoObjectController.h */,
 				340274B4203B98130099328C /* CSUndoObjectController.m */,
 				340274B6203B98A60099328C /* CSUndoObjectControllerDelegate.h */,
+				34A271FB204BF6A600135A5D /* CSLayoutButtonView.h */,
+				34A271FC204BF6A600135A5D /* CSLayoutButtonView.m */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -2832,6 +2837,7 @@
 				340FE4B515F3417E00E4CE4E /* AppDelegate.m in Sources */,
 				345F8B4F1A15F7DA009A81E3 /* CAMultiAudioPCMPlayer.m in Sources */,
 				34ED8C5B1B07371C002C0674 /* MIKMIDIDeviceManager.m in Sources */,
+				34A271FD204BF6A600135A5D /* CSLayoutButtonView.m in Sources */,
 				344DE4281FFB0FEE00196E2E /* CAMultiAudioEffectWindow.m in Sources */,
 				3441269F1E6D0C4C0051DA06 /* CSLayoutSwitcherHostingView.m in Sources */,
 				34AFC33319B19CD00007C07B /* SourceCache.m in Sources */,

@@ -16,22 +16,53 @@
 
 
 
+-(BOOL)wantsUpdateLayer
+{
+    return YES;
+}
+
+-(void)updateLayer
+{
+    CGColorRef backgroundColor;
+    CGFloat useAlpha = 1.0f;
+    
+    /*
+    if (self.cell.isHighlighted)
+    {
+        useAlpha = 0.3f;
+    }
+     */
+    SourceLayout *myLayout = self.viewController.representedObject;
+    if (myLayout.in_staging && myLayout.in_live)
+    {
+        backgroundColor = CGColorCreateGenericRGB(1.0f, 1.0f, 0.0f, useAlpha);
+    } else if (myLayout.in_staging) {
+        backgroundColor = CGColorCreateGenericRGB(0.0f, 1.0f, 0.0f, useAlpha);
+    } else if (myLayout.in_live) {
+        backgroundColor = CGColorCreateGenericRGB(1.0f, 0.0f, 0.0f, useAlpha);
+    } else {
+        backgroundColor = CGColorCreateGenericRGB(0.353f, 0.534f, 0.434, useAlpha);
+    }
+    self.layer.backgroundColor = backgroundColor;
+    self.layer.cornerRadius = 5.0f;
+}
+
+
 - (void)drawRect:(NSRect)dirtyRect {
     [super drawRect:dirtyRect];
-    NSColor *redColor = [NSColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.3];
-    NSColor *greenColor = [NSColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:0.3];
+    NSColor *redColor = [NSColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.5];
+    NSColor *greenColor = [NSColor colorWithRed:0.0 green:1.0 blue:0.0 alpha:0.5];
     
     NSRect mybounds = self.bounds;
     
     SourceLayout *myLayout = self.viewController.representedObject;
-    
     if (myLayout.in_staging)
     {
         [greenColor set];
         
         NSRect fillBox = mybounds;
         
-        fillBox.size.width = fillBox.size.width/2;
+        //fillBox.size.width = fillBox.size.width/2;
         
         NSRectFillUsingOperation(fillBox, NSCompositeSourceOver);
     }
@@ -54,6 +85,7 @@
 }
 
 
+/*
 -(void)mouseDown:(NSEvent *)theEvent
 {
     [self highlight:YES];
@@ -75,7 +107,7 @@
     [self performClick:self];
     [self.nextResponder mouseUp:theEvent];
 }
-
+*/
 
 
 -(void)rightMouseDown:(NSEvent *)theEvent
