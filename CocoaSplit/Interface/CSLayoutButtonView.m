@@ -16,10 +16,18 @@
     return YES;
 }
 
+-(void)mouseDragged:(NSEvent *)event
+{
+    self.mouseisDown = NO;
+    [self setNeedsDisplay];
+    [[self nextResponder] mouseDown:event];
+    [[self nextResponder] mouseDragged:event];
+}
+
+
 -(void)mouseDown:(NSEvent *)event
 {
     self.mouseisDown = YES;
-    [NSObject cancelPreviousPerformRequestsWithTarget:self];
 
     [self setNeedsDisplay];
 }
@@ -30,39 +38,23 @@
     {
         [self.viewController layoutButtonPushed:self];
     }
-    [NSObject cancelPreviousPerformRequestsWithTarget:self];
 
     self.mouseisDown = NO;
     [self setNeedsDisplay];
 
-}
-
--(void)mouseHovered
-{
-    [self.viewController layoutButtonHovered:self];
-}
-
-
--(void)mouseEntered:(NSEvent *)event
-{
-    [self performSelector:@selector(mouseHovered) withObject:nil afterDelay:1.0];
 }
 
 -(void)mouseExited:(NSEvent *)event
 {
     self.mouseisDown = NO;
-    [NSObject cancelPreviousPerformRequestsWithTarget:self];
     [self setNeedsDisplay];
 }
 
 -(void)rightMouseDown:(NSEvent *)theEvent
 {
-    [NSObject cancelPreviousPerformRequestsWithTarget:self];
 
     [self.viewController showLayoutMenu:theEvent];
 }
-
-
 -(void)updateLayer
 {
     CGColorRef backgroundColor;
@@ -89,14 +81,6 @@
     self.layer.cornerRadius = 5.0f;
 }
 
--(void)awakeFromNib
-{
-    int opts = (NSTrackingActiveAlways | NSTrackingInVisibleRect | NSTrackingMouseMoved | NSTrackingMouseEnteredAndExited);
-    NSTrackingArea *trackingArea = [[NSTrackingArea alloc] initWithRect:[self bounds]
-                                                 options:opts
-                                                   owner:self
-                                                userInfo:nil];
-    [self addTrackingArea:trackingArea];
-}
+
 
 @end

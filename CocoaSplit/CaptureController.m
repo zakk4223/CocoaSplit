@@ -589,17 +589,22 @@
 
 - (IBAction)createLayoutOrSequenceAction:(id)sender
 {
-    [self openLayoutPopover:sender];
-    return;
-    if (_layoutViewController)
+    
+    NSInteger layoutCount = self.sourceLayouts.count;
+    int active_width = self.activePreviewView.sourceLayout.canvas_width;
+    int active_height = self.activePreviewView.sourceLayout.canvas_height;
+    
+    NSString *newName = [NSString stringWithFormat:@"Layout %ld", (long)++layoutCount];
+    while ([self findLayoutWithName:newName])
     {
-        [self openLayoutPopover:sender];
-    } else {
-        _sequenceWindowController = [[CSSequenceEditorWindowController alloc] init];
-        _sequenceWindowController.addSequenceOnSave = YES;
-        _sequenceWindowController.sequence = [[CSLayoutSequence alloc] init];
-        [_sequenceWindowController showWindow:nil];
+        newName = [NSString stringWithFormat:@"Layout %ld", (long)++layoutCount];
     }
+    SourceLayout *newLayout = [[SourceLayout alloc] init];
+    newLayout.name = newName;
+    newLayout.canvas_height = active_height;
+    newLayout.canvas_width = active_width;
+    newLayout.frameRate = self.activePreviewView.sourceLayout.frameRate;
+    [self insertObject:newLayout inSourceLayoutsAtIndex:self.sourceLayouts.count];
 }
 
 
@@ -2097,8 +2102,8 @@
     self.activePreviewView = self.stagingPreviewView;
     [self.layoutCollectionView registerForDraggedTypes:@[@"CS_LAYOUT_DRAG"]];
 
-    NSNib *layoutNib = [[NSNib alloc] initWithNibNamed:@"CSLayoutCollectionItem" bundle:nil];
-    [self.layoutCollectionView registerNib:layoutNib forItemWithIdentifier:@"layout_item"];
+    //NSNib *layoutNib = [[NSNib alloc] initWithNibNamed:@"CSLayoutCollectionItem" bundle:nil];
+    //[self.layoutCollectionView registerNib:layoutNib forItemWithIdentifier:@"layout_item"];
     
     
 
@@ -2268,7 +2273,7 @@
         self.sourceLayouts = [[NSMutableArray alloc] init];
     }
     
-    if (self.sourceLayouts.count < 12)
+    if (self.sourceLayouts.count < 1)
     {
         for(NSUInteger i=self.sourceLayouts.count+1; i <= 12; i++)
         {

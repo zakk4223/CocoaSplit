@@ -77,11 +77,7 @@
 }
 
 
--(void)layoutButtonHovered:(id)sender
-{
-    [self.buttonLabel setEditable:YES];
-    [self.view.window makeFirstResponder:self.buttonLabel];
-}
+
 - (IBAction)layoutButtonPushed:(id)sender
 {
     SourceLayout *useLayout = self.captureController.activePreviewView.sourceLayout;
@@ -119,7 +115,11 @@
     //[self.captureController openLayoutPopover:self.layoutButton forLayout:toEdit];
 }
 
-
+-(void)editLayoutName:(id) sender
+{
+    [self.buttonLabel setEditable:YES];
+    [self.view.window makeFirstResponder:self.buttonLabel];
+}
 -(void)deleteLayout:(id) sender
 {
     SourceLayout *toDelete = self.representedObject;
@@ -171,9 +171,16 @@
         tmp.representedObject = forLayout;
         
     }
+    
+    tmp = [self.layoutMenu insertItemWithTitle:@"Change Name" action:@selector(editLayoutName:) keyEquivalent:@"" atIndex:idx++];
+    tmp.target = self;
+    tmp.representedObject = forLayout;
+    
     tmp = [self.layoutMenu insertItemWithTitle:@"Edit" action:@selector(editLayout:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
     tmp.representedObject = forLayout;
+    
+
     
     tmp = [self.layoutMenu insertItemWithTitle:@"Delete" action:@selector(deleteLayout:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
