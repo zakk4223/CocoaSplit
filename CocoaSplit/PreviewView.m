@@ -1778,7 +1778,7 @@
     self.layer.backgroundColor = tmpColor;
     CGColorRelease(tmpColor);
     
-    [self registerForDraggedTypes:@[@"cocoasplit.library.item",NSSoundPboardType,NSFilenamesPboardType, NSFilesPromisePboardType, NSFileContentsPboardType, @"cocoasplit.input.item", @"cocoasplit.audio.item"]];
+    [self registerForDraggedTypes:@[@"cocoasplit.library.item",NSSoundPboardType,NSFilenamesPboardType, NSFilesPromisePboardType, NSFileContentsPboardType, @"cocoasplit.input.item", @"cocoasplit.audio.item", @"cocoasplit.layout"]];
     self.undoManager.levelsOfUndo = 20;
     
     
@@ -1810,6 +1810,20 @@
     
     pboard = [sender draggingPasteboard];
     
+    if ([pboard canReadItemWithDataConformingToTypes:@[@"cocoasplit.layout"]])
+    {
+        NSData *indexSave = [pboard dataForType:@"cocoasplit.layout"];
+        NSIndexSet *indexes = [NSKeyedUnarchiver unarchiveObjectWithData:indexSave];
+        
+        [indexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+            SourceLayout *useLayout = [[CaptureController sharedCaptureController].sourceLayouts objectAtIndex:idx];
+            if (useLayout)
+            {
+                [[CaptureController sharedCaptureController] switchToLayout:useLayout usingLayout:self.sourceLayout];
+            }
+        }];
+        return YES;
+    }
     
     if ([pboard canReadItemWithDataConformingToTypes:@[@"cocoasplit.library.item"]])
     {

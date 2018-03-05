@@ -2100,7 +2100,7 @@
     
     
     self.activePreviewView = self.stagingPreviewView;
-    [self.layoutCollectionView registerForDraggedTypes:@[@"CS_LAYOUT_DRAG"]];
+    [self.layoutCollectionView registerForDraggedTypes:@[@"cocoasplit.layout"]];
 
     //NSNib *layoutNib = [[NSNib alloc] initWithNibNamed:@"CSLayoutCollectionItem" bundle:nil];
     //[self.layoutCollectionView registerNib:layoutNib forItemWithIdentifier:@"layout_item"];
@@ -3610,7 +3610,7 @@
 {
     
     NSPasteboard *pBoard = [draggingInfo draggingPasteboard];
-    NSData *indexSave = [pBoard dataForType:@"CS_LAYOUT_DRAG"];
+    NSData *indexSave = [pBoard dataForType:@"cocoasplit.layout"];
     NSIndexSet *indexes = [NSKeyedUnarchiver unarchiveObjectWithData:indexSave];
     NSInteger draggedItemIdx = [indexes firstIndex];
     
@@ -3641,8 +3641,8 @@
 -(BOOL)collectionView:(NSCollectionView *)collectionView writeItemsAtIndexes:(NSIndexSet *)indexes toPasteboard:(NSPasteboard *)pasteboard
 {
     NSData *indexSave = [NSKeyedArchiver archivedDataWithRootObject:indexes];
-    [pasteboard declareTypes:@[@"CS_LAYOUT_DRAG"] owner:nil];
-    [pasteboard setData:indexSave forType:@"CS_LAYOUT_DRAG"];
+    [pasteboard declareTypes:@[@"cocoasplit.layout"] owner:nil];
+    [pasteboard setData:indexSave forType:@"cocoasplit.layout"];
     return YES;
 }
 
@@ -3650,7 +3650,7 @@
 -(BOOL)collectionView:(NSCollectionView *)collectionView acceptDrop:(id<NSDraggingInfo>)draggingInfo index:(NSInteger)index dropOperation:(NSCollectionViewDropOperation)dropOperation
 {
     NSPasteboard *pBoard = [draggingInfo draggingPasteboard];
-    NSData *indexSave = [pBoard dataForType:@"CS_LAYOUT_DRAG"];
+    NSData *indexSave = [pBoard dataForType:@"cocoasplit.layout"];
     NSIndexSet *indexes = [NSKeyedUnarchiver unarchiveObjectWithData:indexSave];
     NSInteger draggedItemIdx = [indexes firstIndex];
 
