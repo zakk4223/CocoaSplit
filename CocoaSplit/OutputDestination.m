@@ -7,7 +7,7 @@
 
 #import "OutputDestination.h"
 #import "CSOutputBase.h"
-
+#import "CapturedFrameData.h"
 
 @implementation OutputDestination
 
@@ -363,6 +363,10 @@
         if (self.streamServiceObject)
         {
             newout = [self.streamServiceObject createOutput];
+            if (!newout)
+            {
+                newout = [[CSOutputBase alloc] init];
+            }
         } else {
             newout = [[CSOutputBase alloc] init];
         }

@@ -3,11 +3,11 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 4/30/17.
-//  Copyright © 2017 Zakk. All rights reserved.
 //
 
 #import "CSLayoutRecorder.h"
 #import "CaptureController.h"
+#import "CSLavfOutput.h"
 
 @implementation CSLayoutRecorder
 
@@ -115,6 +115,11 @@
         [self checkOutputs];
 
     }
+}
+
+-(NSObject<CSOutputWriterProtocol> *)createOutput
+{
+    return [[CSLavfOutput alloc] init];
 }
 
 
@@ -272,10 +277,6 @@
 }
 
 
--(NSString *)getServiceFormat
-{
-    return self.fileFormat;
-}
 
 
 

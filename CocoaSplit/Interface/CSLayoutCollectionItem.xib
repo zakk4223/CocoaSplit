@@ -48,14 +48,13 @@
                     <rect key="frame" x="4" y="4" width="72" height="30"/>
                     <subviews>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vOF-qL-CuC">
-                            <rect key="frame" x="-2" y="7" width="76" height="17"/>
-                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Label" id="RCF-n8-wbW">
-                                <font key="font" metaFont="system"/>
+                            <rect key="frame" x="-2" y="8" width="76" height="14"/>
+                            <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="center" title="Label" id="RCF-n8-wbW">
+                                <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                             </textFieldCell>
                             <connections>
-                                <binding destination="-2" name="value" keyPath="self.representedObject.name" id="EbT-w1-byj"/>
                                 <outlet property="delegate" destination="-2" id="FkF-zo-sbL"/>
                             </connections>
                         </textField>

@@ -208,7 +208,6 @@
         
         [_sourceLayout addObserver:self forKeyPath:@"in_live" options:NSKeyValueObservingOptionNew context:NULL];
         [_sourceLayout addObserver:self forKeyPath:@"in_staging" options:NSKeyValueObservingOptionNew context:NULL];
-        [_sourceLayout addObserver:self forKeyPath:@"audioData" options:NSKeyValueObservingOptionNew context:NULL];
         [_sourceLayout addObserver:self forKeyPath:@"recorder.defaultRecordingActive" options:NSKeyValueObservingOptionNew context:NULL];
         [_sourceLayout addObserver:self forKeyPath:@"name" options:NSKeyValueObservingOptionNew context:NULL];
 

@@ -7,6 +7,7 @@
 
 #import "CSLayoutCollectionItem.h"
 #import "AppDelegate.h"
+#import "CSLayoutRecorder.h"
 #import "PreviewView.h"
 
 @interface CSLayoutCollectionItem ()
@@ -23,11 +24,16 @@
 
 
     [self.layoutButton setNeedsDisplay:YES];
-    
+
+    [self setButtonLabelName];
     if (self.representedObject)
     {
         [self.representedObject addObserver:self forKeyPath:@"in_live" options:NSKeyValueObservingOptionNew context:NULL];
         [self.representedObject addObserver:self forKeyPath:@"in_staging" options:NSKeyValueObservingOptionNew context:NULL];
+        [self.representedObject addObserver:self forKeyPath:@"recorder.defaultRecordingActive" options:NSKeyValueObservingOptionNew context:NULL];
+        [self.representedObject addObserver:self forKeyPath:@"name" options:NSKeyValueObservingOptionNew context:NULL];
+
+
     }
 }
 
@@ -37,7 +43,7 @@
     [super awakeFromNib];
     AppDelegate *appDel = [NSApp delegate];
     self.captureController = appDel.captureController;
-    
+    [self setButtonLabelName];
 
 
 }
@@ -45,7 +51,12 @@
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
 {
-    [self.layoutButton setNeedsDisplay:YES];
+    if ([keyPath isEqualToString:@"name"] || [keyPath isEqualToString:@"recorder.defaultRecordingActive"])
+    {
+        [self setButtonLabelName];
+    } else {
+        [self.layoutButton setNeedsDisplay:YES];
+    }
 }
 
 
@@ -76,7 +87,21 @@
     return NO;
 }
 
-
+-(void)setButtonLabelName
+{
+    SourceLayout *layout = self.representedObject;
+    NSString *name = layout.name;
+    NSString *recString;
+    if (layout.recorder && layout.recorder.defaultRecordingActive)
+    {
+        recString = @"(R) ";
+    } else {
+        recString = @"";
+    }
+    
+    NSString *labelString = [NSString stringWithFormat:@"%@%@", recString, name];
+    self.buttonLabel.stringValue = labelString;
+}
 
 - (IBAction)layoutButtonPushed:(id)sender
 {
@@ -120,6 +145,8 @@
     [self.buttonLabel setEditable:YES];
     [self.view.window makeFirstResponder:self.buttonLabel];
 }
+
+
 -(void)deleteLayout:(id) sender
 {
     SourceLayout *toDelete = self.representedObject;
@@ -128,6 +155,8 @@
     {
         [toDelete removeObserver:self forKeyPath:@"in_live"];
         [toDelete removeObserver:self forKeyPath:@"in_staging"];
+        [toDelete removeObserver:self forKeyPath:@"recorder.defaultRecordingActive"];
+        [toDelete removeObserver:self forKeyPath:@"name"];
 
     }
 }
