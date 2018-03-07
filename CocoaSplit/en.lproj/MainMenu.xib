@@ -545,7 +545,7 @@
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="RlI-X9-h96" userLabel="LayoutView">
                                 <rect key="frame" x="20" y="0.0" width="330" height="316"/>
                                 <subviews>
-                                    <stackView orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Fi-x7-Vbz">
+                                    <stackView orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" translatesAutoresizingMaskIntoConstraints="NO" id="3Fi-x7-Vbz">
                                         <rect key="frame" x="0.0" y="302" width="59" height="14"/>
                                         <beginningViews>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HdA-UM-xTY">
@@ -632,6 +632,7 @@
                                 <constraints>
                                     <constraint firstItem="0zf-z9-1vO" firstAttribute="top" secondItem="3Fi-x7-Vbz" secondAttribute="bottom" constant="8" id="0yC-K5-w1l"/>
                                     <constraint firstItem="vaG-89-fnQ" firstAttribute="leading" secondItem="RlI-X9-h96" secondAttribute="leading" id="1I4-AU-fXm"/>
+                                    <constraint firstItem="3Fi-x7-Vbz" firstAttribute="leading" secondItem="RlI-X9-h96" secondAttribute="leading" id="Jxo-wZ-Czb"/>
                                     <constraint firstItem="3Fi-x7-Vbz" firstAttribute="top" secondItem="RlI-X9-h96" secondAttribute="top" id="N1s-E8-WVj"/>
                                     <constraint firstItem="S3f-OT-hge" firstAttribute="height" secondItem="vaG-89-fnQ" secondAttribute="height" id="OG4-aD-nTl"/>
                                     <constraint firstItem="0zf-z9-1vO" firstAttribute="leading" secondItem="RlI-X9-h96" secondAttribute="leading" id="Oo0-s3-1jR"/>

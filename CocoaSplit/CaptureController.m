@@ -3249,29 +3249,14 @@
 - (IBAction)openLayoutSwitcherWindow:(id)sender
 {
     
-    
-    if (_layoutViewController)
+    if (!_layoutSwitcherWindowController)
     {
-        if (!_layoutSwitcherWindowController)
-        {
-            _layoutSwitcherWindowController = [[CSLayoutSwitcherWithPreviewWindowController alloc] init];
-        }
-        [_layoutSwitcherWindowController showWindow:nil];
-        _layoutSwitcherWindowController.layouts = nil;
-        /*
-    } else {
-        if (!_scriptWindowViewController)
-        {
-            _scriptWindowViewController = [[CSScriptWindowViewController alloc] init];
-        }
-        [_scriptWindowViewController showWindow:nil];
-        _scriptWindowViewController.sequences = nil;
-        
-         */
+        _layoutSwitcherWindowController = [[CSLayoutSwitcherWithPreviewWindowController alloc] init];
     }
-         
-
+    [_layoutSwitcherWindowController showWindow:nil];
     
+    _layoutSwitcherWindowController.layouts = nil;
+ 
 }
 
 - (IBAction)switchLayoutView:(id)sender
