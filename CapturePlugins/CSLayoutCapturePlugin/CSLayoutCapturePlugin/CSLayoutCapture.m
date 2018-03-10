@@ -20,6 +20,12 @@
 }
 
 
++(NSSet *)mediaUTIs
+{
+    return [NSSet setWithArray:@[@"cocoasplit.layout"]];
+}
+
+
 -(instancetype)init
 {
     if (self = [super init])
@@ -57,6 +63,32 @@
     }
 }
 
++(NSObject<CSCaptureSourceProtocol> *)createSourceFromPasteboardItem:(NSPasteboardItem *)item
+{
+    NSData *indexData = [item dataForType:@"cocoasplit.layout"];
+    NSIndexSet *indexes = [NSKeyedUnarchiver unarchiveObjectWithData:indexData];
+    
+    if (!indexes)
+    {
+        return nil;
+    }
+    
+    NSInteger draggedItemIdx = [indexes firstIndex];
+    NSObject *controller = [[CSPluginServices sharedPluginServices] captureController];
+    NSArray *layouts = [controller valueForKey:@"sourceLayouts"];
+
+    NSObject *useLayout = [layouts objectAtIndex:draggedItemIdx];
+    if (useLayout)
+    {
+        NSString *layoutName = [useLayout valueForKey:@"name"];
+        CSLayoutCapture *ret = [[CSLayoutCapture alloc] init];
+        ret.activeVideoDevice = [[CSAbstractCaptureDevice alloc] initWithName:layoutName device:useLayout uniqueID:layoutName];
+        return ret;
+    }
+    
+    return nil;
+}
+
 
 -(NSArray *)availableVideoDevices
 {
@@ -92,6 +124,8 @@
     }
     [_current_renderer setValue:capDev forKey:@"layout"];
 }
+
+
 -(void)setActiveVideoDevice:(CSAbstractCaptureDevice *)activeVideoDevice
 {
     
@@ -114,6 +148,7 @@
 {
     return [CALayer layer];
 }
+
 
 -(void)frameTick
 {

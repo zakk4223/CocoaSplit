@@ -505,36 +505,11 @@
 -(NSObject<CSInputSourceProtocol>*)inputSourceForPasteboardItem:(NSPasteboardItem *)item
 {
     
+    return [CaptureController.sharedCaptureController inputSourceForPasteboardItem:item];
     
-    NSArray *captureClasses = [self captureSourcesForPasteboardItem:item];
-    Class<CSCaptureSourceProtocol> useClass = captureClasses.firstObject;
-    
-    if (useClass)
-    {
-        NSObject<CSCaptureSourceProtocol> *newSource = nil;
-        NSString *pbUUID = [useClass uniqueIDFromPasteboardItem:item];
-        if (pbUUID)
-        {
-            newSource = [[SourceCache sharedCache] findCachedSourceForClass:useClass uniqueID:pbUUID];
-        }
-        
-        if (!newSource)
-        {
-            newSource = [useClass createSourceFromPasteboardItem:item];
-            newSource = [[SourceCache sharedCache] cacheSource:newSource];
-        } else {
-        }
-        
-        if (newSource)
-        {
-            InputSource *newInput = [[InputSource alloc] init];
-            [newInput setDirectVideoInput:newSource];
-            return newInput;
-        }
-    }
-    
-    return nil;
+    NSArray *captureClasses = [CaptureController.sharedCaptureController captureSourcesForPasteboardItem:item];
 }
+
 
 
 -(NSArray *)captureSourcesForPasteboardItem:(NSPasteboardItem *)item
@@ -543,7 +518,6 @@
     NSMutableArray *candidates = [NSMutableArray array];
     
     CSPluginLoader *loader = [CSPluginLoader sharedPluginLoader];
-    
     
     
     NSString *urlString = [item stringForType:@"public.file-url"];
@@ -598,7 +572,7 @@
     if (!self.sourceTreeSortDescriptors)
     {
         self.sourceTreeSortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"depth" ascending:NO]];
-        [self.sourceOutlineView registerForDraggedTypes:@[NSSoundPboardType,NSFilenamesPboardType, NSFilesPromisePboardType, NSFileContentsPboardType, @"cocoasplit.input.item", @"cocoasplit.audio.item"]];
+        [self.sourceOutlineView registerForDraggedTypes:@[NSSoundPboardType,NSFilenamesPboardType, NSFilesPromisePboardType, NSFileContentsPboardType, @"cocoasplit.input.item", @"cocoasplit.audio.item", @"cocoasplit.layout"]];
 
         _activeConfigWindows = [NSMutableDictionary dictionary];
         _activeConfigControllers = [NSMutableDictionary dictionary];

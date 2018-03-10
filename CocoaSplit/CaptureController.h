@@ -533,6 +533,7 @@ NSArray *_savedTransitionConstraints;
 -(JSContext *)setupJavascriptContext;
 -(JSContext *)setupJavascriptContext:(JSVirtualMachine *)machine;
 -(NSObject<CSInputSourceProtocol>*)inputSourceForPasteboardItem:(NSPasteboardItem *)item;
+-(NSArray *)captureSourcesForPasteboardItem:(NSPasteboardItem *)item;
 
 -(IBAction)openScriptSwitcherWindow:(id)sender;
 -(bool)fileURLIsAudio:(NSURL *)url;

@@ -2453,7 +2453,7 @@
     NSMutableArray *candidates = [NSMutableArray array];
     
     CSPluginLoader *loader = [CSPluginLoader sharedPluginLoader];
-
+    NSSet *typeSet = nil;
     
     
     NSString *urlString = [item stringForType:@"public.file-url"];
@@ -2470,39 +2470,30 @@
             NSArray *fileTypes = attrMap[(__bridge NSString *)kMDItemContentTypeTree];
             if (fileTypes)
             {
-                NSSet *typeSet = [NSSet setWithArray:fileTypes];
-                for (NSString *key in loader.sourcePlugins)
-                {
-                    Class<CSCaptureSourceProtocol> captureClass = loader.sourcePlugins[key];
-                    NSSet *captureSet = [captureClass mediaUTIs];
-                    if (captureSet)
-                    {
-                        if([typeSet intersectsSet:captureSet])
-                        {
-                            [candidates addObject:captureClass];
-                        }
-                    }
-                    
-                }
+                typeSet = [NSSet setWithArray:fileTypes];
             }
         }
         
+    } else {
+        typeSet = [NSSet setWithArray:item.types];
     }
-
-    /*
-    if (candidates.count == 0)
+    
+    if (typeSet)
     {
         for (NSString *key in loader.sourcePlugins)
         {
             Class<CSCaptureSourceProtocol> captureClass = loader.sourcePlugins[key];
-            
-            if ([captureClass canCreateSourceFromPasteboardItem:item])
+            NSSet *captureSet = [captureClass mediaUTIs];
+            if (captureSet)
             {
-                [candidates addObject:captureClass];
+                if([typeSet intersectsSet:captureSet])
+                {
+                    [candidates addObject:captureClass];
+                }
             }
             
         }
-    }*/
+    }
     return candidates;
 }
 
