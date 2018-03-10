@@ -423,17 +423,20 @@
 
     } else if (_firstFrame) {
         use_buf = [self.player firstFrame];
-        _lastSize = NSMakeSize(CVPixelBufferGetWidth(use_buf), CVPixelBufferGetHeight(use_buf));
-        [self updateLayersWithFramedataBlock:^(CALayer *layer) {
-            layer.contents = (__bridge id _Nullable)(use_buf);
-            [layer displayIfNeeded];
-        } withPreuseBlock:^{
-            CVPixelBufferRetain(use_buf);
-        } withPostuseBlock:^{
+        if (use_buf)
+        {
+            _lastSize = NSMakeSize(CVPixelBufferGetWidth(use_buf), CVPixelBufferGetHeight(use_buf));
+            [self updateLayersWithFramedataBlock:^(CALayer *layer) {
+                layer.contents = (__bridge id _Nullable)(use_buf);
+                [layer displayIfNeeded];
+            } withPreuseBlock:^{
+                CVPixelBufferRetain(use_buf);
+            } withPostuseBlock:^{
+                CVPixelBufferRelease(use_buf);
+            }];
             CVPixelBufferRelease(use_buf);
-        }];
-        CVPixelBufferRelease(use_buf);
-        _firstFrame = NO;
+            _firstFrame = NO;
+        }
 
     }
 }
