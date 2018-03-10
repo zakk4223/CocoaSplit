@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12120" systemVersion="16G29" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12120"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -15,31 +15,21 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="Hz6-mo-xeY">
             <rect key="frame" x="0.0" y="0.0" width="190" height="344"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
             <subviews>
-                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PtK-Se-LFd">
-                    <rect key="frame" x="56" y="320" width="79" height="28"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="push" title="Configure" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="riz-Dy-dFn">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="openTransitionFilterPanel:" target="-2" id="TpZ-pM-USx"/>
-                    </connections>
-                </button>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kbD-wK-aJn">
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kbD-wK-aJn">
                     <rect key="frame" x="-2" y="308" width="49" height="14"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Duration" id="rXW-8I-q3r">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Q4-nF-uRH">
-                    <rect key="frame" x="61" y="305" width="69" height="19"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8Q4-nF-uRH">
+                    <rect key="frame" x="61" y="305" width="70" height="19"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="70" id="er1-Ek-8QP"/>
+                    </constraints>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="7f5-KL-Y1L">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -49,9 +39,8 @@
                         <binding destination="9BP-0F-4mP" name="value" keyPath="selection.transitionDuration" id="cbZ-hr-m2P"/>
                     </connections>
                 </textField>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qjc-6u-fCc">
-                    <rect key="frame" x="-3" y="283" width="94" height="20"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="qjc-6u-fCc">
+                    <rect key="frame" x="-3" y="285" width="94" height="18"/>
                     <buttonCell key="cell" type="check" title="Whole Layout" bezelStyle="regularSquare" imagePosition="right" controlSize="small" state="on" inset="2" id="7Ow-VO-Hre">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -60,7 +49,27 @@
                         <binding destination="9BP-0F-4mP" name="value" keyPath="selection.transitionFullScene" id="Nt4-4a-GSp"/>
                     </connections>
                 </button>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PtK-Se-LFd">
+                    <rect key="frame" x="56" y="320" width="78" height="28"/>
+                    <buttonCell key="cell" type="push" title="Configure" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="riz-Dy-dFn">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="openTransitionFilterPanel:" target="-2" id="TpZ-pM-USx"/>
+                    </connections>
+                </button>
             </subviews>
+            <constraints>
+                <constraint firstItem="qjc-6u-fCc" firstAttribute="top" secondItem="8Q4-nF-uRH" secondAttribute="bottom" constant="5" id="DH7-y8-hOq"/>
+                <constraint firstItem="8Q4-nF-uRH" firstAttribute="top" secondItem="PtK-Se-LFd" secondAttribute="bottom" constant="2" id="EHj-fx-W8B"/>
+                <constraint firstItem="8Q4-nF-uRH" firstAttribute="leading" secondItem="kbD-wK-aJn" secondAttribute="trailing" constant="16" id="Jxd-Xz-yTU"/>
+                <constraint firstItem="kbD-wK-aJn" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="22" id="NoL-dM-axP"/>
+                <constraint firstItem="kbD-wK-aJn" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="VcL-gV-HcH"/>
+                <constraint firstItem="qjc-6u-fCc" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="cVf-PK-NlG"/>
+                <constraint firstItem="PtK-Se-LFd" firstAttribute="leading" secondItem="8Q4-nF-uRH" secondAttribute="leading" id="dCU-ri-lJf"/>
+                <constraint firstItem="PtK-Se-LFd" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="e4G-R9-UjN"/>
+            </constraints>
             <point key="canvasLocation" x="-13" y="204"/>
         </customView>
         <objectController id="9BP-0F-4mP" userLabel="transitionController">

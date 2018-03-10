@@ -760,9 +760,9 @@
 		345BECB61F3DADF600B46F29 /* CSLayoutCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSLayoutCapturePlugin.xcodeproj; path = CapturePlugins/CSLayoutCapturePlugin/CSLayoutCapturePlugin.xcodeproj; sourceTree = "<group>"; };
 		345BECE61F3FD21200B46F29 /* CSLayoutTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLayoutTransition.h; sourceTree = "<group>"; };
 		345BECE71F3FD21200B46F29 /* CSLayoutTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSLayoutTransition.m; sourceTree = "<group>"; };
-		345BECF11F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSSimpleLayoutTransitionViewController.h; path = Interface/CSSimpleLayoutTransitionViewController.h; sourceTree = "<group>"; };
-		345BECF21F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSSimpleLayoutTransitionViewController.m; path = Interface/CSSimpleLayoutTransitionViewController.m; sourceTree = "<group>"; };
-		345BECF31F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSSimpleLayoutTransitionViewController.xib; path = Interface/CSSimpleLayoutTransitionViewController.xib; sourceTree = "<group>"; };
+		345BECF11F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSimpleLayoutTransitionViewController.h; sourceTree = "<group>"; };
+		345BECF21F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSimpleLayoutTransitionViewController.m; sourceTree = "<group>"; };
+		345BECF31F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSSimpleLayoutTransitionViewController.xib; sourceTree = "<group>"; };
 		345BECF71F447ACC00B46F29 /* CSLayoutTransitionViewProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLayoutTransitionViewProtocol.h; sourceTree = "<group>"; };
 		345BECF81F455AF700B46F29 /* CSCIFilterLayoutTransitionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSCIFilterLayoutTransitionViewController.h; sourceTree = "<group>"; };
 		345BECF91F455AF700B46F29 /* CSCIFilterLayoutTransitionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSCIFilterLayoutTransitionViewController.m; sourceTree = "<group>"; };
@@ -1731,9 +1731,6 @@
 				34E162E71E987420005157ED /* CSScriptWindowViewController.xib */,
 				34C1379D1F28DE0C00F53DE2 /* CSTimeFormatter.h */,
 				34C1379E1F28DE0C00F53DE2 /* CSTimeFormatter.m */,
-				345BECF11F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.h */,
-				345BECF21F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.m */,
-				345BECF31F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.xib */,
 				346544DA1FC22CF0003B9991 /* CSNSButtonCellThemed.h */,
 				346544DB1FC22CF0003B9991 /* CSNSButtonCellThemed.m */,
 				343C2CAF1FFBB8DC00849DA9 /* CSSourceListViewController.h */,
@@ -1821,6 +1818,9 @@
 		345BECF61F447AA200B46F29 /* Transitions */ = {
 			isa = PBXGroup;
 			children = (
+				345BECF11F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.h */,
+				345BECF21F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.m */,
+				345BECF31F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.xib */,
 				345BECF71F447ACC00B46F29 /* CSLayoutTransitionViewProtocol.h */,
 				345BECF81F455AF700B46F29 /* CSCIFilterLayoutTransitionViewController.h */,
 				345BECF91F455AF700B46F29 /* CSCIFilterLayoutTransitionViewController.m */,
