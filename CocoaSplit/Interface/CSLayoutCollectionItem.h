@@ -22,5 +22,7 @@
 
 @property (weak) IBOutlet CSLayoutButtonView *layoutButton;
 @property (weak) IBOutlet NSTextField *buttonLabel;
+@property (weak) IBOutlet NSImageView *upImage;
+@property (strong) IBOutlet NSImageView *downImage;
 
 @end

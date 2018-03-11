@@ -44,7 +44,10 @@
     AppDelegate *appDel = [NSApp delegate];
     self.captureController = appDel.captureController;
     [self setButtonLabelName];
-
+    [self.upImage rotateByAngle:90.0f];
+    [self.downImage rotateByAngle:-90.0f];
+    self.upImage.hidden = YES;
+    self.downImage.hidden = YES;
 
 }
 
