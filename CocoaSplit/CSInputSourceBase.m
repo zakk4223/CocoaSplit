@@ -144,6 +144,7 @@
     [aCoder encodeInteger:self.scriptPriority forKey:@"scriptPriority"];
     [aCoder encodeBool:self.scriptAlwaysRun forKey:@"scriptAlwaysRun"];
     [aCoder encodeBool:self.persistent forKey:@"persistent"];
+    [aCoder encodeObject:self.parentInput forKey:@"parentInput"];
 }
 
 
@@ -178,7 +179,15 @@
     {
         self.persistent = [aDecoder decodeBoolForKey:@"persistent"];
     }
+    InputSource *parentInput = [aDecoder decodeObjectForKey:@"parentInput"];
     
+    if (parentInput && !self.isVideo)
+    {
+        [parentInput attachInput:self];
+    } else {
+        //Video inputs handle attachment differently.
+        self.parentInput = parentInput;
+    }
     
     
     return self;

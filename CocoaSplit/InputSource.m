@@ -238,7 +238,7 @@ static NSArray *_sourceTypes = nil;
     [aCoder encodeFloat:self.transitionDuration forKey:@"transitionDuration"];
     [aCoder encodeObject:self.advancedTransition forKey:@"advancedTransition"];
     
-    [aCoder encodeObject:self.parentInput forKey:@"parentInput"];
+    //[aCoder encodeObject:self.parentInput forKey:@"parentInput"];
     
     
     //if we directly encode constraintMap the resulting NSData is not equal to an 'equal' InputSource, so double encode?
@@ -506,9 +506,7 @@ static NSArray *_sourceTypes = nil;
         
         [CATransaction commit];
 
-        InputSource *parentInput = [aDecoder decodeObjectForKey:@"parentInput"];
-        self.parentInput = parentInput;
-        
+
         if (self.parentInput)
         {
             [self makeSublayerOfLayer:self.parentInput.layer];
