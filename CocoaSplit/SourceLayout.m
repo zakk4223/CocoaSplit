@@ -2282,6 +2282,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     }
     delSource.sourceLayout = nil;
 
+    delSource.isVisible = NO;
     
     
 
@@ -2352,6 +2353,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     
     newSource.sourceLayout = self;
     newSource.is_live = self.isActive;
+    newSource.isVisible = YES;
     
     [self addSourceToPresentation:newSource];
     

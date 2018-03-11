@@ -60,7 +60,7 @@
 //Are we selected in the UI?
 @property (assign) bool isSelected;
 
-//If the source is part of a multi-source input this flag is set when it isn't the source being displayed
+//Set to true if you are visible anywhere. Normally set when the source is added to a layout.
 @property (assign) bool isVisible;
 
 //Your active status (active checkbox in config UI). If an input isn't active currentImage/getCurrentFrame aren't

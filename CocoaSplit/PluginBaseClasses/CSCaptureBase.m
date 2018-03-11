@@ -80,7 +80,7 @@
         self.canProvideTiming = NO;
         self.needsSourceSelection = YES;
         self.allowDedup = YES;
-        self.isVisible = YES;
+        self.isVisible = NO;
         self.allowScaling = YES;
         self.allLayers = [NSMapTable weakToStrongObjectsMapTable];
         pcmPlayers = [NSMutableDictionary dictionary];
@@ -629,6 +629,27 @@
 {
     return;
 }
+
+-(void)visibleStatusChangedForInput:(InputSource *)inputSource
+{
+    bool real_visible = NO;
+    
+    for (id key in self.allLayers)
+    {
+        if (!key)
+        {
+            continue;
+        }
+        InputSource *lSrc = key;
+        if (lSrc.isVisible)
+        {
+            real_visible = YES;
+        }
+    }
+    
+    self.isVisible = real_visible;
+}
+
 
 -(void)activeStatusChangedForInput:(InputSource *)inputSource
 {

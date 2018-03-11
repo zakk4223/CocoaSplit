@@ -147,6 +147,8 @@ typedef enum frame_render_behavior_t {
 -(void)didExport;
 -(void)activeStatusChangedForInput:(InputSource *)inputSource;
 -(void)liveStatusChangedForInput:(InputSource *)inputSource;
+-(void)visibleStatusChangedForInput:(InputSource *)inputSource;
+
 -(void)removePCMPlayer:(CSPcmPlayer *)player;
 -(void)removeAllPcmPlayers;
 -(void) restoreWithCoder:(NSCoder *)aDecoder;

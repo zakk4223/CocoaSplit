@@ -37,6 +37,7 @@ static NSArray *_sourceTypes = nil;
 @synthesize is_selected = _is_selected;
 @synthesize active = _active;
 @synthesize is_live = _is_live;
+@synthesize isVisible = _isVisible;
 @synthesize crop_left = _crop_left;
 @synthesize crop_right = _crop_right;
 @synthesize crop_top = _crop_top;
@@ -3269,6 +3270,21 @@ static NSArray *_sourceTypes = nil;
         [self autoCenter:NSMakeRect(0, 0, self.canvas_width, self.canvas_height)];
         self.autoPlaceOnFrameUpdate = NO;
     }
+}
+
+
+-(void)setIsVisible:(bool)isVisible
+{
+    _isVisible = isVisible;
+    if (self.videoInput)
+    {
+        [self.videoInput visibleStatusChangedForInput:self];
+    }
+}
+
+-(bool)isVisible
+{
+    return _isVisible;
 }
 
 

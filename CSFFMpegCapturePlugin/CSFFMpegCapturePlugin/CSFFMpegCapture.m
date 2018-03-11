@@ -377,6 +377,18 @@
     return _lastSize;
 }
 
+-(void)setIsVisible:(bool)isVisible
+{
+    [super setIsVisible:isVisible];
+    if (isVisible && self.playWhenLive && !self.player.playing)
+    {
+        [self.player play];
+        if (self.useCurrentPosition)
+        {
+            [self.player seek:_savedTime];
+        }
+    }
+}
 
 -(void)frameTick
 {
@@ -385,6 +397,7 @@
     {
         return;
     }
+
 
     
     CFTimeInterval cTime = CACurrentMediaTime();
@@ -457,14 +470,6 @@
         if (self.player)
         {
             [self registerPCMOutput:1024 audioFormat:&_asbd];
-            if (self.playWhenLive)
-            {
-                [self.player play];
-                if (self.useCurrentPosition)
-                {
-                    [self.player seek:_savedTime];
-                }
-            }
         }
 
     } else {
