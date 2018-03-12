@@ -320,10 +320,11 @@ var removeLayout = function(layout, kwargs) {
             if (layoutTransition.preTransition)
             {
                 target_layout.transitionInfo = layoutTransition.preTransition;
-                target_layout.transitionInfo.waitForMedia = layoutTransition.waitForMedia;
-                target_layout.replaceWithSourceLayoutUsingScripts(layoutTransition.transitionLayout, useScripts);
-                waitAnimation(layoutTransition.transitionHoldTime);
             }
+            target_layout.transitionInfo.waitForMedia = layoutTransition.waitForMedia;
+            target_layout.replaceWithSourceLayoutUsingScripts(layoutTransition.transitionLayout, useScripts);
+            waitAnimation(layoutTransition.transitionHoldTime);
+            
             target_layout.transitionInfo = layoutTransition.postTransition;
             target_layout.replaceWithSourceLayoutUsingScripts(endLayout, useScripts);
         } else {
