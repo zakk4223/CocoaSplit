@@ -249,10 +249,24 @@ var mergeLayout = function(layout, kwargs) {
     
     kwargs = kwargs || {};
     var useScripts = !kwargs['noscripts'];
-
+    var useOrder = kwargs['order'];
+    var enumOrder = 0;
+    if (useOrder === "above")
+    {
+        enumOrder = 1;
+    } else if (useOrder === "below") {
+        enumOrder = 2;
+    }
+        
     if (layout)
     {
         var target_layout = getCurrentLayout();
+        
+        if (enumOrder != 0)
+        {
+            target_layout.sourceAddOrder = enumOrder;
+        }
+        
         var layoutTransition = target_layout.transitionInfo;
         var endLayout = layout;
         

@@ -193,6 +193,9 @@
             <parameter name="using" code="toly" type="layout" description="Which layout to operate on" optional="yes">
                 <cocoa key="useLayout"/>
             </parameter>
+            <parameter name="order" code="lyor" type="text" description="How to order merged sources, 'above' or 'below'" optional="yes">
+                <cocoa key="sourceOrder"/>
+            </parameter>
         </command>
         
         <command name="replace with" code="CSssrwly">
@@ -234,7 +237,9 @@
             <parameter name="into" code="toly" type="layout" description="Which layout to operate on" optional="yes">
                 <cocoa key="useLayout"/>
             </parameter>
-    
+            <parameter name="order" code="lyor" type="text" description="How to order merged sources, 'above' or 'below'" optional="yes">
+                <cocoa key="sourceOrder"/>
+            </parameter>
         </command>
 
         <command name="remove" code="CSssrmly">

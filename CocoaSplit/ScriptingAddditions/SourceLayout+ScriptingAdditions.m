@@ -57,7 +57,18 @@
 {
     
     SourceLayout *useLayout = [self getUseLayout:command];
+    NSString *sourceOrder = command.arguments[@"sourceOrder"];
     
+    useLayout.sourceAddOrder = kCSSourceAddOrderAny;
+    if (sourceOrder)
+    {
+        if ([sourceOrder isEqualToString:@"above"])
+        {
+            useLayout.sourceAddOrder = kCSSourceAddOrderTop;
+        } else if ([sourceOrder isEqualToString:@"below"]) {
+            useLayout.sourceAddOrder = kCSSourceAddOrderBottom;
+        }
+    }
     [[CaptureController sharedCaptureController] toggleLayout:self usingLayout:useLayout];
 }
 
@@ -65,6 +76,20 @@
 {
     SourceLayout *useLayout = [self getUseLayout:command];
 
+    
+    NSString *sourceOrder = command.arguments[@"sourceOrder"];
+    
+    useLayout.sourceAddOrder = kCSSourceAddOrderAny;
+    if (sourceOrder)
+    {
+        if ([sourceOrder isEqualToString:@"above"])
+        {
+            useLayout.sourceAddOrder = kCSSourceAddOrderTop;
+        } else if ([sourceOrder isEqualToString:@"below"]) {
+            useLayout.sourceAddOrder = kCSSourceAddOrderBottom;
+        }
+    }
+    
     [[CaptureController sharedCaptureController] mergeLayout:self usingLayout:useLayout];
 }
 
