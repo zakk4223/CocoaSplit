@@ -82,6 +82,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         _rootSize = NSMakeSize(_canvas_width, _canvas_height);
         self.sourceList = [NSMutableArray array];
         self.sourceListPresentation = [NSMutableArray array];
+        self.sourceAddOrder = kCSSourceAddOrderAny;
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(inputAttachEvent:) name:CSNotificationInputAttached object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(inputAttachEvent:) name:CSNotificationInputDetached object:nil];
@@ -2356,6 +2357,17 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     newSource.isVisible = YES;
     
     [self addSourceToPresentation:newSource];
+    
+    switch (self.sourceAddOrder) {
+        case kCSSourceAddOrderBottom:
+            newSource.depth = -FLT_MAX + newSource.depth;
+            break;
+        case kCSSourceAddOrderTop:
+            newSource.depth = FLT_MAX - newSource.depth;
+        default:
+            break;
+    }
+    
     
     [[self mutableArrayValueForKey:@"sourceList" ] addObject:newSource];
     if (newSource.layer && !newSource.layer.superlayer)

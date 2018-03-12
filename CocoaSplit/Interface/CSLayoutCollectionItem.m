@@ -117,6 +117,15 @@
     
     if ([NSEvent modifierFlags] & NSShiftKeyMask)
     {
+        if (!self.upImage.hidden)
+        {
+            useLayout.sourceAddOrder = kCSSourceAddOrderTop;
+        } else if (!self.downImage.hidden) {
+            useLayout.sourceAddOrder = kCSSourceAddOrderBottom;
+        } else {
+            useLayout.sourceAddOrder = kCSSourceAddOrderAny;
+        }
+        
         [self.captureController toggleLayout:self.representedObject usingLayout:useLayout];
     } else {
         [self.captureController switchToLayout:self.representedObject usingLayout:useLayout];

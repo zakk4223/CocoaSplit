@@ -15,6 +15,11 @@
 #import "CAMultiAudioEngine.h"
 #import "CSAudioInputSource.h"
 
+typedef enum source_add_order_t {
+    kCSSourceAddOrderAny = 0,
+    kCSSourceAddOrderTop = 1,
+    kCSSourceAddOrderBottom = 2
+} source_add_order;
 
 
 @class CSLayoutRecorder;
@@ -84,6 +89,7 @@
 @property (assign) CGFloat gradientStartY;
 @property (assign) CGFloat gradientStopX;
 @property (assign) CGFloat gradientStopY;
+@property (assign) source_add_order sourceAddOrder;
 
 
 -(void)deleteSource:(NSObject<CSInputSourceProtocol> *)delSource;
@@ -233,6 +239,7 @@
 @property (assign) CGFloat gradientStopX;
 @property (assign) CGFloat gradientStopY;
 @property (assign) bool containerOnly;
+@property (assign) source_add_order sourceAddOrder;
 
 -(CSAudioInputSource *)findSourceForAudioUUID:(NSString *)audioUUID;
 
