@@ -45,6 +45,7 @@
 
 -(void)setTransition:(CSLayoutTransition *)transition
 {
+    /*
     _transition = transition;
 
     if (transition)
@@ -52,12 +53,14 @@
         self.transitionName = transition.transitionName;
     } else {
         self.transitionName = nil;
-    }
+    }*/
+    
 }
 
 
 -(void) setTransitionName:(NSString *)transitionName
 {
+    /*
     
     _transitionName = transitionName;
     
@@ -87,6 +90,7 @@
         self.layoutTransitionViewController.transition.transitionName = transitionName;
     }
     [self changeTransitionView];
+     */
 }
 
 

@@ -7,6 +7,7 @@
 
 #import "CSTransitionCollectionItem.h"
 #import "CaptureController.h"
+#import "CSLayoutTransitionViewProtocol.h"
 
 @interface CSTransitionCollectionItem ()
 
@@ -65,7 +66,7 @@
     self.transitionMenu = [[NSMenu alloc] init];
 
 
-    tmp = [self.transitionMenu insertItemWithTitle:@"Edit" action:nil keyEquivalent:@"" atIndex:idx++];
+    tmp = [self.transitionMenu insertItemWithTitle:@"Edit" action:@selector(editTransition:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
     tmp.representedObject = forTransition;
     
@@ -91,6 +92,40 @@
     {
         [[CaptureController sharedCaptureController] deleteTransition:self.representedObject];
     }
+}
+
+-(void)editTransition:(NSMenuItem *)menuItem
+{
+    
+    if (!self.representedObject)
+    {
+        return;
+    }
+    
+    CSTransitionBase *transition = self.representedObject;
+    
+    NSViewController<CSLayoutTransitionViewProtocol> *vc = transition.configurationViewController;
+    
+    if (!vc)
+    {
+        return;
+    }
+    
+    if (!_editPopover)
+    {
+        _editPopover = [[NSPopover alloc] init];
+        _editPopover.animates = YES;
+        _editPopover.behavior = NSPopoverBehaviorTransient;
+    }
+    
+    if (!_editPopover.contentViewController)
+    {
+        _editPopover.contentViewController = vc;
+        _editPopover.delegate = vc;
+        vc.popover = _editPopover;
+    }
+    
+    [_editPopover showRelativeToRect:self.view.bounds ofView:self.view preferredEdge:NSMinXEdge];
 }
 
 

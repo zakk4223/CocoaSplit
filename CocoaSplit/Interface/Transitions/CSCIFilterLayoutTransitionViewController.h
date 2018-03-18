@@ -12,7 +12,7 @@
 
 @interface CSCIFilterLayoutTransitionViewController : NSViewController <CSLayoutTransitionViewProtocol>
 
-@property (strong) CSLayoutTransition *transition;
+@property (strong) CSTransitionBase *transition;
 
 @property (strong) NSWindow *transitionFilterWindow;
 

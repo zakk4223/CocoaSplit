@@ -1,35 +1,36 @@
 //
-//  CSTransitionCA.m
+//  CSTransitionCIFilter.m
 //  CocoaSplit
 //
-//  Created by Zakk on 3/16/18.
+//  Created by Zakk on 3/18/18.
 //
 
-#import "CSTransitionCA.h"
+#import "CSTransitionCIFilter.h"
 #import "CSLayoutTransition.h"
-#import "CSSimpleLayoutTransitionViewController.h"
 
-@implementation CSTransitionCA
-
-
+@implementation CSTransitionCIFilter
 
 -(id)copyWithZone:(NSZone *)zone
 {
-    CSTransitionCA *newObj = [super copyWithZone:zone];
+    CSTransitionCIFilter *newObj = [super copyWithZone:zone];
     if (newObj)
     {
-        newObj.transitionDirection = self.transitionDirection;
+        newObj.wholeLayout = self.wholeLayout;
+        newObj.transitionFilter = self.transitionFilter.mutableCopy;
     }
     return newObj;
 }
 
+
 +(NSArray *)subTypes
 {
     NSMutableArray *ret = [NSMutableArray array];
-    for (NSString *subType in @[kCATransitionFade, kCATransitionPush, kCATransitionMoveIn, kCATransitionReveal, @"cube", @"alignedCube", @"flip", @"alignedFlip"])
+    for (NSString *subType in [CIFilter filterNamesInCategory:kCICategoryTransition])
     {
-        CSTransitionCA *newTransition = [[CSTransitionCA alloc] init];
-        newTransition.subType = subType;
+    
+        CSTransitionCIFilter *newTransition = [[CSTransitionCIFilter alloc] init];
+        newTransition.transitionFilter = [CIFilter filterWithName:subType];
+        [newTransition.transitionFilter setDefaults];
         [ret addObject:newTransition];
     }
     
@@ -40,25 +41,25 @@
 
 +(NSString *)transitionCategory
 {
-    return @"Core Animation";
+    return @"Core Image";
 }
 
-
+/*
 -(NSViewController<CSLayoutTransitionViewProtocol> *)configurationViewController
 {
     CSSimpleLayoutTransitionViewController *vc = [[CSSimpleLayoutTransitionViewController alloc] init];
     vc.transition = self;
     return vc;
 }
-
+*/
 
 -(NSString *)name
 {
     
     NSString *ret = [super name];
-    if (!ret)
+    if (!ret && self.transitionFilter)
     {
-        ret = self.subType;
+        ret = [CIFilter localizedNameForFilterName:self.transitionFilter.name];
     }
     return ret;
 }
@@ -67,17 +68,17 @@
 -(NSString *)preChangeAction:(SourceLayout *)targetLayout
 {
     CSLayoutTransition *newTransition = [[CSLayoutTransition alloc] init];
-    newTransition.transitionName = self.subType;
+    newTransition.transitionFilter = self.transitionFilter;
     if (self.duration)
     {
         newTransition.transitionDuration = [self.duration floatValue];
     }
     
-    newTransition.transitionDirection = self.transitionDirection;
     newTransition.transitionFullScene = self.wholeLayout;
     targetLayout.transitionInfo = newTransition;
     
     return nil;
 }
+
 
 @end

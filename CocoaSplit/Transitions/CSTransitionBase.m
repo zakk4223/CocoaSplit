@@ -15,7 +15,6 @@
     if (self = [super init])
     {
         self.duration = @1.0f;
-        self.name = @"Transition";
     }
     
     return self;
@@ -28,6 +27,17 @@
     newObj.name = self.name;
     newObj.subType = self.subType;
     return newObj;
+}
+
+
+-(void)setName:(NSString *)name
+{
+    _name = name;
+}
+
+-(NSString *)name
+{
+    return _name;
 }
 
 
@@ -52,5 +62,9 @@
     return nil;
 }
 
+-(NSViewController<CSLayoutTransitionViewProtocol> *)configurationViewController
+{
+    return nil;
+}
 
 @end

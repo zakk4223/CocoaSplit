@@ -3,7 +3,6 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 8/16/17.
-//  Copyright © 2017 Zakk. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -13,7 +12,7 @@
 @interface CSSimpleLayoutTransitionViewController : NSViewController <CSLayoutTransitionViewProtocol>
 
 @property (strong) NSArray *transitionDirections;
-@property (strong) CSLayoutTransition *transition;
-
+@property (strong) CSTransitionBase *transition;
+@property (strong) NSPopover *popover;
 @end
 

@@ -19,11 +19,11 @@
 }
 
 
-@property (strong) CSLayoutTransition *transition;
+@property (strong) CSTransitionBase *transition;
 
 @property (strong) NSArray *sourceLayouts;
 
-@property (strong) CSLayoutTransition *subTransition;
+@property (strong) CSTransitionBase *subTransition;
 
 - (IBAction)configureInTransition:(id)sender;
 - (IBAction)configureOutTransition:(id)sender;

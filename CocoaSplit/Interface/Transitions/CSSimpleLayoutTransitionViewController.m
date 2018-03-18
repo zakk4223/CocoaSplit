@@ -26,6 +26,11 @@
     return self;
 }
 
+-(void)popoverDidClose:(NSNotification *)notification
+{
+    self.popover.contentViewController = nil;
+}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];

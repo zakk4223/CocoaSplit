@@ -37,6 +37,7 @@
     // Do view setup here.
 }
 
+/*
 - (IBAction)configureInTransition:(NSButton *)sender
 {
     
@@ -96,6 +97,7 @@
     vc.transition = self.subTransition;
 
 }
+*/
 
 -(BOOL) commitEditing
 {

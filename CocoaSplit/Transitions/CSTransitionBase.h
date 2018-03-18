@@ -8,6 +8,7 @@
 #import <Foundation/Foundation.h>
 #import <JavascriptCore/JavascriptCore.h>
 #import "SourceLayout.h"
+#import "CSLayoutTransitionViewProtocol.h"
 
 
 @protocol CSTransitionExport <JSExport>
@@ -22,6 +23,11 @@
 @end
 
 @interface CSTransitionBase : NSObject <CSTransitionExport, NSCopying>
+{
+    NSString *_name;
+}
+
+
 @property (strong) NSNumber *duration;
 @property (strong) NSString *name;
 @property (strong) NSString *subType;
@@ -31,5 +37,6 @@
 
 -(NSString *)preChangeAction:(SourceLayout *)targetLayout;
 -(NSString *)postChangeAction:(SourceLayout *)targetLayout;
+-(NSViewController<CSLayoutTransitionViewProtocol> *)configurationViewController;
 
 @end

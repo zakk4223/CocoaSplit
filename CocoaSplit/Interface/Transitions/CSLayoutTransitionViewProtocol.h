@@ -6,11 +6,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CSLayoutTransition.h"
+@class CSTransitionBase;
 
-@protocol CSLayoutTransitionViewProtocol <NSObject>
+@protocol CSLayoutTransitionViewProtocol <NSObject, NSPopoverDelegate>
 
-@property (strong) CSLayoutTransition *transition;
+@property (strong) CSTransitionBase *transition;
+@property (strong) NSPopover *popover;
 @property (strong) NSView *view;
 
 @end

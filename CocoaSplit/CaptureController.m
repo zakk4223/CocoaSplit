@@ -2686,7 +2686,7 @@
 
 -(void) setTransitionName:(NSString *)transitionName
 {
-    
+    /*
     _transitionName = transitionName;
 
     if (!transitionName)
@@ -2715,6 +2715,7 @@
         self.layoutTransitionViewController.transition.transitionName = transitionName;
     }
     [self changeTransitionView];
+     */
 }
 
 

@@ -9,6 +9,11 @@
 #import "CSTransitionButton.h"
 
 @interface CSTransitionCollectionItem : NSCollectionViewItem
+{
+    NSPopover *_editPopover;
+}
+
+
 -(void)transitionClicked;
 -(void)showTransitionMenu:(NSEvent *)clickEvent;
 

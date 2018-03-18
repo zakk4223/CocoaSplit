@@ -15,6 +15,6 @@
 @property (strong) NSString *transitionName;
 @property (strong) NSObject<CSLayoutTransitionViewProtocol> *layoutTransitionViewController;
 @property (weak) IBOutlet NSView *layoutTransitionConfigView;
-@property (strong) CSLayoutTransition *transition;
+@property (strong) CSTransitionBase *transition;
 
 @end
