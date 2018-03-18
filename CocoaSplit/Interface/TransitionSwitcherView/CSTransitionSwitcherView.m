@@ -35,15 +35,45 @@
 
 
 
-- (IBAction)addTransitionClicked:(id)sender
+- (IBAction)addTransitionClicked:(NSButton *)sender
 {
-    NSLog(@"TRANSITIONS %@", self.blah);
-    CSTransitionCA *wtf = [[CSTransitionCA alloc] init];
-    wtf.subType = kCATransitionFromRight;
-    wtf.duration = @1.5f;
-    [self.transitionsArrayController addObject:wtf];
-
-
+    [self buildTransitionMenu];
     
+    NSInteger midItem = _transitionsMenu.itemArray.count/2;
+    NSPoint popupPoint = NSMakePoint(NSMaxY(sender.bounds), NSMidY(sender.bounds));
+    [_transitionsMenu popUpMenuPositioningItem:[_transitionsMenu itemAtIndex:midItem] atLocation:popupPoint inView:sender];
+}
+
+-(void)createTransition:(NSMenuItem *)menuItem
+{
+    
+}
+-(void)buildTransitionMenu
+{
+    _transitionsMenu = [[NSMenu alloc] init];
+    
+    NSArray *transitionClasses = @[CSTransitionCA.class];
+    
+    for (Class tClass in transitionClasses)
+    {
+       
+        NSString *tCategory = [tClass transitionCategory];
+        NSArray *tTypes = [tClass subTypes];
+        
+
+        NSMenuItem *item = nil;
+        
+        item = [[NSMenuItem alloc] initWithTitle:tCategory action:nil keyEquivalent:@""];
+        NSMenu *typeMenu = [[NSMenu alloc] init];
+        item.submenu = typeMenu;
+        
+        for (NSString *tType in tTypes)
+        {
+            NSMenuItem *typeItem = [[NSMenuItem alloc] initWithTitle:tType action:nil keyEquivalent:@""];
+            [typeMenu addItem:typeItem];
+        }
+        [_transitionsMenu addItem:item];
+        
+    }
 }
 @end

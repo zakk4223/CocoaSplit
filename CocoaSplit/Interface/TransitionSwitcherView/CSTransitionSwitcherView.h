@@ -8,6 +8,11 @@
 #import "CSViewController.h"
 
 @interface CSTransitionSwitcherView : CSViewController
+{
+    NSMenu *_transitionsMenu;
+}
+
+
 @property (weak) IBOutlet NSCollectionView *collectionView;
 - (IBAction)addTransitionClicked:(id)sender;
 @property (weak) IBOutlet NSObject *parentObjectController;

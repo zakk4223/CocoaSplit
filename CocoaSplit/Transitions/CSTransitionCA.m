@@ -18,6 +18,12 @@
     return @[kCATransitionFade, kCATransitionPush, kCATransitionMoveIn, kCATransitionReveal, @"cube", @"alignedCube", @"flip", @"alignedFlip"];
 }
 
++(NSString *)transitionCategory
+{
+    return @"Core Animation";
+}
+
+
 -(NSString *)name
 {
     return self.subType;

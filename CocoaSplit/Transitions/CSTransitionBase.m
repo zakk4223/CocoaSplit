@@ -21,6 +21,11 @@
     return self;
 }
 
++(NSString *)transitionCategory
+{
+    return @"Unknown";
+}
+
 
 +(NSArray *)subTypes
 {

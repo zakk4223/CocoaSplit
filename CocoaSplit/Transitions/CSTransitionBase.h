@@ -27,6 +27,8 @@
 @property (strong) NSString *subType;
 @property (assign) bool active;
 +(NSArray *)subTypes;
++(NSString *)transitionCategory;
+
 -(NSString *)preChangeAction:(SourceLayout *)targetLayout;
 -(NSString *)postChangeAction:(SourceLayout *)targetLayout;
 
