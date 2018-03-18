@@ -8,6 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CSTransitionCollectionItem">
             <connections>
+                <outlet property="transitionButton" destination="Hjc-OZ-ws3" id="vjX-gf-zkS"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
         </customObject>

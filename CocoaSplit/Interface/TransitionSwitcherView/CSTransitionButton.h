@@ -6,7 +6,9 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "CSTransitionCollectionItem.h"
+
+
+@class CSTransitionCollectionItem;
 
 @interface CSTransitionButton : NSControl
 @property (weak) IBOutlet CSTransitionCollectionItem *viewController;

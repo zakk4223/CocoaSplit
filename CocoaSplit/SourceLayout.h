@@ -90,6 +90,7 @@ typedef enum source_add_order_t {
 @property (assign) CGFloat gradientStopX;
 @property (assign) CGFloat gradientStopY;
 @property (assign) source_add_order sourceAddOrder;
+@property (strong) NSString *uuid;
 
 
 -(void)deleteSource:(NSObject<CSInputSourceProtocol> *)delSource;
@@ -240,6 +241,7 @@ typedef enum source_add_order_t {
 @property (assign) CGFloat gradientStopY;
 @property (assign) bool containerOnly;
 @property (assign) source_add_order sourceAddOrder;
+@property (strong) NSString *uuid;
 
 -(CSAudioInputSource *)findSourceForAudioUUID:(NSString *)audioUUID;
 

@@ -52,7 +52,7 @@
 @synthesize useTransitions = _useTransitions;
 @synthesize captureRunning = _captureRunning;
 @synthesize useDarkMode = _useDarkMode;
-
+@synthesize activeTransition = _activeTransition;
 
 
 -(void)evaluateJavascriptFile:(NSString *)baseFile inContext:(JSContext *)ctx
@@ -2413,7 +2413,7 @@
 
     CSTransitionCA *newTransition = [[CSTransitionCA alloc] init];
     newTransition.subType = @"fade";
-    newTransition.duration = @1.5;\
+    newTransition.duration = @1.5;
     [self willChangeValueForKey:@"transitions"];
     [self.transitions addObject:newTransition];
     [self didChangeValueForKey:@"transitions"];
@@ -3534,6 +3534,21 @@
 {
     [self.layoutSequences insertObject:object atIndex:index];
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationSequenceAdded object:object userInfo:nil];
+}
+
+-(SourceLayout *)sourceLayoutForUUID:(NSString *)uuid
+{
+    SourceLayout *ret = nil;
+    for(SourceLayout *layout in self.sourceLayouts)
+    {
+        if ([layout.uuid isEqualToString:uuid])
+        {
+            ret = layout;
+            break;
+        }
+    }
+    
+    return ret;
 }
 
 
@@ -4696,16 +4711,19 @@
 
 -(void)setActiveTransition:(CSTransitionBase *)activeTransition
 {
-    return;
+    if (_activeTransition)
+    {
+        _activeTransition.active = NO;
+    }
+    _activeTransition = activeTransition;
+    activeTransition.active = YES;
 }
 
 
 -(CSTransitionBase *)activeTransition
 {
-    CSTransitionCA *newTransition = [[CSTransitionCA alloc] init];
-    newTransition.subType = @"fade";
-    newTransition.duration = @1.5;
-    return newTransition;
+
+    return _activeTransition;
 }
 
 

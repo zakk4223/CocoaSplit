@@ -7,6 +7,7 @@
 
 #import "CSTransitionButton.h"
 #import "CSTransitionBase.h"
+#import "CSTransitionCollectionItem.h"
 
 @implementation CSTransitionButton
 
@@ -28,9 +29,9 @@
 
     if (self.mouseisDown)
     {
-        CSTransitionBase *transition = self.viewController.representedObject;
-        transition.active = !transition.active;
+        [self.viewController transitionClicked];
     }
+    
     self.mouseisDown = NO;
     [self setNeedsDisplay];
     

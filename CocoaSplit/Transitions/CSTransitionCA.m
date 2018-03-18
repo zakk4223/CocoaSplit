@@ -12,11 +12,29 @@
 
 
 
+-(id)copyWithZone:(NSZone *)zone
+{
+    CSTransitionCA *newObj = [super copyWithZone:zone];
+    if (newObj)
+    {
+        newObj.transitionDirection = self.transitionDirection;
+    }
+    return newObj;
+}
 
 +(NSArray *)subTypes
 {
-    return @[kCATransitionFade, kCATransitionPush, kCATransitionMoveIn, kCATransitionReveal, @"cube", @"alignedCube", @"flip", @"alignedFlip"];
+    NSMutableArray *ret = [NSMutableArray array];
+    for (NSString *subType in @[kCATransitionFade, kCATransitionPush, kCATransitionMoveIn, kCATransitionReveal, @"cube", @"alignedCube", @"flip", @"alignedFlip"])
+    {
+        CSTransitionCA *newTransition = [[CSTransitionCA alloc] init];
+        newTransition.subType = subType;
+        [ret addObject:newTransition];
+    }
+    
+    return ret;
 }
+
 
 +(NSString *)transitionCategory
 {

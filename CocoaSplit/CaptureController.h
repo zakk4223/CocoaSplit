@@ -323,7 +323,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(void)stopRecordingLayout:(SourceLayout *)layout;
 -(void)removeFileAudio:(CAMultiAudioFile *)toDelete;
 
-
+-(SourceLayout *)sourceLayoutForUUID:(NSString *)uuid;
 @end
 
 
@@ -543,6 +543,7 @@ NSArray *_savedTransitionConstraints;
 
 -(IBAction)openScriptSwitcherWindow:(id)sender;
 -(bool)fileURLIsAudio:(NSURL *)url;
+-(SourceLayout *)sourceLayoutForUUID:(NSString *)uuid;
 
 
 

@@ -21,7 +21,7 @@
 
 @end
 
-@interface CSTransitionBase : NSObject <CSTransitionExport>
+@interface CSTransitionBase : NSObject <CSTransitionExport, NSCopying>
 @property (strong) NSNumber *duration;
 @property (strong) NSString *name;
 @property (strong) NSString *subType;

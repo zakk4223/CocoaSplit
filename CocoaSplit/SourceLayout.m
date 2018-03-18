@@ -95,6 +95,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
                            @"stopColor": @"Gradient Stop Color",
                            @"backgroundColor": @"Background Color",
                            };
+        self.uuid = [[NSUUID UUID] UUIDString];
         
         
     }
@@ -442,6 +443,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     newLayout.isActive = NO;
     newLayout.containerOnly = self.containerOnly;
     newLayout.containedLayouts = self.containedLayouts.mutableCopy;
+    newLayout.uuid = self.uuid;
     return newLayout;
 }
 
@@ -463,7 +465,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     [aCoder encodeInt:self.canvas_width forKey:@"canvas_width"];
     [aCoder encodeInt:self.canvas_height forKey:@"canvas_height"];
     [aCoder encodeFloat:self.frameRate forKey:@"frameRate"];
-    
+    [aCoder encodeObject:self.uuid forKey:@"uuid"];
     if (self.containedLayouts)
     {
         NSMutableArray *tmpArray = [NSMutableArray array];
@@ -531,6 +533,12 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
             }
         }
 
+        NSString *savedUUID = [aDecoder decodeObjectForKey:@"uuid"];
+        if (savedUUID)
+        {
+            self.uuid = savedUUID;
+        }
+        
         self.containerOnly = [aDecoder decodeBoolForKey:@"containerOnly"];
         self.backgroundColor = [aDecoder decodeObjectForKey:@"backgroundColor"];
         self.recordingLayout = [aDecoder decodeBoolForKey:@"recordingLayout"];

@@ -19,4 +19,6 @@
 @property (strong) NSString *transitionArrayKeyPath;
 @property (strong) IBOutlet NSArrayController *transitionsArrayController;
 @property (strong) NSMutableArray *blah;
+-(void)transitionClicked;
+
 @end

@@ -6,7 +6,10 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "CSTransitionButton.h"
 
 @interface CSTransitionCollectionItem : NSCollectionViewItem
+-(void)transitionClicked;
+@property (weak) IBOutlet CSTransitionButton *transitionButton;
 
 @end

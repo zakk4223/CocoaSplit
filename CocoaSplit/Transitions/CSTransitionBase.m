@@ -21,6 +21,16 @@
     return self;
 }
 
+-(id)copyWithZone:(NSZone *)zone
+{
+    CSTransitionBase *newObj = [[self.class alloc] init];
+    newObj.duration = self.duration;
+    newObj.name = self.name;
+    newObj.subType = self.subType;
+    return newObj;
+}
+
+
 +(NSString *)transitionCategory
 {
     return @"Unknown";

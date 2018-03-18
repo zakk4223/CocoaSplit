@@ -46,8 +46,15 @@
 
 -(void)createTransition:(NSMenuItem *)menuItem
 {
-    
+    if (menuItem.representedObject)
+    {
+        CSTransitionBase *transitionCopy = [menuItem.representedObject copy];
+        [self.transitionsArrayController addObject:transitionCopy];
+    }
 }
+
+
+
 -(void)buildTransitionMenu
 {
     _transitionsMenu = [[NSMenu alloc] init];
@@ -67,9 +74,12 @@
         NSMenu *typeMenu = [[NSMenu alloc] init];
         item.submenu = typeMenu;
         
-        for (NSString *tType in tTypes)
+        for (CSTransitionBase *tType in tTypes)
         {
-            NSMenuItem *typeItem = [[NSMenuItem alloc] initWithTitle:tType action:nil keyEquivalent:@""];
+            NSMenuItem *typeItem = [[NSMenuItem alloc] initWithTitle:tType.name action:nil keyEquivalent:@""];
+            typeItem.target = self;
+            typeItem.representedObject = tType;
+            typeItem.action = @selector(createTransition:);
             [typeMenu addItem:typeItem];
         }
         [_transitionsMenu addItem:item];
