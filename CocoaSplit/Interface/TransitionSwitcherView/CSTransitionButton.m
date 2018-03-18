@@ -38,6 +38,11 @@
 }
 
 
+-(void)rightMouseDown:(NSEvent *)theEvent
+{
+    [self.viewController showTransitionMenu:theEvent];
+}
+
 -(BOOL)wantsUpdateLayer
 {
     return YES;

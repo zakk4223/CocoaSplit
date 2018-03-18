@@ -613,6 +613,28 @@
 
 
 
+
+-(bool)deleteTransition:(CSTransitionBase *)transition
+{
+    if (transition)
+    {
+        if ([self actionConfirmation:[NSString stringWithFormat:@"Really delete %@?", transition.name] infoString:nil])
+        {
+            transition.active = NO;
+            [self willChangeValueForKey:@"transitions"];
+            [self.transitions removeObject:transition];
+            [self didChangeValueForKey:@"transitions"];
+            if (self.activeTransition == transition)
+            {
+                self.activeTransition = nil;
+            }
+            
+            return YES;
+        }
+    }
+    
+    return NO;
+}
 - (IBAction)openLayoutPopover:(NSButton *)sender
 {
     
@@ -738,7 +760,6 @@
     {
         newLayout.canvas_height = self.captureHeight;
     }
-    
     
     [self insertObject:newLayout inSourceLayoutsAtIndex:self.sourceLayouts.count];
     

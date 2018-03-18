@@ -9,5 +9,7 @@
 
 @interface CSTransitionCA : CSTransitionBase
 @property (strong) NSString *transitionDirection;
+@property (assign) bool wholeLayout;
+
 
 @end

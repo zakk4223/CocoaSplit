@@ -24,7 +24,7 @@
 {
     if (self.representedObject)
     {
-        [self.representedObject removeObserver:self];
+        [self.representedObject removeObserver:self forKeyPath:@"active" context:nil];
     }
     
     [super setRepresentedObject:representedObject];
@@ -54,14 +54,51 @@
     [CaptureController sharedCaptureController].activeTransition = myTransition;
 }
 
+-(void)buildTransitionMenu
+{
+    
+    NSInteger idx = 0;
+    
+    NSMenuItem *tmp;
+    CSTransitionBase *forTransition = self.representedObject;
+    
+    self.transitionMenu = [[NSMenu alloc] init];
 
+
+    tmp = [self.transitionMenu insertItemWithTitle:@"Edit" action:nil keyEquivalent:@"" atIndex:idx++];
+    tmp.target = self;
+    tmp.representedObject = forTransition;
+    
+    
+    
+    tmp = [self.transitionMenu insertItemWithTitle:@"Delete" action:@selector(deleteTransition:) keyEquivalent:@"" atIndex:idx++];
+    tmp.target = self;
+    tmp.representedObject = forTransition;
+    
+}
+
+-(void)showTransitionMenu:(NSEvent *)clickEvent
+{
+    NSPoint tmp = [self.view convertPoint:clickEvent.locationInWindow fromView:nil];
+    [self buildTransitionMenu];
+    [self.transitionMenu popUpMenuPositioningItem:self.transitionMenu.itemArray.firstObject atLocation:tmp inView:self.view];
+}
+
+
+-(void)deleteTransition:(NSMenuItem *)menuItem
+{
+    if (self.representedObject)
+    {
+        [[CaptureController sharedCaptureController] deleteTransition:self.representedObject];
+    }
+}
 
 
 -(void)dealloc
 {
     if (self.representedObject)
     {
-        [self.representedObject removeObserver:self];
+        [self.representedObject removeObserver:self forKeyPath:@"active" context:nil];
     }
 }
 @end

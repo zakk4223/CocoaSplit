@@ -10,6 +10,9 @@
 
 @interface CSTransitionCollectionItem : NSCollectionViewItem
 -(void)transitionClicked;
+-(void)showTransitionMenu:(NSEvent *)clickEvent;
+
 @property (weak) IBOutlet CSTransitionButton *transitionButton;
+@property (strong) NSMenu *transitionMenu;
 
 @end
