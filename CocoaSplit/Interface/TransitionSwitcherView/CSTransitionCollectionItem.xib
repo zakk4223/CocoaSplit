@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="CSTransitionCollectionItem">
+            <connections>
+                <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView wantsLayer="YES" id="Hz6-mo-xeY">
+            <rect key="frame" x="0.0" y="0.0" width="92" height="34"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="Hjc-OZ-ws3" customClass="CSTransitionButton">
+                    <rect key="frame" x="4" y="4" width="84" height="26"/>
+                    <subviews>
+                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ilh-0v-FOh">
+                            <rect key="frame" x="-2" y="5" width="88" height="17"/>
+                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Label" id="QiM-fX-qwp">
+                                <font key="font" metaFont="system"/>
+                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                            <connections>
+                                <binding destination="-2" name="value" keyPath="self.representedObject.name" id="tlp-K1-D2M"/>
+                            </connections>
+                        </textField>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="Ilh-0v-FOh" firstAttribute="leading" secondItem="Hjc-OZ-ws3" secondAttribute="leading" id="5SL-il-bhQ"/>
+                        <constraint firstAttribute="trailing" secondItem="Ilh-0v-FOh" secondAttribute="trailing" id="law-SP-XLa"/>
+                        <constraint firstItem="Ilh-0v-FOh" firstAttribute="centerY" secondItem="Hjc-OZ-ws3" secondAttribute="centerY" id="muH-6p-kBV"/>
+                    </constraints>
+                    <connections>
+                        <outlet property="viewController" destination="-2" id="Xs7-K7-zZn"/>
+                    </connections>
+                </customView>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="Hjc-OZ-ws3" secondAttribute="bottom" constant="4" id="1Gr-CC-lW4"/>
+                <constraint firstItem="Hjc-OZ-ws3" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="4" id="GxR-iP-uka"/>
+                <constraint firstItem="Hjc-OZ-ws3" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="4" id="Ogt-V8-Jbk"/>
+                <constraint firstAttribute="trailing" secondItem="Hjc-OZ-ws3" secondAttribute="trailing" constant="4" id="UMY-Pk-ooG"/>
+            </constraints>
+            <point key="canvasLocation" x="-62" y="212"/>
+        </customView>
+        <userDefaultsController representsSharedInstance="YES" id="d9l-d9-tGI"/>
+    </objects>
+</document>

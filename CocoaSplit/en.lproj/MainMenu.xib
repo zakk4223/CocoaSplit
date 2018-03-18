@@ -31,7 +31,6 @@
                 <outlet property="extrasMenu" destination="wPc-B9-L1T" id="Ysq-1k-pbF"/>
                 <outlet property="inputTreeController" destination="dWz-5q-kjU" id="z14-To-dEK"/>
                 <outlet property="layoutCollectionView" destination="cb9-Ah-LwN" id="zGB-6I-DwK"/>
-                <outlet property="layoutTransitionConfigView" destination="QMD-i5-PWY" id="oZI-FK-ENC"/>
                 <outlet property="liveFullScreenMenu" destination="oei-ah-Eqx" id="3Ot-ve-qp2"/>
                 <outlet property="livePreviewView" destination="79f-hz-x80" id="iR0-Am-BlN"/>
                 <outlet property="liveViewConstraint" destination="65w-O7-ENz" id="fZW-Is-5fU"/>
@@ -353,7 +352,7 @@
         <viewController id="bfs-WP-8en" customClass="CAMultiAudioEngineInputsController">
             <connections>
                 <outlet property="multiAudioEngineController" destination="K9C-MT-b9O" id="fbb-Eh-WsX"/>
-                <outlet property="parentView" destination="3mG-uM-Muu" id="BQE-MG-dyN"/>
+                <outlet property="parentView" destination="3mG-uM-Muu" id="2TS-6Q-AQQ"/>
             </connections>
         </viewController>
         <treeController childrenKeyPath="attachedInputs" avoidsEmptySelection="NO" preservesSelection="NO" selectsInsertedObjects="NO" id="dWz-5q-kjU" userLabel="InputsTreeController">
@@ -734,66 +733,8 @@
                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
-                                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="rSV-Iw-qby">
+                                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="rSV-Iw-qby" customClass="BlahView">
                                                 <rect key="frame" x="0.0" y="0.0" width="225" height="296"/>
-                                                <subviews>
-                                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="QMD-i5-PWY">
-                                                        <rect key="frame" x="0.0" y="0.0" width="225" height="263"/>
-                                                    </customView>
-                                                    <stackView orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" translatesAutoresizingMaskIntoConstraints="NO" id="5kE-0D-Kp3">
-                                                        <rect key="frame" x="0.0" y="271" width="225" height="18"/>
-                                                        <beginningViews>
-                                                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q4K-GP-80x">
-                                                                <rect key="frame" x="-2" y="2" width="30" height="14"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" constant="33" id="g6x-wE-5cF"/>
-                                                                </constraints>
-                                                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Type" id="llQ-sa-o9R">
-                                                                    <font key="font" metaFont="smallSystem"/>
-                                                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                                </textFieldCell>
-                                                            </textField>
-                                                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oyC-TB-vqd">
-                                                                <rect key="frame" x="31" y="-3" width="68" height="22"/>
-                                                                <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="vE6-xr-AEX" id="Sss-QG-HVO">
-                                                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                                    <font key="font" metaFont="smallSystem"/>
-                                                                    <menu key="menu" id="omD-hT-H2f">
-                                                                        <items>
-                                                                            <menuItem title="Item 1" state="on" id="vE6-xr-AEX"/>
-                                                                            <menuItem title="Item 2" id="Ngj-8w-ZZW"/>
-                                                                            <menuItem title="Item 3" id="uQ8-ym-2tW"/>
-                                                                        </items>
-                                                                    </menu>
-                                                                </popUpButtonCell>
-                                                                <connections>
-                                                                    <binding destination="nSm-CJ-gxC" name="content" keyPath="arrangedObjects" id="dV2-d3-A14"/>
-                                                                    <binding destination="nSm-CJ-gxC" name="contentObjects" keyPath="arrangedObjects.key" previousBinding="dV2-d3-A14" id="juO-Xq-obG"/>
-                                                                    <binding destination="nSm-CJ-gxC" name="contentValues" keyPath="arrangedObjects.value" previousBinding="juO-Xq-obG" id="pk2-0t-ZDo"/>
-                                                                    <binding destination="816" name="selectedObject" keyPath="self.transitionName" previousBinding="pk2-0t-ZDo" id="bc4-Ga-1XE"/>
-                                                                </connections>
-                                                            </popUpButton>
-                                                        </beginningViews>
-                                                        <visibilityPriorities>
-                                                            <integer value="1000"/>
-                                                            <integer value="1000"/>
-                                                        </visibilityPriorities>
-                                                        <customSpacing>
-                                                            <real value="3.4028234663852886e+38"/>
-                                                            <real value="3.4028234663852886e+38"/>
-                                                        </customSpacing>
-                                                    </stackView>
-                                                </subviews>
-                                                <constraints>
-                                                    <constraint firstAttribute="bottom" secondItem="QMD-i5-PWY" secondAttribute="bottom" id="7Xf-3d-bLu"/>
-                                                    <constraint firstItem="5kE-0D-Kp3" firstAttribute="leading" secondItem="rSV-Iw-qby" secondAttribute="leading" id="F26-vL-Brj"/>
-                                                    <constraint firstItem="QMD-i5-PWY" firstAttribute="leading" secondItem="rSV-Iw-qby" secondAttribute="leading" id="PF8-9r-TUW"/>
-                                                    <constraint firstAttribute="trailing" secondItem="QMD-i5-PWY" secondAttribute="trailing" id="geE-F9-71d"/>
-                                                    <constraint firstItem="QMD-i5-PWY" firstAttribute="top" secondItem="5kE-0D-Kp3" secondAttribute="bottom" constant="8" id="tDd-35-vGw"/>
-                                                    <constraint firstAttribute="trailing" secondItem="5kE-0D-Kp3" secondAttribute="trailing" id="thM-BO-WzZ"/>
-                                                    <constraint firstItem="5kE-0D-Kp3" firstAttribute="top" secondItem="rSV-Iw-qby" secondAttribute="top" constant="7" id="wF1-go-lLe"/>
-                                                </constraints>
                                             </customView>
                                         </subviews>
                                         <constraints>
@@ -810,7 +751,7 @@
                                     <constraint firstAttribute="trailing" secondItem="Lti-HR-o8t" secondAttribute="trailing" priority="250" constant="20" symbolic="YES" id="0Bz-Ou-BLI"/>
                                     <constraint firstItem="BmY-Tq-zhI" firstAttribute="top" secondItem="Fqv-pg-OAt" secondAttribute="top" id="0Zd-PD-s1i"/>
                                     <constraint firstItem="Lti-HR-o8t" firstAttribute="width" secondItem="Fqv-pg-OAt" secondAttribute="width" multiplier="0.3" id="656-S4-4s1"/>
-                                    <constraint firstAttribute="trailing" secondItem="BmY-Tq-zhI" secondAttribute="trailing" priority="250" constant="20" symbolic="YES" id="J08-wx-b9b"/>
+                                    <constraint firstAttribute="trailing" secondItem="BmY-Tq-zhI" secondAttribute="trailing" priority="750" constant="20" symbolic="YES" id="J08-wx-b9b"/>
                                     <constraint firstItem="Lti-HR-o8t" firstAttribute="leading" secondItem="xzQ-wA-cSV" secondAttribute="trailing" constant="8" id="J2c-Is-u1H"/>
                                     <constraint firstItem="Lti-HR-o8t" firstAttribute="width" secondItem="Fqv-pg-OAt" secondAttribute="width" multiplier="0.5" priority="250" id="RTI-mA-Omg"/>
                                     <constraint firstItem="xzQ-wA-cSV" firstAttribute="width" secondItem="Fqv-pg-OAt" secondAttribute="width" multiplier="0.3" id="gSB-yt-j4s"/>
@@ -928,29 +869,15 @@
             <point key="canvasLocation" x="2571" y="-674.5"/>
         </window>
         <collectionViewItem nibName="CSLayoutCollectionItem" id="UC3-5W-Ml6" customClass="CSLayoutCollectionItem"/>
-        <view id="o1X-Oq-MQQ">
-            <rect key="frame" x="0.0" y="0.0" width="85" height="31"/>
-            <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-            <subviews>
-                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kCF-JS-GjG">
-                    <rect key="frame" x="0.0" y="4" width="85" height="23"/>
-                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7XY-oM-GqR">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <binding destination="UC3-5W-Ml6" name="title" keyPath="self.representedObject.name" id="ZTM-bM-FOk"/>
-                    </connections>
-                </button>
-            </subviews>
-            <constraints>
-                <constraint firstItem="kCF-JS-GjG" firstAttribute="top" secondItem="o1X-Oq-MQQ" secondAttribute="top" constant="4" id="1Og-Td-CXr"/>
-                <constraint firstItem="kCF-JS-GjG" firstAttribute="leading" secondItem="o1X-Oq-MQQ" secondAttribute="leading" id="F3B-Cr-Jzc"/>
-                <constraint firstAttribute="bottom" secondItem="kCF-JS-GjG" secondAttribute="bottom" constant="4" id="P4x-ra-cfx"/>
-                <constraint firstAttribute="trailing" secondItem="kCF-JS-GjG" secondAttribute="trailing" id="jqw-Hk-bHr"/>
-            </constraints>
-            <point key="canvasLocation" x="2368.5" y="-113"/>
-        </view>
+        <viewController id="n39-xr-ReH" customClass="CSTransitionSwitcherView">
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="string" keyPath="transitionArrayKeyPath" value="transitions"/>
+            </userDefinedRuntimeAttributes>
+            <connections>
+                <outlet property="parentObjectController" destination="816" id="9U6-Ux-89H"/>
+                <outlet property="parentView" destination="rSV-Iw-qby" id="wdG-7S-2Zv"/>
+            </connections>
+        </viewController>
     </objects>
     <resources>
         <image name="NSActionTemplate" width="14" height="14"/>

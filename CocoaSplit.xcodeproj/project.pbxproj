@@ -181,6 +181,12 @@
 		3498D94A1A94685000906532 /* CSAudioSwitchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3498D9491A94685000906532 /* CSAudioSwitchCell.m */; };
 		3498D94F1A9472BD00906532 /* CSAudioSwitchControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 3498D94E1A9472BD00906532 /* CSAudioSwitchControl.m */; };
 		34A271FD204BF6A600135A5D /* CSLayoutButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A271FC204BF6A600135A5D /* CSLayoutButtonView.m */; };
+		34A2721A205B9F5000135A5D /* CSTransitionBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A27219205B9F5000135A5D /* CSTransitionBase.m */; };
+		34A2721D205C2E2F00135A5D /* CSTransitionCA.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A2721C205C2E2F00135A5D /* CSTransitionCA.m */; };
+		34A27225205D6DD700135A5D /* CSTransitionSwitcherView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A27223205D6DD700135A5D /* CSTransitionSwitcherView.m */; };
+		34A27226205D6DD700135A5D /* CSTransitionSwitcherView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34A27224205D6DD700135A5D /* CSTransitionSwitcherView.xib */; };
+		34A2722C205D99D000135A5D /* CSTransitionCollectionItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A2722A205D99D000135A5D /* CSTransitionCollectionItem.m */; };
+		34A2722D205D99D000135A5D /* CSTransitionCollectionItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34A2722B205D99D000135A5D /* CSTransitionCollectionItem.xib */; };
 		34A629451FBB6DC500B4E16A /* CSJSAnimationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A629441FBB6DC500B4E16A /* CSJSAnimationDelegate.m */; };
 		34A64A2F165EFE4C00A68428 /* PreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A64A2E165EFE4B00A68428 /* PreviewView.m */; };
 		34A64A37165F208800A68428 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A64A36165F208800A68428 /* QuartzCore.framework */; };
@@ -192,6 +198,7 @@
 		34AB70A71FF9AAB800C5BD8E /* CAMultiAudioEffectsTableController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AB70A61FF9AAB800C5BD8E /* CAMultiAudioEffectsTableController.m */; };
 		34AB70AA1FF9B35300C5BD8E /* CAMultiAudioEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AB70A91FF9B35300C5BD8E /* CAMultiAudioEffect.m */; };
 		34ABEF3C17C0C2CB00AA5E62 /* advancedPrefPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34ABEF3B17C0C2CB00AA5E62 /* advancedPrefPanel.xib */; };
+		34AE993C205DF93900682D41 /* CSTransitionButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AE993B205DF93900682D41 /* CSTransitionButton.m */; };
 		34AFC27819B05C4E0007C07B /* CSChromaKey.plugin in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC27219B05BE90007C07B /* CSChromaKey.plugin */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		34AFC27919B05C4E0007C07B /* TextureWrapPlugin.plugin in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC27719B05BF50007C07B /* TextureWrapPlugin.plugin */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		34AFC27A19B05C4E0007C07B /* CSDesktopCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC24A19B05ADA0007C07B /* CSDesktopCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -906,6 +913,16 @@
 		3498D94E1A9472BD00906532 /* CSAudioSwitchControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAudioSwitchControl.m; sourceTree = "<group>"; };
 		34A271FB204BF6A600135A5D /* CSLayoutButtonView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSLayoutButtonView.h; path = Interface/CSLayoutButtonView.h; sourceTree = "<group>"; };
 		34A271FC204BF6A600135A5D /* CSLayoutButtonView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CSLayoutButtonView.m; path = Interface/CSLayoutButtonView.m; sourceTree = "<group>"; };
+		34A27218205B9F5000135A5D /* CSTransitionBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSTransitionBase.h; sourceTree = "<group>"; };
+		34A27219205B9F5000135A5D /* CSTransitionBase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSTransitionBase.m; sourceTree = "<group>"; };
+		34A2721B205C2E2F00135A5D /* CSTransitionCA.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSTransitionCA.h; sourceTree = "<group>"; };
+		34A2721C205C2E2F00135A5D /* CSTransitionCA.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSTransitionCA.m; sourceTree = "<group>"; };
+		34A27222205D6DD700135A5D /* CSTransitionSwitcherView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSTransitionSwitcherView.h; sourceTree = "<group>"; };
+		34A27223205D6DD700135A5D /* CSTransitionSwitcherView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSTransitionSwitcherView.m; sourceTree = "<group>"; };
+		34A27224205D6DD700135A5D /* CSTransitionSwitcherView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CSTransitionSwitcherView.xib; sourceTree = "<group>"; };
+		34A27229205D99D000135A5D /* CSTransitionCollectionItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSTransitionCollectionItem.h; sourceTree = "<group>"; };
+		34A2722A205D99D000135A5D /* CSTransitionCollectionItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSTransitionCollectionItem.m; sourceTree = "<group>"; };
+		34A2722B205D99D000135A5D /* CSTransitionCollectionItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CSTransitionCollectionItem.xib; sourceTree = "<group>"; };
 		34A629431FBB6DC500B4E16A /* CSJSAnimationDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSJSAnimationDelegate.h; sourceTree = "<group>"; };
 		34A629441FBB6DC500B4E16A /* CSJSAnimationDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSJSAnimationDelegate.m; sourceTree = "<group>"; };
 		34A6295D1FBB6F0D00B4E16A /* CSJSAnimationDelegateJSExport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSJSAnimationDelegateJSExport.h; sourceTree = "<group>"; };
@@ -940,6 +957,8 @@
 		34AE3C69164F01800052C95E /* CapturedFrameProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CapturedFrameProtocol.h; sourceTree = "<group>"; };
 		34AE3C6A164F04B30052C95E /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = /System/Library/Frameworks/IOSurface.framework; sourceTree = "<absolute>"; };
 		34AE3C6C164F04C90052C95E /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
+		34AE993A205DF93900682D41 /* CSTransitionButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSTransitionButton.h; sourceTree = "<group>"; };
+		34AE993B205DF93900682D41 /* CSTransitionButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSTransitionButton.m; sourceTree = "<group>"; };
 		34AFC18719B04CC30007C07B /* CSQTCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSQTCapturePlugin.xcodeproj; path = CapturePlugins/CSQTCapturePlugin/CSQTCapturePlugin.xcodeproj; sourceTree = "<group>"; };
 		34AFC1B819B04DAE0007C07B /* CSTextCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSTextCapturePlugin.xcodeproj; path = CapturePlugins/CSTextCapturePlugin/CSTextCapturePlugin.xcodeproj; sourceTree = "<group>"; };
 		34AFC1E819B04EB90007C07B /* CSSyphonCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSSyphonCapturePlugin.xcodeproj; path = CapturePlugins/CSSyphonCapturePlugin/CSSyphonCapturePlugin.xcodeproj; sourceTree = "<group>"; };
@@ -1395,6 +1414,7 @@
 		340FE4A715F3417E00E4CE4E /* CocoaSplit */ = {
 			isa = PBXGroup;
 			children = (
+				34A27217205B9F0200135A5D /* Transitions */,
 				34788DCD1EF51CB800C3C9C5 /* JSExports */,
 				3494DF341CCD2DB000E921BF /* TPCircularBuffer.c */,
 				3494DF351CCD2DB000E921BF /* TPCircularBuffer.h */,
@@ -1749,6 +1769,7 @@
 				340274B6203B98A60099328C /* CSUndoObjectControllerDelegate.h */,
 				34A271FB204BF6A600135A5D /* CSLayoutButtonView.h */,
 				34A271FC204BF6A600135A5D /* CSLayoutButtonView.m */,
+				34A27228205D6DEE00135A5D /* TransitionSwitcherView */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -1949,6 +1970,33 @@
 				34788DDD1EF59E5B00C3C9C5 /* CSAnimationInput.js */,
 			);
 			path = CSAnimationRunner;
+			sourceTree = "<group>";
+		};
+		34A27217205B9F0200135A5D /* Transitions */ = {
+			isa = PBXGroup;
+			children = (
+				34A27218205B9F5000135A5D /* CSTransitionBase.h */,
+				34A27219205B9F5000135A5D /* CSTransitionBase.m */,
+				34A2721B205C2E2F00135A5D /* CSTransitionCA.h */,
+				34A2721C205C2E2F00135A5D /* CSTransitionCA.m */,
+			);
+			path = Transitions;
+			sourceTree = "<group>";
+		};
+		34A27228205D6DEE00135A5D /* TransitionSwitcherView */ = {
+			isa = PBXGroup;
+			children = (
+				34A27222205D6DD700135A5D /* CSTransitionSwitcherView.h */,
+				34A27223205D6DD700135A5D /* CSTransitionSwitcherView.m */,
+				34A27224205D6DD700135A5D /* CSTransitionSwitcherView.xib */,
+				34A27229205D99D000135A5D /* CSTransitionCollectionItem.h */,
+				34A2722A205D99D000135A5D /* CSTransitionCollectionItem.m */,
+				34A2722B205D99D000135A5D /* CSTransitionCollectionItem.xib */,
+				34AE993A205DF93900682D41 /* CSTransitionButton.h */,
+				34AE993B205DF93900682D41 /* CSTransitionButton.m */,
+			);
+			name = TransitionSwitcherView;
+			path = Interface/TransitionSwitcherView;
 			sourceTree = "<group>";
 		};
 		34A7C19D19B9A41900BC6882 /* Products */ = {
@@ -2715,6 +2763,7 @@
 			files = (
 				34F52A281BC1CE2700662911 /* CSLayoutCollectionItem.xib in Resources */,
 				347B14DD198492D900DC7DF0 /* InputPopupControllerViewController.xib in Resources */,
+				34A27226205D6DD700135A5D /* CSTransitionSwitcherView.xib in Resources */,
 				34E91E432038ECC000E96684 /* CSSourceLayoutSettingsWindowController.xib in Resources */,
 				34DA08C71E87F3CB00E02543 /* CSSequenceItemAnimationViewController.xib in Resources */,
 				3400A07A1BD4533A003E1828 /* CSInputLibraryWindowController.xib in Resources */,
@@ -2723,6 +2772,7 @@
 				34BD1E651B2481C20015CBEC /* CAMultiAudioMatrixMixerWindowController.xib in Resources */,
 				344037631FFEF7C1009183FB /* CAMultiAudioEngineInputsController.xib in Resources */,
 				34E162E91E987420005157ED /* CSScriptWindowViewController.xib in Resources */,
+				34A2722D205D99D000135A5D /* CSTransitionCollectionItem.xib in Resources */,
 				3400A07E1BD49406003E1828 /* CSInputLibraryItemView.xib in Resources */,
 				34788DD11EF52C1A00C3C9C5 /* cocoasplit.js in Resources */,
 				345BED061F45A36000B46F29 /* CSSubLayoutTransitionViewController.xib in Resources */,
@@ -2848,6 +2898,7 @@
 				34ED8C4F1B07371C002C0674 /* MIKMIDIClock.m in Sources */,
 				34ED8C611B07371C002C0674 /* MIKMIDIEntity.m in Sources */,
 				34DA08C61E87F3CB00E02543 /* CSSequenceItemAnimationViewController.m in Sources */,
+				34AE993C205DF93900682D41 /* CSTransitionButton.m in Sources */,
 				34ED8CAF1B07371C002C0674 /* NSUIApplication+MIKMIDI.m in Sources */,
 				34ED8C9D1B07371C002C0674 /* MIKMIDIProgramChangeCommand.m in Sources */,
 				34ED8C731B07371C002C0674 /* MIKMIDIMappingXMLParser.m in Sources */,
@@ -2924,6 +2975,7 @@
 				34D6581819B387DE0012E32B /* AppDelegate+AppDelegate_ScriptingAdditions.m in Sources */,
 				34ED8C991B07371C002C0674 /* MIKMIDIPort.m in Sources */,
 				340DC734197CF6E9003A0BB3 /* CSCaptureBase.m in Sources */,
+				34A2721A205B9F5000135A5D /* CSTransitionBase.m in Sources */,
 				34C1379F1F28DE0C00F53DE2 /* CSTimeFormatter.m in Sources */,
 				343C2CB21FFBB8DC00849DA9 /* CSSourceListViewController.m in Sources */,
 				34A64A2F165EFE4C00A68428 /* PreviewView.m in Sources */,
@@ -2974,6 +3026,7 @@
 				34B5FAD41E74C34B0078FC51 /* CSSequenceItemLayout.m in Sources */,
 				3441269B1E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.m in Sources */,
 				343C2CBE1FFCE73000849DA9 /* CSViewController.m in Sources */,
+				34A27225205D6DD700135A5D /* CSTransitionSwitcherView.m in Sources */,
 				34ED8C811B07371C002C0674 /* MIKMIDIMetaMarkerTextEvent.m in Sources */,
 				345BECF41F4451DB00B46F29 /* CSSimpleLayoutTransitionViewController.m in Sources */,
 				34E26DDC1FF702BD00ACE58B /* CAMultiAudioSilence.m in Sources */,
@@ -2986,6 +3039,7 @@
 				34FDD6F21A215268009A7413 /* CSPluginServices.m in Sources */,
 				346544DC1FC22CF0003B9991 /* CSNSButtonCellThemed.m in Sources */,
 				34ED8C8F1B07371C002C0674 /* MIKMIDINoteOffCommand.m in Sources */,
+				34A2721D205C2E2F00135A5D /* CSTransitionCA.m in Sources */,
 				34ED8C571B07371C002C0674 /* MIKMIDIDestinationEndpoint.m in Sources */,
 				34ED8C8D1B07371C002C0674 /* MIKMIDINoteEvent.m in Sources */,
 				34B5FAE01E75CBF20078FC51 /* CSSequenceActivatorViewController.m in Sources */,
@@ -3015,6 +3069,7 @@
 				34CFE4A018F154DD00092C6A /* AVFChannelManager.m in Sources */,
 				34ED8C6B1B07371C002C0674 /* MIKMIDIMacDebugQuickLookSupport.m in Sources */,
 				34BE2B092014845200E37382 /* CSPassthroughCompressor.m in Sources */,
+				34A2722C205D99D000135A5D /* CSTransitionCollectionItem.m in Sources */,
 				34ED8C511B07371C002C0674 /* MIKMIDICommand.m in Sources */,
 				34213E1A196680880054E238 /* CompressorBase.m in Sources */,
 			);

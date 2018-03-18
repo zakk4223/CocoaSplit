@@ -44,6 +44,8 @@
 #import "JavaScriptCore/JavaScriptCore.h"
 #import "CSLayoutTransitionViewProtocol.h"
 #import "CSSourceListViewController.h"
+#import "CSTransitionBase.h"
+
 
 
 
@@ -164,6 +166,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) NSString *layoutScriptLabel;
 @property (strong) CSLayoutRecorder *mainLayoutRecorder;
 @property (readonly) SourceLayout *activeLayout;
+@property (strong) CSTransitionBase *activeTransition;
 
 
 -(IBAction)hideTransitionView:(id)sender;
@@ -319,6 +322,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(void)removeLayoutRecorder:(CSLayoutRecorder *)toRemove;
 -(void)stopRecordingLayout:(SourceLayout *)layout;
 -(void)removeFileAudio:(CAMultiAudioFile *)toDelete;
+
 
 @end
 
@@ -529,6 +533,8 @@ NSArray *_savedTransitionConstraints;
 
 @property (weak) IBOutlet NSArrayController *audioInputsArrayController;
 @property (strong) IBOutlet NSLayoutConstraint *liveViewConstraint;
+@property (strong) NSMutableArray *transitions;
+@property (strong) CSTransitionBase *activeTransition;
 
 -(JSContext *)setupJavascriptContext;
 -(JSContext *)setupJavascriptContext:(JSVirtualMachine *)machine;
@@ -537,6 +543,7 @@ NSArray *_savedTransitionConstraints;
 
 -(IBAction)openScriptSwitcherWindow:(id)sender;
 -(bool)fileURLIsAudio:(NSURL *)url;
+
 
 
 @end

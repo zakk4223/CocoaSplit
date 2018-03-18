@@ -219,6 +219,7 @@ var switchToLayoutByName = function(name, kwargs) {
     }
 }
 
+/*
 var switchToLayout = function(layout, kwargs) {
     kwargs = kwargs || {};
     var useScripts = !kwargs['noscripts'];
@@ -244,7 +245,28 @@ var switchToLayout = function(layout, kwargs) {
         target_layout.replaceWithSourceLayoutUsingScripts(layout, useScripts);
         commitAnimation();
     }
+}*/
+
+var switchToLayout = function(layout, kwargs) {
+    kwargs = kwargs || {};
+    var useScripts = !kwargs['noscripts'];
+    
+    if (layout)
+    {
+        var target_layout = getCurrentLayout();
+        var active_transition = captureController.activeTransition;
+        
+        
+        beginAnimation();
+        if (active_transition)
+        {
+            active_transition.preChangeAction(target_layout);
+        }
+        target_layout.replaceWithSourceLayoutUsingScripts(layout, useScripts);
+        commitAnimation();
+    }
 }
+
 
 var mergeLayout = function(layout, kwargs) {
     

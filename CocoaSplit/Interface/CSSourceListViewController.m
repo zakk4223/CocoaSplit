@@ -511,7 +511,6 @@
 }
 
 
-
 -(NSArray *)captureSourcesForPasteboardItem:(NSPasteboardItem *)item
 {
     

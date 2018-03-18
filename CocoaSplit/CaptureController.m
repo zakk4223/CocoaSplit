@@ -40,6 +40,7 @@
 #import "CSJSAnimationDelegate.h"
 #import "CSAppleHEVCCompressor.h"
 #import "CSPassthroughCompressor.h"
+#import "CSTransitionCA.h"
 
 @implementation CaptureController
 
@@ -1152,6 +1153,8 @@
        {
            [self.transitionNames setObject:caName forKey:caName];
        }
+       
+       self.transitions = [NSMutableArray array];
        
        for (NSString *ciName in ciTransitionNames)
        {
@@ -2408,6 +2411,12 @@
         }
     }
 
+    CSTransitionCA *newTransition = [[CSTransitionCA alloc] init];
+    newTransition.subType = @"fade";
+    newTransition.duration = @1.5;\
+    [self willChangeValueForKey:@"transitions"];
+    [self.transitions addObject:newTransition];
+    [self didChangeValueForKey:@"transitions"];
 }
 
 
@@ -4683,6 +4692,20 @@
             [self.activePreviewView highlightSource:(InputSource *)src];
         }
     }
+}
+
+-(void)setActiveTransition:(CSTransitionBase *)activeTransition
+{
+    return;
+}
+
+
+-(CSTransitionBase *)activeTransition
+{
+    CSTransitionCA *newTransition = [[CSTransitionCA alloc] init];
+    newTransition.subType = @"fade";
+    newTransition.duration = @1.5;
+    return newTransition;
 }
 
 

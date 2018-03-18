@@ -209,7 +209,6 @@
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
                                                         <connections>
-                                                            <binding destination="-2" name="hidden" keyPath="self.viewOnly" id="S8q-d3-7K3"/>
                                                             <binding destination="4DU-Sc-fYD" name="argument" keyPath="objectValue" id="od5-bK-lwd">
                                                                 <dictionary key="options">
                                                                     <string key="NSSelectorName">removeFileAudio:</string>
@@ -220,6 +219,7 @@
                                                                     <string key="NSSelectorName">removeFileAudio:</string>
                                                                 </dictionary>
                                                             </binding>
+                                                            <binding destination="-2" name="hidden" keyPath="self.viewOnly" id="S8q-d3-7K3"/>
                                                         </connections>
                                                     </button>
                                                     <button toolTip="Configure Audio Input" translatesAutoresizingMaskIntoConstraints="NO" id="oOH-9f-GgJ">
@@ -229,7 +229,6 @@
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
                                                         <connections>
-                                                            <binding destination="-2" name="hidden" keyPath="self.viewOnly" id="HvX-FE-Gvv"/>
                                                             <binding destination="4DU-Sc-fYD" name="argument" keyPath="objectValue" id="TQJ-uR-3o9">
                                                                 <dictionary key="options">
                                                                     <string key="NSSelectorName">openMixerWindow:</string>
@@ -240,6 +239,7 @@
                                                                     <string key="NSSelectorName">openMixerWindow:</string>
                                                                 </dictionary>
                                                             </binding>
+                                                            <binding destination="-2" name="hidden" keyPath="self.viewOnly" id="HvX-FE-Gvv"/>
                                                         </connections>
                                                     </button>
                                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="M4S-dd-K97">
@@ -400,7 +400,6 @@
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
                                                         <connections>
-                                                            <binding destination="-2" name="hidden" keyPath="self.viewOnly" id="riI-5B-rCd"/>
                                                             <binding destination="gXO-Xe-SNg" name="argument" keyPath="objectValue" id="4bn-oH-nYd">
                                                                 <dictionary key="options">
                                                                     <string key="NSSelectorName">openMixerWindow:</string>
@@ -411,6 +410,7 @@
                                                                     <string key="NSSelectorName">openMixerWindow:</string>
                                                                 </dictionary>
                                                             </binding>
+                                                            <binding destination="-2" name="hidden" keyPath="self.viewOnly" id="riI-5B-rCd"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>
