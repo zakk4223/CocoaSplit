@@ -7,6 +7,7 @@
 
 #import "CSTransitionCIFilter.h"
 #import "CSLayoutTransition.h"
+#import "CSCIFilterLayoutTransitionViewController.h"
 
 @implementation CSTransitionCIFilter
 
@@ -79,6 +80,15 @@
     
     return nil;
 }
+
+-(NSViewController<CSLayoutTransitionViewProtocol> *)configurationViewController
+{
+    CSCIFilterLayoutTransitionViewController *vc = [[CSCIFilterLayoutTransitionViewController alloc] init];
+    vc.transition = self;
+    return vc;
+}
+
+
 
 
 @end

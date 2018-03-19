@@ -28,7 +28,6 @@
 
 -(IBAction)openTransitionFilterPanel:(NSButton *)sender
 {
-    /*
     
     if (!self.transition.transitionFilter)
     {
@@ -46,7 +45,6 @@
     [self.transitionFilterWindow setReleasedWhenClosed:NO];
     
     [self.transitionFilterWindow makeKeyAndOrderFront:self.transitionFilterWindow];
-    */
 }
 
 
