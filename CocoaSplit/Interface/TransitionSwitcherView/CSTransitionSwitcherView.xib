@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13196" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13196"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -25,12 +25,13 @@
                         <rect key="frame" x="1" y="1" width="415" height="401"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView maxNumberOfColumns="3" id="3WW-Af-TVL">
+                            <collectionView selectable="YES" maxNumberOfColumns="3" id="3WW-Af-TVL">
                                 <rect key="frame" x="0.0" y="0.0" width="415" height="401"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                 <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 <connections>
                                     <binding destination="RYm-29-5c3" name="content" keyPath="arrangedObjects" id="cex-K2-435"/>
+                                    <outlet property="delegate" destination="-2" id="w5E-FO-xJx"/>
                                     <outlet property="itemPrototype" destination="i4t-Y9-90m" id="i1a-j3-CnZ"/>
                                 </connections>
                             </collectionView>

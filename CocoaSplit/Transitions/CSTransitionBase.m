@@ -15,6 +15,7 @@
     if (self = [super init])
     {
         self.duration = @1.0f;
+        self.uuid = [NSUUID UUID].UUIDString;
     }
     
     return self;

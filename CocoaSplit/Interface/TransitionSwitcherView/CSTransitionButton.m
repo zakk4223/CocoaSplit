@@ -17,6 +17,14 @@
     // Drawing code here.
 }
 
+-(void)mouseDragged:(NSEvent *)event
+{
+    self.mouseisDown = NO;
+    [self setNeedsDisplay];
+    [[self nextResponder] mouseDown:event];
+    [[self nextResponder] mouseDragged:event];
+}
+
 -(void)mouseDown:(NSEvent *)event
 {
     self.mouseisDown = YES;
