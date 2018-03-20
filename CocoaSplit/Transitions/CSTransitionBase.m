@@ -63,6 +63,36 @@
     return nil;
 }
 
+-(NSString *)preReplaceAction:(SourceLayout *)targetLayout
+{
+    return [self preChangeAction:targetLayout];
+}
+
+-(NSString *)postReplaceAction:(SourceLayout *)targetLayout
+{
+    return [self postChangeAction:targetLayout];
+}
+
+
+-(NSString *)preMergeAction:(SourceLayout *)targetLayout
+{
+    return [self preChangeAction:targetLayout];
+}
+-(NSString *)postMergeAction:(SourceLayout *)targetLayout
+{
+    return [self postChangeAction:targetLayout];
+}
+
+-(NSString *)preRemoveAction:(SourceLayout *)targetLayout
+{
+    return [self preChangeAction:targetLayout];
+}
+
+-(NSString *)postRemoveAction:(SourceLayout *)targetLayout
+{
+    return [self postChangeAction:targetLayout];
+}
+
 -(NSViewController<CSLayoutTransitionViewProtocol> *)configurationViewController
 {
     return nil;

@@ -34,6 +34,7 @@
 		340FE4E115F3581200E4CE4E /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4E015F3581200E4CE4E /* QTKit.framework */; };
 		340FE50815F444AA00E4CE4E /* CaptureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FE50715F444AA00E4CE4E /* CaptureController.m */; };
 		3410FEAF205EF80800C5F8C2 /* CSTransitionCIFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3410FEAE205EF80800C5F8C2 /* CSTransitionCIFilter.m */; };
+		3410FECB205FFB6300C5F8C2 /* CSTransitionLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 3410FECA205FFB6300C5F8C2 /* CSTransitionLayout.m */; };
 		3414047D1D76EA3200505A5D /* CSSyphonCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC26819B05B7C0007C07B /* CSSyphonCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3414C6AE1CBB9EBF00107C69 /* CSIRCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3414C6AD1CBB9EBF00107C69 /* CSIRCompressor.m */; };
 		3415CED31AE257DA002F11F5 /* CSTextCaptureBaseView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3415CED21AE257DA002F11F5 /* CSTextCaptureBaseView.xib */; };
@@ -671,6 +672,8 @@
 		340FE50715F444AA00E4CE4E /* CaptureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CaptureController.m; sourceTree = "<group>"; };
 		3410FEAD205EF80800C5F8C2 /* CSTransitionCIFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSTransitionCIFilter.h; sourceTree = "<group>"; };
 		3410FEAE205EF80800C5F8C2 /* CSTransitionCIFilter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSTransitionCIFilter.m; sourceTree = "<group>"; };
+		3410FEC9205FFB6300C5F8C2 /* CSTransitionLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSTransitionLayout.h; sourceTree = "<group>"; };
+		3410FECA205FFB6300C5F8C2 /* CSTransitionLayout.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSTransitionLayout.m; sourceTree = "<group>"; };
 		3414C6AC1CBB9EBF00107C69 /* CSIRCompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSIRCompressor.h; path = Compressor/CSIRCompressor.h; sourceTree = "<group>"; };
 		3414C6AD1CBB9EBF00107C69 /* CSIRCompressor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSIRCompressor.m; path = Compressor/CSIRCompressor.m; sourceTree = "<group>"; };
 		3415CED21AE257DA002F11F5 /* CSTextCaptureBaseView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSTextCaptureBaseView.xib; path = Interface/CSTextCaptureBaseView.xib; sourceTree = "<group>"; };
@@ -1984,6 +1987,8 @@
 				34A2721C205C2E2F00135A5D /* CSTransitionCA.m */,
 				3410FEAD205EF80800C5F8C2 /* CSTransitionCIFilter.h */,
 				3410FEAE205EF80800C5F8C2 /* CSTransitionCIFilter.m */,
+				3410FEC9205FFB6300C5F8C2 /* CSTransitionLayout.h */,
+				3410FECA205FFB6300C5F8C2 /* CSTransitionLayout.m */,
 			);
 			path = Transitions;
 			sourceTree = "<group>";
@@ -2920,6 +2925,7 @@
 				34BD1E4D1B1F1A2D0015CBEC /* CAMultiAudioDownmixer.m in Sources */,
 				34B5FACE1E748DD40078FC51 /* CSSequenceItem.m in Sources */,
 				346544E21FC2457E003B9991 /* CSNSImageCellThemed.m in Sources */,
+				3410FECB205FFB6300C5F8C2 /* CSTransitionLayout.m in Sources */,
 				345F8B251A14E6A0009A81E3 /* CAMultiAudioNode.m in Sources */,
 				342346AA15F59A8500C8C77E /* AVFAudioCapture.m in Sources */,
 				3498D94A1A94685000906532 /* CSAudioSwitchCell.m in Sources */,

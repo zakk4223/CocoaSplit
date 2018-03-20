@@ -48,6 +48,7 @@
     
     if (self.fullScreen)
     {
+        NSLog(@"ADDING ANIMATION FULL");
         [self.forLayout.rootLayer addAnimation:self.useAnimation forKey:nil];
 
     }

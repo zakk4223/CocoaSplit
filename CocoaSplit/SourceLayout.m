@@ -1308,7 +1308,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     
     
     
-    if (jCtx && rTrans)
+    if (jCtx  && rTrans)
     {
         JSValue *runFunc = jCtx[@"addDummyAnimation"];
         [runFunc callWithArguments:@[@(useTransition.transitionDuration)]];

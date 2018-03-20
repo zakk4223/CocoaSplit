@@ -8,6 +8,8 @@
 #import "CSTransitionSwitcherView.h"
 #import "CSTransitionCA.h"
 #import "CSTransitionCIFilter.h"
+#import "CSTransitionLayout.h"
+
 
 @interface CSTransitionSwitcherView ()
 
@@ -63,7 +65,7 @@
 {
     _transitionsMenu = [[NSMenu alloc] init];
     
-    NSArray *transitionClasses = @[CSTransitionCA.class, CSTransitionCIFilter.class];
+    NSArray *transitionClasses = @[CSTransitionCA.class, CSTransitionCIFilter.class,CSTransitionLayout.class];
     
     for (Class tClass in transitionClasses)
     {

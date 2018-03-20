@@ -219,33 +219,6 @@ var switchToLayoutByName = function(name, kwargs) {
     }
 }
 
-/*
-var switchToLayout = function(layout, kwargs) {
-    kwargs = kwargs || {};
-    var useScripts = !kwargs['noscripts'];
-
-    if (layout) {
-        var target_layout = getCurrentLayout();
-        var layoutTransition = target_layout.transitionInfo;
-        if (layoutTransition && layoutTransition.transitionLayout)
-        {
-            if (layoutTransition.preTransition)
-            {
-                target_layout.transitionInfo = layoutTransition.preTransition;
-            }
-            target_layout.transitionInfo.waitForMedia = layoutTransition.waitForMedia;
-            beginAnimation();
-            target_layout.replaceWithSourceLayoutUsingScripts(layoutTransition.transitionLayout, useScripts);
-            waitAnimation(layoutTransition.transitionHoldTime);
-            commitAnimation();
-            target_layout.transitionInfo = layoutTransition.postTransition;
-        }
-    
-        beginAnimation();
-        target_layout.replaceWithSourceLayoutUsingScripts(layout, useScripts);
-        commitAnimation();
-    }
-}*/
 
 var switchToLayout = function(layout, kwargs) {
     kwargs = kwargs || {};
@@ -257,13 +230,30 @@ var switchToLayout = function(layout, kwargs) {
         var active_transition = captureController.activeTransition;
         
         
-        beginAnimation();
-        if (active_transition)
+        if (active_transition && captureController.useTransitions)
         {
-            active_transition.preChangeAction(target_layout);
+            var actionScript = active_transition.preReplaceAction(target_layout);
+            if (actionScript)
+            {
+                beginAnimation();
+                (new Function("self", actionScript))(active_transition);
+                commitAnimation();
+            }
         }
+        beginAnimation();
         target_layout.replaceWithSourceLayoutUsingScripts(layout, useScripts);
         commitAnimation();
+        if (active_transition && captureController.useTransitions)
+        {
+            var actionScript = active_transition.postReplaceAction(target_layout);
+
+            if (actionScript)
+            {
+                beginAnimation();
+                (new Function("self", actionScript))(active_transition);
+                commitAnimation();
+            }
+        }
     }
 }
 
@@ -284,40 +274,39 @@ var mergeLayout = function(layout, kwargs) {
     if (layout)
     {
         var target_layout = getCurrentLayout();
+        var active_transition = captureController.activeTransition;
         
         if (enumOrder != 0)
         {
             target_layout.sourceAddOrder = enumOrder;
         }
         
-        var layoutTransition = target_layout.transitionInfo;
-        var endLayout = layout;
-        
-        if (layoutTransition && layoutTransition.transitionLayout)
+        if (active_transition && captureController.useTransitions)
         {
-            endLayout = target_layout.mergedSourceLayout(layout);
-            if (layoutTransition.preTransition)
+            var actionScript = active_transition.preMergeAction(target_layout);
+            if (actionScript)
             {
-                target_layout.transitionInfo = layoutTransition.preTransition;
+                beginAnimation();
+                (new Function("self", actionScript))(active_transition);
+                commitAnimation();
             }
-            target_layout.transitionInfo.waitForMedia = layoutTransition.waitForMedia;
-            beginAnimation();
-
-            target_layout.replaceWithSourceLayoutUsingScripts(layoutTransition.transitionLayout, useScripts);
-            waitAnimation(layoutTransition.transitionHoldTime);
-            commitAnimation();
-            
-            target_layout.transitionInfo = layoutTransition.postTransition;
-            target_layout.replaceWithSourceLayoutUsingScripts(endLayout, useScripts);
-        } else {
-        
-            beginAnimation();
-
-            target_layout.mergeSourceLayoutUsingScripts(endLayout, useScripts);
-            commitAnimation();
         }
-        
+        beginAnimation();
+        target_layout.mergeSourceLayoutUsingScripts(layout, useScripts);
+        commitAnimation();
+        if (active_transition && captureController.useTransitions)
+        {
+            var actionScript = active_transition.postMergeAction(target_layout);
+            
+            if (actionScript)
+            {
+                beginAnimation();
+                (new Function("self", actionScript))(active_transition);
+                commitAnimation();
+            }
+        }
     }
+
 }
 
 var mergeLayoutByName = function(name, kwargs) {
@@ -327,35 +316,38 @@ var mergeLayoutByName = function(name, kwargs) {
 
 var removeLayout = function(layout, kwargs) {
     kwargs = kwargs || {};
-    
     var useScripts = !kwargs['noscripts'];
-
+    
     if (layout)
     {
         var target_layout = getCurrentLayout();
-        var layoutTransition = target_layout.transitionInfo;
-        var endLayout = layout;
-
-        if (layoutTransition && layoutTransition.transitionLayout)
+        var active_transition = captureController.activeTransition;
+        
+        
+        if (active_transition && captureController.useTransitions)
         {
-            endLayout = target_layout.sourceLayoutWithRemoved(layout);
-            if (layoutTransition.preTransition)
+            var actionScript = active_transition.preRemoveAction(target_layout);
+            if (actionScript)
             {
-                target_layout.transitionInfo = layoutTransition.preTransition;
+                beginAnimation();
+                (new Function("self", actionScript))(active_transition);
+                commitAnimation();
             }
-            target_layout.transitionInfo.waitForMedia = layoutTransition.waitForMedia;
-            target_layout.replaceWithSourceLayoutUsingScripts(layoutTransition.transitionLayout, useScripts);
-            waitAnimation(layoutTransition.transitionHoldTime);
-            
-            target_layout.transitionInfo = layoutTransition.postTransition;
-            target_layout.replaceWithSourceLayoutUsingScripts(endLayout, useScripts);
-        } else {
-            
-            
-            target_layout.removeSourceLayoutUsingScripts(layout, useScripts);
         }
-
-
+        beginAnimation();
+        target_layout.removeSourceLayoutUsingScripts(layout, useScripts);
+        commitAnimation();
+        if (active_transition && captureController.useTransitions)
+        {
+            var actionScript = active_transition.postRemoveAction(target_layout);
+            
+            if (actionScript)
+            {
+                beginAnimation();
+                (new Function("self", actionScript))(active_transition);
+                commitAnimation();
+            }
+        }
     }
 }
 

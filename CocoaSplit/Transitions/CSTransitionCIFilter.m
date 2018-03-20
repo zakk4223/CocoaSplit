@@ -45,14 +45,6 @@
     return @"Core Image";
 }
 
-/*
--(NSViewController<CSLayoutTransitionViewProtocol> *)configurationViewController
-{
-    CSSimpleLayoutTransitionViewController *vc = [[CSSimpleLayoutTransitionViewController alloc] init];
-    vc.transition = self;
-    return vc;
-}
-*/
 
 -(NSString *)name
 {

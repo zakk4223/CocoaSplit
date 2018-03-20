@@ -20,6 +20,12 @@
 
 -(NSString *)preChangeAction:(SourceLayout *)targetLayout;
 -(NSString *)postChangeAction:(SourceLayout *)targetLayout;
+-(NSString *)preReplaceAction:(SourceLayout *)targetLayout;
+-(NSString *)postReplaceAction:(SourceLayout *)targetLayout;
+-(NSString *)preMergeAction:(SourceLayout *)targetLayout;
+-(NSString *)postMergeAction:(SourceLayout *)targetLayout;
+-(NSString *)preRemoveAction:(SourceLayout *)targetLayout;
+-(NSString *)postRemoveAction:(SourceLayout *)targetLayout;
 
 @end
 
@@ -40,6 +46,13 @@
 
 -(NSString *)preChangeAction:(SourceLayout *)targetLayout;
 -(NSString *)postChangeAction:(SourceLayout *)targetLayout;
+-(NSString *)preReplaceAction:(SourceLayout *)targetLayout;
+-(NSString *)postReplaceAction:(SourceLayout *)targetLayout;
+-(NSString *)preMergeAction:(SourceLayout *)targetLayout;
+-(NSString *)postMergeAction:(SourceLayout *)targetLayout;
+-(NSString *)preRemoveAction:(SourceLayout *)targetLayout;
+-(NSString *)postRemoveAction:(SourceLayout *)targetLayout;
+
 -(NSViewController<CSLayoutTransitionViewProtocol> *)configurationViewController;
 
 @end

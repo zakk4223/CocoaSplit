@@ -13,6 +13,9 @@ CSAnimationBlock.currentFrame = function() {
 
 function AnimationBlock(duration, inherit_frame) {
     
+    
+    var self = this;
+    
     if (duration === undefined)
     {
         duration = 0.0;
@@ -24,39 +27,39 @@ function AnimationBlock(duration, inherit_frame) {
     
     if (cframe)
     {
-        this.parent_frame_begin_time = cframe.current_begin_time;
+        self.parent_frame_begin_time = cframe.current_begin_time;
     }
     
     
     if (!inherit_frame || !cframe)
     {
-        this.layout = getCurrentLayout();
-        this.current_begin_time = null;
-        this.latest_end_time = null;
-        this.animation_info = {};
-        this.animation_info["all_animations"] = {};
-        this.isolated = !inherit_frame;
+        self.layout = getCurrentLayout();
+        self.current_begin_time = null;
+        self.latest_end_time = null;
+        self.animation_info = {};
+        self.animation_info["all_animations"] = {};
+        self.isolated = !inherit_frame;
     } else {
         cframe.applyPendingAnimations();
-        this.layout = cframe.layout;
-        this.current_begin_time = cframe.current_begin_time;
-        this.latest_end_time = cframe.latest_end_time;
-        this.animation_info = cframe.animation_info;
-        this.isolated = !inherit_frame;
+        self.layout = cframe.layout;
+        self.current_begin_time = cframe.current_begin_time;
+        self.latest_end_time = cframe.latest_end_time;
+        self.animation_info = cframe.animation_info;
+        self.isolated = !inherit_frame;
     }
     
-    this.animations = [];
-    this.duration = duration;
-    this.max_animation_time = 0.0;
-    this.beginTime = 0.0;
-    this.real_completion_block = null;
-    this.input_map = {};
-    this.label_map = {};
-    this.uuid = generateUUID();
+    self.animations = [];
+    self.duration = duration;
+    self.max_animation_time = 0.0;
+    self.beginTime = 0.0;
+    self.real_completion_block = null;
+    self.input_map = {};
+    self.label_map = {};
+    self.uuid = generateUUID();
     
-    if (this.duration == 0.0)
+    if (self.duration == 0.0)
     {
-        this.duration = 0.25;
+        self.duration = 0.25;
     }
     
     this.internal_completion_block = function(real_completion) {
@@ -76,24 +79,29 @@ function AnimationBlock(duration, inherit_frame) {
     
     
     this.advance_begin_time = function(duration) {
-        if (this.current_begin_time)
+        if (self.current_begin_time)
         {
-            this.latest_end_time = this.current_begin_time + duration;
+            self.latest_end_time = self.current_begin_time + duration;
         }
     }
     
     
     this.add_animation = function(animation)  {
         
-        this.applyPendingAnimations();
-        this.animations.push(animation);
+        self.applyPendingAnimations();
+        self.animations.push(animation);
     }
     
     
     this.add_animation_real = function(animation) {
-        if (!this.current_begin_time)
+        if (!self.current_begin_time)
         {
-            this.current_begin_time = this.layout.rootLayer.convertTimeFromLayer(CACurrentMediaTime(), null);
+            self.current_begin_time = self.layout.rootLayer.convertTimeFromLayer(CACurrentMediaTime(), null);
+        }
+        
+        if (!self.latest_end_time)
+        {
+            self.latest_end_time = self.current_begin_time;
         }
         
         if (animation.duration == 0)
@@ -104,7 +112,7 @@ function AnimationBlock(duration, inherit_frame) {
         
         if (animation.label)
         {
-            this.label_map[animation.label] = animation;
+            self.label_map[animation.label] = animation;
         }
         
         if (!animation.ignore_wait && animation.animation)
@@ -113,21 +121,21 @@ function AnimationBlock(duration, inherit_frame) {
            animation.animation.delegate = a_delegate;
         }
         
-        var a_duration = animation.apply(this.current_begin_time);
-        this.latest_end_time = Math.max(this.latest_end_time, animation.end_time);
+        var a_duration = animation.apply(self.current_begin_time);
+        self.latest_end_time = Math.max(self.latest_end_time, animation.end_time);
         
         if (animation.uukey && animation.target)
         {
-            this.animation_info.all_animations[animation.uukey]= animation.target;
+            self.animation_info.all_animations[animation.uukey]= animation.target;
         }
         
         if (animation.cs_input)
         {
-            if (this.input_map[animation.cs_input.uuid])
+            if (self.input_map[animation.cs_input.uuid])
             {
-                this.input_map[animation.cs_input.uuid] = Math.max(this.latest_end_time, this.input_map[animation.cs_input.uuid]);
+                self.input_map[animation.cs_input.uuid] = Math.max(self.latest_end_time, self.input_map[animation.cs_input.uuid]);
             } else {
-                this.input_map[animation.cs_input.uuid] = this.latest_end_time;
+                self.input_map[animation.cs_input.uuid] = self.latest_end_time;
             }
         }
         
@@ -146,8 +154,8 @@ function AnimationBlock(duration, inherit_frame) {
         new_mark.duration = duration;
         new_mark.cs_input = target;
         new_mark.wait_only = wait_only;
-        this.animations.push(new_mark);
-        this.applyPendingAnimations();
+        self.animations.push(new_mark);
+        self.applyPendingAnimations();
 
         return new_mark;
 
@@ -155,49 +163,54 @@ function AnimationBlock(duration, inherit_frame) {
     
     
     this.add_waitmarker_real = function(waitMark) {
-        if (!this.current_begin_time)
+        
+        if (!self.current_begin_time)
         {
-            this.current_begin_time = this.layout.rootLayer.convertTimeFromLayer(CACurrentMediaTime(), null);
+            self.current_begin_time = self.layout.rootLayer.convertTimeFromLayer(CACurrentMediaTime(), null);
         }
         
-
-        
-        
-
-        if (waitMark.cs_input && this.input_map[waitMark.cs_input.uuid])
+        if (!self.latest_end_time)
         {
-            this.current_begin_time = this.input_map[waitMark.cs_input.uuid];
-        } else if (waitMark.label && this.label_map[waitMark.label]) {
-            this.current_begin_time = this.label_map[waitMark.label].end_time;
+            self.latest_end_time = self.current_begin_time;
+        }
+        
+        
+        if (waitMark.cs_input && self.input_map[waitMark.cs_input.uuid])
+        {
+            self.current_begin_time = self.input_map[waitMark.cs_input.uuid];
+        } else if (waitMark.label && self.label_map[waitMark.label]) {
+            self.current_begin_time = self.label_map[waitMark.label].end_time;
         } else {
             if (!waitMark.wait_only)
             {
-                this.current_begin_time = this.latest_end_time;
+                self.current_begin_time = self.latest_end_time;
             }
         }
         
         
-        waitMark.apply(this.current_begin_time);
-        this.latest_end_time = Math.max(this.latest_end_time, waitMark.end_time);
-        this.current_begin_time += waitMark.duration;
+        waitMark.apply(self.current_begin_time);
+        this.latest_end_time = Math.max(self.latest_end_time, waitMark.end_time);
+        console.log(self.current_begin_time);
+        self.current_begin_time += waitMark.duration;
+    
         return waitMark;
     }
     
     
     this.applyPendingAnimations = function()
     {
-        for(var i = 0, len = this.animations.length; i < len; i++)
+        for(var i = 0, len = self.animations.length; i < len; i++)
         {
-            var anim = this.animations[i];
+            var anim = self.animations[i];
             if (anim.isWaitMark)
             {
-                this.add_waitmarker_real(anim);
+                self.add_waitmarker_real(anim);
             } else {
-                this.add_animation_real(anim);
+                self.add_animation_real(anim);
             }
         }
         
-        this.animations = [];
+        self.animations = [];
     }
     
     
@@ -205,24 +218,24 @@ function AnimationBlock(duration, inherit_frame) {
     this.commit = function()
     {
         
-        this.applyPendingAnimations();
+        self.applyPendingAnimations();
         
         CATransaction.setValueForKey(null, "__CS_BLOCK_UUID__");
-        this.animation_info = null;
-        delete block_uuid_map[this.uuid];
-        if (this.doScriptWait)
+        self.animation_info = null;
+        delete block_uuid_map[self.uuid];
+        if (self.doScriptWait)
         {
-            this.waitAnimation();
+            self.waitAnimation();
         }
         CATransaction.commit();
-        if (!this.isolated)
+        if (!self.isolated)
         {
             let cframe = CSAnimationBlock.currentFrame();
             if (cframe)
             {
 
-                cframe.current_begin_time = this.current_begin_time;
-                cframe.latest_end_time = this.latest_end_time;
+                cframe.current_begin_time = self.current_begin_time;
+                cframe.latest_end_time = self.latest_end_time;
             }
         }
         
@@ -230,25 +243,25 @@ function AnimationBlock(duration, inherit_frame) {
     }
     
     this.waitTransition = function() {
-        if (this.parent_frame_begin_time)
+        if (self.parent_frame_begin_time)
         {
-            this.current_begin_time = this.parent_frame_begin_time;
+            self.current_begin_time = self.parent_frame_begin_time;
         }
     }
     
     
     this.waitAnimation = function(duration, target) {
-        return this.add_waitmarker(duration, target, 0);
+        return self.add_waitmarker(duration, target, 0);
     }
     
     this.wait = function(duration, target) {
-        return this.add_waitmarker(duration, target, 1);
+        return self.add_waitmarker(duration, target, 1);
     }
     
     CATransaction.begin();
-    this.doScriptWait = false;
-    block_uuid_map[this.uuid] = this;
-    CATransaction.setValueForKey(this.uuid, "__CS_BLOCK_UUID__");
+    self.doScriptWait = false;
+    block_uuid_map[self.uuid] = self;
+    CATransaction.setValueForKey(self.uuid, "__CS_BLOCK_UUID__");
     //this.current_begin_time = 0;
 
 
