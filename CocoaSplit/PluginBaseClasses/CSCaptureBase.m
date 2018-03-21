@@ -462,14 +462,16 @@
 {
     
     CAMultiAudioEngine *useEngine = nil;
-    
+
     if (input && input.sourceLayout)
     {
-        if (input.sourceLayout.recorder && input.sourceLayout.recorder.audioEngine)
+        SourceLayout *layout = input.sourceLayout;
+
+        if (layout.recorder && layout.recorder.audioEngine)
         {
-            useEngine = input.sourceLayout.recorder.audioEngine;
+            useEngine = layout.recorder.audioEngine;
         } else {
-            useEngine = input.sourceLayout.audioEngine;
+            useEngine = layout.audioEngine;
         }
     }
     
@@ -764,6 +766,31 @@
     }
 }
 
+-(SourceLayout *)topLevelSourceLayout:(SourceLayout *)layout
+{
+    SourceLayout *ret = layout;
+    CALayer *useLayer = ret.rootLayer;
+    
+    while ((useLayer = useLayer.superlayer))
+    {
+        if ([useLayer isKindOfClass:CSRootLayer.class])
+        {
+            NSString *layoutUUID = ((CSRootLayer *)useLayer).layoutUUID;
+            if (layoutUUID)
+            {
+                SourceLayout *newRet = [CaptureController.sharedCaptureController sourceLayoutForUUID:layoutUUID];
+                if (newRet)
+                {
+                    ret = newRet;
+                }
+            }
+        }
+    }
+    
+    return ret;
+}
+
+
 -(void)createAttachedAudioInputForUUID:(NSString *)uuid withName:(NSString *)withName
 {
     @autoreleasepool
@@ -795,7 +822,6 @@
             
             
             InputSource *layerSrc = (InputSource *)key;
-            
             
             if (layerSrc && layerSrc.sourceLayout)
             {

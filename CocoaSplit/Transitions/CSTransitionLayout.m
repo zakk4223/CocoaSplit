@@ -76,6 +76,20 @@
 }
 
 
+-(NSString *)preMergeAction:(SourceLayout *)targetLayout
+{
+    _savedTransition = CaptureController.sharedCaptureController.activeTransition;
+    CaptureController.sharedCaptureController.activeTransition = nil;
+    
+    return @"mergeLayout(self.layout);waitAnimation(5);removeLayout(self.layout);waitAnimation(0.01);";
+    //return @"var endLayout = targetLayout.mergedSourceLayout(mergedLayout); console.log(endLayout); beginAnimation();switchToLayout(self.layout);commitAnimation();beginAnimation(); waitAnimation();switchToLayout(endLayout);commitAnimation();";
+}
+
+
+-(bool)skipMergeAction:(SourceLayout *)targetLayout
+{
+    return NO;
+}
 /*
 -(NSViewController<CSLayoutTransitionViewProtocol> *)configurationViewController
 {

@@ -25,6 +25,15 @@
     return [NSSet setWithArray:@[@"cocoasplit.layout"]];
 }
 
+-(void)setIsLive:(bool)isLive
+{
+    [super setIsLive:isLive];
+    if (_current_renderer)
+    {
+        SourceLayoutHack *capDev = [_current_renderer valueForKey:@"layout"];
+        capDev.isActive = isLive;
+    }
+}
 
 -(instancetype)init
 {
@@ -33,7 +42,7 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(layoutChanged:) name:CSNotificationLayoutSaved object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(layoutDeleted:) name:CSNotificationLayoutDeleted object:nil];
 
-        self.allowDedup = YES;
+        self.allowDedup = NO;
     }
     return self;
 }
@@ -112,7 +121,8 @@
     Class renderClass = NSClassFromString(@"LayoutRenderer");
     
     self.captureName = self.activeVideoDevice.captureName;
-    NSObject *capDev = [self.activeVideoDevice.captureDevice copy];
+    SourceLayoutHack *capDev = [self.activeVideoDevice.captureDevice copy];
+    capDev.isActive = self.isLive;
     SEL restoreSEL = NSSelectorFromString(@"restoreSourceList:");
     [capDev performSelector:restoreSEL withObject:nil];
     @synchronized(self)
@@ -122,6 +132,8 @@
             _current_renderer = [[renderClass alloc] init];
         }
     }
+    
+
     [_current_renderer setValue:capDev forKey:@"layout"];
 }
 

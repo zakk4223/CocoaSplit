@@ -98,4 +98,9 @@
     return nil;
 }
 
+-(bool)skipMergeAction:(SourceLayout *)targetLayout
+{
+    return NO;
+}
+
 @end

@@ -54,6 +54,7 @@
 		342B33B61980771200492CB7 /* line.vtsh in Resources */ = {isa = PBXBuildFile; fileRef = 342B33B51980771200492CB7 /* line.vtsh */; };
 		342B33B71980774000492CB7 /* line.vtsh in CopyFiles */ = {isa = PBXBuildFile; fileRef = 342B33B51980771200492CB7 /* line.vtsh */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3431FFE119786502000965FE /* InputSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 3431FFE019786502000965FE /* InputSource.m */; };
+		3432D4122061F17400F4680C /* CSRootLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3432D4112061F17400F4680C /* CSRootLayer.m */; };
 		34348C2A19BDBDC000A122C2 /* PluginManagerWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34348C2819BDBDC000A122C2 /* PluginManagerWindowController.m */; };
 		34348C2B19BDBDC000A122C2 /* PluginManagerWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34348C2919BDBDC000A122C2 /* PluginManagerWindowController.xib */; };
 		3434CB281CA8615A001B3DF9 /* AppleProResCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3434CB271CA8615A001B3DF9 /* AppleProResCompressor.m */; };
@@ -698,6 +699,8 @@
 		342F73F41A245316007AA99F /* CSPcmPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPcmPlayer.h; path = PluginHeaders/CSPcmPlayer.h; sourceTree = "<group>"; };
 		3431FFDF19786502000965FE /* InputSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputSource.h; sourceTree = "<group>"; };
 		3431FFE019786502000965FE /* InputSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InputSource.m; sourceTree = "<group>"; };
+		3432D4102061F17400F4680C /* CSRootLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSRootLayer.h; sourceTree = "<group>"; };
+		3432D4112061F17400F4680C /* CSRootLayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSRootLayer.m; sourceTree = "<group>"; };
 		34348C2719BDBDC000A122C2 /* PluginManagerWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PluginManagerWindowController.h; sourceTree = "<group>"; };
 		34348C2819BDBDC000A122C2 /* PluginManagerWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PluginManagerWindowController.m; sourceTree = "<group>"; };
 		34348C2919BDBDC000A122C2 /* PluginManagerWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PluginManagerWindowController.xib; path = Interface/PluginManagerWindowController.xib; sourceTree = "<group>"; };
@@ -1527,6 +1530,8 @@
 				346395042018483300556407 /* CSPcmPlayer.m */,
 				34414E512019C06B00CD9DCE /* CSCaptureBaseInternal.h */,
 				3457BCC52019C3F600B8DF5D /* CSCaptureBaseInputFrameTickProtocol.h */,
+				3432D4102061F17400F4680C /* CSRootLayer.h */,
+				3432D4112061F17400F4680C /* CSRootLayer.m */,
 			);
 			path = CocoaSplit;
 			sourceTree = "<group>";
@@ -3008,6 +3013,7 @@
 				347DBC9D1FF22C0100B98D5E /* CSAppleHEVCCompressor.m in Sources */,
 				345BED051F45A36000B46F29 /* CSSubLayoutTransitionViewController.m in Sources */,
 				34ED8C971B07371C002C0674 /* MIKMIDIPlayer.m in Sources */,
+				3432D4122061F17400F4680C /* CSRootLayer.m in Sources */,
 				34ED8C591B07371C002C0674 /* MIKMIDIDevice.m in Sources */,
 				3400A0791BD4533A003E1828 /* CSInputLibraryWindowController.m in Sources */,
 				345F8B691A16C348009A81E3 /* CAMultiAudioGraph.m in Sources */,

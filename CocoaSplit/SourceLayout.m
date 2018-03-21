@@ -191,7 +191,8 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 
 -(CALayer *)newRootLayer
 {
-    CAGradientLayer *newRoot = [CAGradientLayer layer];
+    CSRootLayer *newRoot = [CSRootLayer layer];
+    newRoot.layoutUUID = self.uuid;
     [CATransaction begin];
     newRoot.bounds = CGRectMake(0, 0, _canvas_width, _canvas_height);
     newRoot.anchorPoint = CGPointMake(0.0, 0.0);
@@ -801,16 +802,46 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     return audioRestore;
 }
 
--(CAMultiAudioEngine *)findAudioEngine
+
+-(SourceLayout *)topLevelSourceLayout:(SourceLayout *)layout
 {
-    if (self.audioEngine)
+    SourceLayout *ret = layout;
+    CALayer *useLayer = ret.rootLayer;
+    
+    while ((useLayer = useLayer.superlayer))
     {
-        return self.audioEngine;
+        if ([useLayer isKindOfClass:CSRootLayer.class])
+        {
+            NSString *layoutUUID = ((CSRootLayer *)useLayer).layoutUUID;
+            NSLog(@"LAYOUT UUID %@", layoutUUID);
+            if (layoutUUID)
+            {
+                SourceLayout *newRet = [CaptureController.sharedCaptureController sourceLayoutForUUID:layoutUUID];
+                if (newRet)
+                {
+                    ret = newRet;
+                }
+            }
+        }
     }
     
-    if (self.recorder.audioEngine)
+    return ret;
+}
+
+
+-(CAMultiAudioEngine *)findAudioEngine
+{
+    NSLog(@"FIND AUDIO ENGINE");
+    SourceLayout *useLayout = self;
+    
+    if (useLayout.audioEngine)
     {
-        return self.recorder.audioEngine;
+        return useLayout.audioEngine;
+    }
+    
+    if (useLayout.recorder.audioEngine)
+    {
+        return useLayout.recorder.audioEngine;
     }
     
     return nil;
@@ -1503,8 +1534,35 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     SourceLayout *retLayout = [self copy];
     retLayout.transitionInfo = nil;
     [retLayout restoreSourceList:[self makeSaveData]];
+    NSDictionary *diffResult = [retLayout diffSourceListWithData:withLayout.savedSourceListData];
+    NSMutableArray *changedRemove = [NSMutableArray array];
     
-    [retLayout mergeSourceLayout:withLayout usingScripts:NO ];
+    NSArray *changedInputs = diffResult[@"changed"];
+    NSArray *sameInputs = diffResult[@"same"];
+    NSArray *newInputs = diffResult[@"new"];
+    NSArray *newScript = diffResult[@"scriptNew"];
+    NSArray *existingScript = diffResult[@"scriptExisting"];
+
+    for (NSObject<CSInputSourceProtocol> *nSrc in newInputs)
+    {
+        [retLayout addSource:nSrc];
+    }
+    
+    for (NSObject<CSInputSourceProtocol> *cSrc in changedInputs)
+    {
+        NSObject<CSInputSourceProtocol> *mSrc = [retLayout inputForUUID:cSrc.uuid];
+        [retLayout deleteSource:mSrc];
+        [changedRemove addObject:mSrc];
+        [retLayout addSource:cSrc];
+        [retLayout incrementInputRef:cSrc];
+    }
+
+    for (NSObject<CSInputSourceProtocol> *cSrc in changedRemove)
+    {
+        [retLayout deleteSource:cSrc];
+    }
+
+    NSLog(@"RET LAYOUT OURCE %@", retLayout.sourceList);
     [retLayout saveSourceList];
     [retLayout clearSourceList];
     return retLayout;
@@ -2207,6 +2265,9 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 
     return NO;
 }
+
+
+
 
 
 -(void)addSourceToPresentation:(NSObject<CSInputSourceProtocol> *)addSource

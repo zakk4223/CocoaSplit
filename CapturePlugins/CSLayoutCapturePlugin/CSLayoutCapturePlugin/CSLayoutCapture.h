@@ -15,6 +15,9 @@
 @interface SourceLayoutHack : NSObject
 @property (assign) int canvas_width;
 @property (assign) int canvas_height;
+@property (assign) bool isActive;
+@property (strong) NSArray *sourceList;
+
 @end
 
 

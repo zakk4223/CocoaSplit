@@ -287,13 +287,22 @@ var mergeLayout = function(layout, kwargs) {
             if (actionScript)
             {
                 beginAnimation();
-                (new Function("self", actionScript))(active_transition);
+                (new Function("self", "targetLayout", "mergedLayout", actionScript))(active_transition, target_layout, layout);
                 commitAnimation();
             }
         }
-        beginAnimation();
-        target_layout.mergeSourceLayoutUsingScripts(layout, useScripts);
-        commitAnimation();
+        var skip_merge = false;
+        
+        if (active_transition && captureController.useTransitions)
+        {
+            skip_merge = active_transition.skipMergeAction(target_layout);
+        }
+        if (!skip_merge)
+        {
+            beginAnimation();
+            target_layout.mergeSourceLayoutUsingScripts(layout, useScripts);
+            commitAnimation();
+        }
         if (active_transition && captureController.useTransitions)
         {
             var actionScript = active_transition.postMergeAction(target_layout);

@@ -14,6 +14,7 @@
 #import "CSInputSourceProtocol.h"
 #import "CAMultiAudioEngine.h"
 #import "CSAudioInputSource.h"
+#import "CSRootLayer.h"
 
 typedef enum source_add_order_t {
     kCSSourceAddOrderAny = 0,
@@ -60,7 +61,7 @@ typedef enum source_add_order_t {
 @property (strong) NSString *name;
 
 @property (strong) CARenderer *renderer;
-@property (strong) CAGradientLayer *rootLayer;
+@property (strong) CSRootLayer *rootLayer;
 
 @property (strong) SourceCache *sourceCache;
 @property (strong) CIFilter *compositeFilter;
@@ -207,7 +208,7 @@ typedef enum source_add_order_t {
 @property (strong) NSString *name;
 
 @property (strong) CARenderer *renderer;
-@property (strong) CAGradientLayer *rootLayer;
+@property (strong) CSRootLayer *rootLayer;
 
 @property (strong) SourceCache *sourceCache;
 @property (strong) CIFilter *compositeFilter;
