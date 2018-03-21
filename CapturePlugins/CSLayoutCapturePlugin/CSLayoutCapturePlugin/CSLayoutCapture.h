@@ -20,13 +20,29 @@
 
 @end
 
+@interface AudioEngineHack : NSObject
+-(void)disableAllInputs;
+
+@end
+
+@interface AacEncoderHack : NSObject
+-(void)setupEncoderBuffer;
+@property (assign) AudioStreamBasicDescription *inputASBD;
+@property (assign) int sampleRate;
+@property (assign) bool skipCompression;
 
 
+@end
+
+@interface AudioGraphHack : NSObject
+@property (assign) AudioStreamBasicDescription *graphAsbd;
+@end
 
 @interface CSLayoutCapture : CSCaptureBase <CSCaptureSourceProtocol>
 {
     LayoutRendererHack *_current_renderer;
     NSObject *_originalLayout;
+    CSPcmPlayer *_pcmPlayer;
 }
 
 @end

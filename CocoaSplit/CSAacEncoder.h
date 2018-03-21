@@ -44,6 +44,7 @@
 @property (assign) int bitRate;
 @property (assign) int preallocatedBuffersize;
 @property (assign) AudioStreamBasicDescription *inputASBD;
+@property (assign) bool skipCompression;
 
 -(void) enqueuePCM:(AudioBufferList *)pcmBuffer atTime:(const AudioTimeStamp *)atTime;
 -(void) setupEncoderBuffer;

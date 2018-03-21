@@ -831,11 +831,12 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 
 -(CAMultiAudioEngine *)findAudioEngine
 {
-    NSLog(@"FIND AUDIO ENGINE");
+    NSLog(@"FIND AUDIO ENGINE %@", self);
     SourceLayout *useLayout = self;
     
     if (useLayout.audioEngine)
     {
+        NSLog(@"USING %@", useLayout.audioEngine);
         return useLayout.audioEngine;
     }
     

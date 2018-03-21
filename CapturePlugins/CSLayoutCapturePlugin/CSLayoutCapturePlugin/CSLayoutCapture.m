@@ -107,8 +107,8 @@
     for (NSObject *layout in layouts)
     {
         NSString *layoutName = [layout valueForKey:@"name"];
-        
-        CSAbstractCaptureDevice *dev = [[CSAbstractCaptureDevice alloc] initWithName:layoutName device:layout uniqueID:layoutName];
+        NSString *layoutUUID = [layout valueForKey:@"uuid"];
+        CSAbstractCaptureDevice *dev = [[CSAbstractCaptureDevice alloc] initWithName:layoutName device:layout uniqueID:layoutUUID];
         [ret addObject:dev];
     }
     
@@ -119,6 +119,8 @@
 -(void)setupRenderer
 {
     Class renderClass = NSClassFromString(@"LayoutRenderer");
+    Class engineClass = NSClassFromString(@"CAMultiAudioEngine");
+    Class encoderClass = NSClassFromString(@"CSAacEncoder");
     
     self.captureName = self.activeVideoDevice.captureName;
     SourceLayoutHack *capDev = [self.activeVideoDevice.captureDevice copy];
@@ -131,10 +133,48 @@
         {
             _current_renderer = [[renderClass alloc] init];
         }
+        
+        AudioEngineHack *audioEngine = [[engineClass alloc] init];
+        [audioEngine disableAllInputs];
+        [audioEngine setValue:@YES forKeyPath:@"previewMixer.muted"];
+        AacEncoderHack *audioEncoder = [[encoderClass alloc] init];
+        AudioGraphHack *audioGraph = [audioEngine valueForKeyPath:@"graph"];
+        if (audioGraph)
+        {
+            AudioStreamBasicDescription *asbd = audioGraph.graphAsbd;
+            audioEncoder.inputASBD = asbd;
+            audioEncoder.sampleRate = asbd->mSampleRate;
+            audioEncoder.skipCompression = YES;
+            [audioEncoder setupEncoderBuffer];
+            [audioEngine setValue:audioEncoder forKey:@"encoder"];
+            [capDev setValue:audioEngine forKey:@"audioEngine"];
+            [audioEncoder setValue:self forKey:@"encodedReceiver"];
+        }
+        [self createAttachedAudioInputForUUID:self.activeVideoDevice.uniqueID withName:self.activeVideoDevice.captureName];
+
     }
     
 
     [_current_renderer setValue:capDev forKey:@"layout"];
+}
+
+
+-(void)captureOutputAudio:(id)fromDevice didOutputPCMSampleBuffer:(CMSampleBufferRef)sampleBuffer
+{
+    if (self.isLive && !_pcmPlayer)
+    {
+        CMFormatDescriptionRef sDescr = CMSampleBufferGetFormatDescription(sampleBuffer);
+        const AudioStreamBasicDescription *asbd =  CMAudioFormatDescriptionGetStreamBasicDescription(sDescr);
+        _pcmPlayer = [self createPCMInput:self.activeVideoDevice.uniqueID withFormat:asbd];
+        _pcmPlayer.name = self.activeVideoDevice.captureName;
+
+    }
+    
+    if (_pcmPlayer)
+    {
+        NSLog(@"SCHEDULE BUFFER");
+        [_pcmPlayer scheduleBuffer:sampleBuffer];
+    }
 }
 
 

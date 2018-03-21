@@ -529,6 +529,7 @@
             if (player)
             {
                 [players addObject:player];
+                player.name = withName;
             }
         }
         
