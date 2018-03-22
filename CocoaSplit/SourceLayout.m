@@ -1484,6 +1484,15 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 }
 
 
+-(void)addSourceForAnimation:(InputSource *)toAdd
+{
+    
+    [self addSourceToPresentation:toAdd];
+    toAdd.layer.hidden = YES;
+    [self.rootLayer addSublayer:toAdd.layer];
+}
+
+
 -(void)mergeSourceLayout:(SourceLayout *)toMerge
 {
     [self mergeSourceLayout:toMerge usingScripts:YES withCompletionBlock:nil];
@@ -1563,7 +1572,6 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         [retLayout deleteSource:cSrc];
     }
 
-    NSLog(@"RET LAYOUT OURCE %@", retLayout.sourceList);
     [retLayout saveSourceList];
     [retLayout clearSourceList];
     return retLayout;

@@ -145,7 +145,7 @@ typedef enum source_add_order_t {
 -(void)deleteLayoutFilter:(NSString *)filteruuid;
 
 -(void)clearGradient;
-
+-(void)addSourceForAnimation:(InputSource *)toAdd;
 
 @end
 
