@@ -24,6 +24,7 @@
 @property (strong) NSArray *sourceLayouts;
 
 @property (strong) CSTransitionBase *subTransition;
+@property (strong) NSPopover *popover;
 
 - (IBAction)configureInTransition:(id)sender;
 - (IBAction)configureOutTransition:(id)sender;

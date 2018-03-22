@@ -8,6 +8,7 @@
 #import "CSTransitionLayout.h"
 #import "CaptureController.h"
 #import "CSLayoutTransition.h"
+#import "CSLayoutLayoutTransitionViewController.h"
 
 @implementation CSTransitionLayout
 
@@ -61,52 +62,41 @@
 {
     
 
-    _savedTransition = CaptureController.sharedCaptureController.activeTransition;
-    CaptureController.sharedCaptureController.activeTransition = nil;
     NSPasteboardItem *layoutItem = [[NSPasteboardItem alloc] init];
     NSData *uuidData = [NSKeyedArchiver archivedDataWithRootObject:self.layout.uuid];
     [layoutItem setData:uuidData forType:@"cocoasplit.layout"];
     
     self.layoutSource = [CaptureController.sharedCaptureController inputSourceForPasteboardItem:layoutItem];
     self.layoutSource.persistent = YES;
-    //-(NSObject<CSInputSourceProtocol>*)inputSourceForPasteboardItem:(NSPasteboardItem *)item;
 
-    NSLog(@"LAYOUT SRC %@", self.layoutSource.uuid);
-    //[[CaptureController sharedCaptureController] switchToLayout:targetLayout];
+    NSMutableString *scriptRet = [NSMutableString stringWithString:@"addInputToLayout(self.layoutSource);"];
+    if (self.waitForMedia)
+    {
+        [scriptRet appendString:@"waitAnimation(self.layoutSource.duration);"];
+    }
     
-    return @"addInputToLayout(self.layoutSource, getCurrentLayout());waitAnimation(5);";
-    //return @"console.log('blah');beginAnimation();target_layout.replaceWithSourceLayoutUsingScripts(captureController.activeTransition.layout, useScripts);;waitAnimation(5);commitAnimation();console.log('done')";
+    if (self.holdDuration > 0.0f)
+    {
+        [scriptRet appendString:@"wait(self.holdDuration);"];
+    }
+    return scriptRet;
 }
+
 
 -(NSString *)postChangeAction:(SourceLayout *)targetLayout
 {
-    NSString *ret = @"waitAnimation(5);removeInputFromLayout(self.layoutSource)";
-    CaptureController.sharedCaptureController.activeTransition = _savedTransition;
+    NSString *ret = @"removeInputFromLayout(self.layoutSource)";
     return ret;
 }
 
 
--(NSString *)preMergeAction:(SourceLayout *)targetLayout
-{
-    _savedTransition = CaptureController.sharedCaptureController.activeTransition;
-    CaptureController.sharedCaptureController.activeTransition = nil;
-    
-    return @"mergeLayout(self.layout);waitAnimation(5);removeLayout(self.layout);waitAnimation(0.01);";
-    //return @"var endLayout = targetLayout.mergedSourceLayout(mergedLayout); console.log(endLayout); beginAnimation();switchToLayout(self.layout);commitAnimation();beginAnimation(); waitAnimation();switchToLayout(endLayout);commitAnimation();";
-}
 
-
--(bool)skipMergeAction:(SourceLayout *)targetLayout
-{
-    return NO;
-}
-/*
 -(NSViewController<CSLayoutTransitionViewProtocol> *)configurationViewController
 {
-    CSCIFilterLayoutTransitionViewController *vc = [[CSCIFilterLayoutTransitionViewController alloc] init];
+    CSLayoutLayoutTransitionViewController *vc = [[CSLayoutLayoutTransitionViewController alloc] init];
     vc.transition = self;
     return vc;
-}*/
+}
 
 
 @end

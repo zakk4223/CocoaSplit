@@ -11,9 +11,9 @@
 
 @protocol CSTransitionLayoutExport <JSExport>
 @property (strong) SourceLayout *layout;
+@property (strong) NSObject<CSInputSourceProtocol> *layoutSource;
 @property (assign) float holdDuration;
-@property (assign) bool doMerge;
-@property (strong) InputSource *layoutSource;
+@property (assign) bool waitForMedia;
 
 @end
 
@@ -27,7 +27,8 @@
 @property (strong) SourceLayout *layout;
 @property (assign) float holdDuration;
 @property (assign) bool doMerge;
-@property (strong) InputSource *layoutSource;
+@property (strong) NSObject<CSInputSourceProtocol> *layoutSource;
+@property (assign) bool waitForMedia;
 @end
 
 

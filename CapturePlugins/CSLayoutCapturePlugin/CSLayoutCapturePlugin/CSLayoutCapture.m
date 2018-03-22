@@ -35,6 +35,23 @@
     }
 }
 
+-(float)duration
+{
+    float maxDuration = 0.0f;
+    SourceLayoutHack *capDev = [_current_renderer valueForKey:@"layout"];
+
+    for (NSObject *inp in capDev.sourceList)
+    {
+        float inp_duration = [[inp valueForKey:@"duration"] floatValue];
+        if (inp_duration > maxDuration)
+        {
+            maxDuration = inp_duration;
+        }
+    }
+    return maxDuration;
+}
+
+
 -(instancetype)init
 {
     if (self = [super init])
