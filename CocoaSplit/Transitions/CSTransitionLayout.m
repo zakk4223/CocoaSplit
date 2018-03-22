@@ -63,16 +63,26 @@
 
     _savedTransition = CaptureController.sharedCaptureController.activeTransition;
     CaptureController.sharedCaptureController.activeTransition = nil;
+    NSPasteboardItem *layoutItem = [[NSPasteboardItem alloc] init];
+    NSData *uuidData = [NSKeyedArchiver archivedDataWithRootObject:self.layout.uuid];
+    [layoutItem setData:uuidData forType:@"cocoasplit.layout"];
+    
+    self.layoutSource = [CaptureController.sharedCaptureController inputSourceForPasteboardItem:layoutItem];
+    self.layoutSource.persistent = YES;
+    //-(NSObject<CSInputSourceProtocol>*)inputSourceForPasteboardItem:(NSPasteboardItem *)item;
+
+    NSLog(@"LAYOUT SRC %@", self.layoutSource.uuid);
     //[[CaptureController sharedCaptureController] switchToLayout:targetLayout];
     
-    return @"switchToLayout(self.layout);waitAnimation(5);";
+    return @"addInputToLayout(self.layoutSource, getCurrentLayout());waitAnimation(5);";
     //return @"console.log('blah');beginAnimation();target_layout.replaceWithSourceLayoutUsingScripts(captureController.activeTransition.layout, useScripts);;waitAnimation(5);commitAnimation();console.log('done')";
 }
 
 -(NSString *)postChangeAction:(SourceLayout *)targetLayout
 {
+    NSString *ret = @"waitAnimation(5);removeInputFromLayout(self.layoutSource)";
     CaptureController.sharedCaptureController.activeTransition = _savedTransition;
-    return nil;
+    return ret;
 }
 
 

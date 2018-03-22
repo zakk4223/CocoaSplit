@@ -17,6 +17,7 @@
 @property (assign) int canvas_height;
 @property (assign) bool isActive;
 @property (strong) NSArray *sourceList;
+@property (strong) NSString *uuid;
 
 @end
 

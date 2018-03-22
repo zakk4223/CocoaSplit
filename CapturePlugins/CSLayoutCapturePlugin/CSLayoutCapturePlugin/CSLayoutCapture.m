@@ -75,18 +75,30 @@
 +(NSObject<CSCaptureSourceProtocol> *)createSourceFromPasteboardItem:(NSPasteboardItem *)item
 {
     NSData *indexData = [item dataForType:@"cocoasplit.layout"];
-    NSIndexSet *indexes = [NSKeyedUnarchiver unarchiveObjectWithData:indexData];
-    
+    NSString *draggedUUID = [NSKeyedUnarchiver unarchiveObjectWithData:indexData];
+   // NSIndexSet *indexes = [NSKeyedUnarchiver unarchiveObjectWithData:indexData];
+    /*
     if (!indexes)
     {
         return nil;
     }
     
     NSInteger draggedItemIdx = [indexes firstIndex];
+     */
     NSObject *controller = [[CSPluginServices sharedPluginServices] captureController];
     NSArray *layouts = [controller valueForKey:@"sourceLayouts"];
 
-    NSObject *useLayout = [layouts objectAtIndex:draggedItemIdx];
+    SourceLayoutHack *useLayout = nil;
+    for (SourceLayoutHack *tmp in layouts)
+    {
+        if ([tmp.uuid isEqualToString:draggedUUID])
+        {
+            useLayout = tmp;
+        }
+    }
+    
+    //SourceLayoutHack *useLayout = [layouts objectAtIndex:draggedItemIdx];
+
     if (useLayout)
     {
         NSString *layoutName = [useLayout valueForKey:@"name"];

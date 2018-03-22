@@ -187,6 +187,22 @@ var advanceBeginTime = function(duration) {
 }
 
 
+var removeInputFromLayout = function(input, layout) {
+    var useLayout = layout;
+    if (!useLayout)
+    {
+        useLayout = getCurrentLayout();
+    }
+    
+    var animInput = new CSAnimationInput(input);
+    animInput.hidden(false, 0.0).completion_handler = function(anim) { useLayout.deleteSource(input);};
+}
+var addInputToLayout = function(input, layout) {
+    layout.addSourceForAnimation(input);
+    var animInput = new CSAnimationInput(input);
+    animInput.hidden(false, 0.0).completion_handler = function(anim) { layout.addSource(input);};
+}
+
 var addDummyAnimation = function(duration, kwargs) {
     var keyname = "__DUMMY_ANIMATION__" + generateUUID();
     

@@ -1489,7 +1489,14 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     
     [self addSourceToPresentation:toAdd];
     toAdd.layer.hidden = YES;
+    toAdd.autoPlaceOnFrameUpdate = YES;
+    [CATransaction begin];
+    [CATransaction setCompletionBlock:^{
+        [toAdd buildLayerConstraints];
+    }];
+    
     [self.rootLayer addSublayer:toAdd.layer];
+    [CATransaction commit];
 }
 
 
@@ -2286,7 +2293,8 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     {
         return;
     }
-    
+    NSLog(@"ADD SRC %@ %@", addSource, addSource.uuid);
+
     _uuidMapPresentation[addSource.uuid] = addSource;
     @synchronized(self)
     {

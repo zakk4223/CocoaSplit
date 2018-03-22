@@ -13,6 +13,8 @@
 @property (strong) SourceLayout *layout;
 @property (assign) float holdDuration;
 @property (assign) bool doMerge;
+@property (strong) InputSource *layoutSource;
+
 @end
 
 
@@ -25,6 +27,7 @@
 @property (strong) SourceLayout *layout;
 @property (assign) float holdDuration;
 @property (assign) bool doMerge;
+@property (strong) InputSource *layoutSource;
 @end
 
 

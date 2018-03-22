@@ -2316,15 +2316,6 @@
       */
     }
     
-    if ([saveRoot objectForKey:@"stagingHidden"])
-    {
-        BOOL stagingHidden = [[saveRoot valueForKeyPath:@"stagingHidden"] boolValue];
-        self.stagingHidden = stagingHidden;
-    }
-    if (self.stagingHidden)
-    {
-        [self hideStagingView];
-    }
 
     
     
@@ -2364,6 +2355,15 @@
        // [self.stagingLayout mergeSourceLayout:tmpLayout withLayer:nil];
     }
     
+    if ([saveRoot objectForKey:@"stagingHidden"])
+    {
+        BOOL stagingHidden = [[saveRoot valueForKeyPath:@"stagingHidden"] boolValue];
+        self.stagingHidden = stagingHidden;
+    }
+    if (self.stagingHidden)
+    {
+        [self hideStagingView];
+    }
 
     
     self.inputLibrary = [saveRoot valueForKey:@"inputLibrary"];
@@ -3631,6 +3631,8 @@
 -(NSDragOperation)collectionView:(NSCollectionView *)collectionView validateDrop:(id<NSDraggingInfo>)draggingInfo proposedIndex:(NSInteger *)proposedDropIndex dropOperation:(NSCollectionViewDropOperation *)proposedDropOperation
 {
     
+    return NSDragOperationMove;
+    
     NSPasteboard *pBoard = [draggingInfo draggingPasteboard];
     NSData *indexSave = [pBoard dataForType:@"cocoasplit.layout"];
     NSIndexSet *indexes = [NSKeyedUnarchiver unarchiveObjectWithData:indexSave];
@@ -3662,9 +3664,11 @@
 
 -(BOOL)collectionView:(NSCollectionView *)collectionView writeItemsAtIndexes:(NSIndexSet *)indexes toPasteboard:(NSPasteboard *)pasteboard
 {
-    NSData *indexSave = [NSKeyedArchiver archivedDataWithRootObject:indexes];
+    NSArray *layouts = [self.sourceLayouts objectsAtIndexes:indexes];
+    SourceLayout *useLayout = layouts.firstObject;
+    NSData *uuidSave = [NSKeyedArchiver archivedDataWithRootObject:useLayout.uuid];
     [pasteboard declareTypes:@[@"cocoasplit.layout"] owner:nil];
-    [pasteboard setData:indexSave forType:@"cocoasplit.layout"];
+    [pasteboard setData:uuidSave forType:@"cocoasplit.layout"];
     return YES;
 }
 
