@@ -465,7 +465,7 @@ NSArray *_savedTransitionConstraints;
 @property (weak) IBOutlet PreviewView *livePreviewView;
 @property (strong) NSMutableDictionary *transitionNames;
 @property (strong) NSArray *transitionDirections;
-@property (assign) float transitionDuration;
+@property (strong) NSNumber *transitionDuration;
 @property (strong) NSString *transitionName;
 @property (strong) NSString *transitionDirection;
 @property (strong) CIFilter *transitionFilter;

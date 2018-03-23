@@ -354,7 +354,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         extraDict = [NSMutableDictionary dictionary];
     }
     
-    extraDict[@"__default_animation_time__"] = @([CaptureController sharedCaptureController].transitionDuration);
+    extraDict[@"__default_animation_time__"] = [CaptureController sharedCaptureController].transitionDuration;
     
     
     void (^completionBlock)(void) = [threadDict objectForKey:@"completionBlock"];

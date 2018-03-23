@@ -75,7 +75,6 @@
     
     newTransition.transitionDirection = self.transitionDirection;
     newTransition.transitionFullScene = self.wholeLayout;
-    NSLog(@"WHOLE LAYOUT %d", self.wholeLayout);
     targetLayout.transitionInfo = newTransition;
     
     return nil;

@@ -1142,6 +1142,7 @@
        
     
        _stagingHidden = YES;
+       _transitionDuration = @1.0;
        
        _inputViewSortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"depth" ascending:NO]];
 
@@ -2094,6 +2095,8 @@
 
     [saveRoot setValue:self.inputLibrary forKey:@"inputLibrary"];
     [saveRoot setValue:[NSNumber numberWithBool:self.useTransitions] forKey:@"useTransitions"];
+    [saveRoot setValue:self.transitionDuration forKey:@"transitionDuration"];
+    
     if (self.layoutTransitionViewController && self.layoutTransitionViewController.transition)
     {
         [saveRoot setValue:self.layoutTransitionViewController.transition forKey:@"transitionInfo"];
@@ -2414,27 +2417,16 @@
 
     [self.sourceListViewController addObserver:self forKeyPath:@"selectedObjects" options:NSKeyValueObservingOptionNew context:NULL];
     self.useTransitions = [[saveRoot valueForKey:@"useTransitions"] boolValue];
-    self.transitionName = [saveRoot valueForKey:@"transitionName"];
-    
-    if (self.transitionName)
+    if ([saveRoot valueForKey:@"transitionDuration"])
     {
-        CSLayoutTransition *savedTransition = [saveRoot valueForKey:@"transitionInfo"];
-        
-        if (savedTransition)
-        {
-            self.layoutTransitionViewController.transition = savedTransition;
-        } else {
-            savedTransition = self.layoutTransitionViewController.transition;
-            
-            savedTransition.transitionDirection = [saveRoot valueForKey:@"transitionDirection"];
-            savedTransition.transitionDuration = [[saveRoot valueForKey:@"transitionDuration"] floatValue];
-            savedTransition.transitionFilter = [saveRoot valueForKey:@"transitionFilter"];
-        }
+        self.transitionDuration = [saveRoot valueForKey:@"transitionDuration"];
     }
+    
+
 
     CSTransitionCA *newTransition = [[CSTransitionCA alloc] init];
     newTransition.subType = @"fade";
-    newTransition.duration = @1.5;
+    newTransition.duration = nil;
     [self willChangeValueForKey:@"transitions"];
     [self.transitions addObject:newTransition];
     [self didChangeValueForKey:@"transitions"];

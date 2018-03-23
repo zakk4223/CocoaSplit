@@ -6,15 +6,16 @@
 //
 
 #import "CSTransitionBase.h"
+#import "CaptureController.h"
 
 @implementation CSTransitionBase
 
+@synthesize duration = _duration;
 
 -(instancetype)init
 {
     if (self = [super init])
     {
-        self.duration = @1.0f;
         self.uuid = [NSUUID UUID].UUIDString;
     }
     
@@ -24,12 +25,29 @@
 -(id)copyWithZone:(NSZone *)zone
 {
     CSTransitionBase *newObj = [[self.class alloc] init];
-    newObj.duration = self.duration;
+    newObj.duration = _duration;
     newObj.name = self.name;
     newObj.subType = self.subType;
     return newObj;
 }
 
+
+-(void)setDuration:(NSNumber *)duration
+{
+    _duration = duration;
+}
+
+-(NSNumber *)duration
+{
+    
+    NSLog(@"DURATION %@", _duration);
+    if (_duration)
+    {
+        return _duration;
+    }
+    
+    return CaptureController.sharedCaptureController.transitionDuration;
+}
 
 -(void)setName:(NSString *)name
 {

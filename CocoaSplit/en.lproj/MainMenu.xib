@@ -725,6 +725,9 @@
                                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="BmY-Tq-zhI" userLabel="TransitionView">
                                         <rect key="frame" x="407" y="0.0" width="225" height="316"/>
                                         <subviews>
+                                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="rSV-Iw-qby">
+                                                <rect key="frame" x="0.0" y="0.0" width="225" height="296"/>
+                                            </customView>
                                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZFw-Ai-mXd">
                                                 <rect key="frame" x="-2" y="302" width="56" height="14"/>
                                                 <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Transition" id="Cvm-Vd-os9">
@@ -733,14 +736,11 @@
                                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                 </textFieldCell>
                                             </textField>
-                                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="rSV-Iw-qby" customClass="BlahView">
-                                                <rect key="frame" x="0.0" y="0.0" width="225" height="296"/>
-                                            </customView>
                                         </subviews>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="rSV-Iw-qby" secondAttribute="trailing" id="M08-4O-YIp"/>
                                             <constraint firstItem="ZFw-Ai-mXd" firstAttribute="top" secondItem="BmY-Tq-zhI" secondAttribute="top" id="Ml3-yT-CXo"/>
-                                            <constraint firstAttribute="bottom" secondItem="rSV-Iw-qby" secondAttribute="bottom" id="TcJ-um-fWI"/>
+                                            <constraint firstAttribute="bottom" secondItem="rSV-Iw-qby" secondAttribute="bottom" id="UeF-sT-BZY"/>
                                             <constraint firstItem="rSV-Iw-qby" firstAttribute="leading" secondItem="BmY-Tq-zhI" secondAttribute="leading" id="hjR-KW-76c"/>
                                             <constraint firstItem="rSV-Iw-qby" firstAttribute="top" secondItem="ZFw-Ai-mXd" secondAttribute="bottom" constant="6" id="uJy-3X-6zi"/>
                                             <constraint firstItem="ZFw-Ai-mXd" firstAttribute="leading" secondItem="BmY-Tq-zhI" secondAttribute="leading" id="yje-dq-OMr"/>
