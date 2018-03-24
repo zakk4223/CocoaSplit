@@ -2104,6 +2104,7 @@
     }
     [saveRoot setValue:self.layoutSequences forKey:@"layoutSequences"];
     [saveRoot setValue:self.transitions forKey:@"transitions"];
+    [saveRoot setValue:self.activeTransition forKey:@"activeTransition"];
     [NSKeyedArchiver archiveRootObject:saveRoot toFile:path];
     
 }
@@ -2442,6 +2443,7 @@
         [self.transitions addObject:newTransition];
     }
     [self didChangeValueForKey:@"transitions"];
+    self.activeTransition = [saveRoot valueForKey:@"activeTransition"];
 
 }
 
