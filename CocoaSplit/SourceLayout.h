@@ -61,7 +61,7 @@ typedef enum source_add_order_t {
 @property (strong) NSString *name;
 
 @property (strong) CARenderer *renderer;
-@property (strong) CSRootLayer *rootLayer;
+@property (strong) CAGradientLayer *rootLayer;
 
 @property (strong) SourceCache *sourceCache;
 @property (strong) CIFilter *compositeFilter;
@@ -93,6 +93,7 @@ typedef enum source_add_order_t {
 @property (assign) source_add_order sourceAddOrder;
 @property (strong) NSString *uuid;
 
+@property (strong) CALayer *transitionLayer;
 
 -(void)deleteSource:(NSObject<CSInputSourceProtocol> *)delSource;
 -(void)addSource:(NSObject<CSInputSourceProtocol> *)newSource;
@@ -146,6 +147,7 @@ typedef enum source_add_order_t {
 
 -(void)clearGradient;
 -(void)addSourceForAnimation:(InputSource *)toAdd;
+-(void)addSourceForTransition:(InputSource *)toAdd;
 
 @end
 
@@ -208,7 +210,7 @@ typedef enum source_add_order_t {
 @property (strong) NSString *name;
 
 @property (strong) CARenderer *renderer;
-@property (strong) CSRootLayer *rootLayer;
+@property (strong) CAGradientLayer *rootLayer;
 
 @property (strong) SourceCache *sourceCache;
 @property (strong) CIFilter *compositeFilter;
@@ -243,6 +245,7 @@ typedef enum source_add_order_t {
 @property (assign) bool containerOnly;
 @property (assign) source_add_order sourceAddOrder;
 @property (strong) NSString *uuid;
+@property (strong) CALayer *transitionLayer;
 
 -(CSAudioInputSource *)findSourceForAudioUUID:(NSString *)audioUUID;
 

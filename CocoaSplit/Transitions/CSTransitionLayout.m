@@ -118,7 +118,7 @@
     self.layoutSource = [CaptureController.sharedCaptureController inputSourceForPasteboardItem:layoutItem];
     self.layoutSource.persistent = YES;
 
-    NSMutableString *scriptRet = [NSMutableString stringWithString:@"addInputToLayout(self.layoutSource);"];
+    NSMutableString *scriptRet = [NSMutableString stringWithString:@"addInputToLayoutForTransition(self.layoutSource);"];
     if (self.waitForMedia)
     {
         [scriptRet appendString:@"waitAnimation(self.layoutSource.duration);"];

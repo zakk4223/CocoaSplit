@@ -767,29 +767,6 @@
     }
 }
 
--(SourceLayout *)topLevelSourceLayout:(SourceLayout *)layout
-{
-    SourceLayout *ret = layout;
-    CALayer *useLayer = ret.rootLayer;
-    
-    while ((useLayer = useLayer.superlayer))
-    {
-        if ([useLayer isKindOfClass:CSRootLayer.class])
-        {
-            NSString *layoutUUID = ((CSRootLayer *)useLayer).layoutUUID;
-            if (layoutUUID)
-            {
-                SourceLayout *newRet = [CaptureController.sharedCaptureController sourceLayoutForUUID:layoutUUID];
-                if (newRet)
-                {
-                    ret = newRet;
-                }
-            }
-        }
-    }
-    
-    return ret;
-}
 
 
 -(void)createAttachedAudioInputForUUID:(NSString *)uuid withName:(NSString *)withName

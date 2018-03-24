@@ -77,7 +77,8 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         _noSceneTransactions = NO;
         _topLevelSourceArray = [[NSMutableArray alloc] init];
         self.rootLayer = [self newRootLayer];
-        
+        self.transitionLayer = [self newTransitionLayer];
+        [self.transitionLayer addSublayer:self.rootLayer];
         //self.rootLayer.geometryFlipped = YES;
         _rootSize = NSMakeSize(_canvas_width, _canvas_height);
         self.sourceList = [NSMutableArray array];
@@ -189,16 +190,31 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 }
 
 
--(CALayer *)newRootLayer
+-(CALayer *)newTransitionLayer
 {
-    CSRootLayer *newRoot = [CSRootLayer layer];
-    newRoot.layoutUUID = self.uuid;
+    CALayer *newTransition = [CALayer layer];
+    [CATransaction begin];
+    newTransition.bounds = CGRectMake(0, 0, _canvas_width, _canvas_height);
+    newTransition.anchorPoint = CGPointMake(0.0, 0.0);
+    newTransition.position = CGPointMake(0.0, 0.0);
+    newTransition.masksToBounds = YES;
+    [CATransaction commit];
+    
+    return newTransition;
+}
+
+
+-(CAGradientLayer *)newRootLayer
+{
+    CAGradientLayer *newRoot = [CAGradientLayer layer];
     [CATransaction begin];
     newRoot.bounds = CGRectMake(0, 0, _canvas_width, _canvas_height);
     newRoot.anchorPoint = CGPointMake(0.0, 0.0);
     newRoot.position = CGPointMake(0.0, 0.0);
     newRoot.masksToBounds = YES;
-    CGColorRef tmpColor = CGColorCreateGenericRGB(0, 0, 0, 1);
+
+    
+    CGColorRef tmpColor = CGColorCreateGenericRGB(0, 0, 0, 0);
     newRoot.backgroundColor = tmpColor;
     CGColorRelease(tmpColor);
     
@@ -699,7 +715,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     /* invert the point due to layer rendering inversion/weirdness */
     
     CGPoint newPoint = CGPointMake(forPoint.x, self.canvas_height-forPoint.y);
-    CALayer *foundLayer = [self.rootLayer hitTest:newPoint];
+    CALayer *foundLayer = [self.transitionLayer hitTest:newPoint];
     
     InputSource *retInput = nil;
     
@@ -803,40 +819,14 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 }
 
 
--(SourceLayout *)topLevelSourceLayout:(SourceLayout *)layout
-{
-    SourceLayout *ret = layout;
-    CALayer *useLayer = ret.rootLayer;
-    
-    while ((useLayer = useLayer.superlayer))
-    {
-        if ([useLayer isKindOfClass:CSRootLayer.class])
-        {
-            NSString *layoutUUID = ((CSRootLayer *)useLayer).layoutUUID;
-            NSLog(@"LAYOUT UUID %@", layoutUUID);
-            if (layoutUUID)
-            {
-                SourceLayout *newRet = [CaptureController.sharedCaptureController sourceLayoutForUUID:layoutUUID];
-                if (newRet)
-                {
-                    ret = newRet;
-                }
-            }
-        }
-    }
-    
-    return ret;
-}
 
 
 -(CAMultiAudioEngine *)findAudioEngine
 {
-    NSLog(@"FIND AUDIO ENGINE %@", self);
     SourceLayout *useLayout = self;
     
     if (useLayout.audioEngine)
     {
-        NSLog(@"USING %@", useLayout.audioEngine);
         return useLayout.audioEngine;
     }
     
@@ -1483,9 +1473,25 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     [self runAnimationString:mergeScript withCompletionBlock:nil withExceptionBlock:nil withExtraDictionary:extraDict];
 }
 
+-(void)addSourceForTransition:(InputSource *)toAdd
+{
+    [self addSourceForAnimation:toAdd useLayer:self.transitionLayer];
+
+}
 
 -(void)addSourceForAnimation:(InputSource *)toAdd
 {
+    [self addSourceForAnimation:toAdd useLayer:self.rootLayer];
+}
+
+-(void)addSourceForAnimation:(InputSource *)toAdd useLayer:(CALayer *)useLayer
+{
+    
+    CALayer *realLayer = useLayer;
+    if (!realLayer)
+    {
+        realLayer = self.rootLayer;
+    }
     
     [self addSourceToPresentation:toAdd];
     toAdd.layer.hidden = YES;
@@ -1495,7 +1501,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         [toAdd buildLayerConstraints];
     }];
     
-    [self.rootLayer addSublayer:toAdd.layer];
+    [realLayer addSublayer:toAdd.layer];
     [CATransaction commit];
 }
 
@@ -2658,7 +2664,8 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         
         if (!NSEqualSizes(curSize, _rootSize))
         {
-            
+            self.transitionLayer.bounds = CGRectMake(0, 0, self.canvas_width, self.canvas_height);
+
             self.rootLayer.bounds = CGRectMake(0, 0, self.canvas_width, self.canvas_height);
             _rootSize = curSize;
             needsResize = YES;

@@ -197,6 +197,20 @@ var removeInputFromLayout = function(input, layout) {
     var animInput = new CSAnimationInput(input);
     animInput.hidden(false, 0.0).completion_handler = function(anim) { useLayout.deleteSource(input);};
 }
+
+var addInputToLayoutForTransition = function(input, layout) {
+    var useLayout = layout;
+    if (!useLayout)
+    {
+        useLayout = getCurrentLayout();
+    }
+    
+    useLayout.addSourceForTransition(input);
+    var animInput = new CSAnimationInput(input);
+    animInput.hidden(false, 0.0).completion_handler = function(anim) { useLayout.addSource(input);};
+}
+
+
 var addInputToLayout = function(input, layout) {
     var useLayout = layout;
     if (!useLayout)

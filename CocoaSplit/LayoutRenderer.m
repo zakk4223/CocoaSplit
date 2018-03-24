@@ -98,7 +98,7 @@
     }
 
     self.rootLayer.bounds = CGRectMake(0, 0, _cvpool_size.width, _cvpool_size.height);
-    CGColorRef tmpColor = CGColorCreateGenericRGB(0, 0, 0, 1);
+    CGColorRef tmpColor = CGColorCreateGenericRGB(0, 0, 0, 0);
     self.rootLayer.backgroundColor = tmpColor;
     CGColorRelease(tmpColor);
     self.rootLayer.position = CGPointMake(0.0, 0.0);
@@ -152,7 +152,7 @@
         _transitionLayout = nil;
     }
     
-    [self.renderer.layer addSublayer:self.layout.rootLayer];
+    [self.renderer.layer addSublayer:self.layout.transitionLayer];
     [CATransaction commit];
     
     
