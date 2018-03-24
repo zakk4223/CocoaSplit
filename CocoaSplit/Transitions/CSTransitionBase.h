@@ -30,7 +30,7 @@
 
 @end
 
-@interface CSTransitionBase : NSObject <CSTransitionExport, NSCopying>
+@interface CSTransitionBase : NSObject <CSTransitionExport, NSCopying, NSCoding>
 {
     NSString *_name;
 }

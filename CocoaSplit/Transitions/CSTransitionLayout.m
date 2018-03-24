@@ -12,6 +12,31 @@
 
 @implementation CSTransitionLayout
 
+-(instancetype) init
+{
+    if (self = [super init])
+    {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(layoutDeleted:) name:CSNotificationLayoutDeleted object:nil];
+    }
+    return self;
+}
+
+
+-(void)layoutDeleted:(NSNotification *)notification
+{
+    SourceLayout *deleted = notification.object;
+    if (self.layout)
+    {
+        if ([self.layout.uuid isEqualToString:deleted.uuid])
+        {
+            self.layout = nil;
+            self.active = NO;
+        }
+    }
+}
+
+
+
 -(id)copyWithZone:(NSZone *)zone
 {
     CSTransitionLayout *newObj = [super copyWithZone:zone];
@@ -23,7 +48,31 @@
 }
 
 
+-(void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [super encodeWithCoder:aCoder];
+    if (self.layout)
+    {
+        [aCoder encodeObject:self.layout forKey:@"layout"];
+    }
+    [aCoder encodeFloat:self.holdDuration forKey:@"holdDuration"];
+    [aCoder encodeBool:self.waitForMedia forKey:@"waitForMedia"];
+}
+
+-(instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithCoder:aDecoder])
+    {
+        self.layout = [aDecoder decodeObjectForKey:@"layout"];
+        
+        self.holdDuration = [aDecoder decodeFloatForKey:@"holdDuration"];
+        self.waitForMedia = [aDecoder decodeBoolForKey:@"waitForMedia"];
+    }
     
+    return self;
+}
+
+
 +(NSArray *)subTypes
 {
     NSMutableArray *ret = [NSMutableArray array];

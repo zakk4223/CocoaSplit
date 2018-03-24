@@ -26,7 +26,6 @@
 
 @property (strong) SourceLayout *layout;
 @property (assign) float holdDuration;
-@property (assign) bool doMerge;
 @property (strong) NSObject<CSInputSourceProtocol> *layoutSource;
 @property (assign) bool waitForMedia;
 @end

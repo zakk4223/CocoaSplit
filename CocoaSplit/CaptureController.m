@@ -655,6 +655,7 @@
             
             toDelete.isActive = NO;
             [self.sourceLayoutsArrayController removeObject:toDelete];
+            [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutDeleted object:toDelete];
             return YES;
         }
     }
@@ -2102,6 +2103,7 @@
         [saveRoot setValue:self.layoutTransitionViewController.transition forKey:@"transitionInfo"];
     }
     [saveRoot setValue:self.layoutSequences forKey:@"layoutSequences"];
+    [saveRoot setValue:self.transitions forKey:@"transitions"];
     [NSKeyedArchiver archiveRootObject:saveRoot toFile:path];
     
 }
@@ -2423,13 +2425,24 @@
     }
     
 
-
-    CSTransitionCA *newTransition = [[CSTransitionCA alloc] init];
-    newTransition.subType = @"fade";
-    newTransition.duration = nil;
     [self willChangeValueForKey:@"transitions"];
-    [self.transitions addObject:newTransition];
+
+    self.transitions = [saveRoot valueForKey:@"transitions"];
+    NSLog(@"LAYOUTS %@", self.sourceLayouts);
+    if (!self.transitions)
+    {
+        self.transitions = [NSMutableArray array];
+    }
+    
+    if (self.transitions.count == 0)
+    {
+        CSTransitionCA *newTransition = [[CSTransitionCA alloc] init];
+        newTransition.subType = @"fade";
+        newTransition.duration = nil;
+        [self.transitions addObject:newTransition];
+    }
     [self didChangeValueForKey:@"transitions"];
+
 }
 
 

@@ -22,11 +22,37 @@
     return self;
 }
 
+
+-(void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:_name forKey:@"name"];
+    [aCoder encodeObject:self.uuid forKey:@"uuid"];
+    [aCoder encodeObject:self.subType forKey:@"subType"];
+    [aCoder encodeBool:self.active forKey:@"active"];
+    [aCoder encodeObject:_duration forKey:@"duration"];
+}
+
+
+-(instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [self init])
+    {
+        _name = [aDecoder decodeObjectForKey:@"name"];
+        self.uuid = [aDecoder decodeObjectForKey:@"uuid"];
+        self.subType = [aDecoder decodeObjectForKey:@"subType"];
+        self.active = [aDecoder decodeBoolForKey:@"active"];
+        _duration = [aDecoder decodeObjectForKey:@"duration"];
+    }
+    return self;
+}
+
+
+
 -(id)copyWithZone:(NSZone *)zone
 {
     CSTransitionBase *newObj = [[self.class alloc] init];
     newObj.duration = _duration;
-    newObj.name = self.name;
+    newObj.name = _name;
     newObj.subType = self.subType;
     return newObj;
 }
@@ -40,7 +66,6 @@
 -(NSNumber *)duration
 {
     
-    NSLog(@"DURATION %@", _duration);
     if (_duration)
     {
         return _duration;

@@ -19,9 +19,30 @@
     if (newObj)
     {
         newObj.transitionDirection = self.transitionDirection;
+        newObj.wholeLayout = self.wholeLayout;
     }
     return newObj;
 }
+
+
+-(void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [super encodeWithCoder:aCoder];
+    [aCoder encodeObject:self.transitionDirection forKey:@"transitionDirection"];
+    [aCoder encodeBool:self.wholeLayout forKey:@"wholeLayout"];
+}
+
+-(instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithCoder:aDecoder])
+    {
+        self.transitionDirection = [aDecoder decodeObjectForKey:@"transitionDirection"];
+        self.wholeLayout = [aDecoder decodeBoolForKey:@"wholeLayout"];
+    }
+    
+    return self;
+}
+
 
 +(NSArray *)subTypes
 {

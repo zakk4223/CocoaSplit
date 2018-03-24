@@ -22,6 +22,24 @@
     return newObj;
 }
 
+-(void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [super encodeWithCoder:aCoder];
+    [aCoder encodeBool:self.wholeLayout forKey:@"wholeLayout"];
+    [aCoder encodeObject:self.transitionFilter forKey:@"transitionFilter"];
+}
+
+-(instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithCoder:aDecoder])
+    {
+        self.wholeLayout = [aDecoder decodeBoolForKey:@"wholeLayout"];
+        self.transitionFilter = [aDecoder decodeObjectForKey:@"transitionFilter"];
+    }
+    
+    return self;
+}
+
 
 +(NSArray *)subTypes
 {
