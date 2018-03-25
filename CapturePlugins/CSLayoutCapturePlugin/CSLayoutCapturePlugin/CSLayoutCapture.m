@@ -201,7 +201,6 @@
     
     if (_pcmPlayer)
     {
-        NSLog(@"SCHEDULE BUFFER");
         [_pcmPlayer scheduleBuffer:sampleBuffer];
     }
 }

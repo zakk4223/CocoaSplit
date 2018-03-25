@@ -39,7 +39,6 @@
 
 -(void) enqueuePCM:(AudioBufferList *)pcmBuffer atTime:(const AudioTimeStamp *)atTime
 {
-    NSLog(@"ENQUEUE PCM");
     TPCircularBufferCopyAudioBufferList(&_inputBuffer, pcmBuffer, atTime, kTPCircularBufferCopyAll, NULL);
     dispatch_semaphore_signal(_aSemaphore);
 }
@@ -63,10 +62,8 @@
     
     while (1)
     {
-        NSLog(@"LOOP");
         while (TPCircularBufferPeek(&_inputBuffer, NULL, self.inputASBD) >= 1024)
         {
-            NSLog(@"PEEK");
             AudioBufferList *inBuffer = TPCircularBufferPrepareEmptyAudioBufferListWithAudioFormat(&_scratchBuffer, self.inputASBD, 1024, NULL);
             UInt32 inFrameCnt = 1024 ;
             AudioTimeStamp atTime;
@@ -142,7 +139,6 @@
                 if (outstatus == kAudioCodecProduceOutputPacketNeedsMoreInputData)
                 {
                     free(aacBuffer);
-                    NSLog(@"BREAK");
                     break;
                 }
                 
@@ -193,7 +189,6 @@
         double secs_sleep = (1.0f/self.sampleRate)*1024.0f;
         
         int32_t msecs_sleep = secs_sleep * USEC_PER_SEC;
-        NSLog(@"SLEEP %d", msecs_sleep);
 
         usleep(msecs_sleep);
         

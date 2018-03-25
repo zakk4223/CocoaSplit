@@ -40,7 +40,6 @@
     return self;
 }
 
-
 +(NSArray *)subTypes
 {
     NSMutableArray *ret = [NSMutableArray array];

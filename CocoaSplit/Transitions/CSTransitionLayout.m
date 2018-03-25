@@ -11,6 +11,7 @@
 #import "CSLayoutLayoutTransitionViewController.h"
 
 @implementation CSTransitionLayout
+@synthesize holdDuration = _holdDuration;
 
 -(instancetype) init
 {
@@ -55,7 +56,7 @@
     {
         [aCoder encodeObject:self.layout forKey:@"layout"];
     }
-    [aCoder encodeFloat:self.holdDuration forKey:@"holdDuration"];
+    [aCoder encodeObject:self.holdDuration forKey:@"holdDuration"];
     [aCoder encodeBool:self.waitForMedia forKey:@"waitForMedia"];
 }
 
@@ -65,7 +66,7 @@
     {
         self.layout = [aDecoder decodeObjectForKey:@"layout"];
         
-        self.holdDuration = [aDecoder decodeFloatForKey:@"holdDuration"];
+        self.holdDuration = [aDecoder decodeObjectForKey:@"holdDuration"];
         self.waitForMedia = [aDecoder decodeBoolForKey:@"waitForMedia"];
     }
     
@@ -106,6 +107,21 @@
     return ret;
 }
 
+-(void)setHoldDuration:(NSNumber *)holdDuration
+{
+    _holdDuration = holdDuration;
+}
+
+
+-(NSNumber *)holdDuration
+{
+    if (_holdDuration)
+    {
+        return _holdDuration;
+    }
+    
+    return self.duration;
+}
 
 -(NSString *)preChangeAction:(SourceLayout *)targetLayout
 {
@@ -118,23 +134,45 @@
     self.layoutSource = [CaptureController.sharedCaptureController inputSourceForPasteboardItem:layoutItem];
     self.layoutSource.persistent = YES;
 
-    NSMutableString *scriptRet = [NSMutableString stringWithString:@"addInputToLayoutForTransition(self.layoutSource);"];
+    CATransition *testAnim = [CATransition animation];
+    testAnim.subtype = kCATransitionFromLeft;
+    testAnim.type = kCATransitionPush;
+    testAnim.removedOnCompletion = YES;
+    testAnim.duration = 2.0f;
+    testAnim.beginTime = CACurrentMediaTime()+0.5;
+    testAnim.delegate = self;
+    
+    self.transitionInputTransition = testAnim;
+    
+    
+    NSMutableString *scriptRet = [NSMutableString stringWithString:@"addInputToLayoutForTransition(self.layoutSource, self.transitionInputTransition);"];
     if (self.waitForMedia)
     {
         [scriptRet appendString:@"waitAnimation(self.layoutSource.duration);"];
     }
+    self.realHoldDuration = self.holdDuration.floatValue;
     
-    if (self.holdDuration > 0.0f)
+    if (self.realHoldDuration > 0.0f)
     {
-        [scriptRet appendString:@"wait(self.holdDuration);"];
+        [scriptRet appendString:@"waitAnimation(self.realHoldDuration);"];
     }
+    
     return scriptRet;
 }
 
 
 -(NSString *)postChangeAction:(SourceLayout *)targetLayout
 {
-    NSString *ret = @"removeInputFromLayout(self.layoutSource)";
+    CATransition *testAnim = [CATransition animation];
+    testAnim.subtype = kCATransitionFromLeft;
+    testAnim.type = kCATransitionPush;
+    testAnim.duration = 2.0f;
+    testAnim.removedOnCompletion = YES;
+    //testAnim.speed = -1.0f;
+    testAnim.delegate = self;
+    self.transitionInputTransition = testAnim;
+    //NSString *ret = @"beginAnimation(); setCompletionBlock(function() {console.log('COMPLETION ' + CACurrentMediaTime())}); addDummyAnimation(1.0); commitAnimation();";
+    NSString *ret = @"beginAnimation();setCompletionBlock(function () {beginAnimation();removeInputFromLayout(self.layoutSource, self.transitionInputTransition);commitAnimation();}); addDummyAnimation(0.0);commitAnimation();";
     return ret;
 }
 

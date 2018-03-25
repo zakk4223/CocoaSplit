@@ -177,9 +177,10 @@
 
 
     ctx[@"applyAnimationAsync"] = ^(CALayer *target, CAAnimation *animation, NSString *uukey) {
-        dispatch_async(dispatch_get_main_queue(), ^{
+        //dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"APPLIED ANIMATION FOR KEY %@, %f, %f", uukey, animation.beginTime, animation.duration);
             [target addAnimation:animation forKey:uukey];
-        });
+        //});
     };
     
 

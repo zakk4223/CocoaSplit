@@ -187,7 +187,7 @@ var advanceBeginTime = function(duration) {
 }
 
 
-var removeInputFromLayout = function(input, layout) {
+var removeInputFromLayout = function(input, withTransition, layout) {
     var useLayout = layout;
     if (!useLayout)
     {
@@ -195,10 +195,22 @@ var removeInputFromLayout = function(input, layout) {
     }
     
     var animInput = new CSAnimationInput(input);
-    animInput.hidden(false, 0.0).completion_handler = function(anim) { useLayout.deleteSource(input);};
+
+    beginAnimation();
+    animInput.hidden(true, 0.0);
+
+    setCompletionBlock(function() {useLayout.deleteSource(input);});
+    if (withTransition)
+    {
+        var csanim = new CSAnimation(animInput.layer, null, withTransition);
+        
+        animInput.add_animation(csanim, animInput.layer, null);
+    }
+    commitAnimation();
+
 }
 
-var addInputToLayoutForTransition = function(input, layout) {
+var addInputToLayoutForTransition = function(input, withTransition, layout) {
     var useLayout = layout;
     if (!useLayout)
     {
@@ -207,7 +219,13 @@ var addInputToLayoutForTransition = function(input, layout) {
     
     useLayout.addSourceForTransition(input);
     var animInput = new CSAnimationInput(input);
+    if (withTransition)
+    {
+        var csanim = new CSAnimation(animInput.layer, null, withTransition);
+        animInput.add_animation(csanim, animInput.layer, null);
+    }
     animInput.hidden(false, 0.0).completion_handler = function(anim) { useLayout.addSource(input);};
+
 }
 
 
@@ -234,7 +252,7 @@ var addDummyAnimation = function(duration, kwargs) {
     beginAnimation();
     CSAnimationBlock.currentFrame().add_animation(dummy_animation, getCurrentLayout().rootLayer, keyname);
     waitAnimation();
-    commitAnimation();
+   commitAnimation();
     
 }
 

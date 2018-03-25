@@ -12,8 +12,10 @@
 @protocol CSTransitionLayoutExport <JSExport>
 @property (strong) SourceLayout *layout;
 @property (strong) NSObject<CSInputSourceProtocol> *layoutSource;
-@property (assign) float holdDuration;
+@property (strong) NSNumber *holdDuration;
 @property (assign) bool waitForMedia;
+@property (assign) float realHoldDuration;
+@property (strong) CATransition *transitionInputTransition;
 
 @end
 
@@ -25,7 +27,9 @@
 
 
 @property (strong) SourceLayout *layout;
-@property (assign) float holdDuration;
+@property (strong) NSNumber *holdDuration;
+@property (assign) float realHoldDuration;
+@property (strong) CATransition *transitionInputTransition;
 @property (strong) NSObject<CSInputSourceProtocol> *layoutSource;
 @property (assign) bool waitForMedia;
 @end
