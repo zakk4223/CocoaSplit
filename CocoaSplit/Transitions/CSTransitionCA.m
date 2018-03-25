@@ -85,20 +85,19 @@
 }
 
 
+//var createTransition = function(ca_transition, wholeScene) {
+
 -(NSString *)preChangeAction:(SourceLayout *)targetLayout
 {
-    CSLayoutTransition *newTransition = [[CSLayoutTransition alloc] init];
-    newTransition.transitionName = self.subType;
-    if (self.duration)
-    {
-        newTransition.transitionDuration = [self.duration floatValue];
-    }
+
+    CATransition *newTransition = [CATransition animation];
+    newTransition.type = self.subType;
+    newTransition.subtype = self.transitionDirection;
+    newTransition.duration = self.duration.floatValue;
+    newTransition.removedOnCompletion = YES;
+    self.realTransition = newTransition;
     
-    newTransition.transitionDirection = self.transitionDirection;
-    newTransition.transitionFullScene = self.wholeLayout;
-    targetLayout.transitionInfo = newTransition;
-    
-    return nil;
+    return @"return createTransition(self.realTransition, self.wholeLayout);";
 }
 
 @end

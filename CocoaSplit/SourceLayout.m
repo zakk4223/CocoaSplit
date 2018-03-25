@@ -74,7 +74,6 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         _pendingScripts = [NSMutableDictionary dictionary];
         
         _containedLayouts = [[NSMutableArray alloc] init];
-        _noSceneTransactions = NO;
         _topLevelSourceArray = [[NSMutableArray alloc] init];
         self.rootLayer = [self newRootLayer];
         self.transitionLayer = [self newTransitionLayer];
@@ -1144,6 +1143,12 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 }
 
 
+-(void)replaceWithSourceLayout:(SourceLayout *)layout usingScripts:(bool)usingScripts usingTransition:(CSLayoutTransition *)usingTransition
+{
+    [self replaceWithSourceLayout:layout usingScripts:usingScripts usingTransition:usingTransition withCompletionBlock:nil];
+}
+
+
 -(void)replaceWithSourceLayout:(SourceLayout *)layout
 {
 
@@ -1157,11 +1162,15 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     [self replaceWithSourceLayout:layout usingScripts:usingScripts withCompletionBlock:nil];
 }
 
-
 -(void)replaceWithSourceLayout:(SourceLayout *)layout usingScripts:(bool)usingScripts withCompletionBlock:(void (^)(void))completionBlock
 {
+    [self replaceWithSourceLayout:layout usingScripts:usingScripts usingTransition:nil withCompletionBlock:completionBlock];
+}
 
-    [self replaceWithSourceData:layout.savedSourceListData usingScripts:usingScripts withCompletionBlock:completionBlock];
+
+-(void)replaceWithSourceLayout:(SourceLayout *)layout usingScripts:(bool)usingScripts usingTransition:(CSLayoutTransition *)usingTransition withCompletionBlock:(void (^)(void))completionBlock
+{
+    [self replaceWithSourceData:layout.savedSourceListData usingScripts:usingScripts usingTransition:usingTransition withCompletionBlock:completionBlock];
 
     for (SourceLayout *cLayout in self.containedLayouts.copy)
     {
@@ -1208,8 +1217,13 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 
 }
 
+-(void)replaceWithSourceData:(NSData *)sourceData usingScripts:(bool)usingScripts  withCompletionBlock:(void (^)(void))completionBlock
+{
+    [self replaceWithSourceData:sourceData usingScripts:usingScripts usingTransition:nil withCompletionBlock:completionBlock];
+}
 
--(void)replaceWithSourceData:(NSData *)sourceData usingScripts:(bool)usingScripts withCompletionBlock:(void (^)(void))completionBlock
+
+-(void)replaceWithSourceData:(NSData *)sourceData usingScripts:(bool)usingScripts usingTransition:(CSLayoutTransition *)usingTransition withCompletionBlock:(void (^)(void))completionBlock
 {
     NSDictionary *diffResult = [self diffSourceListWithData:sourceData];
     NSMutableArray *changedRemove = [NSMutableArray array];
@@ -1280,33 +1294,13 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     transitionDelegate.changedInputs = changedInputs;
     transitionDelegate.removedInputs = removedInputs;
     transitionDelegate.useFilters = filters;
-    
-    CSLayoutTransition *useTransition = self.transitionInfo;
-    if (useTransition.preTransition)
+    if (usingTransition)
     {
-        useTransition = useTransition.preTransition;
-    }
-    
-    
-    if (useTransition.transitionName || useTransition.transitionFilter)
-    {
-        rTrans = [CATransition animation];
-        
+        rTrans = usingTransition.transition;
         if (aStart)
         {
             [rTrans setBeginTime:aStart.floatValue];
         }
-        
-        
-        rTrans.type = useTransition.transitionName;
-        rTrans.duration = useTransition.transitionDuration;
-        rTrans.removedOnCompletion = YES;
-        rTrans.subtype = useTransition.transitionDirection;
-        if (useTransition.transitionFilter)
-        {
-            rTrans.filter = useTransition.transitionFilter;
-        }
-        
     }
     //We always create a dummy animation so we play nice with scripts that do additional animations. This way we don't do final remove/reveal until the proper time
     NSString *dummyKey = [NSString stringWithFormat:@"__DUMMY_KEY_%f", aStart.floatValue];
@@ -1316,7 +1310,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     bTrans.beginTime = aStart.floatValue;
     if (rTrans)
     {
-        bTrans.duration = useTransition.transitionDuration;
+        bTrans.duration = rTrans.duration;
     }
     transitionDelegate.useAnimation = rTrans;
     
@@ -1333,7 +1327,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     if (jCtx  && rTrans)
     {
         JSValue *runFunc = jCtx[@"addDummyAnimation"];
-        [runFunc callWithArguments:@[@(useTransition.transitionDuration)]];
+        [runFunc callWithArguments:@[@(rTrans.duration)]];
     }
     [CATransaction begin];
     
@@ -1362,7 +1356,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     if (bTrans)
     {
         transitionDelegate.forLayout = self;
-        transitionDelegate.fullScreen = useTransition.transitionFullScene;
+        transitionDelegate.fullScreen = usingTransition.transitionFullScene;
         
         [self.rootLayer addAnimation:bTrans forKey:bTrans.keyPath];
     }
@@ -1432,14 +1426,8 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     }
 
     [CATransaction commit];
-
-
     [self adjustInputs:changedInputs];
     [self adjustInputs:newInputs];
-    
-    _noSceneTransactions = NO;
-    
-    
 }
 
 
@@ -1499,6 +1487,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     [CATransaction begin];
     [CATransaction setCompletionBlock:^{
         [toAdd buildLayerConstraints];
+        [toAdd frameTick];
     }];
     
     [realLayer addSublayer:toAdd.layer];
@@ -1517,7 +1506,13 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     [self mergeSourceLayout:toMerge usingScripts:usingScripts withCompletionBlock:nil];
 }
 
+
 -(void)mergeSourceLayout:(SourceLayout *)toMerge usingScripts:(bool)usingScripts withCompletionBlock:(void (^)(void))completionBlock
+{
+    [self mergeSourceLayout:toMerge usingScripts:usingScripts usingTransition:nil withCompletionBlock:completionBlock];
+}
+
+-(void)mergeSourceLayout:(SourceLayout *)toMerge usingScripts:(bool)usingScripts usingTransition:(CSLayoutTransition *)usingTransition withCompletionBlock:(void (^)(void))completionBlock
 {
     
     if ([self.containedLayouts containsObject:toMerge])
@@ -1526,7 +1521,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     }
 
     
-    [self mergeSourceData:toMerge.savedSourceListData usingScripts:usingScripts withCompletionBlock:completionBlock];
+    [self mergeSourceData:toMerge.savedSourceListData usingScripts:usingScripts usingTransition:usingTransition withCompletionBlock:completionBlock];
 
     if (!toMerge.containerOnly)
     {
@@ -1591,8 +1586,12 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 }
 
 
-
 -(void)mergeSourceData:(NSData *)withData usingScripts:(bool)usingScripts withCompletionBlock:(void (^)(void))completionBlock
+{
+    [self mergeSourceData:withData usingScripts:usingScripts usingTransition:nil withCompletionBlock:completionBlock];
+}
+
+-(void)mergeSourceData:(NSData *)withData usingScripts:(bool)usingScripts usingTransition:(CSLayoutTransition *)usingTransition withCompletionBlock:(void (^)(void))completionBlock
 {
     
     NSDictionary *diffResult = [self diffSourceListWithData:withData];
@@ -1686,19 +1685,10 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     CSTransitionAnimationDelegate *transitionDelegate = [[CSTransitionAnimationDelegate alloc] init];
     transitionDelegate.addedInputs = newInputs;
     transitionDelegate.changedInputs = changedInputs;
-    
-    
-    CSLayoutTransition *useTransition = self.transitionInfo;
-    
-    if (useTransition.preTransition)
+  
+    if (usingTransition)
     {
-        useTransition = useTransition.preTransition;
-    }
-    
-    
-    if (useTransition.transitionName || useTransition.transitionFilter)
-    {
-        rTrans = [CATransition animation];
+        rTrans = usingTransition;
         
         if (aStart)
         {
@@ -1706,14 +1696,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         }
         
         
-        rTrans.type = useTransition.transitionName;
-        rTrans.duration = useTransition.transitionDuration;
         rTrans.removedOnCompletion = YES;
-        rTrans.subtype = useTransition.transitionDirection;
-        if (useTransition.transitionFilter)
-        {
-            rTrans.filter = useTransition.transitionFilter;
-        }
         
     }
     
@@ -1730,7 +1713,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     bTrans.toValue = @1;
     if (rTrans)
     {
-        bTrans.duration = useTransition.transitionDuration;
+        bTrans.duration = rTrans.duration;
     }
     transitionDelegate.useAnimation = rTrans;
     bTrans.delegate = transitionDelegate;
@@ -1738,7 +1721,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     if (jCtx && rTrans)
     {
         JSValue *runFunc = jCtx[@"addDummyAnimation"];
-        [runFunc callWithArguments:@[@(useTransition.transitionDuration)]];
+        [runFunc callWithArguments:@[@(rTrans.duration)]];
     }
 
     [CATransaction begin];
@@ -1785,7 +1768,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     if (bTrans)
     {
         transitionDelegate.forLayout = self;
-        transitionDelegate.fullScreen = useTransition.transitionFullScene;
+        transitionDelegate.fullScreen = usingTransition.transitionFullScene;
         
         [self.rootLayer addAnimation:bTrans forKey:bTrans.keyPath];
     }
@@ -1937,9 +1920,13 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     }
 
 }
-
-
 -(void)removeSourceData:(NSData *)toRemove usingScripts:(bool)usingScripts withCompletionBlock:(void (^)(void))completionBlock
+{
+    [self removeSourceData:toRemove usingScripts:usingScripts usingTransition:nil withCompletionBlock:completionBlock];
+}
+
+
+-(void)removeSourceData:(NSData *)toRemove usingScripts:(bool)usingScripts usingTransition:(CSLayoutTransition *)usingTransition withCompletionBlock:(void (^)(void))completionBlock
 {
     NSDictionary *diffResult = nil;
     diffResult = [self diffSourceListWithData:toRemove];
@@ -2052,16 +2039,9 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     CABasicAnimation *bTrans = nil;
     
     CSTransitionAnimationDelegate *transitionDelegate = [[CSTransitionAnimationDelegate alloc] init];
-    CSLayoutTransition *useTransition = self.transitionInfo;
-    if (useTransition.preTransition)
+    if (usingTransition)
     {
-        useTransition = useTransition.preTransition;
-    }
-
-    
-    if (useTransition.transitionName || useTransition.transitionFilter)
-    {
-        rTrans = [CATransition animation];
+        rTrans = usingTransition;
         
         if (aStart)
         {
@@ -2069,14 +2049,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         }
         
         
-        rTrans.type = useTransition.transitionName;
-        rTrans.duration = useTransition.transitionDuration;
         rTrans.removedOnCompletion = YES;
-        rTrans.subtype = useTransition.transitionDirection;
-        if (useTransition.transitionFilter)
-        {
-            rTrans.filter = useTransition.transitionFilter;
-        }
     }
     
     
@@ -2093,7 +2066,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     bTrans.toValue = @1;
     if (rTrans)
     {
-        bTrans.duration = useTransition.transitionDuration;
+        bTrans.duration = rTrans.duration;;
     }
     transitionDelegate.useAnimation = rTrans;
 
@@ -2101,7 +2074,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     if (jCtx && rTrans)
     {
         JSValue *runFunc = jCtx[@"addDummyAnimation"];
-        [runFunc callWithArguments:@[@(useTransition.transitionDuration)]];
+        [runFunc callWithArguments:@[@(rTrans.duration)]];
     }
 
 
@@ -2110,13 +2083,13 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     if (bTrans)
     {
         transitionDelegate.forLayout = self;
-        transitionDelegate.fullScreen = useTransition.transitionFullScene;
+        transitionDelegate.fullScreen = usingTransition.transitionFullScene;
         
         [self.rootLayer addAnimation:bTrans forKey:bTrans.keyPath];
     }
     
     
-    if (useTransition.transitionFullScene)
+    if (usingTransition.transitionFullScene)
     {
         [self.rootLayer addAnimation:rTrans forKey:nil];
     }
@@ -2470,6 +2443,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
           
         }];
         
+        NSLog(@"ADD TO SUBPLAYER");
         [parentLayer addSublayer:newSource.layer];
         [CATransaction commit];
     }

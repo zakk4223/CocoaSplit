@@ -10,30 +10,19 @@
 
 
 @protocol CSLayoutTransitionExport <JSExport>
-@property (assign) float transitionDuration;
-@property (strong) NSString *transitionName;
-@property (strong) NSString *transitionDirection;
-@property (strong) CIFilter *transitionFilter;
 @property (assign) bool transitionFullScene;
-@property (strong) SourceLayout *transitionLayout;
-@property (assign) float transitionHoldTime;
-@property (strong) CSLayoutTransition *preTransition;
-@property (strong) CSLayoutTransition *postTransition;
 @property (assign) bool waitForMedia;
+@property (strong) CATransition *transition;
++(CSLayoutTransition *)createTransition;
 @end
 
 @interface CSLayoutTransition : NSObject <CSLayoutTransitionExport, NSCopying, NSCoding>
 
-@property (assign) float transitionDuration;
-@property (strong) NSString *transitionName;
-@property (strong) NSString *transitionDirection;
-@property (strong) CIFilter *transitionFilter;
 @property (assign) bool transitionFullScene;
-@property (strong) SourceLayout *transitionLayout;
-@property (assign) float transitionHoldTime;
-@property (strong) CSLayoutTransition *preTransition;
-@property (strong) CSLayoutTransition *postTransition;
 @property (assign) bool waitForMedia;
+@property (strong) CATransition *transition;
++(CSLayoutTransition *)createTransition;
+
 
 
 @end

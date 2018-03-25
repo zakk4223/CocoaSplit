@@ -123,6 +123,7 @@ typedef enum source_add_order_t {
 -(bool)containsLayout:(SourceLayout *)layout;
 -(void)applyAddBlock;
 -(void)replaceWithSourceLayout:(SourceLayout *)layout usingScripts:(bool)usingScripts;
+-(void)replaceWithSourceLayout:(SourceLayout *)layout usingScripts:(bool)usingScripts usingTransition:(CSLayoutTransition *)usingTransition;
 -(void)replaceWithSourceLayout:(SourceLayout *)layout;
 
 -(void)clearSourceList;
@@ -131,6 +132,8 @@ typedef enum source_add_order_t {
 -(NSString *)runAnimationString:(NSString *)animationCode withCompletionBlock:(void (^)(void))completionBlock withExceptionBlock:(void (^)(NSException *exception))exceptionBlock withExtraDictionary:(NSDictionary *)extraDictionary;
 
 -(void)replaceWithSourceLayout:(SourceLayout *)layout usingScripts:(bool)usingScripts withCompletionBlock:(void (^)(void))completionBlock;
+-(void)replaceWithSourceLayout:(SourceLayout *)layout usingScripts:(bool)usingScripts usingTransition:(CSLayoutTransition *)usingTransition withCompletionBlock:(void (^)(void))completionBlock;
+
 -(NSObject<CSInputSourceProtocol> *)inputForName:(NSString *)name;
 -(void)cancelTransition;
 -(void)cancelScriptRun:(NSString *)runUUID;

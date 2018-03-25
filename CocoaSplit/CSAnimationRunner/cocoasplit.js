@@ -53,6 +53,13 @@ var setTransition = function(transition) {
     my_layout.transitionInfo = transition;
 }
 
+var createTransition = function(ca_transition, wholeScene) {
+    var new_transition = CSLayoutTransition.createTransition();
+    new_transition.transitionFullScene = wholeScene;
+    new_transition.transition = ca_transition;
+    return new_transition;
+}
+
 
 var createBasicTransition = function(name, direction, duration, kwargs) {
     kwargs = kwargs || {};
@@ -218,14 +225,16 @@ var addInputToLayoutForTransition = function(input, withTransition, layout) {
     }
     
     useLayout.addSourceForTransition(input);
+    beginAnimation();
     var animInput = new CSAnimationInput(input);
+    animInput.hidden(false, 0.0).completion_handler = function(anim) { useLayout.addSource(input);};
+
     if (withTransition)
     {
         var csanim = new CSAnimation(animInput.layer, null, withTransition);
         animInput.add_animation(csanim, animInput.layer, null);
     }
-    animInput.hidden(false, 0.0).completion_handler = function(anim) { useLayout.addSource(input);};
-
+    commitAnimation();
 }
 
 
@@ -282,7 +291,7 @@ var switchToLayout = function(layout, kwargs) {
     {
         var target_layout = getCurrentLayout();
         var active_transition = captureController.activeTransition;
-        
+        var layout_transition = null;
         
         if (active_transition && captureController.useTransitions)
         {
@@ -290,12 +299,12 @@ var switchToLayout = function(layout, kwargs) {
             if (actionScript)
             {
                 beginAnimation();
-                (new Function("self", actionScript))(active_transition);
+                layout_transition = (new Function("self", actionScript))(active_transition);
                 commitAnimation();
             }
         }
         beginAnimation();
-        target_layout.replaceWithSourceLayoutUsingScripts(layout, useScripts);
+        target_layout.replaceWithSourceLayoutUsingScriptsUsingTransition(layout, useScripts, layout_transition);
         commitAnimation();
         if (active_transition && captureController.useTransitions)
         {

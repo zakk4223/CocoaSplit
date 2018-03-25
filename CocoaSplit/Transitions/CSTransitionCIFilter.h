@@ -7,7 +7,15 @@
 
 #import "CSTransitionBase.h"
 
-@interface CSTransitionCIFilter : CSTransitionBase
+@protocol CSTransitionCIFilterExport <JSExport>
 @property (assign) bool wholeLayout;
 @property (strong) CIFilter *transitionFilter;
+@property (strong) CATransition *realTransition;
+@end
+
+@interface CSTransitionCIFilter : CSTransitionBase <CSTransitionCIFilterExport>
+@property (assign) bool wholeLayout;
+@property (strong) CIFilter *transitionFilter;
+@property (strong) CATransition *realTransition;
+
 @end

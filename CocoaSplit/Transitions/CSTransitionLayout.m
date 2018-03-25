@@ -126,26 +126,30 @@
 -(NSString *)preChangeAction:(SourceLayout *)targetLayout
 {
     
-
+    CATransition *testAnim = [CATransition animation];
+    testAnim.subtype = kCATransitionFromLeft;
+    testAnim.type = kCATransitionPush;
+    testAnim.duration = 12.0f;
+    testAnim.removedOnCompletion = YES;
+    self.transitionInputTransition = testAnim;
+    
+    self.preTransition = CaptureController.sharedCaptureController.transitions.firstObject;
     NSPasteboardItem *layoutItem = [[NSPasteboardItem alloc] init];
     NSData *uuidData = [NSKeyedArchiver archivedDataWithRootObject:self.layout.uuid];
     [layoutItem setData:uuidData forType:@"cocoasplit.layout"];
     
     self.layoutSource = [CaptureController.sharedCaptureController inputSourceForPasteboardItem:layoutItem];
     self.layoutSource.persistent = YES;
+    NSMutableString *scriptRet = [NSMutableString string];
+    [scriptRet appendString:@"var usePreTrans = null;"];
+    if (self.preTransition)
+    {
+        [scriptRet appendString:@"var actionScript = self.preTransition.preReplaceAction();"];
+        [scriptRet appendString:@"if (actionScript) {var prelTrans = (new Function('self', actionScript))(self.preTransition); if (prelTrans) { usePreTrans = prelTrans.transition;} }"];
+    }
+    
+    [scriptRet appendString:@"console.log('PRE TRANS ' + usePreTrans);addInputToLayoutForTransition(self.layoutSource, self.transitionInputTransition);"];
 
-    CATransition *testAnim = [CATransition animation];
-    testAnim.subtype = kCATransitionFromLeft;
-    testAnim.type = kCATransitionPush;
-    testAnim.removedOnCompletion = YES;
-    testAnim.duration = 2.0f;
-    testAnim.beginTime = CACurrentMediaTime()+0.5;
-    testAnim.delegate = self;
-    
-    self.transitionInputTransition = testAnim;
-    
-    
-    NSMutableString *scriptRet = [NSMutableString stringWithString:@"addInputToLayoutForTransition(self.layoutSource, self.transitionInputTransition);"];
     if (self.waitForMedia)
     {
         [scriptRet appendString:@"waitAnimation(self.layoutSource.duration);"];
@@ -169,7 +173,6 @@
     testAnim.duration = 2.0f;
     testAnim.removedOnCompletion = YES;
     //testAnim.speed = -1.0f;
-    testAnim.delegate = self;
     self.transitionInputTransition = testAnim;
     //NSString *ret = @"beginAnimation(); setCompletionBlock(function() {console.log('COMPLETION ' + CACurrentMediaTime())}); addDummyAnimation(1.0); commitAnimation();";
     NSString *ret = @"beginAnimation();setCompletionBlock(function () {beginAnimation();removeInputFromLayout(self.layoutSource, self.transitionInputTransition);commitAnimation();}); addDummyAnimation(0.0);commitAnimation();";

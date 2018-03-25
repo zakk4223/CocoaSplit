@@ -16,6 +16,8 @@
 @property (assign) bool waitForMedia;
 @property (assign) float realHoldDuration;
 @property (strong) CATransition *transitionInputTransition;
+@property (strong) CSTransitionBase *preTransition;
+@property (strong) CSTransitionBase *postTransition;
 
 @end
 
@@ -32,6 +34,9 @@
 @property (strong) CATransition *transitionInputTransition;
 @property (strong) NSObject<CSInputSourceProtocol> *layoutSource;
 @property (assign) bool waitForMedia;
+@property (strong) CSTransitionBase *preTransition;
+@property (strong) CSTransitionBase *postTransition;
+
 @end
 
 

@@ -77,17 +77,14 @@
 
 -(NSString *)preChangeAction:(SourceLayout *)targetLayout
 {
-    CSLayoutTransition *newTransition = [[CSLayoutTransition alloc] init];
-    newTransition.transitionFilter = self.transitionFilter;
-    if (self.duration)
-    {
-        newTransition.transitionDuration = [self.duration floatValue];
-    }
     
-    newTransition.transitionFullScene = self.wholeLayout;
-    targetLayout.transitionInfo = newTransition;
     
-    return nil;
+    CATransition *newTransition = [CATransition animation];
+    newTransition.filter = self.transitionFilter;
+    newTransition.duration = self.duration.floatValue;
+    self.realTransition = newTransition;
+    return @"return createTransition(self.realTransition, self.wholeLayout);";
+  
 }
 
 -(NSViewController<CSLayoutTransitionViewProtocol> *)configurationViewController
