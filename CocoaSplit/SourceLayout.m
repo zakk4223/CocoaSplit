@@ -1489,7 +1489,6 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         [toAdd buildLayerConstraints];
         [toAdd frameTick];
     }];
-    
     [realLayer addSublayer:toAdd.layer];
     [CATransaction commit];
 }
@@ -1503,7 +1502,12 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 
 -(void)mergeSourceLayout:(SourceLayout *)toMerge usingScripts:(bool)usingScripts
 {
-    [self mergeSourceLayout:toMerge usingScripts:usingScripts withCompletionBlock:nil];
+    [self mergeSourceLayout:toMerge usingScripts:usingScripts usingTransition:nil withCompletionBlock:nil];
+}
+
+-(void)mergeSourceLayout:(SourceLayout *)toMerge usingScripts:(bool)usingScripts usingTransition:(CSLayoutTransition *)usingTransition
+{
+    [self mergeSourceLayout:toMerge usingScripts:usingScripts usingTransition:usingTransition withCompletionBlock:nil];
 }
 
 
@@ -1590,6 +1594,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 {
     [self mergeSourceData:withData usingScripts:usingScripts usingTransition:nil withCompletionBlock:completionBlock];
 }
+
 
 -(void)mergeSourceData:(NSData *)withData usingScripts:(bool)usingScripts usingTransition:(CSLayoutTransition *)usingTransition withCompletionBlock:(void (^)(void))completionBlock
 {
@@ -1895,15 +1900,21 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 
 -(void)removeSourceLayout:(SourceLayout *)toRemove
 {
-    [self removeSourceLayout:toRemove usingScripts:YES withCompletionBlock:nil];
+    [self removeSourceLayout:toRemove usingScripts:YES usingTransition:nil withCompletionBlock:nil];
 
 }
 -(void)removeSourceLayout:(SourceLayout *)toRemove usingScripts:(bool)usingScripts
 {
-    [self removeSourceLayout:toRemove usingScripts:usingScripts withCompletionBlock:nil];
+    [self removeSourceLayout:toRemove usingScripts:usingScripts usingTransition:nil withCompletionBlock:nil];
 }
 
--(void)removeSourceLayout:(SourceLayout *)toRemove usingScripts:(bool)usingScripts withCompletionBlock:(void (^)(void))completionBlock
+-(void)removeSourceLayout:(SourceLayout *)toRemove usingScripts:(bool)usingScripts usingTransition:(CSLayoutTransition *)usingTransition
+{
+    [self removeSourceLayout:toRemove usingScripts:usingScripts usingTransition:usingTransition withCompletionBlock:nil];
+}
+
+
+-(void)removeSourceLayout:(SourceLayout *)toRemove usingScripts:(bool)usingScripts usingTransition:(CSLayoutTransition *)usingTransition withCompletionBlock:(void (^)(void))completionBlock
 {
     if (![self.containedLayouts containsObject:toRemove])
     {
@@ -1911,7 +1922,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     }
 
 
-    [self removeSourceData:toRemove.savedSourceListData usingScripts:usingScripts withCompletionBlock:completionBlock];
+    [self removeSourceData:toRemove.savedSourceListData usingScripts:usingScripts usingTransition:usingTransition withCompletionBlock:completionBlock];
     
     [self.containedLayouts removeObject:toRemove];
     if (self.removeLayoutBlock)
@@ -1920,6 +1931,8 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     }
 
 }
+
+
 -(void)removeSourceData:(NSData *)toRemove usingScripts:(bool)usingScripts withCompletionBlock:(void (^)(void))completionBlock
 {
     [self removeSourceData:toRemove usingScripts:usingScripts usingTransition:nil withCompletionBlock:completionBlock];

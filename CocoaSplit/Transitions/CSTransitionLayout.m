@@ -125,15 +125,6 @@
 
 -(NSString *)preChangeAction:(SourceLayout *)targetLayout
 {
-    
-    CATransition *testAnim = [CATransition animation];
-    testAnim.subtype = kCATransitionFromLeft;
-    testAnim.type = kCATransitionPush;
-    testAnim.duration = 12.0f;
-    testAnim.removedOnCompletion = YES;
-    self.transitionInputTransition = testAnim;
-    
-    self.preTransition = CaptureController.sharedCaptureController.transitions.firstObject;
     NSPasteboardItem *layoutItem = [[NSPasteboardItem alloc] init];
     NSData *uuidData = [NSKeyedArchiver archivedDataWithRootObject:self.layout.uuid];
     [layoutItem setData:uuidData forType:@"cocoasplit.layout"];
@@ -146,10 +137,18 @@
     {
         [scriptRet appendString:@"var actionScript = self.preTransition.preReplaceAction();"];
         [scriptRet appendString:@"if (actionScript) {var prelTrans = (new Function('self', actionScript))(self.preTransition); if (prelTrans) { usePreTrans = prelTrans.transition;} }"];
+        [scriptRet appendString:@"self.realPreTransition = usePreTrans;"];
     }
     
-    [scriptRet appendString:@"console.log('PRE TRANS ' + usePreTrans);addInputToLayoutForTransition(self.layoutSource, self.transitionInputTransition);"];
+    [scriptRet appendString:@"addInputToLayoutForTransition(self.layoutSource, self.realPreTransition);"];
 
+    if (self.preTransition)
+    {
+        [scriptRet appendString:@"var postPreScript = self.preTransition.postReplaceAction();"];
+        [scriptRet appendString:@"if (postPreScript) { (new Function('self', postPreScript))(self.preTransition);}"];
+    }
+    
+    
     if (self.waitForMedia)
     {
         [scriptRet appendString:@"waitAnimation(self.layoutSource.duration);"];
@@ -167,17 +166,28 @@
 
 -(NSString *)postChangeAction:(SourceLayout *)targetLayout
 {
-    CATransition *testAnim = [CATransition animation];
-    testAnim.subtype = kCATransitionFromLeft;
-    testAnim.type = kCATransitionPush;
-    testAnim.duration = 2.0f;
-    testAnim.removedOnCompletion = YES;
-    //testAnim.speed = -1.0f;
-    self.transitionInputTransition = testAnim;
-    //NSString *ret = @"beginAnimation(); setCompletionBlock(function() {console.log('COMPLETION ' + CACurrentMediaTime())}); addDummyAnimation(1.0); commitAnimation();";
-    NSString *ret = @"beginAnimation();setCompletionBlock(function () {beginAnimation();removeInputFromLayout(self.layoutSource, self.transitionInputTransition);commitAnimation();}); addDummyAnimation(0.0);commitAnimation();";
-    return ret;
+
+    NSMutableString *scriptRet = [NSMutableString string];
+    [scriptRet appendString:@"var usePostTrans = null;"];
+
+    if (self.postTransition)
+    {
+        [scriptRet appendString:@"var actionScript = self.postTransition.preRemoveAction();"];
+        [scriptRet appendString:@"if (actionScript) {var prerTrans = (new Function('self', actionScript))(self.postTransition); if (prerTrans) { usePostTrans = prerTrans.transition;} }"];
+        [scriptRet appendString:@"self.realPostTransition = usePostTrans;"];
+    }
+    [scriptRet appendString:@"removeInputFromLayout(self.layoutSource, self.realPostTransition);"];
+    if (self.postTransition)
+    {
+        [scriptRet appendString:@"var postPostScript = self.postTransition.postRemoveAction();"];
+        [scriptRet appendString:@"if (postPostScript) { (new Function('self', postPostScript))(self.postTransition);}"];
+    }
+    
+    return scriptRet;
 }
+
+    
+
 
 
 

@@ -204,16 +204,26 @@ var removeInputFromLayout = function(input, withTransition, layout) {
     var animInput = new CSAnimationInput(input);
 
     beginAnimation();
-    animInput.hidden(true, 0.0);
-
-    setCompletionBlock(function() {useLayout.deleteSource(input);});
+    setCompletionBlock(function() {
+                       beginAnimation();
+                       setCompletionBlock(function() {useLayout.deleteSource(input);});
+                       if (withTransition)
+                       {
+                       var csanim = new CSAnimation(animInput.layer, null, withTransition);
+                       
+                       animInput.add_animation(csanim, animInput.layer, null);
+                       }
+                       animInput.hidden(true, 0.0);
+                       
+                       commitAnimation();
+                       
+                       });
+    addDummyAnimation(0.0);
+    commitAnimation();
     if (withTransition)
     {
-        var csanim = new CSAnimation(animInput.layer, null, withTransition);
-        
-        animInput.add_animation(csanim, animInput.layer, null);
+        addDummyAnimation(withTransition.duration);
     }
-    commitAnimation();
 
 }
 
@@ -224,15 +234,31 @@ var addInputToLayoutForTransition = function(input, withTransition, layout) {
         useLayout = getCurrentLayout();
     }
     
-    useLayout.addSourceForTransition(input);
     beginAnimation();
-    var animInput = new CSAnimationInput(input);
-    animInput.hidden(false, 0.0).completion_handler = function(anim) { useLayout.addSource(input);};
 
+    var animInput = new CSAnimationInput(input);
+
+    useLayout.addSourceForTransition(input);
+
+    beginAnimation();
+    setCompletionBlock(function() {
+                       
+                       beginAnimation();
+                       useLayout.addSource(input);
+                       if (withTransition)
+                       {
+                       var csanim = new CSAnimation(animInput.layer, null, withTransition);
+                       
+                       animInput.add_animation(csanim, animInput.layer, null);
+                       }
+                       animInput.hidden(false, 0.0);
+                       commitAnimation();
+                       });
+    addDummyAnimation(0.0);
+    commitAnimation();
     if (withTransition)
     {
-        var csanim = new CSAnimation(animInput.layer, null, withTransition);
-        animInput.add_animation(csanim, animInput.layer, null);
+        addDummyAnimation(withTransition.duration);
     }
     commitAnimation();
 }
@@ -338,6 +364,8 @@ var mergeLayout = function(layout, kwargs) {
     {
         var target_layout = getCurrentLayout();
         var active_transition = captureController.activeTransition;
+        var layout_transition;
+        
         
         if (enumOrder != 0)
         {
@@ -350,7 +378,7 @@ var mergeLayout = function(layout, kwargs) {
             if (actionScript)
             {
                 beginAnimation();
-                (new Function("self", "targetLayout", "mergedLayout", actionScript))(active_transition, target_layout, layout);
+                layout_transition = (new Function("self", "targetLayout", "mergedLayout", actionScript))(active_transition, target_layout, layout);
                 commitAnimation();
             }
         }
@@ -363,7 +391,7 @@ var mergeLayout = function(layout, kwargs) {
         if (!skip_merge)
         {
             beginAnimation();
-            target_layout.mergeSourceLayoutUsingScripts(layout, useScripts);
+            target_layout.mergeSourceLayoutUsingScriptsUsingTransition(layout, useScripts, layout_transition);
             commitAnimation();
         }
         if (active_transition && captureController.useTransitions)
@@ -394,6 +422,7 @@ var removeLayout = function(layout, kwargs) {
     {
         var target_layout = getCurrentLayout();
         var active_transition = captureController.activeTransition;
+        var layout_transition = null;
         
         
         if (active_transition && captureController.useTransitions)
@@ -402,12 +431,12 @@ var removeLayout = function(layout, kwargs) {
             if (actionScript)
             {
                 beginAnimation();
-                (new Function("self", actionScript))(active_transition);
+                layout_transition = (new Function("self", actionScript))(active_transition);
                 commitAnimation();
             }
         }
         beginAnimation();
-        target_layout.removeSourceLayoutUsingScripts(layout, useScripts);
+        target_layout.removeSourceLayoutUsingScriptsUsingTransition(layout, useScripts, layout_transition);
         commitAnimation();
         if (active_transition && captureController.useTransitions)
         {

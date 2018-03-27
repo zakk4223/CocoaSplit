@@ -115,10 +115,12 @@ typedef enum source_add_order_t {
 -(void)mergeSourceLayout:(SourceLayout *)toMerge usingScripts:(bool)usingScripts withCompletionBlock:(void (^)(void))completionBlock;
 -(void)mergeSourceLayout:(SourceLayout *)toMerge usingScripts:(bool)usingScripts;
 -(void)mergeSourceLayout:(SourceLayout *)toMerge;
-
+-(void)mergeSourceLayout:(SourceLayout *)toMerge usingScripts:(bool)usingScripts usingTransition:(CSLayoutTransition *)usingTransition withCompletionBlock:(void (^)(void))completionBlock;
+-(void)mergeSourceLayout:(SourceLayout *)toMerge usingScripts:(bool)usingScripts usingTransition:(CSLayoutTransition *)usingTransition;
 
 -(void)removeSourceLayout:(SourceLayout *)toRemove usingScripts:(bool)usingScripts;
 -(void)removeSourceLayout:(SourceLayout *)toRemove;
+-(void)removeSourceLayout:(SourceLayout *)toRemove usingScripts:(bool)usingScripts usingTransition:(CSLayoutTransition *)usingTransition;
 
 -(bool)containsLayout:(SourceLayout *)layout;
 -(void)applyAddBlock;
