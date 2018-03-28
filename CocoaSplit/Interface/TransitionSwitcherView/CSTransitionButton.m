@@ -17,6 +17,9 @@
     // Drawing code here.
 }
 
+
+
+
 -(void)mouseDragged:(NSEvent *)event
 {
     self.mouseisDown = NO;
