@@ -13,8 +13,6 @@
 @property (strong) NSNumber *holdDuration;
 @property (assign) bool waitForMedia;
 @property (assign) float realHoldDuration;
-@property (strong) CSTransitionBase *preTransition;
-@property (strong) CSTransitionBase *postTransition;
 
 @end
 
@@ -23,6 +21,5 @@
 @property (assign) float realHoldDuration;
 @property (strong) NSObject<CSInputSourceProtocol> *inputSource;
 @property (assign) bool waitForMedia;
-@property (strong) CSTransitionBase *preTransition;
-@property (strong) CSTransitionBase *postTransition;
+
 @end

@@ -17,6 +17,8 @@
 @property (strong) NSString *subType;
 @property (assign) bool active;
 @property (strong) NSString *uuid;
+@property (strong) CSTransitionBase *preTransition;
+@property (strong) CSTransitionBase *postTransition;
 
 -(NSString *)preChangeAction:(SourceLayout *)targetLayout;
 -(NSString *)postChangeAction:(SourceLayout *)targetLayout;
@@ -41,6 +43,10 @@
 @property (strong) NSString *subType;
 @property (assign) bool active;
 @property (strong) NSString *uuid;
+@property (strong) CSTransitionBase *preTransition;
+@property (strong) CSTransitionBase *postTransition;
+@property (readonly) bool usesPreTransitions;
+@property (readonly) bool usesPostTransitions;
 
 +(NSArray *)subTypes;
 +(NSString *)transitionCategory;

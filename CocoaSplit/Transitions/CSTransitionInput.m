@@ -52,7 +52,15 @@
     return @[];
 }
 
+-(bool)usesPreTransitions
+{
+    return YES;
+}
 
+-(bool)usesPostTransitions
+{
+    return YES;
+}
 
 +(NSString *)transitionCategory
 {

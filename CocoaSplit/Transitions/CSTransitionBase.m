@@ -146,4 +146,14 @@
     return NO;
 }
 
+-(bool)usesPreTransitions
+{
+    return NO;
+}
+
+-(bool)usesPostTransitions
+{
+    return NO;
+}
+
 @end

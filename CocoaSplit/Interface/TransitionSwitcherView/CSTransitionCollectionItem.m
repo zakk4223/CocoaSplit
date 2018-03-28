@@ -65,18 +65,109 @@
     
     self.transitionMenu = [[NSMenu alloc] init];
 
+    NSArray *allTransitions = CaptureController.sharedCaptureController.transitions;
 
     tmp = [self.transitionMenu insertItemWithTitle:@"Edit" action:@selector(editTransition:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
     tmp.representedObject = forTransition;
     
+    if (forTransition.usesPreTransitions)
+    {
+        NSMenu *preMenu = [[NSMenu alloc] init];
+        NSMenuItem *item = [preMenu addItemWithTitle:@"None" action:@selector(menuActionPreTransition:) keyEquivalent:@""];
+        item.target = self;
+        item.representedObject = nil;
+        if (!forTransition.preTransition)
+        {
+            item.state = NSOnState;
+        } else {
+            item.state = NSOffState;
+        }
+        
+        for (CSTransitionBase *trans in allTransitions)
+        {
+            if (trans == forTransition)
+            {
+                continue;
+            }
+            
+            if (trans.usesPreTransitions)
+            {
+                continue;
+            }
+            
+            item = [preMenu addItemWithTitle:trans.name action:@selector(menuActionPreTransition:) keyEquivalent:@""];
+            if (forTransition.preTransition == trans)
+            {
+                item.state = NSOnState;
+            } else {
+                item.state = NSOffState;
+            }
+            item.target = self;
+            item.representedObject = trans;
+        }
     
+        tmp = [self.transitionMenu insertItemWithTitle:@"Pre Transition" action:nil keyEquivalent:@"" atIndex:idx++];
+        tmp.submenu = preMenu;
+    }
+    
+    if (forTransition.usesPostTransitions)
+    {
+        NSMenu *postMenu = [[NSMenu alloc] init];
+        NSMenuItem *item = [postMenu addItemWithTitle:@"None" action:@selector(menuActionPostTransition:) keyEquivalent:@""];
+        item.target = self;
+        item.representedObject = nil;
+        if (!forTransition.postTransition)
+        {
+            item.state = NSOnState;
+        } else {
+            item.state = NSOffState;
+        }
+        for (CSTransitionBase *trans in allTransitions)
+        {
+            if (trans == forTransition)
+            {
+                continue;
+            }
+            
+            if (trans.usesPostTransitions)
+            {
+                continue;
+            }
+            item = [postMenu addItemWithTitle:trans.name action:@selector(menuActionPostTransition:) keyEquivalent:@""];
+            if (forTransition.postTransition == trans)
+            {
+                item.state = NSOnState;
+            } else {
+                item.state = NSOffState;
+            }
+            
+            item.target = self;
+            item.representedObject = trans;
+        }
+    
+        tmp = [self.transitionMenu insertItemWithTitle:@"Post Transition" action:nil keyEquivalent:@"" atIndex:idx++];
+        tmp.submenu = postMenu;
+    }
     
     tmp = [self.transitionMenu insertItemWithTitle:@"Delete" action:@selector(deleteTransition:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
     tmp.representedObject = forTransition;
     
 }
+
+-(void)menuActionPreTransition:(NSMenuItem *)item
+{
+    CSTransitionBase *trans = self.representedObject;
+    trans.preTransition = item.representedObject;
+}
+
+-(void)menuActionPostTransition:(NSMenuItem *)item
+{
+    CSTransitionBase *trans = self.representedObject;
+    trans.postTransition = item.representedObject;
+}
+
 
 -(void)showTransitionMenu:(NSEvent *)clickEvent
 {
