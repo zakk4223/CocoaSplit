@@ -56,8 +56,6 @@
     {
         [aCoder encodeObject:self.layout forKey:@"layout"];
     }
-    [aCoder encodeObject:self.holdDuration forKey:@"holdDuration"];
-    [aCoder encodeBool:self.waitForMedia forKey:@"waitForMedia"];
 }
 
 -(instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -65,11 +63,7 @@
     if (self = [super initWithCoder:aDecoder])
     {
         self.layout = [aDecoder decodeObjectForKey:@"layout"];
-        
-        self.holdDuration = [aDecoder decodeObjectForKey:@"holdDuration"];
-        self.waitForMedia = [aDecoder decodeBoolForKey:@"waitForMedia"];
     }
-    
     return self;
 }
 
@@ -107,88 +101,19 @@
     return ret;
 }
 
--(void)setHoldDuration:(NSNumber *)holdDuration
+
+-(NSObject<CSInputSourceProtocol> *)inputSource
 {
-    _holdDuration = holdDuration;
+    if (!_realInput)
+    {
+        NSPasteboardItem *layoutItem = [[NSPasteboardItem alloc] init];
+        NSData *uuidData = [NSKeyedArchiver archivedDataWithRootObject:self.layout.uuid];
+        [layoutItem setData:uuidData forType:@"cocoasplit.layout"];
+        _realInput = [CaptureController.sharedCaptureController inputSourceForPasteboardItem:layoutItem];
+    }
+    
+    return _realInput;
 }
-
-
--(NSNumber *)holdDuration
-{
-    if (_holdDuration)
-    {
-        return _holdDuration;
-    }
-    
-    return self.duration;
-}
-
--(NSString *)preChangeAction:(SourceLayout *)targetLayout
-{
-    NSPasteboardItem *layoutItem = [[NSPasteboardItem alloc] init];
-    NSData *uuidData = [NSKeyedArchiver archivedDataWithRootObject:self.layout.uuid];
-    [layoutItem setData:uuidData forType:@"cocoasplit.layout"];
-    
-    self.layoutSource = [CaptureController.sharedCaptureController inputSourceForPasteboardItem:layoutItem];
-    self.layoutSource.persistent = YES;
-    NSMutableString *scriptRet = [NSMutableString string];
-    [scriptRet appendString:@"var usePreTrans = null;"];
-    if (self.preTransition)
-    {
-        [scriptRet appendString:@"var actionScript = self.preTransition.preReplaceAction();"];
-        [scriptRet appendString:@"if (actionScript) {var prelTrans = (new Function('self', actionScript))(self.preTransition); if (prelTrans) { usePreTrans = prelTrans.transition;} }"];
-        [scriptRet appendString:@"self.realPreTransition = usePreTrans;"];
-    }
-    
-    [scriptRet appendString:@"addInputToLayoutForTransition(self.layoutSource, self.realPreTransition);"];
-
-    if (self.preTransition)
-    {
-        [scriptRet appendString:@"var postPreScript = self.preTransition.postReplaceAction();"];
-        [scriptRet appendString:@"if (postPreScript) { (new Function('self', postPreScript))(self.preTransition);}"];
-    }
-    
-    
-    if (self.waitForMedia)
-    {
-        [scriptRet appendString:@"waitAnimation(self.layoutSource.duration);"];
-    }
-    self.realHoldDuration = self.holdDuration.floatValue;
-    
-    if (self.realHoldDuration > 0.0f)
-    {
-        [scriptRet appendString:@"waitAnimation(self.realHoldDuration);"];
-    }
-    
-    return scriptRet;
-}
-
-
--(NSString *)postChangeAction:(SourceLayout *)targetLayout
-{
-
-    NSMutableString *scriptRet = [NSMutableString string];
-    [scriptRet appendString:@"var usePostTrans = null;"];
-
-    if (self.postTransition)
-    {
-        [scriptRet appendString:@"var actionScript = self.postTransition.preRemoveAction();"];
-        [scriptRet appendString:@"if (actionScript) {var prerTrans = (new Function('self', actionScript))(self.postTransition); if (prerTrans) { usePostTrans = prerTrans.transition;} }"];
-        [scriptRet appendString:@"self.realPostTransition = usePostTrans;"];
-    }
-    [scriptRet appendString:@"removeInputFromLayout(self.layoutSource, self.realPostTransition);"];
-    if (self.postTransition)
-    {
-        [scriptRet appendString:@"var postPostScript = self.postTransition.postRemoveAction();"];
-        [scriptRet appendString:@"if (postPostScript) { (new Function('self', postPostScript))(self.postTransition);}"];
-    }
-    
-    return scriptRet;
-}
-
-    
-
-
 
 
 -(NSViewController<CSLayoutTransitionViewProtocol> *)configurationViewController

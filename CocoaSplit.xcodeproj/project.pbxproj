@@ -73,6 +73,7 @@
 		343644061B78F01D0069B8F2 /* CSAnimationRunner.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 349461591AB4213B00F28883 /* CSAnimationRunner.py */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		343644091B78F01D0069B8F2 /* pluginbase.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34E983841B78B19D00F26F1E /* pluginbase.py */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		343692501B6243D4007EC2D9 /* CSShapeCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 3436922B1B62364E007EC2D9 /* CSShapeCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3437C817206B281200F95AC2 /* CSTransitionInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 3437C816206B281200F95AC2 /* CSTransitionInput.m */; };
 		343B7BE21E917B1A00233DF1 /* cocoasplit.py in Resources */ = {isa = PBXBuildFile; fileRef = 343B7BE11E917B1A00233DF1 /* cocoasplit.py */; };
 		343B7BE31E91803B00233DF1 /* cocoasplit.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 343B7BE11E917B1A00233DF1 /* cocoasplit.py */; };
 		343C2CB21FFBB8DC00849DA9 /* CSSourceListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 343C2CB01FFBB8DC00849DA9 /* CSSourceListViewController.m */; };
@@ -722,6 +723,8 @@
 		3435E399188B90900015CC01 /* passthrough.fgsh */ = {isa = PBXFileReference; lastKnownFileType = text; name = passthrough.fgsh; path = Shaders/passthrough.fgsh; sourceTree = "<group>"; };
 		3435E39A188B93150015CC01 /* passthrough.vtsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = passthrough.vtsh; path = Shaders/passthrough.vtsh; sourceTree = "<group>"; };
 		3436921B1B62364E007EC2D9 /* CSShapeCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSShapeCapturePlugin.xcodeproj; path = CapturePlugins/CSShapeCapturePlugin/CSShapeCapturePlugin.xcodeproj; sourceTree = "<group>"; };
+		3437C815206B281200F95AC2 /* CSTransitionInput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSTransitionInput.h; sourceTree = "<group>"; };
+		3437C816206B281200F95AC2 /* CSTransitionInput.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSTransitionInput.m; sourceTree = "<group>"; };
 		343B7BE11E917B1A00233DF1 /* cocoasplit.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = cocoasplit.py; sourceTree = "<group>"; };
 		343C2CAF1FFBB8DC00849DA9 /* CSSourceListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSSourceListViewController.h; path = Interface/CSSourceListViewController.h; sourceTree = "<group>"; };
 		343C2CB01FFBB8DC00849DA9 /* CSSourceListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CSSourceListViewController.m; path = Interface/CSSourceListViewController.m; sourceTree = "<group>"; };
@@ -1994,6 +1997,8 @@
 				3410FEAE205EF80800C5F8C2 /* CSTransitionCIFilter.m */,
 				3410FEC9205FFB6300C5F8C2 /* CSTransitionLayout.h */,
 				3410FECA205FFB6300C5F8C2 /* CSTransitionLayout.m */,
+				3437C815206B281200F95AC2 /* CSTransitionInput.h */,
+				3437C816206B281200F95AC2 /* CSTransitionInput.m */,
 			);
 			path = Transitions;
 			sourceTree = "<group>";
@@ -2971,6 +2976,7 @@
 				34ED8C9B1B07371C002C0674 /* MIKMIDIPrivateUtilities.m in Sources */,
 				345F8B391A15D850009A81E3 /* CAMultiAudioDefaultOutput.m in Sources */,
 				34E91E422038ECC000E96684 /* CSSourceLayoutSettingsWindowController.m in Sources */,
+				3437C817206B281200F95AC2 /* CSTransitionInput.m in Sources */,
 				34ED8CA51B07371C002C0674 /* MIKMIDISystemExclusiveCommand.m in Sources */,
 				34ED8C5D1B07371C002C0674 /* MIKMIDIEndpoint.m in Sources */,
 				34EB705B1F24F65900F61E6A /* CAMultiAudioFile.m in Sources */,

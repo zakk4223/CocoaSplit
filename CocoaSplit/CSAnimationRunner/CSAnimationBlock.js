@@ -190,11 +190,9 @@ function AnimationBlock(duration, inherit_frame) {
         
         waitMark.apply(self.current_begin_time);
         this.latest_end_time = Math.max(self.latest_end_time, waitMark.end_time);
-        console.log("WAIT START " + self.current_begin_time);
         
         self.current_begin_time += waitMark.duration;
     
-        console.log("CHANGED BEGIN TO " + self.current_begin_time);
         return waitMark;
     }
     
