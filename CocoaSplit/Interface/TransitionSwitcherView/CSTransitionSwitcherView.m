@@ -9,6 +9,7 @@
 #import "CSTransitionCA.h"
 #import "CSTransitionCIFilter.h"
 #import "CSTransitionLayout.h"
+#import "CSTransitionScript.h"
 
 
 @interface CSTransitionSwitcherView ()
@@ -65,7 +66,7 @@
 {
     _transitionsMenu = [[NSMenu alloc] init];
     
-    NSArray *transitionClasses = @[CSTransitionCA.class, CSTransitionCIFilter.class,CSTransitionLayout.class];
+    NSArray *transitionClasses = @[CSTransitionCA.class, CSTransitionCIFilter.class,CSTransitionLayout.class, CSTransitionScript.class];
     
     for (Class tClass in transitionClasses)
     {
@@ -77,17 +78,25 @@
         NSMenuItem *item = nil;
         
         item = [[NSMenuItem alloc] initWithTitle:tCategory action:nil keyEquivalent:@""];
-        NSMenu *typeMenu = [[NSMenu alloc] init];
-        item.submenu = typeMenu;
-        
-        for (CSTransitionBase *tType in tTypes)
+        if (tTypes)
         {
-            NSMenuItem *typeItem = [[NSMenuItem alloc] initWithTitle:tType.name action:nil keyEquivalent:@""];
-            typeItem.target = self;
-            typeItem.representedObject = tType;
-            typeItem.action = @selector(createTransition:);
-            [typeMenu addItem:typeItem];
+            NSMenu *typeMenu = [[NSMenu alloc] init];
+            item.submenu = typeMenu;
+
+            for (CSTransitionBase *tType in tTypes)
+            {
+                NSMenuItem *typeItem = [[NSMenuItem alloc] initWithTitle:tType.name action:nil keyEquivalent:@""];
+                typeItem.target = self;
+                typeItem.representedObject = tType;
+                typeItem.action = @selector(createTransition:);
+                [typeMenu addItem:typeItem];
+            }
+        } else {
+            item.target = self;
+            item.representedObject = [[tClass alloc] init];
+            item.action = @selector(createTransition:);
         }
+        
         [_transitionsMenu addItem:item];
         
     }

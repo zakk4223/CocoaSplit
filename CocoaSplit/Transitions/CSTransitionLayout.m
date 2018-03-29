@@ -104,6 +104,13 @@
 
 -(NSObject<CSInputSourceProtocol> *)inputSource
 {
+
+    return _realInput;
+}
+
+
+-(NSString *)preChangeAction:(SourceLayout *)targetLayout
+{
     if (!_realInput)
     {
         NSPasteboardItem *layoutItem = [[NSPasteboardItem alloc] init];
@@ -111,8 +118,7 @@
         [layoutItem setData:uuidData forType:@"cocoasplit.layout"];
         _realInput = [CaptureController.sharedCaptureController inputSourceForPasteboardItem:layoutItem];
     }
-    
-    return _realInput;
+    return [super preChangeAction:targetLayout];
 }
 
 

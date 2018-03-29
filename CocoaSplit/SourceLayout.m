@@ -1485,10 +1485,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     toAdd.layer.hidden = YES;
     toAdd.autoPlaceOnFrameUpdate = YES;
     [CATransaction begin];
-    [CATransaction setCompletionBlock:^{
-        [toAdd buildLayerConstraints];
-        [toAdd frameTick];
-    }];
+
     [realLayer addSublayer:toAdd.layer];
     [CATransaction commit];
 }

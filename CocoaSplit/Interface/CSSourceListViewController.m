@@ -504,10 +504,7 @@
 
 -(NSObject<CSInputSourceProtocol>*)inputSourceForPasteboardItem:(NSPasteboardItem *)item
 {
-    
     return [CaptureController.sharedCaptureController inputSourceForPasteboardItem:item];
-    
-    NSArray *captureClasses = [CaptureController.sharedCaptureController captureSourcesForPasteboardItem:item];
 }
 
 

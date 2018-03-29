@@ -211,6 +211,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 
+@property (strong) NSMutableArray *transitions;
 
 
 
@@ -325,6 +326,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 -(SourceLayout *)sourceLayoutForUUID:(NSString *)uuid;
 -(bool)deleteTransition:(CSTransitionBase *)transition;
+-(CSTransitionBase *)transitionForName:(NSString *)name;
+
 
 @end
 

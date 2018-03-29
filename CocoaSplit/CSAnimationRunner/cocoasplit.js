@@ -458,3 +458,53 @@ var removeLayoutByName = function(name, kwargs) {
 }
 
 
+var applyPostTransitionByName = function(name) {
+    
+    var transition_return = null;
+    var target_layout = getCurrentLayout();
+
+    var useTransition = captureController.transitionForName(name);
+    if (!useTransition)
+    {
+        return;
+    }
+    
+    if (useTransition)
+    {
+        var actionScript = useTransition.postChangeAction(target_layout);
+        if (actionScript)
+        {
+            beginAnimation();
+            transition_return = (new Function("self", actionScript))(useTransition);
+            commitAnimation();
+        }
+    }
+    
+    return transition_return;
+}
+
+
+var applyPreTransitionByName = function(name) {
+    
+    var transition_return = null;
+    var useTransition = captureController.transitionForName(name);
+    var target_layout = getCurrentLayout();
+    
+    if (!useTransition)
+    {
+        return;
+    }
+    
+    if (useTransition)
+    {
+        var actionScript = useTransition.preChangeAction(target_layout);
+        if (actionScript)
+        {
+            beginAnimation();
+            transition_return = (new Function("self", actionScript))(useTransition);
+            commitAnimation();
+        }
+    }
+    
+    return transition_return;
+}

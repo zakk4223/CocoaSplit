@@ -74,6 +74,9 @@
 		343644091B78F01D0069B8F2 /* pluginbase.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 34E983841B78B19D00F26F1E /* pluginbase.py */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		343692501B6243D4007EC2D9 /* CSShapeCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 3436922B1B62364E007EC2D9 /* CSShapeCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3437C817206B281200F95AC2 /* CSTransitionInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 3437C816206B281200F95AC2 /* CSTransitionInput.m */; };
+		3437C833206D23C800F95AC2 /* CSTransitionScript.m in Sources */ = {isa = PBXBuildFile; fileRef = 3437C832206D23C800F95AC2 /* CSTransitionScript.m */; };
+		3437C837206D2A3600F95AC2 /* CSScriptTransitionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3437C835206D2A3600F95AC2 /* CSScriptTransitionViewController.m */; };
+		3437C838206D2A3600F95AC2 /* CSScriptTransitionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3437C836206D2A3600F95AC2 /* CSScriptTransitionViewController.xib */; };
 		343B7BE21E917B1A00233DF1 /* cocoasplit.py in Resources */ = {isa = PBXBuildFile; fileRef = 343B7BE11E917B1A00233DF1 /* cocoasplit.py */; };
 		343B7BE31E91803B00233DF1 /* cocoasplit.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 343B7BE11E917B1A00233DF1 /* cocoasplit.py */; };
 		343C2CB21FFBB8DC00849DA9 /* CSSourceListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 343C2CB01FFBB8DC00849DA9 /* CSSourceListViewController.m */; };
@@ -725,6 +728,11 @@
 		3436921B1B62364E007EC2D9 /* CSShapeCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSShapeCapturePlugin.xcodeproj; path = CapturePlugins/CSShapeCapturePlugin/CSShapeCapturePlugin.xcodeproj; sourceTree = "<group>"; };
 		3437C815206B281200F95AC2 /* CSTransitionInput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSTransitionInput.h; sourceTree = "<group>"; };
 		3437C816206B281200F95AC2 /* CSTransitionInput.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSTransitionInput.m; sourceTree = "<group>"; };
+		3437C831206D23C800F95AC2 /* CSTransitionScript.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSTransitionScript.h; sourceTree = "<group>"; };
+		3437C832206D23C800F95AC2 /* CSTransitionScript.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSTransitionScript.m; sourceTree = "<group>"; };
+		3437C834206D2A3600F95AC2 /* CSScriptTransitionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSScriptTransitionViewController.h; sourceTree = "<group>"; };
+		3437C835206D2A3600F95AC2 /* CSScriptTransitionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSScriptTransitionViewController.m; sourceTree = "<group>"; };
+		3437C836206D2A3600F95AC2 /* CSScriptTransitionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CSScriptTransitionViewController.xib; sourceTree = "<group>"; };
 		343B7BE11E917B1A00233DF1 /* cocoasplit.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = cocoasplit.py; sourceTree = "<group>"; };
 		343C2CAF1FFBB8DC00849DA9 /* CSSourceListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSSourceListViewController.h; path = Interface/CSSourceListViewController.h; sourceTree = "<group>"; };
 		343C2CB01FFBB8DC00849DA9 /* CSSourceListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CSSourceListViewController.m; path = Interface/CSSourceListViewController.m; sourceTree = "<group>"; };
@@ -1866,6 +1874,9 @@
 				345BED021F45A36000B46F29 /* CSSubLayoutTransitionViewController.h */,
 				345BED031F45A36000B46F29 /* CSSubLayoutTransitionViewController.m */,
 				345BED041F45A36000B46F29 /* CSSubLayoutTransitionViewController.xib */,
+				3437C834206D2A3600F95AC2 /* CSScriptTransitionViewController.h */,
+				3437C835206D2A3600F95AC2 /* CSScriptTransitionViewController.m */,
+				3437C836206D2A3600F95AC2 /* CSScriptTransitionViewController.xib */,
 			);
 			name = Transitions;
 			path = Interface/Transitions;
@@ -1999,6 +2010,8 @@
 				3410FECA205FFB6300C5F8C2 /* CSTransitionLayout.m */,
 				3437C815206B281200F95AC2 /* CSTransitionInput.h */,
 				3437C816206B281200F95AC2 /* CSTransitionInput.m */,
+				3437C831206D23C800F95AC2 /* CSTransitionScript.h */,
+				3437C832206D23C800F95AC2 /* CSTransitionScript.m */,
 			);
 			path = Transitions;
 			sourceTree = "<group>";
@@ -2835,6 +2848,7 @@
 				3473D2AF1D56920B00842EEE /* CSAdvancedAudioWindowController.xib in Resources */,
 				343ED9421BCAC1C80061FC4B /* EditBuiltinLayoutView.xib in Resources */,
 				34788DF71F01719800C3C9C5 /* CSScriptInputSourceViewController.xib in Resources */,
+				3437C838206D2A3600F95AC2 /* CSScriptTransitionViewController.xib in Resources */,
 				34FEF909203C106A0006A676 /* CSAddOutputPopupViewController.xib in Resources */,
 				3441269C1E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.xib in Resources */,
 				3415CED31AE257DA002F11F5 /* CSTextCaptureBaseView.xib in Resources */,
@@ -2979,6 +2993,7 @@
 				3437C817206B281200F95AC2 /* CSTransitionInput.m in Sources */,
 				34ED8CA51B07371C002C0674 /* MIKMIDISystemExclusiveCommand.m in Sources */,
 				34ED8C5D1B07371C002C0674 /* MIKMIDIEndpoint.m in Sources */,
+				3437C837206D2A3600F95AC2 /* CSScriptTransitionViewController.m in Sources */,
 				34EB705B1F24F65900F61E6A /* CAMultiAudioFile.m in Sources */,
 				34ED8C5F1B07371C002C0674 /* MIKMIDIEndpointSynthesizer.m in Sources */,
 				34ED8CA11B07371C002C0674 /* MIKMIDISequencer.m in Sources */,
@@ -3086,6 +3101,7 @@
 				34ED8C851B07371C002C0674 /* MIKMIDIMetaTextEvent.m in Sources */,
 				34B5FACB1E7461E60078FC51 /* CSLayoutSequence.m in Sources */,
 				348585B3201C998200C30A08 /* CSPassthroughCompressorViewController.m in Sources */,
+				3437C833206D23C800F95AC2 /* CSTransitionScript.m in Sources */,
 				34A629451FBB6DC500B4E16A /* CSJSAnimationDelegate.m in Sources */,
 				3427864B1EA4337400877B7B /* CSTransitionAnimationDelegate.m in Sources */,
 				34348C2A19BDBDC000A122C2 /* PluginManagerWindowController.m in Sources */,

@@ -93,7 +93,7 @@
             
             if (trans.usesPreTransitions)
             {
-                continue;
+                //continue;
             }
             
             item = [preMenu addItemWithTitle:trans.name action:@selector(menuActionPreTransition:) keyEquivalent:@""];
@@ -132,7 +132,7 @@
             
             if (trans.usesPostTransitions)
             {
-                continue;
+                //continue;
             }
             item = [postMenu addItemWithTitle:trans.name action:@selector(menuActionPostTransition:) keyEquivalent:@""];
             if (forTransition.postTransition == trans)

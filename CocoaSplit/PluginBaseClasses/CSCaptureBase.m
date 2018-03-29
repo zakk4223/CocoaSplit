@@ -771,6 +771,10 @@
 
 -(void)createAttachedAudioInputForUUID:(NSString *)uuid withName:(NSString *)withName
 {
+    if (!uuid)
+    {
+        return;
+    }
     @autoreleasepool
     {
         if (!self.attachedAudioMap)

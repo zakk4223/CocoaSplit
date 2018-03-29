@@ -612,7 +612,18 @@
 
 
 
-
+-(CSTransitionBase *)transitionForName:(NSString *)name
+{
+    for (CSTransitionBase *trans in self.transitions)
+    {
+        if ([trans.name isEqualToString:name])
+        {
+            return trans;
+        }
+    }
+    
+    return nil;
+}
 
 -(bool)deleteTransition:(CSTransitionBase *)transition
 {
