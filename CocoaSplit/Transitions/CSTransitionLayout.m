@@ -102,24 +102,17 @@
 }
 
 
--(NSObject<CSInputSourceProtocol> *)inputSource
+-(NSObject<CSInputSourceProtocol> *)getInputSource
 {
 
-    return _realInput;
+    NSPasteboardItem *layoutItem = [[NSPasteboardItem alloc] init];
+    NSData *uuidData = [NSKeyedArchiver archivedDataWithRootObject:self.layout.uuid];
+    [layoutItem setData:uuidData forType:@"cocoasplit.layout"];
+    return [CaptureController.sharedCaptureController inputSourceForPasteboardItem:layoutItem];
 }
 
 
--(NSString *)preChangeAction:(SourceLayout *)targetLayout
-{
-    if (!_realInput)
-    {
-        NSPasteboardItem *layoutItem = [[NSPasteboardItem alloc] init];
-        NSData *uuidData = [NSKeyedArchiver archivedDataWithRootObject:self.layout.uuid];
-        [layoutItem setData:uuidData forType:@"cocoasplit.layout"];
-        _realInput = [CaptureController.sharedCaptureController inputSourceForPasteboardItem:layoutItem];
-    }
-    return [super preChangeAction:targetLayout];
-}
+
 
 
 -(NSViewController<CSLayoutTransitionViewProtocol> *)configurationViewController

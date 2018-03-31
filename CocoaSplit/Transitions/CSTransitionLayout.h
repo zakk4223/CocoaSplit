@@ -16,11 +16,6 @@
 
 
 @interface CSTransitionLayout : CSTransitionInput <CSTransitionLayoutExport>
-{
-    NSObject <CSInputSourceProtocol> *_realInput;
-}
-
-
 @property (strong) SourceLayout *layout;
 
 @end

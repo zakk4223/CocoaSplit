@@ -10,12 +10,22 @@
 @implementation CSTransitionInput
 @synthesize holdDuration = _holdDuration;
 
+    
+    -(instancetype) init
+    {
+        if (self = [super init])
+        {
+            self.transitionAfterPre = YES;
+        }
+        return self;
+    }
+    
 -(id)copyWithZone:(NSZone *)zone
 {
     CSTransitionInput *newObj = [super copyWithZone:zone];
     if (newObj)
     {
-        newObj.inputSource = self.inputSource;
+        newObj.configuredInputSource = self.configuredInputSource;
         newObj.holdDuration = self.holdDuration;
         newObj.waitForMedia = self.waitForMedia;
         newObj.transitionAfterPre = self.transitionAfterPre;
@@ -29,7 +39,7 @@
     [super encodeWithCoder:aCoder];
     if (self.inputSource)
     {
-        [aCoder encodeObject:self.inputSource forKey:@"inputSource"];
+        [aCoder encodeObject:self.configuredInputSource forKey:@"configuredInputSource"];
     }
     [aCoder encodeObject:self.holdDuration forKey:@"holdDuration"];
     [aCoder encodeBool:self.waitForMedia forKey:@"waitForMedia"];
@@ -40,11 +50,18 @@
 {
     if (self = [super initWithCoder:aDecoder])
     {
-        self.inputSource = [aDecoder decodeObjectForKey:@"inputSource"];
+        self.configuredInputSource = [aDecoder decodeObjectForKey:@"configuredInputSource"];
         
         self.holdDuration = [aDecoder decodeObjectForKey:@"holdDuration"];
-        self.waitForMedia = [aDecoder decodeBoolForKey:@"waitForMedia"];
-        self.transitionAfterPre = [aDecoder decodeBoolForKey:@"transitionAfterPre"];
+        if ([aDecoder containsValueForKey:@"waitForMedia"])
+        {
+            self.waitForMedia = [aDecoder decodeBoolForKey:@"waitForMedia"];
+        }
+        
+        if ([aDecoder containsValueForKey:@"transitionAfterPre"])
+        {
+            self.transitionAfterPre = [aDecoder decodeBoolForKey:@"transitionAfterPre"];
+        }
     }
     
     return self;
@@ -87,7 +104,14 @@
     _holdDuration = holdDuration;
 }
 
+    
+    
+-(NSObject <CSInputSourceProtocol> *)getInputSource
+{
+    return self.configuredInputSource;
+}
 
+    
 -(NSNumber *)holdDuration
 {
     if (_holdDuration)
@@ -101,6 +125,7 @@
 -(NSString *)preChangeAction:(SourceLayout *)targetLayout
 {
 
+    self.inputSource = [self getInputSource];
     if (!self.inputSource)
     {
         return nil;
@@ -163,6 +188,7 @@
         [scriptRet appendString:@"if (postPostScript) { (new Function('self', postPostScript))(self.postTransition);}"];
     }
     
+    [scriptRet appendString:@"self.inputSource = null;"];
     return scriptRet;
 }
 
