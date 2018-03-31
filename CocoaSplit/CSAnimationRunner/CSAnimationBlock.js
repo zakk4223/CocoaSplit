@@ -130,12 +130,12 @@ function AnimationBlock(duration, inherit_frame) {
         
         if (animation.cs_input && self.input_map[animation.cs_input.uuid])
         {
-            use_begin_time = self.input_map[animation.cs_input.uuid].begin_time;
+            use_begin_time = Math.max(use_begin_time, self.input_map[animation.cs_input.uuid].begin_time);
         }
         
         var a_duration = animation.apply(use_begin_time);
+
         self.latest_end_time = Math.max(self.latest_end_time, animation.end_time);
-        
         if (animation.uukey && animation.target)
         {
             self.animation_info.all_animations[animation.uukey]= animation.target;
