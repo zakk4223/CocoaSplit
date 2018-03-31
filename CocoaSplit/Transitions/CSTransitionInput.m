@@ -17,7 +17,8 @@
     {
         newObj.inputSource = self.inputSource;
         newObj.holdDuration = self.holdDuration;
-        newObj.waitForMedia = newObj.waitForMedia;
+        newObj.waitForMedia = self.waitForMedia;
+        newObj.transitionAfterPre = self.transitionAfterPre;
     }
     return newObj;
 }
@@ -32,6 +33,7 @@
     }
     [aCoder encodeObject:self.holdDuration forKey:@"holdDuration"];
     [aCoder encodeBool:self.waitForMedia forKey:@"waitForMedia"];
+    [aCoder encodeBool:self.transitionAfterPre forKey:@"transitionAfterPre"];
 }
 
 -(instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -42,6 +44,7 @@
         
         self.holdDuration = [aDecoder decodeObjectForKey:@"holdDuration"];
         self.waitForMedia = [aDecoder decodeBoolForKey:@"waitForMedia"];
+        self.transitionAfterPre = [aDecoder decodeBoolForKey:@"transitionAfterPre"];
     }
     
     return self;
@@ -130,11 +133,13 @@
     
     if (self.realHoldDuration > 0.0f)
     {
-        NSLog(@"HOLDING FOR %f", self.realHoldDuration);
         [scriptRet appendString:@"transitionCSInput.waitAnimation(self.realHoldDuration);"];
     }
-    
-    [scriptRet appendString:@"waitAnimation();"];
+
+    if (self.transitionAfterPre)
+    {
+        [scriptRet appendString:@"waitAnimation();"];
+    }
     return scriptRet;
 }
 
