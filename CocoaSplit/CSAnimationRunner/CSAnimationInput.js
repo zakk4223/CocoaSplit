@@ -75,7 +75,12 @@ function CSAnimationInput(cs_input) {
         return kanim;
     }
     
-    
+    this.dummyAnimation = function(duration, kwargs) {
+        var keyname = "__DUMMY_ANIMATION__" + generateUUID();
+        
+        return this.simple_animation(keyname, 0, duration, kwargs);
+    }
+
     this.simple_animation = function(forKey, toValue, withDuration, kwargs) {
         var real_end_value = toValue;
         

@@ -113,7 +113,7 @@
         [scriptRet appendString:@"self.realPreTransition = usePreTrans;"];
     }
     
-    [scriptRet appendString:@"addInputToLayoutForTransition(self.inputSource, self.realPreTransition);"];
+    [scriptRet appendString:@"var transitionCSInput = addInputToLayoutForTransition(self.inputSource, self.realPreTransition);"];
     
     if (self.preTransition)
     {
@@ -124,15 +124,17 @@
     
     if (self.waitForMedia)
     {
-        [scriptRet appendString:@"waitAnimation(self.inputSource.duration);"];
+        [scriptRet appendString:@"transitionCSInput.waitAnimation(self.inputSource.duration);"];
     }
     self.realHoldDuration = self.holdDuration.floatValue;
     
     if (self.realHoldDuration > 0.0f)
     {
-        [scriptRet appendString:@"waitAnimation(self.realHoldDuration);"];
+        NSLog(@"HOLDING FOR %f", self.realHoldDuration);
+        [scriptRet appendString:@"transitionCSInput.waitAnimation(self.realHoldDuration);"];
     }
     
+    [scriptRet appendString:@"waitAnimation();"];
     return scriptRet;
 }
 

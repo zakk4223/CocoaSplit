@@ -39,6 +39,10 @@ function AnimationBlock(duration, inherit_frame) {
         self.animation_info = {};
         self.animation_info["all_animations"] = {};
         self.isolated = !inherit_frame;
+        self.input_map = {};
+        self.label_map = {};
+
+
     } else {
         cframe.applyPendingAnimations();
         self.layout = cframe.layout;
@@ -46,6 +50,8 @@ function AnimationBlock(duration, inherit_frame) {
         self.latest_end_time = cframe.latest_end_time;
         self.animation_info = cframe.animation_info;
         self.isolated = !inherit_frame;
+        self.input_map = cframe.input_map;
+        self.label_map = cframe.label_map;
     }
     
     self.animations = [];
@@ -53,8 +59,6 @@ function AnimationBlock(duration, inherit_frame) {
     self.max_animation_time = 0.0;
     self.beginTime = 0.0;
     self.real_completion_block = null;
-    self.input_map = {};
-    self.label_map = {};
     self.uuid = generateUUID();
     
     if (self.duration == 0.0)
@@ -96,6 +100,7 @@ function AnimationBlock(duration, inherit_frame) {
     this.add_animation_real = function(animation) {
         if (!self.current_begin_time)
         {
+            
             self.current_begin_time = self.layout.rootLayer.convertTimeFromLayer(CACurrentMediaTime(), null);
         }
         
@@ -121,7 +126,14 @@ function AnimationBlock(duration, inherit_frame) {
            animation.animation.delegate = a_delegate;
         }
         
-        var a_duration = animation.apply(self.current_begin_time);
+        var use_begin_time = self.current_begin_time;
+        
+        if (animation.cs_input && self.input_map[animation.cs_input.uuid])
+        {
+            use_begin_time = self.input_map[animation.cs_input.uuid].begin_time;
+        }
+        
+        var a_duration = animation.apply(use_begin_time);
         self.latest_end_time = Math.max(self.latest_end_time, animation.end_time);
         
         if (animation.uukey && animation.target)
@@ -133,9 +145,11 @@ function AnimationBlock(duration, inherit_frame) {
         {
             if (self.input_map[animation.cs_input.uuid])
             {
-                self.input_map[animation.cs_input.uuid] = Math.max(self.latest_end_time, self.input_map[animation.cs_input.uuid]);
+                
+                self.input_map[animation.cs_input.uuid].end_time = Math.max(animation.end_time, self.input_map[animation.cs_input.uuid].end_time);
+                
             } else {
-                self.input_map[animation.cs_input.uuid] = self.latest_end_time;
+                self.input_map[animation.cs_input.uuid] = {begin_time: self.current_begin_time, end_time: animation.end_time};
             }
         }
         
@@ -174,10 +188,23 @@ function AnimationBlock(duration, inherit_frame) {
             self.latest_end_time = self.current_begin_time;
         }
         
-        
-        if (waitMark.cs_input && self.input_map[waitMark.cs_input.uuid])
+
+        if (waitMark.cs_input)
         {
-            self.current_begin_time = self.input_map[waitMark.cs_input.uuid];
+            var input_begin_time = self.current_begin_time;
+            var input_end_time = self.current_begin_time;
+            if (self.input_map[waitMark.cs_input.uuid])
+            {
+                input_begin_time = self.input_map[waitMark.cs_input.uuid].end_time;
+                input_end_time = self.input_map[waitMark.cs_input.uuid].end_time;
+            }
+            input_begin_time += waitMark.duration;
+            
+            self.input_map[waitMark.cs_input.uuid] = {begin_time: input_begin_time, end_time: Math.max(input_end_time, input_begin_time)}
+            
+            
+            this.latest_end_time = Math.max(self.latest_end_time, input_begin_time);
+            return waitMark;
         } else if (waitMark.label && self.label_map[waitMark.label]) {
             self.current_begin_time = self.label_map[waitMark.label].end_time;
         } else {

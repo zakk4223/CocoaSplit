@@ -218,11 +218,11 @@ var removeInputFromLayout = function(input, withTransition, layout) {
                        commitAnimation();
                        
                        });
-    addDummyAnimation(0.0);
+    animInput.dummyAnimation(0.0);
     commitAnimation();
     if (withTransition)
     {
-        addDummyAnimation(withTransition.duration);
+        animInput.dummyAnimation(withTransition.duration);
     }
 
 }
@@ -258,9 +258,11 @@ var addInputToLayoutForTransition = function(input, withTransition, layout) {
     commitAnimation();
     if (withTransition)
     {
-        addDummyAnimation(withTransition.duration);
+        animInput.dummyAnimation(withTransition.duration);
+        animInput.waitAnimation();
     }
     commitAnimation();
+    return animInput;
 }
 
 

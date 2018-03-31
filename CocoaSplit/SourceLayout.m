@@ -2282,7 +2282,6 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     {
         return;
     }
-    NSLog(@"ADD SRC %@ %@", addSource, addSource.uuid);
 
     _uuidMapPresentation[addSource.uuid] = addSource;
     @synchronized(self)
@@ -2453,7 +2452,6 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
           
         }];
         
-        NSLog(@"ADD TO SUBPLAYER");
         [parentLayer addSublayer:newSource.layer];
         [CATransaction commit];
     }
