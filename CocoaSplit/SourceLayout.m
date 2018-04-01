@@ -2312,6 +2312,12 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     
     NSObject<CSInputSourceProtocol> *uSrc;
 
+    for (NSObject<CSInputSourceProtocol> *aSrc in delSource.attachedInputs)
+    {
+        [delSource detachInput:aSrc];
+        [self deleteSource:aSrc];
+    }
+    
     uSrc = _uuidMapPresentation[delSource.uuid];
     if ([uSrc isEqual:delSource])
     {

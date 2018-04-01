@@ -209,6 +209,20 @@
 }
 
 
+-(void)attachInput:(NSObject<CSInputSourceProtocol> *)input
+{
+    [self.attachedInputs addObject:input];
+}
+
+-(void)detachInput:(NSObject<CSInputSourceProtocol> *)input
+{
+    [self.attachedInputs removeObject:input];
+}
+
+-(void)detachAllInputs
+{
+    [self.attachedInputs removeAllObjects];
+}
 
 
 -(bool) isVideo

@@ -125,7 +125,10 @@
 -(NSString *)preChangeAction:(SourceLayout *)targetLayout
 {
 
-    self.inputSource = [self getInputSource];
+    if (!self.inputSource)
+    {
+        self.inputSource = [self getInputSource];
+    }
     if (!self.inputSource)
     {
         return nil;
@@ -188,7 +191,7 @@
         [scriptRet appendString:@"if (postPostScript) { (new Function('self', postPostScript))(self.postTransition);}"];
     }
     
-    [scriptRet appendString:@"self.inputSource = null;"];
+    //[scriptRet appendString:@"self.inputSource = null;"];
     return scriptRet;
 }
 
