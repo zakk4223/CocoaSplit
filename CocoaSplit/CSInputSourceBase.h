@@ -50,6 +50,10 @@
 @property (assign) bool persistent;
 @property (assign) bool isVisible;
 
+-(void)attachInput:(NSObject <CSInputSourceProtocol>*)input;
+-(void)detachInput:(NSObject <CSInputSourceProtocol>*)input;
+-(void)detachAllInputs;
+
 @end
 
 @interface CSInputSourceBase : NSObject <CSInputSourceProtocol, NSCoding, CSInputSourceBaseJSExport, NSCopying, MIKMIDIMappableResponder, MIKMIDIResponder>
