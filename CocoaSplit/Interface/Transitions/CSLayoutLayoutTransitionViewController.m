@@ -37,6 +37,44 @@
     // Do view setup here.
 }
 
+    -(NSUndoManager *)windowWillReturnUndoManager:(NSWindow *)window
+    {
+        return [[NSUndoManager alloc] init];
+    }
+    
+    
+    -(IBAction)openInputConfigWindow:(id)sender
+    {
+
+        NSObject<CSInputSourceProtocol> *configSrc = self.transition.inputSource;
+        NSString *uuid = configSrc.uuid;
+        NSViewController *newViewController = [configSrc configurationViewController];
+        
+        
+        
+        _configWindow = [[NSWindow alloc] init];
+        NSRect newFrame = [_configWindow frameRectForContentRect:NSMakeRect(0.0f, 0.0f, newViewController.view.frame.size.width, newViewController.view.frame.size.height)];
+        
+        
+        
+        [_configWindow setFrame:newFrame display:NO];
+        [_configWindow center];
+        
+        [_configWindow setReleasedWhenClosed:NO];
+        
+        
+        [_configWindow.contentView addSubview:newViewController.view];
+        _configWindow.title = [NSString stringWithFormat:@"Transition Config (%@)", configSrc.name];
+        _configWindow.delegate = self;
+        
+        _configWindow.styleMask =  NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask;
+        _configViewController = newViewController;
+        
+        _configWindow.identifier = uuid;
+        
+        [_configWindow makeKeyAndOrderFront:nil];
+    }
+    
 /*
 - (IBAction)configureInTransition:(NSButton *)sender
 {

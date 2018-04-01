@@ -89,6 +89,10 @@
         return;
     }
     
+    if (!self.inputSource.sourceLayout)
+    {
+        return;
+    }
     
     NSString *propName = [[keyPath componentsSeparatedByString:@"."] lastObject];
 

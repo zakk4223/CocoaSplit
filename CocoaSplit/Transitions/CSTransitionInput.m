@@ -9,7 +9,7 @@
 
 @implementation CSTransitionInput
 @synthesize holdDuration = _holdDuration;
-
+    @synthesize inputSource = _inputSource;
     
     -(instancetype) init
     {
@@ -26,6 +26,7 @@
     if (newObj)
     {
         newObj.configuredInputSource = self.configuredInputSource;
+        newObj.inputSourceSavedata = self.inputSourceSavedata;
         newObj.holdDuration = self.holdDuration;
         newObj.waitForMedia = self.waitForMedia;
         newObj.transitionAfterPre = self.transitionAfterPre;
@@ -45,6 +46,7 @@
     [aCoder encodeBool:self.waitForMedia forKey:@"waitForMedia"];
     [aCoder encodeBool:self.transitionAfterPre forKey:@"transitionAfterPre"];
 }
+
 
 -(instancetype)initWithCoder:(NSCoder *)aDecoder
 {
@@ -99,6 +101,26 @@
     return ret;
 }
 
+-(void)setInputSource:(NSObject<CSInputSourceProtocol> *)inputSource
+{
+    _inputSource = inputSource;
+}
+    
+    
+-(NSObject<CSInputSourceProtocol> *)inputSource
+{
+    if (!_inputSource)
+    {
+        _inputSource = [self restoreInputSource];
+        if (!_inputSource)
+        {
+            _inputSource = [self getInputSource];
+        }
+    }
+    return _inputSource;
+}
+    
+    
 -(void)setHoldDuration:(NSNumber *)holdDuration
 {
     _holdDuration = holdDuration;
@@ -125,7 +147,7 @@
 -(NSString *)preChangeAction:(SourceLayout *)targetLayout
 {
 
-    self.inputSource = [self getInputSource];
+
     if (!self.inputSource)
     {
         return nil;
@@ -188,9 +210,18 @@
         [scriptRet appendString:@"if (postPostScript) { (new Function('self', postPostScript))(self.postTransition);}"];
     }
     
-    [scriptRet appendString:@"self.inputSource = null;"];
+    //[scriptRet appendString:@"self.inputSource = null;"];
     return scriptRet;
 }
 
+    -(NSObject<CSInputSourceProtocol> *)restoreInputSource
+    {
+        NSObject<CSInputSourceProtocol> *ret = nil;
+        if (self.inputSourceSavedata)
+        {
+            ret = [NSKeyedUnarchiver unarchiveObjectWithData:self.inputSourceSavedata];
+        }
+        return ret;
+    }
 
 @end

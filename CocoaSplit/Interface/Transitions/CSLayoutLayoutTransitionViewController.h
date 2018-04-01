@@ -9,17 +9,19 @@
 
 #import <Cocoa/Cocoa.h>
 #import "CSLayoutTransitionViewProtocol.h"
-#import "CSSubLayoutTransitionViewController.h"
+#import "CSTransitionLayout.h"
 
-@interface CSLayoutLayoutTransitionViewController : NSViewController <CSLayoutTransitionViewProtocol>
+@interface CSLayoutLayoutTransitionViewController : NSViewController <CSLayoutTransitionViewProtocol, NSWindowDelegate>
 {
     NSObject <CSLayoutTransitionViewProtocol> *_subTransitionViewController;
     NSPopover *_subPopover;
+    NSWindow *_configWindow;
+    NSViewController *_configViewController;
     
 }
 
 
-@property (strong) CSTransitionBase *transition;
+@property (strong) CSTransitionLayout *transition;
 
 @property (strong) NSArray *sourceLayouts;
 
@@ -28,5 +30,6 @@
 
 - (IBAction)configureInTransition:(id)sender;
 - (IBAction)configureOutTransition:(id)sender;
+-(IBAction)openInputConfigWindow:(id)sender;
 
 @end
