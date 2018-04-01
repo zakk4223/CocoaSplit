@@ -147,14 +147,6 @@
 -(NSString *)preChangeAction:(SourceLayout *)targetLayout
 {
 
-<<<<<<< HEAD
-
-=======
-    if (!self.inputSource)
-    {
-        self.inputSource = [self getInputSource];
-    }
->>>>>>> 9f47cf9fb12fb565b0a27defc8496bf02f9af0c9
     if (!self.inputSource)
     {
         return nil;
