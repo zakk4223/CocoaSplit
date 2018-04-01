@@ -40,7 +40,10 @@
     [super encodeWithCoder:aCoder];
     if (self.inputSource)
     {
-        [aCoder encodeObject:self.configuredInputSource forKey:@"configuredInputSource"];
+        
+        self.inputSourceSavedata = [NSKeyedArchiver archivedDataWithRootObject:self.inputSource];
+        
+        [aCoder encodeObject:self.inputSourceSavedata forKey:@"inputSourceSavedata"];
     }
     [aCoder encodeObject:self.holdDuration forKey:@"holdDuration"];
     [aCoder encodeBool:self.waitForMedia forKey:@"waitForMedia"];
@@ -52,8 +55,7 @@
 {
     if (self = [super initWithCoder:aDecoder])
     {
-        self.configuredInputSource = [aDecoder decodeObjectForKey:@"configuredInputSource"];
-        
+        self.inputSourceSavedata = [aDecoder decodeObjectForKey:@"inputSourceSavedata"];
         self.holdDuration = [aDecoder decodeObjectForKey:@"holdDuration"];
         if ([aDecoder containsValueForKey:@"waitForMedia"])
         {
