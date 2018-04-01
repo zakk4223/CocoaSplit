@@ -119,8 +119,9 @@
     if (useLayout)
     {
         NSString *layoutName = [useLayout valueForKey:@"name"];
+        NSString *layoutUUID = [useLayout valueForKey:@"uuid"];
         CSLayoutCapture *ret = [[CSLayoutCapture alloc] init];
-        ret.activeVideoDevice = [[CSAbstractCaptureDevice alloc] initWithName:layoutName device:useLayout uniqueID:layoutName];
+        ret.activeVideoDevice = [[CSAbstractCaptureDevice alloc] initWithName:layoutName device:useLayout uniqueID:layoutUUID];
         return ret;
     }
     
@@ -137,7 +138,7 @@
     {
         NSString *layoutName = [layout valueForKey:@"name"];
         NSString *layoutUUID = [layout valueForKey:@"uuid"];
-        CSAbstractCaptureDevice *dev = [[CSAbstractCaptureDevice alloc] initWithName:layoutName device:layout uniqueID:layoutUUID];
+        CSAbstractCaptureDevice *dev = [[CSAbstractCaptureDevice alloc] initWithName:layoutName device:nil uniqueID:layoutUUID];
         [ret addObject:dev];
     }
     
@@ -152,7 +153,15 @@
     Class encoderClass = NSClassFromString(@"CSAacEncoder");
     
     self.captureName = self.activeVideoDevice.captureName;
-    SourceLayoutHack *capDev = [self.activeVideoDevice.captureDevice copy];
+    
+    NSObject *controller = [[CSPluginServices sharedPluginServices] captureController];
+    SEL layoutSEL = NSSelectorFromString(@"sourceLayoutForUUID:");
+    SourceLayoutHack *origDev = [controller performSelector:layoutSEL withObject:self.activeVideoDevice.uniqueID];
+    if (!origDev)
+    {
+        return;
+    }
+    SourceLayoutHack *capDev = [origDev copy];
     capDev.isActive = self.isLive;
     SEL restoreSEL = NSSelectorFromString(@"restoreSourceList:");
     [capDev performSelector:restoreSEL withObject:nil];
