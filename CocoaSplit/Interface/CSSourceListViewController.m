@@ -142,13 +142,17 @@
     NSPasteboardItem *pItem = [[NSPasteboardItem alloc] init];
     
     NSMutableArray *sourceIDS = [NSMutableArray array];
+    NSMutableArray *savedSources = [NSMutableArray array];
     for (NSObject<CSInputSourceProtocol>*iSrc in items)
     {
         NSString *iUUID = iSrc.uuid;
         [sourceIDS addObject:iUUID];
+        NSData *saveData = [NSKeyedArchiver archivedDataWithRootObject:iSrc];
+        [savedSources addObject:saveData];
         
     }
-    [pItem setPropertyList:sourceIDS forType:@"cocoasplit.input.item"];
+    [pItem setPropertyList:sourceIDS forType:@"cocoasplit.input.uuids"];
+    [pItem setPropertyList:savedSources forType:@"cocoasplit.input.data"];
     [pasteboard writeObjects:@[pItem]];
     return YES;
 }
@@ -175,7 +179,7 @@
         }
     }
     
-    NSArray *draggedUUIDS = [pb propertyListForType:@"cocoasplit.input.item"];
+    NSArray *draggedUUIDS = [pb propertyListForType:@"cocoasplit.input.uuids"];
     if (draggedUUIDS && draggedUUIDS.lastObject)
     {
         NSString *draggedUUID = draggedUUIDS.lastObject;
@@ -362,7 +366,7 @@
         return YES;
     }
     
-    NSArray *draggedUUIDS = [pb propertyListForType:@"cocoasplit.input.item"];
+    NSArray *draggedUUIDS = [pb propertyListForType:@"cocoasplit.input.uuids"];
     
     InputSource *parentSource = item;
     
@@ -568,7 +572,7 @@
     if (!self.sourceTreeSortDescriptors)
     {
         self.sourceTreeSortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"depth" ascending:NO]];
-        [self.sourceOutlineView registerForDraggedTypes:@[NSSoundPboardType,NSFilenamesPboardType, NSFilesPromisePboardType, NSFileContentsPboardType, @"cocoasplit.input.item", @"cocoasplit.audio.item", @"cocoasplit.layout"]];
+        [self.sourceOutlineView registerForDraggedTypes:@[NSSoundPboardType,NSFilenamesPboardType, NSFilesPromisePboardType, NSFileContentsPboardType, @"cocoasplit.input.uuids", @"cocoasplit.audio.item", @"cocoasplit.layout"]];
 
         _activeConfigWindows = [NSMutableDictionary dictionary];
         _activeConfigControllers = [NSMutableDictionary dictionary];

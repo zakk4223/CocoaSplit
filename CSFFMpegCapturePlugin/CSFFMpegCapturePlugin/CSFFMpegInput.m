@@ -421,7 +421,6 @@
 
 -(void)start
 {
-    NSLog(@"START ITEM");
     dispatch_semaphore_signal(_read_loop_semaphore);
 }
 

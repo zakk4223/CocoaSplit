@@ -1483,9 +1483,16 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     
     [self addSourceToPresentation:toAdd];
     toAdd.layer.hidden = YES;
-    toAdd.autoPlaceOnFrameUpdate = YES;
     [CATransaction begin];
 
+
+    
+    toAdd.needsAdjustment = YES;
+    if (toAdd.isVideo)
+    {
+        InputSource *vSrc = (InputSource *)toAdd;
+        vSrc.autoPlaceOnFrameUpdate = YES;
+    }
     [realLayer addSublayer:toAdd.layer];
     [CATransaction commit];
 }
@@ -2453,15 +2460,23 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     if (newSource.layer && !newSource.layer.superlayer)
     {
         [CATransaction begin];
-        [CATransaction setCompletionBlock:^{
-            [((InputSource *)newSource) buildLayerConstraints];
-          
-        }];
+
         
         [parentLayer addSublayer:newSource.layer];
         [CATransaction commit];
     }
 
+    
+    if (newSource.isVideo)
+    {
+        [CATransaction begin];
+        [CATransaction setCompletionBlock:^{
+            [((InputSource *)newSource) buildLayerConstraints];
+            
+        }];
+        [(InputSource *)newSource layerUpdated];
+        [CATransaction commit];
+    }
     
     
     

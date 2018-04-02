@@ -1778,7 +1778,7 @@
     self.layer.backgroundColor = tmpColor;
     CGColorRelease(tmpColor);
     
-    [self registerForDraggedTypes:@[@"cocoasplit.library.item",NSSoundPboardType,NSFilenamesPboardType, NSFilesPromisePboardType, NSFileContentsPboardType, @"cocoasplit.input.item", @"cocoasplit.audio.item", @"cocoasplit.layout"]];
+    [self registerForDraggedTypes:@[@"cocoasplit.library.item",NSSoundPboardType,NSFilenamesPboardType, NSFilesPromisePboardType, NSFileContentsPboardType, @"cocoasplit.input.uuids", @"cocoasplit.audio.item", @"cocoasplit.layout"]];
     self.undoManager.levelsOfUndo = 20;
     
     

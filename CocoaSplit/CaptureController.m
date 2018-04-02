@@ -3694,13 +3694,13 @@
 -(BOOL)collectionView:(NSCollectionView *)collectionView acceptDrop:(id<NSDraggingInfo>)draggingInfo index:(NSInteger)index dropOperation:(NSCollectionViewDropOperation)dropOperation
 {
     NSPasteboard *pBoard = [draggingInfo draggingPasteboard];
-    NSData *indexSave = [pBoard dataForType:@"cocoasplit.layout"];
-    NSIndexSet *indexes = [NSKeyedUnarchiver unarchiveObjectWithData:indexSave];
-    NSInteger draggedItemIdx = [indexes firstIndex];
+    NSData *uuidSave = [pBoard dataForType:@"cocoasplit.layout"];
+    NSString *draggedUUID = [NSKeyedUnarchiver unarchiveObjectWithData:uuidSave];
+    SourceLayout *draggedItem = [self sourceLayoutForUUID:draggedUUID];
+    NSInteger draggedItemIdx = [self.sourceLayouts indexOfObject:draggedItem];
 
     
     [self willChangeValueForKey:@"sourceLayouts"];
-    SourceLayout *draggedItem = [self.sourceLayouts objectAtIndex:draggedItemIdx];
     NSInteger useIdx = index;
     
     if (index > draggedItemIdx)

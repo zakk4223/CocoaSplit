@@ -3264,6 +3264,7 @@ static NSArray *_sourceTypes = nil;
 {
     if (self.autoPlaceOnFrameUpdate)
     {
+        NSLog(@"AUTOPLACING FRAME UPDATE");
         [self autoSize];
         [self autoCenter:NSMakeRect(0, 0, self.canvas_width, self.canvas_height)];
         self.autoPlaceOnFrameUpdate = NO;
@@ -3616,6 +3617,7 @@ static NSArray *_sourceTypes = nil;
     }
     
     [CATransaction begin];
+    NSLog(@"SETTING CONSTRAINTS");
     self.layer.constraints = constraints;
     [CATransaction commit];
     

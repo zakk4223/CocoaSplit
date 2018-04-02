@@ -9,8 +9,9 @@
 #import "CSTransitionCA.h"
 #import "CSTransitionCIFilter.h"
 #import "CSTransitionLayout.h"
+#import "CSTransitionInput.h"
 #import "CSTransitionScript.h"
-
+#import "CaptureController.h"
 
 @interface CSTransitionSwitcherView ()
 
@@ -35,7 +36,7 @@
 
     
     [self.transitionsArrayController bind:@"contentArray" toObject:self.parentObjectController  withKeyPath:self.transitionArrayKeyPath options:nil];
-    [self.collectionView registerForDraggedTypes:@[@"cocoasplit.transition"]];
+    [self.collectionView registerForDraggedTypes:@[@"cocoasplit.transition", @"cocoasplit.layout", @"cocoasplit.input.data", NSSoundPboardType,NSFilenamesPboardType, NSFilesPromisePboardType, NSFileContentsPboardType]];
     
     //[self.collectionView bind:@"content" toObject:self.parentObjectController withKeyPath:self.transitionArrayKeyPath options:nil];
 }
@@ -146,31 +147,95 @@
 -(BOOL)collectionView:(NSCollectionView *)collectionView acceptDrop:(id<NSDraggingInfo>)draggingInfo index:(NSInteger)index dropOperation:(NSCollectionViewDropOperation)dropOperation
 {
     NSPasteboard *pBoard = [draggingInfo draggingPasteboard];
+    
+    NSData *layoutData = [pBoard dataForType:@"cocoasplit.layout"];
+    
+    if ( layoutData )
+    {
+        
+        NSString *layoutUUID = [NSKeyedUnarchiver unarchiveObjectWithData:layoutData];
+        SourceLayout *draggedLayout = [CaptureController.sharedCaptureController sourceLayoutForUUID:layoutUUID];
+        CSTransitionLayout *newTransition = [[CSTransitionLayout alloc] init];
+        newTransition.layout = draggedLayout;
+        [self.transitionsArrayController addObject:newTransition];
+        return YES;
+    }
+    
+    NSArray *droppedInputs = [pBoard propertyListForType:@"cocoasplit.input.data"];
+    
+    if (droppedInputs)
+    {
+        for (NSData *inputData in droppedInputs)
+        {
+            NSObject <CSInputSourceProtocol> *inputSrc = [NSKeyedUnarchiver unarchiveObjectWithData:inputData];
+            CSTransitionInput *inputTransition = [[CSTransitionInput alloc] init];
+            inputTransition.inputSource = inputSrc;
+            [self.transitionsArrayController addObject:inputTransition];
+            return YES;
+        }
+    }
+
     NSData *indexSave = [pBoard dataForType:@"cocoasplit.transition"];
-    NSIndexSet *indexes = [NSKeyedUnarchiver unarchiveObjectWithData:indexSave];
-    NSInteger draggedItemIdx = [indexes firstIndex];
     
-    
-    
-    CSTransitionBase *draggedItem = [self.transitionsArrayController.arrangedObjects objectAtIndex:draggedItemIdx];
-    NSInteger useIdx = index;
-    
-    if (index > draggedItemIdx)
+    if (indexSave)
     {
-        useIdx--;
+        NSIndexSet *indexes = [NSKeyedUnarchiver unarchiveObjectWithData:indexSave];
+        NSInteger draggedItemIdx = [indexes firstIndex];
+        
+        
+        
+        CSTransitionBase *draggedItem = [self.transitionsArrayController.arrangedObjects objectAtIndex:draggedItemIdx];
+        NSInteger useIdx = index;
+        
+        if (index > draggedItemIdx)
+        {
+            useIdx--;
+        }
+        
+        
+        if (useIdx < 0)
+        {
+            useIdx = 0;
+        }
+        
+        [self.transitionsArrayController removeObjectAtArrangedObjectIndex:draggedItemIdx];
+        [self.transitionsArrayController insertObject:draggedItem atArrangedObjectIndex:useIdx];
+        return YES;
     }
     
-    
-    if (useIdx < 0)
+    bool retVal = NO;
+    for(NSPasteboardItem *item in pBoard.pasteboardItems)
     {
-        useIdx = 0;
+        /*
+        NSString *urlString = [item stringForType:@"public.file-url"];
+        if (urlString)
+        {
+            NSURL *fileURL = [NSURL URLWithString:urlString];
+            if ([self fileURLIsAudio:fileURL])
+            {
+                CSAudioInputSource *audioSrc = [[CSAudioInputSource alloc] initWithPath:fileURL.path];
+                [self addInputSourceWithInput:audioSrc];
+                retVal = YES;
+                continue;
+            }
+            
+        }
+        */
+        NSObject<CSInputSourceProtocol> *itemSrc = [CaptureController.sharedCaptureController inputSourceForPasteboardItem:item];
+        if (itemSrc)
+        {
+            
+            CSTransitionInput *inputTransition = [[CSTransitionInput alloc] init];
+            inputTransition.inputSource = itemSrc;
+            [self.transitionsArrayController addObject:inputTransition];
+            retVal = YES;
+        }
     }
     
-    [self.transitionsArrayController removeObjectAtArrangedObjectIndex:draggedItemIdx];
-    [self.transitionsArrayController insertObject:draggedItem atArrangedObjectIndex:useIdx];
-    return YES;
+    return retVal;
 }
 
+    
 
 -(BOOL)collectionView:(NSCollectionView *)collectionView canDragItemsAtIndexes:(NSIndexSet *)indexes withEvent:(NSEvent *)event
 {

@@ -245,6 +245,11 @@ var addInputToLayoutForTransition = function(input, withTransition, layout) {
                        
                        beginAnimation();
                        useLayout.addSource(input);
+                       if (input.isVideo)
+                       {
+                        input.autoCenter();
+                       }
+                       
                        if (withTransition)
                        {
                        var csanim = new CSAnimation(animInput.layer, null, withTransition);

@@ -6,6 +6,7 @@
 //
 
 #import "CSTransitionInput.h"
+#import "CSInputLayoutTransitionViewController.h"
 
 @implementation CSTransitionInput
 @synthesize holdDuration = _holdDuration;
@@ -155,6 +156,11 @@
     }
     
     self.inputSource.persistent = YES;
+    if (self.inputSource.isVideo)
+    {
+        //[(InputSource *)self.inputSource autoCenter];
+    }
+
     NSMutableString *scriptRet = [NSMutableString string];
     [scriptRet appendString:@"var usePreTrans = null;"];
     if (self.preTransition)
@@ -225,4 +231,10 @@
         return ret;
     }
 
+    -(NSViewController<CSLayoutTransitionViewProtocol> *)configurationViewController
+    {
+        CSInputLayoutTransitionViewController *vc = [[CSInputLayoutTransitionViewController alloc] init];
+        vc.transition = self;
+        return vc;
+    }
 @end
