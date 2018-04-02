@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -21,8 +21,23 @@
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="Hjc-OZ-ws3" customClass="CSTransitionButton">
                     <rect key="frame" x="4" y="4" width="84" height="26"/>
                     <subviews>
+                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="5pc-zq-lJx">
+                            <rect key="frame" x="0.0" y="7" width="12" height="12"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="12" id="Vat-fO-JGr"/>
+                                <constraint firstAttribute="width" constant="12" id="rwb-Ud-wCk"/>
+                            </constraints>
+                            <imageCell key="cell" controlSize="mini" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="play_main" id="R34-rc-ERa"/>
+                            <connections>
+                                <binding destination="-2" name="hidden" keyPath="self.representedObject.preTransition" id="OyC-W3-VMb">
+                                    <dictionary key="options">
+                                        <string key="NSValueTransformerName">NSIsNil</string>
+                                    </dictionary>
+                                </binding>
+                            </connections>
+                        </imageView>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ilh-0v-FOh">
-                            <rect key="frame" x="-2" y="5" width="88" height="17"/>
+                            <rect key="frame" x="-2" y="4" width="88" height="17"/>
                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Label" id="QiM-fX-qwp">
                                 <font key="font" metaFont="system"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -32,9 +47,28 @@
                                 <binding destination="-2" name="value" keyPath="self.representedObject.name" id="tlp-K1-D2M"/>
                             </connections>
                         </textField>
+                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4Mz-H6-hgR">
+                            <rect key="frame" x="72" y="7" width="12" height="12"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="12" id="kwb-bB-l92"/>
+                                <constraint firstAttribute="width" constant="12" id="tYG-eH-n2X"/>
+                            </constraints>
+                            <imageCell key="cell" controlSize="mini" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="play_main" id="0MF-ab-3Ts"/>
+                            <connections>
+                                <binding destination="-2" name="hidden" keyPath="self.representedObject.postTransition" id="K9o-Rg-VAO">
+                                    <dictionary key="options">
+                                        <string key="NSValueTransformerName">NSIsNil</string>
+                                    </dictionary>
+                                </binding>
+                            </connections>
+                        </imageView>
                     </subviews>
                     <constraints>
+                        <constraint firstItem="4Mz-H6-hgR" firstAttribute="centerY" secondItem="Hjc-OZ-ws3" secondAttribute="centerY" id="11v-eO-CWp"/>
                         <constraint firstItem="Ilh-0v-FOh" firstAttribute="leading" secondItem="Hjc-OZ-ws3" secondAttribute="leading" id="5SL-il-bhQ"/>
+                        <constraint firstItem="5pc-zq-lJx" firstAttribute="centerY" secondItem="Hjc-OZ-ws3" secondAttribute="centerY" id="Nae-DB-2Xh"/>
+                        <constraint firstItem="5pc-zq-lJx" firstAttribute="leading" secondItem="Hjc-OZ-ws3" secondAttribute="leading" id="V4d-BF-1KS"/>
+                        <constraint firstAttribute="trailing" secondItem="4Mz-H6-hgR" secondAttribute="trailing" id="dgD-gL-Ytg"/>
                         <constraint firstAttribute="trailing" secondItem="Ilh-0v-FOh" secondAttribute="trailing" id="law-SP-XLa"/>
                         <constraint firstItem="Ilh-0v-FOh" firstAttribute="centerY" secondItem="Hjc-OZ-ws3" secondAttribute="centerY" id="muH-6p-kBV"/>
                     </constraints>
@@ -53,4 +87,7 @@
         </customView>
         <userDefaultsController representsSharedInstance="YES" id="d9l-d9-tGI"/>
     </objects>
+    <resources>
+        <image name="play_main" width="50.400001525878906" height="58.400001525878906"/>
+    </resources>
 </document>
