@@ -123,7 +123,7 @@
         } else if (!self.downImage.hidden) {
             useLayout.sourceAddOrder = kCSSourceAddOrderBottom;
         } else {
-            useLayout.sourceAddOrder = kCSSourceAddOrderAny;
+            useLayout.sourceAddOrder = kCSSourceAddOrderTop;
         }
         
         [self.captureController toggleLayout:self.representedObject usingLayout:useLayout];

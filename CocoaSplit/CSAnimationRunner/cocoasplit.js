@@ -326,6 +326,7 @@ var switchToLayout = function(layout, kwargs) {
         var active_transition = captureController.activeTransition;
         var layout_transition = null;
         
+        
         if (active_transition && captureController.useTransitions)
         {
             var actionScript = active_transition.preReplaceAction(target_layout);

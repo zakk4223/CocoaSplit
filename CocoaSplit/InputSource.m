@@ -3617,8 +3617,10 @@ static NSArray *_sourceTypes = nil;
     }
     
     [CATransaction begin];
-    NSLog(@"SETTING CONSTRAINTS");
+    
     self.layer.constraints = constraints;
+
+
     [CATransaction commit];
     
     

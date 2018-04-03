@@ -10,30 +10,33 @@
 
 @implementation CSTransitionAnimationDelegate
 
+    
+-(void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag
+{
+
+    for (InputSource *nSrc in self.addedInputs)
+    {
+        if (nSrc.layer)
+        {
+                [nSrc buildLayerConstraints];
+                
+        }
+    }
+    
+    for (InputSource *cSrc in self.changedInputs)
+    {
+        if (cSrc.layer)
+        {
+            [cSrc buildLayerConstraints];
+        }
+    }
+
+}
 -(void)animationDidStart:(CAAnimation *)anim
 {
     
     [CATransaction begin];
-    [CATransaction setCompletionBlock:^{
-        for (InputSource *nSrc in self.addedInputs)
-        {
-            if (nSrc.layer)
-            {
-                [nSrc buildLayerConstraints];
-            }
-        }
-        
-        for (InputSource *cSrc in self.changedInputs)
-        {
-            if (cSrc.layer)
-            {
-                [cSrc buildLayerConstraints];
-            }
-        }
 
-    }];
-  
-    
     [CATransaction begin];
     if (self.useAnimation)
     {
@@ -48,7 +51,6 @@
     
     if (self.fullScreen)
     {
-        NSLog(@"ADDING ANIMATION FULL");
         [self.forLayout.rootLayer addAnimation:self.useAnimation forKey:nil];
 
     }

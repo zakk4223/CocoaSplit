@@ -114,7 +114,6 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 
 -(void)runTriggerScriptForInput:(NSObject <CSInputSourceProtocol>*)input withName:(NSString *)scriptName usingContext:(JSContext *)jsCtx
 {
-    
     if (!jsCtx || !input || !scriptName)
     {
         return;
@@ -1135,10 +1134,20 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     [self runAnimationString:sequenceScript withCompletionBlock:completionBlock withExceptionBlock:exceptionBlock withExtraDictionary:extraDict];
 }
 
+    
+    -(void)mergeSourceLayoutViaScript:(SourceLayout *)layout
+    {
+        NSString *mergeScript = @"mergeLayout(extraDict['toLayout']);";
+        
+        NSDictionary *extraDict = @{@"toLayout": layout};
+        [self runAnimationString:mergeScript withCompletionBlock:nil withExceptionBlock:nil withExtraDictionary:extraDict];
+    }
+    
+    
 -(void)replaceWithSourceLayoutViaScript:(SourceLayout *)layout withCompletionBlock:(void (^)(void))completionBlock withExceptionBlock:(void (^)(NSException *exception))exceptionBlock
 {
     NSString *replaceScript = @"switchToLayout(extraDict['toLayout']);";
-    NSDictionary *extraDict = @{@"toLayout": layout};
+    NSDictionary *extraDict = @{@"toLayout": layout};;
     [self runAnimationString:replaceScript withCompletionBlock:completionBlock withExceptionBlock:exceptionBlock withExtraDictionary:extraDict];
 }
 
@@ -1191,7 +1200,6 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
             self.addLayoutBlock(layout);
         }
         
-        NSLog(@"ADDED %@", layout);
         [self.containedLayouts addObject:layout];
     }
     for (SourceLayout *cLayout in layout.containedLayouts.copy)
@@ -1225,6 +1233,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 
 -(void)replaceWithSourceData:(NSData *)sourceData usingScripts:(bool)usingScripts usingTransition:(CSLayoutTransition *)usingTransition withCompletionBlock:(void (^)(void))completionBlock
 {
+    
     NSDictionary *diffResult = [self diffSourceListWithData:sourceData];
     NSMutableArray *changedRemove = [NSMutableArray array];
     
@@ -1307,7 +1316,6 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     bTrans = [CABasicAnimation animationWithKeyPath:dummyKey];
     bTrans.removedOnCompletion = YES;
     bTrans.fillMode = kCAFillModeForwards;
-    bTrans.beginTime = aStart.floatValue;
     if (rTrans)
     {
         bTrans.duration = rTrans.duration;
@@ -1453,13 +1461,6 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 
 
 
--(void)mergeSourceLayoutViaScript:(SourceLayout *)layout
-{
-    NSString *mergeScript = @"mergeLayout(extraDict['toLayout']);";
-    
-    NSDictionary *extraDict = @{@"toLayout": layout};
-    [self runAnimationString:mergeScript withCompletionBlock:nil withExceptionBlock:nil withExtraDictionary:extraDict];
-}
 
 -(void)addSourceForTransition:(InputSource *)toAdd
 {
@@ -1697,7 +1698,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
   
     if (usingTransition)
     {
-        rTrans = usingTransition;
+        rTrans = usingTransition.transition;
         
         if (aStart)
         {
@@ -2183,6 +2184,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     {
         
         [CATransaction begin];
+        /*
         [CATransaction setCompletionBlock:^{
             for (NSObject<CSInputSourceProtocol> *nSrc in self.sourceList)
             {
@@ -2191,7 +2193,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
                     [((InputSource *)nSrc) buildLayerConstraints];
                 }
             }
-        }];
+        }];*/
         NSMutableArray *oldSourceList = self.sourceList;
         
         
@@ -2470,10 +2472,10 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     if (newSource.isVideo)
     {
         [CATransaction begin];
-        [CATransaction setCompletionBlock:^{
+    /*    [CATransaction setCompletionBlock:^{
             [((InputSource *)newSource) buildLayerConstraints];
             
-        }];
+        }];*/
         [(InputSource *)newSource layerUpdated];
         [CATransaction commit];
     }
