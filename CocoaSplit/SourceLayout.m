@@ -196,6 +196,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     newTransition.anchorPoint = CGPointMake(0.0, 0.0);
     newTransition.position = CGPointMake(0.0, 0.0);
     newTransition.masksToBounds = YES;
+    newTransition.layoutManager = [CAConstraintLayoutManager layoutManager];
     [CATransaction commit];
     
     return newTransition;
@@ -1485,15 +1486,6 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     [self addSourceToPresentation:toAdd];
     toAdd.layer.hidden = YES;
     [CATransaction begin];
-
-
-    
-    toAdd.needsAdjustment = YES;
-    if (toAdd.isVideo)
-    {
-        InputSource *vSrc = (InputSource *)toAdd;
-        vSrc.autoPlaceOnFrameUpdate = YES;
-    }
     [realLayer addSublayer:toAdd.layer];
     [CATransaction commit];
 }

@@ -2033,7 +2033,6 @@ static NSArray *_sourceTypes = nil;
 {
     
     
-    
     self.layoutPosition = self.layer.frame;
     _x_pos = self.layer.frame.origin.x;
     _y_pos = self.layer.frame.origin.y;
@@ -3616,12 +3615,12 @@ static NSArray *_sourceTypes = nil;
         
     }
     
-    [CATransaction begin];
+        [CATransaction begin];
+        
+        self.layer.constraints = constraints;
     
-    self.layer.constraints = constraints;
+        [CATransaction commit];
 
-
-    [CATransaction commit];
     
     
 }

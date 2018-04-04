@@ -247,7 +247,7 @@ var addInputToLayoutForTransition = function(input, withTransition, layout) {
                        useLayout.addSource(input);
                        if (input.isVideo)
                        {
-                        input.autoCenter();
+                          input.buildLayerConstraints();
                        }
                        
                        if (withTransition)

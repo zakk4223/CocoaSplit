@@ -107,7 +107,15 @@
 -(void)setInputSource:(NSObject<CSInputSourceProtocol> *)inputSource
 {
     _inputSource = inputSource;
+    if (inputSource && inputSource.isVideo)
+    {
+        [(InputSource *)inputSource frameTick];
+        [(InputSource *)inputSource autoSize];
+
+        
+    }
 }
+    
     
     
 -(NSObject<CSInputSourceProtocol> *)inputSource
