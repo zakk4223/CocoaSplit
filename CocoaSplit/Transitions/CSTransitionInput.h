@@ -14,6 +14,7 @@
 @property (assign) bool waitForMedia;
 @property (assign) float realHoldDuration;
 @property (assign) bool transitionAfterPre;
+@property (assign) bool wholeLayout;
 
 -(NSObject<CSInputSourceProtocol> *)getInputSource;
 
@@ -30,6 +31,7 @@
 
 @property (assign) bool waitForMedia;
 @property (assign) bool transitionAfterPre;
+@property (assign) bool wholeLayout;
 
 -(NSObject<CSInputSourceProtocol> *)getInputSource;
 

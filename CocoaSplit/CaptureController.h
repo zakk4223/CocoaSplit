@@ -327,6 +327,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(SourceLayout *)sourceLayoutForUUID:(NSString *)uuid;
 -(bool)deleteTransition:(CSTransitionBase *)transition;
 -(CSTransitionBase *)transitionForName:(NSString *)name;
+-(CSTransitionBase *)transitionForUUID:(NSString *)uuid;
 
 
 @end

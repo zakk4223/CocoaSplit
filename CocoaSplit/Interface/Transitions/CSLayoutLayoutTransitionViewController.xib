@@ -114,6 +114,24 @@
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="TTU-IS-m2W">
                     <rect key="frame" x="21" y="8" width="203" height="4"/>
                 </customView>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="23k-ag-kQJ">
+                    <rect key="frame" x="119" y="36" width="62" height="20"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="14" id="IUh-U2-TDo"/>
+                        <constraint firstAttribute="width" constant="57" id="eyK-bT-PZG"/>
+                    </constraints>
+                    <buttonCell key="cell" type="check" title="On top" bezelStyle="regularSquare" imagePosition="right" controlSize="small" state="on" inset="2" id="6ic-6u-Go0">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="qIT-yG-aZf" name="value" keyPath="selection.wholeLayout" id="rVx-oU-Nys">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </button>
             </subviews>
             <constraints>
                 <constraint firstItem="bKy-WN-sQO" firstAttribute="baseline" secondItem="Nqr-9t-Ou9" secondAttribute="firstBaseline" id="0o7-lh-k60"/>
@@ -125,9 +143,11 @@
                 <constraint firstItem="d1C-oR-MtB" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="20" symbolic="YES" id="DPN-Un-Es1"/>
                 <constraint firstItem="Xsi-Bx-JQy" firstAttribute="leading" secondItem="pef-lr-P9X" secondAttribute="trailing" constant="8" symbolic="YES" id="E6v-Ld-OZb"/>
                 <constraint firstItem="Xsi-Bx-JQy" firstAttribute="baseline" secondItem="pef-lr-P9X" secondAttribute="firstBaseline" id="Fcl-nM-ehC"/>
+                <constraint firstItem="23k-ag-kQJ" firstAttribute="centerY" secondItem="UXv-J0-BWk" secondAttribute="centerY" id="G1v-HV-wth"/>
                 <constraint firstItem="pef-lr-P9X" firstAttribute="top" secondItem="Nqr-9t-Ou9" secondAttribute="bottom" constant="8" symbolic="YES" id="GWL-kU-5SA"/>
                 <constraint firstItem="bKy-WN-sQO" firstAttribute="top" secondItem="d1C-oR-MtB" secondAttribute="bottom" constant="8" symbolic="YES" id="LPT-sh-1cR"/>
                 <constraint firstItem="UXv-J0-BWk" firstAttribute="top" secondItem="Xsi-Bx-JQy" secondAttribute="bottom" constant="8" symbolic="YES" id="NWz-bl-7ct"/>
+                <constraint firstItem="23k-ag-kQJ" firstAttribute="leading" secondItem="UXv-J0-BWk" secondAttribute="trailing" constant="8" symbolic="YES" id="PCm-i4-tjl"/>
                 <constraint firstItem="bKy-WN-sQO" firstAttribute="leading" secondItem="Nqr-9t-Ou9" secondAttribute="trailing" constant="8" symbolic="YES" id="PRa-0N-f9d"/>
                 <constraint firstItem="Xsi-Bx-JQy" firstAttribute="top" secondItem="bKy-WN-sQO" secondAttribute="bottom" constant="7" id="Unw-Ns-5M0"/>
                 <constraint firstAttribute="trailing" secondItem="bKy-WN-sQO" secondAttribute="trailing" constant="20" symbolic="YES" id="YOW-Dx-aFv"/>

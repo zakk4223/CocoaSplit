@@ -35,6 +35,9 @@
     [aCoder encodeBool:self.active forKey:@"active"];
     [aCoder encodeBool:self.isToggle forKey:@"isToggle"];
     [aCoder encodeObject:_duration forKey:@"duration"];
+    [aCoder encodeObject:self.preTransition forKey:@"preTransition"];
+    [aCoder encodeObject:self.postTransition forKey:@"postTransition"];
+    
 }
 
 
@@ -48,6 +51,8 @@
         self.active = [aDecoder decodeBoolForKey:@"active"];
         self.isToggle = [aDecoder decodeBoolForKey:@"isToggle"];
         _duration = [aDecoder decodeObjectForKey:@"duration"];
+        self.preTransition = [aDecoder decodeObjectForKey:@"preTransition"];
+        self.postTransition = [aDecoder decodeObjectForKey:@"postTransition"];
     }
     return self;
 }

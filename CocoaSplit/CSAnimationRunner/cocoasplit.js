@@ -194,7 +194,7 @@ var advanceBeginTime = function(duration) {
 }
 
 
-var removeInputFromLayout = function(input, withTransition, layout) {
+var removeInputFromLayout = function(input, withTransition, layout, wholeLayout) {
     var useLayout = layout;
     if (!useLayout)
     {
@@ -209,9 +209,16 @@ var removeInputFromLayout = function(input, withTransition, layout) {
                        setCompletionBlock(function() {useLayout.deleteSource(input);});
                        if (withTransition)
                        {
-                       var csanim = new CSAnimation(animInput.layer, null, withTransition);
+                       var useLayer = null;
+                       if (wholeLayout)
+                       {
+                       useLayer = layout.transitionLayer;
+                       } else {
+                       useLayer = animInput.layer;
+                       }
+                       var csanim = new CSAnimation(useLayer, null, withTransition);
                        
-                       animInput.add_animation(csanim, animInput.layer, null);
+                       animInput.add_animation(csanim, useLayer, null);
                        }
                        animInput.hidden(true, 0.0);
                        
@@ -227,7 +234,7 @@ var removeInputFromLayout = function(input, withTransition, layout) {
 
 }
 
-var addInputToLayoutForTransition = function(input, withTransition, layout) {
+var addInputToLayoutForTransition = function(input, withTransition, layout, wholeLayout) {
     var useLayout = layout;
     if (!useLayout)
     {
@@ -252,9 +259,16 @@ var addInputToLayoutForTransition = function(input, withTransition, layout) {
                        
                        if (withTransition)
                        {
-                       var csanim = new CSAnimation(animInput.layer, null, withTransition);
+                       var useLayer = null;
+                       if (wholeLayout)
+                       {
+                       useLayer = layout.transitionLayer;
+                       } else {
+                       useLayer = animInput.layer;
+                       }
+                       var csanim = new CSAnimation(useLayer, null, withTransition);
                        
-                       animInput.add_animation(csanim, animInput.layer, null);
+                       animInput.add_animation(csanim, useLayer, null);
                        }
                        animInput.hidden(false, 0.0);
                        commitAnimation();

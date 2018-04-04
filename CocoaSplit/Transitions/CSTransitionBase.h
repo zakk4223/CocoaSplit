@@ -52,6 +52,7 @@
 @property (assign) bool isToggle;
 @property (assign) bool canToggle;
 
+
 +(NSArray *)subTypes;
 +(NSString *)transitionCategory;
 

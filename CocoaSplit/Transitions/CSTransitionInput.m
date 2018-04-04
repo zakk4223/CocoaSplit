@@ -32,6 +32,7 @@
         newObj.holdDuration = self.holdDuration;
         newObj.waitForMedia = self.waitForMedia;
         newObj.transitionAfterPre = self.transitionAfterPre;
+        newObj.wholeLayout = self.wholeLayout;
     }
     return newObj;
 }
@@ -50,6 +51,7 @@
     [aCoder encodeObject:self.holdDuration forKey:@"holdDuration"];
     [aCoder encodeBool:self.waitForMedia forKey:@"waitForMedia"];
     [aCoder encodeBool:self.transitionAfterPre forKey:@"transitionAfterPre"];
+    [aCoder encodeBool:self.wholeLayout forKey:@"wholeLayout"];
 }
 
 
@@ -67,6 +69,11 @@
         if ([aDecoder containsValueForKey:@"transitionAfterPre"])
         {
             self.transitionAfterPre = [aDecoder decodeBoolForKey:@"transitionAfterPre"];
+        }
+        
+        if ([aDecoder containsValueForKey:@"wholeLayout"])
+        {
+            self.wholeLayout = [aDecoder decodeBoolForKey:@"wholeLayout"];
         }
     }
     
@@ -187,7 +194,7 @@
         [scriptRet appendString:@"self.realPreTransition = usePreTrans;"];
     }
     
-    [scriptRet appendString:@"var transitionCSInput = addInputToLayoutForTransition(self.inputSource, self.realPreTransition);"];
+    [scriptRet appendString:@"var transitionCSInput = addInputToLayoutForTransition(self.inputSource, self.realPreTransition, getCurrentLayout(), self.wholeLayout);"];
     
     if (self.preTransition)
     {
@@ -233,7 +240,7 @@
         [scriptRet appendString:@"if (actionScript) {var prerTrans = (new Function('self', actionScript))(self.postTransition); if (prerTrans) { usePostTrans = prerTrans.transition;} }"];
         [scriptRet appendString:@"self.realPostTransition = usePostTrans;"];
     }
-    [scriptRet appendString:@"removeInputFromLayout(self.inputSource, self.realPostTransition);"];
+    [scriptRet appendString:@"removeInputFromLayout(self.inputSource, self.realPostTransition, getCurrentLayout(), self.wholeLayout);"];
     if (self.postTransition)
     {
         [scriptRet appendString:@"var postPostScript = self.postTransition.postRemoveAction();"];

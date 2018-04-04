@@ -85,6 +85,24 @@
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="WQY-nK-l4U">
                     <rect key="frame" x="21" y="8" width="203" height="4"/>
                 </customView>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vyF-1V-Zex">
+                    <rect key="frame" x="119" y="36" width="62" height="20"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="57" id="1uZ-Qc-NfO"/>
+                        <constraint firstAttribute="height" constant="14" id="ZiL-ee-NFp"/>
+                    </constraints>
+                    <buttonCell key="cell" type="check" title="On top" bezelStyle="regularSquare" imagePosition="right" controlSize="small" state="on" inset="2" id="8Nf-ad-9sX">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="sfv-if-1UN" name="value" keyPath="selection.wholeLayout" id="CSu-WZ-SOt">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </button>
             </subviews>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="WQY-nK-l4U" secondAttribute="trailing" constant="20" symbolic="YES" id="0Ix-gx-blH"/>
@@ -94,6 +112,7 @@
                 <constraint firstItem="ewd-lD-bT8" firstAttribute="leading" secondItem="8Xo-Et-I7O" secondAttribute="trailing" constant="10" id="8f0-Ke-3t0"/>
                 <constraint firstItem="WQY-nK-l4U" firstAttribute="top" secondItem="M2z-m0-nma" secondAttribute="bottom" constant="8" symbolic="YES" id="Kys-oE-nn3"/>
                 <constraint firstItem="ewd-lD-bT8" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="20" symbolic="YES" id="OIT-N8-4Uw"/>
+                <constraint firstItem="vyF-1V-Zex" firstAttribute="leading" secondItem="u9O-Kw-zXN" secondAttribute="trailing" constant="8" symbolic="YES" id="OSH-tQ-Ha3"/>
                 <constraint firstItem="8Xo-Et-I7O" firstAttribute="baseline" secondItem="ewd-lD-bT8" secondAttribute="baseline" id="SEJ-Uz-JPO"/>
                 <constraint firstAttribute="trailing" secondItem="ewd-lD-bT8" secondAttribute="trailing" constant="21" id="Tjr-Rj-kMl"/>
                 <constraint firstItem="WQY-nK-l4U" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="TmW-45-5zO"/>
@@ -103,6 +122,7 @@
                 <constraint firstItem="bja-uD-aN1" firstAttribute="leading" secondItem="aTF-Dl-7ep" secondAttribute="trailing" constant="8" symbolic="YES" id="h9K-5g-StS"/>
                 <constraint firstAttribute="bottom" secondItem="WQY-nK-l4U" secondAttribute="bottom" constant="8" id="hzp-Qq-Hvx"/>
                 <constraint firstItem="M2z-m0-nma" firstAttribute="leading" secondItem="WQY-nK-l4U" secondAttribute="leading" id="ic9-ec-PSb"/>
+                <constraint firstItem="vyF-1V-Zex" firstAttribute="centerY" secondItem="u9O-Kw-zXN" secondAttribute="centerY" id="kOJ-mV-cfD"/>
                 <constraint firstItem="aTF-Dl-7ep" firstAttribute="baseline" secondItem="bja-uD-aN1" secondAttribute="baseline" id="kxF-Fv-nIR"/>
                 <constraint firstItem="u9O-Kw-zXN" firstAttribute="top" secondItem="bja-uD-aN1" secondAttribute="bottom" constant="8" symbolic="YES" id="xRa-8O-yg1"/>
             </constraints>

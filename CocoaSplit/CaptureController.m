@@ -610,7 +610,18 @@
 
 
 
-
+-(CSTransitionBase *)transitionForUUID:(NSString *)uuid
+{
+    for (CSTransitionBase *trans in self.transitions)
+    {
+        if ([trans.uuid isEqualToString:uuid])
+        {
+            return trans;
+        }
+    }
+    
+    return nil;
+}
 
 -(CSTransitionBase *)transitionForName:(NSString *)name
 {
