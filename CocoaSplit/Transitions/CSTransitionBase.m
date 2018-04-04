@@ -11,12 +11,16 @@
 @implementation CSTransitionBase
 
 @synthesize duration = _duration;
+@synthesize active = _active;
+
 
 -(instancetype)init
 {
     if (self = [super init])
     {
         self.uuid = [NSUUID UUID].UUIDString;
+        self.canToggle = NO;
+        self.isToggle = NO;
     }
     
     return self;
@@ -29,6 +33,7 @@
     [aCoder encodeObject:self.uuid forKey:@"uuid"];
     [aCoder encodeObject:self.subType forKey:@"subType"];
     [aCoder encodeBool:self.active forKey:@"active"];
+    [aCoder encodeBool:self.isToggle forKey:@"isToggle"];
     [aCoder encodeObject:_duration forKey:@"duration"];
 }
 
@@ -41,6 +46,7 @@
         self.uuid = [aDecoder decodeObjectForKey:@"uuid"];
         self.subType = [aDecoder decodeObjectForKey:@"subType"];
         self.active = [aDecoder decodeBoolForKey:@"active"];
+        self.isToggle = [aDecoder decodeBoolForKey:@"isToggle"];
         _duration = [aDecoder decodeObjectForKey:@"duration"];
     }
     return self;
@@ -57,6 +63,31 @@
     return newObj;
 }
 
+-(bool)active
+{
+    return _active;
+}
+
+-(void)setActive:(bool)active
+{
+    _active = active;
+    if (self.isToggle)
+    {
+        NSString *actionName = nil;
+        SourceLayout *useLayout = CaptureController.sharedCaptureController.activeLayout;
+        if (_active)
+        {
+            actionName = @"preChangeAction";
+        } else {
+            actionName = @"postChangeAction";
+        }
+        
+        NSMutableString *runScript = [NSMutableString string];
+        [runScript appendString:[NSString stringWithFormat:@"var actionScript = extraDict.transition.%@(getCurrentLayout());", actionName]];
+        [runScript appendString:@"if (actionScript) { beginAnimation(); (new Function('self', actionScript))(extraDict.transition);commitAnimation();}"];
+        [useLayout runAnimationString:runScript withCompletionBlock:nil withExceptionBlock:nil withExtraDictionary:@{@"transition": self}];
+    }
+}
 
 -(void)setDuration:(NSNumber *)duration
 {

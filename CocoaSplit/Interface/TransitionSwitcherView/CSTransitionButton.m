@@ -72,7 +72,12 @@
      CSTransitionBase *transition = self.viewController.representedObject;
     if (transition.active)
     {
-        backgroundColor = CGColorCreateGenericRGB(1.0f, 0.0f, 0.0f, useAlpha);
+        if (transition.isToggle)
+        {
+            backgroundColor = CGColorCreateGenericRGB(0.0f, 1.0f, 0.0f, useAlpha);
+        } else {
+            backgroundColor = CGColorCreateGenericRGB(1.0f, 0.0f, 0.0f, useAlpha);
+        }
     } else {
         backgroundColor = CGColorCreateGenericRGB(0.353f, 0.534f, 0.434, useAlpha);
     }

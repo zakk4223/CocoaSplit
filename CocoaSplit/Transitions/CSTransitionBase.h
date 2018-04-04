@@ -19,6 +19,8 @@
 @property (strong) NSString *uuid;
 @property (strong) CSTransitionBase *preTransition;
 @property (strong) CSTransitionBase *postTransition;
+@property (assign) bool isToggle;
+@property (assign) bool canToggle;
 
 -(NSString *)preChangeAction:(SourceLayout *)targetLayout;
 -(NSString *)postChangeAction:(SourceLayout *)targetLayout;
@@ -47,6 +49,8 @@
 @property (strong) CSTransitionBase *postTransition;
 @property (readonly) bool usesPreTransitions;
 @property (readonly) bool usesPostTransitions;
+@property (assign) bool isToggle;
+@property (assign) bool canToggle;
 
 +(NSArray *)subTypes;
 +(NSString *)transitionCategory;

@@ -17,6 +17,7 @@
         if (self = [super init])
         {
             self.transitionAfterPre = YES;
+            self.canToggle = YES;
         }
         return self;
     }
@@ -126,6 +127,14 @@
         if (!_inputSource)
         {
             _inputSource = [self getInputSource];
+            
+        }
+        if (_inputSource && _inputSource.isVideo)
+        {
+            [(InputSource *)_inputSource frameTick];
+            [(InputSource *)_inputSource autoSize];
+            
+            
         }
     }
     return _inputSource;
@@ -187,6 +196,12 @@
     }
     
     
+    if (self.isToggle)
+    {
+        return scriptRet;
+    }
+    
+    
     if (self.waitForMedia)
     {
         [scriptRet appendString:@"transitionCSInput.waitAnimation(self.inputSource.duration);"];
@@ -229,20 +244,20 @@
     return scriptRet;
 }
 
-    -(NSObject<CSInputSourceProtocol> *)restoreInputSource
+-(NSObject<CSInputSourceProtocol> *)restoreInputSource
+{
+    NSObject<CSInputSourceProtocol> *ret = nil;
+    if (self.inputSourceSavedata)
     {
-        NSObject<CSInputSourceProtocol> *ret = nil;
-        if (self.inputSourceSavedata)
-        {
-            ret = [NSKeyedUnarchiver unarchiveObjectWithData:self.inputSourceSavedata];
-        }
-        return ret;
+        ret = [NSKeyedUnarchiver unarchiveObjectWithData:self.inputSourceSavedata];
     }
+    return ret;
+}
 
-    -(NSViewController<CSLayoutTransitionViewProtocol> *)configurationViewController
-    {
-        CSInputLayoutTransitionViewController *vc = [[CSInputLayoutTransitionViewController alloc] init];
-        vc.transition = self;
-        return vc;
-    }
+-(NSViewController<CSLayoutTransitionViewProtocol> *)configurationViewController
+{
+    CSInputLayoutTransitionViewController *vc = [[CSInputLayoutTransitionViewController alloc] init];
+    vc.transition = self;
+    return vc;
+}
 @end

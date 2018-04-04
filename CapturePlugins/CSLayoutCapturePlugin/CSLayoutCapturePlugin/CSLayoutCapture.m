@@ -228,7 +228,9 @@
     if (self.activeVideoDevice)
     {
         SourceLayoutHack *capDev = self.activeVideoDevice.captureDevice;
-        return NSMakeSize(capDev.canvas_width, capDev.canvas_height);
+        
+        NSSize ret =  NSMakeSize(capDev.canvas_width, capDev.canvas_height);
+        return ret;
     }
     return NSZeroSize;
 }

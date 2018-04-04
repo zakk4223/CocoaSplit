@@ -48,6 +48,25 @@
 {
     
     CSTransitionBase *myTransition = self.representedObject;
+    
+    bool toggleClick = [NSEvent modifierFlags] & NSShiftKeyMask;
+    
+    if (toggleClick && myTransition.canToggle)
+    {
+        myTransition.isToggle = YES;
+    }
+    
+    if (myTransition.isToggle)
+    {
+        myTransition.active = !myTransition.active;
+        if (!myTransition.active)
+        {
+            myTransition.isToggle = NO;
+        }
+        return;
+    }
+    
+    
     if (myTransition.active)
     {
         myTransition = nil;
