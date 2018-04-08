@@ -21,8 +21,9 @@
 
 @interface CSPcmPlayer ()
 
--(instancetype) initWithPlayers:(NSArray  *)players;
--(void) addPlayer:(id)player;
+-(void) addPlayer:(id)player forUUID:(NSString *)uuid;
+-(void)removePlayerForUUID:(NSString *)uuid;
+
 -(AudioStreamBasicDescription *)audioDescription;
 
 @end
@@ -374,8 +375,15 @@
             
         }
 
+        InputSource *lsrc = (InputSource *)inputsrc;
         
         [self.allLayers removeObjectForKey:inputsrc];
+        for (NSString *nodeUID in pcmPlayers)
+        {
+            CSPcmPlayer *ply = [pcmPlayers objectForKey:nodeUID];
+            [ply removePlayerForUUID:lsrc.uuid];
+        }
+        
         
         if (!self.tickInput)
         {
@@ -494,8 +502,7 @@
     @autoreleasepool
     {
         CAMultiAudioEngine *useEngine = nil;
-        NSMutableArray *players = [NSMutableArray array];
-        
+        CSPcmPlayer *newPlayer = [[CSPcmPlayer alloc] init];
         
         NSMapTable *inputsCopy = nil;
         @synchronized(self)
@@ -528,13 +535,13 @@
             
             if (player)
             {
-                [players addObject:player];
+                [newPlayer addPlayer:player forUUID:layerSrc.uuid];
                 player.name = withName;
             }
         }
         
-        CSPcmPlayer *newPlayer = [[CSPcmPlayer alloc] initWithPlayers:players];
         
+    
         newPlayer.nodeUID = forUID;
         
         [pcmPlayers setObject:newPlayer forKey:newPlayer.nodeUID];
@@ -859,7 +866,7 @@
                             if (useDesc)
                             {
                                 CAMultiAudioPCMPlayer *newPlayer = [useEngine createPCMInput:pPlayer.nodeUID withFormat:useDesc];
-                                [pPlayer addPlayer:newPlayer];
+                                [pPlayer addPlayer:newPlayer forUUID:inputSource.uuid];
                             }
                         }
                     } else {

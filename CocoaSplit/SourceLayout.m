@@ -2362,6 +2362,8 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         [delSource removeObserver:self forKeyPath:@"depth"];
         [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputDeleted  object:delSource userInfo:nil];
     }
+    
+    delSource.is_live = NO;
     delSource.sourceLayout = nil;
 
     delSource.isVisible = NO;

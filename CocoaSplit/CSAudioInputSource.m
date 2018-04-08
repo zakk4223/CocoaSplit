@@ -424,6 +424,11 @@
     return YES;
 }
 
+-(void)dealloc
+{
+    [self restoreAudioSettings];
+}
+
 
 -(void)beforeReplace:(bool)removing
 {
@@ -437,12 +442,9 @@
 
 -(void)beforeRemove
 {
-    
     [self restoreAudioSettings];
     if ([self.audioNode isKindOfClass:CAMultiAudioFile.class])
     {
-
-        
         //[[self findAudioEngine] removeFileInput:(CAMultiAudioFile *)self.audioNode];
     }
 }
