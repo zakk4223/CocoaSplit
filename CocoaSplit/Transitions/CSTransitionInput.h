@@ -23,6 +23,9 @@
 @end
 
 @interface CSTransitionInput : CSTransitionBase <CSTransitionInputExport>
+{
+    NSString *_savedInputName;
+}
 @property (strong) NSNumber *holdDuration;
 @property (assign) float realHoldDuration;
 @property (strong) NSObject<CSInputSourceProtocol> *inputSource;

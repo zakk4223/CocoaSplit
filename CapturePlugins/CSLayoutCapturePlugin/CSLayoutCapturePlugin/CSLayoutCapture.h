@@ -31,8 +31,7 @@
 @property (assign) AudioStreamBasicDescription *inputASBD;
 @property (assign) int sampleRate;
 @property (assign) bool skipCompression;
-
-
+-(void) stopEncoder;
 @end
 
 @interface AudioGraphHack : NSObject

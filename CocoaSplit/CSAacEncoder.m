@@ -190,8 +190,23 @@
         
         int32_t msecs_sleep = secs_sleep * USEC_PER_SEC;
 
+        
+        @synchronized(self)
+        {
+            if (_stopRequested)
+            {
+                return;
+            }
+        }
         usleep(msecs_sleep);
         
+        @synchronized(self)
+        {
+            if (_stopRequested)
+            {
+                return;
+            }
+        }
     }
 }
 
@@ -303,8 +318,11 @@
         self.encoderStarted = NO;
         AudioCodecUninitialize(aacCodec);
         free(magicCookie);
+        @synchronized(self)
+        {
+            _stopRequested = YES;
+        }
     }
-    
 }
 -(void)dealloc
 {

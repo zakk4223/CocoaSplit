@@ -52,6 +52,7 @@
     [aCoder encodeBool:self.waitForMedia forKey:@"waitForMedia"];
     [aCoder encodeBool:self.transitionAfterPre forKey:@"transitionAfterPre"];
     [aCoder encodeBool:self.wholeLayout forKey:@"wholeLayout"];
+    [aCoder encodeObject:_savedInputName forKey:@"savedInputName"];
 }
 
 
@@ -75,6 +76,8 @@
         {
             self.wholeLayout = [aDecoder decodeBoolForKey:@"wholeLayout"];
         }
+        
+        _savedInputName = [aDecoder decodeObjectForKey:@"savedInputName"];
     }
     
     return self;
@@ -103,8 +106,17 @@
 
 -(NSString *)name
 {
+
     
     NSString *ret = [super name];
+    
+    if (!ret)
+    {
+        if (_savedInputName)
+        {
+            ret = _savedInputName;
+        }
+    }
     if (!ret && self.inputSource)
     {
         ret = self.inputSource.name;
@@ -115,6 +127,7 @@
 -(void)setInputSource:(NSObject<CSInputSourceProtocol> *)inputSource
 {
     _inputSource = inputSource;
+    _savedInputName = inputSource.name;
     if (inputSource && inputSource.isVideo)
     {
         [(InputSource *)inputSource frameTick];
@@ -144,6 +157,7 @@
             
         }
     }
+    _savedInputName = _inputSource.name;
     return _inputSource;
 }
     

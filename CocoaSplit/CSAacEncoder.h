@@ -34,6 +34,7 @@
     dispatch_source_t _dispatch_timer;
     dispatch_semaphore_t _aSemaphore;
     CMFormatDescriptionRef _pcmFormat;
+    bool _stopRequested;
     
     
 }
@@ -48,7 +49,6 @@
 
 -(void) enqueuePCM:(AudioBufferList *)pcmBuffer atTime:(const AudioTimeStamp *)atTime;
 -(void) setupEncoderBuffer;
-
 -(void) stopEncoder;
 -(void *)inputBufferPtr;
 
