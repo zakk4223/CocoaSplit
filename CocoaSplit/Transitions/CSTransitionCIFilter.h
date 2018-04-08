@@ -10,6 +10,7 @@
 @protocol CSTransitionCIFilterExport <JSExport>
 @property (assign) bool wholeLayout;
 @property (strong) CIFilter *transitionFilter;
+@property (strong) NSString *timingFunction;
 @property (strong) CATransition *realTransition;
 @end
 
@@ -17,5 +18,6 @@
 @property (assign) bool wholeLayout;
 @property (strong) CIFilter *transitionFilter;
 @property (strong) CATransition *realTransition;
-
+@property (strong) NSString *timingFunction;
+@property (strong) NSDictionary *timingFunctions;
 @end
