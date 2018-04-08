@@ -29,7 +29,10 @@
     return self.captureController.multiAudioEngine.audioInputs;
 }
 
-
+-(NSArray *)transitions
+{
+        return self.captureController.transitions;
+}
 -(NSArray *)captureDestinations
 {
     return self.captureController.captureDestinations;
@@ -48,7 +51,11 @@
     return (unsigned int)self.captureController.layoutSequences.count;
 }
 
-
+-( unsigned int)countOfTransitionsArray {
+    return (unsigned int)self.captureController.transitions.count;
+}
+    
+    
 - (unsigned int)countOfLayoutsArray {
     return (unsigned int)self.captureController.sourceLayouts.count+2;
 }
@@ -146,7 +153,7 @@
 {
     
     
-    NSArray *keys = @[@"layouts", @"width", @"height", @"fps", @"activelayout", @"layoutscripts", @"audioInputs", @"captureDestinations", @"staginglayout", @"livelayout", @"useTransitions", @"previewAudio", @"streamAudio"];
+    NSArray *keys = @[@"layouts", @"width", @"height", @"fps", @"activelayout", @"layoutscripts", @"audioInputs", @"captureDestinations", @"staginglayout", @"livelayout", @"useTransitions", @"previewAudio", @"streamAudio", @"transitions"];
     
     return [keys containsObject:key];
 }

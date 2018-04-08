@@ -16,6 +16,9 @@
             <element type="output">
                 <cocoa key="captureDestinations"/>
             </element>
+            <element type="transition">
+                <cocoa key="transitions"/>
+            </element>
             
             <property name="activelayout" code="CSal" type="layout" access="r"/>
             <property name="staginglayout" code="CSsl" type="layout" access = "r"/>
@@ -69,6 +72,29 @@
             </responds-to>
             
             
+        </class>
+        
+        <class name="transition" code="CStr">
+            <cocoa class="CSTransitionBase"/>
+            <property name="name" code="pnam" type="text">
+                <cocoa key="name"/>
+            </property>
+            
+            <responds-to name="deactivate">
+                <cocoa method="scriptDeactivate:"/>
+            </responds-to>
+            
+            <responds-to name="activate">
+                <cocoa method="scriptActivate:"/>
+            </responds-to>
+            
+            <responds-to name="toggle">
+                <cocoa method="scriptToggle:"/>
+            </responds-to>
+            
+            <responds-to name="toggleLive">
+                <cocoa method="scriptToggleLive:"/>
+            </responds-to>
         </class>
         
         
@@ -187,6 +213,21 @@
         </command>
 
 
+        <command name="deactivate" code="CStrdeac">
+            <direct-parameter type="transition"/>
+        </command>
+        
+        <command name="activate" code="CStracti">
+            <direct-parameter type="transition"/>
+        </command>
+        
+        <command name="toggle" code="CStrtogg">
+            <direct-parameter type="transition"/>
+        </command>
+        
+        <command name="toggleLive" code="CStrtglv">
+            <direct-parameter type="transition"/>
+        </command>
 
         <command name="toggle" code="CSsstogl">
             <direct-parameter type="layout"/>

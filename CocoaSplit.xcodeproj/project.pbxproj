@@ -128,9 +128,7 @@
 		345F8B711A177C1F009A81E3 /* CAMultiAudioConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B701A177C1F009A81E3 /* CAMultiAudioConverter.m */; };
 		345F8B751A17A785009A81E3 /* CAMultiAudioMixer.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B741A17A785009A81E3 /* CAMultiAudioMixer.m */; };
 		345F8B791A183D1D009A81E3 /* CAMultiAudioEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B781A183D1D009A81E3 /* CAMultiAudioEngine.m */; };
-		3460E58A1AC766260080358E /* rotate.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3460E5871AC764500080358E /* rotate.py */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		346395052018483300556407 /* CSPcmPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 346395042018483300556407 /* CSPcmPlayer.m */; };
-		3463F99F1AD1594300F3B5C8 /* movement.py in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3463F99D1AD0DC7100F3B5C8 /* movement.py */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		346544DC1FC22CF0003B9991 /* CSNSButtonCellThemed.m in Sources */ = {isa = PBXBuildFile; fileRef = 346544DB1FC22CF0003B9991 /* CSNSButtonCellThemed.m */; };
 		346544DF1FC24248003B9991 /* NSImage+tintedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 346544DE1FC24248003B9991 /* NSImage+tintedImage.m */; };
 		346544E21FC2457E003B9991 /* CSNSImageCellThemed.m in Sources */ = {isa = PBXBuildFile; fileRef = 346544E11FC2457E003B9991 /* CSNSImageCellThemed.m */; };
@@ -184,6 +182,7 @@
 		34938EE81AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 34938EE71AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m */; };
 		34938EED1AE4D24200F3B1CF /* CSFilterChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34938EEB1AE4D24200F3B1CF /* CSFilterChooserWindowController.m */; };
 		34938EEF1AE4D24200F3B1CF /* CSFilterChooserWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34938EEC1AE4D24200F3B1CF /* CSFilterChooserWindowController.xib */; };
+		349400DA207A02CC0092EF90 /* CSTransitionBase+ScriptingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 349400D9207A02CC0092EF90 /* CSTransitionBase+ScriptingAdditions.m */; };
 		349461681ABC57C100F28883 /* CSAnimationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 349461671ABC57C100F28883 /* CSAnimationItem.m */; };
 		3494DF381CCD2DB000E921BF /* TPCircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 3494DF341CCD2DB000E921BF /* TPCircularBuffer.c */; };
 		3494DF391CCD2DB000E921BF /* TPCircularBuffer+AudioBufferList.c in Sources */ = {isa = PBXBuildFile; fileRef = 3494DF361CCD2DB000E921BF /* TPCircularBuffer+AudioBufferList.c */; };
@@ -566,8 +565,6 @@
 			dstPath = Animations;
 			dstSubfolderSpec = 7;
 			files = (
-				3463F99F1AD1594300F3B5C8 /* movement.py in CopyFiles */,
-				3460E58A1AC766260080358E /* rotate.py in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -833,9 +830,7 @@
 		345F8B741A17A785009A81E3 /* CAMultiAudioMixer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioMixer.m; path = CAMultiAudio/CAMultiAudioMixer.m; sourceTree = "<group>"; };
 		345F8B781A183D1D009A81E3 /* CAMultiAudioEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioEngine.m; path = CAMultiAudio/CAMultiAudioEngine.m; sourceTree = "<group>"; };
 		345F8B7B1A184FBC009A81E3 /* CAMultiAudioMixingProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAMultiAudioMixingProtocol.h; sourceTree = "<group>"; };
-		3460E5871AC764500080358E /* rotate.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = rotate.py; sourceTree = "<group>"; };
 		346395042018483300556407 /* CSPcmPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSPcmPlayer.m; sourceTree = "<group>"; };
-		3463F99D1AD0DC7100F3B5C8 /* movement.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = movement.py; sourceTree = "<group>"; };
 		346544DA1FC22CF0003B9991 /* CSNSButtonCellThemed.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSNSButtonCellThemed.h; path = Interface/CSNSButtonCellThemed.h; sourceTree = "<group>"; };
 		346544DB1FC22CF0003B9991 /* CSNSButtonCellThemed.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CSNSButtonCellThemed.m; path = Interface/CSNSButtonCellThemed.m; sourceTree = "<group>"; };
 		346544DD1FC24248003B9991 /* NSImage+tintedImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSImage+tintedImage.h"; sourceTree = "<group>"; };
@@ -924,6 +919,8 @@
 		34938EEA1AE4D24200F3B1CF /* CSFilterChooserWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSFilterChooserWindowController.h; sourceTree = "<group>"; };
 		34938EEB1AE4D24200F3B1CF /* CSFilterChooserWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSFilterChooserWindowController.m; sourceTree = "<group>"; };
 		34938EEC1AE4D24200F3B1CF /* CSFilterChooserWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSFilterChooserWindowController.xib; sourceTree = "<group>"; };
+		349400D8207A02CC0092EF90 /* CSTransitionBase+ScriptingAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CSTransitionBase+ScriptingAdditions.h"; path = "ScriptingAddditions/CSTransitionBase+ScriptingAdditions.h"; sourceTree = "<group>"; };
+		349400D9207A02CC0092EF90 /* CSTransitionBase+ScriptingAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CSTransitionBase+ScriptingAdditions.m"; path = "ScriptingAddditions/CSTransitionBase+ScriptingAdditions.m"; sourceTree = "<group>"; };
 		349461571AB41DA000F28883 /* CSAnimationRunnerObj.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSAnimationRunnerObj.h; sourceTree = "<group>"; };
 		349461591AB4213B00F28883 /* CSAnimationRunner.py */ = {isa = PBXFileReference; explicitFileType = text.script.python; fileEncoding = 4; path = CSAnimationRunner.py; sourceTree = "<group>"; };
 		349461661ABC57C100F28883 /* CSAnimationItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSAnimationItem.h; sourceTree = "<group>"; };
@@ -1445,7 +1442,6 @@
 				3494DF351CCD2DB000E921BF /* TPCircularBuffer.h */,
 				3494DF361CCD2DB000E921BF /* TPCircularBuffer+AudioBufferList.c */,
 				3494DF371CCD2DB000E921BF /* TPCircularBuffer+AudioBufferList.h */,
-				3460E5861AC764360080358E /* AnimationSamples */,
 				340FE4B315F3417E00E4CE4E /* AppDelegate.h */,
 				340FE4B415F3417E00E4CE4E /* AppDelegate.m */,
 				345F8B331A1571B1009A81E3 /* CAMultiAudio */,
@@ -1936,15 +1932,6 @@
 			name = CAMultiAudio;
 			sourceTree = "<group>";
 		};
-		3460E5861AC764360080358E /* AnimationSamples */ = {
-			isa = PBXGroup;
-			children = (
-				3463F99D1AD0DC7100F3B5C8 /* movement.py */,
-				3460E5871AC764500080358E /* rotate.py */,
-			);
-			path = AnimationSamples;
-			sourceTree = "<group>";
-		};
 		3462E79B204214950044B90D /* PluginBaseClasses */ = {
 			isa = PBXGroup;
 			children = (
@@ -2298,6 +2285,8 @@
 				34F80D6F1EDCBE5100D890D3 /* CSScriptCommand.m */,
 				34528B8D1F9A707400C090E0 /* InputSource+ScriptingAdditions.h */,
 				34528B8E1F9A707400C090E0 /* InputSource+ScriptingAdditions.m */,
+				349400D8207A02CC0092EF90 /* CSTransitionBase+ScriptingAdditions.h */,
+				349400D9207A02CC0092EF90 /* CSTransitionBase+ScriptingAdditions.m */,
 			);
 			name = ScriptingAdditions;
 			sourceTree = "<group>";
@@ -3106,6 +3095,7 @@
 				345F8B751A17A785009A81E3 /* CAMultiAudioMixer.m in Sources */,
 				34ED8C951B07371C002C0674 /* MIKMIDIOutputPort.m in Sources */,
 				34ED8CA71B07371C002C0674 /* MIKMIDISystemMessageCommand.m in Sources */,
+				349400DA207A02CC0092EF90 /* CSTransitionBase+ScriptingAdditions.m in Sources */,
 				34788DF61F01719800C3C9C5 /* CSScriptInputSourceViewController.m in Sources */,
 				34B5FADD1E75BC910078FC51 /* CSLayoutSwitcherViewController.m in Sources */,
 				34ED8C851B07371C002C0674 /* MIKMIDIMetaTextEvent.m in Sources */,
