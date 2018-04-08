@@ -623,6 +623,7 @@
     return nil;
 }
 
+    
 -(CSTransitionBase *)transitionForName:(NSString *)name
 {
     for (CSTransitionBase *trans in self.transitions)
@@ -3971,6 +3972,9 @@
     for (SourceLayout *layout in self.sourceLayouts)
     {
         [layoutIdentifiers addObject:[NSString stringWithFormat:@"ToggleLayout:%@", layout.name]];
+        [layoutIdentifiers addObject:[NSString stringWithFormat:@"ToggleLayoutUnder:%@", layout.name]];
+        [layoutIdentifiers addObject:[NSString stringWithFormat:@"ToggleLayoutOver:%@", layout.name]];
+
     }
     
     for (SourceLayout *layout in self.sourceLayouts)
@@ -3986,10 +3990,21 @@
         [audioIdentifiers addObject:[NSString stringWithFormat:@"AudioVolume:%@", node.name]];
 
     }
+    NSMutableArray *transitionIdentifiers = [NSMutableArray array];
     
+    for (CSTransitionBase *transition in self.transitions)
+    {
+        [transitionIdentifiers addObject:[NSString stringWithFormat:@"ToggleTransition:%@", transition.name]];
+        if (transition.canToggle)
+        {
+            [transitionIdentifiers addObject:[NSString stringWithFormat:@"ToggleLiveTransition:%@", transition.name]];
+        }
+    }
     
     baseIdentifiers = [baseIdentifiers arrayByAddingObjectsFromArray:layoutIdentifiers];
     baseIdentifiers = [baseIdentifiers arrayByAddingObjectsFromArray:audioIdentifiers];
+    baseIdentifiers = [baseIdentifiers arrayByAddingObjectsFromArray:transitionIdentifiers];
+
     baseIdentifiers = [baseIdentifiers arrayByAddingObjectsFromArray:_inputIdentifiers];
     return baseIdentifiers;
 }
@@ -4273,6 +4288,37 @@
     }
     
     
+    if ([identifier hasPrefix:@"ToggleLayoutOver:"])
+    {
+        
+        
+        NSString *layoutName = [identifier substringFromIndex:17];
+        SourceLayout *layout = [self getLayoutForName:layoutName];
+        if (layout)
+        {
+            self.activeLayout.sourceAddOrder = kCSSourceAddOrderTop;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self toggleLayout:layout];
+            });
+        }
+    }
+
+    if ([identifier hasPrefix:@"ToggleLayoutUnder:"])
+    {
+        
+        
+        NSString *layoutName = [identifier substringFromIndex:18];
+        SourceLayout *layout = [self getLayoutForName:layoutName];
+        if (layout)
+        {
+            self.activeLayout.sourceAddOrder = kCSSourceAddOrderBottom;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self toggleLayout:layout];
+            });
+        }
+    }
+    
+    
     if ([identifier hasPrefix:@"ToggleLayout:"])
     {
         
@@ -4345,6 +4391,42 @@
         }
         return;
     }
+    
+    if ([identifier hasPrefix:@"ToggleTransition:"])
+    {
+        CSTransitionBase *transition = nil;
+        NSString *transitionName = [identifier substringFromIndex:17];
+        transition = [self transitionForName:transitionName];
+        if (transition)
+        {
+            if (transition.active)
+            {
+                self.activeTransition = nil;
+            } else {
+                self.activeTransition = transition;
+            }
+        }
+    }
+    
+    if ([identifier hasPrefix:@"ToggleLiveTransition:"])
+    {
+        CSTransitionBase *transition = nil;
+        NSString *transitionName = [identifier substringFromIndex:21];
+        transition = [self transitionForName:transitionName];
+        if (transition)
+        {
+            if (transition.canToggle)
+            {
+                transition.isToggle = YES;
+                transition.active = !transition.active;
+                if (!transition.active)
+                {
+                    transition.isToggle = NO;
+                }
+            }
+        }
+    }
+
     
     if ([identifier hasPrefix:@"AudioVolume:"])
     {
