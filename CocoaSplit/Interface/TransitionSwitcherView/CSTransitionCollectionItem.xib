@@ -38,7 +38,7 @@
                         </imageView>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ilh-0v-FOh">
                             <rect key="frame" x="-2" y="4" width="88" height="17"/>
-                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Label" id="QiM-fX-qwp">
+                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Label" id="QiM-fX-qwp">
                                 <font key="font" metaFont="system"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
