@@ -24,6 +24,7 @@
 }
 
 
+
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeBool:self.copyFrame forKey:@"copyFrame"];
