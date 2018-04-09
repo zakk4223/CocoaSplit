@@ -87,6 +87,7 @@
 		343C2CBE1FFCE73000849DA9 /* CSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 343C2CBD1FFCE73000849DA9 /* CSViewController.m */; };
 		343C79ED1D0C796E00B36EEC /* CSFFMpegCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 343C79CC1D0C763A00B36EEC /* CSFFMpegCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		343ED9421BCAC1C80061FC4B /* EditBuiltinLayoutView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 343ED9411BCAC1C80061FC4B /* EditBuiltinLayoutView.xib */; };
+		34403665207B4E48004BC514 /* CIFilter+BindableDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 34403664207B4E48004BC514 /* CIFilter+BindableDescription.m */; };
 		344037621FFEF7C1009183FB /* CAMultiAudioEngineInputsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 344037601FFEF7C1009183FB /* CAMultiAudioEngineInputsController.m */; };
 		344037631FFEF7C1009183FB /* CAMultiAudioEngineInputsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 344037611FFEF7C1009183FB /* CAMultiAudioEngineInputsController.xib */; };
 		3441269B1E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 344126991E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.m */; };
@@ -749,6 +750,8 @@
 		343DD65E19AAD3060017232A /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		343DD6AB19AAD3660017232A /* CSChromaKey.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSChromaKey.xcodeproj; path = ImageUnitPlugins/CSChromaKey/CSChromaKey.xcodeproj; sourceTree = "<group>"; };
 		343ED9411BCAC1C80061FC4B /* EditBuiltinLayoutView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EditBuiltinLayoutView.xib; path = Interface/EditBuiltinLayoutView.xib; sourceTree = "<group>"; };
+		34403663207B4E48004BC514 /* CIFilter+BindableDescription.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CIFilter+BindableDescription.h"; sourceTree = "<group>"; };
+		34403664207B4E48004BC514 /* CIFilter+BindableDescription.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "CIFilter+BindableDescription.m"; sourceTree = "<group>"; };
 		3440375F1FFEF7C1009183FB /* CAMultiAudioEngineInputsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAMultiAudioEngineInputsController.h; sourceTree = "<group>"; };
 		344037601FFEF7C1009183FB /* CAMultiAudioEngineInputsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CAMultiAudioEngineInputsController.m; sourceTree = "<group>"; };
 		344037611FFEF7C1009183FB /* CAMultiAudioEngineInputsController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CAMultiAudioEngineInputsController.xib; sourceTree = "<group>"; };
@@ -1544,6 +1547,8 @@
 				3457BCC52019C3F600B8DF5D /* CSCaptureBaseInputFrameTickProtocol.h */,
 				3432D4102061F17400F4680C /* CSRootLayer.h */,
 				3432D4112061F17400F4680C /* CSRootLayer.m */,
+				34403663207B4E48004BC514 /* CIFilter+BindableDescription.h */,
+				34403664207B4E48004BC514 /* CIFilter+BindableDescription.m */,
 			);
 			path = CocoaSplit;
 			sourceTree = "<group>";
@@ -3016,6 +3021,7 @@
 				343C2CB21FFBB8DC00849DA9 /* CSSourceListViewController.m in Sources */,
 				34A64A2F165EFE4C00A68428 /* PreviewView.m in Sources */,
 				34ED8CAB1B07371C002C0674 /* MIKMIDITrack.m in Sources */,
+				34403665207B4E48004BC514 /* CIFilter+BindableDescription.m in Sources */,
 				34ED8CA91B07371C002C0674 /* MIKMIDITempoEvent.m in Sources */,
 				34528B8F1F9A707400C090E0 /* InputSource+ScriptingAdditions.m in Sources */,
 				3450239D1C60B3EF00B461B5 /* CSLayoutCollectionItemView.m in Sources */,
@@ -3207,7 +3213,7 @@
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.13;
 			};
 			name = Debug;
 		};
@@ -3250,7 +3256,7 @@
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = NO;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.13;
 			};
 			name = Release;
 		};

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -14,9 +14,56 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="171" height="129"/>
+            <rect key="frame" x="0.0" y="0.0" width="171" height="150"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
             <subviews>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IOf-6D-Gdu">
+                    <rect key="frame" x="18" y="114" width="37" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Name" id="hLZ-z4-f5Z">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="63n-gl-6Xu">
+                    <rect key="frame" x="81" y="111" width="70" height="19"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="qKi-6h-qUf">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="9BP-0F-4mP" name="value" keyPath="selection.name" id="2vu-VB-lEn"/>
+                    </connections>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="955-sl-FOG">
+                    <rect key="frame" x="18" y="90" width="40" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="TIming" id="wWf-vx-Y49">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="65C-i7-QeZ">
+                    <rect key="frame" x="74" y="85" width="80" height="22"/>
+                    <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="uDF-NT-St4" id="G9F-G0-ePZ">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" id="jCa-i6-Cax">
+                            <items>
+                                <menuItem title="Item 1" state="on" id="uDF-NT-St4"/>
+                                <menuItem title="Item 2" id="qM4-Eo-qXv"/>
+                                <menuItem title="Item 3" id="tHN-K7-zts"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="Q4m-cT-VBD" name="content" keyPath="arrangedObjects" id="KqB-Ke-eVR"/>
+                        <binding destination="Q4m-cT-VBD" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="KqB-Ke-eVR" id="fX2-bx-F2B"/>
+                        <binding destination="Q4m-cT-VBD" name="contentValues" keyPath="arrangedObjects.key" previousBinding="fX2-bx-F2B" id="PLn-D9-3zv"/>
+                        <binding destination="9BP-0F-4mP" name="selectedObject" keyPath="selection.timingFunction" previousBinding="PLn-D9-3zv" id="KHr-ZR-VZQ"/>
+                    </connections>
+                </popUpButton>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kbD-wK-aJn">
                     <rect key="frame" x="18" y="66" width="49" height="14"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Duration" id="rXW-8I-q3r">
@@ -56,50 +103,41 @@
                         <action selector="openTransitionFilterPanel:" target="-2" id="TpZ-pM-USx"/>
                     </connections>
                 </button>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IOf-6D-Gdu">
-                    <rect key="frame" x="18" y="93" width="37" height="14"/>
-                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Name" id="hLZ-z4-f5Z">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
-                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="63n-gl-6Xu">
-                    <rect key="frame" x="81" y="90" width="70" height="19"/>
-                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="qKi-6h-qUf">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="9BP-0F-4mP" name="value" keyPath="selection.name" id="2vu-VB-lEn"/>
-                    </connections>
-                </textField>
             </subviews>
             <constraints>
-                <constraint firstItem="63n-gl-6Xu" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="20" symbolic="YES" id="6rv-Ie-czr"/>
-                <constraint firstItem="PtK-Se-LFd" firstAttribute="top" secondItem="qjc-6u-fCc" secondAttribute="bottom" constant="8" symbolic="YES" id="BUy-xK-39q"/>
-                <constraint firstItem="IOf-6D-Gdu" firstAttribute="leading" secondItem="kbD-wK-aJn" secondAttribute="leading" id="IFd-n3-rxe"/>
-                <constraint firstItem="PtK-Se-LFd" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="Oj1-EY-U1t"/>
-                <constraint firstItem="63n-gl-6Xu" firstAttribute="leading" secondItem="IOf-6D-Gdu" secondAttribute="trailing" constant="28" id="Wam-70-xQu"/>
-                <constraint firstItem="8Q4-nF-uRH" firstAttribute="leading" secondItem="kbD-wK-aJn" secondAttribute="trailing" constant="16" id="bc1-DJ-xot"/>
-                <constraint firstItem="kbD-wK-aJn" firstAttribute="baseline" secondItem="8Q4-nF-uRH" secondAttribute="baseline" id="dXf-nR-Vxl"/>
-                <constraint firstAttribute="trailing" secondItem="63n-gl-6Xu" secondAttribute="trailing" constant="20" symbolic="YES" id="f69-uJ-2CH"/>
-                <constraint firstItem="63n-gl-6Xu" firstAttribute="leading" secondItem="8Q4-nF-uRH" secondAttribute="leading" id="fwa-ZO-may"/>
-                <constraint firstItem="8Q4-nF-uRH" firstAttribute="top" secondItem="63n-gl-6Xu" secondAttribute="bottom" constant="8" symbolic="YES" id="gH0-Nv-ZTp"/>
-                <constraint firstItem="IOf-6D-Gdu" firstAttribute="baseline" secondItem="63n-gl-6Xu" secondAttribute="baseline" id="iYF-Ji-dPM"/>
-                <constraint firstItem="63n-gl-6Xu" firstAttribute="trailing" secondItem="8Q4-nF-uRH" secondAttribute="trailing" id="mjS-Za-LO6"/>
-                <constraint firstItem="kbD-wK-aJn" firstAttribute="leading" secondItem="qjc-6u-fCc" secondAttribute="leading" id="rDi-zl-vLa"/>
-                <constraint firstItem="IOf-6D-Gdu" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="20" symbolic="YES" id="t7G-rw-vm3"/>
-                <constraint firstItem="qjc-6u-fCc" firstAttribute="top" secondItem="kbD-wK-aJn" secondAttribute="bottom" constant="8" symbolic="YES" id="w6h-mO-vbu"/>
+                <constraint firstItem="PtK-Se-LFd" firstAttribute="top" secondItem="qjc-6u-fCc" secondAttribute="bottom" constant="8" symbolic="YES" id="0UO-bZ-rY7"/>
+                <constraint firstItem="65C-i7-QeZ" firstAttribute="top" secondItem="63n-gl-6Xu" secondAttribute="bottom" constant="5" id="0xm-Gz-1eb"/>
+                <constraint firstAttribute="bottom" secondItem="PtK-Se-LFd" secondAttribute="bottom" constant="20" symbolic="YES" id="1Ou-td-Fcd"/>
+                <constraint firstItem="qjc-6u-fCc" firstAttribute="top" secondItem="kbD-wK-aJn" secondAttribute="bottom" constant="8" symbolic="YES" id="2M2-je-6TN"/>
+                <constraint firstItem="IOf-6D-Gdu" firstAttribute="baseline" secondItem="63n-gl-6Xu" secondAttribute="baseline" id="31j-mO-Bhd"/>
+                <constraint firstItem="63n-gl-6Xu" firstAttribute="leading" secondItem="IOf-6D-Gdu" secondAttribute="trailing" constant="28" id="5QV-wD-Krj"/>
+                <constraint firstItem="65C-i7-QeZ" firstAttribute="leading" secondItem="955-sl-FOG" secondAttribute="trailing" constant="21" id="93o-gc-FTh"/>
+                <constraint firstItem="IOf-6D-Gdu" firstAttribute="leading" secondItem="955-sl-FOG" secondAttribute="leading" id="9LL-MW-nxd"/>
+                <constraint firstItem="63n-gl-6Xu" firstAttribute="leading" secondItem="8Q4-nF-uRH" secondAttribute="leading" id="Ah8-We-w4F"/>
+                <constraint firstItem="955-sl-FOG" firstAttribute="leading" secondItem="kbD-wK-aJn" secondAttribute="leading" id="MkU-Kt-YEq"/>
+                <constraint firstItem="8Q4-nF-uRH" firstAttribute="leading" secondItem="kbD-wK-aJn" secondAttribute="trailing" constant="16" id="Psj-lB-OnD"/>
+                <constraint firstItem="63n-gl-6Xu" firstAttribute="trailing" secondItem="65C-i7-QeZ" secondAttribute="trailing" id="WEk-r9-z89"/>
+                <constraint firstItem="65C-i7-QeZ" firstAttribute="trailing" secondItem="8Q4-nF-uRH" secondAttribute="trailing" id="gpy-EH-6BK"/>
+                <constraint firstItem="955-sl-FOG" firstAttribute="baseline" secondItem="65C-i7-QeZ" secondAttribute="baseline" id="gtJ-eM-Kk9"/>
+                <constraint firstItem="63n-gl-6Xu" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="20" symbolic="YES" id="hSM-0d-FIQ"/>
+                <constraint firstItem="IOf-6D-Gdu" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="20" symbolic="YES" id="iur-8P-Y8F"/>
+                <constraint firstItem="kbD-wK-aJn" firstAttribute="baseline" secondItem="8Q4-nF-uRH" secondAttribute="baseline" id="l04-Fw-dq1"/>
+                <constraint firstAttribute="trailing" secondItem="63n-gl-6Xu" secondAttribute="trailing" constant="20" symbolic="YES" id="pQI-J5-mJT"/>
+                <constraint firstItem="kbD-wK-aJn" firstAttribute="leading" secondItem="qjc-6u-fCc" secondAttribute="leading" id="tvn-of-yJV"/>
+                <constraint firstItem="PtK-Se-LFd" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="yb5-s0-IC8"/>
             </constraints>
-            <point key="canvasLocation" x="-22.5" y="96.5"/>
+            <point key="canvasLocation" x="-22.5" y="107"/>
         </customView>
         <objectController id="9BP-0F-4mP" userLabel="transitionController">
             <connections>
                 <binding destination="-2" name="contentObject" keyPath="self.transition" id="SMq-AM-3ca"/>
             </connections>
         </objectController>
+        <dictionaryController objectClassName="_NSDictionaryControllerKeyValuePair" id="Q4m-cT-VBD" userLabel="timingDictionaryController">
+            <connections>
+                <binding destination="9BP-0F-4mP" name="contentDictionary" keyPath="selection.timingFunctions" id="0Gh-GT-96q"/>
+            </connections>
+        </dictionaryController>
         <userDefaultsController representsSharedInstance="YES" id="r2V-F7-56p"/>
     </objects>
 </document>

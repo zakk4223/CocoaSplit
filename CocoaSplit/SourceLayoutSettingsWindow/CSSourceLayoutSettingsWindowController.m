@@ -33,7 +33,7 @@
     self.window.title = [NSString stringWithFormat:@"%@ Settings", self.layout.name];
     
     self.filterListViewController.baseLayer = self.layout.rootLayer;
-    self.filterListViewController.filterArrayName = @"backgroundFilters";
+    self.filterListViewController.filterArrayName = @"filters";
     self.layoutObjectController.undoDelegate = self;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(colorWellActivate:) name:@"CSColorWellActivated" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(colorWellDeactivate:) name:@"CSColorWellDeactivated" object:nil];

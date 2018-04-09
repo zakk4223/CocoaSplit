@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -44,7 +44,7 @@
                                         </textFieldCell>
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <connections>
-                                            <binding destination="bN2-9k-a9E" name="value" keyPath="arrangedObjects.attributes.CIAttributeFilterDisplayName" id="eer-cO-6kD"/>
+                                            <binding destination="bN2-9k-a9E" name="value" keyPath="arrangedObjects.displayName" id="700-ka-8wj"/>
                                         </connections>
                                     </tableColumn>
                                 </tableColumns>
@@ -61,7 +61,10 @@
                     </scroller>
                 </scrollView>
                 <segmentedControl verticalHuggingPriority="750" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="9Jh-Ol-xL8">
-                    <rect key="frame" x="0.0" y="-1" width="154" height="23"/>
+                    <rect key="frame" x="0.0" y="-1" width="88" height="23"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="88" id="5g1-9z-frp"/>
+                    </constraints>
                     <segmentedCell key="cell" borderStyle="border" alignment="left" style="smallSquare" trackingMode="momentary" id="DZ4-p0-Xt2">
                         <font key="font" metaFont="system"/>
                         <segments>
@@ -70,23 +73,32 @@
                             <segment image="NSActionTemplate">
                                 <nil key="label"/>
                             </segment>
-                            <segment width="65" enabled="NO">
-                                <nil key="label"/>
-                            </segment>
                         </segments>
                     </segmentedCell>
                     <connections>
                         <action selector="filterControlAction:" target="-2" id="jLG-rE-yTt"/>
                     </connections>
                 </segmentedControl>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4qg-0Q-mBC">
+                    <rect key="frame" x="87" y="-1" width="108" height="23"/>
+                    <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="WRE-3r-K7O">
+                        <behavior key="behavior" lightByContents="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                </button>
             </subviews>
             <constraints>
-                <constraint firstItem="dcn-NH-ZKw" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="1rf-7R-HY1"/>
-                <constraint firstAttribute="bottom" secondItem="dcn-NH-ZKw" secondAttribute="bottom" constant="20" symbolic="YES" id="4EZ-hq-hYz"/>
-                <constraint firstAttribute="bottom" secondItem="9Jh-Ol-xL8" secondAttribute="bottom" id="H1W-4u-PfJ"/>
-                <constraint firstAttribute="trailing" secondItem="dcn-NH-ZKw" secondAttribute="trailing" id="M1g-ch-Cae"/>
-                <constraint firstItem="dcn-NH-ZKw" firstAttribute="leading" secondItem="9Jh-Ol-xL8" secondAttribute="leading" id="vlH-Ii-wFe"/>
-                <constraint firstItem="dcn-NH-ZKw" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="wpc-EF-ufn"/>
+                <constraint firstItem="4qg-0Q-mBC" firstAttribute="leading" secondItem="9Jh-Ol-xL8" secondAttribute="trailing" constant="-1" id="4Ws-MB-PdH"/>
+                <constraint firstItem="dcn-NH-ZKw" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="5I4-p3-5ma"/>
+                <constraint firstAttribute="trailing" secondItem="dcn-NH-ZKw" secondAttribute="trailing" id="9mv-AH-YTQ"/>
+                <constraint firstItem="dcn-NH-ZKw" firstAttribute="leading" secondItem="9Jh-Ol-xL8" secondAttribute="leading" id="K26-wd-it0"/>
+                <constraint firstItem="4qg-0Q-mBC" firstAttribute="top" secondItem="dcn-NH-ZKw" secondAttribute="bottom" constant="-1" id="NdE-kK-Ur2"/>
+                <constraint firstAttribute="bottom" secondItem="dcn-NH-ZKw" secondAttribute="bottom" constant="20" symbolic="YES" id="W1r-rE-LIf"/>
+                <constraint firstItem="9Jh-Ol-xL8" firstAttribute="bottom" secondItem="4qg-0Q-mBC" secondAttribute="bottom" id="W4i-p4-fan"/>
+                <constraint firstAttribute="bottom" secondItem="9Jh-Ol-xL8" secondAttribute="bottom" id="gNc-bO-8RW"/>
+                <constraint firstItem="4qg-0Q-mBC" firstAttribute="height" secondItem="9Jh-Ol-xL8" secondAttribute="height" id="rPy-cb-l2V"/>
+                <constraint firstItem="dcn-NH-ZKw" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="v28-oG-MD0"/>
+                <constraint firstItem="dcn-NH-ZKw" firstAttribute="trailing" secondItem="4qg-0Q-mBC" secondAttribute="trailing" id="w3C-bo-GSM"/>
             </constraints>
             <point key="canvasLocation" x="-53.5" y="223.5"/>
         </customView>
