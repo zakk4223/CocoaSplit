@@ -2471,7 +2471,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
             [((InputSource *)newSource) buildLayerConstraints];
             
         }];*/
-        [(InputSource *)newSource layerUpdated];
+        //[(InputSource *)newSource layerUpdated];
         [CATransaction commit];
     }
     

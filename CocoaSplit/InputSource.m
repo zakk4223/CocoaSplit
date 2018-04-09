@@ -3261,7 +3261,8 @@ static NSArray *_sourceTypes = nil;
 
 -(void)layerUpdated
 {
-    if (self.autoPlaceOnFrameUpdate && self.videoInput)
+    
+    if (self.autoPlaceOnFrameUpdate )
     {
         [self autoSize];
         [self autoCenter:NSMakeRect(0, 0, self.canvas_width, self.canvas_height)];
