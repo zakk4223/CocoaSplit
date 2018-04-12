@@ -587,6 +587,10 @@ NSString *const kCSOauth2ClientSecret = @"CSOauth2ClientSecret";
     
     NSURLSessionDataTask *dataTask = [urlSession dataTaskWithRequest:request
         completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+            if (error)
+            {
+                return;
+            }
             NSError *jsonError;
             id json_object = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonError];
             if (handler)

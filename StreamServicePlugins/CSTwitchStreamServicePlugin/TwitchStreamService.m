@@ -275,6 +275,10 @@
     [apiRequest setValue:_oauth_client_id forHTTPHeaderField:@"Client-ID"];
     [NSURLConnection sendAsynchronousRequest:apiRequest queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *err) {
         
+        if (err)
+        {
+            return;
+        }
         NSError *jsonError;
         NSDictionary *ingest_response = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonError];
         //Handle error
