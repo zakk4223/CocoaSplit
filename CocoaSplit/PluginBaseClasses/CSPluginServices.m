@@ -77,14 +77,16 @@
     SecItemCopyMatching((CFDictionaryRef)keyChainAttrs, (CFTypeRef *)&resultArray);
     
     
-    for (NSDictionary *itemDict in (__bridge NSArray *)resultArray)
+    if (resultArray)
     {
-        NSString *accountName = itemDict[(__bridge NSString *)kSecAttrAccount];
-        [retArr addObject:accountName];
+        for (NSDictionary *itemDict in (__bridge NSArray *)resultArray)
+        {
+            NSString *accountName = itemDict[(__bridge NSString *)kSecAttrAccount];
+            [retArr addObject:accountName];
+        }
+        
+        CFRelease(resultArray);
     }
-    
-    CFRelease(resultArray);
-    
     return retArr;
 }
 
