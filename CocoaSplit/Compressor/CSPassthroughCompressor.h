@@ -11,9 +11,11 @@
 @interface CSPassthroughCompressor : CompressorBase
 {
     VTPixelTransferSessionRef _pvt_ref;
+    NSDictionary *_pixelFormats;
     
 }
 
 @property (assign) bool copyFrame;
-
+@property (strong) NSNumber *usePixelFormat;
+@property (readonly) NSDictionary *pixelFormats;
 @end

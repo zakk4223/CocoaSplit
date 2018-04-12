@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -28,7 +28,66 @@
                         <binding destination="-2" name="value" keyPath="self.compressorController.selection.copyFrame" id="kJD-60-HYO"/>
                     </connections>
                 </button>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pC5-q6-rxZ">
+                    <rect key="frame" x="18" y="201" width="79" height="17"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Pixel Format" id="faL-Gm-dTb">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="hidden" keyPath="self.compressorController.selection.copyFrame" id="hUl-Na-HJf">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </textField>
+                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mvO-Q3-MTn">
+                    <rect key="frame" x="101" y="196" width="175" height="26"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="7jn-QL-y4j" id="m7N-Z4-iWz">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="menu"/>
+                        <menu key="menu" id="Tlc-ch-82n">
+                            <items>
+                                <menuItem title="Item 1" state="on" id="7jn-QL-y4j"/>
+                                <menuItem title="Item 2" id="Z9E-Nj-IwY"/>
+                                <menuItem title="Item 3" id="x4Q-LD-2gD"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="F2r-g7-UBm" name="content" keyPath="arrangedObjects" id="Z2f-UH-3pF">
+                            <dictionary key="options">
+                                <bool key="NSInsertsNullPlaceholder" value="YES"/>
+                            </dictionary>
+                        </binding>
+                        <binding destination="F2r-g7-UBm" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="Z2f-UH-3pF" id="H5Q-9b-TPQ">
+                            <dictionary key="options">
+                                <bool key="NSInsertsNullPlaceholder" value="YES"/>
+                            </dictionary>
+                        </binding>
+                        <binding destination="F2r-g7-UBm" name="contentValues" keyPath="arrangedObjects.key" previousBinding="H5Q-9b-TPQ" id="KlD-RV-ZUj">
+                            <dictionary key="options">
+                                <bool key="NSInsertsNullPlaceholder" value="YES"/>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="hidden" keyPath="self.compressorController.selection.copyFrame" id="ncV-z1-n43">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="selectedObject" keyPath="self.compressorController.selection.usePixelFormat" previousBinding="KlD-RV-ZUj" id="98k-Va-dsw"/>
+                    </connections>
+                </popUpButton>
             </subviews>
         </customView>
+        <dictionaryController objectClassName="_NSDictionaryControllerKeyValuePair" id="F2r-g7-UBm">
+            <connections>
+                <binding destination="-2" name="contentDictionary" keyPath="self.compressorController.selection.pixelFormats" id="nJ5-eG-aNh"/>
+            </connections>
+        </dictionaryController>
     </objects>
 </document>

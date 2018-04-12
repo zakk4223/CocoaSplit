@@ -34,7 +34,16 @@
 
 -(instancetype)copyWithZone:(NSZone *)zone
 {
-    return [[self.class allocWithZone:zone] init];
+    CompressorBase *copy = [[self.class allocWithZone:zone] init];
+    copy.isNew = self.isNew;
+    copy.name = self.name;
+    copy.compressorType = self.compressorType;
+    copy.width = self.width;
+    copy.height = self.height;
+    copy.working_width = self.width;
+    copy.working_height = self.height;
+    copy.resolutionOption = self.resolutionOption;
+    return copy;
 }
 
 
@@ -78,12 +87,28 @@
 
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
+    [aCoder encodeObject:self.name forKey:@"name"];
+    [aCoder encodeInteger:self.width forKey:@"videoWidth"];
+    [aCoder encodeInteger:self.height forKey:@"videoHeight"];
+    
+    [aCoder encodeObject:self.resolutionOption forKey:@"resolutionOption"];
     return;
 }
 
 -(id) initWithCoder:(NSCoder *)aDecoder
 {
-    return [self init];
+    if (self = [self init])
+    {
+        self.name = [aDecoder decodeObjectForKey:@"name"];
+        self.width = (int)[aDecoder decodeIntegerForKey:@"videoWidth"];
+        self.height = (int)[aDecoder decodeIntegerForKey:@"videoHeight"];
+        
+        if ([aDecoder containsValueForKey:@"resolutionOption"])
+        {
+            self.resolutionOption = [aDecoder decodeObjectForKey:@"resolutionOption"];
+        }
+    }
+    return self;
 }
 
 

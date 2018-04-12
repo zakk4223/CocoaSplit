@@ -1984,6 +1984,12 @@
         self.compressors[@"Passthrough"] = newCompressor;
         [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:newCompressor];
 
+    } else {
+        CSPassthroughCompressor *pComp = self.compressors[@"Passthrough"];
+        if (!pComp.name)
+        {
+            pComp.name = @"Passthrough".mutableCopy;
+        }
     }
     
     if (hasHEVC)

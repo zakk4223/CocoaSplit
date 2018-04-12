@@ -10,7 +10,7 @@
 #import "CSPassthroughCompressorViewController.h"
 
 @implementation CSPassthroughCompressor
-
+@synthesize usePixelFormat = _usePixelFormat;
 
 -(instancetype)init
 {
@@ -18,16 +18,47 @@
     {
         self.compressorType = @"Passthrough";
         self.copyFrame = YES;
+        _pixelFormats = @{@"RGBA": @(kCVPixelFormatType_32RGBA),
+                          @"ARGB": @(kCVPixelFormatType_32ARGB),
+                          @"BGRA": @(kCVPixelFormatType_32BGRA),
+                          @"422 YpCbCr8 (2vuy/UYVY)": @(kCVPixelFormatType_422YpCbCr8)
+                          };
     }
     
     return self;
 }
 
 
+-(void)setUsePixelFormat:(NSNumber *)usePixelFormat
+{
+    
+    _usePixelFormat = usePixelFormat;
+}
+
+-(NSNumber *)usePixelFormat
+{
+    return _usePixelFormat;
+}
+-(instancetype)copyWithZone:(NSZone *)zone
+{
+    CSPassthroughCompressor *newCompressor = [super copyWithZone:zone];
+    newCompressor.usePixelFormat = self.usePixelFormat;
+    newCompressor.copyFrame = self.copyFrame;
+    return newCompressor;
+}
+
+-(NSDictionary *)pixelFormats
+{
+    return _pixelFormats;
+}
+
 
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
+    [super encodeWithCoder:aCoder];
+    
     [aCoder encodeBool:self.copyFrame forKey:@"copyFrame"];
+    [aCoder encodeObject:self.usePixelFormat forKey:@"usePixelFormat"];
 }
 
 -(instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -35,6 +66,7 @@
     if (self = [super initWithCoder:aDecoder])
     {
         self.copyFrame = [aDecoder decodeBoolForKey:@"copyFrame"];
+        self.usePixelFormat = [aDecoder decodeObjectForKey:@"usePixelFormat"];
     }
     
     return self;
@@ -59,7 +91,13 @@
         {
             VTPixelTransferSessionCreate(NULL, &_pvt_ref);
         }
-        CVPixelBufferCreate(NULL, CVPixelBufferGetWidth(imageBuffer.videoFrame), CVPixelBufferGetHeight(imageBuffer.videoFrame), CVPixelBufferGetPixelFormatType(imageBuffer.videoFrame), NULL, &useFrame);
+        OSType useFormat = CVPixelBufferGetPixelFormatType(imageBuffer.videoFrame);
+        if (self.usePixelFormat)
+        {
+            useFormat = (OSType)self.usePixelFormat.integerValue;
+        }
+        
+        CVPixelBufferCreate(NULL, CVPixelBufferGetWidth(imageBuffer.videoFrame), CVPixelBufferGetHeight(imageBuffer.videoFrame), useFormat, NULL, &useFrame);
         VTPixelTransferSessionTransferImage(_pvt_ref, imageBuffer.videoFrame, useFrame);
     } else {
         useFrame = imageBuffer.videoFrame;
@@ -73,8 +111,8 @@
     timingInfo.decodeTimeStamp = imageBuffer.videoPTS;
     timingInfo.presentationTimeStamp = timingInfo.decodeTimeStamp;
     
-    CMVideoFormatDescriptionCreateForImageBuffer(NULL, imageBuffer.videoFrame, &formatDesc);
-    CMSampleBufferCreateReadyWithImageBuffer(NULL, imageBuffer.videoFrame, formatDesc, &timingInfo, &wrapperBuffer);
+    CMVideoFormatDescriptionCreateForImageBuffer(NULL, useFrame, &formatDesc);
+    CMSampleBufferCreateReadyWithImageBuffer(NULL,useFrame, formatDesc, &timingInfo, &wrapperBuffer);
 
     imageBuffer.encodedSampleBuffer = wrapperBuffer;
     

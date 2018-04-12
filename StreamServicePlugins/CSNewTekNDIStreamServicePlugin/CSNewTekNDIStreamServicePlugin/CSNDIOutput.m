@@ -130,15 +130,34 @@
         }
         
         NDIlib_video_frame_v2_t send_frame;
+        NDIlib_FourCC_type_e useFourCC;
+        
+        OSType imageFormat = CVPixelBufferGetPixelFormatType(useImage);
+        switch (imageFormat) {
+            case kCVPixelFormatType_32BGRA:
+                useFourCC = NDIlib_FourCC_type_BGRA;
+                break;
+            case kCVPixelFormatType_32RGBA:
+                useFourCC = NDIlib_FourCC_type_RGBA;
+                break;
+            case kCVPixelFormatType_422YpCbCr8:
+                useFourCC = NDIlib_FourCC_type_UYVY;
+                break;
+                
+            default:
+                useFourCC = NDIlib_FourCC_type_BGRA;
+
+                break;
+        }
         send_frame.xres = (int)CVPixelBufferGetWidth(useImage);
         send_frame.yres = (int)CVPixelBufferGetHeight(useImage);
-        send_frame.FourCC = NDIlib_FourCC_type_BGRA;
+        send_frame.FourCC = useFourCC;
         send_frame.frame_format_type = NDIlib_frame_format_type_progressive;
         send_frame.frame_rate_N = currentFrame.videoDuration.timescale;
         send_frame.frame_rate_D = (int)currentFrame.videoDuration.value;
         send_frame.picture_aspect_ratio = (float)send_frame.xres/(float)send_frame.yres;
         send_frame.timecode = 0LL;
-        send_frame.line_stride_in_bytes = send_frame.xres*4;
+        send_frame.line_stride_in_bytes = (int)CVPixelBufferGetBytesPerRow(useImage);
         send_frame.p_metadata = NULL;
         
         CVPixelBufferLockBaseAddress(useImage, kCVPixelBufferLock_ReadOnly);
