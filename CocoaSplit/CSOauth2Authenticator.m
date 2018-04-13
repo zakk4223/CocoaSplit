@@ -279,11 +279,13 @@ NSString *const kCSOauth2ClientSecret = @"CSOauth2ClientSecret";
     
     bool doAuth = NO;
     
+    NSLog(@"FORCE VERIFY %d", self.forceVerify);
     if (!self.forceVerify)
     {
         [self loadFromKeychain];
         if ([self doesTokenNeedRefresh])
         {
+            NSLog(@"REFRESH TOKEN");
             _authorizeCallback = authCallback;
             [self refreshAccessToken];
             return;
@@ -295,6 +297,8 @@ NSString *const kCSOauth2ClientSecret = @"CSOauth2ClientSecret";
         } else {
             doAuth = YES;
         }
+        
+        NSLog(@"DO AUTH? %d", doAuth);
     } else {
         doAuth = YES;
     }
