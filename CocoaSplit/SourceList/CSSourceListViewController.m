@@ -68,12 +68,60 @@
         menuEntry = [itemMenu insertItemWithTitle:pinStr action:@selector(itemPinMenu:) keyEquivalent:@"" atIndex:idx++];
         menuEntry.representedObject = item;
         
+        if (input.isVideo)
+        {
+            InputSource *vidSrc = (InputSource *)input;
+            
+            menuEntry = [itemMenu insertItemWithTitle:@"Clone" action:@selector(cloneInputSourceMenu:) keyEquivalent:@"" atIndex:idx++];
+            menuEntry.representedObject = item;
+            
+            menuEntry = [itemMenu insertItemWithTitle:@"Clone Without Cache" action:@selector(cloneInputSourceNoCache:) keyEquivalent:@"" atIndex:idx++];
+            menuEntry.representedObject = item;
+            menuEntry.alternate = YES;
+            menuEntry.keyEquivalentModifierMask = NSAlternateKeyMask;
+            
+            menuEntry = [itemMenu insertItemWithTitle:@"Make Source Private" action:@selector(privatizeSource:) keyEquivalent:@"" atIndex:idx++];
+            menuEntry.representedObject = item;
+            menuEntry.alternate = YES;
+            menuEntry.keyEquivalentModifierMask = NSControlKeyMask;
+            
+            NSString *freezeStr = nil;
+            if (vidSrc.isFrozen)
+            {
+                freezeStr = @"Unfreeze";
+            } else {
+                freezeStr = @"Freeze";
+            }
+            menuEntry = [itemMenu insertItemWithTitle:freezeStr action:@selector(itemFreezeMenu:) keyEquivalent:@"" atIndex:idx++];
+            menuEntry.representedObject = item;
+        }
+        
+        menuEntry = [itemMenu insertItemWithTitle:@"Midi Mapping" action:@selector(midiMapInputMenu:) keyEquivalent:@"" atIndex:idx++];
+        menuEntry.representedObject = item;
+        
         menuEntry = [itemMenu insertItemWithTitle:@"Delete" action:@selector(itemDeleteMenu:) keyEquivalent:@"" atIndex:idx++];
         menuEntry.representedObject = item;
         return itemMenu;
     }
     return nil;
 }
+
+-(void)midiMapInputMenu:(NSMenuItem *)menuItem
+{
+    if (menuItem.representedObject)
+    {
+        
+        [CaptureController.sharedCaptureController openMidiLearnerForResponders:@[menuItem.representedObject]];
+    }
+}
+
+
+-(void)itemFreezeMenu:(NSMenuItem *)menuItem
+{
+    InputSource *input = menuItem.representedObject;
+    input.isFrozen = !input.isFrozen;
+}
+
 
 -(void)itemDeleteMenu:(NSMenuItem *)menuItem
 {
@@ -93,6 +141,95 @@
 {
     [self openInputConfigWindows:@[menuItem.representedObject]];
 }
+
+-(void)cloneInputSourceByUUID:(NSString *)uuid
+{
+    SourceLayout *sourceLayout = self.sourceLayoutController.content;
+
+    InputSource *src = (InputSource *)[sourceLayout inputForUUID:uuid];
+    if (src)
+    {
+        [self cloneInputSource:src];
+    }
+}
+
+
+
+-(void) privatizeSource:(NSMenuItem *)menuItem
+
+{
+    InputSource *toClone = nil;
+    toClone = (InputSource *)menuItem.representedObject;
+
+    if (toClone)
+    {
+        [toClone makeSourcePrivate];
+    }
+}
+
+-(void)undoCloneInput:(NSString *)inputUUID parentUUID:(NSString *)parentUUID
+{
+    
+    SourceLayout *sourceLayout = self.sourceLayoutController.content;
+
+    if (inputUUID)
+    {
+        NSObject<CSInputSourceProtocol> *clonedSource = [sourceLayout inputForUUID:inputUUID];
+        if (clonedSource)
+        {
+            [sourceLayout deleteSource:clonedSource];
+            
+        }
+    }
+    if (parentUUID)
+    {
+        NSObject<CSInputSourceProtocol> *parentSource = [sourceLayout inputForUUID:parentUUID];
+        if (parentSource)
+        {
+            [[self.undoManager prepareWithInvocationTarget:self] cloneInputSourceByUUID:parentUUID];
+        }
+    }
+}
+
+
+
+-(IBAction)cloneInputSourceNoCache:(NSMenuItem *)menuItem
+{
+    InputSource *toClone = nil;
+    toClone = (InputSource *)menuItem.representedObject;
+    SourceLayout *sourceLayout = self.sourceLayoutController.content;
+
+    if (toClone)
+    {
+        InputSource *newSource = [toClone cloneInputNoCache];
+        [sourceLayout addSource:newSource];
+        
+        [[self.undoManager prepareWithInvocationTarget:self] undoCloneInput:newSource.uuid parentUUID:toClone.uuid];
+    }
+}
+
+
+-(void)cloneInputSource:(InputSource *)toClone
+{
+    SourceLayout *sourceLayout = self.sourceLayoutController.content;
+    
+    if (toClone)
+    {
+        InputSource *newSource = [toClone cloneInput];
+        [sourceLayout addSource:newSource];
+        
+        [[self.undoManager prepareWithInvocationTarget:self] undoCloneInput:newSource.uuid parentUUID:toClone.uuid];
+    }
+}
+- (IBAction)cloneInputSourceMenu:(NSMenuItem *)menuItem
+{
+    
+    InputSource *toClone = nil;
+    toClone = (InputSource *)menuItem.representedObject;
+    [self cloneInputSource:toClone];
+}
+
+
 
 -(void)outlineViewDoubleClick:(NSOutlineView *)sender
 {
