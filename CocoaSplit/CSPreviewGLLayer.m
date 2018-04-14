@@ -161,8 +161,13 @@
     
     if (_resizeDirty)
     {
-        glGetDoublev(GL_MODELVIEW_MATRIX, _modelview);
-        glGetDoublev(GL_PROJECTION_MATRIX, _projection);
+        GLfloat    glmat[16];
+        
+        glGetFloatv(GL_MODELVIEW_MATRIX, glmat);
+        _modelview = GLKMatrix4MakeWithArray(glmat);
+        glGetFloatv(GL_PROJECTION_MATRIX, glmat);
+        _projection = GLKMatrix4MakeWithArray(glmat);
+        
         glGetIntegerv(GL_VIEWPORT, _viewport);
         _resizeDirty = NO;
     }
@@ -307,21 +312,25 @@
 {
     
     
-    GLdouble winx, winy, winz;
+    GLKVector3 winVec;
+    
     NSRect winRect;
     
     
     
     
     //origin
-    gluProject(worldRect.origin.x, worldRect.origin.y, 0.0f, _modelview, _projection, _viewport, &winx, &winy, &winz);
-    winRect.origin.x = winx;
-    winRect.origin.y = winy;
-    //origin+width and origin+height
-    gluProject(worldRect.origin.x+worldRect.size.width, worldRect.origin.y+worldRect.size.height, 0.0f, _modelview, _projection, _viewport, &winx, &winy, &winz);
+    GLKVector3 origpoint = GLKVector3Make(worldRect.origin.x, worldRect.origin.y, 0.0f);
     
-    winRect.size.width = winx - winRect.origin.x;
-    winRect.size.height = winy - winRect.origin.y;
+    winVec = GLKMathProject(origpoint, _modelview, _projection, _viewport);
+    
+    winRect.origin.x = winVec.x;
+    winRect.origin.y = winVec.y;
+    //origin+width and origin+height
+    origpoint = GLKVector3Make(worldRect.origin.x+worldRect.size.width, worldRect.origin.y+worldRect.size.height, 0.0f);
+    winVec = GLKMathProject(origpoint, _modelview, _projection, _viewport);
+    winRect.size.width = winVec.x - winRect.origin.x;
+    winRect.size.height = winVec.y - winRect.origin.y;
     return winRect;
 }
 
@@ -330,18 +339,9 @@
 {
     
     
-    GLdouble winx, winy, winz;
-    GLdouble worldx, worldy, worldz;
-    
-    
-    
-    winx = winPoint.x;
-    winy = winPoint.y;
-    winz = 0.0f;
-    
-    gluUnProject(winx, winy, winz, _modelview, _projection, _viewport, &worldx, &worldy, &worldz);
-    
-    return NSMakePoint(worldx, worldy);
+    GLKVector3 winVec = GLKVector3Make(winPoint.x, winPoint.y, 0);
+    GLKVector3 worldPoint = GLKMathUnproject(winVec, _modelview, _projection, _viewport, NULL);
+    return NSMakePoint(worldPoint.x, worldPoint.y);
 }
 
 

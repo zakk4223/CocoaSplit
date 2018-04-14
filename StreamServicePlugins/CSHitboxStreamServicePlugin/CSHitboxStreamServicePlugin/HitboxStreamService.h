@@ -14,7 +14,6 @@
 @interface HitboxStreamService : CSStreamServiceBase <CSStreamServiceProtocol>
 
 
-@property bool isReady;
 
 @property (strong) NSString *authKey;
 @property (strong) NSArray *ingestServers;

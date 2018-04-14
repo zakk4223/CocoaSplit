@@ -40,7 +40,7 @@
     NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
     [attributes setValue:[NSNumber numberWithInt:size.width] forKey:(NSString *)kCVPixelBufferWidthKey];
     [attributes setValue:[NSNumber numberWithInt:size.height] forKey:(NSString *)kCVPixelBufferHeightKey];
-    [attributes setValue:@{(NSString *)kIOSurfaceIsGlobal: @NO} forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
+    [attributes setValue:@{} forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
     [attributes setValue:[NSNumber numberWithUnsignedInt:format] forKey:(NSString *)kCVPixelBufferPixelFormatTypeKey];
     
     
@@ -149,20 +149,20 @@
     if (!_audio_running)
     {
         dispatch_async(_audio_receive_thread, ^{
-            _audio_running = YES;
+            self->_audio_running = YES;
             while (1)
             {
                 [self captureAudio:self.audioTimeout];
                 @synchronized(self)
                 {
-                    if (_stop_audio)
+                    if (self->_stop_audio)
                     {
-                        _stop_audio = NO;
+                        self->_stop_audio = NO;
                         break;
                     }
                 }
             }
-            _audio_running = NO;
+            self->_audio_running = NO;
         });
     } else {
         return;
@@ -180,20 +180,20 @@
     if (!_video_running)
     {
         dispatch_async(_video_receive_thread, ^{
-            _video_running = YES;
+            self->_video_running = YES;
             while (1)
             {
                 [self captureVideo:self.videoTimeout];
                 @synchronized(self)
                 {
-                    if (_stop_video)
+                    if (self->_stop_video)
                     {
-                        _stop_video = NO;
+                        self->_stop_video = NO;
                         return;
                     }
                 }
             }
-            _video_running = NO;
+            self->_video_running = NO;
         });
     } else {
         return;
@@ -244,7 +244,7 @@
                     memcpy(dBuf, audio_frame.p_data, 4*audio_frame.no_samples*audio_frame.no_channels);
                 }
                 dispatch_async(_audio_output_queue, ^{
-                    [_audioDelegate NDIAudioOutput:retPCM fromReceiver:self];
+                    [self->_audioDelegate NDIAudioOutput:retPCM fromReceiver:self];
                 });
             }
             
@@ -291,7 +291,7 @@
                     CVBufferRelease(newFrame);
                     CFRelease(videoDesc);
                     dispatch_async(_video_output_queue, ^{
-                        [_videoDelegate NDIVideoOutput:newSample fromReceiver:self];
+                        [self->_videoDelegate NDIVideoOutput:newSample fromReceiver:self];
                         CFRelease(newSample);
                     });
                 }

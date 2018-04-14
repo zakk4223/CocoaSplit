@@ -531,7 +531,6 @@ NSArray *_savedTransitionConstraints;
 -(NSObject<CSInputSourceProtocol>*)inputSourceForPasteboardItem:(NSPasteboardItem *)item;
 -(NSArray *)captureSourcesForPasteboardItem:(NSPasteboardItem *)item;
 
--(IBAction)openScriptSwitcherWindow:(id)sender;
 -(bool)fileURLIsAudio:(NSURL *)url;
 -(SourceLayout *)sourceLayoutForUUID:(NSString *)uuid;
 -(bool)deleteTransition:(CSTransitionBase *)transition;

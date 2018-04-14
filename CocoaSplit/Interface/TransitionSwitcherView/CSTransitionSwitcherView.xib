@@ -68,7 +68,7 @@
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                 </button>
-                <stackView orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Y6T-fk-6B1">
+                <stackView orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" translatesAutoresizingMaskIntoConstraints="NO" id="Y6T-fk-6B1">
                     <rect key="frame" x="302" y="3" width="108" height="16"/>
                     <beginningViews>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wxE-gG-AY4">

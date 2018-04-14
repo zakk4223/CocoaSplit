@@ -85,9 +85,6 @@
 
 -(instancetype) initWithDevice:(IDeckLink *)device
 {
-    NSString *uid = [CSDeckLinkDevice uniqueIDForDevice:device];
-    
-
     if (self = [super init]) {
         self.canDetectFormat = NO;
 

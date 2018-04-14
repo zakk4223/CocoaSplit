@@ -10,6 +10,7 @@
 #import "LayoutRenderer.h"
 #import <OpenGL/OpenGL.h>
 #import <OpenGL/glu.h>
+#import <GLKit/GLKit.h>
 
 
 
@@ -24,8 +25,8 @@
     
     
     GLint       _viewport[4];
-    GLdouble    _modelview[16];
-    GLdouble    _projection[16];
+    GLKMatrix4    _modelview;
+    GLKMatrix4    _projection;
     CVPixelBufferRef _renderBuffer;
     
     

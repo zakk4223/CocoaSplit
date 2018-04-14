@@ -1558,10 +1558,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     NSMutableArray *changedRemove = [NSMutableArray array];
     
     NSArray *changedInputs = diffResult[@"changed"];
-    NSArray *sameInputs = diffResult[@"same"];
     NSArray *newInputs = diffResult[@"new"];
-    NSArray *newScript = diffResult[@"scriptNew"];
-    NSArray *existingScript = diffResult[@"scriptExisting"];
 
     for (NSObject<CSInputSourceProtocol> *nSrc in newInputs)
     {

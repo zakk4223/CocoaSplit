@@ -58,7 +58,6 @@
 -(IBAction) clearGradient:(NSButton *)sender;
 
 -(IBAction) scriptUndo:(NSButton *)sender;
-- (IBAction)backgroundColorChanged:(NSColorWell *)sender;
 
 @property (weak) IBOutlet NSArrayController *multiSourceController;
 @property (weak) IBOutlet NSArrayController *currentEffectsController;

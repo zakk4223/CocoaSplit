@@ -18,7 +18,6 @@
 
 -(void)buildLayoutMenu;
 -(void)showLayoutMenu:(NSEvent *)clickEvent;
--(void)layoutButtonHovered:(id)sender;
 
 @property (weak) IBOutlet CSLayoutButtonView *layoutButton;
 @property (weak) IBOutlet NSTextField *buttonLabel;

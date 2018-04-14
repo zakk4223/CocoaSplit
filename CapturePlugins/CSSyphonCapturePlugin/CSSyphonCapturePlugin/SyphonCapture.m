@@ -198,23 +198,23 @@
    
             //Big stupid hack to force at least one layer to update the size before we kick a framedata block off
             
-            if (NSEqualSizes(_last_frame_size, NSZeroSize))
+            if (NSEqualSizes(self->_last_frame_size, NSZeroSize))
             {
                 [self updateLayersWithBlock:^(CALayer *layer) {
-                    _last_frame_size = ((CSSyphonCaptureLayer *)layer).lastImageSize;
+                    self->_last_frame_size = ((CSSyphonCaptureLayer *)layer).lastImageSize;
                 }];
-            } else if (_dummyFrameUpdate) {
+            } else if (self->_dummyFrameUpdate) {
                 [self updateLayersWithFramedataBlock:^(CALayer *layer) {
                     return;
                 }];
-                _dummyFrameUpdate = NO;
+                self->_dummyFrameUpdate = NO;
 
             }
                 
             
             
             
-            if (!_dummyFrameUpdate)
+            if (!self->_dummyFrameUpdate)
             {
                 [self updateLayersWithFramedataBlock:^(CALayer *layer) {
                     
@@ -230,7 +230,7 @@
         
  
         [self updateLayersWithBlock:^(CALayer *layer) {
-            ((CSSyphonCaptureLayer *)layer).syphonClient = _syphon_client;
+            ((CSSyphonCaptureLayer *)layer).syphonClient = self->_syphon_client;
         }];
 
         _syphon_uuid = [[_syphon_client serverDescription] objectForKey:SyphonServerDescriptionUUIDKey];

@@ -252,7 +252,7 @@
         
         NSDictionary *channel_response = (NSDictionary *)decodedData;
         NSString *stream_key = [channel_response objectForKey:@"stream_key"];
-        dispatch_async(dispatch_get_main_queue(), ^{self.streamKey = stream_key; _key_fetch_pending = NO;});
+        dispatch_async(dispatch_get_main_queue(), ^{self.streamKey = stream_key; self->_key_fetch_pending = NO;});
     }];
 }
 
