@@ -6,7 +6,8 @@
 
 #import <Cocoa/Cocoa.h>
 #import "CSViewController.h"
-@interface CSSourceListViewController : CSViewController <NSOutlineViewDelegate, NSOutlineViewDataSource, NSWindowDelegate, NSMenuDelegate>
+#import "CSOutlineViewMenuDelegate.h"
+@interface CSSourceListViewController : CSViewController <NSOutlineViewDelegate, NSOutlineViewDataSource, NSWindowDelegate, NSMenuDelegate,CSOutlineViewMenuDelegate>
 {
     NSMenu *_inputsMenu;
     NSMutableDictionary *_activeConfigWindows;

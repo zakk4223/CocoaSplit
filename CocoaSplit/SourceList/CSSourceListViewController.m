@@ -47,7 +47,52 @@
 @implementation CSSourceListViewController
 
 
+-(NSMenu *)menuForItem:(id)item
+{
+    if (item)
+    {
+        NSObject <CSInputSourceProtocol>*input = item;
+        NSInteger idx = 0;
+        
+        NSMenu *itemMenu = [[NSMenu alloc] initWithTitle:input.name];
+        NSMenuItem *menuEntry = [itemMenu insertItemWithTitle:@"Settings" action:@selector(itemSettingsMenu:) keyEquivalent:@"" atIndex:idx++];
+        menuEntry.representedObject = item;
+        NSString *pinStr = nil;
+        if (input.persistent)
+        {
+            pinStr = @"Unpin";
+        } else {
+            pinStr = @"Pin";
+        }
+        
+        menuEntry = [itemMenu insertItemWithTitle:pinStr action:@selector(itemPinMenu:) keyEquivalent:@"" atIndex:idx++];
+        menuEntry.representedObject = item;
+        
+        menuEntry = [itemMenu insertItemWithTitle:@"Delete" action:@selector(itemDeleteMenu:) keyEquivalent:@"" atIndex:idx++];
+        menuEntry.representedObject = item;
+        return itemMenu;
+    }
+    return nil;
+}
 
+-(void)itemDeleteMenu:(NSMenuItem *)menuItem
+{
+    NSObject <CSInputSourceProtocol>*input = menuItem.representedObject;
+    [self deleteSourcesByUUID:@[input.uuid]];
+}
+
+
+-(void)itemPinMenu:(NSMenuItem *)menuItem
+{
+    NSObject <CSInputSourceProtocol>*input = menuItem.representedObject;
+    input.persistent = !input.persistent;
+}
+
+
+-(void)itemSettingsMenu:(NSMenuItem *)menuItem
+{
+    [self openInputConfigWindows:@[menuItem.representedObject]];
+}
 
 -(void)outlineViewDoubleClick:(NSOutlineView *)sender
 {

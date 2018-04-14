@@ -90,6 +90,7 @@
 		34403665207B4E48004BC514 /* CIFilter+BindableDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 34403664207B4E48004BC514 /* CIFilter+BindableDescription.m */; };
 		344036862080B817004BC514 /* CSMixerStreamServicePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 3440367D2080AF72004BC514 /* CSMixerStreamServicePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3440368A2081FE3E004BC514 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 344036892081FE3E004BC514 /* GLKit.framework */; };
+		3440368E20821EE4004BC514 /* CSOutlineViewWithMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 3440368D20821EE4004BC514 /* CSOutlineViewWithMenu.m */; };
 		344037621FFEF7C1009183FB /* CAMultiAudioEngineInputsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 344037601FFEF7C1009183FB /* CAMultiAudioEngineInputsController.m */; };
 		344037631FFEF7C1009183FB /* CAMultiAudioEngineInputsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 344037611FFEF7C1009183FB /* CAMultiAudioEngineInputsController.xib */; };
 		3441269B1E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 344126991E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.m */; };
@@ -719,9 +720,9 @@
 		3437C835206D2A3600F95AC2 /* CSScriptTransitionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSScriptTransitionViewController.m; sourceTree = "<group>"; };
 		3437C836206D2A3600F95AC2 /* CSScriptTransitionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CSScriptTransitionViewController.xib; sourceTree = "<group>"; };
 		343B7BE11E917B1A00233DF1 /* cocoasplit.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; path = cocoasplit.py; sourceTree = "<group>"; };
-		343C2CAF1FFBB8DC00849DA9 /* CSSourceListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSSourceListViewController.h; path = Interface/CSSourceListViewController.h; sourceTree = "<group>"; };
-		343C2CB01FFBB8DC00849DA9 /* CSSourceListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CSSourceListViewController.m; path = Interface/CSSourceListViewController.m; sourceTree = "<group>"; };
-		343C2CB11FFBB8DC00849DA9 /* CSSourceListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = CSSourceListViewController.xib; path = Interface/CSSourceListViewController.xib; sourceTree = "<group>"; };
+		343C2CAF1FFBB8DC00849DA9 /* CSSourceListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSSourceListViewController.h; sourceTree = "<group>"; };
+		343C2CB01FFBB8DC00849DA9 /* CSSourceListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSSourceListViewController.m; sourceTree = "<group>"; };
+		343C2CB11FFBB8DC00849DA9 /* CSSourceListViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CSSourceListViewController.xib; sourceTree = "<group>"; };
 		343C2CB41FFBC77100849DA9 /* BlahView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BlahView.h; path = Interface/BlahView.h; sourceTree = "<group>"; };
 		343C2CB51FFBC77100849DA9 /* BlahView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = BlahView.m; path = Interface/BlahView.m; sourceTree = "<group>"; };
 		343C2CB71FFCD28C00849DA9 /* CAMultiAudioEffectsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAMultiAudioEffectsViewController.h; sourceTree = "<group>"; };
@@ -739,6 +740,9 @@
 		34403664207B4E48004BC514 /* CIFilter+BindableDescription.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "CIFilter+BindableDescription.m"; sourceTree = "<group>"; };
 		344036782080AF71004BC514 /* CSMixerStreamServicePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSMixerStreamServicePlugin.xcodeproj; path = StreamServicePlugins/CSMixerStreamServicePlugin/CSMixerStreamServicePlugin.xcodeproj; sourceTree = "<group>"; };
 		344036892081FE3E004BC514 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/GLKit.framework; sourceTree = DEVELOPER_DIR; };
+		3440368C20821EE4004BC514 /* CSOutlineViewWithMenu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSOutlineViewWithMenu.h; sourceTree = "<group>"; };
+		3440368D20821EE4004BC514 /* CSOutlineViewWithMenu.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSOutlineViewWithMenu.m; sourceTree = "<group>"; };
+		3440368F208221BB004BC514 /* CSOutlineViewMenuDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSOutlineViewMenuDelegate.h; sourceTree = "<group>"; };
 		3440375F1FFEF7C1009183FB /* CAMultiAudioEngineInputsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAMultiAudioEngineInputsController.h; sourceTree = "<group>"; };
 		344037601FFEF7C1009183FB /* CAMultiAudioEngineInputsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CAMultiAudioEngineInputsController.m; sourceTree = "<group>"; };
 		344037611FFEF7C1009183FB /* CAMultiAudioEngineInputsController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CAMultiAudioEngineInputsController.xib; sourceTree = "<group>"; };
@@ -1615,6 +1619,19 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		3440368B20821BB8004BC514 /* SourceList */ = {
+			isa = PBXGroup;
+			children = (
+				343C2CAF1FFBB8DC00849DA9 /* CSSourceListViewController.h */,
+				343C2CB01FFBB8DC00849DA9 /* CSSourceListViewController.m */,
+				343C2CB11FFBB8DC00849DA9 /* CSSourceListViewController.xib */,
+				3440368C20821EE4004BC514 /* CSOutlineViewWithMenu.h */,
+				3440368D20821EE4004BC514 /* CSOutlineViewWithMenu.m */,
+				3440368F208221BB004BC514 /* CSOutlineViewMenuDelegate.h */,
+			);
+			path = SourceList;
+			sourceTree = "<group>";
+		};
 		3441338C18667F280059B686 /* Compressor */ = {
 			isa = PBXGroup;
 			children = (
@@ -1712,9 +1729,7 @@
 				34C1379E1F28DE0C00F53DE2 /* CSTimeFormatter.m */,
 				346544DA1FC22CF0003B9991 /* CSNSButtonCellThemed.h */,
 				346544DB1FC22CF0003B9991 /* CSNSButtonCellThemed.m */,
-				343C2CAF1FFBB8DC00849DA9 /* CSSourceListViewController.h */,
-				343C2CB01FFBB8DC00849DA9 /* CSSourceListViewController.m */,
-				343C2CB11FFBB8DC00849DA9 /* CSSourceListViewController.xib */,
+				3440368B20821BB8004BC514 /* SourceList */,
 				343C2CB41FFBC77100849DA9 /* BlahView.h */,
 				343C2CB51FFBC77100849DA9 /* BlahView.m */,
 				343C2CBC1FFCE73000849DA9 /* CSViewController.h */,
@@ -2806,6 +2821,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3440368E20821EE4004BC514 /* CSOutlineViewWithMenu.m in Sources */,
 				345F8B2D1A156E15009A81E3 /* CAMultiAudioDevice.m in Sources */,
 				34CFE4A418F1992A00092C6A /* AVFAudioChannel.m in Sources */,
 				345F8B791A183D1D009A81E3 /* CAMultiAudioEngine.m in Sources */,
