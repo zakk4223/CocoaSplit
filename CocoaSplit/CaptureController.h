@@ -32,14 +32,8 @@
 #import "CSAddOutputPopupViewController.h"
 #import "CSStreamOutputWindowController.h"
 #import "CSLayoutSwitcherWithPreviewWindowController.h"
-#import "CSScriptWindowViewController.h"
-#import "CSLayoutSequence.h"
-#import "CSSequenceItemLayout.h"
-#import "CSSequenceItemWait.h"
 #import "CSLayoutSwitcherViewController.h"
 #import "CSGridView.h"
-#import "CSSequenceEditorWindowController.h"
-#import "CSSequenceActivatorViewController.h"
 #import "CSLayoutRecorderInfoProtocol.h"
 #import "JavaScriptCore/JavaScriptCore.h"
 #import "CSLayoutTransitionViewProtocol.h"
@@ -99,7 +93,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) CSMidiManagerWindowController *midiManagerController;
 @property (strong) NSString *renderStatsString;
 @property (strong) NSString *outputStatsString;
-@property (strong) NSMutableArray *layoutSequences;
 @property (strong) NSMutableArray *sourceLayouts;
 @property (strong) SourceLayout *selectedLayout;
 @property (strong) SourceLayout *stagingLayout;
@@ -244,14 +237,10 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(InputSource *)findSource:(NSPoint)forPoint;
 -(SourceLayout *)addLayoutFromBase:(SourceLayout *)baseLayout;
 -(SourceLayout *)getLayoutForName:(NSString *)name;
--(void)addSequenceWithNameDedup:(CSLayoutSequence *)sequence;
 -(SourceLayout *)findLayoutWithName:(NSString *)name;
--(void)openSequenceWindow:(CSLayoutSequence *)forSequence;
--(CSLayoutSequence *)getSequenceForName:(NSString *)name;
 
 
 - (IBAction)createLayoutOrSequenceAction:(id)sender;
--(bool)deleteSequence:(CSLayoutSequence *)toDelete;
 
 - (IBAction)openLayoutPopover:(NSButton *)sender;
 -(void)openLayoutPopover:(NSButton *)sender forLayout:(SourceLayout *)layout;
@@ -288,7 +277,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 -(CSLayoutEditWindowController *)openLayoutWindow:(SourceLayout *)layout;
 -(void)layoutWindowWillClose:(CSLayoutEditWindowController *)windowController;
--(void)sequenceWindowWillClose:(CSSequenceEditorWindowController *)windowController;
 
 
 
@@ -334,7 +322,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 
-@interface CaptureController : NSObject <CaptureControllerExport, NSTableViewDelegate, NSMenuDelegate, MIKMIDIMappableResponder, MIKMIDIResponder, MIKMIDIMappingGeneratorDelegate, NSCollectionViewDelegate, CSLayoutRecorderInfoProtocol, NSTableViewDataSource, NSCollectionViewDataSource, NSWindowDelegate>
+@interface CaptureController : NSObject <CaptureControllerExport, NSTableViewDelegate, NSMenuDelegate, MIKMIDIMappableResponder, MIKMIDIResponder, MIKMIDIMappingGeneratorDelegate, NSCollectionViewDelegate, CSLayoutRecorderInfoProtocol, NSTableViewDataSource, NSCollectionViewDataSource, NSWindowDelegate, NSKeyedUnarchiverDelegate>
 
 {
     
@@ -345,15 +333,11 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     
     NSMutableDictionary *_javaScriptFileCache;
     
-CSSequenceEditorWindowController *_sequenceWindowController;
 
 
 CSLayoutSwitcherViewController *_layoutViewController;
-CSScriptWindowViewController *_scriptWindowViewController;
-CSSequenceActivatorViewController *_sequenceViewController;
 
 
-CSLayoutSequence *_testSequence;
 
 NSArray *_inputIdentifiers;
 

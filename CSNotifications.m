@@ -14,9 +14,6 @@ NSString *const CSNotificationLayoutCanvasChanged = @"CSNotificationLayoutCanvas
 NSString *const CSNotificationLayoutFramerateChanged = @"CSNotificationLayoutFramerateChanged";
 
 
-NSString *const CSNotificationSequenceAdded = @"CSNotificationSequenceAdded";
-NSString *const CSNotificationSequenceDeleted = @"CSNotificationSequenceDeleted";
-NSString *const CSNotificationSequenceSaved = @"CSNotificationSequenceSaved";
 
 NSString *const CSNotificationStreamStarted = @"CSNotificationStreamStarted";
 NSString *const CSNotificationStreamStopped = @"CSNotificationStreamStopped";

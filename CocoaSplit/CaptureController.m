@@ -42,6 +42,24 @@
 #import "CSPassthroughCompressor.h"
 #import "CSTransitionCA.h"
 
+
+@interface MissingClass : NSObject <NSCoding>
+@end
+
+@implementation MissingClass
+  -(instancetype) initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super init];
+    return self;
+}
+
+-(void) encodeWithCoder:(NSCoder *)aCoder
+{
+    return;
+}
+@end
+
+
 @implementation CaptureController
 
 @synthesize selectedLayout = _selectedLayout;
@@ -560,32 +578,6 @@
 
 
 
--(void)openSequenceWindow:(CSLayoutSequence *)forSequence
-{
-    CSSequenceEditorWindowController *editSequenceController = [[CSSequenceEditorWindowController alloc] init];
-    editSequenceController.addSequenceOnSave = NO;
-    if (!forSequence)
-    {
-        forSequence = [[CSLayoutSequence alloc] init];
-        
-    }
-    editSequenceController.sequence = forSequence;
-    [_sequenceWindows addObject:editSequenceController];
-    editSequenceController.delegate = self;
-    
-    
-    [editSequenceController showWindow:nil];
-
-}
-
-
--(void)sequenceWindowWillClose:(CSSequenceEditorWindowController *)windowController
-{
-    if ([_sequenceWindows containsObject:windowController])
-    {
-        [_sequenceWindows removeObject:windowController];
-    }
-}
 
 
 - (IBAction)createLayoutOrSequenceAction:(id)sender
@@ -686,40 +678,6 @@
 }
 
 
--(bool)deleteSequence:(CSLayoutSequence *)toDelete
-{
-    if (toDelete)
-    {
-        if ([self actionConfirmation:[NSString stringWithFormat:@"Really delete %@?", toDelete.name] infoString:nil])
-        {
-            
-            
-            NSInteger seqIdx = [self.layoutSequences indexOfObject:toDelete];
-            if (seqIdx != NSNotFound)
-            {
-                [self removeObjectFromLayoutSequencesAtIndex:seqIdx];
-            }
-            return YES;
-        }
-    }
-    return NO;
-    
-}
-
-
--(CSLayoutSequence *)findSequenceWithName:(NSString *)name
-{
-    for(CSLayoutSequence *seq in self.layoutSequences)
-    {
-        if([seq.name isEqualToString:name])
-        {
-            return seq;
-        }
-    }
-    
-    return nil;
-}
-
 
 -(SourceLayout *)findLayoutWithName:(NSString *)name
 {
@@ -732,26 +690,6 @@
     }
     
     return nil;
-}
-
-
--(void)addSequenceWithNameDedup:(CSLayoutSequence *)sequence
-{
-    
-    NSMutableString *baseName = sequence.name.mutableCopy;
-    
-    NSMutableString *newName = baseName;
-    int name_try = 1;
-    
-    while ([self findSequenceWithName:newName]) {
-        newName = [NSMutableString stringWithFormat:@"%@#%d", baseName, name_try];
-        name_try++;
-    }
-    
-    
-    sequence.name = newName;
-
-    [self insertObject:sequence inLayoutSequencesAtIndex:self.layoutSequences.count];
 }
 
 
@@ -1786,7 +1724,14 @@
         [fileManager createDirectoryAtPath:saveFolder withIntermediateDirectories:NO attributes:nil error:nil];
     }
     
-    NSString *saveFile = [saveFolder stringByAppendingPathComponent:@"CocoaSplit-2-1.settings"];
+    NSString *saveFile = [saveFolder stringByAppendingPathComponent:@"CocoaSplit-2-1-4.settings"];
+    if ([fileManager fileExistsAtPath:saveFile])
+    {
+        return saveFile;
+    }
+    
+
+    saveFile = [saveFolder stringByAppendingPathComponent:@"CocoaSplit-2-1.settings"];
 
     if ([fileManager fileExistsAtPath:saveFile])
     {
@@ -1828,7 +1773,7 @@
         [fileManager createDirectoryAtPath:saveFolder withIntermediateDirectories:NO attributes:nil error:nil];
     }
     
-    NSString *saveFile = @"CocoaSplit-2-1.settings";
+    NSString *saveFile = @"CocoaSplit-2-1-4.settings";
     
     return [saveFolder stringByAppendingPathComponent:saveFile];
 }
@@ -2131,7 +2076,6 @@
     {
         [saveRoot setValue:self.layoutTransitionViewController.transition forKey:@"transitionInfo"];
     }
-    [saveRoot setValue:self.layoutSequences forKey:@"layoutSequences"];
     [saveRoot setValue:self.transitions forKey:@"transitions"];
     [saveRoot setValue:self.activeTransition forKey:@"activeTransition"];
     [NSKeyedArchiver archiveRootObject:saveRoot toFile:path];
@@ -2171,10 +2115,12 @@
     
     NSString *path = [self restoreFilePath];
     NSDictionary *defaultValues = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Defaults" ofType:@"plist"]];
-    
+
+    [NSKeyedUnarchiver setClass:MissingClass.class forClassName:@"CSLayoutSequence"];
+    NSLog(@"PATH IS %@", path);
     NSDictionary *savedValues = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
     
-    
+    NSLog(@"SAVED VALUES %@", savedValues);
     NSMutableDictionary *saveRoot = [[NSMutableDictionary alloc] init];
     
 
@@ -2316,13 +2262,7 @@
     
 
 
-    self.layoutSequences = [saveRoot valueForKey:@"layoutSequences"];
-    if (!self.layoutSequences)
-    {
-        self.layoutSequences = [[NSMutableArray alloc] init];
-    }
-    
-    
+
     self.extraPluginsSaveData = nil;
     self.sourceLayouts = [saveRoot valueForKey:@"sourceLayouts"];
     
@@ -3293,16 +3233,6 @@
 }
 
 
--(IBAction)openScriptSwitcherWindow:(id)sender
-{
-    if (!_scriptWindowViewController)
-    {
-        _scriptWindowViewController = [[CSScriptWindowViewController alloc] init];
-    }
-    [_scriptWindowViewController showWindow:nil];
-    _scriptWindowViewController.sequences = nil;
-}
-
 
 - (IBAction)openLayoutSwitcherWindow:(id)sender
 {
@@ -3316,32 +3246,6 @@
     _layoutSwitcherWindowController.layouts = nil;
  
 }
-
-- (IBAction)switchLayoutView:(id)sender
-{
-    if (_layoutViewController)
-    {
-        _layoutViewController.layouts = @[];
-        
-        _layoutViewController = nil;
-        _sequenceViewController = [[CSSequenceActivatorViewController alloc] init];
-        _sequenceViewController.view = self.layoutGridView;
-        _sequenceViewController.sequences = self.layoutSequences;
-        self.layoutScriptLabel = @"Scripts";
-    } else {
-        _sequenceViewController.sequences = @[];
-        _sequenceViewController = nil;
-        _layoutViewController = [[CSLayoutSwitcherViewController alloc] init];
-        _layoutViewController.view = self.layoutGridView;
-        _layoutViewController.isSwitcherView = NO;
-        _layoutViewController.layouts = self.sourceLayouts;
-        self.layoutScriptLabel = @"Layouts";
-
-    }
-}
-
-
-
 
 
 -(NSString *)primaryTypeForURL:(NSURL *)url
@@ -3588,11 +3492,6 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutDeleted object:to_delete userInfo:nil];
 }
 
--(void) insertObject:(CSLayoutSequence *)object inLayoutSequencesAtIndex:(NSUInteger)index
-{
-    [self.layoutSequences insertObject:object atIndex:index];
-    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationSequenceAdded object:object userInfo:nil];
-}
 
 -(SourceLayout *)sourceLayoutForUUID:(NSString *)uuid
 {
@@ -3609,14 +3508,6 @@
     return ret;
 }
 
-
--(void) removeObjectFromLayoutSequencesAtIndex:(NSUInteger)index
-{
-    id to_delete = [self.layoutSequences objectAtIndex:index];
-    
-    [self.layoutSequences removeObjectAtIndex:index];
-    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationSequenceDeleted object:to_delete userInfo:nil];
-}
 
 
 -(void) insertObject:(CSInputLibraryItem *)item inInputLibraryAtIndex:(NSUInteger)index
@@ -3745,21 +3636,6 @@
     return YES;
 }
 
--(CSLayoutSequence *)getSequenceForName:(NSString *)name
-{
-    NSUInteger selectedIdx = [self.layoutSequences indexOfObjectPassingTest:^BOOL(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        return [((CSLayoutSequence *)obj).name isEqualToString:name];
-    }];
-    
-    CSLayoutSequence *foundSequence = nil;
-    
-    if (selectedIdx != NSNotFound)
-    {
-        foundSequence = [self.layoutSequences objectAtIndex:selectedIdx];
-    }
-    
-    return foundSequence;
-}
 
 -(SourceLayout *)getLayoutForName:(NSString *)name
 {

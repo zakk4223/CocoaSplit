@@ -205,12 +205,6 @@
                                     <action selector="openMidiManager:" target="816" id="msu-ZX-OjS"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Scripts" id="1hT-Zd-19y">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="openScriptSwitcherWindow:" target="816" id="HWd-77-aXB"/>
-                                </connections>
-                            </menuItem>
                             <menuItem title="Toggle Staging View" id="qBw-3x-gup">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -409,8 +403,8 @@
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="403" y="305" width="1433" height="817"/>
             <rect key="screenRect" x="0.0" y="0.0" width="3440" height="1417"/>
-            <view key="contentView" misplaced="YES" id="LSw-Ze-64r">
-                <rect key="frame" x="0.0" y="0.0" width="1243" height="817"/>
+            <view key="contentView" id="LSw-Ze-64r">
+                <rect key="frame" x="0.0" y="0.0" width="1433" height="817"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="hIR-Rx-Pl1" userLabel="PreviewHorizontalArea">

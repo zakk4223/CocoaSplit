@@ -109,18 +109,6 @@ var createCITransition = function(name, inputMap, duration, kwargs) {
 }
 
 
-var scriptByName = function(name) {
-    return captureController.getSequenceForName(name);
-}
-
-
-var runScriptByName = function(name) {
-    var layout_script = scriptByName(name);
-    if (layout_script) {
-        var script_code = layout_script.animationCode;
-        eval(script_code);
-    }
-}
 
 var audioInputByRegex = function(regex_str) {
     var all_audio_inputs = captureController.multiAudioEngine.audioInputs;
