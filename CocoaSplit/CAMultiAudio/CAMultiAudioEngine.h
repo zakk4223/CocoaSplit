@@ -25,6 +25,7 @@
 {
     NSString            *_outputId;
     NSMutableDictionary *_inputSettings;
+    CAMultiAudioAVCapturePlayer *_defaultInput;
 }
 
 
@@ -66,6 +67,8 @@
 -(CAMultiAudioInput *)inputForUUID:(NSString *)uuid;
 -(void) disableAllInputs;
 -(void)removeInputAny:(CAMultiAudioInput *)input;
+-(NSDictionary *)systemAudioInputs;
+-(CAMultiAudioInput *)inputForSystemUUID:(NSString *)uuid;
 
 
 

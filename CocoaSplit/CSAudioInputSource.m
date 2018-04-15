@@ -118,10 +118,12 @@
     [aCoder encodeFloat:self.fileStartTime forKey:@"fileStartTime"];
     [aCoder encodeFloat:self.fileEndTime forKey:@"fileEndTime"];
     [aCoder encodeBool:self.fileLoop forKey:@"fileLoop"];
+    NSLog(@"ENCODING WITH CODER %@", self.audioNode);
     if (self.audioNode)
     {
         NSMutableDictionary *nodeData = [NSMutableDictionary dictionary];
         [self.audioNode saveDataToDict:nodeData];
+        NSLog(@"NODE DATA %@", nodeData);
         [aCoder encodeObject:nodeData forKey:@"savedAudioSettings"];
     } else if (_savedAudioSettings) {
         [aCoder encodeObject:_savedAudioSettings forKey:@"savedAudioSettings"];
@@ -198,7 +200,7 @@
 -(void)setAudioVolume:(float)audioVolume
 {
     _audioVolume = audioVolume;
-    if (self.is_live && self.audioNode)
+    if (self.audioNode)
     {
         self.audioNode.volume = audioVolume;
     }
@@ -213,7 +215,7 @@
 -(void)setAudioEnabled:(bool)audioEnabled
 {
     
-    if (self.is_live && self.audioNode)
+    if (self.audioNode)
     {
         self.audioNode.enabled = audioEnabled;
     }
@@ -270,7 +272,13 @@
     {
         CAMultiAudioEngine *audioEngine = [self findAudioEngine];
         self.audioNode = [audioEngine inputForUUID:self.audioUUID];
+
+        if (!self.audioNode)
+        {
+            self.audioNode = [audioEngine inputForSystemUUID:self.audioUUID];
+        }
         
+        NSLog(@"AUDIO NODE IS %@", self.audioNode);
         if (!self.audioNode && self.audioFilePath)
         {
             self.audioNode = [[CAMultiAudioFile alloc] initWithPath:self.audioFilePath];
@@ -311,10 +319,10 @@
     if (!self.audioNode)
     {
         [self findAudioNode];
-        if (self.audioNode && [self.audioNode isKindOfClass:CAMultiAudioFile.class])
+        if (self.audioNode)
         {
             
-            ((CAMultiAudioFile *)self.audioNode).refCount++;
+            self.audioNode.refCount++;
         }
         
         
@@ -342,10 +350,7 @@
         
         if (_savedAudioSettings)
         {
-                if (self.is_live)
-                {
-                    [self.audioNode restoreDataFromDict:_savedAudioSettings];
-                }
+            [self.audioNode restoreDataFromDict:_savedAudioSettings];
         }
 
 
@@ -355,7 +360,7 @@
 -(void)restoreAudioSettings
 {
     
-    if (self.audioNode && self.is_live && _previousSaveData)
+    if (self.audioNode  && _previousSaveData)
     {
         
         [self.audioNode restoreDataFromDict:_previousSaveData];
@@ -363,17 +368,11 @@
         //self.audioNode.volume = _previousVolume;
     }
     
-    if ([self.audioNode isKindOfClass:CAMultiAudioFile.class])
+    self.audioNode.refCount--;
+    if (self.audioNode.refCount <= 0)
     {
-        CAMultiAudioFile *fileNode = (CAMultiAudioFile *)self.audioNode;
-        fileNode.refCount--;
-        
-        if (fileNode.refCount <= 0)
-        {
-            [[self findAudioEngine] removeFileInput:fileNode];
-        }
+        [[self findAudioEngine] removeInputAny:self.audioNode];
     }
-
 }
 
 -(float)duration
@@ -381,42 +380,6 @@
     return self.fileEndTime - self.fileStartTime;
 }
 
-
-/*
--(void)afterReplace
-{
-    NSLog(@"AFTER REPLACE");
-    [self applyAudioSettings];
-
-}
- 
--(void)afterAdd
-{
-    NSLog(@"AFTER ADD");
-    [self applyAudioSettings];
-}
-
-
--(void)afterMerge:(bool)changed
-{
-   // if (changed)
-    {
-        
-        [self findAudioNode];
-    }
-    
-    if (self.audioNode && [self.audioNode isKindOfClass:CAMultiAudioFile.class])
-    {
-        
-        ((CAMultiAudioFile *)self.audioNode).refCount++;
-
-    }
-
-    
-    
-
-}
- */
 
 
 -(bool) isAudio
@@ -460,13 +423,12 @@
     return [super isDifferentInput:from];
 }
 
--(void)setIs_live:(bool)is_live
+-(void)setIsVisible:(bool)isVisible
 {
-    [super setIs_live:is_live];
-    if (is_live)
+    [super setIsVisible:isVisible];
+    if (isVisible)
     {
         [self applyAudioSettings];
     }
 }
-
 @end

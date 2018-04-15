@@ -1001,7 +1001,15 @@
 -(void)audioInputItemClicked:(NSMenuItem *)item
 {
     
-    CAMultiAudioNode *audioNode = item.representedObject;
+    NSString *audioUUID = item.representedObject;
+    
+    SourceLayout *sourceLayout = self.sourceLayoutController.content;
+    CAMultiAudioEngine *useEngine = [sourceLayout findAudioEngine];
+    if (!useEngine)
+    {
+        useEngine = CaptureController.sharedCaptureController.multiAudioEngine;
+    }
+    CAMultiAudioInput *audioNode = [useEngine inputForSystemUUID:audioUUID];
     
     CSAudioInputSource *newSource = [[CSAudioInputSource alloc] initWithAudioNode:audioNode];
     [self addInputSourceWithInput:newSource];
@@ -1093,16 +1101,23 @@
     item.image.size = iconSize;
     item.submenu = [[NSMenu alloc] init];
     
-    for(CAMultiAudioInput *input in [CaptureController sharedCaptureController].multiAudioEngine.audioInputs)
+    SourceLayout *sourceLayout = self.sourceLayoutController.content;
+
+    CAMultiAudioEngine *useEngine = [sourceLayout findAudioEngine];
+    if (!useEngine)
     {
-        if (input.systemDevice)
-        {
-            NSMenuItem *audioItem = [[NSMenuItem alloc] initWithTitle:input.name action:nil keyEquivalent:@""];
-            audioItem.representedObject = input;
-            audioItem.target = self;
-            audioItem.action = @selector(audioInputItemClicked:);
-            [item.submenu addItem:audioItem];
-        }
+        useEngine = CaptureController.sharedCaptureController.multiAudioEngine;
+    }
+    NSDictionary *systemInputs = [useEngine systemAudioInputs];
+    for(NSString *inputUUID in systemInputs)
+    {
+        NSString *inputName = systemInputs[inputUUID];
+        NSMenuItem *audioItem = [[NSMenuItem alloc] initWithTitle:inputName action:nil keyEquivalent:@""];
+        audioItem.representedObject = inputUUID;
+        audioItem.target = self;
+        audioItem.action = @selector(audioInputItemClicked:);
+        [item.submenu addItem:audioItem];
+        
     }
     
     [_inputsMenu addItem:item];

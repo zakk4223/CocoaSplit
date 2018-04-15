@@ -21,6 +21,7 @@
 @property (assign) bool systemDevice;
 @property (assign) bool compressorBypass;
 @property (assign) float powerLevel;
+@property (assign) NSInteger refCount;
 
 
 -(void)openMixerWindow:(id)sender;
@@ -43,6 +44,7 @@
 @property (assign) bool systemDevice;
 @property (strong) CAMultiAudioSubgraph *subGraph;
 @property (assign) float powerLevel;
+@property (assign) NSInteger refCount;
 
 -(void)didRemoveInput;
 -(bool)teardownGraph;

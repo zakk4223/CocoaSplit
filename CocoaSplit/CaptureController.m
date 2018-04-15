@@ -217,6 +217,8 @@
 }
 
 
+
+
 -(void)setUseDarkMode:(bool)useDarkMode
 {
     _useDarkMode = useDarkMode;
@@ -2304,7 +2306,17 @@
     }
     
 
-    
+    if ([saveRoot objectForKey:@"stagingHidden"])
+    {
+        BOOL stagingHidden = [[saveRoot valueForKeyPath:@"stagingHidden"] boolValue];
+        self.stagingHidden = stagingHidden;
+    }
+    if (self.stagingHidden)
+    {
+        [self hideStagingView];
+    } else {
+        [self showStagingView];
+    }
     
     SourceLayout *tmpLayout = [saveRoot valueForKey:@"selectedLayout"];
     if (tmpLayout)
@@ -2320,7 +2332,6 @@
         self.selectedLayout.ignorePinnedInputs = YES;
         self.selectedLayout.containerOnly = YES;
     }
-    
     
     tmpLayout = [saveRoot valueForKey:@"stagingLayout"];
     if (tmpLayout)
@@ -2345,15 +2356,7 @@
     CAMultiAudioEngine *stagingAudio = [self setupStagingAudio];
     self.stagingLayout.audioEngine = stagingAudio;
     
-    if ([saveRoot objectForKey:@"stagingHidden"])
-    {
-        BOOL stagingHidden = [[saveRoot valueForKeyPath:@"stagingHidden"] boolValue];
-        self.stagingHidden = stagingHidden;
-    }
-    if (self.stagingHidden)
-    {
-        [self hideStagingView];
-    }
+
 
 
     
@@ -2415,7 +2418,6 @@
     [self willChangeValueForKey:@"transitions"];
 
     self.transitions = [saveRoot valueForKey:@"transitions"];
-    NSLog(@"LAYOUTS %@", self.sourceLayouts);
     if (!self.transitions)
     {
         self.transitions = [NSMutableArray array];
@@ -2605,7 +2607,6 @@
     self.currentMidiInputStagingIdx = 0;
     
     stagingLayout.doSaveSourceList = YES;
-    NSLog(@"SET STAGING");
     if (!self.stagingHidden)
     {
         NSLog(@"RESTORE STAGING");

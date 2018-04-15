@@ -379,17 +379,108 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 }
 
 
+-(void)listenForDefaultInputChange
+{
+    AudioObjectPropertyAddress inputDeviceAddress = {
+        kAudioHardwarePropertyDefaultInputDevice,
+        kAudioObjectPropertyScopeGlobal,
+        kAudioObjectPropertyElementMaster
+    };
+    
+    AudioObjectAddPropertyListenerBlock(kAudioObjectSystemObject, &inputDeviceAddress, dispatch_get_main_queue(), ^(UInt32 inNumberAddresses, const AudioObjectPropertyAddress * _Nonnull inAddresses) {
+        if (self->_defaultInput)
+        {
+            [self attachDefaultInput];
+        }
+    });
+}
+
+
+-(void)attachDefaultInput
+{
+    AVCaptureDevice *defaultAV = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeAudio];
+    if (defaultAV)
+    {
+        if (self->_defaultInput)
+        {
+            if ([self->_defaultInput.captureDevice.uniqueID isEqualToString:defaultAV.uniqueID])
+            {
+                return;
+            } else {
+                [self removeInput:self->_defaultInput];
+                _defaultInput = nil;
+            }
+        }
+        CAMultiAudioAVCapturePlayer *avplayer = [[CAMultiAudioAVCapturePlayer alloc] initWithDevice:defaultAV withFormat:self.graph.graphAsbd];
+        
+        
+        avplayer.name = @"System Input";
+        avplayer.nodeUID = @"__CS_SYSTEM_INPUT_UUID__";
+        [self attachInput:avplayer];
+        _defaultInput = avplayer;
+    }
+}
+
+
+-(NSDictionary *)systemAudioInputs
+{
+    NSMutableDictionary *ret = [NSMutableDictionary dictionary];
+    if (_defaultInput)
+    {
+        [ret setObject:_defaultInput.name forKey:_defaultInput.nodeUID];
+    }
+    
+    
+    NSArray *sysDevices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio];
+    for(AVCaptureDevice *dev in sysDevices)
+    {
+        [ret setObject:dev.localizedName forKey:dev.uniqueID];
+    }
+    
+    return ret;
+}
+
+-(CAMultiAudioInput *)inputForSystemUUID:(NSString *)uuid
+{
+    CAMultiAudioInput *ret = nil;
+    
+    ret = [self inputForUUID:uuid];
+    if (ret)
+    {
+        return ret;
+    }
+    AVCaptureDevice *dev = [AVCaptureDevice deviceWithUniqueID:uuid];
+    
+    CAMultiAudioAVCapturePlayer *avplayer = [[CAMultiAudioAVCapturePlayer alloc] initWithDevice:dev withFormat:self.graph.graphAsbd];
+    [self attachInput:avplayer];
+    return avplayer;
+}
 
 
 -(void)inputsForSystemAudio
 {
-    NSArray *sysDevices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio];
     
+    
+    //NSArray *sysDevices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio];
+    
+    [self attachDefaultInput];
+    [self listenForDefaultInputChange];
+    NSArray *sysDevices = @[[AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeAudio]];
     for(AVCaptureDevice *dev in sysDevices)
     {
-        CAMultiAudioAVCapturePlayer *avplayer = [[CAMultiAudioAVCapturePlayer alloc] initWithDevice:dev withFormat:self.graph.graphAsbd];
+        if (_defaultInput && [dev.uniqueID isEqualToString:_defaultInput.captureDevice.uniqueID])
+        {
+            continue;
+        }
         
-        [self attachInput:avplayer];
+        NSDictionary *settings = [_inputSettings valueForKey:dev.uniqueID];
+        bool isEnabled = [settings[@"enabled"] boolValue];
+        if (isEnabled)
+        {
+            CAMultiAudioAVCapturePlayer *avplayer = [[CAMultiAudioAVCapturePlayer alloc] initWithDevice:dev withFormat:self.graph.graphAsbd];
+            [self attachInput:avplayer];
+        }
+        
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDeviceConnect:) name:AVCaptureDeviceWasConnectedNotification object:nil];
@@ -741,6 +832,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     //ughhhhh
     if ([NSThread isMainThread])
     {
+        NSLog(@"ATTACH MAIN");
         [self addAudioInputsObject:input];
     } else {
         dispatch_sync(dispatch_get_main_queue(), ^{
