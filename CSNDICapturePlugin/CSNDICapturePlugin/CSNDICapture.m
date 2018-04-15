@@ -178,10 +178,12 @@
 -(void)NDIAudioOutput:(CAMultiAudioPCM *)pcmData fromReceiver:(CSNDIReceiver *)fromReceiver
 {
 
-    if (!_pcmPlayer && self.isLive)
+    if (!_pcmPlayer)
     {
+        CSNDISource *ndiSource = self.activeVideoDevice.captureDevice;
+
         AudioStreamBasicDescription useFormat = pcmData.pcmFormat;
-        [self registerPCMOutput:&useFormat];
+        _pcmPlayer = [self createAttachedAudioInputForUUID:ndiSource.name withName:ndiSource.name withFormat:&useFormat];
         [_pcmPlayer play];
     }
     
@@ -196,8 +198,7 @@
 {
     if (_pcmPlayer)
     {
-        [self deregisterPCMOutput];
-        _pcmPlayer = nil;
+        [_pcmPlayer setAudioFormat:fromReceiver.audioFormat];
     }
 }
 
@@ -250,6 +251,7 @@
 {
     [super setActiveVideoDevice:activeVideoDevice];
 
+    NSString *ndiName = activeVideoDevice.uniqueID;
     CSNDISource *ndiSource = activeVideoDevice.captureDevice;
     
     if (ndiSource)
@@ -278,7 +280,6 @@
             [_current_receiver registerVideoDelegate:self withQueue:_video_thread];
             [_current_receiver registerAudioDelegate:self withQueue:_audio_thread];
             [_current_receiver startCapture];
-            [self createAttachedAudioInputForUUID:ndiSource.name withName:ndiSource.name];
 
         }
     }

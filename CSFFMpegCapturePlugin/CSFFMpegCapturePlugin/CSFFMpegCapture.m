@@ -303,7 +303,20 @@
         }
     }
 
-    [self createAttachedAudioInputForUUID:self.uuid withName:firstItem.shortName];
+    self.pcmPlayer = [self createAttachedAudioInputForUUID:self.uuid withName:firstItem.shortName withFormat:&_asbd];
+    if (self.pcmPlayer && self.player)
+    {
+        self.player.asbd = &_asbd;
+        self.player.pcmPlayer = self.pcmPlayer;
+        if (self.player.currentlyPlaying)
+        {
+            self.pcmPlayer.name = self.player.currentlyPlaying.shortName;
+        } else {
+            CSFFMpegInput *firstItem = self.player.inputQueue.firstObject;
+            
+            self.pcmPlayer.name = firstItem.shortName;
+        }
+    }
     [self generateUniqueID];
 }
 
@@ -454,6 +467,7 @@
     }
 }
 
+/*
 -(void)setIsLive:(bool)isLive
 {
     
@@ -476,21 +490,16 @@
         [self deregisterPCMOutput];
     }
 }
-
+*/
 
 -(void)registerPCMOutput:(CMItemCount)frameCount audioFormat:(const AudioStreamBasicDescription *)audioFormat
 {
-    if (self.pcmPlayer)
+    if (!self.pcmPlayer)
     {
         //looks like we already have one?
         return;
     }
-    
-    
-    self.pcmPlayer = [self createPCMInput:self.uuid withFormat:audioFormat];
-    
 
-    
     if (self.player)
     {
         self.player.asbd = &_asbd;

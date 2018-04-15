@@ -8,10 +8,12 @@
 #import <Foundation/Foundation.h>
 #import "CsPcmPlayer.h"
 #import "CAMultiAudioPCMPlayer.h"
+#import "CAMultiAudioEngine.h"
 
 @interface CSPcmPlayer ()
 {
     NSMapTable *_realPlayers;
+    AudioStreamBasicDescription *_asbd;
     
     //NSPointerArray *_realPlayers;
 }
@@ -26,18 +28,41 @@
 @synthesize name = _name;
 
 
+-(void)setAudioFormat:(AudioStreamBasicDescription *)asbd
+{
+    if (!asbd)
+    {
+        if (_asbd)
+        {
+            free(_asbd);
+        }
+        _asbd = NULL;
+    } else {
+        if (!_asbd)
+        {
+            _asbd = malloc(sizeof(AudioStreamBasicDescription));
+        }
+        memcpy(_asbd, asbd, sizeof(AudioStreamBasicDescription));
+    }
+    
+
+    [self runBlockForPlayers:^(CAMultiAudioPCMPlayer *player) {
+        CAMultiAudioEngine *useEngine = player.engine;
+        [player removeFromEngine];
+        player.inputFormat = asbd;
+        [useEngine attachInput:player];
+    }];
+    
+}
+
+
 -(void)setName:(NSString *)name
 {
     
     _name = name;
-    for (NSString *uuid in _realPlayers)
-    {
-        CAMultiAudioPCMPlayer *player = [_realPlayers objectForKey:uuid];
-        if (player)
-        {
-            player.name = name;
-        }
-    }
+    [self runBlockForPlayers:^(CAMultiAudioPCMPlayer *player) {
+        player.name = name;
+    }];
 }
 
 -(NSString *)name
@@ -60,33 +85,38 @@
     CAMultiAudioPCMPlayer *player = [_realPlayers objectForKey:uuid];
     if (player)
     {
-        [player removeFromEngine];
+        @synchronized(player)
+        {
+            [player removeFromEngine];
+        }
     }
-    [_realPlayers removeObjectForKey:uuid];
+    @synchronized(self)
+    {
+        [_realPlayers removeObjectForKey:uuid];
+    }
 }
 
 
 -(void) addPlayer:(id)player forUUID:(NSString *)uuid
 {
-    [_realPlayers setObject:player forKey:uuid];
-    //[_realPlayers addPointer:(__bridge void * _Nullable)(player)];
+    if (!_asbd)
+    {
+        CAMultiAudioPCMPlayer *caPlayer = player;
+        _asbd = malloc(sizeof(AudioStreamBasicDescription));
+        memcpy(_asbd, caPlayer.inputFormat, sizeof(AudioStreamBasicDescription));
+    }
+    
+    
+    @synchronized(self)
+    {
+        [_realPlayers setObject:player forKey:uuid];
+    }
 }
 
 -(AudioStreamBasicDescription *)audioDescription
 {
-    if (_realPlayers)
-    {
-        for (NSString *uuid in _realPlayers)
-        {
-            CAMultiAudioPCMPlayer *player = [_realPlayers objectForKey:uuid];
-            if (player)
-            {
-                return player.inputFormat;
-            }
-        }
-    }
-    
-    return NULL;
+    return _asbd;
+
 }
 
 
@@ -95,79 +125,68 @@
 -(void)scheduleBuffer:(CMSampleBufferRef)sampleBuffer
 {
 
-    for (NSString *uuid in _realPlayers)
-    {
-        CAMultiAudioPCMPlayer *player = [_realPlayers objectForKey:uuid];
-        if (player)
-        {
-            [player scheduleBuffer:sampleBuffer];
-        }
-    }
+    [self runBlockForPlayers:^(CAMultiAudioPCMPlayer *player) {
+        [player scheduleBuffer:sampleBuffer];
+    }];
 }
 
 -(bool)playPcmBuffer:(CAMultiAudioPCM *)pcmBuffer
 {
-    for (NSString *uuid in _realPlayers)
-    {
-        CAMultiAudioPCMPlayer *player = [_realPlayers objectForKey:uuid];
-        if (player)
-        {
-            [player playPcmBuffer:pcmBuffer];
-        }
-    }
     
-    
+    [self runBlockForPlayers:^(CAMultiAudioPCMPlayer *player) {
+        [player playPcmBuffer:pcmBuffer];
+    }];
     return YES;
 }
 
 
 -(void)play
 {
-    for (NSString *uuid in _realPlayers)
-    {
-        CAMultiAudioPCMPlayer *player = [_realPlayers objectForKey:uuid];
-        if (player)
-        {
-            [player play];
-        }
-    }
+    
+    [self runBlockForPlayers:^(CAMultiAudioPCMPlayer *player) {
+        [player play];
+    }];
 }
 
 -(void)pause
 {
-    for (NSString *uuid in _realPlayers)
-    {
-        CAMultiAudioPCMPlayer *player = [_realPlayers objectForKey:uuid];
-        if (player)
-        {
-            [player pause];
-        }
-    }
+    
+    [self runBlockForPlayers:^(CAMultiAudioPCMPlayer *player) {
+        [player pause];
+    }];
 }
 
 -(void)flush
 {
-    for (NSString *uuid in _realPlayers)
-    {
-        CAMultiAudioPCMPlayer *player = [_realPlayers objectForKey:uuid];
-        if (player)
-        {
-            [player flush];
-        }
-    }
+    [self runBlockForPlayers:^(CAMultiAudioPCMPlayer *player) {
+        [player flush];
+    }];
 }
 
 -(void)dealloc
 {
-    for (NSString *uuid in _realPlayers)
+
+    [self runBlockForPlayers:^(CAMultiAudioPCMPlayer *player) {
+        [player removeFromEngine];
+    }];
+    if (_asbd)
     {
-        CAMultiAudioPCMPlayer *player = [_realPlayers objectForKey:uuid];
-        if (player)
-        {
-            [player removeFromEngine];
-        }
+        free(_asbd);
     }
 }
 
-
+-(void)runBlockForPlayers:(void (^)(CAMultiAudioPCMPlayer *player))useBlock
+{
+    @synchronized(self)
+    {
+        for (NSString *uuid in _realPlayers)
+        {
+            CAMultiAudioPCMPlayer *player = [_realPlayers objectForKey:uuid];
+            if (player)
+            {
+                useBlock(player);
+            }
+        }
+    }
+}
 @end

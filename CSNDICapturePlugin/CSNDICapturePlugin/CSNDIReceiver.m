@@ -33,6 +33,10 @@
     return self;
 }
 
+-(AudioStreamBasicDescription *)audioFormat
+{
+    return _asbd;
+}
 
 -(bool) createPixelBufferPoolForSize:(NSSize) size withFormat:(OSType)format
 {

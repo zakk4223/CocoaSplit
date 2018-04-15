@@ -199,7 +199,7 @@
 
 -(void)captureOutputAudio:(id)fromDevice didOutputPCMSampleBuffer:(CMSampleBufferRef)sampleBuffer
 {
-    if (self.isLive && !_pcmPlayer)
+    if (!_pcmPlayer)
     {
         CMFormatDescriptionRef sDescr = CMSampleBufferGetFormatDescription(sampleBuffer);
         const AudioStreamBasicDescription *asbd =  CMAudioFormatDescriptionGetStreamBasicDescription(sDescr);

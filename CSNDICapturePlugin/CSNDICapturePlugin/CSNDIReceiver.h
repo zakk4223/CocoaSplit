@@ -38,6 +38,7 @@
 
 @property (assign) uint32_t videoTimeout;
 @property (assign) uint32_t audioTimeout;
+@property (readonly) AudioStreamBasicDescription *audioFormat;
 
 -(instancetype)initWithSource:(CSNDISource *)ndi_source;
 -(void)registerVideoDelegate:(id<NDIVideoOutputDelegateProtocol>)delegate withQueue:(dispatch_queue_t)videoQueue;

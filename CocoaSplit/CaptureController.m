@@ -1630,6 +1630,20 @@
     return sharedAnimationObj;
 }
 
+-(CAMultiAudioEngine *)setupStagingAudio
+{
+    CAMultiAudioEngine *useEngine = nil;
+    if (!useEngine)
+    {
+        useEngine = [[CAMultiAudioEngine alloc] init];
+        useEngine.sampleRate = [CaptureController sharedCaptureController].multiAudioEngine.sampleRate;
+        [useEngine disableAllInputs];
+        useEngine.previewMixer.muted = YES;
+    }
+    
+    return useEngine;
+}
+
 
 -(void) buildExtrasMenu
 {
@@ -2117,10 +2131,8 @@
     NSDictionary *defaultValues = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Defaults" ofType:@"plist"]];
 
     [NSKeyedUnarchiver setClass:MissingClass.class forClassName:@"CSLayoutSequence"];
-    NSLog(@"PATH IS %@", path);
     NSDictionary *savedValues = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
     
-    NSLog(@"SAVED VALUES %@", savedValues);
     NSMutableDictionary *saveRoot = [[NSMutableDictionary alloc] init];
     
 
@@ -2330,6 +2342,9 @@
        // [self.stagingLayout mergeSourceLayout:tmpLayout withLayer:nil];
     }
     
+    CAMultiAudioEngine *stagingAudio = [self setupStagingAudio];
+    self.stagingLayout.audioEngine = stagingAudio;
+    
     if ([saveRoot objectForKey:@"stagingHidden"])
     {
         BOOL stagingHidden = [[saveRoot valueForKeyPath:@"stagingHidden"] boolValue];
@@ -2340,6 +2355,8 @@
         [self hideStagingView];
     }
 
+
+    
     
     self.inputLibrary = [saveRoot valueForKey:@"inputLibrary"];
     if (!self.inputLibrary)

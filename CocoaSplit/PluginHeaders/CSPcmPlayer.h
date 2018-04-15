@@ -25,6 +25,8 @@
 -(void)play;
 -(void)pause;
 -(void)flush;
+-(void)setAudioFormat:(AudioStreamBasicDescription *)asbd;
+
 
 
 @end
