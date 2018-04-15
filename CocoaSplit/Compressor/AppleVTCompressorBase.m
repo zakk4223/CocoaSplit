@@ -42,14 +42,6 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
 {
     
     [super encodeWithCoder:aCoder];
-    
-    [aCoder encodeObject:self.name forKey:@"name"];
-    
-    [aCoder encodeInteger:self.width forKey:@"videoWidth"];
-    [aCoder encodeInteger:self.height forKey:@"videoHeight"];
-    
-    [aCoder encodeObject:self.resolutionOption forKey:@"resolutionOption"];
-    
 }
 
 -(id) initWithCoder:(NSCoder *)aDecoder

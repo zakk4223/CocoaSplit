@@ -65,14 +65,12 @@
     if (self = [self init])
     {
         self.name = [aDecoder decodeObjectForKey:@"name"];
-        self.width = (int)[aDecoder decodeIntegerForKey:@"videoWidth"];
-        self.height = (int)[aDecoder decodeIntegerForKey:@"videoHeight"];
         
         if ([aDecoder containsValueForKey:@"resolutionOption"])
         {
             self.resolutionOption = [aDecoder decodeObjectForKey:@"resolutionOption"];
         }
-        
+    
         if ([aDecoder containsValueForKey:@"tryAppleHardware"])
         {
             self.tryAppleHardware = [aDecoder decodeBoolForKey:@"tryAppleHardware"];

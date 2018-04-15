@@ -65,10 +65,6 @@
     [aCoder encodeInteger:self.keyframe_interval forKey:@"keyframe_interval"];
     [aCoder encodeInteger:self.crf forKey:@"crf"];
     [aCoder encodeBool:self.use_cbr forKey:@"use_cbr"];
-    [aCoder encodeInteger:self.width forKey:@"videoWidth"];
-    [aCoder encodeInteger:self.height forKey:@"videoHeight"];
-    
-    [aCoder encodeObject:self.resolutionOption forKey:@"resolutionOption"];
     [aCoder encodeObject:self.advancedSettings forKey:@"advancedSettings"];
 }
 
@@ -85,12 +81,7 @@
         self.crf = (int)[aDecoder decodeIntegerForKey:@"crf"];
         self.use_cbr = [aDecoder decodeBoolForKey:@"use_cbr"];
         self.keyframe_interval = (int)[aDecoder decodeIntegerForKey:@"keyframe_interval"];
-        self.width = (int)[aDecoder decodeIntegerForKey:@"videoWidth"];
-        self.height = (int)[aDecoder decodeIntegerForKey:@"videoHeight"];
-        if ([aDecoder containsValueForKey:@"resolutionOption"])
-        {
-            self.resolutionOption = [aDecoder decodeObjectForKey:@"resolutionOption"];
-        }
+ 
         
         if ([[NSNull null] isEqual:self.preset])
         {
