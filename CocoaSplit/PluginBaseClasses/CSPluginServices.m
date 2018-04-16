@@ -58,6 +58,11 @@
     return [CaptureController sharedCaptureController];
 }
 
+-(NSDate *)streamStartDate
+{
+    return CaptureController.sharedCaptureController.streamStartDate;
+}
+
 
 -(NSArray *)accountNamesForService:(NSString *)serviceName
 {

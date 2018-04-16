@@ -30,6 +30,7 @@
 -(NSObject *)captureController;
 -(JSValue *)runJavascript:(NSString *)script;
 -(NSString *)generateUUID;
+-(NSDate *)streamStartDate;
 
 
 

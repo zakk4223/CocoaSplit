@@ -7,6 +7,7 @@
 //
 
 #import "CSElapsedTimeCapture.h"
+#import "CSPluginServices.h"
 
 @implementation CSElapsedTimeCapture
 
@@ -27,10 +28,21 @@
 }
 
 
+-(void)frameTick
+{
+    if (self.useStreamStart)
+    {
+        self.startDate = [CSPluginServices.sharedPluginServices streamStartDate];
+    }
+    [super frameTick];
+}
+
+
 -(void)restoreWithCoder:(NSCoder *)aDecoder
 {
     [super restoreWithCoder:aDecoder];
     
+    self.useStreamStart = [aDecoder decodeObjectForKey:@"useStreamStart"];
     self.restartWhenLive = [aDecoder decodeBoolForKey:@"restartWhenLive"];
     if (self.restartWhenLive)
     {
@@ -41,6 +53,7 @@
 -(void)saveWithCoder:(NSCoder *)aCoder
 {
     [super saveWithCoder:aCoder];
+    [aCoder encodeBool:self.useStreamStart forKey:@"useStreamStart"];
     [aCoder encodeBool:self.restartWhenLive forKey:@"restartWhenLive"];
 }
 

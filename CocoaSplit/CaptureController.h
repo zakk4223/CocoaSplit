@@ -160,6 +160,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) CSLayoutRecorder *mainLayoutRecorder;
 @property (readonly) SourceLayout *activeLayout;
 @property (strong) CSTransitionBase *activeTransition;
+@property (strong) NSDate *streamStartDate;
 
 
 -(IBAction)hideTransitionView:(id)sender;
@@ -525,6 +526,7 @@ NSArray *_savedTransitionConstraints;
 @property (strong) IBOutlet NSLayoutConstraint *liveViewConstraint;
 @property (strong) NSMutableArray *transitions;
 @property (strong) CSTransitionBase *activeTransition;
+@property (strong) NSDate *streamStartDate;
 
 -(JSContext *)setupJavascriptContext;
 -(JSContext *)setupJavascriptContext:(JSVirtualMachine *)machine;

@@ -11,6 +11,7 @@
 @interface CSElapsedTimeCapture : CSTimeIntervalBase
 
 @property (assign) bool restartWhenLive;
+@property (assign) bool useStreamStart;
 
 
 @end

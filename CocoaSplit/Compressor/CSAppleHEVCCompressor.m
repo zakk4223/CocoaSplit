@@ -16,7 +16,7 @@
     if (self = [super init])
     {
         self.compressorType = @"Apple HEVC";
-        self.profiles = @[[NSNull null], @"Baseline", @"Main", @"High"];
+        self.profiles = @[[NSNull null], @"Main", @"Main10"];
     }
     
     return self;
@@ -111,26 +111,13 @@
         CFStringRef session_profile = nil;
         
         
-        if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_8)
-        {
-            if ([self.profile isEqualToString:@"Baseline"])
+
+            if ([self.profile isEqualToString:@"Main"])
             {
-                session_profile = kVTProfileLevel_H264_Baseline_4_1;
-            } else if ([self.profile isEqualToString:@"Main"]) {
-                session_profile = kVTProfileLevel_H264_Main_5_0;
-            } else if ([self.profile isEqualToString:@"High"]) {
-                session_profile = kVTProfileLevel_H264_High_5_0;
+                session_profile = (__bridge CFStringRef)@"HEVC_Main_AutoLevel";
+            } else if ([self.profile isEqualToString:@"Main10"]) {
+                session_profile = (__bridge CFStringRef)@"HEVC_Main10_AutoLevel";
             }
-        } else {
-            if ([self.profile isEqualToString:@"Baseline"])
-            {
-                session_profile = (__bridge CFStringRef)@"H264_Baseline_AutoLevel";
-            } else if ([self.profile isEqualToString:@"Main"]) {
-                session_profile = (__bridge CFStringRef)@"H264_Main_AutoLevel";
-            } else if ([self.profile isEqualToString:@"High"]) {
-                session_profile = (__bridge CFStringRef)@"H264_High_AutoLevel";
-            }
-        }
         
         
         if (session_profile)

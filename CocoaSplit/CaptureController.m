@@ -2864,7 +2864,7 @@
     self.captureRunning = YES;
 
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationStreamStarted object:self userInfo:nil];
-    
+    self.streamStartDate = [NSDate date];
     return YES;
     
 }
@@ -2937,7 +2937,8 @@
     
     
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationStreamStopped object:self userInfo:nil];
-
+    self.streamStartDate = nil;
+    
 }
 
 - (IBAction)streamButtonPushed:(id)sender {
