@@ -118,12 +118,10 @@
     [aCoder encodeFloat:self.fileStartTime forKey:@"fileStartTime"];
     [aCoder encodeFloat:self.fileEndTime forKey:@"fileEndTime"];
     [aCoder encodeBool:self.fileLoop forKey:@"fileLoop"];
-    NSLog(@"ENCODING WITH CODER %@", self.audioNode);
     if (self.audioNode)
     {
         NSMutableDictionary *nodeData = [NSMutableDictionary dictionary];
         [self.audioNode saveDataToDict:nodeData];
-        NSLog(@"NODE DATA %@", nodeData);
         [aCoder encodeObject:nodeData forKey:@"savedAudioSettings"];
     } else if (_savedAudioSettings) {
         [aCoder encodeObject:_savedAudioSettings forKey:@"savedAudioSettings"];
@@ -363,7 +361,7 @@
     if (self.audioNode  && _previousSaveData)
     {
         
-        [self.audioNode restoreDataFromDict:_previousSaveData];
+        //[self.audioNode restoreDataFromDict:_previousSaveData];
         //self.audioNode.enabled = _previousEnabled;
         //self.audioNode.volume = _previousVolume;
     }
@@ -422,8 +420,22 @@
             return YES;
         }
         
+        if (!!self->_savedAudioSettings != !!fromAudio->_savedAudioSettings)
+        {
+            return YES;
+        }
         
-        return ![self.audioUUID isEqualToString:fromAudio.audioUUID];
+        
+        if (self->_savedAudioSettings)
+        {
+            
+            if (![self->_savedAudioSettings isEqualToDictionary:fromAudio->_savedAudioSettings])
+            {
+                return YES;
+            }
+        }
+    
+        return NO;
     }
     
     return [super isDifferentInput:from];

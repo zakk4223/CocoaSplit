@@ -451,8 +451,16 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     }
     AVCaptureDevice *dev = [AVCaptureDevice deviceWithUniqueID:uuid];
     
+    if (!dev)
+    {
+        return nil;
+    }
+    
     CAMultiAudioAVCapturePlayer *avplayer = [[CAMultiAudioAVCapturePlayer alloc] initWithDevice:dev withFormat:self.graph.graphAsbd];
-    [self attachInput:avplayer];
+    if (avplayer)
+    {
+        [self attachInput:avplayer];
+    }
     return avplayer;
 }
 
