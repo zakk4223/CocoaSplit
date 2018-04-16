@@ -417,6 +417,12 @@
     if ([from isKindOfClass:self.class])
     {
         CSAudioInputSource *fromAudio = (CSAudioInputSource *)from;
+        if (![self.audioUUID isEqualToString:fromAudio.audioUUID])
+        {
+            return YES;
+        }
+        
+        
         return ![self.audioUUID isEqualToString:fromAudio.audioUUID];
     }
     
