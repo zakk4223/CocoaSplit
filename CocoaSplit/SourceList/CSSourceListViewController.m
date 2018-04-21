@@ -1047,6 +1047,33 @@
         }
     }
 }
+
+-(void)libraryItemMenuClicked:(NSMenuItem *)menuItem
+{
+    CSInputLibraryItem *libraryItem = menuItem.representedObject;
+    if (libraryItem)
+    {
+        InputSource *iSrc = [libraryItem makeInput];
+        [self addInputSourceWithInput:iSrc];
+    }
+}
+
+
+-(NSMenuItem *)buildCustomInputMenu
+{
+    NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:@"Custom Inputs" action:nil keyEquivalent:@""];
+    menuItem.submenu = [[NSMenu alloc] init];
+    for (CSInputLibraryItem *libraryItem in CaptureController.sharedCaptureController.inputLibrary)
+    {
+        NSMenuItem *lItem = [[NSMenuItem alloc] initWithTitle:libraryItem.name action:@selector(libraryItemMenuClicked:) keyEquivalent:@""];
+        lItem.representedObject = libraryItem;
+        lItem.target = self;
+        [menuItem.submenu addItem:lItem];
+    }
+    return menuItem;
+}
+
+
 -(void)buildInputMenu
 {
     _inputsMenu = [[NSMenu alloc] init];
@@ -1059,6 +1086,13 @@
     NSSize iconSize;
     iconSize.width = [[NSFont menuFontOfSize:0] pointSize];
     iconSize.height = iconSize.width;
+    
+    if (CaptureController.sharedCaptureController.inputLibrary && CaptureController.sharedCaptureController.inputLibrary.count > 0)
+    {
+        item = [self buildCustomInputMenu];
+        [_inputsMenu addItem:item];
+    }
+
     for (NSString *inputName in sortedKeys)
     {
         Class captureClass = pluginMap[inputName];
