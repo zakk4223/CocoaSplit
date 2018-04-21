@@ -18,6 +18,7 @@
 {
     if (self = [super initWithSubType:subType unitType:unitType])
     {
+        self.isGlobal = NO;
         _delayNodes = [NSMutableArray array];
         self.nameColor = [NSColor blackColor];
 
@@ -184,9 +185,9 @@
     {
         saveDict[@"downMixerData"] = [self.downMixer saveData];
     }
-    
-
+    saveDict[@"isGlobal"] = [NSNumber numberWithBool:self.isGlobal];
 }
+
 
 
 -(void)restoreDataFromDict:(NSDictionary *)restoreDict
@@ -198,6 +199,11 @@
     if (self.downMixer && restoreDict[@"downMixerData"])
     {
         [self.downMixer restoreData:restoreDict[@"downMixerData"]];
+    }
+    
+    if ([restoreDict objectForKey:@"isGlobal"])
+    {
+        self.isGlobal = [restoreDict[@"isGlobal"] boolValue];
     }
 }
 

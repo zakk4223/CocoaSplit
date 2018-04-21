@@ -10,6 +10,7 @@
 @interface CAMultiAudioEngineInputsController : CSViewController <NSWindowDelegate>
 {
     NSMutableDictionary *_mixerWindows;
+    NSMenu *_systemInputMenu;
 }
 
 
@@ -18,5 +19,6 @@
 @property (assign) bool viewOnly;
 @property (weak) IBOutlet NSTableView *audioTableView;
 
+-(IBAction)sourceAddClicked:(NSButton *)sender;
 
 @end

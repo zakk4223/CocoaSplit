@@ -473,7 +473,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     [self attachDefaultInput];
     [self listenForDefaultInputChange];
-    NSArray *sysDevices = @[[AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeAudio]];
+    NSArray *sysDevices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio];
     for(AVCaptureDevice *dev in sysDevices)
     {
         if (_defaultInput && [dev.uniqueID isEqualToString:_defaultInput.captureDevice.uniqueID])
@@ -483,7 +483,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         
         NSDictionary *settings = [_inputSettings valueForKey:dev.uniqueID];
         bool isEnabled = [settings[@"enabled"] boolValue];
-        if (isEnabled)
+        bool isGlobal = [settings[@"isGlobal"] boolValue];
+        if (isEnabled || isGlobal)
         {
             CAMultiAudioAVCapturePlayer *avplayer = [[CAMultiAudioAVCapturePlayer alloc] initWithDevice:dev withFormat:self.graph.graphAsbd];
             [self attachInput:avplayer];

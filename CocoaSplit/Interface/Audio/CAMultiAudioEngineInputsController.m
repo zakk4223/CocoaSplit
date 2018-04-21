@@ -72,6 +72,13 @@
     [engine removeFileInput:toDelete];
 }
 
+-(void)removeSystemAudio:(CAMultiAudioInput *)toDelete
+{
+    CAMultiAudioEngine *engine = self.multiAudioEngineController.content;
+    [engine removeInputAny:toDelete];
+}
+
+
 -(NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
     CAMultiAudioNode *audioNode = [self.audioInputsController.arrangedObjects objectAtIndex:row];
@@ -149,7 +156,52 @@
     return retVal;
 }
 
+-(void)buildSystemInputMenu
+{
+    _systemInputMenu = [[NSMenu alloc] init];
+    
+    NSDictionary *systemInputs = [self.multiAudioEngineController.content systemAudioInputs];
+    for(NSString *inputUUID in systemInputs)
+    {
+        if ([self.multiAudioEngineController.content inputForUUID:inputUUID])
+        {
+            continue;
+        }
+        NSString *inputName = systemInputs[inputUUID];
+        NSMenuItem *audioItem = [[NSMenuItem alloc] initWithTitle:inputName action:nil keyEquivalent:@""];
+        audioItem.representedObject = inputUUID;
+        audioItem.target = self;
+        audioItem.action = @selector(audioInputItemClicked:);
+        [_systemInputMenu addItem:audioItem];
+        
+    }
+}
 
+-(void)openAddInputPopover:(id)sender sourceRect:(NSRect)sourceRect
+{
+    [self buildSystemInputMenu];
+    
+    NSInteger midItem = _systemInputMenu.itemArray.count/2;
+    NSPoint popupPoint = NSMakePoint(NSMaxY(sourceRect), NSMidY(sourceRect));
+    [_systemInputMenu popUpMenuPositioningItem:[_systemInputMenu itemAtIndex:midItem] atLocation:popupPoint inView:sender];
+    
+}
 
+-(IBAction)sourceAddClicked:(NSButton *)sender
+{
+    NSRect sbounds = sender.bounds;
+    
+    [self openAddInputPopover:sender sourceRect:sbounds];
+}
+
+-(void)audioInputItemClicked:(NSMenuItem *)menuItem
+{
+    NSString *uuid = menuItem.representedObject;
+    if (uuid)
+    {
+        CAMultiAudioInput *newInput = [self.multiAudioEngineController.content inputForSystemUUID:uuid];
+        newInput.isGlobal = YES;
+    }
+}
 
 @end
