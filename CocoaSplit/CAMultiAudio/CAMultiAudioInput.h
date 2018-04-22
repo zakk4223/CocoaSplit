@@ -21,6 +21,7 @@
 @property (assign) bool systemDevice;
 @property (assign) bool compressorBypass;
 @property (assign) float powerLevel;
+@property (strong) NSMutableDictionary *powerLevels;
 @property (assign) NSInteger refCount;
 @property (assign) bool isGlobal;
 
@@ -45,6 +46,8 @@
 @property (assign) bool systemDevice;
 @property (strong) CAMultiAudioSubgraph *subGraph;
 @property (assign) float powerLevel;
+@property (strong) NSMutableDictionary *powerLevels;
+
 @property (assign) NSInteger refCount;
 @property (assign) bool isGlobal;
 

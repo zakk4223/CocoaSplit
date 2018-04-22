@@ -21,6 +21,8 @@
         self.isGlobal = NO;
         _delayNodes = [NSMutableArray array];
         self.nameColor = [NSColor blackColor];
+        self.powerLevels = [NSMutableDictionary dictionary];
+        
 
     }
     
@@ -37,8 +39,12 @@
         return;
     }
     
-    float rawPower = [self.downMixer powerForInputBus:0];
-    self.powerLevel = pow(10.0f, rawPower/20.0f);
+    for(int i = 0; i < self.channelCount; i++)
+    {
+        float chanPower = [self.downMixer powerForInputBus:i];
+        [self.powerLevels setObject:[NSNumber numberWithFloat:chanPower] forKey:[NSString stringWithFormat:@"%d", i] ];
+    }
+
 }
 
 

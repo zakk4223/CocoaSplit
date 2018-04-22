@@ -302,8 +302,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     float rawStream = [self.encodeMixer outputPower];
     
     //dispatch_async(dispatch_get_main_queue(), ^{
-        self.previewAudioPowerLevel = pow(10.0f, rawPreview/20.0f);
-        self.streamAudioPowerLevel = pow(10.0f, rawStream/20.0f);
+    self.previewAudioPowerLevel = rawPreview;
+    self.streamAudioPowerLevel = rawStream;
    // });
 
     

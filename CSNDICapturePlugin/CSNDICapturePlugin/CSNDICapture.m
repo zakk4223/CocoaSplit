@@ -251,7 +251,6 @@
 {
     [super setActiveVideoDevice:activeVideoDevice];
 
-    NSString *ndiName = activeVideoDevice.uniqueID;
     CSNDISource *ndiSource = activeVideoDevice.captureDevice;
     
     if (ndiSource)
