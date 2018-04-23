@@ -6,10 +6,10 @@
 //
 
 #import "CSAudioLevelView.h"
+#import "CSNotifications.h"
 
 @implementation CSAudioLevelView
-@synthesize level = _level;
-@synthesize level2 = _level2;
+@synthesize audioLevels = _audioLevels;
 
 
 -(float)convertDbToLinear:(float)dbVal
@@ -37,52 +37,35 @@
     [super drawRect:dirtyRect];
 
     NSGradient *leftgrad;
-    NSGradient *rightgrad;
-    
-    NSRect lRect = dirtyRect;
-    NSRect rRect = dirtyRect;
 
-    float useLevel = [self convertDbToLinear:self.level];
-    float useLevel2 = useLevel;
-    if (self.channelCount > 1)
+    if (!self.audioLevels)
     {
-        useLevel2 = [self convertDbToLinear:self.level2];
+        return;
+    }
+    NSNumber *level1 = nil;
+    NSNumber *level2 = nil;
+    
+    if (self.audioLevels.count > 0)
+    {
+        level1 = [self.audioLevels objectAtIndex:0];
+        level2 = level1;
     }
     
-    
-    if (self.channelCount > 1)
+    if (self.splitMeter && self.audioLevels.count > 1)
     {
-        leftgrad = [[NSGradient alloc] initWithColorsAndLocations:[NSColor greenColor], 0.0f, [NSColor yellowColor], 0.5f, [NSColor redColor], 1.0f, nil];
-        rightgrad = [[NSGradient alloc] initWithColorsAndLocations:[NSColor redColor], 0.0f, [NSColor yellowColor], 0.5f, [NSColor greenColor], 1.0f, nil];
-    } else {
-        leftgrad = [[NSGradient alloc] initWithColorsAndLocations:[NSColor greenColor], 0.0f, [NSColor yellowColor], 0.5f, [NSColor redColor], 1.0f, nil];
+        level2 = [self.audioLevels objectAtIndex:1];
     }
     
-    
-
-    /*
-
-    if (_isVertical)
+    if (!level1)
     {
-        if (self.channelCount > 1)
-        {
-            lRect.size.height = useLevel * (self.bounds.size.height/2);
-            rRect.size.height = useLevel2 * (self.bounds.size.width/2);
-            rRect.origin.y = self.bounds.size.height - rRect.size.height;
-        } else {
-            lRect.size.height = (useLevel) * self.bounds.size.height;
-        }
-    } else {
-        if (self.channelCount > 1)
-        {
-            lRect.size.width = useLevel * (self.bounds.size.width/2);
-            rRect.size.width = useLevel2 * (self.bounds.size.width/2);
-            rRect.origin.x = self.bounds.size.width - rRect.size.width;
-        } else {
-            lRect.size.width = (useLevel) * self.bounds.size.width;
-        }
+        level1 = @(-240.0f);
+        level2 = level1;
     }
-    */
+    
+    float useLevel = [self convertDbToLinear:level1.floatValue];
+    float useLevel2 = [self convertDbToLinear:level2.floatValue];
+
+    leftgrad = [[NSGradient alloc] initWithColorsAndLocations:[NSColor greenColor], 0.0f, [NSColor yellowColor], 0.5f, [NSColor redColor], 1.0f, nil];
 
     [self.backgroundColor setFill];
     NSRectFill(dirtyRect);
@@ -124,7 +107,7 @@
     
     [leftgrad drawInRect:NSInsetRect(dirtyRect, self.backgroundSize, self.backgroundSize) angle:0.0f];
     [NSGraphicsContext restoreGraphicsState];
-    if (self.channelCount > 1)
+    if (self.splitMeter)
     {
         NSBezierPath *linePath = [NSBezierPath bezierPath];
         if (_isVertical)
@@ -141,33 +124,9 @@
 
 
 
--(float)level
+-(void)notificationRan:(NSNotification *)notification
 {
-    return _level;
-}
-
--(void)setLevel:(float)level
-{
-    
-    _level = level;
-    
     [self setNeedsDisplay:YES];
-
-}
-
-
--(float)level2
-{
-    return _level2;
-}
-
--(void)setLevel2:(float)level
-{
-    
-    _level2 = level;
-    
-    [self setNeedsDisplay:YES];
-    
 }
 
 
@@ -182,8 +141,14 @@
     {
         _isVertical = YES;
     }
-    _level = _level2 = -240.0f;
+
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(notificationRan:) name:CSNotificationAudioStatisticsUpdate object:nil];
+    
 }
 
+-(void)dealloc
+{
+    [NSNotificationCenter.defaultCenter removeObserver:self];
+}
 
 @end

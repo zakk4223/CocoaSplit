@@ -29,6 +29,11 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     self.fileInputs = [NSMutableArray array];
     self.validSamplerates = @[@44100, @48000];
     self.sampleRate = 44100;
+    self.streamAudioPowerLevels = [NSMutableDictionary dictionary];
+    self.streamAudioPowerLevels[@"output"] = [NSMutableArray array];
+    self.previewAudioPowerLevels = [NSMutableDictionary dictionary];
+    self.previewAudioPowerLevels[@"output"] = [NSMutableArray array];
+
     self.audioOutputs = [[CAMultiAudioDevice allDevices] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"hasOutput == YES"]];
 
     _outputId = [CAMultiAudioDevice defaultOutputDeviceUID];
@@ -50,6 +55,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         self.encodeMixer.muted = NO;
         self.previewMixer.volume = 1.0;
         self.previewMixer.muted  = NO;
+        
 }
     
     return self;
@@ -296,7 +302,60 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         // });
     }
     
+
+    NSMutableArray *previewArray = self.previewAudioPowerLevels[@"output"];
+    NSMutableArray *streamArray = self.streamAudioPowerLevels[@"output"];
     
+    if (previewArray.count != self.previewMixer.channelCount)
+    {
+    
+        if (previewArray.count < self.previewMixer.channelCount)
+        {
+            for (NSUInteger i = 0; i < self.previewMixer.channelCount - previewArray.count; i++)
+            {
+                [previewArray addObject:@(-240.0f)];
+            }
+        } else {
+            
+            for (NSUInteger i = previewArray.count - 1; i >= self.previewMixer.channelCount; i--)
+            {
+                [previewArray removeObjectAtIndex:i];
+            }
+        }
+        
+    }
+    
+    if (streamArray.count != self.encodeMixer.channelCount)
+    {
+        
+        if (streamArray.count < self.encodeMixer.channelCount)
+        {
+            for (NSUInteger i = 0; i < self.encodeMixer.channelCount - streamArray.count; i++)
+            {
+                [streamArray addObject:@(-240.0f)];
+            }
+        } else {
+            
+            for (NSUInteger i = streamArray.count - 1; i >= self.encodeMixer.channelCount; i--)
+            {
+                [streamArray removeObjectAtIndex:i];
+            }
+        }
+    }
+    
+    
+    for (int i = 0; i < previewArray.count; i++)
+    {
+        
+        float pVal = [self.previewMixer powerForOutputBus:i];
+        [previewArray replaceObjectAtIndex:i withObject:@(pVal)];
+    }
+    
+    for (int i = 0; i < streamArray.count; i++)
+    {
+        float pVal = [self.encodeMixer powerForOutputBus:i];
+        [streamArray replaceObjectAtIndex:i withObject:@(pVal)];
+    }
     
     float rawPreview = [self.previewMixer outputPower];
     float rawStream = [self.encodeMixer outputPower];

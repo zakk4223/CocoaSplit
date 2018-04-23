@@ -22,6 +22,10 @@
         _delayNodes = [NSMutableArray array];
         self.nameColor = [NSColor blackColor];
         self.powerLevels = [NSMutableDictionary dictionary];
+        [self.powerLevels setObject:[NSMutableArray array] forKey:@"input"];
+        [self.powerLevels setObject:[NSMutableArray array] forKey:@"output"];
+
+        
         
 
     }
@@ -39,12 +43,60 @@
         return;
     }
     
-    for(int i = 0; i < self.channelCount; i++)
+    NSMutableArray *inputArray = self.powerLevels[@"input"];
+    NSMutableArray *outputArray = self.powerLevels[@"output"];
+    
+    if (inputArray.count != self.channelCount)
     {
-        float chanPower = [self.downMixer powerForInputBus:i];
-        [self.powerLevels setObject:[NSNumber numberWithFloat:chanPower] forKey:[NSString stringWithFormat:@"%d", i] ];
+        if (inputArray.count < self.channelCount)
+        {
+            
+            for (NSUInteger i = 0; i < self.channelCount - inputArray.count; i++)
+            {
+                [inputArray addObject:@(-240.0f)];
+            }
+        } else {
+            
+            for (NSUInteger i = inputArray.count - 1; i >= self.channelCount; i--)
+            {
+                [inputArray removeObjectAtIndex:i];
+            }
+        }
+    }
+    
+    if (outputArray.count != self.downMixer.outputChannelCount)
+    {
+        
+        if (outputArray.count < self.downMixer.outputChannelCount)
+        {
+            for (NSUInteger i = 0; i < self.downMixer.outputChannelCount - outputArray.count; i++)
+            {
+                [outputArray addObject:@(-240.0f)];
+            }
+        } else {
+            
+            for (NSUInteger i = outputArray.count - 1; i >= self.downMixer.outputChannelCount; i--)
+            {
+                [outputArray removeObjectAtIndex:i];
+            }
+        }
+    }
+    
+    //NSLog(@"CHANNEL COUNT %d OUTPUT COUNT %d", self.channelCount, self.downMixer.outputChannelCount);
+   // NSLog(@"INPUT ARRAY %@ OUTPUT ARRAY %@", inputArray, outputArray);
+    
+    for(int i = 0; i < inputArray.count; i++)
+    {
+        
+        float inPower = [self.downMixer powerForInputBus:i];
+        [self.powerLevels[@"input"] replaceObjectAtIndex:i withObject:@(inPower)];
     }
 
+    for (int i = 0; i < outputArray.count; i++)
+    {
+        float outPower = [self.downMixer powerForOutputBus:i];
+        [self.powerLevels[@"output"] replaceObjectAtIndex:i withObject:@(outPower)];
+    }
 }
 
 

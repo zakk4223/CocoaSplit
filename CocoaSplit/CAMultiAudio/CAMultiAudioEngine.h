@@ -49,6 +49,9 @@
 @property (strong) NSArray *validSamplerates;
 @property (assign) Float32 streamAudioPowerLevel;
 @property (assign) Float32 previewAudioPowerLevel;
+@property (strong) NSMutableDictionary *streamAudioPowerLevels;
+@property (strong) NSMutableDictionary *previewAudioPowerLevels;
+
 @property (strong) CAMultiAudioEffect *renderNode;
 
 

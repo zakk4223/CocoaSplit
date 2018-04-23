@@ -1230,6 +1230,8 @@
                }
                    
            }
+           [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioStatisticsUpdate object:self userInfo:nil];
+
        });
        
        dispatch_resume(_audio_statistics_timer);

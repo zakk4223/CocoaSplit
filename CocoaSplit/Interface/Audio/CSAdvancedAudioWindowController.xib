@@ -165,7 +165,7 @@
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                         <connections>
-                            <binding destination="dRe-6o-71e" name="level" keyPath="selection.previewAudioPowerLevel" id="dvF-Ka-ryp"/>
+                            <binding destination="dRe-6o-71e" name="audioLevels" keyPath="selection.previewAudioPowerLevels.output" id="mKy-zK-twL"/>
                         </connections>
                     </customView>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5HX-Gi-83X">
@@ -209,7 +209,7 @@
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                         <connections>
-                            <binding destination="dRe-6o-71e" name="level" keyPath="selection.streamAudioPowerLevel" id="Mav-vP-lhe"/>
+                            <binding destination="dRe-6o-71e" name="audioLevels" keyPath="selection.streamAudioPowerLevels.output" id="cxT-di-4rA"/>
                         </connections>
                     </customView>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="S23-4m-kb7">

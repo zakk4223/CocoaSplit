@@ -50,6 +50,8 @@ extern NSString *const CSNotificationInputDetached;
 extern NSString *const CSNotificationLayoutModeChanged;
 
 extern NSString *const CSNotificationStatisticsUpdate;
+extern NSString *const CSNotificationAudioStatisticsUpdate;
+
 
 extern NSString *const CSNotificationThemeChanged;
 
