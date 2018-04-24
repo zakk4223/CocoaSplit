@@ -66,9 +66,10 @@
                                             <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
                                                 <color key="value" name="gridColor" catalog="System" colorSpace="catalog"/>
                                             </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="splitMeter" value="YES"/>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
-                                            <binding destination="Y7S-xz-v3h" name="level" keyPath="selection.audioNode.powerLevel" id="d3t-UI-Lyn"/>
+                                            <binding destination="Y7S-xz-v3h" name="audioLevels" keyPath="selection.audioNode.powerLevels.output" id="Z7a-MF-4HG"/>
                                         </connections>
                                     </customView>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ALE-RB-mcN">
