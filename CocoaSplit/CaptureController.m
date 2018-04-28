@@ -2590,6 +2590,7 @@
     [stagingLayout setAddLayoutBlock:^(SourceLayout *layout) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
+            
         layout.in_staging = YES;
         });
     }];
@@ -2604,7 +2605,7 @@
     }];
 
     
-    [stagingLayout applyAddBlock];
+    
     
     self.currentMidiInputStagingIdx = 0;
     
@@ -2612,6 +2613,7 @@
     if (!self.stagingHidden)
     {
         NSLog(@"RESTORE STAGING");
+        [stagingLayout applyAddBlock];
         [stagingLayout restoreSourceList:nil];
         [stagingLayout setupMIDI];
         self.stagingPreviewView.midiActive = YES;
@@ -4673,6 +4675,11 @@
     self.livePreviewView.midiActive = NO;
     self.activePreviewView = self.livePreviewView;
     self.stagingHidden = YES;
+    [self.stagingLayout applyRemoveBlock];
+    if (self.livePreviewView.sourceLayout)
+    {
+        [self.livePreviewView.sourceLayout saveSourceList];
+    }
     self.stagingLayout = self.livePreviewView.sourceLayout;
     self.selectedLayout = self.livePreviewView.sourceLayout;
     self.livePreviewView.sourceLayout.ignorePinnedInputs = NO;
@@ -4688,11 +4695,16 @@
     if (self.livePreviewView.sourceLayout)
     {
         [self.livePreviewView.sourceLayout saveSourceList];
+        
+        /*
             self.stagingPreviewView.sourceLayout.savedSourceListData = self.livePreviewView.sourceLayout.savedSourceListData;
             [self.stagingPreviewView.sourceLayout restoreSourceList:nil];
-        
+        */
         self.stagingLayout = self.stagingPreviewView.sourceLayout;
         self.selectedLayout = self.livePreviewView.sourceLayout;
+        [self.stagingLayout replaceWithSourceLayout:self.selectedLayout];
+        //self.stagingLayout.containedLayouts = self.selectedLayout.containedLayouts;
+        //[self.stagingLayout applyAddBlock];
     }
 
 

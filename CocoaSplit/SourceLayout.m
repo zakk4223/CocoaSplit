@@ -610,6 +610,20 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 }
 
 
+    -(void)applyRemoveBlock
+    {
+        if (self.removeLayoutBlock)
+        {
+            for (SourceLayout *layout in self.containedLayouts)
+            {
+                if (!layout.containerOnly)
+                {
+                    self.removeLayoutBlock(layout);
+                }
+            }
+        }
+    }
+    
 -(float)setDepthForSource:(InputSource *)src startDepth:(float)startDepth
 {
     

@@ -124,6 +124,8 @@ typedef enum source_add_order_t {
 
 -(bool)containsLayout:(SourceLayout *)layout;
 -(void)applyAddBlock;
+-(void)applyRemoveBlock;
+
 -(void)replaceWithSourceLayout:(SourceLayout *)layout usingScripts:(bool)usingScripts;
 -(void)replaceWithSourceLayout:(SourceLayout *)layout usingScripts:(bool)usingScripts usingTransition:(CSLayoutTransition *)usingTransition;
 -(void)replaceWithSourceLayout:(SourceLayout *)layout;
