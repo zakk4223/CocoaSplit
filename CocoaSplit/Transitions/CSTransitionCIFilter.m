@@ -6,7 +6,6 @@
 //
 
 #import "CSTransitionCIFilter.h"
-#import "CSLayoutTransition.h"
 #import "CSCIFilterLayoutTransitionViewController.h"
 
 @implementation CSTransitionCIFilter

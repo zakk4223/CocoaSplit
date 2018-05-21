@@ -28,6 +28,7 @@
         _seen_audio_pkt = NO;
         _duration = 0.0f;
         _seek_request = NO;
+        _media_opened = NO;
         _seek_time = 0;
         _read_loop_semaphore = dispatch_semaphore_create(0);
         _read_thread = dispatch_queue_create("READ QUEUE", DISPATCH_QUEUE_SERIAL);
@@ -73,7 +74,13 @@
 
 -(bool)openMedia:(int)bufferVideoFrames
 {
-    
+    @synchronized(self)
+    {
+        if (_media_opened)
+        {
+            return YES;
+        }
+    }
 
     if (self.is_ready)
     {
@@ -180,12 +187,16 @@
     _stop_request = NO;
     self.is_draining = NO;
     
-
+    
     self.duration = _format_ctx->duration / (double)AV_TIME_BASE;
     
     
     
 
+    @synchronized(self)
+    {
+        _media_opened = YES;
+    }
     
     dispatch_async(_read_thread, ^{
         [self readAndDecodeVideoFrames:bufferVideoFrames];
@@ -566,7 +577,6 @@
 
 -(bool)decodeAudioPacket:(AVPacket *)av_packet
 {
-    
     AVFrame *output_frame = NULL;
     void *orig_data;
     int orig_size;
@@ -703,6 +713,7 @@
 
     if (_video_message_queue)
     {
+
         while (av_thread_message_queue_recv(_video_message_queue, &msg, AV_THREAD_MESSAGE_NONBLOCK) >= 0)
         {
             if (msg.frame)
@@ -783,6 +794,7 @@
 {
     
     [self closeMedia];
+    
     if (_video_message_queue)
     {
         av_thread_message_queue_free(&_video_message_queue);

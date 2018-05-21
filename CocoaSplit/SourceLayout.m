@@ -2063,7 +2063,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     CSTransitionAnimationDelegate *transitionDelegate = [[CSTransitionAnimationDelegate alloc] init];
     if (usingTransition)
     {
-        rTrans = usingTransition;
+        rTrans = usingTransition.transition;
         
         if (aStart)
         {

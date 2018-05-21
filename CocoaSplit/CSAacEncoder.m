@@ -89,6 +89,9 @@
             {
                 [self.encodedReceiver captureOutputAudio:nil didOutputPCMSampleBuffer:pcmSampleBuffer];
             }
+            
+            CFRelease(pcmSampleBuffer);
+            
             if (self.skipCompression)
             {
                 continue;
@@ -171,7 +174,6 @@
                     
                     //Individual video compressors retain the buffer until they push it to their output, we can release it now.
                     CFRelease(timingSampleBuf);
-                    CFRelease(pcmSampleBuffer);
                     
                 } else {
                     free(aacBuffer);

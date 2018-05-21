@@ -111,10 +111,6 @@
     _player.repeat = _repeat;
     
     
-    if (self.isLive)
-    {
-        [self registerPCMOutput:1024 audioFormat:&_asbd];
-    }
 }
 
 
@@ -162,6 +158,7 @@
             self.uuid = [[NSUUID UUID] UUIDString];
         }
         NSArray *paths = [aDecoder decodeObjectForKey:@"queuePaths"];
+    
         for (NSString *mPath in paths)
         {
             if (!self.player)
@@ -169,6 +166,7 @@
                 [self setupPlayer];
             }
             CSFFMpegInput *newInput = [[CSFFMpegInput alloc] initWithMediaPath:mPath];
+            
             [self.player enqueueItem:newInput];
             if (nowPlayingPath && [newInput.mediaPath isEqualToString:nowPlayingPath])
             {
@@ -188,7 +186,7 @@
             self.captureName = firstItem.shortName;
         }
         
-        
+    [self registerPCMOutput:self.captureName];
         _savedTime = [aDecoder decodeDoubleForKey:@"savedTime"];
         self.useCurrentPosition = [aDecoder decodeBoolForKey:@"useCurrentPosition"];
         
@@ -303,20 +301,9 @@
         }
     }
 
-    self.pcmPlayer = [self createAttachedAudioInputForUUID:self.uuid withName:firstItem.shortName withFormat:&_asbd];
-    if (self.pcmPlayer && self.player)
-    {
-        self.player.asbd = &_asbd;
-        self.player.pcmPlayer = self.pcmPlayer;
-        if (self.player.currentlyPlaying)
-        {
-            self.pcmPlayer.name = self.player.currentlyPlaying.shortName;
-        } else {
-            CSFFMpegInput *firstItem = self.player.inputQueue.firstObject;
-            
-            self.pcmPlayer.name = firstItem.shortName;
-        }
-    }
+    [self registerPCMOutput:firstItem.shortName];
+    
+
     [self generateUniqueID];
 }
 
@@ -405,7 +392,6 @@
 
 -(void)frameTick
 {
-    
     if (!self.player)
     {
         return;
@@ -492,28 +478,26 @@
 }
 */
 
--(void)registerPCMOutput:(CMItemCount)frameCount audioFormat:(const AudioStreamBasicDescription *)audioFormat
+-(void)registerPCMOutput:(NSString *)withName
 {
+    
     if (!self.pcmPlayer)
     {
-        //looks like we already have one?
-        return;
-    }
-
-    if (self.player)
-    {
-        self.player.asbd = &_asbd;
-        self.player.pcmPlayer = self.pcmPlayer;
-        if (self.player.currentlyPlaying)
+        self.pcmPlayer = [self createAttachedAudioInputForUUID:self.uuid withName:withName withFormat:&_asbd];
+        if (self.pcmPlayer && self.player)
         {
-            self.pcmPlayer.name = self.player.currentlyPlaying.shortName;
-        } else {
-            CSFFMpegInput *firstItem = self.player.inputQueue.firstObject;
-
-            self.pcmPlayer.name = firstItem.shortName;
+            self.player.asbd = &_asbd;
+            self.player.pcmPlayer = self.pcmPlayer;
+            if (self.player.currentlyPlaying)
+            {
+                self.pcmPlayer.name = self.player.currentlyPlaying.shortName;
+            } else {
+                CSFFMpegInput *firstItem = self.player.inputQueue.firstObject;
+                
+                self.pcmPlayer.name = firstItem.shortName;
+            }
         }
     }
-    
 }
 
 

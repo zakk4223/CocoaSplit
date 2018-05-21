@@ -6,7 +6,6 @@
 //
 
 #import "CSTransitionCA.h"
-#import "CSLayoutTransition.h"
 #import "CSSimpleLayoutTransitionViewController.h"
 
 @implementation CSTransitionCA

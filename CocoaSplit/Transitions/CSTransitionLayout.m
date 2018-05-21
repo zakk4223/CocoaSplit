@@ -7,7 +7,6 @@
 
 #import "CSTransitionLayout.h"
 #import "CaptureController.h"
-#import "CSLayoutTransition.h"
 #import "CSLayoutLayoutTransitionViewController.h"
 
 @implementation CSTransitionLayout

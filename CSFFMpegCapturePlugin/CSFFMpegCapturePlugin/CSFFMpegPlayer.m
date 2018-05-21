@@ -739,7 +739,6 @@
 -(void)dealloc
 {
     
-    
     if (self.currentlyPlaying)
     {
         [self.currentlyPlaying closeMedia];

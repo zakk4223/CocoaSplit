@@ -45,6 +45,8 @@ struct frame_message {
     bool _stop_request;
     bool _seen_audio_pkt;
     bool _seen_video_pkt;
+    bool _media_opened;
+    
     dispatch_semaphore_t _read_loop_semaphore;
     dispatch_queue_t _read_thread;
     
