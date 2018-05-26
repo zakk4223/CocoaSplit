@@ -146,6 +146,21 @@
 }
 
 
+-(SourceLayoutHack *)capturedLayout
+{
+
+    NSObject *controller = [[CSPluginServices sharedPluginServices] captureController];
+    SEL layoutSEL = NSSelectorFromString(@"sourceLayoutForUUID:");
+    SourceLayoutHack *origDev = [controller performSelector:layoutSEL withObject:self.activeVideoDevice.uniqueID];
+    if (!origDev)
+    {
+        return nil;
+    }
+    SourceLayoutHack *capDev = [origDev copy];
+    return capDev;
+}
+
+
 -(void)setupRenderer
 {
     Class renderClass = NSClassFromString(@"LayoutRenderer");
@@ -155,8 +170,7 @@
     self.captureName = self.activeVideoDevice.captureName;
     
     NSObject *controller = [[CSPluginServices sharedPluginServices] captureController];
-    SEL layoutSEL = NSSelectorFromString(@"sourceLayoutForUUID:");
-    SourceLayoutHack *origDev = [controller performSelector:layoutSEL withObject:self.activeVideoDevice.uniqueID];
+    SourceLayoutHack *origDev = [self capturedLayout];
     if (!origDev)
     {
         return;
@@ -275,4 +289,22 @@
     }
 }
 
+-(void)dealloc
+{
+    SourceLayoutHack *capDev = [self capturedLayout];
+    if (capDev)
+    {
+        AudioEngineHack *audioEngine =  [capDev valueForKey:@"audioEngine"];
+        if (audioEngine)
+        {
+            AacEncoderHack *enc = [audioEngine valueForKey:@"encoder"];
+            if (enc)
+            {
+                [enc stopEncoder];
+            }
+        }
+    }
+
+    NSLog(@"LAYOUT SOURCE DEALLOC");
+}
 @end

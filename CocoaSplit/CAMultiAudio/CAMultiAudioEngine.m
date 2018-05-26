@@ -446,10 +446,13 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         kAudioObjectPropertyElementMaster
     };
     
+    __weak CAMultiAudioEngine *weakSelf = self;
+    
     AudioObjectAddPropertyListenerBlock(kAudioObjectSystemObject, &inputDeviceAddress, dispatch_get_main_queue(), ^(UInt32 inNumberAddresses, const AudioObjectPropertyAddress * _Nonnull inAddresses) {
-        if (self->_defaultInput)
+        CAMultiAudioEngine *strongSelf = weakSelf;
+        if (strongSelf->_defaultInput)
         {
-            [self attachDefaultInput];
+            [strongSelf attachDefaultInput];
         }
     });
 }

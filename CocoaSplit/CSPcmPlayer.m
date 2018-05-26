@@ -92,7 +92,10 @@
     }
     @synchronized(self)
     {
-        [_realPlayers removeObjectForKey:uuid];
+        @autoreleasepool
+        {
+            [_realPlayers removeObjectForKey:uuid];
+        }
     }
 }
 

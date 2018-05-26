@@ -338,4 +338,9 @@
     
 }
 
+-(void)dealloc
+{
+    NSLog(@"DEALLOC RENDERER");
+}
+
 @end
