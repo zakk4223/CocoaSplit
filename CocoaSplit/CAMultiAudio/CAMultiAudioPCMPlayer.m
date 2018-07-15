@@ -81,12 +81,14 @@
                     pendingCopy = [self->_pendingBuffers copy];
                 }
                 
+
                 
                 for (CAMultiAudioPCM *pcmObj in pendingCopy)
                 {
-                    
+
                     if ((pcmObj.audioSlice)->mFlags & kScheduledAudioSliceFlag_Complete)
                     {
+                        
                         if (self.save_buffer)
                         {
                             [self.pauseBuffer addObject:pcmObj];
@@ -178,10 +180,6 @@
     
 
     err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ScheduleAudioSlice, kAudioUnitScope_Global, 0, pcmBuffer.audioSlice, sizeof(ScheduledAudioSlice));
-    
-
-    
-    
     //dispatch_async(_pendingQueue, ^{
     
     @synchronized(self)
@@ -259,14 +257,7 @@
 
 -(void)releasePCM:(CAMultiAudioPCM *)buffer
 {
-    /*
-    @synchronized (self) {
-        [self->_pendingBuffers removeObject:buffer];
-
-    }
-    
     @autoreleasepool {
-    */
     
     //dispatch_async(_pendingQueue, ^{
     @synchronized(self)
@@ -275,7 +266,7 @@
     }
     
    // });
-/*    }*/
+  }
 }
 
 

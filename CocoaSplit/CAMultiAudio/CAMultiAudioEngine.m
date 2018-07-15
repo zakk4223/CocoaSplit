@@ -384,19 +384,25 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     }];
 
     
+    if (selectedIdx == NSNotFound)
+    {
+        selectedIdx = [self.audioOutputs indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+            return [((CAMultiAudioDevice *)obj).deviceUID isEqualToString:[CAMultiAudioDevice defaultOutputDeviceUID]];
+        }];
+    }
+    
     
     if (selectedIdx != NSNotFound)
     {
         _outputNode = [self.audioOutputs objectAtIndex:selectedIdx];
+    } else {
+        _outputNode = [self.audioOutputs objectAtIndex:0];
     }
     
     
-    //if (!self.graphOutputNode)
-    {
-        self.graphOutputNode = self.outputNode;
-        
-
-    }
+    self.graphOutputNode = self.outputNode;
+    
+    
     
     
     self.silentNode = [[CAMultiAudioSilence alloc] init];
