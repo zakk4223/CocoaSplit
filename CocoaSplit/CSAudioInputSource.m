@@ -276,7 +276,6 @@
             self.audioNode = [audioEngine inputForSystemUUID:self.audioUUID];
         }
         
-        NSLog(@"AUDIO NODE IS %@", self.audioNode);
         if (!self.audioNode && self.audioFilePath)
         {
             self.audioNode = [[CAMultiAudioFile alloc] initWithPath:self.audioFilePath];

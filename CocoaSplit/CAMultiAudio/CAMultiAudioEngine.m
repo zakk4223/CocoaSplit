@@ -909,7 +909,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     //ughhhhh
     if ([NSThread isMainThread])
     {
-        NSLog(@"ATTACH MAIN");
         [self addAudioInputsObject:input];
     } else {
         dispatch_sync(dispatch_get_main_queue(), ^{
@@ -931,8 +930,14 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     CAMultiAudioGraph *inputGraph = (CAMultiAudioSubgraph *)disconnectNode.graph;
     
     [disconnectNode teardownGraph];
+
+    if (disconnectNode.headNode)
+    {
+        [inputGraph removeNode:disconnectNode.headNode];
+    } else {
+        [inputGraph removeNode:disconnectNode];
+    }
     
-    [inputGraph removeNode:disconnectNode.headNode];
     disconnectNode.headNode = nil;
     disconnectNode.graph = nil;
     

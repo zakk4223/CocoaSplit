@@ -423,6 +423,7 @@
         self.headNode = self.effectsHead;
     }
     
+    currNode = nil;
     currNode = self.effectsHead;
     for (CAMultiAudioNode *eNode in self.effectChain)
     {
@@ -435,6 +436,7 @@
     {
         [self.graph connectNode:currNode toNode:headConn];
     }
+    
     
     if (currNode)
     {

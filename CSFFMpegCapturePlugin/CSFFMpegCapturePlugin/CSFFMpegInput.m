@@ -792,7 +792,6 @@
 
 -(void)dealloc
 {
-    
     [self closeMedia];
     
     if (_video_message_queue)
