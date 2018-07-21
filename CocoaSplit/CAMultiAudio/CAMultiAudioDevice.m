@@ -291,7 +291,7 @@
         
         [deviceList addObject:newDevice];
     }
-    
+    free(deviceIDs);
     return deviceList;
 }
 

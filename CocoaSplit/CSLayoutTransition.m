@@ -3,7 +3,6 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 8/12/17.
-//  Copyright © 2017 Zakk. All rights reserved.
 //
 
 #import "CSLayoutTransition.h"

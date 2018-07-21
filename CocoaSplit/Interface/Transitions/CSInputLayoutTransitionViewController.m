@@ -3,7 +3,6 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 4/1/18.
-//  Copyright © 2018 Zakk. All rights reserved.
 //
 
 #import "CSInputLayoutTransitionViewController.h"
@@ -23,7 +22,6 @@
     -(IBAction)openInputConfigWindow:(id)sender
     {
         
-        
         NSObject<CSInputSourceProtocol> *configSrc = self.transition.inputSource;
         NSViewController *newViewController = [configSrc configurationViewController];
         _configViewController = newViewController;
@@ -38,5 +36,12 @@
         [_configViewController.view setFrameOrigin:NSMakePoint(_configViewController.view.frame.origin.x, NSMaxY(self.inputConfigView.frame) - _configViewController.view.frame.size.height-8)];
         
     }
-    
+
+-(void)popoverDidClose:(NSNotification *)notification
+{
+    self.popover.contentViewController = nil;
+    [self.transition saveAndClearInputSource];
+    _configViewController = nil;
+}
+
 @end

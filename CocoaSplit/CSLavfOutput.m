@@ -472,7 +472,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
                 return NO;
             }
             avcc_size = CFDataGetLength(avcc_data);
-            c_ctx->extradata = malloc(avcc_size);
+            c_ctx->extradata = av_malloc(avcc_size);
     
             CFDataGetBytes(avcc_data, CFRangeMake(0,avcc_size), c_ctx->extradata);
     

@@ -63,7 +63,6 @@ typedef enum source_add_order_t {
 @property (strong) CARenderer *renderer;
 @property (strong) CAGradientLayer *rootLayer;
 
-@property (strong) SourceCache *sourceCache;
 @property (strong) CIFilter *compositeFilter;
 
 @property (weak) InputSource *layoutTimingSource;
@@ -219,7 +218,6 @@ typedef enum source_add_order_t {
 @property (strong) CARenderer *renderer;
 @property (strong) CAGradientLayer *rootLayer;
 
-@property (strong) SourceCache *sourceCache;
 @property (strong) CIFilter *compositeFilter;
 
 @property (weak) InputSource *layoutTimingSource;

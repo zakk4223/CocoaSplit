@@ -61,7 +61,6 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         _sourceDepthSorterRev = [[NSSortDescriptor alloc] initWithKey:@"depth" ascending:NO];
 
         _sourceUUIDSorter = [[NSSortDescriptor alloc] initWithKey:@"uuid" ascending:YES];
-        self.sourceCache = [[SourceCache alloc] init];
         _frameRate = 30;
         _canvas_height = 720;
         _canvas_width = 1280;

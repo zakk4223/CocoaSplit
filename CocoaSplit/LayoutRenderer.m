@@ -340,6 +340,20 @@
 
 -(void)dealloc
 {
+    if (_cvpool)
+    {
+        CVPixelBufferPoolRelease(_cvpool);
+    }
+    
+    if (_cglCtx)
+    {
+        CGLDestroyContext(_cglCtx);
+    }
+    
+    if (_currentPB)
+    {
+        CVPixelBufferRelease(_currentPB);
+    }
     NSLog(@"DEALLOC RENDERER");
 }
 

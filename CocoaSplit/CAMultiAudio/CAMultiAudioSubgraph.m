@@ -36,4 +36,13 @@
 }
 
 
+-(void)dealloc
+{
+    if (self.graphAsbd)
+    {
+        free(self.graphAsbd);
+    }
+}
+
+
 @end

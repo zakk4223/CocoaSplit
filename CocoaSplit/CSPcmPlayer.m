@@ -182,12 +182,16 @@
 {
     @synchronized(self)
     {
-        for (NSString *uuid in _realPlayers)
+        
+        @autoreleasepool //We may not be in the main thread...
         {
-            CAMultiAudioPCMPlayer *player = [_realPlayers objectForKey:uuid];
-            if (player)
+            for (NSString *uuid in _realPlayers)
             {
-                useBlock(player);
+                CAMultiAudioPCMPlayer *player = [_realPlayers objectForKey:uuid];
+                if (player)
+                {
+                    useBlock(player);
+                }
             }
         }
     }

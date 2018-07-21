@@ -330,7 +330,17 @@
 {
     [self stopEncoder];
     AudioComponentInstanceDispose(aacCodec);
+    if (cmFormat)
+    {
+        CFRelease(cmFormat);
+    }
     
+    if (_pcmFormat)
+    {
+        CFRelease(_pcmFormat);
+    }
+    TPCircularBufferCleanup(&_inputBuffer);
+    TPCircularBufferCleanup(&_scratchBuffer);
 }
 
 

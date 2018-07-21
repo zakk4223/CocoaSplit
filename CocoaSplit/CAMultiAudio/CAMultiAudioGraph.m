@@ -3,7 +3,6 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 11/14/14.
-//  Copyright (c) 2014 Zakk. All rights reserved.
 //
 
 #import "CAMultiAudioGraph.h"
@@ -324,6 +323,12 @@
 -(void)dealloc
 {
     self.nodeList = nil;
+    if (self.graphAsbd)
+    {
+        free(self.graphAsbd);
+    }
+    
+    
     if (_graphInst)
     {
         DisposeAUGraph(_graphInst);

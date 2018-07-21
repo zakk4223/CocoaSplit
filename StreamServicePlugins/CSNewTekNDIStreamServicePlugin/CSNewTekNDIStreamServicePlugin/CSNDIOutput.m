@@ -124,7 +124,7 @@
             audio_frame.p_data = buffList->mBuffers[0].mData;
             
             _dispatch->NDIlib_send_send_audio_v2(_ndi_send, &audio_frame);
-            
+            free(buffList);
 
             
         }

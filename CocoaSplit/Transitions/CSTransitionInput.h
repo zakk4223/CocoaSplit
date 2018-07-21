@@ -37,6 +37,8 @@
 @property (assign) bool wholeLayout;
 
 -(NSObject<CSInputSourceProtocol> *)getInputSource;
+-(void)saveAndClearInputSource;
+
 
 
 

@@ -37,14 +37,25 @@
     return newObj;
 }
 
+-(void)saveAndClearInputSource
+{
+    if (_inputSource)
+    {
+        
+        self.inputSourceSavedata = [NSKeyedArchiver archivedDataWithRootObject:_inputSource];
+        self.inputSource = nil;
+        NSLog(@"SET INPUT SOURCE TO NIL");
+    }
+}
+
 
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
     [super encodeWithCoder:aCoder];
-    if (self.inputSource)
+    if (_inputSource)
     {
         
-        self.inputSourceSavedata = [NSKeyedArchiver archivedDataWithRootObject:self.inputSource];
+        self.inputSourceSavedata = [NSKeyedArchiver archivedDataWithRootObject:_inputSource];
         
         [aCoder encodeObject:self.inputSourceSavedata forKey:@"inputSourceSavedata"];
     }
@@ -82,6 +93,16 @@
     
     return self;
 }
+
+-(void)setActive:(bool)active
+{
+    [super setActive:active];
+    if (!active && _inputSource)
+    {
+        [self saveAndClearInputSource];
+    }
+}
+
 
 +(NSArray *)subTypes
 {
@@ -147,7 +168,6 @@
         if (!_inputSource)
         {
             _inputSource = [self getInputSource];
-            
         }
         if (_inputSource && _inputSource.isVideo)
         {
