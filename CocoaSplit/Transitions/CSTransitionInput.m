@@ -94,14 +94,7 @@
     return self;
 }
 
--(void)setActive:(bool)active
-{
-    [super setActive:active];
-    if (!active && _inputSource)
-    {
-        [self saveAndClearInputSource];
-    }
-}
+
 
 
 +(NSArray *)subTypes
@@ -214,11 +207,13 @@
     }
     
     self.inputSource.persistent = YES;
+    self.inputSource.isTransitionInput = YES;
     if (self.inputSource.isVideo)
     {
         //[(InputSource *)self.inputSource autoCenter];
     }
 
+    self.inputSourceUUID = self.inputSource.uuid;
     NSMutableString *scriptRet = [NSMutableString string];
     [scriptRet appendString:@"var usePreTrans = null;"];
     if (self.preTransition)
@@ -281,7 +276,10 @@
         [scriptRet appendString:@"if (postPostScript) { (new Function('self', postPostScript))(self.postTransition);}"];
     }
     
+    //[scriptRet appendString:@"self.saveAndClearInputSource();"];
+    
     //[scriptRet appendString:@"self.inputSource = null;"];
+    NSLog(@"SCRIPT RET %@", scriptRet);
     return scriptRet;
 }
 

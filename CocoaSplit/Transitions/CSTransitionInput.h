@@ -15,8 +15,9 @@
 @property (assign) float realHoldDuration;
 @property (assign) bool transitionAfterPre;
 @property (assign) bool wholeLayout;
-
+@property (strong) NSString *inputSourceUUID;
 -(NSObject<CSInputSourceProtocol> *)getInputSource;
+-(void)saveAndClearInputSource;
 
 
 
@@ -35,6 +36,7 @@
 @property (assign) bool waitForMedia;
 @property (assign) bool transitionAfterPre;
 @property (assign) bool wholeLayout;
+@property (strong) NSString *inputSourceUUID;
 
 -(NSObject<CSInputSourceProtocol> *)getInputSource;
 -(void)saveAndClearInputSource;

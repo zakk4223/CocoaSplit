@@ -1093,7 +1093,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
                 [retDict[@"scriptExisting"] addObject:sSrc];
             }
 
-            if (!sSrc.persistent || self.ignorePinnedInputs)
+            if ((!sSrc.persistent || self.ignorePinnedInputs) && !sSrc.isTransitionInput)
             {
                 [retDict[@"removed"] addObject:sSrc];
             }

@@ -49,6 +49,8 @@
 @property (weak) InputSource* parentInput;
 @property (assign) bool persistent;
 @property (assign) bool isVisible;
+@property (assign) bool isTransitionInput;
+
 
 -(void)attachInput:(NSObject <CSInputSourceProtocol>*)input;
 -(void)detachInput:(NSObject <CSInputSourceProtocol>*)input;
@@ -90,6 +92,8 @@
 
 @property (weak) InputSource* parentInput;
 @property (assign) bool persistent;
+@property (assign) bool isTransitionInput;
+
 
 
 

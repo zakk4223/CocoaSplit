@@ -2104,6 +2104,7 @@
 -(void) loadSettings
 {
     
+    
     [[CSPluginLoader sharedPluginLoader] loadAllBundles];
 
     CGColorRef tmpColor = CGColorCreateGenericRGB(0, 1, 0, 1);
@@ -2353,6 +2354,18 @@
         self.selectedLayout.name = @"live";
         
        // [self.stagingLayout mergeSourceLayout:tmpLayout withLayer:nil];
+    }
+    
+    if ([saveRoot objectForKey:@"stagingHidden"])
+    {
+        BOOL stagingHidden = [[saveRoot valueForKeyPath:@"stagingHidden"] boolValue];
+        self.stagingHidden = stagingHidden;
+    }
+    if (self.stagingHidden)
+    {
+        [self hideStagingView];
+    } else {
+        [self showStagingView];
     }
     
     CAMultiAudioEngine *stagingAudio = [self setupStagingAudio];

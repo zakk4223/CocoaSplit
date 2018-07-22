@@ -33,6 +33,8 @@
 @property (readonly) bool isScript;
 @property (assign) bool persistent;
 @property (assign) bool isVisible;
+@property (assign) bool isTransitionInput;
+
 
 @property (weak) InputSource* parentInput;
 

@@ -31,6 +31,7 @@
     self.active = YES;
     self.scriptPriority = 0;
     self.persistent = NO;
+    self.isTransitionInput = NO;
 
 }
 
