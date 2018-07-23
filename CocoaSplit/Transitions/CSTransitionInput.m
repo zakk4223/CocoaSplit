@@ -44,7 +44,7 @@
         
         self.inputSourceSavedata = [NSKeyedArchiver archivedDataWithRootObject:_inputSource];
         self.inputSource = nil;
-        NSLog(@"SET INPUT SOURCE TO NIL");
+        NSLog(@"SAVE AND CLEAR");
     }
 }
 
@@ -206,8 +206,8 @@
         return nil;
     }
     
-    self.inputSource.persistent = YES;
-    self.inputSource.isTransitionInput = YES;
+    //self.inputSource.persistent = YES;
+    //self.inputSource.isTransitionInput = YES;
     if (self.inputSource.isVideo)
     {
         //[(InputSource *)self.inputSource autoCenter];
@@ -276,10 +276,9 @@
         [scriptRet appendString:@"if (postPostScript) { (new Function('self', postPostScript))(self.postTransition);}"];
     }
     
-    //[scriptRet appendString:@"self.saveAndClearInputSource();"];
+    [scriptRet appendString:@"self.saveAndClearInputSource();"];
     
     //[scriptRet appendString:@"self.inputSource = null;"];
-    NSLog(@"SCRIPT RET %@", scriptRet);
     return scriptRet;
 }
 
