@@ -482,11 +482,11 @@
             useEngine = layout.audioEngine;
         }
     }
-    
+    /*
     if (!useEngine)
     {
         useEngine = [CaptureController sharedCaptureController].multiAudioEngine;
-    }
+    } */
     
     return useEngine;
 }

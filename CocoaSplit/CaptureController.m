@@ -2309,18 +2309,9 @@
     }
     
 
-    if ([saveRoot objectForKey:@"stagingHidden"])
-    {
-        BOOL stagingHidden = [[saveRoot valueForKeyPath:@"stagingHidden"] boolValue];
-        self.stagingHidden = stagingHidden;
-    }
-    if (self.stagingHidden)
-    {
-        [self hideStagingView];
-    } else {
-        [self showStagingView];
-    }
+
     
+
     SourceLayout *tmpLayout = [saveRoot valueForKey:@"selectedLayout"];
     if (tmpLayout)
     {
@@ -2356,6 +2347,10 @@
        // [self.stagingLayout mergeSourceLayout:tmpLayout withLayer:nil];
     }
     
+
+    
+    self.selectedLayout.audioEngine = self.multiAudioEngine;
+    
     if ([saveRoot objectForKey:@"stagingHidden"])
     {
         BOOL stagingHidden = [[saveRoot valueForKeyPath:@"stagingHidden"] boolValue];
@@ -2367,9 +2362,6 @@
     } else {
         [self showStagingView];
     }
-    
-    CAMultiAudioEngine *stagingAudio = [self setupStagingAudio];
-    self.stagingLayout.audioEngine = stagingAudio;
     
 
 
@@ -4675,7 +4667,7 @@
 {
     
 
-    
+    self.stagingLayout.audioEngine = nil;
     self.stagingPreviewView.superview.animator.hidden = YES;
     self.liveViewConstraint.active = NO;
     
@@ -4733,6 +4725,8 @@
         self.livePreviewView.midiActive = YES;
         self.stagingPreviewView.midiActive = NO;
     }
+    
+    self.stagingLayout.audioEngine = [self setupStagingAudio];
 }
 
 
