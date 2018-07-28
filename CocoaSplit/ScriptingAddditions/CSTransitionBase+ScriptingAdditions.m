@@ -24,6 +24,7 @@
 }
     -(void)scriptActivate:(NSScriptCommand *)command
     {
+        
         [CaptureController sharedCaptureController].activeTransition = self;
     }
     

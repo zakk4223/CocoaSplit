@@ -290,8 +290,8 @@
 
 -(void)enqueueItem:(CSFFMpegInput *)item
 {
-    [self insertObject:item inInputQueueAtIndex:self.inputQueue.count];
-    if (self.inputQueue.count == 1)
+   [self insertObject:item inInputQueueAtIndex:self.inputQueue.count];
+   if (self.inputQueue.count == 1)
     {
         [item openMedia:20];
     }
@@ -432,7 +432,6 @@
             if (!self.playing) break;
         }
     }
-    
     _audio_done = YES;
     [self inputDone];
 }
@@ -510,8 +509,9 @@
     bool play_audio = YES;
     
     
-    int av_error = 0;
     
+    int av_error = 0;
+
     if (_first_frame_host_time == 0)
     {
         play_audio = NO;
@@ -568,8 +568,10 @@
                 {
                     av_frame_unref(use_frame);
                     av_frame_free(&use_frame);
-                    use_frame = _peek_frame;
+                    
                 }
+                
+                use_frame = _peek_frame;
                 consumed++;
             }
             if (av_error == AVERROR_EOF)
@@ -604,8 +606,7 @@
         self.lastVideoTime = use_frame->pts * av_q2d(_useInput.videoTimeBase);
         
         ret = [self convertFrameToPixelBuffer:use_frame];
-        av_frame_unref(use_frame);
-        av_frame_free(&use_frame);
+
         CVPixelBufferRetain(ret);
         if (_last_buf)
         {
@@ -616,7 +617,11 @@
         CVPixelBufferRetain(_last_buf);
         ret = _last_buf;
     }
-    
+    if (use_frame)
+    {
+        av_frame_unref(use_frame);
+        av_frame_free(&use_frame);
+    }
     [self inputDone];
     return ret;
 }

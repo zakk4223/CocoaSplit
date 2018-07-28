@@ -103,6 +103,7 @@
 
 -(void)scriptSwitchToLayout:(NSScriptCommand *)command
 {
+
     SourceLayout *useLayout = [self getUseLayout:command];
 
     [[CaptureController sharedCaptureController] switchToLayout:self usingLayout:useLayout];

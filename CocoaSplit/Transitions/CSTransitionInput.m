@@ -64,6 +64,7 @@
     [aCoder encodeBool:self.transitionAfterPre forKey:@"transitionAfterPre"];
     [aCoder encodeBool:self.wholeLayout forKey:@"wholeLayout"];
     [aCoder encodeObject:_savedInputName forKey:@"savedInputName"];
+    
 }
 
 
@@ -131,8 +132,10 @@
             ret = _savedInputName;
         }
     }
+    
     if (!ret && self.inputSource)
     {
+        
         ret = self.inputSource.name;
     }
     return ret;
@@ -141,7 +144,10 @@
 -(void)setInputSource:(NSObject<CSInputSourceProtocol> *)inputSource
 {
     _inputSource = inputSource;
-    _savedInputName = inputSource.name;
+    if (inputSource)
+    {
+        _savedInputName = inputSource.name;
+    }
     if (inputSource && inputSource.isVideo)
     {
         [(InputSource *)inputSource frameTick];
@@ -206,12 +212,8 @@
         return nil;
     }
     
-    //self.inputSource.persistent = YES;
-    //self.inputSource.isTransitionInput = YES;
-    if (self.inputSource.isVideo)
-    {
-        //[(InputSource *)self.inputSource autoCenter];
-    }
+    self.inputSource.persistent = YES;
+    self.inputSource.isTransitionInput = YES;
 
     self.inputSourceUUID = self.inputSource.uuid;
     NSMutableString *scriptRet = [NSMutableString string];
@@ -289,6 +291,7 @@
     {
         ret = [NSKeyedUnarchiver unarchiveObjectWithData:self.inputSourceSavedata];
     }
+    
     return ret;
 }
 

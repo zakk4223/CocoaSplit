@@ -3697,7 +3697,7 @@
     
     [usingLayout saveSourceList];
     SourceLayout *undoCopy = usingLayout.copy;
-    [undoCopy clearSourceList];
+    //[undoCopy clearSourceList];
     [usingLayout replaceWithSourceLayout:previousLayout];
     
     [[self.mainWindow.undoManager prepareWithInvocationTarget:self] switchToLayout:undoCopy usingLayout:usingLayout];
@@ -3713,7 +3713,7 @@
     
     [usingLayout saveSourceList];
     SourceLayout *undoCopy = usingLayout.copy;
-    [undoCopy clearSourceList];
+    //[undoCopy clearSourceList];
     [[self.mainWindow.undoManager prepareWithInvocationTarget:self] undoSwitchToLayout:usingLayout previousLayout:undoCopy];
     [self applyTransitionSettings:usingLayout];
 

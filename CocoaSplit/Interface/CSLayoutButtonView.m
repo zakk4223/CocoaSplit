@@ -88,7 +88,7 @@
 
 -(void)updateLayer
 {
-    CGColorRef backgroundColor;
+    CGColorRef backgroundColor = NULL;
     CGFloat useAlpha = 1.0f;
     
     
@@ -109,6 +109,11 @@
         backgroundColor = CGColorCreateGenericRGB(0.353f, 0.534f, 0.434, useAlpha);
     }
     self.layer.backgroundColor = backgroundColor;
+    if (backgroundColor)
+    {
+        CGColorRelease(backgroundColor);
+    }
+    
     self.layer.cornerRadius = 5.0f;
 }
 

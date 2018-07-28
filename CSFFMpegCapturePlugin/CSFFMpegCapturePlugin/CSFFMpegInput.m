@@ -569,6 +569,7 @@
             {
                 self.is_ready = YES;
                 dispatch_semaphore_wait(_read_loop_semaphore, DISPATCH_TIME_FOREVER);
+                
             }
         }
     }
@@ -708,7 +709,6 @@
 
 -(void) internal_closeMedia
 {
-    
     struct frame_message msg;
 
     if (_video_message_queue)
@@ -745,6 +745,14 @@
     
     if (_video_codec_ctx)
     {
+        AVFrame *outFrame = av_frame_alloc();
+        avcodec_send_packet(_video_codec_ctx, NULL);
+        while (avcodec_receive_frame(_video_codec_ctx, outFrame) != AVERROR_EOF)
+        {
+            av_frame_unref(outFrame);
+        }
+        
+        av_frame_free(&outFrame);
         
         avcodec_close(_video_codec_ctx);
         avcodec_free_context(&_video_codec_ctx);
@@ -754,6 +762,14 @@
     
     if (_audio_codec_ctx)
     {
+        AVFrame *outFrame = av_frame_alloc();
+        avcodec_send_packet(_audio_codec_ctx, NULL);
+        while (avcodec_receive_frame(_audio_codec_ctx, outFrame) != AVERROR_EOF)
+        {
+            av_frame_unref(outFrame);
+        }
+        
+        av_frame_free(&outFrame);
         avcodec_close(_audio_codec_ctx);
         avcodec_free_context(&_audio_codec_ctx);
 

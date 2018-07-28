@@ -50,17 +50,14 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 @synthesize layoutTimingSource = _layoutTimingSource;
 @synthesize startColor = _startColor;
 @synthesize stopColor = _stopColor;
+@synthesize rootLayer = _rootLayer;
+@synthesize transitionLayer = _transitionLayer;
 
 -(instancetype) init
 {
     if (self = [super init])
     {
         self.containerOnly = NO;
-        
-        _sourceDepthSorter = [[NSSortDescriptor alloc] initWithKey:@"depth" ascending:YES];
-        _sourceDepthSorterRev = [[NSSortDescriptor alloc] initWithKey:@"depth" ascending:NO];
-
-        _sourceUUIDSorter = [[NSSortDescriptor alloc] initWithKey:@"uuid" ascending:YES];
         _frameRate = 30;
         _canvas_height = 720;
         _canvas_width = 1280;
@@ -74,10 +71,10 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         
         _containedLayouts = [[NSMutableArray alloc] init];
         _topLevelSourceArray = [[NSMutableArray alloc] init];
+        //self.rootLayer.geometryFlipped = YES;
         self.rootLayer = [self newRootLayer];
         self.transitionLayer = [self newTransitionLayer];
         [self.transitionLayer addSublayer:self.rootLayer];
-        //self.rootLayer.geometryFlipped = YES;
         _rootSize = NSMakeSize(_canvas_width, _canvas_height);
         self.sourceList = [NSMutableArray array];
         self.sourceListPresentation = [NSMutableArray array];
@@ -100,6 +97,47 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     }
     
     return self;
+}
+
+-(void)setTransitionLayer:(CALayer *)transitionLayer
+{
+    _transitionLayer = transitionLayer;
+}
+
+-(CALayer *)transitionLayer
+{
+    /* lazy allocation */
+    if (!_transitionLayer)
+    {
+        _transitionLayer = [self newTransitionLayer];
+        if (!_rootLayer)
+        {
+            /* getter allocs a new instance if needed */
+            [_transitionLayer addSublayer:self.rootLayer];
+        }
+    }
+    return _transitionLayer;
+}
+
+
+-(void)setRootLayer:(CAGradientLayer *)rootLayer
+{
+    _rootLayer = rootLayer;
+}
+
+-(CAGradientLayer *) rootLayer
+{
+    /* lazy allocation */
+    if (!_rootLayer)
+    {
+        _rootLayer = [self newRootLayer];
+        if (!_transitionLayer)
+        {
+            /* getter allocs a new instance if needed */
+            [self.transitionLayer addSublayer:_rootLayer];
+        }
+    }
+    return _rootLayer;
 }
 
 
@@ -392,6 +430,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     @try {
 
             [CATransaction begin];
+        
             [CATransaction setCompletionBlock:^{
                 [self.pendingScripts removeObjectForKey:runUUID];
                 if (completionBlock)
@@ -712,11 +751,25 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     NSSortDescriptor *depthSorter = nil;
     if (depthReverse)
     {
+        if (!_sourceDepthSorterRev)
+        {
+            _sourceDepthSorterRev = [[NSSortDescriptor alloc] initWithKey:@"depth" ascending:NO];
+        }
         depthSorter = _sourceDepthSorterRev;
     } else {
+        if (!_sourceDepthSorter)
+        {
+            _sourceDepthSorter = [[NSSortDescriptor alloc] initWithKey:@"depth" ascending:YES];
+        }
         depthSorter = _sourceDepthSorter;
     }
     
+    
+    if (!_sourceUUIDSorter)
+    {
+        _sourceUUIDSorter = [[NSSortDescriptor alloc] initWithKey:@"uuid" ascending:YES];
+
+    }
     
     NSArray *listCopy = [mylist sortedArrayUsingDescriptors:@[depthSorter, _sourceUUIDSorter]];
     return listCopy;
