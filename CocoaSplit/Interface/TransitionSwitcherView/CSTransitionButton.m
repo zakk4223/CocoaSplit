@@ -82,6 +82,7 @@
         backgroundColor = CGColorCreateGenericRGB(0.353f, 0.534f, 0.434, useAlpha);
     }
     self.layer.backgroundColor = backgroundColor;
+    CGColorRelease(backgroundColor);
     self.layer.cornerRadius = 5.0f;
 }
 

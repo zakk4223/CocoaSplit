@@ -846,6 +846,7 @@
     {
         return;
     }
+    
     @autoreleasepool
     {
         if (!self.attachedAudioMap)

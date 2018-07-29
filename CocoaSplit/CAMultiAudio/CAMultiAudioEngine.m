@@ -744,13 +744,14 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 -(void)removePCMInput:(CAMultiAudioPCMPlayer *)toRemove
 {
-    
     [self removeInput:toRemove];
     NSUInteger index = [self.pcmInputs indexOfObject:toRemove];
     if (index != NSNotFound)
     {
         [self.pcmInputs removeObjectAtIndex:index];
     }
+    
+    
 }
 
 
@@ -776,7 +777,10 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 -(CAMultiAudioPCMPlayer *)createPCMInput:(NSString *)uniqueID withFormat:(const AudioStreamBasicDescription *)withFormat
 {
-    CAMultiAudioPCMPlayer *newInput = [[CAMultiAudioPCMPlayer alloc] init];
+    CAMultiAudioPCMPlayer *newInput = nil;
+    
+
+    newInput = [[CAMultiAudioPCMPlayer alloc] init];
     newInput.inputFormat = (AudioStreamBasicDescription *)withFormat;
     newInput.nodeUID = uniqueID;
     
@@ -784,7 +788,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     //[newInput play];
     [self.pcmInputs addObject:newInput];
-
     return newInput;
     
 }
@@ -859,7 +862,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     [self attachInput:input];
     
-    input.enabled = NO;
+    input.enabled = YES;
 
 }
 
@@ -974,7 +977,15 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         [self disconnectInputNode:toRemove];
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self removeObjectFromAudioInputsAtIndex:index];
+            NSInteger mIndex = NSNotFound;
+            @synchronized(self) {
+                mIndex = [self.audioInputs indexOfObject:toRemove];
+            
+                if (mIndex != NSNotFound)
+                {
+                    [self removeObjectFromAudioInputsAtIndex:mIndex];
+                }
+            }
             
         });
         

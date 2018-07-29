@@ -202,7 +202,6 @@
             [capDev setValue:audioEngine forKey:@"audioEngine"];
             [audioEncoder setValue:self forKey:@"encodedReceiver"];
         }
-        [self createAttachedAudioInputForUUID:self.activeVideoDevice.uniqueID withName:self.activeVideoDevice.captureName];
 
     }
     
@@ -217,9 +216,7 @@
     {
         CMFormatDescriptionRef sDescr = CMSampleBufferGetFormatDescription(sampleBuffer);
         const AudioStreamBasicDescription *asbd =  CMAudioFormatDescriptionGetStreamBasicDescription(sDescr);
-        _pcmPlayer = [self createPCMInput:self.activeVideoDevice.uniqueID withFormat:asbd];
-        _pcmPlayer.name = self.activeVideoDevice.captureName;
-
+        _pcmPlayer = [self createAttachedAudioInputForUUID:self.activeVideoDevice.uniqueID withName:self.activeVideoDevice.captureName withFormat:asbd];
     }
     
     if (_pcmPlayer)
@@ -304,7 +301,5 @@
             }
         }
     }
-
-    NSLog(@"LAYOUT SOURCE DEALLOC");
 }
 @end

@@ -226,6 +226,7 @@
 {
     CAMultiAudioEngine *audioEngine = nil;
     audioEngine = [self.sourceLayout findAudioEngine];
+    
     if (!audioEngine)
     {
         audioEngine = [CaptureController sharedCaptureController].multiAudioEngine;

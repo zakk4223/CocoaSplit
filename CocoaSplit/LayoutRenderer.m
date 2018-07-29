@@ -354,7 +354,6 @@
     {
         CVPixelBufferRelease(_currentPB);
     }
-    NSLog(@"DEALLOC RENDERER");
 }
 
 @end

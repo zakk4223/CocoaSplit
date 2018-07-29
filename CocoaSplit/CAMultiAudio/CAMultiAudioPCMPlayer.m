@@ -362,7 +362,6 @@
 -(void)dealloc
 {
     
-    NSLog(@"DEALLOC PCM PLAYER");
     [self flush];
     _pendingBuffers = nil;
     if (_inputFormat)
