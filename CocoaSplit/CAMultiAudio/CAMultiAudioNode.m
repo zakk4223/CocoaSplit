@@ -88,6 +88,8 @@
     self.volume = [restoreDict[@"volume"] floatValue];
     
 
+    NSLog(@"NODE ENABLED %d VOLUME %f", self.enabled, self.volume);
+    
     NSArray *effectCopy = [self.effectChain copy];
     for (CAMultiAudioEffect *effect in effectCopy)
     {
@@ -163,6 +165,7 @@
 
 -(void)setEnabled:(bool)enabled
 {
+    NSLog(@"SET ENALBED %d %@", enabled, self);
     _enabled = enabled;
     
     

@@ -859,10 +859,9 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     newConverter.sourceNode = input;
     input.converterNode = newConverter;
-    
+    input.enabled = NO;
     [self attachInput:input];
     
-    input.enabled = YES;
 
 }
 
