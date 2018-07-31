@@ -44,7 +44,6 @@
         
         self.inputSourceSavedata = [NSKeyedArchiver archivedDataWithRootObject:_inputSource];
         self.inputSource = nil;
-        NSLog(@"SAVE AND CLEAR");
     }
 }
 

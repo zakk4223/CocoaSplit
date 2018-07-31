@@ -639,7 +639,7 @@
         }
     }
     
-    _av_codec_ctx->flags |= CODEC_FLAG_GLOBAL_HEADER;
+    _av_codec_ctx->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
     
     id x264preset = self.preset;
     

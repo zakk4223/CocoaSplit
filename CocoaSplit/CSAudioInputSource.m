@@ -93,12 +93,10 @@
 {
     NSDictionary *userData = notification.userInfo;
     NSString *nodeUUID = userData[@"UUID"];
-    NSLog(@"AUDIO NODE ADDED %@", nodeUUID);
 
     if (nodeUUID && [nodeUUID isEqualToString:self.audioUUID])
     {
         [self applyAudioSettings];
-        NSLog(@"APPLIED AUDIO SETTINGS");
     }
 }
 
@@ -125,7 +123,6 @@
     {
         NSMutableDictionary *nodeData = [NSMutableDictionary dictionary];
         [self.audioNode saveDataToDict:nodeData];
-        NSLog(@"NODE SAVE DATA %@", nodeData);
         [aCoder encodeObject:nodeData forKey:@"savedAudioSettings"];
     } else if (_savedAudioSettings) {
         [aCoder encodeObject:_savedAudioSettings forKey:@"savedAudioSettings"];
