@@ -249,7 +249,7 @@
 
 
         CFAbsoluteTime nowTime = CFAbsoluteTimeGetCurrent();
-        _lastFrame = nowTime;
+        self->_lastFrame = nowTime;
         
         
         
@@ -275,7 +275,7 @@
         
         if (status == kCGDisplayStreamFrameStatusFrameComplete && frameSurface)
         {
-            _lastSize = CGSizeMake(IOSurfaceGetWidth(frameSurface), IOSurfaceGetHeight(frameSurface));
+            self->_lastSize = CGSizeMake(IOSurfaceGetWidth(frameSurface), IOSurfaceGetHeight(frameSurface));
             
             [strongSelf updateLayersWithFramedataBlock:^(CALayer *layer) {
                 layer.contents = (__bridge id _Nullable)(frameSurface);

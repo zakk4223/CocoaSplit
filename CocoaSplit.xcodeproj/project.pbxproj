@@ -2799,7 +2799,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "rm -r $TEMP_FILES_DIR/ffmpeg-fix\nmkdir $TEMP_FILES_DIR/ffmpeg-fix\ncd $TEMP_FILES_DIR/ffmpeg-fix\ncp /usr/local/lib/libswresample.a .\ncp /usr/local/lib/libavutil.a .\ncp /usr/local/lib/libavformat.a .\ncp /usr/local/lib/libavcodec.a .\ncp /usr/local/lib/libmp3lame.a .\ncp /usr/local/lib/libswscale.a .\ncp /usr/local/lib/libxvidcore.a .\ncp /usr/local/lib/libx264.a .\ncp /usr/local/lib/libx265.a .\ncp /usr/local/lib/libfdk-aac.a .\ncp /usr/local/lib/libvpx.a .\nchmod 755 *.a\nar -dv libswresample.a log2_tab.o\nar -dv libavformat.a log2_tab.o\nar -dv libavformat.a golomb.o\nar -dv libavformat.a reverse.o\nar -dv libavutil.a reverse.o\nar -dv libavcodec.a log2_tab.o\nar -dv libavformat.a golomb_tab.o\nar -dv libswscale.a log2_tab.o\n#ar -dv libx265.a x265-extras.cpp.o\n#ar -dv libx265.a x265-extras.cpp.o";
+			shellScript = "rm -r $TEMP_FILES_DIR/ffmpeg-fix\nmkdir $TEMP_FILES_DIR/ffmpeg-fix\ncd $TEMP_FILES_DIR/ffmpeg-fix\ncp /usr/local/lib/libswresample.a .\ncp /usr/local/lib/libavutil.a .\ncp /usr/local/lib/libavformat.a .\ncp /usr/local/lib/libavcodec.a .\ncp /usr/local/lib/libmp3lame.a .\ncp /usr/local/lib/libswscale.a .\ncp /usr/local/lib/libxvidcore.a .\ncp /usr/local/lib/libx264.a .\ncp /usr/local/lib/libx265.a .\ncp /usr/local/lib/libvpx.a .\nchmod 755 *.a\nar -dv libswresample.a log2_tab.o\nar -dv libavformat.a log2_tab.o\nar -dv libavformat.a golomb.o\nar -dv libavformat.a reverse.o\nar -dv libavutil.a reverse.o\nar -dv libavcodec.a log2_tab.o\nar -dv libavformat.a golomb_tab.o\nar -dv libswscale.a log2_tab.o\n#ar -dv libx265.a x265-extras.cpp.o\n#ar -dv libx265.a x265-extras.cpp.o";
 		};
 		34BAAD3B1C13DF8F00A48C76 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3197,7 +3197,6 @@
 				OTHER_LDFLAGS = (
 					"$TEMP_FILES_DIR/ffmpeg-fix/libswresample.a",
 					"$TEMP_FILES_DIR/ffmpeg-fix/libavutil.a",
-					"$TEMP_FILES_DIR/ffmpeg-fix/libfdk-aac.a",
 					"$TEMP_FILES_DIR/ffmpeg-fix/libx265.a",
 					"$TEMP_FILES_DIR/ffmpeg-fix/libx264.a",
 					"$TEMP_FILES_DIR/ffmpeg-fix/libxvidcore.a",
@@ -3248,7 +3247,6 @@
 				OTHER_LDFLAGS = (
 					"$TEMP_FILES_DIR/ffmpeg-fix/libswresample.a",
 					"$TEMP_FILES_DIR/ffmpeg-fix/libavutil.a",
-					"$TEMP_FILES_DIR/ffmpeg-fix/libfdk-aac.a",
 					"$TEMP_FILES_DIR/ffmpeg-fix/libx265.a",
 					"$TEMP_FILES_DIR/ffmpeg-fix/libx264.a",
 					"$TEMP_FILES_DIR/ffmpeg-fix/libxvidcore.a",

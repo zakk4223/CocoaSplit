@@ -163,8 +163,8 @@
         
         if (streamKey && streamAddress)
         {
-            _currentStreamDest = [NSString stringWithFormat:@"%@/%@", streamAddress, streamKey];
-            _destination_fetch_pending = NO;
+            self->_currentStreamDest = [NSString stringWithFormat:@"%@/%@", streamAddress, streamKey];
+            self->_destination_fetch_pending = NO;
         }
         
         

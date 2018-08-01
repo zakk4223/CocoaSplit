@@ -169,7 +169,6 @@
     
     self.captureName = self.activeVideoDevice.captureName;
     
-    NSObject *controller = [[CSPluginServices sharedPluginServices] captureController];
     SourceLayoutHack *origDev = [self capturedLayout];
     if (!origDev)
     {

@@ -114,7 +114,7 @@
         NSString *destination;
         if (destHost)
         {
-            destination = [NSString stringWithFormat:@"rtmp://%@:1935/beam/%d-%@", destHost, _channel_id.unsignedIntegerValue, self.streamKey];
+            destination = [NSString stringWithFormat:@"rtmp://%@:1935/beam/%lu-%@", destHost, (unsigned long)_channel_id.unsignedIntegerValue, self.streamKey];
         }
         return destination;
     }
@@ -157,7 +157,7 @@
             NSDictionary *channel = [user_response objectForKey:@"channel"];
             if (channel)
             {
-                _channel_id = [channel objectForKey:@"id"];
+                self->_channel_id = [channel objectForKey:@"id"];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self fetchStreamKeyReal];
                 });
@@ -257,7 +257,7 @@
             NSDictionary *channel = [user_response objectForKey:@"channel"];
             if (channel)
             {
-                _channel_id = [channel objectForKey:@"id"];
+                self->_channel_id = [channel objectForKey:@"id"];
             }
             [authenticator saveToKeychain:account_name];
             

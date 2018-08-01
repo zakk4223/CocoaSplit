@@ -259,7 +259,10 @@
         _imageSource = CGImageSourceCreateWithURL((__bridge CFURLRef)fileURL, (__bridge CFDictionaryRef)dict);
     }
     
-    
+    if (!_imageSource)
+    {
+        return;
+    }
     CFDictionaryRef firstframeprop = CGImageSourceCopyPropertiesAtIndex(_imageSource, 0, NULL);
     CFDictionaryRef gifTest = CFDictionaryGetValue(firstframeprop, kCGImagePropertyGIFDictionary);
     
@@ -337,7 +340,7 @@
         _singleImage = nil;
         
         [self updateLayersWithFramedataBlock:^(CALayer *layer) {
-            [layer addAnimation:_animation forKey:@"gifIndex"];
+            [layer addAnimation:self->_animation forKey:@"gifIndex"];
         }];
         
         
