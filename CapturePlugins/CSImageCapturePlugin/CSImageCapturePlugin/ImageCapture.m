@@ -360,7 +360,7 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             [self updateLayersWithFramedataBlock:^(CALayer *layer) {
-                layer.contents = (__bridge id _Nullable)(_singleImage);
+                layer.contents = (__bridge id _Nullable)(self->_singleImage);
                 [layer removeAnimationForKey:@"gifIndex"];
             }];
         });

@@ -286,7 +286,7 @@
             return;
         }
         NSError *jsonError;
-        NSDictionary *ingest_response = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonError];
+        NSArray *ingest_response = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonError];
         dispatch_async(dispatch_get_main_queue(), ^{self.ingests = ingest_response; });
 
         

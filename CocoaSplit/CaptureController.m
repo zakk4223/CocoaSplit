@@ -3589,33 +3589,7 @@
 {
     
     return NSDragOperationMove;
-    
-    NSPasteboard *pBoard = [draggingInfo draggingPasteboard];
-    NSData *indexSave = [pBoard dataForType:@"cocoasplit.layout"];
-    NSIndexSet *indexes = [NSKeyedUnarchiver unarchiveObjectWithData:indexSave];
-    NSInteger draggedItemIdx = [indexes firstIndex];
-    
-    NSInteger useIdx = *proposedDropIndex;
-    
-    if (*proposedDropIndex > draggedItemIdx)
-    {
-        useIdx--;
-    }
-    
-    
-    if (useIdx < 0)
-    {
-        useIdx = 0;
-    }
-
-
-    
-    if (*proposedDropIndex == -1 || labs(draggedItemIdx - useIdx) < 1)
-    {
-        return NSDragOperationNone;
-    }
-    
-    return NSDragOperationMove;
+ 
 }
 
 

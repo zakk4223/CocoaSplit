@@ -31,7 +31,6 @@
 +(NSImage *)serviceImage;
 
 
-@property (assign) bool isReady;
 
 @property (strong) NSString *accountName;
 @property (strong) CSOauth2Authenticator *oauthObject;

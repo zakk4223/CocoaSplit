@@ -533,24 +533,56 @@
         return;
     }
     
-    _av_codec_ctx->rc_max_rate = self.vbv_maxrate*1000;
+    bool needRebuild = NO;
+    
+    
+    int64_t new_rc_rate = self.vbv_maxrate*1000;
+    
+    if (new_rc_rate != _av_codec_ctx->rc_max_rate)
+    {
+        needRebuild = YES;
+        _av_codec_ctx->rc_max_rate = self.vbv_maxrate*1000;
+    }
+    
+    int new_rc_buffer = 0;
+    
     if (self.vbv_buffer > 0)
     {
-        _av_codec_ctx->rc_buffer_size = self.vbv_buffer*1000;
+        new_rc_buffer = self.vbv_buffer*1000;
     } else {
-        _av_codec_ctx->rc_buffer_size = self.vbv_maxrate*1000;
+        new_rc_buffer = self.vbv_maxrate*1000;
+    }
+    
+    if (new_rc_buffer != _av_codec_ctx->rc_buffer_size)
+    {
+        needRebuild = YES;
+        _av_codec_ctx->rc_buffer_size = new_rc_buffer;
     }
     
     if (!self.use_cbr)
     {
         
-        av_opt_set(_av_codec_ctx->priv_data, "crf", [[NSString stringWithFormat:@"%d", self.crf] UTF8String], 0);
+        int64_t cur_crf = 0;
         
+        av_opt_get_int(_av_codec_ctx->priv_data, "crf", 0, &cur_crf);
+        if (cur_crf != self.crf)
+        {
+            needRebuild = YES;
+            av_opt_set(_av_codec_ctx->priv_data, "crf", [[NSString stringWithFormat:@"%d", self.crf] UTF8String], 0);
+        }
     } else {
         
-        _av_codec_ctx->bit_rate = self.vbv_maxrate*1000;
+        int64_t new_bit_rate = self.vbv_maxrate*1000;
+        if (new_bit_rate != _av_codec_ctx->bit_rate)
+        {
+            needRebuild = YES;
+            _av_codec_ctx->bit_rate = self.vbv_maxrate*1000;
+        }
     }
-    [self buildFormatExtensions];
+    if (needRebuild)
+    {
+        [self buildFormatExtensions];
+    }
     
 }
 
