@@ -2138,7 +2138,6 @@
     [NSKeyedUnarchiver setClass:MissingClass.class forClassName:@"CSLayoutSequence"];
     NSDictionary *savedValues = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
     
-    NSLog(@"SAVED VALUES %@", savedValues);
     
     NSMutableDictionary *saveRoot = [[NSMutableDictionary alloc] init];
     
@@ -2619,7 +2618,6 @@
     stagingLayout.doSaveSourceList = YES;
     if (!self.stagingHidden)
     {
-        NSLog(@"RESTORE STAGING");
         [stagingLayout applyAddBlock];
         [stagingLayout restoreSourceList:nil];
         [stagingLayout setupMIDI];

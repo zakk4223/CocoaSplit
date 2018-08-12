@@ -309,14 +309,8 @@
 
 -(void)willDelete
 {
-    NSLog(@"WILL DELEGTE");
-    
     [self deregisterPCMOutput];
 }
 
--(void)dealloc
-{
-    NSLog(@"DEALLOC NDI");
-}
 
 @end

@@ -352,7 +352,6 @@
 -(void) attachOutput
 {
     NSObject<CSOutputWriterProtocol> *newout;
-    NSLog(@"ATTACH OUTPUT");
     if (!self.active)
     {
         return;

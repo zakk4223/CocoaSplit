@@ -308,7 +308,6 @@
         
         if (_savedAudioSettings)
         {
-            NSLog(@"RESTORING DATA TO NODE %@", _savedAudioSettings);
             [node restoreDataFromDict:_savedAudioSettings];
         }
     }
@@ -350,7 +349,6 @@
         
         if (_savedAudioSettings)
         {
-            NSLog(@"RESTORING TO NODE %@", _savedAudioSettings);
             [self.audioNode restoreDataFromDict:_savedAudioSettings];
         }
 

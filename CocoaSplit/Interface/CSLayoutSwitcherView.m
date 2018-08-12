@@ -111,10 +111,7 @@
 
 }
 
--(void)mouseDragged:(NSEvent *)event
-{
-    NSLog(@"DRAGGED LAYOUT VIEW");
-}
+
 
 -(void)mouseUp:(NSEvent *)event
 {

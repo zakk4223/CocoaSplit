@@ -146,7 +146,6 @@ void qtc_xpc_event_handler(xpc_connection_t conn, xpc_object_t event)
     if (!frameIOref)
     {
         
-        NSLog(@"NO FRAME REF");
         return;
     }
     
@@ -182,7 +181,6 @@ void qtc_xpc_event_handler(xpc_connection_t conn, xpc_object_t event)
 
 -(bool) startCaptureSession
 {
-    NSLog(@"STARTING CAPTURE SESSION?");
     
     
     if (!self.activeVideoDevice)

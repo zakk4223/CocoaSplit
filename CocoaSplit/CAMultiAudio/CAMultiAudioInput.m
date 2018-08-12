@@ -82,8 +82,7 @@
         }
     }
     
-    //NSLog(@"CHANNEL COUNT %d OUTPUT COUNT %d", self.channelCount, self.downMixer.outputChannelCount);
-   // NSLog(@"INPUT ARRAY %@ OUTPUT ARRAY %@", inputArray, outputArray);
+
     
     for(int i = 0; i < inputArray.count; i++)
     {

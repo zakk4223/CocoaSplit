@@ -153,9 +153,6 @@
     if ([_capture_session canAddOutput:_audio_capture_output])
     {
         [_capture_session addOutput:_audio_capture_output];
-        
-    } else {
-        NSLog(@"COULDN'T ADD AUDIO OUTPUT");
     }
     
     

@@ -290,7 +290,6 @@
 {
     if (!_graphInst || !node)
     {
-        NSLog(@"WHAT");
         return NO;
     }
     
