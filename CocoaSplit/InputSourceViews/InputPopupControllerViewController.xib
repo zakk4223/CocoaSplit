@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14109"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -2179,13 +2179,13 @@
                                 </connections>
                             </button>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="30" horizontalPageScroll="10" verticalLineScroll="30" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SCi-uN-txg">
-                                <rect key="frame" x="17" y="165" width="456" height="171"/>
+                                <rect key="frame" x="17" y="161" width="456" height="175"/>
                                 <clipView key="contentView" id="VU8-cU-Tot">
-                                    <rect key="frame" x="1" y="0.0" width="454" height="170"/>
-                                    <autoresizingMask key="autoresizingMask"/>
+                                    <rect key="frame" x="1" y="0.0" width="454" height="174"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="28" headerView="Cja-SV-r3z" id="Wec-Fy-TOT">
-                                            <rect key="frame" x="0.0" y="0.0" width="454" height="147"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="454" height="151"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -2274,7 +2274,6 @@
                             <constraint firstItem="TB1-Ve-NXp" firstAttribute="bottom" secondItem="PDP-sr-E5P" secondAttribute="bottom" id="goK-mh-F9H"/>
                             <constraint firstItem="t1a-ea-9eE" firstAttribute="leading" secondItem="G8u-yY-gqV" secondAttribute="trailing" constant="8" symbolic="YES" id="hMs-lb-e9M"/>
                             <constraint firstItem="neP-e9-CZ6" firstAttribute="leading" secondItem="VqO-eq-H6f" secondAttribute="leading" id="jek-66-ZdH"/>
-                            <constraint firstAttribute="bottom" secondItem="SCi-uN-txg" secondAttribute="bottom" constant="165" id="nQN-Yf-Is9"/>
                             <constraint firstItem="KZU-Tb-igF" firstAttribute="baseline" secondItem="t1a-ea-9eE" secondAttribute="baseline" id="rOH-Q9-ypX"/>
                             <constraint firstItem="KZU-Tb-igF" firstAttribute="leading" secondItem="G8u-yY-gqV" secondAttribute="trailing" constant="6" id="rue-cR-v2E"/>
                             <constraint firstItem="neP-e9-CZ6" firstAttribute="leading" secondItem="zPW-WA-ypy" secondAttribute="leading" constant="17" id="sLZ-01-ehh"/>

@@ -38,8 +38,6 @@
 		3414047D1D76EA3200505A5D /* CSSyphonCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34AFC26819B05B7C0007C07B /* CSSyphonCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3414C6AE1CBB9EBF00107C69 /* CSIRCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 3414C6AD1CBB9EBF00107C69 /* CSIRCompressor.m */; };
 		3415CED31AE257DA002F11F5 /* CSTextCaptureBaseView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3415CED21AE257DA002F11F5 /* CSTextCaptureBaseView.xib */; };
-		341A2D5C1C7AB04700FF7566 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 341A2D5B1C7AB04700FF7566 /* Sparkle.framework */; };
-		341A2D5D1C7AB0D100FF7566 /* Sparkle.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 341A2D5B1C7AB04700FF7566 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		34210B3E1606001200362FC8 /* OutputDestination.m in Sources */ = {isa = PBXBuildFile; fileRef = 34210B3D1606001100362FC8 /* OutputDestination.m */; };
 		34213E1A196680880054E238 /* CompressorBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34213E19196680880054E238 /* CompressorBase.m */; };
 		342346AA15F59A8500C8C77E /* AVFAudioCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 342346A915F59A8500C8C77E /* AVFAudioCapture.m */; };
@@ -181,6 +179,8 @@
 		348585DE201E65F900C30A08 /* CSLayerFiltersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 348585DC201E65F900C30A08 /* CSLayerFiltersViewController.m */; };
 		348585DF201E65F900C30A08 /* CSLayerFiltersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 348585DD201E65F900C30A08 /* CSLayerFiltersViewController.xib */; };
 		348AC06B19B406910064F02D /* SourceLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 348AC06A19B406910064F02D /* SourceLayout.m */; };
+		348DF1D52120E2C000144132 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 348DF1D42120E2C000144132 /* Sparkle.framework */; };
+		348DF1D62120E2CB00144132 /* Sparkle.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 348DF1D42120E2C000144132 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		34938EE81AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 34938EE71AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m */; };
 		34938EED1AE4D24200F3B1CF /* CSFilterChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34938EEB1AE4D24200F3B1CF /* CSFilterChooserWindowController.m */; };
 		34938EEF1AE4D24200F3B1CF /* CSFilterChooserWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34938EEC1AE4D24200F3B1CF /* CSFilterChooserWindowController.xib */; };
@@ -560,7 +560,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				341A2D5D1C7AB0D100FF7566 /* Sparkle.framework in Copy Files */,
+				348DF1D62120E2CB00144132 /* Sparkle.framework in Copy Files */,
 			);
 			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -668,7 +668,6 @@
 		3414C6AC1CBB9EBF00107C69 /* CSIRCompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSIRCompressor.h; path = Compressor/CSIRCompressor.h; sourceTree = "<group>"; };
 		3414C6AD1CBB9EBF00107C69 /* CSIRCompressor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSIRCompressor.m; path = Compressor/CSIRCompressor.m; sourceTree = "<group>"; };
 		3415CED21AE257DA002F11F5 /* CSTextCaptureBaseView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSTextCaptureBaseView.xib; path = Interface/CSTextCaptureBaseView.xib; sourceTree = "<group>"; };
-		341A2D5B1C7AB04700FF7566 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		34210B3C1606001100362FC8 /* OutputDestination.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OutputDestination.h; sourceTree = "<group>"; };
 		34210B3D1606001100362FC8 /* OutputDestination.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OutputDestination.m; sourceTree = "<group>"; };
 		34213E18196680880054E238 /* CompressorBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CompressorBase.h; path = Compressor/CompressorBase.h; sourceTree = "<group>"; };
@@ -905,6 +904,7 @@
 		348585DD201E65F900C30A08 /* CSLayerFiltersViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CSLayerFiltersViewController.xib; sourceTree = "<group>"; };
 		348AC06919B406910064F02D /* SourceLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SourceLayout.h; sourceTree = "<group>"; };
 		348AC06A19B406910064F02D /* SourceLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SourceLayout.m; sourceTree = "<group>"; };
+		348DF1D42120E2C000144132 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		34938EE61AE4A7E500F3B1CF /* CSCIFilterConfigProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSCIFilterConfigProxy.h; sourceTree = "<group>"; };
 		34938EE71AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSCIFilterConfigProxy.m; sourceTree = "<group>"; };
 		34938EEA1AE4D24200F3B1CF /* CSFilterChooserWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSFilterChooserWindowController.h; sourceTree = "<group>"; };
@@ -1227,12 +1227,12 @@
 				347B7FC816907AE700B5F4B3 /* VideoDecodeAcceleration.framework in Frameworks */,
 				347B7FC616907A1700B5F4B3 /* libbz2.dylib in Frameworks */,
 				3409A7731FA0EA340073866E /* libc++.1.tbd in Frameworks */,
-				341A2D5C1C7AB04700FF7566 /* Sparkle.framework in Frameworks */,
 				34A64A37165F208800A68428 /* QuartzCore.framework in Frameworks */,
 				34792AFB1611A6B90065A859 /* IOSurface.framework in Frameworks */,
 				34792AF616104AA70065A859 /* IOKit.framework in Frameworks */,
 				34C6C3BF15FB5B440018A18B /* OpenGL.framework in Frameworks */,
 				342346BB15F5FBD700C8C77E /* CoreMedia.framework in Frameworks */,
+				348DF1D52120E2C000144132 /* Sparkle.framework in Frameworks */,
 				342346B915F5FBD200C8C77E /* CoreVideo.framework in Frameworks */,
 				342346AD15F59B0D00C8C77E /* VideoToolbox.framework in Frameworks */,
 				3409A7701FA0D6CC0073866E /* libiconv.tbd in Frameworks */,
@@ -1337,6 +1337,7 @@
 		340FE4A015F3417E00E4CE4E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				348DF1D42120E2C000144132 /* Sparkle.framework */,
 				344036892081FE3E004BC514 /* GLKit.framework */,
 				3409A7721FA0EA340073866E /* libc++.1.tbd */,
 				3409A76F1FA0D6CC0073866E /* libiconv.tbd */,
@@ -1345,7 +1346,6 @@
 				34788DB51EF511E100C3C9C5 /* JavaScriptCore.framework */,
 				340C7FE81D43D22000B2FD7D /* Security.framework */,
 				34EA824D1D3CBFCA00928A06 /* WebKit.framework */,
-				341A2D5B1C7AB04700FF7566 /* Sparkle.framework */,
 				34E9836F1B78AE9100F26F1E /* Python.framework */,
 				34ED8CB11B0737A3002C0674 /* CoreMIDI.framework */,
 				34EAFB7F1A1BA86800E12FBD /* CoreMediaIO.framework */,
@@ -1732,8 +1732,8 @@
 				3440368B20821BB8004BC514 /* SourceList */,
 				343C2CB41FFBC77100849DA9 /* BlahView.h */,
 				343C2CB51FFBC77100849DA9 /* BlahView.m */,
-				343C2CBC1FFCE73000849DA9 /* CSViewController.h */,
 				343C2CBD1FFCE73000849DA9 /* CSViewController.m */,
+				343C2CBC1FFCE73000849DA9 /* CSViewController.h */,
 				340274BB203C0D3C0099328C /* LayerFilters */,
 				340274B8203C0BE50099328C /* SourceLayoutSettingsWindow */,
 				34027497203B6C4B0099328C /* CSColorWell.h */,
