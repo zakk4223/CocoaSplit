@@ -145,7 +145,6 @@
             didLoad = NO;
         } else {
             [registerMap setObject:toLoad forKey:classLabel];
-            [self.principalClassNameMap setObject:toLoad forKey:NSStringFromClass(toLoad)];
             didLoad = YES;
         }
 
@@ -213,6 +212,37 @@
     [self.allPlugins addObject:addMap];
 }
 
+-(void)makeBundleVersionMap
+{
+    NSMutableArray *bundlePaths = [NSMutableArray array];
+    [bundlePaths addObjectsFromArray:[self bundlePaths:@"bundle"]];
+    NSEnumerator *pathEnum = [bundlePaths objectEnumerator];
+    NSString *currPath;
+    while (currPath = [pathEnum nextObject])
+    {
+        NSBundle *currBundle = [NSBundle bundleWithPath:currPath];
+        if(currBundle)
+        {
+            
+            NSString *currClassName = [currBundle bundleIdentifier];
+            NSString *currVersion = [currBundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+            NSBundle *mappedBundle = [self.principalClassNameMap objectForKey:currClassName];
+            if (!mappedBundle)
+            {
+                [self.principalClassNameMap setObject:currBundle forKey:currClassName];
+            } else {
+                NSString *mappedVersion = [mappedBundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+                if (mappedVersion)
+                {
+                    if ([mappedVersion compare:currVersion options:NSNumericSearch] == NSOrderedDescending)
+                    {
+                        [self.principalClassNameMap setObject:currBundle forKey:currClassName];
+                    }
+                }
+            }
+        }
+    }
+}
 
 - (void)loadAllBundles
 {
@@ -222,26 +252,18 @@
     NSString *currPath;
     NSBundle *currBundle;
     Class currPrincipalClass;
-    
-    bundlePaths = [NSMutableArray array];
+    [self makeBundleVersionMap];
+
     if(!instances)
     {
         instances = [[NSMutableArray alloc] init];
     }
     
-    [bundlePaths addObjectsFromArray:[self bundlePaths:@"bundle"]];
-    
-    pathEnum = [bundlePaths objectEnumerator];
-    while(currPath = [pathEnum nextObject])
+    for (NSString *bundleIdentifier in self.principalClassNameMap)
     {
-        currBundle = [NSBundle bundleWithPath:currPath];
+        currBundle = self.principalClassNameMap[bundleIdentifier];
         if(currBundle)
         {
-            NSString *currClassName = [currBundle objectForInfoDictionaryKey:@"NSPrincipalClass"];
-            if ([self.principalClassNameMap objectForKey:currClassName])
-            {
-                continue;
-            }
             
             currPrincipalClass = [currBundle principalClass];
 
