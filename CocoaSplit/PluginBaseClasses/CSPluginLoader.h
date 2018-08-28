@@ -3,7 +3,6 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 8/28/14.
-//  Copyright (c) 2014 Zakk. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -14,6 +13,8 @@
 @property (strong) NSMutableDictionary *sourcePlugins;
 @property (strong) NSMutableDictionary *streamServicePlugins;
 @property (strong) NSMutableDictionary *extraPlugins;
+@property (strong) NSMutableDictionary *principalClassNameMap;
+
 @property (strong) NSMutableArray *allPlugins;
 
 

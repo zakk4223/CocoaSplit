@@ -39,6 +39,7 @@
         self.sourcePlugins = [[NSMutableDictionary alloc] init];
         self.streamServicePlugins  = [[NSMutableDictionary alloc] init];
         self.extraPlugins  = [[NSMutableDictionary alloc] init];
+        self.principalClassNameMap = [[NSMutableDictionary alloc] init];
         self.allPlugins = [NSMutableArray array];
         
 
@@ -59,17 +60,19 @@
     NSMutableArray *allBundles = [NSMutableArray array];
     
     librarySearchPaths = NSSearchPathForDirectoriesInDomains(
-                                                             NSLibraryDirectory, NSAllDomainsMask - NSSystemDomainMask, YES);
+                                                             NSApplicationSupportDirectory, NSAllDomainsMask - NSSystemDomainMask, YES);
+    
     
     searchPathEnum = [librarySearchPaths objectEnumerator];
     while(currPath = [searchPathEnum nextObject])
     {
         [bundleSearchPaths addObject:
-         [currPath stringByAppendingPathComponent:@"Application Support/CocoaSplit/Plugins"]];
+         [currPath stringByAppendingPathComponent:@"CocoaSplit/Plugins"]];
     }
     [bundleSearchPaths addObject:
      [[NSBundle mainBundle] builtInPlugInsPath]];
     
+
     searchPathEnum = [bundleSearchPaths objectEnumerator];
     while(currPath = [searchPathEnum nextObject])
     {
@@ -136,11 +139,19 @@
     
     if (registerMap)
     {
-        [registerMap setObject:toLoad forKey:classLabel];
+        if ([registerMap objectForKey:classLabel])
+        {
+            //The class already exists, so don't load it again
+            didLoad = NO;
+        } else {
+            [registerMap setObject:toLoad forKey:classLabel];
+            [self.principalClassNameMap setObject:toLoad forKey:NSStringFromClass(toLoad)];
+            didLoad = YES;
+        }
 
        // [self.allPlugins addObject:toLoad];
         
-        didLoad = YES;
+        
     }
     
     return didLoad;
@@ -160,9 +171,10 @@
     pluginClasses = [animObj allPlugins];
     for (Class pClass in pluginClasses)
     {
-        [self addToPluginTracker:pClass fromBundle:nil];
-
-        [self validateAndRegisterPluginClass:pClass];
+        if ([self validateAndRegisterPluginClass:pClass])
+        {
+            [self addToPluginTracker:pClass fromBundle:nil];
+        }
     }
 }
 
@@ -225,6 +237,12 @@
         currBundle = [NSBundle bundleWithPath:currPath];
         if(currBundle)
         {
+            NSString *currClassName = [currBundle objectForInfoDictionaryKey:@"NSPrincipalClass"];
+            if ([self.principalClassNameMap objectForKey:currClassName])
+            {
+                continue;
+            }
+            
             currPrincipalClass = [currBundle principalClass];
 
             if ([currPrincipalClass conformsToProtocol:@protocol(CSPluginFactoryProtocol)])
@@ -237,8 +255,10 @@
                 {
                     for(Class tryClass in tryClasses)
                     {
-                        [self addToPluginTracker:tryClass fromBundle:currBundle];
-                        [self validateAndRegisterPluginClass:tryClass];
+                        if ([self validateAndRegisterPluginClass:tryClass])
+                        {
+                            [self addToPluginTracker:tryClass fromBundle:currBundle];
+                        }
                     }
 
                 }
@@ -248,9 +268,10 @@
                 {
                     for(Class tryClass in tryClasses)
                     {
-                        [self addToPluginTracker:tryClass fromBundle:currBundle];
-
-                        [self validateAndRegisterPluginClass:tryClass];
+                        if ([self validateAndRegisterPluginClass:tryClass])
+                        {
+                            [self addToPluginTracker:tryClass fromBundle:currBundle];
+                        }
                     }
                     
                 }
@@ -260,9 +281,11 @@
                 {
                     for(Class tryClass in tryClasses)
                     {
-                        [self addToPluginTracker:tryClass fromBundle:currBundle];
+                        if ([self validateAndRegisterPluginClass:tryClass])
+                        {
+                            [self addToPluginTracker:tryClass fromBundle:currBundle];
+                        }
 
-                        [self validateAndRegisterPluginClass:tryClass];
                     }
                     
                 }
@@ -270,9 +293,13 @@
 
                 
             } else {
-                [self addToPluginTracker:currPrincipalClass fromBundle:currBundle];
+                if ([self validateAndRegisterPluginClass:currPrincipalClass])
+                {
 
-                [self validateAndRegisterPluginClass:currPrincipalClass];
+                    [self addToPluginTracker:currPrincipalClass fromBundle:currBundle];
+                }
+                    
+
             }
             
             
