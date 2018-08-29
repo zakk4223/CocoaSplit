@@ -218,6 +218,8 @@
     [bundlePaths addObjectsFromArray:[self bundlePaths:@"bundle"]];
     NSEnumerator *pathEnum = [bundlePaths objectEnumerator];
     NSString *currPath;
+    NSString *mainVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+
     while (currPath = [pathEnum nextObject])
     {
         NSBundle *currBundle = [NSBundle bundleWithPath:currPath];
@@ -226,9 +228,29 @@
             
             NSString *currClassName = [currBundle bundleIdentifier];
             NSString *currVersion = [currBundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+            NSString *minVersion = [currBundle objectForInfoDictionaryKey:@"CSMinVersion"];
+            NSString *maxVersion = [currBundle objectForInfoDictionaryKey:@"CSMaxVersion"];
+            if (minVersion)
+            {
+                if ([mainVersion compare:minVersion options:NSNumericSearch] == NSOrderedAscending)
+                {
+                    continue;
+                }
+            }
+            
+            if (maxVersion)
+            {
+                if ([mainVersion compare:maxVersion options:NSNumericSearch] == NSOrderedDescending)
+                {
+                    continue;
+                }
+            }
+            
+            
             NSBundle *mappedBundle = [self.principalClassNameMap objectForKey:currClassName];
             if (!mappedBundle)
             {
+                NSLog(@"ADD TO MAP %@", currBundle);
                 [self.principalClassNameMap setObject:currBundle forKey:currClassName];
             } else {
                 NSString *mappedVersion = [mappedBundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
