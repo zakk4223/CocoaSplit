@@ -301,8 +301,7 @@ NS_ASSUME_NONNULL_BEGIN
  * contentsScale is two -drawInContext: will draw into a buffer twice
  * as large as the layer bounds). Defaults to one. Animatable. */
 
-@property CGFloat contentsScale
-CA_AVAILABLE_STARTING (10.7, 4.0, 9.0, 2.0);
+@property CGFloat contentsScale;
 
 /* A rectangle in normalized image coordinates defining the scaled
  * center part of the `contents' image.
@@ -329,8 +328,7 @@ CA_AVAILABLE_STARTING (10.7, 4.0, 9.0, 2.0);
  * -drawLayerInContext. Defaults to kCAContentsFormatRGBA8Uint. Note that this
  * does not affect the interpretation of the `contents' property directly. */
 
-@property(copy) NSString *contentsFormat
-CA_AVAILABLE_STARTING (10.12, 10.0, 10.0, 3.0);
+@property(copy) NSString *contentsFormat;
 
 /* The filter types to use when rendering the `contents' property of
  * the layer. The minification filter is used when to reduce the size
@@ -386,8 +384,7 @@ CA_AVAILABLE_STARTING (10.12, 10.0, 10.0, 3.0);
  * drawing operations sooner than when executing synchronously. The
  * default value is NO. */
 
-@property BOOL drawsAsynchronously
-CA_AVAILABLE_STARTING (10.8, 6.0, 9.0, 2.0);
+@property BOOL drawsAsynchronously;
 
 /* Called via the -display method when the `contents' property is being
  * updated. Default implementation does nothing. The context may be

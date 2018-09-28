@@ -120,19 +120,33 @@
     // Insert code here to initialize your application
     
     
-    _window.appearance = [self getAppearance];
+    //_window.appearance = [self getAppearance];
     
     
 }
 
 -(NSAppearance *)getAppearance
 {
-    if (self.captureController.useDarkMode)
-    {
-        return [NSAppearance appearanceNamed:NSAppearanceNameVibrantDark];
-    }
+    NSAppearance *ret = nil;
+    NSString *contAppearance = self.captureController.appearance;
     
-    return NSAppearance.currentAppearance;
+    if ([contAppearance isEqualToString:CSAppearanceSystem])
+    {
+        ret = nil;
+        
+    } else if ([contAppearance isEqualToString:CSAppearanceLight]) {
+        ret = [NSAppearance appearanceNamed:NSAppearanceNameAqua];
+    } else if ([contAppearance isEqualToString:CSAppearanceDark]) {
+        if(@available(macOS 10.14, *))
+        {
+            ret = [NSAppearance appearanceNamed:NSAppearanceNameDarkAqua];
+        } else {
+            ret = [NSAppearance appearanceNamed:NSAppearanceNameVibrantDark];
+        }
+    } else {
+        ret = nil;
+    }
+    return ret;
 }
 
 
@@ -141,19 +155,26 @@
     
 
     NSWindow *window = notification.object;
-    window.appearance = [self getAppearance];
+    //window.appearance = [self getAppearance];
 }
 
 
 
 -(void)changeAppearance
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationThemeChanged object:self];
     NSAppearance *useAppearance = [self getAppearance];
-    for (NSWindow *win in [NSApplication sharedApplication].windows)
+    if (@available(macOS 10.14, *))
     {
-        win.appearance = useAppearance;
+        NSApp.appearance = useAppearance;
+    } else {
+        for (NSWindow *win in [NSApplication sharedApplication].windows)
+        {
+            win.appearance = useAppearance;
+        }
+        NSApp.appearance = useAppearance;
     }
+    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationThemeChanged object:self];
+
 }
 
 

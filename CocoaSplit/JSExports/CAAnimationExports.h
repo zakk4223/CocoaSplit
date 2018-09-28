@@ -206,7 +206,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-CA_CLASS_AVAILABLE (10.11, 9.0, 9.0, 2.0)
 @protocol CASpringAnimationJSExport <JSExport>
 
 /* The mass of the object attached to the end of the spring. Must be greater
@@ -242,7 +241,6 @@ CA_CLASS_AVAILABLE (10.11, 9.0, 9.0, 2.0)
 
 /** Transition animation subclass. **/
 
-CA_CLASS_AVAILABLE (10.5, 2.0, 9.0, 2.0)
 @protocol CATransitionJSExport <JSExport>
 
 /* The name of the transition. Current legal transition types include

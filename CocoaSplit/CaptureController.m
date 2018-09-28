@@ -43,6 +43,12 @@
 #import "CSTransitionCA.h"
 
 
+NSString *const CSAppearanceDark = @"CSAppearanceDark";
+NSString *const CSAppearanceLight = @"CSAppearanceLight";
+NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
+
+
+
 @interface MissingClass : NSObject <NSCoding>
 @end
 
@@ -69,7 +75,7 @@
 @synthesize instantRecordBufferDuration = _instantRecordBufferDuration;
 @synthesize useTransitions = _useTransitions;
 @synthesize captureRunning = _captureRunning;
-@synthesize useDarkMode = _useDarkMode;
+@synthesize appearance = _appearance;
 @synthesize activeTransition = _activeTransition;
 
 
@@ -219,18 +225,36 @@
 
 
 
--(void)setUseDarkMode:(bool)useDarkMode
+-(bool)isDarkAppearance
 {
-    _useDarkMode = useDarkMode;
+    NSAppearance *cApp = [NSAppearance currentAppearance];
+    NSString *appName = cApp.name;
+    if (@available(macOS 10.14, *))
+    {
+        if ([appName isEqualToString:NSAppearanceNameDarkAqua])
+        {
+            return YES;
+        }
+    } else {
+        if ([appName isEqualToString:NSAppearanceNameVibrantDark])
+        {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+-(void)setAppearance:(NSString *)appearance
+{
+    _appearance = appearance;
     AppDelegate *aDel = [NSApp delegate];
     [aDel changeAppearance];
 }
 
--(bool)useDarkMode
+-(NSString *)appearance
 {
-    return _useDarkMode;
+    return _appearance;
 }
-
 
 -(void) cloneSelectedSourceLayout:(NSTableView *)fromTable
 {
@@ -1105,6 +1129,11 @@
    {
        
     
+       _appearanceMap = @{@"System": CSAppearanceSystem,
+                          @"Light": CSAppearanceLight,
+                          @"Dark": CSAppearanceDark
+                          };
+       
        _stagingHidden = YES;
        _transitionDuration = @1.0;
        
@@ -2052,8 +2081,8 @@
     
 
     
+    [saveRoot setValue:self.appearance forKey:@"appearance"];
     
-    [saveRoot setValue:[NSNumber numberWithBool:self.useDarkMode] forKey:@"useDarkMode"];
     
     [saveRoot setValue:self.selectedLayout forKey:@"selectedLayout"];
     
@@ -2161,7 +2190,8 @@
     self.instantRecordDirectory = [saveRoot valueForKey:@"instantRecordDirectory"];
     
     
-    self.useDarkMode = [[saveRoot valueForKey:@"useDarkMode"] boolValue];
+    self.appearance = [saveRoot valueForKey:@"appearance"];
+    
     
     
     self.captureWidth = [[saveRoot valueForKey:@"captureWidth"] intValue];

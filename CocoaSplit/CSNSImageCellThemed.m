@@ -13,7 +13,7 @@
 
 -(void)drawInteriorWithFrame:(NSRect)cellFrame inView:(NSView *)controlView
 {
-    bool useDarkMode = [CaptureController sharedCaptureController].useDarkMode;
+    bool useDarkMode = [CaptureController sharedCaptureController].isDarkAppearance;
     NSImage *myimage = self.image;
     if (!myimage)
     {

@@ -41,6 +41,9 @@
 #import "CSTransitionBase.h"
 
 
+extern NSString *const CSAppearanceDark;
+extern NSString *const CSAppearanceLight;
+extern NSString *const CSAppearanceSystem;
 
 
 @protocol VideoCompressor;
@@ -404,7 +407,9 @@ NSArray *_savedTransitionConstraints;
 
 
 @property (strong) NSArray *inputViewSortDescriptors;
-@property (assign) bool useDarkMode;
+@property (strong) NSString *appearance;
+@property (strong) NSDictionary *appearanceMap;
+@property (readonly) bool isDarkAppearance;
 
 @property (strong) NSMutableArray *layoutRecorders;
 @property (strong) NSString *layoutRecorderCompressorName;

@@ -78,7 +78,7 @@
     {
         newLayer = [CSPreviewGLLayer layer];
     } else {
-        bool darkMode = [CaptureController sharedCaptureController].useDarkMode;
+        bool darkMode = [CaptureController sharedCaptureController].isDarkAppearance;
         newLayer = [CALayer layer];
         if (darkMode)
         {
@@ -145,7 +145,7 @@
 -(void)setupColors
 {
     
-    bool darkMode = [CaptureController sharedCaptureController].useDarkMode;
+    bool darkMode = [CaptureController sharedCaptureController].isDarkAppearance;
     
     if (self.isSwitcherView)
     {
@@ -153,7 +153,7 @@
         _textView.backgroundColor = [NSColor blackColor];
         _textView.alphaValue = 0.5;
     } else {
-        bool darkMode = [CaptureController sharedCaptureController].useDarkMode;
+        bool darkMode = [CaptureController sharedCaptureController].isDarkAppearance;
         
         if (darkMode)
         {

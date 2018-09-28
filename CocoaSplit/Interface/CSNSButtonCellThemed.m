@@ -16,7 +16,7 @@
 
 -(void)drawImage:(NSImage *)image withFrame:(NSRect)frame inView:(NSView *)controlView
 {
-    bool darkMode = [CaptureController sharedCaptureController].useDarkMode;
+    bool darkMode = [CaptureController sharedCaptureController].isDarkAppearance;
     
     NSImage *useImage = image;
     if (darkMode)

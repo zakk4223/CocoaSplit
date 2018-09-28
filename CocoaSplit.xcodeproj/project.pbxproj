@@ -3210,7 +3210,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "zakk.lol.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = CocoaSplit;
 				PROVISIONING_PROFILE = "";
-				SDKROOT = macosx10.13;
+				SDKROOT = macosx;
 				STRIP_STYLE = debugging;
 				WRAPPER_EXTENSION = app;
 			};
@@ -3260,7 +3260,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "zakk.lol.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = CocoaSplit;
 				PROVISIONING_PROFILE = "";
-				SDKROOT = macosx10.13;
+				SDKROOT = macosx;
 				STRIP_STYLE = debugging;
 				WRAPPER_EXTENSION = app;
 			};
