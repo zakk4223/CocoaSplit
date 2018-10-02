@@ -20,6 +20,8 @@
         self.asynchronous = NO;
         self.needsDisplayOnBoundsChange = YES;
         self.flipImage = NO;
+        _lastImageSize = NSZeroSize;
+        
     }
     
     return self;
@@ -70,8 +72,10 @@
 
 -(CGLContextObj)copyCGLContextForPixelFormat:(CGLPixelFormatObj)pf
 {
-    _myCGLContext = [super copyCGLContextForPixelFormat:pf];
-
+    
+    //_myCGLContext = [super copyCGLContextForPixelFormat:pf];
+    
+    CGLCreateContext(pf, self.sharedContext, &_myCGLContext);
     return _myCGLContext;
 }
 
@@ -95,13 +99,14 @@
     glClearColor(0,0,0,0);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    SyphonImage *image = [self.syphonClient newFrameImageForContext:cgl_ctx];
+    SyphonImage *image = [self.syphonClient newFrameImage];
     
     
     if (!image)
     {
         return;
     }
+    
     
     _lastImageSize = image.textureSize;
 

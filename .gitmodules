@@ -1,4 +1,4 @@
 [submodule "CapturePlugins/CSSyphonCapturePlugin/Syphon-Framework"]
 	path = CapturePlugins/CSSyphonCapturePlugin/Syphon-Framework
-	url = https://github.com/palana/Syphon-Framework.git
+	url = https://github.com/Syphon/Syphon-Framework.git 
         ignore = all

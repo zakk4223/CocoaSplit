@@ -94,6 +94,12 @@
 -(void) commonInit
 {
     
+    CGLPixelFormatAttribute attrib[] = {kCGLPFANoRecovery, kCGLPFAAccelerated, 0};
+    CGLPixelFormatObj pixelFormat = NULL;
+    GLint numPixelFormats = 0;
+    CGLChoosePixelFormat (attrib, &pixelFormat, &numPixelFormats);
+    CGLCreateContext(pixelFormat, NULL, &_cgl_ctx);
+    
     _renderType = kCSRenderFrameArrived;
     
     self.canProvideTiming = YES;
@@ -117,6 +123,8 @@
 -(CALayer *)createNewLayer
 {
     CSSyphonCaptureLayer  *newLayer = [CSSyphonCaptureLayer layer];
+    
+    newLayer.sharedContext = _cgl_ctx;
     
     if (_syphon_client)
     {
@@ -194,16 +202,11 @@
     
     if (_syphonServer)
     {
-        _syphon_client = [[SyphonClient alloc] initWithServerDescription:_syphonServer.copy options:nil newFrameHandler:^(SyphonClient *client) {
+        _syphon_client = [[SyphonClient alloc] initWithServerDescription:_syphonServer.copy context:_cgl_ctx options:nil newFrameHandler:^(SyphonClient *client) {
    
             //Big stupid hack to force at least one layer to update the size before we kick a framedata block off
             
-            if (NSEqualSizes(self->_last_frame_size, NSZeroSize))
-            {
-                [self updateLayersWithBlock:^(CALayer *layer) {
-                    self->_last_frame_size = ((CSSyphonCaptureLayer *)layer).lastImageSize;
-                }];
-            } else if (self->_dummyFrameUpdate) {
+            if (self->_dummyFrameUpdate) {
                 [self updateLayersWithFramedataBlock:^(CALayer *layer) {
                     return;
                 }];
@@ -212,19 +215,24 @@
             }
                 
             
-            
+ 
             
             if (!self->_dummyFrameUpdate)
             {
                 [self updateLayersWithFramedataBlock:^(CALayer *layer) {
-                    
                     [((CSSyphonCaptureLayer *)layer) setNeedsDisplay];
 
                 }];
                 [self frameArrived];
             }
             
-
+            if (NSEqualSizes(self->_last_frame_size, NSZeroSize))
+            {
+                [self updateLayersWithBlock:^(CALayer *layer) {
+                    self->_last_frame_size = ((CSSyphonCaptureLayer *)layer).lastImageSize;
+                    NSLog(@"LAST SIZE %@", NSStringFromSize(self->_last_frame_size));
+                }];
+            }
             
         }];
         

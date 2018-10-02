@@ -27,6 +27,6 @@
 @property (strong) SyphonClient *syphonClient;
 @property (assign) bool flipImage;
 @property (assign) NSSize lastImageSize;
-
+@property (assign) CGLContextObj sharedContext;
 
 @end

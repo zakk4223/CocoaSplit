@@ -31,6 +31,7 @@
     uint32_t _surfaceSeed;
     bool _dummyFrameUpdate;
     
+    CGLContextObj _cgl_ctx;
     
     CATransform3D _flipTransform;
 }
