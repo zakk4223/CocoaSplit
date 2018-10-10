@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14313.18"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -93,7 +93,7 @@
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                 <tableColumns>
-                                    <tableColumn identifier="" width="457" minWidth="40" maxWidth="1000" id="O3y-0Y-Byx">
+                                    <tableColumn width="457" minWidth="40" maxWidth="1000" id="O3y-0Y-Byx">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -106,12 +106,12 @@
                                         </textFieldCell>
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
-                                            <tableCellView identifier="fileAudioView" id="4DU-Sc-fYD">
+                                            <tableCellView identifier="fileAudioView" misplaced="YES" id="4DU-Sc-fYD">
                                                 <rect key="frame" x="1" y="1" width="457" height="50"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ADI-7u-3Hz">
-                                                        <rect key="frame" x="1" y="39" width="414" height="11"/>
+                                                        <rect key="frame" x="1" y="39" width="414" height="12"/>
                                                         <textFieldCell key="cell" controlSize="mini" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="n8b-kr-zc9">
                                                             <font key="font" metaFont="miniSystem"/>
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -202,7 +202,7 @@
                                                         </connections>
                                                     </slider>
                                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="gUT-wM-Uzp">
-                                                        <rect key="frame" x="440" y="39" width="10" height="10"/>
+                                                        <rect key="frame" x="440" y="39" width="10" height="12"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="10" id="WCv-At-6Cb"/>
                                                         </constraints>
@@ -245,7 +245,7 @@
                                                         </connections>
                                                     </button>
                                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="M4S-dd-K97">
-                                                        <rect key="frame" x="421" y="39" width="10" height="10"/>
+                                                        <rect key="frame" x="421" y="39" width="10" height="12"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="10" id="K6q-q6-CXK"/>
                                                         </constraints>
@@ -318,12 +318,12 @@
                                                     <outlet property="textField" destination="ADI-7u-3Hz" id="f12-yQ-uKK"/>
                                                 </connections>
                                             </tableCellView>
-                                            <tableCellView identifier="standardAudioView" id="gXO-Xe-SNg">
+                                            <tableCellView identifier="standardAudioView" misplaced="YES" id="gXO-Xe-SNg">
                                                 <rect key="frame" x="1" y="53" width="457" height="41"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ObQ-CN-7Y9">
-                                                        <rect key="frame" x="26" y="29" width="407" height="11"/>
+                                                        <rect key="frame" x="26" y="247" width="407" height="11"/>
                                                         <textFieldCell key="cell" controlSize="mini" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="Fl2-kG-m10">
                                                             <font key="font" metaFont="miniSystem"/>
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -334,7 +334,7 @@
                                                         </connections>
                                                     </textField>
                                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="248-mL-Kyk">
-                                                        <rect key="frame" x="441" y="28" width="10" height="10"/>
+                                                        <rect key="frame" x="441" y="246" width="10" height="10"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="10" id="QZa-of-t83"/>
                                                         </constraints>
@@ -369,10 +369,10 @@
                                                         </connections>
                                                     </button>
                                                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="moe-fd-J8P" customClass="CSAudioLevelView">
-                                                        <rect key="frame" x="28" y="4" width="403" height="13"/>
+                                                        <rect key="frame" x="28" y="113" width="402" height="13"/>
                                                         <subviews>
                                                             <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ebO-Yz-bOC">
-                                                                <rect key="frame" x="0.0" y="-1" width="403" height="15"/>
+                                                                <rect key="frame" x="0.0" y="-1" width="402" height="15"/>
                                                                 <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="1" doubleValue="0.41066209532374098" tickMarkPosition="above" sliderType="linear" id="3UX-kh-3tf" customClass="CSNobarSliderCell"/>
                                                                 <connections>
                                                                     <binding destination="gXO-Xe-SNg" name="value" keyPath="objectValue.volume" id="VJ8-iH-7eM"/>
@@ -410,7 +410,7 @@
                                                         </connections>
                                                     </customView>
                                                     <button toolTip="Configure Audio Input" translatesAutoresizingMaskIntoConstraints="NO" id="qJi-tw-slz">
-                                                        <rect key="frame" x="3" y="-6" width="17" height="32"/>
+                                                        <rect key="frame" x="3" y="-6" width="17" height="250"/>
                                                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSActionTemplate" imagePosition="overlaps" alignment="center" controlSize="small" imageScaling="proportionallyUpOrDown" inset="2" id="qVI-hj-Xzn">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
@@ -430,7 +430,7 @@
                                                         </connections>
                                                     </button>
                                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="IWv-Gj-aan">
-                                                        <rect key="frame" x="439" y="0.0" width="15" height="21"/>
+                                                        <rect key="frame" x="438" y="-1" width="16" height="240"/>
                                                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Speaker_Icon" imagePosition="overlaps" alignment="center" alternateImage="Mute_Icon" controlSize="small" imageScaling="proportionallyUpOrDown" inset="2" id="jlX-sN-tRf" customClass="CSNSButtonCellThemed">
                                                             <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
@@ -539,7 +539,7 @@
         <image name="Mute_Icon" width="240" height="240"/>
         <image name="NSActionTemplate" width="14" height="14"/>
         <image name="NSAddTemplate" width="11" height="11"/>
-        <image name="NSStopProgressFreestandingTemplate" width="11" height="11"/>
+        <image name="NSStopProgressFreestandingTemplate" width="14" height="14"/>
         <image name="Speaker_Icon" width="240" height="240"/>
         <image name="pause_main" width="42.400001525878906" height="48"/>
         <image name="play_main" width="50.400001525878906" height="58.400001525878906"/>

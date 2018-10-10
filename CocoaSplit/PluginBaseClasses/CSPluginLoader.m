@@ -250,7 +250,6 @@
             NSBundle *mappedBundle = [self.principalClassNameMap objectForKey:currClassName];
             if (!mappedBundle)
             {
-                NSLog(@"ADD TO MAP %@", currBundle);
                 [self.principalClassNameMap setObject:currBundle forKey:currClassName];
             } else {
                 NSString *mappedVersion = [mappedBundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
@@ -269,9 +268,9 @@
 - (void)loadAllBundles
 {
     NSMutableArray *instances;
-    NSMutableArray *bundlePaths;
-    NSEnumerator *pathEnum;
-    NSString *currPath;
+
+
+
     NSBundle *currBundle;
     Class currPrincipalClass;
     [self makeBundleVersionMap];

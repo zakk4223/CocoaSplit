@@ -92,7 +92,6 @@
 
 
 -(void)drawLayerContents:(CGLContextObj)ctx pixelFormat:(CGLPixelFormatObj)pf forLayerTime:(CFTimeInterval)t displayTime:(const CVTimeStamp *)ts{
-    CGLContextObj cgl_ctx = ctx;
     CGLSetCurrentContext(ctx);
 
     

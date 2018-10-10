@@ -87,7 +87,8 @@
         {
             [cSrc.layer addAnimation:self.useAnimation forKey:nil];
         }
-        cSrc.layer.hidden = YES;
+        //cSrc.layer.hidden = YES;
+        cSrc.layer.opacity = 0.0f;
         
     }
     
@@ -97,7 +98,8 @@
         {
             [rSrc.layer addAnimation:self.useAnimation forKey:nil];
         }
-        rSrc.layer.hidden = YES;
+        //rSrc.layer.hidden = YES;
+        rSrc.layer.opacity = 0.0f;
     }
     [CATransaction commit];
 

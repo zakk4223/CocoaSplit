@@ -230,7 +230,6 @@
             {
                 [self updateLayersWithBlock:^(CALayer *layer) {
                     self->_last_frame_size = ((CSSyphonCaptureLayer *)layer).lastImageSize;
-                    NSLog(@"LAST SIZE %@", NSStringFromSize(self->_last_frame_size));
                 }];
             }
             
