@@ -171,7 +171,7 @@
         {
             win.appearance = useAppearance;
         }
-        NSApp.appearance = useAppearance;
+        //NSApp.appearance = useAppearance;
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationThemeChanged object:self];
 

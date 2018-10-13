@@ -291,6 +291,7 @@
 				DEVELOPMENT_TEAM = L3JLUY4S5E;
 				INFOPLIST_FILE = CSNewTekNDIStreamServicePlugin/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_LDFLAGS = (
 					"-undefined",
 					suppress,
@@ -312,6 +313,7 @@
 				DEVELOPMENT_TEAM = L3JLUY4S5E;
 				INFOPLIST_FILE = CSNewTekNDIStreamServicePlugin/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_LDFLAGS = (
 					"-undefined",
 					suppress,
