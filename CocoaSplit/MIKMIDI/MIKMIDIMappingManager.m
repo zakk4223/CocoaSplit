@@ -220,8 +220,8 @@ static MIKMIDIMappingManager *sharedManager = nil;
 - (NSURL *)fileURLForMapping:(MIKMIDIMapping *)mapping shouldBeUnique:(BOOL)unique
 {
 	NSURL *mappingsFolder = [self userMappingsFolder];
-	NSString *filename = [mapping.name stringByAppendingPathExtension:kMIKMIDIMappingFileExtension];
-    
+    NSString *cleanName = [mapping.name stringByReplacingOccurrencesOfString:@"/" withString:@"-"];
+	NSString *filename = [cleanName stringByAppendingPathExtension:kMIKMIDIMappingFileExtension];
 	NSURL *result = [mappingsFolder URLByAppendingPathComponent:filename];
 	
 	if (unique) {
