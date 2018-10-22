@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "SourceLayout.h"
+#import "LayoutRenderer.h"
 
 @class CSLayoutSwitcherViewController;
 
@@ -22,9 +23,12 @@
     NSImageView *_recordImageView;
     
 }
+
+@property (weak) LayoutRenderer *useRenderer;
 @property (strong) SourceLayout *sourceLayout;
-@property (assign) bool isSwitcherView;
 @property (weak) CSLayoutSwitcherViewController *controller;
+@property (assign) bool clickable;
+@property (assign) bool showTitle;
 
 -(instancetype)initWithIsSwitcherView:(bool)isSwitcherView;
 

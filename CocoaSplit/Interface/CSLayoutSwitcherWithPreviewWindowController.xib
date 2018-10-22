@@ -1,43 +1,135 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14313.18"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CSLayoutSwitcherWithPreviewWindowController">
             <connections>
                 <outlet property="gridView" destination="3TK-wu-yv0" id="LgL-AK-OTf"/>
+                <outlet property="liveConstraint" destination="Gdr-M7-ETt" id="vxm-RV-Gqo"/>
+                <outlet property="liveView" destination="qmg-DW-EUj" id="2hz-Ja-giR"/>
+                <outlet property="previewView" destination="Mch-ag-DjC" id="fC5-Rq-OMe"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <window title="Layout Control" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="F0z-JX-Cv5">
+        <window title="Layout Control" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="F0z-JX-Cv5">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="240" width="838" height="402"/>
+            <rect key="contentRect" x="196" y="240" width="705" height="450"/>
             <rect key="screenRect" x="0.0" y="0.0" width="3440" height="1417"/>
-            <view key="contentView" wantsLayer="YES" id="se5-gp-TjO">
-                <rect key="frame" x="0.0" y="0.0" width="838" height="402"/>
+            <view key="contentView" wantsLayer="YES" misplaced="YES" id="se5-gp-TjO">
+                <rect key="frame" x="0.0" y="0.0" width="706" height="450"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <customView translatesAutoresizingMaskIntoConstraints="NO" id="3TK-wu-yv0" customClass="CSLayoutSwitcherHostingView">
-                        <rect key="frame" x="0.0" y="0.0" width="838" height="402"/>
+                        <rect key="frame" x="0.0" y="0.0" width="705" height="300"/>
+                    </customView>
+                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="zAb-eZ-wV9" userLabel="LiveStagingArea">
+                        <rect key="frame" x="0.0" y="301" width="705" height="149"/>
+                        <subviews>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="Fn6-YQ-Z7J" userLabel="StagingArea">
+                                <rect key="frame" x="0.0" y="0.0" width="353" height="149"/>
+                                <subviews>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eeO-Rg-alc">
+                                        <rect key="frame" x="0.0" y="132" width="353" height="17"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="17" id="AZN-kM-94y"/>
+                                        </constraints>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Preview" drawsBackground="YES" id="y1p-fL-FP7">
+                                            <font key="font" usesAppearanceFont="YES"/>
+                                            <color key="textColor" name="controlHighlightColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" red="0.056943728630000003" green="1" blue="0.13822654309999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="Mch-ag-DjC" customClass="CSLayoutSwitcherView">
+                                        <rect key="frame" x="0.0" y="0.0" width="353" height="132"/>
+                                    </customView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="Mch-ag-DjC" secondAttribute="trailing" id="37l-sF-SUC"/>
+                                    <constraint firstAttribute="bottom" secondItem="Mch-ag-DjC" secondAttribute="bottom" id="B9v-dv-bHI"/>
+                                    <constraint firstItem="eeO-Rg-alc" firstAttribute="top" secondItem="Fn6-YQ-Z7J" secondAttribute="top" id="F4A-SP-EBi"/>
+                                    <constraint firstItem="Mch-ag-DjC" firstAttribute="leading" secondItem="Fn6-YQ-Z7J" secondAttribute="leading" id="NTD-yn-DEn"/>
+                                    <constraint firstItem="eeO-Rg-alc" firstAttribute="leading" secondItem="Fn6-YQ-Z7J" secondAttribute="leading" id="RZX-rG-cI0"/>
+                                    <constraint firstItem="Mch-ag-DjC" firstAttribute="top" secondItem="eeO-Rg-alc" secondAttribute="bottom" id="ZFJ-7j-cTG"/>
+                                    <constraint firstAttribute="trailing" secondItem="eeO-Rg-alc" secondAttribute="trailing" id="g3j-16-agL"/>
+                                </constraints>
+                            </customView>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="0Q3-ej-iO8" userLabel="LiveArea">
+                                <rect key="frame" x="355" y="0.0" width="350" height="149"/>
+                                <subviews>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bC8-3c-kPG">
+                                        <rect key="frame" x="0.0" y="132" width="29" height="17"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="17" id="MFG-Sk-80B"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17" id="kzc-pJ-tKl"/>
+                                        </constraints>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Live" drawsBackground="YES" id="DVD-Pt-Fp9">
+                                            <font key="font" usesAppearanceFont="YES"/>
+                                            <color key="textColor" name="controlHighlightColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" red="1" green="0.050457932050000001" blue="0.014875795690000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="qmg-DW-EUj" customClass="CSLayoutSwitcherView">
+                                        <rect key="frame" x="0.0" y="0.0" width="350" height="132"/>
+                                    </customView>
+                                    <box boxType="custom" borderType="none" borderWidth="0.0" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="Bw3-xl-Kyh">
+                                        <rect key="frame" x="29" y="132" width="321" height="17"/>
+                                        <view key="contentView" id="2td-3d-zva">
+                                            <rect key="frame" x="0.0" y="0.0" width="321" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        </view>
+                                        <color key="fillColor" red="1" green="0.050457932050000001" blue="0.014875795690000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </box>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="bC8-3c-kPG" firstAttribute="top" secondItem="0Q3-ej-iO8" secondAttribute="top" id="4p3-Xm-SSw"/>
+                                    <constraint firstItem="Bw3-xl-Kyh" firstAttribute="top" secondItem="0Q3-ej-iO8" secondAttribute="top" id="8l5-O0-GVJ"/>
+                                    <constraint firstItem="qmg-DW-EUj" firstAttribute="top" secondItem="bC8-3c-kPG" secondAttribute="bottom" id="DwR-cD-x0w"/>
+                                    <constraint firstAttribute="trailing" secondItem="qmg-DW-EUj" secondAttribute="trailing" id="ZQV-iM-294"/>
+                                    <constraint firstItem="bC8-3c-kPG" firstAttribute="leading" secondItem="0Q3-ej-iO8" secondAttribute="leading" id="hB2-Zl-cSi"/>
+                                    <constraint firstItem="Bw3-xl-Kyh" firstAttribute="leading" secondItem="bC8-3c-kPG" secondAttribute="trailing" id="j40-4r-eba"/>
+                                    <constraint firstAttribute="bottom" secondItem="qmg-DW-EUj" secondAttribute="bottom" id="nIb-vh-FmA"/>
+                                    <constraint firstItem="qmg-DW-EUj" firstAttribute="top" secondItem="Bw3-xl-Kyh" secondAttribute="bottom" id="pof-Yb-TKj"/>
+                                    <constraint firstAttribute="trailing" secondItem="Bw3-xl-Kyh" secondAttribute="trailing" id="rbZ-b9-gb5"/>
+                                    <constraint firstItem="Bw3-xl-Kyh" firstAttribute="height" secondItem="bC8-3c-kPG" secondAttribute="height" id="wNI-gM-fLU"/>
+                                    <constraint firstItem="qmg-DW-EUj" firstAttribute="leading" secondItem="0Q3-ej-iO8" secondAttribute="leading" id="x0P-yf-Kyl"/>
+                                </constraints>
+                            </customView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="Fn6-YQ-Z7J" secondAttribute="bottom" id="9rp-Th-l4f"/>
+                            <constraint firstItem="0Q3-ej-iO8" firstAttribute="leading" secondItem="Fn6-YQ-Z7J" secondAttribute="trailing" constant="2" id="Gdr-M7-ETt"/>
+                            <constraint firstAttribute="bottom" secondItem="0Q3-ej-iO8" secondAttribute="bottom" id="Hje-Zo-pOX"/>
+                            <constraint firstAttribute="trailing" secondItem="0Q3-ej-iO8" secondAttribute="trailing" id="Ywb-gB-VlB"/>
+                            <constraint firstItem="Fn6-YQ-Z7J" firstAttribute="leading" secondItem="zAb-eZ-wV9" secondAttribute="leading" id="ahh-RY-FYA"/>
+                            <constraint firstItem="Fn6-YQ-Z7J" firstAttribute="top" secondItem="zAb-eZ-wV9" secondAttribute="top" id="doj-of-kDW"/>
+                            <constraint firstItem="Fn6-YQ-Z7J" firstAttribute="centerX" secondItem="zAb-eZ-wV9" secondAttribute="centerX" multiplier="0.5" id="svr-3Y-fcj"/>
+                            <constraint firstItem="0Q3-ej-iO8" firstAttribute="top" secondItem="zAb-eZ-wV9" secondAttribute="top" id="tvw-tt-z68"/>
+                            <constraint firstItem="0Q3-ej-iO8" firstAttribute="leading" secondItem="zAb-eZ-wV9" secondAttribute="leading" priority="250" id="wsv-gU-QA0"/>
+                        </constraints>
                     </customView>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="zAb-eZ-wV9" firstAttribute="height" secondItem="se5-gp-TjO" secondAttribute="height" multiplier="0.33" id="5l2-Mf-fwu"/>
                     <constraint firstItem="3TK-wu-yv0" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" id="Ai2-8w-GlM"/>
+                    <constraint firstItem="zAb-eZ-wV9" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" id="KNl-ZL-7rr"/>
                     <constraint firstAttribute="trailing" secondItem="3TK-wu-yv0" secondAttribute="trailing" id="XNr-Dn-bIb"/>
                     <constraint firstAttribute="bottom" secondItem="3TK-wu-yv0" secondAttribute="bottom" id="XZe-kX-17L"/>
-                    <constraint firstItem="3TK-wu-yv0" firstAttribute="top" secondItem="se5-gp-TjO" secondAttribute="top" id="mej-vv-gX8"/>
+                    <constraint firstItem="zAb-eZ-wV9" firstAttribute="leading" secondItem="se5-gp-TjO" secondAttribute="leading" id="ccc-fe-Z0N"/>
+                    <constraint firstAttribute="trailing" secondItem="zAb-eZ-wV9" secondAttribute="trailing" id="hJD-gq-INO"/>
+                    <constraint firstItem="3TK-wu-yv0" firstAttribute="top" secondItem="zAb-eZ-wV9" secondAttribute="bottom" constant="1" id="pfy-56-hsR"/>
                 </constraints>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="0bl-1N-AYu"/>
             </connections>
-            <point key="canvasLocation" x="311" y="228"/>
+            <point key="canvasLocation" x="1235" y="65"/>
         </window>
     </objects>
 </document>

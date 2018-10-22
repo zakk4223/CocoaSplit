@@ -10,7 +10,10 @@
 #import <Quartz/Quartz.h>
 #import "CSPreviewGLLayer.h"
 #import "CSLayoutSwitcherViewController.h"
+#import "SourceLayout.h"
 
+
+@class PreviewView;
 
 @interface CSLayoutSwitcherWithPreviewWindowController : NSWindowController
 {
@@ -19,6 +22,13 @@
     
 }
 @property (strong) NSArray *layouts;
+
+@property (strong) IBOutlet NSLayoutConstraint *liveConstraint;
+@property (weak) LayoutRenderer *previewRenderer;
+@property (weak) LayoutRenderer *liveRenderer;
+@property (weak) IBOutlet CSLayoutSwitcherView *previewView;
+@property (weak) IBOutlet CSLayoutSwitcherView *liveView;
+
 @property (weak) IBOutlet NSView *gridView;
 
 @property (weak) IBOutlet NSView *transitionView;

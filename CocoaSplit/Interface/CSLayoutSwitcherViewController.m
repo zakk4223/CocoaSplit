@@ -58,11 +58,8 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            if (layoutView.isSwitcherView)
-            {
-                [layout clearSourceList];
-                [layout restoreSourceList:nil];
-            }
+            [layout clearSourceList];
+            [layout restoreSourceList:nil];
             [layoutView setNeedsLayout:YES];
             
         });

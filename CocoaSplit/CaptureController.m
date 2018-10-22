@@ -3302,7 +3302,13 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     [_layoutSwitcherWindowController showWindow:nil];
     
     _layoutSwitcherWindowController.layouts = nil;
- 
+    _layoutSwitcherWindowController.liveRenderer = self.livePreviewView.layoutRenderer;
+    if (self.stagingHidden)
+    {
+        _layoutSwitcherWindowController.previewRenderer = nil;
+    } else {
+        _layoutSwitcherWindowController.previewRenderer = self.stagingPreviewView.layoutRenderer;
+    }
 }
 
 
@@ -4692,7 +4698,10 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     self.stagingLayout = self.livePreviewView.sourceLayout;
     self.selectedLayout = self.livePreviewView.sourceLayout;
     self.livePreviewView.sourceLayout.ignorePinnedInputs = NO;
-    
+    if (_layoutSwitcherWindowController)
+    {
+        _layoutSwitcherWindowController.previewRenderer = nil;
+    }
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutModeChanged object:self];
 
 }
@@ -4730,6 +4739,12 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
         self.stagingPreviewView.midiActive = NO;
     }
     
+    if (_layoutSwitcherWindowController)
+    {
+        _layoutSwitcherWindowController.previewRenderer = self.stagingPreviewView.layoutRenderer;
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutModeChanged object:self];
+
     self.stagingLayout.audioEngine = [self setupStagingAudio];
 }
 

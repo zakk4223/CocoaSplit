@@ -44,6 +44,13 @@
 
 
 
+-(void)awakeFromNib
+{
+    [self setWantsLayer:YES];
+    self.clickable = YES;
+    self.showTitle = YES;
+
+}
 
 
 -(instancetype)initWithIsSwitcherView:(bool)isSwitcherView
@@ -51,10 +58,10 @@
     if (self = [super init])
     {
 
-        self.isSwitcherView = isSwitcherView;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(themeChanged:) name:CSNotificationThemeChanged object:nil];
         [self setWantsLayer:YES];
-
+        self.clickable = YES;
+        self.showTitle = YES;
         //self.layerContentsRedrawPolicy = NSViewLayerContentsRedrawOnSetNeedsDisplay;
     }
     
@@ -74,21 +81,8 @@
 
     CALayer *newLayer;
     
-    if (self.isSwitcherView)
-    {
-        newLayer = [CSPreviewGLLayer layer];
-    } else {
-        bool darkMode = [CaptureController sharedCaptureController].isDarkAppearance;
-        newLayer = [CALayer layer];
-        if (darkMode)
-        {
-            newLayer.backgroundColor = [NSColor blackColor].CGColor;
-        } else {
-            newLayer.backgroundColor = [NSColor controlColor].CGColor;
-        }
+    newLayer = [CSPreviewGLLayer layer];
 
-        newLayer.cornerRadius = 2.5f;
-    }
     return newLayer;
 }
 
@@ -107,7 +101,10 @@
 
 -(void)mouseDown:(NSEvent *)event
 {
-    self.layer.opacity = 0.5f;
+    if (self.clickable)
+    {
+        self.layer.opacity = 0.5f;
+    }
 
 }
 
@@ -115,26 +112,29 @@
 
 -(void)mouseUp:(NSEvent *)event
 {
-    self.layer.opacity = 1.0f;
-    if (self.sourceLayout)
+    if (self.clickable)
     {
-        AppDelegate *appDel = NSApp.delegate;
-        
-        CaptureController *controller = appDel.captureController;
-        
-        SourceLayout *useLayout = controller.activePreviewView.sourceLayout;
-        
-        if (event.modifierFlags & NSCommandKeyMask)
+        self.layer.opacity = 1.0f;
+        if (self.sourceLayout)
         {
-            useLayout = controller.selectedLayout;
-        }
-        
-        
-        if (event.modifierFlags & NSShiftKeyMask)
-        {
-            [controller toggleLayout:self.sourceLayout usingLayout:useLayout];
-        } else {
-            [controller switchToLayout:self.sourceLayout usingLayout:useLayout];
+            AppDelegate *appDel = NSApp.delegate;
+            
+            CaptureController *controller = appDel.captureController;
+            
+            SourceLayout *useLayout = controller.activePreviewView.sourceLayout;
+            
+            if (event.modifierFlags & NSCommandKeyMask)
+            {
+                useLayout = controller.selectedLayout;
+            }
+            
+            
+            if (event.modifierFlags & NSShiftKeyMask)
+            {
+                [controller toggleLayout:self.sourceLayout usingLayout:useLayout];
+            } else {
+                [controller switchToLayout:self.sourceLayout usingLayout:useLayout];
+            }
         }
     }
 
@@ -147,34 +147,11 @@
     
     bool darkMode = [CaptureController sharedCaptureController].isDarkAppearance;
     
-    if (self.isSwitcherView)
-    {
-        _textView.textColor = [NSColor whiteColor];
-        _textView.backgroundColor = [NSColor blackColor];
-        _textView.alphaValue = 0.5;
-    } else {
-        bool darkMode = [CaptureController sharedCaptureController].isDarkAppearance;
-        
-        if (darkMode)
-        {
-            _textView.backgroundColor = [NSColor colorWithRed:1 green:1 blue:1 alpha:0];
-            _textView.textColor = [NSColor whiteColor];
-        } else {
-            _textView.backgroundColor = [NSColor colorWithRed:0 green:0 blue:0 alpha:0];
-            _textView.textColor = [NSColor blackColor];
-        }
-    }
-    
-    if (!self.isSwitcherView)
-    {
-        
-        if (darkMode)
-        {
-            self.layer.backgroundColor = [NSColor blackColor].CGColor;
-        } else {
-            self.layer.backgroundColor = [NSColor controlColor].CGColor;
-        }
-    }
+
+    _textView.textColor = [NSColor whiteColor];
+    _textView.backgroundColor = [NSColor blackColor];
+    _textView.alphaValue = 0.5;
+
 }
 
 
@@ -194,13 +171,18 @@
         
         newLayer.borderColor = [NSColor lightGrayColor].CGColor;
         newLayer.borderWidth = 2.0f;
-        if (self.isSwitcherView)
+        CSPreviewGLLayer *glLayer = (CSPreviewGLLayer *)newLayer;
+        if (self.useRenderer)
         {
-            CSPreviewGLLayer *glLayer = (CSPreviewGLLayer *)newLayer;
+            glLayer.doRender = NO;
+            glLayer.renderer = self.useRenderer;
+        } else {
             glLayer.doRender = YES;
             glLayer.renderer = [[LayoutRenderer alloc] init];
             glLayer.renderer.layout = _sourceLayout;
+
             [_sourceLayout restoreSourceList:nil];
+
         }
         
         [_sourceLayout addObserver:self forKeyPath:@"in_live" options:NSKeyValueObservingOptionNew context:NULL];
@@ -211,19 +193,19 @@
 
 
 
-        if (_sourceLayout.in_live)
+        if (_sourceLayout.in_live && self.clickable)
         {
             newLayer.borderColor = [NSColor redColor].CGColor;
             newLayer.borderWidth = 4.0f;
         }
         
-        if (_sourceLayout.in_staging)
+        if (_sourceLayout.in_staging && self.clickable)
         {
             newLayer.borderColor = [NSColor greenColor].CGColor;
             newLayer.borderWidth = 4.0f;
         }
         
-        if (_sourceLayout.in_staging && _sourceLayout.in_live)
+        if (_sourceLayout.in_staging && _sourceLayout.in_live && self.clickable)
         {
             newLayer.borderColor = [NSColor yellowColor].CGColor;
             newLayer.borderWidth = 4.0f;
@@ -232,7 +214,7 @@
         
         
         
-        if (!_textView)
+        if (!_textView && self.showTitle)
         {
 
             _textView = [[CSSTextView alloc] initWithFrame:NSMakeRect(50,50,50,50)];
@@ -297,24 +279,27 @@
     if ([keyPath isEqualToString:@"in_live"] || [keyPath isEqualToString:@"in_staging"])
     {
         
-        self.layer.borderColor = [NSColor grayColor].CGColor;
-        self.layer.borderWidth = 2.0f;
-        if (_sourceLayout.in_live)
+        if (self.clickable)
         {
-            self.layer.borderColor = [NSColor redColor].CGColor;
-            self.layer.borderWidth = 4.0f;
-        }
-        
-        if (_sourceLayout.in_staging)
-        {
-            self.layer.borderColor = [NSColor greenColor].CGColor;
-            self.layer.borderWidth = 4.0f;
-        }
-        
-        if (_sourceLayout.in_staging && _sourceLayout.in_live)
-        {
-            self.layer.borderColor = [NSColor yellowColor].CGColor;
-            self.layer.borderWidth = 4.0f;
+            self.layer.borderColor = [NSColor grayColor].CGColor;
+            self.layer.borderWidth = 2.0f;
+            if (_sourceLayout.in_live)
+            {
+                self.layer.borderColor = [NSColor redColor].CGColor;
+                self.layer.borderWidth = 4.0f;
+            }
+            
+            if (_sourceLayout.in_staging)
+            {
+                self.layer.borderColor = [NSColor greenColor].CGColor;
+                self.layer.borderWidth = 4.0f;
+            }
+            
+            if (_sourceLayout.in_staging && _sourceLayout.in_live)
+            {
+                self.layer.borderColor = [NSColor yellowColor].CGColor;
+                self.layer.borderWidth = 4.0f;
+            }
         }
     } else if ([keyPath isEqualToString:@"audioData"]) {
     } else if ([keyPath isEqualToString:@"recorder.defaultRecordingActive"]) {
@@ -358,7 +343,7 @@
     }
     
     
-    if (_textView)
+    if (_textView && self.showTitle)
     {
 
         _textView.string = self.sourceLayout.name;
@@ -374,12 +359,7 @@
         }
         
         tFrame.origin.x = NSMidX(self.bounds) - tSize.width/2;
-        if (self.isSwitcherView)
-        {
-            tFrame.origin.y = 5.0f;
-        } else {
-            tFrame.origin.y = NSMidY(self.bounds) - tSize.height/2;
-        }
+        tFrame.origin.y = 5.0f;
         
         tFrame.size.width = tSize.width;
         tFrame.size.height = tSize.height;
