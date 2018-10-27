@@ -25,9 +25,6 @@
     return self;
 }
 
-
-
-
 +(void *)ndi_dispatch_ptr
 {
     static void *dlHandle = NULL;

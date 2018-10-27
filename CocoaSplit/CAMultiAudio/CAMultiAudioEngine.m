@@ -55,7 +55,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         self.encodeMixer.muted = NO;
         self.previewMixer.volume = 1.0;
         self.previewMixer.muted  = NO;
-        
+        [self.graph startGraph];
+
 }
     
     return self;
@@ -143,6 +144,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
                 [self createFileInput:inputPath];
             }
         }
+
+        [self.graph startGraph];
 
     }
     
@@ -431,7 +434,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     [self.graph connectNode:self.encodeMixer toNode:self.renderNode];
     [self.graph connectNode:self.silentNode toNode:self.encodeMixer];
-    [self.graph startGraph];
     
     
     
@@ -700,7 +702,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 */
     [self.encodeMixer restoreDataFromDict:encodeEffectChain];
     [self.graph graphUpdate];
-    
+    [self.graph startGraph];
+
 }
 
 

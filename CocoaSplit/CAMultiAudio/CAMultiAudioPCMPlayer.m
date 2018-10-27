@@ -221,7 +221,6 @@
     
     sampleABL = malloc(sizeof(AudioBufferList) + (bufferCnt-1)*sizeof(AudioBuffer));
     
-    
     sampleABL->mNumberBuffers = bufferCnt;
     uint8_t *dataBuf = malloc(bufferCnt*byteCnt);
     
