@@ -9,6 +9,8 @@
 #import "NDIHeaders/Processing.NDI.Lib.h"
 #import <dlfcn.h>
 
+#define NDILIB_FULL_PATH "/usr/local/lib/"NDILIB_LIBRARY_NAME
+
 @implementation CSNDIOutput
 
 
@@ -35,7 +37,7 @@
     {
         if (dlHandle == NULL)
         {
-            dlHandle = dlopen(NDILIB_LIBRARY_NAME, RTLD_LOCAL | RTLD_LAZY);
+            dlHandle = dlopen(NDILIB_FULL_PATH, RTLD_LOCAL | RTLD_LAZY);
         }
         
         if (!NDIlib_v3_load && dlHandle)

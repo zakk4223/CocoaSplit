@@ -11,6 +11,8 @@
 #import "CSPluginServices.h"
 #import "CSNDISource.h"
 
+#define NDILIB_FULL_PATH "/usr/local/lib/"NDILIB_LIBRARY_NAME
+
 @implementation CSNDICapture
 
 
@@ -60,7 +62,12 @@
     {
         if (dlHandle == NULL)
         {
-            dlHandle = dlopen(NDILIB_LIBRARY_NAME, RTLD_LOCAL | RTLD_LAZY);
+            dlHandle = dlopen(NDILIB_FULL_PATH, RTLD_LOCAL | RTLD_LAZY);
+            if (!dlHandle)
+            {
+                const char *ndiError = dlerror();
+                NSLog(@"NDI dlopen() failed: %s %s", ndiError, NDILIB_LIBRARY_NAME);
+            }
         }
         
         if (!NDIlib_v3_load && dlHandle)
