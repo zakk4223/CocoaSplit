@@ -75,7 +75,17 @@
         }
         
         
-        NSString *windowName = devinstance[(NSString *)kCGWindowOwnerName];
+        NSString *windowOwnerName = devinstance[(NSString *)kCGWindowOwnerName];
+        NSString *windowTitle = devinstance[(NSString *)kCGWindowName];
+        
+        NSString *windowName = nil;
+        if (windowTitle && windowTitle.length > 0)
+        {
+            windowName = [NSString stringWithFormat:@"%@ - %@", windowOwnerName, windowTitle];
+        } else {
+            windowName = windowOwnerName;
+        }
+        
         if (!windowName)
         {
             windowName = @"?????";
@@ -118,6 +128,7 @@
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
+            
         CGImageRef windowImg = CGWindowListCreateImage(CGRectNull, kCGWindowListOptionIncludingWindow, [windowID unsignedIntValue], kCGWindowImageBoundsIgnoreFraming|kCGWindowImageBestResolution);
             
             self->_lastSize = NSMakeSize(CGImageGetWidth(windowImg), CGImageGetHeight(windowImg));

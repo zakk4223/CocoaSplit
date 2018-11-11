@@ -246,7 +246,10 @@
 
 -(void)frameTickFromInput:(InputSource *)input
 {
-    [self frameTick];
+    if (self.tickInput && (input == self.tickInput))
+    {
+        [self frameTick];
+    }
 }
 
 

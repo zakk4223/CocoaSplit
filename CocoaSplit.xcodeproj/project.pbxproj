@@ -250,6 +250,7 @@
 		34E26DD91FF6ED7B00ACE58B /* CAMultiAudioSubgraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E26DD81FF6ED7B00ACE58B /* CAMultiAudioSubgraph.m */; };
 		34E26DDC1FF702BD00ACE58B /* CAMultiAudioSilence.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E26DDB1FF702BD00ACE58B /* CAMultiAudioSilence.m */; };
 		34E26DDF1FF70E0E00ACE58B /* CAMultiAudioGenericOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E26DDE1FF70E0E00ACE58B /* CAMultiAudioGenericOutput.m */; };
+		34E88C9E218DB0A90053913B /* CSAppleWebViewCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34E88C97218DACE40053913B /* CSAppleWebViewCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		34E91E422038ECC000E96684 /* CSSourceLayoutSettingsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E91E402038ECC000E96684 /* CSSourceLayoutSettingsWindowController.m */; };
 		34E91E432038ECC000E96684 /* CSSourceLayoutSettingsWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34E91E412038ECC000E96684 /* CSSourceLayoutSettingsWindowController.xib */; };
 		34E983701B78AE9100F26F1E /* Python.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34E9836F1B78AE9100F26F1E /* Python.framework */; };
@@ -502,6 +503,13 @@
 			remoteGlobalIDString = 34D2D58F1A54857C001004E5;
 			remoteInfo = CSNowPlayingPlugin;
 		};
+		34E88C96218DACE40053913B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 34E88C92218DACE30053913B /* CSAppleWebViewCapturePlugin.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 34E88C89218DACE30053913B;
+			remoteInfo = CSAppleWebViewCapturePlugin;
+		};
 		34F7C5601B2C908700345230 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 34F7C55A1B2C908700345230 /* CSDeckLinkCapturePlugin.xcodeproj */;
@@ -584,6 +592,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				34E88C9E218DB0A90053913B /* CSAppleWebViewCapturePlugin.bundle in Copy Files */,
 				344036862080B817004BC514 /* CSMixerStreamServicePlugin.bundle in Copy Files */,
 				34BE2B5D201527CE00E37382 /* CSNewTekNDIStreamServicePlugin.bundle in Copy Files */,
 				3483599E2010807B00E711AF /* CSNDICapturePlugin.bundle in Copy Files */,
@@ -1044,6 +1053,7 @@
 		34E26DDB1FF702BD00ACE58B /* CAMultiAudioSilence.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioSilence.m; path = CAMultiAudio/CAMultiAudioSilence.m; sourceTree = "<group>"; };
 		34E26DDD1FF70E0E00ACE58B /* CAMultiAudioGenericOutput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioGenericOutput.h; path = CAMultiAudio/CAMultiAudioGenericOutput.h; sourceTree = "<group>"; };
 		34E26DDE1FF70E0E00ACE58B /* CAMultiAudioGenericOutput.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioGenericOutput.m; path = CAMultiAudio/CAMultiAudioGenericOutput.m; sourceTree = "<group>"; };
+		34E88C92218DACE30053913B /* CSAppleWebViewCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSAppleWebViewCapturePlugin.xcodeproj; path = CapturePlugins/CSAppleWebViewCapturePlugin/CSAppleWebViewCapturePlugin.xcodeproj; sourceTree = "<group>"; };
 		34E91E3F2038ECC000E96684 /* CSSourceLayoutSettingsWindowController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSSourceLayoutSettingsWindowController.h; sourceTree = "<group>"; };
 		34E91E402038ECC000E96684 /* CSSourceLayoutSettingsWindowController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSSourceLayoutSettingsWindowController.m; sourceTree = "<group>"; };
 		34E91E412038ECC000E96684 /* CSSourceLayoutSettingsWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CSSourceLayoutSettingsWindowController.xib; sourceTree = "<group>"; };
@@ -2027,6 +2037,7 @@
 		34AFC24319B058800007C07B /* CapturePlugins */ = {
 			isa = PBXGroup;
 			children = (
+				34E88C92218DACE30053913B /* CSAppleWebViewCapturePlugin.xcodeproj */,
 				3446F05420105F0500977BBA /* CSNDICapturePlugin.xcodeproj */,
 				345BECB61F3DADF600B46F29 /* CSLayoutCapturePlugin.xcodeproj */,
 				343C79C31D0C763A00B36EEC /* CSFFMpegCapturePlugin.xcodeproj */,
@@ -2231,6 +2242,14 @@
 			name = AVFAudioCapture;
 			sourceTree = "<group>";
 		};
+		34E88C93218DACE30053913B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				34E88C97218DACE40053913B /* CSAppleWebViewCapturePlugin.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		34ED8BD91B0736E0002C0674 /* MIKMIDI */ = {
 			isa = PBXGroup;
 			children = (
@@ -2430,6 +2449,10 @@
 			productRefGroup = 340FE49E15F3417E00E4CE4E /* Products */;
 			projectDirPath = "";
 			projectReferences = (
+				{
+					ProductGroup = 34E88C93218DACE30053913B /* Products */;
+					ProjectRef = 34E88C92218DACE30053913B /* CSAppleWebViewCapturePlugin.xcodeproj */;
+				},
 				{
 					ProductGroup = 34AFC26919B05B930007C07B /* Products */;
 					ProjectRef = 34AFC21419B04F700007C07B /* CSAVFCapturePlugin.xcodeproj */;
@@ -2709,6 +2732,13 @@
 			fileType = wrapper.cfbundle;
 			path = CSNowPlayingPlugin.bundle;
 			remoteRef = 34D2D59D1A54857D001004E5 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		34E88C97218DACE40053913B /* CSAppleWebViewCapturePlugin.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = CSAppleWebViewCapturePlugin.bundle;
+			remoteRef = 34E88C96218DACE40053913B /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		34F7C5611B2C908700345230 /* CSDeckLinkCapturePlugin.bundle */ = {

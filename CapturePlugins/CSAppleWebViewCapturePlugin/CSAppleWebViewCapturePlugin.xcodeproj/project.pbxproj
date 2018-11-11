@@ -1,0 +1,329 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		34E88C9A218DAD050053913B /* CSAppleWebViewCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E88C99218DAD050053913B /* CSAppleWebViewCapture.m */; };
+		34E88C9D218DAE000053913B /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34E88C9C218DAE000053913B /* WebKit.framework */; };
+		34E88CA3218ED3CF0053913B /* CSAppleWebViewCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E88CA1218ED3CF0053913B /* CSAppleWebViewCaptureViewController.m */; };
+		34E88CA4218ED3CF0053913B /* CSAppleWebViewCaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34E88CA2218ED3CF0053913B /* CSAppleWebViewCaptureViewController.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		34E88C89218DACE30053913B /* CSAppleWebViewCapturePlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSAppleWebViewCapturePlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		34E88C8C218DACE30053913B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		34E88C98218DAD050053913B /* CSAppleWebViewCapture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSAppleWebViewCapture.h; sourceTree = "<group>"; };
+		34E88C99218DAD050053913B /* CSAppleWebViewCapture.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSAppleWebViewCapture.m; sourceTree = "<group>"; };
+		34E88C9C218DAE000053913B /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		34E88CA0218ED3CF0053913B /* CSAppleWebViewCaptureViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSAppleWebViewCaptureViewController.h; sourceTree = "<group>"; };
+		34E88CA1218ED3CF0053913B /* CSAppleWebViewCaptureViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSAppleWebViewCaptureViewController.m; sourceTree = "<group>"; };
+		34E88CA2218ED3CF0053913B /* CSAppleWebViewCaptureViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CSAppleWebViewCaptureViewController.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		34E88C86218DACE30053913B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34E88C9D218DAE000053913B /* WebKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		34E88C80218DACE30053913B = {
+			isa = PBXGroup;
+			children = (
+				34E88C8B218DACE30053913B /* CSAppleWebViewCapturePlugin */,
+				34E88C8A218DACE30053913B /* Products */,
+				34E88C9B218DAE000053913B /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		34E88C8A218DACE30053913B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				34E88C89218DACE30053913B /* CSAppleWebViewCapturePlugin.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		34E88C8B218DACE30053913B /* CSAppleWebViewCapturePlugin */ = {
+			isa = PBXGroup;
+			children = (
+				34E88C8C218DACE30053913B /* Info.plist */,
+				34E88C98218DAD050053913B /* CSAppleWebViewCapture.h */,
+				34E88C99218DAD050053913B /* CSAppleWebViewCapture.m */,
+				34E88CA0218ED3CF0053913B /* CSAppleWebViewCaptureViewController.h */,
+				34E88CA1218ED3CF0053913B /* CSAppleWebViewCaptureViewController.m */,
+				34E88CA2218ED3CF0053913B /* CSAppleWebViewCaptureViewController.xib */,
+			);
+			path = CSAppleWebViewCapturePlugin;
+			sourceTree = "<group>";
+		};
+		34E88C9B218DAE000053913B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				34E88C9C218DAE000053913B /* WebKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		34E88C88218DACE30053913B /* CSAppleWebViewCapturePlugin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 34E88C8F218DACE30053913B /* Build configuration list for PBXNativeTarget "CSAppleWebViewCapturePlugin" */;
+			buildPhases = (
+				34E88C85218DACE30053913B /* Sources */,
+				34E88C86218DACE30053913B /* Frameworks */,
+				34E88C87218DACE30053913B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CSAppleWebViewCapturePlugin;
+			productName = CSAppleWebViewCapturePlugin;
+			productReference = 34E88C89218DACE30053913B /* CSAppleWebViewCapturePlugin.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		34E88C81218DACE30053913B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1010;
+				ORGANIZATIONNAME = Zakk;
+				TargetAttributes = {
+					34E88C88218DACE30053913B = {
+						CreatedOnToolsVersion = 10.1;
+					};
+				};
+			};
+			buildConfigurationList = 34E88C84218DACE30053913B /* Build configuration list for PBXProject "CSAppleWebViewCapturePlugin" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 34E88C80218DACE30053913B;
+			productRefGroup = 34E88C8A218DACE30053913B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				34E88C88218DACE30053913B /* CSAppleWebViewCapturePlugin */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		34E88C87218DACE30053913B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34E88CA4218ED3CF0053913B /* CSAppleWebViewCaptureViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		34E88C85218DACE30053913B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34E88CA3218ED3CF0053913B /* CSAppleWebViewCaptureViewController.m in Sources */,
+				34E88C9A218DAD050053913B /* CSAppleWebViewCapture.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		34E88C8D218DACE30053913B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		34E88C8E218DACE30053913B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		34E88C90218DACE30053913B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = L3JLUY4S5E;
+				INFOPLIST_FILE = CSAppleWebViewCapturePlugin/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-undefined",
+					suppress,
+					"-flat_namespace",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = zakk.lol.CSAppleWebViewCapturePlugin;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../CocoaSplit/PluginHeaders";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		34E88C91218DACE30053913B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = L3JLUY4S5E;
+				INFOPLIST_FILE = CSAppleWebViewCapturePlugin/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-undefined",
+					suppress,
+					"-flat_namespace",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = zakk.lol.CSAppleWebViewCapturePlugin;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../../CocoaSplit/PluginHeaders";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		34E88C84218DACE30053913B /* Build configuration list for PBXProject "CSAppleWebViewCapturePlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34E88C8D218DACE30053913B /* Debug */,
+				34E88C8E218DACE30053913B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		34E88C8F218DACE30053913B /* Build configuration list for PBXNativeTarget "CSAppleWebViewCapturePlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34E88C90218DACE30053913B /* Debug */,
+				34E88C91218DACE30053913B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 34E88C81218DACE30053913B /* Project object */;
+}
