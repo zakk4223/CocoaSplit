@@ -671,6 +671,9 @@ static NSArray *_sourceTypes = nil;
 }
 
 
+
+
+
 -(CGRect)globalLayoutPosition
 {
     return [self.sourceLayout.rootLayer convertRect:self.layer.frame fromLayer:self.layer.superlayer];
@@ -1609,7 +1612,7 @@ static NSArray *_sourceTypes = nil;
 {
     
     CATransform3D transform = CATransform3DIdentity;
-    transform.m34 = 1.0/-500.0;
+    //transform.m34 = 1.0/-500.0;
     
     transform  = CATransform3DRotate(transform, self.rotationAngle * M_PI / 180.0, 0.0, 0.0, 1.0);
     transform = CATransform3DRotate(transform, self.rotationAngleX * M_PI / 180.0, 1.0, 0.0, 0.0);
@@ -2032,13 +2035,23 @@ static NSArray *_sourceTypes = nil;
 -(void)frameTick
 {
     
-    
     self.layoutPosition = self.layer.frame;
+    [self willChangeValueForKey:@"x_pos"];
     _x_pos = self.layer.frame.origin.x;
+    [self didChangeValueForKey:@"x_pos"];
+    [self willChangeValueForKey:@"y_pos"];
+
     _y_pos = self.layer.frame.origin.y;
+    [self didChangeValueForKey:@"y_pos"];
+
+    [self willChangeValueForKey:@"width"];
     _width = self.layer.frame.size.width;
+    [self didChangeValueForKey:@"width"];
+    [self willChangeValueForKey:@"height"];
+
     _height = self.layer.frame.size.height;
-    
+    [self didChangeValueForKey:@"height"];
+
     [self multiChange];
 
     
@@ -2292,7 +2305,6 @@ static NSArray *_sourceTypes = nil;
             }
 
             self.layer.frame = newLayout;
-
         }
     }
     [CATransaction commit];

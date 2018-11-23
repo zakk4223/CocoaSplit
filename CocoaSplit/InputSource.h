@@ -313,6 +313,8 @@ typedef enum resize_style_t {
 @property (assign) NSSize oldSize;
 @property (assign) bool active;
 
+@property (readonly) NSRect cornerPoints;
+
 
 @property (assign) bool lockSize;
 

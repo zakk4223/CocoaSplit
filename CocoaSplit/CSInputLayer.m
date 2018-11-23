@@ -600,6 +600,7 @@
     {
         return NO;
     } else {
+        //return NSPointInRect(p, self.frame);
         return [super containsPoint:p];
     }
 }
