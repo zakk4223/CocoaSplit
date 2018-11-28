@@ -20,5 +20,17 @@
 	return [NSString stringWithFormat:formatString, [self minFrameRate]];
 }
 
+-(NSComparisonResult)compare:(AVFrameRateRange *)otherObj;
+{
+    if (self.minFrameRate < otherObj.minFrameRate)
+    {
+        return NSOrderedAscending;
+    } else if (self.minFrameRate > otherObj.minFrameRate) {
+        return NSOrderedDescending;
+    } else {
+        return NSOrderedSame;
+    }
+}
+
 
 @end

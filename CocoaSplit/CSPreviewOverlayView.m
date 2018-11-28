@@ -255,6 +255,11 @@
 
 -(void)setParentSource:(InputSource *)parentSource
 {
+    if (_parentSource && (_parentSource != parentSource))
+    {
+        [_parentSource removeObserver:self forKeyPath:@"globalLayoutPosition"];
+    }
+    
     _parentSource = parentSource;
     if (!parentSource)
     {
@@ -263,6 +268,7 @@
         NSRect myFrame = [self.previewView windowRectforWorldRect:parentSource.globalLayoutPosition];
         myFrame = NSInsetRect(myFrame, -RESIZE_HANDLE_SIZE, -RESIZE_HANDLE_SIZE);
         self.frame = myFrame;
+        [_parentSource addObserver:self forKeyPath:@"globalLayoutPosition" options:NSKeyValueObservingOptionNew context:nil];
         [self.previewView addSubview:self];
     }
 }
@@ -289,7 +295,21 @@
     return NO;
 }
 
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:@"globalLayoutPosition"])
+    {
+        [self updatePosition];
+    }
+}
 
+-(void)dealloc
+{
+    if (_parentSource)
+    {
+        [_parentSource removeObserver:self forKeyPath:@"globalLayoutPosition"];
+    }
+}
 
 @end
 

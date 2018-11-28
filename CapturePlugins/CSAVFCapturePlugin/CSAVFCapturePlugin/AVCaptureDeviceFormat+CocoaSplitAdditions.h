@@ -10,9 +10,11 @@
 
 @interface AVCaptureDeviceFormat (CocoaSplitAdditions)
 
+
 @property (readonly) NSString *localizedName;
 @property (readonly) NSDictionary *saveDictionary;
-
+@property (readonly) AVFrameRateRange *maxFramerate;
+@property (readonly) NSInteger pixelCount;
 
 -(bool) compareToDictionary:(NSDictionary *)dict;
 

@@ -10,5 +10,6 @@
 
 @interface AVFrameRateRange (CocoaSplitAdditions)
 @property (readonly) NSString *localizedName;
+-(NSComparisonResult)compare:(AVFrameRateRange *)otherObj;
 
 @end

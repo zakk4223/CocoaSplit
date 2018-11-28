@@ -52,6 +52,7 @@
         self.renderType = (frame_render_behavior)[aDecoder decodeIntForKey:@"renderType"];
 }
 
+
 +(NSString *)label
 {
     return @"Webcam Capture";
@@ -233,9 +234,24 @@
     self.captureName = newDev.captureName;
     
     self.videoFormats = _selectedVideoCaptureDevice.formats;
+    
     self.videoFramerates = _selectedVideoCaptureDevice.activeFormat.videoSupportedFrameRateRanges;
+    
+    if (!_activeVideoFormat)
+    {
+        [self switchToDefaultFormat];
+    }
 }
 
+
+-(void)switchToDefaultFormat
+{
+    NSArray *sortedFormats = [self.videoFormats sortedArrayUsingSelector:@selector(compare:)];
+    AVCaptureDeviceFormat *bestFormat = sortedFormats.lastObject;
+    AVFrameRateRange *bestFramerate = bestFormat.maxFramerate;
+    self.activeVideoFormat = bestFormat;
+    self.activeVideoFramerate = bestFramerate;
+}
 
 -(void)setIsLive:(bool)isLive
 {

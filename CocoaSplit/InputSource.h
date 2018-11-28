@@ -79,6 +79,7 @@ typedef enum resize_style_t {
 @property (assign) CGFloat crop_bottom;
 
 @property (assign) float opacity;
+@property (assign) bool resizable;
 
 @property (assign) bool is_selected;
 @property (assign) NSRect layoutPosition;
@@ -315,6 +316,7 @@ typedef enum resize_style_t {
 
 @property (readonly) NSRect cornerPoints;
 
+@property (assign) bool resizable;
 
 @property (assign) bool lockSize;
 

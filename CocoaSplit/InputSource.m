@@ -60,6 +60,8 @@ static NSArray *_sourceTypes = nil;
 @synthesize width = _width;
 @synthesize height = _height;
 @synthesize compositingFilterName = _compositingFilterName;
+@synthesize resizable = _resizable;
+
 
 
 
@@ -2036,21 +2038,34 @@ static NSArray *_sourceTypes = nil;
 {
     
     self.layoutPosition = self.layer.frame;
-    [self willChangeValueForKey:@"x_pos"];
-    _x_pos = self.layer.frame.origin.x;
-    [self didChangeValueForKey:@"x_pos"];
-    [self willChangeValueForKey:@"y_pos"];
+    
+    if (_x_pos != self.layer.frame.origin.x)
+    {
+        [self willChangeValueForKey:@"x_pos"];
+        _x_pos = self.layer.frame.origin.x;
+        [self didChangeValueForKey:@"x_pos"];
+    }
+    
+    if (_y_pos != self.layer.frame.origin.y)
+    {
+        [self willChangeValueForKey:@"y_pos"];
+        _y_pos = self.layer.frame.origin.y;
+        [self didChangeValueForKey:@"y_pos"];
+    }
 
-    _y_pos = self.layer.frame.origin.y;
-    [self didChangeValueForKey:@"y_pos"];
-
-    [self willChangeValueForKey:@"width"];
-    _width = self.layer.frame.size.width;
-    [self didChangeValueForKey:@"width"];
-    [self willChangeValueForKey:@"height"];
-
-    _height = self.layer.frame.size.height;
-    [self didChangeValueForKey:@"height"];
+    if (_width != self.layer.frame.size.width)
+    {
+        [self willChangeValueForKey:@"width"];
+        _width = self.layer.frame.size.width;
+        [self didChangeValueForKey:@"width"];
+    }
+    
+    if (_height != self.layer.frame.size.height)
+    {
+        [self willChangeValueForKey:@"height"];
+        _height = self.layer.frame.size.height;
+        [self didChangeValueForKey:@"height"];
+    }
 
     [self multiChange];
 
@@ -2174,7 +2189,33 @@ static NSArray *_sourceTypes = nil;
 }
 
 
+-(bool)angleIsRegular:(float)angle
+{
+    
+    
+    if (fmodf(angle, 90.0f) != 0.0) //Not an integer
+    {
+        return NO;
+    }
 
+    return YES;
+}
+
+-(bool)resizable
+{
+    if (![self angleIsRegular:self.rotationAngle])
+    {
+        return NO;
+    }
+    
+    return _resizable;
+}
+
+
+-(void)setResizable:(bool)resizable
+{
+    _resizable = resizable;
+}
 
 
 -(void) directSize:(CGFloat)width height:(CGFloat)height
@@ -2213,10 +2254,16 @@ static NSArray *_sourceTypes = nil;
     } else {
         height = width/inputAR;
     }
-
+    
+    
     resize_style resizeSave = self.resizeType;
     self.resizeType = kResizeTop | kResizeRight | kResizeFree;
-    [self updateSize:width height:height];
+    if (self.rotationAngle == 90 || self.rotationAngle == -90)
+    {
+        [self updateSize:height height:width];
+    } else {
+        [self updateSize:width height:height];
+    }
     self.resizeType = resizeSave;
 }
 
@@ -3733,6 +3780,10 @@ static NSArray *_sourceTypes = nil;
     }
 }
 
++(NSSet *)keyPathsForValuesAffectingGlobalLayoutPosition
+{
+    return [NSSet setWithObjects:@"x_pos", @"y_pos", @"height", @"width", nil];
+}
 
 
 
