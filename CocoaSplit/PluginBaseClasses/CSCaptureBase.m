@@ -87,7 +87,6 @@
         _fps_start_time = CFAbsoluteTimeGetCurrent();
         _fps_frame_cnt = 0;
         
-        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateStatistics:) name:CSNotificationStatisticsUpdate object:nil];
     }
     

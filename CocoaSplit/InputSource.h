@@ -252,6 +252,7 @@ typedef enum resize_style_t {
     NSDictionary *_undoActionMap;
     float _croppedAR;
     NSMutableArray *_frameUpdateQueue;
+    NSSize _previousSize;
     
     
     

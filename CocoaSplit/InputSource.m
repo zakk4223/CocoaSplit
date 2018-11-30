@@ -745,6 +745,7 @@ static NSArray *_sourceTypes = nil;
     _needsAdjustPosition = NO;
     _topLevelHeight = 0;
     _topLevelWidth = 0;
+    _previousSize = NSZeroSize;
     _frameUpdateQueue = [NSMutableArray array];
     self.changeInterval = 20.0f;
     
@@ -2094,6 +2095,21 @@ static NSArray *_sourceTypes = nil;
     [self.videoInput frameTickFromInput:self];
     
     [self.layer frameTick];
+    NSSize capSize = self.videoInput.captureSize;
+    
+    if (!NSEqualSizes(capSize, _previousSize) )
+    {
+        if (!NSEqualSizes(NSZeroSize, _previousSize))
+        {
+            resize_style resizeSave = self.resizeType;
+            self.resizeType = kResizeCenter | kResizeFree;
+            [self updateSize:capSize.width height:capSize.height];
+            self.resizeType = resizeSave;
+        }
+        _previousSize = capSize;
+    }
+    
+    
     if (self.needsAdjustment)
     {
         [self adjustInputSize:self.needsAdjustPosition];
