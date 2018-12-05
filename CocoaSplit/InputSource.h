@@ -60,6 +60,9 @@ typedef enum resize_style_t {
 @property (assign) bool isMaskLayer;
 
 @property (strong) NSString *compositingFilterName;
+@property (assign) CALayerContentsFilter upscaleFilter;
+@property (assign) CALayerContentsFilter downscaleFilter;
+@property (assign) float downscaleFilterBias;
 
 
 @property (assign) bool skipSave;

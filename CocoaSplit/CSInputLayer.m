@@ -470,7 +470,9 @@
     toLayer.transform = _sourceLayer.transform;
     //toLayer.delegate = self;
     toLayer.actions = @{@"position": NSNull.null, @"bounds":NSNull.null, @"contentsRect":NSNull.null};
-    
+    toLayer.minificationFilterBias = _sourceLayer.minificationFilterBias;
+    toLayer.magnificationFilter = _sourceLayer.magnificationFilter;
+    toLayer.minificationFilter = _sourceLayer.minificationFilter;
 }
 
 
@@ -546,6 +548,9 @@
     [self setNeedsLayout];
     if (_sourceLayer)
     {
+        _sourceLayer.minificationFilterBias = self.minificationFilterBias;
+        _sourceLayer.magnificationFilter = self.magnificationFilter;
+        _sourceLayer.minificationFilter = self.minificationFilter;
         [_sourceLayer layoutIfNeeded];
     }
     
@@ -555,7 +560,35 @@
     [CATransaction commit];
 }
 
+-(void)setMinificationFilter:(CALayerContentsFilter)minificationFilter
+{
+    if (_sourceLayer)
+    {
+        _sourceLayer.minificationFilter = minificationFilter;
+    }
+    
+    super.minificationFilter = minificationFilter;
+}
 
+-(void)setMagnificationFilter:(CALayerContentsFilter)magnificationFilter
+{
+    if (_sourceLayer)
+    {
+        _sourceLayer.magnificationFilter = magnificationFilter;
+    }
+    
+    super.magnificationFilter = magnificationFilter;
+}
+
+-(void)setMinificationFilterBias:(float)minificationFilterBias
+{
+    if (_sourceLayer)
+    {
+        _sourceLayer.minificationFilterBias = minificationFilterBias;
+    }
+    
+    super.minificationFilterBias = minificationFilterBias;
+}
 
 
 //If the layout isn't forced weird stuff happens, I dunno.

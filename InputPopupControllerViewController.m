@@ -58,6 +58,8 @@
         self.scriptTypes = @[@"After Add", @"Before Delete", @"FrameTick", @"Before Merge", @"After Merge", @"Before Remove", @"Before Replace", @"After Replace"];
         self.scriptKeys = @[@"selection.script_afterAdd", @"selection.script_beforeDelete", @"selection.script_frameTick", @"selection.script_beforeMerge", @"selection.script_afterMerge", @"selection.script_beforeRemove", @"selection.script_beforeReplace", @"selection.script_afterReplace"];
 
+        self.resizeFilters = @[kCAFilterLinear, kCAFilterNearest, kCAFilterTrilinear];
+        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(colorWellActivate:) name:@"CSColorWellActivated" object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(colorWellDeactivate:) name:@"CSColorWellDeactivated" object:nil];
 

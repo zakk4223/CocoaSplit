@@ -272,6 +272,9 @@ static NSArray *_sourceTypes = nil;
     
     [aCoder encodeBool:self.alwaysDisplay forKey:@"alwaysDisplay"];
     [aCoder encodeBool:self.transitionEnabled forKey:@"transitionEnabled"];
+    [aCoder encodeObject:self.downscaleFilter forKey:@"downscaleFilter"];
+    [aCoder encodeObject:self.upscaleFilter forKey:@"upscaleFilter"];
+    [aCoder encodeFloat:self.downscaleFilterBias forKey:@"downscaleFilterBias"];
 }
 
 
@@ -514,6 +517,21 @@ static NSArray *_sourceTypes = nil;
             [self makeSublayerOfLayer:self.parentInput.layer];
             [[self.parentInput mutableArrayValueForKey:@"attachedInputs"] addObject:self];
         }
+        
+        CALayerContentsFilter tmpFilter = nil;
+        tmpFilter = [aDecoder decodeObjectForKey:@"downscaleFilter"];
+        if (tmpFilter)
+        {
+            self.downscaleFilter = tmpFilter;
+        }
+        
+        tmpFilter = [aDecoder decodeObjectForKey:@"upscaleFilter"];
+        if (tmpFilter)
+        {
+            self.upscaleFilter = tmpFilter;
+        }
+        
+        self.downscaleFilterBias = [aDecoder decodeFloatForKey:@"downscaleFilterBias"];
         
         id constraintData = [aDecoder decodeObjectForKey:@"constraintMap"];
         NSMutableDictionary *tmpConstraints;
@@ -2429,6 +2447,38 @@ static NSArray *_sourceTypes = nil;
     toDetach.persistent = NO;
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputDetached object:toDetach userInfo:nil];
 
+}
+
+
+-(void)setUpscaleFilter:(CALayerContentsFilter)upscaleFilter
+{
+    self.layer.sourceLayer.magnificationFilter = upscaleFilter;
+}
+
+-(CALayerContentsFilter)upscaleFilter
+{
+    return self.layer.magnificationFilter;
+}
+
+-(void)setDownscaleFilter:(CALayerContentsFilter)downscaleFilter
+{
+    
+    self.layer.minificationFilter = downscaleFilter;
+}
+
+-(CALayerContentsFilter)downscaleFilter
+{
+    return self.layer.minificationFilter;
+}
+
+-(float)downscaleFilterBias
+{
+    return self.layer.minificationFilterBias;
+}
+
+-(void)setDownscaleFilterBias:(float)downscaleFilterBias
+{
+    self.layer.minificationFilterBias = downscaleFilterBias;
 }
 
 

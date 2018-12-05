@@ -67,6 +67,7 @@
 @property (strong) NSViewController *inputConfigViewController;
 @property (strong) NSArray *scriptTypes;
 @property (strong) NSArray *scriptKeys;
+@property (strong) NSArray *resizeFilters;
 @property (unsafe_unretained) IBOutlet NSTextView *scriptTextView;
 @property (weak) IBOutlet NSTableView *scriptTableView;
 @property (strong) IBOutlet CSLayerFiltersViewController *backgroundFilterViewController;
