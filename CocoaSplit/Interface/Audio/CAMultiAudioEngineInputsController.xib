@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14313.18"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -39,10 +39,10 @@
                     </connections>
                 </button>
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="S7b-CH-xll" customClass="CSAudioLevelView">
-                    <rect key="frame" x="22" y="0.0" width="424" height="20"/>
+                    <rect key="frame" x="21" y="0.0" width="425" height="20"/>
                     <subviews>
                         <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5gm-ul-8QU">
-                            <rect key="frame" x="0.0" y="-1" width="449" height="22"/>
+                            <rect key="frame" x="0.0" y="-1" width="450" height="22"/>
                             <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" maxValue="1" doubleValue="0.53607753537735847" tickMarkPosition="above" sliderType="linear" id="SpI-Hf-Vj8" customClass="CSNobarSliderCell"/>
                             <connections>
                                 <binding destination="-2" name="value" keyPath="self.multiAudioEngineController.selection.encodeMixer.volume" id="H7b-1t-Whl"/>
@@ -525,7 +525,7 @@
                 <constraint firstItem="XUd-qr-99U" firstAttribute="bottom" secondItem="S7b-CH-xll" secondAttribute="bottom" id="sSK-HZ-DN6"/>
                 <constraint firstItem="XUd-qr-99U" firstAttribute="trailing" secondItem="COx-Qs-W2l" secondAttribute="trailing" id="tJh-AH-BFy"/>
                 <constraint firstItem="f5e-pB-VTH" firstAttribute="bottom" secondItem="S7b-CH-xll" secondAttribute="bottom" id="xWc-Tg-6UH"/>
-                <constraint firstItem="S7b-CH-xll" firstAttribute="leading" secondItem="f5e-pB-VTH" secondAttribute="trailing" id="ygg-iN-vDY"/>
+                <constraint firstItem="S7b-CH-xll" firstAttribute="leading" secondItem="f5e-pB-VTH" secondAttribute="trailing" constant="-1" id="ygg-iN-vDY"/>
             </constraints>
             <point key="canvasLocation" x="35" y="147"/>
         </customView>
