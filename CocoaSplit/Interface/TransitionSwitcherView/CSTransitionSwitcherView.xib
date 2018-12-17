@@ -20,9 +20,9 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <scrollView wantsLayer="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OY7-6n-8ZL">
-                    <rect key="frame" x="0.0" y="20" width="417" height="404"/>
+                    <rect key="frame" x="0.0" y="18" width="417" height="406"/>
                     <clipView key="contentView" drawsBackground="NO" id="U3u-Ha-zS2">
-                        <rect key="frame" x="1" y="1" width="415" height="402"/>
+                        <rect key="frame" x="1" y="1" width="415" height="404"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView selectable="YES" maxNumberOfColumns="3" id="3WW-Af-TVL">
@@ -48,10 +48,10 @@
                     </scroller>
                 </scrollView>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lzB-E6-y5d">
-                    <rect key="frame" x="0.0" y="-1" width="25" height="23"/>
+                    <rect key="frame" x="0.0" y="-1" width="20" height="21"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="21" id="cxx-Ks-fML"/>
-                        <constraint firstAttribute="width" constant="25" id="ifT-rH-Y2v"/>
+                        <constraint firstAttribute="width" constant="20" id="ifT-rH-Y2v"/>
+                        <constraint firstAttribute="height" constant="19" id="mB7-oz-Ns4"/>
                     </constraints>
                     <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="5O1-Yk-D0S">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -62,17 +62,17 @@
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pxt-bJ-cW7">
-                    <rect key="frame" x="24" y="-1" width="278" height="23"/>
+                    <rect key="frame" x="19" y="-1" width="283" height="21"/>
                     <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="dCu-IR-46b">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                 </button>
                 <stackView orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" translatesAutoresizingMaskIntoConstraints="NO" id="Y6T-fk-6B1">
-                    <rect key="frame" x="302" y="3" width="108" height="15"/>
+                    <rect key="frame" x="302" y="3" width="108" height="13"/>
                     <beginningViews>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wxE-gG-AY4">
-                            <rect key="frame" x="-2" y="1" width="49" height="14"/>
+                            <rect key="frame" x="-2" y="0.0" width="49" height="13"/>
                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Duration" id="lDt-aF-t9Z">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -80,7 +80,7 @@
                             </textFieldCell>
                         </textField>
                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tTk-IC-FBg">
-                            <rect key="frame" x="53" y="0.0" width="55" height="15"/>
+                            <rect key="frame" x="53" y="0.0" width="55" height="13"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="55" id="mxU-Oh-FUg"/>
                             </constraints>

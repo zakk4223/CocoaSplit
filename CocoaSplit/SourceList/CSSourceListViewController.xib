@@ -19,6 +19,55 @@
             <rect key="frame" x="0.0" y="0.0" width="388" height="549"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
             <subviews>
+                <button toolTip="New Source" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="XR0-Va-dH5" userLabel="Add button">
+                    <rect key="frame" x="0.0" y="-1" width="20" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="20" id="vci-2M-nrn"/>
+                    </constraints>
+                    <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cNQ-vo-365">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="sourceAddClicked:" target="-2" id="II0-6P-k0y"/>
+                    </connections>
+                </button>
+                <button toolTip="Remove Source" verticalHuggingPriority="750" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="Jmz-nq-hkI" userLabel="Remove Button">
+                    <rect key="frame" x="19" y="-1" width="20" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="20" id="ocN-Hg-ymi"/>
+                    </constraints>
+                    <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Wmu-iY-ogf">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <string key="keyEquivalent" base64-UTF8="YES">
+CA
+</string>
+                    </buttonCell>
+                    <connections>
+                        <action selector="sourceDeleteClicked:" target="-2" id="MGF-R9-ocx"/>
+                    </connections>
+                </button>
+                <button toolTip="Configure Source" verticalHuggingPriority="750" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="StZ-ck-v7R" userLabel="Settings Button">
+                    <rect key="frame" x="37" y="-1" width="20" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="20" id="soa-Jk-qua"/>
+                    </constraints>
+                    <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSActionTemplate" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="AxO-tS-Wbt">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="sourceConfigClicked:" target="-2" id="WLx-ix-ZqE"/>
+                    </connections>
+                </button>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OQF-xD-ieU" userLabel="Padding Area">
+                    <rect key="frame" x="57" y="-1" width="331" height="21"/>
+                    <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" enabled="NO" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2U7-lK-ijL">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                    </buttonCell>
+                </button>
                 <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8EI-tH-OAZ">
                     <rect key="frame" x="0.0" y="18" width="388" height="531"/>
                     <clipView key="contentView" id="21w-PW-5cm">
@@ -122,55 +171,6 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                 </scrollView>
-                <button toolTip="New Source" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="XR0-Va-dH5" userLabel="Add button">
-                    <rect key="frame" x="0.0" y="-1" width="20" height="21"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="20" id="vci-2M-nrn"/>
-                    </constraints>
-                    <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cNQ-vo-365">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="sourceAddClicked:" target="-2" id="II0-6P-k0y"/>
-                    </connections>
-                </button>
-                <button toolTip="Remove Source" verticalHuggingPriority="750" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="Jmz-nq-hkI" userLabel="Remove Button">
-                    <rect key="frame" x="19" y="-1" width="20" height="21"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="20" id="ocN-Hg-ymi"/>
-                    </constraints>
-                    <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Wmu-iY-ogf">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                        <string key="keyEquivalent" base64-UTF8="YES">
-CA
-</string>
-                    </buttonCell>
-                    <connections>
-                        <action selector="sourceDeleteClicked:" target="-2" id="MGF-R9-ocx"/>
-                    </connections>
-                </button>
-                <button toolTip="Configure Source" verticalHuggingPriority="750" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="StZ-ck-v7R" userLabel="Settings Button">
-                    <rect key="frame" x="37" y="-1" width="20" height="21"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="20" id="soa-Jk-qua"/>
-                    </constraints>
-                    <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSActionTemplate" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="AxO-tS-Wbt">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="sourceConfigClicked:" target="-2" id="WLx-ix-ZqE"/>
-                    </connections>
-                </button>
-                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OQF-xD-ieU" userLabel="Padding Area">
-                    <rect key="frame" x="57" y="-1" width="331" height="21"/>
-                    <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" enabled="NO" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2U7-lK-ijL">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                    </buttonCell>
-                </button>
             </subviews>
             <constraints>
                 <constraint firstItem="8EI-tH-OAZ" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="1a6-NJ-CS7"/>
