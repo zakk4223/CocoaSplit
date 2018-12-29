@@ -84,6 +84,7 @@
 		343C2CBB1FFCD28C00849DA9 /* CAMultiAudioEffectsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 343C2CB91FFCD28C00849DA9 /* CAMultiAudioEffectsViewController.xib */; };
 		343C2CBE1FFCE73000849DA9 /* CSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 343C2CBD1FFCE73000849DA9 /* CSViewController.m */; };
 		343C79ED1D0C796E00B36EEC /* CSFFMpegCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 343C79CC1D0C763A00B36EEC /* CSFFMpegCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		343CE08F21D3705800233909 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 343CE07321D3705800233909 /* Metal.framework */; };
 		343ED9421BCAC1C80061FC4B /* EditBuiltinLayoutView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 343ED9411BCAC1C80061FC4B /* EditBuiltinLayoutView.xib */; };
 		34403665207B4E48004BC514 /* CIFilter+BindableDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 34403664207B4E48004BC514 /* CIFilter+BindableDescription.m */; };
 		344036862080B817004BC514 /* CSMixerStreamServicePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 3440367D2080AF72004BC514 /* CSMixerStreamServicePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -96,6 +97,7 @@
 		3441269F1E6D0C4C0051DA06 /* CSLayoutSwitcherHostingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3441269E1E6D0C4C0051DA06 /* CSLayoutSwitcherHostingView.m */; };
 		344126A21E6DBBEE0051DA06 /* CSLayoutSwitcherView.m in Sources */ = {isa = PBXBuildFile; fileRef = 344126A11E6DBBEE0051DA06 /* CSLayoutSwitcherView.m */; };
 		3444D8E819A0CDE8000DC46B /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3444D8E719A0CDE8000DC46B /* Quartz.framework */; };
+		3445E7E121D57E07009D628D /* CSPreviewCALayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3445E7E021D57E07009D628D /* CSPreviewCALayer.m */; };
 		344825D21B2536EA00AF9EAC /* CAMultiAudioMatrixView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 344825D11B2536EA00AF9EAC /* CAMultiAudioMatrixView.xib */; };
 		344825E61B253D6900AF9EAC /* CAMultiAudioMatrixCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 344825E51B253D6900AF9EAC /* CAMultiAudioMatrixCell.m */; };
 		344988131893CF0500044259 /* LogWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 344988121893CF0500044259 /* LogWindow.xib */; };
@@ -129,6 +131,7 @@
 		345F8B751A17A785009A81E3 /* CAMultiAudioMixer.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B741A17A785009A81E3 /* CAMultiAudioMixer.m */; };
 		345F8B791A183D1D009A81E3 /* CAMultiAudioEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 345F8B781A183D1D009A81E3 /* CAMultiAudioEngine.m */; };
 		346395052018483300556407 /* CSPcmPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 346395042018483300556407 /* CSPcmPlayer.m */; };
+		3464C7C721D5F82D0042A4AD /* CSSnapOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3464C7C621D5F82D0042A4AD /* CSSnapOverlayView.m */; };
 		346544DC1FC22CF0003B9991 /* CSNSButtonCellThemed.m in Sources */ = {isa = PBXBuildFile; fileRef = 346544DB1FC22CF0003B9991 /* CSNSButtonCellThemed.m */; };
 		346544DF1FC24248003B9991 /* NSImage+tintedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 346544DE1FC24248003B9991 /* NSImage+tintedImage.m */; };
 		346544E21FC2457E003B9991 /* CSNSImageCellThemed.m in Sources */ = {isa = PBXBuildFile; fileRef = 346544E11FC2457E003B9991 /* CSNSImageCellThemed.m */; };
@@ -739,6 +742,7 @@
 		343C2CBC1FFCE73000849DA9 /* CSViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSViewController.h; path = Interface/CSViewController.h; sourceTree = "<group>"; };
 		343C2CBD1FFCE73000849DA9 /* CSViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CSViewController.m; path = Interface/CSViewController.m; sourceTree = "<group>"; };
 		343C79C31D0C763A00B36EEC /* CSFFMpegCapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSFFMpegCapturePlugin.xcodeproj; path = CSFFMpegCapturePlugin/CSFFMpegCapturePlugin.xcodeproj; sourceTree = "<group>"; };
+		343CE07321D3705800233909 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/System/Library/Frameworks/Metal.framework; sourceTree = DEVELOPER_DIR; };
 		343DD65919AAD3060017232A /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
 		343DD65C19AAD3060017232A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		343DD65E19AAD3060017232A /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
@@ -763,10 +767,13 @@
 		344126A11E6DBBEE0051DA06 /* CSLayoutSwitcherView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSLayoutSwitcherView.m; path = Interface/CSLayoutSwitcherView.m; sourceTree = "<group>"; };
 		34414E512019C06B00CD9DCE /* CSCaptureBaseInternal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSCaptureBaseInternal.h; sourceTree = "<group>"; };
 		3444D8E719A0CDE8000DC46B /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
+		3445E7DF21D57E07009D628D /* CSPreviewCALayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSPreviewCALayer.h; sourceTree = "<group>"; };
+		3445E7E021D57E07009D628D /* CSPreviewCALayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSPreviewCALayer.m; sourceTree = "<group>"; };
 		3446F05420105F0500977BBA /* CSNDICapturePlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSNDICapturePlugin.xcodeproj; path = CSNDICapturePlugin/CSNDICapturePlugin.xcodeproj; sourceTree = "<group>"; };
 		344825D11B2536EA00AF9EAC /* CAMultiAudioMatrixView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CAMultiAudioMatrixView.xib; path = ../../CAMultiAudioMatrixView.xib; sourceTree = "<group>"; };
 		344825E41B253D6900AF9EAC /* CAMultiAudioMatrixCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAMultiAudioMatrixCell.h; sourceTree = "<group>"; };
 		344825E51B253D6900AF9EAC /* CAMultiAudioMatrixCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CAMultiAudioMatrixCell.m; sourceTree = "<group>"; };
+		344828A821D4C6E500D34A51 /* CSPreviewRendererLayer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSPreviewRendererLayer.h; sourceTree = "<group>"; };
 		344988121893CF0500044259 /* LogWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LogWindow.xib; path = Interface/LogWindow.xib; sourceTree = "<group>"; };
 		344DE4261FFB0FEE00196E2E /* CAMultiAudioEffectWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAMultiAudioEffectWindow.h; sourceTree = "<group>"; };
 		344DE4271FFB0FEE00196E2E /* CAMultiAudioEffectWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CAMultiAudioEffectWindow.m; sourceTree = "<group>"; };
@@ -831,6 +838,8 @@
 		345F8B781A183D1D009A81E3 /* CAMultiAudioEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioEngine.m; path = CAMultiAudio/CAMultiAudioEngine.m; sourceTree = "<group>"; };
 		345F8B7B1A184FBC009A81E3 /* CAMultiAudioMixingProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAMultiAudioMixingProtocol.h; sourceTree = "<group>"; };
 		346395042018483300556407 /* CSPcmPlayer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSPcmPlayer.m; sourceTree = "<group>"; };
+		3464C7C521D5F82D0042A4AD /* CSSnapOverlayView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSSnapOverlayView.h; sourceTree = "<group>"; };
+		3464C7C621D5F82D0042A4AD /* CSSnapOverlayView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSSnapOverlayView.m; sourceTree = "<group>"; };
 		346544DA1FC22CF0003B9991 /* CSNSButtonCellThemed.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSNSButtonCellThemed.h; path = Interface/CSNSButtonCellThemed.h; sourceTree = "<group>"; };
 		346544DB1FC22CF0003B9991 /* CSNSButtonCellThemed.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CSNSButtonCellThemed.m; path = Interface/CSNSButtonCellThemed.m; sourceTree = "<group>"; };
 		346544DD1FC24248003B9991 /* NSImage+tintedImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSImage+tintedImage.h"; sourceTree = "<group>"; };
@@ -1221,6 +1230,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				343CE08F21D3705800233909 /* Metal.framework in Frameworks */,
 				3440368A2081FE3E004BC514 /* GLKit.framework in Frameworks */,
 				3409A7711FA0D80A0073866E /* OpenCL.framework in Frameworks */,
 				34EB705D1F276EAD00F61E6A /* CoreAudioKit.framework in Frameworks */,
@@ -1348,6 +1358,7 @@
 		340FE4A015F3417E00E4CE4E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				343CE07321D3705800233909 /* Metal.framework */,
 				348DF1D42120E2C000144132 /* Sparkle.framework */,
 				344036892081FE3E004BC514 /* GLKit.framework */,
 				3409A7721FA0EA340073866E /* libc++.1.tbd */,
@@ -1463,6 +1474,8 @@
 				34DC2FAE1B512362008F12A2 /* CSCaptureBase+TimerDelegate.h */,
 				34DC2FAF1B512362008F12A2 /* CSCaptureBase+TimerDelegate.m */,
 				34BB297F1B7652EA00F201C2 /* CSPreviewGLLayer.h */,
+				3445E7DF21D57E07009D628D /* CSPreviewCALayer.h */,
+				3445E7E021D57E07009D628D /* CSPreviewCALayer.m */,
 				34BB29801B7652EA00F201C2 /* CSPreviewGLLayer.m */,
 				34AB1C2F1B944F48003F2C03 /* CSPreviewOverlayView.h */,
 				34AB1C301B944F48003F2C03 /* CSPreviewOverlayView.m */,
@@ -1502,6 +1515,9 @@
 				3432D4112061F17400F4680C /* CSRootLayer.m */,
 				34403663207B4E48004BC514 /* CIFilter+BindableDescription.h */,
 				34403664207B4E48004BC514 /* CIFilter+BindableDescription.m */,
+				344828A821D4C6E500D34A51 /* CSPreviewRendererLayer.h */,
+				3464C7C521D5F82D0042A4AD /* CSSnapOverlayView.h */,
+				3464C7C621D5F82D0042A4AD /* CSSnapOverlayView.m */,
 			);
 			path = CocoaSplit;
 			sourceTree = "<group>";
@@ -2873,6 +2889,7 @@
 				34788DE71EF6753900C3C9C5 /* CSJSProxyObj.m in Sources */,
 				34FEF90A203C106A0006A676 /* CSAddOutputPopupViewController.m in Sources */,
 				34ED8C7B1B07371C002C0674 /* MIKMIDIMetaInstrumentNameEvent.m in Sources */,
+				3445E7E121D57E07009D628D /* CSPreviewCALayer.m in Sources */,
 				34F80D701EDCBE5100D890D3 /* CSScriptCommand.m in Sources */,
 				34ED8C8B1B07371C002C0674 /* MIKMIDIMetronome.m in Sources */,
 				34564D5F2071C4BC00652BF0 /* CSInputLayoutTransitionViewController.m in Sources */,
@@ -2961,6 +2978,7 @@
 				34ED8CB71B073C1B002C0674 /* CSMidiManagerWindowController.m in Sources */,
 				3408235519BC677A00CD1F5F /* CSNotifications.m in Sources */,
 				347B14DC198492D900DC7DF0 /* InputPopupControllerViewController.m in Sources */,
+				3464C7C721D5F82D0042A4AD /* CSSnapOverlayView.m in Sources */,
 				34C0EA411EB64D8E00B30DB4 /* CSLayoutRecorder.m in Sources */,
 				34BB29811B7652EA00F201C2 /* CSPreviewGLLayer.m in Sources */,
 				34CACC991FB886FB00C04BC6 /* CSUserNotificationController.m in Sources */,

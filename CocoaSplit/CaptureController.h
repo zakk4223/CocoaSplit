@@ -161,9 +161,13 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (weak) IBOutlet NSButton *streamButton;
 @property (strong) NSString *layoutScriptLabel;
 @property (strong) CSLayoutRecorder *mainLayoutRecorder;
+@property (strong) CSLayoutRecorder *stagingLayoutRecorder;
 @property (readonly) SourceLayout *activeLayout;
 @property (strong) CSTransitionBase *activeTransition;
 @property (strong) NSDate *streamStartDate;
+@property (assign) bool metalAvailable;
+@property (assign) bool useMetalIfAvailable;
+
 
 
 -(IBAction)hideTransitionView:(id)sender;
@@ -519,6 +523,7 @@ NSArray *_savedTransitionConstraints;
 @property (weak) IBOutlet NSButton *streamButton; 
 @property (strong) NSString *layoutScriptLabel;
 @property (strong) CSLayoutRecorder *mainLayoutRecorder;
+@property (strong) CSLayoutRecorder *stagingLayoutRecorder;
 @property (readonly) SourceLayout *activeLayout;
 @property (strong) NSMutableSet *audioFileUTIs;
 @property (weak) IBOutlet NSView *layoutTransitionConfigView;
@@ -532,6 +537,9 @@ NSArray *_savedTransitionConstraints;
 @property (strong) NSMutableArray *transitions;
 @property (strong) CSTransitionBase *activeTransition;
 @property (strong) NSDate *streamStartDate;
+@property (assign) bool metalAvailable;
+@property (assign) bool useMetalIfAvailable;
+
 
 -(JSContext *)setupJavascriptContext;
 -(JSContext *)setupJavascriptContext:(JSVirtualMachine *)machine;

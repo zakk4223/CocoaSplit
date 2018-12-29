@@ -12,6 +12,7 @@
 #import "SourceLayout.h"
 #import "CreateLayoutViewController.h"
 #import "CSLayoutRecorder.h"
+#import "CSPreviewCALayer.h"
 
 //wtf apple
 
@@ -57,17 +58,6 @@
 -(void)setSelectedSource:(InputSource *)selectedSource
 {
     _selectedSource = selectedSource;
-    if (_glLayer)
-    {
-        _glLayer.outlineSource = selectedSource;
-        if (selectedSource)
-        {
-            _glLayer.doSnaplines = YES;
-        } else {
-            _glLayer.doSnaplines = NO;
-        }
-    }
-    
 }
 
 -(InputSource *)selectedSource
@@ -79,6 +69,13 @@
 -(void)setMousedSource:(InputSource *)mousedSource
 {
     _mousedSource = mousedSource;
+    if (!_mousedSource)
+    {
+        if (_snapOverlay)
+        {
+            _snapOverlay.drawLines = @[];
+        }
+    }
 }
 
 -(InputSource *)mousedSource
@@ -866,6 +863,7 @@
     NSPoint *c_snaps;
     int c_snap_size = 0;
     
+    
     if (!self.selectedSource)
     {
         return;
@@ -1002,10 +1000,30 @@
         }
     }
     
+    if (_snapOverlay)
+    {
+        NSMutableArray *snapRects = [NSMutableArray array];
+        if (_snap_x > -1)
+        {
+            NSRect snapXRect = NSMakeRect(_snap_x, 0, 0, self.sourceLayout.canvas_height);
+            NSRect translatedRect = [self windowRectforWorldRect:snapXRect];
+            [snapRects addObject:[NSValue valueWithRect:translatedRect]];
+        }
+        
+        if (_snap_y > -1)
+        {
+            NSRect snapYRect = NSMakeRect(0, _snap_y, self.sourceLayout.canvas_width, 0);
+            NSRect translatedRect = [self windowRectforWorldRect:snapYRect];
+            [snapRects addObject:[NSValue valueWithRect:translatedRect]];
+        }
+        _snapOverlay.drawLines = snapRects;
+    }
+    
+    
     if (_glLayer)
     {
-        _glLayer.snap_x = _snap_x;
-        _glLayer.snap_y  = _snap_y;
+        //_glLayer.snap_x = _snap_x;
+        //_glLayer.snap_y  = _snap_y;
     }
     
     if (c_snaps)
@@ -1755,7 +1773,11 @@
     
     self.activeConfigWindows = [NSMutableDictionary dictionary];
     self.activeConfigControllers = [NSMutableDictionary dictionary];
+    _snapOverlay = [[CSSnapOverlayView alloc] init];
+    _snapOverlay.autoresizingMask = NSViewHeightSizable|NSViewWidthSizable;
+    _snapOverlay.frame = self.bounds;
     
+    [self addSubview:_snapOverlay];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sourceWasDeleted:) name:CSNotificationInputDeleted object:nil];
     
@@ -1892,7 +1914,13 @@
 
 -(CALayer *)makeBackingLayer
 {
-    _glLayer = [CSPreviewGLLayer layer];
+    if (CaptureController.sharedCaptureController.useMetalIfAvailable)
+    {
+        _glLayer = [CSPreviewCALayer layer];
+    } else {
+        _glLayer = [CSPreviewGLLayer layer];
+
+    }
     _glLayer.doRender = self.isEditWindow;
     return _glLayer;
 }

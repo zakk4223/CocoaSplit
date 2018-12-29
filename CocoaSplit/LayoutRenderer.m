@@ -6,7 +6,9 @@
 //  Copyright (c) 2015 Zakk. All rights reserved.
 //
 
+#import "CaptureController.h"
 #import "LayoutRenderer.h"
+#import <Metal/Metal.h>
 
 @implementation LayoutRenderer
 @synthesize layout = _layout;
@@ -17,6 +19,17 @@
     if (self = [super init])
     {
         _layoutChanged = NO;
+        bool systemMetal = CaptureController.sharedCaptureController.useMetalIfAvailable;
+        
+        if (systemMetal && [CARenderer instancesRespondToSelector:@selector(setDestination:)])
+        {
+            _useMetalRenderer = YES; //CArenderer supports swapping the destination Metal texture on the fly
+            _metalDevice = MTLCreateSystemDefaultDevice();
+            [self createMetalTextureCache];
+            
+        } else {
+            _useMetalRenderer = NO;
+        }
     }
     
     return self;
@@ -77,18 +90,37 @@
     }
     
     
-    if (!self.cglCtx)
+    if (!_useMetalRenderer)
     {
-        [self createCGLContext];
+        if (!self.cglCtx)
+        {
+            [self createCGLContext];
+        }
+        CGLSetCurrentContext(self.cglCtx);
     }
     
-    
-    CGLSetCurrentContext(self.cglCtx);
     
     if (!self.renderer)
     {
-        self.renderer = [CARenderer rendererWithCGLContext:self.cglCtx options:nil];
+        if (_useMetalRenderer)
+        {
+            //A bit wasteful, but only for the initial frame
+            CVPixelBufferRef dummyFrame = NULL;
+            
+            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, _cvpool, &dummyFrame);
+            CVMetalTextureRef dummyTexture = NULL;
+            
+            CVMetalTextureCacheCreateTextureFromImage(NULL, _cvmetalcache, dummyFrame, NULL, MTLPixelFormatBGRA8Unorm, CVPixelBufferGetWidth(dummyFrame), CVPixelBufferGetHeight(dummyFrame), 0, &dummyTexture);
+            if (@available(macOS 10.13, *)) {
+                self.renderer = [CARenderer rendererWithMTLTexture:CVMetalTextureGetTexture(dummyTexture) options:nil];
+            } else {
+                self.renderer = nil;
+            }
+        } else {
+            self.renderer = [CARenderer rendererWithCGLContext:self.cglCtx options:nil];
+        }
     }
+    
     
     if (!self.rootLayer)
     {
@@ -98,7 +130,7 @@
     }
 
     self.rootLayer.bounds = CGRectMake(0, 0, _cvpool_size.width, _cvpool_size.height);
-    CGColorRef tmpColor = CGColorCreateGenericRGB(0, 0, 0, 0);
+    CGColorRef tmpColor = CGColorCreateGenericRGB(0, 0, 0, 1);
     self.rootLayer.backgroundColor = tmpColor;
     CGColorRelease(tmpColor);
     self.rootLayer.position = CGPointMake(0.0, 0.0);
@@ -110,17 +142,20 @@
     self.renderer.bounds = NSMakeRect(0.0, 0.0, _cvpool_size.width, _cvpool_size.height);
     self.rootLayer.delegate = self;
     
-    glViewport(0, 0, _cvpool_size.width, _cvpool_size.height);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(0, _cvpool_size.width, 0,_cvpool_size.height, -1, 1);
+    if (!_useMetalRenderer)
+    {
+        glViewport(0, 0, _cvpool_size.width, _cvpool_size.height);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(0, _cvpool_size.width, 0,_cvpool_size.height, -1, 1);
     
     
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
     
     
-    glClearColor(0, 0, 0, 0);
+        glClearColor(0, 0, 0, 0);
+    }
 
 }
 
@@ -162,9 +197,32 @@
     
 }
 
--(void)renderToSurface:(IOSurfaceRef)ioSurface
+-(void)renderToPixelBuffer:(CVPixelBufferRef)pixelBuffer
 {
 
+    if (!pixelBuffer)
+    {
+        return;
+    }
+    
+    if (_useMetalRenderer)
+    {
+        CVMetalTextureRef mtlTexture = NULL;
+        CVMetalTextureCacheCreateTextureFromImage(NULL, _cvmetalcache, pixelBuffer, NULL, MTLPixelFormatBGRA8Unorm, CVPixelBufferGetWidth(pixelBuffer), CVPixelBufferGetHeight(pixelBuffer), 0, &mtlTexture);
+        if (!mtlTexture)
+        {
+            return;
+        }
+        [self.renderer setDestination:CVMetalTextureGetTexture(mtlTexture)];
+        [self.renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];
+        [self.renderer addUpdateRect:self.renderer.bounds];
+        [self.renderer render];
+        [self.renderer endFrame];
+        CFRelease(mtlTexture);
+        return;
+    }
+    
+    IOSurfaceRef ioSurface = CVPixelBufferGetIOSurface(pixelBuffer);
     CGLSetCurrentContext(self.cglCtx);
     
     if (!_rFbo)
@@ -273,7 +331,7 @@
     CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, _cvpool, &destFrame);
     
 
-    [self renderToSurface:CVPixelBufferGetIOSurface(destFrame)];
+    [self renderToPixelBuffer:destFrame];
 
     [CATransaction commit];
 
@@ -337,6 +395,22 @@
     
     
 }
+
+-(bool)createMetalTextureCache
+{
+    if (_cvmetalcache)
+    {
+        CFRelease(_cvmetalcache);
+    }
+    
+    CVReturn result = CVMetalTextureCacheCreate(NULL, NULL, _metalDevice, NULL, &_cvmetalcache);
+    if (result != kCVReturnSuccess)
+    {
+        return NO;
+    }
+    return YES;
+}
+
 
 -(void)dealloc
 {

@@ -1151,6 +1151,14 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
        
        _layoutRecordingFormat = @"MOV";
        
+       if(@available(macOS 10.11, *))
+       {
+           self.metalAvailable = YES;
+           self.useMetalIfAvailable = YES;
+       } else {
+           self.metalAvailable = NO;
+           self.useMetalIfAvailable = NO;
+       }
        self.transitionDirections = @[kCATransitionFromTop, kCATransitionFromRight, kCATransitionFromBottom, kCATransitionFromLeft];
        self.useInstantRecord = YES;
        self.instantRecordActive = YES;

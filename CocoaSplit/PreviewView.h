@@ -13,6 +13,8 @@
 #import "CSPreviewGLLayer.h"
 #import "CSPreviewOverlayView.h"
 #import "CSSourceLayoutSettingsWindowController.h"
+#import "CSPreviewRendererLayer.h"
+#import "CSSnapOverlayView.h"
 
 @class SourceLayout;
 //@class InputSource;
@@ -31,7 +33,8 @@
 
     PreviewView *_fullScreenView;
     
-    CSPreviewGLLayer *_glLayer;
+    CALayer <CSPreviewRendererLayer> *_glLayer;
+    
     
     SourceLayout *_renderingLayout;
 
@@ -52,6 +55,8 @@
     NSScreen *_fullscreenOn;
     NSPopover *_layoutpopOver;
     CSPreviewOverlayView *_overlayView;
+    CSSnapOverlayView *_snapOverlay;
+    
     bool _inDrag;
     NSMutableDictionary *_highlightedSourceMap;
     NSPoint _configWindowCascadePoint;

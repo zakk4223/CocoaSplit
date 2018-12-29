@@ -396,7 +396,7 @@
             
             if (!drain_cnt)
             {
-                
+                NSLog(@"LEAVING RECORDER LOOP");
                 return;
             }
         }
@@ -442,7 +442,7 @@
     */
     
     
-    if (newFrame)
+    if (newFrame && self.compressors && self.compressors.count > 0)
     {
         _frameCount++;
         CVPixelBufferRetain(newFrame);

@@ -3,7 +3,6 @@
 //  CocoaSplit
 //
 //  Created by Zakk on 8/8/15.
-//  Copyright (c) 2015 Zakk. All rights reserved.
 //
 
 #import <QuartzCore/QuartzCore.h>
@@ -12,9 +11,10 @@
 #import <OpenGL/glu.h>
 #import <GLKit/GLKit.h>
 
+#import "CSPreviewRendererLayer.h"
 
 
-@interface CSPreviewGLLayer : CAOpenGLLayer
+@interface CSPreviewGLLayer : CAOpenGLLayer <CSPreviewRendererLayer>
 {
     bool _initDone;
     GLuint _renderTexture;
@@ -33,11 +33,6 @@
 }
 
 @property (strong) LayoutRenderer *renderer;
-@property (weak) InputSource *outlineSource;
-@property (assign) bool doSnaplines;
-
-@property (assign) float snap_y;
-@property (assign) float snap_x;
 @property (assign) bool doRender;
 @property (assign) bool midiActive;
 @property (assign) bool resizeDirty;

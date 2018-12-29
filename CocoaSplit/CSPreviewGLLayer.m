@@ -17,13 +17,8 @@
     {
         _initDone = NO;
         _lastSurfaceSize = NSZeroSize;
-        self.outlineSource = nil;
-        self.doSnaplines = NO;
         self.needsDisplayOnBoundsChange = YES;
         self.opaque = YES;
-        
-        _snap_x = -1;
-        _snap_y  = -1;
         
     }
     
@@ -42,6 +37,14 @@
     return _midiActive;
 }
 
+
+-(void)logGLMatrix:(GLKMatrix4)mat
+{
+    NSLog(@"    %f %f %f %f", mat.m00, mat.m10, mat.m20, mat.m30);
+    NSLog(@"    %f %f %f %f", mat.m01, mat.m11, mat.m21, mat.m31);
+    NSLog(@"    %f %f %f %f", mat.m02, mat.m12, mat.m22, mat.m32);
+    NSLog(@"    %f %f %f %f", mat.m03, mat.m13, mat.m23, mat.m33);
+}
 
 -(void)drawInCGLContext:(CGLContextObj)ctx pixelFormat:(CGLPixelFormatObj)pf forLayerTime:(CFTimeInterval)t displayTime:(const CVTimeStamp *)ts
 {
@@ -152,7 +155,7 @@
     glLoadIdentity();
     
     
-    glOrtho(0.0, self.bounds.size.width, 0.0, self.bounds.size.height, 0, 1);
+   glOrtho(0.0, self.bounds.size.width, 0.0, self.bounds.size.height, 0, 1);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     
@@ -214,61 +217,6 @@
     
     glDisable(GL_TEXTURE_RECTANGLE_ARB);
     
-    if (self.outlineSource)
-    {
-        
-        glLineWidth(1.0f);
-        
-        glColor3f(1.0f, 1.0f, 0.0f);
-        glLineStipple(2, 0xAAAA);
-        if (self.doSnaplines)
-        {
-            if (_snap_x > -1)
-            {
-                float snap_y_min = 0;
-                float snap_y_max = self.outlineSource.sourceLayout.canvas_height;
-                
-                if (self.outlineSource && self.outlineSource.parentInput)
-                {
-                    NSRect parentRect = ((InputSource *)self.outlineSource.parentInput).globalLayoutPosition;
-                    snap_y_min = parentRect.origin.y;
-                    snap_y_max = NSMaxY(parentRect);
-                }
-                
-                snapx_verts[0] = _snap_x;
-                snapx_verts[1] = snap_y_min;
-                snapx_verts[2] = _snap_x;
-                snapx_verts[3] = snap_y_max;
-                glVertexPointer(2, GL_FLOAT, 0, snapx_verts);
-                glDrawArrays(GL_LINES, 0, 2);
-            }
-            
-            if (_snap_y > -1)
-            {
-                float snap_x_min = 0;
-                float snap_x_max = self.outlineSource.sourceLayout.canvas_width;
-                
-                if (self.outlineSource && self.outlineSource.parentInput)
-                {
-                    NSRect parentRect = ((InputSource *)self.outlineSource.parentInput).globalLayoutPosition;
-                    snap_x_min = parentRect.origin.x;
-                    snap_x_max = NSMaxX(parentRect);
-                }
-                
-                snapy_verts[0] = snap_x_min;
-                snapy_verts[1] = _snap_y;
-                snapy_verts[2] = snap_x_max;
-                snapy_verts[3] = _snap_y;
-                glVertexPointer(2, GL_FLOAT, 0, snapy_verts);
-                glDrawArrays(GL_LINES, 0, 2);
-            }
-        }
-        //glDisable(GL_LINE_STIPPLE);
-        
-        glColor3f(1.0f, 1.0f, 1.0f);
-
-    }
-
 
     
     glColor4f(1.0, 1.0, 1.0, 1.0);
