@@ -82,8 +82,9 @@
     {
         int real_bitrate = self.average_bitrate*1000;
         
-        
-        VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_AverageBitRate, CFNumberCreate(NULL, kCFNumberIntType, &real_bitrate));
+        CFNumberRef real_bitrate_cf = CFNumberCreate(NULL, kCFNumberIntType, &real_bitrate);
+        VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_AverageBitRate, real_bitrate_cf);
+        CFRelease(real_bitrate_cf);
         
     }
     

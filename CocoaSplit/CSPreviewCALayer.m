@@ -131,7 +131,12 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
     
     if (_renderBuffer)
     {
-        self.contents = (__bridge id _Nullable)_renderBuffer;
+        if (@available(macOS 10.12, *))
+        {
+            self.contents = (__bridge id _Nullable)_renderBuffer;
+        } else {
+            self.contents = (__bridge id _Nullable)(CVPixelBufferGetIOSurface(_renderBuffer));
+        }
      }
 }
 

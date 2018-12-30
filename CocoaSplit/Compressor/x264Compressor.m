@@ -589,11 +589,6 @@
 -(bool)setupCompressor:(CapturedFrameData *)videoFrame
 {
     
-    avcodec_register_all();
-    
-    
-    
-    
     NSString *useAdvancedSettings = self.advancedSettings.copy;
     
     

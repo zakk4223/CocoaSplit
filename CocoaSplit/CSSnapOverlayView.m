@@ -40,7 +40,9 @@
     {
         CGContextRef currentContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
         CGContextSetLineWidth(currentContext, 1.0);
-        CGContextSetStrokeColorWithColor(currentContext, CGColorCreateGenericRGB(1.0, 1.0, 0.0,1.0));
+        CGColorRef lineColor = CGColorCreateGenericRGB(1.0, 1.0, 0.0,1.0);
+        CGContextSetStrokeColorWithColor(currentContext, lineColor);
+        CGColorRelease(lineColor);
         for (NSValue *val in self.drawLines)
         {
             NSRect lineDef = [val rectValue];

@@ -142,7 +142,7 @@
 -(void)fetchStreamKey
 {
     
-    if (!_channel_id)
+    if (_channel_id == nil)
     {
         [self createAuthenticator];
         
@@ -171,7 +171,7 @@
 -(void)fetchStreamKeyReal
 {
     [self createAuthenticator];
-    if (!_channel_id)
+    if (_channel_id == nil)
     {
         return;
     }

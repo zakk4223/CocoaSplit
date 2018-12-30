@@ -22,6 +22,12 @@ CV_EXPORT CVReturn CVMetalTextureCacheCreateTextureFromImage(
                                                              size_t planeIndex,
                                                              CV_RETURNS_RETAINED_PARAMETER CVMetalTextureRef CV_NULLABLE * CV_NONNULL textureOut ) API_AVAILABLE(macosx(10.11), ios(8.0), tvos(9.0)) __WATCHOS_PROHIBITED;
 CV_EXPORT id <MTLTexture> CV_NULLABLE CVMetalTextureGetTexture( CVMetalTextureRef CV_NONNULL image ) API_AVAILABLE(macosx(10.11), ios(8.0), tvos(9.0)) __WATCHOS_PROHIBITED;
+CV_EXPORT CVReturn CVMetalTextureCacheCreate(
+                                             CFAllocatorRef CV_NULLABLE allocator,
+                                             CFDictionaryRef CV_NULLABLE cacheAttributes,
+                                             id <MTLDevice> CV_NONNULL metalDevice,
+                                             CFDictionaryRef CV_NULLABLE textureAttributes,
+                                             CV_RETURNS_RETAINED_PARAMETER CVMetalTextureCacheRef CV_NULLABLE * CV_NONNULL cacheOut ) API_AVAILABLE(macosx(10.11), ios(8.0), tvos(9.0)) __WATCHOS_PROHIBITED;
 
 
 
@@ -34,29 +40,20 @@ CV_EXPORT id <MTLTexture> CV_NULLABLE CVMetalTextureGetTexture( CVMetalTextureRe
     NSSize _cvpool_size;
     GLuint _fboTexture;
     GLuint _rFbo;
-    CALayer *_currentLayoutlayer;
     bool _layoutChanged;
-    CATransition *_layoutTransition;
     SourceLayout *_currentLayout;
-    SourceLayout *_transitionLayout;
     bool _useMetalRenderer;
     id <MTLDevice> _metalDevice;
     
 }
 
-@property (strong) SourceLayout *layout;
-@property (assign) CGLContextObj cglCtx;
-@property (strong) CARenderer *renderer;
-@property (strong) CALayer *rootLayer;
-@property (strong) NSString *transitionName;
-@property (strong) NSString *transitionDirection;
-@property (strong) CIFilter *transitionFilter;
+@property (strong) SourceLayout * _Nonnull layout;
+@property (assign) CGLContextObj _Nonnull cglCtx;
+@property (strong) CARenderer * _Nonnull renderer;
+@property (strong) CALayer * _Nullable rootLayer;
 
-@property (assign) float transitionDuration;
-
-
--(CVPixelBufferRef)currentFrame;
--(CVPixelBufferRef)currentImg;
+-(CVPixelBufferRef _Nullable)currentFrame;
+-(CVPixelBufferRef _Nullable)currentImg;
 
 
 @end

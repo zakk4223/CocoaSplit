@@ -114,7 +114,7 @@
             if (@available(macOS 10.13, *)) {
                 self.renderer = [CARenderer rendererWithMTLTexture:CVMetalTextureGetTexture(dummyTexture) options:nil];
             } else {
-                self.renderer = nil;
+                self.renderer = [CARenderer rendererWithCGLContext:self.cglCtx options:nil];
             }
         } else {
             self.renderer = [CARenderer rendererWithCGLContext:self.cglCtx options:nil];
@@ -179,14 +179,7 @@
     [CATransaction begin];
     _currentLayout.inTransition = NO;
     
-    if (_transitionLayout)
-    {
-        
-        [_transitionLayout.rootLayer removeFromSuperlayer];
-        _transitionLayout.isActive = NO;
-        _transitionLayout = nil;
-    }
-    
+
     [self.renderer.layer addSublayer:self.layout.transitionLayer];
     [CATransaction commit];
     
@@ -297,10 +290,7 @@
 
     
     [self.layout frameTick];
-    if (_transitionLayout)
-    {
-        [_transitionLayout frameTick];
-    }
+
     
     frameWidth = self.layout.canvas_width;
     frameHeight = self.layout.canvas_height;

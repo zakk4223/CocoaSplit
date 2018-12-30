@@ -506,16 +506,10 @@
     AVFrame *use_frame = NULL;
     CVPixelBufferRef ret = nil;
     int64_t audio_pts = 0;
-    bool play_audio = YES;
-    
-    
-    
     int av_error = 0;
 
     if (_first_frame_host_time == 0)
     {
-        play_audio = NO;
-        
         use_frame = [_useInput consumeFrame:&av_error];
         if (use_frame)
         {

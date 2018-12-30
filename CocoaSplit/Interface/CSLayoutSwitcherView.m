@@ -145,7 +145,7 @@
 -(void)setupColors
 {
     
-    bool darkMode = [CaptureController sharedCaptureController].isDarkAppearance;
+    //bool darkMode = [CaptureController sharedCaptureController].isDarkAppearance;
     
 
     _textView.textColor = [NSColor whiteColor];

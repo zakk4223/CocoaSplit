@@ -155,7 +155,12 @@
     
 
     NSWindow *window = notification.object;
-    //window.appearance = [self getAppearance];
+    if (@available(macOS 10.14, *))
+    {
+        return;
+    } else {
+        window.appearance = [self getAppearance];
+    }
 }
 
 

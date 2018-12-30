@@ -141,11 +141,9 @@
     float ratio = (hr < wr ? hr : wr);
     NSSize useSize = NSMakeSize(surfaceSize.width * ratio, surfaceSize.height * ratio);
 
-    CGFloat originX = self.bounds.size.width/2 - useSize.width/2;
-    CGFloat originY = self.bounds.size.height/2 - useSize.height/2;
+    //CGFloat originX = self.bounds.size.width/2 - useSize.width/2;
+    //CGFloat originY = self.bounds.size.height/2 - useSize.height/2;
     
-    NSRect inRect = NSMakeRect(originX, originY, useSize.width, useSize.height);
-    inRect = NSIntegralRect(inRect);
     
     float halfw = (self.bounds.size.width - useSize.width) * 0.5;
     float halfh = (self.bounds.size.height - useSize.height) * 0.5;
@@ -203,12 +201,6 @@
     
     glBindTexture(GL_TEXTURE_RECTANGLE_ARB, 0);
     glDisable(GL_TEXTURE_RECTANGLE_ARB);
-    
-    
-    
-    GLfloat snapx_verts[4];
-    GLfloat snapy_verts[4];
-    
     
     glEnableClientState(GL_VERTEX_ARRAY);
     

@@ -579,10 +579,6 @@
 -(bool)decodeAudioPacket:(AVPacket *)av_packet
 {
     AVFrame *output_frame = NULL;
-    void *orig_data;
-    int orig_size;
-    orig_size = av_packet->size;
-    orig_data = av_packet->data;
     bool ret = NO;
     output_frame = av_frame_alloc();
     struct frame_message msg;

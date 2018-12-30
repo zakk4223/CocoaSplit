@@ -154,7 +154,6 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
     {
         int real_bitrate = self.average_bitrate*1000;
         
-        
         VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_AverageBitRate, CFNumberCreate(NULL, kCFNumberIntType, &real_bitrate));
         
     }

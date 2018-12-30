@@ -635,7 +635,6 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     _pending_frame_size = 0;
 
     
-    av_register_all();
     avformat_network_init();
     return self;
     
