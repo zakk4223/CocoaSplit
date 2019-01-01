@@ -37,5 +37,9 @@
     [self.serviceObj authenticateUser];
 }
 
+- (IBAction)refreshStreams:(id)sender {
+    [self.serviceObj fetchliveStreams];
+}
+
 
 @end

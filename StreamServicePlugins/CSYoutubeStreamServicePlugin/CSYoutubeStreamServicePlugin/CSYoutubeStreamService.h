@@ -29,6 +29,7 @@
 +(NSString *)serviceDescription;
 -(void)authenticateUser;
 +(NSImage *)serviceImage;
+-(void)fetchliveStreams;
 
 
 

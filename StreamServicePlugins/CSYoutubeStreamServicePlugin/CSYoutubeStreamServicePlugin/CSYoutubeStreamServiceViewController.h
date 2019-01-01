@@ -13,5 +13,6 @@
 
 @property (weak) CSYoutubeStreamService *serviceObj;
 - (IBAction)authenticateUser:(id)sender;
+- (IBAction)refreshStreams:(id)sender;
 
 @end
