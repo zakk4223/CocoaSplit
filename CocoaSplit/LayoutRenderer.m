@@ -40,7 +40,9 @@
 -(void)setLayout:(SourceLayout *)layout
 {
     _layout = layout;
-    _layoutChanged = YES;
+    @synchronized (self) {
+        _layoutChanged = YES;
+    }
 }
 
 -(SourceLayout *)layout
@@ -80,7 +82,21 @@
     return (id<CAAction>)[NSNull null];
 }
 
-
+-(void) setupRootlayer
+{
+    self.rootLayer.bounds = CGRectMake(0, 0, _cvpool_size.width, _cvpool_size.height);
+    CGColorRef tmpColor = CGColorCreateGenericRGB(0, 0, 0, 1);
+    self.rootLayer.backgroundColor = tmpColor;
+    CGColorRelease(tmpColor);
+    self.rootLayer.position = CGPointMake(0.0, 0.0);
+    self.rootLayer.anchorPoint = CGPointMake(0.0, 0.0);
+    self.rootLayer.masksToBounds = YES;
+    self.rootLayer.sublayerTransform = CATransform3DIdentity;
+    self.rootLayer.sublayerTransform = CATransform3DTranslate(self.rootLayer.sublayerTransform, 0, _cvpool_size.height, 0);
+    self.rootLayer.sublayerTransform = CATransform3DScale(self.rootLayer.sublayerTransform, 1.0, -1.0, 1.0);
+    self.renderer.bounds = NSMakeRect(0.0, 0.0, _cvpool_size.width, _cvpool_size.height);
+    self.rootLayer.delegate = self;
+}
 -(void)resizeRenderer
 {
     
@@ -124,23 +140,12 @@
     
     if (!self.rootLayer)
     {
-        
         self.rootLayer = [CALayer layer];
         self.renderer.layer = self.rootLayer;
     }
 
-    self.rootLayer.bounds = CGRectMake(0, 0, _cvpool_size.width, _cvpool_size.height);
-    CGColorRef tmpColor = CGColorCreateGenericRGB(0, 0, 0, 1);
-    self.rootLayer.backgroundColor = tmpColor;
-    CGColorRelease(tmpColor);
-    self.rootLayer.position = CGPointMake(0.0, 0.0);
-    self.rootLayer.anchorPoint = CGPointMake(0.0, 0.0);
-    self.rootLayer.masksToBounds = YES;
-    self.rootLayer.sublayerTransform = CATransform3DIdentity;
-    self.rootLayer.sublayerTransform = CATransform3DTranslate(self.rootLayer.sublayerTransform, 0, _cvpool_size.height, 0);
-    self.rootLayer.sublayerTransform = CATransform3DScale(self.rootLayer.sublayerTransform, 1.0, -1.0, 1.0);
-    self.renderer.bounds = NSMakeRect(0.0, 0.0, _cvpool_size.width, _cvpool_size.height);
-    self.rootLayer.delegate = self;
+    [self setupRootlayer];
+
     
     if (!_useMetalRenderer)
     {
@@ -163,28 +168,14 @@
 -(void)setupCArenderer
 {
     CGLSetCurrentContext(self.cglCtx);
-    
-    
-    
     if (!self.rootLayer)
     {
-        
         self.rootLayer = [CALayer layer];
-        self.rootLayer.delegate = self;
+        [self setupRootlayer];
+        self.renderer.layer = self.rootLayer;
     }
     
-    
-    
-    
-    [CATransaction begin];
-    _currentLayout.inTransition = NO;
-    
-
     [self.renderer.layer addSublayer:self.layout.transitionLayer];
-    [CATransaction commit];
-    
-    
-    
     _currentLayout = self.layout;
     [_currentLayout didBecomeVisible];
     
@@ -310,19 +301,27 @@
     }
     
 
+    bool doSetup = NO;
+    @synchronized (self) {
+        doSetup = _layoutChanged;
+    }
     
-    if (_layoutChanged)
+    if (doSetup && self.renderer)
     {
+        [CATransaction lock];
         [self setupCArenderer];
-        _layoutChanged = NO;
+        [CATransaction unlock];
+        @synchronized (self) {
+            _layoutChanged = NO;
+        }
 
     }
     
     CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, _cvpool, &destFrame);
-    
 
+    [CATransaction lock];
     [self renderToPixelBuffer:destFrame];
-
+    [CATransaction unlock];
     [CATransaction commit];
 
     @synchronized(self)

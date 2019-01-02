@@ -20,7 +20,6 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
         _lastBounds = NSZeroRect;
         _lastSurfaceSize = NSZeroSize;
         CVDisplayLinkCreateWithCGDisplay(CGMainDisplayID(), &_displayLink);
-        //CVDisplayLinkCreateWithActiveCGDisplays(&_displayLink);
         CVDisplayLinkSetOutputCallback(_displayLink, &DisplayCallback, (__bridge void * _Nullable)(self));
         CVDisplayLinkStart(_displayLink);
     }
@@ -53,12 +52,6 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
     CGFloat originX = _lastBounds.size.width/2 - useSize.width/2;
     CGFloat originY = _lastBounds.size.height/2 - useSize.height/2;
     _scaleRect = NSMakeRect(originX, originY, useSize.width, useSize.height);
-
-    [CATransaction begin];
-    [CATransaction setDisableActions:YES];
-    [CATransaction commit];
-    
-    
 }
 
 
@@ -66,15 +59,28 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
 
 -(void)render
 {
-    dispatch_async(dispatch_get_main_queue()
+    if (!self.renderer || !self.renderer.layout)
+    {
+        return;
+    }
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
                    , ^{
-                       [self display];
+                       @autoreleasepool {
+                           
+                           
+                           [CATransaction begin];
+                               [self displayContent];
+                          [CATransaction commit];
+                       }
                    });
+    
 }
 
 
--(void)display
+-(void)displayContent
 {
+
     CVPixelBufferRef toDraw;
  
     bool sizeDirty = NO;
@@ -100,12 +106,12 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
         return;
     }
     
+    [CATransaction lock];
     if (_renderBuffer)
     {
         CVPixelBufferRelease(_renderBuffer);
     }
     _renderBuffer = toDraw;
-    
     size_t sWidth = CVPixelBufferGetWidth(_renderBuffer);
     size_t sHeight = CVPixelBufferGetHeight(_renderBuffer);
     NSSize sSize = NSMakeSize(sWidth, sHeight);
@@ -140,6 +146,7 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
             self.contents = (__bridge id _Nullable)(CVPixelBufferGetIOSurface(_renderBuffer));
         }
      }
+    [CATransaction unlock];
 }
 
 CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, const CVTimeStamp *outputTime, CVOptionFlags flagsIn, CVOptionFlags *flagsOut, void *displayLinkContext)
