@@ -71,7 +71,7 @@
     
     
     [self.cropSelectionWindow setFrameOrigin:NSMakePoint(screenX, screenY)];
-    [self.cropSelectionWindow orderFrontRegardless];
+    [self.cropSelectionWindow makeKeyAndOrderFront:nil];
     
     
 }
@@ -90,15 +90,8 @@
     NSRect viewRect = cropView.bounds;
     NSRect screenFrame = onScreen.frame;
     
-    
-    
     NSRect windowRect = [cropView convertRect:viewRect fromView:cropView];
     NSRect viewBounds = [self.cropSelectionWindow convertRectToScreen:windowRect];
-    
-    
-    
-    
-    
     //Clamp to screen bounds if we're outside of them
     
     if (viewBounds.origin.x < screenFrame.origin.x)
@@ -125,32 +118,26 @@
     //adjust origin to screen relative point
     viewBounds.origin.x = fabs(fabs(viewBounds.origin.x) - fabs(screenFrame.origin.x));
     viewBounds.origin.y = fabs(fabs(viewBounds.origin.y) - fabs(screenFrame.origin.y) );
-    
-    
-    
-    
+
     //adjust for CGDisplay's origin being top left
     
     
     viewBounds.origin.y = -(viewBounds.origin.y - NSHeight(screenFrame)) - NSHeight(viewBounds);
-    
-    
-    
     id vidInput = self.captureObj;
-    
-    
-    
-    
-    [vidInput setValue:[NSNumber numberWithInt:(int)viewBounds.origin.x] forKeyPath:@"x_origin"];
-    [vidInput setValue:[NSNumber numberWithInt:(int)viewBounds.origin.y] forKeyPath:@"y_origin"];
-    
-    [vidInput setValue:[NSNumber numberWithInt:(int)NSHeight(viewBounds)] forKeyPath:@"region_height"];
-    [vidInput setValue:[NSNumber numberWithInt:(int)NSWidth(viewBounds)] forKeyPath:@"region_width"];
-    
-    
-    
+    [self.captureObj resetRegionRect:viewBounds];
     [self.cropSelectionWindow close];
 }
 
+-(IBAction)resetCroppedArea:(id)sender
+{
+    [self.captureObj resetRegionRect:NSMakeRect(0, 0, 0, 0)];
+}
 
+
+- (IBAction)closeOverlayView:(id)sender {
+    if (self.cropSelectionWindow)
+    {
+        [self.cropSelectionWindow cancelOperation:nil];
+    }
+}
 @end

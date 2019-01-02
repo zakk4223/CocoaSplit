@@ -19,7 +19,8 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
         self.contentsGravity = kCAGravityResizeAspect;
         _lastBounds = NSZeroRect;
         _lastSurfaceSize = NSZeroSize;
-        CVDisplayLinkCreateWithActiveCGDisplays(&_displayLink);
+        CVDisplayLinkCreateWithCGDisplay(CGMainDisplayID(), &_displayLink);
+        //CVDisplayLinkCreateWithActiveCGDisplays(&_displayLink);
         CVDisplayLinkSetOutputCallback(_displayLink, &DisplayCallback, (__bridge void * _Nullable)(self));
         CVDisplayLinkStart(_displayLink);
     }
@@ -59,6 +60,7 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
     
     
 }
+
 
 
 

@@ -84,7 +84,6 @@
 -(void)setupPlayer
 {
     
-    av_register_all();
     avformat_network_init();
     
     

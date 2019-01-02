@@ -1912,6 +1912,7 @@
 }
 
 
+
 -(CALayer *)makeBackingLayer
 {
     if (CaptureController.sharedCaptureController.useMetalIfAvailable)

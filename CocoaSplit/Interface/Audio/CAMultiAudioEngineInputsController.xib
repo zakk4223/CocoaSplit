@@ -48,7 +48,7 @@
                             <real key="value" value="1"/>
                         </userDefinedRuntimeAttribute>
                         <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
-                            <color key="value" name="controlHighlightColor" catalog="System" colorSpace="catalog"/>
+                            <color key="value" name="gridColor" catalog="System" colorSpace="catalog"/>
                         </userDefinedRuntimeAttribute>
                         <userDefinedRuntimeAttribute type="number" keyPath="backgroundSize">
                             <real key="value" value="0.5"/>

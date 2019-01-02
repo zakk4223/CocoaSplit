@@ -17,7 +17,7 @@
     dispatch_queue_t _capture_queue;
     CGDisplayStreamRef _displayStreamRef;
     IOSurfaceRef _currentFrame;
-    uint64_t _currentFrameTime;
+    CFTimeInterval _currentFrameTime;
     CGDirectDisplayID _currentDisplay;
     CIImage *_currentImg;
     CFAbsoluteTime _lastFrame;
@@ -30,6 +30,7 @@
 -(bool)providesAudio;
 -(bool)providesVideo;
 -(NSArray *)availableVideoDevices;
+-(void)resetRegionRect:(NSRect)regionRect;
 
 
 
@@ -40,6 +41,7 @@
 @property (assign) int y_origin;
 @property (assign) int region_width;
 @property (assign) int region_height;
+
 @property (assign) BOOL showCursor;
 @property (readonly) BOOL needsAdvancedVideo;
 @property NSArray *videoFormats;

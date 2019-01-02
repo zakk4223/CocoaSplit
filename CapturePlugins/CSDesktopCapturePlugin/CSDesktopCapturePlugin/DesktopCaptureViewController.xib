@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -30,7 +30,7 @@
                     <rect key="frame" x="67" y="100" width="41" height="19"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="unn-of-x3W">
                         <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
@@ -62,10 +62,10 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1XV-C0-CqP">
-                    <rect key="frame" x="45" y="27" width="41" height="19"/>
+                    <rect key="frame" x="45" y="27" width="42" height="19"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="ACb-87-qEx">
                         <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
@@ -73,7 +73,7 @@
                     </connections>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pLd-Ys-cOI">
-                    <rect key="frame" x="98" y="30" width="38" height="14"/>
+                    <rect key="frame" x="99" y="30" width="38" height="14"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="34" id="bAC-EK-Q1q"/>
                     </constraints>
@@ -84,10 +84,10 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3Px-Af-yqB">
-                    <rect key="frame" x="142" y="27" width="41" height="19"/>
+                    <rect key="frame" x="143" y="27" width="40" height="19"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="U7U-uc-XxH">
                         <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
@@ -103,10 +103,10 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="esZ-gq-1qW">
-                    <rect key="frame" x="45" y="0.0" width="41" height="19"/>
+                    <rect key="frame" x="45" y="0.0" width="42" height="19"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="MNZ-Eo-l3a">
                         <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
@@ -128,7 +128,7 @@
                     <rect key="frame" x="67" y="122" width="41" height="19"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="6Dk-7W-GaH">
                         <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
@@ -147,7 +147,7 @@
                     </textFieldCell>
                 </textField>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BZN-NR-e3t">
-                    <rect key="frame" x="-2" y="48" width="128" height="28"/>
+                    <rect key="frame" x="-2" y="48" width="128" height="27"/>
                     <buttonCell key="cell" type="push" title="Set Capture Region" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tf2-h3-yJI">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -166,26 +166,17 @@
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xUe-Ag-64N">
-                    <rect key="frame" x="121" y="48" width="140" height="28"/>
+                    <rect key="frame" x="121" y="48" width="140" height="27"/>
                     <buttonCell key="cell" type="push" title="Reset Capture Region" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qsR-5N-cM7">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
                     <connections>
-                        <binding destination="YxM-Vh-gvX" name="argument" keyPath="selection.activeVideoDevice" id="MBJ-Hc-2qP">
-                            <dictionary key="options">
-                                <string key="NSSelectorName">openScreenCropWindow:</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="target" keyPath="self" previousBinding="MBJ-Hc-2qP" id="ghR-ws-KBy">
-                            <dictionary key="options">
-                                <string key="NSSelectorName">openScreenCropWindow:</string>
-                            </dictionary>
-                        </binding>
+                        <action selector="resetCroppedArea:" target="-2" id="jHL-mt-1Ee"/>
                     </connections>
                 </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aCF-eX-mDo">
-                    <rect key="frame" x="98" y="3" width="40" height="14"/>
+                    <rect key="frame" x="99" y="3" width="38" height="14"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Height" id="xcn-b2-85u">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -193,10 +184,10 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Aav-9n-GhZ">
-                    <rect key="frame" x="142" y="0.0" width="41" height="19"/>
+                    <rect key="frame" x="143" y="0.0" width="40" height="19"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="YPS-Ie-xEg">
                         <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
@@ -207,7 +198,7 @@
                     <rect key="frame" x="126" y="122" width="41" height="19"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="L6L-UP-xGg">
                         <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
@@ -268,16 +259,17 @@
                 <binding destination="-2" name="contentObject" keyPath="self.captureObj" id="a9t-dA-GxV"/>
             </connections>
         </objectController>
-        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hasShadow="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="tFe-5S-cxQ" customClass="CSOverlayWindow">
+        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hasShadow="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="tFe-5S-cxQ" customClass="CSOverlayWindow">
+            <windowStyleMask key="styleMask" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="207" width="416" height="270"/>
             <rect key="screenRect" x="0.0" y="0.0" width="3440" height="1417"/>
-            <view key="contentView" id="TvA-3W-5a3" customClass="CSOverlayView">
+            <view key="contentView" wantsLayer="YES" id="TvA-3W-5a3" customClass="CSOverlayView">
                 <rect key="frame" x="0.0" y="0.0" width="416" height="270"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xXv-D2-0SI">
-                        <rect key="frame" x="123" y="120" width="170" height="28"/>
+                        <rect key="frame" x="123" y="120" width="170" height="27"/>
                         <buttonCell key="cell" type="push" title="Click to select capture area" bezelStyle="rounded" alignment="center" controlSize="small" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="i4w-jU-K8m">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -290,9 +282,21 @@
                             </binding>
                         </connections>
                     </button>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lsU-Nx-O7f">
+                        <rect key="frame" x="180" y="92" width="56" height="27"/>
+                        <buttonCell key="cell" type="push" title="Close" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ihZ-xZ-ZRM">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="closeOverlayView:" target="-2" id="HBh-if-iMt"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="lsU-Nx-O7f" firstAttribute="top" secondItem="xXv-D2-0SI" secondAttribute="bottom" constant="10" id="XQl-A4-TDz"/>
                     <constraint firstItem="xXv-D2-0SI" firstAttribute="centerY" secondItem="TvA-3W-5a3" secondAttribute="centerY" id="iUl-4h-QQZ"/>
+                    <constraint firstItem="lsU-Nx-O7f" firstAttribute="centerX" secondItem="TvA-3W-5a3" secondAttribute="centerX" id="mHm-Xj-ZWa"/>
                     <constraint firstItem="xXv-D2-0SI" firstAttribute="centerX" secondItem="TvA-3W-5a3" secondAttribute="centerX" id="xWc-Ht-6Xl"/>
                 </constraints>
             </view>

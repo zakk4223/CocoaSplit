@@ -19,7 +19,12 @@
 @synthesize activeVideoDevice = _activeVideoDevice;
 @synthesize videoCaptureFPS = _videoCaptureFPS;
 @synthesize renderType = _renderType;
-
+@synthesize width = _width;
+@synthesize height = _height;
+@synthesize x_origin = _x_origin;
+@synthesize y_origin = _y_origin;
+@synthesize region_height = _region_height;
+@synthesize region_width = _region_width;
 
 
 
@@ -68,7 +73,8 @@
         self.canProvideTiming = YES;
         self.videoCaptureFPS = 60.0f;
         self.showCursor = YES;
-        [self addObserver:self forKeyPath:@"propertiesChanged" options:NSKeyValueObservingOptionNew context:NULL];
+        _currentFrameTime = 0.0f;
+        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationTerminating:) name:NSApplicationWillTerminateNotification object:nil];
         
 
@@ -170,6 +176,7 @@
     int width;
     int height;
     
+    NSLog(@"SETUP DISPLAY STREAM");
     _lastSize = CGSizeZero;
     
     if (_displayStreamRef)
@@ -183,13 +190,8 @@
     {
         return NO;
     }
-    
-    
-    
-    
-    
-    NSNumber *minframetime = [NSNumber numberWithFloat:(1000.0/(self.videoCaptureFPS*1000))];
 
+    NSNumber *minframetime = [NSNumber numberWithFloat:1.0f/self.videoCaptureFPS];
     CGRect displaySize = CGDisplayBounds(self.currentDisplay);
     
     width = displaySize.size.width - self.x_origin;
@@ -245,47 +247,28 @@
     
     
     _displayStreamRef = CGDisplayStreamCreateWithDispatchQueue(self.currentDisplay, width, height,  kCVPixelFormatType_420YpCbCr8BiPlanarFullRange, (__bridge CFDictionaryRef)(opts), _capture_queue, ^(CGDisplayStreamFrameStatus status, uint64_t displayTime, IOSurfaceRef frameSurface, CGDisplayStreamUpdateRef updateRef) {
-        
 
-
-        CFAbsoluteTime nowTime = CFAbsoluteTimeGetCurrent();
-        self->_lastFrame = nowTime;
-        
-        
-        
         if (!weakSelf)
         {
             return;
         }
         
         __typeof__(self) strongSelf = weakSelf;
-        
-        
-        
+ 
         if (status == kCGDisplayStreamFrameStatusStopped)
         {
             if (strongSelf->_displayStreamRef)
             {
                 CFRelease(strongSelf->_displayStreamRef);
             }
-            
-            
         }
-        
-        
         if (status == kCGDisplayStreamFrameStatusFrameComplete && frameSurface)
         {
             self->_lastSize = CGSizeMake(IOSurfaceGetWidth(frameSurface), IOSurfaceGetHeight(frameSurface));
-            
             [strongSelf updateLayersWithFramedataBlock:^(CALayer *layer) {
                 layer.contents = (__bridge id _Nullable)(frameSurface);
             }];
-
-
             [self frameArrived];
-
-            
-            
         }
     });
 
@@ -383,23 +366,144 @@
     return YES;
 }
 
-
-+ (NSSet *)keyPathsForValuesAffectingPropertiesChanged
+/*
++(BOOL)automaticallyNotifiesObserversForKey:(NSString *)key
 {
-    return [NSSet setWithObjects:@"width", @"height", @"videoCaptureFPS", @"x_origin", @"y_origin", @"region_width", @"region_height", nil];
-}
-
-
-- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
+    BOOL doNotify = NO;
     
-    
-    if ([keyPath isEqualToString:@"propertiesChanged"])
+    NSSet *noAutoSet = [NSSet setWithObjects:@"width", @"height", @"x_origin", @"y_origin", @"region_width", @"region_height", nil];
+
+    if ([noAutoSet containsObject:key])
     {
-        [self setupDisplayStream];
+        doNotify = NO;
+    } else {
+        doNotify = [super automaticallyNotifiesObserversForKey:key];
     }
     
+    return doNotify;
 }
+*/
+
+
+-(void)setWidth:(int)width
+{
+    
+    if (_width != width)
+    {
+        _width = width;
+        [self setupDisplayStream];
+
+    }
+}
+
+-(int)width
+{
+    return _width;
+}
+
+-(void)setHeight:(int)height
+{
+    if (_height != height)
+    {
+        _height = height;
+        [self setupDisplayStream];
+
+    }
+}
+
+-(int)height
+{
+    return _height;
+}
+
+-(void)setX_origin:(int)x_origin
+{
+    if (_x_origin != x_origin)
+    {
+        _x_origin = x_origin;
+        [self setupDisplayStream];
+    }
+}
+
+-(int)x_origin
+{
+    return _x_origin;
+}
+
+-(void)setY_origin:(int)y_origin
+{
+    if (_y_origin != y_origin)
+    {
+        _y_origin = y_origin;
+        [self setupDisplayStream];
+    }
+}
+
+-(int)y_origin
+{
+    return _y_origin;
+}
+
+-(void)setRegion_width:(int)region_width
+{
+    if (_region_width != region_width)
+    {
+        _region_width = region_width;
+        [self setupDisplayStream];
+    }
+}
+
+-(int)region_width
+{
+    return _region_width;
+}
+
+-(void)setRegion_height:(int)region_height
+{
+    if (_region_height != region_height)
+    {
+        _region_height = region_height;
+        [self setupDisplayStream];
+    }
+}
+
+-(int)region_height
+{
+    return _region_height;
+}
+
+-(void)setVideoCaptureFPS:(double)videoCaptureFPS
+{
+    if (_videoCaptureFPS != videoCaptureFPS)
+    {
+        _videoCaptureFPS = videoCaptureFPS;
+        [self setupDisplayStream];
+    }
+}
+
+-(double)videoCaptureFPS
+{
+    return _videoCaptureFPS;
+}
+
+
+-(void)resetRegionRect:(NSRect)regionRect
+{
+    [self willChangeValueForKey:@"x_origin"];
+    [self willChangeValueForKey:@"y_origin"];
+    [self willChangeValueForKey:@"region_width"];
+    [self willChangeValueForKey:@"region_height"];
+    _x_origin = regionRect.origin.x;
+    _y_origin = regionRect.origin.y;
+    _region_width = regionRect.size.width;
+    _region_height = regionRect.size.height;
+    [self didChangeValueForKey:@"region_height"];
+    [self didChangeValueForKey:@"region_width"];
+    [self didChangeValueForKey:@"y_origin"];
+    [self didChangeValueForKey:@"x_origin"];
+    [self setupDisplayStream];
+}
+
 
 
 -(void)willDelete
@@ -410,8 +514,6 @@
 
 -(void)dealloc
 {
-    
-    [self removeObserver:self forKeyPath:@"propertiesChanged"];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 

@@ -14,5 +14,7 @@
 @property (weak) IBOutlet NSWindow *cropSelectionWindow;
 @property (strong) NSDictionary *renderStyleMap;
 @property (strong) NSArray *styleSortDescriptors;
+- (IBAction)closeOverlayView:(id)sender;
+-(IBAction)resetCroppedArea:(id)sender;
 
 @end

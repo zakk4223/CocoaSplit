@@ -7,102 +7,22 @@
 //
 
 #import "CSOverlayView.h"
+#import <QuartzCore/QuartzCore.h>
 
 
-#define RESIZE_INSET 5.0f
+#define RESIZE_INSET 0.0f
 @implementation CSOverlayView
 
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        
      }
     return self;
 }
 
--(NSRect)insetSelectionRect
-{
-   return NSInsetRect(self.bounds, RESIZE_INSET, RESIZE_INSET);
-}
 
 
--(NSRect)bottomLeftResizeRect
-{
-    NSRect insetRect = [self insetSelectionRect];
-    return NSMakeRect(insetRect.origin.x-5.0f, insetRect.origin.y-5.0f, 10.0f, 10.0f);
-}
-
-
--(NSRect)bottomRightResizeRect
-{
-    NSRect insetRect = [self insetSelectionRect];
-    return NSMakeRect(insetRect.origin.x+insetRect.size.width-5.0f, insetRect.origin.y-5.0f, 10.0f, 10.0f);
-}
-
-
--(NSRect)topRightResizeRect
-{
-    NSRect insetRect = [self insetSelectionRect];
-    return NSMakeRect(insetRect.origin.x+insetRect.size.width-5.0f, insetRect.origin.y+insetRect.size.height-5.0f, 10.0f, 10.0f);
-}
-
--(NSRect)topLeftResizeRect
-{
-    NSRect insetRect = [self insetSelectionRect];
-    return NSMakeRect(insetRect.origin.x-5.0f, insetRect.origin.y+insetRect.size.height-5.0f, 10.0f, 10.0f);
-}
-
--(NSRect)topResizeRect
-{
-    NSRect insetRect = [self insetSelectionRect];
-    return NSMakeRect(NSMidX(insetRect)-5.0f, insetRect.origin.y+insetRect.size.height-5.0f, 10.0f, 10.0f);
-}
-
--(NSRect)bottomResizeRect
-{
-    NSRect insetRect = [self insetSelectionRect];
-    return NSMakeRect(NSMidX(insetRect)-5.0f, insetRect.origin.y-5.0f, 10.0f, 10.0f);
-}
-
--(NSRect)leftResizeRect
-{
-    NSRect insetRect = [self insetSelectionRect];
-    return NSMakeRect(insetRect.origin.x-5.0f, NSMidY(insetRect)-5.0f, 10.0f, 10.0f);
-}
-
--(NSRect)rightResizeRect
-{
-    NSRect insetRect = [self insetSelectionRect];
-    return NSMakeRect(insetRect.origin.x+insetRect.size.width-5.0f, NSMidY(insetRect)-5.0f, 10.0f, 10.0f);
-}
-
-
--(window_resize_type)isResizing:(NSPoint)myPoint
-{
-    
-    
-    window_resize_type ret = kResizeNone;
-    
-    if (NSPointInRect(myPoint, [self rightResizeRect]))
-        ret |= kResizeRight;
-    if (NSPointInRect(myPoint, [self leftResizeRect]))
-        ret |= kResizeLeft;
-    if (NSPointInRect(myPoint, [self topResizeRect]))
-        ret |= kResizeTop;
-    if (NSPointInRect(myPoint, [self bottomResizeRect]))
-        ret |= kResizeBottom;
-    if (NSPointInRect(myPoint, [self bottomRightResizeRect]))
-        ret |= kResizeBottom|kResizeRight;
-    if (NSPointInRect(myPoint, [self topRightResizeRect]))
-        ret |= kResizeRight|kResizeTop;
-    if (NSPointInRect(myPoint, [self topLeftResizeRect]))
-        ret |= kResizeTop|kResizeLeft;
-    if (NSPointInRect(myPoint, [self bottomLeftResizeRect]))
-        ret |= kResizeBottom|kResizeLeft;
-    
-    return ret;
-}
 
 
 - (void)drawRect:(NSRect)dirtyRect
@@ -110,137 +30,11 @@
     
     CGContextRef currentContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
     CGContextSetLineWidth( currentContext, 2.0 );
-    CGFloat dashLengths[] = { 5,3 };
-    CGContextSetLineDash( currentContext, 0.0f, dashLengths, sizeof( dashLengths ) / sizeof( float ) );
+    CGFloat dashLengths[] = { 5.0f, 3.0f };
+    CGContextSetLineDash( currentContext, 0.0f, dashLengths, sizeof( dashLengths ) / sizeof( CGFloat ) );
     CGContextSetFillColorWithColor(currentContext, [NSColor colorWithDeviceRed:0.0f green:0.0f blue:1.0f alpha:0.2].CGColor);
-    CGContextStrokeRect(currentContext, [self insetSelectionRect]);
-    CGContextFillRect(currentContext, [self insetSelectionRect]);
-    CGContextSetFillColorWithColor(currentContext, [NSColor blackColor].CGColor);
-    CGContextFillEllipseInRect(currentContext, [self bottomLeftResizeRect]);
-    CGContextFillEllipseInRect(currentContext, [self bottomRightResizeRect]);
-    CGContextFillEllipseInRect(currentContext, [self topRightResizeRect]);
-    CGContextFillEllipseInRect(currentContext, [self topLeftResizeRect]);
-    CGContextFillEllipseInRect(currentContext, [self topResizeRect]);
-    CGContextFillEllipseInRect(currentContext, [self bottomResizeRect]);
-    CGContextFillEllipseInRect(currentContext, [self leftResizeRect]);
-    CGContextFillEllipseInRect(currentContext, [self rightResizeRect]);
-}
-
-
-- (void)mouseDown:(NSEvent *)event
-{
-	NSPoint pointInView = [event locationInWindow];
-	window_resize_type resizeType = [self isResizing:pointInView];
-    
-    
-    
-	NSWindow *window = self.window;
-    NSPoint eventLocation = event.locationInWindow;
-    NSRect eventRect = NSMakeRect(eventLocation.x, eventLocation.y, 1, 1);
-    NSRect origRect = [window convertRectToScreen:eventRect];
-    NSPoint originalMouseLocation = origRect.origin;
-    
-	//NSPoint originalMouseLocation = [window convertBaseToScreen:[event locationInWindow]];
-	
-    while (YES)
-	{
-        NSEvent *newEvent = [window
-                             nextEventMatchingMask:(NSLeftMouseDraggedMask | NSLeftMouseUpMask)];
-		
-        if ([newEvent type] == NSLeftMouseUp)
-		{
-			break;
-		}
-		
-        
-        NSPoint eventLocation = newEvent.locationInWindow;
-        NSRect eventRect = NSMakeRect(eventLocation.x, eventLocation.y, 1, 1);
-        NSRect newRect = [window convertRectToScreen:eventRect];
-        NSPoint newMouseLocation = newRect.origin;
-		//NSPoint newMouseLocation = [window convertBaseToScreen:[newEvent locationInWindow]];
-		NSPoint delta = NSMakePoint(
-                                    newMouseLocation.x - originalMouseLocation.x,
-                                    newMouseLocation.y - originalMouseLocation.y);
-		
-		NSRect newFrame = [window frame];
-		
-        NSRect screenBounds = window.screen.frame;
-        
-        
-		if (resizeType == kResizeNone)
-		{
-			newFrame.origin.x += delta.x;
-			newFrame.origin.y += delta.y;
-		}
-		else
-		{
-            
-            if (resizeType & kResizeRight)
-            {
-                if ((newFrame.origin.x + newFrame.size.width + delta.x) < screenBounds.origin.x+screenBounds.size.width+RESIZE_INSET)
-                {
-                    newFrame.size.width += delta.x;
-                }
-            }
-            
-            if (resizeType & kResizeTop)
-            {
-                if ((newFrame.origin.y + newFrame.size.height + delta.y) < screenBounds.origin.y+screenBounds.size.height+RESIZE_INSET)
-                {
-                    newFrame.size.height += delta.y;
-                }
-
-            }
-            
-            if (resizeType & kResizeBottom)
-            {
-                float newOriginY = newFrame.origin.y + delta.y;
-                if (newOriginY > (screenBounds.origin.y-RESIZE_INSET))
-                {
-                    newFrame.size.height -= delta.y;
-                    newFrame.origin.y = newOriginY;
-                }
-            }
-            
-            if (resizeType & kResizeLeft)
-            {
-                float newOriginX = newFrame.origin.x + delta.x;
-                if (newOriginX > (screenBounds.origin.x-RESIZE_INSET))
-                {
-                    newFrame.size.width -= delta.x;
-                    newFrame.origin.x = newOriginX;
-                }
-            }
-		}
-
-        if (newFrame.origin.x < screenBounds.origin.x - RESIZE_INSET)
-        {
-            newFrame.origin.x = screenBounds.origin.x - RESIZE_INSET;
-        }
-        
-        if (newFrame.origin.y < screenBounds.origin.y - RESIZE_INSET)
-        {
-            newFrame.origin.y = screenBounds.origin.y - RESIZE_INSET;
-        }
-        
-        
-        if ((newFrame.origin.x + newFrame.size.width) > screenBounds.origin.x + NSWidth(screenBounds)+RESIZE_INSET)
-        {
-            newFrame.origin.x = screenBounds.origin.x + NSWidth(screenBounds) - newFrame.size.width + RESIZE_INSET;
-        }
-        
-        if ((newFrame.origin.y + newFrame.size.height) > screenBounds.origin.y + NSHeight(screenBounds) + RESIZE_INSET)
-        {
-            newFrame.origin.y = screenBounds.origin.y + NSHeight(screenBounds) - newFrame.size.height + RESIZE_INSET;
-        }
-
-        
-		[window setFrame:newFrame display:YES animate:NO];
-
-        
-        originalMouseLocation = newMouseLocation;
-	}
-    
+    CGContextStrokeRect(currentContext, [self bounds]);
+    CGContextFillRect(currentContext, [self bounds]);
 
 }
 

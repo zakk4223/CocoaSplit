@@ -237,7 +237,7 @@
 
 -(NDIlib_source_t)find_ndi_source:(NSString *)forName
 {
-    int source_count = 0;
+    uint32_t source_count = 0;
     const NDIlib_source_t *sources = [self current_ndi_sources:&source_count];
 
     for (int i = 0; i < source_count; i++)

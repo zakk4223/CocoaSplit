@@ -20,4 +20,8 @@
     [self close];
 }
 
+-(BOOL) isMovableByWindowBackground
+{
+    return YES;
+}
 @end
