@@ -14,6 +14,8 @@ extern NSString *const CSNotificationLayoutDeleted;
 extern NSString *const CSNotificationLayoutCanvasChanged;
 extern NSString *const CSNotificationLayoutFramerateChanged;
 extern NSString *const CSNotificationLayoutSaved;
+extern NSString *const CSNotificationLayoutInLiveChanged;
+extern NSString *const CSNotificationLayoutInStagingChanged;
 
 extern NSString *const CSNotificationStreamStarted;
 extern NSString *const CSNotificationStreamStopped;
@@ -57,4 +59,9 @@ extern NSString *const CSNotificationThemeChanged;
 
 extern NSString *const CSNotificationAudioAdded;
 extern NSString *const CSNotificationAudioRemoved;
+extern NSString *const CSNotificationAudioEnabled;
+extern NSString *const CSNotificationAudioDisabled;
+extern NSString *const CSNotificationAudioMuted;
+extern NSString *const CSNotificationAudioUnmuted;
+
 

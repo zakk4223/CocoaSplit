@@ -164,8 +164,26 @@
 
 -(void)setEnabled:(bool)enabled
 {
+    if (enabled == _enabled)
+    {
+        return;
+    }
     _enabled = enabled;
-    
+
+    if (_enabled)
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioEnabled object:self userInfo:nil];
+        if (self.nodeUID)
+        {
+            [[NSDistributedNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioEnabled object:@"CocoaSplit" userInfo:@{@"uuid": self.nodeUID} deliverImmediately:YES];
+        }
+    } else {
+        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioDisabled object:self userInfo:nil];
+        if (self.nodeUID)
+        {
+            [[NSDistributedNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioDisabled object:@"CocoaSplit" userInfo:@{@"uuid": self.nodeUID} deliverImmediately:YES];
+        }
+    }
     
 }
 -(UInt32)inputElement
@@ -308,6 +326,21 @@
         self.volume = _saved_volume;
     }
     _muted = muted;
+    
+    if (_muted)
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioMuted object:self userInfo:nil];
+        if (self.nodeUID)
+        {
+            [[NSDistributedNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioMuted object:@"CocoaSplit" userInfo:@{@"uuid": self.nodeUID} deliverImmediately:YES];
+        }
+    } else {
+        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioUnmuted object:self userInfo:nil];
+        if (self.nodeUID)
+        {
+            [[NSDistributedNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioUnmuted object:@"CocoaSplit" userInfo:@{@"uuid": self.nodeUID} deliverImmediately:YES];
+        }
+    }
 }
 
 -(void)resetSamplerate:(UInt32)sampleRate

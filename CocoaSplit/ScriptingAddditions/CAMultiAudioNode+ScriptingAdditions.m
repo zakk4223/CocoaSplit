@@ -13,22 +13,18 @@
 - (NSScriptObjectSpecifier *)objectSpecifier {
     NSScriptClassDescription* appDesc
     = (NSScriptClassDescription*)[NSApp classDescription];
-    return [[NSNameSpecifier alloc]
-            initWithContainerClassDescription:appDesc
-            containerSpecifier:nil
-            key:@"audioInputs"
-            name:[self name]];
+    return [[NSUniqueIDSpecifier alloc] initWithContainerClassDescription:appDesc containerSpecifier:nil key:@"audioInputs" uniqueID:self.nodeUID];
 }
 
 
 -(void)scriptMute:(NSScriptCommand *)command
 {
-    self.muted = YES;
+    self.enabled = NO;
 }
 
 -(void)scriptUnmute:(NSScriptCommand *)command
 {
-    self.muted = NO;
+    self.enabled = YES;
 }
 
 

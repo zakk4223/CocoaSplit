@@ -50,6 +50,22 @@
     
 }
 
+-(void)setEnabled:(bool)enabled
+{
+    UInt32 elementCount = 0;
+    UInt32 elementSize = sizeof(UInt32);
+    
+    
+    AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Input, 0, &elementCount, &elementSize);
+    
+    for (UInt32 i = 0; i < elementCount; i++)
+    {
+        AudioUnitSetParameter(self.audioUnit, kMultiChannelMixerParam_Enable, kAudioUnitScope_Input, i, enabled, 0);
+    }
+
+    [super setEnabled:enabled];
+
+}
 -(void)enableMeteringOnInputBus:(UInt32)bus
 {
     if (self.audioUnit)
@@ -175,7 +191,6 @@
     }
 
     [self setVolumeOnInputBus:useElement volume:1.0];
-    
     return useElement;
 }
 

@@ -18,11 +18,13 @@
 - (NSScriptObjectSpecifier *)objectSpecifier {
     NSScriptClassDescription* appDesc
     = (NSScriptClassDescription*)[NSApp classDescription];
-    return [[NSNameSpecifier alloc]
+    return [[NSUniqueIDSpecifier alloc] initWithContainerClassDescription:appDesc containerSpecifier:nil key:@"layouts" uniqueID:self.uuid];
+/*    return [[NSNameSpecifier alloc]
              initWithContainerClassDescription:appDesc
              containerSpecifier:nil
              key:@"layouts"
              name:[self name]];
+ */
 }
 
 

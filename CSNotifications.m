@@ -12,6 +12,9 @@ NSString *const CSNotificationLayoutDeleted = @"CSNotificationLayoutDeleted";
 NSString *const CSNotificationLayoutSaved = @"CSNotificationLayoutSaved";
 NSString *const CSNotificationLayoutCanvasChanged = @"CSNotificationLayoutCanvasChanged";
 NSString *const CSNotificationLayoutFramerateChanged = @"CSNotificationLayoutFramerateChanged";
+NSString *const CSNotificationLayoutInLiveChanged = @"CSNotificationLayoutInLiveChanged";
+NSString *const CSNotificationLayoutInStagingChanged = @"CSNotificationLayoutInStagingChanged";
+
 
 
 
@@ -58,4 +61,7 @@ NSString *const CSNotificationAudioStatisticsUpdate = @"CSNotificationAudioStati
 
 NSString *const CSNotificationAudioAdded = @"CSNotificationAudioAdded";
 NSString *const CSNotificationAudioRemoved = @"CSNotificationAudioRemoved";
-
+NSString *const CSNotificationAudioEnabled = @"CSNotificationAudioEnabled";
+NSString *const CSNotificationAudioDisabled = @"CSNotificationAudioDisabled";
+NSString *const CSNotificationAudioMuted = @"CSNotificationAudioMuted";
+NSString *const CSNotificationAudioUnmuted = @"CSNotificationAudioUnmuted";

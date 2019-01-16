@@ -2911,6 +2911,8 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     self.captureRunning = YES;
 
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationStreamStarted object:self userInfo:nil];
+    [[NSDistributedNotificationCenter defaultCenter] postNotificationName:CSNotificationStreamStarted object:@"CocoaSplit" userInfo:nil deliverImmediately:YES];
+    
     self.streamStartDate = [NSDate date];
     return YES;
     
@@ -2984,6 +2986,8 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     
     
     [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationStreamStopped object:self userInfo:nil];
+    [[NSDistributedNotificationCenter defaultCenter] postNotificationName:CSNotificationStreamStarted object:@"CocoaSplit" userInfo:nil deliverImmediately:YES];
+
     self.streamStartDate = nil;
     
 }

@@ -35,6 +35,9 @@ CV_EXPORT CVReturn CVMetalTextureCacheCreate(
 {
     CVPixelBufferPoolRef _cvpool;
     CVMetalTextureCacheRef _cvmetalcache;
+    CARemoteLayerServer *_caServer;
+    CARemoteLayerClient *_caClient;
+    CALayer *_remoteLayer;
     
     CVPixelBufferRef _currentPB;
     NSSize _cvpool_size;

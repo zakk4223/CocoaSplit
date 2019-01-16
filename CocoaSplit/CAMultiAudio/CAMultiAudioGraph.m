@@ -261,6 +261,7 @@
     {
         useNode = node.headNode;
     }
+
     inNode = useNode.node;
     connectTo = toNode.node;
     //aUnit = node.audioUnit;

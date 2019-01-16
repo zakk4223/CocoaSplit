@@ -148,12 +148,16 @@
     return self.captureController.multiAudioEngine.previewMixer;
 }
 
+-(bool) streamRunning
+{
+    return self.captureController.captureRunning;
+}
 
 -(BOOL)application:(NSApplication *)sender delegateHandlesKey:(NSString *)key
 {
     
     
-    NSArray *keys = @[@"layouts", @"width", @"height", @"fps", @"activelayout", @"layoutscripts", @"audioInputs", @"captureDestinations", @"staginglayout", @"livelayout", @"useTransitions", @"previewAudio", @"streamAudio", @"transitions"];
+    NSArray *keys = @[@"layouts", @"width", @"height", @"fps", @"activelayout", @"layoutscripts", @"audioInputs", @"captureDestinations", @"staginglayout", @"livelayout", @"useTransitions", @"previewAudio", @"streamAudio", @"transitions", @"streamRunning"];
     
     return [keys containsObject:key];
 }

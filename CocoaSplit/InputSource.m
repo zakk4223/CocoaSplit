@@ -669,6 +669,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void)updateLayer:(void (^)(CALayer *layer))updateBlock
 {
+    
     if (_currentLayer)
     {
         [CATransaction begin];

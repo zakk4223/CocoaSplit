@@ -52,6 +52,8 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 @synthesize stopColor = _stopColor;
 @synthesize rootLayer = _rootLayer;
 @synthesize transitionLayer = _transitionLayer;
+@synthesize in_live = _in_live;
+@synthesize in_staging = _in_staging;
 
 -(instancetype) init
 {
@@ -2573,6 +2575,36 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 }
 
 
+
+-(void)setIn_live:(bool)in_live
+{
+    if (_in_live != in_live)
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutInLiveChanged object:self userInfo:nil];
+        [[NSDistributedNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutInLiveChanged object:@"CocoaSplit" userInfo:@{@"layout": self.uuid} deliverImmediately:YES];
+    }
+    _in_live = in_live;
+}
+
+-(bool)in_live
+{
+    return _in_live;
+}
+
+-(void)setIn_staging:(bool)in_staging
+{
+    if (_in_staging != in_staging)
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutInStagingChanged object:self userInfo:nil];
+        [[NSDistributedNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutInStagingChanged object:@"CocoaSplit" userInfo:@{@"layout": self.uuid} deliverImmediately:YES];
+    }
+    _in_staging = in_staging;
+}
+
+-(bool)in_staging
+{
+    return _in_staging;
+}
 
 
 -(void)setIsActive:(bool)isActive

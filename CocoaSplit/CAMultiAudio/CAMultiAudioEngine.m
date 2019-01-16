@@ -410,7 +410,9 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     self.silentNode = [[CAMultiAudioSilence alloc] init];
     self.encodeMixer = [[CAMultiAudioMixer alloc] init];
+    self.encodeMixer.nodeUID = @"__CS_ENCODE_MIXER_NODE";
     self.previewMixer = [[CAMultiAudioMixer alloc] init];
+    self.previewMixer.nodeUID = @"__CS_PREVIEW_MIXER_NODE";
     self.renderNode = [[CAMultiAudioEffect alloc] initWithSubType:kAudioUnitSubType_Delay unitType:kAudioUnitType_Effect];
     
     [self.graph addNode:self.outputNode];

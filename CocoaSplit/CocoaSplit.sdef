@@ -24,6 +24,7 @@
             <property name="staginglayout" code="CSsl" type="layout" access = "r"/>
             <property name="livelayout" code="CSll" type="layout" access="r"/>
             <property name="useTransitions" code="CSut" type="boolean"/>
+            <property name="streamRunning" code="CSsr" type="boolean"/>
             <property name="streamAudio" code="CSsa" type="audioInput" access="r"/>
             <property name="previewAudio" code="CSpa" type="audioInput" access="r"/>
             
@@ -39,6 +40,36 @@
             </property>
             <property name="running" code="CSru" type="boolean" access="r">
                 <cocoa key="scriptRunning"/>
+            </property>
+            <property name="errored" code="CSer" type="boolean" access="r">
+                <cocoa key="errored"/>
+            </property>
+
+            <property name="isDraining" code="CSid" type="boolean" access="r">
+                <cocoa key="buffer_draining"/>
+            </property>
+            
+            <property name="inputFramerate" code="CSif" type="real" access="r">
+                <cocoa key="input_framerate"/>
+            </property>
+            
+            <property name="bitrateOut" code="CSbo" type="real" access="r">
+                <cocoa key="output_bitrate"/>
+            </property>
+            <property name="bufferedFrames" code="CSbf" type="integer" access="r">
+                <cocoa key="buffered_frame_count"/>
+            </property>
+            <property name="bufferedSize" code="CSbs" type="integer" access="r">
+                <cocoa key="buffered_frame_size"/>
+            </property>
+            <property name="droppedFrames" code="CSdf" type="integer" access="r">
+                <cocoa key="dropped_frame_count"/>
+            </property>
+            <property name="outputFrameRate" code="CSfr" type="real" access="r">
+                <cocoa key="output_framerate"/>
+            </property>
+            <property name="compressor" code="CScm" type="text" access="r">
+                <cocoa key="compressor_name"/>
             </property>
         </class>
         
@@ -63,6 +94,10 @@
             </property>
             <property name="enabled" code="CSen" type="boolean"/>
             <property name="muted" code="CSmu" type="boolean"/>
+            <property name="id" code="ID  " type="text">
+                <cocoa key="nodeUID"/>
+            </property>
+            
             <responds-to name="mute">
                 <cocoa method="scriptMute:"/>
             </responds-to>
@@ -122,6 +157,10 @@
             </element>
 
 
+            <property name="id" code="ID  " type="text" access="r">
+                <cocoa key="uuid"/>
+            </property>
+            
             <property name="name" code="pnam" type="text">
                 <cocoa key="name"/>
             </property>
@@ -142,6 +181,14 @@
             </property>
 
 
+            <property name="inStaging" code="CSls" type="boolean">
+                <cocoa key="in_staging"/>
+            </property>
+            
+            <property name="inLive" code="CSll" type="boolean">
+                <cocoa key="in_live"/>
+            </property>
+            
             <responds-to name="merge">
                 <cocoa method="scriptMergeLayout:"/>
             </responds-to>

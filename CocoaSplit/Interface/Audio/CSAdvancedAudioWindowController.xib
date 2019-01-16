@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14313.18"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -196,12 +196,12 @@
                         <constraints>
                             <constraint firstAttribute="height" constant="27" id="cG3-Bd-HAO"/>
                         </constraints>
-                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Speaker_Icon" imagePosition="only" alignment="center" alternateImage="Mute_Icon" controlSize="small" imageScaling="proportionallyUpOrDown" inset="2" id="HFf-ty-SwM" customClass="CSNSButtonCellThemed">
+                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Mute_Icon" imagePosition="only" alignment="center" alternateImage="Speaker_Icon" controlSize="small" imageScaling="proportionallyUpOrDown" inset="2" id="HFf-ty-SwM" customClass="CSNSButtonCellThemed">
                             <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
                         <connections>
-                            <binding destination="dRe-6o-71e" name="value" keyPath="selection.encodeMixer.muted" id="BOX-jc-985"/>
+                            <binding destination="dRe-6o-71e" name="value" keyPath="selection.encodeMixer.enabled" id="gtc-5g-Cnh"/>
                         </connections>
                     </button>
                     <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HYJ-UD-4rz">
@@ -223,12 +223,12 @@
                         <constraints>
                             <constraint firstAttribute="height" constant="23" id="iQU-OE-rbO"/>
                         </constraints>
-                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Speaker_Icon" imagePosition="only" alignment="center" alternateImage="Mute_Icon" controlSize="small" imageScaling="proportionallyUpOrDown" inset="2" id="6fp-6X-2wk" customClass="CSNSButtonCellThemed">
+                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Mute_Icon" imagePosition="only" alignment="center" alternateImage="Speaker_Icon" controlSize="small" imageScaling="proportionallyUpOrDown" inset="2" id="6fp-6X-2wk" customClass="CSNSButtonCellThemed">
                             <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
                         <connections>
-                            <binding destination="dRe-6o-71e" name="value" keyPath="selection.previewMixer.muted" id="4ok-xX-j1r"/>
+                            <binding destination="dRe-6o-71e" name="value" keyPath="selection.previewMixer.enabled" id="GY9-T8-HVd"/>
                         </connections>
                     </button>
                 </subviews>
