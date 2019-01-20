@@ -126,6 +126,10 @@
     return self.captureController.selectedLayout;
 }
 
+-(bool)stagingEnabled
+{
+    return !self.captureController.stagingHidden;
+}
 
 -(bool)useTransitions
 {
@@ -157,7 +161,7 @@
 {
     
     
-    NSArray *keys = @[@"layouts", @"width", @"height", @"fps", @"activelayout", @"layoutscripts", @"audioInputs", @"captureDestinations", @"staginglayout", @"livelayout", @"useTransitions", @"previewAudio", @"streamAudio", @"transitions", @"streamRunning"];
+    NSArray *keys = @[@"layouts", @"width", @"height", @"fps", @"activelayout", @"layoutscripts", @"audioInputs", @"captureDestinations", @"staginglayout", @"livelayout", @"useTransitions", @"previewAudio", @"streamAudio", @"transitions", @"streamRunning", @"stagingEnabled"];
     
     return [keys containsObject:key];
 }

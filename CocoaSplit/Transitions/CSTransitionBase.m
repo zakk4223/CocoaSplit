@@ -75,6 +75,11 @@
 
 -(void)setActive:(bool)active
 {
+    if (_active == active)
+    {
+        return;
+    }
+    
     _active = active;
     if (self.isToggle)
     {
@@ -92,6 +97,8 @@
         [runScript appendString:@"if (actionScript) { beginAnimation(); (new Function('self', actionScript))(extraDict.transition);commitAnimation();}"];
         [useLayout runAnimationString:runScript withCompletionBlock:nil withExceptionBlock:nil withExtraDictionary:@{@"transition": self}];
     }
+    
+    [CaptureController.sharedCaptureController postNotification:CSNotificationTransitionStateChanged forObject:self];    
 }
 
 -(void)setDuration:(NSNumber *)duration

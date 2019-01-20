@@ -218,8 +218,7 @@
                 [self willChangeValueForKey:@"compressors"];
                 [self.compressors removeObjectForKey:self.compressionPanelController.compressor.name];
                 [self didChangeValueForKey:@"compressors"];
-                [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorDeleted object:self.compressionPanelController.compressor userInfo:nil];
-
+                [CaptureController.sharedCaptureController postNotification:CSNotificationCompressorDeleted forObject:self.compressionPanelController.compressor];
                 break;
             case NSModalResponseOK:
             {
@@ -231,13 +230,11 @@
                     {
                         [self.compressors removeObjectForKey:editCompressor.name];
                         NSDictionary *notifyMsg = [NSDictionary dictionaryWithObjectsAndKeys:editCompressor.name, @"oldName", self.compressionPanelController.compressor, @"compressor", nil];
-                        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorRenamed object:notifyMsg];
-                        
+                        [CaptureController.sharedCaptureController postNotification:CSNotificationCompressorRenamed forObject:self.compressionPanelController.compressor withUserInfo:notifyMsg];
                     }
                     self.compressors[self.compressionPanelController.compressor.name] = self.compressionPanelController.compressor;
                 }
-                [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorReconfigured object:self.compressionPanelController.compressor];
-                
+                [CaptureController.sharedCaptureController postNotification:CSNotificationCompressorReconfigured forObject:self.compressionPanelController.compressor];
                 break;
             }
             case 4242:
@@ -247,7 +244,7 @@
                     [self willChangeValueForKey:@"compressors"];
                     self.compressors[self.compressionPanelController.compressor.name] = self.compressionPanelController.compressor;
                     [self didChangeValueForKey:@"compressors"];
-                    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:self.compressionPanelController.compressor userInfo:nil];
+                    [CaptureController.sharedCaptureController postNotification:CSNotificationCompressorAdded forObject:self.compressionPanelController.compressor];
 
                 }
             default:

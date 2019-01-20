@@ -178,15 +178,15 @@
         }
         //NSApp.appearance = useAppearance;
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationThemeChanged object:self];
-
+    [CaptureController.sharedCaptureController postNotification:CSNotificationThemeChanged forObject:self];
 }
 
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-
+    [CaptureController.sharedCaptureController postNotification:CSNotificationLaunchCompleted forObject:self];
 }
+
 
 
 -(NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender

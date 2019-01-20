@@ -61,6 +61,7 @@
 @property (assign) NSUInteger delay_buffer_frames;
 @property (assign) BOOL buffer_draining;
 @property (strong) NSString *name;
+@property (strong) NSString *uuid;
 @property (strong) NSObject<CSStreamServiceProtocol>*streamServiceObject;
 @property (weak) SourceLayout *assignedLayout;
 

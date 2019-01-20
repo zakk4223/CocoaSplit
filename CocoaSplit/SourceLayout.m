@@ -629,7 +629,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     
     if (_frameRate != oldframerate)
     {
-        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutFramerateChanged object:self userInfo:nil];
+        [CaptureController.sharedCaptureController postNotification:CSNotificationLayoutFramerateChanged forObject:self];
     }
 }
 
@@ -1026,7 +1026,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     NSData *saveData = [self makeSaveData];
     self.savedSourceListData = saveData;
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutSaved object:self userInfo:nil];
+    [CaptureController.sharedCaptureController postNotification:CSNotificationLayoutSaved forObject:self];
 
 }
 
@@ -2426,7 +2426,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         //[self.sourceList removeObject:delSource];
         
         [delSource removeObserver:self forKeyPath:@"depth"];
-        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputDeleted  object:delSource userInfo:nil];
+        [CaptureController.sharedCaptureController postNotification:CSNotificationInputDeleted forObject:delSource];
     }
     
     delSource.is_live = NO;
@@ -2551,7 +2551,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     [newSource afterAdd];
     
     [newSource addObserver:self forKeyPath:@"depth" options:NSKeyValueObservingOptionNew context:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputAdded object:newSource userInfo:nil];
+    [CaptureController.sharedCaptureController postNotification:CSNotificationInputAdded forObject:newSource];
 }
 
 
@@ -2580,8 +2580,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 {
     if (_in_live != in_live)
     {
-        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutInLiveChanged object:self userInfo:nil];
-        [[NSDistributedNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutInLiveChanged object:@"CocoaSplit" userInfo:@{@"layout": self.uuid} deliverImmediately:YES];
+        [CaptureController.sharedCaptureController postNotification:CSNotificationLayoutInLiveChanged forObject:self];
     }
     _in_live = in_live;
 }
@@ -2595,8 +2594,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 {
     if (_in_staging != in_staging)
     {
-        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutInStagingChanged object:self userInfo:nil];
-        [[NSDistributedNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutInStagingChanged object:@"CocoaSplit" userInfo:@{@"layout": self.uuid} deliverImmediately:YES];
+        [CaptureController.sharedCaptureController postNotification:CSNotificationLayoutInStagingChanged forObject:self];
     }
     _in_staging = in_staging;
 }
@@ -2745,7 +2743,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     
     if ((old_height != height) || (old_width != width))
     {
-        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutCanvasChanged object:self userInfo:nil];
+        [CaptureController.sharedCaptureController postNotification:CSNotificationLayoutCanvasChanged forObject:self];
     }
 }
 

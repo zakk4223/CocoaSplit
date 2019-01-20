@@ -43,6 +43,7 @@
     [aCoder encodeObject:self.streamServiceObject forKey:@"streamServiceObject"];
     [aCoder encodeObject:_destination forKey:@"destination"];
     [aCoder encodeBool:self.autoRetry forKey:@"autoRetry"];
+    [aCoder encodeObject:self.uuid forKey:@"uuid"];
     if (self.assignedLayout)
     {
         [aCoder encodeObject:self.assignedLayout forKey:@"assignedLayout"];
@@ -59,6 +60,12 @@
         {
             self.assignedLayout = [aDecoder decodeObjectForKey:@"assignedLayout"];
         }
+        
+        if ([aDecoder containsValueForKey:@"uuid"])
+        {
+            self.uuid = [aDecoder decodeObjectForKey:@"uuid"];
+        }
+        
         _destination = [aDecoder decodeObjectForKey:@"destination"];
         self.name = [aDecoder decodeObjectForKey:@"name"];
         self.type_name = [aDecoder decodeObjectForKey:@"type_name"];
@@ -148,8 +155,8 @@
 
     if (self.errored)
     {
-        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputRestarted object:self userInfo:nil];
-    }
+        [CaptureController.sharedCaptureController postNotification:CSNotificationOutputRestarted forObject:self];
+   }
 
     self.errored = NO;
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -185,8 +192,8 @@
             } else {
                 [self setup];
             }
-            [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputSetActive object:self userInfo:nil];
-        } else {
+            [CaptureController.sharedCaptureController postNotification:CSNotificationOutputSetActive forObject:self];
+       } else {
             
             if (self.assignedLayout && ![self.assignedLayout isEqual:[NSNull null]] && streamingActive)
             {
@@ -195,9 +202,7 @@
                 [self teardown];
             }
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputSetInactive object:self userInfo:nil];
-
-            
+           [CaptureController.sharedCaptureController postNotification:CSNotificationOutputSetInactive forObject:self];
         }
     }
 
@@ -236,8 +241,7 @@
                 [self.ffmpeg_out stopProcess];
                 self.ffmpeg_out = nil;
                 }
-            [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputStopped object:self userInfo:nil];
-
+            [CaptureController.sharedCaptureController postNotification:CSNotificationOutputStopped forObject:self];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     self.statusImage = [NSImage imageNamed:@"inactive"];
                 });
@@ -285,6 +289,8 @@
         _delayBuffer = [[NSMutableArray alloc] init];
         self.delay_buffer_frames = 0;
         _stopped = YES;
+        _uuid = [NSUUID UUID].UUIDString;
+        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(compressorDeleted:) name:CSNotificationCompressorDeleted object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(compressorRenamed:) name:CSNotificationCompressorRenamed object:nil];
 
@@ -416,8 +422,7 @@
         {
             self.errored = YES;
             newImage = [NSImage imageNamed:@"Record_Icon"];
-            [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputErrored object:self userInfo:nil];
-
+            [CaptureController.sharedCaptureController postNotification:CSNotificationOutputErrored forObject:self];
         }
         
     }
@@ -538,8 +543,7 @@
         if (start_stream)
         {
             [self attachOutput];
-            [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputStarted object:self userInfo:nil];
-
+            [CaptureController.sharedCaptureController postNotification:CSNotificationOutputStarted forObject:self];
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.statusImage  = [NSImage imageNamed:@"ok"];
             });
@@ -569,8 +573,7 @@
             {
                 self.errored = YES;
                 self.active = NO;
-                [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputErrored object:self userInfo:nil];
-
+                [CaptureController.sharedCaptureController postNotification:CSNotificationOutputErrored forObject:self];
                 if (self.autoRetry)
                 {
                     self.active = YES;

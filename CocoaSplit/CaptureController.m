@@ -696,7 +696,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
             
             toDelete.isActive = NO;
             [self.sourceLayoutsArrayController removeObject:toDelete];
-            [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutDeleted object:toDelete];
+            [CaptureController.sharedCaptureController postNotification:CSNotificationLayoutDeleted forObject:self];
             return YES;
         }
     }
@@ -1267,8 +1267,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
                }
                    
            }
-           [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioStatisticsUpdate object:self userInfo:nil];
-
+           [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioStatisticsUpdate object:self];
        });
        
        dispatch_resume(_audio_statistics_timer);
@@ -1318,9 +1317,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
            self->_renderedFrames = 0;
            self->_render_time_total = 0.0f;
            
-
-           [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationStatisticsUpdate object:self userInfo:nil];
-
+           [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationStatisticsUpdate object:self];
        });
 
         
@@ -1956,7 +1953,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
         defaultCompressor.name = defaultCompressor.compressorType.mutableCopy;
         [self.compressors setObject:defaultCompressor forKey:@"x264"];
         NSDictionary *notifyMsg = [NSDictionary dictionaryWithObjectsAndKeys:@"default", @"oldName", defaultCompressor, @"compressor", nil];
-        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorRenamed object:notifyMsg];
+        [CaptureController.sharedCaptureController postNotification:CSNotificationCompressorRenamed forObject:defaultCompressor withUserInfo:notifyMsg];
     }
     
     
@@ -1982,8 +1979,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
         CSPassthroughCompressor *newCompressor = [[CSPassthroughCompressor alloc] init];
         newCompressor.name = @"Passthrough".mutableCopy;
         self.compressors[@"Passthrough"] = newCompressor;
-        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:newCompressor];
-
+        [CaptureController.sharedCaptureController postNotification:CSNotificationCompressorAdded forObject:newCompressor];
     } else {
         CSPassthroughCompressor *pComp = self.compressors[@"Passthrough"];
         if (!pComp.name)
@@ -2002,7 +1998,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
             newCompressor.max_bitrate = 1000;
             newCompressor.keyframe_interval = 2;
             self.compressors[@"AppleHEVC"] = newCompressor;
-            [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:newCompressor];
+            [CaptureController.sharedCaptureController postNotification:CSNotificationCompressorAdded forObject:newCompressor];
         }
     } else if (self.compressors[@"AppleHEVC"]) {
         [self.compressors removeObjectForKey:@"AppleHEVC"];
@@ -2022,7 +2018,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
         newCompressor.use_cbr = YES;
         
         self.compressors[@"x264"] = newCompressor;
-        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:newCompressor];
+        [CaptureController.sharedCaptureController postNotification:CSNotificationCompressorAdded forObject:newCompressor];
     }
     
     if (!self.compressors[@"AppleH264"])
@@ -2033,7 +2029,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
         newCompressor.max_bitrate = 1000;
         newCompressor.keyframe_interval = 2;
         self.compressors[@"AppleH264"] = newCompressor;
-        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:newCompressor];
+        [CaptureController.sharedCaptureController postNotification:CSNotificationCompressorAdded forObject:newCompressor];
     }
     
     if (!self.compressors[@"AppleProRes"])
@@ -2041,7 +2037,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
         AppleProResCompressor *newCompressor = [[AppleProResCompressor alloc] init];
         newCompressor.name = @"AppleProRes".mutableCopy;
         self.compressors[@"AppleProRes"] = newCompressor;
-        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:newCompressor];
+        [CaptureController.sharedCaptureController postNotification:CSNotificationCompressorAdded forObject:newCompressor];
     }
     
     if (!self.compressors[@"InstantRecorder"])
@@ -2049,7 +2045,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
         CSIRCompressor *newCompressor = [[CSIRCompressor alloc] init];
         newCompressor.name = @"InstantRecorder".mutableCopy;
         self.compressors[@"InstantRecorder"] = newCompressor;
-        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:newCompressor];
+        [CaptureController.sharedCaptureController postNotification:CSNotificationCompressorAdded forObject:newCompressor];
     }
     
 }
@@ -2482,6 +2478,42 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 }
 
 
+-(void)postNotification:(NSString *)notificationName forObject:(id)obj withUserInfo:(NSDictionary *)userInfo;
+{
+    
+    NSMutableDictionary *realInfo = nil;
+
+    
+    if ([obj respondsToSelector:@selector(uuid)])
+    {
+        realInfo = [NSMutableDictionary dictionary];
+        if (userInfo)
+        {
+            [realInfo addEntriesFromDictionary:userInfo];
+        }
+        
+        NSString *uuid = [obj uuid];
+        
+        if (uuid)
+        {
+            [realInfo setObject:uuid forKey:@"uuid"];
+        }
+    }
+    
+    if (userInfo && !realInfo)
+    {
+        realInfo = userInfo.mutableCopy;
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:obj userInfo:realInfo];
+    [[NSDistributedNotificationCenter defaultCenter] postNotificationName:notificationName object:@"CocoaSplit" userInfo:realInfo deliverImmediately:YES];
+}
+
+-(void)postNotification:(NSString *)notificationName forObject:(id)obj
+{
+    [self postNotification:notificationName forObject:obj withUserInfo:nil];
+}
+
 
 -(NSObject<CSInputSourceProtocol>*)inputSourceForPasteboardItem:(NSPasteboardItem *)item
 {
@@ -2910,9 +2942,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     
     self.captureRunning = YES;
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationStreamStarted object:self userInfo:nil];
-    [[NSDistributedNotificationCenter defaultCenter] postNotificationName:CSNotificationStreamStarted object:@"CocoaSplit" userInfo:nil deliverImmediately:YES];
-    
+    [self postNotification:CSNotificationStreamStarted forObject:self];
     self.streamStartDate = [NSDate date];
     return YES;
     
@@ -2984,10 +3014,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     }
     
     
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationStreamStopped object:self userInfo:nil];
-    [[NSDistributedNotificationCenter defaultCenter] postNotificationName:CSNotificationStreamStarted object:@"CocoaSplit" userInfo:nil deliverImmediately:YES];
-
+    [CaptureController.sharedCaptureController postNotification:CSNotificationStreamStopped forObject:self];
     self.streamStartDate = nil;
     
 }
@@ -3154,8 +3181,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
                 [self willChangeValueForKey:@"compressors"];
                 [self.compressors removeObjectForKey:cPanel.compressor.name];
                 [self didChangeValueForKey:@"compressors"];
-                [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorDeleted object:cPanel.compressor userInfo:nil];
-                
+                [CaptureController.sharedCaptureController postNotification:CSNotificationCompressorDeleted forObject:cPanel.compressor];
                 break;
             case NSModalResponseOK:
             {
@@ -3167,13 +3193,11 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
                     {
                         [self.compressors removeObjectForKey:compressor.name];
                         NSDictionary *notifyMsg = [NSDictionary dictionaryWithObjectsAndKeys:compressor.name, @"oldName", cPanel.compressor, @"compressor", nil];
-                        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorRenamed object:notifyMsg];
-                        
+                        [CaptureController.sharedCaptureController postNotification:CSNotificationCompressorRenamed forObject:cPanel.compressor withUserInfo:notifyMsg];
                     }
                     self.compressors[cPanel.compressor.name] = cPanel.compressor;
                 }
-                [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorReconfigured object:cPanel.compressor];
-                
+                [CaptureController.sharedCaptureController postNotification:CSNotificationCompressorReconfigured forObject:cPanel.compressor];
                 break;
             }
             case 4242:
@@ -3183,8 +3207,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
                     [self willChangeValueForKey:@"compressors"];
                     self.compressors[cPanel.compressor.name] = cPanel.compressor;
                     [self didChangeValueForKey:@"compressors"];
-                    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:cPanel.compressor userInfo:nil];
-                    
+                    [CaptureController.sharedCaptureController postNotification:CSNotificationCompressorAdded forObject:cPanel.compressor];
                 }
             default:
                 break;
@@ -3214,8 +3237,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
                 [self willChangeValueForKey:@"compressors"];
                 [self.compressors removeObjectForKey:cPanel.compressor.name];
                 [self didChangeValueForKey:@"compressors"];
-                [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorDeleted object:cPanel.compressor userInfo:nil];
-                
+                [CaptureController.sharedCaptureController postNotification:CSNotificationCompressorDeleted forObject:cPanel.compressor];
                 break;
             case NSModalResponseOK:
             {
@@ -3227,13 +3249,12 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
                     {
                         [self.compressors removeObjectForKey:compressor.name];
                         NSDictionary *notifyMsg = [NSDictionary dictionaryWithObjectsAndKeys:compressor.name, @"oldName", cPanel.compressor, @"compressor", nil];
-                        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorRenamed object:notifyMsg];
-                        
+                        [CaptureController.sharedCaptureController postNotification:CSNotificationCompressorRenamed forObject:cPanel.compressor withUserInfo:notifyMsg];
                     }
                     self.compressors[cPanel.compressor.name] = cPanel.compressor;
                 }
-                [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorReconfigured object:cPanel.compressor];
-                
+                [CaptureController.sharedCaptureController postNotification:CSNotificationCompressorReconfigured forObject:cPanel.compressor];
+
                 break;
             }
             case 4242:
@@ -3243,8 +3264,8 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
                     [self willChangeValueForKey:@"compressors"];
                     self.compressors[cPanel.compressor.name] = cPanel.compressor;
                     [self didChangeValueForKey:@"compressors"];
-                    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationCompressorAdded object:cPanel.compressor userInfo:nil];
-                    
+                    [CaptureController.sharedCaptureController postNotification:CSNotificationCompressorAdded forObject:cPanel.compressor];
+
                 }
             default:
                 break;
@@ -3537,7 +3558,8 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     OutputDestination *to_delete = [self.captureDestinations objectAtIndex:index];
     to_delete.active = NO;
     [self.captureDestinations removeObjectAtIndex:index];
-    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputDeleted object:to_delete userInfo:nil];
+    [CaptureController.sharedCaptureController postNotification:CSNotificationOutputDeleted forObject:to_delete];
+
 }
 
 -(void)replaceObjectInCaptureDestinationsAtIndex:(NSUInteger)index withObject:(id)object
@@ -3549,14 +3571,14 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 -(void)insertObject:(OutputDestination *)object inCaptureDestinationsAtIndex:(NSUInteger)index
 {
     [self.captureDestinations insertObject:object atIndex:index];
-    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationOutputAdded object:object userInfo:nil];
+    [CaptureController.sharedCaptureController postNotification:CSNotificationOutputAdded forObject:object];
 }
 
 
 -(void) insertObject:(SourceLayout *)object inSourceLayoutsAtIndex:(NSUInteger)index
 {
     [self.sourceLayouts insertObject:object atIndex:index];
-    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutAdded object:object userInfo:nil];
+    [CaptureController.sharedCaptureController postNotification:CSNotificationLayoutAdded forObject:object];
 }
 
 
@@ -3565,7 +3587,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     id to_delete = [self.sourceLayouts objectAtIndex:index];
     
     [self.sourceLayouts removeObjectAtIndex:index];
-    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutDeleted object:to_delete userInfo:nil];
+    [CaptureController.sharedCaptureController postNotification:CSNotificationLayoutDeleted forObject:to_delete];
 }
 
 
@@ -3825,7 +3847,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 {
     [self.activePreviewView.sourceLayout saveSourceList];
     layout.savedSourceListData = self.activePreviewView.sourceLayout.savedSourceListData;
-    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutSaved object:layout userInfo:nil];
+    [CaptureController.sharedCaptureController postNotification:CSNotificationLayoutSaved forObject:layout];
 }
 
 
@@ -4466,13 +4488,17 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 
 -(void)setUseTransitions:(bool)useTransitions
 {
-    _useTransitions = useTransitions;
-    
-    if (_useTransitions)
+    if (_useTransitions != useTransitions)
     {
-        [self showTransitionView:nil];
-    } else {
-        [self hideTransitionView:nil];
+        _useTransitions = useTransitions;
+        
+        if (_useTransitions)
+        {
+            [self showTransitionView:nil];
+        } else {
+            [self hideTransitionView:nil];
+        }
+        [self postNotification:CSNotificationUseTransitionsChanged forObject:self];
     }
 }
 
@@ -4714,7 +4740,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     {
         _layoutSwitcherWindowController.previewRenderer = nil;
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutModeChanged object:self];
+    [CaptureController.sharedCaptureController postNotification:CSNotificationLayoutModeChanged forObject:self];
 
 }
 
@@ -4755,7 +4781,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     {
         _layoutSwitcherWindowController.previewRenderer = self.stagingPreviewView.layoutRenderer;
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationLayoutModeChanged object:self];
+    [CaptureController.sharedCaptureController postNotification:CSNotificationLayoutModeChanged forObject:self];
 
     self.stagingLayout.audioEngine = [self setupStagingAudio];
 }

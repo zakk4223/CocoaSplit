@@ -12,6 +12,7 @@
 #import "InputPopupControllerViewController.h"
 
 #import <objc/runtime.h>
+#import "CaptureController.h"
 
 static NSArray *_sourceTypes = nil;
 
@@ -2446,7 +2447,7 @@ static NSArray *_sourceTypes = nil;
     [[self mutableArrayValueForKey:@"attachedInputs"] removeObject:toDetach];
     toDetach.parentInput = nil;
     toDetach.persistent = NO;
-    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputDetached object:toDetach userInfo:nil];
+    [CaptureController.sharedCaptureController postNotification:CSNotificationInputDetached forObject:toDetach];
 
 }
 
@@ -2512,7 +2513,7 @@ static NSArray *_sourceTypes = nil;
     [[self mutableArrayValueForKey:@"attachedInputs"] addObject:toAttach];
     toAttach.persistent = self.persistent;
     toAttach.parentInput = self;
-    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputAttached object:toAttach userInfo:nil];
+    [CaptureController.sharedCaptureController postNotification:CSNotificationInputAttached forObject:toAttach];
 
 }
 
@@ -3459,7 +3460,7 @@ static NSArray *_sourceTypes = nil;
     
     if (is_selected)
     {
-        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationInputSelected object:self userInfo:nil];
+        [CaptureController.sharedCaptureController postNotification:CSNotificationInputSelected forObject:self];
 
     }
     

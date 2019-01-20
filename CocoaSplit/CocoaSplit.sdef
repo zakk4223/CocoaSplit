@@ -20,6 +20,7 @@
                 <cocoa key="transitions"/>
             </element>
             
+            <property name="stagingEnabled" code="CSse" type="boolean" access="r"/>
             <property name="activelayout" code="CSal" type="layout" access="r"/>
             <property name="staginglayout" code="CSsl" type="layout" access = "r"/>
             <property name="livelayout" code="CSll" type="layout" access="r"/>
@@ -51,6 +52,10 @@
             
             <property name="inputFramerate" code="CSif" type="real" access="r">
                 <cocoa key="input_framerate"/>
+            </property>
+            
+            <property name="id" code="ID  " type="text" access="r">
+                <cocoa key="uuid"/>
             </property>
             
             <property name="bitrateOut" code="CSbo" type="real" access="r">
@@ -113,6 +118,26 @@
             <cocoa class="CSTransitionBase"/>
             <property name="name" code="pnam" type="text">
                 <cocoa key="name"/>
+            </property>
+            
+            <property name="id" code="ID  " type="text" access="r">
+                <cocoa key="uuid"/>
+            </property>
+            
+            <property name="duration" code="CSdu" type="real">
+                <cocoa key="duration"/>
+            </property>
+            
+            <property name="active" code="CSac" type="boolean">
+                <cocoa key="active"/>
+            </property>
+            
+            <property name="isToggle" code="CSit" type="boolean" access="r">
+                <cocoa key="isToggle"/>
+            </property>
+            
+            <property name="canToggle" code="CSct" type="boolean" access="r">
+                <cocoa key="canToggle"/>
             </property>
             
             <responds-to name="deactivate">

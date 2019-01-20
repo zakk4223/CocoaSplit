@@ -10,6 +10,7 @@
 #import "CAMultiAudioDelay.h"
 #import "CSNotifications.h"
 #import "CAMultiAudioUnit.h"
+#import "CaptureController.h"
 OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList *ioData );
 
 
@@ -593,9 +594,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         if (selectedIdx != NSNotFound)
         {
             [self removeObjectFromAudioInputsAtIndex:selectedIdx];
-            [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioRemoved object:self userInfo:@{@"UUID": removedDev.uniqueID}];
-
-
+            [CaptureController.sharedCaptureController postNotification:CSNotificationAudioRemoved forObject:self];
         }
     }
 
@@ -922,8 +921,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
             [self addAudioInputsObject:input];
         });
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioAdded object:self userInfo:@{@"UUID": input.nodeUID}];
-
+    [CaptureController.sharedCaptureController postNotification:CSNotificationAudioAdded forObject:self];
     return YES;
     
 }
@@ -949,7 +947,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     disconnectNode.graph = nil;
     
     [self.graph graphUpdate];
-    [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioRemoved object:self userInfo:@{@"UUID": disconnectNode.nodeUID}];
+    [CaptureController.sharedCaptureController postNotification:CSNotificationAudioRemoved forObject:self];
     return YES;
 }
 

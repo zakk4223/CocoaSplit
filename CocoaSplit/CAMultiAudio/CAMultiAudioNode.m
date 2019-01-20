@@ -56,6 +56,10 @@
     return self;
 }
 
+-(NSString *)uuid
+{
+    return self.nodeUID;
+}
 
 -(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType
 {
@@ -172,17 +176,9 @@
 
     if (_enabled)
     {
-        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioEnabled object:self userInfo:nil];
-        if (self.nodeUID)
-        {
-            [[NSDistributedNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioEnabled object:@"CocoaSplit" userInfo:@{@"uuid": self.nodeUID} deliverImmediately:YES];
-        }
+        [CaptureController.sharedCaptureController postNotification:CSNotificationAudioEnabled forObject:self];
     } else {
-        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioDisabled object:self userInfo:nil];
-        if (self.nodeUID)
-        {
-            [[NSDistributedNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioDisabled object:@"CocoaSplit" userInfo:@{@"uuid": self.nodeUID} deliverImmediately:YES];
-        }
+        [CaptureController.sharedCaptureController postNotification:CSNotificationAudioDisabled forObject:self];
     }
     
 }
@@ -329,17 +325,9 @@
     
     if (_muted)
     {
-        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioMuted object:self userInfo:nil];
-        if (self.nodeUID)
-        {
-            [[NSDistributedNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioMuted object:@"CocoaSplit" userInfo:@{@"uuid": self.nodeUID} deliverImmediately:YES];
-        }
+        [CaptureController.sharedCaptureController postNotification:CSNotificationAudioMuted forObject:self];
     } else {
-        [[NSNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioUnmuted object:self userInfo:nil];
-        if (self.nodeUID)
-        {
-            [[NSDistributedNotificationCenter defaultCenter] postNotificationName:CSNotificationAudioUnmuted object:@"CocoaSplit" userInfo:@{@"uuid": self.nodeUID} deliverImmediately:YES];
-        }
+        [CaptureController.sharedCaptureController postNotification:CSNotificationAudioUnmuted forObject:self];
     }
 }
 

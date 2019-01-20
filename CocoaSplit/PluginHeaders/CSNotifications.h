@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString *const CSNotificationLaunchCompleted;
 
 extern NSString *const CSNotificationLayoutAdded;
 extern NSString *const CSNotificationLayoutDeleted;
@@ -63,5 +64,10 @@ extern NSString *const CSNotificationAudioEnabled;
 extern NSString *const CSNotificationAudioDisabled;
 extern NSString *const CSNotificationAudioMuted;
 extern NSString *const CSNotificationAudioUnmuted;
+
+extern NSString *const CSNotificationTransitionAdded;
+extern NSString *const CSNotificationTransitionRemoved;
+extern NSString *const CSNotificationTransitionStateChanged;
+extern NSString *const CSNotificationUseTransitionsChanged;
 
 

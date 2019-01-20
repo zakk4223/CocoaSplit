@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Zakk. All rights reserved.
 //
 
+NSString *const CSNotificationLaunchCompleted = @"CSNotificationLaunchCompleted";
 
 NSString *const CSNotificationLayoutAdded = @"CSNotificationLayoutAdded";
 NSString *const CSNotificationLayoutDeleted = @"CSNotificationLayoutDeleted";
@@ -65,3 +66,8 @@ NSString *const CSNotificationAudioEnabled = @"CSNotificationAudioEnabled";
 NSString *const CSNotificationAudioDisabled = @"CSNotificationAudioDisabled";
 NSString *const CSNotificationAudioMuted = @"CSNotificationAudioMuted";
 NSString *const CSNotificationAudioUnmuted = @"CSNotificationAudioUnmuted";
+
+NSString *const CSNotificationTransitionAdded = @"CSNotificationTransitionAdded";
+NSString *const CSNotificationTransitionRemoved = @"CSNotificationTransitionRemoved";
+NSString *const CSNotificationTransitionStateChanged = @"CSNotificationTransitionStateChanged";
+NSString *const CSNotificationUseTransitionsChanged = @"CSNotificationUseTransitionsChanged";

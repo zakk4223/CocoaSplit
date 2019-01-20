@@ -324,7 +324,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(bool)deleteTransition:(CSTransitionBase *)transition;
 -(CSTransitionBase *)transitionForName:(NSString *)name;
 -(CSTransitionBase *)transitionForUUID:(NSString *)uuid;
-
+-(void)postNotification:(NSString *)notificationName forObject:(id)obj;
+-(void)postNotification:(NSString *)notificationName forObject:(id)obj withUserInfo:(NSDictionary *)userInfo;
 
 @end
 
@@ -549,6 +550,8 @@ NSArray *_savedTransitionConstraints;
 -(bool)fileURLIsAudio:(NSURL *)url;
 -(SourceLayout *)sourceLayoutForUUID:(NSString *)uuid;
 -(bool)deleteTransition:(CSTransitionBase *)transition;
+-(void)postNotification:(NSString *)notificationName forObject:(id)obj;
+-(void)postNotification:(NSString *)notificationName forObject:(id)obj withUserInfo:(NSDictionary *)userInfo;
 
 
 

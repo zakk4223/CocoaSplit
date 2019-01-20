@@ -87,6 +87,7 @@
 @property (weak) CAMultiAudioNode *effectsHead;
 @property (strong) NSMutableArray *effectChain;
 @property (assign) bool deleteNode;
+@property (readonly) NSString *uuid;
 
 
 
