@@ -342,10 +342,10 @@
 -(void)compressorRenamed:(NSNotification *)notification
 {
     
-    NSDictionary *infoDict = notification.object;
+    NSDictionary *infoDict = notification.userInfo;
     
     NSString *oldName = infoDict[@"oldName"];
-    id <VideoCompressor> compressor = infoDict[@"compressor"];
+    id <VideoCompressor> compressor = notification.object;
     
     if (self.compressor_name && [self.compressor_name isEqualToString:oldName])
     {

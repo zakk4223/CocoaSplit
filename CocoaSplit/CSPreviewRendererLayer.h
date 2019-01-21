@@ -18,6 +18,8 @@
 
 -(NSPoint)realPointforWindowPoint:(NSPoint)winPoint;
 -(NSRect)windowRectforWorldRect:(NSRect)worldRect;
+-(void)renderIfNeeded;
+
 @end
 
 

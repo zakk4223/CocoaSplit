@@ -29,6 +29,8 @@
 
 
 
+
+
 @implementation PreviewView
 
 @synthesize sourceLayout = _sourceLayout;
@@ -93,6 +95,7 @@
     }
     
    _layoutRenderer = layoutRenderer;
+
 }
 
 
@@ -297,6 +300,7 @@
 
     tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Reset to source AR" action:@selector(resetSourceAR:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
+
 }
 
 
@@ -492,7 +496,7 @@
         [sourceListMenu insertItem:srcItem atIndex:[sourceListMenu.itemArray count]];
         
     }
-    
+
     return sourceListMenu;
 }
 
@@ -1912,9 +1916,9 @@
 }
 
 
-
 -(CALayer *)makeBackingLayer
 {
+    
     if (CaptureController.sharedCaptureController.useMetalIfAvailable)
     {
         _glLayer = [CSPreviewCALayer layer];
@@ -2102,4 +2106,6 @@
 }
 
 
+
 @end
+
