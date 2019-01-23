@@ -258,6 +258,12 @@
         {
             NSLog(@"Failed to set output volume for channel %d on %@ with status %d", chan, self, err);
         }
+        
+        if (_inputChannels < self.graph.graphAsbd->mChannelsPerFrame)
+        {
+            UInt32 inChan = chan % _inputChannels;
+            [self setVolume:1.0f forChannel:inChan outChannel:chan];
+        }
     }
     
     //set volume for all input channels
@@ -269,9 +275,12 @@
         }
         
         //also set crosspoint volumes.
-        UInt32 outChan = chan % self.graph.graphAsbd->mChannelsPerFrame;
+        if (_inputChannels >= self.graph.graphAsbd->mChannelsPerFrame)
+        {
+            UInt32 outChan = chan % self.graph.graphAsbd->mChannelsPerFrame;
         
-        [self setVolume:1.0 forChannel:chan outChannel:outChan];
+            [self setVolume:1.0 forChannel:chan outChannel:outChan];
+        }
         
     }
 
