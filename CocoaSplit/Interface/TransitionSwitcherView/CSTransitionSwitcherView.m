@@ -11,6 +11,8 @@
 #import "CSTransitionLayout.h"
 #import "CSTransitionInput.h"
 #import "CSTransitionScript.h"
+#import "CSTransitionImageFilter.h"
+
 #import "CaptureController.h"
 
 @interface CSTransitionSwitcherView ()
@@ -67,7 +69,7 @@
 {
     _transitionsMenu = [[NSMenu alloc] init];
     
-    NSArray *transitionClasses = @[CSTransitionCA.class, CSTransitionCIFilter.class,CSTransitionLayout.class, CSTransitionScript.class];
+    NSArray *transitionClasses = @[CSTransitionCA.class, CSTransitionCIFilter.class,CSTransitionLayout.class, CSTransitionImageFilter.class, CSTransitionScript.class];
     
     for (Class tClass in transitionClasses)
     {

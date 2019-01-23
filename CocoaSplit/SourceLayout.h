@@ -154,6 +154,8 @@ typedef enum source_add_order_t {
 -(void)clearGradient;
 -(void)addSourceForAnimation:(InputSource *)toAdd;
 -(void)addSourceForTransition:(InputSource *)toAdd;
+-(void)addFilterForTransition:(CIFilter *)filter;
+-(void)removeFilterForTransition;
 
 @end
 

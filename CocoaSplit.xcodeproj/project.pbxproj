@@ -138,6 +138,7 @@
 		346865471CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 346865451CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.m */; };
 		346865481CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 346865461CC353E2002BAB86 /* CSInstantRecorderCompressorViewController.xib */; };
 		346CF44C1A5C10C2008E5BFF /* CSInputLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 346CF44B1A5C10C2008E5BFF /* CSInputLayer.m */; };
+		346F106121F85432002C189E /* CSTransitionImageFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 346F106021F85432002C189E /* CSTransitionImageFilter.m */; };
 		3470CD2E1D57D2AA006404D9 /* CSStreamOutputWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3470CD2C1D57D2AA006404D9 /* CSStreamOutputWindowController.m */; };
 		3470CD2F1D57D2AA006404D9 /* CSStreamOutputWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3470CD2D1D57D2AA006404D9 /* CSStreamOutputWindowController.xib */; };
 		3470CD3A1D5EED3A006404D9 /* CSNobarSliderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3470CD391D5EED3A006404D9 /* CSNobarSliderCell.m */; };
@@ -320,6 +321,8 @@
 		34ED8CB91B073C1B002C0674 /* CSMidiManagerWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34ED8CB61B073C1B002C0674 /* CSMidiManagerWindowController.xib */; };
 		34ED8CBC1B07763F002C0674 /* CSMidiWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 34ED8CBB1B07763F002C0674 /* CSMidiWrapper.m */; };
 		34F04DAB1CE0BB770054663A /* NSView+NSLayoutConstraintFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F04DAA1CE0BB770054663A /* NSView+NSLayoutConstraintFilter.m */; };
+		34F091ED21F85A90005254E6 /* CSFilterImageLayoutTransitionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F091EB21F85A90005254E6 /* CSFilterImageLayoutTransitionViewController.m */; };
+		34F091EE21F85A90005254E6 /* CSFilterImageLayoutTransitionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34F091EC21F85A90005254E6 /* CSFilterImageLayoutTransitionViewController.xib */; };
 		34F1EB921BCCA41F00B38E6C /* CSLayoutEditWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F1EB901BCCA41F00B38E6C /* CSLayoutEditWindowController.m */; };
 		34F1EB931BCCA41F00B38E6C /* CSLayoutEditWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34F1EB911BCCA41F00B38E6C /* CSLayoutEditWindowController.xib */; };
 		34F5141216FD6E4F00BA894D /* x264Compressor.m in Sources */ = {isa = PBXBuildFile; fileRef = 34F5140F16FD6E4F00BA894D /* x264Compressor.m */; };
@@ -852,6 +855,8 @@
 		346CF44A1A5C10C2008E5BFF /* CSInputLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSInputLayer.h; sourceTree = "<group>"; };
 		346CF44B1A5C10C2008E5BFF /* CSInputLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSInputLayer.m; sourceTree = "<group>"; };
 		346EAAF6197A7B28000892CF /* Capture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Capture.h; sourceTree = "<group>"; };
+		346F105F21F85432002C189E /* CSTransitionImageFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSTransitionImageFilter.h; sourceTree = "<group>"; };
+		346F106021F85432002C189E /* CSTransitionImageFilter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSTransitionImageFilter.m; sourceTree = "<group>"; };
 		3470CD2B1D57D2AA006404D9 /* CSStreamOutputWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSStreamOutputWindowController.h; path = Interface/CSStreamOutputWindowController.h; sourceTree = "<group>"; };
 		3470CD2C1D57D2AA006404D9 /* CSStreamOutputWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSStreamOutputWindowController.m; path = Interface/CSStreamOutputWindowController.m; sourceTree = "<group>"; };
 		3470CD2D1D57D2AA006404D9 /* CSStreamOutputWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSStreamOutputWindowController.xib; path = Interface/CSStreamOutputWindowController.xib; sourceTree = "<group>"; };
@@ -1196,6 +1201,9 @@
 		34ED8CBB1B07763F002C0674 /* CSMidiWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSMidiWrapper.m; sourceTree = "<group>"; };
 		34F04DA91CE0BB770054663A /* NSView+NSLayoutConstraintFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSView+NSLayoutConstraintFilter.h"; sourceTree = "<group>"; };
 		34F04DAA1CE0BB770054663A /* NSView+NSLayoutConstraintFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSView+NSLayoutConstraintFilter.m"; sourceTree = "<group>"; };
+		34F091EA21F85A90005254E6 /* CSFilterImageLayoutTransitionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSFilterImageLayoutTransitionViewController.h; sourceTree = "<group>"; };
+		34F091EB21F85A90005254E6 /* CSFilterImageLayoutTransitionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSFilterImageLayoutTransitionViewController.m; sourceTree = "<group>"; };
+		34F091EC21F85A90005254E6 /* CSFilterImageLayoutTransitionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CSFilterImageLayoutTransitionViewController.xib; sourceTree = "<group>"; };
 		34F1EB8F1BCCA41F00B38E6C /* CSLayoutEditWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLayoutEditWindowController.h; sourceTree = "<group>"; };
 		34F1EB901BCCA41F00B38E6C /* CSLayoutEditWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSLayoutEditWindowController.m; sourceTree = "<group>"; };
 		34F1EB911BCCA41F00B38E6C /* CSLayoutEditWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSLayoutEditWindowController.xib; sourceTree = "<group>"; };
@@ -1857,6 +1865,9 @@
 				34564D5C2071C4BC00652BF0 /* CSInputLayoutTransitionViewController.h */,
 				34564D5D2071C4BC00652BF0 /* CSInputLayoutTransitionViewController.m */,
 				34564D5E2071C4BC00652BF0 /* CSInputLayoutTransitionViewController.xib */,
+				34F091EA21F85A90005254E6 /* CSFilterImageLayoutTransitionViewController.h */,
+				34F091EB21F85A90005254E6 /* CSFilterImageLayoutTransitionViewController.m */,
+				34F091EC21F85A90005254E6 /* CSFilterImageLayoutTransitionViewController.xib */,
 			);
 			name = Transitions;
 			path = Interface/Transitions;
@@ -1983,6 +1994,8 @@
 				3437C816206B281200F95AC2 /* CSTransitionInput.m */,
 				3437C831206D23C800F95AC2 /* CSTransitionScript.h */,
 				3437C832206D23C800F95AC2 /* CSTransitionScript.m */,
+				346F105F21F85432002C189E /* CSTransitionImageFilter.h */,
+				346F106021F85432002C189E /* CSTransitionImageFilter.m */,
 			);
 			path = Transitions;
 			sourceTree = "<group>";
@@ -2833,6 +2846,7 @@
 				3470CD2F1D57D2AA006404D9 /* CSStreamOutputWindowController.xib in Resources */,
 				344825D21B2536EA00AF9EAC /* CAMultiAudioMatrixView.xib in Resources */,
 				3473D2A81D5685DA00842EEE /* Media.xcassets in Resources */,
+				34F091EE21F85A90005254E6 /* CSFilterImageLayoutTransitionViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2936,6 +2950,7 @@
 				345F8B3D1A15F3BD009A81E3 /* CAMultiAudioPCM.m in Sources */,
 				34ED8C9F1B07371C002C0674 /* MIKMIDISequence.m in Sources */,
 				34ED8C671B07371C002C0674 /* MIKMIDIEventIterator.m in Sources */,
+				346F106121F85432002C189E /* CSTransitionImageFilter.m in Sources */,
 				34A7745B201466F10036F8B5 /* CSOutputBase.m in Sources */,
 				34ED8CBC1B07763F002C0674 /* CSMidiWrapper.m in Sources */,
 				34DA1D3E1BF823E700132486 /* CSNewOutputWindowController.m in Sources */,
@@ -2982,6 +2997,7 @@
 				34C0EA411EB64D8E00B30DB4 /* CSLayoutRecorder.m in Sources */,
 				34BB29811B7652EA00F201C2 /* CSPreviewGLLayer.m in Sources */,
 				34CACC991FB886FB00C04BC6 /* CSUserNotificationController.m in Sources */,
+				34F091ED21F85A90005254E6 /* CSFilterImageLayoutTransitionViewController.m in Sources */,
 				34D6581819B387DE0012E32B /* AppDelegate+AppDelegate_ScriptingAdditions.m in Sources */,
 				34ED8C991B07371C002C0674 /* MIKMIDIPort.m in Sources */,
 				340DC734197CF6E9003A0BB3 /* CSCaptureBase.m in Sources */,

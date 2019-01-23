@@ -238,6 +238,48 @@ var removeInputFromLayout = function(input, withTransition, layout, wholeLayout)
 
 }
 
+var removeFilterFromLayoutForTransition = function(outDuration, layout)
+{
+    var useLayout = layout;
+    if (!useLayout)
+    {
+        useLayout = getCurrentLayout();
+    }
+    
+    beginAnimation();
+    setCompletionBlock(function() {
+                       beginAnimation(outDuration);
+                       CATransaction.setAnimationDuration(outDuration);
+                       useLayout.removeFilterForTransition();
+                       commitAnimation();
+                       });
+    addDummyAnimation(0.0);
+    commitAnimation();
+    addDummyAnimation(outDuration);
+}
+
+
+var addFilterToLayoutForTransition = function(corefilter, inDuration, layout)
+{
+    var useLayout = layout;
+    if (!useLayout)
+    {
+        useLayout = getCurrentLayout();
+    }
+    beginAnimation();
+    beginAnimation();
+    setCompletionBlock(function() {
+                       beginAnimation(inDuration);
+                       CATransaction.setAnimationDuration(inDuration);
+                       useLayout.addFilterForTransition(corefilter);
+                       commitAnimation();
+                       });
+    addDummyAnimation(0.0);
+    commitAnimation();
+    addDummyAnimation(inDuration);
+    commitAnimation();
+    
+}
 var addInputToLayoutForTransition = function(input, withTransition, layout, wholeLayout) {
     var useLayout = layout;
     if (!useLayout)

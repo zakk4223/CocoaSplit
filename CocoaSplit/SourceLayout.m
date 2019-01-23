@@ -1560,6 +1560,16 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 }
 
 
+-(void)addFilterForTransition:(CIFilter *)filter
+{
+    self.transitionLayer.filters = @[filter];
+}
+
+-(void)removeFilterForTransition
+{
+    self.transitionLayer.filters = @[];
+}
+
 -(void)mergeSourceLayout:(SourceLayout *)toMerge
 {
     [self mergeSourceLayout:toMerge usingScripts:YES withCompletionBlock:nil];
