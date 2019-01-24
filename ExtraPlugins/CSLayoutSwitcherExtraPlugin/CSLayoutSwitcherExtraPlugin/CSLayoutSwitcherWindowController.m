@@ -39,9 +39,9 @@
 
 -(NSArray *)targetNames
 {
-    if (self.actionType == kScriptRun || self.actionType == kScriptStop)
+    if (self.actionType == kTransitionActivate || self.actionType == kTransitionDeactivate)
     {
-        return self.scriptNames;
+        return self.transitionNames;
     } else {
         return self.layoutNames;
     }
@@ -75,12 +75,12 @@
 
 
 
--(NSArray *)scriptNames
+-(NSArray *)transitionNames
 {
     NSObject *myDelegate = [NSApp delegate];
-    NSArray *layouts = [myDelegate valueForKey:@"layoutscripts"];
+    NSArray *transitions = [myDelegate valueForKey:@"transitions"];
     
-    return [layouts valueForKey:@"name"];
+    return [transitions valueForKey:@"name"];
 }
 
 

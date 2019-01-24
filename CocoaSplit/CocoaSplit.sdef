@@ -152,6 +152,14 @@
                 <cocoa method="scriptToggle:"/>
             </responds-to>
             
+            <responds-to name="activateLive">
+                <cocoa method="scriptActivateLive:"/>
+            </responds-to>
+            
+            <responds-to name="deactivateLive">
+                <cocoa method="scriptDeactivateLive:"/>
+            </responds-to>
+            
             <responds-to name="toggleLive">
                 <cocoa method="scriptToggleLive:"/>
             </responds-to>
@@ -297,6 +305,13 @@
             <direct-parameter type="transition"/>
         </command>
         
+        <command name="activateLive" code="CStraclv">
+            <direct-parameter type="transition"/>
+        </command>
+    
+        <command name="deactivateLive" code="CStrdclv">
+            <direct-parameter type="transition"/>
+        </command>
         <command name="toggleLive" code="CStrtglv">
             <direct-parameter type="transition"/>
         </command>

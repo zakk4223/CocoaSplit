@@ -115,17 +115,19 @@
             
             switch(matchedAction.actionType)
             {
-                case kScriptRun:
-                    verb = @"run";
-                    subjectType = @"layoutscript";
+                
+                case kTransitionDeactivate:
+                    verb = @"deactivateLive";
+                    subjectType = @"transition";
                     break;
-                case kScriptStop:
-                    verb = @"stop";
-                    subjectType = @"layoutscript";
+                case kTransitionActivate:
+                    verb = @"activateLive";
+                    subjectType = @"transition";
                     break;
                 case kLayoutMerge:
                     verb = @"merge";
                     subjectType = @"layout";
+                    break;
                 case kLayoutRemove:
                     verb = @"remove";
                     subjectType = @"layout";

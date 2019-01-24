@@ -19,8 +19,8 @@ typedef enum layout_action_t {
     kLayoutMerge = 0,
     kLayoutSwitch = 1,
     kLayoutRemove = 2,
-    kScriptRun = 3,
-    kScriptStop = 4,
+    kTransitionActivate = 3,
+    kTransitionDeactivate = 4,
 } layout_action;
 
 

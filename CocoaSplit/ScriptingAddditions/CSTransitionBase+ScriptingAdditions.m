@@ -46,6 +46,34 @@
         }
     }
 
+
+-(void)scriptActivateLive:(NSScriptCommand *)command
+{
+    if (!self.canToggle)
+    {
+        return;
+    }
+    self.isToggle = YES;
+    if (self.isToggle)
+    {
+        self.active = YES;
+    }
+}
+
+-(void)scriptDeactivateLive:(NSScriptCommand *)command
+{
+    if (!self.canToggle)
+    {
+        return;
+    }
+    self.isToggle = YES;
+    if (self.isToggle)
+    {
+        self.active = NO;
+        self.isToggle = NO;
+    }
+}
+
     -(void)scriptToggleLive:(NSScriptCommand *)command
     {
         if (!self.canToggle)

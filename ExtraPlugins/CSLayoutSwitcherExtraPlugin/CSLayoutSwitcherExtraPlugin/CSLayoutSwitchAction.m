@@ -56,11 +56,11 @@
     NSString *ret = nil;
     
     switch (self.actionType) {
-        case kScriptStop:
-            ret = @"Stop Script";
+        case kTransitionDeactivate:
+            ret = @"Deactivate Transition";
             break;
-        case kScriptRun:
-            ret = @"Run Script";
+        case kTransitionActivate:
+            ret = @"Activate Transition";
             break;
         case kLayoutMerge:
             ret = @"Merge Layout";
