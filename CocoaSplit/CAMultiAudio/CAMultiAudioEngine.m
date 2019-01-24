@@ -120,11 +120,12 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         if ([aDecoder containsValueForKey:@"streamVolume"])
         {
             self.encodeMixer.volume = [aDecoder decodeFloatForKey:@"streamVolume"];
+            NSLog(@"ENCODE MIXER VOLUME %f", self.encodeMixer.volume);
         }
         
         if ([aDecoder containsValueForKey:@"streamMuted"])
         {
-            self.encodeMixer.muted = [aDecoder decodeBoolForKey:@"streamMuted"];
+            self.encodeMixer.enabled = ![aDecoder decodeBoolForKey:@"streamMuted"];
         }
         
         if ([aDecoder containsValueForKey:@"previewVolume"])
@@ -134,7 +135,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         
         if ([aDecoder containsValueForKey:@"previewMuted"])
         {
-            self.previewMixer.muted = [aDecoder decodeBoolForKey:@"previewMuted"];
+            self.previewMixer.enabled = ![aDecoder decodeBoolForKey:@"previewMuted"];
         }
         
         if ([aDecoder containsValueForKey:@"fileInputs"])
@@ -182,9 +183,9 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     [aCoder encodeInt32:self.sampleRate forKey:@"sampleRate"];
     [aCoder encodeObject:self.outputNode.deviceUID forKey:@"selectedAudioId"];
     [aCoder encodeFloat:self.encodeMixer.volume forKey:@"streamVolume"];
-    [aCoder encodeBool:self.encodeMixer.muted forKey:@"streamMuted"];
+    [aCoder encodeBool:!self.encodeMixer.enabled forKey:@"streamMuted"];
     [aCoder encodeFloat:self.previewMixer.volume forKey:@"previewVolume"];
-    [aCoder encodeBool:self.previewMixer.muted forKey:@"previewMuted"];
+    [aCoder encodeBool:!self.previewMixer.enabled forKey:@"previewMuted"];
 
     [aCoder encodeInt:self.audioBitrate forKey:@"audioBitrate"];
     [aCoder encodeDouble:self.audio_adjust forKey:@"audioAdjust"];

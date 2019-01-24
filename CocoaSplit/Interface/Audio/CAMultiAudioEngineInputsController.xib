@@ -501,12 +501,12 @@
                         <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
                     <connections>
+                        <binding destination="-2" name="value" keyPath="self.multiAudioEngineController.selection.encodeMixer.enabled" id="6WE-qK-wvT"/>
                         <binding destination="-2" name="enabled" keyPath="self.viewOnly" id="1Xh-Zh-PX4">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
                             </dictionary>
                         </binding>
-                        <binding destination="-2" name="value" keyPath="self.multiAudioEngineController.selection.encodeMixer.enabled" id="6WE-qK-wvT"/>
                     </connections>
                 </button>
             </subviews>
