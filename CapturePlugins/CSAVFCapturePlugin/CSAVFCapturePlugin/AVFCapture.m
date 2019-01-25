@@ -237,6 +237,7 @@
     
     self.videoFramerates = _selectedVideoCaptureDevice.activeFormat.videoSupportedFrameRateRanges;
 
+    [self restoreFormatAndFrameRate];
     if (!_activeVideoFormat)
     {
         [self switchToDefaultFormat];
