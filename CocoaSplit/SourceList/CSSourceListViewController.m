@@ -748,6 +748,20 @@
     return NO;
 }
 
+-(void)sourceDeleted:(NSNotification *)notification
+{
+    id <CSInputSourceProtocol> dSrc = notification.object;
+    
+    NSString *uuid = dSrc.uuid;
+    
+    NSWindow *configWindow = _activeConfigWindows[uuid];
+    if (configWindow)
+    {
+        [configWindow close];
+    }
+}
+
+
 -(void)awakeFromNib
 {
     [super awakeFromNib];
@@ -761,7 +775,7 @@
         
 
     }
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sourceDeleted:) name:CSNotificationInputDeleted object:nil];
 
 }
 
@@ -1277,6 +1291,8 @@
     {
         [self.sourceLayoutController removeObserver:self forKeyPath:@"content.topLevelSourceList"];
     }
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end
