@@ -623,7 +623,7 @@
     
     
     int real_keyframe_interval = 0;
-    Float64 durationSecs = CMTimeGetSeconds(videoFrame.videoPTS);
+    Float64 durationSecs = CMTimeGetSeconds(videoFrame.videoDuration);
     
     
     if (!self.keyframe_interval)
@@ -635,12 +635,11 @@
     
     
     _av_codec_ctx->gop_size = real_keyframe_interval;
-    
+
     AVDictionary *opts = NULL;
     
     
     _av_codec_ctx->rc_max_rate = self.vbv_maxrate*1000;
-    
     if (self.vbv_buffer > 0)
     {
         _av_codec_ctx->rc_buffer_size = self.vbv_buffer*1000;
@@ -653,7 +652,6 @@
         av_dict_set(&opts, "crf", [[NSString stringWithFormat:@"%d", self.crf] UTF8String], 0);
         
     } else {
-        
         
         
         _av_codec_ctx->bit_rate = self.vbv_maxrate*1000;
