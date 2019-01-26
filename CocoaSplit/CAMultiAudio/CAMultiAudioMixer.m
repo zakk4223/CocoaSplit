@@ -42,7 +42,6 @@
 
 -(void)setVolume:(float)volume
 {
-    NSLog(@"MIXER %@ VOLUME %f", self, volume);
     super.volume = volume;
     
     

@@ -120,7 +120,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         if ([aDecoder containsValueForKey:@"streamVolume"])
         {
             self.encodeMixer.volume = [aDecoder decodeFloatForKey:@"streamVolume"];
-            NSLog(@"ENCODE MIXER VOLUME %f", self.encodeMixer.volume);
         }
         
         if ([aDecoder containsValueForKey:@"streamMuted"])

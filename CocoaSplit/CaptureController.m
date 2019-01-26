@@ -1940,7 +1940,17 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     }
 }
 
-
+-(void)statusButtonClicked:(id)sender
+{
+    if (NSApp.hidden || !self.mainWindow.visible)
+    {
+        [NSApp unhide:nil];
+        [NSApp activateIgnoringOtherApps:YES];
+        [self.mainWindow setIsVisible:YES];
+    } else {
+        [NSApp hide:nil];
+    }
+}
 
 -(void) migrateDefaultCompressor:(NSMutableDictionary *)saveRoot
 {
@@ -2474,7 +2484,11 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     }
     [self didChangeValueForKey:@"transitions"];
     self.activeTransition = [saveRoot valueForKey:@"activeTransition"];
-
+    _statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSSquareStatusItemLength];
+    _statusItem.button.image = [NSImage imageNamed:@"AppIcon"];
+    _statusItem.button.imageScaling = NSImageScaleProportionallyDown;
+    _statusItem.button.action = @selector(statusButtonClicked:);
+    _statusItem.button.target = self;
 }
 
 
@@ -2944,6 +2958,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 
     [self postNotification:CSNotificationStreamStarted forObject:self];
     self.streamStartDate = [NSDate date];
+    _statusItem.button.image = [NSImage imageNamed:@"StreamingIcon"];
     return YES;
     
 }
@@ -3016,6 +3031,8 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     
     [CaptureController.sharedCaptureController postNotification:CSNotificationStreamStopped forObject:self];
     self.streamStartDate = nil;
+    _statusItem.button.image = [NSImage imageNamed:@"AppIcon"];
+
     
 }
 

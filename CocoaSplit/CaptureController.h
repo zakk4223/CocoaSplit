@@ -341,7 +341,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
     NSPoint _configWindowCascadePoint;
     
     NSMutableDictionary *_javaScriptFileCache;
-    
+    NSStatusItem *_statusItem;
 
 
 CSLayoutSwitcherViewController *_layoutViewController;

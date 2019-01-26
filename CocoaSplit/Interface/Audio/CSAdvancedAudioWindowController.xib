@@ -153,7 +153,10 @@
                         </textFieldCell>
                     </textField>
                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nEN-AL-HsO">
-                        <rect key="frame" x="19" y="391" width="70" height="22"/>
+                        <rect key="frame" x="19" y="391" width="146" height="22"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="140" id="jtd-ll-keJ"/>
+                        </constraints>
                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="KN8-OL-txf" id="SEL-4J-m1s">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
