@@ -16,7 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CSPreviewCALayer : CALayer <CSPreviewRendererLayer>
 {
     CVDisplayLinkRef _displayLink;
-    CVPixelBufferRef _renderBuffer;
     NSRect _lastBounds;
     NSSize _lastSurfaceSize;
     float _scaleRatio;

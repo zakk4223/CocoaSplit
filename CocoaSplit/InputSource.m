@@ -2059,35 +2059,72 @@ static NSArray *_sourceTypes = nil;
 {
     
     self.layoutPosition = self.layer.frame;
+    bool x_chg, y_chg, w_chg, h_chg = NO;
     
     if (_x_pos != self.layer.frame.origin.x)
     {
-        [self willChangeValueForKey:@"x_pos"];
+
+        x_chg = YES;
+        //[self willChangeValueForKey:@"x_pos"];
         _x_pos = self.layer.frame.origin.x;
-        [self didChangeValueForKey:@"x_pos"];
+       // [self didChangeValueForKey:@"x_pos"];
+
     }
+    
     
     if (_y_pos != self.layer.frame.origin.y)
     {
-        [self willChangeValueForKey:@"y_pos"];
+       // [self willChangeValueForKey:@"y_pos"];
         _y_pos = self.layer.frame.origin.y;
-        [self didChangeValueForKey:@"y_pos"];
+        y_chg = YES;
+       // [self didChangeValueForKey:@"y_pos"];
     }
 
     if (_width != self.layer.frame.size.width)
     {
-        [self willChangeValueForKey:@"width"];
+      //  [self willChangeValueForKey:@"width"];
         _width = self.layer.frame.size.width;
-        [self didChangeValueForKey:@"width"];
+       // [self didChangeValueForKey:@"width"];
+        w_chg = YES;
     }
     
     if (_height != self.layer.frame.size.height)
     {
-        [self willChangeValueForKey:@"height"];
+      //  [self willChangeValueForKey:@"height"];
         _height = self.layer.frame.size.height;
-        [self didChangeValueForKey:@"height"];
+        h_chg = YES;
+       // [self didChangeValueForKey:@"height"];
     }
 
+    if (y_chg || x_chg || w_chg || h_chg)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (y_chg)
+            {
+                [self willChangeValueForKey:@"y_pos"];
+                [self didChangeValueForKey:@"y_pos"];
+            }
+           
+            if (x_chg)
+            {
+                [self willChangeValueForKey:@"x_pos"];
+                [self didChangeValueForKey:@"x_pos"];
+            }
+            
+            if (w_chg)
+            {
+                [self willChangeValueForKey:@"width"];
+                [self didChangeValueForKey:@"width"];
+            }
+            
+            if (h_chg)
+            {
+                [self willChangeValueForKey:@"height"];
+                [self didChangeValueForKey:@"height"];
+            }
+            
+        });
+    }
     [self multiChange];
 
     

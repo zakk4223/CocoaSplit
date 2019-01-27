@@ -106,14 +106,9 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
         return;
     }
     
-    [CATransaction lock];
-    if (_renderBuffer)
-    {
-        CVPixelBufferRelease(_renderBuffer);
-    }
-    _renderBuffer = toDraw;
-    size_t sWidth = CVPixelBufferGetWidth(_renderBuffer);
-    size_t sHeight = CVPixelBufferGetHeight(_renderBuffer);
+    
+    size_t sWidth = CVPixelBufferGetWidth(toDraw);
+    size_t sHeight = CVPixelBufferGetHeight(toDraw);
     NSSize sSize = NSMakeSize(sWidth, sHeight);
     if (!NSEqualSizes(sSize, _lastSurfaceSize))
     {
@@ -137,16 +132,17 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
     self.minificationFilter = kCAFilterLinear;
     self.magnificationFilter = kCAFilterTrilinear;
     
-    if (_renderBuffer)
+    if (toDraw)
     {
         if (@available(macOS 10.12, *))
         {
-            self.contents = (__bridge id _Nullable)_renderBuffer;
+            self.contents = (__bridge id _Nullable)toDraw;
         } else {
-            self.contents = (__bridge id _Nullable)(CVPixelBufferGetIOSurface(_renderBuffer));
+            self.contents = (__bridge id _Nullable)(CVPixelBufferGetIOSurface(toDraw));
         }
      }
-    [CATransaction unlock];
+    
+    CVPixelBufferRelease(toDraw);
 }
 
 CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, const CVTimeStamp *outputTime, CVOptionFlags flagsIn, CVOptionFlags *flagsOut, void *displayLinkContext)
