@@ -1769,7 +1769,21 @@
     
 }
 
+-(void)viewDidHide
+{
+    if (_glLayer)
+    {
+        _glLayer.doDisplay = NO;
+    }
+}
 
+-(void)viewDidUnhide
+{
+    if (_glLayer)
+    {
+        _glLayer.doDisplay = YES;
+    }
+}
 
 
 -(void)awakeFromNib

@@ -19,6 +19,7 @@
         _lastSurfaceSize = NSZeroSize;
         self.needsDisplayOnBoundsChange = YES;
         self.opaque = YES;
+        self.doDisplay = YES;
         
     }
     
@@ -304,7 +305,7 @@
 
 -(BOOL)canDrawInCGLContext:(CGLContextObj)ctx pixelFormat:(CGLPixelFormatObj)pf forLayerTime:(CFTimeInterval)t displayTime:(const CVTimeStamp *)ts
 {
-    if (self.renderer)
+    if (self.renderer && self.doDisplay)
     {
         return YES;
     }

@@ -36,6 +36,7 @@
 @property (assign) bool doRender;
 @property (assign) bool midiActive;
 @property (assign) bool resizeDirty;
+@property (assign) bool doDisplay;
 
 
 -(NSPoint)realPointforWindowPoint:(NSPoint)winPoint;

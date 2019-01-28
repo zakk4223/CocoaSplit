@@ -11,7 +11,7 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
 
 @implementation CSPreviewCALayer
 
-
+@synthesize doDisplay = _doDisplay;
 -(instancetype) init
 {
     if (self = [super init])
@@ -19,6 +19,9 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
         self.contentsGravity = kCAGravityResizeAspect;
         _lastBounds = NSZeroRect;
         _lastSurfaceSize = NSZeroSize;
+        _lastFpsTime = CACurrentMediaTime();
+        self.doDisplay = YES;
+
         CVDisplayLinkCreateWithCGDisplay(CGMainDisplayID(), &_displayLink);
         CVDisplayLinkSetOutputCallback(_displayLink, &DisplayCallback, (__bridge void * _Nullable)(self));
         CVDisplayLinkStart(_displayLink);
@@ -26,6 +29,29 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
     
     return self;
 }
+
+
+-(void)setDoDisplay:(bool)doDisplay
+{
+    _doDisplay = doDisplay;
+    if (!_displayLink)
+    {
+        return;
+    }
+    
+    if (_doDisplay && !CVDisplayLinkIsRunning(_displayLink))
+    {
+        CVDisplayLinkStart(_displayLink);
+    } else if (!_doDisplay && CVDisplayLinkIsRunning(_displayLink)) {
+        CVDisplayLinkStop(_displayLink);
+    }
+}
+
+-(bool)doDisplay
+{
+    return _doDisplay;
+}
+
 
 -(NSPoint)realPointforWindowPoint:(NSPoint)winPoint
 {
@@ -90,6 +116,7 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
         return;
     }
     
+    CFTimeInterval sTime = CACurrentMediaTime();
     if (self.doRender)
     {
         toDraw = [self.renderer currentImg];
@@ -101,6 +128,21 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
         toDraw = [self.renderer currentFrame];
     }
     
+    CFTimeInterval eTime = CACurrentMediaTime();
+    
+    float renderTime = eTime - sTime;
+    
+    if (renderTime < _minRenderTime)
+    {
+        _minRenderTime = renderTime;
+    }
+    
+    if (renderTime > _maxRenderTime)
+    {
+        _maxRenderTime = renderTime;
+    }
+    
+    _sumRenderTime += renderTime;
     if (!toDraw)
     {
         return;
@@ -142,6 +184,18 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
         }
      }
     
+    _frameCnt++;
+    if (_frameCnt == 60)
+    {
+        CFTimeInterval deltaTime = sTime - _lastFpsTime;
+        float statFPS = _frameCnt/deltaTime;
+        _lastFpsTime = sTime;
+        _avgRenderTime = _sumRenderTime/_frameCnt;
+        _sumRenderTime = 0.0f;
+        _frameCnt = 0;
+
+        NSLog(@"FPS: %f %f/%f/%f", statFPS, _minRenderTime, _maxRenderTime, _avgRenderTime);
+    }
     CVPixelBufferRelease(toDraw);
 }
 

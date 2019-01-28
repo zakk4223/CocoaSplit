@@ -20,6 +20,12 @@ NS_ASSUME_NONNULL_BEGIN
     NSSize _lastSurfaceSize;
     float _scaleRatio;
     NSRect _scaleRect;
+    NSUInteger _frameCnt;
+    CFTimeInterval _lastFpsTime;
+    float _minRenderTime;
+    float _maxRenderTime;
+    float _avgRenderTime;
+    float _sumRenderTime;
 }
 
 
@@ -27,6 +33,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign) bool doRender;
 @property (assign) bool midiActive;
 @property (assign) bool resizeDirty;
+@property (assign) float measuredFrameRate;
+@property (assign) float minRenderTime;
+@property (assign) float maxRenderTime;
+@property (assign) float avgRenderTime;
+@property (assign) bool doDisplay;
 
 
 -(NSPoint)realPointforWindowPoint:(NSPoint)winPoint;
