@@ -92,10 +92,10 @@
         }
     }
     
-    if (useItem)
+    /*if (useItem)
     {
         [useItem closeMedia];
-    }
+    }*/
 
     
     return useItem;
@@ -135,6 +135,12 @@
     }
     if (nextItem)
     {
+        if (nextItem == useItem)
+        {
+            [nextItem seek:0.0f];
+        } else {
+            [useItem closeMedia];
+        }
         [self playItem:nextItem];
         //[self removeObjectFromInputQueueAtIndex:0];
         
@@ -189,8 +195,15 @@
         nextItem = [_inputQueue objectAtIndex:currentIdx];
         
     }
+    
     if (nextItem)
     {
+        if (nextItem == useItem)
+        {
+            [nextItem seek:0.0f];
+        } else {
+            [useItem closeMedia];
+        }
         [self playItem:nextItem];
         //[self removeObjectFromInputQueueAtIndex:0];
         

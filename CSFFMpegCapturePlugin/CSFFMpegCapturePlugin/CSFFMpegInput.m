@@ -696,7 +696,9 @@
 {
     @synchronized (self) {
         _stop_request = YES;
+        
         dispatch_semaphore_signal(_read_loop_semaphore);
+        
         av_thread_message_queue_set_err_send(_video_message_queue, AVERROR_EOF);
         av_thread_message_queue_set_err_send(_audio_message_queue, AVERROR_EOF);
     }
@@ -797,6 +799,7 @@
         av_frame_unref(_first_frame);
         av_frame_free(&_first_frame);
     }
+    _media_opened = NO;
     self.duration = 0.0f;
     
  
