@@ -664,6 +664,7 @@ static NSArray *_sourceTypes = nil;
             useUpdate.postBlock();
         }
         [CATransaction commit];
+
     }
 }
 

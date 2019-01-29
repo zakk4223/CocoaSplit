@@ -397,6 +397,7 @@
     }
 
 
+
     
     CFTimeInterval cTime = CACurrentMediaTime();
     CVPixelBufferRef use_buf = [self.player frameForMediaTime:cTime];
@@ -416,7 +417,6 @@
                 [self didChangeValueForKey:@"currentMovieTime"];
             });
         }
-        
         [self updateLayersWithFramedataBlock:^(CALayer *layer) {
             layer.contents = (__bridge id _Nullable)(use_buf);
         } withPreuseBlock:^{
@@ -439,7 +439,6 @@
             _lastSize = NSMakeSize(CVPixelBufferGetWidth(use_buf), CVPixelBufferGetHeight(use_buf));
             [self updateLayersWithFramedataBlock:^(CALayer *layer) {
                 layer.contents = (__bridge id _Nullable)(use_buf);
-                [layer displayIfNeeded];
             } withPreuseBlock:^{
                 CVPixelBufferRetain(use_buf);
             } withPostuseBlock:^{

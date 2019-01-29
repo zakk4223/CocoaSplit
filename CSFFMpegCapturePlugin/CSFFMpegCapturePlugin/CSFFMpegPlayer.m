@@ -556,7 +556,7 @@
             use_frame = NULL;
             bool do_consume = YES;
             
-            if (_last_buf && _peek_frame)
+            if (_peek_frame)
             {
                 
                 if (_peek_frame->pts > target_pts)
@@ -613,16 +613,15 @@
         self.lastVideoTime = use_frame->pts * av_q2d(_useInput.videoTimeBase);
         
         ret = [self convertFrameToPixelBuffer:use_frame];
-
-        CVPixelBufferRetain(ret);
-        if (_last_buf)
-        {
-            CVPixelBufferRelease(_last_buf);
-        }
-        _last_buf = ret;
+        //CVPixelBufferRetain(ret);
+        //if (_last_buf)
+      //  {
+       //     CVPixelBufferRelease(_last_buf);
+     //   }
+      //  _last_buf = ret;
     } else {
-        CVPixelBufferRetain(_last_buf);
-        ret = _last_buf;
+        //CVPixelBufferRetain(_last_buf);
+        ret = NULL;//_last_buf;
     }
     if (use_frame)
     {

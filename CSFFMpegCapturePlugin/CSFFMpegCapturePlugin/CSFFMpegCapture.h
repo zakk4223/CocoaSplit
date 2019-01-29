@@ -37,6 +37,7 @@
     AVThreadMessageQueue *_video_msg_queue;
     AVThreadMessageQueue *_audio_msg_queue;
     
+    CFTimeInterval _lastTickTime;
     
     dispatch_queue_t _video_decoder_queue;
     dispatch_queue_t _media_reader_queue;

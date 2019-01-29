@@ -518,8 +518,8 @@
             
             int read_ret = 0;
             
-            read_ret = av_read_frame(_format_ctx, &av_packet);
             
+            read_ret = av_read_frame(_format_ctx, &av_packet);
             if (read_ret < 0)
             {
                 av_thread_message_queue_set_err_recv(_video_message_queue, AVERROR_EOF);

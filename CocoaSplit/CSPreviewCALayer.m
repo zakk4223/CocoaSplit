@@ -22,6 +22,7 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
         _lastFpsTime = CACurrentMediaTime();
         self.doDisplay = YES;
 
+        
         CVDisplayLinkCreateWithCGDisplay(CGMainDisplayID(), &_displayLink);
         CVDisplayLinkSetOutputCallback(_displayLink, &DisplayCallback, (__bridge void * _Nullable)(self));
         CVDisplayLinkStart(_displayLink);
@@ -90,17 +91,16 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
         return;
     }
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
-                   , ^{
-                       @autoreleasepool {
-                           
+    //dispatch_async(_displayQueue
+                 //  , ^{
+                       //@autoreleasepool {
                            
                            [CATransaction begin];
                                [self displayContent];
                           [CATransaction commit];
-                       }
-                   });
-    
+                       //}
+                  // });
+
 }
 
 
@@ -182,6 +182,7 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
         } else {
             self.contents = (__bridge id _Nullable)(CVPixelBufferGetIOSurface(toDraw));
         }
+        [self displayIfNeeded];
      }
     
     _frameCnt++;
@@ -194,7 +195,7 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
         _sumRenderTime = 0.0f;
         _frameCnt = 0;
 
-        NSLog(@"FPS: %f %f/%f/%f", statFPS, _minRenderTime, _maxRenderTime, _avgRenderTime);
+        //NSLog(@"FPS: %f %f/%f/%f", statFPS, _minRenderTime, _maxRenderTime, _avgRenderTime);
     }
     CVPixelBufferRelease(toDraw);
 }
@@ -202,6 +203,7 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
 CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, const CVTimeStamp *outputTime, CVOptionFlags flagsIn, CVOptionFlags *flagsOut, void *displayLinkContext)
 {
     CSPreviewCALayer *realSelf = (__bridge CSPreviewCALayer *)displayLinkContext;
+    
     [realSelf render];
     return kCVReturnSuccess;
 }
