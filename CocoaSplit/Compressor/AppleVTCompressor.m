@@ -27,6 +27,8 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
     copy.profile = self.profile;
     copy.keyframe_interval = self.keyframe_interval;
     copy.use_cbr = self.use_cbr;
+    copy.noHardware = self.noHardware;
+    copy.forceHardware = self.forceHardware;
         return copy;
 }
 
@@ -226,6 +228,7 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
     
     for (NSDictionary *encode in nsEnc)
     {
+        
         NSString *cName = [encode objectForKey:(NSString *)kVTVideoEncoderList_CodecName];
         if ([cName isEqualToString:@"HEVC"])
         {
