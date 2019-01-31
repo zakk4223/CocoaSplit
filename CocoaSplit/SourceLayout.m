@@ -1534,6 +1534,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 
 -(void)addSourceForTransition:(InputSource *)toAdd
 {
+    toAdd.depth = -self.transitionLayer.sublayers.count;
     [self addSourceForAnimation:toAdd useLayer:self.transitionLayer];
 
 }
