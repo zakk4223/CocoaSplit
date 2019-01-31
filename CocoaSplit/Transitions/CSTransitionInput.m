@@ -55,9 +55,9 @@
     {
         
         self.inputSourceSavedata = [NSKeyedArchiver archivedDataWithRootObject:_inputSource];
-        
-        [aCoder encodeObject:self.inputSourceSavedata forKey:@"inputSourceSavedata"];
     }
+    [aCoder encodeObject:self.inputSourceSavedata forKey:@"inputSourceSavedata"];
+    
     [aCoder encodeObject:self.holdDuration forKey:@"holdDuration"];
     [aCoder encodeBool:self.waitForMedia forKey:@"waitForMedia"];
     [aCoder encodeBool:self.transitionAfterPre forKey:@"transitionAfterPre"];
@@ -72,6 +72,7 @@
     if (self = [super initWithCoder:aDecoder])
     {
         self.inputSourceSavedata = [aDecoder decodeObjectForKey:@"inputSourceSavedata"];
+
         self.holdDuration = [aDecoder decodeObjectForKey:@"holdDuration"];
         if ([aDecoder containsValueForKey:@"waitForMedia"])
         {
