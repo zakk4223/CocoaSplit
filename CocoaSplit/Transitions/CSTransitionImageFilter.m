@@ -9,6 +9,7 @@
 #import "CSFilterImageLayoutTransitionViewController.h"
 
 @implementation CSTransitionImageFilter
+@synthesize filter = _filter;
 
 -(instancetype)init
 {
@@ -68,13 +69,24 @@
     {
         if (self.filter)
         {
-            ret = [CIFilter localizedNameForFilterName:self.filter.name];
+            ret = self.filter.attributes[kCIAttributeFilterDisplayName];
         } else {
             ret = @"Image Filter";
         }
     }
 
     return ret;
+}
+
+-(void)setFilter:(CIFilter *)filter
+{
+    _filter = filter;
+    filter.name = [NSUUID UUID].UUIDString;
+}
+
+-(CIFilter *)filter
+{
+    return _filter;
 }
 
 -(NSString *)preChangeAction:(SourceLayout *)targetLayout
@@ -107,7 +119,7 @@
 {
     self.realOutDuration = self.outDuration.floatValue;
 
-    return @"removeFilterFromLayoutForTransition(self.realOutDuration, getCurrentLayout());";
+    return @"removeFilterFromLayoutForTransition(self.filter, self.realOutDuration, getCurrentLayout());";
 }
 
 -(NSViewController<CSLayoutTransitionViewProtocol> *)configurationViewController

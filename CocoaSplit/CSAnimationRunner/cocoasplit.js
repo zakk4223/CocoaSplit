@@ -238,7 +238,7 @@ var removeInputFromLayout = function(input, withTransition, layout, wholeLayout)
 
 }
 
-var removeFilterFromLayoutForTransition = function(outDuration, layout)
+var removeFilterFromLayoutForTransition = function(corefilter, outDuration, layout)
 {
     var useLayout = layout;
     if (!useLayout)
@@ -250,7 +250,7 @@ var removeFilterFromLayoutForTransition = function(outDuration, layout)
     setCompletionBlock(function() {
                        beginAnimation(outDuration);
                        CATransaction.setAnimationDuration(outDuration);
-                       useLayout.removeFilterForTransition();
+                       useLayout.removeFilterForTransition(corefilter);
                        commitAnimation();
                        });
     addDummyAnimation(0.0);

@@ -17,6 +17,7 @@
 
 @property (strong) CAAnimation *useAnimation;
 @property (strong) NSArray *useFilters;
+@property (strong) NSArray *useTransitionFilters;
 
 @property (assign) bool fullScreen;
 

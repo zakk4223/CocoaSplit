@@ -45,7 +45,10 @@
         
     }
     self.forLayout.rootLayer.filters = self.useFilters;
-    
+    if (self.useTransitionFilters)
+    {
+        self.forLayout.transitionLayer.filters = self.useTransitionFilters;
+    }
     [CATransaction commit];
 
     

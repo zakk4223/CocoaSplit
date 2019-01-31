@@ -155,7 +155,7 @@ typedef enum source_add_order_t {
 -(void)addSourceForAnimation:(InputSource *)toAdd;
 -(void)addSourceForTransition:(InputSource *)toAdd;
 -(void)addFilterForTransition:(CIFilter *)filter;
--(void)removeFilterForTransition;
+-(void)removeFilterForTransition:(CIFilter *)filter;
 
 @end
 

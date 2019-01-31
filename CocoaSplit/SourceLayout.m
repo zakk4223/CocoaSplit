@@ -954,6 +954,11 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     archiver.delegate = self;
     [archiver encodeObject:orderedUUIDS forKey:@"orderedUUIDS"];
     [archiver encodeObject:timerSrc forKey:@"timerSrc"];
+    if (self.transitionLayer.filters)
+    {
+        [archiver encodeObject:self.transitionLayer.filters forKey:@"transitionLayerFilters"];
+    }
+    
     if (self.rootLayer.filters)
     {
         [archiver encodeObject:self.rootLayer.filters forKey:@"rootLayerFilters"];
@@ -1003,7 +1008,14 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         {
             rootLayerFilters = @[];
         }
-        ret = @{@"sourcelist": srcList,  @"timingSource": timerSrc, @"rootLayerFilters": rootLayerFilters};
+        
+        NSObject *transitionLayerFilters = [unarchiver decodeObjectForKey:@"transitionLayerFilters"];
+        if (!transitionLayerFilters)
+        {
+            transitionLayerFilters = @[];
+        }
+        
+        ret = @{@"sourcelist": srcList,  @"timingSource": timerSrc, @"rootLayerFilters": rootLayerFilters, @"transitionLayerFilters": transitionLayerFilters};
     } else { //old style, just decode "root"
         ret = [unarchiver decodeObjectForKey:@"root"];
     }
@@ -1073,11 +1085,12 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 
     NSArray *mergeList;
     NSArray *filterList;
-    
+    NSArray *transitionFilterList;
     if ([mergeObj isKindOfClass:[NSDictionary class]])
     {
         mergeList = [((NSDictionary *)mergeObj) objectForKey:@"sourcelist"];
         filterList = [((NSDictionary *)mergeObj) objectForKey:@"rootLayerFilters"];
+        transitionFilterList = [((NSDictionary *)mergeObj) objectForKey:@"transitionLayerFilters"];
     } else {
         mergeList = (NSArray *)mergeObj;
     }
@@ -1086,6 +1099,11 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     if (!filterList)
     {
         filterList = @[];
+    }
+    
+    if (!transitionFilterList)
+    {
+        transitionFilterList = @[];
     }
     
     NSMutableDictionary *uuidMap = [NSMutableDictionary dictionary];
@@ -1102,7 +1120,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     
     [retDict setObject:[NSMutableArray array] forKey:@"removed"];
     [retDict setObject:filterList forKey:@"filterList"];
-    
+    [retDict setObject:transitionFilterList forKey:@"transitionFilterList"];
     for (NSObject<CSInputSourceProtocol> *oSrc in mergeList)
     {
         [uuidMap setObject:oSrc forKey:oSrc.uuid];
@@ -1311,6 +1329,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     NSArray *removedInputs = diffResult[@"removed"];
     NSArray *newInputs = diffResult[@"new"];
     NSArray *filters = diffResult[@"filterList"];
+    NSArray *transitionFilters = diffResult[@"transitionFilterList"];
     
     NSNumber *aStart = nil;
     JSContext *jCtx = [JSContext currentContext];
@@ -1373,6 +1392,8 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     transitionDelegate.changedInputs = changedInputs;
     transitionDelegate.removedInputs = removedInputs;
     transitionDelegate.useFilters = filters;
+    transitionDelegate.useTransitionFilters = transitionFilters;
+    
     if (usingTransition)
     {
         rTrans = usingTransition.transition;
@@ -1563,12 +1584,20 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 
 -(void)addFilterForTransition:(CIFilter *)filter
 {
-    self.transitionLayer.filters = @[filter];
+    
+    NSMutableArray *currentFilters = self.transitionLayer.filters.mutableCopy;
+    if (!currentFilters)
+    {
+        currentFilters = [NSMutableArray array];
+    }
+    
+    [currentFilters addObject:filter];
+    self.transitionLayer.filters = currentFilters;
 }
 
--(void)removeFilterForTransition
+-(void)removeFilterForTransition:(CIFilter *)filter
 {
-    self.transitionLayer.filters = @[];
+    self.transitionLayer.filters = [self newFilterArray:self.transitionLayer.filters withoutName:filter.name];
 }
 
 -(void)mergeSourceLayout:(SourceLayout *)toMerge
