@@ -52,7 +52,6 @@
     if (self.fullScreen)
     {
         [self.forLayout.rootLayer addAnimation:self.useAnimation forKey:nil];
-
     }
 
 

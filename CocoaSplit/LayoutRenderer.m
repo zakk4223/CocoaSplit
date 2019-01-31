@@ -19,6 +19,7 @@
     if (self = [super init])
     {
         _layoutChanged = NO;
+        /*
         bool systemMetal = CaptureController.sharedCaptureController.useMetalIfAvailable;
         
         if (systemMetal && [CARenderer instancesRespondToSelector:@selector(setDestination:)])
@@ -29,7 +30,12 @@
             
         } else {
             _useMetalRenderer = NO;
-        }
+        }*/
+        
+        //
+        _useMetalRenderer = NO;
+         
+         
     }
     
     return self;
@@ -97,6 +103,8 @@
     self.renderer.bounds = NSMakeRect(0.0, 0.0, _cvpool_size.width, _cvpool_size.height);
     self.rootLayer.delegate = self;
 }
+
+
 -(void)resizeRenderer
 {
     
@@ -197,12 +205,13 @@
         {
             return;
         }
-        
+        [CATransaction begin];
         [self.renderer setDestination:CVMetalTextureGetTexture(mtlTexture)];
         [self.renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];
         [self.renderer addUpdateRect:self.renderer.bounds];
         [self.renderer render];
         [self.renderer endFrame];
+        [CATransaction commit];
         CFRelease(mtlTexture);
         return;
     }
@@ -320,9 +329,9 @@
     
     CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, _cvpool, &destFrame);
 
-    [CATransaction lock];
+    //[CATransaction lock];
     [self renderToPixelBuffer:destFrame];
-    [CATransaction unlock];
+    //[CATransaction unlock];
     [CATransaction commit];
 
     @synchronized(self)
@@ -364,7 +373,7 @@
     [attributes setValue:[NSNumber numberWithInt:size.height] forKey:(NSString *)kCVPixelBufferHeightKey];
     [attributes setValue:@{(NSString *)kIOSurfaceIsGlobal: @NO} forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
     [attributes setValue:[NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA] forKey:(NSString *)kCVPixelBufferPixelFormatTypeKey];
-    
+    [attributes setValue:@YES forKey:(NSString *)kCVPixelBufferMetalCompatibilityKey];
     
     
     if (_cvpool)
