@@ -362,7 +362,6 @@
 
     }
     
-    
     self.userFilterWindow = [[NSWindow alloc] init];
 
     self.userFilterWindow.delegate = self;

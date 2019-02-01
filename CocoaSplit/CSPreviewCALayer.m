@@ -21,7 +21,7 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
         _lastSurfaceSize = NSZeroSize;
         _lastFpsTime = CACurrentMediaTime();
         self.doDisplay = YES;
-
+        _displayQueue = dispatch_queue_create("PreviewCALayer queue", DISPATCH_QUEUE_SERIAL);
         
         CVDisplayLinkCreateWithCGDisplay(CGMainDisplayID(), &_displayLink);
         CVDisplayLinkSetOutputCallback(_displayLink, &DisplayCallback, (__bridge void * _Nullable)(self));
@@ -90,16 +90,16 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
     {
         return;
     }
-    
-    //dispatch_async(_displayQueue
-                 //  , ^{
-                       //@autoreleasepool {
-                           
+    _frameCnt++;
+   dispatch_async(_displayQueue
+                   , ^{
+                       @autoreleasepool {
                            [CATransaction begin];
                                [self displayContent];
-                          [CATransaction commit];
-                       //}
-                  // });
+        [CATransaction commit];
+                           [CATransaction flush];
+                      }
+                 });
 
 }
 
@@ -120,6 +120,7 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
     if (self.doRender)
     {
         toDraw = [self.renderer currentImg];
+
         if (toDraw)
         {
             CVPixelBufferRetain(toDraw);
@@ -185,19 +186,7 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
         [self displayIfNeeded];
      }
     
-    _frameCnt++;
-    if (_frameCnt == 60)
-    {
-        CFTimeInterval deltaTime = sTime - _lastFpsTime;
-        float statFPS = _frameCnt/deltaTime;
-        _lastFpsTime = sTime;
-        _avgRenderTime = _sumRenderTime/_frameCnt;
-        _sumRenderTime = 0.0f;
-        _frameCnt = 0;
 
-        //NSLog(@"FPS: %f %f/%f/%f", statFPS, _minRenderTime, _maxRenderTime, _avgRenderTime);
-    }
-    CVPixelBufferRelease(toDraw);
 }
 
 CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, const CVTimeStamp *outputTime, CVOptionFlags flagsIn, CVOptionFlags *flagsOut, void *displayLinkContext)

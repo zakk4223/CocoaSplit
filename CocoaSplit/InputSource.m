@@ -14,6 +14,14 @@
 #import <objc/runtime.h>
 #import "CaptureController.h"
 
+#ifndef CGFLOAT_EPSILON
+#if CGFLOAT_IS_DOUBLE
+#define CGFLOAT_EPSILON DBL_EPSILON
+#else
+#define CGFLOAT_EPSILON FLT_EPSILON
+#endif
+#endif
+
 static NSArray *_sourceTypes = nil;
 
 
@@ -2056,13 +2064,14 @@ static NSArray *_sourceTypes = nil;
     
 }
 
+
 -(void)frameTick
 {
     
     self.layoutPosition = self.layer.frame;
     bool x_chg, y_chg, w_chg, h_chg = NO;
     
-    if (_x_pos != self.layer.frame.origin.x)
+    if (fabs(_x_pos - self.layer.frame.origin.x) >= CGFLOAT_EPSILON)
     {
 
         x_chg = YES;
@@ -2073,29 +2082,33 @@ static NSArray *_sourceTypes = nil;
     }
     
     
-    if (_y_pos != self.layer.frame.origin.y)
+    if (fabs(_y_pos - self.layer.frame.origin.y) >= CGFLOAT_EPSILON)
     {
        // [self willChangeValueForKey:@"y_pos"];
         _y_pos = self.layer.frame.origin.y;
         y_chg = YES;
+
        // [self didChangeValueForKey:@"y_pos"];
     }
 
-    if (_width != self.layer.frame.size.width)
+    if (fabs(_width - self.layer.frame.size.width) >= CGFLOAT_EPSILON)
     {
+
       //  [self willChangeValueForKey:@"width"];
         _width = self.layer.frame.size.width;
        // [self didChangeValueForKey:@"width"];
         w_chg = YES;
     }
     
-    if (_height != self.layer.frame.size.height)
+    if (fabs(_height - self.layer.frame.size.height) >= CGFLOAT_EPSILON)
     {
+
       //  [self willChangeValueForKey:@"height"];
         _height = self.layer.frame.size.height;
         h_chg = YES;
        // [self didChangeValueForKey:@"height"];
     }
+
 
     if (y_chg || x_chg || w_chg || h_chg)
     {
@@ -2111,7 +2124,6 @@ static NSArray *_sourceTypes = nil;
                 [self willChangeValueForKey:@"x_pos"];
                 [self didChangeValueForKey:@"x_pos"];
             }
-            
             if (w_chg)
             {
                 [self willChangeValueForKey:@"width"];
@@ -2123,7 +2135,8 @@ static NSArray *_sourceTypes = nil;
                 [self willChangeValueForKey:@"height"];
                 [self didChangeValueForKey:@"height"];
             }
-            
+            //[self willChangeValueForKey:@"globalLayoutPosition"];
+            //[self didChangeValueForKey:@"globalLayoutPosition"];
         });
     }
     [self multiChange];
@@ -2425,7 +2438,9 @@ static NSArray *_sourceTypes = nil;
                 }
             }
 
+            
             self.layer.frame = newLayout;
+ 
         }
     }
     [CATransaction commit];

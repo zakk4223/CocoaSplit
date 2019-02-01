@@ -30,8 +30,8 @@
             
         } else {
             _useMetalRenderer = NO;
-        }*/
-        
+        }
+        */
         //
         _useMetalRenderer = NO;
          
@@ -205,13 +205,11 @@
         {
             return;
         }
-        [CATransaction begin];
         [self.renderer setDestination:CVMetalTextureGetTexture(mtlTexture)];
         [self.renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];
         [self.renderer addUpdateRect:self.renderer.bounds];
         [self.renderer render];
         [self.renderer endFrame];
-        [CATransaction commit];
         CFRelease(mtlTexture);
         return;
     }
@@ -261,7 +259,6 @@
         [self.renderer addUpdateRect:self.renderer.bounds];
         [self.renderer render];
         [self.renderer endFrame];
-        //[CATransaction flush];
 
     }
     glBindTexture(GL_TEXTURE_RECTANGLE_ARB, 0);
@@ -273,7 +270,7 @@
 
 -(CVPixelBufferRef)currentImg
 {
-    [CATransaction begin];
+    //[CATransaction begin];
 
     if (!self.layout)
     {
@@ -300,6 +297,8 @@
     
     if (CGSizeEqualToSize(frameSize, CGSizeZero))
     {
+        CGLSetCurrentContext(NULL);
+
         return nil;
     }
  
@@ -318,9 +317,9 @@
     
     if (doSetup && self.renderer)
     {
-        [CATransaction lock];
+        //[CATransaction lock];
         [self setupCArenderer];
-        [CATransaction unlock];
+        //[CATransaction unlock];
         @synchronized (self) {
             _layoutChanged = NO;
         }
@@ -329,10 +328,11 @@
     
     CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, _cvpool, &destFrame);
 
-    //[CATransaction lock];
+    [CATransaction begin];
     [self renderToPixelBuffer:destFrame];
     //[CATransaction unlock];
     [CATransaction commit];
+    CGLSetCurrentContext(NULL);
 
     @synchronized(self)
     {

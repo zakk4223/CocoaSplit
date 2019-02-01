@@ -152,10 +152,10 @@ typedef enum resize_style_t {
 @property (strong) NSColor *backgroundColor;
 @property (readonly) CGRect globalLayoutPosition;
 
-@property (assign) float x_pos;
-@property (assign) float y_pos;
-@property (assign) float width;
-@property (assign) float height;
+@property (assign) CGFloat x_pos;
+@property (assign) CGFloat y_pos;
+@property (assign) CGFloat width;
+@property (assign) CGFloat height;
 
 @property (strong) NSMutableDictionary *constraintMap;
 
@@ -379,10 +379,11 @@ typedef enum resize_style_t {
 @property (strong) NSColor *backgroundColor;
 @property (readonly) CGRect globalLayoutPosition;
 
-@property (assign) float x_pos;
-@property (assign) float y_pos;
-@property (assign) float width;
-@property (assign) float height;
+@property (assign) CGFloat x_pos;
+@property (assign) CGFloat y_pos;
+@property (assign) CGFloat width;
+@property (assign) CGFloat height;
+
 
 @property (strong) NSMutableDictionary *constraintMap;
 

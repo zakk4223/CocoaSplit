@@ -177,6 +177,8 @@ typedef enum source_add_order_t {
     bool _doingLayoutExport;
     JSVirtualMachine *_animationVirtualMachine;
     //dispatch_queue_t _animationQueue;
+    dispatch_group_t _frameTickGroup;
+    
     
     NSDictionary *_undoActionMap;
     

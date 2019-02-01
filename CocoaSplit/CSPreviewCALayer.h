@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 {
     
     CVDisplayLinkRef _displayLink;
+    dispatch_queue_t _displayQueue;
     NSRect _lastBounds;
     NSSize _lastSurfaceSize;
     float _scaleRatio;

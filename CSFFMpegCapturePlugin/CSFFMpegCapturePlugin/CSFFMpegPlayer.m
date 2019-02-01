@@ -513,6 +513,7 @@
     if (_seekRequest)
     {
         [self seek:_seekRequestTime];
+        return nil;
     }
     
     

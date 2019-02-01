@@ -67,7 +67,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         _rFbo = 0;
         _uuidMap = [NSMutableDictionary dictionary];
         _uuidMapPresentation = [NSMutableDictionary dictionary];
-        
+        _frameTickGroup = dispatch_group_create();
         
         _pendingScripts = [NSMutableDictionary dictionary];
         
@@ -1985,7 +1985,6 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     }
 
     [CATransaction commit];
-    [CATransaction flush];
     
     [self adjustInputs:changedInputs];
     [self adjustInputs:newInputs];
@@ -2823,10 +2822,16 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
             
             if (isource.active)
             {
-                [isource frameTick];
+                //dispatch_group_async(_frameTickGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                   // [CATransaction begin];
+                
+                    [isource frameTick];
+                  //  [CATransaction commit];
+            //    });
             }
             
         }
+        //dispatch_group_wait(_frameTickGroup, DISPATCH_TIME_FOREVER);
     }
     
 }
