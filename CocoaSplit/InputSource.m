@@ -234,8 +234,8 @@ static NSArray *_sourceTypes = nil;
     [aCoder encodeObject:self.currentEffects forKey:@"currentEffects"];
     [aCoder encodeFloat:self.changeInterval forKey:@"changeInterval"];
 
-    [aCoder encodeFloat:self.layer.position.x forKey:@"CAx_pos"];
-    [aCoder encodeFloat:self.layer.position.y forKey:@"CAy_pos"];
+    [aCoder encodeDouble:self.layer.position.x forKey:@"CAx_pos"];
+    [aCoder encodeDouble:self.layer.position.y forKey:@"CAy_pos"];
     
     
     [aCoder encodeFloat:self.layer.bounds.size.width forKey:@"CAdisplay_width"];
@@ -329,18 +329,18 @@ static NSArray *_sourceTypes = nil;
 
 
         
-        float x_pos,y_pos,width,height;
+        double x_pos,y_pos,width,height;
         
         if ([aDecoder containsValueForKey:@"CAx_pos"])
         {
-            x_pos = [aDecoder decodeFloatForKey:@"CAx_pos"];
-            y_pos = [aDecoder decodeFloatForKey:@"CAy_pos"];
+            x_pos = [aDecoder decodeDoubleForKey:@"CAx_pos"];
+            y_pos = [aDecoder decodeDoubleForKey:@"CAy_pos"];
 
         } else {
         //at one point [xy]_pos was an integer, so if the float fails try integer. otherwise die.
             @try {
-                x_pos = [aDecoder decodeFloatForKey:@"x_pos"];
-                y_pos = [aDecoder decodeFloatForKey:@"y_pos"];
+                x_pos = [aDecoder decodeDoubleForKey:@"x_pos"];
+                y_pos = [aDecoder decodeDoubleForKey:@"y_pos"];
             } @catch (NSException *e) {
                 x_pos = [aDecoder decodeIntForKey:@"x_pos"];
                 y_pos = [aDecoder decodeIntForKey:@"y_pos"];
@@ -350,8 +350,8 @@ static NSArray *_sourceTypes = nil;
         
         if ([aDecoder containsValueForKey:@"CAdisplay_width"])
         {
-            width = [aDecoder decodeFloatForKey:@"CAdisplay_width"];
-            height = [aDecoder decodeFloatForKey:@"CAdisplay_height"];
+            width = [aDecoder decodeDoubleForKey:@"CAdisplay_width"];
+            height = [aDecoder decodeDoubleForKey:@"CAdisplay_height"];
 
             
         } else {
@@ -362,6 +362,7 @@ static NSArray *_sourceTypes = nil;
 
 
         NSRect tmpRect = NSIntegralRect(NSMakeRect(x_pos, y_pos, width, height));
+        NSLog(@"RESTORED RECT %@", NSStringFromRect(tmpRect));
         self.layer.position = CGPointMake(tmpRect.origin.x, tmpRect.origin.y);
         self.layer.bounds = CGRectMake(0, 0, tmpRect.size.width, tmpRect.size.height);
         
@@ -2069,8 +2070,11 @@ static NSArray *_sourceTypes = nil;
 {
     
     self.layoutPosition = self.layer.frame;
-    bool x_chg, y_chg, w_chg, h_chg = NO;
-    
+    bool x_chg = NO;
+    bool y_chg = NO;
+    bool w_chg = NO;
+    bool h_chg = NO;
+
     if (fabs(_x_pos - self.layer.frame.origin.x) >= CGFLOAT_EPSILON)
     {
 
@@ -2093,7 +2097,6 @@ static NSArray *_sourceTypes = nil;
 
     if (fabs(_width - self.layer.frame.size.width) >= CGFLOAT_EPSILON)
     {
-
       //  [self willChangeValueForKey:@"width"];
         _width = self.layer.frame.size.width;
        // [self didChangeValueForKey:@"width"];
