@@ -16,6 +16,7 @@
 @property (assign) bool transitionAfterPre;
 @property (assign) bool wholeLayout;
 @property (strong) NSString *inputSourceUUID;
+@property (assign) bool autoFit;
 -(NSObject<CSInputSourceProtocol> *)getInputSource;
 -(void)saveAndClearInputSource;
 
@@ -36,6 +37,7 @@
 @property (assign) bool waitForMedia;
 @property (assign) bool transitionAfterPre;
 @property (assign) bool wholeLayout;
+@property (assign) bool autoFit;
 @property (strong) NSString *inputSourceUUID;
 
 -(NSObject<CSInputSourceProtocol> *)getInputSource;

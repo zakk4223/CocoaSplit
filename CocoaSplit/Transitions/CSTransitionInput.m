@@ -57,7 +57,7 @@
         self.inputSourceSavedata = [NSKeyedArchiver archivedDataWithRootObject:_inputSource];
     }
     [aCoder encodeObject:self.inputSourceSavedata forKey:@"inputSourceSavedata"];
-    
+    [aCoder encodeBool:self.autoFit forKey:@"autoFit"];
     [aCoder encodeObject:self.holdDuration forKey:@"holdDuration"];
     [aCoder encodeBool:self.waitForMedia forKey:@"waitForMedia"];
     [aCoder encodeBool:self.transitionAfterPre forKey:@"transitionAfterPre"];
@@ -89,6 +89,7 @@
             self.wholeLayout = [aDecoder decodeBoolForKey:@"wholeLayout"];
         }
         
+        self.autoFit = [aDecoder decodeBoolForKey:@"autoFit"];
         _savedInputName = [aDecoder decodeObjectForKey:@"savedInputName"];
     }
     
@@ -150,10 +151,8 @@
     }
     if (inputSource && inputSource.isVideo)
     {
-        [(InputSource *)inputSource frameTick];
-        [(InputSource *)inputSource autoSize];
 
-        
+        [(InputSource *)inputSource frameTick];
     }
 }
     
@@ -170,10 +169,9 @@
         }
         if (_inputSource && _inputSource.isVideo)
         {
+
             [(InputSource *)_inputSource frameTick];
-            [(InputSource *)_inputSource autoSize];
-            
-            
+
         }
     }
     _savedInputName = _inputSource.name;
@@ -225,7 +223,7 @@
         [scriptRet appendString:@"self.realPreTransition = usePreTrans;"];
     }
     
-    [scriptRet appendString:@"var transitionCSInput = addInputToLayoutForTransition(self.inputSource, self.realPreTransition, getCurrentLayout(), self.wholeLayout);"];
+    [scriptRet appendString:@"var transitionCSInput = addInputToLayoutForTransition(self.inputSource, self.realPreTransition, getCurrentLayout(), self.wholeLayout, self.autoFit);"];
     
     if (self.preTransition)
     {

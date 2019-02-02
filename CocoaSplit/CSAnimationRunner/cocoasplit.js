@@ -280,7 +280,7 @@ var addFilterToLayoutForTransition = function(corefilter, inDuration, layout)
     commitAnimation();
     
 }
-var addInputToLayoutForTransition = function(input, withTransition, layout, wholeLayout) {
+var addInputToLayoutForTransition = function(input, withTransition, layout, wholeLayout, doAutoFit) {
     var useLayout = layout;
     if (!useLayout)
     {
@@ -301,6 +301,10 @@ var addInputToLayoutForTransition = function(input, withTransition, layout, whol
                        if (input.isVideo)
                        {
                           input.buildLayerConstraints();
+                          if (doAutoFit)
+                          {
+                            input.autoFit();
+                          }
                        }
                        
                        if (withTransition)

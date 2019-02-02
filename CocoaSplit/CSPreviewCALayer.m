@@ -183,6 +183,7 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
         } else {
             self.contents = (__bridge id _Nullable)(CVPixelBufferGetIOSurface(toDraw));
         }
+        CVPixelBufferRelease(toDraw);
         [self displayIfNeeded];
      }
     
