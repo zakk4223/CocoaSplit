@@ -329,7 +329,7 @@ static NSArray *_sourceTypes = nil;
 
 
         
-        double x_pos,y_pos,width,height;
+        CGFloat x_pos,y_pos,width,height;
         
         if ([aDecoder containsValueForKey:@"CAx_pos"])
         {
@@ -1975,30 +1975,30 @@ static NSArray *_sourceTypes = nil;
 }
 
 
--(void)setWidth:(float)width
+-(void)setWidth:(CGFloat)width
 {
     _width = width;
     [self directSize:_width height:_height];
 }
 
--(float)width
+-(CGFloat)width
 {
     return _width;
 }
 
--(void)setHeight:(float)height
+-(void)setHeight:(CGFloat)height
 {
     _height = height;
     [self directSize:_width height:_height];
 }
 
--(float)height
+-(CGFloat)height
 {
     return _height;
 }
 
 
--(void)setX_pos:(float)x_pos
+-(void)setX_pos:(CGFloat)x_pos
 {
     //[self registerUndoForProperty:@"x_pos" withAction:@"Position X"];
     if (x_pos > 0 && x_pos <= 1.0)
@@ -2012,12 +2012,12 @@ static NSArray *_sourceTypes = nil;
     [self positionOrigin:_x_pos y:_y_pos];
 }
 
--(float)x_pos
+-(CGFloat)x_pos
 {
     return _x_pos;
 }
 
--(void)setY_pos:(float)y_pos
+-(void)setY_pos:(CGFloat)y_pos
 {
     //[self registerUndoForProperty:@"y_pos" withAction:@"Position Y"];
     if (y_pos > 0 && y_pos <= 1.0)
@@ -2033,7 +2033,7 @@ static NSArray *_sourceTypes = nil;
 
 
 
--(float)y_pos
+-(CGFloat)y_pos
 {
     return _y_pos;
 }
@@ -2047,11 +2047,11 @@ static NSArray *_sourceTypes = nil;
     {
         float wRatio = self.canvas_width/self.topLevelWidth;
         float hRatio = self.canvas_height/self.topLevelHeight;
-        float old_x = self.x_pos;
-        float old_y = self.y_pos;
+        CGFloat old_x = self.x_pos;
+        CGFloat old_y = self.y_pos;
         
-        float new_width = self.layer.frame.size.width * wRatio;
-        float new_height = self.layer.frame.size.height * hRatio;
+        CGFloat new_width = self.layer.frame.size.width * wRatio;
+        CGFloat new_height = self.layer.frame.size.height * hRatio;
         [self directSize:new_width height:new_height];
         if (doPosition)
         {
@@ -3160,7 +3160,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void)handleMIDICommandPositionX:(MIKMIDICommand *)command
 {
-    float newVal = [self convertMidiValueForRange:(MIKMIDIChannelVoiceCommand *)command minValue:0.0 maxValue:1.0];
+    CGFloat newVal = [self convertMidiValueForRange:(MIKMIDIChannelVoiceCommand *)command minValue:0.0 maxValue:1.0];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         self.x_pos = newVal;
@@ -3170,7 +3170,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void)handleMIDICommandPositionY:(MIKMIDICommand *)command
 {
-    float newVal = [self convertMidiValueForRange:(MIKMIDIChannelVoiceCommand *)command minValue:0.0 maxValue:1.0];
+    CGFloat newVal = [self convertMidiValueForRange:(MIKMIDIChannelVoiceCommand *)command minValue:0.0 maxValue:1.0];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         self.y_pos = newVal;
