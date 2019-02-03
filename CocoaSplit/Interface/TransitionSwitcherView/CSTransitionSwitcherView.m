@@ -160,6 +160,7 @@
         CSTransitionLayout *newTransition = [[CSTransitionLayout alloc] init];
         newTransition.layout = draggedLayout;
         [self.transitionsArrayController addObject:newTransition];
+        [newTransition saveAndClearInputSource];
         return YES;
     }
     
@@ -173,6 +174,8 @@
             CSTransitionInput *inputTransition = [[CSTransitionInput alloc] init];
             inputTransition.inputSource = inputSrc;
             [self.transitionsArrayController addObject:inputTransition];
+            [inputTransition saveAndClearInputSource];
+
             return YES;
         }
     }
