@@ -505,7 +505,9 @@
 {
     
     CapturedFrameData *sendData = nil;
+    
     double current_time = [[CaptureController sharedCaptureController] mach_time_seconds];
+    
     
     if (self.active)
     {
@@ -552,6 +554,8 @@
         if (frameData)
         {
             _p_input_framecnt++;
+            CFTimeInterval frameDelay = current_time - frameData.frameTime;
+            _compressor_delay_total += frameDelay;
         }
         
         
@@ -614,6 +618,7 @@
     _p_output_framecnt = 0;
     _p_output_bytes = 0;
     _consecutive_dropped_frames = 0;
+    _compressor_delay_total = 0.0f;
 }
 
 
@@ -640,9 +645,15 @@
     self.buffered_frame_count = self.ffmpeg_out.buffered_frame_count;
     self.buffered_frame_size = self.ffmpeg_out.buffered_frame_size;
     
+    if (_p_input_framecnt > 0)
+    {
+        self.average_compressor_delay = _compressor_delay_total / _p_input_framecnt;
+    }
+    
     //TODO
     self.dropped_frame_count = _dropped_frame_count;
     self.delay_buffer_frames = [_delayBuffer count];
+    _compressor_delay_total = 0.0f;
     _p_input_framecnt = 0;
     _p_output_framecnt = 0;
     _output_frame_timestamp = time_now;

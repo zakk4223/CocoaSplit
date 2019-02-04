@@ -148,6 +148,7 @@
 		3473D2A81D5685DA00842EEE /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3473D2A71D5685DA00842EEE /* Media.xcassets */; };
 		3473D2AE1D56920B00842EEE /* CSAdvancedAudioWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3473D2AC1D56920B00842EEE /* CSAdvancedAudioWindowController.m */; };
 		3473D2AF1D56920B00842EEE /* CSAdvancedAudioWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3473D2AD1D56920B00842EEE /* CSAdvancedAudioWindowController.xib */; };
+		3477BF5122081E57003AF9FF /* CSKilobitFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3477BF5022081E57003AF9FF /* CSKilobitFormatter.m */; };
 		34788DB61EF511E100C3C9C5 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34788DB51EF511E100C3C9C5 /* JavaScriptCore.framework */; };
 		34788DD11EF52C1A00C3C9C5 /* cocoasplit.js in Resources */ = {isa = PBXBuildFile; fileRef = 34788DD01EF52C1A00C3C9C5 /* cocoasplit.js */; };
 		34788DD31EF52DA000C3C9C5 /* CSAnimationBlock.js in Resources */ = {isa = PBXBuildFile; fileRef = 34788DD21EF52DA000C3C9C5 /* CSAnimationBlock.js */; };
@@ -871,6 +872,8 @@
 		3473D2AB1D56920B00842EEE /* CSAdvancedAudioWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSAdvancedAudioWindowController.h; sourceTree = "<group>"; };
 		3473D2AC1D56920B00842EEE /* CSAdvancedAudioWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAdvancedAudioWindowController.m; sourceTree = "<group>"; };
 		3473D2AD1D56920B00842EEE /* CSAdvancedAudioWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSAdvancedAudioWindowController.xib; sourceTree = "<group>"; };
+		3477BF4F22081E57003AF9FF /* CSKilobitFormatter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSKilobitFormatter.h; path = Interface/CSKilobitFormatter.h; sourceTree = "<group>"; };
+		3477BF5022081E57003AF9FF /* CSKilobitFormatter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CSKilobitFormatter.m; path = Interface/CSKilobitFormatter.m; sourceTree = "<group>"; };
 		34788DB51EF511E100C3C9C5 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		34788DCE1EF51D0700C3C9C5 /* CATransactionJSExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CATransactionJSExport.h; sourceTree = "<group>"; };
 		34788DCF1EF5254700C3C9C5 /* JSExports.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSExports.h; sourceTree = "<group>"; };
@@ -1780,6 +1783,8 @@
 				34A271FB204BF6A600135A5D /* CSLayoutButtonView.h */,
 				34A271FC204BF6A600135A5D /* CSLayoutButtonView.m */,
 				34A27228205D6DEE00135A5D /* TransitionSwitcherView */,
+				3477BF4F22081E57003AF9FF /* CSKilobitFormatter.h */,
+				3477BF5022081E57003AF9FF /* CSKilobitFormatter.m */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -2943,6 +2948,7 @@
 				3410FECB205FFB6300C5F8C2 /* CSTransitionLayout.m in Sources */,
 				345F8B251A14E6A0009A81E3 /* CAMultiAudioNode.m in Sources */,
 				342346AA15F59A8500C8C77E /* AVFAudioCapture.m in Sources */,
+				3477BF5122081E57003AF9FF /* CSKilobitFormatter.m in Sources */,
 				3498D94A1A94685000906532 /* CSAudioSwitchCell.m in Sources */,
 				34AB1C311B944F48003F2C03 /* CSPreviewOverlayView.m in Sources */,
 				345F8B051A1060D6009A81E3 /* CSAacEncoder.m in Sources */,

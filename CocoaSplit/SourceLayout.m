@@ -2822,16 +2822,17 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
             
             if (isource.active)
             {
-                //dispatch_group_async(_frameTickGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                   // [CATransaction begin];
+                dispatch_group_async(_frameTickGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    [CATransaction begin];
                 
                     [isource frameTick];
-                  //  [CATransaction commit];
-            //    });
+                    [CATransaction commit];
+                });
             }
             
         }
-        //dispatch_group_wait(_frameTickGroup, DISPATCH_TIME_FOREVER);
+        
+        dispatch_group_wait(_frameTickGroup, DISPATCH_TIME_FOREVER);
     }
     
 }

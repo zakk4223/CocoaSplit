@@ -33,6 +33,7 @@
     int _p_output_framecnt;
     int _p_output_bytes;
     int _consecutive_dropped_frames;
+    CFTimeInterval _compressor_delay_total;
     bool _output_prepared;
     
     
@@ -74,6 +75,8 @@
 @property (assign) int dropped_frame_count;
 @property (assign) double output_framerate;
 @property (assign) double output_bitrate;
+@property (assign) double average_compressor_delay;
+
 @property (strong) NSObject <VideoCompressor> *compressor;
 @property (strong) NSString *compressor_name;
 
