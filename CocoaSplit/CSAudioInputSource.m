@@ -24,6 +24,8 @@
     {
         [self createUUID];
         self.active = YES;
+        self.audioEnabled = YES;
+        self.audioVolume = 1.0;
     }
     
     return self;
@@ -36,9 +38,9 @@
     if (self = [self init])
     {
         self.audioUUID = path;
-        self.audioVolume = 0;
+        self.audioVolume = 1.0;
         self.name = [path lastPathComponent];
-        self.audioEnabled = NO;
+        self.audioEnabled = YES;
         self.audioFilePath = path;
         self.fileDuration = [CAMultiAudioFile durationForPath:path];
         self.fileEndTime = self.fileDuration;
@@ -136,7 +138,10 @@
     {
         self.audioUUID = [aDecoder decodeObjectForKey:@"audioUUID"];
         self.audioVolume = [aDecoder decodeFloatForKey:@"audioVolume"];
-        self.audioEnabled = [aDecoder decodeBoolForKey:@"audioEnabled"];
+        if ([aDecoder containsValueForKey:@"audioEnabled"])
+        {
+            self.audioEnabled = [aDecoder decodeBoolForKey:@"audioEnabled"];
+        }
         
         self.audioFilePath = [aDecoder decodeObjectForKey:@"audioFilePath"];
         

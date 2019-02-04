@@ -88,7 +88,7 @@
 -(void)restoreDataFromDict:(NSDictionary *)restoreDict
 {
     self.enabled = [restoreDict[@"enabled"] boolValue];
-
+    
     self.volume = [restoreDict[@"volume"] floatValue];
     
 

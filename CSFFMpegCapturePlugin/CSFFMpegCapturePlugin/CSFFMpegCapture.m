@@ -20,7 +20,7 @@
         _lastSize = NSZeroSize;
         
         self.needsSourceSelection = NO;
-        
+        self.playWhenLive = YES;
         self.updateMovieTime = YES;
         self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
         _firstFrame = YES;
@@ -381,6 +381,7 @@
     [super setIsVisible:isVisible];
     if (isVisible && self.playWhenLive && !self.player.playing)
     {
+
         [self.player play];
         if (self.useCurrentPosition)
         {
@@ -482,6 +483,7 @@
     if (!self.pcmPlayer)
     {
         self.pcmPlayer = [self createAttachedAudioInputForUUID:self.uuid withName:withName withFormat:&_asbd];
+        
         if (self.pcmPlayer && self.player)
         {
             self.player.asbd = &_asbd;

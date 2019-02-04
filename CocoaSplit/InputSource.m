@@ -362,7 +362,6 @@ static NSArray *_sourceTypes = nil;
 
 
         NSRect tmpRect = NSIntegralRect(NSMakeRect(x_pos, y_pos, width, height));
-        NSLog(@"RESTORED RECT %@", NSStringFromRect(tmpRect));
         self.layer.position = CGPointMake(tmpRect.origin.x, tmpRect.origin.y);
         self.layer.bounds = CGRectMake(0, 0, tmpRect.size.width, tmpRect.size.height);
         

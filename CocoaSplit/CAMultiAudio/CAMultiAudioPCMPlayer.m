@@ -28,7 +28,7 @@
         _inputFormat = NULL;
         self.latestScheduledTime = 0;
         _pauseBuffer = [[NSMutableArray alloc] init];
-        self.enabled = NO;
+        self.enabled = YES;
         _exitPending = NO;
         
     }
