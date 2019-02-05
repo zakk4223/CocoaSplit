@@ -1551,6 +1551,7 @@
             vSrc.autoPlaceOnFrameUpdate = YES;
         }
         
+        source.depth = FLT_MAX;
         [self.sourceLayout addSource:source];
         [[self.undoManager prepareWithInvocationTarget:self] undoAddInput:source.uuid];
     }
