@@ -7,6 +7,11 @@
 
 #import "CSFFMpegCapture.h"
 
+@interface InputSourceHack
+@property (assign) bool active;
+@end
+
+
 @implementation CSFFMpegCapture
 
 @synthesize currentMovieTime  = _currentMovieTime;
@@ -22,6 +27,7 @@
         self.needsSourceSelection = NO;
         self.playWhenLive = YES;
         self.updateMovieTime = YES;
+        self.deactivateWhenDone = NO;
         self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
         _firstFrame = YES;
         _repeat = kCSFFMovieRepeatNone;
@@ -139,7 +145,7 @@
     [aCoder encodeDouble:_currentMovieTime forKey:@"savedTime"];
     [aCoder encodeInt:self.repeat forKey:@"repeat"];
     [aCoder encodeObject:self.uuid forKey:@"uuid"];
-    
+    [aCoder encodeBool:self.deactivateWhenDone forKey:@"deactivateWhenDone"];
 }
 
 
@@ -191,7 +197,12 @@
         
         self.playWhenLive = [aDecoder decodeBoolForKey:@"playWhenLive"];
         self.repeat = [aDecoder decodeIntForKey:@"repeat"];
+    if ([aDecoder containsValueForKey:@"deactivateWhenDone"])
+    {
+        self.deactivateWhenDone = [aDecoder decodeBoolForKey:@"deactivateWhenDone"];
+    }
 
+    
 }
 
 
@@ -256,6 +267,17 @@
 -(void)itemStarted:(CSFFMpegInput *)item
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if (!item && self.deactivateWhenDone)
+        {
+            [self updateInputWithBlock:^(id input) {
+                InputSourceHack *inp = input;
+                [CATransaction begin];
+                [CATransaction setAnimationDuration:0.25f];
+                inp.active = NO;
+                [CATransaction commit];
+            }];
+        }
         self.durationString = [self timeToString:item.duration];
         self.currentMovieDuration = item.duration;
         [self generateUniqueID];

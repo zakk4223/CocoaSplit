@@ -59,6 +59,7 @@
 @property (assign) double currentMovieTime;
 @property (assign) double currentMovieDuration;
 @property (assign) bool playWhenLive;
+@property (assign) bool deactivateWhenDone;
 @property (assign) bool useCurrentPosition;
 @property (assign) bool updateMovieTime;
 @property (assign) ff_movie_repeat repeat;

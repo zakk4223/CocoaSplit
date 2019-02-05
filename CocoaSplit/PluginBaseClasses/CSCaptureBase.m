@@ -407,6 +407,32 @@
 
 
 
+-(void)updateInputWithBlock:(void (^)(id input))updateBlock
+{
+    @autoreleasepool
+    {
+        
+        
+        NSMapTable *inputsCopy = nil;
+        @synchronized(self)
+        {
+            inputsCopy = self.allLayers.copy;
+        }
+        
+        for (id key in inputsCopy)
+        {
+            
+            if (!key)
+            {
+                continue;
+            }
+            
+            
+            InputSource *layerSrc = (InputSource *)key;
+            updateBlock(layerSrc);
+        }
+    }
+}
 -(void)updateLayersWithFramedataBlock:(void (^)(CALayer *))updateBlock withPreuseBlock:(void(^)(void))preUseBlock withPostuseBlock:(void(^)(void))postUseBlock
 {
     [self internalUpdateLayerswithFrameData:true updateBlock:updateBlock preBlock:preUseBlock postBlock:postUseBlock];

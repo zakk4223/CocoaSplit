@@ -152,6 +152,8 @@ typedef enum frame_render_behavior_t {
 -(void) restoreWithCoder:(NSCoder *)aDecoder;
 -(void) saveWithCoder:(NSCoder *)aCoder;
 
+-(void)updateInputWithBlock:(void (^)(id input))updateBlock;
+
 
 
 @end

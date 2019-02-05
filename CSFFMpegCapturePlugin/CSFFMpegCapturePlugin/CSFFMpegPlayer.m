@@ -103,13 +103,13 @@
 }
 
 
--(void)previousItem
+-(CSFFMpegInput *)previousItem
 {
     CSFFMpegInput *useItem = [self preChangeItem];
     
     if (!self.playing)
     {
-        return;
+        return nil;
     }
     
     NSInteger currentIdx = 0;
@@ -146,20 +146,22 @@
         
     }
     
+    return nextItem;
 }
 
 
--(void)nextItem
+-(CSFFMpegInput *)nextItem
 {
     if (self.currentlyPlaying && (_inputQueue.count == 1) && (self.repeat == kCSFFMovieRepeatNone))
     {
-        return;
+        self.currentlyPlaying = nil;
+        return nil;
     }
     CSFFMpegInput *useItem = [self preChangeItem];
     
     if (!self.playing)
     {
-        return;
+        return nil;
     }
 
     NSUInteger currentIdx = 0;
@@ -181,7 +183,7 @@
         if (self.repeat == kCSFFMovieRepeatNone)
         {
             [self stop];
-            return;
+            return nil;
         }
         currentIdx = 0;
     }
@@ -208,7 +210,7 @@
         //[self removeObjectFromInputQueueAtIndex:0];
         
     }
-    
+    return nextItem;
 }
 
 
@@ -635,6 +637,8 @@
 
 -(void)inputDone
 {
+    CSFFMpegInput *willPlay = nil;
+    CSFFMpegInput *wasPlaying = self.currentlyPlaying;
     
     if (_audio_done && _video_done)
     {
@@ -645,13 +649,22 @@
         {
             [self preChangeItem];
             [self playItem:_forceNextInput];
+            willPlay = _forceNextInput;
             _forceNextInput = nil;
         } else if (_doneDirection > 0) {
-            [self nextItem];
+            willPlay = [self nextItem];
         } else if (_doneDirection < 0) {
-            [self previousItem];
+            willPlay = [self previousItem];
         }
         
+        if (!willPlay && (willPlay != wasPlaying))
+        {
+            if (self.itemStarted)
+            {
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{ self.itemStarted(nil);});
+            }
+
+        }
     }
 }
 

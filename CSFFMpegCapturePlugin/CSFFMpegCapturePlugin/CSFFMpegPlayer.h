@@ -73,8 +73,8 @@ typedef enum ff_movie_repeat_t {
 
 
 
--(void)nextItem;
--(void)previousItem;
+-(CSFFMpegInput *)nextItem;
+-(CSFFMpegInput *)previousItem;
 -(void)enqueueItem:(CSFFMpegInput *)item;
 -(void)play;
 -(void)stop;
