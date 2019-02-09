@@ -632,12 +632,12 @@
 /* Begin PBXFileReference section */
 		3400A0601BD44DF0003E1828 /* CSInputLibraryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSInputLibraryItem.h; sourceTree = "<group>"; };
 		3400A0611BD44DF0003E1828 /* CSInputLibraryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSInputLibraryItem.m; sourceTree = "<group>"; };
-		3400A0761BD4533A003E1828 /* CSInputLibraryWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSInputLibraryWindowController.h; path = Interface/CSInputLibraryWindowController.h; sourceTree = "<group>"; };
-		3400A0771BD4533A003E1828 /* CSInputLibraryWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSInputLibraryWindowController.m; path = Interface/CSInputLibraryWindowController.m; sourceTree = "<group>"; };
-		3400A0781BD4533A003E1828 /* CSInputLibraryWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSInputLibraryWindowController.xib; path = Interface/CSInputLibraryWindowController.xib; sourceTree = "<group>"; };
-		3400A07D1BD49406003E1828 /* CSInputLibraryItemView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CSInputLibraryItemView.xib; path = Interface/CSInputLibraryItemView.xib; sourceTree = "<group>"; };
-		3400A0821BD522A5003E1828 /* CSLibraryInputItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSLibraryInputItemViewController.h; path = Interface/CSLibraryInputItemViewController.h; sourceTree = "<group>"; };
-		3400A0831BD522A5003E1828 /* CSLibraryInputItemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSLibraryInputItemViewController.m; path = Interface/CSLibraryInputItemViewController.m; sourceTree = "<group>"; };
+		3400A0761BD4533A003E1828 /* CSInputLibraryWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSInputLibraryWindowController.h; sourceTree = "<group>"; };
+		3400A0771BD4533A003E1828 /* CSInputLibraryWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSInputLibraryWindowController.m; sourceTree = "<group>"; };
+		3400A0781BD4533A003E1828 /* CSInputLibraryWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSInputLibraryWindowController.xib; sourceTree = "<group>"; };
+		3400A07D1BD49406003E1828 /* CSInputLibraryItemView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSInputLibraryItemView.xib; sourceTree = "<group>"; };
+		3400A0821BD522A5003E1828 /* CSLibraryInputItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLibraryInputItemViewController.h; sourceTree = "<group>"; };
+		3400A0831BD522A5003E1828 /* CSLibraryInputItemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSLibraryInputItemViewController.m; sourceTree = "<group>"; };
 		34027497203B6C4B0099328C /* CSColorWell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSColorWell.h; path = Interface/CSColorWell.h; sourceTree = "<group>"; };
 		34027498203B6C4B0099328C /* CSColorWell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CSColorWell.m; path = Interface/CSColorWell.m; sourceTree = "<group>"; };
 		340274B3203B98130099328C /* CSUndoObjectController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSUndoObjectController.h; path = Interface/CSUndoObjectController.h; sourceTree = "<group>"; };
@@ -1737,12 +1737,7 @@
 				34F52A2A1BC1E0F800662911 /* CSLayoutButton.m */,
 				343ED9411BCAC1C80061FC4B /* EditBuiltinLayoutView.xib */,
 				340274B9203C0C360099328C /* LayoutEditWindow */,
-				3400A0761BD4533A003E1828 /* CSInputLibraryWindowController.h */,
-				3400A0771BD4533A003E1828 /* CSInputLibraryWindowController.m */,
-				3400A0781BD4533A003E1828 /* CSInputLibraryWindowController.xib */,
-				3400A07D1BD49406003E1828 /* CSInputLibraryItemView.xib */,
-				3400A0821BD522A5003E1828 /* CSLibraryInputItemViewController.h */,
-				3400A0831BD522A5003E1828 /* CSLibraryInputItemViewController.m */,
+				3477BF6E220B13CF003AF9FF /* InputLibrary */,
 				34DA1D3B1BF823E700132486 /* CSNewOutputWindowController.h */,
 				34DA1D3C1BF823E700132486 /* CSNewOutputWindowController.m */,
 				34DA1D3D1BF823E700132486 /* CSNewOutputWindowController.xib */,
@@ -1945,6 +1940,19 @@
 				3473D27E1D4C349700842EEE /* CSVaughnliveStreamServicePlugin.bundle */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		3477BF6E220B13CF003AF9FF /* InputLibrary */ = {
+			isa = PBXGroup;
+			children = (
+				3400A0761BD4533A003E1828 /* CSInputLibraryWindowController.h */,
+				3400A0771BD4533A003E1828 /* CSInputLibraryWindowController.m */,
+				3400A0781BD4533A003E1828 /* CSInputLibraryWindowController.xib */,
+				3400A07D1BD49406003E1828 /* CSInputLibraryItemView.xib */,
+				3400A0821BD522A5003E1828 /* CSLibraryInputItemViewController.h */,
+				3400A0831BD522A5003E1828 /* CSLibraryInputItemViewController.m */,
+			);
+			path = InputLibrary;
 			sourceTree = "<group>";
 		};
 		34788DCD1EF51CB800C3C9C5 /* JSExports */ = {

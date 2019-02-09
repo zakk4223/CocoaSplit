@@ -33,7 +33,8 @@
     return self;
 }
 
--(void) writeCurrentBuffer:(NSString *)toFile
+
+-(void) writeCurrentBuffer:(NSString *)toFile withCompletionBlock:(void (^)(void))completionBlock
 {
     AppDelegate *appD = NSApp.delegate;
     CaptureController *controller = appD.captureController;
@@ -45,7 +46,7 @@
     newout.stream_output = [toFile stringByStandardizingPath];
     newout.samplerate = controller.multiAudioEngine.sampleRate;
     newout.audio_bitrate = controller.multiAudioEngine.audioBitrate;
-
+    
     NSMutableArray *fCopy;
     @synchronized(self) {
         fCopy = _frameBuffer.copy;
@@ -57,9 +58,19 @@
             [newout writeEncodedData:cData];
         }
         [newout stopProcess];
+        if (completionBlock)
+        {
+            completionBlock();
+        }
     });
 
 }
+-(void) writeCurrentBuffer:(NSString *)toFile
+{
+
+    [self writeCurrentBuffer:toFile withCompletionBlock:nil];
+}
+
 
 
 -(void) writeEncodedData:(CapturedFrameData *)frameData

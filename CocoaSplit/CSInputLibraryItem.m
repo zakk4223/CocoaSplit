@@ -59,6 +59,7 @@
     if (self = [super init])
     {
         self.inputImage = [NSImage imageNamed:NSImageNameUser];
+        self.transient = NO;
     }
     
     return self;
@@ -69,6 +70,7 @@
     [aCoder encodeObject:self.name forKey:@"name"];
     [aCoder encodeObject:self.inputImage forKey:@"inputImage"];
     [aCoder encodeObject:self.inputData forKey:@"inputData"];
+    [aCoder encodeBool:self.autoFit forKey:@"autoFit"];
 }
 
 -(instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -78,6 +80,7 @@
         _name = [aDecoder decodeObjectForKey:@"name"];
         _inputData = [aDecoder decodeObjectForKey:@"inputData"];
         _inputImage = [aDecoder decodeObjectForKey:@"inputImage"];
+        _autoFit = [aDecoder decodeBoolForKey:@"autoFit"];
     }
     
     return self;

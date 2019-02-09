@@ -14,8 +14,10 @@
 #import <sys/types.h>
 #import <sys/stat.h>
 #include "libavformat/avformat.h"
+#include "libavformat/avio.h"
 
 #import <stdio.h>
+int ffurl_get_file_handle(struct URLContext *);
 
 @interface CSLavfOutput ()
 {
@@ -668,6 +670,8 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         {
             av_write_trailer(_av_fmt_ctx);
         }
+        
+        avio_flush(_av_fmt_ctx->pb);
         
         avio_close(_av_fmt_ctx->pb);
         avformat_free_context(_av_fmt_ctx);

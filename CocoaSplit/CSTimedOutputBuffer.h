@@ -25,6 +25,8 @@
 @property (strong) CSIRCompressor *compressor;
 
 -(void) writeCurrentBuffer:(NSString *)toFile;
+-(void) writeCurrentBuffer:(NSString *)toFile withCompletionBlock:(void (^)(void))completionBlock;
+
 -(instancetype) initWithCompressor:(id<VideoCompressor>)compressor;
 
 

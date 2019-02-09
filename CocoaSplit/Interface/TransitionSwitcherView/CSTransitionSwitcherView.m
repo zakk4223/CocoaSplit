@@ -232,6 +232,7 @@
             
             CSTransitionInput *inputTransition = [[CSTransitionInput alloc] init];
             inputTransition.inputSource = itemSrc;
+            inputTransition.autoFit = YES;
             [self.transitionsArrayController addObject:inputTransition];
             retVal = YES;
         }

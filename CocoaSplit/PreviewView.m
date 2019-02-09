@@ -1900,10 +1900,15 @@
 
             [iSrc createUUID];
 
+            iSrc.depth = FLT_MAX;
             [self.sourceLayout addSource:iSrc];
             //[iSrc positionOrigin:worldPoint.x y:worldPoint.y];
             iSrc.x_pos = worldPoint.x;
             iSrc.y_pos = worldPoint.y;
+            if (item.autoFit)
+            {
+                iSrc.autoPlaceOnFrameUpdate = YES;
+            }
         }
         return YES;
     }

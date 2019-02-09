@@ -303,7 +303,7 @@ var addInputToLayoutForTransition = function(input, withTransition, layout, whol
                           input.buildLayerConstraints();
                           if (doAutoFit)
                           {
-                            input.autoFit();
+                            input.autoPlaceOnFrameUpdate = true;
                           }
                        }
                        

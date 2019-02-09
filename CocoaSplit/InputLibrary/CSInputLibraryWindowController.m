@@ -101,7 +101,8 @@
             NSObject<CSInputSourceProtocol> *itemSrc = [[CaptureController sharedCaptureController] inputSourceForPasteboardItem:item];
             if (itemSrc)
             {
-                [[CaptureController sharedCaptureController] addInputToLibrary:itemSrc atIndex:row];
+                CSInputLibraryItem *lItem = [[CaptureController sharedCaptureController] addInputToLibrary:itemSrc atIndex:row];
+                lItem.autoFit = YES;
             }
         }
         

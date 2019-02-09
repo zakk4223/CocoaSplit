@@ -555,20 +555,21 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     self.inputLibraryController = newController;
 }
 
--(void)addInputToLibrary:(NSObject<CSInputSourceProtocol> *)source atIndex:(NSUInteger)idx
+-(CSInputLibraryItem *)addInputToLibrary:(NSObject<CSInputSourceProtocol> *)source atIndex:(NSUInteger)idx
 {
     CSInputLibraryItem *newItem = [[CSInputLibraryItem alloc] initWithInput:source];
     
     
     [self insertObject:newItem inInputLibraryAtIndex:idx];
+    return newItem;
 
 }
 
--(void)addInputToLibrary:(NSObject<CSInputSourceProtocol> *)source
+-(CSInputLibraryItem *)addInputToLibrary:(NSObject<CSInputSourceProtocol> *)source
 {
     
     NSUInteger cIdx = self.inputLibrary.count;
-    [self addInputToLibrary:source atIndex:cIdx];
+    return [self addInputToLibrary:source atIndex:cIdx];
 }
 
 
@@ -2129,7 +2130,12 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     
     [self saveMIDI];
 
-    [saveRoot setValue:self.inputLibrary forKey:@"inputLibrary"];
+    NSArray *realInputLibrary = [self.inputLibrary filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(CSInputLibraryItem   * _Nullable evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+        return !evaluatedObject.transient;
+    }]];
+    
+    
+    [saveRoot setValue:realInputLibrary.mutableCopy forKey:@"inputLibrary"];
     [saveRoot setValue:[NSNumber numberWithBool:self.useTransitions] forKey:@"useTransitions"];
     [saveRoot setValue:self.transitionDuration forKey:@"transitionDuration"];
     
@@ -2414,6 +2420,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     
     
     self.inputLibrary = [saveRoot valueForKey:@"inputLibrary"];
+    
     if (!self.inputLibrary)
     {
         self.inputLibrary = [NSMutableArray array];
@@ -2529,6 +2536,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 }
 
 
+
 -(NSObject<CSInputSourceProtocol>*)inputSourceForPasteboardItem:(NSPasteboardItem *)item
 {
     
@@ -2563,40 +2571,34 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     return nil;
 }
 
-
--(NSArray *)captureSourcesForPasteboardItem:(NSPasteboardItem *)item
+-(NSArray *)fileTypesForURL:(NSString *)urlString
 {
-    
-    NSMutableArray *candidates = [NSMutableArray array];
-    
-    CSPluginLoader *loader = [CSPluginLoader sharedPluginLoader];
-    NSSet *typeSet = nil;
-    
-    
-    NSString *urlString = [item stringForType:@"public.file-url"];
+    NSArray *ret = nil;
     if (urlString)
     {
         NSURL *fileURL = [NSURL URLWithString:urlString];
         NSString *realPath = [fileURL path];
-        
         MDItemRef mditem = MDItemCreate(NULL, (__bridge CFStringRef)realPath);
+        
         if (mditem)
         {
             NSArray *attrs = @[(__bridge NSString *)kMDItemContentTypeTree];
             NSDictionary *attrMap = CFBridgingRelease(MDItemCopyAttributes(mditem, (__bridge CFArrayRef)attrs));
             NSArray *fileTypes = attrMap[(__bridge NSString *)kMDItemContentTypeTree];
-            if (fileTypes)
-            {
-                typeSet = [NSSet setWithArray:fileTypes];
-            }
+            ret = fileTypes;
         }
-        
-    } else {
-        typeSet = [NSSet setWithArray:item.types];
     }
     
+    return ret;
+}
+
+-(NSArray *)captureCandidatesForTypes:(NSSet *)typeSet
+{
+    NSMutableArray *ret = nil;
     if (typeSet)
     {
+        ret = [NSMutableArray array];
+        CSPluginLoader *loader = [CSPluginLoader sharedPluginLoader];
         for (NSString *key in loader.sourcePlugins)
         {
             Class<CSCaptureSourceProtocol> captureClass = loader.sourcePlugins[key];
@@ -2605,12 +2607,37 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
             {
                 if([typeSet intersectsSet:captureSet])
                 {
-                    [candidates addObject:captureClass];
+                    [ret addObject:captureClass];
                 }
             }
             
         }
     }
+    
+    return ret;
+}
+
+-(NSArray *)captureSourcesForPasteboardItem:(NSPasteboardItem *)item
+{
+    
+    NSArray *candidates = [NSMutableArray array];
+    
+    NSSet *typeSet = nil;
+    
+    
+    NSString *urlString = [item stringForType:@"public.file-url"];
+    if (urlString)
+    {
+        NSArray *fileTypes = [self fileTypesForURL:urlString];
+        if (fileTypes)
+        {
+            typeSet = [NSSet setWithArray:fileTypes];
+        }
+    } else {
+        typeSet = [NSSet setWithArray:item.types];
+    }
+    
+    candidates = [self captureCandidatesForTypes:typeSet];
     return candidates;
 }
 
@@ -3627,7 +3654,9 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 
 -(void) insertObject:(CSInputLibraryItem *)item inInputLibraryAtIndex:(NSUInteger)index
 {
+    
     [self.inputLibrary insertObject:item atIndex:index];
+    
 }
 
 -(void)removeObjectFromInputLibraryAtIndex:(NSUInteger)index
@@ -4587,10 +4616,41 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
             dFormat.timeStyle = NSDateFormatterMediumStyle;
             NSString *dateStr = [dFormat stringFromDate:[NSDate date]];
             NSString *useFilename = [NSString stringWithFormat:@"CS_instant_record-%@.mov", dateStr];
-
+            
             NSString *savePath = [NSString pathWithComponents:@[directory, useFilename]];
             
-            [self.instantRecorder writeCurrentBuffer:savePath];
+            [self.instantRecorder writeCurrentBuffer:savePath withCompletionBlock:^{
+                
+                
+                NSURL *fileUrl = [NSURL fileURLWithPath:savePath];
+                
+                NSPasteboardItem *tmpItem = [[NSPasteboardItem alloc] init];
+                [tmpItem setString:fileUrl.absoluteString forType:@"public.file-url"];
+                //This is annoying. The data doesn't get flushed to disk immediately, so the metadata lookup fails (whyyyyy)
+                //Just try a few times until we get an input source...
+                
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0
+                                                         ), ^{
+                    for (int i = 0; i < 10; i++)
+                    {
+                        NSObject<CSInputSourceProtocol>* inputSrc = [self inputSourceForPasteboardItem:tmpItem];
+                        
+                        if (inputSrc)
+                        {
+                            dispatch_async(dispatch_get_main_queue()
+                                           , ^{
+                                               CSInputLibraryItem *item = [self addInputToLibrary:inputSrc];
+                                               item.autoFit = YES;
+                                               item.transient = YES;
+                                           });
+
+                            break;
+                        } else {
+                            sleep(1.0f);
+                        }
+                    }
+                });
+            }];
         }
     }
 }

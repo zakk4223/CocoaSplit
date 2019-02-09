@@ -288,8 +288,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 
--(void)addInputToLibrary:(NSObject<CSInputSourceProtocol> *)source;
--(void)addInputToLibrary:(NSObject<CSInputSourceProtocol> *)source atIndex:(NSUInteger)idx;
+-(CSInputLibraryItem *)addInputToLibrary:(NSObject<CSInputSourceProtocol> *)source;
+-(CSInputLibraryItem *)addInputToLibrary:(NSObject<CSInputSourceProtocol> *)source atIndex:(NSUInteger)idx;
 
 - (IBAction)openLibraryWindow:(id) sender;
 
