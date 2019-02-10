@@ -12,6 +12,7 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
 @implementation CSPreviewCALayer
 
 @synthesize doDisplay = _doDisplay;
+@synthesize doRender = _doRender;
 -(instancetype) init
 {
     if (self = [super init])
@@ -31,6 +32,22 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
     return self;
 }
 
+
+-(bool)doRender
+{
+    bool retval;
+    @synchronized (self) {
+        retval = _doRender;
+    }
+    return retval;
+}
+
+-(void) setDoRender:(bool)doRender
+{
+    @synchronized (self) {
+        _doRender = doRender;
+    }
+}
 
 -(void)setDoDisplay:(bool)doDisplay
 {

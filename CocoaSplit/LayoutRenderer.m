@@ -211,6 +211,7 @@
         [self.renderer render];
         [self.renderer endFrame];
         CFRelease(mtlTexture);
+            
         return;
     }
     
@@ -328,10 +329,12 @@
     
     CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, _cvpool, &destFrame);
 
-    [CATransaction begin];
-    [self renderToPixelBuffer:destFrame];
-    //[CATransaction unlock];
-    [CATransaction commit];
+    @synchronized (self) {
+        [CATransaction begin];
+        [self renderToPixelBuffer:destFrame];
+        //[CATransaction unlock];
+        [CATransaction commit];
+    }
     CGLSetCurrentContext(NULL);
 
     @synchronized(self)

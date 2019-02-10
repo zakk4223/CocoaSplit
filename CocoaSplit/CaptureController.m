@@ -2195,19 +2195,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     [saveRoot addEntriesFromDictionary:savedValues];
     
 
-    if (saveRoot[@"useInstantRecord"])
-    {
-        self.useInstantRecord = [[saveRoot valueForKey:@"useInstantRecord"] boolValue];
-    }
-    
-    self.instantRecordActive = YES;
-    
-    if (saveRoot[@"instantRecordBufferDuration"])
-    {
-        self.instantRecordBufferDuration = [[saveRoot valueForKey:@"instantRecordBufferDuration"] intValue];
-    }
-    
-    self.instantRecordDirectory = [saveRoot valueForKey:@"instantRecordDirectory"];
+
     
     
     self.appearance = [saveRoot valueForKey:@"appearance"];
@@ -2461,10 +2449,6 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     
     
 
-    if (self.useInstantRecord)
-    {
-        [self setupInstantRecorder];
-    }
 
     [self.sourceListViewController addObserver:self forKeyPath:@"selectedObjects" options:NSKeyValueObservingOptionNew context:NULL];
     self.useTransitions = [[saveRoot valueForKey:@"useTransitions"] boolValue];
@@ -2496,6 +2480,28 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     _statusItem.button.imageScaling = NSImageScaleProportionallyDown;
     _statusItem.button.action = @selector(statusButtonClicked:);
     _statusItem.button.target = self;
+    
+    
+    if (saveRoot[@"instantRecordBufferDuration"])
+    {
+        self.instantRecordBufferDuration = [[saveRoot valueForKey:@"instantRecordBufferDuration"] intValue];
+    }
+    
+    self.instantRecordDirectory = [saveRoot valueForKey:@"instantRecordDirectory"];
+    
+    if (saveRoot[@"useInstantRecord"])
+    {
+        self.useInstantRecord = [[saveRoot valueForKey:@"useInstantRecord"] boolValue];
+        self.instantRecordActive = YES;
+
+    }
+    
+    if (self.useInstantRecord)
+    {
+        [self setupInstantRecorder];
+    }
+
+
 }
 
 
@@ -2902,6 +2908,8 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 
 -(void)setupMainRecorder
 {
+    [self.livePreviewView disablePrimaryRender];
+
     if (!self.mainLayoutRecorder)
     {
         self.mainLayoutRecorder = [[CSLayoutRecorder alloc] init];
@@ -2920,6 +2928,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 
         }
     }
+
         self.mainLayoutRecorder.audioEngine.encoder.encodedReceiver = self.mainLayoutRecorder;
     
         self.mainLayoutRecorder.compressors  = self.compressors;
@@ -2932,7 +2941,6 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
         //self.livePreviewView.layoutRenderer = self.mainLayoutRecorder.renderer;
    // }
     
-        [self.livePreviewView disablePrimaryRender];
 
 }
 

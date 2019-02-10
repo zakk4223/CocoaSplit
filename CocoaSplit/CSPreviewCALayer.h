@@ -28,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
     float _maxRenderTime;
     float _avgRenderTime;
     float _sumRenderTime;
+
 }
 
 

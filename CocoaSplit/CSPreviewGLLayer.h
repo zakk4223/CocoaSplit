@@ -23,7 +23,6 @@
     CIContext *_cictx;
     bool _resetClearColor;
     
-    
     GLint       _viewport[4];
     GLKMatrix4    _modelview;
     GLKMatrix4    _projection;
