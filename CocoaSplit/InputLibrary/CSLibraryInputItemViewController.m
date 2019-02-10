@@ -7,6 +7,7 @@
 //
 
 #import "CSLibraryInputItemViewController.h"
+#import "CaptureController.h"
 
 @interface CSLibraryInputItemViewController ()
 
@@ -30,4 +31,21 @@
     // Do view setup here.
 }
 
+- (IBAction)addButtonClicked:(id)sender {
+    
+    InputSource *iSrc = [self.item makeInput];
+    if (self.item.autoFit)
+    {
+        iSrc.autoPlaceOnFrameUpdate = YES;
+    }
+    SourceLayout *useLayout = [CaptureController sharedCaptureController].activeLayout;
+    
+    if ([NSEvent modifierFlags]& NSCommandKeyMask)
+    {
+        useLayout = [CaptureController sharedCaptureController].selectedLayout;
+    }
+    [useLayout addSource:iSrc];
+    
+    
+}
 @end

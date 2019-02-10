@@ -13,5 +13,6 @@
 
 @property (strong) CSInputLibraryItem *item;
 
+- (IBAction)addButtonClicked:(id)sender;
 
 @end
