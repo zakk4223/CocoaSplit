@@ -632,6 +632,29 @@
     
     bool retVal = NO;
     
+    if ([pb canReadItemWithDataConformingToTypes:@[@"cocoasplit.library.item"]])
+    {
+        NSArray *classes = @[[CSInputLibraryItem class]];
+        NSArray *draggedObjects = [pb readObjectsForClasses:classes options:@{}];
+        
+        for (CSInputLibraryItem *item in draggedObjects)
+        {
+            InputSource *iSrc = [item makeInput];
+            [iSrc createUUID];
+            if (item.autoFit)
+            {
+                iSrc.autoPlaceOnFrameUpdate = YES;
+            }
+            [self addInputSourceWithInput:iSrc];
+            if (parentSource)
+            {
+                [parentSource attachInput:iSrc];
+            }
+            iSrc.depth = newDepth++;
+            retVal = YES;
+        }
+    }
+    
     
     for(NSPasteboardItem *item in pb.pasteboardItems)
     {
@@ -768,7 +791,7 @@
     if (!self.sourceTreeSortDescriptors)
     {
         self.sourceTreeSortDescriptors = @[[[NSSortDescriptor alloc] initWithKey:@"depth" ascending:NO]];
-        [self.sourceOutlineView registerForDraggedTypes:@[NSSoundPboardType,NSFilenamesPboardType, NSFilesPromisePboardType, NSFileContentsPboardType, @"cocoasplit.input.uuids", @"cocoasplit.audio.item", @"cocoasplit.layout"]];
+        [self.sourceOutlineView registerForDraggedTypes:@[NSSoundPboardType,NSFilenamesPboardType, NSFilesPromisePboardType, NSFileContentsPboardType, @"cocoasplit.input.uuids", @"cocoasplit.audio.item", @"cocoasplit.layout", @"cocoasplit.library.item"]];
 
         _activeConfigWindows = [NSMutableDictionary dictionary];
         _activeConfigControllers = [NSMutableDictionary dictionary];
