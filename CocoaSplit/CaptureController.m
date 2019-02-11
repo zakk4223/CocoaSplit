@@ -2480,7 +2480,8 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     _statusItem.button.imageScaling = NSImageScaleProportionallyDown;
     _statusItem.button.action = @selector(statusButtonClicked:);
     _statusItem.button.target = self;
-    
+    _statusItem.menu = [[NSMenu alloc] init];
+    _statusItem.menu.delegate = self;
     
     if (saveRoot[@"instantRecordBufferDuration"])
     {
@@ -2502,6 +2503,25 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     }
 
 
+}
+
+
+-(void)menuNeedsUpdate:(NSMenu *)menu
+{
+    if (menu == _statusItem.menu)
+    {
+        [menu removeAllItems];
+        NSString *streamTitle = nil;
+        if (self.captureRunning)
+        {
+            streamTitle = @"Stop Stream";
+        } else {
+            streamTitle = @"Start Stream";
+        }
+        NSMenuItem *streamItem = [[NSMenuItem alloc] initWithTitle:streamTitle action:@selector(statusMenuStreamAction:) keyEquivalent:@""];
+        streamItem.target = self;
+        [menu addItem:streamItem];
+    }
 }
 
 
@@ -3073,7 +3093,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 
 - (IBAction)streamButtonPushed:(id)sender {
     
-    NSButton *button = (NSButton *)sender;
+    NSButton *button = self.streamButton;
     
     
     [self.objectController commitEditing];
@@ -3106,6 +3126,17 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     }
     
 }
+
+-(void)statusMenuStreamAction:(NSMenuItem *)sender
+{
+    if (self.captureRunning)
+    {
+        [self stopStream];
+    } else {
+        [self startStream];
+    }
+}
+
 
 -(BOOL)captureRunning
 {
