@@ -465,7 +465,6 @@
             
             id <VideoCompressor> compressor;
             compressor = self.compressors[cKey];
-            
             CapturedFrameData *newFrameData = newData.copy;
             
             [compressor compressFrame:newFrameData];

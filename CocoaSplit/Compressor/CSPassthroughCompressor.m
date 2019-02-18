@@ -76,6 +76,12 @@
 -(bool)compressFrame:(CapturedFrameData *)imageBuffer
 {
 
+    if (![self hasOutputs])
+    {
+        return NO;
+    }
+    
+    
     bool doCopy;
     
     @synchronized(self)
