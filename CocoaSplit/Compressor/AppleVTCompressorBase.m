@@ -125,6 +125,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     free((int *)baseAddress);
 }
 
+
 -(bool)compressFrame:(CapturedFrameData *)frameData
 {
     
@@ -151,9 +152,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
         }
         return NO;
     }
-    
-    
-    
+
     CFMutableDictionaryRef frameProperties;
     
     /*
@@ -177,7 +176,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     CVImageBufferRef imageBuffer = frameData.videoFrame;
     CVPixelBufferRetain(imageBuffer);
     
-    CVPixelBufferCreate(kCFAllocatorDefault, self.working_width, self.working_height, kCVPixelFormatType_420YpCbCr8Planar, 0, &converted_frame);
+    CVPixelBufferCreate(kCFAllocatorDefault, self.working_width, self.working_height, kCVPixelFormatType_422YpCbCr8, 0, &converted_frame);
     
     VTPixelTransferSessionTransferImage(_vtpt_ref, imageBuffer, converted_frame);
     

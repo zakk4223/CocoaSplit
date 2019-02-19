@@ -42,6 +42,7 @@
     if (self = [super init])
     {
         self.name = @"Script";
+        self.canToggle = YES;
     }
     
     return self;
