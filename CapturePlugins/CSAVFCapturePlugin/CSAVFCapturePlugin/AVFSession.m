@@ -82,7 +82,7 @@
             NSArray *pixelFormats = _video_capture_output.availableVideoCodecTypes;
             if (pixelFormats)
             {
-                [videoSettings setValue:pixelFormats.firstObject forKey:(__bridge NSString *)kCVPixelBufferPixelFormatTypeKey];
+                //[videoSettings setValue:pixelFormats.firstObject forKey:(__bridge NSString *)kCVPixelBufferPixelFormatTypeKey];
             }
             
             [_capture_session addOutput:_video_capture_output];

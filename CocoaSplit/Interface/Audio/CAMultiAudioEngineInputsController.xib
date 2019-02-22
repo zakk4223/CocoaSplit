@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
+        <capability name="System colors introduced in macOS 10.14" minToolsVersion="10.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -23,7 +24,7 @@
                     <rect key="frame" x="19" y="0.0" width="427" height="19"/>
                     <subviews>
                         <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5gm-ul-8QU">
-                            <rect key="frame" x="0.0" y="2" width="452" height="15"/>
+                            <rect key="frame" x="0.0" y="-1" width="427" height="21"/>
                             <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" maxValue="1" doubleValue="0.53607753537735847" tickMarkPosition="above" sliderType="linear" id="SpI-Hf-Vj8" customClass="CSNobarSliderCell"/>
                             <connections>
                                 <binding destination="-2" name="value" keyPath="self.multiAudioEngineController.selection.encodeMixer.volume" id="H7b-1t-Whl"/>
@@ -36,8 +37,9 @@
                         </slider>
                     </subviews>
                     <constraints>
-                        <constraint firstAttribute="trailing" secondItem="5gm-ul-8QU" secondAttribute="trailing" constant="-25" id="2UB-V1-qrF"/>
+                        <constraint firstAttribute="trailing" secondItem="5gm-ul-8QU" secondAttribute="trailing" id="2UB-V1-qrF"/>
                         <constraint firstItem="5gm-ul-8QU" firstAttribute="leading" secondItem="S7b-CH-xll" secondAttribute="leading" id="JI1-q6-Cps"/>
+                        <constraint firstItem="5gm-ul-8QU" firstAttribute="top" secondItem="S7b-CH-xll" secondAttribute="top" id="Vka-aD-SYU"/>
                         <constraint firstItem="5gm-ul-8QU" firstAttribute="centerY" secondItem="S7b-CH-xll" secondAttribute="centerY" id="bnV-kh-vWp"/>
                     </constraints>
                     <userDefinedRuntimeAttributes>
@@ -48,12 +50,13 @@
                             <real key="value" value="1"/>
                         </userDefinedRuntimeAttribute>
                         <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
-                            <color key="value" name="gridColor" catalog="System" colorSpace="catalog"/>
+                            <color key="value" name="unemphasizedSelectedContentBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </userDefinedRuntimeAttribute>
                         <userDefinedRuntimeAttribute type="number" keyPath="backgroundSize">
                             <real key="value" value="0.5"/>
                         </userDefinedRuntimeAttribute>
                         <userDefinedRuntimeAttribute type="boolean" keyPath="splitMeter" value="YES"/>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="wantsDefaultClipping" value="NO"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
                         <binding destination="-2" name="audioLevels" keyPath="self.multiAudioEngineController.selection.streamAudioPowerLevels.output" id="cfD-uf-ica"/>
@@ -129,7 +132,7 @@
                                                                 <real key="value" value="1"/>
                                                             </userDefinedRuntimeAttribute>
                                                             <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
-                                                                <color key="value" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="value" name="unemphasizedSelectedContentBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </userDefinedRuntimeAttribute>
                                                             <userDefinedRuntimeAttribute type="number" keyPath="backgroundSize">
                                                                 <real key="value" value="0.5"/>
@@ -377,7 +380,7 @@
                                                                 <real key="value" value="1"/>
                                                             </userDefinedRuntimeAttribute>
                                                             <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
-                                                                <color key="value" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="value" name="unemphasizedSelectedContentBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </userDefinedRuntimeAttribute>
                                                             <userDefinedRuntimeAttribute type="number" keyPath="backgroundSize">
                                                                 <real key="value" value="0.5"/>
@@ -525,7 +528,7 @@
                 <constraint firstItem="XUd-qr-99U" firstAttribute="trailing" secondItem="COx-Qs-W2l" secondAttribute="trailing" id="tJh-AH-BFy"/>
                 <constraint firstItem="S7b-CH-xll" firstAttribute="leading" secondItem="f5e-pB-VTH" secondAttribute="trailing" constant="-1" id="ygg-iN-vDY"/>
             </constraints>
-            <point key="canvasLocation" x="35" y="147"/>
+            <point key="canvasLocation" x="35" y="146.5"/>
         </customView>
         <arrayController id="mdx-ax-wDS" userLabel="audioInputsController">
             <connections>

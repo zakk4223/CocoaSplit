@@ -64,6 +64,12 @@
 }
 
 
+-(NSSize)streamSizeHint
+{
+    return NSMakeSize(CaptureController.sharedCaptureController.activeLayout.canvas_width, CaptureController.sharedCaptureController.activeLayout.canvas_height);
+    
+}
+
 -(NSArray *)accountNamesForService:(NSString *)serviceName
 {
     

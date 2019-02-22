@@ -12,6 +12,7 @@
 @synthesize audioLevels = _audioLevels;
 
 
+
 -(float)convertDbToLinear:(float)dbVal
 {
     float minDB = -160.0f;
@@ -37,7 +38,8 @@
     [super drawRect:dirtyRect];
 
     NSGradient *leftgrad;
-
+    NSGradient *backgroundGrad;
+    
     if (!self.audioLevels)
     {
         return;
@@ -66,13 +68,13 @@
     float useLevel2 = [self convertDbToLinear:level2.floatValue];
 
     leftgrad = [[NSGradient alloc] initWithColorsAndLocations:[NSColor greenColor], 0.0f, [NSColor yellowColor], 0.5f, [NSColor redColor], 1.0f, nil];
-
+    //backgroundGrad = [[NSGradient alloc] initWithColorsAndLocations:[NSColor colorWithRed:0.0f green:0.2f blue:0.0 alpha:1.0], 0.0f, [NSColor colorWithRed:0.2f green:0.2f blue:0.0f alpha:1.0f], 0.5f, [NSColor colorWithRed:0.2f green:0.0f blue:0.0f alpha:1.0f], 1.0f, nil];
     [self.backgroundColor setFill];
     NSRectFill(dirtyRect);
     NSBezierPath *borderPath = [NSBezierPath bezierPathWithRect:dirtyRect];
     borderPath.lineWidth = self.backgroundSize;
     [borderPath stroke];
-    
+    [backgroundGrad drawInRect:NSInsetRect(dirtyRect, self.backgroundSize, self.backgroundSize) angle:0.0f];
     NSBezierPath *clipPath = [NSBezierPath bezierPath];
     CGFloat l2point;
     CGFloat l1point;
@@ -116,7 +118,8 @@
             [linePath lineToPoint:NSMakePoint(self.bounds.size.width/2, MAX(l1point,l2point))];
         } else {
             [linePath moveToPoint:NSMakePoint(0.0f, self.bounds.size.height/2)];
-            [linePath lineToPoint:NSMakePoint(MAX(l1point,l2point), self.bounds.size.height/2)];
+           // [linePath lineToPoint:NSMakePoint(MAX(l1point,l2point), self.bounds.size.height/2)];
+            [linePath lineToPoint:NSMakePoint(NSMaxX(dirtyRect), self.bounds.size.height/2)];
         }
         [linePath stroke];
     }

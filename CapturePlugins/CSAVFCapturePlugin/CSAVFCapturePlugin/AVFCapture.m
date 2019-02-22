@@ -247,11 +247,36 @@
 
 -(void)switchToDefaultFormat
 {
+    NSSize captureSize = CSPluginServices.sharedPluginServices.streamSizeHint;
+    NSInteger pixelCnt = captureSize.width * captureSize.height;
+    
     NSArray *sortedFormats = [self.videoFormats sortedArrayUsingSelector:@selector(compare:)];
-    AVCaptureDeviceFormat *bestFormat = sortedFormats.lastObject;
-    AVFrameRateRange *bestFramerate = bestFormat.maxFramerate;
+    
+    
+    AVCaptureDeviceFormat *bestFormat = nil;
+    AVFrameRateRange *bestFramerate = nil;
+    
+    for (AVCaptureDeviceFormat *cFmt in sortedFormats)
+    {
+        if (!bestFormat)
+        {
+            bestFormat = cFmt;
+            bestFramerate = cFmt.maxFramerate;
+            continue;
+        }
+        
+        if (pixelCnt == cFmt.pixelCount)
+        {
+                bestFormat = cFmt;
+                bestFramerate = cFmt.maxFramerate;
+        } else if ((cFmt.pixelCount < pixelCnt) && (cFmt.pixelCount >= bestFormat.pixelCount)) {
+            bestFormat = cFmt;
+        }
+    }
+    
+    
     self.activeVideoFormat = bestFormat;
-    self.activeVideoFramerate = bestFramerate;
+    self.activeVideoFramerate = bestFormat.maxFramerate;
 }
 
 -(void)setIsLive:(bool)isLive
@@ -364,7 +389,7 @@
             
             //CFRetain(sampleBuffer);
             [self updateLayersWithFramedataBlock:^(CALayer *layer) {
-                layer.contents = (__bridge id _Nullable)(CVPixelBufferGetIOSurface(videoFrame));
+                layer.contents = (__bridge id _Nullable)(videoFrame);
             } withPreuseBlock:^{
                 CFRetain(sampleBuffer);
             } withPostuseBlock:^{

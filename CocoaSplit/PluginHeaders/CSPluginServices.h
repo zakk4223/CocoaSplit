@@ -36,6 +36,9 @@
 
 @property (readonly) double currentFPS;
 @property (readonly) int audioSampleRate;
+@property (readonly) NSSize streamSizeHint;
+
+
 
 
 @end
