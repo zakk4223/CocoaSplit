@@ -255,6 +255,13 @@
 
 -(void)setParentSource:(InputSource *)parentSource
 {
+    
+    if (_parentSource == parentSource)
+    {
+        return;
+    }
+    
+    
     if (_parentSource && (_parentSource != parentSource))
     {
         [_parentSource removeObserver:self forKeyPath:@"globalLayoutPosition"];

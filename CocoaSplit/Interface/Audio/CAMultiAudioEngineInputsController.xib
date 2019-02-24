@@ -56,7 +56,6 @@
                             <real key="value" value="0.5"/>
                         </userDefinedRuntimeAttribute>
                         <userDefinedRuntimeAttribute type="boolean" keyPath="splitMeter" value="YES"/>
-                        <userDefinedRuntimeAttribute type="boolean" keyPath="wantsDefaultClipping" value="NO"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
                         <binding destination="-2" name="audioLevels" keyPath="self.multiAudioEngineController.selection.streamAudioPowerLevels.output" id="cfD-uf-ica"/>

@@ -84,7 +84,7 @@
 		343C2CBB1FFCD28C00849DA9 /* CAMultiAudioEffectsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 343C2CB91FFCD28C00849DA9 /* CAMultiAudioEffectsViewController.xib */; };
 		343C2CBE1FFCE73000849DA9 /* CSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 343C2CBD1FFCE73000849DA9 /* CSViewController.m */; };
 		343C79ED1D0C796E00B36EEC /* CSFFMpegCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 343C79CC1D0C763A00B36EEC /* CSFFMpegCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		343CE08F21D3705800233909 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 343CE07321D3705800233909 /* Metal.framework */; };
+		343CE08F21D3705800233909 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 343CE07321D3705800233909 /* Metal.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		343ED9421BCAC1C80061FC4B /* EditBuiltinLayoutView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 343ED9411BCAC1C80061FC4B /* EditBuiltinLayoutView.xib */; };
 		34403665207B4E48004BC514 /* CIFilter+BindableDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 34403664207B4E48004BC514 /* CIFilter+BindableDescription.m */; };
 		344036862080B817004BC514 /* CSMixerStreamServicePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 3440367D2080AF72004BC514 /* CSMixerStreamServicePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };

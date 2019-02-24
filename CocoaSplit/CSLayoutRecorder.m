@@ -396,7 +396,6 @@
             
             if (!drain_cnt)
             {
-                NSLog(@"LEAVING RECORDER LOOP");
                 return;
             }
         }

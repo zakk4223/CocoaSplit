@@ -222,10 +222,10 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
     
     NSDictionary *opts = @{@"RevealHiddenEncoders": @YES};
     
+    
     VTCopyVideoEncoderList((__bridge CFDictionaryRef _Nullable)(opts), &encoders);
     
     
-    NSLog(@"ENCODERS %@", encoders);
     NSArray *nsEnc = (__bridge NSArray *)(encoders);
     
     for (NSDictionary *encode in nsEnc)

@@ -566,7 +566,10 @@
         [newCursor push];
     }
  
-    self.mousedSource = newSrc;
+    if (self.mousedSource != newSrc)
+    {
+        self.mousedSource = newSrc;
+    }
     _in_resize_rect = hitResize;
 }
 

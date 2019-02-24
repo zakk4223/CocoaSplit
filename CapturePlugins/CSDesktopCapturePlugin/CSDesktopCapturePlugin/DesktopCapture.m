@@ -176,7 +176,6 @@
     int width;
     int height;
     
-    NSLog(@"SETUP DISPLAY STREAM");
     _lastSize = CGSizeZero;
     
     if (_displayStreamRef)

@@ -1572,7 +1572,6 @@ static NSArray *_sourceTypes = nil;
 
     self.layer = nil;
     
-    
 }
 
 /*
