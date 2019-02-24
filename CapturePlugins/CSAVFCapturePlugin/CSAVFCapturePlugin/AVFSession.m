@@ -12,6 +12,7 @@
 @implementation AVFSession
 
 
+
 +(id) sessionCache
 {
     static NSMutableDictionary *sessionCache = nil;
@@ -23,6 +24,8 @@
     
     return sessionCache;
 }
+
+
 
 -(instancetype)initWithDevice:(AVCaptureDevice *)device
 {
@@ -68,12 +71,8 @@
         //[videoSettings setValue:@(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange) forKey:(__bridge NSString *)kCVPixelBufferPixelFormatTypeKey];
         
         
-        NSDictionary *ioAttrs = [NSDictionary dictionaryWithObject: [NSNumber numberWithBool: NO]
-                                                            forKey: (NSString *)kIOSurfaceIsGlobal];
         
-        
-        
-        [videoSettings setValue:ioAttrs forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
+        [videoSettings setValue:@{} forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
         
         _video_capture_output = [[AVCaptureVideoDataOutput alloc] init];
         
@@ -87,7 +86,7 @@
             
             [_capture_session addOutput:_video_capture_output];
             _video_capture_output.videoSettings = videoSettings;
-            
+
             _capture_queue = dispatch_queue_create("VideoQueue", NULL);
             
             [_video_capture_output setSampleBufferDelegate:self queue:_capture_queue];
