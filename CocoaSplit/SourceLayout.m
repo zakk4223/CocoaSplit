@@ -252,7 +252,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     newRoot.masksToBounds = YES;
 
     
-    CGColorRef tmpColor = CGColorCreateGenericRGB(0, 0, 0, 0);
+    CGColorRef tmpColor = CGColorCreateGenericRGB(0, 0, 0, 1);
     newRoot.backgroundColor = tmpColor;
     CGColorRelease(tmpColor);
     
@@ -2980,12 +2980,14 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 
 -(NSColor *)backgroundColor
 {
+    NSColor *retColor = nil;
     if (self.rootLayer.backgroundColor)
     {
-        return [NSColor colorWithCGColor:self.rootLayer.backgroundColor];
+        retColor =  [NSColor colorWithCGColor:self.rootLayer.backgroundColor];
     } else {
-        return nil;
+        retColor =  nil;
     }
+    return retColor;
 }
 
 -(void)clearGradient
@@ -3013,7 +3015,6 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 
 -(void)setGradientStartY:(CGFloat)gradientStartY
 {
-    
     CGPoint cBounds = self.rootLayer.startPoint;
     cBounds.y = gradientStartY;
     self.rootLayer.startPoint = cBounds;
