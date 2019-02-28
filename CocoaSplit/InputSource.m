@@ -3624,38 +3624,6 @@ static NSArray *_sourceTypes = nil;
 }
 
 
--(void)undoNotification:(NSNotification *)notification
-{
-    NSString *keyPath = notification.name;
-    id propertyValue = notification.object;
-
-    NSString *actionName = _undoActionMap[keyPath];
-    if (!actionName)
-    {
-        if ([keyPath isEqualToString:@"isMaskLayer"])
-        {
-            actionName = propertyValue ? @"Set As Mask" : @"Unset As Mask";
-        } else if ([keyPath isEqualToString: @"active"]) {
-            actionName = propertyValue ? @"Set Active" : @"Unset Active";
-        } else if ([keyPath isEqualToString:@"doChromaKey"]) {
-            actionName = propertyValue ? @"Set Chroma Key" : @"Unset Chroma Key";
-        } else {
-            actionName = [NSString stringWithFormat:@"Change %@", keyPath];
-        }
-    }
-    
-    [[self.sourceLayout.undoManager prepareWithInvocationTarget:self.sourceLayout] modifyUUID:self.uuid withBlock:^(NSObject<CSInputSourceProtocol> *input) {
-        [input pauseUndoForKeyPath:keyPath];
-        [input setValue:propertyValue forKeyPath:keyPath];
-        [input resumeUndoForKeyPath:keyPath];
-        
-    }];
-    [self.sourceLayout.undoManager setActionName:actionName];
-}
-
-
-
-
 -(void)setChromaKeyColor:(NSColor *)chromaKeyColor
 {
 

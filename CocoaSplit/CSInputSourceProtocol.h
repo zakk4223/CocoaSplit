@@ -50,8 +50,6 @@
 -(void)beforeRemove;
 -(void)beforeReplace:(bool)removing;
 -(void)afterReplace;
--(void)pauseUndoForKeyPath:(NSString *)keyPath;
--(void)resumeUndoForKeyPath:(NSString *)keyPath;
 -(void)attachInput:(NSObject <CSInputSourceProtocol>*)input;
 -(void)detachInput:(NSObject <CSInputSourceProtocol>*)input;
 -(void)detachAllInputs;

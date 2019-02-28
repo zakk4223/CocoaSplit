@@ -16,15 +16,10 @@
 @property (assign) bool resizeDirty;
 @property (assign) bool doDisplay;
 
-@property (assign) float measuredFrameRate;
-@property (assign) float minRenderTime;
-@property (assign) float maxRenderTime;
-@property (assign) float avgRenderTime;
 
 
 -(NSPoint)realPointforWindowPoint:(NSPoint)winPoint;
 -(NSRect)windowRectforWorldRect:(NSRect)worldRect;
--(void)renderIfNeeded;
 
 @end
 

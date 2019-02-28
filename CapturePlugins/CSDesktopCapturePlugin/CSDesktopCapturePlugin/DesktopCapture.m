@@ -309,6 +309,46 @@
     return YES;
 }
 
+-(CFDictionaryRef)getIODisplayDictForSerial:(uint32_t) serial
+{
+    io_iterator_t ioIter;
+    io_service_t ioService;
+    CFDictionaryRef retDict = NULL;
+    kern_return_t err = IOServiceGetMatchingServices(kIOMasterPortDefault,  IOServiceMatching("IODisplayConnect"), &ioIter);
+    if (err)
+    {
+        return NULL;
+    }
+    
+    while ((ioService = IOIteratorNext(ioIter)) != 0)
+    {
+        CFDictionaryRef info;
+        
+        
+        info  = IODisplayCreateInfoDictionary(ioService,kIODisplayOnlyPreferredName);
+        if (info)
+        {
+            CFNumberRef displaySerialRef = CFDictionaryGetValue(info, CFSTR(kDisplaySerialNumber));
+            if (displaySerialRef)
+            {
+                uint32_t cmpSerial;
+                NSNumber *nsDispSerial = (NSNumber *)CFBridgingRelease(displaySerialRef);
+                cmpSerial = nsDispSerial.unsignedIntValue;
+
+                if (cmpSerial == serial)
+                {
+                    retDict = info;
+                    break;
+                } else {
+                    CFRelease(info);
+                }
+            }
+        }
+    }
+    
+    IOObjectRelease(ioIter);
+    return retDict;
+}
 
 -(NSArray *) availableVideoDevices
 {
@@ -320,14 +360,18 @@
     
     NSMutableArray *retArray = [[NSMutableArray alloc] init];
     
-    
-    
     for(int i = 0; i < active_display_count; i++)
     {
         CGDirectDisplayID disp_id = display_ids[i];
         NSString *displayName;
+        uint32_t serial  = CGDisplaySerialNumber(disp_id);
         
-        NSDictionary *deviceInfo = (NSDictionary *)CFBridgingRelease(IODisplayCreateInfoDictionary(CGDisplayIOServicePort(disp_id), kIODisplayOnlyPreferredName));
+        
+        NSDictionary *deviceInfo = CFBridgingRelease([self getIODisplayDictForSerial:serial]);
+        if (!deviceInfo)
+        {
+            continue;
+        }
         NSDictionary *localizedNames = [deviceInfo objectForKey:[NSString stringWithUTF8String:kDisplayProductName]];
         if ([localizedNames count] > 0)
         {
@@ -338,11 +382,12 @@
             displayName = @"????";
         }
         
-        NSNumber *display_id_obj = [NSNumber numberWithLong:disp_id];
-        NSString *display_id_uniq = [NSString stringWithFormat:@"%ud", disp_id];
+        CFUUIDRef display_uuid_ref = CGDisplayCreateUUIDFromDisplayID(disp_id);
+        NSString *displayUUID = CFBridgingRelease(CFUUIDCreateString(NULL, display_uuid_ref));
+        NSNumber *displayObj = [NSNumber numberWithUnsignedInt:disp_id];
         
         
-        [retArray addObject:[[CSAbstractCaptureDevice alloc] initWithName:displayName device:display_id_obj uniqueID:display_id_uniq]];
+        [retArray addObject:[[CSAbstractCaptureDevice alloc] initWithName:displayName device:displayObj uniqueID:displayUUID]];
     }
     
     return (NSArray *)retArray;

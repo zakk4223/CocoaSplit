@@ -7,8 +7,9 @@
 
 #import <Cocoa/Cocoa.h>
 #import "CSTransitionInput.h"
+#import "CSLayoutTransitionViewProtocol.h"
 
-@interface CSInputLayoutTransitionViewController : NSViewController
+@interface CSInputLayoutTransitionViewController : NSViewController <CSLayoutTransitionViewProtocol>
     {
         NSViewController *_configViewController;
     }

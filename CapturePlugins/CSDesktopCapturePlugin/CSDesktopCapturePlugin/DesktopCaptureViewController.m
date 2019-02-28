@@ -123,7 +123,6 @@
     
     
     viewBounds.origin.y = -(viewBounds.origin.y - NSHeight(screenFrame)) - NSHeight(viewBounds);
-    id vidInput = self.captureObj;
     [self.captureObj resetRegionRect:viewBounds];
     [self.cropSelectionWindow close];
 }

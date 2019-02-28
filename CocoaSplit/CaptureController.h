@@ -270,8 +270,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 
--(void)layoutWentFullscreen;
--(void)layoutLeftFullscreen;
 +(void)loadPythonClass:(NSString *)pyClass fromFile:(NSString *)fromFile withBlock:(void(^)(Class))withBlock;
 +(Class)loadPythonClass:(NSString *)pyClass fromFile:(NSString *)fromFile;
 -(void)toggleLayout:(SourceLayout *)layout usingLayout:(SourceLayout *)usingLayout;
@@ -297,12 +295,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 - (IBAction)configureLayoutRecordingCompressor:(id)sender;
 
 
-
-- (IBAction)inputTableControlClick:(NSButton *)sender;
-
--(void) resetInputTableHighlights;
-
-
 - (IBAction)outputSegmentedAction:(NSButton *)sender;
 
 - (IBAction)openAdvancedAudio:(id)sender;
@@ -311,7 +303,6 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(void)openAddOutputPopover:(id)sender sourceRect:(NSRect)sourceRect;
 
 - (IBAction)openLayoutSwitcherWindow:(id)sender;
-- (IBAction)switchLayoutView:(id)sender;
 -(bool) sleepUntil:(double)target_time;
 -(CSLayoutRecorder *)startRecordingLayout:(SourceLayout *)layout;
 -(CSLayoutRecorder *)startRecordingLayout:(SourceLayout *)layout usingOutput:(OutputDestination *)output;

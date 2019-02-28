@@ -36,10 +36,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign) bool doRender;
 @property (assign) bool midiActive;
 @property (assign) bool resizeDirty;
-@property (assign) float measuredFrameRate;
-@property (assign) float minRenderTime;
-@property (assign) float maxRenderTime;
-@property (assign) float avgRenderTime;
 @property (assign) bool doDisplay;
 
 
