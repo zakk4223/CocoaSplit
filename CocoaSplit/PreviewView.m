@@ -1789,7 +1789,18 @@
     }
 }
 
-
+-(void)windowOcclusionStateChanged
+{
+    if (_glLayer)
+    {
+        if (self.window.occlusionState & NSWindowOcclusionStateVisible)
+        {
+            _glLayer.doDisplay = YES;
+        } else {
+            _glLayer.doDisplay = NO;
+        }
+    }
+}
 -(void)awakeFromNib
 {
     

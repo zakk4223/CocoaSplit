@@ -52,6 +52,9 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
 -(void)setDoDisplay:(bool)doDisplay
 {
     _doDisplay = doDisplay;
+
+    self.hidden = !_doDisplay;
+    
     if (!_displayLink)
     {
         return;

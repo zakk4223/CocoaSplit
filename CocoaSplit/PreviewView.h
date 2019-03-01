@@ -123,6 +123,7 @@
 -(void)openInputConfigWindow:(NSString *)uuid;
 -(void)disablePrimaryRender;
 -(void)enablePrimaryRender;
+-(void)windowOcclusionStateChanged;
 
 
 

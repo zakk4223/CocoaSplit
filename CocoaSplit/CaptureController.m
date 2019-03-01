@@ -4959,6 +4959,15 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     return _activeTransition;
 }
 
+-(void)windowDidChangeOcclusionState:(NSNotification *)notification
+{
+    NSWindow *win = notification.object;
+    if (win == self.mainWindow)
+    {
+        [self.livePreviewView windowOcclusionStateChanged];
+        [self.stagingPreviewView windowOcclusionStateChanged];
+    }
+}
 
 -(void)dealloc
 {

@@ -596,7 +596,7 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <collectionView selectable="YES" maxNumberOfColumns="3" id="cb9-Ah-LwN">
-                                                    <rect key="frame" x="0.0" y="0.0" width="328" height="272"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="328" height="274"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                                     <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     <connections>
@@ -854,6 +854,9 @@
                     <constraint firstItem="hIR-Rx-Pl1" firstAttribute="top" secondItem="LSw-Ze-64r" secondAttribute="top" id="ybs-ZG-JIY"/>
                 </constraints>
             </view>
+            <connections>
+                <outlet property="delegate" destination="816" id="2jB-fK-B0I"/>
+            </connections>
             <point key="canvasLocation" x="2782.5" y="-663.5"/>
         </window>
         <collectionViewItem nibName="CSLayoutCollectionItem" id="UC3-5W-Ml6" customClass="CSLayoutCollectionItem"/>
