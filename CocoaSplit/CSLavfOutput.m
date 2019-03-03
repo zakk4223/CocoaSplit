@@ -241,11 +241,11 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
     
     CapturedFrameData *frameData = frameDataIn;
-    
-    if (!_audio_extradata && [frameData.audioSamples count] > 0)
+    NSMutableArray *audioSamples = frameData.audioSamples[@"Default"];
+    if (!_audio_extradata && [audioSamples count] > 0)
     {
         
-        CMSampleBufferRef audioSample = (__bridge CMSampleBufferRef)[frameData.audioSamples objectAtIndex:0];
+        CMSampleBufferRef audioSample = (__bridge CMSampleBufferRef)[audioSamples objectAtIndex:0];
         [self extractAudioCookie:audioSample];
     }
     
@@ -269,7 +269,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
     //If we made it here, we have all the metadata and av* stuff created, so start sending data.
     
-    for (id object in frameData.audioSamples)
+    for (id object in audioSamples)
     {
         CMSampleBufferRef audioSample = (__bridge CMSampleBufferRef)object;
         

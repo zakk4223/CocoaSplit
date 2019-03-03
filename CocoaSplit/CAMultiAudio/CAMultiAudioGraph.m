@@ -167,6 +167,14 @@
         return NO;
     }
     
+    for (NSString *inpUUID in node.inputMap)
+    {
+        NSDictionary *inpInfo = node.inputMap[inpUUID];
+        CAMultiAudioNode *inpNode = inpInfo[@"node"];
+        [inpNode.outputMap removeObjectForKey:node.nodeUID];
+    }
+    
+    
     err = AUGraphRemoveNode(_graphInst, node.node);
     if (err)
     {

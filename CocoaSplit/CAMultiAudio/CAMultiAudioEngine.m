@@ -18,7 +18,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 @synthesize sampleRate = _sampleRate;
 @synthesize outputNode = _outputNode;
-@synthesize encoder = _encoder;
+//@synthesize encoder = _encoder;
 
 
 -(void)commonInit
@@ -262,7 +262,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
 }
 
-
+/*
 -(CSAacEncoder *)encoder
 {
     return _encoder;
@@ -282,6 +282,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     AudioUnitAddRenderNotify(self.renderNode.audioUnit, encoderRenderCallback, [_encoder inputBufferPtr]);
 }
 
+*/
 
 -(void) disableAllInputs
 {
@@ -375,13 +376,118 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 }
 
+-(bool)removeInput:(CAMultiAudioInput *)input fromTrack:(NSString *)trackName
+{
+    NSDictionary *trackInfo = self.outputTracks[trackName];
+    if (!trackInfo)
+    {
+        return NO;
+    }
+    
+    NSNumber *trackOutBus = trackInfo[@"outputBus"];
+    [self.encodeMixer disconnectInputBus:input.effectsHead.connectedToBus fromOutputBus:trackOutBus.unsignedIntValue];
+    [input.outputTracks removeObjectForKey:trackName];
+    return YES;
+}
+
+
+-(bool)addInput:(CAMultiAudioInput *)input toTrack:(NSString *)trackName
+{
+    NSDictionary *trackInfo = self.outputTracks[trackName];
+    if (!trackInfo)
+    {
+        return NO;
+    }
+    
+    NSNumber *trackOutBus = trackInfo[@"outputBus"];
+    [self.encodeMixer connectInputBus:input.effectsHead.connectedToBus toOutputBus:trackOutBus.unsignedIntValue];
+    [input.outputTracks setObject:@(YES) forKey:trackName];
+    return YES;
+}
+
+
+
+-(void)setupDefaultOutputTrack
+{
+    NSMutableDictionary *defaultInfo = self.outputTracks[@"Default"];
+    if (!defaultInfo)
+    {
+        defaultInfo = [NSMutableDictionary dictionary];
+        defaultInfo[@"encoderNode"] = self.renderNode;
+        defaultInfo[@"outputBus"] = @(0);
+    }
+    
+    if (!defaultInfo[@"encoder"])
+    {
+        CSAacEncoder *encoder =  [[CSAacEncoder alloc] init];
+        encoder.sampleRate = self.sampleRate;
+        encoder.bitRate = self.audioBitrate*1000;
+        encoder.inputASBD = self.graph.graphAsbd;
+        encoder.trackName = @"Default";
+        [encoder setupEncoderBuffer];
+        defaultInfo[@"encoder"] = encoder;
+    }
+    
+    
+    self.outputTracks[@"Default"] = defaultInfo;
+}
+
+
 -(bool)createOutputTrack:(NSString *)withName
 {
-    //Create encodernode
-    //attach encodeMixer to node
-    //get bus?!?!
-    //
+
+    if ([withName isEqualToString:@"Default"])
+    {
+        return NO;
+    }
+    CAMultiAudioEffect *encNode = [[CAMultiAudioEffect alloc] initWithSubType:kAudioUnitSubType_Delay unitType:kAudioUnitType_Effect];
+    CSAacEncoder *encoder = [[CSAacEncoder alloc] init];
+    encoder.sampleRate = self.sampleRate;
+    encoder.bitRate = self.audioBitrate*1000;
+    encoder.trackName = withName;
+    encoder.inputASBD = self.graph.graphAsbd;
+    [encoder setupEncoderBuffer];
+    
+    [self.graph addNode:encNode];
+    [self.graph connectNode:self.encodeMixer toNode:encNode];
+    NSDictionary *connInfo = encNode.inputMap[self.encodeMixer.nodeUID];
+    NSDictionary *trackEntry = @{@"encoder": encoder, @"encoderNode": encNode, @"outputBus": connInfo[@"outBus"]};
+    [self.outputTracks setObject:trackEntry forKey:withName];
+    return YES;
 }
+
+-(bool)removeOutputTrack:(NSString *)withName
+{
+    if ([withName isEqualToString:@"Default"])
+    {
+        return NO;
+    }
+    
+    
+    NSDictionary *trackInfo = self.outputTracks[withName];
+    if (trackInfo)
+    {
+        CSAacEncoder *enc = trackInfo[@"encoder"];
+        if (enc)
+        {
+            [enc stopEncoder];
+        }
+        
+        CAMultiAudioNode *encNode = trackInfo[@"encoderNode"];
+        [self.encodeMixer disconnectOutput:encNode];
+        if (encNode)
+        {
+            [self.graph removeNode:encNode];
+        }
+        
+        [self.outputTracks removeObjectForKey:withName];
+        return YES;
+    }
+    
+    return NO;
+}
+
+
 -(bool)buildGraph
 {
     self.graph = [[CAMultiAudioGraph alloc] initWithSamplerate:self.sampleRate];
@@ -446,12 +552,21 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     [self.graph connectNode:self.encodeMixer toNode:self.renderNode];
     [self.graph connectNode:self.silentNode toNode:self.encodeMixer];
     
-    
-    
-    if (self.encoder)
+    /*
+    if (!self.encoder)
     {
+        CSAacEncoder *encoder = [[CSAacEncoder alloc] init];
+        encoder.sampleRate = self.sampleRate;
+        encoder.bitRate = self.audioBitrate*1000;
+    
+        encoder.inputASBD = self.graph.graphAsbd;
+        [encoder setupEncoderBuffer];
+        self.encoder = encoder;
+    } else {
         AudioUnitAddRenderNotify(self.renderNode.audioUnit, encoderRenderCallback, [self.encoder inputBufferPtr]);
     }
+     */
+    [self setupDefaultOutputTrack];
 
     return YES;
 }
@@ -716,6 +831,29 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 }
 
 
+-(void)startEncoders
+{
+    
+    for(NSString *trackName in self.outputTracks)
+    {
+        NSDictionary *trackInfo = self.outputTracks[trackName];
+        CAMultiAudioNode *renderNode = trackInfo[@"encoderNode"];
+        CSAacEncoder *encoder = trackInfo[@"encoder"];
+        AudioUnitAddRenderNotify(renderNode.audioUnit, encoderRenderCallback, [encoder inputBufferPtr]);
+    }
+}
+
+-(void)stopEncoders
+{
+    for(NSString *trackName in self.outputTracks)
+    {
+        NSDictionary *trackInfo = self.outputTracks[trackName];
+        CAMultiAudioNode *renderNode = trackInfo[@"encoderNode"];
+        CSAacEncoder *encoder = trackInfo[@"encoder"];
+        AudioUnitRemoveRenderNotify(renderNode.audioUnit, encoderRenderCallback, [encoder inputBufferPtr]);
+    }
+}
+
 
 -(UInt32)sampleRate
 {
@@ -856,7 +994,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     {
         [self.graph addNode:input];
         [self.graph connectNode:input toNode:self.encodeMixer];
-        [self.encodeMixer connectInputBus:input.effectsHead.connectedToBus toOutputBus:0];
+        [self addInput:input toTrack:@"Default"];
     }
     
     return YES;
@@ -1052,9 +1190,20 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 -(void)dealloc
 {
+    /*
     if (self.encoder)
     {
         [self.encoder stopEncoder];
+    }*/
+    
+    for(NSString *trackName in self.outputTracks)
+    {
+        NSDictionary *trackInfo = self.outputTracks[trackName];
+        CSAacEncoder *enc = trackInfo[@"encoder"];
+        if (enc)
+        {
+            [enc stopEncoder];
+        }
     }
 }
 
@@ -1064,7 +1213,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioActionFlags, const AudioTimeStamp *inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList *ioData )
 {
     
-    
+
     if ((*ioActionFlags) & kAudioUnitRenderAction_PostRenderError)
     {
         return noErr;
@@ -1076,7 +1225,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
     if (encodeBuffer && ((*ioActionFlags) & kAudioUnitRenderAction_PostRender))
     {
-        
         
         TPCircularBufferCopyAudioBufferList(encodeBuffer, ioData, inTimeStamp, kTPCircularBufferCopyAll, NULL);
 

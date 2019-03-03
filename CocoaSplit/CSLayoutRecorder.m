@@ -9,6 +9,27 @@
 #import "CaptureController.h"
 #import "CSLavfOutput.h"
 
+@interface RecAudioBufferData : NSObject
+@property (strong) NSMutableArray *audiobuffer;
+@property (assign) CMTime firstAudioTime;
+@property (assign) CMTime previousAudioTime;
+@end
+
+@implementation RecAudioBufferData
+-(instancetype) init
+{
+    if (self = [super init])
+    {
+        _audiobuffer = [NSMutableArray array];
+        _firstAudioTime = kCMTimeZero;
+        _previousAudioTime = kCMTimeZero;
+    }
+    
+    return self;
+}
+@end
+
+
 @implementation CSLayoutRecorder
 
 
@@ -42,8 +63,11 @@
         self.layout.recorder = nil;
         self.layout.isActive = NO;
         self.recordingActive = NO;
+        /*
         [self.audioEncoder stopEncoder];
         self.audioEngine.encoder = nil;
+         */
+        [self.audioEngine stopEncoders];
         self.audioEngine = nil;
         [[CaptureController sharedCaptureController] removeLayoutRecorder:self];
     }
@@ -171,10 +195,7 @@
 
 -(void)startRecordingCommon
 {
-    
-    
 
-    
     if (!self.recordingActive)
     {
         _firstAudioTime = kCMTimeZero;
@@ -183,8 +204,8 @@
         _previousPcmAudioTime = kCMTimeZero;
         
         
-        _audioBuffer = [NSMutableArray array];
-        _pcmAudioBuffer = [NSMutableArray array];
+        _audioBuffers = [NSMutableDictionary dictionary];
+        _pcmAudioBuffers = [NSMutableDictionary dictionary];
 
 
         
@@ -207,6 +228,7 @@
             }
             
 
+            /*
             self.audioEncoder = [[CSAacEncoder alloc] init];
             self.audioEncoder.encodedReceiver = self;
             self.audioEncoder.sampleRate = [CaptureController sharedCaptureController].multiAudioEngine.sampleRate;
@@ -215,14 +237,22 @@
             self.audioEncoder.inputASBD = useEngine.graph.graphAsbd;
             [self.audioEncoder setupEncoderBuffer];
             useEngine.encoder = self.audioEncoder;
+             */
             useEngine.previewMixer.muted = YES;
             self.audioEngine = useEngine;
+            [self.audioEngine startEncoders];
             
         } else {
-            self.audioEncoder = self.audioEngine.encoder;
+            //self.audioEncoder = self.audioEngine.encoder;
         }
         
-        
+        for(NSString *trackName in self.audioEngine.outputTracks)
+        {
+            NSDictionary *trackInfo = self.audioEngine.outputTracks[trackName];
+            CSAacEncoder *enc = trackInfo[@"encoder"];
+            enc.encodedReceiver = self;
+        }
+        [self.audioEngine startEncoders];
         if (!self.renderer)
         {
             self.renderer = [[LayoutRenderer alloc] init];
@@ -445,17 +475,27 @@
     {
         _frameCount++;
         CVPixelBufferRetain(newFrame);
-        NSMutableArray *frameAudio = [[NSMutableArray alloc] init];
-        NSMutableArray *pcmFrameAudio = [[NSMutableArray alloc] init];
 
-        [self setAudioData:frameAudio videoPTS:CMTimeMake((_frame_time - _firstFrameTime)*1000, 1000)];
-        [self setPcmAudioData:pcmFrameAudio videoPTS:CMTimeMake((_frame_time - _firstFrameTime)*1000, 1000)];
+
 
         
         CapturedFrameData *newData = [self createFrameData];
-        newData.audioSamples = frameAudio;
+        
+        for(NSString *trackName in _audioBuffers)
+        {
+            NSMutableArray *frameAudio = [[NSMutableArray alloc] init];
+            [self setAudioData:frameAudio videoPTS:CMTimeMake((_frame_time - _firstFrameTime)*1000, 1000) forTrack:trackName];
+            newData.audioSamples[trackName] = frameAudio;
+        }
+        
+        for(NSString *trackName in _pcmAudioBuffers)
+        {
+            NSMutableArray *pcmFrameAudio = [[NSMutableArray alloc] init];
+            [self setPcmAudioData:pcmFrameAudio videoPTS:CMTimeMake((_frame_time - _firstFrameTime)*1000, 1000) forTrack:trackName];
+            newData.pcmAudioSamples[trackName] = pcmFrameAudio;
+        }
+        
         newData.videoFrame = newFrame;
-        newData.pcmAudioSamples = pcmFrameAudio;
         
         int used_compressor_count = 0;
         
@@ -503,30 +543,54 @@
     return [[CaptureController sharedCaptureController] mach_time_seconds];
 }
 
-
--(void) addPcmAudioData:(CMSampleBufferRef)audioData
+-(void)createBuffersForTrack:(NSString *)trackName
 {
-    
-    @synchronized(self)
+    if (!_audioBuffers[trackName])
     {
-        
-        [_pcmAudioBuffer addObject:(__bridge id)audioData];
+        _audioBuffers[trackName] = [[RecAudioBufferData alloc] init];
+    }
+    
+    if (!_pcmAudioBuffers)
+    {
+        _pcmAudioBuffers[trackName] = [[RecAudioBufferData alloc] init];
     }
 }
 
 
--(void) addAudioData:(CMSampleBufferRef)audioData
+-(void) addPcmAudioData:(CMSampleBufferRef)audioData forTrack:(NSString *)trackName
+{
+    
+    @synchronized(self)
+    {
+        RecAudioBufferData *pcmBuffer = _pcmAudioBuffers[trackName];
+        if (!pcmBuffer)
+        {
+            pcmBuffer = [[RecAudioBufferData alloc] init];
+            _pcmAudioBuffers[trackName] = pcmBuffer;
+        }
+        [pcmBuffer.audiobuffer addObject:(__bridge id)audioData];
+    }
+}
+
+
+-(void) addAudioData:(CMSampleBufferRef)audioData forTrack:(NSString *)trackName
 {
     
     @synchronized(self)
     {
 
-        [_audioBuffer addObject:(__bridge id)audioData];
+        RecAudioBufferData *audioBuffer = _audioBuffers[trackName];
+        if (!audioBuffer)
+        {
+            audioBuffer = [[RecAudioBufferData alloc] init];
+            _audioBuffers[trackName] = audioBuffer;
+        }
+        [audioBuffer.audiobuffer addObject:(__bridge id)audioData];
     }
 }
 
 
--(void)setPcmAudioData:(NSMutableArray *)audioDestination videoPTS:(CMTime)videoPTS
+-(void)setPcmAudioData:(NSMutableArray *)audioDestination videoPTS:(CMTime)videoPTS forTrack:(NSString *)trackName
 {
     NSUInteger audioConsumed = 0;
     NSUInteger sampleCount = 0;
@@ -534,11 +598,17 @@
     
     @synchronized(self)
     {
-        NSUInteger audioBufferSize = [_pcmAudioBuffer count];
+        RecAudioBufferData *pcmBuffer = _pcmAudioBuffers[trackName];
+        if (!pcmBuffer)
+        {
+            return;
+        }
+        
+        NSUInteger audioBufferSize = [pcmBuffer.audiobuffer count];
         
         for (int i = 0; i < audioBufferSize; i++)
         {
-            CMSampleBufferRef audioData = (__bridge CMSampleBufferRef)[_pcmAudioBuffer objectAtIndex:i];
+            CMSampleBufferRef audioData = (__bridge CMSampleBufferRef)[pcmBuffer.audiobuffer objectAtIndex:i];
             
             CMTime audioTime = CMSampleBufferGetOutputPresentationTimeStamp(audioData);
             
@@ -557,23 +627,29 @@
         
         if (audioConsumed > 0)
         {
-            [_pcmAudioBuffer removeObjectsInRange:NSMakeRange(0, audioConsumed)];
+            [pcmBuffer.audiobuffer removeObjectsInRange:NSMakeRange(0, audioConsumed)];
         }
         
     }
 }
 
--(void) setAudioData:(NSMutableArray *)audioDestination videoPTS:(CMTime)videoPTS
+-(void) setAudioData:(NSMutableArray *)audioDestination videoPTS:(CMTime)videoPTS forTrack:(NSString *)trackName
 {
     
     NSUInteger audioConsumed = 0;
     @synchronized(self)
     {
-        NSUInteger audioBufferSize = [_audioBuffer count];
+        RecAudioBufferData *audioBuffer = _audioBuffers[trackName];
+        if (!audioBuffer)
+        {
+            return;
+        }
+        
+        NSUInteger audioBufferSize = [audioBuffer.audiobuffer count];
         
         for (int i = 0; i < audioBufferSize; i++)
         {
-            CMSampleBufferRef audioData = (__bridge CMSampleBufferRef)[_audioBuffer objectAtIndex:i];
+            CMSampleBufferRef audioData = (__bridge CMSampleBufferRef)[audioBuffer.audiobuffer objectAtIndex:i];
             
             CMTime audioTime = CMSampleBufferGetOutputPresentationTimeStamp(audioData);
             
@@ -592,17 +668,24 @@
         
         if (audioConsumed > 0)
         {
-            [_audioBuffer removeObjectsInRange:NSMakeRange(0, audioConsumed)];
+            [audioBuffer.audiobuffer removeObjectsInRange:NSMakeRange(0, audioConsumed)];
         }
         
     }
 }
 
--(void)captureOutputAudio:(id)fromDevice didOutputPCMSampleBuffer:(CMSampleBufferRef)sampleBuffer
+-(void)captureOutputAudio:(NSString *)withTag didOutputPCMSampleBuffer:(CMSampleBufferRef)sampleBuffer
 {
     if (!self.recordingActive)
     {
         return;
+    }
+    
+    RecAudioBufferData *pcmBuffer = _pcmAudioBuffers[withTag];
+    if (!pcmBuffer)
+    {
+        [self createBuffersForTrack:withTag];
+        pcmBuffer = _pcmAudioBuffers[withTag];
     }
     
     
@@ -610,17 +693,15 @@
     
     
     
-    
-    if (CMTIME_COMPARE_INLINE(_firstPcmAudioTime, ==, kCMTimeZero))
+    if (CMTIME_COMPARE_INLINE(pcmBuffer.firstAudioTime, ==, kCMTimeZero))
     {
         
-        
-        _firstPcmAudioTime = orig_pts;
+        pcmBuffer.firstAudioTime = orig_pts;
         return;
     }
     
     
-    CMTime pts = CMTimeSubtract(orig_pts, _firstPcmAudioTime);
+    CMTime pts = CMTimeSubtract(orig_pts, pcmBuffer.firstAudioTime);
     //CMTime adjust_pts = CMTimeMakeWithSeconds(self.audio_adjust, orig_pts.timescale);
     //CMTime pts = CMTimeAdd(real_pts, adjust_pts);
     
@@ -628,18 +709,18 @@
     
     CMSampleBufferSetOutputPresentationTimeStamp(sampleBuffer, pts);
     
-    if (CMTIME_COMPARE_INLINE(pts, >, _previousPcmAudioTime))
+    if (CMTIME_COMPARE_INLINE(pts, >, pcmBuffer.previousAudioTime))
     {
         if (sampleBuffer)
         {
-            [self addPcmAudioData:sampleBuffer];
+            [self addPcmAudioData:sampleBuffer forTrack:withTag];
         }
-        _previousPcmAudioTime = pts;
+        pcmBuffer.previousAudioTime = pts;
     }
 }
 
 
-- (void)captureOutputAudio:(id)fromDevice didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer 
+- (void)captureOutputAudio:(NSString *)withTag didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 {
     
     
@@ -648,22 +729,28 @@
         return;
     }
     
+    RecAudioBufferData *audioBuffer = _audioBuffers[withTag];
+    if (!audioBuffer)
+    {
+        [self createBuffersForTrack:withTag];
+        audioBuffer = _audioBuffers[withTag];
+    }
     
     CMTime orig_pts = CMSampleBufferGetPresentationTimeStamp(sampleBuffer);
     
     
     
     
-    if (CMTIME_COMPARE_INLINE(_firstAudioTime, ==, kCMTimeZero))
+    if (CMTIME_COMPARE_INLINE(audioBuffer.firstAudioTime, ==, kCMTimeZero))
     {
         
         
-        _firstAudioTime = orig_pts;
+        audioBuffer.firstAudioTime = orig_pts;
         return;
     }
     
     
-    CMTime pts = CMTimeSubtract(orig_pts, _firstAudioTime);
+    CMTime pts = CMTimeSubtract(orig_pts, audioBuffer.firstAudioTime);
     //CMTime adjust_pts = CMTimeMakeWithSeconds(self.audio_adjust, orig_pts.timescale);
     //CMTime pts = CMTimeAdd(real_pts, adjust_pts);
     
@@ -671,13 +758,13 @@
     
     CMSampleBufferSetOutputPresentationTimeStamp(sampleBuffer, pts);
     
-    if (CMTIME_COMPARE_INLINE(pts, >, _previousAudioTime))
+    if (CMTIME_COMPARE_INLINE(pts, >, audioBuffer.previousAudioTime))
     {
         if (sampleBuffer)
         {
-            [self addAudioData:sampleBuffer];
+            [self addAudioData:sampleBuffer forTrack:withTag];
         }
-        _previousAudioTime = pts;
+        audioBuffer.previousAudioTime = pts;
     }
 }
 

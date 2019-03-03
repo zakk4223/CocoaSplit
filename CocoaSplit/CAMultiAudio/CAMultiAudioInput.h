@@ -50,6 +50,7 @@
 
 @property (assign) NSInteger refCount;
 @property (assign) bool isGlobal;
+@property (strong) NSMutableDictionary *outputTracks;
 
 -(void)didRemoveInput;
 -(bool)teardownGraph;

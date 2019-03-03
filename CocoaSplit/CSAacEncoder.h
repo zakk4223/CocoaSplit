@@ -46,6 +46,7 @@
 @property (assign) int preallocatedBuffersize;
 @property (assign) AudioStreamBasicDescription *inputASBD;
 @property (assign) bool skipCompression;
+@property (strong) NSString *trackName;
 
 -(void) enqueuePCM:(AudioBufferList *)pcmBuffer atTime:(const AudioTimeStamp *)atTime;
 -(void) setupEncoderBuffer;

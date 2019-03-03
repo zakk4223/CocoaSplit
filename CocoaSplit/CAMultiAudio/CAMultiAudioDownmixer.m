@@ -411,6 +411,23 @@
     return YES;
 }
 
+-(void)disconnectOutput:(CAMultiAudioNode *)outNode
+{
+    NSDictionary *outInfo = self.outputMap[outNode.nodeUID];
+    if (outInfo)
+    {
+        NSNumber *outBus = outInfo[@"outBus"];
+        for(NSString *inpUUID in self.inputMap)
+        {
+            NSDictionary *inpInfo = self.inputMap[inpUUID];
+            NSNumber *inpBus = inpInfo[@"inBus"];
+            [self disconnectInputBus:inpBus.unsignedIntValue fromOutputBus:outBus.unsignedIntValue];
+            [self disableOutputBus:outBus.unsignedIntValue];
+        }
+    }
+}
+
+
 -(void)connectInputBus:(UInt32)inputBus toOutputBus:(UInt32)outputBus
 {
     UInt32 inputChan = inputBus*_inputChannels;

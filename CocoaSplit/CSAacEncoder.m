@@ -87,7 +87,7 @@
             CMSampleBufferSetDataBufferFromAudioBufferList(pcmSampleBuffer, kCFAllocatorDefault, kCFAllocatorDefault, 0, inBuffer);
             if (self.encodedReceiver)
             {
-                [self.encodedReceiver captureOutputAudio:nil didOutputPCMSampleBuffer:pcmSampleBuffer];
+                [self.encodedReceiver captureOutputAudio:self.trackName didOutputPCMSampleBuffer:pcmSampleBuffer];
             }
             
             CFRelease(pcmSampleBuffer);
@@ -169,8 +169,7 @@
                     //The sample buffer retains the block buffer when it is handed over to it, we can release ours.
                     CFRelease(bufferRef);
                     
-                    
-                    [self.encodedReceiver captureOutputAudio:nil didOutputSampleBuffer:timingSampleBuf];
+                    [self.encodedReceiver captureOutputAudio:self.trackName didOutputSampleBuffer:timingSampleBuf];
                     
                     //Individual video compressors retain the buffer until they push it to their output, we can release it now.
                     CFRelease(timingSampleBuf);

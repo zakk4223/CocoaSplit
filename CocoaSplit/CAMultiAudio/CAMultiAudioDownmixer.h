@@ -33,4 +33,6 @@
 -(bool)enableOutputBus:(UInt32)outputBus;
 -(bool)disableInputBus:(UInt32)inputBus;
 -(bool)disableOutputBus:(UInt32)outputBus;
+-(void)disconnectOutput:(CAMultiAudioNode *)outNode;
+
 @end

@@ -24,10 +24,7 @@
         self.powerLevels = [NSMutableDictionary dictionary];
         [self.powerLevels setObject:[NSMutableArray array] forKey:@"input"];
         [self.powerLevels setObject:[NSMutableArray array] forKey:@"output"];
-
-        
-        
-
+        self.outputTracks = [NSMutableDictionary dictionary];
     }
     
     return self;

@@ -45,6 +45,8 @@
         _videoFrame = nil;
         self.frameNumber = 0;
         //self.audioSamples = [[NSMutableArray alloc] init];
+        _audioSamples = [NSMutableDictionary dictionary];
+        _pcmAudioSamples = [NSMutableDictionary dictionary];
     }
     
     return self;

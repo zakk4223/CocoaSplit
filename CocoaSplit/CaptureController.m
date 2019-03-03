@@ -2936,6 +2936,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
         self.mainLayoutRecorder.renderer = self.livePreviewView.layoutRenderer;
         self.mainLayoutRecorder.layout = self.livePreviewView.sourceLayout;
         self.mainLayoutRecorder.audioEngine = self.multiAudioEngine;
+        /*
         if (!self.multiAudioEngine.encoder)
         {
             CSAacEncoder *audioEnc = [[CSAacEncoder alloc] init];
@@ -2947,9 +2948,10 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
             self.multiAudioEngine.encoder = audioEnc;
 
         }
+         */
     }
 
-        self.mainLayoutRecorder.audioEngine.encoder.encodedReceiver = self.mainLayoutRecorder;
+        //self.mainLayoutRecorder.audioEngine.encoder.encodedReceiver = self.mainLayoutRecorder;
     
         self.mainLayoutRecorder.compressors  = self.compressors;
         self.mainLayoutRecorder.outputs = self.captureDestinations;

@@ -29,8 +29,9 @@
     CMTime _previousAudioTime;
     CMTime _firstPcmAudioTime;
     CMTime _previousPcmAudioTime;
-    NSMutableArray *_audioBuffer;
-    NSMutableArray *_pcmAudioBuffer;
+    NSMutableDictionary *_audioBuffers;
+    NSMutableDictionary *_pcmAudioBuffers;
+    
 
 
 

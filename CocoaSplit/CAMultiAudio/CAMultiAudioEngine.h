@@ -39,7 +39,7 @@
 @property (strong) NSMutableArray *fileInputs;
 
 @property (strong) CAMultiAudioDownmixer *encodeMixer;
-@property (strong) CSAacEncoder *encoder;
+//@property (strong) CSAacEncoder *encoder;
 @property (assign) UInt32 sampleRate;
 @property (assign) int audioBitrate;
 @property (assign) double audio_adjust;
@@ -73,6 +73,8 @@
 -(void)removeInputAny:(CAMultiAudioInput *)input;
 -(NSDictionary *)systemAudioInputs;
 -(CAMultiAudioInput *)inputForSystemUUID:(NSString *)uuid;
+-(void)startEncoders;
+-(void)stopEncoders;
 
 
 
