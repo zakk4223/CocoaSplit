@@ -17,7 +17,7 @@
 {
     if (self = [super initWithSubType:subType unitType:unitType manufacturer:manufacturer])
     {
-        self.nodeUID = [[NSUUID UUID] UUIDString];
+        
     }
     
     return self;

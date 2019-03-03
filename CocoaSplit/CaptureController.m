@@ -41,7 +41,7 @@
 #import "CSAppleHEVCCompressor.h"
 #import "CSPassthroughCompressor.h"
 #import "CSTransitionCA.h"
-
+#import "CAMultiAudioDownMixer.h"
 
 NSString *const CSAppearanceDark = @"CSAppearanceDark";
 NSString *const CSAppearanceLight = @"CSAppearanceLight";

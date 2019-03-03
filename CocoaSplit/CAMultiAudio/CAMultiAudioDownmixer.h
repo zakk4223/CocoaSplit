@@ -27,5 +27,10 @@
 -(NSDictionary *)saveData;
 -(void)restoreData:(NSDictionary *)saveData;
 -(void)setOutputVolume;
-
+-(void)connectInputBus:(UInt32)inputBus toOutputBus:(UInt32)outputBus;
+-(void)disconnectInputBus:(UInt32)inputBus fromOutputBus:(UInt32)outputBus;
+-(bool)enableInputBus:(UInt32)inputBus;
+-(bool)enableOutputBus:(UInt32)outputBus;
+-(bool)disableInputBus:(UInt32)inputBus;
+-(bool)disableOutputBus:(UInt32)outputBus;
 @end

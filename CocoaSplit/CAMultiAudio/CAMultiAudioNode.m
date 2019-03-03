@@ -25,6 +25,8 @@
 @synthesize volume = _volume;
 @synthesize muted = _muted;
 @synthesize enabled = _enabled;
+@synthesize connectedTo = _connectedTo;
+@synthesize connectedToBus = _connectedToBus;
 
 -(instancetype)init
 {
@@ -50,6 +52,9 @@
         self.channelCount = 2;
         _volume = 1.0;
         self.effectChain = [NSMutableArray array];
+        self.inputMap = [NSMutableDictionary dictionary];
+        self.outputMap = [NSMutableDictionary dictionary];
+        self.nodeUID = [[NSUUID UUID] UUIDString];
         
     }
     
@@ -187,6 +192,10 @@
     return 0;
 }
 
+-(UInt32)outputElement
+{
+    return 0;
+}
 
 -(bool)createNode:(CAMultiAudioGraph *)forGraph
 {
@@ -293,16 +302,65 @@
 
 
 
--(void)nodeConnected:(CAMultiAudioNode *)toNode onBus:(UInt32)onBus
+-(bool)busForOutput:(CAMultiAudioNode *)inputNode busOut:(UInt32 *)busOut
 {
-    self.connectedTo = toNode;
-    self.connectedToBus = onBus;
+    NSString *nodeUUID = inputNode.nodeUID;
+    NSDictionary *outputInfo = self.inputMap[nodeUUID];
+    if (outputInfo)
+    {
+        NSNumber *oBus = outputInfo[@"outBus"];
+        if (oBus)
+        {
+            *busOut = oBus.unsignedIntValue;
+            return YES;
+        }
+        return NO;
+    }
+    
+    return NO;
 }
 
--(void)willConnectNode:(CAMultiAudioNode *)node toBus:(UInt32)toBus
+
+-(bool)busForInput:(CAMultiAudioNode *)inputNode busOut:(UInt32 *)busOut
+{
+    NSString *nodeUUID = inputNode.nodeUID;
+    NSDictionary *inputInfo = self.inputMap[nodeUUID];
+    if (inputInfo)
+    {
+        NSNumber *inBus = inputInfo[@"inBus"];
+        if (inBus)
+        {
+            *busOut = inBus.unsignedIntValue;
+            return YES;
+        }
+        return NO;
+    }
+    
+    return NO;
+}
+
+
+-(void)nodeConnected:(CAMultiAudioNode *)toNode inBus:(UInt32)inBus outBus:(UInt32)outBus
+{
+
+
+    NSLog(@"NODE %@ CONNECTED TO %@ %d", self, toNode, outBus);
+    [self.outputMap setObject:@{@"inBus": @(inBus), @"outBus": @(outBus), @"node": toNode} forKey:toNode.nodeUID];
+    if (outBus == 0)
+    {
+        _connectedTo = toNode;
+        _connectedToBus = inBus;
+    }
+}
+
+
+-(void)willConnectNode:(CAMultiAudioNode *)node inBus:(UInt32)inBus outBus:(UInt32)outBus
 {
     return;
 }
+
+
+
 
 
 -(void)setMuted:(bool)muted
@@ -398,14 +456,17 @@
     
 }
 
--(void) willConnectToNode:(CAMultiAudioNode *)node
+-(void) willConnectToNode:(CAMultiAudioNode *)node inBus:(UInt32)inBus outBus:(UInt32)outBus
 {
     return;
 }
 
--(void) connectedToNode:(CAMultiAudioNode *)node
+-(void) connectedToNode:(CAMultiAudioNode *)node inBus:(UInt32)inBus outBus:(UInt32)outBus
 {
-    return;
+    
+
+    [self.inputMap setObject:@{@"inBus": @(inBus), @"outBus": @(outBus), @"node": node} forKey:node.nodeUID];
+
 }
 
 -(void)willRemoveNode
@@ -425,6 +486,7 @@
     while (currNode && currNode != self.headNode)
     {
         CAMultiAudioNode *connNode = currNode.connectedTo;
+              NSLog(@"DISCONNECT CURR %@", currNode);
         [self.graph disconnectNode:currNode];
         if (currNode.deleteNode)
         {

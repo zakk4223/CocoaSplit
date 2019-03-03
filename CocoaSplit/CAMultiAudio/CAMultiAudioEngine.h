@@ -38,7 +38,7 @@
 @property (strong) NSMutableArray *pcmInputs;
 @property (strong) NSMutableArray *fileInputs;
 
-@property (strong) CAMultiAudioMixer *encodeMixer;
+@property (strong) CAMultiAudioDownmixer *encodeMixer;
 @property (strong) CSAacEncoder *encoder;
 @property (assign) UInt32 sampleRate;
 @property (assign) int audioBitrate;
@@ -51,6 +51,7 @@
 @property (assign) Float32 previewAudioPowerLevel;
 @property (strong) NSMutableDictionary *streamAudioPowerLevels;
 @property (strong) NSMutableDictionary *previewAudioPowerLevels;
+@property (strong) NSMutableDictionary *outputTracks;
 
 @property (strong) CAMultiAudioEffect *renderNode;
 

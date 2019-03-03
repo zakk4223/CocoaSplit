@@ -37,6 +37,11 @@
 }
 
 
+-(NSString *)nodeUID
+{
+    return self.deviceUID;
+}
+
 
 -(void)setInputForDevice
 {

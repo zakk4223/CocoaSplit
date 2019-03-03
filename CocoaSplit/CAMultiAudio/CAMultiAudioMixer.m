@@ -139,13 +139,14 @@
 
 -(UInt32)inputElement
 {
-    return [self getNextElement];
+    return [self getNextInputElement];
 
 }
 
 
 
--(UInt32)getNextElement
+
+-(UInt32)getNextInputElement
 {
     UInt32 elementCount = 0;
     UInt32 elementSize = sizeof(UInt32);
@@ -191,6 +192,56 @@
     }
 
     [self setVolumeOnInputBus:useElement volume:1.0];
+    return useElement;
+}
+
+
+-(UInt32)getNextOutputElement
+{
+    UInt32 elementCount = 0;
+    UInt32 elementSize = sizeof(UInt32);
+    
+    UInt32 useElement = 0;
+    
+    AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Output, 0, &elementCount, &elementSize);
+    
+    UInt32 interactionCnt = 0;
+    
+    AUGraphCountNodeInteractions(self.graph.graphInst, self.node, &interactionCnt);
+    AUNodeInteraction *interactions = malloc(sizeof(AUNodeInteraction)*interactionCnt);
+    
+    
+    AUGraphGetNodeInteractions(self.graph.graphInst, self.node, &interactionCnt, interactions);
+    
+    useElement = 0;
+    UInt32 seenIdx = 0;
+    
+    for (int i=0; i < interactionCnt; i++)
+    {
+        
+        AUNodeInteraction iact = interactions[i];
+        if (iact.nodeInteractionType == kAUNodeInteraction_Connection && iact.nodeInteraction.connection.sourceNode == self.node)
+        {
+            if (seenIdx != iact.nodeInteraction.connection.sourceOutputNumber)
+            {
+                useElement = seenIdx;
+                break;
+            } else {
+                seenIdx++;
+                useElement = iact.nodeInteraction.connection.sourceOutputNumber+1;
+            }
+            
+        }
+    }
+    
+    free(interactions);
+    if (useElement >= elementCount)
+    {
+        elementCount += 64;
+        AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Output, 0, &elementCount, sizeof(elementCount));
+    }
+    
+    [self setVolumeOnOutputBus:useElement volume:1.0];
     return useElement;
 }
 

@@ -32,22 +32,29 @@
 @property (assign) AudioUnit audioUnit;
 @property (assign) int channelCount;
 @property (readonly) UInt32 inputElement;
+@property (readonly) UInt32 outputElement;
 @property (weak) CAMultiAudioGraph *graph;
-@property (weak) CAMultiAudioNode *connectedTo;
 
-@property (assign) UInt32 connectedToBus;
 @property (strong) NSString *name;
 @property (strong) NSString *nodeUID;
 @property (assign) float volume;
 @property (assign) bool muted;
 @property (assign) bool enabled;
+@property (strong) NSMutableDictionary *inputMap;
+@property (strong) NSMutableDictionary *outputMap;
+@property (readonly) CAMultiAudioNode *connectedTo;
+@property (readonly) UInt32 connectedToBus;
 
 -(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType;
 -(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType manufacturer:(OSType)manufacturer;
 
 -(bool)createNode:(CAMultiAudioGraph *)forGraph;
--(void)nodeConnected:(CAMultiAudioNode *)toNode onBus:(UInt32)onBus;
--(void)willConnectNode:(CAMultiAudioNode *)node toBus:(UInt32)toBus;
+
+-(void)willConnectToNode:(CAMultiAudioNode *)node inBus:(UInt32)inBus outBus:(UInt32)outBus;
+-(void)connectedToNode:(CAMultiAudioNode *)node inBus:(UInt32)inBus outBus:(UInt32)outBus;
+-(void)nodeConnected:(CAMultiAudioNode *)toNode inBus:(UInt32)inBus outBus:(UInt32)outBus;
+-(void)willConnectNode:(CAMultiAudioNode *)node inBus:(UInt32)inBus outBus:(UInt32)outBus;
+
 -(void)willInitializeNode;
 -(void)didInitializeNode;
 -(bool)setInputStreamFormat:(AudioStreamBasicDescription *)format;
@@ -76,11 +83,11 @@
 @property (assign) AudioUnit audioUnit;
 @property (assign) int channelCount;
 @property (readonly) UInt32 inputElement;
+@property (readonly) UInt32 outputElement;
+
 @property (weak) CAMultiAudioGraph *graph;
-@property (weak) CAMultiAudioNode *connectedTo;
 @property (weak) CAMultiAudioEngine *engine;
 
-@property (assign) UInt32 connectedToBus;
 @property (strong) NSString *name;
 @property (strong) NSString *nodeUID;
 @property (weak) CAMultiAudioNode *headNode;
@@ -88,8 +95,10 @@
 @property (strong) NSMutableArray *effectChain;
 @property (assign) bool deleteNode;
 @property (readonly) NSString *uuid;
-
-
+@property (strong) NSMutableDictionary *inputMap;
+@property (strong) NSMutableDictionary *outputMap;
+@property (readonly) CAMultiAudioNode *connectedTo;
+@property (readonly) UInt32 connectedToBus;
 
 
 @property (assign) float volume;
@@ -100,13 +109,17 @@
 
 -(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType;
 -(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType manufacturer:(OSType)manufacturer NS_DESIGNATED_INITIALIZER;
--(void) willConnectToNode:(CAMultiAudioNode *)node;
--(void) connectedToNode:(CAMultiAudioNode *)node;
+-(void)willConnectToNode:(CAMultiAudioNode *)node inBus:(UInt32)inBus outBus:(UInt32)outBus;
+-(void)connectedToNode:(CAMultiAudioNode *)node inBus:(UInt32)inBus outBus:(UInt32)outBus;
+-(void)nodeConnected:(CAMultiAudioNode *)toNode inBus:(UInt32)inBus outBus:(UInt32)outBus;
+-(void)willConnectNode:(CAMultiAudioNode *)node inBus:(UInt32)inBus outBus:(UInt32)outBus;
 -(void)willRemoveNode;
 -(void)setupEffectsChain;
 -(void)removeEffectsChain;
 -(void)addEffect:(CAMultiAudioNode *)effect;
 -(void)addEffect:(CAMultiAudioNode *)effect atIndex:(NSUInteger)idx;
+-(bool)busForOutput:(CAMultiAudioNode *)inputNode busOut:(UInt32 *)busOut;
+-(bool)busForInput:(CAMultiAudioNode *)inputNode busOut:(UInt32 *)busOut;
 
 
 @end

@@ -36,7 +36,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     self.previewAudioPowerLevels[@"output"] = [NSMutableArray array];
 
     self.audioOutputs = [[CAMultiAudioDevice allDevices] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"hasOutput == YES"]];
-
+    self.outputTracks = [NSMutableDictionary dictionary];
+    
     _outputId = [CAMultiAudioDevice defaultOutputDeviceUID];
     
     
@@ -110,7 +111,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         
         [self buildGraph];
         [self inputsForSystemAudio];
-        
         if ([aDecoder containsValueForKey:@"encodeMixerSettings"])
         {
             [self.encodeMixer restoreDataFromDict:[aDecoder decodeObjectForKey:@"encodeMixerSettings"]];
@@ -375,7 +375,13 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 }
 
-
+-(bool)createOutputTrack:(NSString *)withName
+{
+    //Create encodernode
+    //attach encodeMixer to node
+    //get bus?!?!
+    //
+}
 -(bool)buildGraph
 {
     self.graph = [[CAMultiAudioGraph alloc] initWithSamplerate:self.sampleRate];
@@ -410,7 +416,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     
     self.silentNode = [[CAMultiAudioSilence alloc] init];
-    self.encodeMixer = [[CAMultiAudioMixer alloc] init];
+    self.encodeMixer = [[CAMultiAudioDownmixer alloc] initWithInputChannels:2];
     self.encodeMixer.nodeUID = @"__CS_ENCODE_MIXER_NODE";
     self.encodeMixer.name = @"Stream";
     self.previewMixer = [[CAMultiAudioMixer alloc] init];
@@ -850,6 +856,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     {
         [self.graph addNode:input];
         [self.graph connectNode:input toNode:self.encodeMixer];
+        [self.encodeMixer connectInputBus:input.effectsHead.connectedToBus toOutputBus:0];
     }
     
     return YES;

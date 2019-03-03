@@ -148,6 +148,7 @@
 }
 
 
+
 -(bool)createNode:(CAMultiAudioGraph *)forGraph
 {
     [super createNode:forGraph];
@@ -177,13 +178,90 @@
 }
 
 
--(void)willConnectNode:(CAMultiAudioNode *)node toBus:(UInt32)toBus
+-(UInt32)inputElement
+{
+    return [self getNextInputElement];
+    
+}
+
+
+
+
+-(UInt32)getNextInputElement
+{
+    UInt32 elementCount = 0;
+    UInt32 elementSize = sizeof(UInt32);
+    
+    UInt32 useElement = 0;
+    
+    AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Input, 0, &elementCount, &elementSize);
+    
+    UInt32 interactionCnt = 0;
+    
+    AUGraphCountNodeInteractions(self.graph.graphInst, self.node, &interactionCnt);
+    AUNodeInteraction *interactions = malloc(sizeof(AUNodeInteraction)*interactionCnt);
+    
+    
+    AUGraphGetNodeInteractions(self.graph.graphInst, self.node, &interactionCnt, interactions);
+    
+    useElement = 0;
+    UInt32 seenIdx = 0;
+    
+    for (int i=0; i < interactionCnt; i++)
+    {
+        
+        AUNodeInteraction iact = interactions[i];
+        if (iact.nodeInteractionType == kAUNodeInteraction_Connection && iact.nodeInteraction.connection.destNode == self.node)
+        {
+            if (seenIdx != iact.nodeInteraction.connection.destInputNumber)
+            {
+                useElement = seenIdx;
+                break;
+            } else {
+                seenIdx++;
+                useElement = iact.nodeInteraction.connection.destInputNumber+1;
+            }
+            
+        }
+    }
+    
+    free(interactions);
+    if (useElement >= elementCount)
+    {
+        elementCount += 64;
+        AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Input, 0, &elementCount, sizeof(elementCount));
+    }
+    
+    [self setVolumeOnInputBus:useElement volume:1.0];
+    return useElement;
+}
+
+
+
+-(void)willInitializeNode
+{
+    UInt32 elementCount = 64;
+    
+    OSStatus err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Input, 0,&elementCount, sizeof(UInt32));
+    
+    
+    err = AudioUnitSetParameter(self.audioUnit, kMultiChannelMixerParam_Volume, kAudioUnitScope_Output, 0, self.volume, 0);
+    UInt32 enableVal = 1;
+    
+    
+    AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_MeteringMode, kAudioUnitScope_Global, 0, &enableVal, sizeof(enableVal));
+    
+    
+}
+
+
+-(void)willConnectNode:(CAMultiAudioNode *)node inBus:(UInt32)inBus outBus:(UInt32)outBus
 {
     AudioStreamBasicDescription nformat;
     AudioStreamBasicDescription sformat;
     UInt32 fsize = sizeof(nformat);
-    AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, toBus, &sformat, &fsize);
-    AudioUnitGetProperty(node.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 0, &nformat, &fsize);
+    AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, inBus, &sformat, &fsize);
+    AudioUnitGetProperty(node.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, outBus, &nformat, &fsize);
 
 }
 -(void)setVolumeOnOutputBus:(UInt32)bus volume:(float)volume
@@ -283,10 +361,85 @@
         }
         
     }
-
-    
-    
 }
+
+-(bool)enableInputBus:(UInt32)inputBus
+{
+    OSStatus err = AudioUnitSetParameter(self.audioUnit, kMatrixMixerParam_Enable, kAudioUnitScope_Input, inputBus, 1, 0);
+    if (err)
+    {
+        NSLog(@"Failed to enable input bus %d on %@ with status %d", inputBus, self, err);
+        return NO;
+    }
+    
+    return YES;
+}
+
+-(bool)enableOutputBus:(UInt32)outputBus
+{
+    OSStatus err = AudioUnitSetParameter(self.audioUnit, kMatrixMixerParam_Enable, kAudioUnitScope_Output, outputBus, 1, 0);
+    if (err)
+    {
+        NSLog(@"Failed to enable output bus %d on %@ with status %d", outputBus, self, err);
+        return NO;
+    }
+    
+    return YES;
+}
+
+-(bool)disableInputBus:(UInt32)inputBus
+{
+    OSStatus err = AudioUnitSetParameter(self.audioUnit, kMatrixMixerParam_Enable, kAudioUnitScope_Input, inputBus, 0, 0);
+    if (err)
+    {
+        NSLog(@"Failed to disable input bus %d on %@ with status %d", inputBus, self, err);
+        return NO;
+    }
+    
+    return YES;
+}
+
+-(bool)disableOutputBus:(UInt32)outputBus
+{
+    OSStatus err = AudioUnitSetParameter(self.audioUnit, kMatrixMixerParam_Enable, kAudioUnitScope_Output, outputBus, 0, 0);
+    if (err)
+    {
+        NSLog(@"Failed to disable output bus %d on %@ with status %d", outputBus, self, err);
+        return NO;
+    }
+    
+    return YES;
+}
+
+-(void)connectInputBus:(UInt32)inputBus toOutputBus:(UInt32)outputBus
+{
+    UInt32 inputChan = inputBus*_inputChannels;
+    UInt32 outputChan = outputBus*_outputChannelCount;
+    
+    OSStatus err;
+    
+    for(UInt32 i = 0; i < _inputChannels; i++)
+    {
+        NSLog(@"SET CHANNEL %d -> %d", inputChan+i, outputChan+i);
+        err = AudioUnitSetParameter(self.audioUnit, kMatrixMixerParam_Volume, kAudioUnitScope_Input, inputChan+i, 1.0, 0);
+        err = AudioUnitSetParameter(self.audioUnit, kMatrixMixerParam_Volume, kAudioUnitScope_Output, outputChan+i, 1.0, 0);
+
+        [self setVolume:1.0f forChannel:inputChan+i outChannel:outputChan+i];
+    }
+}
+
+
+-(void)disconnectInputBus:(UInt32)inputBus fromOutputBus:(UInt32)outputBus
+{
+    UInt32 inputChan = inputBus*_inputChannels;
+    UInt32 outputChan = outputBus*_outputChannelCount;
+    
+    for(UInt32 i = 0; i < _inputChannels; i++)
+    {
+        [self setVolume:0.0f forChannel:inputChan+i outChannel:outputChan+i];
+    }
+}
+
 
 -(Float32)getVolumeforChannel:(UInt32)inChannel outChannel:(UInt32)outChannel
 {

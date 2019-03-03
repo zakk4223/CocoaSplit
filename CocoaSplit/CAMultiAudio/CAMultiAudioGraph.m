@@ -251,10 +251,11 @@
     OSStatus err;
     
     UInt32 bus = toNode.inputElement;
+    UInt32 outBus = node.outputElement;
     
-    [node willConnectToNode:toNode];
+    [node willConnectToNode:toNode inBus:bus outBus:outBus];
     
-    [toNode willConnectNode:node toBus:bus];
+    [toNode willConnectNode:node inBus:bus outBus:outBus];
     
     CAMultiAudioNode *useNode = node;
     if (node.headNode)
@@ -266,16 +267,16 @@
     connectTo = toNode.node;
     //aUnit = node.audioUnit;
     
-    err = AUGraphConnectNodeInput(_graphInst, inNode, 0, connectTo, bus);
+    err = AUGraphConnectNodeInput(_graphInst, inNode, outBus, connectTo, bus);
     if (err)
     {
         NSLog(@"AUGraphConnectNodeInput failed for %@ -> %@, err: %d", node, toNode, err);
         return NO;
     }
     
-    [useNode nodeConnected:toNode onBus:bus];
+    [useNode nodeConnected:toNode inBus:bus outBus:outBus];
 
-    [toNode connectedToNode:node];
+    [toNode connectedToNode:node inBus:bus outBus:outBus];
     
     if (![self graphUpdate])
     {
@@ -283,6 +284,7 @@
         NSLog(@"Graph %@ graphUpdate for connection failed %@ -> %@", self, node, toNode);
         return NO;
     }
+
 
     return YES;
 }
@@ -294,7 +296,7 @@
         return NO;
     }
     
-    if (!node.connectedTo)
+    if (!node.outputMap || node.outputMap.count == 0)
     {
        // NSLog(@"Node %@ is not connected to anything", node);
         return YES;
@@ -306,16 +308,23 @@
         return NO;
     }
     OSStatus err;
-    
-    err = AUGraphDisconnectNodeInput(_graphInst, node.connectedTo.node, node.connectedToBus);
-    if (err)
+    for(NSString *uuid in node.outputMap)
     {
-        NSLog(@"AUGraphDisconnectNodeInput failed for node %@, err %d", node, err);
+        NSDictionary *outDict = node.outputMap[uuid];
+        CAMultiAudioNode *outNode = outDict[@"node"];
+        NSNumber *inBus = outDict[@"inBus"];
+        err = AUGraphDisconnectNodeInput(_graphInst, outNode.node, inBus.unsignedIntValue);
+        if (err)
+        {
+            NSLog(@"AUGraphDisconnectNodeInput failed for source node %@ dest node %@, err %d", node, outNode, err);
+        }
+        [outNode.inputMap removeObjectForKey:node.nodeUID];
     }
     
+    [node.outputMap removeAllObjects];
+
     [self graphUpdate];
     
-    node.connectedTo = nil;
     return YES;
     
 }
