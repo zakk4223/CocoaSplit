@@ -57,5 +57,7 @@
 -(bool)setupGraph;
 -(void)updatePowerlevel;
 -(void)removeFromEngine;
+-(void)addToOutputTrack:(NSString *)trackName;
+-(void)removeFromOutputTrack:(NSString *)trackName;
 
 @end

@@ -32,6 +32,7 @@
 -(bool)addNode:(CAMultiAudioNode *)newNode;
 -(bool)connectNode:(CAMultiAudioNode *)node toNode:(CAMultiAudioNode *)toNode;
 -(bool)connectNode:(CAMultiAudioNode *)node toNode:(CAMultiAudioNode *)toNode sampleRate:(int)sampleRate;
+-(bool)connectNode:(CAMultiAudioNode *)node toNode:(CAMultiAudioNode *)toNode sampleRate:(int)sampleRate inBus:(UInt32)inBus outBus:(UInt32)outBus;
 -(bool)disconnectNode:(CAMultiAudioNode *)node;
 
 

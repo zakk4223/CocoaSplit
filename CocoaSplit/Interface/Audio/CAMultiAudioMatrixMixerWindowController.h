@@ -12,7 +12,7 @@
 
 @interface CAMultiAudioMatrixMixerWindowController : NSWindowController <NSTableViewDataSource, NSTableViewDelegate, NSWindowDelegate>
 {
-    
+    NSMenu *_tracksMenu;
 }
 
 @property (weak) IBOutlet NSTableView *matrixTable;
@@ -24,10 +24,13 @@
 @property (strong) NSWindow *compressorWindow;
 @property (weak) IBOutlet CAMultiAudioEffectsTableController *effectsController;
 @property (weak) NSObject *delegate;
+@property (strong) IBOutlet NSDictionaryController *audioTracksDictionaryController;
 
 - (IBAction)matrixVolumeChanged:(NSSlider *)sender;
 
 -(instancetype)initWithAudioMixer:(CAMultiAudioNode *)node;
+-(IBAction)trackAddClicked:(NSButton *)sender;
+- (IBAction)trackRemoveClicked:(id)sender;
 
 
 @end

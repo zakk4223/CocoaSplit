@@ -8,6 +8,9 @@
 #import "CAMultiAudioMatrixMixerWindowController.h"
 #import "CAMultiAudioMatrixCell.h"
 #import "CAMultiAudioUnit.h"
+#import "CAMultiAudioEngine.h"
+#import <AppKit/AppKit.h>
+
 
 
 @interface NSObject(CAMultiAudioMixerWindowDelegate)
@@ -20,6 +23,63 @@
 @end
 
 @implementation CAMultiAudioMatrixMixerWindowController
+
+
+-(void)addTrackToInput:(NSMenuItem *)menuItem
+{
+    NSString *trackName = menuItem.representedObject;
+    
+    [self.audioNode addToOutputTrack:trackName];
+}
+
+
+
+
+-(void)buildTrackMenu
+{
+    NSDictionary *availableTracks = self.audioNode.engine.outputTracks;
+    _tracksMenu = [[NSMenu alloc] init];
+    
+    for(NSString *trackName in availableTracks)
+    {
+        if (!self.audioNode.outputTracks[trackName])
+        {
+            NSMenuItem *tItem = [[NSMenuItem alloc] initWithTitle:trackName action:@selector(addTrackToInput:) keyEquivalent:@""];
+            tItem.target = self;
+            tItem.representedObject = trackName;
+            [_tracksMenu addItem:tItem];
+        }
+    }
+}
+
+
+-(void)openAddTrackPopover:(id)sender sourceRect:(NSRect)sourceRect
+{
+    [self buildTrackMenu];
+    
+    NSInteger midItem = _tracksMenu.itemArray.count/2;
+    NSPoint popupPoint = NSMakePoint(NSMaxY(sourceRect), NSMidY(sourceRect));
+    [_tracksMenu popUpMenuPositioningItem:[_tracksMenu itemAtIndex:midItem] atLocation:popupPoint inView:sender];
+    
+}
+
+
+-(IBAction)trackAddClicked:(NSButton *)sender
+{
+    NSRect sbounds = sender.bounds;
+    
+    [self openAddTrackPopover:sender sourceRect:sbounds];
+}
+
+- (IBAction)trackRemoveClicked:(id)sender
+{
+    NSArray *selectedTracks = self.audioTracksDictionaryController.selectedObjects;
+    for (id trackInfo in selectedTracks)
+    {
+        NSString *trackName = [trackInfo key];
+        [self.audioNode removeFromOutputTrack:trackName];
+    }
+}
 
 
 - (IBAction)matrixVolumeChanged:(NSSlider *)sender

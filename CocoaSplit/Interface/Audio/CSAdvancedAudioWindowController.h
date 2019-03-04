@@ -14,6 +14,7 @@
 
 
 @property (strong) CAMultiAudioEngine *audioEngine;
+- (IBAction)addAudioTrack:(id)sender;
 
 @property (weak) IBOutlet CAMultiAudioEffectsTableController *effectsController;
 @end

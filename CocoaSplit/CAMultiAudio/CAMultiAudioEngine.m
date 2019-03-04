@@ -433,6 +433,13 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 }
 
 
+-(void)addOutputTrack
+{
+    NSString *useName = [NSString stringWithFormat:@"Track %lu", (unsigned long)self.outputTracks.count];
+    [self createOutputTrack:useName];
+}
+
+
 -(bool)createOutputTrack:(NSString *)withName
 {
 
@@ -448,11 +455,20 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     encoder.inputASBD = self.graph.graphAsbd;
     [encoder setupEncoderBuffer];
     
+    
+    encNode.bypass = YES;
     [self.graph addNode:encNode];
     [self.graph connectNode:self.encodeMixer toNode:encNode];
+    [self.graph connectNode:encNode toNode:self.previewMixer];
+    [self.previewMixer setVolumeOnInputBus:encNode.connectedToBus volume:0.0f];
     NSDictionary *connInfo = encNode.inputMap[self.encodeMixer.nodeUID];
+    NSNumber *outBus = connInfo[@"outBus"];
     NSDictionary *trackEntry = @{@"encoder": encoder, @"encoderNode": encNode, @"outputBus": connInfo[@"outBus"]};
+    [self.encodeMixer setVolumeOnOutputBus:outBus.unsignedIntValue volume:1.0f];
+    [self.encodeMixer connectInputBus:self.silentNode.connectedToBus toOutputBus:outBus.unsignedIntValue];
+    [self willChangeValueForKey:@"outputTracks"];
     [self.outputTracks setObject:trackEntry forKey:withName];
+    [self didChangeValueForKey:@"outputTracks"];
     return YES;
 }
 
@@ -480,7 +496,9 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
             [self.graph removeNode:encNode];
         }
         
+        [self willChangeValueForKey:@"outputTracks"];
         [self.outputTracks removeObjectForKey:withName];
+        [self didChangeValueForKey:@"outputTracks"];
         return YES;
     }
     
@@ -839,6 +857,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         NSDictionary *trackInfo = self.outputTracks[trackName];
         CAMultiAudioNode *renderNode = trackInfo[@"encoderNode"];
         CSAacEncoder *encoder = trackInfo[@"encoder"];
+        NSLog(@"STARTING ENCODER %@", trackName);
         AudioUnitAddRenderNotify(renderNode.audioUnit, encoderRenderCallback, [encoder inputBufferPtr]);
     }
 }

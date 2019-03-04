@@ -342,9 +342,6 @@
 
 -(void)nodeConnected:(CAMultiAudioNode *)toNode inBus:(UInt32)inBus outBus:(UInt32)outBus
 {
-
-
-    NSLog(@"NODE %@ CONNECTED TO %@ %d", self, toNode, outBus);
     [self.outputMap setObject:@{@"inBus": @(inBus), @"outBus": @(outBus), @"node": toNode} forKey:toNode.nodeUID];
     if (outBus == 0)
     {
@@ -476,6 +473,38 @@
 
 
 
+-(void) remakeNode
+{
+    NSMutableDictionary *inputMap = self.inputMap.copy;
+    NSMutableDictionary *outputMap = self.outputMap.copy;
+    CAMultiAudioGraph *saveGraph = self.graph;
+    
+    [saveGraph removeNode:self];
+
+    [saveGraph addNode:self];
+    
+    NSLog(@"INPUT MAP %@", inputMap);
+    for (NSString *uuid in inputMap)
+    {
+        NSLog(@"UUID %@", uuid);
+        NSDictionary *inpInfo = inputMap[uuid];
+        CAMultiAudioNode *inputNode = inpInfo[@"node"];
+        NSNumber *inBus = inpInfo[@"inBus"];
+        NSNumber *outBus = inpInfo[@"outBus"];
+        
+        [saveGraph connectNode:inputNode toNode:self sampleRate:self.graph.sampleRate inBus:inBus.unsignedIntValue outBus:outBus.unsignedIntValue];
+    }
+    
+    for (NSString *uuid in outputMap)
+    {
+        NSDictionary *outInfo = outputMap[uuid];
+        CAMultiAudioNode *outputNode = outInfo[@"node"];
+        NSNumber *inBus = outInfo[@"inBus"];
+        NSNumber *outBus = outInfo[@"outBus"];
+        NSLog(@"RECONNECTING %d %d", inBus.unsignedIntValue, outBus.unsignedIntValue);
+        [saveGraph connectNode:self toNode:outputNode sampleRate:self.graph.sampleRate inBus:inBus.unsignedIntValue outBus:outBus.unsignedIntValue];
+    }
+}
 
 -(void)rebuildEffectChain
 {
@@ -486,7 +515,6 @@
     while (currNode && currNode != self.headNode)
     {
         CAMultiAudioNode *connNode = currNode.connectedTo;
-              NSLog(@"DISCONNECT CURR %@", currNode);
         [self.graph disconnectNode:currNode];
         if (currNode.deleteNode)
         {

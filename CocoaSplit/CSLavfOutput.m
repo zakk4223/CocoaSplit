@@ -19,14 +19,45 @@
 #import <stdio.h>
 int ffurl_get_file_handle(struct URLContext *);
 
+@interface AudioStreamInfo : NSObject
+
+@property (assign) size_t audio_extradata_size;
+@property (assign) char *audio_extradata;
+@property (assign) int stream_index;
+@end
+
+@implementation AudioStreamInfo
+-(instancetype)init
+{
+    if (self = [super init])
+    {
+        _audio_extradata_size = 0;
+        _audio_extradata = NULL;
+    }
+    return self;
+}
+
+-(void)dealloc
+{
+    if (_audio_extradata)
+    {
+        _audio_extradata = NULL;
+    }
+}
+
+
+@end
+
+
 @interface CSLavfOutput ()
 {
     AVFormatContext *_av_fmt_ctx;
     AVStream *_av_video_stream;
-    AVStream *_av_audio_stream;
     
-    char *_audio_extradata;
-    size_t _audio_extradata_size;
+    NSMutableDictionary *_audio_stream_info;
+    
+    
+    bool _audio_extradata_done;
     
     int _input_framecnt;
     int _pending_frame_count;
@@ -200,7 +231,8 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         length = readAudioTag(&esds, &tag);
         if (tag == 0x05)
         {
-            *buffer = calloc(1, length + 8);
+            *buffer = av_malloc(length + AV_INPUT_BUFFER_PADDING_SIZE);
+            
             if (*buffer)
             {
                 memcpy(*buffer, esds, length);
@@ -215,7 +247,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 
 
 
--(void) extractAudioCookie:(CMSampleBufferRef)theBuffer
+-(void) extractAudioCookie:(CMSampleBufferRef)theBuffer intoAudioInfo:(AudioStreamInfo *)aInfo
 {
     CMAudioFormatDescriptionRef audio_fmt;
     
@@ -227,10 +259,15 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     }
     
     void *audio_tmp;
-    audio_tmp = (char *)CMAudioFormatDescriptionGetMagicCookie(audio_fmt, &_audio_extradata_size);
+    char *extradata = NULL;
+    size_t extradata_size = 0;
+    
+    audio_tmp = (char *)CMAudioFormatDescriptionGetMagicCookie(audio_fmt, &extradata_size);
     if (audio_tmp)
     {
-        getAudioExtradata(audio_tmp, &_audio_extradata, &_audio_extradata_size);
+        getAudioExtradata(audio_tmp, &extradata, &extradata_size);
+        aInfo.audio_extradata = extradata;
+        aInfo.audio_extradata_size = extradata_size;
     }
     
 }
@@ -239,20 +276,54 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 -(BOOL) writeEncodedData:(CapturedFrameData *)frameDataIn
 {
     
-    
     CapturedFrameData *frameData = frameDataIn;
     NSMutableArray *audioSamples = frameData.audioSamples[@"Default"];
-    if (!_audio_extradata && [audioSamples count] > 0)
+    
+    if (!_audio_stream_info && frameData.audioSamples.count > 0)
     {
+        //We only add to this dictionary once, which means we only use audio tracks that are available when we start up. No adding later
+        _audio_stream_info = [NSMutableDictionary dictionary];
+        for(NSString *trackName in frameData.audioSamples)
+        {
+            [_audio_stream_info setObject:[[AudioStreamInfo alloc] init] forKey:trackName];
+        }
         
-        CMSampleBufferRef audioSample = (__bridge CMSampleBufferRef)[audioSamples objectAtIndex:0];
-        [self extractAudioCookie:audioSample];
     }
     
-    if (!_av_video_stream && _audio_extradata)
+    int extradata_count = 0;
+    
+    for(NSString *trackName in _audio_stream_info)
+    {
+        AudioStreamInfo *aInfo = _audio_stream_info[trackName];
+        if (aInfo.audio_extradata)
+        {
+            extradata_count++;
+            continue;
+        }
+        
+        NSMutableArray *audioSamples = frameData.audioSamples[trackName];
+        if (audioSamples.count > 0)
+        {
+            CMSampleBufferRef audioSample = (__bridge CMSampleBufferRef)[audioSamples objectAtIndex:0];
+            [self extractAudioCookie:audioSample intoAudioInfo:aInfo];
+            if (aInfo.audio_extradata)
+            {
+                extradata_count++;
+                continue;
+            }
+        }
+    }
+    
+
+    if (extradata_count == _audio_stream_info.count)
+    {
+        _audio_extradata_done = YES;
+    }
+    
+    if (!_av_video_stream && _audio_extradata_done)
     {
         
-        if ([self createAVFormatOut:frameData.encodedSampleBuffer])
+        if ([self createAVFormatOut:frameData])
         {
             [self initStatsValues];
         } else {
@@ -260,7 +331,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         }
     }
     
-    if (!_av_video_stream || !_av_audio_stream)
+    if (!_av_video_stream || !_audio_extradata_done)
     {
         //This is a lie. We probably have only received video frames and are waiting for audio. Just pretend we did something.
         return YES;
@@ -269,12 +340,22 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
     //If we made it here, we have all the metadata and av* stuff created, so start sending data.
     
-    for (id object in audioSamples)
+    for (NSString *trackName in _audio_stream_info)
     {
-        CMSampleBufferRef audioSample = (__bridge CMSampleBufferRef)object;
-        
-        
-        [self writeAudioSampleBuffer:audioSample presentationTimeStamp:CMSampleBufferGetOutputPresentationTimeStamp(audioSample)];
+        AudioStreamInfo *aInfo = _audio_stream_info[trackName];
+        NSArray *audioSamples = frameData.audioSamples[trackName];
+        if (audioSamples && audioSamples.count > 0)
+        {
+            int stream_idx = aInfo.stream_index;
+            for (id object in audioSamples)
+            {
+                CMSampleBufferRef audioSample = (__bridge CMSampleBufferRef)object;
+                
+                
+                [self writeAudioSampleBuffer:audioSample presentationTimeStamp:CMSampleBufferGetOutputPresentationTimeStamp(audioSample) streamIndex:stream_idx];
+        }
+    }
+ 
         
         //CFRelease(audioSample);
     }
@@ -290,7 +371,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     return ret_status;
 }
 
--(BOOL) writeAudioSampleBuffer:(CMSampleBufferRef)theBuffer presentationTimeStamp:(CMTime)pts
+-(BOOL) writeAudioSampleBuffer:(CMSampleBufferRef)theBuffer presentationTimeStamp:(CMTime)pts streamIndex:(int)streamIndex
 {
     
     
@@ -298,7 +379,9 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 
     BOOL ret_val = YES;
 
-    if (_av_audio_stream && (self.init_done == YES))
+    AVStream *audio_stream = _av_fmt_ctx->streams[streamIndex];
+    
+    if (audio_stream && (self.init_done == YES))
     {
         
             CMBlockBufferRef blockBufferRef = CMSampleBufferGetDataBuffer(theBuffer);
@@ -311,7 +394,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
             av_init_packet(&pkt);
         
         
-            pkt.stream_index = _av_audio_stream->index;
+            pkt.stream_index = audio_stream->index;
         
             CMBlockBufferGetDataPointer(blockBufferRef, 0, &offset_length, &buffer_length, &sampledata);
         
@@ -324,7 +407,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
             
         
         
-            pkt.pts = av_rescale_q(pts.value, (AVRational) {1.0, pts.timescale}, _av_audio_stream->time_base);
+            pkt.pts = av_rescale_q(pts.value, (AVRational) {1.0, pts.timescale}, audio_stream->time_base);
         pkt.dts = pkt.pts;
         
 
@@ -371,9 +454,10 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 }
 
 
--(bool) createAVFormatOut:(CMSampleBufferRef)theBuffer
+-(bool) createAVFormatOut:(CapturedFrameData *)frameData
 {
  
+    CMSampleBufferRef theBuffer = frameData.encodedSampleBuffer;
     NSLog(@"Creating output format %@ DESTINATION %@", self.stream_format, self.stream_output);
     AVOutputFormat *av_out_fmt;
     
@@ -404,36 +488,28 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
     
     AVCodecParameters *c_ctx = _av_video_stream->codecpar;
-    _av_audio_stream = avformat_new_stream(_av_fmt_ctx, 0);
     
-    if (!_av_audio_stream)
+    for(NSString *trackName in _audio_stream_info)
     {
-        return NO;
+        AudioStreamInfo *aInfo = _audio_stream_info[trackName];
+        AVStream *audio_stream = avformat_new_stream(_av_fmt_ctx, NULL);
+        if (!audio_stream)
+        {
+            continue;
+        }
+        AVCodecParameters *a_ctx = audio_stream->codecpar;
+        a_ctx->codec_type = AVMEDIA_TYPE_AUDIO;
+        a_ctx->codec_id = AV_CODEC_ID_AAC;
+        audio_stream->time_base.num = 1;
+        audio_stream->time_base.den = self.samplerate;
+        a_ctx->sample_rate = self.samplerate;
+        a_ctx->bit_rate = self.audio_bitrate;
+        a_ctx->channels = 2;
+        a_ctx->extradata = (unsigned char *)aInfo.audio_extradata;
+        a_ctx->extradata_size = (int)aInfo.audio_extradata_size;
+        a_ctx->frame_size = 1024;
+        aInfo.stream_index = audio_stream->index;
     }
-    
-    AVCodecParameters *a_ctx = _av_audio_stream->codecpar;
-    //AVCodecContext *a_ctx = _av_audio_stream->codec;
-    
-    
-    a_ctx->codec_type = AVMEDIA_TYPE_AUDIO;
-    a_ctx->codec_id = AV_CODEC_ID_AAC;
-    
-    /*_av_audio_stream->time_base.num = 100000;
-    _av_audio_stream->time_base.den = self.framerate*100000;
-     */
-    
-    _av_audio_stream->time_base.num = 1;
-    _av_audio_stream->time_base.den = self.samplerate;
-    
-    a_ctx->sample_rate = self.samplerate;
-    a_ctx->bit_rate = self.audio_bitrate;
-    a_ctx->channels = 2;
-    a_ctx->extradata = (unsigned char *)_audio_extradata;
-    a_ctx->extradata_size = (int)_audio_extradata_size;
-    a_ctx->frame_size = 1024;
-    
-    //a_ctx->frame_size = (_samplerate * 2 * 2) / _framerate;
-    
     if (theBuffer)
     {
         CMFormatDescriptionRef fmt;
@@ -680,13 +756,10 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
     _av_fmt_ctx = NULL;
     _av_video_stream = NULL;
-    _av_audio_stream = NULL;
     
-    if (_audio_extradata)
-    {
-        //free(_audio_extradata);
-        _audio_extradata = NULL;
-    }
+    _audio_extradata_done = NO;
+    _audio_stream_info = nil;
+    
     return YES;
         
 }

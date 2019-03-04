@@ -545,14 +545,16 @@
 
 -(void)createBuffersForTrack:(NSString *)trackName
 {
+    @synchronized (self) {
     if (!_audioBuffers[trackName])
     {
         _audioBuffers[trackName] = [[RecAudioBufferData alloc] init];
     }
     
-    if (!_pcmAudioBuffers)
+    if (!_pcmAudioBuffers[trackName])
     {
         _pcmAudioBuffers[trackName] = [[RecAudioBufferData alloc] init];
+    }
     }
 }
 
@@ -680,10 +682,10 @@
     {
         return;
     }
-    
     RecAudioBufferData *pcmBuffer = _pcmAudioBuffers[withTag];
     if (!pcmBuffer)
     {
+
         [self createBuffersForTrack:withTag];
         pcmBuffer = _pcmAudioBuffers[withTag];
     }

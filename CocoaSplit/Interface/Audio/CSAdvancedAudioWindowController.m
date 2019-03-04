@@ -36,4 +36,8 @@
 
 
 
+- (IBAction)addAudioTrack:(id)sender
+{
+    [self.audioEngine addOutputTrack];
+}
 @end

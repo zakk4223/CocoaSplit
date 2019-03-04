@@ -32,7 +32,6 @@
 
 
 
-
 -(void)updatePowerlevel
 {
     if (!self.downMixer)
@@ -95,8 +94,21 @@
     }
 }
 
+-(void)addToOutputTrack:(NSString *)trackName
+{
+    [self willChangeValueForKey:@"outputTracks"];
+    [self.engine addInput:self toTrack:trackName];
+    [self didChangeValueForKey:@"outputTracks"];
+}
 
 
+-(void)removeFromOutputTrack:(NSString *)trackName
+{
+    [self willChangeValueForKey:@"outputTracks"];
+    [self.engine removeInput:self fromTrack:trackName];
+    [self didChangeValueForKey:@"outputTracks"];
+
+}
 
 -(bool)teardownGraph
 {

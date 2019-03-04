@@ -120,6 +120,7 @@
 -(void)addEffect:(CAMultiAudioNode *)effect atIndex:(NSUInteger)idx;
 -(bool)busForOutput:(CAMultiAudioNode *)inputNode busOut:(UInt32 *)busOut;
 -(bool)busForInput:(CAMultiAudioNode *)inputNode busOut:(UInt32 *)busOut;
+-(void) remakeNode;
 
 
 @end

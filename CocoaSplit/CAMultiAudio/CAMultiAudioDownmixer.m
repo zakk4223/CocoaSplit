@@ -9,7 +9,6 @@
 #import "CAMultiAudioDownmixer.h"
 #import "CAMultiAudioGraph.h"
 #import "math.h"
-
 @implementation CAMultiAudioDownmixer
 
 -(instancetype)init
@@ -185,6 +184,11 @@
 }
 
 
+-(UInt32)outputElement
+{
+    return [self getNextOutputElement];
+}
+
 
 
 -(UInt32)getNextInputElement
@@ -229,21 +233,89 @@
     if (useElement >= elementCount)
     {
         elementCount += 64;
+        NSDictionary *saveData = [self saveDataForPrivateRestore];
+        AudioUnitUninitialize(self.audioUnit);
+        [self setInputStreamFormat:self.graph.graphAsbd];
+        [self setOutputStreamFormat:self.graph.graphAsbd];
+        [self willInitializeNode];
         AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Input, 0, &elementCount, sizeof(elementCount));
+        AudioUnitInitialize(self.audioUnit);
+        [self didInitializeNode];
+        [self restoreDataFromPrivateRestore:saveData];
+
     }
     
     [self setVolumeOnInputBus:useElement volume:1.0];
     return useElement;
 }
 
+-(UInt32)getNextOutputElement
+{
+    UInt32 elementCount = 0;
+    UInt32 elementSize = sizeof(UInt32);
+    
+    UInt32 useElement = 0;
+    
+    AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Output, 0, &elementCount, &elementSize);
+    
+    UInt32 interactionCnt = 0;
+    
+    AUGraphCountNodeInteractions(self.graph.graphInst, self.node, &interactionCnt);
+    AUNodeInteraction *interactions = malloc(sizeof(AUNodeInteraction)*interactionCnt);
+    
+    
+    AUGraphGetNodeInteractions(self.graph.graphInst, self.node, &interactionCnt, interactions);
+    
+    useElement = 0;
+    UInt32 seenIdx = 0;
+    
+    for (int i=0; i < interactionCnt; i++)
+    {
+        
+        AUNodeInteraction iact = interactions[i];
+        if (iact.nodeInteractionType == kAUNodeInteraction_Connection && iact.nodeInteraction.connection.sourceNode == self.node)
+        {
+            if (seenIdx != iact.nodeInteraction.connection.sourceOutputNumber)
+            {
+                useElement = seenIdx;
+                break;
+            } else {
+                seenIdx++;
+                useElement = iact.nodeInteraction.connection.sourceOutputNumber+1;
+            }
+            
+        }
+    }
+    
+    free(interactions);
+    if (useElement >= elementCount)
+    {
+        elementCount += 64;
+        NSDictionary *saveData = [self saveDataForPrivateRestore];
+        AudioUnitUninitialize(self.audioUnit);
+        [self setInputStreamFormat:self.graph.graphAsbd];
+        [self setOutputStreamFormat:self.graph.graphAsbd];
+        [self willInitializeNode];
+        AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Output, 0, &elementCount, sizeof(elementCount));
+        AudioUnitInitialize(self.audioUnit);
+        [self didInitializeNode];
+        [self restoreDataFromPrivateRestore:saveData];
+    }
+    
+    [self setVolumeOnOutputBus:useElement volume:1.0];
+    return useElement;
+}
+
+
 
 
 -(void)willInitializeNode
 {
-    UInt32 elementCount = 64;
+    UInt32 elementCount = 65;
     
     OSStatus err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Input, 0,&elementCount, sizeof(UInt32));
-    
+
+    err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Output, 0,&elementCount, sizeof(UInt32));
     
     err = AudioUnitSetParameter(self.audioUnit, kMultiChannelMixerParam_Volume, kAudioUnitScope_Output, 0, self.volume, 0);
     UInt32 enableVal = 1;
@@ -437,7 +509,6 @@
     
     for(UInt32 i = 0; i < _inputChannels; i++)
     {
-        NSLog(@"SET CHANNEL %d -> %d", inputChan+i, outputChan+i);
         err = AudioUnitSetParameter(self.audioUnit, kMatrixMixerParam_Volume, kAudioUnitScope_Input, inputChan+i, 1.0, 0);
         err = AudioUnitSetParameter(self.audioUnit, kMatrixMixerParam_Volume, kAudioUnitScope_Output, outputChan+i, 1.0, 0);
 
@@ -475,7 +546,7 @@
 }
 -(void)setVolume:(float)volume forChannel:(UInt32)inChannel outChannel:(UInt32)outChannel
 {
-    UInt32 xElem = (inChannel << 16) | (outChannel & 0x0000FFFF);
+    UInt32 xElem = (inChannel << 16) | (outChannel);
     OSStatus err = AudioUnitSetParameter(self.audioUnit, kMatrixMixerParam_Volume, kAudioUnitScope_Global, xElem, volume,0);
     if (err)
     {
@@ -526,6 +597,81 @@
         free(levels);
     }
 }
+
+-(NSDictionary *)saveDataForPrivateRestore
+{
+    NSMutableDictionary *ret = [NSMutableDictionary dictionary];
+    
+    UInt32 dimSize = sizeof(UInt32)*2;
+    
+    UInt32 matrixDims[2];
+    
+    AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_MatrixDimensions, kAudioUnitScope_Global, 0, matrixDims, &dimSize);
+    
+    
+    UInt32 levelSize = ((matrixDims[0]+1)*(matrixDims[1]+1))*sizeof(Float32);
+    
+    
+    Float32 *levelData = malloc(levelSize);
+    
+    AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_MatrixLevels, kAudioUnitScope_Global, 0, levelData, &levelSize);
+    NSLog(@"LEVEL SIZE %d", levelSize);
+    
+    NSData *levels = [NSData dataWithBytesNoCopy:levelData length:levelSize freeWhenDone:YES];
+    [ret setObject:levels forKey:@"data"];
+    [ret setObject:@(matrixDims[0]) forKey:@"inputChannels"];
+    [ret setObject:@(matrixDims[1]) forKey:@"outputChannels"];
+    
+    return ret;
+}
+
+-(void)restoreDataFromPrivateRestore:(NSDictionary *)saveData
+{
+    NSData *data = [saveData objectForKey:@"data"];
+    NSNumber *inputChannels = [saveData objectForKey:@"inputChannels"];
+    NSNumber *outputChannels = [saveData objectForKey:@"outputChannels"];
+    NSUInteger dataSize = data.length;
+    
+    if ((dataSize % sizeof(Float32)))
+    {
+        return;
+    }
+    
+    
+    
+    Float32 *levels = malloc(dataSize);
+
+    [data getBytes:levels length:dataSize];
+
+    //We have to manually set all the volumes because the input/output element count may have changed. If it did change, the matrix volume array from the old size doesn't work as a blob restore.
+    
+    UInt32 inpMax = inputChannels.unsignedIntValue+1;
+    UInt32 outMax = outputChannels.unsignedIntValue+1;
+    for (int inp = 0; inp < inpMax; inp++)
+    {
+        for (int outp = 0; outp < outMax; outp++)
+        {
+            Float32 level = *(levels+(inp*outMax)+outp);
+            
+            
+            if (outp == outMax-1 && inp == inpMax-1)
+            {
+                //Global
+                [self setVolume:level];
+                
+            } else if (outp == outMax-1) {
+                AudioUnitSetParameter(self.audioUnit, kMatrixMixerParam_Volume, kAudioUnitScope_Input, inp, level, 0);
+            } else if (inp == inpMax-1) {
+                AudioUnitSetParameter(self.audioUnit, kMatrixMixerParam_Volume, kAudioUnitScope_Output, outp, level, 0);
+            } else {
+                [self setVolume:level forChannel:inp outChannel:outp];
+            }
+        }
+    }
+    
+    free(levels);
+}
+
 
 -(NSDictionary *)saveData
 {

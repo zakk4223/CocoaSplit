@@ -160,13 +160,11 @@
     
     
     OSStatus err;
-    
     if (![self disconnectNode:node])
     {
         NSLog(@"Remove node %@: disconnected failed", node);
         return NO;
     }
-    
     for (NSString *inpUUID in node.inputMap)
     {
         NSDictionary *inpInfo = node.inputMap[inpUUID];
@@ -181,13 +179,13 @@
         NSLog(@"Remove node %@: AUGraphRemoveNode failed, err: %d", node, err);
         return NO;
     }
-    
+
     if (![self graphUpdate])
     {
         NSLog(@"Graph %@, graphUpdate failed in removeNode %@", self, node);
         return NO;
     }
-    
+
     [self.nodeList removeObject:node];
     [node removeEffectsChain];
     node.graph = nil;
@@ -239,6 +237,27 @@
 
 -(bool)connectNode:(CAMultiAudioNode *)node toNode:(CAMultiAudioNode *)toNode sampleRate:(int)sampleRate
 {
+    if (!_graphInst)
+    {
+        NSLog(@"ConnectNode: No AUGraph!");
+        return NO;
+    }
+    
+    if (!node || !toNode)
+    {
+        NSLog(@"ConnectNode: Source or destination node is nil %@ -> %@", node, toNode);
+        return NO;
+    }
+    
+    UInt32 inBus = toNode.inputElement;
+    UInt32 outBus = node.outputElement;
+    
+    return [self connectNode:node toNode:toNode sampleRate:self.sampleRate inBus:inBus outBus:outBus];
+}
+
+
+-(bool)connectNode:(CAMultiAudioNode *)node toNode:(CAMultiAudioNode *)toNode sampleRate:(int)sampleRate inBus:(UInt32)inBus outBus:(UInt32)outBus
+{
     
     if (!_graphInst)
     {
@@ -258,8 +277,7 @@
     
     OSStatus err;
     
-    UInt32 bus = toNode.inputElement;
-    UInt32 outBus = node.outputElement;
+    UInt32 bus = inBus;
     
     [node willConnectToNode:toNode inBus:bus outBus:outBus];
     
@@ -284,12 +302,18 @@
     
     [useNode nodeConnected:toNode inBus:bus outBus:outBus];
 
-    [toNode connectedToNode:node inBus:bus outBus:outBus];
+    [toNode connectedToNode:useNode inBus:bus outBus:outBus];
     
     if (![self graphUpdate])
     {
         
-        NSLog(@"Graph %@ graphUpdate for connection failed %@ -> %@", self, node, toNode);
+        UInt32 elementCount = 0;
+        UInt32 elementSize = sizeof(UInt32);
+        
+        
+        AudioUnitGetProperty(toNode.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Input, 0, &elementCount, &elementSize);
+        
+        NSLog(@"Graph %@ graphUpdate for connection failed %@:%d -> %@:%d (%d)", self, node, outBus, toNode, bus, elementCount );
         return NO;
     }
 

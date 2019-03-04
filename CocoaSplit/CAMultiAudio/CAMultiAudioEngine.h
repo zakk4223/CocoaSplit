@@ -75,8 +75,10 @@
 -(CAMultiAudioInput *)inputForSystemUUID:(NSString *)uuid;
 -(void)startEncoders;
 -(void)stopEncoders;
-
-
+-(void)addOutputTrack;
+-(bool)createOutputTrack:(NSString *)withName;
+-(bool)addInput:(CAMultiAudioInput *)input toTrack:(NSString *)trackName;
+-(bool)removeInput:(CAMultiAudioInput *)input fromTrack:(NSString *)trackName;
 
 
 @end
