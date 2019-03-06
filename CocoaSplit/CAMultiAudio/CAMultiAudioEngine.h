@@ -77,6 +77,7 @@
 -(void)stopEncoders;
 -(void)addOutputTrack;
 -(bool)createOutputTrack:(NSString *)withName;
+-(bool)removeOutputTrack:(NSString *)withName;
 -(bool)addInput:(CAMultiAudioInput *)input toTrack:(NSString *)trackName;
 -(bool)removeInput:(CAMultiAudioInput *)input fromTrack:(NSString *)trackName;
 

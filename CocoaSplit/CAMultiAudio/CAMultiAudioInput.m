@@ -9,6 +9,7 @@
 #import "CAMultiAudioDelay.h"
 #import "CAMultiAudioMatrixMixerWindowController.h"
 #import "CAMultiAudioEngine.h"
+#import "CaptureController.h"
 
 @implementation CAMultiAudioInput
 @synthesize delay = _delay;
@@ -99,6 +100,7 @@
     [self willChangeValueForKey:@"outputTracks"];
     [self.engine addInput:self toTrack:trackName];
     [self didChangeValueForKey:@"outputTracks"];
+    [[CaptureController sharedCaptureController] postNotification:CSNotificationAudioTrackInputAdded forObject:self];
 }
 
 
@@ -107,7 +109,7 @@
     [self willChangeValueForKey:@"outputTracks"];
     [self.engine removeInput:self fromTrack:trackName];
     [self didChangeValueForKey:@"outputTracks"];
-
+    [[CaptureController sharedCaptureController] postNotification:CSNotificationAudioTrackInputDeleted forObject:self];
 }
 
 -(bool)teardownGraph
@@ -252,6 +254,7 @@
         saveDict[@"downMixerData"] = [self.downMixer saveData];
     }
     saveDict[@"isGlobal"] = [NSNumber numberWithBool:self.isGlobal];
+    saveDict[@"outputTracks"] = self.outputTracks;
 }
 
 
@@ -270,6 +273,15 @@
     if ([restoreDict objectForKey:@"isGlobal"])
     {
         self.isGlobal = [restoreDict[@"isGlobal"] boolValue];
+    }
+    
+    NSDictionary *outputTracks = restoreDict[@"outputTracks"];
+    if (outputTracks)
+    {
+        for(NSString *trackName in outputTracks)
+        {
+            [self.engine addInput:self toTrack:trackName];
+        }
     }
 }
 

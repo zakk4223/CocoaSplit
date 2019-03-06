@@ -48,6 +48,8 @@
     {
         [aCoder encodeObject:self.assignedLayout forKey:@"assignedLayout"];
     }
+    
+    [aCoder encodeObject:self.audioTracks forKey:@"audioTracks"];
 }
 
 
@@ -75,6 +77,14 @@
         self.type_class_name = [aDecoder decodeObjectForKey:@"type_class_name"];
         self.autoRetry = [aDecoder decodeBoolForKey:@"autoRetry"];
         _active = [aDecoder decodeBoolForKey:@"active"];
+        NSDictionary *audioTracks = [aDecoder decodeObjectForKey:@"audioTracks"];
+        if (audioTracks)
+        {
+            for(NSString *trackName in audioTracks)
+            {
+                self.audioTracks[trackName] = @(YES);
+            }
+        }
 
     }
     return self;
@@ -290,11 +300,12 @@
         self.delay_buffer_frames = 0;
         _stopped = YES;
         _uuid = [NSUUID UUID].UUIDString;
+        self.audioTracks = [NSMutableDictionary dictionary];
+        self.audioTracks[@"Default"] = @(YES);
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(compressorDeleted:) name:CSNotificationCompressorDeleted object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(compressorRenamed:) name:CSNotificationCompressorRenamed object:nil];
-
-
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioTrackDeleted:) name:CSNotificationAudioTrackDeleted object:nil];
     }
     return self;
     
@@ -325,6 +336,15 @@
     
     return nil;
 }
+
+
+-(void)audioTrackDeleted:(NSNotification *)notification
+{
+    NSString *trackName = notification.object;
+    
+    [self removeAudioTrack:trackName];
+}
+
 
 
 -(void)compressorDeleted:(NSNotification *)notification
@@ -398,6 +418,7 @@
     newout.stream_format = self.output_format;
     newout.samplerate = [CaptureController sharedCaptureController].multiAudioEngine.sampleRate;
     newout.audio_bitrate = [CaptureController sharedCaptureController].multiAudioEngine.audioBitrate;
+    newout.activeAudioTracks = self.audioTracks;
     
     
     
@@ -673,6 +694,24 @@
     return [NSString stringWithFormat:@"Name: %@ Type Name: %@ Destination %@ Key %@", self.name, self.type_name, self.destination, self.stream_key];
     
 }
+
+-(void)addAudioTrack:(NSString *)trackName
+{
+    [self willChangeValueForKey:@"audioTracks"];
+    self.audioTracks[trackName] = @(1);
+    [self didChangeValueForKey:@"audioTracks"];
+    [[CaptureController sharedCaptureController] postNotification:CSNotificationAudioTrackOutputAttached forObject:self];
+}
+
+
+-(void)removeAudioTrack:(NSString *)trackName
+{
+    [self willChangeValueForKey:@"audioTracks"];
+    [self.audioTracks removeObjectForKey:trackName];
+    [self didChangeValueForKey:@"audioTracks"];
+    [[CaptureController sharedCaptureController] postNotification:CSNotificationAudioTrackOutputDetached forObject:self];
+}
+
 
 
 -(void)dealloc

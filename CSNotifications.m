@@ -71,3 +71,10 @@ NSString *const CSNotificationTransitionAdded = @"CSNotificationTransitionAdded"
 NSString *const CSNotificationTransitionRemoved = @"CSNotificationTransitionRemoved";
 NSString *const CSNotificationTransitionStateChanged = @"CSNotificationTransitionStateChanged";
 NSString *const CSNotificationUseTransitionsChanged = @"CSNotificationUseTransitionsChanged";
+
+NSString *const CSNotificationAudioTrackCreated = @"CSNotificationAudioTrackCreated";
+NSString *const CSNotificationAudioTrackDeleted = @"CSNotificationAudioTrackDeleted";
+NSString *const CSNotificationAudioTrackInputAdded = @"CSNotificationAudioTrackInputAdded";
+NSString *const CSNotificationAudioTrackInputDeleted = @"CSNotificationAudioTrackInputDeleted";
+NSString *const CSNotificationAudioTrackOutputAttached = @"CSNotificationAudioTrackOutputAttached";
+NSString *const CSNotificationAudioTrackOutputDetached = @"CSNotificationAudioTrackOutputDetached";

@@ -20,6 +20,7 @@
 @property (strong) NSString *stream_format;
 @property (assign) int samplerate;
 @property (assign) int audio_bitrate;
+@property (strong) NSMutableDictionary *activeAudioTracks;
 
 -(NSUInteger)frameQueueSize;
 -(bool)queueFramedata:(CapturedFrameData *)frameData;

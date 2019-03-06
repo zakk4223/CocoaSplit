@@ -8,6 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CSAdvancedAudioWindowController">
             <connections>
+                <outlet property="outputTracksController" destination="HGe-Xd-c37" id="i98-XO-v15"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="poq-vV-Gbj"/>
             </connections>
         </customObject>
@@ -286,6 +287,7 @@
                                     </tableColumns>
                                     <connections>
                                         <binding destination="HGe-Xd-c37" name="content" keyPath="arrangedObjects.key" id="fZq-Gn-omp"/>
+                                        <binding destination="HGe-Xd-c37" name="selectionIndexes" keyPath="selectionIndexes" previousBinding="fZq-Gn-omp" id="eib-1y-cYl"/>
                                     </connections>
                                 </tableView>
                             </subviews>
@@ -331,6 +333,9 @@
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
+                        <connections>
+                            <action selector="removeAudioTrack:" target="-2" id="Vpk-YM-Bjv"/>
+                        </connections>
                     </button>
                 </subviews>
                 <constraints>

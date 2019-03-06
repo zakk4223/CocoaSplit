@@ -110,6 +110,19 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         
         
         [self buildGraph];
+        
+        
+        if ([aDecoder containsValueForKey:@"outputTracks"])
+        {
+            NSArray *outputTracks = [aDecoder decodeObjectForKey:@"outputTracks"];
+
+            for (NSString *trackName in outputTracks)
+            {
+                [self createOutputTrack:trackName];
+            }
+        }
+        
+        
         [self inputsForSystemAudio];
         if ([aDecoder containsValueForKey:@"encodeMixerSettings"])
         {
@@ -206,6 +219,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     }
     
     [aCoder encodeObject:fileSave forKey:@"fileInputs"];
+    
+    [aCoder encodeObject:self.outputTracks.allKeys forKey:@"outputTracks"];
     
 }
 
@@ -469,6 +484,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     [self willChangeValueForKey:@"outputTracks"];
     [self.outputTracks setObject:trackEntry forKey:withName];
     [self didChangeValueForKey:@"outputTracks"];
+    [[CaptureController sharedCaptureController] postNotification:CSNotificationAudioTrackCreated forObject:withName];
+
     return YES;
 }
 
@@ -499,6 +516,16 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         [self willChangeValueForKey:@"outputTracks"];
         [self.outputTracks removeObjectForKey:withName];
         [self didChangeValueForKey:@"outputTracks"];
+        
+        for (CAMultiAudioInput *input in self.audioInputs)
+        {
+            if ([input.outputTracks valueForKey:withName])
+            {
+                [input removeFromOutputTrack:withName];
+            }
+        }
+        
+        [[CaptureController sharedCaptureController] postNotification:CSNotificationAudioTrackDeleted forObject:withName];
         return YES;
     }
     

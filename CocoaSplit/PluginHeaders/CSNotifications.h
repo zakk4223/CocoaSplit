@@ -71,3 +71,10 @@ extern NSString *const CSNotificationTransitionStateChanged;
 extern NSString *const CSNotificationUseTransitionsChanged;
 
 
+extern NSString *const CSNotificationAudioTrackCreated;
+extern NSString *const CSNotificationAudioTrackDeleted;
+extern NSString *const CSNotificationAudioTrackInputAdded;
+extern NSString *const CSNotificationAudioTrackInputDeleted;
+extern NSString *const CSNotificationAudioTrackOutputAttached;
+extern NSString *const CSNotificationAudioTrackOutputDetached;
+

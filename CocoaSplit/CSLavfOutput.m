@@ -74,6 +74,7 @@ int ffurl_get_file_handle(struct URLContext *);
 @property (assign) int width;
 @property (assign) int height;
 @property (assign) BOOL init_done;
+@property (assign) NSMutableDictionary *activeAudioTracks;
 
 @end
 
@@ -277,14 +278,18 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 {
     
     CapturedFrameData *frameData = frameDataIn;
-    NSMutableArray *audioSamples = frameData.audioSamples[@"Default"];
     
+
     if (!_audio_stream_info && frameData.audioSamples.count > 0)
     {
         //We only add to this dictionary once, which means we only use audio tracks that are available when we start up. No adding later
         _audio_stream_info = [NSMutableDictionary dictionary];
         for(NSString *trackName in frameData.audioSamples)
         {
+            if (self.activeAudioTracks && !self.activeAudioTracks[trackName])
+            {
+                continue;
+            }
             [_audio_stream_info setObject:[[AudioStreamInfo alloc] init] forKey:trackName];
         }
         

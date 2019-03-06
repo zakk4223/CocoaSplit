@@ -13,7 +13,9 @@
 @class OutputDestination;
 
 @interface CSNewOutputWindowController : NSWindowController
-
+{
+    NSMenu *_tracksMenu;
+}
 - (IBAction)cancelButtonAction:(id)sender;
 - (IBAction)addButtonAction:(id)sender;
 - (IBAction)openCompressorEdit:(id)sender;
@@ -33,6 +35,7 @@
 
 @property (nonatomic, copy) void (^windowDone)(NSModalResponse response, CSNewOutputWindowController *windowController);
 
+@property (strong) IBOutlet NSDictionaryController *audioTracksDictionaryController;
 
 
 @end

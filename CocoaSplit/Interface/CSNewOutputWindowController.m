@@ -253,5 +253,69 @@
     }];
 }
 
+-(void)addTrackToOutput:(NSMenuItem *)menuItem
+{
+    NSString *trackName = menuItem.representedObject;
+    [self.outputDestination addAudioTrack:trackName];
+}
+
+
+
+-(void)buildTrackMenu
+{
+    CAMultiAudioEngine *useEngine = nil;
+    if (self.outputDestination && self.outputDestination.assignedLayout)
+    {
+        useEngine = self.outputDestination.assignedLayout.audioEngine;
+    } else {
+        useEngine = [CaptureController sharedCaptureController].multiAudioEngine;
+    }
+    
+    NSDictionary *availableTracks = useEngine.outputTracks;
+    
+    _tracksMenu = [[NSMenu alloc] init];
+    
+    for(NSString *trackName in availableTracks)
+    {
+        if (!self.outputDestination.audioTracks[trackName])
+        {
+            NSMenuItem *tItem = [[NSMenuItem alloc] initWithTitle:trackName action:@selector(addTrackToOutput:) keyEquivalent:@""];
+            tItem.target = self;
+            tItem.representedObject = trackName;
+            [_tracksMenu addItem:tItem];
+        }
+    }
+}
+
+
+-(void)openAddTrackPopover:(id)sender sourceRect:(NSRect)sourceRect
+{
+    [self buildTrackMenu];
+    
+    NSInteger midItem = _tracksMenu.itemArray.count/2;
+    NSPoint popupPoint = NSMakePoint(NSMaxY(sourceRect), NSMidY(sourceRect));
+    [_tracksMenu popUpMenuPositioningItem:[_tracksMenu itemAtIndex:midItem] atLocation:popupPoint inView:sender];
+    
+}
+
+
+-(IBAction)trackAddClicked:(NSButton *)sender
+{
+    NSRect sbounds = sender.bounds;
+    
+    [self openAddTrackPopover:sender sourceRect:sbounds];
+}
+
+- (IBAction)trackRemoveClicked:(id)sender
+{
+    NSArray *selectedTracks = self.audioTracksDictionaryController.selectedObjects;
+    for (NSDictionaryControllerKeyValuePair *trackInfo in selectedTracks)
+    {
+        NSString *trackName = [trackInfo key];
+        [self.outputDestination removeAudioTrack:trackName];
+    }
+}
+
+
 
 @end

@@ -40,4 +40,14 @@
 {
     [self.audioEngine addOutputTrack];
 }
+- (IBAction)removeAudioTrack:(id)sender
+{
+    NSArray *selectedTracks = self.outputTracksController.selectedObjects;
+    for (NSDictionaryControllerKeyValuePair *kvp in selectedTracks)
+    {
+        NSString *trackName = kvp.key;
+        [self.audioEngine removeOutputTrack:trackName];
+    }
+}
+
 @end

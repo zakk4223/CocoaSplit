@@ -12,9 +12,11 @@
 {
 }
 
+- (IBAction)removeAudioTrack:(id)sender;
 
 @property (strong) CAMultiAudioEngine *audioEngine;
 - (IBAction)addAudioTrack:(id)sender;
+@property (strong) IBOutlet NSDictionaryController *outputTracksController;
 
 @property (weak) IBOutlet CAMultiAudioEffectsTableController *effectsController;
 @end
