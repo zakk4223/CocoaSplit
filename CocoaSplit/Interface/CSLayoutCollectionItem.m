@@ -74,6 +74,8 @@
 -(void)controlTextDidEndEditing:(NSNotification *)obj
 {
     [self.view.window makeFirstResponder:self.buttonLabel.superview];
+    SourceLayout *layout = self.representedObject;
+    layout.name = self.buttonLabel.stringValue;
     [self.buttonLabel setEditable:NO];
 }
 
