@@ -64,6 +64,7 @@
     {
         while (TPCircularBufferPeek(&_inputBuffer, NULL, self.inputASBD) >= 1024)
         {
+
             AudioBufferList *inBuffer = TPCircularBufferPrepareEmptyAudioBufferListWithAudioFormat(&_scratchBuffer, self.inputASBD, 1024, NULL);
             UInt32 inFrameCnt = 1024 ;
             AudioTimeStamp atTime;
@@ -86,6 +87,7 @@
             CMSampleBufferCreate(kCFAllocatorDefault, NULL, NO, NULL, NULL, _pcmFormat, inFrameCnt, 1, &timeInfo, 0, NULL, &pcmSampleBuffer);
             CMSampleBufferSetDataBufferFromAudioBufferList(pcmSampleBuffer, kCFAllocatorDefault, kCFAllocatorDefault, 0, inBuffer);
             if (self.encodedReceiver)
+                
             {
                 [self.encodedReceiver captureOutputAudio:self.trackName didOutputPCMSampleBuffer:pcmSampleBuffer];
             }

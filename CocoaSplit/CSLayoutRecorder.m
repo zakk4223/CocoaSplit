@@ -248,8 +248,8 @@
         
         for(NSString *trackName in self.audioEngine.outputTracks)
         {
-            NSDictionary *trackInfo = self.audioEngine.outputTracks[trackName];
-            CSAacEncoder *enc = trackInfo[@"encoder"];
+            CAMultiAudioOutputTrack *outputTrack = self.audioEngine.outputTracks[trackName];
+            CSAacEncoder *enc = outputTrack.encoder;
             enc.encodedReceiver = self;
         }
         [self.audioEngine startEncoders];

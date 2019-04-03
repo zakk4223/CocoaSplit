@@ -45,8 +45,9 @@
     NSArray *selectedTracks = self.outputTracksController.selectedObjects;
     for (NSDictionaryControllerKeyValuePair *kvp in selectedTracks)
     {
-        NSString *trackName = kvp.key;
-        [self.audioEngine removeOutputTrack:trackName];
+        CAMultiAudioOutputTrack *outTrack = kvp.value;
+        
+        [self.audioEngine removeOutputTrack:outTrack.uuid];
     }
 }
 

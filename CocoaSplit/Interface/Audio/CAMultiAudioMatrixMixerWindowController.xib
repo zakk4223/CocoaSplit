@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -165,11 +165,11 @@
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                 <connections>
-                                                                    <binding destination="ygX-A2-hUO" name="value" keyPath="objectValue" id="WnM-bE-wTy"/>
+                                                                    <binding destination="ygX-A2-hUO" name="value" keyPath="objectValue.name" id="mqD-Hr-Eb7"/>
                                                                 </connections>
                                                             </textFieldCell>
                                                             <connections>
-                                                                <binding destination="ygX-A2-hUO" name="value" keyPath="objectValue" id="jf0-5J-WKL"/>
+                                                                <binding destination="ygX-A2-hUO" name="value" keyPath="objectValue.name" id="ivf-ga-LGa"/>
                                                             </connections>
                                                         </textField>
                                                     </subviews>
@@ -186,8 +186,8 @@
                                         </tableColumn>
                                     </tableColumns>
                                     <connections>
-                                        <binding destination="OYm-wd-HNd" name="content" keyPath="arrangedObjects.key" id="Dp9-S9-r3X"/>
-                                        <binding destination="OYm-wd-HNd" name="selectionIndexes" keyPath="selectionIndexes" previousBinding="Dp9-S9-r3X" id="6hq-c3-Jr3"/>
+                                        <binding destination="OYm-wd-HNd" name="content" keyPath="arrangedObjects.value" id="zXO-hB-uea"/>
+                                        <binding destination="OYm-wd-HNd" name="selectionIndexes" keyPath="selectionIndexes" previousBinding="zXO-hB-uea" id="ekn-Li-u3w"/>
                                     </connections>
                                 </tableView>
                             </subviews>

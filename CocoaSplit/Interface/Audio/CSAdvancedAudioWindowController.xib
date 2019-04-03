@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -274,7 +274,7 @@
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
-                                                                <binding destination="KTu-PC-R34" name="value" keyPath="objectValue" id="RnS-2Y-AnI"/>
+                                                                <binding destination="KTu-PC-R34" name="value" keyPath="objectValue.name" id="LPJ-30-8ja"/>
                                                             </connections>
                                                         </textField>
                                                     </subviews>
@@ -286,8 +286,8 @@
                                         </tableColumn>
                                     </tableColumns>
                                     <connections>
-                                        <binding destination="HGe-Xd-c37" name="content" keyPath="arrangedObjects.key" id="fZq-Gn-omp"/>
-                                        <binding destination="HGe-Xd-c37" name="selectionIndexes" keyPath="selectionIndexes" previousBinding="fZq-Gn-omp" id="eib-1y-cYl"/>
+                                        <binding destination="HGe-Xd-c37" name="content" keyPath="arrangedObjects.value" id="bKJ-sP-u0P"/>
+                                        <binding destination="HGe-Xd-c37" name="selectionIndexes" keyPath="selectionIndexes" previousBinding="bKJ-sP-u0P" id="1m2-NF-utp"/>
                                     </connections>
                                 </tableView>
                             </subviews>

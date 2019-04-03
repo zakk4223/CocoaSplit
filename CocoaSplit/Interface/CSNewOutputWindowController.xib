@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -220,7 +220,7 @@ Gw
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
-                                                                <binding destination="28e-Zw-NSs" name="value" keyPath="objectValue" id="BjY-Cb-7CF"/>
+                                                                <binding destination="28e-Zw-NSs" name="value" keyPath="objectValue.name" id="qDX-dU-mlX"/>
                                                             </connections>
                                                         </textField>
                                                     </subviews>
@@ -237,8 +237,8 @@ Gw
                                         </tableColumn>
                                     </tableColumns>
                                     <connections>
-                                        <binding destination="yfp-Da-Yi4" name="content" keyPath="arrangedObjects.key" id="wyf-cX-7nY"/>
-                                        <binding destination="yfp-Da-Yi4" name="selectionIndexes" keyPath="selectionIndexes" previousBinding="wyf-cX-7nY" id="ZO1-Pg-9wJ"/>
+                                        <binding destination="yfp-Da-Yi4" name="content" keyPath="arrangedObjects.value" id="c9i-xA-9XN"/>
+                                        <binding destination="yfp-Da-Yi4" name="selectionIndexes" keyPath="selectionIndexes" previousBinding="c9i-xA-9XN" id="YKF-KU-QaD"/>
                                     </connections>
                                 </tableView>
                             </subviews>

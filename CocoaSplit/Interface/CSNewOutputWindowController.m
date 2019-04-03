@@ -255,33 +255,31 @@
 
 -(void)addTrackToOutput:(NSMenuItem *)menuItem
 {
-    NSString *trackName = menuItem.representedObject;
-    [self.outputDestination addAudioTrack:trackName];
+    CAMultiAudioOutputTrack *track = menuItem.representedObject;
+    [self.outputDestination addAudioTrack:track];
 }
 
 
 
 -(void)buildTrackMenu
 {
-    CAMultiAudioEngine *useEngine = nil;
-    if (self.outputDestination && self.outputDestination.assignedLayout)
-    {
-        useEngine = self.outputDestination.assignedLayout.audioEngine;
-    } else {
-        useEngine = [CaptureController sharedCaptureController].multiAudioEngine;
-    }
     
+    CAMultiAudioEngine *useEngine = self.outputDestination.audioEngine;
+    
+
     NSDictionary *availableTracks = useEngine.outputTracks;
     
     _tracksMenu = [[NSMenu alloc] init];
     
-    for(NSString *trackName in availableTracks)
+    for(NSString *trackUUID in availableTracks)
     {
-        if (!self.outputDestination.audioTracks[trackName])
+        CAMultiAudioOutputTrack *outputTrack = availableTracks[trackUUID];
+        
+        if (!self.outputDestination.audioTracks[trackUUID])
         {
-            NSMenuItem *tItem = [[NSMenuItem alloc] initWithTitle:trackName action:@selector(addTrackToOutput:) keyEquivalent:@""];
+            NSMenuItem *tItem = [[NSMenuItem alloc] initWithTitle:outputTrack.name action:@selector(addTrackToOutput:) keyEquivalent:@""];
             tItem.target = self;
-            tItem.representedObject = trackName;
+            tItem.representedObject = outputTrack;
             [_tracksMenu addItem:tItem];
         }
     }
@@ -311,8 +309,8 @@
     NSArray *selectedTracks = self.audioTracksDictionaryController.selectedObjects;
     for (NSDictionaryControllerKeyValuePair *trackInfo in selectedTracks)
     {
-        NSString *trackName = [trackInfo key];
-        [self.outputDestination removeAudioTrack:trackName];
+        CAMultiAudioOutputTrack *track = [trackInfo value];
+        [self.outputDestination removeAudioTrack:track];
     }
 }
 

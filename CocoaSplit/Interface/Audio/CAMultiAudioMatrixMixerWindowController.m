@@ -27,9 +27,9 @@
 
 -(void)addTrackToInput:(NSMenuItem *)menuItem
 {
-    NSString *trackName = menuItem.representedObject;
+    CAMultiAudioOutputTrack *track = menuItem.representedObject;
     
-    [self.audioNode addToOutputTrack:trackName];
+    [self.audioNode addToOutputTrack:track];
 }
 
 
@@ -40,13 +40,14 @@
     NSDictionary *availableTracks = self.audioNode.engine.outputTracks;
     _tracksMenu = [[NSMenu alloc] init];
     
-    for(NSString *trackName in availableTracks)
+    for(NSString *trackUUID in availableTracks)
     {
-        if (!self.audioNode.outputTracks[trackName])
+        CAMultiAudioOutputTrack *track = availableTracks[trackUUID];
+        if (!self.audioNode.outputTracks[trackUUID])
         {
-            NSMenuItem *tItem = [[NSMenuItem alloc] initWithTitle:trackName action:@selector(addTrackToInput:) keyEquivalent:@""];
+            NSMenuItem *tItem = [[NSMenuItem alloc] initWithTitle:track.name action:@selector(addTrackToInput:) keyEquivalent:@""];
             tItem.target = self;
-            tItem.representedObject = trackName;
+            tItem.representedObject = track;
             [_tracksMenu addItem:tItem];
         }
     }
@@ -74,10 +75,10 @@
 - (IBAction)trackRemoveClicked:(id)sender
 {
     NSArray *selectedTracks = self.audioTracksDictionaryController.selectedObjects;
-    for (id trackInfo in selectedTracks)
+    for (NSDictionaryControllerKeyValuePair *trackInfo in selectedTracks)
     {
-        NSString *trackName = [trackInfo key];
-        [self.audioNode removeFromOutputTrack:trackName];
+        CAMultiAudioOutputTrack *track = [trackInfo value];
+        [self.audioNode removeFromOutputTrack:track];
     }
 }
 

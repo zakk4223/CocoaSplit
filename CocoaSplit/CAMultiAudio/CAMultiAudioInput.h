@@ -8,7 +8,7 @@
 #import "CAMultiAudioNode.h"
 #import "CAMultiAudioConverter.h"
 #import "CAMultiAudioSubgraph.h"
-
+#import "CAMultiAudioOutputTrack.h"
 
 @protocol CAMultiAudioInputJSExport <JSExport>
 @property (strong) CAMultiAudioDownmixer *downMixer;
@@ -57,7 +57,7 @@
 -(bool)setupGraph;
 -(void)updatePowerlevel;
 -(void)removeFromEngine;
--(void)addToOutputTrack:(NSString *)trackName;
--(void)removeFromOutputTrack:(NSString *)trackName;
+-(void)addToOutputTrack:(CAMultiAudioOutputTrack *)trackName;
+-(void)removeFromOutputTrack:(CAMultiAudioOutputTrack *)trackName;
 
 @end

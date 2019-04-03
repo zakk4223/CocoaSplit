@@ -95,19 +95,19 @@
     }
 }
 
--(void)addToOutputTrack:(NSString *)trackName
+-(void)addToOutputTrack:(CAMultiAudioOutputTrack *)outputTrack
 {
     [self willChangeValueForKey:@"outputTracks"];
-    [self.engine addInput:self toTrack:trackName];
+    [self.engine addInput:self toTrack:outputTrack];
     [self didChangeValueForKey:@"outputTracks"];
     [[CaptureController sharedCaptureController] postNotification:CSNotificationAudioTrackInputAdded forObject:self];
 }
 
 
--(void)removeFromOutputTrack:(NSString *)trackName
+-(void)removeFromOutputTrack:(CAMultiAudioOutputTrack *)outputTrack
 {
     [self willChangeValueForKey:@"outputTracks"];
-    [self.engine removeInput:self fromTrack:trackName];
+    [self.engine removeInput:self fromTrack:outputTrack];
     [self didChangeValueForKey:@"outputTracks"];
     [[CaptureController sharedCaptureController] postNotification:CSNotificationAudioTrackInputDeleted forObject:self];
 }
@@ -278,9 +278,10 @@
     NSDictionary *outputTracks = restoreDict[@"outputTracks"];
     if (outputTracks)
     {
-        for(NSString *trackName in outputTracks)
+        for(NSString *trackUUID in outputTracks)
         {
-            [self.engine addInput:self toTrack:trackName];
+            CAMultiAudioOutputTrack *track = self.engine.outputTracks[trackUUID];
+            [self.engine addInput:self toTrack:track];
         }
     }
 }

@@ -12,7 +12,7 @@
 #import "CAMultiAudioConverter.h"
 #import "CAMultiAudioSilence.h"
 #import "CAMultiAudioEffect.h"
-
+#import "CAMultiAudioOutputTrack.h"
 
 /* our default graph setup looks like this:
  
@@ -37,6 +37,7 @@
 @property (strong) NSMutableArray *audioInputs;
 @property (strong) NSMutableArray *pcmInputs;
 @property (strong) NSMutableArray *fileInputs;
+@property (strong) CAMultiAudioOutputTrack *defaultOutputTrack;
 
 @property (strong) CAMultiAudioDownmixer *encodeMixer;
 //@property (strong) CSAacEncoder *encoder;
@@ -78,8 +79,8 @@
 -(void)addOutputTrack;
 -(bool)createOutputTrack:(NSString *)withName;
 -(bool)removeOutputTrack:(NSString *)withName;
--(bool)addInput:(CAMultiAudioInput *)input toTrack:(NSString *)trackName;
--(bool)removeInput:(CAMultiAudioInput *)input fromTrack:(NSString *)trackName;
+-(bool)addInput:(CAMultiAudioInput *)input toTrack:(CAMultiAudioOutputTrack *)outputTrack;
+-(bool)removeInput:(CAMultiAudioInput *)input fromTrack:(CAMultiAudioOutputTrack *)outputTrack;
 
 
 @end

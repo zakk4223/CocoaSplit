@@ -85,6 +85,7 @@
 @property (assign) BOOL active;
 
 @property (assign) BOOL autoRetry;
+@property (readonly) CAMultiAudioEngine *audioEngine;
 
 
 -(id)initWithType:(NSString *)type;
@@ -96,8 +97,8 @@
 -(void) setupCompressor;
 -(void) setup;
 -(void) teardown;
--(void)addAudioTrack:(NSString *)trackName;
--(void)removeAudioTrack:(NSString *)trackName;
+-(void)addAudioTrack:(CAMultiAudioOutputTrack *)track;
+-(void)removeAudioTrack:(CAMultiAudioOutputTrack *)track;
 
 
 

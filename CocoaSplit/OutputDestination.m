@@ -80,10 +80,7 @@
         NSDictionary *audioTracks = [aDecoder decodeObjectForKey:@"audioTracks"];
         if (audioTracks)
         {
-            for(NSString *trackName in audioTracks)
-            {
-                self.audioTracks[trackName] = @(YES);
-            }
+            self.audioTracks = audioTracks;
         }
 
     }
@@ -109,6 +106,16 @@
 -(void)setAssignedLayout:(SourceLayout *)assignedLayout
 {
     _assignedLayout = assignedLayout;
+    self.audioTracks = [NSMutableDictionary dictionary];
+    CAMultiAudioEngine *useEngine = self.audioEngine;
+    if (useEngine)
+    {
+        CAMultiAudioOutputTrack *defTrack = useEngine.defaultOutputTrack;
+        if (defTrack)
+        {
+            self.audioTracks[defTrack.uuid] = defTrack;
+        }
+    }
 }
 
 -(void)stopCompressor
@@ -292,7 +299,6 @@
     if (self = [super init])
     {
         
-        self.assignedLayout = nil;
         self.type_name = type;
         self.statusImage = [NSImage imageNamed:@"inactive"];
         _output_start_time = 0.0f;
@@ -301,8 +307,8 @@
         _stopped = YES;
         _uuid = [NSUUID UUID].UUIDString;
         self.audioTracks = [NSMutableDictionary dictionary];
-        self.audioTracks[@"Default"] = @(YES);
-        
+        self.assignedLayout = nil;
+
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(compressorDeleted:) name:CSNotificationCompressorDeleted object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(compressorRenamed:) name:CSNotificationCompressorRenamed object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(audioTrackDeleted:) name:CSNotificationAudioTrackDeleted object:nil];
@@ -643,6 +649,18 @@
 }
 
 
+-(CAMultiAudioEngine *)audioEngine
+{
+    CAMultiAudioEngine *useEngine = nil;
+    if (self && self.assignedLayout)
+    {
+        useEngine = self.assignedLayout.audioEngine;
+    } else {
+        useEngine = [CaptureController sharedCaptureController].multiAudioEngine;
+    }
+    
+    return useEngine;
+}
 -(void) updateStatistics
 {
     
@@ -695,19 +713,19 @@
     
 }
 
--(void)addAudioTrack:(NSString *)trackName
+-(void)addAudioTrack:(CAMultiAudioOutputTrack *)outputTrack
 {
     [self willChangeValueForKey:@"audioTracks"];
-    self.audioTracks[trackName] = @(1);
+    self.audioTracks[outputTrack.uuid] = outputTrack;
     [self didChangeValueForKey:@"audioTracks"];
     [[CaptureController sharedCaptureController] postNotification:CSNotificationAudioTrackOutputAttached forObject:self];
 }
 
 
--(void)removeAudioTrack:(NSString *)trackName
+-(void)removeAudioTrack:(CAMultiAudioOutputTrack *)track;
 {
     [self willChangeValueForKey:@"audioTracks"];
-    [self.audioTracks removeObjectForKey:trackName];
+    [self.audioTracks removeObjectForKey:track.uuid];
     [self didChangeValueForKey:@"audioTracks"];
     [[CaptureController sharedCaptureController] postNotification:CSNotificationAudioTrackOutputDetached forObject:self];
 }
