@@ -10,18 +10,6 @@
 
 @implementation CAMultiAudioOutputTrack
 
-@synthesize name = _name;
-
--(void)setName:(NSString *)name
-{
-    _name = name;
-    NSLog(@"NAME SET %@", name);
-}
-
--(NSString *)name
-{
-    return _name;
-}
 
 
 -(instancetype) init

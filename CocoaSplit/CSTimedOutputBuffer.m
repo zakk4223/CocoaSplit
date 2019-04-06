@@ -46,6 +46,9 @@
     newout.stream_output = [toFile stringByStandardizingPath];
     newout.samplerate = controller.multiAudioEngine.sampleRate;
     newout.audio_bitrate = controller.multiAudioEngine.audioBitrate;
+    CAMultiAudioOutputTrack *audioTrack = controller.multiAudioEngine.defaultOutputTrack;
+    
+    newout.activeAudioTracks = @{audioTrack.uuid: audioTrack}.mutableCopy;
     
     NSMutableArray *fCopy;
     @synchronized(self) {
