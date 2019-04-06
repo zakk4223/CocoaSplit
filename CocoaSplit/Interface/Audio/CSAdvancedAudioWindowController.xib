@@ -434,6 +434,7 @@
         <dictionaryController objectClassName="_NSDictionaryControllerKeyValuePair" id="HGe-Xd-c37" userLabel="outputTracksController">
             <connections>
                 <binding destination="dRe-6o-71e" name="contentDictionary" keyPath="selection.outputTracks" id="y0v-XJ-HL8"/>
+                <binding destination="-2" name="sortDescriptors" keyPath="self.trackSortDescriptors" id="c2S-5t-VqQ"/>
             </connections>
         </dictionaryController>
         <arrayController id="C6s-yq-C8q" userLabel="effectsChainController"/>

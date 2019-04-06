@@ -36,6 +36,7 @@
 @property (nonatomic, copy) void (^windowDone)(NSModalResponse response, CSNewOutputWindowController *windowController);
 
 @property (strong) IBOutlet NSDictionaryController *audioTracksDictionaryController;
+@property (readonly) NSArray *trackSortDescriptors;
 
 
 @end

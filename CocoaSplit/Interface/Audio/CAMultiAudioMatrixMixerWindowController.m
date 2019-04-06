@@ -99,6 +99,19 @@
         self.audioNode = node;
         self.downMixer = node.downMixer;
         
+        NSSortDescriptor *nameSort = [NSSortDescriptor sortDescriptorWithKey:@"value.name" ascending:YES comparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+            NSString *name1 = obj1;
+            NSString *name2 = obj2;
+            
+            if ([name1 isEqualToString:@"Default"])
+            {
+                return (NSComparisonResult)NSOrderedAscending;
+            }
+            
+            return [name1 compare:name2];
+        }];
+        
+        _trackSortDescriptors = @[nameSort];
         //NSView *audioView = [node audioUnitNSView];
        // NSLog(@"AUDIO VIEW SIZE %@", NSStringFromRect(audioView.frame));
         //self.window.contentView = audioView;

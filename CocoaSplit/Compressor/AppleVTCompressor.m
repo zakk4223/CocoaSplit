@@ -227,7 +227,7 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
     
     
     NSArray *nsEnc = (__bridge NSArray *)(encoders);
-    
+
     for (NSDictionary *encode in nsEnc)
     {
         

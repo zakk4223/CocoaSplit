@@ -278,6 +278,7 @@
         <dictionaryController objectClassName="_NSDictionaryControllerKeyValuePair" id="OYm-wd-HNd" userLabel="audioTracksController">
             <connections>
                 <binding destination="eFT-P1-fYd" name="contentDictionary" keyPath="selection.outputTracks" id="KH1-le-KhS"/>
+                <binding destination="-2" name="sortDescriptors" keyPath="self.trackSortDescriptors" id="kB5-Gd-Cpe"/>
             </connections>
         </dictionaryController>
         <viewController id="hhG-Ht-ou8" customClass="CAMultiAudioEffectsViewController">

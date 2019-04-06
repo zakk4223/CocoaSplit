@@ -25,6 +25,7 @@
 @property (weak) IBOutlet CAMultiAudioEffectsTableController *effectsController;
 @property (weak) NSObject *delegate;
 @property (strong) IBOutlet NSDictionaryController *audioTracksDictionaryController;
+@property (readonly) NSArray *trackSortDescriptors;
 
 - (IBAction)matrixVolumeChanged:(NSSlider *)sender;
 

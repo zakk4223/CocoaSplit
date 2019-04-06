@@ -19,4 +19,6 @@
 @property (strong) IBOutlet NSDictionaryController *outputTracksController;
 
 @property (weak) IBOutlet CAMultiAudioEffectsTableController *effectsController;
+@property (readonly) NSArray *trackSortDescriptors;
+
 @end

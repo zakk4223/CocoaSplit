@@ -367,6 +367,7 @@ Gw
         <dictionaryController objectClassName="_NSDictionaryControllerKeyValuePair" id="yfp-Da-Yi4" userLabel="outputAudioTracksController">
             <connections>
                 <binding destination="I41-1j-4DV" name="contentDictionary" keyPath="selection.audioTracks" id="IJC-5S-D4b"/>
+                <binding destination="-2" name="sortDescriptors" keyPath="self.trackSortDescriptors" id="zOr-xn-joo"/>
             </connections>
         </dictionaryController>
     </objects>
