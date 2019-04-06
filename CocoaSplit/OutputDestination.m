@@ -348,7 +348,7 @@
 {
     NSString *trackName = notification.object;
     
-    [self removeAudioTrack:trackName];
+    [self removeAudioTrackByUUID:trackName];
 }
 
 
@@ -722,12 +722,21 @@
 }
 
 
--(void)removeAudioTrack:(CAMultiAudioOutputTrack *)track;
+-(void)removeAudioTrackByUUID:(NSString *)uuid
 {
     [self willChangeValueForKey:@"audioTracks"];
-    [self.audioTracks removeObjectForKey:track.uuid];
+    [self.audioTracks removeObjectForKey:uuid];
     [self didChangeValueForKey:@"audioTracks"];
     [[CaptureController sharedCaptureController] postNotification:CSNotificationAudioTrackOutputDetached forObject:self];
+}
+
+-(void)removeAudioTrack:(CAMultiAudioOutputTrack *)track
+{
+
+    if (track && track.uuid)
+    {
+        [self removeAudioTrackByUUID:track.uuid];
+    }
 }
 
 

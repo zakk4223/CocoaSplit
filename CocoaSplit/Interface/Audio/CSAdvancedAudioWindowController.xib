@@ -8,7 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CSAdvancedAudioWindowController">
             <connections>
-                <outlet property="outputTracksController" destination="HGe-Xd-c37" id="i98-XO-v15"/>
+                <outlet property="outputTracksController" destination="zcO-am-MlV" id="Jg3-bC-PGU"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="poq-vV-Gbj"/>
             </connections>
         </customObject>
@@ -268,13 +268,13 @@
                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LJs-YP-fm3">
                                                             <rect key="frame" x="0.0" y="0.0" width="135" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="RW3-FA-3VW">
+                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" title="Table View Cell" id="RW3-FA-3VW">
                                                                 <font key="font" metaFont="system"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <connections>
-                                                                <binding destination="KTu-PC-R34" name="value" keyPath="objectValue.name" id="LPJ-30-8ja"/>
+                                                                <binding destination="KTu-PC-R34" name="value" keyPath="objectValue.name" id="tzj-Nl-KYV"/>
                                                             </connections>
                                                         </textField>
                                                     </subviews>
@@ -286,8 +286,8 @@
                                         </tableColumn>
                                     </tableColumns>
                                     <connections>
-                                        <binding destination="HGe-Xd-c37" name="content" keyPath="arrangedObjects.value" id="bKJ-sP-u0P"/>
-                                        <binding destination="HGe-Xd-c37" name="selectionIndexes" keyPath="selectionIndexes" previousBinding="bKJ-sP-u0P" id="1m2-NF-utp"/>
+                                        <binding destination="zcO-am-MlV" name="content" keyPath="arrangedObjects" id="3Qv-98-k4M"/>
+                                        <binding destination="zcO-am-MlV" name="selectionIndexes" keyPath="selectionIndexes" previousBinding="3Qv-98-k4M" id="2A3-5i-5AQ"/>
                                     </connections>
                                 </tableView>
                             </subviews>
@@ -431,13 +431,13 @@
             </connections>
         </objectController>
         <arrayController id="xMr-1u-sQs" userLabel="audioInputArrayController"/>
-        <dictionaryController objectClassName="_NSDictionaryControllerKeyValuePair" id="HGe-Xd-c37" userLabel="outputTracksController">
-            <connections>
-                <binding destination="dRe-6o-71e" name="contentDictionary" keyPath="selection.outputTracks" id="y0v-XJ-HL8"/>
-                <binding destination="-2" name="sortDescriptors" keyPath="self.trackSortDescriptors" id="c2S-5t-VqQ"/>
-            </connections>
-        </dictionaryController>
         <arrayController id="C6s-yq-C8q" userLabel="effectsChainController"/>
+        <arrayController id="zcO-am-MlV" userLabel="outputTracksController">
+            <connections>
+                <binding destination="dRe-6o-71e" name="contentArray" keyPath="selection.outputTracks.@allValues" id="gbn-0O-d4F"/>
+                <binding destination="-2" name="sortDescriptors" keyPath="self.trackSortDescriptors" id="PO6-lJ-owG"/>
+            </connections>
+        </arrayController>
     </objects>
     <resources>
         <image name="Mute_Icon" width="240" height="240"/>

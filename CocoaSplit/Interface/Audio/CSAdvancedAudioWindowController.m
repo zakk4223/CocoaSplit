@@ -20,7 +20,7 @@
     
     if (self = [self initWithWindowNibName:@"CSAdvancedAudioWindowController"])
     {
-        NSSortDescriptor *nameSort = [NSSortDescriptor sortDescriptorWithKey:@"value.name" ascending:YES comparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+        NSSortDescriptor *nameSort = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES comparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
             NSString *name1 = obj1;
             NSString *name2 = obj2;
             
@@ -51,9 +51,6 @@
 
 
 
-
-
-
 - (IBAction)addAudioTrack:(id)sender
 {
     [self.audioEngine addOutputTrack];
@@ -61,12 +58,12 @@
 - (IBAction)removeAudioTrack:(id)sender
 {
     NSArray *selectedTracks = self.outputTracksController.selectedObjects;
-    for (NSDictionaryControllerKeyValuePair *kvp in selectedTracks)
+    for (CAMultiAudioOutputTrack *outTrack in selectedTracks)
     {
-        CAMultiAudioOutputTrack *outTrack = kvp.value;
-        
         [self.audioEngine removeOutputTrack:outTrack.uuid];
     }
 }
+
+
 
 @end

@@ -8,7 +8,7 @@
 #import <Cocoa/Cocoa.h>
 #import "CaptureController.h"
 #import "CAMultiAudioEffectsTableController.h"
-@interface CSAdvancedAudioWindowController : NSWindowController <NSWindowDelegate>
+@interface CSAdvancedAudioWindowController : NSWindowController <NSWindowDelegate, NSTableViewDataSource>
 {
 }
 
@@ -16,9 +16,10 @@
 
 @property (strong) CAMultiAudioEngine *audioEngine;
 - (IBAction)addAudioTrack:(id)sender;
-@property (strong) IBOutlet NSDictionaryController *outputTracksController;
 
 @property (weak) IBOutlet CAMultiAudioEffectsTableController *effectsController;
 @property (readonly) NSArray *trackSortDescriptors;
+@property (strong) IBOutlet NSDictionaryController *tracksDictionaryController;
+@property (strong) IBOutlet NSArrayController *outputTracksController;
 
 @end
