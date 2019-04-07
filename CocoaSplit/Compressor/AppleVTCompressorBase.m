@@ -176,7 +176,10 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     CVImageBufferRef imageBuffer = frameData.videoFrame;
     CVPixelBufferRetain(imageBuffer);
     
-    CVPixelBufferCreate(kCFAllocatorDefault, self.working_width, self.working_height, kCVPixelFormatType_422YpCbCr8, 0, &converted_frame);
+    CVPixelBufferPoolRef vtPixelPool = VTCompressionSessionGetPixelBufferPool(_compression_session);
+    CVPixelBufferPoolCreatePixelBuffer(NULL, vtPixelPool, &converted_frame);
+    
+    //CVPixelBufferCreate(kCFAllocatorDefault, self.working_width, self.working_height, kCVPixelFormatType_422YpCbCr8, 0, &converted_frame);
     
     VTPixelTransferSessionTransferImage(_vtpt_ref, imageBuffer, converted_frame);
     
