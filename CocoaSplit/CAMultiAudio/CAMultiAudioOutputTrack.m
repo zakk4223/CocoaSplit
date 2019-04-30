@@ -10,6 +10,8 @@
 
 @implementation CAMultiAudioOutputTrack
 
+@synthesize name = _name;
+
 
 
 -(instancetype) init
@@ -49,5 +51,7 @@
     copy.outputBus = self.outputBus;
     return copy;
 }
+
+
 
 @end

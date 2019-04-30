@@ -574,7 +574,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         {
             if ([input.outputTracks valueForKey:withUUID])
             {
-                [input removeFromOutputTrack:withUUID];
+                [input removeFromOutputTrack:trackInfo];
             }
         }
         
@@ -1300,8 +1300,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     for(NSString *trackName in self.outputTracks)
     {
-        NSDictionary *trackInfo = self.outputTracks[trackName];
-        CSAacEncoder *enc = trackInfo[@"encoder"];
+        CAMultiAudioOutputTrack *trackInfo = self.outputTracks[trackName];
+        CSAacEncoder *enc = trackInfo.encoder;
         if (enc)
         {
             [enc stopEncoder];
