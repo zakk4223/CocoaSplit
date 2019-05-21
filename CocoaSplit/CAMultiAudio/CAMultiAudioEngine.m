@@ -937,7 +937,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         CAMultiAudioOutputTrack *outputTrack = self.outputTracks[trackName];
         CAMultiAudioNode *renderNode = outputTrack.encoderNode;
         CSAacEncoder *encoder = outputTrack.encoder;
-        NSLog(@"STARTING ENCODER %@ %@ %@", trackName, encoder, renderNode);
         AudioUnitAddRenderNotify(renderNode.audioUnit, encoderRenderCallback, [encoder inputBufferPtr]);
     }
 }

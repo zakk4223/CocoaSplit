@@ -272,6 +272,11 @@
         }
         
         
+        if (self.output)
+        {
+            self.output.assignedLayout = self.layout;
+        }
+        
         self.layout.recorder = self;
         
         self.recordingActive = YES;

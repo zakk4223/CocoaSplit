@@ -190,6 +190,7 @@
     [self reset];
 
 }
+
 -(void) setActive:(BOOL)is_active
 {
     
@@ -307,7 +308,7 @@
         _stopped = YES;
         _uuid = [NSUUID UUID].UUIDString;
         self.audioTracks = [NSMutableDictionary dictionary];
-        self.assignedLayout = nil;
+        _assignedLayout = nil;
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(compressorDeleted:) name:CSNotificationCompressorDeleted object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(compressorRenamed:) name:CSNotificationCompressorRenamed object:nil];
@@ -425,7 +426,6 @@
     newout.samplerate = [CaptureController sharedCaptureController].multiAudioEngine.sampleRate;
     newout.audio_bitrate = [CaptureController sharedCaptureController].multiAudioEngine.audioBitrate;
     newout.activeAudioTracks = self.audioTracks;
-    
     
     
     self.ffmpeg_out = newout;

@@ -234,6 +234,11 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     }
     
 
+    CFDictionaryRef sessionProperties = NULL;
+    
+    VTSessionCopySupportedPropertyDictionary(_compression_session, &sessionProperties);
+    
+
     Float64 durationSecs = CMTimeGetSeconds(videoFrame.videoDuration);
     
     if (durationSecs > 0)
@@ -243,7 +248,8 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     }
     
     [self configureCompressionSession:_compression_session];
-        
+    
+    
     _audioBuffer = [[NSMutableArray alloc] init];
     return YES;
     

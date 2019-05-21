@@ -1434,6 +1434,17 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
         self.layoutRecordingFormat = @"MOV";
     }
     
+    if (!layout.audioEngine)
+    {
+        CAMultiAudioEngine *audioEngine = nil;
+        audioEngine = [[CAMultiAudioEngine alloc] init];
+        audioEngine.sampleRate = [CaptureController sharedCaptureController].multiAudioEngine.sampleRate;
+        audioEngine.previewMixer.muted = YES;
+        //dispatch_async(dispatch_get_main_queue(), ^{
+            layout.audioEngine = audioEngine;
+            [layout reapplyAudioSources];
+        //});
+    }
     CSLayoutRecorder *useRec = layout.recorder;
     if (!useRec)
     {
