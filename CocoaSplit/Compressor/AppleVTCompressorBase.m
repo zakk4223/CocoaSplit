@@ -222,6 +222,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     
     NSMutableDictionary *encoderSpec = [self encoderSpec];
     
+    
     _compression_session = NULL;
 
     

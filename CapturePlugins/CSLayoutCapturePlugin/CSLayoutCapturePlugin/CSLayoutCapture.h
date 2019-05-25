@@ -23,6 +23,7 @@
 
 @interface AudioEngineHack : NSObject
 -(void)disableAllInputs;
+-(void)startEncoders;
 
 @end
 

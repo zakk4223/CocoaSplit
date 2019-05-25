@@ -197,7 +197,7 @@
             audioEncoder.sampleRate = asbd->mSampleRate;
             audioEncoder.skipCompression = YES;
             [audioEncoder setupEncoderBuffer];
-            [audioEngine setValue:audioEncoder forKey:@"encoder"];
+            [audioEngine startEncoders];
             [capDev setValue:audioEngine forKey:@"audioEngine"];
             [audioEncoder setValue:self forKey:@"encodedReceiver"];
         }
