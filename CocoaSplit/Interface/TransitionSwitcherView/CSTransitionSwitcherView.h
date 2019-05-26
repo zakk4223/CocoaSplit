@@ -7,7 +7,7 @@
 
 #import "CSViewController.h"
 
-@interface CSTransitionSwitcherView : CSViewController <NSCollectionViewDelegate>
+@interface CSTransitionSwitcherView : CSViewController <NSCollectionViewDelegate, NSMenuDelegate>
 {
     NSMenu *_transitionsMenu;
 }

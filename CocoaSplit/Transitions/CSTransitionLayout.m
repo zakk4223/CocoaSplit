@@ -75,6 +75,7 @@
         
         
         CSTransitionLayout *newTransition = [[CSTransitionLayout alloc] init];
+        newTransition.name = layout.name;
         newTransition.layout = layout;
         [ret addObject:newTransition];
     }

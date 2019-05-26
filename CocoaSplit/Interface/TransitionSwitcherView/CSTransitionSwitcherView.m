@@ -65,9 +65,16 @@
 
 
 
+-(void)menuDidClose:(NSMenu *)menu
+{
+    _transitionsMenu = nil;
+}
+
+
 -(void)buildTransitionMenu
 {
     _transitionsMenu = [[NSMenu alloc] init];
+    _transitionsMenu.delegate = self;
     
     NSArray *transitionClasses = @[CSTransitionCA.class, CSTransitionCIFilter.class,CSTransitionLayout.class, CSTransitionImageFilter.class, CSTransitionScript.class];
     
