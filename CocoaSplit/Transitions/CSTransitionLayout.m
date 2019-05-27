@@ -17,6 +17,7 @@
     if (self = [super init])
     {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(layoutDeleted:) name:CSNotificationLayoutDeleted object:nil];
+        self.autoFit = YES;
     }
     return self;
 }

@@ -210,7 +210,7 @@ typedef enum resize_style_t {
 -(void)addedToLayout;
 -(void)autoCenter:(NSRect)containerRect;
 -(void)autoCenter;
--(void)autoSize;
+-(bool)autoSize;
 -(void)layerUpdated;
 -(void)resetAspectRatio;
 @end

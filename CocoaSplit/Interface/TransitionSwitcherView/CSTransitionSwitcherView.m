@@ -117,28 +117,29 @@
     
     NSPasteboard *pBoard = [draggingInfo draggingPasteboard];
     NSData *indexSave = [pBoard dataForType:@"cocoasplit.transition"];
-    NSIndexSet *indexes = [NSKeyedUnarchiver unarchiveObjectWithData:indexSave];
-    NSInteger draggedItemIdx = [indexes firstIndex];
-    
-    NSInteger useIdx = *proposedDropIndex;
-    
-    if (*proposedDropIndex > draggedItemIdx)
+    if (indexSave)
     {
-        useIdx--;
+        NSIndexSet *indexes = [NSKeyedUnarchiver unarchiveObjectWithData:indexSave];
+        NSInteger draggedItemIdx = [indexes firstIndex];
+    
+        NSInteger useIdx = *proposedDropIndex;
+    
+        if (*proposedDropIndex > draggedItemIdx)
+        {
+            useIdx--;
+        }
+    
+    
+        if (useIdx < 0)
+        {
+            useIdx = 0;
+        }
+        if (*proposedDropIndex == -1 || labs(draggedItemIdx - useIdx) < 1)
+        {
+            return NSDragOperationNone;
+        }
     }
     
-    
-    if (useIdx < 0)
-    {
-        useIdx = 0;
-    }
-    
-    
-    
-    if (*proposedDropIndex == -1 || labs(draggedItemIdx - useIdx) < 1)
-    {
-        return NSDragOperationNone;
-    }
     
     return NSDragOperationMove;
 }
@@ -172,7 +173,6 @@
     }
     
     NSArray *droppedInputs = [pBoard propertyListForType:@"cocoasplit.input.data"];
-    
     if (droppedInputs)
     {
         for (NSData *inputData in droppedInputs)

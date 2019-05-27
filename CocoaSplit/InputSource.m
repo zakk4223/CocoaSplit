@@ -2194,18 +2194,22 @@ static NSArray *_sourceTypes = nil;
 
 
 
--(void)autoSize
+-(bool)autoSize
 {
     if (!self.videoInput)
     {
-        return;
+        return NO;
     }
     
     NSSize videoSize = [self.videoInput captureSize];
+    
     if (!NSEqualSizes(videoSize, NSZeroSize))
     {
         [self directSize:videoSize.width height:videoSize.height];
+        return YES;
     }
+    
+    return NO;
 }
 
 
@@ -3445,9 +3449,11 @@ static NSArray *_sourceTypes = nil;
     
     if (self.autoPlaceOnFrameUpdate )
     {
-        [self autoSize];
-        [self autoCenter:NSMakeRect(0, 0, self.canvas_width, self.canvas_height)];
-        self.autoPlaceOnFrameUpdate = NO;
+        if ([self autoSize])
+        {
+            [self autoCenter:NSMakeRect(0, 0, self.canvas_width, self.canvas_height)];
+            self.autoPlaceOnFrameUpdate = NO;
+        }
     }
 }
 

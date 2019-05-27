@@ -235,10 +235,19 @@
 
 -(NSSize)captureSize
 {
-    if (self.activeVideoDevice)
+    SourceLayoutHack *capDev = nil;
+    
+    if (_current_renderer)
     {
-        SourceLayoutHack *capDev = self.activeVideoDevice.captureDevice;
-        
+        capDev = [_current_renderer valueForKey:@"layout"];
+    }
+    if (!capDev && self.activeVideoDevice)
+    {
+        capDev = self.activeVideoDevice.captureDevice;
+    }
+    
+    if (capDev)
+    {
         NSSize ret =  NSMakeSize(capDev.canvas_width, capDev.canvas_height);
         return ret;
     }
