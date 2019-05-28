@@ -4,6 +4,10 @@
     <suite name="CocoaSplit Scripting Suite" code="CSss">
         <class name="application" code="capp">
             <cocoa class="NSApplication"/>
+            <element type="audioTrack">
+                <cocoa key="audioTracks"/>
+            </element>
+            
             <element type="layout">
                 <cocoa key="layouts"/>
             </element>
@@ -90,6 +94,14 @@
 
         </class>
         
+        
+        <class name="audioTrack" code="CSat">
+            <cocoa class="CAMultiAudioOutputTrack"/>
+            <property name="name" code="pnam" type="text"/>
+            <property name="id" code="ID  " type="text">
+                <cocoa key="uuid"/>
+            </property>
+        </class>
         
         <class name="audioInput" code="CSai">
             <cocoa class="CAMultiAudioNode"/>

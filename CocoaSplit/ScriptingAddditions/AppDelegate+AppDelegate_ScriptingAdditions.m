@@ -10,6 +10,18 @@
 @implementation AppDelegate (AppDelegate_ScriptingAdditions)
 
 
+-(NSArray *)audioTracks
+{
+    NSMutableArray *ret = [NSMutableArray array];
+    for (NSString *trackKey in self.captureController.multiAudioEngine.outputTracks)
+    {
+        CAMultiAudioOutputTrack *track = self.captureController.multiAudioEngine.outputTracks[trackKey];
+        [ret addObject:track];
+    }
+    return ret;
+}
+
+
 -(NSArray *)layouts
 {
     NSArray *layouts = self.captureController.sourceLayouts;
@@ -161,7 +173,7 @@
 {
     
     
-    NSArray *keys = @[@"layouts", @"width", @"height", @"fps", @"activelayout", @"layoutscripts", @"audioInputs", @"captureDestinations", @"staginglayout", @"livelayout", @"useTransitions", @"previewAudio", @"streamAudio", @"transitions", @"streamRunning", @"stagingEnabled"];
+    NSArray *keys = @[@"layouts", @"width", @"height", @"fps", @"activelayout", @"layoutscripts", @"audioInputs", @"captureDestinations", @"staginglayout", @"livelayout", @"useTransitions", @"previewAudio", @"streamAudio", @"transitions", @"streamRunning", @"stagingEnabled", @"audioTracks"];
     
     return [keys containsObject:key];
 }

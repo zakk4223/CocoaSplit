@@ -543,6 +543,7 @@ NSArray *_savedTransitionConstraints;
 -(bool)deleteTransition:(CSTransitionBase *)transition;
 -(void)postNotification:(NSString *)notificationName forObject:(id)obj;
 -(void)postNotification:(NSString *)notificationName forObject:(id)obj withUserInfo:(NSDictionary *)userInfo;
+-(IBAction)generateDebugFile:(id)sender;
 
 
 

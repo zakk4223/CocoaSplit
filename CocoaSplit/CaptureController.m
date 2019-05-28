@@ -2018,10 +2018,48 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 }
 
 
+-(IBAction)generateDebugFile:(id)sender
+{
+    NSDateFormatter *dFormat = [[NSDateFormatter alloc] init];
+    dFormat.dateFormat = @"yyyyMMddHHmmss";
+    NSString *dateStr = [dFormat stringFromDate:[NSDate date]];
+    NSString *debugFilename = [NSString stringWithFormat:@"CocoaSplitDebug-%@.zip", dateStr];
+    
+    NSURL *desktopDirectory = [[NSFileManager defaultManager] URLForDirectory:NSDesktopDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:NO error:nil];
+    NSURL *debugURL = [desktopDirectory URLByAppendingPathComponent:debugFilename];
+    
+    NSURL *baseTemporaryDirectory = [[NSFileManager defaultManager] URLForDirectory:NSItemReplacementDirectory inDomain:NSUserDomainMask appropriateForURL:debugURL create:NO error:nil];
+    NSURL *temporaryDirectory = [baseTemporaryDirectory URLByAppendingPathComponent:@"CocoaSplitDebug"];
+    [NSFileManager.defaultManager createDirectoryAtURL:temporaryDirectory withIntermediateDirectories:YES attributes:nil error:nil];
+    
+    NSString *settingsPath = [NSString pathWithComponents:@[temporaryDirectory.path, @"CocoaSplit.settings"]];
+    [self saveSettingsToPath:settingsPath];
+    
+    if (self.logTextView)
+    {
+        NSURL *logPath = [temporaryDirectory URLByAppendingPathComponent:@"CocoaSplit.log"];
+        [self.logTextView.string writeToURL:logPath atomically:YES encoding:NSUTF8StringEncoding error:nil];
+    }
+    
+    NSFileCoordinator *coord = [[NSFileCoordinator alloc] init];
+    [coord coordinateReadingItemAtURL:temporaryDirectory options:NSFileCoordinatorReadingForUploading error:nil byAccessor:^(NSURL * _Nonnull newURL) {
+        [NSFileManager.defaultManager copyItemAtURL:newURL toURL:debugURL error:nil];
+    }];
+    [NSFileManager.defaultManager removeItemAtURL:temporaryDirectory error:nil];
+}
+
+
 -(void) saveSettings
 {
-    
     NSString *path = [self saveFilePath];
+    [self saveSettingsToPath:path];
+}
+
+
+-(void) saveSettingsToPath:(NSString *)path
+{
+    
+    //NSString *path = [self saveFilePath];
     
     NSMutableDictionary *saveRoot;
     

@@ -210,6 +210,7 @@
 		34A7745B201466F10036F8B5 /* CSOutputBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A7745A201466F10036F8B5 /* CSOutputBase.m */; };
 		34A7ADB81C01EF1400685044 /* CompressionSettingsPanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A7ADB71C01EF1400685044 /* CompressionSettingsPanelController.m */; };
 		34A7C1AD19B9A57600BC6882 /* CSLayoutSwitcherExtraPlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34A7C1A119B9A41A00BC6882 /* CSLayoutSwitcherExtraPlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		34A88834229CB22F0023D8B9 /* CAMultiAudioOutputTrack+ScriptingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A88833229CB22F0023D8B9 /* CAMultiAudioOutputTrack+ScriptingAdditions.m */; };
 		34AB1C311B944F48003F2C03 /* CSPreviewOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AB1C301B944F48003F2C03 /* CSPreviewOverlayView.m */; };
 		34AB70A71FF9AAB800C5BD8E /* CAMultiAudioEffectsTableController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AB70A61FF9AAB800C5BD8E /* CAMultiAudioEffectsTableController.m */; };
 		34AB70AA1FF9B35300C5BD8E /* CAMultiAudioEffect.m in Sources */ = {isa = PBXBuildFile; fileRef = 34AB70A91FF9B35300C5BD8E /* CAMultiAudioEffect.m */; };
@@ -983,6 +984,8 @@
 		34A7ADB71C01EF1400685044 /* CompressionSettingsPanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CompressionSettingsPanelController.m; path = Interface/CompressionSettingsPanelController.m; sourceTree = "<group>"; };
 		34A7C17A19B98EA200BC6882 /* CSExtraPluginProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSExtraPluginProtocol.h; path = PluginHeaders/CSExtraPluginProtocol.h; sourceTree = "<group>"; };
 		34A7C19C19B9A41900BC6882 /* CSLayoutSwitcherExtraPlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSLayoutSwitcherExtraPlugin.xcodeproj; path = ExtraPlugins/CSLayoutSwitcherExtraPlugin/CSLayoutSwitcherExtraPlugin.xcodeproj; sourceTree = "<group>"; };
+		34A88832229CB22F0023D8B9 /* CAMultiAudioOutputTrack+ScriptingAdditions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CAMultiAudioOutputTrack+ScriptingAdditions.h"; path = "ScriptingAddditions/CAMultiAudioOutputTrack+ScriptingAdditions.h"; sourceTree = "<group>"; };
+		34A88833229CB22F0023D8B9 /* CAMultiAudioOutputTrack+ScriptingAdditions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CAMultiAudioOutputTrack+ScriptingAdditions.m"; path = "ScriptingAddditions/CAMultiAudioOutputTrack+ScriptingAdditions.m"; sourceTree = "<group>"; };
 		34AB1C2F1B944F48003F2C03 /* CSPreviewOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPreviewOverlayView.h; sourceTree = "<group>"; };
 		34AB1C301B944F48003F2C03 /* CSPreviewOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSPreviewOverlayView.m; sourceTree = "<group>"; };
 		34AB70A51FF9AAB800C5BD8E /* CAMultiAudioEffectsTableController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAMultiAudioEffectsTableController.h; sourceTree = "<group>"; };
@@ -2275,6 +2278,8 @@
 				34528B8E1F9A707400C090E0 /* InputSource+ScriptingAdditions.m */,
 				349400D8207A02CC0092EF90 /* CSTransitionBase+ScriptingAdditions.h */,
 				349400D9207A02CC0092EF90 /* CSTransitionBase+ScriptingAdditions.m */,
+				34A88832229CB22F0023D8B9 /* CAMultiAudioOutputTrack+ScriptingAdditions.h */,
+				34A88833229CB22F0023D8B9 /* CAMultiAudioOutputTrack+ScriptingAdditions.m */,
 			);
 			name = ScriptingAdditions;
 			sourceTree = "<group>";
@@ -3015,6 +3020,7 @@
 				34ED8C751B07371C002C0674 /* MIKMIDIMetaCopyrightEvent.m in Sources */,
 				3434CB3C1CB09BC4001B3DF9 /* CSTimedOutputBuffer.m in Sources */,
 				34ED8CB71B073C1B002C0674 /* CSMidiManagerWindowController.m in Sources */,
+				34A88834229CB22F0023D8B9 /* CAMultiAudioOutputTrack+ScriptingAdditions.m in Sources */,
 				3408235519BC677A00CD1F5F /* CSNotifications.m in Sources */,
 				347B14DC198492D900DC7DF0 /* InputPopupControllerViewController.m in Sources */,
 				3464C7C721D5F82D0042A4AD /* CSSnapOverlayView.m in Sources */,
