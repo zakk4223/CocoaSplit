@@ -2035,18 +2035,26 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     NSString *settingsPath = [NSString pathWithComponents:@[temporaryDirectory.path, @"CocoaSplit.settings"]];
     [self saveSettingsToPath:settingsPath];
     
-    if (self.logTextView)
+    if (self.logTextView && self.logTextView.string && self.logTextView.string.length > 0)
     {
+        NSError *logError = nil;
         NSURL *logPath = [temporaryDirectory URLByAppendingPathComponent:@"CocoaSplit.log"];
-        [self.logTextView.string writeToURL:logPath atomically:YES encoding:NSUTF8StringEncoding error:nil];
+        [self.logTextView.string writeToURL:logPath atomically:YES encoding:NSUTF8StringEncoding error:&logError];
+        if (logError)
+        {
+            NSLog(@"Failed to write log file to %@: Error: %@ Reason: %@", logPath, logError.localizedDescription, logError.localizedFailureReason);
+        }
+        
     }
     
     NSFileCoordinator *coord = [[NSFileCoordinator alloc] init];
     [coord coordinateReadingItemAtURL:temporaryDirectory options:NSFileCoordinatorReadingForUploading error:nil byAccessor:^(NSURL * _Nonnull newURL) {
         [NSFileManager.defaultManager copyItemAtURL:newURL toURL:debugURL error:nil];
+        
     }];
     [NSFileManager.defaultManager removeItemAtURL:temporaryDirectory error:nil];
 }
+
 
 
 -(void) saveSettings
