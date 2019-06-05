@@ -599,7 +599,7 @@
                                         <rect key="frame" x="0.0" y="18" width="330" height="276"/>
                                         <clipView key="contentView" drawsBackground="NO" id="4un-pd-BkP">
                                             <rect key="frame" x="1" y="1" width="328" height="274"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <collectionView selectable="YES" maxNumberOfColumns="3" id="cb9-Ah-LwN">
                                                     <rect key="frame" x="0.0" y="0.0" width="328" height="274"/>

@@ -2329,17 +2329,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     {
         self.sourceLayouts = [[NSMutableArray alloc] init];
     }
-    
-    if (self.sourceLayouts.count < 1)
-    {
-        for(NSUInteger i=self.sourceLayouts.count+1; i <= 12; i++)
-        {
-            SourceLayout *nLayout = [[SourceLayout alloc] init];
-            nLayout.name = [NSString stringWithFormat:@"Layout %lu", (unsigned long)i];
-            [self.sourceLayouts addObject:nLayout];
-        }
-    }
-    
+
     if (!_layoutViewController)
     {/*
         _layoutViewController = [[CSLayoutSwitcherViewController alloc] init];
