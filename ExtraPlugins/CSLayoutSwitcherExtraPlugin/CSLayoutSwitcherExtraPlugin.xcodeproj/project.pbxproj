@@ -172,10 +172,11 @@
 			};
 			buildConfigurationList = 34A7C18219B9A41900BC6882 /* Build configuration list for PBXProject "CSLayoutSwitcherExtraPlugin" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 34A7C17E19B9A41900BC6882;
 			productRefGroup = 34A7C18819B9A41900BC6882 /* Products */;

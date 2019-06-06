@@ -151,10 +151,11 @@
 			};
 			buildConfigurationList = 34D43523198DCE3800266169 /* Build configuration list for PBXProject "TextureWrapPlugin" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 34D4351F198DCE3800266169;
 			productRefGroup = 34D4352B198DCE3800266169 /* Products */;

@@ -156,10 +156,11 @@
 			};
 			buildConfigurationList = 34576D3819B024EB007BAD90 /* Build configuration list for PBXProject "CSImageCapturePlugin" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 34576D3419B024EB007BAD90;
 			productRefGroup = 34576D3E19B024EB007BAD90 /* Products */;

@@ -101,10 +101,11 @@
 			};
 			buildConfigurationList = 340C80021D44722000B2FD7D /* Build configuration list for PBXProject "CSYoutubeStreamServicePlugin" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 340C7FFE1D44722000B2FD7D;
 			productRefGroup = 340C80081D44722000B2FD7D /* Products */;

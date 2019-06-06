@@ -260,10 +260,11 @@
 			};
 			buildConfigurationList = 34AFC1CE19B04EB90007C07B /* Build configuration list for PBXProject "CSSyphonCapturePlugin" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 34AFC1CA19B04EB90007C07B;
 			productRefGroup = 34AFC1D419B04EB90007C07B /* Products */;

@@ -185,10 +185,11 @@
 			};
 			buildConfigurationList = 34AFC19E19B04DAE0007C07B /* Build configuration list for PBXProject "CSTextCapturePlugin" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 34AFC19A19B04DAE0007C07B;
 			productRefGroup = 34AFC1A419B04DAE0007C07B /* Products */;

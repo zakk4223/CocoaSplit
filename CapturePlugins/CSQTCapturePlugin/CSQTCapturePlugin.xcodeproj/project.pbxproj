@@ -139,10 +139,11 @@
 			};
 			buildConfigurationList = 34AFC16D19B04CC30007C07B /* Build configuration list for PBXProject "CSQTCapturePlugin" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 34AFC16919B04CC30007C07B;
 			productRefGroup = 34AFC17319B04CC30007C07B /* Products */;

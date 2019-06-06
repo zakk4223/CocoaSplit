@@ -220,10 +220,11 @@
 			};
 			buildConfigurationList = 3436920C1B62364E007EC2D9 /* Build configuration list for PBXProject "CSShapeCapturePlugin" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 343692081B62364E007EC2D9;
 			productRefGroup = 343692121B62364E007EC2D9 /* Products */;

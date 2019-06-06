@@ -192,10 +192,11 @@
 			};
 			buildConfigurationList = 34F7C54B1B2C908700345230 /* Build configuration list for PBXProject "CSDeckLinkCapturePlugin" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 34F7C5471B2C908700345230;
 			productRefGroup = 34F7C5511B2C908700345230 /* Products */;

@@ -177,10 +177,11 @@
 			};
 			buildConfigurationList = 34576D6A19B02597007BAD90 /* Build configuration list for PBXProject "CSDesktopCapturePlugin" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 34576D6619B02597007BAD90;
 			productRefGroup = 34576D7019B02597007BAD90 /* Products */;

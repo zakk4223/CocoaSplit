@@ -171,10 +171,11 @@
 			};
 			buildConfigurationList = 34576D0619B023E2007BAD90 /* Build configuration list for PBXProject "CSMovieCapturePlugin" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 34576D0219B023E2007BAD90;
 			productRefGroup = 34576D0C19B023E2007BAD90 /* Products */;

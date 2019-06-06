@@ -147,10 +147,11 @@
 			};
 			buildConfigurationList = 34576C7E19AFE6F7007BAD90 /* Build configuration list for PBXProject "CSWindowCapturePlugin" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 34576C7A19AFE6F7007BAD90;
 			productRefGroup = 34576C8419AFE6F7007BAD90 /* Products */;

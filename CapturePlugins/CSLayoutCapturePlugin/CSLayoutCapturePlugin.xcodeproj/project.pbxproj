@@ -130,10 +130,11 @@
 			};
 			buildConfigurationList = 345BECA81F3DADF600B46F29 /* Build configuration list for PBXProject "CSLayoutCapturePlugin" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 345BECA41F3DADF600B46F29;
 			productRefGroup = 345BECAE1F3DADF600B46F29 /* Products */;

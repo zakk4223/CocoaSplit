@@ -104,7 +104,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
         
         
-        
         if ([aDecoder containsValueForKey:@"inputSettings"])
         {
             _inputSettings = [aDecoder decodeObjectForKey:@"inputSettings"];
@@ -118,7 +117,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         }
         
         [self buildGraph];
-        
 
         if ([aDecoder containsValueForKey:@"outputTracks"])
         {
@@ -133,7 +131,9 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
             [self didChangeValueForKey:@"outputTracks"];
             
         }
+        
         [self inputsForSystemAudio];
+        
         if ([aDecoder containsValueForKey:@"encodeMixerSettings"])
         {
             [self.encodeMixer restoreDataFromDict:[aDecoder decodeObjectForKey:@"encodeMixerSettings"]];
@@ -170,11 +170,13 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         }
 
         [self.graph startGraph];
-
         for (NSString *trackUUID in self.outputTracks)
         {
             CAMultiAudioOutputTrack *outTrack = self.outputTracks[trackUUID];
-            [self attachOutputTrack:outTrack];
+            if (outTrack != _defaultOutputTrack)
+            {
+                [self attachOutputTrack:outTrack];
+            }
         }
 
     }
@@ -435,6 +437,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     
     NSNumber *trackOutBus = outputTrack.outputBus;
+    NSLog(@"INPUT BUS %d OUT BUS %@", input.effectsHead.connectedToBus, trackOutBus);
     [self.encodeMixer connectInputBus:input.effectsHead.connectedToBus toOutputBus:trackOutBus.unsignedIntValue];
     [input.outputTracks setObject:outputTrack forKey:outputTrack.uuid];
     return YES;

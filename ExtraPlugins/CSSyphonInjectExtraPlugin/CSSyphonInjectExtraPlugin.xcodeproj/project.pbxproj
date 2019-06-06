@@ -155,10 +155,11 @@
 			};
 			buildConfigurationList = 34C6806419DD01C300413468 /* Build configuration list for PBXProject "CSSyphonInjectExtraPlugin" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 34C6806019DD01C300413468;
 			productRefGroup = 34C6806A19DD01C300413468 /* Products */;

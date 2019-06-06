@@ -141,10 +141,11 @@
 			};
 			buildConfigurationList = 34D2D58A1A54857C001004E5 /* Build configuration list for PBXProject "CSNowPlayingPlugin" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 34D2D5861A54857C001004E5;
 			productRefGroup = 34D2D5901A54857C001004E5 /* Products */;

@@ -150,10 +150,11 @@
 			};
 			buildConfigurationList = 34AFC2C619B08C050007C07B /* Build configuration list for PBXProject "CSFileStreamServicePlugin" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 34AFC2C219B08C050007C07B;
 			productRefGroup = 34AFC2CC19B08C050007C07B /* Products */;

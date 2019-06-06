@@ -109,10 +109,11 @@
 			};
 			buildConfigurationList = 34BD1E0D1B1B970C0015CBEC /* Build configuration list for PBXProject "CSVaughnliveStreamServicePlugin" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 34BD1E091B1B970C0015CBEC;
 			productRefGroup = 34BD1E131B1B970C0015CBEC /* Products */;

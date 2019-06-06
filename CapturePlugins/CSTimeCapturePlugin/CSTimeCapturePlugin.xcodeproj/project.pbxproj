@@ -227,10 +227,11 @@
 			};
 			buildConfigurationList = 34FDA7F81A84BF9300E7F65E /* Build configuration list for PBXProject "CSTimeCapturePlugin" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 34FDA7F41A84BF9300E7F65E;
 			productRefGroup = 34FDA7FE1A84BF9300E7F65E /* Products */;

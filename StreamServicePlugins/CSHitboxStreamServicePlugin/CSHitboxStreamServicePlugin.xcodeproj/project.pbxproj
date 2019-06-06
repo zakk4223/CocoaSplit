@@ -113,10 +113,11 @@
 			};
 			buildConfigurationList = 34C67B641A2D7B690012DC1B /* Build configuration list for PBXProject "CSHitboxStreamServicePlugin" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 34C67B601A2D7B690012DC1B;
 			productRefGroup = 34C67B6A1A2D7B690012DC1B /* Products */;

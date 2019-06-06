@@ -190,10 +190,11 @@
 			};
 			buildConfigurationList = 34AFC1FA19B04F700007C07B /* Build configuration list for PBXProject "CSAVFCapturePlugin" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 34AFC1F619B04F6F0007C07B;
 			productRefGroup = 34AFC20019B04F700007C07B /* Products */;

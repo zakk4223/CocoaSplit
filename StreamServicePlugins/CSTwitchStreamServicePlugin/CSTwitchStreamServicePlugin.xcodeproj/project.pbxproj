@@ -137,10 +137,11 @@
 			};
 			buildConfigurationList = 34AFC2F919B0A5800007C07B /* Build configuration list for PBXProject "CSTwitchStreamServicePlugin" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 34AFC2F519B0A5800007C07B;
 			productRefGroup = 34AFC2FF19B0A5800007C07B /* Products */;

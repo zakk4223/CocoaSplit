@@ -74,7 +74,6 @@ int ffurl_get_file_handle(struct URLContext *);
 @property (assign) int width;
 @property (assign) int height;
 @property (assign) BOOL init_done;
-@property (assign) NSMutableDictionary *activeAudioTracks;
 
 @end
 

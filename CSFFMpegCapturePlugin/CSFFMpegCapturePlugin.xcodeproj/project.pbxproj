@@ -111,10 +111,11 @@
 			};
 			buildConfigurationList = 343C79B51D0C763A00B36EEC /* Build configuration list for PBXProject "CSFFMpegCapturePlugin" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 343C79B11D0C763A00B36EEC;
 			productRefGroup = 343C79BB1D0C763A00B36EEC /* Products */;

@@ -670,7 +670,6 @@
 		340FE4B115F3417E00E4CE4E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		340FE4B315F3417E00E4CE4E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		340FE4B415F3417E00E4CE4E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		340FE4B715F3417E00E4CE4E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		340FE4BF15F3417E00E4CE4E /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		340FE4C615F3417E00E4CE4E /* CocoaSplitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CocoaSplitTests-Info.plist"; sourceTree = "<group>"; };
 		340FE4C815F3417E00E4CE4E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -820,6 +819,7 @@
 		345BECFD1F456C6500B46F29 /* CSLayoutLayoutTransitionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLayoutLayoutTransitionViewController.h; sourceTree = "<group>"; };
 		345BECFE1F456C6500B46F29 /* CSLayoutLayoutTransitionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSLayoutLayoutTransitionViewController.m; sourceTree = "<group>"; };
 		345BECFF1F456C6500B46F29 /* CSLayoutLayoutTransitionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSLayoutLayoutTransitionViewController.xib; sourceTree = "<group>"; };
+		345D199422A7B665007366F1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		345F8B031A1060D6009A81E3 /* CSAacEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSAacEncoder.h; sourceTree = "<group>"; };
 		345F8B041A1060D6009A81E3 /* CSAacEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAacEncoder.m; sourceTree = "<group>"; };
 		345F8B191A1218DE009A81E3 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -2497,11 +2497,11 @@
 			};
 			buildConfigurationList = 340FE49715F3417E00E4CE4E /* Build configuration list for PBXProject "CocoaSplit" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
+				Base,
 			);
 			mainGroup = 340FE49215F3417E00E4CE4E;
 			productRefGroup = 340FE49E15F3417E00E4CE4E /* Products */;
@@ -3152,7 +3152,7 @@
 		340FE4B615F3417E00E4CE4E /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				340FE4B715F3417E00E4CE4E /* en */,
+				345D199422A7B665007366F1 /* Base */,
 			);
 			name = MainMenu.xib;
 			sourceTree = "<group>";

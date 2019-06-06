@@ -151,10 +151,11 @@
 			};
 			buildConfigurationList = 343DD67E19AAD3660017232A /* Build configuration list for PBXProject "CSChromaKey" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 343DD67A19AAD3660017232A;
 			productRefGroup = 343DD68619AAD3660017232A /* Products */;
