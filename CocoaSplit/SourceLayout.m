@@ -2832,7 +2832,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
             
         }
         
-        dispatch_group_wait(_frameTickGroup, DISPATCH_TIME_FOREVER);
+        //dispatch_group_wait(_frameTickGroup, DISPATCH_TIME_FOREVER);
     }
     
 }

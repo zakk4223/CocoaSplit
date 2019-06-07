@@ -271,8 +271,8 @@
 
 -(CVPixelBufferRef)currentImg
 {
-    //[CATransaction begin];
 
+    [CATransaction begin];
     if (!self.layout)
     {
         return NULL;
@@ -287,7 +287,6 @@
     CVPixelBufferRef destFrame = NULL;
     CGFloat frameWidth, frameHeight;
 
-    
     [self.layout frameTick];
 
     
@@ -319,7 +318,9 @@
     if (doSetup && self.renderer)
     {
         //[CATransaction lock];
+        [CATransaction begin];
         [self setupCArenderer];
+        [CATransaction commit];
         //[CATransaction unlock];
         @synchronized (self) {
             _layoutChanged = NO;
@@ -335,8 +336,8 @@
         //[CATransaction unlock];
         [CATransaction commit];
     }
+    [CATransaction commit];
     CGLSetCurrentContext(NULL);
-
     @synchronized(self)
     {
         if (_currentPB)
