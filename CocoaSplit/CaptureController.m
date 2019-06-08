@@ -4590,13 +4590,15 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     {
         _useTransitions = useTransitions;
         
-        if (_useTransitions)
-        {
-            [self showTransitionView:nil];
-        } else {
-            [self hideTransitionView:nil];
-        }
+
         [self postNotification:CSNotificationUseTransitionsChanged forObject:self];
+    }
+    
+    if (_useTransitions)
+    {
+        [self showTransitionView:nil];
+    } else {
+        [self hideTransitionView:nil];
     }
 }
 
