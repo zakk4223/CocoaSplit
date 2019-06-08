@@ -283,7 +283,6 @@
         
         if (self.multiInput)
         {
-            
             [self.multiInput scheduleBuffer:sampleBuffer];
             
         }

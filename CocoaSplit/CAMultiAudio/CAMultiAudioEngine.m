@@ -498,7 +498,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 -(void)attachOutputTrack:(CAMultiAudioOutputTrack *)outputTrack
 {
-    NSLog(@"ATTACHING %@", outputTrack.name);
     CAMultiAudioEffect *encNode = [[CAMultiAudioEffect alloc] initWithSubType:kAudioUnitSubType_Delay unitType:kAudioUnitType_Effect];
     CSAacEncoder *encoder = [[CSAacEncoder alloc] init];
     encoder.sampleRate = self.sampleRate;
@@ -714,6 +713,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         avplayer.name = @"System Input";
         avplayer.nodeUID = @"__CS_SYSTEM_INPUT_UUID__";
         [self attachInput:avplayer];
+        avplayer.enabled = YES;
         _defaultInput = avplayer;
     }
 }
@@ -757,6 +757,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     if (avplayer)
     {
         [self attachInput:avplayer];
+        avplayer.enabled = YES;
     }
     return avplayer;
 }
