@@ -18,6 +18,7 @@
         {
             self.transitionAfterPre = YES;
             self.canToggle = YES;
+            self.holdDuration = @0.25f;
         }
         return self;
     }
