@@ -585,7 +585,6 @@ NSString *const kCSOauth2ClientSecret = @"CSOauth2ClientSecret";
 
     NSURLSession *urlSession = [NSURLSession sharedSession];
     
-    
     NSURLSessionDataTask *dataTask = [urlSession dataTaskWithRequest:request
         completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
             if (error)

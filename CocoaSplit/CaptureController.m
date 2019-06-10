@@ -2187,6 +2187,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     NSDictionary *defaultValues = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Defaults" ofType:@"plist"]];
 
     [NSKeyedUnarchiver setClass:MissingClass.class forClassName:@"CSLayoutSequence"];
+    
     NSDictionary *savedValues = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
     
     
@@ -2198,6 +2199,26 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     
 
 
+    self.multiAudioEngine = [saveRoot valueForKey:@"multiAudioEngine"];
+    if (!self.multiAudioEngine)
+    {
+        self.multiAudioEngine = [[CAMultiAudioEngine alloc] init];
+    }
+    
+    NSNumber *legacyBitrate = [saveRoot valueForKey:@"audioBitrate"];
+    
+    if (legacyBitrate)
+    {
+        self.multiAudioEngine.audioBitrate = [legacyBitrate intValue];
+    }
+    
+    
+    NSNumber *legacy_audio_adjust = [saveRoot valueForKey:@"audioAdjust"];
+    
+    if (legacy_audio_adjust)
+    {
+        self.multiAudioEngine.audio_adjust = [legacy_audio_adjust doubleValue];
+    }
     
     
     self.appearance = [saveRoot valueForKey:@"appearance"];
@@ -2231,6 +2252,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     for (OutputDestination *outdest in _captureDestinations)
     {
         outdest.settingsController = self;
+        outdest.assignedLayout = outdest.assignedLayout; //hax
     }
 
     self.useStatusColors = [[saveRoot valueForKeyPath:@"useStatusColors"] boolValue];
@@ -2297,27 +2319,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     
 
 
-    self.multiAudioEngine = [saveRoot valueForKey:@"multiAudioEngine"];
-    if (!self.multiAudioEngine)
-    {
-        self.multiAudioEngine = [[CAMultiAudioEngine alloc] init];
-    }
-    
-    NSNumber *legacyBitrate = [saveRoot valueForKey:@"audioBitrate"];
-    
-    if (legacyBitrate)
-    {
-        self.multiAudioEngine.audioBitrate = [legacyBitrate intValue];
-    }
-    
-    
-    NSNumber *legacy_audio_adjust = [saveRoot valueForKey:@"audioAdjust"];
 
-    if (legacy_audio_adjust)
-    {
-        self.multiAudioEngine.audio_adjust = [legacy_audio_adjust doubleValue];
-    }
-    
 
 
 

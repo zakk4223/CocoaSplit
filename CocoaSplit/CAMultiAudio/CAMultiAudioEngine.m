@@ -118,6 +118,11 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         
         [self buildGraph];
 
+        if (_defaultOutputTrack)
+        {
+            _defaultOutputTrack.encoderNode = self.renderNode;
+        }
+        
         if ([aDecoder containsValueForKey:@"outputTracks"])
         {
             NSDictionary *outputTracks = [aDecoder decodeObjectForKey:@"outputTracks"];

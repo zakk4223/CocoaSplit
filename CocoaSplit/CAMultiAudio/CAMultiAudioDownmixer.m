@@ -573,7 +573,7 @@
     
     [data getBytes:levels length:dataSize];
     
-    
+
     for (int ichan = 0; ichan < inputCount; ichan++)
     {
         if (ichan >= self.inputChannelCount)
@@ -583,6 +583,7 @@
         
         for (int ochan = 0; ochan < outputCount; ochan++)
         {
+
             if (ochan >= self.outputChannelCount)
             {
                 break;
@@ -615,8 +616,7 @@
     Float32 *levelData = malloc(levelSize);
     
     AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_MatrixLevels, kAudioUnitScope_Global, 0, levelData, &levelSize);
-    NSLog(@"LEVEL SIZE %d", levelSize);
-    
+
     NSData *levels = [NSData dataWithBytesNoCopy:levelData length:levelSize freeWhenDone:YES];
     [ret setObject:levels forKey:@"data"];
     [ret setObject:@(matrixDims[0]) forKey:@"inputChannels"];
@@ -681,7 +681,15 @@
 
     Float32 *levelData = malloc(levelSize);
     
-    AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_MatrixLevels, kAudioUnitScope_Global, 0, levelData, &levelSize);
+    //AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_MatrixLevels, kAudioUnitScope_Global, 0, levelData, &levelSize);
+    
+    for (int ichan = 0; ichan < self.inputChannelCount; ichan++)
+    {
+        for (int ochan = 0; ochan < self.outputChannelCount; ochan++)
+        {
+            levelData[(ichan * (self.outputChannelCount+1)) + ochan] = [self getVolumeforChannel:ichan outChannel:ochan];
+        }
+    }
     
     NSData *levels = [NSData dataWithBytesNoCopy:levelData length:levelSize freeWhenDone:YES];
     [ret setObject:@(self.inputChannelCount) forKey:@"inputChannels"];

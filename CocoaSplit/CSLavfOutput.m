@@ -283,6 +283,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     {
         //We only add to this dictionary once, which means we only use audio tracks that are available when we start up. No adding later
         _audio_stream_info = [NSMutableDictionary dictionary];
+        
         for(NSString *trackName in frameData.audioSamples)
         {
             if (self.activeAudioTracks && !self.activeAudioTracks[trackName])
@@ -319,7 +320,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     }
     
 
-    if (extradata_count == _audio_stream_info.count)
+    if (_audio_stream_info && (extradata_count == _audio_stream_info.count))
     {
         _audio_extradata_done = YES;
     }

@@ -16,7 +16,6 @@
 @synthesize output_format = _output_format;
 @synthesize assignedLayout = _assignedLayout;
 
-
 -(instancetype)copyWithZone:(NSZone *)zone
 {
     OutputDestination *newCopy = [[OutputDestination alloc] init];
@@ -58,10 +57,7 @@
     if (self = [self init])
     {
         
-        if ([aDecoder containsValueForKey:@"assignedLayout"])
-        {
-            self.assignedLayout = [aDecoder decodeObjectForKey:@"assignedLayout"];
-        }
+
         
         if ([aDecoder containsValueForKey:@"uuid"])
         {
@@ -80,9 +76,15 @@
         NSDictionary *audioTracks = [aDecoder decodeObjectForKey:@"audioTracks"];
         if (audioTracks)
         {
-            self.audioTracks = audioTracks;
+            self.audioTracks = audioTracks.mutableCopy;
+            
         }
-
+        if ([aDecoder containsValueForKey:@"assignedLayout"])
+        {
+            self.assignedLayout = [aDecoder decodeObjectForKey:@"assignedLayout"];
+        } else {
+            self.assignedLayout = nil;
+        }
     }
     return self;
 }
@@ -103,17 +105,22 @@
     return _assignedLayout;
 }
 
+
 -(void)setAssignedLayout:(SourceLayout *)assignedLayout
 {
+    
     _assignedLayout = assignedLayout;
     self.audioTracks = [NSMutableDictionary dictionary];
     CAMultiAudioEngine *useEngine = self.audioEngine;
+    
     if (useEngine)
     {
         CAMultiAudioOutputTrack *defTrack = useEngine.defaultOutputTrack;
         if (defTrack)
         {
+            [self willChangeValueForKey:@"audioTracks"];
             self.audioTracks[defTrack.uuid] = defTrack;
+            [self didChangeValueForKey:@"audioTracks"];
         }
     }
 }
@@ -308,7 +315,7 @@
         _stopped = YES;
         _uuid = [NSUUID UUID].UUIDString;
         self.audioTracks = [NSMutableDictionary dictionary];
-        _assignedLayout = nil;
+        self.assignedLayout = nil;
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(compressorDeleted:) name:CSNotificationCompressorDeleted object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(compressorRenamed:) name:CSNotificationCompressorRenamed object:nil];
@@ -425,6 +432,7 @@
     newout.stream_format = self.output_format;
     newout.samplerate = [CaptureController sharedCaptureController].multiAudioEngine.sampleRate;
     newout.audio_bitrate = [CaptureController sharedCaptureController].multiAudioEngine.audioBitrate;
+    NSLog(@"SETTING AUDIO TO %@", self.audioTracks);
     newout.activeAudioTracks = self.audioTracks;
     
     
@@ -661,6 +669,7 @@
     
     return useEngine;
 }
+
 -(void) updateStatistics
 {
     

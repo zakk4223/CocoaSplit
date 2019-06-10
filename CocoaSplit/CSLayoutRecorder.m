@@ -730,7 +730,6 @@
 - (void)captureOutputAudio:(NSString *)withTag didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 {
     
-    
     if (!self.recordingActive)
     {
         return;
