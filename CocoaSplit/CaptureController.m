@@ -1733,7 +1733,12 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
         [fileManager createDirectoryAtPath:saveFolder withIntermediateDirectories:NO attributes:nil error:nil];
     }
     
-    NSString *saveFile = [saveFolder stringByAppendingPathComponent:@"CocoaSplit-2-1-4.settings"];
+    NSString *saveFile = [saveFolder stringByAppendingPathComponent:@"CocoaSplit-2-1-9.settings"];
+    if ([fileManager fileExistsAtPath:saveFile])
+    {
+        return saveFile;
+    }
+    saveFile = [saveFolder stringByAppendingPathComponent:@"CocoaSplit-2-1-4.settings"];
     if ([fileManager fileExistsAtPath:saveFile])
     {
         return saveFile;
@@ -1782,7 +1787,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
         [fileManager createDirectoryAtPath:saveFolder withIntermediateDirectories:NO attributes:nil error:nil];
     }
     
-    NSString *saveFile = @"CocoaSplit-2-1-4.settings";
+    NSString *saveFile = @"CocoaSplit-2-1-9.settings";
     
     return [saveFolder stringByAppendingPathComponent:saveFile];
 }
