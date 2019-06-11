@@ -329,6 +329,7 @@ NSString *const kCSOauth2ClientSecret = @"CSOauth2ClientSecret";
 
 -(void)closeAuthWindow
 {
+    [_authWindow orderOut:nil];
     _authWindow = nil;
 }
 
