@@ -257,7 +257,7 @@ function AnimationBlock(duration, inherit_frame) {
         CATransaction.commit();
         if (!self.isolated)
         {
-            let cframe = CSAnimationBlock.currentFrame();
+            var cframe = CSAnimationBlock.currentFrame();
             if (cframe)
             {
 

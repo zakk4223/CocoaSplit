@@ -2337,58 +2337,6 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
         self.sourceLayouts = [[NSMutableArray alloc] init];
     }
 
-    if (!_layoutViewController)
-    {/*
-        _layoutViewController = [[CSLayoutSwitcherViewController alloc] init];
-        _layoutViewController.isSwitcherView = NO;
-        _layoutViewController.view = self.layoutGridView;
-       _layoutViewController.layouts = self.sourceLayouts;
-      */
-    }
-    
-
-
-    
-
-    SourceLayout *tmpLayout = [saveRoot valueForKey:@"selectedLayout"];
-    if (tmpLayout)
-    {
-        if (tmpLayout == self.stagingLayout || [self.sourceLayouts containsObject:tmpLayout])
-        {
-            SourceLayout *tmpCopy = [tmpLayout copy];
-            self.selectedLayout = tmpCopy;
-        } else {
-            self.selectedLayout = tmpLayout;
-        }
-        
-        self.selectedLayout.ignorePinnedInputs = YES;
-        self.selectedLayout.containerOnly = YES;
-    }
-    
-    tmpLayout = [saveRoot valueForKey:@"stagingLayout"];
-    if (tmpLayout)
-    {
-        if (tmpLayout == self.selectedLayout || [self.sourceLayouts containsObject:tmpLayout])
-        {
-            SourceLayout *tmpCopy = [tmpLayout copy];
-            self.stagingLayout = tmpCopy;
-        } else {
-            self.stagingLayout = tmpLayout;
-        }
-        
-        self.stagingLayout.containerOnly = YES;
-        
-        self.stagingPreviewView.sourceLayout = self.stagingLayout;
-        self.stagingLayout.name = @"staging";
-        self.selectedLayout.name = @"live";
-        
-       // [self.stagingLayout mergeSourceLayout:tmpLayout withLayer:nil];
-    }
-    
-
-    
-    self.selectedLayout.audioEngine = self.multiAudioEngine;
-    
     if ([saveRoot objectForKey:@"stagingHidden"])
     {
         BOOL stagingHidden = [[saveRoot valueForKeyPath:@"stagingHidden"] boolValue];
@@ -2400,6 +2348,53 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     } else {
         [self showStagingView];
     }
+    
+    SourceLayout *tmpLayout = [saveRoot valueForKey:@"selectedLayout"];
+    if (tmpLayout)
+    {
+        
+        [self.selectedLayout replaceWithSourceLayout:tmpLayout];
+        /*
+        if (tmpLayout == self.stagingLayout || [self.sourceLayouts containsObject:tmpLayout])
+        {
+            SourceLayout *tmpCopy = [tmpLayout copy];
+            self.selectedLayout = tmpCopy;
+        } else {
+            self.selectedLayout = tmpLayout;
+        }
+        */
+        self.selectedLayout.ignorePinnedInputs = YES;
+        self.selectedLayout.containerOnly = YES;
+    }
+    
+    tmpLayout = [saveRoot valueForKey:@"stagingLayout"];
+
+    if (tmpLayout)
+    {
+        [self.stagingLayout replaceWithSourceLayout:tmpLayout];
+        /*
+        if (tmpLayout == self.selectedLayout || [self.sourceLayouts containsObject:tmpLayout])
+        {
+            SourceLayout *tmpCopy = [tmpLayout copy];
+            self.stagingLayout = tmpCopy;
+        } else {
+            self.stagingLayout = tmpLayout;
+        }
+        */
+        self.stagingLayout.containerOnly = YES;
+        
+        //self.stagingPreviewView.sourceLayout = self.stagingLayout;
+        self.stagingLayout.name = @"staging";
+        self.selectedLayout.name = @"live";
+        
+       // [self.stagingLayout mergeSourceLayout:tmpLayout withLayer:nil];
+    }
+    
+
+    
+    self.selectedLayout.audioEngine = self.multiAudioEngine;
+    
+
     
 
 
