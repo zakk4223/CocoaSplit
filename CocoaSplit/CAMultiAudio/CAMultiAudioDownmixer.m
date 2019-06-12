@@ -373,6 +373,23 @@
     return [super setInputStreamFormat:&fCopy];
 }
 
+-(void)setEnabled:(bool)enabled
+{
+    UInt32 elementCount = 0;
+    UInt32 elementSize = sizeof(UInt32);
+    
+    
+    AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Output, 0, &elementCount, &elementSize);
+    
+    for (UInt32 i = 0; i < elementCount; i++)
+    {
+        AudioUnitSetParameter(self.audioUnit, kMatrixMixerParam_Enable, kAudioUnitScope_Output, i, enabled, 0);
+    }
+    
+    [super setEnabled:enabled];
+    
+}
+
 -(void)didInitializeNode
 {
     //Enable both input and output busses
