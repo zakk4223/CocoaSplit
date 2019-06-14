@@ -94,8 +94,20 @@
     {
 
 
+        NSString *audioTrackkey = nil;
+        if (self.activeAudioTracks && (self.activeAudioTracks.allKeys.count > 0))
+        {
+            audioTrackkey = self.activeAudioTracks.allKeys.firstObject;
+        }
         
-        for (id object in currentFrame.pcmAudioSamples)
+        if (!audioTrackkey)
+        {
+            audioTrackkey = currentFrame.pcmAudioSamples.allKeys.firstObject;
+        }
+        
+        NSArray *pcmSamples = currentFrame.pcmAudioSamples[audioTrackkey];
+        
+        for (id object in pcmSamples)
         {
             
             

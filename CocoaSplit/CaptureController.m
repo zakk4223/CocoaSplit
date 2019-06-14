@@ -2353,8 +2353,8 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     if (tmpLayout)
     {
         
-        [self.selectedLayout replaceWithSourceLayout:tmpLayout];
-        /*
+        //[self.selectedLayout replaceWithSourceLayout:tmpLayout];
+        
         if (tmpLayout == self.stagingLayout || [self.sourceLayouts containsObject:tmpLayout])
         {
             SourceLayout *tmpCopy = [tmpLayout copy];
@@ -2362,7 +2362,8 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
         } else {
             self.selectedLayout = tmpLayout;
         }
-        */
+        
+        self.livePreviewView.sourceLayout = self.selectedLayout;
         self.selectedLayout.ignorePinnedInputs = YES;
         self.selectedLayout.containerOnly = YES;
     }
@@ -2371,8 +2372,8 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 
     if (tmpLayout)
     {
-        [self.stagingLayout replaceWithSourceLayout:tmpLayout];
-        /*
+        //[self.stagingLayout replaceWithSourceLayout:tmpLayout];
+        
         if (tmpLayout == self.selectedLayout || [self.sourceLayouts containsObject:tmpLayout])
         {
             SourceLayout *tmpCopy = [tmpLayout copy];
@@ -2380,9 +2381,9 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
         } else {
             self.stagingLayout = tmpLayout;
         }
-        */
-        self.stagingLayout.containerOnly = YES;
         
+        self.stagingLayout.containerOnly = YES;
+        self.stagingPreviewView.sourceLayout = self.stagingLayout;
         //self.stagingPreviewView.sourceLayout = self.stagingLayout;
         self.stagingLayout.name = @"staging";
         self.selectedLayout.name = @"live";

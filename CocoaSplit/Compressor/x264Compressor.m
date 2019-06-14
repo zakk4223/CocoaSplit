@@ -148,6 +148,9 @@
             [self.x264tunes addObject:[NSString stringWithUTF8String:x264_tune_names[i]]];
         }
 
+        self.tune = @"zerolatency";
+        self.profile = @"main";
+        self.preset = @"veryfast";
     }
     return self;
 }

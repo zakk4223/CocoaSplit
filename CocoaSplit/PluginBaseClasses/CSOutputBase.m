@@ -18,6 +18,7 @@
     {
         _output_bytes = 0;
         _output_framecnt = 0;
+        _activeAudioTracks = [NSMutableDictionary dictionary];
     }
     
     return self;
