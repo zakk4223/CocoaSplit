@@ -38,7 +38,11 @@
         WKPreferences *webPrefs = [[WKPreferences alloc] init];
         webPrefs.plugInsEnabled = YES;
         webPrefs.javaScriptEnabled = YES;
-        config.mediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypeNone;
+        if (@available(macOS 10.12, *))
+        {
+            config.mediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypeNone;
+        }
+        
         
         self.webView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 0, self.browser_width, self.browser_height) configuration:[[WKWebViewConfiguration alloc] init]];
         self.webView.navigationDelegate = self;

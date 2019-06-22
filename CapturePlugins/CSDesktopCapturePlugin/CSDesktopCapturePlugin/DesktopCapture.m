@@ -309,7 +309,7 @@
     return YES;
 }
 
--(CFDictionaryRef)getIODisplayDictForSerial:(uint32_t) serial
+-(CFDictionaryRef)getIODisplayDictForSerial:(uint32_t) serial vendor:(uint32_t)vendor model:(uint32_t)model
 {
     io_iterator_t ioIter;
     io_service_t ioService;
@@ -329,7 +329,8 @@
         if (info)
         {
             CFNumberRef displaySerialRef = CFDictionaryGetValue(info, CFSTR(kDisplaySerialNumber));
-            if (displaySerialRef)
+            
+            if (displaySerialRef && serial)
             {
                 uint32_t cmpSerial;
                 NSNumber *nsDispSerial = (NSNumber *)CFBridgingRelease(displaySerialRef);
@@ -339,10 +340,25 @@
                 {
                     retDict = info;
                     break;
-                } else {
-                    CFRelease(info);
                 }
+            } else {
+                CFNumberRef vendorIDRef = CFDictionaryGetValue(info, CFSTR(kDisplayVendorID));
+                CFNumberRef modelIDRef = CFDictionaryGetValue(info, CFSTR(kDisplayProductID));
+                uint32_t cmpVendor;
+                uint32_t cmpModel;
+                NSNumber *nsDispModel = (NSNumber *)CFBridgingRelease(modelIDRef);
+                NSNumber *nsDispVendor = (NSNumber *)CFBridgingRelease(vendorIDRef);
+                cmpVendor = nsDispVendor.unsignedIntValue;
+                cmpModel = nsDispModel.unsignedIntValue;
+                
+                if (cmpVendor == vendor && cmpModel == model)
+                {
+                    retDict = info;
+                    break;
+                }
+            
             }
+            CFRelease(info);
         }
     }
     
@@ -365,9 +381,10 @@
         CGDirectDisplayID disp_id = display_ids[i];
         NSString *displayName;
         uint32_t serial  = CGDisplaySerialNumber(disp_id);
+        uint32_t vendorID = CGDisplayVendorNumber(disp_id);
+        uint32_t modelID = CGDisplayModelNumber(disp_id);
         
-        
-        NSDictionary *deviceInfo = CFBridgingRelease([self getIODisplayDictForSerial:serial]);
+        NSDictionary *deviceInfo = CFBridgingRelease([self getIODisplayDictForSerial:serial vendor:vendorID model:modelID]);
         if (!deviceInfo)
         {
             continue;

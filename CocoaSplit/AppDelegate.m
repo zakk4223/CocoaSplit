@@ -210,7 +210,6 @@
 
 -(BOOL)applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)flag
 {
-    NSLog(@"HANDL REOPEN %@", _window);
     [self.captureController.mainWindow setIsVisible:YES];
     return YES;
 }

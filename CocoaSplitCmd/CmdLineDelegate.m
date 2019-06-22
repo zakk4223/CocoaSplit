@@ -42,7 +42,6 @@
 -(NSApplicationTerminateReply) applicationShouldTerminate: (NSNotification *)notification
 {
     
-    NSLog(@"STOPPING STREAM!");
     
     [self.captureController stopStream];
     

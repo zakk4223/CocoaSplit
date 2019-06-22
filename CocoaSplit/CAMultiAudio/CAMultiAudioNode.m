@@ -483,10 +483,8 @@
 
     [saveGraph addNode:self];
     
-    NSLog(@"INPUT MAP %@", inputMap);
     for (NSString *uuid in inputMap)
     {
-        NSLog(@"UUID %@", uuid);
         NSDictionary *inpInfo = inputMap[uuid];
         CAMultiAudioNode *inputNode = inpInfo[@"node"];
         NSNumber *inBus = inpInfo[@"inBus"];
@@ -501,7 +499,6 @@
         CAMultiAudioNode *outputNode = outInfo[@"node"];
         NSNumber *inBus = outInfo[@"inBus"];
         NSNumber *outBus = outInfo[@"outBus"];
-        NSLog(@"RECONNECTING %d %d", inBus.unsignedIntValue, outBus.unsignedIntValue);
         [saveGraph connectNode:self toNode:outputNode sampleRate:self.graph.sampleRate inBus:inBus.unsignedIntValue outBus:outBus.unsignedIntValue];
     }
 }

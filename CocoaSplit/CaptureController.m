@@ -924,19 +924,26 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     while ((serv = IOIteratorNext(itr)) != 0)
     {
         NSDictionary *info = (NSDictionary *)CFBridgingRelease(IODisplayCreateInfoDictionary(serv, kIODisplayOnlyPreferredName));
-        
+        NSLog(@"INFO %@", info);
         NSNumber *vendorIDVal = [info objectForKey:@(kDisplayVendorID)];
         
         NSNumber *productIDVal = [info objectForKey:@(kDisplayProductID)];
-        
+        NSNumber *serialNumberVal = [info objectForKey:@(kDisplaySerialNumber)];
         
         for (NSScreen *screen in screens)
         {
             CGDirectDisplayID dispID = [[[screen deviceDescription] valueForKey:@"NSScreenNumber"] unsignedIntValue];
             uint32_t vid = CGDisplayVendorNumber(dispID);
             uint32_t pid = CGDisplayModelNumber(dispID);
-            
-            if (vid == vendorIDVal.integerValue && pid == productIDVal.integerValue)
+            uint32_t serialNumber = CGDisplaySerialNumber(dispID);
+            bool isMatch = NO;
+            if (serialNumberVal && serialNumber && (serialNumberVal.integerValue == serialNumber))
+            {
+                isMatch = YES;
+            } else if ((vid == vendorIDVal.integerValue && pid == productIDVal.integerValue)) {
+                isMatch = YES;
+            }
+            if (isMatch)
             {
                 NSDictionary *names = [info objectForKey:@(kDisplayProductName)];
                 if (names)
@@ -946,10 +953,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
                 }
                 
             }
-            
-            
         }
-        
         
     }
 }

@@ -442,7 +442,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     
     NSNumber *trackOutBus = outputTrack.outputBus;
-    NSLog(@"INPUT BUS %d OUT BUS %@", input.effectsHead.connectedToBus, trackOutBus);
     [self.encodeMixer connectInputBus:input.effectsHead.connectedToBus toOutputBus:trackOutBus.unsignedIntValue];
     [input.outputTracks setObject:outputTrack forKey:outputTrack.uuid];
     return YES;
