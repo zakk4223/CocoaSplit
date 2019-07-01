@@ -239,6 +239,7 @@
                 
                 if (!self.compressionPanelController.compressor.active)
                 {
+                    
                     if (![editCompressor.name isEqualToString:self.compressionPanelController.compressor.name])
                     {
                         [self.compressors removeObjectForKey:editCompressor.name];

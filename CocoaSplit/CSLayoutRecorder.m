@@ -503,12 +503,13 @@
         newData.videoFrame = newFrame;
         
         int used_compressor_count = 0;
+        NSMutableDictionary *useCompressors = self.compressors.copy;
         
-        for(id cKey in self.compressors)
+        for(id cKey in useCompressors)
         {
             
             id <VideoCompressor> compressor;
-            compressor = self.compressors[cKey];
+            compressor = useCompressors[cKey];
             CapturedFrameData *newFrameData = newData.copy;
             
             [compressor compressFrame:newFrameData];
