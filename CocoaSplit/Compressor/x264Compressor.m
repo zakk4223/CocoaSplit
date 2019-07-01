@@ -143,6 +143,8 @@
             [self.x264presets addObject:[NSString stringWithUTF8String:x264_preset_names[i]]];
         }
         
+        [self.x264tunes addObject:[NSNull null]];
+        
         for (int i = 0; x264_tune_names[i]; i++)
         {
             [self.x264tunes addObject:[NSString stringWithUTF8String:x264_tune_names[i]]];
@@ -671,6 +673,11 @@
     
     id x264preset = self.preset;
     
+    if ([x264preset isEqualTo:[NSNull null]])
+    {
+        x264preset = nil;
+    }
+    
     if (x264preset)
     {
         av_dict_set(&opts, "preset", [x264preset UTF8String], 0);
@@ -686,13 +693,23 @@
     }
     
     
+    if (x264profile && [x264profile isEqualTo:[NSNull null]])
+    {
+        x264profile = nil;
+    }
     
-    if (x264profile)
+    if (x264profile )
     {
         av_dict_set(&opts, "profile", [x264profile UTF8String], 0);
     }
     
     id x264tune = self.tune;
+    
+    if ([x264tune isEqualTo:[NSNull null]])
+    {
+        x264tune = nil;
+    }
+    
     
     if (x264tune)
     {
