@@ -23,7 +23,6 @@
     self.useAudioEngine = NO;
     _capture_session = [[AVCaptureSession alloc] init];
     _audio_capture_queue = dispatch_queue_create("AudioQueue", NULL);
-    [_capture_session startRunning];
 }
 
 
@@ -38,6 +37,7 @@
         
         [self setupAudioCompression];
         self.activeAudioDevice = device;
+
     }
     
     return self;
@@ -136,10 +136,6 @@
     
 
     
-    if (_capture_session.isRunning)
-    {
-        return YES;
-    }
 
     
     if (!_capture_session)
@@ -153,7 +149,14 @@
         
     }
     
-    
+    if (_capture_session.isRunning)
+    {
+        return YES;
+    }
+
+    dispatch_async(_audio_capture_queue, ^{
+        [_capture_session startRunning];
+    });
     return YES;
 }
 

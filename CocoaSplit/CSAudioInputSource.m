@@ -219,6 +219,7 @@
 -(void)setAudioEnabled:(bool)audioEnabled
 {
     
+    
     if (self.audioNode)
     {
         self.audioNode.enabled = audioEnabled;
@@ -338,7 +339,6 @@
 
 
     }
-
     if (self.audioNode)
     {
         if ([self.audioNode isKindOfClass:CAMultiAudioFile.class])
@@ -350,14 +350,12 @@
         }
         
         self.audioEnabled = self.audioEnabled;
-        self.audioVolume = self.audioVolume;
         
+        //self.audioVolume = self.audioVolume;
         if (_savedAudioSettings)
         {
-            [self.audioNode restoreDataFromDict:_savedAudioSettings];
+            //[self.audioNode restoreDataFromDict:_savedAudioSettings];
         }
-
-
     }
 }
 
@@ -404,6 +402,12 @@
         [self restoreAudioSettings];
 
     }
+}
+
+
+-(CSInputLayer *)layer
+{
+    return nil;
 }
 
 

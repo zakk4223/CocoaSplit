@@ -1431,7 +1431,6 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     [CATransaction begin];
     
     [CATransaction setCompletionBlock:^{
-        
         for (NSObject<CSInputSourceProtocol> *rSrc in removedInputs)
         {
             [self deleteSource:rSrc];
@@ -2539,11 +2538,9 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 
 -(void) addSource:(NSObject<CSInputSourceProtocol> *)newSource withParentLayer:(CALayer *)parentLayer
 {
-    
     newSource.sourceLayout = self;
     newSource.is_live = self.isActive;
     newSource.isVisible = YES;
-    
     [self addSourceToPresentation:newSource];
     
     switch (self.sourceAddOrder) {
@@ -2556,8 +2553,8 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
             break;
     }
     
-    
     [[self mutableArrayValueForKey:@"sourceList" ] addObject:newSource];
+    
     if (newSource.layer && !newSource.layer.superlayer)
     {
         [CATransaction begin];
@@ -2567,19 +2564,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
         [CATransaction commit];
     }
 
-    
-    if (newSource.isVideo)
-    {
-        [CATransaction begin];
-    /*    [CATransaction setCompletionBlock:^{
-            [((InputSource *)newSource) buildLayerConstraints];
-            
-        }];*/
-        //[(InputSource *)newSource layerUpdated];
-        [CATransaction commit];
-    }
-    
-    
+
     
     [_uuidMap setObject:newSource forKey:newSource.uuid];
     

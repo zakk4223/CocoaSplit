@@ -20,6 +20,8 @@
         {
                 [nSrc buildLayerConstraints];
                 
+        } else {
+            [self.forLayout addSource:nSrc];
         }
     }
     
@@ -28,6 +30,8 @@
         if (cSrc.layer)
         {
             [cSrc buildLayerConstraints];
+        } else {
+            [self.forLayout addSource:cSrc];
         }
     }
 
@@ -65,43 +69,58 @@
         {
             [nSrc.layer addAnimation:self.useAnimation forKey:nil];
         }
-        [self.forLayout addSource:nSrc];
 
-        nSrc.layer.hidden = NO;
+        if (nSrc.layer)
+        {
+            [self.forLayout addSource:nSrc];
+
+            nSrc.layer.hidden = NO;
+        }
+        
 
     }
     
     for (InputSource *cSrc in self.changedInputs)
     {
-        if (self.useAnimation && !self.fullScreen)
+        if (cSrc.layer && self.useAnimation && !self.fullScreen)
         {
             [cSrc.layer addAnimation:self.useAnimation forKey:nil];
         }
         
-        [self.forLayout addSource:cSrc];
-        cSrc.layer.hidden = NO;
+        if (cSrc.layer)
+        {
+            [self.forLayout addSource:cSrc];
+            cSrc.layer.hidden = NO;
+        }
 
     }
     
     for (InputSource *cSrc in self.changeremoveInputs)
     {
-        if (self.useAnimation && !self.fullScreen)
+        if (cSrc.layer && self.useAnimation && !self.fullScreen)
         {
             [cSrc.layer addAnimation:self.useAnimation forKey:nil];
         }
-        //cSrc.layer.hidden = YES;
-        cSrc.layer.opacity = 0.0f;
+        
+        if (cSrc.layer)
+        {
+            //cSrc.layer.hidden = YES;
+            cSrc.layer.opacity = 0.0f;
+        }
         
     }
     
     for (InputSource *rSrc in self.removedInputs)
     {
-        if (self.useAnimation && !self.fullScreen)
+        if (rSrc.layer && self.useAnimation && !self.fullScreen)
         {
             [rSrc.layer addAnimation:self.useAnimation forKey:nil];
         }
-        //rSrc.layer.hidden = YES;
-        rSrc.layer.opacity = 0.0f;
+        if (rSrc.layer)
+        {
+            //rSrc.layer.hidden = YES;
+            rSrc.layer.opacity = 0.0f;
+        }
     }
     [CATransaction commit];
 

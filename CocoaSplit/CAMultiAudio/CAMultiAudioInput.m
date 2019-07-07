@@ -324,6 +324,7 @@
 {
     [super setEnabled:enabled];
     
+    
     NSColor *newColor;
     if (enabled)
     {

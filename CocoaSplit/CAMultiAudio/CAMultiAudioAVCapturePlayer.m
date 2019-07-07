@@ -70,9 +70,11 @@
 
 -(void)attachCaptureSession
 {
+    
     AVFAudioCapture *newAC = [[AVFAudioCapture alloc] initForAudioEngine:self.captureDevice sampleRate:self.sampleRate];
     self.avfCapture = newAC;
     newAC.multiInput = self;
+    [newAC startCaptureSession:nil];
 }
 
 
