@@ -924,7 +924,6 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     while ((serv = IOIteratorNext(itr)) != 0)
     {
         NSDictionary *info = (NSDictionary *)CFBridgingRelease(IODisplayCreateInfoDictionary(serv, kIODisplayOnlyPreferredName));
-        NSLog(@"INFO %@", info);
         NSNumber *vendorIDVal = [info objectForKey:@(kDisplayVendorID)];
         
         NSNumber *productIDVal = [info objectForKey:@(kDisplayProductID)];
