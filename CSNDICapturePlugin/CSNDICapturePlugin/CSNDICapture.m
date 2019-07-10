@@ -43,7 +43,7 @@
             NDIlib_v3 *dispatch = [self ndi_dispatch_ptr];
             if (dispatch)
             {
-                ndi_finder = dispatch->NDIlib_find_create_v2(&find_create);
+                ndi_finder = dispatch->NDIlib_find_create(&find_create);
             }
         }
     }
