@@ -77,6 +77,9 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 @synthesize captureRunning = _captureRunning;
 @synthesize appearance = _appearance;
 @synthesize activeTransition = _activeTransition;
+@synthesize mainRecordingActive = _mainRecordingActive;
+
+
 
 
 -(void)evaluateJavascriptFile:(NSString *)baseFile inContext:(JSContext *)ctx
@@ -2023,6 +2026,11 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
         [CaptureController.sharedCaptureController postNotification:CSNotificationCompressorAdded forObject:newCompressor];
     }
     
+    if (!self.compressors[@"Recorder"])
+    {
+        
+    }
+    
 }
 
 
@@ -2175,6 +2183,14 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     
     self.streamButton.layer.borderWidth = 1.0f;
     self.streamButton.layer.cornerRadius = 2.0f;
+    
+    tmpColor = CGColorCreateGenericRGB(1, 0, 0, 0.5);
+    self.recordButton.layer.backgroundColor = tmpColor;
+    CGColorRelease(tmpColor);
+    
+    self.recordButton.layer.borderWidth = 1.0f;
+    self.recordButton.layer.cornerRadius = 2.0f;
+    
     //all color panels allow opacity
     _savedAudioConstraintConstant = self.audioConstraint.constant;
     self.layoutScriptLabel = @"Layouts";
@@ -2984,6 +3000,27 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 }
 
 
+-(bool) startRecording
+{
+    if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_8)
+    {
+        _PMAssertionRet = IOPMAssertionCreateWithName(kIOPMAssertionTypePreventUserIdleDisplaySleep, kIOPMAssertionLevelOn, CFSTR("CocoaSplit is capturing video"), &_PMAssertionID);
+    } else {
+        _activity_token = [[NSProcessInfo processInfo] beginActivityWithOptions:NSActivityUserInitiated|NSActivityIdleDisplaySleepDisabled reason:@"CocoaSplit is capturing video"];
+        
+    }
+    
+    [self setupMainRecorder];
+    
+    if (self.mainLayoutRecorder)
+    {
+        [self.mainLayoutRecorder startRecording];
+        self.mainRecordingActive = YES;
+    }
+    
+    
+    return YES;
+}
 -(bool) startStream
 {
     
@@ -3038,6 +3075,16 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 }
 
 
+-(void)stopRecording
+{
+    if (self.mainLayoutRecorder)
+    {
+        [self.mainLayoutRecorder stopDefaultRecording];
+        self.mainRecordingActive = NO;
+    }
+}
+
+
 - (void)stopStream
 {
     
@@ -3073,12 +3120,12 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
         }
     }
     
-    if (self.mainLayoutRecorder && !self.instantRecorder)
+    if (self.mainLayoutRecorder && !self.instantRecorder && !self.mainRecordingActive)
     {
         self.mainLayoutRecorder.recordingActive = NO;
     }
     
-    if (self.mainLayoutRecorder && !self.instantRecorder)
+    if (self.mainLayoutRecorder && !self.instantRecorder && !self.mainRecordingActive)
     {
         
         [self.livePreviewView enablePrimaryRender];
@@ -3110,6 +3157,27 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     
 }
 
+
+-(IBAction)recordButtonPushed:(id)sender
+{
+    NSButton *button = self.recordButton;
+    
+    if ([button state] == NSOnState)
+    {
+
+        if ([self startRecording] != YES)
+        {
+            [sender setNextState];
+            
+        }
+        
+    } else {
+        
+
+        [self stopRecording];
+        
+    }
+}
 - (IBAction)streamButtonPushed:(id)sender {
     
     NSButton *button = self.streamButton;
@@ -3154,6 +3222,28 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     } else {
         [self startStream];
     }
+}
+
+
+-(bool)mainRecordingActive
+{
+    return _mainRecordingActive;
+}
+
+-(void)setMainRecordingActive:(bool)mainRecordingActive
+{
+    _mainRecordingActive = mainRecordingActive;
+    
+    CGColorRef tmpColor;
+    if (mainRecordingActive)
+    {
+        tmpColor = CGColorCreateGenericRGB(1, 0, 0, 1);
+    } else {
+        tmpColor = CGColorCreateGenericRGB(1, 0, 0, 0.5);
+    }
+    
+    self.recordButton.layer.backgroundColor = tmpColor;
+    CGColorRelease(tmpColor);
 }
 
 

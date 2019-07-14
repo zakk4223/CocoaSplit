@@ -173,7 +173,7 @@
     self.outputFilename = [baseDir stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", self.layout.name, fileFormat]];
     self.fileFormat = fileFormat;
     
-    [self.outputs addObject:newOutput];
+    //[self.outputs addObject:newOutput];
     [self startRecordingCommon];
     self.defaultRecordingActive = YES;
     self.layout.recordingLayout = YES;
@@ -187,7 +187,7 @@
         self.layout.recordingLayout = NO;
         self.output.active = NO;
         self.output.captureRunning = NO;
-        [self.outputs removeObject:self.output];
+        //[self.outputs removeObject:self.output];
         [self checkOutputs];
     }
 }

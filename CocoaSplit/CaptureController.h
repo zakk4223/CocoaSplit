@@ -159,6 +159,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (weak) IBOutlet NSArrayController *sourceLayoutsArrayController;
 @property (weak) IBOutlet NSTreeController *inputTreeController;
 @property (weak) IBOutlet NSButton *streamButton;
+@property (weak) IBOutlet NSButton *recordButton;
 @property (strong) NSString *layoutScriptLabel;
 @property (strong) CSLayoutRecorder *mainLayoutRecorder;
 @property (strong) CSLayoutRecorder *stagingLayoutRecorder;
@@ -167,6 +168,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) NSDate *streamStartDate;
 @property (assign) bool metalAvailable;
 @property (assign) bool useMetalIfAvailable;
+@property (assign) bool mainRecordingActive;
+
 
 
 
@@ -201,6 +204,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 
 
 - (IBAction)streamButtonPushed:(id)sender;
+- (IBAction)recordButtonPushed:(id)sender;
+
 
 - (IBAction)closeAdvancedPrefPanel:(id)sender;
 - (IBAction)openAdvancedPrefPanel:(id)sender;
@@ -512,7 +517,8 @@ NSArray *_savedTransitionConstraints;
 @property (weak) IBOutlet NSTableView *outputTableView;
 @property (weak) IBOutlet NSArrayController *sourceLayoutsArrayController;
 @property (weak) IBOutlet NSTreeController *inputTreeController;
-@property (weak) IBOutlet NSButton *streamButton; 
+@property (weak) IBOutlet NSButton *streamButton;
+@property (weak) IBOutlet NSButton *recordButton;
 @property (strong) NSString *layoutScriptLabel;
 @property (strong) CSLayoutRecorder *mainLayoutRecorder;
 @property (strong) CSLayoutRecorder *stagingLayoutRecorder;
@@ -531,7 +537,7 @@ NSArray *_savedTransitionConstraints;
 @property (strong) NSDate *streamStartDate;
 @property (assign) bool metalAvailable;
 @property (assign) bool useMetalIfAvailable;
-
+@property (assign) bool mainRecordingActive;
 
 -(JSContext *)setupJavascriptContext;
 -(JSContext *)setupJavascriptContext:(JSVirtualMachine *)machine;
