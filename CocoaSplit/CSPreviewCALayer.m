@@ -106,6 +106,7 @@ CVReturn DisplayCallback(CVDisplayLinkRef displayLink, const CVTimeStamp *now, c
 
 -(void)render
 {
+    
     if (!self.renderer || !self.renderer.layout)
     {
         return;

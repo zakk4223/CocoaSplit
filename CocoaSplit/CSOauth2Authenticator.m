@@ -15,6 +15,7 @@ NSString *const kCSOauth2CodeFlow = @"CSOauth2CodeFlow";
 NSString *const kCSOauth2ImplicitGrantFlow = @"CSOauth2ImplicitGrantFlow";
 NSString *const kCSOauth2ExtraAuthParams = @"CSOauth2ExtraAuthParams";
 NSString *const kCSOauth2AccessTokenRequestURL = @"CSOauth2AccessTokenRequestURL";
+NSString *const kCSOauth2ExtraAuthHeaders = @"CSOauth2ExtraAuthHeaders";
 NSString *const kCSOauth2AccessRefreshURL = @"CSOauth2AccessRefreshURL";
 NSString *const kCSOauth2ClientSecret = @"CSOauth2ClientSecret";
 
@@ -307,6 +308,17 @@ NSString *const kCSOauth2ClientSecret = @"CSOauth2ClientSecret";
         [self buildAuthURL];
         
         
+        NSMutableURLRequest *authRequest = [NSMutableURLRequest requestWithURL:self.authURL];
+        NSDictionary *extraHeaders = [self configurationVariableGet:kCSOauth2ExtraAuthHeaders];
+        if (extraHeaders)
+        {
+            for (NSString *headerName in extraHeaders)
+            {
+                NSString *headerVal = extraHeaders[headerName];
+                [authRequest setValue:headerVal forHTTPHeaderField:headerName];
+            }
+        }
+        
         NSRect winFrame = NSMakeRect(0, 0, 1000, 1000);
         _authWebView = [[WebView alloc] initWithFrame:winFrame frameName:nil groupName:nil];
         _authWebView.policyDelegate = self;
@@ -316,7 +328,7 @@ NSString *const kCSOauth2ClientSecret = @"CSOauth2ClientSecret";
         [_authWindow center];
         [_authWindow setContentView:_authWebView];
         [_authWindow makeKeyAndOrderFront:NSApp];
-        [[_authWebView mainFrame] loadRequest:[NSURLRequest requestWithURL:self.authURL]];
+        [[_authWebView mainFrame] loadRequest:authRequest];
     } else {
         if (authCallback)
         {

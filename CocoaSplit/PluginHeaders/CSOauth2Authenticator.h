@@ -18,6 +18,7 @@ extern NSString *const kCSOauth2CodeFlow;
 extern NSString *const kCSOauth2ImplicitGrantFlow;
 extern NSString *const kCSOauth2ExtraAuthParams;
 extern NSString *const kCSOauth2ClientSecret;
+extern NSString *const kCSOauth2ExtraAuthHeaders;
 
 
 

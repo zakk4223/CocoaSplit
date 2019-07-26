@@ -158,7 +158,7 @@
             _oauth_client_id = [[NSBundle bundleForClass:[self class]] objectForInfoDictionaryKey:@"TwitchAPIClientID"];
         }
         
-        NSDictionary *oconfig = @{kCSOauth2ConfigAuthURL:@"https://api.twitch.tv/kraken/oauth2/authorize", kCSOauth2ConfigRedirectURL:@"cocoasplit-twitch://cocoasplit.com/oauth/redirect", kCSOauth2ConfigScopes:@[@"channel_read", @"user_read"]};
+        NSDictionary *oconfig = @{kCSOauth2ConfigAuthURL:@"https://api.twitch.tv/kraken/oauth2/authorize", kCSOauth2ConfigRedirectURL:@"cocoasplit-twitch://cocoasplit.com/oauth/redirect", kCSOauth2ConfigScopes:@[@"channel_read", @"user_read"], kCSOauth2ExtraAuthHeaders:@{@"Accept": @"application/vnd.twitchtv.v5+json"}};
         
         self.oauthObject = [[CSPluginServices sharedPluginServices] createOAuth2Authenticator:@"twitch" clientID:_oauth_client_id flowType:kCSOauth2ImplicitGrantFlow config:oconfig];
         
@@ -214,7 +214,8 @@
         
         
         NSMutableURLRequest *apiRequest = [NSMutableURLRequest requestWithURL:apiURL];
-        
+        [apiRequest setValue:@"application/vnd.twitchtv.v5+json" forHTTPHeaderField:@"Accept"];
+
         [self.oauthObject jsonRequest:apiRequest completionHandler:^(id decodedData) {
             
             NSDictionary *user_response = (NSDictionary *)decodedData;
@@ -247,7 +248,8 @@
     
     
     //[apiRequest setValue:[NSString stringWithFormat:@"OAuth %@", self.oAuthKey] forHTTPHeaderField:@"Authorization"];
-    
+    [apiRequest setValue:@"application/vnd.twitchtv.v5+json" forHTTPHeaderField:@"Accept"];
+
     [self.oauthObject jsonRequest:apiRequest completionHandler:^(id decodedData) {
         
         NSDictionary *channel_response = (NSDictionary *)decodedData;
@@ -271,6 +273,8 @@
         _oauth_client_id = [[NSBundle bundleForClass:[self class]] objectForInfoDictionaryKey:@"TwitchAPIClientID"];
     }
 
+    [apiRequest setValue:@"application/vnd.twitchtv.v5+json" forHTTPHeaderField:@"Accept"];
+    
     [apiRequest setValue:_oauth_client_id forHTTPHeaderField:@"Client-ID"];
     [NSURLConnection sendAsynchronousRequest:apiRequest queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *err) {
         

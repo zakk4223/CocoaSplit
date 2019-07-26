@@ -19,7 +19,6 @@
     if (self = [super init])
     {
         _layoutChanged = NO;
-        /*
         bool systemMetal = CaptureController.sharedCaptureController.useMetalIfAvailable;
         
         if (systemMetal && [CARenderer instancesRespondToSelector:@selector(setDestination:)])
@@ -31,10 +30,9 @@
         } else {
             _useMetalRenderer = NO;
         }
-        */
         //
         _useMetalRenderer = NO;
-         
+
          
     }
     
@@ -377,7 +375,7 @@
     [attributes setValue:[NSNumber numberWithInt:size.height] forKey:(NSString *)kCVPixelBufferHeightKey];
     [attributes setValue:@{(NSString *)kIOSurfaceIsGlobal: @NO} forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
     [attributes setValue:[NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA] forKey:(NSString *)kCVPixelBufferPixelFormatTypeKey];
-    //[attributes setValue:@YES forKey:(NSString *)kCVPixelBufferMetalCompatibilityKey];
+    [attributes setValue:@YES forKey:(NSString *)kCVPixelBufferMetalCompatibilityKey];
     
     
     if (_cvpool)

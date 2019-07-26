@@ -1411,6 +1411,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     {
         bTrans.duration = rTrans.duration;
     }
+    
     transitionDelegate.useAnimation = rTrans;
     
     bTrans.fromValue = @0;
