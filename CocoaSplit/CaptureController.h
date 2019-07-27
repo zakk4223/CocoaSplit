@@ -315,6 +315,8 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 -(void)removeLayoutRecorder:(CSLayoutRecorder *)toRemove;
 -(void)stopRecordingLayout:(SourceLayout *)layout;
 -(void)removeFileAudio:(CAMultiAudioFile *)toDelete;
+-(void)startRecording;
+-(void)stopRecording;
 
 -(SourceLayout *)sourceLayoutForUUID:(NSString *)uuid;
 -(bool)deleteTransition:(CSTransitionBase *)transition;
@@ -550,7 +552,8 @@ NSArray *_savedTransitionConstraints;
 -(void)postNotification:(NSString *)notificationName forObject:(id)obj;
 -(void)postNotification:(NSString *)notificationName forObject:(id)obj withUserInfo:(NSDictionary *)userInfo;
 -(IBAction)generateDebugFile:(id)sender;
-
+-(bool)startRecording;
+-(bool)stopRecording;
 
 
 @end

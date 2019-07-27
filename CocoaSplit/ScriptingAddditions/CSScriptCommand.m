@@ -35,14 +35,43 @@
         return [self showStagingView];
     } else if ([commandName isEqualToString:@"toggleStagingView"]) {
         return [self toggleStagingView];
+    } else if ([commandName isEqualToString:@"startRecording"]) {
+        return [self startRecording];
+    } else if ([commandName isEqualToString:@"stopRecording"]) {
+        return [self stopRecording];
+    } else if ([commandName isEqualToString:@"toggleRecording"]) {
+        return [self toggleRecording];
     }
-    
-    
     return nil;
 }
 
 
 
+
+-(id) startRecording
+{
+    [CaptureController.sharedCaptureController startRecording];
+    return nil;
+}
+
+-(id) stopRecording
+{
+    [CaptureController.sharedCaptureController stopRecording];
+    return nil;
+}
+
+-(id) toggleRecording
+{
+    bool isRecording = CaptureController.sharedCaptureController.mainRecordingActive;
+    if (isRecording)
+    {
+        [self stopRecording];
+    } else {
+        [self startRecording];
+    }
+    
+    return nil;
+}
 
 -(id) hideStagingView
 {

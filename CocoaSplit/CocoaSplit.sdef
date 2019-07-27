@@ -24,6 +24,7 @@
                 <cocoa key="transitions"/>
             </element>
             
+            <property name="recordingActive" code="CSra" type="boolean" access="r"/>
             <property name="stagingEnabled" code="CSse" type="boolean" access="r"/>
             <property name="activelayout" code="CSal" type="layout" access="r"/>
             <property name="staginglayout" code="CSsl" type="layout" access = "r"/>
@@ -263,6 +264,19 @@
                 <cocoa method="scriptActivate:"/>
             </responds-to>
         </class>
+        
+        <command name="startRecording" code="CSsrRecd">
+            <cocoa class="CSScriptCommand"/>
+        </command>
+        
+        <command name="stopRecording" code="CSstRecd">
+            <cocoa class="CSScriptCommand"/>
+        </command>
+        
+        <command name="toggleRecording" code="CStgRecd">
+            <cocoa class="CSScriptCommand"/>
+        </command>
+        
         
         <command name="record" code="CSlyRecd">
             <direct-parameter type="layout"/>

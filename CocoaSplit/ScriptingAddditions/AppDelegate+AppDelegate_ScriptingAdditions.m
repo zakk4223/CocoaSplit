@@ -73,6 +73,17 @@
 }
 
 
+-(void)toggleRecording
+{
+    if (self.captureController.mainRecordingActive)
+    {
+        [self.captureController stopRecording];
+    } else {
+        [self.captureController startRecording];
+    }
+}
+
+
 -(void)setActivelayoutByString:(NSString *)byString
 {
     NSUInteger selectedIdx = [self.captureController.sourceLayouts indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
@@ -138,6 +149,12 @@
     return self.captureController.selectedLayout;
 }
 
+-(bool)recordingActive
+{
+    return self.captureController.mainRecordingActive;
+}
+
+
 -(bool)stagingEnabled
 {
     return !self.captureController.stagingHidden;
@@ -152,6 +169,7 @@
 {
     self.captureController.useTransitions = useValue;
 }
+
 
 -(CAMultiAudioNode *)streamAudio
 {
