@@ -804,7 +804,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     OutputDestination *newDest = [[OutputDestination alloc] initWithType:[outputClass label]];
     id serviceObj = [[outputClass alloc] init];
     newDest.streamServiceObject = serviceObj;
-    
+    newDest.isStreamer = YES;
     [self openOutputSheet:newDest];
 }
 
@@ -1231,6 +1231,8 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
        dispatch_source_set_timer(_statistics_timer, DISPATCH_TIME_NOW, 1*NSEC_PER_SEC, 0);
        dispatch_source_set_event_handler(_statistics_timer, ^{
            
+           int stream_outputs = 0;
+           int record_outputs = 0;
            int total_outputs = 0;
            int errored_outputs = 0;
            int dropped_frame_cnt = 0;
@@ -1240,6 +1242,13 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
                if (outdest.active)
                {
                    total_outputs++;
+                   if (outdest.isRecorder)
+                   {
+                       record_outputs++;
+                   } else if (outdest.isStreamer) {
+                       stream_outputs++;
+                   }
+                   
                    if (outdest.errored)
                    {
                        errored_outputs++;
@@ -1257,11 +1266,17 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
                self.renderStatsString = [NSString stringWithFormat:@"Render min/max/avg: %f/%f/%f", self->_min_render_time, self->_max_render_time, self->_render_time_total / self->_renderedFrames];
                self.active_output_count = total_outputs;
                bool streamButtonEnabled = YES;
-               if (total_outputs == 0 && !self.captureRunning)
+               bool recordButtonEnabled = YES;
+               if (stream_outputs == 0 && !self.captureRunning)
                {
                    streamButtonEnabled = NO;
                }
                
+               if (record_outputs == 0 && !self.mainRecordingActive)
+               {
+                   recordButtonEnabled = NO;
+               }
+               self.recordButton.enabled = recordButtonEnabled;
                self.streamButton.enabled = streamButtonEnabled;
                self.total_dropped_frames = dropped_frame_cnt;
                
@@ -2163,6 +2178,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     }
     [saveRoot setValue:self.transitions forKey:@"transitions"];
     [saveRoot setValue:self.activeTransition forKey:@"activeTransition"];
+    [saveRoot setValue:@"YES" forKey:@"defaultRecorderSetup"];
     [NSKeyedArchiver archiveRootObject:saveRoot toFile:path];
     
 }
@@ -2517,7 +2533,18 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     }
 
 
+    if (!saveRoot[@"defaultRecorderSetup"])
+    {
+        for (OutputDestination *odest in _captureDestinations)
+        {
+            odest.isStreamer = YES;
+        }
+    
+        [self createDefaultRecorderOutput];
+    }
 }
+
+
 
 
 -(void)menuNeedsUpdate:(NSMenu *)menu
@@ -3000,6 +3027,40 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 }
 
 
+-(void) createDefaultRecorderOutput
+{
+    Class fileClass = self.sharedPluginLoader.streamServicePlugins[@"File"];
+    
+    OutputDestination *newDest = [[OutputDestination alloc] initWithType:[fileClass label]];
+    newDest.isRecorder = YES;
+    newDest.name = @"Recording";
+    newDest.active = YES;
+    id serviceObj = [[fileClass alloc] init];
+    [serviceObj setValue:@YES forKey:@"useTimestamp"];
+    [serviceObj setValue:@YES forKey:@"noClobber"];
+    NSString *baseDir = self.layoutRecordingDirectory;
+    NSString *fileFormat = self.layoutRecordingFormat;
+    NSString *outputFilename = [baseDir stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", @"CocoaSplit Recording", fileFormat]];
+    [serviceObj setValue:outputFilename forKey:@"fileName"];
+    newDest.streamServiceObject = serviceObj;
+    newDest.compressor_name = self.layoutRecorderCompressorName;
+    [self.captureDestinations addObject:newDest];
+}
+
+
+-(bool)shouldStopOutput:(OutputDestination *)dest
+{
+    if (dest.isStreamer && dest.isRecorder)
+    {
+        return (!self.mainRecordingActive && !self.captureRunning);
+    } else if (dest.isStreamer && !self.captureRunning) {
+        return YES;
+    } else if (dest.isRecorder && !self.mainRecordingActive) {
+        return YES;
+    }
+    return NO;
+}
+
 -(bool) startRecording
 {
     if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_8)
@@ -3014,13 +3075,42 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     
     if (self.mainLayoutRecorder)
     {
-        [self.mainLayoutRecorder startRecording];
+        //[self.mainLayoutRecorder startRecording];
         self.mainRecordingActive = YES;
+        for (OutputDestination *outdest in _captureDestinations)
+        {
+            
+            if (!outdest.isRecorder || outdest.captureRunning)
+            {
+                continue;
+            }
+            
+            outdest.captureRunning = YES;
+            
+            if (outdest.assignedLayout && outdest.active)
+            {
+                [self startRecordingLayout:outdest.assignedLayout usingOutput:outdest];
+            } else {
+                
+                
+                outdest.settingsController = self.mainLayoutRecorder;
+                if (outdest.active)
+                {
+                    [outdest reset];
+                    [outdest setup];
+                    
+                    //[outdest setupCompressor];
+                    
+                }
+            }
+        }
     }
     
     
     return YES;
 }
+
+
 -(bool) startStream
 {
     
@@ -3044,6 +3134,11 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     for (OutputDestination *outdest in _captureDestinations)
     {
     
+        if (!outdest.isStreamer || outdest.captureRunning)
+        {
+            continue;
+        }
+        
         outdest.captureRunning = YES;
 
         if (outdest.assignedLayout && outdest.active)
@@ -3079,8 +3174,26 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 {
     if (self.mainLayoutRecorder)
     {
-        [self.mainLayoutRecorder stopDefaultRecording];
+        //[self.mainLayoutRecorder stopDefaultRecording];
         self.mainRecordingActive = NO;
+        for (OutputDestination *out in _captureDestinations)
+        {
+            bool shouldStop = [self shouldStopOutput:out];
+            if (!shouldStop)
+            {
+                continue;
+            }
+            
+            out.captureRunning = NO;
+            
+            if (out.assignedLayout && out.active)
+            {
+                [self stopRecordingLayout:out.assignedLayout usingOutput:out];
+            } else {
+                [out stopOutput];
+            }
+        }
+        
     }
 }
 
@@ -3110,6 +3223,12 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     
     for (OutputDestination *out in _captureDestinations)
     {
+        bool shouldStop = [self shouldStopOutput:out];
+        if (!shouldStop)
+        {
+            continue;
+        }
+        
         out.captureRunning = NO;
         
         if (out.assignedLayout && out.active)

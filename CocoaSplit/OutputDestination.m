@@ -49,7 +49,10 @@
     }
     
     [aCoder encodeObject:self.audioTracks forKey:@"audioTracks"];
+    [aCoder encodeBool:self.isStreamer forKey:@"isStreamer"];
+    [aCoder encodeBool:self.isRecorder forKey:@"isRecorder"];
 }
+
 
 
 -(id) initWithCoder:(NSCoder *)aDecoder
@@ -72,6 +75,18 @@
         self.streamServiceObject = [aDecoder decodeObjectForKey:@"streamServiceObject"];
         self.type_class_name = [aDecoder decodeObjectForKey:@"type_class_name"];
         self.autoRetry = [aDecoder decodeBoolForKey:@"autoRetry"];
+        
+        if ([aDecoder containsValueForKey:@"isRecorder"])
+        {
+            self.isRecorder = [aDecoder decodeBoolForKey:@"isRecorder"];
+        }
+        
+        if ([aDecoder containsValueForKey:@"isStreamer"])
+        {
+            self.isStreamer = [aDecoder decodeBoolForKey:@"isStreamer"];
+        }
+        
+        
         _active = [aDecoder decodeBoolForKey:@"active"];
         NSDictionary *audioTracks = [aDecoder decodeObjectForKey:@"audioTracks"];
         if (audioTracks)
@@ -85,6 +100,8 @@
         } else {
             self.assignedLayout = nil;
         }
+        
+        
     }
     return self;
 }
@@ -202,20 +219,36 @@
 {
     
     bool streamingActive = [CaptureController sharedCaptureController].captureRunning;
+    bool recordingActive = [CaptureController sharedCaptureController].mainRecordingActive;
     
     bool old_active = _active;
     _active = is_active;
 
+    
     if (old_active != is_active)
     {
         if (is_active)
         {
-            
-            if (self.assignedLayout && ![self.assignedLayout isEqual:[NSNull null]] && streamingActive)
+    
+            bool doStart = NO;
+            if (self.isStreamer && streamingActive)
             {
-                [[CaptureController sharedCaptureController] startRecordingLayout:self.assignedLayout usingOutput:self];
-            } else {
-                [self setup];
+                doStart = YES;
+            }
+            
+            if (self.isRecorder && recordingActive)
+            {
+                doStart = YES;
+            }
+            
+            if (doStart)
+            {
+                if (self.assignedLayout && ![self.assignedLayout isEqual:[NSNull null]])
+                {
+                    [[CaptureController sharedCaptureController] startRecordingLayout:self.assignedLayout usingOutput:self];
+                } else {
+                    [self setup];
+                }
             }
             [CaptureController.sharedCaptureController postNotification:CSNotificationOutputSetActive forObject:self];
        } else {
@@ -432,7 +465,6 @@
     newout.stream_format = self.output_format;
     newout.samplerate = [CaptureController sharedCaptureController].multiAudioEngine.sampleRate;
     newout.audio_bitrate = [CaptureController sharedCaptureController].multiAudioEngine.audioBitrate;
-    NSLog(@"SETTING AUDIO TO %@", self.audioTracks);
     newout.activeAudioTracks = self.audioTracks;
     
     

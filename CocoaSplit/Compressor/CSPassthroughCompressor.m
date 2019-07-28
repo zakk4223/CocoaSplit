@@ -119,7 +119,7 @@
     
     CMVideoFormatDescriptionCreateForImageBuffer(NULL, useFrame, &formatDesc);
     CMSampleBufferCreateReadyWithImageBuffer(NULL,useFrame, formatDesc, &timingInfo, &wrapperBuffer);
-
+    
     imageBuffer.encodedSampleBuffer = wrapperBuffer;
     
     CFRelease(formatDesc);

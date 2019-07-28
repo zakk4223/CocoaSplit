@@ -173,11 +173,12 @@
     self.outputFilename = [baseDir stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", self.layout.name, fileFormat]];
     self.fileFormat = fileFormat;
     
-    //[self.outputs addObject:newOutput];
+    [self.outputs addObject:newOutput];
     [self startRecordingCommon];
     self.defaultRecordingActive = YES;
     self.layout.recordingLayout = YES;
 }
+
 
 
 -(void)stopDefaultRecording

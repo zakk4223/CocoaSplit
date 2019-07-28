@@ -66,6 +66,9 @@
 @property (strong) NSObject<CSStreamServiceProtocol>*streamServiceObject;
 @property (weak) SourceLayout *assignedLayout;
 @property (strong) NSMutableDictionary *audioTracks;
+@property (assign) bool isRecorder;
+@property (assign) bool isStreamer;
+
 
 //stats, mostly we just interrogate the ffmpeg_out object for these, but bouncing
 //through this class allows us to be a bit smarter about the UI status updates

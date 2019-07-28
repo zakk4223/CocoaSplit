@@ -64,6 +64,13 @@
     return dispatchPtr;
 }
 
+-(void) initStatsValues
+{
+    self.output_bytes = 0;
+    self.output_framecnt = 0;
+}
+
+
 -(bool)queueFramedata:(CapturedFrameData *)frameData
 {
     
@@ -135,6 +142,7 @@
             audio_frame.p_data = buffList->mBuffers[0].mData;
             
             _dispatch->NDIlib_send_send_audio_v2(_ndi_send, &audio_frame);
+
             free(buffList);
 
             
@@ -174,7 +182,8 @@
         CVPixelBufferLockBaseAddress(useImage, kCVPixelBufferLock_ReadOnly);
         send_frame.p_data = CVPixelBufferGetBaseAddress(useImage);
         _dispatch->NDIlib_send_send_video_async_v2(_ndi_send, &send_frame);
-        
+        self.output_framecnt++;
+        self.output_bytes += CVPixelBufferGetDataSize(useImage);
         if (_last_frame)
         {
             CVImageBufferRef oldImage = CMSampleBufferGetImageBuffer(_last_frame.encodedSampleBuffer);
