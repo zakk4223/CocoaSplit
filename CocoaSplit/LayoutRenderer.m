@@ -114,6 +114,7 @@
     
 
     
+    _planeNode.geometry.firstMaterial.diffuse.contents = nil;
     
     SCNPlane *planeGeometry = (SCNPlane *)_planeNode.geometry;
     planeGeometry.width = _cvpool_size.width;
@@ -130,6 +131,7 @@
     } else {
         camZ = camZ_h;
     }
+    
     _planeNode.position = SCNVector3Make(half_width, half_height, 0);
     _cameraNode.position = SCNVector3Make(half_width, half_height, camZ);
     _cameraNode.camera.zFar = 50000;
@@ -142,8 +144,9 @@
     CGColorRef tmpColor = CGColorCreateGenericRGB(0, 0, 0, 1);
     self.rootLayer.backgroundColor = tmpColor;
     CGColorRelease(tmpColor);
-    self.rootLayer.position = CGPointMake(0.0, _cvpool_size.height);
     self.rootLayer.anchorPoint = CGPointMake(0.0, 0.0);
+
+    self.rootLayer.position = CGPointMake(0.0, _cvpool_size.height);
     self.rootLayer.masksToBounds = YES;
     if (!_useMetalRenderer)
     {
@@ -230,7 +233,7 @@
     if (_useMetalRenderer)
     {
         CVMetalTextureRef mtlTexture = NULL;
-        CVMetalTextureCacheCreateTextureFromImage(NULL, _cvmetalcache, pixelBuffer, NULL, MTLPixelFormatBGRA8Unorm, CVPixelBufferGetWidth(pixelBuffer), CVPixelBufferGetHeight(pixelBuffer), 0, &mtlTexture);
+        CVMetalTextureCacheCreateTextureFromImage(NULL, _cvmetalcache, pixelBuffer, NULL, MTLPixelFormatBGRA8Unorm_sRGB, CVPixelBufferGetWidth(pixelBuffer), CVPixelBufferGetHeight(pixelBuffer), 0, &mtlTexture);
         if (!mtlTexture)
         {
             return;
@@ -239,7 +242,7 @@
         MTLRenderPassDescriptor *rpd = [[MTLRenderPassDescriptor alloc] init];
         rpd.colorAttachments[0].texture = CVMetalTextureGetTexture(mtlTexture);
         rpd.colorAttachments[0].loadAction = MTLLoadActionClear;
-        rpd.colorAttachments[0].clearColor = MTLClearColorMake(1, 0, 0, 1);
+        rpd.colorAttachments[0].clearColor = MTLClearColorMake(1, 0, 0, 0);
         rpd.colorAttachments[0].storeAction = MTLStoreActionStore;
         id<MTLCommandBuffer> cBuf = [_mtlCmdQueue commandBuffer];
         CGRect viewPort = CGRectMake(0, 0, _cvpool_size.width, _cvpool_size.height);
