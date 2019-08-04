@@ -21,19 +21,26 @@
         _layoutChanged = NO;
         bool systemMetal = CaptureController.sharedCaptureController.useMetalIfAvailable;
         
-        if (systemMetal && [CARenderer instancesRespondToSelector:@selector(setDestination:)])
+        _usescene = [SCNScene scene];
+        _cameraNode = [SCNNode node];
+        _cameraNode.camera = [SCNCamera camera];
+        [_usescene.rootNode addChildNode:_cameraNode];
+        
+        if (systemMetal)
         {
-            _useMetalRenderer = YES; //CArenderer supports swapping the destination Metal texture on the fly
+            _useMetalRenderer = YES;
             _metalDevice = MTLCreateSystemDefaultDevice();
             [self createMetalTextureCache];
-            
+
+
+            _mtlCmdQueue = [_metalDevice newCommandQueue];
         } else {
+            
             _useMetalRenderer = NO;
         }
-        //
-        _useMetalRenderer = NO;
+        
 
-         
+        
     }
     
     return self;
@@ -86,19 +93,70 @@
     return (id<CAAction>)[NSNull null];
 }
 
+-(void)setupSceneRenderer
+{
+    
+    float half_width = _cvpool_size.width/2.0f;
+    float half_height = _cvpool_size.height/2.0f;
+    _minBounding = SCNVector3Make(0, 0, 0);
+    _maxBounding = SCNVector3Make(_cvpool_size.width, _cvpool_size.height, 0);
+    [_usescene.rootNode setBoundingBoxMin:&_minBounding max:&_maxBounding];
+    if (!_planeNode)
+    {
+        _planeNode = [SCNNode node];
+        [_usescene.rootNode addChildNode:_planeNode];
+    }
+    
+    if (!_planeNode.geometry)
+    {
+        _planeNode.geometry = [SCNPlane planeWithWidth:_cvpool_size.width height:_cvpool_size.height];
+    }
+    
+
+    
+    
+    SCNPlane *planeGeometry = (SCNPlane *)_planeNode.geometry;
+    planeGeometry.width = _cvpool_size.width;
+    planeGeometry.height = _cvpool_size.height;
+    CGFloat camZ_w;
+    CGFloat camZ_h;
+    CGFloat camZ;
+    
+    camZ_w = fabs(half_width/tan((30.0f)*(M_PI/180)));
+    camZ_h = fabs(half_height/tan((30.0f)*(M_PI/180)));
+    if (camZ_w < camZ_h)
+    {
+        camZ = camZ_w;
+    } else {
+        camZ = camZ_h;
+    }
+    _planeNode.position = SCNVector3Make(half_width, half_height, 0);
+    _cameraNode.position = SCNVector3Make(half_width, half_height, camZ);
+    _cameraNode.camera.zFar = 50000;
+}
+
+
 -(void) setupRootlayer
 {
     self.rootLayer.bounds = CGRectMake(0, 0, _cvpool_size.width, _cvpool_size.height);
     CGColorRef tmpColor = CGColorCreateGenericRGB(0, 0, 0, 1);
     self.rootLayer.backgroundColor = tmpColor;
     CGColorRelease(tmpColor);
-    self.rootLayer.position = CGPointMake(0.0, 0.0);
+    self.rootLayer.position = CGPointMake(0.0, _cvpool_size.height);
     self.rootLayer.anchorPoint = CGPointMake(0.0, 0.0);
     self.rootLayer.masksToBounds = YES;
-    self.rootLayer.sublayerTransform = CATransform3DIdentity;
-    self.rootLayer.sublayerTransform = CATransform3DTranslate(self.rootLayer.sublayerTransform, 0, _cvpool_size.height, 0);
-    self.rootLayer.sublayerTransform = CATransform3DScale(self.rootLayer.sublayerTransform, 1.0, -1.0, 1.0);
-    self.renderer.bounds = NSMakeRect(0.0, 0.0, _cvpool_size.width, _cvpool_size.height);
+    if (!_useMetalRenderer)
+    {
+        self.rootLayer.sublayerTransform = CATransform3DIdentity;
+        self.rootLayer.sublayerTransform = CATransform3DTranslate(self.rootLayer.sublayerTransform, 0, _cvpool_size.height, 0);
+        self.rootLayer.sublayerTransform = CATransform3DScale(self.rootLayer.sublayerTransform, 1.0, -1.0, 1.0);
+    }
+    if (_planeNode)
+    {
+        _planeNode.geometry.firstMaterial.diffuse.contents = self.rootLayer;
+
+    }
+
     self.rootLayer.delegate = self;
 }
 
@@ -111,54 +169,43 @@
         return;
     }
     
+    [self setupSceneRenderer];
     
-    if (!_useMetalRenderer)
-    {
-        if (!self.cglCtx)
-        {
-            [self createCGLContext];
-        }
-        CGLSetCurrentContext(self.cglCtx);
-    }
-    
-    
-    if (!self.renderer)
-    {
-        if (_useMetalRenderer)
-        {
-            //A bit wasteful, but only for the initial frame
-            CVPixelBufferRef dummyFrame = NULL;
-            
-            CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, _cvpool, &dummyFrame);
-            CVMetalTextureRef dummyTexture = NULL;
-            
-            CVMetalTextureCacheCreateTextureFromImage(NULL, _cvmetalcache, dummyFrame, NULL, MTLPixelFormatBGRA8Unorm, CVPixelBufferGetWidth(dummyFrame), CVPixelBufferGetHeight(dummyFrame), 0, &dummyTexture);
-            if (@available(macOS 10.13, *)) {
-                self.renderer = [CARenderer rendererWithMTLTexture:CVMetalTextureGetTexture(dummyTexture) options:nil];
-            } else {
-                self.renderer = [CARenderer rendererWithCGLContext:self.cglCtx options:nil];
-            }
-        } else {
-            self.renderer = [CARenderer rendererWithCGLContext:self.cglCtx options:nil];
-        }
-    }
-    
-    
+
     if (!self.rootLayer)
     {
         self.rootLayer = [CALayer layer];
-        self.renderer.layer = self.rootLayer;
     }
 
     [self setupRootlayer];
 
     
-    if (!_useMetalRenderer)
+    if (_useMetalRenderer)
     {
+        if (!_sceneRenderer)
+        {
+            _sceneRenderer = [SCNRenderer rendererWithDevice:_metalDevice options:nil];
+            _sceneRenderer.scene = _usescene;
+            _sceneRenderer.pointOfView = _cameraNode;
+        }
+    } else {
+        if (!self.cglCtx)
+        {
+            [self createCGLContext];
+        }
+        
+        if (!_sceneRenderer)
+        {
+            _sceneRenderer = [SCNRenderer rendererWithContext:self.cglCtx options:nil];
+            _sceneRenderer.scene = _usescene;
+            _sceneRenderer.pointOfView = _cameraNode;
+
+        }
+        CGLSetCurrentContext(self.cglCtx);
         glViewport(0, 0, _cvpool_size.width, _cvpool_size.height);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        glOrtho(0, _cvpool_size.width, 0,_cvpool_size.height, -1, 1);
+       // glOrtho(0, _cvpool_size.width, 0,_cvpool_size.height, -1, 1);
     
     
         glMatrixMode(GL_MODELVIEW);
@@ -171,21 +218,6 @@
 }
 
 
--(void)setupCArenderer
-{
-    CGLSetCurrentContext(self.cglCtx);
-    if (!self.rootLayer)
-    {
-        self.rootLayer = [CALayer layer];
-        [self setupRootlayer];
-        self.renderer.layer = self.rootLayer;
-    }
-    
-    [self.renderer.layer addSublayer:self.layout.transitionLayer];
-    _currentLayout = self.layout;
-    [_currentLayout didBecomeVisible];
-    
-}
 
 -(void)renderToPixelBuffer:(CVPixelBufferRef)pixelBuffer
 {
@@ -203,15 +235,21 @@
         {
             return;
         }
-        [self.renderer setDestination:CVMetalTextureGetTexture(mtlTexture)];
-        [self.renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];
-        [self.renderer addUpdateRect:self.renderer.bounds];
-        [self.renderer render];
-        [self.renderer endFrame];
+
+        MTLRenderPassDescriptor *rpd = [[MTLRenderPassDescriptor alloc] init];
+        rpd.colorAttachments[0].texture = CVMetalTextureGetTexture(mtlTexture);
+        rpd.colorAttachments[0].loadAction = MTLLoadActionClear;
+        rpd.colorAttachments[0].clearColor = MTLClearColorMake(1, 0, 0, 1);
+        rpd.colorAttachments[0].storeAction = MTLStoreActionStore;
+        id<MTLCommandBuffer> cBuf = [_mtlCmdQueue commandBuffer];
+        CGRect viewPort = CGRectMake(0, 0, _cvpool_size.width, _cvpool_size.height);
+        [_sceneRenderer renderAtTime:CACurrentMediaTime() viewport:viewPort commandBuffer:cBuf passDescriptor:rpd];
+        [cBuf commit];
         CFRelease(mtlTexture);
             
         return;
     }
+    
     
     IOSurfaceRef ioSurface = CVPixelBufferGetIOSurface(pixelBuffer);
     CGLSetCurrentContext(self.cglCtx);
@@ -251,14 +289,9 @@
     fboStatus  = glCheckFramebufferStatus(GL_FRAMEBUFFER);
     glClear(GL_COLOR_BUFFER_BIT);
     
-    if (fboStatus == GL_FRAMEBUFFER_COMPLETE && self.renderer && self.renderer.layer)
+    if (fboStatus == GL_FRAMEBUFFER_COMPLETE && _sceneRenderer)
     {
-        
-        [self.renderer beginFrameAtTime:CACurrentMediaTime() timeStamp:NULL];
-        [self.renderer addUpdateRect:self.renderer.bounds];
-        [self.renderer render];
-        [self.renderer endFrame];
-
+        [_sceneRenderer renderAtTime:CACurrentMediaTime()];
     }
     glBindTexture(GL_TEXTURE_RECTANGLE_ARB, 0);
     glDisable(GL_TEXTURE_RECTANGLE_ARB);
@@ -273,7 +306,7 @@
     [CATransaction begin];
     if (!self.layout)
     {
-        return NULL;
+        goto rError;
     }
     
     
@@ -295,9 +328,7 @@
     
     if (CGSizeEqualToSize(frameSize, CGSizeZero))
     {
-        CGLSetCurrentContext(NULL);
-
-        return nil;
+        goto rError;
     }
  
     if (!CGSizeEqualToSize(frameSize, _cvpool_size))
@@ -312,14 +343,14 @@
     @synchronized (self) {
         doSetup = _layoutChanged;
     }
-    
-    if (doSetup && self.renderer)
+
+    if (doSetup)
     {
+    
         //[CATransaction lock];
         [CATransaction begin];
-        [self setupCArenderer];
-        [CATransaction commit];
-        //[CATransaction unlock];
+        [self.rootLayer addSublayer:self.layout.transitionLayer];
+        [self.layout didBecomeVisible];
         @synchronized (self) {
             _layoutChanged = NO;
         }
@@ -331,10 +362,8 @@
     @synchronized (self) {
         [CATransaction begin];
         [self renderToPixelBuffer:destFrame];
-        //[CATransaction unlock];
         [CATransaction commit];
     }
-    [CATransaction commit];
     CGLSetCurrentContext(NULL);
     @synchronized(self)
     {
@@ -346,7 +375,9 @@
         _currentPB = destFrame;
     }
     
-
+rError:
+    CGLSetCurrentContext(NULL);
+    [CATransaction commit];
     return _currentPB;
 }
 

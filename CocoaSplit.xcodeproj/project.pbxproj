@@ -103,6 +103,7 @@
 		344825E61B253D6900AF9EAC /* CAMultiAudioMatrixCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 344825E51B253D6900AF9EAC /* CAMultiAudioMatrixCell.m */; };
 		344988131893CF0500044259 /* LogWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 344988121893CF0500044259 /* LogWindow.xib */; };
 		344DE4281FFB0FEE00196E2E /* CAMultiAudioEffectWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 344DE4271FFB0FEE00196E2E /* CAMultiAudioEffectWindow.m */; };
+		344E29D022F3D7090026D909 /* SceneKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 344E29B422F3D7090026D909 /* SceneKit.framework */; };
 		3450239D1C60B3EF00B461B5 /* CSLayoutCollectionItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3450239C1C60B3EF00B461B5 /* CSLayoutCollectionItemView.m */; };
 		34528B8F1F9A707400C090E0 /* InputSource+ScriptingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 34528B8E1F9A707400C090E0 /* InputSource+ScriptingAdditions.m */; };
 		34564D5F2071C4BC00652BF0 /* CSInputLayoutTransitionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34564D5D2071C4BC00652BF0 /* CSInputLayoutTransitionViewController.m */; };
@@ -787,6 +788,7 @@
 		344988121893CF0500044259 /* LogWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LogWindow.xib; path = Interface/LogWindow.xib; sourceTree = "<group>"; };
 		344DE4261FFB0FEE00196E2E /* CAMultiAudioEffectWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAMultiAudioEffectWindow.h; sourceTree = "<group>"; };
 		344DE4271FFB0FEE00196E2E /* CAMultiAudioEffectWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CAMultiAudioEffectWindow.m; sourceTree = "<group>"; };
+		344E29B422F3D7090026D909 /* SceneKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SceneKit.framework; path = System/Library/Frameworks/SceneKit.framework; sourceTree = SDKROOT; };
 		3450239B1C60B3EF00B461B5 /* CSLayoutCollectionItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSLayoutCollectionItemView.h; path = Interface/CSLayoutCollectionItemView.h; sourceTree = "<group>"; };
 		3450239C1C60B3EF00B461B5 /* CSLayoutCollectionItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CSLayoutCollectionItemView.m; path = Interface/CSLayoutCollectionItemView.m; sourceTree = "<group>"; };
 		3451A1C617111BD900DF6A8B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -1250,6 +1252,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				344E29D022F3D7090026D909 /* SceneKit.framework in Frameworks */,
 				343CE08F21D3705800233909 /* Metal.framework in Frameworks */,
 				3440368A2081FE3E004BC514 /* GLKit.framework in Frameworks */,
 				3409A7711FA0D80A0073866E /* OpenCL.framework in Frameworks */,
@@ -1378,6 +1381,7 @@
 		340FE4A015F3417E00E4CE4E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				344E29B422F3D7090026D909 /* SceneKit.framework */,
 				343CE07321D3705800233909 /* Metal.framework */,
 				348DF1D42120E2C000144132 /* Sparkle.framework */,
 				344036892081FE3E004BC514 /* GLKit.framework */,
