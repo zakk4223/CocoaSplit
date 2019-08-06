@@ -4,6 +4,7 @@
 //
 //  Created by Zakk on 9/2/12.
 
+#import <Metal/Metal.h>
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
 #import <VideoToolbox/VideoToolbox.h>
@@ -169,7 +170,9 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (assign) bool metalAvailable;
 @property (assign) bool useMetalIfAvailable;
 @property (assign) bool mainRecordingActive;
-
+@property (strong) id<MTLDevice> useMetalDevice;
+@property (readonly) NSArray *availableMetalDevices;
+@property (readonly) id<MTLDevice> currentMetalDevice;
 
 
 
@@ -540,6 +543,9 @@ NSArray *_savedTransitionConstraints;
 @property (assign) bool metalAvailable;
 @property (assign) bool useMetalIfAvailable;
 @property (assign) bool mainRecordingActive;
+@property (strong) id<MTLDevice> useMetalDevice;
+@property (readonly) NSArray *availableMetalDevices;
+@property (readonly) id<MTLDevice> currentMetalDevice;
 
 -(JSContext *)setupJavascriptContext;
 -(JSContext *)setupJavascriptContext:(JSVirtualMachine *)machine;

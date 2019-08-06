@@ -29,7 +29,8 @@
         if (systemMetal)
         {
             _useMetalRenderer = YES;
-            _metalDevice = MTLCreateSystemDefaultDevice();
+            _metalDevice = [CaptureController.sharedCaptureController currentMetalDevice];
+            NSLog(@"USING METAL RENDERER WITH DEVICE %@", _metalDevice);
             [self createMetalTextureCache];
 
 

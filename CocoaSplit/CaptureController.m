@@ -2178,6 +2178,29 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     }
     [saveRoot setValue:self.transitions forKey:@"transitions"];
     [saveRoot setValue:self.activeTransition forKey:@"activeTransition"];
+    [saveRoot setValue:[NSNumber numberWithBool:self.useMetalIfAvailable] forKey:@"useMetalIfAvailable"];
+    if (@available(macOS 10.13, *))
+    {
+        NSNumber *saveMetalDeviceID;
+        if (self.useMetalDevice)
+        {
+            if ([[NSNull null] isEqual:self.useMetalDevice])
+            {
+                saveMetalDeviceID = nil;
+            } else {
+                saveMetalDeviceID = [NSNumber numberWithUnsignedLongLong:self.useMetalDevice.registryID];
+            }
+        } else {
+            saveMetalDeviceID = nil;
+        }
+        if (saveMetalDeviceID)
+        {
+            [saveRoot setValue:saveMetalDeviceID forKey:@"metalDeviceID"];
+        }
+
+    }
+    
+    
     [saveRoot setValue:@"YES" forKey:@"defaultRecorderSetup"];
     [NSKeyedArchiver archiveRootObject:saveRoot toFile:path];
     
@@ -2238,7 +2261,32 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     [saveRoot addEntriesFromDictionary:savedValues];
     
 
-
+    if ([saveRoot valueForKey:@"useMetalIfAvailable"])
+    {
+        self.useMetalIfAvailable = [[saveRoot valueForKey:@"useMetalIfAvailable"] boolValue];
+    }
+    
+    if (@available(macOS 10.13, *))
+    {
+        if ([saveRoot valueForKey:@"metalDeviceID"])
+        {
+            NSNumber *mdid = [saveRoot valueForKey:@"metalDeviceID"];
+            
+            if (mdid && ![[NSNull null] isEqual:mdid])
+            {
+                unsigned long long mrID = [mdid unsignedLongLongValue];
+                NSArray *mDevs = MTLCopyAllDevices();
+                for (id<MTLDevice> dev in mDevs)
+                {
+                    if (dev.registryID == mrID)
+                    {
+                        self.useMetalDevice = dev;
+                        break;
+                    }
+                }
+            }
+        }
+    }
     self.multiAudioEngine = [saveRoot valueForKey:@"multiAudioEngine"];
     if (!self.multiAudioEngine)
     {
@@ -2482,6 +2530,9 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 
     [self.sourceListViewController addObserver:self forKeyPath:@"selectedObjects" options:NSKeyValueObservingOptionNew context:NULL];
     self.useTransitions = [[saveRoot valueForKey:@"useTransitions"] boolValue];
+    
+
+    
     if ([saveRoot valueForKey:@"transitionDuration"])
     {
         self.transitionDuration = [saveRoot valueForKey:@"transitionDuration"];
@@ -5198,6 +5249,27 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
         [self.stagingPreviewView windowOcclusionStateChanged];
     }
 }
+
+-(NSArray *)availableMetalDevices
+{
+    
+    return MTLCopyAllDevices();
+}
+
+-(id<MTLDevice>)currentMetalDevice
+{
+    id<MTLDevice> retDevice;
+    
+    retDevice = self.useMetalDevice;
+    
+    if ([[NSNull null] isEqual:retDevice] || !retDevice)
+    {
+        retDevice = MTLCreateSystemDefaultDevice();
+    }
+    
+    return retDevice;
+}
+
 
 -(void)dealloc
 {
