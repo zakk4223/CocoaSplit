@@ -2605,6 +2605,13 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     {
         [menu removeAllItems];
         NSString *streamTitle = nil;
+        NSString *recordingTitle = nil;
+        if (self.mainRecordingActive)
+        {
+            recordingTitle = @"Stop Recording";
+        } else {
+            recordingTitle = @"Start Recording";
+        }
         if (self.captureRunning)
         {
             streamTitle = @"Stop Stream";
@@ -2614,6 +2621,9 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
         NSMenuItem *streamItem = [[NSMenuItem alloc] initWithTitle:streamTitle action:@selector(statusMenuStreamAction:) keyEquivalent:@""];
         streamItem.target = self;
         [menu addItem:streamItem];
+        NSMenuItem *recItem = [[NSMenuItem alloc] initWithTitle:recordingTitle action:@selector(statusMenuRecordAction:) keyEquivalent:@""];
+        recItem.target = self;
+        [menu addItem:recItem];
     } else if (menu == self.stagingFullScreenMenu || menu == self.liveFullScreenMenu) {
         [menu removeAllItems];
         for (NSDictionary *sInfo in _screensCache)
@@ -3383,6 +3393,17 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     }
     
 }
+
+-(void)statusMenuRecordAction:(NSMenuItem *)sender
+{
+    if (self.mainRecordingActive)
+    {
+        [self stopRecording];
+    } else {
+        [self startRecording];
+    }
+}
+
 
 -(void)statusMenuStreamAction:(NSMenuItem *)sender
 {
