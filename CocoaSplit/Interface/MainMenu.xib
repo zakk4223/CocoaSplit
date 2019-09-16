@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
+            <connections>
+                <outlet property="delegate" destination="vt4-0x-svo" id="sXl-5Y-rTl"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <userDefaultsController id="WwR-SJ-Eby"/>
+        <menu title="AMainMenu" systemMenu="main" id="Zns-7Q-ZtE">
+            <items>
+                <menuItem title="CocoaSplit" id="fkz-Fl-J4t">
+                    <menu key="submenu" title="CocoaSplit" systemMenu="apple" id="Aqu-lT-tmd">
+                        <items>
+                            <menuItem title="About CocoaSplit" id="JGH-1D-w62">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="orderFrontStandardAboutPanel:" target="-2" id="VKr-yH-riV"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="O46-Hh-aUt">
+                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                            </menuItem>
+                            <menuItem title="Preferences…" keyEquivalent="," id="TMS-NM-jLR">
+                                <connections>
+                                    <binding destination="vt4-0x-svo" name="target" keyPath="self.captureController" id="3lk-lU-t4Q">
+                                        <dictionary key="options">
+                                            <string key="NSSelectorName">openAdvancedPrefPanel:</string>
+                                        </dictionary>
+                                    </binding>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="3lE-Ab-E8m">
+                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                            </menuItem>
+                            <menuItem title="Services" id="Nyn-ap-192">
+                                <menu key="submenu" title="Services" systemMenu="services" id="R2s-Q4-cJs"/>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="Xxs-WH-WMf">
+                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                            </menuItem>
+                            <menuItem title="Hide CocoaSplit" keyEquivalent="h" id="qlE-FY-4Y5">
+                                <connections>
+                                    <action selector="hide:" target="-1" id="Ru7-ek-9yi"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Hide Others" keyEquivalent="h" id="73P-2c-5Ry">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="hideOtherApplications:" target="-1" id="uf9-V7-s2X"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Show All" id="fuC-3E-qGR">
+                                <connections>
+                                    <action selector="unhideAllApplications:" target="-1" id="4Y1-Jv-Sd6"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="CBZ-HP-5yJ">
+                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                            </menuItem>
+                            <menuItem title="Quit CocoaSplit" keyEquivalent="q" id="8Wk-FQ-giX">
+                                <connections>
+                                    <action selector="terminate:" target="-2" id="GbC-ZZ-lP9"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="File" id="HU8-lN-r1h">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="File" id="eMM-sM-Lyn">
+                        <items>
+                            <menuItem title="Import Layout" id="fFf-Va-TlI">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <binding destination="vt4-0x-svo" name="target" keyPath="self.captureController" id="fJu-XM-cbt">
+                                        <dictionary key="options">
+                                            <string key="NSSelectorName">doImportLayout:</string>
+                                        </dictionary>
+                                    </binding>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Export Layout" id="AAh-mm-r1B">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" id="8aI-O0-q4b">
+                                    <items>
+                                        <menuItem title="Item 1" id="N6Z-f5-Nya">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="Edit" id="Qdg-FQ-t7P">
+                    <menu key="submenu" title="Edit" id="y9V-5F-Lsm">
+                        <items>
+                            <menuItem title="Undo" keyEquivalent="z" id="XvN-BN-bXl">
+                                <connections>
+                                    <action selector="undo:" target="-1" id="47P-IT-fyX"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Redo" keyEquivalent="Z" id="YfN-lD-6J1">
+                                <modifierMask key="keyEquivalentModifierMask" shift="YES" command="YES"/>
+                                <connections>
+                                    <action selector="redo:" target="-1" id="xAn-nc-Mjz"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="SFS-Ol-pEc">
+                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                            </menuItem>
+                            <menuItem title="Cut" keyEquivalent="x" id="V57-pq-rR3">
+                                <connections>
+                                    <action selector="cut:" target="-1" id="w1y-xd-BM3"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Copy" keyEquivalent="c" id="NWk-Pl-dWe">
+                                <connections>
+                                    <action selector="copy:" target="-1" id="5a8-yw-som"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Paste" keyEquivalent="v" id="0MZ-n7-uO2">
+                                <connections>
+                                    <action selector="paste:" target="-1" id="FeE-ZW-Knt"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Paste and Match Style" keyEquivalent="V" id="OaI-td-AFH">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="pasteAsPlainText:" target="-1" id="sGD-7V-MKD"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Delete" id="C8P-Mi-p1u">
+                                <connections>
+                                    <action selector="delete:" target="-1" id="42T-PD-f5l"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Select All" keyEquivalent="a" id="ueV-RJ-e62">
+                                <connections>
+                                    <action selector="selectAll:" target="-1" id="ap6-fR-55b"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="View" id="7vh-hB-kek">
+                    <menu key="submenu" title="View" id="ZPJ-zE-yBL">
+                        <items>
+                            <menuItem title="Logs" id="aS1-n8-7CB">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <binding destination="vt4-0x-svo" name="target" keyPath="self.captureController" id="vyd-QO-yAh">
+                                        <dictionary key="options">
+                                            <string key="NSSelectorName">openLogWindow:</string>
+                                        </dictionary>
+                                    </binding>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Input Library" id="xtr-5P-1EL">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <binding destination="vt4-0x-svo" name="target" keyPath="self.captureController" id="N1c-ra-8ek">
+                                        <dictionary key="options">
+                                            <string key="NSSelectorName">openLibraryWindow:</string>
+                                        </dictionary>
+                                    </binding>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Plugin Manager" id="GlK-pr-mRf">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <binding destination="vt4-0x-svo" name="target" keyPath="self.captureController" id="AQg-SO-m0G">
+                                        <dictionary key="options">
+                                            <string key="NSSelectorName">openPluginManager:</string>
+                                        </dictionary>
+                                    </binding>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Midi Manager" id="GBn-Ag-JSL">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <binding destination="vt4-0x-svo" name="target" keyPath="self.captureController" id="uGr-qa-IF0">
+                                        <dictionary key="options">
+                                            <string key="NSSelectorName">openMidiManager:</string>
+                                        </dictionary>
+                                    </binding>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Toggle Staging View" id="gBR-ns-BhI">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <binding destination="vt4-0x-svo" name="target" keyPath="self.captureController" id="ZS5-jN-ARc">
+                                        <dictionary key="options">
+                                            <string key="NSSelectorName">stagingViewToggle:</string>
+                                        </dictionary>
+                                    </binding>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="FullScreen" id="QCH-zK-edI">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="FullScreen" id="kBt-Ix-tLw">
+                                    <items>
+                                        <menuItem title="Staging" id="Btb-gj-ybl">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="Staging" id="Km0-Yt-Rnk">
+                                                <items>
+                                                    <menuItem title="Item" id="PaS-9J-r5y">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </menuItem>
+                                        <menuItem title="Live" id="T4c-CR-MLt">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="Live" id="L8l-Xt-1wh">
+                                                <items>
+                                                    <menuItem title="Item" id="T7m-bW-Cn3">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="Window" id="ivw-qO-1dD">
+                    <menu key="submenu" title="Window" systemMenu="window" id="XRP-xf-RkD">
+                        <items>
+                            <menuItem title="Minimize" keyEquivalent="m" id="lfx-3J-sIa">
+                                <connections>
+                                    <action selector="performMiniaturize:" target="-1" id="mci-1u-Ey3"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Zoom" id="ppV-C1-2aC">
+                                <connections>
+                                    <action selector="performZoom:" target="-1" id="UZR-oZ-vY9"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="hba-AS-Kne">
+                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                            </menuItem>
+                            <menuItem title="Bring All to Front" id="mZJ-l4-edn">
+                                <connections>
+                                    <action selector="arrangeInFront:" target="-1" id="itB-e9-Kgy"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="Extras" id="BBT-lR-q8m">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Extras" id="ajP-CO-aYQ">
+                        <items>
+                            <menuItem title="Item" id="Jdd-mm-LOl">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="Help" id="XqZ-EB-RGr">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Help" systemMenu="help" id="KE6-q2-tyC">
+                        <items>
+                            <menuItem title="Check for Updates" id="ibZ-f9-bKn">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="checkForUpdates:" target="U9Q-OD-6GE" id="jea-kf-cFr"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="CocoaSplit Help" keyEquivalent="?" id="xtO-9x-Are">
+                                <connections>
+                                    <action selector="showHelp:" target="-1" id="3v1-fd-UWt"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Create Debug Info" id="iXf-GR-NwZ" userLabel="Generate debug file">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <binding destination="vt4-0x-svo" name="target" keyPath="self.captureController" id="e8s-Km-xis">
+                                        <dictionary key="options">
+                                            <string key="NSSelectorName">generateDebugFIle:</string>
+                                        </dictionary>
+                                    </binding>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+            </items>
+        </menu>
+        <objectController id="s9w-SF-hoc" userLabel="CaptureController">
+            <connections>
+                <binding destination="vt4-0x-svo" name="contentObject" keyPath="self.captureController" id="C0f-Jc-sj5"/>
+            </connections>
+        </objectController>
+        <customObject id="vt4-0x-svo" userLabel="Delegate" customClass="AppDelegate">
+            <connections>
+                <outlet property="exportLayoutMenu" destination="8aI-O0-q4b" id="7Ka-nB-G6W"/>
+                <outlet property="extrasMenu" destination="ajP-CO-aYQ" id="rOO-Se-eJh"/>
+                <outlet property="liveFullScreenMenu" destination="L8l-Xt-1wh" id="hu0-I1-JQS"/>
+                <outlet property="stagingFullScreenMenu" destination="Km0-Yt-Rnk" id="Abq-9z-cWj"/>
+            </connections>
+        </customObject>
+        <customObject id="U9Q-OD-6GE" customClass="SUUpdater"/>
+    </objects>
+</document>

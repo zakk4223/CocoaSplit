@@ -61,6 +61,31 @@
 -(void)applicationWillFinishLaunching:(NSNotification *)notification
 {
     
+    NSMutableDictionary *defaults = [NSMutableDictionary dictionary];
+    
+    if (@available(macOS 10.11, *))
+    {
+        defaults[@"useMetalIfAvailable"] = [NSNumber numberWithBool:YES];
+    } else {
+        defaults[@"useMetalIfAvailable"] = [NSNumber numberWithBool:NO];
+    }
+    
+    [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
+    
+    NSArray *nibObjects = nil;
+    [NSBundle.mainBundle loadNibNamed:@"MainWindow" owner:self topLevelObjects:&nibObjects];
+    _mainWindowObjects = nibObjects;
+    NSLog(@"CAPTURE CONTROLLER %@", self.captureController);
+    self.captureController.stagingFullScreenMenu = self.stagingFullScreenMenu;
+    self.stagingFullScreenMenu.delegate = self.captureController;
+    self.captureController.liveFullScreenMenu = self.liveFullScreenMenu;
+    self.liveFullScreenMenu.delegate = self.captureController;
+    self.captureController.extrasMenu = self.extrasMenu;
+    self.captureController.exportLayoutMenu = self.exportLayoutMenu;
+    self.captureController.exportLayoutMenu.delegate = self.captureController;
+    NSLog(@"WILL FINISH LAUNCHING %@", NSUserDefaults.standardUserDefaults);
+
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleNotification:) name:@"_NSWindowWillBecomeVisible" object:nil];
     
     _notificationController = [[CSUserNotificationController alloc] init];
@@ -82,7 +107,7 @@
     
     
     
-    self.captureController = [CaptureController sharedCaptureController];
+    //self.captureController = [CaptureController sharedCaptureController];
 
     
     [_window setReleasedWhenClosed:NO];
@@ -184,6 +209,7 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
+    NSLog(@"DID FINISH LAUNCHING");
     [CaptureController.sharedCaptureController postNotification:CSNotificationLaunchCompleted forObject:self];
 }
 

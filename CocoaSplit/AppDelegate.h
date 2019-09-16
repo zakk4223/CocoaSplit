@@ -14,6 +14,7 @@
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 {
     CSUserNotificationController *_notificationController;
+    NSArray *_mainWindowObjects;
     
 }
 @property (unsafe_unretained) IBOutlet CaptureController *captureController;
@@ -22,6 +23,11 @@
 
 @property (weak) IBOutlet NSButton *layoutSequenceButton;
 
+@property (weak) IBOutlet NSMenu *exportLayoutMenu;
+
+@property (weak) IBOutlet NSMenu *stagingFullScreenMenu;
+@property (weak) IBOutlet NSMenu *liveFullScreenMenu;
+@property (weak) IBOutlet NSMenu *extrasMenu;
 
 -(void)changeAppearance;
 

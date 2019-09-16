@@ -1955,8 +1955,10 @@
     
     if (CaptureController.sharedCaptureController.useMetalIfAvailable)
     {
+        NSLog(@"CA LAYER");
         _glLayer = [CSPreviewCALayer layer];
     } else {
+        NSLog(@"GL LAYER");
         _glLayer = [CSPreviewGLLayer layer];
 
     }

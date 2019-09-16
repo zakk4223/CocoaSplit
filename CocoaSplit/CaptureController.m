@@ -1106,10 +1106,8 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
        if(@available(macOS 10.11, *))
        {
            self.metalAvailable = YES;
-           self.useMetalIfAvailable = YES;
        } else {
            self.metalAvailable = NO;
-           self.useMetalIfAvailable = NO;
        }
        self.transitionDirections = @[kCATransitionFromTop, kCATransitionFromRight, kCATransitionFromBottom, kCATransitionFromLeft];
        self.useInstantRecord = YES;
@@ -2087,6 +2085,18 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 }
 
 
+-(bool) useMetalIfAvailable
+{
+    
+    if (@available(macOS 10.11, *))
+    {
+        bool defaultsValue = [NSUserDefaults.standardUserDefaults boolForKey:@"useMetalIfAvailable"];
+        NSLog(@"RETURNING %d", defaultsValue);
+        return defaultsValue;
+    }
+    return NO;
+}
+
 
 -(void) saveSettings
 {
@@ -2178,7 +2188,6 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     }
     [saveRoot setValue:self.transitions forKey:@"transitions"];
     [saveRoot setValue:self.activeTransition forKey:@"activeTransition"];
-    [saveRoot setValue:[NSNumber numberWithBool:self.useMetalIfAvailable] forKey:@"useMetalIfAvailable"];
     if (@available(macOS 10.13, *))
     {
         NSNumber *saveMetalDeviceID;
@@ -2263,7 +2272,9 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 
     if ([saveRoot valueForKey:@"useMetalIfAvailable"])
     {
-        self.useMetalIfAvailable = [[saveRoot valueForKey:@"useMetalIfAvailable"] boolValue];
+        BOOL metalVal = [[saveRoot valueForKey:@"useMetalIfAvailable"] boolValue];
+        
+        [NSUserDefaults.standardUserDefaults setBool:metalVal forKey:@"useMetalIfAvailable"];
     }
     
     if (@available(macOS 10.13, *))

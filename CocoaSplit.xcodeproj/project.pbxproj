@@ -29,7 +29,7 @@
 		340FE4AE15F3417E00E4CE4E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FE4AD15F3417E00E4CE4E /* main.m */; };
 		340FE4B215F3417E00E4CE4E /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 340FE4B015F3417E00E4CE4E /* Credits.rtf */; };
 		340FE4B515F3417E00E4CE4E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FE4B415F3417E00E4CE4E /* AppDelegate.m */; };
-		340FE4B815F3417E00E4CE4E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 340FE4B615F3417E00E4CE4E /* MainMenu.xib */; };
+		340FE4B815F3417E00E4CE4E /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 340FE4B615F3417E00E4CE4E /* MainWindow.xib */; };
 		340FE4DA15F346D900E4CE4E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4D815F346CC00E4CE4E /* AVFoundation.framework */; };
 		340FE4E115F3581200E4CE4E /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 340FE4E015F3581200E4CE4E /* QTKit.framework */; };
 		340FE50815F444AA00E4CE4E /* CaptureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340FE50715F444AA00E4CE4E /* CaptureController.m */; };
@@ -150,6 +150,7 @@
 		3473D2A81D5685DA00842EEE /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3473D2A71D5685DA00842EEE /* Media.xcassets */; };
 		3473D2AE1D56920B00842EEE /* CSAdvancedAudioWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3473D2AC1D56920B00842EEE /* CSAdvancedAudioWindowController.m */; };
 		3473D2AF1D56920B00842EEE /* CSAdvancedAudioWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3473D2AD1D56920B00842EEE /* CSAdvancedAudioWindowController.xib */; };
+		3473E6D1232F5F4D008FF29A /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3473E6D0232F5F4D008FF29A /* MainMenu.xib */; };
 		3477BF5122081E57003AF9FF /* CSKilobitFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3477BF5022081E57003AF9FF /* CSKilobitFormatter.m */; };
 		34788DB61EF511E100C3C9C5 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34788DB51EF511E100C3C9C5 /* JavaScriptCore.framework */; };
 		34788DD11EF52C1A00C3C9C5 /* cocoasplit.js in Resources */ = {isa = PBXBuildFile; fileRef = 34788DD01EF52C1A00C3C9C5 /* cocoasplit.js */; };
@@ -821,7 +822,7 @@
 		345BECFD1F456C6500B46F29 /* CSLayoutLayoutTransitionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSLayoutLayoutTransitionViewController.h; sourceTree = "<group>"; };
 		345BECFE1F456C6500B46F29 /* CSLayoutLayoutTransitionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSLayoutLayoutTransitionViewController.m; sourceTree = "<group>"; };
 		345BECFF1F456C6500B46F29 /* CSLayoutLayoutTransitionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSLayoutLayoutTransitionViewController.xib; sourceTree = "<group>"; };
-		345D199422A7B665007366F1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		345D199422A7B665007366F1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainWindow.xib; sourceTree = "<group>"; };
 		345F8B031A1060D6009A81E3 /* CSAacEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSAacEncoder.h; sourceTree = "<group>"; };
 		345F8B041A1060D6009A81E3 /* CSAacEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAacEncoder.m; sourceTree = "<group>"; };
 		345F8B191A1218DE009A81E3 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -881,6 +882,7 @@
 		3473D2AB1D56920B00842EEE /* CSAdvancedAudioWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSAdvancedAudioWindowController.h; sourceTree = "<group>"; };
 		3473D2AC1D56920B00842EEE /* CSAdvancedAudioWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSAdvancedAudioWindowController.m; sourceTree = "<group>"; };
 		3473D2AD1D56920B00842EEE /* CSAdvancedAudioWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSAdvancedAudioWindowController.xib; sourceTree = "<group>"; };
+		3473E6D0232F5F4D008FF29A /* MainMenu.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainMenu.xib; path = Interface/MainMenu.xib; sourceTree = "<group>"; };
 		3477BF4F22081E57003AF9FF /* CSKilobitFormatter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSKilobitFormatter.h; path = Interface/CSKilobitFormatter.h; sourceTree = "<group>"; };
 		3477BF5022081E57003AF9FF /* CSKilobitFormatter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CSKilobitFormatter.m; path = Interface/CSKilobitFormatter.m; sourceTree = "<group>"; };
 		34788DB51EF511E100C3C9C5 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -1739,7 +1741,8 @@
 				3415CED21AE257DA002F11F5 /* CSTextCaptureBaseView.xib */,
 				340274BA203C0D0D0099328C /* InputSourceViews */,
 				344988121893CF0500044259 /* LogWindow.xib */,
-				340FE4B615F3417E00E4CE4E /* MainMenu.xib */,
+				340FE4B615F3417E00E4CE4E /* MainWindow.xib */,
+				3473E6D0232F5F4D008FF29A /* MainMenu.xib */,
 				34348C2919BDBDC000A122C2 /* PluginManagerWindowController.xib */,
 				34F52A241BC1CE2700662911 /* CSLayoutCollectionItem.h */,
 				3450239B1C60B3EF00B461B5 /* CSLayoutCollectionItemView.h */,
@@ -2837,7 +2840,7 @@
 				3400A07E1BD49406003E1828 /* CSInputLibraryItemView.xib in Resources */,
 				34788DD11EF52C1A00C3C9C5 /* cocoasplit.js in Resources */,
 				340FE4B215F3417E00E4CE4E /* Credits.rtf in Resources */,
-				340FE4B815F3417E00E4CE4E /* MainMenu.xib in Resources */,
+				340FE4B815F3417E00E4CE4E /* MainWindow.xib in Resources */,
 				343B7BE21E917B1A00233DF1 /* cocoasplit.py in Resources */,
 				34DA1D3F1BF823E700132486 /* CSNewOutputWindowController.xib in Resources */,
 				343C2CB31FFBB8DC00849DA9 /* CSSourceListViewController.xib in Resources */,
@@ -2877,6 +2880,7 @@
 				3415CED31AE257DA002F11F5 /* CSTextCaptureBaseView.xib in Resources */,
 				342B33B3198073EC00492CB7 /* line.fgsh in Resources */,
 				3470CD2F1D57D2AA006404D9 /* CSStreamOutputWindowController.xib in Resources */,
+				3473E6D1232F5F4D008FF29A /* MainMenu.xib in Resources */,
 				344825D21B2536EA00AF9EAC /* CAMultiAudioMatrixView.xib in Resources */,
 				3473D2A81D5685DA00842EEE /* Media.xcassets in Resources */,
 				34F091EE21F85A90005254E6 /* CSFilterImageLayoutTransitionViewController.xib in Resources */,
@@ -3153,12 +3157,12 @@
 			name = Credits.rtf;
 			sourceTree = "<group>";
 		};
-		340FE4B615F3417E00E4CE4E /* MainMenu.xib */ = {
+		340FE4B615F3417E00E4CE4E /* MainWindow.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				345D199422A7B665007366F1 /* Base */,
 			);
-			name = MainMenu.xib;
+			name = MainWindow.xib;
 			sourceTree = "<group>";
 		};
 		340FE4C715F3417E00E4CE4E /* InfoPlist.strings */ = {

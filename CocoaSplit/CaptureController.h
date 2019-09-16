@@ -168,7 +168,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) CSTransitionBase *activeTransition;
 @property (strong) NSDate *streamStartDate;
 @property (assign) bool metalAvailable;
-@property (assign) bool useMetalIfAvailable;
+@property (readonly) bool useMetalIfAvailable;
 @property (assign) bool mainRecordingActive;
 @property (strong) id<MTLDevice> useMetalDevice;
 @property (readonly) NSArray *availableMetalDevices;
@@ -541,7 +541,7 @@ NSArray *_savedTransitionConstraints;
 @property (strong) CSTransitionBase *activeTransition;
 @property (strong) NSDate *streamStartDate;
 @property (assign) bool metalAvailable;
-@property (assign) bool useMetalIfAvailable;
+@property (readonly) bool useMetalIfAvailable;
 @property (assign) bool mainRecordingActive;
 @property (strong) id<MTLDevice> useMetalDevice;
 @property (readonly) NSArray *availableMetalDevices;

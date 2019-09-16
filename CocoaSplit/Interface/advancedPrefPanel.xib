@@ -253,7 +253,7 @@ DQ
                                                         <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                     </dictionary>
                                                 </binding>
-                                                <binding destination="-2" name="value" keyPath="self.useMetalIfAvailable" id="1Pd-T5-rP5">
+                                                <binding destination="qQW-4u-ptg" name="value" keyPath="values.useMetalIfAvailable" id="wkl-F6-sNp">
                                                     <dictionary key="options">
                                                         <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                     </dictionary>
@@ -303,13 +303,13 @@ DQ
                                                         <bool key="NSInsertsNullPlaceholder" value="YES"/>
                                                     </dictionary>
                                                 </binding>
-                                                <binding destination="-2" name="enabled" keyPath="self.useMetalIfAvailable" id="suR-ls-Iry"/>
                                                 <binding destination="-2" name="hidden" keyPath="self.metalAvailable" previousBinding="suR-ls-Iry" id="bMw-RR-Qcg">
                                                     <dictionary key="options">
                                                         <string key="NSValueTransformerName">NSNegateBoolean</string>
                                                     </dictionary>
                                                 </binding>
                                                 <binding destination="-2" name="selectedObject" keyPath="self.useMetalDevice" previousBinding="8Eb-nt-uiB" id="kVp-mM-01v"/>
+                                                <binding destination="-2" name="enabled" keyPath="self.useMetalIfAvailable" id="suR-ls-Iry"/>
                                             </connections>
                                         </popUpButton>
                                     </subviews>
@@ -587,6 +587,7 @@ DQ
             <point key="canvasLocation" x="499.5" y="364.5"/>
         </window>
         <customObject id="8zn-qH-lHi" userLabel="SUUpdater" customClass="SUUpdater"/>
+        <userDefaultsController id="qQW-4u-ptg"/>
         <userDefaultsController representsSharedInstance="YES" id="87"/>
         <dictionaryController objectClassName="_NSDictionaryControllerKeyValuePair" id="pVv-mF-YeV" userLabel="compressorsController">
             <connections>
