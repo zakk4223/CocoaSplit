@@ -261,6 +261,8 @@
                 CFRelease(strongSelf->_displayStreamRef);
             }
         }
+        
+        
         if (status == kCGDisplayStreamFrameStatusFrameComplete && frameSurface)
         {
             self->_lastSize = CGSizeMake(IOSurfaceGetWidth(frameSurface), IOSurfaceGetHeight(frameSurface));

@@ -782,7 +782,11 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 {
     /* invert the point due to layer rendering inversion/weirdness */
     
-    CGPoint newPoint = CGPointMake(forPoint.x, self.canvas_height-forPoint.y);
+    CGPoint newPoint = forPoint;
+    if (!CaptureController.sharedCaptureController.useMetalIfAvailable)
+    {
+        newPoint = CGPointMake(forPoint.x, self.canvas_height-forPoint.y);
+    }
     CALayer *foundLayer = [self.transitionLayer hitTest:newPoint];
     
     InputSource *retInput = nil;
