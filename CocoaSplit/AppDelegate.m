@@ -75,7 +75,6 @@
     NSArray *nibObjects = nil;
     [NSBundle.mainBundle loadNibNamed:@"MainWindow" owner:self topLevelObjects:&nibObjects];
     _mainWindowObjects = nibObjects;
-    NSLog(@"CAPTURE CONTROLLER %@", self.captureController);
     self.captureController.stagingFullScreenMenu = self.stagingFullScreenMenu;
     self.stagingFullScreenMenu.delegate = self.captureController;
     self.captureController.liveFullScreenMenu = self.liveFullScreenMenu;
@@ -83,7 +82,6 @@
     self.captureController.extrasMenu = self.extrasMenu;
     self.captureController.exportLayoutMenu = self.exportLayoutMenu;
     self.captureController.exportLayoutMenu.delegate = self.captureController;
-    NSLog(@"WILL FINISH LAUNCHING %@", NSUserDefaults.standardUserDefaults);
 
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleNotification:) name:@"_NSWindowWillBecomeVisible" object:nil];
@@ -209,7 +207,6 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-    NSLog(@"DID FINISH LAUNCHING");
     [CaptureController.sharedCaptureController postNotification:CSNotificationLaunchCompleted forObject:self];
 }
 
