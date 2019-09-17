@@ -13,6 +13,11 @@
 
 
 
++(bool)shouldLoad
+{
+    return YES;
+}
+
 
 -(NSViewController  *)getConfigurationView
 {

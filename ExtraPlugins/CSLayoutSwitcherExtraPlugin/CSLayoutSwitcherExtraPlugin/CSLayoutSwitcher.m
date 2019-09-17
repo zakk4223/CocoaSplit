@@ -24,7 +24,10 @@
     return self;
 }
 
-
++(bool)shouldLoad
+{
+    return YES;
+}
 
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {

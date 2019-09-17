@@ -23,6 +23,7 @@
 
 
 - (void)doInject:(NSRunningApplication *)toInject;
++(bool)shouldLoad;
 
 
 @end

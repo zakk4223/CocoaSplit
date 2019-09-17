@@ -17,6 +17,8 @@
 +(NSString *)serviceDescription;
 +(NSImage *)serviceImage;
 -(NSObject<CSOutputWriterProtocol> *)createOutput;
++(bool)shouldLoad;
+
 
 
 @property (assign) bool isReady;

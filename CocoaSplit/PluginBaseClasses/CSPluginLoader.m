@@ -115,7 +115,9 @@
 
 -(bool)validateAndRegisterPluginClass:(Class)toLoad
 {
-    if (!toLoad)
+    
+    
+    if (!toLoad || ![toLoad shouldLoad])
     {
         return NO;
     }
@@ -285,7 +287,6 @@
         currBundle = self.principalClassNameMap[bundleIdentifier];
         if(currBundle)
         {
-            
             currPrincipalClass = [currBundle principalClass];
 
             if ([currPrincipalClass conformsToProtocol:@protocol(CSPluginFactoryProtocol)])

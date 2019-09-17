@@ -19,6 +19,7 @@
 +(NSString *)label;
 +(NSString *)serviceDescription;
 +(NSImage *)serviceImage;
++(bool)shouldLoad;
 -(NSObject<CSOutputWriterProtocol> *)createOutput;
 
 -(void)prepareForStreamStart;

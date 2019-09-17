@@ -61,6 +61,10 @@
 @synthesize cachePersistent = _cachePersistent;
 
 
++(bool)shouldLoad
+{
+    return YES;
+}
 +(NSString *) label
 {
     return NSStringFromClass(self);

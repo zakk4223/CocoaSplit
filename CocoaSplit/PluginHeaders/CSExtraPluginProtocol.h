@@ -15,6 +15,7 @@
 
 
 +(NSString *) label;
++(bool)shouldLoad;
 
 @optional
 -(void)extraTopLevelMenuClicked;

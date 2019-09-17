@@ -13,6 +13,11 @@
 @implementation CSSyphonInject
 
 
++(bool)shouldLoad
+{
+    return YES;
+}
+
 
 +(NSString *)label
 {

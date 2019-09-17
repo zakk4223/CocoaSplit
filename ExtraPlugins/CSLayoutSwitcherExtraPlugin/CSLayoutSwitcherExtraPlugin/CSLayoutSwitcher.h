@@ -28,6 +28,7 @@
 
 
 +(NSString *) label;
++(bool)shouldLoad;
 
 @property (strong) NSMutableArray *switchActions;
 

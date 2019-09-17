@@ -12,8 +12,20 @@
 @synthesize browser_height = _browser_height;
 @synthesize browser_width = _browser_width;
 
+
++(bool)shouldLoad
+{
+    if (@available(macOS 10.13, *))
+    {
+        return YES;
+    }
+    return NO;
+}
+
+
 -(instancetype) init
 {
+    
     if (self = [super init])
     {
         self.browser_width = 1280;

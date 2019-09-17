@@ -1101,6 +1101,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
        
        _layoutRecordingDirectory = [[[NSFileManager defaultManager] URLsForDirectory:NSMoviesDirectory inDomains:NSUserDomainMask] firstObject].path;
        
+       
        _layoutRecordingFormat = @"MOV";
        
        if(@available(macOS 10.11, *))
@@ -2091,7 +2092,6 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     if (@available(macOS 10.11, *))
     {
         bool defaultsValue = [NSUserDefaults.standardUserDefaults boolForKey:@"useMetalIfAvailable"];
-        NSLog(@"RETURNING %d", defaultsValue);
         return defaultsValue;
     }
     return NO;
@@ -2510,8 +2510,16 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
         self.layoutRecorderCompressorName = @"AppleProRes";
     }
     
-    self.layoutRecordingDirectory = [saveRoot valueForKey:@"layoutRecordingDirectory"];
-    self.layoutRecordingFormat = [saveRoot valueForKey:@"layoutRecordingFormat"];
+    if ([saveRoot objectForKey:@"layoutRecordingDirectory"])
+    {
+        self.layoutRecordingDirectory = [saveRoot valueForKey:@"layoutRecordingDirectory"];
+    }
+    
+    if ([saveRoot objectForKey:@"layoutRecordingFormat"])
+    {
+        self.layoutRecordingFormat = [saveRoot valueForKey:@"layoutRecordingFormat"];
+    }
+    
     if (!self.layoutRecordingFormat)
     {
         _layoutRecordingFormat = @"MOV";
@@ -3113,6 +3121,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     NSString *baseDir = self.layoutRecordingDirectory;
     NSString *fileFormat = self.layoutRecordingFormat;
     NSString *outputFilename = [baseDir stringByAppendingString:[NSString stringWithFormat:@"/%@.%@", @"CocoaSplit Recording", fileFormat]];
+    NSLog(@"OUTPUT FILENAME %@", fileFormat);
     [serviceObj setValue:outputFilename forKey:@"fileName"];
     newDest.streamServiceObject = serviceObj;
     newDest.compressor_name = self.layoutRecorderCompressorName;
@@ -5284,19 +5293,32 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 
 -(NSArray *)availableMetalDevices
 {
+    NSArray *ret = nil;
     
-    return MTLCopyAllDevices();
+    if (@available(macOS 10.11, *))
+    {
+        ret = MTLCopyAllDevices();
+    } else {
+        ret = @[];
+    }
+    
+    return ret;
 }
 
 -(id<MTLDevice>)currentMetalDevice
 {
     id<MTLDevice> retDevice;
     
-    retDevice = self.useMetalDevice;
-    
-    if ([[NSNull null] isEqual:retDevice] || !retDevice)
+    if (@available(macOS 10.11, *))
     {
-        retDevice = MTLCreateSystemDefaultDevice();
+        retDevice = self.useMetalDevice;
+        
+        if ([[NSNull null] isEqual:retDevice] || !retDevice)
+        {
+            retDevice = MTLCreateSystemDefaultDevice();
+        }
+    } else {
+        retDevice = nil;
     }
     
     return retDevice;
