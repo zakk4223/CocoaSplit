@@ -58,9 +58,9 @@
     NSScreen *cropScreen = [self findScreeenForDisplayID:captureDevice.captureDevice];
     
     
-    
     [self.cropSelectionWindow setOpaque:NO];
-    [self.cropSelectionWindow setLevel:CGShieldingWindowLevel()];
+    [self.cropSelectionWindow setLevel:kCGPopUpMenuWindowLevel];
+    self.cropSelectionWindow.floatingPanel = YES;
     
     [self.cropSelectionWindow setIgnoresMouseEvents:NO];
     
@@ -68,6 +68,8 @@
     
     float screenX = NSMidX(cropScreen.frame) - self.cropSelectionWindow.frame.size.width/2;
     float screenY = NSMidY(cropScreen.frame) - self.cropSelectionWindow.frame.size.height/2;
+    
+    self.cropSelectionWindow.collectionBehavior = NSWindowCollectionBehaviorCanJoinAllSpaces | NSWindowCollectionBehaviorFullScreenAuxiliary;
     
     
     [self.cropSelectionWindow setFrameOrigin:NSMakePoint(screenX, screenY)];

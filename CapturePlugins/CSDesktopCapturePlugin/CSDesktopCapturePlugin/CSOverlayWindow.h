@@ -8,6 +8,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface CSOverlayWindow : NSWindow
+@interface CSOverlayWindow : NSPanel
 
 @end
