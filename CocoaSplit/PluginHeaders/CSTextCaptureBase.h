@@ -15,13 +15,14 @@
 {
     CGLayerRef  _cgLayer;
     CIImage *_ciimage;
-    NSAttributedString *_attribString;
+    NSMutableAttributedString *_attribString;
     
     
 }
 
 @property (strong) NSFont *font;
 
+@property (strong) NSAttributedString *attributedText;
 @property (strong) NSString *text;
 @property (strong) NSArray *fontNames;
 @property (strong) NSColor *foregroundColor;
@@ -30,7 +31,7 @@
 @property (strong) NSString *alignmentMode;
 @property (assign) bool wrapped;
 @property (readonly) NSString *saveText;
-
+@property (readonly) NSDictionary *defaultAttributes;
 
 @end
 

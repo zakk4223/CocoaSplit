@@ -323,7 +323,6 @@
     CGFloat frameWidth, frameHeight;
 
     [self.layout frameTick];
-
     
     frameWidth = self.layout.canvas_width;
     frameHeight = self.layout.canvas_height;

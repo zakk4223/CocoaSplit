@@ -109,6 +109,10 @@
             });
         }
     }
+    if (self.activeVideoDevice && self.activeVideoDevice.captureName)
+    {
+        self.captureName = self.activeVideoDevice.captureName;
+    }
 }
 
 
@@ -127,7 +131,16 @@
         
         [retArr addObject:newDev];
         
-        if (!self.activeVideoDevice && [newDev.uniqueID isEqualToString:self.savedUniqueID])
+        NSLog(@"UNIQ APP %@ SAVED %@", newDev.uniqueID, self.savedUniqueID);
+        
+        bool appMatch = NO;
+        if ([newDev.uniqueID isEqualToString:self.savedUniqueID])
+        {
+            appMatch = YES;
+        } else if ([app.executableURL.lastPathComponent isEqualToString:self.savedUniqueID.lastPathComponent]) {
+            appMatch = YES;
+        }
+        if (!self.activeVideoDevice && appMatch)
         {
             self.activeVideoDevice = newDev;
         }

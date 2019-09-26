@@ -291,7 +291,7 @@
 }
 -(void) handleSyphonServerRetire:(NSNotification *)notification
 {
-    NSString *retireID = [[notification object] objectForKey:SyphonServerDescriptionUUIDKey];
+    NSString *retireID = [[notification userInfo] objectForKey:SyphonServerDescriptionUUIDKey];
     
     if ([retireID isEqualToString:_syphon_uuid])
     {

@@ -22,7 +22,7 @@
 @implementation CSTextCaptureBase
 
 @synthesize text = _text;
-
+@synthesize attributedText = _attributedText;
 -(instancetype)init
 {
     if (self = [super init])
@@ -85,6 +85,7 @@
         
     }
     _text = [aDecoder decodeObjectForKey:@"text"];
+    _attributedText = [aDecoder decodeObjectForKey:@"attributedText"];
     NSFont *savedFont = [aDecoder decodeObjectForKey:@"font"];
     if (savedFont)
     {
@@ -134,15 +135,27 @@
 
 
 
+-(NSDictionary *)defaultAttributes
+{
+    NSMutableDictionary *strAttrs = [NSMutableDictionary dictionaryWithDictionary:self.fontAttributes];
+    strAttrs[NSFontAttributeName] = self.font;
+    return strAttrs;
+}
+
+
 -(void) buildString
 {
-    if (self.text)
+    if (self.text || self.attributedText)
     {
         
-        
-        NSMutableDictionary *strAttrs = [NSMutableDictionary dictionaryWithDictionary:self.fontAttributes];
-        strAttrs[NSFontAttributeName] = self.font;
-        _attribString = [[NSAttributedString alloc] initWithString:self.text attributes:strAttrs];
+        NSDictionary *strAttrs = self.defaultAttributes;
+        if (self.attributedText)
+        {
+            _attribString = self.attributedText.mutableCopy;
+        } else {
+
+            _attribString = [[NSMutableAttributedString alloc] initWithString:self.text attributes:strAttrs];
+        }
         
         if ([self.alignmentMode isEqualToString:kCAAlignmentCenter] || [self.alignmentMode isEqualToString:kCAAlignmentRight])
         {
@@ -153,7 +166,7 @@
 
         
         [self updateLayersWithBlock:^(CALayer *layer) {
-            layer.bounds = CGRectMake(0.0, 0.0, self->_attribString.size.width, self->_attribString.size.height);
+            //layer.bounds = CGRectMake(0.0, 0.0, self->_attribString.size.width, self->_attribString.size.height);
             ((CATextLayer *)layer).string = self->_attribString;
             ((CATextLayer *)layer).alignmentMode = self.alignmentMode;
             ((CATextLayer *)layer).wrapped = self.wrapped;
@@ -163,8 +176,33 @@
 
     }
     
-    
 }
+
+-(NSAttributedString *)attributedText
+{
+    return _attributedText;
+}
+
+-(void)setAttributedText:(NSAttributedString *)attributedText
+{
+    if ([_attributedText isEqualToAttributedString:attributedText])
+    {
+        return;
+    }
+    _attributedText = attributedText;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        self.captureName = attributedText.string;
+        
+    });
+    
+    
+    
+    
+    [self buildString];
+}
+
 -(NSString *)text
 {
     return _text;

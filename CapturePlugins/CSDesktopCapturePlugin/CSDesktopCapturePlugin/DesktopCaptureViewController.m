@@ -57,9 +57,10 @@
     
     NSScreen *cropScreen = [self findScreeenForDisplayID:captureDevice.captureDevice];
     
-    
+
+    [NSMenu setMenuBarVisible:NO];
     [self.cropSelectionWindow setOpaque:NO];
-    [self.cropSelectionWindow setLevel:kCGPopUpMenuWindowLevel];
+    [self.cropSelectionWindow setLevel:NSStatusWindowLevel];
     self.cropSelectionWindow.floatingPanel = YES;
     
     [self.cropSelectionWindow setIgnoresMouseEvents:NO];
@@ -127,6 +128,7 @@
     viewBounds.origin.y = -(viewBounds.origin.y - NSHeight(screenFrame)) - NSHeight(viewBounds);
     [self.captureObj resetRegionRect:viewBounds];
     [self.cropSelectionWindow close];
+    [NSMenu setMenuBarVisible:YES];
 }
 
 -(IBAction)resetCroppedArea:(id)sender
@@ -139,6 +141,7 @@
     if (self.cropSelectionWindow)
     {
         [self.cropSelectionWindow cancelOperation:nil];
+        [NSMenu setMenuBarVisible:YES];
     }
 }
 @end
