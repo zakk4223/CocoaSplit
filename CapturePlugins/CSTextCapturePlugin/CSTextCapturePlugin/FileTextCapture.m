@@ -122,30 +122,38 @@
     return @"Text File";
 }
 
-
 -(void)openFile:(NSString *)filename
 {
     if (!self.currentFile)
     {
         return;
     }
-    //[self cancelWatch];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0
+                                             ), ^{
+        NSData *fileData = [NSData dataWithContentsOfFile:filename];
+        [self watchPath:filename];
+        [self processFileData:fileData];
+    });
+}
+
+
+-(void)processFileData:(NSData *)fileData
+{
     
     if (self.readAsHTML)
     {
-        NSData *fileData = [NSData dataWithContentsOfFile:filename];
+        self.text = nil;
         
         NSAttributedString *fileText = [[NSAttributedString alloc] initWithHTML:fileData documentAttributes:nil];
         if (fileText)
         {
             self.attributedText = fileText;
         }
-        
-        self.text = nil;
     } else {
         self.attributedText = nil;
         //self.currentFile = filename;
-        NSString *fileText = [[NSString alloc] initWithContentsOfFile:filename encoding:NSUTF8StringEncoding error:nil];
+        NSString *fileText = [[NSString alloc] initWithData:fileData encoding:NSUTF8StringEncoding];
         
         long lineCount = self.lineLimit;
         long startLine = self.startLine;
@@ -177,7 +185,6 @@
         
         self.text = fileText;
     }
-    [self watchPath:filename];
 }
 
 

@@ -175,7 +175,8 @@ typedef enum resize_style_t {
 @property (assign) bool needsAdjustPosition;
 @property (assign) bool isFrozen;
 @property (assign) int frameDelay;
-
+@property (assign) bool wasAutoplaced;
+@property (assign) bool forceAutofit;
 
 -(void) updateOrigin:(CGFloat)x y:(CGFloat)y;
 -(void) positionOrigin:(CGFloat)x y:(CGFloat)y;
@@ -403,6 +404,8 @@ typedef enum resize_style_t {
 @property (assign) bool needsAdjustPosition;
 @property (assign) bool isFrozen;
 @property (assign) int frameDelay;
+@property (assign) bool wasAutoplaced;
+@property (assign) bool forceAutofit;
 
 
 @end

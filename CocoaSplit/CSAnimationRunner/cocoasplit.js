@@ -304,6 +304,7 @@ var addInputToLayoutForTransition = function(input, withTransition, layout, whol
                           if (doAutoFit)
                           {
                             input.autoPlaceOnFrameUpdate = true;
+                            input.forceAutofit = true;
                           }
                        }
                        

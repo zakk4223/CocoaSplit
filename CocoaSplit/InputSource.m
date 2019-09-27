@@ -2178,10 +2178,22 @@ static NSArray *_sourceTypes = nil;
             [self updateSize:capSize.width height:capSize.height];
             self.resizeType = resizeSave;
         }
+        
+
         _previousSize = capSize;
     }
     
     
+    if (!self.wasAutoplaced && self.autoPlaceOnFrameUpdate && !NSEqualSizes(NSZeroSize, capSize))
+    {
+        
+        if ([self autoSize])
+        {
+            [self autoCenter:NSMakeRect(0, 0, self.canvas_width, self.canvas_height)];
+            self.autoPlaceOnFrameUpdate = NO;
+            self.wasAutoplaced = YES;
+        }
+    }
     if (self.needsAdjustment)
     {
         [self adjustInputSize:self.needsAdjustPosition];
@@ -2223,7 +2235,7 @@ static NSArray *_sourceTypes = nil;
 {
     NSRect myRect = self.layer.bounds;
     
-    if (NSContainsRect(containerRect, myRect))
+    if (NSContainsRect(containerRect, myRect) && !self.forceAutofit)
     {
         CGFloat newX = (self.canvas_width/2) - self.layer.frame.size.width/2;
         CGFloat newY = (self.canvas_height/2) - self.layer.frame.size.height/2;
@@ -3446,15 +3458,6 @@ static NSArray *_sourceTypes = nil;
 
 -(void)layerUpdated
 {
-    
-    if (self.autoPlaceOnFrameUpdate )
-    {
-        if ([self autoSize])
-        {
-            [self autoCenter:NSMakeRect(0, 0, self.canvas_width, self.canvas_height)];
-            self.autoPlaceOnFrameUpdate = NO;
-        }
-    }
 }
 
 
