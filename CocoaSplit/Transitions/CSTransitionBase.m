@@ -21,7 +21,7 @@
         self.uuid = [NSUUID UUID].UUIDString;
         self.canToggle = NO;
         self.isToggle = NO;
-        _duration = @0.25f;
+        _duration = nil;
         
     }
     

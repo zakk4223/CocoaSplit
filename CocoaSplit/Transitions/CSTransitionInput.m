@@ -18,7 +18,7 @@
         {
             self.transitionAfterPre = YES;
             self.canToggle = YES;
-            self.holdDuration = @0.25f;
+            self.holdDuration = nil;
         }
         return self;
     }
@@ -195,6 +195,8 @@
     
 -(NSNumber *)holdDuration
 {
+    
+    
     if (_holdDuration)
     {
         return _holdDuration;
@@ -245,6 +247,7 @@
     }
     self.realHoldDuration = self.holdDuration.floatValue;
     
+    NSLog(@"REAL HOLD DURATION %f", self.realHoldDuration);
     if (self.realHoldDuration > 0.0f)
     {
         [scriptRet appendString:@"transitionCSInput.waitAnimation(self.realHoldDuration);"];

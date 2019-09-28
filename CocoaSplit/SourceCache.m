@@ -75,7 +75,6 @@
     {
         NSString *ofType = NSStringFromClass(toCache.class);
         sourceKey = [NSString stringWithFormat:@"%@:%@", ofType, uid];
-        //NSLog(@"ADD CACHE %@ %@", sourceKey, toCache);
         [self.persistentMap setObject:toCache forKey:sourceKey];
     }
 

@@ -141,13 +141,14 @@
         }
      
         self.savedUniqueID = [aDecoder decodeObjectForKey:@"active_uniqueID"];
-        self.cachePersistent = [aDecoder decodeBoolForKey:@"cachePersistent"];
 
     }
     
     [self restoreWithCoder:aDecoder];
     
     [self setDeviceForUniqueID:self.savedUniqueID];
+    self.cachePersistent = [aDecoder decodeBoolForKey:@"cachePersistent"];
+
     return self;
 }
 
@@ -242,8 +243,11 @@
     {
         self.activeVideoDevice = nil;
     } else {
-        
         self.activeVideoDevice = [currentAvailableDevices objectAtIndex:sidx];
+        if (self.allowDedup)
+        {
+            [[SourceCache sharedCache] cacheSourcePersistent:self];
+        }
     }
 }
 
