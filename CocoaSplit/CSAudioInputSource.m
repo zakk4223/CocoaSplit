@@ -373,7 +373,7 @@
     self.audioNode.refCount--;
     if (self.audioNode.refCount <= 0 && !self.audioNode.isGlobal)
     {
-        [[self findAudioEngine] removeInputAny:self.audioNode];
+        [self.audioNode.engine removeInputAny:self.audioNode];
     }
 }
 
