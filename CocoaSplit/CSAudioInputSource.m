@@ -391,6 +391,7 @@
 
 -(void)dealloc
 {
+    NSLog(@"DEALLOC AUDIO");
     [self restoreAudioSettings];
 }
 

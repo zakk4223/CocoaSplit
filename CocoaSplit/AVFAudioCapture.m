@@ -57,10 +57,28 @@
 
 -(void)dealloc
 {
+    if (_audio_capture_output)
+    {
+        [_audio_capture_output setSampleBufferDelegate:nil queue:NULL];
+    }
     if (_capture_session)
     {
+        for(AVCaptureInput *inp in _capture_session.inputs)
+        {
+            [_capture_session removeInput:inp];
+        }
+        
+        for (AVCaptureOutput *outp in _capture_session.outputs)
+        {
+            [_capture_session removeOutput:outp];
+            
+        }
         [_capture_session stopRunning];
     }
+    _audio_capture_output = nil;
+    _audio_capture_input = nil;
+    _audio_capture_queue = nil;
+    
 }
 
 -(id) activeAudioDevice

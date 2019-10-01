@@ -1190,15 +1190,19 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     CAMultiAudioGraph *inputGraph = (CAMultiAudioSubgraph *)disconnectNode.graph;
     
-    [disconnectNode teardownGraph];
 
+    [inputGraph removeNode:disconnectNode];
+    /*
     if (disconnectNode.headNode)
     {
         [inputGraph removeNode:disconnectNode.headNode];
     } else {
         [inputGraph removeNode:disconnectNode];
     }
+    */
     
+    [disconnectNode teardownGraph];
+
     disconnectNode.headNode = nil;
     disconnectNode.graph = nil;
     

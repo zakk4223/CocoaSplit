@@ -246,8 +246,12 @@
     if (!item)
     {
         SourceLayout *layout = self.sourceLayoutController.content;
+        NSArray *sourceList = layout.topLevelSourceList.copy;
         
-        return [layout.topLevelSourceList objectAtIndex:index];
+        if (index < sourceList.count)
+        {
+            return [sourceList objectAtIndex:index];
+        }
     }
     
     

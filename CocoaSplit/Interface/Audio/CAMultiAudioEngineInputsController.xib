@@ -324,19 +324,14 @@
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
                                                         <connections>
-                                                            <binding destination="gXO-Xe-SNg" name="argument" keyPath="objectValue" id="uTO-Gl-6fQ">
+                                                            <binding destination="gXO-Xe-SNg" name="argument" keyPath="objectValue" id="zS1-u2-aO6">
                                                                 <dictionary key="options">
-                                                                    <string key="NSSelectorName">removeFileAudio:</string>
+                                                                    <string key="NSSelectorName">removeSystemAudio:</string>
                                                                 </dictionary>
                                                             </binding>
                                                             <binding destination="gXO-Xe-SNg" name="hidden" keyPath="objectValue.isGlobal" id="uGb-Zd-ekf">
                                                                 <dictionary key="options">
                                                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                                                </dictionary>
-                                                            </binding>
-                                                            <binding destination="-2" name="target" keyPath="self" previousBinding="uTO-Gl-6fQ" id="51F-G2-q6Z">
-                                                                <dictionary key="options">
-                                                                    <string key="NSSelectorName">removeFileAudio:</string>
                                                                 </dictionary>
                                                             </binding>
                                                             <binding destination="-2" name="hidden2" keyPath="self.viewOnly" previousBinding="uGb-Zd-ekf" id="gXa-Y5-Dvt">
@@ -345,6 +340,11 @@
                                                                     <integer key="NSNoSelectionPlaceholder" value="-1"/>
                                                                     <integer key="NSNotApplicablePlaceholder" value="-1"/>
                                                                     <integer key="NSNullPlaceholder" value="-1"/>
+                                                                </dictionary>
+                                                            </binding>
+                                                            <binding destination="-2" name="target" keyPath="self" previousBinding="zS1-u2-aO6" id="A70-wc-8aF">
+                                                                <dictionary key="options">
+                                                                    <string key="NSSelectorName">removeSystemAudio:</string>
                                                                 </dictionary>
                                                             </binding>
                                                         </connections>
