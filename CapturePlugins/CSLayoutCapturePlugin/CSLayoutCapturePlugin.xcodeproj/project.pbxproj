@@ -7,10 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		340084962356B11300D11BA3 /* CSLayoutCaptureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340084942356B11300D11BA3 /* CSLayoutCaptureViewController.m */; };
+		340084972356B11300D11BA3 /* CSLayoutCaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 340084952356B11300D11BA3 /* CSLayoutCaptureViewController.xib */; };
 		345BECE41F3DAE5F00B46F29 /* CSLayoutCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 345BECE31F3DAE5F00B46F29 /* CSLayoutCapture.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		340084932356B11300D11BA3 /* CSLayoutCaptureViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSLayoutCaptureViewController.h; sourceTree = "<group>"; };
+		340084942356B11300D11BA3 /* CSLayoutCaptureViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSLayoutCaptureViewController.m; sourceTree = "<group>"; };
+		340084952356B11300D11BA3 /* CSLayoutCaptureViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CSLayoutCaptureViewController.xib; sourceTree = "<group>"; };
 		345BECAD1F3DADF600B46F29 /* CSLayoutCapturePlugin.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSLayoutCapturePlugin.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		345BECB01F3DADF600B46F29 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		345BECD21F3DAE1900B46F29 /* CSPluginServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CSPluginServices.h; path = PluginHeaders/CSPluginServices.h; sourceTree = "<group>"; };
@@ -66,6 +71,9 @@
 				345BECB01F3DADF600B46F29 /* Info.plist */,
 				345BECE21F3DAE5F00B46F29 /* CSLayoutCapture.h */,
 				345BECE31F3DAE5F00B46F29 /* CSLayoutCapture.m */,
+				340084932356B11300D11BA3 /* CSLayoutCaptureViewController.h */,
+				340084942356B11300D11BA3 /* CSLayoutCaptureViewController.m */,
+				340084952356B11300D11BA3 /* CSLayoutCaptureViewController.xib */,
 			);
 			path = CSLayoutCapturePlugin;
 			sourceTree = "<group>";
@@ -151,6 +159,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				340084972356B11300D11BA3 /* CSLayoutCaptureViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -162,6 +171,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				345BECE41F3DAE5F00B46F29 /* CSLayoutCapture.m in Sources */,
+				340084962356B11300D11BA3 /* CSLayoutCaptureViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

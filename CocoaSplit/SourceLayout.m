@@ -783,7 +783,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     /* invert the point due to layer rendering inversion/weirdness */
     
     CGPoint newPoint = forPoint;
-    if (!CaptureController.sharedCaptureController.useMetalIfAvailable)
+    //if (!CaptureController.sharedCaptureController.useMetalIfAvailable)
     {
         newPoint = CGPointMake(forPoint.x, self.canvas_height-forPoint.y);
     }
@@ -2814,15 +2814,18 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
             {
                 dispatch_group_async(_frameTickGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                     [CATransaction begin];
-                
                     [isource frameTick];
                     [CATransaction commit];
                 });
             }
             
         }
-        
-        //dispatch_group_wait(_frameTickGroup, DISPATCH_TIME_FOREVER);
+        //long did_timeout = dispatch_group_wait(_frameTickGroup, dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC*0.01666));
+        long did_timeout = dispatch_group_wait(_frameTickGroup, DISPATCH_TIME_FOREVER);
+        if (did_timeout)
+        {
+            NSLog(@"FRAMETICK TIMEOUT %@", self);
+        }
     }
     
 }

@@ -2201,6 +2201,7 @@ static NSArray *_sourceTypes = nil;
         self.needsAdjustment = NO;
     }
 
+    
 
 }
 
@@ -2254,7 +2255,7 @@ static NSArray *_sourceTypes = nil;
 
 -(void)autoFit
 {
-    [self autoFitWithSize:self.size];
+    [self autoFitWithSize:self.layer.frame.size];
 }
 
 

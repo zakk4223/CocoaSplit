@@ -71,8 +71,12 @@
         //[videoSettings setValue:@(kCVPixelFormatType_420YpCbCr8BiPlanarFullRange) forKey:(__bridge NSString *)kCVPixelBufferPixelFormatTypeKey];
         
         
-        
-        [videoSettings setValue:@{} forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
+
+        CGColorSpaceRef cSpace = CGColorSpaceCreateWithName(kCGColorSpaceITUR_709);
+        NSData *cData = CFBridgingRelease(CGColorSpaceCopyICCData(cSpace));
+        NSLog(@"NADATA %@", cData);
+       // [videoSettings setValue:@{AVVideoColorPrimariesKey: AVVideoColorPrimaries_ITU_R_709_2, AVVideoTransferFunctionKey: AVVideoTransferFunction_ITU_R_709_2, AVVideoYCbCrMatrixKey: AVVideoYCbCrMatrix_ITU_R_601_4} forKey:AVVideoColorPropertiesKey];
+        [videoSettings setValue:@{@"IOSurfaceColorSpace": cData} forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
         
         _video_capture_output = [[AVCaptureVideoDataOutput alloc] init];
         
@@ -103,12 +107,12 @@
     }
     
     [_capture_session beginConfiguration];
-    
+
     if (_capture_device)
     {
         
         _video_capture_input = [AVCaptureDeviceInput deviceInputWithDevice:_capture_device error:nil];
-        
+    
         if (_video_capture_input)
         {
             [_capture_session addInput:_video_capture_input];
@@ -219,6 +223,8 @@
         {
             if (connection.output == _video_capture_output)
             {
+                CVPixelBufferRef blah = CMSampleBufferGetImageBuffer(sampleBuffer);
+                
                 [outcapture captureVideoOutput:sampleBuffer];
             } else if (connection.output == _audio_capture_output) {
                 [outcapture captureAudioOutput:sampleBuffer];

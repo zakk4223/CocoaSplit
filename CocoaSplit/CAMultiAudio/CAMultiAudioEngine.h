@@ -81,6 +81,7 @@
 -(bool)removeOutputTrack:(NSString *)withName;
 -(bool)addInput:(CAMultiAudioInput *)input toTrack:(CAMultiAudioOutputTrack *)outputTrack;
 -(bool)removeInput:(CAMultiAudioInput *)input fromTrack:(CAMultiAudioOutputTrack *)outputTrack;
-
+-(void)removeDefaultInput;
+-(bool)createOutputTrack:(NSString *)withName;
 
 @end

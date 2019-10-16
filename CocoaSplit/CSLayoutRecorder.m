@@ -76,6 +76,7 @@
 
 
 
+
 -(void)stopRecordingAll
 {
     
@@ -226,6 +227,18 @@
                 useEngine = [[CAMultiAudioEngine alloc] init];
                 useEngine.sampleRate = [CaptureController sharedCaptureController].multiAudioEngine.sampleRate;
                 [useEngine disableAllInputs];
+                CAMultiAudioEngine *systemEngine = CaptureController.sharedCaptureController.multiAudioEngine;
+                if (systemEngine)
+                {
+                    NSDictionary *outputTracks = systemEngine.outputTracks;
+                    for (NSString *trackUUID in outputTracks)
+                    {
+                        CAMultiAudioOutputTrack *track = outputTracks[trackUUID];
+                        NSString *trackName = track.name;
+                        [useEngine createOutputTrack:trackName];
+                        
+                    }
+                }
             }
             
 
@@ -520,6 +533,7 @@
             }
         }
 
+        
         CVPixelBufferRelease(newFrame);
         if (used_compressor_count == 0)
         {

@@ -18,32 +18,37 @@
 @property (assign) bool isActive;
 @property (strong) NSArray *sourceList;
 @property (strong) NSString *uuid;
+@property (strong) NSString *name;
 
 @end
 
-@interface AudioEngineHack : NSObject
--(void)disableAllInputs;
--(void)startEncoders;
+@interface OutputDestinationHack : NSObject
+@property (weak) SourceLayoutHack *assignedLayout;
+@property (strong) NSString *compressor_name;
+@property (strong) id ffmpeg_out;
+@property (assign) BOOL active;
+@property (assign) bool alwaysStart;
 
 @end
 
-@interface AacEncoderHack : NSObject
--(void)setupEncoderBuffer;
-@property (assign) AudioStreamBasicDescription *inputASBD;
-@property (assign) int sampleRate;
-@property (assign) bool skipCompression;
--(void) stopEncoder;
+@interface CapturedFrameDataHack : NSObject
+@property (strong) NSMutableDictionary *pcmAudioSamples;
+@property (assign) CMSampleBufferRef encodedSampleBuffer;
 @end
 
-@interface AudioGraphHack : NSObject
-@property (assign) AudioStreamBasicDescription *graphAsbd;
-@end
+
 
 @interface CSLayoutCapture : CSCaptureBase <CSCaptureSourceProtocol>
 {
-    LayoutRendererHack *_current_renderer;
-    NSObject *_originalLayout;
     CSPcmPlayer *_pcmPlayer;
+    OutputDestinationHack *_out_dest;
+    NSSize _last_frame_size;
+    SourceLayoutHack *_current_layout;
+    CAShapeLayer *_crop_layer;
+    NSRect _last_crop_rect;
 }
+
+@property (strong) NSString *cropNamePattern;
+
 
 @end

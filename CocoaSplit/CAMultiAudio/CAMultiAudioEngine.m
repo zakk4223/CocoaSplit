@@ -493,6 +493,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 }
 
 
+
 -(void)addOutputTrack
 {
     NSString *useName = [NSString stringWithFormat:@"Track %lu", (unsigned long)self.outputTracks.count];
@@ -693,6 +694,16 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
             [strongSelf attachDefaultInput];
         }
     });
+}
+
+
+-(void)removeDefaultInput
+{
+    if (_defaultInput)
+    {
+        [self removeInput:_defaultInput];
+        _defaultInput = nil;
+    }
 }
 
 

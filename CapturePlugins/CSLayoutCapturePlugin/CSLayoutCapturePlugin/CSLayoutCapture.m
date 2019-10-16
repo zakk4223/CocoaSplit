@@ -11,6 +11,18 @@
 #import "CSNotifications.h"
 
 
+@interface InputSourceHack
+-(void)autoFit;
+@property (assign) CGFloat crop_left;
+@property (assign) CGFloat crop_right;
+@property (assign) CGFloat crop_top;
+@property (assign) CGFloat crop_bottom;
+@property (assign) bool autoPlaceOnFrameUpdate;
+@property (assign) bool wasAutoplaced;
+@property (strong) NSString *name;
+@property (assign) NSRect layoutPosition;
+
+@end
 
 @implementation CSLayoutCapture
 
@@ -28,24 +40,25 @@
 -(void)setIsLive:(bool)isLive
 {
     [super setIsLive:isLive];
-    if (_current_renderer)
+    if (_current_layout)
     {
-        SourceLayoutHack *capDev = [_current_renderer valueForKey:@"layout"];
-        capDev.isActive = isLive;
+        _current_layout.isActive = isLive;
     }
 }
 
 -(float)duration
 {
     float maxDuration = 0.0f;
-    SourceLayoutHack *capDev = [_current_renderer valueForKey:@"layout"];
-
-    for (NSObject *inp in capDev.sourceList)
+    
+    if (_current_layout)
     {
-        float inp_duration = [[inp valueForKey:@"duration"] floatValue];
-        if (inp_duration > maxDuration)
+        for (NSObject *inp in _current_layout.sourceList)
         {
-            maxDuration = inp_duration;
+            float inp_duration = [[inp valueForKey:@"duration"] floatValue];
+            if (inp_duration > maxDuration)
+            {
+                maxDuration = inp_duration;
+            }
         }
     }
     return maxDuration;
@@ -60,6 +73,9 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(layoutDeleted:) name:CSNotificationLayoutDeleted object:nil];
 
         self.allowDedup = NO;
+        _last_frame_size = NSZeroSize;
+        _last_crop_rect = NSZeroRect;
+        _cropNamePattern = nil ;
     }
     return self;
 }
@@ -75,6 +91,7 @@
     }
 }
 
+/*
 -(void)layoutDeleted:(NSNotification *)notification
 {
     NSObject *deletedLayout = [notification object];
@@ -88,6 +105,7 @@
         }
     }
 }
+*/
 
 +(NSObject<CSCaptureSourceProtocol> *)createSourceFromPasteboardItem:(NSPasteboardItem *)item
 {
@@ -134,14 +152,31 @@
     NSObject *controller = [[CSPluginServices sharedPluginServices] captureController];
     NSMutableArray *ret = [NSMutableArray array];
     NSArray *layouts = [controller valueForKey:@"sourceLayouts"];
-    for (NSObject *layout in layouts)
+    NSMutableArray *useLayouts = layouts.mutableCopy;
+    
+    SourceLayoutHack *liveLayout = [controller valueForKey:@"activeLayout"];
+    SourceLayoutHack *stagingLayout = [controller valueForKey:@"stagingLayout"];
+    if (liveLayout)
+    {
+        [useLayouts addObject:liveLayout];
+    }
+    
+    if (stagingLayout)
+    {
+        [useLayouts addObject:stagingLayout];
+    }
+    
+    
+    for (NSObject *layout in useLayouts)
     {
         NSString *layoutName = [layout valueForKey:@"name"];
         NSString *layoutUUID = [layout valueForKey:@"uuid"];
         CSAbstractCaptureDevice *dev = [[CSAbstractCaptureDevice alloc] initWithName:layoutName device:nil uniqueID:layoutUUID];
+        NSLog(@"ADDED %@: %@", layoutName, layoutUUID);
         [ret addObject:dev];
     }
     
+
     return ret;
 }
 
@@ -156,56 +191,32 @@
     {
         return nil;
     }
-    SourceLayoutHack *capDev = [origDev copy];
-    return capDev;
+    //SourceLayoutHack *capDev = [origDev copy];
+    return origDev;
 }
 
 
 -(void)setupRenderer
 {
-    Class renderClass = NSClassFromString(@"LayoutRenderer");
-    Class engineClass = NSClassFromString(@"CAMultiAudioEngine");
-    Class encoderClass = NSClassFromString(@"CSAacEncoder");
-    
+    Class outputClass = NSClassFromString(@"OutputDestination");
+
     self.captureName = self.activeVideoDevice.captureName;
     
     SourceLayoutHack *origDev = [self capturedLayout];
+    NSLog(@"ORIGINAL DEV IS %@", origDev);
     if (!origDev)
     {
         return;
     }
-    SourceLayoutHack *capDev = [origDev copy];
-    capDev.isActive = self.isLive;
-    SEL restoreSEL = NSSelectorFromString(@"restoreSourceList:");
-    [capDev performSelector:restoreSEL withObject:nil];
-    @synchronized(self)
-    {
-        if (!_current_renderer)
-        {
-            _current_renderer = [[renderClass alloc] init];
-        }
-        
-        AudioEngineHack *audioEngine = [[engineClass alloc] init];
-        [audioEngine disableAllInputs];
-        [audioEngine setValue:@YES forKeyPath:@"previewMixer.muted"];
-        AacEncoderHack *audioEncoder = [[encoderClass alloc] init];
-        AudioGraphHack *audioGraph = [audioEngine valueForKeyPath:@"graph"];
-        if (audioGraph)
-        {
-            AudioStreamBasicDescription *asbd = audioGraph.graphAsbd;
-            audioEncoder.inputASBD = asbd;
-            audioEncoder.sampleRate = asbd->mSampleRate;
-            audioEncoder.skipCompression = YES;
-            [audioEncoder setupEncoderBuffer];
-            [audioEngine startEncoders];
-            [capDev setValue:audioEngine forKey:@"audioEngine"];
-            [audioEncoder setValue:self forKey:@"encodedReceiver"];
-        }
-
-    }
+    _current_layout = origDev;
+    _out_dest = [[outputClass alloc] init];
+    _out_dest.assignedLayout = origDev;
+    _out_dest.compressor_name = @"PassthroughNoCopy";
+    _out_dest.ffmpeg_out = self;
+    _out_dest.alwaysStart = YES;
+    _out_dest.active = YES;
     
 
-    [_current_renderer setValue:capDev forKey:@"layout"];
 }
 
 
@@ -235,79 +246,196 @@
 
 -(NSSize)captureSize
 {
-    SourceLayoutHack *capDev = nil;
-    
-    if (_current_renderer)
-    {
-        capDev = [_current_renderer valueForKey:@"layout"];
-    }
-    if (!capDev && self.activeVideoDevice)
-    {
-        capDev = self.activeVideoDevice.captureDevice;
-    }
-    
-    if (capDev)
-    {
-        NSSize ret =  NSMakeSize(capDev.canvas_width, capDev.canvas_height);
-        return ret;
-    }
-    return NSZeroSize;
+    return _last_frame_size;
 }
+
 
 -(CALayer *)createNewLayer
 {
-    return [CALayer layer];
+    CALayer *layer = [CALayer layer];
+    return layer;
 }
 
 
--(void)frameTick
+-(void)saveWithCoder:(NSCoder *)aCoder
 {
+    [super saveWithCoder:aCoder];
     
-    LayoutRendererHack *renderer = nil;
-    @synchronized(self)
-    {
-        renderer = _current_renderer;
-    }
-    if (renderer)
-    {
-        CVImageBufferRef pb = [renderer currentImg];
-        
+    [aCoder encodeObject:self.cropNamePattern forKey:@"cropNamePattern"];
+}
 
+
+-(void)restoreWithCoder:(NSCoder *)aDecoder
+{
+    [super restoreWithCoder:aDecoder];
+    self.cropNamePattern = [aDecoder decodeObjectForKey:@"cropNamePattern"];
+}
+
+
+-(void)setupInputCropping:(NSRect )sourceRect
+{
+    CGFloat left;
+    CGFloat right;
+    CGFloat top;
+    CGFloat bottom;
+    
+    if (NSEqualRects(sourceRect, _last_crop_rect))
+    {
+        return;
+    }
+    
+    _last_crop_rect = sourceRect;
+    
+    if (NSEqualRects(sourceRect, NSZeroRect))
+    {
+        left = right = top = bottom = 0.0f;
+    } else {
+        left = sourceRect.origin.x/_last_frame_size.width;
+        right = (_last_frame_size.width - NSMaxX(sourceRect))/_last_frame_size.width;
+        top = sourceRect.origin.y/_last_frame_size.height;
+        bottom = (_last_frame_size.height - NSMaxY(sourceRect))/_last_frame_size.height;
+    }
+    NSLog(@"CROP l %f r %f t %f b %f", left, right, top, bottom);
+    [self updateInputWithBlock:^(id input) {
+        InputSourceHack *useInput = input;
+        
+        useInput.crop_top = top;
+        useInput.crop_bottom = bottom;
+        useInput.crop_left = left;
+        useInput.crop_right = right;
+        [useInput autoFit];
+        /*
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [useInput autoFit];
+        });*/
+    }];
+    
+}
+-(InputSourceHack *)findInputMatch:(NSString *)matchPattern
+{
+    NSRegularExpression *matchRE = [NSRegularExpression regularExpressionWithPattern:matchPattern options:0 error:nil];
+    
+    for (InputSourceHack *inp in _current_layout.sourceList)
+    {
+        NSUInteger matchCnt = [matchRE numberOfMatchesInString:inp.name options:0 range:NSMakeRange(0,inp.name.length)];
+        if (matchCnt > 0)
+        {
+            return inp;
+        }
+    }
+    return nil;
+}
+
+
+-(bool)queueFramedata:(CapturedFrameDataHack *)frameData
+{
+    CVImageBufferRef useImage = CMSampleBufferGetImageBuffer(frameData.encodedSampleBuffer);
+    if (useImage)
+    {
+       _last_frame_size = NSMakeSize(CVPixelBufferGetWidth(useImage), CVPixelBufferGetHeight(useImage));
+        NSRect useCropRect = NSZeroRect;
+        if (self.cropNamePattern)
+        {
+            InputSourceHack *matchedInp = [self findInputMatch:self.cropNamePattern];
+            if (matchedInp)
+            {
+                NSRect inputRect = matchedInp.layoutPosition;
+                useCropRect = inputRect;
+            }
+        }
+        
+        
         
         [self updateLayersWithFramedataBlock:^(CALayer *layer) {
-            
-            if (pb)
-            {
-                layer.contents = (__bridge id _Nullable)(pb);
-            } else {
-                layer.contents = nil;
-            }
-            
+            layer.contents = (__bridge id _Nullable)useImage;
         } withPreuseBlock:^{
-            if (pb)
-                CFRetain(pb);
+            CFRetain(useImage);
         } withPostuseBlock:^{
-            if (pb)
-                CFRelease(pb);
+            CFRelease(useImage);
         }];
-
+        
+        [self setupInputCropping:useCropRect];
     }
+    NSString *audioTrackkey = nil;
+
+    
+    if (!audioTrackkey)
+    {
+        audioTrackkey = frameData.pcmAudioSamples.allKeys.firstObject;
+    }
+    
+    NSArray *pcmSamples = frameData.pcmAudioSamples[audioTrackkey];
+    for (id object in pcmSamples)
+    {
+        CMSampleBufferRef sampleBuffer = (__bridge CMSampleBufferRef)object;
+        if (!_pcmPlayer)
+        {
+            CMFormatDescriptionRef sDescr = CMSampleBufferGetFormatDescription(sampleBuffer);
+            const AudioStreamBasicDescription *asbd =  CMAudioFormatDescriptionGetStreamBasicDescription(sDescr);
+            _pcmPlayer = [self createAttachedAudioInputForUUID:self.activeVideoDevice.uniqueID withName:self.activeVideoDevice.captureName withFormat:asbd];
+        }
+        
+        if (_pcmPlayer)
+        {
+            [_pcmPlayer scheduleBuffer:sampleBuffer];
+        }
+    }
+    return YES;
 }
+
+
+-(bool) stopProcess
+{
+    return YES;
+}
+
+-(bool)errored
+{
+    return NO;
+}
+
+-(void)initStatsValues
+{
+    return;
+}
+
+-(NSUInteger)frameQueueSize
+{
+    return 0;
+}
+
+-(int) output_framecnt
+{
+    return 0;
+}
+
+-(NSUInteger) output_bytes
+{
+    return 0;
+}
+
+-(NSUInteger) buffered_frame_count
+{
+    return 0;
+}
+-(NSUInteger) buffered_frame_size
+{
+    return 0;
+}
+
+-(void)willDelete
+{
+    if (_out_dest)
+    {
+        _out_dest.active = NO;
+    }
+    _out_dest = nil;
+    _current_layout = nil;
+}
+
 
 -(void)dealloc
 {
-    SourceLayoutHack *capDev = [self capturedLayout];
-    if (capDev)
-    {
-        AudioEngineHack *audioEngine =  [capDev valueForKey:@"audioEngine"];
-        if (audioEngine)
-        {
-            AacEncoderHack *enc = [audioEngine valueForKey:@"encoder"];
-            if (enc)
-            {
-                [enc stopEncoder];
-            }
-        }
-    }
+    NSLog(@"DEALLOC LAYOUT INPUT");
 }
 @end

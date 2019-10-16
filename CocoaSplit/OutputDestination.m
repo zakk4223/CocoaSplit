@@ -241,6 +241,11 @@
                 doStart = YES;
             }
             
+            if (self.alwaysStart)
+            {
+                doStart = YES;
+            }
+            
             if (doStart)
             {
                 if (self.assignedLayout && ![self.assignedLayout isEqual:[NSNull null]])

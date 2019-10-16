@@ -68,6 +68,7 @@
 @property (strong) NSMutableDictionary *audioTracks;
 @property (assign) bool isRecorder;
 @property (assign) bool isStreamer;
+@property (assign) bool alwaysStart;
 
 
 //stats, mostly we just interrogate the ffmpeg_out object for these, but bouncing

@@ -7,9 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <SceneKit/SceneKit.h>
 #import "SourceLayout.h"
-
 
 typedef struct CV_BRIDGED_TYPE(id) __CVMetalTextureCache *CVMetalTextureCacheRef;
 typedef CVImageBufferRef CVMetalTextureRef;
@@ -37,6 +35,9 @@ CV_EXPORT CVReturn CVMetalTextureCacheCreate(
 {
     CVPixelBufferPoolRef _cvpool;
     CVMetalTextureCacheRef _cvmetalcache;
+    CARemoteLayerServer *_caServer;
+    CARemoteLayerClient *_caClient;
+    CALayer *_remoteLayer;
     
     CVPixelBufferRef _currentPB;
     NSSize _cvpool_size;
@@ -46,19 +47,12 @@ CV_EXPORT CVReturn CVMetalTextureCacheCreate(
     SourceLayout *_currentLayout;
     bool _useMetalRenderer;
     id <MTLDevice> _metalDevice;
-    id<MTLCommandQueue> _mtlCmdQueue;
-    SCNScene *_usescene;
-    SCNNode *_cameraNode;
-    SCNNode *_planeNode;
     
-    SCNRenderer *_sceneRenderer;
-    SCNVector3 _minBounding;
-    SCNVector3 _maxBounding;
 }
-
 
 @property (strong) SourceLayout * _Nonnull layout;
 @property (assign) CGLContextObj _Nonnull cglCtx;
+@property (strong) CARenderer * _Nonnull renderer;
 @property (strong) CALayer * _Nullable rootLayer;
 
 -(CVPixelBufferRef _Nullable)currentFrame;

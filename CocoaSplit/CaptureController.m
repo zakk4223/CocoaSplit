@@ -221,8 +221,15 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 
 +(CaptureController *)sharedCaptureController
 {
-    AppDelegate *appDel = [NSApp delegate];
-    return appDel.captureController;
+    static dispatch_once_t sharedControllerOnce;
+    static CaptureController *sharedCaptureController = nil;
+    
+    dispatch_once(&sharedControllerOnce, ^{
+        AppDelegate *appdel = [NSApp delegate];
+        
+        sharedCaptureController = appdel.captureController;
+    });
+    return sharedCaptureController;
 }
 
 
@@ -1965,6 +1972,21 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     
     
     
+    if (!self.compressors[@"PassthroughNoCopy"])
+    {
+        CSPassthroughCompressor *newCompressor = [[CSPassthroughCompressor alloc] init];
+        newCompressor.copyFrame = NO;
+        newCompressor.name = @"PassthroughNoCopy".mutableCopy;
+        self.compressors[@"PassthroughNoCopy"] = newCompressor;
+        [CaptureController.sharedCaptureController postNotification:CSNotificationCompressorAdded forObject:newCompressor];
+    } else {
+        CSPassthroughCompressor *pComp = self.compressors[@"PassthroughNoCopy"];
+        if (!pComp.name)
+        {
+            pComp.name = @"PassthroughNoCopy".mutableCopy;
+        }
+    }
+    
     
     if (!self.compressors[@"Passthrough"])
     {
@@ -2436,12 +2458,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
         BOOL stagingHidden = [[saveRoot valueForKeyPath:@"stagingHidden"] boolValue];
         self.stagingHidden = stagingHidden;
     }
-    if (self.stagingHidden)
-    {
-        [self hideStagingView];
-    } else {
-        [self showStagingView];
-    }
+
     
     SourceLayout *tmpLayout = [saveRoot valueForKey:@"selectedLayout"];
     if (tmpLayout)
@@ -2611,6 +2628,13 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
         }
     
         [self createDefaultRecorderOutput];
+    }
+    
+    if (self.stagingHidden)
+    {
+        [self hideStagingView];
+    } else {
+        [self showStagingView];
     }
 }
 
@@ -3997,7 +4021,20 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 -(SourceLayout *)sourceLayoutForUUID:(NSString *)uuid
 {
     SourceLayout *ret = nil;
-    for(SourceLayout *layout in self.sourceLayouts)
+    NSMutableArray *useLayouts = self.sourceLayouts.mutableCopy;
+    if (self.activeLayout)
+    {
+        [useLayouts addObject:self.activeLayout];
+    }
+    
+    /*
+    if (self.stagingLayout)
+    {
+        [useLayouts addObject:self.stagingLayout];
+    }*/
+    
+    
+    for(SourceLayout *layout in useLayouts)
     {
         if ([layout.uuid isEqualToString:uuid])
         {
