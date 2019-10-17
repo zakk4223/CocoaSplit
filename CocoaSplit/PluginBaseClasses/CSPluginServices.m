@@ -136,6 +136,19 @@
     return [CaptureController loadPythonClass:pyClass fromFile:fromFile];
 }
 
+-(NSString *)nameForAudioTrackUUID:(NSString *)uuid
+{
+    CAMultiAudioEngine *systemEngine = CaptureController.sharedCaptureController.multiAudioEngine;
+    NSDictionary *outputTracks = systemEngine.outputTracks;
+    CAMultiAudioOutputTrack *outTrack = outputTracks[uuid];
+    NSString *trackName = nil;
+    if (outTrack)
+    {
+        trackName = outTrack.name;
+    }
+    return trackName;
+}
+
 
 -(void)removePCMInput:(CSPcmPlayer *)toRemove
 {

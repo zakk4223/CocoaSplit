@@ -40,7 +40,7 @@
 
 @interface CSLayoutCapture : CSCaptureBase <CSCaptureSourceProtocol>
 {
-    CSPcmPlayer *_pcmPlayer;
+    NSMutableDictionary *_pcmPlayers;
     OutputDestinationHack *_out_dest;
     NSSize _last_frame_size;
     SourceLayoutHack *_current_layout;

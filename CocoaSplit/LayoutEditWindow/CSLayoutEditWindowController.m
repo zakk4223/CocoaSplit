@@ -65,7 +65,8 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         CAMultiAudioEngine *audioEngine = nil;
         CAMultiAudioEngine *systemEngine = CaptureController.sharedCaptureController.multiAudioEngine;
-        audioEngine = [[CAMultiAudioEngine alloc] init];
+        
+        audioEngine = [[CAMultiAudioEngine alloc] initWithDefaultTrackUUID:systemEngine.defaultTrackUUID];
         audioEngine.sampleRate = systemEngine.sampleRate;
         audioEngine.previewMixer.muted = YES;
         
@@ -75,7 +76,7 @@
         {
             CAMultiAudioOutputTrack *track = outputTracks[trackUUID];
             NSString *trackName = track.name;
-            [audioEngine createOutputTrack:trackName];
+            [audioEngine createOutputTrack:trackName withUUID:track.uuid];
             
         }
         dispatch_async(dispatch_get_main_queue(), ^{

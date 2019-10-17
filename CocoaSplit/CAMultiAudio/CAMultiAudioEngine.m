@@ -48,10 +48,13 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
     
 }
--(instancetype)init
+
+-(instancetype)initWithDefaultTrackUUID:(NSString *)outputUUID
 {
     if (self = [super init])
     {
+        _defaultTrackUUID = outputUUID;
+        
         [self commonInit];
         
         [self buildGraph];
@@ -61,10 +64,15 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         self.previewMixer.volume = 1.0;
         self.previewMixer.muted  = NO;
         [self.graph startGraph];
-
-}
+    }
     
     return self;
+
+}
+
+-(instancetype)init
+{
+    return [self initWithDefaultTrackUUID:nil];
 }
 
 -(instancetype) initWithCoder:(NSCoder *)aDecoder
@@ -454,27 +462,23 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     CAMultiAudioOutputTrack *defaultTrack = nil;
     
     defaultTrack = _defaultOutputTrack;
-    
-    /*
-    for(NSString *uuid in self.outputTracks)
-    {
-        CAMultiAudioOutputTrack *track = self.outputTracks[uuid];
-        if ([track.name isEqualToString:@"Default"])
-        {
-            defaultTrack = track;
-            break;
-        }
-    }
-     */
-    
-    
+
     if (!defaultTrack)
     {
         defaultTrack = [[CAMultiAudioOutputTrack alloc] init];
         defaultTrack.encoderNode = self.renderNode;
         defaultTrack.outputBus = @(0);
         defaultTrack.name = @"Default";
+        if (self.defaultTrackUUID)
+        {
+            defaultTrack.uuid = self.defaultTrackUUID;
+        } else {
+            self.defaultTrackUUID = defaultTrack.uuid;
+        }
+    } else {
+        self.defaultTrackUUID = defaultTrack.uuid;
     }
+    
     
     if (!defaultTrack.encoder)
     {
@@ -526,6 +530,12 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 -(bool)createOutputTrack:(NSString *)withName
 {
+    return [self createOutputTrack:withName withUUID:nil];
+}
+
+
+-(bool)createOutputTrack:(NSString *)withName withUUID:(NSString *)uuid
+{
 
     if ([withName isEqualToString:@"Default"])
     {
@@ -533,6 +543,11 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     }
     CAMultiAudioOutputTrack *outputTrack = [[CAMultiAudioOutputTrack alloc] init];
     outputTrack.name = withName;
+    if (uuid)
+    {
+        outputTrack.uuid = uuid;
+    }
+    
     [self attachOutputTrack:outputTrack];
 
     [self willChangeValueForKey:@"outputTracks"];

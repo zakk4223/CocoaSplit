@@ -53,9 +53,8 @@
 @property (strong) NSMutableDictionary *streamAudioPowerLevels;
 @property (strong) NSMutableDictionary *previewAudioPowerLevels;
 @property (strong) NSMutableDictionary *outputTracks;
-
 @property (strong) CAMultiAudioEffect *renderNode;
-
+@property (strong) NSString *defaultTrackUUID;
 
 -(CAMultiAudioPCMPlayer *)createPCMInput:(NSString *)uniqueID withFormat:(const AudioStreamBasicDescription *)withFormat;
 -(CAMultiAudioFile *)createFileInput:(NSString *)filePath;
@@ -77,11 +76,12 @@
 -(void)startEncoders;
 -(void)stopEncoders;
 -(void)addOutputTrack;
--(bool)createOutputTrack:(NSString *)withName;
 -(bool)removeOutputTrack:(NSString *)withName;
 -(bool)addInput:(CAMultiAudioInput *)input toTrack:(CAMultiAudioOutputTrack *)outputTrack;
 -(bool)removeInput:(CAMultiAudioInput *)input fromTrack:(CAMultiAudioOutputTrack *)outputTrack;
 -(void)removeDefaultInput;
 -(bool)createOutputTrack:(NSString *)withName;
+-(bool)createOutputTrack:(NSString *)withName withUUID:(NSString *)uuid;
+-(instancetype)initWithDefaultTrackUUID:(NSString *)outputUUID;
 
 @end

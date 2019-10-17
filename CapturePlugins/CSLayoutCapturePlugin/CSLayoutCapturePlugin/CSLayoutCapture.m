@@ -76,6 +76,7 @@
         _last_frame_size = NSZeroSize;
         _last_crop_rect = NSZeroRect;
         _cropNamePattern = nil ;
+        _pcmPlayers = [NSMutableDictionary dictionary];
     }
     return self;
 }
@@ -220,20 +221,7 @@
 }
 
 
--(void)captureOutputAudio:(id)fromDevice didOutputPCMSampleBuffer:(CMSampleBufferRef)sampleBuffer
-{
-    if (!_pcmPlayer)
-    {
-        CMFormatDescriptionRef sDescr = CMSampleBufferGetFormatDescription(sampleBuffer);
-        const AudioStreamBasicDescription *asbd =  CMAudioFormatDescriptionGetStreamBasicDescription(sDescr);
-        _pcmPlayer = [self createAttachedAudioInputForUUID:self.activeVideoDevice.uniqueID withName:self.activeVideoDevice.captureName withFormat:asbd];
-    }
-    
-    if (_pcmPlayer)
-    {
-        [_pcmPlayer scheduleBuffer:sampleBuffer];
-    }
-}
+
 
 
 -(void)setActiveVideoDevice:(CSAbstractCaptureDevice *)activeVideoDevice
@@ -295,7 +283,6 @@
         top = sourceRect.origin.y/_last_frame_size.height;
         bottom = (_last_frame_size.height - NSMaxY(sourceRect))/_last_frame_size.height;
     }
-    NSLog(@"CROP l %f r %f t %f b %f", left, right, top, bottom);
     [self updateInputWithBlock:^(id input) {
         InputSourceHack *useInput = input;
         
@@ -359,27 +346,37 @@
     NSString *audioTrackkey = nil;
 
     
-    if (!audioTrackkey)
+    for (NSString *audioTrackkey in frameData.pcmAudioSamples)
     {
-        audioTrackkey = frameData.pcmAudioSamples.allKeys.firstObject;
-    }
-    
-    NSArray *pcmSamples = frameData.pcmAudioSamples[audioTrackkey];
-    for (id object in pcmSamples)
-    {
-        CMSampleBufferRef sampleBuffer = (__bridge CMSampleBufferRef)object;
-        if (!_pcmPlayer)
+        NSArray *pcmSamples = frameData.pcmAudioSamples[audioTrackkey];
+        for (id object in pcmSamples)
         {
-            CMFormatDescriptionRef sDescr = CMSampleBufferGetFormatDescription(sampleBuffer);
-            const AudioStreamBasicDescription *asbd =  CMAudioFormatDescriptionGetStreamBasicDescription(sDescr);
-            _pcmPlayer = [self createAttachedAudioInputForUUID:self.activeVideoDevice.uniqueID withName:self.activeVideoDevice.captureName withFormat:asbd];
+            CMSampleBufferRef sampleBuffer = (__bridge CMSampleBufferRef)object;
+            CSPcmPlayer *pcmPlayer = _pcmPlayers[audioTrackkey];
+            if (!pcmPlayer)
+            {
+                CMFormatDescriptionRef sDescr = CMSampleBufferGetFormatDescription(sampleBuffer);
+                const AudioStreamBasicDescription *asbd =  CMAudioFormatDescriptionGetStreamBasicDescription(sDescr);
+                NSString *trackName = [[CSPluginServices sharedPluginServices] nameForAudioTrackUUID:audioTrackkey];
+                if (!trackName)
+                {
+                    trackName = @"";
+                }
+                
+                NSString *pcmName = [NSString stringWithFormat:@"%@ - %@", self.activeVideoDevice.captureName, trackName];
+                
+                pcmPlayer = [self createAttachedAudioInputForUUID:audioTrackkey withName:pcmName withFormat:asbd];
+                _pcmPlayers[audioTrackkey] = pcmPlayer;
+            }
+            
+            if (pcmPlayer)
+            {
+                [pcmPlayer scheduleBuffer:sampleBuffer];
+            }
         }
         
-        if (_pcmPlayer)
-        {
-            [_pcmPlayer scheduleBuffer:sampleBuffer];
-        }
     }
+
     return YES;
 }
 

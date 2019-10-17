@@ -224,10 +224,16 @@
             
             if (!useEngine)
             {
-                useEngine = [[CAMultiAudioEngine alloc] init];
+                CAMultiAudioEngine *systemEngine = CaptureController.sharedCaptureController.multiAudioEngine;
+                NSString *defaultOutUUID = nil;
+                if (systemEngine)
+                {
+                    defaultOutUUID = systemEngine.defaultTrackUUID;
+                }
+                
+                useEngine = [[CAMultiAudioEngine alloc] initWithDefaultTrackUUID:defaultOutUUID];
                 useEngine.sampleRate = [CaptureController sharedCaptureController].multiAudioEngine.sampleRate;
                 [useEngine disableAllInputs];
-                CAMultiAudioEngine *systemEngine = CaptureController.sharedCaptureController.multiAudioEngine;
                 if (systemEngine)
                 {
                     NSDictionary *outputTracks = systemEngine.outputTracks;
@@ -235,23 +241,14 @@
                     {
                         CAMultiAudioOutputTrack *track = outputTracks[trackUUID];
                         NSString *trackName = track.name;
-                        [useEngine createOutputTrack:trackName];
+                        [useEngine createOutputTrack:trackName withUUID:track.uuid];
                         
                     }
                 }
             }
             
 
-            /*
-            self.audioEncoder = [[CSAacEncoder alloc] init];
-            self.audioEncoder.encodedReceiver = self;
-            self.audioEncoder.sampleRate = [CaptureController sharedCaptureController].multiAudioEngine.sampleRate;
-            self.audioEncoder.bitRate = [CaptureController sharedCaptureController].multiAudioEngine.audioBitrate*1000;
-            
-            self.audioEncoder.inputASBD = useEngine.graph.graphAsbd;
-            [self.audioEncoder setupEncoderBuffer];
-            useEngine.encoder = self.audioEncoder;
-             */
+
             useEngine.previewMixer.muted = YES;
             self.audioEngine = useEngine;
             [self.audioEngine startEncoders];
