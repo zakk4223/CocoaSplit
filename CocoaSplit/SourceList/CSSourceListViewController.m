@@ -1050,7 +1050,7 @@
     {
         useEngine = CaptureController.sharedCaptureController.multiAudioEngine;
     }
-    CAMultiAudioInput *audioNode = [useEngine inputForSystemUUID:audioUUID];
+    CAMultiAudioInput *audioNode = [useEngine createInputForSystemUUID:audioUUID];
     
     CSAudioInputSource *newSource = [[CSAudioInputSource alloc] initWithAudioNode:audioNode];
     [self addInputSourceWithInput:newSource];

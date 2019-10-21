@@ -152,6 +152,8 @@
 
 -(instancetype)initWithCoder:(NSCoder *)aDecoder {
     
+    self = [self init];
+    
     [self basecommonInit];
     
     self.name = [aDecoder decodeObjectForKey:@"name"];

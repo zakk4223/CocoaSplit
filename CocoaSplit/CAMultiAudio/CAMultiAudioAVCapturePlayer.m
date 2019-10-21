@@ -11,6 +11,7 @@
 @implementation CAMultiAudioAVCapturePlayer
 
 
+
 -(instancetype)initWithDevice:(AVCaptureDevice *)avDevice withFormat:(AudioStreamBasicDescription *)withFormat
 {
     if (self = [super init])
@@ -19,9 +20,10 @@
         self.captureDevice = avDevice;
         self.sampleRate = withFormat->mSampleRate;
         self.name = avDevice.localizedName;
-        self.nodeUID = avDevice.uniqueID;
+        //self.nodeUID = avDevice.uniqueID;
         self.inputFormat = withFormat;
         self.systemDevice = YES;
+        self.deviceUID = avDevice.uniqueID;
         
     }
     return self;
@@ -115,6 +117,8 @@
 {
     super.channelCount = channelCount;
 }
+
+
 
 /*
 -(AudioStreamBasicDescription *)inputFormat

@@ -25,6 +25,7 @@
 {
     NSString            *_outputId;
     NSMutableDictionary *_inputSettings;
+    NSMutableDictionary *_savedSystemInputs;
     CAMultiAudioAVCapturePlayer *_defaultInput;
 }
 
@@ -72,7 +73,6 @@
 -(void) disableAllInputs;
 -(void)removeInputAny:(CAMultiAudioInput *)input;
 -(NSDictionary *)systemAudioInputs;
--(CAMultiAudioInput *)inputForSystemUUID:(NSString *)uuid;
 -(void)startEncoders;
 -(void)stopEncoders;
 -(void)addOutputTrack;
@@ -83,5 +83,7 @@
 -(bool)createOutputTrack:(NSString *)withName;
 -(bool)createOutputTrack:(NSString *)withName withUUID:(NSString *)uuid;
 -(instancetype)initWithDefaultTrackUUID:(NSString *)outputUUID;
+-(CAMultiAudioInput *)findInputForSystemUUID:(NSString *)uuid;
+-(CAMultiAudioInput *)createInputForSystemUUID:(NSString *)uuid;
 
 @end

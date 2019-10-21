@@ -680,7 +680,14 @@
 {
     bool real_visible = NO;
     
-    for (id key in self.allLayers)
+    NSMapTable *inputsCopy;
+    
+    @synchronized(self)
+    {
+        inputsCopy = self.allLayers.copy;
+    }
+    
+    for (id key in inputsCopy)
     {
         if (!key)
         {
@@ -692,11 +699,19 @@
             real_visible = YES;
         }
     }
-    if (real_visible && pcmPlayers.count > 0)
+    
+    NSMutableDictionary *pcmCopy;
+    
+    @synchronized (self) {
+        pcmCopy = pcmPlayers.copy;
+    }
+    
+    
+    if (real_visible && pcmCopy.count > 0)
     {
-        for(NSString *pUUID in pcmPlayers)        {
+        for(NSString *pUUID in pcmCopy)        {
             
-            CSPcmPlayer *pPlayer = [pcmPlayers objectForKey:pUUID];
+            CSPcmPlayer *pPlayer = [pcmCopy objectForKey:pUUID];
             if (pPlayer)
             {
                 
@@ -733,11 +748,16 @@
         }
     }
     
-    if (self.attachedAudioMap)
+    NSMutableDictionary *audioCopy;
+    @synchronized (self) {
+        audioCopy = self.attachedAudioMap.copy;
+    }
+    
+    if (audioCopy)
     {
-        for(NSString *aUID in self.attachedAudioMap)
+        for(NSString *aUID in audioCopy)
         {
-            NSString *aName = [self.attachedAudioMap objectForKey:aUID];
+            NSString *aName = [audioCopy objectForKey:aUID];
             [self createAttachedAudioInputForUUID:aUID withName:aName];
             
         }
@@ -750,7 +770,13 @@
 {
     bool real_active = NO;
     
-    for (id key in self.allLayers)
+    NSMapTable *inputsCopy;
+    @synchronized(self)
+    {
+        inputsCopy = self.allLayers.copy;
+    }
+    
+    for (id key in inputsCopy)
     {
         if (!key)
         {

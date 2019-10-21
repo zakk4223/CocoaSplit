@@ -131,7 +131,6 @@
         
         [retArr addObject:newDev];
         
-        NSLog(@"UNIQ APP %@ SAVED %@", newDev.uniqueID, self.savedUniqueID);
         
         bool appMatch = NO;
         if ([newDev.uniqueID isEqualToString:self.savedUniqueID])

@@ -29,6 +29,8 @@
 @property (assign) Float64 fileEndTime;
 @property (assign) Float64 fileDuration;
 @property (strong) NSMutableDictionary *savedAudioSettings;
+@property (assign) bool useExistingInput;
+@property (strong) NSString *deviceUID;
 
 -(instancetype) initWithAudioNode:(CAMultiAudioNode *)node;
 -(instancetype) initWithPath:(NSString *)path;

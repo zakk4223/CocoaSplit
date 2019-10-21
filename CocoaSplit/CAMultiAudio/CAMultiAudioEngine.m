@@ -27,6 +27,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 -(void)commonInit
 {
     _inputSettings = [NSMutableDictionary dictionary];
+    _savedSystemInputs = [NSMutableDictionary dictionary];
 
     self.audioInputs = [NSMutableArray array];
     self.pcmInputs = [NSMutableArray array];
@@ -182,6 +183,24 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
             }
         }
 
+        if ([aDecoder containsValueForKey:@"savedSystemInputs"])
+        {
+            
+            _savedSystemInputs = [aDecoder decodeObjectForKey:@"savedSystemInputs"];
+            _savedSystemInputs = _savedSystemInputs.mutableCopy;
+            
+            for (NSString *nodeUID in _savedSystemInputs)
+            {
+                NSString *devUID = _savedSystemInputs[nodeUID];
+                AVCaptureDevice *dev = [AVCaptureDevice deviceWithUniqueID:devUID];
+                if (dev)
+                {
+                    CAMultiAudioAVCapturePlayer *avplayer = [[CAMultiAudioAVCapturePlayer alloc] initWithDevice:dev withFormat:self.graph.graphAsbd];
+                    avplayer.nodeUID = nodeUID;
+                    [self attachInput:avplayer];
+                }
+            }
+        }
         [self.graph startGraph];
         for (NSString *trackUUID in self.outputTracks)
         {
@@ -253,6 +272,19 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     [aCoder encodeObject:self.outputTracks forKey:@"outputTracks"];
     [aCoder encodeObject:_defaultOutputTrack forKey:@"defaultOutputTrack"];
+    
+    NSMutableDictionary *systemInputMap = [NSMutableDictionary dictionary];
+    
+    for (CAMultiAudioInput *input in self.audioInputs)
+    {
+        if ([input isKindOfClass:[CAMultiAudioAVCapturePlayer class]])
+        {
+            CAMultiAudioAVCapturePlayer *avinput = (CAMultiAudioAVCapturePlayer *)input;
+            systemInputMap[avinput.nodeUID] = avinput.deviceUID;
+        }
+    }
+    
+    [aCoder encodeObject:systemInputMap forKey:@"savedSystemInputs"];
 }
 
 
@@ -276,6 +308,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
                 
 
             }
+            
+
         }
     }
 
@@ -767,15 +801,28 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     return ret;
 }
 
--(CAMultiAudioInput *)inputForSystemUUID:(NSString *)uuid
+-(CAMultiAudioInput *)findInputForSystemUUID:(NSString *)uuid
 {
-    CAMultiAudioInput *ret = nil;
-    
-    ret = [self inputForUUID:uuid];
-    if (ret)
-    {
-        return ret;
+    @synchronized(self) {
+        for(CAMultiAudioInput *node in self.audioInputs)
+        {
+            if ([node isKindOfClass:[CAMultiAudioAVCapturePlayer class]])
+            {
+                CAMultiAudioAVCapturePlayer *sysInput = (CAMultiAudioAVCapturePlayer *)node;
+                if ([sysInput.deviceUID isEqualToString:uuid])
+                {
+                    return node;
+                }
+            }
+        }
     }
+    return nil;
+}
+
+
+-(CAMultiAudioInput *)createInputForSystemUUID:(NSString *)uuid
+{
+    
     AVCaptureDevice *dev = [AVCaptureDevice deviceWithUniqueID:uuid];
     
     if (!dev)
@@ -815,7 +862,10 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         if (isEnabled || isGlobal)
         {
             CAMultiAudioAVCapturePlayer *avplayer = [[CAMultiAudioAVCapturePlayer alloc] initWithDevice:dev withFormat:self.graph.graphAsbd];
+            NSString *realUID = avplayer.nodeUID;
+            avplayer.nodeUID = dev.uniqueID;
             [self attachInput:avplayer];
+            avplayer.nodeUID = realUID;
         }
         
     }

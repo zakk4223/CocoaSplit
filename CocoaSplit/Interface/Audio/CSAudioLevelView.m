@@ -42,7 +42,7 @@
     
     if (!self.audioLevels)
     {
-        return;
+        //return;
     }
     NSNumber *level1 = nil;
     NSNumber *level2 = nil;

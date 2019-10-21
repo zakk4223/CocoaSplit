@@ -51,6 +51,8 @@
 @property (assign) NSInteger refCount;
 @property (assign) bool isGlobal;
 @property (strong) NSMutableDictionary *outputTracks;
+@property (strong) NSString *deviceUID;
+
 
 -(void)didRemoveInput;
 -(bool)teardownGraph;

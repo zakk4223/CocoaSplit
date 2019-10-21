@@ -433,6 +433,5 @@
 
 -(void)dealloc
 {
-    NSLog(@"DEALLOC LAYOUT INPUT");
 }
 @end

@@ -163,10 +163,11 @@
     NSDictionary *systemInputs = [self.multiAudioEngineController.content systemAudioInputs];
     for(NSString *inputUUID in systemInputs)
     {
+        /*
         if ([self.multiAudioEngineController.content inputForUUID:inputUUID])
         {
             continue;
-        }
+        }*/
         NSString *inputName = systemInputs[inputUUID];
         NSMenuItem *audioItem = [[NSMenuItem alloc] initWithTitle:inputName action:nil keyEquivalent:@""];
         audioItem.representedObject = inputUUID;
@@ -199,7 +200,7 @@
     NSString *uuid = menuItem.representedObject;
     if (uuid)
     {
-        CAMultiAudioInput *newInput = [self.multiAudioEngineController.content inputForSystemUUID:uuid];
+        CAMultiAudioInput *newInput = [self.multiAudioEngineController.content createInputForSystemUUID:uuid];
         newInput.isGlobal = YES;
     }
 }

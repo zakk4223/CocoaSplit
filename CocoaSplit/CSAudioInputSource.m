@@ -26,6 +26,7 @@
         self.active = YES;
         self.audioEnabled = YES;
         self.audioVolume = 1.0;
+        self.useExistingInput = YES;
     }
     
     return self;
@@ -51,11 +52,12 @@
 }
 
 
--(instancetype) initWithAudioNode:(CAMultiAudioNode *)node
+-(instancetype) initWithAudioNode:(CAMultiAudioInput *)node
 {
     if (self = [self init])
     {
         
+        self.deviceUID = node.deviceUID;
         self.audioUUID = node.nodeUID;
         self.audioVolume = node.volume;
         self.name = node.name;
@@ -74,6 +76,7 @@
 {
     CSAudioInputSource *newCopy = [super copyWithZone:zone];
     newCopy.audioUUID = self.audioUUID;
+    newCopy.deviceUID = self.deviceUID;
     newCopy.audioVolume = self.audioVolume;
     newCopy.audioEnabled = self.audioEnabled;
     return newCopy;
@@ -121,6 +124,7 @@
     [aCoder encodeFloat:self.fileStartTime forKey:@"fileStartTime"];
     [aCoder encodeFloat:self.fileEndTime forKey:@"fileEndTime"];
     [aCoder encodeBool:self.fileLoop forKey:@"fileLoop"];
+    [aCoder encodeObject:self.deviceUID forKey:@"deviceUID"];
     if (self.audioNode)
     {
         NSMutableDictionary *nodeData = [NSMutableDictionary dictionary];
@@ -137,6 +141,7 @@
     if (self=[super initWithCoder:aDecoder])
     {
         self.audioUUID = [aDecoder decodeObjectForKey:@"audioUUID"];
+        self.deviceUID = [aDecoder decodeObjectForKey:@"deviceUID"];
         self.audioVolume = [aDecoder decodeFloatForKey:@"audioVolume"];
         if ([aDecoder containsValueForKey:@"audioEnabled"])
         {
@@ -273,28 +278,47 @@
 
 -(void)findAudioNode
 {
-    
-    if (!self.audioNode && self.audioUUID && self.sourceLayout)
+    if (self.audioNode)
     {
-        CAMultiAudioEngine *audioEngine = [self findAudioEngine];
+        return;
+    }
+    
+    if (!self.sourceLayout)
+    {
+        return;
+    }
+    
+    CAMultiAudioEngine *audioEngine = [self findAudioEngine];
+
+    if (self.audioUUID || self.deviceUID)
+    {
         self.audioNode = [audioEngine inputForUUID:self.audioUUID];
 
         if (!self.audioNode)
         {
-            self.audioNode = [audioEngine inputForSystemUUID:self.audioUUID];
-        }
-        
-        if (!self.audioNode && self.audioFilePath)
-        {
-            self.audioNode = [[CAMultiAudioFile alloc] initWithPath:self.audioFilePath];
-            //Tell the audio engine not to save or restore settings for this input
-            if (self.audioNode)
+            if (self.useExistingInput)
             {
-                self.audioNode.noSettings = YES;
-                [audioEngine addFileInput:(CAMultiAudioFile *)self.audioNode];
+                self.audioNode = [audioEngine findInputForSystemUUID:self.deviceUID];
             }
         }
+        
+        if (!self.audioNode)
+        {
+            self.audioNode = [audioEngine createInputForSystemUUID:self.deviceUID];
+
+        }
     }
+    if (!self.audioNode && self.audioFilePath)
+    {
+        self.audioNode = [[CAMultiAudioFile alloc] initWithPath:self.audioFilePath];
+        //Tell the audio engine not to save or restore settings for this input
+        if (self.audioNode)
+        {
+            self.audioNode.noSettings = YES;
+            [audioEngine addFileInput:(CAMultiAudioFile *)self.audioNode];
+        }
+    }
+    
 }
 
 -(void)applyAudioSettingsForNode:(CAMultiAudioInput *)node
@@ -365,7 +389,7 @@
     if (self.audioNode  && _previousSaveData)
     {
         
-        //[self.audioNode restoreDataFromDict:_previousSaveData];
+        [self.audioNode restoreDataFromDict:_previousSaveData];
         //self.audioNode.enabled = _previousEnabled;
         //self.audioNode.volume = _previousVolume;
     }
@@ -391,7 +415,6 @@
 
 -(void)dealloc
 {
-    NSLog(@"DEALLOC AUDIO");
     [self restoreAudioSettings];
 }
 
