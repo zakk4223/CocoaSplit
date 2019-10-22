@@ -155,7 +155,7 @@
     NSArray *layouts = [controller valueForKey:@"sourceLayouts"];
     NSMutableArray *useLayouts = layouts.mutableCopy;
     
-    SourceLayoutHack *liveLayout = [controller valueForKey:@"activeLayout"];
+    SourceLayoutHack *liveLayout = [controller valueForKey:@"liveLayout"];
     SourceLayoutHack *stagingLayout = [controller valueForKey:@"stagingLayout"];
     if (liveLayout)
     {
@@ -173,7 +173,6 @@
         NSString *layoutName = [layout valueForKey:@"name"];
         NSString *layoutUUID = [layout valueForKey:@"uuid"];
         CSAbstractCaptureDevice *dev = [[CSAbstractCaptureDevice alloc] initWithName:layoutName device:nil uniqueID:layoutUUID];
-        NSLog(@"ADDED %@: %@", layoutName, layoutUUID);
         [ret addObject:dev];
     }
     
@@ -204,7 +203,6 @@
     self.captureName = self.activeVideoDevice.captureName;
     
     SourceLayoutHack *origDev = [self capturedLayout];
-    NSLog(@"ORIGINAL DEV IS %@", origDev);
     if (!origDev)
     {
         return;
@@ -343,7 +341,6 @@
         
         [self setupInputCropping:useCropRect];
     }
-    NSString *audioTrackkey = nil;
 
     
     for (NSString *audioTrackkey in frameData.pcmAudioSamples)

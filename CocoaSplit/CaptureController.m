@@ -78,7 +78,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 @synthesize appearance = _appearance;
 @synthesize activeTransition = _activeTransition;
 @synthesize mainRecordingActive = _mainRecordingActive;
-
+@synthesize liveLayout = _liveLayout;
 
 
 
@@ -2164,7 +2164,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     [saveRoot setValue:self.appearance forKey:@"appearance"];
     
     
-    [saveRoot setValue:self.selectedLayout forKey:@"selectedLayout"];
+    [saveRoot setValue:self.liveLayout forKey:@"liveLayout"];
     
     [saveRoot setValue:self.stagingLayout forKey:@"stagingLayout"];
     
@@ -2419,13 +2419,13 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     self.livePreviewView.layoutRenderer = liveRender;
     self.livePreviewView.viewOnly = YES;
     
-    self.selectedLayout = [[SourceLayout alloc] init];
+    self.liveLayout = [[SourceLayout alloc] init];
     self.stagingLayout = [[SourceLayout alloc] init];
 
-    self.selectedLayout.containerOnly = YES;
-    self.stagingLayout.containerOnly = YES;
+    self.liveLayout.name = @"Live Layout";
+    self.stagingLayout.name = @"Staging Layout";
     
-    self.stagingPreviewView.sourceLayout = self.stagingLayout;
+
     
     
     self.extraPluginsSaveData = [saveRoot valueForKey:@"extraPluginsSaveData"];
@@ -2458,61 +2458,36 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
         BOOL stagingHidden = [[saveRoot valueForKeyPath:@"stagingHidden"] boolValue];
         self.stagingHidden = stagingHidden;
     }
-
-    
-    SourceLayout *tmpLayout = [saveRoot valueForKey:@"selectedLayout"];
+    SourceLayout *tmpLayout = [saveRoot valueForKey:@"liveLayout"];
     if (tmpLayout)
     {
-        
-        //[self.selectedLayout replaceWithSourceLayout:tmpLayout];
-        
-        if (tmpLayout == self.stagingLayout || [self.sourceLayouts containsObject:tmpLayout])
+        self.liveLayout = tmpLayout;
+    } else {
+        tmpLayout = [saveRoot valueForKey:@"selectedLayout"];
+        if (tmpLayout)
         {
-            SourceLayout *tmpCopy = [tmpLayout copy];
-            self.selectedLayout = tmpCopy;
-        } else {
-            self.selectedLayout = tmpLayout;
+            self.liveLayout = tmpLayout;
         }
-        
-        self.livePreviewView.sourceLayout = self.selectedLayout;
-        self.selectedLayout.ignorePinnedInputs = YES;
-        self.selectedLayout.containerOnly = YES;
     }
     
+
     tmpLayout = [saveRoot valueForKey:@"stagingLayout"];
 
     if (tmpLayout)
     {
-        //[self.stagingLayout replaceWithSourceLayout:tmpLayout];
-        
-        if (tmpLayout == self.selectedLayout || [self.sourceLayouts containsObject:tmpLayout])
-        {
-            SourceLayout *tmpCopy = [tmpLayout copy];
-            self.stagingLayout = tmpCopy;
-        } else {
-            self.stagingLayout = tmpLayout;
-        }
-        
-        self.stagingLayout.containerOnly = YES;
+        self.stagingLayout = tmpLayout;
         self.stagingPreviewView.sourceLayout = self.stagingLayout;
         //self.stagingPreviewView.sourceLayout = self.stagingLayout;
-        self.stagingLayout.name = @"staging";
-        self.selectedLayout.name = @"live";
+
         
        // [self.stagingLayout mergeSourceLayout:tmpLayout withLayer:nil];
     }
     
-
-    
-    self.selectedLayout.audioEngine = self.multiAudioEngine;
-    
-
-    
-
-
-
-    
-    
+    self.stagingLayout.containerOnly = YES;
+    self.liveLayout.containerOnly = YES;
+    self.stagingPreviewView.sourceLayout = self.stagingLayout;
+    self.livePreviewView.sourceLayout = self.liveLayout;
+    self.liveLayout.audioEngine = self.multiAudioEngine;
     self.inputLibrary = [saveRoot valueForKey:@"inputLibrary"];
     
     if (!self.inputLibrary)
@@ -2629,13 +2604,16 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     
         [self createDefaultRecorderOutput];
     }
-    
     if (self.stagingHidden)
     {
         [self hideStagingView];
     } else {
         [self showStagingView];
     }
+    self.liveLayout.name = @"Live Layout";
+    self.stagingLayout.name = @"Staging Layout";
+    [self.liveLayout restoreSourceList:nil];
+    [self setupMainRecorder];
 }
 
 
@@ -2889,6 +2867,37 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     return [self.extraSaveData valueForKey:forkey];
 }
 
+-(void)setLiveLayout:(SourceLayout *)liveLayout
+{
+    _liveLayout = liveLayout;
+    
+    [liveLayout setAddLayoutBlock:^(SourceLayout *layout) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+        layout.in_live = YES;
+        });
+        
+    }];
+    
+    [liveLayout setRemoveLayoutBlock:^(SourceLayout *layout) {
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+
+        layout.in_live = NO;
+        });
+
+    }];
+    
+    liveLayout.doSaveSourceList = YES;
+    [liveLayout applyAddBlock];
+    [liveLayout restoreSourceList:nil];
+}
+
+-(SourceLayout *)liveLayout
+{
+    return _liveLayout;
+}
+
 
 -(void)setStagingLayout:(SourceLayout *)stagingLayout
 {
@@ -2942,36 +2951,19 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 {
     
     
-    [selectedLayout setAddLayoutBlock:^(SourceLayout *layout) {
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            layout.in_live = YES;
 
-        });
-        
-    }];
-    
-    [selectedLayout setRemoveLayoutBlock:^(SourceLayout *layout) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-
-        layout.in_live = NO;
-        });
-
-    }];
-
-    
     [selectedLayout applyAddBlock];
 
     [self.objectController commitEditing];
     
     
     selectedLayout.isActive = YES;
-    [selectedLayout restoreSourceList:nil];
+    //[selectedLayout restoreSourceList:nil];
     
     [selectedLayout setupMIDI];
     
-    self.livePreviewView.sourceLayout = selectedLayout;
-    self.livePreviewView.midiActive = NO;
+    //self.livePreviewView.sourceLayout = selectedLayout;
+    //self.livePreviewView.midiActive = NO;
     
     
     
@@ -3090,6 +3082,26 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 
 
 
+-(void)setupStagingRecorder
+{
+    [self.stagingPreviewView disablePrimaryRender];
+    if (!self.stagingLayoutRecorder)
+    {
+        self.stagingLayoutRecorder = [[CSLayoutRecorder alloc] init];
+        self.stagingLayoutRecorder.renderer = self.stagingPreviewView.layoutRenderer;
+        self.stagingLayoutRecorder.layout = self.stagingLayout;
+        if (!self.stagingLayout.audioEngine)
+        {
+            self.stagingLayout.audioEngine = [self setupStagingAudio];
+        }
+        
+        self.stagingLayoutRecorder.audioEngine = self.stagingLayout.audioEngine;
+        [self.stagingLayoutRecorder startRecordingCommon];
+        
+    }
+}
+
+
 -(void)setupMainRecorder
 {
     [self.livePreviewView disablePrimaryRender];
@@ -3117,7 +3129,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 
         //self.mainLayoutRecorder.audioEngine.encoder.encodedReceiver = self.mainLayoutRecorder;
     
-        self.mainLayoutRecorder.compressors  = self.compressors;
+        //self.mainLayoutRecorder.compressors  = self.compressors;
         self.mainLayoutRecorder.outputs = self.captureDestinations;
         [self.mainLayoutRecorder startRecordingCommon];
     
@@ -4022,16 +4034,16 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 {
     SourceLayout *ret = nil;
     NSMutableArray *useLayouts = self.sourceLayouts.mutableCopy;
-    if (self.activeLayout)
+    if (self.liveLayout)
     {
-        [useLayouts addObject:self.activeLayout];
+        [useLayouts addObject:self.liveLayout];
     }
     
-    /*
+    
     if (self.stagingLayout)
     {
         [useLayouts addObject:self.stagingLayout];
-    }*/
+    }
     
     
     for(SourceLayout *layout in useLayouts)
@@ -5136,7 +5148,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
         [self stagingSave:sender];
     
         self.inLayoutTransition = YES;
-        [self.selectedLayout replaceWithSourceLayoutViaScript:self.stagingLayout  withCompletionBlock:^{
+        [self.liveLayout replaceWithSourceLayoutViaScript:self.stagingLayout  withCompletionBlock:^{
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.inLayoutTransition = NO;
             });} withExceptionBlock:nil];
@@ -5194,11 +5206,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     self.stagingPreviewView.superview.animator.hidden = YES;
     self.liveViewConstraint.active = NO;
     
-    if (self.stagingPreviewView.sourceLayout)
-    {
-        [self.stagingPreviewView.sourceLayout saveSourceList];
-        [self.stagingPreviewView.sourceLayout clearSourceList];
-    }
+
     self.livePreviewView.viewOnly = NO;
     self.livePreviewView.midiActive = NO;
     self.activePreviewView = self.livePreviewView;
@@ -5206,11 +5214,15 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     [self.stagingLayout applyRemoveBlock];
     if (self.livePreviewView.sourceLayout)
     {
-        [self.livePreviewView.sourceLayout saveSourceList];
+        [self.liveLayout saveSourceList];
     }
-    self.stagingLayout = self.livePreviewView.sourceLayout;
-    self.selectedLayout = self.livePreviewView.sourceLayout;
-    self.livePreviewView.sourceLayout.ignorePinnedInputs = NO;
+    self.stagingLayout = nil;
+    self.stagingPreviewView.sourceLayout = nil;
+    self.stagingLayoutRecorder = nil;
+    
+    self.selectedLayout = self.liveLayout;
+    self.liveLayout.ignorePinnedInputs = NO;
+    self.stagingPreviewView.sourceLayout = nil;
     if (_layoutSwitcherWindowController)
     {
         _layoutSwitcherWindowController.previewRenderer = nil;
@@ -5223,26 +5235,29 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 {
     self.stagingPreviewView.superview.animator.hidden = NO;
     self.liveViewConstraint.active = YES;
-    if (self.livePreviewView.sourceLayout)
+    
+    
+    if (!self.stagingLayout)
     {
-        [self.livePreviewView.sourceLayout saveSourceList];
+        [self.liveLayout saveSourceList];
         
         /*
-            self.stagingPreviewView.sourceLayout.savedSourceListData = self.livePreviewView.sourceLayout.savedSourceListData;
-            [self.stagingPreviewView.sourceLayout restoreSourceList:nil];
-        */
-        self.stagingLayout = self.stagingPreviewView.sourceLayout;
-        self.selectedLayout = self.livePreviewView.sourceLayout;
-        [self.stagingLayout replaceWithSourceLayout:self.selectedLayout];
+         self.stagingPreviewView.sourceLayout.savedSourceListData = self.livePreviewView.sourceLayout.savedSourceListData;
+         [self.stagingPreviewView.sourceLayout restoreSourceList:nil];
+         */
+        self.stagingLayout = [[SourceLayout alloc] init];
+        
+        [self.stagingLayout replaceWithSourceLayout:self.liveLayout];
+        self.stagingLayout.name = @"Staging Layout";
+        
         //self.stagingLayout.containedLayouts = self.selectedLayout.containedLayouts;
         //[self.stagingLayout applyAddBlock];
     }
-
-
+    
+    
     self.livePreviewView.viewOnly = YES;
-    self.livePreviewView.sourceLayout.ignorePinnedInputs = YES;
+    self.liveLayout.ignorePinnedInputs = YES;
     self.stagingHidden = NO;
-    self.activePreviewView = self.stagingPreviewView;
     if (self.currentMidiLayoutLive)
     {
         self.livePreviewView.midiActive = YES;
@@ -5256,10 +5271,17 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     {
         _layoutSwitcherWindowController.previewRenderer = self.stagingPreviewView.layoutRenderer;
     }
-    [CaptureController.sharedCaptureController postNotification:CSNotificationLayoutModeChanged forObject:self];
-
+    
     self.stagingLayout.audioEngine = [self setupStagingAudio];
+    self.activePreviewView = self.stagingPreviewView;
+    [self setupStagingRecorder];
+    self.stagingPreviewView.sourceLayout = self.stagingLayout;
+    //self.selectedLayout = self.stagingLayout;
+    [CaptureController.sharedCaptureController postNotification:CSNotificationLayoutModeChanged forObject:self];
+    
 }
+
+
 
 
 - (IBAction)stagingViewToggle:(id)sender

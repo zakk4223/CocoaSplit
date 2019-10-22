@@ -100,6 +100,7 @@ void VideoCompressorReceiveFrame(void *, void *, OSStatus , VTEncodeInfoFlags , 
 @property (strong) NSMutableArray *sourceLayouts;
 @property (strong) SourceLayout *selectedLayout;
 @property (strong) SourceLayout *stagingLayout;
+@property (strong) SourceLayout *liveLayout;
 @property (assign) double captureFPS;
 //@property (assign) double audio_adjust;
 @property (weak) IBOutlet NSPopover *editorPopover;
@@ -453,6 +454,8 @@ NSArray *_savedTransitionConstraints;
 @property (strong) NSMutableArray *sourceLayouts;
 @property (strong) SourceLayout *selectedLayout;
 @property (strong) SourceLayout *stagingLayout;
+@property (strong) SourceLayout *liveLayout;
+
 @property (weak) IBOutlet NSSplitView *canvasSplitView;
 @property (assign) double captureFPS;
 //@property (assign) double audio_adjust;

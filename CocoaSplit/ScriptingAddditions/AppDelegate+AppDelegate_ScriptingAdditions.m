@@ -109,7 +109,7 @@
 
 -(void)setActiveLayout:(SourceLayout *)layout
 {
-    self.captureController.selectedLayout = layout;
+    //self.captureController.selectedLayout = layout;
 }
 
 

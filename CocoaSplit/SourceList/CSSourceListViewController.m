@@ -1060,6 +1060,7 @@
 {
     NSObject <CSCaptureSourceProtocol> *captureObj = forItem.representedObject;
     
+    
     for (CSAbstractCaptureDevice *dev in captureObj.availableVideoDevices)
     {
         NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:dev.captureName action:nil keyEquivalent:@""];
