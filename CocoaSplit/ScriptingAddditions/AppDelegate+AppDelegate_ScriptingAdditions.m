@@ -24,10 +24,19 @@
 
 -(NSArray *)layouts
 {
-    NSArray *layouts = self.captureController.sourceLayouts;
+    NSMutableArray *layouts = self.captureController.sourceLayouts.mutableCopy;
     
-    return [layouts arrayByAddingObjectsFromArray:@[self.captureController.activeLayout, self.captureController.stagingLayout]];
+    if (self.captureController.liveLayout)
+    {
+        [layouts addObject:self.captureController.liveLayout];
+    }
     
+    if (self.captureController.stagingLayout)
+    {
+        [layouts addObject:self.captureController.stagingLayout];
+    }
+    
+    return layouts;
     //return self.captureController.sourceLayouts;
 }
 

@@ -5,6 +5,7 @@
 //  Created by Zakk on 8/31/14.
 //
 
+
 #import "SourceLayout.h"
 #import "InputSource.h"
 #import "CaptureController.h"
@@ -13,6 +14,10 @@
 #import "CSLayoutTransition.h"
 #import "CSLayoutRecorder.h"
 #import "CSAudioInputSource.h"
+
+@interface CATransaction (ThreadHack)
++(void)activateBackground;
+@end
 
 JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
 
@@ -354,6 +359,7 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
     }
     
     dispatch_async(_animationQueue, ^{
+            
         [self doAnimation:animMap];
     });
     
@@ -998,7 +1004,10 @@ JS_EXPORT void JSSynchronousGarbageCollectForDebugging(JSContextRef ctx);
             {
                 newSrc = [unarchiver decodeObjectForKey:uuid];
             }
-            [srcList addObject:newSrc];
+            if (newSrc)
+            {
+                [srcList addObject:newSrc];
+            }
         }
         
         NSObject *timerSrc = [unarchiver decodeObjectForKey:@"timerSrc"];

@@ -33,6 +33,7 @@
         self.activeVideoDevice = [[CSAbstractCaptureDevice alloc] init];
         self.activeVideoDevice.uniqueID = [[CSPluginServices sharedPluginServices] generateUUID];
 
+        //OBSERVER:ZAKK
         [self addObserver:self forKeyPath:@"propertiesChanged" options:NSKeyValueObservingOptionNew context:NULL];
         
         _font = [NSFont fontWithName:@"Helvetica" size:50];

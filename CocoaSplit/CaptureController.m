@@ -2538,7 +2538,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     
     
 
-
+    
     [self.sourceListViewController addObserver:self forKeyPath:@"selectedObjects" options:NSKeyValueObservingOptionNew context:NULL];
     self.useTransitions = [[saveRoot valueForKey:@"useTransitions"] boolValue];
     
@@ -5152,8 +5152,6 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.inLayoutTransition = NO;
             });} withExceptionBlock:nil];
-
- 
     }
 }
 

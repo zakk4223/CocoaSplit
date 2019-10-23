@@ -296,8 +296,8 @@ static NSArray *_sourceTypes = nil;
     if (self = [super initWithCoder:aDecoder])
     {
         
-        [CATransaction begin];
-        [self commonInit];
+        //[CATransaction begin];
+        //[self commonInit];
         
         
         _userBackground = [aDecoder decodeBoolForKey:@"userBackground"];
@@ -518,7 +518,7 @@ static NSArray *_sourceTypes = nil;
             self.transitionEnabled = [aDecoder decodeBoolForKey:@"transitionEnabled"];
         }
         
-        [CATransaction commit];
+        //[CATransaction commit];
 
 
         if (self.parentInput)
@@ -577,7 +577,6 @@ static NSArray *_sourceTypes = nil;
         } else {
             self.constraintMap = tmpConstraints;
         }
-        [self observeConstraintKeys];
     }
     
     return self;
@@ -714,6 +713,7 @@ static NSArray *_sourceTypes = nil;
 {
     forInput.inputSource = self;
     forInput.isLive = self.is_live;
+    //OBSERVER:ZAKK
     [forInput addObserver:self forKeyPath:@"captureName" options:NSKeyValueObservingOptionNew context:NULL];
     self.name = _editedName;
     _currentLayer = [forInput createNewLayerForInput:self];
@@ -755,8 +755,6 @@ static NSArray *_sourceTypes = nil;
     if (self = [super init])
     {
         [self commonInit];
-        [self observeConstraintKeys];
-
     }
 
     return self;
@@ -766,7 +764,6 @@ static NSArray *_sourceTypes = nil;
 -(void)commonInit
 {
 
-    [CATransaction begin];
     self.name = nil;
     _nextImageTime = 0.0f;
     _currentSourceIdx = 0;
@@ -822,7 +819,7 @@ static NSArray *_sourceTypes = nil;
     
     _constraintObserveKeys = tmpArr;
     
-    
+    [self observeConstraintKeys];
     self.transitionFilterName = @"fade";
     self.currentEffects = [[NSMutableArray alloc] init];
     
@@ -880,7 +877,6 @@ static NSArray *_sourceTypes = nil;
     _currentInput = self;
     
 
-    [CATransaction commit];
 
     _undoActionMap = @{@"name": @"Set Name",
                        @"crop_top": @"Crop Top",
@@ -1506,7 +1502,7 @@ static NSArray *_sourceTypes = nil;
             [self.userFilter removeObserver:self forKeyPath:@"params"];
         }
         self.userFilter = newFilter;
-        
+        //OBSERVER:ZAKK
         [self.userFilter addObserver:self forKeyPath:@"params" options:NSKeyValueObservingOptionNew context:NULL];
     }
 }
@@ -1560,6 +1556,9 @@ static NSArray *_sourceTypes = nil;
 
 -(void)dealloc
 {
+    
+    [self stopObservingConstraintKeys];
+
     [self detachAllInputs];
     [self deregisterVideoInput:self.videoInput];
     for(id vInput in self.videoSources)
@@ -1567,7 +1566,6 @@ static NSArray *_sourceTypes = nil;
         [self deregisterVideoInput:vInput];
     }
     
-    [self stopObservingConstraintKeys];
 
     self.layer = nil;
     
@@ -3865,7 +3863,7 @@ static NSArray *_sourceTypes = nil;
 {
     for (NSString *key in _constraintObserveKeys)
     {
-        [self removeObserver:self forKeyPath:key];
+        [self removeObserver:self forKeyPath:key context:NULL];
     }
 }
 
@@ -3873,8 +3871,10 @@ static NSArray *_sourceTypes = nil;
 
 -(void)observeConstraintKeys
 {
+
     for (NSString *key in _constraintObserveKeys)
     {
+        //OBSERVER:ZAKK
         [self addObserver:self forKeyPath:key options:(NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld) context:NULL];
     }
 }
