@@ -4474,10 +4474,10 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     
     if (self.currentMidiLayoutLive)
     {
-        return self.livePreviewView.sourceLayout;
+        return self.liveLayout;
     }
     
-    return self.stagingPreviewView.sourceLayout;
+    return self.stagingLayout;
 }
 
 -(InputSource *)currentMIDIInput:(MIKMIDIChannelVoiceCommand *)command
@@ -5223,6 +5223,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     self.selectedLayout = self.liveLayout;
     self.liveLayout.ignorePinnedInputs = NO;
     self.stagingPreviewView.sourceLayout = nil;
+    self.currentMidiLayoutLive = YES;
     if (_layoutSwitcherWindowController)
     {
         _layoutSwitcherWindowController.previewRenderer = nil;
@@ -5274,9 +5275,9 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     
     self.stagingLayout.audioEngine = [self setupStagingAudio];
     self.activePreviewView = self.stagingPreviewView;
+    self.currentMidiLayoutLive = NO;
     [self setupStagingRecorder];
     self.stagingPreviewView.sourceLayout = self.stagingLayout;
-    //self.selectedLayout = self.stagingLayout;
     [CaptureController.sharedCaptureController postNotification:CSNotificationLayoutModeChanged forObject:self];
     
 }
