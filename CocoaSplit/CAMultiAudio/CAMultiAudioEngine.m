@@ -277,6 +277,10 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     for (CAMultiAudioInput *input in self.audioInputs)
     {
+        if ([input isEqual:_defaultInput])
+        {
+            continue;
+        }
         if ([input isKindOfClass:[CAMultiAudioAVCapturePlayer class]])
         {
             CAMultiAudioAVCapturePlayer *avinput = (CAMultiAudioAVCapturePlayer *)input;
@@ -846,7 +850,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     //NSArray *sysDevices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio];
     
-    [self attachDefaultInput];
+   [self attachDefaultInput];
     [self listenForDefaultInputChange];
     NSArray *sysDevices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio];
     for(AVCaptureDevice *dev in sysDevices)

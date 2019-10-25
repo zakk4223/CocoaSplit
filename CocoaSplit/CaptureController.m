@@ -5117,16 +5117,18 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 
     //Save the current live layout to a temporary layout, do a normal staging->live and then restore old live into current staging
 
-    [self.livePreviewView.sourceLayout saveSourceList];
+    [self.liveLayout saveSourceList];
     [self stagingSave:sender];
 
-    SourceLayout *tmpLive = [self.livePreviewView.sourceLayout copy];
+    SourceLayout *tmpLive = [self.liveLayout copy];
     SourceLayout *tmpStage = [self.stagingLayout copy];
     
-    [self.selectedLayout replaceWithSourceLayoutViaScript:tmpStage  withCompletionBlock:^{
+    [self.liveLayout replaceWithSourceLayoutViaScript:tmpStage  withCompletionBlock:^{
         dispatch_async(dispatch_get_main_queue(), ^{
             self.inLayoutTransition = NO;
-        });} withExceptionBlock:nil];
+        });
+        
+        ;} withExceptionBlock:nil];
     //[self stagingGoLive:self];
 
     [self applyTransitionSettings:self.activePreviewView.sourceLayout];
