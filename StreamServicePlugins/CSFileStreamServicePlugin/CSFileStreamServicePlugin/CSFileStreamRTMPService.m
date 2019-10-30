@@ -25,6 +25,7 @@
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:self.destinationURI forKey:@"destinationURI"];
+    [aCoder encodeObject:self.forceFormat forKey:@"forceFormat"];
 }
 
 
@@ -33,6 +34,7 @@
     if (self = [self init])
     {
         self.destinationURI = [aDecoder decodeObjectForKey:@"destinationURI"];
+        self.forceFormat = [aDecoder decodeObjectForKey:@"forceFormat"];
     }
     
     return self;
@@ -53,6 +55,10 @@
 
 -(NSString *)getServiceFormat
 {
+    if (self.forceFormat)
+    {
+        return self.forceFormat;
+    }
     return @"FLV";
 }
 

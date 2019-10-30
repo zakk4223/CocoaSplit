@@ -463,7 +463,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
 {
  
     CMSampleBufferRef theBuffer = frameData.encodedSampleBuffer;
-    NSLog(@"Creating output format %@ DESTINATION %@", self.stream_format, self.stream_output);
+    NSLog(@"Creating output format %@ DESTINATION %@ %@", self.stream_format, self.stream_output, self);
     AVOutputFormat *av_out_fmt;
     
     int avErr = 0;
@@ -482,6 +482,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
     [self setVideoFormatOptions:_av_fmt_ctx];
     
+
     av_out_fmt = _av_fmt_ctx->oformat;
     
     _av_video_stream = avformat_new_stream(_av_fmt_ctx, 0);
@@ -604,7 +605,15 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
             return NO;
         }
     }
-        if (_av_fmt_ctx == NULL || avformat_write_header(_av_fmt_ctx, NULL) < 0)
+    
+    
+    AVDictionary *optionDict = NULL;
+    
+    if (self.privateOptions)
+    {
+        av_dict_parse_string(&optionDict, self.privateOptions.UTF8String, ":", ",", 0);
+    }
+    if (_av_fmt_ctx == NULL || avformat_write_header(_av_fmt_ctx, &optionDict) < 0)
     {
  
         NSLog(@"AVFORMAT_WRITE_HEADER failed");
@@ -669,6 +678,7 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
         
     pkt.pts = av_rescale_q(CMSampleBufferGetPresentationTimeStamp(theBuffer).value, (AVRational) {1.0, CMSampleBufferGetPresentationTimeStamp(theBuffer).timescale}, _av_video_stream->time_base);
 
+    pkt.duration = av_rescale_q(frameData.videoDuration.value, (AVRational) {1.0, frameData.videoDuration.timescale}, _av_video_stream->time_base);
     
     if (pkt.dts == AV_NOPTS_VALUE)
     {
@@ -747,14 +757,16 @@ void getAudioExtradata(char *cookie, char **buffer, size_t *size)
     
     if (_av_fmt_ctx)
     {
-        if (_av_fmt_ctx->pb && !self.errored)
+       //if (_av_fmt_ctx->pb && !self.errored)
         {
             av_write_trailer(_av_fmt_ctx);
         }
         
-        avio_flush(_av_fmt_ctx->pb);
-        
-        avio_close(_av_fmt_ctx->pb);
+        if (_av_fmt_ctx->pb)
+        {
+            avio_flush(_av_fmt_ctx->pb);
+            avio_close(_av_fmt_ctx->pb);
+        }
         avformat_free_context(_av_fmt_ctx);
         
     }

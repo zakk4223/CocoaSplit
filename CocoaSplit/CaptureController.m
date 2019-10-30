@@ -1919,6 +1919,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     
     if (irCompressor)
     {
+        NSLog(@"SETTING UP INSTANT RECORDER");
         self.instantRecorder = [[CSTimedOutputBuffer alloc] initWithCompressor:irCompressor];
         self.instantRecorder.bufferDuration = self.instantRecordBufferDuration;
         if (!self.mainLayoutRecorder)
@@ -2582,6 +2583,11 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     
     self.instantRecordDirectory = [saveRoot valueForKey:@"instantRecordDirectory"];
     
+    if (!self.instantRecordDirectory)
+    {
+        NSArray *mPaths = NSSearchPathForDirectoriesInDomains(NSMoviesDirectory, NSUserDomainMask, YES);
+        self.instantRecordDirectory = mPaths.firstObject;
+    }
     if (saveRoot[@"useInstantRecord"])
     {
         self.useInstantRecord = [[saveRoot valueForKey:@"useInstantRecord"] boolValue];
@@ -2589,11 +2595,12 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 
     }
     
+    /*
     if (self.useInstantRecord)
     {
         [self setupInstantRecorder];
     }
-
+*/
 
     if (!saveRoot[@"defaultRecorderSetup"])
     {
@@ -3130,6 +3137,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
         //self.mainLayoutRecorder.audioEngine.encoder.encodedReceiver = self.mainLayoutRecorder;
     
         //self.mainLayoutRecorder.compressors  = self.compressors;
+        [self.mainLayoutRecorder.compressors setValue:self.compressors[@"InstantRecorder"] forKey:@"InstantRecorder"];
         self.mainLayoutRecorder.outputs = self.captureDestinations;
         [self.mainLayoutRecorder startRecordingCommon];
     

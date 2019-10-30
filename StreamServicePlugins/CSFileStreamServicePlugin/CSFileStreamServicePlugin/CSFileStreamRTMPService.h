@@ -13,7 +13,7 @@
 
 
 @property (strong) NSString *destinationURI;
-
+@property (strong) NSString *forceFormat;
 
 -(NSViewController  *)getConfigurationView;
 -(NSString *)getServiceDestination;

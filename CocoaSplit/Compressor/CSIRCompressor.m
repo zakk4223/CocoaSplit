@@ -143,7 +143,6 @@
 -(bool)compressFrame:(CapturedFrameData *)frameData
 {
     
-    
     if (![self hasOutputs])
     {
         return NO;
@@ -199,6 +198,7 @@
         acomp.average_bitrate = 9000;
         acomp.max_bitrate = 15000;
         acomp.keyframe_interval = 2;
+        acomp.use_cbr = YES;
         acomp.forceHardware = YES;
         _compressor = acomp;
         return YES;

@@ -21,7 +21,7 @@
 @property (assign) int samplerate;
 @property (assign) int audio_bitrate;
 @property (strong) NSMutableDictionary *activeAudioTracks;
-
+@property (strong) NSString *privateOptions;
 -(NSUInteger)frameQueueSize;
 -(bool)queueFramedata:(CapturedFrameData *)frameData;
 -(void) initStatsValues;

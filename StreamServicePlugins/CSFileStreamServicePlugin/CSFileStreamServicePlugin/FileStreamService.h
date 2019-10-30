@@ -16,6 +16,11 @@
 
 @property (assign) BOOL useTimestamp;
 @property (assign) BOOL noClobber;
+@property (readonly) BOOL segmentFile;
+@property (strong) NSNumber *segmentTime;
+@property (strong) NSNumber *segmentCount;
+@property (strong) NSString *forceFormat;
+
 
 
 

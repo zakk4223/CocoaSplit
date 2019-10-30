@@ -19,8 +19,17 @@
     if(self = [super init])
     {
         self.isReady = YES;
+        self.segmentCount = NULL;
+        self.segmentTime = NULL;
+        self.forceFormat = NULL;
     }
     return self;
+}
+
+
+-(BOOL)segmentFile
+{
+    return self.segmentTime || self.segmentCount;
 }
 
 
@@ -29,6 +38,9 @@
     [aCoder encodeObject:self.fileName forKey:@"fileName"];
     [aCoder encodeBool:self.useTimestamp forKey:@"useTimestamp"];
     [aCoder encodeBool:self.noClobber forKey:@"noClobber"];
+    [aCoder encodeObject:self.segmentCount forKey:@"segmentCount"];
+    [aCoder encodeObject:self.segmentTime forKey:@"segmentTime"];
+    [aCoder encodeObject:self.forceFormat forKey:@"forceFormat"];
 }
 
 
@@ -39,6 +51,9 @@
         self.fileName = [aDecoder decodeObjectForKey:@"fileName"];
         self.noClobber = [aDecoder decodeBoolForKey:@"noClobber"];
         self.useTimestamp = [aDecoder decodeBoolForKey:@"useTimestamp"];
+        self.forceFormat = [aDecoder decodeObjectForKey:@"forceFormat"];
+        self.segmentCount = [aDecoder decodeObjectForKey:@"segmentCount"];
+        self.segmentTime = [aDecoder decodeObjectForKey:@"segmentTime"];
     }
     
     return self;
@@ -59,9 +74,52 @@
 
 -(NSString *)getServiceFormat
 {
+    
+    if (self.segmentFile)
+    {
+        return @"segment";
+    }
+    
+    if (self.forceFormat)
+    {
+        return self.forceFormat;
+    }
+    
     return nil;
 }
 
+
+-(NSObject <CSOutputWriterProtocol> *)createOutput
+{
+    NSObject<CSOutputWriterProtocol>*ret = [super createOutput];
+    if (self.segmentFile)
+    {
+        NSMutableArray *outOpts = [NSMutableArray array];
+        if (self.segmentTime)
+        {
+            [outOpts addObject:[NSString stringWithFormat:@"segment_time:%@", self.segmentTime]];
+        }
+        
+        if (self.segmentCount)
+        {
+            [outOpts addObject:[NSString stringWithFormat:@"segment_wrap:%@", self.segmentCount]];
+        }
+        
+        if (self.forceFormat)
+        {
+            [outOpts addObject:[NSString stringWithFormat:@"segment_format:%@", self.forceFormat]];
+        }
+        
+        
+        if (outOpts.count > 0)
+        {
+            ret.privateOptions = [outOpts componentsJoinedByString:@","];
+        }
+        
+    }
+    
+    return ret;
+}
 
 
 -(NSString *)getServiceDestination
@@ -75,10 +133,21 @@
         NSDateFormatter *dFormat = [[NSDateFormatter alloc] init];
         dFormat.dateFormat = @"yyyyMMddHHmmss";
         NSString *dateStr = [dFormat stringFromDate:[NSDate date]];
-        useFilename = [NSString stringWithFormat:@"%@-%@.%@", noExt, dateStr, pathExt];
+        noExt = [NSString stringWithFormat:@"%@-%@", noExt, dateStr];
     }
     
-    if (self.noClobber)
+
+    
+    if (self.segmentFile)
+    {
+        noExt = [NSString stringWithFormat:@"%@-%%03d", noExt];
+    }
+    
+    
+    useFilename = [NSString stringWithFormat:@"%@.%@", noExt, pathExt];
+    
+    
+    if (self.noClobber && !self.segmentFile)
     {
         noExt = [useFilename stringByDeletingPathExtension];
 
@@ -91,6 +160,8 @@
             fidx++;
         }
     }
+    
+
     return useFilename;
 }
 

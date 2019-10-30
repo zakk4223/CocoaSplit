@@ -13,7 +13,6 @@
 
 
 @synthesize name = _name;
-@synthesize output_format = _output_format;
 @synthesize assignedLayout = _assignedLayout;
 
 -(instancetype)copyWithZone:(NSZone *)zone
@@ -364,20 +363,10 @@
     
 }
 
--(void)setOutput_format:(NSString *)output_format
-{
-    _output_format = output_format;
-}
-
 
 -(NSString *)output_format
 {
-    if (_output_format)
-    {
-        return _output_format;
-    }
-    
-    
+
     if (self.streamServiceObject)
     {
         if ([self.streamServiceObject respondsToSelector:@selector(getServiceFormat)])
