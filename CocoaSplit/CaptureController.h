@@ -408,10 +408,12 @@ CGFloat _savedAudioConstraintConstant;
 NSArray *_savedTransitionConstraints;
     
     NSMenu *_inputsMenu;
+    NSMenu *_instantRecordMenu;
     
 
 }
 
+@property (weak) IBOutlet NSButton *instantRecordButton;
 
 @property (strong) NSArray *inputViewSortDescriptors;
 @property (strong) NSString *appearance;
@@ -563,6 +565,7 @@ NSArray *_savedTransitionConstraints;
 -(IBAction)generateDebugFile:(id)sender;
 -(bool)startRecording;
 -(bool)stopRecording;
+-(void)saveInstantRecordBufferWithLength:(int)saveLength;
 
 
 @end

@@ -2270,6 +2270,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     self.activePreviewView = self.stagingPreviewView;
     [self.layoutCollectionView registerForDraggedTypes:@[@"cocoasplit.layout"]];
 
+     
     //NSNib *layoutNib = [[NSNib alloc] initWithNibNamed:@"CSLayoutCollectionItem" bundle:nil];
     //[self.layoutCollectionView registerNib:layoutNib forItemWithIdentifier:@"layout_item"];
     
@@ -5013,63 +5014,158 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
 }
 
 
+-(void)instantRecordMenuClicked:(NSMenuItem *)item
+{
+    NSNumber *recLength = item.representedObject;
+    
+    if (self.instantRecorder)
+    {
+        [self saveInstantRecordBufferWithLength:(int)recLength.integerValue];
+    }
+}
+-(void)buildInstantRecordMenu
+{
+    
+    NSArray *recLengths = nil;
+    if (!self.instantRecordBufferDuration)
+    {
+        _instantRecordMenu = nil;
+        return;
+    }
+    
+    switch(self.instantRecordBufferDuration)
+    {
+        case 900:
+            recLengths = @[@(900),@(600),@(300),@(60),@(30)];
+            break;
+        case 600:
+            recLengths = @[@(600),@(300),@(120),@(60),@(30)].mutableCopy;
+            break;
+        case 3600:
+            recLengths = @[@(3600),@(2700),@(1800),@(900),@(300),@(60),@(30)];
+            break;
+        default:
+            recLengths = @[@(self.instantRecordBufferDuration), @(self.instantRecordBufferDuration*0.75), @(self.instantRecordBufferDuration/2), @(self.instantRecordBufferDuration*0.25)];
+    }
+    
+    _instantRecordMenu = [[NSMenu alloc] init];
+    
+    
+    for (NSNumber *recVal in recLengths)
+    {
+        NSString *titleUnits = nil;
+        NSString *titleValue = nil;
+        if (recVal.integerValue < 60)
+        {
+            titleUnits = @"seconds";
+            titleValue = [NSString stringWithFormat:@"%ld", recVal.integerValue];
+        } else {
+            titleUnits = @"minutes";
+            if (recVal.integerValue == 60)
+            {
+                titleUnits = @"minute";
+            }
+            titleValue = [NSString stringWithFormat:@"%ld", recVal.integerValue/60];
+        }
+        
+        
+        NSString *menuTitle = [NSString stringWithFormat:@"%@ %@", titleValue, titleUnits];
+        NSMenuItem *mItem = [[NSMenuItem alloc] initWithTitle:menuTitle action:@selector(instantRecordMenuClicked:) keyEquivalent:@""];
+        mItem.representedObject = recVal;
+        mItem.target = self;
+        
+        [_instantRecordMenu addItem:mItem];
+    }
 
+    
+    //Special cases: 15 minute buffer: 15m,10m,5m,1m,30s
+    //10 minute buffer: 10m,5m,2m,1m,30s
+    //1 hour buffer: 1hr,45m,30m,15m,10m,5m,1m,30s
+    
+    //Full buffer length, 3/4th buffer length, 1/2 buffer length, 1/4th buffer length
+    
+    
+    
+}
+-(void)showInstantRecordAlternateMenu:(NSButton *)sender
+{
+    
+    [self buildInstantRecordMenu];
+    NSInteger midItem = _instantRecordMenu.itemArray.count/2;
+    NSPoint popupPoint = NSMakePoint(NSMaxY(sender.bounds), NSMidY(sender.bounds));
+    [_instantRecordMenu popUpMenuPositioningItem:[_instantRecordMenu itemAtIndex:midItem] atLocation:popupPoint inView:sender];
+}
+
+-(void)saveInstantRecordBufferWithLength:(int)saveLength
+{
+        if (self.instantRecordActive && self.instantRecorder)
+        {
+
+            NSString *directory = self.instantRecordDirectory;
+            
+            if (!directory)
+            {
+                NSArray *mPaths = NSSearchPathForDirectoriesInDomains(NSMoviesDirectory, NSUserDomainMask, YES);
+                directory = mPaths.firstObject;
+            }
+            
+            if (directory)
+            {
+                NSDateFormatter *dFormat = [[NSDateFormatter alloc] init];
+                dFormat.dateStyle = NSDateFormatterMediumStyle;
+                dFormat.timeStyle = NSDateFormatterMediumStyle;
+                NSString *dateStr = [dFormat stringFromDate:[NSDate date]];
+                NSString *useFilename = [NSString stringWithFormat:@"CS_instant_record-%@.mov", dateStr];
+                
+                NSString *savePath = [NSString pathWithComponents:@[directory, useFilename]];
+                
+                [self.instantRecorder writeCurrentBuffer:savePath usingDuration:(float)saveLength withCompletionBlock:^{
+                    
+                    
+                    NSURL *fileUrl = [NSURL fileURLWithPath:savePath];
+                    
+                    NSPasteboardItem *tmpItem = [[NSPasteboardItem alloc] init];
+                    [tmpItem setString:fileUrl.absoluteString forType:@"public.file-url"];
+                    //This is annoying. The data doesn't get flushed to disk immediately, so the metadata lookup fails (whyyyyy)
+                    //Just try a few times until we get an input source...
+                    
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0
+                                                             ), ^{
+                        for (int i = 0; i < 10; i++)
+                        {
+                            NSObject<CSInputSourceProtocol>* inputSrc = [self inputSourceForPasteboardItem:tmpItem];
+                            
+                            if (inputSrc)
+                            {
+                                dispatch_async(dispatch_get_main_queue()
+                                               , ^{
+                                                   CSInputLibraryItem *item = [self addInputToLibrary:inputSrc];
+                                                   item.autoFit = YES;
+                                                   item.transient = YES;
+                                               });
+
+                                break;
+                            } else {
+                                sleep(1.0f);
+                            }
+                        }
+                    });
+                }];
+            }
+        }
+    }
+    
 - (IBAction)doInstantRecord:(id)sender
 {
     if (self.instantRecordActive && self.instantRecorder)
     {
-        
-        NSString *directory = self.instantRecordDirectory;
-        
-        if (!directory)
+        if (NSEvent.pressedMouseButtons == 2 || (NSEvent.modifierFlags & NSEventModifierFlagControl))
         {
-            NSArray *mPaths = NSSearchPathForDirectoriesInDomains(NSMoviesDirectory, NSUserDomainMask, YES);
-            directory = mPaths.firstObject;
+            [self showInstantRecordAlternateMenu:sender];
+            return;
         }
         
-        if (directory)
-        {
-            NSDateFormatter *dFormat = [[NSDateFormatter alloc] init];
-            dFormat.dateStyle = NSDateFormatterMediumStyle;
-            dFormat.timeStyle = NSDateFormatterMediumStyle;
-            NSString *dateStr = [dFormat stringFromDate:[NSDate date]];
-            NSString *useFilename = [NSString stringWithFormat:@"CS_instant_record-%@.mov", dateStr];
-            
-            NSString *savePath = [NSString pathWithComponents:@[directory, useFilename]];
-            
-            [self.instantRecorder writeCurrentBuffer:savePath withCompletionBlock:^{
-                
-                
-                NSURL *fileUrl = [NSURL fileURLWithPath:savePath];
-                
-                NSPasteboardItem *tmpItem = [[NSPasteboardItem alloc] init];
-                [tmpItem setString:fileUrl.absoluteString forType:@"public.file-url"];
-                //This is annoying. The data doesn't get flushed to disk immediately, so the metadata lookup fails (whyyyyy)
-                //Just try a few times until we get an input source...
-                
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0
-                                                         ), ^{
-                    for (int i = 0; i < 10; i++)
-                    {
-                        NSObject<CSInputSourceProtocol>* inputSrc = [self inputSourceForPasteboardItem:tmpItem];
-                        
-                        if (inputSrc)
-                        {
-                            dispatch_async(dispatch_get_main_queue()
-                                           , ^{
-                                               CSInputLibraryItem *item = [self addInputToLibrary:inputSrc];
-                                               item.autoFit = YES;
-                                               item.transient = YES;
-                                           });
-
-                            break;
-                        } else {
-                            sleep(1.0f);
-                        }
-                    }
-                });
-            }];
-        }
+        [self saveInstantRecordBufferWithLength:self.instantRecordBufferDuration];
     }
 }
 

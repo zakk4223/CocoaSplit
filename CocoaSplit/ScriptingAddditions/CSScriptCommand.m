@@ -94,7 +94,12 @@
 
 -(id) instantRecord
 {
-    [[CaptureController sharedCaptureController] doInstantRecord:nil];
+    NSNumber *duration = self.evaluatedArguments[@""];
+    if (!duration)
+    {
+        duration = @(0);
+    }
+    [[CaptureController sharedCaptureController] saveInstantRecordBufferWithLength:(int)duration.integerValue];
     return nil;
 }
 

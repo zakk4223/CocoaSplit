@@ -303,6 +303,7 @@
         
         <command name="instantRecord" code="CSssirec">
             <cocoa class="CSScriptCommand"/>
+            <direct-parameter type="integer" optional="yes" description="Seconds to save" name="duration"/>
         </command>
         
         <command name="toggleStagingView" code="CSsstgst">

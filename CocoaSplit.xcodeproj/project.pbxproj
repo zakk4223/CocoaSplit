@@ -243,6 +243,7 @@
 		34C19053189EE60400AB2430 /* CapturedFrameData.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C19052189EE60400AB2430 /* CapturedFrameData.m */; };
 		34C67B8E1A2E69F60012DC1B /* CSHitboxStreamServicePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34C67B781A2D7B6A0012DC1B /* CSHitboxStreamServicePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		34C6C3BF15FB5B440018A18B /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34C6C3BE15FB5B440018A18B /* OpenGL.framework */; };
+		34CA586D236ADC01000FFD9A /* CSRightClickButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 34CA586C236ADC01000FFD9A /* CSRightClickButton.m */; };
 		34CACC991FB886FB00C04BC6 /* CSUserNotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34CACC981FB886FB00C04BC6 /* CSUserNotificationController.m */; };
 		34CFE4A018F154DD00092C6A /* AVFChannelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 34CFE49F18F154DD00092C6A /* AVFChannelManager.m */; };
 		34CFE4A418F1992A00092C6A /* AVFAudioChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 34CFE4A318F1992A00092C6A /* AVFAudioChannel.m */; };
@@ -1052,6 +1053,8 @@
 		34C6807E19DD01C300413468 /* CSSyphonInjectExtraPlugin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSSyphonInjectExtraPlugin.xcodeproj; path = ExtraPlugins/CSSyphonInjectExtraPlugin/CSSyphonInjectExtraPlugin.xcodeproj; sourceTree = "<group>"; };
 		34C6C3BE15FB5B440018A18B /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		34C6DC341EBF545F0038FA44 /* CSLayoutRecorderInfoProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSLayoutRecorderInfoProtocol.h; sourceTree = "<group>"; };
+		34CA586B236ADC01000FFD9A /* CSRightClickButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSRightClickButton.h; path = Interface/CSRightClickButton.h; sourceTree = "<group>"; };
+		34CA586C236ADC01000FFD9A /* CSRightClickButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CSRightClickButton.m; path = Interface/CSRightClickButton.m; sourceTree = "<group>"; };
 		34CACC971FB886FB00C04BC6 /* CSUserNotificationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSUserNotificationController.h; sourceTree = "<group>"; };
 		34CACC981FB886FB00C04BC6 /* CSUserNotificationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSUserNotificationController.m; sourceTree = "<group>"; };
 		34CFE49E18F154DD00092C6A /* AVFChannelManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVFChannelManager.h; sourceTree = "<group>"; };
@@ -1796,6 +1799,8 @@
 				34A27228205D6DEE00135A5D /* TransitionSwitcherView */,
 				3477BF4F22081E57003AF9FF /* CSKilobitFormatter.h */,
 				3477BF5022081E57003AF9FF /* CSKilobitFormatter.m */,
+				34CA586B236ADC01000FFD9A /* CSRightClickButton.h */,
+				34CA586C236ADC01000FFD9A /* CSRightClickButton.m */,
 			);
 			name = Interface;
 			sourceTree = "<group>";
@@ -3100,6 +3105,7 @@
 				34DC2FB01B512362008F12A2 /* CSCaptureBase+TimerDelegate.m in Sources */,
 				34ED8C791B07371C002C0674 /* MIKMIDIMetaEvent.m in Sources */,
 				34F52A2B1BC1E0F900662911 /* CSLayoutButton.m in Sources */,
+				34CA586D236ADC01000FFD9A /* CSRightClickButton.m in Sources */,
 				3434E16B224F2E1A0091A149 /* CAMultiAudioOutputTrack.m in Sources */,
 				34576C7819AFCA1B007BAD90 /* CSPluginLoader.m in Sources */,
 				34FDD6F21A215268009A7413 /* CSPluginServices.m in Sources */,
