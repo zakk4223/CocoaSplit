@@ -26,7 +26,6 @@
 
 }
 
-
 @property (readonly) NSString *windowTitle;
 @property (readonly) NSString *resolutionDescription;
 @property (weak) CAMultiAudioEngine *multiAudioEngine;

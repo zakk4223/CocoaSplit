@@ -79,6 +79,7 @@
     newCopy.deviceUID = self.deviceUID;
     newCopy.audioVolume = self.audioVolume;
     newCopy.audioEnabled = self.audioEnabled;
+    newCopy.useExistingInput = self.useExistingInput;
     return newCopy;
 }
 
@@ -125,6 +126,7 @@
     [aCoder encodeFloat:self.fileEndTime forKey:@"fileEndTime"];
     [aCoder encodeBool:self.fileLoop forKey:@"fileLoop"];
     [aCoder encodeObject:self.deviceUID forKey:@"deviceUID"];
+    [aCoder encodeBool:self.useExistingInput forKey:@"useExistingInput"];
     if (self.audioNode)
     {
         NSMutableDictionary *nodeData = [NSMutableDictionary dictionary];
@@ -140,6 +142,11 @@
 {
     if (self=[super initWithCoder:aDecoder])
     {
+        
+        if ([aDecoder containsValueForKey:@"useExistingInput"])
+        {
+            self.useExistingInput = [aDecoder decodeBoolForKey:@"useExistingInput"];
+        }
         self.audioUUID = [aDecoder decodeObjectForKey:@"audioUUID"];
         self.deviceUID = [aDecoder decodeObjectForKey:@"deviceUID"];
         self.audioVolume = [aDecoder decodeFloatForKey:@"audioVolume"];
@@ -304,7 +311,12 @@
         
         if (!self.audioNode)
         {
-            self.audioNode = [audioEngine createInputForSystemUUID:self.deviceUID];
+            NSString *useUID = self.deviceUID;
+            if (!useUID)
+            {
+                useUID = self.audioUUID;
+            }
+            self.audioNode = [audioEngine createInputForSystemUUID:useUID];
 
         }
     }

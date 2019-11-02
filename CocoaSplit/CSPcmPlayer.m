@@ -102,6 +102,13 @@
 
 -(void) addPlayer:(id)player forUUID:(NSString *)uuid
 {
+    
+    if ([_realPlayers objectForKey:uuid])
+    {
+        return;
+    }
+    
+    
     if (!_asbd)
     {
         CAMultiAudioPCMPlayer *caPlayer = player;

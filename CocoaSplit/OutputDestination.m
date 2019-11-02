@@ -689,7 +689,9 @@
     if (self && self.assignedLayout)
     {
         useEngine = self.assignedLayout.audioEngine;
-    } else {
+    }
+    if (!useEngine)
+    {
         useEngine = [CaptureController sharedCaptureController].multiAudioEngine;
     }
     

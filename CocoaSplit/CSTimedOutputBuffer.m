@@ -379,7 +379,7 @@ errLabel:
     
     _current_file_index = _current_file_index ^ 1;
     
-    NSString *fileBase = [NSString stringWithFormat:@"LiveRecord-%d.mov", _current_file_index];
+    NSString *fileBase = [NSString stringWithFormat:@"LiveRecord-%d.mkv", _current_file_index];
     
     NSString *fileName = [NSString pathWithComponents:@[instantRecordDirectory, fileBase]];
     
@@ -394,7 +394,7 @@ errLabel:
     CAMultiAudioOutputTrack *audioTrack = controller.multiAudioEngine.defaultOutputTrack;
     
     _hlsOutput.activeAudioTracks = @{audioTrack.uuid: audioTrack}.mutableCopy;
-    _hlsOutput.privateOptions = @"movflags:frag_keyframe";
+    //_hlsOutput.privateOptions = @"movflags:frag_keyframe";
 }
 
 -(void) writeEncodedData:(CapturedFrameData *)frameData

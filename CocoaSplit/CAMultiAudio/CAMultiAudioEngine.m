@@ -283,8 +283,12 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         }
         if ([input isKindOfClass:[CAMultiAudioAVCapturePlayer class]])
         {
+            
             CAMultiAudioAVCapturePlayer *avinput = (CAMultiAudioAVCapturePlayer *)input;
-            systemInputMap[avinput.nodeUID] = avinput.deviceUID;
+            if (avinput.isGlobal)
+            {
+                systemInputMap[avinput.nodeUID] = avinput.deviceUID;
+            }
         }
     }
     
@@ -780,8 +784,9 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         
         avplayer.name = @"System Input";
         avplayer.nodeUID = @"__CS_SYSTEM_INPUT_UUID__";
-        [self attachInput:avplayer];
         avplayer.enabled = YES;
+
+        [self attachInput:avplayer];
         _defaultInput = avplayer;
     }
 }

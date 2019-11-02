@@ -62,7 +62,7 @@
 -(void) setupDummyAudioEngine
 {
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         CAMultiAudioEngine *audioEngine = nil;
         CAMultiAudioEngine *systemEngine = CaptureController.sharedCaptureController.multiAudioEngine;
         
@@ -79,12 +79,14 @@
             [audioEngine createOutputTrack:trackName withUUID:track.uuid];
             
         }
+    self.previewView.sourceLayout.audioEngine = audioEngine;
+    [self.previewView.sourceLayout reapplyAudioSources];
+
         dispatch_async(dispatch_get_main_queue(), ^{
             self.multiAudioEngine = audioEngine;
-            self.previewView.sourceLayout.audioEngine = audioEngine;
-            [self.previewView.sourceLayout reapplyAudioSources];
+            
         });
-    });
+    //});
 
 }
 -(NSString *)windowTitle

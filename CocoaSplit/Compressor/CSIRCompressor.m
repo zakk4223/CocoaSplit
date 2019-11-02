@@ -195,7 +195,7 @@
     {
         
         AppleVTCompressor *acomp = [[AppleVTCompressor alloc] init];
-        acomp.average_bitrate = 9000;
+        acomp.average_bitrate = 15000;
         acomp.max_bitrate = 15000;
         acomp.keyframe_interval = 2;
         acomp.use_cbr = YES;

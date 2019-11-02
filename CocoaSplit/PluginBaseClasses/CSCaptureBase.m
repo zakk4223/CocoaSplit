@@ -367,6 +367,7 @@
         
         //[_allInputs addObject:inputsrc];
         [self.allLayers setObject:newLayer forKey:inputsrc];
+
     }
 
 
@@ -566,6 +567,7 @@
             if (useEngine)
             {
                 
+                NSLog(@"ENGINE %@", useEngine);
                 player = [useEngine createPCMInput:forUID withFormat:withFormat];
             }
             
