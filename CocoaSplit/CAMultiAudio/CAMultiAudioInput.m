@@ -254,7 +254,7 @@
         saveDict[@"downMixerData"] = [self.downMixer saveData];
     }
     saveDict[@"isGlobal"] = [NSNumber numberWithBool:self.isGlobal];
-    saveDict[@"outputTracks"] = self.outputTracks;
+    saveDict[@"outputTracks"] = self.outputTracks.copy;
 }
 
 

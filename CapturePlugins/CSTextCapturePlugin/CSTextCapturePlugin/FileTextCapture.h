@@ -17,6 +17,7 @@
 @property (assign) int lineLimit;
 @property (assign) bool collapseLines;
 @property (assign) bool readAsHTML;
+@property (assign) int fontSizeAdjust;
 @property (strong) NSString *currentFile;
 
 -(void)openFile:(NSString *)filename;

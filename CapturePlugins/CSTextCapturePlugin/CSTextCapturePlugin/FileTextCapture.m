@@ -12,7 +12,7 @@
 @synthesize currentFile = _currentFile;
 @synthesize startLine = _startLine;
 @synthesize lineLimit = _lineLimit;
-@synthesize readAsHTML = _readAsHTML;
+@synthesize fontSizeAdjust = _fontSizeAdjust;
 
 -(instancetype)init
 {
@@ -21,6 +21,7 @@
         self.lineLimit = 0;
         self.startLine = 0;
         self.collapseLines = NO;
+        self.fontSizeAdjust = 0;
         _fileChangeQueue = dispatch_queue_create("File Watch Queue", DISPATCH_QUEUE_SERIAL);
     }
     
@@ -34,7 +35,7 @@
     [aCoder encodeObject:self.currentFile forKey:@"currentFile"];
     [aCoder encodeInt:self.startLine forKey:@"startLine"];
     [aCoder encodeInt:self.lineLimit forKey:@"lineLimit"];
-    [aCoder encodeBool:self.readAsHTML forKey:@"readAsHTML"];
+    [aCoder encodeInt:self.fontSizeAdjust forKey:@"fontSizeAdjust"];
 }
 
 -(void)restoreWithCoder:(NSCoder *)aDecoder
@@ -43,8 +44,13 @@
     
     _lineLimit = [aDecoder decodeIntForKey:@"lineLimit"];
     _startLine = [aDecoder decodeIntForKey:@"startLine"];
-    _readAsHTML = [aDecoder decodeBoolForKey:@"readAsHTML"];
+    if ([aDecoder containsValueForKey:@"fontSizeAdjust"])
+    {
+        _fontSizeAdjust = [aDecoder decodeIntForKey:@"fontSizeAdjust"];
+    }
+    
     self.currentFile = [aDecoder decodeObjectForKey:@"currentFile"];
+    
     
 }
 
@@ -94,16 +100,17 @@
     return _lineLimit;
 }
 
--(void)setReadAsHTML:(bool)readAsHTML
+-(void)setFontSizeAdjust:(int)fontSizeAdjust
 {
-    _readAsHTML = readAsHTML;
+    _fontSizeAdjust = fontSizeAdjust;
     [self openFile:self.currentFile];
 }
 
--(bool)readAsHTML
+-(int)fontSizeAdjust
 {
-    return _readAsHTML;
+    return _fontSizeAdjust;
 }
+
 
 -(void)setCurrentFile:(NSString *)currentFile
 {
@@ -124,6 +131,8 @@
 
 -(void)openFile:(NSString *)filename
 {
+    
+    
     if (!self.currentFile)
     {
         return;
@@ -131,6 +140,7 @@
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0
                                              ), ^{
+        [self cancelWatch];
         NSData *fileData = [NSData dataWithContentsOfFile:filename];
         [self watchPath:filename];
         [self processFileData:fileData];
@@ -141,19 +151,18 @@
 -(void)processFileData:(NSData *)fileData
 {
     
-    if (self.readAsHTML)
-    {
-        self.text = nil;
-        
-        NSAttributedString *fileText = [[NSAttributedString alloc] initWithHTML:fileData documentAttributes:nil];
-        if (fileText)
-        {
-            self.attributedText = fileText;
-        }
-    } else {
+    NSDictionary *documentAttributes = nil;
+    
+    NSMutableAttributedString *fileAttributedString = [[NSMutableAttributedString alloc] initWithData:fileData options:@{NSCharacterEncodingDocumentOption:@(NSUTF8StringEncoding)} documentAttributes:&documentAttributes error:nil];
+    
+    
+    
+
+   if (fileAttributedString && [documentAttributes[NSDocumentTypeDocumentAttribute] isEqualToString:NSPlainTextDocumentType])
+   {
         self.attributedText = nil;
         //self.currentFile = filename;
-        NSString *fileText = [[NSString alloc] initWithData:fileData encoding:NSUTF8StringEncoding];
+        NSString *fileText = fileAttributedString.string;
         
         long lineCount = self.lineLimit;
         long startLine = self.startLine;
@@ -184,7 +193,18 @@
         }
         
         self.text = fileText;
-    }
+   } else if (fileAttributedString) {
+       [fileAttributedString beginEditing];
+       [fileAttributedString enumerateAttribute:NSFontAttributeName inRange:NSMakeRange(0, fileAttributedString.length) options:0 usingBlock:^(id  _Nullable value, NSRange range, BOOL * _Nonnull stop) {
+           NSFont *fontAttribute = value;
+           NSFont *newFont = [NSFont fontWithDescriptor:fontAttribute.fontDescriptor size:fontAttribute.pointSize+self.fontSizeAdjust];
+           [fileAttributedString removeAttribute:NSFontAttributeName range:range];
+           [fileAttributedString addAttribute:NSFontAttributeName value:newFont range:range];
+       }];
+       [fileAttributedString endEditing];
+       self.text = nil;
+       self.attributedText = fileAttributedString;
+   }
 }
 
 
