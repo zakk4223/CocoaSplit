@@ -166,10 +166,12 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     frameProperties = NULL;
     //}
     
+    /*
     if (!_vtpt_ref)
     {
         VTPixelTransferSessionCreate(kCFAllocatorDefault, &_vtpt_ref);
         VTSessionSetProperty(_vtpt_ref, kVTPixelTransferPropertyKey_ScalingMode, kVTScalingMode_Letterbox);
+        VTSessionSetProperty(_vtpt_ref, kVTPixelTransferPropertyKey_RealTime, kCFBooleanTrue);
     }
     CVPixelBufferRef converted_frame;
     
@@ -182,16 +184,17 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     //CVPixelBufferCreate(kCFAllocatorDefault, self.working_width, self.working_height, kCVPixelFormatType_422YpCbCr8, 0, &converted_frame);
     
     VTPixelTransferSessionTransferImage(_vtpt_ref, imageBuffer, converted_frame);
+    */
     
     //set it to nil since this is our private copy and this will force the frameData instance to release the video data
     
-    frameData.videoFrame = nil;
-    frameData.encoderData = converted_frame;
+    //frameData.videoFrame = nil;
+    //frameData.encoderData = converted_frame;
     
     
-    CVPixelBufferRelease(imageBuffer);
+    //CVPixelBufferRelease(imageBuffer);
     
-    VTCompressionSessionEncodeFrame(_compression_session, converted_frame, frameData.videoPTS, frameData.videoDuration, frameProperties, (__bridge_retained void *)(frameData), NULL);
+    VTCompressionSessionEncodeFrame(_compression_session, frameData.videoFrame, frameData.videoPTS, frameData.videoDuration, frameProperties, (__bridge_retained void *)(frameData), NULL);
     
     if (frameProperties)
     {
@@ -248,6 +251,12 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
         VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_ExpectedFrameRate, (__bridge CFTypeRef)(@(captureFPS)));
     }
     
+    CFMutableDictionaryRef transferProps = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+    CFDictionarySetValue(transferProps, kVTPixelTransferPropertyKey_ScalingMode, kVTScalingMode_Letterbox);
+    
+    VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_PixelTransferProperties, transferProps);
+    CFRelease(transferProps);
+    
     [self configureCompressionSession:_compression_session];
     
     
@@ -298,7 +307,8 @@ void VideoCompressorReceiveFrame(void *VTref, void *VTFrameRef, OSStatus status,
     }
     
     
-    CVPixelBufferRelease(frameData.encoderData);
+    //CVPixelBufferRelease(frameData.videoFrame);
+    frameData.videoFrame = nil;
     
     
     //frameData.videoFrame = nil;
@@ -312,8 +322,7 @@ void VideoCompressorReceiveFrame(void *VTref, void *VTFrameRef, OSStatus status,
         
         attach = CFArrayGetValueAtIndex(sample_attachments, 0);
         depends_on_others = CFDictionaryGetValue(attach, kCMSampleAttachmentKey_DependsOnOthers);
-        frameData.isKeyFrame = CFBooleanGetValue(depends_on_others);
-        
+        frameData.isKeyFrame = !CFBooleanGetValue(depends_on_others);
     }
     
     

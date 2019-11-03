@@ -393,6 +393,7 @@
 {
     
     double startTime;
+    double start_t, end_t, elapsed_t;
     
     startTime = [[CaptureController sharedCaptureController] mach_time_seconds];
     
@@ -405,65 +406,80 @@
     {
         @autoreleasepool {
             
-    
-        if (self.layout.layoutTimingSource && self.layout.layoutTimingSource.videoInput && self.layout.layoutTimingSource.videoInput.canProvideTiming)
-        {
-            CSCaptureBase *newTiming = (CSCaptureBase *)self.layout.layoutTimingSource.videoInput;
-            newTiming.timerDelegateCtx = nil;
-            newTiming.timerDelegate = self;
-            return;
-        }
-        
-        
-        
-        
-        //_frame_time = nowTime;//startTime;
-        
-        
-        if (![[CaptureController sharedCaptureController] sleepUntil:(startTime += 1.0/self.layout.frameRate)])
-        {
-            //NSLog(@"MISSED FRAME!");
-            continue;
-        }
-        
-        
-        int drain_cnt = 0;
-        if (!self.recordingActive)
-        {
             
-            for (OutputDestination *outdest in self.outputs)
+            if (self.layout.layoutTimingSource && self.layout.layoutTimingSource.videoInput && self.layout.layoutTimingSource.videoInput.canProvideTiming)
             {
-                if (outdest.buffer_draining)
-                {
-                    drain_cnt++;
-                }
-                [outdest writeEncodedData:nil];
-            }
-            
-            if (!drain_cnt)
-            {
+                CSCaptureBase *newTiming = (CSCaptureBase *)self.layout.layoutTimingSource.videoInput;
+                newTiming.timerDelegateCtx = nil;
+                newTiming.timerDelegate = self;
                 return;
             }
-        }
-
-        
-        _frame_time = startTime;
-
+            
+            
+            
+            
+            //_frame_time = nowTime;//startTime;
+            
+            startTime += 1.0/self.layout.frameRate;
+            
+            double start_time = [CaptureController.sharedCaptureController mach_time_seconds];
+            if (![[CaptureController sharedCaptureController] sleepUntil:startTime])
+            {
+                NSLog(@"SLEEP UNTIL %f CURRENT TIME %f LAYOUT %@ %@", startTime, [[CaptureController sharedCaptureController] mach_time_seconds], self.layout.name, NSThread.currentThread);
+                continue;
+            }
+            //NSLog(@"SLEPT %f %f", end_time - start_time, self.layout.frameRate);
+            
+            int drain_cnt = 0;
+            if (!self.recordingActive)
+            {
+                
+                for (OutputDestination *outdest in self.outputs)
+                {
+                    if (outdest.buffer_draining)
+                    {
+                        drain_cnt++;
+                    }
+                    [outdest writeEncodedData:nil];
+                }
+                
+                if (!drain_cnt)
+                {
+                    return;
+                }
+            }
+            
+            
+            _frame_time = startTime;
+            start_t = [CaptureController.sharedCaptureController mach_time_seconds];
             [self newFrame];
-        
-    }
+            end_t = [CaptureController.sharedCaptureController mach_time_seconds];
+            elapsed_t = end_t - start_t;
+            if (elapsed_t > 1.0/self.layout.frameRate)
+            {
+                NSLog(@"NEW FRAME TOOK %f", elapsed_t);
+            }
+            
+        }
     }
 }
 
 -(void) newFrame
 {
+    double start_t,end_t, elapsed_t;
     
     CVPixelBufferRef newFrame;
     
     //double nfstart = [self mach_time_seconds];
-    
+
+    start_t = [CaptureController.sharedCaptureController mach_time_seconds];
     newFrame = [self.renderer currentImg];
-    
+    end_t = [CaptureController.sharedCaptureController mach_time_seconds];
+    elapsed_t = end_t - start_t;
+    if (elapsed_t > 1.0f/60.0f)
+    {
+        NSLog(@"RENDER TOOK %f", elapsed_t);
+    }
     if (self.frameReadyBlock)
     {
         self.frameReadyBlock();
@@ -486,7 +502,8 @@
     }
     */
     
-    
+    start_t = [CaptureController.sharedCaptureController mach_time_seconds];
+
     if (newFrame && self.compressors && self.compressors.count > 0)
     {
         _frameCount++;
@@ -522,14 +539,19 @@
             id <VideoCompressor> compressor;
             compressor = useCompressors[cKey];
             CapturedFrameData *newFrameData = newData.copy;
-            
             [compressor compressFrame:newFrameData];
+
             if ([compressor hasOutputs])
             {
                 used_compressor_count++;
             }
         }
-
+        end_t = [CaptureController.sharedCaptureController mach_time_seconds];
+        elapsed_t = end_t - start_t;
+        //if (elapsed_t > 1.0f/60.0f)
+        {
+            //NSLog(@"COMPRESSOR STUFF TOOK %f %@", elapsed_t, self.layout.name);
+        }
         
         CVPixelBufferRelease(newFrame);
         if (used_compressor_count == 0)

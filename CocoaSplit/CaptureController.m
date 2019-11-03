@@ -3203,7 +3203,8 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     {
         //[self.mainLayoutRecorder startRecording];
         self.mainRecordingActive = YES;
-        for (OutputDestination *outdest in _captureDestinations)
+        NSArray *destsCopy = _captureDestinations.copy;
+        for (OutputDestination *outdest in destsCopy)
         {
             
             if (!outdest.isRecorder || outdest.captureRunning)
