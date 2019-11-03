@@ -114,10 +114,12 @@
 
 -(bool)addNode:(CAMultiAudioNode *)newNode
 {
-    
-    if ([self.nodeList containsObject:newNode])
+    @synchronized(self.nodeList)
     {
-        return YES;
+        if ([self.nodeList containsObject:newNode])
+        {
+            return YES;
+        }
     }
     
     
@@ -140,7 +142,9 @@
         
         [newNode didInitializeNode];
         
-        [self.nodeList addObject:newNode];
+        @synchronized (self.nodeList) {
+            [self.nodeList addObject:newNode];
+        }
         [newNode setupEffectsChain];
         return YES;
     }
@@ -186,7 +190,9 @@
         return NO;
     }
 
-    [self.nodeList removeObject:node];
+    @synchronized (self.nodeList) {
+        [self.nodeList removeObject:node];
+    }
     [node removeEffectsChain];
     node.graph = nil;
     return YES;

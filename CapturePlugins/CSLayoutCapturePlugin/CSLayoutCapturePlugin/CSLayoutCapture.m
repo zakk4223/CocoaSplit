@@ -339,7 +339,10 @@
             CFRelease(useImage);
         }];
         
-        [self setupInputCropping:useCropRect];
+        if (!NSEqualRects(useCropRect, NSZeroRect))
+        {
+            [self setupInputCropping:useCropRect];
+        }
     }
 
     

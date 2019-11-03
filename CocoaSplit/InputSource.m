@@ -2260,6 +2260,10 @@ static NSArray *_sourceTypes = nil;
 {
 
     
+    if (NSEqualSizes(NSZeroSize, useSize))
+    {
+        return;
+    }
     float wr = useSize.width / self.canvas_width;
     float hr = useSize.height / self.canvas_height;
     float ratio = (hr < wr ? wr : hr);
