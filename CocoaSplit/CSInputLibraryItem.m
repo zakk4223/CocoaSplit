@@ -25,7 +25,7 @@
             NSImage *thumb = [[NSImage alloc] initWithSize:NSMakeSize(32, 32)];
             NSRect fromRect = NSMakeRect(0, 0, img.size.width, img.size.height);
             [thumb lockFocus];
-            [img drawInRect:NSMakeRect(0, 0, 32, 32) fromRect:fromRect operation:NSCompositeCopy fraction:1.0f];
+            [img drawInRect:NSMakeRect(0, 0, 32, 32) fromRect:fromRect operation:NSCompositingOperationCopy fraction:1.0f];
             [thumb unlockFocus];
             self.inputImage = thumb;
         }

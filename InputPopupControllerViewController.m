@@ -367,7 +367,7 @@
     self.userFilterWindow.delegate = self;
     [self.userFilterWindow setContentSize:filterView.bounds.size];
     [self.userFilterWindow.contentView addSubview:filterView];
-    self.userFilterWindow.styleMask =  NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask;
+    self.userFilterWindow.styleMask =  NSWindowStyleMaskTitled|NSWindowStyleMaskClosable|NSWindowStyleMaskMiniaturizable;
     [self.userFilterWindow setReleasedWhenClosed:NO];
     
     [self.userFilterWindow makeKeyAndOrderFront:self.userFilterWindow];
@@ -440,7 +440,7 @@
     [self.transitionFilterWindow setContentSize:filterView.bounds.size];
     [self.transitionFilterWindow.contentView addSubview:filterView];
     
-    self.transitionFilterWindow.styleMask =  NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask;
+    self.transitionFilterWindow.styleMask =  NSWindowStyleMaskTitled|NSWindowStyleMaskClosable|NSWindowStyleMaskMiniaturizable;
     [self.transitionFilterWindow setReleasedWhenClosed:NO];
     
     [self.transitionFilterWindow makeKeyAndOrderFront:self.transitionFilterWindow];
@@ -510,7 +510,7 @@
     configWindow.title = [NSString stringWithFormat:@"CocoaSplit Input (%@)", windowController.inputSource.name];
     configWindow.delegate = windowController.inputSource;
     
-    configWindow.styleMask =  NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask;
+    configWindow.styleMask =  NSWindowStyleMaskTitled|NSWindowStyleMaskClosable|NSWindowStyleMaskMiniaturizable;
     
     windowController.inputSource.editorWindow = configWindow;
     windowController.inputSource.editorController = windowController;

@@ -374,9 +374,15 @@
     NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
     [attributes setValue:[NSNumber numberWithInt:size.width] forKey:(NSString *)kCVPixelBufferWidthKey];
     [attributes setValue:[NSNumber numberWithInt:size.height] forKey:(NSString *)kCVPixelBufferHeightKey];
-    [attributes setValue:@{(NSString *)kIOSurfaceIsGlobal: @NO} forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
+    [attributes setValue:@{} forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
     [attributes setValue:[NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA] forKey:(NSString *)kCVPixelBufferPixelFormatTypeKey];
     [attributes setValue:@YES forKey:(NSString *)kCVPixelBufferMetalCompatibilityKey];
+    CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
+    CFDataRef rgbProfileData = CGColorSpaceCopyICCProfile(rgbColorSpace);
+    NSDictionary *poolAttachments = @{(NSString *)kCVImageBufferICCProfileKey : (__bridge NSData *)rgbProfileData, (NSString *)kCVImageBufferTransferFunctionKey: (NSString *)kCVImageBufferTransferFunction_ITU_R_709_2};
+    [attributes setValue:poolAttachments forKey:(NSString *)kCVBufferPropagatedAttachmentsKey];
+    CFRelease(rgbColorSpace);
+    
     
     
     if (_cvpool)
@@ -416,6 +422,8 @@
 
 -(void)dealloc
 {
+    
+    NSLog(@"DEALLOC RENDER %@", self);
     if (_cvpool)
     {
         CVPixelBufferPoolRelease(_cvpool);

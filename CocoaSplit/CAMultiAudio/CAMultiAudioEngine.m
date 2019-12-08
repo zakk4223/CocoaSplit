@@ -746,7 +746,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     AudioObjectAddPropertyListenerBlock(kAudioObjectSystemObject, &inputDeviceAddress, dispatch_get_main_queue(), ^(UInt32 inNumberAddresses, const AudioObjectPropertyAddress * _Nonnull inAddresses) {
         CAMultiAudioEngine *strongSelf = weakSelf;
-        if (strongSelf->_defaultInput)
+        if (strongSelf && strongSelf->_defaultInput)
         {
             [strongSelf attachDefaultInput];
         }
@@ -916,6 +916,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 }
 -(void)handleDeviceConnect:(NSNotification *)notification
 {
+    /*
     AVCaptureDevice *newDev = notification.object;
     
     if ([newDev hasMediaType:AVMediaTypeAudio])
@@ -937,6 +938,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
             [self attachInput:avplayer];
         }
     }
+     */
 }
 
 

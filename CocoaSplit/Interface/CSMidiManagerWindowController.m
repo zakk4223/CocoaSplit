@@ -87,7 +87,7 @@
 
 -(void)createModal
 {
-    NSWindow *newWindow = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, self.window.frame.size.width, 300) styleMask:NSTexturedBackgroundWindowMask backing:NSBackingStoreBuffered defer:NO];
+    NSWindow *newWindow = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, self.window.frame.size.width, 300) styleMask:NSWindowStyleMaskTexturedBackground backing:NSBackingStoreBuffered defer:NO];
     
     NSTextField *text = [[NSTextField alloc] initWithFrame:newWindow.frame];
     text.editable = NO;

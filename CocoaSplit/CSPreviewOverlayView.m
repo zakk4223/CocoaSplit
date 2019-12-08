@@ -189,7 +189,7 @@
         
         if (!_closeButton)
         {
-            _closeButton = [NSWindow standardWindowButton:NSWindowCloseButton forStyleMask:NSClosableWindowMask];
+            _closeButton = [NSWindow standardWindowButton:NSWindowCloseButton forStyleMask:NSWindowStyleMaskClosable];
             [self addSubview:_closeButton];
             _closeButton.target = self;
             _closeButton.action = @selector(deleteSource);
@@ -197,7 +197,7 @@
         
         if (!_autoFitButton)
         {
-            _autoFitButton = [NSWindow standardWindowButton:NSWindowZoomButton forStyleMask:NSClosableWindowMask];
+            _autoFitButton = [NSWindow standardWindowButton:NSWindowZoomButton forStyleMask:NSWindowStyleMaskClosable];
             [self addSubview:_autoFitButton];
             _autoFitButton.target = self;
             _autoFitButton.action  = @selector(autoFitSource);

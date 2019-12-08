@@ -15,6 +15,7 @@
 
 @property (strong) NSString *injectedAppName;
 @property (strong) SBApplication *injectSB;
+@property (strong) NSString *lastAppID;
 
 
 -(void)changeBuffer;

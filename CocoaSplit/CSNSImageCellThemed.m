@@ -33,6 +33,6 @@
         myimage = [self.image tintedImageWithColor:NSColor.blackColor];
     }
     
-    [myimage drawInRect:cellFrame fromRect:NSMakeRect(0, 0, myimage.size.width, myimage.size.height) operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+    [myimage drawInRect:cellFrame fromRect:NSMakeRect(0, 0, myimage.size.width, myimage.size.height) operation:NSCompositingOperationSourceOver fraction:1.0 respectFlipped:YES hints:nil];
 }
 @end

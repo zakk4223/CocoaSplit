@@ -169,7 +169,7 @@
 
 -(void)keyDown:(NSEvent *)theEvent
 {
-    if ([theEvent.charactersIgnoringModifiers isEqualToString:@"f"] && (theEvent.modifierFlags & NSCommandKeyMask))
+    if ([theEvent.charactersIgnoringModifiers isEqualToString:@"f"] && (theEvent.modifierFlags & NSEventModifierFlagCommand))
     {
         [self toggleFullscreen:self];
     }
@@ -259,12 +259,12 @@
     tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Clone Without Cache" action:@selector(cloneInputSourceNoCache:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
     tmp.alternate = YES;
-    tmp.keyEquivalentModifierMask = NSAlternateKeyMask;
+    tmp.keyEquivalentModifierMask = NSEventModifierFlagOption;
     
     tmp = [self.sourceSettingsMenu insertItemWithTitle:@"Make Source Private" action:@selector(privatizeSource:) keyEquivalent:@"" atIndex:idx++];
     tmp.target = self;
     tmp.alternate = YES;
-    tmp.keyEquivalentModifierMask = NSControlKeyMask;
+    tmp.keyEquivalentModifierMask = NSEventModifierFlagControl;
     
     NSString *freezeString = @"Freeze";
     if (self.selectedSource.isFrozen)
@@ -589,7 +589,7 @@
     
     bool doDeep = YES;
     
-    if (event.modifierFlags & NSControlKeyMask)
+    if (event.modifierFlags & NSEventModifierFlagControl)
     {
         doDeep = NO;
     }
@@ -658,7 +658,7 @@
     InputSource *deepSource = [self.sourceLayout findSource:worldPoint deepParent:YES];
 ;
     
-    if (theEvent.modifierFlags & NSControlKeyMask)
+    if (theEvent.modifierFlags & NSEventModifierFlagControl)
     {
         self.selectedSource = topSource;
     } else {
@@ -715,17 +715,17 @@
     
     if (self.isResizing)
     {
-        if (theEvent.modifierFlags & NSAlternateKeyMask)
+        if (theEvent.modifierFlags & NSEventModifierFlagOption)
         {
             self.resizeType |= kResizeCenter;
         }
         
-        if (theEvent.modifierFlags & NSControlKeyMask)
+        if (theEvent.modifierFlags & NSEventModifierFlagControl)
         {
             self.resizeType |= kResizeFree;
         }
         
-        if (theEvent.modifierFlags & NSShiftKeyMask)
+        if (theEvent.modifierFlags & NSEventModifierFlagShift)
         {
             self.resizeType |= kResizeCrop;
         }
@@ -793,7 +793,7 @@
         if (self.isResizing)
         {
             
-                if (theEvent.modifierFlags & NSAlternateKeyMask)
+            if (theEvent.modifierFlags & NSEventModifierFlagOption)
                 {
                     self.resizeType |= kResizeCenter;
                 } else {
@@ -2071,7 +2071,7 @@
     configWindow.title = [NSString stringWithFormat:@"CocoaSplit Input (%@)", configSrc.name];
     configWindow.delegate = self;
     
-    configWindow.styleMask =  NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask;
+    configWindow.styleMask =  NSWindowStyleMaskTitled|NSWindowStyleMaskClosable|NSWindowStyleMaskMiniaturizable;
 
     NSWindow *cWindow = [self.activeConfigWindows objectForKey:uuid];
     NSViewController *cController = [self.activeConfigControllers objectForKey:uuid];

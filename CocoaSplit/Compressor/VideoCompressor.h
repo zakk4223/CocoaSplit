@@ -42,6 +42,7 @@
 @property (assign) bool active;
 @property (assign) float frameRate;
 
+-(int) drainOutputBufferFrame;
 -(void) addOutput:(id)destination;
 -(void) removeOutput:(id)destination;
 -(bool) hasOutputs;

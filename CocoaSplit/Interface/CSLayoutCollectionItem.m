@@ -112,12 +112,12 @@
 {
     SourceLayout *useLayout = self.captureController.activePreviewView.sourceLayout;
     
-    if ([NSEvent modifierFlags]& NSCommandKeyMask)
+    if ([NSEvent modifierFlags]& NSEventModifierFlagCommand)
     {
         useLayout = self.captureController.selectedLayout;
     }
     
-    if ([NSEvent modifierFlags] & NSShiftKeyMask)
+    if ([NSEvent modifierFlags] & NSEventModifierFlagShift)
     {
         if (!self.upImage.hidden)
         {

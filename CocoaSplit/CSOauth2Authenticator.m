@@ -323,7 +323,7 @@ NSString *const kCSOauth2ClientSecret = @"CSOauth2ClientSecret";
         _authWebView = [[WebView alloc] initWithFrame:winFrame frameName:nil groupName:nil];
         _authWebView.policyDelegate = self;
         
-        _authWindow = [[NSWindow alloc] initWithContentRect:winFrame styleMask:NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask|NSResizableWindowMask backing:NSBackingStoreBuffered defer:NO];
+        _authWindow = [[NSWindow alloc] initWithContentRect:winFrame styleMask:NSWindowStyleMaskTitled|NSWindowStyleMaskClosable|NSWindowStyleMaskMiniaturizable|NSWindowStyleMaskResizable backing:NSBackingStoreBuffered defer:NO];
         
         [_authWindow center];
         [_authWindow setContentView:_authWebView];

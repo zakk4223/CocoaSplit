@@ -92,21 +92,24 @@
     }
 }
 
-/*
 -(void)layoutDeleted:(NSNotification *)notification
 {
     NSObject *deletedLayout = [notification object];
     
-    if (self.activeVideoDevice && (self.activeVideoDevice.captureDevice == deletedLayout) && _current_renderer)
+    if (self.activeVideoDevice && (self.activeVideoDevice.captureDevice == deletedLayout) && _current_layout)
     {
         @synchronized(self)
         {
-            [_current_renderer setValue:nil forKey:@"layout"];
-            _current_renderer = nil;
+            if (_out_dest)
+            {
+                _out_dest.active = NO;
+            }
+            _out_dest = nil;
+            _current_layout = nil;
+            self.activeVideoDevice = nil;
         }
     }
 }
-*/
 
 +(NSObject<CSCaptureSourceProtocol> *)createSourceFromPasteboardItem:(NSPasteboardItem *)item
 {
@@ -351,6 +354,7 @@
         NSArray *pcmSamples = frameData.pcmAudioSamples[audioTrackkey];
         for (id object in pcmSamples)
         {
+            
             CMSampleBufferRef sampleBuffer = (__bridge CMSampleBufferRef)object;
             CSPcmPlayer *pcmPlayer = _pcmPlayers[audioTrackkey];
             if (!pcmPlayer)
@@ -431,7 +435,5 @@
 }
 
 
--(void)dealloc
-{
-}
+
 @end

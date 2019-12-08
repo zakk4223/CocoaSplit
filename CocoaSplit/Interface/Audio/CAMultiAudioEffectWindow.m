@@ -20,7 +20,7 @@
     }
     
     NSRect contentRect = NSMakeRect(0, 0, self.audioUnitView.frame.size.width, self.audioUnitView.frame.size.height);
-    if (self = [super initWithContentRect:contentRect styleMask:NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask|NSResizableWindowMask backing:NSBackingStoreBuffered defer:YES])
+    if (self = [super initWithContentRect:contentRect styleMask:NSWindowStyleMaskTitled|NSWindowStyleMaskClosable|NSWindowStyleMaskMiniaturizable|NSWindowStyleMaskResizable backing:NSBackingStoreBuffered defer:YES])
     {
         
         self.level = NSNormalWindowLevel;

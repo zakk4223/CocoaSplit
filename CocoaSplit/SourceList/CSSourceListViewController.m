@@ -78,12 +78,12 @@
             menuEntry = [itemMenu insertItemWithTitle:@"Clone Without Cache" action:@selector(cloneInputSourceNoCache:) keyEquivalent:@"" atIndex:idx++];
             menuEntry.representedObject = item;
             menuEntry.alternate = YES;
-            menuEntry.keyEquivalentModifierMask = NSAlternateKeyMask;
+            menuEntry.keyEquivalentModifierMask = NSEventModifierFlagOption;
             
             menuEntry = [itemMenu insertItemWithTitle:@"Make Source Private" action:@selector(privatizeSource:) keyEquivalent:@"" atIndex:idx++];
             menuEntry.representedObject = item;
             menuEntry.alternate = YES;
-            menuEntry.keyEquivalentModifierMask = NSControlKeyMask;
+            menuEntry.keyEquivalentModifierMask = NSEventModifierFlagControl;
             
             NSString *freezeStr = nil;
             if (vidSrc.isFrozen)
@@ -1274,7 +1274,7 @@
     configWindow.title = [NSString stringWithFormat:@"CocoaSplit Input (%@)", configSrc.name];
     configWindow.delegate = self;
     
-    configWindow.styleMask =  NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask;
+    configWindow.styleMask =  NSWindowStyleMaskTitled|NSWindowStyleMaskClosable|NSWindowStyleMaskMiniaturizable;
     
     NSWindow *cWindow = [_activeConfigWindows objectForKey:uuid];
     NSViewController *cController = [_activeConfigControllers objectForKey:uuid];

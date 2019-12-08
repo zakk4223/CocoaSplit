@@ -220,10 +220,13 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
     bool ret = NO;
     CFArrayRef encoders = NULL;
     
-    NSDictionary *opts = @{@"RevealHiddefnEncoders": @YES, @"RevealHardwareAcceleratedEncoders": @YES};
+    NSDictionary *opts = @{@"RevealHiddenEncoders": @YES, @"RevealHardwareAcceleratedEncoders": @YES};
     
+    VTCopyVideoEncoderList((__bridge CFDictionaryRef _Nullable)(opts), &encoders);
+    NSLog(@"ENCODERS %@", encoders);
 
-    
+
+
     VTCopyVideoEncoderList((__bridge CFDictionaryRef _Nullable)(opts), &encoders);
     
     
@@ -231,7 +234,6 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
 
     for (NSDictionary *encode in nsEnc)
     {
-        
         NSString *cName = [encode objectForKey:(NSString *)kVTVideoEncoderList_CodecName];
         if ([cName isEqualToString:@"HEVC"])
         {
@@ -246,8 +248,6 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
 
 +(bool)intelQSVAvailable
 {
-    
-
     
     NSMutableDictionary *encoderSpec = [[NSMutableDictionary alloc] init];
     encoderSpec[(__bridge NSString *)kVTVideoEncoderSpecification_RequireHardwareAcceleratedVideoEncoder] = @YES;

@@ -130,7 +130,7 @@
     self.userFilterWindow.delegate = self;
     [self.userFilterWindow setContentSize:filterView.bounds.size];
     [self.userFilterWindow.contentView addSubview:filterView];
-    self.userFilterWindow.styleMask =  NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask;
+    self.userFilterWindow.styleMask =  NSWindowStyleMaskTitled|NSWindowStyleMaskClosable|NSWindowStyleMaskMiniaturizable;
     [self.userFilterWindow setReleasedWhenClosed:NO];
     
     [self.userFilterWindow makeKeyAndOrderFront:self.userFilterWindow];

@@ -61,7 +61,7 @@
 {
     SourceLayout *myLayout = self.viewController.representedObject;
     NSPoint mouseLoc = [self convertPoint:event.locationInWindow fromView:nil];
-    if (event.modifierFlags & NSShiftKeyMask && !(myLayout.in_live || myLayout.in_staging) )
+    if (event.modifierFlags & NSEventModifierFlagShift && !(myLayout.in_live || myLayout.in_staging) )
     {
         if (mouseLoc.x < NSMidX(self.frame))
         {

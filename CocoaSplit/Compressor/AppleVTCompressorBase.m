@@ -193,7 +193,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     
     
     //CVPixelBufferRelease(imageBuffer);
-    
+     
     VTCompressionSessionEncodeFrame(_compression_session, frameData.videoFrame, frameData.videoPTS, frameData.videoDuration, frameProperties, (__bridge_retained void *)(frameData), NULL);
     
     if (frameProperties)
@@ -253,7 +253,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     
     CFMutableDictionaryRef transferProps = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
     CFDictionarySetValue(transferProps, kVTPixelTransferPropertyKey_ScalingMode, kVTScalingMode_Letterbox);
-    
+    CFDictionarySetValue(transferProps, kVTPixelTransferPropertyKey_DestinationTransferFunction, kCVImageBufferTransferFunction_ITU_R_709_2);
     VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_PixelTransferProperties, transferProps);
     CFRelease(transferProps);
     

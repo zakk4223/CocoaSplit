@@ -40,7 +40,7 @@
     }
     SourceLayout *useLayout = [CaptureController sharedCaptureController].activeLayout;
     
-    if ([NSEvent modifierFlags]& NSCommandKeyMask)
+    if ([NSEvent modifierFlags]& NSEventModifierFlagCommand)
     {
         useLayout = [CaptureController sharedCaptureController].selectedLayout;
     }

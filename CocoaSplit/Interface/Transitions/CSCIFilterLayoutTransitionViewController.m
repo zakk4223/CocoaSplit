@@ -41,7 +41,7 @@
     [self.transitionFilterWindow setContentSize:filterView.bounds.size];
     [self.transitionFilterWindow.contentView addSubview:filterView];
     
-    self.transitionFilterWindow.styleMask =  NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask;
+    self.transitionFilterWindow.styleMask =  NSWindowStyleMaskTitled|NSWindowStyleMaskClosable|NSWindowStyleMaskMiniaturizable;
     [self.transitionFilterWindow setReleasedWhenClosed:NO];
     
     [self.transitionFilterWindow makeKeyAndOrderFront:self.transitionFilterWindow];

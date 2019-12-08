@@ -1375,6 +1375,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     if (useRecorder)
     {
         [useRecorder stopRecordingForOutput:output];
+        [layout clearSourceList];
         //output.active = NO;
         if (self.mainLayoutRecorder)
         {
@@ -3139,7 +3140,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     
         //self.mainLayoutRecorder.compressors  = self.compressors;
         [self.mainLayoutRecorder.compressors setValue:self.compressors[@"InstantRecorder"] forKey:@"InstantRecorder"];
-        self.mainLayoutRecorder.outputs = self.captureDestinations;
+        //self.mainLayoutRecorder.outputs = self.captureDestinations;
         [self.mainLayoutRecorder startRecordingCommon];
     
 
@@ -3924,7 +3925,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
         [confirmationAlert setInformativeText:infoString];
     }
     
-    [confirmationAlert setAlertStyle:NSWarningAlertStyle];
+    [confirmationAlert setAlertStyle:NSAlertStyleWarning];
     
     if ([confirmationAlert runModal] == NSAlertFirstButtonReturn)
     {

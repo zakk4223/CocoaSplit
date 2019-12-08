@@ -20,6 +20,19 @@
 
 
 
+-(void)saveWithCoder:(NSCoder *)aCoder
+{
+    [super saveWithCoder:aCoder];
+    [aCoder encodeObject:self.lastAppID forKey:@"lastAppID"];
+}
+
+-(void)restoreWithCoder:(NSCoder *)aDecoder
+{
+    [super restoreWithCoder:aDecoder];
+    self.lastAppID = [aDecoder decodeObjectForKey:@"lastAppID"];
+}
+
+
 -(bool) isSyphonInjectInstalled
 {
     
@@ -83,6 +96,13 @@
     _activeVideoDevice = activeVideoDevice;
     [self changeAvailableVideoDevices];
 
+    if (!_activeVideoDevice)
+    {
+        return;
+    }
+    
+    self.lastAppID = _activeVideoDevice.uniqueID;
+    
     NSString *appExecutablePath = activeVideoDevice.uniqueID;
     NSRunningApplication *injectApp;
 
@@ -123,6 +143,12 @@
     
     NSMutableArray *retArr = [[NSMutableArray alloc] init];
     
+    NSString *useUniqueID = self.savedUniqueID;
+    if (!useUniqueID)
+    {
+        useUniqueID = self.lastAppID;
+    }
+    
     for(NSRunningApplication *app in applications)
     {
         CSAbstractCaptureDevice *newDev;
@@ -133,10 +159,10 @@
         
         
         bool appMatch = NO;
-        if ([newDev.uniqueID isEqualToString:self.savedUniqueID])
+        if ([newDev.uniqueID isEqualToString:useUniqueID])
         {
             appMatch = YES;
-        } else if ([app.executableURL.lastPathComponent isEqualToString:self.savedUniqueID.lastPathComponent]) {
+        } else if ([app.executableURL.lastPathComponent isEqualToString:useUniqueID]) {
             appMatch = YES;
         }
         if (!self.activeVideoDevice && appMatch)

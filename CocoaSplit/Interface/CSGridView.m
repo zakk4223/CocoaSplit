@@ -16,7 +16,7 @@
     if (self.backgroundColor)
     {
         [self.backgroundColor setFill];
-        NSRectFillUsingOperation(dirtyRect, NSCompositeSourceOver);
+        NSRectFillUsingOperation(dirtyRect, NSCompositingOperationSourceOver);
     }
     
     [super drawRect:dirtyRect];

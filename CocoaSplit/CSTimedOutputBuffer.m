@@ -233,7 +233,6 @@
             {
                 if (ptsStarts[pkt.stream_index] == 0)
                 {
-                    NSLog(@"PTS START %lld", pkt.pts);
                     ptsStarts[pkt.stream_index] = pkt.pts;
                 }
                 

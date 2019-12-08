@@ -42,7 +42,7 @@
     {
         encoderSpec[(__bridge NSString *)kVTVideoEncoderSpecification_RequireHardwareAcceleratedVideoEncoder] = @YES;
     }
-    
+
     return encoderSpec;
 }
 

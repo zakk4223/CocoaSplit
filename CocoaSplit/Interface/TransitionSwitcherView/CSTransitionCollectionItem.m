@@ -49,7 +49,7 @@
     
     CSTransitionBase *myTransition = self.representedObject;
     
-    bool toggleClick = [NSEvent modifierFlags] & NSShiftKeyMask;
+    bool toggleClick = [NSEvent modifierFlags] & NSEventModifierFlagShift;
     
     if (toggleClick && myTransition.canToggle)
     {

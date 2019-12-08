@@ -140,6 +140,30 @@
 }
 
 
+-(int) drainOutputBufferFrame
+{
+    
+    int drain_cnt = 0;
+    if (self.outputs.count > 0)
+    {
+        NSDictionary *outputs = self.outputs;
+        for (id dKey in outputs)
+        {
+            OutputDestination *dest = self.outputs[dKey];
+            
+            if (dest.buffer_draining)
+            {
+                drain_cnt++;
+                [dest writeEncodedData:nil];
+            }
+            
+        }
+        
+    }
+    return drain_cnt;
+}
+
+
 -(void) removeOutput:(OutputDestination *)destination
 {
 

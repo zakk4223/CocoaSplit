@@ -422,7 +422,6 @@
             
             startTime += 1.0/self.layout.frameRate;
             
-            double start_time = [CaptureController.sharedCaptureController mach_time_seconds];
             if (![[CaptureController sharedCaptureController] sleepUntil:startTime])
             {
                 NSLog(@"SLEEP UNTIL %f CURRENT TIME %f LAYOUT %@ %@", startTime, [[CaptureController sharedCaptureController] mach_time_seconds], self.layout.name, NSThread.currentThread);
@@ -434,15 +433,16 @@
             if (!self.recordingActive)
             {
                 
-                for (OutputDestination *outdest in self.outputs)
+                NSMutableDictionary *useCompressors = self.compressors.copy;
+
+                for(id cKey in useCompressors)
                 {
-                    if (outdest.buffer_draining)
-                    {
-                        drain_cnt++;
-                    }
-                    [outdest writeEncodedData:nil];
+                    
+                    id <VideoCompressor> compressor;
+                    compressor = useCompressors[cKey];
+                    drain_cnt += [compressor drainOutputBufferFrame];
                 }
-                
+
                 if (!drain_cnt)
                 {
                     return;

@@ -128,8 +128,13 @@
     {
         CVPixelBufferRelease(useFrame);
     }
+    NSDictionary *outputsCopy = nil;
     
-    for (id dKey in self.outputs)
+    @synchronized(self)
+    {
+        outputsCopy = self.outputs.copy;
+    }
+    for (id dKey in outputsCopy )
     {
         OutputDestination *dest = self.outputs[dKey];
         [dest writeEncodedData:imageBuffer];

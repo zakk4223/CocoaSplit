@@ -63,7 +63,7 @@
         
         //fillBox.size.width = fillBox.size.width/2;
         
-        NSRectFillUsingOperation(fillBox, NSCompositeSourceOver);
+        NSRectFillUsingOperation(fillBox, NSCompositingOperationSourceOver);
     }
     
     if (myLayout.in_live)
@@ -75,7 +75,7 @@
         fillBox.size.width = fillBox.size.width/2;
         fillBox.origin.x = fillBox.origin.x + fillBox.size.width;
         
-        NSRectFillUsingOperation(fillBox, NSCompositeSourceOver);
+        NSRectFillUsingOperation(fillBox, NSCompositingOperationSourceOver);
     }
 
     

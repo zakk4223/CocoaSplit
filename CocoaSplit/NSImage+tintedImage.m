@@ -16,7 +16,7 @@
     
     [copy lockFocus];
     [color set];
-    NSRectFillUsingOperation(NSMakeRect(0, 0, self.size.width, self.size.height), NSCompositeSourceAtop);
+    NSRectFillUsingOperation(NSMakeRect(0, 0, self.size.width, self.size.height), NSCompositingOperationSourceAtop);
     [copy unlockFocus];
     return copy;
 }

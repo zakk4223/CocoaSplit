@@ -123,13 +123,13 @@
             
             SourceLayout *useLayout = controller.activePreviewView.sourceLayout;
             
-            if (event.modifierFlags & NSCommandKeyMask)
+            if (event.modifierFlags & NSEventModifierFlagCommand)
             {
                 useLayout = controller.selectedLayout;
             }
             
             
-            if (event.modifierFlags & NSShiftKeyMask)
+            if (event.modifierFlags & NSEventModifierFlagShift)
             {
                 [controller toggleLayout:self.sourceLayout usingLayout:useLayout];
             } else {

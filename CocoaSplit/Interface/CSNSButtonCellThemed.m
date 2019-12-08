@@ -23,7 +23,7 @@
     {
         useImage = [image tintedImageWithColor:NSColor.whiteColor];
     }
-    [useImage drawInRect:frame fromRect:NSMakeRect(0, 0, image.size.width, image.size.height) operation:NSCompositeSourceOver fraction:1.0 respectFlipped:YES hints:nil];
+    [useImage drawInRect:frame fromRect:NSMakeRect(0, 0, image.size.width, image.size.height) operation:NSCompositingOperationSourceOver fraction:1.0 respectFlipped:YES hints:nil];
 }
 
 @end

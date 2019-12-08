@@ -43,7 +43,7 @@
 
 
 
-
+-(int) drainOutputBufferFrame;
 -(void) reset;
 -(BOOL) setupResolution:(CVImageBufferRef)withFrame;
 -(id <CSCompressorViewControllerProtocol>)getConfigurationView;
