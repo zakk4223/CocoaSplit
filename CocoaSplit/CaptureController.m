@@ -1251,7 +1251,9 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
                    if (outdest.isRecorder)
                    {
                        record_outputs++;
-                   } else if (outdest.isStreamer) {
+                   }
+                   
+                   if (outdest.isStreamer) {
                        stream_outputs++;
                    }
                    

@@ -9,6 +9,7 @@
 #import "WindowCapture.h"
 #import "WindowCaptureViewController.h"
 
+
 @implementation WindowCapture
 
 /* CGWindowListCreateImage sucks. It's really slow. This probably isn't a useful capture type, but whatever */

@@ -55,8 +55,8 @@
             config.mediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypeNone;
         }
         
-        
-        self.webView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 0, self.browser_width, self.browser_height) configuration:[[WKWebViewConfiguration alloc] init]];
+        config.preferences = webPrefs;
+        self.webView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 0, self.browser_width, self.browser_height) configuration:config];
         self.webView.navigationDelegate = self;
         self.webView.layer.backgroundColor = [NSColor clearColor].CGColor;
     }
