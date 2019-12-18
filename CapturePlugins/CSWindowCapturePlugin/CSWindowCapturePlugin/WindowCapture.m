@@ -79,6 +79,14 @@
         NSString *windowOwnerName = devinstance[(NSString *)kCGWindowOwnerName];
         NSString *windowTitle = devinstance[(NSString *)kCGWindowName];
         
+        NSNumber *windowLayer = devinstance[(NSString *)kCGWindowLayer];
+        if (windowLayer)
+        {
+            if (![windowLayer isEqualToNumber:@0])
+            {
+                continue;
+            }
+        }
         NSString *windowName = nil;
         if (windowTitle && windowTitle.length > 0)
         {
@@ -130,7 +138,7 @@
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
             
-        CGImageRef windowImg = CGWindowListCreateImage(CGRectNull, kCGWindowListOptionIncludingWindow, [windowID unsignedIntValue], kCGWindowImageBoundsIgnoreFraming|kCGWindowImageBestResolution);
+        CGImageRef windowImg = CGWindowListCreateImage(CGRectNull, kCGWindowListOptionIncludingWindow, [windowID unsignedIntValue], kCGWindowImageBoundsIgnoreFraming);
             
             self->_lastSize = NSMakeSize(CGImageGetWidth(windowImg), CGImageGetHeight(windowImg));
             
