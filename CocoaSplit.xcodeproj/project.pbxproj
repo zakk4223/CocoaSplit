@@ -187,8 +187,8 @@
 		348585DE201E65F900C30A08 /* CSLayerFiltersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 348585DC201E65F900C30A08 /* CSLayerFiltersViewController.m */; };
 		348585DF201E65F900C30A08 /* CSLayerFiltersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 348585DD201E65F900C30A08 /* CSLayerFiltersViewController.xib */; };
 		348AC06B19B406910064F02D /* SourceLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 348AC06A19B406910064F02D /* SourceLayout.m */; };
-		348DF1D52120E2C000144132 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 348DF1D42120E2C000144132 /* Sparkle.framework */; };
-		348DF1D62120E2CB00144132 /* Sparkle.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 348DF1D42120E2C000144132 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		348CDBC923D6671C004131AD /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 348CDBC723D665DF004131AD /* Sparkle.framework */; };
+		348CDBCA23D6671C004131AD /* Sparkle.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 348CDBC723D665DF004131AD /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		34938EE81AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 34938EE71AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m */; };
 		34938EED1AE4D24200F3B1CF /* CSFilterChooserWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34938EEB1AE4D24200F3B1CF /* CSFilterChooserWindowController.m */; };
 		34938EEF1AE4D24200F3B1CF /* CSFilterChooserWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34938EEC1AE4D24200F3B1CF /* CSFilterChooserWindowController.xib */; };
@@ -581,7 +581,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				348DF1D62120E2CB00144132 /* Sparkle.framework in Copy Files */,
+				348CDBCA23D6671C004131AD /* Sparkle.framework in Copy Files */,
 			);
 			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -943,7 +943,7 @@
 		348585DD201E65F900C30A08 /* CSLayerFiltersViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CSLayerFiltersViewController.xib; sourceTree = "<group>"; };
 		348AC06919B406910064F02D /* SourceLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SourceLayout.h; sourceTree = "<group>"; };
 		348AC06A19B406910064F02D /* SourceLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SourceLayout.m; sourceTree = "<group>"; };
-		348DF1D42120E2C000144132 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
+		348CDBC723D665DF004131AD /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		34938EE61AE4A7E500F3B1CF /* CSCIFilterConfigProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSCIFilterConfigProxy.h; sourceTree = "<group>"; };
 		34938EE71AE4A7E500F3B1CF /* CSCIFilterConfigProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSCIFilterConfigProxy.m; sourceTree = "<group>"; };
 		34938EEA1AE4D24200F3B1CF /* CSFilterChooserWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSFilterChooserWindowController.h; sourceTree = "<group>"; };
@@ -1281,8 +1281,8 @@
 				34792AF616104AA70065A859 /* IOKit.framework in Frameworks */,
 				34C6C3BF15FB5B440018A18B /* OpenGL.framework in Frameworks */,
 				342346BB15F5FBD700C8C77E /* CoreMedia.framework in Frameworks */,
-				348DF1D52120E2C000144132 /* Sparkle.framework in Frameworks */,
 				342346B915F5FBD200C8C77E /* CoreVideo.framework in Frameworks */,
+				348CDBC923D6671C004131AD /* Sparkle.framework in Frameworks */,
 				342346AD15F59B0D00C8C77E /* VideoToolbox.framework in Frameworks */,
 				3409A7701FA0D6CC0073866E /* libiconv.tbd in Frameworks */,
 				340FE4E115F3581200E4CE4E /* QTKit.framework in Frameworks */,
@@ -1388,10 +1388,10 @@
 			children = (
 				344E29B422F3D7090026D909 /* SceneKit.framework */,
 				343CE07321D3705800233909 /* Metal.framework */,
-				348DF1D42120E2C000144132 /* Sparkle.framework */,
 				344036892081FE3E004BC514 /* GLKit.framework */,
 				3409A7721FA0EA340073866E /* libc++.1.tbd */,
 				3409A76F1FA0D6CC0073866E /* libiconv.tbd */,
+				348CDBC723D665DF004131AD /* Sparkle.framework */,
 				3409A76E1FA0D67F0073866E /* OpenCL.framework */,
 				34EB705C1F276EAD00F61E6A /* CoreAudioKit.framework */,
 				34788DB51EF511E100C3C9C5 /* JavaScriptCore.framework */,
@@ -3308,7 +3308,7 @@
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				INFOPLIST_FILE = "CocoaSplit/CocoaSplit-Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @executable_path/../Frameworks";
 				"LIBRARY_SEARCH_PATHS[arch=*]" = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MARKETING_VERSION = 2.1.11;
@@ -3361,7 +3361,7 @@
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				INFOPLIST_FILE = "CocoaSplit/CocoaSplit-Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MARKETING_VERSION = 2.1.11;
 				OTHER_LDFLAGS = (
