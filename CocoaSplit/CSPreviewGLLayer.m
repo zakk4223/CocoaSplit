@@ -84,7 +84,8 @@
     }
     
     
-    CVPixelBufferRef toDraw;
+    
+    CVPixelBufferRef toDraw = NULL;
     if (self.doRender)
     {
      
@@ -98,11 +99,11 @@
     } else {
         toDraw = [self.renderer currentFrame];
     }
-    
     if (!toDraw)
     {
         return;
     }
+    
     
     if (_renderBuffer)
     {

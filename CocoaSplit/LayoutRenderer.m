@@ -271,13 +271,13 @@
 -(CVPixelBufferRef)currentImg
 {
 
-    [CATransaction begin];
     if (!self.layout)
     {
         return NULL;
     }
     
-    
+    [CATransaction begin];
+
     if (self.cglCtx)
     {
         CGLSetCurrentContext(self.cglCtx);
@@ -297,6 +297,7 @@
     if (CGSizeEqualToSize(frameSize, CGSizeZero))
     {
         CGLSetCurrentContext(NULL);
+        [CATransaction commit];
 
         return nil;
     }
