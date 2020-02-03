@@ -785,9 +785,8 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     {
         
         [[NSBundle mainBundle] loadNibNamed:@"advancedPrefPanel" owner:self topLevelObjects:nil];
-        
-        [NSApp beginSheet:self.advancedPrefPanel modalForWindow:[NSApplication sharedApplication].mainWindow modalDelegate:self didEndSelector:NULL contextInfo:NULL];
-        
+
+        [self.mainWindow beginSheet:self.advancedPrefPanel completionHandler:nil];
     }
     
 }

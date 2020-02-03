@@ -180,7 +180,8 @@ NSString *const kCSOauth2ClientSecret = @"CSOauth2ClientSecret";
     for (NSString *pname in params)
     {
         NSString *pval = params[pname];
-        NSString *equalString = [NSString stringWithFormat:@"%@=%@", pname, [pval stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+        NSString *equalString = [NSString stringWithFormat:@"%@=%@", pname, [pval stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]];
+        
         [paramParts addObject:equalString];
     }
     

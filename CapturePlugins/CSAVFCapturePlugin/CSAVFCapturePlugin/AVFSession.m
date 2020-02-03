@@ -223,7 +223,6 @@
         {
             if (connection.output == _video_capture_output)
             {
-                CVPixelBufferRef blah = CMSampleBufferGetImageBuffer(sampleBuffer);
                 
                 [outcapture captureVideoOutput:sampleBuffer];
             } else if (connection.output == _audio_capture_output) {

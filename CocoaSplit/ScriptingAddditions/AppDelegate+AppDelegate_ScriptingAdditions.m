@@ -182,7 +182,7 @@
 
 -(CAMultiAudioNode *)streamAudio
 {
-    return self.captureController.multiAudioEngine.encodeMixer;
+    return (CAMultiAudioNode *)self.captureController.multiAudioEngine.encodeMixer;
 }
 
 

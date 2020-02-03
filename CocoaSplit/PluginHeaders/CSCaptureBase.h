@@ -116,7 +116,7 @@ typedef enum frame_render_behavior_t {
 
 
 -(void)setDeviceForUniqueID:(NSString *)uniqueID;
--(NSView *)configurationView;
+-(NSViewController *)configurationView;
 +(NSString *) label;
 -(NSString *)instanceLabel;
 +(bool)shouldLoad;
