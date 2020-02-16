@@ -142,7 +142,7 @@
 
 -(bool)addConnection:(CAMultiAudioNode *)fromNode toNode:(CAMultiAudioNode *)toNode toBus:(AVAudioNodeBus)toBus withFormat:(AVAudioFormat *)format
 {
-    if (_avEngine)
+    if (!_avEngine)
     {
         return NO;
     }
@@ -162,6 +162,7 @@
     AVAudioConnectionPoint *newConnect = [[AVAudioConnectionPoint alloc] initWithNode:toNode.avAudioNode bus:toBus];
     [existingConnections addObject:newConnect];
     [_avEngine connect:fromNode.avAudioNode toConnectionPoints:existingConnections fromBus:0 format:useFormat];
+    return YES;
 }
 
 

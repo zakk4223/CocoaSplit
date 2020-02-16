@@ -130,6 +130,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         if (_defaultOutputTrack)
         {
             _defaultOutputTrack.encoderNode = self.renderNode;
+            _defaultOutputTrack.trackMixer = self.encodeMixer;
         }
         
         if ([aDecoder containsValueForKey:@"outputTracks"])
@@ -503,7 +504,9 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
     CAMultiAudioMixer *trackMixer = outputTrack.trackMixer;
     AVAudioNodeBus nextMixerBus = trackMixer.nextInputBus;
-    [self.graph addConnection:input.effectsHead toNode:trackMixer toBus:nextMixerBus withFormat:nil];
+    AVAudioFormat *newFmt = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:input.inputFormat.sampleRate channels:input.inputFormat.channelCount];
+
+    [self.graph addConnection:input.effectsHead toNode:trackMixer toBus:nextMixerBus withFormat:newFmt];
     [input.outputTracks setObject:@{@"inputBus": @(nextMixerBus), @"outputTrack": outputTrack} forKey:outputTrack.uuid];
     return YES;
 }
@@ -762,7 +765,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         AudioUnitAddRenderNotify(self.renderNode.audioUnit, encoderRenderCallback, [self.encoder inputBufferPtr]);
     }
      */
-   // [self setupDefaultOutputTrack];
+    [self setupDefaultOutputTrack];
 
     
     return YES;
@@ -1228,14 +1231,12 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     {
         [self.graph addNode:input];
         AVAudioNodeBus nextBus = [self.encodeMixer nextInputBus];
-        NSLog(@"INPUT FORMAT %@", input.inputFormat);
         AVAudioFormat *newFmt = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:input.inputFormat.sampleRate channels:input.inputFormat.channelCount];
-        [self.graph connectNode:input toNode:self.encodeMixer withFormat:newFmt inBus:nextBus outBus:0];
-        NSLog(@"CONNECTIONS %@", [input.avAudioNode.engine outputConnectionPointsForNode:input.avAudioNode outputBus:0]);
+        //[self.graph connectNode:input toNode:self.encodeMixer withFormat:newFmt inBus:nextBus outBus:0];
 
         if (_defaultOutputTrack)
         {
-            //[self addInput:input toTrack:_defaultOutputTrack];
+            [self addInput:input toTrack:_defaultOutputTrack];
         }
     }
     
