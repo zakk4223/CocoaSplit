@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AVFoundation/AVFoundation.h>
+
 #import "CAMultiAudio.h"
 #import "CSAacEncoder.h"
 #import "CAMultiAudioConverter.h"
@@ -34,13 +36,12 @@
 @property (strong) CAMultiAudioGraph *graph;
 @property (strong) CAMultiAudioMixer *previewMixer;
 @property (strong) CAMultiAudioSilence *silentNode;
-@property (strong) CAMultiAudioDefaultOutput *defaultOutputNode;
 @property (strong) NSMutableArray *audioInputs;
 @property (strong) NSMutableArray *pcmInputs;
 @property (strong) NSMutableArray *fileInputs;
 @property (strong) CAMultiAudioOutputTrack *defaultOutputTrack;
 
-@property (strong) CAMultiAudioDownmixer *encodeMixer;
+@property (strong) CAMultiAudioMixer *encodeMixer;
 //@property (strong) CSAacEncoder *encoder;
 @property (assign) UInt32 sampleRate;
 @property (assign) int audioBitrate;

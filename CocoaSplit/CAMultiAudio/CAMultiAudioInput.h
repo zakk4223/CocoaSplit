@@ -7,7 +7,6 @@
 
 #import "CAMultiAudioNode.h"
 #import "CAMultiAudioConverter.h"
-#import "CAMultiAudioSubgraph.h"
 #import "CAMultiAudioOutputTrack.h"
 
 @protocol CAMultiAudioInputJSExport <JSExport>
@@ -35,7 +34,7 @@
 @interface CAMultiAudioInput : CAMultiAudioNode
 {
 }
-@property (strong) CAMultiAudioDownmixer *downMixer;
+@property (strong) CAMultiAudioMixer *downMixer;
 
 @property (strong) CAMultiAudioConverter *converterNode;
 @property (strong) NSMutableArray *delayNodes;
@@ -44,7 +43,6 @@
 @property (assign) Float32 delay;
 @property (assign) bool noSettings;
 @property (assign) bool systemDevice;
-@property (strong) CAMultiAudioSubgraph *subGraph;
 @property (assign) float powerLevel;
 @property (strong) NSMutableDictionary *powerLevels;
 
@@ -52,6 +50,7 @@
 @property (assign) bool isGlobal;
 @property (strong) NSMutableDictionary *outputTracks;
 @property (strong) NSString *deviceUID;
+@property (readonly) AVAudioFormat *inputFormat;
 
 
 -(void)didRemoveInput;

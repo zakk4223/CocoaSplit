@@ -27,7 +27,6 @@
 
 @property (strong) AVFChannelManager *audioChannelManager;
 @property (assign) int audioBitrate;
-@property (assign) float audioSamplerate;
 @property (strong) AVCaptureDevice *activeAudioDevice;
 @property (strong) AVCaptureAudioPreviewOutput *audioPreviewOutput;
 @property (assign) float previewVolume;
@@ -40,7 +39,7 @@
 
 
 
--(instancetype) initForAudioEngine:(AVCaptureDevice *)device sampleRate:(int)sampleRate;
+-(instancetype) initForAudioEngine:(AVCaptureDevice *)device;
 
 -(bool) startCaptureSession:(NSError **)error;
 -(bool) stopCaptureSession;

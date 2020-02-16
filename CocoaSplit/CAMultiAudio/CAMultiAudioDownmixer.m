@@ -179,18 +179,20 @@
 
 -(UInt32)inputElement
 {
-    return [self getNextInputElement];
+    return 0;
+    //return [self getNextInputElement];
     
 }
 
 
 -(UInt32)outputElement
 {
-    return [self getNextOutputElement];
+    return 0;
+    //return [self getNextOutputElement];
 }
 
 
-
+/*
 -(UInt32)getNextInputElement
 {
     UInt32 elementCount = 0;
@@ -306,7 +308,7 @@
     return useElement;
 }
 
-
+*/
 
 
 -(void)willInitializeNode
@@ -390,67 +392,6 @@
     
 }
 
--(void)didInitializeNode
-{
-    //Enable both input and output busses
-    OSStatus err;
-    
-  
-    
-    err = AudioUnitSetParameter(self.audioUnit, kMatrixMixerParam_Enable, kAudioUnitScope_Input, 0, 1, 0);
-    if (err)
-    {
-        NSLog(@"Failed to enable input on %@ with status %d", self, err);
-    }
-    
-    err = AudioUnitSetParameter(self.audioUnit, kMatrixMixerParam_Enable, kAudioUnitScope_Output, 0, 1, 0);
-    if (err)
-    {
-        NSLog(@"Failed to enable output on %@ with status %d", self, err);
-    }
-
-    //Set Master Volume
-    
-    err = AudioUnitSetParameter(self.audioUnit, kMatrixMixerParam_Volume, kAudioUnitScope_Global, 0xFFFFFFFF, 1.0, 0);
-    if (err)
-    {
-        NSLog(@"Failed to set master volume on %@ with status %d", self, err);
-    }
-    
-    
-    //Set output volume for all channels
-    for (UInt32 chan = 0; chan < self.graph.graphAsbd->mChannelsPerFrame; chan++) {
-        err = AudioUnitSetParameter(self.audioUnit, kMatrixMixerParam_Volume, kAudioUnitScope_Output, chan, 1.0, 0);
-        if (err)
-        {
-            NSLog(@"Failed to set output volume for channel %d on %@ with status %d", chan, self, err);
-        }
-        
-        if (_inputChannels < self.graph.graphAsbd->mChannelsPerFrame)
-        {
-            UInt32 inChan = chan % _inputChannels;
-            [self setVolume:1.0f forChannel:inChan outChannel:chan];
-        }
-    }
-    
-    //set volume for all input channels
-    for (UInt32 chan = 0; chan < _inputChannels; chan++) {
-        err = AudioUnitSetParameter(self.audioUnit, kMatrixMixerParam_Volume, kAudioUnitScope_Input, chan, 1.0, 0);
-        if (err)
-        {
-            NSLog(@"Failed to set input volume for channel %d on %@ with status %d", chan, self, err);
-        }
-        
-        //also set crosspoint volumes.
-        if (_inputChannels >= self.graph.graphAsbd->mChannelsPerFrame)
-        {
-            UInt32 outChan = chan % self.graph.graphAsbd->mChannelsPerFrame;
-        
-            [self setVolume:1.0 forChannel:chan outChannel:outChan];
-        }
-        
-    }
-}
 
 -(bool)enableInputBus:(UInt32)inputBus
 {

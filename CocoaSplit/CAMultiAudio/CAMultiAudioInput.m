@@ -21,7 +21,6 @@
     {
         self.isGlobal = NO;
         _delayNodes = [NSMutableArray array];
-        self.nameColor = [NSColor blackColor];
         self.powerLevels = [NSMutableDictionary dictionary];
         [self.powerLevels setObject:[NSMutableArray array] forKey:@"input"];
         [self.powerLevels setObject:[NSMutableArray array] forKey:@"output"];
@@ -32,7 +31,7 @@
 }
 
 
-
+/*
 -(void)updatePowerlevel
 {
     if (!self.downMixer)
@@ -40,6 +39,7 @@
         return;
     }
     
+    return;
     NSMutableArray *inputArray = self.powerLevels[@"input"];
     NSMutableArray *outputArray = self.powerLevels[@"output"];
     
@@ -94,7 +94,7 @@
         [self.powerLevels[@"output"] replaceObjectAtIndex:i withObject:@(outPower)];
     }
 }
-
+*/
 -(void)addToOutputTrack:(CAMultiAudioOutputTrack *)outputTrack
 {
     [self willChangeValueForKey:@"outputTracks"];
@@ -232,8 +232,8 @@
 
 -(void)setupEffectsChain
 {
-    [self setupGraph];
-    [super setupEffectsChain];
+   // [self setupGraph];
+   // [super setupEffectsChain];
 }
 
 -(void)removeEffectsChain
@@ -243,7 +243,10 @@
 }
 
 
-
+-(AVAudioFormat *)inputFormat
+{
+    return self.graph.graphFormat;
+}
 
 -(void)saveDataToDict:(NSMutableDictionary *)saveDict
 {
@@ -251,7 +254,7 @@
     saveDict[@"delay"] = [NSNumber numberWithFloat:self.delay];
     if (self.downMixer)
     {
-        saveDict[@"downMixerData"] = [self.downMixer saveData];
+        //saveDict[@"downMixerData"] = [self.downMixer saveData];
     }
     saveDict[@"isGlobal"] = [NSNumber numberWithBool:self.isGlobal];
     saveDict[@"outputTracks"] = self.outputTracks.copy;
@@ -267,7 +270,7 @@
     self.delay = [restoreDict[@"delay"] floatValue];
     if (self.downMixer && restoreDict[@"downMixerData"])
     {
-        [self.downMixer restoreData:restoreDict[@"downMixerData"]];
+        //[self.downMixer restoreData:restoreDict[@"downMixerData"]];
     }
     
     if ([restoreDict objectForKey:@"isGlobal"])

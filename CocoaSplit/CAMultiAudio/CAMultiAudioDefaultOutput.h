@@ -7,7 +7,8 @@
 //
 
 #import "CAMultiAudioNode.h"
+#import "CAMultiAudioDevice.h"
 
-@interface CAMultiAudioDefaultOutput : CAMultiAudioNode
+@interface CAMultiAudioDefaultOutput : CAMultiAudioDevice
 
 @end

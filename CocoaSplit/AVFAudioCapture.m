@@ -26,14 +26,13 @@
 }
 
 
--(instancetype) initForAudioEngine:(AVCaptureDevice *)device sampleRate:(int)sampleRate
+-(instancetype) initForAudioEngine:(AVCaptureDevice *)device
 {
     
     if (self = [super init])
     {
         [self commoninit];
         self.useAudioEngine = YES;
-        self.audioSamplerate = sampleRate;
         
         [self setupAudioCompression];
         self.activeAudioDevice = device;
@@ -238,14 +237,8 @@
            
             
             
-            _audio_capture_output.audioSettings = @{
-                                                    AVFormatIDKey: [NSNumber numberWithInt:kAudioFormatLinearPCM],
-                                                    AVLinearPCMBitDepthKey: @32,
-                                                    AVLinearPCMIsFloatKey: @YES,
-                                                    AVLinearPCMIsNonInterleaved: @YES,
-                                                    //AVNumberOfChannelsKey: @2,
-                                                    AVSampleRateKey: @(self.audioSamplerate),
-                                                    };
+            _audio_capture_output.audioSettings = nil;
+                                                  
             
 
         } else {

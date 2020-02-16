@@ -49,7 +49,7 @@
     [self runBlockForPlayers:^(CAMultiAudioPCMPlayer *player) {
         CAMultiAudioEngine *useEngine = player.engine;
         [player removeFromEngine];
-        player.inputFormat = asbd;
+        //player.inputFormat = asbd;
         [useEngine attachInput:player];
     }];
     
@@ -113,7 +113,7 @@
     {
         CAMultiAudioPCMPlayer *caPlayer = player;
         _asbd = malloc(sizeof(AudioStreamBasicDescription));
-        memcpy(_asbd, caPlayer.inputFormat, sizeof(AudioStreamBasicDescription));
+        //memcpy(_asbd, caPlayer.inputFormat, sizeof(AudioStreamBasicDescription));
     }
     
     

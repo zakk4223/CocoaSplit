@@ -48,7 +48,7 @@
     copy.name = self.name;
     copy.encoder = self.encoder;
     copy.encoderNode = self.encoderNode;
-    copy.outputBus = self.outputBus;
+    copy.trackMixer = self.trackMixer;
     return copy;
 }
 

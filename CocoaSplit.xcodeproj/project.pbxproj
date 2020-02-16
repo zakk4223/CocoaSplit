@@ -258,7 +258,6 @@
 		34DA1D3F1BF823E700132486 /* CSNewOutputWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34DA1D3D1BF823E700132486 /* CSNewOutputWindowController.xib */; };
 		34DC2FB01B512362008F12A2 /* CSCaptureBase+TimerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34DC2FAF1B512362008F12A2 /* CSCaptureBase+TimerDelegate.m */; };
 		34DF75581AA272F100DA9FDE /* LayoutRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34DF75571AA272F100DA9FDE /* LayoutRenderer.m */; };
-		34E26DD91FF6ED7B00ACE58B /* CAMultiAudioSubgraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E26DD81FF6ED7B00ACE58B /* CAMultiAudioSubgraph.m */; };
 		34E26DDC1FF702BD00ACE58B /* CAMultiAudioSilence.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E26DDB1FF702BD00ACE58B /* CAMultiAudioSilence.m */; };
 		34E26DDF1FF70E0E00ACE58B /* CAMultiAudioGenericOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E26DDE1FF70E0E00ACE58B /* CAMultiAudioGenericOutput.m */; };
 		34E88C9E218DB0A90053913B /* CSAppleWebViewCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34E88C97218DACE40053913B /* CSAppleWebViewCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -1080,8 +1079,6 @@
 		34DC2FAF1B512362008F12A2 /* CSCaptureBase+TimerDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CSCaptureBase+TimerDelegate.m"; sourceTree = "<group>"; };
 		34DF75561AA272F100DA9FDE /* LayoutRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutRenderer.h; sourceTree = "<group>"; };
 		34DF75571AA272F100DA9FDE /* LayoutRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayoutRenderer.m; sourceTree = "<group>"; };
-		34E26DD71FF6ED7B00ACE58B /* CAMultiAudioSubgraph.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioSubgraph.h; path = CAMultiAudio/CAMultiAudioSubgraph.h; sourceTree = "<group>"; };
-		34E26DD81FF6ED7B00ACE58B /* CAMultiAudioSubgraph.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioSubgraph.m; path = CAMultiAudio/CAMultiAudioSubgraph.m; sourceTree = "<group>"; };
 		34E26DDA1FF702BD00ACE58B /* CAMultiAudioSilence.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioSilence.h; path = CAMultiAudio/CAMultiAudioSilence.h; sourceTree = "<group>"; };
 		34E26DDB1FF702BD00ACE58B /* CAMultiAudioSilence.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioSilence.m; path = CAMultiAudio/CAMultiAudioSilence.m; sourceTree = "<group>"; };
 		34E26DDD1FF70E0E00ACE58B /* CAMultiAudioGenericOutput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioGenericOutput.h; path = CAMultiAudio/CAMultiAudioGenericOutput.h; sourceTree = "<group>"; };
@@ -1928,8 +1925,6 @@
 				34EB705A1F24F65900F61E6A /* CAMultiAudioFile.m */,
 				340620741F2E2BFE0016D997 /* CAMultiAudioInput.h */,
 				340620751F2E2BFE0016D997 /* CAMultiAudioInput.m */,
-				34E26DD71FF6ED7B00ACE58B /* CAMultiAudioSubgraph.h */,
-				34E26DD81FF6ED7B00ACE58B /* CAMultiAudioSubgraph.m */,
 				34E26DDA1FF702BD00ACE58B /* CAMultiAudioSilence.h */,
 				34E26DDB1FF702BD00ACE58B /* CAMultiAudioSilence.m */,
 				34E26DDD1FF70E0E00ACE58B /* CAMultiAudioGenericOutput.h */,
@@ -3085,7 +3080,6 @@
 				3470CD2E1D57D2AA006404D9 /* CSStreamOutputWindowController.m in Sources */,
 				3400A0621BD44DF0003E1828 /* CSInputLibraryItem.m in Sources */,
 				34ED8C831B07371C002C0674 /* MIKMIDIMetaSequenceEvent.m in Sources */,
-				34E26DD91FF6ED7B00ACE58B /* CAMultiAudioSubgraph.m in Sources */,
 				3434CB2D1CA90D28001B3DF9 /* CSx264CompressorViewController.m in Sources */,
 				34788E291F0D166C00C3C9C5 /* CSAudioInputSource.m in Sources */,
 				34ED8C6D1B07371C002C0674 /* MIKMIDIMapping.m in Sources */,

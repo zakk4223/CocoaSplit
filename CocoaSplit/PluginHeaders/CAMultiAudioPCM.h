@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreAudio/CoreAudio.h>
 #import <AudioUnit/AudioUnit.h>
-
+#import <AVFoundation/AVFoundation.h>
 
 
 //This class is used by the CAMultiAudioPCMPlayer class to store some submitted buffers for later free-ing.
@@ -29,6 +29,7 @@
 @property (assign) AudioBufferList *pcmData;
 @property (assign) bool handleFreeBuffer;
 @property (assign) uint8_t *dataBuffer;
+@property (strong) AVAudioPCMBuffer *avBuffer;
 
 
 

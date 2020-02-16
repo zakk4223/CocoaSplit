@@ -10,16 +10,20 @@
 
 #import "AVFAudioCapture.h"
 
-@interface CAMultiAudioAVCapturePlayer : CAMultiAudioPCMPlayer 
+@interface CAMultiAudioAVCapturePlayer : CAMultiAudioPCMPlayer
+{
+    AVAudioFormat *_useFormat;
+}
 
 @property (strong) AVCaptureDevice *captureDevice;
 
 @property (strong) AVFAudioCapture *avfCapture;
-@property (assign) int sampleRate;
+@property (assign) double sampleRate;
+@property (readonly) AVAudioFormat *deviceFormat;
 
--(instancetype)initWithDevice:(AVCaptureDevice *)avDevice withFormat:(AudioStreamBasicDescription *)withFormat;
+
+-(instancetype)initWithDevice:(AVCaptureDevice *)avDevice;
 
 -(void)resetFormat:(AudioStreamBasicDescription *)format;
-
 
 @end

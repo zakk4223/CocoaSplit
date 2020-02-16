@@ -15,7 +15,7 @@
 
 -(instancetype)initWithDeviceID:(AudioDeviceID)devid
 {
-    if (self = [super initWithSubType:kAudioUnitSubType_HALOutput unitType:kAudioUnitType_Output])
+    if (self = [self initWithAudioNode:nil])
     {
         self.deviceID = devid;
     }
@@ -27,7 +27,7 @@
 
 -(instancetype)initWithDeviceUID:(NSString *)uid
 {
-    if (self = [super initWithSubType:kAudioUnitSubType_HALOutput unitType:kAudioUnitType_Output])
+    if (self = [self initWithAudioNode:nil])
     {
         self.deviceUID = uid;
         self.deviceID = [self lookupUID:uid];
@@ -61,24 +61,6 @@
 
 }
 
--(AudioStreamBasicDescription *)getOutputFormat
-{
-    AudioStreamBasicDescription *outfmt = malloc(sizeof(AudioStreamBasicDescription));
-    UInt32 outsize = sizeof(AudioStreamBasicDescription);
-    
-    AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 0, outfmt, &outsize);
-    
-    
-    return outfmt;
-}
-
-
-
--(bool)setInputStreamFormat:(AudioStreamBasicDescription *)format
-{
-    return [super setInputStreamFormat:[self getOutputFormat]];
-    
-}
 
 
 -(bool)setOutputStreamFormat:(AudioStreamBasicDescription *)format

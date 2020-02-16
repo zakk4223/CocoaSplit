@@ -27,16 +27,15 @@
 {
     if (self = [super init])
     {
+        AVAudioFrameCount numFrames = 0;
+        AVAudioFormat *bufferFmt = [[AVAudioFormat alloc] initWithStreamDescription:streamFormat];
+        numFrames = bufferList->mBuffers[0].mDataByteSize / streamFormat->mBytesPerFrame;
         
-        _audioSlice = calloc(1, sizeof(ScheduledAudioSlice));
-        
-        _audioSlice->mBufferList = bufferList;
-        _audioSlice->mNumberFrames = bufferList->mBuffers[0].mDataByteSize / streamFormat->mBytesPerFrame;
-        self.frameCount = _audioSlice->mNumberFrames;
-        
-        self.bufferCount = streamFormat->mChannelsPerFrame;
-        _alloced_buffers = NO;
-        
+        self.avBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat:bufferFmt frameCapacity:numFrames];
+        for (uint32_t i = 0; i < bufferList->mNumberBuffers; i++)
+        {
+            memcpy(self.avBuffer.mutableAudioBufferList->mBuffers[i].mData, bufferList->mBuffers[i].mData, self.avBuffer.mutableAudioBufferList->mBuffers[i].mDataByteSize);
+        }
     }
     
     return self;
@@ -44,23 +43,16 @@
 
 
 
--(void)silenceBuffer
-{
-
-    
-    for (int i=0; i < _audioSlice->mBufferList->mNumberBuffers; i++)
-    {
-        memset(_audioSlice->mBufferList->mBuffers[i].mData, 0, _audioSlice->mBufferList->mBuffers[i].mDataByteSize);
-    }
-
-}
 -(void)copyFromAudioBufferList:(AudioBufferList *)copyFrom
 {
     //Just copy the data, we already allocated the List.
-    
-    for (int i=0; i < _pcmData->mNumberBuffers; i++)
+    if (!self.avBuffer)
     {
-        memcpy(_pcmData->mBuffers[i].mData, copyFrom->mBuffers[i].mData, _audioBufferDataSize);
+        return;
+    }
+    for (int i=0; i < self.avBuffer.audioBufferList->mNumberBuffers; i++)
+    {
+        memcpy(self.avBuffer.mutableAudioBufferList->mBuffers[i].mData, copyFrom->mBuffers[i].mData, self.avBuffer.mutableAudioBufferList->mBuffers[i].mDataByteSize);
     }
 }
 
@@ -70,49 +62,10 @@
     
     if (self = [super init])
     {
-        _audioSlice = calloc(1, sizeof(ScheduledAudioSlice));
-        _audioSlice->mNumberFrames = forFrameCount;
-        _audioSlice->mBufferList = NULL;
-        
-        
-        int bufferCnt = streamFormat->mFormatFlags & kAudioFormatFlagIsNonInterleaved ? streamFormat->mChannelsPerFrame : 1;
-        int channelCnt = streamFormat->mFormatFlags & kAudioFormatFlagIsNonInterleaved ? 1 : streamFormat->mChannelsPerFrame;
-        
-        self.bufferCount = bufferCnt;
-        self.frameCount = forFrameCount;
-        
-        long byteCnt = streamFormat->mBytesPerFrame * forFrameCount;
-        
-        _audioBufferDataSize = byteCnt;
+        AVAudioFormat *fmt = [[AVAudioFormat alloc] initWithStreamDescription:streamFormat];
+        self.avBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat:fmt frameCapacity:forFrameCount];
+        self.avBuffer.frameLength = forFrameCount;
 
-        _audioBufferListSize = sizeof(AudioBufferList) + (bufferCnt-1)*sizeof(AudioBuffer);
-        
-        _pcmData = malloc(_audioBufferListSize);
-        
-        
-        _dataBuffer = malloc(_audioBufferDataSize*bufferCnt);
-        
-        _pcmData->mNumberBuffers = bufferCnt;
-        
-        
-        for (int i=0; i<bufferCnt; i++)
-        {
-            /*
-            if (byteCnt > 0)
-            {
-                _pcmData->mBuffers[i].mData = malloc(_audioBufferDataSize);
-                
-            }*/
-            
-            
-            _pcmData->mBuffers[i].mData = _dataBuffer+(_audioBufferDataSize*i);
-            
-            _pcmData->mBuffers[i].mDataByteSize = (UInt32)_audioBufferDataSize;
-            _pcmData->mBuffers[i].mNumberChannels = channelCnt;
-        }
-        _audioSlice->mBufferList = _pcmData;
-        memcpy(&_pcmFormat, streamFormat, sizeof(AudioStreamBasicDescription));
-        _alloced_buffers = YES;
     }
     
     

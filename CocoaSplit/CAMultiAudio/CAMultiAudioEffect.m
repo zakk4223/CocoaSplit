@@ -13,9 +13,18 @@
 @synthesize bypass = _bypass;
 
 
+
 -(instancetype) initWithSubType:(OSType)subType unitType:(OSType)unitType manufacturer:(OSType)manufacturer
 {
-    if (self = [super initWithSubType:subType unitType:unitType manufacturer:manufacturer])
+    AudioComponentDescription effectDescr;
+    
+    effectDescr.componentManufacturer = manufacturer;
+    effectDescr.componentSubType = subType;
+    effectDescr.componentType = unitType;
+    
+    AVAudioUnitEffect *effectNode = [[AVAudioUnitEffect alloc] initWithAudioComponentDescription:effectDescr];
+
+    if (self = [self initWithAudioNode:effectNode])
     {
         
     }
@@ -24,25 +33,14 @@
 }
 
 
--(void)setAudioUnitBypass
-{
-    UInt32 bypassVal;
-    
-    if (self.bypass)
-    {
-        bypassVal = 1;
-    } else {
-        bypassVal = 0;
-    }
-    
-    AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_BypassEffect, kAudioUnitScope_Global, 0, &bypassVal, sizeof(bypassVal));
-}
-
 
 -(void)setBypass:(bool)bypass
 {
     _bypass = bypass;
-    [self setAudioUnitBypass];
+    if (self.avAudioNode)
+    {
+        ((AVAudioUnitEffect *)self.avAudioNode).bypass = bypass;
+    }
 }
 
 -(bool)bypass
@@ -159,6 +157,7 @@
 }
 
 
+/*
 -(bool)createNode:(CAMultiAudioGraph *)forGraph
 {
     bool ret = [super createNode:forGraph];
@@ -188,7 +187,7 @@
     [self setAudioUnitBypass];
     
     return ret;
-}
+}*/
 
 -(void)selectPresetNumber:(SInt32)presetNumber
 {

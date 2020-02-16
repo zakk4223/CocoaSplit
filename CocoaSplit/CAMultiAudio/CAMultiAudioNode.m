@@ -15,6 +15,10 @@
 #include "CaptureController.h"
 
 
+@interface AVAudioNode()
+@property(nonatomic, readonly) AudioUnit audioUnit;
+@end
+
 @implementation CAMultiAudioVolumeAnimation
 
 @end
@@ -30,7 +34,7 @@
 
 -(instancetype)init
 {
-    if (self = [self initWithSubType:0 unitType:0])
+    if (self = [self initWithAudioNode:nil])
     {
         
     }
@@ -40,27 +44,35 @@
 
 -(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType manufacturer:(OSType)manufacturer
 {
-    if (self = [super init])
+    if (self = [self initWithAudioNode:nil])
     {
         //Creating the node and unit are deferred until the node is attached to a graph, since we need the graph to create the node.
         unitDescr.componentManufacturer = manufacturer;
         unitDescr.componentSubType = subType;
         unitDescr.componentType = unitType;
-        
-        //Default to two channels, subclasses can override this
-        
-        self.channelCount = 2;
-        _volume = 1.0;
-        self.effectChain = [NSMutableArray array];
-        self.inputMap = [NSMutableDictionary dictionary];
-        self.outputMap = [NSMutableDictionary dictionary];
-        self.nodeUID = [[NSUUID UUID] UUIDString];
-        
+        [AVAudioUnit instantiateWithComponentDescription:unitDescr options:kAudioComponentInstantiation_LoadInProcess completionHandler:^(__kindof AVAudioUnit * _Nullable audioUnit, NSError * _Nullable error) {
+            self.avAudioNode = audioUnit;
+        }];
     }
     
     return self;
 }
 
+-(instancetype)initWithAudioNode:(AVAudioNode *)audioNode
+{
+    if (self = [super init])
+    {
+        _avAudioNode = audioNode;
+        self.effectChain = [NSMutableArray array];
+        self.inputMap = [NSMutableDictionary dictionary];
+        self.outputMap = [NSMutableDictionary dictionary];
+        self.nodeUID = [[NSUUID UUID] UUIDString];
+        self.volume = 1.0f;
+        self.headNode = self;
+        self.effectsHead = self;
+    }
+    return self;
+}
 -(NSString *)uuid
 {
     return self.nodeUID;
@@ -71,6 +83,15 @@
     return [self initWithSubType:subType unitType:unitType manufacturer:kAudioUnitManufacturer_Apple];
 }
 
+
+-(AudioUnit) audioUnit
+{
+    if (self.avAudioNode)
+    {
+        return self.avAudioNode.audioUnit;
+    }
+    return 0;
+}
 
 
 //We don't use NSCoding here because the audio engine/graph does deferred creating of audio unit objects, so most of what we load/save doesn't matter at creating time.
@@ -92,7 +113,7 @@
 
 -(void)restoreDataFromDict:(NSDictionary *)restoreDict
 {
-    self.enabled = [restoreDict[@"enabled"] boolValue];
+   // self.enabled = [restoreDict[@"enabled"] boolValue];
     
     self.volume = [restoreDict[@"volume"] floatValue];
     
@@ -118,13 +139,20 @@
         
     }
 
-    [self rebuildEffectChain];
+    //[self rebuildEffectChain];
 
 }
 
 
 -(NSView *)audioUnitNSView
 {
+    
+    if (!self.avAudioNode)
+    {
+        return nil;
+    }
+    
+    
     UInt32 cuiSize;
     Boolean isWriteable;
     
@@ -196,71 +224,6 @@
 {
     return 0;
 }
-
--(bool)createNode:(CAMultiAudioGraph *)forGraph
-{
-    if (!forGraph)
-    {
-        return NO;
-    }
-    OSStatus err;
-    err = AUGraphAddNode(forGraph.graphInst, &unitDescr, &_node);
-    if (err)
-    {
-        NSLog(@"AUGraphAddNode failed for %@, err: %d", self, err);
-        return NO;
-    }
-    err = AUGraphNodeInfo(forGraph.graphInst, _node, NULL, &_audioUnit);
-    if (err)
-    {
-        NSLog(@"AUGraphNodeInfo failed for %@, err: %d", self, err);
-        return NO;
-    }
-    
-    self.graph = forGraph;
-    self.engine = forGraph.engine;
-
-    self.effectsHead = self;
-    self.headNode = self;
-    
-    
-    
-    return YES;
-}
-
--(bool)setInputStreamFormat:(AudioStreamBasicDescription *)format
-{
-
-    OSStatus err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 0, format, sizeof(AudioStreamBasicDescription));
-    if (err)
-    {
-        NSLog(@"Failed to set StreamFormat for input %@ in willInitializeNode: %d", self, err);
-        return NO;
-    }
-    
-    return YES;
-}
-
-
--(bool)setOutputStreamFormat:(AudioStreamBasicDescription *)format
-{
-    AudioStreamBasicDescription casbd;
-    
-    memcpy(&casbd, format, sizeof(casbd));
-    casbd.mChannelsPerFrame = self.channelCount;
-    
-    OSStatus err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 0, &casbd, sizeof(AudioStreamBasicDescription));
-    
-    if (err)
-    {
-        NSLog(@"Failed to set StreamFormat for output on node %@ with %d", self, err);
-        return NO;
-    }
-    
-    return YES;
-
-}
-
 
 
 -(void)willInitializeNode
@@ -472,35 +435,9 @@
 }
 
 
-
--(void) remakeNode
+-(void)didAttachNode
 {
-    NSMutableDictionary *inputMap = self.inputMap.copy;
-    NSMutableDictionary *outputMap = self.outputMap.copy;
-    CAMultiAudioGraph *saveGraph = self.graph;
-    
-    [saveGraph removeNode:self];
-
-    [saveGraph addNode:self];
-    
-    for (NSString *uuid in inputMap)
-    {
-        NSDictionary *inpInfo = inputMap[uuid];
-        CAMultiAudioNode *inputNode = inpInfo[@"node"];
-        NSNumber *inBus = inpInfo[@"inBus"];
-        NSNumber *outBus = inpInfo[@"outBus"];
-        
-        [saveGraph connectNode:inputNode toNode:self sampleRate:self.graph.sampleRate inBus:inBus.unsignedIntValue outBus:outBus.unsignedIntValue];
-    }
-    
-    for (NSString *uuid in outputMap)
-    {
-        NSDictionary *outInfo = outputMap[uuid];
-        CAMultiAudioNode *outputNode = outInfo[@"node"];
-        NSNumber *inBus = outInfo[@"inBus"];
-        NSNumber *outBus = outInfo[@"outBus"];
-        [saveGraph connectNode:self toNode:outputNode sampleRate:self.graph.sampleRate inBus:inBus.unsignedIntValue outBus:outBus.unsignedIntValue];
-    }
+    return;
 }
 
 -(void)rebuildEffectChain

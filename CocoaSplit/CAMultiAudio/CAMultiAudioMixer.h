@@ -15,4 +15,8 @@
     UInt32 _nextElement;
     
 }
+
+@property (readonly) AVAudioNodeBus nextInputBus;
+
+
 @end

@@ -20,7 +20,9 @@
 
 -(instancetype)init
 {
-    if (self = [super initWithSubType:kAudioUnitSubType_ScheduledSoundPlayer unitType:kAudioUnitType_Generator])
+    AVAudioPlayerNode *pNode = [[AVAudioPlayerNode alloc] init];
+    pNode.volume = 1.0f;
+    if (self = [self initWithAudioNode:pNode])
     {
         _pendingBuffers = [NSMutableArray array];
         //_pendingQueue = dispatch_queue_create("PCM Player pending queue", NULL);
@@ -28,7 +30,7 @@
         _inputFormat = NULL;
         self.latestScheduledTime = 0;
         _pauseBuffer = [[NSMutableArray alloc] init];
-        self.enabled = YES;
+        self.enabled = NO;
         _exitPending = NO;
         
     }
@@ -127,7 +129,40 @@
         return NO;
     }
     
+    AVAudioPlayerNode *pNode = (AVAudioPlayerNode *)self.avAudioNode;
+    if (!pNode.engine)
+    {
+        return NO;
+    }
     
+    if (!pNode.engine.running)
+    {
+        return NO;
+    }
+    
+
+    if (!pNode.playing)
+    {
+        [self play];
+    }
+    
+    
+    if (!_audioConverter)
+    {
+        AVAudioFormat *newFmt = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:pcmBuffer.avBuffer.format.sampleRate channels:pcmBuffer.avBuffer.format.channelCount];
+        _audioConverter = [[AVAudioConverter alloc] initFromFormat:pcmBuffer.avBuffer.format toFormat:newFmt];
+    }
+    
+    AVAudioPCMBuffer *newBuffer = [[AVAudioPCMBuffer alloc] initWithPCMFormat:_audioConverter.outputFormat frameCapacity:pcmBuffer.avBuffer.frameCapacity];
+    newBuffer.frameLength = pcmBuffer.avBuffer.frameCapacity;
+    NSError *wtf = nil;
+    [_audioConverter convertToBuffer:newBuffer fromBuffer:pcmBuffer.avBuffer error:&wtf];
+
+    [((AVAudioPlayerNode *)self.avAudioNode) scheduleBuffer:newBuffer completionHandler:^{
+        //NSLog(@"DONE PLAYING BUFFER!");
+    }];
+    
+    return YES;
     if (!_pendingQueue)
     {
         [self startPendingProcessor];
@@ -145,6 +180,7 @@
     pcmBuffer.audioSlice->mFlags = 0;
  
     pcmBuffer.player = self;
+    
     
     if (floor(NSAppKitVersionNumber) <= NSAppKitVersionNumber10_9)
     {
@@ -210,46 +246,12 @@
     
     
     CMFormatDescriptionRef sDescr = CMSampleBufferGetFormatDescription(sampleBuffer);
+    CMItemCount numSamples = CMSampleBufferGetNumSamples(sampleBuffer);
+    
     const AudioStreamBasicDescription *asbd =  CMAudioFormatDescriptionGetStreamBasicDescription(sDescr);
     
-    
-    int bufferCnt = asbd->mFormatFlags & kAudioFormatFlagIsNonInterleaved ? asbd->mChannelsPerFrame : 1;
-    int channelCnt = asbd->mFormatFlags & kAudioFormatFlagIsNonInterleaved ? 1 : asbd->mChannelsPerFrame;
-    CMItemCount numSamples = CMSampleBufferGetNumSamples(sampleBuffer);
-
-    long byteCnt = asbd->mBytesPerFrame * numSamples;
-    
-    sampleABL = malloc(sizeof(AudioBufferList) + (bufferCnt-1)*sizeof(AudioBuffer));
-    
-    sampleABL->mNumberBuffers = bufferCnt;
-    uint8_t *dataBuf = malloc(bufferCnt*byteCnt);
-    
-    for (int i=0; i<bufferCnt; i++)
-    {
-        /*
-        if (byteCnt > 0)
-        {
-            sampleABL->mBuffers[i].mData = malloc(byteCnt);
-            
-        }*/
-        
-        sampleABL->mBuffers[i].mData = dataBuf+(byteCnt*i);
-        
-        sampleABL->mBuffers[i].mDataByteSize = (UInt32)byteCnt;
-        sampleABL->mBuffers[i].mNumberChannels = channelCnt;
-    }
-    
-    
-    CMSampleBufferCopyPCMDataIntoAudioBufferList(sampleBuffer, 0, (int32_t)numSamples, sampleABL);
-    CAMultiAudioPCM *pcmBuffer = [[CAMultiAudioPCM alloc] initWithAudioBufferList:sampleABL streamFormat:asbd];
-    pcmBuffer.dataBuffer = dataBuf;
-    
-
-    pcmBuffer.handleFreeBuffer = YES;
-    
-    
-
-    
+    CAMultiAudioPCM *pcmBuffer = [[CAMultiAudioPCM alloc] initWithDescription:asbd forFrameCount:numSamples];
+    CMSampleBufferCopyPCMDataIntoAudioBufferList(sampleBuffer, 0, (int32_t)numSamples, pcmBuffer.avBuffer.mutableAudioBufferList);
     [self playPcmBuffer:pcmBuffer];
 }
 
@@ -267,57 +269,21 @@
   }
 }
 
-
-
--(bool)createNode:(CAMultiAudioGraph *)forGraph
+/*
+-(void)didAttachNode
 {
-    bool ret = [super createNode:forGraph];
-    if (floor(NSAppKitVersionNumber > NSAppKitVersionNumber10_9))
-    {
-        
-        //We can start whenever on 10.10. Anything not 10.10 we have to start/restart at specific times in the schedule function.
-        [self play];
-
-    }
-
-    return ret;
+    [self play];
 }
+*/
 
 
--(void)setInputFormat:(AudioStreamBasicDescription *)inputFormat
-{
-    if (inputFormat)
-    {
-        if (!_inputFormat)
-        {
-            _inputFormat = malloc(sizeof(AudioStreamBasicDescription));
-        }
-        
-        memcpy(_inputFormat, inputFormat, sizeof(AudioStreamBasicDescription));
-    } else {
-        inputFormat = NULL;
-    }
-}
 
--(AudioStreamBasicDescription *)inputFormat
-{
-    return _inputFormat;
-}
 
 -(bool)setInputStreamFormat:(AudioStreamBasicDescription *)format
 {
     return YES;
 }
 
--(bool)setOutputStreamFormat:(AudioStreamBasicDescription *)format
-{
-    if (self.inputFormat)
-    {
-        return [super setOutputStreamFormat:self.inputFormat];
-    }
-    
-    return YES;
-}
 
 -(void)pause
 {
@@ -338,23 +304,12 @@
 
 -(void)play
 {
-    AudioTimeStamp ts = {0};
     
-    OSStatus err;
-    
-
- 
-    
-    ts.mFlags = kAudioTimeStampSampleTimeValid;
-    ts.mSampleTime = -1;
-    err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ScheduleStartTimeStamp, kAudioUnitScope_Global, 0, &ts, sizeof(ts));
-    _save_buffer = NO;
-    for (CAMultiAudioPCM *buffer in self.pauseBuffer)
+    if (self.avAudioNode)
     {
-        [self playPcmBuffer:buffer];
+        AVAudioPlayerNode *pNode = self.avAudioNode;
+        [pNode play];
     }
-    
-    [self.pauseBuffer removeAllObjects];
 }
 
 
@@ -363,10 +318,7 @@
     
     [self flush];
     _pendingBuffers = nil;
-    if (_inputFormat)
-    {
-        free(_inputFormat);
-    }
+
 }
 
 

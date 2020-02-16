@@ -12,8 +12,13 @@
 
 -(instancetype)init
 {
-    if (self = [super initWithSubType:kAudioUnitSubType_Delay unitType:kAudioUnitType_Effect])
+    AVAudioUnitDelay *delayNode = [[AVAudioUnitDelay alloc] init];
+    if (self = [self initWithAudioNode:delayNode])
     {
+        delayNode.feedback = 0.0f;
+        delayNode.wetDryMix = 100.0f;
+        delayNode.lowPassCutoff = 22050.0f;
+        delayNode.delayTime = 0.0f;
         _delay = 0;
     }
     
@@ -26,8 +31,10 @@
 -(void)setDelay:(float)delay
 {
     _delay = delay;
-    
-    AudioUnitSetParameter(self.audioUnit, kDelayParam_DelayTime, kAudioUnitScope_Global, 0, self.delay, 0);
+    if (self.avAudioNode)
+    {
+        ((AVAudioUnitDelay *)self.avAudioNode).delayTime = delay;
+    }
 
 }
 
@@ -37,47 +44,4 @@
 }
 
 
--(bool)setInputStreamFormat:(AudioStreamBasicDescription *)format
-{
-    AudioStreamBasicDescription casbd;
-    
-    memcpy(&casbd, format, sizeof(casbd));
-    casbd.mChannelsPerFrame = self.channelCount;
-    OSStatus err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 0, &casbd, sizeof(AudioStreamBasicDescription));
-    if (err)
-    {
-        NSLog(@"Failed to set StreamFormat for input %@ in willInitializeNode: %d", self, err);
-        return NO;
-    }
-    
-    return YES;
-}
-
-
--(bool)setOutputStreamFormat:(AudioStreamBasicDescription *)format
-{
-    AudioStreamBasicDescription casbd;
-    
-    memcpy(&casbd, format, sizeof(casbd));
-    casbd.mChannelsPerFrame = self.channelCount;
-    OSStatus err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 0, &casbd, sizeof(AudioStreamBasicDescription));
-    
-    if (err)
-    {
-        NSLog(@"Failed to set StreamFormat for output on node %@ with %d", self, err);
-        return NO;
-    }
-    
-    return YES;
-    
-}
-
--(void)willInitializeNode
-{
-    AudioUnitSetParameter(self.audioUnit, kDelayParam_Feedback, kAudioUnitScope_Global, 0, 0, 0);
-    AudioUnitSetParameter(self.audioUnit, kDelayParam_WetDryMix, kAudioUnitScope_Global, 0, 100, 0);
-    AudioUnitSetParameter(self.audioUnit, kDelayParam_LopassCutoff, kAudioUnitScope_Global, 0, 22050, 0);
-    AudioUnitSetParameter(self.audioUnit, kDelayParam_Feedback, kAudioUnitScope_Global, 0, 0, 0);
-    AudioUnitSetParameter(self.audioUnit, kDelayParam_DelayTime, kAudioUnitScope_Global, 0, self.delay, 0);
-}
 @end

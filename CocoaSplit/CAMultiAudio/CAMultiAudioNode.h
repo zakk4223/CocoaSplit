@@ -10,6 +10,7 @@
 #import <Foundation/Foundation.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import <JavaScriptCore/JavaScriptCore.h>
+#import <AVFoundation/AVFoundation.h>
 
 
 @class CAMultiAudioGraph;
@@ -29,7 +30,7 @@
 
 @protocol CAMultiAudioNodeJSExport <JSExport>
 @property (assign) AUNode node;
-@property (assign) AudioUnit audioUnit;
+@property (readonly) AudioUnit audioUnit;
 @property (assign) int channelCount;
 @property (readonly) UInt32 inputElement;
 @property (readonly) UInt32 outputElement;
@@ -74,11 +75,13 @@
 @interface CAMultiAudioNode : NSObject <CAMultiAudioNodeJSExport, NSAnimationDelegate>
 {
     float _saved_volume;
-    
+        
     AudioComponentDescription unitDescr;
     CAMultiAudioVolumeAnimation *_volumeAnimation;
 }
 
+
+@property (strong) AVAudioNode *avAudioNode;
 @property (assign) AUNode node;
 @property (assign) AudioUnit audioUnit;
 @property (assign) int channelCount;
@@ -108,7 +111,8 @@
 
 
 -(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType;
--(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType manufacturer:(OSType)manufacturer NS_DESIGNATED_INITIALIZER;
+-(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType manufacturer:(OSType)manufacturer;
+-(instancetype)initWithAudioNode:(AVAudioNode *)audioNode NS_DESIGNATED_INITIALIZER;
 -(void)willConnectToNode:(CAMultiAudioNode *)node inBus:(UInt32)inBus outBus:(UInt32)outBus;
 -(void)connectedToNode:(CAMultiAudioNode *)node inBus:(UInt32)inBus outBus:(UInt32)outBus;
 -(void)nodeConnected:(CAMultiAudioNode *)toNode inBus:(UInt32)inBus outBus:(UInt32)outBus;
@@ -116,6 +120,7 @@
 -(void)willRemoveNode;
 -(void)setupEffectsChain;
 -(void)removeEffectsChain;
+-(void)didAttachNode;
 -(void)addEffect:(CAMultiAudioNode *)effect;
 -(void)addEffect:(CAMultiAudioNode *)effect atIndex:(NSUInteger)idx;
 -(bool)busForOutput:(CAMultiAudioNode *)inputNode busOut:(UInt32 *)busOut;

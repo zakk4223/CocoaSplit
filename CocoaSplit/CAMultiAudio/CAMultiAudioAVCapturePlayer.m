@@ -12,22 +12,38 @@
 
 
 
--(instancetype)initWithDevice:(AVCaptureDevice *)avDevice withFormat:(AudioStreamBasicDescription *)withFormat
+-(instancetype)initWithDevice:(AVCaptureDevice *)avDevice
 {
     if (self = [super init])
     {
         
         self.captureDevice = avDevice;
-        self.sampleRate = withFormat->mSampleRate;
+        //self.sampleRate = withFormat.sampleRate;
         self.name = avDevice.localizedName;
         //self.nodeUID = avDevice.uniqueID;
-        self.inputFormat = withFormat;
         self.systemDevice = YES;
         self.deviceUID = avDevice.uniqueID;
         
     }
     return self;
 }
+
+-(AVAudioFormat *)inputFormat
+{
+    if (self.captureDevice)
+    {
+        CMFormatDescriptionRef sDescr = self.captureDevice.activeFormat.formatDescription;
+        
+        
+        AVAudioFormat *retFmt = [[AVAudioFormat alloc] initWithCMAudioFormatDescription:sDescr];
+        return retFmt;
+        
+    }
+    
+    return nil;
+
+}
+
 
 -(void)setEnabled:(bool)enabled
 {
@@ -46,19 +62,6 @@
 }
 
 
--(bool)createNode:(CAMultiAudioGraph *)forGraph
-{
-    [super createNode:forGraph];
-    AudioStreamBasicDescription asbd;
-    UInt32 asbdSize = sizeof(asbd);
-    
-
-    AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 0, &asbd, &asbdSize);
-    asbd.mChannelsPerFrame = self.channelCount;
-    AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 0, &asbd, asbdSize);
-
-    return YES;
-}
 
 
 -(void)detachCaptureSession
@@ -73,9 +76,11 @@
 -(void)attachCaptureSession
 {
     
+    
+    
     if (!self.avfCapture)
     {
-        AVFAudioCapture *newAC = [[AVFAudioCapture alloc] initForAudioEngine:self.captureDevice sampleRate:self.sampleRate];
+        AVFAudioCapture *newAC = [[AVFAudioCapture alloc] initForAudioEngine:self.captureDevice];
         self.avfCapture = newAC;        //return;
     }
     
@@ -87,7 +92,6 @@
 
 -(void)resetFormat:(AudioStreamBasicDescription *)format
 {
-    self.inputFormat = format;
     self.sampleRate = format->mSampleRate;
     AudioStreamBasicDescription asbd;
     UInt32 asbdSize = sizeof(asbd);
@@ -98,7 +102,7 @@
     AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 0, &asbd, asbdSize);
     if (self.avfCapture)
     {
-        self.avfCapture.audioSamplerate = self.sampleRate;
+        //self.avfCapture.audioSamplerate = self.sampleRate;
         
         [self.avfCapture stopAudioCompression];
         [self.avfCapture setupAudioCompression];
@@ -110,7 +114,7 @@
 {
     if (self.avfCapture)
     {
-        self.avfCapture.audioSamplerate = sampleRate;
+        //self.avfCapture.audioSamplerate = sampleRate;
     
         [self.avfCapture stopAudioCompression];
         [self.avfCapture setupAudioCompression];

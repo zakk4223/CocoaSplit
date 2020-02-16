@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "CSAacEncoder.h"
 #import "CAMultiAudioNode.h"
-
+#import "CAMultiAudioMixer.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSString *uuid;
 @property (strong) CSAacEncoder *encoder;
 @property (strong) CAMultiAudioNode *encoderNode;
-@property (strong) NSNumber *outputBus;
+@property (strong) CAMultiAudioMixer *trackMixer;
 
 @end
 

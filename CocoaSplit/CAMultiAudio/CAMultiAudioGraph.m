@@ -13,69 +13,55 @@
 
 
 @implementation CAMultiAudioGraph
-@synthesize graphAsbd = _graphAsbd;
 
--(instancetype)initWithSamplerate:(int)samplerate
+-(instancetype)initWithSamplerate:(double)samplerate
 {
     if (self = [self init])
     {
+        
+        _avEngine = [[AVAudioEngine alloc] init];
+        
         //default to something reasonable
         
         _sampleRate = samplerate;
+        
+        
         //set to canonical, 2 channel
-        self.graphAsbd = malloc(sizeof(AudioStreamBasicDescription));
+        self.graphFormat = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:_sampleRate channels:2];
+        //Always force an input singleton
+        NSLog(@"%@", _avEngine.inputNode);
         
-        _graphAsbd->mSampleRate = self.sampleRate;
-        _graphAsbd->mFormatID = kAudioFormatLinearPCM;
-        _graphAsbd->mFormatFlags = kAudioFormatFlagIsFloat | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked | kAudioFormatFlagIsNonInterleaved;
-        _graphAsbd->mFramesPerPacket = 1;
-        _graphAsbd->mChannelsPerFrame = 2;
-        _graphAsbd->mReserved = 0;
-        _graphAsbd->mBytesPerPacket = 1 * sizeof(Float32);
-        _graphAsbd->mBytesPerFrame = 1 * sizeof(Float32);
-        _graphAsbd->mBitsPerChannel = 8 * sizeof(Float32);
-        
-        
-        self.nodeList = [NSMutableArray array];
-        OSStatus err;
-        err = NewAUGraph(&_graphInst);
-        if (err)
-        {
-            NSLog(@"NewAUGraph failed, err: %d", err);
-            return nil;
-        }
-        err = AUGraphOpen(_graphInst);
-        if (err)
-        {
-            NSLog(@"AUGraphOpen failed, err: %d", err);
-            return nil;
-        }
-        
-        err = AUGraphInitialize(_graphInst);
-        if (err)
-        {
-            NSLog(@"AUGraphInitialize failed, err: %d", err);
-            return nil;
-        }
         
     }
     
     return self;
 }
 
+-(AVAudioOutputNode *)defaultOutputNode
+{
+    return _avEngine.outputNode;
+}
+
+
+-(AVAudioInputNode *)defaultInputNode
+{
+    return _avEngine.inputNode;
+}
+
+
 -(bool)startGraph
 {
-    OSStatus err;
-    if (!_graphInst)
+    if (!_avEngine)
     {
         return NO;
     }
     
+    NSError *startError = nil;
+    [_avEngine startAndReturnError:&startError];
     
-    err = AUGraphStart(_graphInst);
-    if (err)
+    if (startError)
     {
-        NSLog(@"AUGraphStart failed, err %d", err);
+        NSLog(@"AUGraphStart failed, err %@", startError);
         return NO;
     }
     
@@ -84,77 +70,55 @@
 
 -(bool)stopGraph
 {
-    if (!_graphInst)
+    if (!_avEngine)
     {
         return NO;
-    }
-    OSStatus err;
-    Boolean isRunning;
-    
-    err = AUGraphIsRunning(_graphInst, &isRunning);
-    if (err)
-    {
-        NSLog(@"AUGraphIsRunning failed, err: %d", err);
-        return NO;
-    }
-    if (isRunning)
-    {
-        return YES;
     }
     
-    err = AUGraphStop(_graphInst);
-    if (err)
-    {
-        NSLog(@"AUGraphStop failed, err: %d", err);
-        return NO;
-    }
+    [_avEngine stop];
+    
     return YES;
 }
 
 
 -(bool)addNode:(CAMultiAudioNode *)newNode
 {
-    @synchronized(self.nodeList)
+    
+    if (!_avEngine)
     {
-        if ([self.nodeList containsObject:newNode])
-        {
-            return YES;
-        }
+        return NO;
     }
     
-    
-    if ([newNode createNode:self])
+    if (!newNode)
     {
-        
-        
-
-       [newNode setInputStreamFormat:self.graphAsbd];
-      [newNode setOutputStreamFormat:self.graphAsbd];
-        
-        [newNode willInitializeNode];
-        
-        OSStatus err = AudioUnitInitialize(newNode.audioUnit);
-        if (err)
-        {
-            NSLog(@"AudioUnitInitialize failed for node %@ with status %d", newNode, err);
-            return NO;
-        }
-        
-        [newNode didInitializeNode];
-        
-        @synchronized (self.nodeList) {
-            [self.nodeList addObject:newNode];
-        }
-        [newNode setupEffectsChain];
+        return NO;
+    }
+    
+    if (!newNode.avAudioNode)
+    {
+        return NO;
+    }
+    
+    if (newNode.avAudioNode.engine)
+    {
         return YES;
     }
     
-    return NO;
+    
+    [_avEngine attachNode:newNode.avAudioNode];
+
+    newNode.graph = self;
+    [newNode didAttachNode];
+    
+    //[newNode setupEffectsChain];
+    NSLog(@"ALL NODES %@", _avEngine.attachedNodes);
+    return YES;
 }
 
 -(bool)removeNode:(CAMultiAudioNode *)node
 {
-    if (!_graphInst || !node)
+    
+    if (!_avEngine || !node || !node.avAudioNode)
     {
         return NO;
     }
@@ -162,224 +126,137 @@
     [node willRemoveNode];
     
     
-    
-    OSStatus err;
-    if (![self disconnectNode:node])
-    {
-        NSLog(@"Remove node %@: disconnected failed", node);
-        return NO;
-    }
-    for (NSString *inpUUID in node.inputMap)
-    {
-        NSDictionary *inpInfo = node.inputMap[inpUUID];
-        CAMultiAudioNode *inpNode = inpInfo[@"node"];
-        [inpNode.outputMap removeObjectForKey:node.nodeUID];
-    }
-    
-    
-    err = AUGraphRemoveNode(_graphInst, node.node);
-    if (err)
-    {
-        NSLog(@"Remove node %@: AUGraphRemoveNode failed, err: %d", node, err);
-        return NO;
-    }
 
-    if (![self graphUpdate])
-    {
-        NSLog(@"Graph %@, graphUpdate failed in removeNode %@", self, node);
-        return NO;
-    }
-
-    @synchronized (self.nodeList) {
-        [self.nodeList removeObject:node];
-    }
+    [_avEngine detachNode:node.avAudioNode];
     [node removeEffectsChain];
     node.graph = nil;
     return YES;
     
 }
 
--(bool)graphUpdate
+-(bool)addConnection:(CAMultiAudioNode *)fromNode toNode:(CAMultiAudioNode *)toNode  withFormat:(AVAudioFormat *)format
 {
-    if (!_graphInst)
-    {
-        return NO;
-    }
-    OSStatus err;
-    
-    /*
-    if (![self stopGraph])
-    {
-        NSLog(@"Graph %@: graphUpdate, stopGraph failed", self);
-        return NO;
-    }
-    */
-    
-    err = AUGraphUpdate(_graphInst, NULL);
-    if (err)
-    {
-        NSLog(@"AUGraphUpdate failed, err: %d", err);
-        return NO;
-    }
-    
-    /*
-    if (![self startGraph])
-    {
-        NSLog(@"Graph %@: graphUpdate, startGraph failed", self);
-        return NO;
+    [self addConnection:fromNode toNode:toNode toBus:0 withFormat:format];
+}
 
-    }*/
+
+-(bool)addConnection:(CAMultiAudioNode *)fromNode toNode:(CAMultiAudioNode *)toNode toBus:(AVAudioNodeBus)toBus withFormat:(AVAudioFormat *)format
+{
+    if (_avEngine)
+    {
+        return NO;
+    }
     
-    return YES;
+    if (!fromNode || !toNode || !fromNode.avAudioNode || !toNode.avAudioNode)
+    {
+        return NO;
+    }
+    
+    AVAudioFormat *useFormat = format;
+    if (!useFormat)
+    {
+        useFormat = self.graphFormat;
+    }
+    
+    NSMutableArray *existingConnections = [_avEngine outputConnectionPointsForNode:fromNode.avAudioNode outputBus:0].mutableCopy;
+    AVAudioConnectionPoint *newConnect = [[AVAudioConnectionPoint alloc] initWithNode:toNode.avAudioNode bus:toBus];
+    [existingConnections addObject:newConnect];
+    [_avEngine connect:fromNode.avAudioNode toConnectionPoints:existingConnections fromBus:0 format:useFormat];
 }
 
 
 -(bool)connectNode:(CAMultiAudioNode *)node toNode:(CAMultiAudioNode *)toNode
 {
-    return [self connectNode:node toNode:toNode sampleRate:self.sampleRate];
+    return [self connectNode:node toNode:toNode withFormat:self.graphFormat];
 }
 
 
 
--(bool)connectNode:(CAMultiAudioNode *)node toNode:(CAMultiAudioNode *)toNode sampleRate:(int)sampleRate
+-(bool)connectNode:(CAMultiAudioNode *)node toNode:(CAMultiAudioNode *)toNode withFormat:(AVAudioFormat *)format
 {
-    if (!_graphInst)
+    
+    
+    if (!_avEngine)
     {
-        NSLog(@"ConnectNode: No AUGraph!");
         return NO;
     }
     
-    if (!node || !toNode)
+    if (!node || !toNode || !format)
     {
-        NSLog(@"ConnectNode: Source or destination node is nil %@ -> %@", node, toNode);
         return NO;
     }
     
-    UInt32 inBus = toNode.inputElement;
-    UInt32 outBus = node.outputElement;
+    if (!node.avAudioNode || !toNode.avAudioNode)
+    {
+        return NO;
+    }
     
-    return [self connectNode:node toNode:toNode sampleRate:self.sampleRate inBus:inBus outBus:outBus];
+    NSLog(@"CONNECTING %@ TO %@ WITH FORMAT %@", node, toNode, format);
+    [_avEngine connect:node.avAudioNode to:toNode.avAudioNode format:format];
+    
 }
 
 
--(bool)connectNode:(CAMultiAudioNode *)node toNode:(CAMultiAudioNode *)toNode sampleRate:(int)sampleRate inBus:(UInt32)inBus outBus:(UInt32)outBus
+-(bool)connectNode:(CAMultiAudioNode *)node toNode:(CAMultiAudioNode *)toNode withFormat:(AVAudioFormat *)format inBus:(UInt32)inBus outBus:(UInt32)outBus
 {
     
-    if (!_graphInst)
+    if (!_avEngine)
     {
-        NSLog(@"ConnectNode: No AUGraph!");
         return NO;
     }
     
-    if (!node || !toNode)
+    if (!node || !toNode || !format)
     {
-        NSLog(@"ConnectNode: Source or destination node is nil %@ -> %@", node, toNode);
         return NO;
     }
     
-    
-    AUNode inNode;
-    AUNode connectTo;
-    
-    OSStatus err;
-    
-    UInt32 bus = inBus;
-    
-    [node willConnectToNode:toNode inBus:bus outBus:outBus];
-    
-    [toNode willConnectNode:node inBus:bus outBus:outBus];
-    
-    CAMultiAudioNode *useNode = node;
-    if (node.headNode)
+    if (!node.avAudioNode || !toNode.avAudioNode)
     {
-        useNode = node.headNode;
-    }
-
-    inNode = useNode.node;
-    connectTo = toNode.node;
-    //aUnit = node.audioUnit;
-    
-    err = AUGraphConnectNodeInput(_graphInst, inNode, outBus, connectTo, bus);
-    if (err)
-    {
-        NSLog(@"AUGraphConnectNodeInput failed for %@ -> %@, err: %d", node, toNode, err);
         return NO;
     }
     
-    [useNode nodeConnected:toNode inBus:bus outBus:outBus];
-
-    [toNode connectedToNode:useNode inBus:bus outBus:outBus];
+    [_avEngine connect:node.avAudioNode to:toNode.avAudioNode fromBus:outBus toBus:inBus format:format];
+    return YES;
     
-    if (![self graphUpdate])
+}
+
+-(bool)disconnectNode:(CAMultiAudioNode *)node inputBus:(AVAudioNodeBus)inputBus
+{
+    if (!_avEngine)
     {
-        
-        UInt32 elementCount = 0;
-        UInt32 elementSize = sizeof(UInt32);
-        
-        
-        AudioUnitGetProperty(toNode.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Input, 0, &elementCount, &elementSize);
-        
-        NSLog(@"Graph %@ graphUpdate for connection failed %@:%d -> %@:%d (%d)", self, node, outBus, toNode, bus, elementCount );
         return NO;
     }
-
-
+    
+    if (!node || !node.avAudioNode)
+    {
+        return NO;
+    }
+    
+    [_avEngine disconnectNodeInput:node.avAudioNode bus:inputBus];
+    
     return YES;
 }
-
 -(bool)disconnectNode:(CAMultiAudioNode *)node
 {
-    if (!_graphInst || !node)
+    if (!_avEngine)
     {
         return NO;
     }
     
-    if (!node.outputMap || node.outputMap.count == 0)
+    if (!node || !node.avAudioNode)
     {
-       // NSLog(@"Node %@ is not connected to anything", node);
-        return YES;
-    }
-    
-    if (!node.audioUnit) 
-    {
-        NSLog(@"Node %@ has no audio unit", node);
         return NO;
     }
-    OSStatus err;
-    for(NSString *uuid in node.outputMap)
-    {
-        NSDictionary *outDict = node.outputMap[uuid];
-        CAMultiAudioNode *outNode = outDict[@"node"];
-        NSNumber *inBus = outDict[@"inBus"];
-        err = AUGraphDisconnectNodeInput(_graphInst, outNode.node, inBus.unsignedIntValue);
-        if (err)
-        {
-            NSLog(@"AUGraphDisconnectNodeInput failed for source node %@ dest node %@, err %d", node, outNode, err);
-        }
-        [outNode.inputMap removeObjectForKey:node.nodeUID];
-    }
     
-    [node.outputMap removeAllObjects];
-
-    [self graphUpdate];
+    [_avEngine disconnectNodeInput:node.avAudioNode];
+    [_avEngine disconnectNodeOutput:node.avAudioNode];
     
     return YES;
-    
 }
 
 -(void)dealloc
 {
-    self.nodeList = nil;
-    if (self.graphAsbd)
-    {
-        free(self.graphAsbd);
-    }
-    
-    
-    if (_graphInst)
-    {
-        DisposeAUGraph(_graphInst);
-    }
+    _avEngine = nil;
 }
 
 

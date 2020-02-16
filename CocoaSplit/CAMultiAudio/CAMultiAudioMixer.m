@@ -11,7 +11,9 @@
 
 -(instancetype)init
 {
-    if (self = [super initWithSubType:kAudioUnitSubType_MultiChannelMixer unitType:kAudioUnitType_Mixer])
+    
+    AVAudioMixerNode *myNode = [[AVAudioMixerNode alloc] init];
+    if (self = [super initWithAudioNode:myNode])
     {
         _nextElement = 0;
         
@@ -19,6 +21,7 @@
     
     return self;
 }
+
 
 -(void)willInitializeNode
 {
@@ -37,7 +40,7 @@
 }
 -(void)setOutputVolume
 {
-    AudioUnitSetParameter(self.audioUnit, kMultiChannelMixerParam_Volume, kAudioUnitScope_Output, 0, self.volume, 0);
+    ((AVAudioMixerNode *)self.avAudioNode).outputVolume = self.volume;
 }
 
 -(void)setVolume:(float)volume
@@ -280,6 +283,11 @@
     [self setVolumeForScope:kAudioUnitScope_Output onBus:0 volume:volume];
 }
 
+-(AVAudioNodeBus)nextInputBus
+{
+    
+    return ((AVAudioMixerNode *)self.avAudioNode).nextAvailableInputBus;
+}
 
 
 

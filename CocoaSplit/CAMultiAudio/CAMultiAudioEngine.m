@@ -195,9 +195,9 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
                 AVCaptureDevice *dev = [AVCaptureDevice deviceWithUniqueID:devUID];
                 if (dev)
                 {
-                    CAMultiAudioAVCapturePlayer *avplayer = [[CAMultiAudioAVCapturePlayer alloc] initWithDevice:dev withFormat:self.graph.graphAsbd];
+                    CAMultiAudioAVCapturePlayer *avplayer = [[CAMultiAudioAVCapturePlayer alloc] initWithDevice:dev];
                     avplayer.nodeUID = nodeUID;
-                    [self attachInput:avplayer];
+                    //[self attachInput:avplayer];
                 }
             }
         }
@@ -311,7 +311,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
                 NSDictionary *mixerData = [settings valueForKey:@"downMixerData"];
                 if (mixerData)
                 {
-                    [input.downMixer restoreData:mixerData];
+                    //[input.downMixer restoreData:mixerData];
                 }
                 
 
@@ -383,6 +383,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 -(void)updateStatistics
 {
+    
+    return;
     CAMultiAudioEngine *__weak blockSelf = self;
     
     //dispatch_async(dispatch_get_main_queue(), ^{
@@ -471,8 +473,16 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         return NO;
     }
     
-    NSNumber *trackOutBus = outputTrack.outputBus;
-    [self.encodeMixer disconnectInputBus:input.effectsHead.connectedToBus fromOutputBus:trackOutBus.unsignedIntValue];
+    NSDictionary *outInfo = input.outputTracks[outputTrack.uuid];
+    if (!outInfo)
+    {
+        return NO;
+    }
+    
+    AVAudioNodeBus mixerBus = ((NSNumber *)outInfo[@"inputBus"]).unsignedIntegerValue;
+    
+    
+    [self.graph disconnectNode:outputTrack.trackMixer inputBus:mixerBus];
     [input.outputTracks removeObjectForKey:outputTrack.uuid];
     return YES;
 }
@@ -490,10 +500,11 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         return NO;
     }
     
-    
-    NSNumber *trackOutBus = outputTrack.outputBus;
-    [self.encodeMixer connectInputBus:input.effectsHead.connectedToBus toOutputBus:trackOutBus.unsignedIntValue];
-    [input.outputTracks setObject:outputTrack forKey:outputTrack.uuid];
+
+    CAMultiAudioMixer *trackMixer = outputTrack.trackMixer;
+    AVAudioNodeBus nextMixerBus = trackMixer.nextInputBus;
+    [self.graph addConnection:input.effectsHead toNode:trackMixer toBus:nextMixerBus withFormat:nil];
+    [input.outputTracks setObject:@{@"inputBus": @(nextMixerBus), @"outputTrack": outputTrack} forKey:outputTrack.uuid];
     return YES;
 }
 
@@ -509,7 +520,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     {
         defaultTrack = [[CAMultiAudioOutputTrack alloc] init];
         defaultTrack.encoderNode = self.renderNode;
-        defaultTrack.outputBus = @(0);
+        defaultTrack.trackMixer = self.encodeMixer;
         defaultTrack.name = @"Default";
         if (self.defaultTrackUUID)
         {
@@ -527,7 +538,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         CSAacEncoder *encoder =  [[CSAacEncoder alloc] init];
         encoder.sampleRate = self.sampleRate;
         encoder.bitRate = self.audioBitrate*1000;
-        encoder.inputASBD = self.graph.graphAsbd;
+        encoder.inputASBD = self.graph.graphFormat.streamDescription;
         encoder.trackName = defaultTrack.uuid;
         [encoder setupEncoderBuffer];
         defaultTrack.encoder = encoder;
@@ -549,25 +560,36 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 -(void)attachOutputTrack:(CAMultiAudioOutputTrack *)outputTrack
 {
-    CAMultiAudioEffect *encNode = [[CAMultiAudioEffect alloc] initWithSubType:kAudioUnitSubType_Delay unitType:kAudioUnitType_Effect];
+    
+    CAMultiAudioDelay *encNode = [[CAMultiAudioDelay alloc] init];
+    CAMultiAudioMixer *mixerNode = [[CAMultiAudioMixer alloc] init];
+    mixerNode.volume = 0.0f;
+    encNode.delay = 0.0f;
     CSAacEncoder *encoder = [[CSAacEncoder alloc] init];
     encoder.sampleRate = self.sampleRate;
     encoder.bitRate = self.audioBitrate*1000;
     encoder.trackName = outputTrack.uuid;
-    encoder.inputASBD = self.graph.graphAsbd;
+    encoder.inputASBD = self.graph.graphFormat.formatDescription;
     [encoder setupEncoderBuffer];
     encNode.bypass = YES;
+    [self.graph addNode:mixerNode];
     [self.graph addNode:encNode];
-    [self.graph connectNode:self.encodeMixer toNode:encNode];
-    [self.graph connectNode:encNode toNode:self.previewMixer];
-    [self.previewMixer setVolumeOnInputBus:encNode.connectedToBus volume:0.0f];
+    [self.graph addConnection:self.silentNode toNode:mixerNode withFormat:self.graph.graphFormat];
+    [self.graph connectNode:mixerNode toNode:encNode];
+    AVAudioNodeBus previewMixerBus = self.previewMixer.nextInputBus;
+    [self.graph connectNode:encNode toNode:self.previewMixer withFormat:self.graph.graphFormat inBus:previewMixerBus outBus:0];
+    
+    
+
     NSDictionary *connInfo = encNode.inputMap[self.encodeMixer.nodeUID];
     NSNumber *outBus = connInfo[@"outBus"];
-    [self.encodeMixer setVolumeOnOutputBus:outBus.unsignedIntValue volume:1.0f];
-    [self.encodeMixer connectInputBus:self.silentNode.connectedToBus toOutputBus:outBus.unsignedIntValue];
+    AVAudioMixerNode *encoderImpl = (AVAudioMixerNode *)mixerNode.avAudioNode;
+    
+    AVAudioMixingDestination *previewDest = [encoderImpl destinationForMixer:self.previewMixer.avAudioNode bus:previewMixerBus];
+    previewDest.volume = 0.0f;
     outputTrack.encoderNode = encNode;
     outputTrack.encoder = encoder;
-    outputTrack.outputBus = outBus;
+    outputTrack.trackMixer = mixerNode;
 }
 
 -(bool)createOutputTrack:(NSString *)withName
@@ -624,11 +646,16 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         }
         
         CAMultiAudioNode *encNode = trackInfo.encoderNode;
-        [self.encodeMixer disconnectOutput:encNode];
         if (encNode)
         {
             [self.graph removeNode:encNode];
         }
+        
+        if (trackInfo.trackMixer)
+        {
+            [self.graph removeNode:trackInfo.trackMixer];
+        }
+        
         
         [self willChangeValueForKey:@"outputTracks"];
         [self.outputTracks removeObjectForKey:withUUID];
@@ -678,25 +705,27 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     }
     
     
-    self.graphOutputNode = self.outputNode;
+    self.graphOutputNode = [[CAMultiAudioDefaultOutput alloc] initWithAudioNode:self.graph.defaultOutputNode];
     
     
     
     
     self.silentNode = [[CAMultiAudioSilence alloc] init];
-    self.encodeMixer = [[CAMultiAudioDownmixer alloc] initWithInputChannels:2];
+    self.encodeMixer = [[CAMultiAudioMixer alloc] init];
     self.encodeMixer.nodeUID = @"__CS_ENCODE_MIXER_NODE";
     self.encodeMixer.name = @"Stream";
     self.previewMixer = [[CAMultiAudioMixer alloc] init];
     self.previewMixer.nodeUID = @"__CS_PREVIEW_MIXER_NODE";
     self.previewMixer.name = @"Preview";
-    self.renderNode = [[CAMultiAudioEffect alloc] initWithSubType:kAudioUnitSubType_Delay unitType:kAudioUnitType_Effect];
+    self.renderNode = [[CAMultiAudioDelay alloc] init];
     
-    [self.graph addNode:self.outputNode];
+    //[self.graph addNode:self.outputNode];
     
     if ([self.graphOutputNode respondsToSelector:@selector(setOutputForDevice)])
     {
-        [self.graphOutputNode setOutputForDevice];
+        NSLog(@"SETTING OUTPUT DEVICE %@", self.graphOutputNode.avAudioNode);
+        //[self.graphOutputNode setOutputForDevice];
+        NSLog(@"SETTING OUTPUT DEVICE DONE");
     }
     
     
@@ -711,8 +740,13 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     [self.graph connectNode:self.previewMixer toNode:self.graphOutputNode];
     [self.graph connectNode:self.renderNode toNode:self.previewMixer];
     
+    //CAMultiAudioInput *iNode = [[CAMultiAudioInput alloc] initWithAudioNode:self.graph.defaultInputNode];
+    
+     
     [self.graph connectNode:self.encodeMixer toNode:self.renderNode];
-    [self.graph connectNode:self.silentNode toNode:self.encodeMixer];
+   // [self.graph connectNode:iNode toNode:self.encodeMixer withFormat:[iNode.avAudioNode inputFormatForBus:0]];
+
+   [self.graph connectNode:self.silentNode toNode:self.encodeMixer];
     
     /*
     if (!self.encoder)
@@ -728,8 +762,9 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         AudioUnitAddRenderNotify(self.renderNode.audioUnit, encoderRenderCallback, [self.encoder inputBufferPtr]);
     }
      */
-    [self setupDefaultOutputTrack];
+   // [self setupDefaultOutputTrack];
 
+    
     return YES;
 }
 
@@ -779,14 +814,16 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
                 _defaultInput = nil;
             }
         }
-        CAMultiAudioAVCapturePlayer *avplayer = [[CAMultiAudioAVCapturePlayer alloc] initWithDevice:defaultAV withFormat:self.graph.graphAsbd];
         
+        NSLog(@"FORMATS %@", defaultAV.activeFormat.formatDescription);
+        CAMultiAudioAVCapturePlayer *avplayer = [[CAMultiAudioAVCapturePlayer alloc] initWithDevice:defaultAV];
         
+        [self attachInput:avplayer];
+
         avplayer.name = @"System Input";
         avplayer.nodeUID = @"__CS_SYSTEM_INPUT_UUID__";
-        avplayer.enabled = YES;
+        //avplayer.enabled = YES;
 
-        [self attachInput:avplayer];
         _defaultInput = avplayer;
     }
 }
@@ -839,7 +876,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         return nil;
     }
     
-    CAMultiAudioAVCapturePlayer *avplayer = [[CAMultiAudioAVCapturePlayer alloc] initWithDevice:dev withFormat:self.graph.graphAsbd];
+    CAMultiAudioAVCapturePlayer *avplayer = [[CAMultiAudioAVCapturePlayer alloc] initWithDevice:dev];
     if (avplayer)
     {
         [self attachInput:avplayer];
@@ -854,8 +891,10 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     
     //NSArray *sysDevices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio];
+
     
    [self attachDefaultInput];
+    return;
     [self listenForDefaultInputChange];
     NSArray *sysDevices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeAudio];
     for(AVCaptureDevice *dev in sysDevices)
@@ -870,11 +909,12 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         bool isGlobal = [settings[@"isGlobal"] boolValue];
         if (isEnabled || isGlobal)
         {
-            CAMultiAudioAVCapturePlayer *avplayer = [[CAMultiAudioAVCapturePlayer alloc] initWithDevice:dev withFormat:self.graph.graphAsbd];
+            CAMultiAudioAVCapturePlayer *avplayer = [[CAMultiAudioAVCapturePlayer alloc] initWithDevice:dev];
             NSString *realUID = avplayer.nodeUID;
             avplayer.nodeUID = dev.uniqueID;
             [self attachInput:avplayer];
             avplayer.nodeUID = realUID;
+            //avplayer.enabled = YES;
         }
         
     }
@@ -1002,7 +1042,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     for (CAMultiAudioInput *node in self.audioInputs)
     {
-        [node resetFormat:self.graph.graphAsbd];
+        //[node resetFormat:self.graph.graphAsbd];
         [self reattachInput:node];
         
     }
@@ -1124,7 +1164,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
 
     newInput = [[CAMultiAudioPCMPlayer alloc] init];
-    newInput.inputFormat = (AudioStreamBasicDescription *)withFormat;
+    //newInput.inputFormat = (AudioStreamBasicDescription *)withFormat;
     newInput.nodeUID = uniqueID;
     
     [self attachPCMInput:newInput];
@@ -1153,6 +1193,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         return; //what?
     }
     
+    /*
     AudioStreamBasicDescription *devFormat = device.inputFormat;
     
     if (devFormat)
@@ -1164,7 +1205,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         device.converterNode = newConverter;
     }
     [self attachInput:device];
-
+*/
 }
 
 
@@ -1186,10 +1227,15 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     if (input)
     {
         [self.graph addNode:input];
-        [self.graph connectNode:input toNode:self.encodeMixer];
+        AVAudioNodeBus nextBus = [self.encodeMixer nextInputBus];
+        NSLog(@"INPUT FORMAT %@", input.inputFormat);
+        AVAudioFormat *newFmt = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:input.inputFormat.sampleRate channels:input.inputFormat.channelCount];
+        [self.graph connectNode:input toNode:self.encodeMixer withFormat:newFmt inBus:nextBus outBus:0];
+        NSLog(@"CONNECTIONS %@", [input.avAudioNode.engine outputConnectionPointsForNode:input.avAudioNode outputBus:0]);
+
         if (_defaultOutputTrack)
         {
-            [self addInput:input toTrack:_defaultOutputTrack];
+            //[self addInput:input toTrack:_defaultOutputTrack];
         }
     }
     
@@ -1200,7 +1246,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 -(void)attachPCMInput:(CAMultiAudioPCMPlayer *)input
 {
     
-    
+    /*
     CAMultiAudioConverter *newConverter = [[CAMultiAudioConverter alloc] initWithInputFormat:input.inputFormat];
     newConverter.nodeUID = input.nodeUID; //Not so unique, lol
     
@@ -1208,7 +1254,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     input.converterNode = newConverter;
     input.enabled = YES;
     [self attachInput:input];
-    
+    */
 
 }
 
@@ -1275,7 +1321,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
 
     
-    CAMultiAudioGraph *inputGraph = (CAMultiAudioSubgraph *)disconnectNode.graph;
+    CAMultiAudioGraph *inputGraph = disconnectNode.graph;
     
 
     [inputGraph removeNode:disconnectNode];
