@@ -31,12 +31,11 @@ struct cspcm_buffer_msg {
     int _bufcnt;
     bool _exitPending;
     AVAudioConverter *_audioConverter;
-    
+    AVAudioFormat *_audioFormat;
     TPCircularBuffer _completedBuffer;
-    
-    
-    
+    bool _dataSeen;
 }
+
 
 @property (strong) NSString *inputUID;
 @property (assign) Float64 latestScheduledTime;
@@ -45,10 +44,14 @@ struct cspcm_buffer_msg {
 @property (strong) NSMutableArray *pauseBuffer;
 @property (assign) bool save_buffer;
 
+-(instancetype)initWithAudioFormat:(AVAudioFormat *)format;
+
+
 -(void)releasePCM:(CAMultiAudioPCM *)buffer;
 -(void)scheduleBuffer:(CMSampleBufferRef)sampleBuffer;
 -(void)scheduleAudioBuffer:(AudioBufferList *)bufferList bufferFormat:(AudioStreamBasicDescription)bufferFormat;
 -(bool)playPcmBuffer:(CAMultiAudioPCM *)pcmBuffer;
+
 
 
 -(void)play;
