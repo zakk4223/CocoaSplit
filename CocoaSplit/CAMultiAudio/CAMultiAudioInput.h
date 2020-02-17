@@ -36,7 +36,6 @@
 }
 @property (strong) CAMultiAudioMixer *downMixer;
 
-@property (strong) CAMultiAudioConverter *converterNode;
 @property (strong) NSMutableArray *delayNodes;
 @property (strong) NSColor *nameColor;
 @property (strong) CAMultiAudioMatrixMixerWindowController *mixerWindow;

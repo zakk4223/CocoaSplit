@@ -110,8 +110,7 @@
     newNode.graph = self;
     [newNode didAttachNode];
     
-    //[newNode setupEffectsChain];
-    NSLog(@"ALL NODES %@", _avEngine.attachedNodes);
+    [newNode setupEffectsChain];
     return YES;
 }
 
@@ -194,6 +193,7 @@
     
     NSLog(@"CONNECTING %@ TO %@ WITH FORMAT %@", node, toNode, format);
     [_avEngine connect:node.avAudioNode to:toNode.avAudioNode format:format];
+    return YES;
     
 }
 

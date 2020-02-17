@@ -198,7 +198,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
                 {
                     CAMultiAudioAVCapturePlayer *avplayer = [[CAMultiAudioAVCapturePlayer alloc] initWithDevice:dev];
                     avplayer.nodeUID = nodeUID;
-                    //[self attachInput:avplayer];
+                     [self attachInput:avplayer];
                 }
             }
         }
@@ -385,15 +385,14 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 -(void)updateStatistics
 {
     
-    return;
     CAMultiAudioEngine *__weak blockSelf = self;
-    
+    return;
     //dispatch_async(dispatch_get_main_queue(), ^{
     
     @synchronized(self) {
         for(CAMultiAudioInput *node in blockSelf.audioInputs)
         {
-            [node updatePowerlevel];
+            //[node updatePowerlevel];
         }
         // });
     }
@@ -504,9 +503,9 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
     CAMultiAudioMixer *trackMixer = outputTrack.trackMixer;
     AVAudioNodeBus nextMixerBus = trackMixer.nextInputBus;
-    AVAudioFormat *newFmt = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:input.inputFormat.sampleRate channels:input.inputFormat.channelCount];
+    AVAudioFormat *newFmt = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:input.inputFormat.sampleRate channels:self.graph.graphFormat.channelCount];
 
-    [self.graph addConnection:input.effectsHead toNode:trackMixer toBus:nextMixerBus withFormat:newFmt];
+    [self.graph addConnection:input.headNode toNode:trackMixer toBus:nextMixerBus withFormat:newFmt];
     [input.outputTracks setObject:@{@"inputBus": @(nextMixerBus), @"outputTrack": outputTrack} forKey:outputTrack.uuid];
     return YES;
 }
@@ -1218,7 +1217,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     newConverter.nodeUID = input.nodeUID; //Not so unique, lol
     
     newConverter.sourceNode = input;
-    input.converterNode = newConverter;
+    //input.converterNode = newConverter;
     [self attachInput:input];
     
 }

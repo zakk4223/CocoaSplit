@@ -15,22 +15,38 @@
 @synthesize delay = _delay;
 
 
--(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType
+-(instancetype)initWithAudioNode:(AVAudioNode *)audioNode
 {
-    if (self = [super initWithSubType:subType unitType:unitType])
+    if (self = [super initWithAudioNode:audioNode])
     {
-        self.isGlobal = NO;
-        _delayNodes = [NSMutableArray array];
-        self.powerLevels = [NSMutableDictionary dictionary];
-        [self.powerLevels setObject:[NSMutableArray array] forKey:@"input"];
-        [self.powerLevels setObject:[NSMutableArray array] forKey:@"output"];
-        self.outputTracks = [NSMutableDictionary dictionary];
+
+        [self commonInit];
     }
     
     return self;
 }
 
 
+-(instancetype)init
+{
+    if (self = [super init])
+    {
+        [self commonInit];
+
+    }
+    return self;
+}
+
+
+-(void)commonInit
+{
+    self.isGlobal = NO;
+    _delayNodes = [NSMutableArray array];
+    self.powerLevels = [NSMutableDictionary dictionary];
+    [self.powerLevels setObject:[NSMutableArray array] forKey:@"input"];
+    [self.powerLevels setObject:[NSMutableArray array] forKey:@"output"];
+    self.outputTracks = [NSMutableDictionary dictionary];
+}
 /*
 -(void)updatePowerlevel
 {
@@ -94,7 +110,8 @@
         [self.powerLevels[@"output"] replaceObjectAtIndex:i withObject:@(outPower)];
     }
 }
-*/
+
+ */
 -(void)addToOutputTrack:(CAMultiAudioOutputTrack *)outputTrack
 {
     [self willChangeValueForKey:@"outputTracks"];
@@ -121,11 +138,7 @@
     }
     
     
-    if (self.converterNode)
-    {
-        [self.graph removeNode:self.converterNode];
-    }
-    
+
     if (self.downMixer)
     {
         [self.graph removeNode:self.downMixer];
@@ -139,9 +152,8 @@
     }
     
 
-    self.converterNode = nil;
     self.downMixer = nil;
-    self.headNode = nil;
+    self.headNode = self;
     return YES;
 }
 
@@ -149,52 +161,19 @@
 -(bool)setupGraph
 {
     
-
-    if (self.converterNode)
-    {
-        if (![self.graph addNode:self.converterNode])
-        {
-            [self teardownGraph];
-            return NO;
-        }
-        
-
-    }
-    
-
-    self.downMixer = [[CAMultiAudioDownmixer alloc] initWithInputChannels:self.channelCount];
-    
-    if (![self.graph addNode:self.downMixer])
+    //self.downMixer = [[CAMultiAudioMixer alloc] init];
+    AVAudioFormat *useFormat = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:self.inputFormat.sampleRate channels:self.inputFormat.channelCount];
+    /*if (![self.graph addNode:self.downMixer])
     {
         
         [self teardownGraph];
         return NO;
-    }
+    }*/
 
-    CAMultiAudioNode *connectTo = self.converterNode;
-    if (!connectTo)
-    {
-        connectTo = self.downMixer;
-    }
-    
-    
 
-    if(![self.graph connectNode:self toNode:connectTo])
-    {
-        [self teardownGraph];
-        return NO;
-    }
-    if (self.converterNode)
-    {
-        if(![self.graph connectNode:self.converterNode toNode:self.downMixer])
-        {
-            [self teardownGraph];
-            return NO;
-        }
-    }
-    
+
     CAMultiAudioDelay *delayNode;
-    CAMultiAudioNode *connectNode = self.downMixer;
+    CAMultiAudioNode *connectNode = self;
     
     for(int i=0; i < 5; i++)
     {
@@ -207,7 +186,7 @@
             [self teardownGraph];
             return NO;
         }
-        ret = [self.graph connectNode:connectNode toNode:delayNode];
+        ret = [self.graph connectNode:connectNode toNode:delayNode withFormat:useFormat];
         if (!ret)
         {
             
@@ -223,17 +202,29 @@
     
     
 
-    self.effectsHead = delayNode;
-    
+    self.headNode = delayNode;
+    NSLog(@"HEAD NODE %@", self.headNode);
     return YES;
     
 }
 
+-(void)setupDownmixer
+{
+    AVAudioFormat *useFormat = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:self.inputFormat.sampleRate channels:self.inputFormat.channelCount];
+
+    self.downMixer = [[CAMultiAudioMixer alloc] init];
+    [self.graph addNode:self.downMixer];
+    [self.graph connectNode:self.headNode toNode:self.downMixer withFormat:useFormat];
+    self.headNode = self.downMixer;
+    self.downMixer.volume = 1.0f;
+}
 
 -(void)setupEffectsChain
 {
-   // [self setupGraph];
+    [self setupGraph];
    // [super setupEffectsChain];
+    [self setupDownmixer];
+    
 }
 
 -(void)removeEffectsChain

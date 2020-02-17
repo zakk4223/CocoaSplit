@@ -545,7 +545,7 @@
 
 -(void)setupEffectsChain
 {
-    [self rebuildEffectChain];
+   // [self rebuildEffectChain];
     //Do restore here
 }
 
