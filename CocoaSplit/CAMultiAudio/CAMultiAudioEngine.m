@@ -202,7 +202,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
                 }
             }
         }
-        [self.graph startGraph];
         for (NSString *trackUUID in self.outputTracks)
         {
             CAMultiAudioOutputTrack *outTrack = self.outputTracks[trackUUID];
@@ -211,6 +210,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
                 [self attachOutputTrack:outTrack];
             }
         }
+
+        [self.graph startGraph];
 
     }
     
@@ -505,7 +506,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     AVAudioNodeBus nextMixerBus = trackMixer.nextInputBus;
     AVAudioFormat *newFmt = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:input.inputFormat.sampleRate channels:self.graph.graphFormat.channelCount];
 
-    [self.graph addConnection:input.headNode toNode:trackMixer toBus:nextMixerBus withFormat:newFmt];
+    [self.graph addConnection:input.headNode toNode:trackMixer toBus:nextMixerBus withFormat:self.graph.graphFormat];
     [input.outputTracks setObject:@{@"inputBus": @(nextMixerBus), @"outputTrack": outputTrack} forKey:outputTrack.uuid];
     return YES;
 }
@@ -708,7 +709,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     
     self.graphOutputNode = [[CAMultiAudioDefaultOutput alloc] initWithAudioNode:self.graph.defaultOutputNode];
-    
     
     
     
@@ -1310,6 +1310,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
             [self addAudioInputsObject:input];
         });
     }
+    
+    [input didAttachInput];
     [CaptureController.sharedCaptureController postNotification:CSNotificationAudioAdded forObject:self];
     return YES;
     

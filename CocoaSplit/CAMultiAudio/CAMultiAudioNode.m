@@ -70,6 +70,7 @@
         self.volume = 1.0f;
         self.headNode = self;
         self.effectsHead = self;
+        _currentEffectChain = [NSMutableArray array];
     }
     return self;
 }
@@ -440,62 +441,92 @@
     return;
 }
 
+-(void)engineDidStart
+{
+    return;
+}
+
+
 -(void)rebuildEffectChain
 {
-    //Disconnect every node from effectsHead -> headNode (including headNode) and then reconnect everything in effectchain array
+
+    bool restoreHeadNode = NO;
+
+    NSArray *outConnections = nil;
+    CAMultiAudioNode *lastEffect = _currentEffectChain.lastObject;
+    AVAudioFormat *useFormat = [self.effectsHead.avAudioNode outputFormatForBus:0];
+
+    if (lastEffect)
+    {
+        outConnections = [self.avAudioNode.engine outputConnectionPointsForNode:lastEffect.avAudioNode outputBus:0];
+        if (lastEffect == self.headNode)
+        {
+            restoreHeadNode = YES;
+        }
+    } else {
+        outConnections = [self.avAudioNode.engine outputConnectionPointsForNode:self.effectsHead.avAudioNode outputBus:0];
+    }
+    
+    
+    [self.effectsHead.graph disconnectNodeOutput:self.effectsHead];
+    
+    for (CAMultiAudioNode *currNode in _currentEffectChain)
+    {
+        if (currNode.avAudioNode && currNode.avAudioNode.engine)
+        {
+            [currNode.graph disconnectNode:currNode];
+            [currNode.graph removeNode:currNode];
+        }
+    }
+    
+    
+    [_currentEffectChain removeAllObjects];
+    
+    
     CAMultiAudioNode *currNode = self.effectsHead;
 
-    CAMultiAudioNode *headConn;
-    while (currNode && currNode != self.headNode)
-    {
-        CAMultiAudioNode *connNode = currNode.connectedTo;
-        [self.graph disconnectNode:currNode];
-        if (currNode.deleteNode)
-        {
-            [self.graph removeNode:currNode];
-        }
-        currNode = connNode;
-    }
-    
-    if (currNode) //This is headNode
-    {
-        headConn = currNode.connectedTo;
-        [self.graph disconnectNode:currNode];
-        if (currNode.deleteNode)
-        {
-            [self.graph removeNode:currNode];
-        }
-        
-        self.headNode = self.effectsHead;
-    }
-    
-    currNode = nil;
+
     currNode = self.effectsHead;
     for (CAMultiAudioNode *eNode in self.effectChain)
     {
         [self.graph addNode:eNode];
-        [self.graph connectNode:currNode toNode:eNode];
+        [self.graph connectNode:currNode toNode:eNode withFormat:useFormat];
+        [_currentEffectChain addObject:eNode];
         currNode = eNode;
     }
     
-    if (headConn && currNode)
+    if (outConnections && outConnections.count > 0)
     {
-        [self.graph connectNode:currNode toNode:headConn];
+        AVAudioUnitSampler *dummyNode = [[AVAudioUnitSampler alloc] init];
+        [self.avAudioNode.engine attachNode:dummyNode];
+
+        NSMutableArray *newConns = [NSMutableArray array];
+        for(AVAudioConnectionPoint *avpt in outConnections)
+        {
+            
+            AVAudioConnectionPoint *newPoint = [[AVAudioConnectionPoint alloc] initWithNode:avpt.node bus:avpt.bus];
+            [newConns addObject:newPoint];
+            //Hacks?
+            AVAudioNode *destNode = avpt.node;
+            AVAudioNodeBus destBus = avpt.bus;
+
+            NSLog(@"CONNECTION %@ ON BUS %d WITH FORMAT %@", avpt.node, avpt.bus, useFormat);
+        }
+        
+        //[dummyNode.engine disconnectNodeOutput:dummyNode];
+        if (newConns.count > 0)
+        {
+            [currNode.avAudioNode.engine connect:currNode.avAudioNode toConnectionPoints:newConns fromBus:0 format:useFormat];
+        }
+
     }
     
-    
-    if (currNode)
+    if (restoreHeadNode)
     {
         self.headNode = currNode;
-    } else {
-        self.headNode = self.effectsHead;
     }
     
 
-    
-    //CAShow(self.graph.graphInst);
-
-    
 }
 
 -(void)addEffect:(CAMultiAudioNode *)effect;
@@ -545,7 +576,7 @@
 
 -(void)setupEffectsChain
 {
-   // [self rebuildEffectChain];
+   [self rebuildEffectChain];
     //Do restore here
 }
 

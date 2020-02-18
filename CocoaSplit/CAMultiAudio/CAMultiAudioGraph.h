@@ -23,6 +23,7 @@
 
 //We need to hold references to all the nodes so this isn't a pain to use for clients
 
+@property (strong) NSMutableArray *attachedNodes;
 @property (assign) AUGraph graphInst;
 @property (readonly) NSSet *nodeSet;
 @property (assign) double sampleRate;
@@ -41,7 +42,7 @@
 -(bool)addConnection:(CAMultiAudioNode *)fromNode toNode:(CAMultiAudioNode *)toNode toBus:(AVAudioNodeBus)toBus withFormat:(AVAudioFormat *)format;
 -(bool)disconnectNode:(CAMultiAudioNode *)node inputBus:(AVAudioNodeBus)inputBus;
 -(bool)disconnectNode:(CAMultiAudioNode *)node;
-
+-(bool)disconnectNodeOutput:(CAMultiAudioNode *)node;
 
 -(bool)startGraph;
 -(bool)stopGraph;

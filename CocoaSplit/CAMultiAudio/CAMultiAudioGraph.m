@@ -25,7 +25,7 @@
         
         _sampleRate = samplerate;
         
-        
+        _attachedNodes = [NSMutableArray array];
         //set to canonical, 2 channel
         self.graphFormat = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:_sampleRate channels:2];
         //Always force an input singleton
@@ -64,7 +64,10 @@
         NSLog(@"AUGraphStart failed, err %@", startError);
         return NO;
     }
-    
+    for(CAMultiAudioNode *node in self.attachedNodes)
+    {
+        [node engineDidStart];
+    }
     return YES;
 }
 
@@ -109,7 +112,7 @@
 
     newNode.graph = self;
     [newNode didAttachNode];
-    
+    [self.attachedNodes addObject:newNode];
     [newNode setupEffectsChain];
     return YES;
 }
@@ -127,6 +130,7 @@
     
 
     [_avEngine detachNode:node.avAudioNode];
+    [self.attachedNodes removeObject:node];
     [node removeEffectsChain];
     node.graph = nil;
     return YES;
@@ -220,6 +224,24 @@
     return YES;
     
 }
+
+-(bool)disconnectNodeOutput:(CAMultiAudioNode *)node
+{
+    if (!_avEngine)
+    {
+        return NO;
+    }
+    
+    if (!node || !node.avAudioNode)
+    {
+        return NO;
+    }
+    
+    [_avEngine disconnectNodeOutput:node.avAudioNode];
+    
+    return YES;
+}
+
 
 -(bool)disconnectNode:(CAMultiAudioNode *)node inputBus:(AVAudioNodeBus)inputBus
 {

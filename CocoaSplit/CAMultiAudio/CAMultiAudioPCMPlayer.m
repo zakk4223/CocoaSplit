@@ -60,6 +60,18 @@
 }
 
 
+-(bool)isPlaying
+{
+    AVAudioPlayerNode *pNode = (AVAudioPlayerNode *)self.avAudioNode;
+    if (!pNode)
+    {
+        return NO;
+    }
+    
+    return pNode.playing;
+}
+
+
 -(AVAudioFormat *)inputFormat
 {
     return _audioFormat;
@@ -70,6 +82,8 @@
 {
     return _pendingBuffers.count;
 }
+
+
 
 
 -(void)setEnabled:(bool)enabled
@@ -84,6 +98,20 @@
 }
 
 
+-(void)rebuildEffectChain
+{
+
+    bool isPlaying = self.isPlaying;
+    if (isPlaying)
+    {
+        [self pause];
+    }
+    [super rebuildEffectChain];
+    if (isPlaying)
+    {
+        [self play];
+    }
+}
 -(void)startPendingProcessor
 {
     if (!_pendingQueue)
@@ -161,10 +189,9 @@
         return NO;
     }
     
-
-    if (!pNode.playing)
+    if (!self.isPlaying)
     {
-        [self play];
+        return NO;
     }
     
     
@@ -249,11 +276,22 @@
 
 -(void)pause
 {
-    
-    self.save_buffer = YES;
-    [self flush];
+     if (self.avAudioNode)
+    {
+        AVAudioPlayerNode *pNode = (AVAudioPlayerNode *)self.avAudioNode;
+        [pNode pause];
+    }
 }
 
+
+-(void)stop
+{
+     if (self.avAudioNode)
+    {
+        AVAudioPlayerNode *pNode = (AVAudioPlayerNode *)self.avAudioNode;
+        [pNode stop];
+    }
+}
 
 -(void)flush
 {
@@ -269,12 +307,53 @@
     
     if (self.avAudioNode)
     {
-        AVAudioPlayerNode *pNode = self.avAudioNode;
+        AVAudioPlayerNode *pNode = (AVAudioPlayerNode *)self.avAudioNode;
         [pNode play];
     }
 }
 
 
+-(void)engineDidStart
+{
+    
+    [super engineDidStart];
+    bool ppending;
+    
+    @synchronized (self) {
+        ppending = _playPending;
+    }
+    
+    if (ppending)
+    {
+        [self play];
+    }
+    
+    @synchronized (self) {
+        ppending = NO;
+    }
+}
+
+
+-(void)didAttachInput
+{
+    [super didAttachInput];
+    
+    AVAudioPlayerNode *pNode = (AVAudioPlayerNode *)self.avAudioNode;
+    if (!pNode.engine || !pNode.engine.running)
+    {
+        
+        @synchronized (self) {
+            _playPending = YES;
+        }
+        return;
+    }
+
+    
+    if (!self.isPlaying)
+    {
+        [self play];
+    }
+}
 -(void)dealloc
 {
     

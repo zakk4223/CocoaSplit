@@ -18,5 +18,7 @@
 
 @property (readonly) AVAudioNodeBus nextInputBus;
 
+@property (assign) int inputChannelCount;
+@property (assign) int outputChannelCount;
 
 @end

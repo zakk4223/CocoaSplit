@@ -35,7 +35,7 @@
 {
 }
 @property (strong) CAMultiAudioMixer *downMixer;
-
+@property (strong) CAMultiAudioDelay *stupidNode;
 @property (strong) NSMutableArray *delayNodes;
 @property (strong) NSColor *nameColor;
 @property (strong) CAMultiAudioMatrixMixerWindowController *mixerWindow;
@@ -59,5 +59,6 @@
 -(void)removeFromEngine;
 -(void)addToOutputTrack:(CAMultiAudioOutputTrack *)trackName;
 -(void)removeFromOutputTrack:(CAMultiAudioOutputTrack *)trackName;
+-(void)didAttachInput;
 
 @end

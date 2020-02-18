@@ -131,6 +131,7 @@
 
 -(bool)teardownGraph
 {
+    return YES;
     if (!self.graph)
     {
         //!?!?!
@@ -203,18 +204,28 @@
     
 
     self.headNode = delayNode;
-    NSLog(@"HEAD NODE %@", self.headNode);
+    self.effectsHead = delayNode;
     return YES;
     
 }
+
+-(void)didAttachInput
+{
+    return;
+}
+
 
 -(void)setupDownmixer
 {
     AVAudioFormat *useFormat = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:self.inputFormat.sampleRate channels:self.inputFormat.channelCount];
 
     self.downMixer = [[CAMultiAudioMixer alloc] init];
+    self.stupidNode = [[CAMultiAudioDelay alloc] init];
+    self.stupidNode.delay = 0.0f;
     [self.graph addNode:self.downMixer];
-    [self.graph connectNode:self.headNode toNode:self.downMixer withFormat:useFormat];
+    [self.graph addNode:self.stupidNode];
+    [self.graph connectNode:self.effectsHead toNode:self.stupidNode withFormat:useFormat];
+    [self.graph connectNode:self.stupidNode toNode:self.downMixer withFormat:useFormat];
     self.headNode = self.downMixer;
     self.downMixer.volume = 1.0f;
 }
@@ -222,7 +233,7 @@
 -(void)setupEffectsChain
 {
     [self setupGraph];
-   // [super setupEffectsChain];
+    [super setupEffectsChain];
     [self setupDownmixer];
     
 }

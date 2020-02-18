@@ -22,6 +22,7 @@
     effectDescr.componentSubType = subType;
     effectDescr.componentType = unitType;
     
+    
     AVAudioUnitEffect *effectNode = [[AVAudioUnitEffect alloc] initWithAudioComponentDescription:effectDescr];
 
     if (self = [self initWithAudioNode:effectNode])
@@ -151,7 +152,9 @@
 
 -(id)copyWithZone:(NSZone *)zone
 {
-    CAMultiAudioEffect *newNode = [[CAMultiAudioEffect alloc] initWithSubType:unitDescr.componentSubType unitType:unitDescr.componentType manufacturer:unitDescr.componentManufacturer];
+    AVAudioUnitEffect *effectNode = (AVAudioUnitEffect *)self.avAudioNode;
+    
+    CAMultiAudioEffect *newNode = [[CAMultiAudioEffect alloc] initWithSubType:effectNode.AUAudioUnit.componentDescription.componentSubType unitType:effectNode.AUAudioUnit.componentDescription.componentType manufacturer:effectNode.AUAudioUnit.componentDescription.componentManufacturer];
     newNode.name = self.name;
     return newNode;
 }

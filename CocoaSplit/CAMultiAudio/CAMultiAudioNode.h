@@ -78,6 +78,7 @@
         
     AudioComponentDescription unitDescr;
     CAMultiAudioVolumeAnimation *_volumeAnimation;
+    NSMutableArray *_currentEffectChain;
 }
 
 
@@ -120,12 +121,13 @@
 -(void)willRemoveNode;
 -(void)setupEffectsChain;
 -(void)removeEffectsChain;
+-(void)rebuildEffectChain;
 -(void)didAttachNode;
 -(void)addEffect:(CAMultiAudioNode *)effect;
 -(void)addEffect:(CAMultiAudioNode *)effect atIndex:(NSUInteger)idx;
 -(bool)busForOutput:(CAMultiAudioNode *)inputNode busOut:(UInt32 *)busOut;
 -(bool)busForInput:(CAMultiAudioNode *)inputNode busOut:(UInt32 *)busOut;
 -(void) remakeNode;
-
+-(void)engineDidStart;
 
 @end

@@ -34,6 +34,7 @@ struct cspcm_buffer_msg {
     AVAudioFormat *_audioFormat;
     TPCircularBuffer _completedBuffer;
     bool _dataSeen;
+    bool _playPending;
 }
 
 
@@ -43,6 +44,7 @@ struct cspcm_buffer_msg {
 @property (nonatomic, copy) void (^completedBlock)(CAMultiAudioPCM *pcmBuffer);
 @property (strong) NSMutableArray *pauseBuffer;
 @property (assign) bool save_buffer;
+@property (readonly) bool isPlaying;
 
 -(instancetype)initWithAudioFormat:(AVAudioFormat *)format;
 
