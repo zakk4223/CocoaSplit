@@ -17,13 +17,11 @@
 @property (assign) bool hasOutput;
 
 
-
 -(instancetype)initWithDeviceUID:(NSString *)uid;
 -(instancetype)initWithDeviceID:(AudioDeviceID)devid;
 
 -(void)setInputForDevice;
 -(void)setOutputForDevice;
--(AudioStreamBasicDescription *)getOutputFormat;
 
 +(NSMutableArray *)allDevices;
 +(AudioDeviceID)defaultOutputDeviceID;

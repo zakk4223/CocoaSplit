@@ -19,7 +19,7 @@
 }
 
 @property (strong) NSString *filePath;
-@property (assign) AudioStreamBasicDescription *outputFormat;
+@property (strong) AVAudioFormat *outputFormat;
 @property (assign) Float64 duration;
 @property (assign) Float64 currentTime;
 @property (assign) bool playing;

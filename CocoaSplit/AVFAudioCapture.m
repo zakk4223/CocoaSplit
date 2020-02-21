@@ -239,13 +239,13 @@
             
             
             _audio_capture_output.audioSettings = @{
-                                                    AVFormatIDKey: [NSNumber numberWithInt:kAudioFormatLinearPCM],
-                                                    AVLinearPCMBitDepthKey: @32,
-                                                    AVLinearPCMIsFloatKey: @YES,
-                                                    AVLinearPCMIsNonInterleaved: @YES,
-                                                    //AVNumberOfChannelsKey: @2,
-                                                    AVSampleRateKey: @(self.audioSamplerate),
-                                                    };
+            AVFormatIDKey: [NSNumber numberWithInt:kAudioFormatLinearPCM],
+            AVLinearPCMBitDepthKey: @32,
+            AVLinearPCMIsFloatKey: @YES,
+            AVLinearPCMIsNonInterleaved: @YES,
+            //AVNumberOfChannelsKey: @2,
+            //AVSampleRateKey: @(self.audioSamplerate),
+            };;
             
 
         } else {

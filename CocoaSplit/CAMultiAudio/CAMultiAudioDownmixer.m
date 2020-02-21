@@ -27,6 +27,7 @@
     {
         _inputChannels = channels;
         self.inputChannelCount = channels;
+        self.outputChannelCount = 2;
     }
     return self;
 }
@@ -235,8 +236,6 @@
         elementCount += 64;
         NSDictionary *saveData = [self saveDataForPrivateRestore];
         AudioUnitUninitialize(self.audioUnit);
-        [self setInputStreamFormat:self.graph.graphAsbd];
-        [self setOutputStreamFormat:self.graph.graphAsbd];
         [self willInitializeNode];
         AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Input, 0, &elementCount, sizeof(elementCount));
         AudioUnitInitialize(self.audioUnit);
@@ -293,8 +292,6 @@
         elementCount += 64;
         NSDictionary *saveData = [self saveDataForPrivateRestore];
         AudioUnitUninitialize(self.audioUnit);
-        [self setInputStreamFormat:self.graph.graphAsbd];
-        [self setOutputStreamFormat:self.graph.graphAsbd];
         [self willInitializeNode];
         AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Output, 0, &elementCount, sizeof(elementCount));
         AudioUnitInitialize(self.audioUnit);
@@ -347,31 +344,9 @@
 }
 
 
--(bool)setOutputStreamFormat:(AudioStreamBasicDescription *)format
-{
-    bool ret =     [super setOutputStreamFormat:format];
-
-    self.outputChannelCount = format->mChannelsPerFrame;
-
-    return ret;
-}
 
 
--(bool)setInputStreamFormat:(AudioStreamBasicDescription *)format
-{
-    
-    
-    AudioStreamBasicDescription fCopy;
-    
-    
-    memcpy(&fCopy, format, sizeof(fCopy));
-    
-    
-    fCopy.mChannelsPerFrame = _inputChannels;
-    
-    
-    return [super setInputStreamFormat:&fCopy];
-}
+
 
 -(void)setEnabled:(bool)enabled
 {
@@ -419,14 +394,14 @@
     
     
     //Set output volume for all channels
-    for (UInt32 chan = 0; chan < self.graph.graphAsbd->mChannelsPerFrame; chan++) {
+    for (UInt32 chan = 0; chan < self.graph.audioFormat.channelCount; chan++) {
         err = AudioUnitSetParameter(self.audioUnit, kMatrixMixerParam_Volume, kAudioUnitScope_Output, chan, 1.0, 0);
         if (err)
         {
             NSLog(@"Failed to set output volume for channel %d on %@ with status %d", chan, self, err);
         }
         
-        if (_inputChannels < self.graph.graphAsbd->mChannelsPerFrame)
+        if (_inputChannels < self.graph.audioFormat.channelCount)
         {
             UInt32 inChan = chan % _inputChannels;
             [self setVolume:1.0f forChannel:inChan outChannel:chan];
@@ -442,9 +417,9 @@
         }
         
         //also set crosspoint volumes.
-        if (_inputChannels >= self.graph.graphAsbd->mChannelsPerFrame)
+        if (_inputChannels >= self.graph.audioFormat.channelCount)
         {
-            UInt32 outChan = chan % self.graph.graphAsbd->mChannelsPerFrame;
+            UInt32 outChan = chan % self.graph.audioFormat.channelCount;
         
             [self setVolume:1.0 forChannel:chan outChannel:outChan];
         }
@@ -502,16 +477,18 @@
 
 -(void)disconnectOutput:(CAMultiAudioNode *)outNode
 {
-    NSDictionary *outInfo = self.outputMap[outNode.nodeUID];
-    if (outInfo)
+    
+    CAMultiAudioConnection *conn = [self.graph inputConnection:outNode forBus:0];
+    
+    
+    if (conn && (conn.node == self))
     {
-        NSNumber *outBus = outInfo[@"outBus"];
-        for(NSString *inpUUID in self.inputMap)
+        UInt32 outBus = conn.bus;
+        NSArray *allInputBusses = [self.graph connectedInputBusses:self];
+        for (NSNumber *inpBus in allInputBusses)
         {
-            NSDictionary *inpInfo = self.inputMap[inpUUID];
-            NSNumber *inpBus = inpInfo[@"inBus"];
-            [self disconnectInputBus:inpBus.unsignedIntValue fromOutputBus:outBus.unsignedIntValue];
-            [self disableOutputBus:outBus.unsignedIntValue];
+            [self disconnectInputBus:inpBus.unsignedIntValue fromOutputBus:outBus];
+            [self disableOutputBus:outBus];
         }
     }
 }

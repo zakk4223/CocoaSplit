@@ -26,12 +26,17 @@
         [self.powerLevels setObject:[NSMutableArray array] forKey:@"input"];
         [self.powerLevels setObject:[NSMutableArray array] forKey:@"output"];
         self.outputTracks = [NSMutableDictionary dictionary];
+        
     }
     
     return self;
 }
 
 
+-(AVAudioFormat *)inputFormat
+{
+    return self.graph.audioFormat;
+}
 
 -(void)updatePowerlevel
 {
@@ -150,27 +155,28 @@
 {
     
 
-    if (self.converterNode)
+    if (!self.converterNode)
     {
-        if (![self.graph addNode:self.converterNode])
-        {
-            [self teardownGraph];
-            return NO;
-        }
-        
-
+        self.converterNode = [[CAMultiAudioConverter alloc] init];
+    }
+    
+    if (![self.graph addNode:self.converterNode])
+    {
+        [self teardownGraph];
+        return NO;
     }
     
 
     self.downMixer = [[CAMultiAudioDownmixer alloc] initWithInputChannels:self.channelCount];
-    
+
     if (![self.graph addNode:self.downMixer])
     {
         
         [self teardownGraph];
         return NO;
     }
-
+    self.downMixer.muted = NO;
+    self.downMixer.volume = 1.0f;
     CAMultiAudioNode *connectTo = self.converterNode;
     if (!connectTo)
     {
@@ -179,25 +185,27 @@
     
     
 
-    if(![self.graph connectNode:self toNode:connectTo])
+    
+    if(![self.graph connectNode:self toNode:connectTo format:self.inputFormat])
     {
         [self teardownGraph];
         return NO;
     }
     if (self.converterNode)
     {
+        
+        
         if(![self.graph connectNode:self.converterNode toNode:self.downMixer])
         {
             [self teardownGraph];
             return NO;
         }
     }
-    
     CAMultiAudioDelay *delayNode;
     CAMultiAudioNode *connectNode = self.downMixer;
-    
     for(int i=0; i < 5; i++)
     {
+
         bool ret;
         
         delayNode = [[CAMultiAudioDelay alloc] init];
@@ -216,24 +224,37 @@
             return NO;
         }
         
+
         connectNode = delayNode;
         delayNode.bypass = YES;
         [self.delayNodes addObject:delayNode];
     }
     
-    
 
-    self.effectsHead = delayNode;
-    
+    self.effectsHead = connectNode;
+    [self.downMixer connectInputBus:0 toOutputBus:0];
+
+
     return YES;
     
 }
 
 
+-(void)rebuildEffectChain
+{
+    [super rebuildEffectChain];
+    [self.graph connectNode:self.effectsHead toNode:self.downMixer];
+    self.headNode = self.downMixer;
+}
+
 -(void)setupEffectsChain
 {
     [self setupGraph];
-    [super setupEffectsChain];
+    //self.effectsHead = self;
+   // [super setupEffectsChain];
+    self.headNode = self.effectsHead;
+    //[self.converterNode generateTone];
+    
 }
 
 -(void)removeEffectsChain

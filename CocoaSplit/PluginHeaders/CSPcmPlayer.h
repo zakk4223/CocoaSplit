@@ -25,7 +25,7 @@
 -(void)play;
 -(void)pause;
 -(void)flush;
--(void)setAudioFormat:(AudioStreamBasicDescription *)asbd;
+-(void)setAudioFormat:(AVAudioFormat *)asbd;
 
 
 

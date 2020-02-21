@@ -57,7 +57,7 @@
 @property (strong) CAMultiAudioEffect *renderNode;
 @property (strong) NSString *defaultTrackUUID;
 
--(CAMultiAudioPCMPlayer *)createPCMInput:(NSString *)uniqueID withFormat:(const AudioStreamBasicDescription *)withFormat;
+-(CAMultiAudioPCMPlayer *)createPCMInput:(NSString *)uniqueID withFormat:(AVAudioFormat *)withFormat;
 -(CAMultiAudioFile *)createFileInput:(NSString *)filePath;
 -(void)addFileInput:(CAMultiAudioFile *)fileInput;
 

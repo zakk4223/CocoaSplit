@@ -165,7 +165,7 @@
 }
 
 
--(CSPcmPlayer *)createPCMInput:(NSString *)forUID withFormat:(const AudioStreamBasicDescription *)withFormat
+-(CSPcmPlayer *)createPCMInput:(NSString *)forUID withFormat:(AVAudioFormat *)withFormat
 {
     AppDelegate *myAppDelegate = [[NSApplication sharedApplication] delegate];
     

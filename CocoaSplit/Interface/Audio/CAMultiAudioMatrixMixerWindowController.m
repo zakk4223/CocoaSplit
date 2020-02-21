@@ -158,6 +158,7 @@
     slider.tag = ((row+1)*100) + columnIndex-1;
     
     Float32 volume = [self.downMixer getVolumeforChannel:(UInt32)row outChannel:(UInt32)columnIndex-1];
+    NSLog(@"VOLUME %f", volume);
     slider.doubleValue = volume;
     
     
@@ -185,6 +186,7 @@
     
     [self.matrixTable registerNib:cellNib forIdentifier:@"MatrixMixerCell"];
     
+    NSLog(@"OUTPUT CHANNELS %d", self.downMixer.outputChannelCount);
     if (self.matrixTable.numberOfColumns < self.downMixer.outputChannelCount)
     {
         for (int i = 0; i < self.downMixer.outputChannelCount; i++)

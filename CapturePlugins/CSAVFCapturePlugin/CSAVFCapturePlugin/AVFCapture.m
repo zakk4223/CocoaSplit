@@ -413,8 +413,8 @@
         if (self.isLive && !_pcmPlayer)
         {
             CMFormatDescriptionRef sDescr = CMSampleBufferGetFormatDescription(sampleBuffer);
-            const AudioStreamBasicDescription *asbd =  CMAudioFormatDescriptionGetStreamBasicDescription(sDescr);
-            _pcmPlayer = [[CSPluginServices sharedPluginServices] createPCMInput:self.activeVideoDevice.uniqueID withFormat:asbd];
+            AVAudioFormat *avFmt = [[AVAudioFormat alloc] initWithCMAudioFormatDescription:sDescr];
+            _pcmPlayer = [[CSPluginServices sharedPluginServices] createPCMInput:self.activeVideoDevice.uniqueID withFormat:avFmt];
             _pcmPlayer.name = _selectedVideoCaptureDevice.localizedName;
         }
         

@@ -15,6 +15,14 @@
 #include "CaptureController.h"
 
 
+OSStatus RenderTone(
+void *inRefCon,
+AudioUnitRenderActionFlags *ioActionFlags,
+const AudioTimeStamp *inTimeStamp,
+UInt32 inBusNumber,
+UInt32 inNumberFrames,
+                    AudioBufferList *ioData);
+
 @implementation CAMultiAudioVolumeAnimation
 
 @end
@@ -52,10 +60,9 @@
         self.channelCount = 2;
         _volume = 1.0;
         self.effectChain = [NSMutableArray array];
-        self.inputMap = [NSMutableDictionary dictionary];
-        self.outputMap = [NSMutableDictionary dictionary];
         self.nodeUID = [[NSUUID UUID] UUIDString];
-        
+        self.inputConnections = [NSMutableDictionary dictionary];
+        self.outputConnections = [NSMutableDictionary dictionary];
     }
     
     return self;
@@ -118,7 +125,7 @@
         
     }
 
-    [self rebuildEffectChain];
+    //[self rebuildEffectChain];
 
 }
 
@@ -197,6 +204,8 @@
     return 0;
 }
 
+
+
 -(bool)createNode:(CAMultiAudioGraph *)forGraph
 {
     if (!forGraph)
@@ -223,34 +232,63 @@
     self.effectsHead = self;
     self.headNode = self;
     
-    
-    
     return YES;
 }
 
--(bool)setInputStreamFormat:(AudioStreamBasicDescription *)format
+
+-(AVAudioFormat *)inputFormatForBus:(UInt32)bus
+{
+    
+    AVAudioFormat *ret = nil;
+    AudioStreamBasicDescription asbd;
+    UInt32 asbdSize = sizeof(asbd);
+    
+    AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, bus, &asbd, &asbdSize);
+    
+    AVAudioChannelLayout *chanLayout = [AVAudioChannelLayout layoutWithLayoutTag:kAudioChannelLayoutTag_DiscreteInOrder | asbd.mChannelsPerFrame];
+    ret = [[AVAudioFormat alloc] initWithStreamDescription:&asbd channelLayout:chanLayout];
+    return ret;
+}
+
+
+-(AVAudioFormat *)outputFormatForBus:(UInt32)bus
+{
+    
+    AVAudioFormat *ret = nil;
+    AudioStreamBasicDescription asbd;
+    UInt32 asbdSize = sizeof(asbd);
+    
+    AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, bus, &asbd, &asbdSize);
+    
+    AVAudioChannelLayout *chanLayout = [AVAudioChannelLayout layoutWithLayoutTag:kAudioChannelLayoutTag_DiscreteInOrder | asbd.mChannelsPerFrame];
+    ret = [[AVAudioFormat alloc] initWithStreamDescription:&asbd channelLayout:chanLayout];
+    return ret;
+}
+
+
+
+
+-(bool)setInputStreamFormat:(AVAudioFormat *)format bus:(UInt32)bus
 {
 
-    OSStatus err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 0, format, sizeof(AudioStreamBasicDescription));
+    OSStatus err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, bus, format.streamDescription, sizeof(AudioStreamBasicDescription));
+
     if (err)
     {
-        NSLog(@"Failed to set StreamFormat for input %@ in willInitializeNode: %d", self, err);
+        NSLog(@"Failed to set StreamFormat for input on node %@ with %d", self, err);
         return NO;
     }
     
     return YES;
+
 }
 
 
--(bool)setOutputStreamFormat:(AudioStreamBasicDescription *)format
+-(bool)setOutputStreamFormat:(AVAudioFormat *)format bus:(UInt32)bus
 {
-    AudioStreamBasicDescription casbd;
     
-    memcpy(&casbd, format, sizeof(casbd));
-    casbd.mChannelsPerFrame = self.channelCount;
-    
-    OSStatus err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 0, &casbd, sizeof(AudioStreamBasicDescription));
-    
+    OSStatus err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, bus, format.streamDescription, sizeof(AudioStreamBasicDescription));
+
     if (err)
     {
         NSLog(@"Failed to set StreamFormat for output on node %@ with %d", self, err);
@@ -273,76 +311,30 @@
     return;
 }
 
-
-
-
-
-
-/*
--(void)setVolumeOnConnectedNode
+-(void)generateTone
 {
-    
-    CAMultiAudioNode *volNode = self.connectedTo;
-    
-    
-    while (volNode)
-    {
-        if ([volNode.class conformsToProtocol:@protocol(CAMultiAudioMixingProtocol)])
-        {
-            id<CAMultiAudioMixingProtocol>mixerNode = (id<CAMultiAudioMixingProtocol>)volNode;
-            [mixerNode setVolumeOnInputBus:self.downMixer volume:self.volume];
-            break;
-        } else {
-            volNode = volNode.connectedTo;
-        }
-    }
-}
-*/
-
-
-
-
--(bool)busForOutput:(CAMultiAudioNode *)inputNode busOut:(UInt32 *)busOut
-{
-    NSString *nodeUUID = inputNode.nodeUID;
-    NSDictionary *outputInfo = self.inputMap[nodeUUID];
-    if (outputInfo)
-    {
-        NSNumber *oBus = outputInfo[@"outBus"];
-        if (oBus)
-        {
-            *busOut = oBus.unsignedIntValue;
-            return YES;
-        }
-        return NO;
-    }
-    
-    return NO;
+    OSErr err;
+    AURenderCallbackStruct input;
+    input.inputProc = RenderTone;
+    input.inputProcRefCon = (__bridge void * _Nullable)(self);
+    err = AudioUnitSetProperty(self.audioUnit,
+        kAudioUnitProperty_SetRenderCallback,
+        kAudioUnitScope_Input,
+        0,
+        &input,
+        sizeof(input));
 }
 
 
--(bool)busForInput:(CAMultiAudioNode *)inputNode busOut:(UInt32 *)busOut
-{
-    NSString *nodeUUID = inputNode.nodeUID;
-    NSDictionary *inputInfo = self.inputMap[nodeUUID];
-    if (inputInfo)
-    {
-        NSNumber *inBus = inputInfo[@"inBus"];
-        if (inBus)
-        {
-            *busOut = inBus.unsignedIntValue;
-            return YES;
-        }
-        return NO;
-    }
-    
-    return NO;
-}
+
+
+
+
+
 
 
 -(void)nodeConnected:(CAMultiAudioNode *)toNode inBus:(UInt32)inBus outBus:(UInt32)outBus
 {
-    [self.outputMap setObject:@{@"inBus": @(inBus), @"outBus": @(outBus), @"node": toNode} forKey:toNode.nodeUID];
     if (outBus == 0)
     {
         _connectedTo = toNode;
@@ -355,10 +347,6 @@
 {
     return;
 }
-
-
-
-
 
 -(void)setMuted:(bool)muted
 {
@@ -384,17 +372,6 @@
     } else {
         [CaptureController.sharedCaptureController postNotification:CSNotificationAudioUnmuted forObject:self];
     }
-}
-
--(void)resetSamplerate:(UInt32)sampleRate
-{
-    //only certain node types need to react to this
-    return;
-}
-
--(void)resetFormat:(AudioStreamBasicDescription *)format
-{
-    return;
 }
 
 
@@ -460,48 +437,9 @@
 
 -(void) connectedToNode:(CAMultiAudioNode *)node inBus:(UInt32)inBus outBus:(UInt32)outBus
 {
-    
-
-    [self.inputMap setObject:@{@"inBus": @(inBus), @"outBus": @(outBus), @"node": node} forKey:node.nodeUID];
-
-}
-
--(void)willRemoveNode
-{
     return;
 }
 
-
-
--(void) remakeNode
-{
-    NSMutableDictionary *inputMap = self.inputMap.copy;
-    NSMutableDictionary *outputMap = self.outputMap.copy;
-    CAMultiAudioGraph *saveGraph = self.graph;
-    
-    [saveGraph removeNode:self];
-
-    [saveGraph addNode:self];
-    
-    for (NSString *uuid in inputMap)
-    {
-        NSDictionary *inpInfo = inputMap[uuid];
-        CAMultiAudioNode *inputNode = inpInfo[@"node"];
-        NSNumber *inBus = inpInfo[@"inBus"];
-        NSNumber *outBus = inpInfo[@"outBus"];
-        
-        [saveGraph connectNode:inputNode toNode:self sampleRate:self.graph.sampleRate inBus:inBus.unsignedIntValue outBus:outBus.unsignedIntValue];
-    }
-    
-    for (NSString *uuid in outputMap)
-    {
-        NSDictionary *outInfo = outputMap[uuid];
-        CAMultiAudioNode *outputNode = outInfo[@"node"];
-        NSNumber *inBus = outInfo[@"inBus"];
-        NSNumber *outBus = outInfo[@"outBus"];
-        [saveGraph connectNode:self toNode:outputNode sampleRate:self.graph.sampleRate inBus:inBus.unsignedIntValue outBus:outBus.unsignedIntValue];
-    }
-}
 
 -(void)rebuildEffectChain
 {
@@ -608,7 +546,7 @@
 
 -(void)setupEffectsChain
 {
-    [self rebuildEffectChain];
+    //[self rebuildEffectChain];
     //Do restore here
 }
 
@@ -642,3 +580,45 @@
 }
 
 @end
+
+
+OSStatus RenderTone(
+    void *inRefCon,
+    AudioUnitRenderActionFlags *ioActionFlags,
+    const AudioTimeStamp *inTimeStamp,
+    UInt32 inBusNumber,
+    UInt32 inNumberFrames,
+    AudioBufferList *ioData)
+
+{
+    // Fixed amplitude is good enough for our purposes
+    const double amplitude = 0.25;
+
+    // Get the tone parameters out of the view controller
+    CAMultiAudioDevice *viewController =
+    (__bridge CAMultiAudioDevice *)inRefCon;
+    double theta = viewController.theta;
+    double theta_increment =
+        2.0 * M_PI * 600 / 44100;
+
+    // This is a mono tone generator so we only need the first buffer
+    const int channel = 0;
+    Float32 *buffer = (Float32 *)ioData->mBuffers[channel].mData;
+    
+    // Generate the samples
+    for (UInt32 frame = 0; frame < inNumberFrames; frame++)
+    {
+        buffer[frame] = sin(theta) * amplitude;
+        
+        theta += theta_increment;
+        if (theta > 2.0 * M_PI)
+        {
+            theta -= 2.0 * M_PI;
+        }
+    }
+    
+    // Store the updated theta back in the view controller
+    viewController.theta = theta;
+
+    return noErr;
+}

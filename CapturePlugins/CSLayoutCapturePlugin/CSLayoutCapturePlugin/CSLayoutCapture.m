@@ -360,7 +360,7 @@
             if (!pcmPlayer)
             {
                 CMFormatDescriptionRef sDescr = CMSampleBufferGetFormatDescription(sampleBuffer);
-                const AudioStreamBasicDescription *asbd =  CMAudioFormatDescriptionGetStreamBasicDescription(sDescr);
+                AVAudioFormat *avFmt = [[AVAudioFormat alloc] initWithCMAudioFormatDescription:sDescr];
                 NSString *trackName = [[CSPluginServices sharedPluginServices] nameForAudioTrackUUID:audioTrackkey];
                 if (!trackName)
                 {
@@ -369,7 +369,7 @@
                 
                 NSString *pcmName = [NSString stringWithFormat:@"%@ - %@", self.activeVideoDevice.captureName, trackName];
                 
-                pcmPlayer = [self createAttachedAudioInputForUUID:audioTrackkey withName:pcmName withFormat:asbd];
+                pcmPlayer = [self createAttachedAudioInputForUUID:audioTrackkey withName:pcmName withFormat:avFmt];
                 _pcmPlayers[audioTrackkey] = pcmPlayer;
             }
             

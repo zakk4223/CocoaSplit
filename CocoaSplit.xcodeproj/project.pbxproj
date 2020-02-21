@@ -186,6 +186,7 @@
 		348585B4201C998200C30A08 /* CSPassthroughCompressorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 348585B2201C998200C30A08 /* CSPassthroughCompressorViewController.xib */; };
 		348585DE201E65F900C30A08 /* CSLayerFiltersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 348585DC201E65F900C30A08 /* CSLayerFiltersViewController.m */; };
 		348585DF201E65F900C30A08 /* CSLayerFiltersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 348585DD201E65F900C30A08 /* CSLayerFiltersViewController.xib */; };
+		3488161A23FE9BBF00FF4E1B /* CAMultiAudioConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 3488161923FE9BBF00FF4E1B /* CAMultiAudioConnection.m */; };
 		348AC06B19B406910064F02D /* SourceLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 348AC06A19B406910064F02D /* SourceLayout.m */; };
 		348CDBC923D6671C004131AD /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 348CDBC723D665DF004131AD /* Sparkle.framework */; };
 		348CDBCA23D6671C004131AD /* Sparkle.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 348CDBC723D665DF004131AD /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -258,7 +259,6 @@
 		34DA1D3F1BF823E700132486 /* CSNewOutputWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34DA1D3D1BF823E700132486 /* CSNewOutputWindowController.xib */; };
 		34DC2FB01B512362008F12A2 /* CSCaptureBase+TimerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34DC2FAF1B512362008F12A2 /* CSCaptureBase+TimerDelegate.m */; };
 		34DF75581AA272F100DA9FDE /* LayoutRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34DF75571AA272F100DA9FDE /* LayoutRenderer.m */; };
-		34E26DD91FF6ED7B00ACE58B /* CAMultiAudioSubgraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E26DD81FF6ED7B00ACE58B /* CAMultiAudioSubgraph.m */; };
 		34E26DDC1FF702BD00ACE58B /* CAMultiAudioSilence.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E26DDB1FF702BD00ACE58B /* CAMultiAudioSilence.m */; };
 		34E26DDF1FF70E0E00ACE58B /* CAMultiAudioGenericOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E26DDE1FF70E0E00ACE58B /* CAMultiAudioGenericOutput.m */; };
 		34E88C9E218DB0A90053913B /* CSAppleWebViewCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34E88C97218DACE40053913B /* CSAppleWebViewCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -941,6 +941,8 @@
 		348585DB201E65F900C30A08 /* CSLayerFiltersViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSLayerFiltersViewController.h; sourceTree = "<group>"; };
 		348585DC201E65F900C30A08 /* CSLayerFiltersViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSLayerFiltersViewController.m; sourceTree = "<group>"; };
 		348585DD201E65F900C30A08 /* CSLayerFiltersViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CSLayerFiltersViewController.xib; sourceTree = "<group>"; };
+		3488161823FE9BBF00FF4E1B /* CAMultiAudioConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioConnection.h; path = CAMultiAudio/CAMultiAudioConnection.h; sourceTree = "<group>"; };
+		3488161923FE9BBF00FF4E1B /* CAMultiAudioConnection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioConnection.m; path = CAMultiAudio/CAMultiAudioConnection.m; sourceTree = "<group>"; };
 		348AC06919B406910064F02D /* SourceLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SourceLayout.h; sourceTree = "<group>"; };
 		348AC06A19B406910064F02D /* SourceLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SourceLayout.m; sourceTree = "<group>"; };
 		348CDBC723D665DF004131AD /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
@@ -1080,8 +1082,6 @@
 		34DC2FAF1B512362008F12A2 /* CSCaptureBase+TimerDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CSCaptureBase+TimerDelegate.m"; sourceTree = "<group>"; };
 		34DF75561AA272F100DA9FDE /* LayoutRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutRenderer.h; sourceTree = "<group>"; };
 		34DF75571AA272F100DA9FDE /* LayoutRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayoutRenderer.m; sourceTree = "<group>"; };
-		34E26DD71FF6ED7B00ACE58B /* CAMultiAudioSubgraph.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioSubgraph.h; path = CAMultiAudio/CAMultiAudioSubgraph.h; sourceTree = "<group>"; };
-		34E26DD81FF6ED7B00ACE58B /* CAMultiAudioSubgraph.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioSubgraph.m; path = CAMultiAudio/CAMultiAudioSubgraph.m; sourceTree = "<group>"; };
 		34E26DDA1FF702BD00ACE58B /* CAMultiAudioSilence.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioSilence.h; path = CAMultiAudio/CAMultiAudioSilence.h; sourceTree = "<group>"; };
 		34E26DDB1FF702BD00ACE58B /* CAMultiAudioSilence.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioSilence.m; path = CAMultiAudio/CAMultiAudioSilence.m; sourceTree = "<group>"; };
 		34E26DDD1FF70E0E00ACE58B /* CAMultiAudioGenericOutput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioGenericOutput.h; path = CAMultiAudio/CAMultiAudioGenericOutput.h; sourceTree = "<group>"; };
@@ -1928,8 +1928,6 @@
 				34EB705A1F24F65900F61E6A /* CAMultiAudioFile.m */,
 				340620741F2E2BFE0016D997 /* CAMultiAudioInput.h */,
 				340620751F2E2BFE0016D997 /* CAMultiAudioInput.m */,
-				34E26DD71FF6ED7B00ACE58B /* CAMultiAudioSubgraph.h */,
-				34E26DD81FF6ED7B00ACE58B /* CAMultiAudioSubgraph.m */,
 				34E26DDA1FF702BD00ACE58B /* CAMultiAudioSilence.h */,
 				34E26DDB1FF702BD00ACE58B /* CAMultiAudioSilence.m */,
 				34E26DDD1FF70E0E00ACE58B /* CAMultiAudioGenericOutput.h */,
@@ -1940,6 +1938,8 @@
 				34342203222A76220060F43E /* CAMultiAudioSplitter.m */,
 				3434E169224F2E1A0091A149 /* CAMultiAudioOutputTrack.h */,
 				3434E16A224F2E1A0091A149 /* CAMultiAudioOutputTrack.m */,
+				3488161823FE9BBF00FF4E1B /* CAMultiAudioConnection.h */,
+				3488161923FE9BBF00FF4E1B /* CAMultiAudioConnection.m */,
 			);
 			name = CAMultiAudio;
 			sourceTree = "<group>";
@@ -3085,7 +3085,6 @@
 				3470CD2E1D57D2AA006404D9 /* CSStreamOutputWindowController.m in Sources */,
 				3400A0621BD44DF0003E1828 /* CSInputLibraryItem.m in Sources */,
 				34ED8C831B07371C002C0674 /* MIKMIDIMetaSequenceEvent.m in Sources */,
-				34E26DD91FF6ED7B00ACE58B /* CAMultiAudioSubgraph.m in Sources */,
 				3434CB2D1CA90D28001B3DF9 /* CSx264CompressorViewController.m in Sources */,
 				34788E291F0D166C00C3C9C5 /* CSAudioInputSource.m in Sources */,
 				34ED8C6D1B07371C002C0674 /* MIKMIDIMapping.m in Sources */,
@@ -3138,6 +3137,7 @@
 				34348C2A19BDBDC000A122C2 /* PluginManagerWindowController.m in Sources */,
 				34CFE4A018F154DD00092C6A /* AVFChannelManager.m in Sources */,
 				34ED8C6B1B07371C002C0674 /* MIKMIDIMacDebugQuickLookSupport.m in Sources */,
+				3488161A23FE9BBF00FF4E1B /* CAMultiAudioConnection.m in Sources */,
 				34BE2B092014845200E37382 /* CSPassthroughCompressor.m in Sources */,
 				34A2722C205D99D000135A5D /* CSTransitionCollectionItem.m in Sources */,
 				34ED8C511B07371C002C0674 /* MIKMIDICommand.m in Sources */,
@@ -3330,7 +3330,7 @@
 				PRODUCT_NAME = CocoaSplit;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SDKROOT = macosx;
+				SDKROOT = macosx10.14;
 				STRIP_STYLE = debugging;
 				WRAPPER_EXTENSION = app;
 			};
@@ -3383,7 +3383,7 @@
 				PRODUCT_NAME = CocoaSplit;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SDKROOT = macosx;
+				SDKROOT = macosx10.14;
 				STRIP_STYLE = debugging;
 				WRAPPER_EXTENSION = app;
 			};

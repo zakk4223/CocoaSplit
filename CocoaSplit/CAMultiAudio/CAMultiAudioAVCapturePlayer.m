@@ -8,20 +8,22 @@
 #import "CAMultiAudioAVCapturePlayer.h"
 #import "CAMultiAudioMatrixMixerWindowController.h"
 
+
+
+
+
 @implementation CAMultiAudioAVCapturePlayer
 
 
 
--(instancetype)initWithDevice:(AVCaptureDevice *)avDevice withFormat:(AudioStreamBasicDescription *)withFormat
+-(instancetype)initWithDevice:(AVCaptureDevice *)avDevice
 {
     if (self = [super init])
     {
         
         self.captureDevice = avDevice;
-        self.sampleRate = withFormat->mSampleRate;
         self.name = avDevice.localizedName;
         //self.nodeUID = avDevice.uniqueID;
-        self.inputFormat = withFormat;
         self.systemDevice = YES;
         self.deviceUID = avDevice.uniqueID;
         
@@ -49,14 +51,6 @@
 -(bool)createNode:(CAMultiAudioGraph *)forGraph
 {
     [super createNode:forGraph];
-    AudioStreamBasicDescription asbd;
-    UInt32 asbdSize = sizeof(asbd);
-    
-
-    AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 0, &asbd, &asbdSize);
-    asbd.mChannelsPerFrame = self.channelCount;
-    AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 0, &asbd, asbdSize);
-
     return YES;
 }
 
@@ -85,89 +79,27 @@
 }
 
 
--(void)resetFormat:(AudioStreamBasicDescription *)format
-{
-    self.inputFormat = format;
-    self.sampleRate = format->mSampleRate;
-    AudioStreamBasicDescription asbd;
-    UInt32 asbdSize = sizeof(asbd);
-    memcpy(&asbd, format, sizeof(asbd));
-
-    asbd.mChannelsPerFrame = self.channelCount;
-    
-    AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 0, &asbd, asbdSize);
-    if (self.avfCapture)
-    {
-        self.avfCapture.audioSamplerate = self.sampleRate;
-        
-        [self.avfCapture stopAudioCompression];
-        [self.avfCapture setupAudioCompression];
-    }
-}
-
-
--(void)resetSamplerate:(UInt32)sampleRate
-{
-    if (self.avfCapture)
-    {
-        self.avfCapture.audioSamplerate = sampleRate;
-    
-        [self.avfCapture stopAudioCompression];
-        [self.avfCapture setupAudioCompression];
-    }
-}
-
-
 -(void)setChannelCount:(int)channelCount
 {
     super.channelCount = channelCount;
 }
 
 
-
-/*
--(AudioStreamBasicDescription *)inputFormat
+-(AVAudioFormat *)inputFormat
 {
     if (self.captureDevice)
     {
         CMFormatDescriptionRef sDescr = self.captureDevice.activeFormat.formatDescription;
         
         
-        const AudioStreamBasicDescription *asbd =  CMAudioFormatDescriptionGetStreamBasicDescription(sDescr);
-        return (AudioStreamBasicDescription *)asbd;
+        AVAudioFormat *tmpFmt = [[AVAudioFormat alloc] initWithCMAudioFormatDescription:sDescr];
+        AVAudioFormat *retFmt = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:tmpFmt.sampleRate channelLayout:tmpFmt.channelLayout];
+        return retFmt;
         
     }
     
-    return NULL;
+    return nil;
 
 }
-
--(void)setInputFormat:(AudioStreamBasicDescription *)inputFormat
-{
-    return;
-}
-*/
-
-
--(int)channelCount
-{
-    if (self.captureDevice)
-    {
-        CMFormatDescriptionRef sDescr = self.captureDevice.activeFormat.formatDescription;
-        
-        
-        const AudioStreamBasicDescription *asbd =  CMAudioFormatDescriptionGetStreamBasicDescription(sDescr);
-        
-        
-
-        if (asbd)
-        {
-            return asbd->mChannelsPerFrame;
-        }
-    }
-    
-    return super.channelCount;
-}
-
 
 @end

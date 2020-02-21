@@ -212,7 +212,7 @@
 
 
 
--(CAMultiAudioPCM *)consumeAudioFrame:(AudioStreamBasicDescription *)asbd error_out:(int *)error_out
+-(CAMultiAudioPCM *)consumeAudioFrame:(AVAudioFormat *)audioFormat error_out:(int *)error_out
 {
     struct frame_message msg;
     uint8_t *arrBuf[2] = {0};
@@ -234,10 +234,11 @@
         {
             //flush PCM player
             av_frame_free(&recv_frame);
-            CAMultiAudioPCM *flushPCM = [[CAMultiAudioPCM alloc] init];
-            flushPCM.frameCount = -1;
-            flushPCM.bufferCount = -1;
-            return flushPCM;
+            *error_out = AVERROR_PATCHWELCOME;
+            
+            //flushPCM.frameCount = -1;
+            //flushPCM.bufferCount = -1;
+            return NULL;
         }
         
         int dst_linesize;
@@ -249,14 +250,14 @@
             {
                 channel_layout = av_get_default_channel_layout(_audio_codec_ctx->channels);
             }
-            _swr_ctx = swr_alloc_set_opts(NULL, AV_CH_LAYOUT_STEREO, AV_SAMPLE_FMT_FLTP, asbd->mSampleRate, channel_layout, _audio_codec_ctx->sample_fmt, _audio_codec_ctx->sample_rate, 0, NULL);
+            _swr_ctx = swr_alloc_set_opts(NULL, AV_CH_LAYOUT_STEREO, AV_SAMPLE_FMT_FLTP, audioFormat.sampleRate, channel_layout, _audio_codec_ctx->sample_fmt, _audio_codec_ctx->sample_rate, 0, NULL);
             swr_init(_swr_ctx);
         }
-        int64_t dst_nb_samples = av_rescale_rnd(recv_frame->nb_samples, asbd->mSampleRate, _audio_codec_ctx->sample_rate, AV_ROUND_UP);
+        int64_t dst_nb_samples = av_rescale_rnd(recv_frame->nb_samples, audioFormat.sampleRate, _audio_codec_ctx->sample_rate, AV_ROUND_UP);
         
-        CAMultiAudioPCM *retPCM = [[CAMultiAudioPCM alloc] initWithDescription:asbd forFrameCount:(int)dst_nb_samples];
-        
-        uint8_t *dBuf =  retPCM.dataBuffer;
+        CAMultiAudioPCM *retPCM = [[CAMultiAudioPCM alloc] initWithPCMFormat:audioFormat frameCapacity:(int)dst_nb_samples];
+        retPCM.frameLength = (int)dst_nb_samples;
+        uint8_t *dBuf =  retPCM.audioBufferList->mBuffers->mData;
         
         
         if (dBuf) //Just in case

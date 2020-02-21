@@ -42,7 +42,7 @@
     dispatch_queue_t _video_decoder_queue;
     dispatch_queue_t _media_reader_queue;
     CAMultiAudioPCM *_bufferPCM;
-    AudioStreamBasicDescription _asbd;
+    AVAudioFormat * _audioFormat;
     CFTimeInterval _lastTimeUpdate;
     double _savedTime;
     NSSize _lastSize;

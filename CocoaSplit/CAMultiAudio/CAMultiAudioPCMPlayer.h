@@ -28,7 +28,6 @@ struct cspcm_buffer_msg {
     NSMutableArray *_pendingBuffers;
     dispatch_queue_t _pendingQueue;
     bool _playing;
-    int _bufcnt;
     bool _exitPending;
     
     TPCircularBuffer _completedBuffer;
@@ -38,8 +37,6 @@ struct cspcm_buffer_msg {
 }
 
 @property (strong) NSString *inputUID;
-@property (assign) Float64 latestScheduledTime;
-@property (assign) AudioStreamBasicDescription *inputFormat;
 @property (readonly) NSUInteger pendingFrames;
 @property (nonatomic, copy) void (^completedBlock)(CAMultiAudioPCM *pcmBuffer);
 @property (strong) NSMutableArray *pauseBuffer;
@@ -47,7 +44,6 @@ struct cspcm_buffer_msg {
 
 -(void)releasePCM:(CAMultiAudioPCM *)buffer;
 -(void)scheduleBuffer:(CMSampleBufferRef)sampleBuffer;
--(void)scheduleAudioBuffer:(AudioBufferList *)bufferList bufferFormat:(AudioStreamBasicDescription)bufferFormat;
 -(bool)playPcmBuffer:(CAMultiAudioPCM *)pcmBuffer;
 
 

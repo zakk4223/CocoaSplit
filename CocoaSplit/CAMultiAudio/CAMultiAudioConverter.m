@@ -21,56 +21,17 @@
     return self;
 }
 
--(instancetype)initWithInputFormat:(const AudioStreamBasicDescription *)format
+
+
+
+
+
+
+
+-(bool)setInputStreamFormat:(AVAudioFormat *)format bus:(UInt32)bus
 {
-    if (self = [self init])
-    {
-        memcpy(&_inputFormat, format, sizeof(AudioStreamBasicDescription));
-        self.channelCount = format->mChannelsPerFrame;
-    }
-    
-    return self;
-}
-
-
-
--(bool)setInputStreamFormat:(AudioStreamBasicDescription *)format
-{
-    
-    /*
-    bool ret = NO;
-    if (&_inputFormat)
-    {
-        ret = [super setInputStreamFormat:&_inputFormat];
-    } else {
-        ret = [super setInputStreamFormat:format];
-    }
-    
-    return ret;
-     */
     return YES;
 }
-
-
-
--(bool)setOutputStreamFormat:(AudioStreamBasicDescription *)format
-{
-    //ignore if we have our own
-    
-    return YES;
-    
-    bool ret = NO;
-    if (self.outputFormat)
-    {
-        
-        ret = [super setOutputStreamFormat:self.outputFormat];
-    } else {
-        ret = [super setOutputStreamFormat:format];
-    }
-    
-    return ret;
-}
-
 
 -(float)volume
 {

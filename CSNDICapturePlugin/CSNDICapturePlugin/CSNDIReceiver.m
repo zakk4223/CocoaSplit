@@ -242,7 +242,7 @@
             {
                 
                 CAMultiAudioPCM *retPCM = [[CAMultiAudioPCM alloc] initWithDescription:_asbd forFrameCount:audio_frame.no_samples];
-                uint8_t *dBuf = retPCM.dataBuffer;
+                uint8_t *dBuf = retPCM.audioBufferList->mBuffers->mData;
                 if (dBuf)
                 {
                     memcpy(dBuf, audio_frame.p_data, 4*audio_frame.no_samples*audio_frame.no_channels);

@@ -13,7 +13,7 @@
 @interface CSPcmPlayer ()
 {
     NSMapTable *_realPlayers;
-    AudioStreamBasicDescription *_asbd;
+    AVAudioFormat *_audioDescription;
     
     //NSPointerArray *_realPlayers;
 }
@@ -28,28 +28,14 @@
 @synthesize name = _name;
 
 
--(void)setAudioFormat:(AudioStreamBasicDescription *)asbd
+-(void)setAudioFormat:(AVAudioFormat *)avFmt
 {
-    if (!asbd)
-    {
-        if (_asbd)
-        {
-            free(_asbd);
-        }
-        _asbd = NULL;
-    } else {
-        if (!_asbd)
-        {
-            _asbd = malloc(sizeof(AudioStreamBasicDescription));
-        }
-        memcpy(_asbd, asbd, sizeof(AudioStreamBasicDescription));
-    }
-    
 
+    _audioDescription = avFmt;
     [self runBlockForPlayers:^(CAMultiAudioPCMPlayer *player) {
         CAMultiAudioEngine *useEngine = player.engine;
         [player removeFromEngine];
-        player.inputFormat = asbd;
+        player.inputFormat = avFmt;
         [useEngine attachInput:player];
     }];
     
@@ -109,12 +95,7 @@
     }
     
     
-    if (!_asbd)
-    {
-        CAMultiAudioPCMPlayer *caPlayer = player;
-        _asbd = malloc(sizeof(AudioStreamBasicDescription));
-        memcpy(_asbd, caPlayer.inputFormat, sizeof(AudioStreamBasicDescription));
-    }
+
     
     
     @synchronized(self)
@@ -123,9 +104,9 @@
     }
 }
 
--(AudioStreamBasicDescription *)audioDescription
+-(AVAudioFormat *)audioDescription
 {
-    return _asbd;
+    return _audioDescription;
 
 }
 
@@ -179,10 +160,6 @@
     [self runBlockForPlayers:^(CAMultiAudioPCMPlayer *player) {
         [player removeFromEngine];
     }];
-    if (_asbd)
-    {
-        free(_asbd);
-    }
 }
 
 -(void)runBlockForPlayers:(void (^)(CAMultiAudioPCMPlayer *player))useBlock

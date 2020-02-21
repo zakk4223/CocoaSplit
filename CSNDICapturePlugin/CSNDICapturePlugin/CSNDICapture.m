@@ -157,7 +157,7 @@
     
 }
 
--(void)registerPCMOutput:(const AudioStreamBasicDescription *)audioFormat
+-(void)registerPCMOutput:(AVAudioFormat *)audioFormat
 {
     
     if (_pcmPlayer)
@@ -189,8 +189,7 @@
     {
         CSNDISource *ndiSource = self.activeVideoDevice.captureDevice;
 
-        AudioStreamBasicDescription useFormat = pcmData.pcmFormat;
-        _pcmPlayer = [self createAttachedAudioInputForUUID:ndiSource.name withName:ndiSource.name withFormat:&useFormat];
+        _pcmPlayer = [self createAttachedAudioInputForUUID:ndiSource.name withName:ndiSource.name withFormat:pcmData.format];
         [_pcmPlayer play];
     }
     

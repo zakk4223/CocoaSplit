@@ -13,6 +13,7 @@
 
 
 
+
 -(instancetype)initWithDeviceID:(AudioDeviceID)devid
 {
     if (self = [super initWithSubType:kAudioUnitSubType_HALOutput unitType:kAudioUnitType_Output])
@@ -59,31 +60,6 @@
     
     AudioUnitSetProperty(self.audioUnit, kAudioOutputUnitProperty_CurrentDevice, kAudioUnitScope_Global, 0, &_deviceID, sizeof(_deviceID));
 
-}
-
--(AudioStreamBasicDescription *)getOutputFormat
-{
-    AudioStreamBasicDescription *outfmt = malloc(sizeof(AudioStreamBasicDescription));
-    UInt32 outsize = sizeof(AudioStreamBasicDescription);
-    
-    AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 0, outfmt, &outsize);
-    
-    
-    return outfmt;
-}
-
-
-
--(bool)setInputStreamFormat:(AudioStreamBasicDescription *)format
-{
-    return [super setInputStreamFormat:[self getOutputFormat]];
-    
-}
-
-
--(bool)setOutputStreamFormat:(AudioStreamBasicDescription *)format
-{
-    return YES;
 }
 
 
@@ -301,3 +277,5 @@
 }
 
 @end
+
+

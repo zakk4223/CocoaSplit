@@ -55,7 +55,7 @@ typedef enum ff_movie_repeat_t {
 @property (assign) bool playing;
 
 @property (strong) CSFFMpegInput *currentlyPlaying;
-@property (assign) AudioStreamBasicDescription *asbd;
+@property (strong) AVAudioFormat *audioFormat;
 
 @property (copy, nonatomic) void (^itemStarted)(CSFFMpegInput *);
 @property (copy, nonatomic) void (^pauseStateChanged)(void);

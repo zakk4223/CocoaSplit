@@ -23,7 +23,7 @@
 
 -(void) addPlayer:(id)player forUUID:(NSString *)uuid;
 -(void)removePlayerForUUID:(NSString *)uuid;
--(AudioStreamBasicDescription *)audioDescription;
+-(AVAudioFormat *)audioDescription;
 
 @end
 
@@ -529,12 +529,12 @@
 }
 
 
--(CSPcmPlayer *)createPCMInput:(NSString *)forUID  withFormat:(const AudioStreamBasicDescription *)withFormat
+-(CSPcmPlayer *)createPCMInput:(NSString *)forUID  withFormat:(AVAudioFormat *)withFormat
 {
     return [self createPCMInput:forUID named:forUID withFormat:withFormat];
 }
 
--(CSPcmPlayer *)createPCMInput:(NSString *)forUID named:(NSString *)withName withFormat:(const AudioStreamBasicDescription *)withFormat
+-(CSPcmPlayer *)createPCMInput:(NSString *)forUID named:(NSString *)withName withFormat:(AVAudioFormat *)withFormat
 {
     @autoreleasepool
     {
@@ -729,7 +729,7 @@
                         if (!realPlayer)
                         {
                             
-                            AudioStreamBasicDescription *useDesc = [pPlayer audioDescription];
+                            AVAudioFormat *useDesc = [pPlayer audioDescription];
                             
                             if (useDesc)
                             {
@@ -890,7 +890,7 @@
 
 //[self createPCMInput:self.captureName withFormat:audioFormat];
 
--(CSPcmPlayer *)createAttachedAudioInputForUUID:(NSString *)uuid withName:(NSString *)withName withFormat:(const AudioStreamBasicDescription *)withFormat
+-(CSPcmPlayer *)createAttachedAudioInputForUUID:(NSString *)uuid withName:(NSString *)withName withFormat:(AVAudioFormat *)withFormat
 {
     if (!uuid)
     {

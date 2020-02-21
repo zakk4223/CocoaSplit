@@ -131,8 +131,8 @@ typedef enum frame_render_behavior_t {
 -(NSSize)captureSize;
 
 /* Create a PCM audio input. Use this and not the service plugin version. This version properly finds the appropriate audio engine and creates the PCM input there */
--(CSPcmPlayer *)createPCMInput:(NSString *)forUID withFormat:(const AudioStreamBasicDescription *)withFormat;
--(CSPcmPlayer *)createPCMInput:(NSString *)forUID named:(NSString *)withName withFormat:(const AudioStreamBasicDescription *)withFormat;
+-(CSPcmPlayer *)createPCMInput:(NSString *)forUID withFormat:(AVAudioFormat *)withFormat;
+-(CSPcmPlayer *)createPCMInput:(NSString *)forUID named:(NSString *)withName withFormat:(AVAudioFormat *)withFormat;
 
 //Don't ever call this, it's not for you.
 -(CALayer *)createNewLayerForInput:(id)inputsrc;

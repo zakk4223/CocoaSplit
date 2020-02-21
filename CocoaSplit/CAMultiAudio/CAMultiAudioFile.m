@@ -174,11 +174,7 @@
         UInt32 absdSize = sizeof(AudioStreamBasicDescription);
         UInt32 durationSize = sizeof(Float64);
         Float64 fileDuration;
-
-        if (!_outputFormat)
-        {
-            _outputFormat = malloc(sizeof(AudioStreamBasicDescription));
-        }
+        
         err = AudioFileOpenURL(audioURL, kAudioFileReadPermission, 0, &_audioFile);
         CFRelease(audioURL);
 
@@ -186,9 +182,14 @@
         {
             return NO;
         }
-        err = AudioFileGetProperty(_audioFile, kAudioFilePropertyDataFormat, &absdSize, _outputFormat);
+        AudioStreamBasicDescription fileasbd;
+        
+        err = AudioFileGetProperty(_audioFile, kAudioFilePropertyDataFormat, &absdSize, &fileasbd);
+        
         AudioFileGetProperty(_audioFile, kAudioFilePropertyEstimatedDuration, &durationSize, &fileDuration);
         
+        AVAudioChannelLayout *chanLayout = [AVAudioChannelLayout layoutWithLayoutTag:kAudioChannelLayoutTag_DiscreteInOrder | fileasbd.mChannelsPerFrame];
+        _outputFormat = [[AVAudioFormat alloc] initWithStreamDescription:&fileasbd channelLayout:chanLayout];
         Float64 realEnd = fileDuration;
 
         if (self.endTime)
@@ -245,15 +246,15 @@
     }
     
     
-    Float64 adjustedFrame = _lastStartFrame * (_outputFormat->mSampleRate/_outputSampleRate);
-    Float64 calculatedStart = self.startTime * _outputFormat->mSampleRate;
+    Float64 adjustedFrame = _lastStartFrame * (_outputFormat.sampleRate/_outputSampleRate);
+    Float64 calculatedStart = self.startTime * _outputFormat.sampleRate;
     
     fileRegion.mStartFrame = calculatedStart + adjustedFrame;
     
     if (self.endTime > 0 && self.endTime > self.startTime)
     {
      
-        Float64 endFrame = self.endTime * _outputFormat->mSampleRate;
+        Float64 endFrame = self.endTime * _outputFormat.sampleRate;
         fileRegion.mFramesToPlay = endFrame - fileRegion.mStartFrame;
     } else {
         fileRegion.mFramesToPlay = -1;
@@ -281,7 +282,7 @@
         fileRegion.mStartFrame = calculatedStart;
         if (self.endTime > 0 && self.endTime > self.startTime)
         {
-            fileRegion.mFramesToPlay = (self.endTime * _outputFormat->mSampleRate) - fileRegion.mStartFrame;
+            fileRegion.mFramesToPlay = (self.endTime * _outputFormat.sampleRate) - fileRegion.mStartFrame;
         } else {
             fileRegion.mFramesToPlay = -1;
         }
@@ -306,7 +307,6 @@
     
 }
 
-
 -(void)play
 {
     AudioTimeStamp startTime;
@@ -314,7 +314,11 @@
     startTime.mSampleTime = -1;
     AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ScheduleStartTimeStamp,
                          kAudioUnitScope_Global, 0, &startTime, sizeof(startTime));
-    self.playing = YES;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+            self.playing = YES;
+
+    });
 
 }
 
@@ -334,6 +338,18 @@
 }
 
 
+-(bool)setOutputStreamFormat:(AVAudioFormat *)format bus:(UInt32)bus
+{
+    bool ret = [super setOutputStreamFormat:format bus:bus];
+    _outputSampleRate = format.sampleRate;
+    return ret;
+}
+
+-(bool)setInputStreamFormat:(AVAudioFormat *)format bus:(UInt32)bus
+{
+    return YES;
+}
+
 -(void)setEnabled:(bool)enabled
 {
     super.enabled = enabled;
@@ -346,28 +362,12 @@
     }
 }
 
--(bool)setInputStreamFormat:(AudioStreamBasicDescription *)format
-{
-    return YES;
-}
 
--(bool)setOutputStreamFormat:(AudioStreamBasicDescription *)format
-{
-    
-    
-    bool ret = [super setOutputStreamFormat:format];
-    
-    _outputSampleRate = format->mSampleRate;
-    return ret;
-}
 
 -(void)dealloc
 {
     AudioFileClose(_audioFile);
-    if (_outputFormat)
-    {
-        free(_outputFormat);
-    }
+    _outputFormat = nil;
 }
 
 

@@ -40,8 +40,6 @@
 @property (assign) float volume;
 @property (assign) bool muted;
 @property (assign) bool enabled;
-@property (strong) NSMutableDictionary *inputMap;
-@property (strong) NSMutableDictionary *outputMap;
 @property (readonly) CAMultiAudioNode *connectedTo;
 @property (readonly) UInt32 connectedToBus;
 
@@ -57,11 +55,11 @@
 
 -(void)willInitializeNode;
 -(void)didInitializeNode;
--(bool)setInputStreamFormat:(AudioStreamBasicDescription *)format;
--(bool)setOutputStreamFormat:(AudioStreamBasicDescription *)format;
-
--(void)resetSamplerate:(UInt32)sampleRate;
--(void)resetFormat:(AudioStreamBasicDescription *)format;
+-(bool)setInputStreamFormat:(AVAudioFormat *)format bus:(UInt32)bus;
+-(bool)setOutputStreamFormat:(AVAudioFormat *)format bus:(UInt32)bus;
+-(AVAudioFormat *)outputFormatForBus:(UInt32)bus;
+-(AVAudioFormat *)inputFormatForBus:(UInt32)bus;
+-(void)rebuildEffectChain;
 
 -(void)setVolumeAnimated:(float)volume withDuration:(float)duration;
 -(NSView *)audioUnitNSView;
@@ -95,8 +93,9 @@
 @property (strong) NSMutableArray *effectChain;
 @property (assign) bool deleteNode;
 @property (readonly) NSString *uuid;
-@property (strong) NSMutableDictionary *inputMap;
-@property (strong) NSMutableDictionary *outputMap;
+@property (strong) NSMutableDictionary *inputConnections;
+@property (strong) NSMutableDictionary *outputConnections;
+
 @property (readonly) CAMultiAudioNode *connectedTo;
 @property (readonly) UInt32 connectedToBus;
 
@@ -105,6 +104,7 @@
 @property (assign) bool muted;
 
 @property (assign) bool enabled;
+@property (assign) double theta;
 
 
 -(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType;
@@ -113,14 +113,11 @@
 -(void)connectedToNode:(CAMultiAudioNode *)node inBus:(UInt32)inBus outBus:(UInt32)outBus;
 -(void)nodeConnected:(CAMultiAudioNode *)toNode inBus:(UInt32)inBus outBus:(UInt32)outBus;
 -(void)willConnectNode:(CAMultiAudioNode *)node inBus:(UInt32)inBus outBus:(UInt32)outBus;
--(void)willRemoveNode;
 -(void)setupEffectsChain;
 -(void)removeEffectsChain;
 -(void)addEffect:(CAMultiAudioNode *)effect;
 -(void)addEffect:(CAMultiAudioNode *)effect atIndex:(NSUInteger)idx;
--(bool)busForOutput:(CAMultiAudioNode *)inputNode busOut:(UInt32 *)busOut;
--(bool)busForInput:(CAMultiAudioNode *)inputNode busOut:(UInt32 *)busOut;
--(void) remakeNode;
+-(void)generateTone;
 
 
 @end

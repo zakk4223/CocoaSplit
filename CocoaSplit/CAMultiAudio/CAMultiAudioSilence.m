@@ -39,15 +39,4 @@
     return ret;
 }
 
-
--(bool)setInputStreamFormat:(AudioStreamBasicDescription *)format
-{
-    return YES;
-}
-
--(bool)setOutputStreamFormat:(AudioStreamBasicDescription *)format
-{
- 
-    return YES;
-}
 @end

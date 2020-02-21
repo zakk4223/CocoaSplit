@@ -20,33 +20,5 @@
     return self;
 }
 
-        -(bool)setInputStreamFormat:(AudioStreamBasicDescription *)format
-    {
-        
-        /*
-         bool ret = NO;
-         if (&_inputFormat)
-         {
-         ret = [super setInputStreamFormat:&_inputFormat];
-         } else {
-         ret = [super setInputStreamFormat:format];
-         }
-         
-         return ret;
-         */
-        return YES;
-    }
-        
-        
-        
-    -(bool)setOutputStreamFormat:(AudioStreamBasicDescription *)format
-    {
-        //ignore if we have our own
-        
-        return YES;
-        
-
-    }
-
 
 @end

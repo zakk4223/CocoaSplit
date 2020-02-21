@@ -96,18 +96,11 @@
     
     //Inputs resample to floating point non-interleaved 48k for now.
     
-    _asbd.mSampleRate = 48000;
-    _asbd.mFormatID = kAudioFormatLinearPCM;
-    _asbd.mFormatFlags = kAudioFormatFlagsNativeEndian  | kAudioFormatFlagIsFloat | kAudioFormatFlagIsNonInterleaved;
-    _asbd.mChannelsPerFrame = 2;
-    _asbd.mBitsPerChannel = 32;
-    _asbd.mBytesPerFrame = 4;
-    _asbd.mBytesPerPacket = 4;
-    _asbd.mFramesPerPacket = 1;
     
+    _audioFormat = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:48000.0f channels:2];
     self.player = [[CSFFMpegPlayer alloc] init];
     
-    self.player.asbd = &_asbd;
+    self.player.audioFormat = _audioFormat;
     
     __weak __typeof__(self) weakSelf = self;
     
@@ -504,11 +497,11 @@
     
     if (!self.pcmPlayer)
     {
-        self.pcmPlayer = [self createAttachedAudioInputForUUID:self.uuid withName:withName withFormat:&_asbd];
+        self.pcmPlayer = [self createAttachedAudioInputForUUID:self.uuid withName:withName withFormat:_audioFormat];
         
         if (self.pcmPlayer && self.player)
         {
-            self.player.asbd = &_asbd;
+            self.player.audioFormat = _audioFormat;
             self.player.pcmPlayer = self.pcmPlayer;
             if (self.player.currentlyPlaying)
             {
