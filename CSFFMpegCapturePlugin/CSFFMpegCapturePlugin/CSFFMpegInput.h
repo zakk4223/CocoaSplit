@@ -101,7 +101,7 @@ struct frame_message {
 
 
 -(AVFrame *)consumeFrame:(int *)error_out;
--(CAMultiAudioPCM *)consumeAudioFrame:(AudioStreamBasicDescription *)asbd error_out:(int *)error_out;
+-(CAMultiAudioPCM *)consumeAudioFrame:(AVAudioFormat *)audioFormat error_out:(int *)error_out;
 -(void) closeMedia;
 -(void) seek:(double)time;
 

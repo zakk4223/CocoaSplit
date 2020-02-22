@@ -394,7 +394,7 @@
                 return;
             }
             
-            audioPCM = [self.currentlyPlaying consumeAudioFrame:self.asbd error_out:&av_error];
+            audioPCM = [self.currentlyPlaying consumeAudioFrame:self.audioFormat error_out:&av_error];
             if (!self.playing) break;
             if (av_error == AVERROR_EOF)
             {
@@ -405,24 +405,22 @@
                 break;
             }
             
+            if (av_error == AVERROR_PATCHWELCOME)
+            {
+                if (good_audio)
+                {
+                    //input needs us to flush the player, probably due to seek
+                    [self.pcmPlayer flush];
+                    [self.pcmPlayer play];
+                    continue;
+                } else {
+                    continue;
+                }
+            }
+            
             if (audioPCM)
             {
-                if (audioPCM.bufferCount == -1 && audioPCM.frameCount == -1)
-                {
-                    if (good_audio)
-                    {
-                        //input needs us to flush the player, probably due to seek
-                        [self.pcmPlayer flush];
-                        [self.pcmPlayer play];
-                        continue;
-                    } else {
-                        continue;
-                    }
-                }
-                
                 good_audio = YES;
-                
-                
             }
             
             

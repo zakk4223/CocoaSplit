@@ -33,11 +33,6 @@
 }
 
 
--(AVAudioFormat *)inputFormat
-{
-    return self.graph.audioFormat;
-}
-
 -(void)updatePowerlevel
 {
     if (!self.downMixer)

@@ -94,10 +94,10 @@
     
     
     
-    //Inputs resample to floating point non-interleaved 48k for now.
+    //Inputs resample to floating point non-interleaved 44.1k for now.
     
     
-    _audioFormat = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:48000.0f channels:2];
+    _audioFormat = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:44100.0f channels:2];
     self.player = [[CSFFMpegPlayer alloc] init];
     
     self.player.audioFormat = _audioFormat;

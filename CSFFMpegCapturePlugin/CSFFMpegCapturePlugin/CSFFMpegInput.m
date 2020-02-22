@@ -243,6 +243,14 @@
         
         int dst_linesize;
         
+        /*
+        if (!_audio_conv)
+        {
+            //_audio_conv = [AVAudioConverter alloc] initFromFormat:<#(nonnull AVAudioFormat *)#> toFormat:audioFormat];
+            
+        }*/
+        
+        
         if (!_swr_ctx)
         {
             uint64_t channel_layout = _audio_codec_ctx->channel_layout;
