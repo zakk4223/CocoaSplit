@@ -450,7 +450,9 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     }
     
     NSNumber *trackOutBus = outputTrack.outputBus;
-    [self.encodeMixer disconnectInputBus:input.effectsHead.connectedToBus fromOutputBus:trackOutBus.unsignedIntValue];
+    CAMultiAudioConnection *inputConn = [self.graph findOutputConnection:input.headNode forNode:self.encodeMixer onBus:0];
+
+    [self.encodeMixer disconnectInputBus:inputConn.bus fromOutputBus:trackOutBus.unsignedIntValue];
     [input.outputTracks removeObjectForKey:outputTrack.uuid];
     return YES;
 }
@@ -470,10 +472,10 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     
     NSNumber *trackOutBus = outputTrack.outputBus;
-    NSLog(@"EFFECT HEAD %@ ON BUS %d -> BUS %d", input.effectsHead, input.effectsHead.connectedToBus, trackOutBus.unsignedIntValue);
-    
-    [self.encodeMixer connectInputBus:input.effectsHead.connectedToBus toOutputBus:trackOutBus.unsignedIntValue];
-    [input.outputTracks setObject:outputTrack forKey:outputTrack.uuid];
+    CAMultiAudioConnection *inputConn = [self.graph findOutputConnection:input.headNode forNode:self.encodeMixer onBus:0];
+    [self.encodeMixer connectInputBus:inputConn.bus toOutputBus:trackOutBus.unsignedIntValue];
+    CAMultiAudioOutputTrackConnection *trackConn = [[CAMultiAudioOutputTrackConnection alloc] initWithTrack:outputTrack inBus:inputConn.bus];
+    [input.outputTracks setObject:trackConn forKey:outputTrack.uuid];
     return YES;
 }
 
@@ -540,8 +542,9 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     [self.graph addNode:encNode];
     [self.graph connectNode:self.encodeMixer toNode:encNode];
     [self.graph connectNode:encNode toNode:self.previewMixer];
-    [self.previewMixer setVolumeOnInputBus:encNode.connectedToBus volume:0.0f];
     CAMultiAudioConnection *eConn = [self.graph inputConnection:encNode forBus:0];
+
+    [self.previewMixer setVolumeOnInputBus:eConn.bus volume:0.0f];
     CAMultiAudioConnection *silenceConn = [self.graph findOutputConnection:self.silentNode forNode:self.encodeMixer onBus:0];
     [self.encodeMixer setVolumeOnOutputBus:eConn.bus volume:1.0f];
     

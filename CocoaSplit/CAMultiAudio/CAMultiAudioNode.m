@@ -33,8 +33,6 @@ UInt32 inNumberFrames,
 @synthesize volume = _volume;
 @synthesize muted = _muted;
 @synthesize enabled = _enabled;
-@synthesize connectedTo = _connectedTo;
-@synthesize connectedToBus = _connectedToBus;
 
 -(instancetype)init
 {
@@ -63,6 +61,7 @@ UInt32 inNumberFrames,
         self.nodeUID = [[NSUUID UUID] UUIDString];
         self.inputConnections = [NSMutableDictionary dictionary];
         self.outputConnections = [NSMutableDictionary dictionary];
+        _currentEffectChain = [NSMutableArray array];
     }
     
     return self;
@@ -332,14 +331,9 @@ UInt32 inNumberFrames,
 
 
 
-
 -(void)nodeConnected:(CAMultiAudioNode *)toNode inBus:(UInt32)inBus outBus:(UInt32)outBus
 {
-    if (outBus == 0)
-    {
-        _connectedTo = toNode;
-        _connectedToBus = inBus;
-    }
+    return;
 }
 
 
@@ -443,59 +437,62 @@ UInt32 inNumberFrames,
 
 -(void)rebuildEffectChain
 {
-    //Disconnect every node from effectsHead -> headNode (including headNode) and then reconnect everything in effectchain array
+    bool restoreHeadNode = NO;
+
+    NSArray *outConnections = nil;
+    CAMultiAudioNode *lastEffect = _currentEffectChain.lastObject;
+    AVAudioFormat *useFormat = [self.effectsHead outputFormatForBus:0];
+
+    if (lastEffect)
+    {
+        outConnections = [self.graph outputConnections:lastEffect forBus:0];
+        if (lastEffect == self.headNode)
+        {
+            restoreHeadNode = YES;
+        }
+    } else {
+        outConnections = [self.graph outputConnections:self.effectsHead forBus:0];
+    }
+    
+    
+    [self.effectsHead.graph disconnectNodeOutput:self.effectsHead];
+    
+    for (CAMultiAudioNode *currNode in _currentEffectChain)
+    {
+        if (currNode && currNode.graph)
+        {
+            [currNode.graph disconnectNode:currNode];
+            [currNode.graph removeNode:currNode];
+        }
+    }
+    
+    
+    [_currentEffectChain removeAllObjects];
+    
+    
     CAMultiAudioNode *currNode = self.effectsHead;
 
-    CAMultiAudioNode *headConn;
-    while (currNode && currNode != self.headNode)
-    {
-        CAMultiAudioNode *connNode = currNode.connectedTo;
-        [self.graph disconnectNode:currNode];
-        if (currNode.deleteNode)
-        {
-            [self.graph removeNode:currNode];
-        }
-        currNode = connNode;
-    }
-    
-    if (currNode) //This is headNode
-    {
-        headConn = currNode.connectedTo;
-        [self.graph disconnectNode:currNode];
-        if (currNode.deleteNode)
-        {
-            [self.graph removeNode:currNode];
-        }
-        
-        self.headNode = self.effectsHead;
-    }
-    
-    currNode = nil;
+
     currNode = self.effectsHead;
     for (CAMultiAudioNode *eNode in self.effectChain)
     {
         [self.graph addNode:eNode];
-        [self.graph connectNode:currNode toNode:eNode];
+        [self.graph connectNode:currNode toNode:eNode format:useFormat];
+        [_currentEffectChain addObject:eNode];
         currNode = eNode;
     }
     
-    if (headConn && currNode)
+    if (outConnections && outConnections.count > 0)
     {
-        [self.graph connectNode:currNode toNode:headConn];
+
+        [currNode.graph connectNode:currNode usingConnections:outConnections outBus:0 format:useFormat];
+
     }
     
-    
-    if (currNode)
+    if (restoreHeadNode)
     {
         self.headNode = currNode;
-    } else {
-        self.headNode = self.effectsHead;
     }
-    
-
-    
-    //CAShow(self.graph.graphInst);
-
     
 }
 
@@ -569,6 +566,12 @@ UInt32 inNumberFrames,
 }
 
 
+-(void)reset
+{
+    AudioUnitReset(self.audioUnit, kAudioUnitScope_Global, 0);
+    AudioUnitUninitialize(self.audioUnit);
+    AudioUnitInitialize(self.audioUnit);
+}
 -(void) dealloc
 {
     if (self.graph)

@@ -204,6 +204,33 @@
     return YES;
 }
 
+-(bool)connectNode:(CAMultiAudioNode *)node usingConnections:(NSArray *)connections outBus:(UInt32)outBus
+{
+    return [self connectNode:node usingConnections:connections outBus:outBus format:self.audioFormat];
+}
+
+
+-(bool)connectNode:(CAMultiAudioNode *)node usingConnections:(NSArray *)connections outBus:(UInt32)outBus format:(AVAudioFormat *)format
+{
+    if (!_graphInst)
+    {
+        NSLog(@"ConnectNode: No AUGraph!");
+        return NO;
+    }
+    
+    if (!node)
+    {
+        return NO;
+    }
+    
+    for(CAMultiAudioConnection *conn in connections)
+    {
+        [self connectNode:node toNode:conn.node format:format inBus:conn.bus outBus:outBus];
+    }
+    
+    return YES;
+}
+
 
 -(bool)connectNode:(CAMultiAudioNode *)node toNode:(CAMultiAudioNode *)toNode
 {

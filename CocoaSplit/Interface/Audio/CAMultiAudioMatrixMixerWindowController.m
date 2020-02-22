@@ -57,9 +57,20 @@
 -(void)openAddTrackPopover:(id)sender sourceRect:(NSRect)sourceRect
 {
     [self buildTrackMenu];
+    NSInteger midItem = 0;
     
-    NSInteger midItem = _tracksMenu.itemArray.count/2;
+    if (_tracksMenu.itemArray.count == 0)
+    {
+        return;
+    }
+    
+    
+    if (_tracksMenu.itemArray.count > 2)
+    {
+        midItem = _tracksMenu.itemArray.count/2;
+    }
     NSPoint popupPoint = NSMakePoint(NSMaxY(sourceRect), NSMidY(sourceRect));
+    
     [_tracksMenu popUpMenuPositioningItem:[_tracksMenu itemAtIndex:midItem] atLocation:popupPoint inView:sender];
     
 }
@@ -99,7 +110,7 @@
         self.audioNode = node;
         self.downMixer = node.downMixer;
         
-        NSSortDescriptor *nameSort = [NSSortDescriptor sortDescriptorWithKey:@"value.name" ascending:YES comparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+        NSSortDescriptor *nameSort = [NSSortDescriptor sortDescriptorWithKey:@"value.outputTrack.name" ascending:YES comparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
             NSString *name1 = obj1;
             NSString *name2 = obj2;
             

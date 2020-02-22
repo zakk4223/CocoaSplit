@@ -40,8 +40,6 @@
 @property (assign) float volume;
 @property (assign) bool muted;
 @property (assign) bool enabled;
-@property (readonly) CAMultiAudioNode *connectedTo;
-@property (readonly) UInt32 connectedToBus;
 
 -(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType;
 -(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType manufacturer:(OSType)manufacturer;
@@ -75,6 +73,7 @@
     
     AudioComponentDescription unitDescr;
     CAMultiAudioVolumeAnimation *_volumeAnimation;
+    NSMutableArray *_currentEffectChain;
 }
 
 @property (assign) AUNode node;
@@ -97,7 +96,6 @@
 @property (strong) NSMutableDictionary *outputConnections;
 
 @property (readonly) CAMultiAudioNode *connectedTo;
-@property (readonly) UInt32 connectedToBus;
 
 
 @property (assign) float volume;
@@ -118,6 +116,8 @@
 -(void)addEffect:(CAMultiAudioNode *)effect;
 -(void)addEffect:(CAMultiAudioNode *)effect atIndex:(NSUInteger)idx;
 -(void)generateTone;
+-(void)reset;
+
 
 
 @end

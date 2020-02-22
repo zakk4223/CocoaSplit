@@ -43,6 +43,9 @@
 -(NSArray *)connectedInputBusses:(CAMultiAudioNode *)node;
 -(NSArray *)connectedOutputBusses:(CAMultiAudioNode *)node;
 -(CAMultiAudioConnection *)findOutputConnection:(CAMultiAudioNode *)node forNode:(CAMultiAudioNode *)forNode onBus:(UInt32)outBus;
+-(bool)connectNode:(CAMultiAudioNode *)node usingConnections:(NSArray *)connections outBus:(UInt32)outBus format:(AVAudioFormat *)format;
+-(bool)connectNode:(CAMultiAudioNode *)node usingConnections:(NSArray *)connections outBus:(UInt32)outBus;
+
 
 
 

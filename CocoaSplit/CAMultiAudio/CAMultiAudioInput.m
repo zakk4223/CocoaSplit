@@ -162,42 +162,16 @@
     }
     
 
-    self.downMixer = [[CAMultiAudioDownmixer alloc] initWithInputChannels:self.channelCount];
 
-    if (![self.graph addNode:self.downMixer])
-    {
-        
-        [self teardownGraph];
-        return NO;
-    }
-    self.downMixer.muted = NO;
-    self.downMixer.volume = 1.0f;
-    CAMultiAudioNode *connectTo = self.converterNode;
-    if (!connectTo)
-    {
-        connectTo = self.downMixer;
-    }
-    
-    
-
-    
-    if(![self.graph connectNode:self toNode:connectTo format:self.inputFormat])
+    if (![self.graph connectNode:self toNode:self.converterNode  format:self.inputFormat])
     {
         [self teardownGraph];
         return NO;
     }
-    if (self.converterNode)
-    {
-        
-        
-        if(![self.graph connectNode:self.converterNode toNode:self.downMixer])
-        {
-            [self teardownGraph];
-            return NO;
-        }
-    }
+    
+    AVAudioFormat *useFormat = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:self.graph.audioFormat.sampleRate channelLayout:self.inputFormat.channelLayout];
     CAMultiAudioDelay *delayNode;
-    CAMultiAudioNode *connectNode = self.downMixer;
+    CAMultiAudioNode *connectNode = self.converterNode;
     for(int i=0; i < 5; i++)
     {
 
@@ -210,7 +184,7 @@
             [self teardownGraph];
             return NO;
         }
-        ret = [self.graph connectNode:connectNode toNode:delayNode];
+        ret = [self.graph connectNode:connectNode toNode:delayNode format:useFormat];
         if (!ret)
         {
             
@@ -225,30 +199,34 @@
         [self.delayNodes addObject:delayNode];
     }
     
-
-    self.effectsHead = connectNode;
-    [self.downMixer connectInputBus:0 toOutputBus:0];
-
-
+    self.headNode = delayNode;
+    self.effectsHead = delayNode;
     return YES;
     
 }
 
 
--(void)rebuildEffectChain
+-(void)setupDownmixer
 {
-    [super rebuildEffectChain];
-    [self.graph connectNode:self.effectsHead toNode:self.downMixer];
+    AVAudioFormat *useFormat = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:self.graph.audioFormat.sampleRate channelLayout:self.inputFormat.channelLayout];
+
+    
+    self.downMixer = [[CAMultiAudioDownmixer alloc] initWithInputChannels:useFormat.channelCount];
+    [self.graph addNode:self.downMixer];
+    [self.graph connectNode:self.headNode toNode:self.downMixer format:useFormat];
     self.headNode = self.downMixer;
+    self.downMixer.volume = 1.0f;
+    self.downMixer.muted = NO;
+    [self.downMixer connectInputBus:0 toOutputBus:0];
+
 }
+
 
 -(void)setupEffectsChain
 {
     [self setupGraph];
-    //self.effectsHead = self;
-   // [super setupEffectsChain];
-    self.headNode = self.effectsHead;
-    //[self.converterNode generateTone];
+    [super setupEffectsChain];
+    [self setupDownmixer];
     
 }
 
