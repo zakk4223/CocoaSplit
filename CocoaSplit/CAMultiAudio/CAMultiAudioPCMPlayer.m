@@ -49,61 +49,45 @@
 
 -(void)startPendingProcessor
 {
-    if (!_pendingQueue)
+    
+    if (!_pendingTimer)
     {
-        _pendingQueue = dispatch_queue_create("PCM Player pending queue", NULL);
-    }
-    
-    
-    dispatch_async(_pendingQueue, ^{
-        
-        while (1)
+        _pendingTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_global_queue(QOS_CLASS_UTILITY, 0));
+        if (_pendingTimer)
         {
-            @autoreleasepool {
-                NSArray *pendingCopy;
-                
-                @synchronized(self) {
-                    pendingCopy = [self->_pendingBuffers copy];
-                }
-                
+            dispatch_source_set_timer(_pendingTimer, dispatch_time(DISPATCH_TIME_NOW, 0.10*NSEC_PER_SEC), 0.10*NSEC_PER_SEC, 0.5*NSEC_PER_SEC);
+            dispatch_source_set_event_handler(_pendingTimer, ^{
+                @autoreleasepool {
+                     NSArray *pendingCopy;
+                     
+                     @synchronized(self) {
+                         pendingCopy = [self->_pendingBuffers copy];
+                     }
+                     
 
-                
-                for (CAMultiAudioPCM *pcmObj in pendingCopy)
-                {
+                     
+                     for (CAMultiAudioPCM *pcmObj in pendingCopy)
+                     {
 
-                    if ((pcmObj.audioSlice)->mFlags & kScheduledAudioSliceFlag_Complete)
-                    {
-                        
-                        if (self.save_buffer)
-                        {
-                            [self.pauseBuffer addObject:pcmObj];
-                        }
-                        [self releasePCM:pcmObj];
-                    }
-                }
-            }
-            
-            @synchronized(self)
-            {
-                if (self->_exitPending)
-                {
-                    return;
-                }
-            }
-            usleep(20000);
+                         if ((pcmObj.audioSlice)->mFlags & kScheduledAudioSliceFlag_Complete)
+                         {
+                             
+                             if (self.save_buffer)
+                             {
+                                 [self.pauseBuffer addObject:pcmObj];
+                             }
+                             [self releasePCM:pcmObj];
+                         }
+                     }
+                 }
+            });
+            dispatch_resume(_pendingTimer);
         }
-    });
-}
-
-
--(void)didRemoveInput
-{
-    @synchronized(self)
-    {
-        _exitPending = YES;
+                                               
     }
-}
 
+
+}
 
 -(bool)playPcmBuffer:(CAMultiAudioPCM *)pcmBuffer
 {
@@ -114,7 +98,7 @@
     }
     
     
-    if (!_pendingQueue)
+    if (!_pendingTimer)
     {
         [self startPendingProcessor];
     }
@@ -228,6 +212,11 @@
 {
     
     [self flush];
+    if (_pendingTimer)
+    {
+        dispatch_source_cancel(_pendingTimer);
+    }
+    _pendingTimer = nil;
     _pendingBuffers = nil;
 
 }

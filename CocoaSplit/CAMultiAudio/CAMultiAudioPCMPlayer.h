@@ -27,6 +27,8 @@ struct cspcm_buffer_msg {
 {
     NSMutableArray *_pendingBuffers;
     dispatch_queue_t _pendingQueue;
+    dispatch_source_t _pendingTimer;
+    
     bool _playing;
     bool _exitPending;
     

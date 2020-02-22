@@ -13,6 +13,7 @@
 #import "CAMultiAudioSilence.h"
 #import "CAMultiAudioEffect.h"
 #import "CAMultiAudioOutputTrack.h"
+#import "CAMultiAudioOutputTrackConnection.h"
 
 /* our default graph setup looks like this:
  

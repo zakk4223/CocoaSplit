@@ -12,7 +12,6 @@
 
 #import "CAMultiAudioNode.h"
 #import "CAMultiAudioConnection.h"
-
 @interface CAMultiAudioGraph : NSObject
 {
     AUGraph _graphInst;

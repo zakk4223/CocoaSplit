@@ -187,6 +187,7 @@
 		348585DE201E65F900C30A08 /* CSLayerFiltersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 348585DC201E65F900C30A08 /* CSLayerFiltersViewController.m */; };
 		348585DF201E65F900C30A08 /* CSLayerFiltersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 348585DD201E65F900C30A08 /* CSLayerFiltersViewController.xib */; };
 		3488161A23FE9BBF00FF4E1B /* CAMultiAudioConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 3488161923FE9BBF00FF4E1B /* CAMultiAudioConnection.m */; };
+		348816202401010B00FF4E1B /* CAMultiAudioOutputTrackConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 3488161F2401010B00FF4E1B /* CAMultiAudioOutputTrackConnection.m */; };
 		348AC06B19B406910064F02D /* SourceLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 348AC06A19B406910064F02D /* SourceLayout.m */; };
 		348CDBC923D6671C004131AD /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 348CDBC723D665DF004131AD /* Sparkle.framework */; };
 		348CDBCA23D6671C004131AD /* Sparkle.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 348CDBC723D665DF004131AD /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -943,6 +944,8 @@
 		348585DD201E65F900C30A08 /* CSLayerFiltersViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CSLayerFiltersViewController.xib; sourceTree = "<group>"; };
 		3488161823FE9BBF00FF4E1B /* CAMultiAudioConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioConnection.h; path = CAMultiAudio/CAMultiAudioConnection.h; sourceTree = "<group>"; };
 		3488161923FE9BBF00FF4E1B /* CAMultiAudioConnection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioConnection.m; path = CAMultiAudio/CAMultiAudioConnection.m; sourceTree = "<group>"; };
+		3488161E2401010B00FF4E1B /* CAMultiAudioOutputTrackConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioOutputTrackConnection.h; path = CAMultiAudio/CAMultiAudioOutputTrackConnection.h; sourceTree = "<group>"; };
+		3488161F2401010B00FF4E1B /* CAMultiAudioOutputTrackConnection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CAMultiAudioOutputTrackConnection.m; path = CAMultiAudio/CAMultiAudioOutputTrackConnection.m; sourceTree = "<group>"; };
 		348AC06919B406910064F02D /* SourceLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SourceLayout.h; sourceTree = "<group>"; };
 		348AC06A19B406910064F02D /* SourceLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SourceLayout.m; sourceTree = "<group>"; };
 		348CDBC723D665DF004131AD /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
@@ -1940,6 +1943,8 @@
 				3434E16A224F2E1A0091A149 /* CAMultiAudioOutputTrack.m */,
 				3488161823FE9BBF00FF4E1B /* CAMultiAudioConnection.h */,
 				3488161923FE9BBF00FF4E1B /* CAMultiAudioConnection.m */,
+				3488161E2401010B00FF4E1B /* CAMultiAudioOutputTrackConnection.h */,
+				3488161F2401010B00FF4E1B /* CAMultiAudioOutputTrackConnection.m */,
 			);
 			name = CAMultiAudio;
 			sourceTree = "<group>";
@@ -3036,6 +3041,7 @@
 				34ED8C751B07371C002C0674 /* MIKMIDIMetaCopyrightEvent.m in Sources */,
 				3434CB3C1CB09BC4001B3DF9 /* CSTimedOutputBuffer.m in Sources */,
 				34ED8CB71B073C1B002C0674 /* CSMidiManagerWindowController.m in Sources */,
+				348816202401010B00FF4E1B /* CAMultiAudioOutputTrackConnection.m in Sources */,
 				34A88834229CB22F0023D8B9 /* CAMultiAudioOutputTrack+ScriptingAdditions.m in Sources */,
 				3408235519BC677A00CD1F5F /* CSNotifications.m in Sources */,
 				347B14DC198492D900DC7DF0 /* InputPopupControllerViewController.m in Sources */,
