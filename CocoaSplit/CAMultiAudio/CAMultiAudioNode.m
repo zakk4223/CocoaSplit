@@ -212,19 +212,22 @@ UInt32 inNumberFrames,
         return NO;
     }
     OSStatus err;
-    err = AUGraphAddNode(forGraph.graphInst, &unitDescr, &_node);
-    if (err)
+    
+    
+    AudioComponent auComponent = AudioComponentFindNext(NULL, &unitDescr);
+    
+    if (!auComponent)
     {
-        NSLog(@"AUGraphAddNode failed for %@, err: %d", self, err);
-        return NO;
-    }
-    err = AUGraphNodeInfo(forGraph.graphInst, _node, NULL, &_audioUnit);
-    if (err)
-    {
-        NSLog(@"AUGraphNodeInfo failed for %@, err: %d", self, err);
         return NO;
     }
     
+    err =  AudioComponentInstanceNew(auComponent, &_audioUnit);
+    if (err)
+    {
+        NSLog(@"AudioComponentInstanceNew failed for %@, err: %d", self, err);
+        _audioUnit = NULL;
+        return NO;
+    }
     self.graph = forGraph;
     self.engine = forGraph.engine;
 

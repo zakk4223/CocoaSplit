@@ -27,27 +27,6 @@
         
         self.nodeList = [NSMutableArray array];
         self.nodeMap = [NSMutableDictionary dictionary];
-        OSStatus err;
-        err = NewAUGraph(&_graphInst);
-        if (err)
-        {
-            NSLog(@"NewAUGraph failed, err: %d", err);
-            return nil;
-        }
-        err = AUGraphOpen(_graphInst);
-        if (err)
-        {
-            NSLog(@"AUGraphOpen failed, err: %d", err);
-            return nil;
-        }
-        
-        err = AUGraphInitialize(_graphInst);
-        if (err)
-        {
-            NSLog(@"AUGraphInitialize failed, err: %d", err);
-            return nil;
-        }
-        
     }
     
     return self;
@@ -56,16 +35,16 @@
 -(bool)startGraph
 {
     OSStatus err;
-    if (!_graphInst)
+    if (!self.outputNode)
     {
         return NO;
     }
     
     
-    err = AUGraphStart(_graphInst);
+    err = AudioOutputUnitStart(self.outputNode.audioUnit);
     if (err)
     {
-        NSLog(@"AUGraphStart failed, err %d", err);
+        NSLog(@"AudioOutputUnitStart failed, err %d", err);
         return NO;
     }
     
@@ -74,28 +53,16 @@
 
 -(bool)stopGraph
 {
-    if (!_graphInst)
+    if (!self.outputNode)
     {
         return NO;
     }
     OSStatus err;
-    Boolean isRunning;
     
-    err = AUGraphIsRunning(_graphInst, &isRunning);
+    err = AudioOutputUnitStop(self.outputNode.audioUnit);
     if (err)
     {
-        NSLog(@"AUGraphIsRunning failed, err: %d", err);
-        return NO;
-    }
-    if (isRunning)
-    {
-        return YES;
-    }
-    
-    err = AUGraphStop(_graphInst);
-    if (err)
-    {
-        NSLog(@"AUGraphStop failed, err: %d", err);
+        NSLog(@"AudioOutputUnitStop failed, err: %d", err);
         return NO;
     }
     return YES;
@@ -136,7 +103,7 @@
 
 -(bool)removeNode:(CAMultiAudioNode *)node
 {
-    if (!_graphInst || !node)
+    if (!node)
     {
         return NO;
     }
@@ -145,19 +112,6 @@
     if (![self disconnectNode:node])
     {
         NSLog(@"Remove node %@: disconnected failed", node);
-        return NO;
-    }
-
-    err = AUGraphRemoveNode(_graphInst, node.node);
-    if (err)
-    {
-        NSLog(@"Remove node %@: AUGraphRemoveNode failed, err: %d", node, err);
-        return NO;
-    }
-
-    if (![self graphUpdate])
-    {
-        NSLog(@"Graph %@, graphUpdate failed in removeNode %@", self, node);
         return NO;
     }
 
@@ -170,39 +124,6 @@
     
 }
 
--(bool)graphUpdate
-{
-    if (!_graphInst)
-    {
-        return NO;
-    }
-    OSStatus err;
-    
-    /*
-    if (![self stopGraph])
-    {
-        NSLog(@"Graph %@: graphUpdate, stopGraph failed", self);
-        return NO;
-    }
-    */
-    
-    err = AUGraphUpdate(_graphInst, NULL);
-    if (err)
-    {
-        NSLog(@"AUGraphUpdate failed, err: %d", err);
-        return NO;
-    }
-    
-    /*
-    if (![self startGraph])
-    {
-        NSLog(@"Graph %@: graphUpdate, startGraph failed", self);
-        return NO;
-
-    }*/
-    
-    return YES;
-}
 
 -(bool)connectNode:(CAMultiAudioNode *)node usingConnections:(NSArray *)connections outBus:(UInt32)outBus
 {
@@ -212,12 +133,6 @@
 
 -(bool)connectNode:(CAMultiAudioNode *)node usingConnections:(NSArray *)connections outBus:(UInt32)outBus format:(AVAudioFormat *)format
 {
-    if (!_graphInst)
-    {
-        NSLog(@"ConnectNode: No AUGraph!");
-        return NO;
-    }
-    
     if (!node)
     {
         return NO;
@@ -241,12 +156,7 @@
 
 -(bool)connectNode:(CAMultiAudioNode *)node toNode:(CAMultiAudioNode *)toNode format:(AVAudioFormat *)format
 {
-    if (!_graphInst)
-    {
-        NSLog(@"ConnectNode: No AUGraph!");
-        return NO;
-    }
-    
+
     if (!node || !toNode)
     {
         NSLog(@"ConnectNode: Source or destination node is nil %@ -> %@", node, toNode);
@@ -262,13 +172,7 @@
 
 -(bool)connectNode:(CAMultiAudioNode *)node toNode:(CAMultiAudioNode *)toNode format:(AVAudioFormat *)format inBus:(UInt32)inBus outBus:(UInt32)outBus
 {
-    
-    if (!_graphInst)
-    {
-        NSLog(@"ConnectNode: No AUGraph!");
-        return NO;
-    }
-    
+
     if (!node || !toNode)
     {
         NSLog(@"ConnectNode: Source or destination node is nil %@ -> %@", node, toNode);
@@ -285,22 +189,28 @@
     UInt32 bus = inBus;
     
     
+    [self disconnectNode:node outputBus:outBus];
+    [self disconnectNode:toNode inputBus:inBus];
 
     [node willConnectToNode:toNode inBus:bus outBus:outBus];
     
     [toNode willConnectNode:node inBus:bus outBus:outBus];
     
 
-    inNode = node.node;
-    connectTo = toNode.node;
-    //aUnit = node.audioUnit;
     [toNode setInputStreamFormat:format bus:inBus];
     [node setOutputStreamFormat:format bus:outBus];
 
-    err = AUGraphConnectNodeInput(_graphInst, inNode, outBus, connectTo, bus);
+    
+    AudioUnitConnection newConn;
+    newConn.destInputNumber = inBus;
+    newConn.sourceOutputNumber = outBus;
+    newConn.sourceAudioUnit = node.audioUnit;
+    
+    err = AudioUnitSetProperty(toNode.audioUnit, kAudioUnitProperty_MakeConnection, kAudioUnitScope_Input, inBus, &newConn, sizeof(newConn));
+    
     if (err)
     {
-        NSLog(@"AUGraphConnectNodeInput failed for %@ -> %@, err: %d", node, toNode, err);
+        NSLog(@"AudioUnitSetProperty(MakeConnection) failed for %@ -> %@, err: %d", node, toNode, err);
         return NO;
     }
 
@@ -308,19 +218,6 @@
 
     [toNode connectedToNode:node inBus:bus outBus:outBus];
     
-    if (![self graphUpdate])
-    {
-        
-        UInt32 elementCount = 0;
-        UInt32 elementSize = sizeof(UInt32);
-        
-        
-        AudioUnitGetProperty(toNode.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Input, 0, &elementCount, &elementSize);
-        
-        NSLog(@"Graph %@ graphUpdate for connection failed %@:%d -> %@:%d (%d)", self, node, outBus, toNode, bus, elementCount );
-        return NO;
-    }
-
     NSMutableArray *outputsForBus = node.outputConnections[@(outBus)];
     if (!outputsForBus)
     {
@@ -393,7 +290,7 @@
 
 -(bool)disconnectNode:(CAMultiAudioNode *)node inputBus:(UInt32)inputBus updateOutputs:(bool)updateOutputs
 {
-    if (!_graphInst || !node)
+    if (!node)
     {
         return NO;
     }
@@ -402,10 +299,16 @@
     
     if (inputConnection)
     {
-        OSErr err = AUGraphDisconnectNodeInput(_graphInst, node.node, inputBus);
+        
+        AudioUnitConnection breakConn;
+        breakConn.destInputNumber = inputBus;
+        breakConn.sourceOutputNumber = inputConnection.bus;
+        breakConn.sourceAudioUnit = NULL;
+        
+        OSErr err = AudioUnitSetProperty(node.audioUnit, kAudioUnitProperty_MakeConnection, kAudioUnitScope_Input, inputBus, &breakConn, sizeof(breakConn));
         if (err)
         {
-            NSLog(@"AUGraphDisconnectNodeInput failed for node %@:%d, err %d", node, inputBus, err);
+            NSLog(@"AudioUnitSetProperty(MakeConnection) failed for node %@:%d, err %d", node, inputBus, err);
         }
         
         if (updateOutputs)
@@ -428,7 +331,6 @@
         }
         [node.inputConnections removeObjectForKey:@(inputBus)];
     }
-    [self graphUpdate];
     return YES;
 }
 
@@ -436,7 +338,7 @@
 -(bool)disconnectNodeOutput:(CAMultiAudioNode *)node
 {
     
-    if (!_graphInst || !node)
+    if (!node)
     {
         return NO;
     }
@@ -453,7 +355,7 @@
 
 -(bool)disconnectNodeInput:(CAMultiAudioNode *)node
 {
-    if (!_graphInst || !node)
+    if (!node)
     {
         return NO;
     }
@@ -469,7 +371,7 @@
 
 -(bool)disconnectNode:(CAMultiAudioNode *)node outputBus:(UInt32)outputBus
 {
-    if (!_graphInst || !node)
+    if (!node)
     {
         return NO;
     }
@@ -488,7 +390,7 @@
 
 -(bool)disconnectNode:(CAMultiAudioNode *)node
 {
-    if (!_graphInst || !node)
+    if (!node)
     {
         return NO;
     }
@@ -503,13 +405,6 @@
 -(void)dealloc
 {
     self.nodeList = nil;
-
-    
-    
-    if (_graphInst)
-    {
-        DisposeAUGraph(_graphInst);
-    }
 }
 
 

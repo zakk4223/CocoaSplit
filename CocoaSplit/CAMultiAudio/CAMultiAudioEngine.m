@@ -663,6 +663,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     
     
     self.graphOutputNode = self.outputNode;
+    self.graph.outputNode = self.outputNode;
     
     
     

@@ -28,7 +28,6 @@
 @end
 
 @protocol CAMultiAudioNodeJSExport <JSExport>
-@property (assign) AUNode node;
 @property (assign) AudioUnit audioUnit;
 @property (assign) int channelCount;
 @property (readonly) UInt32 inputElement;
@@ -76,7 +75,6 @@
     NSMutableArray *_currentEffectChain;
 }
 
-@property (assign) AUNode node;
 @property (assign) AudioUnit audioUnit;
 @property (assign) int channelCount;
 @property (readonly) UInt32 inputElement;

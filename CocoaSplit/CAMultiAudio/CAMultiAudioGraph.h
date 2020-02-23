@@ -12,19 +12,21 @@
 
 #import "CAMultiAudioNode.h"
 #import "CAMultiAudioConnection.h"
+#import "CAMultiAudioDevice.h"
+
 @interface CAMultiAudioGraph : NSObject
 {
-    AUGraph _graphInst;
 }
 
 //We need to hold references to all the nodes so this isn't a pain to use for clients
 
-@property (assign) AUGraph graphInst;
 @property (strong) NSMutableArray *nodeList;
 @property (strong) NSMutableDictionary *nodeMap;
 @property (strong) AVAudioFormat *audioFormat;
 @property (weak) CAMultiAudioEngine *engine;
 @property (assign) bool running;
+@property (strong) CAMultiAudioDevice *outputNode;
+
 
 -(instancetype)initWithFormat:(AVAudioFormat *)format;
 
