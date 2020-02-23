@@ -21,9 +21,9 @@
 }
 
 
--(bool)createNode:(CAMultiAudioGraph *)forGraph
+-(bool)createNode
 {
-    bool ret = [super createNode:forGraph];
+    bool ret = [super createNode];
     
     AudioTimeStamp ts = {0};
     

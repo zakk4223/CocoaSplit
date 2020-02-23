@@ -205,35 +205,64 @@ UInt32 inNumberFrames,
 
 
 
--(bool)createNode:(CAMultiAudioGraph *)forGraph
+-(bool)createNode
 {
-    if (!forGraph)
+    return [self createNode:nil];
+}
+
+
+-(bool)createNode:(void(^)(void))completionHandler
+{
+    
+    
+    if (_audioUnit)
     {
-        return NO;
+        //Already created
+        return YES;
     }
+    
     OSStatus err;
     
     
     AudioComponent auComponent = AudioComponentFindNext(NULL, &unitDescr);
+
     
     if (!auComponent)
     {
         return NO;
     }
     
-    err =  AudioComponentInstanceNew(auComponent, &_audioUnit);
-    if (err)
-    {
-        NSLog(@"AudioComponentInstanceNew failed for %@, err: %d", self, err);
-        _audioUnit = NULL;
-        return NO;
-    }
-    self.graph = forGraph;
-    self.engine = forGraph.engine;
-
-    self.effectsHead = self;
-    self.headNode = self;
+    AudioComponentDescription fullDesc;
+    AudioComponentGetDescription(auComponent, &fullDesc);
     
+    
+    bool requiresAsync = (fullDesc.componentFlags & kAudioComponentFlag_RequiresAsyncInstantiation) > 0;
+    
+    
+    if (requiresAsync)
+    {
+        AudioComponentInstantiate(auComponent, kAudioComponentInstantiation_LoadOutOfProcess, ^(AudioComponentInstance _Nullable auUnit, OSStatus osErr) {
+            self.audioUnit = auUnit;
+            if (completionHandler)
+            {
+                dispatch_async(dispatch_get_main_queue(), completionHandler);
+            }
+        });
+    } else {
+        AudioUnit newUnit;
+        err =  AudioComponentInstanceNew(auComponent, &newUnit);
+        if (err)
+        {
+            NSLog(@"AudioComponentInstanceNew failed for %@, err: %d", self, err);
+            _audioUnit = NULL;
+            return NO;
+        }
+        self.audioUnit = newUnit;
+        if (completionHandler)
+        {
+            dispatch_async(dispatch_get_main_queue(), completionHandler);
+        }
+    }
     return YES;
 }
 

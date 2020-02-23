@@ -24,6 +24,23 @@
 }
 
 
+-(void)setAudioUnit:(AudioUnit)audioUnit
+{
+    [super setAudioUnit:audioUnit];
+    
+    if (audioUnit && _auClassData)
+    {
+        CFDictionaryRef cfValue = (__bridge CFDictionaryRef)_auClassData;
+        
+        UInt32 size = sizeof(cfValue);
+        
+        AudioUnitSetProperty(audioUnit, kAudioUnitProperty_ClassInfo, kAudioUnitScope_Global, 0, &cfValue, size);
+    }
+    
+    [self setAudioUnitBypass];
+}
+
+
 -(void)setAudioUnitBypass
 {
     UInt32 bypassVal;
@@ -159,36 +176,6 @@
 }
 
 
--(bool)createNode:(CAMultiAudioGraph *)forGraph
-{
-    bool ret = [super createNode:forGraph];
-    
-    if (ret && !self.name)
-    {
-        
-
-        
-        AudioComponent comp = AudioComponentFindNext(NULL, &unitDescr);
-        CFStringRef cName;
-        AudioComponentCopyName(comp, &cName);
-        self.name = CFBridgingRelease(cName);
-    }
-    
-    
-    
-    if (self.audioUnit && _auClassData)
-    {
-        CFDictionaryRef cfValue = (__bridge CFDictionaryRef)_auClassData;
-        
-        UInt32 size = sizeof(cfValue);
-        
-        AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ClassInfo, kAudioUnitScope_Global, 0, &cfValue, size);
-    }
-    
-    [self setAudioUnitBypass];
-    
-    return ret;
-}
 
 -(void)selectPresetNumber:(SInt32)presetNumber
 {

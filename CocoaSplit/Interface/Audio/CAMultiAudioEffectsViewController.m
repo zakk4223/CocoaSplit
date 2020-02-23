@@ -34,7 +34,11 @@
     
     CAMultiAudioEffect *newEffect = clickedEffect.copy;
     
-    [self.effectArrayController addObject:newEffect];
+    [newEffect createNode:^{
+        [self.effectArrayController addObject:newEffect];
+        
+    }];
+    
 }
 
 

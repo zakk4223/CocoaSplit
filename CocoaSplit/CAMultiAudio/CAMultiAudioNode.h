@@ -43,7 +43,8 @@
 -(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType;
 -(instancetype)initWithSubType:(OSType)subType unitType:(OSType)unitType manufacturer:(OSType)manufacturer;
 
--(bool)createNode:(CAMultiAudioGraph *)forGraph;
+-(bool)createNode:(void(^)(void))completionHandler;
+-(bool)createNode;
 
 -(void)willConnectToNode:(CAMultiAudioNode *)node inBus:(UInt32)inBus outBus:(UInt32)outBus;
 -(void)connectedToNode:(CAMultiAudioNode *)node inBus:(UInt32)inBus outBus:(UInt32)outBus;

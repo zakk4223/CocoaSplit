@@ -149,9 +149,9 @@
 
 
 
--(bool)createNode:(CAMultiAudioGraph *)forGraph
+-(bool)createNode
 {
-    [super createNode:forGraph];
+    [super createNode];
     
     //Create the input and output elements
     

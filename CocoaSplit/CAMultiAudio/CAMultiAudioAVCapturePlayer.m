@@ -48,11 +48,6 @@
 }
 
 
--(bool)createNode:(CAMultiAudioGraph *)forGraph
-{
-    [super createNode:forGraph];
-    return YES;
-}
 
 
 -(void)detachCaptureSession

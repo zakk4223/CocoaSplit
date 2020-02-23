@@ -79,8 +79,11 @@
         }
     }
     
-    if ([newNode createNode:self])
+    if ([newNode createNode])
     {
+        newNode.graph = self;
+        newNode.engine = self.engine;
+        
         [newNode willInitializeNode];
         
         OSStatus err = AudioUnitInitialize(newNode.audioUnit);
