@@ -362,6 +362,10 @@
     }
 }
 
+-(AVAudioFormat *)inputFormat
+{
+    return _outputFormat;
+}
 
 
 -(void)dealloc

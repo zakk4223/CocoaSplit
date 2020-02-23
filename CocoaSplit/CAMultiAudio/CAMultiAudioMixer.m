@@ -155,42 +155,25 @@
     
     AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Input, 0, &elementCount, &elementSize);
     
-    UInt32 interactionCnt = 0;
-    
-    AUGraphCountNodeInteractions(self.graph.graphInst, self.node, &interactionCnt);
-    AUNodeInteraction *interactions = malloc(sizeof(AUNodeInteraction)*interactionCnt);
-    
-    
-    AUGraphGetNodeInteractions(self.graph.graphInst, self.node, &interactionCnt, interactions);
-    
-    useElement = 0;
-    UInt32 seenIdx = 0;
-    
-    for (int i=0; i < interactionCnt; i++)
-    {
+    useElement = UINT32_MAX;
         
-        AUNodeInteraction iact = interactions[i];
-        if (iact.nodeInteractionType == kAUNodeInteraction_Connection && iact.nodeInteraction.connection.destNode == self.node)
+    for (UInt32 i=0; i < elementCount; i++)
+    {
+        CAMultiAudioConnection *inConn = [self.graph inputConnection:self forBus:i];
+        if (!inConn)
         {
-            if (seenIdx != iact.nodeInteraction.connection.destInputNumber)
-            {
-                useElement = seenIdx;
-                break;
-            } else {
-                seenIdx++;
-                useElement = iact.nodeInteraction.connection.destInputNumber+1;
-            }
-            
+            useElement = i;
+            break;
         }
     }
     
-    free(interactions);
-    if (useElement >= elementCount)
+    if (useElement == UINT32_MAX)
     {
+        useElement = elementCount;
         elementCount += 64;
-        AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Input, 0, &elementCount, sizeof(elementCount));
+        AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Output, 0, &elementCount, sizeof(elementCount));
     }
-
+    
     [self setVolumeOnInputBus:useElement volume:1.0];
     return useElement;
 }
@@ -203,40 +186,23 @@
     
     UInt32 useElement = 0;
     
-    AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Output, 0, &elementCount, &elementSize);
+    AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Input, 0, &elementCount, &elementSize);
     
-    UInt32 interactionCnt = 0;
-    
-    AUGraphCountNodeInteractions(self.graph.graphInst, self.node, &interactionCnt);
-    AUNodeInteraction *interactions = malloc(sizeof(AUNodeInteraction)*interactionCnt);
-    
-    
-    AUGraphGetNodeInteractions(self.graph.graphInst, self.node, &interactionCnt, interactions);
-    
-    useElement = 0;
-    UInt32 seenIdx = 0;
-    
-    for (int i=0; i < interactionCnt; i++)
-    {
+    useElement = UINT32_MAX;
         
-        AUNodeInteraction iact = interactions[i];
-        if (iact.nodeInteractionType == kAUNodeInteraction_Connection && iact.nodeInteraction.connection.sourceNode == self.node)
+    for (UInt32 i=0; i < elementCount; i++)
+    {
+        NSArray *outConns = [self.graph outputConnections:self forBus:i];
+        if (!outConns || outConns.count == 0)
         {
-            if (seenIdx != iact.nodeInteraction.connection.sourceOutputNumber)
-            {
-                useElement = seenIdx;
-                break;
-            } else {
-                seenIdx++;
-                useElement = iact.nodeInteraction.connection.sourceOutputNumber+1;
-            }
-            
+            useElement = i;
+            break;
         }
     }
     
-    free(interactions);
-    if (useElement >= elementCount)
+    if (useElement == UINT32_MAX)
     {
+        useElement = elementCount;
         elementCount += 64;
         AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ElementCount, kAudioUnitScope_Output, 0, &elementCount, sizeof(elementCount));
     }
