@@ -214,6 +214,8 @@
     if (err)
     {
         NSLog(@"AudioUnitSetProperty(MakeConnection) failed for %@ -> %@, err: %d", node, toNode, err);
+        NSLog(@"%@ OUTPUT %@", node, [node outputFormatForBus:outBus]);
+        NSLog(@"%@ INPUT %@", toNode, [toNode inputFormatForBus:inBus]);
         return NO;
     }
 

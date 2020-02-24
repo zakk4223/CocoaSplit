@@ -72,7 +72,6 @@
     OSStatus err;
     
     err = AudioUnitGetParameter(self.audioUnit, kStereoMixerParam_PostAveragePower, kAudioUnitScope_Output, bus, &result);
-    //err = AudioUnitGetParameter(self.audioUnit, kStereoMixerParam_PostAveragePower, kAudioUnitScope_Output, 0, &result);
     
     
     if (err)
@@ -88,9 +87,7 @@
     Float32 result = 0;
     OSStatus err;
     
-    err = AudioUnitGetParameter(self.audioUnit, kStereoMixerParam_PostAveragePower, kAudioUnitScope_Input, bus, &result);
-    //err = AudioUnitGetParameter(self.audioUnit, kStereoMixerParam_PostAveragePower, kAudioUnitScope_Output, 0, &result);
-    
+    err = AudioUnitGetParameter(self.audioUnit, kStereoMixerParam_PostAveragePower, kAudioUnitScope_Input, bus, &result);    
     
     if (err)
     {
@@ -190,6 +187,20 @@
     return [self getNextOutputElement];
 }
 
+
+
+-(bool)setInputStreamFormat:(AVAudioFormat *)format bus:(UInt32)bus
+{
+    bool retVal;
+    NSDictionary *saveData = [self saveDataForPrivateRestore];
+    AudioUnitUninitialize(self.audioUnit);
+    retVal = [super setInputStreamFormat:format bus:bus];
+    [self willInitializeNode];
+    AudioUnitInitialize(self.audioUnit);
+    [self didInitializeNode];
+    [self restoreDataFromPrivateRestore:saveData];
+    return retVal;
+}
 
 
 -(UInt32)getNextInputElement

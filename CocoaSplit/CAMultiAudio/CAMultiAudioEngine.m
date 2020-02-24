@@ -384,7 +384,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         {
             for (NSUInteger i = 0; i < self.previewMixer.channelCount - previewArray.count; i++)
             {
-                [previewArray addObject:@(-240.0f)];
+                [previewArray addObject:@(-60.0f)];
             }
         } else {
             
@@ -403,7 +403,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         {
             for (NSUInteger i = 0; i < self.encodeMixer.channelCount - streamArray.count; i++)
             {
-                [streamArray addObject:@(-240.0f)];
+                [streamArray addObject:@(-60.0f)];
             }
         } else {
             

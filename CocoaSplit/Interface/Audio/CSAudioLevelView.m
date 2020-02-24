@@ -15,7 +15,7 @@
 
 -(float)convertDbToLinear:(float)dbVal
 {
-    float minDB = -160.0f;
+    float minDB = -60.0f;
     float level;
     if (dbVal < minDB)
     {
@@ -23,11 +23,10 @@
     } else if (dbVal >= 0.0f) {
         level = 1.0f;
     } else {
-        float minAmp = powf(10.0f, 0.05f * minDB);
-        float invAmpRange = 1.0f/(1.0f - minAmp);
-        float amp = powf(10.0f, 0.05f * dbVal);
-        float adjAmp = (amp - minAmp) * invAmpRange;
-        level = powf(adjAmp, 1.0f/2.0f);
+        //Just try a percentage?
+        
+        float rawpercent = dbVal/60.0f;
+        level = 1.0f - fabs(rawpercent);
     }
 
     return level;
@@ -60,14 +59,14 @@
     
     if (!level1)
     {
-        level1 = @(-240.0f);
+        level1 = @(-60.0f);
         level2 = level1;
     }
     
     float useLevel = [self convertDbToLinear:level1.floatValue];
     float useLevel2 = [self convertDbToLinear:level2.floatValue];
 
-    leftgrad = [[NSGradient alloc] initWithColorsAndLocations:[NSColor greenColor], 0.0f, [NSColor yellowColor], 0.5f, [NSColor redColor], 1.0f, nil];
+    leftgrad = [[NSGradient alloc] initWithColorsAndLocations:[NSColor greenColor], 0.0f, [NSColor yellowColor], 0.667f, [NSColor redColor], 1.0f, nil];
     //backgroundGrad = [[NSGradient alloc] initWithColorsAndLocations:[NSColor colorWithRed:0.0f green:0.2f blue:0.0 alpha:1.0], 0.0f, [NSColor colorWithRed:0.2f green:0.2f blue:0.0f alpha:1.0f], 0.5f, [NSColor colorWithRed:0.2f green:0.0f blue:0.0f alpha:1.0f], 1.0f, nil];
     [self.backgroundColor setFill];
     NSRectFill(dirtyRect);

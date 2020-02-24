@@ -50,7 +50,7 @@
             
             for (NSUInteger i = 0; i < self.channelCount - inputArray.count; i++)
             {
-                [inputArray addObject:@(-240.0f)];
+                [inputArray addObject:@(-60.0f)];
             }
         } else {
             
@@ -68,7 +68,7 @@
         {
             for (NSUInteger i = 0; i < self.downMixer.outputChannelCount - outputArray.count; i++)
             {
-                [outputArray addObject:@(-240.0f)];
+                [outputArray addObject:@(-60.0f)];
             }
         } else {
             

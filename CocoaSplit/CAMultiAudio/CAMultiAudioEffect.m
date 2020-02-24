@@ -104,6 +104,32 @@
 }
 
 
+-(bool)setInputStreamFormat:(AVAudioFormat *)format bus:(UInt32)bus
+{
+    bool retval;
+    NSMutableDictionary *saveDict = [NSMutableDictionary dictionary];
+    [self saveDataToDict:saveDict];
+    AudioUnitUninitialize(self.audioUnit);
+    [self willInitializeNode];
+    retval = [super setInputStreamFormat:format bus:bus];
+    AudioUnitInitialize(self.audioUnit);
+    [self restoreDataFromDict:saveDict];
+    return retval;
+}
+
+-(bool)setOutputStreamFormat:(AVAudioFormat *)format bus:(UInt32)bus
+{
+    bool retval;
+    NSMutableDictionary *saveDict = [NSMutableDictionary dictionary];
+    [self saveDataToDict:saveDict];
+    AudioUnitUninitialize(self.audioUnit);
+    [self willInitializeNode];
+    retval = [super setOutputStreamFormat:format bus:bus];
+    AudioUnitInitialize(self.audioUnit);
+    [self restoreDataFromDict:saveDict];
+
+    return retval;
+}
 
 -(void)saveDataToDict:(NSMutableDictionary *)saveDict
 {
@@ -114,7 +140,11 @@
     [saveDict setObject:subType forKey:@"subType"];
     [saveDict setObject:manufacturer forKey:@"manufacturer"];
     [saveDict setObject:auType forKey:@"componentType"];
-    [saveDict setObject:self.name forKey:@"name"];
+    if (self.name)
+    {
+        [saveDict setObject:self.name forKey:@"name"];
+    }
+    
     [saveDict setObject:[NSNumber numberWithBool:self.bypass] forKey:@"bypass"];
     
     CFPropertyListRef saveData;

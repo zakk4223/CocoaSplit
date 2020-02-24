@@ -263,6 +263,8 @@ UInt32 inNumberFrames,
             dispatch_async(dispatch_get_main_queue(), completionHandler);
         }
     }
+    self.effectsHead = self;
+    self.headNode = self;
     return YES;
 }
 
