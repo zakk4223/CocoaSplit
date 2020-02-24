@@ -61,6 +61,6 @@
 -(void)updatePowerlevel;
 -(void)removeFromEngine;
 -(void)addToOutputTrack:(CAMultiAudioOutputTrack *)trackName;
--(void)removeFromOutputTrack:(CAMultiAudioOutputTrack *)trackName;
+-(void)removeFromOutputTrack:(NSString *)trackUUID;
 
 @end

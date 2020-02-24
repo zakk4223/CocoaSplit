@@ -86,5 +86,6 @@
 -(instancetype)initWithDefaultTrackUUID:(NSString *)outputUUID;
 -(CAMultiAudioInput *)findInputForSystemUUID:(NSString *)uuid;
 -(CAMultiAudioInput *)createInputForSystemUUID:(NSString *)uuid;
+-(void)startEncoder:(NSString *)trackUID;
 
 @end

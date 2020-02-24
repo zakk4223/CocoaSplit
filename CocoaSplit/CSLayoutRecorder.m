@@ -33,6 +33,7 @@
 @implementation CSLayoutRecorder
 
 
+@synthesize audioEngine = _audioEngine;
 
 -(instancetype) init
 {
@@ -194,6 +195,13 @@
     }
 }
 
+-(void)attachToEncoder:(NSString *)trackUID
+{
+    CAMultiAudioOutputTrack *outputTrack = self.audioEngine.outputTracks[trackUID];
+    CSAacEncoder *enc = outputTrack.encoder;
+    enc.encodedReceiver = self;
+    [self.audioEngine startEncoder:trackUID];
+}
 
 -(void)startRecordingCommon
 {
@@ -259,11 +267,8 @@
         
         for(NSString *trackName in self.audioEngine.outputTracks)
         {
-            CAMultiAudioOutputTrack *outputTrack = self.audioEngine.outputTracks[trackName];
-            CSAacEncoder *enc = outputTrack.encoder;
-            enc.encodedReceiver = self;
+            [self attachToEncoder:trackName];
         }
-        [self.audioEngine startEncoders];
         if (!self.renderer)
         {
             self.renderer = [[LayoutRenderer alloc] init];
@@ -292,7 +297,7 @@
         
         self.recordingActive = YES;
         self.layout.isActive = YES;
-
+        [self.audioEngine addObserver:self forKeyPath:@"outputTracks.@allKeys" options:NSKeyValueObservingOptionNew context:nil];
         dispatch_async(_frame_queue, ^{
             [self newFrameTimed];
             
@@ -302,8 +307,37 @@
     
 }
 
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
+{
+    if (!self.audioEngine)
+    {
+        return;
+    }
+    NSArray *trackKeys = change[NSKeyValueChangeNewKey];
+    for (NSString *trackUID in trackKeys)
+    {
+        CAMultiAudioOutputTrack *outTrack = self.audioEngine.outputTracks[trackUID];
+        if (!outTrack.encoder.encodedReceiver)
+        {
+            [self attachToEncoder:trackUID];
+        }
+    }
+}
 
 
+-(CAMultiAudioEngine *)audioEngine
+{
+    return _audioEngine;
+}
+-(void)setAudioEngine:(CAMultiAudioEngine *)audioEngine
+{
+    if (self.audioEngine)
+    {
+        [self.audioEngine removeObserver:self forKeyPath:@"outputTracks.@allKeys"];
+    }
+    
+    _audioEngine = audioEngine;
+}
 
 
 -(NSObject<VideoCompressor> *)compressorByName:(NSString *)name
@@ -735,15 +769,15 @@
     
     
     
-    if (CMTIME_COMPARE_INLINE(pcmBuffer.firstAudioTime, ==, kCMTimeZero))
+    if (CMTIME_COMPARE_INLINE(_firstPcmAudioTime, ==, kCMTimeZero))
     {
         
-        pcmBuffer.firstAudioTime = orig_pts;
+        _firstPcmAudioTime = orig_pts;
         return;
     }
     
     
-    CMTime pts = CMTimeSubtract(orig_pts, pcmBuffer.firstAudioTime);
+    CMTime pts = CMTimeSubtract(orig_pts, _firstPcmAudioTime);
     //CMTime adjust_pts = CMTimeMakeWithSeconds(self.audio_adjust, orig_pts.timescale);
     //CMTime pts = CMTimeAdd(real_pts, adjust_pts);
     
@@ -782,23 +816,20 @@
     
     
     
-    if (CMTIME_COMPARE_INLINE(audioBuffer.firstAudioTime, ==, kCMTimeZero))
+    if (CMTIME_COMPARE_INLINE(_firstAudioTime, ==, kCMTimeZero))
     {
         
         
-        audioBuffer.firstAudioTime = orig_pts;
+        _firstAudioTime = orig_pts;
         return;
     }
     
     
-    CMTime pts = CMTimeSubtract(orig_pts, audioBuffer.firstAudioTime);
+    CMTime pts = CMTimeSubtract(orig_pts, _firstAudioTime);
     //CMTime adjust_pts = CMTimeMakeWithSeconds(self.audio_adjust, orig_pts.timescale);
     //CMTime pts = CMTimeAdd(real_pts, adjust_pts);
     
-    
-    
     CMSampleBufferSetOutputPresentationTimeStamp(sampleBuffer, pts);
-    
     if (CMTIME_COMPARE_INLINE(pts, >, audioBuffer.previousAudioTime))
     {
         if (sampleBuffer)
@@ -809,5 +840,11 @@
     }
 }
 
-
+-(void)dealloc
+{
+    if (self.audioEngine)
+    {
+        [self.audioEngine removeObserver:self forKeyPath:@"outputTracks.@allKeys"];
+    }
+}
 @end

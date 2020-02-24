@@ -53,7 +53,6 @@
 
 -(bool)startGraph;
 -(bool)stopGraph;
--(bool)graphUpdate;
 -(bool)removeNode:(CAMultiAudioNode *)node;
 
 @end

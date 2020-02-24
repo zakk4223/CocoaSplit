@@ -88,8 +88,8 @@
     NSArray *selectedTracks = self.audioTracksDictionaryController.selectedObjects;
     for (NSDictionaryControllerKeyValuePair *trackInfo in selectedTracks)
     {
-        CAMultiAudioOutputTrack *track = [trackInfo value];
-        [self.audioNode removeFromOutputTrack:track];
+        CAMultiAudioOutputTrackConnection *trackConn = [trackInfo value];
+        [self.audioNode removeFromOutputTrack:trackConn.outputTrack.uuid];
     }
 }
 

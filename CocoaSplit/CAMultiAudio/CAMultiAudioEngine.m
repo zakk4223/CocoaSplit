@@ -442,18 +442,24 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 }
 
--(bool)removeInput:(CAMultiAudioInput *)input fromTrack:(CAMultiAudioOutputTrack *)outputTrack
+-(bool)removeInput:(CAMultiAudioInput *)input fromTrack:(NSString *)outputTrackUUID
 {
-    if (!outputTrack)
+    if (!outputTrackUUID)
     {
         return NO;
     }
     
-    NSNumber *trackOutBus = outputTrack.outputBus;
-    CAMultiAudioConnection *inputConn = [self.graph findOutputConnection:input.headNode forNode:self.encodeMixer onBus:0];
+    
+    CAMultiAudioOutputTrackConnection *trackConn = input.outputTracks[outputTrackUUID];
+    if (!trackConn)
+    {
+        return NO;
+    }
+    
+    NSNumber *trackOutBus = trackConn.outputTrack.outputBus;
 
-    [self.encodeMixer disconnectInputBus:inputConn.bus fromOutputBus:trackOutBus.unsignedIntValue];
-    [input.outputTracks removeObjectForKey:outputTrack.uuid];
+    [self.encodeMixer disconnectInputBus:trackConn.bus fromOutputBus:trackOutBus.unsignedIntValue];
+    [input.outputTracks removeObjectForKey:outputTrackUUID];
     return YES;
 }
 
@@ -577,6 +583,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     [self attachOutputTrack:outputTrack];
 
     [self willChangeValueForKey:@"outputTracks"];
+    
     [self.outputTracks setObject:outputTrack forKey:outputTrack.uuid];
     [self didChangeValueForKey:@"outputTracks"];
     [[CaptureController sharedCaptureController] postNotification:CSNotificationAudioTrackCreated forObject:withName];
@@ -620,9 +627,10 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         
         for (CAMultiAudioInput *input in self.audioInputs)
         {
+            
             if ([input.outputTracks valueForKey:withUUID])
             {
-                [input removeFromOutputTrack:trackInfo];
+                [input removeFromOutputTrack:withUUID];
             }
         }
         
@@ -993,21 +1001,29 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     }
 
     [self.encodeMixer restoreDataFromDict:encodeEffectChain];
-    [self.graph graphUpdate];
     [self.graph startGraph];
 
 }
 
 
+-(void)startEncoder:(NSString *)trackUID
+{
+    CAMultiAudioOutputTrack *outputTrack = self.outputTracks[trackUID];
+    if (outputTrack)
+    {
+        NSLog(@"STARTING ENCODER FOR %@", trackUID);
+        CAMultiAudioNode *renderNode = outputTrack.encoderNode;
+        CSAacEncoder *encoder = outputTrack.encoder;
+        AudioUnitAddRenderNotify(renderNode.audioUnit, encoderRenderCallback, [encoder inputBufferPtr]);
+    }
+
+}
 -(void)startEncoders
 {
     
     for(NSString *trackName in self.outputTracks)
     {
-        CAMultiAudioOutputTrack *outputTrack = self.outputTracks[trackName];
-        CAMultiAudioNode *renderNode = outputTrack.encoderNode;
-        CSAacEncoder *encoder = outputTrack.encoder;
-        AudioUnitAddRenderNotify(renderNode.audioUnit, encoderRenderCallback, [encoder inputBufferPtr]);
+        [self startEncoder:trackName];
     }
 }
 
@@ -1215,7 +1231,6 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     disconnectNode.headNode = nil;
     disconnectNode.graph = nil;
     
-    [self.graph graphUpdate];
     [CaptureController.sharedCaptureController postNotification:CSNotificationAudioRemoved forObject:self];
     return YES;
 }
@@ -1346,10 +1361,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     TPCircularBuffer *encodeBuffer = (TPCircularBuffer *)inRefCon;
     
 
-    
     if (encodeBuffer && ((*ioActionFlags) & kAudioUnitRenderAction_PostRender))
     {
-        
         TPCircularBufferCopyAudioBufferList(encodeBuffer, ioData, inTimeStamp, kTPCircularBufferCopyAll, NULL);
 
         /*

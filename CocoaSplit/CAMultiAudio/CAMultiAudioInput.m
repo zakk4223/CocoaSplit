@@ -104,10 +104,12 @@
 }
 
 
--(void)removeFromOutputTrack:(CAMultiAudioOutputTrack *)outputTrack
+-(void)removeFromOutputTrack:(NSString *)trackUUID
 {
+    
+    
     [self willChangeValueForKey:@"outputTracks"];
-    [self.engine removeInput:self fromTrack:outputTrack];
+    [self.engine removeInput:self fromTrack:trackUUID];
     [self didChangeValueForKey:@"outputTracks"];
     [[CaptureController sharedCaptureController] postNotification:CSNotificationAudioTrackInputDeleted forObject:self];
 }
@@ -248,7 +250,7 @@
         saveDict[@"downMixerData"] = [self.downMixer saveData];
     }
     saveDict[@"isGlobal"] = [NSNumber numberWithBool:self.isGlobal];
-    saveDict[@"outputTracks"] = self.outputTracks.copy;
+    saveDict[@"outputTracksUUIDs"] = self.outputTracks.allKeys;
 }
 
 
@@ -269,7 +271,7 @@
         self.isGlobal = [restoreDict[@"isGlobal"] boolValue];
     }
     
-    NSDictionary *outputTracks = restoreDict[@"outputTracks"];
+    NSArray *outputTracks = restoreDict[@"outputTracksUUIDs"];
     if (outputTracks)
     {
         for(NSString *trackUUID in outputTracks)

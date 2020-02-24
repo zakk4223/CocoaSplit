@@ -26,7 +26,7 @@
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6qE-t2-zqe">
                         <rect key="frame" x="19" y="476" width="84" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Stream Volume" id="clH-Fr-TJ1">
-                            <font key="font" metaFont="toolTip"/>
+                            <font key="font" metaFont="controlContent" size="11"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -34,7 +34,7 @@
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wwP-vq-QJZ">
                         <rect key="frame" x="18" y="528" width="65" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Samplerate" id="qPp-Ym-izV">
-                            <font key="font" metaFont="toolTip"/>
+                            <font key="font" metaFont="controlContent" size="11"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -42,7 +42,7 @@
                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ssR-h6-svZ">
                         <rect key="frame" x="91" y="548" width="59" height="19"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="lBZ-LI-XH0">
-                            <font key="font" metaFont="toolTip"/>
+                            <font key="font" metaFont="controlContent" size="11"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -54,7 +54,7 @@
                         <rect key="frame" x="88" y="523" width="70" height="22"/>
                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="FJb-Og-tdf" id="uSC-7v-E4B">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="toolTip"/>
+                            <font key="font" metaFont="controlContent" size="11"/>
                             <menu key="menu" id="6Ra-rI-plD">
                                 <items>
                                     <menuItem title="Item 1" state="on" id="FJb-Og-tdf"/>
@@ -74,7 +74,7 @@
                             <constraint firstAttribute="width" constant="58" id="q2p-hX-TR0"/>
                         </constraints>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="kbits/sec" id="S8r-Xg-ebh">
-                            <font key="font" metaFont="toolTip"/>
+                            <font key="font" metaFont="controlContent" size="11"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -82,7 +82,7 @@
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zuo-gj-1Pr">
                         <rect key="frame" x="18" y="506" width="63" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Audio Shift" id="6Pl-mK-60G">
-                            <font key="font" metaFont="toolTip"/>
+                            <font key="font" metaFont="controlContent" size="11"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -90,7 +90,7 @@
                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="I72-n8-A7m">
                         <rect key="frame" x="91" y="504" width="59" height="19"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="Utr-K4-fTZ">
-                            <font key="font" metaFont="toolTip"/>
+                            <font key="font" metaFont="controlContent" size="11"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -101,7 +101,7 @@
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3S3-NA-Pfr">
                         <rect key="frame" x="157" y="506" width="49" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="seconds" id="ktg-pa-9dP">
-                            <font key="font" metaFont="toolTip"/>
+                            <font key="font" metaFont="controlContent" size="11"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -112,7 +112,7 @@
                             <constraint firstAttribute="width" constant="36" id="8wR-h0-BoG"/>
                         </constraints>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Bitrate" id="FVz-ie-6Zt">
-                            <font key="font" metaFont="toolTip"/>
+                            <font key="font" metaFont="controlContent" size="11"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -120,7 +120,7 @@
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GNm-og-wRf">
                         <rect key="frame" x="19" y="372" width="101" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Monitor volume" id="IAm-lt-PXz">
-                            <font key="font" metaFont="toolTip"/>
+                            <font key="font" metaFont="controlContent" size="11"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -148,7 +148,7 @@
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5HX-Gi-83X">
                         <rect key="frame" x="19" y="420" width="84" height="14"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Monitor Output" id="41g-2s-fF7">
-                            <font key="font" metaFont="toolTip"/>
+                            <font key="font" metaFont="controlContent" size="11"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -160,7 +160,7 @@
                         </constraints>
                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="KN8-OL-txf" id="SEL-4J-m1s">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="toolTip"/>
+                            <font key="font" metaFont="controlContent" size="11"/>
                             <menu key="menu" id="sce-bW-EMX">
                                 <items>
                                     <menuItem title="Item 1" state="on" id="KN8-OL-txf"/>
@@ -199,7 +199,7 @@
                         </constraints>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Mute_Icon" imagePosition="only" alignment="center" alternateImage="Speaker_Icon" controlSize="small" imageScaling="proportionallyUpOrDown" inset="2" id="HFf-ty-SwM" customClass="CSNSButtonCellThemed">
                             <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="toolTip"/>
+                            <font key="font" metaFont="controlContent" size="11"/>
                         </buttonCell>
                         <connections>
                             <binding destination="dRe-6o-71e" name="value" keyPath="selection.encodeMixer.enabled" id="gtc-5g-Cnh"/>
@@ -226,7 +226,7 @@
                         </constraints>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Mute_Icon" imagePosition="only" alignment="center" alternateImage="Speaker_Icon" controlSize="small" imageScaling="proportionallyUpOrDown" inset="2" id="6fp-6X-2wk" customClass="CSNSButtonCellThemed">
                             <behavior key="behavior" pushIn="YES" changeContents="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="toolTip"/>
+                            <font key="font" metaFont="controlContent" size="11"/>
                         </buttonCell>
                         <connections>
                             <binding destination="dRe-6o-71e" name="value" keyPath="selection.previewMixer.enabled" id="GY9-T8-HVd"/>
@@ -247,7 +247,7 @@
                                     <tableColumns>
                                         <tableColumn width="135" minWidth="40" maxWidth="1000" id="Gka-Lc-OMt">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
-                                                <font key="font" metaFont="toolTip"/>
+                                                <font key="font" metaFont="controlContent" size="11"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                             </tableHeaderCell>
@@ -301,7 +301,7 @@
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8BQ-Ld-p55">
                         <rect key="frame" x="19" y="282" width="72" height="14"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Audio Tracks" id="szd-Om-2xO">
-                            <font key="font" metaFont="toolTip"/>
+                            <font key="font" metaFont="controlContent" size="11"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -314,7 +314,7 @@
                         </constraints>
                         <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="caC-7M-URI">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="toolTip"/>
+                            <font key="font" metaFont="controlContent" size="11"/>
                         </buttonCell>
                         <connections>
                             <action selector="addAudioTrack:" target="-2" id="Kp6-Qm-Mq6"/>
@@ -328,7 +328,7 @@
                         </constraints>
                         <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="overlaps" alignment="center" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="EQD-RZ-rXn">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="toolTip"/>
+                            <font key="font" metaFont="controlContent" size="11"/>
                         </buttonCell>
                         <connections>
                             <action selector="removeAudioTrack:" target="-2" id="Vpk-YM-Bjv"/>
