@@ -19,6 +19,7 @@
 @property (strong) IBInspectable NSColor *backgroundColor;
 @property (assign) IBInspectable float backgroundSize;
 @property (assign) IBInspectable BOOL splitMeter;
+@property (assign) IBInspectable int useChannel;
 @property (strong) NSArray *audioLevels;
 
 

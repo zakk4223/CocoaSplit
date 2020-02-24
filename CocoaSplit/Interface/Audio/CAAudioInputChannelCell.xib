@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15505"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="c22-O7-iKe" customClass="CAAudioInputChannelCell">
+            <rect key="frame" x="0.0" y="0.0" width="130" height="26"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="fON-UY-MPD" customClass="CSAudioLevelView">
+                    <rect key="frame" x="0.0" y="0.0" width="130" height="6"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="6" id="L59-oI-pNS"/>
+                    </constraints>
+                </customView>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SZh-fb-Bw3">
+                    <rect key="frame" x="-2" y="5" width="134" height="16"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="xpg-VX-Q7L">
+                        <font key="font" usesAppearanceFont="YES"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+            </subviews>
+            <constraints>
+                <constraint firstItem="fON-UY-MPD" firstAttribute="top" secondItem="SZh-fb-Bw3" secondAttribute="bottom" constant="-1" id="aoz-Oj-T6R"/>
+                <constraint firstAttribute="trailing" secondItem="fON-UY-MPD" secondAttribute="trailing" id="hK2-mr-MhJ"/>
+                <constraint firstItem="fON-UY-MPD" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="i8O-4O-CXg"/>
+                <constraint firstItem="SZh-fb-Bw3" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="k6V-Lf-YcF"/>
+                <constraint firstAttribute="trailing" secondItem="SZh-fb-Bw3" secondAttribute="trailing" id="qMY-De-Dig"/>
+                <constraint firstItem="SZh-fb-Bw3" firstAttribute="centerY" secondItem="c22-O7-iKe" secondAttribute="centerY" id="z5F-9e-Es0"/>
+            </constraints>
+            <connections>
+                <outlet property="levelView" destination="fON-UY-MPD" id="ymw-bb-WJC"/>
+                <outlet property="textLabel" destination="SZh-fb-Bw3" id="xeV-aH-PGq"/>
+            </connections>
+            <point key="canvasLocation" x="-76" y="125"/>
+        </customView>
+    </objects>
+</document>

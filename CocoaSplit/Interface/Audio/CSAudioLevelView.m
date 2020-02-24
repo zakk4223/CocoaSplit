@@ -48,7 +48,13 @@
     
     if (self.audioLevels.count > 0)
     {
-        level1 = [self.audioLevels objectAtIndex:0];
+        NSUInteger chanIdx = 0;
+        if (self.useChannel > -1)
+        {
+            chanIdx = self.useChannel;
+        }
+            
+        level1 = [self.audioLevels objectAtIndex:chanIdx];
         level2 = level1;
     }
     
@@ -135,6 +141,8 @@
 -(void)awakeFromNib
 {
     [super awakeFromNib];
+    self.useChannel = -1;
+    
     if (!self.backgroundColor)
     {
         self.backgroundColor = [NSColor disabledControlTextColor];

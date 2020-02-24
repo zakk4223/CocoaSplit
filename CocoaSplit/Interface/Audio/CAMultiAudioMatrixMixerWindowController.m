@@ -7,8 +7,10 @@
 
 #import "CAMultiAudioMatrixMixerWindowController.h"
 #import "CAMultiAudioMatrixCell.h"
+#import "CAAudioInputChannelCell.h"
 #import "CAMultiAudioUnit.h"
 #import "CAMultiAudioEngine.h"
+
 #import <AppKit/AppKit.h>
 
 
@@ -154,12 +156,14 @@
 
     if (columnIndex == 0)
     {
-        NSTableCellView *inputLabel = [self.matrixTable makeViewWithIdentifier:@"MatrixLabelCell" owner:self];
-
-        [inputLabel.textField setStringValue:[NSString stringWithFormat:@"Input Channel %ld", (long)row]];
-        [inputLabel setNeedsLayout:YES];
+        CAAudioInputChannelCell *inputCell = [self.matrixTable makeViewWithIdentifier:@"CAAudioInputChannelCell" owner:self];
         
-        return inputLabel;
+        
+
+        [inputCell.textLabel setStringValue:[NSString stringWithFormat:@"Input Channel %ld", (long)row]];
+        [inputCell.levelView bind:@"audioLevels" toObject:self.audioNode withKeyPath:@"powerLevels.input" options:nil];
+        inputCell.levelView.useChannel = (int)row;
+        return inputCell;
     }
     
     
@@ -169,7 +173,6 @@
     slider.tag = ((row+1)*100) + columnIndex-1;
     
     Float32 volume = [self.downMixer getVolumeforChannel:(UInt32)row outChannel:(UInt32)columnIndex-1];
-    NSLog(@"VOLUME %f", volume);
     slider.doubleValue = volume;
     
     
@@ -190,14 +193,15 @@
 
     [super windowDidLoad];
     NSNib *cellNib = [[NSNib alloc] initWithNibNamed:@"CAMultiAudioMatrixView" bundle:nil];
+    NSNib *inputNib = [[NSNib alloc] initWithNibNamed:@"CAAudioInputChannelCell" bundle:nil];
     self.matrixTable.columnAutoresizingStyle = NSTableViewUniformColumnAutoresizingStyle;
     
 
     self.matrixTable.columnAutoresizingStyle = NSTableViewUniformColumnAutoresizingStyle;
     
     [self.matrixTable registerNib:cellNib forIdentifier:@"MatrixMixerCell"];
+    [self.matrixTable registerNib:inputNib forIdentifier:@"CAAudioInputChannelCell"];
     
-    NSLog(@"OUTPUT CHANNELS %d", self.downMixer.outputChannelCount);
     if (self.matrixTable.numberOfColumns < self.downMixer.outputChannelCount)
     {
         for (int i = 0; i < self.downMixer.outputChannelCount; i++)

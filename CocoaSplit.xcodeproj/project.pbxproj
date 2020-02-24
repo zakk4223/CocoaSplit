@@ -108,6 +108,8 @@
 		34528B8F1F9A707400C090E0 /* InputSource+ScriptingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 34528B8E1F9A707400C090E0 /* InputSource+ScriptingAdditions.m */; };
 		34564D5F2071C4BC00652BF0 /* CSInputLayoutTransitionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34564D5D2071C4BC00652BF0 /* CSInputLayoutTransitionViewController.m */; };
 		34564D602071C4BC00652BF0 /* CSInputLayoutTransitionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34564D5E2071C4BC00652BF0 /* CSInputLayoutTransitionViewController.xib */; };
+		34567F1124046BE200D046F8 /* CAAudioInputChannelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 34567F1024046BE200D046F8 /* CAAudioInputChannelCell.m */; };
+		34567F1524046C7100D046F8 /* CAAudioInputChannelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34567F1424046C7100D046F8 /* CAAudioInputChannelCell.xib */; };
 		34576C7819AFCA1B007BAD90 /* CSPluginLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 34576C7719AFCA1B007BAD90 /* CSPluginLoader.m */; };
 		345BECE51F3DB4F000B46F29 /* CSLayoutCapturePlugin.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 345BECC31F3DADF700B46F29 /* CSLayoutCapturePlugin.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		345BECE81F3FD21200B46F29 /* CSLayoutTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 345BECE71F3FD21200B46F29 /* CSLayoutTransition.m */; };
@@ -804,6 +806,9 @@
 		34564D5C2071C4BC00652BF0 /* CSInputLayoutTransitionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSInputLayoutTransitionViewController.h; sourceTree = "<group>"; };
 		34564D5D2071C4BC00652BF0 /* CSInputLayoutTransitionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSInputLayoutTransitionViewController.m; sourceTree = "<group>"; };
 		34564D5E2071C4BC00652BF0 /* CSInputLayoutTransitionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CSInputLayoutTransitionViewController.xib; sourceTree = "<group>"; };
+		34567F0F24046BE200D046F8 /* CAAudioInputChannelCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAAudioInputChannelCell.h; sourceTree = "<group>"; };
+		34567F1024046BE200D046F8 /* CAAudioInputChannelCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CAAudioInputChannelCell.m; sourceTree = "<group>"; };
+		34567F1424046C7100D046F8 /* CAAudioInputChannelCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CAAudioInputChannelCell.xib; sourceTree = "<group>"; };
 		3456E1F3217BB5BD00A368F9 /* CocoaSplit.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CocoaSplit.entitlements; sourceTree = "<group>"; };
 		34576C7619AFCA1B007BAD90 /* CSPluginLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPluginLoader.h; sourceTree = "<group>"; };
 		34576C7719AFCA1B007BAD90 /* CSPluginLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSPluginLoader.m; sourceTree = "<group>"; };
@@ -1615,6 +1620,9 @@
 				3440375F1FFEF7C1009183FB /* CAMultiAudioEngineInputsController.h */,
 				344037601FFEF7C1009183FB /* CAMultiAudioEngineInputsController.m */,
 				344037611FFEF7C1009183FB /* CAMultiAudioEngineInputsController.xib */,
+				34567F0F24046BE200D046F8 /* CAAudioInputChannelCell.h */,
+				34567F1024046BE200D046F8 /* CAAudioInputChannelCell.m */,
+				34567F1424046C7100D046F8 /* CAAudioInputChannelCell.xib */,
 			);
 			name = Audio;
 			path = Interface/Audio;
@@ -2889,6 +2897,7 @@
 				34FEF909203C106A0006A676 /* CSAddOutputPopupViewController.xib in Resources */,
 				3441269C1E6C86400051DA06 /* CSLayoutSwitcherWithPreviewWindowController.xib in Resources */,
 				3415CED31AE257DA002F11F5 /* CSTextCaptureBaseView.xib in Resources */,
+				34567F1524046C7100D046F8 /* CAAudioInputChannelCell.xib in Resources */,
 				342B33B3198073EC00492CB7 /* line.fgsh in Resources */,
 				3470CD2F1D57D2AA006404D9 /* CSStreamOutputWindowController.xib in Resources */,
 				3473E6D1232F5F4D008FF29A /* MainMenu.xib in Resources */,
@@ -3063,6 +3072,7 @@
 				34528B8F1F9A707400C090E0 /* InputSource+ScriptingAdditions.m in Sources */,
 				3450239D1C60B3EF00B461B5 /* CSLayoutCollectionItemView.m in Sources */,
 				348585DE201E65F900C30A08 /* CSLayerFiltersViewController.m in Sources */,
+				34567F1124046BE200D046F8 /* CAAudioInputChannelCell.m in Sources */,
 				3410FEAF205EF80800C5F8C2 /* CSTransitionCIFilter.m in Sources */,
 				34B5FADA1E75B9B30078FC51 /* CSGridView.m in Sources */,
 				3400A0841BD522A5003E1828 /* CSLibraryInputItemViewController.m in Sources */,
