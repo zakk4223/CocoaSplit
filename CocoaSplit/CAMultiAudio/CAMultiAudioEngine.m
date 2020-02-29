@@ -197,7 +197,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
                 {
                     CAMultiAudioAVCapturePlayer *avplayer = [[CAMultiAudioAVCapturePlayer alloc] initWithDevice:dev];
                     avplayer.nodeUID = nodeUID;
-                    //[self attachInput:avplayer];
+                    [self attachInput:avplayer];
                 }
             }
         }
