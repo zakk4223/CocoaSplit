@@ -304,6 +304,8 @@ UInt32 inNumberFrames,
 -(bool)setInputStreamFormat:(AVAudioFormat *)format bus:(UInt32)bus
 {
 
+    AudioUnitUninitialize(self.audioUnit);
+    
     OSStatus err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, bus, format.streamDescription, sizeof(AudioStreamBasicDescription));
 
     if (err)
@@ -311,7 +313,10 @@ UInt32 inNumberFrames,
         NSLog(@"Failed to set StreamFormat for input on node %@ with %d", self, err);
         return NO;
     }
-    
+
+    [self willInitializeNode];
+    AudioUnitInitialize(self.audioUnit);
+    [self didInitializeNode];
     return YES;
 
 }
@@ -319,7 +324,8 @@ UInt32 inNumberFrames,
 
 -(bool)setOutputStreamFormat:(AVAudioFormat *)format bus:(UInt32)bus
 {
-    
+    AudioUnitUninitialize(self.audioUnit);
+
     OSStatus err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, bus, format.streamDescription, sizeof(AudioStreamBasicDescription));
 
     if (err)
@@ -327,7 +333,9 @@ UInt32 inNumberFrames,
         NSLog(@"Failed to set StreamFormat for output on node %@ with %d", self, err);
         return NO;
     }
-    
+    [self willInitializeNode];
+    AudioUnitInitialize(self.audioUnit);
+    [self didInitializeNode];
     return YES;
 
 }

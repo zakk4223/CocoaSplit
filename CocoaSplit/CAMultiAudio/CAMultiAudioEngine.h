@@ -43,7 +43,7 @@
 
 @property (strong) CAMultiAudioDownmixer *encodeMixer;
 //@property (strong) CSAacEncoder *encoder;
-@property (assign) UInt32 sampleRate;
+@property (assign) double sampleRate;
 @property (assign) int audioBitrate;
 @property (assign) double audio_adjust;
 @property (strong) NSArray *audioOutputs;

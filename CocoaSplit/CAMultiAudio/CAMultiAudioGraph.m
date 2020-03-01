@@ -175,71 +175,71 @@
 
 -(bool)connectNode:(CAMultiAudioNode *)node toNode:(CAMultiAudioNode *)toNode format:(AVAudioFormat *)format inBus:(UInt32)inBus outBus:(UInt32)outBus
 {
-
-    if (!node || !toNode)
+    @synchronized(self)
     {
-        NSLog(@"ConnectNode: Source or destination node is nil %@ -> %@", node, toNode);
-        return NO;
-    }
-    
-    
-    NSLog(@"CONNECT %@:%d TO %@:%d FORMAT %@", node, outBus, toNode, inBus, format);
-    AUNode inNode;
-    AUNode connectTo;
-    
-    OSStatus err;
-    
-    UInt32 bus = inBus;
-    
-    
-    [self disconnectNode:node outputBus:outBus];
-    [self disconnectNode:toNode inputBus:inBus];
-
-    [node willConnectToNode:toNode inBus:bus outBus:outBus];
-    
-    [toNode willConnectNode:node inBus:bus outBus:outBus];
-    
-
-    [toNode setInputStreamFormat:format bus:inBus];
-    [node setOutputStreamFormat:format bus:outBus];
-
-    
-    AudioUnitConnection newConn;
-    newConn.destInputNumber = inBus;
-    newConn.sourceOutputNumber = outBus;
-    newConn.sourceAudioUnit = node.audioUnit;
-    
-    err = AudioUnitSetProperty(toNode.audioUnit, kAudioUnitProperty_MakeConnection, kAudioUnitScope_Input, inBus, &newConn, sizeof(newConn));
-    
-    if (err)
-    {
-        NSLog(@"AudioUnitSetProperty(MakeConnection) failed for %@ -> %@, err: %d", node, toNode, err);
+        if (!node || !toNode)
+        {
+            NSLog(@"ConnectNode: Source or destination node is nil %@ -> %@", node, toNode);
+            return NO;
+        }
+        
+        
+        NSLog(@"CONNECT %@:%d TO %@:%d FORMAT %@", node, outBus, toNode, inBus, format);
+        
+        OSStatus err;
+        
+        UInt32 bus = inBus;
+        
+        
+        [self disconnectNode:node outputBus:outBus];
+        [self disconnectNode:toNode inputBus:inBus];
+        
+        [node willConnectToNode:toNode inBus:bus outBus:outBus];
+        
+        [toNode willConnectNode:node inBus:bus outBus:outBus];
+        
+        
+        [toNode setInputStreamFormat:format bus:inBus];
+        [node setOutputStreamFormat:format bus:outBus];
+        
+        
+        AudioUnitConnection newConn;
+        newConn.destInputNumber = inBus;
+        newConn.sourceOutputNumber = outBus;
+        newConn.sourceAudioUnit = node.audioUnit;
+        
+        err = AudioUnitSetProperty(toNode.audioUnit, kAudioUnitProperty_MakeConnection, kAudioUnitScope_Input, inBus, &newConn, sizeof(newConn));
+        
+        if (err)
+        {
+            NSLog(@"AudioUnitSetProperty(MakeConnection) failed for %@ -> %@, err: %d", node, toNode, err);
+            NSLog(@"%@ OUTPUT %@", node, [node outputFormatForBus:outBus]);
+            NSLog(@"%@ INPUT %@", toNode, [toNode inputFormatForBus:inBus]);
+            return NO;
+        }
+        
+        [node nodeConnected:toNode inBus:bus outBus:outBus];
+        
+        [toNode connectedToNode:node inBus:bus outBus:outBus];
+        
+        NSMutableArray *outputsForBus = node.outputConnections[@(outBus)];
+        if (!outputsForBus)
+        {
+            outputsForBus = [NSMutableArray array];
+            node.outputConnections[@(outBus)] = outputsForBus;
+        }
+        [outputsForBus addObject:[[CAMultiAudioConnection alloc] initWithNode:toNode bus:inBus]];
+        toNode.inputConnections[@(inBus)] = [[CAMultiAudioConnection alloc] initWithNode:node bus:outBus];
         NSLog(@"%@ OUTPUT %@", node, [node outputFormatForBus:outBus]);
         NSLog(@"%@ INPUT %@", toNode, [toNode inputFormatForBus:inBus]);
-        return NO;
     }
-
-    [node nodeConnected:toNode inBus:bus outBus:outBus];
-
-    [toNode connectedToNode:node inBus:bus outBus:outBus];
-    
-    NSMutableArray *outputsForBus = node.outputConnections[@(outBus)];
-    if (!outputsForBus)
-    {
-        outputsForBus = [NSMutableArray array];
-        node.outputConnections[@(outBus)] = outputsForBus;
-    }
-    [outputsForBus addObject:[[CAMultiAudioConnection alloc] initWithNode:toNode bus:inBus]];
-    toNode.inputConnections[@(inBus)] = [[CAMultiAudioConnection alloc] initWithNode:node bus:outBus];
-    NSLog(@"%@ OUTPUT %@", node, [node outputFormatForBus:outBus]);
-    NSLog(@"%@ INPUT %@", toNode, [toNode inputFormatForBus:inBus]);
-    
     return YES;
 }
 
 
 -(NSArray *)connectedInputBusses:(CAMultiAudioNode *)node
 {
+    
     return node.inputConnections.allKeys;
 }
 
@@ -300,41 +300,44 @@
         return NO;
     }
     
-    CAMultiAudioConnection *inputConnection = node.inputConnections[@(inputBus)];
-    
-    if (inputConnection)
+    @synchronized (self)
     {
+        CAMultiAudioConnection *inputConnection = node.inputConnections[@(inputBus)];
         
-        AudioUnitConnection breakConn;
-        breakConn.destInputNumber = inputBus;
-        breakConn.sourceOutputNumber = inputConnection.bus;
-        breakConn.sourceAudioUnit = NULL;
-        
-        OSErr err = AudioUnitSetProperty(node.audioUnit, kAudioUnitProperty_MakeConnection, kAudioUnitScope_Input, inputBus, &breakConn, sizeof(breakConn));
-        if (err)
+        if (inputConnection)
         {
-            NSLog(@"AudioUnitSetProperty(MakeConnection) failed for node %@:%d, err %d", node, inputBus, err);
-        }
-        
-        if (updateOutputs)
-        {
-            CAMultiAudioNode *srcNode = inputConnection.node;
-            if (srcNode)
+            
+            AudioUnitConnection breakConn;
+            breakConn.destInputNumber = inputBus;
+            breakConn.sourceOutputNumber = inputConnection.bus;
+            breakConn.sourceAudioUnit = NULL;
+            
+            OSErr err = AudioUnitSetProperty(node.audioUnit, kAudioUnitProperty_MakeConnection, kAudioUnitScope_Input, inputBus, &breakConn, sizeof(breakConn));
+            if (err)
             {
-                NSMutableArray *newConns = [NSMutableArray array];
-                NSArray *conns = [self outputConnections:srcNode forBus:inputConnection.bus];
-                for(CAMultiAudioConnection *nConn in conns)
-                {
-                    if (nConn.node != node)
-                    {
-                        [newConns addObject:nConn];
-                    }
-                }
-                
-                srcNode.outputConnections[@(inputConnection.bus)] = newConns;
+                NSLog(@"AudioUnitSetProperty(MakeConnection) failed for node %@:%d, err %d", node, inputBus, err);
             }
+            
+            if (updateOutputs)
+            {
+                CAMultiAudioNode *srcNode = inputConnection.node;
+                if (srcNode)
+                {
+                    NSMutableArray *newConns = [NSMutableArray array];
+                    NSArray *conns = [self outputConnections:srcNode forBus:inputConnection.bus];
+                    for(CAMultiAudioConnection *nConn in conns)
+                    {
+                        if (nConn.node != node)
+                        {
+                            [newConns addObject:nConn];
+                        }
+                    }
+                    
+                    srcNode.outputConnections[@(inputConnection.bus)] = newConns;
+                }
+            }
+            [node.inputConnections removeObjectForKey:@(inputBus)];
         }
-        [node.inputConnections removeObjectForKey:@(inputBus)];
     }
     return YES;
 }

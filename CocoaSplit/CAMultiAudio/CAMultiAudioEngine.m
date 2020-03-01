@@ -84,9 +84,16 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
         
         if ([aDecoder containsValueForKey:@"sampleRate"])
         {
-            self.sampleRate = [aDecoder decodeInt32ForKey:@"sampleRate"];
+            UInt32 oldSampleRate = [aDecoder decodeInt32ForKey:@"sampleRate"];
+            self.sampleRate = (double)oldSampleRate;
         }
         
+        
+        if ([aDecoder containsValueForKey:@"sampleRateDouble"])
+        {
+            self.sampleRate = [aDecoder decodeDoubleForKey:@"sampleRateDouble"];
+
+        }
         
         if ([aDecoder containsValueForKey:@"audioBitrate"])
         {
@@ -242,7 +249,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
-    [aCoder encodeInt32:self.sampleRate forKey:@"sampleRate"];
+    [aCoder encodeDouble:self.sampleRate forKey:@"sampleRateDouble"];
     [aCoder encodeObject:self.outputNode.deviceUID forKey:@"selectedAudioId"];
     [aCoder encodeFloat:self.encodeMixer.volume forKey:@"streamVolume"];
     [aCoder encodeBool:!self.encodeMixer.enabled forKey:@"streamMuted"];
@@ -644,7 +651,8 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
 
 -(bool)buildGraph
 {
-    self.graph = [[CAMultiAudioGraph alloc] initWithFormat:nil];
+    AVAudioFormat *useFormat = [[AVAudioFormat alloc] initStandardFormatWithSampleRate:self.sampleRate channels:2];
+    self.graph = [[CAMultiAudioGraph alloc] initWithFormat:useFormat];
     self.graph.engine = self;
     
     
@@ -1038,16 +1046,16 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     }
 }
 
-
--(UInt32)sampleRate
+/*
+-(double)sampleRate
 {
     return _sampleRate;
 }
 
 
--(void)setSampleRate:(UInt32)sampleRate
+-(void)setSampleRate:(double)sampleRate
 {
-    UInt32 old_samplerate = _sampleRate;
+    double old_samplerate = _sampleRate;
     _sampleRate = sampleRate;
     if (sampleRate > 0 && (sampleRate != old_samplerate))
     {
@@ -1058,6 +1066,7 @@ OSStatus encoderRenderCallback( void *inRefCon, AudioUnitRenderActionFlags *ioAc
     }
     
 }
+*/
 
 
 -(void)removeFileInput:(CAMultiAudioFile *)toRemove
