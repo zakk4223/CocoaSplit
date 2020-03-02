@@ -539,9 +539,17 @@
     @autoreleasepool
     {
         
+        AVAudioFormat *useFormat = nil;
+        if (!withFormat.channelLayout)
+        {
+            AVAudioChannelLayout *chanLayout = [AVAudioChannelLayout layoutWithLayoutTag:kAudioChannelLayoutTag_DiscreteInOrder | withFormat.channelCount];
+            useFormat = [[AVAudioFormat alloc] initWithStreamDescription:withFormat.streamDescription channelLayout:chanLayout];
+        } else {
+            useFormat = withFormat;
+        }
         CAMultiAudioEngine *useEngine = nil;
         CSPcmPlayer *newPlayer = [[CSPcmPlayer alloc] init];
-        [newPlayer setAudioFormat:withFormat];
+        [newPlayer setAudioFormat:useFormat];
         NSMapTable *inputsCopy = nil;
         @synchronized(self)
         {
