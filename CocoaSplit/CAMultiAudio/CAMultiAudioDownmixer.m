@@ -193,11 +193,7 @@
 {
     bool retVal;
     NSDictionary *saveData = [self saveDataForPrivateRestore];
-    AudioUnitUninitialize(self.audioUnit);
     retVal = [super setInputStreamFormat:format bus:bus];
-    [self willInitializeNode];
-    AudioUnitInitialize(self.audioUnit);
-    [self didInitializeNode];
     [self restoreDataFromPrivateRestore:saveData];
     return retVal;
 }

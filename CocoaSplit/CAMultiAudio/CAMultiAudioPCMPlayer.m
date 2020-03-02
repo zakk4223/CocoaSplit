@@ -207,6 +207,21 @@
     [self.pauseBuffer removeAllObjects];
 }
 
+-(void)drainPendingBuffers
+{
+    @synchronized (self) {
+        [_pendingBuffers removeAllObjects];
+    }
+}
+-(void)didRemoveInput
+{
+    if (_pendingTimer)
+    {
+        dispatch_source_cancel(_pendingTimer);
+    }
+    [self drainPendingBuffers];
+}
+
 
 -(void)dealloc
 {
