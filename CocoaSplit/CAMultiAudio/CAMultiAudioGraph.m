@@ -111,7 +111,6 @@
         return NO;
     }
 
-    OSStatus err;
     if (![self disconnectNode:node])
     {
         NSLog(@"Remove node %@: disconnected failed", node);

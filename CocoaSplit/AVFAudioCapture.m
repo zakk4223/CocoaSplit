@@ -57,7 +57,6 @@
 
 -(void)dealloc
 {
-    NSLog(@"DEALLOC AUDIO");
     if (_audio_capture_output)
     {
         [_audio_capture_output setSampleBufferDelegate:nil queue:NULL];
